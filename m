@@ -2,134 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C2F2686330
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 10:54:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71E04686336
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 10:55:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230461AbjBAJyB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 04:54:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37276 "EHLO
+        id S232166AbjBAJzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 04:55:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230502AbjBAJx7 (ORCPT
+        with ESMTP id S232132AbjBAJzl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 04:53:59 -0500
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ED234A211
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 01:53:58 -0800 (PST)
-Received: by mail-lj1-x232.google.com with SMTP id h17so18789894ljq.4
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 01:53:58 -0800 (PST)
+        Wed, 1 Feb 2023 04:55:41 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289CA518E8
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 01:55:40 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id o20so28453905lfk.5
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 01:55:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=hXBLBJgX4EaRecabGDlsbhKYn/5vHTxOlvqGwGoHBPg=;
-        b=kGuhkOUGRiUBb82xnq/SP0PH18a2BT8S1d4JOz6WZAZJ1pjUkuD2ixPSt46h0gUfdn
-         J3o7C+wF049nP5XsvuPSv8RTjjoa+/1JV25eSAFAAv2IOBY89cp3vnPTRwYpWB2pc5H6
-         amZqseA7VDjMshiL4mh2kEhmuLUFXriQM27ALI2dFc8fl17ujHHsZznv3QFMa4A7hrgi
-         XUJIrFiCgPSrYWwCLPGPLNvO0v5FGURdM1IFSgnm93n1+YkLwpLK3thl+ZyURoKwx/zO
-         ocsJuUvX9Dq8NAHuAgOXho0n+QyU73sM+n8n5iF30fuV/k+QzbmwhlTNOMaOXeEE4xlr
-         hIgg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gOPXlgNZjtNho8nzp/sMGlDYULpras0FGxK/VYvvstM=;
+        b=YX8ktkNzJZtPZ3Jbj7KrEDO8skM9T914XRHeeK1oBaJRbGWCess/PSYDtNFg7mKxt8
+         y6G0ln1hS5ZYQHzyEiFkaowo//IMfMvWx5NzcjHIv55BR4W1+Xa8ly023lW3LuvEsrC5
+         wgROR9RtxiKQF6n8zSPJ4SkXHguJnoP++KRaq8I4Fh7GOV0tgxAwXNrOVk1371bUXT9u
+         ikglRTLFIyWk2jtT80JmnUysyFkdUlRkby96IksxDp7O+6jD/pwFoopv9npzSubcX3pO
+         7gavGWgLxzxCaYmSYs8GZ0Z9n9gKy+BsyuLUAtM1MtD4844MpOLUTpyo+SoZPecnWCTv
+         mPmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=hXBLBJgX4EaRecabGDlsbhKYn/5vHTxOlvqGwGoHBPg=;
-        b=iQjYjS/GBcZL580iWbzc5cgfEqhnM06nWqMACrk+77iUSXyxt+5AdYCQrIGcwX4oRB
-         3wI3WwprQSoYKuN2+z6Ib4iVNlXGSjXDt+R52+EO7VAFItkORx85F68Amwpgqhez1FDK
-         GAfHlRaO0ly1vXICDFdaAwQxSWJTSxageE67unttmemp/m/xFXB9WfVUrCLR3LcqMh0G
-         mHum4smJHCH7oZ8ZKShZoXi5H5M9QroEtXd2To3OAngvggFs8VVc7k3+7kqLbRgUJa2A
-         j+qeXi4jWt3bKYeoQuN6WHpKwmdvSGOindvpQUCHQKKYuyTGMKkSlvwI+btisBElt6iK
-         PYNw==
-X-Gm-Message-State: AO0yUKWs1M+WXVuNW3wGQFAoMqXSch25hOODrZ37cJ5U90RqS3OjocJl
-        SuYzeElhR4jFfHucXFm+8BXreqNlIbO800NmfiFh/g==
-X-Google-Smtp-Source: AK7set/SnkQ6D+DOsTEIwKu7gH1tVuc4Aop2ZxyXy/5CnDm05inFo7TpmqVd2reBirxiOQVXt78QUDARAskOvz3HHq0=
-X-Received: by 2002:a05:651c:231b:b0:290:7402:78a1 with SMTP id
- bi27-20020a05651c231b00b00290740278a1mr233501ljb.183.1675245236576; Wed, 01
- Feb 2023 01:53:56 -0800 (PST)
+        bh=gOPXlgNZjtNho8nzp/sMGlDYULpras0FGxK/VYvvstM=;
+        b=FWwoRWjaujOaQXEoAW59ijchZx+OIU0CsnssXZ7f5vvaA8ObfFHsBmeSUu4zEko3bC
+         HFnoy9J3Vutvxx/DjP5FSsxxenT8oY1QM2moKg9sSZObtuhORAwdggLcwLFD17/PBjcK
+         IgPaF49Fv4z6M9a+WSs2qfsIZbyT3GPWhpYyg2CYZWEBb/h3qn393HKxx+H2+ynSUljp
+         MKqAxV6+CSfXnrMzDDUm9M74b/0UjD5m8s/uwbKnFQdNWp/c7S6mO2QEHRft54RXcHhb
+         xLaa40TaFoB1t0QQpyk4YYUC+PncX+jXbZj4domXh1juEqoKrvBO+MgSyV64Te7b1vYk
+         aSkw==
+X-Gm-Message-State: AO0yUKUtK/V/kOJ+uz04E45zxlKG3NWJqrPMrXfdJiWDyXqKJOMOLTNC
+        fC3vm7OL2Yg9TBjb8Ri88gda/g==
+X-Google-Smtp-Source: AK7set8BI0ZQnFDpVw0CC9Cl2mgE9DoCr+cHoOhlCNRo90UyZJAJErsgJ8Y8LW3PlQlbiJr3qnQY2A==
+X-Received: by 2002:ac2:5a01:0:b0:4b5:987c:de3e with SMTP id q1-20020ac25a01000000b004b5987cde3emr1348094lfn.69.1675245338383;
+        Wed, 01 Feb 2023 01:55:38 -0800 (PST)
+Received: from ta1.c.googlers.com.com (138.58.228.35.bc.googleusercontent.com. [35.228.58.138])
+        by smtp.gmail.com with ESMTPSA id y7-20020a197507000000b004cc83be556dsm1131634lfe.247.2023.02.01.01.55.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Feb 2023 01:55:38 -0800 (PST)
+From:   Tudor Ambarus <tudor.ambarus@linaro.org>
+To:     stable@vger.kernel.org
+Cc:     davem@davemloft.net, kuznet@ms2.inr.ac.ru, yoshfuji@linux-ipv6.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        joneslee@google.com, Eric Dumazet <edumazet@google.com>,
+        syzbot <syzkaller@googlegroups.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Tudor Ambarus <tudor.ambarus@linaro.org>
+Subject: [PATCH][for stable {4.14, 4.19, 5.4}.y] ipv6: ensure sane device mtu in tunnels
+Date:   Wed,  1 Feb 2023 09:55:33 +0000
+Message-Id: <20230201095533.2628469-1-tudor.ambarus@linaro.org>
+X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
 MIME-Version: 1.0
-References: <20230127162409.2505312-1-elver@google.com> <Y9QUi7oU3nbdIV1J@FVFF77S0Q05N>
- <CANpmjNNGCf_NqS96iB+YLU1M+JSFy2tRRbuLfarkUchfesk2=A@mail.gmail.com>
- <Y9ef8cKrE4RJsrO+@FVFF77S0Q05N> <CANpmjNOEG2KPN+NaF37E-d8tbAExKvjVMAXUORC10iG=Bmk=vA@mail.gmail.com>
-In-Reply-To: <CANpmjNOEG2KPN+NaF37E-d8tbAExKvjVMAXUORC10iG=Bmk=vA@mail.gmail.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Wed, 1 Feb 2023 10:53:44 +0100
-Message-ID: <CACT4Y+Yriv_JYXm9N1YAMh+YuiT57irnF-vyCqxnTTux-2Ffwg@mail.gmail.com>
-Subject: Re: [PATCH v2] perf: Allow restricted kernel breakpoints on user addresses
-To:     Marco Elver <elver@google.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, Jann Horn <jannh@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrey Konovalov <andreyknvl@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 1 Feb 2023 at 10:34, Marco Elver <elver@google.com> wrote:
->
-> On Mon, 30 Jan 2023 at 11:46, Mark Rutland <mark.rutland@arm.com> wrote:
-> [...]
-> > > This again feels like a deficiency with access_ok(). Is there a better
-> > > primitive than access_ok(), or can we have something that gives us the
-> > > guarantee that whatever it says is "ok" is a userspace address?
-> >
-> > I don't think so, since this is contextual and temporal -- a helper can't give
-> > a single correct answert in all cases because it could change.
->
-> That's fair, but unfortunate. Just curious: would
-> copy_from_user_nofault() reliably fail if it tries to access one of
-> those mappings but where access_ok() said "ok"?
+From: Eric Dumazet <edumazet@google.com>
 
-I also wonder if these special mappings are ever accessible in a user
-task context?
-If yes, can a racing process_vm_readv/writev mess with these special mappings?
+[ Upstream commit d89d7ff01235f218dad37de84457717f699dee79 ]
 
-We could use copy_from_user() to probe that the watchpoint address is
-legit. But I think the memory can be potentially PROT_NONE but still
-legit, so copy_from_user() won't work for these corner cases.
+Another syzbot report [1] with no reproducer hints
+at a bug in ip6_gre tunnel (dev:ip6gretap0)
 
-> Though that would probably restrict us to only creating watchpoints
-> for addresses that are actually mapped in the task.
->
-> > In the cases we switch to another mapping, we could try to ensure that we
-> > enable/disable potentially unsafe watchpoints/breakpoints.
->
-> That seems it'd be too hard to reason that it's 100% safe, everywhere,
-> on every arch. I'm still convinced we can prohibit creation of such
-> watchpoints in the first place, but need something other than
-> access_ok().
->
-> > Taking a look at arm64, our idmap code might actually be ok, since we usually
-> > mask all the DAIF bits (and the 'D' or 'Debug' bit masks HW
-> > breakpoints/watchpoints). For EFI we largely switch to another thread (but not
-> > always), so that would need some auditing.
-> >
-> > So if this only needs to work in per-task mode rather than system-wide mode, I
-> > reckon we can have some save/restore logic around those special cases where we
-> > transiently install a mapping, which would protect us.
->
-> It should only work in per-task mode.
->
-> > For the threads that run with special mappings in the low half, I'm not sure
-> > what to do. If we've ruled out system-wide monitoring I believe those would be
-> > protected from unprivileged users.
->
-> Can the task actually access those special mappings, or is it only
-> accessible by the kernel?
->
-> Thanks,
-> -- Marco
+Since ipv6 mcast code makes sure to read dev->mtu once
+and applies a sanity check on it (see commit b9b312a7a451
+"ipv6: mcast: better catch silly mtu values"), a remaining
+possibility is that a layer is able to set dev->mtu to
+an underflowed value (high order bit set).
+
+This could happen indeed in ip6gre_tnl_link_config_route(),
+ip6_tnl_link_config() and ipip6_tunnel_bind_dev()
+
+Make sure to sanitize mtu value in a local variable before
+it is written once on dev->mtu, as lockless readers could
+catch wrong temporary value.
+
+[1]
+skbuff: skb_over_panic: text:ffff80000b7a2f38 len:40 put:40 head:ffff000149dcf200 data:ffff000149dcf2b0 tail:0xd8 end:0xc0 dev:ip6gretap0
+------------[ cut here ]------------
+kernel BUG at net/core/skbuff.c:120
+Internal error: Oops - BUG: 00000000f2000800 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 1 PID: 10241 Comm: kworker/1:1 Not tainted 6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+Workqueue: mld mld_ifc_work
+pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : skb_panic+0x4c/0x50 net/core/skbuff.c:116
+lr : skb_panic+0x4c/0x50 net/core/skbuff.c:116
+sp : ffff800020dd3b60
+x29: ffff800020dd3b70 x28: 0000000000000000 x27: ffff00010df2a800
+x26: 00000000000000c0 x25: 00000000000000b0 x24: ffff000149dcf200
+x23: 00000000000000c0 x22: 00000000000000d8 x21: ffff80000b7a2f38
+x20: ffff00014c2f7800 x19: 0000000000000028 x18: 00000000000001a9
+x17: 0000000000000000 x16: ffff80000db49158 x15: ffff000113bf1a80
+x14: 0000000000000000 x13: 00000000ffffffff x12: ffff000113bf1a80
+x11: ff808000081c0d5c x10: 0000000000000000 x9 : 73f125dc5c63ba00
+x8 : 73f125dc5c63ba00 x7 : ffff800008161d1c x6 : 0000000000000000
+x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : ffff0001fefddcd0 x1 : 0000000100000000 x0 : 0000000000000089
+Call trace:
+skb_panic+0x4c/0x50 net/core/skbuff.c:116
+skb_over_panic net/core/skbuff.c:125 [inline]
+skb_put+0xd4/0xdc net/core/skbuff.c:2049
+ip6_mc_hdr net/ipv6/mcast.c:1714 [inline]
+mld_newpack+0x14c/0x270 net/ipv6/mcast.c:1765
+add_grhead net/ipv6/mcast.c:1851 [inline]
+add_grec+0xa20/0xae0 net/ipv6/mcast.c:1989
+mld_send_cr+0x438/0x5a8 net/ipv6/mcast.c:2115
+mld_ifc_work+0x38/0x290 net/ipv6/mcast.c:2653
+process_one_work+0x2d8/0x504 kernel/workqueue.c:2289
+worker_thread+0x340/0x610 kernel/workqueue.c:2436
+kthread+0x12c/0x158 kernel/kthread.c:376
+ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:860
+Code: 91011400 aa0803e1 a90027ea 94373093 (d4210000)
+
+Fixes: c12b395a4664 ("gre: Support GRE over IPv6")
+Reported-by: syzbot <syzkaller@googlegroups.com>
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Link: https://lore.kernel.org/r/20221024020124.3756833-1-eric.dumazet@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+[ta: Backport patch for stable kernels < 5.10.y. Fix conflict in
+net/ipv6/ip6_tunnel.c, mtu initialized with:
+mtu = rt->dst.dev->mtu - t_hlen;]
+Cc: <stable@vger.kernel.org> # 4.14.y, 4.19.y, 5.4.y
+Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+---
+ net/ipv6/ip6_gre.c    | 12 +++++++-----
+ net/ipv6/ip6_tunnel.c | 10 ++++++----
+ net/ipv6/sit.c        |  8 +++++---
+ 3 files changed, 18 insertions(+), 12 deletions(-)
+
+diff --git a/net/ipv6/ip6_gre.c b/net/ipv6/ip6_gre.c
+index 4a6396d574a0..fd4da1019e44 100644
+--- a/net/ipv6/ip6_gre.c
++++ b/net/ipv6/ip6_gre.c
+@@ -1137,14 +1137,16 @@ static void ip6gre_tnl_link_config_route(struct ip6_tnl *t, int set_mtu,
+ 				dev->needed_headroom = dst_len;
+ 
+ 			if (set_mtu) {
+-				dev->mtu = rt->dst.dev->mtu - t_hlen;
++				int mtu = rt->dst.dev->mtu - t_hlen;
++
+ 				if (!(t->parms.flags & IP6_TNL_F_IGN_ENCAP_LIMIT))
+-					dev->mtu -= 8;
++					mtu -= 8;
+ 				if (dev->type == ARPHRD_ETHER)
+-					dev->mtu -= ETH_HLEN;
++					mtu -= ETH_HLEN;
+ 
+-				if (dev->mtu < IPV6_MIN_MTU)
+-					dev->mtu = IPV6_MIN_MTU;
++				if (mtu < IPV6_MIN_MTU)
++					mtu = IPV6_MIN_MTU;
++				WRITE_ONCE(dev->mtu, mtu);
+ 			}
+ 		}
+ 		ip6_rt_put(rt);
+diff --git a/net/ipv6/ip6_tunnel.c b/net/ipv6/ip6_tunnel.c
+index 878a08c40fff..acc75975edde 100644
+--- a/net/ipv6/ip6_tunnel.c
++++ b/net/ipv6/ip6_tunnel.c
+@@ -1430,6 +1430,7 @@ static void ip6_tnl_link_config(struct ip6_tnl *t)
+ 	struct __ip6_tnl_parm *p = &t->parms;
+ 	struct flowi6 *fl6 = &t->fl.u.ip6;
+ 	int t_hlen;
++	int mtu;
+ 
+ 	memcpy(dev->dev_addr, &p->laddr, sizeof(struct in6_addr));
+ 	memcpy(dev->broadcast, &p->raddr, sizeof(struct in6_addr));
+@@ -1472,12 +1473,13 @@ static void ip6_tnl_link_config(struct ip6_tnl *t)
+ 			dev->hard_header_len = rt->dst.dev->hard_header_len +
+ 				t_hlen;
+ 
+-			dev->mtu = rt->dst.dev->mtu - t_hlen;
++			mtu = rt->dst.dev->mtu - t_hlen;
+ 			if (!(t->parms.flags & IP6_TNL_F_IGN_ENCAP_LIMIT))
+-				dev->mtu -= 8;
++				mtu -= 8;
+ 
+-			if (dev->mtu < IPV6_MIN_MTU)
+-				dev->mtu = IPV6_MIN_MTU;
++			if (mtu < IPV6_MIN_MTU)
++				mtu = IPV6_MIN_MTU;
++			WRITE_ONCE(dev->mtu, mtu);
+ 		}
+ 		ip6_rt_put(rt);
+ 	}
+diff --git a/net/ipv6/sit.c b/net/ipv6/sit.c
+index 117d374695fe..1179608955f5 100644
+--- a/net/ipv6/sit.c
++++ b/net/ipv6/sit.c
+@@ -1083,10 +1083,12 @@ static void ipip6_tunnel_bind_dev(struct net_device *dev)
+ 
+ 	if (tdev && !netif_is_l3_master(tdev)) {
+ 		int t_hlen = tunnel->hlen + sizeof(struct iphdr);
++		int mtu;
+ 
+-		dev->mtu = tdev->mtu - t_hlen;
+-		if (dev->mtu < IPV6_MIN_MTU)
+-			dev->mtu = IPV6_MIN_MTU;
++		mtu = tdev->mtu - t_hlen;
++		if (mtu < IPV6_MIN_MTU)
++			mtu = IPV6_MIN_MTU;
++		WRITE_ONCE(dev->mtu, mtu);
+ 	}
+ }
+ 
+-- 
+2.39.1.519.gcb327c4b5f-goog
+
