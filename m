@@ -2,155 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4ECA686BED
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 17:38:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25645686BEC
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 17:38:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231661AbjBAQit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 11:38:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43726 "EHLO
+        id S229651AbjBAQie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 11:38:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232434AbjBAQii (ORCPT
+        with ESMTP id S231509AbjBAQiZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 11:38:38 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA36C7A4AE
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 08:37:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675269416;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2DUTRd/HWxCL5qiIGieZHEITtUq3cOtR+H9zwFOpCb8=;
-        b=Ev4mpb0H4bJV6YHwTAQ7N15CXIR5oMErNeqFK1HNlVjjleskX0xTNcPUEdsaOdgNPND+q6
-        9BceXTGTZi4eI01Zjc0nOzX9vaww4ru+0IW+7EJB/CiGxoj2WWiRol1ZkeB4wlyfA6D41F
-        N7p1zagTBP+ti9jXuKarpVlB5CKpjNg=
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
- [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-573-zcex9cRyPvy9EZfeP8Wl8Q-1; Wed, 01 Feb 2023 11:36:47 -0500
-X-MC-Unique: zcex9cRyPvy9EZfeP8Wl8Q-1
-Received: by mail-il1-f200.google.com with SMTP id j7-20020a056e02014700b00310d217f518so8879090ilr.2
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 08:36:47 -0800 (PST)
+        Wed, 1 Feb 2023 11:38:25 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 730BFC173
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 08:38:16 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id a3so11188301wrt.6
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 08:38:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mrcqv7iS1cquJvqoLMbtEWKy/UDB0TOdu8u7+euImwo=;
+        b=HEnQif1tx0zTKMoBmkbT/iretYU8xu0ia36crD/trQlO9VlhcVSmUCN7JS+mDuJR0r
+         xhIq3L+JUzUfNlSm5Ys44fRrSdBdwnpqGZzoWWuMxYTw3WC3sTQxbHP8Fz/gsAZY0xt2
+         jIv+diZVnT53pAec9I8up8qiO4aoDW/v/rMGjqtP546MMJeiHeRcqz/I22nD6BI3k8g3
+         +76rPG4dPa/NrF51x5fqtQiJWCi13TmPVOPjqfeaqoNfFmy5ppaAnoBQKkB0cw3Y2ET6
+         a12d/ZY4PnuDz1suVsmH6J1iT/RA8UrW57OdnsYnyP3vw+8e/cLeu52TbTQ68niy52to
+         Eb1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2DUTRd/HWxCL5qiIGieZHEITtUq3cOtR+H9zwFOpCb8=;
-        b=B9+HbQesot61vb9cX4E2KyaXT106enalxWCUS4XbWzahyDBbzAar62Q4W9S2yWFW8M
-         z7IT27pxk98F+Qkg+xYK/YMZpcid8CzJRUs8jFGyhQ6GuFak7f3SQwzEI5qiDtrSenbN
-         xfFGv1G+2uSKKF7CTDXQ0NeIdfBd6BZGc+HAHDriIDPXloy29kuhLLEMv4aYkc8pAwYa
-         SDHfq5cEGw83W4AZQbPLHb3RCEgWjAP30gSLk8zckQo+Q4F6qg7a7ekLBV8A07Euo/mH
-         MUaBaQlQs/9DRq8Njv9G3z43ntleFTv/N8cfpn3iDdTgvNoon7RsJuqdJGVsHGpB3w2t
-         hvsQ==
-X-Gm-Message-State: AO0yUKUd9Eo7bCV2/lZxVUzuR0t5MRIGCX6gwF/i1Lim0qwGDU8DSL+G
-        3sGDWs/jzHi/xsrZ+z9upY791vZgmoOtjF2I9HtBJl7pKMdGLWZYsBnUMYevekgg1SI3wbkE9Gi
-        Pl/oaTy+tCSOpxyOlrhxYyIZ1
-X-Received: by 2002:a6b:c406:0:b0:714:ff62:cb18 with SMTP id y6-20020a6bc406000000b00714ff62cb18mr9081558ioa.17.1675269406692;
-        Wed, 01 Feb 2023 08:36:46 -0800 (PST)
-X-Google-Smtp-Source: AK7set9Sq+jvuM5LhUKUdHPVkvEcT70eV2R4TL+3a+zwu2jZW0RqaAuGnf+KAZ+Lw7zfSXKgBSLfgg==
-X-Received: by 2002:a6b:c406:0:b0:714:ff62:cb18 with SMTP id y6-20020a6bc406000000b00714ff62cb18mr9081547ioa.17.1675269406400;
-        Wed, 01 Feb 2023 08:36:46 -0800 (PST)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id w1-20020a05660201c100b006f8ee49c22dsm6105876iot.10.2023.02.01.08.36.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Feb 2023 08:36:45 -0800 (PST)
-Date:   Wed, 1 Feb 2023 09:36:44 -0700
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     liulongfang <liulongfang@huawei.com>
-Cc:     <jgg@nvidia.com>, <shameerali.kolothum.thodi@huawei.com>,
-        <jonathan.cameron@huawei.com>, <cohuck@redhat.com>,
-        <linux-kernel@vger.kernel.org>, <linuxarm@openeuler.org>
-Subject: Re: [PATCH v7 1/5] vfio/migration: Add debugfs to live migration
- driver
-Message-ID: <20230201093644.4983db0d.alex.williamson@redhat.com>
-In-Reply-To: <add8f068-3aaa-0707-bfe6-27fd8bf9e10c@huawei.com>
-References: <20230120032930.43608-1-liulongfang@huawei.com>
-        <20230120032930.43608-2-liulongfang@huawei.com>
-        <20230126122759.5aa4d84c.alex.williamson@redhat.com>
-        <add8f068-3aaa-0707-bfe6-27fd8bf9e10c@huawei.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mrcqv7iS1cquJvqoLMbtEWKy/UDB0TOdu8u7+euImwo=;
+        b=5yqGD2Ju/iIsEC7agi0W1hyf2me+wVFHNeHRyc884cAynfNwfU1Vem7iSvJpDtuGfT
+         uhI/cLqJ0w1t/G846Xo5pP6q2ujShTe+BmuahLQioMq7WqBV1RSTYm/WsquyAn7szSz/
+         D3cqC8Qt2yJMW0FK5vE8tzZk6oCSAO42F7UsJ8Cb65SF2C3rX0wa8ZMbUlGcEBBowC9D
+         sW8kH/sfS25TT+d4KgVlOjb6ajGVIInFs/mXP5EFRtpCAhpYw7h5NLQ1C2C4aGbLd6ia
+         pIVu4m7yC2hK1LWffUDtekfQ77zPP94x/zHJmi5Vh7v2XnEgyFfKcQKEi55aFPPnOPSL
+         wtvQ==
+X-Gm-Message-State: AO0yUKWNPFnGlKqCoYAutqK9Rlmc0/jbQBD2AC6O2kKCioHf1ADMJPnI
+        bKgVfHul7KCXDcRNUF7ejO+W5g==
+X-Google-Smtp-Source: AK7set8OjV9bsPy0E5o71+igl9MbubLZ/y4xjVKKORsyD+9B+4sJKoouxiK/GQ+Z54tO2tWR7YYa9w==
+X-Received: by 2002:adf:c713:0:b0:2bf:e9dc:5536 with SMTP id k19-20020adfc713000000b002bfe9dc5536mr3432655wrg.45.1675269495424;
+        Wed, 01 Feb 2023 08:38:15 -0800 (PST)
+Received: from ?IPV6:2a02:6b6a:b566:0:7611:c340:3d8d:d46c? ([2a02:6b6a:b566:0:7611:c340:3d8d:d46c])
+        by smtp.gmail.com with ESMTPSA id k6-20020a5d6d46000000b002bfeccd872bsm9688027wri.70.2023.02.01.08.38.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Feb 2023 08:38:15 -0800 (PST)
+Message-ID: <7fda05c9-9d4a-6005-0ce5-91bda1bb06c1@bytedance.com>
+Date:   Wed, 1 Feb 2023 16:38:14 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [External] Re: [PATCH v4 0/9] Parallel CPU bringup for x86_64
+Content-Language: en-US
+To:     David Woodhouse <dwmw2@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
+        hushiyuan@huawei.com, luolongjun@huawei.com, hejingxian@huawei.com,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Fam Zheng <fam.zheng@bytedance.com>,
+        Punit Agrawal <punit.agrawal@bytedance.com>,
+        simon.evans@bytedance.com, liangma@liangbit.com
+References: <20220201205328.123066-1-dwmw2@infradead.org>
+ <ff876008-b642-4dbc-aa41-1639905e08b6@bytedance.com>
+ <1d0ed92ab68409b62a14cd29d0021f92c6e2568a.camel@infradead.org>
+From:   Usama Arif <usama.arif@bytedance.com>
+In-Reply-To: <1d0ed92ab68409b62a14cd29d0021f92c6e2568a.camel@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 1 Feb 2023 11:20:08 +0800
-liulongfang <liulongfang@huawei.com> wrote:
 
-> On 2023/1/27 3:27, Alex Williamson wrote:
-> > On Fri, 20 Jan 2023 11:29:26 +0800
-> > Longfang Liu <liulongfang@huawei.com> wrote:
-> >   
-> >> There are multiple devices, software and operational steps involved
-> >> in the process of live migration. An error occurred on any node may
-> >> cause the live migration operation to fail.
-> >> This complex process makes it very difficult to locate and analyze
-> >> the cause when the function fails.
-> >>
-> >> In order to quickly locate the cause of the problem when the
-> >> live migration fails, I added a set of debugfs to the vfio
-> >> live migration driver.
-> >>
-> >>  +------------------------------------------+
-> >>  |                                          |
-> >>  |                                          |
-> >>  |                 QEMU                     |
-> >>  |                                          |
-> >>  |                                          |
-> >>  +-----+-------------------------+----------+
-> >>        |   ^                     |   ^
-> >>        v   |                     v   |
-> >>      +-----+--+                +-----+--+
-> >>      | src VF |                | dst VF |
-> >>      +-+------+                +-+------+
-> >>        |   ^                     |   ^
-> >>        v   |                     v   |
-> >>  +-------+-+------+        +-------+-+------+
-> >>  |Debugfs|state   |        |Debugfs|state   |
-> >>  +-------+--------+        +-------+--------+
-> >>  |   debug_root   |        |   debug_root   |
-> >>  +-------+--------+        +-------+--------+
-> >>
-> >> The entire debugfs directory will be based on the definition of
-> >> the CONFIG_DEBUG_FS macro. If this macro is not enabled, the
-> >> interfaces in vfio_pci_debugfs.h will be empty definitions,
-> >> and the creation and initialization of the debugfs directory
-> >> will not be executed.
-> >>
-> >> debugfs will create a public root directory "vfio_mig" file.
-> >> then create a "debug_root" file for each live migration VF device.  
-> > 
-> > s/VF // In practice it may be VFs, but I don't think we want to
-> > artificially imply that the device must be a VF.  In fact, I'm not sure  
-> 
-> Yes, the description should be modified here, and it should not be limited
-> to only support VF.
-> 
-> > why any of this code lives in vfio/pci/ vs vfio/, there's nothing PCI
-> > specific here.  Why isn't all of this done in vfio_main to be shared
-> > with both pci and non-pci vfio drivers and devices?
-> >  
-> 
-> Combined with your observations below, I think it is more appropriate to
-> create a "vfio-pci" directory here, because the current live migration
-> function is still used on pci devices.
-> 
-> For non-pci devices, if there is a device that needs to add debugfs,
-> then it can create a similar directory.
 
-But live migration itself is not specific to vfio-pci, it's device
-agnostic.  We'd certainly expect to see mdev devices supporting
-migration in the near term.  Thanks,
+On 01/02/2023 15:08, David Woodhouse wrote:
+> On Wed, 2023-02-01 at 14:40 +0000, Usama Arif wrote:
+>> On 01/02/2022 20:53, David Woodhouse wrote:
+>>> Doing the INIT/SIPI/SIPI in parallel for all APs and *then* waiting for
+>>> them shaves about 80% off the AP bringup time on a 96-thread 2-socket
+>>> Skylake box (EC2 c5.metal) — from about 500ms to 100ms.
+>>>
+>>> There are more wins to be had with further parallelisation, but this is
+>>> the simple part.
+>>>
+>>
+>> Hi,
+>>
+>> We are interested in reducing the boot time of servers (with kexec), and
+>> smpboot takes up a significant amount of time while booting. When
+>> testing the patch series (rebased to v6.1) on a server with 128 CPUs
+>> split across 2 NUMA nodes, it brought down the smpboot time from ~700ms
+>> to 100ms. Adding another cpuhp state for do_wait_cpu_initialized to make
+>> sure cpu_init is reached (as done in v1 of the series + using the
+>> cpu_finishup_mask) brought it down further to ~30ms.
+>>
+>> I just wanted to check what was needed to progress the patch series
+>> further for review? There weren't any comments on v4 of the patch so I
+>> couldn't figure out what more is needed. I think its quite useful to
+>> have this working so would be really glad help in anything needed to
+>> restart the review.
+> 
+> 
+> I believe the only thing holding it back was the fact that it broke on
+> some AMD CPUs.
+> 
+> We don't *think* there are any remaining software issues; we think it's
+> hardware. Either an actual hardware race in CPU or chipset, or perhaps
+> even something as simple as a voltage regulator which can't cope with
+> an increase in power draw from *all* the CPUs at the same time.
+> 
+> We have prodded AMD a few times to investigate, but so far to no avail.
+> 
+> Last time I actually spoke to Thomas in person, I think he agreed that
+> we should just merge it and disable the parallel mode for the affected
+> AMD CPUs.
+>
 
-Alex
+ From the comments in v3, it seems to affect multiple generations, would 
+it be worth proceeding with the patches by disabling it on all AMD CPUs 
+to be on the safe side, until the actual issue is found and what causes 
+it, and then follow up later if the issue is found by disabling it only 
+on affected cpus. Maybe simply do something like below?
 
+diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
+index 0f144773a7fc..6b8884592341 100644
+--- a/arch/x86/kernel/smpboot.c
++++ b/arch/x86/kernel/smpboot.c
+@@ -1575,7 +1575,8 @@ void __init native_smp_prepare_cpus(unsigned int 
+max_cpus)
+          * for SEV-ES guests because they can't use CPUID that early.
+          */
+         if (IS_ENABLED(CONFIG_X86_32) || boot_cpu_data.cpuid_level < 
+0x0B ||
+-           cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT))
++           cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT) ||
++           boot_cpu_data.x86_vendor == X86_VENDOR_AMD)
+                 do_parallel_bringup = false;
+
+         if (do_parallel_bringup) {
+
+
+
+
+> If you've already rebased to a newer kernel and tested it, perhaps now
+> is the time to do just that.
+
+If you would like me to repost the rebased patches to restart the 
+reviews (with do_parallel_bringup disabled for AMD), please let me know!
+
+Thanks,
+Usama
