@@ -2,80 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2971686FC8
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 21:41:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A67B686EB9
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 20:14:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229655AbjBAUkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 15:40:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50144 "EHLO
+        id S231963AbjBATOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 14:14:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjBAUk2 (ORCPT
+        with ESMTP id S231330AbjBATOB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 15:40:28 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C798F5CD26
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 12:40:27 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-4ff7c6679f2so103477b3.12
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 12:40:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=u+y1eUE75kzOF0FCyh3hyuMd042g4IapCMvhc5hehs4=;
-        b=agdAeHdow69Gw2Qn3uQo4630v6WSjORE7FyxvWvBRcUTHPZq/8QSzRb2sXf8WlIh+I
-         VwgTEE7C1cqrYXPrXM6yLFG4uLoRThrRVFNGmT8I8meWJAXTI0L441BOD1qLJkD9id1e
-         rA06D5dD0aaJ14KaiCTq/Aa4mugxDLfNsrtU1FkqG/TfxU5JRpRapqe/7yfpzzo9yamM
-         enCgzq3UOkxoQKmAlg8GmXE1KN/AdghVvKXS5TsvAtR8pBHRIGAlN2F4+QzZqk8rZ610
-         uFxuNL/9x05uCM6wE165GIx+GmO9g7aj6Hw77U5KuHR86N74VoWvA2T0wVmK4k8EGyZP
-         0byA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=u+y1eUE75kzOF0FCyh3hyuMd042g4IapCMvhc5hehs4=;
-        b=EjmhK4+h5RIKMos8xdMoN7T0fReVMEn6NqEOqKtOGgpUW26r8gqVxZPxM0IyG2pxsc
-         FY5bmzrxBIYn03E4F6u0JWLisjifKk1Z96M30Vd0B1IxjCTyUlyal9NEXyx1oTnFyK7A
-         GNSDVkml4T3PVKgra2GnpSsA4Ckpg5H8G+U7cjUleYWnACc/ETyzmroUoZbsGusaYRBY
-         wU+Ue41KWotPvFanhYWKA0Io3a6C2bxD/l0voVLRXGA0wAcvttP1zpUe76VvJGwx2x5w
-         873d8d6Ag4h8aePXY66iApPIwcVCVeW/ZCxRB3ojDzruHaS0H+0TfbmsI5wR6D7HMPy4
-         J4kg==
-X-Gm-Message-State: AO0yUKXCo2+elQkAzqVfWee6XQNCd8VyFChlMnA8nLd0cCOVeAn5znDw
-        hq4vxM1f/xgfMNAFP0XfY63warXMfOE=
-X-Google-Smtp-Source: AK7set8EB1ZfwIH8LMIOe/3Ky00wvNRaKKkfGdp8jDS4s6uPwhSjaXmg4z/QhkcSsz9s/VNEcxxeKN8vTQU=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6902:507:b0:855:fafc:5ea7 with SMTP id
- x7-20020a056902050700b00855fafc5ea7mr3ybs.7.1675284026684; Wed, 01 Feb 2023
- 12:40:26 -0800 (PST)
-Date:   Wed,  1 Feb 2023 19:13:24 +0000
-In-Reply-To: <20221129193717.513824-1-mlevitsk@redhat.com>
-Mime-Version: 1.0
-References: <20221129193717.513824-1-mlevitsk@redhat.com>
-X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
-Message-ID: <167527861236.717060.16272359261905713276.b4-ty@google.com>
-Subject: Re: [PATCH v2 00/11] SVM: vNMI (with my fixes)
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
-        Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Sandipan Das <sandipan.das@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
-        Babu Moger <babu.moger@amd.com>, linux-kernel@vger.kernel.org,
-        Jing Liu <jing2.liu@intel.com>,
-        Wyes Karny <wyes.karny@amd.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Content-Type: text/plain; charset="utf-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        Wed, 1 Feb 2023 14:14:01 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F6FB367F9
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 11:14:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675278840; x=1706814840;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=8E/viQsDuVZf98r42WrEgMAhsNl6MKLs4EyRN+Z043s=;
+  b=AnJPmGFDnXeBte2r2K1t8m7VJJZISG447217rqFN1utNGtNwfuQG48xx
+   MHKI0npS/dPfn4PbK//a939SY7g6TgyfhavJ09FZzx+6cGb4BNZbQnbRa
+   3CSbLO+BOJTt9PL00sxfb76RYkoHcVOecQ4PmRgFZEeCcVglmNX/HbukQ
+   XcK08XB1S97efO6e9y/y0GyTWzKZO/j8Gm0JqW1fGtR2wyYck9kuf/OaZ
+   nYnSmIZYU+tXB66WTkRWg12lxWHudT5cT0RoBaW5oXPtSCrechbaxQjLa
+   Lj2jvVt67/n1tD++BlXR9VfKbbeDml4r37ydbrBVJAOF11b2cbIDGDcaf
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="414452707"
+X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
+   d="scan'208";a="414452707"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 11:14:00 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="993798396"
+X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
+   d="scan'208";a="993798396"
+Received: from sgkhacha-mobl1.amr.corp.intel.com (HELO [10.212.227.86]) ([10.212.227.86])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 11:13:59 -0800
+Message-ID: <388d0260-042c-209f-a986-c9ca47061b3c@intel.com>
+Date:   Wed, 1 Feb 2023 11:13:58 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [Patch v3 Part2 3/9] x86/microcode/intel: Fix collect_cpu_info()
+ to reflect current microcode
+Content-Language: en-US
+To:     Ashok Raj <ashok.raj@intel.com>, Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86 <x86@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Stefan Talpalaru <stefantalpalaru@yahoo.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Peter Zilstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Martin Pohlack <mpohlack@amazon.de>
+References: <20230130213955.6046-1-ashok.raj@intel.com>
+ <20230130213955.6046-4-ashok.raj@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20230130213955.6046-4-ashok.raj@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,32 +80,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 29 Nov 2022 21:37:06 +0200, Maxim Levitsky wrote:
-> This is the vNMI patch series based on Santosh Shukla's vNMI patch series.
+On 1/30/23 13:39, Ashok Raj wrote:
+> Currently collect_cpu_info() is only returning what was cached earlier
+> instead of reading the current revision from the proper MSR.
 > 
-> In this version of this patch series I addressed most of the review feedback
-> added some more refactoring and also I think fixed the issue with migration.
+> Collect the current revision and report that value instead of reflecting
+> what was cached in the past.
 > 
-> I only tested this on a machine which doesn't have vNMI, so this does need
-> some testing to ensure that nothing is broken.
+> [TBD:
+>     Need to change microcode/amd.c. I didn't quite follow the logic since
+>     it reports the revision from the patch file, instead of reporting the
+>     real PATCH_LEVEL MSR.
 > 
-> [...]
+>     Untested on AMD.
+> ]
 
-Applied 1, 4, and 5 to kvm-x86 svm.  I split patch 4 as doing so made the
-HF_GIF_MASK change super trivial.
+This thread is meandering a bit.  I think it's because this changelog
+doesn't have a problem statement.  It's hard to agree on a patch being a
+solution to anything if we haven't first agreed on the problem.
 
-vNMI support will get pushed beyond v6.3, but I will do my best to promptly
-review future versions, while I still have all of this paged in...
+What is the problem?
 
-[01/11] KVM: nSVM: Don't sync tlb_ctl back to vmcb12 on nested VM-Exit
-        https://github.com/kvm-x86/linux/commit/8957cbcfed0a
-[04/11] KVM: x86: Move HF_GIF_MASK into "struct vcpu_svm" as "guest_gif"
-        https://github.com/kvm-x86/linux/commit/c760e86f27fe
-[04/11] KVM: x86: Move HF_NMI_MASK and HF_IRET_MASK into "struct vcpu_svm"
-        https://github.com/kvm-x86/linux/commit/916b54a7688b
-[05/11] KVM: x86: Use emulator callbacks instead of duplicating "host flags"
-        https://github.com/kvm-x86/linux/commit/32e69f232db4
-
---
-https://github.com/kvm-x86/linux/tree/next
-https://github.com/kvm-x86/linux/tree/fixes
+What does this "fix"?
