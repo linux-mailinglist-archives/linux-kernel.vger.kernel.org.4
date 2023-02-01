@@ -2,176 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50D2468648D
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 11:41:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BEAD68648F
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 11:41:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230177AbjBAKl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 05:41:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43010 "EHLO
+        id S232218AbjBAKlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 05:41:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232067AbjBAKk5 (ORCPT
+        with ESMTP id S232224AbjBAKk7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 05:40:57 -0500
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2048.outbound.protection.outlook.com [40.107.22.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D3571A493;
-        Wed,  1 Feb 2023 02:40:28 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=StVX7OCccLWMplgA4DyyFXEQzTfhNWQMBRV69ngKJJA2Ng6b0Mf7L6EHNEy3OJNljHUrZ+mHVyApf/grdOniByGjMEE9Zo2J6ZOylRzExIZKQTt78wgjfGXPTnUhQoBzVyDh6otgtESRXGCcIgBIE8qoxLnI2wuCrfMaq3NPaV6rq/4vkTLoaI5rm4hkkcqwQQD1bG5Pd+7EZjuo7VF16WNSQD7F+LLa7G641pPd09/LgPuw1XiWw4vA9GlmojPvabTizgTg60WNzM7cG0IVABaFycl02RZ13AzMcOqlLaYg5GRp6O+1mReFlCDeF7L2Eygejd5sQiUJQT8pNEuzRw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AwwUtue5wCR/qrDcBhsSwW5h2f6WGLFH3hwj2kVLT9c=;
- b=OQGdQ4j0WrMuXcyavZA+cwvSE1+L+ISW23l4on7vbuWgv2gknYbpfGoLEQNFuo0nejpI/zO2W77E3c7gIa3BxcChczO3D4zTWHYOT3UAitm/n2ZVNdACo+gdNS8bPghyhwW2ISjvK3OGsMd3hTeET3FDrdJMztY63T1kuJOJdrK7suvt55NkAJz6vSGNxS0ruFL6pXS/a3D03Tyun4RUTSsgYjvEOSVVyKWZ4RBkhK4HZuqTZtvyC4JZJkq15ck7LoY4VyS6wCKWJVuAYMKFhKnmRdZByIaALgJQbg/UT0DSkEHcpP1SOUK/Se7EhDbQ84085U4BEBxV0bo6C28UVQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AwwUtue5wCR/qrDcBhsSwW5h2f6WGLFH3hwj2kVLT9c=;
- b=lNlap4bT1Vlx8jKZIDckdRxAxzKrPJYAJmBstz7CsPCPqVD2tOJX9Jt/KH9hFaGBrZcybAQSalwOLsQ703Hz2lj+F8U+3Zxwafkj80CaY2OqzFYJcBtJu3KPC28Q5DBsssYx9QgA1V8OmsC8K3OIiRVO3vUDt6RaUn7MmpLaV7g=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from HE1PR0402MB2939.eurprd04.prod.outlook.com (2603:10a6:3:db::18)
- by AM0PR04MB7170.eurprd04.prod.outlook.com (2603:10a6:208:191::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.24; Wed, 1 Feb
- 2023 10:39:34 +0000
-Received: from HE1PR0402MB2939.eurprd04.prod.outlook.com
- ([fe80::4980:91ae:a2a8:14e1]) by HE1PR0402MB2939.eurprd04.prod.outlook.com
- ([fe80::4980:91ae:a2a8:14e1%4]) with mapi id 15.20.6064.024; Wed, 1 Feb 2023
- 10:39:34 +0000
-From:   Clark Wang <xiaoning.wang@nxp.com>
-To:     peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
-        joabreu@synopsys.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, mcoquelin.stm32@gmail.com,
-        linux@armlinux.org.uk, andrew@lunn.ch, hkallweit1@gmail.com
-Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-imx@nxp.com
-Subject: [PATCH V2 2/2] net: stmmac: resume phy separately before calling stmmac_hw_setup()
-Date:   Wed,  1 Feb 2023 18:38:37 +0800
-Message-Id: <20230201103837.3258752-2-xiaoning.wang@nxp.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230201103837.3258752-1-xiaoning.wang@nxp.com>
-References: <20230201103837.3258752-1-xiaoning.wang@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SGXP274CA0002.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b8::14)
- To HE1PR0402MB2939.eurprd04.prod.outlook.com (2603:10a6:3:db::18)
+        Wed, 1 Feb 2023 05:40:59 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F9E126D4
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 02:40:38 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id bk15so50044234ejb.9
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 02:40:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=akVFYb7eyxwgivRRMnUHCdAP1zAt0L+6NAmMhYaMXo0=;
+        b=x1kVc/0t7XOvLu8n7/fpZorROVEFqokMu1Dyq0UsEwgQ6VEA7XYueTtn8DK/7v2Cr3
+         fK8KSnc3ypYeC8QSUT95EkHNQIT5nCmwAYR5/kqX/9/oolB2vI3/Oo/vFpLPgegKGwMg
+         r1XIhHXdQplWd8ZR4kCj6Go5FT7Jh8DkInqrsEtpj9UcikVa5JLltts764di9pszsRjb
+         OxVxqA7rOlM6U2NCzCIMbosFAga+Jw+3+MvTFbsKGfgP8QVdckswUz92mWwjpk/cJs01
+         ucmhp8JiKf6/iCK/NZr4gB3BNFctf3I35M+ng9bJdEImw40R2f+SyCwsLi2RH6seF72r
+         3SWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=akVFYb7eyxwgivRRMnUHCdAP1zAt0L+6NAmMhYaMXo0=;
+        b=3rYpJVairvxT3aibrxcwdd3Ai938WFW6Deuqsjn27zNFpoanQYZskH9HvZbygEYcxA
+         nKv2zPxauBEhbiTECdvseUW229LCXXAb0JxnT5pAZqKEoKqx1y++paVj4buEEmz0p/xJ
+         Zq/FZ1urmiP8RCH7Z89uQPsCfhcjuprv/aZpnMjeNpWbAv9yAgWwYdxWJKxgnbgaizUe
+         SX0ft+ukKzccTEIoTLKW6EzJZmrveNk+nQGyY7HhY9UnlcX3SdM5BooLurONokrXy5tQ
+         TpvIbYbz/6UOyUNQLldh6PNBX4aCkCBArrEgDUBmDDt/f3h61DhrIRmiS4wH7fyfVgGa
+         zZDA==
+X-Gm-Message-State: AO0yUKX6lSDcE6l6SD8p0JZz6MkEnic/P8X5Pa+2a/1prYEmLhFfT30l
+        Qu90u7S9q1YCjTGQwmefLt9q9A==
+X-Google-Smtp-Source: AK7set954JPkWgXwQ8nW8dvSZPB66mOuuccfEFBg4BjCBBYwQJ3B8dYoamn9U5AYum8r9leJoJ1WqA==
+X-Received: by 2002:a17:907:1c95:b0:881:7f2d:7a87 with SMTP id nb21-20020a1709071c9500b008817f2d7a87mr1534595ejc.63.1675248035239;
+        Wed, 01 Feb 2023 02:40:35 -0800 (PST)
+Received: from [192.168.1.101] (abyl20.neoplus.adsl.tpnet.pl. [83.9.31.20])
+        by smtp.gmail.com with ESMTPSA id 21-20020a170906311500b0087045ae5935sm9813939ejx.1.2023.02.01.02.40.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Feb 2023 02:40:34 -0800 (PST)
+Message-ID: <11859977-4e29-e4d7-acd4-94e3d3227c27@linaro.org>
+Date:   Wed, 1 Feb 2023 11:40:32 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: HE1PR0402MB2939:EE_|AM0PR04MB7170:EE_
-X-MS-Office365-Filtering-Correlation-Id: b3656736-c9a7-43c2-b6bd-08db04409bd4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: NbSxE4ILXDYrQEhdR9CAP56Wlo1KkVuFLJuQ2/lUlr6CQdE1cJqnMIbwR+jokMnz7PNn73EADnOfcuLqolmGYsA/wNZuXJ26wybxvsSzKda+Vj0wlPTP4jySQtKkqcICNVuPHsZmi7Kmw76TvqHdrncrJXwg7z2kFMP+dGvYUHTa3PVkVhRGG5slfewMG40DCyeDJ2HtoWLIkg0ITaMDHAI6cPb9np4CpFFDtVK8YL9F+vYzHzZ++i0HeYSGxp/FCzqs9q3LkpgHWHH+a/p7qbOpWHtMbYR5y/ol85fcwIyJ59KyvwsRV4vWMQgdBJCTwZGnfPZBhiP2A4A1/rbh+CtpK3xu+7PNEXUD9Gs6ekyoMWTysqW4Fe8Sw+RR7Ffc6fdauGQsTEP8flxcTfUT9afViVd1T3Zh1IXETsmMx1n0owL6UrNxHsD6y1QqW6oIFgD5OlaEbXcHkAynfzUquWnZpCoH1G6Z1XJbmRjDwdGYS5n9ZkfM4SWdAsIi0Lu7XOuT7YH/xJOSt6FM/YAMO5Q5DQMk962+En+MvktXnWT4xDVAJb/a82qwVlvfh85v80Ixnv2+3J1AIDANYSqZQeCXwJ7twv6eAsuaVUntBGibKtMzYVkhEw4pNmxuyhYfn4GuJZrGXvrxk0gOMT2ZMgedV8oshS4ERfH8wtlDPjk6Pv7O4zngfd2P6y8qrEELW5ekaPaQxe6w35/3oyhEefiSllicXcCTRswMLvuMX4Y=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0402MB2939.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(346002)(396003)(376002)(366004)(136003)(451199018)(1076003)(6512007)(26005)(6506007)(186003)(478600001)(2616005)(83380400001)(52116002)(6486002)(2906002)(86362001)(316002)(36756003)(8676002)(5660300002)(7416002)(8936002)(921005)(66946007)(38350700002)(38100700002)(66476007)(41300700001)(66556008)(4326008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?BW9umz8DyjwUYSTTxl3DFZ2Bzmai9cB33eC+J/Z8h3xXMXi/FPnhjZJhIsG/?=
- =?us-ascii?Q?1rqzFoytPLiCBfsMptYfslVYT/4q+/Ot4c+zGQy26h4jYbmPIL1Sym9CLdNh?=
- =?us-ascii?Q?/iNfPU2koiXdrQfO7BkvmDuQQ4qKUOMEwWEUf2Ii4T1WVTmM8jwf8w8HqxcF?=
- =?us-ascii?Q?wL3mxF76+L1SRE58zRZ09Pyg3VuqNDfYKjPkCMPOqNbqxES551mPqtrXvPO5?=
- =?us-ascii?Q?c1Na+V1QKUYKoDTdvazeo0ky5gFIfqBTZU12F2gKuyWr1utcGLak9xQmL+lC?=
- =?us-ascii?Q?5+lXLgmPFsT6JSLPoWFVh3JM+6ZDA6Fnxal4gYGhdiBQZLvRBlz6XcZ3uz4r?=
- =?us-ascii?Q?B43Gky+iMV+YcqtY8253KUmPLApak1fCjhtOWnpwvOdyuAyBSv5ZTxN8DDLg?=
- =?us-ascii?Q?/qEysJL2V3V8MF9iYOnqni/c6kVASKJPFc2j/S1QAubkjEmJqco05yjKcbQS?=
- =?us-ascii?Q?Pu+FWR0nYmyiULYeRH4WST4CDbS8uXVzyiwUbbuxIMgGxnZGX39ribMxckwc?=
- =?us-ascii?Q?SgLHUT0l7NxuWoGbJ4IBs0J7aBos91ir+udkF+y+b4mRPT0THC1wy/ctOKHA?=
- =?us-ascii?Q?nhfxc7uBVGdIHtTStIaDHCKA+NiJzyspk5LWmRszri0/X71Y3rbIF5OZXYhP?=
- =?us-ascii?Q?U129aqgFPXpjTO6hfJu7w3QFG2R+qf5hkn73dBaBbRT8GUHjL9dCCejg5mKB?=
- =?us-ascii?Q?9onD2E3lsEp2IqFuV91A23DA02GdywWfMD6NhuW08WVHvuGzRhQsudp+voY6?=
- =?us-ascii?Q?NZI/OAgSHm46rXKHm17UxfC8is90820+qu5ekAFUJpmz9W5R0APiapafC18I?=
- =?us-ascii?Q?ybrvD8GgrvwNuzksk2Eyt34oZVBoMhfcJ7hCXozreBYWaGP//2EgDHpEQg78?=
- =?us-ascii?Q?HownrZghbbHMH9+XpRGF3BIwT4RN7+LoZ9YLcb+Yr8MZzBO3AySSxybbDqpJ?=
- =?us-ascii?Q?q61EI7LKjSdb0A/rFyfACaFSwF/jMgugYL0UQrmzhQwjdnAgw1mhQJkjw+x+?=
- =?us-ascii?Q?AyhW5ZZl+P/t07pV+7yOCiN8J5WV9mdaxav6GZleA1OQ6G/SXx+vAzpTAsM8?=
- =?us-ascii?Q?RsXxmQeqmHAk7uNWSezVoCCKQUlwB2ENGi1Tn7kH8TalTrR+t4b4VVp45ycF?=
- =?us-ascii?Q?c272+oHn+8dty1YMh/71TQDwvVfq7Hgh62ADB0/p9PW300wZ/M8XaokhrFMo?=
- =?us-ascii?Q?cvpsSiK6Nq6teDRD8vMFd16JhP5Jqkt6ZpqRlB9vAzGuXcRxyydemFINP/aS?=
- =?us-ascii?Q?Gtd6+A018iN/cL5WzgNiEHKrjmsyY8z7WW3W9tMrskPlMzNEHGGvKgguJ1gN?=
- =?us-ascii?Q?oqD/cHO6eJGPrUnay7BROnt08aMDisPTT/zk0oU4pqu+1HzjRcS2DfXA2Srd?=
- =?us-ascii?Q?OlkJ30xu2VS5nauoE7wDL425hJLJRXmnXJ498qIibvCQMuuvSKgmVQL+LDSR?=
- =?us-ascii?Q?W3JuVd34eMPq8m3jWGGCs78OwgowU9ySr4vJtC6gs7irKy+qVN8l1lhvGLAE?=
- =?us-ascii?Q?Pq1JY8vsTDfSGJfidm3T+kWD4spCC/zjdSmYDwmUBknS582LfibpuwoRrmtD?=
- =?us-ascii?Q?5M/YwdI6SzaYc2Emntc5mcJiT7YcxznztPGPG4ZW1wEUbLa7ue1s/t91UOeS?=
- =?us-ascii?Q?fQ=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b3656736-c9a7-43c2-b6bd-08db04409bd4
-X-MS-Exchange-CrossTenant-AuthSource: HE1PR0402MB2939.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Feb 2023 10:39:34.4383
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: i35yVUcjEAlApECkRXt9W0jdZHSRyH4+1GRViyOhsDL0L23Dm3d+W9n9ug9uIm4OaiFSIaBL7KsVfz3IRetHYw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB7170
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH v2] arm64: Add a couple of missing part numbers
+To:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     marijn.suijten@somainline.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        D Scott Phillips <scott@os.amperecomputing.com>,
+        Michal Orzel <michal.orzel@arm.com>,
+        Linu Cherian <lcherian@marvell.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230201000900.3150295-1-konrad.dybcio@linaro.org>
+ <e1688749-bcdf-14f4-ac34-137a602286e1@arm.com>
+Content-Language: en-US
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <e1688749-bcdf-14f4-ac34-137a602286e1@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On some platforms, mac cannot work after resumed from the suspend with WoL
-enabled.
 
-We found the stmmac_hw_setup() when system resumes will called after the
-stmmac_mac_link_up(). So the correct values set in stmmac_mac_link_up()
-are overwritten by stmmac_core_init() in phylink_resume().
 
-So call the new added function in phylink to resume phy fristly.
-Then can call the stmmac_hw_setup() before calling phy_resume().
+On 1.02.2023 05:50, Anshuman Khandual wrote:
+> 
+> 
+> On 2/1/23 05:39, Konrad Dybcio wrote:
+>> Add Cortex X1C and add/clarify various recent Qualcomm Kryo cores,
+>> which almost exclusively mimic ARM IDs nowadays.
+> 
+> Why add these cpu numbers ? Is there an errata being worked on for them ?
+> Without specific implementation requirement, these might not be necessary.
+Generally I was under the impression that this header
+double-served as sort of a documentation. I checked
+my board and they seem to even use the Arm implementer
+ID (instead of their own, as they did in the past),
+so I suppose they may be using actual Cortex parts
+with no modifications and this patch is not very
+beneficial.
 
-Fixes: 90702dcd19c0 ("net: stmmac: fix MAC not working when system resume back with WoL active")
-Signed-off-by: Clark Wang <xiaoning.wang@nxp.com>
-Reviewed-by: Piotr Raczynski <piotr.raczynski@intel.com>
----
-V2:
- - add Fixes tag
----
- .../net/ethernet/stmicro/stmmac/stmmac_main.c    | 16 +++++++---------
- 1 file changed, 7 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index 1a5b8dab5e9b..38777e408d96 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -7538,16 +7538,9 @@ int stmmac_resume(struct device *dev)
- 	}
- 
- 	rtnl_lock();
--	if (device_may_wakeup(priv->device) && priv->plat->pmt) {
--		phylink_resume(priv->phylink);
--	} else {
--		phylink_resume(priv->phylink);
--		if (device_may_wakeup(priv->device))
--			phylink_speed_up(priv->phylink);
--	}
--	rtnl_unlock();
- 
--	rtnl_lock();
-+	phylink_phy_resume(priv->phylink);
-+
- 	mutex_lock(&priv->lock);
- 
- 	stmmac_reset_queues_param(priv);
-@@ -7565,6 +7558,11 @@ int stmmac_resume(struct device *dev)
- 	stmmac_enable_all_dma_irq(priv);
- 
- 	mutex_unlock(&priv->lock);
-+
-+	phylink_resume(priv->phylink);
-+	if (device_may_wakeup(priv->device) && !priv->plat->pmt)
-+		phylink_speed_up(priv->phylink);
-+
- 	rtnl_unlock();
- 
- 	netif_device_attach(ndev);
--- 
-2.34.1
-
+Konrad
+> 
+>>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> ---
+>> v1 -> v2:
+>>
+>> - Don't change the name of QCOM_CPU_PART_KRYO_4XX_SILVER
+>>
+>>  arch/arm64/include/asm/cputype.h | 9 +++++++++
+>>  1 file changed, 9 insertions(+)
+>>
+>> diff --git a/arch/arm64/include/asm/cputype.h b/arch/arm64/include/asm/cputype.h
+>> index 683ca3af4084..a4260d3194fc 100644
+>> --- a/arch/arm64/include/asm/cputype.h
+>> +++ b/arch/arm64/include/asm/cputype.h
+>> @@ -84,6 +84,7 @@
+>>  #define ARM_CPU_PART_CORTEX_X2		0xD48
+>>  #define ARM_CPU_PART_NEOVERSE_N2	0xD49
+>>  #define ARM_CPU_PART_CORTEX_A78C	0xD4B
+>> +#define ARM_CPU_PART_CORTEX_X1C		0xD4C
+>>  
+>>  #define APM_CPU_PART_POTENZA		0x000
+>>  
+>> @@ -107,9 +108,17 @@
+>>  #define QCOM_CPU_PART_KRYO		0x200
+>>  #define QCOM_CPU_PART_KRYO_2XX_GOLD	0x800
+>>  #define QCOM_CPU_PART_KRYO_2XX_SILVER	0x801
+>> +#define QCOM_CPU_PART_KRYO_3XX_GOLD	0x802
+>>  #define QCOM_CPU_PART_KRYO_3XX_SILVER	0x803
+>>  #define QCOM_CPU_PART_KRYO_4XX_GOLD	0x804
+>>  #define QCOM_CPU_PART_KRYO_4XX_SILVER	0x805
+>> +#define QCOM_CPU_PART_KRYO_5XX_GOLD	ARM_CPU_PART_CORTEX_A77
+>> +#define QCOM_CPU_PART_KRYO_6XX_GOLD	ARM_CPU_PART_CORTEX_A78
+>> +#define QCOM_CPU_PART_KRYO_6XX_GOLDPLUS	ARM_CPU_PART_CORTEX_X1
+>> +#define QCOM_CPU_PART_KRYO_6XX_SILVER_V1	ARM_CPU_PART_CORTEX_A55
+>> +#define QCOM_CPU_PART_KRYO_7XX_GOLD	ARM_CPU_PART_CORTEX_A710
+>> +#define QCOM_CPU_PART_KRYO_7XX_GOLDPLUS	ARM_CPU_PART_CORTEX_X2
+>> +#define QCOM_CPU_PART_KRYO_7XX_SILVER	ARM_CPU_PART_CORTEX_A510
+>>  
+>>  #define NVIDIA_CPU_PART_DENVER		0x003
+>>  #define NVIDIA_CPU_PART_CARMEL		0x004
