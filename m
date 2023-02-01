@@ -2,180 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 505E9686419
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 11:21:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EFB168641F
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 11:24:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232299AbjBAKVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 05:21:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59584 "EHLO
+        id S230286AbjBAKYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 05:24:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232428AbjBAKVh (ORCPT
+        with ESMTP id S229601AbjBAKYS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 05:21:37 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CA0F5EF9F
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 02:21:21 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id a3so10107533wrt.6
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 02:21:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=miY8Nl9pasl3CNdADib5ACTcN+W/hw5ia5NnpxR1DOs=;
-        b=uLgSYR59FG0YvqcaWR3edxkJi/+BwDtZfmZg22UEfWNcGd1MdmeJhJAkVV4YnNlPcU
-         dZrytTLPSl2JkwEoxnsKx0G1I6uHo+ihZ7/NxVZWNTPw73q6oidpJv6B3pGpwDIbnt6T
-         NDe49O7o04eqNDOJu1gFgSK2bR0/QOlfty5Nb1sLnvE6siz4fs364oke8/+aN0jUdEDc
-         OPIKwf6JiIHm6caFfnbu3ec7JwJZ6d7HGs1a4hZWkWs/9PzzD18quoRPbTI7dNZyhozC
-         JoCFilT7p/NBPjY6ichMj7h4TYSnOSADXvfiROZxAaHDGWqLBw451H3ffWWHET+Wq9ao
-         /ITg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=miY8Nl9pasl3CNdADib5ACTcN+W/hw5ia5NnpxR1DOs=;
-        b=0SChDiqiYfH9Etbmq4OZCokv+nb9nXvOxRZJX9g6FEwAeKLmod5KQrfww7ZQoSVb3t
-         O+HGjvX0OCYRADKxCUmC3NzoEgywNTwX8H8ba4ec690Cs4lKDOqtpeKNJ6d/WTQqVbQ8
-         g2vWpxJDK53CxhDOhll8j7QxK4Er9oB8/+FhRWhecbfIT3aBHfNBHW5gQgQqGVw3jaeR
-         LrbRFM//5CHx7N/UmWvWm4N0knBqSz7Ey9uXb2/dnJq1bynsGAy/ikSywsY135JZJT8U
-         Akcwe21VQuhYgZhofZHcE/UapYzMuhw5/SPCgihgbSkHUUSLieDUbXgUXkWobrEufB+6
-         e+CQ==
-X-Gm-Message-State: AO0yUKXqqjSXoKuHAp5bBLZDziiu+1Jh7PbLHEoKiTgUUpm0X1BLdWSG
-        8SdEXn2qghdr+/wLV1Xp5LEeKQ==
-X-Google-Smtp-Source: AK7set/IC4WGJsen1OnuWzNLHYicjdoUj049JRvIbLxwbusnIcgd9UWJMJPf4DuYsVOVsCI4Hx7xzw==
-X-Received: by 2002:a05:6000:143:b0:2bf:e7c4:898a with SMTP id r3-20020a056000014300b002bfe7c4898amr5305107wrx.51.1675246859017;
-        Wed, 01 Feb 2023 02:20:59 -0800 (PST)
-Received: from linaro.org ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id x7-20020a5d6b47000000b002bbed1388a5sm17076852wrw.15.2023.02.01.02.20.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Feb 2023 02:20:58 -0800 (PST)
-Date:   Wed, 1 Feb 2023 12:20:56 +0200
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Georgi Djakov <djakov@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Artur =?utf-8?B?xZp3aWdvxYQ=?= <a.swigon@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 13/23] interconnect: qcom: sm8550: fix registration race
-Message-ID: <Y9o9CGeJ4W2Pm5fG@linaro.org>
-References: <20230201101559.15529-1-johan+linaro@kernel.org>
- <20230201101559.15529-14-johan+linaro@kernel.org>
+        Wed, 1 Feb 2023 05:24:18 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B0F61BCF
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 02:24:17 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1675247054;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/4UEm05XueA6pWxRcOXdrL8zvf0PnlSmgk3ga9kmqQo=;
+        b=XGaaTNZX297PFBDpNlBbvxeA3oWNrVjQtOvVcsUbR5f92zbefFEWi4K7obdeR1+3ks/3It
+        Sb+/vdX12lNonq0Kkn2KsIp30oHyOcZkZlSzwwhtqQYersK4ogqq3uSeoVp8diysTQlSK2
+        7zWXUAX+Mk0hZy9XbCRDVM0ZhcI2Wd84OgHcDu8T9TltK4sH6debcUoII4TMfyNnsqODWW
+        IjTvT9WJi9GLAyePnvKkTIIsArIObFFD7l3d9K1fBRASDsmLSbqMHfKWgILLmrCeMZNkJP
+        re2905VRwmeLp4qi/TaBQPT4EabieYTRb4CjwI1nbC48Yb60Zu8BG8HSrK/WHA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1675247054;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/4UEm05XueA6pWxRcOXdrL8zvf0PnlSmgk3ga9kmqQo=;
+        b=8Yfbbnq5Bb/tyKddoJ3PTySivsUVbUn9B2YMePncC8YdRc7a4pNMBeioThwQqLt1HQlyty
+        YQ7/4A1s43YRBhAg==
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, john.stultz@linaro.org,
+        sboyd@kernel.org, corbet@lwn.net, Mark.Rutland@arm.com,
+        maz@kernel.org, kernel-team@meta.com, neeraju@codeaurora.org,
+        ak@linux.intel.com, feng.tang@intel.com, zhengjun.xing@intel.com,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Waiman Long <longman@redhat.com>, x86@kernel.org
+Subject: Re: [PATCH v2 clocksource 6/7] clocksource: Verify HPET and PMTMR
+ when TSC unverified
+In-Reply-To: <20230125002730.1471349-6-paulmck@kernel.org>
+References: <20230125002708.GA1471122@paulmck-ThinkPad-P17-Gen-1>
+ <20230125002730.1471349-6-paulmck@kernel.org>
+Date:   Wed, 01 Feb 2023 11:24:14 +0100
+Message-ID: <87wn51znsh.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230201101559.15529-14-johan+linaro@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23-02-01 11:15:49, Johan Hovold wrote:
-> The current interconnect provider registration interface is inherently
-> racy as nodes are not added until the after adding the provider. This
-> can specifically cause racing DT lookups to fail.
-> 
-> Switch to using the new API where the provider is not registered until
-> after it has been fully initialised.
+Paul!
 
-Sounds good to me.
+On Tue, Jan 24 2023 at 16:27, Paul E. McKenney wrote:
+> On systems with two or fewer sockets, when the boot CPU has CONSTANT_TSC,
+> NONSTOP_TSC, and TSC_ADJUST, clocksource watchdog verification of the
+> TSC is disabled.  This works well much of the time, but there is the
+> occasional production-level system that meets all of these criteria, but
+> which still has a TSC that skews significantly from atomic-clock time.
+> This is usually attributed to a firmware or hardware fault.  Yes, the
+> various NTP daemons do express their opinions of userspace-to-atomic-clock
+> time skew, but they put them in various places, depending on the daemon
+> and distro in question.  It would therefore be good for the kernel to
+> have some clue that there is a problem.
+>
+> The old behavior of marking the TSC unstable is a non-starter because a
+> great many workloads simply cannot tolerate the overheads and latencies
+> of the various non-TSC clocksources.  In addition, NTP-corrected systems
+> sometimes can tolerate significant kernel-space time skew as long as
+> the userspace time sources are within epsilon of atomic-clock time.
+>
+> Therefore, when watchdog verification of TSC is disabled, enable it for
+> HPET and PMTMR (AKA ACPI PM timer).  This provides the needed in-kernel
+> time-skew diagnostic without degrading the system's performance.
 
-> 
-> Fixes: e6f0d6a30f73 ("interconnect: qcom: Add SM8550 interconnect provider driver")
-> Cc: Abel Vesa <abel.vesa@linaro.org>
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+I'm more than unhappy about this. We finally have a point where the TSC
+watchdog overhead can go away without adding TSC=reliable to the kernel
+commandline.
 
-Reviewed-by: Abel Vesa <abel.vesa@linaro.org>
+Now you add an unconditionally enforce the watchdog again in a way which
+even cannot be disabled on the kernel command line.
 
-> ---
->  drivers/interconnect/qcom/sm8550.c | 22 +++++++++++-----------
->  1 file changed, 11 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/interconnect/qcom/sm8550.c b/drivers/interconnect/qcom/sm8550.c
-> index 54fa027ab961..7ab492ca8fe0 100644
-> --- a/drivers/interconnect/qcom/sm8550.c
-> +++ b/drivers/interconnect/qcom/sm8550.c
-> @@ -2197,9 +2197,10 @@ static int qnoc_probe(struct platform_device *pdev)
->  	provider->pre_aggregate = qcom_icc_pre_aggregate;
->  	provider->aggregate = qcom_icc_aggregate;
->  	provider->xlate_extended = qcom_icc_xlate_extended;
-> -	INIT_LIST_HEAD(&provider->nodes);
->  	provider->data = data;
->  
-> +	icc_provider_init(provider);
-> +
->  	qp->dev = &pdev->dev;
->  	qp->bcms = desc->bcms;
->  	qp->num_bcms = desc->num_bcms;
-> @@ -2208,12 +2209,6 @@ static int qnoc_probe(struct platform_device *pdev)
->  	if (IS_ERR(qp->voter))
->  		return PTR_ERR(qp->voter);
->  
-> -	ret = icc_provider_add(provider);
-> -	if (ret) {
-> -		dev_err_probe(&pdev->dev, ret,
-> -			      "error adding interconnect provider\n");
-> -		return ret;
-> -	}
->  
->  	for (i = 0; i < qp->num_bcms; i++)
->  		qcom_icc_bcm_init(qp->bcms[i], &pdev->dev);
-> @@ -2227,7 +2222,7 @@ static int qnoc_probe(struct platform_device *pdev)
->  		node = icc_node_create(qnodes[i]->id);
->  		if (IS_ERR(node)) {
->  			ret = PTR_ERR(node);
-> -			goto err;
-> +			goto err_remove_nodes;
->  		}
->  
->  		node->name = qnodes[i]->name;
-> @@ -2241,12 +2236,17 @@ static int qnoc_probe(struct platform_device *pdev)
->  	}
->  	data->num_nodes = num_nodes;
->  
-> +	ret = icc_provider_register(provider);
-> +	if (ret)
-> +		goto err_remove_nodes;
-> +
->  	platform_set_drvdata(pdev, qp);
->  
->  	return 0;
-> -err:
-> +
-> +err_remove_nodes:
->  	icc_nodes_remove(provider);
-> -	icc_provider_del(provider);
-> +
->  	return ret;
->  }
->  
-> @@ -2254,8 +2254,8 @@ static int qnoc_remove(struct platform_device *pdev)
->  {
->  	struct qcom_icc_provider *qp = platform_get_drvdata(pdev);
->  
-> +	icc_provider_deregister(&qp->provider);
->  	icc_nodes_remove(&qp->provider);
-> -	icc_provider_del(&qp->provider);
->  
->  	return 0;
->  }
-> -- 
-> 2.39.1
-> 
+Patently bad idea, no cookies for you!
+
+Thanks,
+
+        tglx
