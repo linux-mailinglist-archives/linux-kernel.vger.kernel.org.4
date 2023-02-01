@@ -2,151 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BB5D68657D
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 12:41:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D5F468657E
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 12:42:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231564AbjBALlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 06:41:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51746 "EHLO
+        id S231635AbjBALmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 06:42:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjBALlm (ORCPT
+        with ESMTP id S229483AbjBALmH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 06:41:42 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C2A474D6
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 03:41:40 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id l4-20020a17090a850400b0023013402671so1853542pjn.5
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 03:41:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=5bXvsgoiR+l3eWpgXtRlq4Hbq0hyNkL1nv2x5YPzs4o=;
-        b=T3X2hrM0WKKoWJ6KGYHnf0BQr7JyLhIQDVWxq9npfd8Jhsz05Es81zwx3TIatEp+/f
-         9dUbTZKL9Dz3QQ7ckwYcbsjJgA1pvVDqFoi+4R71yEtafoawRnlsX56lMTnbJt0dzKPb
-         CblfL85QAG+GiWIsWpoGImzHp6E0sKC+QK4mPEKg5YySGbzPKQijLSeFnC34WR0LD6sH
-         5kfK5kfP+6h08UsUlW6X3pDhqc7lFtJveKKTIB3mcMtM5402ZvURzAjREEGdfZvQROUA
-         UE/yU4x82yUhahakcHKjlHkt0jUnC+OgGwgWFKzN01PPF174MAPTGprDOLAkQr4Cae+0
-         6Uuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5bXvsgoiR+l3eWpgXtRlq4Hbq0hyNkL1nv2x5YPzs4o=;
-        b=3IlKfXiQZrEzXQcWvIxpdraKw0L5mgkNyAxEoH9dMs4Bhx4yWCoetrlZbvuCHc0BTB
-         wqde/JvY9rU3+tb6LOy4ROHQZ8kD2OzXgdBPzneIENpFYl3ygFvMwniULw4vRsTWvzRd
-         5xWlGhGEZyGw6y5QPovSGvCh/5IOPyRmdzEFp4cX0jgKr7aX1tMOpQI97UXAum9sAI+u
-         a2RKSP6FZxVGjLjJD+DfgGu4jmAW15tX94a9CNfMnWe8/xR4r+D7Pu3wWhPUCiotCJF7
-         KGVxtveT2DyoBbZp6A8TCT0cCrxHPkKy/BQVJDqPrUBrhbBrm0hw7EhSHOzMz/uIT4iT
-         /LXw==
-X-Gm-Message-State: AO0yUKXNE2dDdtU67tDwpkFOCEeimYedpNDHe8xGTCvLbqp9cD6du5TK
-        W5C0VcdwOAxhfFzbZW/zNkjMc5BEgaG2Rg==
-X-Google-Smtp-Source: AK7set94acvRQfUPbtBsFbvSUn3Lw6SO1V5JWqbdMVT2dTr90tfbsG7QXf7bNN5/G4ePIBhaDW9u0g==
-X-Received: by 2002:a17:902:c943:b0:196:5787:d73a with SMTP id i3-20020a170902c94300b001965787d73amr2848104pla.53.1675251700015;
-        Wed, 01 Feb 2023 03:41:40 -0800 (PST)
-Received: from min-iamroot ([210.91.70.133])
-        by smtp.gmail.com with ESMTPSA id ay2-20020a1709028b8200b0019468fe44d3sm11476329plb.25.2023.02.01.03.41.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Feb 2023 03:41:39 -0800 (PST)
-Date:   Wed, 1 Feb 2023 20:41:34 +0900
-From:   Hyunmin Lee <hn.min.lee@gmail.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>,
-        Jeungwoo Yoo <casionwoo@gmail.com>,
-        Sangyun Kim <sangyun.kim@snu.ac.kr>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Subject: Re: [PATCH v3] mm/vmalloc: replace BUG_ON to a simple if statement
-Message-ID: <20230201114134.GA6060@min-iamroot>
-References: <20230201101152.GA5535@min-iamroot>
- <9f507a28-bbe3-7ebd-6e32-b5dc046c310d@csgroup.eu>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+        Wed, 1 Feb 2023 06:42:07 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7F7A3F29D
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 03:42:05 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 82018336FD;
+        Wed,  1 Feb 2023 11:42:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1675251724; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=oHYQwYae+Nqi8c2dcOjmXgPDqVbUG/Drybt00Yrvza0=;
+        b=fqsLR5dML4iyyZirtgGS0cGyrakP2+KduDZ2Cm8PzNuG47ZMl9NuRkD5hs3AyCXd0FJ3zg
+        bbXQcPSYxKisgVCKjgaw6L2qQM32JBBNDWS+RnrFHAm5Q56C0t+f0+Mjfm8BSi0LBLwxW0
+        tf1c3xYEqMb6i77W+iViPs8gIuPOqx0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1675251724;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=oHYQwYae+Nqi8c2dcOjmXgPDqVbUG/Drybt00Yrvza0=;
+        b=YfDms+Q+Rk1hbKoD3OG/K4cScXLpb+APyCjAQRfPp+dBECGQawGudYp6iSNjSOT+m8ymI5
+        YJE7QIYMuiFtpmBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 76E0C1348C;
+        Wed,  1 Feb 2023 11:42:04 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id QcfEHAxQ2mNCJgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 01 Feb 2023 11:42:04 +0000
+Date:   Wed, 01 Feb 2023 12:42:03 +0100
+Message-ID: <87edr9y5mc.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] sound fixes for 6.2-rc7
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=ISO-8859-2
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <9f507a28-bbe3-7ebd-6e32-b5dc046c310d@csgroup.eu>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 01, 2023 at 10:37:19AM +0000, Christophe Leroy wrote:
-> 
-> 
-> Le 01/02/2023 à 11:11, Hyunmin Lee a écrit :
-> > [Vous ne recevez pas souvent de courriers de hn.min.lee@gmail.com. D?couvrez pourquoi ceci est important ? https://aka.ms/LearnAboutSenderIdentification ]
-> > 
-> > As per the coding standards, in the event of an abnormal condition that
-> > should not occur under normal circumstances, the kernel should attempt
-> > recovery and proceed with execution, rather than halting the machine.
-> > 
-> > Specifically, in the alloc_vmap_area() function, use a simple if()
-> > instead of using BUG_ON() halting the machine.
-> > 
-> > Co-Developed-by: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
-> > Co-Developed-by: Jeungwoo Yoo <casionwoo@gmail.com>
-> > Co-Developed-by: Sangyun Kim <sangyun.kim@snu.ac.kr>
-> > Signed-off-by: Hyunmin Lee <hn.min.lee@gmail.com>
-> > Signed-off-by: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
-> > Signed-off-by: Jeungwoo Yoo <casionwoo@gmail.com>
-> > Signed-off-by: Sangyun Kim <sangyun.kim@snu.ac.kr>
-> > Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-> > ---
-> > v1->v2 : Add commit description
-> > v2->v3 : Change WARN_ON() to if()
-> > ---
-> >   mm/vmalloc.c | 11 ++++++++---
-> >   1 file changed, 8 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> > index 74afa2208558..52a346bc02a1 100644
-> > --- a/mm/vmalloc.c
-> > +++ b/mm/vmalloc.c
-> > @@ -1587,9 +1587,14 @@ static struct vmap_area *alloc_vmap_area(unsigned long size,
-> >          int purged = 0;
-> >          int ret;
-> > 
-> > -       BUG_ON(!size);
-> > -       BUG_ON(offset_in_page(size));
-> > -       BUG_ON(!is_power_of_2(align));
-> > +       if (unlikely(!size))
-> > +               return ERR_PTR(-EINVAL);
-> > +
-> > +       if (unlikely(offset_in_page(size)))
-> > +               return ERR_PTR(-EINVAL);
-> > +
-> > +       if (unlikely(!is_power_of_2(align)))
-> > +               return ERR_PTR(-EINVAL);
-> 
-> I would have written it more compact. When using BUG_ON or WARN_ON it is 
-> interesting to have three separate lines because you get the line number 
-> in the Oops message, but here you are just returning the exact same 
-> error code, so it could be:
-> 
-> 	if (unlikely(!size || offset_in_page(size) || !is_power_of_2(align)))
-> 		return ERR_PTR(-EINVAL);
-> 
-> > 
-> >          if (unlikely(!vmap_initialized))
-> >                  return ERR_PTR(-EBUSY);
-> > --
-> > 2.25.1
-> > 
-> > 
-Hi Christophe,
+Linus,
 
-Thanks for your comment.
-I will send new patch.
+please pull sound fixes for v6.2-rc7 from:
 
-Best,
-Min
+  git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-6.2-rc7
+
+The topmost commit is c7a806d9ce6757ff56078674916e53bd859f242d
+
+----------------------------------------------------------------
+
+sound fixes for 6.2-rc7
+
+A bit higher volume of changes than wished, but each change is
+relatively small and the fix targets are mostly device-specific,
+so those should be safe as a late stage merge.
+
+The most significant LoC is about the memalloc helper fix, which
+is applied only to Xen PV.  The other major parts are ASoC Intel
+SOF and AVS fixes that are scattered as various small code
+changes.  The rest are device-specific fixes and quirks for HD-
+and USB-audio, FireWire and ASoC AMD / HDMI.
+
+----------------------------------------------------------------
+
+Amadeusz S³awiñski (1):
+      ASoC: Intel: avs: Implement PCI shutdown
+
+Andy Shevchenko (6):
+      ASoC: amd: acp-es8336: Drop reference count of ACPI device after use
+      ASoC: Intel: bytcht_es8316: Drop reference count of ACPI device after use
+      ASoC: Intel: bytcr_rt5651: Drop reference count of ACPI device after use
+      ASoC: Intel: bytcr_rt5640: Drop reference count of ACPI device after use
+      ASoC: Intel: bytcr_wm5102: Drop reference count of ACPI device after use
+      ASoC: Intel: sof_es8336: Drop reference count of ACPI device after use
+
+Arnd Bergmann (1):
+      ASoC: cs42l56: fix DT probe
+
+Artemii Karasev (1):
+      ALSA: hda/via: Avoid potential array out-of-bound in add_secret_dac_path()
+
+Bard Liao (3):
+      ASoC: SOF: sof-audio: start with the right widget type
+      ASoC: SOF: sof-audio: unprepare when swidget->use_count > 0
+      ASoC: SOF: keep prepare/unprepare widgets in sink path
+
+Cezary Rojewski (1):
+      ALSA: hda: Do not unset preset when cleaning up codec
+
+Dan Carpenter (1):
+      ASoC: SOF: ipc4-mtrace: prevent underflow in sof_ipc4_priority_mask_dfs_write()
+
+Jeremy Szu (1):
+      ALSA: hda/realtek: fix mute/micmute LEDs, speaker don't work for a HP platform
+
+Krzysztof Kozlowski (1):
+      ASoC: codecs: wsa883x: correct playback min/max rates
+
+Kuninori Morimoto (1):
+      ASoC: hdmi-codec: zero clear HDMI pdata
+
+Peter Ujfalusi (1):
+      ASoC: SOF: sof-audio: prepare_widgets: Check swidget for NULL on sink failure
+
+Pierre-Louis Bossart (4):
+      ASoC: Intel: sof_rt5682: always set dpcm_capture for amplifiers
+      ASoC: Intel: sof_cs42l42: always set dpcm_capture for amplifiers
+      ASoC: Intel: sof_nau8825: always set dpcm_capture for amplifiers
+      ASoC: Intel: sof_ssp_amp: always set dpcm_capture for amplifiers
+
+Ranjani Sridharan (1):
+      ASoC: SOF: sof-audio: skip prepare/unprepare if swidget is NULL
+
+Syed Saba Kareem (1):
+      ASoC: amd: yc: Add DMI support for new acer/emdoor platforms
+
+Takashi Iwai (2):
+      ALSA: usb-audio: Add FIXED_RATE quirk for JBL Quantum610 Wireless
+      ALSA: memalloc: Workaround for Xen PV
+
+Takashi Sakamoto (2):
+      firewire: fix memory leak for payload of request subaction to IEC 61883-1 FCP region
+      ALSA: firewire-motu: fix unreleased lock warning in hwdep device
+
+Victor Shyba (1):
+      ALSA: hda/realtek: Add Acer Predator PH315-54
+
+fengwk (1):
+      ASoC: amd: yc: Add Xiaomi Redmi Book Pro 15 2022 into DMI table
+
+---
+ drivers/firewire/core-cdev.c                       |  4 +-
+ .../gpu/drm/bridge/synopsys/dw-hdmi-i2s-audio.c    |  1 +
+ sound/core/memalloc.c                              | 87 +++++++++++++++++-----
+ sound/firewire/motu/motu-hwdep.c                   |  4 +
+ sound/pci/hda/hda_bind.c                           |  2 +
+ sound/pci/hda/hda_codec.c                          |  1 -
+ sound/pci/hda/patch_realtek.c                      |  2 +
+ sound/pci/hda/patch_via.c                          |  3 +
+ sound/soc/amd/acp-es8336.c                         |  6 +-
+ sound/soc/amd/yc/acp6x-mach.c                      | 21 ++++++
+ sound/soc/codecs/cs42l56.c                         |  6 --
+ sound/soc/codecs/wsa883x.c                         |  4 +-
+ sound/soc/intel/avs/core.c                         | 24 ++++++
+ sound/soc/intel/boards/bytcht_es8316.c             | 20 +++--
+ sound/soc/intel/boards/bytcr_rt5640.c              | 12 +--
+ sound/soc/intel/boards/bytcr_rt5651.c              |  2 +-
+ sound/soc/intel/boards/bytcr_wm5102.c              |  2 +-
+ sound/soc/intel/boards/sof_cs42l42.c               |  3 +
+ sound/soc/intel/boards/sof_es8336.c                | 14 ++--
+ sound/soc/intel/boards/sof_nau8825.c               |  5 +-
+ sound/soc/intel/boards/sof_rt5682.c                |  5 +-
+ sound/soc/intel/boards/sof_ssp_amp.c               |  5 +-
+ sound/soc/sof/ipc4-mtrace.c                        |  7 +-
+ sound/soc/sof/sof-audio.c                          | 16 ++--
+ sound/usb/quirks.c                                 |  2 +
+ 25 files changed, 189 insertions(+), 69 deletions(-)
+
