@@ -2,141 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43EAA685D4C
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 03:20:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00C95685D4E
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 03:22:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231808AbjBACU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 21:20:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50682 "EHLO
+        id S231821AbjBACWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 21:22:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbjBACUZ (ORCPT
+        with ESMTP id S229863AbjBACW1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 21:20:25 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C3B183
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 18:20:24 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id t12-20020a17090aae0c00b00229f4cff534so2342449pjq.1
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 18:20:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=1MMwx9ODtw2il+L0S/Yx7Xt3qG0rGIJ1WWhiqIjHGQs=;
-        b=DNvC96wzyC/Z43UGfNP1xHRIq38cJ1lEBlAXqjtPxL+N8of47Au7OUr/WazqFlfqNX
-         CYvz8+XQnUJs1AfiQZHCd9DHUhVekZW4IZfLYf+vgk+ps1S56WUInZfQryxbRRT0DA9Z
-         PTI7K97ASmWTbEvVU88rwUN4P2O8aqT27Wg3/0TKi0+8GRHp/MQ1NZa9S9o0NQloKlit
-         jFu0Sx2Q5jU7+rnkvZ+4jkgzi1In+gwzWkneDzd3ol3SkAxba7BIu6nHKhBFe0VvxxRx
-         VphTGgOafY4Qg10T+Dx50CLg+fyl4AZ8l7ppCTMLod+pUImfMn2iufsSZoSns5X1x6bY
-         Ol0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1MMwx9ODtw2il+L0S/Yx7Xt3qG0rGIJ1WWhiqIjHGQs=;
-        b=vWJPTCvVOFRwx4z6Hwc7odCbi3VDLAsq+72ItYe8anR5AivsZ0ZTUYrvtfbYAv8ROb
-         uYItM/5fgwRR+0G5xEhTtWY444aFJ4dsFZYVh85gMYnHv4RzdXyet4sXzzIx1KIjAMZ7
-         gdNtyTsc9CXnTMNtnRvdMp+SYVjjBKvq5g9fBY8qguOGVfoX3DRp8dsG6PXflQKzRQNY
-         amFrj1ScT4OZKzPaPpcTY7GVoYKQYe3XKyDLZboQwvTVxLMN07TZltcPcWxEFkkRkUAZ
-         kdBjNH0slq8ji2FYVZd20h0sTZ35yUvu++yksJEsEAbhWvAiMdB+PkZIqPvqI5ecxWXG
-         kzFg==
-X-Gm-Message-State: AO0yUKXkHTlWD3lBN8TD+h9EV23eNAKgXSoqnnzxo0auFWvHLYBBy7ov
-        q4bFyWiKvHDZsI/7+wUrtaYMuA==
-X-Google-Smtp-Source: AK7set88QhzZb35gToP7v0qzuGf0SvHK0+IDWM+2Xhk1CWrk9VgpNTkMG7HXWUt4bQBjYW9q+LNAbA==
-X-Received: by 2002:a17:902:d091:b0:198:af4f:de09 with SMTP id v17-20020a170902d09100b00198af4fde09mr19584plv.9.1675218023779;
-        Tue, 31 Jan 2023 18:20:23 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id h11-20020a170902f7cb00b001926392adf9sm10439243plw.271.2023.01.31.18.20.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 18:20:23 -0800 (PST)
-Date:   Wed, 1 Feb 2023 02:20:20 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Alexey Kardashevskiy <aik@amd.com>, kvm@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        Yury Norov <yury.norov@gmail.com>,
-        Venu Busireddy <venu.busireddy@oracle.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sandipan Das <sandipan.das@amd.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Kees Cook <keescook@chromium.org>,
-        Juergen Gross <jgross@suse.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH kernel v3 2/3] KVM: SEV: Enable data breakpoints in SEV-ES
-Message-ID: <Y9nMZNrV+Iz8Ce5l@google.com>
-References: <20230120031047.628097-1-aik@amd.com>
- <20230120031047.628097-3-aik@amd.com>
- <Y9lqiXu4yUgP6APS@zn.tnic>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y9lqiXu4yUgP6APS@zn.tnic>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 31 Jan 2023 21:22:27 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D859A183;
+        Tue, 31 Jan 2023 18:22:25 -0800 (PST)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4P65KW3Yw1z6FMyr;
+        Wed,  1 Feb 2023 10:22:23 +0800 (CST)
+Received: from xaxapp02.zte.com.cn ([10.88.97.241])
+        by mse-fl2.zte.com.cn with SMTP id 3112MIjp082981;
+        Wed, 1 Feb 2023 10:22:19 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp01[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Wed, 1 Feb 2023 10:22:19 +0800 (CST)
+Date:   Wed, 1 Feb 2023 10:22:19 +0800 (CST)
+X-Zmail-TransId: 2af963d9ccdb3c5e9129
+X-Mailer: Zmail v1.0
+Message-ID: <202302011022199155711@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <clm@fb.com>
+Cc:     <josef@toxicpanda.com>, <dsterba@suse.com>,
+        <linux-btrfs@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIXSBCdHJmczogZml4IGNvbXBpbGUgZXJyb3IgYWJvdXQgdW5pbml0aWFsaXplZCB2YXJpYWJsZQ==?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 3112MIjp082981
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 63D9CCDF.000 by FangMail milter!
+X-FangMail-Envelope: 1675218143/4P65KW3Yw1z6FMyr/63D9CCDF.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 63D9CCDF.000/4P65KW3Yw1z6FMyr
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023, Borislav Petkov wrote:
-> Hey Sean,
-> 
-> On Fri, Jan 20, 2023 at 02:10:46PM +1100, Alexey Kardashevskiy wrote:
-> > Prior to SEV-ES, KVM stored/loaded host debug registers upon switching
-> > to/from a VM. Changing those registers inside a running SEV VM
-> > triggered #VC exit to KVM.
-> > 
-> > SEV-ES added the encrypted state (ES) which uses an encrypted guest page
-> > for the VM state (VMSA). The hardware saves/restores certain registers on
-> > VMRUN/VMEXIT according to a swap type (A, B, C), see
-> > "Table B-3. Swap Types" in the AMD Architecture Programmer’s Manual
-> > volume 2.
-> > 
-> > AMD Milan (Fam 19h) introduces support for the debug registers swapping.
-> > DR6 and DR7 are always swapped. DR[0-3] and DR[0-3]_ADDR_MASK are swapped
-> > a type B when SEV_FEATURES[5] ("DebugSwap") is set.
-> > 
-> > Enable DebugSwap in VMSA. But only do so if CPUID Fn80000021_EAX[0]
-> > ("NoNestedDataBp", "Processor ignores nested data breakpoints") is
-> > supported by the SOC as otherwise a malicious SEV-ES guest can set up
-> > data breakpoints on the #VC IDT entry/stack and cause an infinite loop.
-> > 
-> > Eliminate DR7 and #DB intercepts as:
-> > - they are not needed when DebugSwap is supported;
-> > - #VC for these intercepts is most likely not supported anyway and
-> > kills the VM.
-> > Keep DR7 intercepted unless DebugSwap enabled to prevent the infinite #DB
-> > loop DoS.
-> 
-> ...
-> 
-> ok to take this through the tip tree?
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-I would prefer to take this through KVM, there's enough subtle complexity in this
-code that it'd be nice to have it close by.
+fs/btrfs/tree-log.c:6166:6: note: 'last_range_start' was declared here
+fs/btrfs/volumes.c:2598:27: note: 'seed_devices' was declared here
+fs/btrfs/send.c:1909:13: error: 'right_gen' may be used uninitialized in this function [-Werror=maybe-uninitialized]
 
-If you're happy with patch 1, maybe ack that one and take it through KVM, and
-route patch 3 through tip?
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+---
+ fs/btrfs/send.c     | 2 +-
+ fs/btrfs/tree-log.c | 2 +-
+ fs/btrfs/volumes.c  | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/fs/btrfs/send.c b/fs/btrfs/send.c
+index c3146ce84156..3c9f2d30065d 100644
+--- a/fs/btrfs/send.c
++++ b/fs/btrfs/send.c
+@@ -1875,7 +1875,7 @@ static int get_cur_inode_state(struct send_ctx *sctx, u64 ino, u64 gen,
+ 	int left_ret;
+ 	int right_ret;
+ 	u64 left_gen;
+-	u64 right_gen;
++	u64 right_gen = 0;
+ 	struct btrfs_inode_info info;
+
+ 	ret = get_inode_info(sctx->send_root, ino, &info);
+diff --git a/fs/btrfs/tree-log.c b/fs/btrfs/tree-log.c
+index 200cea6e49e5..b91fa398b814 100644
+--- a/fs/btrfs/tree-log.c
++++ b/fs/btrfs/tree-log.c
+@@ -6163,7 +6163,7 @@ static int log_delayed_deletions_incremental(struct btrfs_trans_handle *trans,
+ {
+ 	struct btrfs_root *log = inode->root->log_root;
+ 	const struct btrfs_delayed_item *curr;
+-	u64 last_range_start;
++	u64 last_range_start = 0;
+ 	u64 last_range_end = 0;
+ 	struct btrfs_key key;
+
+diff --git a/fs/btrfs/volumes.c b/fs/btrfs/volumes.c
+index 83cb2db43779..1298569cf8b5 100644
+--- a/fs/btrfs/volumes.c
++++ b/fs/btrfs/volumes.c
+@@ -2595,7 +2595,7 @@ int btrfs_init_new_device(struct btrfs_fs_info *fs_info, const char *device_path
+ 	struct block_device *bdev;
+ 	struct super_block *sb = fs_info->sb;
+ 	struct btrfs_fs_devices *fs_devices = fs_info->fs_devices;
+-	struct btrfs_fs_devices *seed_devices;
++	struct btrfs_fs_devices *seed_devices = NULL;
+ 	u64 orig_super_total_bytes;
+ 	u64 orig_super_num_devices;
+ 	int ret = 0;
+-- 
+2.25.1
