@@ -2,161 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 373C168636D
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 11:08:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A48B68637A
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 11:12:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231635AbjBAKIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 05:08:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48208 "EHLO
+        id S231731AbjBAKMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 05:12:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231543AbjBAKIC (ORCPT
+        with ESMTP id S230204AbjBAKL7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 05:08:02 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F4165DC39;
-        Wed,  1 Feb 2023 02:07:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=g+3Kn0G4m+PlpkGb8DecHsMvWoNFYkOTR3sD11gMtlE=; b=bl7PyQga9sZkESdiKhqmk7ZoT3
-        9daFCbP2lTujVbKRcXeogZoeKXWceOXK4w5L5XjP/1hSybxRCS+sV01rUM1s/yEBrG2wNc7B2bIbZ
-        ONfSWIVTHSU7mL3wMNghdxIAxCLCuh2ELVkMIhJEJel/MMeayrLgVuHlO4BcsECAjv4yIZY5Md0nc
-        g2MdN1oVvg8lSPHTIwwvnTM9HL8ykPDThCxpauh2aeSH8HV1bo5RnDT/JsNlpwnl4COaB2L17ug32
-        CDvGrgXwwPV7Xr4szxAV+aJ4SbKClR4btgl7mYp/6oRKLLmft+udxMriTHJLJiXyxh7noXTsxIw3O
-        ZTdeD9zg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pNA0u-004iqu-2i;
-        Wed, 01 Feb 2023 10:06:50 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 69D63300129;
-        Wed,  1 Feb 2023 11:07:21 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 38E56206F4AB2; Wed,  1 Feb 2023 11:07:21 +0100 (CET)
-Date:   Wed, 1 Feb 2023 11:07:21 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Song Liu <song@kernel.org>
-Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hch@lst.de, kernel-team@meta.com,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: Re: [PATCH v5] module: replace module_layout with module_memory
-Message-ID: <Y9o52aAC33YlRueI@hirez.programming.kicks-ass.net>
-References: <20230201064720.1949224-1-song@kernel.org>
+        Wed, 1 Feb 2023 05:11:59 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A175245
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 02:11:58 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id rm7-20020a17090b3ec700b0022c05558d22so1484774pjb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 02:11:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OYqzg/T0LaloBHYldjFBFyRxBuHKs2BASAL6cTqmqDQ=;
+        b=kYSkjbt3CoDGthjE1muYlphECzFd1NTCJGRUkVfEih4s35VlVL1HTaH0ENL2dd/v/y
+         MDCRryUhOxagYtXjQawfsnLxB86PRAu7qiQVrHiJvh5fS+Kk2KAqmBqLsrel6yBc6xs1
+         7qZYg2oBnhZNRG9OCZNVuqCNuQrW741VSacLnkGxCeiTV+OKfX68fo9ZYEuoMjN84MYV
+         Sgg0Cv40eYoNZFo5xuoMsWmaHj/9mbj6PSqZr8kayz1vRcyj1JOJeUhb0x+CEpgm5a1v
+         m4qXJXGM3QRZIrquhuDuaqgvtrqnlyIoolwk9jLlhQa7PNHiA/DuYr2KGA5MbPP2K81J
+         D2hQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OYqzg/T0LaloBHYldjFBFyRxBuHKs2BASAL6cTqmqDQ=;
+        b=McVSxkr+lRFOhkUIjI/7ZFVuy/mJ6OcT0wqXOTB0NPyUj1dck9CQeySYJaZ2y+R5e5
+         D29NhTiNgBoMTZ7JW/HhQG8h+FHqbVobaQ5tJ5wUil+7hL6aj5CB89APPJdqARObfhXm
+         7GNDYjhoDs9MfxYb/JaeOu86RiRdLZoCPbzbDUxC4irJZfI1viJfRDcaxwmV6j0vVqfr
+         5h896+U1wVKJqzesGeqqKUpKW9yBOoaY2U1ANT0Rif2STisALIvZ1LnHgqkKHV84W70/
+         HgnQlr1PN6Hg97c8sAHYEg2TIfnbK6M1nx7/72s1tMwVEkusvjEEyyktRki39J9F57jV
+         dzmA==
+X-Gm-Message-State: AO0yUKX+GU5Ds5U1N7ro1D44oboYIJ0tiGZZzqfUwLS/F23yEPQZLgag
+        6L+vFoTozQZFVOVP3iDSk/PA/ydPzkCZ8w==
+X-Google-Smtp-Source: AK7set9yNodUn2+Snq1aZuqL2V8nqcr56KT2NdQkF8cksyL8vJf600SDWYXtNiA+fTEausjp7bM3Vw==
+X-Received: by 2002:a05:6a21:99aa:b0:bc:ccea:a969 with SMTP id ve42-20020a056a2199aa00b000bccceaa969mr2451168pzb.26.1675246317753;
+        Wed, 01 Feb 2023 02:11:57 -0800 (PST)
+Received: from min-iamroot ([210.91.70.133])
+        by smtp.gmail.com with ESMTPSA id f9-20020a639c09000000b004b4d4de54absm9167806pge.59.2023.02.01.02.11.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Feb 2023 02:11:57 -0800 (PST)
+Date:   Wed, 1 Feb 2023 19:11:52 +0900
+From:   Hyunmin Lee <hn.min.lee@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>,
+        Jeungwoo Yoo <casionwoo@gmail.com>,
+        Sangyun Kim <sangyun.kim@snu.ac.kr>,
+        Mike Rapoport <rppt@kernel.org>
+Subject: [PATCH v3] mm/vmalloc: replace BUG_ON to a simple if statement
+Message-ID: <20230201101152.GA5535@min-iamroot>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230201064720.1949224-1-song@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 10:47:20PM -0800, Song Liu wrote:
-> diff --git a/include/linux/module.h b/include/linux/module.h
-> index 8c5909c0076c..3429d354fec0 100644
-> --- a/include/linux/module.h
-> +++ b/include/linux/module.h
-> @@ -320,17 +320,50 @@ struct mod_tree_node {
->  	struct latch_tree_node node;
->  };
->  
-> +enum mod_mem_type {
-	MOD_TEXT = 0,
+As per the coding standards, in the event of an abnormal condition that
+should not occur under normal circumstances, the kernel should attempt
+recovery and proceed with execution, rather than halting the machine.
 
-(just paranoia, and you explicitly rely on that below)
+Specifically, in the alloc_vmap_area() function, use a simple if()
+instead of using BUG_ON() halting the machine.
 
-> +	MOD_DATA,
-> +	MOD_RODATA,
-> +	MOD_RO_AFTER_INIT,
-> +	MOD_INIT_TEXT,
-> +	MOD_INIT_DATA,
-> +	MOD_INIT_RODATA,
-> +
-> +	MOD_MEM_NUM_TYPES,
-> +	MOD_INVALID = -1,
-> +};
-> +
-> +#define mod_mem_type_is_core_data(type)	\
-> +	((type) == MOD_DATA ||		\
-> +	 (type) == MOD_RODATA ||	\
-> +	 (type) == MOD_RO_AFTER_INIT)
-> +
-> +#define mod_mem_type_is_core(type)	\
-> +	((type) == MOD_TEXT ||		\
-> +	 mod_mem_type_is_core_data(type))
-> +
-> +#define mod_mem_type_is_init(type)	\
-> +	((type) == MOD_INIT_TEXT ||	\
-> +	 (type) == MOD_INIT_DATA ||	\
-> +	 (type) == MOD_INIT_RODATA)
+Co-Developed-by: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
+Co-Developed-by: Jeungwoo Yoo <casionwoo@gmail.com>
+Co-Developed-by: Sangyun Kim <sangyun.kim@snu.ac.kr>
+Signed-off-by: Hyunmin Lee <hn.min.lee@gmail.com>
+Signed-off-by: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
+Signed-off-by: Jeungwoo Yoo <casionwoo@gmail.com>
+Signed-off-by: Sangyun Kim <sangyun.kim@snu.ac.kr>
+Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+---
+v1->v2 : Add commit description
+v2->v3 : Change WARN_ON() to if()
+---
+ mm/vmalloc.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-Note that, per definition:
+diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+index 74afa2208558..52a346bc02a1 100644
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@ -1587,9 +1587,14 @@ static struct vmap_area *alloc_vmap_area(unsigned long size,
+ 	int purged = 0;
+ 	int ret;
+ 
+-	BUG_ON(!size);
+-	BUG_ON(offset_in_page(size));
+-	BUG_ON(!is_power_of_2(align));
++	if (unlikely(!size))
++		return ERR_PTR(-EINVAL);
++
++	if (unlikely(offset_in_page(size)))
++		return ERR_PTR(-EINVAL);
++
++	if (unlikely(!is_power_of_2(align)))
++		return ERR_PTR(-EINVAL);
+ 
+ 	if (unlikely(!vmap_initialized))
+ 		return ERR_PTR(-EBUSY);
+-- 
+2.25.1
 
-  core := !init
-  data := !text
-
-(and vice-versa ofcourse, so pick the smallest set) also ISTR you
-explicitly needing is_text somewhere.... ah yes, module_enable_nx().
-
-That is; I'd write something like:
-
-#define mod_mem_type_is_core(type) !mod_mem_type_is_init(type)
-
-#define mod_mem_type_is_text(type)	\
-	((type) == MOD_TEXT ||		\
-	 (type) == MOD_INIT_TEXT)
-
-#define mod_mem_type_is_data(type) !mod_mem_type_is_text(type)
-
-and then possibly additional helpers like is_core_data etc.. where
-needed.
-
-#define mod_mem_type_is_core_data(type)	\
-	(mod_mem_type_is_core(type) &&	\
-	 mod_mem_type_is_data(type))
-
-> +#define for_each_mod_mem_type(type)		\
-> +	for (enum mod_mem_type (type) = 0;	\
-> +	     (type) < MOD_MEM_NUM_TYPES; (type)++)
-
-So how about instead of this ...
-
-> +#define for_core_mod_mem_type(type)			\
-> +	for (enum mod_mem_type (type) = 0;		\
-> +	     (type) < MOD_MEM_NUM_TYPES; (type)++)	\
-> +		if (mod_mem_type_is_core(type))
-> +
-> +#define for_init_mod_mem_type(type)			\
-> +	for (enum mod_mem_type (type) = 0;		\
-> +	     (type) < MOD_MEM_NUM_TYPES; (type)++)	\
-> +		if (mod_mem_type_is_init(type))
-
-... you write something like:
-
-#define for_class_mod_mem_type(type, class)		\
-	for_each_mod_mem_type(type)			\
-		if (mod_mem_type_is_##class(type))
-
-Then we can write things like:
-
-	for_class_mod_mem_type(type, init)
-	for_class_mod_mem_type(type, data)
-
-and
-
-	for_class_mod_mem_type(type, core_data)
-
-(this last could be used in show_datasize() for example).
-
-Does that make sense?
