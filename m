@@ -2,115 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69C6E686993
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 16:08:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D61CD6869CC
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 16:16:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231946AbjBAPI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 10:08:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42160 "EHLO
+        id S232450AbjBAPQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 10:16:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232149AbjBAPIO (ORCPT
+        with ESMTP id S230013AbjBAPPq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 10:08:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE9D474C32
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 07:05:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675263815;
+        Wed, 1 Feb 2023 10:15:46 -0500
+X-Greylist: delayed 497 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 01 Feb 2023 07:15:19 PST
+Received: from out-116.mta1.migadu.com (out-116.mta1.migadu.com [IPv6:2001:41d0:203:375::74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89DE93430D
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 07:15:19 -0800 (PST)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1675264015;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uSFGQnJKj8/Bp7/utfIPR5eu4HZIdNy/TbWIaePtzGs=;
-        b=Ig4bJrGmIRHb7ZgcaPBaK2dRc552ahDMY6SUM0W8gR6GzoL2PwhKzn/NeicyrD1mp0PzZ/
-        DhHS9UZCsZOWy7oP7yqjLQkqHGjoeOZ1d1/ub7NB9i12yM6Pw8tYvSIw181R5g4BcWp2FZ
-        DQgfOsuFHwPf5+/1jrcMN1OKhhe4gXY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-621-79VmOYT6PBagsGl4iztLCA-1; Wed, 01 Feb 2023 10:03:29 -0500
-X-MC-Unique: 79VmOYT6PBagsGl4iztLCA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7BC3E101A55E;
-        Wed,  1 Feb 2023 15:03:28 +0000 (UTC)
-Received: from [10.18.17.153] (dhcp-17-153.bos.redhat.com [10.18.17.153])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 21BA0492B06;
-        Wed,  1 Feb 2023 15:03:28 +0000 (UTC)
-Message-ID: <2d450978-5d7d-9a21-adf9-2fdb2bb512a5@redhat.com>
-Date:   Wed, 1 Feb 2023 10:03:27 -0500
+         content-transfer-encoding:content-transfer-encoding;
+        bh=nxqm+4IZRFfG+BFvC8+di0Y0mHZDeyM6lhNBB5I4L7U=;
+        b=GUq1RuIKjuHYjuQS0jputOzcj0/VxfTUnQhpAlMxu3EKAJpuWWXJ4wcbA/39Jk7pSv0Bcu
+        NoHJhkYBq0vLxCoNPoCwb9Wy3dweusdLPCpaRvbde4ZOvdGWPTIKuecSwKFZT7iBO1asdX
+        MlYBWxkGto5S34mB4mqwF/MTA6lJJB4=
+From:   richard.leitner@linux.dev
+Subject: [PATCH v2 0/2] panel-simple: Add InnoLux G070ACE-L01 support
+Date:   Wed, 01 Feb 2023 16:06:28 +0100
+Message-Id: <20230201-innolux-g070ace-v2-0-ebac7aaf004f@skidata.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 2/2] cpuset: Call set_cpus_allowed_ptr() with appropriate
- mask for task
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        kernel-team@android.com, Zefan Li <lizefan.x@bytedance.com>,
-        Tejun Heo <tj@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org
-References: <20230131221719.3176-1-will@kernel.org>
- <20230131221719.3176-3-will@kernel.org>
- <66cdf2e8-f1aa-5dfe-cd2e-0e37dc0ae799@redhat.com>
- <Y9otsg1ihF3LH2vG@hirez.programming.kicks-ass.net>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <Y9otsg1ihF3LH2vG@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-B4-Tracking: v=1; b=H4sIAPR/2mMC/w3LOwqAMAwA0KtIZgMxDn5uE2u0gZJCiyKId7fjG
+ 94LVYtphbV7oeht1bI3cN9BiOKnou3NwMQjMQ1o7jldD540kQTFYxcewrzooQxtbVIVtyIeYnt
+ +pfR9PyMz4h5mAAAA
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Richard Leitner <richard.leitner@skidata.com>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=674;
+ i=richard.leitner@skidata.com; h=from:subject:message-id;
+ bh=qICrJNgSNpd/ysAFIuK7QMeqbUpb/LYnyvOjJ/HgBBQ=;
+ b=owGbwMvMwCX2R2KahkXN7wuMp9WSGJJvNfBVv8synxZ3gD9/9u59d6c9y5i862bqvO8361hn8YSZ
+ zfc61VHKwiDGxSArpshib8zV7p5b9r5SUScXZg4rE8gQBi5OAZiIDy8jw6sZNxbmnU3UmXydZa6P8+
+ s/hb4prla3T2hrfHfyFUld9pXhf4Dm1h9dqjM+LwiZHMjz+lfoETeLT8t2Fpaq3Lb/XrJ2NT8A
+X-Developer-Key: i=richard.leitner@skidata.com; a=openpgp;
+ fpr=3F330A87476D76EF79212C6DFC189628387CFBD0
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/1/23 04:15, Peter Zijlstra wrote:
-> On Tue, Jan 31, 2023 at 09:22:44PM -0500, Waiman Long wrote:
->> On 1/31/23 17:17, Will Deacon wrote:
->>> set_cpus_allowed_ptr() will fail with -EINVAL if the requested
->>> affinity mask is not a subset of the task_cpu_possible_mask() for the
->>> task being updated. Consequently, on a heterogeneous system with cpusets
->>> spanning the different CPU types, updates to the cgroup hierarchy can
->>> silently fail to update task affinities when the effective affinity
->>> mask for the cpuset is expanded.
->>>
->>> For example, consider an arm64 system with 4 CPUs, where CPUs 2-3 are
->>> the only cores capable of executing 32-bit tasks. Attaching a 32-bit
->>> task to a cpuset containing CPUs 0-2 will correctly affine the task to
->>> CPU 2. Extending the cpuset to CPUs 0-3, however, will fail to extend
->>> the affinity mask of the 32-bit task because update_tasks_cpumask() will
->>> pass the full 0-3 mask to set_cpus_allowed_ptr().
->>>
->>> Extend update_tasks_cpumask() to take a temporary 'cpumask' paramater
->>> and use it to mask the 'effective_cpus' mask with the possible mask for
->>> each task being updated.
->>>
->>> Fixes: 431c69fac05b ("cpuset: Honour task_cpu_possible_mask() in guarantee_online_cpus()")
->>> Signed-off-by: Will Deacon <will@kernel.org>
->>> ---
->>>
->>> Note: We wondered whether it was worth calling guarantee_online_cpus()
->>> if the cpumask_and() returns 0 in update_tasks_cpumask(), but given that
->>> this path is only called when the effective mask changes, it didn't
->>> seem appropriate. Ultimately, if you have 32-bit tasks attached to a
->>> cpuset containing only 64-bit cpus, then the affinity is going to be
->>> forced.
->> Now I see how the sched_setaffinity() change is impacting arm64. Instead of
->> putting in the bandage in cpuset. I would suggest doing another cpu masking
->> in __set_cpus_allowed_ptr() similar to what is now done for user_cpus_ptr.
-> NO! cpuset is *BROKEN* it has been for a while, it needs to get fixed.
->
-> Masking the offline CPUs is *WRONG*.
->
-This patch is not related to offline cpus at all. It is all about the 
-32-bit misfit cpus in some arm64 system.
+This series adds support for the InnoLux G070ACE-L01 7" 800x480 TFT LCD
+panel with WLED backlight.
 
-Cheers,
-Longman
+Signed-off-by: Richard Leitner <richard.leitner@skidata.com>
+---
+Richard Leitner (2):
+      dt-bindings: display: simple: add support for InnoLux G070ACE-L01
+      drm/panel: simple: Add InnoLux G070ACE-L01
+
+ .../bindings/display/panel/panel-simple.yaml       |  2 ++
+ drivers/gpu/drm/panel/panel-simple.c               | 35 ++++++++++++++++++++++
+ 2 files changed, 37 insertions(+)
+---
+base-commit: c0b67534c95c537f7a506a06b98e5e85d72e2b7d
+change-id: 20230201-innolux-g070ace-fda21c89efe2
+
+Best regards,
+-- 
+Richard Leitner <richard.leitner@skidata.com>
 
