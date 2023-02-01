@@ -2,118 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF368685DF2
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 04:36:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16803685E13
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 04:42:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231214AbjBADg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 22:36:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52610 "EHLO
+        id S231185AbjBADmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 22:42:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229846AbjBADg2 (ORCPT
+        with ESMTP id S229500AbjBADmI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 22:36:28 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B872845BF0
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 19:36:26 -0800 (PST)
-Received: from kwepemm600005.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4P66yl0bQ5zfZ45;
-        Wed,  1 Feb 2023 11:36:15 +0800 (CST)
-Received: from [10.67.103.158] (10.67.103.158) by
- kwepemm600005.china.huawei.com (7.193.23.191) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Wed, 1 Feb 2023 11:36:24 +0800
-Subject: Re: [PATCH v7 5/5] vfio: update live migration device status
-To:     Alex Williamson <alex.williamson@redhat.com>
-CC:     <jgg@nvidia.com>, <shameerali.kolothum.thodi@huawei.com>,
-        <jonathan.cameron@huawei.com>, <cohuck@redhat.com>,
-        <linux-kernel@vger.kernel.org>, <linuxarm@openeuler.org>
-References: <20230120032930.43608-1-liulongfang@huawei.com>
- <20230120032930.43608-6-liulongfang@huawei.com>
- <20230126122808.3c0963f2.alex.williamson@redhat.com>
-From:   liulongfang <liulongfang@huawei.com>
-Message-ID: <06453add-847e-3969-c313-b93a14ddfd0a@huawei.com>
-Date:   Wed, 1 Feb 2023 11:36:23 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Tue, 31 Jan 2023 22:42:08 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E82C52B2BF
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 19:42:06 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id nm12-20020a17090b19cc00b0022c2155cc0bso693587pjb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 19:42:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=B9gFWLBbXJO+fTDUkJEhDE5AAFHtlij46AyAy+kzk8A=;
+        b=GKVuK+BQJLSYEymgkJUxh8Dw/ZsSmcYWiU+b1qmS0eN3ZqS0imn5FW6nWzGfxgR/H9
+         pHNj/GU92PlZQ+iwET4xzhDDJ0p86+k947xodsf/HUfh+yLx2IS5gQr22p7MHYPM5JmF
+         D53waLbG7LDxKOFC/ZqzI4viIz+U6BeV+7rKo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=B9gFWLBbXJO+fTDUkJEhDE5AAFHtlij46AyAy+kzk8A=;
+        b=tXDlB+QmZ0XciMrhf5f2T/eu/I4i063Hstz8FbfDJS5VZ7hzn8b21CWo9W0ngnmWTV
+         WghOSEkmmAjNrd8FvcnEZZTPsQ5/T2hnSKsoTWGmES0yknn3UzRfvVSgcefGaDb45VP2
+         o8aXp2BkiCR/qUS8cj0PD2RfL08BvlYNrGJBpowIZpvEL8gI0H5k7Udd4ipu4V/rtmCT
+         Vdu/1TaWayIl5xuZo/N319/POa6cuA1qT0eOeROOH7nJj/jmZyY/dn+xRUNo0Rrfd9Wq
+         vRKUZs6+hAysWcSceLY0iRyyYsH+nYwmDyGrFNJdPNveNhYZGMEInD8D5GH3OZyj6xpp
+         v+kQ==
+X-Gm-Message-State: AO0yUKX1Sd0sTtxTDGWESN39Al8Fp7p4T019rQqBShlYJ5ZvUaDZObU/
+        Yum6AOIdbmjH5qOqzvYw06mszuQw+Qc63R9q
+X-Google-Smtp-Source: AK7set//Rgle2d/HSuclPsF6r6tDzpB8dTbPaMn3vTeq1onPvJg8TCuez/OhN4vx4gDSXr6Y3YpXIw==
+X-Received: by 2002:a17:90a:30d:b0:22c:932:2870 with SMTP id 13-20020a17090a030d00b0022c09322870mr568622pje.33.1675222926348;
+        Tue, 31 Jan 2023 19:42:06 -0800 (PST)
+Received: from localhost ([2401:fa00:8f:203:e9a3:1082:396d:c1c1])
+        by smtp.gmail.com with UTF8SMTPSA id l63-20020a639142000000b004d1d89ec63fsm9584677pge.6.2023.01.31.19.42.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 Jan 2023 19:42:05 -0800 (PST)
+From:   David Stevens <stevensd@chromium.org>
+X-Google-Original-From: David Stevens <stevensd@google.com>
+To:     linux-mm@kvack.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, David Stevens <stevensd@chromium.org>
+Subject: [PATCH] mm/khugepaged: skip shmem with armed userfaultfd
+Date:   Wed,  1 Feb 2023 12:41:37 +0900
+Message-Id: <20230201034137.2463113-1-stevensd@google.com>
+X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
 MIME-Version: 1.0
-In-Reply-To: <20230126122808.3c0963f2.alex.williamson@redhat.com>
-Content-Type: text/plain; charset="gbk"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.103.158]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600005.china.huawei.com (7.193.23.191)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/1/27 3:28, Alex Williamson wrote:
-> On Fri, 20 Jan 2023 11:29:30 +0800
-> Longfang Liu <liulongfang@huawei.com> wrote:
-> 
->> migration debugfs needs to perform debug operations based on the
->> status of the current device. If the device is not loaded or has
->> stopped, debugfs does not allow operations.
->>
->> so, after the live migration function is executed and the device is
->> turned off, the device no longer needs to be accessed. At this time,
->> the status of the device needs to be set to stop.
->>
->> Signed-off-by: Longfang Liu <liulongfang@huawei.com>
->> ---
->>  drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c | 3 +++
->>  drivers/vfio/pci/mlx5/main.c                   | 3 +++
->>  2 files changed, 6 insertions(+)
->>
->> diff --git a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
->> index 96e2a021a956..bdb9043f88f1 100644
->> --- a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
->> +++ b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
->> @@ -1607,6 +1607,9 @@ static void hisi_acc_vfio_pci_close_device(struct vfio_device *core_vdev)
->>  	struct hisi_acc_vf_core_device *hisi_acc_vdev = hisi_acc_get_vf_dev(core_vdev);
->>  	struct hisi_qm *vf_qm = &hisi_acc_vdev->vf_qm;
->>  
->> +	if (core_vdev->mig_ops)
->> +		hisi_acc_vdev->mig_state = VFIO_DEVICE_STATE_STOP;
->> +
->>  	iounmap(vf_qm->io_base);
->>  	vfio_pci_core_close_device(core_vdev);
->>  }
->> diff --git a/drivers/vfio/pci/mlx5/main.c b/drivers/vfio/pci/mlx5/main.c
->> index 031ac8cc215d..64b2fe58355a 100644
->> --- a/drivers/vfio/pci/mlx5/main.c
->> +++ b/drivers/vfio/pci/mlx5/main.c
->> @@ -1092,6 +1092,9 @@ static void mlx5vf_pci_close_device(struct vfio_device *core_vdev)
->>  	struct mlx5vf_pci_core_device *mvdev = container_of(
->>  		core_vdev, struct mlx5vf_pci_core_device, core_device.vdev);
->>  
->> +	if (mvdev->migrate_cap)
->> +		mvdev->mig_state = VFIO_DEVICE_STATE_STOP;
->> +
->>  	mlx5vf_cmd_close_migratable(mvdev);
->>  	vfio_pci_core_close_device(core_vdev);
->>  }
-> 
-> It seems prone to issues to manipulate the migration state outside of
-> the driver state machine.  If the device is closed, shouldn't the
-> debugfs state interface return -EINVAL?  Thanks,
-> 
+From: David Stevens <stevensd@chromium.org>
 
-This operation itself should be paired with the operation of setting mig_state to
-the VFIO_DEVICE_STATE_RUNNING state in the open_device of vfio_device_ops.
-It's just that this problem was not found when the debugfs function was not added.
-In addition, this setting mig_state to VFIO_DEVICE_STATE_STOP state will be used
-in hisi_acc_vf_debug_check, which is to prevent the wrong operation of debugfs
-through this state, and return -EINVAL.
+Collapsing memory in a vma that has an armed userfaultfd results in
+zero-filling any missing pages, which breaks user-space paging for those
+filled pages. Avoid khugepage bypassing userfaultfd by not collapsing
+pages in shmem reached via scanning a vma with an armed userfaultfd if
+doing so would zero-fill any pages.
 
-> Alex
-> 
-Thanks,
-Longfang.
-> .
-> 
+Signed-off-by: David Stevens <stevensd@chromium.org>
+---
+ mm/khugepaged.c | 35 ++++++++++++++++++++++++-----------
+ 1 file changed, 24 insertions(+), 11 deletions(-)
+
+diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+index 79be13133322..48e944fb8972 100644
+--- a/mm/khugepaged.c
++++ b/mm/khugepaged.c
+@@ -1736,8 +1736,8 @@ static int retract_page_tables(struct address_space *mapping, pgoff_t pgoff,
+  *    + restore gaps in the page cache;
+  *    + unlock and free huge page;
+  */
+-static int collapse_file(struct mm_struct *mm, unsigned long addr,
+-			 struct file *file, pgoff_t start,
++static int collapse_file(struct mm_struct *mm, struct vm_area_struct *vma,
++			 unsigned long addr, struct file *file, pgoff_t start,
+ 			 struct collapse_control *cc)
+ {
+ 	struct address_space *mapping = file->f_mapping;
+@@ -1784,6 +1784,9 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
+ 	 * be able to map it or use it in another way until we unlock it.
+ 	 */
+ 
++	if (is_shmem)
++		mmap_read_lock(mm);
++
+ 	xas_set(&xas, start);
+ 	for (index = start; index < end; index++) {
+ 		struct page *page = xas_next(&xas);
+@@ -1792,6 +1795,10 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
+ 		VM_BUG_ON(index != xas.xa_index);
+ 		if (is_shmem) {
+ 			if (!page) {
++				if (userfaultfd_armed(vma)) {
++					result = SCAN_EXCEED_NONE_PTE;
++					goto xa_locked;
++				}
+ 				/*
+ 				 * Stop if extent has been truncated or
+ 				 * hole-punched, and is now completely
+@@ -2095,6 +2102,8 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
+ 		hpage->mapping = NULL;
+ 	}
+ 
++	if (is_shmem)
++		mmap_read_unlock(mm);
+ 	if (hpage)
+ 		unlock_page(hpage);
+ out:
+@@ -2108,8 +2117,8 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
+ 	return result;
+ }
+ 
+-static int hpage_collapse_scan_file(struct mm_struct *mm, unsigned long addr,
+-				    struct file *file, pgoff_t start,
++static int hpage_collapse_scan_file(struct mm_struct *mm, struct vm_area_struct *vma,
++				    unsigned long addr, struct file *file, pgoff_t start,
+ 				    struct collapse_control *cc)
+ {
+ 	struct page *page = NULL;
+@@ -2118,6 +2127,9 @@ static int hpage_collapse_scan_file(struct mm_struct *mm, unsigned long addr,
+ 	int present, swap;
+ 	int node = NUMA_NO_NODE;
+ 	int result = SCAN_SUCCEED;
++	bool uffd_was_armed = userfaultfd_armed(vma);
++
++	mmap_read_unlock(mm);
+ 
+ 	present = 0;
+ 	swap = 0;
+@@ -2193,13 +2205,16 @@ static int hpage_collapse_scan_file(struct mm_struct *mm, unsigned long addr,
+ 	}
+ 	rcu_read_unlock();
+ 
++	if (uffd_was_armed && present < HPAGE_PMD_NR)
++		result = SCAN_EXCEED_SWAP_PTE;
++
+ 	if (result == SCAN_SUCCEED) {
+ 		if (cc->is_khugepaged &&
+ 		    present < HPAGE_PMD_NR - khugepaged_max_ptes_none) {
+ 			result = SCAN_EXCEED_NONE_PTE;
+ 			count_vm_event(THP_SCAN_EXCEED_NONE_PTE);
+ 		} else {
+-			result = collapse_file(mm, addr, file, start, cc);
++			result = collapse_file(mm, vma, addr, file, start, cc);
+ 		}
+ 	}
+ 
+@@ -2207,8 +2222,8 @@ static int hpage_collapse_scan_file(struct mm_struct *mm, unsigned long addr,
+ 	return result;
+ }
+ #else
+-static int hpage_collapse_scan_file(struct mm_struct *mm, unsigned long addr,
+-				    struct file *file, pgoff_t start,
++static int hpage_collapse_scan_file(struct mm_struct *mm, struct vm_area_struct *vma,
++				    unsigned long addr, struct file *file, pgoff_t start,
+ 				    struct collapse_control *cc)
+ {
+ 	BUILD_BUG();
+@@ -2304,8 +2319,7 @@ static unsigned int khugepaged_scan_mm_slot(unsigned int pages, int *result,
+ 				pgoff_t pgoff = linear_page_index(vma,
+ 						khugepaged_scan.address);
+ 
+-				mmap_read_unlock(mm);
+-				*result = hpage_collapse_scan_file(mm,
++				*result = hpage_collapse_scan_file(mm, vma,
+ 								   khugepaged_scan.address,
+ 								   file, pgoff, cc);
+ 				mmap_locked = false;
+@@ -2656,9 +2670,8 @@ int madvise_collapse(struct vm_area_struct *vma, struct vm_area_struct **prev,
+ 			struct file *file = get_file(vma->vm_file);
+ 			pgoff_t pgoff = linear_page_index(vma, addr);
+ 
+-			mmap_read_unlock(mm);
+ 			mmap_locked = false;
+-			result = hpage_collapse_scan_file(mm, addr, file, pgoff,
++			result = hpage_collapse_scan_file(mm, vma, addr, file, pgoff,
+ 							  cc);
+ 			fput(file);
+ 		} else {
+-- 
+2.39.1.456.gfc5497dd1b-goog
+
