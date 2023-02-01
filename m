@@ -2,114 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E56716865D1
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 13:20:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE5866865D4
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 13:20:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231846AbjBAMUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 07:20:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40858 "EHLO
+        id S231874AbjBAMUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 07:20:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231131AbjBAMUA (ORCPT
+        with ESMTP id S230204AbjBAMUj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 07:20:00 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA3937B4E
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 04:19:59 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id v10so17474863edi.8
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 04:19:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gzdhhCYvzHiBhuGYmxPBCtZ5TtZFOM4jwBA4xo+x74s=;
-        b=an4mkRsnuVd/w6+Rhiwnjnw46AVxTv6DY8FeyqUQof2IdZoUe3d84nDcRQoUZr262V
-         IeKhQnw1ryGjSyOZdIxyBwAsnBa5dsJQBEY6BufakwEasnp8Ryk7tWpOUxShT9P1jBnd
-         ZFqyIRHw1yIlANxRBJbsTs1E2+veE24VdxIZMQk+csE361r/4312V3QsFoWi35sc+zK6
-         WT3YMIlxJl9MPKNe49V9/C6WQ20MuNfebBoxWmdrd8/WELhM/8l8KyajxA4THHPKpFr4
-         Hbu8EWHOJIsFUsL65hNtxB5Rk+D37UAAvOHp/QNQpaEBaLLfsosYY357j6SlWNo0isrS
-         rABQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gzdhhCYvzHiBhuGYmxPBCtZ5TtZFOM4jwBA4xo+x74s=;
-        b=aTX0jSCI//mFFLQT96kL27qdPuSFXzXN+BbA1rVAwwUTKnFqlDziBaQNGPxP0r3HnP
-         236GJ9XQBDtyxZXe8en9v1EsWUe6kdgfba9z/UkJHZY20Joa89EJj3n65ztERDr2/O0g
-         NEZSr1v/1oS4pxsNen69dBan6CpjWtFJc2DJAe+VA5ZDT4QApGcxeg1/vWuzwL9o4KXR
-         C0Y/4dM4XFCkg/lbWYHsvvmWx4ZnzhGJzfwJ9ilQsCCBXuI+0TgUdvC9sB9FUQNiEklW
-         DSfU+/PkoivgD9jhawFV0Brk3nzmLBMGlJFlfzUCxGW2o9RU1oY9F8Hfs20+oLH8TkLe
-         OSHw==
-X-Gm-Message-State: AO0yUKXobrffxi7guQGu6MekF+pRkjV+08v2D4h4xcv10IwAugN9tRH3
-        Qo1voZTROCHrBjW8+MAQEYpO7A==
-X-Google-Smtp-Source: AK7set8sEmkJMPX8jiT7EYwuYwfaFowGB/g0uC4lY0ah7wy/obx1qm0DtRP+YkdG+/dZF1PM0W8Y0A==
-X-Received: by 2002:a05:6402:4012:b0:4a2:46f3:467e with SMTP id d18-20020a056402401200b004a246f3467emr1891029eda.30.1675253997706;
-        Wed, 01 Feb 2023 04:19:57 -0800 (PST)
-Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
-        by smtp.gmail.com with ESMTPSA id z94-20020a509e67000000b0049df0f91b78sm9847217ede.78.2023.02.01.04.19.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Feb 2023 04:19:56 -0800 (PST)
-Date:   Wed, 1 Feb 2023 13:19:55 +0100
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     Miko Larsson <mikoxyzzz@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v2] net/usb: kalmia: Fix uninit-value in
- kalmia_send_init_packet
-Message-ID: <Y9pY61y1nwTuzMOa@nanopsycho>
-References: <7266fe67c835f90e5c257129014a63e79e849ef9.camel@gmail.com>
- <f0b62f38c042d2dcb8b8e83c827d76db2ac5d7ad.camel@gmail.com>
+        Wed, 1 Feb 2023 07:20:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6396C4E51E
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 04:20:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F0879B8215F
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 12:20:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0547CC433EF;
+        Wed,  1 Feb 2023 12:20:18 +0000 (UTC)
+Date:   Wed, 1 Feb 2023 12:20:16 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Muchun Song <muchun.song@linux.dev>
+Subject: Re: [PATCH V2] arm64/mm: Intercept pfn changes in set_pte_at()
+Message-ID: <Y9pZALdn3pKiJUeQ@arm.com>
+References: <20230109052816.405335-1-anshuman.khandual@arm.com>
+ <e924c1aa-5f04-fd7f-52d4-7cf22c476016@arm.com>
+ <20230126133321.GB29148@willie-the-truck>
+ <d454c9a2-5300-b600-a2ae-21d82d338470@arm.com>
+ <20230131154950.GB2646@willie-the-truck>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f0b62f38c042d2dcb8b8e83c827d76db2ac5d7ad.camel@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230131154950.GB2646@willie-the-truck>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tue, Jan 31, 2023 at 03:20:33PM CET, mikoxyzzz@gmail.com wrote:
->syzbot reports that act_len in kalmia_send_init_packet() is
->uninitialized. Fix this by initializing it to 0.
->
->Fixes: d40261236e8e ("net/usb: Add Samsung Kalmia driver for Samsung GT-B3730")
->Reported-and-tested-by: syzbot+cd80c5ef5121bfe85b55@syzkaller.appspotmail.com
->Signed-off-by: Miko Larsson <mikoxyzzz@gmail.com>
->---
->v1 -> v2
->* Minor alteration of commit message.
->* Added 'reported-and-tested-by' which is attributed to syzbot.
->
-> drivers/net/usb/kalmia.c | 2 +-
-> 1 file changed, 1 insertion(+), 1 deletion(-)
->
->diff --git a/drivers/net/usb/kalmia.c b/drivers/net/usb/kalmia.c
->index 9f2b70ef39aa..b158fb7bf66a 100644
->--- a/drivers/net/usb/kalmia.c
->+++ b/drivers/net/usb/kalmia.c
->@@ -56,7 +56,7 @@ static int
-> kalmia_send_init_packet(struct usbnet *dev, u8 *init_msg, u8 init_msg_len,
-> 	u8 *buffer, u8 expected_len)
-> {
->-	int act_len;
->+	int act_len = 0;
-> 	int status;
+On Tue, Jan 31, 2023 at 03:49:51PM +0000, Will Deacon wrote:
+> On Fri, Jan 27, 2023 at 12:43:17PM +0000, Robin Murphy wrote:
+> > On 2023-01-26 13:33, Will Deacon wrote:
+> > > On Tue, Jan 24, 2023 at 11:11:49AM +0530, Anshuman Khandual wrote:
+> > > > On 1/9/23 10:58, Anshuman Khandual wrote:
+> > > > > Changing pfn on a user page table mapped entry, without first going through
+> > > > > break-before-make (BBM) procedure is unsafe. This just updates set_pte_at()
+> > > > > to intercept such changes, via an updated pgattr_change_is_safe(). This new
+> > > > > check happens via __check_racy_pte_update(), which has now been renamed as
+> > > > > __check_safe_pte_update().
+> > > > > 
+> > > > > Cc: Catalin Marinas <catalin.marinas@arm.com>
+> > > > > Cc: Will Deacon <will@kernel.org>
+> > > > > Cc: Mark Rutland <mark.rutland@arm.com>
+> > > > > Cc: Andrew Morton <akpm@linux-foundation.org>
+> > > > > Cc: linux-arm-kernel@lists.infradead.org
+> > > > > Cc: linux-kernel@vger.kernel.org
+> > > > > Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> > > > > ---
+> > > > > This applies on v6.2-rc3. This patch had some test time on an internal CI
+> > > > > system without any issues being reported.
+> > > > 
+> > > > Gentle ping, any updates on this patch ? Still any concerns ?
+> > > 
+> > > I don't think we really got to the bottom of Mark's concerns with
+> > > unreachable ptes on the stack, did we? I also have vague recollections
+> > > of somebody (Robin?) running into issues with the vmap code not honouring
+> > > BBM.
+> > 
+> > Doesn't ring a bell, so either it wasn't me, or it was many years ago and
+> > about 5 levels deep into trying to fix something else :/
 > 
-> 	netdev_dbg(dev->net, "Sending init packet");
+> Bah, sorry! Catalin reckons it may have been him talking about the vmemmap.
 
-Hmm, this is not the right fix.
+Indeed. The discussion with Anshuman started from this thread:
 
-If the second call of usb_bulk_msg() in this function returns != 0, the
-act_len printed out contains the value from previous usb_bulk_msg() call,
-which does not make sense.
+https://lore.kernel.org/all/20221025014215.3466904-1-mawupeng1@huawei.com/
 
-Printing act_len on error path is pointless, so rather remove it from
-the error message entirely for both usb_bulk_msg() calls.
+We already trip over the existing checks even without Anshuman's patch,
+though only by chance. We are not setting the software PTE_DIRTY on the
+new pte (we don't bother with this bit for kernel mappings).
+
+Given that the vmemmap ptes are still live when such change happens and
+no-one came with a solution to the break-before-make problem, I propose
+we revert the arm64 part of commit 47010c040dec ("mm: hugetlb_vmemmap:
+cleanup CONFIG_HUGETLB_PAGE_FREE_VMEMMAP*"). We just need this hunk:
+
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index 27b2592698b0..5263454a5794 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -100,7 +100,6 @@ config ARM64
+ 	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
+ 	select ARCH_WANT_FRAME_POINTERS
+ 	select ARCH_WANT_HUGE_PMD_SHARE if ARM64_4K_PAGES || (ARM64_16K_PAGES && !ARM64_VA_BITS_36)
+-	select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+ 	select ARCH_WANT_LD_ORPHAN_WARN
+ 	select ARCH_WANTS_NO_INSTR
+ 	select ARCH_WANTS_THP_SWAP if ARM64_4K_PAGES
+
+-- 
+Catalin
