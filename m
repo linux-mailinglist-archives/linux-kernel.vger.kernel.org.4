@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29972686915
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 15:55:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7836B68691D
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 15:56:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232315AbjBAOzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 09:55:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58080 "EHLO
+        id S232566AbjBAO4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 09:56:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232445AbjBAOz3 (ORCPT
+        with ESMTP id S232320AbjBAO4A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 09:55:29 -0500
+        Wed, 1 Feb 2023 09:56:00 -0500
 Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA2E36600B
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 06:55:27 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id 123so22611174ybv.6
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 06:55:27 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47AE669B28
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 06:55:56 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id 123so22613002ybv.6
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 06:55:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=f7SUNQyRKCpf4C/POu/u7L438CCRwNPoXjRFVtxsbJg=;
-        b=DdkyChVD5kowrB8me9WFblmkD9Of8A4+sdQQ7ACe+WVE3iaU6kMRLGKuM5ijntpe9Z
-         5+pRHFfCLNqKjEilhjxXqcf+cBf9JQ+MpE0QtQLFTvG1b+dUxYTn5w7f8X9ZTNKEdzPy
-         Ks3IvSy6xFnRM5gB1B9jqLVVkiZR0i2o7cgGK3wOVD9R2SlhI0zBMLhCqOtMr7JE7cyk
-         bG0sAE9fpwD6nNofbyVJ5El/tUEll4RSKQGVIQXIcnUwtNG4wwKzgRsVNR0HxwzYOuW2
-         j4qZBuV602XYT4HPrplUuOETirb2NU7KeQ0iz3eKN0vBX8eSqfRd0PvCbDWIPuknWfxR
-         Ppig==
+        bh=ImenvlSZqiGev30iuxYAHjcK6h9wKIIw7n5ZxJIaiEE=;
+        b=XeYXkN6WVPXsft03P0rMvKPq+E3BcQJujz9ahCDeXJBQojMzmpke9ee/87gOlo6R+q
+         AmNxvXXdhLC87eMDUNSg3txvpXPxMeib8k2Y9ZyQ+dmk4v7QEwFDRke3YOqJvucAFyzZ
+         zGg3YIVSHfwIf49BxGmb/55XB+JwJG8oytXS7u7T/BLDj5XC9nVHvgDWR9CYFtcIUD8q
+         H8BU/LggqhsjFbPz55oMTrWNJEP750/83iHW7wfaMigIvRvzNLLfryQF8ijoB0OgOIL+
+         p6m1DQchPAWBha99z8H4nnQxaKKlKFvPIq8cS/h4IbK71RUZMsdkOz2uWDYUqR6OiX8h
+         mRmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=f7SUNQyRKCpf4C/POu/u7L438CCRwNPoXjRFVtxsbJg=;
-        b=CjYUqRcn0v0SzFQiSFw1bCU8Pi/c/T4OJd8W5P3fqYnxWAVgyV/mVyl8LUEQjAtC+4
-         3XNbmenPvmuVg7wxa7kXKumQ2DdXkyaXOdiQkiX9vA/u2e6QMC84c1KbNgyzC6ROa38A
-         57Awjn7OlwKAbzwdl32ZEoVpjXaqDL7vGG3jjINn6u8wTtg+PVZdY5C/SqA1+vIUcU8l
-         ksy3IjHH/zEDZmMn2X/tYNh3HcAQGazVSUnZXRl0bDPxiGpXXVuoVptfD+9pre73/Na5
-         bJIuSsa9azDxUP/JgAFJpPlMWVj71i1yJnmivAy02lnoRMdFZiTcq2TZh540x9D+DVrm
-         H8Bg==
-X-Gm-Message-State: AO0yUKUS2r3B9Dp51XSqdbQAqn1R8ZAekMLd4FFPkFzA++Yj1bIIjjIr
-        ew/cHLEOdnJ9sAQDaZDBjo6hxTKiHYN+XVG17u2krA==
-X-Google-Smtp-Source: AK7set++NAwq/dEiVCGr/I7rab+JO9iNRk16DMetBlVIATN2KzTvfMWmIfeaz5rvVlQklPDUJbUx0KBemUcAF/rmfJY=
-X-Received: by 2002:a25:d341:0:b0:803:9f76:ca27 with SMTP id
- e62-20020a25d341000000b008039f76ca27mr236477ybf.145.1675263326966; Wed, 01
- Feb 2023 06:55:26 -0800 (PST)
+        bh=ImenvlSZqiGev30iuxYAHjcK6h9wKIIw7n5ZxJIaiEE=;
+        b=OZMYtKPzy6oJmp6GoeqlkOhZBKTECEaZ3vezcNmPNfqIMXWBMN920Bt3ATFczNllmx
+         iulkCCDdnJmk4urZxdd+ji0zAca45RUnTg2hkOlgtLLmsqohB88DCeZMMzENx5NqDZbb
+         2M2KcXyQRGn8OezYMBFWOObSvSENHVTAHKtU+IS1xk46fBV6JqsVC8HQIa/KoqxNwwKc
+         nNy2WOdQ1eE7mRiaSV2UOWUPTnd3TZsWdfDglg2fjFIW7wpNJh/zdrQXe89a0AH8GjPO
+         WBK65vJvtzCvzNL0kjdZDyDXGJKaTYutmlnnPLJcA/uPEPqu2SqbfbxBiEsup3KcXR7k
+         ArVw==
+X-Gm-Message-State: AO0yUKX25lINz8y/oB5JqKfoWEm3YWlMDjXoqtCigL6anG2EMx+n/2Gk
+        fPD0NM1QalPOiPawUyg0Ko8S91L24VmZQeski7TlCA==
+X-Google-Smtp-Source: AK7set9/L7JjIO4yxEh5pQVxm13Hxl0z5wGOlkXzvLASyBLSIuKlydGv98i7nshVimvXehTYwx4AW5qTxPMuo+Zvp5w=
+X-Received: by 2002:a05:6902:181a:b0:80b:8d00:d61 with SMTP id
+ cf26-20020a056902181a00b0080b8d000d61mr407295ybb.180.1675263355464; Wed, 01
+ Feb 2023 06:55:55 -0800 (PST)
 MIME-Version: 1.0
-References: <20230201001612.515730-1-andrei.gherzan@canonical.com> <20230201001612.515730-3-andrei.gherzan@canonical.com>
-In-Reply-To: <20230201001612.515730-3-andrei.gherzan@canonical.com>
+References: <20230201001612.515730-1-andrei.gherzan@canonical.com> <20230201001612.515730-2-andrei.gherzan@canonical.com>
+In-Reply-To: <20230201001612.515730-2-andrei.gherzan@canonical.com>
 From:   Willem de Bruijn <willemb@google.com>
-Date:   Wed, 1 Feb 2023 09:54:51 -0500
-Message-ID: <CA+FuTSfDqhmP=68rQ5CmpyMcGj+cGYzvVvfjOMN0f+Bby51GuA@mail.gmail.com>
-Subject: Re: [PATCH net v4 3/4] selftests: net: udpgso_bench: Fix racing bug
- between the rx/tx programs
+Date:   Wed, 1 Feb 2023 09:55:19 -0500
+Message-ID: <CA+FuTSc3jJmupMuFvZs=nuKr4dask3D5CsxBtjnzUBMkeTVo-Q@mail.gmail.com>
+Subject: Re: [PATCH net v4 2/4] selftests: net: udpgso_bench_rx/tx: Stop when
+ wrong CLI args are provided
 To:     Andrei Gherzan <andrei.gherzan@canonical.com>
 Cc:     "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
@@ -76,21 +76,12 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On Tue, Jan 31, 2023 at 7:18 PM Andrei Gherzan
 <andrei.gherzan@canonical.com> wrote:
 >
-> "udpgro_bench.sh" invokes udpgso_bench_rx/udpgso_bench_tx programs
-> subsequently and while doing so, there is a chance that the rx one is not
-> ready to accept socket connections. This racing bug could fail the test
-> with at least one of the following:
->
-> ./udpgso_bench_tx: connect: Connection refused
-> ./udpgso_bench_tx: sendmsg: Connection refused
-> ./udpgso_bench_tx: write: Connection refused
->
-> This change addresses this by making udpgro_bench.sh wait for the rx
-> program to be ready before firing off the tx one - up to a 10s timeout.
+> Leaving unrecognized arguments buried in the output, can easily hide a
+> CLI/script typo. Avoid this by exiting when wrong arguments are provided to
+> the udpgso_bench test programs.
 >
 > Fixes: 3a687bef148d ("selftests: udp gso benchmark")
 > Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
-> Cc: Paolo Abeni <pabeni@redhat.com>
 > Cc: Willem de Bruijn <willemb@google.com>
 
 Reviewed-by: Willem de Bruijn <willemb@google.com>
