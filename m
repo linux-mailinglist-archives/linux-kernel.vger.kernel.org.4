@@ -2,190 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7931C68686E
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 15:37:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9272E686880
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 15:40:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232439AbjBAOhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 09:37:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43940 "EHLO
+        id S231883AbjBAOkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 09:40:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232449AbjBAOhN (ORCPT
+        with ESMTP id S231644AbjBAOkg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 09:37:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE1469B09;
-        Wed,  1 Feb 2023 06:36:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 16C8D617A9;
-        Wed,  1 Feb 2023 14:36:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 788B8C4339E;
-        Wed,  1 Feb 2023 14:36:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675262215;
-        bh=EpjNuddLZ0oyJXOpFsXevRvksJuGkUPm0MwRzNRkx5U=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=IEI21STL5fvN9f7o5cvtG5bWYaRRFaa8zcQlzevQ6q+el8REfbrc7TDL+tMhBv716
-         9NaO6kyn4OtiJlOyqCtn0tV2RujszrAbduznlurZ71vlRpV+uXU3jIn1XdI5qiRMBl
-         i195juUqKAz7LtwRDOU5jTJnu+8hfXegxC4iA2BK6SBM0XxhR6c8OHk0gi6W95VSnu
-         jnAfj9fXDCZwQTWOoPcMrCiTagPZdpwGJYdWujrwfXTWPxf4IpiZ1NzrIMsECcyKNY
-         odGQlnOgkn60VDs6qAHhs2K9aZ+A/qnt4jT0BkEuNMwUYm3oG/GFjfIIUSmDmmyzBD
-         8gh3/WS2plzxw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 1B5A35C06D0; Wed,  1 Feb 2023 06:36:55 -0800 (PST)
-Date:   Wed, 1 Feb 2023 06:36:55 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Yujie Liu <yujie.liu@intel.com>
-Cc:     "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        oe-lkp@lists.linux.dev, lkp@intel.com,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [linus:master] [maple_tree] 120b116208:
- INFO:task_blocked_for_more_than#seconds
-Message-ID: <20230201143655.GE2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <202301310940.4a37c7af-yujie.liu@intel.com>
- <20230131202635.GA3019407@paulmck-ThinkPad-P17-Gen-1>
- <20230131204520.ad6cf4lvtw5uf27s@revolver>
- <20230131205221.GX2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y9okrO+GOYP2Gh4K@yujie-X299>
+        Wed, 1 Feb 2023 09:40:36 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E98B9028
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 06:40:12 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id c10-20020a05600c0a4a00b003db0636ff84so1643495wmq.0
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 06:40:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ntqD2+JXvdh0eVlKapCiL5KQqPWBOr/MM6KuL8nVXn8=;
+        b=uQLHiaQ7A/DFeUxgi+JDnmQc11d51gg6i8PiotXoZFfqWNXsZWSTp1Nm6gzHhuoaQB
+         SaQ3xOzci4arbzweFCCwzHblApQbSZZoIsFfx1/CbvtYtKAXxUwkkr15KdoYeKHT6+gk
+         q54ZXGalW4J05i/Nj75nQWgwGcDYgjSQy/qJ9cSJ+/huMkYfWgHH3P1w/jyxtovcTZtD
+         NIvr4dp+Gwk98ruC1EZm7VmgUHqleaQtsZHkJV2oBBfZSzq4Ie6/e2Wq++6N3f4o040c
+         TnrTs3fDscpAgM7mj03EJmM1yUX3Op11satjIue8hnY6h9xg7O1oSLT03CRfsRw0vXK8
+         6zLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ntqD2+JXvdh0eVlKapCiL5KQqPWBOr/MM6KuL8nVXn8=;
+        b=2Jjn3fiI1lckDUEYKIJrequTpMZ/AsmnKYI6tLudB89Jyb5LzZBz1HkIZWHyaPC6SD
+         fkcsYAPOyrz+UXHXGIGdJcsAu0EEBYTlrBtG9YV7AAhagyJt8KxbhSzi6jFqI3P1chmS
+         G4Qhy30RETrc2yHCeG8JCJg/5rrkhv4mgln8TnwxS2dK1OHObjmPhEhxPvWKmBC7Zv5H
+         wJYelTo80lYZz8PjgqvfyURPKQjOI0VOvZoWFqzy5E5jhaIIDkE7cEMcMBqsSHc549ho
+         CViy1HU4J0aAAMvYARKIEJRkJiNMzFKcrORtccq4g+ZGV5U0hw8koepCvU77V+wUsKgQ
+         1laQ==
+X-Gm-Message-State: AO0yUKU6vD0GzLZAlKNBf8k8uXmttp9lmiAyanvc0tqUUHJiYm4M84D7
+        hpdoNCll6iE89vXsK8uXlUi7eQ==
+X-Google-Smtp-Source: AK7set8CH2pFHo/EOLHu4jCReTo9hfE+OIR2c8OVbzsL2VHrYohdwGOPlboTAjqO6SFBSnZ8xPZfVg==
+X-Received: by 2002:a05:600c:4f93:b0:3dc:5823:d6c0 with SMTP id n19-20020a05600c4f9300b003dc5823d6c0mr2509942wmq.6.1675262411008;
+        Wed, 01 Feb 2023 06:40:11 -0800 (PST)
+Received: from ?IPV6:2a02:6b6a:b566:0:7611:c340:3d8d:d46c? ([2a02:6b6a:b566:0:7611:c340:3d8d:d46c])
+        by smtp.gmail.com with ESMTPSA id n9-20020a05600c3b8900b003d9aa76dc6asm2205329wms.0.2023.02.01.06.40.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Feb 2023 06:40:10 -0800 (PST)
+Message-ID: <ff876008-b642-4dbc-aa41-1639905e08b6@bytedance.com>
+Date:   Wed, 1 Feb 2023 14:40:09 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9okrO+GOYP2Gh4K@yujie-X299>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v4 0/9] Parallel CPU bringup for x86_64
+Content-Language: en-US
+To:     David Woodhouse <dwmw2@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
+        hushiyuan@huawei.com, luolongjun@huawei.com, hejingxian@huawei.com,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Fam Zheng <fam.zheng@bytedance.com>,
+        Punit Agrawal <punit.agrawal@bytedance.com>,
+        simon.evans@bytedance.com, liangma@liangbit.com
+References: <20220201205328.123066-1-dwmw2@infradead.org>
+From:   Usama Arif <usama.arif@bytedance.com>
+In-Reply-To: <20220201205328.123066-1-dwmw2@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 01, 2023 at 04:37:00PM +0800, Yujie Liu wrote:
-> Hi Paul, Hi Liam,
-> 
-> On Tue, Jan 31, 2023 at 12:52:21PM -0800, Paul E. McKenney wrote:
-> > On Tue, Jan 31, 2023 at 03:45:20PM -0500, Liam R. Howlett wrote:
-> > > * Paul E. McKenney <paulmck@kernel.org> [230131 15:26]:
-> > > > On Tue, Jan 31, 2023 at 03:18:22PM +0800, kernel test robot wrote:
-> > > > > Hi Liam,
-> > > > > 
-> > > > > We caught a "task blocked" dmesg in maple tree test. Not sure if this
-> > > > > is expected for maple tree test, so we are sending this report for
-> > > > > your information. Thanks.
-> > > > > 
-> > > > > Greeting,
-> > > > > 
-> > > > > FYI, we noticed INFO:task_blocked_for_more_than#seconds due to commit (built with clang-14):
-> > > > > 
-> > > > > commit: 120b116208a0877227fc82e3f0df81e7a3ed4ab1 ("maple_tree: reorganize testing to restore module testing")
-> > > > > https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
-> > > > > 
-> > > > > in testcase: boot
-> > > > > 
-> > > > > on test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
-> > > > > 
-> > > > > caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
-> > > > > 
-> > > > > 
-> > > > > [   17.318428][    T1] calling  maple_tree_seed+0x0/0x15d0 @ 1
-> > > > > [   17.319219][    T1] 
-> > > > > [   17.319219][    T1] TEST STARTING
-> > > > > [   17.319219][    T1] 
-> > > > > [  999.249871][   T23] INFO: task rcu_scale_shutd:59 blocked for more than 491 seconds.
-> > > > > [  999.253363][   T23]       Not tainted 6.1.0-rc4-00003-g120b116208a0 #1
-> > > > > [  999.254249][   T23] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> > > > > [  999.255390][   T23] task:rcu_scale_shutd state:D stack:30968 pid:59    ppid:2      flags:0x00004000
-> > > > > [  999.256934][   T23] Call Trace:
-> > > > > [  999.257418][   T23]  <TASK>
-> > > > > [  999.257900][   T23]  __schedule+0x169b/0x1f90
-> > > > > [  999.261677][   T23]  schedule+0x151/0x300
-> > > > > [  999.262281][   T23]  ? compute_real+0xe0/0xe0
-> > > > > [  999.263364][   T23]  rcu_scale_shutdown+0xdd/0x130
-> > > > > [  999.264093][   T23]  ? wake_bit_function+0x2c0/0x2c0
-> > > > > [  999.268985][   T23]  kthread+0x309/0x3a0
-> > > > > [  999.269958][   T23]  ? compute_real+0xe0/0xe0
-> > > > > [  999.270552][   T23]  ? kthread_unuse_mm+0x200/0x200
-> > > > > [  999.271281][   T23]  ret_from_fork+0x1f/0x30
-> > > > > [  999.272385][   T23]  </TASK>
-> > > > > [  999.272865][   T23] 
-> > > > > [  999.272865][   T23] Showing all locks held in the system:
-> > > > > [  999.273988][   T23] 2 locks held by swapper/0/1:
-> > > > > [  999.274684][   T23] 1 lock held by khungtaskd/23:
-> > > > > [  999.275400][   T23]  #0: ffffffff88346e00 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire+0x8/0x30
-> > > > > [  999.277171][   T23] 
-> > > > > [  999.277525][   T23] =============================================
-> > > > > [  999.277525][   T23] 
-> > > > > [ 1049.050884][    T1] maple_tree: 12610686 of 12610686 tests passed
-> > > > > 
-> > > > > 
-> > > > > If you fix the issue, kindly add following tag
-> > > > > | Reported-by: kernel test robot <yujie.liu@intel.com>
-> > > > > | Link: https://lore.kernel.org/oe-lkp/202301310940.4a37c7af-yujie.liu@intel.com
-> > > > 
-> > > > Liam brought this to my attention on IRC, and it looks like the root
-> > > > cause is that the rcuscale code does not deal gracefully with grace
-> > > > periods that are in much excess of a second in duration.
-> > > > 
-> > > > Now, it might well be worth looking into why the grace periods were taking
-> > > > that long, but if you were running Maple Tree stress tests concurrently
-> > > > with rcuscale, this might well be expected behavior.
-> > > > 
-> > > 
-> > > This could be simply cpu starvation causing no foward progress in your
-> > > tests with the number of concurrent running tests and "-smp 2".
-> > > 
-> > > It's also worth noting that building in the rcu test module makes the
-> > > machine turn off once the test is complete.  This can be seen in your
-> > > console message:
-> > > [   13.254240][    T1] rcu-scale:--- Start of test: nreaders=2 nwriters=2 verbose=1 shutdown=1
-> > > 
-> > > so your machine may not have finished running through the array of tests
-> > > you have specified to build in - which is a lot.  I'm not sure if this
-> > > is the best approach considering the load that produces on the system
-> > > and how difficult it is (was) to figure out which test is causing a
-> > > stall, or other issue.
-> > 
-> > Agreed, both rcuscale and refscale when built in turn the machine off at
-> > the end of the test.  For providing background stress for some other test
-> > (in this case Maple Tree tests), rcutorture, locktorture, or scftorture
-> > might be better choices.
-> 
-> Thanks for looking into this. This is a boot test on a randconfig
-> kernel, and yes, it happend to select CONFIG_RCU_SCALE_TEST=y together
-> with CONFIG_TEST_MAPLE_TREE=y, leading to the situation in this case.
-> 
-> I've tested the patch on same config, it does clear up the "task
-> blocked" log, though it still waits a long time at this step. The test
-> result is as follows:
-> 
-> [   18.397784][    T1] calling  maple_tree_seed+0x0/0x15d0 @ 1
-> [   18.398646][    T1]
-> [   18.398646][    T1] TEST STARTING
-> [   18.398646][    T1]
-> [ 1266.450656][    T1] maple_tree: 12610686 of 12610686 tests passed
-> [ 1266.451749][    T1] initcall maple_tree_seed+0x0/0x15d0 returned 0 after 1248053116 usecs
-> ...
-> 
-> =========================================================================================
-> compiler/kconfig/rootfs/sleep/tbox_group/testcase:
->   clang-14/x86_64-randconfig-a006-20230116/yocto-x86_64-minimal-20190520.cgz/300/vm-snb/boot
-> 
-> commit:
->   120b116208a08 ("maple_tree: reorganize testing to restore module testing")
->   4b1aafbdb208f ("rcuscale: Move shutdown from wait_event() to wait_event_idle()")
-> 
-> 120b116208a08    4b1aafbdb208fb4e10bf7abff1a
-> ---------------- ---------------------------
->        fail:runs  %reproduction    fail:runs
->            |             |             |
->           5:6          -83%            :6     dmesg.INFO:task_blocked_for_more_than#seconds
-> 
-> Tested-by: Yujie Liu <yujie.liu@intel.com>
 
-Thank you very much!  I will apply this on my next rebase.
 
-							Thanx, Paul
+On 01/02/2022 20:53, David Woodhouse wrote:
+> Doing the INIT/SIPI/SIPI in parallel for all APs and *then* waiting for
+> them shaves about 80% off the AP bringup time on a 96-thread 2-socket
+> Skylake box (EC2 c5.metal) — from about 500ms to 100ms.
+> 
+> There are more wins to be had with further parallelisation, but this is
+> the simple part.
+> 
+
+Hi,
+
+We are interested in reducing the boot time of servers (with kexec), and 
+smpboot takes up a significant amount of time while booting. When 
+testing the patch series (rebased to v6.1) on a server with 128 CPUs 
+split across 2 NUMA nodes, it brought down the smpboot time from ~700ms 
+to 100ms. Adding another cpuhp state for do_wait_cpu_initialized to make 
+sure cpu_init is reached (as done in v1 of the series + using the 
+cpu_finishup_mask) brought it down further to ~30ms.
+
+I just wanted to check what was needed to progress the patch series 
+further for review? There weren't any comments on v4 of the patch so I 
+couldn't figure out what more is needed. I think its quite useful to 
+have this working so would be really glad help in anything needed to 
+restart the review.
+
+Thanks!
+Usama
+
+
+
+> v2: Cut it back to just INIT/SIPI/SIPI in parallel for now, nothing more
+> v3: Clean up x2apic patch, add MTRR optimisation, lock topology update
+>      in preparation for more parallelisation.
+> v4: Fixes to the real mode parallelisation patch spotted by SeanC, to
+>      avoid scribbling on initial_gs in common_cpu_up(), and to allow all
+>      24 bits of the physical X2APIC ID to be used. That patch still needs
+>      a Signed-off-by from its original author, who once claimed not to
+>      remember writing it at all. But now we've fixed it, hopefully he'll
+>      admit it now :)
+> 
+> David Woodhouse (8):
+>        x86/apic/x2apic: Fix parallel handling of cluster_mask
+>        cpu/hotplug: Move idle_thread_get() to <linux/smpboot.h>
+>        cpu/hotplug: Add dynamic parallel bringup states before CPUHP_BRINGUP_CPU
+>        x86/smpboot: Reference count on smpboot_setup_warm_reset_vector()
+>        x86/smpboot: Split up native_cpu_up into separate phases and document them
+>        x86/smpboot: Send INIT/SIPI/SIPI to secondary CPUs in parallel
+>        x86/mtrr: Avoid repeated save of MTRRs on boot-time CPU bringup
+>        x86/smpboot: Serialize topology updates for secondary bringup
+> 
+> Thomas Gleixner (1):
+>        x86/smpboot: Support parallel startup of secondary CPUs
+> 
+> [dwoodhou@i7 linux-2.6]$ git diff --stat  v5.17-rc2..share/parallel-5.17-part1
+>   arch/x86/include/asm/realmode.h       |   3 +
+>   arch/x86/include/asm/smp.h            |  13 +-
+>   arch/x86/include/asm/topology.h       |   2 -
+>   arch/x86/kernel/acpi/sleep.c          |   1 +
+>   arch/x86/kernel/apic/apic.c           |   2 +-
+>   arch/x86/kernel/apic/x2apic_cluster.c | 108 ++++++-----
+>   arch/x86/kernel/cpu/common.c          |   6 +-
+>   arch/x86/kernel/cpu/mtrr/mtrr.c       |   9 +
+>   arch/x86/kernel/head_64.S             |  73 ++++++++
+>   arch/x86/kernel/smpboot.c             | 325 ++++++++++++++++++++++++----------
+>   arch/x86/realmode/init.c              |   3 +
+>   arch/x86/realmode/rm/trampoline_64.S  |  14 ++
+>   arch/x86/xen/smp_pv.c                 |   4 +-
+>   include/linux/cpuhotplug.h            |   2 +
+>   include/linux/smpboot.h               |   7 +
+>   kernel/cpu.c                          |  27 ++-
+>   kernel/smpboot.c                      |   2 +-
+>   kernel/smpboot.h                      |   2 -
+>   18 files changed, 442 insertions(+), 161 deletions(-)
+> 
+> 
+> 
+> 
