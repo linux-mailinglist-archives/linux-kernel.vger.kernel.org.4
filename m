@@ -2,97 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8B6C686367
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 11:07:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 373C168636D
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 11:08:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231185AbjBAKHG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 05:07:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46702 "EHLO
+        id S231635AbjBAKIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 05:08:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231752AbjBAKHC (ORCPT
+        with ESMTP id S231543AbjBAKIC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 05:07:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A79E56227F;
-        Wed,  1 Feb 2023 02:06:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4A99FB81F2D;
-        Wed,  1 Feb 2023 10:06:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A07F3C433D2;
-        Wed,  1 Feb 2023 10:06:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675245996;
-        bh=SLnoyaEacnsPS2Yh3z9JeolmCwJoPt310N3QnpHVhJc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=J79rcS/6tptKFy0f4jXmE8h08JGZFSxobTZ+PxvUt7DYMAhXeI124TFzwLzcAwZR5
-         nuzCvRasfYhbsbf5jRRQpOlx8C5L6/fA2NWMFlaC/xJcNTUGX3zUJnXye10gfD6XQa
-         vAvin56Ypbci1HV034pM8qQxbNsJmzEn9komIf/IZD1sbJzxhnAKe9pixxioust39W
-         ksGqRErrBPdNno4rjOa8sy6kjFR9+Gqcdpx5GHm3tAEtfpz0BqgBGJs3XlfxAnKfs0
-         Zlq4QH7/M4KGVYqKxx1uhloomaG18a2WuMoTxmwdm4jb7xswcMW3qJCz85BkXXTLL9
-         PDFuAuG4SL3hQ==
-Date:   Wed, 1 Feb 2023 10:06:26 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Poovendhan Selvaraj <quic_poovendh@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        jassisinghbrar@gmail.com, catalin.marinas@arm.com, will@kernel.org,
-        shawnguo@kernel.org, arnd@arndb.de, marcel.ziswiler@toradex.com,
-        robimarko@gmail.com, dmitry.baryshkov@linaro.org,
-        nfraprado@collabora.com, broonie@kernel.org,
-        quic_gurus@quicinc.com, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
-        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
-        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
-        quic_devipriy@quicinc.com
-Subject: Re: [PATCH V2 5/5] dt-bindings: tcsr: Add compatible for IPQ9574
-Message-ID: <Y9o5onFcETRUmqGt@google.com>
-References: <20230201090529.30446-1-quic_poovendh@quicinc.com>
- <20230201090529.30446-6-quic_poovendh@quicinc.com>
+        Wed, 1 Feb 2023 05:08:02 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F4165DC39;
+        Wed,  1 Feb 2023 02:07:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=g+3Kn0G4m+PlpkGb8DecHsMvWoNFYkOTR3sD11gMtlE=; b=bl7PyQga9sZkESdiKhqmk7ZoT3
+        9daFCbP2lTujVbKRcXeogZoeKXWceOXK4w5L5XjP/1hSybxRCS+sV01rUM1s/yEBrG2wNc7B2bIbZ
+        ONfSWIVTHSU7mL3wMNghdxIAxCLCuh2ELVkMIhJEJel/MMeayrLgVuHlO4BcsECAjv4yIZY5Md0nc
+        g2MdN1oVvg8lSPHTIwwvnTM9HL8ykPDThCxpauh2aeSH8HV1bo5RnDT/JsNlpwnl4COaB2L17ug32
+        CDvGrgXwwPV7Xr4szxAV+aJ4SbKClR4btgl7mYp/6oRKLLmft+udxMriTHJLJiXyxh7noXTsxIw3O
+        ZTdeD9zg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pNA0u-004iqu-2i;
+        Wed, 01 Feb 2023 10:06:50 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 69D63300129;
+        Wed,  1 Feb 2023 11:07:21 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 38E56206F4AB2; Wed,  1 Feb 2023 11:07:21 +0100 (CET)
+Date:   Wed, 1 Feb 2023 11:07:21 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Song Liu <song@kernel.org>
+Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hch@lst.de, kernel-team@meta.com,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: Re: [PATCH v5] module: replace module_layout with module_memory
+Message-ID: <Y9o52aAC33YlRueI@hirez.programming.kicks-ass.net>
+References: <20230201064720.1949224-1-song@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230201090529.30446-6-quic_poovendh@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230201064720.1949224-1-song@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 01 Feb 2023, Poovendhan Selvaraj wrote:
+On Tue, Jan 31, 2023 at 10:47:20PM -0800, Song Liu wrote:
+> diff --git a/include/linux/module.h b/include/linux/module.h
+> index 8c5909c0076c..3429d354fec0 100644
+> --- a/include/linux/module.h
+> +++ b/include/linux/module.h
+> @@ -320,17 +320,50 @@ struct mod_tree_node {
+>  	struct latch_tree_node node;
+>  };
+>  
+> +enum mod_mem_type {
+	MOD_TEXT = 0,
 
-> Add the tcsr compatible string for IPQ9574 SoC
-> 
-> Signed-off-by: Poovendhan Selvaraj <quic_poovendh@quicinc.com>
-> ---
->  Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml | 1 +
->  1 file changed, 1 insertion(+)
+(just paranoia, and you explicitly rely on that below)
 
-Nit: Subject should be "dt-bindings: mfd: ..."
+> +	MOD_DATA,
+> +	MOD_RODATA,
+> +	MOD_RO_AFTER_INIT,
+> +	MOD_INIT_TEXT,
+> +	MOD_INIT_DATA,
+> +	MOD_INIT_RODATA,
+> +
+> +	MOD_MEM_NUM_TYPES,
+> +	MOD_INVALID = -1,
+> +};
+> +
+> +#define mod_mem_type_is_core_data(type)	\
+> +	((type) == MOD_DATA ||		\
+> +	 (type) == MOD_RODATA ||	\
+> +	 (type) == MOD_RO_AFTER_INIT)
+> +
+> +#define mod_mem_type_is_core(type)	\
+> +	((type) == MOD_TEXT ||		\
+> +	 mod_mem_type_is_core_data(type))
+> +
+> +#define mod_mem_type_is_init(type)	\
+> +	((type) == MOD_INIT_TEXT ||	\
+> +	 (type) == MOD_INIT_DATA ||	\
+> +	 (type) == MOD_INIT_RODATA)
 
-> diff --git a/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml b/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
-> index d463fb47278f..8cd0005fc8c7 100644
-> --- a/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
-> @@ -30,6 +30,7 @@ properties:
->            - qcom,tcsr-apq8084
->            - qcom,tcsr-ipq6018
->            - qcom,tcsr-ipq8064
-> +          - qcom,tcsr-ipq9574
->            - qcom,tcsr-mdm9615
->            - qcom,tcsr-msm8226
->            - qcom,tcsr-msm8660
-> -- 
-> 2.17.1
-> 
+Note that, per definition:
 
--- 
-Lee Jones [李琼斯]
+  core := !init
+  data := !text
+
+(and vice-versa ofcourse, so pick the smallest set) also ISTR you
+explicitly needing is_text somewhere.... ah yes, module_enable_nx().
+
+That is; I'd write something like:
+
+#define mod_mem_type_is_core(type) !mod_mem_type_is_init(type)
+
+#define mod_mem_type_is_text(type)	\
+	((type) == MOD_TEXT ||		\
+	 (type) == MOD_INIT_TEXT)
+
+#define mod_mem_type_is_data(type) !mod_mem_type_is_text(type)
+
+and then possibly additional helpers like is_core_data etc.. where
+needed.
+
+#define mod_mem_type_is_core_data(type)	\
+	(mod_mem_type_is_core(type) &&	\
+	 mod_mem_type_is_data(type))
+
+> +#define for_each_mod_mem_type(type)		\
+> +	for (enum mod_mem_type (type) = 0;	\
+> +	     (type) < MOD_MEM_NUM_TYPES; (type)++)
+
+So how about instead of this ...
+
+> +#define for_core_mod_mem_type(type)			\
+> +	for (enum mod_mem_type (type) = 0;		\
+> +	     (type) < MOD_MEM_NUM_TYPES; (type)++)	\
+> +		if (mod_mem_type_is_core(type))
+> +
+> +#define for_init_mod_mem_type(type)			\
+> +	for (enum mod_mem_type (type) = 0;		\
+> +	     (type) < MOD_MEM_NUM_TYPES; (type)++)	\
+> +		if (mod_mem_type_is_init(type))
+
+... you write something like:
+
+#define for_class_mod_mem_type(type, class)		\
+	for_each_mod_mem_type(type)			\
+		if (mod_mem_type_is_##class(type))
+
+Then we can write things like:
+
+	for_class_mod_mem_type(type, init)
+	for_class_mod_mem_type(type, data)
+
+and
+
+	for_class_mod_mem_type(type, core_data)
+
+(this last could be used in show_datasize() for example).
+
+Does that make sense?
