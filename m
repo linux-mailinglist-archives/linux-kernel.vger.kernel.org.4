@@ -2,151 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47759686DA4
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 19:06:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D92E686DAB
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 19:09:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231718AbjBASGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 13:06:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51106 "EHLO
+        id S231761AbjBASJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 13:09:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231211AbjBASGs (ORCPT
+        with ESMTP id S229771AbjBASJT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 13:06:48 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63D597D2A8;
-        Wed,  1 Feb 2023 10:06:47 -0800 (PST)
+        Wed, 1 Feb 2023 13:09:19 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B73287B78E;
+        Wed,  1 Feb 2023 10:09:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675274807; x=1706810807;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=217n0jzbEqwc1KMujYEh03wa1IX6hmrZDo8bwPhDwWA=;
-  b=Ve0ZUIRrkwq+mIjUZHs9EuTo1IWVHFI2nKxS3LqaKMIKT3dmpGWffElS
-   o6N9YckYzS/OyZP8f15jhVUV4joEdlgwP7eCvqdSKGKdQxhxz5KU0XEZU
-   HGbYyWM+bRs8GGZX0+KLbugpTk4x13zXF/hu6tireik/F0F8rya8LkU53
-   ULKo2vH33QP1ZY7f7lw0/IiZ1Be86fmwRvws0amOKImq0qgFkdLILIG99
-   0v90PqyfAQUVfn7/vnzd0rO4WrXfTAcI/XKbr87OrS3BvB+icy51DUJGQ
-   UuxKHWeNP8igYtTQel53DhDisro3dgaEutHf5ndzrCzus32s0/pkpyZmi
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="311868002"
+  t=1675274958; x=1706810958;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=DzB41kqRjG9qUWIA0y3gZ/k7RV+zOm/shnhJdtIANr0=;
+  b=GSPagN+Zy2w1l80TvnlovsGmqGorCtM7YlIatGsyMtTP6Vc9nczzAhHd
+   s+zjHR8JXodQCxpD2xbnFdAOC6TKurvn51cWF80ce4TMd27L+S4Awbj3k
+   WLRsoyQakCHYD9NIX9R+46s5hhcDt4NzUfLX/xRTDeKEHpymCnozv0tLk
+   8wvtwUOP+KfcrHeGEevD6uxKL8oyz+Yeg1hYBRK29/5APVIZOKVUEK3kY
+   uvDjZbhaODUdun5mVHw1wwVBeaigbNalYNVMlmfy20LN2KvI20vCl4fGO
+   asIHo37/E/98hsbDnyIMHYZ6fBP+3hw1TGFsUzShSyAAXaueIka+6Efli
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="414431226"
 X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
-   d="scan'208";a="311868002"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 10:06:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="667002139"
+   d="scan'208";a="414431226"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 10:09:18 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="993782516"
 X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
-   d="scan'208";a="667002139"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by fmsmga007.fm.intel.com with ESMTP; 01 Feb 2023 10:06:27 -0800
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        daniel.lezcano@linaro.org, rui.zhang@intel.com,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        stable@vger.kernel.org
-Subject: [PATCH] thermal: intel_powerclamp: Fix cur_state for multi package system
-Date:   Wed,  1 Feb 2023 10:06:25 -0800
-Message-Id: <20230201180625.2156520-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.39.1
+   d="scan'208";a="993782516"
+Received: from sgkhacha-mobl1.amr.corp.intel.com (HELO [10.212.227.86]) ([10.212.227.86])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 10:09:17 -0800
+Message-ID: <c5809098-9066-d90d-1bcc-108a11525cac@intel.com>
+Date:   Wed, 1 Feb 2023 10:09:16 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] x86: enable Data Operand Independent Timing Mode
+Content-Language: en-US
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     Jann Horn <jannh@google.com>, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Roxana Bradescu <roxabee@chromium.org>,
+        Adam Langley <agl@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>
+References: <20230125012801.362496-1-ebiggers@kernel.org>
+ <14506678-918f-81e1-2c26-2b347ff50701@intel.com>
+ <CAG48ez1NaWarARJj5SBdKKTYFO2MbX7xO75Rk0Q2iK8LX4BwFA@mail.gmail.com>
+ <394c92e2-a9aa-37e1-7a34-d7569ac844fd@intel.com>
+ <CAG48ez0ZK3pMqkto4DTZPNyddYcv8jPHQDNhYoFEPvSRLf80fQ@mail.gmail.com>
+ <e37a17c4-8611-6d1d-85ad-fcd04ff285e1@intel.com> <Y9MAvhQYlOe4l2BM@gmail.com>
+ <8b2771ce-9cfa-54cc-de6b-e80ce7af0a93@intel.com>
+ <16e3217b-1561-51ea-7514-014e27240402@intel.com>
+ <Y9oMmYWzy7mlk3D9@sol.localdomain>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <Y9oMmYWzy7mlk3D9@sol.localdomain>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The powerclamp cooling device cur_state shows actual idle observed by
-package C-state idle counters. But the implementation is not sufficient
-for multi package or multi die system. The cur_state value is incorrect.
-On these systems, these counters must be read from each package/die and
-somehow aggregate them. But there is no good method for aggregation.
+On 1/31/23 22:54, Eric Biggers wrote:
+> On Tue, Jan 31, 2023 at 02:48:05PM -0800, Dave Hansen wrote:
+>> We've been talking about this inside Intel.  Suffice to say that DOITM
+>> was not designed to be turned on all the time.  If software turns it on
+>> all the time, it won't accomplish what it was designed to do.
+> 
+> Why wouldn't it accomplish what it is designed to do?  Does it not actually
+> work?
 
-It was not a problem when explicit CPU model addition was required to
-enable intel powerclamp. In this way certain CPU models could have
-been avoided. But with the removal of CPU model check with the
-availability of Package C-state counters, the driver is loaded on most
-of the recent systems.
+It was designed with the idea that timing-sensitive and *ONLY*
+timing-sensitive code would be wrapped with DOITM.  Wrapping that code
+would allow the rest of the system to safely operate with fancy new
+optimizations that exhibit data dependent timing.
 
-For multi package/die systems, just show the actual target idle state,
-the system is trying to achieve. In powerclamp this is the user set
-state minus one.
+But, first of all, that code isn't wrapped with DOITM-prodding APIs
+today.  That model falls apart with current software on current DOITM
+implementations.
 
-Also there is no use of starting a worker thread for polling package
-C-state counters and applying any compensation.
+Second, we consider the kernel in general to be timing-sensitive enough
+that we want DOITM=1 behavior in the kernel.
 
-Fixes: b721ca0d1927 ("thermal/powerclamp: remove cpu whitelist")
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: stable@vger.kernel.org # 4.14+
----
- drivers/thermal/intel/intel_powerclamp.c | 20 ++++++++++++++++----
- 1 file changed, 16 insertions(+), 4 deletions(-)
+Those lead software folks to set DOITM=1 on all the time.  The fallout
+from that is that nobody will ever use those fancy new optimizations.
+If nobody can take advantage of them, silicon shouldn't be wasted on
+them in the first place.
 
-diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
-index b80e25ec1261..64f082c584b2 100644
---- a/drivers/thermal/intel/intel_powerclamp.c
-+++ b/drivers/thermal/intel/intel_powerclamp.c
-@@ -57,6 +57,7 @@
- 
- static unsigned int target_mwait;
- static struct dentry *debug_dir;
-+static bool poll_pkg_cstate_enable;
- 
- /* user selected target */
- static unsigned int set_target_ratio;
-@@ -261,6 +262,9 @@ static unsigned int get_compensation(int ratio)
- {
- 	unsigned int comp = 0;
- 
-+	if (!poll_pkg_cstate_enable)
-+		return 0;
-+
- 	/* we only use compensation if all adjacent ones are good */
- 	if (ratio == 1 &&
- 		cal_data[ratio].confidence >= CONFIDENCE_OK &&
-@@ -519,7 +523,8 @@ static int start_power_clamp(void)
- 	control_cpu = cpumask_first(cpu_online_mask);
- 
- 	clamping = true;
--	schedule_delayed_work(&poll_pkg_cstate_work, 0);
-+	if (poll_pkg_cstate_enable)
-+		schedule_delayed_work(&poll_pkg_cstate_work, 0);
- 
- 	/* start one kthread worker per online cpu */
- 	for_each_online_cpu(cpu) {
-@@ -585,11 +590,15 @@ static int powerclamp_get_max_state(struct thermal_cooling_device *cdev,
- static int powerclamp_get_cur_state(struct thermal_cooling_device *cdev,
- 				 unsigned long *state)
- {
--	if (true == clamping)
--		*state = pkg_cstate_ratio_cur;
--	else
-+	if (true == clamping) {
-+		if (poll_pkg_cstate_enable)
-+			*state = pkg_cstate_ratio_cur;
-+		else
-+			*state = set_target_ratio;
-+	} else {
- 		/* to save power, do not poll idle ratio while not clamping */
- 		*state = -1; /* indicates invalid state */
-+	}
- 
- 	return 0;
- }
-@@ -712,6 +721,9 @@ static int __init powerclamp_init(void)
- 		goto exit_unregister;
- 	}
- 
-+	if (topology_max_packages() == 1 && topology_max_die_per_package() == 1)
-+		poll_pkg_cstate_enable = true;
-+
- 	cooling_dev = thermal_cooling_device_register("intel_powerclamp", NULL,
- 						&powerclamp_cooling_ops);
- 	if (IS_ERR(cooling_dev)) {
--- 
-2.39.1
+Basically, DOITM was meant to open the door for adding fancy new
+optimizations.  It's a failure if it doesn't do that.
 
+>> The _most_ likely thing that's going to happen is that DOITM gets
+>> redefined to be much more limited in scope.  The current DOITM
+>> architecture is very broad, but the implementations have much more
+>> limited effects.  This means that the architecture can probably be
+>> constrained and still match the hardware that's out there today.  That's
+>> pure speculation (ha!) on my part.
+>>
+>> I think we should hold off on merging any DOITM patches until the dust
+>> settles.  As far as I know, there is no pressing practical reason to
+>> apply something urgently.
+>>
+>> Any objections?
+> 
+> Does this mean that Intel will be restoring the data operand independent timing
+> guarantee of some instructions that have had it removed?  If so, which
+> instructions will still be left?
+
+Speaking for myself and *not* the official Intel plan here.  Yes, I
+think the pre-DOITM behavior can and will be restored for basically the
+entire list[1] (ignoring MCDT of course).
+
+> Also, given that the DOITM flag can only be set and cleared by the
+> kernel, and assuming that Linux won't support DOITM in any way yet
+> (as you're recommending), what should the developers of userspace
+> cryptographic libraries do? Does Intel have a list of which
+> instructions *already* have started having data operand dependent
+> timing on released CPUs, so that the existing security impact can be
+> assessed and so that developers can avoid using those instructions?
+Good questions.  I want to make sure what I'm saying here is accurate,
+and I don't have good answers to those right now.  We're working on it,
+and should have something useful to say in the next couple of days.
+
+1.
+https://www.intel.com/content/www/us/en/developer/articles/technical/software-security-guidance/resources/data-operand-independent-timing-instructions.html
