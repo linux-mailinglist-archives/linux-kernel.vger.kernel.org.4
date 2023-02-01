@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F94A6868AD
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 15:43:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECA346868AA
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 15:43:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231644AbjBAOnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 09:43:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48814 "EHLO
+        id S232553AbjBAOnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 09:43:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232449AbjBAOnK (ORCPT
+        with ESMTP id S232462AbjBAOnK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 1 Feb 2023 09:43:10 -0500
-X-Greylist: delayed 488 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 01 Feb 2023 06:43:05 PST
-Received: from mail.fris.de (mail.fris.de [IPv6:2a01:4f8:c2c:390b::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B6282E0D0;
-        Wed,  1 Feb 2023 06:43:04 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 663D9C033A;
-        Wed,  1 Feb 2023 15:35:04 +0100 (CET)
+X-Greylist: delayed 491 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 01 Feb 2023 06:43:05 PST
+Received: from mail.fris.de (mail.fris.de [116.203.77.234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C03D2E80B;
+        Wed,  1 Feb 2023 06:43:03 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 432F6C033C;
+        Wed,  1 Feb 2023 15:35:06 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fris.de; s=dkim;
-        t=1675262104; h=from:subject:date:message-id:to:cc:mime-version:
+        t=1675262109; h=from:subject:date:message-id:to:cc:mime-version:
          content-transfer-encoding:in-reply-to:references;
-        bh=lDLZ/xjvrtcN+1CWCH6iD2koCwn6Eb1LpwYqcz6QtGM=;
-        b=bZ55zZJ5eoXQhSN7w9SMB4VCaK51BKzgXkS33yOHee5bB2bhkPDekZpgtZ93c/YxCRE4lj
-        ucP6wYBafqEQ4SNVYXa+DD8qqy3gnRx0R01rnQWNjyWybCCtgxv9zgv4i8Tf3tBUmv3lBP
-        pFRu7HlgOucmf3Eb+CbBzy9BJLSWfwcbCA6r60JD0KySH1eEtuheqw9A4zQijH8Vq8t7k9
-        nQN+AWJYpWUnuilcqLkg7GvI4deowbc2IX/ABCe8mEG/QfFOrNopolv0QVTrPFn7dSpwBg
-        Ppc3o7UfL9AtjanRkaLAay/rCZYwQW21UmgD0hn7VmgT1YuFneII41Cba86oAw==
+        bh=wvJB0OUDEjfjJl0NbgwhqGyfXYoeQO+CyeH0uszLyk0=;
+        b=silF0PZRDEQ+cRx3MXl+8ZK4MfXSgw/Xeu5H/4fxJDygDKC88Zw65FY6WVG3pWEQ9DEWc0
+        Liz7qJ8O4M71oGThvh+zL2SIYCziQcwpNs8/M2KvA0TumO6qOo0g0pGIoyNDxteHsGkHG2
+        JxyR7kAoeie/HU69iXi7Wvt5qD+zNPrtwdBFTN1M6Y1AAHwsVQkyJJc8WUNoyt5lGWhtI4
+        eH5KZfnH8tUtL7cFta9BVXp0h6vqDYuoBkzey2F4UrBFonlCOrJwfx17HVJTVX1uAhfemC
+        zFR0NAH3zLARFWNLNg4cVG1cAPOm3hRP+kjVFxtAAYUTB3+Uw6o6xBYgg1fAgw==
 From:   Frieder Schrempf <frieder@fris.de>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Frieder Schrempf <frieder.schrempf@kontron.de>
-Subject: [PATCH 4/7] rtc: Move BSM defines to separate header for DT usage
-Date:   Wed,  1 Feb 2023 15:34:26 +0100
-Message-Id: <20230201143431.863784-5-frieder@fris.de>
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
+Cc:     Frieder Schrempf <frieder.schrempf@kontron.de>,
+        keliu <liuke94@huawei.com>,
+        Shang XiaoJing <shangxiaojing@huawei.com>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Yang Yingliang <yangyingliang@huawei.com>
+Subject: [PATCH 5/7] rtc: class: Support setting backup switch mode from devicetree
+Date:   Wed,  1 Feb 2023 15:34:27 +0100
+Message-Id: <20230201143431.863784-6-frieder@fris.de>
 In-Reply-To: <20230201143431.863784-1-frieder@fris.de>
 References: <20230201143431.863784-1-frieder@fris.de>
 MIME-Version: 1.0
@@ -54,56 +55,50 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Frieder Schrempf <frieder.schrempf@kontron.de>
 
-To be able to use the BSM defines in the devicetree, move the defines
-to a separate header within the dt-bindings directory.
+Some RTC devices like the RV3028 have BSM disabled as factory default.
+This makes the RTC quite useless if it is expected to preserve the
+time on hardware that has a battery buffered supply for the RTC.
+
+Let boards that have a buffered supply for the RTC available force
+the BSM to the desired value via devicetree by setting the
+'backup-switch-mode' property.
 
 Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
 ---
- include/dt-bindings/rtc/rtc.h | 11 +++++++++++
- include/uapi/linux/rtc.h      |  6 +-----
- 2 files changed, 12 insertions(+), 5 deletions(-)
- create mode 100644 include/dt-bindings/rtc/rtc.h
+ drivers/rtc/class.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/include/dt-bindings/rtc/rtc.h b/include/dt-bindings/rtc/rtc.h
-new file mode 100644
-index 000000000000..b0cc06d368c0
---- /dev/null
-+++ b/include/dt-bindings/rtc/rtc.h
-@@ -0,0 +1,11 @@
-+/* SPDX-License-Identifier: GPL-2.0 OR MIT */
-+
-+#ifndef _DT_BINDINGS_RTC_H
-+#define _DT_BINDINGS_RTC_H
-+
-+#define RTC_BSM_DISABLED	0
-+#define RTC_BSM_DIRECT		1
-+#define RTC_BSM_LEVEL		2
-+#define RTC_BSM_STANDBY		3
-+
-+#endif /* _DT_BINDINGS_RTC_H */
-diff --git a/include/uapi/linux/rtc.h b/include/uapi/linux/rtc.h
-index 97aca4503a6a..9e78c17b5733 100644
---- a/include/uapi/linux/rtc.h
-+++ b/include/uapi/linux/rtc.h
-@@ -12,6 +12,7 @@
- #ifndef _UAPI_LINUX_RTC_H_
- #define _UAPI_LINUX_RTC_H_
+diff --git a/drivers/rtc/class.c b/drivers/rtc/class.c
+index e5b7b48cffac..79417d1fbeee 100644
+--- a/drivers/rtc/class.c
++++ b/drivers/rtc/class.c
+@@ -391,6 +391,11 @@ int __devm_rtc_register_device(struct module *owner, struct rtc_device *rtc)
+ 	struct rtc_wkalrm alrm;
+ 	int err;
  
-+#include <dt-bindings/rtc/rtc.h>
- #include <linux/const.h>
- #include <linux/ioctl.h>
- #include <linux/types.h>
-@@ -141,11 +142,6 @@ struct rtc_param {
- #define RTC_PARAM_CORRECTION		1
- #define RTC_PARAM_BACKUP_SWITCH_MODE	2
++	struct rtc_param bsm = {
++		.param = RTC_PARAM_BACKUP_SWITCH_MODE,
++		.uvalue = RTC_BSM_DISABLED,
++	};
++
+ 	if (!rtc->ops) {
+ 		dev_dbg(&rtc->dev, "no ops set\n");
+ 		return -EINVAL;
+@@ -402,6 +407,15 @@ int __devm_rtc_register_device(struct module *owner, struct rtc_device *rtc)
+ 	if (rtc->ops->set_offset)
+ 		set_bit(RTC_FEATURE_CORRECTION, rtc->features);
  
--#define RTC_BSM_DISABLED	0
--#define RTC_BSM_DIRECT		1
--#define RTC_BSM_LEVEL		2
--#define RTC_BSM_STANDBY		3
--
- #define RTC_MAX_FREQ	8192
- 
++	/* setup backup switching mode */
++	if (test_bit(RTC_FEATURE_BACKUP_SWITCH_MODE, rtc->features) &&
++	    !device_property_read_u32(rtc->dev.parent, "backup-switch-mode",
++				      (u32 *)&bsm.uvalue)) {
++		err = rtc->ops->param_set(rtc->dev.parent, &bsm);
++		if (err && err != -EINVAL)
++			return err;
++	}
++
+ 	rtc->owner = owner;
+ 	rtc_device_get_offset(rtc);
  
 -- 
 2.39.1
