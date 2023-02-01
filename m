@@ -2,234 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0B56686F1B
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 20:45:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12AFC686F2C
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 20:47:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232318AbjBATot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 14:44:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54582 "EHLO
+        id S231790AbjBATrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 14:47:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232159AbjBATob (ORCPT
+        with ESMTP id S231712AbjBATrA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 14:44:31 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4CA074C3E
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 11:44:29 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id ud5so54662157ejc.4
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 11:44:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=grsecurity.net; s=grsec;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Qsy2Uw5CdDxyHnHzJNf7tebm5waQcm3qgkQypIRD0TQ=;
-        b=u5nOIOiIHGHsUUIO2RFWXjN11TEIX9e+ptL1+CFtVB/c9QeQUBW4CCMKhj+d+jZC9W
-         o/pFuvwXHpvKU8vlW/cQMaNDWw9ok4uB7LnEfQZYqdJ4RbicM3mJwYF33qErrH0McdbG
-         dol1+omltPpOKQY+gJs/XG9hjc4gUAUwj6uo+Uf29HCeDeyK9S7kBCmVzfj+WAdTaiQq
-         GBlkXnew/QD5OUivpAPWqzpIL6dpx4aP3jDDVIlYTRhATKAcyEr1YPyss0/IcWNpOZ3C
-         B7UvaRb7awdj/0U0aX0rRbASJ8Glxqm26OFAY87zPlrP9k5ra2Xo6PpZYUfrgVtaR6CQ
-         zcrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Qsy2Uw5CdDxyHnHzJNf7tebm5waQcm3qgkQypIRD0TQ=;
-        b=fXNO8k/q1N45whpX3NDyaJLv0ua6vdFi+Rsy31AohRayj+U2HZLtnZT5WBWovSqfxK
-         Hi6XWF5QBt3X455r5k+iD5NXJrov+nyJe/kl1HD5raWhpkYe9jNUVl9zKbBTOMqkzLwp
-         aLkNeFmWbAgnSi64ySFMBBWEZXCE74WiJZ3a5+YJw1THcxcKnTT5pOApzTILscCudP3q
-         iZcxehxfH3eC8qL/Wc9Z7MF8hu8ljVP7iKGJEzpflS+cCvEwG+gMvxA8t0BRWyc1W3MH
-         Tl6Mo5qhjPXJ7LSr88D2F494otMHpiywUgU3znHWTi2TB8AZFBnaCzDuMEIWOB9XyEat
-         g0JQ==
-X-Gm-Message-State: AO0yUKVZqG5N4urygbL2zp8Yw71voXxpjuZXwMCOON1aalxZiGmH9kLT
-        P+Gan9ZAzoNWwLoMUMuWoPSIUg==
-X-Google-Smtp-Source: AK7set+H1klZL37ScJpHXCuuMJhTfaEvIr9rEf8uMIyTSOnXzcZN68vTuJtwKY8/D3K4EEBkvU7O9A==
-X-Received: by 2002:a17:906:4c8a:b0:887:c44a:b8e9 with SMTP id q10-20020a1709064c8a00b00887c44ab8e9mr3727788eju.76.1675280669450;
-        Wed, 01 Feb 2023 11:44:29 -0800 (PST)
-Received: from nuc.fritz.box (p200300f6af111a00277482c051eca183.dip0.t-ipconnect.de. [2003:f6:af11:1a00:2774:82c0:51ec:a183])
-        by smtp.gmail.com with ESMTPSA id c23-20020a170906155700b00869f2ca6a87sm10397579ejd.135.2023.02.01.11.44.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Feb 2023 11:44:29 -0800 (PST)
-From:   Mathias Krause <minipli@grsecurity.net>
-To:     kvm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Mathias Krause <minipli@grsecurity.net>
-Subject: [PATCH v3 6/6] KVM: VMX: Make CR0.WP a guest owned bit
-Date:   Wed,  1 Feb 2023 20:46:04 +0100
-Message-Id: <20230201194604.11135-7-minipli@grsecurity.net>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230201194604.11135-1-minipli@grsecurity.net>
-References: <20230201194604.11135-1-minipli@grsecurity.net>
+        Wed, 1 Feb 2023 14:47:00 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0610A83253;
+        Wed,  1 Feb 2023 11:46:47 -0800 (PST)
+Received: by linux.microsoft.com (Postfix, from userid 1052)
+        id 5F2CE20B7102; Wed,  1 Feb 2023 11:46:47 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5F2CE20B7102
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1675280807;
+        bh=8MDyb8NfMEMA+gvGsYIH3Hk92qnGUNCXXiiUGYDGeY0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aGiTEE1l0zxKt35hRAw5O5rUjHIWcAoDjTu0gK/pqVOhoxy2wEnsm8ZNcF03j15OU
+         toc+XIsocCQ+PUZLhpiUjHGzrPbYhknyZg79wHeR50uEX2RjoQI/xWZzNaX8eA9EKw
+         t8/KxyA0u4mFqi9fvZeO3cXFFwKkFGDUqHnC4vOk=
+Date:   Wed, 1 Feb 2023 11:46:47 -0800
+From:   Fan Wu <wufan@linux.microsoft.com>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
+        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
+        axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
+        eparis@redhat.com, paul@paul-moore.com, linux-doc@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        dm-devel@redhat.com, linux-audit@redhat.com,
+        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
+        Deven Bowers <deven.desai@linux.microsoft.com>
+Subject: Re: [RFC PATCH v9 05/16] ipe: add userspace interface
+Message-ID: <20230201194647.GA11892@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1675119451-23180-1-git-send-email-wufan@linux.microsoft.com>
+ <1675119451-23180-6-git-send-email-wufan@linux.microsoft.com>
+ <255c119de8f8665b88c411d981762fddc0fe7eaa.camel@huaweicloud.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <255c119de8f8665b88c411d981762fddc0fe7eaa.camel@huaweicloud.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Guests like grsecurity that make heavy use of CR0.WP to implement kernel
-level W^X will suffer from the implied VMEXITs.
+On Tue, Jan 31, 2023 at 11:49:44AM +0100, Roberto Sassu wrote:
+> On Mon, 2023-01-30 at 14:57 -0800, Fan Wu wrote:
+> > From: Deven Bowers <deven.desai@linux.microsoft.com>
+> > +
+> > +/**
+> > + * new_policy - Write handler for the securityfs node, "ipe/new_policy".
+> > + * @f: Supplies a file structure representing the securityfs node.
+> > + * @data: Suppleis a buffer passed to the write syscall.
+> 
+> Typo: Suppleis.
+> 
+Thanks for spotting the typos!
 
-For a direct MMU role there is no need to intercept a guest change of
-CR0.WP, so simply make it a guest owned bit if we can do so.
+> > + * @len: Supplies the length of @data.
+> > + * @offset: unused.
+> > + *
+> > + * Return:
+> > + * * >0	- Success, Length of buffer written
+> > + * * <0	- Error
+> > + */
+> > +static ssize_t new_policy(struct file *f, const char __user *data,
+> > +			  size_t len, loff_t *offset)
+> > +{
+> > +	int rc = 0;
+> > +	char *copy = NULL;
+> > +	struct ipe_policy *p = NULL;
+> > +
+> > +	if (!file_ns_capable(f, &init_user_ns, CAP_MAC_ADMIN))
+> > +		return -EPERM;
+> > +
+> > +	copy = memdup_user_nul(data, len);
+> > +	if (IS_ERR(copy)) {
+> > +		rc = PTR_ERR(copy);
+> > +		goto err;
+> > +	}
+> > +
+> > +	p = ipe_new_policy(NULL, 0, copy, len);
+> > +	if (IS_ERR(p)) {
+> > +		rc = PTR_ERR(p);
+> > +		goto err;
+> > +	}
+> > +
+> > +	rc = ipe_new_policyfs_node(p);
+> > +	if (rc)
+> > +		goto err;
+> 
+> Uhm, don't you need to do cleanup of allocated memory or revert the
+> actions of ipe_new_policy()?
+> 
+Yes that should be cleaned up but should be done in ipe_new_policy instead,
+will add a ipe_free_policy call at the end. Thanks for pointing that out.
 
-This implies that a read of a guest's CR0.WP bit might need a VMREAD.
-However, the only potentially affected user seems to be kvm_init_mmu()
-which is a heavy operation to begin with. But also most callers already
-cache the full value of CR0 anyway, so no additional VMREAD is needed.
-The only exception is nested_vmx_load_cr3().
+> 
+> I would like more to see all the functions managing the policy
+> together. If the patch is too long, you could further split by adding
+> the helpers (that don't directly deal with the policy) in a separate
+> patch.
+> 
+> Here you would simply instantiate dirs/files in securityfs and call the
+> existing functions previously introduced.
+> 
+> Roberto
+> 
 
-Add a new module parameter 'lazycr0' to allow users to revert back to
-the old behaviour by loading kvm-intel.ko with 'lazycr0=0'.
-
-This change is VMX-specific, as SVM has no such fine grained control
-register intercept control.
-
-Suggested-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Mathias Krause <minipli@grsecurity.net>
----
-
-Initially I wanted to implement the scheme Sean sketched[1]: having a
-threshold where we would switch from eager to lazy CR0.WP tracking after
-toggling the bit often enough, make the bit guest owned afterwards and
-VMREAD CR0 when needed. However, when starting to look for users that
-would be affected, I only found kvm_init_mmu() (via kvm_init_mmu() ->
-vcpu_to_role_regs() -> kvm_read_cr0_bits(KVM_MMU_CR0_ROLE_BITS)). It has
-only these three interesting callers:
-1/ kvm_mmu_reset_context(), which isn't all that interesting, as it's a
-   heavy weight operation anyway and many of the control flows leading
-   to it already cache the value of CR0, so no additional VMREAD is
-   needed,
-2/ nested_vmx_load_cr3() and
-3/ kvm_post_set_cr0(), only when CR0.WP was toggled and the MMU is in
-   direct mode (optimization introduced by patch 3).
-
-The last case's most interesting caller is likely kvm_set_cr0(), which
-already caches the written CR0 value, thereby vanishes the need for
-another VMREAD in vcpu_to_role_regs().
-
-That's why I went with the much simpler approach and always allow CR0.WP
-to be guest owned if EPT is enabled as well.
-
-There's nothing we can do for SVM, though :/
-
-[1] https://lore.kernel.org/kvm/Y8cTMnyBzNdO5dY3@google.com/
----
- arch/x86/kvm/kvm_cache_regs.h   | 3 ++-
- arch/x86/kvm/vmx/capabilities.h | 1 +
- arch/x86/kvm/vmx/nested.c       | 4 ++--
- arch/x86/kvm/vmx/vmx.c          | 9 ++++++++-
- arch/x86/kvm/vmx/vmx.h          | 8 ++++++++
- 5 files changed, 21 insertions(+), 4 deletions(-)
-
-diff --git a/arch/x86/kvm/kvm_cache_regs.h b/arch/x86/kvm/kvm_cache_regs.h
-index c09174f73a34..495ae0204933 100644
---- a/arch/x86/kvm/kvm_cache_regs.h
-+++ b/arch/x86/kvm/kvm_cache_regs.h
-@@ -4,7 +4,8 @@
- 
- #include <linux/kvm_host.h>
- 
--#define KVM_POSSIBLE_CR0_GUEST_BITS X86_CR0_TS
-+#define KVM_LAZY_CR0_GUEST_BITS		X86_CR0_WP
-+#define KVM_POSSIBLE_CR0_GUEST_BITS	(X86_CR0_TS | KVM_LAZY_CR0_GUEST_BITS)
- #define KVM_POSSIBLE_CR4_GUEST_BITS				  \
- 	(X86_CR4_PVI | X86_CR4_DE | X86_CR4_PCE | X86_CR4_OSFXSR  \
- 	 | X86_CR4_OSXMMEXCPT | X86_CR4_PGE | X86_CR4_TSD | X86_CR4_FSGSBASE)
-diff --git a/arch/x86/kvm/vmx/capabilities.h b/arch/x86/kvm/vmx/capabilities.h
-index 45162c1bcd8f..41d48a3a651e 100644
---- a/arch/x86/kvm/vmx/capabilities.h
-+++ b/arch/x86/kvm/vmx/capabilities.h
-@@ -12,6 +12,7 @@
- extern bool __read_mostly enable_vpid;
- extern bool __read_mostly flexpriority_enabled;
- extern bool __read_mostly enable_ept;
-+extern bool __read_mostly enable_lazy_cr0;
- extern bool __read_mostly enable_unrestricted_guest;
- extern bool __read_mostly enable_ept_ad_bits;
- extern bool __read_mostly enable_pml;
-diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index 557b9c468734..2a0010ca7277 100644
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -4478,7 +4478,7 @@ static void load_vmcs12_host_state(struct kvm_vcpu *vcpu,
- 	 * CR0_GUEST_HOST_MASK is already set in the original vmcs01
- 	 * (KVM doesn't change it);
- 	 */
--	vcpu->arch.cr0_guest_owned_bits = KVM_POSSIBLE_CR0_GUEST_BITS;
-+	vcpu->arch.cr0_guest_owned_bits = vmx_guest_owned_cr0_bits();
- 	vmx_set_cr0(vcpu, vmcs12->host_cr0);
- 
- 	/* Same as above - no reason to call set_cr4_guest_host_mask().  */
-@@ -4629,7 +4629,7 @@ static void nested_vmx_restore_host_state(struct kvm_vcpu *vcpu)
- 	 */
- 	vmx_set_efer(vcpu, nested_vmx_get_vmcs01_guest_efer(vmx));
- 
--	vcpu->arch.cr0_guest_owned_bits = KVM_POSSIBLE_CR0_GUEST_BITS;
-+	vcpu->arch.cr0_guest_owned_bits = vmx_guest_owned_cr0_bits();
- 	vmx_set_cr0(vcpu, vmcs_readl(CR0_READ_SHADOW));
- 
- 	vcpu->arch.cr4_guest_owned_bits = ~vmcs_readl(CR4_GUEST_HOST_MASK);
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index d3b49e0b6c32..1969360d2744 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -91,6 +91,9 @@ module_param_named(flexpriority, flexpriority_enabled, bool, S_IRUGO);
- bool __read_mostly enable_ept = 1;
- module_param_named(ept, enable_ept, bool, S_IRUGO);
- 
-+bool __read_mostly enable_lazy_cr0 = 1;
-+module_param_named(lazycr0, enable_lazy_cr0, bool, S_IRUGO);
-+
- bool __read_mostly enable_unrestricted_guest = 1;
- module_param_named(unrestricted_guest,
- 			enable_unrestricted_guest, bool, S_IRUGO);
-@@ -4765,7 +4768,7 @@ static void init_vmcs(struct vcpu_vmx *vmx)
- 	/* 22.2.1, 20.8.1 */
- 	vm_entry_controls_set(vmx, vmx_vmentry_ctrl());
- 
--	vmx->vcpu.arch.cr0_guest_owned_bits = KVM_POSSIBLE_CR0_GUEST_BITS;
-+	vmx->vcpu.arch.cr0_guest_owned_bits = vmx_guest_owned_cr0_bits();
- 	vmcs_writel(CR0_GUEST_HOST_MASK, ~vmx->vcpu.arch.cr0_guest_owned_bits);
- 
- 	set_cr4_guest_host_mask(vmx);
-@@ -8370,6 +8373,10 @@ static __init int hardware_setup(void)
- 		return -EOPNOTSUPP;
- 	}
- 
-+	/* Need EPT for lazy CR0.WP synchronization. */
-+	if (!enable_ept)
-+		enable_lazy_cr0 = 0;
-+
- 	if (!cpu_has_vmx_ept_ad_bits() || !enable_ept)
- 		enable_ept_ad_bits = 0;
- 
-diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
-index a3da84f4ea45..e899c2291a3f 100644
---- a/arch/x86/kvm/vmx/vmx.h
-+++ b/arch/x86/kvm/vmx/vmx.h
-@@ -640,6 +640,14 @@ BUILD_CONTROLS_SHADOW(tertiary_exec, TERTIARY_VM_EXEC_CONTROL, 64)
- 				(1 << VCPU_EXREG_EXIT_INFO_1) | \
- 				(1 << VCPU_EXREG_EXIT_INFO_2))
- 
-+static inline unsigned long vmx_guest_owned_cr0_bits(void)
-+{
-+	unsigned long bits = KVM_POSSIBLE_CR0_GUEST_BITS;
-+	if (!enable_lazy_cr0)
-+		bits &= ~KVM_LAZY_CR0_GUEST_BITS;
-+	return bits;
-+}
-+
- static inline struct kvm_vmx *to_kvm_vmx(struct kvm *kvm)
- {
- 	return container_of(kvm, struct kvm_vmx, kvm);
--- 
-2.39.1
-
+I will try to split them in the next version. Thanks for the suggestion.
+-Fan
