@@ -2,82 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 083916862CD
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 10:29:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 986646862CB
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 10:29:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231770AbjBAJ3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 04:29:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49272 "EHLO
+        id S231723AbjBAJ3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 04:29:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231594AbjBAJ3t (ORCPT
+        with ESMTP id S231594AbjBAJ33 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 04:29:49 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 333885DC07
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 01:29:46 -0800 (PST)
-Received: from loongson.cn (unknown [111.9.175.10])
-        by gateway (Coremail) with SMTP id _____8Dxi+oJMdpjdFsLAA--.23414S3;
-        Wed, 01 Feb 2023 17:29:45 +0800 (CST)
-Received: from localhost.localdomain (unknown [111.9.175.10])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Axfb4IMdpjj1AmAA--.14203S2;
-        Wed, 01 Feb 2023 17:29:44 +0800 (CST)
-From:   Jinyang He <hejinyang@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] LoongArch: Fix Chinese comma
-Date:   Wed,  1 Feb 2023 17:29:04 +0800
-Message-Id: <20230201092904.11070-1-hejinyang@loongson.cn>
-X-Mailer: git-send-email 2.20.1
+        Wed, 1 Feb 2023 04:29:29 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7ABB2BEE5
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 01:29:27 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id d14so16651755wrr.9
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 01:29:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bS8u9dCXaSOWNsP7B7Sh+H7V+3DTgLiBLBtS8ycyLEc=;
+        b=LmmGVpowRS29RQUjxz4ZJFIt5f8Qs7RZanr1gRW76BGvy1BKPvxXtyL5tDtYEixLvq
+         S27mgLjagerJEezr8drBZGER+VEgZXY7Hasgjr0LhdtiW/en+ZhUX6L16cY8guV2BG76
+         dXsePUdP/goKeiLhu3XaDSdDvIB5vAy6sP7pDoCezOSR8nyaM7Kh50leLBvjNUa13eba
+         +w+R2oumx+n9EKEO2/L6UVfDH+YIs27dT4/NQeFmzYYcmK8lWsBAi/hnTN6bx6ZoMfPx
+         E7pl4H3y6HJ1S/co5awLWDbEiL6Egt/9gtFWoSul2zjHHpcXVhdOm4+1JpsZRipn9YFZ
+         KMqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bS8u9dCXaSOWNsP7B7Sh+H7V+3DTgLiBLBtS8ycyLEc=;
+        b=qC8xHlNSYKqbFHi0T2zuLAzofv3r23ernxPrnDmSj6nymaIsBoed3clPAwWuaIGBYb
+         W2FQ/CyffIy3tLasiCDsP6d7acR0Vb8Wl5iC/M5YDvWr55IBiHgR6eG9XcWIKa/KAAXU
+         aR+w0bbljv2LIqq9jxTO+YumCpPv+auDq+xRim/Ogx5orK1ZU9fp868bhK1/qALyHMVj
+         txYD18jXB3NjUAF/2giNohlWbmr3g/6XPi8c1jXIShDQBwI2A460Bl9u9tJxjkJvm28j
+         IfSkxTUrVi2PctwcMZl2PbtuWzM7g1H+hm1v+oB5cXYQZF76y2OEguqQBVUjcZmLAdcZ
+         smzQ==
+X-Gm-Message-State: AO0yUKXyXhx+G4+0e5VaSm0B28vWl3lAb7X2rMtm3RIcehfp1pa0EAF2
+        ksluCrIcaGmudHE84JhslHLCgg==
+X-Google-Smtp-Source: AK7set81cMnSNDvxJINFe7dfS34mhVEhPHLeliCWQnE2YDzX/9iwv01Ne9fckDEuo9bFuRsiZYUJMw==
+X-Received: by 2002:a5d:4561:0:b0:2bf:65ac:ebcc with SMTP id a1-20020a5d4561000000b002bf65acebccmr1580523wrc.17.1675243766435;
+        Wed, 01 Feb 2023 01:29:26 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id z12-20020adff74c000000b00291f1a5ced6sm17010536wrp.53.2023.02.01.01.29.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Feb 2023 01:29:26 -0800 (PST)
+Message-ID: <13a4bd83-e4a3-c423-4d4e-32ea94c71e68@linaro.org>
+Date:   Wed, 1 Feb 2023 10:29:22 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH V2 1/5] dt-bindings: scm: Add compatible for IPQ9574
+Content-Language: en-US
+To:     Poovendhan Selvaraj <quic_poovendh@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        jassisinghbrar@gmail.com, catalin.marinas@arm.com, will@kernel.org,
+        shawnguo@kernel.org, arnd@arndb.de, marcel.ziswiler@toradex.com,
+        robimarko@gmail.com, dmitry.baryshkov@linaro.org,
+        nfraprado@collabora.com, broonie@kernel.org,
+        quic_gurus@quicinc.com, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
+        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
+        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
+        quic_devipriy@quicinc.com
+References: <20230201090529.30446-1-quic_poovendh@quicinc.com>
+ <20230201090529.30446-2-quic_poovendh@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230201090529.30446-2-quic_poovendh@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Axfb4IMdpjj1AmAA--.14203S2
-X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvdXoW7Gw1DKryDZFyxCrWxAr4Dtwb_yoW3trX_J3
-        W2yw4kC34rCFWIvwn5Xa4kWr1jgryxAas5CF1ftF1xAayYqr1kJw4rCwnrZFn0krW7XFyf
-        JrWFqrZ5Cry5KjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
-        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
-        17kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
-        AFIxvE14AKwVWUGVWUXwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
-        6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7
-        xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS
-        0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0V
-        AKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1l
-        Ox8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxC20s
-        026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_
-        JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
-        v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xva
-        j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJV
-        W8JbIYCTnIWIevJa73UjIFyTuYvjxU25EfUUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix Chinese comma in cpu.h.
+On 01/02/2023 10:05, Poovendhan Selvaraj wrote:
+> Add the scm compatible string for IPQ9574 SoC
+> 
+> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
+> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
+> Co-developed-by: Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
+> Signed-off-by: Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
+> Signed-off-by: Poovendhan Selvaraj <quic_poovendh@quicinc.com>
 
-Signed-off-by: Jinyang He <hejinyang@loongson.cn>
----
- arch/loongarch/include/asm/cpu.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I don't think this improved. This patch adds one line with one value -
+one new compatible. Are you sure that three people were working on
+exactly that line and that compatible? Especially that it is essentially
+copy-paste of other compatibles so there is nothing to work on here?
 
-diff --git a/arch/loongarch/include/asm/cpu.h b/arch/loongarch/include/asm/cpu.h
-index 754f28506791..c3da91759472 100644
---- a/arch/loongarch/include/asm/cpu.h
-+++ b/arch/loongarch/include/asm/cpu.h
-@@ -36,7 +36,7 @@
- 
- #define PRID_SERIES_LA132	0x8000  /* Loongson 32bit */
- #define PRID_SERIES_LA264	0xa000  /* Loongson 64bit, 2-issue */
--#define PRID_SERIES_LA364	0xb000  /* Loongson 64bit，3-issue */
-+#define PRID_SERIES_LA364	0xb000  /* Loongson 64bit, 3-issue */
- #define PRID_SERIES_LA464	0xc000  /* Loongson 64bit, 4-issue */
- #define PRID_SERIES_LA664	0xd000  /* Loongson 64bit, 6-issue */
- 
--- 
-2.34.3
+Best regards,
+Krzysztof
 
