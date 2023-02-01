@@ -2,50 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AA00686C2B
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 17:55:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D68CB686C2C
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 17:55:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230152AbjBAQy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 11:54:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53912 "EHLO
+        id S230366AbjBAQzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 11:55:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229955AbjBAQy4 (ORCPT
+        with ESMTP id S230225AbjBAQy7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 11:54:56 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A22AD6C13E
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 08:54:54 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id g9so13044386pfo.5
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 08:54:54 -0800 (PST)
+        Wed, 1 Feb 2023 11:54:59 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E2664DBA
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 08:54:56 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id mi9so8732132pjb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 08:54:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=v42abFOaxIlmW4awj8kF2Nh0ZkUL+DGZkQ/FsMg5/Lo=;
-        b=VrF1mG7zFBzc+C7jPblzg3iCFvvDjx/+tr7aA+HecgsS4iWudNCaPX0qWgYt2dCN0e
-         PUmM93Vz92MUceh+zk1SV2VAWdhH8oePYHYIgZI435fyTmnP9z3hGnrOY3I0PyzsNeWs
-         tHMMajIgi3fbTPiqhxmZlJiypDtRj4yIt4mXo=
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CuWcrDVG77MlzAzG1Dc9fCEJWh5XQzqPcKQwClqpGQk=;
+        b=elsctNm6DvnStQNg/FiqgVT58WMOCUG7xRLbpU1S3BHrK2CrWN3bs69y3FSS53aQIT
+         VGfpRUFDv+zQ/9PPxQBjX0Hn5y15GaAc1Lhq8hOuApj/9xVEah0bavBFheTs7kb6viHU
+         uzT67e9IFG4XJUH4X4EBou9OUYS6NnHgTRD/I=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=v42abFOaxIlmW4awj8kF2Nh0ZkUL+DGZkQ/FsMg5/Lo=;
-        b=0juDqkhx+mO+4SQMSkkYDYlKbrviwIAYIvMeswJx0J1SeOyCi4wp7YnvSqKQORZLvd
-         3rMQn127Beq91tkG1gA9ySYRnyRmLwhZHtzkFHZymuqF+xzyV/8g6sbQroKLmG0G7pb+
-         jLyB9ve3dInPI1mNnITLjC1AslNpJks6D7mOyRIIbdpdgaGWkDEeBUUFl3JbPnOLEuQf
-         FPg3gQJPiJDIsS9BfAfqwxEmHFIPUgUYaI1ACSDPoEcpNqfYs7K2V5FzFWmzTaXsO3Yg
-         aPDdegla1nWI+bXXgndKph0FQorxQjddVeOO5o8Qnxao/fqcwFZD9+VuAsQxYxqB7OXV
-         2puA==
-X-Gm-Message-State: AO0yUKUcUv7akx9KS9WR6t4/qYFTGDIy+kKS8sPlU3NuHE86O97DPg0A
-        eeAedvnfV6ZfkwWk90ScWIs0cQ==
-X-Google-Smtp-Source: AK7set/Ngk6EWKR6yWWn0hLrOjHifSFiaIyR4hRkotMraLijRfBa3zbKNX1T18IRweHaOow9z4BwTg==
-X-Received: by 2002:a05:6a00:1d9a:b0:592:6313:20fb with SMTP id z26-20020a056a001d9a00b00592631320fbmr2864421pfw.30.1675270494150;
-        Wed, 01 Feb 2023 08:54:54 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CuWcrDVG77MlzAzG1Dc9fCEJWh5XQzqPcKQwClqpGQk=;
+        b=a78ThYNIOT+opmkwsMxMZdT8R0xs7ZW/9RgkpTrr+Q6Dg0Q7K/XErZVACujw7CKZ1v
+         cwS33XWxLLq4AWguUadu3x2qs1odcTWoWt8Q53If1/F0n5I6cRNjw+1oSOdDSUsKHlk/
+         ValktqseU1CYwQa8U2KoBXGmRwBQNe246+hrt8Z8F/KR4dEowTkn+laeTP83sxmYJlQd
+         tzWaUeJqI0RDSivQpm69KA9S0PrLtHCXeWwOM5t8e94r4IX7nhze1+wNoMqDScq5jtY2
+         XGkZIhRYcvIZQwpAEGqA/ggGF9+g3zUkEmX8PsXXzcJ5BL8nUYgWyg22TaxDz9m44HNk
+         Vyag==
+X-Gm-Message-State: AO0yUKW3D42E+JTJvS/W0K9EbpJ60+KUpi0ex0RUEnGoRj0q5iXtWx5u
+        sUasfrb5ZJI4OBqNvFNTNWoALeHI0ichw0nYNvQ=
+X-Google-Smtp-Source: AK7set9yAZQ6+dqWsBd9DE4iXXS9o4iyPyJ7iSp8CiKtvLQ+kk68I2UOsZmjpeyAcBcmjYLHtzQXLQ==
+X-Received: by 2002:a05:6a20:7da4:b0:bd:79a:a215 with SMTP id v36-20020a056a207da400b000bd079aa215mr4272667pzj.29.1675270496006;
+        Wed, 01 Feb 2023 08:54:56 -0800 (PST)
 Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:ba26:efe8:5132:5fcf])
-        by smtp.gmail.com with ESMTPSA id b15-20020aa7870f000000b0058119caa82csm11605090pfo.205.2023.02.01.08.54.52
+        by smtp.gmail.com with ESMTPSA id b15-20020aa7870f000000b0058119caa82csm11605090pfo.205.2023.02.01.08.54.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Feb 2023 08:54:53 -0800 (PST)
+        Wed, 01 Feb 2023 08:54:55 -0800 (PST)
 From:   Douglas Anderson <dianders@chromium.org>
 To:     ath11k@lists.infradead.org, linux-wireless@vger.kernel.org
 Cc:     Kalle Valo <kvalo@kernel.org>, junyuu@chromium.org,
@@ -59,20 +60,20 @@ Cc:     Kalle Valo <kvalo@kernel.org>, junyuu@chromium.org,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Manikanta Pubbisetty <quic_mpubbise@quicinc.com>,
         Marc Zyngier <maz@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
         Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: [PATCH v2 1/2] wifi: ath11k: Use platform_get_irq() to get the interrupt
-Date:   Wed,  1 Feb 2023 08:54:42 -0800
-Message-Id: <20230201084131.v2.1.I69cf3d56c97098287fe3a70084ee515098390b70@changeid>
+Subject: [PATCH v2 2/2] wifi: ath5k: Use platform_get_irq() to get the interrupt
+Date:   Wed,  1 Feb 2023 08:54:43 -0800
+Message-Id: <20230201084131.v2.2.Ic4f8542b0588d7eb4bc6e322d4af3d2064e84ff0@changeid>
 X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
+In-Reply-To: <20230201084131.v2.1.I69cf3d56c97098287fe3a70084ee515098390b70@changeid>
+References: <20230201084131.v2.1.I69cf3d56c97098287fe3a70084ee515098390b70@changeid>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -87,46 +88,50 @@ platform_get_resource() simply won't get them anymore.
 This was already fixed in several other Atheros WiFi drivers,
 apparently in response to Zeal Robot reports. An example of another
 fix is commit 9503a1fc123d ("ath9k: Use platform_get_irq() to get the
-interrupt"). ath11k seems to have been missed in this effort, though.
-
-Without this change, WiFi wasn't coming up on my Qualcomm sc7280-based
-hardware. Specifically, "platform_get_resource(pdev, IORESOURCE_IRQ,
-i)" was failing even for i=0.
-
-Tested-on: WCN6750 hw1.0 AHB WLAN.MSL.1.0.1-00887-QCAMSLSWPLZ-1
+interrupt"). ath5k seems to have been missed in this effort, though.
 
 Fixes: a1a2b7125e10 ("of/platform: Drop static setup of IRQ resource from DT core")
-Fixes: 00402f49d26f ("ath11k: Add support for WCN6750 device")
 Signed-off-by: Douglas Anderson <dianders@chromium.org>
-Tested-by: Jun Yu <junyuu@chromium.org>
 ---
+I'm not setup to actually test this, but I figured that I might as
+well go all the way and fix all the instances of the same pattern that
+I found in the ath drivers since the old call was actually breaking me
+in ath11k. I did at least confirm that the code compiles for me.
+
+If folks would rather not land an untested patch like this, though,
+feel free to drop this and just land patch #1 as long as that one
+looks OK.
 
 Changes in v2:
 - Update commit message and point to patch that broke us (Jonas)
 
- drivers/net/wireless/ath/ath11k/ahb.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/net/wireless/ath/ath5k/ahb.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/net/wireless/ath/ath11k/ahb.c b/drivers/net/wireless/ath/ath11k/ahb.c
-index d34a4d6325b2..f70a119bb5c8 100644
---- a/drivers/net/wireless/ath/ath11k/ahb.c
-+++ b/drivers/net/wireless/ath/ath11k/ahb.c
-@@ -859,11 +859,11 @@ static int ath11k_ahb_setup_msi_resources(struct ath11k_base *ab)
- 	ab->pci.msi.ep_base_data = int_prop + 32;
- 
- 	for (i = 0; i < ab->pci.msi.config->total_vectors; i++) {
--		res = platform_get_resource(pdev, IORESOURCE_IRQ, i);
--		if (!res)
--			return -ENODEV;
-+		ret = platform_get_irq(pdev, i);
-+		if (ret < 0)
-+			return ret;
- 
--		ab->pci.msi.irqs[i] = res->start;
-+		ab->pci.msi.irqs[i] = ret;
+diff --git a/drivers/net/wireless/ath/ath5k/ahb.c b/drivers/net/wireless/ath/ath5k/ahb.c
+index 2c9cec8b53d9..28a1e5eff204 100644
+--- a/drivers/net/wireless/ath/ath5k/ahb.c
++++ b/drivers/net/wireless/ath/ath5k/ahb.c
+@@ -113,15 +113,13 @@ static int ath_ahb_probe(struct platform_device *pdev)
+ 		goto err_out;
  	}
  
- 	set_bit(ATH11K_FLAG_MULTI_MSI_VECTORS, &ab->dev_flags);
+-	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+-	if (res == NULL) {
+-		dev_err(&pdev->dev, "no IRQ resource found\n");
+-		ret = -ENXIO;
++	irq = platform_get_irq(pdev, 0);
++	if (irq < 0) {
++		dev_err(&pdev->dev, "no IRQ resource found: %d\n", irq);
++		ret = irq;
+ 		goto err_iounmap;
+ 	}
+ 
+-	irq = res->start;
+-
+ 	hw = ieee80211_alloc_hw(sizeof(struct ath5k_hw), &ath5k_hw_ops);
+ 	if (hw == NULL) {
+ 		dev_err(&pdev->dev, "no memory for ieee80211_hw\n");
 -- 
 2.39.1.456.gfc5497dd1b-goog
 
