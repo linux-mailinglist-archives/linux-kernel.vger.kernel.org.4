@@ -2,94 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 486836868D9
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 15:49:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1E066868E4
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 15:51:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230147AbjBAOs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 09:48:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55238 "EHLO
+        id S231954AbjBAOvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 09:51:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231954AbjBAOs5 (ORCPT
+        with ESMTP id S229556AbjBAOvt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 09:48:57 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 680F647EED
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 06:48:47 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id iv8-20020a05600c548800b003db04a0a46bso2669940wmb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 06:48:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IrnlLHSpUTjrHRq92D868o5e+HjYioBUEUhrnsOP32c=;
-        b=UfPFRQsMj32BsjZ01Mk6hCF0qquffPQzHMzbMrt95W634kccfQupeRF9JZ2z5EVoBf
-         gOPmI8ZocCBvIlZLhNqend3rOkVmscOAh1qa8v0kRkIelaLpo52RTKEXIJcPUiWxzZLx
-         bb17PM841mbhRI30oRsMY0JGqLVeHnb90sxUoNoElNp89qLR/KhJAQlkpC6tBR+j5GXr
-         VGYyIf/Bna7fGYutR2v/EpjhAWiw+wQNyct4HOX9hAR625hogyTZ5laEwGreWD+g3hik
-         oXp8tVO9mNfPbxX0Yc5degCgn90+V/33lip6HxDH83FpvHtesM30ZFiprr3IBVghG4Xu
-         v+pw==
+        Wed, 1 Feb 2023 09:51:49 -0500
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3A542BFA;
+        Wed,  1 Feb 2023 06:51:48 -0800 (PST)
+Received: by mail-ot1-f53.google.com with SMTP id v24-20020a05683011d800b0068bdd29b160so2034863otq.13;
+        Wed, 01 Feb 2023 06:51:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IrnlLHSpUTjrHRq92D868o5e+HjYioBUEUhrnsOP32c=;
-        b=wtUHOaOc6zSMyNCMWfTRuoNSnaiOtXDDTCqwTa5uqUa1bFVXGrp/B/UnV4EU1OyVWJ
-         1lcoIOCg0IbFDK+7tXe0jlp4fInZHyNqZt/Z+u41DpwyToDP98ad/ll7VfhAAQjexriV
-         dFwtWhB08kQ33jyBdMgsDqCHzdplRgr2q//ZBJpq2n+y4Yg1+EKebSD5ePNBjmSybKTC
-         zdoKShvxPmYeGH7Gzc6IiIRlSDZ60qortT/fGAzpyRzN6LJYKMc6Bo76zQVlfwATC8Oh
-         HnZw4QlkoUD+t/Kn6lUEG0W8SyoHnuUY6eyPmDDLdDE+vbj0SqU7ztzmeqBW4BscUKL0
-         lPJQ==
-X-Gm-Message-State: AO0yUKXD/HXFZ8aKOkLMfERordnNITVYZTMw0oAZKw51e34ppUcr7f+D
-        Jx/+7AOBC3ld/WAQGLvec3Zq7Q==
-X-Google-Smtp-Source: AK7set+7RVhri8YFyr5V2meUkuAy+CNt+qnGsTyJwzqSTxxdHvqRO6TilYs80rAWUfMOTzbkXWKJoQ==
-X-Received: by 2002:a05:600c:4586:b0:3de:e447:8025 with SMTP id r6-20020a05600c458600b003dee4478025mr1846048wmo.21.1675262925589;
-        Wed, 01 Feb 2023 06:48:45 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id m17-20020a7bce11000000b003dc492e4430sm2014770wmc.28.2023.02.01.06.48.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Feb 2023 06:48:45 -0800 (PST)
-Message-ID: <ca742cbe-69f8-e269-ada5-b8731329e0a8@linaro.org>
-Date:   Wed, 1 Feb 2023 15:48:43 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Tljt9O289Ygn6RcNGURVZg0WLWtxuH5o9nRRq4d+zBg=;
+        b=VCB+HC8x6mr9/xOilQHNFt8kd0PonzESWg3NLMinZ2JWNZy5QEcBPHbn0bNqeOsNOZ
+         2bLWxtOXZrk2F6zXC+RZZNdpIXpcsWSdxFu4qQpt/t4PCg5MOs83T1RgPPIfYImrRzEi
+         yIRu6A9W1XA7aJ9uEnnx5PYFGNdL0QvwN3DpeLynesyg0D9ApqQWTNxpnL4/gREwDSOC
+         sI3rUznTRijeAjJ0mXG+xnBsSDkBm6XHQ1L/++XC6zmVUNH/aVCrPL9Nz9DzHCWPEtu/
+         Ut3ZfqwQnuurkmeig9j+TYXvujo1CaFYH8n75+mA6r47oKnGD9uErhTT+uj6M/cKevER
+         Ufng==
+X-Gm-Message-State: AO0yUKV8stU4dHIn9A4d2dvVYjCB6EaD8h0HFAGaDp/gBG4MF/YopAky
+        FKu8N3J/ssXSuAWDl/XFgg==
+X-Google-Smtp-Source: AK7set+yHHJTXSgQrEBo/14mWJ9B0EPRO/kN/uQP7vYXz6zGUE9ij0ke5wXk6VULnR0zcZ6KWd+jLA==
+X-Received: by 2002:a05:6830:14cc:b0:686:5047:8478 with SMTP id t12-20020a05683014cc00b0068650478478mr1529863otq.16.1675263107506;
+        Wed, 01 Feb 2023 06:51:47 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id t14-20020a9d590e000000b006864816ecd9sm7825565oth.59.2023.02.01.06.51.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Feb 2023 06:51:47 -0800 (PST)
+Received: (nullmailer pid 3364869 invoked by uid 1000);
+        Wed, 01 Feb 2023 14:51:46 -0000
+Date:   Wed, 1 Feb 2023 08:51:46 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Saurabh Singh Sengar <ssengar@linux.microsoft.com>
+Cc:     krzysztof.kozlowski+dt@linaro.org, kys@microsoft.com,
+        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+        daniel.lezcano@linaro.org, tglx@linutronix.de,
+        virtualization@lists.linux-foundation.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, mikelley@microsoft.com,
+        ssengar@microsoft.com
+Subject: Re: [PATCH v2 0/6] Device tree support for Hyper-V VMBus driver
+Message-ID: <20230201145146.GA3352796-robh@kernel.org>
+References: <1675188609-20913-1-git-send-email-ssengar@linux.microsoft.com>
+ <CAL_JsqKL3JA6nAkEHuuyxbs8-Mm=Q-nNkCmpnDApNUDVbLsvKw@mail.gmail.com>
+ <20230201020449.GC20379@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v1] colibri.dtsi: Refactor ASoC driver name
-Content-Language: en-US
-To:     Markus Burri <markus.burri@mt.com>, linux-kernel@vger.kernel.org
-Cc:     Manuel Traut <manuel.traut@mt.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20230201120900.840725-1-markus.burri@mt.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230201120900.840725-1-markus.burri@mt.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230201020449.GC20379@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/02/2023 13:09, Markus Burri wrote:
-> From: Manuel Traut <manuel.traut@mt.com>
+On Tue, Jan 31, 2023 at 06:04:49PM -0800, Saurabh Singh Sengar wrote:
+> On Tue, Jan 31, 2023 at 02:27:51PM -0600, Rob Herring wrote:
+> > On Tue, Jan 31, 2023 at 12:10 PM Saurabh Sengar
+> > <ssengar@linux.microsoft.com> wrote:
+> > >
+> > > This set of patches expands the VMBus driver to include device tree
+> > > support.
+> > >
+> > > The first two patches enable compilation of Hyper-V APIs in a non-ACPI
+> > > build.
+> > >
+> > > The third patch converts the VMBus driver from acpi to more generic
+> > > platform driver.
+> > >
+> > > Further to add device tree documentation for VMBus, it needs to club with
+> > > other virtualization driver's documentation. For this rename the virtio
+> > > folder to more generic hypervisor, so that all the hypervisor based
+> > > devices can co-exist in a single place in device tree documentation. The
+> > > fourth patch does this renaming.
+> > >
+> > > The fifth patch introduces the device tree documentation for VMBus.
+> > >
+> > > The sixth patch adds device tree support to the VMBus driver. Currently
+> > > this is tested only for x86 and it may not work for other archs.
+> > 
+> > I can read all the patches and see *what* they do. You don't really
+> > need to list that here. I'm still wondering *why*. That is what the
+> > cover letter and commit messages should answer. Why do you need DT
+> > support? How does this even work on x86? FDT is only enabled for
+> > CE4100 platform.
 > 
+> HI Rob,
+> 
+> Thanks for your comments.
+> We are working on a solution where kernel is booted without ACPI tables to keep
+> the overall system's memory footprints slim and possibly faster boot time.
+> We have tested this by enabling CONFIG_OF for x86.
 
-Use subject prefixes matching the subsystem (which you can get for
-example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-your patch is touching).
+It's CONFIG_OF_EARLY_FLATTREE which you would need and that's not user 
+selectable. At a minimum, you need some kconfig changes. Where are 
+those?
 
-Best regards,
-Krzysztof
+Also see my comment on v1 about running DT validation on your dtb. I'm 
+sure running it would point out other issues. Such as the root level 
+comaptible string(s) need to be documented. You need cpu nodes, 
+interrupt controller, timers, etc. Those all have to be documented.
 
+Rob
