@@ -2,273 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09938686B26
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 17:07:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C87C4686B36
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 17:11:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232981AbjBAQHt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 11:07:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44614 "EHLO
+        id S232919AbjBAQLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 11:11:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232973AbjBAQHq (ORCPT
+        with ESMTP id S231895AbjBAQLa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 11:07:46 -0500
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE09774C3C;
-        Wed,  1 Feb 2023 08:07:42 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1675267660; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=lfYmpWgL0UaaxXjNCpQCXxzyOZubao8dXEmV8np09uCsLGtIwp9RZ7ybyg4gRNvFCn
-    SyzaWLcHmxt3RqehjpeXbIxAtZ9rhmGrLd4NAGGAFIAF/fKcXStaBS84fc/lgw8yJmR+
-    XKLXzKXldNIli++qqP+L0drOcor6N8Y4nVfVdtDA+RyxIi55E1vbXZ5Of9ZsjzlRnO6Q
-    g65wbt1XjLUCDQcJ4upSwGdFsrb+7mdTCWKHhBa8x/WWF3MY1Ew/cGCbVpI/TcyJtQH7
-    xGjIx+zlBFj03aU498UyznLj+vT84A6Y6OWti6qeNmLo95zGCbUURqvaUCZ2geXMvno5
-    YXxQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1675267660;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=5EWlNg+XhFGtz1hJ7SAiKe/vHMaM/9hIzu2dnaeJK2k=;
-    b=ZSRkH013oKcZjawQAgn5JOQFjvR4w8LyMmCXxVkEv3BrKD3nq6Wr3AC8I0lROWlPxh
-    WKlCVQ4kgbBgncjjIWocFGbXa5Ys2Z+PW7/80kjqv6RQJsBiwUuemM24YQutGtzFIvQ4
-    59oN/Sj7xQrWvgWu3nwcibujHm9GI2rfpUvQVwwcH6WpDZubsK1gf86fouo6cWxR0Pwd
-    UjrVF2tBZ8+YPPIC5AqgmxC01wXvr9KLOvTV242pwOQXrkcqO58EPpkM1TVnWE1e/GSj
-    gGMZppRIAIdsPbaj0yvZZHHv8q7vdOcBecaPCCJlCEOBEMOb3eKRMArOg3f4cwMQ8pT1
-    IQeQ==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1675267660;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=5EWlNg+XhFGtz1hJ7SAiKe/vHMaM/9hIzu2dnaeJK2k=;
-    b=SxfynlKLzBt0nR54NB7KB87PCmv42ibHGWHJTbLpIo5nINxPKAVbOoT33i7/MW/M11
-    74pID6Yn4KKsn+c7yXuc95IuGjKI332mgJhW9rnX8l0wuPBxK/DsM8V0EcjZ/lAqPCKk
-    qyZIdoz6gIbwjYfpH3SsWKoIwfQQ3A1fjMQaWxS/P+4N6hRTml6iC/GaBOThqY0Hhszb
-    r1zEdgxeYhgGcl60A/nFGMC8DR4U72WvewP82I54CT56shKopgcpwje06fGb1rSp9o8l
-    JCr4y9FRyubE+2NApkpRVEXnfnxgBjLNW4Em3FDO6vTesT8H6PGGjbyNu9nf4kaCF9gy
-    wXpg==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u267EpF+OQRc4obTF5+XwHE="
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 49.2.2 DYNA|AUTH)
-    with ESMTPSA id eee9e2z11G7eUqH
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Wed, 1 Feb 2023 17:07:40 +0100 (CET)
-Date:   Wed, 1 Feb 2023 17:07:33 +0100
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Richard Acayan <mailingradian@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        krishna Lanka <quic_vamslank@quicinc.com>,
-        Iskren Chernev <me@iskren.info>,
-        Martin Botka <martin.botka@somainline.org>,
-        Abel Vesa <abel.vesa@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 7/7] dt-bindings: pinctrl: qcom: correct gpio-ranges in
- examples
-Message-ID: <Y9qORcPIuq4IZcL1@gerhold.net>
-References: <20230201153019.269718-1-krzysztof.kozlowski@linaro.org>
- <20230201153019.269718-7-krzysztof.kozlowski@linaro.org>
+        Wed, 1 Feb 2023 11:11:30 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C28D340FD;
+        Wed,  1 Feb 2023 08:11:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675267889; x=1706803889;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1WRzhheT0far4uWXe5/27l5EWuUFvZB4LXQCLYYjMl4=;
+  b=a1tHRK2ptw5CFpt8vjvczBweJ7gou26iszdkKK4Rw4SSwUpy+KT5FkNN
+   N1EqSr0q32UuOTF1binOMsbp5Y17lz/7o++53ZhX+vQCdb6q6Nm6Ab8DW
+   weoUgBNycR0rjeSovLasNrL+c81GMOGoZroLkFpj+yJTlNUOkz2JxHQ+u
+   bF9sGWVqnXPNKlR47kCgdAsmGqNGGT5fHUCObNL+1hN7D1NX+30p4nLWc
+   cQuLTING77PbEY8GQoD9c7AomzSwAKIsaGrcMlb3sPqTKUXcOU6K51MdJ
+   uhLgPMwSDEQNR2kYYjRbK8CICjV/COrtSMIhPd0V//A/03O/hXQrRhGxW
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="392762610"
+X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
+   d="scan'208";a="392762610"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 08:10:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="664918209"
+X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
+   d="scan'208";a="664918209"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 01 Feb 2023 08:10:33 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pNFgu-0005Z7-2i;
+        Wed, 01 Feb 2023 16:10:32 +0000
+Date:   Thu, 2 Feb 2023 00:09:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mohammad Rafi Shaik <quic_mohs@quicinc.com>,
+        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
+        andersson@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
+        robh+dt@kernel.org, quic_plai@quicinc.com, bgoswami@quicinc.com,
+        srinivas.kandagatla@linaro.org, quic_rohkumar@quicinc.com,
+        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, swboyd@chromium.org,
+        judyhsiao@chromium.org, devicetree@vger.kernel.org,
+        konrad.dybcio@linaro.org
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Mohammad Rafi Shaik <quic_mohs@quicinc.com>
+Subject: Re: [PATCH 08/14] ASoC: q6dsp: q6apm-dai: Add open/free compress DAI
+ callbacks
+Message-ID: <202302012337.pC5Q3lLy-lkp@intel.com>
+References: <20230201134947.1638197-9-quic_mohs@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230201153019.269718-7-krzysztof.kozlowski@linaro.org>
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230201134947.1638197-9-quic_mohs@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 01, 2023 at 04:30:19PM +0100, Krzysztof Kozlowski wrote:
-> Correct the number of GPIOs in gpio-ranges to match reality.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Hi Mohammad,
 
-AFAICT the current gpio-ranges do match the number of GPIOs (ngpios) in
-the pinctrl drivers for all/most of the platforms you update below. It
-looks like the special UFS_RESET pins are also exported as GPIOs in
-addition to the real GPIOs. I'm not sure if this is intended or a
-mistake.
+Thank you for the patch! Perhaps something to improve:
 
-In any case, the gpio-ranges should match the "ngpios" in the driver,
-otherwise the driver exposes more GPIOs than advertised by the DT.
+[auto build test WARNING on broonie-sound/for-next]
+[also build test WARNING on next-20230201]
+[cannot apply to tiwai-sound/for-next tiwai-sound/for-linus linus/master v6.2-rc6]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-So I think the same change should be made in the driver as well if the
-UFS pins are not supposed to be exposed as GPIOs.
+url:    https://github.com/intel-lab-lkp/linux/commits/Mohammad-Rafi-Shaik/ALSA-compress-Update-compress-set-params-for-gapless-playback/20230201-215622
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+patch link:    https://lore.kernel.org/r/20230201134947.1638197-9-quic_mohs%40quicinc.com
+patch subject: [PATCH 08/14] ASoC: q6dsp: q6apm-dai: Add open/free compress DAI callbacks
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230201/202302012337.pC5Q3lLy-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/78a6016e006a8e405679fd335940ee710416c43f
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Mohammad-Rafi-Shaik/ALSA-compress-Update-compress-set-params-for-gapless-playback/20230201-215622
+        git checkout 78a6016e006a8e405679fd335940ee710416c43f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash sound/soc/qcom/qdsp6/
 
-Thanks,
-Stephan
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-> ---
->  .../devicetree/bindings/pinctrl/qcom,sc7180-pinctrl.yaml        | 2 +-
->  .../devicetree/bindings/pinctrl/qcom,sc8280xp-tlmm.yaml         | 2 +-
->  Documentation/devicetree/bindings/pinctrl/qcom,sdm670-tlmm.yaml | 2 +-
->  .../devicetree/bindings/pinctrl/qcom,sdm845-pinctrl.yaml        | 2 +-
->  Documentation/devicetree/bindings/pinctrl/qcom,sdx65-tlmm.yaml  | 2 +-
->  Documentation/devicetree/bindings/pinctrl/qcom,sm6115-tlmm.yaml | 2 +-
->  Documentation/devicetree/bindings/pinctrl/qcom,sm6125-tlmm.yaml | 2 +-
->  Documentation/devicetree/bindings/pinctrl/qcom,sm6350-tlmm.yaml | 2 +-
->  .../devicetree/bindings/pinctrl/qcom,sm8150-pinctrl.yaml        | 2 +-
->  Documentation/devicetree/bindings/pinctrl/qcom,sm8450-tlmm.yaml | 2 +-
->  Documentation/devicetree/bindings/pinctrl/qcom,sm8550-tlmm.yaml | 2 +-
->  11 files changed, 11 insertions(+), 11 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sc7180-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sc7180-pinctrl.yaml
-> index f33792a1af6c..77a5aaefddbe 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/qcom,sc7180-pinctrl.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,sc7180-pinctrl.yaml
-> @@ -138,7 +138,7 @@ examples:
->          #gpio-cells = <2>;
->          interrupt-controller;
->          #interrupt-cells = <2>;
-> -        gpio-ranges = <&tlmm 0 0 120>;
-> +        gpio-ranges = <&tlmm 0 0 119>;
->          wakeup-parent = <&pdc>;
->  
->          dp_hot_plug_det: dp-hot-plug-det-state {
-> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sc8280xp-tlmm.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sc8280xp-tlmm.yaml
-> index 97b27d6835e9..854bbb5b6f5d 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/qcom,sc8280xp-tlmm.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,sc8280xp-tlmm.yaml
-> @@ -128,7 +128,7 @@ examples:
->          #gpio-cells = <2>;
->          interrupt-controller;
->          #interrupt-cells = <2>;
-> -        gpio-ranges = <&tlmm 0 0 230>;
-> +        gpio-ranges = <&tlmm 0 0 228>;
->  
->          gpio-wo-subnode-state {
->              pins = "gpio1";
-> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sdm670-tlmm.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sdm670-tlmm.yaml
-> index f586b3aa138e..03c7b5c97599 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/qcom,sdm670-tlmm.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,sdm670-tlmm.yaml
-> @@ -119,7 +119,7 @@ examples:
->          #gpio-cells = <2>;
->          interrupt-controller;
->          #interrupt-cells = <2>;
-> -        gpio-ranges = <&tlmm 0 0 151>;
-> +        gpio-ranges = <&tlmm 0 0 150>;
->  
->          qup-i2c9-state {
->              pins = "gpio6", "gpio7";
-> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sdm845-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sdm845-pinctrl.yaml
-> index 23d7c030fec0..a08e4557d8b7 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/qcom,sdm845-pinctrl.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,sdm845-pinctrl.yaml
-> @@ -134,7 +134,7 @@ examples:
->          #gpio-cells = <2>;
->          interrupt-controller;
->          #interrupt-cells = <2>;
-> -        gpio-ranges = <&tlmm 0 0 151>;
-> +        gpio-ranges = <&tlmm 0 0 150>;
->          wakeup-parent = <&pdc_intc>;
->  
->          ap-suspend-l-hog {
-> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sdx65-tlmm.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sdx65-tlmm.yaml
-> index 89c5562583d1..96375f58fa22 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/qcom,sdx65-tlmm.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,sdx65-tlmm.yaml
-> @@ -140,7 +140,7 @@ examples:
->          reg = <0x03000000 0xdc2000>;
->          gpio-controller;
->          #gpio-cells = <2>;
-> -        gpio-ranges = <&tlmm 0 0 109>;
-> +        gpio-ranges = <&tlmm 0 0 108>;
->          interrupt-controller;
->          #interrupt-cells = <2>;
->          interrupts = <GIC_SPI 212 IRQ_TYPE_LEVEL_HIGH>;
-> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sm6115-tlmm.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sm6115-tlmm.yaml
-> index 29325483cd2b..d35db4f4581b 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/qcom,sm6115-tlmm.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,sm6115-tlmm.yaml
-> @@ -121,7 +121,7 @@ examples:
->          #gpio-cells = <2>;
->          interrupt-controller;
->          #interrupt-cells = <2>;
-> -        gpio-ranges = <&tlmm 0 0 114>;
-> +        gpio-ranges = <&tlmm 0 0 113>;
->  
->          sdc2_on_state: sdc2-on-state {
->              clk-pins {
-> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sm6125-tlmm.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sm6125-tlmm.yaml
-> index c9bc4893e8e8..83848950cc3b 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/qcom,sm6125-tlmm.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,sm6125-tlmm.yaml
-> @@ -125,7 +125,7 @@ examples:
->          reg-names = "west", "south", "east";
->          interrupts = <GIC_SPI 227 IRQ_TYPE_LEVEL_HIGH>;
->          gpio-controller;
-> -        gpio-ranges = <&tlmm 0 0 134>;
-> +        gpio-ranges = <&tlmm 0 0 133>;
->          #gpio-cells = <2>;
->          interrupt-controller;
->          #interrupt-cells = <2>;
-> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sm6350-tlmm.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sm6350-tlmm.yaml
-> index d95935fcc8b5..3fe1f1668fbc 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/qcom,sm6350-tlmm.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,sm6350-tlmm.yaml
-> @@ -142,7 +142,7 @@ examples:
->          #gpio-cells = <2>;
->          interrupt-controller;
->          #interrupt-cells = <2>;
-> -        gpio-ranges = <&tlmm 0 0 157>;
-> +        gpio-ranges = <&tlmm 0 0 156>;
->  
->          gpio-wo-subnode-state {
->              pins = "gpio1";
-> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sm8150-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sm8150-pinctrl.yaml
-> index 4376a9bd4d70..4c9ad9079e69 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/qcom,sm8150-pinctrl.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,sm8150-pinctrl.yaml
-> @@ -136,7 +136,7 @@ examples:
->                <0x03d00000 0x300000>;
->          reg-names = "west", "east", "north", "south";
->          interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
-> -        gpio-ranges = <&tlmm 0 0 176>;
-> +        gpio-ranges = <&tlmm 0 0 175>;
->          gpio-controller;
->          #gpio-cells = <2>;
->          interrupt-controller;
-> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sm8450-tlmm.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sm8450-tlmm.yaml
-> index 56c8046f1be0..c4cec40cbb92 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/qcom,sm8450-tlmm.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,sm8450-tlmm.yaml
-> @@ -124,7 +124,7 @@ examples:
->          reg = <0x0f100000 0x300000>;
->          gpio-controller;
->          #gpio-cells = <2>;
-> -        gpio-ranges = <&tlmm 0 0 211>;
-> +        gpio-ranges = <&tlmm 0 0 210>;
->          interrupt-controller;
->          #interrupt-cells = <2>;
->          interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
-> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sm8550-tlmm.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sm8550-tlmm.yaml
-> index a457425ba112..6ecc1ad6ccd4 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/qcom,sm8550-tlmm.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,sm8550-tlmm.yaml
-> @@ -136,7 +136,7 @@ examples:
->          reg = <0x0f100000 0x300000>;
->          gpio-controller;
->          #gpio-cells = <2>;
-> -        gpio-ranges = <&tlmm 0 0 211>;
-> +        gpio-ranges = <&tlmm 0 0 210>;
->          interrupt-controller;
->          #interrupt-cells = <2>;
->          interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
-> -- 
-> 2.34.1
-> 
+All warnings (new ones prefixed by >>):
+
+>> sound/soc/qcom/qdsp6/q6apm-dai.c:135:6: warning: no previous prototype for 'event_handler_compr' [-Wmissing-prototypes]
+     135 | void event_handler_compr(uint32_t opcode, uint32_t token,
+         |      ^~~~~~~~~~~~~~~~~~~
+
+
+vim +/event_handler_compr +135 sound/soc/qcom/qdsp6/q6apm-dai.c
+
+   134	
+ > 135	void event_handler_compr(uint32_t opcode, uint32_t token,
+   136					uint32_t *payload, void *priv)
+   137	{
+   138		struct q6apm_dai_rtd *prtd = priv;
+   139		struct snd_compr_stream *substream = prtd->cstream;
+   140		unsigned long flags;
+   141		uint32_t wflags = 0;
+   142		uint64_t avail;
+   143		uint32_t bytes_written, bytes_to_write;
+   144		bool is_last_buffer = false;
+   145	
+   146		switch (opcode) {
+   147		case APM_CLIENT_EVENT_CMD_EOS_DONE:
+   148			spin_lock_irqsave(&prtd->lock, flags);
+   149			if (prtd->notify_on_drain) {
+   150				snd_compr_drain_notify(prtd->cstream);
+   151				prtd->notify_on_drain = false;
+   152			} else {
+   153				prtd->state = Q6APM_STREAM_STOPPED;
+   154			}
+   155			spin_unlock_irqrestore(&prtd->lock, flags);
+   156			break;
+   157		case APM_CLIENT_EVENT_DATA_WRITE_DONE:
+   158			spin_lock_irqsave(&prtd->lock, flags);
+   159			bytes_written = token >> APM_WRITE_TOKEN_LEN_SHIFT;
+   160			prtd->copied_total += bytes_written;
+   161			snd_compr_fragment_elapsed(substream);
+   162	
+   163			if (prtd->state != Q6APM_STREAM_RUNNING) {
+   164				spin_unlock_irqrestore(&prtd->lock, flags);
+   165				break;
+   166			}
+   167	
+   168			avail = prtd->bytes_received - prtd->bytes_sent;
+   169	
+   170			if (avail > prtd->pcm_count) {
+   171				bytes_to_write = prtd->pcm_count;
+   172			} else {
+   173				if (substream->partial_drain || prtd->notify_on_drain)
+   174					is_last_buffer = true;
+   175				bytes_to_write = avail;
+   176			}
+   177	
+   178			if (bytes_to_write) {
+   179				if (substream->partial_drain && is_last_buffer)
+   180					wflags |= APM_LAST_BUFFER_FLAG;
+   181	
+   182				q6apm_write_async_compr(prtd->graph,
+   183							bytes_to_write, 0, 0, wflags);
+   184	
+   185				prtd->bytes_sent += bytes_to_write;
+   186	
+   187				if (prtd->notify_on_drain && is_last_buffer)
+   188					audioreach_shared_memory_send_eos(prtd->graph);
+   189			}
+   190	
+   191			spin_unlock_irqrestore(&prtd->lock, flags);
+   192			break;
+   193		default:
+   194			break;
+   195		}
+   196	}
+   197	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
