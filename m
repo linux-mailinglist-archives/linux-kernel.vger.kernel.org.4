@@ -2,140 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B02B1687033
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 21:56:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06142687034
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 21:56:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231546AbjBAUze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 15:55:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38166 "EHLO
+        id S231907AbjBAUzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 15:55:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232223AbjBAUzL (ORCPT
+        with ESMTP id S231743AbjBAUzq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 15:55:11 -0500
-Received: from proxima.lasnet.de (proxima.lasnet.de [IPv6:2a01:4f8:121:31eb:3::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43D157C704;
-        Wed,  1 Feb 2023 12:54:46 -0800 (PST)
-Received: from [IPV6:2003:e9:d70f:e348:e684:710d:4017:e1c4] (p200300e9d70fe348e684710d4017e1c4.dip0.t-ipconnect.de [IPv6:2003:e9:d70f:e348:e684:710d:4017:e1c4])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: stefan@datenfreihafen.org)
-        by proxima.lasnet.de (Postfix) with ESMTPSA id C7B1CC0149;
-        Wed,  1 Feb 2023 21:54:42 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=datenfreihafen.org;
-        s=2021; t=1675284883;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XWQe8ddurgsjYuPYrNczj6KquCmyVn8EYAjajevyWqk=;
-        b=jzHraYIKHzx4BETD/IDmd0PAaBBTHUKw9vvbq44WX2fM5Js567KGnWWJw2bTC3Rd5D1rf5
-        PzwN4donRPjc4xqKvv/oyyTRiS3mEv/aIZzuAP5YDm9FcxxJVc49V7uypUuMcowo4tcQT4
-        Zd1b9MDgAmLl6oqV5M6CnLJf6m/VhKZXqcVMwl+xequORUbnR8KC9/87oiv1azp8ADa36B
-        7JntKdm3zh0G+IYukVOstNpv7GREuCLOFm69Ms2A49xXCTuFUQ1uTqDn0L7xmTKeEm/6xs
-        ZgwFJslnOPlt/Ux6BhGFR49wMkU5wtdY6FI/BnM35ADCkZ9kL4H+3rzt0BzZTw==
-Message-ID: <274d24c0-67e1-cc33-4bf4-0072b97d7e36@datenfreihafen.org>
-Date:   Wed, 1 Feb 2023 21:54:42 +0100
+        Wed, 1 Feb 2023 15:55:46 -0500
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0514718B08
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 12:55:13 -0800 (PST)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-1685cf2003aso4882833fac.12
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 12:55:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=eclypsium.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FlWTce92nQlg/802bLA6DdGA+q4nEqDW0SzseRRjZrU=;
+        b=XMDzUFtIjOioeXfMZYX4brOWpvhNVyGvzKXnW45esMvmF72CdyTaA75mevt990Nh+h
+         R1TxHybLuh3VAurNy0WOIqpD2FDqxFeLlJgrpApb9K1/Q5aH4V2qMM0D8m04rbDgTfFu
+         XXWUvafvXcYO4+jP+hHQJgwpPSRmZ8unsNTqldqj4kAtq50GxASGaM0K0feQ8Uadh0iA
+         qml4WDzLCYGQDBRnlROEtjC8cuQ5GMHqhxVsPYgNAqfyStSt46N0lhdAnvgFqXc0D/3E
+         gQ+mcELmA9DX4VU5FHHlKsoTBg8CFTNwyXnHj2ze6huTrOz1RuTCpHOk96F83TbM84cY
+         ANtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FlWTce92nQlg/802bLA6DdGA+q4nEqDW0SzseRRjZrU=;
+        b=zSOy2nrDJ9NE8ZytWgyi9TCYneP4bPi9mqZCS48nnRbV8WYBuQM9fEBU2mLZ8IuYGC
+         fsyXOLjX4vW8nkwz0rhllCkQ+HA6wM/s3KTD8ICzX2GravRfixpIV4Z4d+a1GPLTqmM+
+         RbfV7hxUOOt1NDXO5rKOUAQexiY++WAi/uXTCFeZcjPyAOLJFb7AQN1AbTv/h13aPeYH
+         10YA9YxRVAJUkXM/kemu6lcrxWGutjVhUoqiN/mZj0mPGXU2xJrb2txa5b5xYMuiPrJK
+         WYtP11+xJaF0ydfmAoumry8mH6G/q18HOpBHAtilDpJ15S9XR9EOBGRQCnJmSOuJUhhI
+         BwdA==
+X-Gm-Message-State: AO0yUKXnz0PWIzbS/7dLnCJqkrMxi0ORAT+XmDaq19LlioTXwEPYOV5R
+        9PNYLTvP94Ex78rVucxZvNXBQg==
+X-Google-Smtp-Source: AK7set8T38usyswFkVRq7QWdynZz30Oqy3aWZZZK+c0TAz8aD/Sw+RDko+j+XEeT7qHSAVbOISIDaA==
+X-Received: by 2002:a05:6870:390a:b0:163:b5e9:7717 with SMTP id b10-20020a056870390a00b00163b5e97717mr2105096oap.51.1675284911730;
+        Wed, 01 Feb 2023 12:55:11 -0800 (PST)
+Received: from fedora.. ([186.122.181.28])
+        by smtp.gmail.com with ESMTPSA id n18-20020a056870971200b0014fe4867dc7sm8245908oaq.56.2023.02.01.12.55.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Feb 2023 12:55:11 -0800 (PST)
+From:   Mauro Lima <mauro.lima@eclypsium.com>
+To:     mika.westerberg@linux.intel.com
+Cc:     broonie@kernel.org, alok.a.tiwari@oracle.com,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mauro Lima <mauro.lima@eclypsium.com>
+Subject: [PATCH v2 0/2] spi: intel: PCI driver housekeeping
+Date:   Wed,  1 Feb 2023 17:54:53 -0300
+Message-Id: <20230201205455.550308-1-mauro.lima@eclypsium.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] [v2] at86rf230: convert to gpio descriptors
-Content-Language: en-US
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Alexander Aring <alex.aring@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-wpan@vger.kernel.org, netdev@vger.kernel.org
-References: <20230126162323.2986682-1-arnd@kernel.org>
- <CAKdAkRQT_Jk5yBeMZqh=M1JscVLFieZTQjLGOGxy8nHh8SnD3A@mail.gmail.com>
- <CAKdAkRSuDJgdsSQqy9Cc_eUYuOfFsLmBJ8Rd93uQhY6HV8nN4w@mail.gmail.com>
- <77b78287-a352-85ae-0c3d-c3837be9bf1d@datenfreihafen.org>
- <Y9qRC2qz7ZbKslnb@google.com>
-From:   Stefan Schmidt <stefan@datenfreihafen.org>
-In-Reply-To: <Y9qRC2qz7ZbKslnb@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello.
+Found some controllers' private data that were wrong according
+to the documentation. Also, the number of Protected Regions from 
+Broxton types was changed.
+The second patch adds more Device IDs to the module table.
+Probably good candidates to stable?
 
-On 01.02.23 17:19, Dmitry Torokhov wrote:
-> On Wed, Feb 01, 2023 at 01:42:37PM +0100, Stefan Schmidt wrote:
->> Hello Dmitry.
->>
->> On 01.02.23 01:50, Dmitry Torokhov wrote:
->>> On Tue, Jan 31, 2023 at 3:52 PM Dmitry Torokhov
->>> <dmitry.torokhov@gmail.com> wrote:
->>>>
->>>> Hi Arnd,
->>>>
->>>> On Thu, Jan 26, 2023 at 8:32 AM Arnd Bergmann <arnd@kernel.org> wrote:
->>>>>
->>>>>           /* Reset */
->>>>> -       if (gpio_is_valid(rstn)) {
->>>>> +       if (rstn) {
->>>>>                   udelay(1);
->>>>> -               gpio_set_value_cansleep(rstn, 0);
->>>>> +               gpiod_set_value_cansleep(rstn, 0);
->>>>>                   udelay(1);
->>>>> -               gpio_set_value_cansleep(rstn, 1);
->>>>> +               gpiod_set_value_cansleep(rstn, 1);
->>>>
->>>> For gpiod conversions, if we are not willing to chase whether existing
->>>> DTSes specify polarities
->>>> properly and create workarounds in case they are wrong, we should use
->>>> gpiod_set_raw_value*()
->>>> (my preference would be to do the work and not use "raw" variants).
->>>>
->>>> In this particular case, arch/arm/boot/dts/vf610-zii-dev-rev-c.dts
->>>> defines reset line as active low,
->>>> so you are leaving the device in reset state.
->>>>
->>>> Please review your other conversion patches.
->>>
->>> We also can not change the names of requested GPIOs from "reset-gpio"
->>> to "rstn-gpios" and expect
->>> this to work.
->>>
->>> Stefan, please consider reverting this and applying a couple of
->>> patches I will send out shortly.
->>
->> Thanks for having another look at these patches. Do you have the same
->> concern for the convesion patch to cc2520 that has been posted and applied
->> as well?
-> 
-> There are no DT users of cc2520 in the tree, so while ideally reset line
-> should not be left in "logical active" state at the end of the probe, we
-> can deal with this in a follow up patch, I doubt it will lead to
-> regressions as it is.
-> 
-> If I were really nitpicky I would adjust error messages when we fail to
-> get GPIOs, but again, can be done as a followup.
+Changes since v1:
+	* Change BXT to Broxton in commit message
+	* Sort new Device IDs by hex value in the driver's module table
+	* Add ack from Mika Westerberg to the first patch
+	Link: https://lore.kernel.org/r/20230201050455.505135-1-mauro.lima@eclypsium.com
 
-Feel free to send patches if you are in the mood on fixing this as well. :-)
+Mauro Lima (2):
+  spi: intel: Fix device private data and PR_NUM for Broxton controllers
+  spi: intel: Add support for controllers
 
->> Arnd, if you have any concerns about the revert please speak up soon as I am
->> going to revert your patch and get these patches into my tree later today.
->>
-> 
-> Thanks.
+ drivers/spi/spi-intel-pci.c | 13 ++++++++-----
+ drivers/spi/spi-intel.c     |  2 +-
+ 2 files changed, 9 insertions(+), 6 deletions(-)
 
-Reverted and pushed now. Your patches are applied as well. Thanks again 
-for catching this early on.
-
-regards
-Stefan Schmidt
+-- 
+2.39.1
 
