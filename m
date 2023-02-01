@@ -2,214 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6A346862F7
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 10:40:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FF656862FE
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 10:41:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231717AbjBAJky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 04:40:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56782 "EHLO
+        id S231979AbjBAJls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 04:41:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbjBAJku (ORCPT
+        with ESMTP id S231835AbjBAJlq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 04:40:50 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E408E5B584
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 01:40:48 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id e6so9658152plg.12
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 01:40:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=SVuKRnPNvFjhzFwddZE2JiwECmbB5uSTQamVzWtgKyM=;
-        b=M4znWT4pB0bTC5+RDVLLsP5OidE4lOZHR9IwVoepPCh6Cj3SIApx8Y5036lT188moF
-         QGjucQH3/0TjsEtNkdh4J/jRhizrmHBLZvIOoPC6H1w1A87/WwTS3Pa5WgIs+IPobIZV
-         4QNGZUMQIqXwGb0j5kCb3D2ARxTzidAqKy8BbfJB6bPl7nSHsYCPnMmYk/PXAgkyb1ph
-         t/8EhOFQMHuMAeDWJGzDrOwqK2MLYo7NahRaPGXzEilNIjOSnKLLkU+PyeGyxPLrKa0E
-         fPTETUB1BNmCizARrC+bQkfCPqoLfa0MFMMGsqzU57yhT3bUbW5vSThEn0nncGZl9ugW
-         Tmdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SVuKRnPNvFjhzFwddZE2JiwECmbB5uSTQamVzWtgKyM=;
-        b=Tn1OE556dDJ2Z2nI08WqSRCpJp+4eAFW+EVl7PMgYVn6baLH2o8kKPzGDP9rV1AP4J
-         bVLxkpzE20YEOzbnu9X6FG+KeeuO2/RWJm8y0FuqpK4kdFRMNRr88yS3Ugs8TdnjjNDU
-         aPvYaEANZwCpAy2lFYR04ynVARbYziyBbEtsulnQ6s9M32GjJ6JqRZBhQxBlUOo5ZxI6
-         cIDgn4pltFC0DSqPLdxTOE8mI39dJYeKkv29GONaqHRDDb7U2vLtTSu/NmofofPAaZ46
-         SVcSiST0VlomC+uhkihjjoJApzy81jEGawu+QHdxM3O8N/uRF/z3aJEDC+/NoWFUQ+EO
-         YPEg==
-X-Gm-Message-State: AO0yUKVutum5q8xYso8Tu3JfaLpOonsqa4nunhKECdFvM2D7G4NJ12Mn
-        WvV48S5U3m4+dElEUShblW2+sAd/stHc4RlVl9s=
-X-Google-Smtp-Source: AK7set9GuLsBgmgrccvhtmjOoyqG2yzJ9CrgB87F4+PToaU40CR/KDqCr/fZbRzdzjhIl+yiWt4Ao5MVnNImqlYEtFk=
-X-Received: by 2002:a17:90a:aa87:b0:22c:890b:c5f7 with SMTP id
- l7-20020a17090aaa8700b0022c890bc5f7mr281858pjq.23.1675244448122; Wed, 01 Feb
- 2023 01:40:48 -0800 (PST)
+        Wed, 1 Feb 2023 04:41:46 -0500
+Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C39D45D133;
+        Wed,  1 Feb 2023 01:41:44 -0800 (PST)
+Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
+  by mx.socionext.com with ESMTP; 01 Feb 2023 18:41:43 +0900
+Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
+        by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id 341DD2058B4F;
+        Wed,  1 Feb 2023 18:41:43 +0900 (JST)
+Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Wed, 1 Feb 2023 18:41:50 +0900
+Received: from [10.212.157.12] (unknown [10.212.157.12])
+        by kinkan2.css.socionext.com (Postfix) with ESMTP id 954C27366;
+        Wed,  1 Feb 2023 18:41:42 +0900 (JST)
+Message-ID: <bed0a57c-a880-0b6f-f97d-d2b40c7cb17f@socionext.com>
+Date:   Wed, 1 Feb 2023 18:41:42 +0900
 MIME-Version: 1.0
-References: <1674007261-9198-1-git-send-email-yangtiezhu@loongson.cn>
- <CAAhV-H4aTd6_cSy45KKjv-KrLTiwT4iG6+fkb84KfCrL3Y+hpg@mail.gmail.com> <CAAhV-H5WN5E=0Z9wpbXDc6VO7Nc+j7PGvnyAAGOmCRMJkdwSYw@mail.gmail.com>
-In-Reply-To: <CAAhV-H5WN5E=0Z9wpbXDc6VO7Nc+j7PGvnyAAGOmCRMJkdwSYw@mail.gmail.com>
-From:   Jeff Xie <xiehuan09@gmail.com>
-Date:   Wed, 1 Feb 2023 17:40:36 +0800
-Message-ID: <CAEr6+ECO-=jfhzHrcdKGx0MsjMBMiN6wsBPCfv7CaXo_amAWWg@mail.gmail.com>
-Subject: Re: [PATCH v12 0/5] Add kprobe and kretprobe support for LoongArch
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        WANG Xuerui <kernel@xen0n.name>,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 2/4] nvmem: add generic driver for devices with MMIO
+ access
+Content-Language: en-US
+To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
         Masami Hiramatsu <mhiramat@kernel.org>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+References: <20230201064717.18410-1-zajec5@gmail.com>
+ <20230201064717.18410-3-zajec5@gmail.com>
+From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+In-Reply-To: <20230201064717.18410-3-zajec5@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 1, 2023 at 12:56 PM Huacai Chen <chenhuacai@kernel.org> wrote:
->
-> Hi, Jeff,
->
-> Could you please pay some time to test this series? Thank you.
+Hi,
 
-Thanks for notifying me about the test.
+On 2023/02/01 15:47, Rafał Miłecki wrote:
+> From: Rafał Miłecki <rafal@milecki.pl>
+> 
+> With nvmem layouts in place we should now work on plain content access
+> NVMEM drivers (e.g. MMIO one). Actual NVMEM content handling should go
+> to layout drivers.
+> 
+> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+> ---
+>   drivers/nvmem/Kconfig  | 10 ++++++
+>   drivers/nvmem/Makefile |  2 ++
+>   drivers/nvmem/mmio.c   | 80 ++++++++++++++++++++++++++++++++++++++++++
+>   3 files changed, 92 insertions(+)
+>   create mode 100644 drivers/nvmem/mmio.c
+> 
+> diff --git a/drivers/nvmem/Kconfig b/drivers/nvmem/Kconfig
+> index 789729ff7e50..9eb5e93f0455 100644
+> --- a/drivers/nvmem/Kconfig
+> +++ b/drivers/nvmem/Kconfig
+> @@ -170,6 +170,16 @@ config NVMEM_MICROCHIP_OTPC
+>   	  This driver enable the OTP controller available on Microchip SAMA7G5
+>   	  SoCs. It controls the access to the OTP memory connected to it.
+> 
+> +config NVMEM_MMIO
+> +	tristate "MMIO access based NVMEM support"
+> +	depends on HAS_IOMEM
+> +	help
+> +	  This driver provides support for NVMEM devices that can be accessed
+> +	  using MMIO.
+> +
+> +	  This driver can also be built as a module. If so, the module
+> +	  will be called nvmem-mmio.
+> +
+>   config NVMEM_MTK_EFUSE
+>   	tristate "Mediatek SoCs EFUSE support"
+>   	depends on ARCH_MEDIATEK || COMPILE_TEST
+> diff --git a/drivers/nvmem/Makefile b/drivers/nvmem/Makefile
+> index 442f9a4876a5..2f2bed7cdf24 100644
+> --- a/drivers/nvmem/Makefile
+> +++ b/drivers/nvmem/Makefile
+> @@ -36,6 +36,8 @@ obj-$(CONFIG_NVMEM_MESON_MX_EFUSE)	+=
+> nvmem_meson_mx_efuse.o
+>   nvmem_meson_mx_efuse-y			:= meson-mx-efuse.o
+>   obj-$(CONFIG_NVMEM_MICROCHIP_OTPC)	+= nvmem-microchip-otpc.o
+>   nvmem-microchip-otpc-y			:= microchip-otpc.o
+> +obj-$(CONFIG_NVMEM_MMIO)		+= nvmem-mmio.o
+> +nvmem-mmio-y				:= mmio.o
+>   obj-$(CONFIG_NVMEM_MTK_EFUSE)		+= nvmem_mtk-efuse.o
+>   nvmem_mtk-efuse-y			:= mtk-efuse.o
+>   obj-$(CONFIG_NVMEM_MXS_OCOTP)		+= nvmem-mxs-ocotp.o
+> diff --git a/drivers/nvmem/mmio.c b/drivers/nvmem/mmio.c
+> new file mode 100644
+> index 000000000000..19c8880dc675
+> --- /dev/null
+> +++ b/drivers/nvmem/mmio.c
+> @@ -0,0 +1,80 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (C) 2023 Rafał Miłecki <rafal@milecki.pl>
+> + */
+> +
+> +#include <linux/io.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/module.h>
+> +#include <linux/nvmem-provider.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/property.h>
+> +#include <linux/slab.h>
+> +
+> +struct mmio_nvmem {
+> +	void __iomem *base;
+> +};
+> +
+> +static int mmio_nvmem_read(void *context, unsigned int offset, void *val,
+> size_t bytes)
+> +{
+> +	struct mmio_nvmem *priv = context;
+> +
+> +	memcpy_fromio(val, priv->base, bytes);
+> +
+> +	return 0;
+> +}
+> +
+> +static int mmio_nvmem_probe(struct platform_device *pdev)
+> +{
+> +	struct nvmem_config config = {
+> +		.name = "mmio-nvmem",
 
-I have tested the patchset(based on the
-https://github.com/loongson/linux/tree/loongarch-next),
-I found that some functions can't  be probed e.g. scheduler_tick() or
-uart_write_wakeup()
-the two functions have the same point,  they are all run in the hardirq context.
+The fixed name breaks sysfs for multiple nvmem instances.
 
-I don't know if it's related to the hardirq context, I haven't had
-time to study this patchset carefully.
-and they can be probed in the x86_64 arch.
+     sysfs: cannot create duplicate filename '/bus/nvmem/devices/mmio-nvmem0'
 
-root@loongarch modules]# insmod ./kprobe_example.ko symbol=scheduler_tick
-insmod: can't insert './kprobe_example.ko': invalid parameter
+> +		.read_only = true,
 
-dmesg:
-[   39.806435] kprobe_init: register_kprobe failed, returned -22
+As Michael said in the mediatek patch,
+I also think it's hard to make read-only fixed in the generic driver.
 
+> +		.reg_read = mmio_nvmem_read,
+> +	};
+> +	struct device *dev = &pdev->dev;
+> +	struct mmio_nvmem *priv;
+> +	struct resource *res;
+> +
+> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	priv->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+> +	if (IS_ERR(priv->base))
+> +		return PTR_ERR(priv->base);
+> +
+> +	config.dev = dev;
+> +	config.size = resource_size(res);
+> +	config.word_size = sizeof(u8);
+> +	config.stride = sizeof(u8);
+> +	config.priv = priv;
+> +
+> +	if (!device_property_present(dev, "read-only"))
+> +		dev_warn(dev, "Writing is not supported yet");
 
->
-> Huacai
->
-> On Wed, Jan 18, 2023 at 11:30 AM Huacai Chen <chenhuacai@kernel.org> wrote:
-> >
-> > Hi, Masami,
-> >
-> > Could you please pay some time to review this series? Thank you.
-> >
-> > Huacai
-> >
-> > On Wed, Jan 18, 2023 at 10:01 AM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
-> > >
-> > > v12:
-> > >   -- Rebase on the latest code
-> > >   -- Fix -Wmissing-prototypes warning when make W=1
-> > >   -- Drop patch #6 "Use common function sign_extend64()"
-> > >      since it has been applied yet
-> > >
-> > > v11:
-> > >   -- Rebase on the latest code
-> > >   -- Address all the review comments, thank you all
-> > >   -- Modify arch_prepare_kprobe() and setup_singlestep()
-> > >      to make the probe logic more clear
-> > >   -- Mark some assembler symbols as non-kprobe-able
-> > >   -- Use common function sign_extend64()
-> > >   -- Test 20 times about 36 hours for all the 71 assembler
-> > >      functions annotated with SYM_CODE_START and SYM_FUNC_START
-> > >      under arch/loongarch, especially test memset alone for 10
-> > >      hours, no hang problems
-> > >
-> > > v10:
-> > >   -- Remove sign_extend() based on the latest code
-> > >   -- Rename insns_are_not_supported() to insns_not_supported()
-> > >   -- Rename insns_are_not_simulated() to insns_not_simulated()
-> > >   -- Set KPROBE_HIT_SSDONE if cur->post_handler is not NULL
-> > >   -- Enable preemption for KPROBE_REENTER in kprobe_fault_handler()
-> > >
-> > > v9:
-> > >   -- Rename sign_extended() to sign_extend()
-> > >   -- Modify kprobe_fault_handler() to handle all of kprobe_status
-> > >
-> > > v8:
-> > >   -- Put "regs->csr_prmd &= ~CSR_PRMD_PIE;" ahead to save one line
-> > >   -- Add code comment of preempt_disable()
-> > >   -- Put kprobe_page_fault() in __do_page_fault()
-> > >   -- Modify the check condition of break insn in kprobe_breakpoint_handler()
-> > >
-> > > v7:
-> > >   -- Remove stop_machine_cpuslocked() related code
-> > >
-> > > v6:
-> > >   -- Add a new patch to redefine larch_insn_patch_text() with
-> > >      stop_machine_cpuslocked()
-> > >   -- Modify kprobe_breakpoint_handler() to consider the original
-> > >      insn is break and return the correct value
-> > >   -- Modify do_bp() to refresh bcode when original insn is break
-> > >
-> > > v5:
-> > >   -- Rebase on the latest code
-> > >   -- Use stop_machine_cpuslocked() to modify insn to avoid CPU race
-> > >
-> > > v4:
-> > >   -- Remove kprobe_exceptions_notify() in kprobes.c
-> > >   -- Call kprobe_breakpoint_handler() and kprobe_singlestep_handler()
-> > >      in do_bp()
-> > >
-> > > v3:
-> > >   -- Rebase on the latest code
-> > >   -- Check the alignment of PC in simu_branch() and simu_pc()
-> > >   -- Add ibar in flush_insn_slot()
-> > >   -- Rename kprobe_{pre,post}_handler() to {post_}kprobe_handler
-> > >   -- Add preempt_disable() and preempt_enable_no_resched()
-> > >   -- Remove r0 save/restore and do some minor changes
-> > >      in kprobes_trampoline.S
-> > >   -- Do not enable CONFIG_KPROBES by default
-> > >
-> > > v2:
-> > >   -- Split simu_branch() and simu_pc() into a single patch
-> > >   -- Call kprobe_page_fault() in do_page_fault()
-> > >   -- Add kprobes_trampoline.S for kretprobe
-> > >
-> > > Tiezhu Yang (5):
-> > >   LoongArch: Simulate branch and PC* instructions
-> > >   LoongArch: Add kprobe support
-> > >   LoongArch: Add kretprobe support
-> > >   LoongArch: Mark some assembler symbols as non-kprobe-able
-> > >   samples/kprobes: Add LoongArch support
-> > >
-> > >  arch/loongarch/Kconfig                     |   2 +
-> > >  arch/loongarch/include/asm/asm.h           |  10 +
-> > >  arch/loongarch/include/asm/inst.h          |  20 ++
-> > >  arch/loongarch/include/asm/kprobes.h       |  61 +++++
-> > >  arch/loongarch/include/asm/ptrace.h        |   1 +
-> > >  arch/loongarch/kernel/Makefile             |   2 +
-> > >  arch/loongarch/kernel/entry.S              |   1 +
-> > >  arch/loongarch/kernel/inst.c               | 123 +++++++++
-> > >  arch/loongarch/kernel/kprobes.c            | 405 +++++++++++++++++++++++++++++
-> > >  arch/loongarch/kernel/kprobes_trampoline.S |  96 +++++++
-> > >  arch/loongarch/kernel/traps.c              |  11 +-
-> > >  arch/loongarch/lib/memcpy.S                |   3 +
-> > >  arch/loongarch/mm/fault.c                  |   3 +
-> > >  samples/kprobes/kprobe_example.c           |   8 +
-> > >  14 files changed, 741 insertions(+), 5 deletions(-)
-> > >  create mode 100644 arch/loongarch/include/asm/kprobes.h
-> > >  create mode 100644 arch/loongarch/kernel/kprobes.c
-> > >  create mode 100644 arch/loongarch/kernel/kprobes_trampoline.S
-> > >
-> > > --
-> > > 2.1.0
-> > >
-> > >
+Isn't the logic opposite?
+Anyway, the driver doesn't use "read-only" properties for selection.
 
+> +
+> +	return PTR_ERR_OR_ZERO(devm_nvmem_register(dev, &config));
+> +}
+> +
+> +static const struct of_device_id mmio_nvmem_of_match_table[] = {
+> +	{ .compatible = "mmio-nvmem", },
+> +	{},
+> +};
+> +
+> +static struct platform_driver mmio_nvmem_driver = {
+> +	.probe = mmio_nvmem_probe,
+> +	.driver = {
+> +		.name = "mmio_nvmem",
+> +		.of_match_table = mmio_nvmem_of_match_table,
+> +	},
+> +};
+> +
+> +static int __init mmio_nvmem_init(void)
+> +{
+> +	return platform_driver_register(&mmio_nvmem_driver);
+> +}
+> +
+> +subsys_initcall_sync(mmio_nvmem_init);
+> +
+> +MODULE_AUTHOR("Rafał Miłecki");
+> +MODULE_LICENSE("GPL");
+> +MODULE_DEVICE_TABLE(of, mmio_nvmem_of_match_table);
 
+Thank you,
 
--- 
-Thanks,
-JeffXie
+---
+Best Regards
+Kunihiko Hayashi
