@@ -2,139 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10CDF6868CC
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 15:46:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BADE06868CE
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 15:47:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231531AbjBAOqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 09:46:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49964 "EHLO
+        id S232203AbjBAOrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 09:47:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232585AbjBAOqd (ORCPT
+        with ESMTP id S232202AbjBAOre (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 09:46:33 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 326B130EB7
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 06:46:32 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id q10so17548783wrm.4
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 06:46:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vFO6Menks76/PjVM2v0FfpZTwomJcaT6TEjwJv8UGZQ=;
-        b=Goi5q4N49AnrkFf7gHYniaDCl2Xlxnok0hTT6DCJ3o9v3j2h18Fx3RgC6i6w0QQn6l
-         IHzM/KY+3/OMbzOe0+WH23E/gRrSpzRwcAWK8Egc7p36YRSsuqqjFutHT2QurY2CIhdP
-         yOv9ULuXlAIfcqGEEixthSh1aGlPay6JM73R5GM+bc+xJg6Oj3wB6yG2tQZKz+0zEoMt
-         90B1W9id5e6I6c/ds5edEQXLr13rFm5bfTzXMAaf+TsupT6xQxa1XvZFbRG4pWarsTVJ
-         H4sZD4HRUWCOYL78gE4IXkiC4xefBbtWT7xtMCutagH8ywTgEBfFGvOqlTeYzwBWSrCX
-         U2BA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vFO6Menks76/PjVM2v0FfpZTwomJcaT6TEjwJv8UGZQ=;
-        b=7dS+0JkEH95nCnTpZR+T10ZFxTtC6Spf9iJlmJEMB9Eencs0I0uAoNYQzuqLI14BkH
-         9nr6L2+rfnh6+aE7txN46OqwAV1ctuqIbZqeE5f8CTVwD0PovgCOZHgh8k7OQFo/WcFG
-         1nuTYuSCkpk+6ArYCIXzZTLUIpw0eIWzvBuP2K+vbcAkTrauQ7nGVfgUL/oqqd+wGQHu
-         YNDWAm2FvJyVGsC71v2kzZsbDIdtlA0M1bF6sIEKfmOpnyWIBvZvPuGnNUEmBdxV1mCX
-         rjmKG/E7EdSpvxFvzLe/nEARYuhVwaYmqNgDNvwC8pgK4913nFD4Yj7tbWBqCKEA31la
-         jx8Q==
-X-Gm-Message-State: AO0yUKWjK0NAbbEGq8EMz6OaWy7NV/Y764dTfY1ImHrayiXKtaqYTb8V
-        zKtj7pECYSiJUQugUXG0snNbxw==
-X-Google-Smtp-Source: AK7set+WJkY9Mi0KIQARoaUpO6AUsjE8m693dOPJRiIIX0qtHAB7nf9RwF9/xCEeIMPNxd/yeigXWw==
-X-Received: by 2002:a5d:6b89:0:b0:2bf:ae2f:c6ff with SMTP id n9-20020a5d6b89000000b002bfae2fc6ffmr2607870wrx.31.1675262790727;
-        Wed, 01 Feb 2023 06:46:30 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id f12-20020adfdb4c000000b002bfb1de74absm17460688wrj.114.2023.02.01.06.46.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Feb 2023 06:46:30 -0800 (PST)
-Message-ID: <530a96ba-d820-4970-17e6-94aa696bef5e@linaro.org>
-Date:   Wed, 1 Feb 2023 15:46:28 +0100
+        Wed, 1 Feb 2023 09:47:34 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529292E80B
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 06:47:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675262852; x=1706798852;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=e6pBa2geDJARtq4Dyyl5CQ8d74kBZf8Ahyqg/pfx6R4=;
+  b=Js/0p+cACPPqaVglGipkImSJTjpzeL2jXt/qj6QFBR7bBaq5jpfI4wrt
+   YC126Q5q9RXLEC8GAgUKO0h5YzCaEELm8PfDQ/qE2pUdS/rGFZHRvIKxW
+   81sVeY722Yb2DLVqG3L82XXqoEo3SBlEWvSkL8u6sSyXC2pdboC9wIJQo
+   MxR3TV8qRPUfk2Uh9a7qEs2Cy72kaP62hSPGOho4arDaRtLRR6qwOeXtG
+   1jAFEY/9ClFkHt/vdLnktozADd94LWs68UM9nqXdM0Rew0Wgbqr/aR/br
+   Uci4IjFqKQ93qiiorrOqSclyxP2kZx4nGv4s4MJfmdfNBv4/7zjFE9ABU
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="414366717"
+X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
+   d="scan'208";a="414366717"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 06:47:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="838804789"
+X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
+   d="scan'208";a="838804789"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 01 Feb 2023 06:47:30 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pNEOX-0005Vc-1g;
+        Wed, 01 Feb 2023 14:47:29 +0000
+Date:   Wed, 1 Feb 2023 22:47:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: drivers/net/ethernet/adaptec/starfire.c:1831:41: sparse: sparse:
+ incorrect type in argument 1 (different base types)
+Message-ID: <202302012215.YjNBuRBU-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v4 1/5] dt-bindings: regulator: Add ADI MAX77541/MAX77540
- Regulator
-Content-Language: en-US
-To:     Okan Sahin <okan.sahin@analog.com>
-Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ramona Bolboaca <ramona.bolboaca@analog.com>,
-        Marcelo Schmitt <marcelo.schmitt1@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Marcus Folkesson <marcus.folkesson@gmail.com>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        William Breathitt Gray <william.gray@linaro.org>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org
-References: <20230201103534.108136-1-okan.sahin@analog.com>
- <20230201103534.108136-2-okan.sahin@analog.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230201103534.108136-2-okan.sahin@analog.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/02/2023 11:35, Okan Sahin wrote:
-> Add ADI MAX77541/MAX77540 Regulator devicetree document.
-> 
-> Signed-off-by: Okan Sahin <okan.sahin@analog.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../regulator/adi,max77541-regulator.yaml     | 44 +++++++++++++++++++
->  1 file changed, 44 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/regulator/adi,max77541-regulator.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/regulator/adi,max77541-regulator.yaml b/Documentation/devicetree/bindings/regulator/adi,max77541-regulator.yaml
-> new file mode 100644
-> index 000000000000..fff463d5e79d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/regulator/adi,max77541-regulator.yaml
-> @@ -0,0 +1,44 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/regulator/adi,max77541-regulator.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Buck Converter for MAX77540/MAX77541
-> +
-> +maintainers:
-> +  - Okan Sahin <okan.sahin@analog.com>
-> +
-> +description: |
-> +  This is a part of device tree bindings for ADI MAX77540/MAX77541
-> +
-> +  The buck converter is represented as a sub-node of the PMIC node on the device tree.
-> +
-> +  The device has two buck regulators.
-> +  See also Documentation/devicetree/bindings/mfd/adi,max77541.yaml for
-> +  additional information and example.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - adi,max77540-regulator
-> +      - adi,max77541-regulator
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   c0b67534c95c537f7a506a06b98e5e85d72e2b7d
+commit: 548927e0312194167f7ee5de47d50c2036088cce arm64: io: Use asm-generic high level MMIO accessors
+date:   8 months ago
+config: arm64-randconfig-s042-20230201 (https://download.01.org/0day-ci/archive/20230201/202302012215.YjNBuRBU-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=548927e0312194167f7ee5de47d50c2036088cce
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 548927e0312194167f7ee5de47d50c2036088cce
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/net/ethernet/adaptec/ drivers/pci/
 
-Why do need the compatible? I don't see any usage of it in the driver
-(empty driver data).
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-Best regards,
-Krzysztof
+sparse warnings: (new ones prefixed by >>)
+   drivers/net/ethernet/adaptec/starfire.c:1515:35: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __wsum [usertype] csum @@     got unsigned short [usertype] @@
+   drivers/net/ethernet/adaptec/starfire.c:1515:35: sparse:     expected restricted __wsum [usertype] csum
+   drivers/net/ethernet/adaptec/starfire.c:1515:35: sparse:     got unsigned short [usertype]
+>> drivers/net/ethernet/adaptec/starfire.c:1831:41: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned short [usertype] value @@     got restricted __le16 @@
+   drivers/net/ethernet/adaptec/starfire.c:1831:41: sparse:     expected unsigned short [usertype] value
+   drivers/net/ethernet/adaptec/starfire.c:1831:41: sparse:     got restricted __le16
 
+vim +1831 drivers/net/ethernet/adaptec/starfire.c
+
+5da96be53a16a6 drivers/net/starfire.c                  Jiri Pirko     2011-07-20  1782  
+^1da177e4c3f41 drivers/net/starfire.c                  Linus Torvalds 2005-04-16  1783  	if (dev->flags & IFF_PROMISC) {	/* Set promiscuous. */
+^1da177e4c3f41 drivers/net/starfire.c                  Linus Torvalds 2005-04-16  1784  		rx_mode |= AcceptAll;
+4cd24eaf0c6ee7 drivers/net/starfire.c                  Jiri Pirko     2010-02-08  1785  	} else if ((netdev_mc_count(dev) > multicast_filter_limit) ||
+8e95a2026f3b43 drivers/net/starfire.c                  Joe Perches    2009-12-03  1786  		   (dev->flags & IFF_ALLMULTI)) {
+^1da177e4c3f41 drivers/net/starfire.c                  Linus Torvalds 2005-04-16  1787  		/* Too many to match, or accept all multicasts. */
+^1da177e4c3f41 drivers/net/starfire.c                  Linus Torvalds 2005-04-16  1788  		rx_mode |= AcceptBroadcast|AcceptAllMulticast|PerfectFilter;
+4cd24eaf0c6ee7 drivers/net/starfire.c                  Jiri Pirko     2010-02-08  1789  	} else if (netdev_mc_count(dev) <= 14) {
+^1da177e4c3f41 drivers/net/starfire.c                  Linus Torvalds 2005-04-16  1790  		/* Use the 16 element perfect filter, skip first two entries. */
+^1da177e4c3f41 drivers/net/starfire.c                  Linus Torvalds 2005-04-16  1791  		void __iomem *filter_addr = ioaddr + PerfFilterTable + 2 * 16;
+766607570becbd drivers/net/ethernet/adaptec/starfire.c Jakub Kicinski 2021-10-14  1792  		const __be16 *eaddrs;
+22bedad3ce112d drivers/net/starfire.c                  Jiri Pirko     2010-04-01  1793  		netdev_for_each_mc_addr(ha, dev) {
+22bedad3ce112d drivers/net/starfire.c                  Jiri Pirko     2010-04-01  1794  			eaddrs = (__be16 *) ha->addr;
+88b1943bd3e4d2 drivers/net/starfire.c                  Al Viro        2007-08-23  1795  			writew(be16_to_cpu(eaddrs[2]), filter_addr); filter_addr += 4;
+88b1943bd3e4d2 drivers/net/starfire.c                  Al Viro        2007-08-23  1796  			writew(be16_to_cpu(eaddrs[1]), filter_addr); filter_addr += 4;
+88b1943bd3e4d2 drivers/net/starfire.c                  Al Viro        2007-08-23  1797  			writew(be16_to_cpu(eaddrs[0]), filter_addr); filter_addr += 8;
+^1da177e4c3f41 drivers/net/starfire.c                  Linus Torvalds 2005-04-16  1798  		}
+766607570becbd drivers/net/ethernet/adaptec/starfire.c Jakub Kicinski 2021-10-14  1799  		eaddrs = (const __be16 *)dev->dev_addr;
+5508590c193661 drivers/net/starfire.c                  Jiri Pirko     2010-02-18  1800  		i = netdev_mc_count(dev) + 2;
+^1da177e4c3f41 drivers/net/starfire.c                  Linus Torvalds 2005-04-16  1801  		while (i++ < 16) {
+88b1943bd3e4d2 drivers/net/starfire.c                  Al Viro        2007-08-23  1802  			writew(be16_to_cpu(eaddrs[0]), filter_addr); filter_addr += 4;
+88b1943bd3e4d2 drivers/net/starfire.c                  Al Viro        2007-08-23  1803  			writew(be16_to_cpu(eaddrs[1]), filter_addr); filter_addr += 4;
+88b1943bd3e4d2 drivers/net/starfire.c                  Al Viro        2007-08-23  1804  			writew(be16_to_cpu(eaddrs[2]), filter_addr); filter_addr += 8;
+^1da177e4c3f41 drivers/net/starfire.c                  Linus Torvalds 2005-04-16  1805  		}
+^1da177e4c3f41 drivers/net/starfire.c                  Linus Torvalds 2005-04-16  1806  		rx_mode |= AcceptBroadcast|PerfectFilter;
+^1da177e4c3f41 drivers/net/starfire.c                  Linus Torvalds 2005-04-16  1807  	} else {
+^1da177e4c3f41 drivers/net/starfire.c                  Linus Torvalds 2005-04-16  1808  		/* Must use a multicast hash table. */
+^1da177e4c3f41 drivers/net/starfire.c                  Linus Torvalds 2005-04-16  1809  		void __iomem *filter_addr;
+766607570becbd drivers/net/ethernet/adaptec/starfire.c Jakub Kicinski 2021-10-14  1810  		const __be16 *eaddrs;
+88b1943bd3e4d2 drivers/net/starfire.c                  Al Viro        2007-08-23  1811  		__le16 mc_filter[32] __attribute__ ((aligned(sizeof(long))));	/* Multicast hash filter */
+^1da177e4c3f41 drivers/net/starfire.c                  Linus Torvalds 2005-04-16  1812  
+^1da177e4c3f41 drivers/net/starfire.c                  Linus Torvalds 2005-04-16  1813  		memset(mc_filter, 0, sizeof(mc_filter));
+22bedad3ce112d drivers/net/starfire.c                  Jiri Pirko     2010-04-01  1814  		netdev_for_each_mc_addr(ha, dev) {
+fdecea66687d76 drivers/net/starfire.c                  Jeff Garzik    2005-05-12  1815  			/* The chip uses the upper 9 CRC bits
+fdecea66687d76 drivers/net/starfire.c                  Jeff Garzik    2005-05-12  1816  			   as index into the hash table */
+22bedad3ce112d drivers/net/starfire.c                  Jiri Pirko     2010-04-01  1817  			int bit_nr = ether_crc_le(ETH_ALEN, ha->addr) >> 23;
+88b1943bd3e4d2 drivers/net/starfire.c                  Al Viro        2007-08-23  1818  			__le32 *fptr = (__le32 *) &mc_filter[(bit_nr >> 4) & ~1];
+^1da177e4c3f41 drivers/net/starfire.c                  Linus Torvalds 2005-04-16  1819  
+^1da177e4c3f41 drivers/net/starfire.c                  Linus Torvalds 2005-04-16  1820  			*fptr |= cpu_to_le32(1 << (bit_nr & 31));
+^1da177e4c3f41 drivers/net/starfire.c                  Linus Torvalds 2005-04-16  1821  		}
+^1da177e4c3f41 drivers/net/starfire.c                  Linus Torvalds 2005-04-16  1822  		/* Clear the perfect filter list, skip first two entries. */
+^1da177e4c3f41 drivers/net/starfire.c                  Linus Torvalds 2005-04-16  1823  		filter_addr = ioaddr + PerfFilterTable + 2 * 16;
+766607570becbd drivers/net/ethernet/adaptec/starfire.c Jakub Kicinski 2021-10-14  1824  		eaddrs = (const __be16 *)dev->dev_addr;
+^1da177e4c3f41 drivers/net/starfire.c                  Linus Torvalds 2005-04-16  1825  		for (i = 2; i < 16; i++) {
+88b1943bd3e4d2 drivers/net/starfire.c                  Al Viro        2007-08-23  1826  			writew(be16_to_cpu(eaddrs[0]), filter_addr); filter_addr += 4;
+88b1943bd3e4d2 drivers/net/starfire.c                  Al Viro        2007-08-23  1827  			writew(be16_to_cpu(eaddrs[1]), filter_addr); filter_addr += 4;
+88b1943bd3e4d2 drivers/net/starfire.c                  Al Viro        2007-08-23  1828  			writew(be16_to_cpu(eaddrs[2]), filter_addr); filter_addr += 8;
+^1da177e4c3f41 drivers/net/starfire.c                  Linus Torvalds 2005-04-16  1829  		}
+^1da177e4c3f41 drivers/net/starfire.c                  Linus Torvalds 2005-04-16  1830  		for (filter_addr = ioaddr + HashTable, i = 0; i < 32; filter_addr+= 16, i++)
+^1da177e4c3f41 drivers/net/starfire.c                  Linus Torvalds 2005-04-16 @1831  			writew(mc_filter[i], filter_addr);
+^1da177e4c3f41 drivers/net/starfire.c                  Linus Torvalds 2005-04-16  1832  		rx_mode |= AcceptBroadcast|PerfectFilter|HashFilter;
+^1da177e4c3f41 drivers/net/starfire.c                  Linus Torvalds 2005-04-16  1833  	}
+^1da177e4c3f41 drivers/net/starfire.c                  Linus Torvalds 2005-04-16  1834  	writel(rx_mode, ioaddr + RxFilterMode);
+^1da177e4c3f41 drivers/net/starfire.c                  Linus Torvalds 2005-04-16  1835  }
+^1da177e4c3f41 drivers/net/starfire.c                  Linus Torvalds 2005-04-16  1836  
+
+:::::: The code at line 1831 was first introduced by commit
+:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
+
+:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
+:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
