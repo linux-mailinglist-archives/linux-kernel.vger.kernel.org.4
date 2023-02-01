@@ -2,86 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9115686672
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 14:13:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CDF5686675
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 14:13:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231685AbjBANNj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 08:13:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42446 "EHLO
+        id S230244AbjBANN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 08:13:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231984AbjBANNf (ORCPT
+        with ESMTP id S232068AbjBANNz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 08:13:35 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D80ED37B75
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 05:13:12 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id D899C6602EC6;
-        Wed,  1 Feb 2023 13:13:09 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1675257190;
-        bh=f7vElBbzhtAES5v+6NQeQ2fY8DILnjp5rWlWuotQaUs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=mOtEYVLCXZWTgOJkflsxN+jkXJGnvNtnvMdhUBZE4fseeSA5yDx1WR6LrAybtHZct
-         l5+RrS8NVbKNpRnh5M7znPvpyl6682XGs56ouhI0dSbWKeIZKA0NjOi5fJPjjZDP+7
-         bCy63avgsSr2FJ/kK8u9tqm1/sNrMYZbwRnO+Btl5w36JUB1mTQctUgkgpF5SKRYSx
-         wTCP9Ek6tvNpuEY7bZUExjTIu7xIu/3+30lsu6gLv0UUnnU7Dm/4AHZiHTULDEzoEa
-         FJaJciV1GPEEFmUjJDo4UDsDVbCPKSQHmfLr6gURMSoNsmUgSUS38h9tOU6gZMrncQ
-         vWx6pQnGjiSWQ==
-Message-ID: <ea37d824-5bfa-9e6c-a007-c5b794cd44e3@collabora.com>
-Date:   Wed, 1 Feb 2023 14:13:06 +0100
+        Wed, 1 Feb 2023 08:13:55 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F79F37F25
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 05:13:51 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id k16so12649489wms.2
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 05:13:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NBVSqHRFtG/oRQBhwtv4eQUlLsJwKfgYGxR//a3EtVY=;
+        b=CawsGJou9VXLSTLiSbX94s6GV0QPhhZLeRf5TV1XVsktftepDsXJYJblOBAdRuQB9o
+         rmE+KByzfmAVrZctCx3YP7a2gNbfNWKpVs5EfjJoYQxQOJV/kkBP465DkNhH0cS9+73E
+         /LOxy8+De01bfA5Vp+5bTC9yeqs24OTuY1iFUivKuSkQAc1gegbgJdwpvw3WeOCg65k0
+         DHUz+knydv1eaoUm0WZFLJYbpCwqQsq38571FXTWd86VI/y9fdgZBwCjX0kmTLzRLQeP
+         ENbI4oAdMAh59CWpPwkevxfGUzsvMXRr5MSmwYRIh8EaUr1Lu55D4+SVdtLBa9K6ifTw
+         XkTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NBVSqHRFtG/oRQBhwtv4eQUlLsJwKfgYGxR//a3EtVY=;
+        b=GVAt2/oi6daUfqLFaMJyzuMr+6DNl44Ab0H4qsmLTrO7D64H8jnVFdIakqnfMV0RA/
+         tQD3dZlBVbexUeuOJ6h5kYbqb9X+V5LrHKW/npNwdLT+Y4hWOAd6R5NaWNP+IBdPwF19
+         6yyOReEUM1JjFk3jZG7G4f07OmKDBFr3n6V4KAsQs6XC33oDTTzMLGkiN6px8kmWnkUN
+         KRwkjD37qo7DvRLEMcHDB9NcgsyO00TzTBTJTqncCjK5YDslbKWj+X4T+w114JJCNw22
+         PewaV0mW3X3JBLQ3om4kyJjBUmQrMxW0xFAnkgvjv3mmUfk5Mgz8Qex00n3xQuulQBuu
+         b3yQ==
+X-Gm-Message-State: AO0yUKVTcqeDlavkGZG9Wr3VjIij6ZsALE76jM9J6N6oESZwsSDt25fD
+        IR2JonxVK9XS2LLjnel1CE1G1A==
+X-Google-Smtp-Source: AK7set+yf3Nsm5C9ZeM11L6U4K6PWqyZeCiqzJ6QeAuVfoj2t+QoDJCDauh2FgNVUvOi6P2O7Ttkww==
+X-Received: by 2002:a05:600c:1c9b:b0:3dc:5240:53b6 with SMTP id k27-20020a05600c1c9b00b003dc524053b6mr2211877wms.6.1675257229667;
+        Wed, 01 Feb 2023 05:13:49 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id o9-20020a05600c4fc900b003dc1300eab0sm1965656wmq.33.2023.02.01.05.13.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Feb 2023 05:13:49 -0800 (PST)
+Message-ID: <1bcd61d6-810f-1239-1b6e-367e0fe87370@linaro.org>
+Date:   Wed, 1 Feb 2023 14:13:46 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v3 2/2] arm64: defconfig: Enable DMA_RESTRICTED_POOL
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     kernel@collabora.com, Arnd Bergmann <arnd@arndb.de>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Shawn Guo <shawnguo@kernel.org>, Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230130200820.82084-1-nfraprado@collabora.com>
- <20230130200820.82084-2-nfraprado@collabora.com>
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] ASoC: dt-bindings: Drop broken irondevice,sma1303 binding
 Content-Language: en-US
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230130200820.82084-2-nfraprado@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Kiseok Jo <kiseok.jo@irondevice.com>
+References: <20230201131059.65527-1-krzysztof.kozlowski@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230201131059.65527-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 30/01/23 21:08, Nícolas F. R. A. Prado ha scritto:
-> Enable support for restricted DMA pools which provide a level of DMA
-> memory protection on systems with limited hardware protection
-> capabilities, such as those lacking an IOMMU.
+On 01/02/2023 14:10, Krzysztof Kozlowski wrote:
+> This reverts entire SMA1303 submission:
 > 
-> For instance, mt8192-asurada-spherion makes use of this to provide a
-> restricted DMA region for WiFi since its MT7921E WiFi card is connected
-> through PCIe, and the MT8192 SoC doesn't have an IOMMU context for the
-> PCIe controller.
+> 1. commit 1c24d12b68fa ("ASoC: dt-bindings: irondevice,sma1303.yaml: Fix about breaking the checks")
+> 2. commit dcf6d2ef0e82 ("ASoC: Modified the schema binding and added the vendor prefixes.")
+> 3. commit 5b28c049ff53 ("ASoC: SMA1303: Fix spelling mistake "Invald" -> "Invalid"")
+> 4. commit 68cd394efd0f ("ASoC: The Iron Device SMA1303 is a boosted Class-D audio amplifier.")
 > 
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> Because the binding:
+> 1. Was never tested,
+> 2. Was never sent to Devicetree maintainers,
+> 3. Is entirely broken and wrong, so it would have to be almost rewritten
+>    from scratch,
+> 4. It does not match the driver, IOW, the binding is fake.
 > 
+> We cannot accept drivers with broken bindings and make it an ABI.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
 
-On MT8173 Elm, MT8192 Spherion, MT8195 Tomato:
+I understand that in general we tend to fix, not just to revert. But the
+poor quality of this binding and the next patch, which was suppose to
+fix it, plus complete lack of testing, means I do not believe the author
+will send correct binding.
 
-Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+More over, fixing binding might require dropping incorrect properties,
+thus changing the driver. I am not willing to do that, I doubt that
+anyone has the time for it.
 
+It's the job of submitter to work on it.
+
+Best regards,
+Krzysztof
 
