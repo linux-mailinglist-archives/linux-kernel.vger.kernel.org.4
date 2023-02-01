@@ -2,171 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B048968645C
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 11:35:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3977768646B
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 11:37:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231671AbjBAKfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 05:35:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40772 "EHLO
+        id S231806AbjBAKh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 05:37:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231215AbjBAKfQ (ORCPT
+        with ESMTP id S230154AbjBAKhX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 05:35:16 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6464A4F367
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 02:35:15 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id E9FC43370C;
-        Wed,  1 Feb 2023 10:35:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1675247713; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HE6LPCvk2HbeMV42NEF8mKiuXHkIefRo1yhHi2UV0Vk=;
-        b=rr3Eocgk9l5Qn//wqYe0mMVxCutTgzIW/qF0TcMtXtedu7nLMLHt3ehRx7EWvFZQ0bWpZB
-        geZhqhO6oTMmiFU+efS6qe0ob5cYR9VHKZYtW6466xKps8rhteIPGmUNnkNm55s/McNDry
-        QIA6kbx0ssnfQrc+sLxhiHiKnYBToHY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1675247713;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HE6LPCvk2HbeMV42NEF8mKiuXHkIefRo1yhHi2UV0Vk=;
-        b=n9VBYG+Sb1XI/MJaE5ahrWMRmNKiLHLCoUpDelUZRb6Phvknx5Lg0SFLltXaZpxI5MPhNr
-        FYTW/5ACMnydsNDg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CC50013A10;
-        Wed,  1 Feb 2023 10:35:13 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id zBbkMGFA2mN5BAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Wed, 01 Feb 2023 10:35:13 +0000
-Message-ID: <39dbbfa1-90bc-bea4-9b1c-f94cc6f2d8b7@suse.de>
-Date:   Wed, 1 Feb 2023 11:35:13 +0100
+        Wed, 1 Feb 2023 05:37:23 -0500
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0710B5B594;
+        Wed,  1 Feb 2023 02:36:56 -0800 (PST)
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3119u8XU011882;
+        Wed, 1 Feb 2023 05:36:26 -0500
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3nfnvvg5fp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Feb 2023 05:36:26 -0500
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 311AaPXn014075
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 1 Feb 2023 05:36:25 -0500
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Wed, 1 Feb 2023
+ 05:36:24 -0500
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Wed, 1 Feb 2023 05:36:22 -0500
+Received: from okan.localdomain ([10.158.19.61])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 311AZiWY012011;
+        Wed, 1 Feb 2023 05:35:51 -0500
+From:   Okan Sahin <okan.sahin@analog.com>
+To:     <okan.sahin@analog.com>
+CC:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Marcelo Schmitt <marcelo.schmitt1@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        Marcus Folkesson <marcus.folkesson@gmail.com>,
+        Ramona Bolboaca <ramona.bolboaca@analog.com>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        William Breathitt Gray <william.gray@linaro.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-iio@vger.kernel.org>
+Subject: [PATCH v4 0/5] Add MAX77541/MAX77540 PMIC Support
+Date:   Wed, 1 Feb 2023 13:35:13 +0300
+Message-ID: <20230201103534.108136-1-okan.sahin@analog.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v3] drm/shmem: Cleanup drm_gem_shmem_create_with_handle()
-Content-Language: en-US
-To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
-Cc:     Rob Clark <robdclark@chromium.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Steven Price <steven.price@arm.com>
-References: <20230123154831.3191821-1-robdclark@gmail.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20230123154831.3191821-1-robdclark@gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------Hch1rk5MHXD0unN33r0ICikz"
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: X76Rue4PA1Bp5q1cvdun0q7bZk00aiEe
+X-Proofpoint-ORIG-GUID: X76Rue4PA1Bp5q1cvdun0q7bZk00aiEe
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-01_03,2023-01-31_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ mlxlogscore=999 clxscore=1011 priorityscore=1501 lowpriorityscore=0
+ phishscore=0 impostorscore=0 bulkscore=0 spamscore=0 adultscore=0
+ malwarescore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302010091
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------Hch1rk5MHXD0unN33r0ICikz
-Content-Type: multipart/mixed; boundary="------------srip3YX0lwXK04bt2gzYBMiO";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
-Cc: Rob Clark <robdclark@chromium.org>,
- open list <linux-kernel@vger.kernel.org>, Steven Price <steven.price@arm.com>
-Message-ID: <39dbbfa1-90bc-bea4-9b1c-f94cc6f2d8b7@suse.de>
-Subject: Re: [PATCH v3] drm/shmem: Cleanup drm_gem_shmem_create_with_handle()
-References: <20230123154831.3191821-1-robdclark@gmail.com>
-In-Reply-To: <20230123154831.3191821-1-robdclark@gmail.com>
+MFD, regulator and ADC driver and related bindings for MAX77540/MAX77541.
+The patches are required to be applied in sequence.
 
---------------srip3YX0lwXK04bt2gzYBMiO
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Changes in v4:
+* Patch 1: "dt-bindings: regulator: Add ADI MAX77541/MAX77540 Regulator"
+  * NO CHANGE
+* Patch 2: "drivers: regulator: Add ADI MAX77541/MAX77540 Regulator Support"
+  * Drop OF ID Table
+  * Drop driver_data in platform_device_id
+* Patch 3: "drivers: iio: adc: Add ADI MAX77541 ADC Support"
+  * Add missing blank line
+* Patch 4: "dt-bindings: mfd: adi,max77541.yaml Add MAX77541 bindings"
+  * NO CHANGE(Order of patchset changed, and [4/5] has dependency to [1/5])
+* Patch 5: "drivers: mfd: Add MAX77541/MAX77540 PMIC Support"
+  * Use pointers in the driver_data
+  * Use probe_new instead of probe
+  * Use PLATFORM_DEVID_NONE macro instead of "-1"
 
-SSBoYXZlIGNoZXJyeS1waWNrZWQgdGhlIHBhdGNoIGludG8gZHJtLW1pc2MtbmV4dC1maXhl
-cy4NCg0KQW0gMjMuMDEuMjMgdW0gMTY6NDggc2NocmllYiBSb2IgQ2xhcms6DQo+IEZyb206
-IFJvYiBDbGFyayA8cm9iZGNsYXJrQGNocm9taXVtLm9yZz4NCj4gDQo+IE9uY2Ugd2UgY3Jl
-YXRlIHRoZSBoYW5kbGUsIHRoZSBoYW5kbGUgb3ducyB0aGUgcmVmZXJlbmNlLiAgQ3VycmVu
-dGx5DQo+IG5vdGhpbmcgd2FzIGRvaW5nIGFueXRoaW5nIHdpdGggdGhlIHNobWVtIHB0ciBh
-ZnRlciB0aGUgaGFuZGxlIHdhcw0KPiBjcmVhdGVkLCBidXQgbGV0J3MgY2hhbmdlIGRybV9n
-ZW1fc2htZW1fY3JlYXRlX3dpdGhfaGFuZGxlKCkgdG8gbm90DQo+IHJldHVybiB0aGUgcG9p
-bnRlciwgc28tYXMgdG8gbm90IGVuY291cmFnZSBwcm9ibGVtYXRpYyB1c2Ugb2YgdGhpcw0K
-PiBmdW5jdGlvbiBpbiB0aGUgZnV0dXJlLiAgQXMgYSBib251cywgaXQgbWFrZXMgdGhlIGNv
-ZGUgYSBiaXQgY2xlYW5lci4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IFJvYiBDbGFyayA8cm9i
-ZGNsYXJrQGNocm9taXVtLm9yZz4NCj4gLS0tDQo+ICAgZHJpdmVycy9ncHUvZHJtL2RybV9n
-ZW1fc2htZW1faGVscGVyLmMgfCAxMyArKysrLS0tLS0tLS0tDQo+ICAgMSBmaWxlIGNoYW5n
-ZWQsIDQgaW5zZXJ0aW9ucygrKSwgOSBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQg
-YS9kcml2ZXJzL2dwdS9kcm0vZHJtX2dlbV9zaG1lbV9oZWxwZXIuYyBiL2RyaXZlcnMvZ3B1
-L2RybS9kcm1fZ2VtX3NobWVtX2hlbHBlci5jDQo+IGluZGV4IGYyMWY0NzczNzgxNy4uNDJj
-NDk2YzVmOTJjIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vZHJtX2dlbV9zaG1l
-bV9oZWxwZXIuYw0KPiArKysgYi9kcml2ZXJzL2dwdS9kcm0vZHJtX2dlbV9zaG1lbV9oZWxw
-ZXIuYw0KPiBAQCAtNDE1LDcgKzQxNSw3IEBAIHZvaWQgZHJtX2dlbV9zaG1lbV92dW5tYXAo
-c3RydWN0IGRybV9nZW1fc2htZW1fb2JqZWN0ICpzaG1lbSwNCj4gICB9DQo+ICAgRVhQT1JU
-X1NZTUJPTChkcm1fZ2VtX3NobWVtX3Z1bm1hcCk7DQo+ICAgDQo+IC1zdGF0aWMgc3RydWN0
-IGRybV9nZW1fc2htZW1fb2JqZWN0ICoNCj4gK3N0YXRpYyBpbnQNCj4gICBkcm1fZ2VtX3No
-bWVtX2NyZWF0ZV93aXRoX2hhbmRsZShzdHJ1Y3QgZHJtX2ZpbGUgKmZpbGVfcHJpdiwNCj4g
-ICAJCQkJIHN0cnVjdCBkcm1fZGV2aWNlICpkZXYsIHNpemVfdCBzaXplLA0KPiAgIAkJCQkg
-dWludDMyX3QgKmhhbmRsZSkNCj4gQEAgLTQyNSw3ICs0MjUsNyBAQCBkcm1fZ2VtX3NobWVt
-X2NyZWF0ZV93aXRoX2hhbmRsZShzdHJ1Y3QgZHJtX2ZpbGUgKmZpbGVfcHJpdiwNCj4gICAN
-Cj4gICAJc2htZW0gPSBkcm1fZ2VtX3NobWVtX2NyZWF0ZShkZXYsIHNpemUpOw0KPiAgIAlp
-ZiAoSVNfRVJSKHNobWVtKSkNCj4gLQkJcmV0dXJuIHNobWVtOw0KPiArCQlyZXR1cm4gUFRS
-X0VSUihzaG1lbSk7DQo+ICAgDQo+ICAgCS8qDQo+ICAgCSAqIEFsbG9jYXRlIGFuIGlkIG9m
-IGlkciB0YWJsZSB3aGVyZSB0aGUgb2JqIGlzIHJlZ2lzdGVyZWQNCj4gQEAgLTQzNCwxMCAr
-NDM0LDggQEAgZHJtX2dlbV9zaG1lbV9jcmVhdGVfd2l0aF9oYW5kbGUoc3RydWN0IGRybV9m
-aWxlICpmaWxlX3ByaXYsDQo+ICAgCXJldCA9IGRybV9nZW1faGFuZGxlX2NyZWF0ZShmaWxl
-X3ByaXYsICZzaG1lbS0+YmFzZSwgaGFuZGxlKTsNCj4gICAJLyogZHJvcCByZWZlcmVuY2Ug
-ZnJvbSBhbGxvY2F0ZSAtIGhhbmRsZSBob2xkcyBpdCBub3cuICovDQo+ICAgCWRybV9nZW1f
-b2JqZWN0X3B1dCgmc2htZW0tPmJhc2UpOw0KPiAtCWlmIChyZXQpDQo+IC0JCXJldHVybiBF
-UlJfUFRSKHJldCk7DQo+ICAgDQo+IC0JcmV0dXJuIHNobWVtOw0KPiArCXJldHVybiByZXQ7
-DQo+ICAgfQ0KPiAgIA0KPiAgIC8qIFVwZGF0ZSBtYWR2aXNlIHN0YXR1cywgcmV0dXJucyB0
-cnVlIGlmIG5vdCBwdXJnZWQsIGVsc2UNCj4gQEAgLTUyMCw3ICs1MTgsNiBAQCBpbnQgZHJt
-X2dlbV9zaG1lbV9kdW1iX2NyZWF0ZShzdHJ1Y3QgZHJtX2ZpbGUgKmZpbGUsIHN0cnVjdCBk
-cm1fZGV2aWNlICpkZXYsDQo+ICAgCQkJICAgICAgc3RydWN0IGRybV9tb2RlX2NyZWF0ZV9k
-dW1iICphcmdzKQ0KPiAgIHsNCj4gICAJdTMyIG1pbl9waXRjaCA9IERJVl9ST1VORF9VUChh
-cmdzLT53aWR0aCAqIGFyZ3MtPmJwcCwgOCk7DQo+IC0Jc3RydWN0IGRybV9nZW1fc2htZW1f
-b2JqZWN0ICpzaG1lbTsNCj4gICANCj4gICAJaWYgKCFhcmdzLT5waXRjaCB8fCAhYXJncy0+
-c2l6ZSkgew0KPiAgIAkJYXJncy0+cGl0Y2ggPSBtaW5fcGl0Y2g7DQo+IEBAIC01MzMsOSAr
-NTMwLDcgQEAgaW50IGRybV9nZW1fc2htZW1fZHVtYl9jcmVhdGUoc3RydWN0IGRybV9maWxl
-ICpmaWxlLCBzdHJ1Y3QgZHJtX2RldmljZSAqZGV2LA0KPiAgIAkJCWFyZ3MtPnNpemUgPSBQ
-QUdFX0FMSUdOKGFyZ3MtPnBpdGNoICogYXJncy0+aGVpZ2h0KTsNCj4gICAJfQ0KPiAgIA0K
-PiAtCXNobWVtID0gZHJtX2dlbV9zaG1lbV9jcmVhdGVfd2l0aF9oYW5kbGUoZmlsZSwgZGV2
-LCBhcmdzLT5zaXplLCAmYXJncy0+aGFuZGxlKTsNCj4gLQ0KPiAtCXJldHVybiBQVFJfRVJS
-X09SX1pFUk8oc2htZW0pOw0KPiArCXJldHVybiBkcm1fZ2VtX3NobWVtX2NyZWF0ZV93aXRo
-X2hhbmRsZShmaWxlLCBkZXYsIGFyZ3MtPnNpemUsICZhcmdzLT5oYW5kbGUpOw0KPiAgIH0N
-Cj4gICBFWFBPUlRfU1lNQk9MX0dQTChkcm1fZ2VtX3NobWVtX2R1bWJfY3JlYXRlKTsNCj4g
-ICANCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Bl
-cg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1
-LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykN
-Ckdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
+Changes in v3:
+* Patch 1: "drivers: mfd: Add ADI MAX77541/MAX77540 PMIC Support"
+  * Change struct name from max77541_dev to max77541
+  * Adjust max-line-length lower than 80
+* Patch 2: "dt-bindings: mfd: Add ADI MAX77541/MAX77540"
+  * Remove adc object as we do not need
+  * Remove adc node from example
+* Patch 3: "drivers: regulator: Add ADI MAX77541/MAX77540 Regulator Support"
+  * Change node name from "BUCK#_id" to "buck#_id" in regulator desc
+* Patch 4: "dt-bindings: regulator: Add ADI MAX77541/MAX77540 Regulator"
+  * Change node name from "BUCK" to "buck" in regulators
+* Patch 5: "drivers: iio: adc: Add ADI MAX77541 ADC Support"
+  * Convert voltage values from V to mV for scaling.
+  * Convert temperature values from C to miliC for scale and offset
+  * Do not set offset bit in info_mask_separate for voltage that does not need offset
+  * Remove unnecessary dev_get_drvdata() instead of it use dev_get_regmap to have regmap.
+  * Assing hard coded name for adc dev name
 
---------------srip3YX0lwXK04bt2gzYBMiO--
+Changes in v2:
+* Patch 1: "drivers: mfd: Add MAX77541/MAX77540 PMIC Support"
+  * Drop "this patch adds" from commit message.
+  * Drop redundant blank lines.
+  * Drop module version
+  * Use definition for parameter of devm_mfd_add_devices(.., -1,..)
+  * Use desc in chip_info to adding desc for different devices.
+  * Add missing headers and forward declarations.
+  * Drop unused elements from max77541_dev struct
+  * Add chip_info into max77541_dev struct to identify different devices.
+* Patch 2: "dt-bindings: mfd: adi,max77541.yaml Add MAX77541 bindings"
+  * Drop "this patch adds" from commit message.
+  * Fix $ref path
+  * Drop adc part under allOf
+  * Keep only one example (more complex one)
+  * Fix make dt_binding_check errors.(trailing space, No newline)
+* Patch 3: "drivers: regulator: Add MAX77541 Regulator Support"
+  * Drop "this patch adds" from commit message.
+  * Add trailing comma for required structs.
+  * Fix wrong indentation.
+  * Drop redundant blank lines.
+  * Drop max77541_regulator_dev struct.
+  * Use "regulator_desc *desc" for both regulator
+    regarding to "max77541->id"
+* Patch 4: "dt-bindings: regulator: max77541-regulator.yaml Add MAX77541
+            Regulator bindings"
+  * Drop "this patch adds" from commit message.
+  * Chance filename (matching compatible), so adi,max77541-regulator.yaml
+  * Fix make dt_binding_check errors.(trailing space, No newline)
+* Patch 5: "drivers: iio: adc: Add MAX77541 ADC Support"
+  * Drop "this patch adds" from commit message.
+  * Drop redundant blank lines.
+  * Fix wrong include path.
+  * Use switch instead of if-else for range setting in max77541_adc_scale
+  * Move max77541_adc_range enum from max77541.h to here.
+  * Use definition from units.h
+  * Drop unused elements from max77541_adc_iio struct
+  * Drop the .data from platform_device_id
 
---------------Hch1rk5MHXD0unN33r0ICikz
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+Okan Sahin (5):
+  dt-bindings: regulator: Add ADI MAX77541/MAX77540 Regulator
+  drivers: regulator: Add ADI MAX77541/MAX77540 Regulator Support
+  drivers: iio: adc: Add ADI MAX77541 ADC Support
+  dt-bindings: mfd: Add ADI MAX77541/MAX77540
+  drivers: mfd: Add ADI MAX77541/MAX77540 PMIC Support
 
------BEGIN PGP SIGNATURE-----
+ .../devicetree/bindings/mfd/adi,max77541.yaml |  87 +++++++
+ .../regulator/adi,max77541-regulator.yaml     |  44 ++++
+ drivers/iio/adc/Kconfig                       |  11 +
+ drivers/iio/adc/Makefile                      |   1 +
+ drivers/iio/adc/max77541-adc.c                | 200 ++++++++++++++
+ drivers/mfd/Kconfig                           |  13 +
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/max77541.c                        | 244 ++++++++++++++++++
+ drivers/regulator/Kconfig                     |   9 +
+ drivers/regulator/Makefile                    |   1 +
+ drivers/regulator/max77541-regulator.c        | 145 +++++++++++
+ include/linux/mfd/max77541.h                  | 108 ++++++++
+ 12 files changed, 864 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/adi,max77541.yaml
+ create mode 100644 Documentation/devicetree/bindings/regulator/adi,max77541-regulator.yaml
+ create mode 100644 drivers/iio/adc/max77541-adc.c
+ create mode 100644 drivers/mfd/max77541.c
+ create mode 100644 drivers/regulator/max77541-regulator.c
+ create mode 100644 include/linux/mfd/max77541.h
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmPaQGEFAwAAAAAACgkQlh/E3EQov+B2
-cg//YASft9OLePFd/IUOkVr/P5QXC22vo4gtBnQWj5vV0RNSVjBytXmRKcdReWWaeBK7J9Uaz8Iq
-UjekkptbVRyXpXlW2ctQasXt/PHeAQ+YvmYuhXXPdVla9MIqn0m1OJM1GmYrg5geXJgu5Sne9fJ3
-JsC4tyyWr+fxZaoW5itQxMqNwTkua8DsThbaccAegSfvH7jH6pWLyJi2NH6afaD0Eoyh4MBCP5qN
-mEvB6zbRpx6nOEWJqT4ammZQff0xZkmTiH2uNafUdedu6mt9lIndQKzk305El2O/+Ds2MWHZIerT
-55mwZeRHSWnfFY6eCedwqQzP64VH5FvkigCqhdmfiawDzBbN41nUACDQ2wBmYLJSfiSU+TZziZVX
-0O79Y9xMppf56j2PvI8o3XcEuDtw9BeaHfDPpmv97jaAHIbYjvgF+nFtsbKXNfl3Lji8wiZ22yPr
-UPisTWNSfCfWGJMRuCi5j2ElvbIV9INnq2IMYN1bTSzE5RGzZ7ZvqaPF5Waaa9ljzj6KrURXIYfI
-hz1mp1nbIleicwMrMzbHAqUM7RexHvafBLRHN8cTxgxmCewWrX1b4N8DDfbxgIxveYg/G0Rvnh9v
-IQTo0y4PNWJvcGS2vOdClN1qJZbScc1/L2eFd/8xW7toO9T3z3Odl7FXjj05rVL+MfKQIV7tsZ4s
-oXg=
-=1Nq0
------END PGP SIGNATURE-----
+-- 
+2.30.2
 
---------------Hch1rk5MHXD0unN33r0ICikz--
