@@ -2,105 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8910C686003
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 07:55:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CBD8686007
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 07:57:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230259AbjBAGzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 01:55:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38960 "EHLO
+        id S231200AbjBAG5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 01:57:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjBAGzC (ORCPT
+        with ESMTP id S230372AbjBAG5c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 01:55:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A134D1ABC6;
-        Tue, 31 Jan 2023 22:54:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 33D52B820E3;
-        Wed,  1 Feb 2023 06:54:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A5FDC433D2;
-        Wed,  1 Feb 2023 06:54:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675234459;
-        bh=KMtVzKmdPlrQIUHaXY0uBFlMTKi/xJ843BQMk9glniY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Wly5c+fZHIaF4HwWcpKHwCgt9WVmBSJXE3Ak9cFw/nW187YoruMo39FTtOPs0TG9J
-         j4ygeOopPRZ4NexqPAknlOgEbU38rjyWqpaXUYagHVdcvmwc03Xfr5OfEvcNTam30U
-         Qjop95KIdM0NF7+9w0dw01dT7t5ah1pCCACkSWUfHg5uzQh1RoApvMMARtfrabmVB6
-         iw3tf5AHTI72H6CQuBqvXmSWxOfPfHfSmzml1IY2WKZdgloZBIBkooK5Qvof4eD+XW
-         OBkpUZcjPkSmc23PL82USP8dZZZpPxRoWwRz3gixLmY5up36+F4Zw/5u6sR2S9OwK5
-         4J53/kezSfjUw==
-Date:   Tue, 31 Jan 2023 22:54:17 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Jann Horn <jannh@google.com>, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Roxana Bradescu <roxabee@chromium.org>,
-        Adam Langley <agl@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>
-Subject: Re: [PATCH] x86: enable Data Operand Independent Timing Mode
-Message-ID: <Y9oMmYWzy7mlk3D9@sol.localdomain>
-References: <20230125012801.362496-1-ebiggers@kernel.org>
- <14506678-918f-81e1-2c26-2b347ff50701@intel.com>
- <CAG48ez1NaWarARJj5SBdKKTYFO2MbX7xO75Rk0Q2iK8LX4BwFA@mail.gmail.com>
- <394c92e2-a9aa-37e1-7a34-d7569ac844fd@intel.com>
- <CAG48ez0ZK3pMqkto4DTZPNyddYcv8jPHQDNhYoFEPvSRLf80fQ@mail.gmail.com>
- <e37a17c4-8611-6d1d-85ad-fcd04ff285e1@intel.com>
- <Y9MAvhQYlOe4l2BM@gmail.com>
- <8b2771ce-9cfa-54cc-de6b-e80ce7af0a93@intel.com>
- <16e3217b-1561-51ea-7514-014e27240402@intel.com>
+        Wed, 1 Feb 2023 01:57:32 -0500
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2063.outbound.protection.outlook.com [40.107.96.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41A5F46A0
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 22:57:31 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NRVbRZU7NatCkZIorRyTKxbmcwThW1QV99YVSz7AlUt5zss6frBRl/+BEaX9q7LmIzb+lIqIA7u4CudlMkRtU3h8+BnsA6UXf2nyb88DlKe4JIezJD+5lGxos1LxanpMtADhIE2J0vfts/VEDMpcm5TWCr08bnsf84zEiErzVkyfLk0eGf54P8r11OKoATdL/JwPpFAnF+Y01fOq7xzPI5QjzsjcgkJJEL0OYaB65a4y8SpHkJMtC/NSYLfVvguS5Uc0mtxNa91p3UoFByznFoDpb/alglSQx3KkWMT+w2xhcAOobGqwpuMrb5P+z/HnfwwsJhEX0uSWLImILt2DWQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7yvVarZTSBwAMpXjr83CotaXizJswu6U4UhR2KDzf2w=;
+ b=DFnO4haP0Rq0mu2NPS+z9o0TZyhw0oVsg5DK0apqWvYdcYJXSRjI6rqu5qhvlHLEhogrbGASTwoHxRnNJa7kvI2MhI8Afgov5mrK7sKe4LXN4d1j08VEapIOQCH/+aIVfS5or3IW5ZYI8JozD1EkEHL13NCX48lMCaOO8dUHY00rTqzwXGyI5vyPpNn6T02BhDBH6LJtG5iRoePP203CaTn9m+jEj/1dIE2OIsn1zF7RLtLJJXYHofI8kPI4kjCZCO76HqkPXAsy/KdUd94ItHnI6tncv++4GJngDtLW3jzmLLGuBNGQEr15YDdjhTUXK5LuxMyKgaUjAmxjLZqFpA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7yvVarZTSBwAMpXjr83CotaXizJswu6U4UhR2KDzf2w=;
+ b=YPkKuHczFgMcfpqi/eupOoo64B65CurWc6UzSMH89BpfbDk+MdBlowLu78Wl6TzWYlBLtM7lZsnODKxtBEyVWPzFWHw9UtYVJKRKR3bhsdgE3MQGnQaC8QY4535Tzr0jTLSf20zmFD71pAo/8JVuB4jt/kOYd5o575j8JTKeeJ+zfj2sHvsojcrOtF/nln5uVhg2XwnWamgnypwHrH4uXhIZqNOk9hiEvz8zBdegelXer0dw9gYLfV7d6qmmQry5r2ZXB8Uw1Gv1H9LxQS1VAQR/F0N0JYdxJBHLp+mxH1Rg8HiAtC/OX8KnbLyTJLM74Ik97q6t/GR+7iwlREPERw==
+Received: from BN9PR03CA0238.namprd03.prod.outlook.com (2603:10b6:408:f8::33)
+ by PH7PR12MB6956.namprd12.prod.outlook.com (2603:10b6:510:1b9::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.36; Wed, 1 Feb
+ 2023 06:57:28 +0000
+Received: from BN8NAM11FT016.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:f8:cafe::d) by BN9PR03CA0238.outlook.office365.com
+ (2603:10b6:408:f8::33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.24 via Frontend
+ Transport; Wed, 1 Feb 2023 06:57:27 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ BN8NAM11FT016.mail.protection.outlook.com (10.13.176.97) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6064.22 via Frontend Transport; Wed, 1 Feb 2023 06:57:26 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 31 Jan
+ 2023 22:57:15 -0800
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail203.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 31 Jan
+ 2023 22:57:15 -0800
+Received: from Asurada-Nvidia (10.127.8.9) by mail.nvidia.com (10.129.68.10)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36 via Frontend
+ Transport; Tue, 31 Jan 2023 22:57:15 -0800
+Date:   Tue, 31 Jan 2023 22:57:13 -0800
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+CC:     <kevin.tian@intel.com>, <yi.l.liu@intel.com>,
+        <iommu@lists.linux.dev>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 1/3] iommufd: Add devices_users to track the
+ hw_pagetable usage by device
+Message-ID: <Y9oNSUbDe1YOTj+b@Asurada-Nvidia>
+References: <cover.1674939002.git.nicolinc@nvidia.com>
+ <c1c65ce093a3b585546dd17a77949efbe03a81d9.1674939002.git.nicolinc@nvidia.com>
+ <Y9fcAdFxl7GVSH9r@nvidia.com>
+ <Y9gaKaMKOf+P2NtK@Asurada-Nvidia>
+ <Y9gfbx/fszb0aTJn@nvidia.com>
+ <Y9gi0UaE1PlKVzmn@Asurada-Nvidia>
+ <Y9gqFwDNd3VKQvC3@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <16e3217b-1561-51ea-7514-014e27240402@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y9gqFwDNd3VKQvC3@nvidia.com>
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT016:EE_|PH7PR12MB6956:EE_
+X-MS-Office365-Filtering-Correlation-Id: bbacb330-56c8-42f2-f7c5-08db04219439
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ufkkJQ8B6Us9MKgNzskhE6QBmhLIRXI/w68+QL2cnLSnjhV0xS9RGbrusBD97Ug+pqg2WMj/asxdb2qXQAjukgWJTGkBHHGjmKZGeAanBP5gC8lzJZyQ+9bxnP9dC92NQiELljTFWXtXHt2GQ0flBHm/Mi/SzCRW8GZ/8bF8XQP925ODGXPHSrAyTHsuz9gS0tNQfuE28J8/NUOa97GjkBm50QQWRFQhIRJx7HNlltEW1MVqaVB/eqxqyioF81c4qr1WqEf18M3fM5BfO/+XR7yVLzSiCnCb6278QipC1md10sFUqZI4qBDNIoR0lcsups/UqP/ofTUKNWMd/k/TJAmdBoqvPdpqBooyXT4FwZZfiEInnNC91TdpiwTU/IMPeq0JEmcYymRBQrdBtYyHqJyu196mDW9F8CFgza2cE5DeJMdgKi/cVqn4GFuwFNeiNdEYVRoYzVjLyFwlrPiXMSYZrJZPFeAlS72Hve5IFcAUQrTlX7LN81LuQfqYbpf/WhrKHPGuTaDGNfD6sEr0BVUaZM3DrsIsrWfTrhiy739p1yYNctSPviotiUfpsO6ozYKvHwYFkYtUSiJWykdpoG5ESb3YFHZy9qEcDeFROpju9t9S+XAOK/4o9tR9st1ynuUARwlXsphTSpoetyzS0g2p8IKgf/MCB6G4hmbxPEyoAoMOVfMp0KFOQvwemjNqE9XC/PhTjPXGqU68Z13HR6Kunl89VfYJ8i+/sPSkdZM=
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(396003)(39860400002)(376002)(136003)(346002)(451199018)(36840700001)(40470700004)(46966006)(82310400005)(33716001)(2906002)(6862004)(9686003)(47076005)(36860700001)(55016003)(40480700001)(5660300002)(8936002)(41300700001)(86362001)(26005)(186003)(336012)(426003)(356005)(70206006)(4326008)(40460700003)(7636003)(70586007)(478600001)(54906003)(8676002)(316002)(82740400003)(6636002)(67856001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Feb 2023 06:57:26.8441
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: bbacb330-56c8-42f2-f7c5-08db04219439
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT016.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6956
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 02:48:05PM -0800, Dave Hansen wrote:
-> We've been talking about this inside Intel.  Suffice to say that DOITM
-> was not designed to be turned on all the time.  If software turns it on
-> all the time, it won't accomplish what it was designed to do.
-
-Why wouldn't it accomplish what it is designed to do?  Does it not actually
-work?
-
+On Mon, Jan 30, 2023 at 04:35:35PM -0400, Jason Gunthorpe wrote:
+ 
+> IMHO I would structure the smmu driver so that all the different
+> iommu_domain formats have their own ops pointer. The special
+> "undecided" format would have a special ops with only attach_dev and
+> at first attach it would switch the ops to whatever format it
+> selected.
 > 
-> The _most_ likely thing that's going to happen is that DOITM gets
-> redefined to be much more limited in scope.  The current DOITM
-> architecture is very broad, but the implementations have much more
-> limited effects.  This means that the architecture can probably be
-> constrained and still match the hardware that's out there today.  That's
-> pure speculation (ha!) on my part.
->
-> I think we should hold off on merging any DOITM patches until the dust
-> settles.  As far as I know, there is no pressing practical reason to
-> apply something urgently.
-> 
-> Any objections?
+> I think this could get rid of a lot of the 'if undecided/S1/S2/CD'
+> complexity all over the place. You know what type it is because you
+> were called on a op that is only called on its type.
 
-Does this mean that Intel will be restoring the data operand independent timing
-guarantee of some instructions that have had it removed?  If so, which
-instructions will still be left?
+An auto/unmanaged domain allocation via iommu_domain_alloc() would
+be S1, while an allocation via ops->domain_alloc_user can be S1 or
+S2 with a given parameter/flag. So, actually the format is always
+decided. The trouble we have with the iommu_domain_alloc() path is
+that we don't pass the dev pointer down to ops->domain_alloc. So,
+the SMMU driver can't know which SMMU device the device is behind,
+resulting in being unable to finalizing the domain. Robin mentioned
+that he has a patch "iommu: Pass device through ops->domain_alloc".
+Perhaps that is required for us to entirely fix the add_domain()
+problem?
 
-Also, given that the DOITM flag can only be set and cleared by the kernel, and
-assuming that Linux won't support DOITM in any way yet (as you're recommending),
-what should the developers of userspace cryptographic libraries do?  Does Intel
-have a list of which instructions *already* have started having data operand
-dependent timing on released CPUs, so that the existing security impact can be
-assessed and so that developers can avoid using those instructions?
-
-- Eric
+Thanks
+Nic
