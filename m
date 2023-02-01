@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A39EF6869A1
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 16:10:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A40A66869BB
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 16:14:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232819AbjBAPKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 10:10:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43140 "EHLO
+        id S231454AbjBAPOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 10:14:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232860AbjBAPJl (ORCPT
+        with ESMTP id S232789AbjBAPJl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 1 Feb 2023 10:09:41 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A2A66F80;
-        Wed,  1 Feb 2023 07:08:21 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id qw12so36369370ejc.2;
-        Wed, 01 Feb 2023 07:08:21 -0800 (PST)
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3149F66F8B;
+        Wed,  1 Feb 2023 07:08:22 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id m2so51835346ejb.8;
+        Wed, 01 Feb 2023 07:08:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=oWGEYERPvz3Z7XS0c9NWA+7/cG741tA5LjUXI+xdY9A=;
-        b=a5TGg72O4JVsbdjy8Fdwnjt1CZo2FFCFYgUY9zkr98rstihvKl+h2kTYnnQZj3XtIQ
-         VrLdkj6Y8gRLKhKPrEtocVaVOw5Kqx9UYfjDWXRsHFay9d1QtX2Y1PDqy4dQKWewU3TC
-         3UYtypps+hRIw0eo2P1np+vhLCLx7bfF2s8dlvC5L9lZRCzVkvRPlM6ZHeNJLS3glfeb
-         afq1QNf+AfCNLiFhWe9Un0v4bsrFoG25K6Cbdnql4+Cbv+WM0zsZDjoBhbT7TY3FuVQq
-         zf39dosn0iqhtolYkYxX7Mn7zR44cAUFhAxTGsdKOMhfaM3AINRsuKah8qgIMRjt1HXL
-         j9ww==
+        bh=1f2sZTLCh+6MjnBo1NM4qx8aN8UK3+QyFktme+HJb1M=;
+        b=dKmAu0GxbikreE6kPJmqHkddGR4hdJEwSy/Hyn9dorAla/AcEyCzBi0e0E5WKnnadE
+         ZOoGHTpyuGBvNdYpaYDYcvhdpuYyY32EQuFRAWIhvBFh5vTxfR1pld3Ab6ScfSKARDAM
+         sc2UMjZv2Pc+Fz5wbQlfV16JlBQkDyrYomHAkpzegrg7Jcwi5hSg3voaTAqOK7f84SP6
+         9T7cGzELd1jUt2G622d2YjrOKECc9MFeZ1qCKxQALvy/15evIShrh1+HKkkrn1/eRv+N
+         NzUTzuo0yZ07hHQCVYZf4cxu/9+TaJ7wfNNg5s3LCxsCjX0IvX/o3RSYThcDvihaSgp7
+         N25A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=oWGEYERPvz3Z7XS0c9NWA+7/cG741tA5LjUXI+xdY9A=;
-        b=8C1hoTCx3NWojKfwaYeBcKwTWkTESWptWmMn4lZo/Q175/u0kR1hzftoA+l+qvIiWR
-         1apW2wd0+GiyAHJKajqS3Omq0DexMnw9UUSSbxJhkLuyuU3S1J5NdMz1HfgUWmrg+ZWk
-         lZTe5lNkWuRH8evb1BFs1I/VFP7jt5w7AJc413btTPdrjmRR6LT+Lf0RcbhMwDqpgYeJ
-         maHlwF79Cx9IcR28TQDwYhZiHDzG0C3DkvHK2dpBR+o2QxNH+WmIHbyUMUZaI6Ju7z23
-         5TMH6NppCfJ/6KACz4R60GvM4xejZ+O5e7EkkwkcYSmOVL1fV8fKzNuBuk2I7QhNJ2qf
-         TRyQ==
-X-Gm-Message-State: AO0yUKXaWUQPtzoeiCsfmNIwdlHAcw7LvV/wvnP9uJqgobjt/9emXiaK
-        XKoux0CBYXzAZev/tqDWf1JpaRWSXcYyPw==
-X-Google-Smtp-Source: AK7set/G9utt0kjirrLeO0f7RG4vKpbd0iCDXqlCLC97vHF2UZQtZK2/B3FCOQK+DPWEChiWZCsWLw==
-X-Received: by 2002:a17:906:434b:b0:878:72f7:bd87 with SMTP id z11-20020a170906434b00b0087872f7bd87mr2475279ejm.6.1675264099752;
-        Wed, 01 Feb 2023 07:08:19 -0800 (PST)
+        bh=1f2sZTLCh+6MjnBo1NM4qx8aN8UK3+QyFktme+HJb1M=;
+        b=a+6ffcdrTbl+BddaUPsrX9kO2q58MlUEN9D+xb67k8X3PruIeGYrQkhAVR6sKLluQr
+         4WIKDYDaZd37VYv+EBRWIpqSFkH8QMHraFMoghiYRbPsUsqr3AGMu68IbzZGE9rk44T7
+         pxNJJiFHgG73Sr5IiPQmFfHRo8q4k0z2BP5KKjaGNy8G65qHv0o3ydFjekJeR9VbWmsd
+         0Sflf1NcQOmVdzNCTnEU1sci+pkjKFdn0iGCEh27WneqHsoLaOvHOe+d2ye8La6EC2p+
+         FH58yRv20QKF1E0v4n4TzB2AWkmT2EWjfQRE27a/QfRvSFILOUtI/hmKcNYmQNApNcY8
+         UmhQ==
+X-Gm-Message-State: AO0yUKVtgXmCd1vIZhsyGb2HIZgi/RCx/dKRk7EXLoFh8ZYqBLSwkgrG
+        iODeC7q64TE6PsTa8PB+zf52WFJAf6CCLA==
+X-Google-Smtp-Source: AK7set97wGmJcPMtT1Vrg2FbfLmw1oPPmZCQAOt149jYSK9E/tj08/FAxVMeqSvRhMDYKFxZsXw3og==
+X-Received: by 2002:a17:907:2ce7:b0:886:7eae:26c4 with SMTP id hz7-20020a1709072ce700b008867eae26c4mr2498160ejc.5.1675264100689;
+        Wed, 01 Feb 2023 07:08:20 -0800 (PST)
 Received: from pc638.lan ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id qc26-20020a170906d8ba00b008787e94c5ccsm9585774ejb.184.2023.02.01.07.08.18
+        by smtp.gmail.com with ESMTPSA id qc26-20020a170906d8ba00b008787e94c5ccsm9585774ejb.184.2023.02.01.07.08.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Feb 2023 07:08:19 -0800 (PST)
+        Wed, 01 Feb 2023 07:08:20 -0800 (PST)
 From:   "Uladzislau Rezki (Sony)" <urezki@gmail.com>
 To:     LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
         "Paul E . McKenney" <paulmck@kernel.org>
@@ -63,10 +63,10 @@ Cc:     Uladzislau Rezki <urezki@gmail.com>,
         Bob Pearson <rpearsonhpe@gmail.com>,
         Ariel Levkovich <lariel@nvidia.com>,
         Theodore Ts'o <tytso@mit.edu>, Julian Anastasov <ja@ssi.bg>,
-        Lars Ellenberg <lars.ellenberg@linbit.com>
-Subject: [PATCH 02/13] drbd: Rename kvfree_rcu() to kvfree_rcu_mightsleep()
-Date:   Wed,  1 Feb 2023 16:08:08 +0100
-Message-Id: <20230201150815.409582-3-urezki@gmail.com>
+        Vishnu Dasa <vdasa@vmware.com>
+Subject: [PATCH 03/13] misc: vmw_vmci: Rename kvfree_rcu() to kvfree_rcu_mightsleep()
+Date:   Wed,  1 Feb 2023 16:08:09 +0100
+Message-Id: <20230201150815.409582-4-urezki@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230201150815.409582-1-urezki@gmail.com>
 References: <20230201150815.409582-1-urezki@gmail.com>
@@ -86,82 +86,40 @@ The kvfree_rcu()'s single argument name is deprecated therefore
 rename it to kvfree_rcu_mightsleep() variant. The goal is explicitly
 underline that it is for sleepable contexts.
 
-Cc: Jens Axboe <axboe@kernel.dk>
-Cc: Philipp Reisner <philipp.reisner@linbit.com>
-Cc: Lars Ellenberg <lars.ellenberg@linbit.com>
+Cc: Bryan Tan <bryantan@vmware.com>
+Cc: Vishnu Dasa <vdasa@vmware.com>
 Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
 ---
- drivers/block/drbd/drbd_nl.c       | 6 +++---
- drivers/block/drbd/drbd_receiver.c | 4 ++--
- drivers/block/drbd/drbd_state.c    | 2 +-
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ drivers/misc/vmw_vmci/vmci_context.c | 2 +-
+ drivers/misc/vmw_vmci/vmci_event.c   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/block/drbd/drbd_nl.c b/drivers/block/drbd/drbd_nl.c
-index 60757ac31701..f49f2a5282e1 100644
---- a/drivers/block/drbd/drbd_nl.c
-+++ b/drivers/block/drbd/drbd_nl.c
-@@ -1615,7 +1615,7 @@ int drbd_adm_disk_opts(struct sk_buff *skb, struct genl_info *info)
- 			drbd_send_sync_param(peer_device);
- 	}
+diff --git a/drivers/misc/vmw_vmci/vmci_context.c b/drivers/misc/vmw_vmci/vmci_context.c
+index 172696abce31..f22b44827e92 100644
+--- a/drivers/misc/vmw_vmci/vmci_context.c
++++ b/drivers/misc/vmw_vmci/vmci_context.c
+@@ -687,7 +687,7 @@ int vmci_ctx_remove_notification(u32 context_id, u32 remote_cid)
+ 	spin_unlock(&context->lock);
  
--	kvfree_rcu(old_disk_conf);
-+	kvfree_rcu_mightsleep(old_disk_conf);
- 	kfree(old_plan);
- 	mod_timer(&device->request_timer, jiffies + HZ);
- 	goto success;
-@@ -2446,7 +2446,7 @@ int drbd_adm_net_opts(struct sk_buff *skb, struct genl_info *info)
+ 	if (notifier)
+-		kvfree_rcu(notifier);
++		kvfree_rcu_mightsleep(notifier);
  
- 	mutex_unlock(&connection->resource->conf_update);
- 	mutex_unlock(&connection->data.mutex);
--	kvfree_rcu(old_net_conf);
-+	kvfree_rcu_mightsleep(old_net_conf);
+ 	vmci_ctx_put(context);
  
- 	if (connection->cstate >= C_WF_REPORT_PARAMS) {
- 		struct drbd_peer_device *peer_device;
-@@ -2860,7 +2860,7 @@ int drbd_adm_resize(struct sk_buff *skb, struct genl_info *info)
- 		new_disk_conf->disk_size = (sector_t)rs.resize_size;
- 		rcu_assign_pointer(device->ldev->disk_conf, new_disk_conf);
- 		mutex_unlock(&device->resource->conf_update);
--		kvfree_rcu(old_disk_conf);
-+		kvfree_rcu_mightsleep(old_disk_conf);
- 		new_disk_conf = NULL;
- 	}
+diff --git a/drivers/misc/vmw_vmci/vmci_event.c b/drivers/misc/vmw_vmci/vmci_event.c
+index 2100297c94ad..5d7ac07623c2 100644
+--- a/drivers/misc/vmw_vmci/vmci_event.c
++++ b/drivers/misc/vmw_vmci/vmci_event.c
+@@ -209,7 +209,7 @@ int vmci_event_unsubscribe(u32 sub_id)
+ 	if (!s)
+ 		return VMCI_ERROR_NOT_FOUND;
  
-diff --git a/drivers/block/drbd/drbd_receiver.c b/drivers/block/drbd/drbd_receiver.c
-index 757f4692b5bd..e197b2a465d2 100644
---- a/drivers/block/drbd/drbd_receiver.c
-+++ b/drivers/block/drbd/drbd_receiver.c
-@@ -3759,7 +3759,7 @@ static int receive_protocol(struct drbd_connection *connection, struct packet_in
- 		drbd_info(connection, "peer data-integrity-alg: %s\n",
- 			  integrity_alg[0] ? integrity_alg : "(none)");
+-	kvfree_rcu(s);
++	kvfree_rcu_mightsleep(s);
  
--	kvfree_rcu(old_net_conf);
-+	kvfree_rcu_mightsleep(old_net_conf);
- 	return 0;
- 
- disconnect_rcu_unlock:
-@@ -4127,7 +4127,7 @@ static int receive_sizes(struct drbd_connection *connection, struct packet_info
- 
- 			rcu_assign_pointer(device->ldev->disk_conf, new_disk_conf);
- 			mutex_unlock(&connection->resource->conf_update);
--			kvfree_rcu(old_disk_conf);
-+			kvfree_rcu_mightsleep(old_disk_conf);
- 
- 			drbd_info(device, "Peer sets u_size to %lu sectors (old: %lu)\n",
- 				 (unsigned long)p_usize, (unsigned long)my_usize);
-diff --git a/drivers/block/drbd/drbd_state.c b/drivers/block/drbd/drbd_state.c
-index 75d13ea0024f..2aeea295fa28 100644
---- a/drivers/block/drbd/drbd_state.c
-+++ b/drivers/block/drbd/drbd_state.c
-@@ -2071,7 +2071,7 @@ static int w_after_conn_state_ch(struct drbd_work *w, int unused)
- 		conn_free_crypto(connection);
- 		mutex_unlock(&connection->resource->conf_update);
- 
--		kvfree_rcu(old_conf);
-+		kvfree_rcu_mightsleep(old_conf);
- 	}
- 
- 	if (ns_max.susp_fen) {
+ 	return VMCI_SUCCESS;
+ }
 -- 
 2.30.2
 
