@@ -2,75 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7C5668608A
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 08:23:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE5BD68608E
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 08:25:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231822AbjBAHXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 02:23:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57296 "EHLO
+        id S231854AbjBAHZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 02:25:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231478AbjBAHXx (ORCPT
+        with ESMTP id S231478AbjBAHZh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 02:23:53 -0500
+        Wed, 1 Feb 2023 02:25:37 -0500
 Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26FEC6580
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 23:23:52 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id t18so16383249wro.1
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 23:23:52 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 597796580
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 23:25:36 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id d14so16351511wrr.9
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 23:25:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=aWbAr9mBTWOMtAoqN4GLxi4sz+M94KHE/wqJAmQCP4Y=;
-        b=Cxxt2hjYpMNG9w0CHlFVW7pp1ICkDXKprzAXGOZAiJIuIIZcEv5jkGi2oMtyJfEX/p
-         gx2CGoJStdWBEubEfzP1gOSwQwi1GsXxYI9+9CweEcf2hF6l7SOyfUqxNxZRY1qv0jsb
-         Tfuiu9EHcBo8+MqFQKsPylvskN2LifOOCrtQRjqiD1UrfL9Snm+jeFRktURZw7cJ9SlO
-         yDumtrx+jGy8liLB0/nwqPnOfx8mO/bVDL6n+OMbYp3+4RY+fbD0ij+tfIr0YN8bbQSI
-         KJ82V8wpnPXSa2o5uKAzaRPOLWvIgbZXvxMre8/TpRVot+gJDhGiT3do3dhIcv9B4b6D
-         IDFQ==
+        bh=BPo/q9D5ac3uSvDlctkYDl419CKsFo9D1tuwF0xBQlM=;
+        b=fy0dKzPqaB8hOEpanX1S5Gbg3Ip9oWiLfNZbjZIZeSvomNGiBtB1E5o5ouFodKSw54
+         pghlzI6+1roiTNyQsG/cTRHAe/TeSAcUUbBjALLR9njBpZgdabNMtAEI5vIYy4cqJfC4
+         8SeKCr+ppc/G5NmQXFmRbA3mA1OgxDwJMbPbPExqWTNGfs/hR/8Tj98nyrl0LS4Tqa0i
+         liBeBJ7iTtVUCCJkvtp9bYhxoOKxCdznnX8OWX7iDe40mWAqi/xL+z7DvEnAb9vWyrHx
+         VZTs1XPf3SKsxTYLz4/DYW7Ufr5Yk4EzwsnU+ebRk76Hez0PA7dbUFBYfRBNu5OcMZDH
+         fA4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aWbAr9mBTWOMtAoqN4GLxi4sz+M94KHE/wqJAmQCP4Y=;
-        b=N8EcAFn6B4BydIRmc+rfFxXK6OPsowwybqeXygbQ5u1GxjyDqbGIV1e5ptDpp8IGVr
-         SOqCLGqeTq8FmZBKw7QbLXC8X0cYMA/uB5CFPNluKi2ZHzq3k/XDF7e8SXfJVxqGIeua
-         JPcL7GHUCi7eh4HbiTe2SwLIr9X/k8JwW0OdVJ4IqDgH/eOX4L4Ow/CfS7ToXmTrH7R4
-         WVIYsS3B3hfZrB75HmTSy35ZT79iFWt26+6hyj5SYFMj5dI1/Kp02llw+tq61VgOSOse
-         KoqcQmHw9WNuBTIZDa+h6uWPcBAgk9A3kOZZqGzKmQWsjTmwJF4/JWBU7TuGmSxyGpe2
-         zyWw==
-X-Gm-Message-State: AO0yUKWsi7yWzOd0/M2b5NUi+xXB6eDsHOrJPQaQp7eh8mJeu7oMDY+G
-        CAokpURhxTSzWGlQfPs7EVIvCg==
-X-Google-Smtp-Source: AK7set8cJQO3VUWKw/onCq6pDwenKE4EACMeCdvxzCOtnu69YShLVk0A8EvdjocJ92tEsMBFyoq72g==
-X-Received: by 2002:a05:6000:9:b0:2bf:c338:b02a with SMTP id h9-20020a056000000900b002bfc338b02amr4815972wrx.36.1675236230671;
-        Tue, 31 Jan 2023 23:23:50 -0800 (PST)
+        bh=BPo/q9D5ac3uSvDlctkYDl419CKsFo9D1tuwF0xBQlM=;
+        b=O0z+Iijfq73fBp1i/ACLDH/NNG0IHDT6XbZeKTF4xStWSeOpNHN8/VL+rDzIBIqdPd
+         h7bXUUzZQ4CcsBNlvpHgS5HFsm73AP/pFvDc6jj5gR6KvWgvvHHVivRB73ZGCMP+Sefc
+         92z7i1JCYj0LgcFDq8eqqeuWtroIkV8G9P4o1rIDXe2K/OfKDg0M47DvioUjOLnEb5Y1
+         rWL+5B5Yp79R9WHr0V34vwzXmihD/c3U3yc4NCEj0K5RedhFTSqVaCDHOjr9jzaE6BLr
+         CNpID3CpkUjL74CzgCZ8HG3C4rFBNeZ+8cgEPbt3DOGgzyx5SuRd+2nI0D6Tf/pzTtHE
+         TYqA==
+X-Gm-Message-State: AO0yUKUplZUcjspITZSSfAu9qm53+yPy7mfS2sprCuaGqTf0zgboijck
+        qualJi0xO/oWkoOZuUu+t//cUA==
+X-Google-Smtp-Source: AK7set+prGSYrdiu8oqIfF4ozlr1/98VvmogLktJ4xqgfQoviK77oZcGC9yxgETNqDXONBvvoaJTSQ==
+X-Received: by 2002:a5d:4b4e:0:b0:242:eb5:254f with SMTP id w14-20020a5d4b4e000000b002420eb5254fmr636375wrs.48.1675236334808;
+        Tue, 31 Jan 2023 23:25:34 -0800 (PST)
 Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id i16-20020adfb650000000b0029100e8dedasm5263235wre.28.2023.01.31.23.23.48
+        by smtp.gmail.com with ESMTPSA id m15-20020a056000024f00b002bfae16ee2fsm17168542wrz.111.2023.01.31.23.25.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Jan 2023 23:23:50 -0800 (PST)
-Message-ID: <6cd98ec5-3d0e-eb91-b2a5-9781439ae483@linaro.org>
-Date:   Wed, 1 Feb 2023 08:23:48 +0100
+        Tue, 31 Jan 2023 23:25:34 -0800 (PST)
+Message-ID: <f67f81fd-c770-45b2-9c5e-7ea53e956db9@linaro.org>
+Date:   Wed, 1 Feb 2023 08:25:32 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH v2 5/6] dt-bindings: hypervisor: Add dt-bindings for VMBus
+Subject: Re: [PATCH v3 2/5] dt-bindings: mfd: Add ADI MAX77541/MAX77540
 Content-Language: en-US
-To:     Saurabh Singh Sengar <ssengar@linux.microsoft.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, daniel.lezcano@linaro.org, tglx@linutronix.de,
-        virtualization@lists.linux-foundation.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, mikelley@microsoft.com,
-        ssengar@microsoft.com
-References: <1675188609-20913-1-git-send-email-ssengar@linux.microsoft.com>
- <1675188609-20913-6-git-send-email-ssengar@linux.microsoft.com>
- <9a3bbaf0-eb1d-613a-a8ba-272896ef2da8@linaro.org>
- <20230201015723.GB20379@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+To:     "Sahin, Okan" <Okan.Sahin@analog.com>
+Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        Marcus Folkesson <marcus.folkesson@gmail.com>,
+        "Bolboaca, Ramona" <Ramona.Bolboaca@analog.com>,
+        William Breathitt Gray <william.gray@linaro.org>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
+References: <20230118063822.14521-1-okan.sahin@analog.com>
+ <20230118063822.14521-3-okan.sahin@analog.com>
+ <c4433cba-ce35-e5d3-f04b-ba8f9f501732@linaro.org>
+ <MN2PR03MB51685B56D49CBB590BBE6B7EE7D09@MN2PR03MB5168.namprd03.prod.outlook.com>
+ <04ac07ef-ee4b-abb8-9fb2-114e3a646a2f@linaro.org>
+ <MN2PR03MB5168884376CEE35E73739A95E7D09@MN2PR03MB5168.namprd03.prod.outlook.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230201015723.GB20379@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+In-Reply-To: <MN2PR03MB5168884376CEE35E73739A95E7D09@MN2PR03MB5168.namprd03.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -82,46 +92,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/02/2023 02:57, Saurabh Singh Sengar wrote:
-> On Tue, Jan 31, 2023 at 07:54:56PM +0100, Krzysztof Kozlowski wrote:
->> On 31/01/2023 19:10, Saurabh Sengar wrote:
->>>
->>> Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+On 31/01/2023 22:28, Sahin, Okan wrote:
+> On Tue, 31 Jan 2023 7:44 PM
+> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+> 
+>> On 31/01/2023 13:02, Sahin, Okan wrote:
+>>>>> +  regulators:
+>>>>> +    $ref: /schemas/regulator/adi,max77541-regulator.yaml#
+>>>>
+>>>> No improvements regarding bisectability - this patch fails. If you
+>>>> tested this patch, you would see it.
+>>>>
+>>>> Instead of ignoring comments, either implement them or ask for clarification.
+>>>>
+>>>>
+>>> Sorry for misunderstanding, I checked patchset as a whole not one by one this is
+>> why I did not get failure after "make dt_binding_check " . Right now, I understand
+>> why you are saying this patch fails, but what is your suggestion?  what is the
+>> correct order for this patchset? I sent adi,max77541-regulator.yaml in path 4/5.
+>> In the light of discussion, should I remove all the parts related to regulator in
+>> patch 2/5, then add adi,max77541-regulator.yaml and update
+>> adi,max77541.yaml in patch 4/5? or should I add new patch to update
+>> adi,max77541.yaml?
 >>
->>> +  - |
->>> +    / {
->>> +        compatible = "foo";
->>> +        model = "foo";
->>> +        #address-cells = <0x02>;
->>> +        #size-cells = <0x02>;
+>> Regulator binding patch should be first in the series (bindings are before usage),
+>> then the MFD binding should come. Your cover letter should clearly at the top
+>> mention the dependency. You can also mention dependency in MFD patch after --
+>> -, because many of us do not really read cover letters...
 >>
->> Except previous comments (all of them were ignored),
+>>
+>> Best regards,
+>> Krzysztof
+> Hi Krzysztof,
 > 
-> Thank you for your comments, I have tried to address them all in this version
-> but I may have missed few. I will go and look again all the emails, but if
-> there is any thing which you can point again and we can start a new dicussion
-> from here will be very helpful.
-> 
-> I think one concern was related to use of 'reg' or 'ranges', and I 
-> thought this patch will give clarity that I intend to use 'ranges'
-> without any child node. Is this acceptable ?
+> Thank you for your feedback. I tried to explain in cover letter .However, I understand that it was not clear enough. I do not want to take your time, but let me ask one thing to understand the case completely. Right now, my order is like below
+> [cover letter]->[mfd driver]->[mfd binding]->[regulator driver]->[regulator binding]->[adc]. 
+> Should I completely change the ordering  e.g. starting with regulator ending with mfd or is it sufficient to just get the regulator binding just before the mfd bindings?
 
-There were several comments.
+"bindings are before usage" - what's unclear?
 
-> 
-> 
->> also:
->> Drop entire part. Not related, not correct, not helping and you cannot
->> have top level nodes in example.
-> 
-> If I dont use the top level node, the parent address cells are assumed to be 1,
-> and I get below warning. If there is better way to address this warning, please
-> suggest I will work on it.
-> 
-> Warning (ranges_format): /example-0/vmbus@ff0000000:ranges: "ranges" property has invalid length (20 bytes) (parent #address-cells == 1, child #address-cells == 2, #size-cells == 1)
-
-Then use soc just like every other example.
-
+How can you use binding before defining it?
 
 Best regards,
 Krzysztof
