@@ -2,183 +2,345 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0B48686251
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 10:04:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C444968624D
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 10:04:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231527AbjBAJEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 04:04:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57096 "EHLO
+        id S231513AbjBAJEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 04:04:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230245AbjBAJEf (ORCPT
+        with ESMTP id S231473AbjBAJD6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 04:04:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D263F301A5
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 01:03:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675242227;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=a8vyRUGLmPZw1cx7uiPTXStMX6sS7pJs7SRmtCoOPQ0=;
-        b=Lu0QIVDo5qsP/nuVjpMPt/krULE24S0OroVcm69Eo5hwxB9pQDLLXlOI5IAxUFN1TXWhw4
-        7b3Pik5hfqucQOzr8+q+odo3oJuXs2D5becMXAkE4ekWV2qR8Uny2bdYTXRBTOTdtkLPrL
-        X6gb8yW3bfQPWweD1zs7/WOYJCKcEhg=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-480-725fkwHkOr-Vp3lxb2ir3g-1; Wed, 01 Feb 2023 04:03:43 -0500
-X-MC-Unique: 725fkwHkOr-Vp3lxb2ir3g-1
-Received: by mail-wr1-f69.google.com with SMTP id w16-20020a5d4b50000000b002bfca568cdfso2702974wrs.0
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 01:03:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=a8vyRUGLmPZw1cx7uiPTXStMX6sS7pJs7SRmtCoOPQ0=;
-        b=4kMA4iiwIWb+BV8H6z4iZIyQs1UUhmMQFgZzyAHh63WeZHSrKhk9LCuhwW1p3HmHiu
-         0dUcCoRNvlD8hrXHsVfYgXPGVko4xVLLifnPg2sDd0cRTVy9j5eS3UKnM1TJr3JnOK+S
-         16vwnECjuFDf17cItYoggCipknp31MXARy/Rc1BMepb4GACgeQtjC3nDelsCckBEgzn+
-         AXlNUCeh8ObgYZ5Jeboxg/Wv3hvYBn7MDCO2rF1Zn84N+iTVOToc7BgGt3o60gKdAQuM
-         rChZwmcot/EIHdhlg4I5DX1nv1OQE24OrcR+vSy0Vclx2eDtVbYZW351VjMFAcuVfNue
-         Xr8A==
-X-Gm-Message-State: AO0yUKXS6hK2BdHx8pAgc5bivkpOo0lpzVFdJt2X5xxkK5APSjkBueTZ
-        yR4Vu/bgWa794IVEnH5qHB4PJuYklVWMHvkmTSzld0D6GWaGJxKaYWlJN76pu/l9uiSPqS7MCST
-        Aa3q6n/g8IF36aV5z71f7qkef
-X-Received: by 2002:a05:600c:3b9d:b0:3d2:3be4:2d9a with SMTP id n29-20020a05600c3b9d00b003d23be42d9amr1322214wms.20.1675242222434;
-        Wed, 01 Feb 2023 01:03:42 -0800 (PST)
-X-Google-Smtp-Source: AK7set/gMluqZSQ5LKXrgZW/yePv93crC07VbTZ6hjsNCTASxrv++pCMxw86gG10oZFOIcmNhL6zeQ==
-X-Received: by 2002:a05:600c:3b9d:b0:3d2:3be4:2d9a with SMTP id n29-20020a05600c3b9d00b003d23be42d9amr1322185wms.20.1675242222113;
-        Wed, 01 Feb 2023 01:03:42 -0800 (PST)
-Received: from ?IPV6:2003:cb:c705:3100:e20e:4ace:6f25:6a79? (p200300cbc7053100e20e4ace6f256a79.dip0.t-ipconnect.de. [2003:cb:c705:3100:e20e:4ace:6f25:6a79])
-        by smtp.gmail.com with ESMTPSA id p16-20020a05600c469000b003a84375d0d1sm1100168wmo.44.2023.02.01.01.03.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Feb 2023 01:03:41 -0800 (PST)
-Message-ID: <a4857ccd-1d5f-2169-40bc-e7a75a0c896f@redhat.com>
-Date:   Wed, 1 Feb 2023 10:03:39 +0100
+        Wed, 1 Feb 2023 04:03:58 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5F81446712;
+        Wed,  1 Feb 2023 01:03:57 -0800 (PST)
+Received: by linux.microsoft.com (Postfix, from userid 1127)
+        id 2728820B74F7; Wed,  1 Feb 2023 01:03:57 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2728820B74F7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1675242237;
+        bh=cKf+gXPvzpZBvZyZdeOritYpywNGNnq241PfObLelrc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RnLek3rk1XgvZBn4SvjNlo4y9x9CwRzc4Omk8OH0y13BnV0TlIpl0Q7+MZ6ZIl90h
+         ihZA2g7IYm1PDCLNmJWwhWM3dFBSp8F9YcBXkRtIeuVtD1egHNPZ4Ikf2jCWjjRVXO
+         i9NJ1NJZ2rl8ipe1353H9B0SJXDxh/3ZkCvVNvpc=
+Date:   Wed, 1 Feb 2023 01:03:57 -0800
+From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, daniel.lezcano@linaro.org, tglx@linutronix.de,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, mikelley@microsoft.com,
+        ssengar@microsoft.com
+Subject: Re: [PATCH 3/4] Drivers: hv: vmbus: Device Tree support
+Message-ID: <20230201090357.GA22253@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1673887688-19151-1-git-send-email-ssengar@linux.microsoft.com>
+ <1673887688-19151-4-git-send-email-ssengar@linux.microsoft.com>
+ <23b4ecbd-f7af-b1fd-6cc0-d23622a4115f@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v5 18/39] mm: Handle faultless write upgrades for shstk
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>
-Cc:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-References: <20230119212317.8324-1-rick.p.edgecombe@intel.com>
- <20230119212317.8324-19-rick.p.edgecombe@intel.com>
- <7f63d13d-7940-afb6-8b25-26fdf3804e00@redhat.com>
- <50cf64932507ba60639eca28692e7df285bcc0a7.camel@intel.com>
- <1327c608-1473-af4f-d962-c24f04f3952c@redhat.com>
- <8c3820ae1448de4baffe7c476b4b5d9ba0a309ff.camel@intel.com>
- <4d224020-f26f-60a4-c7ab-721a024c7a6d@redhat.com>
- <dd06b54291ad5721da392a42f2d8e5636301ffef.camel@intel.com>
- <899d8f3baaf45b896cf335dec2143cd0969a2d8a.camel@intel.com>
- <ad7d94dd-f0aa-bf21-38c3-58ef1e9e46dc@redhat.com>
- <27b141c06c37da78afca7214ec7efeaf730162d9.camel@intel.com>
- <f4b62ed9-21a9-4b23-567e-51b339a643ac@redhat.com>
- <6a38779c1539c2bcfeb6bc8251ed04aa9b06802e.camel@intel.com>
- <0e29a2d0-08d8-bcd6-ff26-4bea0e4037b0@redhat.com>
- <f337d3b0e401c210b67a6465bf35f66f6a46fc3d.camel@intel.com>
-Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <f337d3b0e401c210b67a6465bf35f66f6a46fc3d.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <23b4ecbd-f7af-b1fd-6cc0-d23622a4115f@linaro.org>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01.02.23 00:33, Edgecombe, Rick P wrote:
-> On Tue, 2023-01-31 at 09:46 +0100, David Hildenbrand wrote:
->> Sure ...
->>
->> but I reconsidered :)
->>
->> Maybe there is a cleaner way to do it and avoid the "NULL" argument.
->>
->> What about having (while you're going over everything already):
->>
->> pte_mkwrite(pte, vma)
->> pte_mkwrite_kernel(pte)
->>
->> The latter would only be used in that arch code where we're working
->> on
->> kernel pgtables. We already have pte_offset_kernel() and
->> pte_alloc_kernel_track(), so it's not too weird.
+On Mon, Jan 16, 2023 at 07:48:25PM +0100, Krzysztof Kozlowski wrote:
+> On 16/01/2023 17:48, Saurabh Sengar wrote:
+> > Update the driver to use vmbus_root_dev device instead of acpi_device,
+> > which can be assigned to either ACPI or OF device, making VMBus agnostic
+> > to whether the device is using ACPI or device tree.
+> > 
 > 
-> Hmm, one downside is the "mk" part might lead people to guess
-> pte_mkwrite_kernel() would make it writable AND a kernel page (like
-> U/S=0 on x86). Instead of being a mkwrite() that's useful for setting
-> on kernel PTEs.
+> (...)
+> 
+> >  
+> >  static void vmbus_reserve_fb(void)
+> > @@ -2319,8 +2322,9 @@ static void vmbus_reserve_fb(void)
+> >  	 * reserving a larger area and make it smaller until it succeeds.
+> >  	 */
+> >  	for (; !fb_mmio && (size >= 0x100000); size >>= 1)
+> > -		fb_mmio = __request_region(hyperv_mmio, start, size, fb_mmio_name, 0);
+> > +		fb_mmio = __request_region(hyperv_mmio, start, size, "fb_range", 0);
+> 
+> Your patch is doing much more than just adding OF. Adding OF is usually
+> just few lines, so this means you are refactoring driver and all this
+> work should be split to self-contained patches.
 
-At least I wouldn't worry about that too much. We handle nowhere in 
-common code user vs. supervisor access that way explicitly (e.g., 
-mkkernel), and it wouldn't even apply on architectures where we cannot 
-make such a decision on a per-PTE basis.
+did a split in v2.
 
 > 
-> The other problem is that one of NULL passers is not for kernel memory.
-> huge_pte_mkwrite() calls pte_mkwrite(). Shadow stack memory can't be
-> created with MAP_HUGETLB, so it is not needed. Using
-> pte_mkwrite_kernel() would look weird in this case, but making
-> huge_pte_mkwrite() take a VMA would be for no reason. Maybe making
-> huge_pte_mkwrite() take a VMA is the better of those two options. Or
-> keep the NULL semantics...  Any thoughts?
+> >  }
+> > +#endif /* CONFIG_ACPI */
+> >  
+> >  /**
+> >   * vmbus_allocate_mmio() - Pick a memory-mapped I/O range.
+> > @@ -2441,13 +2445,14 @@ void vmbus_free_mmio(resource_size_t start, resource_size_t size)
+> >  }
+> >  EXPORT_SYMBOL_GPL(vmbus_free_mmio);
+> >  
+> > +#ifdef CONFIG_ACPI
+> >  static int vmbus_acpi_add(struct acpi_device *device)
+> >  {
+> >  	acpi_status result;
+> >  	int ret_val = -ENODEV;
+> >  	struct acpi_device *ancestor;
+> >  
+> > -	hv_acpi_dev = device;
+> > +	vmbus_root_dev = &device->dev;
+> >  
+> >  	/*
+> >  	 * Older versions of Hyper-V for ARM64 fail to include the _CCA
+> > @@ -2492,6 +2497,72 @@ static int vmbus_acpi_add(struct acpi_device *device)
+> >  		vmbus_acpi_remove(device);
+> >  	return ret_val;
+> >  }
+> > +#endif
+> > +
+> > +#ifdef CONFIG_OF
+> > +static int vmbus_of_driver_probe(struct platform_device *dev)
+> > +{
+> > +	struct resource **cur_res = &hyperv_mmio;
+> > +	struct device_node *np;
+> > +	const __be32 *ranges;
+> > +	u32 nr_addr, nr_size, nr_parent_addr_cells, nr_ranges;
+> > +	u32 range_len, range_size;
+> > +	int i;
+> > +
+> > +	vmbus_root_dev = &dev->dev;
+> > +	np = vmbus_root_dev->of_node;
+> > +
+> > +	if (of_property_read_u32(np, "#address-cells", &nr_addr))
+> > +		return -ENOENT;
+> > +	if (of_property_read_u32(np, "#size-cells", &nr_size))
+> > +		return -ENOENT;
+> > +	nr_parent_addr_cells = of_n_addr_cells(np);
+> > +
+> > +	if (nr_parent_addr_cells != 2 || nr_addr != 2 || nr_size != 1) {
+> > +		pr_err("Address format is not supported\n");
+> > +		return -EINVAL;
+> > +	}
+> > +
+> > +	ranges = of_get_property(np, "ranges", &range_len);
+> > +	if (!ranges)
+> > +		return -ENOENT;
+> > +
+> > +	range_size = nr_parent_addr_cells + nr_addr + nr_size; // in cells
+> > +	nr_ranges = range_len / sizeof(__be32) / range_size;
+> > +
+> > +	for (i = 0; i < nr_ranges; ++i, ranges += range_size) {
+> > +		struct resource *res;
+> > +		/*
+> > +		 * The first u64 in the ranges description isn't used currently.
+> > +		 * u64 _ = of_read_number(ranges, nr_parent_addr_cells);
+> > +		 */
+> > +		u64 start = of_read_number(ranges + nr_parent_addr_cells, nr_addr);
+> > +		u32 len = of_read_number(ranges + nr_parent_addr_cells + nr_addr, nr_size);
+> > +
+> > +		pr_debug("VMBUS DeviceTree MMIO region start %#llx, %#x\n", start, len);
+> 
+> You must not print kernel or IO space addresses. You could use some
+> printk formats to hide the address, if this is really needed.
 
-Well, the reason would be consistency. From a core-mm point of view it 
-makes sense to handle this all consistency, even if the single user 
-(x86) wouldn't strictly require it right now.
+removed in v2
 
-I'd just pass in the VMA and call it a day :)
+> 
+> > +
+> > +		res = kzalloc(sizeof(*res), GFP_ATOMIC);
+> > +		if (!res)
+> > +			return -ENOMEM;
+> > +
+> > +		res->name = "hyperv mmio";
+> > +		res->flags = IORESOURCE_MEM | IORESOURCE_MEM_64;
+> > +		res->start = start;
+> > +		res->end = start + len;
+> > +
+> > +		*cur_res = res;
+> > +		cur_res = &res->sibling;
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int vmbus_of_driver_remove(struct platform_device *dev)
+> > +{
+> > +	vmbus_remove_mmio();
+> > +	return 0;
+> > +}
+> > +#endif
+> >  
+> >  #ifdef CONFIG_PM_SLEEP
+> >  static int vmbus_bus_suspend(struct device *dev)
+> > @@ -2630,6 +2701,9 @@ static int vmbus_bus_resume(struct device *dev)
+> >  #define vmbus_bus_resume NULL
+> >  #endif /* CONFIG_PM_SLEEP */
+> >  
+> > +#define DRV_NAME "vmbus"
+> > +
+> > +#ifdef CONFIG_ACPI
+> >  static const struct acpi_device_id vmbus_acpi_device_ids[] = {
+> >  	{"VMBUS", 0},
+> >  	{"VMBus", 0},
+> > @@ -2659,7 +2733,7 @@ static int vmbus_bus_resume(struct device *dev)
+> >  };
+> >  
+> >  static struct acpi_driver vmbus_acpi_driver = {
+> > -	.name = "vmbus",
+> > +	.name = DRV_NAME,
+> 
+> How this is related?
 
--- 
-Thanks,
+removed in v2
 
-David / dhildenb
+> 
+> >  	.ids = vmbus_acpi_device_ids,
+> >  	.ops = {
+> >  		.add = vmbus_acpi_add,
+> > @@ -2669,6 +2743,7 @@ static int vmbus_bus_resume(struct device *dev)
+> >  	.drv.probe_type = PROBE_FORCE_SYNCHRONOUS,
+> >  };
+> >  
+> > +#endif
+> >  static void hv_kexec_handler(void)
+> >  {
+> >  	hv_stimer_global_cleanup();
+> > @@ -2737,7 +2812,32 @@ static void hv_synic_resume(void)
+> >  	.resume = hv_synic_resume,
+> >  };
+> >  
+> > -static int __init hv_acpi_init(void)
+> > +#ifdef CONFIG_OF
+> > +static const struct of_device_id vmbus_of_match[] = {
+> > +	{
+> > +		.name = "msft,vmbus",
+> 
+> Why do you need name?
 
+removed in v2.
+
+> 
+> > +		.compatible = "msft,vmbus",
+> > +		.data = NULL
+> 
+> Why do you need data field?
+
+removed in v2
+
+> 
+> > +	},
+> > +	{
+> > +		/* sentinel */
+> > +	},
+> > +};
+> > +MODULE_DEVICE_TABLE(of, vmbus_of_match);
+> > +
+> > +static struct platform_driver vmbus_platform_driver = {
+> > +	.probe = vmbus_of_driver_probe,
+> > +	.remove = vmbus_of_driver_remove,
+> > +	.driver = {
+> > +		.name = DRV_NAME,
+> > +		.of_match_table = of_match_ptr(vmbus_of_match),
+> > +		.pm = &vmbus_pm,
+> > +		.bus = &hv_bus,
+> > +	}
+> > +};
+> > +#endif
+> 
+> Why platform driver is hidden by CONFIG_OF? It should not be the case.
+> The interface - ACPI or OF - should not differ for driver
+> infrastructure. Even one probe could be used - just drop all of_...
+> methods and use generic device_property_
+
+Changed the driver to platform driver as suggested and used common probe
+in v2. Also using device_property_ instead of of_property.
+
+> > +
+> > +static int __init vmbus_init(void)
+> >  {
+> >  	int ret;
+> >  
+> > @@ -2747,18 +2847,27 @@ static int __init hv_acpi_init(void)
+> >  	if (hv_root_partition && !hv_nested)
+> >  		return 0;
+> >  
+> > +#ifdef CONFIG_ACPI
+> >  	/*
+> > -	 * Get ACPI resources first.
+> > +	 * Request ACPI resources and wait for the completion
+> >  	 */
+> >  	ret = acpi_bus_register_driver(&vmbus_acpi_driver);
+> >  
+> >  	if (ret)
+> >  		return ret;
+> >  
+> > -	if (!hv_acpi_dev) {
+> > -		ret = -ENODEV;
+> > +	if (!vmbus_root_dev) {
+> > +		ret = -ETIMEDOUT;
+> >  		goto cleanup;
+> >  	}
+> > +#endif
+> > +#ifdef CONFIG_OF
+> > +	ret = platform_driver_register(&vmbus_platform_driver);
+> > +	if (ret) {
+> > +		pr_err("Error registering platform resources: %d\n", ret);
+> > +		goto cleanup;
+> > +	}
+> > +#endif
+> >  
+> >  	/*
+> >  	 * If we're on an architecture with a hardcoded hypervisor
+> > @@ -2785,8 +2894,14 @@ static int __init hv_acpi_init(void)
+> >  	return 0;
+> >  
+> >  cleanup:
+> > +#ifdef CONFIG_ACPI
+> >  	acpi_bus_unregister_driver(&vmbus_acpi_driver);
+> > -	hv_acpi_dev = NULL;
+> > +#endif
+> > +#ifdef CONFIG_OF
+> > +	platform_driver_unregister(&vmbus_platform_driver);
+> > +#endif
+> > +	vmbus_root_dev = NULL;
+> > +
+> >  	return ret;
+> >  }
+> >  
+> > @@ -2839,12 +2954,17 @@ static void __exit vmbus_exit(void)
+> >  
+> >  	cpuhp_remove_state(hyperv_cpuhp_online);
+> >  	hv_synic_free();
+> > +#ifdef CONFIG_ACPI
+> >  	acpi_bus_unregister_driver(&vmbus_acpi_driver);
+> > +#endif
+> > +#ifdef CONFIG_OF
+> > +	platform_driver_unregister(&vmbus_platform_driver);
+> > +#endif
+> > +	vmbus_root_dev = NULL;
+> >  }
+> >  
+> > -
+> 
+> This is really a messy patch...
+
+fixed in v2 with changing this driver to platform.
+
+> 
+> >  MODULE_LICENSE("GPL");
+> >  MODULE_DESCRIPTION("Microsoft Hyper-V VMBus Driver");
+> >  
+> > -subsys_initcall(hv_acpi_init);
+> > +subsys_initcall(vmbus_init);
+> >  module_exit(vmbus_exit);
+> 
+> Best regards,
+> Krzysztof
