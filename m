@@ -2,106 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85DEF686649
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 13:53:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A6FC68664A
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 13:55:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbjBAMxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 07:53:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34576 "EHLO
+        id S231433AbjBAMzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 07:55:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231687AbjBAMxi (ORCPT
+        with ESMTP id S230043AbjBAMzn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 07:53:38 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E0CA558E
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 04:53:34 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        Wed, 1 Feb 2023 07:55:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CBDF5242
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 04:55:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D07E61EC0691;
-        Wed,  1 Feb 2023 13:53:32 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1675256012;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=QCSNqE80tGMEO4sQcnGk1Vn2CvpIBiPcvlWbZkvRnQw=;
-        b=YcBBEppLGYyEFDkL8tBugvladbjXoW6b+EBgLCxqiNPGJl4akNEueSEVRoKb4ro9Zoptql
-        K7xcwNqdXjlR/RbD4unDLAeYqyqcwQRBeRMQ2aHm3V0R819wQ4D9FQ04XGr5Y6oZhQyXs/
-        p0WyvE39B1j643zB4iYs6Mm6yHETV7k=
-Date:   Wed, 1 Feb 2023 13:53:32 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     "Raj, Ashok" <ashok.raj@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>, x86 <x86@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "Schofield, Alison" <alison.schofield@intel.com>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Stefan Talpalaru <stefantalpalaru@yahoo.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Peter Zilstra <peterz@infradead.org>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "Ostrovsky, Boris" <boris.ostrovsky@oracle.com>,
-        Martin Pohlack <mpohlack@amazon.de>
-Subject: Re: [Patch v3 Part2 3/9] x86/microcode/intel: Fix collect_cpu_info()
- to reflect current microcode
-Message-ID: <Y9pgzGr4MccwEJAl@zn.tnic>
-References: <20230130213955.6046-1-ashok.raj@intel.com>
- <20230130213955.6046-4-ashok.raj@intel.com>
- <Y9lGdh+0faIrIIiQ@zn.tnic>
- <SJ1PR11MB6083580526A7FFA11F110B77FCD09@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <Y9l8yGVvVHBLKAoh@zn.tnic>
- <SJ1PR11MB60837E6E6AE7C82511DC039EFCD09@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <Y9mDYMASXCFaFkNU@zn.tnic>
- <SJ1PR11MB608384F3B075E0D2F25683D3FCD09@SJ1PR11MB6083.namprd11.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <SJ1PR11MB608384F3B075E0D2F25683D3FCD09@SJ1PR11MB6083.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ACA876178E
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 12:55:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2AF2C433EF;
+        Wed,  1 Feb 2023 12:55:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675256141;
+        bh=1xg4451YbC4DyqNIFrhmJrdp/zHaaX2hZC+i5bxMS1I=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Puz192zI0V39rqpMK3L4NRd+aXmkg1l1zK8HkXzHR0uqCWo+JbJHMfmllhkGfMzEh
+         Op9Hqwi7vLbjjtTWavtq71uFw5yIaCZqRhrVc7uumayakNxyop1OR+2W2aUfUw3jjq
+         XyjUTATpdGYcoCpdkrL8EYmcYcErzwaeB1kVAlEk0mu+9kiVj/6t0hQNOLo+nxOVWN
+         lb4wl7U+Z09c520N+R+1VWNslv/CfJ1uCwrIb+0wE8QUS1Z4mThkNCn7+juuugvP6W
+         ShSr4O7TNpiTtLPJocc+iBNIlwmHSDNXHca+B/bSXGwnAjeNMAhUnhQu343bXNpOxd
+         09fGXzgr2QYZg==
+Date:   Wed, 1 Feb 2023 21:55:37 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Jinyang He <hejinyang@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v12 4/5] LoongArch: Mark some assembler symbols as
+ non-kprobe-able
+Message-Id: <20230201215537.feda4232f7d95f499e408966@kernel.org>
+In-Reply-To: <CAAhV-H59SOQ3QQgbbJ-U1VK5z=zaGR4kEtnTmz9HUALSAnrcGA@mail.gmail.com>
+References: <1674007261-9198-1-git-send-email-yangtiezhu@loongson.cn>
+        <1674007261-9198-5-git-send-email-yangtiezhu@loongson.cn>
+        <CAAhV-H7Dt5MhaMU1=D9HxPFR+xjjoQG6RguaYMydy=v_jvrtiA@mail.gmail.com>
+        <48f0508f-3908-c6ca-c8ba-7c12dd6b3f11@loongson.cn>
+        <7f518dec-fd72-a73c-3f23-6372a83d65c2@loongson.cn>
+        <6879b948-2d61-8e09-a9d4-bc2ede31c52b@loongson.cn>
+        <CAAhV-H7KJTtZPC9=OZEZfQvMjd6Gw37Q3kZODk=wk9pt6VZuAQ@mail.gmail.com>
+        <20230120003156.48ca16ea2a6f73398e568358@kernel.org>
+        <CAAhV-H59SOQ3QQgbbJ-U1VK5z=zaGR4kEtnTmz9HUALSAnrcGA@mail.gmail.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 10:43:23PM +0000, Luck, Tony wrote:
-> In an ideal world yes. But what if T1 arrives here and tries to do the
-> update while T0, which has returned out of the microcode update
-> code and could be doing anything, happen to be doing WRMSR(some MSR
-> that the ucode update is tinkering with).
+On Fri, 20 Jan 2023 21:23:18 +0800
+Huacai Chen <chenhuacai@kernel.org> wrote:
+
+> On Thu, Jan 19, 2023 at 11:32 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> >
+> > On Wed, 18 Jan 2023 15:17:00 +0800
+> > Huacai Chen <chenhuacai@kernel.org> wrote:
+> >
+> > > On Wed, Jan 18, 2023 at 2:24 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+> > > >
+> > > >
+> > > >
+> > > > On 01/18/2023 02:05 PM, Jinyang He wrote:
+> > > > >
+> > > > > On 2023-01-18 12:23, Tiezhu Yang wrote:
+> > > > >>
+> > > > >>
+> > > > >> On 01/18/2023 12:14 PM, Huacai Chen wrote:
+> > > > >>> If memcpy should be blacklisted, then what about memset and memmove?
+> > > > >>
+> > > > >> According to the test results, there are no problems to probe
+> > > > >> memset and memmove, so no need to blacklist them for now,
+> > > > >> blacklist memcpy is because it may cause recursive exceptions,
+> > > > >> there is a detailed discussion in the following link:
+> > > > >>
+> > > > >> https://lore.kernel.org/lkml/20230114143859.7ccc45c1c5d9ce302113ab0a@kernel.org/
+> > > > >>
+> > > > >
+> > > > > Hi, Tiezhu,
+> > > > >
+> > > > > I cannot reproduce the results when kprobe memcpy. Could you please give
+> > > > > some details. Emm, I just replace "kernel_clone" with "memcpy" in
+> > > > > kprobe_example.c.
+> > > >
+> > > > Please remove the related "_ASM_NOKPROBE(memcpy)" code in
+> > > > arch/loongarch/lib/memcpy.S, and then compile and update kernel,
+> > > > execute the following cmd after reboot, I can reproduce the hang
+> > > > problem easily (it will take a few minutes).
+> > > >
+> > > > modprobe kprobe_example symbol="memcpy"
+> > > Then, why is handle_syscall different from other exception handlers?
+> >
+> > I need to check the loongarch implementation of handle_syscall() but
+> > I guess in that handler the register set is not completely set as
+> > kernel one. In that case, the software breakpoint handler may not
+> > possible to handle it correctly. So it is better to avoid probing such
+> > "border" function by kprobes.
+> Seems reasonable, handle_syscall() indeed doesn't save all registers.
+> But for memcpy(), I still think memmove() and memset() may have the
+> same problem.
+
+I agree with that. Those fundamental functions can be used from some
+debug macros in the software breakpoint code in the future (or already?)
+Maybe you would better to check it with enabling some more (intrusive)
+debug features.
+
+Thank you,
+
 > 
-> Now T0 explodes (not literally, I hope!) but does something crazy because
-> it was in the middle of some microcode flow that got updated between two
-> operations.
+> Huacai
+> >
+> > Thank you,
+> >
+> > >
+> > > Huacai
+> > > >
+> > > > >
+> > > > > And for your call trace,
+> > > > >
+> > > > >  handler_pre()
+> > > > >    pr_info()
+> > > > >      printk()
+> > > > >       _printk()
+> > > > >         vprintk()
+> > > > >           vprintk_store()
+> > > > >             memcpy()
+> > > > >
+> > > > > I think when we should skip this time kprobe which triggered in
+> > > > > handler_{pre, post}. That means this time kprobe will not call
+> > > > > handler_{pre, post} agian, and not cause recursion. I remember
+> > > > > your codes had done this skip action. So, that's so strange if
+> > > > > recursion in handler_{pre, post}.
+> > > > >
+> > > > >
+> > > > > Thanks,
+> > > > >
+> > > > > Jinyang
+> > > > >
+> > > > >
+> > > > >>
+> > > > >> Thanks,
+> > > > >> Tiezhu
+> > > > >>
+> > > > >>>
+> > > > >>> Huacai
+> > > > >>>
+> > > > >>> On Wed, Jan 18, 2023 at 10:01 AM Tiezhu Yang <yangtiezhu@loongson.cn>
+> > > > >>> wrote:
+> > > > >>>>
+> > > > >>>> Some assembler symbols are not kprobe safe, such as handle_syscall
+> > > > >>>> (used as syscall exception handler), *memcpy* (may cause recursive
+> > > > >>>> exceptions), they can not be instrumented, just blacklist them for
+> > > > >>>> kprobing.
+> > > > >>>>
+> > > > >>>> Here is a related problem and discussion:
+> > > > >>>> Link:
+> > > > >>>> https://lore.kernel.org/lkml/20230114143859.7ccc45c1c5d9ce302113ab0a@kernel.org/
+> > > > >>>>
+> > > > >>>>
+> > > > >>>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> > > > >>>> ---
+> > > > >>>>  arch/loongarch/include/asm/asm.h | 10 ++++++++++
+> > > > >>>>  arch/loongarch/kernel/entry.S    |  1 +
+> > > > >>>>  arch/loongarch/lib/memcpy.S      |  3 +++
+> > > > >>>>  3 files changed, 14 insertions(+)
+> > > > >>>>
+> > > > >>>> diff --git a/arch/loongarch/include/asm/asm.h
+> > > > >>>> b/arch/loongarch/include/asm/asm.h
+> > > > >>>> index 40eea6a..f591b32 100644
+> > > > >>>> --- a/arch/loongarch/include/asm/asm.h
+> > > > >>>> +++ b/arch/loongarch/include/asm/asm.h
+> > > > >>>> @@ -188,4 +188,14 @@
+> > > > >>>>  #define PTRLOG         3
+> > > > >>>>  #endif
+> > > > >>>>
+> > > > >>>> +/* Annotate a function as being unsuitable for kprobes. */
+> > > > >>>> +#ifdef CONFIG_KPROBES
+> > > > >>>> +#define _ASM_NOKPROBE(name)                            \
+> > > > >>>> +       .pushsection "_kprobe_blacklist", "aw";         \
+> > > > >>>> +       .quad   name;                                   \
+> > > > >>>> +       .popsection
+> > > > >>>> +#else
+> > > > >>>> +#define _ASM_NOKPROBE(name)
+> > > > >>>> +#endif
+> > > > >>>> +
+> > > > >>>>  #endif /* __ASM_ASM_H */
+> > > > >>>> diff --git a/arch/loongarch/kernel/entry.S
+> > > > >>>> b/arch/loongarch/kernel/entry.S
+> > > > >>>> index d53b631..55e23b1 100644
+> > > > >>>> --- a/arch/loongarch/kernel/entry.S
+> > > > >>>> +++ b/arch/loongarch/kernel/entry.S
+> > > > >>>> @@ -67,6 +67,7 @@ SYM_FUNC_START(handle_syscall)
+> > > > >>>>
+> > > > >>>>         RESTORE_ALL_AND_RET
+> > > > >>>>  SYM_FUNC_END(handle_syscall)
+> > > > >>>> +_ASM_NOKPROBE(handle_syscall)
+> > > > >>>>
+> > > > >>>>  SYM_CODE_START(ret_from_fork)
+> > > > >>>>         bl      schedule_tail           # a0 = struct task_struct *prev
+> > > > >>>> diff --git a/arch/loongarch/lib/memcpy.S b/arch/loongarch/lib/memcpy.S
+> > > > >>>> index 7c07d59..3b7e1de 100644
+> > > > >>>> --- a/arch/loongarch/lib/memcpy.S
+> > > > >>>> +++ b/arch/loongarch/lib/memcpy.S
+> > > > >>>> @@ -17,6 +17,7 @@ SYM_FUNC_START(memcpy)
+> > > > >>>>         ALTERNATIVE     "b __memcpy_generic", \
+> > > > >>>>                         "b __memcpy_fast", CPU_FEATURE_UAL
+> > > > >>>>  SYM_FUNC_END(memcpy)
+> > > > >>>> +_ASM_NOKPROBE(memcpy)
+> > > > >>>>
+> > > > >>>>  EXPORT_SYMBOL(memcpy)
+> > > > >>>>
+> > > > >>>> @@ -41,6 +42,7 @@ SYM_FUNC_START(__memcpy_generic)
+> > > > >>>>  2:     move    a0, a3
+> > > > >>>>         jr      ra
+> > > > >>>>  SYM_FUNC_END(__memcpy_generic)
+> > > > >>>> +_ASM_NOKPROBE(__memcpy_generic)
+> > > > >>>>
+> > > > >>>>  /*
+> > > > >>>>   * void *__memcpy_fast(void *dst, const void *src, size_t n)
+> > > > >>>> @@ -93,3 +95,4 @@ SYM_FUNC_START(__memcpy_fast)
+> > > > >>>>  3:     move    a0, a3
+> > > > >>>>         jr      ra
+> > > > >>>>  SYM_FUNC_END(__memcpy_fast)
+> > > > >>>> +_ASM_NOKPROBE(__memcpy_fast)
+> > > > >>>> --
+> > > > >>>> 2.1.0
+> > > > >>>>
+> > > > >>
+> > > >
+> > > >
+> >
+> >
+> > --
+> > Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-So first of all, I'm wondering whether the scenario you're chasing is
-something completely hypothetical or you're actually thinking of
-something concrete which has actually happened or there's high potential
-for it.
-
-In that case, that late patching sync algorithm would need to be made
-more robust to handle cases like that.
-
-Because from what I'm reading above, this doesn't sound like the
-reporting is wrong only but more like, if T0 fails the update and T1
-gets to do that update for a change, then crap can happen.
-
-Which means, our update dance cannot handle that case properly.
-
-Hmmm...
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
