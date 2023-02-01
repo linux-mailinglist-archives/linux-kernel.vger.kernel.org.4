@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9764F685FFB
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 07:52:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20629685FFD
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 07:52:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbjBAGwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 01:52:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36470 "EHLO
+        id S229719AbjBAGwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 01:52:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231292AbjBAGwc (ORCPT
+        with ESMTP id S231338AbjBAGwe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 01:52:32 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56836A26A;
-        Tue, 31 Jan 2023 22:52:30 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id qw12so32546003ejc.2;
-        Tue, 31 Jan 2023 22:52:30 -0800 (PST)
+        Wed, 1 Feb 2023 01:52:34 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 225069740;
+        Tue, 31 Jan 2023 22:52:33 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id qw12so32546222ejc.2;
+        Tue, 31 Jan 2023 22:52:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rkN86TIGDYJR+4nG2fHZ23r9O15jnUv5Y7OgjldbOWg=;
-        b=XQIBijkI8+OKqPlP1sL19SlqXbWw60maYM9giAx3GHyaI8sTJzjRmp2DolRMnASr0y
-         KN+uzR6MaFeH/IuHZUnl3SEco9dEAigoohMzr0+VR8jnKTbFs1fCxFNC7IK019wWt8OY
-         QlzYoAHwljH2DooyMDx5L6kYW21Py4D8vjJ6cfSynz3h51BrFBttejiOKfgd1GgTw0dZ
-         nvzLHSsmvPeJHRhlskiqcv2KfYB/dmNUWPK4L88y9+WMg/F2dS1qJkXnsz7aGsFYHnUn
-         JUswLiy7imzInpudmE6IkD6zZJt8FYlpLUtjMa3u4G3B8tWtvyaAACqDkuz6q4JX0ttc
-         zRsQ==
+        bh=LPyU19+VhmMuIMMpSU5GySmAIP6oqfiCTnK5b5e8Lus=;
+        b=WrbOhXAP/9dmBsWhH17HvQ/1RmrjVeZyRRbdY5B8ueOrb3gEhdOqTxM7CW4PMPYFL4
+         TfCfQoI9GAnc2vHMfMEMPctNOI+K95B9YLclNRWNuuTXcKzKWmoLgIucD5Ri2dRB9+Rm
+         QLv/KzB8rnUvez0ZHoG4nZrJ85jQDhii7gbbkQKCmrmEKC4KDkfntN51xX569+x5XVeb
+         dFpPQPuZ6oaAADR43HGvkfC2TBXTPPPMjpzuxkmHkQI9fkG2WBMeiFoFY8mWgPOubeq/
+         Dz6XsYizMF8UQYUJihKY5arEzzl4iYYd4W6XzB6rUSmkhwPwjD5UKxN8KKLZxC+7L1v9
+         Ohug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rkN86TIGDYJR+4nG2fHZ23r9O15jnUv5Y7OgjldbOWg=;
-        b=zrJt6ujNMV6nijKiz28w1N+sKoNkFLrzL/eAi2g2RV4Gjr6vIhZUDyl4QeMAuctw9f
-         e7WtHAq69n4e5fNxAakftobnjbrmig2GWhJlE5A7/FWmUS94WXSjqttLKMkDeRpWjqlm
-         bKSQmI0ypfWeW5BVGioG3nawQ0ApYyiqQa+odlOvM7SNMcZQVljWENmQlUZcbyOi+Kb7
-         UJyGCMabPVzyXPhOnoyMsg/P8GVend3P+Or2pTJaORoowNG+GAW+3tlhZEr9XmOB2uhv
-         LG/oA/HUMU0IFxkmYTapSfakQE10daiRxg830IuBq3+H2/ionVXcxSNChj1TDEVEI9zZ
-         tQGQ==
-X-Gm-Message-State: AO0yUKVwMJt3CgyvZjdV7V59/2qG1IHBrr7tA/j/UcHHeca2761ubg2T
-        Msy8xFGLtPIUNKQuZAIh68UMtB29dwY=
-X-Google-Smtp-Source: AK7set9RlXgjOXhXlIkZpvFu0cd4Wj6DSXLwpe5l9TlAygwD+iwHH++wtMJmQg75MNEL1biWwmOg+w==
-X-Received: by 2002:a17:906:b7d7:b0:88d:fe1:1aca with SMTP id fy23-20020a170906b7d700b0088d0fe11acamr1102961ejb.34.1675234348849;
-        Tue, 31 Jan 2023 22:52:28 -0800 (PST)
+        bh=LPyU19+VhmMuIMMpSU5GySmAIP6oqfiCTnK5b5e8Lus=;
+        b=AiKbHyMlDb58NdhA+ElbaltreNx2XylkShr9ukdTYtWaQhrEO360y+wcAR0Qek0qqB
+         riB+aiL/0D7WPsJt5JOM8cOYTCUSRAYPOoAFtRhpWkzU5ZfBquQ/jjEjViEZryzbTTNH
+         9fT29rANC0/SmxslgVOTRG0otMb9X/tKhjCzVkLn4yAxlA132CQi8o73BtiMSJFsP+I3
+         bVY5l9xCPIPGZCXD3NkLTDfSCpW73rl65wwfPT0cn+46n0Dg1UuShxwA3i3gusHFbbQi
+         7A2cq8ip1yaWoHgi9AnHqOrmx7JOw8THEzXMSlZGLPO8gsf4e9Bxn29iTASK7ZA0OniV
+         FZYg==
+X-Gm-Message-State: AO0yUKWbc46c2tM6y4w+nxsNQBbxDM5y0YQu9kc7BhB4KLZWfgx81bUl
+        55RKVZ03FjSI8zyxVniCB+s=
+X-Google-Smtp-Source: AK7set9i41akd5yXdQqcl/yGbOzAYiYzmbj+ird09ej50uN9MO10IRnAkqTkHdnPFbklxuI5P/WbBQ==
+X-Received: by 2002:a17:907:7244:b0:886:323c:dc39 with SMTP id ds4-20020a170907724400b00886323cdc39mr562016ejc.55.1675234351419;
+        Tue, 31 Jan 2023 22:52:31 -0800 (PST)
 Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id 1-20020a170906218100b008720c458bd4sm9509608eju.3.2023.01.31.22.52.27
+        by smtp.gmail.com with ESMTPSA id 1-20020a170906218100b008720c458bd4sm9509608eju.3.2023.01.31.22.52.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 22:52:28 -0800 (PST)
+        Tue, 31 Jan 2023 22:52:30 -0800 (PST)
 From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
 To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -61,9 +61,9 @@ Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH 1/4] dt-bindings: nvmem: mmio: new binding for MMIO accessible NVMEM devices
-Date:   Wed,  1 Feb 2023 07:47:14 +0100
-Message-Id: <20230201064717.18410-2-zajec5@gmail.com>
+Subject: [PATCH 2/4] nvmem: add generic driver for devices with MMIO access
+Date:   Wed,  1 Feb 2023 07:47:15 +0100
+Message-Id: <20230201064717.18410-3-zajec5@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230201064717.18410-1-zajec5@gmail.com>
 References: <20230201064717.18410-1-zajec5@gmail.com>
@@ -82,70 +82,138 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Rafał Miłecki <rafal@milecki.pl>
 
-With the NVMEM layouts binding in place we should now use:
-1. NVMEM device access bindings
-2. NVMEM content description bindings
-
-This binding allows describing NVMEM devices that can be MMIO accessed.
+With nvmem layouts in place we should now work on plain content access
+NVMEM drivers (e.g. MMIO one). Actual NVMEM content handling should go
+to layout drivers.
 
 Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
 ---
- .../devicetree/bindings/nvmem/mmio.yaml       | 46 +++++++++++++++++++
- 1 file changed, 46 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/nvmem/mmio.yaml
+ drivers/nvmem/Kconfig  | 10 ++++++
+ drivers/nvmem/Makefile |  2 ++
+ drivers/nvmem/mmio.c   | 80 ++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 92 insertions(+)
+ create mode 100644 drivers/nvmem/mmio.c
 
-diff --git a/Documentation/devicetree/bindings/nvmem/mmio.yaml b/Documentation/devicetree/bindings/nvmem/mmio.yaml
+diff --git a/drivers/nvmem/Kconfig b/drivers/nvmem/Kconfig
+index 789729ff7e50..9eb5e93f0455 100644
+--- a/drivers/nvmem/Kconfig
++++ b/drivers/nvmem/Kconfig
+@@ -170,6 +170,16 @@ config NVMEM_MICROCHIP_OTPC
+ 	  This driver enable the OTP controller available on Microchip SAMA7G5
+ 	  SoCs. It controls the access to the OTP memory connected to it.
+ 
++config NVMEM_MMIO
++	tristate "MMIO access based NVMEM support"
++	depends on HAS_IOMEM
++	help
++	  This driver provides support for NVMEM devices that can be accessed
++	  using MMIO.
++
++	  This driver can also be built as a module. If so, the module
++	  will be called nvmem-mmio.
++
+ config NVMEM_MTK_EFUSE
+ 	tristate "Mediatek SoCs EFUSE support"
+ 	depends on ARCH_MEDIATEK || COMPILE_TEST
+diff --git a/drivers/nvmem/Makefile b/drivers/nvmem/Makefile
+index 442f9a4876a5..2f2bed7cdf24 100644
+--- a/drivers/nvmem/Makefile
++++ b/drivers/nvmem/Makefile
+@@ -36,6 +36,8 @@ obj-$(CONFIG_NVMEM_MESON_MX_EFUSE)	+= nvmem_meson_mx_efuse.o
+ nvmem_meson_mx_efuse-y			:= meson-mx-efuse.o
+ obj-$(CONFIG_NVMEM_MICROCHIP_OTPC)	+= nvmem-microchip-otpc.o
+ nvmem-microchip-otpc-y			:= microchip-otpc.o
++obj-$(CONFIG_NVMEM_MMIO)		+= nvmem-mmio.o
++nvmem-mmio-y				:= mmio.o
+ obj-$(CONFIG_NVMEM_MTK_EFUSE)		+= nvmem_mtk-efuse.o
+ nvmem_mtk-efuse-y			:= mtk-efuse.o
+ obj-$(CONFIG_NVMEM_MXS_OCOTP)		+= nvmem-mxs-ocotp.o
+diff --git a/drivers/nvmem/mmio.c b/drivers/nvmem/mmio.c
 new file mode 100644
-index 000000000000..27e3f6142769
+index 000000000000..19c8880dc675
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/nvmem/mmio.yaml
-@@ -0,0 +1,46 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/nvmem/mmio.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/drivers/nvmem/mmio.c
+@@ -0,0 +1,80 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2023 Rafał Miłecki <rafal@milecki.pl>
++ */
 +
-+title: MMIO access based NVMEM
++#include <linux/io.h>
++#include <linux/mod_devicetable.h>
++#include <linux/module.h>
++#include <linux/nvmem-provider.h>
++#include <linux/platform_device.h>
++#include <linux/property.h>
++#include <linux/slab.h>
 +
-+description: |
-+  This binding describes simple NVMEM devices that can be accessed by using MMIO
-+  (memory-mapped I/O access).
++struct mmio_nvmem {
++	void __iomem *base;
++};
 +
-+  It's a generic solution for providing NVMEM content access. The way of
-+  handling actual content may be device specific and can be described using a
-+  proper layout.
++static int mmio_nvmem_read(void *context, unsigned int offset, void *val, size_t bytes)
++{
++	struct mmio_nvmem *priv = context;
 +
-+maintainers:
-+  - Rafał Miłecki <rafal@milecki.pl>
++	memcpy_fromio(val, priv->base, bytes);
 +
-+allOf:
-+  - $ref: nvmem.yaml#
++	return 0;
++}
 +
-+properties:
-+  compatible:
-+    const: mmio-nvmem
++static int mmio_nvmem_probe(struct platform_device *pdev)
++{
++	struct nvmem_config config = {
++		.name = "mmio-nvmem",
++		.read_only = true,
++		.reg_read = mmio_nvmem_read,
++	};
++	struct device *dev = &pdev->dev;
++	struct mmio_nvmem *priv;
++	struct resource *res;
 +
-+  reg:
-+    maxItems: 1
++	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
++	if (!priv)
++		return -ENOMEM;
 +
-+  reg-io-width:
-+    description: |
-+      The size (in bytes) of the IO accesses that should be performed
-+      on the device.
-+    enum: [1, 2, 4, 8]
++	priv->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
++	if (IS_ERR(priv->base))
++		return PTR_ERR(priv->base);
 +
-+required:
-+  - reg
++	config.dev = dev;
++	config.size = resource_size(res);
++	config.word_size = sizeof(u8);
++	config.stride = sizeof(u8);
++	config.priv = priv;
 +
-+unevaluatedProperties: false
++	if (!device_property_present(dev, "read-only"))
++		dev_warn(dev, "Writing is not supported yet");
 +
-+examples:
-+  - |
-+    nvmem@10000 {
-+        compatible = "mmio-nvmem";
-+        reg = <0x10000000 0x10000>;
-+    };
++	return PTR_ERR_OR_ZERO(devm_nvmem_register(dev, &config));
++}
++
++static const struct of_device_id mmio_nvmem_of_match_table[] = {
++	{ .compatible = "mmio-nvmem", },
++	{},
++};
++
++static struct platform_driver mmio_nvmem_driver = {
++	.probe = mmio_nvmem_probe,
++	.driver = {
++		.name = "mmio_nvmem",
++		.of_match_table = mmio_nvmem_of_match_table,
++	},
++};
++
++static int __init mmio_nvmem_init(void)
++{
++	return platform_driver_register(&mmio_nvmem_driver);
++}
++
++subsys_initcall_sync(mmio_nvmem_init);
++
++MODULE_AUTHOR("Rafał Miłecki");
++MODULE_LICENSE("GPL");
++MODULE_DEVICE_TABLE(of, mmio_nvmem_of_match_table);
 -- 
 2.34.1
 
