@@ -2,181 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31C616862F8
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 10:41:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A9D56862ED
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 10:36:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232009AbjBAJk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 04:40:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56796 "EHLO
+        id S232045AbjBAJga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 04:36:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231787AbjBAJky (ORCPT
+        with ESMTP id S232032AbjBAJg1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 04:40:54 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6947D5B584
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 01:40:51 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id dr8so28031206ejc.12
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 01:40:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=metaspace-dk.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=WwWn2SiLiW7sLaC3t5z9qnIk8iNhwtCwJiitRlNyQ/8=;
-        b=jogpAeWNiX1Jz4lazS8c8MTlJNpDcXZ8GDVYjJys7iQGpMmyD3GADSgxPUp+8UYu5c
-         ChxJvvGr6rfWafHRold7G8ZHuXCD5DAmqTATtuDEDVzbSDnOkFAHYP1hNJS+/vJOQCMH
-         4rq9rSwsbd5Oi1O3d2EcPA5J5YicWh7y+GfXZiCtxvRiTliFY2tifRx9sWmx7feNyiER
-         Pdslt9srn6XvCa76BB4S0gWUc6SGdxGP6knvevyMlQBMUh34GTrB/DE/qzINR+JRAxNx
-         Ekx/OBiimEfpkD2ukBeSzqvXKoB//fE+THtXv9wq2/sXeeuKii44ah9AlnW2gA0ZThY+
-         e6ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WwWn2SiLiW7sLaC3t5z9qnIk8iNhwtCwJiitRlNyQ/8=;
-        b=3BTwIqhuoZsQ89wePuOxi63jbpKtovwoSYVwydSVI7AjAr1XjFIkUvUXSK29gYEJvn
-         nmTCgJqiuJun33kteVhCeHnr2gZ1SGQiyVRzcLm8VxmDTea6LlFcW6XnVPAxareCZqdF
-         Zgm3rNRA8vhgOF9VA+o8I21L0IihLV4qYmDfLoZ0xPelOwynU/wJ9XiTZcQlE4qszYy1
-         Er3vkBLYL3XqtEedsMyTVo1wcBZ3BTDKE0gebruJaO2QR3eWFrrEhOZauLDVe8LGogLc
-         Vg885yewoGdzplXM/21TbP2LQjJE97VeKZfw6FIhEyAaXlrYOhGwIGvoYHjUE2r74FyT
-         aBNw==
-X-Gm-Message-State: AO0yUKUyR47l9SFcHLqSupfswMxBpZSH/785kj/AhNSJyXyYqXn7FVEs
-        PCV0smCbDanuAL2dz15LEXIBvw==
-X-Google-Smtp-Source: AK7set/I3ZSX+O9UcLe15Di0So9RXz1fxvTlWmnT7fw+tfog1w/9tkLzFeReshElytkmDWaw6cwZYw==
-X-Received: by 2002:a17:906:9610:b0:878:5e84:e1d6 with SMTP id s16-20020a170906961000b008785e84e1d6mr1930486ejx.75.1675244449923;
-        Wed, 01 Feb 2023 01:40:49 -0800 (PST)
-Received: from localhost ([79.142.230.49])
-        by smtp.gmail.com with ESMTPSA id os25-20020a170906af7900b008874c903ec5sm5188677ejb.43.2023.02.01.01.40.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Feb 2023 01:40:49 -0800 (PST)
-References: <20230130064404.744600-1-wedsonaf@gmail.com>
- <20230130064404.744600-2-wedsonaf@gmail.com>
-User-agent: mu4e 1.9.18; emacs 28.2.50
-From:   Andreas Hindborg <nmi@metaspace.dk>
-To:     Wedson Almeida Filho <wedsonaf@gmail.com>
-Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?Q?Bj=C3=B6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        linux-kernel@vger.kernel.org,
-        Vincenzo Palazzo <vincenzopalazzodev@gmail.com>,
-        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
-        Andreas Hindborg <a.hindborg@samsung.com>
-Subject: Re: [PATCH v2 2/5] rust: types: introduce `ForeignOwnable`
-Date:   Wed, 01 Feb 2023 10:35:11 +0100
-In-reply-to: <20230130064404.744600-2-wedsonaf@gmail.com>
-Message-ID: <87sffpk9jz.fsf@metaspace.dk>
+        Wed, 1 Feb 2023 04:36:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5F5035271;
+        Wed,  1 Feb 2023 01:36:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 42A5361743;
+        Wed,  1 Feb 2023 09:36:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C195DC433D2;
+        Wed,  1 Feb 2023 09:36:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675244185;
+        bh=nAUpo7Q/j5KNuIbds1/t9+qLE0Sz0LS9dwd79h6snqA=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=MnUP0akeHlBOwbavhm30X5chkZO3+OJe3TOoJNsAHr5hnMZic8jEIGc5X7gUZRMyc
+         nf3tGrXHj8+IfEuq+xt6tKKwq2OkUU3ZMGSc19KEJg/OIaNdiVooZ+LDYoFKan05i+
+         ZMGHI0mWWutb5N8Z+vIxC4fF9cujxJu+QC7VTNgDCMos3HWWXHrYuRPjcpzXJO6CoP
+         LrwNVz2Sme6JqnAneVfbBukd2axbn+hVsGAJ6aPCGwQUJcWqxbmCBDmKzBDih3NKDB
+         nUeYXaNhOKoofac1aS25Yz/7CMfyfcYSVC70Dt/4EmplrFdmBSlPUY8JzkEmnY/jat
+         0C18H99CFcptg==
+From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To:     guoren@kernel.org, guoren@kernel.org, palmer@rivosinc.com,
+        conor.dooley@microchip.com, liaochang1@huawei.com
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH V2] riscv: kprobe: Fixup kernel panic when probing an
+ illegal position
+In-Reply-To: <20230201040604.3390509-1-guoren@kernel.org>
+References: <20230201040604.3390509-1-guoren@kernel.org>
+Date:   Wed, 01 Feb 2023 10:36:22 +0100
+Message-ID: <87y1phpw15.fsf@all.your.base.are.belong.to.us>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+guoren@kernel.org writes:
 
-Wedson Almeida Filho <wedsonaf@gmail.com> writes:
-
-> It was originally called `PointerWrapper`. It is used to convert
-> a Rust object to a pointer representation (void *) that can be
-> stored on the C side, used, and eventually returned to Rust.
+> From: Guo Ren <guoren@linux.alibaba.com>
 >
-> Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
-> Reviewed-by: Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
-> Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+> The kernel would panic when probed for an illegal position. eg:
+>
+> (CONFIG_RISCV_ISA_C=3Dn)
+>
+> echo 'p:hello kernel_clone+0x16 a0=3D%a0' >> kprobe_events
+> echo 1 > events/kprobes/hello/enable
+> cat trace
+>
+> Kernel panic - not syncing: stack-protector: Kernel stack
+> is corrupted in: __do_sys_newfstatat+0xb8/0xb8
+> CPU: 0 PID: 111 Comm: sh Not tainted
+> 6.2.0-rc1-00027-g2d398fe49a4d #490
+> Hardware name: riscv-virtio,qemu (DT)
+> Call Trace:
+> [<ffffffff80007268>] dump_backtrace+0x38/0x48
+> [<ffffffff80c5e83c>] show_stack+0x50/0x68
+> [<ffffffff80c6da28>] dump_stack_lvl+0x60/0x84
+> [<ffffffff80c6da6c>] dump_stack+0x20/0x30
+> [<ffffffff80c5ecf4>] panic+0x160/0x374
+> [<ffffffff80c6db94>] generic_handle_arch_irq+0x0/0xa8
+> [<ffffffff802deeb0>] sys_newstat+0x0/0x30
+> [<ffffffff800158c0>] sys_clone+0x20/0x30
+> [<ffffffff800039e8>] ret_from_syscall+0x0/0x4
+> ---[ end Kernel panic - not syncing: stack-protector:
+> Kernel stack is corrupted in: __do_sys_newfstatat+0xb8/0xb8 ]---
+>
+> That is because the kprobe's ebreak instruction broke the kernel's
+> original code. The user should guarantee the correction of the probe
+> position, but it couldn't make the kernel panic.
+>
+> This patch adds arch_check_kprobe in arch_prepare_kprobe to prevent an
+> illegal position (Such as the middle of an instruction).
+>
+> Fixes: c22b0bcb1dd0 ("riscv: Add kprobes supported")
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
 > ---
+> Changelog
+> V2:
+>  - Fixup misaligned load (Thx Bjorn)
 
-Reviewed-by: Andreas Hindborg <a.hindborg@samsung.com>
-
-It would be cool to see a debug implementation of this trait that verify
-safety properties by using a counter at runtime. Panic if borrow_mut()
-is called while there are live references in existence returned by
-borrow().
-
-> v1 -> v2: Use `Self` instead of generic type in `borrow_mut`
->
->  rust/kernel/lib.rs   |  1 +
->  rust/kernel/types.rs | 54 ++++++++++++++++++++++++++++++++++++++++++++
->  2 files changed, 55 insertions(+)
->
-> diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-> index e0b0e953907d..223564f9f0cc 100644
-> --- a/rust/kernel/lib.rs
-> +++ b/rust/kernel/lib.rs
-> @@ -16,6 +16,7 @@
->  #![feature(coerce_unsized)]
->  #![feature(core_ffi_c)]
->  #![feature(dispatch_from_dyn)]
-> +#![feature(generic_associated_types)]
->  #![feature(receiver_trait)]
->  #![feature(unsize)]
->  
-> diff --git a/rust/kernel/types.rs b/rust/kernel/types.rs
-> index dd834bfcb57b..72710b7442a3 100644
-> --- a/rust/kernel/types.rs
-> +++ b/rust/kernel/types.rs
-> @@ -8,6 +8,60 @@ use core::{
->      ops::{Deref, DerefMut},
->  };
->  
-> +/// Used to transfer ownership to and from foreign (non-Rust) languages.
-> +///
-> +/// Ownership is transferred from Rust to a foreign language by calling [`Self::into_foreign`] and
-> +/// later may be transferred back to Rust by calling [`Self::from_foreign`].
-> +///
-> +/// This trait is meant to be used in cases when Rust objects are stored in C objects and
-> +/// eventually "freed" back to Rust.
-> +pub trait ForeignOwnable: Sized {
-> +    /// Type of values borrowed between calls to [`ForeignOwnable::into_foreign`] and
-> +    /// [`ForeignOwnable::from_foreign`].
-> +    type Borrowed<'a>;
-> +
-> +    /// Converts a Rust-owned object to a foreign-owned one.
-> +    ///
-> +    /// The foreign representation is a pointer to void.
-> +    fn into_foreign(self) -> *const core::ffi::c_void;
-> +
-> +    /// Borrows a foreign-owned object.
-> +    ///
-> +    /// # Safety
-> +    ///
-> +    /// `ptr` must have been returned by a previous call to [`ForeignOwnable::into_foreign`] for
-> +    /// which a previous matching [`ForeignOwnable::from_foreign`] hasn't been called yet.
-> +    /// Additionally, all instances (if any) of values returned by [`ForeignOwnable::borrow_mut`]
-> +    /// for this object must have been dropped.
-> +    unsafe fn borrow<'a>(ptr: *const core::ffi::c_void) -> Self::Borrowed<'a>;
-> +
-> +    /// Mutably borrows a foreign-owned object.
-> +    ///
-> +    /// # Safety
-> +    ///
-> +    /// `ptr` must have been returned by a previous call to [`ForeignOwnable::into_foreign`] for
-> +    /// which a previous matching [`ForeignOwnable::from_foreign`] hasn't been called yet.
-> +    /// Additionally, all instances (if any) of values returned by [`ForeignOwnable::borrow`] and
-> +    /// [`ForeignOwnable::borrow_mut`] for this object must have been dropped.
-> +    unsafe fn borrow_mut(ptr: *const core::ffi::c_void) -> ScopeGuard<Self, fn(Self)> {
-> +        // SAFETY: The safety requirements ensure that `ptr` came from a previous call to
-> +        // `into_foreign`.
-> +        ScopeGuard::new_with_data(unsafe { Self::from_foreign(ptr) }, |d| {
-> +            d.into_foreign();
-> +        })
-> +    }
-> +
-> +    /// Converts a foreign-owned object back to a Rust-owned one.
-> +    ///
-> +    /// # Safety
-> +    ///
-> +    /// `ptr` must have been returned by a previous call to [`ForeignOwnable::into_foreign`] for
-> +    /// which a previous matching [`ForeignOwnable::from_foreign`] hasn't been called yet.
-> +    /// Additionally, all instances (if any) of values returned by [`ForeignOwnable::borrow`] and
-> +    /// [`ForeignOwnable::borrow_mut`] for this object must have been dropped.
-> +    unsafe fn from_foreign(ptr: *const core::ffi::c_void) -> Self;
-> +}
-> +
->  /// Runs a cleanup function/closure when dropped.
->  ///
->  /// The [`ScopeGuard::dismiss`] function prevents the cleanup function from running.
-
+Reviewed-by: Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org>
