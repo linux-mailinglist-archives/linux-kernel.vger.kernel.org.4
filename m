@@ -2,115 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00E2C686DC6
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 19:19:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85BFF686DED
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 19:28:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230487AbjBASTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 13:19:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56360 "EHLO
+        id S230091AbjBAS2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 13:28:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230208AbjBASTU (ORCPT
+        with ESMTP id S230204AbjBAS2C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 13:19:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D61B7BE6D;
-        Wed,  1 Feb 2023 10:19:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3981761901;
-        Wed,  1 Feb 2023 18:19:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18537C433D2;
-        Wed,  1 Feb 2023 18:19:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675275558;
-        bh=b+wlHDCzi8AdBnLpjdjGeEQLMS0qfahPSzCmwkMSiqk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ptKD62LX78owda4w+Y0RYSwG/OXKHYW9gSEjj671KQR76Ta78vlE4GMdxxs917kzR
-         PCfbb2N85zBghqkfACFMRL+3ZxXNtYLf4aSBG0SAHb6yFKqDEANTmgwPUc4JdE0Bql
-         UNksukzT9Zu1Bgzqhmcu/MxeVgzk4miNdZdxRHbw=
-Date:   Wed, 1 Feb 2023 19:19:15 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     "Joseph, Jithu" <jithu.joseph@intel.com>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "markgross@kernel.org" <markgross@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "Macieira, Thiago" <thiago.macieira@intel.com>,
-        "Jimenez Gonzalez, Athenas" <athenas.jimenez.gonzalez@intel.com>,
-        "Mehta, Sohil" <sohil.mehta@intel.com>
-Subject: Re: [PATCH 4/5] platform/x86/intel/ifs: Implement Array BIST test
-Message-ID: <Y9qtI+CZaX051rLo@kroah.com>
-References: <20230131234302.3997223-1-jithu.joseph@intel.com>
- <20230131234302.3997223-5-jithu.joseph@intel.com>
- <Y9nyWVNtfBEny66w@kroah.com>
- <SJ1PR11MB6083EBD2D2826E0A247AF242FCD19@SJ1PR11MB6083.namprd11.prod.outlook.com>
+        Wed, 1 Feb 2023 13:28:02 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04114AD25
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 10:28:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675276081; x=1706812081;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=KJfvR0PNRjVIZ5qVTjcc05Xxt8yxLl4gMU5LDLRTEu0=;
+  b=ZS/BmpPImOtMdT7aj84rMFE3dBbAtFKv6JuwyLmzFHLEbiFb4zzgyPec
+   WLr1R5ig/Tke6B1Oh8cZiHe21ykT1nh4CQTOKYCasz84xGbThSz1AWJ0B
+   QmjEF7YbQrqkjUMDMsVz6REFAxPbJw5oQEMQxv0JoS8v39GlNQRng79Wp
+   nKorZKkm6NhmjfwgHT4sLpsJgwOLqPJI1qrBfCZLThRE4HOe+PEMFUcDk
+   Nry/u4iRTNuWL0doBEOxa2t4mPEFxOR++7q3r2TRb1wmpJt9ERMEn8nIS
+   hmkmyJJiGxTaA2BiUbQ3z8kGbm0wvEx7b5wJfJfr21z/0LD6VPKhoIZ4V
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="414437036"
+X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
+   d="scan'208";a="414437036"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 10:20:35 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="667009268"
+X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
+   d="scan'208";a="667009268"
+Received: from sgkhacha-mobl1.amr.corp.intel.com (HELO [10.212.227.86]) ([10.212.227.86])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 10:20:34 -0800
+Message-ID: <b1ea8d3b-d5f4-0aac-d7b4-45fef9afe778@intel.com>
+Date:   Wed, 1 Feb 2023 10:20:33 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <SJ1PR11MB6083EBD2D2826E0A247AF242FCD19@SJ1PR11MB6083.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 3/7] x86/cpu: Disable kernel LASS when patching kernel
+ alternatives
+Content-Language: en-US
+To:     Sohil Mehta <sohil.mehta@intel.com>,
+        "Chen, Yian" <yian.chen@intel.com>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ravi Shankar <ravi.v.shankar@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Paul Lai <paul.c.lai@intel.com>
+References: <20230110055204.3227669-1-yian.chen@intel.com>
+ <20230110055204.3227669-4-yian.chen@intel.com>
+ <693d8332-3b86-3dcf-fc87-5c3a08a752db@intel.com>
+ <ad2da884-c8c8-bc57-e21f-452a08cb10cc@intel.com>
+ <b9e73d06-bd95-7c54-3ff1-f9e43c9967a4@intel.com>
+ <9e0a8b20-cb76-b06d-67fb-f8942df5a2f7@intel.com>
+ <f8352c29-6b9f-2711-ddf4-223a6806f42f@intel.com>
+ <ed41ccf1-8f2d-6d4a-7692-7a3465aca73a@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <ed41ccf1-8f2d-6d4a-7692-7a3465aca73a@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 01, 2023 at 05:22:18PM +0000, Luck, Tony wrote:
-> > > +/* MSR_ARRAY_BIST bit fields */
-> > > +union ifs_array {
-> > > +   u64     data;
-> > > +   struct {
-> > > +           u32     array_bitmask           :32;
-> > > +           u32     array_bank              :16;
-> > > +           u32     rsvd                    :15;
-> > > +           u32     ctrl_result             :1;
-> >
-> > This isn't going to work well over time, just mask the bits you want off
-> > properly, don't rely on the compiler to lay them out like this.
-> 
-> What is this "time" issue?  This driver is X86_64 specific (and it seems
-> incredibly unlikely that some other architecture will copy this h/w
-> interface so closely that they want to re-use this driver. There's an x86_64
-> ABI that says how bitfields in C are allocated. So should not break moving
-> to other C compilers.
+On 1/31/23 18:25, Sohil Mehta wrote:
+>> 	/*
+>> 	 * Set cr4 to a known state:
+>> 	 *  - physical address extension enabled
+>> 	 *  - 5-level paging, if it was enabled before
+>> 	 */
+>> 	movl	$X86_CR4_PAE, %eax
+>> 	testq	$X86_CR4_LA57, %r13
+>> 	jz	1f
+>> 	orl	$X86_CR4_LA57, %eax
+>> 1:
+>> 	movq	%rax, %cr4
+>>
+>> 	jmp 1f
+>> 1:
+> Dave, does this address your concern or were you looking for something
+> else? Is there some path other than kexec that should also be audited
+> for this scenario?
 
-Ok, but generally this is considered a "bad idea" that you should not
-do.  It's been this way for many many years, just because this file only
-runs on one system now, doesn't mean you shouldn't use the proper apis.
+Yep, that addresses it.  I don't know of any other path that would
+matter.  Couldn't hurt to poke around and look for other CR4
+manipulation that might need to be LASS-aware, though.
 
-Also, odds are, using the proper apis will get you faster/smaller code
-than using a bitfield like this as compilers were notorious for doing
-odd things here in the past.
-
-> Is there going to be a "re-write all drivers in Rust" edict coming soon?
-
-Don't be silly, it's been this way for drivers for decades.
-
-> 
-> > Note, we have bitmask and bitfield operations, please use them.
-> 
-> We do, but code written using them is not as easy to read (unless
-> you wrap in even more macros, which has its own maintainability
-> issues).
-
-It shouldn't be that hard, lots of people use them today.
-
-Try and see!
-
-thanks,
-
-greg k-h
