@@ -2,77 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B93A6862F2
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 10:37:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E05FD6862F6
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 10:40:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232083AbjBAJhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 04:37:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55148 "EHLO
+        id S231575AbjBAJkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 04:40:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231491AbjBAJhp (ORCPT
+        with ESMTP id S230460AbjBAJkR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 04:37:45 -0500
-Received: from trent.utfs.org (trent.utfs.org [94.185.90.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9626E35271
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 01:37:43 -0800 (PST)
-Received: from localhost (localhost [IPv6:::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Wed, 1 Feb 2023 04:40:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A015C5B585;
+        Wed,  1 Feb 2023 01:40:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by trent.utfs.org (Postfix) with ESMTPS id 71AF15F8F9;
-        Wed,  1 Feb 2023 10:37:41 +0100 (CET)
-Date:   Wed, 1 Feb 2023 10:37:41 +0100 (CET)
-From:   Christian Kujau <lists@nerdbynature.de>
-To:     Juergen Gross <jgross@suse.com>
-cc:     Michael Kelley <mikelley@microsoft.com>,
-        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: Re: External USB disks not recognized with v6.1.8 when using Xen
-In-Reply-To: <0f441adb-f565-7a37-d9e5-3b14f6f7aea6@suse.com>
-Message-ID: <58cf4464-57e0-afe7-68d1-8f42d8088545@nerdbynature.de>
-References: <4fe9541e-4d4c-2b2a-f8c8-2d34a7284930@nerdbynature.de> <f22551ea-0694-2838-4a3f-f60d8d93fa64@leemhuis.info> <8f132803-f496-f33a-d2ab-b47fd5af0b88@nerdbynature.de> <0f441adb-f565-7a37-d9e5-3b14f6f7aea6@suse.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3681061727;
+        Wed,  1 Feb 2023 09:40:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 284C8C433D2;
+        Wed,  1 Feb 2023 09:40:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675244415;
+        bh=dDiMrAuD2jJiEu0GSefWpr5gCrPFP3YeIHhIbx9yqds=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=Gp2hNSeXdQwtWvUuUQtDMTLm/xCZU2ZeKwg7AIgvq0k0stTayd9xseyrv2+Mpg6XA
+         lobPEboO/QnN1rhCPuP9k645XKww+OhqE09vshEzIIsCRYRxRCASpD57Ktl/6pweK5
+         WDGErxfp8fbwLF8hX+8fa4EVemXG5qU3ZK2x/MsowvM/Af49sUQsv7FunLHEfJKqor
+         +N5/q47YWoCQKQP2kDh1JP0F1D9EMIxlWCaAaC52Tvf/zly9YPh7wAutoCeXr7FKbj
+         6oBp7CYU8QomarEoSs/q2ltxY5ZpUH4+tDdthM5kKY9wxyqsbBaJp2ovyH6zs8wn2I
+         FOXtFl+PJ1/fg==
+From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To:     guoren@kernel.org, guoren@kernel.org, palmer@rivosinc.com,
+        conor.dooley@microchip.com, liaochang1@huawei.com
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Bjorn Topel <bjorn.topel@gmail.com>
+Subject: Re: [PATCH] riscv: kprobe: Fixup misaligned load text
+In-Reply-To: <20230201064608.3486136-1-guoren@kernel.org>
+References: <20230201064608.3486136-1-guoren@kernel.org>
+Date:   Wed, 01 Feb 2023 10:40:12 +0100
+Message-ID: <87tu05pvur.fsf@all.your.base.are.belong.to.us>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 1 Feb 2023, Juergen Gross wrote:
-> I have problems understanding the behavior.
-> 
-> Assuming the cited error messages
-> 
->   ioremap error for 0xf2520000-0xf2530000, requested 0x2, got 0x0
+guoren@kernel.org writes:
 
-Yes, that and the XHCI_HCD error are only present in dmesg when it's 
-running as the Xen Dom0:
+> From: Guo Ren <guoren@linux.alibaba.com>
+>
+> The current kprobe would cause a misaligned load for the probe point.
+> This patch fixup it with two half-word loads instead.
+>
+> Fixes: c22b0bcb1dd0 ("riscv: Add kprobes supported")
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Link: https://lore.kernel.org/linux-riscv/878rhig9zj.fsf@all.your.base.are.belong.to.us/
+> Reported-by: Bjorn Topel <bjorn.topel@gmail.com>
+> ---
+>  arch/riscv/kernel/probes/kprobes.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/riscv/kernel/probes/kprobes.c b/arch/riscv/kernel/probes/kprobes.c
+> index 41c7481afde3..c1160629cef4 100644
+> --- a/arch/riscv/kernel/probes/kprobes.c
+> +++ b/arch/riscv/kernel/probes/kprobes.c
+> @@ -74,7 +74,9 @@ int __kprobes arch_prepare_kprobe(struct kprobe *p)
+>  		return -EILSEQ;
+>  
+>  	/* copy instruction */
+> -	p->opcode = *p->addr;
+> +	p->opcode = (kprobe_opcode_t)(*(u16 *)probe_addr);
+> +	if (GET_INSN_LENGTH(p->opcode) == 4)
+> +		p->opcode |= (kprobe_opcode_t)(*(u16 *)(probe_addr + 2))
+>  	<< 16;
 
-+ioremap error for 0xf2520000-0xf2530000, requested 0x2, got 0x0
-+xhci_hcd 0000:00:14.0: init 0000:00:14.0 fail, -14
-+xhci_hcd: probe of 0000:00:14.0 failed with error -14
-
-I don't know if it's related, but the issue is really, really gone when 
-that commit is reverted. And "no external disks when running in Dom0 mode" 
-(i.e. started by the Xen HV) is kind of a big issue, I'm afraid.
-
-But I'm at a loss on the technicalities of that commit, sorry.
-
-Christian.
-
-> are related to the issue, this would mean that the ioremap() caller
-> requested _PAGE_CACHE_MODE_UC_MINUS (type 0x2) and got _PAGE_CACHE_MODE_WB
-> (type 0x0).
-> 
-> The patch you have reverted is modifying behavior only if the _input_ type
-> is _PAGE_CACHE_MODE_WB.
-> 
-> Anyone having an idea what could be wrong here?
--- 
-BOFH excuse #339:
-
-manager in the cable duct
+Ugh, those casts. :-( What about the memcpy variant you had in the other
+thread?
