@@ -2,136 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77D426865A4
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 13:01:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B00866865A8
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 13:01:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231434AbjBAMBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 07:01:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60446 "EHLO
+        id S231607AbjBAMBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 07:01:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231473AbjBAMBM (ORCPT
+        with ESMTP id S231485AbjBAMBm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 07:01:12 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD9212BEE5
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 04:01:06 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id d8so6786179ljq.9
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 04:01:05 -0800 (PST)
+        Wed, 1 Feb 2023 07:01:42 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2086360A4
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 04:01:36 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id n28-20020a05600c3b9c00b003ddca7a2bcbso1231285wms.3
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 04:01:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XkDaAs7NEt8L2ex9bykzKZqXj4em5dtmEAnn6lTD46I=;
-        b=fYBQpmj9+BCFujF4ggobCLF8XcT7axTJSwBqGi4rHoqTmgZG3IV/eTiVL8hjJBWqxB
-         cCItiSoVjZfEwznFZWj914HVyfoIwkePYVADQsQpNd7zQjY2m39QG4VL8t5PtpjGQ6Uj
-         4fFqQ3ZKZUFm9//ZLWqnF8CN+KC+vnv9uv2Zwv9PiTcAM/mHP3dw9DeHjsPDel8ioSbk
-         2Uxa1Irw1zYCEW17iQkT6X8OzIsQyeNiruRCkJya8biexSSyFupnHPGdoM//rC/KNWN2
-         2wN7p2lN6oSIsg3ZnTV51I8FUU3ctF8Mu4k+FOQ5tnhOcinfq7J5uqKAQ6eLfBt8Z0P9
-         j4rg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6prvu2CI3NzcBWqU0N1Xpa6iVV1xGFav24j3mlsXXA4=;
+        b=In09R1A0QdGqESTC/tbUuyeGu1hlVo9zBahaCjmLsXyT9YmlXvcrYY5h4eV9Ezsnii
+         SxS1z4Xq3xRPII5NzoBuTDG1bkxeQiSXAflfnxM34O4B1w0EkmpaKZiUUnQ0usp4PgyY
+         2n5ukflsgbrsWs/Dno1DOyK3+fwOMA2+NmNfSZ5ZkJH9b+ZiE5RAoVqhdo6LgiQlgRcn
+         pv01MQninn/TwLUdLFP/0j0fi0WSwN8w2xWQfTOGFmqDSxnSSPq1w9BiAug9sODRqZ7V
+         TiWjXSQfLoeLA0UMOoZRmUvtfluMom8Z/I7A+47kNUu7Q0QjCgDiSDNJ4w/YqX4JRDyI
+         hUYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XkDaAs7NEt8L2ex9bykzKZqXj4em5dtmEAnn6lTD46I=;
-        b=3uZLNIJhxUlqVxKpXuF+Bo8UcyBHCNUWrZ291KqLfdqipe15q+PXb3B8c2Xpuou4wW
-         CtPE0mjGxwY/gsJmLfdPqw1iC42hllc96aBSfq0B6UISCa08ygzGgBOM1YSLwdDV71cq
-         SdWWgxgHQvysD0b3slmMI50hzU4NjXZdxIA7HCSp+jVzANjHDVECsxfef8YO7m8y8wKb
-         l9w55fLj3HAee4sNJ2yNq0xhcpQGgEVR/XSMbVsT2U16mZbvDqSmCUQYVZVZ4ym0vBVb
-         ygsAdoChctJbzlqhnvSYPqToil99Ojtgo6DA4mCO3k4BDeWDN4XpdIUvFvjFgaG8KCCq
-         IO5g==
-X-Gm-Message-State: AO0yUKXVnq7Y7aXXEBdR5yIB6nIaIrWDmp6kjAxNtTE+Kiqc5f3scB3L
-        UaIqigXAtBXcYDmcXh56Ix4zNyXB3+lzVQmZfreLiA==
-X-Google-Smtp-Source: AK7set+zVln3WH05zdXmKTDplM012eLlf6r2VhDXYbH6vrJMeKcnnpLEzXKgjxgvPsUsRQCoWkdKb7pqe3DO1S9pXCQ=
-X-Received: by 2002:a05:651c:200a:b0:290:7c00:8cee with SMTP id
- s10-20020a05651c200a00b002907c008ceemr241094ljo.144.1675252864135; Wed, 01
- Feb 2023 04:01:04 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6prvu2CI3NzcBWqU0N1Xpa6iVV1xGFav24j3mlsXXA4=;
+        b=XaeD3nScjKqVwK8jZlif6SLV7hP+UUNJoKKx/aoMaNxO1lhfvmAquXtdcs9S9H9hnE
+         zuO9UItzSI9MU32mY/uWin8egtz+seNHt8GHPxcAiCs4E4jAbfbdzwIJiaNtVHmmCsQv
+         /q5wrfDhS4pcskNcZbK9XcpZi1VR3Ae7prle0vThXR7vbVe8ye9lzs5ocqi/n7KhGFUY
+         mtwHKfc9t5r7BjWPnHcVSqyDVj9Df08CvhosJQpv8c4YtTYElgfRqHhudVn9K6h8mjLT
+         3bd9t5b12NR9DNtSzHm51Jncb70lE+NxW81kM7sXSS/NAwOxnzZkYxErZ0xscobvJN0i
+         MjlQ==
+X-Gm-Message-State: AO0yUKXGY3vm8L7OUpNK8ZaAbQn7ojgA/zSBhHSGADtcB4wpNDSVbn0K
+        1hheky2IWirVz1VSZuSyTUiwGw==
+X-Google-Smtp-Source: AK7set9jSoYr+KrAD0fdumuXJ7Cz89lWI/z0xkcgMMNwyBtEpC8hJTmIUDg3r3Q6CgjkEMUjQeAWuQ==
+X-Received: by 2002:a05:600c:1d03:b0:3dd:1bcc:eb17 with SMTP id l3-20020a05600c1d0300b003dd1bcceb17mr1587144wms.28.1675252894823;
+        Wed, 01 Feb 2023 04:01:34 -0800 (PST)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id y13-20020a1c4b0d000000b003dc4aae4739sm1522444wma.27.2023.02.01.04.01.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Feb 2023 04:01:33 -0800 (PST)
+Message-ID: <0df20322-e520-1622-8da8-6dbb44705aec@linaro.org>
+Date:   Wed, 1 Feb 2023 12:01:32 +0000
 MIME-Version: 1.0
-References: <20230127162409.2505312-1-elver@google.com> <Y9QUi7oU3nbdIV1J@FVFF77S0Q05N>
- <CANpmjNNGCf_NqS96iB+YLU1M+JSFy2tRRbuLfarkUchfesk2=A@mail.gmail.com>
- <Y9ef8cKrE4RJsrO+@FVFF77S0Q05N> <CANpmjNOEG2KPN+NaF37E-d8tbAExKvjVMAXUORC10iG=Bmk=vA@mail.gmail.com>
- <CACT4Y+Yriv_JYXm9N1YAMh+YuiT57irnF-vyCqxnTTux-2Ffwg@mail.gmail.com> <Y9pS4MNnFWOEO2Fr@FVFF77S0Q05N>
-In-Reply-To: <Y9pS4MNnFWOEO2Fr@FVFF77S0Q05N>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Wed, 1 Feb 2023 13:00:51 +0100
-Message-ID: <CACT4Y+Y3E7nu7PGj3m6+83Hs_D=3dVZe4rBh5-Pn=Gsm07r-=g@mail.gmail.com>
-Subject: Re: [PATCH v2] perf: Allow restricted kernel breakpoints on user addresses
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Marco Elver <elver@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, Jann Horn <jannh@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrey Konovalov <andreyknvl@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH V2 3/5] firmware: scm: Modify only the DLOAD bit in TCSR
+ register for download mode
+Content-Language: en-US
+To:     Poovendhan Selvaraj <quic_poovendh@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        jassisinghbrar@gmail.com, catalin.marinas@arm.com, will@kernel.org,
+        shawnguo@kernel.org, arnd@arndb.de, marcel.ziswiler@toradex.com,
+        robimarko@gmail.com, dmitry.baryshkov@linaro.org,
+        nfraprado@collabora.com, broonie@kernel.org,
+        quic_gurus@quicinc.com, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
+        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
+        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
+        quic_devipriy@quicinc.com
+References: <20230201090529.30446-1-quic_poovendh@quicinc.com>
+ <20230201090529.30446-4-quic_poovendh@quicinc.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20230201090529.30446-4-quic_poovendh@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 1 Feb 2023 at 12:54, Mark Rutland <mark.rutland@arm.com> wrote:
->
-> Hi Dmitry,
->
-> We raced to reply here, so there's more detail in my reply to Marco. I'm
-> providing minimal detail here, sorry for being terse! :)
->
-> On Wed, Feb 01, 2023 at 10:53:44AM +0100, Dmitry Vyukov wrote:
-> > On Wed, 1 Feb 2023 at 10:34, Marco Elver <elver@google.com> wrote:
-> > >
-> > > On Mon, 30 Jan 2023 at 11:46, Mark Rutland <mark.rutland@arm.com> wrote:
-> > > [...]
-> > > > > This again feels like a deficiency with access_ok(). Is there a better
-> > > > > primitive than access_ok(), or can we have something that gives us the
-> > > > > guarantee that whatever it says is "ok" is a userspace address?
-> > > >
-> > > > I don't think so, since this is contextual and temporal -- a helper can't give
-> > > > a single correct answert in all cases because it could change.
-> > >
-> > > That's fair, but unfortunate. Just curious: would
-> > > copy_from_user_nofault() reliably fail if it tries to access one of
-> > > those mappings but where access_ok() said "ok"?
-> >
-> > I also wonder if these special mappings are ever accessible in a user
-> > task context?
->
-> No. The special mappings are actually distinct page tables from the user page
-> tables, so whenever userspace is executing and can issue a syscall, the user
-> page tables are installed.
->
-> The special mappings are only installed for transient periods within the
-> context of a user task. There *might* be some latent issues with work happening
-> in IPI context (e.g. perf user backtrace) on some architectures.
->
-> > If yes, can a racing process_vm_readv/writev mess with these special mappings?
->
-> No; those happen in task context, and cannot be invoked within the critical
-> section where the page tables with the special mappings are installed.
->
-> > We could use copy_from_user() to probe that the watchpoint address is
-> > legit. But I think the memory can be potentially PROT_NONE but still
-> > legit, so copy_from_user() won't work for these corner cases.
->
-> Please see my other reply; ahead-of-time checks cannot help here. An address
-> might be a legitimate user address and *also* transiently be a special mapping
-> (since the two aare in entirely separate page tables).
 
-This brings more clarity. Thanks for the explanations.
 
-If addresses overlap, then it seems that the kernel must disable all
-watchpoints while the mapping is installed. This patch tries to relax
-checks, but CAP_ADMIN can install such watchpoints today. And they can
-unintentionally break kernel, or produce false watchpoint triggers.
-And if all watchpoints are disabled while the mapping is installed,
-then this patch should be OK, right?
+On 01/02/2023 09:05, Poovendhan Selvaraj wrote:
+> Add support to read-modify-write TCSR register to modify only DLOAD bit.
+> 
+> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
+> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
+> Co-developed-by: Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
+> Signed-off-by: Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
+> Signed-off-by: Poovendhan Selvaraj <quic_poovendh@quicinc.com>
+> ---
+>   drivers/firmware/qcom_scm.c | 12 ++++++++----
+>   1 file changed, 8 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
+> index 2000323722bf..e3435587a72d 100644
+> --- a/drivers/firmware/qcom_scm.c
+> +++ b/drivers/firmware/qcom_scm.c
+> @@ -407,7 +407,7 @@ int qcom_scm_set_remote_state(u32 state, u32 id)
+>   }
+>   EXPORT_SYMBOL(qcom_scm_set_remote_state);
+>   
+> -static int __qcom_scm_set_dload_mode(struct device *dev, bool enable)
+> +static int __qcom_scm_set_dload_mode(struct device *dev, u32 val, bool enable)
+>   {
+>   	struct qcom_scm_desc desc = {
+>   		.svc = QCOM_SCM_SVC_BOOT,
+> @@ -417,7 +417,7 @@ static int __qcom_scm_set_dload_mode(struct device *dev, bool enable)
+>   		.owner = ARM_SMCCC_OWNER_SIP,
+>   	};
+>   
+> -	desc.args[1] = enable ? QCOM_SCM_BOOT_SET_DLOAD_MODE : 0;
+> +	desc.args[1] = enable ? val | QCOM_SCM_BOOT_SET_DLOAD_MODE : 0;
+
+
+It is not read-modify-write when enable == false, its just writing 0.
+
+Is this intentional?
+
+
+>   
+>   	return qcom_scm_call_atomic(__scm->dev, &desc, NULL);
+>   }
+> @@ -426,15 +426,19 @@ static void qcom_scm_set_download_mode(bool enable)
+>   {
+>   	bool avail;
+>   	int ret = 0;
+> +	u32 dload_addr_val;
+>   
+>   	avail = __qcom_scm_is_call_available(__scm->dev,
+>   					     QCOM_SCM_SVC_BOOT,
+>   					     QCOM_SCM_BOOT_SET_DLOAD_MODE);
+> +	ret = qcom_scm_io_readl(__scm->dload_mode_addr, &dload_addr_val);
+> +
+>   	if (avail) {
+> -		ret = __qcom_scm_set_dload_mode(__scm->dev, enable);
+> +		ret = __qcom_scm_set_dload_mode(__scm->dev, dload_addr_val, enable);
+>   	} else if (__scm->dload_mode_addr) {
+>   		ret = qcom_scm_io_writel(__scm->dload_mode_addr,
+> -				enable ? QCOM_SCM_BOOT_SET_DLOAD_MODE : 0);
+> +				enable ? dload_addr_val |
+> +					QCOM_SCM_BOOT_SET_DLOAD_MODE : 0);
+
+same here.
+
+
+--srini
+
+>   	} else {
+>   		dev_err(__scm->dev,
+>   			"No available mechanism for setting download mode\n");
