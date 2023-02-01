@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E376686411
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 11:18:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54F1368640B
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 11:18:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232411AbjBAKRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 05:17:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52074 "EHLO
+        id S232513AbjBAKR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 05:17:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232148AbjBAKQj (ORCPT
+        with ESMTP id S232018AbjBAKQf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 05:16:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADFE94A201;
-        Wed,  1 Feb 2023 02:16:37 -0800 (PST)
+        Wed, 1 Feb 2023 05:16:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E994E533;
+        Wed,  1 Feb 2023 02:16:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E4B3EB8215A;
-        Wed,  1 Feb 2023 10:16:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0FC2C4323C;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DA34261756;
+        Wed,  1 Feb 2023 10:16:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E55CAC4323E;
         Wed,  1 Feb 2023 10:16:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675246592;
-        bh=l0VN7msG9L+s5ijjJrCbTiHxIlXGehCmox8V3hFK5UU=;
+        s=k20201202; t=1675246593;
+        bh=DopQjRozUlqLm8kLLOiYmoJfcthKaCplFrQrtxG3j4o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GSj50QqSIG0/gLjRUheGo/84VIuOPFzdLM3noqHeQSqElOphv+CLzLGUWROMm1uJb
-         gEG+/c0B2csR1hEuJ8UIN4iTjf6gUMPoLZ2KtX6pwXE5CPp08Bw6brh/erB9OsxxO9
-         bpRAdDY6acHV+rJkczpTvQInlqUafg/qtOKjEnPvQlPcLZJRifacdtdRqHJFgw1LJ3
-         AhwDUzwi2iWoOEem7wI4J/fYoMxo1eWQwA5pGDsArdTZh4AE3WrlTqdSXbQQPHFWO+
-         ma+8G0mPAdds0z4OfIHFdtYUqQ0aS/6AY+qhSiaxbF6zotfFKpUKakdFR+kZ4u5Gom
-         GT/+bZb6tI+cg==
+        b=Y3t6mpcRXV0ZYGmIgJ8VKte6Xf6yMsefLMGHNVd5cR9LNCLofo3+VpLIGQ58jUjrQ
+         kuyZhPev32rK9pmni6WgCf0cM4c6ZWGM3xQlaZQ+PD9UWhEYlRexFN4RXtf+t/16rV
+         A9N+IR+FAU9CVOiZ79EX4GmkS/mHvmN1QfJ558IL52g5btRJaPXSAdhKxOAsynt0qH
+         SEW0tLvqwzmqQrgIOJIC00K3fChnSvlvsJMFrmmSBSCjC0dbeAFj4/HuVYoA/Wj7L1
+         8lUSVJGAj1covok8bXtFis5xVMvInuJEqCbxps55aSQu7j/wlVL4z4X500Opk8zzw5
+         gBlsNepeoN3ow==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1pNAAg-00044B-1h; Wed, 01 Feb 2023 11:16:54 +0100
+        id 1pNAAg-00044D-4G; Wed, 01 Feb 2023 11:16:54 +0100
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Georgi Djakov <djakov@kernel.org>
 Cc:     Shawn Guo <shawnguo@kernel.org>,
@@ -54,11 +54,11 @@ Cc:     Shawn Guo <shawnguo@kernel.org>,
         linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
         linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>, stable@vger.kernel.org,
-        Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH 12/23] interconnect: qcom: sm8450: fix registration race
-Date:   Wed,  1 Feb 2023 11:15:48 +0100
-Message-Id: <20230201101559.15529-13-johan+linaro@kernel.org>
+        Johan Hovold <johan+linaro@kernel.org>,
+        Abel Vesa <abel.vesa@linaro.org>
+Subject: [PATCH 13/23] interconnect: qcom: sm8550: fix registration race
+Date:   Wed,  1 Feb 2023 11:15:49 +0100
+Message-Id: <20230201101559.15529-14-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230201101559.15529-1-johan+linaro@kernel.org>
 References: <20230201101559.15529-1-johan+linaro@kernel.org>
@@ -80,19 +80,18 @@ can specifically cause racing DT lookups to fail.
 Switch to using the new API where the provider is not registered until
 after it has been fully initialised.
 
-Fixes: fafc114a468e ("interconnect: qcom: Add SM8450 interconnect provider driver")
-Cc: stable@vger.kernel.org      # 5.17
-Cc: Vinod Koul <vkoul@kernel.org>
+Fixes: e6f0d6a30f73 ("interconnect: qcom: Add SM8550 interconnect provider driver")
+Cc: Abel Vesa <abel.vesa@linaro.org>
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- drivers/interconnect/qcom/sm8450.c | 22 +++++++++++-----------
+ drivers/interconnect/qcom/sm8550.c | 22 +++++++++++-----------
  1 file changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/interconnect/qcom/sm8450.c b/drivers/interconnect/qcom/sm8450.c
-index e3a12e3d6e06..c7a8bbf102a3 100644
---- a/drivers/interconnect/qcom/sm8450.c
-+++ b/drivers/interconnect/qcom/sm8450.c
-@@ -1876,9 +1876,10 @@ static int qnoc_probe(struct platform_device *pdev)
+diff --git a/drivers/interconnect/qcom/sm8550.c b/drivers/interconnect/qcom/sm8550.c
+index 54fa027ab961..7ab492ca8fe0 100644
+--- a/drivers/interconnect/qcom/sm8550.c
++++ b/drivers/interconnect/qcom/sm8550.c
+@@ -2197,9 +2197,10 @@ static int qnoc_probe(struct platform_device *pdev)
  	provider->pre_aggregate = qcom_icc_pre_aggregate;
  	provider->aggregate = qcom_icc_aggregate;
  	provider->xlate_extended = qcom_icc_xlate_extended;
@@ -104,20 +103,20 @@ index e3a12e3d6e06..c7a8bbf102a3 100644
  	qp->dev = &pdev->dev;
  	qp->bcms = desc->bcms;
  	qp->num_bcms = desc->num_bcms;
-@@ -1887,12 +1888,6 @@ static int qnoc_probe(struct platform_device *pdev)
+@@ -2208,12 +2209,6 @@ static int qnoc_probe(struct platform_device *pdev)
  	if (IS_ERR(qp->voter))
  		return PTR_ERR(qp->voter);
  
 -	ret = icc_provider_add(provider);
 -	if (ret) {
--		dev_err(&pdev->dev, "error adding interconnect provider\n");
+-		dev_err_probe(&pdev->dev, ret,
+-			      "error adding interconnect provider\n");
 -		return ret;
 -	}
--
+ 
  	for (i = 0; i < qp->num_bcms; i++)
  		qcom_icc_bcm_init(qp->bcms[i], &pdev->dev);
- 
-@@ -1905,7 +1900,7 @@ static int qnoc_probe(struct platform_device *pdev)
+@@ -2227,7 +2222,7 @@ static int qnoc_probe(struct platform_device *pdev)
  		node = icc_node_create(qnodes[i]->id);
  		if (IS_ERR(node)) {
  			ret = PTR_ERR(node);
@@ -126,7 +125,7 @@ index e3a12e3d6e06..c7a8bbf102a3 100644
  		}
  
  		node->name = qnodes[i]->name;
-@@ -1919,12 +1914,17 @@ static int qnoc_probe(struct platform_device *pdev)
+@@ -2241,12 +2236,17 @@ static int qnoc_probe(struct platform_device *pdev)
  	}
  	data->num_nodes = num_nodes;
  
@@ -146,7 +145,7 @@ index e3a12e3d6e06..c7a8bbf102a3 100644
  	return ret;
  }
  
-@@ -1932,8 +1932,8 @@ static int qnoc_remove(struct platform_device *pdev)
+@@ -2254,8 +2254,8 @@ static int qnoc_remove(struct platform_device *pdev)
  {
  	struct qcom_icc_provider *qp = platform_get_drvdata(pdev);
  
