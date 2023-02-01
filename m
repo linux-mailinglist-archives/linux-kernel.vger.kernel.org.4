@@ -2,215 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66C7B686EC8
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 20:19:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5EDF686ECA
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 20:20:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231924AbjBATTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 14:19:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41502 "EHLO
+        id S231985AbjBATUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 14:20:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229879AbjBATTs (ORCPT
+        with ESMTP id S229879AbjBATUG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 14:19:48 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21ED51E5F0;
-        Wed,  1 Feb 2023 11:19:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675279187; x=1706815187;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=biIGiOmjt67LaekM9gvPsbL3EOt6ge0EZRh1FVz4hlE=;
-  b=CfQPZ9Q2w4gCfWUj1+LP8TyxQueValFNffXKi+NyBzLDQdzHoRylHRBG
-   61x8lMSFARhCMFJCrLaHcV+kKWFwFppjCZDB43/Fu+SYwaMJhCR5C2jHk
-   s1X6atQuOP0sVziYxZkkp+qAa9rYWpRaACHgFYPgD6vmQDcZEoXWupKIR
-   Pg2RzCfPF5cjfQVHFAAI8fZdQbJBuBj6VT9t7N6JCHVCO5jdyckJ+DBVp
-   VH8278BpUQRAvtTtJHj0SbTSJ7m0Px2hhdW8gqFWQgfQhPOU5rax6Mff6
-   QfSUD6tFIqGV7PG1ZZA+WTEm+/vi0XJGUXlWhUcdUe5lbq2L+HDCzqnSZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="414454385"
-X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
-   d="scan'208";a="414454385"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 11:19:46 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="910420177"
-X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
-   d="scan'208";a="910420177"
-Received: from aolabode-mobl.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.255.230.22])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 11:19:46 -0800
-Message-ID: <120794f5f4a0a091cf04366cc6e23ec5387a3b54.camel@linux.intel.com>
-Subject: Re: [PATCH] thermal: intel_powerclamp: Fix cur_state for multi
- package system
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        daniel.lezcano@linaro.org, rui.zhang@intel.com,
-        stable@vger.kernel.org
-Date:   Wed, 01 Feb 2023 11:19:45 -0800
-In-Reply-To: <CAJZ5v0jQn7ON8XRk1zH_wWbwXJdKZFwR_Op=a4AO8kWp2jm8Aw@mail.gmail.com>
-References: <20230201180625.2156520-1-srinivas.pandruvada@linux.intel.com>
-         <CAJZ5v0jQn7ON8XRk1zH_wWbwXJdKZFwR_Op=a4AO8kWp2jm8Aw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Wed, 1 Feb 2023 14:20:06 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCBF77AE78
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 11:20:04 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id v23so19491618plo.1
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 11:20:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=H3aJxkFjia0TG0Zw0pJke9K17wju5Se/TaQW6+Ae14k=;
+        b=XwZbyhIp0OuYZyo9xcqBh+P2rODjCpd3IsgZPNGgJrZcAU9R0QOr76mypm5GR1vkSZ
+         fsE01uLzqnqyXMI/rLvvTmYCFPnACj5UDlOOgzzC7XoB+7WE24CEPlxhCTm83l8QDvfv
+         tqP0/PZgeq47vv+88irhObpAIwcYrzXOUbFd9q5qpg3NJhl1ok949kn1Tvr80r0AeQEn
+         lccaQ3yxraUuUK3lojLi8QAb+oJTWGxcRDw195V5Mehcz2CV32fF04ivMKajyCAMl2Ku
+         eq+U8PY8UHYXBVDNcP+pm844YYL9qV0YYW8rd7U1XmUiNgYxoalfYyrOwbmzvmmHEvXG
+         sC2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H3aJxkFjia0TG0Zw0pJke9K17wju5Se/TaQW6+Ae14k=;
+        b=TEIIzUtAqbwaYeyp7YASSMTAvMbJax8wOaKglPlqB7kUU6bV7qWpB4BielH9D61xfF
+         SJH0vY/WoGmZFExo8m5fmih2X6ttkYq+RjxnPtLXf4Q64pHWOhC/yJGYGW8/R/ubZJ30
+         tmBt/uGXG5JcA1rWnw8I1xyoZ9BoRtQqgqIt4EIaTZD8HVMKsN2cDRFxSqNZI/XR1zVF
+         3jRhDpiKn3nTtCO9TXdSnyON6JHdq1rsROmDB7Mjb1BOSGDVN6UeqkrRF8rnSupLpqOT
+         ILygXsLRhGQZx1/DODVVLV10LsI5hkIMyrHGWbezxv88koR7CefiPS/tr0roVC5h7Uvp
+         qtSQ==
+X-Gm-Message-State: AO0yUKXJeMD8JGy62CaNkZAAZS3BzakRYq9ns3PbcmHqT1zBI+1B0uUo
+        C2YSqtTk5HdV2ts/aDC0R/JUXw==
+X-Google-Smtp-Source: AK7set/d3D8AsFkSrakWSJ8TPNgYvflhAFxzYv278HPao7EaPtrAx6LS4oH2E1mmhjA1QO8zSQEyDw==
+X-Received: by 2002:a17:902:ce08:b0:198:af50:e4e5 with SMTP id k8-20020a170902ce0800b00198af50e4e5mr57671plg.11.1675279204063;
+        Wed, 01 Feb 2023 11:20:04 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id u34-20020a056a0009a200b00593225b379dsm9764805pfg.106.2023.02.01.11.20.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Feb 2023 11:20:02 -0800 (PST)
+Date:   Wed, 1 Feb 2023 19:19:59 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org
+Subject: Re: [PATCH] kvm: x86/mmu: Remove FNAME(is_self_change_mapping)
+Message-ID: <Y9q7XwWAGUpFrzqZ@google.com>
+References: <20221213125538.81209-1-jiangshanlai@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221213125538.81209-1-jiangshanlai@gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-02-01 at 20:10 +0100, Rafael J. Wysocki wrote:
-> On Wed, Feb 1, 2023 at 7:06 PM Srinivas Pandruvada
-> <srinivas.pandruvada@linux.intel.com> wrote:
-> > 
-> > The powerclamp cooling device cur_state shows actual idle observed
-> > by
-> > package C-state idle counters. But the implementation is not
-> > sufficient
-> > for multi package or multi die system. The cur_state value is
-> > incorrect.
-> > On these systems, these counters must be read from each package/die
-> > and
-> > somehow aggregate them. But there is no good method for
-> > aggregation.
-> > 
-> > It was not a problem when explicit CPU model addition was required
-> > to
-> > enable intel powerclamp. In this way certain CPU models could have
-> > been avoided. But with the removal of CPU model check with the
-> > availability of Package C-state counters, the driver is loaded on
-> > most
-> > of the recent systems.
-> > 
-> > For multi package/die systems, just show the actual target idle
-> > state,
-> > the system is trying to achieve. In powerclamp this is the user set
-> > state minus one.
-> > 
-> > Also there is no use of starting a worker thread for polling
-> > package
-> > C-state counters and applying any compensation.
+On Tue, Dec 13, 2022, Lai Jiangshan wrote:
+> From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 > 
-> I think that the last paragraph applies to systems with multiple
-> dies/packages?
-Yes.
+> FNAME(is_self_change_mapping) has two functionalities.
+> 
+>   If the fault is on a huge page but at least one of the pagetable on
+>   the walk is also on the terminal huge page, disable the huge page
+>   mapping for the fault.
+> 
+>   If the fault is modifying at least one of the pagetable on the walk,
+>   set something to tell the emulator.
 
-> 
-> > Fixes: b721ca0d1927 ("thermal/powerclamp: remove cpu whitelist")
-> 
-> 
-> 
-> > Signed-off-by: Srinivas Pandruvada
-> > <srinivas.pandruvada@linux.intel.com>
-> > Cc: stable@vger.kernel.org # 4.14+
-> > ---
-> >  drivers/thermal/intel/intel_powerclamp.c | 20 ++++++++++++++++----
-> >  1 file changed, 16 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/drivers/thermal/intel/intel_powerclamp.c
-> > b/drivers/thermal/intel/intel_powerclamp.c
-> > index b80e25ec1261..64f082c584b2 100644
-> > --- a/drivers/thermal/intel/intel_powerclamp.c
-> > +++ b/drivers/thermal/intel/intel_powerclamp.c
-> > @@ -57,6 +57,7 @@
-> > 
-> >  static unsigned int target_mwait;
-> >  static struct dentry *debug_dir;
-> > +static bool poll_pkg_cstate_enable;
-> > 
-> >  /* user selected target */
-> >  static unsigned int set_target_ratio;
-> > @@ -261,6 +262,9 @@ static unsigned int get_compensation(int ratio)
-> >  {
-> >         unsigned int comp = 0;
-> > 
-> > +       if (!poll_pkg_cstate_enable)
-> > +               return 0;
-> > +
-> >         /* we only use compensation if all adjacent ones are good
-> > */
-> >         if (ratio == 1 &&
-> >                 cal_data[ratio].confidence >= CONFIDENCE_OK &&
-> > @@ -519,7 +523,8 @@ static int start_power_clamp(void)
-> >         control_cpu = cpumask_first(cpu_online_mask);
-> > 
-> >         clamping = true;
-> > -       schedule_delayed_work(&poll_pkg_cstate_work, 0);
-> > +       if (poll_pkg_cstate_enable)
-> > +               schedule_delayed_work(&poll_pkg_cstate_work, 0);
-> > 
-> >         /* start one kthread worker per online cpu */
-> >         for_each_online_cpu(cpu) {
-> > @@ -585,11 +590,15 @@ static int powerclamp_get_max_state(struct
-> > thermal_cooling_device *cdev,
-> >  static int powerclamp_get_cur_state(struct thermal_cooling_device
-> > *cdev,
-> >                                  unsigned long *state)
-> >  {
-> > -       if (true == clamping)
-> > -               *state = pkg_cstate_ratio_cur;
-> > -       else
-> > +       if (true == clamping) {
-> 
-> This really should be
-I can change that, just kept the old style.
-I will send an update.
+This should be two patches, one to move the arch.write_fault_to_shadow_pgtable
+handling and one to drop the hugepage adjustment.
 
-> 
->         if (clamping) {
-> 
-> > +               if (poll_pkg_cstate_enable)
-> > +                       *state = pkg_cstate_ratio_cur;
-> > +               else
-> > +                       *state = set_target_ratio;
-> > +       } else {
-> >                 /* to save power, do not poll idle ratio while not
-> > clamping */
-> >                 *state = -1; /* indicates invalid state */
-> > +       }
-> > 
-> >         return 0;
-> >  }
-> > @@ -712,6 +721,9 @@ static int __init powerclamp_init(void)
-> >                 goto exit_unregister;
-> >         }
-> > 
-> > +       if (topology_max_packages() == 1 &&
-> > topology_max_die_per_package() == 1)
-> > +               poll_pkg_cstate_enable = true;
-> > +
-> >         cooling_dev =
-> > thermal_cooling_device_register("intel_powerclamp", NULL,
-> >                                                
-> > &powerclamp_cooling_ops);
-> >         if (IS_ERR(cooling_dev)) {
-> > --
-> 
-> This fixes a rather old bug and we are late in the cycle, so I'm a
-> bit
-> reluctant to push it for -rc7 or -rc8.  I would prefer to apply it
-> for
-> 6.3, but let it go before the other powerclamp driver changes from
-> you. 
-Yes, that's why I rebased other patches on top of this.
+I also want to rework the handling of write_fault_to_shadow_pgtable as prep work.
+Every time I look at that flag it takes me an eternity to remember exactly how
+KVM guarantees x86_emulate_instruction() won't get false positives.  I.e. I always
+forget why it's ok to not clear vcpu->arch.write_fault_to_shadow_pgtable after
+every VM-Exit.
 
->  This way, if anyone needs to backport it or put it into
-> -stable, they will be able to do that without pulling in the more
-> intrusive material.
-> 
-> Now, I do realize that this avoids changing the current behavior too
-> much, but I think that it is plain confusing to return
-> pkg_cstate_ratio_cur from powerclamp_get_cur_state() in any case.  It
-> should always return set_target_ratio IMV.
-It should. It in unnecessary complications. When I use in thermald, I
-don't look at the returned value from cur_state as this doesn't matter
-if the temperature is not under control. I will change this for all
-cases.
+Unless I've missed something, we can use an EMULTYPE flag to communicate to the
+emulator that the #PF emulation is on a self-referential write to a shadow page.
+That allows dropping write_fault_to_shadow_pgtable from vcpu->arch and sidesteps
+the whole "how do we avoid false positives?" question.
 
-Thanks,
-Srinivas
-
+Testing now, if everything looks good, I'll post v2 with all three patches.
