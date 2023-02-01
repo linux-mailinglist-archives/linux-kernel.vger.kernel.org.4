@@ -2,50 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB6E1686BD9
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 17:35:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9489B686BDA
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 17:35:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232224AbjBAQff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 11:35:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40554 "EHLO
+        id S232361AbjBAQfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 11:35:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232029AbjBAQfc (ORCPT
+        with ESMTP id S232200AbjBAQfd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 11:35:32 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E20F370D6A
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 08:35:23 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id f47-20020a05600c492f00b003dc584a7b7eso1827326wmp.3
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 08:35:23 -0800 (PST)
+        Wed, 1 Feb 2023 11:35:33 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 628FFCA07
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 08:35:25 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id j32-20020a05600c1c2000b003dc4fd6e61dso1822128wms.5
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 08:35:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ogquxG5XLdGczboibIaLv1v+sI1rVWj8OVZyg325S98=;
-        b=OqDLJPqNgNTjv+tJkw0JVlEEnytMVwnS/r+9V/2FKWOtmXea2c1oNHkbLhHfsaoPb6
-         ABgxtqiJR2l1iWo/91F2ArCyfyfFlfeXEwvW1djmxV3bWjU1UFqd2xWtLD+JHZVZKkyB
-         OqVr5X6HRQ+fiPdrTztgkFSF+oMEz0W9GIOS0=
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mWFrI/ZwPkf24GvAi4zS93lAjO18wCo9ugFdCRD9vug=;
+        b=R/wJRycxVlXr98cXymYAxYn59y2w9nV7JoCbhkjevWZR1Cd6qPhPtO6JgzG3VxSI9Q
+         GKjV0BjUpT2ySQyMbsatvRUEOMMnI83NorJqYQruLmLn9Dd7v4V8prfj6ZAjCD1ul2/+
+         TWRYbF22VUKSRARcJ2XvXOHcRQs/Rg82E+MiE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ogquxG5XLdGczboibIaLv1v+sI1rVWj8OVZyg325S98=;
-        b=n7B2L5m3DysGH5fGFU9+jD+mYqXJ7Kr/upcVVlrImyY+Jp8K2x1+cmgl5Lc8Gf1oqb
-         vnfRHx+cpq0tWUjA6rMrRngcm7SNuHvhvbCtbj3wm8DeKy5uPz7QdVh7l1bT1KjTHbgm
-         cteiK+uuEwoyveH5OQUCzwcbY2mzgyuW+0v7myJp8JYKjVZY4Xn+RV4Xmj2/CN97baKf
-         I1RIxvWW2LnbYjq/jqbVa60MPCtkfXjF9IvXKef4dB5bteIaX6CfgOUni0k7bycAYSjd
-         gD7tAcJs4Fe5kl2J0cLMSVngtr6OUD2ZltY09v/raUaecKvTHcOk6QXKC5uNq4oVvLXK
-         gfSg==
-X-Gm-Message-State: AO0yUKV4QmBWzQAiuMuDZTBVyti2ggUBvS9HPPTsIdIOJheH0oEV4rJ9
-        j6zrPtEbnXaO5OireX2asrvMeA==
-X-Google-Smtp-Source: AK7set8qjoGgTsYwyJ3LRLtxhldsGEurrzyEfjQAtmQT56+MJE4pgQklXhOB5XitFcad606GvpR/fQ==
-X-Received: by 2002:a05:600c:6018:b0:3dc:1ad6:55fd with SMTP id az24-20020a05600c601800b003dc1ad655fdmr2743120wmb.32.1675269322418;
-        Wed, 01 Feb 2023 08:35:22 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mWFrI/ZwPkf24GvAi4zS93lAjO18wCo9ugFdCRD9vug=;
+        b=RqI51WrNZWMuARjmE7wzLv5/k9V/jfmJNCOuJmFsVOgtxDl44rYRGZu7qHUwcuuutw
+         evI86Pq6jFpkE2snmjNK8SdZt90DcFbUQxMGwRSwNxiSq/9x0E55Piq70DT+ETM2F+d9
+         mf4pHAMLm2lq48JP/jqY8BboQ3A1pBl9i/tqsirsTtfGehjMrOteiaLqSYn98O8jY44T
+         zt2TesSI6Vn755Pvzpak1U3hBqNwm08TGesIU/Suqy2Ci6Xbf4BwLMpriuFULIwTTbpL
+         GQG8hfsHIocTZOci68diQVT3J8imu/NLvvjY2u+QZXmLE9etlIpq3TI9HCfJ1riZoj2A
+         Pyvw==
+X-Gm-Message-State: AO0yUKUNgIJnGY3neeiWBzHv6+LpYEhTnQC8Td8Wm3FJgtlyqN8+fPWi
+        sZKqxTgKxYiZc9Kawd6XR6gE+A==
+X-Google-Smtp-Source: AK7set+/RTqNE3i6RzBFCPFMdJxcxKMsNBsU7or9P4oRwy2TN0ZjlO+eOnMfvdrBDV3haIG0hgP9Kw==
+X-Received: by 2002:a05:600c:3544:b0:3dd:1c46:b92 with SMTP id i4-20020a05600c354400b003dd1c460b92mr2882937wmq.16.1675269323861;
+        Wed, 01 Feb 2023 08:35:23 -0800 (PST)
 Received: from revest.zrh.corp.google.com ([2a00:79e0:9d:6:4399:89a1:4a86:9630])
-        by smtp.gmail.com with ESMTPSA id r38-20020a05600c322600b003dd7edcc960sm2058522wmp.45.2023.02.01.08.35.20
+        by smtp.gmail.com with ESMTPSA id r38-20020a05600c322600b003dd7edcc960sm2058522wmp.45.2023.02.01.08.35.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Feb 2023 08:35:21 -0800 (PST)
+        Wed, 01 Feb 2023 08:35:23 -0800 (PST)
 From:   Florent Revest <revest@chromium.org>
 To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
@@ -54,10 +55,12 @@ Cc:     catalin.marinas@arm.com, will@kernel.org, rostedt@goodmis.org,
         daniel@iogearbox.net, andrii@kernel.org, kpsingh@kernel.org,
         jolsa@kernel.org, xukuohai@huaweicloud.com,
         Florent Revest <revest@chromium.org>
-Subject: [PATCH 0/8] Add ftrace direct call for arm64
-Date:   Wed,  1 Feb 2023 17:34:12 +0100
-Message-Id: <20230201163420.1579014-1-revest@chromium.org>
+Subject: [PATCH 1/8] ftrace: Replace uses of _ftrace_direct APIs with _ftrace_direct_multi
+Date:   Wed,  1 Feb 2023 17:34:13 +0100
+Message-Id: <20230201163420.1579014-2-revest@chromium.org>
 X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
+In-Reply-To: <20230201163420.1579014-1-revest@chromium.org>
+References: <20230201163420.1579014-1-revest@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -69,70 +72,164 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series adds ftrace direct call support to arm64.
-This makes BPF tracing programs (fentry/fexit/fmod_ret/lsm) work on arm64.
+The _multi API requires that users keep their own ops and can enforce
+that an op is only associated to one direct call.
 
-It is meant to apply on top of the arm64 tree which contains Mark Rutland's
-series on CALL_OPS [1] under the for-next/ftrace tag.
+Signed-off-by: Florent Revest <revest@chromium.org>
+---
+ kernel/trace/trace_selftest.c         |  9 ++++++---
+ samples/ftrace/ftrace-direct-modify.c | 11 +++++++----
+ samples/ftrace/ftrace-direct-too.c    | 12 +++++++-----
+ samples/ftrace/ftrace-direct.c        | 12 +++++++-----
+ 4 files changed, 27 insertions(+), 17 deletions(-)
 
-The first three patches consolidate the two existing ftrace APIs for registering
-direct calls. They are split to make the reviewers lives easier but if it'd be a
-preferred style, I'd be happy to squash them in the next revision.
-Currently, there is both a _ftrace_direct and _ftrace_direct_multi API. Apart
-from samples and selftests, there are no users of the _ftrace_direct API left
-in-tree so this deletes it and renames the _ftrace_direct_multi API to
-_ftrace_direct for simplicity.
-
-The main benefit of this refactoring is that, with the API that's left, an
-ftrace_ops backing a direct call will only ever point to one direct call. We can
-therefore store the direct called trampoline address in the ops (patch 4) and
-look it up from the ftrace trampoline on arm64 (patch 7) in the case when the
-destination would be out of reach of a BL instruction at the ftrace callsite.
-(in this case, ftrace_caller acts as a lightweight intermediary trampoline)
-
-This series has been tested on both arm64 and x86_64 with:
-1- CONFIG_FTRACE_SELFTEST (cf: patch 6)
-2- samples/ftrace/*.ko (cf: patch 8)
-3- tools/testing/selftests/bpf/test_progs (both -t lsm and -t fentry_fexit)
-
-This follows up on prior art by Xu Kuohai [2].
-The implementation here is totally different but the fix for ftrace selftests
-(patch 6) is a trivial rebase of a patch originally by Xu so I kept his
-authorship and trailers untouched on that patch, I hope that's ok.
-
-1: https://lore.kernel.org/all/20230123134603.1064407-1-mark.rutland@arm.com/
-2: https://lore.kernel.org/bpf/20220913162732.163631-1-xukuohai@huaweicloud.com/
-
-Florent Revest (7):
-  ftrace: Replace uses of _ftrace_direct APIs with _ftrace_direct_multi
-  ftrace: Remove the legacy _ftrace_direct API
-  ftrace: Rename _ftrace_direct_multi APIs to _ftrace_direct APIs
-  ftrace: Store direct called addresses in their ops
-  ftrace: Make DIRECT_CALLS work WITH_ARGS and !WITH_REGS
-  arm64: ftrace: Add direct call support
-  arm64: ftrace: Add direct called trampoline samples support
-
-Xu Kuohai (1):
-  ftrace: Fix dead loop caused by direct call in ftrace selftest
-
- arch/arm64/Kconfig                          |   4 +
- arch/arm64/include/asm/ftrace.h             |  24 ++
- arch/arm64/kernel/asm-offsets.c             |   6 +
- arch/arm64/kernel/entry-ftrace.S            |  70 +++-
- arch/arm64/kernel/ftrace.c                  |  36 +-
- include/linux/ftrace.h                      |  51 +--
- kernel/bpf/trampoline.c                     |  14 +-
- kernel/trace/Kconfig                        |   2 +-
- kernel/trace/ftrace.c                       | 433 +-------------------
- kernel/trace/trace_selftest.c               |  14 +-
- samples/Kconfig                             |   2 +-
- samples/ftrace/ftrace-direct-modify.c       |  41 +-
- samples/ftrace/ftrace-direct-multi-modify.c |  44 +-
- samples/ftrace/ftrace-direct-multi.c        |  28 +-
- samples/ftrace/ftrace-direct-too.c          |  35 +-
- samples/ftrace/ftrace-direct.c              |  33 +-
- 16 files changed, 333 insertions(+), 504 deletions(-)
-
+diff --git a/kernel/trace/trace_selftest.c b/kernel/trace/trace_selftest.c
+index ff0536cea968..9b7f10cbc51d 100644
+--- a/kernel/trace/trace_selftest.c
++++ b/kernel/trace/trace_selftest.c
+@@ -806,6 +806,9 @@ trace_selftest_startup_function_graph(struct tracer *trace,
+ 	int ret;
+ 	unsigned long count;
+ 	char *func_name __maybe_unused;
++#ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
++	struct ftrace_ops direct = {};
++#endif
+ 
+ #ifdef CONFIG_DYNAMIC_FTRACE
+ 	if (ftrace_filter_param) {
+@@ -870,8 +873,8 @@ trace_selftest_startup_function_graph(struct tracer *trace,
+ 	 * Register direct function together with graph tracer
+ 	 * and make sure we get graph trace.
+ 	 */
+-	ret = register_ftrace_direct((unsigned long) DYN_FTRACE_TEST_NAME,
+-				     (unsigned long) trace_direct_tramp);
++	ftrace_set_filter_ip(&direct, (unsigned long)DYN_FTRACE_TEST_NAME, 0, 0);
++	ret = register_ftrace_direct_multi(&direct, (unsigned long)trace_direct_tramp);
+ 	if (ret)
+ 		goto out;
+ 
+@@ -891,7 +894,7 @@ trace_selftest_startup_function_graph(struct tracer *trace,
+ 
+ 	unregister_ftrace_graph(&fgraph_ops);
+ 
+-	ret = unregister_ftrace_direct((unsigned long) DYN_FTRACE_TEST_NAME,
++	ret = unregister_ftrace_direct_multi(&direct,
+ 				       (unsigned long) trace_direct_tramp);
+ 	if (ret)
+ 		goto out;
+diff --git a/samples/ftrace/ftrace-direct-modify.c b/samples/ftrace/ftrace-direct-modify.c
+index de5a0f67f320..e1e6c286970c 100644
+--- a/samples/ftrace/ftrace-direct-modify.c
++++ b/samples/ftrace/ftrace-direct-modify.c
+@@ -96,6 +96,8 @@ asm (
+ 
+ #endif /* CONFIG_S390 */
+ 
++static struct ftrace_ops direct;
++
+ static unsigned long my_tramp = (unsigned long)my_tramp1;
+ static unsigned long tramps[2] = {
+ 	(unsigned long)my_tramp1,
+@@ -114,7 +116,7 @@ static int simple_thread(void *arg)
+ 		if (ret)
+ 			continue;
+ 		t ^= 1;
+-		ret = modify_ftrace_direct(my_ip, my_tramp, tramps[t]);
++		ret = modify_ftrace_direct_multi(&direct, tramps[t]);
+ 		if (!ret)
+ 			my_tramp = tramps[t];
+ 		WARN_ON_ONCE(ret);
+@@ -129,7 +131,8 @@ static int __init ftrace_direct_init(void)
+ {
+ 	int ret;
+ 
+-	ret = register_ftrace_direct(my_ip, my_tramp);
++	ftrace_set_filter_ip(&direct, (unsigned long) my_ip, 0, 0);
++	ret = register_ftrace_direct_multi(&direct, my_tramp);
+ 	if (!ret)
+ 		simple_tsk = kthread_run(simple_thread, NULL, "event-sample-fn");
+ 	return ret;
+@@ -138,12 +141,12 @@ static int __init ftrace_direct_init(void)
+ static void __exit ftrace_direct_exit(void)
+ {
+ 	kthread_stop(simple_tsk);
+-	unregister_ftrace_direct(my_ip, my_tramp);
++	unregister_ftrace_direct_multi(&direct, my_tramp);
+ }
+ 
+ module_init(ftrace_direct_init);
+ module_exit(ftrace_direct_exit);
+ 
+ MODULE_AUTHOR("Steven Rostedt");
+-MODULE_DESCRIPTION("Example use case of using modify_ftrace_direct()");
++MODULE_DESCRIPTION("Example use case of using modify_ftrace_direct_multi()");
+ MODULE_LICENSE("GPL");
+diff --git a/samples/ftrace/ftrace-direct-too.c b/samples/ftrace/ftrace-direct-too.c
+index e13fb59a2b47..0e907092e2c0 100644
+--- a/samples/ftrace/ftrace-direct-too.c
++++ b/samples/ftrace/ftrace-direct-too.c
+@@ -70,21 +70,23 @@ asm (
+ 
+ #endif /* CONFIG_S390 */
+ 
++static struct ftrace_ops direct;
++
+ static int __init ftrace_direct_init(void)
+ {
+-	return register_ftrace_direct((unsigned long)handle_mm_fault,
+-				     (unsigned long)my_tramp);
++	ftrace_set_filter_ip(&direct, (unsigned long) handle_mm_fault, 0, 0);
++
++	return register_ftrace_direct_multi(&direct, (unsigned long) my_tramp);
+ }
+ 
+ static void __exit ftrace_direct_exit(void)
+ {
+-	unregister_ftrace_direct((unsigned long)handle_mm_fault,
+-				 (unsigned long)my_tramp);
++	unregister_ftrace_direct_multi(&direct, (unsigned long)my_tramp);
+ }
+ 
+ module_init(ftrace_direct_init);
+ module_exit(ftrace_direct_exit);
+ 
+ MODULE_AUTHOR("Steven Rostedt");
+-MODULE_DESCRIPTION("Another example use case of using register_ftrace_direct()");
++MODULE_DESCRIPTION("Another example use case of using register_ftrace_direct_multi()");
+ MODULE_LICENSE("GPL");
+diff --git a/samples/ftrace/ftrace-direct.c b/samples/ftrace/ftrace-direct.c
+index 1f769d0db20f..e446c38f6b58 100644
+--- a/samples/ftrace/ftrace-direct.c
++++ b/samples/ftrace/ftrace-direct.c
+@@ -63,21 +63,23 @@ asm (
+ 
+ #endif /* CONFIG_S390 */
+ 
++static struct ftrace_ops direct;
++
+ static int __init ftrace_direct_init(void)
+ {
+-	return register_ftrace_direct((unsigned long)wake_up_process,
+-				     (unsigned long)my_tramp);
++	ftrace_set_filter_ip(&direct, (unsigned long) wake_up_process, 0, 0);
++
++	return register_ftrace_direct_multi(&direct, (unsigned long) my_tramp);
+ }
+ 
+ static void __exit ftrace_direct_exit(void)
+ {
+-	unregister_ftrace_direct((unsigned long)wake_up_process,
+-				 (unsigned long)my_tramp);
++	unregister_ftrace_direct_multi(&direct, (unsigned long)my_tramp);
+ }
+ 
+ module_init(ftrace_direct_init);
+ module_exit(ftrace_direct_exit);
+ 
+ MODULE_AUTHOR("Steven Rostedt");
+-MODULE_DESCRIPTION("Example use case of using register_ftrace_direct()");
++MODULE_DESCRIPTION("Example use case of using register_ftrace_direct_multi()");
+ MODULE_LICENSE("GPL");
 -- 
 2.39.1.519.gcb327c4b5f-goog
 
