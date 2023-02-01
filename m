@@ -2,218 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE55B687108
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 23:36:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B72B0687110
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 23:39:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230494AbjBAWgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 17:36:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53912 "EHLO
+        id S231540AbjBAWjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 17:39:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjBAWgn (ORCPT
+        with ESMTP id S231479AbjBAWjQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 17:36:43 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD55E4C16
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 14:36:41 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id t7so150393wrp.5
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 14:36:41 -0800 (PST)
+        Wed, 1 Feb 2023 17:39:16 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 338DA28D01
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 14:39:13 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id x8-20020a25e008000000b007cb4f1e3e57so16470345ybg.8
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 14:39:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=O3cdoduGIOs+WYLZ/KKSQFCR2wNSBYmRF9c/LvnjTJs=;
-        b=yK3EzAi/JrUjXIQ1Cc0UQ5dT8Qgqp9WXd29FN474fjSyYpBNYW9rBrLZToKxvBVh6u
-         ebGKN/7ODrpJpDeGGyJvSycvmjBpsHnIDvRCJLuqSAo8S9C842LzyHeuWXeIlIpVJTF6
-         UfTzo2XzWyNROjVvcsGYpzg475y7E0formPr63RmkShQkdwjp/Nh7LS28wvH/TpCHe4a
-         XEt97BU0Kg7zFdq6IHHTp+RfhoMkVtUK/VIsLKCt71newni06RnQ7cIAfFRLwI8UCQps
-         2Xwxg9rllZCRIQDlmmBcxyYnKaqV8FAXtpfMfWUtZMN9WNmRJgfGwDrsK/7FsjtiUuzk
-         HD0w==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=VfjIQrCZKH7ipWOhIHgNB+L4oWQlrAmV0rH/utG3vBk=;
+        b=boXv4vPWJe22L/kH6A1SvNazwAqD9IFi3cC/pDgFCVG6zpzlo41Zz/eXFBZFLoEQSi
+         Oa4vyEum/kwwhvwiZMuxExhEaq8tHYCcekaz12DWHJ/GEiW2nEC0FJAgYWDi+WMnPo/a
+         PXEzenOR0uB4PrqyVlhS75mljuT6ttHEaU66Eqo6mqmqSCktQ89bkWZaAoc9stIc8rMy
+         NsakNl5Yia303OTiJMZp1FXiLI0YHRsSKVnvu17WjTWdZ6oETfN19BAXt6Ndtkj3zinY
+         Vx2GvGdu/jKkT3JsVZrHcqZ1YZIJ5mW4wkUUpTcKjAQThNejzfhxUQbMmvMR+t29Yd/L
+         4GdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=O3cdoduGIOs+WYLZ/KKSQFCR2wNSBYmRF9c/LvnjTJs=;
-        b=nUgno1lf7ZPLUTqP513lKLnOW7dC9km9T1yzRimx5CC/Qdm16CHMCdySEA94PeBE0o
-         pGUNFX1+NJg9XKbQgkdMRF8btQLHl4FbszE7ckB4/maNEKHt01yU9gWixoNykvCZ2H3t
-         dMsbvVGoq5yB4NkkyZthSOnVcss1k/LDxQGHMP23BS2xzwiSW2vCLDxlnh5lEQCHHUZO
-         2NZRvJdBbzELJvMZfwTMJQeiJMYaSoI61Yicco1oiIm71nVWY/OOyv8F9ErZyP4b2eWD
-         Bp1pQpDClyhE7iLnh6cTrXian+wguWzdSAId+j5FBsW3H+IAbl4qlor+1r3H/Eh6azi7
-         8/xQ==
-X-Gm-Message-State: AO0yUKVqyRXMFRRN8Vhz3EyL806ciqRHYIl4/XcFfETKXbk1ebUcGFvV
-        tSrFOSj7Peaq7+upRc1LR2qXzQ==
-X-Google-Smtp-Source: AK7set8qEA0wvrtW+7mVp1R7TMGSPk2nqUldEup5U1CYdOJ08eb2O9h3axdglAI1EpkplBPlb6uGVA==
-X-Received: by 2002:a5d:5643:0:b0:2c0:227d:ca48 with SMTP id j3-20020a5d5643000000b002c0227dca48mr3466187wrw.63.1675291000267;
-        Wed, 01 Feb 2023 14:36:40 -0800 (PST)
-Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id z2-20020a5d6542000000b00267bcb1bbe5sm18264819wrv.56.2023.02.01.14.36.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Feb 2023 14:36:39 -0800 (PST)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     rafael@kernel.org, daniel.lezcano@linaro.org
-Cc:     srinivas.pandruvada@linux.intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Subject: [PATCH v2] thermal/drivers/intel: Use generic trip points for quark_dts
-Date:   Wed,  1 Feb 2023 23:36:16 +0100
-Message-Id: <20230201223617.1306964-1-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VfjIQrCZKH7ipWOhIHgNB+L4oWQlrAmV0rH/utG3vBk=;
+        b=aMb9CWkbfwRoGUZzWe1Qf9ieU9ydsNfnU6/CvJKmN7Zy7S9G/ayx5YqNETvKReluXy
+         Klf462h7JkXP/VWpRcFgg9tcojI+fOBT5dsULfbT+fsfPBaDpe5A9zMtaebLouv8CvRq
+         PdXR/nbkG650wMwGD/TFdIm1dupzXCeOs4Jp2ztkcHwsLGxhMnNAATVOftguMpU/RvM3
+         9IZI3aIL+66YvbrZH7Xp+7Nxh7R09mRpGuoDRR0ZqtVROIErVPjL7s5TLHIxAyB7CaUG
+         p6dyvpzavvyRLBCQwmms7JQkGNN60zoelWpAwRMlwHr/iY/aavh7roOyqxmM/DR/jsEA
+         kp+A==
+X-Gm-Message-State: AO0yUKWTBGnK/qLoqy+0NqLRsNVI5GCNROEWTju2ULjBvgqw24H9o/UQ
+        Td/UVohQWG3CeJz6kkWAkVLhtakMVz4=
+X-Google-Smtp-Source: AK7set+2ZzcbKOe1O/V52p2ikbekoO/wYDG4nkkpAP/pzpws1LTtmiv96cDgiKnBQBlTCi/ozfjSIvFeL28=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a0d:ea87:0:b0:521:daa4:d68c with SMTP id
+ t129-20020a0dea87000000b00521daa4d68cmr0ywe.5.1675291151988; Wed, 01 Feb 2023
+ 14:39:11 -0800 (PST)
+Date:   Wed,  1 Feb 2023 22:37:35 +0000
+In-Reply-To: <20221219171924.67989-1-seanjc@google.com>
+Mime-Version: 1.0
+References: <20221219171924.67989-1-seanjc@google.com>
+X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
+Message-ID: <167528558345.768469.17759293608992301689.b4-ty@google.com>
+Subject: Re: [PATCH] KVM: Destroy target device if coalesced MMIO
+ unregistration fails
+From:   Sean Christopherson <seanjc@google.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "=?UTF-8?q?=E6=9F=B3=E8=8F=81=E5=B3=B0?=" <liujingfeng@qianxin.com>,
+        Wei Wang <wei.w.wang@intel.com>, Michal Luczaj <mhal@rbox.co>
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The thermal framework gives the possibility to register the trip
-points with the thermal zone. When that is done, no get_trip_* ops are
-needed and they can be removed.
+On Mon, 19 Dec 2022 17:19:24 +0000, Sean Christopherson wrote:
+> Destroy and free the target coalesced MMIO device if unregistering said
+> device fails.  As clearly noted in the code, kvm_io_bus_unregister_dev()
+> does not destroy the target device.
+> 
+>   BUG: memory leak
+>   unreferenced object 0xffff888112a54880 (size 64):
+>     comm "syz-executor.2", pid 5258, jiffies 4297861402 (age 14.129s)
+>     hex dump (first 32 bytes):
+>       38 c7 67 15 00 c9 ff ff 38 c7 67 15 00 c9 ff ff  8.g.....8.g.....
+>       e0 c7 e1 83 ff ff ff ff 00 30 67 15 00 c9 ff ff  .........0g.....
+>     backtrace:
+>       [<0000000006995a8a>] kmalloc include/linux/slab.h:556 [inline]
+>       [<0000000006995a8a>] kzalloc include/linux/slab.h:690 [inline]
+>       [<0000000006995a8a>] kvm_vm_ioctl_register_coalesced_mmio+0x8e/0x3d0 arch/x86/kvm/../../../virt/kvm/coalesced_mmio.c:150
+>       [<00000000022550c2>] kvm_vm_ioctl+0x47d/0x1600 arch/x86/kvm/../../../virt/kvm/kvm_main.c:3323
+>       [<000000008a75102f>] vfs_ioctl fs/ioctl.c:46 [inline]
+>       [<000000008a75102f>] file_ioctl fs/ioctl.c:509 [inline]
+>       [<000000008a75102f>] do_vfs_ioctl+0xbab/0x1160 fs/ioctl.c:696
+>       [<0000000080e3f669>] ksys_ioctl+0x76/0xa0 fs/ioctl.c:713
+>       [<0000000059ef4888>] __do_sys_ioctl fs/ioctl.c:720 [inline]
+>       [<0000000059ef4888>] __se_sys_ioctl fs/ioctl.c:718 [inline]
+>       [<0000000059ef4888>] __x64_sys_ioctl+0x6f/0xb0 fs/ioctl.c:718
+>       [<000000006444fa05>] do_syscall_64+0x9f/0x4e0 arch/x86/entry/common.c:290
+>       [<000000009a4ed50b>] entry_SYSCALL_64_after_hwframe+0x49/0xbe
+> 
+> [...]
 
-Convert ops content logic into generic trip points and register them with the
-thermal zone.
+Applied to kvm-x86 generic, the plan is that Wei will send the bigger
+cleanup on top.  Thanks!
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@kernel.org>
----
+[1/1] KVM: Destroy target device if coalesced MMIO unregistration fails
+      https://github.com/kvm-x86/linux/commit/b1cb1fac22ab
 
-This patch applies on top of linux-pm/linux-next
-
- V2:
-   - Changed get_trip_temp() to return THERMAL_TEMP_INVALID
-   - Register unconditonnaly the thermal trips
-   - Fixed thermal_zone_device_register() call replaced by the
-     _with_trips() version
-
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- .../thermal/intel/intel_quark_dts_thermal.c   | 55 +++++++------------
- 1 file changed, 20 insertions(+), 35 deletions(-)
-
-diff --git a/drivers/thermal/intel/intel_quark_dts_thermal.c b/drivers/thermal/intel/intel_quark_dts_thermal.c
-index 3eafc6b0e6c3..97b843fa7568 100644
---- a/drivers/thermal/intel/intel_quark_dts_thermal.c
-+++ b/drivers/thermal/intel/intel_quark_dts_thermal.c
-@@ -84,6 +84,7 @@
- #define QRK_DTS_MASK_TP_THRES		0xFF
- #define QRK_DTS_SHIFT_TP		8
- #define QRK_DTS_ID_TP_CRITICAL		0
-+#define QRK_DTS_ID_TP_HOT		1
- #define QRK_DTS_SAFE_TP_THRES		105
- 
- /* Thermal Sensor Register Lock */
-@@ -104,6 +105,7 @@ struct soc_sensor_entry {
- 	u32 store_ptps;
- 	u32 store_dts_enable;
- 	struct thermal_zone_device *tzone;
-+	struct thermal_trip trips[QRK_MAX_DTS_TRIPS];
- };
- 
- static struct soc_sensor_entry *soc_dts;
-@@ -172,9 +174,9 @@ static int soc_dts_disable(struct thermal_zone_device *tzd)
- 	return ret;
- }
- 
--static int _get_trip_temp(int trip, int *temp)
-+static int get_trip_temp(int trip)
- {
--	int status;
-+	int status, temp;
- 	u32 out;
- 
- 	mutex_lock(&dts_update_mutex);
-@@ -183,7 +185,7 @@ static int _get_trip_temp(int trip, int *temp)
- 	mutex_unlock(&dts_update_mutex);
- 
- 	if (status)
--		return status;
-+		return THERMAL_TEMP_INVALID;
- 
- 	/*
- 	 * Thermal Sensor Programmable Trip Point Register has 8-bit
-@@ -191,21 +193,10 @@ static int _get_trip_temp(int trip, int *temp)
- 	 * thresholds. The threshold value is always offset by its
- 	 * temperature base (50 degree Celsius).
- 	 */
--	*temp = (out >> (trip * QRK_DTS_SHIFT_TP)) & QRK_DTS_MASK_TP_THRES;
--	*temp -= QRK_DTS_TEMP_BASE;
-+	temp = (out >> (trip * QRK_DTS_SHIFT_TP)) & QRK_DTS_MASK_TP_THRES;
-+	temp -= QRK_DTS_TEMP_BASE;
- 
--	return 0;
--}
--
--static inline int sys_get_trip_temp(struct thermal_zone_device *tzd,
--				int trip, int *temp)
--{
--	return _get_trip_temp(trip, temp);
--}
--
--static inline int sys_get_crit_temp(struct thermal_zone_device *tzd, int *temp)
--{
--	return _get_trip_temp(QRK_DTS_ID_TP_CRITICAL, temp);
-+	return temp;
- }
- 
- static int update_trip_temp(struct soc_sensor_entry *aux_entry,
-@@ -262,17 +253,6 @@ static inline int sys_set_trip_temp(struct thermal_zone_device *tzd, int trip,
- 	return update_trip_temp(tzd->devdata, trip, temp);
- }
- 
--static int sys_get_trip_type(struct thermal_zone_device *thermal,
--		int trip, enum thermal_trip_type *type)
--{
--	if (trip)
--		*type = THERMAL_TRIP_HOT;
--	else
--		*type = THERMAL_TRIP_CRITICAL;
--
--	return 0;
--}
--
- static int sys_get_curr_temp(struct thermal_zone_device *tzd,
- 				int *temp)
- {
-@@ -315,10 +295,7 @@ static int sys_change_mode(struct thermal_zone_device *tzd,
- 
- static struct thermal_zone_device_ops tzone_ops = {
- 	.get_temp = sys_get_curr_temp,
--	.get_trip_temp = sys_get_trip_temp,
--	.get_trip_type = sys_get_trip_type,
- 	.set_trip_temp = sys_set_trip_temp,
--	.get_crit_temp = sys_get_crit_temp,
- 	.change_mode = sys_change_mode,
- };
- 
-@@ -385,10 +362,18 @@ static struct soc_sensor_entry *alloc_soc_dts(void)
- 			goto err_ret;
- 	}
- 
--	aux_entry->tzone = thermal_zone_device_register("quark_dts",
--			QRK_MAX_DTS_TRIPS,
--			wr_mask,
--			aux_entry, &tzone_ops, NULL, 0, polling_delay);
-+	aux_entry->trips[QRK_DTS_ID_TP_CRITICAL].temperature = get_trip_temp(QRK_DTS_ID_TP_CRITICAL);
-+	aux_entry->trips[QRK_DTS_ID_TP_CRITICAL].type = THERMAL_TRIP_CRITICAL;
-+
-+	aux_entry->trips[QRK_DTS_ID_TP_HOT].temperature = get_trip_temp(QRK_DTS_ID_TP_HOT);
-+	aux_entry->trips[QRK_DTS_ID_TP_HOT].type = THERMAL_TRIP_HOT;
-+
-+	aux_entry->tzone = thermal_zone_device_register_with_trips("quark_dts",
-+								   aux_entry->trips,
-+								   QRK_MAX_DTS_TRIPS,
-+								   wr_mask,
-+								   aux_entry, &tzone_ops,
-+								   NULL, 0, polling_delay);
- 	if (IS_ERR(aux_entry->tzone)) {
- 		err = PTR_ERR(aux_entry->tzone);
- 		goto err_ret;
--- 
-2.34.1
-
+--
+https://github.com/kvm-x86/linux/tree/next
+https://github.com/kvm-x86/linux/tree/fixes
