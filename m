@@ -2,179 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 125BF6867A9
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 14:53:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFA4C686775
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 14:50:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232203AbjBANxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 08:53:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45752 "EHLO
+        id S232455AbjBANuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 08:50:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232527AbjBANxQ (ORCPT
+        with ESMTP id S232449AbjBANuB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 08:53:16 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D5346779B;
-        Wed,  1 Feb 2023 05:52:49 -0800 (PST)
+        Wed, 1 Feb 2023 08:50:01 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A97446086
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 05:49:52 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id qw12so35654080ejc.2
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 05:49:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1675259569; x=1706795569;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=HwQIVDLFm5wts9Zpmji6vpaZ2OWNop5ROxZR3n4FmwQ=;
-  b=mLHd26+fwtBOypiqdbjlq3TVEeDtMlzefS0xHde/1dBn8b3MMajKcxlS
-   T8rtzVLBg7jgtf/l4ktK6BuEkdK9YF6hh9CT2fV3H+gw5X/87qGIPVDcb
-   fQBfhN/tH/CbbjWH6MDhwCbV1+wC8A1q2/n6TZvQvZurhZDA+Qy/XNrkf
-   c=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 01 Feb 2023 05:52:48 -0800
-X-QCInternal: smtphost
-Received: from nalasex01b.na.qualcomm.com ([10.47.209.197])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 05:52:48 -0800
-Received: from hu-mohs-hyd.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Wed, 1 Feb 2023 05:52:42 -0800
-From:   Mohammad Rafi Shaik <quic_mohs@quicinc.com>
-To:     <krzysztof.kozlowski+dt@linaro.org>, <agross@kernel.org>,
-        <andersson@kernel.org>, <lgirdwood@gmail.com>,
-        <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>,
-        <srinivas.kandagatla@linaro.org>, <quic_rohkumar@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <alsa-devel@alsa-project.org>,
-        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
-        <judyhsiao@chromium.org>, <devicetree@vger.kernel.org>,
-        <konrad.dybcio@linaro.org>
-CC:     Mohammad Rafi Shaik <quic_mohs@quicinc.com>
-Subject: [PATCH 14/14] ASoC: q6dsp: audioreach: Add gapless feature support
-Date:   Wed, 1 Feb 2023 19:19:47 +0530
-Message-ID: <20230201134947.1638197-15-quic_mohs@quicinc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230201134947.1638197-1-quic_mohs@quicinc.com>
-References: <20230201134947.1638197-1-quic_mohs@quicinc.com>
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ACzUjtExd1GIrXZr1vO/BegTBXZjaP/+ZCi6MVW3dcE=;
+        b=XqDxeyaONwSMSPBNLF2wQqvVaptIMfUXKIL+odbcSjOEZWz8roz/UWW0pxxPb3rcZr
+         XFDmxM9TAigHeKTHQNxt3sps1g+kXk+XspyzHQ5nM5bVtha7xLYeGTaNdb6wdqMkBygt
+         WSEV1c7E4T0OUWeGWS+B6KE7T7kIMhklClCadFuGuBww3apkEKZPesqOgZ9QRbiHKG/s
+         RhLPhfcLZUjCzjYqLQHasEL3rbrwMn3G0UFhkARdB2BfN7ojuinil2MH8DDWf2Qw7UB2
+         ZZJQivmgEIaA59HQPwDukXmfcC2PdEJW/QS3cJCIN/QIrsmdmoW50R6C9Sw/k3AukrL8
+         +d3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ACzUjtExd1GIrXZr1vO/BegTBXZjaP/+ZCi6MVW3dcE=;
+        b=hP7m7rHGBswfadJmI5DTwd0nXtYhNhOQcR4OIhzaW047bNxfmebTyPR/Pj86LkO1qP
+         GcZHgCV8qJ8yBzknS18IkrDrtgivtQZHFnK/0110wQzafeS8NgGnjyzjqmb6CL4Lt5l5
+         hS5GWZ1DTMG8sNqBQK3VO/mMvi5jKWfyTWWpgSguenYavYGTQ1FbDQCBFegTMyClAPi7
+         kNmA9/OVZimuhdbuz+ypqv6xVgFY1senD0SGbp0gse9v6VckRGyQqvBpqdL9Zadxdhtl
+         6obC7hnUK1mVx7QfNuPFn3zf8Y3hXezBABM74MQs7+15pL91jJS4zOBnkjMd/DwIm6ox
+         iYGg==
+X-Gm-Message-State: AO0yUKWo1I0qa4EKQi6oc7m0CAw+8MoNGW/yLKqkMhD9zPy4bGCw7h71
+        ZsLmJfLhseQSVtPN9dXao1anKw==
+X-Google-Smtp-Source: AK7set8R0ihVH9gQLKTpTgxDtC0l0P5jQ5GnLv1eb/VCHQJYaBQmNmb6DhTSWztbpqMBqXz4Dg9UCA==
+X-Received: by 2002:a17:906:2b0d:b0:877:a9d2:e5e9 with SMTP id a13-20020a1709062b0d00b00877a9d2e5e9mr2588659ejg.42.1675259391045;
+        Wed, 01 Feb 2023 05:49:51 -0800 (PST)
+Received: from [10.10.15.130] ([192.130.178.91])
+        by smtp.gmail.com with ESMTPSA id gt15-20020a170906f20f00b0088bd62b1cbbsm2858318ejb.192.2023.02.01.05.49.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Feb 2023 05:49:49 -0800 (PST)
+Message-ID: <05344ca0-3847-ea55-1e61-04aacc58995c@linaro.org>
+Date:   Wed, 1 Feb 2023 15:49:48 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [v1 2/3] drm/msm/disp/dpu1: add dspps into reservation if there
+ is a ctm request
+Content-Language: en-GB
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Kalyan Thota <quic_kalyant@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, robdclark@chromium.org,
+        dianders@chromium.org, swboyd@chromium.org,
+        quic_vpolimer@quicinc.com, quic_abhinavk@quicinc.com
+References: <1675092092-26412-1-git-send-email-quic_kalyant@quicinc.com>
+ <1675092092-26412-3-git-send-email-quic_kalyant@quicinc.com>
+ <20230201111604.htgczy6yvdkywhvl@SoMainline.org>
+ <20230201112631.mgwuboehrwdefqnd@SoMainline.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230201112631.mgwuboehrwdefqnd@SoMainline.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for setting EOS delay command and receive the
-EOS response from ADSP, for seamless compress offload
-playback feature.
+On 01/02/2023 13:26, Marijn Suijten wrote:
+> On 2023-02-01 12:16:05, Marijn Suijten wrote:
+> <snip>
+>>> +	if (dpu_kms->catalog->dspp &&
+>>> +	    crtc_state->ctm && (dpu_kms->catalog->dspp_count >= topology.num_lm))
+>>
+>> Multiline-if-clause is typically indented with two tabs, not a half tab
+>> (4 spaces).
+> 
+> Hmm, Dmitry requested indent-to-opening-parenthesis in v1 instead; and
+> the majority of dpu1 uses the worst version of all: indent with a single
+> tab so that the contents line up with the code block below.  Dmitry,
+> I'll leave final say to you (and fix it up in my own DPU series
+> accordingly too).
 
-Signed-off-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
-Co-developed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
----
- sound/soc/qcom/qdsp6/audioreach.c | 40 +++++++++++++++++++++++++++++++
- sound/soc/qcom/qdsp6/audioreach.h |  6 +++++
- sound/soc/qcom/qdsp6/q6apm.c      |  3 +++
- 3 files changed, 49 insertions(+)
+Well,
 
-diff --git a/sound/soc/qcom/qdsp6/audioreach.c b/sound/soc/qcom/qdsp6/audioreach.c
-index 250ed828c7d3..71ff705e27cb 100644
---- a/sound/soc/qcom/qdsp6/audioreach.c
-+++ b/sound/soc/qcom/qdsp6/audioreach.c
-@@ -852,6 +852,43 @@ static int audioreach_mfc_set_media_format(struct q6apm_graph *graph,
- 	return rc;
- }
- 
-+static int audioreach_gapless_set_media_format(struct q6apm_graph *graph,
-+					   struct audioreach_module *module,
-+					   struct audioreach_module_config *cfg)
-+{
-+	struct apm_module_param_data *param_data;
-+	struct param_id_gapless_early_eos_delay_t *media_format;
-+	int payload_size;
-+	struct gpr_pkt *pkt;
-+	int rc;
-+	void *p;
-+
-+	payload_size = sizeof(struct param_id_gapless_early_eos_delay_t) +
-+		APM_MODULE_PARAM_DATA_SIZE;
-+
-+	pkt = audioreach_alloc_apm_cmd_pkt(payload_size, APM_CMD_SET_CFG, 0);
-+	if (IS_ERR(pkt))
-+		return PTR_ERR(pkt);
-+
-+	p = (void *)pkt + GPR_HDR_SIZE + APM_CMD_HDR_SIZE;
-+
-+	param_data = p;
-+	param_data->module_instance_id = module->instance_id;
-+	param_data->error_code = 0;
-+	param_data->param_id = PARAM_ID_EARLY_EOS_DELAY;
-+	param_data->param_size = sizeof(struct param_id_gapless_early_eos_delay_t);
-+	p = p + APM_MODULE_PARAM_DATA_SIZE;
-+	media_format = p;
-+
-+	media_format->early_eos_delay_ms = EARLY_EOS_DELAY_MS;
-+
-+	rc = q6apm_send_cmd_sync(graph->apm, pkt, 0);
-+
-+	kfree(pkt);
-+
-+	return rc;
-+}
-+
- static int  audioreach_set_compr_media_format(struct media_format *media_fmt_hdr,
- 					      void *p, struct audioreach_module_config *mcfg)
- {
-@@ -1249,6 +1286,9 @@ int audioreach_set_media_format(struct q6apm_graph *graph, struct audioreach_mod
- 	case MODULE_ID_MFC:
- 		rc = audioreach_mfc_set_media_format(graph, module, cfg);
- 		break;
-+	case MODULE_ID_GAPLESS:
-+		rc = audioreach_gapless_set_media_format(graph, module, cfg);
-+		break;
- 	default:
- 		rc = 0;
- 	}
-diff --git a/sound/soc/qcom/qdsp6/audioreach.h b/sound/soc/qcom/qdsp6/audioreach.h
-index 044994ca4811..a9d4f70ad3e0 100644
---- a/sound/soc/qcom/qdsp6/audioreach.h
-+++ b/sound/soc/qcom/qdsp6/audioreach.h
-@@ -543,6 +543,8 @@ struct param_id_sal_limiter_enable {
- } __packed;
- 
- #define PARAM_ID_MFC_OUTPUT_MEDIA_FORMAT	0x08001024
-+#define PARAM_ID_EARLY_EOS_DELAY		0x0800114C
-+#define EARLY_EOS_DELAY_MS			150
- 
- struct param_id_mfc_media_format {
- 	uint32_t sample_rate;
-@@ -551,6 +553,10 @@ struct param_id_mfc_media_format {
- 	uint16_t channel_mapping[];
- } __packed;
- 
-+struct param_id_gapless_early_eos_delay_t {
-+	uint32_t early_eos_delay_ms;
-+} __packed;
-+
- struct media_format {
- 	uint32_t data_format;
- 	uint32_t fmt_id;
-diff --git a/sound/soc/qcom/qdsp6/q6apm.c b/sound/soc/qcom/qdsp6/q6apm.c
-index 1a6c7108bae0..37ded6e0f4ea 100644
---- a/sound/soc/qcom/qdsp6/q6apm.c
-+++ b/sound/soc/qcom/qdsp6/q6apm.c
-@@ -605,6 +605,9 @@ static int graph_callback(struct gpr_resp_pkt *data, void *priv, int op)
- 		}
- 		break;
- 	case DATA_CMD_WR_SH_MEM_EP_EOS_RENDERED:
-+		client_event = APM_CLIENT_EVENT_CMD_EOS_DONE;
-+		if (graph->cb)
-+			graph->cb(client_event, hdr->token, data->payload, graph->priv);
- 		break;
- 	case GPR_BASIC_RSP_RESULT:
- 		switch (result->opcode) {
+:set cino=(0
+
+> 
+> - Marijn
+
 -- 
-2.25.1
+With best wishes
+Dmitry
 
