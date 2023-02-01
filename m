@@ -2,94 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A57C686AED
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 16:56:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E438686AEE
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 16:56:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232527AbjBAP4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 10:56:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57252 "EHLO
+        id S230152AbjBAP4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 10:56:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbjBAP4O (ORCPT
+        with ESMTP id S232442AbjBAP4Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 10:56:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C91641BF2
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 07:56:11 -0800 (PST)
+        Wed, 1 Feb 2023 10:56:16 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D026240FC;
+        Wed,  1 Feb 2023 07:56:14 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 86BAFB821BC
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 15:56:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7B93C433D2;
-        Wed,  1 Feb 2023 15:56:07 +0000 (UTC)
-Date:   Wed, 1 Feb 2023 10:56:03 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Song Chen <chensong_2000@189.cn>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kernel/sched/core: adjust rt_priority accordingly when
- prio is changed
-Message-ID: <20230201105603.1d377866@gandalf.local.home>
-In-Reply-To: <1675245680-2811-1-git-send-email-chensong_2000@189.cn>
-References: <1675245680-2811-1-git-send-email-chensong_2000@189.cn>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BBA561827;
+        Wed,  1 Feb 2023 15:56:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADCE2C433D2;
+        Wed,  1 Feb 2023 15:56:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675266973;
+        bh=Q2EPanjPmFZeesRSm0BQ+4z8xT5vyStaiZMkawcpuzs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=INcV+U4CVGWv25GcGpI9edlYaYjBE8Nka9tJJ/aVTZ6XirBUYQeMrSlj5ptbbqsMW
+         7OSQdQ8h2gdJUqhV61yVeQI3MCScEM5cTTgvUZPLcYt8DP4gkxrEQMgYQ5etkCds8S
+         KHBh1tNLTwVW7k5hwfnu52YKqZVZLrRnJvFzKewynuIqtthxSxkTQaMOcxc2a3/5QO
+         jlgitKlT3BDUPv4Kxxq9ozwTDtJ4whOMZYU0AN7NqoXMlrBr4gg4IChDbMSaZIEZB4
+         0TZT4Uhwptff7wbooexr/4dFcBAtzPxWjbQ1fCC4dw8o71Fk/v4rHF6tV72QGwTqv2
+         2Ra/lMTpxK8Rw==
+From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To:     linux-trace-kernel@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        mhiramat@kernel.org, Florent Revest <revest@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>
+Subject: [PATCH v3 02/10] lib/test_fprobe: Add private entry_data testcases
+Date:   Thu,  2 Feb 2023 00:56:10 +0900
+Message-Id:  <167526697074.433354.17790288501657876219.stgit@mhiramat.roam.corp.google.com>
+X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
+In-Reply-To:  <167526695292.433354.8949652607331707144.stgit@mhiramat.roam.corp.google.com>
+References:  <167526695292.433354.8949652607331707144.stgit@mhiramat.roam.corp.google.com>
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed,  1 Feb 2023 18:01:20 +0800
-Song Chen <chensong_2000@189.cn> wrote:
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-> When a high priority process is acquiring a rtmutex which is held by a
-> low priority process, the latter's priority will be boosted up by calling
-> rt_mutex_setprio->__setscheduler_prio.
-> 
-> However, p->prio is changed but p->rt_priority is not, as a result, the
-> equation between prio and rt_priority is broken, which is:
-> 
-> 	prio = MAX_RT_PRIO - 1 - rt_priority
-> 
-> It's confusing to the user when it calls sched_getparam, which only
-> returns rt_priority.
+Add test cases for checking whether private entry_data is
+correctly passed or not.
 
-If it is boosted, then that's an internal implementation and not the real
-priority of the task. It should not be exposed to a user interface. In
-fact, there's discussion of implementing a "proxy" algorithm which will
-make what the "priority" of a task is even more complicated when acquiring
-mutexes.
+Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+---
+ lib/test_fprobe.c |   30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
+diff --git a/lib/test_fprobe.c b/lib/test_fprobe.c
+index e4f65d114ed2..6c7ef5acea21 100644
+--- a/lib/test_fprobe.c
++++ b/lib/test_fprobe.c
+@@ -38,6 +38,12 @@ static notrace void fp_entry_handler(struct fprobe *fp, unsigned long ip,
+ 	if (ip != target_ip)
+ 		KUNIT_EXPECT_EQ(current_test, ip, target2_ip);
+ 	entry_val = (rand1 / div_factor);
++	if (fp->entry_data_size) {
++		KUNIT_EXPECT_NOT_NULL(current_test, data);
++		if (data)
++			*(u32 *)data = entry_val;
++	} else
++		KUNIT_EXPECT_NULL(current_test, data);
+ }
+ 
+ static notrace void fp_exit_handler(struct fprobe *fp, unsigned long ip,
+@@ -53,6 +59,12 @@ static notrace void fp_exit_handler(struct fprobe *fp, unsigned long ip,
+ 		KUNIT_EXPECT_EQ(current_test, ret, (rand1 / div_factor));
+ 	KUNIT_EXPECT_EQ(current_test, entry_val, (rand1 / div_factor));
+ 	exit_val = entry_val + div_factor;
++	if (fp->entry_data_size) {
++		KUNIT_EXPECT_NOT_NULL(current_test, data);
++		if (data)
++			KUNIT_EXPECT_EQ(current_test, *(u32 *)data, entry_val);
++	} else
++		KUNIT_EXPECT_NULL(current_test, data);
+ }
+ 
+ /* Test entry only (no rethook) */
+@@ -134,6 +146,23 @@ static void test_fprobe_syms(struct kunit *test)
+ 	KUNIT_EXPECT_EQ(test, 0, unregister_fprobe(&fp));
+ }
+ 
++/* Test private entry_data */
++static void test_fprobe_data(struct kunit *test)
++{
++	struct fprobe fp = {
++		.entry_handler = fp_entry_handler,
++		.exit_handler = fp_exit_handler,
++		.entry_data_size = sizeof(u32),
++	};
++
++	current_test = test;
++	KUNIT_EXPECT_EQ(test, 0, register_fprobe(&fp, "fprobe_selftest_target", NULL));
++
++	target(rand1);
++
++	KUNIT_EXPECT_EQ(test, 0, unregister_fprobe(&fp));
++}
++
+ static unsigned long get_ftrace_location(void *func)
+ {
+ 	unsigned long size, addr = (unsigned long)func;
+@@ -159,6 +188,7 @@ static struct kunit_case fprobe_testcases[] = {
+ 	KUNIT_CASE(test_fprobe_entry),
+ 	KUNIT_CASE(test_fprobe),
+ 	KUNIT_CASE(test_fprobe_syms),
++	KUNIT_CASE(test_fprobe_data),
+ 	{}
+ };
+ 
 
-> 
-> This patch addresses this issue by adjusting rt_priority according to
-> the new value of prio, what's more, it also returns normal_prio for
-> CFS processes instead of just a zero.
-
-The comment above sched_getparam() is:
-
-/**
- * sys_sched_getparam - get the RT priority of a thread
- * @pid: the pid in question.
- * @param: structure containing the RT priority.
- *
- * Return: On success, 0 and the RT priority is in @param. Otherwise, an error
- * code.
- */
-
-So returning the nice value is incorrect. If anything, perhaps it should
-return -EINVAL if the task is not an RT task?
-
--- Steve
-
-> 
-> Signed-off-by: Song Chen <chensong_2000@189.cn>
-> ---
