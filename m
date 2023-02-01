@@ -2,125 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12AFC686F2C
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 20:47:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68704686F2E
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 20:47:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231790AbjBATrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 14:47:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57416 "EHLO
+        id S232113AbjBATrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 14:47:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231712AbjBATrA (ORCPT
+        with ESMTP id S231543AbjBATr1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 14:47:00 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0610A83253;
-        Wed,  1 Feb 2023 11:46:47 -0800 (PST)
-Received: by linux.microsoft.com (Postfix, from userid 1052)
-        id 5F2CE20B7102; Wed,  1 Feb 2023 11:46:47 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5F2CE20B7102
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1675280807;
-        bh=8MDyb8NfMEMA+gvGsYIH3Hk92qnGUNCXXiiUGYDGeY0=;
+        Wed, 1 Feb 2023 14:47:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3842C841A1;
+        Wed,  1 Feb 2023 11:47:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E29F5B8228F;
+        Wed,  1 Feb 2023 19:47:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01C89C433D2;
+        Wed,  1 Feb 2023 19:47:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1675280835;
+        bh=A9tTG8dWtmVDJMbXWhKt0soYbv6crDy7nFqy+MC4d2k=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aGiTEE1l0zxKt35hRAw5O5rUjHIWcAoDjTu0gK/pqVOhoxy2wEnsm8ZNcF03j15OU
-         toc+XIsocCQ+PUZLhpiUjHGzrPbYhknyZg79wHeR50uEX2RjoQI/xWZzNaX8eA9EKw
-         t8/KxyA0u4mFqi9fvZeO3cXFFwKkFGDUqHnC4vOk=
-Date:   Wed, 1 Feb 2023 11:46:47 -0800
-From:   Fan Wu <wufan@linux.microsoft.com>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
-        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
-        axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
-        eparis@redhat.com, paul@paul-moore.com, linux-doc@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
-        dm-devel@redhat.com, linux-audit@redhat.com,
-        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
-        Deven Bowers <deven.desai@linux.microsoft.com>
-Subject: Re: [RFC PATCH v9 05/16] ipe: add userspace interface
-Message-ID: <20230201194647.GA11892@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <1675119451-23180-1-git-send-email-wufan@linux.microsoft.com>
- <1675119451-23180-6-git-send-email-wufan@linux.microsoft.com>
- <255c119de8f8665b88c411d981762fddc0fe7eaa.camel@huaweicloud.com>
+        b=kYyDEcOIYUjcY88IYKRyJ3v0ffkxC6DFXM6AOwI/RNsVCxS8ZVdc+hWO33907UT3q
+         9aHeIdmineumpKvWWoJWqkSsy1kh/2l5XfRRyyFPP3hYPPA+5TcsQV/BMCWl7gCLMF
+         EcPAQDIhcnGzYXwKo5gmC2+DKybMMVeiCssPK3OQ=
+Date:   Wed, 1 Feb 2023 20:47:12 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc:     linux-kernel@vger.kernel.org, linux-sh@vger.kernel.org,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux Kernel Functional Testing <lkft@linaro.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>
+Subject: Re: [PATCH] maple: remove unneeded maple_bus_uevent() callback.
+Message-ID: <Y9rBwMf6p6QmkVPp@kroah.com>
+References: <20230201125642.624255-1-gregkh@linuxfoundation.org>
+ <2f10003fcf3671ccdd285952ba76153f5c2d5307.camel@physik.fu-berlin.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <255c119de8f8665b88c411d981762fddc0fe7eaa.camel@huaweicloud.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <2f10003fcf3671ccdd285952ba76153f5c2d5307.camel@physik.fu-berlin.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 11:49:44AM +0100, Roberto Sassu wrote:
-> On Mon, 2023-01-30 at 14:57 -0800, Fan Wu wrote:
-> > From: Deven Bowers <deven.desai@linux.microsoft.com>
-> > +
-> > +/**
-> > + * new_policy - Write handler for the securityfs node, "ipe/new_policy".
-> > + * @f: Supplies a file structure representing the securityfs node.
-> > + * @data: Suppleis a buffer passed to the write syscall.
+On Wed, Feb 01, 2023 at 08:05:21PM +0100, John Paul Adrian Glaubitz wrote:
+> Hi Greg!
 > 
-> Typo: Suppleis.
+> On Wed, 2023-02-01 at 13:56 +0100, Greg Kroah-Hartman wrote:
+> > The driver core recently changed the uevent bus callback to take a const
+> > pointer, and the maple_bus_uevent() was not correctly fixed up.  Instead
+> > of fixing the function parameter types, just remove the callback
+> > entirely as it does not do anything, so it is not necessary.
+> > 
+> > Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+> > Cc: Rich Felker <dalias@libc.org>
+> > Cc: Hans de Goede <hdegoede@redhat.com>
+> > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> > Fixes: 2a81ada32f0e ("driver core: make struct bus_type.uevent() take a const *")
+> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > ---
+> > sh maintainers, I'll take this through my tree as that's where the
+> > offending commit is that causes the build breakage.
+> > 
+> >  drivers/sh/maple/maple.c | 7 -------
+> >  1 file changed, 7 deletions(-)
+> > 
+> > diff --git a/drivers/sh/maple/maple.c b/drivers/sh/maple/maple.c
+> > index e24e220e56ee..e05473c5c267 100644
+> > --- a/drivers/sh/maple/maple.c
+> > +++ b/drivers/sh/maple/maple.c
+> > @@ -760,12 +760,6 @@ static int maple_match_bus_driver(struct device *devptr,
+> >  	return 0;
+> >  }
+> >  
+> > -static int maple_bus_uevent(struct device *dev,
+> > -			    struct kobj_uevent_env *env)
+> > -{
+> > -	return 0;
+> > -}
+> > -
+> >  static void maple_bus_release(struct device *dev)
+> >  {
+> >  }
+> > @@ -782,7 +776,6 @@ static struct maple_driver maple_unsupported_device = {
+> >  struct bus_type maple_bus_type = {
+> >  	.name = "maple",
+> >  	.match = maple_match_bus_driver,
+> > -	.uevent = maple_bus_uevent,
+> >  };
+> >  EXPORT_SYMBOL_GPL(maple_bus_type);
 > 
-Thanks for spotting the typos!
+> Through which tree is this supposed to be picked up?
 
-> > + * @len: Supplies the length of @data.
-> > + * @offset: unused.
-> > + *
-> > + * Return:
-> > + * * >0	- Success, Length of buffer written
-> > + * * <0	- Error
-> > + */
-> > +static ssize_t new_policy(struct file *f, const char __user *data,
-> > +			  size_t len, loff_t *offset)
-> > +{
-> > +	int rc = 0;
-> > +	char *copy = NULL;
-> > +	struct ipe_policy *p = NULL;
-> > +
-> > +	if (!file_ns_capable(f, &init_user_ns, CAP_MAC_ADMIN))
-> > +		return -EPERM;
-> > +
-> > +	copy = memdup_user_nul(data, len);
-> > +	if (IS_ERR(copy)) {
-> > +		rc = PTR_ERR(copy);
-> > +		goto err;
-> > +	}
-> > +
-> > +	p = ipe_new_policy(NULL, 0, copy, len);
-> > +	if (IS_ERR(p)) {
-> > +		rc = PTR_ERR(p);
-> > +		goto err;
-> > +	}
-> > +
-> > +	rc = ipe_new_policyfs_node(p);
-> > +	if (rc)
-> > +		goto err;
-> 
-> Uhm, don't you need to do cleanup of allocated memory or revert the
-> actions of ipe_new_policy()?
-> 
-Yes that should be cleaned up but should be done in ipe_new_policy instead,
-will add a ipe_free_policy call at the end. Thanks for pointing that out.
+As the comment below the --- line said above:
 
-> 
-> I would like more to see all the functions managing the policy
-> together. If the patch is too long, you could further split by adding
-> the helpers (that don't directly deal with the policy) in a separate
-> patch.
-> 
-> Here you would simply instantiate dirs/files in securityfs and call the
-> existing functions previously introduced.
-> 
-> Roberto
-> 
+	sh maintainers, I'll take this through my tree as that's where the
+	offending commit is that causes the build breakage.
 
-I will try to split them in the next version. Thanks for the suggestion.
--Fan
+So I took it :)
+
+thanks,
+
+greg k-h
