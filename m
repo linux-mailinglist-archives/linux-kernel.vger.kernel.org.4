@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7D4868693D
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 15:59:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1D6A686946
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 16:00:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232439AbjBAO7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 09:59:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33564 "EHLO
+        id S232882AbjBAO75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 09:59:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbjBAO7D (ORCPT
+        with ESMTP id S232285AbjBAO7F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 09:59:03 -0500
+        Wed, 1 Feb 2023 09:59:05 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE1B965EE9
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 06:59:02 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E336ACA1
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 06:59:03 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1pNEZY-0002rk-0A; Wed, 01 Feb 2023 15:58:52 +0100
+        id 1pNEZY-0002rl-0N; Wed, 01 Feb 2023 15:58:52 +0100
 Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ore@pengutronix.de>)
-        id 1pNEZY-001w1k-10; Wed, 01 Feb 2023 15:58:51 +0100
+        id 1pNEZY-001w1q-5E; Wed, 01 Feb 2023 15:58:51 +0100
 Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ore@pengutronix.de>)
-        id 1pNEZT-009hWa-G8; Wed, 01 Feb 2023 15:58:47 +0100
+        id 1pNEZT-009hWj-Ge; Wed, 01 Feb 2023 15:58:47 +0100
 From:   Oleksij Rempel <o.rempel@pengutronix.de>
 To:     Woojung Huh <woojung.huh@microchip.com>,
         UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
@@ -41,9 +41,9 @@ To:     Woojung Huh <woojung.huh@microchip.com>,
 Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
         linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         Arun.Ramadoss@microchip.com, intel-wired-lan@lists.osuosl.org
-Subject: [PATCH net-next v4 14/23] net: phy: at803x: add PHY_SMART_EEE flag to AR8035
-Date:   Wed,  1 Feb 2023 15:58:36 +0100
-Message-Id: <20230201145845.2312060-15-o.rempel@pengutronix.de>
+Subject: [PATCH net-next v4 15/23] net: phy: add phy_has_smarteee() helper
+Date:   Wed,  1 Feb 2023 15:58:37 +0100
+Message-Id: <20230201145845.2312060-16-o.rempel@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230201145845.2312060-1-o.rempel@pengutronix.de>
 References: <20230201145845.2312060-1-o.rempel@pengutronix.de>
@@ -61,27 +61,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-AR8035 is one of the PHYs with SmartEEE functionality. This flag will be
-used by one of next patches on the i.MX FEC driver.
+Add helper to identify PHYs with SmartEEE support.
 
 Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 ---
- drivers/net/phy/at803x.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/phy.h | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/drivers/net/phy/at803x.c b/drivers/net/phy/at803x.c
-index 5ab43eb63581..94dbec0a992c 100644
---- a/drivers/net/phy/at803x.c
-+++ b/drivers/net/phy/at803x.c
-@@ -2147,7 +2147,7 @@ static struct phy_driver at803x_driver[] = {
- 	/* Qualcomm Atheros AR8035 */
- 	PHY_ID_MATCH_EXACT(ATH8035_PHY_ID),
- 	.name			= "Qualcomm Atheros AR8035",
--	.flags			= PHY_POLL_CABLE_TEST,
-+	.flags			= PHY_POLL_CABLE_TEST | PHY_SMART_EEE,
- 	.probe			= at803x_probe,
- 	.remove			= at803x_remove,
- 	.config_aneg		= at803x_config_aneg,
+diff --git a/include/linux/phy.h b/include/linux/phy.h
+index 6063b0c7a06e..c85187897115 100644
+--- a/include/linux/phy.h
++++ b/include/linux/phy.h
+@@ -1407,6 +1407,15 @@ static inline bool phy_polling_mode(struct phy_device *phydev)
+ 	return phydev->irq == PHY_POLL;
+ }
+ 
++/**
++ * phy_has_rxtstamp - Tests whether a PHY supports SmartEEE.
++ * @phydev: the phy_device struct
++ */
++static inline bool phy_has_smarteee(struct phy_device *phydev)
++{
++	return phydev && phydev->drv && !!(phydev->drv->flags & PHY_SMART_EEE);
++}
++
+ /**
+  * phy_has_hwtstamp - Tests whether a PHY time stamp configuration.
+  * @phydev: the phy_device struct
 -- 
 2.30.2
 
