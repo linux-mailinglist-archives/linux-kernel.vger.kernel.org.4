@@ -2,64 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B633685E38
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 05:15:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D097685E48
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 05:19:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231185AbjBAEPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 23:15:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34200 "EHLO
+        id S231335AbjBAETH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 23:19:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjBAEPT (ORCPT
+        with ESMTP id S229500AbjBAETF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 23:15:19 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64681552AF
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 20:14:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675224872;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/eKFn64VzPTEGVhGDDJ4Rj8PWdwFHGYC51EzAnMCzcw=;
-        b=brjveYrL/0ZZcQ4zTYRg6o3a1QMZR0DmPsf0iUU0M3BG0ochPV/FaNtOLw+Pf5yPfqUdRu
-        nWIdaQ4a/rY8RNH/j60cyfBt3kHPTwbQ9DRTzPnjy9CFrWWXePqhAewt4/v4E6EoOmyEvD
-        HKkvHd+NOV3/lfLmeTjnaMIyPdOt+Ws=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-619-2aJBGfx1PjeLOgckNusxEw-1; Tue, 31 Jan 2023 23:14:29 -0500
-X-MC-Unique: 2aJBGfx1PjeLOgckNusxEw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 652A329A9CC1;
-        Wed,  1 Feb 2023 04:14:28 +0000 (UTC)
-Received: from [10.22.8.85] (unknown [10.22.8.85])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id EB05CC15BAE;
-        Wed,  1 Feb 2023 04:14:27 +0000 (UTC)
-Message-ID: <6b068916-5e1b-a943-1aad-554964d8b746@redhat.com>
-Date:   Tue, 31 Jan 2023 23:14:27 -0500
+        Tue, 31 Jan 2023 23:19:05 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 032A13F2B2;
+        Tue, 31 Jan 2023 20:19:03 -0800 (PST)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3114Bx1A029916;
+        Wed, 1 Feb 2023 04:19:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=CrymkedV5laHK2FzFN517hNBKAJU5Sy8gU2V0LVlGnU=;
+ b=XPRMB0yxqgd+oL4ddVVtPsmtTeiHGuwbLnnJaGdUlYkJ+sTGLSkAHUOzBjQm2O7nU4JM
+ 9N+6+zIcYrLHOXT0UpahkTg4yFHJYYOUfCacHNXYMOQ/Zm/YpUySLyP+s/rTOssZGJDd
+ 4y39UEb4Ik4zAw9iUacZuJ4mIm2J4tHnjHIZV7Cp8ylrLRaeD42KEDPErl0MSoCwjZyL
+ 8OpmcwiVytaxf4m8yTpjleKpfDEpQ15hvJRdWdB1jRHh6qrjfB8dyZEOlAzYH+v4fdwB
+ pLZGsyrAJf4Dj9Mf8koexKiTzrQ61Fc18qkzWJVjraI8hEP3OU139wlBACi2icEyNsY2 Dw== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3netc4b8xv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Feb 2023 04:19:00 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3114IxXD004524
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 1 Feb 2023 04:18:59 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Tue, 31 Jan 2023 20:18:58 -0800
+From:   Bjorn Andersson <quic_bjorande@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        "Subbaraman Narayanamurthy" <quic_subbaram@quicinc.com>,
+        Johan Hovold <johan@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [PATCH v4 0/4] soc: qcom: Introduce PMIC GLINK
+Date:   Tue, 31 Jan 2023 20:18:49 -0800
+Message-ID: <20230201041853.1934355-1-quic_bjorande@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 1/2] cpuset: Fix cpuset_cpus_allowed() to not filter
- offline CPUs
-Content-Language: en-US
-To:     Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org
-Cc:     kernel-team@android.com, Peter Zijlstra <peterz@infradead.org>,
-        Zefan Li <lizefan.x@bytedance.com>, Tejun Heo <tj@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org
-References: <20230131221719.3176-1-will@kernel.org>
- <20230131221719.3176-2-will@kernel.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20230131221719.3176-2-will@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: TnHORyjvtcA-t7w1s6WBJk7HUY4zydao
+X-Proofpoint-ORIG-GUID: TnHORyjvtcA-t7w1s6WBJk7HUY4zydao
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-31_08,2023-01-31_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
+ impostorscore=0 phishscore=0 mlxlogscore=841 mlxscore=0 spamscore=0
+ adultscore=0 priorityscore=1501 lowpriorityscore=0 malwarescore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302010035
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,66 +82,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/31/23 17:17, Will Deacon wrote:
-> From: Peter Zijlstra <peterz@infradead.org>
->
-> There is a difference in behaviour between CPUSET={y,n} that is now
-> wrecking havoc with {relax,force}_compatible_cpus_allowed_ptr().
->
-> Specifically, since commit 8f9ea86fdf99 ("sched: Always preserve the
-> user requested cpumask")  relax_compatible_cpus_allowed_ptr() is
-> calling __sched_setaffinity() unconditionally.
->
-> But the underlying problem goes back a lot further, possibly to
-> commit: ae1c802382f7 ("cpuset: apply cs->effective_{cpus,mems}") which
-> switched cpuset_cpus_allowed() from cs->cpus_allowed to
-> cs->effective_cpus.
->
-> The problem is that for CPUSET=y cpuset_cpus_allowed() will filter out
-> all offline CPUs. For tasks that are part of a (!root) cpuset this is
-> then later fixed up by the cpuset hotplug notifiers that re-evaluate
-> and re-apply cs->effective_cpus, but for (normal) tasks in the root
-> cpuset this does not happen and they will forever after be excluded
-> from CPUs onlined later.
->
-> As such, rewrite cpuset_cpus_allowed() to return a wider mask,
-> including the offline CPUs.
->
-> Fixes: 8f9ea86fdf99 ("sched: Always preserve the user requested cpumask")
-> Reported-by: Will Deacon <will@kernel.org>
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Link: https://lkml.kernel.org/r/20230117160825.GA17756@willie-the-truck
-> Signed-off-by: Will Deacon <will@kernel.org>
+This implements the base PMIC GLINK driver, a power_supply driver and a
+driver for the USB Type-C altmode protocol. This has been tested and
+shown to provide battery information, USB Type-C switch and mux requests
+and DisplayPort notifications on SC8180X, SC8280XP and SM8350.
 
-Before cgroup v2, cpuset had only one cpumask - cpus_allowed. It only 
-tracked online cpus and ignored the offline ones. It behaves more like 
-effective_cpus in cpuset v2. With v2, we have 2 cpumasks - cpus_allowed 
-and effective_cpus. When cpuset v1 is mounted, cpus_allowed and 
-effective_cpus are effectively the same and track online cpus. With 
-cpuset v2, cpus_allowed contains what the user has written into and it 
-won't be changed until another write happen. However, what the user 
-written may not be what the system can give it and effective_cpus is 
-what the system decides a cpuset can use.
+Bjorn Andersson (4):
+  dt-bindings: soc: qcom: Introduce PMIC GLINK binding
+  soc: qcom: pmic_glink: Introduce base PMIC GLINK driver
+  soc: qcom: pmic_glink: Introduce altmode support
+  power: supply: Introduce Qualcomm PMIC GLINK power supply
 
-Cpuset v2 is able to handle hotplug correctly and update the task's 
-cpumask accordingly. So missing previously offline cpus won't happen 
-with v2.
+ .../bindings/soc/qcom/qcom,pmic-glink.yaml    |   95 ++
+ drivers/power/supply/Kconfig                  |    9 +
+ drivers/power/supply/Makefile                 |    1 +
+ drivers/power/supply/qcom_battmgr.c           | 1421 +++++++++++++++++
+ drivers/soc/qcom/Kconfig                      |   15 +
+ drivers/soc/qcom/Makefile                     |    2 +
+ drivers/soc/qcom/pmic_glink.c                 |  336 ++++
+ drivers/soc/qcom/pmic_glink_altmode.c         |  478 ++++++
+ include/linux/soc/qcom/pmic_glink.h           |   32 +
+ 9 files changed, 2389 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
+ create mode 100644 drivers/power/supply/qcom_battmgr.c
+ create mode 100644 drivers/soc/qcom/pmic_glink.c
+ create mode 100644 drivers/soc/qcom/pmic_glink_altmode.c
+ create mode 100644 include/linux/soc/qcom/pmic_glink.h
 
-Since v1 keeps the old behavior, previously offlined cpus are lost in 
-the cpuset's cpus_allowed. However tasks in the root cpuset will still 
-be fine with cpu hotplug as its cpus_allowed should track 
-cpu_online_mask. IOW, only tasks in a non-root cpuset suffer this problem.
-
-It was a known issue in v1 and I believe is one of the major reasons of 
-the cpuset v2 redesign.
-
-A major concern I have is the overhead of creating a poor man version of 
-v2 cpus_allowed. This issue can be worked around even for cpuset v1 if 
-it is mounted with the cpuset_v2_mode option to behave more like v2 in 
-its cpumask handling. Alternatively we may be able to provide a config 
-option to make this the default for v1 without the special mount option, 
-if necessary.
-
-Cheers,
-Longman
+-- 
+2.25.1
 
