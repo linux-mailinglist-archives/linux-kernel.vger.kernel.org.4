@@ -2,91 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F26C6864C1
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 11:52:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 673F06864BF
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 11:51:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232253AbjBAKwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 05:52:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55088 "EHLO
+        id S232228AbjBAKvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 05:51:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230369AbjBAKwA (ORCPT
+        with ESMTP id S230369AbjBAKvJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 05:52:00 -0500
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D351940BE2;
-        Wed,  1 Feb 2023 02:51:56 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4P6JRr3sN7z9v7bZ;
-        Wed,  1 Feb 2023 18:43:36 +0800 (CST)
-Received: from [10.81.213.150] (unknown [10.81.213.150])
-        by APP1 (Coremail) with SMTP id LxC2BwC3M_8YRNpjWPLkAA--.12937S2;
-        Wed, 01 Feb 2023 11:51:20 +0100 (CET)
-Message-ID: <3b56b84d-92fa-873f-1ed8-19a54f6eee80@huaweicloud.com>
-Date:   Wed, 1 Feb 2023 11:51:01 +0100
+        Wed, 1 Feb 2023 05:51:09 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D9BE410B5
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 02:51:08 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id ud5so50195271ejc.4
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 02:51:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9syDN6lVof2BYFuxSBHicwMUB0VPrCisO1VbIHSe+6A=;
+        b=SHPXpNCRVqPweEXV0hlapMi/VQuvoK5IvsIRNK7hZ8PhKscyS7ct4IkMeIJHsbWRor
+         9k32ljOamOWyTl9lhUrBJx2meuyF2/A1C7bD2hEcZ80InE9vmokiad7A8hz5KCXA2KSI
+         InWKiYKeBp5rwqPR5j/zBbKXHNJiLUS2I4PWZXME2baGmG0Z2P4n7YmiSEJq25yDcYvo
+         nmNFf2aWUctvcWQcJFOIcLiaCf2Rg5q+lpBtJBRPSt911V2v7wKt9SJUxMYMK6l9qvCc
+         FPBzZy/hpMattSEqXyQlLZuJW4MlE6M2kC4LPF8Waij6LVkG77QzTm+kjbDHc1MoN3MO
+         AQiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9syDN6lVof2BYFuxSBHicwMUB0VPrCisO1VbIHSe+6A=;
+        b=0BI2Z7r11pbmjqfF8FZ/EHukV1DdkanXCL/r3aTFdNNwRt9+NJ1bUoTZxfEjKUg5rq
+         Tkeh5usR8uMWp1NULnmFtLUpF78skG8Kl5gVCSPcIcFuLf7XRJIx8uYx2nOq2icSd/eu
+         EG9WpPC+CWxW3Xxsl9CeXTWFM6S+Oi3Jz77vNVMm29ViaAC3b8CyahPUd3CU3B+TYiki
+         dUNdDIXtVIUtv9igmVCPogtlo0z90eJLSUsp10eUzbAWDRbyTqhLRnHEMWZ0y29lrkIu
+         /KTCDs6FAA+jStOcffusc1uKEQIRs6MEliGuN6c80zcuafE9nnA0QLyAgkmFwmQiD6xc
+         FItw==
+X-Gm-Message-State: AO0yUKUSamBpcTMhT1PfyFuZCAZXhQjDGZiyt7jlsH0Rs1qhO0JRlv0i
+        ChZ+TH5megQ3AxQOtGzlfde9YA==
+X-Google-Smtp-Source: AK7set/ZlvzNCR642AtQEOigZkb5AINCHT4epDo5VZqT7HU14gSKMAjDoCe9mm67WxPQ9hW27+m5TA==
+X-Received: by 2002:a17:907:c78a:b0:878:7349:5ce6 with SMTP id tz10-20020a170907c78a00b0087873495ce6mr2037849ejc.71.1675248666940;
+        Wed, 01 Feb 2023 02:51:06 -0800 (PST)
+Received: from [192.168.1.101] (abyl20.neoplus.adsl.tpnet.pl. [83.9.31.20])
+        by smtp.gmail.com with ESMTPSA id l15-20020a1709066b8f00b00886faa3d569sm5484873ejr.58.2023.02.01.02.51.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Feb 2023 02:51:06 -0800 (PST)
+Message-ID: <b844c47e-8ee4-8163-3888-43a06edfd1a2@linaro.org>
+Date:   Wed, 1 Feb 2023 11:51:04 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] locking/atomic: atomic: Use arch_atomic_{read,set} in
- generic atomic ops
-To:     Boqun Feng <boqun.feng@gmail.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Jules Maselbas <jmaselbas@kalray.eu>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>,
-        =?UTF-8?Q?Paul_Heidekr=c3=bcger?= <paul.heidekrueger@in.tum.de>,
-        Marco Elver <elver@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
-References: <20230126173354.13250-1-jmaselbas@kalray.eu>
- <Y9Oy9ZAj/DQ7O+6e@hirez.programming.kicks-ass.net>
- <20230127134946.GJ5952@tellis.lin.mbt.kalray.eu>
- <Y9Pg+aNM9f48SY5Z@hirez.programming.kicks-ass.net>
- <Y9RLpYGmzW1KPksE@boqun-archlinux>
- <2f4717b3-268f-8db3-e380-4af0a5479901@huaweicloud.com>
- <Y9gOjzGaWy2hIAmu@boqun-archlinux>
- <2f121e2d-8e4c-de99-5672-93350fbb52af@huaweicloud.com>
- <Y9mQNNhzkOF/+uuC@boqun-archlinux>
-From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-In-Reply-To: <Y9mQNNhzkOF/+uuC@boqun-archlinux>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH 02/14] drm/msm/a6xx: Extend UBWC config
+Content-Language: en-US
+To:     Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     marijn.suijten@somainline.org, Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Chia-I Wu <olvaffe@gmail.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20230126151618.225127-1-konrad.dybcio@linaro.org>
+ <20230126151618.225127-3-konrad.dybcio@linaro.org>
+ <3644f111-0d69-1006-f032-782e1b00cd17@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <3644f111-0d69-1006-f032-782e1b00cd17@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwC3M_8YRNpjWPLkAA--.12937S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxtw13Wry7Gr4xZFWrJry3CFg_yoW7ZFW8pF
-        WxKa1xGF4kJryYy3s7t3WIg3WFk3yftrW5Xr95Gw1kur90vFyfur1fKw4Y9Fy7Arn2g34j
-        qr4jva47u3WrAFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9F14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r
-        4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
-        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
-        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
-        17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
-        IF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3
-        Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
-        sGvfC2KfnxnUUI43ZEXa7VU1VOJ5UUUUU==
-X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -95,142 +87,94 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 1/31/2023 11:03 PM, Boqun Feng wrote:
-> On Tue, Jan 31, 2023 at 04:08:29PM +0100, Jonas Oberhauser wrote:
+On 1.02.2023 10:30, Akhil P Oommen wrote:
+> On 1/26/2023 8:46 PM, Konrad Dybcio wrote:
+>> Port setting min_access_length, ubwc_mode and upper_bit from downstream.
+>> Values were validated using downstream device trees for SM8[123]50 and
+>> left default (as per downstream) elsewhere.
 >>
->> On 1/30/2023 7:38 PM, Boqun Feng wrote:
->>> On Mon, Jan 30, 2023 at 01:23:28PM +0100, Jonas Oberhauser wrote:
->>>> On 1/27/2023 11:09 PM, Boqun Feng wrote:
->>>>> On Fri, Jan 27, 2023 at 03:34:33PM +0100, Peter Zijlstra wrote:
->>>>>>> I also noticed that GCC has some builtin/extension to do such things,
->>>>>>> __atomic_OP_fetch and __atomic_fetch_OP, but I do not know if this
->>>>>>> can be used in the kernel.
->>>>>> On a per-architecture basis only, the C/C++ memory model does not match
->>>>>> the Linux Kernel memory model so using the compiler to generate the
->>>>>> atomic ops is somewhat tricky and needs architecture audits.
->>>>> Hijack this thread a little bit, but while we are at it, do you think it
->>>>> makes sense that we have a config option that allows archs to
->>>>> implement LKMM atomics via C11 (volatile) atomics? I know there are gaps
->>>>> between two memory models, but the option is only for fallback/generic
->>>>> implementation so we can put extra barriers/orderings to make things
->>>>> guaranteed to work.
->>>>>
-
->>>> [...]
->>>> I'm also curious whether link time optimization can resolve the inlining
->>>> issue?
->>>>
->>> For Rust case, cross-language LTO is needed I think, and last time I
->>> tried, it didn't work.
->> In German we say "Was noch nicht ist kann ja noch werden", translated as
->> "what isn't can yet become", I don't feel like putting too much effort into
-> Not too much compared to wrapping LKMM atomics with Rust using FFI,
->
-> Using FFI:
->
-> 	impl Atomic {
-> 		fn read_acquire(&self) -> i32 {
-> 			// SAFTEY:
-> 			unsafe { atomic_read_acquire(self as _) }
-> 		}
-> 	}
->
-> Using standard atomics:
->
-> 	impl Atomic {
-> 		fn read_acquire(&self) -> i32 {
-> 			// self.0 is a Rust AtomicI32
-> 			compiler_fence(SeqCst); // Rust not support volatile atomic yet
-> 			self.0.load(Acquire)
-> 		}
-> 	}
->
-> Needless to say, if we really need LKMM atomics in Rust, it's kinda my
-> job to implement these, so not much different for me ;-) Of course, any
-> help is appreciate!
-
-I think a lot more mental effort goes into figuring out where and which 
-barriers go everywhere.
-But of course if there's curiosity driving you, then that small 
-trade-off may be acceptable : )
-
->> something that hardly affects performance and will hopefully become obsolete
->> at some point in the near future.
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> ---
+>>  drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 26 ++++++++++++++++++--------
+>>  1 file changed, 18 insertions(+), 8 deletions(-)
 >>
->>>> I think another big question for me is to which extent it makes sense
->>>> anyways to have shared memory concurrency between the Rust code and the C
->>>> code. It seems all the bad concurrency stuff from the C world would flow
->>>> into the Rust world, right?
->>> What do you mean by "bad" ;-) ;-) ;-)
->> Uh oh. Let's pretend I didn't say anything :D
->>
->>>> If you can live without shared Rust & C concurrency, then perhaps you can
->>>> get away without using LKMM in Rust at all, and just rely on its (C11-like)
->>>> memory model internally and talk to the C code through synchronous, safer
->>>> ways.
->>>>
->>> First I don't think I can avoid using LKMM in Rust, besides the
->>> communication from two sides, what if kernel developers just want to
->>> use the memory model they learn and understand (i.e. LKMM) in a new Rust
->>> driver?
->> I'd rather people think 10 times before relying on atomics to write Rust
->> code.
->> There may be cases where it can't be avoided because of performance reasons,
->> but Rust has a much more convenient concurrency model to offer than atomics.
->> I think a lot more people understand Rust mutexes or channels compared to
->> atomics.
-> C also has more convenient concurrency tools in kernel, and I'm happy
-> that people use them. But there are also people (including me) working
-> on building these tools/models, inevitably we need to use atomics.
+>> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+>> index c5f5d0bb3fdc..ad5d791b804c 100644
+>> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+>> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+>> @@ -786,17 +786,22 @@ static void a6xx_set_cp_protect(struct msm_gpu *gpu)
+>>  static void a6xx_set_ubwc_config(struct msm_gpu *gpu)
+>>  {
+>>  	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
+>> -	u32 lower_bit = 2;
+>> +	u32 lower_bit = 1;
+> Wouldn't this break a630?
 
-:D
+// highest_bank_bit = 15 on 845, from "qcom,highest-bank-bit" in dt
 
-> 1.	Use Rust standard atomics and pretend different memory models
-> 	work together (do we have model tools to handle code in
-> 	different models communicating with each other?)
+bit = adreno_dev->highest_bank_bit ? adreno_dev->highest_bank_bit - 13 : 0;
+// => bit = 2
 
-I'm not aware of any generic tools, and in particular for Rust and LKMM 
-it will take some thought to create interoperability.
-This is because the po | sw and ppo | rfe | pb styles are so different.
+lower_bit = bit & 0x3;
+// => lower_bit = 2
 
-I did some previous work on letting SC and x86 talk to each other 
-through shared memory, which is much easier because both can be 
-understood through the ppo | rfe | coe | fre lense, just that on SC 
-everything is preserved; it still wasn't completely trivial because the 
-SC part was actually implemented efficiently on x86 as well, so it was a 
-"partial-DRF-partial-SC" kind of deal.
+Yes it would! Thanks for catching that, I'll add the A630 case in v2.
+
+The 1 default value comes from the fact that highest_bank_bit is 13
+when it's unset in dt, which makes lower_bit 1.
 
 
->
-> 2.	Use Rust standard atomics and add extra mb()s to enforce more
-> 	ordering guarantee.
->
-> 3.	Implement LKMM atomics in Rust and use them with caution when
-> 	comes to implicit ordering guarantees such as ppo. In fact lots
-> 	of implicit ordering guarantees are available since the compiler
-> 	won't exploit the potential reordering to "optimize", we also
-> 	kinda have tools to check:
->
-> 		https://lpc.events/event/16/contributions/1174/attachments/1108/2121/Status%20Report%20-%20Broken%20Dependency%20Orderings%20in%20the%20Linux%20Kernel.pdf
->
-> 	A good part of using Rust is that we may try out a few tricks
-> 	(with proc-macro, compiler plugs, etc) to express some ordering
-> 	expection, e.g. control dependencies.
->
-> 	Two suboptions are:
->
-> 	3.1	Implement LKMM atomics in Rust with FFI
+Konrad
 
-I'd target this one ; ) It seems the most likely to work the way people 
-want, with perhaps the least effort, and a good chance of not having 
-overhead at some point in the future.
-
-> 	3.2	Implement LKMM atomics in Rust with Rust standard
-> 		atomics
->
-> I'm happy to figure out pros and cons behind each option.
->
-
-
-Best wishes, jonas
-
+> 
+> -Akhil.
+>> +	u32 upper_bit = 0;
+>>  	u32 amsbc = 0;
+>>  	u32 rgb565_predicator = 0;
+>>  	u32 uavflagprd_inv = 0;
+>> +	u32 min_acc_len = 0;
+>> +	u32 ubwc_mode = 0;
+>>  
+>>  	/* a618 is using the hw default values */
+>>  	if (adreno_is_a618(adreno_gpu))
+>>  		return;
+>>  
+>> -	if (adreno_is_a640_family(adreno_gpu))
+>> +	if (adreno_is_a640_family(adreno_gpu)) {
+>>  		amsbc = 1;
+>> +		lower_bit = 2;
+>> +	}
+>>  
+>>  	if (adreno_is_a650(adreno_gpu) || adreno_is_a660(adreno_gpu)) {
+>>  		/* TODO: get ddr type from bootloader and use 2 for LPDDR4 */
+>> @@ -807,18 +812,23 @@ static void a6xx_set_ubwc_config(struct msm_gpu *gpu)
+>>  	}
+>>  
+>>  	if (adreno_is_7c3(adreno_gpu)) {
+>> -		lower_bit = 1;
+>>  		amsbc = 1;
+>>  		rgb565_predicator = 1;
+>>  		uavflagprd_inv = 2;
+>>  	}
+>>  
+>>  	gpu_write(gpu, REG_A6XX_RB_NC_MODE_CNTL,
+>> -		rgb565_predicator << 11 | amsbc << 4 | lower_bit << 1);
+>> -	gpu_write(gpu, REG_A6XX_TPL1_NC_MODE_CNTL, lower_bit << 1);
+>> -	gpu_write(gpu, REG_A6XX_SP_NC_MODE_CNTL,
+>> -		uavflagprd_inv << 4 | lower_bit << 1);
+>> -	gpu_write(gpu, REG_A6XX_UCHE_MODE_CNTL, lower_bit << 21);
+>> +		  rgb565_predicator << 11 | upper_bit << 10 | amsbc << 4 |
+>> +		  min_acc_len << 3 | lower_bit << 1 | ubwc_mode);
+>> +
+>> +	gpu_write(gpu, REG_A6XX_TPL1_NC_MODE_CNTL, upper_bit << 4 |
+>> +		  min_acc_len << 3 | lower_bit << 1 | ubwc_mode);
+>> +
+>> +	gpu_write(gpu, REG_A6XX_SP_NC_MODE_CNTL, upper_bit << 10 |
+>> +		  uavflagprd_inv << 4 | min_acc_len << 3 |
+>> +		  lower_bit << 1 | ubwc_mode);
+>> +
+>> +	gpu_write(gpu, REG_A6XX_UCHE_MODE_CNTL, min_acc_len << 23 | lower_bit << 21);
+>>  }
+>>  
+>>  static int a6xx_cp_init(struct msm_gpu *gpu)
+> 
