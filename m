@@ -2,94 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35664683ADB
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 01:00:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94F15683AE2
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 01:01:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230245AbjBAAAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 19:00:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48310 "EHLO
+        id S231268AbjBAABh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 19:01:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231431AbjBAAAa (ORCPT
+        with ESMTP id S231469AbjBAABd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 19:00:30 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 634FA903D;
-        Tue, 31 Jan 2023 16:00:29 -0800 (PST)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30VMlfwp017012;
-        Wed, 1 Feb 2023 00:00:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=47RuRwySVmTMFFl54aMpaViCwmyYhYq34ZYUAVPjLlA=;
- b=TUYwTfpBqcOXSeJCvjEhFXq17beYJXERCbvz4rOLQIbjcCT+1ZP2A/4fhA9uK8tBljN5
- e2J1kh34fPczrwFH2j5bkt001hPU1vDU6wWUqa+gnU2Ufe6MNb0JfsTLbF6ZGBoeT4mn
- 49W/bsTbCdTN2bpGV+Hm4ZHo8QiMa9tdNv7gAhl3/J/dmBuevOYkoUz/Z0qkSfKXihr6
- F34x/NdpRK5k1D3zNAyG9Gg6clNyQDFWLQIoniQZN9upG0DWi0PIrRwIqFzVsWZXVjiB
- sxU/FMYUMlz/FNrgXVzECjYK4TY1C45Po83SX4m5CHpvs+E6x/iZZIfyjcNh4EDGs6vH zA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nfag0bh5q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Feb 2023 00:00:13 +0000
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30VNqBJe005831;
-        Wed, 1 Feb 2023 00:00:12 GMT
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nfag0bh4n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Feb 2023 00:00:12 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30VMYW1k007780;
-        Wed, 1 Feb 2023 00:00:11 GMT
-Received: from smtprelay02.dal12v.mail.ibm.com ([9.208.130.97])
-        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3ncvtetrag-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Feb 2023 00:00:11 +0000
-Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-        by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31100Ai729557168
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 1 Feb 2023 00:00:10 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3D69C58061;
-        Wed,  1 Feb 2023 00:00:10 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 87B3B5805A;
-        Wed,  1 Feb 2023 00:00:09 +0000 (GMT)
-Received: from sig-9-77-155-214.ibm.com (unknown [9.77.155.214])
-        by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Wed,  1 Feb 2023 00:00:09 +0000 (GMT)
-Message-ID: <6a98beea4607a9684789e862b4182dfdf3bec8de.camel@linux.ibm.com>
-Subject: Re: [PATCH ima-evm-utils v2] Add tests for MMAP_CHECK and
- MMAP_CHECK_REQPROT hooks
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stefanb@linux.ibm.com,
-        viro@zeniv.linux.org.uk, pvorel@suse.cz,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Tue, 31 Jan 2023 19:00:09 -0500
-In-Reply-To: <20230131174245.2343342-3-roberto.sassu@huaweicloud.com>
-References: <20230131174245.2343342-1-roberto.sassu@huaweicloud.com>
-         <20230131174245.2343342-3-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+        Tue, 31 Jan 2023 19:01:33 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0155C1024B
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 16:01:28 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id p19-20020a25d813000000b0080b78270db5so17980762ybg.15
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 16:01:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=bxtFPzszSwirgU1/0J+PiMZRXMSQgSBrsapRb9QUY2A=;
+        b=Rk9+8STvrqcbQlKiAZtMBFXlHokjI0hFJPEVyGKrBrbMfUwZG8qeTJEuvgsTMPrddh
+         QBvNTohEnVdpbnlrXIgz3Ikz6D2cz4x6un8ohdjcDpAfu7gZ17WU+drJlhJu9Qtc4X1w
+         EN1waKUDwB0WD09JdlRGgqA2ctv2OIzWCDINQo+peotxUMRoWPkFgEen/RotX4SxEykY
+         LuacT9neZvFmURFR16w8DaONfwFwVOcr03mG+PjT2JsZXXZmxD4X3lmTqKTBd5FY/kIG
+         JWR8f0Sx+Z/NFa0Ne873ZtAwDgad97njkhjjwAf7i14upKxsl5EruUIt4SUZYeig/N3q
+         ro2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bxtFPzszSwirgU1/0J+PiMZRXMSQgSBrsapRb9QUY2A=;
+        b=PdKlbWUtySgUlFUD5NLTVWV+CVlrUxDHqqp5Axz7XLxIeZDGH7g88Vpnev+bGAFrCz
+         dkXO1zQxd6Qc3ixW+PmrD/IQXm8jKtZDyOpCmxWM4Vp7WMEqgdJTi2p68XdobtUdVy1m
+         cn50C4eTc+dBl5utO/9QN0ligiPXU/Hoqt0pSVzBeMN+OHjCJLLcMUEQdLxjXASkES2T
+         vl7KOlyGSLFlg1N2ux3zUIc7Jl/+2nCbp86YJ9aqFKmjDg2k8hxDI3nOFpkpVuzM9hzX
+         o9lgpeBQyayHDLzsBfFtJdWIs/RTo5kndRveBPzlwUjAE9Jk6Pc7xYgtsZZ2yUNyRCoY
+         k8gg==
+X-Gm-Message-State: AO0yUKULE6yk9dU1rbiKC/kpJb0IXVI65lB3jZTyyAA6fQpqwaUS3XIf
+        Ow2z0C1TXKoK/1okyCdYZ0dtDRPNX/o=
+X-Google-Smtp-Source: AK7set8qCAXBbF1QMD7keC0/SZMMktYNysM7vnt2K6tJydZhJP2e/r9qdYRWK1+YTYhm0sm9RG76XRb3Zl4=
+X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:3d02:e79b:d9e3:ddd3])
+ (user=surenb job=sendgmr) by 2002:a81:204:0:b0:4db:df79:a7c7 with SMTP id
+ 4-20020a810204000000b004dbdf79a7c7mr21711ywc.515.1675209688185; Tue, 31 Jan
+ 2023 16:01:28 -0800 (PST)
+Date:   Tue, 31 Jan 2023 16:01:16 -0800
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: adHO93F_tAE9m5qYBJLmFb3SUv_jYlNi
-X-Proofpoint-ORIG-GUID: dn5BI28q1kg3csdIGl3tFd01l0iJV54i
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-31_08,2023-01-31_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- phishscore=0 suspectscore=0 spamscore=0 adultscore=0 lowpriorityscore=0
- priorityscore=1501 mlxscore=0 mlxlogscore=999 malwarescore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301310202
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
+Message-ID: <20230201000116.1333160-1-surenb@google.com>
+Subject: [PATCH 1/1] mm: introduce vm_flags_reset_once to replace WRITE_ONCE
+ vm_flags updates
+From:   Suren Baghdasaryan <surenb@google.com>
+To:     akpm@linux-foundation.org
+Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
+        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@techsingularity.net,
+        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
+        peterz@infradead.org, ldufour@linux.ibm.com, paulmck@kernel.org,
+        mingo@redhat.com, will@kernel.org, luto@kernel.org,
+        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
+        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
+        kent.overstreet@linux.dev, punit.agrawal@bytedance.com,
+        lstoakes@gmail.com, peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        rppt@kernel.org, 42.hyeyoo@gmail.com, jannh@google.com,
+        shakeelb@google.com, tatashin@google.com, edumazet@google.com,
+        gthelen@google.com, gurua@google.com, arjunroy@google.com,
+        soheil@google.com, leewalsh@google.com, posk@google.com,
+        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com,
+        surenb@google.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,48 +83,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-01-31 at 18:42 +0100, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
-> 
-> Add tests to ensure that, after applying the kernel patch 'ima: Align
-> ima_file_mmap() parameters with mmap_file LSM hook', the MMAP_CHECK hook
-> checks the protections applied by the kernel and not those requested by the
-> application.
-> 
-> Also ensure that after applying 'ima: Introduce MMAP_CHECK_REQPROT hook',
-> the MMAP_CHECK_REQPROT hook checks the protections requested by the
-> application.
-> 
-> Test both with the test_mmap application that by default requests the
-> PROT_READ protection flag. Its syntax is:
-> 
-> test_mmap <file> <mode>
-> 
-> where mode can be:
-> - exec: adds the PROT_EXEC protection flag to mmap()
-> - read_implies_exec: calls the personality() system call with
->                      READ_IMPLIES_EXEC as the first argument before mmap()
-> - mprotect: adds the PROT_EXEC protection flag to a memory area in addition
->             to PROT_READ
-> - exec_on_writable: calls mmap() with PROT_EXEC on a file which has a
->                     writable mapping
-> 
-> Check the different combinations of hooks/modes and ensure that a
-> measurement entry is found in the IMA measurement list only when it is
-> expected. No measurement entry should be found when only the PROT_READ
-> protection flag is requested or the matching policy rule has the
-> MMAP_CHECK_REQPROT hook and the personality() system call was called with
-> READ_IMPLIES_EXEC.
-> 
-> mprotect() with PROT_EXEC on an existing memory area protected with
-> PROT_READ should be denied (with an appraisal rule), regardless of the MMAP
-> hook specified in the policy. The same applies for mmap() with PROT_EXEC on
-> a file with a writable mapping.
-> 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+Provide vm_flags_reset_once() and replace the vm_flags updates which used
+WRITE_ONCE() to prevent compiler optimizations.
 
-Nice!   Including some comments, or at least the test assumption, would
-help simplify reviewing the code.
+Fixes: 0cce31a0aa0e ("mm: replace vma->vm_flags direct modifications with modifier calls")
+Reported-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+---
+Notes:
+- The patch applies cleanly over mm-unstable
+- The SHA in Fixes: line is from mm-unstable, so is... unstable
 
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+ include/linux/mm.h | 7 +++++++
+ mm/mlock.c         | 4 ++--
+ 2 files changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 5bf0ad48faaa..23ce04f6e91e 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -648,6 +648,13 @@ static inline void vm_flags_reset(struct vm_area_struct *vma,
+ 	vm_flags_init(vma, flags);
+ }
+ 
++static inline void vm_flags_reset_once(struct vm_area_struct *vma,
++				       vm_flags_t flags)
++{
++	mmap_assert_write_locked(vma->vm_mm);
++	WRITE_ONCE(ACCESS_PRIVATE(vma, __vm_flags), flags);
++}
++
+ static inline void vm_flags_set(struct vm_area_struct *vma,
+ 				vm_flags_t flags)
+ {
+diff --git a/mm/mlock.c b/mm/mlock.c
+index ed49459e343e..617469fce96d 100644
+--- a/mm/mlock.c
++++ b/mm/mlock.c
+@@ -380,7 +380,7 @@ static void mlock_vma_pages_range(struct vm_area_struct *vma,
+ 	 */
+ 	if (newflags & VM_LOCKED)
+ 		newflags |= VM_IO;
+-	vm_flags_reset(vma, newflags);
++	vm_flags_reset_once(vma, newflags);
+ 
+ 	lru_add_drain();
+ 	walk_page_range(vma->vm_mm, start, end, &mlock_walk_ops, NULL);
+@@ -388,7 +388,7 @@ static void mlock_vma_pages_range(struct vm_area_struct *vma,
+ 
+ 	if (newflags & VM_IO) {
+ 		newflags &= ~VM_IO;
+-		vm_flags_reset(vma, newflags);
++		vm_flags_reset_once(vma, newflags);
+ 	}
+ }
+ 
+-- 
+2.39.1.456.gfc5497dd1b-goog
 
