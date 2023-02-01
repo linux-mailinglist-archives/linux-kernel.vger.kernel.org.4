@@ -2,101 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D112687112
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 23:39:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EE97687119
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 23:41:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231552AbjBAWjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 17:39:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55480 "EHLO
+        id S231357AbjBAWlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 17:41:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230136AbjBAWjg (ORCPT
+        with ESMTP id S229730AbjBAWlI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 17:39:36 -0500
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DBD0244B8
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 14:39:35 -0800 (PST)
-Received: by mail-pl1-x64a.google.com with SMTP id m12-20020a1709026bcc00b001963da9cc71so246plt.11
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 14:39:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=amcATFasBpSs8MNI2KZjvtTtDn1HGc2e896fYt2Kp/8=;
-        b=fVkLjhI/esXpbr02/JFz7657iuPwZG4MSprxP6l5IuHndZRem6MmzG057TF7jg0QRr
-         avSuRmiXhX/a/Ol7wmMrrAQiEBRm+z2BzZx4DV28cq43XKZKmq7RzNqWGHwRPZCmr7p6
-         ielRxk3KfClrtPfQdCIqOp7hZB9APb5BTdiNZvC6HovuBe0PR0MYbUCPqJLuteku0oka
-         PtA2LezI9Mzc76mhc2ICYpfa0Yd5TlPiVluZAECJWOkP3ZBAkqTxxyVG/KgMplgkW4cY
-         6lj3QA1s9BjogDLlBbV3ZIBWUvzl4XFTfxwTNNa+dwSM8AyjiTIwmHEukY4M4i97GPtG
-         K18A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=amcATFasBpSs8MNI2KZjvtTtDn1HGc2e896fYt2Kp/8=;
-        b=ugVDqBzqDncFuRfzkLwbdFBn19zdDf2+n3d1EFB9QjJTIZCk5SKumxKY9T1FYCmJi2
-         N5cCMLQzI+5MgB4DT0fxeJpOhpeLYsiP2A7xrZNOCZU+8bnddltnTEqM/1WvISgjiy8S
-         kxAK5pbao/l0EiRA/VZGkvBGBxdS1eif7BckpRIyqMKcCWwtccjkia6zxBP0lLwkGbxt
-         HplY7Mx3CAIzJI5X0ivf21jrG6Q8MSljg4Z/z3VSUHy6aL84TCUCjPlrAj2RWPcLdh9V
-         8gvxiRXy5sGN7G9QE7FDAjTbRNU+LDWAWHjCrRsm365aVnrU4UFYNTTjNUb411VWRwTl
-         Xcnw==
-X-Gm-Message-State: AO0yUKXp09JcRNQs9M2NJvBHdjbmbp3hLMgqioaA9mWv1KUEVNLwv/ig
-        AyczSOA/yto/2s+oZu52TsUNlys2Ts8=
-X-Google-Smtp-Source: AK7set9oSzf5kH5BczSyIXnDBULTTnuRaODOR0+mACIG6kdtSGJuCRV/EhejZUcj/DTIz5dsC3aFsrMw5lQ=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a62:33c4:0:b0:592:ecb5:f51f with SMTP id
- z187-20020a6233c4000000b00592ecb5f51fmr846308pfz.34.1675291174649; Wed, 01
- Feb 2023 14:39:34 -0800 (PST)
-Date:   Wed,  1 Feb 2023 22:39:19 +0000
-In-Reply-To: <20221212183720.4062037-1-vipinsh@google.com>
-Mime-Version: 1.0
-References: <20221212183720.4062037-1-vipinsh@google.com>
-X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
-Message-ID: <167528978572.826771.13904811225670358495.b4-ty@google.com>
-Subject: Re: (subset) [Patch v4 00/13] Add Hyper-v extended hypercall support
- in KVM
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>, pbonzini@redhat.com,
-        vkuznets@redhat.com, dmatlack@google.com,
-        Vipin Sharma <vipinsh@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 1 Feb 2023 17:41:08 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B615A2A982
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 14:41:03 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2EDE21EC0589;
+        Wed,  1 Feb 2023 23:41:02 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1675291262;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=AyoeuwBBM2ackjOZrWChwx5x8HGPUXUVlBJUm7ryOIQ=;
+        b=H6p+CSnDVJIG8Rcs6jgZYfWmN5r1SIQu0HHp2v1Qwl0Ewz7VEdGYK8lb4iSg/OrshD3B/d
+        gtoloum+s15DxutSxn3N1geAnRGoafllZ+/nmOHXLsq+giKRI5S5Hduelgo0J2T7lRj8hm
+        urKR/BPKEqSyND5XyqjXfKSBu2/S5Ok=
+Date:   Wed, 1 Feb 2023 23:40:58 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Ashok Raj <ashok.raj@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>, x86 <x86@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Stefan Talpalaru <stefantalpalaru@yahoo.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Peter Zilstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Martin Pohlack <mpohlack@amazon.de>
+Subject: Re: [Patch v3 Part2 4/9] x86/microcode: Do not call
+ apply_microcode() on sibling threads
+Message-ID: <Y9rqeqMjDOYJKmLZ@zn.tnic>
+References: <20230130213955.6046-1-ashok.raj@intel.com>
+ <20230130213955.6046-5-ashok.raj@intel.com>
+ <bfd85699-4b7a-c606-266a-cea7ff336950@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <bfd85699-4b7a-c606-266a-cea7ff336950@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 12 Dec 2022 10:37:07 -0800, Vipin Sharma wrote:
-> There are two patch series combined in this one because I have rebased
-> my patch series (patches 8 to 13) on top of Vitaly's "Hyper-V invariant TSC control
-> feature" (patches 1 to 7).
-> https://lore.kernel.org/kvm/87o7szouyr.fsf@ovpn-194-185.brq.redhat.com/
+On Wed, Feb 01, 2023 at 02:21:18PM -0800, Dave Hansen wrote:
+> That works great, unless T0 experiences an error.  In that case, T0 will
+> jump out of __reload_late() after failing to do the update.  T1 will
+> come bumbling along after it and will enter ->apply_microcode(),
+> blissfully unaware of T0's failure.  T1 will assume that it is supposed
+> to do T0's job, noting "rev < mc->hdr.rev".  T1 will write the MSR while
+> T0 is off doing god knows what.
 > 
-> Vitaly's series had some small merge conflicts on the KVM queue branch I
-> have fixed them in this series, no code changes.
-> 
-> [...]
+> T1 should not even be attempting to do ->apply_microcode() because T0 is
+> not quiescent.
 
-Applied 8-11 and 13 to kvm-x86 misc.  1-7 were already merged, and I don't
-want to carry the sweeping TEST_ASSERT_KVM_EXIT_REASON() change, at least
-not in "misc", and I definitely don't want to grab it without Cc'ing the
-other arch maintainers.  I'll follow up in that patch.
+Yah, thanks for explaining properly.
 
-[08/13] KVM: x86: hyper-v: Use common code for hypercall userspace exit
-        https://github.com/kvm-x86/linux/commit/1a9df3262a63
-[09/13] KVM: x86: hyper-v: Add extended hypercall support in Hyper-v
-        https://github.com/kvm-x86/linux/commit/db9cf24cea69
-[10/13] KVM: selftests: Test Hyper-V extended hypercall enablement
-        https://github.com/kvm-x86/linux/commit/c4a46627e5a8
-[11/13] KVM: selftests: Replace hardcoded Linux OS id with HYPERV_LINUX_OS_ID
-        https://github.com/kvm-x86/linux/commit/f65092015a83
-[13/13] KVM: selftests: Test Hyper-V extended hypercall exit to userspace
-        https://github.com/kvm-x86/linux/commit/60325261235a
+So, if T0 fails, then we will say that it failed. The ->apply_microcode()
+call on T1 was never meant to apply any microcode - just to update the
+cached data.
 
---
-https://github.com/kvm-x86/linux/tree/next
-https://github.com/kvm-x86/linux/tree/fixes
+Now, if T0 fails, then it doesn't matter what T1 does - you have a
+bigger problem:
+
+A subset of the cores is running with new microcode while other subset
+with the old one. Now this is a shit situation I don't want to be in.
+
+And I don't have a good way out of it.
+
+Revert to the old patch? Maybe...
+
+Retry to application on all again with the hope that it works this time?
+
+What if some core touches a MSR being added with the new microcode
+patch?
+
+Late loading is a big PITA. As we've been preaching for a while now.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
