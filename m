@@ -2,82 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B01926868C2
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 15:45:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10CDF6868CC
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 15:46:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232795AbjBAOpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 09:45:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48878 "EHLO
+        id S231531AbjBAOqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 09:46:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232391AbjBAOp3 (ORCPT
+        with ESMTP id S232585AbjBAOqd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 09:45:29 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10FEB69B1B
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 06:45:03 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id l8so12855392wms.3
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 06:45:02 -0800 (PST)
+        Wed, 1 Feb 2023 09:46:33 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 326B130EB7
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 06:46:32 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id q10so17548783wrm.4
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 06:46:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=D3cxAKq3W6GNmm99bqwhkQT0fOr9iLLRhZZR6J2sGvQ=;
-        b=F7lRECosIkJ3E5HvHCJYzmL5WrWrxDsrCO537GZjANosTWxVk9cd8NON8083pm+KdC
-         kSVqpnGfX/PzU3OZ8R1oPcJJEk+a0YSjKTmt5/5CCnl3eQElf42BTeFFBERDWWI8/h4R
-         FBCjdQaUET8GbGYpj8WZ2hKW1wVjREC8ZAQvM5DjKqntuFvPYlU6ayyQfBXUb3dEa/Xz
-         qYrvr9iMKfgifFswnFUCm2z54vQHocY7VRFZa/4PwPrzjkTktUWpsudU0xKhyRHJvhvP
-         oobSqeGI0vk1fPAbEjhoB0ORLVPAHHNF71eV9uweva1KHXCkUZ5bVCfKZ8q+yAFEjW2I
-         7S5Q==
+        bh=vFO6Menks76/PjVM2v0FfpZTwomJcaT6TEjwJv8UGZQ=;
+        b=Goi5q4N49AnrkFf7gHYniaDCl2Xlxnok0hTT6DCJ3o9v3j2h18Fx3RgC6i6w0QQn6l
+         IHzM/KY+3/OMbzOe0+WH23E/gRrSpzRwcAWK8Egc7p36YRSsuqqjFutHT2QurY2CIhdP
+         yOv9ULuXlAIfcqGEEixthSh1aGlPay6JM73R5GM+bc+xJg6Oj3wB6yG2tQZKz+0zEoMt
+         90B1W9id5e6I6c/ds5edEQXLr13rFm5bfTzXMAaf+TsupT6xQxa1XvZFbRG4pWarsTVJ
+         H4sZD4HRUWCOYL78gE4IXkiC4xefBbtWT7xtMCutagH8ywTgEBfFGvOqlTeYzwBWSrCX
+         U2BA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=D3cxAKq3W6GNmm99bqwhkQT0fOr9iLLRhZZR6J2sGvQ=;
-        b=mTZF27k0pyS+AyvyldIMxDw00TkFYk6ZhZh//81kslrcWbrDAviiGKcmapPX1eo2Sr
-         V//bZighQp1LnzNZrKXhm/FAX6sfGjgHvA4E1pH3pxCjgyUXFVl4VUHzaJLGWLu3HHuz
-         l+H37kBlwqJhUXa7UfoQ6JvP7y/+rzv5gp6pBP8sqBW1nZLcAD/FFD5KhVwKqivJYPvg
-         KhoPCZW/+B6u7aEMcvXfvkY5A5dY/bcEWYyd6Wf4MyVeYxZaE/4N6NkL2WhUoM9ZkMVO
-         TDVgtIPOc3X4QVpomSk62sserPiuTAEhXpUxQ8VpKDYvSUZthk5BhdIFDCU90N9BbTi8
-         VXPA==
-X-Gm-Message-State: AO0yUKURgmBEBVO25ZTgKfE3DAJyNi66OcI0eel+Beab3pN5ls5EQfNX
-        kDAKtDzt5t14hLe5uV7aGDgN8g==
-X-Google-Smtp-Source: AK7set/je/28Ve1sxehfaX5nK3YqtyP3YXDQHPF2Xn/Ma37QbEgVUVA1hCsoLo4QKRhVfzlmwg5adw==
-X-Received: by 2002:a05:600c:4e4f:b0:3dd:1c45:a90e with SMTP id e15-20020a05600c4e4f00b003dd1c45a90emr2490817wmq.25.1675262701628;
-        Wed, 01 Feb 2023 06:45:01 -0800 (PST)
+        bh=vFO6Menks76/PjVM2v0FfpZTwomJcaT6TEjwJv8UGZQ=;
+        b=7dS+0JkEH95nCnTpZR+T10ZFxTtC6Spf9iJlmJEMB9Eencs0I0uAoNYQzuqLI14BkH
+         9nr6L2+rfnh6+aE7txN46OqwAV1ctuqIbZqeE5f8CTVwD0PovgCOZHgh8k7OQFo/WcFG
+         1nuTYuSCkpk+6ArYCIXzZTLUIpw0eIWzvBuP2K+vbcAkTrauQ7nGVfgUL/oqqd+wGQHu
+         YNDWAm2FvJyVGsC71v2kzZsbDIdtlA0M1bF6sIEKfmOpnyWIBvZvPuGnNUEmBdxV1mCX
+         rjmKG/E7EdSpvxFvzLe/nEARYuhVwaYmqNgDNvwC8pgK4913nFD4Yj7tbWBqCKEA31la
+         jx8Q==
+X-Gm-Message-State: AO0yUKWjK0NAbbEGq8EMz6OaWy7NV/Y764dTfY1ImHrayiXKtaqYTb8V
+        zKtj7pECYSiJUQugUXG0snNbxw==
+X-Google-Smtp-Source: AK7set+WJkY9Mi0KIQARoaUpO6AUsjE8m693dOPJRiIIX0qtHAB7nf9RwF9/xCEeIMPNxd/yeigXWw==
+X-Received: by 2002:a5d:6b89:0:b0:2bf:ae2f:c6ff with SMTP id n9-20020a5d6b89000000b002bfae2fc6ffmr2607870wrx.31.1675262790727;
+        Wed, 01 Feb 2023 06:46:30 -0800 (PST)
 Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id p11-20020a1c544b000000b003dc4fd6e624sm2037613wmi.19.2023.02.01.06.44.59
+        by smtp.gmail.com with ESMTPSA id f12-20020adfdb4c000000b002bfb1de74absm17460688wrj.114.2023.02.01.06.46.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Feb 2023 06:45:00 -0800 (PST)
-Message-ID: <9dc413ab-c8a4-f248-d714-8c96346bd186@linaro.org>
-Date:   Wed, 1 Feb 2023 15:44:59 +0100
+        Wed, 01 Feb 2023 06:46:30 -0800 (PST)
+Message-ID: <530a96ba-d820-4970-17e6-94aa696bef5e@linaro.org>
+Date:   Wed, 1 Feb 2023 15:46:28 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH v4 3/5] drivers: iio: adc: Add ADI MAX77541 ADC Support
+Subject: Re: [PATCH v4 1/5] dt-bindings: regulator: Add ADI MAX77541/MAX77540
+ Regulator
 Content-Language: en-US
 To:     Okan Sahin <okan.sahin@analog.com>
-Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Mark Brown <broonie@kernel.org>,
         Jonathan Cameron <jic23@kernel.org>,
         Lars-Peter Clausen <lars@metafoo.de>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        Marcus Folkesson <marcus.folkesson@gmail.com>,
         Ramona Bolboaca <ramona.bolboaca@analog.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
+        Marcelo Schmitt <marcelo.schmitt1@gmail.com>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Marcus Folkesson <marcus.folkesson@gmail.com>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
         William Breathitt Gray <william.gray@linaro.org>,
+        ChiYuan Huang <cy_huang@richtek.com>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-iio@vger.kernel.org
 References: <20230201103534.108136-1-okan.sahin@analog.com>
- <20230201103534.108136-4-okan.sahin@analog.com>
+ <20230201103534.108136-2-okan.sahin@analog.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230201103534.108136-4-okan.sahin@analog.com>
+In-Reply-To: <20230201103534.108136-2-okan.sahin@analog.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -90,20 +91,49 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 01/02/2023 11:35, Okan Sahin wrote:
-> The MAX77541 has an 8-bit Successive Approximation Register (SAR) ADC
-> with four multiplexers for supporting the telemetry feature.
+> Add ADI MAX77541/MAX77540 Regulator devicetree document.
 > 
 > Signed-off-by: Okan Sahin <okan.sahin@analog.com>
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->  drivers/iio/adc/Kconfig        |  11 ++
->  drivers/iio/adc/Makefile       |   1 +
->  drivers/iio/adc/max77541-adc.c | 200 +++++++++++++++++++++++++++++++++
->  3 files changed, 212 insertions(+)
->  create mode 100644 drivers/iio/adc/max77541-adc.c
+>  .../regulator/adi,max77541-regulator.yaml     | 44 +++++++++++++++++++
+>  1 file changed, 44 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/regulator/adi,max77541-regulator.yaml
 > 
+> diff --git a/Documentation/devicetree/bindings/regulator/adi,max77541-regulator.yaml b/Documentation/devicetree/bindings/regulator/adi,max77541-regulator.yaml
+> new file mode 100644
+> index 000000000000..fff463d5e79d
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/regulator/adi,max77541-regulator.yaml
+> @@ -0,0 +1,44 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/regulator/adi,max77541-regulator.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Buck Converter for MAX77540/MAX77541
+> +
+> +maintainers:
+> +  - Okan Sahin <okan.sahin@analog.com>
+> +
+> +description: |
+> +  This is a part of device tree bindings for ADI MAX77540/MAX77541
+> +
+> +  The buck converter is represented as a sub-node of the PMIC node on the device tree.
+> +
+> +  The device has two buck regulators.
+> +  See also Documentation/devicetree/bindings/mfd/adi,max77541.yaml for
+> +  additional information and example.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - adi,max77540-regulator
+> +      - adi,max77541-regulator
 
-The comment about subject prefixes applies also here and to other patches.
+Why do need the compatible? I don't see any usage of it in the driver
+(empty driver data).
 
 Best regards,
 Krzysztof
