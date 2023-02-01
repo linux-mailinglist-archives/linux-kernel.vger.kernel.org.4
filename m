@@ -2,65 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20A48686080
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 08:22:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7C5668608A
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 08:23:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231786AbjBAHWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 02:22:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55384 "EHLO
+        id S231822AbjBAHXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 02:23:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbjBAHWA (ORCPT
+        with ESMTP id S231478AbjBAHXx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 02:22:00 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEFE647EE3;
-        Tue, 31 Jan 2023 23:21:56 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id CC90F24E226;
-        Wed,  1 Feb 2023 15:21:49 +0800 (CST)
-Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 1 Feb
- 2023 15:21:49 +0800
-Received: from [192.168.125.110] (183.27.97.127) by EXMBX172.cuchost.com
- (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 1 Feb
- 2023 15:21:48 +0800
-Message-ID: <c507e0b2-5ca3-cffe-55d2-873ed8c24e3d@starfivetech.com>
-Date:   Wed, 1 Feb 2023 15:21:48 +0800
+        Wed, 1 Feb 2023 02:23:53 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26FEC6580
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 23:23:52 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id t18so16383249wro.1
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 23:23:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aWbAr9mBTWOMtAoqN4GLxi4sz+M94KHE/wqJAmQCP4Y=;
+        b=Cxxt2hjYpMNG9w0CHlFVW7pp1ICkDXKprzAXGOZAiJIuIIZcEv5jkGi2oMtyJfEX/p
+         gx2CGoJStdWBEubEfzP1gOSwQwi1GsXxYI9+9CweEcf2hF6l7SOyfUqxNxZRY1qv0jsb
+         Tfuiu9EHcBo8+MqFQKsPylvskN2LifOOCrtQRjqiD1UrfL9Snm+jeFRktURZw7cJ9SlO
+         yDumtrx+jGy8liLB0/nwqPnOfx8mO/bVDL6n+OMbYp3+4RY+fbD0ij+tfIr0YN8bbQSI
+         KJ82V8wpnPXSa2o5uKAzaRPOLWvIgbZXvxMre8/TpRVot+gJDhGiT3do3dhIcv9B4b6D
+         IDFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aWbAr9mBTWOMtAoqN4GLxi4sz+M94KHE/wqJAmQCP4Y=;
+        b=N8EcAFn6B4BydIRmc+rfFxXK6OPsowwybqeXygbQ5u1GxjyDqbGIV1e5ptDpp8IGVr
+         SOqCLGqeTq8FmZBKw7QbLXC8X0cYMA/uB5CFPNluKi2ZHzq3k/XDF7e8SXfJVxqGIeua
+         JPcL7GHUCi7eh4HbiTe2SwLIr9X/k8JwW0OdVJ4IqDgH/eOX4L4Ow/CfS7ToXmTrH7R4
+         WVIYsS3B3hfZrB75HmTSy35ZT79iFWt26+6hyj5SYFMj5dI1/Kp02llw+tq61VgOSOse
+         KoqcQmHw9WNuBTIZDa+h6uWPcBAgk9A3kOZZqGzKmQWsjTmwJF4/JWBU7TuGmSxyGpe2
+         zyWw==
+X-Gm-Message-State: AO0yUKWsi7yWzOd0/M2b5NUi+xXB6eDsHOrJPQaQp7eh8mJeu7oMDY+G
+        CAokpURhxTSzWGlQfPs7EVIvCg==
+X-Google-Smtp-Source: AK7set8cJQO3VUWKw/onCq6pDwenKE4EACMeCdvxzCOtnu69YShLVk0A8EvdjocJ92tEsMBFyoq72g==
+X-Received: by 2002:a05:6000:9:b0:2bf:c338:b02a with SMTP id h9-20020a056000000900b002bfc338b02amr4815972wrx.36.1675236230671;
+        Tue, 31 Jan 2023 23:23:50 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id i16-20020adfb650000000b0029100e8dedasm5263235wre.28.2023.01.31.23.23.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 Jan 2023 23:23:50 -0800 (PST)
+Message-ID: <6cd98ec5-3d0e-eb91-b2a5-9781439ae483@linaro.org>
+Date:   Wed, 1 Feb 2023 08:23:48 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v3 6/7] riscv: dts: starfive: Add initial StarFive JH7110
- device tree
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 5/6] dt-bindings: hypervisor: Add dt-bindings for VMBus
 Content-Language: en-US
-To:     Conor Dooley <conor@kernel.org>
-CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        "Philipp Zabel" <p.zabel@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20221220011247.35560-1-hal.feng@starfivetech.com>
- <20221220011247.35560-7-hal.feng@starfivetech.com> <Y6zHy9oL4xzl+6Rd@spud>
-From:   Hal Feng <hal.feng@starfivetech.com>
-In-Reply-To: <Y6zHy9oL4xzl+6Rd@spud>
-Content-Type: text/plain; charset="UTF-8"
+To:     Saurabh Singh Sengar <ssengar@linux.microsoft.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, daniel.lezcano@linaro.org, tglx@linutronix.de,
+        virtualization@lists.linux-foundation.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, mikelley@microsoft.com,
+        ssengar@microsoft.com
+References: <1675188609-20913-1-git-send-email-ssengar@linux.microsoft.com>
+ <1675188609-20913-6-git-send-email-ssengar@linux.microsoft.com>
+ <9a3bbaf0-eb1d-613a-a8ba-272896ef2da8@linaro.org>
+ <20230201015723.GB20379@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230201015723.GB20379@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [183.27.97.127]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX172.cuchost.com
- (172.16.6.92)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,130 +82,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 28 Dec 2022 22:48:43 +0000, Conor Dooley wrote:
-> Hey,
+On 01/02/2023 02:57, Saurabh Singh Sengar wrote:
+> On Tue, Jan 31, 2023 at 07:54:56PM +0100, Krzysztof Kozlowski wrote:
+>> On 31/01/2023 19:10, Saurabh Sengar wrote:
+>>>
+>>> Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+>>
+>>> +  - |
+>>> +    / {
+>>> +        compatible = "foo";
+>>> +        model = "foo";
+>>> +        #address-cells = <0x02>;
+>>> +        #size-cells = <0x02>;
+>>
+>> Except previous comments (all of them were ignored),
 > 
-> On Tue, Dec 20, 2022 at 09:12:46AM +0800, Hal Feng wrote:
->> From: Emil Renner Berthing <kernel@esmil.dk>
->> 
->> Add initial device tree for the JH7110 RISC-V SoC by StarFive
->> Technology Ltd.
->> 
->> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
->> Co-developed-by: Jianlong Huang <jianlong.huang@starfivetech.com>
->> Signed-off-by: Jianlong Huang <jianlong.huang@starfivetech.com>
->> Co-developed-by: Hal Feng <hal.feng@starfivetech.com>
->> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
->> ---
->>  arch/riscv/boot/dts/starfive/jh7110.dtsi | 411 +++++++++++++++++++++++
->>  1 file changed, 411 insertions(+)
->>  create mode 100644 arch/riscv/boot/dts/starfive/jh7110.dtsi
->> 
->> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
->> new file mode 100644
->> index 000000000000..64d260ea1f29
->> --- /dev/null
->> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
->> @@ -0,0 +1,411 @@
->> +// SPDX-License-Identifier: GPL-2.0 OR MIT
->> +/*
->> + * Copyright (C) 2022 StarFive Technology Co., Ltd.
->> + * Copyright (C) 2022 Emil Renner Berthing <kernel@esmil.dk>
->> + */
->> +
->> +/dts-v1/;
->> +#include <dt-bindings/clock/starfive,jh7110-crg.h>
->> +#include <dt-bindings/reset/starfive,jh7110-crg.h>
->> +
->> +/ {
->> +	compatible = "starfive,jh7110";
->> +	#address-cells = <2>;
->> +	#size-cells = <2>;
->> +
->> +	cpus {
->> +		#address-cells = <1>;
->> +		#size-cells = <0>;
->> +
->> +		S76_0: cpu@0 {
->> +			compatible = "sifive,u74-mc", "riscv";
+> Thank you for your comments, I have tried to address them all in this version
+> but I may have missed few. I will go and look again all the emails, but if
+> there is any thing which you can point again and we can start a new dicussion
+> from here will be very helpful.
 > 
-> The label here says S76 but the compatible says u74-mc.
+> I think one concern was related to use of 'reg' or 'ranges', and I 
+> thought this patch will give clarity that I intend to use 'ranges'
+> without any child node. Is this acceptable ?
 
-U74-MC has 5 cores including 1 * S7 core and 4 * U74 cores.
-
-> Which is correct? Your docs say S7 and S76, so I would imagine that it
-> is actually an S76?
-
-I found SiFive website [1] call it S76, but call it S7 in other places.
-So I misunderstood this. Considering the ISA difference you described
-as below, I think it's proper to change the label to "S7_0".
-
-[1] https://www.sifive.com/cores/essential
+There were several comments.
 
 > 
->> +			reg = <0>;
->> +			d-cache-block-size = <64>;
->> +			d-cache-sets = <64>;
->> +			d-cache-size = <8192>;
->> +			d-tlb-sets = <1>;
->> +			d-tlb-size = <40>;
->> +			device_type = "cpu";
->> +			i-cache-block-size = <64>;
->> +			i-cache-sets = <64>;
->> +			i-cache-size = <16384>;
->> +			i-tlb-sets = <1>;
->> +			i-tlb-size = <40>;
->> +			mmu-type = "riscv,sv39";
->> +			next-level-cache = <&ccache>;
->> +			riscv,isa = "rv64imac";
 > 
-> While I was poking around trying to see if there was some logic behind
-> that compatible, I noticed that SiFive's docs for the S76 say it is
-> RV64GBC *but* the docs for the u74-mc say "4xRV64GBC and 1xRV64IMAC".
-> I assume that rv64imac is the correct one here?
-
-Yes, "RV64IMAC" is correct. The monitor core in U74-MC is a
-S7-series core, not S76.
-
+>> also:
+>> Drop entire part. Not related, not correct, not helping and you cannot
+>> have top level nodes in example.
 > 
->> +			tlb-split;
->> +			status = "disabled";
->> +
->> +			cpu0_intc: interrupt-controller {
->> +				compatible = "riscv,cpu-intc";
->> +				interrupt-controller;
->> +				#interrupt-cells = <1>;
->> +			};
->> +		};
->> +
->> +		U74_1: cpu@1 {
->> +			compatible = "sifive,u74-mc", "riscv";
->> +			reg = <1>;
->> +			d-cache-block-size = <64>;
->> +			d-cache-sets = <64>;
->> +			d-cache-size = <32768>;
->> +			d-tlb-sets = <1>;
->> +			d-tlb-size = <40>;
->> +			device_type = "cpu";
->> +			i-cache-block-size = <64>;
->> +			i-cache-sets = <64>;
->> +			i-cache-size = <32768>;
->> +			i-tlb-sets = <1>;
->> +			i-tlb-size = <40>;
->> +			mmu-type = "riscv,sv39";
->> +			next-level-cache = <&ccache>;
->> +			riscv,isa = "rv64imafdc";
+> If I dont use the top level node, the parent address cells are assumed to be 1,
+> and I get below warning. If there is better way to address this warning, please
+> suggest I will work on it.
 > 
-> That also begs the question:
-> Do your u74s support RV64GBC, as the (current) SiFive documentation
-> suggests?
+> Warning (ranges_format): /example-0/vmbus@ff0000000:ranges: "ranges" property has invalid length (20 bytes) (parent #address-cells == 1, child #address-cells == 2, #size-cells == 1)
 
-Actually, U74 doesn't support the full B extension, and the SiFive doc [1]
-describes the ISA of U74 is "RV64GC_Zba_Zbb_Sscofpmf" which "G" includes
-"IMAFD". "_Zba_Zbb_Sscofpmf" is not shown in other device trees such as
-jh7100.dtsi and fu740-c000.dtsi, so I didn't show them here.
+Then use soc just like every other example.
 
-[1] https://sifive.cdn.prismic.io/sifive/2dd11994-693c-4360-8aea-5453d8642c42_u74mc_core_complex_manual_21G3.pdf
 
 Best regards,
-Hal
+Krzysztof
+
