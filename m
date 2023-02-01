@@ -2,78 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46AB268658D
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 12:46:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E182C686554
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 12:23:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230138AbjBALqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 06:46:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54392 "EHLO
+        id S231362AbjBALXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 06:23:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229963AbjBALqu (ORCPT
+        with ESMTP id S229777AbjBALXA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 06:46:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEFAA1207E
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 03:46:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 802EDB82127
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 11:46:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80B8CC433D2;
-        Wed,  1 Feb 2023 11:46:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675252007;
-        bh=8zY9HL8SA760e0+goNcAHg1Z3ldcC/GIG4fiYUhdcMI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MmL/IopwbpieYFpoJt0G/Obm7qwSVbzVm3z2TT5zcgTE/jbQGRa3Fmlg+Fm65iIhe
-         UYs373agseCg8TJPCsh6FNtG9zBewlV3iHUEf3/eQSrCXBb0v7PS4/PRMR06XIdPSp
-         wkSxV7qhZqld8TSx+hleUovuWrh4nqcvFsnP959Q=
-Date:   Wed, 1 Feb 2023 12:46:43 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, rafael@kernel.org, arnd@arndb.de,
-        Linux Kernel Functional Testing <lkft@linaro.org>
-Subject: Re: [PATCH v2 15/16] driver core: make struct bus_type.uevent() take
- a const *
-Message-ID: <Y9pRIwStDHbgoCVl@kroah.com>
-References: <20230111113018.459199-16-gregkh@linuxfoundation.org>
- <20230201112122.16098-1-naresh.kamboju@linaro.org>
+        Wed, 1 Feb 2023 06:23:00 -0500
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D66B63C17;
+        Wed,  1 Feb 2023 03:22:58 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4P6KK93K4kz4f3nTP;
+        Wed,  1 Feb 2023 19:22:53 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP3 (Coremail) with SMTP id _Ch0CgDn4R+NS9pj_j45Cg--.57546S4;
+        Wed, 01 Feb 2023 19:22:55 +0800 (CST)
+From:   Ye Bin <yebin@huaweicloud.com>
+To:     tytso@mit.edu, adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, jack@suse.cz,
+        Ye Bin <yebin10@huawei.com>
+Subject: [PATCH 0/5] fix error flag covered by journal recovery
+Date:   Wed,  1 Feb 2023 19:46:46 +0800
+Message-Id: <20230201114651.4090446-1-yebin@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230201112122.16098-1-naresh.kamboju@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _Ch0CgDn4R+NS9pj_j45Cg--.57546S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7KFWruFy8Gr45XFWfZF1kKrg_yoW8WFyUp3
+        93u3sxKrWvvFyxtF93Aa1UJ345X34rCFy5WFnruw1xJw1Ykr17X3srtF4rJFWUKrWSqa1j
+        qr18J345G3WUKrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUgEb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCj
+        c4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4
+        CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1x
+        MIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJV
+        Cq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIY
+        CTnIWIevJa73UjIFyTuYvjxUrR6zUUUUU
+X-CM-SenderInfo: p1hex046kxt4xhlfz01xgou0bp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 01, 2023 at 04:51:22PM +0530, Naresh Kamboju wrote:
-> Following build regression started from next-20230130.
-> 
-> Regressions found on sh:
-> 
->   - build/gcc-11-dreamcast_defconfig
-> 
-> drivers/sh/maple/maple.c:785:19: error: initialization of 'int (*)(const struct device *, struct kobj_uevent_env *)' from incompatible pointer type 'int (*)(struct device *, struct kobj_uevent_env *)' [-Werror=incompatible-pointer-types]
->   785 |         .uevent = maple_bus_uevent,
->       |                   ^~~~~~~~~~~~~~~~
->       
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> 
-> 
-> https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230201/testrun/14479366/suite/build/test/gcc-11-dreamcast_defconfig/history/
-> 
-> The bisection pointed to this commit,
->   2a81ada32f0e ("driver core: make struct bus_type.uevent() take a const *")
+From: Ye Bin <yebin10@huawei.com>
 
-Odd that no other build system reported this (linux-next, 0-day, etc.)
-I guess no one really cares about sh and the dreamcast anymore?  :)
+When do fault injection test, got issue as follows:
+EXT4-fs (dm-5): warning: mounting fs with errors, running e2fsck is recommended
+EXT4-fs (dm-5): Errors on filesystem, clearing orphan list.
+EXT4-fs (dm-5): recovery complete
+EXT4-fs (dm-5): mounted filesystem with ordered data mode. Opts: data_err=abort,errors=remount-ro
 
-Anyway, thanks, I'll fix this up.
+EXT4-fs (dm-5): recovery complete
+EXT4-fs (dm-5): mounted filesystem with ordered data mode. Opts: data_err=abort,errors=remount-ro
 
-greg k-h
+Without do file system check, file system is clean when do second mount.
+Theoretically, the kernel will not clear fs error flag. In errors=remount-ro
+mode the last super block is commit directly. So super block in journal is
+not uptodate. When do jounral recovery, the uptodate super block will be
+covered by jounral data. If super block submit all failed after recover
+journal, then file system error flag is lost. When do "fsck -a" couldn't
+repair file system deeply.
+To solve above issue we need to do extra handle when do super block journal
+recovery.
+
+Ye Bin (5):
+  jbd2: introduce callback for recovery journal
+  ext4: introudce helper for jounral recover handle
+  ext4: fix error flag covered by journal recovery
+  ext4: fix super block checksum error
+  ext4: make sure fs error flag setted before clear journal error
+
+ fs/ext4/ext4_jbd2.c  | 66 ++++++++++++++++++++++++++++++++++++++++++++
+ fs/ext4/ext4_jbd2.h  |  2 ++
+ fs/ext4/super.c      | 45 ++++++++++++++----------------
+ fs/jbd2/recovery.c   | 14 ++++++++++
+ include/linux/jbd2.h | 11 ++++++++
+ 5 files changed, 114 insertions(+), 24 deletions(-)
+
+-- 
+2.31.1
+
