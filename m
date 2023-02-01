@@ -2,83 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99B6A685CD7
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 02:49:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAB6E685CDB
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 02:50:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231431AbjBABt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 20:49:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33548 "EHLO
+        id S231476AbjBABug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 20:50:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230286AbjBABtZ (ORCPT
+        with ESMTP id S231433AbjBABue (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 20:49:25 -0500
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA44038661
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 17:49:22 -0800 (PST)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-4ff1fa82bbbso227267627b3.10
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 17:49:22 -0800 (PST)
+        Tue, 31 Jan 2023 20:50:34 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F27BD19F0D
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 17:50:32 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5063c0b909eso183713537b3.7
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 17:50:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=z1m13XCTvymftA/AFOwDDbr1NYjXo09zVt/zVuxJnSQ=;
-        b=R+Dcj4zWuzGr6r5l2F611kxVGta7vRkU+AzU3k2BaP+94g2UqWf7s+N1I3h1EPQeMg
-         tpyP1vFQ+tdCTJ5KZ95KtfSVCOkWEovHqWTCR94pctkt7jjLjVi8OIs60iUq+0WuPNbT
-         amhAhh5vE5kQN8BodyTGKRKkGfOb9NNNSRCMY4pMl9Pksww6Mfubu9pdWcRvveIK8ryr
-         rCO5ZKGxag4fXrEew8JYN0tbv6E1yBBAxA2cxrRyOnVBeVJp/tHNbqD0AeeV7ut8Usrt
-         A+hHwUu5nUSHBlpn9CNBoTt2oPdDAAibNma7TzDQGp39pw/kSA+ZBcKqO+A1cVZa2/U9
-         gFzA==
+        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=xdDlsYqmeKUXi1m/okS37mLJa+8YvjWUBaTgXlbztPE=;
+        b=NjDYjH9h61xsRUkP1cMK6GH/YJOE/Ugf+FYRQmlIy6/pU9YfGeWWMtVYSz3bSqYFXf
+         OnxmZLq6YmvL4A6u3cXYcmfs981RefJnJFfw4TjFSdZYVBSv0D6JkmIRk+slznlJs2N7
+         wzUp3xH9l7ir6KMUkp4+oELZU4hUm5VqOMcEyu8J2VVWc7P8fTCsmnM6wDnKa6uJ5yjG
+         UOFFlmWkrExXx/yz4nox+NsZ0AZFKmbz20kvR9juq0khDxynOHBQ6jZze+WDohgtCRjJ
+         63IdzIR0bEklXdmrsRRUcs8jmr9QaTLq9aeolM21CGZW6xH9ZemOMdjCws8iji17SGHE
+         weQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=z1m13XCTvymftA/AFOwDDbr1NYjXo09zVt/zVuxJnSQ=;
-        b=0hyJiNmPwYA5pppRbskfdxgSizCDZ0JMeuX2egwzcMPZqKhcTI7wVacWrAhbJYCYAt
-         b7220dX9bd7V2axFeKx+C2KJ9dwsHcwRoc2Sjkb4hagPTDbojpRH0TEyB2DEjFlzMdIx
-         68/MEOcfqxrl2LGE7FEKMnsTpmHBZFfm5dG5FWbr4lMlJuCxBq47RNvXYmQARGobTBcW
-         QzvEKYiFSIU1hbVkpkDsvn/wMzDOv8yP2KVqWvalMx9OiVNanzdmCw8E7eoI4AyWU/iw
-         n8G8Sh6M6e3av2qaBH8vxzEW/UAwn5fjFtlom/nlA/Za5kjubJjwz6SXMlMU82/LceS1
-         2FXA==
-X-Gm-Message-State: AO0yUKVUZhQpsDtqSnNqGyQSlxWvhsZ1eFewyADsU60sjIYzKqBh0lhy
-        PxS+Sx9SIgeFEA2DAzfvjpOgoalrWsqqRd27E2ttsA==
-X-Google-Smtp-Source: AK7set/wzA5afz5mZ+K94QaPji2ux5+fHm9/NlE+zLFQpSQHQsfBw/F6ZgDvrWDx4avq/xII6/kRx6OUWDoCRKtYyGc=
-X-Received: by 2002:a81:994d:0:b0:508:4dc0:7f7c with SMTP id
- q74-20020a81994d000000b005084dc07f7cmr54078ywg.240.1675216161793; Tue, 31 Jan
- 2023 17:49:21 -0800 (PST)
-MIME-Version: 1.0
-References: <20230123191728.2928839-1-tjmercier@google.com>
- <20230123191728.2928839-2-tjmercier@google.com> <Y8/ybgp2FW+e3bjc@dhcp22.suse.cz>
- <20230124194628.d44rtcfsv23fndxw@google.com> <Y9EX+usSpAjZ/8LS@dhcp22.suse.cz>
- <347560bc-d06a-92b7-8003-133d2b8af2df@linux.intel.com> <CABdmKX09S3bYzX+xBkhfkFULk2BtzS11RhzrvWv94j+cHSezPA@mail.gmail.com>
- <ad6bd448-91bd-d47e-5b54-8755fe0e0340@linux.intel.com>
-In-Reply-To: <ad6bd448-91bd-d47e-5b54-8755fe0e0340@linux.intel.com>
-From:   "T.J. Mercier" <tjmercier@google.com>
-Date:   Tue, 31 Jan 2023 17:49:10 -0800
-Message-ID: <CABdmKX3VSdF3jmktpw9VH4k+J+ZtQCLCPdNN6uye4XnZGPhG5g@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] memcg: Track exported dma-buffers
-To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Cc:     Michal Hocko <mhocko@suse.com>, Shakeel Butt <shakeelb@google.com>,
-        linux-doc@vger.kernel.org, daniel.vetter@ffwll.ch,
-        Roman Gushchin <roman.gushchin@linux.dev>, cmllamas@google.com,
-        dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
-        jstultz@google.com, Zefan Li <lizefan.x@bytedance.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>, android-mm@google.com,
-        Jonathan Corbet <corbet@lwn.net>, jeffv@google.com,
-        linux-media@vger.kernel.org, selinux@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, cgroups@vger.kernel.org,
-        Muchun Song <muchun.song@linux.dev>,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Tejun Heo <tj@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xdDlsYqmeKUXi1m/okS37mLJa+8YvjWUBaTgXlbztPE=;
+        b=v6dbb5ZTiMioUvc2qdngOxysc24mVci7JfyudfZ7kx0qcErtOxqnXjPrSt9Pcd5AxS
+         8wMVaHIkiLnRfkQNQ3Lm0QztK6zermeo7j6OryQIyOYPFqxzRrvWlLUhq6fUEC+OBse7
+         ie3i23aY+6+KPi+j9PscTTG8AutZ1j833O9ufrPk8/4muJy+B2g3Xx8bsA4Glya3FCa5
+         f5vekmTl0bfS/o7rVqemx6VWdxPsdZh6HMBaWu6mVZQdQCvYugnG/e9peGDyjxzPB9Ze
+         bQOSdZyyxDQJ6Y61mxM6YVaj7ar4i1w/axzJRxovfJuPlVSYPNkKrxbjQsZ9/k2LJJUo
+         tLtw==
+X-Gm-Message-State: AO0yUKXqQ9Ig5dj43naTrtx1Nm8D9Z9oBO3ka3rm536SmRZfSPlRlB+m
+        yEFykTRw/ngtyAhRZfvwVwTOLU2qzjsR
+X-Google-Smtp-Source: AK7set+6G7w93iKvh3pK8d4Pn09fp4vjG7pahxdlFvN/m3ZzAOPWx2J7sdTsm/hJEeolIHRv+ZBD+dSqPMMX
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:fc49:772b:8c4f:d691])
+ (user=irogers job=sendgmr) by 2002:a81:8d09:0:b0:4df:ab25:431 with SMTP id
+ d9-20020a818d09000000b004dfab250431mr52684ywg.312.1675216232233; Tue, 31 Jan
+ 2023 17:50:32 -0800 (PST)
+Date:   Tue, 31 Jan 2023 17:50:15 -0800
+Message-Id: <20230201015015.359535-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
+Subject: [PATCH v1] tools/resolve_btfids: Tidy host CFLAGS forcing
+From:   Ian Rogers <irogers@google.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Connor OBrien <connoro@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,167 +77,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 6:01 AM Tvrtko Ursulin
-<tvrtko.ursulin@linux.intel.com> wrote:
->
->
-> On 25/01/2023 20:04, T.J. Mercier wrote:
-> > On Wed, Jan 25, 2023 at 9:31 AM Tvrtko Ursulin
-> > <tvrtko.ursulin@linux.intel.com> wrote:
-> >>
-> >>
-> >> Hi,
-> >>
-> >> On 25/01/2023 11:52, Michal Hocko wrote:
-> >>> On Tue 24-01-23 19:46:28, Shakeel Butt wrote:
-> >>>> On Tue, Jan 24, 2023 at 03:59:58PM +0100, Michal Hocko wrote:
-> >>>>> On Mon 23-01-23 19:17:23, T.J. Mercier wrote:
-> >>>>>> When a buffer is exported to userspace, use memcg to attribute the
-> >>>>>> buffer to the allocating cgroup until all buffer references are
-> >>>>>> released.
-> >>>>>
-> >>>>> Is there any reason why this memory cannot be charged during the
-> >>>>> allocation (__GFP_ACCOUNT used)?
-> >>>>> Also you do charge and account the memory but underlying pages do not
-> >>>>> know about their memcg (this is normally done with commit_charge for
-> >>>>> user mapped pages). This would become a problem if the memory is
-> >>>>> migrated for example.
-> >>>>
-> >>>> I don't think this is movable memory.
-> >>>>
-> >>>>> This also means that you have to maintain memcg
-> >>>>> reference outside of the memcg proper which is not really nice either.
-> >>>>> This mimicks tcp kmem limit implementation which I really have to say I
-> >>>>> am not a great fan of and this pattern shouldn't be coppied.
-> >>>>>
-> >>>>
-> >>>> I think we should keep the discussion on technical merits instead of
-> >>>> personal perference. To me using skmem like interface is totally fine
-> >>>> but the pros/cons need to be very explicit and the clear reasons to
-> >>>> select that option should be included.
-> >>>
-> >>> I do agree with that. I didn't want sound to be personal wrt tcp kmem
-> >>> accounting but the overall code maintenance cost is higher because
-> >>> of how tcp take on accounting differs from anything else in the memcg
-> >>> proper. I would prefer to not grow another example like that.
-> >>>
-> >>>> To me there are two options:
-> >>>>
-> >>>> 1. Using skmem like interface as this patch series:
-> >>>>
-> >>>> The main pros of this option is that it is very simple. Let me list down
-> >>>> the cons of this approach:
-> >>>>
-> >>>> a. There is time window between the actual memory allocation/free and
-> >>>> the charge and uncharge and [un]charge happen when the whole memory is
-> >>>> allocated or freed. I think for the charge path that might not be a big
-> >>>> issue but on the uncharge, this can cause issues. The application and
-> >>>> the potential shrinkers have freed some of this dmabuf memory but until
-> >>>> the whole dmabuf is freed, the memcg uncharge will not happen. This can
-> >>>> consequences on reclaim and oom behavior of the application.
-> >>>>
-> >>>> b. Due to the usage model i.e. a central daemon allocating the dmabuf
-> >>>> memory upfront, there is a requirement to have a memcg charge transfer
-> >>>> functionality to transfer the charge from the central daemon to the
-> >>>> client applications. This does introduce complexity and avenues of weird
-> >>>> reclaim and oom behavior.
-> >>>>
-> >>>>
-> >>>> 2. Allocate and charge the memory on page fault by actual user
-> >>>>
-> >>>> In this approach, the memory is not allocated upfront by the central
-> >>>> daemon but rather on the page fault by the client application and the
-> >>>> memcg charge happen at the same time.
-> >>>>
-> >>>> The only cons I can think of is this approach is more involved and may
-> >>>> need some clever tricks to track the page on the free patch i.e. we to
-> >>>> decrement the dmabuf memcg stat on free path. Maybe a page flag.
-> >>>>
-> >>>> The pros of this approach is there is no need have a charge transfer
-> >>>> functionality and the charge/uncharge being closely tied to the actual
-> >>>> memory allocation and free.
-> >>>>
-> >>>> Personally I would prefer the second approach but I don't want to just
-> >>>> block this work if the dmabuf folks are ok with the cons mentioned of
-> >>>> the first approach.
-> >>>
-> >>> I am not familiar with dmabuf internals to judge complexity on their end
-> >>> but I fully agree that charge-when-used is much more easier to reason
-> >>> about and it should have less subtle surprises.
-> >>
-> >> Disclaimer that I don't seem to see patches 3&4 on dri-devel so maybe I
-> >> am missing something, but in principle yes, I agree that the 2nd option
-> >> (charge the user, not exporter) should be preferred. Thing being that at
-> >> export time there may not be any backing store allocated, plus if the
-> >> series is restricting the charge transfer to just Android clients then
-> >> it seems it has the potential to miss many other use cases. At least
-> >> needs to outline a description on how the feature will be useful outside
-> >> Android.
-> >>
-> > There is no restriction like that. It's available to anybody who wants
-> > to call dma_buf_charge_transfer if they actually have a need for that,
-> > which I don't really expect to be common since most users/owners of
-> > the buffers will be the ones causing the export in the first place.
-> > It's just not like that on Android with the extra allocator process in
-> > the middle most of the time.
->
-> Yeah I used the wrong term "restrict", apologies. What I meant was, if
-> the idea was to allow spotting memory leaks, with the charge transfer
-> being optional and in the series only wired up for Android Binder, then
-> it obviously only fully works for that one case. So a step back..
->
-Oh, spotting kernel memory leaks is a side-benefit of accounting
-kernel-only buffers in the root cgroup. The primary goal is to
-attribute buffers to applications that originated them (via
-per-application cgroups) simply for accounting purposes. Buffers are
-using memory on the system, and we want to know who created them and
-how much memory is used. That information is/will no longer available
-with the recent deprecation of the dmabuf sysfs statistics.
+Avoid passing CROSS_COMPILE to submakes and ensure CFLAGS is forced to
+HOSTCFLAGS for submake builds. This fixes problems with cross
+compilation.
 
-> .. For instance, it is not feasible to transfer the charge when dmabuf
-> is attached, or imported? That would attribute the usage to the
-> user/importer so give better visibility on who is actually causing the
-> memory leak.
->
-Instead of accounting at export, we could account at attach. That just
-turns out not to be very useful when the majority of our
-heap-allocated buffers don't have attachments at any particular point
-in time. :\ But again it's less about leaks and more about knowing
-which buffers exist in the first place.
+Tidy to not unnecessarily modify/export CFLAGS, make the override for
+prepare and build clearer.
 
-> Further more, if above is feasible, then could it also be implemented in
-> the common layer so it would automatically cover all drivers?
->
-Which common layer code specifically? The dmabuf interface appears to
-be the most central/common place to me.
+Fixes: 13e07691a16f ("tools/resolve_btfids: Alter how HOSTCC is forced")
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/bpf/resolve_btfids/Makefile | 49 ++++++++++++++++---------------
+ 1 file changed, 26 insertions(+), 23 deletions(-)
 
-> >> Also stepping back for a moment - is a new memory category really
-> >> needed, versus perhaps attempting to charge the actual backing store
-> >> memory to the correct client? (There might have been many past
-> >> discussions on this so it's okay to point me towards something in the
-> >> archives.)
-> >>
-> > Well the dmabuf counter for the stat file is really just a subcategory
-> > of memory that is charged. Its existence is not related to getting the
-> > charge attributed to the right process/cgroup. We do want to know how
-> > much of the memory attributed to a process is for dmabufs, which is
-> > the main point of this series.
->
-> Then I am probably missing something because the statement how proposal
-> is not intended to charge to the right process, but wants to know how
-> much dmabuf "size" is attributed to a process, confuses me due a seeming
-> contradiction. And the fact it would not be externally observable how
-> much of the stats is accurate and how much is not (without knowing the
-> implementation detail of which drivers implement charge transfer and
-> when). Maybe I completely misunderstood the use case.
->
-Hmm, did I clear this up above or no? The current proposal is for the
-process causing the export of a buffer to be charged for it,
-regardless of whatever happens afterwards. (Unless that process is
-like gralloc on Android, in which case the charge is transferred from
-gralloc to whoever called gralloc to allocate the buffer on their
-behalf.)
+diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
+index daed388aa5d7..c9b6cf1fb844 100644
+--- a/tools/bpf/resolve_btfids/Makefile
++++ b/tools/bpf/resolve_btfids/Makefile
+@@ -17,12 +17,7 @@ else
+   MAKEFLAGS=--no-print-directory
+ endif
+ 
+-# always use the host compiler
+-HOST_OVERRIDES := AR="$(HOSTAR)" CC="$(HOSTCC)" LD="$(HOSTLD)" ARCH="$(HOSTARCH)" \
+-		  EXTRA_CFLAGS="$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)"
+-
+ RM      ?= rm
+-CROSS_COMPILE =
+ 
+ OUTPUT ?= $(srctree)/tools/bpf/resolve_btfids/
+ 
+@@ -43,6 +38,29 @@ SUBCMD_INCLUDE := $(SUBCMD_DESTDIR)include
+ BINARY     := $(OUTPUT)/resolve_btfids
+ BINARY_IN  := $(BINARY)-in.o
+ 
++LIBELF_FLAGS := $(shell $(HOSTPKG_CONFIG) libelf --cflags 2>/dev/null)
++LIBELF_LIBS  := $(shell $(HOSTPKG_CONFIG) libelf --libs 2>/dev/null || echo -lelf)
++
++RESOLVE_BTFIDS_CFLAGS = -g \
++          -I$(srctree)/tools/include \
++          -I$(srctree)/tools/include/uapi \
++          -I$(LIBBPF_INCLUDE) \
++          -I$(SUBCMD_INCLUDE) \
++          $(LIBELF_FLAGS)
++
++# Overrides for the prepare step libraries.
++HOST_OVERRIDES_PREPARE := AR="$(HOSTAR)" CC="$(HOSTCC)" LD="$(HOSTLD)" \
++	  ARCH="$(HOSTARCH)" CROSS_COMPILE=""
++
++# Overrides for Makefile.build C targets.
++HOST_OVERRIDES_BUILD := $(HOST_OVERRIDES_PREPARE) \
++	  CFLAGS="$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS) $(RESOLVE_BTFIDS_CFLAGS)" \
++
++LIBS = $(LIBELF_LIBS) -lz
++
++export srctree OUTPUT Q
++include $(srctree)/tools/build/Makefile.include
++
+ all: $(BINARY)
+ 
+ prepare: $(BPFOBJ) $(SUBCMDOBJ)
+@@ -53,31 +71,16 @@ $(OUTPUT) $(OUTPUT)/libsubcmd $(LIBBPF_OUT):
+ 
+ $(SUBCMDOBJ): fixdep FORCE | $(OUTPUT)/libsubcmd
+ 	$(Q)$(MAKE) -C $(SUBCMD_SRC) OUTPUT=$(SUBCMD_OUT) \
+-		    DESTDIR=$(SUBCMD_DESTDIR) $(HOST_OVERRIDES) prefix= subdir= \
++		    DESTDIR=$(SUBCMD_DESTDIR) $(HOST_OVERRIDES_PREPARE) prefix= subdir= \
+ 		    $(abspath $@) install_headers
+ 
+ $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OUT)
+ 	$(Q)$(MAKE) $(submake_extras) -C $(LIBBPF_SRC) OUTPUT=$(LIBBPF_OUT)    \
+-		    DESTDIR=$(LIBBPF_DESTDIR) $(HOST_OVERRIDES) prefix= subdir= \
++		    DESTDIR=$(LIBBPF_DESTDIR) $(HOST_OVERRIDES_PREPARE) prefix= subdir= \
+ 		    $(abspath $@) install_headers
+ 
+-LIBELF_FLAGS := $(shell $(HOSTPKG_CONFIG) libelf --cflags 2>/dev/null)
+-LIBELF_LIBS  := $(shell $(HOSTPKG_CONFIG) libelf --libs 2>/dev/null || echo -lelf)
+-
+-CFLAGS += -g \
+-          -I$(srctree)/tools/include \
+-          -I$(srctree)/tools/include/uapi \
+-          -I$(LIBBPF_INCLUDE) \
+-          -I$(SUBCMD_INCLUDE) \
+-          $(LIBELF_FLAGS)
+-
+-LIBS = $(LIBELF_LIBS) -lz
+-
+-export srctree OUTPUT CFLAGS Q
+-include $(srctree)/tools/build/Makefile.include
+-
+ $(BINARY_IN): fixdep FORCE prepare | $(OUTPUT)
+-	$(Q)$(MAKE) $(build)=resolve_btfids $(HOST_OVERRIDES)
++	$(Q)$(MAKE) $(build)=resolve_btfids $(HOST_OVERRIDES_BUILD)
+ 
+ $(BINARY): $(BPFOBJ) $(SUBCMDOBJ) $(BINARY_IN)
+ 	$(call msg,LINK,$@)
+-- 
+2.39.1.456.gfc5497dd1b-goog
 
-> Regards,
->
-> Tvrtko
