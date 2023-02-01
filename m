@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DA196869A0
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 16:10:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 495C968699E
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 16:10:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232585AbjBAPKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 10:10:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42122 "EHLO
+        id S232467AbjBAPKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 10:10:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232905AbjBAPJo (ORCPT
+        with ESMTP id S232926AbjBAPJo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 1 Feb 2023 10:09:44 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBACC66FA4;
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D10D66FAA;
         Wed,  1 Feb 2023 07:08:24 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id m2so51835654ejb.8;
+Received: by mail-ed1-x52c.google.com with SMTP id be12so6740712edb.4;
         Wed, 01 Feb 2023 07:08:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fO35H2/wXICWhJ+cuarq0XINTUHDojZ1200QGctnX2s=;
-        b=SUl+ss9v5UYWv8NVc+1bIneBIoOFhC93EyGiZTsCfA+JgqnMTLsUJhloNmitcDPyah
-         zhSiml1PTBGgW/R81AmM8CTk6Sj107GDnZP+DAs2hC79RVmKywEOAQw+7F97t87n5cb/
-         3SNTvvcC2eb61GOiCXqztxc82x8jzbFrDdEn2F+X6XmhlCMNavxIn5Jx3//Xss8BFX9y
-         8IZv9wIxrUFj4shJIPlq8ONgV0y93Ww0E/IRPe+0kwCfnhC/ue90egwnnvkSpBl36z6T
-         ggsXtcw+ss/53rVrtqvTPDTvvwDTGVjAShKJ752MLUXrcN0ksnOd9hhHEYWgFG4uUZE1
-         1+pA==
+        bh=v7t+jH47dutnrEewrpFYJCTIdzeIdrMXC7jVe2cYM1o=;
+        b=axm8GclNe0TkydqMsP7WrJXjtkaTy5Us4zqhdTWmg2xnNAxQfkDMBXKZ21FQxDg7wq
+         FxoE3ayhhjkVGUy//ctSzLPp9/7i90nBwEV3YVUJJ0WMFS5L6oS0suOeNLJeaVO6i2L1
+         s8s1dW3g8daDhCb1PYPRpk8S/774DEKn4IyUIiponWkVWmreuGMAosaw3IWCdhuPdVJ8
+         8SEmr6Njxvw8bB5KOqp0GY5Gf1rr39JDlnVXdQhY5fpbEobkXyahDU92E1S1lU+xpoNd
+         3O2/LiEs1exrkzevNNQX25oi7cq7VW5YiMd/AJcDfnHEF6LmMvNaI6AoTi/gRVb08UPH
+         eGiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fO35H2/wXICWhJ+cuarq0XINTUHDojZ1200QGctnX2s=;
-        b=ALDzzQQQ65gEdIM+Irwb5UmVjK/wpoBAIUnZmJIkcb+wT7tVTxCaVvQCG28ztJzsFj
-         1W/KSJRcgaMwbcvEReY9liyzdDVZTnXgQEVRQreGhai8/84rSrDRSGHoBkHghG60lx0h
-         2RluuGjMZl5x9FKN7zD6KLd7/BeqOvTBvdyW8BTG5bMt5s7EhRmJOHZHiDs+aAi/aIY7
-         IzPPQK0X8cc6iJGNSUGQ3tTjdOdg/N70rTvMPeSZjREm/6w+Rl7nbaT57ssaXuft92rM
-         6uPqglyViXId0GOsHZa8+wAqFRYKRfGRB9w4A9rOGB+znkh9LwZx7Mgg+IbOEUtv8BcC
-         MoFw==
-X-Gm-Message-State: AO0yUKUIlHv7De7aM5Td+kfcC7d+wizvaIDcYZUzNRU7RtIqBCaBp9Ff
-        uMiVjyu9LfrHZeLbbGVxAx2rhj4/B5d+KQ==
-X-Google-Smtp-Source: AK7set9aFDpwzIr/zYc4RTSpyE0YXhwfxTDiMJwKhIebZokzv2cysN23I5YVLaBbRST0AMkJPPC5WA==
-X-Received: by 2002:a17:907:e8e:b0:878:7ba6:b69 with SMTP id ho14-20020a1709070e8e00b008787ba60b69mr8224743ejc.51.1675264102547;
-        Wed, 01 Feb 2023 07:08:22 -0800 (PST)
+        bh=v7t+jH47dutnrEewrpFYJCTIdzeIdrMXC7jVe2cYM1o=;
+        b=NI9Ja2nuJ+5Tp+JCstwRgvTPLm6oTRrOpBn2JmE998ZfjHJdFIt8BWz4NZgWENpjE/
+         4qHYAMtLrK5yKxJEfw5h7cvp21MM7hhr/MtIZvdrKJOsp0iVzrdAWCHx/HnsuwL5PM7t
+         4j1rWRf8NNMb854cnRav8G/BpLGomYo50OuysonC7oKXXnMmcRX85or6cGmUbIUeybE1
+         sn0ClclF2IWn1AFzqgdGknwx8sDpLTNNZxr/BVyd2UfgsMfmDLgIFCt3gvRD+g6ZaZ9P
+         9dMYTQ/NuaOCMAOikNGjKpMeNjuZL34dhcNUGmWzNMDjpw97DXffULUu+VELMi0x19tx
+         InEw==
+X-Gm-Message-State: AO0yUKXoUGJPQARKOPL3OieET0t74kawstx8y6Vt0WMK66gldvCwQwm6
+        ByLLbcw1Uugpwa5+FIglVKox8v912bTJ/Q==
+X-Google-Smtp-Source: AK7set8jOPc1FL0gqkf6hHR27Gh0OOx6IwdNTQrshUFLPMLPWE9EiGyHm4LH0bpDVr19OM6AVWddRg==
+X-Received: by 2002:a05:6402:3488:b0:494:fae3:c0df with SMTP id v8-20020a056402348800b00494fae3c0dfmr2985034edc.12.1675264103466;
+        Wed, 01 Feb 2023 07:08:23 -0800 (PST)
 Received: from pc638.lan ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id qc26-20020a170906d8ba00b008787e94c5ccsm9585774ejb.184.2023.02.01.07.08.21
+        by smtp.gmail.com with ESMTPSA id qc26-20020a170906d8ba00b008787e94c5ccsm9585774ejb.184.2023.02.01.07.08.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Feb 2023 07:08:22 -0800 (PST)
+        Wed, 01 Feb 2023 07:08:23 -0800 (PST)
 From:   "Uladzislau Rezki (Sony)" <urezki@gmail.com>
 To:     LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
         "Paul E . McKenney" <paulmck@kernel.org>
@@ -62,10 +62,11 @@ Cc:     Uladzislau Rezki <urezki@gmail.com>,
         Eric Dumazet <edumazet@google.com>,
         Bob Pearson <rpearsonhpe@gmail.com>,
         Ariel Levkovich <lariel@nvidia.com>,
-        Theodore Ts'o <tytso@mit.edu>, Julian Anastasov <ja@ssi.bg>
-Subject: [PATCH 05/13] lib/test_vmalloc.c: Rename kvfree_rcu() to kvfree_rcu_mightsleep()
-Date:   Wed,  1 Feb 2023 16:08:11 +0100
-Message-Id: <20230201150815.409582-6-urezki@gmail.com>
+        Theodore Ts'o <tytso@mit.edu>, Julian Anastasov <ja@ssi.bg>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: [PATCH 06/13] net/sysctl: Rename kvfree_rcu() to kvfree_rcu_mightsleep()
+Date:   Wed,  1 Feb 2023 16:08:12 +0100
+Message-Id: <20230201150815.409582-7-urezki@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230201150815.409582-1-urezki@gmail.com>
 References: <20230201150815.409582-1-urezki@gmail.com>
@@ -85,24 +86,35 @@ The kvfree_rcu()'s single argument name is deprecated therefore
 rename it to kvfree_rcu_mightsleep() variant. The goal is explicitly
 underline that it is for sleepable contexts.
 
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: David S. Miller <davem@davemloft.net>
 Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
 ---
- lib/test_vmalloc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/core/sysctl_net_core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/lib/test_vmalloc.c b/lib/test_vmalloc.c
-index f90d2c27675b..6d8c5c0afd53 100644
---- a/lib/test_vmalloc.c
-+++ b/lib/test_vmalloc.c
-@@ -328,7 +328,7 @@ kvfree_rcu_1_arg_vmalloc_test(void)
- 			return -1;
- 
- 		p->array[0] = 'a';
--		kvfree_rcu(p);
-+		kvfree_rcu_mightsleep(p);
+diff --git a/net/core/sysctl_net_core.c b/net/core/sysctl_net_core.c
+index 5b1ce656baa1..a28562d4e468 100644
+--- a/net/core/sysctl_net_core.c
++++ b/net/core/sysctl_net_core.c
+@@ -101,7 +101,7 @@ static int rps_sock_flow_sysctl(struct ctl_table *table, int write,
+ 			if (orig_sock_table) {
+ 				static_branch_dec(&rps_needed);
+ 				static_branch_dec(&rfs_needed);
+-				kvfree_rcu(orig_sock_table);
++				kvfree_rcu_mightsleep(orig_sock_table);
+ 			}
+ 		}
  	}
- 
- 	return 0;
+@@ -139,7 +139,7 @@ static int flow_limit_cpu_sysctl(struct ctl_table *table, int write,
+ 				     lockdep_is_held(&flow_limit_update_mutex));
+ 			if (cur && !cpumask_test_cpu(i, mask)) {
+ 				RCU_INIT_POINTER(sd->flow_limit, NULL);
+-				kfree_rcu(cur);
++				kfree_rcu_mightsleep(cur);
+ 			} else if (!cur && cpumask_test_cpu(i, mask)) {
+ 				cur = kzalloc_node(len, GFP_KERNEL,
+ 						   cpu_to_node(i));
 -- 
 2.30.2
 
