@@ -2,169 +2,465 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0660C68634F
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 11:04:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8E7D686361
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 11:06:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231273AbjBAKEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 05:04:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43446 "EHLO
+        id S231733AbjBAKGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 05:06:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230269AbjBAKEo (ORCPT
+        with ESMTP id S231268AbjBAKGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 05:04:44 -0500
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7632A4F35C
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 02:04:42 -0800 (PST)
-Received: by mail-io1-f69.google.com with SMTP id k4-20020a6b7e44000000b0071e11cafea7so4280597ioq.15
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 02:04:42 -0800 (PST)
+        Wed, 1 Feb 2023 05:06:48 -0500
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4137962241
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 02:06:25 -0800 (PST)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-16332831ed0so22856962fac.10
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 02:06:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ufispace-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=PYMbS5c58pA+ZLazPFK01vHQz402w+ekY4M7VB1E9lg=;
+        b=j0vcCEhh8ChlGacQV1ymgA7g6NE8VRjg94+7+UxO3pF8S1K3dyIC9whrPq0LUsOBi6
+         s79tTOA2WaNllVYMDu0RiIhrSDackjIENyWzlbIMgFCLtUuJIECltCxq9bY3VpiiLOFS
+         M/bMWHwbX8dJYfRpTlvQJ09RXeHOMDu6XJyIl8+IVAtkZIz4MGxsA+FiFy91k6EnVGwt
+         nQAlrUd5gacjMTMdupLZsnNgpKnrnwrkmvm4Z73OvuQyxA991BnrT0nYq+4IwfeCVyh+
+         nPVaZEVsQiavcW3tdADlcX84DMFV6BRYEbhDGr5pnrE+lyOtkDiDywkkqGYTHJMRehfB
+         Xgtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fdqRayzcVj9GrkW60ip7rWWzNJPEBAcTfyxei4Frw3A=;
-        b=6KmpVQMD97J9LKzmC3ojT9MsPdYc959VOaaXQct/Lhs6eSv68YDCezb9djqQmCc0pE
-         O+JXoTOV3iAW59Lgcj+QBbcQuGaz6mjCSC1++Yzr78uv+Gc8PdngSCu9KAStSb0PP3Um
-         DPqBNRoMJbli7gVbpf1O7mafq2bKHVRuOimMVaybVR0Pn8i05yZCDaGOBFy4zOlzNSSr
-         DEht7nSGPUAvp1iGZehK+NvozLvI2nu12JvvYEf9uowksu8RYtUDtjBGIPsIrxNTfmyK
-         DfrsVC+MW+mS23D0xJ0JOsGoh11Ia3DVxuuQwzzEruvZVrzyVSdNgsDpYIvDNhWeYP1C
-         8bAQ==
-X-Gm-Message-State: AO0yUKUN32X1EB7JPh17hfqWG8HOGgZe3KHBycc092X83xo5zeM1E5/c
-        8Yo3aBE9MSas+aWHxfD70gO/6HMo6oOeLPa1ccbdGbfxAjOl
-X-Google-Smtp-Source: AK7set+iGZdE8Z66crosqd0dDD/u7PJnBZBxvdE1MOGJlkW2zc1fLH/sSfcsoO1pptIrpje217WpUm6IyflvaDzSuB6som8wiwFm
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PYMbS5c58pA+ZLazPFK01vHQz402w+ekY4M7VB1E9lg=;
+        b=4yvUV8Db78A1fXyZLA4k7rPGv5YUceIOAtORkOjwMQ/IcQuJvparThqt48VhF3wTMP
+         Htwazr05bM0C98an7qd+PhFC5jv35HDIua+d/zjsTDHH1Hwx0WqUjDFaH7gDLj4eiWrQ
+         WRGMTLlpj6Bn3YTPlNZ8LSG78+wkEta21P+3OKt/YFR4dB2rANr/bDVzGhG1fR5umCL5
+         pQpG+zLGUYSNSW/vyLN3BkXEF0hnnlxzVxm77fgL4x0D+TLgp/mkGxG9lUIADYCTZjrj
+         2u13i2JWXGk2vq9xk05Xtqc0Z0xOECTA96nSXfGPQYUNWyxEmU9wIehcHuq1wTB1ObP9
+         ABlA==
+X-Gm-Message-State: AO0yUKUahVVL1Y/XdifJf0M8Jqo3vY4KJeGOd6+fSugyXzYdMPiKwYK+
+        FEdAOIljDoKikF83WJdRUBGEe/tRscErWkv/Pok/kw==
+X-Google-Smtp-Source: AK7set9Yiiz/gLXfK1/25n+reEvTFt5QS+KmJ+V4QGc6jTf4VoITcDUOIFF6/wA1dMm+4Ilqgv9O+YYjUby/OUrg6Uw=
+X-Received: by 2002:a05:6871:146:b0:163:88f9:2c51 with SMTP id
+ z6-20020a056871014600b0016388f92c51mr132440oab.144.1675245972602; Wed, 01 Feb
+ 2023 02:06:12 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a02:cbcc:0:b0:3ad:800c:6c7a with SMTP id
- u12-20020a02cbcc000000b003ad800c6c7amr377776jaq.9.1675245881698; Wed, 01 Feb
- 2023 02:04:41 -0800 (PST)
-Date:   Wed, 01 Feb 2023 02:04:41 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b0b3c005f3a09383@google.com>
-Subject: [syzbot] general protection fault in skb_dequeue (3)
-From:   syzbot <syzbot+a440341a59e3b7142895@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, dhowells@redhat.com, edumazet@google.com,
-        hch@lst.de, jhubbard@nvidia.com, johannes@sipsolutions.net,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
+References: <20230119102102.73414-1-jordan.chang@ufispace.com>
+ <20230119102102.73414-4-jordan.chang@ufispace.com> <3e242c03-f8fd-2136-0263-2306acb9f610@linaro.org>
+In-Reply-To: <3e242c03-f8fd-2136-0263-2306acb9f610@linaro.org>
+From:   Jordan Chang <jordan.chang@ufispace.com>
+Date:   Wed, 1 Feb 2023 18:06:01 +0800
+Message-ID: <CAJ3czeT1O3iw2S_SK3z0C6dMiJ+-fUrWXPox4LJpJkMy_rVsJA@mail.gmail.com>
+Subject: Re: [PATCH 3/3] ARM: dts: aspeed: Add device tree for Ufispace
+ NCPLite BMC
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au,
+        robh+dt@kernel.org, jay.tc.lin@ufispace.com,
+        eason.ys.huang@ufispace.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,WEIRD_QUOTING
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Krzysztof,
 
-syzbot found the following issue on:
+Thanks for your comments.
 
-HEAD commit:    80bd9028feca Add linux-next specific files for 20230131
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=1468e369480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=904dc2f450eaad4a
-dashboard link: https://syzkaller.appspot.com/bug?extid=a440341a59e3b7142895
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12c5d2be480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11259a79480000
+On Thu, Jan 19, 2023 at 7:00 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 19/01/2023 11:21, Jordan Chang wrote:
+> > Add initial version of device tree for Ufispace NCPlite platform
+> > which is equipped with AST2600-based BMC.
+> >
+> > Signed-off-by: Jordan Chang <jordan.chang@ufispace.com>
+> > ---
+> >  arch/arm/boot/dts/Makefile                    |   1 +
+> >  .../boot/dts/aspeed-bmc-ufispace-ncplite.dts  | 360 ++++++++++++++++++
+> >  2 files changed, 361 insertions(+)
+> >  create mode 100644 arch/arm/boot/dts/aspeed-bmc-ufispace-ncplite.dts
+> >
+> > diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+> > index 2ee9c043218b..d26e0651e805 100644
+> > --- a/arch/arm/boot/dts/Makefile
+> > +++ b/arch/arm/boot/dts/Makefile
+> > @@ -1626,6 +1626,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
+> >       aspeed-bmc-inventec-transformers.dtb \
+> >       aspeed-bmc-tyan-s7106.dtb \
+> >       aspeed-bmc-tyan-s8036.dtb \
+> > +     aspeed-bmc-ufispace-ncplite.dtb \
+> >       aspeed-bmc-vegman-n110.dtb \
+> >       aspeed-bmc-vegman-rx20.dtb \
+> >       aspeed-bmc-vegman-sx20.dtb
+> > diff --git a/arch/arm/boot/dts/aspeed-bmc-ufispace-ncplite.dts b/arch/arm/boot/dts/aspeed-bmc-ufispace-ncplite.dts
+> > new file mode 100644
+> > index 000000000000..7ab29129d1e4
+> > --- /dev/null
+> > +++ b/arch/arm/boot/dts/aspeed-bmc-ufispace-ncplite.dts
+> > @@ -0,0 +1,360 @@
+> > +// SPDX-License-Identifier: GPL-2.0-or-later
+> > +// Copyright (c) 2022 Ufispace Co., Ltd.
+> > +/dts-v1/;
+> > +
+> > +#include "aspeed-g6.dtsi"
+> > +#include <dt-bindings/i2c/i2c.h>
+> > +#include <dt-bindings/gpio/aspeed-gpio.h>
+> > +
+> > +/ {
+> > +     model = "Ufispace NCPLite BMC";
+> > +     compatible = "ufispace,ncplite-bmc", "aspeed,ast2600";
+> > +
+> > +     aliases {
+> > +             serial4 = &uart5;
+> > +     };
+> > +
+> > +     chosen {
+> > +             stdout-path = &uart5;
+> > +             bootargs = "console=ttyS4,115200n8 earlycon";
+>
+> earlycon is debugging tool and not suitable for mainline, wide usage. Drop.
+>
+> Actually drop entire bootags and use proper stdout-path.
+>
+Will drop the line.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/924618188238/disk-80bd9028.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/7a03cf86e545/vmlinux-80bd9028.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/568e80043a41/bzImage-80bd9028.xz
+> > +     };
+> > +
+> > +     memory@80000000 {
+> > +             device_type = "memory";
+> > +             reg = <0x80000000 0x80000000>;
+> > +     };
+> > +
+> > +     iio-hwmon {
+> > +             compatible = "iio-hwmon";
+> > +             io-channels = <&adc0 0>, <&adc0 1>, <&adc0 2>, <&adc0 3>,
+> > +                           <&adc0 4>, <&adc0 5>, <&adc0 6>, <&adc0 7>,
+> > +                           <&adc1 0>, <&adc1 1>, <&adc1 2>, <&adc1 3>,
+> > +                           <&adc1 4>, <&adc1 5>, <&adc1 6>, <&adc1 7>;
+> > +     };
+> > +
+> > +     gpio-keys {
+> > +             compatible = "gpio-keys";
+> > +
+> > +             fan-status-int-l {
+>
+> Does not look like you tested the DTS against bindings. Please run `make
+> dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
+> for instructions).
+>
+> These will bring warnings. Missing generic name,
+>
+I have run the `make dtbs_check` command, and did not notice the warning
+message 'Missing generic name'. It shows lots of compatible failed messages.
+- /ahb/ftgmac@1e670000: failed to match any schema with compatible:
 
-The issue was bisected to:
+> > +                     label = "fan-status-int-l";
+> > +                     gpios = <&gpio0 ASPEED_GPIO(M, 2) GPIO_ACTIVE_LOW>;
+> > +                     linux,code = <ASPEED_GPIO(M, 2)>;
+> > +             };
+> > +
+> > +             allpwr-good {
+> > +                     label = "allpwr-good";
+> > +                     gpios = <&gpio0 ASPEED_GPIO(V, 4) GPIO_ACTIVE_HIGH>;
+> > +                     linux,code = <ASPEED_GPIO(V, 4)>;
+> > +             };
+> > +
+> > +             psu0-alert-n {
+> > +                     label = "psu0-alert-n";
+> > +                     gpios = <&gpio0 ASPEED_GPIO(V, 1) GPIO_ACTIVE_LOW>;
+> > +                     linux,code = <ASPEED_GPIO(V, 1)>;
+> > +             };
+> > +
+> > +             psu1-alert-n {
+> > +                     label = "psu1-alert-n";
+> > +                     gpios = <&gpio0 ASPEED_GPIO(V, 2) GPIO_ACTIVE_LOW>;
+> > +                     linux,code = <ASPEED_GPIO(V, 2)>;
+> > +             };
+> > +
+> > +             int-thermal-alert {
+> > +                     label = "int-thermal-alert";
+> > +                     gpios = <&gpio0 ASPEED_GPIO(P, 2) GPIO_ACTIVE_LOW>;
+> > +                     linux,code = <ASPEED_GPIO(P, 2)>;
+> > +             };
+> > +
+> > +             cpu-caterr-l {
+> > +                     label = "cpu-caterr-l";
+> > +                     gpios = <&gpio0 ASPEED_GPIO(N, 3) GPIO_ACTIVE_LOW>;
+> > +                     linux,code = <ASPEED_GPIO(N, 3)>;
+> > +             };
+> > +
+> > +             cpu-thermtrip-l {
+> > +                     label = "cpu-thermtrip-l";
+> > +                     gpios = <&gpio0 ASPEED_GPIO(V, 5) GPIO_ACTIVE_LOW>;
+> > +                     linux,code = <ASPEED_GPIO(V, 5)>;
+> > +             };
+> > +
+> > +             psu0-presence-l {
+> > +                     label = "psu0-presence-l";
+> > +                     gpios = <&gpio0 ASPEED_GPIO(F, 6) GPIO_ACTIVE_LOW>;
+> > +                     linux,code = <ASPEED_GPIO(F, 6)>;
+> > +             };
+> > +
+> > +             psu1-presence-l {
+> > +                     label = "psu1-presence-l";
+> > +                     gpios = <&gpio0 ASPEED_GPIO(F, 7) GPIO_ACTIVE_LOW>;
+> > +                     linux,code = <ASPEED_GPIO(F, 7)>;
+> > +             };
+> > +
+> > +             psu0-power-ok {
+> > +                     label = "psu0-power-ok";
+> > +                     gpios = <&gpio0 ASPEED_GPIO(M, 4) GPIO_ACTIVE_HIGH>;
+> > +                     linux,code = <ASPEED_GPIO(M, 4)>;
+> > +             };
+> > +
+> > +             psu1-power-ok {
+> > +                     label = "psu1-power-ok";
+> > +                     gpios = <&gpio0 ASPEED_GPIO(M, 5) GPIO_ACTIVE_HIGH>;
+> > +                     linux,code = <ASPEED_GPIO(M, 5)>;
+> > +             };
+> > +     };
+> > +
+> > +     gpio-keys-polled {
+> > +             compatible = "gpio-keys-polled";
+> > +             #address-cells = <1>;
+> > +             #size-cells = <0>;
+> > +             poll-interval = <1000>;
+> > +
+> > +             fan0-presence {
+>
+> Same problem - not tested.
+>
+> > +                     label = "fan0-presence";
+> > +                     gpios = <&fan_ioexp 2 GPIO_ACTIVE_LOW>;
+> > +                     linux,code = <2>;
+> > +             };
+> > +
+> > +             fan1-presence {
+> > +                     label = "fan1-presence";
+> > +                     gpios = <&fan_ioexp 6 GPIO_ACTIVE_LOW>;
+> > +                     linux,code = <6>;
+> > +             };
+> > +
+> > +             fan2-presence {
+> > +                     label = "fan2-presence";
+> > +                     gpios = <&fan_ioexp 10 GPIO_ACTIVE_LOW>;
+> > +                     linux,code = <10>;
+> > +             };
+> > +
+> > +             fan3-presence {
+> > +                     label = "fan3-presence";
+> > +                     gpios = <&fan_ioexp 14 GPIO_ACTIVE_LOW>;
+> > +                     linux,code = <14>;
+> > +             };
+> > +     };
+> > +};
+> > +
+> > +&mac2 {
+> > +     status = "okay";
+> > +     use-ncsi;
+> > +
+> > +     pinctrl-names = "default";
+> > +     pinctrl-0 = <&pinctrl_rmii3_default>;
+> > +     clocks = <&syscon ASPEED_CLK_GATE_MAC3CLK>,
+> > +              <&syscon ASPEED_CLK_MAC3RCLK>;
+> > +     clock-names = "MACCLK", "RCLK";
+> > +};
+> > +
+> > +&fmc {
+> > +     status = "okay";
+> > +     flash@0 {
+> > +             status = "okay";
+> > +             m25p,fast-read;
+> > +             label = "bmc";
+> > +             spi-max-frequency = <50000000>;
+> > +#include "openbmc-flash-layout-64.dtsi"
+> > +     };
+> > +
+> > +     flash@1 {
+> > +             status = "okay";
+> > +             m25p,fast-read;
+> > +             label = "alt-bmc";
+> > +             spi-max-frequency = <50000000>;
+> > +#include "openbmc-flash-layout-64-alt.dtsi"
+> > +     };
+> > +};
+> > +
+> > +&uart1 {
+> > +     status = "okay";
+> > +};
+> > +
+> > +&uart4 {
+> > +     status = "okay";
+> > +};
+> > +
+> > +&uart5 {
+> > +     status = "okay";
+> > +};
+> > +
+> > +&kcs3 {
+> > +     status = "okay";
+> > +     aspeed,lpc-io-reg = <0xca2>;
+> > +};
+> > +
+> > +&lpc_reset {
+> > +     status = "okay";
+> > +};
+> > +
+> > +&lpc_ctrl {
+> > +     status = "okay";
+> > +};
+> > +
+> > +&uart_routing {
+> > +     status = "okay";
+> > +};
+> > +
+> > +&wdt1 {
+> > +     status = "okay";
+> > +};
+> > +
+> > +&wdt2 {
+> > +     status = "okay";
+> > +};
+> > +
+> > +&peci0 {
+> > +     status = "okay";
+> > +};
+> > +
+> > +&udc {
+> > +     status = "okay";
+> > +};
+> > +
+> > +&adc0 {
+> > +     vref = <2500>;
+> > +     status = "okay";
+> > +
+> > +     pinctrl-names = "default";
+> > +     pinctrl-0 = <&pinctrl_adc0_default &pinctrl_adc1_default
+> > +             &pinctrl_adc2_default &pinctrl_adc3_default
+> > +             &pinctrl_adc4_default &pinctrl_adc5_default
+> > +             &pinctrl_adc6_default &pinctrl_adc7_default>;
+> > +};
+> > +
+> > +&adc1 {
+> > +     vref = <2500>;
+> > +     status = "okay";
+> > +
+> > +     pinctrl-names = "default";
+> > +     pinctrl-0 = <&pinctrl_adc8_default &pinctrl_adc9_default
+> > +             &pinctrl_adc10_default &pinctrl_adc11_default
+> > +             &pinctrl_adc12_default &pinctrl_adc13_default
+> > +             &pinctrl_adc14_default &pinctrl_adc15_default>;
+> > +};
+> > +
+> > +&i2c0 {
+> > +     status = "okay";
+> > +};
+> > +
+> > +&i2c1 {
+> > +     status = "okay";
+> > +
+> > +     lm75@48 {
+>
+> Node names should be generic.
+> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+Will rename the node with the generic name.
 
-commit 920756a3306a35f1c08f25207d375885bef98975
-Author: David Howells <dhowells@redhat.com>
-Date:   Sat Jan 21 12:51:18 2023 +0000
+> > +             compatible = "nxp,pca9535";
+> > +             reg = <0x20>;
+> > +             #address-cells = <1>;
+> > +             #size-cells = <0>;
+> > +             gpio-controller;
+> > +             #gpio-cells = <2>;
+> > +
+> > +             gpio-line-names =
+> > +             "","","presence-fan0","",
+> > +             "","","presence-fan1","",
+> > +             "","","presence-fan2","",
+> > +             "","","presence-fan3","";
+> > +     };
+> > +};
+> > +
+> > +&i2c3 {
+> > +     status = "okay";
+> > +
+> > +     eeprom@50 {
+> > +             compatible = "atmel,24c128";
+> > +             reg = <0x50>;
+> > +             pagesize = <64>;
+> > +     };
+> > +};
+> > +
+> > +&i2c4 {
+> > +     status = "okay";
+> > +
+> > +     psu@58 {
+> > +             compatible = "pmbus";
+>
+> Where is this compatible documented?
+Can not find the corresponding document.
+>
+> Did you run checkpatch? Did it pass without warnings?
+Yes, I did run the ./scripts/checkpatch.pl and there were two warnings left.
+- WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
+- WARNING: line length of 104 exceeds 100 columns
+I just ignore those warnings that Joel has informed me in the previous
+mail loop.
 
-    block: Convert bio_iov_iter_get_pages to use iov_iter_extract_pages
+Best regards,
+Jordan Chang
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=170384f9480000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=148384f9480000
-console output: https://syzkaller.appspot.com/x/log.txt?x=108384f9480000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a440341a59e3b7142895@syzkaller.appspotmail.com
-Fixes: 920756a3306a ("block: Convert bio_iov_iter_get_pages to use iov_iter_extract_pages")
-
-general protection fault, probably for non-canonical address 0xdffffc0000000001: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
-CPU: 0 PID: 2838 Comm: kworker/u4:6 Not tainted 6.2.0-rc6-next-20230131-syzkaller-09515-g80bd9028feca #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
-Workqueue: phy4 ieee80211_iface_work
-RIP: 0010:__skb_unlink include/linux/skbuff.h:2321 [inline]
-RIP: 0010:__skb_dequeue include/linux/skbuff.h:2337 [inline]
-RIP: 0010:skb_dequeue+0xf5/0x180 net/core/skbuff.c:3511
-Code: 8d 7e 08 49 8b 5c 24 08 48 b8 00 00 00 00 00 fc ff df 49 c7 44 24 08 00 00 00 00 48 89 fa 49 c7 04 24 00 00 00 00 48 c1 ea 03 <80> 3c 02 00 75 6d 48 89 da 49 89 5e 08 48 b8 00 00 00 00 00 fc ff
-RSP: 0018:ffffc9000ca2fc80 EFLAGS: 00010002
-RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: 0000000000000001 RSI: ffffffff8808951d RDI: 0000000000000008
-RBP: 0000000000000293 R08: 0000000000000001 R09: 0000000000000003
-R10: fffff52001945f7e R11: 0000000000000000 R12: ffff88801d8f63c0
-R13: ffff888075675880 R14: 0000000000000000 R15: ffff888075675868
-FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f4a51f6d150 CR3: 0000000072a78000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- ieee80211_iface_work+0x369/0xd70 net/mac80211/iface.c:1631
- process_one_work+0x9bf/0x1820 kernel/workqueue.c:2390
- worker_thread+0x669/0x1090 kernel/workqueue.c:2537
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:__skb_unlink include/linux/skbuff.h:2321 [inline]
-RIP: 0010:__skb_dequeue include/linux/skbuff.h:2337 [inline]
-RIP: 0010:skb_dequeue+0xf5/0x180 net/core/skbuff.c:3511
-Code: 8d 7e 08 49 8b 5c 24 08 48 b8 00 00 00 00 00 fc ff df 49 c7 44 24 08 00 00 00 00 48 89 fa 49 c7 04 24 00 00 00 00 48 c1 ea 03 <80> 3c 02 00 75 6d 48 89 da 49 89 5e 08 48 b8 00 00 00 00 00 fc ff
-RSP: 0018:ffffc9000ca2fc80 EFLAGS: 00010002
-RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: 0000000000000001 RSI: ffffffff8808951d RDI: 0000000000000008
-RBP: 0000000000000293 R08: 0000000000000001 R09: 0000000000000003
-R10: fffff52001945f7e R11: 0000000000000000 R12: ffff88801d8f63c0
-R13: ffff888075675880 R14: 0000000000000000 R15: ffff888075675868
-FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f4a51f6d150 CR3: 0000000072a78000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	8d 7e 08             	lea    0x8(%rsi),%edi
-   3:	49 8b 5c 24 08       	mov    0x8(%r12),%rbx
-   8:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-   f:	fc ff df
-  12:	49 c7 44 24 08 00 00 	movq   $0x0,0x8(%r12)
-  19:	00 00
-  1b:	48 89 fa             	mov    %rdi,%rdx
-  1e:	49 c7 04 24 00 00 00 	movq   $0x0,(%r12)
-  25:	00
-  26:	48 c1 ea 03          	shr    $0x3,%rdx
-* 2a:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
-  2e:	75 6d                	jne    0x9d
-  30:	48 89 da             	mov    %rbx,%rdx
-  33:	49 89 5e 08          	mov    %rbx,0x8(%r14)
-  37:	48                   	rex.W
-  38:	b8 00 00 00 00       	mov    $0x0,%eax
-  3d:	00 fc                	add    %bh,%ah
-  3f:	ff                   	.byte 0xff
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+>
+>
+> > +             reg = <0x58>;
+> > +     };
+> > +
+> > +     eeprom@50 {
+> > +             compatible = "atmel,24c02";
+> > +             reg = <0x50>;
+> > +             pagesize = <1>;
+> > +     };
+> > +};
+> > +
+> > +&i2c5 {
+> > +     status = "okay";
+> > +
+> > +     psu@58 {
+> > +             compatible = "pmbus";
+> > +             reg = <0x58>;
+> > +     };
+> > +
+> > +     eeprom@50 {
+> > +             compatible = "atmel,24c02";
+> > +             reg = <0x50>;
+> > +             pagesize = <1>;
+> > +     };
+> > +};
+> > +
+> > +&i2c8 {
+> > +     status = "okay";
+> > +};
+> > +
+> > +&i2c10 {
+> > +     status = "okay";
+> > +
+> > +     lm75@4d {
+>
+> Node names should be generic.
+> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+>
+> > +             compatible = "national,lm75";
+> > +             reg = <0x4d>;
+> > +     };
+> > +};
+> Best regards,
+> Krzysztof
+>
