@@ -2,71 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C587D686F3D
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 20:49:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C0A3686F52
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 20:53:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232029AbjBATtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 14:49:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33098 "EHLO
+        id S231827AbjBATx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 14:53:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231953AbjBATtr (ORCPT
+        with ESMTP id S231916AbjBATxW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 14:49:47 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4CF92725
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 11:49:46 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id d3so19515929plr.10
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 11:49:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=to:cc:date:message-id:subject:mime-version
-         :content-transfer-encoding:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1dg+uXzaaDlrvsfZB5ZVYE69CBYsnyR8HC8FMGd9uOk=;
-        b=mUdhzyCgYPNycF/3bkAMsoqXvQQ/tso4Texyq30NkVnpEYdcyRuKmzz2Rr9fp34Eje
-         PStVXCIBfTeS/ewMRxcWIN0eZkpiwVz+K9wrlYOCPExPoX8XDqDeXpo/xdlz8Mb6P8yH
-         rcBTRdi3v3r589fekBvveOZSmC7+ooKvp8fSGwL7tL9TYZnQkCuAxoflAaTlkZplc+kS
-         eEtwnPc7zlSIS/pHv8ONU0y+IeI1t0HUSWZ8XxQfIZDEqXbwAz2erCpu4iuptmGQRHkV
-         n2pvh7Je1PuerQguKUAuzrm4EdS0tWGOF8oz7CtrfidrPzyq9yyoll/nea+iLRYeDveu
-         pE4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:cc:date:message-id:subject:mime-version
-         :content-transfer-encoding:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1dg+uXzaaDlrvsfZB5ZVYE69CBYsnyR8HC8FMGd9uOk=;
-        b=ds8zJ8JSjhaHTurMaj57Uc5vg25iVtfPJtsndVCnI1bPgpKFY8QCasZzUvZ2Cijbpg
-         xYlg4M5XKdzP7jQX0HXWeJdT5lLzkmpTzQxsG+Hcp7UTQNTPT0zrw6LLJQDRBHr5Jal5
-         8va7Xd0gqhaX0FiZgR60tyLBMXFg8q8MHa+s4GRgLEg9Vg/FjSCGn8XEKNF2Vc1ODyn5
-         cIiqMw3jbMVFKAg2CkdkMZWa1POF2u6JF1tly1dnurvXM0MQijX7H6GNALadGtbMp3F+
-         Q5JfYCA4nuwdbvTno4mswyrH+yKSSjyLBLvsV5JRguYCuIc2OLma2slKkyl1rAXpEmsu
-         eXYw==
-X-Gm-Message-State: AO0yUKVvf74/XOlrrg5UclidDwJguaB35iwlLz0v8QLe0PFEQtXGhZm9
-        4G09Zgs5cOGcQdQAb+ODU6tEme0mzlRpXZw6
-X-Google-Smtp-Source: AK7set+GulbmfTJcMlD3KZbcW1D0M9MZZW397DAJ+hjZSoE0ohBkXfhXkx7rlEzwdgu1mqowUP6nKw==
-X-Received: by 2002:a17:902:d415:b0:196:6298:6226 with SMTP id b21-20020a170902d41500b0019662986226mr3453841ple.49.1675280986263;
-        Wed, 01 Feb 2023 11:49:46 -0800 (PST)
-Received: from smtpclient.apple ([51.52.155.79])
-        by smtp.gmail.com with ESMTPSA id q9-20020a170902b10900b0019608291564sm4015021plr.134.2023.02.01.11.49.44
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 01 Feb 2023 11:49:45 -0800 (PST)
-From:   Matt Evans <mev@rivosinc.com>
-Content-Type: text/plain;
-        charset=us-ascii
-Content-Transfer-Encoding: quoted-printable
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: [PATCH V2] clocksource: riscv: Patch riscv_clock_next_event() jump
- before first use
-Message-Id: <CDDAB2D0-264E-42F3-8E31-BA210BEB8EC1@rivosinc.com>
-Date:   Wed, 1 Feb 2023 19:49:42 +0000
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Atish Patra <atishp@rivosinc.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Wed, 1 Feb 2023 14:53:22 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B3218016D
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 11:52:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675281155;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=sTvWe2kfUoGBfAaCSxydSPRezZXDlplO8iSUUltKQvQ=;
+        b=iSdWvokJmoXkJby0gG/mw1MytJVEeyFGVY7nZMzL/kjtdy6bWimpDHHur4Ub119Z7LJpPB
+        XjM9eOPGAkPOBeAIQ8l829vPi/DXIvqHBuX5UAQ5sqftPU2aaJ4OFkg2UepIn2VpNXg9HR
+        lvWu2/yf+uYBcs90oCPtXiAbpqV/u74=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-664-FlzSg14TO-WC0NOa6ALVgw-1; Wed, 01 Feb 2023 14:52:30 -0500
+X-MC-Unique: FlzSg14TO-WC0NOa6ALVgw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4975A2806051;
+        Wed,  1 Feb 2023 19:52:30 +0000 (UTC)
+Received: from tpad.localdomain (ovpn-112-2.gru2.redhat.com [10.97.112.2])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id F40FD492B06;
+        Wed,  1 Feb 2023 19:52:29 +0000 (UTC)
+Received: by tpad.localdomain (Postfix, from userid 1000)
+        id 0A274403C1B83; Wed,  1 Feb 2023 16:51:49 -0300 (-03)
+Message-ID: <20230201195013.881721887@redhat.com>
+User-Agent: quilt/0.67
+Date:   Wed, 01 Feb 2023 16:50:13 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     Christoph Lameter <cl@linux.com>
+Cc:     Aaron Tomlin <atomlin@atomlin.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH 0/5] fold per-CPU vmstats remotely
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,58 +58,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A static key is used to select between SBI and Sstc timer usage in
-riscv_clock_next_event(), but currently the direction is resolved
-after cpuhp_setup_state() is called (which sets the next event).  The
-first event will therefore fall through the sbi_set_timer() path; this
-breaks Sstc-only systems.  So, apply the jump patching before first
-use.
+This patch series addresses the following two problems:
 
-Fixes: 9f7a8ff6391f ("RISC-V: Prefer sstc extension if available")
-Signed-off-by: Matt Evans <mev@rivosinc.com>
----
+    1. A customer provided some evidence which indicates that
+       the idle tick was stopped; albeit, CPU-specific vmstat
+       counters still remained populated.
 
-V1 -> V2: Commit msg tweak.
+       Thus one can only assume quiet_vmstat() was not
+       invoked on return to the idle loop. If I understand
+       correctly, I suspect this divergence might erroneously
+       prevent a reclaim attempt by kswapd. If the number of
+       zone specific free pages are below their per-cpu drift
+       value then zone_page_state_snapshot() is used to
+       compute a more accurate view of the aforementioned
+       statistic.  Thus any task blocked on the NUMA node
+       specific pfmemalloc_wait queue will be unable to make
+       significant progress via direct reclaim unless it is
+       killed after being woken up by kswapd
+       (see throttle_direct_reclaim())
 
- drivers/clocksource/timer-riscv.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+    2. With a SCHED_FIFO task that busy loops on a given CPU,
+       and kworker for that CPU at SCHED_OTHER priority,
+       queuing work to sync per-vmstats will either cause that
+       work to never execute, or stalld (i.e. stall daemon)
+       boosts kworker priority which causes a latency
+       violation
 
-diff --git a/drivers/clocksource/timer-riscv.c =
-b/drivers/clocksource/timer-riscv.c
-index 969a552da8d2..a36d173fd6cd 100644
---- a/drivers/clocksource/timer-riscv.c
-+++ b/drivers/clocksource/timer-riscv.c
-@@ -177,6 +177,11 @@ static int __init riscv_timer_init_dt(struct =
-device_node *n)
- 		return error;
- 	}
-=20
-+	if (riscv_isa_extension_available(NULL, SSTC)) {
-+		pr_info("Timer interrupt in S-mode is available via sstc =
-extension\n");
-+		static_branch_enable(&riscv_sstc_available);
-+	}
-+
- 	error =3D cpuhp_setup_state(CPUHP_AP_RISCV_TIMER_STARTING,
- 			 "clockevents/riscv/timer:starting",
- 			 riscv_timer_starting_cpu, =
-riscv_timer_dying_cpu);
-@@ -184,11 +189,6 @@ static int __init riscv_timer_init_dt(struct =
-device_node *n)
- 		pr_err("cpu hp setup state failed for RISCV timer =
-[%d]\n",
- 		       error);
-=20
--	if (riscv_isa_extension_available(NULL, SSTC)) {
--		pr_info("Timer interrupt in S-mode is available via sstc =
-extension\n");
--		static_branch_enable(&riscv_sstc_available);
--	}
--
- 	return error;
- }
-=20
---=20
-2.30.2
+By having vmstat_shepherd flush the per-CPU counters to the
+global counters from remote CPUs.
+
+This is done using cmpxchg to manipulate the counters,
+both CPU locally (via the account functions),
+and remotely (via cpu_vm_stats_fold).
+
+Thanks to Aaron Tomlin for diagnosing issue 1 and writing
+the initial patch series.
+
+ include/linux/mmzone.h |    3 
+ mm/vmstat.c            |  424 ++++++++++++++++++++++++++++++++++++++++++++++++------------------------------------------
+ 2 files changed, 230 insertions(+), 197 deletions(-)
+
 
 
