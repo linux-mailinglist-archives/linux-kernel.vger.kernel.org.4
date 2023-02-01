@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E5A568629F
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 10:15:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B5986862A2
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 10:15:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229991AbjBAJPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 04:15:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39614 "EHLO
+        id S231970AbjBAJPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 04:15:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231556AbjBAJOr (ORCPT
+        with ESMTP id S232002AbjBAJOz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 04:14:47 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDFE63803C
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 01:14:03 -0800 (PST)
+        Wed, 1 Feb 2023 04:14:55 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 236833B0D5
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 01:14:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675242843;
+        s=mimecast20190719; t=1675242846;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Cc8KcFYSac3hETCaiorDwaJuaLkn+gY3HkrQz3ErLWA=;
-        b=d7hKCbk7DseypUEc8pPAqRTzr7vKqxJ/JPDxrpmrQuix5Qn1bLk119Xjn+/a6H7c/D9plO
-        HOrCJyjTasCxJXXi/nqs6eo55mJQxED3Njree0M5owWiQjPjsb0dGmrNG5xyuhamthrC0l
-        va5FMNEX5WoZRyVFjJkVH3feHKSlO3k=
+        bh=XBWQd8JpXqPiSUXlz560wSrv6GFOWoMdAs6vQXNYcJk=;
+        b=gY/yj1+YiF2aa+sRuRNpr1sU88/MDUuFLdSuh0h8OFnwBYEu01hBchFnlVFN+gmOESOGek
+        f5PDsQjJsmHQVHvcNK8k7DWFrIskBRiun8xHI/eVWNSQUVMSv9vq7hmW7UmbgHVpBUw79s
+        py/u+A/JC1SkTRu0xn1hCwhyZwtbAig=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-187-TESVCinaPw-AsPopzx-RcQ-1; Wed, 01 Feb 2023 04:13:57 -0500
-X-MC-Unique: TESVCinaPw-AsPopzx-RcQ-1
+ us-mta-278-cP9HqQaYMY-UMqezcG8onw-1; Wed, 01 Feb 2023 04:14:02 -0500
+X-MC-Unique: cP9HqQaYMY-UMqezcG8onw-1
 Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9E30A85CBE0;
-        Wed,  1 Feb 2023 09:13:56 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 32D1B183B3C3;
+        Wed,  1 Feb 2023 09:14:02 +0000 (UTC)
 Received: from MiWiFi-R3L-srv.redhat.com (ovpn-13-89.pek2.redhat.com [10.72.13.89])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 09BC6492C3E;
-        Wed,  1 Feb 2023 09:13:51 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5E5C1492B01;
+        Wed,  1 Feb 2023 09:13:57 +0000 (UTC)
 From:   Baoquan He <bhe@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
         stephen.s.brennan@oracle.com, urezki@gmail.com, lstoakes@gmail.com,
         willy@infradead.org, hch@infradead.org, error27@gmail.com,
         Baoquan He <bhe@redhat.com>
-Subject: [PATCH v4 2/7] mm/vmalloc.c: add flags to mark vm_map_ram area
-Date:   Wed,  1 Feb 2023 17:13:34 +0800
-Message-Id: <20230201091339.61761-3-bhe@redhat.com>
+Subject: [PATCH v4 3/7] mm/vmalloc.c: allow vread() to read out vm_map_ram areas
+Date:   Wed,  1 Feb 2023 17:13:35 +0800
+Message-Id: <20230201091339.61761-4-bhe@redhat.com>
 In-Reply-To: <20230201091339.61761-1-bhe@redhat.com>
 References: <20230201091339.61761-1-bhe@redhat.com>
 MIME-Version: 1.0
@@ -63,113 +63,145 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Through vmalloc API, a virtual kernel area is reserved for physical
-address mapping. And vmap_area is used to track them, while vm_struct
-is allocated to associate with the vmap_area to store more information
-and passed out.
+Currently, vread can read out vmalloc areas which is associated with
+a vm_struct. While this doesn't work for areas created by vm_map_ram()
+interface because it doesn't have an associated vm_struct. Then in vread(),
+these areas are all skipped.
 
-However, area reserved via vm_map_ram() is an exception. It doesn't have
-vm_struct to associate with vmap_area. And we can't recognize the
-vmap_area with '->vm == NULL' as a vm_map_ram() area because the normal
-freeing path will set va->vm = NULL before unmapping, please see
-function remove_vm_area().
-
-Meanwhile, there are two kinds of handling for vm_map_ram area. One is
-the whole vmap_area being reserved and mapped at one time through
-vm_map_area() interface; the other is the whole vmap_area with
-VMAP_BLOCK_SIZE size being reserved, while mapped into split regions
-with smaller size via vb_alloc().
-
-To mark the area reserved through vm_map_ram(), add flags field into
-struct vmap_area. Bit 0 indicates this is vm_map_ram area created
-through vm_map_ram() interface, while bit 1 marks out the type of
-vm_map_ram area which makes use of vmap_block to manage split regions
-via vb_alloc/free().
-
-This is a preparation for later use.
+Here, add a new function vmap_ram_vread() to read out vm_map_ram areas.
+The area created with vmap_ram_vread() interface directly can be handled
+like the other normal vmap areas with aligned_vread(). While areas
+which will be further subdivided and managed with vmap_block need
+carefully read out page-aligned small regions and zero fill holes.
 
 Signed-off-by: Baoquan He <bhe@redhat.com>
-Reviewed-by: Lorenzo Stoakes <lstoakes@gmail.com>
-Reviewed-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
 ---
- include/linux/vmalloc.h |  1 +
- mm/vmalloc.c            | 16 ++++++++++++----
- 2 files changed, 13 insertions(+), 4 deletions(-)
+ mm/vmalloc.c | 87 +++++++++++++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 80 insertions(+), 7 deletions(-)
 
-diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
-index 096d48aa3437..69250efa03d1 100644
---- a/include/linux/vmalloc.h
-+++ b/include/linux/vmalloc.h
-@@ -76,6 +76,7 @@ struct vmap_area {
- 		unsigned long subtree_max_size; /* in "free" tree */
- 		struct vm_struct *vm;           /* in "busy" tree */
- 	};
-+	unsigned long flags; /* mark type of vm_map_ram area */
- };
- 
- /* archs that select HAVE_ARCH_HUGE_VMAP should override one or more of these */
 diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index d6ff058ef4d0..ab4825050b5c 100644
+index ab4825050b5c..5a3ea6cb7ec2 100644
 --- a/mm/vmalloc.c
 +++ b/mm/vmalloc.c
-@@ -1589,7 +1589,8 @@ preload_this_cpu_lock(spinlock_t *lock, gfp_t gfp_mask, int node)
- static struct vmap_area *alloc_vmap_area(unsigned long size,
- 				unsigned long align,
- 				unsigned long vstart, unsigned long vend,
--				int node, gfp_t gfp_mask)
-+				int node, gfp_t gfp_mask,
-+				unsigned long va_flags)
- {
- 	struct vmap_area *va;
- 	unsigned long freed;
-@@ -1635,6 +1636,7 @@ static struct vmap_area *alloc_vmap_area(unsigned long size,
- 	va->va_start = addr;
- 	va->va_end = addr + size;
- 	va->vm = NULL;
-+	va->flags = va_flags;
+@@ -3544,6 +3544,67 @@ static int aligned_vread(char *buf, char *addr, unsigned long count)
+ 	return copied;
+ }
  
- 	spin_lock(&vmap_area_lock);
- 	insert_vmap_area(va, &vmap_area_root, &vmap_area_list);
-@@ -1913,6 +1915,10 @@ static struct vmap_area *find_unlink_vmap_area(unsigned long addr)
- 
- #define VMAP_BLOCK_SIZE		(VMAP_BBMAP_BITS * PAGE_SIZE)
- 
-+#define VMAP_RAM		0x1 /* indicates vm_map_ram area*/
-+#define VMAP_BLOCK		0x2 /* mark out the vmap_block sub-type*/
-+#define VMAP_FLAGS_MASK		0x3
++static void vmap_ram_vread(char *buf, char *addr, int count, unsigned long flags)
++{
++	char *start;
++	struct vmap_block *vb;
++	unsigned long offset;
++	unsigned int rs, re, n;
 +
- struct vmap_block_queue {
- 	spinlock_t lock;
- 	struct list_head free;
-@@ -1988,7 +1994,8 @@ static void *new_vmap_block(unsigned int order, gfp_t gfp_mask)
++	/*
++	 * If it's area created by vm_map_ram() interface directly, but
++	 * not further subdividing and delegating management to vmap_block,
++	 * handle it here.
++	 */
++	if (!(flags & VMAP_BLOCK)) {
++		aligned_vread(buf, addr, count);
++		return;
++	}
++
++	/*
++	 * Area is split into regions and tracked with vmap_block, read out
++	 * each region and zero fill the hole between regions.
++	 */
++	vb = xa_load(&vmap_blocks, addr_to_vb_idx((unsigned long)addr));
++	if (!vb)
++		goto finished;
++
++	spin_lock(&vb->lock);
++	if (bitmap_empty(vb->used_map, VMAP_BBMAP_BITS)) {
++		spin_unlock(&vb->lock);
++		goto finished;
++	}
++	for_each_set_bitrange(rs, re, vb->used_map, VMAP_BBMAP_BITS) {
++		if (!count)
++			break;
++		start = vmap_block_vaddr(vb->va->va_start, rs);
++		while (addr < start) {
++			if (count == 0)
++				break;
++			*buf = '\0';
++			buf++;
++			addr++;
++			count--;
++		}
++		/*it could start reading from the middle of used region*/
++		offset = offset_in_page(addr);
++		n = ((re - rs + 1) << PAGE_SHIFT) - offset;
++		if (n > count)
++			n = count;
++		aligned_vread(buf, start+offset, n);
++
++		buf += n;
++		addr += n;
++		count -= n;
++	}
++	spin_unlock(&vb->lock);
++
++finished:
++	/* zero-fill the left dirty or free regions */
++	if (count)
++		memset(buf, 0, count);
++}
++
+ /**
+  * vread() - read vmalloc area in a safe way.
+  * @buf:     buffer for reading data
+@@ -3574,7 +3635,7 @@ long vread(char *buf, char *addr, unsigned long count)
+ 	struct vm_struct *vm;
+ 	char *vaddr, *buf_start = buf;
+ 	unsigned long buflen = count;
+-	unsigned long n;
++	unsigned long n, size, flags;
  
- 	va = alloc_vmap_area(VMAP_BLOCK_SIZE, VMAP_BLOCK_SIZE,
- 					VMALLOC_START, VMALLOC_END,
--					node, gfp_mask);
-+					node, gfp_mask,
-+					VMAP_RAM|VMAP_BLOCK);
- 	if (IS_ERR(va)) {
- 		kfree(vb);
- 		return ERR_CAST(va);
-@@ -2297,7 +2304,8 @@ void *vm_map_ram(struct page **pages, unsigned int count, int node)
- 	} else {
- 		struct vmap_area *va;
- 		va = alloc_vmap_area(size, PAGE_SIZE,
--				VMALLOC_START, VMALLOC_END, node, GFP_KERNEL);
-+				VMALLOC_START, VMALLOC_END,
-+				node, GFP_KERNEL, VMAP_RAM);
- 		if (IS_ERR(va))
- 			return NULL;
+ 	addr = kasan_reset_tag(addr);
  
-@@ -2537,7 +2545,7 @@ static struct vm_struct *__get_vm_area_node(unsigned long size,
- 	if (!(flags & VM_NO_GUARD))
- 		size += PAGE_SIZE;
+@@ -3595,12 +3656,21 @@ long vread(char *buf, char *addr, unsigned long count)
+ 		if (!count)
+ 			break;
  
--	va = alloc_vmap_area(size, align, start, end, node, gfp_mask);
-+	va = alloc_vmap_area(size, align, start, end, node, gfp_mask, 0);
- 	if (IS_ERR(va)) {
- 		kfree(area);
- 		return NULL;
+-		if (!va->vm)
++		vm = va->vm;
++		flags = va->flags & VMAP_FLAGS_MASK;
++		/*
++		 * VMAP_BLOCK indicates a sub-type of vm_map_ram area, need
++		 * be set together with VMAP_RAM.
++		 */
++		WARN_ON(flags == VMAP_BLOCK);
++
++		if (!vm && !flags)
+ 			continue;
+ 
+-		vm = va->vm;
+-		vaddr = (char *) vm->addr;
+-		if (addr >= vaddr + get_vm_area_size(vm))
++		vaddr = (char *) va->va_start;
++		size = vm ? get_vm_area_size(vm) : va_size(va);
++
++		if (addr >= vaddr + size)
+ 			continue;
+ 		while (addr < vaddr) {
+ 			if (count == 0)
+@@ -3610,10 +3680,13 @@ long vread(char *buf, char *addr, unsigned long count)
+ 			addr++;
+ 			count--;
+ 		}
+-		n = vaddr + get_vm_area_size(vm) - addr;
++		n = vaddr + size - addr;
+ 		if (n > count)
+ 			n = count;
+-		if (!(vm->flags & VM_IOREMAP))
++
++		if (flags & VMAP_RAM)
++			vmap_ram_vread(buf, addr, n, flags);
++		else if (!(vm->flags & VM_IOREMAP))
+ 			aligned_vread(buf, addr, n);
+ 		else /* IOREMAP area is treated as memory hole */
+ 			memset(buf, 0, n);
 -- 
 2.34.1
 
