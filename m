@@ -2,161 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84E8F686472
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 11:38:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8A44686476
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 11:38:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232146AbjBAKiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 05:38:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42852 "EHLO
+        id S232126AbjBAKiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 05:38:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232022AbjBAKiB (ORCPT
+        with ESMTP id S232099AbjBAKiN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 05:38:01 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16FF85CE58
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 02:37:50 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id C6CFF3370C;
-        Wed,  1 Feb 2023 10:37:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1675247868; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7dknyLkO73ygt9vBhoceK7Ye2jngYAD05fHku6QQaSY=;
-        b=K8StW1l2cdNxZxs+GDvb44NHOFDZYqjDdcHmqps9gFa5H8tNVUYPDcwKz9+lqX3+nkwE3C
-        f7k8kplVFFtTj/Qj0ZZzvRn5VWUIphp5bIc74vfIKm9GxE36D8kI96gUFpvg9tSPTeUBmJ
-        3J2aDJx1Rms9jrWBBUHswsvFslQykhQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1675247868;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7dknyLkO73ygt9vBhoceK7Ye2jngYAD05fHku6QQaSY=;
-        b=23PuvmDkNBVnzIG2NJqs3GcM5hue36Pn8MrUBdTC4h/94lsKtt8LuW/L/y5/nZaKybqVmJ
-        hF7gHaeCX2j4ucCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 983A313A10;
-        Wed,  1 Feb 2023 10:37:48 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id tZu8I/xA2mPcBQAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Wed, 01 Feb 2023 10:37:48 +0000
-Message-ID: <857f4b92-fba7-0afe-55d9-52e84543e58f@suse.de>
-Date:   Wed, 1 Feb 2023 11:37:48 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 2/2] accel/ivpu: avoid duplciate assignment
-Content-Language: en-US
-To:     Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Krystian Pradzynski <krystian.pradzynski@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20230126163804.3648051-1-arnd@kernel.org>
- <20230126163804.3648051-2-arnd@kernel.org>
- <92f5faec-7fd5-4205-0b0f-1ed15626c30b@linux.intel.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <92f5faec-7fd5-4205-0b0f-1ed15626c30b@linux.intel.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------mbh0nDHae58PyReWvashjCa7"
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 1 Feb 2023 05:38:13 -0500
+Received: from mail-wr1-x44a.google.com (mail-wr1-x44a.google.com [IPv6:2a00:1450:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A94E8686
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 02:38:01 -0800 (PST)
+Received: by mail-wr1-x44a.google.com with SMTP id j25-20020adfd219000000b002bfd1484f9bso2333895wrh.2
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 02:38:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=s4zWblSgk9sC59/aeD2C4zXhl1NkdUvsWjCEZ+kae5w=;
+        b=kDd5sNOxRKfGTyQyrwC8Z9FLlQkrpsj/Nng2DTWB6IJUir3WQndNIexufILUN++wdV
+         JDwcGHttIbcRuSGZu7j9qulGqGELbopzYZ3m8BIvsoLl5QqurHIf6HGUOy+1AH4o06Ba
+         VNDrWbdJVT7ESS5kjdleefmF0NLuB3WcOoOJtsonsWVaNaBJDrHQTAgCuYmv5i/ph5Zl
+         UR2zJtbSKKV85ivzBHyqklZSKeSB/QSPrTRbPWkBl7+94vRWUCwYOn/R+g7PNWGcQH08
+         xrRKBM3IyQbvObsc3VmNRqTfnUlUIxxqTU0sIC/IIuFBnorDytqD1S3czSqHoRXsHpoc
+         XzaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=s4zWblSgk9sC59/aeD2C4zXhl1NkdUvsWjCEZ+kae5w=;
+        b=Walh0lLKd/JI9ZpCLBh674MGd4MKRJZtX52YkbYD/HN/YL/aT9g39PHuWDKZPN/O1K
+         bEvFxsJZ+k+6ED8t+MBSKRuWtwsRWD4CFer3lsgtwDnzfa0bgqIRFRSQuhfor89X6XPX
+         ZRcrf19NfqJSzCyfSJGLCPp8GUgquBq/lO72cMdRS2fDsR8lP4F6B5PKijkobke2jQeR
+         bmLjZaFAP4UL21kCFgBp/cpAX2AKOkpwhcvXT1WudtSzwUOf6BVJ3cQ97FCHMoZykfN2
+         QAykv89uBy+fwwHiUneIX9BaGEwv8+cx8KQAGcqmZUAE3MGCPoVjfrqYArRN656K+Jx1
+         8fNQ==
+X-Gm-Message-State: AO0yUKV6i4xFqtJSswj/LQbBxj7Ol/gOgxfNGhPX9OU36ZDURQY2gRBX
+        QBU7hCtjd03bqt018zr1P6Ct3P6epb0+
+X-Google-Smtp-Source: AK7set9OO31MOIG5ytUAh8LFORGHH4kWKzwK1XEnu8LH1geO7NiaHrTAAjdFjC0NALlJrHjXuGZHsPmGikuT
+X-Received: from big-boi.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:129])
+ (user=qperret job=sendgmr) by 2002:a05:600c:170a:b0:3dc:5240:a87b with SMTP
+ id c10-20020a05600c170a00b003dc5240a87bmr145717wmn.12.1675247879605; Wed, 01
+ Feb 2023 02:37:59 -0800 (PST)
+Date:   Wed,  1 Feb 2023 10:37:50 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
+Message-ID: <20230201103755.1398086-1-qperret@google.com>
+Subject: [PATCH 0/4] KVM: arm64: Fix CPU resume/on with pKVM
+From:   Quentin Perret <qperret@google.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu,
+        kernel-team@android.com, Quentin Perret <qperret@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------mbh0nDHae58PyReWvashjCa7
-Content-Type: multipart/mixed; boundary="------------mDyCDoTDlytybpA01dMLZzzG";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
- Arnd Bergmann <arnd@kernel.org>,
- Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
- Oded Gabbay <ogabbay@kernel.org>, Jeffrey Hugo <quic_jhugo@quicinc.com>
-Cc: Daniel Vetter <daniel.vetter@ffwll.ch>,
- Krystian Pradzynski <krystian.pradzynski@linux.intel.com>,
- Arnd Bergmann <arnd@arndb.de>, dri-devel@lists.freedesktop.org,
- linux-kernel@vger.kernel.org
-Message-ID: <857f4b92-fba7-0afe-55d9-52e84543e58f@suse.de>
-Subject: Re: [PATCH 2/2] accel/ivpu: avoid duplciate assignment
-References: <20230126163804.3648051-1-arnd@kernel.org>
- <20230126163804.3648051-2-arnd@kernel.org>
- <92f5faec-7fd5-4205-0b0f-1ed15626c30b@linux.intel.com>
-In-Reply-To: <92f5faec-7fd5-4205-0b0f-1ed15626c30b@linux.intel.com>
+When using pKVM, we do not reset the EL2 exception vectors back to the
+stubs for e.g. Power Management or CPU hotplug as we normally do in KVM.
+As consequence, the initialisation perfomed by __finalise_el2 is missing
+on e.g. the CPU_RESUME path with pKVM, hence leaving certain registers
+in an incorrect state.
 
---------------mDyCDoTDlytybpA01dMLZzzG
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+One such example is ZCR_EL2 which remains configured with SVE traps
+enabled. And so using SVE on a CPU that has gone through a hotplug
+off/on cycle leads to a hyp panic. Not good.
 
-DQoNCkFtIDMxLjAxLjIzIHVtIDE1OjAwIHNjaHJpZWIgSmFjZWsgTGF3cnlub3dpY3o6DQo+
-IEFwcGxpZWQgdG8gZHJtLW1pc2MtbmV4dC4gVGhhbmtzLg0KDQpJIGhhdmUgY2hlcnJ5LXBp
-Y2tlZCB0aGUgcGF0Y2ggaW50byBkcm0tbWlzYy1uZXh0LWZpeGVzLg0KDQo+IA0KPiBPbiAy
-Ni4wMS4yMDIzIDE3OjM3LCBBcm5kIEJlcmdtYW5uIHdyb3RlOg0KPj4gRnJvbTogQXJuZCBC
-ZXJnbWFubiA8YXJuZEBhcm5kYi5kZT4NCj4+DQo+PiBXaXRoIGV4dHJhIHdhcm5pbmdzIGVu
-YWJsZWQsIGdjYyB3YXJucyBhYm91dCB0d28gYXNzaWdubWVudHMNCj4+IG9mIHRoZSBzYW1l
-IC5tbWFwIGNhbGxiYWNrOg0KPj4NCj4+IEluIGZpbGUgaW5jbHVkZWQgZnJvbSBkcml2ZXJz
-L2FjY2VsL2l2cHUvaXZwdV9kcnYuYzoxMDoNCj4+IGluY2x1ZGUvZHJtL2RybV9hY2NlbC5o
-OjMxOjI3OiBlcnJvcjogaW5pdGlhbGl6ZWQgZmllbGQgb3ZlcndyaXR0ZW4gWy1XZXJyb3I9
-b3ZlcnJpZGUtaW5pdF0NCj4+ICAgICAzMSB8ICAgICAgICAgLm1tYXAgICAgICAgICAgID0g
-ZHJtX2dlbV9tbWFwDQo+PiAgICAgICAgfCAgICAgICAgICAgICAgICAgICAgICAgICAgIF5+
-fn5+fn5+fn5+fg0KPj4gZHJpdmVycy9hY2NlbC9pdnB1L2l2cHVfZHJ2LmM6MzYwOjk6IG5v
-dGU6IGluIGV4cGFuc2lvbiBvZiBtYWNybyAnRFJNX0FDQ0VMX0ZPUFMnDQo+PiAgICAzNjAg
-fCAgICAgICAgIERSTV9BQ0NFTF9GT1BTLA0KPj4gICAgICAgIHwgICAgICAgICBefn5+fn5+
-fn5+fn5+fg0KPj4NCj4+IFJlbW92ZSB0aGUgdW51c2VkIGxvY2FsIGFzc2lnbm1lbnQuDQo+
-Pg0KPj4gRml4ZXM6IDIwNzA5YWE5NDM1YiAoImFjY2VsOiBBZGQgLm1tYXAgdG8gRFJNX0FD
-Q0VMX0ZPUFMiKQ0KPj4gU2lnbmVkLW9mZi1ieTogQXJuZCBCZXJnbWFubiA8YXJuZEBhcm5k
-Yi5kZT4NCj4+IC0tLQ0KPj4gICBkcml2ZXJzL2FjY2VsL2l2cHUvaXZwdV9kcnYuYyB8IDEg
-LQ0KPj4gICAxIGZpbGUgY2hhbmdlZCwgMSBkZWxldGlvbigtKQ0KPj4NCj4+IGRpZmYgLS1n
-aXQgYS9kcml2ZXJzL2FjY2VsL2l2cHUvaXZwdV9kcnYuYyBiL2RyaXZlcnMvYWNjZWwvaXZw
-dS9pdnB1X2Rydi5jDQo+PiBpbmRleCAyYmMyZjFiOTA2NzEuLmEyOWU4ZWUwZGNlNiAxMDA2
-NDQNCj4+IC0tLSBhL2RyaXZlcnMvYWNjZWwvaXZwdS9pdnB1X2Rydi5jDQo+PiArKysgYi9k
-cml2ZXJzL2FjY2VsL2l2cHUvaXZwdV9kcnYuYw0KPj4gQEAgLTM1Niw3ICszNTYsNiBAQCBp
-bnQgaXZwdV9zaHV0ZG93bihzdHJ1Y3QgaXZwdV9kZXZpY2UgKnZkZXYpDQo+PiAgIA0KPj4g
-ICBzdGF0aWMgY29uc3Qgc3RydWN0IGZpbGVfb3BlcmF0aW9ucyBpdnB1X2ZvcHMgPSB7DQo+
-PiAgIAkub3duZXIJCT0gVEhJU19NT0RVTEUsDQo+PiAtCS5tbWFwICAgICAgICAgICA9IGRy
-bV9nZW1fbW1hcCwNCj4+ICAgCURSTV9BQ0NFTF9GT1BTLA0KPj4gICB9Ow0KPj4gICANCg0K
-LS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VT
-RSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQw
-OSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2No
-w6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
+This series fixes this by macroizing the first half of __finalise_el2
+(that is, the part that is not specific to VHE) to allow its re-use
+from pKVM's PSCI relay.
 
---------------mDyCDoTDlytybpA01dMLZzzG--
+Quentin Perret (4):
+  KVM: arm64: Provide sanitized SYS_ID_AA64SMFR0_EL1 to nVHE
+  KVM: arm64: Introduce finalise_el2_state macro
+  KVM: arm64: Use sanitized values in __check_override in nVHE
+  KVM: arm64: Finalise EL2 state from pKVM PSCI relay
 
---------------mbh0nDHae58PyReWvashjCa7
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+ arch/arm64/include/asm/el2_setup.h | 92 ++++++++++++++++++++++++++++++
+ arch/arm64/include/asm/kvm_hyp.h   |  1 +
+ arch/arm64/kernel/hyp-stub.S       | 79 +------------------------
+ arch/arm64/kvm/arm.c               |  1 +
+ arch/arm64/kvm/hyp/nvhe/hyp-init.S |  1 +
+ arch/arm64/kvm/hyp/nvhe/sys_regs.c |  1 +
+ 6 files changed, 98 insertions(+), 77 deletions(-)
 
------BEGIN PGP SIGNATURE-----
+-- 
+2.39.1.456.gfc5497dd1b-goog
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmPaQPwFAwAAAAAACgkQlh/E3EQov+Ai
-6A//cMMsJ4AvQxwOKxpV+caBp18tLIC1n+76EBkATeS137PYg67IypnbTLqxGPHg49U7Lo8p+YUY
-YZiXk68URCw7m+eNSHQ3+3cPXZMO83eEJA2DGcS3iX94rCmAzR0a/lb/B9wOeA8Tba6o0HS9lFa3
-SVPCe8upp5atqd3NQWj5CFdXcu6OeDD2Raz/iCuAZab3rdBCDI9AE7yGCr6uvRVreG3Ux3Lb7NwC
-VImhyreXRTkSJ0xJZ2LIqYgDVKqSp/W2SRTU0O4eR7n3amsKIkn2M0Lw1PDSLLXVXne5K8QEL5iw
-ouoFnRuJvUyo9AFGPqkDu+fuf2uzksCUsQOb9ICMqTxBC7cfZJl5relVnUyh3kUYPk52sVuTz35p
-zGcq7Ozvn2VPa8yj9zA0KnpyivPEoJbFu/Dafd4II8CcJ8QQxhpQ131GIeY45E/l7KS3AJPPB7//
-guckXhSAFjTuH9twIgZPtqNX0rBhhlvxvpMQL23VG7q0PrG2zjITWIuN8hu8Za5e9sxZBSdU9K07
-RSEze8DIZKR8m0M0PzJpTVX1Rqty8qubbwleddoEefq+kg/pUvD6vLyDWaR14DbIko+ohq1MGAM7
-077FXhmU+Z86f3CRHvQjFCm5YR8hoxIJ7IOQqvfLsrhshns08sduPP3YndSvGp+q2wSsmRcVTabW
-WBM=
-=XwQL
------END PGP SIGNATURE-----
-
---------------mbh0nDHae58PyReWvashjCa7--
