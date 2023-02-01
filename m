@@ -2,20 +2,20 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A4A8686B8D
+	by mail.lfdr.de (Postfix) with ESMTP id 58B71686B8F
 	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 17:26:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231503AbjBAQ0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 11:26:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59346 "EHLO
+        id S231789AbjBAQ0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 11:26:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjBAQ0f (ORCPT
+        with ESMTP id S230519AbjBAQ0g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 11:26:35 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B383E77517;
-        Wed,  1 Feb 2023 08:26:34 -0800 (PST)
-Date:   Wed, 01 Feb 2023 16:26:32 -0000
+        Wed, 1 Feb 2023 11:26:36 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 788BF7642D;
+        Wed,  1 Feb 2023 08:26:35 -0800 (PST)
+Date:   Wed, 01 Feb 2023 16:26:33 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1675268793;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ZHa29J7fJfvVDrJh+OJqnvehQZwLvuS2I7HxcjmkPxY=;
-        b=h6WlmtyuT4yS4/ifrE4tkm36RJZwaEBFLMEP5JA32UIpMykLZmRuKEX1PTxKCZMUkSNaUU
-        P5ZcsY4pzRxJ0QScJFBZX2+o5hPwDAnchbgiAxuUuMQcsU0UcnHiu9Q8+YW1/KI4e3mtTV
-        zZ+iLr7PQuDSy40E9DXQi8ztIoImfBdyjWwYnj9tGV2bMJS+9sl8Schnr0OsfVAYlf11Tf
-        s6/l41OmaX5zViKs/oThy1fn6rquXWyyi/+ryb0viv+deUBDRzdX7QzuhgJPpkjiJZYVfR
-        cF1u756H9UVHQnC4ZHj/9t+5zgUVA7Mhw8QoUhRkeUb+4T6MlYQTTG51FBjcHg==
+        bh=ET2zNrmGhg8iIYs2CHxnFSC7tXI+GhXiFy2BEWL3ZzY=;
+        b=VNE1TTPi8zT+FwVxD5TqQbiBsb+dAK/ESCnq58OqZCQiP/G9IlpUxdDcixOgCXL8oq4+X5
+        By5Mcq6EbgA9XHpbMaecTcefJP2mFjrO/4yN0z2R0UooG2NSPjYZQG0+Ae960Jb2zEATqQ
+        p/WTiaKq7Ls3qpQjiAR8w/JvFLP13yKFiuJI1XunPqf+BGXFvhg3JeVKMuBJ7xdI9Y9Jgd
+        LjlyJwG2059smgjaGihKQOm3SYWXscO2GQjx5h+8Oae33KQUOqBrC9JvtuCu5ZhDJTrUjc
+        6yfGzCp/TIY/QPojZE+9KiTrvJS4ZFRhPUw6reZaaGZYXkwRl7cVYyvpFC017Q==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1675268793;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,21 +36,21 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ZHa29J7fJfvVDrJh+OJqnvehQZwLvuS2I7HxcjmkPxY=;
-        b=CJwcJBt6qdTYfba46yHY6Dvt8S3ulSYeD4g5IfJ861bvoQdOQRTz3LnwvFsJCiDxiAr7Vh
-        JP5b5d/0kLS1W3CA==
+        bh=ET2zNrmGhg8iIYs2CHxnFSC7tXI+GhXiFy2BEWL3ZzY=;
+        b=GVjaw9Uob4Y/Njxy2GTqxtGqvH3ot1Vni4CVd9GbLT/54dwdGxw2A2aL90hOTRQzZGv+WT
+        ie7aNab2ejyGmkBA==
 From:   tip-bot2 for Thomas =?utf-8?q?Wei=C3=9Fschuh?= 
         <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: objtool/core] objtool: Optimize layout of struct special_alt
+Subject: [tip: objtool/core] objtool: Optimize layout of struct symbol
 Cc:     linux@weissschuh.net, Josh Poimboeuf <jpoimboe@kernel.org>,
         x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20221216-objtool-memory-v2-7-17968f85a464@weissschuh.net>
-References: <20221216-objtool-memory-v2-7-17968f85a464@weissschuh.net>
+In-Reply-To: <20221216-objtool-memory-v2-6-17968f85a464@weissschuh.net>
+References: <20221216-objtool-memory-v2-6-17968f85a464@weissschuh.net>
 MIME-Version: 1.0
-Message-ID: <167526879285.4906.9411259266925630445.tip-bot2@tip-bot2>
+Message-ID: <167526879328.4906.805580574761621233.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,44 +66,47 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the objtool/core branch of tip:
 
-Commit-ID:     391e6d2abd652b460d9017b2f8a8ded508c09558
-Gitweb:        https://git.kernel.org/tip/391e6d2abd652b460d9017b2f8a8ded508c=
-09558
+Commit-ID:     55156d43d62124a92ab80c8f31661609465e257b
+Gitweb:        https://git.kernel.org/tip/55156d43d62124a92ab80c8f31661609465=
+e257b
 Author:        Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
-AuthorDate:    Tue, 27 Dec 2022 16:01:03=20
+AuthorDate:    Tue, 27 Dec 2022 16:01:02=20
 Committer:     Josh Poimboeuf <jpoimboe@kernel.org>
 CommitterDate: Mon, 30 Jan 2023 16:28:20 -08:00
 
-objtool: Optimize layout of struct special_alt
+objtool: Optimize layout of struct symbol
 
-Reduce the size of struct special_alt from 72 to 64 bytes.
+Reduce the size of struct symbol on x86_64 from 208 to 200 bytes.
+This structure is allocated a lot and never freed.
+
+This reduces maximum memory usage while processing vmlinux.o from
+2919716 KB to 2917988 KB (-0.5%) on my notebooks "localmodconfig".
 
 Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
-Link: https://lore.kernel.org/r/20221216-objtool-memory-v2-7-17968f85a464@wei=
+Link: https://lore.kernel.org/r/20221216-objtool-memory-v2-6-17968f85a464@wei=
 ssschuh.net
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- tools/objtool/include/objtool/special.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/objtool/include/objtool/elf.h | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/tools/objtool/include/objtool/special.h b/tools/objtool/include/=
-objtool/special.h
-index dc4721e..86d4af9 100644
---- a/tools/objtool/include/objtool/special.h
-+++ b/tools/objtool/include/objtool/special.h
-@@ -19,6 +19,7 @@ struct special_alt {
- 	bool skip_orig;
- 	bool skip_alt;
- 	bool jump_or_nop;
-+	u8 key_addend;
-=20
- 	struct section *orig_sec;
- 	unsigned long orig_off;
-@@ -27,7 +28,6 @@ struct special_alt {
- 	unsigned long new_off;
-=20
- 	unsigned int orig_len, new_len; /* group only */
--	u8 key_addend;
- };
-=20
- int special_get_alts(struct elf *elf, struct list_head *alts);
+diff --git a/tools/objtool/include/objtool/elf.h b/tools/objtool/include/objt=
+ool/elf.h
+index 1c90f0a..ad0024d 100644
+--- a/tools/objtool/include/objtool/elf.h
++++ b/tools/objtool/include/objtool/elf.h
+@@ -50,12 +50,11 @@ struct symbol {
+ 	GElf_Sym sym;
+ 	struct section *sec;
+ 	char *name;
+-	unsigned int idx;
+-	unsigned char bind, type;
++	unsigned int idx, len;
+ 	unsigned long offset;
+-	unsigned int len;
+ 	unsigned long __subtree_last;
+ 	struct symbol *pfunc, *cfunc, *alias;
++	unsigned char bind, type;
+ 	u8 uaccess_safe      : 1;
+ 	u8 static_call_tramp : 1;
+ 	u8 retpoline_thunk   : 1;
