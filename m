@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40E4E6868B0
+	by mail.lfdr.de (Postfix) with ESMTP id 8C35D6868B1
 	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 15:43:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232676AbjBAOnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 09:43:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48880 "EHLO
+        id S232671AbjBAOnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 09:43:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232536AbjBAOnM (ORCPT
+        with ESMTP id S232535AbjBAOnM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 1 Feb 2023 09:43:12 -0500
 Received: from mail.fris.de (mail.fris.de [IPv6:2a01:4f8:c2c:390b::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D6052E82E;
-        Wed,  1 Feb 2023 06:43:03 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 75799BFC6C;
-        Wed,  1 Feb 2023 15:34:48 +0100 (CET)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CF8B2E819;
+        Wed,  1 Feb 2023 06:43:04 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id AEAB6C00E3;
+        Wed,  1 Feb 2023 15:34:55 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fris.de; s=dkim;
-        t=1675262091; h=from:subject:date:message-id:to:cc:mime-version:
-         content-transfer-encoding; bh=jpzkr24nHKJp5IYEK48VP/WYJnaAAqAY3mtPMKQ4JTk=;
-        b=EyhNDpImLtYrLnSp9RszhmfZjgngLI5STcz8zOdrh17GinHCp5YJE3zgtszbPSiQnpAnae
-        xNdr4zrlZ0mKxAUaBUSqQJuGlTP2/pCqfbrB5/hovHvR+PojO5PttjnGFIcnjJ31qp23nr
-        KdZlZTyJbhqvHE24LaQGzhdy4qYwLM4nxNYHAe/PUIY61wf7idcvDamcz4jI6virl51pHY
-        jpdHe8kKUEDGJjPiRr0KhLIL4GZhloH23lwsCEaQ1ykSVM7YcpFDTIMNYXmkKDs1IVwsqR
-        A9x7BKDpE/1rj0AeNSB3yW+hOWuKYYiBQdV0CGzRcpIomE9IBP6lCZc8K2iNeA==
+        t=1675262096; h=from:subject:date:message-id:to:cc:mime-version:
+         content-transfer-encoding:in-reply-to:references;
+        bh=MjLoVQc1RTDuq1zZZzBKnhQUzoJ04kzFHyZmhNIUaWs=;
+        b=spjaJgzmNsNJYfBkVEYRJKvJQFzMRn1FUYNuO4U2YOFo6WNhl4gFXP7VNY3+DO8DbbhKnZ
+        pCtmGlTp1+RBxMd8C2QFwjJCRNqe7RV6VIXAIrz7KLehDVMeWGc27T8YEDnlLv3WW8J61A
+        c28Faflv191Q3jKkv4PygmYs+VzhSOSyW7J6TIq+zIO8p8LWKP8frD/mXq3vbGzsJlA0BP
+        UcMOhavzQb6nTErryt0UluYi6nSlj4k5ll3cXiRltnTazQTqww6CcmfaaVfu1zlzXod0fD
+        8UK7NrSGX7pMbTx/xSFvTGBj4TIGIsqGPAdGw3o7h3FBMsD2+lKwVmENWV3g5Q==
 From:   Frieder Schrempf <frieder@fris.de>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
-Cc:     Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        devicetree@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>
-Subject: [PATCH 0/7] Enable backup switch mode on RTCs via devicetree
-Date:   Wed,  1 Feb 2023 15:34:22 +0100
-Message-Id: <20230201143431.863784-1-frieder@fris.de>
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Rob Herring <robh@kernel.org>,
+        Thierry Reding <treding@nvidia.com>
+Subject: [PATCH 1/7] dt-bindings: rtc: Move RV3028 to separate binding file
+Date:   Wed,  1 Feb 2023 15:34:23 +0100
+Message-Id: <20230201143431.863784-2-frieder@fris.de>
+In-Reply-To: <20230201143431.863784-1-frieder@fris.de>
+References: <20230201143431.863784-1-frieder@fris.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Last-TLS-Session-Version: TLSv1.3
@@ -52,37 +55,91 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Frieder Schrempf <frieder.schrempf@kontron.de>
 
-Some RTC devices like the RV3028 have BSM disabled as factory default.
-This makes the RTC quite useless if it is expected to preserve the
-time on hardware that has a battery-buffered supply for the RTC.
+The RV3028 driver uses properties that are not covered by the
+trivial-rtc bindings. Use custom bindings for it.
 
-Let boards that have a buffered supply for the RTC force the BSM to the
-desired value via devicetree by setting the 'backup-switch-mode' property.
-
-That way the RTC on the boards work as one would expect them to do without
-any per-board intervention through userspace tools to enable BSM.
-
-Frieder Schrempf (7):
-  dt-bindings: rtc: Move RV3028 to separate binding file
-  dt-bindings: rtc: Add backup-switch-mode property
-  dt-bindings: rtc: microcrystal,rv3032: Add backup-switch-mode property
-  rtc: Move BSM defines to separate header for DT usage
-  rtc: class: Support setting backup switch mode from devicetree
-  arm64: dts: imx8mm-kontron: Remove useless trickle-diode-disable from
-    RTC node
-  arm64: dts: imx8mm-kontron: Enable backup switch mode for RTC on OSM-S
-    module
-
- .../bindings/rtc/microcrystal,rv3028.yaml     | 60 +++++++++++++++++++
- .../devicetree/bindings/rtc/rtc.yaml          |  7 +++
+Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+---
+ .../bindings/rtc/microcrystal,rv3028.yaml     | 56 +++++++++++++++++++
  .../devicetree/bindings/rtc/trivial-rtc.yaml  |  2 -
- .../dts/freescale/imx8mm-kontron-osm-s.dtsi   |  3 +-
- drivers/rtc/class.c                           | 14 +++++
- include/dt-bindings/rtc/rtc.h                 | 11 ++++
- include/uapi/linux/rtc.h                      |  6 +-
- 7 files changed, 95 insertions(+), 8 deletions(-)
+ 2 files changed, 56 insertions(+), 2 deletions(-)
  create mode 100644 Documentation/devicetree/bindings/rtc/microcrystal,rv3028.yaml
- create mode 100644 include/dt-bindings/rtc/rtc.h
 
+diff --git a/Documentation/devicetree/bindings/rtc/microcrystal,rv3028.yaml b/Documentation/devicetree/bindings/rtc/microcrystal,rv3028.yaml
+new file mode 100644
+index 000000000000..4667ba86fd0c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/rtc/microcrystal,rv3028.yaml
+@@ -0,0 +1,56 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/rtc/microcrystal,rv3028.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Microchip RV-3028 RTC
++
++allOf:
++  - $ref: "rtc.yaml#"
++
++maintainers:
++  - Alexandre Belloni <alexandre.belloni@bootlin.com>
++
++properties:
++  compatible:
++    const: microcrystal,rv3028
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  start-year: true
++
++  trickle-resistor-ohms:
++    enum:
++      - 3000
++      - 5000
++      - 9000
++      - 15000
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        rtc@51 {
++            compatible = "microcrystal,rv3028";
++            reg = <0x52>;
++            pinctrl-0 = <&rtc_nint_pins>;
++            interrupts-extended = <&gpio1 16 IRQ_TYPE_LEVEL_HIGH>;
++            trickle-resistor-ohms = <3000>;
++        };
++    };
++
++...
+diff --git a/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml b/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
+index d9fc120c61cc..84cce1f0ca0c 100644
+--- a/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
++++ b/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
+@@ -48,8 +48,6 @@ properties:
+       # Intersil ISL12022 Real-time Clock
+       - isil,isl12022
+       # Real Time Clock Module with I2C-Bus
+-      - microcrystal,rv3028
+-      # Real Time Clock Module with I2C-Bus
+       - microcrystal,rv3029
+       # Real Time Clock
+       - microcrystal,rv8523
 -- 
 2.39.1
+
