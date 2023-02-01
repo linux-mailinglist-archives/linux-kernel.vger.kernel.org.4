@@ -2,176 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C2C2686DF5
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 19:31:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BF0E686DF9
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 19:32:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230369AbjBASbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 13:31:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36116 "EHLO
+        id S230437AbjBAScY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 13:32:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230177AbjBASbo (ORCPT
+        with ESMTP id S231607AbjBAScV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 13:31:44 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 22B982BF36;
-        Wed,  1 Feb 2023 10:31:43 -0800 (PST)
-Received: by linux.microsoft.com (Postfix, from userid 1127)
-        id CD32520B74F7; Wed,  1 Feb 2023 10:31:41 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com CD32520B74F7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1675276301;
-        bh=5l6X8n+sLaMl1oSrN2WO8DaIAyt6VmAKYZDLl+sqKbE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IehjFntxghdUgdtSLPG710qlB8D8CpfRUmwLBLBKOrMcwMPSvINFYFZWbiRR0DSDh
-         6L9s0i7pLY/W4IEBQ9TxWGBIp0eUIyxQjQRS8L1/MKELA8riP26DzjB2/WEP6mpD5g
-         rJI+x8H6Y84GgYNVJsm7r0jHo7QdBnub6eypD92M=
-Date:   Wed, 1 Feb 2023 10:31:41 -0800
-From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     krzysztof.kozlowski+dt@linaro.org, kys@microsoft.com,
-        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-        daniel.lezcano@linaro.org, tglx@linutronix.de,
-        virtualization@lists.linux-foundation.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, mikelley@microsoft.com,
-        ssengar@microsoft.com
-Subject: Re: [PATCH v2 6/6] Driver: VMBus: Add device tree support
-Message-ID: <20230201183141.GA6988@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <1675188609-20913-1-git-send-email-ssengar@linux.microsoft.com>
- <1675188609-20913-7-git-send-email-ssengar@linux.microsoft.com>
- <CAL_JsqK_7eTTrSd6EKDGy9A8kC5w6cjVEtSi3CB1M7Awj+zg6g@mail.gmail.com>
- <20230201165133.GA24116@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
- <20230201174638.GA3872117-robh@kernel.org>
+        Wed, 1 Feb 2023 13:32:21 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F44E2D154;
+        Wed,  1 Feb 2023 10:32:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675276335; x=1706812335;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Lc3QJ57ZITulULY9CL129xfA2Shk7EL+Hu31oUiLs6o=;
+  b=KEgzXxW+rLTMblTW9iitpm5iWv+xwsKd9jSjCW68M1bjL/5X4a0RXOh/
+   +QPJrVGJZNmBMpTW3z3+cmNpYQtbSHS3wlZB//reqLFDBpEoNVddpbeNH
+   IYNuSAiE9jOOWvU24866ZRQ+QNAcBdv1mfK9ePRh7X99ycM4ZgwG8IzNo
+   bEpH6Ab8C7ZvBaJS7X3BKN7/oLRbwhbX9vncJZXzglpxlCNSBFCBDHpI6
+   y0xSsNpVZdayJsy/1IICw/iVEMQ+/Qxh24Lkiv2p1yitGgLUfDbBPkFre
+   wdAYJWhosYeze7Pnr/Q9yq9clE2/77UuuTNT6q5xLECePYlkI2EvGnl9V
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="307892311"
+X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
+   d="scan'208";a="307892311"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 10:32:13 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="658421522"
+X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
+   d="scan'208";a="658421522"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga007.jf.intel.com with ESMTP; 01 Feb 2023 10:32:08 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pNHtu-000pXF-1L;
+        Wed, 01 Feb 2023 20:32:06 +0200
+Date:   Wed, 1 Feb 2023 20:32:06 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Arnd Bergmann <arnd@kernel.org>, linux-gpio@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/7] gpiolib: remove gpio_set_debounce
+Message-ID: <Y9qwJtOaKrgB5n+T@smile.fi.intel.com>
+References: <20230127101149.3475929-1-arnd@kernel.org>
+ <20230127101149.3475929-5-arnd@kernel.org>
+ <Y9n8P1rP+cYyoNIH@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230201174638.GA3872117-robh@kernel.org>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y9n8P1rP+cYyoNIH@google.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 01, 2023 at 11:46:38AM -0600, Rob Herring wrote:
-> On Wed, Feb 01, 2023 at 08:51:33AM -0800, Saurabh Singh Sengar wrote:
-> > On Tue, Jan 31, 2023 at 02:12:53PM -0600, Rob Herring wrote:
-> > > On Tue, Jan 31, 2023 at 12:10 PM Saurabh Sengar
-> > > <ssengar@linux.microsoft.com> wrote:
-> > > >
-(...)
-> > > > @@ -2442,6 +2443,7 @@ void vmbus_free_mmio(resource_size_t start, resource_size_t size)
-> > > >  }
-> > > >  EXPORT_SYMBOL_GPL(vmbus_free_mmio);
-> > > >
-> > > > +#ifdef CONFIG_ACPI
-> > > 
-> > > It's better to put C 'if (!IS_ENABLED(CONFIG_ACPI)' code in the
-> > 
-> > I wanted to have separate function for ACPI and device tree flow, which
-> > can be easily maintained with #ifdef. Please let me know if its fine.
-> 
-> Yes, you can have separate functions:
-> 
-> static int vmbus_acpi_add(struct platform_device *pdev)
-> {
-> 	if (!IS_ENABLED(CONFIG_ACPI))
-> 		return -ENODEV;
-> 
-> 	...
-> }
-> 
-> The compiler will throw away the function in the end if CONFIG_ACPI is 
-> not enabled.
-> 
-> That is easier for us to maintain because it reduces the combinations to 
-> build.
+On Tue, Jan 31, 2023 at 09:44:31PM -0800, Dmitry Torokhov wrote:
+> On Fri, Jan 27, 2023 at 11:11:46AM +0100, Arnd Bergmann wrote:
 
-Thanks, Will fix this in v3.
+...
 
+> > -	return !gpio_get_value(ts->gpio_pendown);
+> > +	return !gpiod_get_value(ts->gpio_pendown);
 > 
-> > 
-> > > 
-> > > >  static int vmbus_acpi_add(struct platform_device *pdev)
-> > > >  {
-> > > >         acpi_status result;
-> > > > @@ -2496,10 +2498,68 @@ static int vmbus_acpi_add(struct platform_device *pdev)
-> > > >                 vmbus_mmio_remove();
-> > > >         return ret_val;
-> > > >  }
-> > > > +#else
-> > > > +
-> > > > +static int vmbus_device_add(struct platform_device *pdev)
-> > > > +{
-> > > > +       struct resource **cur_res = &hyperv_mmio;
-> > > > +       struct device_node *np;
-> > > > +       u32 *ranges, len;
-> > > > +       u64 start;
-> > > > +       int nr_ranges, child_cells = 2, cur_cell = 0, ret = 0;
-> > > > +
-> > > > +       hv_dev = pdev;
-> > > > +       np = pdev->dev.of_node;
-> > > > +
-> > > > +       nr_ranges = device_property_count_u32(&pdev->dev, "ranges");
-> > > 
-> > > Parsing ranges yourself is a bad sign. It's a standard property and we
-> > > have functions which handle it. If those don't work, then something is
-> > > wrong with your DT or they need to be fixed/expanded.
-> > 
-> > I find all the  standard functions which parse "ranges" property are doing
-> > much more then I need. Our requirement is to only pass the mmio memory range
-> > and size, I couldn't find any standard API doing this.
-> 
-> You can't just change how standard properties work to suit your needs.
-> 
-> We shouldn't even be having this discussion because we have tools to 
-> check all this now. dtc does some and dtschema does a lot more.
-> 
-> > I see some of the drivers are using these APIs to parse ranges property hence
-> > I follwed those examples. I will be happy to improve it if I get any better
-> > alternative.
-> 
-> You can always find bad examples to follow...
-> 
-> > > > +       if (nr_ranges < 0)
-> > > > +               return nr_ranges;
-> > > > +       ranges = kcalloc(nr_ranges, sizeof(u32), GFP_KERNEL);
-> > > > +       if (!ranges)
-> > > > +               return -ENOMEM;
-> > > > +
-> > > > +       if (device_property_read_u32_array(&pdev->dev, "ranges", ranges, nr_ranges)) {
-> > > > +               ret =  -EINVAL;
-> > > > +               goto free_ranges;
-> > > > +       }
-> > > > +
-> > > > +       while (cur_cell < nr_ranges) {
-> > > > +               struct resource *res;
-> > > > +
-> > > > +               /* The first u64 in the ranges description isn't used currently. */
-> > > > +               cur_cell = cur_cell + child_cells;
-> > > > +               start = ranges[cur_cell++];
-> > > > +               start = (start << 32) | ranges[cur_cell++];
-> > > > +               len = ranges[cur_cell++];
-> > > 
-> > > To expand my last point, the format of ranges is <child_addr
-> > > parent_addr length>. That's not what your 'ranges' has. You've also
-> > > just ignored '#address-cells' and '#size-cells'.
-> > 
-> > Got it. However I need to check if there is any standard API which can
-> > give me these values, otherwise I may have to parse these as well :(
-> 
-> for_each_of_range()
-> 
-> That is not how linux works. When the core code doesn't do what you 
-> want, you adapt it to your needs. You don't work around it. Read 
-> this[1].
-> 
-> Rob
-> 
-> [1] https://lwn.net/Articles/443531/
+> No, we can not blindly do that without checking annotations on GPIOs.
 
-Thanks I will work on this suggestion and fix this up in next version.
+But this is easy to fix, i.e. use raw API, no?
+
+> > +		ts->gpio_pendown = gpiod_get(&spi->dev, "pendown-gpio", GPIOD_IN);
+> 
+> Wrong name, you will be looking for "pendown-gpio-gpios".
+> 
+> Sorry, but I have to NAK this in the current form.
+
+Oh, indeed. On top of that the conversion missing the label to be set.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
