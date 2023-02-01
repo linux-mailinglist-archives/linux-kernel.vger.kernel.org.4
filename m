@@ -2,53 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5FB0685E1B
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 04:50:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87CED685E1C
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 04:52:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231529AbjBADuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 22:50:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55860 "EHLO
+        id S229816AbjBADwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 22:52:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230112AbjBADuG (ORCPT
+        with ESMTP id S229937AbjBADwS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 22:50:06 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E3464ABCA
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 19:50:02 -0800 (PST)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4P67Dm3F3QzJsB6;
-        Wed,  1 Feb 2023 11:48:24 +0800 (CST)
-Received: from [10.67.110.108] (10.67.110.108) by
- kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Wed, 1 Feb 2023 11:49:59 +0800
-Message-ID: <cc396e04-b462-caca-2360-ed3cd19b21fe@huawei.com>
-Date:   Wed, 1 Feb 2023 11:49:58 +0800
+        Tue, 31 Jan 2023 22:52:18 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5C09402F1
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 19:52:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675223537; x=1706759537;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=rmCcr90OIBPdiIGNAQ9gadT4jTI03VlYZhtAK3NArTU=;
+  b=Bqmr9D/89WOCxBVlovZdH9QvFRioryb5TUJYbdx6kZGy5LIIDM3EC5+O
+   lxBsE2oMW+qrHqeGHJYPpdBXGYe0I9CsEbbzrYlr5LaNojnrp4SyECeOl
+   d5tXzc1GyCjbs+w/HjLH0BFDg+dVDsUz8RJugInFZXBEwASSJQ8RzOBy5
+   RZsqB4+0WCoNg/RGphx6aJEj0F/ONcWCaDhqREQvjp1SjkKo4NFw97/68
+   adX2//GJVhMlUiEUi+GP105KgKMko3r6OmSANU13E92tC3q4ebU2YEqj3
+   N5W6wO8ziqJgmZcFsxGOQTtL/qxNBZ5wCFXR9YihQyOAFBIWY3sAz3x0s
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="414238359"
+X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
+   d="scan'208";a="414238359"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 19:52:17 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="788686482"
+X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
+   d="scan'208";a="788686482"
+Received: from ncollins-mobl.amr.corp.intel.com (HELO [10.212.85.244]) ([10.212.85.244])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 19:52:15 -0800
+Message-ID: <7b8fe2b6-84cb-e8c8-22aa-2d940a5c68b7@linux.intel.com>
+Date:   Tue, 31 Jan 2023 21:52:14 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] riscv: kprobe: Fixup kernel panic when probing an illegal
- position
-To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        <guoren@kernel.org>, <palmer@dabbelt.com>,
-        <paul.walmsley@sifive.com>, <mhiramat@kernel.org>,
-        <conor.dooley@microchip.com>, <penberg@kernel.org>,
-        <mark.rutland@arm.com>
-CC:     <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
-References: <20230126130509.1418251-1-guoren@kernel.org>
- <878rhig9zj.fsf@all.your.base.are.belong.to.us>
-From:   "liaochang (A)" <liaochang1@huawei.com>
-In-Reply-To: <878rhig9zj.fsf@all.your.base.are.belong.to.us>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.108]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemi500012.china.huawei.com (7.221.188.12)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [PATCH 01/19] ASoC: amd: ps: create platform devices based on acp
+ config
+To:     "Mukunda,Vijendar" <vijendar.mukunda@amd.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>
+Cc:     "Katragadda, Mastan" <Mastan.Katragadda@amd.com>,
+        "Dommati, Sunil-kumar" <Sunil-kumar.Dommati@amd.com>,
+        "Hiregoudar, Basavaraj" <Basavaraj.Hiregoudar@amd.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        "Saba Kareem, Syed" <Syed.SabaKareem@amd.com>,
+        "kondaveeti, Arungopal" <Arungopal.kondaveeti@amd.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>
+References: <20230111090222.2016499-1-Vijendar.Mukunda@amd.com>
+ <20230111090222.2016499-2-Vijendar.Mukunda@amd.com>
+ <9f2229fb-499b-f802-993b-56a7ad2ce361@linux.intel.com>
+ <257b6f1e-f403-573f-3978-13ffb14342ad@amd.com>
+ <2b4c12ce-2586-0277-ede0-560f8317e4e4@linux.intel.com>
+ <27eabbf2-eff2-0964-b72b-f9db251c3b57@amd.com>
+ <87ddd91b-fb5f-4f27-942b-dc439b32ce20@amd.com>
+ <fa4cdd91-b430-eb1b-a151-d144f62e827d@linux.intel.com>
+ <MN0PR12MB6101DBF0419C2C565F7F6840E2D09@MN0PR12MB6101.namprd12.prod.outlook.com>
+ <c5161bc3-62cb-d0a1-2ba2-d670285b6958@linux.intel.com>
+ <2ea354bc-4263-1db6-4423-4de1b0d4e535@amd.com>
+ <815ab487-a1a3-1978-94fc-b60e931c2848@linux.intel.com>
+ <ac734e4e-2f61-b9b8-0751-4e3293084696@amd.com>
+Content-Language: en-US
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <ac734e4e-2f61-b9b8-0751-4e3293084696@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -57,113 +90,23 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-在 2023/1/31 20:32, Björn Töpel 写道:
-> guoren@kernel.org writes:
-> 
->> From: Guo Ren <guoren@linux.alibaba.com>
->>
->> The kernel would panic when probed for an illegal position. eg:
->>
->> (CONFIG_RISCV_ISA_C=n)
->>
->> echo 'p:hello kernel_clone+0x16 a0=%a0' >> kprobe_events
->> echo 1 > events/kprobes/hello/enable
->> cat trace
->>
->> Kernel panic - not syncing: stack-protector: Kernel stack
->> is corrupted in: __do_sys_newfstatat+0xb8/0xb8
->> CPU: 0 PID: 111 Comm: sh Not tainted
->> 6.2.0-rc1-00027-g2d398fe49a4d #490
->> Hardware name: riscv-virtio,qemu (DT)
->> Call Trace:
->> [<ffffffff80007268>] dump_backtrace+0x38/0x48
->> [<ffffffff80c5e83c>] show_stack+0x50/0x68
->> [<ffffffff80c6da28>] dump_stack_lvl+0x60/0x84
->> [<ffffffff80c6da6c>] dump_stack+0x20/0x30
->> [<ffffffff80c5ecf4>] panic+0x160/0x374
->> [<ffffffff80c6db94>] generic_handle_arch_irq+0x0/0xa8
->> [<ffffffff802deeb0>] sys_newstat+0x0/0x30
->> [<ffffffff800158c0>] sys_clone+0x20/0x30
->> [<ffffffff800039e8>] ret_from_syscall+0x0/0x4
->> ---[ end Kernel panic - not syncing: stack-protector:
->> Kernel stack is corrupted in: __do_sys_newfstatat+0xb8/0xb8 ]---
->>
->> That is because the kprobe's ebreak instruction broke the kernel's
->> original code. The user should guarantee the correction of the probe
->> position, but it couldn't make the kernel panic.
->>
->> This patch adds arch_check_kprobe in arch_prepare_kprobe to prevent an
->> illegal position (Such as the middle of an instruction).
-> 
-> Nice!
-> 
-> @liaochang Will you remove your patch from the OPTPROBE series?
 
-Sure, i will remove it.
-
-> 
->> Fixes: c22b0bcb1dd0 ("riscv: Add kprobes supported")
->> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
->> Signed-off-by: Guo Ren <guoren@kernel.org>
->> ---
->>  arch/riscv/kernel/probes/kprobes.c | 18 ++++++++++++++++++
->>  1 file changed, 18 insertions(+)
+>>> In above case, two manager instances will be created.
+>>> When manager under SWC1 scope tries to add peripheral
+>>> device, In sdw_slave_add() API its failing because peripheral
+>>> device descriptor uses link id followed by 48bit encoded address.
+>>> In above scenarios, both the manager's link id is zero only.
+>> what fails exactly? The device_register() ?
 >>
->> diff --git a/arch/riscv/kernel/probes/kprobes.c b/arch/riscv/kernel/probes/kprobes.c
->> index f21592d20306..475989f06d6d 100644
->> --- a/arch/riscv/kernel/probes/kprobes.c
->> +++ b/arch/riscv/kernel/probes/kprobes.c
->> @@ -48,6 +48,21 @@ static void __kprobes arch_simulate_insn(struct kprobe *p, struct pt_regs *regs)
->>  	post_kprobe_handler(p, kcb, regs);
->>  }
->>  
->> +static bool __kprobes arch_check_kprobe(struct kprobe *p)
->> +{
->> +	unsigned long tmp  = (unsigned long)p->addr - p->offset;
->> +	unsigned long addr = (unsigned long)p->addr;
->> +
->> +	while (tmp <= addr) {
->> +		if (tmp == addr)
->> +			return true;
->> +
->> +		tmp += GET_INSN_LENGTH(*(kprobe_opcode_t *)tmp);
-> 
-> kprobe_opcode_t is u32; This can trigger a misaligned load, right?
+>> If yes, what the issue. the device name?
+> device_register() is failing because of duplication of
+> device name.
+>> I wonder if we need to use something like
+>>
+>> "name shall be sdw:bus_id:link:mfg:part:class"
+>>
+>> so as to uniquify the device name, if that was the problem.
+> Yes correct.
 
-I think it depends on the hardware implementation, event an EEI may guarantee that misaligned
-loads and stores are fully supported, hardware will requires additional sychronizatin to ensure
-atomicity, so it is better to use a load instruction whose effective address is naturally aligned.
-
-From "Volum I: RISC-V Unprivileged ISA 2.6":
-
-"..., Loads and stores whose effective address is not naturally aligned to the referenced datatype
-(i.e, the effective address is not divisible by the size of the access in bytes) have behavior
-dependenet on the EEI."
-
-> 
->> +	}
->> +
->> +	return false;
->> +}
->> +
->>  int __kprobes arch_prepare_kprobe(struct kprobe *p)
->>  {
->>  	unsigned long probe_addr = (unsigned long)p->addr;
->> @@ -55,6 +70,9 @@ int __kprobes arch_prepare_kprobe(struct kprobe *p)
->>  	if (probe_addr & 0x1)
->>  		return -EILSEQ;
->>  
->> +	if (!arch_check_kprobe(p))
->> +		return -EILSEQ;
->> +
->>  	/* copy instruction */
->>  	p->opcode = *p->addr;
-> 
-> Not related to your patch, but this can also trigger a misaligned load.
-> 
-> 
-> Björn
-
--- 
-BR,
-Liao, Chang
+can you check https://github.com/thesofproject/linux/pull/4165 and see
+if this works for you? I tested it on Intel platforms.
