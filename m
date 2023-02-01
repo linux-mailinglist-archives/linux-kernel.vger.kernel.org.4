@@ -2,163 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA24F685D8D
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 03:52:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16B13685D92
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 03:58:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231226AbjBACwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 21:52:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35630 "EHLO
+        id S230417AbjBAC6C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 21:58:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbjBACwm (ORCPT
+        with ESMTP id S229761AbjBAC6A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 21:52:42 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A699238B5A
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 18:52:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675219961; x=1706755961;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=K9dWblYCafS8mpgET+MjzQvK6vI2nfHgMhhofIxSLm8=;
-  b=GySovDWwcGNxT/uuevg3Til89FFxBk/LssZqecmK5hm1zVUyy3X7AmMc
-   TvX6mXkWWm/Dy5p5WdZonhBNbKAP+cmunMwh4+Ju/uhH+Nd1BbpM82m33
-   p+hhi91086GOaQrNnUPl2lkRsf/YfkxL0H/q0QzeYWp6b/S9j7rRMzMSS
-   sJz2bpVAYw2lnN2hxIpZzSDph6NwJfc/LbrfYexERT77UlPh2K89kMXsX
-   OgYIsEIj+qi/APdnzLNB8xCE7X8UfX3N2mM8ZhmnUaYSLSVzvVQVmp9AT
-   eNck4Bvy5ZC/bYMvC/8+0wlfgAp/M4r3A8hbNSy7o+HDGJCw8AOJ/DKml
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="315993301"
-X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
-   d="scan'208";a="315993301"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 18:52:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="666749237"
-X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
-   d="scan'208";a="666749237"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 31 Jan 2023 18:52:38 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pN3Ek-0004xE-0q;
-        Wed, 01 Feb 2023 02:52:38 +0000
-Date:   Wed, 01 Feb 2023 10:51:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/alternatives] BUILD REGRESSION
- 923510c88d2b7d947c4217835fd9ca6bd65cc56c
-Message-ID: <63d9d3be.2FnzZHUx2CcJew/o%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Tue, 31 Jan 2023 21:58:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1929D86AE
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 18:57:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 55F3B60AE2
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 02:57:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B636AC433A7
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 02:57:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675220277;
+        bh=10P8Z+pIOUvlrCjA+wavMpCD7WRfDGtQ0JWHUqTWTo4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Vv15f5rGXmI73TjMnA/q8HuCU9lCiFdU7oH39CFJ8TMLvDjckezPcTXEq8Uwrk2fQ
+         BcnurYKYywhc/nYQnbZHs//xNAqAqMJFUCmJmoOYFlEnYnURSKsJ+pZU/lYRHOhoCm
+         U1+qtmkP/rp7WFdu24zOSKv+6jT9P6TCfp2AvDXJ3lBzK1i3AGOFaqWFQpD75kLhE3
+         Jy2plzeLaHbZjBeEl7PYJv4mjJWu9ckMvFHkPrEt1AQG1horsSkHIw/bLP9A+23PxK
+         lZp4u8Peo7Pu/NmFgul2Y28Yx6nktPdCOZECBb5AoeT5wUpYP70ms3Te9GxWDFJkdI
+         p/yamSAn65ECg==
+Received: by mail-ed1-f53.google.com with SMTP id m8so7092754edd.10
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 18:57:57 -0800 (PST)
+X-Gm-Message-State: AO0yUKWH5RlWyhPKZwja/df7/wB4IjFiPdjnYdkNmHhKrbFMUk2ps85O
+        3ijj0x+qCPowOJv6kjCy6hz0mcVnvU7seu0GGoo=
+X-Google-Smtp-Source: AK7set8MCIG6L9/2W7/h49loHPlTByOB4jIKC6rT4XTIzKZxXyr42YKwNWkpyUat0C0aPD95sNO/WNpV6cdlj/Uk3wk=
+X-Received: by 2002:aa7:c6d2:0:b0:499:c343:30e3 with SMTP id
+ b18-20020aa7c6d2000000b00499c34330e3mr111241eds.4.1675220275861; Tue, 31 Jan
+ 2023 18:57:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+References: <20230126130509.1418251-1-guoren@kernel.org> <878rhig9zj.fsf@all.your.base.are.belong.to.us>
+In-Reply-To: <878rhig9zj.fsf@all.your.base.are.belong.to.us>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 1 Feb 2023 10:57:43 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQHDmT=XWE=j8+5Y5ogKh4qNMpXCwAa+7wXEkBit0ujXw@mail.gmail.com>
+Message-ID: <CAJF2gTQHDmT=XWE=j8+5Y5ogKh4qNMpXCwAa+7wXEkBit0ujXw@mail.gmail.com>
+Subject: Re: [PATCH] riscv: kprobe: Fixup kernel panic when probing an illegal position
+To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com, mhiramat@kernel.org,
+        conor.dooley@microchip.com, penberg@kernel.org,
+        mark.rutland@arm.com, liaochang <liaochang1@huawei.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/alternatives
-branch HEAD: 923510c88d2b7d947c4217835fd9ca6bd65cc56c  x86/static_call: Add support for Jcc tail-calls
+On Tue, Jan 31, 2023 at 8:32 PM Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> wr=
+ote:
+>
+> guoren@kernel.org writes:
+>
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > The kernel would panic when probed for an illegal position. eg:
+> >
+> > (CONFIG_RISCV_ISA_C=3Dn)
+> >
+> > echo 'p:hello kernel_clone+0x16 a0=3D%a0' >> kprobe_events
+> > echo 1 > events/kprobes/hello/enable
+> > cat trace
+> >
+> > Kernel panic - not syncing: stack-protector: Kernel stack
+> > is corrupted in: __do_sys_newfstatat+0xb8/0xb8
+> > CPU: 0 PID: 111 Comm: sh Not tainted
+> > 6.2.0-rc1-00027-g2d398fe49a4d #490
+> > Hardware name: riscv-virtio,qemu (DT)
+> > Call Trace:
+> > [<ffffffff80007268>] dump_backtrace+0x38/0x48
+> > [<ffffffff80c5e83c>] show_stack+0x50/0x68
+> > [<ffffffff80c6da28>] dump_stack_lvl+0x60/0x84
+> > [<ffffffff80c6da6c>] dump_stack+0x20/0x30
+> > [<ffffffff80c5ecf4>] panic+0x160/0x374
+> > [<ffffffff80c6db94>] generic_handle_arch_irq+0x0/0xa8
+> > [<ffffffff802deeb0>] sys_newstat+0x0/0x30
+> > [<ffffffff800158c0>] sys_clone+0x20/0x30
+> > [<ffffffff800039e8>] ret_from_syscall+0x0/0x4
+> > ---[ end Kernel panic - not syncing: stack-protector:
+> > Kernel stack is corrupted in: __do_sys_newfstatat+0xb8/0xb8 ]---
+> >
+> > That is because the kprobe's ebreak instruction broke the kernel's
+> > original code. The user should guarantee the correction of the probe
+> > position, but it couldn't make the kernel panic.
+> >
+> > This patch adds arch_check_kprobe in arch_prepare_kprobe to prevent an
+> > illegal position (Such as the middle of an instruction).
+>
+> Nice!
+>
+> @liaochang Will you remove your patch from the OPTPROBE series?
+>
+> > Fixes: c22b0bcb1dd0 ("riscv: Add kprobes supported")
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > ---
+> >  arch/riscv/kernel/probes/kprobes.c | 18 ++++++++++++++++++
+> >  1 file changed, 18 insertions(+)
+> >
+> > diff --git a/arch/riscv/kernel/probes/kprobes.c b/arch/riscv/kernel/pro=
+bes/kprobes.c
+> > index f21592d20306..475989f06d6d 100644
+> > --- a/arch/riscv/kernel/probes/kprobes.c
+> > +++ b/arch/riscv/kernel/probes/kprobes.c
+> > @@ -48,6 +48,21 @@ static void __kprobes arch_simulate_insn(struct kpro=
+be *p, struct pt_regs *regs)
+> >       post_kprobe_handler(p, kcb, regs);
+> >  }
+> >
+> > +static bool __kprobes arch_check_kprobe(struct kprobe *p)
+> > +{
+> > +     unsigned long tmp  =3D (unsigned long)p->addr - p->offset;
+> > +     unsigned long addr =3D (unsigned long)p->addr;
+> > +
+> > +     while (tmp <=3D addr) {
+> > +             if (tmp =3D=3D addr)
+> > +                     return true;
+> > +
+> > +             tmp +=3D GET_INSN_LENGTH(*(kprobe_opcode_t *)tmp);
+>
+> kprobe_opcode_t is u32; This can trigger a misaligned load, right?
+>
+> > +     }
+> > +
+> > +     return false;
+> > +}
+> > +
+> >  int __kprobes arch_prepare_kprobe(struct kprobe *p)
+> >  {
+> >       unsigned long probe_addr =3D (unsigned long)p->addr;
+> > @@ -55,6 +70,9 @@ int __kprobes arch_prepare_kprobe(struct kprobe *p)
+> >       if (probe_addr & 0x1)
+> >               return -EILSEQ;
+> >
+> > +     if (!arch_check_kprobe(p))
+> > +             return -EILSEQ;
+> > +
+> >       /* copy instruction */
+> >       p->opcode =3D *p->addr;
+>
+> Not related to your patch, but this can also trigger a misaligned load.
+After rereading the spec, misaligned load/store is not mandatory
+supported. (Although my machines and qemu are correct)
 
-Error/Warning: (recently discovered and may have been fixed)
+So I need fixup:
 
-error: aborting due to previous error
-error[E0588]: packed type cannot transitively contain a `#[repr(align)]` type
+diff --git a/arch/riscv/kernel/probes/kprobes.c
+b/arch/riscv/kernel/probes/kprobes.c
+index 27f8960c321c..0c016d496746 100644
+--- a/arch/riscv/kernel/probes/kprobes.c
++++ b/arch/riscv/kernel/probes/kprobes.c
+@@ -58,12 +58,14 @@ static bool __kprobes arch_check_kprobe(struct kprobe *=
+p)
+ {
+        unsigned long tmp  =3D (unsigned long)p->addr - p->offset;
+        unsigned long addr =3D (unsigned long)p->addr;
++       kprobe_opcode_t opcode;
 
-Error/Warning ids grouped by kconfigs:
+        while (tmp <=3D addr) {
+                if (tmp =3D=3D addr)
+                        return true;
 
-clang_recent_errors
-|-- x86_64-randconfig-a012-20230130
-|   |-- error-E0588:packed-type-cannot-transitively-contain-a-repr(align)-type
-|   `-- error:aborting-due-to-previous-error
-`-- x86_64-rhel-8.3-rust
-    |-- error-E0588:packed-type-cannot-transitively-contain-a-repr(align)-type
-    `-- error:aborting-due-to-previous-error
+-               tmp +=3D GET_INSN_LENGTH(*(kprobe_opcode_t *)tmp);
++               memcpy(&opcode, (void *)tmp, sizeof(kprobe_opcode_t));
++               tmp +=3D GET_INSN_LENGTH(opcode);
+        }
 
-elapsed time: 724m
+        return false;
+@@ -80,7 +82,7 @@ int __kprobes arch_prepare_kprobe(struct kprobe *p)
+                return -EILSEQ;
 
-configs tested: 68
-configs skipped: 2
+        /* copy instruction */
+-       p->opcode =3D *p->addr;
++       memcpy(&p->opcode, p->addr, sizeof(kprobe_opcode_t));
 
-gcc tested configs:
-x86_64                            allnoconfig
-um                             i386_defconfig
-powerpc                           allnoconfig
-um                           x86_64_defconfig
-x86_64               randconfig-a001-20230130
-m68k                             allmodconfig
-x86_64               randconfig-a003-20230130
-arc                              allyesconfig
-x86_64               randconfig-a004-20230130
-x86_64               randconfig-a002-20230130
-alpha                            allyesconfig
-x86_64               randconfig-a006-20230130
-m68k                             allyesconfig
-x86_64                          rhel-8.3-func
-x86_64                              defconfig
-x86_64               randconfig-a005-20230130
-x86_64                    rhel-8.3-kselftests
-arc                                 defconfig
-sh                               allmodconfig
-x86_64                               rhel-8.3
-mips                             allyesconfig
-alpha                               defconfig
-arc                  randconfig-r043-20230129
-powerpc                          allmodconfig
-i386                                defconfig
-arm                  randconfig-r046-20230129
-i386                 randconfig-a002-20230130
-i386                 randconfig-a006-20230130
-i386                             allyesconfig
-i386                 randconfig-a001-20230130
-s390                             allmodconfig
-arm                  randconfig-r046-20230130
-i386                 randconfig-a005-20230130
-x86_64                           rhel-8.3-syz
-i386                 randconfig-a004-20230130
-arc                  randconfig-r043-20230130
-i386                 randconfig-a003-20230130
-x86_64                           allyesconfig
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-s390                                defconfig
-x86_64                           rhel-8.3-bpf
-ia64                             allmodconfig
-s390                             allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-arm64                            allyesconfig
+        /* decode instruction */
+        switch (riscv_probe_decode_insn(p->addr, &p->ainsn.api)) {
 
-clang tested configs:
-x86_64                          rhel-8.3-rust
-hexagon              randconfig-r041-20230129
-hexagon              randconfig-r045-20230130
-hexagon              randconfig-r041-20230130
-hexagon              randconfig-r045-20230129
-s390                 randconfig-r044-20230129
-s390                 randconfig-r044-20230130
-riscv                randconfig-r042-20230129
-x86_64               randconfig-a012-20230130
-x86_64               randconfig-a013-20230130
-riscv                randconfig-r042-20230130
-x86_64               randconfig-a011-20230130
-x86_64               randconfig-a014-20230130
-x86_64               randconfig-a015-20230130
-x86_64               randconfig-a016-20230130
-i386                 randconfig-a013-20230130
-i386                 randconfig-a012-20230130
-i386                 randconfig-a014-20230130
-i386                 randconfig-a015-20230130
-i386                 randconfig-a011-20230130
-i386                 randconfig-a016-20230130
+>
+>
+> Bj=C3=B6rn
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+
+
+--=20
+Best Regards
+ Guo Ren
