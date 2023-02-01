@@ -2,171 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CE37686B50
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 17:13:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9865686B5C
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 17:15:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233028AbjBAQNN convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 1 Feb 2023 11:13:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48854 "EHLO
+        id S232252AbjBAQPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 11:15:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231185AbjBAQMy (ORCPT
+        with ESMTP id S231868AbjBAQPh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 11:12:54 -0500
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5C2D790B8;
-        Wed,  1 Feb 2023 08:12:23 -0800 (PST)
-Received: (Authenticated sender: hadess@hadess.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id 41C6D4000B;
-        Wed,  1 Feb 2023 16:12:19 +0000 (UTC)
-Message-ID: <d9cec163f93922e59378a4aa351934ba1d702817.camel@hadess.net>
-Subject: Re: Bug#1029850: linux: Driver not loaded for ST Microelectronics
- LSM6DS3TR-C accelerometer (acpi:SMO8B30:SMO8B30:)
-From:   Bastien Nocera <hadess@hadess.net>
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
-        Darrell Kavanagh <darrell.kavanagh@gmail.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 01 Feb 2023 17:12:19 +0100
-In-Reply-To: <c3207f3a-ecb9-0e69-e26a-71dc1b06db6a@redhat.com>
-References: <167493679618.4533.12181720504943588640.reportbug@debian-duet>
-         <Y9WGmBc9HG4Tx9gf@eldamar.lan>
-         <CAMxBKG1670TFuV3nHP7Yk8s6H+oBF7iiyiB-b=PvKv9hcH22xQ@mail.gmail.com>
-         <20230129182441.082f29d0@jic23-huawei>
-         <CAMxBKG0tyLSpaDPGBXsJbqgHSG9rH6owtSJsLw_ekmTA3Kyvdw@mail.gmail.com>
-         <CAMxBKG3zL_yvw=dHK+Gqd3EHWzvJmiLHVvKnf6UsYbMgcS6nrg@mail.gmail.com>
-         <20230130123113.00002c3f@Huawei.com>
-         <CAMxBKG3xOEj1gEs9pGzKb+rDjTLPqAq1YOp4bEFas4tQMzGZ+Q@mail.gmail.com>
-         <20230130173525.0000418d@huawei.com>
-         <CAMxBKG1yKcodDD2kvfwKvpYnPrXmgaOk9rTztRPFzKMCZ5F=tA@mail.gmail.com>
-         <20230130194110.256144e7@jic23-huawei>
-         <CAMxBKG3S6aJSrO-BAPCAhVpg2qF2kWfRJ9d0n2EmOY=JGNid-A@mail.gmail.com>
-         <20230130203110.60c96f37@jic23-huawei>
-         <CAMxBKG1+Vcaic2WzVvZZSrVDO7+PTYJZgPP77s_GPOdo+BKJAQ@mail.gmail.com>
-         <CAMxBKG0Q4H6Dv9a=oOAX8c5TS08ZJBBO0tTLRaUY9h-W1FTHCQ@mail.gmail.com>
-         <20230201102824.00002044@Huawei.com>
-         <c3207f3a-ecb9-0e69-e26a-71dc1b06db6a@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+        Wed, 1 Feb 2023 11:15:37 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ADB640FD;
+        Wed,  1 Feb 2023 08:15:36 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id b5so11680679plz.5;
+        Wed, 01 Feb 2023 08:15:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=AhR4u+vxDGzq69f5+cc5asnvpVqZaiftxbUIgQ+O7y8=;
+        b=mJ0tX01t685V6CibzNWcXwo0AQi3b3VVSjlkoqCiMcof4SAKo3KJxnY2U7IPVAwRz7
+         xLCLI0jywgcmlCBoUuWcWgg3Qxl6H0GbFczg5RfB5g+GrrhXLakccmqr+HU7ZXGDAQUp
+         u4Yc4ZqV/ULPrMJGGohn8maidjUvROAcln43aipv34gZtGNDem15nkpo/nStsvOkkf1y
+         Xl3jiW5fX6Cseo9wqrnLim6bTutBhNCuFZXmTqyo+ecASCdg61oGtStUcr+m/PoChBpP
+         ruvVfHjF3mpJ/HVsgbc2+C3irRJAdLCm2sQa0k1aaEwPnmEKnipGRRIQWcG1iNu3ERr6
+         A9/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AhR4u+vxDGzq69f5+cc5asnvpVqZaiftxbUIgQ+O7y8=;
+        b=jVsZh6xLDjkwqFxvqjPwZueYVukYrNpegEq9VerbM4LCkaeszYwkh42DVbcUEo5FdO
+         zop1oFWQ5F0lCve/hEPE5ZT0/74pr5U9wiSfvRapUwlwxNN+yl1cVzGIUaUD1hdyFugN
+         bOe6EO2FEwLE7H8hZwnGBb6j/G+laHrrNtUQmmoNnARmTluQu/Nmjn3vfnSIDuaFx19s
+         apSdksFVJFRBA3HXHOxM3OwXWp5qVk8eoNXAGvfam+lXFxkM+STGjFLZzbCpNgq+KDbJ
+         xlfAQ2Wgb8Hn6bpJS86iFIMX725H+Fzvqxe90GzeYqre55QOcxVslN3g8oOAWYrpY+7h
+         0/4g==
+X-Gm-Message-State: AO0yUKXBlVjCSsMs213RJik+WCCA0PoIMc/hEc/ewxotloGpOduQMRi5
+        0fN8SY5D8TOue8PK8RE+gEI=
+X-Google-Smtp-Source: AK7set/cXFOzG/U5yeAhHQQhMy5PiRNYtGMDesEiGCMSOznrqODzwLM9sAEhg0yMZ24Xux0oizSdiA==
+X-Received: by 2002:a05:6a20:a689:b0:be:e0c3:5012 with SMTP id ba9-20020a056a20a68900b000bee0c35012mr6615060pzb.1.1675268130748;
+        Wed, 01 Feb 2023 08:15:30 -0800 (PST)
+Received: from google.com ([2620:15c:9d:2:ce3a:44de:62b3:7a4b])
+        by smtp.gmail.com with ESMTPSA id q21-20020a637515000000b004b1fef0bf16sm10752763pgc.73.2023.02.01.08.15.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Feb 2023 08:15:29 -0800 (PST)
+Date:   Wed, 1 Feb 2023 08:15:26 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 2/3] dt-bindings: rtc: moxart: use proper names for gpio
+ properties
+Message-ID: <Y9qQHj70SN/3fZCc@google.com>
+References: <20230201054815.4112632-1-dmitry.torokhov@gmail.com>
+ <20230201054815.4112632-2-dmitry.torokhov@gmail.com>
+ <31e979dd-f4e9-081e-1bf2-e44dffc4e70f@linaro.org>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <31e979dd-f4e9-081e-1bf2-e44dffc4e70f@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-02-01 at 12:00 +0100, Hans de Goede wrote:
-> Hi,
-> 
-> On 2/1/23 11:28, Jonathan Cameron wrote:
-> > On Wed, 1 Feb 2023 01:40:49 +0000
-> > Darrell Kavanagh <darrell.kavanagh@gmail.com> wrote:
+On Wed, Feb 01, 2023 at 08:38:48AM +0100, Krzysztof Kozlowski wrote:
+> On 01/02/2023 06:48, Dmitry Torokhov wrote:
+> > MOXA ART RTC driver has been switched to gpiod API and is now using
+> > properly named properties for its gpios (with gpiolib implementing a
+> > quirk to recognize legacy names). Change binding document to use
+> > proper names as well.
 > > 
-> > > Hello, all.
-> > > 
-> > > I've finally reached a conclusion on this, after testing all the
-> > > combinations of the patches (with and without reading the acpi
-> > > mounting matrix), window managers (wayland, xorg) and the
-> > > presence or
-> > > not of my custom kernel parms.
-> > > 
-> > > What works well is the full set of patches with the custom kernel
-> > > parms and a new hwdb entry for the sensor:
-> > > 
-> > > sensor:modalias:acpi:SMO8B30*:dmi:*:svnLENOVO*:pn82AT:*
-> > >  ACCEL_MOUNT_MATRIX=0, 1, 0; -1, 0, 0; 0, 0, 1
-> > > 
-> > > The autorotate then works correctly in wayland and xorg, but for
-> > > xorg,
-> > > the settings say the screen is "portrait left" when in actual
-> > > fact it
-> > > is in standard laptop landscape orientation. Wayland does not
-> > > have
-> > > this problem (I guess because wayland's view of the screen is
-> > > straight
-> > > from the kernel).
-> > > 
-> > > Without the hwdb entry, the orientation is 90 degrees out without
-> > > using the acpi matrix and 180 degrees out when using it. I could
-> > > have
-> > > gone either way here with appropriate hwdb entries, but my view
-> > > is
-> > > that we *should* be using the matrix.
+> > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> > ---
+> >  .../devicetree/bindings/rtc/moxa,moxart-rtc.txt      | 12 ++++++------
+> >  1 file changed, 6 insertions(+), 6 deletions(-)
 > > 
-> > Added Hans de Goede as he has probably run into more of this mess
-> > than anyone else.  Hans, any thoughts on if we are doing something
-> > wrong on kernel side?  Or is the matrix just wrong *sigh*
+> > diff --git a/Documentation/devicetree/bindings/rtc/moxa,moxart-rtc.txt b/Documentation/devicetree/bindings/rtc/moxa,moxart-rtc.txt
+> > index c9d3ac1477fe..1374df7bf9d6 100644
+> > --- a/Documentation/devicetree/bindings/rtc/moxa,moxart-rtc.txt
+> > +++ b/Documentation/devicetree/bindings/rtc/moxa,moxart-rtc.txt
+> > @@ -3,15 +3,15 @@ MOXA ART real-time clock
+> >  Required properties:
+> >  
+> >  - compatible : Should be "moxa,moxart-rtc"
+> > -- gpio-rtc-sclk : RTC sclk gpio, with zero flags
+> > -- gpio-rtc-data : RTC data gpio, with zero flags
+> > -- gpio-rtc-reset : RTC reset gpio, with zero flags
+> > +- rtc-sclk-gpios : RTC sclk gpio, with zero flags
+> > +- rtc-data-gpios : RTC data gpio, with zero flags
+> > +- rtc-reset-gpios : RTC reset gpio, with zero flags
 > 
-> I see below that this laptop has a panel which is mounted 90 degrees
-> rotated, that likely explains why the ACPI matrix does not work.
-> So the best thing to do here is to just override it with a hwdb
-> entries.
-> 
-> IIRC there are already 1 or 2 other hwdb entries which actually
-> override the ACPI provided matrix because of similar issues.
-> 
-> Linux userspace expects the matrix in this case to be set so that
-> it causes e.g. gnome's auto-rotation to put the image upright
-> even with older gnome versions / mate / xfce which don't know about
-> the panel being mounted 90 degrees.
-> 
-> So e.g. "monitor-sensor" will report left-side-up or right-side-up
-> while the device is actually in normal clamshell mode with the
-> display up-right.
-> 
-> This reporting of left-side-up or right-side-up is actually "correct"
-> looking from the native LCD panel orientation and as mentioned is
-> done for backward compatibility. This is documented here:
-> 
-> https://github.com/systemd/systemd/blob/main/hwdb.d/60-sensor.hwdb#L54
-> 
-> The way we are handling this is likely incompatible with how Windows
-> handles this special case of 90° rotated screen + ROTM. Or the
-> matrix in the ACPI tables could be just wrong...
-> 
-> > I think 'ROTM' is defined by MS. 
-> > https://learn.microsoft.com/en-us/windows-hardware/drivers/sensors/sensors-acpi-entries
-> 
-> Right and as such it would be good if we can still add support to
-> it to the sensor driver in question. Because the ROTM info usually
-> is correct and avoids the need for adding more and more hwdb entries.
-> 
-> Note there already is existing support in some other sensor drivers.
-> 
-> So we probably need to factor out some helper code for this and share
-> that between sensor drivers.
-> 
-> 
-> > > The only thing that concerns me is the need for custom kernel
-> > > parms.
-> > > It would be better if there was a way to avoid this, so that the
-> > > user
-> > > didn't have to mess around with their grub config. Though having
-> > > said
-> > > that, the sensors fix as we have it doesn't make things worse -
-> > > under
-> > > currently released kernels the screen always starts up sideways
-> > > unless
-> > > custom parms are added in grub.
-> 
-> We actually have a quirk mechanism in the kernel for specifying
-> the need for: video=DSI-1:panel_orientation=right_side_up  and this
-> will also automatically fix the fbcon orientation, see:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/gpu/drm/drm_panel_orientation_quirks.c
-> 
-> If you submit a patch for this upstream please Cc me.
+> Your driver breaks the ABI, doesn't it? If not, how are the old
+> properties parsed?
 
-And if after that change, and copy/pasting the orientation from the
-DSDT into hwdb the sensor and screen move in the expected ways, then
-maybe stealing the BMC150 driver's
-bmc150_apply_bosc0200_acpi_orientation() might be a good idea.
+It does not. As I mentioned in the driver code patch, commit
+eaf1a29665cd ("gpiolib: of: add a quirk for legacy names in MOXA ART
+RTC") makes sure gpiolib falls back to trying old variants if it can't
+locate properly formatted names.
 
-Once exported through "mount_matrix", iio-sensor-proxy should see it
-and read it without the need for a hwdb entry.
+Thanks.
 
-Cheers
+-- 
+Dmitry
