@@ -2,69 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D95C068866E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 19:29:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D7C468868E
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 19:32:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232674AbjBBS33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 13:29:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33490 "EHLO
+        id S232673AbjBBScv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 13:32:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232658AbjBBS2s (ORCPT
+        with ESMTP id S232650AbjBBScf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 13:28:48 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E9466EEE
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 10:28:27 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id e69-20020a253748000000b00845f15be258so2466644yba.9
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 10:28:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=Leen11Z2EIFQsH+NN7hqdICZGapTSqx3IkQSdi85rv4=;
-        b=swDomma/Ao/1AjVGqZhc77Ly1aJmaYi96lJ6fEnLjho/yWLYjCbG87uCRLZVXzLq1M
-         LScVQt+pZ9knZ5XD8RVoKRxLT1q+fEpmj2L2LXViaHSf7ilAayTs/eQh/Rwtvr2Vs3eW
-         TtDm8cGugXeffCt23ir1w6zNFfj7yik+sgpFjM9V9BSjPfEoc9GUBKMV6qBA74fyHAWP
-         +dsl0anfnGpkYnWUciMVIuHcfYl7QH02zwFv0QlTgGrXln7suPDF2xX5Qqk8Hsk0ZjyP
-         jBboZOjT/qXiq8k9yfGUjmpOpA/fkbxmaAzM0uqiIkU6UwAe9vuKWKkQTF0m1+TCwBM8
-         dJvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Leen11Z2EIFQsH+NN7hqdICZGapTSqx3IkQSdi85rv4=;
-        b=cRLIsyneAQf9tYmJ7Z2YrC/Rx5yxL4HigQJd6hgJrY2yvqlIZR/GDe1AVuxrVQdabM
-         4ttdOyp933bldbGK1JmuCk5tka/M9KHuQad2pCSDTT4sbbLdBBVNdVXK3bYRL3KFMPlZ
-         Mey83qunQq5NfZX53RfUrxBI5jliqf7Er/7xqIZKyS6mea6QLIQtGDOiKF+hDCzI7WeO
-         7oLfeVKfWG2nFPr0xNx6ooRbBLVYh0DHiLxdE0SrUcpbupWkDi6Ojpnv1Hb+2WuOhzyv
-         M4SMPvG5cJnrAdyIaAaZy5gmeWU0FgkvE3o1g2DQF5EQbG56tvUWBg53DPeXcum5IXfm
-         Vw7Q==
-X-Gm-Message-State: AO0yUKWQyrKfJPj1T8tJcRxpEJc/ZN7rjTHgM2XSdhjk13oXyakRIptx
-        OSPX3LnazhwG47bHK+aK9NVc1DJe2Wk=
-X-Google-Smtp-Source: AK7set+v8zDs6XnzjllU8ur/f0MIRCkHIofH+Wt+ThfPgIot1Um67e13cWqpbQBNYlMCc88CYLX3y0XmC3I=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:d095:0:b0:857:8f9c:7b87 with SMTP id
- h143-20020a25d095000000b008578f9c7b87mr368794ybg.558.1675362505413; Thu, 02
- Feb 2023 10:28:25 -0800 (PST)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Thu,  2 Feb 2023 18:28:17 +0000
-In-Reply-To: <20230202182817.407394-1-seanjc@google.com>
-Mime-Version: 1.0
-References: <20230202182817.407394-1-seanjc@google.com>
-X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
-Message-ID: <20230202182817.407394-4-seanjc@google.com>
-Subject: [PATCH v2 3/3] KVM: x86/mmu: Remove FNAME(is_self_change_mapping)
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Huang Hang <hhuang@linux.alibaba.com>,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        Thu, 2 Feb 2023 13:32:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2830D7E6DE
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 10:30:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675362553;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=/2CxDEOz/wKRg3fPVeBOZL5/A6pUQeGKLsIcyTY078w=;
+        b=dzFb6Sz/l8Js9eL7OT71ft7tACdvNmXGCdEJAqhYqp+sR3+Xj3Dohrbv1yyNCjFQJ2YB3V
+        c+dMUGkalots3EVw/RcnjbzYJcJSguCS4t7Gkk3HVD3n1yg9l+oTzpSz3WTc8yh529N0ZL
+        JnONShKfl287lCbAXuULoZTjcTlgP0E=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-561-yacWg-_YP2WGO1gFxz4KjA-1; Thu, 02 Feb 2023 13:29:10 -0500
+X-MC-Unique: yacWg-_YP2WGO1gFxz4KjA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E3C4A3810B14;
+        Thu,  2 Feb 2023 18:29:09 +0000 (UTC)
+Received: from vschneid.remote.csb (unknown [10.33.36.105])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3B0DF140EBF6;
+        Thu,  2 Feb 2023 18:29:08 +0000 (UTC)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Eder Zulian <ezulian@redhat.com>
+Subject: [RFC PATCH v1] sched/deadline: Add more reschedule cases to prio_changed_dl()
+Date:   Thu,  2 Feb 2023 18:28:54 +0000
+Message-Id: <20230202182854.3696665-1-vschneid@redhat.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,124 +64,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+I've been tracking down an issue on a ~5.17ish kernel where:
 
-Drop FNAME(is_self_change_mapping) and instead rely on
-kvm_mmu_hugepage_adjust() to adjust the hugepage accordingly.  Prior to
-commit 4cd071d13c5c ("KVM: x86/mmu: Move calls to thp_adjust() down a
-level"), the hugepage adjustment was done before allocating new shadow
-pages, i.e. failed to restrict the hugepage sizes if a new shadow page
-resulted in account_shadowed() changing the disallowed hugepage tracking.
+  CPUx                           CPUy
 
-Removing FNAME(is_self_change_mapping) fixes a bug reported by Huang Hang
-where KVM unnecessarily forces a 4KiB page.  FNAME(is_self_change_mapping)
-has a defect in that it blindly disables _all_ hugepage mappings rather
-than trying to reduce the size of the hugepage.  If the guest is writing
-to a 1GiB page and the 1GiB is self-referential but a 2MiB page is not,
-then KVM can and should create a 2MiB mapping.
+  <DL task p0 owns an rtmutex M>
+  <p0 depletes its runtime, gets throttled>
+  <rq switches to the idle task>
+				 <DL task p1 blocks on M, boost/replenish p0>
+				 <No call to resched_curr() happens here>
 
-Add a comment above the call to kvm_mmu_hugepage_adjust() to call out the
-new dependency on adjusting the hugepage size after walking indirect PTEs.
+  [idle task keeps running here until *something*
+   accidentally sets TIF_NEED_RESCHED]
 
-Reported-by: Huang Hang <hhuang@linux.alibaba.com>
-Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
-Link: https://lore.kernel.org/r/20221213125538.81209-1-jiangshanlai@gmail.com
-[sean: rework changelog after separating out the emulator change]
-Signed-off-by: Sean Christopherson <seanjc@google.com>
+On that kernel, it is quite easy to trigger using rt-tests's deadline_test
+[1] with the test running on isolated CPUs (this reduces the chance of
+something unrelated setting TIF_NEED_RESCHED on the idle tasks, making the
+issue even more obvious as the hung task detector chimes in).
+
+I haven't been able to reproduce this using a mainline kernel, even if I
+revert
+
+  2972e3050e35 ("tracing: Make trace_marker{,_raw} stream-like")
+
+which gets rid of the lock involved in the above test, *but* I cannot
+convince myself the issue isn't there from looking at the code.
+
+Make prio_changed_dl() issue a reschedule if the current task isn't a
+deadline one. While at it, ensure a reschedule is emitted when a
+queued-but-not-current task gets boosted with an earlier deadline that
+current's.
+
+[1]: https://git.kernel.org/pub/scm/utils/rt-tests/rt-tests.git
+Signed-off-by: Valentin Schneider <vschneid@redhat.com>
 ---
- arch/x86/kvm/mmu/paging_tmpl.h | 51 +++++-----------------------------
- 1 file changed, 7 insertions(+), 44 deletions(-)
+ kernel/sched/deadline.c | 45 ++++++++++++++++++++++++++---------------
+ 1 file changed, 29 insertions(+), 16 deletions(-)
 
-diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
-index f57d9074fb9b..a056f2773dd9 100644
---- a/arch/x86/kvm/mmu/paging_tmpl.h
-+++ b/arch/x86/kvm/mmu/paging_tmpl.h
-@@ -690,6 +690,12 @@ static int FNAME(fetch)(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
- 			fault->write_fault_to_shadow_pgtable = true;
- 	}
+diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+index 0d97d54276cc8..faa382ea084c1 100644
+--- a/kernel/sched/deadline.c
++++ b/kernel/sched/deadline.c
+@@ -2663,17 +2663,28 @@ static void switched_to_dl(struct rq *rq, struct task_struct *p)
+ static void prio_changed_dl(struct rq *rq, struct task_struct *p,
+ 			    int oldprio)
+ {
+-	if (task_on_rq_queued(p) || task_current(rq, p)) {
+-#ifdef CONFIG_SMP
+-		/*
+-		 * This might be too much, but unfortunately
+-		 * we don't have the old deadline value, and
+-		 * we can't argue if the task is increasing
+-		 * or lowering its prio, so...
+-		 */
+-		if (!rq->dl.overloaded)
+-			deadline_queue_pull_task(rq);
++	if (!task_on_rq_queued(p))
++		return;
++
++	/*
++	 * We don't know if p has a earlier or later deadline, so let's blindly
++	 * set a (maybe not needed) rescheduling point.
++	 */
++	if (!IS_ENABLED(CONFIG_SMP)) {
++		resched_curr(rq);
++		return;
++	}
  
 +	/*
-+	 * Adjust the hugepage size _after_ resolving indirect shadow pages.
-+	 * KVM doesn't support mapping hugepages into the guest for gfns that
-+	 * are being shadowed by KVM, i.e. allocating a new shadow page may
-+	 * affect the allowed hugepage size.
++	 * This might be too much, but unfortunately
++	 * we don't have the old deadline value, and
++	 * we can't argue if the task is increasing
++	 * or lowering its prio, so...
 +	 */
- 	kvm_mmu_hugepage_adjust(vcpu, fault);
- 
- 	trace_kvm_mmu_spte_requested(fault);
-@@ -734,41 +740,6 @@ static int FNAME(fetch)(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
- 	return RET_PF_RETRY;
++	if (!rq->dl.overloaded)
++		deadline_queue_pull_task(rq);
++
++	if (task_current(rq, p)) {
+ 		/*
+ 		 * If we now have a earlier deadline task than p,
+ 		 * then reschedule, provided p is still on this
+@@ -2681,14 +2692,16 @@ static void prio_changed_dl(struct rq *rq, struct task_struct *p,
+ 		 */
+ 		if (dl_time_before(rq->dl.earliest_dl.curr, p->dl.deadline))
+ 			resched_curr(rq);
+-#else
++	} else {
+ 		/*
+-		 * Again, we don't know if p has a earlier
+-		 * or later deadline, so let's blindly set a
+-		 * (maybe not needed) rescheduling point.
++		 * Current may not be deadline in case p was throttled but we
++		 * have just replenished it (e.g. rt_mutex_setprio()).
++		 *
++		 * Otherwise, if p was given an earlier deadline, reschedule.
+ 		 */
+-		resched_curr(rq);
+-#endif /* CONFIG_SMP */
++		if (!dl_task(rq->curr) ||
++		    dl_time_before(p->dl.deadline, rq->curr->dl.deadline))
++			resched_curr(rq);
+ 	}
  }
  
-- /*
-- * To see whether the mapped gfn can write its page table in the current
-- * mapping.
-- *
-- * It is the helper function of FNAME(page_fault). When guest uses large page
-- * size to map the writable gfn which is used as current page table, we should
-- * force kvm to use small page size to map it because new shadow page will be
-- * created when kvm establishes shadow page table that stop kvm using large
-- * page size. Do it early can avoid unnecessary #PF and emulation.
-- *
-- * Note: the PDPT page table is not checked for PAE-32 bit guest. It is ok
-- * since the PDPT is always shadowed, that means, we can not use large page
-- * size to map the gfn which is used as PDPT.
-- */
--static bool
--FNAME(is_self_change_mapping)(struct kvm_vcpu *vcpu,
--			      struct guest_walker *walker, bool user_fault)
--{
--	int level;
--	gfn_t mask = ~(KVM_PAGES_PER_HPAGE(walker->level) - 1);
--	bool self_changed = false;
--
--	if (!(walker->pte_access & ACC_WRITE_MASK ||
--	    (!is_cr0_wp(vcpu->arch.mmu) && !user_fault)))
--		return false;
--
--	for (level = walker->level; level <= walker->max_level; level++) {
--		gfn_t gfn = walker->gfn ^ walker->table_gfn[level - 1];
--
--		self_changed |= !(gfn & mask);
--	}
--
--	return self_changed;
--}
--
- /*
-  * Page fault handler.  There are several causes for a page fault:
-  *   - there is no shadow pte for the guest pte
-@@ -787,7 +758,6 @@ static int FNAME(page_fault)(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
- {
- 	struct guest_walker walker;
- 	int r;
--	bool is_self_change_mapping;
- 
- 	pgprintk("%s: addr %lx err %x\n", __func__, fault->addr, fault->error_code);
- 	WARN_ON_ONCE(fault->is_tdp);
-@@ -812,6 +782,7 @@ static int FNAME(page_fault)(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
- 	}
- 
- 	fault->gfn = walker.gfn;
-+	fault->max_level = walker.level;
- 	fault->slot = kvm_vcpu_gfn_to_memslot(vcpu, fault->gfn);
- 
- 	if (page_fault_handle_page_track(vcpu, fault)) {
-@@ -823,14 +794,6 @@ static int FNAME(page_fault)(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
- 	if (r)
- 		return r;
- 
--	is_self_change_mapping = FNAME(is_self_change_mapping)(vcpu,
--	      &walker, fault->user);
--
--	if (is_self_change_mapping)
--		fault->max_level = PG_LEVEL_4K;
--	else
--		fault->max_level = walker.level;
--
- 	r = kvm_faultin_pfn(vcpu, fault, walker.pte_access);
- 	if (r != RET_PF_CONTINUE)
- 		return r;
 -- 
-2.39.1.519.gcb327c4b5f-goog
+2.31.1
 
