@@ -2,92 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A805688A90
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 00:14:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AA27688A9E
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 00:17:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233032AbjBBXOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 18:14:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38752 "EHLO
+        id S231860AbjBBXRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 18:17:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232341AbjBBXOc (ORCPT
+        with ESMTP id S230173AbjBBXRe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 18:14:32 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC97D23D97
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 15:13:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675379627;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kXVHvL7Zc9SvpXlyodElHL/El9p9PH7Vp09KDuKNQ7k=;
-        b=UZSsENMhMyiq0vTVZM7cqcrB4nyoqHJi/tkIFKdWIFh38FBUhz4H/xoZ98ObPRjQwNz/KD
-        ur5WN3y4wPiHyavJFKuZxh6kA4DHfc/GvHJEosj1h01G89E+gfy3nR8ipkcfuLeyZgjp0P
-        vX/sjuzFbK/LeS3w3cAbiFrt3uq8/Ko=
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
- [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-433-scBfYTKoMhKyZrRImn2kJQ-1; Thu, 02 Feb 2023 18:13:45 -0500
-X-MC-Unique: scBfYTKoMhKyZrRImn2kJQ-1
-Received: by mail-il1-f200.google.com with SMTP id x9-20020a056e021ca900b0030f177273c3so2193777ill.8
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 15:13:45 -0800 (PST)
+        Thu, 2 Feb 2023 18:17:34 -0500
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D83C423D97;
+        Thu,  2 Feb 2023 15:17:29 -0800 (PST)
+Received: by mail-ot1-f53.google.com with SMTP id e12-20020a0568301e4c00b0068bc93e7e34so916863otj.4;
+        Thu, 02 Feb 2023 15:17:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kXVHvL7Zc9SvpXlyodElHL/El9p9PH7Vp09KDuKNQ7k=;
-        b=ex4SB1ta/OIguRAfv/ZYYlXyQfjLNnpWjzLZqCVLgRN0KvTzE8VqevaKyKP2lP1WGg
-         nPhtgFybIH12Q5kEZoUxGDNptXnKZYE/SSFMGpWxf2mD3Y6aemXxVZQsteFyEtyhxgw9
-         LV0AkiPgp3ICeFooYVODaoGeVEuSAgUlukbAKWC4t6I8kMYYwv66VF9MTW/utQKp3wCm
-         b+xZ96CkDzW3duw2214LkeXrR1e4Ve5MhqKZk9sq2ziMBYlCGn/7kahHqQ7Ne+Zwy8mt
-         BSS/BWco94SoTrfCpIGrUO5RYS0sYP1V9wj8W39ERVGMuNFan+kHM9sD9PsqYoyYuawa
-         9Rqw==
-X-Gm-Message-State: AO0yUKV54dAggl2adsdkIR4PR957Y007IrCPBr64MLZVNiYEsBrdVGL+
-        EDZDM7q3f+pi3u4zF+W8mZurDOfTpMJhg+iOK6gQ0O900+RcvPP4mArB7iHgQRUro7A3eZv38Xj
-        NQkDFt2EpKd6M2tgB7eR3DuIo
-X-Received: by 2002:a05:6602:2dc2:b0:707:d9c9:458e with SMTP id l2-20020a0566022dc200b00707d9c9458emr3293884iow.1.1675379625362;
-        Thu, 02 Feb 2023 15:13:45 -0800 (PST)
-X-Google-Smtp-Source: AK7set8MFntk5bjnEw1nbcEwPglzwxtEbs/VR6tLktByEWuRryxfTh9CCM+W/HuYuBK+h7W/qw1aLw==
-X-Received: by 2002:a05:6602:2dc2:b0:707:d9c9:458e with SMTP id l2-20020a0566022dc200b00707d9c9458emr3293860iow.1.1675379625133;
-        Thu, 02 Feb 2023 15:13:45 -0800 (PST)
-Received: from x1 (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
-        by smtp.gmail.com with ESMTPSA id a7-20020a5e8e07000000b007192441e5e6sm274085ion.45.2023.02.02.15.13.42
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=x6+YD6IXci0DRMRu2WdWwnlfWwhkErY5wLNu+9o8ClU=;
+        b=SEdhKwKbbpxZoZnVdqmoS2w2T5fohYG/aJJZGhic2xTvXaBYuo9aT61RaCWQZ3Uzkm
+         XqI7eAZwZ4Y5oxJRpxEaF3b8XN4vFoQlTM7eHHSqZ0Z3AbG3A8acimd1J01N3hLCX1AW
+         ZB5PMTF+r0BVxH9hT/TKvm0khe6UN62/oSo5AzAt/snlOyrEbivowdLOKWr6QLNVzS+u
+         QId1zKmfM3i8BfPXvZT2OXHdph+umv4DtkIWS1PwHjhKzCaMjVcvExdBxzb9dHcs/99Z
+         mHPTqPm2FlKHy92CaUPIZo3Pbk5bzE9LdRysUmiU6elnOPsK4Ufqupny346gWx3ATJUp
+         1N4A==
+X-Gm-Message-State: AO0yUKX2+ffSfniE3ls7PpJ0gHxCyUffv+9oqLUzCSOtIkKVbwDYKvNd
+        WyUqe+2k0CjF7MgzD+D8WOABuwDTAA==
+X-Google-Smtp-Source: AK7set/W+rdvCdAEUX/V7wxeXR6WBs4+3ypheYP8+QC+6MPyTvEirhPsiGn0zyWM+rG3tU4zxaYemw==
+X-Received: by 2002:a9d:798c:0:b0:68b:e2bb:8027 with SMTP id h12-20020a9d798c000000b0068be2bb8027mr3905749otm.14.1675379849086;
+        Thu, 02 Feb 2023 15:17:29 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id h26-20020a9d641a000000b0067781a9292asm429317otl.2.2023.02.02.15.17.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 15:13:44 -0800 (PST)
-Date:   Thu, 2 Feb 2023 18:13:41 -0500
-From:   Brian Masney <bmasney@redhat.com>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Georgi Djakov <djakov@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Artur =?utf-8?B?xZp3aWdvxYQ=?= <a.swigon@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH 11/23] interconnect: qcom: msm8974: fix registration race
-Message-ID: <Y9xDpSxL+3Iny+hF@x1>
-References: <20230201101559.15529-1-johan+linaro@kernel.org>
- <20230201101559.15529-12-johan+linaro@kernel.org>
+        Thu, 02 Feb 2023 15:17:28 -0800 (PST)
+Received: (nullmailer pid 2886180 invoked by uid 1000);
+        Thu, 02 Feb 2023 23:17:27 -0000
+Date:   Thu, 2 Feb 2023 17:17:27 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        dmaengine@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: ti,k3: Use common ti,k3-sci-common.yaml
+ schema
+Message-ID: <167537984602.2886078.411236741378963603.robh@kernel.org>
+References: <20230125221339.3057322-1-robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230201101559.15529-12-johan+linaro@kernel.org>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+In-Reply-To: <20230125221339.3057322-1-robh@kernel.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,18 +70,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 01, 2023 at 11:15:47AM +0100, Johan Hovold wrote:
-> The current interconnect provider registration interface is inherently
-> racy as nodes are not added until the after adding the provider. This
-> can specifically cause racing DT lookups to fail.
-> 
-> Switch to using the new API where the provider is not registered until
-> after it has been fully initialised.
-> 
-> Fixes: 4e60a9568dc6 ("interconnect: qcom: add msm8974 driver")
-> Cc: stable@vger.kernel.org      # 5.5
-> Cc: Brian Masney <bmasney@redhat.com>
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 
-Reviewed-by: Brian Masney <bmasney@redhat.com>
+On Wed, 25 Jan 2023 16:13:39 -0600, Rob Herring wrote:
+> Instead of redefining the 'ti,sci' and 'ti,sci-dev-id' properties multiple
+> times, reference the common schema where they are defined. Most cases
+> using these properties already do this, just udma and ringacc need to be
+> fixed.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../devicetree/bindings/dma/ti/k3-udma.yaml         |  9 +--------
+>  .../devicetree/bindings/soc/ti/k3-ringacc.yaml      | 13 ++++---------
+>  2 files changed, 5 insertions(+), 17 deletions(-)
+> 
+
+Applied, thanks!
 
