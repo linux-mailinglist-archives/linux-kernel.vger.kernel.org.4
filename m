@@ -2,102 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 679826888AE
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 22:01:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D8BA6888B1
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 22:02:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233095AbjBBVBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 16:01:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54054 "EHLO
+        id S233121AbjBBVB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 16:01:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233090AbjBBVBm (ORCPT
+        with ESMTP id S233112AbjBBVBp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 16:01:42 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A20834B2
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 13:01:41 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id me3so9682129ejb.7
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 13:01:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=oTODos+JhjSsHMBz5WWde+ZXEzF0nlSS0ENQxh5rzZM=;
-        b=Wkc5GlD/FMKs5jzKPItNIB48d18Vt5fgOxWvYT6sO6WbX7UR5gcq8Temv+KOltBFcU
-         UFd5KeCB2LK0vUvPqnpH+j6bfqKyOR/J9PnFMbgMpZgEM71rYA19/8B8pVNDAYa84JYo
-         YyRF5TNqz/s/9lOOewI7FVv/Om4/CNsFznsBE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oTODos+JhjSsHMBz5WWde+ZXEzF0nlSS0ENQxh5rzZM=;
-        b=jKWmZwY6BDJeCKFOpkVES+EJvxAxhPIeYKB8+NsZbJRZ48AsC3lTzVQyjubsRQvKDN
-         S+T1/fy7N5MibDt6EqMKmVMJnXJN7H+b27sP+7tTUCCbf2nE8hrx6l+pEANE+tkUpY52
-         xVB/ucqpJUHn7P/DtawN6oVSgiEiK51cPjLUW+E6IV4KvAIWIcMlJk2Ud2n5fbcGnZ71
-         +81TXbVWwjoDzTly4iRUm5TiVVi/KQcgFjfKREWPZWML3GcXJMhrQJs3eACsaXPLYjlV
-         B3Jy7+GQkVAepnrX4KhADTFa0FGicJtURnoQM6wlMfAHIIgCvgVJT5Ao7584q5W8ZeH0
-         Fdwg==
-X-Gm-Message-State: AO0yUKXt8tF5ajEb2UENucZ8zs2PasYzHLP9YXMr/7xUlDDinDP6E1Xs
-        zSuXE9HBA5pXI46RvegF4cDsOJFa6ocVT2/dbIp7vg==
-X-Google-Smtp-Source: AK7set9Sx9Pz4UXKrXGQOO+VM2+pGdFZjZzNipZ4w0YF225BLrGdW7tnR7iXNaw0AMjraZ6As0LJ9g==
-X-Received: by 2002:a17:907:78d4:b0:878:7a0e:5730 with SMTP id kv20-20020a17090778d400b008787a0e5730mr7336487ejc.56.1675371699474;
-        Thu, 02 Feb 2023 13:01:39 -0800 (PST)
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com. [209.85.218.42])
-        by smtp.gmail.com with ESMTPSA id t24-20020a1709066bd800b0088452ca0666sm288836ejs.196.2023.02.02.13.01.38
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 13:01:38 -0800 (PST)
-Received: by mail-ej1-f42.google.com with SMTP id me3so9681883ejb.7
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 13:01:38 -0800 (PST)
-X-Received: by 2002:a17:906:892:b0:87a:7098:ca09 with SMTP id
- n18-20020a170906089200b0087a7098ca09mr2044808eje.78.1675371698233; Thu, 02
- Feb 2023 13:01:38 -0800 (PST)
+        Thu, 2 Feb 2023 16:01:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C833834B0;
+        Thu,  2 Feb 2023 13:01:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AE77AB8286C;
+        Thu,  2 Feb 2023 21:01:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4504C433EF;
+        Thu,  2 Feb 2023 21:01:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675371702;
+        bh=pAsMU92a1kCb2rKpQkLrMe9BIidKskm5XpaUiW3uPTA=;
+        h=From:Date:Subject:To:Cc:From;
+        b=LxuFv6qnz9tJoG3fRDTwNdWIpTUAL5nJVvHy9zVHNz2GiBMe3x00F+Bb8O68qob+q
+         zwkHhxqEgN68y2n1q58Ciw+w5HiU1bRblF/GUy2uVhoXsXKdJi/bCyZyCDuw5HN1Tf
+         8RDN1jU0a6rB9h2s0hkkQM5AGKDFrAuGQxf+k8tu7PWE5XdOnWs+xK0SaLa0oRreSH
+         jAkB4pdmH52EsdfwB8LSeFqPeo03u4+GPtflEdWK2EJBS77IYwmpRkXWP+rse8fCeU
+         1kHiseahv34X4hcThNPTh1xmJjECY9YFqYKslX9gZeBNSPdPFjO/eRcrKu7XmMiiQ5
+         4UmZ4N7bDwYPg==
+From:   Mark Brown <broonie@kernel.org>
+Date:   Thu, 02 Feb 2023 21:01:36 +0000
+Subject: [PATCH] KVM: selftests: Enable USERFAULTFD
 MIME-Version: 1.0
-References: <Y9wYTnwXVwg/3Dv3@osiris>
-In-Reply-To: <Y9wYTnwXVwg/3Dv3@osiris>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 2 Feb 2023 13:01:21 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wg3u9fG-Oy_NV+w2H7pFUWmfyX5JXHGvxynxA9b1sNZGw@mail.gmail.com>
-Message-ID: <CAHk-=wg3u9fG-Oy_NV+w2H7pFUWmfyX5JXHGvxynxA9b1sNZGw@mail.gmail.com>
-Subject: Re: [GIT PULL] s390 fixes for 6.2-rc7
-To:     Heiko Carstens <hca@linux.ibm.com>
-Cc:     Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230202-kvm-selftest-userfaultfd-v1-1-8186ac5a33a5@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAK8k3GMC/x2N2wqDQAxEf0Xy3IBVpEt/pfQhq0ldtGtJ1guI/
+ +7al4EzcGZ2MNbABs9iB+UlWJhihvutgLan+GEMXWaoyqouc+CwfNF4lMSWcM620Dwm6ZDJNeR
+ 8I+5RQ9Y9GaNXim1/DayTDlf9U5aw/R9f7+M4Aci9MzeBAAAA
+To:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>
+Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=972; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=pAsMU92a1kCb2rKpQkLrMe9BIidKskm5XpaUiW3uPTA=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBj3CSzb3mxsxHX43429e0HnfD6WwKwvfP65sZRp/4T
+ gNhVqm+JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY9wkswAKCRAk1otyXVSH0HUKB/
+ 0Q0xqagueHxarbUjNpZ06zZxiVxOD1PDiq6Nngw3UZ60Z24DI+78x+vxUbPd9YNwg/kK6oKpUjX1NE
+ wJLXFA9qcXpANo6EwczOrTSc6H6JF/YPlxMDtKM9dimW4l/Q9VgkxTDSZZHF9UYo28b/fUfeoeNrYE
+ Gkr8rkFozuu0kSIH1glvHejvdzXB3q5gLVsEfubCm4X9CYawBEWzetCVFdLlagN7MJPsLwYTQE5dvK
+ dIM9oTwMjpiyuOVK30dpr3O/w0IxNlKR+xm71G07fqcaW/FNkUklFJtl7rNTYr4AuoMeYdVC3GdeN4
+ 1SnAvO/ItZwBkVj73/MIgvD6lli6hz
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 2, 2023 at 12:08 PM Heiko Carstens <hca@linux.ibm.com> wrote:
->
-> - With CONFIG_VMAP_STACK enabled it is not possible to load the s390
->   specific diag288_wdt watchdog module. Reason is that a pointer to a
->   string is passed to an inline assembly; this string however is located on
->   the stack, while the instruction within the inline assembly expects a
->   physicial address. Fix this by copying the string to a kmalloc'ed buffer.
+The page_fault_test KVM selftest requires userfaultfd but the config
+fragment for the KVM selftests does not enable it, meaning that those tests
+are skipped in CI systems that rely on appropriate settings in the config
+fragments except on S/390 which happens to have it in defconfig. Enable
+the option in the config fragment so that the tests get run.
 
-Ugh. I have pulled this, but I think that fix is disgusting.
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ tools/testing/selftests/kvm/config | 1 +
+ 1 file changed, 1 insertion(+)
 
-I think the kmalloc/kfree should have been done inside __diag288_vm()
-itself, where it actually does that whole "virt_to_phys()" too.
+diff --git a/tools/testing/selftests/kvm/config b/tools/testing/selftests/kvm/config
+index 63ed533f73d6..d011b38e259e 100644
+--- a/tools/testing/selftests/kvm/config
++++ b/tools/testing/selftests/kvm/config
+@@ -1,3 +1,4 @@
+ CONFIG_KVM=y
+ CONFIG_KVM_INTEL=y
+ CONFIG_KVM_AMD=y
++CONFIG_USERFAULTFD=y
 
-Now there are three callers of __diag288_vm(), and they all do that
-ugly kmalloc game with no comment about why it's needed.
+---
+base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
+change-id: 20230202-kvm-selftest-userfaultfd-ea85a8b5f873
 
-If __diag288_vm() just did it itself, and had a comment right next to
-the virt_to_phys() about why, that would look a lot better, I think.
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
 
-That said, I don't know the code, and maybe there was some reason to
-do it this way. As mentioned, I've pulled it, I just don't
-particularly love the patch.
-
-              Linus
