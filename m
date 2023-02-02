@@ -2,109 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8C896882BD
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 16:36:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71C816882D7
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 16:40:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232479AbjBBPgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 10:36:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56342 "EHLO
+        id S232807AbjBBPkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 10:40:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233179AbjBBPfq (ORCPT
+        with ESMTP id S232949AbjBBPkW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 10:35:46 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A95F234D4;
-        Thu,  2 Feb 2023 07:35:16 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id n13so1700284wmr.4;
-        Thu, 02 Feb 2023 07:35:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=trv1AGGi2ZldMb5ssniYbBdtJBugUHujIqtgNiIg+Vs=;
-        b=c5Y63VtVWSajudI2t9sYCFJ5AT1CYvsF4csR+nQSPnF7R1hilM1CflU+yEw7hzHGfF
-         zC7c9KRF8Pwl6wbWvUsYRfmMrxm7Qb3DCyPAd/wMtnPYPmj0d8uf+zNsANt4KVhXSSZB
-         uDOmcIVC4rV/VF5glzM7bCdWCZ/LzSSa6SP+GylGOsnJW2VvaH2nFkeJtcA3IlztSaM1
-         C2ZlzMCnCIjE8S1y2apGpv9Gcnkxt6OLU98GQt2B6g86l8H2v/wT8tuZvqZeklbqGkOc
-         ahFu6jjeB+lqaMbkAUbEzXvuREDRnXl/xBLWubfPFJZFM2+V5iOCW2BUgVs9iBPt/3e0
-         Pdzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=trv1AGGi2ZldMb5ssniYbBdtJBugUHujIqtgNiIg+Vs=;
-        b=Ikp3o5qH5MhPywB6XKS4wIdT6v4+z0s+2D7lBWeTVG7UGjHHFzf3iJI2SNXO9JxP/6
-         hnHLXb3iSZPWkoOhYvTeVuJJ88SaHoewjJHRN/XpbRkH+M/bQduEE1wNRuea+1KCq5e8
-         aTCumQorCQrA9AYJDdXzuIBtZC9c++kPbvFLFIozQIzoXog3BAqK4Nkwy4k198+RqVHd
-         NfXWRI5OwGk9okMiUzJ+XWBsO4nBfs9l3xst352ijDaqt7ifCnHK4JRjvWR4WylEEuqG
-         zKCwrrh6D8TvsmJzU9CQEhttBsWCJ/IRM1esgRxqTG9SbnPGGFFTojt1F2uQmtTIXs/D
-         h5zQ==
-X-Gm-Message-State: AO0yUKUlziFB+u3t0PDrnHtwvYZh2n0FT2lDJZ4Dl3ErwZHXTMOREVOB
-        AjrwgJIWTUjMtNpiPpB3844=
-X-Google-Smtp-Source: AK7set9AnusFcqc2c6udy8lC2Y6wkzqTL1MyGF5uggu+wfO/RWfZBQYHQvqUeEugk2/pBsVxs4pj9Q==
-X-Received: by 2002:a05:600c:1e06:b0:3dc:18de:b20d with SMTP id ay6-20020a05600c1e0600b003dc18deb20dmr6553730wmb.33.1675352038166;
-        Thu, 02 Feb 2023 07:33:58 -0800 (PST)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id h20-20020a05600c351400b003dc22ee5a2bsm5522893wmq.39.2023.02.02.07.33.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 07:33:57 -0800 (PST)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Thu, 2 Feb 2023 16:33:55 +0100
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Hao Luo <haoluo@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        bpf@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Subject: Re: [RFC 0/5] mm/bpf/perf: Store build id in file object
-Message-ID: <Y9vX49CtDzyg3B/8@krava>
-References: <20230201135737.800527-1-jolsa@kernel.org>
- <Y9vSZhBBCbshI3eM@casper.infradead.org>
+        Thu, 2 Feb 2023 10:40:22 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB92F23C7D
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 07:39:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675352398; x=1706888398;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=tklnhT8GNmJ7trqLgHdVnPc2VC3uRP06uBquwx2Tfng=;
+  b=QVYyER+IaWmCVYGeJJ6qZnDRvjwzo0OqSS0s1Ml6hd9/c6lqHvLDCxWX
+   tC5Hmuz1Ln8+P3oMAB+R/sonw2G+wcp/UwIcpNy/kX8BWsFOSETUBI4Nr
+   Z+dcrUp/oYpKse1MD0K3IhbHaoWTLxhfB4hrzD3cCg8GTGYu1TMkfdEUR
+   +mN2VmClbu30xkTwtk1CYz5Z4AApqhHM+PX6LATodjdkl7b96A9uS/L83
+   g+lMK7tjxVXPJ2IGJkQat1/xRBo/df8pVy13AA/RWyKZUYe/paks89Jg7
+   hBQek524wYGMo3nakMsPGgvPFTYbHHY0i82AK3Fvr4Rfq54gIcnIBpuOn
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="414681206"
+X-IronPort-AV: E=Sophos;i="5.97,267,1669104000"; 
+   d="scan'208";a="414681206"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2023 07:34:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="839247590"
+X-IronPort-AV: E=Sophos;i="5.97,267,1669104000"; 
+   d="scan'208";a="839247590"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005.jf.intel.com with ESMTP; 02 Feb 2023 07:34:17 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1pNbbM-001EgL-0Q;
+        Thu, 02 Feb 2023 17:34:16 +0200
+Date:   Thu, 2 Feb 2023 17:34:15 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Kees Cook <keescook@chromium.org>
+Subject: memchr() vs. memscan()
+Message-ID: <Y9vX95GpI272VKn0@smile.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y9vSZhBBCbshI3eM@casper.infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 03:10:30PM +0000, Matthew Wilcox wrote:
-> On Wed, Feb 01, 2023 at 02:57:32PM +0100, Jiri Olsa wrote:
-> > hi,
-> > we have a use cases for bpf programs to use binary file's build id.
-> 
-> What is your use case?  Is it some hobbyist thing or is it something
-> that distro kernels are all going to enable?
-> 
+Why do we have memchr() and memscan() implementations in lib/string.c?
+As far as I can see the one may be derived from the other easily.
 
-our use case is for hubble/tetragon [1] and we are asked to report
-buildid of executed binary.. but the monitoring process is running
-in its own pod and can't access the the binaries outside of it, so
-we need to be able to read it in kernel
-
-I understand Hao Luo has also use case for that [2]
-
-jirka
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-[1] https://github.com/cilium/tetragon/
-[2] https://lore.kernel.org/bpf/CA+khW7gAYHmoUkq0UqTiZjdOqARLG256USj3uFwi6z_FyZf31w@mail.gmail.com/
