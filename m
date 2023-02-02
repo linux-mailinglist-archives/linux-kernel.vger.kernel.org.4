@@ -2,182 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D5FD688096
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 15:52:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBF8C68809E
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 15:53:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232372AbjBBOwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 09:52:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59498 "EHLO
+        id S231814AbjBBOxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 09:53:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231653AbjBBOwn (ORCPT
+        with ESMTP id S232142AbjBBOwx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 09:52:43 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D0342918AE
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 06:52:15 -0800 (PST)
-Received: by linux.microsoft.com (Postfix, from userid 1112)
-        id 36F1820B74F7; Thu,  2 Feb 2023 06:51:54 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 36F1820B74F7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1675349514;
-        bh=sGLps7CqkFNZDG3cdYODwV6PIkGOHAkiIVB7Bzz6aGU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DtRoMrNAwoSQzbflumoSS+I9iXvGFkTcZBAMfbISimrqI/V+c7Ub0xH9KpMe9VKV8
-         mhn0La0PK9UxP4m/+GHTOtJoC83sChTWzO1PgZBklKtjcu5an5WMcE9JIwI5C6IBDJ
-         OLe7xFgcSJTomXzzFzgW4bzcIb8eXn1Pwiktak8U=
-Date:   Thu, 2 Feb 2023 06:51:54 -0800
-From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
-To:     "Reshetova, Elena" <elena.reshetova@intel.com>
-Cc:     "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
-        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
-        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
-        "Kleen, Andi" <andi.kleen@intel.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Wunner, Lukas" <lukas.wunner@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "Poimboe, Josh" <jpoimboe@redhat.com>,
-        "aarcange@redhat.com" <aarcange@redhat.com>,
-        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
-        "jbachmann@google.com" <jbachmann@google.com>,
-        "pgonda@google.com" <pgonda@google.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        James Morris <jmorris@namei.org>,
-        Michael Kelley <mikelley@microsoft.com>,
-        "Lange, Jon" <jlange@microsoft.com>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>
-Subject: Re: Linux guest kernel threat model for Confidential Computing
-Message-ID: <20230202145154.GA10621@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <Y9EkCvAfNXnJ+ATo@kroah.com>
- <DM8PR11MB5750FA4849C3224F597C101AE7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
- <Y9Jh2x9XJE1KEUg6@unreal>
- <DM8PR11MB5750414F6638169C7097E365E7CF9@DM8PR11MB5750.namprd11.prod.outlook.com>
- <Y9JyW5bUqV7gWmU8@unreal>
- <DM8PR11MB57507D9C941D77E148EE9E87E7CF9@DM8PR11MB5750.namprd11.prod.outlook.com>
- <702f22df28e628d41babcf670c909f1fa1bb3c0c.camel@linux.ibm.com>
- <DM8PR11MB5750F939C0B70939AD3CBC37E7D39@DM8PR11MB5750.namprd11.prod.outlook.com>
- <220b0be95a8c733f0a6eeddc08e37977ee21d518.camel@linux.ibm.com>
- <DM8PR11MB575074D3BCBD02F3DD677A57E7D09@DM8PR11MB5750.namprd11.prod.outlook.com>
+        Thu, 2 Feb 2023 09:52:53 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF6E74204;
+        Thu,  2 Feb 2023 06:52:33 -0800 (PST)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 312EbVDA007329;
+        Thu, 2 Feb 2023 14:52:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=bq/+gpa+Xc2tW3MBRu7pzVh4bcUQjgzBhx8XLYKtPXg=;
+ b=cDTsqgHnmaxdS10L59R/zyWOnnK3zJX8fz7sePFTKn9b+H2rI90gLa4+yzNGhXiP3M88
+ +ktmT0TWQl97VChBgD8FMDSwVHHOJ4qlir8mBmcgq82AeDvW9DNQhB5dVUOjKOtRGYhc
+ xc1RQ8Rq3GzyO6nbA5bnL8cqs1MJuMKF/7J7TBjrGovhlJuDmA0kVskBLF6OA+utU8sC
+ LhUAKN7Yz4YePkxUZ0a6Bd0uPQA66CvV/BfSOOdTLQm0x38OJ5z0JT/a035fMKI3wc5b
+ 2h272J7LvBmpzqnfe2ROsO0q9ACu+h+uqHkY+4ql0GJkatGr8tie8JtYS0XldhtWhYLr fQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nfn5j357e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Feb 2023 14:52:28 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 312EqRac002881
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 2 Feb 2023 14:52:27 GMT
+Received: from win-platform-upstream01.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Thu, 2 Feb 2023 06:52:23 -0800
+From:   Kathiravan T <quic_kathirav@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <jassisinghbrar@gmail.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Kathiravan T <quic_kathirav@quicinc.com>
+Subject: [PATCH 0/6] Add APSS clock driver support for IPQ5332
+Date:   Thu, 2 Feb 2023 20:22:02 +0530
+Message-ID: <20230202145208.2328032-1-quic_kathirav@quicinc.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <DM8PR11MB575074D3BCBD02F3DD677A57E7D09@DM8PR11MB5750.namprd11.prod.outlook.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: Q-pJWIfo6uQUe2rJGC--uhRO6cZJtVaY
+X-Proofpoint-GUID: Q-pJWIfo6uQUe2rJGC--uhRO6cZJtVaY
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-02_04,2023-02-02_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ lowpriorityscore=0 malwarescore=0 suspectscore=0 clxscore=1011
+ adultscore=0 mlxscore=0 impostorscore=0 bulkscore=0 priorityscore=1501
+ spamscore=0 mlxlogscore=846 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2302020133
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 11:31:28AM +0000, Reshetova, Elena wrote:
-> > On Mon, 2023-01-30 at 07:42 +0000, Reshetova, Elena wrote:
-> > [...]
-> > > > The big threat from most devices (including the thunderbolt
-> > > > classes) is that they can DMA all over memory.  However, this isn't
-> > > > really a threat in CC (well until PCI becomes able to do encrypted
-> > > > DMA) because the device has specific unencrypted buffers set aside
-> > > > for the expected DMA. If it writes outside that CC integrity will
-> > > > detect it and if it reads outside that it gets unintelligible
-> > > > ciphertext.  So we're left with the device trying to trick secrets
-> > > > out of us by returning unexpected data.
-> > >
-> > > Yes, by supplying the input that hasn’t been expected. This is
-> > > exactly the case we were trying to fix here for example:
-> > > https://lore.kernel.org/all/20230119170633.40944-2-
-> > alexander.shishkin@linux.intel.com/
-> > > I do agree that this case is less severe when others where memory
-> > > corruption/buffer overrun can happen, like here:
-> > > https://lore.kernel.org/all/20230119135721.83345-6-
-> > alexander.shishkin@linux.intel.com/
-> > > But we are trying to fix all issues we see now (prioritizing the
-> > > second ones though).
-> > 
-> > I don't see how MSI table sizing is a bug in the category we've
-> > defined.  The very text of the changelog says "resulting in a kernel
-> > page fault in pci_write_msg_msix()."  which is a crash, which I thought
-> > we were agreeing was out of scope for CC attacks?
-> 
-> As I said this is an example of a crash and on the first look
-> might not lead to the exploitable condition (albeit attackers are creative).
-> But we noticed this one while fuzzing and it was common enough
-> that prevented fuzzer going deeper into the virtio devices driver fuzzing.
-> The core PCI/MSI doesn’t seem to have that many easily triggerable 
-> Other examples in virtio patchset are more severe. 
-> 
-> > 
-> > > >
-> > > > If I set this as the problem, verifying device correct operation is
-> > > > a possible solution (albeit hugely expensive) but there are likely
-> > > > many other cheaper ways to defeat or detect a device trying to
-> > > > trick us into revealing something.
-> > >
-> > > What do you have in mind here for the actual devices we need to
-> > > enable for CC cases?
-> > 
-> > Well, the most dangerous devices seem to be the virtio set a CC system
-> > will rely on to boot up.  After that, there are other ways (like SPDM)
-> > to verify a real PCI device is on the other end of the transaction.
-> 
-> Yes, it the future, but not yet. Other vendors will not necessary be 
-> using virtio devices at this point, so we will have non-virtio and not
-> CC enabled devices that we want to securely add to the guest.
-> 
-> > 
-> > > We have been using here a combination of extensive fuzzing and static
-> > > code analysis.
-> > 
-> > by fuzzing, I assume you mean fuzzing from the PCI configuration space?
-> > Firstly I'm not so sure how useful a tool fuzzing is if we take Oopses
-> > off the table because fuzzing primarily triggers those
-> 
-> If you enable memory sanitizers you can detect more server conditions like
-> out of bounds accesses and such. I think given that we have a way to 
-> verify that fuzzing is reaching the code locations we want it to reach, it
-> can be pretty effective method to find at least low-hanging bugs. And these
-> will be the bugs that most of the attackers will go after at the first place. 
-> But of course it is not a formal verification of any kind.
-> 
->  so its hard to
-> > see what else it could detect given the signal will be smothered by
-> > oopses and secondly I think the PCI interface is likely the wrong place
-> > to begin and you should probably begin on the virtio bus and the
-> > hypervisor generated configuration space.
-> 
-> This is exactly what we do. We don’t fuzz from the PCI config space,
-> we supply inputs from the host/vmm via the legitimate interfaces that it can 
-> inject them to the guest: whenever guest requests a pci config space
-> (which is controlled by host/hypervisor as you said) read operation, 
-> it gets input injected by the kafl fuzzer.  Same for other interfaces that 
-> are under control of host/VMM (MSRs, port IO, MMIO, anything that goes
-> via #VE handler in our case). When it comes to virtio, we employ 
-> two different fuzzing techniques: directly injecting kafl fuzz input when
-> virtio core or virtio drivers gets the data received from the host 
-> (via injecting input in functions virtio16/32/64_to_cpu and others) and 
-> directly fuzzing DMA memory pages using kfx fuzzer. 
-> More information can be found in https://intel.github.io/ccc-linux-guest-hardening-docs/tdx-guest-hardening.html#td-guest-fuzzing
-> 
-> Best Regards,
-> Elena.
+This series adds support for the APSS clock to bump the CPU frequency
+above 800MHz.
 
-Hi Elena,
+APSS PLL found in the IPQ5332 is of type Stromer Plus. However the
+existing IPQ targets uses the Huayra PLL. So the driver has to
+refactored to accommodate the different PLL types. The first patch in
+the series does the refactoring, which can be independenty merged.
 
-I think it might be a good idea to narrow down a configuration that *can*
-reasonably be hardened to be suitable for confidential computing, before
-proceeding with fuzzing. Eg. a lot of time was spent discussing PCI devices
-in the context of virtualization, but what about taking PCI out of scope
-completely by switching to virtio-mmio devices?
+For the Stromer PLL separate function clk_stromer_pll_configure is
+introduced, so the 3rd patch in the series depends on the below patch
+https://lore.kernel.org/linux-arm-msm/20230120082631.22053-1-quic_kathirav@quicinc.com/
 
-Jeremi
+DTS patch depends on the IPQ5332 baseport series
+https://lore.kernel.org/linux-arm-msm/20230130114702.20606-1-quic_kathirav@quicinc.com/
+
+Kathiravan T (6):
+  clk: qcom: apss-ipq-pll: refactor the driver to accommodate different
+    PLL types
+  dt-bindings: clock: qcom,a53pll: add IPQ5332 compatible
+  clk: qcom: apss-ipq-pll: add support for IPQ5332
+  dt-bindings: mailbox: qcom: add compatible for the IPQ5332 SoC
+  mailbox: qcom-apcs-ipc: add IPQ5332 APSS clock support
+  arm64: dts: qcom: ipq5332: enable the CPUFreq support
+
+ .../bindings/clock/qcom,a53pll.yaml           |   1 +
+ .../mailbox/qcom,apcs-kpss-global.yaml        |   3 +
+ arch/arm64/boot/dts/qcom/ipq5332.dtsi         |  36 ++++++
+ drivers/clk/qcom/apss-ipq-pll.c               | 111 +++++++++++++++---
+ drivers/mailbox/qcom-apcs-ipc-mailbox.c       |   1 +
+ 5 files changed, 133 insertions(+), 19 deletions(-)
+
+-- 
+2.34.1
+
