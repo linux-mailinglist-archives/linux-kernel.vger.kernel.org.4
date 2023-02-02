@@ -2,201 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E4836889CD
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 23:32:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A463F6889D3
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 23:34:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232287AbjBBWbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 17:31:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48122 "EHLO
+        id S232450AbjBBWeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 17:34:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232450AbjBBWbS (ORCPT
+        with ESMTP id S229667AbjBBWeP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 17:31:18 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CA48193EA;
-        Thu,  2 Feb 2023 14:31:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
-        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=jsfVYED/tXF70d26rRyauEeOtWvDFd/QbP9mJvJS6zg=; b=uBZWE81YfPxu6AfqEDank1J/zJ
-        5ZdOQWK9luFYXBageUzSHTsBmt6MT0bINiaDTKIdc7hyOumeCQNWW5pL8w/o8CqMS6wiIxQztO8zM
-        8ZH74lj74rP1mAeoZ8F59LyzTbHOrqJk5Ubk2shPZlFeGn26BVIc+FjetMDbzxhMvo58L37QT+WIT
-        REmqATeJE4mWvSxK/zJZQuX63zKY7jAZQwtfZr3Ae9Jc/mQ4XxN8h/dB4oRfSCNlcav84n8XRAhtQ
-        ETh8kgH/niApgPoqtDvb8pBihal0PKRPS6jpde0z6V7qgRuwS7Lty/mI03GFRfcxKN4r0md9YP3rD
-        VRhcYvdA==;
-Received: from [2001:8b0:10b:5::bb3] (helo=u3832b3a9db3152.ant.amazon.com)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pNi6C-00DmXh-IT; Thu, 02 Feb 2023 22:30:33 +0000
-Message-ID: <dac090d2a61137b9e2fecd6cb3bfb4d5a9656fb6.camel@infradead.org>
-Subject: Re: [PATCH v6 06/11] x86/smpboot: Support parallel startup of
- secondary CPUs
-From:   David Woodhouse <dwmw2@infradead.org>
-To:     Usama Arif <usama.arif@bytedance.com>, tglx@linutronix.de,
-        arjan@linux.intel.com
-Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, x86@kernel.org, pbonzini@redhat.com,
-        paulmck@kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, rcu@vger.kernel.org, mimoja@mimoja.de,
-        hewenliang4@huawei.com, thomas.lendacky@amd.com, seanjc@google.com,
-        pmenzel@molgen.mpg.de, fam.zheng@bytedance.com,
-        punit.agrawal@bytedance.com, simon.evans@bytedance.com,
-        liangma@liangbit.com
-Date:   Thu, 02 Feb 2023 22:30:30 +0000
-In-Reply-To: <20230202215625.3248306-7-usama.arif@bytedance.com>
-References: <20230202215625.3248306-1-usama.arif@bytedance.com>
-         <20230202215625.3248306-7-usama.arif@bytedance.com>
-Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-        boundary="=-Ud+nR1ZismnfA8ozToH3"
-User-Agent: Evolution 3.44.4-0ubuntu1 
-MIME-Version: 1.0
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 2 Feb 2023 17:34:15 -0500
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D5668AD4
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 14:34:12 -0800 (PST)
+Received: by mail-pl1-x64a.google.com with SMTP id z9-20020a170902d54900b00196680ec8bbso1575385plf.16
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 14:34:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=JqXBZCshocKpxm4gEZMlbqbtIQK38/N6xcknjdoOafE=;
+        b=rtxJ+BeTJ2KGfEbZbbP4kOUdXR7t10eCA7N/6Qus1DybSK7fnJzApwwV+0M4y+1A7C
+         QNE+jnNgMUEclDsYBGvrxLCJFp1efPe1N+3AruYpf1ePfHUDbH3USc2n7YDrQO52Z3yW
+         S+vVueWtrBlQjeLj1foHFhrVTOUyeY48oR319ratj8r031ViZk6P6heXrazbE2XQKSQb
+         d4TeNmyocCJmTUYe1n3PsuZBmUBRwiX9+dSvL6Gg8JysuDgdFFYev52/dVinOiLgxIK1
+         O9ZT2V6B25uH8VmekIe1mqwmng5zEYHkW8F3ohP7EsyL+U04jVQhnye+GsGlW/0gHa4r
+         P/nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JqXBZCshocKpxm4gEZMlbqbtIQK38/N6xcknjdoOafE=;
+        b=DYuTmLYWqcI0XQLdQuwZGDYpFW4DhW6gXRA1erievxgLHA3rHOISmEWGBSYWLASViU
+         yEWa9ghmGYBED2yRTU3NxPX8OPVtL35e7Gq7H8oXwX0n7nfowePGYjRQNWKuBN8eplfA
+         66wI/jzxoD0CIa/Ma/85mnM4J04TX+m7W56EZxovnmHLFfQuckfKpFtQ9L4NbRkOHd+d
+         MlZSIcybbwRXUERoAjlFDvGuzbTswKJk+mtmJGKyqaAbEpJbKGq3vubv78QwEawb5Y+S
+         ir3wBxYWm96hn6u+ZZ9iO/ajJO9hgskOhv433A89Bh32KLWEQ7nkx1jqtH67VZs0SiK1
+         Hatg==
+X-Gm-Message-State: AO0yUKV41oR792oIWb92ybC4xHIUoAjwkVRLPxRrRajnwqItHlJFw/oA
+        B9e6mnIEsP9i+vUAx7IlGP4rbIpCYHKZprotj/+ErdQUQCr2NYv9wC7/BEzvDPKstcXdVkAiB1V
+        J6AUKn/mpilNHF7LzbY72HemErhRXm0obhI6iIBYhcQOG68Pvsqjw2i+0FHqSxjWEQknI7N4=
+X-Google-Smtp-Source: AK7set9jKY6SAJHs9HUfQdlzVmEnaQlEY3eJt6Tkj8jpF5UuaT0fCvdAqa8Wmr8aq9ApYypnuFwTUwiONgYq
+X-Received: from jstultz-noogler2.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:600])
+ (user=jstultz job=sendgmr) by 2002:a17:90a:3d04:b0:22c:7639:a926 with SMTP id
+ h4-20020a17090a3d0400b0022c7639a926mr974784pjc.83.1675377252249; Thu, 02 Feb
+ 2023 14:34:12 -0800 (PST)
+Date:   Thu,  2 Feb 2023 22:34:06 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
+Message-ID: <20230202223409.2812443-1-jstultz@google.com>
+Subject: [RFC][PATCH 1/4] locktorture: Add nested_[un]lock() hooks and nlocks parameter
+From:   John Stultz <jstultz@google.com>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     John Stultz <jstultz@google.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In order ot extend locktorture to support lock nesting, add
+nested_lock() and nested_unlock() hooks to the torture ops.
 
---=-Ud+nR1ZismnfA8ozToH3
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+These take a 32bit lockset mask which is generated at random,
+so some number of locks will be taken before the main lock is
+taken and released afterwards.
 
-T24gVGh1LCAyMDIzLTAyLTAyIGF0IDIxOjU2ICswMDAwLCBVc2FtYSBBcmlmIHdyb3RlOgo+IEBA
-IC0xNTE1LDYgKzE1MzAsMTcgQEAgdm9pZCBfX2luaXQgbmF0aXZlX3NtcF9wcmVwYXJlX2NwdXMo
-dW5zaWduZWQgaW50IG1heF9jcHVzKQo+IMKgCj4gwqDCoMKgwqDCoMKgwqDCoHNwZWN1bGF0aXZl
-X3N0b3JlX2J5cGFzc19odF9pbml0KCk7Cj4gwqAKPiArwqDCoMKgwqDCoMKgwqAvKgo+ICvCoMKg
-wqDCoMKgwqDCoCAqIFdlIGNhbiBkbyA2NC1iaXQgQVAgYnJpbmd1cCBpbiBwYXJhbGxlbCBpZiB0
-aGUgQ1BVIHJlcG9ydHMgaXRzCj4gK8KgwqDCoMKgwqDCoMKgICogQVBJQyBJRCBpbiBDUFVJRCBs
-ZWFmIDB4MEIuIE90aGVyd2lzZSBpdCdzIHRvbyBoYXJkLiBBbmQgbm90Cj4gK8KgwqDCoMKgwqDC
-oMKgICogZm9yIFNFVi1FUyBndWVzdHMgYmVjYXVzZSB0aGV5IGNhbid0IHVzZSBDUFVJRCB0aGF0
-IGVhcmx5Lgo+ICvCoMKgwqDCoMKgwqDCoCAqIEFsc28sIHNvbWUgQU1EIENQVXMgY3Jhc2ggd2hl
-biBkb2luZyBwYXJhbGxlbCBjcHUgYnJpbmd1cCwgZGlzYWJsZQo+ICvCoMKgwqDCoMKgwqDCoCAq
-IGl0IGZvciBhbGwgQU1EIENQVXMgdG8gYmUgb24gdGhlIHNhZmUgc2lkZS4KPiArwqDCoMKgwqDC
-oMKgwqAgKi8KPiArwqDCoMKgwqDCoMKgwqBpZiAoSVNfRU5BQkxFRChDT05GSUdfWDg2XzMyKSB8
-fCBib290X2NwdV9kYXRhLmNwdWlkX2xldmVsIDwgMHgwQiB8fAo+ICvCoMKgwqDCoMKgwqDCoMKg
-wqDCoCBjY19wbGF0Zm9ybV9oYXMoQ0NfQVRUUl9HVUVTVF9TVEFURV9FTkNSWVBUKSkKPiArwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZG9fcGFyYWxsZWxfYnJpbmd1cCA9IGZhbHNlOwo+
-ICsKPiDCoMKgwqDCoMKgwqDCoMKgc25wX3NldF93YWtldXBfc2Vjb25kYXJ5X2NwdSgpOwo+IMKg
-fQoKT29wcywgSSB0aG91Z2h0IEknZCByZW1vdmVkIHRob3NlIHR3byBsaW5lcyBhYm91dCBBTUQg
-aW4gdGhlIGNvbW1lbnQKd2hlbiBJIHJlbW92ZWQgdGhlIGFjdHVhbCBjb2RlIHRoYXQgZGlkIHNv
-LiBUdXJucyBvdXQgd2UgcmVtb3ZlIHRob3NlCmxpbmVzIGFnYWluIGluIHRoZSAqbmV4dCogcGF0
-Y2ggaW5zdGVhZC4gCg==
+Additionally, add nlocks module parameter to allow specifying
+the number of nested locks to be used.
 
+This has been helpful to uncover issues in the proxy-exec
+series development.
 
---=-Ud+nR1ZismnfA8ozToH3
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
+This was inspired by locktorture extensions originally implemented
+by Connor O'Brien, for stress testing the proxy-execution series:
+  https://lore.kernel.org/lkml/20221003214501.2050087-12-connoro@google.com/
 
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
-ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
-EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
-FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
-aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
-EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
-VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
-aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
-AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
-ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
-QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
-rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
-ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
-U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
-DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
-BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
-dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
-BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
-QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
-CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
-xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
-IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
-kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
-eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
-KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
-1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
-OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
-x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
-5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
-DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
-VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
-UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
-MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
-ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
-oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
-SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
-xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
-RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
-bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
-NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
-KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
-5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
-C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
-gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
-VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
-MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
-by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
-b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
-BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
-QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
-c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
-AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
-qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
-v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
-Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
-tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
-Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
-YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
-ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
-IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
-ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
-GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
-h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
-9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
-P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
-2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
-BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
-7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
-lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
-lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
-AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
-Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
-FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
-BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
-cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
-aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
-LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
-BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
-cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
-Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
-lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
-WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
-hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
-IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
-dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
-NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
-xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
-DQEHATAcBgkqhkiG9w0BCQUxDxcNMjMwMjAyMjIzMDMwWjAvBgkqhkiG9w0BCQQxIgQgKw8LoSvT
-9/zfI4V9oLAS2IhFgtvrvcSitqv8Ge/4+Dkwgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
-BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
-A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
-dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
-DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
-MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
-Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
-lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgB2j5ET28ppmMTUQ6pSi203iNKSl3PEe+7O
-NdhV2AgzDSbEOKhau1L7FZ0j+byk1QMn+u1BJDrueXFL1QcsYaJuioDRwkyvhwFOmeUdktT8y/Pf
-w4B/ykDd89Gvjs1qHQ1hc2lC1G7NBNJ3FoK/X8VQKsvVk7jHvjsFVRHp8ptlAeXDD7tTP5MvuUEj
-IYKxERti0mQYwpCEzkGM4pIRIDlG1pAIF1hoffP1cgem2kcvBuE4sCXUTC0ScdhvYJI2RnHiVCka
-Pl5PNuPFMFRUsdwGOanVZrpbrVw7f4rOFV7STsPANrIik/m1guvfXHEQ6M3gg/JngVmyp5fTBx0B
-5gYDbk2dq8cbealQXOGTB0UwICd5b/YaRgEMxDMnVr2VddzP8RoD3PwPrl/tSJ6Id3XaMKKU/dPN
-XSQj5OZcvlErQ3CTByK3ijq6k3aNcQi7VHSUrZiSIM8JF92UZFTfCepjxU3i8z0fl2F8TP33+D/R
-Q4obC99xLteHN12TZ1bFK2wIBnss81H2xaiypOW/DYflP3EBr/6eOTMDk2vh+5Y+JmbZkvQW0hk/
-38VsbmfqgDgIPoIWOGLIzCqjZye0Tit9189rQhK484SnyRZcZ0MwCN+zDtQU+1/cWORgCR3pgpm6
-3J4Sl5z6NDNyO3S5G+/ZObYaxcC7egiSro/H7IleHAAAAAAAAA==
+Comments or feedback would be greatly appreciated!
 
+Cc: Davidlohr Bueso <dave@stgolabs.net>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: Josh Triplett <josh@joshtriplett.org>
+Cc: Joel Fernandes <joel@joelfernandes.org>
+Cc: Juri Lelli <juri.lelli@redhat.com>
+Cc: Valentin Schneider <vschneid@redhat.com>
+Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Signed-off-by: John Stultz <jstultz@google.com>
+---
+ kernel/locking/locktorture.c | 23 +++++++++++++++++++----
+ 1 file changed, 19 insertions(+), 4 deletions(-)
 
---=-Ud+nR1ZismnfA8ozToH3--
+diff --git a/kernel/locking/locktorture.c b/kernel/locking/locktorture.c
+index 9c2fb613a55d..f4fbd3194654 100644
+--- a/kernel/locking/locktorture.c
++++ b/kernel/locking/locktorture.c
+@@ -48,6 +48,9 @@ torture_param(int, stat_interval, 60,
+ torture_param(int, stutter, 5, "Number of jiffies to run/halt test, 0=disable");
+ torture_param(int, verbose, 1,
+ 	     "Enable verbose debugging printk()s");
++torture_param(int, nlocks, 0, "Number of nested locks");
++/* Going much higher trips "BUG: MAX_LOCKDEP_CHAIN_HLOCKS too low!" errors */
++#define MAX_LOCKS 8
+ 
+ static char *torture_type = "spin_lock";
+ module_param(torture_type, charp, 0444);
+@@ -76,10 +79,12 @@ static void lock_torture_cleanup(void);
+ struct lock_torture_ops {
+ 	void (*init)(void);
+ 	void (*exit)(void);
++	int (*nested_lock)(int tid, u32 lockset);
+ 	int (*writelock)(int tid);
+ 	void (*write_delay)(struct torture_random_state *trsp);
+ 	void (*task_boost)(struct torture_random_state *trsp);
+ 	void (*writeunlock)(int tid);
++	void (*nested_unlock)(int tid, u32 lockset);
+ 	int (*readlock)(int tid);
+ 	void (*read_delay)(struct torture_random_state *trsp);
+ 	void (*readunlock)(int tid);
+@@ -669,6 +674,7 @@ static int lock_torture_writer(void *arg)
+ 	struct lock_stress_stats *lwsp = arg;
+ 	int tid = lwsp - cxt.lwsa;
+ 	DEFINE_TORTURE_RANDOM(rand);
++	u32 lockset_mask;
+ 
+ 	VERBOSE_TOROUT_STRING("lock_torture_writer task started");
+ 	set_user_nice(current, MAX_NICE);
+@@ -677,7 +683,10 @@ static int lock_torture_writer(void *arg)
+ 		if ((torture_random(&rand) & 0xfffff) == 0)
+ 			schedule_timeout_uninterruptible(1);
+ 
++		lockset_mask = torture_random(&rand);
+ 		cxt.cur_ops->task_boost(&rand);
++		if (cxt.cur_ops->nested_lock)
++			cxt.cur_ops->nested_lock(tid, lockset_mask);
+ 		cxt.cur_ops->writelock(tid);
+ 		if (WARN_ON_ONCE(lock_is_write_held))
+ 			lwsp->n_lock_fail++;
+@@ -690,6 +699,8 @@ static int lock_torture_writer(void *arg)
+ 		lock_is_write_held = false;
+ 		WRITE_ONCE(last_lock_release, jiffies);
+ 		cxt.cur_ops->writeunlock(tid);
++		if (cxt.cur_ops->nested_unlock)
++			cxt.cur_ops->nested_unlock(tid, lockset_mask);
+ 
+ 		stutter_wait("lock_torture_writer");
+ 	} while (!torture_must_stop());
+@@ -830,11 +841,11 @@ lock_torture_print_module_parms(struct lock_torture_ops *cur_ops,
+ 				const char *tag)
+ {
+ 	pr_alert("%s" TORTURE_FLAG
+-		 "--- %s%s: nwriters_stress=%d nreaders_stress=%d stat_interval=%d verbose=%d shuffle_interval=%d stutter=%d shutdown_secs=%d onoff_interval=%d onoff_holdoff=%d\n",
++		 "--- %s%s: nwriters_stress=%d nreaders_stress=%d nlocks=%d stat_interval=%d verbose=%d shuffle_interval=%d stutter=%d shutdown_secs=%d onoff_interval=%d onoff_holdoff=%d\n",
+ 		 torture_type, tag, cxt.debug_lock ? " [debug]": "",
+-		 cxt.nrealwriters_stress, cxt.nrealreaders_stress, stat_interval,
+-		 verbose, shuffle_interval, stutter, shutdown_secs,
+-		 onoff_interval, onoff_holdoff);
++		 cxt.nrealwriters_stress, cxt.nrealreaders_stress, nlocks,
++		 stat_interval, verbose, shuffle_interval, stutter,
++		 shutdown_secs, onoff_interval, onoff_holdoff);
+ }
+ 
+ static void lock_torture_cleanup(void)
+@@ -1053,6 +1064,10 @@ static int __init lock_torture_init(void)
+ 		}
+ 	}
+ 
++	/* cap nlocks to MAX_LOCKS */
++	if (nlocks > MAX_LOCKS)
++		nlocks = MAX_LOCKS;
++
+ 	if (cxt.cur_ops->readlock) {
+ 		reader_tasks = kcalloc(cxt.nrealreaders_stress,
+ 				       sizeof(reader_tasks[0]),
+-- 
+2.39.1.519.gcb327c4b5f-goog
+
