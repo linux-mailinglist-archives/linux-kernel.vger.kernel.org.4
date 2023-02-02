@@ -2,118 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 278DA6878DB
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:31:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF34F6878E7
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:34:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231947AbjBBJbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 04:31:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40040 "EHLO
+        id S232375AbjBBJeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 04:34:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232079AbjBBJbs (ORCPT
+        with ESMTP id S232079AbjBBJd4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 04:31:48 -0500
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 427AC59E6F;
-        Thu,  2 Feb 2023 01:31:47 -0800 (PST)
-Received: by mail-ed1-f45.google.com with SMTP id x7so1390071edr.0;
-        Thu, 02 Feb 2023 01:31:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ffpgR5z2JZo6pwKFf6fTkgFN1AbQFcPjb/i8EhiUIp0=;
-        b=PnZb8TfMK9LulumZbLHMdE9FvYIZNFF+ziO3KmXlRPbPkYrv52Ffb97jKAoCJn9avG
-         Fo0KNzsBIlCii7tOyRTJKk5x61Fn7p4bpXcdQ0qHAkseLFitxfwmyhJPiVdlX5ZZXsWs
-         VMJv5Q0lUCuHm9ARq5+2vdw6Zc80EfeXxUi/oKGORZBf8yorBMJY0KYrPGiu4sDIHFRk
-         tv6qM0sHVSUIr4jT7UPraXNTI7pHUma2bMLci8eZHbzOjXHhaP27vFtRZlVHwPYbLgUY
-         dA4ChUbqLxUwWhwfHAY6dwddBDRtP2pB0fsaPV2yIPHYI07ht6tApk19foHl4GaCpKq0
-         2X0g==
-X-Gm-Message-State: AO0yUKUqnLQ+2DJMLaQsOFHkFGK5qVxH4r2CnzUosFpoMjO3Y7OlkQlm
-        7d34YpYH9HtxPOCUC7pfcrwgujE7OA36qY4Steg=
-X-Google-Smtp-Source: AK7set9306TERMaXrdPKee5SdML+Gqydz/luQ9C1YIJFgYD0NZ/nYQnWiZBRLI5KkCDKzPTMZc9hEPaVfQaHClP1dUA=
-X-Received: by 2002:a50:cd8e:0:b0:4a2:480b:e164 with SMTP id
- p14-20020a50cd8e000000b004a2480be164mr1594675edi.50.1675330305735; Thu, 02
- Feb 2023 01:31:45 -0800 (PST)
+        Thu, 2 Feb 2023 04:33:56 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B44B6F70F
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 01:33:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675330404; x=1706866404;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=srm5w7+BKSkrJk00PeZckd1dPmLrk3ZHtxcul7VIOqw=;
+  b=ITxl4VBjuxgqcOo1yUM+RVEpXhV091NEBpq9W6nwAXGG2Ra+gTLuSQ2g
+   CmY6ZinAZ1God6s2SD6Qm5Kp9yquTC3Cz+wCcPNPcrXX6FlQGONrcHj8i
+   oEZJ5vFtVjQl6xzm30J7jZMkltwFZROqvfr6/++VxJhZuZx2kQJayPsPj
+   /8t/QI7bvr/4zmtZV4OqZLTdiT9WjMNaTMZ/1gBBc+gpyTVepgDKq0e7I
+   wG6HtRjNoHuA145WVocShnmAoBUoj6b6E7AGaNVCTGKqrE6unDcGim2oo
+   lKRBoUaUOpu/hKU4+fkPNF2fwCWEfpNn6e612WVLaj/4a7WAt3D0oFy+X
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="308742880"
+X-IronPort-AV: E=Sophos;i="5.97,267,1669104000"; 
+   d="scan'208";a="308742880"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2023 01:33:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="697626478"
+X-IronPort-AV: E=Sophos;i="5.97,267,1669104000"; 
+   d="scan'208";a="697626478"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 02 Feb 2023 01:33:22 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pNVy6-0006O2-0l;
+        Thu, 02 Feb 2023 09:33:22 +0000
+Date:   Thu, 2 Feb 2023 17:32:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Max Filippov <jcmvbkbc@gmail.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: xtensa-linux-ld: section .start VMA
+ [00000000d1000000,00000000d1000007] overlaps section .image VMA
+ [00000000d0003000,00000000d1527fe7]
+Message-ID: <202302021738.V4vXGaiB-lkp@intel.com>
 MIME-Version: 1.0
-References: <20230202034821.25123-1-tianruidong@linux.alibaba.com>
-In-Reply-To: <20230202034821.25123-1-tianruidong@linux.alibaba.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 2 Feb 2023 10:31:33 +0100
-Message-ID: <CAJZ5v0i=2f+NFHbyYNgL8vqkcf8ST=14-uqHqOUmL0JPVhmiBw@mail.gmail.com>
-Subject: Re: [PATCH] ACPICA: PCI: Undefined ACPI_ADR_SPACE_PCI_CONFIG when
- CONFIG_PCI is unset
-To:     Ruidong Tian <tianruidong@linux.alibaba.com>
-Cc:     robert.moore@intel.com, rafael.j.wysocki@intel.com,
-        lenb@kernel.org, linux-acpi@vger.kernel.org,
-        acpica-devel@lists.linuxfoundation.org,
-        linux-kernel@vger.kernel.org, baolin.wang@linux.alibaba.com,
-        jkchen@linux.alibaba.com, xueshuai@linux.alibaba.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 2, 2023 at 4:48 AM Ruidong Tian
-<tianruidong@linux.alibaba.com> wrote:
->
-> ACPI core subsystem initialization will fail when Kernel disabled PCI but
-> ACPI tables still have PCI config address spaces.
->
-> Enable ACPI_ADR_SPACE_PCI_CONFIG in acpi_gbl_default_address_spaces
-> only when ACPI_PCI_CONFIGURED is defined.
->
-> Signed-off-by: Ruidong Tian <tianruidong@linux.alibaba.com>
+Hi Max,
 
-As an ACPICA change, this should first be submitted (as a pull
-request) to the upstream ACPICA project on GitHub.
+FYI, the error/warning still remains.
 
-Having done that, please resubmit the patch with a Link tag pointing
-to the corresponding upstream pull request.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   9f266ccaa2f5228bfe67ad58a94ca4e0109b954a
+commit: 725aea873261e8d986e527838fde2a721f0962d8 xtensa: enable KCSAN
+date:   9 months ago
+config: xtensa-buildonly-randconfig-r006-20230201 (https://download.01.org/0day-ci/archive/20230202/202302021738.V4vXGaiB-lkp@intel.com/config)
+compiler: xtensa-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=725aea873261e8d986e527838fde2a721f0962d8
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 725aea873261e8d986e527838fde2a721f0962d8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=xtensa olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=xtensa SHELL=/bin/bash
 
-Thanks!
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-> ---
->  drivers/acpi/acpica/evhandler.c | 2 ++
->  include/acpi/acconfig.h         | 4 ++++
->  2 files changed, 6 insertions(+)
->
-> diff --git a/drivers/acpi/acpica/evhandler.c b/drivers/acpi/acpica/evhandler.c
-> index be9a05498adc..86057e39df8c 100644
-> --- a/drivers/acpi/acpica/evhandler.c
-> +++ b/drivers/acpi/acpica/evhandler.c
-> @@ -26,7 +26,9 @@ acpi_ev_install_handler(acpi_handle obj_handle,
->  u8 acpi_gbl_default_address_spaces[ACPI_NUM_DEFAULT_SPACES] = {
->         ACPI_ADR_SPACE_SYSTEM_MEMORY,
->         ACPI_ADR_SPACE_SYSTEM_IO,
-> +#ifdef ACPI_PCI_CONFIGURED
->         ACPI_ADR_SPACE_PCI_CONFIG,
-> +#endif
->         ACPI_ADR_SPACE_DATA_TABLE
->  };
->
-> diff --git a/include/acpi/acconfig.h b/include/acpi/acconfig.h
-> index 151e40385673..28456120529f 100644
-> --- a/include/acpi/acconfig.h
-> +++ b/include/acpi/acconfig.h
-> @@ -162,7 +162,11 @@
->  /* Maximum space_ids for Operation Regions */
->
->  #define ACPI_MAX_ADDRESS_SPACE          255
-> +#ifdef ACPI_PCI_CONFIGURED
->  #define ACPI_NUM_DEFAULT_SPACES         4
-> +#else
-> +#define ACPI_NUM_DEFAULT_SPACES         3
-> +#endif
->
->  /* Array sizes.  Used for range checking also */
->
-> --
-> 2.33.1
->
+All errors (new ones prefixed by >>):
+
+>> xtensa-linux-ld: section .start VMA [00000000d1000000,00000000d1000007] overlaps section .image VMA [00000000d0003000,00000000d1527fe7]
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
