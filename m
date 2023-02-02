@@ -2,140 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEF58688612
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 19:07:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BDFD688618
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 19:09:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232345AbjBBSHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 13:07:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48562 "EHLO
+        id S231778AbjBBSJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 13:09:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231322AbjBBSGw (ORCPT
+        with ESMTP id S229848AbjBBSJH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 13:06:52 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10FA54F853
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 10:06:49 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id 5so2692383plo.3
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 10:06:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wnwgjrHepV+H3nCkJcaUs0IGb7Rlz+pPTaZ+oHX/Xh4=;
-        b=dCZLFetoHYEdLjXuduYmjGgC+4Qh1sS48dw6tEJC9xHF2s5tu+pwO3IPRYDMem9EBL
-         quSh3YnNAzpu0ODOMss1V7ge6VLGCl1r8zHkijeD0LMfvOg7Ev6CjMeUtjJyuhXIm21B
-         VVF0IhNRdolCFyP84SHwWLD63pDs60NwwhqdfTGhInuTRX7SoHPWoM2yb9gqvUmFwUIP
-         Hw99UcB6YxVYXDc0/DwAObc8mWZXKfc6OVyYLKc0OOczKtGrKRqm7e5FBfIIvJxAlNx+
-         QijuGiuItpKgmquxmJI6jf8aep3zfnA4x8BzUMQFPyS5hVw+lWIpbo8ay3l49bWbfl+9
-         HW2g==
+        Thu, 2 Feb 2023 13:09:07 -0500
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A7C1206C
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 10:09:06 -0800 (PST)
+Received: by mail-ej1-f53.google.com with SMTP id dr8so8292097ejc.12
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 10:09:06 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wnwgjrHepV+H3nCkJcaUs0IGb7Rlz+pPTaZ+oHX/Xh4=;
-        b=xfUF2Mlw6JGCWSoBy25OdE+Wzt0QKdv9tANzBpVd1s1bQ1sqZJ0IrHOWE2+HqhNwod
-         Uv2KIKkFnhxfQClR77BUeIh5/BdKWUDXZvDeNHg6mm56wYaOvrWQhwtj0SJ0bbamarpi
-         ZASVE2pvjsCwyMIi79Wpgu3YG6RimyRwCGGN6qap45oqH5syIpqvY3LkhD/VLWNBsPKo
-         z9pv2hviqN+FPf2GxV+PYTzxn21v7NrgRDGQlC/0RQjSlVzUF5x4Wc2gWxPHpyJkfFHA
-         cvQDraZUU1zq53lAai80nJNCz/Tfq1tv+9y/y6rVHAEvOQkKHnlwkq7Zf+WK77/22dHD
-         +swQ==
-X-Gm-Message-State: AO0yUKXhVAtsxBgbpQ3UDUKryUD+ELmrbMUU9q7D6fXVtn3jsc0p9naX
-        eHUW/2r41IqjeB0UpaucJf/wrQ==
-X-Google-Smtp-Source: AK7set+5qH3JUjrkoBgHPl06pDMVhp8SO/e8uUOIcO+DUveaJLsEbcyP3GWObhd5xYnUTFYrZU6rxA==
-X-Received: by 2002:a17:902:c3c4:b0:198:af50:e4df with SMTP id j4-20020a170902c3c400b00198af50e4dfmr54828plj.5.1675361208333;
-        Thu, 02 Feb 2023 10:06:48 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id b15-20020aa7870f000000b0058119caa82csm13759528pfo.205.2023.02.02.10.06.47
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KTNk0BA5NM2oMhge3KzqOkD0ufAOyhldxWNhE6pIRMo=;
+        b=WmZV5nrhLAZoYwruYQ0B1F7QEq5giCZrfaxgd34v/rXS0lBEiPSSyvaO6vv5NhF9W2
+         G3B5hS0jh8XgWT2+yJL55OocCPM13NG055aVvrSU1Sew6qgdrE0R3z8iwSbCOC1qv6gE
+         02y6nXmfmUUdKGeZ5K35RwTm5uDTQ/hG0cYeFIYfM9CfjE1wNgCbScgzPmU86QDh8dQx
+         FA8LyGHXa0D04858KdUi2DEyBQjkFhzXgDjF55gZGqYP0ZmPnrhiogTYQqQzp/iYLKDf
+         IyRutNahm/KSLdPyHSTkny94sLVNpHRwzy9RKsYu3WrJRcecb8mHJMBpB2KLARPhKdOK
+         ZjHw==
+X-Gm-Message-State: AO0yUKUtQ+m6x01FbK2k8ShMLUmEvwaWIiAzdTw87l9fTpHkzPLkP9gi
+        f9X4tiJrMqnGZyLQTdHjRXrIvg7ip9Uugg==
+X-Google-Smtp-Source: AK7set+ikZ5pIJ3yDO30FYgZHmWdRV5lvyieAXCeXF3igMOfTjRElSj8xvqbq8MCXjISdZWvWpgY9g==
+X-Received: by 2002:a17:906:8a63:b0:888:7ce4:1dc1 with SMTP id hy3-20020a1709068a6300b008887ce41dc1mr7421458ejc.26.1675361344779;
+        Thu, 02 Feb 2023 10:09:04 -0800 (PST)
+Received: from localhost (fwdproxy-cln-034.fbsv.net. [2a03:2880:31ff:22::face:b00c])
+        by smtp.gmail.com with ESMTPSA id x10-20020a1709060a4a00b00880dbd4b6d4sm108421ejf.136.2023.02.02.10.09.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 10:06:47 -0800 (PST)
-Date:   Thu, 2 Feb 2023 18:06:44 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jianfeng Gao <jianfeng.gao@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v2] KVM: x86/pmu: Disable all vPMU features support on
- Intel hybrid CPUs
-Message-ID: <Y9v7tEXPlki7YOT4@google.com>
-References: <20230131085031.88939-1-likexu@tencent.com>
- <Y9k7eyfmXjqW9lYF@google.com>
- <afe1fdd8-9f3e-c988-cd38-476a6da26d46@gmail.com>
+        Thu, 02 Feb 2023 10:09:04 -0800 (PST)
+From:   Breno Leitao <leitao@debian.org>
+To:     tglx@linutronix.de, bp@alien8.de,
+        pawan.kumar.gupta@linux.intel.com, paul@paul-moore.com
+Cc:     leit@meta.com, x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH] cpu/bugs: Disable CPU mitigations at compilation time
+Date:   Thu,  2 Feb 2023 10:08:58 -0800
+Message-Id: <20230202180858.1539234-1-leitao@debian.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <afe1fdd8-9f3e-c988-cd38-476a6da26d46@gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023, Like Xu wrote:
-> On 1/2/2023 12:02 am, Sean Christopherson wrote:
-> > > diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
-> > > index 79988dafb15b..6a3995657e1e 100644
-> > > --- a/arch/x86/kvm/pmu.h
-> > > +++ b/arch/x86/kvm/pmu.h
-> > > @@ -166,9 +166,11 @@ static inline void kvm_init_pmu_capability(const struct kvm_pmu_ops *pmu_ops)
-> > >   	 /*
-> > >   	  * For Intel, only support guest architectural pmu
-> > > -	  * on a host with architectural pmu.
-> > > +	  * on a non-hybrid host with architectural pmu.
-> > >   	  */
-> > > -	if ((is_intel && !kvm_pmu_cap.version) || !kvm_pmu_cap.num_counters_gp)
-> > > +	if (!kvm_pmu_cap.num_counters_gp ||
-> > > +	    (is_intel && (!kvm_pmu_cap.version ||
-> > > +			  boot_cpu_has(X86_FEATURE_HYBRID_CPU))))
-> > 
-> > Why do this here instead of in perf_get_x86_pmu_capability()[*]?  The issue isn't
-> > restricted to Intel CPUs, it just so happens that Intel is the only x86 vendor
-> > that has shipped hybrid CPUs/PMUs.  Similarly, it's entirely possible to create a
-> > hybrid CPU with a fully homogeneous PMU.  IMO KVM should rely on the PMU's is_hybrid()
-> > and not the generic X86_FEATURE_HYBRID_CPU flag.
-> > 
-> > [*] https://lore.kernel.org/all/20230120004051.2043777-1-seanjc@google.com
-> 
-> As of today, other x86 vendors do not have hybrid core products in their
-> road maps. Before implementing the virtual hybrid vCPU model, there is
-> no practical value in talking about homogeneous PMU on hybrid vCPU
-> at the present stage.
+Right now it is not possible to disable CPU vulnerabilities mitigations
+at build time. Mitigation needs to be disabled passing kernel
+parameters, such as 'mitigations=off'.
 
-Why not?  I assume Intel put a fair bit of effort into ensuring feature parity
-between P and E cores.  Other than time, money, and effort, I don't see any
-reason why Intel can't do the same for the PMU.
+This patch creates an easy way to disable mitigation during compilation
+time (CONFIG_DEFAULT_CPU_MITIGATIONS_OFF), so, insecure kernel users don't
+need to deal with kernel parameters when booting insecure kernels.
 
-> The perf interface only provides host PMU capabilities and the logic for
-> choosing to disable (or enable) vPMU based on perf input should be left
-> in the KVM part so that subsequent development work can add most code
-> to the just KVM, which is very helpful for downstream users to upgrade
-> loadable KVM module rather than the entire core kernel.
-> 
-> My experience interacting with the perf subsystem has taught me that
-> perf change required from KVM should be made as small as possible.
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+ kernel/cpu.c     |  5 +++++
+ security/Kconfig | 11 +++++++++++
+ 2 files changed, 16 insertions(+)
 
-I don't disagree, but I don't think that's relevant in this case.  Perf doesn't
-provide the necessary bits for KVM to virtualize a hybrid PMU, so unless KVM is
-somehow able to get away with enumerating a very stripped down vPMU, additional
-modifications to perf_get_x86_pmu_capability() will be required.
+diff --git a/kernel/cpu.c b/kernel/cpu.c
+index 6c0a92ca6bb5..497e9a3d3d77 100644
+--- a/kernel/cpu.c
++++ b/kernel/cpu.c
+@@ -2727,8 +2727,13 @@ enum cpu_mitigations {
+ 	CPU_MITIGATIONS_AUTO_NOSMT,
+ };
+ 
++#ifdef CONFIG_DEFAULT_CPU_MITIGATIONS_OFF
++static enum cpu_mitigations cpu_mitigations __ro_after_init =
++	CPU_MITIGATIONS_OFF;
++#else
+ static enum cpu_mitigations cpu_mitigations __ro_after_init =
+ 	CPU_MITIGATIONS_AUTO;
++#endif
+ 
+ static int __init mitigations_parse_cmdline(char *arg)
+ {
+diff --git a/security/Kconfig b/security/Kconfig
+index e6db09a779b7..a70427dc6ace 100644
+--- a/security/Kconfig
++++ b/security/Kconfig
+@@ -258,6 +258,17 @@ config LSM
+ 
+ 	  If unsure, leave this as the default.
+ 
++config CONFIG_DEFAULT_CPU_MITIGATIONS_OFF
++	bool "Disable mitigations for CPU vulnerabilities by default"
++	default n
++	help
++	  This option disable mitigations for CPU vulnerabilities by default.
++	  This improves system performance, but it may also expose users
++	  to several CPU vulnerabilities.
++	  This has the same effect as passing `mitigations=off` kernel
++	  parameter. The mitigations could be enabled back passing the
++	  'mitigations' parameter.
++
+ source "security/Kconfig.hardening"
+ 
+ endmenu
+-- 
+2.30.2
 
-What I care more about though is this ugliness in perf_get_x86_pmu_capability():
-
-	/*
-	 * KVM doesn't support the hybrid PMU yet.
-	 * Return the common value in global x86_pmu,
-	 * which available for all cores.
-	 */
-	cap->num_counters_gp	= x86_pmu.num_counters;
-
-I really don't want to leave that comment lying around as it's flat out wrong in
-that it obviously doesn't address the other differences beyond the number of
-counters.  And since there are dependencies on perf, my preference is to disable
-PMU enumeration in perf specifically so that whoever takes on vPMU enabling is
-forced to consider the perf side of things, and get buy in from the perf folks.
