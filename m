@@ -2,217 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5154468782E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:03:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A197668782A
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:03:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232390AbjBBJDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 04:03:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45484 "EHLO
+        id S232004AbjBBJDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 04:03:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232240AbjBBJDc (ORCPT
+        with ESMTP id S232283AbjBBJDV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 04:03:32 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B35454540
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 01:02:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675328566;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=De3EEQ1m72Gwo/6RnWtloeFaKS85eTsg/vaPSBwqp1U=;
-        b=WAp1Jiw1Et9/pJBJtxioBqs6UVbA22lXI8YZNGFV0sPwqHtfFbEBHK025bytECwel4n9Vw
-        Vtj8Y/2FrqhGKyE3y8FhI6RxCNesrb8xktQClGNDM9LRM+qhWFgcmg+tRz2Xfoc8dZKtzz
-        YCUttRt9D9VrhAVN52fywjQQ1SlP1qQ=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-311-OjQCRpqJO46ledfyuIVLZA-1; Thu, 02 Feb 2023 04:02:45 -0500
-X-MC-Unique: OjQCRpqJO46ledfyuIVLZA-1
-Received: by mail-wr1-f70.google.com with SMTP id o9-20020adfa109000000b002bfc062eaa8so105618wro.20
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 01:02:45 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=De3EEQ1m72Gwo/6RnWtloeFaKS85eTsg/vaPSBwqp1U=;
-        b=36GJC63IYuAaSTKUgrzd2vShv9srHNF1TJ/97MKirfSze95u8DHti3chx6MJJKdxfI
-         /wkMp2dRCfgPDaTkRIwxTiXLJk8v/sVfxztS9MuIAut8/ycRvu23gMu7vc3aBkU5Wumr
-         DsVjO9F39yOrtetVhS18P7uqNWmIDJe60KRqHhO0hU9VyGMJtLcVX7tYZr+4n1O7Fkhk
-         vTDBtOaZPdFFfH3VhO3OTUPeIbwaSCOyo3Zsiq7LM1VPT9EI7x4j9hUZ1QYaPqVXwcBp
-         mpdqzbkWDJ/9dooaKrIWn42sTlBuvIS4koaLJtDBPePUf8YqiNjcQMsk0V59IrVgoQJY
-         HWCA==
-X-Gm-Message-State: AO0yUKWkPhpD7e3lOAqXP65gDiQMDL1qyZNWI3JIsdXRrLiKbWWx2w0I
-        SE1x0gUan+C6y1kDWHw49B3oLhJkGWPMh/Vp3RZimIssaC2HLvqOYoFB2WNP4yGzmJi6WW+prRA
-        mYlbfp+yOI0dUPRcSiZvcc4Po
-X-Received: by 2002:a05:600c:5127:b0:3df:e1cc:94ff with SMTP id o39-20020a05600c512700b003dfe1cc94ffmr243172wms.28.1675328564399;
-        Thu, 02 Feb 2023 01:02:44 -0800 (PST)
-X-Google-Smtp-Source: AK7set+fCz01ItwOkICqUjPGvI9tDwbLemLD7FdONgucCuAKb9cdtz4cX1DC5V0lyMB/NcT5nCtZrQ==
-X-Received: by 2002:a05:600c:5127:b0:3df:e1cc:94ff with SMTP id o39-20020a05600c512700b003dfe1cc94ffmr243149wms.28.1675328564119;
-        Thu, 02 Feb 2023 01:02:44 -0800 (PST)
-Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
-        by smtp.gmail.com with ESMTPSA id t1-20020a1c7701000000b003b47b80cec3sm4027759wmi.42.2023.02.02.01.02.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 01:02:43 -0800 (PST)
-Message-ID: <e8065d6a-d2f9-60aa-8541-8dfc8e9b608f@redhat.com>
-Date:   Thu, 2 Feb 2023 10:02:42 +0100
+        Thu, 2 Feb 2023 04:03:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9922D5B9F;
+        Thu,  2 Feb 2023 01:03:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3075761A34;
+        Thu,  2 Feb 2023 09:03:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11975C433D2;
+        Thu,  2 Feb 2023 09:03:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675328592;
+        bh=O5PxmLyogSKp6fm3zoyf+RnAlkhGjJZJBmZ6s0sTyks=;
+        h=From:To:Cc:Subject:Date:From;
+        b=AMSWvUgfqRblOJlRnxrkJF2OiQUhCtXBy5xsDiix9Uk49fz7EqjJUrrueNE2bwkLD
+         BG0Wjdttt+5fY85Os6cDu6BB3dYy42Y5MLmZGGu0+mlemd7bchO+L1vOOYiGXms5Yd
+         uq2D/GAYPNABSzFFo4vtxbT5QBdCJfpYkMwXH7WJ3Cs6w8TTzDrjhun85rRqtQ/j4M
+         1PPGfzG22Rfg5wPpQi5ZZyQFAyauIg1AOBwe4zUIDv24Lw5uweDNjpk4RfF89WHOIg
+         6qcx9wnYIxI7zcB+jRWjar/W/kJcT9mBb24XDqporfwneo/MHGdGIyxKpzNLk3TOaz
+         JXHcC2LLkMSeQ==
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Leon Romanovsky <leonro@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org,
+        Michael Guralnik <michaelgur@nvidia.com>
+Subject: [PATCH rdma-next 0/2] Two small fixes to MR cache series
+Date:   Thu,  2 Feb 2023 11:03:05 +0200
+Message-Id: <cover.1675328463.git.leon@kernel.org>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [syzbot] general protection fault in skb_dequeue (3)
-Content-Language: en-US
-To:     David Howells <dhowells@redhat.com>, jhubbard@nvidia.com
-Cc:     syzbot <syzbot+a440341a59e3b7142895@syzkaller.appspotmail.com>,
-        davem@davemloft.net, edumazet@google.com, hch@lst.de,
-        johannes@sipsolutions.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
-References: <000000000000b0b3c005f3a09383@google.com>
- <822863.1675327935@warthog.procyon.org.uk>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <822863.1675327935@warthog.procyon.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02.02.23 09:52, David Howells wrote:
-> Hi John, David,
-> 
-> Could you have a look at this?
-> 
->> syzbot found the following issue on:
->>
->> HEAD commit:    80bd9028feca Add linux-next specific files for 20230131
->> git tree:       linux-next
->> console output: https://syzkaller.appspot.com/x/log.txt?x=1468e369480000
->> kernel config:  https://syzkaller.appspot.com/x/.config?x=904dc2f450eaad4a
->> dashboard link: https://syzkaller.appspot.com/bug?extid=a440341a59e3b7142895
->> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
->> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12c5d2be480000
->> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11259a79480000
->> ...
->> The issue was bisected to:
->>
->> commit 920756a3306a35f1c08f25207d375885bef98975
->> Author: David Howells <dhowells@redhat.com>
->> Date:   Sat Jan 21 12:51:18 2023 +0000
->>
->>      block: Convert bio_iov_iter_get_pages to use iov_iter_extract_pages
->>
->> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=170384f9480000
->> final oops:     https://syzkaller.appspot.com/x/report.txt?x=148384f9480000
->> console output: https://syzkaller.appspot.com/x/log.txt?x=108384f9480000
->> ...
->> general protection fault, probably for non-canonical address 0xdffffc0000000001: 0000 [#1] PREEMPT SMP KASAN
->> KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
->> CPU: 0 PID: 2838 Comm: kworker/u4:6 Not tainted 6.2.0-rc6-next-20230131-syzkaller-09515-g80bd9028feca #0
->> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
->> Workqueue: phy4 ieee80211_iface_work
->> RIP: 0010:__skb_unlink include/linux/skbuff.h:2321 [inline]
->> RIP: 0010:__skb_dequeue include/linux/skbuff.h:2337 [inline]
->> RIP: 0010:skb_dequeue+0xf5/0x180 net/core/skbuff.c:3511
-> 
-> I don't think this is specifically related to anything networking.  I've run
-> it a few times and weird stuff happens in various places.  I'm wondering if
-> it's related to FOLL_PIN in some way.
-> 
-> The syzbot test in question does the following:
-> 
->     #{"repeat":true,"procs":1,"slowdown":1,"sandbox":"none","sandbox_arg":0,"netdev":true,"cgroups":true,"close_fds":true,"usb":true,"wifi":true,"sysctl":true,"tmpdir":true}
->     socket(0x0, 0x2, 0x0)
->     epoll_create(0x7)
->     r0 = creat(&(0x7f0000000040)='./bus\x00', 0x9)
->     ftruncate(r0, 0x800)
->     lseek(r0, 0x200, 0x2)
->     r1 = open(&(0x7f0000000000)='./bus\x00', 0x24000, 0x0)  <-- O_DIRECT
->     sendfile(r0, r1, 0x0, 0x1dd00)
-> 
-> Basically a DIO splice from a file to itself.
-> 
-> I've hand-written my own much simpler tester (see attached).  You need to run
-> at least two copies in parallel, I think, to trigger the bug.  It's possible
-> truncate is interfering somehow.
-> 
-> David
-> ---
-> #define _GNU_SOURCE
-> #include <stdio.h>
-> #include <stdlib.h>
-> #include <unistd.h>
-> #include <fcntl.h>
-> #include <sys/sendfile.h>
-> #include <sys/wait.h>
-> 
-> #define file_size 0x800
-> #define send_size 0x1dd00
-> #define repeat_count 1000
-> 
-> int main(int argc, char *argv[])
-> {
-> 	int in, out, i, wt;
-> 
-> 	if (argc != 2 || !argv[1][0]) {
-> 		fprintf(stderr, "Usage: %s <file>\n", argv[0]);
-> 		exit(2);
-> 	}
-> 
-> 	for (i = 0; i < repeat_count; i++) {
-> 		switch (fork()) {
-> 		case -1:
-> 			perror("fork");
-> 			exit(1);
-> 		case 0:
-> 			out = creat(argv[1], 0666);
-> 			if (out < 0) {
-> 				perror(argv[1]);
-> 				exit(1);
-> 			}
-> 
-> 			if (ftruncate(out, file_size) < 0) {
-> 				perror("ftruncate");
-> 				exit(1);
-> 			}
-> 
-> 			if (lseek(out, file_size, SEEK_SET) < 0) {
-> 				perror("lseek");
-> 				exit(1);
-> 			}
-> 
-> 			in = open(argv[1], O_RDONLY | O_DIRECT | O_NOFOLLOW);
-> 			if (in < 0) {
-> 				perror("open");
-> 				exit(1);
-> 			}
-> 
-> 			if (sendfile(out, in, NULL, send_size) < 0) {
-> 				perror("sendfile");
-> 				exit(1);
-> 			}
-> 			exit(0);
+From: Leon Romanovsky <leonro@nvidia.com>
 
-[as raised on IRC]
+Hi,
 
-At first, I wondered if that's related to shared anonymous pages getting 
-pinned R/O that would trigger COW-unsharing ... but I don't even see 
-where we are supposed to use FOLL_PIN vs. FOLL_GET here? IOW, we're not 
-even supposed to access user space memory (neither FOLL_GET nor 
-FOLL_PIN) but still end up with a change in behavior.
+There are two small patches with fix and cleanup to previously accepted
+MR cache series from Michael.
+
+Thanks
+
+Leon Romanovsky (2):
+  RDMA/mlx5: Fix MR cache debugfs in switchdev mode
+  RDMA/mlx5: Remove impossible check of mkey cache cleanup failure
+
+ drivers/infiniband/hw/mlx5/main.c    |  7 +------
+ drivers/infiniband/hw/mlx5/mlx5_ib.h |  2 +-
+ drivers/infiniband/hw/mlx5/mr.c      | 10 ++++++----
+ 3 files changed, 8 insertions(+), 11 deletions(-)
 
 -- 
-Thanks,
-
-David / dhildenb
+2.39.1
 
