@@ -2,93 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83B5C6889A9
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 23:22:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DEFB6889AD
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 23:26:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232096AbjBBWWA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 17:22:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43002 "EHLO
+        id S230156AbjBBW0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 17:26:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232504AbjBBWV4 (ORCPT
+        with ESMTP id S229575AbjBBW0G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 17:21:56 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5579B6A327
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 14:21:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675376515; x=1706912515;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Ih45qw3GO+A2Jg57523xVsGMRHouyCzrPpg2VyURJ3o=;
-  b=U9PqLLgpixX0YyBpeZVky3S+TEhcBY4HAINTO9IhQcBKJxmAeq8DGgFX
-   XY8oi0TVz/K25/LPQETQQrRj+duQiwJ0tJCg8SWIkJjc42FL9DAOmZzuJ
-   ILRediJP+RT/vsssKl3z7m1ElNsRhOPPqx/Mx4cPy5DABqutbMiLWBEmT
-   9iT7kXV0zdiPbGWAWMfv57SLLCAvlehcocWjKrvEscjGnk2KDl0Nc/Dj/
-   UPARdByIRhPFbg/bHajr47TCe5ZYAb4qTAnpMm9P+OBEjmnX9zStCv7Sq
-   R5skcSjfpVKFeIcABx0kN1oxVsYiH0AYgVCAwIKLoAhQGTi9+97oq5bvL
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="308927186"
-X-IronPort-AV: E=Sophos;i="5.97,268,1669104000"; 
-   d="scan'208";a="308927186"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2023 14:21:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="729048449"
-X-IronPort-AV: E=Sophos;i="5.97,268,1669104000"; 
-   d="scan'208";a="729048449"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 02 Feb 2023 14:21:53 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pNhxp-0006um-0z;
-        Thu, 02 Feb 2023 22:21:53 +0000
-Date:   Fri, 3 Feb 2023 06:21:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Nicolas Schier <nicolas@fjasle.eu>
-Subject: arch/mips/kernel/vpe-mt.c:(.text.vpe_run+0x280): undefined reference
- to `physical_memsize'
-Message-ID: <202302030625.2g3E98sY-lkp@intel.com>
+        Thu, 2 Feb 2023 17:26:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F17FDCC04
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 14:25:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675376717;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=B8BHBNa+yNC4hDxX+kSVeo8iDcZfNEIlhda9yEMbHoc=;
+        b=T0VJaApelDWowy8Isl9fqAbIKemmrDgRnNCMmrmlDj1grXv0L9ubz5tVXkMHoSew9IZqLX
+        a84CDL/FrO7uyPNE96iOtcc0Cyu99udXaJfbs25vKFtDBUKXavVuFYRE3vsWpt7JBMqgF3
+        sRphwikt4UIlQpVy65KUybtm1cZwNX4=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-324-HGrorYAaO7OLHlOatt38WA-1; Thu, 02 Feb 2023 17:25:16 -0500
+X-MC-Unique: HGrorYAaO7OLHlOatt38WA-1
+Received: by mail-ej1-f72.google.com with SMTP id z2-20020a1709060be200b0088b579825f9so2443185ejg.18
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 14:25:15 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=B8BHBNa+yNC4hDxX+kSVeo8iDcZfNEIlhda9yEMbHoc=;
+        b=P/KE5gR+3QLF/7KfjAhZU+hIHsLGwUMw0/WkmXjtQMSpckD+rNHnhqU6pevwGrISkH
+         FW+DaDhMvn+3L3yCwOAIdxGkD/CwOdjQ7+v7+Ulx8SBFlWlp8T7f2pTFTQZmwxIsyRuE
+         coSc8l/GJ1iNjcVvC66czATxVrM6L/kZyvAyfurP9C7JFBGwitRsRYsYnbf4RH3XlRxz
+         5ZWmeW7QR9DItF3xA2WMraY/8/bkxtdU6MnHAumuy18Ynn+obqVvMhXNhW7F8TAf2QOO
+         fWFf3iDJMvKentPlHvboG1+SD8w1n25ofU8SOndLEwqGmmIGHZphWhgdwzG94xtQgrZa
+         FGVg==
+X-Gm-Message-State: AO0yUKUQjWCobVeb8vKqtpVHKAKOL8vEHIfyHQgC9HIO2gcvPMkga/Ux
+        voF9pdqJE1YDZd6SoKnaNhfrGReKZherR7gwBqOliNWoJICFf7Mau8ub8pSxM08rEsC39aeXtzL
+        95Xi4I5Ls2THQxrvQP2HE+AUAgTrrltN9OzdOwPL5
+X-Received: by 2002:a05:6402:360a:b0:499:cfee:8d96 with SMTP id el10-20020a056402360a00b00499cfee8d96mr2481751edb.21.1675376714505;
+        Thu, 02 Feb 2023 14:25:14 -0800 (PST)
+X-Google-Smtp-Source: AK7set/RS3nWD5I2qidy/TUBFe5KzmDNDoQo3pywjpkX7ZNqRxjHHFLYfFeOAyYKMUUZ3YPLVMy4JsWgYmPMR6yaBs0=
+X-Received: by 2002:a05:6402:360a:b0:499:cfee:8d96 with SMTP id
+ el10-20020a056402360a00b00499cfee8d96mr2481747edb.21.1675376714326; Thu, 02
+ Feb 2023 14:25:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <6b008b94e3b295f572502abec8ae15da46133a64.1675351367.git.edwin.torok@cloud.com>
+In-Reply-To: <6b008b94e3b295f572502abec8ae15da46133a64.1675351367.git.edwin.torok@cloud.com>
+From:   Alexander Aring <aahringo@redhat.com>
+Date:   Thu, 2 Feb 2023 17:25:02 -0500
+Message-ID: <CAK-6q+gJ_JOo1KXwGsYPc1fkKnYLM3vNSZXuxxVSrdZbROzYug@mail.gmail.com>
+Subject: Re: [Cluster-devel] [PATCH] DLM: increase socket backlog to avoid
+ hangs with 16 nodes
+To:     =?UTF-8?B?RWR3aW4gVMO2csO2aw==?= <edvin.torok@citrix.com>
+Cc:     linux-kernel@vger.kernel.org, cluster-devel@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   e7368fd30165ced757d64da48e2091c83815ce5c
-commit: 7b4537199a4a8480b8c3ba37a2d44765ce76cd9b kbuild: link symbol CRCs at final link, removing CONFIG_MODULE_REL_CRCS
-date:   9 months ago
-config: mips-randconfig-r002-20230202 (https://download.01.org/0day-ci/archive/20230203/202302030625.2g3E98sY-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7b4537199a4a8480b8c3ba37a2d44765ce76cd9b
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 7b4537199a4a8480b8c3ba37a2d44765ce76cd9b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+Hi,
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+On Thu, Feb 2, 2023 at 10:37 AM Edwin T=C3=B6r=C3=B6k <edvin.torok@citrix.c=
+om> wrote:
+>
+> On a 16 node virtual cluster with e1000 NICs joining the 12th node prints
+> SYN flood warnings for the DLM port:
+> Dec 21 01:46:41 localhost kernel: [ 2146.516664] TCP: request_sock_TCP: P=
+ossible SYN flooding on port 21064. Sending cookies.  Check SNMP counters.
+>
+> And then joining a DLM lockspace hangs:
+> ```
+> Dec 21 01:49:00 localhost kernel: [ 2285.780913] INFO: task xapi-clusterd=
+:17638 blocked for more than 120 seconds.                                  =
+                                   =E2=94=82
+> Dec 21 01:49:00 localhost kernel: [ 2285.786476]       Not tainted 4.4.0+=
+10 #1                                                                      =
+                                   =E2=94=82
+> Dec 21 01:49:00 localhost kernel: [ 2285.789043] "echo 0 > /proc/sys/kern=
+el/hung_task_timeout_secs" disables this message.                          =
+                                   =E2=94=82
+> Dec 21 01:49:00 localhost kernel: [ 2285.794611] xapi-clusterd   D ffff88=
+001930bc58     0 17638      1 0x00000000                                   =
+                                   =E2=94=82
+> Dec 21 01:49:00 localhost kernel: [ 2285.794615]  ffff88001930bc58 ffff88=
+0025593800 ffff880022433800 ffff88001930c000                               =
+                                   =E2=94=82
+> Dec 21 01:49:00 localhost kernel: [ 2285.794617]  ffff88000ef4a660 ffff88=
+000ef4a658 ffff880022433800 ffff88000ef4a000                               =
+                                   =E2=94=82
+> Dec 21 01:49:00 localhost kernel: [ 2285.794619]  ffff88001930bc70 ffffff=
+ff8159f6b4 7fffffffffffffff ffff88001930bd10
+> Dec 21 01:49:00 localhost kernel: [ 2285.794644]  [<ffffffff811570fe>] ? =
+printk+0x4d/0x4f                                                           =
+                                   =E2=94=82
+> Dec 21 01:49:00 localhost kernel: [ 2285.794647]  [<ffffffff810b1741>] ? =
+__raw_callee_save___pv_queued_spin_unlock+0x11/0x20                        =
+                                   =E2=94=82
+> Dec 21 01:49:00 localhost kernel: [ 2285.794649]  [<ffffffff815a085d>] wa=
+it_for_completion+0x9d/0x110                                               =
+                                   =E2=94=82
+> Dec 21 01:49:00 localhost kernel: [ 2285.794653]  [<ffffffff810979e0>] ? =
+wake_up_q+0x80/0x80                                                        =
+                                   =E2=94=82
+> Dec 21 01:49:00 localhost kernel: [ 2285.794661]  [<ffffffffa03fa4b8>] dl=
+m_new_lockspace+0x908/0xac0 [dlm]                                          =
+                                   =E2=94=82
+> Dec 21 01:49:00 localhost kernel: [ 2285.794665]  [<ffffffff810aaa60>] ? =
+prepare_to_wait_event+0x100/0x100                                          =
+                                   =E2=94=82
+> Dec 21 01:49:00 localhost kernel: [ 2285.794670]  [<ffffffffa0402e37>] de=
+vice_write+0x497/0x6b0 [dlm]                                               =
+                                   =E2=94=82
+> Dec 21 01:49:00 localhost kernel: [ 2285.794673]  [<ffffffff811834f0>] ? =
+handle_mm_fault+0x7f0/0x13b0                                               =
+                                   =E2=94=82
+> Dec 21 01:49:00 localhost kernel: [ 2285.794677]  [<ffffffff811b4438>] __=
+vfs_write+0x28/0xd0                                                        =
+                                   =E2=94=82
+> Dec 21 01:49:00 localhost kernel: [ 2285.794679]  [<ffffffff811b4b7f>] ? =
+rw_verify_area+0x6f/0xd0                                                   =
+                                   =E2=94=A4
+> Dec 21 01:49:00 localhost kernel: [ 2285.794681]  [<ffffffff811b4dc1>] vf=
+s_write+0xb1/0x190                                                         =
+                                   =E2=94=82
+> Dec 21 01:49:00 localhost kernel: [ 2285.794686]  [<ffffffff8105ffc2>] ? =
+__do_page_fault+0x302/0x420                                                =
+                                   =E2=94=82
+> Dec 21 01:49:00 localhost kernel: [ 2285.794688]  [<ffffffff811b5986>] Sy=
+S_write+0x46/0xa0                                                          =
+                                   =E2=94=82
+> Dec 21 01:49:00 localhost kernel: [ 2285.794690]  [<ffffffff815a31ae>] en=
+try_SYSCALL_64_fastpath+0x12/0x71
+> ```
+>
+> The previous limit of 5 seems like an arbitrary number, that doesn't matc=
+h any
+> known DLM cluster size upper bound limit.
+>
+> Signed-off-by: Edwin T=C3=B6r=C3=B6k <edvin.torok@citrix.com>
+> Cc: Christine Caulfield <ccaulfie@redhat.com>
+> Cc: David Teigland <teigland@redhat.com>
+> Cc: cluster-devel@redhat.com
+> ---
+> Notes from 2023:
+>   This patch was initially developed on 21 Dec 2017, and in production us=
+e ever since.
+> I expected to drop out of our patchqueue at the next kernel upgrade, howe=
+ver it
+> hasn't, so I probably forgot to send it.
+>
+> I haven't noticed this bug again with the patch applied, and the previous=
+ value
+> of '5' seems like an arbitrary limit not matching any supported upper bou=
+nds
+> on DLM cluster sizes, so this patch has (unintentionally) had a 5 year te=
+st
+> cycle.
 
-All errors (new ones prefixed by >>):
+Correct, I guess the 128 coming from dlm_controld 128 max node
+boundary [0] and I think it's okay to change it to 128, especially if
+you start a cluster every "mostly" node wants to connect() at the same
+time and the backlog of 5 could be not enough to handle them.
+From my understanding the connect() will return -ECONNREFUSED in the
+case of backlog is full. As I see the code of kernel v4.0 dlm at this
+point will _not_ slow down a reattempt to run connect() again, see
+[1].
 
-   mips-linux-ld: arch/mips/kernel/vpe-mt.o: in function `vpe_run':
->> arch/mips/kernel/vpe-mt.c:(.text.vpe_run+0x280): undefined reference to `physical_memsize'
->> mips-linux-ld: arch/mips/kernel/vpe-mt.c:(.text.vpe_run+0x284): undefined reference to `physical_memsize'
+>
+> Although the join hanging forever like that may still be a bug, if the SY=
+N cookies
+> consistently trigger it lets try to avoid the bug by avoiding the SYN coo=
+kies.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+right, it should work even with 1 as a backlog... after digging into
+the code. My guess is that [2] ran into the MAX_CONNECT_RETRIES
+condition and we do _not_ reset con->retries to 0 if connect() [3]
+fails. If this happens we are kind of stuck and we would not try to
+connect() again. Means you run into the hung task situation, because
+e.g. ping_members() will not succeed.
+
+The current upstream code does not have any limitations of trying
+retries and will always wait some time to try a connect() again if it
+fails. It should retry to connect so long the cluster manager tells
+dlm kernel that a specific node is still part of a lockspace resource
+and there is a transmission happening to this particular node. However
+I think pumping this value to the maximum amount of possible nodes in
+a cluster is not a bad idea.
+
+There is still a question of "why seeing SYN flooding" warning, but as
+I said there are a lot of connect() happening at the beginning at
+mostly the same time starting a cluster and some of them retrying
+connect() fast.
+
+...
+
+- Alex
+
+[0] https://pagure.io/dlm/blob/c1e2ee574794e0dea68fd45783991ef7b1835901/f/d=
+lm_controld/dlm_daemon.h#_177
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
+/fs/dlm/lowcomms.c?h=3Dv4.0#n1226
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
+/fs/dlm/lowcomms.c?h=3Dv4.0#n1168
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
+/fs/dlm/lowcomms.c?h=3Dv4.0#n1220
+
