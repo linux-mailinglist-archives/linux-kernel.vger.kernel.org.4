@@ -2,129 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2B1C687F9A
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 15:11:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 948CF687F9D
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 15:12:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232148AbjBBOLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 09:11:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57170 "EHLO
+        id S231855AbjBBOMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 09:12:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231695AbjBBOLo (ORCPT
+        with ESMTP id S230230AbjBBOMh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 09:11:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F187B8FB7E
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 06:11:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7502B61B63
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 14:11:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D28FC433EF;
-        Thu,  2 Feb 2023 14:11:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675347101;
-        bh=975b4kPA+NLq0YmeXLwxMZvqYcj3aaM9QWDIE/DupWk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=SXvYC5vW2/L1O1Nmo3J3G2R2uHvLHPxvr+dq4MsIg5JINzOumTQvcanJNMoRNI6kc
-         au35FOqbILogiDGy/cksnHKxUE41nkziisq/3G3XgOEexLL9+9hsIB6/PZOf6oNyQT
-         f/ygnynDxAqGmFnATDmvaxW/V98Q7bHemdVr3LLc=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-staging@lists.linux.dev
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Sidong Yang <realwakka@gmail.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: pi433: fix memory leak with using debugfs_lookup()
-Date:   Thu,  2 Feb 2023 15:11:38 +0100
-Message-Id: <20230202141138.2291946-1-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.39.1
+        Thu, 2 Feb 2023 09:12:37 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502238F262
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 06:12:11 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id mc11so6243031ejb.10
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 06:12:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mind.be; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=36/zgaiJ3vcUE+pkQOajDZH6QDOEpwsWqGv3Wm8E224=;
+        b=EK6nadhuEaV8/bpB6M/w+DhVhgMHM/ojZE5vxrq+EfdfFUvwOgIqSH3L4tNKlC6Sd8
+         Vmsq7jITSfA0j6gy2KX4epK0gFHegv/hQEabaabFLVQINHSAh0Mbo/qdiZJPd7auchGA
+         QJ4kK2sAUqbSwz67zAtZFXDkLZS+jV/azIs7SzeGk0J4Sskz9dOKI+WHFSk19XjK0r7D
+         dVJwIXfrT16BBPbtPRwAmtM7rfHpa2g1eE7zVtkZE8S6pQpHi+1nRrax0NDLdCyr4Xy5
+         5wggYfsdFL5GwIvN+a2BsphV7pvV6OSl9F+CfTv+i3BGPdS7kL6VJTLKIK7wzCJII1+V
+         Inaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=36/zgaiJ3vcUE+pkQOajDZH6QDOEpwsWqGv3Wm8E224=;
+        b=ElrFOiJwDAhzefmKNFqGzXisCkTnKDkRwF8Z8y+ZBZBnUf1Iom5lsi8+hHXBIUBkfQ
+         PKeAK2HfxEQxsXW/4V9QqROUzqARxD5fVfdflCdv8Bmd4gQpKhvZnQ19nN7v98ojhBdk
+         L/jKgkFU1GXQqJED1XdZCxtnJxu6NukZq487cMWZOir17nFQ74MkxOVcBV+CeJSHpJnv
+         JiqS/kkhWosH9fqd8oi8y3itIrtDD/Pn8ieTbTGxxOh/t2IdJxl+6kPoKjLOwIFZnMZV
+         bU42DcgopMtIYe8OKvds3tUKEF2UXzwMMg2OTWQn/AX7u2U0uW4KkljX5v0FyctQ+rbo
+         XeJw==
+X-Gm-Message-State: AO0yUKWJu0D+s9Cr/8zp6PgtOT23n8+H7hxzvwebSNDiSuSDi2fCODk9
+        sLMIOdBErlbd+ZD1TQfCjXeEOg==
+X-Google-Smtp-Source: AK7set/C2r51EVGqTuEG/Rb/gzpA5AZ8AYxxnc51SdCQFpqUHRd98fzR5Gq/YRCQIrSCTYVSFIjIZQ==
+X-Received: by 2002:a17:906:5e17:b0:882:1b70:8967 with SMTP id n23-20020a1709065e1700b008821b708967mr6633491eju.35.1675347129645;
+        Thu, 02 Feb 2023 06:12:09 -0800 (PST)
+Received: from [192.168.2.9] (78-22-137-109.access.telenet.be. [78.22.137.109])
+        by smtp.gmail.com with ESMTPSA id w20-20020a170906d21400b008897858bb06sm5903041ejz.119.2023.02.02.06.12.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Feb 2023 06:12:08 -0800 (PST)
+Message-ID: <fa47912f-ec10-f22b-0447-0b7c998711b3@mind.be>
+Date:   Thu, 2 Feb 2023 15:12:07 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2772; i=gregkh@linuxfoundation.org; h=from:subject; bh=975b4kPA+NLq0YmeXLwxMZvqYcj3aaM9QWDIE/DupWk=; b=owGbwMvMwCRo6H6F97bub03G02pJDMm3j8zytqh9Wbmqb4ewgPrVYxwNlXwHpz9ft/HQw8lLV/aL L1X42BHLwiDIxCArpsjyZRvP0f0VhxS9DG1Pw8xhZQIZwsDFKQATMQ9gWHBL+vyp15oGrUJyT9rm5l 1gfMhg/Jphnl3WP23VaZxSEhErxFp5J53ucV9xHwA=
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v4 1/2] dt-bindings: leds-lp55xx: add ti,charge-pump-mode
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>
+Cc:     linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230202101032.26737-1-maarten.zanders@mind.be>
+ <20230202101032.26737-2-maarten.zanders@mind.be>
+ <20eb5589-8287-90bd-3703-2818b61c6ba3@linaro.org>
+ <b9c6c74b-65d2-46bf-bd7c-e031d420f31c@mind.be>
+ <5fbb6d80-7280-604a-3e1e-4bd98e9776cd@linaro.org>
+From:   Maarten Zanders <maarten.zanders@mind.be>
+In-Reply-To: <5fbb6d80-7280-604a-3e1e-4bd98e9776cd@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When calling debugfs_lookup() the result must have dput() called on it,
-otherwise the memory will leak over time.  To make things simpler, just
-call debugfs_lookup_and_remove() instead which handles all of the logic
-at once.  This requires saving off the root directory dentry to make
-creation of individual device subdirectories easier.
 
-Cc: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
-Cc: Dan Carpenter <error27@gmail.com>
-Cc: Sidong Yang <realwakka@gmail.com>
-Cc: Liu Shixin <liushixin2@huawei.com>
-Cc: "Uwe Kleine-König" <u.kleine-koenig@pengutronix.de>
-Cc: linux-staging@lists.linux.dev
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/staging/pi433/pi433_if.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+On 2/2/23 14:43, Krzysztof Kozlowski wrote:
+>
+> Strings in DTS are usually easier to for humans to read, but it's not a
+> requirement to use them. The problem of storing register values is that
+> binding is tied/coupled with hardware programming model, so you cannot
+> add a new device if the register value is a bit different (e.g.
+> LP55XX_CP_OFF is 0x1). You need entire new binding for such case. With
+> string - no need.
+I understand and this is why I started with the string in the first 
+place (as suggested by yourself in V1).
+> With binding constants (IDs) also no need, so was this
+> the intention? Just to be clear - it is then ID or binding constant, not
+> a value for hardware register.
+>
+For simplicity sake, yes, now the setting is propagating directly into 
+the register as a bit value. But this is how the current implementation 
+of the drivers work. If we add a device in the future which indeed has 
+different bit mappings, that driver will have to do a mapping of the DT 
+binding to its own bit field definitions. I consider this DT binding as 
+the "master", which is now conveniently chosen to match the register values.
 
-diff --git a/drivers/staging/pi433/pi433_if.c b/drivers/staging/pi433/pi433_if.c
-index d4e06a3929f3..b59f6a4cb611 100644
---- a/drivers/staging/pi433/pi433_if.c
-+++ b/drivers/staging/pi433/pi433_if.c
-@@ -55,6 +55,7 @@
- static dev_t pi433_dev;
- static DEFINE_IDR(pi433_idr);
- static DEFINE_MUTEX(minor_lock); /* Protect idr accesses */
-+static struct dentry *root_dir;	/* debugfs root directory for the driver */
- 
- static struct class *pi433_class; /* mainly for udev to create /dev/pi433 */
- 
-@@ -1306,8 +1307,7 @@ static int pi433_probe(struct spi_device *spi)
- 	/* spi setup */
- 	spi_set_drvdata(spi, device);
- 
--	entry = debugfs_create_dir(dev_name(device->dev),
--				   debugfs_lookup(KBUILD_MODNAME, NULL));
-+	entry = debugfs_create_dir(dev_name(device->dev), root_dir);
- 	debugfs_create_file("regs", 0400, entry, device, &pi433_debugfs_regs_fops);
- 
- 	return 0;
-@@ -1333,9 +1333,8 @@ static int pi433_probe(struct spi_device *spi)
- static void pi433_remove(struct spi_device *spi)
- {
- 	struct pi433_device	*device = spi_get_drvdata(spi);
--	struct dentry *mod_entry = debugfs_lookup(KBUILD_MODNAME, NULL);
- 
--	debugfs_remove(debugfs_lookup(dev_name(device->dev), mod_entry));
-+	debugfs_lookup_and_remove(dev_name(device->dev), root_dir);
- 
- 	/* free GPIOs */
- 	free_gpio(device);
-@@ -1408,7 +1407,7 @@ static int __init pi433_init(void)
- 		return PTR_ERR(pi433_class);
- 	}
- 
--	debugfs_create_dir(KBUILD_MODNAME, NULL);
-+	root_dir = debugfs_create_dir(KBUILD_MODNAME, NULL);
- 
- 	status = spi_register_driver(&pi433_spi_driver);
- 	if (status < 0) {
-@@ -1427,7 +1426,7 @@ static void __exit pi433_exit(void)
- 	spi_unregister_driver(&pi433_spi_driver);
- 	class_destroy(pi433_class);
- 	unregister_chrdev(MAJOR(pi433_dev), pi433_spi_driver.driver.name);
--	debugfs_remove_recursive(debugfs_lookup(KBUILD_MODNAME, NULL));
-+	debugfs_remove(root_dir);
- }
- module_exit(pi433_exit);
- 
--- 
-2.39.1
+Cheers,
 
+Maarten
