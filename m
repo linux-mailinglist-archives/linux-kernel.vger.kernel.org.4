@@ -2,91 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA7B168858C
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 18:36:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30040688590
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 18:37:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232053AbjBBRgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 12:36:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56984 "EHLO
+        id S231764AbjBBRhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 12:37:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231722AbjBBRge (ORCPT
+        with ESMTP id S231835AbjBBRhE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 12:36:34 -0500
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A887074C1E;
-        Thu,  2 Feb 2023 09:36:33 -0800 (PST)
-Received: from g550jk.localnet (unknown [62.108.10.64])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id F3703CD52C;
-        Thu,  2 Feb 2023 17:36:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1675359392; bh=OTyDkxpr2/8OyEpapjyVq0VRTuVQfP0EbcF0UYFilLg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=wg5K3m1vDyspNHizdP4SIt0k/XvIy7pXWILoGm8Jz+O1VjnNrH9ULfie6E0NPLuVW
-         YDJ5FbAy0gQ38HRUBxf1JnbpXse3YjQss6sUckP5iU1WGIN2DpgrYE/gh3XXoxecw3
-         AyJJuym6d4vJYvDcpgw3vgsm7BPi1eH/h+qT7R38=
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Vinod Koul <vkoul@kernel.org>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        Iskren Chernev <me@iskren.info>, linux-arm-msm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v2 09/10] arm64: dts: qcom: msm8953: correct TLMM gpio-ranges
-Date:   Thu, 02 Feb 2023 18:36:31 +0100
-Message-ID: <6520866.4vTCxPXJkl@z3ntu.xyz>
-In-Reply-To: <20230202104452.299048-10-krzysztof.kozlowski@linaro.org>
-References: <20230202104452.299048-1-krzysztof.kozlowski@linaro.org>
- <20230202104452.299048-10-krzysztof.kozlowski@linaro.org>
+        Thu, 2 Feb 2023 12:37:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23A1076414
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 09:36:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A794861C2E
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 17:36:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0ADCC433EF;
+        Thu,  2 Feb 2023 17:36:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675359411;
+        bh=KP9QG+sF1vvAP8/fJTd2GxrPLXDXXes9zY/KqqcMzXQ=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=qJgdXMIOKV+BIEjYZHCjYi0ndbfkZikCDfUjoKCzrcUQtarRubsV6+lKykcbbnMze
+         VxEy0cBTDBiab9BBFXFMmmCQt3uwkdTEisKHs9+dyB19LF36i8XYUFj2hzji8lTpyj
+         oqs3djFZfAM5aWSzGjHVYrH57LOMbwojMGRaMiLdv2qxuusATlJQoeem1+51QBMfhM
+         GOjDGECr3IxaAoCyLItm9LK2egmjAGk1Fxus2MMqPDvaTWxE+8g8zuLZmhx+GZnzPK
+         oJSSCA9/6HghTfGM29l62ITB32XMot5iUdf0+/AuGVKrO22mLbGnOlwxFSuky36Vn0
+         OtzAo2eQePIag==
+From:   Mark Brown <broonie@kernel.org>
+To:     alsa-devel@alsa-project.org,
+        V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>
+Cc:     Vijendar.Mukunda@amd.com, Basavaraj.Hiregoudar@amd.com,
+        Sunil-kumar.Dommati@amd.com, venkataprasad.potturu@amd.com,
+        ssabakar@amd.com,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Ajye Huang <ajye_huang@compal.corp-partner.google.com>,
+        "moderated list:SOUND - SOUND OPEN FIRMWARE (SOF) DRIVERS" 
+        <sound-open-firmware@alsa-project.org>,
+        open list <linux-kernel@vger.kernel.org>
+In-Reply-To: <20230203123254.1898794-1-Vsujithkumar.Reddy@amd.com>
+References: <20230203123254.1898794-1-Vsujithkumar.Reddy@amd.com>
+Subject: Re: [PATCH] ASoC: SOF: amd: Fix for handling spurious interrupts
+ from DSP
+Message-Id: <167535940664.1002862.2489220522555148757.b4-ty@kernel.org>
+Date:   Thu, 02 Feb 2023 17:36:46 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.0
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Donnerstag, 2. Februar 2023 11:44:51 CET Krzysztof Kozlowski wrote:
-> Correct the number of GPIOs in TLMM pin controller.
+On Fri, 03 Feb 2023 18:02:52 +0530, V sujith kumar Reddy wrote:
+> As interrupts are Level-triggered,unless and until we deassert the register
+> the interrupts are generated which causes spurious interrupts unhandled.
 > 
-> Fixes: 9fb08c801923 ("arm64: dts: qcom: Add MSM8953 device tree")
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Given msm8953 has gpio0 - gpio141, 142 looks correct.
-
-Reviewed-by: Luca Weiss <luca@z3ntu.xyz>
-
-> ---
->  arch/arm64/boot/dts/qcom/msm8953.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Now we deasserted the interrupt at top half which solved the below
+> "nobody cared" warning.
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/msm8953.dtsi
-> b/arch/arm64/boot/dts/qcom/msm8953.dtsi index 4e17bc9f8167..610f3e3fc0c2
-> 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8953.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/msm8953.dtsi
-> @@ -399,7 +399,7 @@ tlmm: pinctrl@1000000 {
->  			reg = <0x1000000 0x300000>;
->  			interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
->  			gpio-controller;
-> -			gpio-ranges = <&tlmm 0 0 155>;
-> +			gpio-ranges = <&tlmm 0 0 142>;
->  			#gpio-cells = <2>;
->  			interrupt-controller;
->  			#interrupt-cells = <2>;
+> warning reported in dmesg:
+> 	irq 80: nobody cared (try booting with the "irqpoll" option)
+> 	CPU: 5 PID: 2735 Comm: irq/80-AudioDSP
+> 		Not tainted 5.15.86-15817-g4c19f3e06d49 #1 1bd3fd932cf58caacc95b0504d6ea1e3eab22289
+> 	Hardware name: Google Skyrim/Skyrim, BIOS Google_Skyrim.15303.0.0 01/03/2023
+> 	Call Trace:
+> 	<IRQ>
+> 	dump_stack_lvl+0x69/0x97
+> 	 __report_bad_irq+0x3a/0xae
+> 	note_interrupt+0x1a9/0x1e3
+> 	handle_irq_event_percpu+0x4b/0x6e
+> 	handle_irq_event+0x36/0x5b
+> 	handle_fasteoi_irq+0xae/0x171
+> 	 __common_interrupt+0x48/0xc4
+> 	</IRQ>
+> 
+> [...]
 
+Applied to
 
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
+Thanks!
+
+[1/1] ASoC: SOF: amd: Fix for handling spurious interrupts from DSP
+      commit: 2e7c6652f9b86c01cbd4e988057a746a3a461969
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
