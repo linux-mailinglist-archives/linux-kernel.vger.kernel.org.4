@@ -2,119 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91E2D6884E3
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 17:56:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66C586884E5
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 17:57:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232002AbjBBQ4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 11:56:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32924 "EHLO
+        id S232206AbjBBQ46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 11:56:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbjBBQ4S (ORCPT
+        with ESMTP id S229608AbjBBQ44 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 11:56:18 -0500
-X-Greylist: delayed 167 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 02 Feb 2023 08:56:18 PST
-Received: from mail-40135.protonmail.ch (mail-40135.protonmail.ch [185.70.40.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A0765EF4;
-        Thu,  2 Feb 2023 08:56:17 -0800 (PST)
-Date:   Thu, 02 Feb 2023 16:56:06 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1675356976; x=1675616176;
-        bh=KTKd/DfSeMG+RDS1R75oSk6PP95+qG0nM4YE2HKPVxM=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=cSJDT6tIdL0uOFani6e+Y5UaS75/DT9DjS5Qxpzt1oOWn+RnPqfyqNRvYMfbxzsmR
-         QhPdSHLEBV0RC9njwj5YdOqGtzCewSwsq6IljOJk5q+cFVBbar8CQFeQkL73BshS69
-         z8rb+KSYLXFfOFru/VAsspkTFJ0Q1PDoKBPvfYdNKCYM01zAds/vkUbDiKvxe9CRmi
-         XzzqYH9uDSRvdQKQ1G7VgGEmwGrXRxAty0wHpeubRZfznHOthG8YKxiRHRRoLkB4vr
-         ApDtclTGD2NukUrT+JS3r6li1sgeNWMxfxR2ewxRaL698qouKRsfxZNRSHbZ1rlM7y
-         gUdHMyNzcWqLQ==
-To:     Boqun Feng <boqun.feng@gmail.com>
-From:   =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
-Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
-Subject: Re: [RFC 5/5] sample: rust: print: Add sampe code for Arc printing
-Message-ID: <GpS33r41srXb-5jSGsywYv1yCxEU8iHy3BmNkMTn0J2ahxiQoDVIzPiOTfzHqX7Qm0lRlqavDbsrmLKIMwl_7cMtCvF6IJ8kELjFPcKNifE=@protonmail.com>
-In-Reply-To: <20230201232244.212908-6-boqun.feng@gmail.com>
-References: <20230201232244.212908-1-boqun.feng@gmail.com> <20230201232244.212908-6-boqun.feng@gmail.com>
-Feedback-ID: 27884398:user:proton
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 2 Feb 2023 11:56:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD7065EF4
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 08:56:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 87A78B8274E
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 16:56:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A8C5C433EF;
+        Thu,  2 Feb 2023 16:56:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675357013;
+        bh=HYXDxSkz4syAEX51RYyCe4qxwfwbOeU+++1WVQI/ZZY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=U+wYKAEEN3ytaCAhCX+CNbEKVDk9LwoSsyt6WkldXG3H6pnKAXKfAzySvGUqfCGyj
+         xKY+KmnFJJbwRIKEheZzSTm6ha3iKODutzm8of7fBfpZfm0fC4lqMKCpavdvHjgsbb
+         711hsPIskrFYUeo9WXwLnxD6gzAnQQU1BceWLtwRc3IneWXGpNJiP99tO8evxR0EKF
+         UWXdY51O/EptYp7Rzr0jhij4L1bmqhAoxyeMQzlvx60xjGgnoHGYGVe45O4UYVdNdK
+         9YkgB1ayzt56ohcPPlx+2kytbMNHTca2ItKsxH4UyWYLJRFLRTG5VBjKIGP02fu+9S
+         A+ZuWSj4/FyuA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pNctG-006sNZ-WD;
+        Thu, 02 Feb 2023 16:56:51 +0000
+Date:   Thu, 02 Feb 2023 16:56:50 +0000
+Message-ID: <867cx00zvx.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH] kernel/irq/irqdomain.c: fix memory leak with using debugfs_lookup()
+In-Reply-To: <Y9vqJhCj5w/+b6SV@kroah.com>
+References: <20230202151554.2310273-1-gregkh@linuxfoundation.org>
+        <868rhg109t.wl-maz@kernel.org>
+        <Y9vqJhCj5w/+b6SV@kroah.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, tglx@linutronix.de
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thursday, February 2nd, 2023 at 00:22, Boqun Feng <boqun.feng@gmail.com>=
- wrote:
+On Thu, 02 Feb 2023 16:51:50 +0000,
+Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> 
+> On Thu, Feb 02, 2023 at 04:48:30PM +0000, Marc Zyngier wrote:
+> > On Thu, 02 Feb 2023 15:15:54 +0000,
+> > Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> > > 
+> > > When calling debugfs_lookup() the result must have dput() called on it,
+> > > otherwise the memory will leak over time.  To make things simpler, just
+> > > call debugfs_lookup_and_remove() instead which handles all of the logic
+> > > at once.
+> > > 
+> > > Cc: Marc Zyngier <maz@kernel.org>
+> > > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > > Cc: linux-kernel@vger.kernel.org
+> > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > ---
+> > >  kernel/irq/irqdomain.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > 
+> > > diff --git a/kernel/irq/irqdomain.c b/kernel/irq/irqdomain.c
+> > > index 8fe1da9614ee..e2096b51c004 100644
+> > > --- a/kernel/irq/irqdomain.c
+> > > +++ b/kernel/irq/irqdomain.c
+> > > @@ -1915,7 +1915,7 @@ static void debugfs_add_domain_dir(struct irq_domain *d)
+> > >  
+> > >  static void debugfs_remove_domain_dir(struct irq_domain *d)
+> > >  {
+> > > -	debugfs_remove(debugfs_lookup(d->name, domain_dir));
+> > > +	debugfs_lookup_and_remove(d->name, domain_dir);
+> > >  }
+> > >  
+> > >  void __init irq_domain_debugfs_init(struct dentry *root)
+> > 
+> > Reviewed-by: Marc Zyngier <maz@kernel.org>
+> > 
+> > Maybe add a Cc stable to get this in 6.1?
+> 
+> Sure, I can, but how often are irq domains removed from the system under
+> a normal operation?
 
-> This both demonstrates the usage of different print format in Rust and
-> serves as a selftest for the `Display` and `Debug` implementation of
-> `Arc` and its friends.
->=20
-> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+As many time as you want if you're doing virtualisation and have the
+right sort of HW (anything GICv4.x, for example, which will create
+per-VM irqdomains).
 
-Reviewed-by: Bj=C3=B6rn Roy Baron <bjorn3_gh@protonmail.com>
+> Or you can take it through your tree and add that?  I too can take
+> it through mine, which ever is easier for you.
 
-> ---
->  samples/rust/rust_print.rs | 26 ++++++++++++++++++++++++++
->  1 file changed, 26 insertions(+)
->=20
-> diff --git a/samples/rust/rust_print.rs b/samples/rust/rust_print.rs
-> index 8b39d9cef6d1..165a8d7b1c07 100644
-> --- a/samples/rust/rust_print.rs
-> +++ b/samples/rust/rust_print.rs
-> @@ -15,6 +15,30 @@ module! {
->=20
->  struct RustPrint;
->=20
-> +fn arc_print() -> Result {
-> +    use kernel::sync::*;
-> +
-> +    let a =3D Arc::try_new(1)?;
-> +    let b =3D UniqueArc::try_new("hello, world")?;
-> +
-> +    // Prints the value of data in `a`.
-> +    pr_info!("{}", a);
-> +
-> +    // Uses ":?" to print debug fmt of `b`.
-> +    pr_info!("{:?}", b);
-> +
-> +    let a: Arc<&str> =3D b.into();
-> +    let c =3D a.clone();
-> +
-> +    // Uses `dbg` to print, will move `c`.
-> +    dbg!(c);
-> +
-> +    // Prints debug fmt with pretty-print "#" and number-in-hex "x".
-> +    pr_info!("{:#x?}", a);
-> +
-> +    Ok(())
-> +}
-> +
->  impl kernel::Module for RustPrint {
->      fn init(_module: &'static ThisModule) -> Result<Self> {
->          pr_info!("Rust printing macros sample (init)\n");
-> @@ -43,6 +67,8 @@ impl kernel::Module for RustPrint {
->          pr_cont!(" is {}", "continued");
->          pr_cont!(" with {}\n", "args");
->=20
-> +        arc_print()?;
-> +
->          Ok(RustPrint)
->      }
->  }
-> --
-> 2.39.1
+Sure, I can queue that, although that will probably be next week.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
