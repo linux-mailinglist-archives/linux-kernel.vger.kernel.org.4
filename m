@@ -2,90 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B3C668804F
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 15:44:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 141AB688050
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 15:45:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232450AbjBBOn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 09:43:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52040 "EHLO
+        id S232296AbjBBOpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 09:45:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbjBBOn4 (ORCPT
+        with ESMTP id S229662AbjBBOpb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 09:43:56 -0500
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1728626E;
-        Thu,  2 Feb 2023 06:43:55 -0800 (PST)
-Received: by mail-ed1-f53.google.com with SMTP id be12so2229563edb.4;
-        Thu, 02 Feb 2023 06:43:55 -0800 (PST)
+        Thu, 2 Feb 2023 09:45:31 -0500
+Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F9E8626E
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 06:45:30 -0800 (PST)
+Received: by mail-oo1-xc2d.google.com with SMTP id t24-20020a4a8258000000b005170b789faaso195240oog.5
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 06:45:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=CGufOIJ0TiCnGVFcLZ+Cxm7XNsb1pLcp45dbpeI8y5g=;
+        b=W6HeCVMQ6ftSO2rX+RY8QMgrI6vlKcGmEi6BNxrIBs0WgKeUq9OcVTp1etZJkuk7n3
+         eT7/kSP0eQ81JETUpJRl5p1cXrFEmnSQCwfBzTn2arkrAsssNSQyJdRVR3IgRZowx2Gu
+         Sm0cStZLDRFZbCDEcGs1bC6jE49rR0lvBrSTHHK/I9nGUK12BqLZkn1+SFkzBQu6ri2E
+         b91E3sF1a9aJpGPLuAvXHMAbjNPw+YFI3Da6ULlG+/0kyJeTvHTlSId9blb8LtyL0D0D
+         acUbJ2Py2o5raDWCif9amuCJnN3l7ysVLscV3U/TPlZvvkkAwTsIZcTlglPH0T54+i5d
+         ljPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=h0Uvs+EgprBTmQ0jVYkQK7pz/LZJDEiugwmDCmQcPKg=;
-        b=d3+SjSDk5udxvdirVlfJh4PTiNubbg90sXvQFTo5R6QaBzmaH00x49aVzqjSwuKSuU
-         4V6+5Ync+362RmNXCQ6TXPuE0nL5FTUybjFnSzWjXSc9nCJXboM1Vc1ZmOog6/VhWjvD
-         nfs7nJ5muSlPPq2wk/GgHz2IMR7zopBgacV8eBwk4FAwRBvcnKTv9L2N7pWqLGZr3uzv
-         4To70VgaHkLJyZ7Zh4YXreDF54hyR7FZZFYBhgO5LkqvguAmZUdJ9ff+mXbrC9ZgYVMh
-         CzWhCdiFyGsLb1L1hwvqyCcEk3nMeXGLqGhh6tuM7LBDTL4mGQLU88xtg/retk+34896
-         NKEA==
-X-Gm-Message-State: AO0yUKUc8LXWn/pMkCKp/6yxwtJi4hoxzVLttkkIF4yIr/CRVW4MEd1M
-        SeiBupKtCaafyi6m097mvWn5hFC5HAii5XpeH5dUFYgG
-X-Google-Smtp-Source: AK7set8zXcku0FdlawfFg+hMPW0Pgx+DcdQPYQmJrlkn5C8kI3sGrRL/zulzapQslpt2wsc31bgjDky7O3Pe43xtOrs=
-X-Received: by 2002:a05:6402:40ce:b0:490:47c3:3d71 with SMTP id
- z14-20020a05640240ce00b0049047c33d71mr2046481edb.31.1675349034088; Thu, 02
- Feb 2023 06:43:54 -0800 (PST)
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CGufOIJ0TiCnGVFcLZ+Cxm7XNsb1pLcp45dbpeI8y5g=;
+        b=lm17vi8bGkYJPaO7ZkirEyWOcBGggCUJn7RKBciIEdga6cP4/qUyJIizAbryAdukbw
+         Nis8y0Q/MmNW0fJ/BBippiNq4wyFW8N6+HVxMulbpjAKXc+/Q9tylBVpqYVZpPOxjOOE
+         y7/eMArEPbG368R1Fz3CFcpdtTcuDC+U5/20xuNHphKW/j+6IFs3KfONQnN6mbXNhDwN
+         io3hXntKOMdWzbEHwV2osm1QE15KrcPvvaq+6SvqVbQaFpU9yR2VfO10hQcPG/5ZtHiS
+         znqETA+Sza/TThV/p9m6FHwTpwp2Qn5kp1GwdnD7iPxAILd5+hh4NSapz+W1OgoU17yq
+         RDqQ==
+X-Gm-Message-State: AO0yUKV1BrANVTqKryzNvkZ6TRhNkAyOYHYqNYm9gBoqV8+irvU2+XyR
+        61ceDL5eeRv47cqSTLf7Af0=
+X-Google-Smtp-Source: AK7set8xdRBKC/rgen1Gt+ngaNQ2mxHcQ6U/gzQqpMUyq+2HoA8P01vlGp51GATHsO0GeCcsH+6iyA==
+X-Received: by 2002:a4a:1744:0:b0:51a:cab:cbef with SMTP id 65-20020a4a1744000000b0051a0cabcbefmr2657590ooe.4.1675349129733;
+        Thu, 02 Feb 2023 06:45:29 -0800 (PST)
+Received: from ?IPv6:::1? ([2804:14d:128a:85a9:38a9:1bdb:a338:39fa])
+        by smtp.gmail.com with ESMTPSA id z7-20020a4ab607000000b004a8eb1d8f1bsm8497497oon.39.2023.02.02.06.45.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Feb 2023 06:45:29 -0800 (PST)
+Date:   Thu, 02 Feb 2023 11:45:24 -0300
+From:   Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+To:     "Liang, Kan" <kan.liang@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+CC:     peterz@infradead.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org, ak@linux.intel.com,
+        eranian@google.com, irogers@google.com
+Subject: Re: [PATCH V2 7/9] perf/x86/msr: Add Meteor Lake support
+User-Agent: K-9 Mail for Android
+In-Reply-To: <79807730-73ac-c8c2-fc9d-b7cd00f9336e@linux.intel.com>
+References: <20230104201349.1451191-1-kan.liang@linux.intel.com> <20230104201349.1451191-7-kan.liang@linux.intel.com> <Y9sWImm4v5I/MZId@kernel.org> <79807730-73ac-c8c2-fc9d-b7cd00f9336e@linux.intel.com>
+Message-ID: <1828CB97-35C8-4420-92F2-4795A89FA793@gmail.com>
 MIME-Version: 1.0
-References: <20230118181622.33335-1-daniel.lezcano@linaro.org>
- <20230118181622.33335-3-daniel.lezcano@linaro.org> <CAJZ5v0jbHR03UyJBMmBBYnSsZmGG0OXqLJvMfXxXKVn4Np4Egw@mail.gmail.com>
- <beb367d8-dad7-87d9-7872-b81a4d3492ae@linaro.org> <CAJZ5v0hFG1VjzKubWkLYPXeGHN9sMt4SDdC_f-dLseaXpsAOKg@mail.gmail.com>
- <c7c7d71d-28e1-310e-2c8f-e5ae53a09f78@linaro.org>
-In-Reply-To: <c7c7d71d-28e1-310e-2c8f-e5ae53a09f78@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 2 Feb 2023 15:43:42 +0100
-Message-ID: <CAJZ5v0hP_5kOG7kE13fTLRgdiQrz7fskeAWBNW48MSD5t7FnvA@mail.gmail.com>
-Subject: Re: [PATCH 3/3] thermal/drivers/intel: Use generic trip points for intel_soc_dts_iosf
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        srinivas.pandruvada@linux.intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rui.zhang@intel.com,
-        Daniel Lezcano <daniel.lezcano@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 2, 2023 at 3:36 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->
->
-> Hi Rafael,
->
-> On 31/01/2023 20:17, Rafael J. Wysocki wrote:
->
-> [ ... ]
->
-> >>> Why should temp be overwritten here?
-> >>
-> >> You are correct. This is wrong.
-> >>
-> >> I think we should call get_trip_temp() before calling update_trip_temp()
-> >> instead of passing a zero temperature parameter
-> >
-> > update_trip_temp() is sort of a misnomer, because it is used for
-> > initializing a trip point for example in
-> > intel_soc_dts_iosf_add_read_only_critical_trip() and in this
-> > particular case get_trip_temp() need not be called before it.
-> >
-> > This driver seems to be in need of a cleanup.
->
-> Will you take care of this cleanup ?
 
-I think I can do that, but I'm not sure how much time I will be able
-to allocate for that.  Let me try though.
+
+On February 2, 2023 11:34:02 AM GMT-03:00, "Liang, Kan" <kan=2Eliang@linux=
+=2Eintel=2Ecom> wrote:
+>Hi Arnaldo,
+>
+>On 2023-02-01 8:47 p=2Em=2E, Arnaldo Carvalho de Melo wrote:
+>> Em Wed, Jan 04, 2023 at 12:13:47PM -0800, kan=2Eliang@linux=2Eintel=2Ec=
+om escreveu:
+>>> From: Kan Liang <kan=2Eliang@linux=2Eintel=2Ecom>
+>>>
+>>> Meteor Lake is Intel's successor to Raptor lake=2E PPERF and SMI_COUNT=
+ MSRs
+>>> are also supported=2E
+>>>
+>>> Reviewed-by: Andi Kleen <ak@linux=2Eintel=2Ecom>
+>>> Signed-off-by: Kan Liang <kan=2Eliang@linux=2Eintel=2Ecom>
+>>> ---
+>>=20
+>> Did the kernel bits land upstream?
+>Yes, the kernel part has been merged into the tip=2Egit perf/core branch=
+=2E
+>
+>Thanks for checking the status=2E There are two perf tool patches in this
+>series, which hasn't been merged=2E Should I resend them?
+
+Please, try rebasing it on the tmp=2Eperf/core in my tree=2E
+
+- Arnaldo
+
+>
+>
+>> =20
+>>> No change since V1
+>>>
+>>>  arch/x86/events/msr=2Ec | 2 ++
+>>>  1 file changed, 2 insertions(+)
+>>>
+>>> diff --git a/arch/x86/events/msr=2Ec b/arch/x86/events/msr=2Ec
+>>> index ecced3a52668=2E=2E074150d28fa8 100644
+>>> --- a/arch/x86/events/msr=2Ec
+>>> +++ b/arch/x86/events/msr=2Ec
+>>> @@ -107,6 +107,8 @@ static bool test_intel(int idx, void *data)
+>>>  	case INTEL_FAM6_RAPTORLAKE:
+>>>  	case INTEL_FAM6_RAPTORLAKE_P:
+>>>  	case INTEL_FAM6_RAPTORLAKE_S:
+>>> +	case INTEL_FAM6_METEORLAKE:
+>>> +	case INTEL_FAM6_METEORLAKE_L:
+>>>  		if (idx =3D=3D PERF_MSR_SMI || idx =3D=3D PERF_MSR_PPERF)
+>>>  			return true;
+>>>  		break;
+>>> --=20
+>>> 2=2E35=2E1
+>>=20
