@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A523688687
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 19:30:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4686D688688
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 19:30:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232956AbjBBSao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 13:30:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33430 "EHLO
+        id S232963AbjBBSar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 13:30:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232861AbjBBS3z (ORCPT
+        with ESMTP id S232869AbjBBS34 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 13:29:55 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42BC87BE42
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 10:28:58 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-524c76beb5eso1759077b3.21
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 10:28:58 -0800 (PST)
+        Thu, 2 Feb 2023 13:29:56 -0500
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2111054542
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 10:29:00 -0800 (PST)
+Received: by mail-pf1-x44a.google.com with SMTP id x9-20020aa79409000000b00593a1f7c3d8so1367486pfo.14
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 10:29:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+tw1hsgT63166ej2zhrQQOmMvKwFEkphuz02olq7+08=;
-        b=XUzVSAJxWqPbzwVpr2pag5CYXwETYKK0ALTrMWIMIaMu9FjXqHaBxWsq6xe7VlIz30
-         yFIDNAFg1bM/ofmE4lU/7FZABxu12+JMdYE3NzAf09Ckl4wguykHS6VSPMPFZr1saL69
-         Sl4KrpQGIX4AM9TkxrEbGqTvxEfsnRe0OD4hqMCA/jj8jRZM8ldKBHJvudyJzDH1R/7u
-         h+8PFXEa/1NMjUUolvl18NX70IoW2UA1H3yQ0qPMFf+AWxvhU6+ruNAxOey9YOhoWE89
-         QoaDG2ZOqizZI1ALnaHRHMb7Fop0Lph4P72Lzd/W6jJ2B+6vqIBmoOWjaoEblZ0BpWuh
-         2Xfw==
+        bh=j1L53IKzbh0q2dj44QZHCfw/umfVO+10rbiNwcUgEhA=;
+        b=W1S45eT23c0+qcokTUS8aeHe9NQ0UJlsA8P8amVpYEG5na6e9bWDZkdSemeWjy5s4c
+         Q3x5YQdMqMG9sOw+jpBa0BuqS4vl1h5JFeEVTcscL7zQrdvi83yZU0mdweM3jK3Sybnc
+         7bn1PGgFgtR7pQQ5yibMzVq38fz84GEMPIbRGY42hhwRwHkWdDXvI0LsCl1A+21U3dmT
+         WbDhSnwzRmI8cVTzq19EpBrUIsXhdGHet3yG0DbiFyYYBZBQ9da39DANL1F2QxLZPpSf
+         ifC9/mJFXwbWze15ZHLVPt1tb78Ksk9gqibxUCSuCLGD6JNE63FFu/w3e6I50lLnfMMG
+         XbQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+tw1hsgT63166ej2zhrQQOmMvKwFEkphuz02olq7+08=;
-        b=xIkhCf2h0WvNH1ArWZZACFNYGoaMFKLpd9QjH+vnos541Nn3IWqTt8ubbJeWRQVPUx
-         RPEYu9ucUBs0kBphSOMcROgd/XMSZTyAM77VR9MVySgsOsf5TfkoGGZipHKBVThX/OIK
-         wHShUV/gHq7NJHu9aFd6XoQVjJfzy0JD/Igf0gQfGI6yhyD98mYyQc+tAWagFps/1A6G
-         nISKxkR3qrw/HKKcnvht4FJl4sb+iIh++Ld5mPK6FoF0JECU+JWuaxk6CGCMBd63u+pk
-         nPuAx11szHDRGu5d1BQApSEiJCmj3s3H61RS7z0LVp/iW9etsQuJ1Nj7dleewmz/YKW/
-         iLqQ==
-X-Gm-Message-State: AO0yUKVyA1c+3NMWhGQbzwVXyFFa98/4REXyEQQYHjPD1NLjMqgyeGGt
-        xIRJVQOHWGykiSUfeGCFwxVr1Bn1097whpMfPopAGd2BUEkBqYFF/fbC9WhgcVBGqY1ZbXt2/Xi
-        ubB7Rxmau2/lTJ9LYf3BmpdAqRhBvQm8EOLo3HG7Xc2BLFlx4H0w1BiZimnIgT+Hnl09BcN/j
-X-Google-Smtp-Source: AK7set+Xz2fBka2jkFS8iVqlOh3mOAFdfXz82uXAipo6phMpUvQSqDYd6OcurBL4o2H0p5DF3P6XI7G5uw0I
+        bh=j1L53IKzbh0q2dj44QZHCfw/umfVO+10rbiNwcUgEhA=;
+        b=Ztr/pWU97xUxBqlnI+awqDefRfeepK84LNIMZ27b81hRqxnborw5O/U2BsITpL7kSf
+         fZGYJrtkUQxtap88ReD1hrZEs0RJTjsvmEjvsvBeRWsr7mCslgzqafbEPFZhbk9BO4Ca
+         8BG/LK+4wqqJB6HUsb6UvMmEp4rbYbefr6bwEN9RWM3EZk9PYv6g36VsdN/S1fuBOLep
+         /Z4gmhn3Lpg65w7Ri3ue8TlzNLgoAqNjEHh9Gg2udAxBvR4pCVZ9rZUgzXw5oQb9ex1/
+         O+B/l/LxZ9yskht+GtDtaIOsP4PJizSmqGA4cjeSqN5BvxjHHIOUzDDJzOaV4qeeOVfV
+         dDqA==
+X-Gm-Message-State: AO0yUKXtJwbcTD2myOGkRC0KBeRfwTmCrSudJ+w/9HgrAm9+eZmeOhCp
+        HcnxOq4yahlMNVh6InbroKNF6xaxqptZFwj0bGNzslnU+5tOyK9zf72qr3Gz/rK94Sf+s8zbQyn
+        Uh7Cydmd4eqlf+5UQmOGRWfMD1zBHqxNj6b1Xfny3tpW9dqRExeqkBucG8zGqvEBl7QM7BWRS
+X-Google-Smtp-Source: AK7set916/u3394HNJvodluH3daOOWYNeMl7oGeiAXyr4Do5NV8pOu3l5Ipq+/7T7xIqeoOJN2Xu+tfXg3kb
 X-Received: from sweer.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:e45])
- (user=bgardon job=sendgmr) by 2002:a81:78ca:0:b0:521:db3f:a11f with SMTP id
- t193-20020a8178ca000000b00521db3fa11fmr5ywc.9.1675362522851; Thu, 02 Feb 2023
- 10:28:42 -0800 (PST)
-Date:   Thu,  2 Feb 2023 18:28:07 +0000
+ (user=bgardon job=sendgmr) by 2002:a62:1a57:0:b0:593:bac2:b49 with SMTP id
+ a84-20020a621a57000000b00593bac20b49mr1825572pfa.44.1675362524733; Thu, 02
+ Feb 2023 10:28:44 -0800 (PST)
+Date:   Thu,  2 Feb 2023 18:28:08 +0000
 In-Reply-To: <20230202182809.1929122-1-bgardon@google.com>
 Mime-Version: 1.0
 References: <20230202182809.1929122-1-bgardon@google.com>
 X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
-Message-ID: <20230202182809.1929122-20-bgardon@google.com>
-Subject: [PATCH 19/21] KVM: x86/mmu: Move Shadow MMU part of kvm_mmu_zap_all()
- to shadow_mmu.h
+Message-ID: <20230202182809.1929122-21-bgardon@google.com>
+Subject: [PATCH 20/21] KVM: x86/mmu: Move Shadow MMU init/teardown to shadow_mmu.c
 From:   Ben Gardon <bgardon@google.com>
 To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
 Cc:     Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
@@ -74,88 +73,187 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move the Shadow MMU part of kvm_mmu_zap_all() into a helper function in
-shadow_mmu.h. Also check kvm_memslots_have_rmaps so the Shadow MMU
-operation can be skipped entierly if it's not needed. This could present
-an opportuinity to move the TDP MMU portion of the function under the
-MMU lock in read mode, but since zapping all paging structures should be
-a very rare and thus not a perfromance sensitive operation, it's not
-necessary.
+Move the meat of kvm_mmu_init_vm() and kvm_mmu_uninit_vm() pertaining to
+the Shadow MMU to shadow_mmu.c.
 
 Suggested-by: David Matlack <dmatlack@google.com>
 
 Signed-off-by: Ben Gardon <bgardon@google.com>
 ---
- arch/x86/kvm/mmu/mmu.c        | 17 ++---------------
- arch/x86/kvm/mmu/shadow_mmu.c | 19 +++++++++++++++++++
- arch/x86/kvm/mmu/shadow_mmu.h |  2 ++
- 3 files changed, 23 insertions(+), 15 deletions(-)
+ arch/x86/kvm/mmu/mmu.c          | 41 +++---------------------------
+ arch/x86/kvm/mmu/mmu_internal.h |  2 ++
+ arch/x86/kvm/mmu/shadow_mmu.c   | 44 +++++++++++++++++++++++++++++++--
+ arch/x86/kvm/mmu/shadow_mmu.h   |  6 ++---
+ 4 files changed, 51 insertions(+), 42 deletions(-)
 
 diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 8514e998e2127..63b928bded9d1 100644
+index 63b928bded9d1..10aff23dea75d 100644
 --- a/arch/x86/kvm/mmu/mmu.c
 +++ b/arch/x86/kvm/mmu/mmu.c
-@@ -3011,22 +3011,9 @@ void kvm_mmu_slot_leaf_clear_dirty(struct kvm *kvm,
- 
- void kvm_mmu_zap_all(struct kvm *kvm)
+@@ -2743,7 +2743,7 @@ int kvm_mmu_create(struct kvm_vcpu *vcpu)
+  * not use any resource of the being-deleted slot or all slots
+  * after calling the function.
+  */
+-static void kvm_mmu_zap_all_fast(struct kvm *kvm)
++void kvm_mmu_zap_all_fast(struct kvm *kvm)
  {
--	struct kvm_mmu_page *sp, *node;
--	LIST_HEAD(invalid_list);
--	int ign;
--
- 	write_lock(&kvm->mmu_lock);
--restart:
--	list_for_each_entry_safe(sp, node, &kvm->arch.active_mmu_pages, link) {
--		if (WARN_ON(sp->role.invalid))
--			continue;
--		if (__kvm_shadow_mmu_prepare_zap_page(kvm, sp, &invalid_list, &ign))
--			goto restart;
--		if (cond_resched_rwlock_write(&kvm->mmu_lock))
--			goto restart;
--	}
--
--	kvm_shadow_mmu_commit_zap_page(kvm, &invalid_list);
-+	if (kvm_memslots_have_rmaps(kvm))
-+		kvm_shadow_mmu_zap_all(kvm);
+ 	lockdep_assert_held(&kvm->slots_lock);
  
+@@ -2795,22 +2795,13 @@ static void kvm_mmu_zap_all_fast(struct kvm *kvm)
+ 		kvm_tdp_mmu_zap_invalidated_roots(kvm);
+ }
+ 
+-static void kvm_mmu_invalidate_zap_pages_in_memslot(struct kvm *kvm,
+-			struct kvm_memory_slot *slot,
+-			struct kvm_page_track_notifier_node *node)
+-{
+-	kvm_mmu_zap_all_fast(kvm);
+-}
+-
+ int kvm_mmu_init_vm(struct kvm *kvm)
+ {
+-	struct kvm_page_track_notifier_node *node = &kvm->arch.mmu_sp_tracker;
+ 	int r;
+ 
+-	INIT_LIST_HEAD(&kvm->arch.active_mmu_pages);
+-	INIT_LIST_HEAD(&kvm->arch.zapped_obsolete_pages);
+ 	INIT_LIST_HEAD(&kvm->arch.possible_nx_huge_pages);
+-	spin_lock_init(&kvm->arch.mmu_unsync_pages_lock);
++
++	kvm_mmu_init_shadow_mmu(kvm);
+ 
+ 	if (tdp_mmu_enabled) {
+ 		r = kvm_mmu_init_tdp_mmu(kvm);
+@@ -2818,38 +2809,14 @@ int kvm_mmu_init_vm(struct kvm *kvm)
+ 			return r;
+ 	}
+ 
+-	node->track_write = kvm_shadow_mmu_pte_write;
+-	node->track_flush_slot = kvm_mmu_invalidate_zap_pages_in_memslot;
+-	kvm_page_track_register_notifier(kvm, node);
+-
+-	kvm->arch.split_page_header_cache.kmem_cache = mmu_page_header_cache;
+-	kvm->arch.split_page_header_cache.gfp_zero = __GFP_ZERO;
+-
+-	kvm->arch.split_shadow_page_cache.gfp_zero = __GFP_ZERO;
+-
+-	kvm->arch.split_desc_cache.kmem_cache = pte_list_desc_cache;
+-	kvm->arch.split_desc_cache.gfp_zero = __GFP_ZERO;
+-
+ 	return 0;
+ }
+ 
+-static void mmu_free_vm_memory_caches(struct kvm *kvm)
+-{
+-	kvm_mmu_free_memory_cache(&kvm->arch.split_desc_cache);
+-	kvm_mmu_free_memory_cache(&kvm->arch.split_page_header_cache);
+-	kvm_mmu_free_memory_cache(&kvm->arch.split_shadow_page_cache);
+-}
+-
+ void kvm_mmu_uninit_vm(struct kvm *kvm)
+ {
+-	struct kvm_page_track_notifier_node *node = &kvm->arch.mmu_sp_tracker;
+-
+-	kvm_page_track_unregister_notifier(kvm, node);
+-
++	kvm_mmu_uninit_shadow_mmu(kvm);
  	if (tdp_mmu_enabled)
- 		kvm_tdp_mmu_zap_all(kvm);
+ 		kvm_mmu_uninit_tdp_mmu(kvm);
+-
+-	mmu_free_vm_memory_caches(kvm);
+ }
+ 
+ /*
+diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
+index 2273c6263faf0..c49d302b037ec 100644
+--- a/arch/x86/kvm/mmu/mmu_internal.h
++++ b/arch/x86/kvm/mmu/mmu_internal.h
+@@ -406,4 +406,6 @@ BUILD_MMU_ROLE_ACCESSOR(ext,  cr4, pke);
+ BUILD_MMU_ROLE_ACCESSOR(ext,  cr4, la57);
+ BUILD_MMU_ROLE_ACCESSOR(base, efer, nx);
+ BUILD_MMU_ROLE_ACCESSOR(ext,  efer, lma);
++
++void kvm_mmu_zap_all_fast(struct kvm *kvm);
+ #endif /* __KVM_X86_MMU_INTERNAL_H */
 diff --git a/arch/x86/kvm/mmu/shadow_mmu.c b/arch/x86/kvm/mmu/shadow_mmu.c
-index bb23692d34a73..c6d3da795992e 100644
+index c6d3da795992e..6449ac4de4883 100644
 --- a/arch/x86/kvm/mmu/shadow_mmu.c
 +++ b/arch/x86/kvm/mmu/shadow_mmu.c
-@@ -3604,3 +3604,22 @@ bool kvm_shadow_mmu_test_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
+@@ -3013,8 +3013,9 @@ static u64 *get_written_sptes(struct kvm_mmu_page *sp, gpa_t gpa, int *nspte)
+ 	return spte;
+ }
+ 
+-void kvm_shadow_mmu_pte_write(struct kvm_vcpu *vcpu, gpa_t gpa, const u8 *new,
+-			      int bytes, struct kvm_page_track_notifier_node *node)
++static void kvm_shadow_mmu_pte_write(struct kvm_vcpu *vcpu, gpa_t gpa,
++				     const u8 *new, int bytes,
++				     struct kvm_page_track_notifier_node *node)
  {
- 	return kvm_handle_gfn_range(kvm, range, kvm_test_age_rmap);
+ 	gfn_t gfn = gpa >> PAGE_SHIFT;
+ 	struct kvm_mmu_page *sp;
+@@ -3623,3 +3624,42 @@ void kvm_shadow_mmu_zap_all(struct kvm *kvm)
+ 
+ 	kvm_shadow_mmu_commit_zap_page(kvm, &invalid_list);
  }
 +
-+void kvm_shadow_mmu_zap_all(struct kvm *kvm)
++static void kvm_shadow_mmu_invalidate_zap_pages_in_memslot(struct kvm *kvm,
++			struct kvm_memory_slot *slot,
++			struct kvm_page_track_notifier_node *node)
 +{
-+	struct kvm_mmu_page *sp, *node;
-+	LIST_HEAD(invalid_list);
-+	int ign;
++	kvm_mmu_zap_all_fast(kvm);
++}
 +
-+restart:
-+	list_for_each_entry_safe(sp, node, &kvm->arch.active_mmu_pages, link) {
-+		if (WARN_ON(sp->role.invalid))
-+			continue;
-+		if (__kvm_shadow_mmu_prepare_zap_page(kvm, sp, &invalid_list, &ign))
-+			goto restart;
-+		if (cond_resched_rwlock_write(&kvm->mmu_lock))
-+			goto restart;
-+	}
++void kvm_mmu_init_shadow_mmu(struct kvm *kvm)
++{
++	struct kvm_page_track_notifier_node *node = &kvm->arch.mmu_sp_tracker;
 +
-+	kvm_shadow_mmu_commit_zap_page(kvm, &invalid_list);
++	INIT_LIST_HEAD(&kvm->arch.active_mmu_pages);
++	INIT_LIST_HEAD(&kvm->arch.zapped_obsolete_pages);
++	spin_lock_init(&kvm->arch.mmu_unsync_pages_lock);
++
++	node->track_write = kvm_shadow_mmu_pte_write;
++	node->track_flush_slot = kvm_shadow_mmu_invalidate_zap_pages_in_memslot;
++	kvm_page_track_register_notifier(kvm, node);
++
++	kvm->arch.split_page_header_cache.kmem_cache = mmu_page_header_cache;
++	kvm->arch.split_page_header_cache.gfp_zero = __GFP_ZERO;
++
++	kvm->arch.split_shadow_page_cache.gfp_zero = __GFP_ZERO;
++
++	kvm->arch.split_desc_cache.kmem_cache = pte_list_desc_cache;
++	kvm->arch.split_desc_cache.gfp_zero = __GFP_ZERO;
++}
++
++void kvm_mmu_uninit_shadow_mmu(struct kvm *kvm)
++{
++	struct kvm_page_track_notifier_node *node = &kvm->arch.mmu_sp_tracker;
++
++	kvm_page_track_unregister_notifier(kvm, node);
++
++	kvm_mmu_free_memory_cache(&kvm->arch.split_desc_cache);
++	kvm_mmu_free_memory_cache(&kvm->arch.split_page_header_cache);
++	kvm_mmu_free_memory_cache(&kvm->arch.split_shadow_page_cache);
 +}
 diff --git a/arch/x86/kvm/mmu/shadow_mmu.h b/arch/x86/kvm/mmu/shadow_mmu.h
-index 4d39017873aa6..ab01636373bda 100644
+index ab01636373bda..f2e54355ebb19 100644
 --- a/arch/x86/kvm/mmu/shadow_mmu.h
 +++ b/arch/x86/kvm/mmu/shadow_mmu.h
-@@ -101,6 +101,8 @@ bool kvm_shadow_mmu_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range);
- bool kvm_shadow_mmu_age_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range);
- bool kvm_shadow_mmu_test_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range);
+@@ -65,9 +65,6 @@ int kvm_shadow_mmu_alloc_special_roots(struct kvm_vcpu *vcpu);
+ int kvm_shadow_mmu_get_walk(struct kvm_vcpu *vcpu, u64 addr, u64 *sptes,
+ 			    int *root_level);
  
-+void kvm_shadow_mmu_zap_all(struct kvm *kvm);
+-void kvm_shadow_mmu_pte_write(struct kvm_vcpu *vcpu, gpa_t gpa, const u8 *new,
+-			      int bytes, struct kvm_page_track_notifier_node *node);
+-
+ void kvm_shadow_mmu_zap_obsolete_pages(struct kvm *kvm);
+ bool kvm_shadow_mmu_zap_gfn_range(struct kvm *kvm, gfn_t gfn_start, gfn_t gfn_end);
+ 
+@@ -103,6 +100,9 @@ bool kvm_shadow_mmu_test_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range);
+ 
+ void kvm_shadow_mmu_zap_all(struct kvm *kvm);
+ 
++void kvm_mmu_init_shadow_mmu(struct kvm *kvm);
++void kvm_mmu_uninit_shadow_mmu(struct kvm *kvm);
 +
  /* Exports from paging_tmpl.h */
  gpa_t paging32_gva_to_gpa(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu,
