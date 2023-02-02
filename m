@@ -2,117 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4F3E688562
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 18:30:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33D0D68856A
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 18:31:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232471AbjBBRaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 12:30:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51676 "EHLO
+        id S232054AbjBBRbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 12:31:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232277AbjBBRat (ORCPT
+        with ESMTP id S230117AbjBBRbk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 12:30:49 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D3E46EAC5
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 09:30:43 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id k16so2006794wms.2
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 09:30:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=nJsqO9ccDg3aYN+Xes+xxvWd7JmlQmKL6WOcJpU3hP0=;
-        b=j7OZ4lA5kyRDqd/Ve9ZS5mhmccpKED8txw9QQIbn2dkpo5EHkEpAtYDMZoZxuHc4l1
-         CqAr4TJEFP3zC/zjUFQHOCUCVwcM08i+1/rqed1uuIR1OWVRXZbwGAN0loj+0wNV5b64
-         TcpvC3jeLTvv89Z8rT554aRhfDmfGFJzCkOH6RbAwrCTI6aLjVKKFIfCZNcCsFC6y5Vm
-         2ye87VjA7LvMWGSbYOo7nx18qj2Lw2qJYVLKhMTl4Dj/GKX8cINsXzL5w5Tv+ck3cr3D
-         OWdSV357F8BTC6MBd7T9NTx0TKLVG5kFKFXVVpZvY9GDwlzPH/2EaEwHvTOGY79cX0g4
-         F4Lw==
+        Thu, 2 Feb 2023 12:31:40 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85FC573074
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 09:30:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675359051;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cYKqs3MjGl7TQ1cHEqSG5d8XiBUPJ2VDaeFs07Gxf5M=;
+        b=U6y35i1Ld8ySA5LIvYGHTvg6RlUMnqOXtvrYxiENbTu92DEJmkXNK1ltlZJd9e8h3HVkI8
+        W19r/hXbA9L6/Yx5aSpANVKNtXBb289voqc+BqH77ka2x2UfLgB+107yp851KLP9ZgNz0n
+        B98VMmEzZiGCCOgGtoQ3GfktLaMXri0=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-228-1XnniSi4P9Wc36_aqJ_Mqw-1; Thu, 02 Feb 2023 12:30:50 -0500
+X-MC-Unique: 1XnniSi4P9Wc36_aqJ_Mqw-1
+Received: by mail-ej1-f70.google.com with SMTP id xh12-20020a170906da8c00b007413144e87fso1989080ejb.14
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 09:30:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=nJsqO9ccDg3aYN+Xes+xxvWd7JmlQmKL6WOcJpU3hP0=;
-        b=dijqmWdWzPiuOVz9Qx+lN2iQB6wyjsVV+FKLXNYbQ4a+eBAv9pQjuIQiKEoYCH8o5Q
-         Ol5F0W3uUKW/WWtAXzRzVXGUetB/9QwpQ0NH2571QX3TXAoFZzyIg9MHqpHWzw+C/IZr
-         Tny3GcbybTbmegyLTfhOKd5Bstl+ptDrnM7WLC2R/H7AaT7SyPQLaJGbasnZe1BV3h1f
-         /IzG7lONcHBG7hQI8RWIYc68ZwsGow/fNtryfsZTZ/ViH+ofKXhxRxRQonKfEydF1Aa4
-         axkyzcvvuw2aY6v6B0VC5H0LJFBpu12oxJiuxXviJ30MrOtJt+ppjpHIcAi5BKqJAwS0
-         S0+w==
-X-Gm-Message-State: AO0yUKWrtKWeNPsptuCspdcBjlZ0xSmlT78+43l2P8YCZW5MxmCvSOzJ
-        LpRkKMg9evqE4YNGVLEEMzzLyDpC1sXmArhh
-X-Google-Smtp-Source: AK7set9osSFbUU6g5UAhijUC/OgzTgoLxZ2rnbSppOUaU/Z9jpz1s5SRnhCKmJL7Zv6kjIfTcVbzoA==
-X-Received: by 2002:a05:600c:1987:b0:3dd:1b5d:9b18 with SMTP id t7-20020a05600c198700b003dd1b5d9b18mr6479641wmq.29.1675359041941;
-        Thu, 02 Feb 2023 09:30:41 -0800 (PST)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id l8-20020a05600c4f0800b003dec22de1b1sm477996wmq.10.2023.02.02.09.30.41
+        bh=cYKqs3MjGl7TQ1cHEqSG5d8XiBUPJ2VDaeFs07Gxf5M=;
+        b=IWQvpwYF6HJE90OfAOes+FO+o7JmEAVTwRzMdNoGu2VCMdi9MAt/xO01tmz7VrhWHD
+         c/P33eMVzqGRPAlCrOyrXdec25R9A3zrA8GVcvrEJsIxaix2RZis9eJwZc1EjVjDaA8t
+         9G3ozwEJ4zVZkLSM3exoyqIytmCyLB054MRoWn/udg2BB9xM87o6ERxZDOGf9Vb6bsSc
+         VJajzVpEciPOEljUd5sTLLAGpezC46lrtQ7HAXCbcs5iwRBCaR4ydhbU3eiL00iBQjqT
+         WCGJTaFY2JUUi3NhZUv4oCSLoyHjhF1FMmlmImo5XprMjl2mbrBem1FBJwI2b0bcAbpE
+         5DOQ==
+X-Gm-Message-State: AO0yUKV9Lyt+R1/+ijvBOGmeqdOFUHOWwOIuvn+Ny0i7KbfIPZjjuGwp
+        GO8g/ylxp9bWiqm6LL/5OdKu/j8eG6U1t+9Fpi/IwAtxVLYWfRqgNSp7/GwWVoZuF57fIQsGkOB
+        OxCYH4we45bBAUsY9AAotuLJn
+X-Received: by 2002:aa7:d54c:0:b0:4a3:43c1:8441 with SMTP id u12-20020aa7d54c000000b004a343c18441mr2229029edr.21.1675359049157;
+        Thu, 02 Feb 2023 09:30:49 -0800 (PST)
+X-Google-Smtp-Source: AK7set/8iTLbXbQv+s/UGj22Gc8lXgPP1ENSohhV651rdA6zrWZf+Ya3iBnFyTnbDxf3sgsW2UZ+Dg==
+X-Received: by 2002:aa7:d54c:0:b0:4a3:43c1:8441 with SMTP id u12-20020aa7d54c000000b004a343c18441mr2229020edr.21.1675359049002;
+        Thu, 02 Feb 2023 09:30:49 -0800 (PST)
+Received: from redhat.com ([2.52.156.122])
+        by smtp.gmail.com with ESMTPSA id a16-20020aa7d910000000b00463bc1ddc76sm11448795edr.28.2023.02.02.09.30.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 09:30:41 -0800 (PST)
-Date:   Thu, 2 Feb 2023 18:30:40 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Atish Patra <atishp@rivosinc.com>
-Cc:     linux-kernel@vger.kernel.org, Anup Patel <anup@brainfault.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atishp@atishpatra.org>,
-        Eric Lin <eric.lin@sifive.com>, Guo Ren <guoren@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v4 09/14] RISC-V: KVM: Make PMU functionality depend on
- Sscofpmf
-Message-ID: <20230202173040.e4rdrkdeuq7vdauk@orel>
-References: <20230201231250.3806412-1-atishp@rivosinc.com>
- <20230201231250.3806412-10-atishp@rivosinc.com>
+        Thu, 02 Feb 2023 09:30:48 -0800 (PST)
+Date:   Thu, 2 Feb 2023 12:30:45 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Si-Wei Liu <si-wei.liu@oracle.com>
+Cc:     jasowang@redhat.com, parav@nvidia.com, elic@nvidia.com,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/6] features provisioning fixes and mlx5_vdpa support
+Message-ID: <20230202123024-mutt-send-email-mst@kernel.org>
+References: <1675207327-22289-1-git-send-email-si-wei.liu@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230201231250.3806412-10-atishp@rivosinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1675207327-22289-1-git-send-email-si-wei.liu@oracle.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 01, 2023 at 03:12:45PM -0800, Atish Patra wrote:
-> The privilege mode filtering feature must be available in the host so
-> that the host can inhibit the counters while the execution is in HS mode.
-> Otherwise, the guests may have access to critical guest information.
+On Tue, Jan 31, 2023 at 03:22:01PM -0800, Si-Wei Liu wrote:
+> This patchset is pre-requisite to export and provision device
+> config attributes and features for vdpa live migration, in a way
+> backward and forward compatibility can be retained. The follow up
+> work [1] will need to be built around the new feature provisioning
+> uAPI, with which it's easier to formalize migration compatibility
+> support at the driver level.
 > 
-> Reviewed-by: Anup Patel <anup@brainfault.org>
-> Signed-off-by: Atish Patra <atishp@rivosinc.com>
-> ---
->  arch/riscv/kvm/vcpu_pmu.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
+> Thanks,
+> -Siwei
 > 
-> diff --git a/arch/riscv/kvm/vcpu_pmu.c b/arch/riscv/kvm/vcpu_pmu.c
-> index 2dad37f..9a531fe 100644
-> --- a/arch/riscv/kvm/vcpu_pmu.c
-> +++ b/arch/riscv/kvm/vcpu_pmu.c
-> @@ -79,6 +79,14 @@ void kvm_riscv_vcpu_pmu_init(struct kvm_vcpu *vcpu)
->  	struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
->  	struct kvm_pmc *pmc;
->  
-> +	/*
-> +	 * PMU functionality should be only available to guests if privilege mode
-> +	 * filtering is available in the host. Otherwise, guest will always count
-> +	 * events while the execution is in hypervisor mode.
-> +	 */
-> +	if (!riscv_isa_extension_available(NULL, SSCOFPMF))
-> +		return;
-> +
->  	ret = riscv_pmu_get_hpm_info(&hpm_width, &num_hw_ctrs);
->  	if (ret < 0 || !hpm_width || !num_hw_ctrs)
->  		return;
-> -- 
-> 2.25.1
->
+> [1] [PATCH v3 0/4] vDPA: initial config export via "vdpa dev show"
+> https://lore.kernel.org/virtualization/1666392237-4042-1-git-send-email-si-wei.liu@oracle.com/
 
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+1-6 look like bugfixes right?
+
+> ---
+> 
+> Si-Wei Liu (6):
+>   vdpa: fix improper error message when adding vdpa dev
+>   vdpa: conditionally read STATUS in config space
+>   vdpa: validate provisioned device features against specified attribute
+>   virtio: VIRTIO_DEVICE_F_MASK for all per-device features
+>   vdpa: validate device feature provisioning against supported class
+>   vdpa/mlx5: support device features provisioning
+> 
+>  drivers/vdpa/mlx5/net/mlx5_vnet.c  | 72 ++++++++++++++++++++++------
+>  drivers/vdpa/vdpa.c                | 98 ++++++++++++++++++++++++++++++++------
+>  include/uapi/linux/virtio_config.h |  8 ++++
+>  3 files changed, 149 insertions(+), 29 deletions(-)
+> 
+> -- 
+> 1.8.3.1
+
