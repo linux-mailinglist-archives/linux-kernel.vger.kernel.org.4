@@ -2,871 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CB6A68742C
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 04:50:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B78068742A
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 04:50:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232090AbjBBDuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 22:50:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46120 "EHLO
+        id S231893AbjBBDu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 22:50:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbjBBDut (ORCPT
+        with ESMTP id S229612AbjBBDuY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 22:50:49 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBCB97CC84;
-        Wed,  1 Feb 2023 19:50:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id CB0BBCE2736;
-        Thu,  2 Feb 2023 03:50:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28973C4339C;
-        Thu,  2 Feb 2023 03:50:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675309837;
-        bh=vOOE6qEdOXVAdndCW+Z8sC+3s9YRz1AKZV2oyGAzdhk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=loNRucmwZioR9POexrXv8C+XpquM399L62LZN+L5iAjVmP6UjLSxeMFBGvPBeJoUZ
-         O7f5GNSYyx2vORvxf+WmQMNm3W86id2W46rWbGAWckdKAqemfP95bY5QXBvn2zgPBH
-         onW1nlciCPh+daFg/A7mM0rp22MKwTdfXO532/+16xHKRoRK3WmKm+ebNbv6Bi7aHo
-         vK3aDxBR4ZiROa6IS8JkWRCsckcn655jsSjY714Nt9H9XqS3Ll+lrQuLGQmzuMuiu3
-         j94J3g0Z/CCMqvrkefykfzneDyjf9EOcPh4NqxCzuplGKY0eVFs27rz5aO1smjruyO
-         KZdJgmMsh+yfg==
-Received: by mail-oi1-f180.google.com with SMTP id j21so449574oie.4;
-        Wed, 01 Feb 2023 19:50:37 -0800 (PST)
-X-Gm-Message-State: AO0yUKX61tUlKsT2H0c7h/DdUC6/8dACPgcdp29rgsDQf5ky3EsRKsrC
-        8PQg+clH7EgnlUW1He8GnnslyzZ3T57uCWwg5Ks=
-X-Google-Smtp-Source: AK7set/wZXzVLQIQ8ECkVfmWqp0A8gtcqO6gbuIt2FK4k5zdoA0M2iATnSWd864Pez33EbJSLUyQJc23FygPBhk8CyQ=
-X-Received: by 2002:aca:6c6:0:b0:35e:7c55:b015 with SMTP id
- 189-20020aca06c6000000b0035e7c55b015mr71134oig.287.1675309836142; Wed, 01 Feb
- 2023 19:50:36 -0800 (PST)
+        Wed, 1 Feb 2023 22:50:24 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E3D77BE61;
+        Wed,  1 Feb 2023 19:50:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675309823; x=1706845823;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=VRvgZHNe7ra9m4s5E9GktRBZ7PTO6blvfnKeKReW0js=;
+  b=Gn88+2pxauMxaOm2uG30vCAbGqVwoAg3CYvlN0NjA5uRhHm+s5N+Fv5k
+   KhrGlFTumZNQ3stZ4egJcBJG8N90advhWkkY17bMpqAWTk6HK/lldQVvN
+   j7VAHXa+zqk3g+nubFD1c8jLlAc18/8TdS6lATSNzLemUigbrZShIs183
+   sfSG1QyFnj0Hp+feHbEemV/Xeb8b5QqcO4s2PHBpWM8iIcUNcSDz9Ccoo
+   kGLfB9TAo6XlxqNOeROkZPNi9VbOMe0jv4jZZbDctjsyTsgD9eAsuA/p/
+   Bx6NNcAGJUqcONK6yvll5RgLs2AMTYsHn/Vcu0Yl+fXxH86UqHbEX56WF
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="392924511"
+X-IronPort-AV: E=Sophos;i="5.97,266,1669104000"; 
+   d="scan'208";a="392924511"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 19:50:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="789135407"
+X-IronPort-AV: E=Sophos;i="5.97,266,1669104000"; 
+   d="scan'208";a="789135407"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga004.jf.intel.com with ESMTP; 01 Feb 2023 19:50:19 -0800
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Wed, 1 Feb 2023 19:50:19 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Wed, 1 Feb 2023 19:50:18 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Wed, 1 Feb 2023 19:50:18 -0800
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Wed, 1 Feb 2023 19:50:18 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eqSm60rOooax6NBS/WOsbeoVGYrVwK8pXKV/0LJjslpYUnOWZ56KjIQljwQ2pp+jt377b1ekm/e68gxUC5yxh8fPn0GJ7vea3e0b8Z0tfH812VZScn6On8l47qEZ1aJQzOR0wf29ZakZaEWivxzvU/pBAB4LPaugWexfCQn/xdGQm7+aOXirnuGWlN/+J+Zb+7JEO04VDn2IAh9oZ2Pu7nZNKfClfk3K6QGaYtK0mZruHxAPLcQNeixU4JSzlEn5RYCq4l7tnDgE5JHOxJFJvuIrYdTBbdmB+s0COjWU5TXY2ZERy+Ldu+1Z0ER0V0LIPDBtADtCMWghcO1YMEOHYQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VRvgZHNe7ra9m4s5E9GktRBZ7PTO6blvfnKeKReW0js=;
+ b=Dk7EGjY3rVpIzbineJCfz8CjGa9ywFYQx2GL8EoBxhwTMrA1mdq140ZWE7JzBoDpWgO0c4YmsC3TEvuYNSgyHYIEFGwvqXsjaxSCzT/ARQNZkFMC+4+zFaFrNRkvdr+OeXk5C2ErBZbXeffUCu3c8HRHgy+GRYMfFZPHhRwBloqSSVpS/7pk5XAJQmuhQfYapYg+bmVBNWcp7CfKySr6fjbLnqMqfJSiA+CIiJK/U5fmfjNPwPq7ada2KUPWEqkl8TncJe1Cbl5p2j4Q0knENuD1bER02zgq/xLrDDuSzWY56HmPejg3DV9qTZtRch0AMjCkPBr3pP/KP/cOVxaQew==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by CY8PR11MB7800.namprd11.prod.outlook.com (2603:10b6:930:72::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.38; Thu, 2 Feb
+ 2023 03:50:16 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::6a8d:b95:e1b5:d79d]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::6a8d:b95:e1b5:d79d%8]) with mapi id 15.20.6064.027; Thu, 2 Feb 2023
+ 03:50:15 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+CC:     Robin Murphy <robin.murphy@arm.com>,
+        Nicolin Chen <nicolinc@nvidia.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "agross@kernel.org" <agross@kernel.org>,
+        "andersson@kernel.org" <andersson@kernel.org>,
+        "konrad.dybcio@linaro.org" <konrad.dybcio@linaro.org>,
+        "yong.wu@mediatek.com" <yong.wu@mediatek.com>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "vdumpa@nvidia.com" <vdumpa@nvidia.com>,
+        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
+Subject: RE: [PATCH 1/4] iommu: Add a broken_unmanaged_domain flag in
+ iommu_ops
+Thread-Topic: [PATCH 1/4] iommu: Add a broken_unmanaged_domain flag in
+ iommu_ops
+Thread-Index: AQHZMoqzsVwORV4fDkqb25GPYvi+2K6yz/kAgAAgNYCAAhsCEIAB7paAgAJ2Q5CAAMVyAIAA2Chg
+Date:   Thu, 2 Feb 2023 03:50:15 +0000
+Message-ID: <BN9PR11MB52766E8C47B04FC4FE252D0F8CD69@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <cover.1674849118.git.nicolinc@nvidia.com>
+ <0875479d24a53670e17db8a11945664a6bb4a25b.1674849118.git.nicolinc@nvidia.com>
+ <dfad6d75-6f4d-99ef-1c6a-4bf397dcaa13@arm.com> <Y9RkG2dejdXptUTB@nvidia.com>
+ <BN9PR11MB5276C9BDCCA7FB295C25BC738CD29@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <Y9fHJSTIP6zXAStX@nvidia.com>
+ <BN9PR11MB52769E3A3DD09983C11677F88CD19@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <Y9p9ehPsg9Hdn1OK@nvidia.com>
+In-Reply-To: <Y9p9ehPsg9Hdn1OK@nvidia.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|CY8PR11MB7800:EE_
+x-ms-office365-filtering-correlation-id: 46b46fcb-354b-4535-9dba-08db04d09844
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: DJEfSYbZ6YbO+gs97SsNl5cmV0kXh00MYEVztvjYcdRVyw30Bf1Z9vGhqLfUgvEemCXLIfP+7TVU0JMa9ok3Wc9h2SLJDivPWI0U89buwd8n0JwU8m2Kic0mBA8ynP5OUD9AYRglmgkwEIWChkbJkKCunplsKUKWLifua6xG4iAo7FJ++3F4CjdVX+VzHFs4N5M5mdR4xuiwKnrp40+KQxczgkRMNnNVSGziIWNdoT1xHyKcuHQscc9W/pW3C0w1k5YbacxGv0Iq6J3byBJZ8s7HgKNHG6ohnZJqvISzCOfPrZkAds0NCspWWG3mzn+PyK3iEG2frMMfgdCkTMEpwmEs2eihUjxXBAtYLl/9XIweAsdRtLfF87Oug18ePusAjjnioj9PpMK0KEdL1TJCdRIUtbHcRKFggJXlgyH5KstsZMTnXYZ7Fg1dL0DwvQwkVDzSoQmrtOAXVUzwze+j3k4UrF8fYAGxl2DVHdiCVKmktpeJFFtTkaDqQ6XB8m3OWPhuL/Ud1dCpwPFHH1EnGNtUHrAWv2XdCZ86mez7syNMW48S0FO4mfQwfiaT0sX543vKI2LIYwuLWE9mSF+Ads0wYIC8DLhMjV4zjzNYwRT+2V8KiemntBi0DMHCOVvR0KyDA70HCYTGSx/pzZw7soiAj7kQt9FB0M23XSGIH8P/283Ir1Wr8THfuKJ7v6U9zQuNx2vLpZ59OEc+ZF3APg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(39860400002)(396003)(376002)(136003)(346002)(451199018)(38100700002)(83380400001)(71200400001)(54906003)(8676002)(33656002)(2906002)(316002)(122000001)(82960400001)(66446008)(66946007)(6506007)(76116006)(66476007)(6916009)(26005)(7696005)(9686003)(186003)(478600001)(41300700001)(52536014)(64756008)(55016003)(86362001)(66556008)(4326008)(7416002)(8936002)(38070700005)(5660300002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?kGwUmhbsjXWydpyDnezmfm+GNC5nSPvr3aCOw+1Vr5PqDLOJ6WEo+qh6fWyo?=
+ =?us-ascii?Q?zCLvRiYbNWKiUKeuFqy8M+LVG4n5bquPwv43VU3/iqq9zieSkAw0pEF87Ip4?=
+ =?us-ascii?Q?CMUvuBUDBzC3y3V/6XenDm2idheJlvSGPPXCXE3zwcYfVRUKnEs9dQ4sw5dI?=
+ =?us-ascii?Q?mGSErJKb0vChEDvsoXa4cO9dG5rxRsvRyHyJaAAu4IbLUYvbSPmuO/6BcQ3Y?=
+ =?us-ascii?Q?TKe939UuRoD7ijCgX6i1Mov/7VvE6JiQBqZ1FkulMKoqLj5kXYlYhtRbnfSG?=
+ =?us-ascii?Q?rL9umD01RQjaE4ErNqTuzxEZXGZjUhlQZquLskg3aChZmXnvBE19FIAf4Awd?=
+ =?us-ascii?Q?e+GwCb4PUFPOzcyZxGreM2xCVxEu9mMe4UtBet5q2ra5+dL8hutTz0dZvrd9?=
+ =?us-ascii?Q?LN8wF9AA8tc7+gnP1kaONQcden/YW3XivZzZCHqBTH3bh07QUI/wO2af+6eL?=
+ =?us-ascii?Q?qDuCmQr5E55MjNRA6k7PpzCwiZsSFvOGYLWpO6UGLKvrgJtpqIHcsS3w0QVQ?=
+ =?us-ascii?Q?oOa4SfXyzfSuLqb+TSCi0ycR4XwwXne+ueW3Fo/B1Y6CNXmec3bhCrtcfKKu?=
+ =?us-ascii?Q?FEekSCb6HDWAUpBz1LLfbuegVJKeQb/V0D9UlSkB4l24+apL4vn8eqQp+GHe?=
+ =?us-ascii?Q?Hgzh9nfRFMtN6a9QNnQ1ah8kvH2z7FY8Gh9KjyFfm9uqVWIrMsgGLwR9jmu7?=
+ =?us-ascii?Q?SRharjy/ynr6V3xAdG0t+2u7ZVq1h6lZvvjaRUd/JnbvrAQPvgmVAXRk1EAI?=
+ =?us-ascii?Q?G22bEVyeW1mwVzUpq66Fx1uM9RacKLD7ToLgBpAlTI6FjkMovNy84kKuxZqB?=
+ =?us-ascii?Q?zoMlKYam0600XTaFZlJl0A6axHmR454iIdNZqiewk0KvkXCV9EtfdYWpw1+p?=
+ =?us-ascii?Q?1/5Agl6G/owdVtmhBlcRHiTnjNTSWuSAGGoKM6rjpr1X0drc8hw1IfEwa0B5?=
+ =?us-ascii?Q?lFog2tVmribguoBBkxRN+ApfupHqW+/FwNLgzVj8wHHz56PtvaQuNpCF01Qh?=
+ =?us-ascii?Q?G0WWyxX3jtVYKfPLJNz5nJnEHIwX1R8P+jdjF76rTUbROGaGHR6bj8msvZ8W?=
+ =?us-ascii?Q?S61hHizmdpC7npPA3Tch68xnHyforEAPeA2GupJHkQJnicV59gLpAfbd8yRG?=
+ =?us-ascii?Q?oaZVS/Zm6pUFwvw6O/cPplZeP7qkh+s8Pk3b+ShSe8aLphY3kSvFRkx7alaA?=
+ =?us-ascii?Q?0+t2vTuoUwblvmrO3vP+z2//6qM5DRMLTWiqt7Wyd3wykJoTEewMvyPcM29h?=
+ =?us-ascii?Q?Hx7et4Pmt6FlbSqALS+VEhUjXlQt3t8D+pEbpsitmoR1rs7hsIb5x3W9uOOF?=
+ =?us-ascii?Q?VoQC8RcuNFs8IJeNeaOuwQLr2cY1r3pi/PI1n9EfcN4hJOI0th5/KHbx/oWc?=
+ =?us-ascii?Q?10OEi0odEwmQ/3FdVyA70YugvsVkXNqgqXtWC2QIU1Ymb3J0X8s7xXQYIabh?=
+ =?us-ascii?Q?7oprTjQoH2fQ9o6bNzyGSCpEuGxMEcKvsuOLJpsuOzclUkgGBozdPd6BEYUW?=
+ =?us-ascii?Q?vnuZDGaS09klzdRi+OrtPmQ26AP/8ydyXPQAJYQYUppjLpZB6I849RTDJD3v?=
+ =?us-ascii?Q?TxNQsJXru+qGenx5zBJ+jZE1sm9KZDYfkcGDVW+s?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20230202033716.341858-1-masahiroy@kernel.org> <20230202033716.341858-2-masahiroy@kernel.org>
-In-Reply-To: <20230202033716.341858-2-masahiroy@kernel.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 2 Feb 2023 12:49:59 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASBEEQYNyDKJC+D7hmkbX1GwOUtzTZZZ8A4QkgVJPoKDQ@mail.gmail.com>
-Message-ID: <CAK7LNASBEEQYNyDKJC+D7hmkbX1GwOUtzTZZZ8A4QkgVJPoKDQ@mail.gmail.com>
-Subject: Re: [PATCH v4 1/6] kbuild: add a tool to generate a list of files
- ignored by git
-To:     linux-kbuild@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Ben Hutchings <ben@decadent.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 46b46fcb-354b-4535-9dba-08db04d09844
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Feb 2023 03:50:15.7087
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: V54JMvDmgdpB6ZTicbwoBacPnuSJQJTAegmODN27hSBN3/U5jy9dUitfgs4um+K5sztSC2yt0s9nilCZQBXrog==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR11MB7800
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 2, 2023 at 12:38 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> In short, the motivation of this commit is to build a source package
-> without cleaning the source tree.
->
-> The deb-pkg and (src)rpm-pkg targets first run 'make clean' before
-> creating a source tarball. Otherwise build artifacts such as *.o,
-> *.a, etc. would be included in the tarball. Yet, the tarball ends up
-> containing several garbage files since 'make clean' does not clean
-> everything.
->
-> Cleaning the tree every time is annoying since it makes the incremental
-> build impossible. It is desirable to create a source tarball without
-> cleaning the tree.
->
-> In fact, there are some ways to archive this.
+> From: Jason Gunthorpe <jgg@nvidia.com>
+> Sent: Wednesday, February 1, 2023 10:56 PM
+>=20
+> On Wed, Feb 01, 2023 at 03:14:03AM +0000, Tian, Kevin wrote:
+> > > From: Jason Gunthorpe <jgg@nvidia.com>
+> > > Sent: Monday, January 30, 2023 9:33 PM
+> > >
+> > > On Sun, Jan 29, 2023 at 08:11:48AM +0000, Tian, Kevin wrote:
+> > >
+> > > > " I'd also question sprd-iommu, which hardly has a generally-useful
+> > > > domain size, and has only just recently gained the ability to unmap
+> > > > anything successfully."
+> > >
+> > > So long as it has a correct kernel API and exposes the right (small)
+> > > aperture then it is OK.
+> > >
+> > > The device will not be useful for qemu, but it would run some dpdk
+> > > configurations just fine.
+> >
+> > I still didn't get the restriction here. Can you elaborate why it works
+> > with dpdk but not qemu?
+>=20
+> dpdk needs like, say, 64M of aperture and doesn't care what the IOVAs
+> are
+>=20
+> qemu needs the entire guest memory of aperture and must have IOVAs
+> that are 1:1 with the GPA.
+>=20
+> So aperture size and location can exclude qemu
+>=20
+> > Can qemu verify this restriction via existing path or need new uAPI
+> > flag to communicate?
+>=20
+> It already happens, the aperture/etc is convayed to qemu through
+> IOMMUFD_CMD_IOAS_IOVA_RANGES and if qemu cannot get the IOVA's it
+> needs to create the guest it should fail.
+>=20
 
-"achieve this".
-
-
-
->
-> The easiest way is 'git archive'. Actually, 'make perf-tar*-src-pkg'
-> does this way, but I do not like it because it works only when the source
-> tree is managed by git, and all files you want in the tarball must be
-> committed in advance.
->
-> I want to make it work without relying on git. We can do this.
->
-> Files that are not tracked by git are generated files. We can list them
-> out by parsing the .gitignore files. Of course, .gitignore does not cover
-> all the cases, but it works well enough.
->
-> tar(1) claims to support it:
->
->   --exclude-vcs-ignores
->
->     Exclude files that match patterns read from VCS-specific ignore files.
->     Supported files are: .cvsignore, .gitignore, .bzrignore, and .hgignore.
->
-> The best scenario would be to use 'tar --exclude-vcs-ignores', but this
-> option does not work. --exclude-vcs-ignore does not understand any of
-> the negation (!), preceding slash, following slash, etc.. So, this option
-> is just useless.
->
-> Hence, I wrote this gitignore parser. The previous version [1], written
-> in Python, was so slow. This version is implemented in C, so it works
-> much faster.
->
-> This tool traverses the source tree, parsing the .gitignore files. It
-> prints the file paths that are not tracked by git. The output can be
-> used for tar's --exclude-from= option.
->
-> [How to test this tool]
->
->   $ git clean -dfx
->   $ make -s -j$(nproc) defconfig all                       # or allmodconifg or whatever
->   $ git archive -o ../linux1.tar --prefix=./ HEAD
->   $ tar tf ../linux1.tar | LANG=C sort > ../file-list1     # files emitted by 'git archive'
->   $ make scripts_exclude
->     HOSTCC  scripts/gen-exclude
->   $ scripts/gen-exclude --prefix=./ -o ../exclude-list
->   $ tar cf ../linux2.tar --exclude-from=../exclude-list .
->   $ tar tf ../linux2.tar | LANG=C sort > ../file-list2     # files emitted by 'tar'
->   $ diff  ../file-list1 ../file-list2 | grep -E '^(<|>)'
->   < ./Documentation/devicetree/bindings/.yamllint
->   < ./drivers/clk/.kunitconfig
->   < ./drivers/gpu/drm/tests/.kunitconfig
->   < ./drivers/gpu/drm/vc4/tests/.kunitconfig
->   < ./drivers/hid/.kunitconfig
->   < ./fs/ext4/.kunitconfig
->   < ./fs/fat/.kunitconfig
->   < ./kernel/kcsan/.kunitconfig
->   < ./lib/kunit/.kunitconfig
->   < ./mm/kfence/.kunitconfig
->   < ./net/sunrpc/.kunitconfig
->   < ./tools/testing/selftests/arm64/tags/
->   < ./tools/testing/selftests/arm64/tags/.gitignore
->   < ./tools/testing/selftests/arm64/tags/Makefile
->   < ./tools/testing/selftests/arm64/tags/run_tags_test.sh
->   < ./tools/testing/selftests/arm64/tags/tags_test.c
->   < ./tools/testing/selftests/kvm/.gitignore
->   < ./tools/testing/selftests/kvm/Makefile
->   < ./tools/testing/selftests/kvm/config
->   < ./tools/testing/selftests/kvm/settings
->
-> The source tarball contains most of files that are tracked by git. You
-> see some diffs, but it is just because some .gitignore files are wrong.
->
->   $ git ls-files -i -c --exclude-per-directory=.gitignore
->   Documentation/devicetree/bindings/.yamllint
->   drivers/clk/.kunitconfig
->   drivers/gpu/drm/tests/.kunitconfig
->   drivers/hid/.kunitconfig
->   fs/ext4/.kunitconfig
->   fs/fat/.kunitconfig
->   kernel/kcsan/.kunitconfig
->   lib/kunit/.kunitconfig
->   mm/kfence/.kunitconfig
->   tools/testing/selftests/arm64/tags/.gitignore
->   tools/testing/selftests/arm64/tags/Makefile
->   tools/testing/selftests/arm64/tags/run_tags_test.sh
->   tools/testing/selftests/arm64/tags/tags_test.c
->   tools/testing/selftests/kvm/.gitignore
->   tools/testing/selftests/kvm/Makefile
->   tools/testing/selftests/kvm/config
->   tools/testing/selftests/kvm/settings
->
-> [1]: https://lore.kernel.org/all/20230128173843.765212-1-masahiroy@kernel.org/
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
->
-> (no changes since v3)
->
-> Changes in v3:
->  - Various code refactoring: remove struct gitignore, remove next: label etc.
->  - Support --extra-pattern option
->
-> Changes in v2:
->  - Reimplement in C
->
->  Makefile              |   4 +
->  scripts/.gitignore    |   1 +
->  scripts/Makefile      |   2 +-
->  scripts/gen-exclude.c | 623 ++++++++++++++++++++++++++++++++++++++++++
->  4 files changed, 629 insertions(+), 1 deletion(-)
->  create mode 100644 scripts/gen-exclude.c
->
-> diff --git a/Makefile b/Makefile
-> index 2faf872b6808..35b294cc6f32 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -1652,6 +1652,10 @@ distclean: mrproper
->  %pkg: include/config/kernel.release FORCE
->         $(Q)$(MAKE) -f $(srctree)/scripts/Makefile.package $@
->
-> +PHONY += scripts_exclude
-> +scripts_exclude: scripts_basic
-> +       $(Q)$(MAKE) $(build)=scripts scripts/gen-exclude
-> +
->  # Brief documentation of the typical targets used
->  # ---------------------------------------------------------------------------
->
-> diff --git a/scripts/.gitignore b/scripts/.gitignore
-> index 6e9ce6720a05..7f433bc1461c 100644
-> --- a/scripts/.gitignore
-> +++ b/scripts/.gitignore
-> @@ -1,5 +1,6 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  /asn1_compiler
-> +/gen-exclude
->  /generate_rust_target
->  /insert-sys-cert
->  /kallsyms
-> diff --git a/scripts/Makefile b/scripts/Makefile
-> index 32b6ba722728..5dcd7f57607f 100644
-> --- a/scripts/Makefile
-> +++ b/scripts/Makefile
-> @@ -38,7 +38,7 @@ HOSTCFLAGS_sorttable.o += -DMCOUNT_SORT_ENABLED
->  endif
->
->  # The following programs are only built on demand
-> -hostprogs += unifdef
-> +hostprogs += gen-exclude unifdef
->
->  # The module linker script is preprocessed on demand
->  targets += module.lds
-> diff --git a/scripts/gen-exclude.c b/scripts/gen-exclude.c
-> new file mode 100644
-> index 000000000000..5c4ecd902290
-> --- /dev/null
-> +++ b/scripts/gen-exclude.c
-> @@ -0,0 +1,623 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +//
-> +// Traverse the source tree, parsing all .gitignore files, and print file paths
-> +// that are not tracked by git.
-> +// The output is suitable to the --exclude-from option of tar.
-> +// This is useful until the --exclude-vcs-ignores option gets working correctly.
-> +//
-> +// Copyright (C) 2023 Masahiro Yamada <masahiroy@kernel.org>
-> +
-> +#include <dirent.h>
-> +#include <errno.h>
-> +#include <fcntl.h>
-> +#include <fnmatch.h>
-> +#include <getopt.h>
-> +#include <stdarg.h>
-> +#include <stdbool.h>
-> +#include <stdio.h>
-> +#include <stdlib.h>
-> +#include <string.h>
-> +#include <sys/stat.h>
-> +#include <sys/types.h>
-> +#include <unistd.h>
-> +
-> +#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
-> +
-> +// struct pattern - represent an ignore pattern (a line in .gitignroe)
-> +// @negate:          negate the pattern (prefixing '!')
-> +// @dir_only:        only matches directories (trailing '/')
-> +// @path_match:      true if the glob pattern is a path instead of a file name
-> +// @double_asterisk: true if the glob pattern contains double asterisks ('**')
-> +// @glob:            glob pattern
-> +struct pattern {
-> +       bool negate;
-> +       bool dir_only;
-> +       bool path_match;
-> +       bool double_asterisk;
-> +       char glob[];
-> +};
-> +
-> +struct pattern **patterns;
-> +static int nr_patterns, alloced_patterns;
-> +
-> +// Remember the number of patterns at each directory level
-> +static int *nr_patterns_at;
-> +// Track the current/max directory level;
-> +static int depth, max_depth;
-> +static bool debug_on;
-> +static FILE *out_fp;
-> +static char *prefix = "";
-> +static char *progname;
-> +
-> +static void __attribute__((noreturn)) perror_exit(const char *s)
-> +{
-> +       perror(s);
-> +
-> +       exit(EXIT_FAILURE);
-> +}
-> +
-> +static void __attribute__((noreturn)) error_exit(const char *fmt, ...)
-> +{
-> +       va_list args;
-> +
-> +       fprintf(stderr, "%s: error: ", progname);
-> +
-> +       va_start(args, fmt);
-> +       vfprintf(stderr, fmt, args);
-> +       va_end(args);
-> +
-> +       exit(EXIT_FAILURE);
-> +}
-> +
-> +static void debug(const char *fmt, ...)
-> +{
-> +       va_list args;
-> +       int i;
-> +
-> +       if (!debug_on)
-> +               return;
-> +
-> +       fprintf(stderr, "[DEBUG]");
-> +
-> +       for (i = 0; i < depth * 2; i++)
-> +               fputc(' ', stderr);
-> +
-> +       va_start(args, fmt);
-> +       vfprintf(stderr, fmt, args);
-> +       va_end(args);
-> +}
-> +
-> +static void *xrealloc(void *ptr, size_t size)
-> +{
-> +       ptr = realloc(ptr, size);
-> +       if (!ptr)
-> +               perror_exit(progname);
-> +
-> +       return ptr;
-> +}
-> +
-> +static void *xmalloc(size_t size)
-> +{
-> +       return xrealloc(NULL, size);
-> +}
-> +
-> +static char *xstrdup(const char *s)
-> +{
-> +       char *new = strdup(s);
-> +
-> +       if (!new)
-> +               perror_exit(progname);
-> +
-> +       return new;
-> +}
-> +
-> +static bool simple_match(const char *string, const char *pattern)
-> +{
-> +       return fnmatch(pattern, string, FNM_PATHNAME) == 0;
-> +}
-> +
-> +// Handle double asterisks ("**") matching.
-> +// FIXME:
-> +//  This function does not work if double asterisks apppear multiple times,
-> +//  like "foo/**/bar/**/baz".
-> +static bool double_asterisk_match(const char *path, const char *pattern)
-> +{
-> +       bool result = false;
-> +       int slash_diff = 0;
-> +       char *modified_pattern, *q;
-> +       const char *p;
-> +       size_t len;
-> +
-> +       for (p = path; *p; p++)
-> +               if (*p == '/')
-> +                       slash_diff++;
-> +
-> +       for (p = pattern; *p; p++)
-> +               if (*p == '/')
-> +                       slash_diff--;
-> +
-> +       len = strlen(pattern) + 1;
-> +
-> +       if (slash_diff > 0)
-> +               len += slash_diff * 2;
-> +       modified_pattern = xmalloc(len);
-> +
-> +       q = modified_pattern;
-> +       for (p = pattern; *p; p++) {
-> +               if (!strncmp(p, "**/", 3)) {
-> +                       // "**/" means zero of more sequences of '*/".
-> +                       // "foo**/bar" matches "foobar", "foo*/bar",
-> +                       // "foo*/*/bar", etc.
-> +                       while (slash_diff-- > 0) {
-> +                               *q++ = '*';
-> +                               *q++ = '/';
-> +                       }
-> +
-> +                       if (slash_diff == 0) {
-> +                               *q++ = '*';
-> +                               *q++ = '/';
-> +                       }
-> +
-> +                       if (slash_diff < 0)
-> +                               slash_diff++;
-> +
-> +                       p += 2;
-> +               } else if (!strcmp(p, "/**")) {
-> +                       // A trailing "/**" matches everything inside.
-> +                       while (slash_diff-- >= 0) {
-> +                               *q++ = '/';
-> +                               *q++ = '*';
-> +                       }
-> +
-> +                       p += 2;
-> +               } else {
-> +                       // Copy other patterns as-is.
-> +                       // Other consecutive asterisks are considered regular
-> +                       // asterisks. fnmatch() already handles them like that.
-> +                       *q++ = *p;
-> +               }
-> +       }
-> +
-> +       *q = '\0';
-> +
-> +       result = simple_match(path, modified_pattern);
-> +
-> +       free(modified_pattern);
-> +
-> +       return result;
-> +}
-> +
-> +// Return true if the given path is ignored by git.
-> +static bool is_ignored(const char *path, const char *name, bool is_dir)
-> +{
-> +       int i;
-> +
-> +       // Search the patterns in the reverse order because the last matching
-> +       // pattern wins.
-> +       for (i = nr_patterns - 1; i >= 0; i--) {
-> +               struct pattern *p = patterns[i];
-> +
-> +               if (!is_dir && p->dir_only)
-> +                       continue;
-> +
-> +               if (!p->path_match) {
-> +                       // If the pattern has no slash at the beginning or
-> +                       // middle, it matches against the basename. Most cases
-> +                       // fall into this and work well with double asterisks.
-> +                       if (!simple_match(name, p->glob))
-> +                               continue;
-> +               } else if (!p->double_asterisk) {
-> +                       // Unless the pattern has double asterisks, it is still
-> +                       // simple but matches against the path instead.
-> +                       if (!simple_match(path, p->glob))
-> +                               continue;
-> +               } else {
-> +                       // Double asterisks with a slash. Complex, but rare.
-> +                       if (!double_asterisk_match(path, p->glob))
-> +                               continue;
-> +               }
-> +
-> +               debug("%s: matches %s%s%s\n", path, p->negate ? "!" : "",
-> +                     p->glob, p->dir_only ? "/" : "");
-> +
-> +               return !p->negate;
-> +       }
-> +
-> +       debug("%s: no match\n", path);
-> +
-> +       return false;
-> +}
-> +
-> +// Return the length of the initial segment of the string that does not contain
-> +// the unquoted sequence of the given character. Similar to strcspn() in libc.
-> +static size_t strcspn_trailer(const char *str, char c)
-> +{
-> +       bool quoted = false;
-> +       size_t len = strlen(str);
-> +       size_t spn = len;
-> +       const char *s;
-> +
-> +       for (s = str; *s; s++) {
-> +               if (!quoted && *s == c) {
-> +                       if (s - str < spn)
-> +                               spn = s - str;
-> +               } else {
-> +                       spn = len;
-> +
-> +                       if (!quoted && *s == '\\')
-> +                               quoted = true;
-> +                       else
-> +                               quoted = false;
-> +               }
-> +       }
-> +
-> +       return spn;
-> +}
-> +
-> +// Add an gitignore pattern.
-> +static void add_pattern(char *s, const char *dirpath)
-> +{
-> +       bool negate = false;
-> +       bool dir_only = false;
-> +       bool path_match = false;
-> +       bool double_asterisk = false;
-> +       char *e = s + strlen(s);
-> +       struct pattern *p;
-> +       size_t len;
-> +
-> +       // Skip comments
-> +       if (*s == '#')
-> +               return;
-> +
-> +       // Trailing spaces are ignored unless they are quoted with backslash.
-> +       e = s + strcspn_trailer(s, ' ');
-> +       *e = '\0';
-> +
-> +       // The prefix '!' negates the pattern
-> +       if (*s == '!') {
-> +               s++;
-> +               negate = true;
-> +       }
-> +
-> +       // If there is slash(es) that is not escaped at the end of the pattern,
-> +       // it matches only directories.
-> +       len = strcspn_trailer(s, '/');
-> +       if (s + len < e) {
-> +               dir_only = true;
-> +               e = s + len;
-> +               *e = '\0';
-> +       }
-> +
-> +       // Skip if the line gets empty
-> +       if (*s == '\0')
-> +               return;
-> +
-> +       // Double asterisk is tricky. Mark it to handle it specially later.
-> +       if (strstr(s, "**/") || strstr(s, "/**"))
-> +               double_asterisk = true;
-> +
-> +       // If there is a slash at the beginning or middle, the pattern
-> +       // is relative to the directory level of the .gitignore.
-> +       if (strchr(s, '/')) {
-> +               if (*s == '/')
-> +                       s++;
-> +               path_match = true;
-> +       }
-> +
-> +       len = e - s;
-> +
-> +       // We need more room to store dirpath and '/'
-> +       if (path_match)
-> +               len += strlen(dirpath) + 1;
-> +
-> +       p = xmalloc(sizeof(*p) + len + 1);
-> +       p->negate = negate;
-> +       p->dir_only = dir_only;
-> +       p->path_match = path_match;
-> +       p->double_asterisk = double_asterisk;
-> +       p->glob[0] = '\0';
-> +
-> +       if (path_match) {
-> +               strcat(p->glob, dirpath);
-> +               strcat(p->glob, "/");
-> +       }
-> +
-> +       strcat(p->glob, s);
-> +
-> +       debug("Add pattern: %s%s%s\n", negate ? "!" : "", p->glob,
-> +             dir_only ? "/" : "");
-> +
-> +       if (nr_patterns >= alloced_patterns) {
-> +               alloced_patterns += 128;
-> +               patterns = xrealloc(patterns,
-> +                                   sizeof(*patterns) * alloced_patterns);
-> +       }
-> +
-> +       patterns[nr_patterns++] = p;
-> +}
-> +
-> +static void *load_gitignore(const char *dirpath)
-> +{
-> +       struct stat st;
-> +       char path[PATH_MAX], *buf;
-> +       int fd, ret;
-> +
-> +       ret = snprintf(path, sizeof(path), "%s/.gitignore", dirpath);
-> +       if (ret >= sizeof(path))
-> +               error_exit("%s: too long path was truncated\n", path);
-> +
-> +       // If .gitignore does not exist in this directory, open() fails.
-> +       // It is ok, just skip it.
-> +       fd = open(path, O_RDONLY);
-> +       if (fd < 0)
-> +               return NULL;
-> +
-> +       if (fstat(fd, &st) < 0)
-> +               perror_exit(path);
-> +
-> +       buf = xmalloc(st.st_size + 1);
-> +       if (read(fd, buf, st.st_size) != st.st_size)
-> +               perror_exit(path);
-> +
-> +       buf[st.st_size] = '\0';
-> +       if (close(fd))
-> +               perror_exit(path);
-> +
-> +       return buf;
-> +}
-> +
-> +// Parse '.gitignore' in the given directory.
-> +static void parse_gitignore(const char *dirpath)
-> +{
-> +       char *buf, *s, *next;
-> +
-> +       buf = load_gitignore(dirpath);
-> +       if (!buf)
-> +               return;
-> +
-> +       debug("Parse %s/.gitignore\n", dirpath);
-> +
-> +       for (s = buf; *s; s = next) {
-> +               next = s;
-> +
-> +               while (*next != '\0' && *next != '\n')
-> +                       next++;
-> +
-> +               if (*next != '\0') {
-> +                       *next = '\0';
-> +                       next++;
-> +               }
-> +
-> +               add_pattern(s, dirpath);
-> +       }
-> +
-> +       free(buf);
-> +}
-> +
-> +// Save the current number of patterns and increment the depth
-> +static void increment_depth(void)
-> +{
-> +       if (depth >= max_depth) {
-> +               max_depth += 1;
-> +               nr_patterns_at = xrealloc(nr_patterns_at,
-> +                                         sizeof(*nr_patterns_at) * max_depth);
-> +       }
-> +
-> +       nr_patterns_at[depth] = nr_patterns;
-> +       depth++;
-> +}
-> +
-> +// Decrement the depth, and free up the patterns of this directory level.
-> +static void decrement_depth(void)
-> +{
-> +       depth--;
-> +       if (depth < 0)
-> +               error_exit("BUG\n");
-> +
-> +       while (nr_patterns > nr_patterns_at[depth])
-> +               free(patterns[--nr_patterns]);
-> +}
-> +
-> +// If we find an ignored path, print it.
-> +static void print_path(const char *path)
-> +{
-> +       // The path always start with "./". If not, it is a bug.
-> +       if (strlen(path) < 2)
-> +               error_exit("BUG\n");
-> +
-> +       // Replace the root directory with the prefix you like.
-> +       // This is useful for the tar command.
-> +       fprintf(out_fp, "%s%s\n", prefix, path + 2);
-> +}
-> +
-> +// Traverse the entire directory tree, parsing .gitignore files.
-> +// Print file paths that are not tracked by git.
-> +//
-> +// Return true if all files under the directory are ignored, false otherwise.
-> +static bool traverse_directory(const char *dirpath)
-> +{
-> +       bool all_ignored = true;
-> +       DIR *dirp;
-> +
-> +       debug("Enter[%d]: %s\n", depth, dirpath);
-> +       increment_depth();
-> +
-> +       // We do not know whether .gitignore exists in this directory or not.
-> +       // Anyway, try to open it.
-> +       parse_gitignore(dirpath);
-> +
-> +       dirp = opendir(dirpath);
-> +       if (!dirp)
-> +               perror_exit(dirpath);
-> +
-> +       while (1) {
-> +               char path[PATH_MAX];
-> +               struct dirent *d;
-> +               int ret;
-> +
-> +               errno = 0;
-> +               d = readdir(dirp);
-> +               if (!d) {
-> +                       // readdir() returns NULL on the end of the directory
-> +                       // steam, and also on an error. To distinguish them,
-> +                       // errno should be checked.
-> +                       if (errno)
-> +                               perror_exit(dirpath);
-> +                       break;
-> +               }
-> +
-> +               if (!strcmp(d->d_name, "..") || !strcmp(d->d_name, "."))
-> +                       continue;
-> +
-> +               ret = snprintf(path, sizeof(path), "%s/%s", dirpath, d->d_name);
-> +               if (ret >= sizeof(path))
-> +                       error_exit("%s: too long path was truncated\n", path);
-> +
-> +               if (is_ignored(path, d->d_name, d->d_type & DT_DIR)) {
-> +                       debug("Ignore: %s\n", path);
-> +                       print_path(path);
-> +               } else {
-> +                       if ((d->d_type & DT_DIR) && !(d->d_type & DT_LNK)) {
-> +                               if (!traverse_directory(path))
-> +                                       all_ignored = false;
-> +                       } else {
-> +                               all_ignored = false;
-> +                       }
-> +               }
-> +       }
-> +
-> +       if (closedir(dirp))
-> +               perror_exit(dirpath);
-> +
-> +       // If all the files under this directory are ignored, let's ignore this
-> +       // directory as well in order to avoid empty directories in the tarball.
-> +       if (all_ignored) {
-> +               debug("Ignore: %s (due to all files inside ignored)\n", dirpath);
-> +               print_path(dirpath);
-> +       }
-> +
-> +       decrement_depth();
-> +       debug("Leave[%d]: %s\n", depth, dirpath);
-> +
-> +       return all_ignored;
-> +}
-> +
-> +// Register hard-coded ignore patterns.
-> +static void add_fixed_patterns(void)
-> +{
-> +       const char * const fixed_patterns[] = {
-> +               ".git/",
-> +       };
-> +       int i;
-> +
-> +       for (i = 0; i < ARRAY_SIZE(fixed_patterns); i++) {
-> +               char *s = xstrdup(fixed_patterns[i]);
-> +
-> +               add_pattern(s, ".");
-> +               free(s);
-> +       }
-> +}
-> +
-> +static void usage(void)
-> +{
-> +       fprintf(stderr,
-> +               "usage: %s [options]\n"
-> +               "\n"
-> +               "Print files that are not ignored by git\n"
-> +               "\n"
-> +               "options:\n"
-> +               "  -d, --debug                   print debug messages to stderr\n"
-> +               "  -e, --extra-pattern PATTERN   Add extra ignore patterns. This behaves like it is prepended to the top .gitignore\n"
-> +               "  -h, --help                    show this help message and exit\n"
-> +               "  -o, --output FILE             output to a file (default: '-', i.e. stdout)\n"
-> +               "  -p, --prefix PREFIX           prefix added to each path (default: empty string)\n"
-> +               "  -r, --rootdir DIR             root of the source tree (default: current working directory):\n",
-> +               progname);
-> +}
-> +
-> +int main(int argc, char *argv[])
-> +{
-> +       const char *output = "-";
-> +       const char *rootdir = ".";
-> +
-> +       progname = strrchr(argv[0], '/');
-> +       if (progname)
-> +               progname++;
-> +       else
-> +               progname = argv[0];
-> +
-> +       while (1) {
-> +               static struct option long_options[] = {
-> +                       {"debug",         no_argument,       NULL, 'd'},
-> +                       {"extra-pattern", required_argument, NULL, 'e'},
-> +                       {"help",          no_argument,       NULL, 'h'},
-> +                       {"output",        required_argument, NULL, 'o'},
-> +                       {"prefix",        required_argument, NULL, 'p'},
-> +                       {"rootdir",       required_argument, NULL, 'r'},
-> +                       {},
-> +               };
-> +
-> +               int c = getopt_long(argc, argv, "de:ho:p:r:", long_options, NULL);
-> +
-> +               if (c == -1)
-> +                       break;
-> +
-> +               switch (c) {
-> +               case 'd':
-> +                       debug_on = true;
-> +                       break;
-> +               case 'e':
-> +                       add_pattern(optarg, ".");
-> +                       break;
-> +               case 'h':
-> +                       usage();
-> +                       exit(0);
-> +               case 'o':
-> +                       output = optarg;
-> +                       break;
-> +               case 'p':
-> +                       prefix = optarg;
-> +                       break;
-> +               case 'r':
-> +                       rootdir = optarg;
-> +                       break;
-> +               case '?':
-> +                       usage();
-> +                       /* fallthrough */
-> +               default:
-> +                       exit(EXIT_FAILURE);
-> +               }
-> +       }
-> +
-> +       if (chdir(rootdir))
-> +               perror_exit(rootdir);
-> +
-> +       if (strcmp(output, "-")) {
-> +               out_fp = fopen(output, "w");
-> +               if (!out_fp)
-> +                       perror_exit(output);
-> +       } else {
-> +               out_fp = stdout;
-> +       }
-> +
-> +       add_fixed_patterns();
-> +
-> +       traverse_directory(".");
-> +
-> +       if (depth != 0)
-> +               error_exit("BUG\n");
-> +
-> +       while (nr_patterns > 0)
-> +               free(patterns[--nr_patterns]);
-> +       free(patterns);
-> +       free(nr_patterns_at);
-> +
-> +       fflush(out_fp);
-> +       if (ferror(out_fp))
-> +               error_exit("not all data was written to the output\n");
-> +
-> +       if (fclose(out_fp))
-> +               perror_exit(output);
-> +
-> +       return 0;
-> +}
-> --
-> 2.34.1
->
-
-
--- 
-Best Regards
-Masahiro Yamada
+Make sense.
