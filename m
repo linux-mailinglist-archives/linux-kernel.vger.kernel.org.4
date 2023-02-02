@@ -2,250 +2,412 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D66266878B9
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:24:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 353136878B0
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:23:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232165AbjBBJYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 04:24:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34730 "EHLO
+        id S231956AbjBBJXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 04:23:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232004AbjBBJX7 (ORCPT
+        with ESMTP id S231899AbjBBJXl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 04:23:59 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61BEC6F702
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 01:23:57 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id lu11so4182908ejb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 01:23:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mind.be; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eJR3j7UgcHI8drkrJokvDJuY/mtil1DqdGHf4t4Su9s=;
-        b=HFf1Yg0hiyf7Ud6/Vt8BibDYkQo2daDFPEzRUHOyb+CttMOo56Ev8Nw0q1kBnA3tly
-         5fKuFv3zk5LcnqlGRNae5lfl+iE+GKVrR92DTUpj1bTcj6OnZVbxXRYfRlxP6bsFBWli
-         hHcAmvRRw9hjAG64KlevLHERnv3rn1OcuV68ak7avmw4DN7QQWIJBlr/6xpwQTYstimw
-         tdRDqek2jERGQrZS6/hEUt2mSmUu9ugJInRStSh43SRza+qnsyPXNMApfDJzcJml6DKy
-         /XQ5IzagkYFix8fFKXDE+2lpgr3zqzmauGMhL83Oi0IolTGUZi/aV7Fiu1tqKGwcVPa2
-         M1Rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eJR3j7UgcHI8drkrJokvDJuY/mtil1DqdGHf4t4Su9s=;
-        b=mQUWZQ0jGhWq7QPgc67F+3Aw/NF6p9fdzaf5ujEl0g5XL9cG4GODHTlg7z8grtmynf
-         h0PTDuVzljqIdnd2Mjpb/Yy8Z/FGNYWoAceMW1H3XdKyRQ55igET6dplWEbQkjJn63M0
-         rmmzOFWPrOjrxOLiQH3MdhTdSr5mr9QpvqGzQGFep0DAyArgW/qoO4V0hvvOHmgBG7cE
-         jI7nSzXlNHW3zJUOCDK5v5+XkxAmthl4Y6icrq/o+eVFYaLQfFhsEij8N5HyiREFxPTt
-         WF2h868XO2Mrnfp27YsAjyse2RXJcIWULB3jQfVBuhv+VKUUdHyiYNGNzZRQu0r4raF+
-         dxEA==
-X-Gm-Message-State: AO0yUKXDMzSf4TDQ8EPa4n187AEcrqw3FYkKUq+rxT47VZChgIFG6efg
-        vKJnvQx6Ha4MyIl9MZYRCV41l2coGURdbAly
-X-Google-Smtp-Source: AK7set9CScJwmTYyFXHqel3Ljr+cMRX1jUgPHSMB/jaHklWgbW3tH5Z2mQ3Py6HbKbj9Fz1+QzyBzw==
-X-Received: by 2002:a17:906:2a50:b0:888:c0b4:7f08 with SMTP id k16-20020a1709062a5000b00888c0b47f08mr5537360eje.29.1675329835902;
-        Thu, 02 Feb 2023 01:23:55 -0800 (PST)
-Received: from dtpc.zanders.be (78-22-137-109.access.telenet.be. [78.22.137.109])
-        by smtp.gmail.com with ESMTPSA id j4-20020a170906474400b00856ad9108e7sm11372658ejs.70.2023.02.02.01.23.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 01:23:55 -0800 (PST)
-From:   Maarten Zanders <maarten.zanders@mind.be>
-To:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>
-Cc:     Maarten Zanders <maarten.zanders@mind.be>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        Thu, 2 Feb 2023 04:23:41 -0500
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 795EB4B74B
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 01:23:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=k1; bh=pcqLq8qMa3JNWsW3ad62UmmWMqJ
+        QCmrAr/IBe7SbFhs=; b=D96lQDKbrB2wdnu59hVeCR7xEinJLSmKAKcsHgrH4iI
+        WO1Lhs8prNxQk5lDjtMbcxmPnO/KGzlUyBeReXQNaaQqbzfcbdxC8b90Ecu7LMGC
+        rZchNFv8zCq2JDdZ2OzTKUTfKeyltwiuxOgZK4fsjMr1m9K405edjKn7ryhSQJg4
+        =
+Received: (qmail 2588005 invoked from network); 2 Feb 2023 10:23:34 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 2 Feb 2023 10:23:34 +0100
+X-UD-Smtp-Session: l3s3148p1@ihpxHrTzBoMujnsO
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-renesas-soc@vger.kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/2] leds: lp55xx: configure internal charge pump
-Date:   Thu,  2 Feb 2023 10:23:25 +0100
-Message-Id: <20230202092325.21241-3-maarten.zanders@mind.be>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20230202092325.21241-1-maarten.zanders@mind.be>
-References: <20230202092325.21241-1-maarten.zanders@mind.be>
+Subject: [PATCH] clk: renesas: rcar-gen3: disable R-Car H3 ES1.*
+Date:   Thu,  2 Feb 2023 10:23:31 +0100
+Message-Id: <20230202092332.2504-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The LP55xx range of devices have an internal charge pump which
-can (automatically) increase the output voltage towards the
-LED's, boosting the output voltage to 4.5V.
+R-Car H3 ES1.* was only available to an internal development group and
+needed a lot of quirks and workarounds. These become a maintenance
+burden now, so our development group decided to remove upstream support
+for this SoC. Public users only have ES2 onwards.
 
-Implement this option from the devicetree. When the setting
-is not present it will operate in automatic mode as before.
+In addition to the ES1 specific removals, a check for it was added
+preventing the machine to boot further. It may otherwise inherit wrong
+clock settings from ES2 which could damage the hardware.
 
-Tested on LP55231. Datasheet analysis shows that LP5521, LP5523
-and LP8501 are identical in topology and are modified in the
-same way.
-
-Signed-off-by: Maarten Zanders <maarten.zanders@mind.be>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- drivers/leds/leds-lp5521.c                | 12 ++++++------
- drivers/leds/leds-lp5523.c                | 18 +++++++++++++-----
- drivers/leds/leds-lp55xx-common.c         | 14 ++++++++++++++
- drivers/leds/leds-lp8501.c                |  8 ++++++--
- include/linux/platform_data/leds-lp55xx.h |  3 +++
- 5 files changed, 42 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/leds/leds-lp5521.c b/drivers/leds/leds-lp5521.c
-index 19478d9c19a7..76c6b81afb38 100644
---- a/drivers/leds/leds-lp5521.c
-+++ b/drivers/leds/leds-lp5521.c
-@@ -58,14 +58,11 @@
- /* CONFIG register */
- #define LP5521_PWM_HF			0x40	/* PWM: 0 = 256Hz, 1 = 558Hz */
- #define LP5521_PWRSAVE_EN		0x20	/* 1 = Power save mode */
--#define LP5521_CP_MODE_OFF		0	/* Charge pump (CP) off */
--#define LP5521_CP_MODE_BYPASS		8	/* CP forced to bypass mode */
--#define LP5521_CP_MODE_1X5		0x10	/* CP forced to 1.5x mode */
--#define LP5521_CP_MODE_AUTO		0x18	/* Automatic mode selection */
-+#define LP5521_CP_MODE_MASK		0x18	/* Charge pump mode */
-+#define LP5521_CP_MODE_SHIFT		3
- #define LP5521_R_TO_BATT		0x04	/* R out: 0 = CP, 1 = Vbat */
- #define LP5521_CLK_INT			0x01	/* Internal clock */
--#define LP5521_DEFAULT_CFG		\
--	(LP5521_PWM_HF | LP5521_PWRSAVE_EN | LP5521_CP_MODE_AUTO)
-+#define LP5521_DEFAULT_CFG		(LP5521_PWM_HF | LP5521_PWRSAVE_EN)
+Review tag has been given by Geert during internal review because we
+tried two different approaches. Tested on Salvator-X(S) boards with H3
+ES1.0, ES2.0, and M3-N.
+
+ drivers/clk/renesas/Kconfig            |   2 +-
+ drivers/clk/renesas/r8a7795-cpg-mssr.c | 126 ++-----------------------
+ drivers/clk/renesas/rcar-gen3-cpg.c    |  17 +---
+ drivers/clk/renesas/renesas-cpg-mssr.c |  27 ------
+ drivers/clk/renesas/renesas-cpg-mssr.h |  14 ---
+ 5 files changed, 13 insertions(+), 173 deletions(-)
+
+diff --git a/drivers/clk/renesas/Kconfig b/drivers/clk/renesas/Kconfig
+index cacaf9b87d26..37632a0659d8 100644
+--- a/drivers/clk/renesas/Kconfig
++++ b/drivers/clk/renesas/Kconfig
+@@ -22,7 +22,7 @@ config CLK_RENESAS
+ 	select CLK_R8A7791 if ARCH_R8A7791 || ARCH_R8A7793
+ 	select CLK_R8A7792 if ARCH_R8A7792
+ 	select CLK_R8A7794 if ARCH_R8A7794
+-	select CLK_R8A7795 if ARCH_R8A77950 || ARCH_R8A77951
++	select CLK_R8A7795 if ARCH_R8A77951
+ 	select CLK_R8A77960 if ARCH_R8A77960
+ 	select CLK_R8A77961 if ARCH_R8A77961
+ 	select CLK_R8A77965 if ARCH_R8A77965
+diff --git a/drivers/clk/renesas/r8a7795-cpg-mssr.c b/drivers/clk/renesas/r8a7795-cpg-mssr.c
+index 301475c74f50..7a585a777d38 100644
+--- a/drivers/clk/renesas/r8a7795-cpg-mssr.c
++++ b/drivers/clk/renesas/r8a7795-cpg-mssr.c
+@@ -128,7 +128,6 @@ static struct cpg_core_clk r8a7795_core_clks[] __initdata = {
+ };
  
- /* Status */
- #define LP5521_EXT_CLK_USED		0x08
-@@ -310,6 +307,9 @@ static int lp5521_post_init_device(struct lp55xx_chip *chip)
- 	if (!lp55xx_is_extclk_used(chip))
- 		val |= LP5521_CLK_INT;
+ static struct mssr_mod_clk r8a7795_mod_clks[] __initdata = {
+-	DEF_MOD("fdp1-2",		 117,	R8A7795_CLK_S2D1), /* ES1.x */
+ 	DEF_MOD("fdp1-1",		 118,	R8A7795_CLK_S0D1),
+ 	DEF_MOD("fdp1-0",		 119,	R8A7795_CLK_S0D1),
+ 	DEF_MOD("tmu4",			 121,	R8A7795_CLK_S0D6),
+@@ -162,7 +161,6 @@ static struct mssr_mod_clk r8a7795_mod_clks[] __initdata = {
+ 	DEF_MOD("pcie1",		 318,	R8A7795_CLK_S3D1),
+ 	DEF_MOD("pcie0",		 319,	R8A7795_CLK_S3D1),
+ 	DEF_MOD("usb-dmac30",		 326,	R8A7795_CLK_S3D1),
+-	DEF_MOD("usb3-if1",		 327,	R8A7795_CLK_S3D1), /* ES1.x */
+ 	DEF_MOD("usb3-if0",		 328,	R8A7795_CLK_S3D1),
+ 	DEF_MOD("usb-dmac31",		 329,	R8A7795_CLK_S3D1),
+ 	DEF_MOD("usb-dmac0",		 330,	R8A7795_CLK_S3D1),
+@@ -187,28 +185,21 @@ static struct mssr_mod_clk r8a7795_mod_clks[] __initdata = {
+ 	DEF_MOD("hscif0",		 520,	R8A7795_CLK_S3D1),
+ 	DEF_MOD("thermal",		 522,	R8A7795_CLK_CP),
+ 	DEF_MOD("pwm",			 523,	R8A7795_CLK_S0D12),
+-	DEF_MOD("fcpvd3",		 600,	R8A7795_CLK_S2D1), /* ES1.x */
+ 	DEF_MOD("fcpvd2",		 601,	R8A7795_CLK_S0D2),
+ 	DEF_MOD("fcpvd1",		 602,	R8A7795_CLK_S0D2),
+ 	DEF_MOD("fcpvd0",		 603,	R8A7795_CLK_S0D2),
+ 	DEF_MOD("fcpvb1",		 606,	R8A7795_CLK_S0D1),
+ 	DEF_MOD("fcpvb0",		 607,	R8A7795_CLK_S0D1),
+-	DEF_MOD("fcpvi2",		 609,	R8A7795_CLK_S2D1), /* ES1.x */
+ 	DEF_MOD("fcpvi1",		 610,	R8A7795_CLK_S0D1),
+ 	DEF_MOD("fcpvi0",		 611,	R8A7795_CLK_S0D1),
+-	DEF_MOD("fcpf2",		 613,	R8A7795_CLK_S2D1), /* ES1.x */
+ 	DEF_MOD("fcpf1",		 614,	R8A7795_CLK_S0D1),
+ 	DEF_MOD("fcpf0",		 615,	R8A7795_CLK_S0D1),
+-	DEF_MOD("fcpci1",		 616,	R8A7795_CLK_S2D1), /* ES1.x */
+-	DEF_MOD("fcpci0",		 617,	R8A7795_CLK_S2D1), /* ES1.x */
+ 	DEF_MOD("fcpcs",		 619,	R8A7795_CLK_S0D1),
+-	DEF_MOD("vspd3",		 620,	R8A7795_CLK_S2D1), /* ES1.x */
+ 	DEF_MOD("vspd2",		 621,	R8A7795_CLK_S0D2),
+ 	DEF_MOD("vspd1",		 622,	R8A7795_CLK_S0D2),
+ 	DEF_MOD("vspd0",		 623,	R8A7795_CLK_S0D2),
+ 	DEF_MOD("vspbc",		 624,	R8A7795_CLK_S0D1),
+ 	DEF_MOD("vspbd",		 626,	R8A7795_CLK_S0D1),
+-	DEF_MOD("vspi2",		 629,	R8A7795_CLK_S2D1), /* ES1.x */
+ 	DEF_MOD("vspi1",		 630,	R8A7795_CLK_S0D1),
+ 	DEF_MOD("vspi0",		 631,	R8A7795_CLK_S0D1),
+ 	DEF_MOD("ehci3",		 700,	R8A7795_CLK_S3D2),
+@@ -221,7 +212,6 @@ static struct mssr_mod_clk r8a7795_mod_clks[] __initdata = {
+ 	DEF_MOD("cmm2",			 709,	R8A7795_CLK_S2D1),
+ 	DEF_MOD("cmm1",			 710,	R8A7795_CLK_S2D1),
+ 	DEF_MOD("cmm0",			 711,	R8A7795_CLK_S2D1),
+-	DEF_MOD("csi21",		 713,	R8A7795_CLK_CSI0), /* ES1.x */
+ 	DEF_MOD("csi20",		 714,	R8A7795_CLK_CSI0),
+ 	DEF_MOD("csi41",		 715,	R8A7795_CLK_CSI0),
+ 	DEF_MOD("csi40",		 716,	R8A7795_CLK_CSI0),
+@@ -350,103 +340,26 @@ static const struct rcar_gen3_cpg_pll_config cpg_pll_configs[16] __initconst = {
+ 	{ 2,		192,	1,	192,	1,	32,	},
+ };
  
-+	val |= (chip->pdata->charge_pump_mode << LP5521_CP_MODE_SHIFT) &
-+		LP5521_CP_MODE_MASK;
-+
- 	ret = lp55xx_write(chip, LP5521_REG_CONFIG, val);
- 	if (ret)
- 		return ret;
-diff --git a/drivers/leds/leds-lp5523.c b/drivers/leds/leds-lp5523.c
-index e08e3de1428d..b5d10d4252e6 100644
---- a/drivers/leds/leds-lp5523.c
-+++ b/drivers/leds/leds-lp5523.c
-@@ -57,8 +57,12 @@
- #define LP5523_AUTO_INC			0x40
- #define LP5523_PWR_SAVE			0x20
- #define LP5523_PWM_PWR_SAVE		0x04
--#define LP5523_CP_AUTO			0x18
-+#define LP5523_CP_MODE_MASK		0x18
-+#define LP5523_CP_MODE_SHIFT		3
- #define LP5523_AUTO_CLK			0x02
-+#define LP5523_DEFAULT_CONFIG	\
-+	(LP5523_AUTO_INC | LP5523_PWR_SAVE |\
-+	 LP5523_AUTO_CLK | LP5523_PWM_PWR_SAVE)
+-static const struct soc_device_attribute r8a7795es1[] __initconst = {
++static const struct soc_device_attribute r8a7795_denylist[] __initconst = {
+ 	{ .soc_id = "r8a7795", .revision = "ES1.*" },
+ 	{ /* sentinel */ }
+ };
  
- #define LP5523_EN_LEDTEST		0x80
- #define LP5523_LEDTEST_DONE		0x80
-@@ -125,6 +129,7 @@ static void lp5523_set_led_current(struct lp55xx_led *led, u8 led_current)
- static int lp5523_post_init_device(struct lp55xx_chip *chip)
+-
+-	/*
+-	 * Fixups for R-Car H3 ES1.x
+-	 */
+-
+-static const unsigned int r8a7795es1_mod_nullify[] __initconst = {
+-	MOD_CLK_ID(326),			/* USB-DMAC3-0 */
+-	MOD_CLK_ID(329),			/* USB-DMAC3-1 */
+-	MOD_CLK_ID(700),			/* EHCI/OHCI3 */
+-	MOD_CLK_ID(705),			/* HS-USB-IF3 */
+-
+-};
+-
+-static const struct mssr_mod_reparent r8a7795es1_mod_reparent[] __initconst = {
+-	{ MOD_CLK_ID(118), R8A7795_CLK_S2D1 },	/* FDP1-1 */
+-	{ MOD_CLK_ID(119), R8A7795_CLK_S2D1 },	/* FDP1-0 */
+-	{ MOD_CLK_ID(121), R8A7795_CLK_S3D2 },	/* TMU4 */
+-	{ MOD_CLK_ID(217), R8A7795_CLK_S3D1 },	/* SYS-DMAC2 */
+-	{ MOD_CLK_ID(218), R8A7795_CLK_S3D1 },	/* SYS-DMAC1 */
+-	{ MOD_CLK_ID(219), R8A7795_CLK_S3D1 },	/* SYS-DMAC0 */
+-	{ MOD_CLK_ID(408), R8A7795_CLK_S3D1 },	/* INTC-AP */
+-	{ MOD_CLK_ID(501), R8A7795_CLK_S3D1 },	/* AUDMAC1 */
+-	{ MOD_CLK_ID(502), R8A7795_CLK_S3D1 },	/* AUDMAC0 */
+-	{ MOD_CLK_ID(523), R8A7795_CLK_S3D4 },	/* PWM */
+-	{ MOD_CLK_ID(601), R8A7795_CLK_S2D1 },	/* FCPVD2 */
+-	{ MOD_CLK_ID(602), R8A7795_CLK_S2D1 },	/* FCPVD1 */
+-	{ MOD_CLK_ID(603), R8A7795_CLK_S2D1 },	/* FCPVD0 */
+-	{ MOD_CLK_ID(606), R8A7795_CLK_S2D1 },	/* FCPVB1 */
+-	{ MOD_CLK_ID(607), R8A7795_CLK_S2D1 },	/* FCPVB0 */
+-	{ MOD_CLK_ID(610), R8A7795_CLK_S2D1 },	/* FCPVI1 */
+-	{ MOD_CLK_ID(611), R8A7795_CLK_S2D1 },	/* FCPVI0 */
+-	{ MOD_CLK_ID(614), R8A7795_CLK_S2D1 },	/* FCPF1 */
+-	{ MOD_CLK_ID(615), R8A7795_CLK_S2D1 },	/* FCPF0 */
+-	{ MOD_CLK_ID(619), R8A7795_CLK_S2D1 },	/* FCPCS */
+-	{ MOD_CLK_ID(621), R8A7795_CLK_S2D1 },	/* VSPD2 */
+-	{ MOD_CLK_ID(622), R8A7795_CLK_S2D1 },	/* VSPD1 */
+-	{ MOD_CLK_ID(623), R8A7795_CLK_S2D1 },	/* VSPD0 */
+-	{ MOD_CLK_ID(624), R8A7795_CLK_S2D1 },	/* VSPBC */
+-	{ MOD_CLK_ID(626), R8A7795_CLK_S2D1 },	/* VSPBD */
+-	{ MOD_CLK_ID(630), R8A7795_CLK_S2D1 },	/* VSPI1 */
+-	{ MOD_CLK_ID(631), R8A7795_CLK_S2D1 },	/* VSPI0 */
+-	{ MOD_CLK_ID(804), R8A7795_CLK_S2D1 },	/* VIN7 */
+-	{ MOD_CLK_ID(805), R8A7795_CLK_S2D1 },	/* VIN6 */
+-	{ MOD_CLK_ID(806), R8A7795_CLK_S2D1 },	/* VIN5 */
+-	{ MOD_CLK_ID(807), R8A7795_CLK_S2D1 },	/* VIN4 */
+-	{ MOD_CLK_ID(808), R8A7795_CLK_S2D1 },	/* VIN3 */
+-	{ MOD_CLK_ID(809), R8A7795_CLK_S2D1 },	/* VIN2 */
+-	{ MOD_CLK_ID(810), R8A7795_CLK_S2D1 },	/* VIN1 */
+-	{ MOD_CLK_ID(811), R8A7795_CLK_S2D1 },	/* VIN0 */
+-	{ MOD_CLK_ID(812), R8A7795_CLK_S3D2 },	/* EAVB-IF */
+-	{ MOD_CLK_ID(820), R8A7795_CLK_S2D1 },	/* IMR3 */
+-	{ MOD_CLK_ID(821), R8A7795_CLK_S2D1 },	/* IMR2 */
+-	{ MOD_CLK_ID(822), R8A7795_CLK_S2D1 },	/* IMR1 */
+-	{ MOD_CLK_ID(823), R8A7795_CLK_S2D1 },	/* IMR0 */
+-	{ MOD_CLK_ID(905), R8A7795_CLK_CP },	/* GPIO7 */
+-	{ MOD_CLK_ID(906), R8A7795_CLK_CP },	/* GPIO6 */
+-	{ MOD_CLK_ID(907), R8A7795_CLK_CP },	/* GPIO5 */
+-	{ MOD_CLK_ID(908), R8A7795_CLK_CP },	/* GPIO4 */
+-	{ MOD_CLK_ID(909), R8A7795_CLK_CP },	/* GPIO3 */
+-	{ MOD_CLK_ID(910), R8A7795_CLK_CP },	/* GPIO2 */
+-	{ MOD_CLK_ID(911), R8A7795_CLK_CP },	/* GPIO1 */
+-	{ MOD_CLK_ID(912), R8A7795_CLK_CP },	/* GPIO0 */
+-	{ MOD_CLK_ID(918), R8A7795_CLK_S3D2 },	/* I2C6 */
+-	{ MOD_CLK_ID(919), R8A7795_CLK_S3D2 },	/* I2C5 */
+-	{ MOD_CLK_ID(927), R8A7795_CLK_S3D2 },	/* I2C4 */
+-	{ MOD_CLK_ID(928), R8A7795_CLK_S3D2 },	/* I2C3 */
+-};
+-
+-
+-	/*
+-	 * Fixups for R-Car H3 ES2.x
+-	 */
+-
+-static const unsigned int r8a7795es2_mod_nullify[] __initconst = {
+-	MOD_CLK_ID(117),			/* FDP1-2 */
+-	MOD_CLK_ID(327),			/* USB3-IF1 */
+-	MOD_CLK_ID(600),			/* FCPVD3 */
+-	MOD_CLK_ID(609),			/* FCPVI2 */
+-	MOD_CLK_ID(613),			/* FCPF2 */
+-	MOD_CLK_ID(616),			/* FCPCI1 */
+-	MOD_CLK_ID(617),			/* FCPCI0 */
+-	MOD_CLK_ID(620),			/* VSPD3 */
+-	MOD_CLK_ID(629),			/* VSPI2 */
+-	MOD_CLK_ID(713),			/* CSI21 */
+-};
+-
+ static int __init r8a7795_cpg_mssr_init(struct device *dev)
  {
- 	int ret;
-+	int val;
+ 	const struct rcar_gen3_cpg_pll_config *cpg_pll_config;
+ 	u32 cpg_mode;
+ 	int error;
  
- 	ret = lp55xx_write(chip, LP5523_REG_ENABLE, LP5523_ENABLE);
- 	if (ret)
-@@ -133,10 +138,13 @@ static int lp5523_post_init_device(struct lp55xx_chip *chip)
- 	/* Chip startup time is 500 us, 1 - 2 ms gives some margin */
- 	usleep_range(1000, 2000);
- 
--	ret = lp55xx_write(chip, LP5523_REG_CONFIG,
--			    LP5523_AUTO_INC | LP5523_PWR_SAVE |
--			    LP5523_CP_AUTO | LP5523_AUTO_CLK |
--			    LP5523_PWM_PWR_SAVE);
-+	val = LP5523_DEFAULT_CONFIG;
++	/*
++	 * We panic here to ensure removed SoCs and clk updates are always in
++	 * sync to avoid overclocking damages. The panic can only be seen with
++	 * commandline args 'earlycon keep_bootcon'. But these SoCs were for
++	 * developers only anyhow.
++	 */
++	if (soc_device_match(r8a7795_denylist))
++		panic("SoC not supported anymore!\n");
 +
-+	val |= (chip->pdata->charge_pump_mode << LP5523_CP_MODE_SHIFT) &
-+	       LP5523_CP_MODE_MASK;
-+
-+	ret = lp55xx_write(chip, LP5523_REG_CONFIG, val);
-+
- 	if (ret)
- 		return ret;
- 
-diff --git a/drivers/leds/leds-lp55xx-common.c b/drivers/leds/leds-lp55xx-common.c
-index c1940964067a..086033860a6f 100644
---- a/drivers/leds/leds-lp55xx-common.c
-+++ b/drivers/leds/leds-lp55xx-common.c
-@@ -19,6 +19,8 @@
- #include <linux/slab.h>
- #include <linux/gpio/consumer.h>
- 
-+#include <dt-bindings/leds/leds-lp55xx.h>
-+
- #include "leds-lp55xx-common.h"
- 
- /* External clock rate */
-@@ -691,6 +693,18 @@ struct lp55xx_platform_data *lp55xx_of_populate_pdata(struct device *dev,
- 		i++;
+ 	error = rcar_rst_read_mode_pins(&cpg_mode);
+ 	if (error)
+ 		return error;
+@@ -457,25 +370,6 @@ static int __init r8a7795_cpg_mssr_init(struct device *dev)
+ 		return -EINVAL;
  	}
  
-+	ret = of_property_read_u8(np, "ti,charge-pump-mode",
-+				  &pdata->charge_pump_mode);
-+	if (ret) {
-+		pdata->charge_pump_mode = LP55XX_CP_AUTO;
-+	} else {
-+		if (pdata->charge_pump_mode > LP55XX_CP_AUTO) {
-+			dev_err(dev, "invalid charge pump mode %d\n",
-+				pdata->charge_pump_mode);
-+			return ERR_PTR(-EINVAL);
-+		}
-+	}
-+
- 	of_property_read_string(np, "label", &pdata->label);
- 	of_property_read_u8(np, "clock-mode", &pdata->clock_mode);
+-	if (soc_device_match(r8a7795es1)) {
+-		cpg_core_nullify_range(r8a7795_core_clks,
+-				       ARRAY_SIZE(r8a7795_core_clks),
+-				       R8A7795_CLK_S0D2, R8A7795_CLK_S0D12);
+-		mssr_mod_nullify(r8a7795_mod_clks,
+-				 ARRAY_SIZE(r8a7795_mod_clks),
+-				 r8a7795es1_mod_nullify,
+-				 ARRAY_SIZE(r8a7795es1_mod_nullify));
+-		mssr_mod_reparent(r8a7795_mod_clks,
+-				  ARRAY_SIZE(r8a7795_mod_clks),
+-				  r8a7795es1_mod_reparent,
+-				  ARRAY_SIZE(r8a7795es1_mod_reparent));
+-	} else {
+-		mssr_mod_nullify(r8a7795_mod_clks,
+-				 ARRAY_SIZE(r8a7795_mod_clks),
+-				 r8a7795es2_mod_nullify,
+-				 ARRAY_SIZE(r8a7795es2_mod_nullify));
+-	}
+-
+ 	return rcar_gen3_cpg_init(cpg_pll_config, CLK_EXTALR, cpg_mode);
+ }
  
-diff --git a/drivers/leds/leds-lp8501.c b/drivers/leds/leds-lp8501.c
-index ae11a02c0ab2..f0e70e116919 100644
---- a/drivers/leds/leds-lp8501.c
-+++ b/drivers/leds/leds-lp8501.c
-@@ -53,10 +53,11 @@
- #define LP8501_PWM_PSAVE		BIT(7)
- #define LP8501_AUTO_INC			BIT(6)
- #define LP8501_PWR_SAVE			BIT(5)
--#define LP8501_CP_AUTO			0x18
-+#define LP8501_CP_MODE_MASK		0x18
-+#define LP8501_CP_MODE_SHIFT		3
- #define LP8501_INT_CLK			BIT(0)
- #define LP8501_DEFAULT_CFG	\
--	(LP8501_PWM_PSAVE | LP8501_AUTO_INC | LP8501_PWR_SAVE | LP8501_CP_AUTO)
-+	(LP8501_PWM_PSAVE | LP8501_AUTO_INC | LP8501_PWR_SAVE)
+diff --git a/drivers/clk/renesas/rcar-gen3-cpg.c b/drivers/clk/renesas/rcar-gen3-cpg.c
+index e668f23c75e7..b3ef62fa612e 100644
+--- a/drivers/clk/renesas/rcar-gen3-cpg.c
++++ b/drivers/clk/renesas/rcar-gen3-cpg.c
+@@ -310,19 +310,10 @@ static unsigned int cpg_clk_extalr __initdata;
+ static u32 cpg_mode __initdata;
+ static u32 cpg_quirks __initdata;
  
- #define LP8501_REG_RESET		0x3D
- #define LP8501_RESET			0xFF
-@@ -102,6 +103,9 @@ static int lp8501_post_init_device(struct lp55xx_chip *chip)
- 	if (chip->pdata->clock_mode != LP55XX_CLOCK_EXT)
- 		val |= LP8501_INT_CLK;
+-#define PLL_ERRATA	BIT(0)		/* Missing PLL0/2/4 post-divider */
+ #define RCKCR_CKSEL	BIT(1)		/* Manual RCLK parent selection */
  
-+	val |= (chip->pdata->charge_pump_mode << LP8501_CP_MODE_SHIFT) &
-+	       LP8501_CP_MODE_MASK;
-+
- 	ret = lp55xx_write(chip, LP8501_REG_CONFIG, val);
- 	if (ret)
- 		return ret;
-diff --git a/include/linux/platform_data/leds-lp55xx.h b/include/linux/platform_data/leds-lp55xx.h
-index 3441064713a3..9a738979e1ce 100644
---- a/include/linux/platform_data/leds-lp55xx.h
-+++ b/include/linux/platform_data/leds-lp55xx.h
-@@ -73,6 +73,9 @@ struct lp55xx_platform_data {
- 	/* Clock configuration */
- 	u8 clock_mode;
  
-+	/* Charge pump mode */
-+	u8 charge_pump_mode;
-+
- 	/* optional enable GPIO */
- 	struct gpio_desc *enable_gpiod;
+ static const struct soc_device_attribute cpg_quirks_match[] __initconst = {
+-	{
+-		.soc_id = "r8a7795", .revision = "ES1.0",
+-		.data = (void *)(PLL_ERRATA | RCKCR_CKSEL),
+-	},
+-	{
+-		.soc_id = "r8a7795", .revision = "ES1.*",
+-		.data = (void *)(RCKCR_CKSEL),
+-	},
+ 	{
+ 		.soc_id = "r8a7796", .revision = "ES1.0",
+ 		.data = (void *)(RCKCR_CKSEL),
+@@ -355,9 +346,8 @@ struct clk * __init rcar_gen3_cpg_clk_register(struct device *dev,
+ 		 * multiplier when cpufreq changes between normal and boost
+ 		 * modes.
+ 		 */
+-		mult = (cpg_quirks & PLL_ERRATA) ? 4 : 2;
+ 		return cpg_pll_clk_register(core->name, __clk_get_name(parent),
+-					    base, mult, CPG_PLL0CR, 0);
++					    base, 2, CPG_PLL0CR, 0);
  
+ 	case CLK_TYPE_GEN3_PLL1:
+ 		mult = cpg_pll_config->pll1_mult;
+@@ -370,9 +360,8 @@ struct clk * __init rcar_gen3_cpg_clk_register(struct device *dev,
+ 		 * multiplier when cpufreq changes between normal and boost
+ 		 * modes.
+ 		 */
+-		mult = (cpg_quirks & PLL_ERRATA) ? 4 : 2;
+ 		return cpg_pll_clk_register(core->name, __clk_get_name(parent),
+-					    base, mult, CPG_PLL2CR, 2);
++					    base, 2, CPG_PLL2CR, 2);
+ 
+ 	case CLK_TYPE_GEN3_PLL3:
+ 		mult = cpg_pll_config->pll3_mult;
+@@ -388,8 +377,6 @@ struct clk * __init rcar_gen3_cpg_clk_register(struct device *dev,
+ 		 */
+ 		value = readl(base + CPG_PLL4CR);
+ 		mult = (((value >> 24) & 0x7f) + 1) * 2;
+-		if (cpg_quirks & PLL_ERRATA)
+-			mult *= 2;
+ 		break;
+ 
+ 	case CLK_TYPE_GEN3_SDH:
+diff --git a/drivers/clk/renesas/renesas-cpg-mssr.c b/drivers/clk/renesas/renesas-cpg-mssr.c
+index 3b899ffa88b4..9927bc0dde97 100644
+--- a/drivers/clk/renesas/renesas-cpg-mssr.c
++++ b/drivers/clk/renesas/renesas-cpg-mssr.c
+@@ -1113,19 +1113,6 @@ static int __init cpg_mssr_init(void)
+ 
+ subsys_initcall(cpg_mssr_init);
+ 
+-void __init cpg_core_nullify_range(struct cpg_core_clk *core_clks,
+-				   unsigned int num_core_clks,
+-				   unsigned int first_clk,
+-				   unsigned int last_clk)
+-{
+-	unsigned int i;
+-
+-	for (i = 0; i < num_core_clks; i++)
+-		if (core_clks[i].id >= first_clk &&
+-		    core_clks[i].id <= last_clk)
+-			core_clks[i].name = NULL;
+-}
+-
+ void __init mssr_mod_nullify(struct mssr_mod_clk *mod_clks,
+ 			     unsigned int num_mod_clks,
+ 			     const unsigned int *clks, unsigned int n)
+@@ -1139,19 +1126,5 @@ void __init mssr_mod_nullify(struct mssr_mod_clk *mod_clks,
+ 		}
+ }
+ 
+-void __init mssr_mod_reparent(struct mssr_mod_clk *mod_clks,
+-			      unsigned int num_mod_clks,
+-			      const struct mssr_mod_reparent *clks,
+-			      unsigned int n)
+-{
+-	unsigned int i, j;
+-
+-	for (i = 0, j = 0; i < num_mod_clks && j < n; i++)
+-		if (mod_clks[i].id == clks[j].clk) {
+-			mod_clks[i].parent = clks[j].parent;
+-			j++;
+-		}
+-}
+-
+ MODULE_DESCRIPTION("Renesas CPG/MSSR Driver");
+ MODULE_LICENSE("GPL v2");
+diff --git a/drivers/clk/renesas/renesas-cpg-mssr.h b/drivers/clk/renesas/renesas-cpg-mssr.h
+index 1c3c057d17f5..80c5b462924a 100644
+--- a/drivers/clk/renesas/renesas-cpg-mssr.h
++++ b/drivers/clk/renesas/renesas-cpg-mssr.h
+@@ -187,21 +187,7 @@ void __init cpg_mssr_early_init(struct device_node *np,
+     /*
+      * Helpers for fixing up clock tables depending on SoC revision
+      */
+-
+-struct mssr_mod_reparent {
+-	unsigned int clk, parent;
+-};
+-
+-
+-extern void cpg_core_nullify_range(struct cpg_core_clk *core_clks,
+-				   unsigned int num_core_clks,
+-				   unsigned int first_clk,
+-				   unsigned int last_clk);
+ extern void mssr_mod_nullify(struct mssr_mod_clk *mod_clks,
+ 			     unsigned int num_mod_clks,
+ 			     const unsigned int *clks, unsigned int n);
+-extern void mssr_mod_reparent(struct mssr_mod_clk *mod_clks,
+-			      unsigned int num_mod_clks,
+-			      const struct mssr_mod_reparent *clks,
+-			      unsigned int n);
+ #endif
 -- 
-2.37.3
+2.30.2
 
