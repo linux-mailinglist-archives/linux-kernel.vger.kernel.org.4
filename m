@@ -2,108 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91B456872F6
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 02:25:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 417EF68730D
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 02:33:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231491AbjBBBZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 20:25:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38782 "EHLO
+        id S230048AbjBBBdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 20:33:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbjBBBZT (ORCPT
+        with ESMTP id S229729AbjBBBdS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 20:25:19 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9C869539;
-        Wed,  1 Feb 2023 17:25:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675301118; x=1706837118;
-  h=from:to:cc:subject:date:message-id;
-  bh=VBzWoukx2SS6XrRH71Q5fqpOr6MncyDcf/33oE3P7lI=;
-  b=beF/Lr5C9NVEgO7hduUfx8hk/ilFwbGTmKYHQkRB97wo1xvROWrqek8L
-   ORUZglD3bkgycT1+EtrUsFmM2qocvfYKyLEdvnqmJxslZUPWFmdUSj/yR
-   OH9yOUKOAV+uaZCbiZ2FLi3yz1DYpXwRo7gxfEBSyldra1CSXWgo7pL92
-   twsDpmvp0JorYUeODlr8FW4+qi9mCJcqxRgNo7ttG/uRWXnyUVBcvaRng
-   S+7JZZJLX6FkcvGAV1EVv1FSfiWpC8keAGsvz+HDNv935NnRsYNqMVaLl
-   mp0SCsER+0wLBg49hk9TJs/whrQx6RdjE2wFr827Mohveyr3VU5eWzMkx
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="328334772"
-X-IronPort-AV: E=Sophos;i="5.97,266,1669104000"; 
-   d="scan'208";a="328334772"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 17:25:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="695579295"
-X-IronPort-AV: E=Sophos;i="5.97,266,1669104000"; 
-   d="scan'208";a="695579295"
-Received: from power-sh.sh.intel.com ([10.239.183.7])
-  by orsmga008.jf.intel.com with ESMTP; 01 Feb 2023 17:25:16 -0800
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     linux-pm@vger.kernel.org, rafael.j.wysocki@intel.com,
-        daniel.lezcano@linaro.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] powercap/intel_rapl: Fix handling for large time window
-Date:   Thu,  2 Feb 2023 09:31:40 +0800
-Message-Id: <20230202013140.30416-1-rui.zhang@intel.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 1 Feb 2023 20:33:18 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B94956F205
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 17:33:13 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id k15-20020a5b0a0f000000b007eba3f8e3baso355291ybq.4
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 17:33:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=CJ2suvTcnRqJyFH1jkuVoU3bY9GWNZHCdTTD+8pN/ek=;
+        b=ab2NcTEqcbY7BhT+q9RKK8BMRghu34aBqxgrwqyQE9pKF+aD5Qh3pXIOp+Ca2Ct6V4
+         CR7D8BIMFNycXHTz8bU9RNWJCl4Xb9h94tE2xZgVu4/ABKE8zMV3v5k1m5eUDjVUNYP+
+         +qCv4S/lL4uRlD6jbps3dtQ1Ul7uTczt8pFhP0KgFOhUkWJS4L9UdgcWPpk72waZyOgz
+         /YlQrSnMFinkTESaIfmgGoAOThbRxb0Fji0qeEvgTT69mxb/2HXF7ii7gGx1Y89GSRwG
+         4Q6YaisfxkYxrFgZaXzE7lJzcoDhgQKklRkWWT2vuVHu7PTnLqtGJP2leiChCiJ2vHT1
+         J1RQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CJ2suvTcnRqJyFH1jkuVoU3bY9GWNZHCdTTD+8pN/ek=;
+        b=n9kDuMWBWLiIlL+Dq4wzmXdol8qS/PlHRenXvYQZDQ73uOCSkKjCsiy5uTHGx+lYL8
+         ZJFctWrHCQRIdhbHT5rA3HMbW+E4QADTfuXFt6KdAaEC1wKxId0hnMW0w6fLO8SGdaWo
+         R+m9Urv0KxNE8CdYroeTCe77lgxyrPzs45jtv0V+2yCHd+GYRsXoUs50T41nOa2eLvYn
+         yw9SrAu5fcJY0/CAed7XijtZXn0IIRV8JxHtG49kL2dAXju3CmdObRPrAtewPxwM6YpV
+         NyYn1lPPGm8p9yrbyIkRuAi2j+kTq1PUgw1klkOGfkPMgWM18UWY6JATBuvzmzLzMFG6
+         h7HQ==
+X-Gm-Message-State: AO0yUKU4MeXofbbszG3s1WIwi12GQ5tPxxyS0EOCPifeAzHbjkGtib5B
+        OsM1xBm6stjVi4nQ4ZtF5wHqFXAFS8U=
+X-Google-Smtp-Source: AK7set9BpsXGFaQaIWNZQclxhRO3k0f4qDD0DIbvZ6nNKWBuTyun5Jle53OkdeNSGVkFVCMQzMEhbkT3UHI=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:8389:0:b0:835:7411:4e35 with SMTP id
+ t9-20020a258389000000b0083574114e35mr516313ybk.203.1675301593015; Wed, 01 Feb
+ 2023 17:33:13 -0800 (PST)
+Date:   Thu,  2 Feb 2023 01:32:31 +0000
+In-Reply-To: <20221109082802.27543-1-likexu@tencent.com>
+Mime-Version: 1.0
+References: <20221109082802.27543-1-likexu@tencent.com>
+X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
+Message-ID: <167529856265.852656.15112384836454646847.b4-ty@google.com>
+Subject: Re: [PATCH v3 0/3] KVM: x86/pmu: Enable guest PEBS for SPR and later models
+From:   Sean Christopherson <seanjc@google.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Like Xu <like.xu.linux@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When setting the power limit time window, software updates the 'y' bits
-and 'f' bits in the power limit register, and the value hardware takes
-follows the formula below
+On Wed, 09 Nov 2022 16:27:59 +0800, Like Xu wrote:
+> Finally, SPR will go live in early 2023. Virtualization support for SPR
+> PEBS (kvm.x86.vpmu.pebs_ept) has officially available in the Intel SDM
+> (June 2022), and this patch set is validated on a late stepping machine.
+> 
+> Let's see if this new revision will satisfy everyone's appetite.
+> 
+> Previous:
+> https://lore.kernel.org/kvm/20220922051929.89484-1-likexu@tencent.com/
+> V2 -> V3 Changelog:
+> - Add more commit message about the pdit/pdir stuff; (Sean)
+> - Refine confusing comments on event precise level and TNT+; (Sean)
+> - Use pmc_get_pebs_precise_level() instead of need_max_precise(); (Sean)
+> - Move HYBRID_CPU change in a separate patch; (Sean)
+> - Land KVM changes before perf core changes; (Sean)
+> - Aalign code indentation; (Sean) // VScode is quite good for kernel dev.
+> 
+> [...]
 
-	Time window = 2 ^ y * (1 + f / 4) * Time_Unit
+Applied 2-3 to kvm-x86 pmu.  I want to get Paolo's input before proceeding on
+the whole "disable vPMU for Hybrid PMUs" snafu.  IIUC, applying these patches
+won't make the situation worse, please holler if that's incorrect.
 
-When handling large time window input from userspace, using left
-shifting breaks in two cases,
-1. when ilog2(value) is bigger than 31, in expression "1 << y", left
-   shifting by more than 31 bits has undefined behavior. This breaks
-   'y'. For example, on an Alderlake platform, "1 << 32" returns 1.
-2. when ilog2(value) equals 31, "1 << 31" returns negative value
-   because '1' is recognized as signed int. And this breaks 'f'.
+Thanks!
 
-Given that 'y' has 5 bits and hardware can never take a value larger
-than 31, fix the first problem by clamp the time window to the maximum
-possible value that the hardware can take.
+[2/3] KVM: x86/pmu: Add PRIR++ and PDist support for SPR and later models
+      https://github.com/kvm-x86/linux/commit/974850be0125
+[3/3] perf/x86/intel: Expose EPT-friendly PEBS for SPR and future models
+      https://github.com/kvm-x86/linux/commit/13738a364736
 
-Fix the second problem by using unsigned bit left shift.
-
-Note that hardware has its own maximum time window limitation, which
-may be lower than the time window value retrieved from the power limit
-register. When this happens, hardware clamps the input to its maximum
-time window limitation. That is why a software clamp is preferred to
-handle the problem on hand.
-
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
----
- drivers/powercap/intel_rapl_common.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
-index 26d00b1853b4..8b30e5259d3b 100644
---- a/drivers/powercap/intel_rapl_common.c
-+++ b/drivers/powercap/intel_rapl_common.c
-@@ -999,7 +999,12 @@ static u64 rapl_compute_time_window_core(struct rapl_package *rp, u64 value,
- 
- 		do_div(value, rp->time_unit);
- 		y = ilog2(value);
--		f = div64_u64(4 * (value - (1 << y)), 1 << y);
-+		if (y > 0x1f) {
-+			pr_warn("%s: time window too large, clamped\n", rp->name);
-+			return 0x7f;
-+		}
-+
-+		f = div64_u64(4 * (value - (1ULL << y)), 1ULL << y);
- 		value = (y & 0x1f) | ((f & 0x3) << 5);
- 	}
- 	return value;
--- 
-2.25.1
-
+--
+https://github.com/kvm-x86/linux/tree/next
+https://github.com/kvm-x86/linux/tree/fixes
