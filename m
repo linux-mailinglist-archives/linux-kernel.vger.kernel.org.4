@@ -2,64 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D2556873C7
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 04:25:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDD086873CC
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 04:27:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230526AbjBBDZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 22:25:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55238 "EHLO
+        id S230444AbjBBD1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 22:27:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjBBDZt (ORCPT
+        with ESMTP id S229457AbjBBD1k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 22:25:49 -0500
-Received: from formenos.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 474784FAE7;
-        Wed,  1 Feb 2023 19:25:48 -0800 (PST)
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1pNQE9-006bCQ-NC; Thu, 02 Feb 2023 11:25:34 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Thu, 02 Feb 2023 11:25:33 +0800
-Date:   Thu, 2 Feb 2023 11:25:33 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Neal Liu <neal_liu@aspeedtech.com>
-Cc:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>
-Subject: Re: [PATCH-next] crypto: aspeed: fix type warnings
-Message-ID: <Y9stLeguRuQVpbiD@gondor.apana.org.au>
-References: <20230202025600.2598548-1-neal_liu@aspeedtech.com>
- <Y9spg/66x/wQ3x+g@gondor.apana.org.au>
- <TY2PR06MB321395387369059BC9F9722E80D69@TY2PR06MB3213.apcprd06.prod.outlook.com>
+        Wed, 1 Feb 2023 22:27:40 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43DC402F6
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 19:26:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675308413;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SomATYxJ25mjdEUM/kMCsDAyR8EdHP8aHoITCDKVtgQ=;
+        b=XwDlOd/y9QpraRuI2Pxz4ciHOyzOjEV9rjmHGx1V1/jBncT6RNPApxVhu+T3tJL6njvGuA
+        uLj2OCMupSiNvHjr0mBEyeDvq8jY5J7a3404lpHwvSTC6/q8WwCRFGT6gbnQd7YvYPJXnw
+        bCL+y16YvFUVPbH6/cIdv15cGG/Qr5o=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-97-CSEqgLmZP6GHOFnI3P5FfA-1; Wed, 01 Feb 2023 22:26:47 -0500
+X-MC-Unique: CSEqgLmZP6GHOFnI3P5FfA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EE14C29AA2C5;
+        Thu,  2 Feb 2023 03:26:46 +0000 (UTC)
+Received: from [10.22.32.115] (unknown [10.22.32.115])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4CCE62166B33;
+        Thu,  2 Feb 2023 03:26:46 +0000 (UTC)
+Message-ID: <4db0b257-4c8b-6e30-0c72-b581198d4a68@redhat.com>
+Date:   Wed, 1 Feb 2023 22:26:46 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <TY2PR06MB321395387369059BC9F9722E80D69@TY2PR06MB3213.apcprd06.prod.outlook.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v4 0/2] blk-cgroup: Fix potential UAF & flush rstat at
+ blkgs destruction path
+Content-Language: en-US
+To:     Jens Axboe <axboe@kernel.dk>, Tejun Heo <tj@kernel.org>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        "Dennis Zhou (Facebook)" <dennisszhou@gmail.com>
+References: <20221215033132.230023-1-longman@redhat.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20221215033132.230023-1-longman@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 03:23:29AM +0000, Neal Liu wrote:
+
+On 12/14/22 22:31, Waiman Long wrote:
+>   v4:
+>    - Update comment and commit logs for both patches.
 >
-> I cannot tell which way is better. Do you prefer to keep the iomem marker?
+>   v3:
+>    - Drop v2 patch 2 as it may not be needed.
+>    - Replace css_tryget() with percpu_ref_is_zero() in patch 1 as
+>      suggested by Tejun.
+>    - Expand comment on patch 2 to elaborate the reason for this patch.
+>
+>   v2:
+>    - Remove unnecessary rcu_read_{lock|unlock} from
+>      cgroup_rstat_css_cpu_flush() in patch 3.
+>
+> It was found that blkcg_destroy_blkgs() may be called with all blkcg
+> references gone. This may potentially cause user-after-free and so should
+> be fixed. The second patch flushes rstat when calling blkcg_destroy_blkgs().
+>
+> Waiman Long (2):
+>    bdi, blk-cgroup: Fix potential UAF of blkcg
+>    blk-cgroup: Flush stats at blkgs destruction path
+>
+>   block/blk-cgroup.c     | 23 +++++++++++++++++++++++
+>   include/linux/cgroup.h |  1 +
+>   kernel/cgroup/rstat.c  | 18 ++++++++++++++++++
+>   mm/backing-dev.c       |  8 ++++++--
+>   4 files changed, 48 insertions(+), 2 deletions(-)
+>
+Ping!
 
-The whole point of iomem is to prevent you from directly
-dereferencing that memory.  So casting it away to remove the
-warning simply defeats its purpose.
+Any comments on these patches.
 
-If you're worried about the overhead of readb perhaps you can
-look into readb_relaxed after considering the effects of the
-barriers.
+Thanks,
+Longman
 
-Cheers,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
