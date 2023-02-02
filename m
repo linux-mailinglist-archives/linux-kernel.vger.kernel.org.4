@@ -2,90 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DCB56877B4
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 09:40:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 629766877B9
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 09:42:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231733AbjBBIkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 03:40:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56010 "EHLO
+        id S231731AbjBBImo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 03:42:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231624AbjBBIkT (ORCPT
+        with ESMTP id S229851AbjBBImm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 03:40:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5B2761D0;
-        Thu,  2 Feb 2023 00:40:18 -0800 (PST)
+        Thu, 2 Feb 2023 03:42:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14FA37DBF1;
+        Thu,  2 Feb 2023 00:42:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4AFB861A28;
-        Thu,  2 Feb 2023 08:40:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A740AC4339B;
-        Thu,  2 Feb 2023 08:40:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675327217;
-        bh=ULsV67zQUJfvmJQRTAc+jmxPY77ctm/HpmxnTdpyPhA=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=ZxzyeduWsSQVTVNv1dXXe8cizpB6icn4jaJjsNQRYs3TOKhufSP7cWqi0TspCOdCC
-         qNUJOlG+SpaM5ogAKbtVOzQXV86Gq9MVfMMJLGZCjl2TlFIHVNtyRWrl7hglIDhXy4
-         +LoJuSShwwb/gGspLJkOuGPr7Ymg7UDdi7QlzGUZGZkgx8SCxyuJfZ3tgj1DcKKSCw
-         GcQtHvRrFip4dVjkNX2EA0q3vzKRSMcYWFZHjjV+up4yxXz98G5JgjzFy6p/TNmf8V
-         t+caQ937XGgKyWYY0are0FnqDQnC85gJggbZUTUF1OLKlMFyfeFPjHOFS/VC6MlxKC
-         954XcqVTNIsmw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8BC2AE270CC;
-        Thu,  2 Feb 2023 08:40:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by ams.source.kernel.org (Postfix) with ESMTPS id B4BE2B8253F;
+        Thu,  2 Feb 2023 08:42:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3B26C433D2;
+        Thu,  2 Feb 2023 08:42:35 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org, Huacai Chen <chenhuacai@loongson.cn>
+Subject: [PATCH] LoongArch: Make -mstrict-align be configurable
+Date:   Thu,  2 Feb 2023 16:42:38 +0800
+Message-Id: <20230202084238.2408516-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 1/1] hv_netvsc: Fix missed pagebuf entries in
- netvsc_dma_map/unmap()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167532721756.2893.14755906003032321617.git-patchwork-notify@kernel.org>
-Date:   Thu, 02 Feb 2023 08:40:17 +0000
-References: <1675135986-254490-1-git-send-email-mikelley@microsoft.com>
-In-Reply-To: <1675135986-254490-1-git-send-email-mikelley@microsoft.com>
-To:     Michael Kelley (LINUX) <mikelley@microsoft.com>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Introduce Kconfig option ARCH_STRICT_ALIGN to make -mstrict-align be
+configurable.
 
-This patch was applied to netdev/net.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
+Not all LoongArch cores support h/w unaligned access, we can use the
+-mstrict-align build parameter to prevent unaligned accesses.
 
-On Mon, 30 Jan 2023 19:33:06 -0800 you wrote:
-> netvsc_dma_map() and netvsc_dma_unmap() currently check the cp_partial
-> flag and adjust the page_count so that pagebuf entries for the RNDIS
-> portion of the message are skipped when it has already been copied into
-> a send buffer. But this adjustment has already been made by code in
-> netvsc_send(). The duplicate adjustment causes some pagebuf entries to
-> not be mapped. In a normal VM, this doesn't break anything because the
-> mapping doesn’t change the PFN. But in a Confidential VM,
-> dma_map_single() does bounce buffering and provides a different PFN.
-> Failing to do the mapping causes the wrong PFN to be passed to Hyper-V,
-> and various errors ensue.
-> 
-> [...]
+This option is disabled by default to optimise for performance, but you
+can enabled it manually if you want to run kernel on systems without h/w
+unaligned access support.
 
-Here is the summary with links:
-  - [net,1/1] hv_netvsc: Fix missed pagebuf entries in netvsc_dma_map/unmap()
-    https://git.kernel.org/netdev/net/c/99f1c46011cc
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+---
+ arch/loongarch/Kconfig  | 10 ++++++++++
+ arch/loongarch/Makefile |  2 ++
+ 2 files changed, 12 insertions(+)
 
-You are awesome, thank you!
+diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+index 9cc8b84f7eb0..7470dcfb32f0 100644
+--- a/arch/loongarch/Kconfig
++++ b/arch/loongarch/Kconfig
+@@ -441,6 +441,16 @@ config ARCH_IOREMAP
+ 	  protection support. However, you can enable LoongArch DMW-based
+ 	  ioremap() for better performance.
+ 
++config ARCH_STRICT_ALIGN
++	bool "Enable -mstrict-align to prevent unaligned accesses"
++	help
++	  Not all LoongArch cores support h/w unaligned access, we can use
++	  -mstrict-align build parameter to prevent unaligned accesses.
++
++	  This is disabled by default to optimise for performance, you can
++	  enabled it manually if you want to run kernel on systems without
++	  h/w unaligned access support.
++
+ config KEXEC
+ 	bool "Kexec system call"
+ 	select KEXEC_CORE
+diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
+index 4402387d2755..ccfb52700237 100644
+--- a/arch/loongarch/Makefile
++++ b/arch/loongarch/Makefile
+@@ -91,10 +91,12 @@ KBUILD_CPPFLAGS += -DVMLINUX_LOAD_ADDRESS=$(load-y)
+ # instead of .eh_frame so we don't discard them.
+ KBUILD_CFLAGS += -fno-asynchronous-unwind-tables
+ 
++ifdef CONFIG_ARCH_STRICT_ALIGN
+ # Don't emit unaligned accesses.
+ # Not all LoongArch cores support unaligned access, and as kernel we can't
+ # rely on others to provide emulation for these accesses.
+ KBUILD_CFLAGS += $(call cc-option,-mstrict-align)
++endif
+ 
+ KBUILD_CFLAGS += -isystem $(shell $(CC) -print-file-name=include)
+ 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.39.0
 
