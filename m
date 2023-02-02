@@ -2,110 +2,319 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFE63687D6A
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 13:36:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCBB5687D68
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 13:36:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231698AbjBBMgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 07:36:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35642 "EHLO
+        id S231617AbjBBMgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 07:36:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230174AbjBBMgi (ORCPT
+        with ESMTP id S229881AbjBBMgP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 07:36:38 -0500
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7241184974
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 04:36:27 -0800 (PST)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 312BcPrE004028;
-        Thu, 2 Feb 2023 13:36:00 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=vfEQ+byTec7V2sg7Odj3rpVtBYXBn2st79ESMt6FUV0=;
- b=rupDROGwjI3ryvx1yAtJBmU37Mz/qTljDwikf47HBEhjlqckHE+KZPJJ5juHN/kplQDZ
- UIlf2WTpaYzpEZO8EDE/hFEsSXJrV+4MfqZj1xNiGVZoY5OVVuqKn4OlSVLFA0URJ4T9
- 8uZDcLmT9VA2tnbd1X/84BWtyS5EhqE/GfrI0MKLt+nw+v+B36r6h2zc44/77rvJBM7L
- 8unaLOuS7dm/f56xzkhrEH75c/i29xc1Ybd9tar4X7ZB1wZJLtQJtYA0RCkpRRBpvO9T
- x7jILpraesMFB07KLSDwgZjDYUhQpENeA/rx8Nx2tRLJzK0ZQh0tMn8MuU+QHQ3YEMiU cw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3nfn39gvd0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Feb 2023 13:36:00 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 3400710002A;
-        Thu,  2 Feb 2023 13:35:58 +0100 (CET)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2179F2128DC;
-        Thu,  2 Feb 2023 13:35:58 +0100 (CET)
-Received: from [10.201.21.93] (10.201.21.93) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Thu, 2 Feb
- 2023 13:35:56 +0100
-Message-ID: <244541fb-993e-3c50-d671-0730811335ae@foss.st.com>
-Date:   Thu, 2 Feb 2023 13:35:55 +0100
+        Thu, 2 Feb 2023 07:36:15 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA2984974
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 04:36:10 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id 123so1964047ybv.6
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 04:36:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1H8wFBOyPkjGl14ZZGifIpI9n23/NSkoyGUNWz/xoCY=;
+        b=MNLy31iC/RKvsSK9GZsB186SPDmdAnN6ZwbOkN0qCYzXppcsf2ef2v1e+JrB01pUae
+         sIG7jMW0R9rQMd1Qoq06n9tsyJ0XnF2IdOYiISLXSpiC1+v1az9PIn/nfwz5RQPoqhxF
+         2YvQ9ZLvMK98LWoNjDEvuzpBqTmx9JwyMHxzd3TcGrTm4zrO4s8duA+VoHhKl1K/3gg9
+         KGH5BnjMtI1JwYrmrSEs/Omvjz+lZHs8bSoNy8OGNrWCvPN45IkN2L3Hu2ZaSh+66Iad
+         DpWMC4UWWGELS5y28tBiu1tP1W+mw8Z2xy9lUD9jz0lizh2eGAdqu+c4wEyJksHYTCIK
+         PWMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1H8wFBOyPkjGl14ZZGifIpI9n23/NSkoyGUNWz/xoCY=;
+        b=kW0wB3LoQRZiR1LI6UZsnvMVUoUC8THvczbF51utVrzSPoIpx71BOUmkIXrJ1hEFjr
+         5WeM8FdQDWJRCdLCZv1Qhyz7HfxXJ7uMQ3V9vYFED1AqFJBjAFO/W6izIo+CQ49LgP1x
+         PzbiAVSKluuOx6NfIMvHLUdr7T1io/44Vpe9UeiFCyuI8hFNZtCUyNYvxNJ2vDO3wLDP
+         0GeberxK3TLDBova8VcBCZ9zhOycyqt6PK2pCM3uoflwWRNddnUysmbFGB9GlW+aTil4
+         6j/A//pUU/m/Xe64JwEoemn+hC21JcJqvUpTZ9VsS8UEMVRjA8MOyLiCDK9iXdN0NASY
+         A16A==
+X-Gm-Message-State: AO0yUKXIOS6ooYceXGejKG1J7Jaunq588nUqscVTD4AIgSV3fGMf/Jmu
+        uQ2JZn0eTrNRpc+i/O0yDzwcwIQQvM3mIzj9gNcyqkZFTlmR5c+1YuY=
+X-Google-Smtp-Source: AK7set96i5msEO6+Tf/ghTVEhAq48i95AHAjRKXlmu837XwqQ+AG3Nrx+hQbKqODLSNsVVpTgak6Y9WsCIEm/1kRUl4=
+X-Received: by 2002:a25:8711:0:b0:80b:5c18:a17 with SMTP id
+ a17-20020a258711000000b0080b5c180a17mr735338ybl.394.1675341369046; Thu, 02
+ Feb 2023 04:36:09 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] ARM: multi_v7_defconfig: enable NVMEM driver for STM32
-Content-Language: en-US
-To:     Patrick Delaunay <patrick.delaunay@foss.st.com>,
-        Russell King <linux@armlinux.org.uk>
-CC:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Eugen Hristev <eugen.hristev@collabora.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Michael Walle <michael@walle.cc>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        William Zhang <william.zhang@broadcom.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230130135951.1.I609229f603520144b3831bea4b026000ae0dd9a8@changeid>
-From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
-In-Reply-To: <20230130135951.1.I609229f603520144b3831bea4b026000ae0dd9a8@changeid>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.201.21.93]
-X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-02_04,2023-02-02_01,2022-06-22_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CANn89i+hAht=g1F6kjPfq8eO4j6-2WEE+CNtRtq1S4UnwXEQaw@mail.gmail.com>
+ <20230202120902.2827191-1-iam@sung-woo.kim>
+In-Reply-To: <20230202120902.2827191-1-iam@sung-woo.kim>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Thu, 2 Feb 2023 13:35:57 +0100
+Message-ID: <CANn89i+CiUvz-7PmQUAs3Lq7ZEcbonmkyUOegxGDN7N0VX5Xdg@mail.gmail.com>
+Subject: Re: [PATCH] Bluetooth: L2CAP: Fix use-after-free
+To:     Sungwoo Kim <iam@sung-woo.kim>
+Cc:     benquike@gmail.com, davem@davemloft.net, daveti@purdue.edu,
+        happiness.sung.woo@gmail.com, johan.hedberg@gmail.com,
+        kuba@kernel.org, linux-bluetooth@vger.kernel.org,
+        linux-kernel@vger.kernel.org, luiz.dentz@gmail.com,
+        marcel@holtmann.org, netdev@vger.kernel.org, pabeni@redhat.com,
+        wuruoyu@me.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/30/23 14:00, Patrick Delaunay wrote:
-> Enable the STMicroelectronics NVMEM drivers used on
-> STM32 MPU, STM32MP15x and STM32MP13x, to access OTPs.
-> 
-> Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
-> ---
-> 
->   arch/arm/configs/multi_v7_defconfig | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
-> index d2f218341ad0..9b3ef21f44c1 100644
-> --- a/arch/arm/configs/multi_v7_defconfig
-> +++ b/arch/arm/configs/multi_v7_defconfig
-> @@ -1209,6 +1209,7 @@ CONFIG_RAS=y
->   CONFIG_NVMEM_IMX_OCOTP=y
->   CONFIG_NVMEM_QCOM_QFPROM=y
->   CONFIG_NVMEM_ROCKCHIP_EFUSE=m
-> +CONFIG_NVMEM_STM32_ROMEM=m
->   CONFIG_NVMEM_SUNXI_SID=y
->   CONFIG_NVMEM_VF610_OCOTP=y
->   CONFIG_NVMEM_MESON_MX_EFUSE=m
+On Thu, Feb 2, 2023 at 1:09 PM Sungwoo Kim <iam@sung-woo.kim> wrote:
+>
+> On Thu, Feb 2, 2023 at 4:26 AM Eric Dumazet <edumazet@google.com> wrote:
+> >
+> > On Thu, Feb 2, 2023 at 10:07 AM Sungwoo Kim <iam@sung-woo.kim> wrote:
+> > >
+> > > Due to the race condition between l2cap_sock_cleanup_listen and
+> > > l2cap_sock_close_cb, l2cap_sock_kill can receive already freed sk,
+> > > resulting in use-after-free inside l2cap_sock_kill.
+> > > This patch prevent this by adding a null check in l2cap_sock_kill.
+> > >
+> > > Context 1:
+> > > l2cap_sock_cleanup_listen();
+> > >   // context switched
+> > >   l2cap_chan_lock(chan);
+> > >   l2cap_sock_kill(sk); // <-- sk is already freed below
+> >
+> > But sk is used in l2cap_sock_cleanup_listen()
+> > and should not be NULL...
+> >
+> > while ((sk =3D bt_accept_dequeue(parent, NULL))) {
+> >   ...
+> >   l2cap_sock_kill(sk);
+> >   ..
+> > }
+> >
+> > It would help if you send us a stack trace ...
+>
+> Here is the stack trace and l2cap_sock.c:
+> https://gist.github.com/swkim101/5c3b8cb7c7d7172aef23810c9412f323
+>
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> BUG: KASAN: use-after-free in l2cap_sock_kill (/v6.1-rc2/./include/net/so=
+ck.h:986 /v6.1-rc2/net/bluetooth/l2cap_sock.c:1281)
+> Read of size 8 at addr ffff88800f7f4060 by task l2cap-server/1764
+> CPU: 0 PID: 1764 Comm: l2cap-server Not tainted 6.1.0-rc2 #129
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubunt=
+u1.1 04/01/2014
+> Call Trace:
+>  <TASK>
+> dump_stack_lvl (/v6.1-rc2/lib/dump_stack.c:105)
+> print_address_description+0x7e/0x360
+> print_report (/v6.1-rc2/mm/kasan/report.c:187 /v6.1-rc2/mm/kasan/report.c=
+:389)
+> ? __virt_addr_valid (/v6.1-rc2/./include/linux/mmzone.h:1855 /v6.1-rc2/ar=
+ch/x86/mm/physaddr.c:65)
+> ? kasan_complete_mode_report_info (/v6.1-rc2/mm/kasan/report_generic.c:10=
+4 /v6.1-rc2/mm/kasan/report_generic.c:127 /v6.1-rc2/mm/kasan/report_generic=
+.c:136)
+> ? l2cap_sock_kill (/v6.1-rc2/./include/net/sock.h:986 /v6.1-rc2/net/bluet=
+ooth/l2cap_sock.c:1281)
+> kasan_report (/v6.1-rc2/mm/kasan/report.c:? /v6.1-rc2/mm/kasan/report.c:4=
+84)
+> ? l2cap_sock_kill (/v6.1-rc2/./include/net/sock.h:986 /v6.1-rc2/net/bluet=
+ooth/l2cap_sock.c:1281)
+> kasan_check_range (/v6.1-rc2/mm/kasan/generic.c:85 /v6.1-rc2/mm/kasan/gen=
+eric.c:115 /v6.1-rc2/mm/kasan/generic.c:128 /v6.1-rc2/mm/kasan/generic.c:15=
+9 /v6.1-rc2/mm/kasan/generic.c:180 /v6.1-rc2/mm/kasan/generic.c:189)
+> __kasan_check_read (/v6.1-rc2/mm/kasan/shadow.c:31)
+> l2cap_sock_kill (/v6.1-rc2/./include/net/sock.h:986 /v6.1-rc2/net/bluetoo=
+th/l2cap_sock.c:1281)
+> l2cap_sock_teardown_cb (/v6.1-rc2/./include/net/bluetooth/bluetooth.h:304=
+ /v6.1-rc2/net/bluetooth/l2cap_sock.c:1475 /v6.1-rc2/net/bluetooth/l2cap_so=
+ck.c:1612)
+> l2cap_chan_close (/v6.1-rc2/net/bluetooth/l2cap_core.c:885)
+> ? __kasan_check_write (/v6.1-rc2/mm/kasan/shadow.c:37)
+> l2cap_sock_shutdown (/v6.1-rc2/./include/linux/kcsan-checks.h:231 /v6.1-r=
+c2/./include/net/sock.h:2470 /v6.1-rc2/net/bluetooth/l2cap_sock.c:1321 /v6.=
+1-rc2/net/bluetooth/l2cap_sock.c:1377)
+> ? _raw_write_unlock (/v6.1-rc2/./include/asm-generic/qrwlock.h:122 /v6.1-=
+rc2/./include/linux/rwlock_api_smp.h:225 /v6.1-rc2/kernel/locking/spinlock.=
+c:342)
+> l2cap_sock_release (/v6.1-rc2/net/bluetooth/l2cap_sock.c:1453)
+> sock_close (/v6.1-rc2/net/socket.c:1382)
+> ? sock_mmap (/v6.1-rc2/net/socket.c:?)
+> __fput (/v6.1-rc2/./include/linux/fsnotify.h:? /v6.1-rc2/./include/linux/=
+fsnotify.h:99 /v6.1-rc2/./include/linux/fsnotify.h:341 /v6.1-rc2/fs/file_ta=
+ble.c:306)
+> ____fput (/v6.1-rc2/fs/file_table.c:348)
+> task_work_run (/v6.1-rc2/kernel/task_work.c:165)
+> do_exit (/v6.1-rc2/kernel/exit.c:?)
+> do_group_exit (/v6.1-rc2/kernel/exit.c:943)
 
-Applied on stm32-next.
+OK, now compare this trace with what you put in your changelog...
 
-Thanks.
-Alex
+Very different problem.
+
+Context 1:
+l2cap_sock_cleanup_listen();
+  // context switched
+  l2cap_chan_lock(chan);
+  l2cap_sock_kill(sk); // <-- sk is already freed below
+
+
+On current linux tree, all l2cap_sock_kill() callers already checked sk !=
+=3D NULL
+
+Do you have a repro ?
+
+> ? __kasan_check_write (/v6.1-rc2/mm/kasan/shadow.c:37)
+> get_signal (/v6.1-rc2/kernel/signal.c:2863)
+> ? _raw_spin_unlock (/v6.1-rc2/./include/linux/spinlock_api_smp.h:142 /v6.=
+1-rc2/kernel/locking/spinlock.c:186)
+> ? finish_task_switch (/v6.1-rc2/./arch/x86/include/asm/current.h:15 /v6.1=
+-rc2/kernel/sched/core.c:5065)
+> arch_do_signal_or_restart (/v6.1-rc2/arch/x86/kernel/signal.c:869)
+> exit_to_user_mode_prepare (/v6.1-rc2/kernel/entry/common.c:383)
+> syscall_exit_to_user_mode (/v6.1-rc2/./arch/x86/include/asm/current.h:15 =
+/v6.1-rc2/kernel/entry/common.c:261 /v6.1-rc2/kernel/entry/common.c:283 /v6=
+.1-rc2/kernel/entry/common.c:296)
+> do_syscall_64 (/v6.1-rc2/arch/x86/entry/common.c:50 /v6.1-rc2/arch/x86/en=
+try/common.c:80)
+> ? sysvec_apic_timer_interrupt (/v6.1-rc2/arch/x86/kernel/apic/apic.c:1107=
+)
+> entry_SYSCALL_64_after_hwframe (/v6.1-rc2/arch/x86/entry/entry_64.S:120)
+> RIP: 0033:0x7f66c14db970
+> Code: Unable to access opcode bytes at 0x7f66c14db946.
+>
+> Code starting with the faulting instruction
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> RSP: 002b:00007ffe166a5508 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+> RAX: 0000000000000013 RBX: 0000000000000013 RCX: 00007f66c14db970
+> RDX: 0000000000000013 RSI: 00007ffe166a56d0 RDI: 0000000000000002
+> RBP: 00007ffe166a56d0 R08: 00007f66c1a28440 R09: 0000000000000013
+> R10: 0000000000000078 R11: 0000000000000246 R12: 0000000000000013
+> R13: 0000000000000001 R14: 00007f66c179a520 R15: 0000000000000013
+>  </TASK>
+> Allocated by task 77:
+> kasan_set_track (/v6.1-rc2/mm/kasan/common.c:51)
+> kasan_save_alloc_info (/v6.1-rc2/mm/kasan/generic.c:432 /v6.1-rc2/mm/kasa=
+n/generic.c:498)
+> __kasan_kmalloc (/v6.1-rc2/mm/kasan/common.c:356)
+> __kmalloc (/v6.1-rc2/mm/slab_common.c:943 /v6.1-rc2/mm/slab_common.c:968)
+> sk_prot_alloc (/v6.1-rc2/net/core/sock.c:2028)
+> sk_alloc (/v6.1-rc2/net/core/sock.c:2083)
+> l2cap_sock_alloc (/v6.1-rc2/net/bluetooth/l2cap_sock.c:1903)
+> l2cap_sock_new_connection_cb (/v6.1-rc2/net/bluetooth/l2cap_sock.c:1504)
+> l2cap_connect (/v6.1-rc2/net/bluetooth/l2cap_core.c:102 /v6.1-rc2/net/blu=
+etooth/l2cap_core.c:4277)
+> l2cap_bredr_sig_cmd (/v6.1-rc2/net/bluetooth/l2cap_core.c:5634 /v6.1-rc2/=
+net/bluetooth/l2cap_core.c:5927)
+> l2cap_recv_frame (/v6.1-rc2/net/bluetooth/l2cap_core.c:7851 /v6.1-rc2/net=
+/bluetooth/l2cap_core.c:7919)
+> l2cap_recv_acldata (/v6.1-rc2/net/bluetooth/l2cap_core.c:8601 /v6.1-rc2/n=
+et/bluetooth/l2cap_core.c:8631)
+> hci_rx_work (/v6.1-rc2/./include/net/bluetooth/hci_core.h:1121 /v6.1-rc2/=
+net/bluetooth/hci_core.c:3937 /v6.1-rc2/net/bluetooth/hci_core.c:4189)
+> process_one_work (/v6.1-rc2/kernel/workqueue.c:2225)
+> worker_thread (/v6.1-rc2/kernel/workqueue.c:816 /v6.1-rc2/kernel/workqueu=
+e.c:2107 /v6.1-rc2/kernel/workqueue.c:2159 /v6.1-rc2/kernel/workqueue.c:240=
+8)
+> kthread (/v6.1-rc2/kernel/kthread.c:361)
+> ret_from_fork (/v6.1-rc2/arch/x86/entry/entry_64.S:306)
+> Freed by task 52:
+> kasan_set_track (/v6.1-rc2/mm/kasan/common.c:51)
+> kasan_save_free_info (/v6.1-rc2/mm/kasan/generic.c:508)
+> ____kasan_slab_free (/v6.1-rc2/./include/linux/slub_def.h:164 /v6.1-rc2/m=
+m/kasan/common.c:214)
+> __kasan_slab_free (/v6.1-rc2/mm/kasan/common.c:244)
+> slab_free_freelist_hook (/v6.1-rc2/mm/slub.c:381 /v6.1-rc2/mm/slub.c:1747=
+)
+> __kmem_cache_free (/v6.1-rc2/mm/slub.c:3656 /v6.1-rc2/mm/slub.c:3674)
+> kfree (/v6.1-rc2/mm/slab_common.c:1007)
+> __sk_destruct (/v6.1-rc2/./include/linux/cred.h:288 /v6.1-rc2/net/core/so=
+ck.c:2147)
+> __sk_free (/v6.1-rc2/./include/linux/sock_diag.h:87 /v6.1-rc2/net/core/so=
+ck.c:2175)
+> sk_free (/v6.1-rc2/./include/linux/instrumented.h:? /v6.1-rc2/./include/l=
+inux/atomic/atomic-instrumented.h:176 /v6.1-rc2/./include/linux/refcount.h:=
+272 /v6.1-rc2/./include/linux/refcount.h:315 /v6.1-rc2/./include/linux/refc=
+ount.h:333 /v6.1-rc2/net/core/sock.c:2188)
+> l2cap_sock_kill (/v6.1-rc2/./include/net/bluetooth/bluetooth.h:286 /v6.1-=
+rc2/net/bluetooth/l2cap_sock.c:1284)
+> l2cap_sock_close_cb (/v6.1-rc2/net/bluetooth/l2cap_sock.c:1576)
+> l2cap_chan_timeout (/v6.1-rc2/./include/net/bluetooth/bluetooth.h:296 /v6=
+.1-rc2/net/bluetooth/l2cap_core.c:462)
+> process_one_work (/v6.1-rc2/kernel/workqueue.c:2225)
+> worker_thread (/v6.1-rc2/kernel/workqueue.c:816 /v6.1-rc2/kernel/workqueu=
+e.c:2107 /v6.1-rc2/kernel/workqueue.c:2159 /v6.1-rc2/kernel/workqueue.c:240=
+8)
+> kthread (/v6.1-rc2/kernel/kthread.c:361)
+> ret_from_fork (/v6.1-rc2/arch/x86/entry/entry_64.S:306)
+> The buggy address belongs to the object at ffff88800f7f4000
+>  which belongs to the cache kmalloc-1k of size 1024
+> The buggy address is located 96 bytes inside of
+>  1024-byte region [ffff88800f7f4000, ffff88800f7f4400)
+> The buggy address belongs to the physical page:
+> page:00000000b8d65c1d refcount:1 mapcount:0 mapping:0000000000000000 inde=
+x:0xffff88800f7f6800 pfn:0xf7f4
+> head:00000000b8d65c1d order:2 compound_mapcount:0 compound_pincount:0
+> flags: 0xfffffc0010200(slab|head|node=3D0|zone=3D1|lastcpupid=3D0x1fffff)
+> raw: 000fffffc0010200 ffffea0000993408 ffffea0000991308 ffff888005841dc0
+> raw: ffff88800f7f6800 0000000000080002 00000001ffffffff 0000000000000000
+> page dumped because: kasan: bad access detected
+> Memory state around the buggy address:
+>  ffff88800f7f3f00: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+>  ffff88800f7f3f80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+> >ffff88800f7f4000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>                                                        ^
+>  ffff88800f7f4080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>  ffff88800f7f4100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+> > >
+> > > Context 2:
+> > > l2cap_chan_timeout();
+> > >   l2cap_chan_lock(chan);
+> > >   chan->ops->close(chan);
+> > >     l2cap_sock_close_cb()
+> > >     l2cap_sock_kill(sk); // <-- sk is freed here
+> > >   l2cap_chan_unlock(chan);
+> > >
+> >
+> > Please add a Fixes: tag
+>
+> Fixes: 6c08fc896b60 ("Bluetooth: Fix refcount use-after-free issue")
+> > > Signed-off-by: Sungwoo Kim <iam@sung-woo.kim>
+> > > ---
+> > >  net/bluetooth/l2cap_sock.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > diff --git a/net/bluetooth/l2cap_sock.c b/net/bluetooth/l2cap_sock.c
+> > > index ca8f07f35..657704059 100644
+> > > --- a/net/bluetooth/l2cap_sock.c
+> > > +++ b/net/bluetooth/l2cap_sock.c
+> > > @@ -1245,7 +1245,7 @@ static int l2cap_sock_recvmsg(struct socket *so=
+ck, struct msghdr *msg,
+> > >   */
+> > >  static void l2cap_sock_kill(struct sock *sk)
+> > >  {
+> > > -       if (!sock_flag(sk, SOCK_ZAPPED) || sk->sk_socket)
+> > > +       if (!sk || !sock_flag(sk, SOCK_ZAPPED) || sk->sk_socket)
+> > >                 return;
+> > >
+> > >         BT_DBG("sk %p state %s", sk, state_to_string(sk->sk_state));
+> > > --
+> > > 2.25.1
+> > >
