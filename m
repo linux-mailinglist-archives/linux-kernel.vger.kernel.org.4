@@ -2,101 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B21C688576
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 18:33:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD67D68857D
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 18:34:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232088AbjBBRdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 12:33:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54986 "EHLO
+        id S232176AbjBBRe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 12:34:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbjBBRdo (ORCPT
+        with ESMTP id S231722AbjBBReX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 12:33:44 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17A0C74A44;
-        Thu,  2 Feb 2023 09:33:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B99A8B82768;
-        Thu,  2 Feb 2023 17:33:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E4DCC4339B;
-        Thu,  2 Feb 2023 17:33:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675359217;
-        bh=jWpsupyz5OCnrBf7xdkbmxZaIA2WX22mnR+/HQKkP3Y=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=OhFq/JiPBa5ABY88fWTVqNuxugI2btGa9Q5645hYmS+5CqgOej38MY46FshP77q6c
-         a+2pJJOASsY7M5EEWV7JsOXUUmECPRfdPUTrBoj6mOP9yUku06jpHWWfZoS6Z+SI4G
-         eW3PD49Bt5ogYj2wxo3NYgvisBi0nOl1/0E+4KHyFCp54Ku048DIpn0U/8iQImwsqw
-         O2JAdJptdKps/x3oJGFEvouviGFitVu61LIphCLiECS2w5OUnAx6VBuUp2pK0fqLj0
-         gMXbTdW2jxJENrA7x2ncpRXj4h5KW9zAZZUeUDt75Qpwr7FgHkrRdNm9o11dT8+wp5
-         AiN2tQ2lPWnJg==
-Date:   Thu, 2 Feb 2023 09:33:35 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Tariq Toukan <ttoukan.linux@gmail.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Yury Norov <yury.norov@gmail.com>,
+        Thu, 2 Feb 2023 12:34:23 -0500
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92DF2712DF;
+        Thu,  2 Feb 2023 09:34:15 -0800 (PST)
+Received: from g550jk.localnet (unknown [62.108.10.64])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id C6C5ECD52C;
+        Thu,  2 Feb 2023 17:33:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1675359224; bh=89NIZqClh0XOO29LJCvpiqXNMG5Y6aeTmCeKVbe3aFc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=fuq84wTkhk0BH39og3UfbLA2soir4P5R2HP2TmqVAYe2ySPBahuj5kSAIFeKGRYp4
+         J2tEDFygpWRkyk7adRqIhaPnZDHfnURyfuqUMl+OTLbtJgLYgpMYlnI76aOAJm9W3U
+         9MmJzw88fcsb+YmOjFPdbRL8txpj6/efwZ8/Z4cU=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Vinod Koul <vkoul@kernel.org>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        Iskren Chernev <me@iskren.info>, linux-arm-msm@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Barry Song <baohua@kernel.org>,
-        Ben Segall <bsegall@google.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Gal Pressman <gal@nvidia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Haniel Bristot de Oliveira <bristot@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Lafreniere <peter@n8pjl.ca>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-crypto@vger.kernel.org, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org
-Subject: Re: [PATCH RESEND 0/9] sched: cpumask: improve on
- cpumask_local_spread() locality
-Message-ID: <20230202093335.43586ecf@kernel.org>
-In-Reply-To: <20230130122206.3b55a0a7@kernel.org>
-References: <20230121042436.2661843-1-yury.norov@gmail.com>
-        <4dc2a367-d3b1-e73e-5f42-166e9cf84bac@gmail.com>
-        <xhsmhv8kxh8tk.mognet@vschneid.remote.csb>
-        <4fa5d53d-d614-33b6-2d33-156281420507@gmail.com>
-        <20230130122206.3b55a0a7@kernel.org>
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v2 04/10] dt-bindings: pinctrl: qcom,msm8953: correct GPIO name
+ pattern
+Date:   Thu, 02 Feb 2023 18:33:43 +0100
+Message-ID: <3205321.oiGErgHkdL@z3ntu.xyz>
+In-Reply-To: <20230202104452.299048-5-krzysztof.kozlowski@linaro.org>
+References: <20230202104452.299048-1-krzysztof.kozlowski@linaro.org>
+ <20230202104452.299048-5-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 30 Jan 2023 12:22:06 -0800 Jakub Kicinski wrote:
-> On Sun, 29 Jan 2023 10:07:58 +0200 Tariq Toukan wrote:
-> > > Peter/Ingo, any objections to stashing this in tip/sched/core?  
-> > 
-> > Can you please look into it? So we'll have enough time to act (in 
-> > case...) during this kernel.
-> > 
-> > We already missed one kernel...  
+On Donnerstag, 2. Februar 2023 11:44:46 CET Krzysztof Kozlowski wrote:
+> The MSM8953 TLMM pin controller has GPIOs 0-141, so narrow the pattern.
 > 
-> We really need this in linux-next by the end of the week. PTAL.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Peter, could you please take a look? Linux doesn't have an API for
-basic, common sense IRQ distribution on AMD systems. It's important :(
+Reviewed-by: Luca Weiss <luca@z3ntu.xyz>
+
+> ---
+>  .../devicetree/bindings/pinctrl/qcom,msm8953-pinctrl.yaml       | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git
+> a/Documentation/devicetree/bindings/pinctrl/qcom,msm8953-pinctrl.yaml
+> b/Documentation/devicetree/bindings/pinctrl/qcom,msm8953-pinctrl.yaml index
+> 6bcd52080801..ce219827ccc8 100644
+> --- a/Documentation/devicetree/bindings/pinctrl/qcom,msm8953-pinctrl.yaml
+> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,msm8953-pinctrl.yaml
+> @@ -53,7 +53,7 @@ $defs:
+>            subnode.
+>          items:
+>            oneOf:
+> -            - pattern: "^gpio([0-9]|[1-9][0-9]|1[0-7][0-9])$"
+> +            - pattern: "^gpio([0-9]|[1-9][0-9]|1[0-3][0-9]|14[01])$"
+>              - enum: [ sdc1_clk, sdc1_cmd, sdc1_data, sdc1_rclk, sdc2_clk,
+>                        sdc2_cmd, sdc2_data, qdsd_clk, qdsd_cmd, qdsd_data0,
+>                        qdsd_data1, qdsd_data2, qdsd_data3 ]
+
+
+
+
