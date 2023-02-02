@@ -2,284 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F1B568790B
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:38:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00E7368790F
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:38:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231629AbjBBJih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 04:38:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47702 "EHLO
+        id S232011AbjBBJiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 04:38:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbjBBJib (ORCPT
+        with ESMTP id S231954AbjBBJim (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 04:38:31 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8499234DE;
-        Thu,  2 Feb 2023 01:38:29 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6DFF46602EDA;
-        Thu,  2 Feb 2023 09:38:27 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1675330708;
-        bh=T3a1RTmc7bqKNC8RsSYzoSMpeLuyxvbNktMrz/S6qn4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Q6ulCjWSaQLtba9oozrUKNMaf1CBo+th5cIQ5Pu60QJBsjyOnlAWVbJh+IeyClX3Y
-         g3J/nYick4sWvVJp14IKidxBAc7eGKQ3Nepb036iriz/xfCTedVmmeWI/u4RujDypo
-         0lZBZ7b4uvXgkH9DkAbOHethjfueAlVAU5VDol2UCCL0UGcumzFR9SZaRwZYDSqLkw
-         r1s3qoHs9bFdSUrVWBLhwqae1sV1CKPvnDvV6SDlszHs9W5SILzmxBuBgqOTMjNSfn
-         edNO601DMyA2eJvAefQDpKujnDBWD/7grDKZzUHrKSldKocwQ6LCXzCicxCcXOcWwl
-         Dg8qa0Su3mRig==
-Message-ID: <ddf75149-e5ec-8093-2d36-55b6f2341d6a@collabora.com>
-Date:   Thu, 2 Feb 2023 10:38:24 +0100
+        Thu, 2 Feb 2023 04:38:42 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D1F8304B
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 01:38:38 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id q5so1156158wrv.0
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 01:38:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1SVU6QigYfI43kWNTeLwwoyCrnQDbgOxVnxRJ80sFMw=;
+        b=DGkg38jlZDUTz15Z4tOwAS3Anphznwxrli3xvDOZRnNl6r8/CayV5FrtmrR4Vsxpa0
+         gyFTfObawwlIt4jLoiZ6LsIvFzwWiOfRcKyIEv3Xy3382u8K23U2B0SmXVJUgNogx3xX
+         HdKFBy1X57O5dDcYNnIgd8qxJndlpOq7wNV15Uq2pDwKOrDZD/VawfOzCQQYr4rtq+bz
+         xxczjZGFR3JwzXOxGDY7g/TiwZk5m8ZSWIbd2bCE9i6GXtDZNZfkys7nxW9lcCka+8hP
+         cSsG78iW1elHk6WSThjlAbw3CG4HwHfOf/IShBlWETBYNkFXP+3c/oXVC7yI+Xzz450g
+         4JYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1SVU6QigYfI43kWNTeLwwoyCrnQDbgOxVnxRJ80sFMw=;
+        b=0HHa8MCH1sCMifXpnYERCtjWA1mjHnGpVWeMX/pymUE5Yl2vKeulCC4lkG85rfTZHy
+         CWum7q39BXjMmvtMsjvHEAiI1BpIpzas5V4PMWghx6YcxriTUS2HuYqne767KhRB11AQ
+         4aCpB4eXDuEhcG0kZNofMSxu7x+9TgoFAxKFqHwIahVIu6gNTUe0zaxXejMZuw1MWF2a
+         L4+yWmEZieMYsTqppAEHwipDbacTneOcVtsX6KbB3wtR8d/26cYZ/bdJjTDq8mJFaGWd
+         LTIWux6yHV9GOLbq8hrSK5x4379fyKlNUlK48R/63VS9J79sGtCS67dRBfYGSSEv6uvt
+         CpUQ==
+X-Gm-Message-State: AO0yUKXlHO3TgP1I6sZbWAttLsJR9bqf+WoH8TXNw37uxzoWkdrpOMvR
+        Lc+IIl8cW6oDSsdXybVXwmJG3A==
+X-Google-Smtp-Source: AK7set/YtuHJ/gLfQ7R747dzj3cK1k46TG7Tyv3bSIJY4mF9pBcvOhfX3zWGEcm+q27k7hoJOBQ0uA==
+X-Received: by 2002:a05:6000:184a:b0:2bf:bc75:1730 with SMTP id c10-20020a056000184a00b002bfbc751730mr5852303wri.70.1675330716631;
+        Thu, 02 Feb 2023 01:38:36 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id j9-20020a5d6189000000b002c285b4d2b5sm6437113wru.101.2023.02.02.01.38.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Feb 2023 01:38:36 -0800 (PST)
+Message-ID: <176bf263-a12d-2cb3-d67c-3d7c3a0c7c31@linaro.org>
+Date:   Thu, 2 Feb 2023 10:38:34 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v29 0/7] Add MediaTek SoC DRM (vdosys1) support for mt8195
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 7/7] dt-bindings: pinctrl: qcom: correct gpio-ranges in
+ examples
 Content-Language: en-US
-To:     "Nancy.Lin" <nancy.lin@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+To:     Stephan Gerhold <stephan@gerhold.net>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        CK Hu <ck.hu@mediatek.com>, dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        clang-built-linux@googlegroups.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        singo.chang@mediatek.com
-References: <20221227081011.6426-1-nancy.lin@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221227081011.6426-1-nancy.lin@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Richard Acayan <mailingradian@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        krishna Lanka <quic_vamslank@quicinc.com>,
+        Iskren Chernev <me@iskren.info>,
+        Martin Botka <martin.botka@somainline.org>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230201153019.269718-1-krzysztof.kozlowski@linaro.org>
+ <20230201153019.269718-7-krzysztof.kozlowski@linaro.org>
+ <Y9qORcPIuq4IZcL1@gerhold.net> <Y9qT3vNTcuT+njIR@gerhold.net>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Y9qT3vNTcuT+njIR@gerhold.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 27/12/22 09:10, Nancy.Lin ha scritto:
-> The hardware path of vdosys1 with DPTx output need to go through by several modules, such as, OVL_ADAPTOR and MERGE.
+On 01/02/2023 17:31, Stephan Gerhold wrote:
+> On Wed, Feb 01, 2023 at 05:07:40PM +0100, Stephan Gerhold wrote:
+>> On Wed, Feb 01, 2023 at 04:30:19PM +0100, Krzysztof Kozlowski wrote:
+>>> Correct the number of GPIOs in gpio-ranges to match reality.
+>>>
+>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>
+>> AFAICT the current gpio-ranges do match the number of GPIOs (ngpios) in
+>> the pinctrl drivers for all/most of the platforms you update below. It
+>> looks like the special UFS_RESET pins are also exported as GPIOs in
+>> addition to the real GPIOs. I'm not sure if this is intended or a
+>> mistake.
+>>
 > 
-> Add DRM and these modules support by the patches below:
+> It looks like this is on purpose:
 > 
+> ---
+> From 53a5372ce326116f3e3d3f1d701113b2542509f4 Mon Sep 17 00:00:00 2001
+> From: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Date: Tue, 4 Jun 2019 00:19:59 -0700
+> Subject: [PATCH] pinctrl: qcom: sdm845: Expose ufs_reset as gpio
+> 
+> The ufs_reset pin is expected to be wired to the reset pin of the
+> primary UFS memory but is pretty much just a general purpose output pinr
+> 
+> Reorder the pins and expose it as gpio 150, so that the UFS driver can
+> toggle it.
+> ---
+> 
+> And it's used in sdm845-mtp.dts:
+> 
+> &ufs_mem_hc {
+> 	reset-gpios = <&tlmm 150 GPIO_ACTIVE_LOW>;
+> };
+> 
+> So I think this patch (together with the DT ones you sent) should be
+> dropped because it would prevent using the UFS_RESET as GPIO since it's
+> no longer included in gpio-ranges.
 
-Hello Chun-Kuang,
+Thanks, but then we need to fix few others which miss the UFS reset pin.
 
-This series reached version 29 and was tested for a long time.
-Is there anything else to fix in here, or can it be finally picked?
-
-Its soc/mediatek counterpart was already picked by Matthias.
-
-Thanks,
-Angelo
-
-> Changes in v29:
-> - rebase to next-20221226
-> - fix reviewer comment in v28
->    - keep original flow if comp node not found in mtk_drm_crtc_create()
-> 
-> Changes in v28:
-> - rebase to next-20221107
-> - fix reviewer comment in v27
->    - extra new line at the end mtk_ethdr.h
-> 
-> Changes in v27:
-> - rebase to next-20221102
-> - change mmsys compatible for mt8195 vdosys1
->    - base on jason's series[ref 1]
-> - fix reviewer comment
->    - add error return code if no ovl_adaptor's comp found
-> 
-> Changes in v26:
-> - rebase to next-20220819
-> - resend for patch corrupted in v25
-> 
-> Changes in v25:
-> - rebase to next-20220803
-> 
-> Changes in v24:
-> - fix ovl_adaptor binding issue (mtk_disp_ovl_adaptor.c)
->    - Since ovl_adaptor is an aggregated component, it should be bounded after
->      all its child components are bounded.
-> - rebase to next-20220708
-> 
-> Changes in v23:
-> - separate[7] mmsys/mutex and drm patches into two series
-> 
-> Changes in v22:
-> - rebase to next-20220525
-> - rebase to vdosys0 series v22
-> - separate dts to a new patch
-> 
-> Changes in v21:
-> - fix reviewer comment
->    - fix rdma and ethdr binding doc and dts
-> 
-> Changes in v20:
-> - fix reviewer comment
->    - update mmsys update bit api name
->    - add mtk_mmsys_update_bits error message if lose gce property
->    - list all mt8195 vdosys1 reset bits
-> 
-> Changes in v19:
-> - fix reviewer comment
->    - separate mt8195 mmsys component to a new patch
->    - separate mt8195 vdo0 and vdo1 routing table
->    - separate mmsys_write_reg api to a new patch and simplify write reg code
->    - separate mmsys 64 bit reset to a new patch
->    - separate mtk-mutex dp_intf1 component to a new patch
-> 
-> Changes in v18:
-> - fix reviewer comment
->    - fix rdma binding doc
->    - fix ethdr binding doc
->    - refine mmsys config cmdq support
->    - refine merge reset control flow, get reset control in probe function
->    - add ethdr reset control error handling and remove dbg log
-> - rebase to vdosys0 series v20 (ref [5])
-> 
-> Changes in v17:
-> - fix reviewer comment in v16
->    - separate ovl adaptor comp in mtk-mmsys and mtk-mutex
->    - separate mmsys config API
->    - move mdp_rdma binding yaml
-> - fix ovl adaptor pm runtime get sync timing issue
-> - rebase to vdosys0 series v19 (ref [5])
-> - rebase to [7] for modify vblank register change
-> 
-> Changes in v16:
-> - fix reviewer comment in v 15
->    - fix mtk_drm_ddp_comp.c alignment
->    - fix vdosys0 mmsys num before adding vdosys1 patch
-> 
-> Changes in v15:
-> - fix ethdr uppercase hex number in dts
-> 
-> Changes in v14:
-> - remove MTK_MMSYS 64 bit dependency
-> - add ethdr.yaml back and fix dt_schema check fail
-> 
-> Resend v13
-> - add related maintainer in maillist
-> 
-> Changes in v13:
-> - fix reviewer comment in v12
->    - fix rdma dt-binding format
->    - fix dts node naming
-> - fix 32 bit build error
->    - modify 64bit dependency for mtk-mmsys
-> - rebase to vdosys0 series v16. (ref [5])
-> 
-> Changes in v12:
-> - fix reviewer comment in v11
->    - modify mbox index
->    - refine dma dev for ovl_adaptor sub driver
-> 
-> Changes in v11:
-> - remove ethdr vblank spin lock
-> - refine ovl_adaptor print message
-> 
-> Changes in v10:
-> - refine ethdr reset control using devm_reset_control_array_get_optional_exclusive
-> - fix ovl_adaptor mtk_ovl_adaptor_clk_enable error handle issue
-> 
-> Changes in v9:
-> - rebase on kernel-5.16-rc1
-> - rebase on vdosys0 series v13. (ref [5])
-> - fix ovl_adaptor sub driver is brought up unintentionally
-> - fix clang build test fail- duplicate ethdr/mdp_rdma init_module/cleanup_module symbol issue
-> 
-> Changes in v8:
-> - separate merge async reset to new patch.
-> - separate drm ovl_adaptor sub driver to new patch.
-> - fix reviewer comment in v7.
-> 
-> Changes in v7:
-> - rebase on vdosys0 series v12 (ref[5])
-> - add dma description in ethdr binding document.
-> - refine vdosys1 bit definition of mmsys routing table.
-> - separate merge modification into 3 pathces.
-> - separate mutex modification into 2 patches.
-> - add plane color coding for mdp_rdma csc.
-> - move mdp_rdma pm control to ovl_adaptor.
-> - fix reviewer comment in v6.
-> 
-> Changes in v6:
-> - rebase on kernel-5.15-rc1.
-> - change mbox label to gce0 for dts node of vdosys1.
-> - modify mmsys reset num for mt8195.
-> - rebase on vdosys0 series v10. (ref [5])
-> - use drm to bring up ovl_adaptor driver.
-> - move drm iommu/mutex check from kms init to drm bind.
-> - modify rdma binding doc location. (Documentation/devicetree/bindings/arm/)
-> - modify for reviewer's comment in v5.
-> 
-> Changes in v5:
-> - add mmsys reset controller reference.
-> 
-> Changes in v4:
-> - use merge common driver for merge1~4.
-> - refine ovl_adaptor rdma driver.
-> - use ovl_adaptor ddp_comp function instead of ethdr.
-> - modify for reviewer's comment in v3.
-> 
-> Changes in v3:
-> - modify for reviewer's comment in v2.
-> - add vdosys1 2 pixels align limit.
-> - add mixer odd offset support.
-> 
-> Changes in v2:
-> - Merge PSEUDO_OVL and ETHDR into one DRM component.
-> - Add mmsys config API for vdosys1 hardware setting.
-> - Add mmsys reset control using linux reset framework.
-> 
-> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-> 
-> This series are based on the following patch:
-> [1] Change mmsys compatible for mt8195 mediatek-drm
->      20221126101220.18179-1-jason-jh.lin@mediatek.com
-> [2] Add MediaTek SoC(vdosys1) support for mt8195
->      20221103032512.9144-1-nancy.lin@mediatek.com
-> 
-> Nancy.Lin (7):
->    dt-bindings: mediatek: add ethdr definition for mt8195
->    drm/mediatek: add ETHDR support for MT8195
->    drm/mediatek: add ovl_adaptor support for MT8195
->    drm/mediatek: add dma dev get function
->    drm/mediatek: modify mediatek-drm for mt8195 multi mmsys support
->    drm/mediatek: add drm ovl_adaptor sub driver for MT8195
->    drm/mediatek: add mediatek-drm of vdosys1 support for MT8195
-> 
->   .../display/mediatek/mediatek,ethdr.yaml      | 188 ++++++
->   drivers/gpu/drm/mediatek/Makefile             |   2 +
->   drivers/gpu/drm/mediatek/mtk_disp_drv.h       |  26 +
->   .../gpu/drm/mediatek/mtk_disp_ovl_adaptor.c   | 533 ++++++++++++++++++
->   drivers/gpu/drm/mediatek/mtk_drm_crtc.c       |  85 ++-
->   drivers/gpu/drm/mediatek/mtk_drm_crtc.h       |   6 +-
->   drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c   | 129 +++--
->   drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h   |  58 +-
->   drivers/gpu/drm/mediatek/mtk_drm_drv.c        | 366 ++++++++----
->   drivers/gpu/drm/mediatek/mtk_drm_drv.h        |  24 +-
->   drivers/gpu/drm/mediatek/mtk_ethdr.c          | 370 ++++++++++++
->   drivers/gpu/drm/mediatek/mtk_ethdr.h          |  25 +
->   12 files changed, 1624 insertions(+), 188 deletions(-)
->   create mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.yaml
->   create mode 100644 drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c
->   create mode 100644 drivers/gpu/drm/mediatek/mtk_ethdr.c
->   create mode 100644 drivers/gpu/drm/mediatek/mtk_ethdr.h
-> 
-
-
+Best regards,
+Krzysztof
 
