@@ -2,146 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67B86687354
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 03:25:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FFF4687358
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 03:34:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231237AbjBBCZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 21:25:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58336 "EHLO
+        id S229940AbjBBCey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 21:34:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjBBCZE (ORCPT
+        with ESMTP id S229470AbjBBCew (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 21:25:04 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45CFE646BE
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 18:25:02 -0800 (PST)
-Received: from [192.168.2.198] (109-252-117-89.nat.spd-mgts.ru [109.252.117.89])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Wed, 1 Feb 2023 21:34:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 974BB6C100;
+        Wed,  1 Feb 2023 18:34:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 177C76602EDA;
-        Thu,  2 Feb 2023 02:25:00 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1675304701;
-        bh=oTyILudNkiAPMkgb1Pm09advI5woCz1l2SmEwaMEO4A=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=WFG3vDMC2J7SqYCRgoSohRBkQpNrmBTfsL86EAgtfMSqMSD5njimmBBd6suozlfWk
-         H7W5DaRuIi8lkwkGjCawD1IftrlFLh2e2/aAQN8O3p/BF6UIW5yHWahO/GzjYKqnx6
-         NuwszdsieIDxsBPALFhedTzMNJEJnwX6Hbe5b/UKpe/1Yc8ZBvl0bnrd9VmaX2RAaz
-         IEkXtmVC0gELnmOEIyGPi0t2qQ23HOfDgNqnTXYosK1w567XbIqYPx+cY2f2WRY3P8
-         MbpZ+OGkQUuqTvxhLJMhIKFpCC1KM6xIe5g+q1yzUAf0DgtmhaHjiGeuHbLiSqRreq
-         Thp3pCeP4x/UA==
-Message-ID: <39be7689-a8fa-d985-efeb-29b5f91a4b50@collabora.com>
-Date:   Thu, 2 Feb 2023 05:24:57 +0300
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 24743619C6;
+        Thu,  2 Feb 2023 02:34:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 467D6C433EF;
+        Thu,  2 Feb 2023 02:34:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675305290;
+        bh=w7axNIyDbb9s6F+CkgIBCYQF7+/2qyeSkh/uF2REEcI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=K6qAPVavwJ8qNC3pXKIUSvkpUiBJD6Ou+wraLfNo4bpatMCjlVu+dt7kl9rTMxx+h
+         4sSqcDPgAyMYQGRVetlJLBq8Ou+RSl9kqx6S4RdIUUrYnD033mDHpf+QyTcWaejSZc
+         hrNXwOsdeneNr+K6GeXW64XKFVt5+MGk3tBNezGedbG9PDUhIN27rnwf4B7FiFxWfZ
+         obi3JR6iq3YnvmRHkYMZ6VpPygzVPEOvn6cz1Dv509fF+N56PDYaInh3jHt760+pDa
+         ZI7Djp5EV1x3LB9MpSJ9Urhag8qbjqRO6RvzKmi0h4RiMTTFtbDnlFOG0qczjVW4fq
+         G5NHpS/UszdLQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 607D7405BE; Wed,  1 Feb 2023 23:34:46 -0300 (-03)
+Date:   Wed, 1 Feb 2023 23:34:46 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Sandipan Das <sandipan.das@amd.com>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        x86@kernel.org, peterz@infradead.org, bp@alien8.de,
+        namhyung@kernel.org, jolsa@kernel.org, tglx@linutronix.de,
+        mingo@redhat.com, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, dave.hansen@linux.intel.com,
+        james.clark@arm.com, irogers@google.com, eranian@google.com,
+        ananth.narayan@amd.com, ravi.bangoria@amd.com,
+        santosh.shukla@amd.com
+Subject: Re: [PATCH v3 1/2] perf script: Show branch speculation info
+Message-ID: <Y9shRsZuhGgpNi25@kernel.org>
+References: <cover.1675057032.git.sandipan.das@amd.com>
+ <87c48949f5a442dda6d4dc75d4a4303973eb04b2.1675057032.git.sandipan.das@amd.com>
+ <08385b8c-0fae-3249-3dfb-5a7800928213@amd.com>
+ <Y9gj5spCa8JcTY/X@kernel.org>
+ <Y9sOH5p6ffMi91wd@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] drm/virtio: exbuf->fence_fd unmodified on interrupted
- wait
-Content-Language: en-US
-To:     Ryan Neph <ryanneph@chromium.org>,
-        David Airlie <airlied@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, dri-devel@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Cc:     Rob Clark <robdclark@chromium.org>,
-        Yiwei Zhang <zzyiwei@chromium.org>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Emil Velikov <emil.velikov@collabora.com>
-References: <20230126225815.1518839-1-ryanneph@chromium.org>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <20230126225815.1518839-1-ryanneph@chromium.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9sOH5p6ffMi91wd@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/27/23 01:58, Ryan Neph wrote:
-> An interrupted dma_fence_wait() becomes an -ERESTARTSYS returned
-> to userspace ioctl(DRM_IOCTL_VIRTGPU_EXECBUFFER) calls, prompting to
-> retry the ioctl(), but the passed exbuf->fence_fd has been reset to -1,
-> making the retry attempt fail at sync_file_get_fence().
+Em Wed, Feb 01, 2023 at 10:13:03PM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Mon, Jan 30, 2023 at 05:09:10PM -0300, Arnaldo Carvalho de Melo escreveu:
+> > Em Mon, Jan 30, 2023 at 04:04:58PM +0530, Sandipan Das escreveu:
+> > > On 1/30/2023 11:29 AM, Sandipan Das wrote:
+> > > > Show the branch speculation info if provided by the branch recording
+> > > > hardware feature. This can be useful for optimizing code further.
+> > > > 
+> > > > The speculation info is appended to the end of the list of fields so any
+> > > > existing tools that use "/" as a delimiter for access fields via an index
+> > > > remain unaffected. Also show "-" instead of "N/A" when speculation info
+> > > > is unavailable because "/" is used as the field separator.
+> > > > 
+> > > > E.g.
+> > > > 
+> > > >   $ perf record -j any,u,save_type ./test_branch
+> > > >   $ perf script --fields brstacksym
+> > > > 
+> > > > Before:
+> > > > 
+> > > >   [...]
+> > > >   check_match+0x60/strcmp+0x0/P/-/-/0/CALL
+> > > >   do_lookup_x+0x3c5/check_match+0x0/P/-/-/0/CALL
+> > > >   [...]
+> > > > 
+> > > > After:
+> > > > 
+> > > >   [...]
+> > > >   check_match+0x60/strcmp+0x0/P/-/-/0/CALL/NON_SPEC_CORRECT_PATH
+> > > >   do_lookup_x+0x3c5/check_match+0x0/P/-/-/0/CALL/NON_SPEC_CORRECT_PATH
+> > > >   [...]
+> > > > 
+> > > > Signed-off-by: Sandipan Das <sandipan.das@amd.com>
+> > > > ---
+> > > >  tools/perf/builtin-script.c |  5 +++--
+> > > >  tools/perf/util/branch.c    | 15 +++++++++++++++
+> > > >  tools/perf/util/branch.h    |  2 ++
+> > > >  tools/perf/util/evsel.c     | 15 ++++++++++++---
+> > > >  4 files changed, 32 insertions(+), 5 deletions(-)
+> > > > 
+> > > 
+> > > Sorry but I realized later that this change breaks the builtin branch test.
+> > > The additional change below fixes that.
+> > 
+> > Please wait a bit for people to be able to review the other patches and
+> > then submit a v2 series.
 > 
-> The uapi for DRM_IOCTL_VIRTGPU_EXECBUFFER is changed to retain the
-> passed value for exbuf->fence_fd when returning ERESTARTSYS or EINTR.
-> 
-> Fixes: 2cd7b6f08bc4 ("drm/virtio: add in/out fence support for explicit synchronization")
-> Signed-off-by: Ryan Neph <ryanneph@chromium.org>
-> ---
-> 
->  drivers/gpu/drm/virtio/virtgpu_ioctl.c | 9 ++++++---
->  include/uapi/drm/virtgpu_drm.h         | 3 +++
->  2 files changed, 9 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/virtio/virtgpu_ioctl.c b/drivers/gpu/drm/virtio/virtgpu_ioctl.c
-> index 9f4a90493aea..ffce4e2a409a 100644
-> --- a/drivers/gpu/drm/virtio/virtgpu_ioctl.c
-> +++ b/drivers/gpu/drm/virtio/virtgpu_ioctl.c
-> @@ -132,6 +132,8 @@ static int virtio_gpu_execbuffer_ioctl(struct drm_device *dev, void *data,
->  	uint64_t fence_ctx;
->  	uint32_t ring_idx;
->  
-> +	exbuf->fence_fd = -1;
-> +
->  	fence_ctx = vgdev->fence_drv.context;
->  	ring_idx = 0;
->  
-> @@ -152,8 +154,6 @@ static int virtio_gpu_execbuffer_ioctl(struct drm_device *dev, void *data,
->  		ring_idx = exbuf->ring_idx;
->  	}
->  
-> -	exbuf->fence_fd = -1;
-> -
->  	virtio_gpu_create_context(dev, file);
->  	if (exbuf->flags & VIRTGPU_EXECBUF_FENCE_FD_IN) {
->  		struct dma_fence *in_fence;
-> @@ -173,7 +173,7 @@ static int virtio_gpu_execbuffer_ioctl(struct drm_device *dev, void *data,
->  
->  		dma_fence_put(in_fence);
->  		if (ret)
-> -			return ret;
-> +			goto out_err;
->  	}
->  
->  	if (exbuf->flags & VIRTGPU_EXECBUF_FENCE_FD_OUT) {
-> @@ -259,6 +259,9 @@ static int virtio_gpu_execbuffer_ioctl(struct drm_device *dev, void *data,
->  
->  	if (out_fence_fd >= 0)
->  		put_unused_fd(out_fence_fd);
-> +out_err:
-> +	if (ret == -EINTR || ret == -ERESTARTSYS)
-> +		exbuf->fence_fd = in_fence_fd;
->  
->  	return ret;
->  }
-> diff --git a/include/uapi/drm/virtgpu_drm.h b/include/uapi/drm/virtgpu_drm.h
-> index 0512fde5e697..ac8d1eed12ab 100644
-> --- a/include/uapi/drm/virtgpu_drm.h
-> +++ b/include/uapi/drm/virtgpu_drm.h
-> @@ -64,6 +64,9 @@ struct drm_virtgpu_map {
->  	__u32 pad;
->  };
->  
-> +/* For ioctl() returning ERESTARTSYS or EINTR, fence_fd is unmodified.
-> + * For all other errors it is set to -1.
-> + */
->  struct drm_virtgpu_execbuffer {
->  	__u32 flags;
->  	__u32 size;
+> So I applied it manually, no need to send v2.
 
-Reviewed-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Please send v2 after figuring out why 'perf test "Sample parsing"'
+fails,
 
--- 
-Best regards,
-Dmitry
+I removed both patches for now.
 
+- Arnaldo
