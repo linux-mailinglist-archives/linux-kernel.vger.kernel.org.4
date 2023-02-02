@@ -2,107 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9045687963
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:46:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E69A0687970
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:47:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232663AbjBBJqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 04:46:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55320 "EHLO
+        id S232496AbjBBJrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 04:47:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232554AbjBBJqV (ORCPT
+        with ESMTP id S232548AbjBBJrp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 04:46:21 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56DB6712CC
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 01:45:47 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pNW9r-0001mR-Ci; Thu, 02 Feb 2023 10:45:31 +0100
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:fff9:bfd9:c514:9ad9])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 437EE16D10B;
-        Thu,  2 Feb 2023 09:45:29 +0000 (UTC)
-Date:   Thu, 2 Feb 2023 10:45:23 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Wei Fang <wei.fang@nxp.com>, Jakub Kicinski <kuba@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>, Arnd Bergmann <arnd@arndb.de>,
-        Shenwei Wang <shenwei.wang@nxp.com>,
-        Clark Wang <xiaoning.wang@nxp.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] net: fec: restore handling of PHY reset line as
- optional
-Message-ID: <20230202094523.diwmp3xh47oesmai@pengutronix.de>
-References: <20230201215320.528319-1-dmitry.torokhov@gmail.com>
+        Thu, 2 Feb 2023 04:47:45 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28811712DC
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 01:47:01 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id r2so1122099wrv.7
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 01:47:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=e7LSJNpsdTumzuzb+ZqPJnH76wCvGImRrSuiCZTeWSY=;
+        b=G1vY0r6yXxzL/nRzJb6pV+Nb1EqeDUYbvWIgOyXs4H2+WWA2xGHX69HRTWR+vTnoHj
+         P2WW6UeCG0TWOoTadmm3NKkp0Khd8j9oFLLzUhohOIEpkM5giK4aQfHIaIZuUeLGD6v2
+         QcPwxHJ77YO2JP5CYZ0fV1sJCQDLIAr7fU8Xqbog0UV9jvT7ejGwflkirJh1X4plFBLj
+         TAYRRgPMeFyAWAUqvO8MJdU0jhLQ/VWopUMPmoRHg+Ki5YenA/CT53SFslEq5Wmcfzxr
+         zJhIeA8J/yvHphV4uhuopo7fOFqV4yepaQsiQy2PMw1vOMVKb8feG/R4G/RoYooPhmj0
+         xRfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=e7LSJNpsdTumzuzb+ZqPJnH76wCvGImRrSuiCZTeWSY=;
+        b=p28JD3275Qm8n2ukbks/oGdVuFWdU6JGpX74nNhj6isUa/A+uwiv6YgKi/MxCZ9Juj
+         3bc44ZAnDoGDJvPvgx9lPPxo1UhDEawcLLcxzGiNn9+2musqleUcxYMDKB9od8boROqI
+         hhG5hygbuqzyxyEhUPfzTdLKWSdGGkUBqX5YSxmjLq+Od0cHXSWohtK83F49c5Nj1CSf
+         oo5UUcEdPM9zQCLj/uS4/B6t71ocgq307QWXPa5isxQJR79+79W2+i4DDcZFhwz5G5/9
+         PQlhNF6NWCq841C8awWlvEr4wWl/TtnUTkBrzbJ15w1NeTMHF7iQQS4Ww0hunZe5TupC
+         YmXw==
+X-Gm-Message-State: AO0yUKV2Pp3mFk+Fz9Wz/Eleiw8JGDC6+FRTIbz7pI3Z3O1q8KjyHZF+
+        CTlpcT6PZ93vF/AbEl8VE+csow==
+X-Google-Smtp-Source: AK7set+AoX32q9cg0KFR87dHq8mO6Z1vlOLkqdhKrS9M/FBzS5RArLO+E9zVRRoL1VEtBTza0SZuzA==
+X-Received: by 2002:adf:ce0a:0:b0:2bf:b44d:6dae with SMTP id p10-20020adfce0a000000b002bfb44d6daemr5380729wrn.28.1675331190166;
+        Thu, 02 Feb 2023 01:46:30 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id l16-20020adffe90000000b002b8fe58d6desm18852055wrr.62.2023.02.02.01.46.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Feb 2023 01:46:29 -0800 (PST)
+Message-ID: <266a4dec-ec2c-3c21-975e-301e3a7bb5f3@linaro.org>
+Date:   Thu, 2 Feb 2023 10:46:28 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ex7klsl5dwe2hkvu"
-Content-Disposition: inline
-In-Reply-To: <20230201215320.528319-1-dmitry.torokhov@gmail.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH V4 7/9] dt-bindings: i2c: xiic: Add 'xlnx,axi-iic-2.1' to
+Content-Language: en-US
+To:     Manikanta Guntupalli <manikanta.guntupalli@amd.com>,
+        michal.simek@xilinx.com, michal.simek@amd.com,
+        devicetree@vger.kernel.org, andrew@lunn.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     git@amd.com, srinivas.goud@amd.com, shubhrajyoti.datta@amd.com,
+        manion05gk@gmail.com,
+        Raviteja Narayanam <raviteja.narayanam@xilinx.com>
+References: <1675330898-563-1-git-send-email-manikanta.guntupalli@amd.com>
+ <1675330898-563-8-git-send-email-manikanta.guntupalli@amd.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1675330898-563-8-git-send-email-manikanta.guntupalli@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 02/02/2023 10:41, Manikanta Guntupalli wrote:
+> From: Raviteja Narayanam <raviteja.narayanam@xilinx.com>
 
---ex7klsl5dwe2hkvu
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Your subject is corrupted
 
-On 01.02.2023 13:53:19, Dmitry Torokhov wrote:
-> Conversion of the driver to gpiod API done in 468ba54bd616 ("fec:
-> convert to gpio descriptor") incorrectly made reset line mandatory and
-> resulted in aborting driver probe in cases where reset line was not
-> specified (note: this way of specifying PHY reset line is actually
-> deprecated).
->=20
-> Switch to using devm_gpiod_get_optional() and skip manipulating reset
-> line if it can not be located.
->=20
-> Fixes: 468ba54bd616 ("fec: convert to gpio descriptor")
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> 
+> compatible
+> 
+> Added the xilinx I2C new version 'xlnx,axi-iic-2.1' string to compatible
+> Added clock-frequency as optional property.
 
-Reported-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Tested-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Use imperative, not past tense.
 
-Marc
+> 
+> Signed-off-by: Raviteja Narayanam <raviteja.narayanam@xilinx.com>
+> Signed-off-by: Manikanta Guntupalli <manikanta.guntupalli@amd.com>
+> Acked-by: Michal Simek <michal.simek@amd.com>
+> ---
+> Changes for v4:
+> Added description for clock-frequency in xlnx,xps-iic-2.00.a.yaml
+> ---
+>  .../devicetree/bindings/i2c/xlnx,xps-iic-2.00.a.yaml      | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/xlnx,xps-iic-2.00.a.yaml b/Documentation/devicetree/bindings/i2c/xlnx,xps-iic-2.00.a.yaml
+> index 8d241a703d85..92cb9006e8b7 100644
+> --- a/Documentation/devicetree/bindings/i2c/xlnx,xps-iic-2.00.a.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/xlnx,xps-iic-2.00.a.yaml
+> @@ -14,7 +14,9 @@ allOf:
+>  
+>  properties:
+>    compatible:
+> -    const: xlnx,xps-iic-2.00.a
+> +    enum:
+> +      - xlnx,xps-iic-2.00.a
+> +      - xlnx,axi-iic-2.1
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+Keep the list sorted alphabetically
 
---ex7klsl5dwe2hkvu
-Content-Type: application/pgp-signature; name="signature.asc"
+>  
+>    reg:
+>      maxItems: 1
+> @@ -30,6 +32,10 @@ properties:
+>      description: |
+>        Input clock name.
+>  
+> +  clock-frequency:
+> +    description:
+> +      Optional I2C SCL clock frequency.
 
------BEGIN PGP SIGNATURE-----
+Is maximum known? If this is optional, you should have here default.
 
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmPbhjEACgkQvlAcSiqK
-BOioUAf/VtrDO4hQX76US/UcDLkUNt4s55S8AqwPwfLmYMZ2m4BGihGN7Ec1oSvt
-PFcKIvGwrfTpI3ScctjZwpU/6/MBKW+sh3cSrAYl5EEY7duN/vtOP9Ys2Lidkl+w
-W3vPJ6bS3Y6nEzRPvCR3EMZLe45/1Mj22bFsqlxFYIYdxt5qkEGnNKmLWlwpPGBL
-2u/V892/xJB9a93UChOJBPgXRQLojWvmNpFDq3jFko/qclqmSsLRbBBICa18YzF+
-BfSB7qwo07xVaseTJB5ycT6a7HkXIVtscBkM7UnypQKrYlV5bvoloSLCe40FruqU
-1wjzhIElxeteLvY2ztwXsNU4UglVdA==
-=vs8x
------END PGP SIGNATURE-----
+Best regards,
+Krzysztof
 
---ex7klsl5dwe2hkvu--
