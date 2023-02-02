@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20E79688031
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 15:33:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A3DB688033
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 15:33:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232463AbjBBOdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 09:33:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44808 "EHLO
+        id S232471AbjBBOd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 09:33:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232375AbjBBOdQ (ORCPT
+        with ESMTP id S232450AbjBBOdX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 09:33:16 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0BDE6DFC6;
-        Thu,  2 Feb 2023 06:33:11 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id me3so6476667ejb.7;
-        Thu, 02 Feb 2023 06:33:10 -0800 (PST)
+        Thu, 2 Feb 2023 09:33:23 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61DBC70D66;
+        Thu,  2 Feb 2023 06:33:13 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id me3so6477014ejb.7;
+        Thu, 02 Feb 2023 06:33:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=DHsKnCrkXhOuDYV6+psb/tAdbPB1L9cKyhHKv9nMf6Y=;
-        b=jDvvFl1HOwLXc0lbexFGVnSiiWaY+hhv9rMr5kUceI/zzR0eQV4gXV4+jzbe2CH7Or
-         4jizr+0XBF6cFSgmDJf5MszV48SOf1KU1aScqcdb60stjZiPS6PUCwvUDvMCOaKs0QYo
-         6lFWaXTYz1aknDvr3UfH4r4VGpG9LPo+axd7OVHJ7G3iXulq0YtmnAK1viZvW837RsTu
-         awZxD4U3yc6QgN4a3HoXWLZy8vXb5BDXl7f2+IsKQoNotyPH60soQubKufK/Fl0A0kys
-         dsk0Ijf8TQcGS5PyYlOaVZ6wiuuK41CtwXso8VpeyD08InIa9mP2bIpUYMl6KErKRbEA
-         f7jQ==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=K8r6DkoETWsIgmS/Xmo5gOSzidDMMFOeOxAXjNrOtJE=;
+        b=RaocD1pHp6TJyQCWEcVek7fYJPOy+7+RuO0Edq73pthLuJR6LV7KHHywomUoHYd2+l
+         X17/W41UsrEAoNleicS34D/rMEYs7+NI5omwaMgYmPNB3XU3faIorut46kHnGmUiKKEF
+         jD+FwwXcOvTg3zrVW+u5Zbr+pJSL/LFRzYdKTex0kt71RHSw+b2VvSyAMYvOoo9BL9e0
+         0tckVecGLmx91as4l7PE5gKIMRP8MdjPFMeovPgI3QkWCTyijErwTWy/9fE65MWvkXoC
+         4/AeMItSxOuARiDOmnD06zyMj6KUSYtw80aAKPveNARuX8+0LpR3HTTdYr8T3TeHsLkJ
+         Gsdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DHsKnCrkXhOuDYV6+psb/tAdbPB1L9cKyhHKv9nMf6Y=;
-        b=O4wWjOTsqxmCfWhiV2/mT5VQRArZ7alhSv4fu8mjgFd1qs5FISWrb1Twejg2Q8oFv3
-         P+lrHuTNAt8RK+3ChWdD03zCnRITXqgCZuwMYEp4GWOW4jJmWz6NzcYZZmMTfax5FGfj
-         tGpoBaui08LhtDCc5bC5Fyf7bbfepf+0Py5ESGsUFBUWMG1PjGYDYu+TdQarUri+Aeml
-         tHYfqtakt4R2Sl8x1tRtcPURxhWa/e0m4z+G6auk8cEIfX8GeQe99ewZbcXe5reQ7l9L
-         HmAArL84mqfCounEizc23pwh6eGyOpZy7LHG9ACVlABJq/tAlvXk6ByB0DSOIKcB272U
-         w6ww==
-X-Gm-Message-State: AO0yUKXCRd8sHBjmoZSLuCleZ/dEPjAB8ofulCXIxSz/UfNu45KxPNvs
-        gKvJUrjnqQGCjfr/oXEacnYo1Pts6P1dWg==
-X-Google-Smtp-Source: AK7set9YH61SsDQpzrCjhRdmXusAByNf2t2Y7y9NvtsXebSPFTPdIDbKu7QwrbLLU6TjpFEuu3mwYA==
-X-Received: by 2002:a17:906:8a43:b0:861:4671:a834 with SMTP id gx3-20020a1709068a4300b008614671a834mr5664657ejc.71.1675348389392;
-        Thu, 02 Feb 2023 06:33:09 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=K8r6DkoETWsIgmS/Xmo5gOSzidDMMFOeOxAXjNrOtJE=;
+        b=Go/DtK1vlb4rbHHVX4Q7TBk3udp6mcYYkVyYHcn/UlJBin9v3jovOJpninTcFk8nAo
+         HC48yrMciMbt9Z6MTzoWe1zo4k6Lt22byjyLZIaWEKOZpUo5DaxXVPeHJhZp2nJc3TSb
+         EIrJ9Ihjvd5pLAkDLM6wi8o/L3V0a+6V3cjUVkLAVNxdS4d+7Bqvb5oNBaXi78LiR9xf
+         dZfHUuX40o2yfJUFl0jx8+wvuCNbJ6UKgdAs0ABp0ju2uU9jPgCNzexg4Bs9r8uTqtDz
+         S2aRyvw48vENkYZWOlTtoYA0cr6mWYlzJtiR8Fipb0RbdbFRqWnwH+4gFsCtwv3BAeNb
+         HhgA==
+X-Gm-Message-State: AO0yUKWtSKfg/VjDrnjFIJ4Q2QZTorAKjtSRh+oey6P9rQFcr4AV3YTv
+        R5qOI52bx/hPagv5jTllFPdAe7abiqT8Wg==
+X-Google-Smtp-Source: AK7set+/t/Hvx6HCB5PaEI8Fm9dwFEiyx9wsphAp67ZBEJE/qW5CluXrygKIJbu068bGJxWMPlZAog==
+X-Received: by 2002:a17:906:ccce:b0:872:ec40:65e9 with SMTP id ot14-20020a170906ccce00b00872ec4065e9mr6465557ejb.18.1675348391611;
+        Thu, 02 Feb 2023 06:33:11 -0800 (PST)
 Received: from fedora.local.tbs-biometrics.cz (176-74-132-138.netdatacomm.cz. [176.74.132.138])
-        by smtp.gmail.com with ESMTPSA id h17-20020a1709066d9100b0087856bd9dbbsm11814237ejt.97.2023.02.02.06.33.08
+        by smtp.gmail.com with ESMTPSA id h17-20020a1709066d9100b0087856bd9dbbsm11814237ejt.97.2023.02.02.06.33.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 06:33:08 -0800 (PST)
+        Thu, 02 Feb 2023 06:33:11 -0800 (PST)
 From:   =?UTF-8?q?Martin=20Za=C5=A5ovi=C4=8D?= <m.zatovic1@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
@@ -60,10 +61,12 @@ Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         dan.j.williams@intel.com, devicetree@vger.kernel.org,
         linus.walleij@linaro.org,
         =?UTF-8?q?Martin=20Za=C5=A5ovi=C4=8D?= <m.zatovic1@gmail.com>
-Subject: [PATCHv2 0/4] Wiegand bus driver and GPIO bit-banged controller
-Date:   Thu,  2 Feb 2023 15:33:01 +0100
-Message-Id: <20230202143305.21789-1-m.zatovic1@gmail.com>
+Subject: [PATCHv2 1/4] dt-bindings: wiegand: add Wiegand controller common properties
+Date:   Thu,  2 Feb 2023 15:33:02 +0100
+Message-Id: <20230202143305.21789-2-m.zatovic1@gmail.com>
 X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230202143305.21789-1-m.zatovic1@gmail.com>
+References: <20230202143305.21789-1-m.zatovic1@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -77,68 +80,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Weigand bus is defined by a Wiegand controller node. This node
+can contain one or more device nodes for devices attached to
+the controller(it is advised to only connect one device as Wiegand
+is a point-to-point bus).
 
-Thank you for your feedback on the last version.
+Wiegand controller needs to specify several attributes such as
+the pulse length in order to function properly. These attributes
+are documented here.
 
-I came to a realization, that it is for the best to let message
-formats and checksum calculation be handled by device drivers.
-Support of these options was removed from the bus driver.
-
-The GPIO bitbanging controller driver contained two attribute
-files - format and payload_len. The format file is obviously not
-needed anymore, however I have decided to keep the payload_len
-file. It seems to me to be the best way to communicate this
-information to the controller driver. This information needs
-to be provided especially in order for the /dev file to work
-properly(as the driver has no idea where the message ends). If
-there is a better way to approach this problem, please let me
-know.
-
-Device drivers will not face the same problem, as the length of
-a message is passed with every call of the transfer_message()
-function.
-
-CHANGELOG since v1:
-- added dt-bindings for wiegand_gpio driver
-- dt_binding_check now passes
-- added help texts to Kconfig files
-- removed controller list from bus driver
-- removed the option to add a device from another driver (along
-  with wiegand_baord_info structure)
-- moved the bus driver to drivers/wiegand/
-- removed all explicit castings, used specific getters instead
-- fixed indentation
-- removed fromat attribute from controller structure
-- removed format implementation from wiegand_gpio driver
-
-Martin Zaťovič (4):
-  dt-bindings: wiegand: add Wiegand controller common properties
-  wiegand: add Wiegand bus driver
-  dt-bindings: wiegand: add GPIO bitbanged Wiegand documentation
-  wiegand: add Wiegand GPIO bit-banged controller driver
-
- .../ABI/testing/sysfs-driver-wiegand-gpio     |   9 +
- .../bindings/wiegand/wiegand-controller.yaml  |  50 ++
- .../bindings/wiegand/wiegand-gpio.yaml        |  51 ++
- MAINTAINERS                                   |  14 +
- drivers/Kconfig                               |   2 +
- drivers/Makefile                              |   1 +
- drivers/wiegand/Kconfig                       |  28 +
- drivers/wiegand/Makefile                      |   2 +
- drivers/wiegand/wiegand-gpio.c                | 324 +++++++++++
- drivers/wiegand/wiegand.c                     | 543 ++++++++++++++++++
- include/linux/wiegand.h                       | 177 ++++++
- 11 files changed, 1201 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-driver-wiegand-gpio
+Signed-off-by: Martin Zaťovič <m.zatovic1@gmail.com>
+---
+ .../bindings/wiegand/wiegand-controller.yaml  | 50 +++++++++++++++++++
+ MAINTAINERS                                   |  5 ++
+ 2 files changed, 55 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/wiegand/wiegand-controller.yaml
- create mode 100644 Documentation/devicetree/bindings/wiegand/wiegand-gpio.yaml
- create mode 100644 drivers/wiegand/Kconfig
- create mode 100644 drivers/wiegand/Makefile
- create mode 100644 drivers/wiegand/wiegand-gpio.c
- create mode 100644 drivers/wiegand/wiegand.c
- create mode 100644 include/linux/wiegand.h
 
+diff --git a/Documentation/devicetree/bindings/wiegand/wiegand-controller.yaml b/Documentation/devicetree/bindings/wiegand/wiegand-controller.yaml
+new file mode 100644
+index 000000000000..fed90e01e56f
+--- /dev/null
++++ b/Documentation/devicetree/bindings/wiegand/wiegand-controller.yaml
+@@ -0,0 +1,50 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/wiegand/wiegand-controller.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Wiegand Generic Controller Common Properties
++
++maintainers:
++  - Martin Zaťovič <martin.zatovic@tbs-biometrics.com>
++
++description:
++  Wiegand busses can be described with a node for the Wiegand controller device
++  and a set of child nodes for each SPI slave on the bus.
++
++properties:
++  $nodename:
++    pattern: "^wiegand(@.*|-[0-9a-f])?$"
++
++  pulse-len-us:
++    description: |
++      Length of the low pulse in microseconds.
++
++  interval-len-us:
++    description: |
++      Length of a whole bit (both the pulse and the high phase) in microseconds.
++
++  frame-gap-us:
++    description: |
++      Length of the last bit of a frame (both the pulse and the high phase) in
++      microseconds.
++
++required:
++  - compatible
++  - pulse-len-us
++  - interval-len-us
++  - frame-gap-us
++
++additionalProperties: true
++
++examples:
++  - |
++    wiegand@f00 {
++        compatible = "wiegand-foo";
++        pulse-len-us = <50>;
++        interval-len-us = <2000>;
++        frame-gap-us = <2000>;
++
++        /* devices */
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 7f86d02cb427..db9624d93af0 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -22428,6 +22428,11 @@ L:	linux-input@vger.kernel.org
+ S:	Maintained
+ F:	drivers/hid/hid-wiimote*
+ 
++WIEGAND BUS DRIVER
++M:	Martin Zaťovič <m.zatovic1@gmail.com>
++S:	Maintained
++F:	Documentation/devicetree/bindings/wiegand/wiegand-controller.yaml
++
+ WILOCITY WIL6210 WIRELESS DRIVER
+ L:	linux-wireless@vger.kernel.org
+ S:	Orphan
 -- 
 2.39.1
 
