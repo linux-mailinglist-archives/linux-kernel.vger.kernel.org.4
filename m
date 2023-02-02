@@ -2,73 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A5D7688494
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 17:36:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DCC968849B
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 17:38:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232361AbjBBQgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 11:36:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47488 "EHLO
+        id S232083AbjBBQiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 11:38:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232468AbjBBQgf (ORCPT
+        with ESMTP id S230144AbjBBQiL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 11:36:35 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC8E6B37C
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 08:36:30 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id bf19so2468867ljb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 08:36:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Em9KOz7Z4HbmSs3XsIqoezy5V4/6T6jB3yMfk8wPI8k=;
-        b=S9ra05uvD328XXNDuOo83dhibYOONyf8Eg/0qA/aomo9ES6sUD44419EVHAVJnKJup
-         v8CsxwGH7Mupr1Ne55sGyBoDp9daTEOMHJCmzXMWZC9nYSFsJElsYJKNiyX88152lndZ
-         DmC7BlswRT9q0IYpKuiw9WaYFJz1P+2VQs/p+/474rj0u1v5tLPHYe5w+fsSWezadaUw
-         FWL9rYzsz3/hNjftdb3mnvHF+LPLCla160bRSjylO5A4VDr9eaFDWXHftHqLWoDpo8GP
-         zb88mBfcqEWksvdv8JWjSX9TAmikhcp2dxO8LJESUF3fA2Ase2oc7HG8tGhR0v3goGJ0
-         LnUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Em9KOz7Z4HbmSs3XsIqoezy5V4/6T6jB3yMfk8wPI8k=;
-        b=Pk38WlC7cFVA8pXCYzycclRNw98nZ/Z4xnAO6+Sd3Flth6opSkJl69SG4q/NlgwaQG
-         0PjwsgSo34M5osmVW4ujxbHM25WuTdwUwOIJqZKNcM9xlH8lEOreVs3DmuoWm7aziKed
-         mnc6ItZaZaN7Lu6b8DwzYKVXCnLqZqgwFLZDdZ+0rPpMDUtFhihza+Ft67gq5vV2u9ZK
-         /wzogvdrJsrO0cUZBBiCES5ipI0smrzX+qE9Njwo6S0DPvFEIT/5eoRxgtbeFx/an/B+
-         iFa0Dn32ZyRZ3tLajCRyNvmpKNXehDQqwd4pSBGzBrE0+73/eqpuOzhQg2Ff/Nv61Ax3
-         G+PA==
-X-Gm-Message-State: AO0yUKW9b+tQlbIpumdeHBZQNmXHjDXQ8c2D1Vf6gS6mqFVa6IrywHxL
-        Cnon6R62Zh04zQsqPIQALuxOlH61W0+dlF6I5Jk=
-X-Google-Smtp-Source: AK7set8uzIxSVMuDSHExBSxRpuqbSn9ZUIVsFIgan00jeDJrVKjfbPxw99S1L9ePqcMOm0vcMZJ3Smtfax0fJ2XXusc=
-X-Received: by 2002:a2e:9885:0:b0:290:5a2e:c5d with SMTP id
- b5-20020a2e9885000000b002905a2e0c5dmr1011544ljj.155.1675355788682; Thu, 02
- Feb 2023 08:36:28 -0800 (PST)
+        Thu, 2 Feb 2023 11:38:11 -0500
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC2B25293;
+        Thu,  2 Feb 2023 08:38:07 -0800 (PST)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 965C318843AC;
+        Thu,  2 Feb 2023 16:38:06 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 8D99F250007B;
+        Thu,  2 Feb 2023 16:38:06 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 743E591201E4; Thu,  2 Feb 2023 16:38:06 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-Sender: adinduchukwudi7@gmail.com
-Received: by 2002:a05:6022:31cf:b0:37:29fa:ba2f with HTTP; Thu, 2 Feb 2023
- 08:36:27 -0800 (PST)
-From:   Elena Tudorie <elenatudorie987@gmail.com>
-Date:   Thu, 2 Feb 2023 22:06:27 +0530
-X-Google-Sender-Auth: Pi90KMqu6juTBgDI706FtR_viwU
-Message-ID: <CAP-A=S1WFT4=47eCmOz8OzNpm_onvtpY-id6UPv34PteS72m0Q@mail.gmail.com>
-Subject: Greetings
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_20,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Date:   Thu, 02 Feb 2023 17:38:06 +0100
+From:   netdev@kapio-technology.com
+To:     Ido Schimmel <idosch@idosch.org>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
+        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?UTF-8?Q?Cl=C3=A9m?= =?UTF-8?Q?ent_L=C3=A9ger?= 
+        <clement.leger@bootlin.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>
+Subject: Re: [PATCH net-next 1/5] net: bridge: add dynamic flag to switchdev
+ notifier
+In-Reply-To: <Y9vgz4x/O+dIp+0/@shredder>
+References: <20230130173429.3577450-1-netdev@kapio-technology.com>
+ <20230130173429.3577450-2-netdev@kapio-technology.com>
+ <Y9qrAup9Xt/ZDEG0@shredder>
+ <f27dd18d9d0b7ff8b693af8a58ea8616@kapio-technology.com>
+ <Y9vgz4x/O+dIp+0/@shredder>
+User-Agent: Gigahost Webmail
+Message-ID: <766efaf94fcb6362c5ceb176ad7955f1@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings.
+On 2023-02-02 17:11, Ido Schimmel wrote:
+> On Thu, Feb 02, 2023 at 08:28:36AM +0100, netdev@kapio-technology.com 
+> wrote:
+>> On 2023-02-01 19:10, Ido Schimmel wrote:
+>> > On Mon, Jan 30, 2023 at 06:34:25PM +0100, Hans J. Schultz wrote:
+>> > > To be able to add dynamic FDB entries to drivers from userspace, the
+>> > > dynamic flag must be added when sending RTM_NEWNEIGH events down.
+>> > >
+>> > > Signed-off-by: Hans J. Schultz <netdev@kapio-technology.com>
+>> > > ---
+>> > >  include/net/switchdev.h   | 1 +
+>> > >  net/bridge/br_switchdev.c | 2 ++
+>> > >  2 files changed, 3 insertions(+)
+>> > >
+>> > > diff --git a/include/net/switchdev.h b/include/net/switchdev.h
+>> > > index ca0312b78294..aaf918d4ba67 100644
+>> > > --- a/include/net/switchdev.h
+>> > > +++ b/include/net/switchdev.h
+>> > > @@ -249,6 +249,7 @@ struct switchdev_notifier_fdb_info {
+>> > >  	u8 added_by_user:1,
+>> > >  	   is_local:1,
+>> > >  	   locked:1,
+>> > > +	   is_dyn:1,
+>> > >  	   offloaded:1;
+>> > >  };
+>> > >
+>> > > diff --git a/net/bridge/br_switchdev.c b/net/bridge/br_switchdev.c
+>> > > index 7eb6fd5bb917..4420fcbbfdb2 100644
+>> > > --- a/net/bridge/br_switchdev.c
+>> > > +++ b/net/bridge/br_switchdev.c
+>> > > @@ -136,6 +136,8 @@ static void br_switchdev_fdb_populate(struct
+>> > > net_bridge *br,
+>> > >  	item->added_by_user = test_bit(BR_FDB_ADDED_BY_USER, &fdb->flags);
+>> > >  	item->offloaded = test_bit(BR_FDB_OFFLOADED, &fdb->flags);
+>> > >  	item->is_local = test_bit(BR_FDB_LOCAL, &fdb->flags);
+>> > > +	item->is_dyn = !test_bit(BR_FDB_STATIC, &fdb->flags) &&
+>> >
+>> > Why not 'is_static' and be consistent with the bridge flag like all the
+>> > other fields?
+>> >
+>> > Regardless of how you name this field, it is irrelevant for
+>> > 'SWITCHDEV_FDB_ADD_TO_BRIDGE' notifications that all add FDB entries
+>> > with the 'BR_FDB_ADDED_BY_EXT_LEARN' flag set, which makes
+>> > 'BR_FDB_STATIC' irrelevant.
+>> >
+>> > > +		item->added_by_user;
+>> >
+>> > Unclear why this is needed...
+>> >
+>> 
+>> The answer to those two questions lies in my earlier correspondences 
+>> (with
+>> Oltean) on the RFC version.
+> 
+> It is not up to me as a reviewer to dig up old versions of the patch 
+> and
+> find out what was changed and why. It is up to you as the submitter of
+> the patch to provide all this information in the patch posting. Please
+> read:
+> https://www.kernel.org/doc/html/latest/process/submitting-patches.html
+> 
+> Specifically:
+> 
+> "Review comments or questions that do not lead to a code change should
+> almost certainly bring about a comment or changelog entry so that the
+> next reviewer better understands what is going on."
+> 
+> And:
+> 
+> "Other comments relevant only to the moment or the maintainer, not
+> suitable for the permanent changelog, should also go here. A good
+> example of such comments might be patch changelogs which describe what
+> has changed between the v1 and v2 version of the patch.
+> 
+> Please put this information after the --- line which separates the
+> changelog from the rest of the patch. The version information is not
+> part of the changelog which gets committed to the git tree. It is
+> additional information for the reviewers."
+> 
+> Thanks
 
-I am Ms Elena Tudorie, I have a important  business  to discuss with you,
-Thanks for your time and  Attention.
-Regards.
-Mrs.Elena Tudorie
+
+Sorry about that. I thought it would be easily found...
+
+On the first question please look here:
+https://lore.kernel.org/netdev/20230119134045.fqdt6zrna5x3iavt@skbuf/
+
+On the second question it is what Oltean pointed out to me here...
+https://lore.kernel.org/netdev/20230118230135.szu6a7kvt2mjb3i5@skbuf/
+
+Oltean says there:
+"This is not true, because it assumes that DSA never called 
+port_fdb_add()
+up until now for bridge FDB entries with the BR_FDB_STATIC flag unset,
+which is incorrect (it did)."
+
+Though as I see it, if it is only from the DSA layer on, the new 
+is_dynamic flag would not be set anyway in the case he references. And 
+as can be seen the change is in the bridge layer, as the rest is just 
+propagating the flag, but it ensures that to set this flag that it comes 
+from the user adding an FDB entry.
