@@ -2,134 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 836EA687A96
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 11:46:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 147D1687A99
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 11:46:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232827AbjBBKqA convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 2 Feb 2023 05:46:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42838 "EHLO
+        id S232736AbjBBKqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 05:46:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232632AbjBBKpZ (ORCPT
+        with ESMTP id S232746AbjBBKpk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 05:45:25 -0500
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 948D5885D7;
-        Thu,  2 Feb 2023 02:45:10 -0800 (PST)
-Received: by mail-ej1-f48.google.com with SMTP id hx15so4642371ejc.11;
-        Thu, 02 Feb 2023 02:45:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=po7aQyjY/NTYpssfxPmIQc5nJCER56LXRnmfZ8cj9AE=;
-        b=2HKPgyqT1LS9CXxfW1HZOSEh/jRTpJldvNyS5+N7P8+UtV0HlE3qbwY8ap586L9Abm
-         XqqUhoJ+vuSqgHk/eRKtzNyHiMn7kL+uNd7lpq7ox/sA0dS6HARIW5YubI/IuxG/lvJf
-         c9ynYe3pkazzNhat7NOVV36bSwWaadr3Nm5bv1q9aCL4BwuXfQAvXCJyqeXeHOyzI1oq
-         UbE9mrF0dkWEofcL8wLHW2UnrQBmtbEzIx86SowQVPDniKOGkdrhgybvWYxsmTDjYhBk
-         psf2Hv8nJHe1L3Zav+6KUF+o/dJu6tf011kgHxP55lF/Tz0/0ddjNqele5yKpBW2NyKt
-         atRw==
-X-Gm-Message-State: AO0yUKXoAKTxIrqn8VzPbaowcnHwA8IyqjnJsW6mGPN23QbVhW5/+fYn
-        XRU2x8SCVJTA2D7YYOMuPQGZUJjscxmVnMuCHLk=
-X-Google-Smtp-Source: AK7set/SJyV8B7X24GPWCByzF5zo48o8FjN9pXhMtcFod1nL7p97Z+Yg7+/Q0kU0s0qNNpOZONRaJg6w41hn441KQ6Y=
-X-Received: by 2002:a17:906:e56:b0:884:3298:12b with SMTP id
- q22-20020a1709060e5600b008843298012bmr1794851eji.125.1675334709049; Thu, 02
- Feb 2023 02:45:09 -0800 (PST)
+        Thu, 2 Feb 2023 05:45:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21EF8885F1
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 02:45:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C69F6B823EF
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 10:45:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0796C433D2;
+        Thu,  2 Feb 2023 10:45:18 +0000 (UTC)
+Date:   Thu, 2 Feb 2023 10:45:15 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Muchun Song <muchun.song@linux.dev>
+Cc:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH V2] arm64/mm: Intercept pfn changes in set_pte_at()
+Message-ID: <Y9uUO9AadE+8ik/0@arm.com>
+References: <20230109052816.405335-1-anshuman.khandual@arm.com>
+ <e924c1aa-5f04-fd7f-52d4-7cf22c476016@arm.com>
+ <20230126133321.GB29148@willie-the-truck>
+ <d454c9a2-5300-b600-a2ae-21d82d338470@arm.com>
+ <20230131154950.GB2646@willie-the-truck>
+ <Y9pZALdn3pKiJUeQ@arm.com>
+ <A8DF7D56-C145-4B49-A034-022917B87C89@linux.dev>
 MIME-Version: 1.0
-References: <20230131233755.58942-1-pedro.falcato@gmail.com>
- <CAJZ5v0iXcRFamA+mE837=zHReBT-+8WmMeRDR7L9R+FVpLr25A@mail.gmail.com>
- <20230202084953.3035c6e3@gmail.com> <CAJZ5v0iwO=xJ8A=vv4Khm6Z+Lb9hpZsZmyCjMeSHutMWRcp78g@mail.gmail.com>
-In-Reply-To: <CAJZ5v0iwO=xJ8A=vv4Khm6Z+Lb9hpZsZmyCjMeSHutMWRcp78g@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 2 Feb 2023 11:44:57 +0100
-Message-ID: <CAJZ5v0hbFNGugDJ3PGLzfNm7h7f8vTesUOZ0R_vkYGaxBWFCdQ@mail.gmail.com>
-Subject: Re: [PATCH] ACPI: Make custom_method use per-open state
-To:     "Marty E. Plummer" <hanetzer@startmail.com>,
-        Sebastian Grzywna <swiftgeek@gmail.com>
-Cc:     Pedro Falcato <pedro.falcato@gmail.com>,
-        linux-acpi@vger.kernel.org, Len Brown <lenb@kernel.org>,
-        linux-kernel@vger.kernel.org, rui.zhang@intel.com,
-        Hang Zhang <zh.nvgt@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <A8DF7D56-C145-4B49-A034-022917B87C89@linux.dev>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 2, 2023 at 11:03 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Thu, Feb 2, 2023 at 8:50 AM Sebastian Grzywna <swiftgeek@gmail.com> wrote:
-> >
-> > Dnia 2023-02-01, o godz. 19:34:48
-> > "Rafael J. Wysocki" <rafael@kernel.org> napisał(a):
-> >
-> > > On Wed, Feb 1, 2023 at 12:38 AM Pedro Falcato
-> > > <pedro.falcato@gmail.com> wrote:
-> > > >
-> > > > Make custom_method keep its own per-file-open state instead of
-> > > > global state in order to avoid race conditions[1] and other
-> > > > possible conflicts with other concurrent users.
-> > > >
-> > > > Link:
-> > > > https://lore.kernel.org/linux-acpi/20221227063335.61474-1-zh.nvgt@gmail.com/
-> > > > # [1] Reported-by: Hang Zhang <zh.nvgt@gmail.com> Cc: Swift Geek
-> > > > <swiftgeek@gmail.com> Signed-off-by: Pedro Falcato
-> > > > <pedro.falcato@gmail.com> ---
-> > > >  This patch addresses Hang's problems plus the ones raised by
-> > > > Rafael in his review (see link above).
-> > > > https://lore.kernel.org/lkml/2667007.mvXUDI8C0e@kreacher/ was
-> > > > submitted but since there were still people that wanted this
-> > > > feature, I took my time to write up a patch that should fix the
-> > > > issues. Hopefully the linux-acpi maintainers have not decided to
-> > > > remove custom_method just yet.
-> > >
-> > > Well, thanks for the patch, but yes, they have.  Sorry.
-> >
-> > Hi Rafael,
-> > Can you please explain why you don't want to keep it, given there's a
-> > patch?
->
-> Because this interface was a bad idea to start with and its
-> implementation is questionable at the design level.
->
-> Granted, at the time it was introduced, there was no alternative, but
-> there is the AML debugger in the kernel now and as far as debugging is
-> concerned, it is actually more powerful than custom_metod AFAICS.  See
-> Documentation/firmware-guide/acpi/aml-debugger.rst.
->
-> If the AML debugger has problems, I would very much prefer fixing them
-> to the perpetual maintenance of custom_method.
->
-> > I find it really useful in my day-to-day as a firmware engineer.
-> > I don't see much happening in git history of
-> > drivers/acpi/custom_method.c , and I don't see anything that was
-> > specifically changed in it in past 10 years to keep it being
-> > functional. Without your more detailed explanation I have hard time
-> > understanding your decision to remove it, since I'm not a kernel
-> > developer myself.
->
-> It's been always conceptually questionable, problematic from the
-> security standpoint and implemented poorly.  Also its documentation is
-> outdated.
->
-> The patches fixing its most apparent functional issues don't actually
-> address much of the above.
->
-> The AML debugger should really be used for debug rather than
-> custom_method and honestly, what's the purpose of it beyond debug?
+On Thu, Feb 02, 2023 at 05:51:39PM +0800, Muchun Song wrote:
+> > On Feb 1, 2023, at 20:20, Catalin Marinas <catalin.marinas@arm.com> wrote:
+> >> Bah, sorry! Catalin reckons it may have been him talking about the vmemmap.
+> > 
+> > Indeed. The discussion with Anshuman started from this thread:
+> > 
+> > https://lore.kernel.org/all/20221025014215.3466904-1-mawupeng1@huawei.com/
+> > 
+> > We already trip over the existing checks even without Anshuman's patch,
+> > though only by chance. We are not setting the software PTE_DIRTY on the
+> > new pte (we don't bother with this bit for kernel mappings).
+> > 
+> > Given that the vmemmap ptes are still live when such change happens and
+> > no-one came with a solution to the break-before-make problem, I propose
+> > we revert the arm64 part of commit 47010c040dec ("mm: hugetlb_vmemmap:
+> > cleanup CONFIG_HUGETLB_PAGE_FREE_VMEMMAP*"). We just need this hunk:
+> > 
+> > diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> > index 27b2592698b0..5263454a5794 100644
+> > --- a/arch/arm64/Kconfig
+> > +++ b/arch/arm64/Kconfig
+> > @@ -100,7 +100,6 @@ config ARM64
+> > 	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
+> > 	select ARCH_WANT_FRAME_POINTERS
+> > 	select ARCH_WANT_HUGE_PMD_SHARE if ARM64_4K_PAGES || (ARM64_16K_PAGES && !ARM64_VA_BITS_36)
+> > -	select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+> 
+> Maybe it is a little overkill for HVO as it can significantly minimize the
+> overhead of vmemmap on ARM64 servers for some workloads (like qemu, DPDK).
+> So I don't think disabling it is a good approach. Indeed, HVO broke BBM,
+> but the waring does not affect anything since the tail vmemmap pages are
+> supposed to be read-only. So, I suggest skipping warnings if it is the
+> vmemmap address in set_pte_at(). What do you think of?
 
-The above said, if people really do care about custom_method, it can
-be retained, but its documentation needs to be updated to cover the
-current requirements (according to Rui, they have changed after some
-upstream ACPICA changes).
+IIUC, vmemmap_remap_pte() not only makes the pte read-only but also
+changes the output address. Architecturally, this needs a BBM sequence.
+We can avoid going through an invalid pte if we first make the pte
+read-only, TLBI but keeping the same pfn, followed by a change of the
+pfn while keeping the pte readonly. This also assumes that the content
+of the page pointed at by the pte is the same at both old and new pfn.
 
-Also note that the upstream ACPICA may not be guaranteed to avoid
-breaking this interface in the future, as it depends on
-acpi_install_method() that is provided by ACPICA specifically for the
-use in the AML debugger.
+-- 
+Catalin
