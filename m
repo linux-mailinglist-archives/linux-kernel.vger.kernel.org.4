@@ -2,75 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE2626882F2
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 16:46:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4F566882E2
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 16:42:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232135AbjBBPqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 10:46:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45972 "EHLO
+        id S232184AbjBBPmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 10:42:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232024AbjBBPqb (ORCPT
+        with ESMTP id S231707AbjBBPmW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 10:46:31 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA92977DD9;
-        Thu,  2 Feb 2023 07:46:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=BF3GBvlC/+RSSxBp90Pqw55bNKBsJW82s0xPbbxC8Ow=; b=FR2nOapuJ0SlEF+innoLhrdDvB
-        HxY/xDZyhmI9nJVlH/PGIKWzGxmQrHLpgOnNraQmbn16e2p1P3D/XoLwi07kwZxdvpbS4hPGAjVFt
-        vvG7xnsqBo1uzGzUvV+fBsoTim06sW5gKBMeR3D3e2SAv/aJUSOgoCzJ7E3QGnkLra+Q=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pNbhU-003uPH-C5; Thu, 02 Feb 2023 16:40:36 +0100
-Date:   Thu, 2 Feb 2023 16:40:36 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Rakesh Sankaranarayanan <rakesh.sankaranarayanan@microchip.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        f.fainelli@gmail.com, olteanv@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        linux@armlinux.org.uk
-Subject: Re: [RFC PATCH net-next 07/11] net: dsa: microchip: lan937x: update
- switch register
-Message-ID: <Y9vZdMQgqhaGIcdf@lunn.ch>
-References: <20230202125930.271740-1-rakesh.sankaranarayanan@microchip.com>
- <20230202125930.271740-8-rakesh.sankaranarayanan@microchip.com>
+        Thu, 2 Feb 2023 10:42:22 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3721027D46;
+        Thu,  2 Feb 2023 07:41:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 56B6E61B8C;
+        Thu,  2 Feb 2023 15:41:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FFF7C433D2;
+        Thu,  2 Feb 2023 15:40:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675352460;
+        bh=SnokYtP0nj6+SdMUZyE/P5z1gQHBzL3/1Otl7bzbNK0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qeFYPex0TzA+VS5gBR3VY20pInVwSOxzIE9DS2E/rVorWjdplJ7T6z4Jt7mTCUIEb
+         nD8qA26Zqm7KB9hK0gNg2i2WvyDVSnkPDzwrlp5DrsPf375ACqitNM/AtlZJK6zEuy
+         6k29M0fgNmDAK3DlYrpiYat5Qi3YbNb/yBo0ePq/+QciRgfIWjr9JMiYFYFpbDCIK3
+         XAIvyjPMErvq8IPmbZV5ikztXtZatwsjnGubkenVLMsgr+8Wpr2G2p8RbZpmbRJHZG
+         ziPS3ZEQebz72j0/bvhKDjkYiMat5pTuNd9PXdJhfOwZ1SbGcOQgN8aSjYW415iJZ8
+         uTazh+EWqSZSA==
+Date:   Thu, 2 Feb 2023 16:40:54 +0100
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Marek Vasut <marek.vasut+renesas@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PCI: rcar: avoid defines prefixed with CONFIG
+Message-ID: <Y9vZhv2+F4e/Asko@lpieralisi>
+References: <20230113084516.31888-1-lukas.bulwahn@gmail.com>
+ <CAMuHMdX_TPgXO2KYNdD5rRzuE9m6_JxfW-otWzw7r7Wptq_rOQ@mail.gmail.com>
+ <Y8GHICwCNRsYCva8@lpieralisi>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230202125930.271740-8-rakesh.sankaranarayanan@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y8GHICwCNRsYCva8@lpieralisi>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 06:29:26PM +0530, Rakesh Sankaranarayanan wrote:
-> Second switch in cascaded connection doesn't have port with macb
-> interface. dsa_switch_register returns error if macb interface is
-> not up. Due to this reason, second switch in cascaded connection will
-> not report error during dsa_switch_register and mib thread work will be
-> invoked even if actual switch register is not done. This will lead to
-> kernel warning and it can be avoided by checking device tree setup
-> status. This will return true only after actual switch register is done.
+On Fri, Jan 13, 2023 at 05:30:24PM +0100, Lorenzo Pieralisi wrote:
+> On Fri, Jan 13, 2023 at 10:05:09AM +0100, Geert Uytterhoeven wrote:
+> > Hi Lukas,
+> > 
+> > On Fri, Jan 13, 2023 at 9:52 AM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
+> > > Defines prefixed with "CONFIG" should be limited to proper Kconfig options,
+> > > that are introduced in a Kconfig file.
+> > >
+> > > Here, a definition for a bitmask to configure the SEND_ENABLE mode is named
+> > > CONFIG_SEND_ENABLE.
+> > >
+> > > Rename this local definition to CONFIGURE_SEND_ENABLE to avoid defines
+> > > prefixed with "CONFIG".
+> > >
+> > > No functional change.
+> > >
+> > > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> > 
+> > Thanks for your patch!
+> > 
+> > > --- a/drivers/pci/controller/pcie-rcar.h
+> > > +++ b/drivers/pci/controller/pcie-rcar.h
+> > > @@ -11,7 +11,7 @@
+> > >
+> > >  #define PCIECAR                        0x000010
+> > >  #define PCIECCTLR              0x000018
+> > > -#define  CONFIG_SEND_ENABLE    BIT(31)
+> > > +#define  CONFIGURE_SEND_ENABLE BIT(31)
+> > 
+> > The R-Car Gen3 rev. 2.30 Hardware User's Manual calls the bit "CCIE".
+> > 
+> > Hence if I would have written the driver, I would have used
+> > 
+> >     #define PCIECCTLR_CCIE     BIT(31)   /* Configuration Send Enable */
+> 
+> Should I change it when I merge it ? That makes sense actually.
 
-What i think you need to do is move the code into ksz_setup().
+If I don't hear from anybody I will make the change above and merge it.
 
-With a D in DSA setup, dsa_switch_register() adds the switch to the
-list of switches, and then a check is performed to see if all switches
-in the cluster have been registered. If not, it just returns. If all
-switches have been registered, it then iterates over all the switches
-can calls dsa_switch_ops.setup().
+Thanks,
+Lorenzo
 
-By moving the start of the MIB counter into setup(), it will only be
-started once all the switches are present, and it means you don't need
-to look at DSA core internal state.
-
-	Andrew
+> 
+> Thanks,
+> Lorenzo
+> 
+> > >  #define  TYPE0                 (0 << 8)
+> > >  #define  TYPE1                 BIT(8)
+> > >  #define PCIECDR                        0x000020
+> > 
+> > Gr{oetje,eeting}s,
+> > 
+> >                         Geert
+> > 
+> > --
+> > Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> > 
+> > In personal conversations with technical people, I call myself a hacker. But
+> > when I'm talking to journalists I just say "programmer" or something like that.
+> >                                 -- Linus Torvalds
