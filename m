@@ -2,138 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B39A687B50
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 12:02:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A15E1687BD3
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 12:12:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232818AbjBBLB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 06:01:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58572 "EHLO
+        id S229988AbjBBLMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 06:12:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231811AbjBBLB2 (ORCPT
+        with ESMTP id S231737AbjBBLM2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 06:01:28 -0500
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5756A78AE7
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 03:01:26 -0800 (PST)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4P6wnm60SJz9svy;
-        Thu,  2 Feb 2023 12:01:16 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 4RsAhJRFSqBV; Thu,  2 Feb 2023 12:01:16 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4P6wnl5FQYz9svt;
-        Thu,  2 Feb 2023 12:01:15 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id A51AE8B779;
-        Thu,  2 Feb 2023 12:01:15 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id JTaqZHlsZ_TI; Thu,  2 Feb 2023 12:01:15 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.5.213])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 706558B767;
-        Thu,  2 Feb 2023 12:01:15 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 312B1Due4109513
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Thu, 2 Feb 2023 12:01:13 +0100
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 312B1BVI4109507;
-        Thu, 2 Feb 2023 12:01:11 +0100
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH] powerpc: Disable CPU unknown by CLANG when CC_IS_CLANG
-Date:   Thu,  2 Feb 2023 12:01:04 +0100
-Message-Id: <e62892e32c14a7a5738c597e39e0082cb0abf21c.1675335659.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.39.1
+        Thu, 2 Feb 2023 06:12:28 -0500
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5D4879634;
+        Thu,  2 Feb 2023 03:12:24 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4P6wLH1s6Xz9xHw6;
+        Thu,  2 Feb 2023 18:40:55 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwBnNl3+lNtjGVTnAA--.14834S2;
+        Thu, 02 Feb 2023 11:48:42 +0100 (CET)
+Message-ID: <7dc9963c563d0b55bb35109be012e355eef13882.camel@huaweicloud.com>
+Subject: Re: [RFC PATCH v9 00/16] Integrity Policy Enforcement LSM (IPE)
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Fan Wu <wufan@linux.microsoft.com>
+Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
+        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
+        axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
+        eparis@redhat.com, paul@paul-moore.com, linux-doc@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        dm-devel@redhat.com, linux-audit@redhat.com,
+        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org
+Date:   Thu, 02 Feb 2023 11:48:18 +0100
+In-Reply-To: <20230201004852.GB30104@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1675119451-23180-1-git-send-email-wufan@linux.microsoft.com>
+         <033335b26f6becdc3dc0325ef926efd94fcc4dda.camel@huaweicloud.com>
+         <20230201004852.GB30104@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1675335662; l=1918; s=20211009; h=from:subject:message-id; bh=T1nm18iJl4xpzofZJ+3Z32joE+oZKTCIgLvBiflPfmI=; b=ki6QPdVA71l70DsTw316cQGEqYIa1O1NQ6XC1aacpUVfw8BJtC1bWsleSB2MW9+5Jh7dVfR2PTny yq2fug/1AzQsN57PnuOLdeoJDb+Q7rb0tKiJHx8EuyIb28MV6/wn
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: GxC2BwBnNl3+lNtjGVTnAA--.14834S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxGw4rWw4DXFWxCryUCF1xXwb_yoW5CFW8pF
+        WagayYkr1DKFs2yw1vy3WSqayYv395Ja1UJr98tryUAa15ur1UZF43Ka4Y93W7ur1kZ34Y
+        vF42vr9rAF1UCaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFDGOUUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAQBF1jj4RztQAEsh
+X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CLANG only knows the following CPUs:
+On Tue, 2023-01-31 at 16:48 -0800, Fan Wu wrote:
+> On Tue, Jan 31, 2023 at 03:22:05PM +0100, Roberto Sassu wrote:
+> > On Mon, 2023-01-30 at 14:57 -0800, Fan Wu wrote:
+> > > IPE has two known gaps:
+> > > 
+> > > 1. IPE cannot verify the integrity of anonymous executable memory, such as
+> > >   the trampolines created by gcc closures and libffi (<3.4.2), or JIT'd code.
+> > >   Unfortunately, as this is dynamically generated code, there is no way
+> > >   for IPE to ensure the integrity of this code to form a trust basis. In all
+> > >   cases, the return result for these operations will be whatever the admin
+> > >   configures the DEFAULT action for "EXECUTE".
+> > 
+> > I think it would be useful to handle special cases, for example you
+> > could allow a process that created a file with memfd to use it, at the
+> > condition that nobody else writes it.
+> > 
+> > This would be required during the boot, otherwise services could fail
+> > to start (depending on the policy).
+> > 
+> Thanks for the suggestion. I agree with your opinion and I think supporting
+> memfd is possible but restricting read/write needs more hooks. We would like
+> to avoid adding more complexity to this initial posting as necessary. 
+> We will consider this as a future work and will post follow-on patches
+> in the future.
 
-generic, 440, 450, 601, 602, 603, 603e, 603ev, 604, 604e, 620, 630,
-g3, 7400, g4, 7450, g4+, 750, 8548, 970, g5, a2, e500, e500mc, e5500,
-power3, pwr3, power4, pwr4, power5, pwr5, power5x, pwr5x, power6,
-pwr6, power6x, pwr6x, power7, pwr7, power8, pwr8, power9, pwr9,
-power10, pwr10, powerpc, ppc, ppc32, powerpc64, ppc64, powerpc64le,
-ppc64le, futur
+Ok, maybe it is necessary to specify better the scope of IPE, why the
+current implementation can be considered as complete.
 
-Disable other ones when CC_IS_CLANG.
+If we say, IPE can only allow/deny operations on system components with
+immutable security properties, clearly memfd as a component cannot
+fullfill this goal due to the non-immutability. This would apply to any
+component allowing modifications.
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- arch/powerpc/platforms/Kconfig.cputype | 8 ++++++++
- 1 file changed, 8 insertions(+)
+How to address this? What is the immutable property then?
 
-diff --git a/arch/powerpc/platforms/Kconfig.cputype b/arch/powerpc/platforms/Kconfig.cputype
-index 29d6be033576..046b571496b1 100644
---- a/arch/powerpc/platforms/Kconfig.cputype
-+++ b/arch/powerpc/platforms/Kconfig.cputype
-@@ -143,6 +143,7 @@ config POWERPC_CPU
- config CELL_CPU
- 	bool "Cell Broadband Engine"
- 	depends on PPC_BOOK3S_64 && !CPU_LITTLE_ENDIAN
-+	depends on !CC_IS_CLANG
- 	select PPC_64S_HASH_MMU
- 
- config PPC_970_CPU
-@@ -187,11 +188,13 @@ config E5500_CPU
- config E6500_CPU
- 	bool "Freescale e6500"
- 	depends on PPC64 && PPC_E500
-+	depends on !CC_IS_CLANG
- 	select PPC_HAS_LBARX_LHARX
- 
- config 405_CPU
- 	bool "40x family"
- 	depends on 40x
-+	depends on !CC_IS_CLANG
- 
- config 440_CPU
- 	bool "440 (44x family)"
-@@ -200,22 +203,27 @@ config 440_CPU
- config 464_CPU
- 	bool "464 (44x family)"
- 	depends on 44x
-+	depends on !CC_IS_CLANG
- 
- config 476_CPU
- 	bool "476 (47x family)"
- 	depends on PPC_47x
-+	depends on !CC_IS_CLANG
- 
- config 860_CPU
- 	bool "8xx family"
- 	depends on PPC_8xx
-+	depends on !CC_IS_CLANG
- 
- config E300C2_CPU
- 	bool "e300c2 (832x)"
- 	depends on PPC_BOOK3S_32
-+	depends on !CC_IS_CLANG
- 
- config E300C3_CPU
- 	bool "e300c3 (831x)"
- 	depends on PPC_BOOK3S_32
-+	depends on !CC_IS_CLANG
- 
- config G4_CPU
- 	bool "G4 (74xx)"
--- 
-2.39.1
+In the case of memfd, intuitively, a useful property for integrity
+could be for example that the content can be accessed/modified by only
+one process. No other (possibly malicious) processes can tamper with
+that file.
+
+So, it is true, to make this property immutable more hooks are needed.
+But should it be something that IPE does? Or it should be done by an
+external component (another LSM) that does the enforcement and reports
+to IPE that the property is true? Theoretically (with a proper policy),
+existing LSMs could be used for that purpose too.
+
+I would say more the second, it should not be IPE job, so that IPE can
+exclusively focus on evaluating properties, not making sure that the
+properties are immutable.
+
+Roberto
+
+> -Fan
+> 
+> > > 2. IPE cannot verify the integrity of interpreted languages' programs when
+> > >   these scripts invoked via ``<interpreter> <file>``. This is because the
+> > >   way interpreters execute these files, the scripts themselves are not
+> > >   evaluated as executable code through one of IPE's hooks. Interpreters
+> > >   can be enlightened to the usage of IPE by trying to mmap a file into
+> > >   executable memory (+X), after opening the file and responding to the
+> > >   error code appropriately. This also applies to included files, or high
+> > >   value files, such as configuration files of critical system components.
+> > 
+> > Ok, it is a well known issue. Hopefully, it will be fixed soon.
+> > 
+> > Roberto
+> > 
 
