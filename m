@@ -2,112 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0148D687D86
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 13:39:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9290687D87
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 13:39:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231434AbjBBMjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 07:39:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36876 "EHLO
+        id S231923AbjBBMjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 07:39:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbjBBMjU (ORCPT
+        with ESMTP id S231819AbjBBMjU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 2 Feb 2023 07:39:20 -0500
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16ED589F88
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3023A89F9C
         for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 04:39:19 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 95DA458200E;
-        Thu,  2 Feb 2023 07:39:16 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Thu, 02 Feb 2023 07:39:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1675341556; x=
-        1675348756; bh=66544bd5OlXqw/yfmhmprOXzWx+UMIFlGhBeotohUVs=; b=C
-        foF4xKupoAX8Lakv+HZys1O0vgSz/EolME2suCvDqv4BsaOB41mP6bk7uaPj0cfn
-        RmGZNDqqb+YH0PF21kGW9HGh51YuxxVnFldIDdiDtvn3mpdbY7h6KKfTn8UhajSZ
-        G3C/hWjGlBRUyOfPBxAVMbSItrYatxHRvYlveotDTJ+lA0hZkRJGlXeY8mcwLU/D
-        8oLMEUT4/OOPRlmAiD6JlDAKNtZm789OmSmLSGRJf1eOLOfc9zV8bsIx31b2BoVZ
-        eg4FBXCL/eT4kamydiDEPpKHA7Z98Tp9zh07f7vT/E6QwnQVOgRrrPklP+SYE9Cb
-        mDIgXsbiIOpKxcEjD/83Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1675341556; x=
-        1675348756; bh=66544bd5OlXqw/yfmhmprOXzWx+UMIFlGhBeotohUVs=; b=T
-        r7cD7+QMOrRbxwe3iGQkD6Xb10rP1Y1CxO2iYGP0FdApirAYVCVXTvNWKZcP+zzN
-        FEYqSLwR+rzDQavOcAU2mnkDmkySGXtWfhq25+XjK5wDhUnJSZ30TDmFEZDVKIJU
-        YovYSTIAcSX+k4LMVutu/PTr/swMrXaiA33Q/7+orZ9u6CHEQDPxf6uDw5FYzgua
-        mtzEbdlHGu3q6rB2tPllVgvBILj7s6ke1PEbZSae3Uv1yoNhy9uCLk5U1LGJH1jv
-        5D8sdBV5bVsKJmKnRee2hqxZqr7jOixGnQtlffZomqSHbGooS+ft/gDeXkgORcWO
-        Z/ZucQrlppwgmFXQsYPlw==
-X-ME-Sender: <xms:867bY_E_9dg1ZxZQr76Tp1CZ9D_LtOr1ISnxj1vL48rBSp6QLqaG8A>
-    <xme:867bY8XbAPBNcOAf6_iGvjrnIxUyhZ4fqtPz2LBHCJ5C6TmhcwTxwXcBh6Y0sKn8b
-    0mh4iJbqIuCtYkYzMQ>
-X-ME-Received: <xmr:867bYxLpzFyTF3_Fx9kwtf8bJVRmRobbCl82uKa0MbjdMGMvvnabb4ItQARMX49-9qvAHbuwi1vpLh7NGy0yNnUP2S2rm4EFDTP3h-RwI9nY8A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudefkedggeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvegjfhfukfffgggtgffosehtjeertdertdejnecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnhepleeifffgvdetjeejueejieehuedvteeigeehtefhhfeifeegleekudek
-    teegueffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:9K7bY9HUIFoba9yXCteBqx2QW5sMDXuXCBM1wDCoUQ9zOlMxowqmrw>
-    <xmx:9K7bY1UnHorjZpQcwuXnFZRPFOxx4kU5B3OHttMIBSIjKb-FUnK3bA>
-    <xmx:9K7bY4O5b19owAdMhK8UIKvvb5tkClos8V8PlZ_QtOfiFxLuVrF4Mg>
-    <xmx:9K7bY4rZZAGwj38poOvksw7HyqoLQz2MfIsGxratmFv5WRK3iarsoA>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 2 Feb 2023 07:39:15 -0500 (EST)
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Emma Anholt <emma@anholt.net>, Maxime Ripard <mripard@kernel.org>,
-        Arnd Bergmann <arnd@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Zheng Bin <zhengbin13@huawei.com>,
-        Danilo Krummrich <dakr@redhat.com>,
-        =?utf-8?q?Ma=C3=ADra_Canal?= <mcanal@igalia.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230202102346.868771-1-arnd@kernel.org>
-References: <20230202102346.868771-1-arnd@kernel.org>
-Subject: Re: [PATCH] drm/vc4: allow DRM_VC4_KUNIT_TEST to be a loadable
- module
-Message-Id: <167534153408.825132.11115041356580033234.b4-ty@cerno.tech>
-Date:   Thu, 02 Feb 2023 13:38:54 +0100
+Received: by mail-wr1-x433.google.com with SMTP id bk16so1554671wrb.11
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 04:39:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9mGLj5xguoE6RrOwo1RSDNcCNpxgV7w5pav0XGnKq0U=;
+        b=ymahsYbxdjN6kVaYC/klylxQGhfpSXPAu/bQHo4p5pgyqoS1i0IUPaxWo/69ehRy7Q
+         0qU4NBzCYG48rA9kieVpWewyTpCvfxAYJWDY+KHYMZpWcIzEJA/T4tVxvP85WgIxEzIT
+         zpIT4QuWxFs78i7xvO77nfXXVcdwedncGKWtkSz6W8pdFjU4hwRtNBTS4oM5zkGOhPBO
+         tlfA9qXIGE9rkCH/9ePnRnIAbXvIyQMllPtzYd5dWdR4h/73I3ppUYddADWua7+vPxxk
+         f4n9UDIQaUhu3gQl/HiB4cV7xGE+bmcgeLNvCgQSGogJFsBY3d5GWimPAW19cbZG13Gk
+         qO0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9mGLj5xguoE6RrOwo1RSDNcCNpxgV7w5pav0XGnKq0U=;
+        b=1w/Tfj1mZXPuYdBlsJJ6lZK264NE9JY+6l202mJjBKGisVe4a0Ztlc5EjbiV6HRqFR
+         s6bGg0U/+K2263d6q9Xuwc8sswntj+Nv/XqhqpR6Cdnxi3nZFg3xD2SXc4+P73HEdMiD
+         Tje22zKEJVNy2fNXQ5L7DbQsF60xm70358KcEy06vGQexJbVbSExZs3wnWMrf6NYEcdg
+         hKpLT2EvLX8D+aSNJlvTag44BuaMmtYGr+nenEiliQUt9YVXGXJU110WCtS9OKyL2cF+
+         jMjYEQqbswsDC+eZJ40aawh3X8WV/jbagJZbYuWOcH08MEel7Rd4+9etLBhKKrvU2T6g
+         1q3g==
+X-Gm-Message-State: AO0yUKWDeVNUEQriHyJaKp79/nn+XkgENy8C7jBMc5J0lfviJfB4izwJ
+        VweGGJtINwdilfI4NTlY4Nrhzg==
+X-Google-Smtp-Source: AK7set+zllAgMFi3gHo1Y2Se5M9ntPh7hvp5bsppe+JBBuLo4aPC80LidugD31TqG69Ab+vF17iYvw==
+X-Received: by 2002:a5d:624b:0:b0:2bd:e8c2:c9bc with SMTP id m11-20020a5d624b000000b002bde8c2c9bcmr4653251wrv.42.1675341558724;
+        Thu, 02 Feb 2023 04:39:18 -0800 (PST)
+Received: from hackbox.lan ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id j5-20020adff005000000b002bddd75a83fsm19525644wro.8.2023.02.02.04.39.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Feb 2023 04:39:18 -0800 (PST)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: [PATCH v6 05/12] phy: qcom-qmp: pcs-pcie: Add v6.20 register offsets
+Date:   Thu,  2 Feb 2023 14:38:55 +0200
+Message-Id: <20230202123902.3831491-6-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230202123902.3831491-1-abel.vesa@linaro.org>
+References: <20230202123902.3831491-1-abel.vesa@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.1
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 02 Feb 2023 11:23:32 +0100, Arnd Bergmann wrote:
-> In configurations with CONFIG_KUNIT=m, builting the unit test
-> into the kernel causes a link failure:
-> 
-> arm-linux-gnueabi-ld: drivers/gpu/drm/vc4/tests/vc4_mock.o: in function `__build_mock':
-> vc4_mock.c:(.text+0x6e): undefined reference to `kunit_do_failed_assertion'
-> arm-linux-gnueabi-ld: vc4_mock.c:(.text+0x9c): undefined reference to `kunit_do_failed_assertion'
-> arm-linux-gnueabi-ld: vc4_mock.c:(.text+0x100): undefined reference to `kunit_ptr_not_err_assert_format'
-> ...
-> 
-> [...]
+The new SM8550 SoC bumps up the HW version of QMP phy to v6.20 for
+PCIE g4x2. Add the new PCS PCIE specific offsets in a dedicated
+header file.
 
-Applied to drm/drm-misc (drm-misc-next-fixes).
+Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+---
 
-Thanks!
-Maxime
+This patchset relies on the following patchset:
+https://lore.kernel.org/all/20230117224148.1914627-1-abel.vesa@linaro.org/
+
+The v5 of this patch is:
+https://lore.kernel.org/all/20230124124714.3087948-6-abel.vesa@linaro.org/
+
+Changes since v5:
+ * none
+
+Changes since v4:
+ * none
+
+Changes since v3:
+ * added Dmitry's R-b tag
+
+Changes since v2:
+ * none
+
+Changes since v1:
+ * split all the offsets into separate patches, like Vinod suggested
+
+
+ drivers/phy/qualcomm/phy-qcom-qmp-pcie.c      |  1 +
+ .../qualcomm/phy-qcom-qmp-pcs-pcie-v6_20.h    | 23 +++++++++++++++++++
+ 2 files changed, 24 insertions(+)
+ create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-pcs-pcie-v6_20.h
+
+diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
+index 05b59f261999..907f3f236f05 100644
+--- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
++++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
+@@ -30,6 +30,7 @@
+ #include "phy-qcom-qmp-pcs-pcie-v5.h"
+ #include "phy-qcom-qmp-pcs-pcie-v5_20.h"
+ #include "phy-qcom-qmp-pcs-pcie-v6.h"
++#include "phy-qcom-qmp-pcs-pcie-v6_20.h"
+ #include "phy-qcom-qmp-pcie-qhp.h"
+ 
+ /* QPHY_SW_RESET bit */
+diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcs-pcie-v6_20.h b/drivers/phy/qualcomm/phy-qcom-qmp-pcs-pcie-v6_20.h
+new file mode 100644
+index 000000000000..e3eb08776339
+--- /dev/null
++++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcs-pcie-v6_20.h
+@@ -0,0 +1,23 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (c) 2023, Linaro Limited
++ */
++
++#ifndef QCOM_PHY_QMP_PCS_PCIE_V6_20_H_
++#define QCOM_PHY_QMP_PCS_PCIE_V6_20_H_
++
++/* Only for QMP V6_20 PHY - PCIE have different offsets than V5 */
++#define QPHY_PCIE_V6_20_PCS_POWER_STATE_CONFIG2		0x00c
++#define QPHY_PCIE_V6_20_PCS_TX_RX_CONFIG		0x018
++#define QPHY_PCIE_V6_20_PCS_ENDPOINT_REFCLK_DRIVE	0x01c
++#define QPHY_PCIE_V6_20_PCS_OSC_DTCT_ATCIONS		0x090
++#define QPHY_PCIE_V6_20_PCS_EQ_CONFIG1			0x0a0
++#define QPHY_PCIE_V6_20_PCS_EQ_CONFIG5			0x108
++#define QPHY_PCIE_V6_20_PCS_G4_PRE_GAIN			0x15c
++#define QPHY_PCIE_V6_20_PCS_RX_MARGINING_CONFIG1	0x17c
++#define QPHY_PCIE_V6_20_PCS_RX_MARGINING_CONFIG3	0x184
++#define QPHY_PCIE_V6_20_PCS_RX_MARGINING_CONFIG5	0x18c
++#define QPHY_PCIE_V6_20_PCS_G3_FOM_EQ_CONFIG5		0x1ac
++#define QPHY_PCIE_V6_20_PCS_G4_FOM_EQ_CONFIG5		0x1c0
++
++#endif
+-- 
+2.34.1
 
