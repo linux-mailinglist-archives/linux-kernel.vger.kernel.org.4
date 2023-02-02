@@ -2,120 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AB1F6887F5
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 21:01:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBC176887F8
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 21:05:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231904AbjBBUB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 15:01:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47592 "EHLO
+        id S231994AbjBBUFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 15:05:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230456AbjBBUBx (ORCPT
+        with ESMTP id S231744AbjBBUFi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 15:01:53 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86C17921B
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 12:01:51 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id ml19so9416327ejb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 12:01:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fxM9HSg7LJAXbn7ENAypRMHLklYazMOh09jYix5Uw6E=;
-        b=TrgOINh6q9JsQaHyOaEFAUKvJS025pXWFlHU3arvlNbLBnK3qcsGuaaMCbjbJN04ZO
-         3IlOf2lr6noFQliEHbf+rC9NgB3jAok4fEfbVtF+MywGorktax/oUFYU1xpF5Zau1qmB
-         8hq5h44U+elUuZzAW8XFbnpkXiY8ssOyfB4dr13WJ/qtnykslbWA66MGAzupbFzoz7K0
-         CJdyB6VXLW++6J0RmyCOgXWJrSnDfUguUwDCMrVjiMZ/xIElI3SKLwY0Fxxvp7z/1b2g
-         1plpTYByibYUq0+1x1yJo9bnQHj9K2HIQ7G+X0SMfqGPKuPxlrjKkNeU7vHb+r+ZpDOm
-         wQrA==
+        Thu, 2 Feb 2023 15:05:38 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AC4722A22
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 12:04:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675368290;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JTHdymdXseHUyg+Ebb447lp0I2uDggYeKUHoqsLF3K4=;
+        b=RK0hvvT4WIlq7M0ji2orcyIaejq/ryu7QAkOBAoPOF6INMXll+BRejF6xJVF08aPLn45zE
+        oxRowc5zxaYHayQPss6VEH5crNid0Lh4UohFZek2v+qFt+pBBC+1k047zdoixRB+J+eH4a
+        gqOIVtwVc9H31IIJ2M+n1IlHVPbV4LU=
+Received: from mail-yb1-f199.google.com (mail-yb1-f199.google.com
+ [209.85.219.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-661-Zb3xLrVKN6uWMf7811CCnA-1; Thu, 02 Feb 2023 15:04:49 -0500
+X-MC-Unique: Zb3xLrVKN6uWMf7811CCnA-1
+Received: by mail-yb1-f199.google.com with SMTP id a4-20020a5b0004000000b006fdc6aaec4fso2749348ybp.20
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 12:04:49 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fxM9HSg7LJAXbn7ENAypRMHLklYazMOh09jYix5Uw6E=;
-        b=DuWeBazynGYTC+OtGDiqx11+fxsfPp50+B9ldxJduqxvVAPlKO/7tu6AvGdn/p3t12
-         2jtdSibZBDHjGcu5KQYfrifn9Y+nSk4Jq7EGOSvsNloXpACyW+rielkFf32JnWNCjh5v
-         nbpht1jISMrAvGW8c8Tns/7w4gz2SX7bUTtznDZeeNVB055y1tqS4b2Y5GOlCTpm+9Ox
-         SY9RfDh+2aZ5Id1z1O8l/kj0FQ5BCTnL/i3oBtevdATXVNUp4asbX92eQYwhvckmbWl9
-         p+kD5bDTPifmX+a2jpKqZP2uPJscY+Kx/UkdwIL/kg3sA8z8aFnABy3RT0YiUoXWGb8C
-         nnwQ==
-X-Gm-Message-State: AO0yUKVJa1LaO/SJRip86xoETSInotGXQEB6XR7ArEkzr8ixSLMb3XOO
-        5+05RZCrmZwo/swh0RMKnMjUNQ==
-X-Google-Smtp-Source: AK7set9JKwd3BkoJ3sv3/meRokBhU/jYIVthMrh8D+corP149rVnlLcP+5twV+Gr3Na6gp+EK9USwA==
-X-Received: by 2002:a17:906:3885:b0:877:6a03:9ad4 with SMTP id q5-20020a170906388500b008776a039ad4mr7284363ejd.56.1675368110320;
-        Thu, 02 Feb 2023 12:01:50 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id 1-20020a170906318100b008787134a939sm257789ejy.18.2023.02.02.12.01.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 12:01:49 -0800 (PST)
-Message-ID: <a3b6560a-764f-203f-4926-871c814a556a@linaro.org>
-Date:   Thu, 2 Feb 2023 22:01:48 +0200
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JTHdymdXseHUyg+Ebb447lp0I2uDggYeKUHoqsLF3K4=;
+        b=z+KRsmoVXZtVEC1YP9glyuQpRQ6FbSK2iwDpEji7jDiT0JLY16GR27Y2zMEfrTDqu9
+         PILz+60JrSEbSbLK0qQxjiLjCbXECUxa4MlQ+PX9VEU7t2zr85AcQkuD1ChOtZENNIQR
+         OB0GlSG0W7fUsys0sNVc1dvVBAHy9h+7JKlnYZxFRZ6kn05CAprM4R204RyM8hKyk3QQ
+         pA/N5Toj1yittdC3od5y8Pypv1y2k1X8VxNuAw4yiynRDQck3Suu2oYpmjKROxNE2mFY
+         4AI7b1rn0lNmVHJv4LnAJ/Qsdd3ZbfdH6vU2sPidLodAtLTSCjYFDNRVdlDUW4CFGYY3
+         Fy6Q==
+X-Gm-Message-State: AO0yUKW4uCRp+Mu0elqkKF8PUWgxtG5iWwriQvKXUmXIwrv/ye/yZUKp
+        ay7IsvHmP57m4lRBRNRgnyvL35fuklAvsIgw2njZb7J7eFDwDBzvCW190cdvzrZNxTtBc232iTy
+        FBs1zP4X0FdnhFOAubO5i0Vq+
+X-Received: by 2002:a05:690c:1b:b0:51d:efdd:b1d with SMTP id bc27-20020a05690c001b00b0051defdd0b1dmr7235284ywb.0.1675368288438;
+        Thu, 02 Feb 2023 12:04:48 -0800 (PST)
+X-Google-Smtp-Source: AK7set+K6sx4quQN5ghvY74ba3Y9dYzcyRzTFaEw9AXmqSMs//jZGTpZAalF5pjDQRAtQo8peVpekw==
+X-Received: by 2002:a05:690c:1b:b0:51d:efdd:b1d with SMTP id bc27-20020a05690c001b00b0051defdd0b1dmr7235259ywb.0.1675368288168;
+        Thu, 02 Feb 2023 12:04:48 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id p13-20020a05620a056d00b007208dd55183sm359687qkp.40.2023.02.02.12.04.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Feb 2023 12:04:47 -0800 (PST)
+Date:   Thu, 2 Feb 2023 15:04:46 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     Yang Shi <shy828301@gmail.com>
+Cc:     David Stevens <stevensd@chromium.org>,
+        David Hildenbrand <david@redhat.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, Hugh Dickins <hughd@google.com>
+Subject: Re: [PATCH] mm/khugepaged: skip shmem with armed userfaultfd
+Message-ID: <Y9wXXoSY+QqoKMMx@x1n>
+References: <20230201034137.2463113-1-stevensd@google.com>
+ <CAHbLzkpbV2LOoTpWwSOS+UUsYJiZX4vO78jZSr6xmpAGNGoH5w@mail.gmail.com>
+ <Y9rRCN9EfqzwYnDG@x1n>
+ <CAHbLzkqyhS5thdVKa-jcS5iNUNxe95hagBncWaG=CQTh=LU70w@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 4/6] dt-bindings: mailbox: qcom: add compatible for the
- IPQ5332 SoC
-Content-Language: en-GB
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Kathiravan T <quic_kathirav@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, jassisinghbrar@gmail.com,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230202145208.2328032-1-quic_kathirav@quicinc.com>
- <20230202145208.2328032-5-quic_kathirav@quicinc.com>
- <3a346606-576b-ab89-78f5-5bbaca729090@linaro.org>
- <8766f07e-a5d2-b59c-d130-f8cc2da64556@linaro.org>
-In-Reply-To: <8766f07e-a5d2-b59c-d130-f8cc2da64556@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAHbLzkqyhS5thdVKa-jcS5iNUNxe95hagBncWaG=CQTh=LU70w@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/02/2023 22:00, Dmitry Baryshkov wrote:
-> On 02/02/2023 17:35, Krzysztof Kozlowski wrote:
->> On 02/02/2023 15:52, Kathiravan T wrote:
->>> Add the mailbox compatible for the IPQ5332 SoC.
->>>
->>> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
->>> ---
->>>   .../devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml     | 3 +++
->>>   1 file changed, 3 insertions(+)
->>>
->>> diff --git 
->>> a/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml b/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml
->>> index 943f9472ae10..8d8cd1bbe67e 100644
->>> --- 
->>> a/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml
->>> +++ 
->>> b/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml
->>> @@ -18,6 +18,7 @@ properties:
->>>       oneOf:
->>
->> - items:
->>      - enum:
->>          - qcom,ipq5332-apcs-apps-global
->>      - const: qcom,ipq6018-apcs-apps-global
->>
->> and drop the next patch
+On Wed, Feb 01, 2023 at 03:57:33PM -0800, Yang Shi wrote:
+> > There's another problem where the current vma may not have uffd armed,
+> > khugepaged may think it has nothing to do with uffd and moved on with
+> > collapsing, but actually it's armed in another vma of either the current mm
+> > or just another mm's.
 > 
-> Is it still ok even if the two devices are not fully compatible (iow, 
-> using different PLL types)?
+> Out of curiosity, could you please elaborate how another vma armed
+> with userfaultfd could have an impact on the vmas that are not armed?
 
-Ignore my question, I mixed the A53 and APCS clocks.
+It's e.g. when >1 vmas mapped to the same shmem file on the same range, one
+registered with uffd missing, others not.  Then others can cause page cache
+populated without generating message to the vma that got uffd missing mode
+registered, so there'll be the same issue as when khugepaged accidentally
+does thp collapsings.  Thanks,
 
 -- 
-With best wishes
-Dmitry
+Peter Xu
 
