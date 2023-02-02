@@ -2,77 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57844687A59
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 11:35:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 369E8687A60
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 11:37:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232690AbjBBKe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 05:34:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34592 "EHLO
+        id S231614AbjBBKhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 05:37:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232832AbjBBKeu (ORCPT
+        with ESMTP id S230323AbjBBKh2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 05:34:50 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CDB26EDCE
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 02:34:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675334042;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=SpknTtimSl+guOKxaF16NMhAWaSqtArEG/8BewjAniM=;
-        b=FtcbzLjxVvJOkGDqDyXOXzv8zcTFFurVB54v0WqaIDm3C1007IHZ86i739AjhFrDZd6v8s
-        VfAjh73UBibhMHiki4Gq2A1U9K6c30jIQFJLkZ9dgi1z0iJA+59E6t9/rffU2netortYOM
-        uhz4K8wootE7tgp1m5NN/ETfG6zuXRY=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-216-4Qb5DdesM3aDVGhX8vA8fA-1; Thu, 02 Feb 2023 05:34:01 -0500
-X-MC-Unique: 4Qb5DdesM3aDVGhX8vA8fA-1
-Received: by mail-wr1-f69.google.com with SMTP id q18-20020adff512000000b002bfc49c299dso157899wro.5
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 02:34:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SpknTtimSl+guOKxaF16NMhAWaSqtArEG/8BewjAniM=;
-        b=sZhkO9TNM/7Y9Y6PvCUdpfx4eJ2Xi9ssR5TlCcIsJ5+MdteuBx+gpjwW1WLDlwgg9B
-         evfDyZVYr8fIajL26/8xxP4chsiaD9cl4CF3Ep+4gSNx28m9bgtI/Mo4AWRM5sBcl4bF
-         /qYqInXGJoZ5+fi4WQQYqSm9rGEjkYWp4otBKwvBGi9pSMyhn8M2qg2JRLxO8XLmFnGF
-         XaVIFqy+wxCXZuVMa4HAVcm1eVibI8QjqQIOLoyUfHhiToMmc3anFkcbFjYhnIIPnS1D
-         oGhNvg6HN1FzPfpUKnULaoLwPZIf4KqmBJwVOAUUlCd2c0WQRunlc9hrBg7X0A/pLrLO
-         YrNw==
-X-Gm-Message-State: AO0yUKUDquxLm1XPoJU237tyx8DPY+Hx/7ympTmIjRUxctl2z2XGjf3j
-        OiDl8d4nfEyQNr1M/4h0uYS+czGoJre9Ygpv9kFuQPhZMPUF37NUnUgAl+2ThItMs1T4IDfz3Is
-        28B1JF6flYAyMqcJj1Ds+P838
-X-Received: by 2002:a1c:f606:0:b0:3db:3695:11b4 with SMTP id w6-20020a1cf606000000b003db369511b4mr5235165wmc.33.1675334039773;
-        Thu, 02 Feb 2023 02:33:59 -0800 (PST)
-X-Google-Smtp-Source: AK7set/aRh3S+7oJAh3Alg/NT2t1M9KB8chGYSyRGs8MriRivULozR8wG/So+QjE+3JvxeVKT3C53g==
-X-Received: by 2002:a1c:f606:0:b0:3db:3695:11b4 with SMTP id w6-20020a1cf606000000b003db369511b4mr5235153wmc.33.1675334039564;
-        Thu, 02 Feb 2023 02:33:59 -0800 (PST)
-Received: from redhat.com ([2a02:14f:1fc:826d:55d8:70a4:3d30:fc2f])
-        by smtp.gmail.com with ESMTPSA id l13-20020adff48d000000b002366e3f1497sm19523049wro.6.2023.02.02.02.33.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 02:33:58 -0800 (PST)
-Date:   Thu, 2 Feb 2023 05:33:54 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Shunsuke Mie <mie@igel.co.jp>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        Rusty Russell <rusty@rustcorp.com.au>, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v2 2/7] tools/virtio: enable to build with retpoline
-Message-ID: <20230202053341-mutt-send-email-mst@kernel.org>
-References: <20230202090934.549556-1-mie@igel.co.jp>
- <20230202090934.549556-3-mie@igel.co.jp>
+        Thu, 2 Feb 2023 05:37:28 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCA0C60CA9
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 02:37:17 -0800 (PST)
+X-UUID: 8c8a5bdea2e511ed945fc101203acc17-20230202
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=g3x9st1cLckpQozblUmO+23e1Rs2Ez5xAw9Nt8F6aEo=;
+        b=pQ0gRocQzNTuHVw8JytTA+emifsmsjXq8AivScr1yZRwlkoJ/p4sNkGVVsOutxWwtljjapHx4i5P134px9r7+MmMGFqTj+Wxg3vy0VRGXlLXmMDXM5deQjNJdj2R5zLOh+u9j2JEUHOP2ZGlKYSvaFqMnF6MGUz8t14tXuolGlA=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.18,REQID:b3403138-62eb-4712-86fc-ff10243628e9,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:3ca2d6b,CLOUDID:9fbb1956-dd49-462e-a4be-2143a3ddc739,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0
+X-CID-BVR: 0,NGT
+X-UUID: 8c8a5bdea2e511ed945fc101203acc17-20230202
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+        (envelope-from <trevor.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 2115447088; Thu, 02 Feb 2023 18:37:10 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 2 Feb 2023 18:37:09 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Thu, 2 Feb 2023 18:37:09 +0800
+From:   Trevor Wu <trevor.wu@mediatek.com>
+To:     <broonie@kernel.org>, <lgirdwood@gmail.com>, <tiwai@suse.com>,
+        <perex@perex.cz>, <matthias.bgg@gmail.com>
+CC:     <trevor.wu@mediatek.com>, <alsa-devel@alsa-project.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <error27@gmail.com>
+Subject: [PATCH] ASoC: mediatek: mt8188: remove etdm dead code
+Date:   Thu, 2 Feb 2023 18:37:04 +0800
+Message-ID: <20230202103704.15626-1-trevor.wu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230202090934.549556-3-mie@igel.co.jp>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,RDNS_NONE,
+        SPF_HELO_PASS,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,31 +63,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 06:09:29PM +0900, Shunsuke Mie wrote:
-> Add build options to bring it close to a linux kernel. It allows for
-> testing that is close to reality.
-> 
-> Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
+Some Smatch static checker warning like below was found.
 
-This too, pls submit separately.
+sound/soc/mediatek/mt8188/mt8188-dai-etdm.c:2487
+mt8188_dai_etdm_parse_of()
+warn: 'ret' returned from snprintf() might be larger than 48
 
-> ---
->  tools/virtio/Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/virtio/Makefile b/tools/virtio/Makefile
-> index 1b25cc7c64bb..7b7139d97d74 100644
-> --- a/tools/virtio/Makefile
-> +++ b/tools/virtio/Makefile
-> @@ -4,7 +4,7 @@ test: virtio_test vringh_test
->  virtio_test: virtio_ring.o virtio_test.o
->  vringh_test: vringh_test.o vringh.o virtio_ring.o
->  
-> -CFLAGS += -g -O2 -Werror -Wno-maybe-uninitialized -Wall -I. -I../include/ -I ../../usr/include/ -Wno-pointer-sign -fno-strict-overflow -fno-strict-aliasing -fno-common -MMD -U_FORTIFY_SOURCE -include ../../include/linux/kconfig.h
-> +CFLAGS += -g -O2 -Werror -Wno-maybe-uninitialized -Wall -I. -I../include/ -I ../../usr/include/ -Wno-pointer-sign -fno-strict-overflow -fno-strict-aliasing -fno-common -MMD -U_FORTIFY_SOURCE -include ../../include/linux/kconfig.h -mfunction-return=thunk -fcf-protection=none -mindirect-branch-register
->  CFLAGS += -pthread
->  LDFLAGS += -pthread
->  vpath %.c ../../drivers/virtio ../../drivers/vhost
-> -- 
-> 2.25.1
+    2479         for (i = 0; i < MT8188_AFE_IO_ETDM_NUM; i++) {
+    2480                 dai_id = ETDM_TO_DAI_ID(i);
+    2481                 etdm_data = afe_priv->dai_priv[dai_id];
+    2482
+    2483                 ret = snprintf(prop, sizeof(prop),
+    2484                                "mediatek,%s-multi-pin-mode",
+    2485                                of_afe_etdms[i].name);
+    2486                 if (ret < 0) {
+--> 2487                         dev_err(afe->dev, "%s snprintf
+err=%d\n",
+    2488
+
+In linux kernel, snprintf() never returns negatives. On the other hand,
+the format string like "mediatek,%s-multi-pin-mode" must be smaller
+than sizeof(prop)=48.
+
+After discussing in the mail thread[1], I remove the dead code to fix
+the Smatch warnings.
+
+[1]: https://lore.kernel.org/all/Y9EdBg641tJDDrt%2F@kili/
+
+Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
+---
+ sound/soc/mediatek/mt8188/mt8188-dai-etdm.c | 33 ++++++---------------
+ 1 file changed, 9 insertions(+), 24 deletions(-)
+
+diff --git a/sound/soc/mediatek/mt8188/mt8188-dai-etdm.c b/sound/soc/mediatek/mt8188/mt8188-dai-etdm.c
+index 0b79c1cc293b..071841903c62 100644
+--- a/sound/soc/mediatek/mt8188/mt8188-dai-etdm.c
++++ b/sound/soc/mediatek/mt8188/mt8188-dai-etdm.c
+@@ -2480,24 +2480,14 @@ static void mt8188_dai_etdm_parse_of(struct mtk_base_afe *afe)
+ 		dai_id = ETDM_TO_DAI_ID(i);
+ 		etdm_data = afe_priv->dai_priv[dai_id];
+ 
+-		ret = snprintf(prop, sizeof(prop),
+-			       "mediatek,%s-multi-pin-mode",
+-			       of_afe_etdms[i].name);
+-		if (ret < 0) {
+-			dev_err(afe->dev, "%s snprintf err=%d\n",
+-				__func__, ret);
+-			return;
+-		}
++		snprintf(prop, sizeof(prop), "mediatek,%s-multi-pin-mode",
++			 of_afe_etdms[i].name);
++
+ 		etdm_data->data_mode = of_property_read_bool(of_node, prop);
+ 
+-		ret = snprintf(prop, sizeof(prop),
+-			       "mediatek,%s-cowork-source",
+-			       of_afe_etdms[i].name);
+-		if (ret < 0) {
+-			dev_err(afe->dev, "%s snprintf err=%d\n",
+-				__func__, ret);
+-			return;
+-		}
++		snprintf(prop, sizeof(prop), "mediatek,%s-cowork-source",
++			 of_afe_etdms[i].name);
++
+ 		ret = of_property_read_u32(of_node, prop, &sel);
+ 		if (ret == 0) {
+ 			if (sel >= MT8188_AFE_IO_ETDM_NUM) {
+@@ -2516,14 +2506,9 @@ static void mt8188_dai_etdm_parse_of(struct mtk_base_afe *afe)
+ 
+ 	/* etdm in only */
+ 	for (i = 0; i < 2; i++) {
+-		ret = snprintf(prop, sizeof(prop),
+-			       "mediatek,%s-chn-disabled",
+-			       of_afe_etdms[i].name);
+-		if (ret < 0) {
+-			dev_err(afe->dev, "%s snprintf err=%d\n",
+-				__func__, ret);
+-			return;
+-		}
++		snprintf(prop, sizeof(prop), "mediatek,%s-chn-disabled",
++			 of_afe_etdms[i].name);
++
+ 		ret = of_property_read_variable_u8_array(of_node, prop,
+ 							 disable_chn,
+ 							 1, max_chn);
+-- 
+2.18.0
 
