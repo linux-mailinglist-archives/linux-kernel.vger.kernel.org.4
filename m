@@ -2,182 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE265688927
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 22:47:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D3C9688929
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 22:47:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232955AbjBBVrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 16:47:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46272 "EHLO
+        id S232415AbjBBVrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 16:47:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230057AbjBBVrG (ORCPT
+        with ESMTP id S229712AbjBBVrT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 16:47:06 -0500
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DA12270D54
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 13:47:03 -0800 (PST)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 312Lkv1O004766;
-        Thu, 2 Feb 2023 22:46:57 +0100
-Date:   Thu, 2 Feb 2023 22:46:57 +0100
-From:   Willy Tarreau <w@1wt.eu>
-To:     Vincent Dagonneau <v@vda.io>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] tools/nolibc: Add stdint.h
-Message-ID: <20230202214657.GA4579@1wt.eu>
-References: <20230202201101.43160-1-v@vda.io>
+        Thu, 2 Feb 2023 16:47:19 -0500
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2069.outbound.protection.outlook.com [40.107.92.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 905EB8626C;
+        Thu,  2 Feb 2023 13:47:11 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kGN7EAbVJNPLRV9stZy6ECmNrqQt/0HvwIueOlBC+hIzQNCGXejZ7XXz0+4f7rBngq8N6gK9oIbhO8RHaERJZuIbr3+TrIgvvJ5jtewRBsOXoqEqOe8JR2fY/cFkRzioEmiCKg04/LHuWLU1eYXeL1GS+SNE0fvfUCkmj0YM+3J+u+lpQXcRUgkGo8NmLxeHsDHb2KGUaHFKCqbxBz9mGhBkFYm+olaySXrO2htO5dQefJiJ7z4//ZFmSTDVgd4uGrUHtyKa7ZxnS1GoPhjvDlRM2HVrqoFCP+/3cfbmBZmVQKez+/wTWssRJrW02ilNJDJUy74Favv7NbR3+zDUtw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gBTajpA0WH7bgpLB6DtWgGNNgryYV5eQZMQu51zpt5Q=;
+ b=fhHV9gZXNOBRYcpfiNMzIoWuUm2sV54XdrvYXeURaPTdVMx4NAmI4dt6JR94t0Tr9jhSX3Y8bupnKGYsDR4JurOF87dA7BmUoHyW/T7m/2F9Sz+6+0nI3+G+dY2zk0wViPJA6SvYIWiV1mth1nB6Hr9dOJgFh9xkefn/BQXUG+0LhY1Mh9KpjPCzHUk2To2gniH9m/7/O8yv0/Qf9IrWSRERV6asfaEEXG6rGyiMaUXBnN4bMmqrBdmwMpqigqqrBtPWUWHLDR6dLjec9NdNoUCvizoIuDenBcv0ZWi/eGMElLXLHafjkD4d/45ZYc20axgjyb/Tep+0pPokW30SxA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=zytor.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gBTajpA0WH7bgpLB6DtWgGNNgryYV5eQZMQu51zpt5Q=;
+ b=OJQY0Rx5b2i+6LTBvv4rBtgu7Nn8XwVv4fQSaSUvgUxz7uU/laqLq1C8cRaH6UpedWfxVLxujdspq8INwC9BecgUg/MIbQgMXsnn/rtIJT7FW2GwMa4RbCLaClyRqxuckY/9JIBaXzMXwx3kdnhKIaveFlQd6cx1HbMQTBXRv2I=
+Received: from BYAPR03CA0032.namprd03.prod.outlook.com (2603:10b6:a02:a8::45)
+ by CY8PR12MB7122.namprd12.prod.outlook.com (2603:10b6:930:61::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.22; Thu, 2 Feb
+ 2023 21:47:08 +0000
+Received: from CO1PEPF00001A64.namprd05.prod.outlook.com
+ (2603:10b6:a02:a8:cafe::56) by BYAPR03CA0032.outlook.office365.com
+ (2603:10b6:a02:a8::45) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.27 via Frontend
+ Transport; Thu, 2 Feb 2023 21:47:08 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1PEPF00001A64.mail.protection.outlook.com (10.167.241.11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6064.17 via Frontend Transport; Thu, 2 Feb 2023 21:47:07 +0000
+Received: from [127.0.1.1] (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 2 Feb
+ 2023 15:47:06 -0600
+Subject: [RFC v2 PATCH 2/7] x86/resctrl: Remove few unnecessary rftype flags
+From:   Babu Moger <babu.moger@amd.com>
+To:     <fenghua.yu@intel.com>, <reinette.chatre@intel.com>
+CC:     <babu.moger@amd.com>, <tglx@linutronix.de>, <mingo@redhat.com>,
+        <bp@alien8.de>, <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        <hpa@zytor.com>, <corbet@lwn.net>, <linux-kernel@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <eranian@google.com>,
+        <peternewman@google.com>
+Date:   Thu, 2 Feb 2023 15:47:00 -0600
+Message-ID: <167537442064.647488.11274211283317010424.stgit@bmoger-ubuntu>
+In-Reply-To: <167537433143.647488.9641864719195184123.stgit@bmoger-ubuntu>
+References: <167537433143.647488.9641864719195184123.stgit@bmoger-ubuntu>
+User-Agent: StGit/1.1.dev103+g5369f4c
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230202201101.43160-1-v@vda.io>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,LOTS_OF_MONEY,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PEPF00001A64:EE_|CY8PR12MB7122:EE_
+X-MS-Office365-Filtering-Correlation-Id: ae607a50-c2ed-486a-1bbf-08db05670834
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: QFU9+XLh02dT1QRSDFnKL8fOYFlDvkUYtpRJinDQv2vq058r6lVcyKmpT66GdW9LZhYVquQ8jf7v2LrGKOc7yQA/Q+v3cS3cszY/aQGeDNHrCQ45kqViqYUec56m0imS4n6FwWxpNXO6WBOdJEWZ5KR04nH9CbKCrFnrhvNO0GqK4/A+dgFpkZsagb39QT5GSdTMi08XkJFEpuxp4cHSHzsVAR0pFQ7NZMKlXQ1XVVIxEM9n6uFcpB2cNcksTP1ns+tAl/T0US5RKmoTScGWX18yEzmI4ZvyISDS2OxHJdm+d02YGVRfKi0sm/1Wyh67xJCB6anmVVpfqSlXZ+K0X+d+/aEQ58GW5yl8aWN1MKBSIqBOCAhBUjk4IsAkGol3SW77vVyP9oFnMb4AggnO/QwHk2RGV67xJ0eiKxiNRqNTo6l7p3eOpha+WdkA7jS3CSex2SYAUFgTIERatYEvm8NDRZq9yYvsUJnD8w3DwhgxTmFALp0Mml3Lmoge9GfFIrd8LF2UrZRXFAqWfsNNWz7ddPIn4UWbPlGobxUdz0FEVQPYjctbBF1Uocz9wVSnPDY/yYE3AEYMfe+EQFaS0sUtZPaPIipvIS3nWYWcwqEdesQLQvk72repGEVBl2pbYuF3YQlbCvGOodpQtAn+JZ7fqftJb4nIrtmLuxjBxyO777AkLUqUYkg/k6iFnuhjOaSKGzPL/hCtzK9OGSqIDrJUydQ5kDONlBusKBU+h371Ju3x2xUE//4p3NTi4RUnEJ6ba/V8gL2fVFCRRIg1KA==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(7916004)(376002)(39860400002)(136003)(346002)(396003)(451199018)(46966006)(36840700001)(40470700004)(103116003)(81166007)(86362001)(82310400005)(356005)(83380400001)(6666004)(186003)(82740400003)(36860700001)(33716001)(336012)(426003)(9686003)(47076005)(26005)(16526019)(44832011)(316002)(2906002)(478600001)(110136005)(54906003)(8676002)(40480700001)(70586007)(16576012)(4326008)(70206006)(7416002)(5660300002)(41300700001)(40460700003)(8936002)(71626013)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Feb 2023 21:47:07.8897
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ae607a50-c2ed-486a-1bbf-08db05670834
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF00001A64.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7122
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vincent,
+Remove few unnecessary rftype flags and simplify the code. This is done=0A=
+to further cleanup the code eventually.=0A=
+=0A=
+Signed-off-by: Babu Moger <babu.moger@amd.com>=0A=
+---=0A=
+ arch/x86/kernel/cpu/resctrl/internal.h |    9 +++------=0A=
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c |   10 +++++++---=0A=
+ 2 files changed, 10 insertions(+), 9 deletions(-)=0A=
+=0A=
+diff --git a/arch/x86/kernel/cpu/resctrl/internal.h b/arch/x86/kernel/cpu/r=
+esctrl/internal.h=0A=
+index 8edecc5763d8..571145d75d29 100644=0A=
+--- a/arch/x86/kernel/cpu/resctrl/internal.h=0A=
++++ b/arch/x86/kernel/cpu/resctrl/internal.h=0A=
+@@ -243,12 +243,9 @@ struct rdtgroup {=0A=
+  */=0A=
+ #define RFTYPE_INFO			BIT(0)=0A=
+ #define RFTYPE_BASE			BIT(1)=0A=
+-#define RF_CTRLSHIFT			4=0A=
+-#define RF_MONSHIFT			5=0A=
+-#define RF_TOPSHIFT			6=0A=
+-#define RFTYPE_CTRL			BIT(RF_CTRLSHIFT)=0A=
+-#define RFTYPE_MON			BIT(RF_MONSHIFT)=0A=
+-#define RFTYPE_TOP			BIT(RF_TOPSHIFT)=0A=
++#define RFTYPE_CTRL			BIT(4)=0A=
++#define RFTYPE_MON			BIT(5)=0A=
++#define RFTYPE_TOP			BIT(6)=0A=
+ #define RFTYPE_RES_CACHE		BIT(8)=0A=
+ #define RFTYPE_RES_MB			BIT(9)=0A=
+ #define RF_CTRL_INFO			(RFTYPE_INFO | RFTYPE_CTRL)=0A=
+diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/r=
+esctrl/rdtgroup.c=0A=
+index 13b7c5f3a27c..cccf3fb84b26 100644=0A=
+--- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c=0A=
++++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c=0A=
+@@ -3163,7 +3163,7 @@ static int mkdir_rdt_prepare(struct kernfs_node *pare=
+nt_kn,=0A=
+ {=0A=
+ 	struct rdtgroup *prdtgrp, *rdtgrp;=0A=
+ 	struct kernfs_node *kn;=0A=
+-	uint files =3D 0;=0A=
++	uint fflags =3D 0;=0A=
+ 	int ret;=0A=
+ =0A=
+ 	prdtgrp =3D rdtgroup_kn_lock_live(parent_kn);=0A=
+@@ -3215,8 +3215,12 @@ static int mkdir_rdt_prepare(struct kernfs_node *par=
+ent_kn,=0A=
+ 		goto out_destroy;=0A=
+ 	}=0A=
+ =0A=
+-	files =3D RFTYPE_BASE | BIT(RF_CTRLSHIFT + rtype);=0A=
+-	ret =3D rdtgroup_add_files(kn, files);=0A=
++	if (rtype =3D=3D RDTCTRL_GROUP)=0A=
++		fflags =3D RFTYPE_BASE | RFTYPE_CTRL;=0A=
++	else=0A=
++		fflags =3D RFTYPE_BASE | RFTYPE_MON;=0A=
++=0A=
++	ret =3D rdtgroup_add_files(kn, fflags);=0A=
+ 	if (ret) {=0A=
+ 		rdt_last_cmd_puts("kernfs fill error\n");=0A=
+ 		goto out_destroy;=0A=
+=0A=
 
-On Thu, Feb 02, 2023 at 03:11:01PM -0500, Vincent Dagonneau wrote:
-> Hi,
-> 
-> This is v2, thank you Thomas for the reply. This version hopefully
-> addresses the comments you made. I also added some rough tests for the
-> limits.
-> 
-> Add stdint.h and moved the relevant definitions from std.h. Also added
-> macros for limits and *_least_* types. Adds tests for the integer
-> limits.
-
-First, thanks for this work. In order to respond your initial question,
-yes there's definitely interest in having something like this to further
-ease portability, even if we all know that programs that can be built
-with nolibc are really tiny and limited.
-
-A few points though:
-  - for your commit message, you'll need to put a description of what
-    it does and the reasons for your choices so that it's easier to
-    figure later when facing the patch during a bisect session or a
-    git blame.
-
-  - you'll also need to append your signed-off-by tag for the patch to
-    be merged. Some developers purposely don't put it during reviews
-    to save it from being merged but then it's better to write
-    "PATCH RFC" in the subject to make it more obvious.
-
-  - the history between your changes, if any, should rather be placed
-    after the "---" that ends the commit message: it will not appear
-    in the commit message but still passes the info to the reviewers.
-
-  - I'm seeing some preparatory changes in nolibc-test.c that are not
-    directly caused by the patch itself but by its impact (essentially
-    the width changes), and these ones should be separate so that they
-    do not pollute the patch and allow reviewers to focus on the
-    important part of your changes. I even think that you could proceed
-    in three steps:
-      - introduce stdint with the new types and values
-      - enlarge all fields in the selftest to preserve alignment when
-        dealing with large return values
-      - add the integer tests to the suite.
-
-That would give you 3 patches. In the last one it would be appreciated
-if you at least mention roughly in which condition you've tested it
-(native local test, or qemu for arch x/y or real hardware of what arch).
-That will help other testers gauge if it's worth running extra tests on
-other platforms or not.
-
-This aside, I'm having a few concerns below:
-
-(...)
-> +typedef unsigned long        size_t;
-> +#define       INT64_MIN  (-9223372036854775807-1)
-
-This one shoul have "LL" appended, otherwise in some operations it will
-be considered as an integer and some values can be truncated.
-
-> +#define       INT64_MAX  (9223372036854775807)
-
-Same for this one.
-
-> +#define       UINT8_MAX  (255)
-> +#define      UINT16_MAX  (65535)
-> +#define      UINT32_MAX  (4294967295U)
-> +#define      UINT64_MAX  (18446744073709551615)
-
-This one is missing ULL for the same reasons. Look for example at the
-nasty impacts on a 32-bit system:
-
-  $ gcc-5.5.0 -xc -Os -fomit-frame-pointer -o /dev/stdout -S - <<< "unsigned x() { return ((18446744073709551615) << 1) >> 40; }" | grep movl
-<stdin>: In function 'x':
-<stdin>:1:25: warning: integer constant is so large that it is unsigned
-        movl    $33554431, %eax
-
-  $ gcc-5.5.0 -xc -Os -fomit-frame-pointer -o /dev/stdout -S - <<< "unsigned x() { return ((18446744073709551615ULL) << 1) >> 40; }" | grep movl
-        movl    $16777215, %eax
-
-See ? When there's no variable around to help figure the type, the default
-type will be "int" for the intermediary operations and some calculations
-will be wrong without the proper suffix.
-
-> +#define         SIZE_MAX UINT64_MAX
-
-This one is not correct, it must follow the word size since it's defined
-as an unsigned long (i.e. same as UINTPTR_MAX later).
-
-And below please also add the LL/ULL as needed to the hex values you're
-testing to match the expected signedness and size:
-
-> @@ -531,6 +531,35 @@ int run_syscall(int min, int max)
->  		CASE_TEST(waitpid_child);     EXPECT_SYSER(1, waitpid(getpid(), &tmp, WNOHANG), -1, ECHILD); break;
->  		CASE_TEST(write_badf);        EXPECT_SYSER(1, write(-1, &tmp, 1), -1, EBADF); break;
->  		CASE_TEST(write_zero);        EXPECT_SYSZR(1, write(1, &tmp, 0)); break;
-> +		CASE_TEST(limit_int8_max);          EXPECT_EQ(1, INT8_MAX,   (int8_t)   0x7f); break;
-> +		CASE_TEST(limit_int8_min);          EXPECT_EQ(1, INT8_MIN,   (int8_t)   0x80); break;
-> +		CASE_TEST(limit_uint8_max);         EXPECT_EQ(1, UINT8_MAX,  (uint8_t)  0xff); break;
-> +		CASE_TEST(limit_int16_max);         EXPECT_EQ(1, INT16_MAX,  (int16_t)  0x7fff); break;
-> +		CASE_TEST(limit_int16_min);         EXPECT_EQ(1, INT16_MIN,  (int16_t)  0x8000); break;
-> +		CASE_TEST(limit_uint16_max);        EXPECT_EQ(1, UINT16_MAX, (uint16_t) 0xffff); break;
-> +		CASE_TEST(limit_int32_max);         EXPECT_EQ(1, INT32_MAX,  (int32_t)  0x7fffffff); break;
-> +		CASE_TEST(limit_int32_min);         EXPECT_EQ(1, INT32_MIN,  (int32_t)  0x80000000); break;
-> +		CASE_TEST(limit_uint32_max);        EXPECT_EQ(1, UINT32_MAX, (uint32_t) 0xffffffff); break;
-> +		CASE_TEST(limit_int64_max);         EXPECT_EQ(1, INT64_MAX,  (int64_t)  0x7fffffffffffffff); break;
-> +		CASE_TEST(limit_int64_min);         EXPECT_EQ(1, INT64_MIN,  (int64_t)  0x8000000000000000); break;
-> +		CASE_TEST(limit_uint64_max);        EXPECT_EQ(1, UINT64_MAX, (uint64_t) 0xffffffffffffffff); break;
-> +		CASE_TEST(limit_int_least8_max);    EXPECT_EQ(1, INT_LEAST8_MAX,   (int_least8_t)    0x7f); break;
-> +		CASE_TEST(limit_int_least8_min);    EXPECT_EQ(1, INT_LEAST8_MIN,   (int_least8_t)    0x80); break;
-> +		CASE_TEST(limit_uint_least8_max);   EXPECT_EQ(1, UINT_LEAST8_MAX,  (uint_least8_t)   0xff); break;
-> +		CASE_TEST(limit_int_least16_max);   EXPECT_EQ(1, INT_LEAST16_MAX,  (int_least16_t)   0x7fff); break;
-> +		CASE_TEST(limit_int_least16_min);   EXPECT_EQ(1, INT_LEAST16_MIN,  (int_least16_t)   0x8000); break;
-> +		CASE_TEST(limit_uint_least16_max);  EXPECT_EQ(1, UINT_LEAST16_MAX, (uint_least16_t)  0xffff); break;
-> +		CASE_TEST(limit_int_least32_max);   EXPECT_EQ(1, INT_LEAST32_MAX,  (int_least32_t)   0x7fffffff); break;
-> +		CASE_TEST(limit_int_least32_min);   EXPECT_EQ(1, INT_LEAST32_MIN,  (int_least32_t)   0x80000000); break;
-> +		CASE_TEST(limit_uint_least32_max);  EXPECT_EQ(1, UINT_LEAST32_MAX, (uint_least32_t)  0xffffffff); break;
-> +		CASE_TEST(limit_int_least64_max);   EXPECT_EQ(1, INT_LEAST64_MAX,  (int_least64_t)   0x7fffffffffffffff); break;
-> +		CASE_TEST(limit_int_least64_min);   EXPECT_EQ(1, INT_LEAST64_MIN,  (int_least64_t)   0x8000000000000000); break;
-> +		CASE_TEST(limit_uint_least64_max);  EXPECT_EQ(1, UINT_LEAST64_MAX, (uint_least64_t)  0xffffffffffffffff); break;
-> +		CASE_TEST(limit_intptr_min);        EXPECT_EQ(1, INTPTR_MIN,  (void*) 0x8000000000000000); break;
-> +		CASE_TEST(limit_intptr_max);        EXPECT_EQ(1, INTPTR_MAX, (void*) 0x7fffffffffffffff); break;
-> +		CASE_TEST(limit_uintptr_max);       EXPECT_EQ(1, UINTPTR_MAX, (void*) 0xffffffffffffffff); break;
-> +		CASE_TEST(limit_ptrdiff_min);       EXPECT_EQ(1, PTRDIFF_MIN,  (void*) 0x8000000000000000); break;
-> +		CASE_TEST(limit_ptrdiff_max);       EXPECT_EQ(1, PTRDIFF_MAX, (void*) 0x7fffffffffffffff); break;
-
-Other than that it looks correct.
-
-If you're having doubts, please run it in i386 mode. For this, please have
-a look at the thread surrounding this message, as we had a very similar
-discussion recently:
-
-   https://lore.kernel.org/lkml/Y87EVVt431Wx2zXk@biznet-home.integral.gnuweeb.org/
-
-It will show how to run the test for other architectures under qemu
-without having to rebuild a whole kernel. For what you're doing it's
-a perfect example where it makes sense.
-
-I would also suggest always trying arm (has unsigned chars, could
-possibly catch a mistake) and mips (big endian though should not
-be affected by your changes, but it's a good habit to develop).
-
-Thanks!
-Willy
