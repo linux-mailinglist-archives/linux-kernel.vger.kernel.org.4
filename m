@@ -2,105 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16DB8687A0A
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 11:21:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A14C9687A10
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 11:22:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232645AbjBBKV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 05:21:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55764 "EHLO
+        id S232110AbjBBKWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 05:22:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231570AbjBBKV0 (ORCPT
+        with ESMTP id S232646AbjBBKVy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 05:21:26 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F11199C0;
-        Thu,  2 Feb 2023 02:21:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675333286; x=1706869286;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=I3BObQyIUsuS842dSFNMbhIiOWbS9ICN9kPUAQN0188=;
-  b=Va5q1OF+YMnzitdPjOTwSx+C2/VtboYZ4Y5uyrxazS2ej7D2biET3KOd
-   7fauEJTX7coE8SouHc5gSsPO86trDieUk8mbOVzWG2U7h1jHsUN+dzVYY
-   ap+hSIEUV7Bl7vH7wZyO7fnwRctZYDF1udsXI3LKyY5hqHmsOA8dbdqPv
-   v5Q34hE42E8ec+aiPO+wdK/vpVmGHamNbeYptZHBQM48N4wVmnwW3krlO
-   6Sv5VxLqk+M3U7NMPfWqRba8wariVdq6M+YvrY7EtvHiCDhwUlhalOlNU
-   HNH1lDEe5NMD4ZJ07TAXbE0JSH8/smqaQF4kiNNEU9jRP6vsJQ9fr084f
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="327061548"
-X-IronPort-AV: E=Sophos;i="5.97,267,1669104000"; 
-   d="scan'208";a="327061548"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2023 02:21:25 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="728809060"
-X-IronPort-AV: E=Sophos;i="5.97,267,1669104000"; 
-   d="scan'208";a="728809060"
-Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.255.29.248]) ([10.255.29.248])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2023 02:21:22 -0800
-Message-ID: <d5147b2f-4698-b39f-e956-84db122e9822@linux.intel.com>
-Date:   Thu, 2 Feb 2023 18:21:20 +0800
+        Thu, 2 Feb 2023 05:21:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B876988991;
+        Thu,  2 Feb 2023 02:21:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 45AD8B8258E;
+        Thu,  2 Feb 2023 10:21:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8EEDC433D2;
+        Thu,  2 Feb 2023 10:21:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675333300;
+        bh=t2QWbka6v7vkNVodGFBJPfO8m9esNG/StESQ91OzWDY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WVvHV5iL8E3fvp4rq2PuesKawvlmbTmxUaK+116vTxU8BLo4jCqt43C5xHhsoFAg3
+         V91VwIKuhTWQGrWKs2nFHjaj3Aiy4koCHi0+x5X8oykQTUMonKHbARTJq1HaRYt//C
+         tEE9Tf7L5Mca7Lhb3nIpgZZacsGL9RYyxCeqNgjGLTiA1Xf1D5acw0pB5bPuJaZLEc
+         GGHQg0q3Lr3VXU0IQrvue45jddooWWXvMrVIENluqirXPfnFflaO/pFKeK2xrLfwn5
+         WYzZqiM8wo7pn94WDnPe5gJ1jV1iBQwOZYe4uJIQyQsd9wAa2i4RTCeEfcd/D19jj/
+         CsWnifHhCzO1w==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pNWjD-0006WZ-Cj; Thu, 02 Feb 2023 11:22:03 +0100
+Date:   Thu, 2 Feb 2023 11:22:03 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 17/24] rtc: pm8xxx: add copyright notice
+Message-ID: <Y9uOy6F9ZHhZtWPI@hovoldconsulting.com>
+References: <20230126142057.25715-1-johan+linaro@kernel.org>
+ <20230126142057.25715-18-johan+linaro@kernel.org>
+ <Y9Kk/AYBUfnoPCcP@mail.local>
+ <Y9PL73mTJZ3hayur@hovoldconsulting.com>
+ <f52c832f-0522-5b3e-8267-cb3dc8da5374@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Cc:     baolu.lu@linux.intel.com, yi.l.liu@intel.com,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v1 2/8] iommu: Introduce a new
- iommu_group_replace_domain() API
-Content-Language: en-US
-To:     Nicolin Chen <nicolinc@nvidia.com>, jgg@nvidia.com,
-        kevin.tian@intel.com, joro@8bytes.org, will@kernel.org,
-        robin.murphy@arm.com, alex.williamson@redhat.com, shuah@kernel.org
-References: <cover.1675320212.git.nicolinc@nvidia.com>
- <a98e622f41d76b64f5a7d0c758d8bda5e8043013.1675320212.git.nicolinc@nvidia.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <a98e622f41d76b64f5a7d0c758d8bda5e8043013.1675320212.git.nicolinc@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f52c832f-0522-5b3e-8267-cb3dc8da5374@linaro.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/2/2 15:05, Nicolin Chen wrote:
-> +/**
-> + * iommu_group_replace_domain - replace the domain that a group is attached to
-> + * @new_domain: new IOMMU domain to replace with
-> + * @group: IOMMU group that will be attached to the new domain
-> + *
-> + * This API allows the group to switch domains without being forced to go to
-> + * the blocking domain in-between.
-> + *
-> + * If the attached domain is a core domain (e.g. a default_domain), it will act
-> + * just like the iommu_attach_group().
+On Fri, Jan 27, 2023 at 03:14:48PM +0100, Krzysztof Kozlowski wrote:
+> On 27/01/2023 14:04, Johan Hovold wrote:
+> > On Thu, Jan 26, 2023 at 05:06:20PM +0100, Alexandre Belloni wrote:
+> >> On 26/01/2023 15:20:50+0100, Johan Hovold wrote:
+> >>> Add a copyright notice for Linaro and add myself as a (primary) author
+> >>> of this driver.
+> >>>
+> >>> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> >>> ---
+> >>>  drivers/rtc/rtc-pm8xxx.c | 7 ++++++-
+> >>>  1 file changed, 6 insertions(+), 1 deletion(-)
+> >>>
+> >>> diff --git a/drivers/rtc/rtc-pm8xxx.c b/drivers/rtc/rtc-pm8xxx.c
+> >>> index 09816b9f6282..25bdd804b4d2 100644
+> >>> --- a/drivers/rtc/rtc-pm8xxx.c
+> >>> +++ b/drivers/rtc/rtc-pm8xxx.c
+> >>> @@ -1,5 +1,9 @@
+> >>>  // SPDX-License-Identifier: GPL-2.0-only
+> >>> -/* Copyright (c) 2010-2011, Code Aurora Forum. All rights reserved.
+> >>> +/*
+> >>> + * pm8xxx RTC driver
+> >>> + *
+> >>> + * Copyright (c) 2010-2011, Code Aurora Forum. All rights reserved.
+> >>> + * Copyright (c) 2023, Linaro Limited
+> >>
+> >> Is this really useful? The authoritative source is going to be git
+> >> anyway.
+> > 
+> > Sure, but in this case the driver ended up being almost completely
+> > reworked so I think it is warranted.
+> 
+> Copyright update is an effect of rework, not independent, thus it should
+> be squashed with the code doing the rework. Copyright updates on their
+> own do not make sense.
 
-I am not following above two lines. Why and how could iommufd set a
-core domain to an iommu_group?
+I tend to agree, but there can be reasons for adding it separately as in
+this case where I wanted to highlight that I was adding a new entry. And
+it is still added along with the changes (i.e. as part of the series).
 
-> + */
-> +int iommu_group_replace_domain(struct iommu_group *group,
-> +			       struct iommu_domain *new_domain)
-> +{
-> +	int ret;
-> +
-> +	if (!new_domain)
-> +		return -EINVAL;
-> +
-> +	mutex_lock(&group->mutex);
-> +	ret = __iommu_group_set_domain(group, new_domain);
-> +	if (ret) {
-> +		if (__iommu_group_set_domain(group, group->domain))
-> +			__iommu_group_set_core_domain(group);
-> +	}
-> +	mutex_unlock(&group->mutex);
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_NS_GPL(iommu_group_replace_domain, IOMMUFD_INTERNAL);
+But I'll squash it with the previous patch for v2.
 
-Best regards,
-baolu
+Johan
