@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A6306873B3
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 04:12:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B15196873B2
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 04:12:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231755AbjBBDMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 22:12:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49922 "EHLO
+        id S231743AbjBBDM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 22:12:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbjBBDM0 (ORCPT
+        with ESMTP id S230481AbjBBDM0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 1 Feb 2023 22:12:26 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B429E1E2A8
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E191E9F0
         for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 19:12:24 -0800 (PST)
-Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4P6kLM1KQXz16NMP;
-        Thu,  2 Feb 2023 11:10:19 +0800 (CST)
+Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4P6kL85NvgzRrG2;
+        Thu,  2 Feb 2023 11:10:08 +0800 (CST)
 Received: from localhost.localdomain (10.175.112.125) by
  kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Thu, 2 Feb 2023 11:12:21 +0800
+ 15.1.2375.34; Thu, 2 Feb 2023 11:12:22 +0800
 From:   Longlong Xia <xialonglong1@huawei.com>
 To:     <akpm@linux-foundation.org>
 CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         <chenwandun@huawei.com>, <wangkefeng.wang@huawei.com>,
         <sunnanyong@huawei.com>
-Subject: [PATCH -next 1/3] devtmpfs: convert to pr_fmt
-Date:   Thu, 2 Feb 2023 03:10:44 +0000
-Message-ID: <20230202031046.1224338-2-xialonglong1@huawei.com>
+Subject: [PATCH -next 2/3] devtmpfs: add debug info to handle()
+Date:   Thu, 2 Feb 2023 03:10:45 +0000
+Message-ID: <20230202031046.1224338-3-xialonglong1@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230202031046.1224338-1-xialonglong1@huawei.com>
 References: <20230202031046.1224338-1-xialonglong1@huawei.com>
@@ -48,71 +48,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the pr_fmt() macro to prefix all the output with "devtmpfs: ".
-while at it, convert printk(<LEVEL>) to pr_<level>().
+The devtmpfs_*_node() are used to mount/unmount devices to /dev, but their
+callers don't check their return value, so we don't know the reason for
+the failure. Let's add some debug info in handle() to help users know
+why failed.
 
 Signed-off-by: Longlong Xia <xialonglong1@huawei.com>
 ---
- drivers/base/devtmpfs.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ drivers/base/devtmpfs.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/base/devtmpfs.c b/drivers/base/devtmpfs.c
-index 03e8a95f1f35..ae72d4ba8547 100644
+index ae72d4ba8547..77ca64f708ce 100644
 --- a/drivers/base/devtmpfs.c
 +++ b/drivers/base/devtmpfs.c
-@@ -13,6 +13,8 @@
-  * overwrite the default setting if needed.
-  */
- 
-+#define pr_fmt(fmt) "devtmpfs: " fmt
+@@ -389,10 +389,18 @@ static __initdata DECLARE_COMPLETION(setup_done);
+ static int handle(const char *name, umode_t mode, kuid_t uid, kgid_t gid,
+ 		  struct device *dev)
+ {
++	int ret;
 +
- #include <linux/kernel.h>
- #include <linux/syscalls.h>
- #include <linux/mount.h>
-@@ -376,9 +378,9 @@ int __init devtmpfs_mount(void)
- 
- 	err = init_mount("devtmpfs", "dev", "devtmpfs", DEVTMPFS_MFLAGS, NULL);
- 	if (err)
--		printk(KERN_INFO "devtmpfs: error mounting %i\n", err);
-+		pr_info("error mounting %d\n", err);
+ 	if (mode)
+-		return handle_create(name, mode, uid, gid, dev);
++		ret = handle_create(name, mode, uid, gid, dev);
  	else
--		printk(KERN_INFO "devtmpfs: mounted\n");
-+		pr_info("mounted\n");
- 	return err;
+-		return handle_remove(name, dev);
++		ret = handle_remove(name, dev);
++
++	if (ret)
++		pr_err_ratelimited("failed to %s %s, ret = %d\n",
++				   mode ? "create" : "remove", name, ret);
++
++	return ret;
  }
  
-@@ -460,14 +462,12 @@ int __init devtmpfs_init(void)
- 
- 	mnt = vfs_kern_mount(&internal_fs_type, 0, "devtmpfs", opts);
- 	if (IS_ERR(mnt)) {
--		printk(KERN_ERR "devtmpfs: unable to create devtmpfs %ld\n",
--				PTR_ERR(mnt));
-+		pr_err("unable to create devtmpfs %ld\n", PTR_ERR(mnt));
- 		return PTR_ERR(mnt);
- 	}
- 	err = register_filesystem(&dev_fs_type);
- 	if (err) {
--		printk(KERN_ERR "devtmpfs: unable to register devtmpfs "
--		       "type %i\n", err);
-+		pr_err("unable to register devtmpfs type %d\n", err);
- 		return err;
- 	}
- 
-@@ -480,12 +480,12 @@ int __init devtmpfs_init(void)
- 	}
- 
- 	if (err) {
--		printk(KERN_ERR "devtmpfs: unable to create devtmpfs %i\n", err);
-+		pr_err("unable to create devtmpfs %d\n", err);
- 		unregister_filesystem(&dev_fs_type);
- 		thread = NULL;
- 		return err;
- 	}
- 
--	printk(KERN_INFO "devtmpfs: initialized\n");
-+	pr_info("initialized\n");
- 	return 0;
- }
+ static void __noreturn devtmpfs_work_loop(void)
 -- 
 2.25.1
 
