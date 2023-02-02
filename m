@@ -2,72 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E85F568871B
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 19:51:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA5D368871D
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 19:51:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232830AbjBBSvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 13:51:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35178 "EHLO
+        id S232834AbjBBSvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 13:51:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232387AbjBBSvp (ORCPT
+        with ESMTP id S232387AbjBBSvw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 13:51:45 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B261940DF;
-        Thu,  2 Feb 2023 10:51:44 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id f16-20020a17090a9b1000b0023058bbd7b2so2100264pjp.0;
-        Thu, 02 Feb 2023 10:51:44 -0800 (PST)
+        Thu, 2 Feb 2023 13:51:52 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F305D410A6
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 10:51:51 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id jh15so2811013plb.8
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 10:51:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4bhsb2fuNBYHSupvvVBEu0/2p/VPgtQRHARS0fdgrQw=;
-        b=fl54cRpow83IgMccmr8VLx+5n6ALA6aKE7LvaqSpcL0YwJW0bFklnlB8hQXu4VcTVW
-         gItWqrnMYNO9QNdUxMVUI9EoAZl8tr2NveBRgvf1gserVwkApBhu/ayywcdjYpxZjmDO
-         eZf+eHZqzLO8do22o3NrXU6v1b5PyZ/cRs67oe9g7uE5GG8Rffuydw/rAUj02Wb/KGP8
-         LyPt47y9yJJo1CgIrwXb0JCh+A2tAfXvVZoEsydT7QlQBQWzUJ01tsKMi9vrhxFWm6vj
-         LqPt7IVfX7KGWOUL6HE/SbP3ZepXr/sbBWF2NPAbAFWZ5hrZznIFjCjL1GyGtDcS3W70
-         NE7A==
+        bh=92s1J/v3u+gUuu9+JAVWjvaQldTTiVNdn4GiJVShZUo=;
+        b=ZqfxJAUsCqlHXcL37UAiEULnvzmklsb5UqQ0hw1beNAz2Y7ROWpbgTK8dMEph7r/4b
+         VLZVrTM8ZV8q+pTcMAw2NO+LDrK9nvlxLYfRsqKrMuFBkNKdbOFEO2caMIu28Kg7KUoz
+         CiScaH2G/0GZDF6v0W3NVWxPajel2AGHRKiiC5l0ioQi112IQir10Qjkq9187jqFsqmt
+         o6aoSViNyprb6p0ciNedLQ47nQvyjvIrE2wkaqJx/o3+L/pXvGluWKjaCukuk6sv0sxA
+         sXnL10vplLObrdVtA7nBu/tpRCO425Wboe6UEXvkcSjrhOxaKyc/g3fW49Qh7LSq0yev
+         nF6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4bhsb2fuNBYHSupvvVBEu0/2p/VPgtQRHARS0fdgrQw=;
-        b=PvMCytJgB2K3/Z3t13s3J1WgtJoycfKmabseU1YAU6s4Y/LLvMVgZL88XwGC/dwR8g
-         fw42W3U6OvR75j6mXn8EWxlBzDtSyr00Rdmx1bDtGT7+stKEnzVs8JhrfVjQnkqY4HSh
-         Seuf+kcaHtIvPKaxznByRSnyXPb2g20QYCX/3hBetyKhOvI2PZxT7m5XHAwOlhXMcTQt
-         h5rZpswhO+MJhkMdnoEs7U9jKKSWd8zonZW6YPc0IX06gQPO7DtecU39AkSww1jd9pRX
-         r3uL3dLn5c+nIDDXEph/ySet5A4c5e/XyZyer6/IFP7Tbc3byawaskrmZ3buKnmY+9yX
-         4uiQ==
-X-Gm-Message-State: AO0yUKUnWKS53BrchkVYq9n+Zk3RSVm3XKiP7KoTP01VnvFyKo5be8KQ
-        DoWpCyPUeHB0Wvy6S9OmHjXrSlraLY4=
-X-Google-Smtp-Source: AK7set/wqo5Bc3GMCe1/MUkp7nQGbr3XI+EomgafXQ2z1Flem72j6vha4fXv9v355t8kF+fn2LG8bQ==
-X-Received: by 2002:a17:90b:3a86:b0:22c:9782:e718 with SMTP id om6-20020a17090b3a8600b0022c9782e718mr7623682pjb.0.1675363903802;
-        Thu, 02 Feb 2023 10:51:43 -0800 (PST)
-Received: from google.com ([2620:15c:9d:2:6b75:4990:9ed8:d8dc])
-        by smtp.gmail.com with ESMTPSA id fw2-20020a17090b128200b0022c01ab2899sm176362pjb.49.2023.02.02.10.51.42
+        bh=92s1J/v3u+gUuu9+JAVWjvaQldTTiVNdn4GiJVShZUo=;
+        b=1rJUzp13+M9SPh8kkFWO/RdKHsO7maPwSbtZeFwUckbhqPlKF0Cw0tFf13K1S5jiGI
+         Yif18JvPIYLxz7F9owt4wCi+noQC0yvBM6SZNYhQMK80PmE7JHUmwZbiRJwzyagCUFwn
+         ELOOHeO+oexFur82rNncrQSIaeYqPIaN1I1YJ0tQbhm3GS71sfipzb/j6ip3S86H4+tf
+         9NLdDJZfkLy21atIP915HdYdfyAa7i+4C7lENAU0r9PuVDaXagcBlKdhiTU4c/l9NDkl
+         uMEYfMTr5FD43I2UE0kD2JvUp09ipSUnv9mTUR3BNAvTwIVtlEUO3vMHTAJ0fvZI8dfp
+         HHGw==
+X-Gm-Message-State: AO0yUKUlvc10ycypt9hWNKI/l1DVAYUw+TtweTyQ0qJ1lMAgWLw0WRAm
+        fKX8PAFBffk2IZWkRJc6D6Q0Qw==
+X-Google-Smtp-Source: AK7set+HAtahAeEjYFdnIkDZh6suSe/pkdbewp9U1iXACabYX5zcuU+L6p/E1XQBosWsbCj4DtjMdw==
+X-Received: by 2002:a17:902:9a47:b0:198:af4f:de0a with SMTP id x7-20020a1709029a4700b00198af4fde0amr1151plv.10.1675363911344;
+        Thu, 02 Feb 2023 10:51:51 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id s11-20020a056a00178b00b0059392f591b0sm17990pfg.53.2023.02.02.10.51.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 10:51:43 -0800 (PST)
-Date:   Thu, 2 Feb 2023 10:51:39 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Patrice Chotard <patrice.chotard@foss.st.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alain Volmat <avolmat@me.com>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] ARM: dts: stihxxx-b2120: fix polarity of reset line
- of tsin0 port
-Message-ID: <Y9wGO0Q//TIKwTTE@google.com>
-References: <YzcSqZdpNbdINp4Q@google.com>
+        Thu, 02 Feb 2023 10:51:50 -0800 (PST)
+Date:   Thu, 2 Feb 2023 18:51:47 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vipin Sharma <vipinsh@google.com>
+Cc:     pbonzini@redhat.com, vkuznets@redhat.com, dmatlack@google.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        m Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>
+Subject: Re: [Patch v4 12/13] KVM: selftests: Make vCPU exit reason test
+ assertion common.
+Message-ID: <Y9wGQx89zI3TMU1Y@google.com>
+References: <20221212183720.4062037-1-vipinsh@google.com>
+ <20221212183720.4062037-13-vipinsh@google.com>
+ <Y9r0q9cuK/ifu+OW@google.com>
+ <CAHVum0fEmEAQSxozb1BTTy-d3UGrsvhjt8V5FXQPrX5wOYqpPQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YzcSqZdpNbdINp4Q@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <CAHVum0fEmEAQSxozb1BTTy-d3UGrsvhjt8V5FXQPrX5wOYqpPQ@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,43 +87,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 09:00:41AM -0700, Dmitry Torokhov wrote:
-> According to c8sectpfe driver code we first drive reset line low and
-> then high to reset the port, therefore the reset line is supposed to
-> be annotated as "active low". This will be important when we convert
-> the driver to gpiod API.
+On Thu, Feb 02, 2023, Vipin Sharma wrote:
+> On Wed, Feb 1, 2023 at 3:24 PM Sean Christopherson <seanjc@google.com> wrote:
+> > I love the cleanup, but in the future, please don't squeeze KVM-wide changes in
+> > the middle of an otherwise arch-specific series unless it's absolutely necessary.
+> > I get why you added the macro before copy-pasting more code into a new test, but
+> > the unfortunate side effect is that complicates grabbing the entire series.
+> >
 > 
-> Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> ---
+> Make sense. So what is preferable:
+> 1. Make the big cleanup identified during a series as the last patches
+> in that series?
+> 2. Have two series and big cleanups rebased on top of the initial series?
+> 
+> Or, both 1 & 2 are acceptable depending on the cleanup?
 
-Gentle ping on this one...
+  3. Post the cleanup independently, but make a note so that maintainers know
+     that there may be conflicts and/or missed cleanup opportunities.
 
-> 
-> v2: fixed typo in the subject, added Patrice's reviewed-by
-> 
->  arch/arm/boot/dts/stihxxx-b2120.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm/boot/dts/stihxxx-b2120.dtsi b/arch/arm/boot/dts/stihxxx-b2120.dtsi
-> index 2aa94605d3d4..d52a7aaa1074 100644
-> --- a/arch/arm/boot/dts/stihxxx-b2120.dtsi
-> +++ b/arch/arm/boot/dts/stihxxx-b2120.dtsi
-> @@ -178,7 +178,7 @@ tsin0: port {
->  				tsin-num = <0>;
->  				serial-not-parallel;
->  				i2c-bus = <&ssc2>;
-> -				reset-gpios = <&pio15 4 GPIO_ACTIVE_HIGH>;
-> +				reset-gpios = <&pio15 4 GPIO_ACTIVE_LOW>;
->  				dvb-card = <STV0367_TDA18212_NIMA_1>;
->  			};
->  		};
-> -- 
-> 2.38.0.rc1.362.ged0d419d3c-goog
-> 
-> 
-> -- 
-> Dmitry
+#1 is rarely going to be the best option.  The big cleanup is going to necessitate
+Cc'ing a lot of people that don't care about the base arch-specific changes, so
+unless the base changes are one or two trivial patches, a lot of people end up
+having to wade through a lot of noise.  And aside from annoying people, that also
+makes it more likely that someone will overlook the cleanup.
 
--- 
-Dmitry
+As for #2 vs. #3, #3 is probably a better option in most cases.  For broad cleanups,
+odds are very good that there will be other conflicts beyond just the changes _you_
+have in-flight.  E.g. in this case, any new tests and/or asserts that are in-flight,
+sitting in other trees, etc., will suffer the same fate.  I.e. whoever applies the
+cleanup is going to need to resolve conflicts and/or look for other cleanup
+opportunities anyways.  For a scenario like this, a way to make life easy for the
+maintainer applying the cleanup would be to provide a script, e.g. single grep
+command, to look for potential cleanup spots.  That communicates to the maintainer
+that there may be silent "conflicts" and makes it easier for them to resolve such
+conflicts.
+
+Posting the cleanup separately means the two series/patches can proceed
+independently, e.g. respinning one doesn't screw up the other, maintainers can
+take the patches in whatever order they prefer, etc.
+
+There are undoubtedly exceptions, e.g. if the resulting conflicts are really nasty,
+but those should be few and far between.
