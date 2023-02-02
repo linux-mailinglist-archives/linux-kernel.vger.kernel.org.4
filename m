@@ -2,131 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 141AB688050
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 15:45:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37DEC688053
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 15:46:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232296AbjBBOpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 09:45:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52592 "EHLO
+        id S232503AbjBBOqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 09:46:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbjBBOpb (ORCPT
+        with ESMTP id S232446AbjBBOqJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 09:45:31 -0500
-Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F9E8626E
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 06:45:30 -0800 (PST)
-Received: by mail-oo1-xc2d.google.com with SMTP id t24-20020a4a8258000000b005170b789faaso195240oog.5
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 06:45:30 -0800 (PST)
+        Thu, 2 Feb 2023 09:46:09 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC4598626E
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 06:46:04 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id n13so2002618plf.11
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 06:46:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=CGufOIJ0TiCnGVFcLZ+Cxm7XNsb1pLcp45dbpeI8y5g=;
-        b=W6HeCVMQ6ftSO2rX+RY8QMgrI6vlKcGmEi6BNxrIBs0WgKeUq9OcVTp1etZJkuk7n3
-         eT7/kSP0eQ81JETUpJRl5p1cXrFEmnSQCwfBzTn2arkrAsssNSQyJdRVR3IgRZowx2Gu
-         Sm0cStZLDRFZbCDEcGs1bC6jE49rR0lvBrSTHHK/I9nGUK12BqLZkn1+SFkzBQu6ri2E
-         b91E3sF1a9aJpGPLuAvXHMAbjNPw+YFI3Da6ULlG+/0kyJeTvHTlSId9blb8LtyL0D0D
-         acUbJ2Py2o5raDWCif9amuCJnN3l7ysVLscV3U/TPlZvvkkAwTsIZcTlglPH0T54+i5d
-         ljPQ==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=gvGare09I4V4QCI5X/npMy6Vy+zrhiXQfO2Ggf/2QIQ=;
+        b=OJSVdyEU67KR6Z4IUNjb9xxd9Rez/Hpvl26ubVkHLZQLBODwGJ2BIPov3hbIsLoJAe
+         zVLxY1V/2UCALWWggXLSAW0hQmEYbULgWNVKogiS5i/MNdqwBO/VjiD+UTVR2hopi71o
+         YCnPM9GFi/zoHnXfqDZBIxFfqfsIFc07iJTEcHHeicIMh5Qg5Q5uR0jJRPrcz8DoXBay
+         scV+MVpnh4EkHMBqUqZfIkaUqPdmFFZRynjaWzrqk/w12wHLoRqYawa2OLsqmrjOED0R
+         r3lVgdzDeqKbcL9MFX9fGeo0X+HilreYP2Rk6oZNoNSK2OJUxMpHObsopjzXAR5/41Sq
+         85gQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CGufOIJ0TiCnGVFcLZ+Cxm7XNsb1pLcp45dbpeI8y5g=;
-        b=lm17vi8bGkYJPaO7ZkirEyWOcBGggCUJn7RKBciIEdga6cP4/qUyJIizAbryAdukbw
-         Nis8y0Q/MmNW0fJ/BBippiNq4wyFW8N6+HVxMulbpjAKXc+/Q9tylBVpqYVZpPOxjOOE
-         y7/eMArEPbG368R1Fz3CFcpdtTcuDC+U5/20xuNHphKW/j+6IFs3KfONQnN6mbXNhDwN
-         io3hXntKOMdWzbEHwV2osm1QE15KrcPvvaq+6SvqVbQaFpU9yR2VfO10hQcPG/5ZtHiS
-         znqETA+Sza/TThV/p9m6FHwTpwp2Qn5kp1GwdnD7iPxAILd5+hh4NSapz+W1OgoU17yq
-         RDqQ==
-X-Gm-Message-State: AO0yUKV1BrANVTqKryzNvkZ6TRhNkAyOYHYqNYm9gBoqV8+irvU2+XyR
-        61ceDL5eeRv47cqSTLf7Af0=
-X-Google-Smtp-Source: AK7set8xdRBKC/rgen1Gt+ngaNQ2mxHcQ6U/gzQqpMUyq+2HoA8P01vlGp51GATHsO0GeCcsH+6iyA==
-X-Received: by 2002:a4a:1744:0:b0:51a:cab:cbef with SMTP id 65-20020a4a1744000000b0051a0cabcbefmr2657590ooe.4.1675349129733;
-        Thu, 02 Feb 2023 06:45:29 -0800 (PST)
-Received: from ?IPv6:::1? ([2804:14d:128a:85a9:38a9:1bdb:a338:39fa])
-        by smtp.gmail.com with ESMTPSA id z7-20020a4ab607000000b004a8eb1d8f1bsm8497497oon.39.2023.02.02.06.45.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 06:45:29 -0800 (PST)
-Date:   Thu, 02 Feb 2023 11:45:24 -0300
-From:   Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-To:     "Liang, Kan" <kan.liang@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-CC:     peterz@infradead.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, ak@linux.intel.com,
-        eranian@google.com, irogers@google.com
-Subject: Re: [PATCH V2 7/9] perf/x86/msr: Add Meteor Lake support
-User-Agent: K-9 Mail for Android
-In-Reply-To: <79807730-73ac-c8c2-fc9d-b7cd00f9336e@linux.intel.com>
-References: <20230104201349.1451191-1-kan.liang@linux.intel.com> <20230104201349.1451191-7-kan.liang@linux.intel.com> <Y9sWImm4v5I/MZId@kernel.org> <79807730-73ac-c8c2-fc9d-b7cd00f9336e@linux.intel.com>
-Message-ID: <1828CB97-35C8-4420-92F2-4795A89FA793@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gvGare09I4V4QCI5X/npMy6Vy+zrhiXQfO2Ggf/2QIQ=;
+        b=BN1CTwPkL+feQhpvHHQqvncE1rjKnZQM8dXwyTgoefYwrpepAhM8iM6Vo5QUL3RwXg
+         u257CaTvCH6tJAlNoHmWWXyQQtprQDam7mftvG2dX5xwWnSostDYcceLpEKBuwDyzp3X
+         oLM+sOgNqKM650M2ZdYJW8Ukdolwh8ObGeAm/4uJG98gxbXE+8wrFZQyKdzAlaXRkgIj
+         fODZV9rkLykG/6siAGGLVXrne9PtgQWd/42pOHpsOLV6t1bWf413mDTSpwGTNGsJzJhI
+         5hmO8KhSqw57i13LB7DF1Di8hzNY7QQoiYSQAc5iJ4dd0ImUW/Fril8sBaO/4nIQn4WV
+         +XqA==
+X-Gm-Message-State: AO0yUKXHtjq8VDOmA441ALzBKX9KxhecxQ9pWTXEXc6IgFK7a01s6rIw
+        7X1T91/m3tw10yy8SGSfuJ2StPw6jbvsrJhWnc35lw85eSirnw==
+X-Google-Smtp-Source: AK7set+nZEC4dDNojajz4bpX0JArLbWo/ibWLgz3iwsLe/PfjICfstwFRNHUq8px4ZzSazS8Ca+zatCtuHtim1ieg+I=
+X-Received: by 2002:a17:90a:f98f:b0:230:5394:6eef with SMTP id
+ cq15-20020a17090af98f00b0023053946eefmr531542pjb.109.1675349164472; Thu, 02
+ Feb 2023 06:46:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+References: <20230202141545.2295679-1-gregkh@linuxfoundation.org>
+In-Reply-To: <20230202141545.2295679-1-gregkh@linuxfoundation.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 2 Feb 2023 15:45:28 +0100
+Message-ID: <CAPDyKFq_yAJOSZO7WsPZKV_aGcFAs0kWqpNN-_=ywa8n=8D=-g@mail.gmail.com>
+Subject: Re: [PATCH] drivers: base: power: fix memory leak with using debugfs_lookup()
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     rafael@kernel.org, Kevin Hilman <khilman@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On February 2, 2023 11:34:02 AM GMT-03:00, "Liang, Kan" <kan=2Eliang@linux=
-=2Eintel=2Ecom> wrote:
->Hi Arnaldo,
+On Thu, 2 Feb 2023 at 15:15, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
->On 2023-02-01 8:47 p=2Em=2E, Arnaldo Carvalho de Melo wrote:
->> Em Wed, Jan 04, 2023 at 12:13:47PM -0800, kan=2Eliang@linux=2Eintel=2Ec=
-om escreveu:
->>> From: Kan Liang <kan=2Eliang@linux=2Eintel=2Ecom>
->>>
->>> Meteor Lake is Intel's successor to Raptor lake=2E PPERF and SMI_COUNT=
- MSRs
->>> are also supported=2E
->>>
->>> Reviewed-by: Andi Kleen <ak@linux=2Eintel=2Ecom>
->>> Signed-off-by: Kan Liang <kan=2Eliang@linux=2Eintel=2Ecom>
->>> ---
->>=20
->> Did the kernel bits land upstream?
->Yes, the kernel part has been merged into the tip=2Egit perf/core branch=
-=2E
+> When calling debugfs_lookup() the result must have dput() called on it,
+> otherwise the memory will leak over time.  To make things simpler, just
+> call debugfs_lookup_and_remove() instead which handles all of the logic
+> at
+> once.
 >
->Thanks for checking the status=2E There are two perf tool patches in this
->series, which hasn't been merged=2E Should I resend them?
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Kevin Hilman <khilman@kernel.org>
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: Len Brown <len.brown@intel.com>
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-Please, try rebasing it on the tmp=2Eperf/core in my tree=2E
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-- Arnaldo
+Kind regards
+Uffe
 
+> ---
+>  drivers/base/power/domain.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
 >
+> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> index 967bcf9d415e..6097644ebdc5 100644
+> --- a/drivers/base/power/domain.c
+> +++ b/drivers/base/power/domain.c
+> @@ -220,13 +220,10 @@ static void genpd_debug_add(struct generic_pm_domain *genpd);
 >
->> =20
->>> No change since V1
->>>
->>>  arch/x86/events/msr=2Ec | 2 ++
->>>  1 file changed, 2 insertions(+)
->>>
->>> diff --git a/arch/x86/events/msr=2Ec b/arch/x86/events/msr=2Ec
->>> index ecced3a52668=2E=2E074150d28fa8 100644
->>> --- a/arch/x86/events/msr=2Ec
->>> +++ b/arch/x86/events/msr=2Ec
->>> @@ -107,6 +107,8 @@ static bool test_intel(int idx, void *data)
->>>  	case INTEL_FAM6_RAPTORLAKE:
->>>  	case INTEL_FAM6_RAPTORLAKE_P:
->>>  	case INTEL_FAM6_RAPTORLAKE_S:
->>> +	case INTEL_FAM6_METEORLAKE:
->>> +	case INTEL_FAM6_METEORLAKE_L:
->>>  		if (idx =3D=3D PERF_MSR_SMI || idx =3D=3D PERF_MSR_PPERF)
->>>  			return true;
->>>  		break;
->>> --=20
->>> 2=2E35=2E1
->>=20
+>  static void genpd_debug_remove(struct generic_pm_domain *genpd)
+>  {
+> -       struct dentry *d;
+> -
+>         if (!genpd_debugfs_dir)
+>                 return;
+>
+> -       d = debugfs_lookup(genpd->name, genpd_debugfs_dir);
+> -       debugfs_remove(d);
+> +       debugfs_lookup_and_remove(genpd->name, genpd_debugfs_dir);
+>  }
+>
+>  static void genpd_update_accounting(struct generic_pm_domain *genpd)
+> --
+> 2.39.1
+>
