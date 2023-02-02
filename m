@@ -2,138 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E69A0687970
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:47:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3100F687976
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:48:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232496AbjBBJrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 04:47:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58300 "EHLO
+        id S232542AbjBBJsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 04:48:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232548AbjBBJrp (ORCPT
+        with ESMTP id S232590AbjBBJsZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 04:47:45 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28811712DC
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 01:47:01 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id r2so1122099wrv.7
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 01:47:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=e7LSJNpsdTumzuzb+ZqPJnH76wCvGImRrSuiCZTeWSY=;
-        b=G1vY0r6yXxzL/nRzJb6pV+Nb1EqeDUYbvWIgOyXs4H2+WWA2xGHX69HRTWR+vTnoHj
-         P2WW6UeCG0TWOoTadmm3NKkp0Khd8j9oFLLzUhohOIEpkM5giK4aQfHIaIZuUeLGD6v2
-         QcPwxHJ77YO2JP5CYZ0fV1sJCQDLIAr7fU8Xqbog0UV9jvT7ejGwflkirJh1X4plFBLj
-         TAYRRgPMeFyAWAUqvO8MJdU0jhLQ/VWopUMPmoRHg+Ki5YenA/CT53SFslEq5Wmcfzxr
-         zJhIeA8J/yvHphV4uhuopo7fOFqV4yepaQsiQy2PMw1vOMVKb8feG/R4G/RoYooPhmj0
-         xRfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=e7LSJNpsdTumzuzb+ZqPJnH76wCvGImRrSuiCZTeWSY=;
-        b=p28JD3275Qm8n2ukbks/oGdVuFWdU6JGpX74nNhj6isUa/A+uwiv6YgKi/MxCZ9Juj
-         3bc44ZAnDoGDJvPvgx9lPPxo1UhDEawcLLcxzGiNn9+2musqleUcxYMDKB9od8boROqI
-         hhG5hygbuqzyxyEhUPfzTdLKWSdGGkUBqX5YSxmjLq+Od0cHXSWohtK83F49c5Nj1CSf
-         oo5UUcEdPM9zQCLj/uS4/B6t71ocgq307QWXPa5isxQJR79+79W2+i4DDcZFhwz5G5/9
-         PQlhNF6NWCq841C8awWlvEr4wWl/TtnUTkBrzbJ15w1NeTMHF7iQQS4Ww0hunZe5TupC
-         YmXw==
-X-Gm-Message-State: AO0yUKV2Pp3mFk+Fz9Wz/Eleiw8JGDC6+FRTIbz7pI3Z3O1q8KjyHZF+
-        CTlpcT6PZ93vF/AbEl8VE+csow==
-X-Google-Smtp-Source: AK7set+AoX32q9cg0KFR87dHq8mO6Z1vlOLkqdhKrS9M/FBzS5RArLO+E9zVRRoL1VEtBTza0SZuzA==
-X-Received: by 2002:adf:ce0a:0:b0:2bf:b44d:6dae with SMTP id p10-20020adfce0a000000b002bfb44d6daemr5380729wrn.28.1675331190166;
-        Thu, 02 Feb 2023 01:46:30 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id l16-20020adffe90000000b002b8fe58d6desm18852055wrr.62.2023.02.02.01.46.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 01:46:29 -0800 (PST)
-Message-ID: <266a4dec-ec2c-3c21-975e-301e3a7bb5f3@linaro.org>
-Date:   Thu, 2 Feb 2023 10:46:28 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH V4 7/9] dt-bindings: i2c: xiic: Add 'xlnx,axi-iic-2.1' to
-Content-Language: en-US
-To:     Manikanta Guntupalli <manikanta.guntupalli@amd.com>,
-        michal.simek@xilinx.com, michal.simek@amd.com,
-        devicetree@vger.kernel.org, andrew@lunn.ch, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        Thu, 2 Feb 2023 04:48:25 -0500
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71805268;
+        Thu,  2 Feb 2023 01:48:02 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 8B34F5C0059;
+        Thu,  2 Feb 2023 04:47:16 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 02 Feb 2023 04:47:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1675331236; x=1675417636; bh=LFC34TAL9j
+        tpDQE+UCn/9sUe6pge8viDh79p+DyhgO8=; b=NJY+AHJV/+n+8tmmq4+Tc+KX7d
+        BDhHlSWy50bc+7b4Ka8ZsSz5n1BnCsrz5GbzUYFO2JdJCEFboO6okmfBq6pVO/ai
+        pLad/FRWb9osPXLM6fBgBKtY5WlHVnX7SitaanTIC/wlqEUpd+jw6V6jSMqGCzKM
+        +JVnf3aJ0kLZoMk04MEQBBqD9gEaoAxmi2hLPn3xZ7zOn3mqB4NP2tmTFv78xkZk
+        lrQ+Fu5gKnwxktllpvwYws7BCF8jYknZ3iTxH6iRGlenntNXfpCCKf1p/2RBEIkO
+        3I8Pj76BYHikSNmB47jgCEqzX9yJtxoBMp6nBvZglp5t5fPXN0/DJlp8nb7g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1675331236; x=1675417636; bh=LFC34TAL9jtpDQE+UCn/9sUe6pge
+        8viDh79p+DyhgO8=; b=QjIxKxoqmL2q359SmbuioNC+3IHi5M7bW64DEsdA+MU0
+        9rgNJx+cTTYMSIHP+P+Tsb/YfRivarH3VTSsjxarkwBCkXYYOn/eQO2FvgS6xsvZ
+        mg03DDLv/OxBkeRuAyvvT9ydMSsQdfQz7u+gru+qs2j86NNtdOgVJPCxAjZeVOg/
+        ybj3ZL3HkaaxfEMZiCiSVo8fEBbLX7EWlJDN9uO4/CnxrvQQ5d45+VIklbOLItZJ
+        3zikSxswjH7LViAgxNSWpewb+v1KnogwOTCsLE4prqkPVyq90IsESdm8KTcnqZ4Y
+        j8Uzcd3z5mNIj7IIOLWu6wFZ1E8A5MRFXOjEYKDZeA==
+X-ME-Sender: <xms:o4bbYxzLhPw7hLtejZEc1RKXRjtdTUtuZIyc6pggt9364cqB8aNF0w>
+    <xme:o4bbYxS_y6BlcgBynek21SvxvCOVrUkavcnwkLSkHnOdpaXce22muRqN0GqJ56e5u
+    Bps74GQuko2fDbUXQ8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudefkedgtdejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:o4bbY7WrPPphmReiUgSWAsAcP9vz_uli01d5WXbt7jkPGIQ4PT6czQ>
+    <xmx:o4bbYzgm2ZPuDf8IB2LRfZ7u5m7vnhF3qa7jTpylMhD6TWBFKmLHDg>
+    <xmx:o4bbYzBarxOFNOoXh1-dz86yntwhoU7CORrIHNwZrZ1UxxDOAHyqRQ>
+    <xmx:pIbbY10va1t_-qxKNBI3FQepGoPNaMGoDlpPVa_YPe35V37PLACqVQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id AC923B6044F; Thu,  2 Feb 2023 04:47:15 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-107-g82c3c54364-fm-20230131.002-g82c3c543
+Mime-Version: 1.0
+Message-Id: <ccf74ebd-ccc1-4de5-a425-dcde4ac39a8d@app.fastmail.com>
+In-Reply-To: <20230202084238.2408516-1-chenhuacai@loongson.cn>
+References: <20230202084238.2408516-1-chenhuacai@loongson.cn>
+Date:   Thu, 02 Feb 2023 10:46:56 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Huacai Chen" <chenhuacai@loongson.cn>,
+        "Huacai Chen" <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, Linux-Arch <linux-arch@vger.kernel.org>,
+        "Xuefeng Li" <lixuefeng@loongson.cn>, guoren <guoren@kernel.org>,
+        "WANG Xuerui" <kernel@xen0n.name>,
+        "Jiaxun Yang" <jiaxun.yang@flygoat.com>,
         linux-kernel@vger.kernel.org
-Cc:     git@amd.com, srinivas.goud@amd.com, shubhrajyoti.datta@amd.com,
-        manion05gk@gmail.com,
-        Raviteja Narayanam <raviteja.narayanam@xilinx.com>
-References: <1675330898-563-1-git-send-email-manikanta.guntupalli@amd.com>
- <1675330898-563-8-git-send-email-manikanta.guntupalli@amd.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1675330898-563-8-git-send-email-manikanta.guntupalli@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Subject: Re: [PATCH] LoongArch: Make -mstrict-align be configurable
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/02/2023 10:41, Manikanta Guntupalli wrote:
-> From: Raviteja Narayanam <raviteja.narayanam@xilinx.com>
+On Thu, Feb 2, 2023, at 09:42, Huacai Chen wrote:
+> Introduce Kconfig option ARCH_STRICT_ALIGN to make -mstrict-align be
+> configurable.
+>
+> Not all LoongArch cores support h/w unaligned access, we can use the
+> -mstrict-align build parameter to prevent unaligned accesses.
+>
+> This option is disabled by default to optimise for performance, but you
+> can enabled it manually if you want to run kernel on systems without h/w
+> unaligned access support.
+>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 
-Your subject is corrupted
+This feels like it's a way too low-level option, I would not expect
+users to be able to answer this correctly.
 
-> 
-> compatible
-> 
-> Added the xilinx I2C new version 'xlnx,axi-iic-2.1' string to compatible
-> Added clock-frequency as optional property.
+What I would do instead is to have Kconfig options for specific
+CPU implementations and derive the alignment requirements from
+that.
+ 
+> +config ARCH_STRICT_ALIGN
+> +	bool "Enable -mstrict-align to prevent unaligned accesses"
+> +	help
+> +	  Not all LoongArch cores support h/w unaligned access, we can use
+> +	  -mstrict-align build parameter to prevent unaligned accesses.
+> +
+> +	  This is disabled by default to optimise for performance, you can
+> +	  enabled it manually if you want to run kernel on systems without
+> +	  h/w unaligned access support.
+> +
 
-Use imperative, not past tense.
 
-> 
-> Signed-off-by: Raviteja Narayanam <raviteja.narayanam@xilinx.com>
-> Signed-off-by: Manikanta Guntupalli <manikanta.guntupalli@amd.com>
-> Acked-by: Michal Simek <michal.simek@amd.com>
-> ---
-> Changes for v4:
-> Added description for clock-frequency in xlnx,xps-iic-2.00.a.yaml
-> ---
->  .../devicetree/bindings/i2c/xlnx,xps-iic-2.00.a.yaml      | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/xlnx,xps-iic-2.00.a.yaml b/Documentation/devicetree/bindings/i2c/xlnx,xps-iic-2.00.a.yaml
-> index 8d241a703d85..92cb9006e8b7 100644
-> --- a/Documentation/devicetree/bindings/i2c/xlnx,xps-iic-2.00.a.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/xlnx,xps-iic-2.00.a.yaml
-> @@ -14,7 +14,9 @@ allOf:
->  
->  properties:
->    compatible:
-> -    const: xlnx,xps-iic-2.00.a
-> +    enum:
-> +      - xlnx,xps-iic-2.00.a
-> +      - xlnx,axi-iic-2.1
+There is already a global CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+option, I think you should use that one instead of adding another
+one. Setting HAVE_EFFICIENT_UNALIGNED_ACCESS for CPUs that can
+do unaligned access will enable some important optimizations in
+the network stack and a few other places.
 
-Keep the list sorted alphabetically
-
->  
->    reg:
->      maxItems: 1
-> @@ -30,6 +32,10 @@ properties:
->      description: |
->        Input clock name.
->  
-> +  clock-frequency:
-> +    description:
-> +      Optional I2C SCL clock frequency.
-
-Is maximum known? If this is optional, you should have here default.
-
-Best regards,
-Krzysztof
-
+    Arnd
