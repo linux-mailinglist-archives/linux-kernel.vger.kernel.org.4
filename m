@@ -2,103 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2EC7688434
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 17:20:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CD0B68840A
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 17:19:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232883AbjBBQUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 11:20:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56782 "EHLO
+        id S232580AbjBBQTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 11:19:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232256AbjBBQTy (ORCPT
+        with ESMTP id S232591AbjBBQTT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 11:19:54 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E15B6813B
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 08:19:52 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id d4-20020a05600c3ac400b003db1de2aef0so1838038wms.2
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 08:19:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VtgKBnPRCwb98a3FyvDw8aR7YxIqb2SNRFrW+A++kN4=;
-        b=RC8duqK7n91NBKeQMiIyph7LDzlPaClogDiFaNToN/m6hkm6nUraHVjI5ZrmBmAK4i
-         fKP14QUUMsTvhSzHFZ+qbr5wOZ18UShuriq2jgToiZNDT9mol1C7OcWeFYyBcaAD1jBY
-         j6LUhNuSurEB+eugEqSv4k4/UNsVqKMuTsnPRR9TxRIFka3WyuPSFNTi44q0FQB28PHc
-         h8l9Rg4wUOFCmqm0EhL84oxLJrfQmsvYB8YTy+iRuRR9qa7xjkWmpy90V48BBQ9lO/wB
-         +3TFJLcYZJBHG/hoXV1q//lJSW/SKPxBwPLsxdmmjT7nXISaQq+m3bV1Kg8vQrWAaxQa
-         VtOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VtgKBnPRCwb98a3FyvDw8aR7YxIqb2SNRFrW+A++kN4=;
-        b=0bWgeiZ8f8tpnFosdqMVJK3/2S1CdXHWv/FroDb7hSkFRi+z8l4JvCi6DSVkrgXVwi
-         6t7Kbs+/bzEof9T0+Fst3GbvS+ioXip7+LWGfLhkKVNi2PYgDstsV5UQl4BZcwMVkvHp
-         0GsmCQeIZSd/bBh6NthbufbMJGQRPvATY7ivgLVD/aBYrKrWNM7okm9/oGHdwvZQGHS3
-         2TQ3tax6yesGPt/LdocxbsLH3/QbNfHuWP8hy5orYthlGySwoqiMOJ1/fJG4g4CRFYuM
-         1yDWsIOWSwsqH+UDRxMi5yVzb9NAeoMAxIv6dcUc8vRMT99+P+dLre/DTIxb11ng5vq2
-         O0iQ==
-X-Gm-Message-State: AO0yUKW6WaNcKnRIffqyA8SKLtzYQt3wsjswdfVhvj/w0J/uAYqGTSav
-        KKk5UiIzNrr1s3N6KtfY1zb0TKzmvtFEH6WA
-X-Google-Smtp-Source: AK7set+vIk6UpkuGODD1j0SYtAncrTjWyvRYc/zd/hzQaegDljSJXvxzHTMGQvuuSIvf2Q2vqUUnZw==
-X-Received: by 2002:a05:600c:354c:b0:3db:1a41:6629 with SMTP id i12-20020a05600c354c00b003db1a416629mr6392726wmq.22.1675354791974;
-        Thu, 02 Feb 2023 08:19:51 -0800 (PST)
-Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id h16-20020a05600c351000b003dc521f336esm212416wmq.14.2023.02.02.08.19.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 08:19:51 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 13/13] arm64: dts: qcom: sm8150: add compatible fallback to mailbox
-Date:   Thu,  2 Feb 2023 17:18:56 +0100
-Message-Id: <20230202161856.385825-14-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230202161856.385825-1-krzysztof.kozlowski@linaro.org>
-References: <20230202161856.385825-1-krzysztof.kozlowski@linaro.org>
+        Thu, 2 Feb 2023 11:19:19 -0500
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9686F4CE69;
+        Thu,  2 Feb 2023 08:19:11 -0800 (PST)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id C5A801883528;
+        Thu,  2 Feb 2023 16:19:07 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id BABFF250007B;
+        Thu,  2 Feb 2023 16:19:07 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id B0E8191201E4; Thu,  2 Feb 2023 16:19:07 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Date:   Thu, 02 Feb 2023 17:19:07 +0100
+From:   netdev@kapio-technology.com
+To:     Ido Schimmel <idosch@idosch.org>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
+        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?UTF-8?Q?Cl=C3=A9m?= =?UTF-8?Q?ent_L=C3=A9ger?= 
+        <clement.leger@bootlin.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>
+Subject: Re: [PATCH net-next 0/5] ATU and FDB synchronization on locked ports
+In-Reply-To: <Y9vaIOefIf/gI0BR@shredder>
+References: <20230130173429.3577450-1-netdev@kapio-technology.com>
+ <Y9lrIWMnWLqGreZL@shredder>
+ <e2535b002be9044958ab0003d8bd6966@kapio-technology.com>
+ <Y9vaIOefIf/gI0BR@shredder>
+User-Agent: Gigahost Webmail
+Message-ID: <3cecf4425b0e6f38646e25e40fd8f0fd@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SC8150 mailbox is compatible with SDM845.
+On 2023-02-02 16:43, Ido Schimmel wrote:
+> On Thu, Feb 02, 2023 at 08:37:08AM +0100, netdev@kapio-technology.com 
+> wrote:
+>> On 2023-01-31 20:25, Ido Schimmel wrote:
+>> >
+>> > Will try to review tomorrow, but it looks like this set is missing
+>> > selftests. What about extending bridge_locked_port.sh?
+>> 
+>> I knew you would take this up. :-)
+>> But I am not sure that it's so easy to have selftests here as it is 
+>> timing
+>> based and it would take the 5+ minutes just waiting to test in the 
+>> stadard
+>> case, and there is opnly support for mv88e6xxx driver with this patch 
+>> set.
+> 
+> The ageing time is configurable: See commit 081197591769 ("selftests:
+> net: bridge: Parameterize ageing timeout"). Please add test cases in 
+> the
+> next version.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8150.dtsi | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-index fd20096cfc6e..6c6fea74d438 100644
---- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-@@ -4097,7 +4097,8 @@ intc: interrupt-controller@17a00000 {
- 		};
- 
- 		apss_shared: mailbox@17c00000 {
--			compatible = "qcom,sm8150-apss-shared";
-+			compatible = "qcom,sm8150-apss-shared",
-+				     "qcom,sdm845-apss-shared";
- 			reg = <0x0 0x17c00000 0x0 0x1000>;
- 			#mbox-cells = <1>;
- 		};
--- 
-2.34.1
-
+When I was looking at configuring the ageing time last time, my finding 
+was that the ageing time could not be set very low as there was some 
+part in the DSA layer etc, and confusion wrt units. I think the minimum 
+secured was like around 2 min. (not validated), which is not that much 
+of an improvement for fast testing. If you know what would be a good low 
+timeout to set, I would like to know.
