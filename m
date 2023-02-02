@@ -2,120 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A78F3688061
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 15:47:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9788C68807B
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 15:50:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232358AbjBBOr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 09:47:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54276 "EHLO
+        id S232222AbjBBOuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 09:50:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232519AbjBBOrx (ORCPT
+        with ESMTP id S231712AbjBBOtu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 09:47:53 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F67E8F53D;
-        Thu,  2 Feb 2023 06:47:49 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id y1so1946450wru.2;
-        Thu, 02 Feb 2023 06:47:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=1jg1FM+l1x90qZRI+1yXniygncn9Da3UxYbqywq4gpY=;
-        b=CrNUnrXXJMEMMhrHPxmBs1XGQMa7YxqjqYblWbTA3uR3de2kBsyU9biCdNkh5y/ykW
-         vuUWKJfKqc3D6zptmk1Jwi2DqdF/89tVGDYjhDcryv6+JrTDH+awQC5lsQGzkVFCM06/
-         kk3Dp33w8kpqYx7gXQz2LaMWTnWPPiRUKA8r7jtGY7OSRNCN2RM1UdfLv9eUDYgPpTAa
-         4i6fdtttpvw9JHfn8LBVSZnAuE80scqklJD80KF+mdfcGs/ugQVjrM2WF/kiO3UEuhC+
-         SvLb4EEX4KJH6P8RCSIVowFebZo3rNb5cUVc2K4KLxoL8v/8Vb89/1gLV+r5dPRKA77l
-         AT3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1jg1FM+l1x90qZRI+1yXniygncn9Da3UxYbqywq4gpY=;
-        b=utAulXnD3EJwFtQ01FL/wiur6wklYgQmq3jJlJHU4i3S7HBUl44AQIPSbAthVDaSVJ
-         dZt1L93fD0L7hEGq86I+5jfUR1eYIAc1A+WKy7Bz2xtUZIsEvI4/wCRtdqh2UUmU83Da
-         Q2Xy8GyQMnr/Zk4T6qy5OilEzZ3URXi0OamIQjJ2c5slTFWHAfmPyr3zitCGVad7jfJs
-         hIHgq8UOPhWacHGR5s69d4kgijiSjE0ziMO9slRLPEx/GS2ORak3Z3DqngEngjAvUpXb
-         KWOGZIa8rzhRrD+UaU2S1YZgxkh+O81bO26IrH6ZLwSRkAsu/aRx7tMb26WJ98YJvDAT
-         8gag==
-X-Gm-Message-State: AO0yUKVyoV/IoQVWXt4gMi+smrAMnS2S03lyvoQaTFRLTSNxJBAzTCh2
-        PoX5xLl7M2pgiqChOJ6BMrQr9d4fr84DN06y
-X-Google-Smtp-Source: AK7set8fehSj0T9hBTlYwSrsIkFREbiUWEWCpLMiuMMQpN0NTg6HQ0be2OEaDS5lWPFDeb+zfp56gQ==
-X-Received: by 2002:adf:ed07:0:b0:2bf:f029:8ac7 with SMTP id a7-20020adfed07000000b002bff0298ac7mr5559202wro.67.1675349267983;
-        Thu, 02 Feb 2023 06:47:47 -0800 (PST)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id u15-20020a5d6daf000000b002bfe266d710sm1821764wrs.90.2023.02.02.06.47.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 06:47:47 -0800 (PST)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Thu, 2 Feb 2023 15:47:45 +0100
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Hao Luo <haoluo@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        bpf <bpf@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
-        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Subject: Re: [RFC 0/5] mm/bpf/perf: Store build id in file object
-Message-ID: <Y9vNEYsx/SQcN79y@krava>
-References: <20230201135737.800527-1-jolsa@kernel.org>
- <CAADnVQ+im7FwSqDcTLmMvfRcT9unwdHBeWG9Snw7W5Q-bcdWvg@mail.gmail.com>
+        Thu, 2 Feb 2023 09:49:50 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8E2E3918A6;
+        Thu,  2 Feb 2023 06:48:54 -0800 (PST)
+Received: by linux.microsoft.com (Postfix, from userid 1127)
+        id B0F6620B7102; Thu,  2 Feb 2023 06:48:43 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B0F6620B7102
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1675349323;
+        bh=gjpf4tmCpJspm7R09KDz9PoxVO973A9P+dcFaqNYhig=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eWqOL1KUEIVforAPnG/YSYfnmeUMryD+fqy9Q57F9tkXrRfSx+Su5JWbomxYbdmcy
+         CKlZgQMTBWuYSM6yg4YfewcXLiImUqk3mpjdV3RVFN3XM8db2cWP4TA0JudUTRBReR
+         vxr9HDphRSm4fwZx3TBOPdSrQ7wJibPkxCfXfXao=
+Date:   Thu, 2 Feb 2023 06:48:43 -0800
+From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        Saurabh Singh Sengar <ssengar@microsoft.com>
+Subject: Re: [PATCH v2 2/6] Drivers: hv: allow non ACPI compilation for
+ hv_is_hibernation_supported
+Message-ID: <20230202144843.GA11173@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1675188609-20913-1-git-send-email-ssengar@linux.microsoft.com>
+ <1675188609-20913-3-git-send-email-ssengar@linux.microsoft.com>
+ <BYAPR21MB1688813B65EEDB79554E30D4D7D19@BYAPR21MB1688.namprd21.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAADnVQ+im7FwSqDcTLmMvfRcT9unwdHBeWG9Snw7W5Q-bcdWvg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <BYAPR21MB1688813B65EEDB79554E30D4D7D19@BYAPR21MB1688.namprd21.prod.outlook.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 03:15:39AM -0800, Alexei Starovoitov wrote:
-> On Wed, Feb 1, 2023 at 5:57 AM Jiri Olsa <jolsa@kernel.org> wrote:
-> >
-> > hi,
-> > we have a use cases for bpf programs to use binary file's build id.
-> >
-> > After some attempts to add helpers/kfuncs [1] [2] Andrii had an idea [3]
-> > to store build id directly in the file object. That would solve our use
-> > case and might be beneficial for other profiling/tracing use cases with
-> > bpf programs.
-> >
-> > This RFC patchset adds new config CONFIG_FILE_BUILD_ID option, which adds
-> > build id object pointer to the file object when enabled. The build id is
-> > read/populated when the file is mmap-ed.
-> >
-> > I also added bpf and perf changes that would benefit from this.
-> >
-> > I'm not sure what's the policy on adding stuff to file object, so apologies
-> > if that's out of line. I'm open to any feedback or suggestions if there's
-> > better place or way to do this.
+On Wed, Feb 01, 2023 at 05:47:44PM +0000, Michael Kelley (LINUX) wrote:
+> From: Saurabh Sengar <ssengar@linux.microsoft.com> Sent: Tuesday, January 31, 2023 10:10 AM
+> > 
+> > acpi_sleep_state_supported API is only define for CONFIG_ACPI flag and
+> > thus it can't be used for non-ACPI builds. Initaly there won't be
 > 
-> struct file represents all files while build_id is for executables only,
-> and not all executables, but those currently running, so
-> I think it's cleaner to put it into vm_area_struct.
+> s/Initaly/Initially/
 
-I thought file objects would be shared to some extend and we might save
-some memory keeping the build id objects there, but not sure it's really
-the case now.. will check, using vma might be also easier
+OK
 
-jirka
+> 
+> > hibernate support for non ACPI builds.
+> 
+> s/hibernate/hibernation/
+
+OK
+
+> 
+> > 
+> > This change will help adding device tree support in subsequent commits.
+> > 
+> > Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+> > ---
+> >  drivers/hv/hv_common.c | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> > 
+> > diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
+> > index 52a6f89ccdbd..370ec20d1993 100644
+> > --- a/drivers/hv/hv_common.c
+> > +++ b/drivers/hv/hv_common.c
+> > @@ -234,7 +234,11 @@ EXPORT_SYMBOL_GPL(hv_setup_dma_ops);
+> > 
+> >  bool hv_is_hibernation_supported(void)
+> >  {
+> > +#ifdef CONFIG_ACPI
+> >  	return !hv_root_partition && acpi_sleep_state_supported(ACPI_STATE_S4);
+> > +#else
+> > +	return false;
+> > +#endif
+> 
+> Is this patch needed?  If CONFIG_ACPI is not set, then per
+> arch/x86/Kconfig, CONFIG_ACPI_SYSTEM_POWER_STATES_SUPPORT
+> is not selected.  In that case, the #ifdef in include/acpi/acpi_bus.h
+> provides a stub for acpi_sleep_state_supported() that returns "false".
+> So it seems like the existing code should compile and correctly return
+> "false" when CONFIG_ACPI is not set.
+
+You are right, if CONFIG_ACPI_SYSTEM_POWER_STATES_SUPPORT is not set
+acpi_sleep_state_supported will return false, but this is applicable only
+when CONFIG_ACPI is enable. If CONFIG_ACPI is not enable both these
+functions are not defined.
+
+Regards,
+Saurabh
+
+
+> 
+> Michael
+> 
+> >  }
+> >  EXPORT_SYMBOL_GPL(hv_is_hibernation_supported);
+> > 
+> > --
+> > 2.25.1
