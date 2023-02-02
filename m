@@ -2,158 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69AB068743D
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 05:02:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D40C568743E
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 05:02:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231868AbjBBECQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 23:02:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49956 "EHLO
+        id S232167AbjBBECW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 23:02:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbjBBECJ (ORCPT
+        with ESMTP id S232163AbjBBECN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 23:02:09 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED697E075;
-        Wed,  1 Feb 2023 20:02:08 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id e6so600427plg.12;
-        Wed, 01 Feb 2023 20:02:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LA2f4kIoYW0zW49rLJoqHLmL9faUvqTBb7xYUY7v1VQ=;
-        b=H8ZzT3DPUs+jLLCqGqKGObBrUiZ3ZGTgwTxY/2yIfMZie9PUcq8uNum9CAEwOTfk8k
-         BTeNZA8SRSaa9It7mKE/WG4xq9i1yRkh2IhxlNqFXxxvtlEtBgao5bB0jo3PuXaqtCGX
-         BLjdEd0fhEXNJw82pQfZW28wqrXqo/x6X2ANFFT4NUJq6YAGqx750cOOLyS0+sH6icTg
-         shGDbgjkZBg7oF9wovvzptM6hertx24pvXZJd0npY4MwKmsHqd5G3qNZISCGjmi2N9+4
-         AtmWmVffL9ILYo6+N+KmO5hd9DIaEREn4bnz9fiQKW1MrvJK7vbzOZB1W1GSW0aE4qAR
-         NaKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=LA2f4kIoYW0zW49rLJoqHLmL9faUvqTBb7xYUY7v1VQ=;
-        b=lFGY82kHvm3pFdqO2aEFhyWZ/B3tHB8AzrCT8N1dVMa9xBbrwT3v5qBeYd2HWZd8MB
-         FE/P1A3q07PohFAii7ugrsx7hdZb490C6mhx0S9eYyMjNAAuL9wm1v/Nv14T1R7dJCY1
-         QE+x2AtlK/CitwahdrVhH/6OqFGsjUpHetGnhENfESCPGqxieUChGleRXNzVMMTeCv9R
-         jACPuoDsKX0veHw1zL/iIvA9yOWmbvSzJo8pGf7Q3GMXHFn7BJ8RFtd7g2hSf8bBKLdd
-         KXzYmgvLb4I+5/cKABvZ+lh91thUAmgYY9+VNQQWdqPEhgxDY2GzqfAmyh0busKGAiMF
-         tksA==
-X-Gm-Message-State: AO0yUKUSNjTsWMLMAuc0IKcsYyqEqmL5/uzjyD2Pb44STkDTUtr4zJ6k
-        tU8622Zn/2Y4z9uY//9mbgg=
-X-Google-Smtp-Source: AK7set/S5ylzwpUk6T/QLWoaDx1UsTAyamH7uRcYzn/u/kRjHl9qg/FG6DX7feem/dfp0XWzLs8H6A==
-X-Received: by 2002:a17:902:dac6:b0:196:6ff8:69b8 with SMTP id q6-20020a170902dac600b001966ff869b8mr5699008plx.27.1675310527773;
-        Wed, 01 Feb 2023 20:02:07 -0800 (PST)
-Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:18:efec::75b])
-        by smtp.gmail.com with ESMTPSA id z5-20020a1709027e8500b00196251ca124sm12524446pla.75.2023.02.01.20.01.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Feb 2023 20:02:01 -0800 (PST)
-Message-ID: <15204de3-42f8-e1f8-f8bd-83f909a5da8a@gmail.com>
-Date:   Thu, 2 Feb 2023 12:01:48 +0800
+        Wed, 1 Feb 2023 23:02:13 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 817417BBDE;
+        Wed,  1 Feb 2023 20:02:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675310531; x=1706846531;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Q6pt76n3GNc0XQSh5sHwG6/T5JVBFQK0A82aR9qxwdg=;
+  b=RiXIFgaidd7mguTArhHjE4iB/oeChdOuwQlDrfWgXhSN0FH3QhsiTDBv
+   hUwAFmUpDc8EK7zqTEO2RFJUJ2sGt/rH5DNL6Q6eWVKhv3gIruRafeEkx
+   GpJuZIFokTeLO3fQxtijrovIeFN9As/idnYTM8k4WIHL+iFiVVi/3zMWW
+   YWhCAfZQNWlL8h6P7CTMpsAusTqT3Nq6AxBW4Vn7s1q7cxaj/W0p4NGVQ
+   eZHQZ/mPc6EzwJ4bV8DBd0TtM2jPilD8H1FYulPQWESHIIm2uQa+otYYJ
+   xYV0u6aExXvXn9Kvs/w6WskhJncFh7kekVSnC4Ti3R37cLNwGdAyCZVCj
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="392926396"
+X-IronPort-AV: E=Sophos;i="5.97,266,1669104000"; 
+   d="scan'208";a="392926396"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 20:02:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="789139053"
+X-IronPort-AV: E=Sophos;i="5.97,266,1669104000"; 
+   d="scan'208";a="789139053"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 01 Feb 2023 20:02:08 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pNQnX-00067S-2Z;
+        Thu, 02 Feb 2023 04:02:07 +0000
+Date:   Thu, 2 Feb 2023 12:01:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next 2/4] bpf: treewide: Clean up BPF_ALU and BPF_JMP
+Message-ID: <202302021105.HU4McFMJ-lkp@intel.com>
+References: <1675254998-4951-3-git-send-email-yangtiezhu@loongson.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [RFC PATCH V3 01/16] x86/hyperv: Add sev-snp enlightened guest
- specific config
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "jgross@suse.com" <jgross@suse.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "kirill@shutemov.name" <kirill@shutemov.name>,
-        "jiangshan.ljs@antgroup.com" <jiangshan.ljs@antgroup.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "ashish.kalra@amd.com" <ashish.kalra@amd.com>,
-        "srutherford@google.com" <srutherford@google.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "anshuman.khandual@arm.com" <anshuman.khandual@arm.com>,
-        "pawan.kumar.gupta@linux.intel.com" 
-        <pawan.kumar.gupta@linux.intel.com>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "daniel.sneddon@linux.intel.com" <daniel.sneddon@linux.intel.com>,
-        "alexander.shishkin@linux.intel.com" 
-        <alexander.shishkin@linux.intel.com>,
-        "sandipan.das@amd.com" <sandipan.das@amd.com>,
-        "ray.huang@amd.com" <ray.huang@amd.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "michael.roth@amd.com" <michael.roth@amd.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "venu.busireddy@oracle.com" <venu.busireddy@oracle.com>,
-        "sterritt@google.com" <sterritt@google.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "samitolvanen@google.com" <samitolvanen@google.com>,
-        "fenghua.yu@intel.com" <fenghua.yu@intel.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-References: <20230122024607.788454-1-ltykernel@gmail.com>
- <20230122024607.788454-2-ltykernel@gmail.com>
- <BYAPR21MB1688C47E9B4BD0D1293E7D4DD7D09@BYAPR21MB1688.namprd21.prod.outlook.com>
-From:   Tianyu Lan <ltykernel@gmail.com>
-In-Reply-To: <BYAPR21MB1688C47E9B4BD0D1293E7D4DD7D09@BYAPR21MB1688.namprd21.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1675254998-4951-3-git-send-email-yangtiezhu@loongson.cn>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/1/2023 1:34 AM, Michael Kelley (LINUX) wrote:
->> diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
->> index 8f83ceec45dc..ace5901ba0fc 100644
->> --- a/arch/x86/kernel/cpu/mshyperv.c
->> +++ b/arch/x86/kernel/cpu/mshyperv.c
->> @@ -273,6 +273,18 @@ static void __init ms_hyperv_init_platform(void)
->>
->>   	hv_max_functions_eax = cpuid_eax(HYPERV_CPUID_VENDOR_AND_MAX_FUNCTIONS);
->>
->> +	/*
->> +	 * Add custom configuration for SEV-SNP Enlightened guest
->> +	 */
->> +	if (cc_platform_has(CC_ATTR_GUEST_SEV_SNP)) {
->> +		ms_hyperv.features |= HV_ACCESS_FREQUENCY_MSRS;
->> +		ms_hyperv.misc_features |= HV_FEATURE_FREQUENCY_MSRS_AVAILABLE;
->> +		ms_hyperv.misc_features &= ~HV_FEATURE_GUEST_CRASH_MSR_AVAILABLE;
->> +		ms_hyperv.hints |= HV_DEPRECATING_AEOI_RECOMMENDED;
->> +		ms_hyperv.hints |= HV_X64_APIC_ACCESS_RECOMMENDED;
->> +		ms_hyperv.hints |= HV_X64_CLUSTER_IPI_RECOMMENDED;
-> Two different things are happening in changing the above flags:
-> 
-> 1)  Disabling certain feature that Hyper-V might offer to a guest, such
-> as the crash MSRs and Auto EOI.  (In some cases disabling the feature
-> means removing the flag.  In other cases in means adding the flag.  But
-> the net result is same -- other Hyper-V specific code will not use the
-> feature.)  This category is OK.
-> 
-> 2)  Forcing certain features to be treated as enabled.  This category
-> is somewhat concerning.  Assuming that Hyper-V is accurately indicating
-> which features are available, it seems better to check that the flags
-> required by SNP are present, and refuse to boot in SNP mode if not.
-> Or is this code handling a different problem, where Hyper-V is not
-> indicating that the feature is available, even though it really is?
-> 
+Hi Tiezhu,
 
-Agree. The CPUID emulation in SEV-SNP guest may be controlled by the
-cpuid table which is passed to kernel via EFI bootloader or hypervisor.
-In Hyper-V case, the CPUID table is passed by Hyper-V directly and the
-table is built during making guest image. To avoid the confusion here,
-will try hiding the change in the cpuid table and double check whether 
-these features will be enalbed or disabled on different machine or VM
-type.
+Thank you for the patch! Yet something to improve:
 
-Thanks.
+[auto build test ERROR on bpf-next/master]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Tiezhu-Yang/bpf-Add-new-macro-BPF_ALU32-and-BPF_JMP64/20230201-203836
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/1675254998-4951-3-git-send-email-yangtiezhu%40loongson.cn
+patch subject: [PATCH bpf-next 2/4] bpf: treewide: Clean up BPF_ALU and BPF_JMP
+config: i386-randconfig-a016-20230130 (https://download.01.org/0day-ci/archive/20230202/202302021105.HU4McFMJ-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/9955f957cb218f711161ac710656be1164eaa3a3
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Tiezhu-Yang/bpf-Add-new-macro-BPF_ALU32-and-BPF_JMP64/20230201-203836
+        git checkout 9955f957cb218f711161ac710656be1164eaa3a3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash samples/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> samples/seccomp/bpf-fancy.c:38:3: error: use of undeclared identifier 'BPF_JMP64'
+                   SYSCALL(__NR_exit, ALLOW),
+                   ^
+   samples/seccomp/bpf-helper.h:56:11: note: expanded from macro 'SYSCALL'
+           BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, (nr), 0, 1), \
+                    ^
+   samples/seccomp/bpf-fancy.c:39:3: error: use of undeclared identifier 'BPF_JMP64'
+                   SYSCALL(__NR_exit_group, ALLOW),
+                   ^
+   samples/seccomp/bpf-helper.h:56:11: note: expanded from macro 'SYSCALL'
+           BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, (nr), 0, 1), \
+                    ^
+   samples/seccomp/bpf-fancy.c:40:3: error: use of undeclared identifier 'BPF_JMP64'
+                   SYSCALL(__NR_write, JUMP(&l, write_fd)),
+                   ^
+   samples/seccomp/bpf-helper.h:56:11: note: expanded from macro 'SYSCALL'
+           BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, (nr), 0, 1), \
+                    ^
+   samples/seccomp/bpf-fancy.c:40:23: error: use of undeclared identifier 'BPF_JMP64'
+                   SYSCALL(__NR_write, JUMP(&l, write_fd)),
+                                       ^
+   samples/seccomp/bpf-helper.h:50:11: note: expanded from macro 'JUMP'
+           BPF_JUMP(BPF_JMP64+BPF_JA, FIND_LABEL((labels), (label)), \
+                    ^
+   samples/seccomp/bpf-fancy.c:41:3: error: use of undeclared identifier 'BPF_JMP64'
+                   SYSCALL(__NR_read, JUMP(&l, read)),
+                   ^
+   samples/seccomp/bpf-helper.h:56:11: note: expanded from macro 'SYSCALL'
+           BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, (nr), 0, 1), \
+                    ^
+   samples/seccomp/bpf-fancy.c:41:22: error: use of undeclared identifier 'BPF_JMP64'
+                   SYSCALL(__NR_read, JUMP(&l, read)),
+                                      ^
+   samples/seccomp/bpf-helper.h:50:11: note: expanded from macro 'JUMP'
+           BPF_JUMP(BPF_JMP64+BPF_JA, FIND_LABEL((labels), (label)), \
+                    ^
+   samples/seccomp/bpf-fancy.c:44:3: error: use of undeclared identifier 'BPF_JMP64'
+                   LABEL(&l, read),
+                   ^
+   samples/seccomp/bpf-helper.h:53:11: note: expanded from macro 'LABEL'
+           BPF_JUMP(BPF_JMP64+BPF_JA, FIND_LABEL((labels), (label)), \
+                    ^
+   samples/seccomp/bpf-fancy.c:46:3: error: use of undeclared identifier 'BPF_JMP64'
+                   JNE(STDIN_FILENO, DENY),
+                   ^
+   samples/seccomp/bpf-helper.h:77:20: note: expanded from macro 'JNE'
+   #define JNE(x, jt) JNE32(x, EXPAND(jt))
+                      ^
+   samples/seccomp/bpf-helper.h:154:11: note: expanded from macro 'JNE32'
+           BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, (value), 1, 0), \
+                    ^
+   samples/seccomp/bpf-fancy.c:48:3: error: use of undeclared identifier 'BPF_JMP64'
+                   JNE((unsigned long)buf, DENY),
+                   ^
+   samples/seccomp/bpf-helper.h:77:20: note: expanded from macro 'JNE'
+   #define JNE(x, jt) JNE32(x, EXPAND(jt))
+                      ^
+   samples/seccomp/bpf-helper.h:154:11: note: expanded from macro 'JNE32'
+           BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, (value), 1, 0), \
+                    ^
+   samples/seccomp/bpf-fancy.c:50:3: error: use of undeclared identifier 'BPF_JMP64'
+                   JGE(sizeof(buf), DENY),
+                   ^
+   samples/seccomp/bpf-helper.h:80:20: note: expanded from macro 'JGE'
+   #define JGE(x, jt) JGE32(x, EXPAND(jt))
+                      ^
+   samples/seccomp/bpf-helper.h:162:11: note: expanded from macro 'JGE32'
+           BPF_JUMP(BPF_JMP64+BPF_JGE+BPF_K, (value), 0, 1), \
+                    ^
+   samples/seccomp/bpf-fancy.c:53:3: error: use of undeclared identifier 'BPF_JMP64'
+                   LABEL(&l, write_fd),
+                   ^
+   samples/seccomp/bpf-helper.h:53:11: note: expanded from macro 'LABEL'
+           BPF_JUMP(BPF_JMP64+BPF_JA, FIND_LABEL((labels), (label)), \
+                    ^
+   samples/seccomp/bpf-fancy.c:55:3: error: use of undeclared identifier 'BPF_JMP64'
+                   JEQ(STDOUT_FILENO, JUMP(&l, write_buf)),
+                   ^
+   samples/seccomp/bpf-helper.h:76:20: note: expanded from macro 'JEQ'
+   #define JEQ(x, jt) JEQ32(x, EXPAND(jt))
+                      ^
+   samples/seccomp/bpf-helper.h:150:11: note: expanded from macro 'JEQ32'
+           BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, (value), 0, 1), \
+                    ^
+   samples/seccomp/bpf-fancy.c:55:22: error: use of undeclared identifier 'BPF_JMP64'
+                   JEQ(STDOUT_FILENO, JUMP(&l, write_buf)),
+                                      ^
+   samples/seccomp/bpf-helper.h:50:11: note: expanded from macro 'JUMP'
+           BPF_JUMP(BPF_JMP64+BPF_JA, FIND_LABEL((labels), (label)), \
+                    ^
+   samples/seccomp/bpf-fancy.c:56:3: error: use of undeclared identifier 'BPF_JMP64'
+                   JEQ(STDERR_FILENO, JUMP(&l, write_buf)),
+                   ^
+   samples/seccomp/bpf-helper.h:76:20: note: expanded from macro 'JEQ'
+   #define JEQ(x, jt) JEQ32(x, EXPAND(jt))
+                      ^
+   samples/seccomp/bpf-helper.h:150:11: note: expanded from macro 'JEQ32'
+           BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, (value), 0, 1), \
+                    ^
+   samples/seccomp/bpf-fancy.c:56:22: error: use of undeclared identifier 'BPF_JMP64'
+                   JEQ(STDERR_FILENO, JUMP(&l, write_buf)),
+--
+>> samples/seccomp/bpf-helper.c:33:23: error: use of undeclared identifier 'BPF_JMP64'
+                   if (instr->code != (BPF_JMP64+BPF_JA))
+                                       ^
+   1 error generated.
+--
+>> samples/seccomp/dropper.c:33:12: error: use of undeclared identifier 'BPF_JMP64'
+                   BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, arch, 0, 3),
+                            ^
+   samples/seccomp/dropper.c:36:12: error: use of undeclared identifier 'BPF_JMP64'
+                   BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, nr, 0, 1),
+                            ^
+>> samples/seccomp/dropper.c:42:33: error: invalid application of 'sizeof' to an incomplete type 'struct sock_filter[]'
+                   .len = (unsigned short)(sizeof(filter)/sizeof(filter[0])),
+                                                 ^~~~~~~~
+   3 errors generated.
+--
+>> samples/seccomp/bpf-direct.c:117:12: error: use of undeclared identifier 'BPF_JMP64'
+                   BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, __NR_rt_sigreturn, 0, 1),
+                            ^
+   samples/seccomp/bpf-direct.c:120:12: error: use of undeclared identifier 'BPF_JMP64'
+                   BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, __NR_sigreturn, 0, 1),
+                            ^
+   samples/seccomp/bpf-direct.c:123:12: error: use of undeclared identifier 'BPF_JMP64'
+                   BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, __NR_exit_group, 0, 1),
+                            ^
+   samples/seccomp/bpf-direct.c:125:12: error: use of undeclared identifier 'BPF_JMP64'
+                   BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, __NR_exit, 0, 1),
+                            ^
+   samples/seccomp/bpf-direct.c:127:12: error: use of undeclared identifier 'BPF_JMP64'
+                   BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, __NR_read, 1, 0),
+                            ^
+   samples/seccomp/bpf-direct.c:128:12: error: use of undeclared identifier 'BPF_JMP64'
+                   BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, __NR_write, 3, 2),
+                            ^
+   samples/seccomp/bpf-direct.c:132:12: error: use of undeclared identifier 'BPF_JMP64'
+                   BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, STDIN_FILENO, 4, 0),
+                            ^
+   samples/seccomp/bpf-direct.c:137:12: error: use of undeclared identifier 'BPF_JMP64'
+                   BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, STDOUT_FILENO, 1, 0),
+                            ^
+   samples/seccomp/bpf-direct.c:139:12: error: use of undeclared identifier 'BPF_JMP64'
+                   BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, STDERR_FILENO, 1, 2),
+                            ^
+>> samples/seccomp/bpf-direct.c:146:33: error: invalid application of 'sizeof' to an incomplete type 'struct sock_filter[]'
+                   .len = (unsigned short)(sizeof(filter)/sizeof(filter[0])),
+                                                 ^~~~~~~~
+   10 errors generated.
+--
+>> samples/seccomp/user-trap.c:91:12: error: use of undeclared identifier 'BPF_JMP64'
+                   BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, nr, 0, 1),
+                            ^
+>> samples/seccomp/user-trap.c:97:26: error: invalid application of 'sizeof' to an incomplete type 'struct sock_filter[]'
+                   .len = (unsigned short)ARRAY_SIZE(filter),
+                                          ^~~~~~~~~~~~~~~~~~
+   samples/seccomp/user-trap.c:24:30: note: expanded from macro 'ARRAY_SIZE'
+   #define ARRAY_SIZE(x) (sizeof(x) / sizeof(*(x)))
+                                ^~~
+   2 errors generated.
+
+
+vim +/BPF_JMP64 +38 samples/seccomp/bpf-fancy.c
+
+8ac270d1e29f042 Will Drewry 2012-04-12  26  
+8ac270d1e29f042 Will Drewry 2012-04-12  27  int main(int argc, char **argv)
+8ac270d1e29f042 Will Drewry 2012-04-12  28  {
+3a9af0bd34410a2 Kees Cook   2015-02-17  29  	struct bpf_labels l = {
+3a9af0bd34410a2 Kees Cook   2015-02-17  30  		.count = 0,
+3a9af0bd34410a2 Kees Cook   2015-02-17  31  	};
+8ac270d1e29f042 Will Drewry 2012-04-12  32  	static const char msg1[] = "Please type something: ";
+8ac270d1e29f042 Will Drewry 2012-04-12  33  	static const char msg2[] = "You typed: ";
+8ac270d1e29f042 Will Drewry 2012-04-12  34  	char buf[256];
+8ac270d1e29f042 Will Drewry 2012-04-12  35  	struct sock_filter filter[] = {
+8ac270d1e29f042 Will Drewry 2012-04-12  36  		/* TODO: LOAD_SYSCALL_NR(arch) and enforce an arch */
+8ac270d1e29f042 Will Drewry 2012-04-12  37  		LOAD_SYSCALL_NR,
+8ac270d1e29f042 Will Drewry 2012-04-12 @38  		SYSCALL(__NR_exit, ALLOW),
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
