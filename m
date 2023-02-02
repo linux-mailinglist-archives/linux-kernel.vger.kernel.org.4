@@ -2,106 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91C476884B9
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 17:44:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D43686884C0
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 17:46:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232100AbjBBQod (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 11:44:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53780 "EHLO
+        id S232273AbjBBQqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 11:46:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231665AbjBBQoc (ORCPT
+        with ESMTP id S232241AbjBBQp7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 11:44:32 -0500
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 199254B8B5;
-        Thu,  2 Feb 2023 08:44:31 -0800 (PST)
-Received: by mail-ed1-f54.google.com with SMTP id n6so2607407edo.9;
-        Thu, 02 Feb 2023 08:44:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Px1xcB23kP4MnnGGoCIIfo3EkxqRE3bJUNzTnkZ3uHA=;
-        b=Ah8n2j73pdE0qNLJQ2I9u5mr5YcI7m+cfiffNlFnUrwiZy5zNSWima8F3/U215l7fy
-         4xProjV97YXHAeVRbe+bxqdDkpiEnH6smQZv8XK2mWwy2zqPdFitZu8ySn0oxp9eRmYx
-         UUYgaDoJ254rC70IeooVvsXe3JDYdjZHYXtD5MhiVjnIDJguMt3lVLXgewa9/P8+P9g0
-         iVpoc1nY81r+N/9ZNVnomkSp+7xfVVsKil2J6WN110WW3FSjQGH/nbdwDNLNmgZhzYw0
-         NbQkeWBUvdxDA937HpQLlGlaP+QlsoWrSvLdpVWg6IAFRvjgGd9cPs4zrzDEzH2fb+RF
-         zJIw==
-X-Gm-Message-State: AO0yUKVEGaazu0RGtAaOSq48l4lhJXTozMMqtHTK0MjtjLg+LhGxAjiX
-        Hrb43zncZWQgpoOngjA6XYorIWYm2TvxPas4YSU=
-X-Google-Smtp-Source: AK7set+jGfvAz09eI0nUDLd85R5enTo+FwH49qmQ0GzuaFTkZ68NhlEqlk632rxiUxb99M/+E3qXdk/UVwVl/IORYJQ=
-X-Received: by 2002:a05:6402:22ee:b0:4a2:1d19:ca14 with SMTP id
- dn14-20020a05640222ee00b004a21d19ca14mr2180460edb.68.1675356269576; Thu, 02
- Feb 2023 08:44:29 -0800 (PST)
+        Thu, 2 Feb 2023 11:45:59 -0500
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DAEF6CC93;
+        Thu,  2 Feb 2023 08:45:58 -0800 (PST)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 229C61883A88;
+        Thu,  2 Feb 2023 16:45:57 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 1AC1B25004F0;
+        Thu,  2 Feb 2023 16:45:57 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 0E5F491201E4; Thu,  2 Feb 2023 16:45:57 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-References: <20230201210712.2170312-1-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20230201210712.2170312-1-srinivas.pandruvada@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 2 Feb 2023 17:44:18 +0100
-Message-ID: <CAJZ5v0ieQocb2oe1ggDCOos4HtkmypsadMkXCwH2J5XmRUdVyQ@mail.gmail.com>
-Subject: Re: [PATCH] thermal: intel_powerclamp: Return last requested state as cur_state
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
-        rui.zhang@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Date:   Thu, 02 Feb 2023 17:45:56 +0100
+From:   netdev@kapio-technology.com
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
+        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?UTF-8?Q?Cl=C3=A9m?= =?UTF-8?Q?ent_L=C3=A9ger?= 
+        <clement.leger@bootlin.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>
+Subject: Re: [PATCH net-next 3/5] drivers: net: dsa: add fdb entry flags
+ incoming to switchcore drivers
+In-Reply-To: <Y9lj7RJgyMJfjtGp@corigine.com>
+References: <20230130173429.3577450-1-netdev@kapio-technology.com>
+ <20230130173429.3577450-4-netdev@kapio-technology.com>
+ <Y9lj7RJgyMJfjtGp@corigine.com>
+User-Agent: Gigahost Webmail
+Message-ID: <0b021777dfc1825b6565c0d9dbd6dbef@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 1, 2023 at 10:07 PM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> When the user is reading cur_state from the thermal cooling device for
-> Intel powerclamp device:
-> - It returns the idle ratio from Package C-state counters when
-> there is active idle injection session.
-> - -1, when there is no active idle injection session.
->
-> This information is not very useful as the package C-state counters vary
-> a lot from read to read. Instead just return the last requested cur_state.
->
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> ---
->  drivers/thermal/intel/intel_powerclamp.c | 12 +-----------
->  1 file changed, 1 insertion(+), 11 deletions(-)
->
-> diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
-> index 2f4cbfdf26a0..72a45cf2708c 100644
-> --- a/drivers/thermal/intel/intel_powerclamp.c
-> +++ b/drivers/thermal/intel/intel_powerclamp.c
-> @@ -590,17 +590,7 @@ static int powerclamp_get_max_state(struct thermal_cooling_device *cdev,
->  static int powerclamp_get_cur_state(struct thermal_cooling_device *cdev,
->                                  unsigned long *state)
->  {
-> -       if (clamping) {
-> -               if (poll_pkg_cstate_enable)
-> -                       *state = pkg_cstate_ratio_cur;
-> -               else
-> -                       *state = set_target_ratio;
-> -       } else {
-> -               /* to save power, do not poll idle ratio while not clamping */
-> -               *state = -1; /* indicates invalid state */
-> -       }
-> -
-> -       return 0;
-> +       return set_target_ratio;
+On 2023-01-31 19:54, Simon Horman wrote:
+>> --- a/drivers/net/dsa/b53/b53_common.c
+>> +++ b/drivers/net/dsa/b53/b53_common.c
+>> @@ -1684,11 +1684,15 @@ static int b53_arl_op(struct b53_device *dev, 
+>> int op, int port,
+>> 
+>>  int b53_fdb_add(struct dsa_switch *ds, int port,
+>>  		const unsigned char *addr, u16 vid,
+>> -		struct dsa_db db)
+>> +		u16 fdb_flags, struct dsa_db db)
+>>  {
+>>  	struct b53_device *priv = ds->priv;
+>>  	int ret;
+>> 
+>> +	/* Ignore entries with set flags */
+>> +	if (fdb_flags)
+>> +		return 0;
+> 
+> 
+> 	Would returning -EOPNOTSUPP be more appropriate?
+> 
+> ...
 
-*state = set_target_ratio;
-return 0;
+I don't think that would be so good, as the command
 
->  }
->
->  static int powerclamp_set_cur_state(struct thermal_cooling_device *cdev,
-> --
+bridge fdb replace ADDR dev <DEV> master dynamic
 
-And please rebase it on top of the idle_inject series (which is being
-added to my bleeding-edge branch right now).
+is a valid command and should not generate errors. When ignored by the 
+driver, it will just install a dynamic FDB entry in the bridge, and the 
+bridge will age it.
