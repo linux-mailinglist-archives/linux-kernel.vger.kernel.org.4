@@ -2,130 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86CD56878C3
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:26:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F74768792A
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:42:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231688AbjBBJ0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 04:26:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37098 "EHLO
+        id S232346AbjBBJmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 04:42:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229988AbjBBJ0f (ORCPT
+        with ESMTP id S230218AbjBBJmH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 04:26:35 -0500
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10DB643452
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 01:26:34 -0800 (PST)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-510476ee20aso18550477b3.3
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 01:26:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=yMJLDKfiAh5d4q1e+8BHnfDMo0mUiYMeMc9aD1SEa10=;
-        b=fzeQZSHyw47SxC8Rtj+m5yBF+0xwnHJBbuQKxaz0Iac7/qtsy9fHhvgm89w6nwL6C2
-         w/4hH5m23kzrn5ChiLw1DtIeK9vkEqavU9lWOIfZbVp5g7FegM2+H3wdLVbMp6aTqXc0
-         WCILhVZe/eFsMU1Thw4veNWUgxMeVUW/ZIXLkHXiPBXsKPJkVsZqGLF0Ehlv3D022i++
-         FxV+9bkXjvpHaRNUCAraNsXt9ZhJ0E+HN24IoruY5J7mFvyDF2lgreSyJtqD0BZg8X5C
-         izALpjgrgmEu7FQsQ+w/LyRQ/Nsu6w/KxDM+YhzFB2MGOLHYm6ldNxd2kQ2k0Zb8Nf2U
-         dZPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yMJLDKfiAh5d4q1e+8BHnfDMo0mUiYMeMc9aD1SEa10=;
-        b=6F91L0nU7vBMdeUIkDmDzzwY8njAEVbl94FNLtkg/aPMWt+h3Frm8RJNwKD8cWiL17
-         bB4juL2tMGlScp7KjtyAKkQj5Xyk4mZnbWfbPcZgA0v8NUPtjyMV2ch0PKEmTqss+wgK
-         RdnnZOJt1HDw3eOJdr2WFXx8DHPvWB9/stLbrVAj7UaHL0/iD3a91vFoA249a7YTwoeW
-         EHaPCTgyUPJOSFmze9/aUyXOOWFLpnsjIKD8smnDeRzXBxDCMKklVbfRH7D5xNroHD2z
-         d38oX9dpnQbRxtirmOCfRktzOSSP72H0q0pQQTJq7f068e8FtkgxdXAVbuJG5DLnZbND
-         0ZCQ==
-X-Gm-Message-State: AO0yUKVY7sawn5UIZCWmzOQh4Sfmpa1uOecMm+3tlKQ1cYAW8IeTcbXl
-        V2x6nHR8m7iwGB0T/h6SjtwVgCwgYE8gEvRqwoAsIA==
-X-Google-Smtp-Source: AK7set8aXMGpKuLxzy9fQl+dGgdEeWWeapuh8k4nJ6zlAccjUYwWS0b7tuE6Jv3NgHgtrKXm51wDkn85QhM/rxFquZE=
-X-Received: by 2002:a05:690c:b82:b0:500:ac2c:80fb with SMTP id
- ck2-20020a05690c0b8200b00500ac2c80fbmr617309ywb.90.1675329992984; Thu, 02 Feb
- 2023 01:26:32 -0800 (PST)
+        Thu, 2 Feb 2023 04:42:07 -0500
+X-Greylist: delayed 720 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 02 Feb 2023 01:41:59 PST
+Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8DD5B84FAA;
+        Thu,  2 Feb 2023 01:41:58 -0800 (PST)
+Received: from [172.24.5.120] (unknown [27.16.215.248])
+        by APP-03 (Coremail) with SMTP id rQCowAAnLh4ggdtjMB0dAw--.22567S3;
+        Thu, 02 Feb 2023 17:23:44 +0800 (CST)
+Message-ID: <3e450ff5-f084-4a33-bff7-4ef1061d1f30@iscas.ac.cn>
+Date:   Thu, 2 Feb 2023 17:27:09 +0800
 MIME-Version: 1.0
-References: <20230123091708.4112735-1-git@sung-woo.kim> <20230202090509.2774062-1-iam@sung-woo.kim>
-In-Reply-To: <20230202090509.2774062-1-iam@sung-woo.kim>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Thu, 2 Feb 2023 10:26:21 +0100
-Message-ID: <CANn89i+hAht=g1F6kjPfq8eO4j6-2WEE+CNtRtq1S4UnwXEQaw@mail.gmail.com>
-Subject: Re: [PATCH] Bluetooth: L2CAP: Fix use-after-free
-To:     Sungwoo Kim <iam@sung-woo.kim>
-Cc:     happiness.sung.woo@gmail.com, benquike@gmail.com,
-        davem@davemloft.net, daveti@purdue.edu, johan.hedberg@gmail.com,
-        kuba@kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-kernel@vger.kernel.org, luiz.dentz@gmail.com,
-        marcel@holtmann.org, netdev@vger.kernel.org, pabeni@redhat.com,
-        wuruoyu@me.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Content-Language: en-US
+To:     reiserfs-devel@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+From:   lujiongjia <lujiongjia@iscas.ac.cn>
+Subject: reiserfsprogs: fail to build from sources on riscv64gc machine
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: rQCowAAnLh4ggdtjMB0dAw--.22567S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7AFykCr18Cr1Dtw1DCrWxJFb_yoW8XrWrp3
+        yfJwsxtr1ktF1fG3yxG34xWFn5A3ZFk345Xr48t34DJr98ZFZ2vF97KrWa9FW8Cr1jyw4Y
+        kFZa9w1jkr1vqaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkab7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwV
+        C2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
+        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr
+        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l
+        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1Y6r17MIIYrxkI7VAK
+        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
+        4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
+        6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07beJ5wUUUUU=
+X-Originating-IP: [27.16.215.248]
+X-CM-SenderInfo: 5oxmx05qjmxt46lvutnvoduhdfq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 2, 2023 at 10:07 AM Sungwoo Kim <iam@sung-woo.kim> wrote:
->
-> Due to the race condition between l2cap_sock_cleanup_listen and
-> l2cap_sock_close_cb, l2cap_sock_kill can receive already freed sk,
-> resulting in use-after-free inside l2cap_sock_kill.
-> This patch prevent this by adding a null check in l2cap_sock_kill.
->
-> Context 1:
-> l2cap_sock_cleanup_listen();
->   // context switched
->   l2cap_chan_lock(chan);
->   l2cap_sock_kill(sk); // <-- sk is already freed below
+The config.guess file contained in source tarball is too old that it 
+cannot guess build type on riscv64. Please release new source code 
+tarball with the latest autotools.
 
-But sk is used in l2cap_sock_cleanup_listen()
-and should not be NULL...
+Full configure error output:
 
-while ((sk = bt_accept_dequeue(parent, NULL))) {
-  ...
-  l2cap_sock_kill(sk);
-  ..
-}
+> checking build system type... ./config.guess: unable to guess system type
+> 
+> This script, last modified 2014-11-04, has failed to recognize
+> the operating system you are using. It is advised that you
+> download the most up to date version of the config scripts from
+> 
+>   http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD
+> and
+>   http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD
+> 
+> If the version you run (./config.guess) is already up to date, please
+> send the following data and any information you think might be
+> pertinent to <config-patches@gnu.org> in order to provide the needed
+> information to handle your system.
+> 
+> config.guess timestamp = 2014-11-04
+> 
+> uname -m = riscv64
+> uname -r = 6.1.7-arch1-1
+> uname -s = Linux
+> uname -v = #1 SMP PREEMPT_DYNAMIC Wed, 18 Jan 2023 19:54:38 +0000
+> 
+> /usr/bin/uname -p = unknown
+> /bin/uname -X     = 
+> 
+> hostinfo               = 
+> /bin/universe          = 
+> /usr/bin/arch -k       = 
+> /bin/arch              = 
+> /usr/bin/oslevel       = 
+> /usr/convex/getsysinfo = 
+> 
+> UNAME_MACHINE = riscv64
+> UNAME_RELEASE = 6.1.7-arch1-1
+> UNAME_SYSTEM  = Linux
+> UNAME_VERSION = #1 SMP PREEMPT_DYNAMIC Wed, 18 Jan 2023 19:54:38 +0000
+> configure: error: cannot guess build type; you must specify one
 
-It would help if you send us a stack trace ...
-
->
-> Context 2:
-> l2cap_chan_timeout();
->   l2cap_chan_lock(chan);
->   chan->ops->close(chan);
->     l2cap_sock_close_cb()
->     l2cap_sock_kill(sk); // <-- sk is freed here
->   l2cap_chan_unlock(chan);
->
-
-Please add a Fixes: tag
-
-> Signed-off-by: Sungwoo Kim <iam@sung-woo.kim>
-> ---
->  net/bluetooth/l2cap_sock.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/net/bluetooth/l2cap_sock.c b/net/bluetooth/l2cap_sock.c
-> index ca8f07f35..657704059 100644
-> --- a/net/bluetooth/l2cap_sock.c
-> +++ b/net/bluetooth/l2cap_sock.c
-> @@ -1245,7 +1245,7 @@ static int l2cap_sock_recvmsg(struct socket *sock, struct msghdr *msg,
->   */
->  static void l2cap_sock_kill(struct sock *sk)
->  {
-> -       if (!sock_flag(sk, SOCK_ZAPPED) || sk->sk_socket)
-> +       if (!sk || !sock_flag(sk, SOCK_ZAPPED) || sk->sk_socket)
->                 return;
->
->         BT_DBG("sk %p state %s", sk, state_to_string(sk->sk_state));
-> --
-> 2.25.1
->
