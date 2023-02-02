@@ -2,96 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7BF5687668
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 08:33:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7FBD6876E6
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 09:01:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231718AbjBBHdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 02:33:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33178 "EHLO
+        id S232165AbjBBIBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 03:01:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbjBBHdC (ORCPT
+        with ESMTP id S229479AbjBBIBB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 02:33:02 -0500
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064957DBEE;
-        Wed,  1 Feb 2023 23:32:48 -0800 (PST)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 9AAA118841CA;
-        Thu,  2 Feb 2023 07:32:47 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 8B72C250007B;
-        Thu,  2 Feb 2023 07:32:47 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 7A5E19B403E4; Thu,  2 Feb 2023 07:32:47 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
-MIME-Version: 1.0
-Date:   Thu, 02 Feb 2023 08:32:47 +0100
-From:   netdev@kapio-technology.com
-To:     Ido Schimmel <idosch@idosch.org>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
-        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?UTF-8?Q?Cl=C3=A9m?= =?UTF-8?Q?ent_L=C3=A9ger?= 
-        <clement.leger@bootlin.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>
-Subject: Re: [PATCH net-next 4/5] net: bridge: ensure FDB offloaded flag is
- handled as needed
-In-Reply-To: <Y9qucziByvXsx5Q0@shredder>
-References: <20230130173429.3577450-1-netdev@kapio-technology.com>
- <20230130173429.3577450-5-netdev@kapio-technology.com>
- <Y9qucziByvXsx5Q0@shredder>
-User-Agent: Gigahost Webmail
-Message-ID: <d972e76bed896b229d9df4da81ad8eb4@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 2 Feb 2023 03:01:01 -0500
+Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B0558A4B;
+        Thu,  2 Feb 2023 00:00:59 -0800 (PST)
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id E37F21A130E;
+        Thu,  2 Feb 2023 09:00:57 +0100 (CET)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 84E5E1A12FC;
+        Thu,  2 Feb 2023 09:00:57 +0100 (CET)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id A0EC3183ABF0;
+        Thu,  2 Feb 2023 16:00:55 +0800 (+08)
+From:   Richard Zhu <hongxing.zhu@nxp.com>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        l.stach@pengutronix.de, shawnguo@kernel.org,
+        lorenzo.pieralisi@arm.com, peng.fan@nxp.com, marex@denx.de,
+        marcel.ziswiler@toradex.com, tharvey@gateworks.com,
+        frank.li@nxp.com
+Cc:     hongxing.zhu@nxp.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de, linux-imx@nxp.com
+Subject: [PATCH DTS v9 0/4] Add i.MX PCIe EP mode support
+Date:   Thu,  2 Feb 2023 15:35:33 +0800
+Message-Id: <1675323337-19358-1-git-send-email-hongxing.zhu@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-02-01 19:24, Ido Schimmel wrote:
-> 
-> This also looks correct, but the function name is not really accurate
-> anymore. I guess you can keep it as-is unless someone has a better name
-> 
->>  		fdb_delete(br, fdb, swdev_notify);
->>  	else
->>  		err = -ENOENT;
->> --
->> 2.34.1
->> 
+i.MX PCIe controller is one dual mode PCIe controller, and can work either
+as RC or EP.
 
-I have been wondering if it makes sense to have both external_learn and 
-offloaded flags as they now work pretty much the same seen from the 
-bridge. But as I don't know other switches, I guess there is some good 
-reason to have the two?
+This series add the i.MX PCIe EP mode support. And had been verified on
+i.MX8MQ, i.MX8MM EVK and i.MX8MP EVK boards.
+
+In the verification, one EVK board used as RC, the other one used as EP.
+Use the cross TX/RX differential cable connect the two PCIe ports of these
+two EVK boards.
+
++-----------+                +------------+
+|   PCIe TX |<-------------->|PCIe RX     |
+|           |                |            |
+|EVK Board  |                |EVK Board   |
+|           |                |            |
+|   PCIe RX |<-------------->|PCIe TX     |
++-----------+                +------------+
+
+Main changes from v8 -> v9:
+Refer to Rob's review comments.
+- To avoid codes duplication, move as much as possible properties into
+  common schema.
+
+Main changes from v7 -> v8:
+Refer to Rob's review comments.
+- Merge the binding document changes into one commit.
+- To avoid the duplication, restruct the common properties of i.MX PCIe
+  schema, thus they can be shared by both RC and Endpoint modes.
+
+Main changes from v6 -> v7:
+Refer to Krzysztof's review comments.
+- Drop the 2/4/6 patches of v6 series.
+- Based on for-next branch of Shawn's git, and the fsl,imx6q-pcie.yaml
+  changes in the v4.
+  Separate the DT-schema for i.MX PCIe Endpoint modes, and pass the
+  dt_binding_check and dtbs_check.
+
+Main changes from v5 -> v6:
+- The v6 only contains the DTS changes, since PCIe part had been picked up.
+- Based on Shawn's for-next branch, and the following two patch-sets [1]
+  and [2] issued by Marek, rebase the DTS changes.
+[1] https://patchwork.kernel.org/project/linux-arm-kernel/patch/20230116101649.46459-1-marex@denx.de/
+[2] https://patchwork.kernel.org/project/linux-arm-kernel/patch/20230116101422.46257-1-marex@denx.de/
+
+Main changes from v4 -> v5:
+- Rebase to v6.2-rc1.
+- Follow the clock definitions on i.MX8MP platform refer to the
+  following commit.
+  https://patchwork.kernel.org/project/linux-arm-kernel/patch/20221216195932.3228998-1-l.stach@pengutronix.de/
+
+Main changes from v3 -> v4:
+- Add the Rob's ACK in the dt-binding patch.
+- Use "i.MX" to keep spell consistent.
+- Squash generic endpoint infrastructure changes of
+  "[12/14] PCI: imx6: Add iMX8MM PCIe EP mode" into Kconfig changes.
+
+NOTE:
+The following commits should be cherried back firstly, when apply this
+series.
+
+Shawn's tree (git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git)
+d50650500064 arm64: dts: imx8mp-evk: Add PCIe support
+9e65987b9584 arm64: dts: imx8mp: Add iMX8MP PCIe support
+5506018d3dec soc: imx: imx8mp-blk-ctrl: handle PCIe PHY resets
+
+Philipp's tree (git://git.pengutronix.de/git/pza/linux)
+051d9eb40388 reset: imx7: Fix the iMX8MP PCIe PHY PERST support
+
+The PHY changes:
+https://patchwork.kernel.org/project/linux-pci/cover/1664174463-13721-1-git-send-email-hongxing.zhu@nxp.com/
+
+Main changes from v2 -> v3:
+- Add the i.MX8MP PCIe EP support, and verified on i.MX8MP EVK board.
+- Rebase to latest pci/next branch(tag: v6.0-rc1 plus some PCIe changes).
+
+Main changes from v1 -> v2:
+- Add Rob's ACK into first two commits.
+- Rebase to the tag: pci-v5.20-changes of the pci/next branch.
+
+Documentation/devicetree/bindings/pci/fsl,imx6q-pcie-common.yaml | 285 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Documentation/devicetree/bindings/pci/fsl,imx6q-pcie-ep.yaml     |  83 +++++++++++++++++++++++
+Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.yaml        | 247 ++-----------------------------------------------------------------
+MAINTAINERS                                                      |   2 +
+arch/arm64/boot/dts/freescale/imx8mm.dtsi                        |  24 +++++++
+arch/arm64/boot/dts/freescale/imx8mp.dtsi                        |  26 ++++++++
+arch/arm64/boot/dts/freescale/imx8mq.dtsi                        |  32 +++++++++
+7 files changed, 458 insertions(+), 241 deletions(-)
+
+[PATCH v9 1/4] dt-bindings: imx6q-pcie: Restruct i.MX PCIe schema
+[PATCH v9 2/4] arm64: dts: Add i.MX8MM PCIe EP support
+[PATCH v9 3/4] arm64: dts: Add i.MX8MQ PCIe EP support
+[PATCH v9 4/4] arm64: dts: Add i.MX8MP PCIe EP support
