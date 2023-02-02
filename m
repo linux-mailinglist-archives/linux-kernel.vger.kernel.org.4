@@ -2,272 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B5596872E5
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 02:19:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 705ED6872E7
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 02:21:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230361AbjBBBS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 20:18:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33956 "EHLO
+        id S231185AbjBBBVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 20:21:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbjBBBSs (ORCPT
+        with ESMTP id S230432AbjBBBVK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 20:18:48 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26431EF8C;
-        Wed,  1 Feb 2023 17:18:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 97F4B619A5;
-        Thu,  2 Feb 2023 01:18:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C40EC433EF;
-        Thu,  2 Feb 2023 01:18:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675300724;
-        bh=ho8EUnBbpt5/Dr9N4HX5AE0tdqFpcj1JCqTlt/TNsKg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=j8nBKNjbJr/WGIqc6C7x88ABBXdcdTN4fzFS7v9Jg25W+USCoXEoNfCZZ17eBYy+9
-         sPm5FmayDwqL6Ljrw2o9czg6NsdNe17b3IEmF94IDNbGkuM4DlGbbYx1RotzMr+lZN
-         OIYJSHvanmHZ5X/rFLDDNi3VuG3BQ8BH2rqUzUaLJexiKiYkFhrFL+QXD4Oe77wD9T
-         Rw3cDElAAVG2NWBsoRrrPQQwJyXDMPTU7exuW+EWqNa59cAZhZpbIOfF0QkpgmkSLB
-         wEceviQAaaNxvzlvjkQ7aQwGtd0kg8Yn9NqciPoTq25w7j6kBG51ElGMMU1iKrXKTE
-         No2kB92bIeeeg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 23DC2405BE; Wed,  1 Feb 2023 22:18:41 -0300 (-03)
-Date:   Wed, 1 Feb 2023 22:18:41 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Michael Petlan <mpetlan@redhat.com>
-Cc:     linux-perf-users@vger.kernel.org, acme@redhat.com,
-        qzhao@redhat.com, cjense@google.com,
-        Ian Rogers <irogers@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>
-Subject: Re: [PATCH 2/2] perf test: Fix JSON format linter test checks
-Message-ID: <Y9sPcfnJJ3BDHUA0@kernel.org>
-References: <20230120134039.17788-1-mpetlan@redhat.com>
- <20230120134039.17788-3-mpetlan@redhat.com>
- <Y9PC2+Yqh3W8wyNU@kernel.org>
- <Y9PDycrODMfeUSA2@kernel.org>
- <alpine.LRH.2.20.2301311803440.5281@Diego>
+        Wed, 1 Feb 2023 20:21:10 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6380267797
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 17:21:08 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id h9so333107plf.9
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 17:21:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=S4gNTXols2zUCK+Bbf92IJ3jgKiB/hlHNVwgThgFNbY=;
+        b=QLoTkpMZSuxDOrCnLlgRzlWIlCWXCX6MQGfA0dsC4W6Iqvw/enD7qJgFyOQpd69E5U
+         kQvuEwUfx2vFJsc39S+GDZ9RlhWrdaxgfm+HssItPiaTwzlxkRyTf4qH9a90a/ZdtN/6
+         s3cm2fXpiCYYtTOkV6tPyUd2Xc5z8h7YjgL6ixTIxZ9YVdpS6wAfCIIRHTVH9tsUNqOE
+         1lWDh6o15eXzRbtilD4+Qo2lgT8VmKxtfaqLmUyeK++42l6K5oigXqQeMl6JsnPr7K/f
+         AEKEdRPICR2jA0UHqvFpiSk6qzadwOh+1/Gzfpyfxv6BI1H8hdzQRoYNXVvA4GzdL+he
+         OLjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=S4gNTXols2zUCK+Bbf92IJ3jgKiB/hlHNVwgThgFNbY=;
+        b=peH8Ty7MaadBDExS5V3RI76rH1JtDhPlktGbyn2ATTifIGMkPhyDGoQCkrLnThXLNF
+         AObkgTLiSunQH76iLl2ImhErM2Dpk8R1CRoSwVWGxA9ztDPmTE7tg1LW2D9N/Tegloc9
+         nrOALehpnnpba8lEtrjzybN3YhRRu9FuNUzic9/Do8Rqabkgw3L+Wm33ihjRtHtj8579
+         0yPqNULnKoGQtk6p2puIoOCElhegsjBxruivoA870CiDOhWgvxa3yidIw4836swaycz2
+         oifn3HFU71aGpyxcdLoPctlqPQoW7PME6qpQebCS2prxwA8zxTjRT1UBjcCCgf+H3PqX
+         QXpw==
+X-Gm-Message-State: AO0yUKV05S/77TbZvFocKTTaCJi0iTsamk3Ng79MJrZ1uc/WW68b+D4V
+        D0YWPwIDCs3m4AWbX/OHm8+wHg==
+X-Google-Smtp-Source: AK7set/aBbNUWclOGQUBTunvdOQv6LWwLKUzRLjPkqixKVrkG0vf73s3NIePHMZ48fOI7r+Jkx86BQ==
+X-Received: by 2002:a17:902:8347:b0:198:af4f:de09 with SMTP id z7-20020a170902834700b00198af4fde09mr148827pln.9.1675300867658;
+        Wed, 01 Feb 2023 17:21:07 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id w2-20020a1709027b8200b00196025a34b9sm9084724pll.159.2023.02.01.17.21.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Feb 2023 17:21:07 -0800 (PST)
+Date:   Thu, 2 Feb 2023 01:21:03 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org
+Subject: Re: [PATCH 1/7] kvm: x86/mmu: Use KVM_MMU_ROOT_XXX for
+ kvm_mmu_invalidate_gva()
+Message-ID: <Y9sP/0B8A7fx2tkf@google.com>
+References: <20230105095848.6061-1-jiangshanlai@gmail.com>
+ <20230105095848.6061-2-jiangshanlai@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <alpine.LRH.2.20.2301311803440.5281@Diego>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230105095848.6061-2-jiangshanlai@gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Jan 31, 2023 at 06:14:17PM +0100, Michael Petlan escreveu:
-> On Fri, 27 Jan 2023, Arnaldo Carvalho de Melo wrote:
-> > Em Fri, Jan 27, 2023 at 09:26:03AM -0300, Arnaldo Carvalho de Melo escreveu:
-> [...]
+On Thu, Jan 05, 2023, Lai Jiangshan wrote:
+> From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 > 
-> > > Before I apply this first patch I can run, as root, the 'perf test' JSON
-> > > lint 100 times without problems:
-> > > 
-> > > [root@quaco ~]# for a in $(seq 100) ; do echo -n $a ; perf test 98 ; done
-> > > 1 98: perf stat JSON output linter                                    : Ok
-> > > 2 98: perf stat JSON output linter                                    : Ok
-> > > 3 98: perf stat JSON output linter                                    : Ok
-> > > 4 98: perf stat JSON output linter                                    : Ok
-> > > <SNIP>
-> > > 96 98: perf stat JSON output linter                                    : Ok
-> > > 97 98: perf stat JSON output linter                                    : Ok
-> > > 98 98: perf stat JSON output linter                                    : Ok
-> > > 99 98: perf stat JSON output linter                                    : Ok
-> > > 100 98: perf stat JSON output linter                                    : Ok
-> > > [root@quaco ~]#
-> > > 
-> > > After applying it it fails seemingly randomly, I'll remove both patches
-> > > from my tmp.perf/core branch and investigate.
+> The @root_hpa for kvm_mmu_invalidate_gva() is called with @mmu->root.hpa
+> or INVALID_PAGE.
 > 
-> Hello Arnaldo. Have you found anything?
-> 
-> Which patch of the two causes the failures? The one that changes the JSON
+> Replace them with KVM_MMU_ROOT_XXX.
 
-Its described below, the first patch introduces the problem.
+Please explain _why_.  I can (and did) figure it out on my own, but doing that
+takes time and slows down reviews.
 
-IT may well be due to the Intel model of my test machine, from what I
-could read on the other threads about the "all metrics test", but I
-haven't had time to fully investigate.
+> No fuctionalities changed.
+> 
+> Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+> ---
+>  arch/x86/include/asm/kvm_host.h |  2 +-
+>  arch/x86/kvm/mmu/mmu.c          | 39 ++++++++++++++++-----------------
+>  arch/x86/kvm/x86.c              |  2 +-
+>  3 files changed, 21 insertions(+), 22 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 2f5bf581d00a..dbea616bccce 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -2026,7 +2026,7 @@ int kvm_mmu_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa, u64 error_code,
+>  		       void *insn, int insn_len);
+>  void kvm_mmu_invlpg(struct kvm_vcpu *vcpu, gva_t gva);
+>  void kvm_mmu_invalidate_gva(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu,
+> -			    gva_t gva, hpa_t root_hpa);
+> +			    gva_t gva, ulong roots_to_invalidate);
+>  void kvm_mmu_invpcid_gva(struct kvm_vcpu *vcpu, gva_t gva, unsigned long pcid);
+>  void kvm_mmu_new_pgd(struct kvm_vcpu *vcpu, gpa_t new_pgd);
+>  
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 5407649de547..90339b71bd56 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -5693,8 +5693,9 @@ int noinline kvm_mmu_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa, u64 err
+>  }
+>  EXPORT_SYMBOL_GPL(kvm_mmu_page_fault);
+>  
+> +/* roots_to_invalidte must be some combination of the KVM_MMU_ROOT_* flags */
 
-[acme@quaco pahole]$ grep -m1 ^model\ name /proc/cpuinfo 
-model name	: Intel(R) Core(TM) i7-8650U CPU @ 1.90GHz
-[acme@quaco pahole]$ 
+Typo, though I would just drop this comment.  If we want some form of sanity check,
+it should be totally doable to add a WARN_ON_ONCE() that verifies the parameter
+is a subset of all possible root flags.
 
-- Arnaldo
+>  void kvm_mmu_invalidate_gva(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu,
+> -			    gva_t gva, hpa_t root_hpa)
+> +			    gva_t gva, ulong roots_to_invalidate)
 
-> printing or the second that changes the test?
-> 
-> I hope that the JSON printing is now correct, it seems to be, at least on my
-> machine + the SPR box I was debugging this on.
-> 
-> 
-> > > 
-> > > [acme@quaco perf]$ git log --oneline -1
-> > > fdafd42aac3629db (HEAD) perf stat: Fix JSON metric printout for multiple metrics per line
-> > > [acme@quaco perf]$ perf -v
-> > > perf version 6.2.rc5.gfdafd42aac36
-> > > [acme@quaco perf]$
-> > > [root@quaco ~]# perf -v
-> > > perf version 6.2.rc5.gfdafd42aac36
-> > > [root@quaco ~]# for a in $(seq 100) ; do echo -n $a ; perf test 98 ; done
-> > > [root@quaco ~]# perf -v
-> > > perf version 6.2.rc5.gfdafd42aac36
-> > > [root@quaco ~]# for a in $(seq 100) ; do echo -n $a ; perf test 98 ; done
-> > > 1 98: perf stat JSON output linter                                    : Ok
-> > > 2 98: perf stat JSON output linter                                    : Ok
-> > > 3 98: perf stat JSON output linter                                    : FAILED!
-> > > 4 98: perf stat JSON output linter                                    : Ok
-> > 
-> > BTW, after applying the second patch, the one for 'perf test', the
-> > problem persists:
-> > 
-> > [acme@quaco perf]$ git log --oneline -1
-> > 320cd37176508ec2 (HEAD, acme/tmp.perf/core, acme.korg/tmp.perf/core) perf test: Fix JSON format linter test checks
-> > [acme@quaco perf]$ perf -v
-> > perf version 6.2.rc5.g320cd3717650
-> > [acme@quaco perf]$
-> > [root@quaco ~]# perf -v
-> > perf version 6.2.rc5.g320cd3717650
-> > [root@quaco ~]# for a in $(seq 100) ; do echo -n $a ; perf test 98 ; done
-> > 1 98: perf stat JSON output linter                                    : Ok
-> > 2 98: perf stat JSON output linter                                    : FAILED!
-> > 3 98: perf stat JSON output linter                                    : Ok
-> > 4 98: perf stat JSON output linter                                    : Ok
-> > 5 98: perf stat JSON output linter                                    : FAILED!
-> > 6 98: perf stat JSON output linter                                    : Ok
-> > 7 98: perf stat JSON output linter                                    : FAILED!
-> > 8 98: perf stat JSON output linter                                    : Ok
-> > 9 98: perf stat JSON output linter                                    : Ok
-> > 10 98: perf stat JSON output linter                                    : FAILED!
-> > 11 98: perf stat JSON output linter                                    : FAILED!
-> > 12 98: perf stat JSON output linter                                    : FAILED!
-> > 13 98: perf stat JSON output linter                                    : Ok
-> > 14 98: perf stat JSON output linter                                    : Ok
-> > 15 98: perf stat JSON output linter                                    : FAILED!
-> > 16 98: perf stat JSON output linter                                    : FAILED!
-> > 17 98: perf stat JSON output linter                                    : FAILED!
-> > 18 98: perf stat JSON output linter                                    :^C
-> > [root@quaco ~]#
-> > 
-> > When it works:
-> > 
-> > [root@quaco ~]# perf test -v 98
-> >  98: perf stat JSON output linter                                    :
-> > --- start ---
-> > test child forked, pid 62202
-> > Checking json output: no args [Success]
-> > Checking json output: system wide [Success]
-> > Checking json output: interval [Success]
-> > Checking json output: event [Success]
-> > Checking json output: per thread [Success]
-> > Checking json output: per node [Success]
-> > Checking json output: system wide Checking json output: system wide no aggregation [Success]
-> > Checking json output: per core [Success]
-> > Checking json output: per die [Success]
-> > Checking json output: per socket [Success]
-> > test child finished with 0
-> > ---- end ----
-> > perf stat JSON output linter: Ok
-> > [root@quaco ~]#
-> > 
-> > When it fails:
-> > 
-> > [root@quaco ~]# perf test -v 98
-> >  98: perf stat JSON output linter                                    :
-> > --- start ---
-> > test child forked, pid 62270
-> > Checking json output: no args [Success]
-> > Checking json output: system wide [Success]
-> > Checking json output: interval [Success]
-> > Checking json output: event [Success]
-> > Checking json output: per thread Test failed for input:
-> > {"thread" : "rcu_preempt-16", "counter-value" : "0.018340", "unit" : "msec", "event" : "cpu-clock", "event-runtime" : 19071, "pcnt-running" : 100.00, "metric-value" : 0.001758, "metric-unit" : "CPUs utilized"}
-> > 
-> > {"thread" : "gnome-terminal--2977", "counter-value" : "0.061868", "unit" : "msec", "event" : "cpu-clock", "event-runtime" : 62075, "pcnt-running" : 100.00, "metric-value" : 0.005930, "metric-unit" : "CPUs utilized"}
-> > 
-> > {"thread" : "perf-62294", "counter-value" : "9.398635", "unit" : "msec", "event" : "cpu-clock", "event-runtime" : 9398904, "pcnt-running" : 100.00, "metric-value" : 0.900916, "metric-unit" : "CPUs utilized"}
-> > 
-> > {"thread" : "rcu_preempt-16", "counter-value" : "4.000000", "unit" : "", "event" : "context-switches", "event-runtime" : 15203, "pcnt-running" : 100.00, "metric-value" : 218.102508, "metric-unit" : "K/sec"}
-> > 
-> > {"thread" : "gnome-terminal--2977", "counter-value" : "1.000000", "unit" : "", "event" : "context-switches", "event-runtime" : 62075, "pcnt-running" : 100.00, "metric-value" : 16.163445, "metric-unit" : "K/sec"}
-> > 
-> > {"thread" : "perf-62294", "counter-value" : "1.000000", "unit" : "", "event" : "context-switches", "event-runtime" : 9388658, "pcnt-running" : 100.00, "metric-value" : 106.398429, "metric-unit" : "/sec"}
-> > 
-> > {"thread" : "rcu_preempt-16", "counter-value" : "1.000000", "unit" : "", "event" : "cpu-migrations", "event-runtime" : 12511, "pcnt-running" : 100.00, "metric-value" : 54.525627, "metric-unit" : "K/sec"}
-> > 
-> > {"thread" : "perf-62294", "counter-value" : "2.000000", "unit" : "", "event" : "page-faults", "event-runtime" : 9427495, "pcnt-running" : 100.00, "metric-value" : 212.796858, "metric-unit" : "/sec"}
-> > 
-> > {"thread" : "rcu_preempt-16", "counter-value" : "41498.000000", "unit" : "", "event" : "cycles", "event-runtime" : 20944, "pcnt-running" : 100.00, "metric-value" : 2.262704, "metric-unit" : "GHz"}
-> > 
-> > {"thread" : "ksoftirqd/1-22", "counter-value" : "23883.000000", "unit" : "", "event" : "cycles", "event-runtime" : 9949, "pcnt-running" : 100.00}
-> > 
-> > {"thread" : "perf-62294", "counter-value" : "36686750.000000", "unit" : "", "event" : "cycles", "event-runtime" : 9439269, "pcnt-running" : 100.00, "metric-value" : 3.903413, "metric-unit" : "GHz"}
-> > 
-> > {"thread" : "rcu_preempt-16", "counter-value" : "25086.000000", "unit" : "", "event" : "instructions", "event-runtime" : 20944, "pcnt-running" : 100.00, "metric-value" : 0.604511, "metric-unit" : "insn per cycle"}
-> > 
-> > {"thread" : "ksoftirqd/1-22", "counter-value" : "13360.000000", "unit" : "", "event" : "instructions", "event-runtime" : 9949, "pcnt-running" : 100.00, "metric-value" : 0.559394, "metric-unit" : "insn per cycle"}
-> > 
-> > {"thread" : "perf-62294", "counter-value" : "7905940.000000", "unit" : "", "event" : "instructions", "event-runtime" : 9438686, "pcnt-running" : 100.00, "metric-value" : 0.215499, "metric-unit" : "insn per cycle"}
-> > 
-> > {"thread" : "rcu_preempt-16", "counter-value" : "3951.000000", "unit" : "", "event" : "branches", "event-runtime" : 16533, "pcnt-running" : 100.00, "metric-value" : 215.430752, "metric-unit" : "M/sec"}
-> > 
-> > {"thread" : "ksoftirqd/1-22", "counter-value" : "2822.000000", "unit" : "", "event" : "branches", "event-runtime" : 9949, "pcnt-running" : 100.00, "metric-value" : 0.000000, "metric-unit" : "/sec"}
-> > 
-> > {"thread" : "perf-62294", "counter-value" : "1691804.000000", "unit" : "", "event" : "branches", "event-runtime" : 9474118, "pcnt-running" : 100.00, "metric-value" : 180.005288, "metric-unit" : "M/sec"}
-> > 
-> > {"thread" : "rcu_preempt-16", "counter-value" : "279.000000", "unit" : "", "event" : "branch-misses", "event-runtime" : 16533, "pcnt-running" : 100.00, "metric-value" : 7.061503, "metric-unit" : "of all branches"}
-> > 
-> > {"thread" : "ksoftirqd/1-22", "counter-value" : "153.000000", "unit" : "", "event" : "branch-misses", "event-runtime" : 9949, "pcnt-running" : 100.00, "metric-value" : 5.421687, "metric-unit" : "of all branches"}
-> > 
-> > {"thread" : "kworker/1:2-events-752", "counter-value" : "121.000000", "unit" : "", "event" : "branch-misses", "event-runtime" : 9850, "pcnt-running" : 100.00, "metric-value" : 0.000000, "metric-unit" : "of all branches"}
-> > 
-> > {"thread" : "perf-62294", "counter-value" : "52693.000000", "unit" : "", "event" : "branch-misses", "event-runtime" : 9451948, "pcnt-running" : 100.00, "metric-value" : 3.114604, "metric-unit" : "of all branches"}
-> > 
-> > Traceback (most recent call last):
-> >   File "/home/acme/libexec/perf-core/tests/shell/lib/perf_json_output_lint.py", line 93, in <module>
-> >     check_json_output(expected_items)
-> >   File "/home/acme/libexec/perf-core/tests/shell/lib/perf_json_output_lint.py", line 54, in check_json_output
-> >     raise RuntimeError(f'wrong number of fields. counted {count} expected {expected_items}'
-> > RuntimeError: wrong number of fields. counted 6 expected [8, 10] in '{"thread" : "ksoftirqd/1-22", "counter-value" : "23883.000000", "unit" : "", "event" : "cycles", "event-runtime" : 9949, "pcnt-running" : 100.00}
-> 
-> Here it seems that the test finds unexpected number of entities in the
-> line. It can be, 6 is not in [8, 10]. However, since the line looks OK,
-> we should expand the set of accepted results to [6, 8, 10] then.
-> 
-> If this fails even without the test patch, so only with my JSON printing
-> patch, AND it does NOT fail without it, it seems very weird. The patch
-> fixes the JSON format breakage that happens when two metrics are per line.
-> 
-> The JSON output above looks sane, especially looking at the line that
-> failed:
-> 
->   {"thread" : "ksoftirqd/1-22", "counter-value" : "23883.000000", "unit" : "", "event" : "cycles", "event-runtime" : 9949, "pcnt-running" : 100.00}
-> 
-> It rather seems that depending on the values counted, something gets
-> computed or not, and that changes the output, so sometimes a line with
-> unexpected count of elements appears there. Couldn't anything else
-> cause the change of the output?
-> 
-> Michael
-> > '
-> > test child finished with -1
-> > ---- end ----
-> > perf stat JSON output linter: FAILED!
-> > [root@quaco ~]#
-> > 
-> > 
-> 
+s/ulong/unsigned long
 
--- 
+And I got confused by "roots_to_invalidate"; I thought it meant "invalidate these
+entire trees" as opposed to "invalidate the gva in these trees".  Best I can come
+up with is simply "roots".
 
-- Arnaldo
+>  {
+>  	int i;
+>  
+> @@ -5710,31 +5711,29 @@ void kvm_mmu_invalidate_gva(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu,
+>  	if (!mmu->invlpg)
+>  		return;
+>  
+> -	if (root_hpa == INVALID_PAGE) {
+> +	if ((roots_to_invalidate & KVM_MMU_ROOT_CURRENT) && VALID_PAGE(mmu->root.hpa))
+>  		mmu->invlpg(vcpu, gva, mmu->root.hpa);
+>  
+> -		/*
+> -		 * INVLPG is required to invalidate any global mappings for the VA,
+> -		 * irrespective of PCID. Since it would take us roughly similar amount
+> -		 * of work to determine whether any of the prev_root mappings of the VA
+> -		 * is marked global, or to just sync it blindly, so we might as well
+> -		 * just always sync it.
+> -		 *
+> -		 * Mappings not reachable via the current cr3 or the prev_roots will be
+> -		 * synced when switching to that cr3, so nothing needs to be done here
+> -		 * for them.
+> -		 */
+> -		for (i = 0; i < KVM_MMU_NUM_PREV_ROOTS; i++)
+> -			if (VALID_PAGE(mmu->prev_roots[i].hpa))
+> -				mmu->invlpg(vcpu, gva, mmu->prev_roots[i].hpa);
+> -	} else {
+> -		mmu->invlpg(vcpu, gva, root_hpa);
+> -	}
+> +	for (i = 0; i < KVM_MMU_NUM_PREV_ROOTS; i++)
+
+for-loop needs curly braces.
+
+> +		if ((roots_to_invalidate & KVM_MMU_ROOT_PREVIOUS(i)) &&
+> +		    VALID_PAGE(mmu->prev_roots[i].hpa))
+> +			mmu->invlpg(vcpu, gva, mmu->prev_roots[i].hpa);
+
+I think it has to go at the end of this series, but please add a patch somewhere
+to move the VALID_PAGE() check into __kvm_mmu_invalidate_gva(), e.g. end up with
+
+	if (roots & KVM_MMU_ROOT_CURRENT)
+		__kvm_mmu_invalidate_gva(vcpu, mmu, gva, mmu->root.hpa);
+
+	for (i = 0; i < KVM_MMU_NUM_PREV_ROOTS; i++) {
+		if (roots & KVM_MMU_ROOT_PREVIOUS(i))
+			__kvm_mmu_invalidate_gva(vcpu, mmu, gva,
+						 mmu->prev_roots[i].hpa);
+	}
+
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index c936f8d28a53..4696cbb40545 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -799,7 +799,7 @@ void kvm_inject_emulated_page_fault(struct kvm_vcpu *vcpu,
+>  	if ((fault->error_code & PFERR_PRESENT_MASK) &&
+>  	    !(fault->error_code & PFERR_RSVD_MASK))
+>  		kvm_mmu_invalidate_gva(vcpu, fault_mmu, fault->address,
+> -				       fault_mmu->root.hpa);
+> +				       KVM_MMU_ROOT_CURRENT);
+
+This is logically correct, but there's potential (weird) functional change here.
+If this is called with an invalid root, then KVM will invalidate the GVA in all
+roots prior to this patch, but in no roots after this patch.
+
+I _think_ it should be impossible get here with an invalid root.  Can you try
+adding a prep patch to assert that the root is valid so that this patch can
+reasonably assert that there's no functional change?
+
+
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 508074e47bc0..fffd9b610196 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -792,6 +792,8 @@ void kvm_inject_emulated_page_fault(struct kvm_vcpu *vcpu,
+        fault_mmu = fault->nested_page_fault ? vcpu->arch.mmu :
+                                               vcpu->arch.walk_mmu;
+ 
++       WARN_ON_ONCE(!VALID_PAGE(fault_mmu->root.hpa));
++
+        /*
+         * Invalidate the TLB entry for the faulting address, if it exists,
+         * else the access will fault indefinitely (and to emulate hardware).
+
