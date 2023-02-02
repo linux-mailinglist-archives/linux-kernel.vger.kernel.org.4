@@ -2,120 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE8F368875A
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 20:10:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2245F68875C
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 20:11:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233094AbjBBTKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 14:10:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45702 "EHLO
+        id S233128AbjBBTLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 14:11:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231237AbjBBTKD (ORCPT
+        with ESMTP id S232671AbjBBTLb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 14:10:03 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F28CD34C25
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 11:10:01 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id ha3-20020a17090af3c300b00230222051a6so2765277pjb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 11:10:01 -0800 (PST)
+        Thu, 2 Feb 2023 14:11:31 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC9834C25
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 11:11:29 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id n13so2203349wmr.4
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 11:11:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ei84xjALj/qnZ251dtHcjT7fuwkFwrmIuOWdIaj3IB4=;
-        b=ifBa3W+FjfUT/jALuyk7vSXJgPyrderSzeCqeUprNB2WEcZ5Cgu0jv05ook+3UnGvo
-         RtCgWWWwBDb7dOQWyuCGRnin3PpUqmpGnFqv5jTK2qZ2wwaTL2B9DzAqWakctSuEbd68
-         sv1+oh3wKsRHifknwXnc2pr4q1kxywhLR6pyU=
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=cmqPx/Zy279diCwL80ZzQVZT2Mcv1030GfDHO64ZwaM=;
+        b=rx8n/zPQAkVDgqYtXeVL8F0TnK38f8l/sJKC7Iw6IjH4QL1MAaJHL0FJeHMz1V21kf
+         Jbm9izq0xBt1iNhCYXs7gXTM7mhkddeSKb/oD1d9dPQ022nlIde3tKQsTklfZaKR4lX/
+         dxr34usvKTUG1ei0NbJu5KZ1RA9uQtIik7lHAXtSLR4lzA4IyQr6xcfOm9Uursp/AoIk
+         dYmXeGNB5CTGUmx/aJ494btV5e/xnEKwzUAqVUWjt6qrAzbibsdBwMDmeSzQvcl5Tt1i
+         Ak675YUxYRmrcjzLQnrP3ToqhGiNWjVYS2t7C9GL0GrFGoZXGiu5d6KKI0j6iskItLgC
+         rdtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ei84xjALj/qnZ251dtHcjT7fuwkFwrmIuOWdIaj3IB4=;
-        b=tu84fxAscoCjLzLQl38NpjiAdlUZ4OSyYVT1/sG/udi5PwUZb4k8jhk/0KLwhjNmS8
-         Is0Pr+M5+4+ENiQjiEazTU1f3I9hWrcs7WCYbEKDxEmhu7tm9T9TLlYsiyNIm2ftBcrJ
-         QpA1HB3owK469x96mLjjy87cU6VYPc73c31DRsj0gjF+j8/2OmfAl71wkClZ2y9OiKeB
-         o9V4pes909LsKWkLZQyg+VWafinuoNkj4s9Q8Z4+cImcBcW9HDUz/QRFpfKoHRHJBpM8
-         iyE8WH7jQq7nE7jnsJaraNPj+y26dqrDWzbly5u1Lfor3eT/I8BnZDWQ/JkQpsml1oGU
-         eLsg==
-X-Gm-Message-State: AO0yUKWE31vnJAx+HTMBFWOzjnAs7HU3f5P7GyqlVmE1dbBwSWknhHoF
-        uQPVxSZ9sa08voBEaHRYUECt7w==
-X-Google-Smtp-Source: AK7set9p/VLscj8lYzuVH+QL97IgWbcWTtlAXemsvo5mM0a99DAyaG7vV23KHqvBlFv4YZ4XzS0krA==
-X-Received: by 2002:a17:902:ce8f:b0:196:2d55:5b96 with SMTP id f15-20020a170902ce8f00b001962d555b96mr8751901plg.24.1675365001490;
-        Thu, 02 Feb 2023 11:10:01 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id s23-20020a170902b19700b00186b3c3e2dasm14950plr.155.2023.02.02.11.10.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 11:10:01 -0800 (PST)
-Message-ID: <63dc0a89.170a0220.49507.0091@mx.google.com>
-X-Google-Original-Message-ID: <202302021904.@keescook>
-Date:   Thu, 2 Feb 2023 19:10:00 +0000
-From:   Kees Cook <keescook@chromium.org>
-To:     John Stultz <jstultz@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     Yongqin Liu <yongqin.liu@linaro.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Nishanth Menon <nm@ti.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Won Chung <wonchung@google.com>,
-        David Gow <davidgow@google.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-hardening@vger.kernel.org,
-        llvm@lists.linux.dev, Sumit Semwal <sumit.semwal@linaro.org>
-Subject: Re: [PATCH 5/6] driver core: Add __alloc_size hint to devm allocators
-References: <20221101222520.never.109-kees@kernel.org>
- <20221101223321.1326815-5-keescook@chromium.org>
- <CAMSo37W3gRkP02tSCxGX71ZDAt3WgPZrkTRTM6J1iQ4gvUS9vg@mail.gmail.com>
- <CANDhNCogJrvt=yEXFK-xVmGjkcRxSNGZUqUeNw2MV9bFRrwPdQ@mail.gmail.com>
- <63dbf04a.630a0220.2608a.0149@mx.google.com>
- <CANDhNCoJJs_jSAdr6uved=cK=-6+nzSJq3e_E3HgtiXHZXkVww@mail.gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cmqPx/Zy279diCwL80ZzQVZT2Mcv1030GfDHO64ZwaM=;
+        b=GyXewDQEZWELKoHcR7VCYkDbH/ULUgSZWyervmbMo5RIGqQZnv3Qp6exz5mMxCFkS9
+         0FX/iHiUIIg9SXPvZK/SUpGFaaIgpwN/EuZTFhyrnVzlkAs8GWuWUVw5RAjQfGP3NE4D
+         CO/ziWoAS9umm978cKTpoRR8LAHHAnfIyFgTfOJJTrk3L6ZijJwT6RLRNDXUYKJKcXRd
+         bkzE5UKH8BiEynzoqESqc8LlNaMh5dRlQ7hJJWhrdTQf6IP5VLMkK4qiMVTiOnBAXyNx
+         3DnIBB1vwyhvUwKQyKmAuWK3KXcktgOMsFcW3K9p9OeSlAcCXI8k6YvbEsu1v9/Kpn1i
+         rXZQ==
+X-Gm-Message-State: AO0yUKVNd+dmn6K5SAv9NUbenYRUmi1iO7bHObXF1K5BsW9OhRe3ti9M
+        vuw2C3FJY44KNHTxTIf4m0ZwDqngI462aw5bJU0h4g==
+X-Google-Smtp-Source: AK7set96hCXSN8RisUiNR5YsJkh6ScE8+8SR4F6BqhH6feHgPVQmnMOF+Dd5nQ7x6loD3WWBhySd5AaVOyA9RgQ/D6o=
+X-Received: by 2002:a05:600c:1da3:b0:3da:b40f:c734 with SMTP id
+ p35-20020a05600c1da300b003dab40fc734mr372362wms.115.1675365087907; Thu, 02
+ Feb 2023 11:11:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANDhNCoJJs_jSAdr6uved=cK=-6+nzSJq3e_E3HgtiXHZXkVww@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230202012348.885402-1-nhuck@google.com> <Y9vnte1xP5T+nZ6j@redhat.com>
+In-Reply-To: <Y9vnte1xP5T+nZ6j@redhat.com>
+From:   Nathan Huckleberry <nhuck@google.com>
+Date:   Thu, 2 Feb 2023 11:11:16 -0800
+Message-ID: <CAJkfWY5sYxPe1ArxSe3fkwqkOFSxxz9HDdF6XoL_Wc9g070hRg@mail.gmail.com>
+Subject: Re: dm-verity: Remove WQ_UNBOUND.
+To:     Mike Snitzer <snitzer@kernel.org>
+Cc:     mpatocka@redhat.com, linux-kernel@vger.kernel.org,
+        Eric Biggers <ebiggers@kernel.org>, dm-devel@redhat.com,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Alasdair Kergon <agk@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 10:56:29AM -0800, John Stultz wrote:
-> That said, making sense of the error message isn't completely trivial
-> either. I've been seeing a few cases recently of some of the new
-> compiler tooling (I pinged you earlier on a CFI one) causing errors
-> that developers aren't really sure how to address.  I know sometimes
-> it's not easy to surface the errors with context to what was wrong,
-> but at the risk of intense bike shedding, is there some way to provide
-> something like "Likely array bounds error" instead of just "BRK
-> handler: Fatal exception"?
+Looks good. Thanks.
 
-Yeah, this is a result of the size trade-off that resulted in config
-CONFIG_UBSAN_TRAP -- there ends up being no message about what went
-wrong. I'd really like to have cleaner handling of this -- perhaps what
-was done for KCFI could be applied to UBSAN as well, though this is an
-area I don't know well myself. (i.e. encoding "this was a UBSAN trap"
-in the trap itself.)
-
-Sami or Ard, is this something that could be improved for arm64?
-
--- 
-Kees Cook
+On Thu, Feb 2, 2023 at 8:41 AM Mike Snitzer <snitzer@kernel.org> wrote:
+>
+> On Wed, Feb 01 2023 at  8:23P -0500,
+> Nathan Huckleberry <nhuck@google.com> wrote:
+>
+> > Setting WQ_UNBOUND increases scheduler latency on ARM64.  This is likely
+> > due to the asymmetric architecture of ARM64 processors.
+> >
+> > I've been unable to reproduce the results that claim WQ_UNBOUND gives a
+> > performance boost on x86-64.
+> >
+> > This flag is causing performance issues for multiple subsystems within
+> > Android.  Notably, the same slowdown exists for decompression with
+> > EROFS.
+> >
+> > | open-prebuilt-camera  | WQ_UNBOUND | ~WQ_UNBOUND   |
+> > |-----------------------|------------|---------------|
+> > | verity wait time (us) | 11746      | 119 (-98%)    |
+> > | erofs wait time (us)  | 357805     | 174205 (-51%) |
+> >
+> > | sha256 ramdisk random read | WQ_UNBOUND    | ~WQ_UNBOUND |
+> > |----------------------------|-----------=---|-------------|
+> > | arm64 (accelerated)        | bw=42.4MiB/s  | bw=212MiB/s |
+> > | arm64 (generic)            | bw=16.5MiB/s  | bw=48MiB/s  |
+> > | x86_64 (generic)           | bw=233MiB/s   | bw=230MiB/s |
+> >
+> > Cc: Sami Tolvanen <samitolvanen@google.com>
+> > Cc: Eric Biggers <ebiggers@kernel.org>
+> > Signed-off-by: Nathan Huckleberry <nhuck@google.com>
+> > ---
+> >  drivers/md/dm-verity-target.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/md/dm-verity-target.c b/drivers/md/dm-verity-target.c
+> > index ccf5b852fbf7..020fd2341025 100644
+> > --- a/drivers/md/dm-verity-target.c
+> > +++ b/drivers/md/dm-verity-target.c
+> > @@ -1399,8 +1399,8 @@ static int verity_ctr(struct dm_target *ti, unsigned argc, char **argv)
+> >               goto bad;
+> >       }
+> >
+> > -     /* WQ_UNBOUND greatly improves performance when running on ramdisk */
+> > -     wq_flags = WQ_MEM_RECLAIM | WQ_UNBOUND;
+> > +     wq_flags = WQ_MEM_RECLAIM;
+> > +
+> >       /*
+> >        * Using WQ_HIGHPRI improves throughput and completion latency by
+> >        * reducing wait times when reading from a dm-verity device.
+> > --
+> > 2.39.1.456.gfc5497dd1b-goog
+>
+> Hi,
+>
+> I've discussed with Mikulas, tweaked your patch slightly but accepted
+> your change, please see:
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm.git/commit/?h=dm-6.3&id=6f30cc248507ee96c22ff4c3cbc86099ff12b7a9
+>
+> Thanks,
+> Mike
