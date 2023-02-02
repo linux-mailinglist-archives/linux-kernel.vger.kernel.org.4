@@ -2,211 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 124E468830A
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 16:48:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6FB1688310
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 16:49:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232990AbjBBPsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 10:48:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49124 "EHLO
+        id S233090AbjBBPtK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 10:49:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232835AbjBBPsL (ORCPT
+        with ESMTP id S233074AbjBBPsv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 10:48:11 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F162C7D9BF;
-        Thu,  2 Feb 2023 07:47:44 -0800 (PST)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 312DQonP007852;
-        Thu, 2 Feb 2023 15:47:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=e0FvsPYibgBEabS+IwF1w2XYW1r9Mf34lD/7oUyb4Tg=;
- b=BBLIC96XdidqSzZHLA4ytRPFTLI+hoO3t/CoAU9oPk7WxyTbRL6r0n9hewUN9SLGjviw
- /JFs0NQ7017hu+2De3Tj9oYB28nJw8CE3zC649LtiWU3AJVWJGyXMGcnz5Fc8VRlKJrp
- +fMW3Jv/F1ZsPGswKReYMzVWpv61c8+YWu6pvBiWv5mCik2TXInAvgKStjoZ2Jw7thHu
- kOlat9TutMJFkGUHcGvH1ElXWvmj/R61TZjsHAU4qO+bvjtXcv0skMLB6R/Moy7cm6Lq
- Zm0wcNg4xxD22x4IVLzGYTivegRumrC6VCXZmhuTzrM5tK0MgYR9c9tXpddi9KPR83YY Rg== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nfm9g3gfc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Feb 2023 15:47:16 +0000
-Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 312FlFWb028327
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 2 Feb 2023 15:47:15 GMT
-Received: from hu-ahari-hyd.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Thu, 2 Feb 2023 07:47:10 -0800
-From:   Anjana Hari <quic_ahari@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>
-CC:     <alim.akhtar@samsung.com>, <avri.altman@wdc.com>,
-        <bvanassche@acm.org>, <konrad.dybcio@linaro.org>,
-        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_narepall@quicinc.com>, <quic_nitirawa@quicinc.com>,
-        <quic_rampraka@quicinc.com>, Anjana Hari <quic_ahari@quicinc.com>
-Subject: [PATCH v4 1/1] scsi: ufs: Add hibernation callbacks
-Date:   Thu, 2 Feb 2023 21:16:14 +0530
-Message-ID: <20230202154614.31433-2-quic_ahari@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230202154614.31433-1-quic_ahari@quicinc.com>
-References: <20230202154614.31433-1-quic_ahari@quicinc.com>
+        Thu, 2 Feb 2023 10:48:51 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25A662312A;
+        Thu,  2 Feb 2023 07:48:17 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id u5so1479298pfm.10;
+        Thu, 02 Feb 2023 07:48:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mBRKU9ePr2Z6fcG6an6gYpt7CqLb0XsF4lYBsix8b8U=;
+        b=FSnBEMxJIPecU08W0GFfZwy05AgsLIHW9cJN+1f7niVTxMoU5iQ02+i2e9C5bUQXGE
+         kQg8IIcSdDi6PvjV4lU7TsqNpM9wVTbeSrbFtt4HIC9Uy6y9p2AHQ8ztK+ZZc+SSpM8s
+         2UFSM16bJRxbzhsFozSajcqqGildUFM5tN/ueGo5iXULxeuCiavDw9GNfQvGGPPbrBvV
+         JIY+uyGcHBAvvWymjKtEFny2Q0zFcksVExnPGHSI1XgJDrTehCTioNLtj7YGysDUeM2z
+         QqZ+QB0Jby+5l6sY0fP/C39SRLVu/G/tzcUxb+gAHwLazk63smIm+7UJ9xdiUT1MH1Rt
+         SZEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mBRKU9ePr2Z6fcG6an6gYpt7CqLb0XsF4lYBsix8b8U=;
+        b=Rh2ZZPoxoiXwSb4H7haUTIJut+rtEOgbsPKbERWX1bifD8LQxy2RcHnhnFyFTvfyG1
+         KP+dXewu6Kej0BX8VxNCiu1h284N6E2pmmgZjXqzsQCoKEdemgdBVEW7/exSm1j0pNMx
+         irltd9LVH4QeYyFs0tGPUd7nMMs6ggvpn+OEArvtXtgcVDxyy15ikBeDnhKAhUCeScVN
+         GIdABhv8Dz8A7k8hdwJ8hGaeRKhEYZwfGSst4I4our3ZX/NKB8KQEdtYuPX0MfHu1NUF
+         lUTqkqufBzweZ59h12KiSDUjyiRM1rD8VqrGBfkJtqA8PyV1fWn2DTLqFqhgNVJhcF4M
+         3Bxw==
+X-Gm-Message-State: AO0yUKWy129cYzQqL483GbIrroU2zUnf6wjtwv7nJxQu3Ky6RCGt9Fk/
+        ES5vNHeMicAV2WquaQu9a36hdDgXu5R+i4G7ANT+r04pr2M=
+X-Google-Smtp-Source: AK7set/h3mMM2F+0vXAwb5oGQKg4EXoZwqxMzEYgicmwV2/Yp3EUZNPcF7SYcLSIaAtf887iYnHtLn1b78c7GBIj7ps=
+X-Received: by 2002:aa7:8d16:0:b0:591:4b17:22b5 with SMTP id
+ j22-20020aa78d16000000b005914b1722b5mr1344241pfe.14.1675352894050; Thu, 02
+ Feb 2023 07:48:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 7JvFWAe-UCAd30eYSzPFxFP2fQgMt6jU
-X-Proofpoint-GUID: 7JvFWAe-UCAd30eYSzPFxFP2fQgMt6jU
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-02_10,2023-02-02_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
- malwarescore=0 clxscore=1015 spamscore=0 impostorscore=0 phishscore=0
- priorityscore=1501 mlxlogscore=999 suspectscore=0 lowpriorityscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302020140
+References: <20230131233755.58942-1-pedro.falcato@gmail.com>
+ <CAJZ5v0iXcRFamA+mE837=zHReBT-+8WmMeRDR7L9R+FVpLr25A@mail.gmail.com>
+ <20230202084953.3035c6e3@gmail.com> <CAJZ5v0iwO=xJ8A=vv4Khm6Z+Lb9hpZsZmyCjMeSHutMWRcp78g@mail.gmail.com>
+ <CAJZ5v0hbFNGugDJ3PGLzfNm7h7f8vTesUOZ0R_vkYGaxBWFCdQ@mail.gmail.com>
+In-Reply-To: <CAJZ5v0hbFNGugDJ3PGLzfNm7h7f8vTesUOZ0R_vkYGaxBWFCdQ@mail.gmail.com>
+From:   Pedro Falcato <pedro.falcato@gmail.com>
+Date:   Thu, 2 Feb 2023 15:48:02 +0000
+Message-ID: <CAKbZUD3UPMuH-NHXL093FaaFtEaeC295RemSeVMC8jLr6zbghA@mail.gmail.com>
+Subject: Re: [PATCH] ACPI: Make custom_method use per-open state
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Marty E. Plummer" <hanetzer@startmail.com>,
+        Sebastian Grzywna <swiftgeek@gmail.com>,
+        linux-acpi@vger.kernel.org, Len Brown <lenb@kernel.org>,
+        linux-kernel@vger.kernel.org, rui.zhang@intel.com,
+        Hang Zhang <zh.nvgt@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adds freeze, thaw and restore callbacks for hibernate and restore
-functionality.
+On Thu, Feb 2, 2023 at 10:45 AM Rafael J. Wysocki <rafael@kernel.org> wrote=
+:
+>
+> On Thu, Feb 2, 2023 at 11:03 AM Rafael J. Wysocki <rafael@kernel.org> wro=
+te:
+> >
+> > On Thu, Feb 2, 2023 at 8:50 AM Sebastian Grzywna <swiftgeek@gmail.com> =
+wrote:
+> > >
+> > > Dnia 2023-02-01, o godz. 19:34:48
+> > > "Rafael J. Wysocki" <rafael@kernel.org> napisa=C5=82(a):
+> > >
+> > > > On Wed, Feb 1, 2023 at 12:38 AM Pedro Falcato
+> > > > <pedro.falcato@gmail.com> wrote:
+> > > > >
+> > > > > Make custom_method keep its own per-file-open state instead of
+> > > > > global state in order to avoid race conditions[1] and other
+> > > > > possible conflicts with other concurrent users.
+> > > > >
+> > > > > Link:
+> > > > > https://lore.kernel.org/linux-acpi/20221227063335.61474-1-zh.nvgt=
+@gmail.com/
+> > > > > # [1] Reported-by: Hang Zhang <zh.nvgt@gmail.com> Cc: Swift Geek
+> > > > > <swiftgeek@gmail.com> Signed-off-by: Pedro Falcato
+> > > > > <pedro.falcato@gmail.com> ---
+> > > > >  This patch addresses Hang's problems plus the ones raised by
+> > > > > Rafael in his review (see link above).
+> > > > > https://lore.kernel.org/lkml/2667007.mvXUDI8C0e@kreacher/ was
+> > > > > submitted but since there were still people that wanted this
+> > > > > feature, I took my time to write up a patch that should fix the
+> > > > > issues. Hopefully the linux-acpi maintainers have not decided to
+> > > > > remove custom_method just yet.
+> > > >
+> > > > Well, thanks for the patch, but yes, they have.  Sorry.
+> > >
+> > > Hi Rafael,
+> > > Can you please explain why you don't want to keep it, given there's a
+> > > patch?
+> >
+> > Because this interface was a bad idea to start with and its
+> > implementation is questionable at the design level.
+> >
+> > Granted, at the time it was introduced, there was no alternative, but
+> > there is the AML debugger in the kernel now and as far as debugging is
+> > concerned, it is actually more powerful than custom_metod AFAICS.  See
+> > Documentation/firmware-guide/acpi/aml-debugger.rst.
+> >
+> > If the AML debugger has problems, I would very much prefer fixing them
+> > to the perpetual maintenance of custom_method.
+> >
+> > > I find it really useful in my day-to-day as a firmware engineer.
+> > > I don't see much happening in git history of
+> > > drivers/acpi/custom_method.c , and I don't see anything that was
+> > > specifically changed in it in past 10 years to keep it being
+> > > functional. Without your more detailed explanation I have hard time
+> > > understanding your decision to remove it, since I'm not a kernel
+> > > developer myself.
+> >
+> > It's been always conceptually questionable, problematic from the
+> > security standpoint and implemented poorly.  Also its documentation is
+> > outdated.
+> >
+> > The patches fixing its most apparent functional issues don't actually
+> > address much of the above.
+> >
+> > The AML debugger should really be used for debug rather than
+> > custom_method and honestly, what's the purpose of it beyond debug?
+>
+> The above said, if people really do care about custom_method, it can
+> be retained, but its documentation needs to be updated to cover the
+> current requirements (according to Rui, they have changed after some
+> upstream ACPICA changes).
+>
+> Also note that the upstream ACPICA may not be guaranteed to avoid
+> breaking this interface in the future, as it depends on
+> acpi_install_method() that is provided by ACPICA specifically for the
+> use in the AML debugger.
 
-Signed-off-by: Anjana Hari <quic_ahari@quicinc.com>
----
- drivers/ufs/core/ufshcd.c   | 51 +++++++++++++++++++++++++++++++++++++
- drivers/ufs/host/ufs-qcom.c |  8 +++++-
- include/ufs/ufshcd.h        |  7 +++++
- 3 files changed, 65 insertions(+), 1 deletion(-)
+Just to be clear, I have no stake in this matter and wrote this patch becau=
+se
+someone complained on #coreboot about the removal. This patch was mostly
+trivial to write and if you decide there really is no value in keeping
+this, I'm a-OK.
 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index ec732e4bbbf4..cabe0b4c0138 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -9825,6 +9825,7 @@ static int ufshcd_resume(struct ufs_hba *hba)
- 
- 	/* enable the host irq as host controller would be active soon */
- 	ufshcd_enable_irq(hba);
-+
- 	goto out;
- 
- disable_vreg:
-@@ -9988,6 +9989,56 @@ void ufshcd_remove(struct ufs_hba *hba)
- }
- EXPORT_SYMBOL_GPL(ufshcd_remove);
- 
-+#ifdef CONFIG_PM_SLEEP
-+int ufshcd_system_freeze(struct device *dev)
-+{
-+
-+	return ufshcd_system_suspend(dev);
-+
-+}
-+EXPORT_SYMBOL_GPL(ufshcd_system_freeze);
-+
-+int ufshcd_system_restore(struct device *dev)
-+{
-+
-+	struct ufs_hba *hba = dev_get_drvdata(dev);
-+	int ret;
-+
-+	ret = ufshcd_system_resume(dev);
-+	if (ret)
-+		return ret;
-+
-+	/* Configure UTRL and UTMRL base address registers */
-+	ufshcd_writel(hba, lower_32_bits(hba->utrdl_dma_addr),
-+			REG_UTP_TRANSFER_REQ_LIST_BASE_L);
-+	ufshcd_writel(hba, upper_32_bits(hba->utrdl_dma_addr),
-+			REG_UTP_TRANSFER_REQ_LIST_BASE_H);
-+	ufshcd_writel(hba, lower_32_bits(hba->utmrdl_dma_addr),
-+			REG_UTP_TASK_REQ_LIST_BASE_L);
-+	ufshcd_writel(hba, upper_32_bits(hba->utmrdl_dma_addr),
-+			REG_UTP_TASK_REQ_LIST_BASE_H);
-+	/*
-+	 * Make sure that UTRL and UTMRL base address registers
-+	 * are updated with the latest queue addresses. Only after
-+	 * updating these addresses, we can queue the new commands.
-+	 */
-+	mb();
-+
-+	/* Resuming from hibernate, assume that link was OFF */
-+	ufshcd_set_link_off(hba);
-+
-+	return 0;
-+
-+}
-+EXPORT_SYMBOL_GPL(ufshcd_system_restore);
-+
-+int ufshcd_system_thaw(struct device *dev)
-+{
-+	return ufshcd_system_resume(dev);
-+}
-+EXPORT_SYMBOL_GPL(ufshcd_system_thaw);
-+#endif /* CONFIG_PM_SLEEP  */
-+
- /**
-  * ufshcd_dealloc_host - deallocate Host Bus Adapter (HBA)
-  * @hba: pointer to Host Bus Adapter (HBA)
-diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
-index 681da3ea7154..057753ed2915 100644
---- a/drivers/ufs/host/ufs-qcom.c
-+++ b/drivers/ufs/host/ufs-qcom.c
-@@ -1714,10 +1714,16 @@ MODULE_DEVICE_TABLE(acpi, ufs_qcom_acpi_match);
- #endif
- 
- static const struct dev_pm_ops ufs_qcom_pm_ops = {
--	SET_SYSTEM_SLEEP_PM_OPS(ufshcd_system_suspend, ufshcd_system_resume)
- 	SET_RUNTIME_PM_OPS(ufshcd_runtime_suspend, ufshcd_runtime_resume, NULL)
- 	.prepare	 = ufshcd_suspend_prepare,
-+#ifdef CONFIG_PM_SLEEP
- 	.complete	 = ufshcd_resume_complete,
-+	.suspend         = ufshcd_system_suspend,
-+	.resume          = ufshcd_system_resume,
-+	.freeze          = ufshcd_system_freeze,
-+	.restore         = ufshcd_system_restore,
-+	.thaw            = ufshcd_system_thaw,
-+#endif
- };
- 
- static struct platform_driver ufs_qcom_pltform = {
-diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
-index 6d26ff0cc07e..aff5fe64631c 100644
---- a/include/ufs/ufshcd.h
-+++ b/include/ufs/ufshcd.h
-@@ -1073,6 +1073,9 @@ struct ufs_hba {
- 	struct ufs_hw_queue *uhq;
- 	struct ufs_hw_queue *dev_cmd_queue;
- 	struct ufshcd_mcq_opr_info_t mcq_opr[OPR_MAX];
-+
-+	/* Distinguish between resume and restore */
-+	bool restore;
- };
- 
- /**
-@@ -1278,8 +1281,12 @@ extern int ufshcd_runtime_resume(struct device *dev);
- #ifdef CONFIG_PM_SLEEP
- extern int ufshcd_system_suspend(struct device *dev);
- extern int ufshcd_system_resume(struct device *dev);
-+extern int ufshcd_system_freeze(struct device *dev);
-+extern int ufshcd_system_thaw(struct device *dev);
-+extern int ufshcd_system_restore(struct device *dev);
- #endif
- extern int ufshcd_shutdown(struct ufs_hba *hba);
-+
- extern int ufshcd_dme_configure_adapt(struct ufs_hba *hba,
- 				      int agreed_gear,
- 				      int adapt_val);
--- 
-Qualcomm India Private Limited, on behalf of Qualcomm Innovation Center, Inc., is a member of Code Aurora Forum, a Linux Foundation Collaborative Project
+From a maintainers' PoV, if the AML debugger completely encompasses this
+from a functional PoV with a good UX, I would probably encourage you to
+remove this once and for all (what's the value in having 2 of the same
+functionality?).
 
+Hopefully the FW folks can give more context and feedback.
+
+--=20
+Pedro
