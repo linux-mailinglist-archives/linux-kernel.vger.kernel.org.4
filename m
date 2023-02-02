@@ -2,109 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D81BA6887EB
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 21:00:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5860F6887F1
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 21:00:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232406AbjBBUAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 15:00:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46480 "EHLO
+        id S232228AbjBBUAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 15:00:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbjBBUAR (ORCPT
+        with ESMTP id S232762AbjBBUAa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 15:00:17 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B02BD75190;
-        Thu,  2 Feb 2023 12:00:16 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id l4-20020a17090a850400b0023013402671so6669491pjn.5;
-        Thu, 02 Feb 2023 12:00:16 -0800 (PST)
+        Thu, 2 Feb 2023 15:00:30 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFF9D8003C
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 12:00:25 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id be12so3207709edb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 12:00:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KTEXTLdEtQvrB7aVFpBYAbH4Vf/ihPabgDflRw+s72o=;
-        b=CuJhJ9UTVuPY/jraolwLg+hw6h/pKxRy1SLRd/hEO8GnE3cDoiPidADrjRGw4Tat7E
-         jsPj+B5/JWPEzkR1ov2cP4QLjkGjelgudaCyhdc4WTw+8Tb5Oonu+M6rmd85VoAp+09n
-         p29yqXXOCqF9Y85uU7Om7KJ2ttMYgVWNGXZB9YxNzDvxDzbpksNHc1G+p86CxKdlN0Ty
-         +rwXXExzAQPU5AL4D29Etk7FWGP466Or/Daf4dCE9QSEqudpR8qq8SpggqjYy48/R5Nd
-         XYVHbi+FsHBVz+Wv+DIRXgY0DRGWK3xQsCPpOzfidwB7nrd2hKVFHAH562MKRavuNJmY
-         xtXQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3NoqwPWGdPAAWq3tFe6UZV9Xjkz8TFbiEHT4UnURl68=;
+        b=Tn28cTUSKVUffrD7pCt/S1MhVB2RkrGSUwZX/JySWEYfCCwjY0OGIbyUa/ZCwJFffY
+         apfQkcw3TMBqChoq4X37lw40vtgOLTx0jwMxK7xd21TYs7M7uNtqkxqK6tJTIA4jbk3F
+         lr0s8xjSde00oNu5sxyac8YAn4DJakT1oN6Njx39tGn6hpYtheIen5hx2aqhR6Q6XWgZ
+         JJBKXwZVfTZd4jDAnnZFQ26FFZJYJz5Xq7PSi5/c9He0Q22yjnj0KWOcTs5yvPthItKq
+         kNmTSaCq/aB65gkTgiS8uHjYmW/GwH25E6jurgCa8WKKM7cVdmra1RyC1mbhWMD2PaVB
+         mOfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KTEXTLdEtQvrB7aVFpBYAbH4Vf/ihPabgDflRw+s72o=;
-        b=vtd4FKduuXJGgzVL1qvaa0spsjrfNLAc4k4gHSW6qy0v/sEL6ZdhfriGCUDj3xOqDn
-         hPN1nwtQlq2pR/IGXMPnSD1/1koWMvtHCOrdnuB8hFwJMlrlZ9r+6t8+rp1uC5jeXDBl
-         0YIyL3PsCUFZ7fA3XfsYEAaU9Flho4jsSKB1TtfbNWBW7ZZNgDj8kzXoyKak0J8kYgGw
-         vUVgMTsgX4938hCyFW2fraSx6Evsd5yMfHLBLXebBmf8VzwlsSeSrumTKBtr2c/OZNIu
-         kgQ0e3oUDhO41BT45j7D/kPUUuQ8j+xkCLK3jtUkX6INJvWlPs6nOCZwyFsWbggnGWQc
-         +83g==
-X-Gm-Message-State: AO0yUKVxZV5IHCvHh5RWcBom9QW+Qa5/dVAkWKbOld9PTdmsF7jY321G
-        tXf7ouxaWITGpoED3yHHSiY=
-X-Google-Smtp-Source: AK7set8Q9bsQxt4cyQu1ye65OLJScIues9R6Sdz55WQAGcTEZjBv9qXC8qRJpwpjQ6p92muQd2Vhww==
-X-Received: by 2002:a17:903:1111:b0:196:6ec4:52db with SMTP id n17-20020a170903111100b001966ec452dbmr8506618plh.51.1675368016015;
-        Thu, 02 Feb 2023 12:00:16 -0800 (PST)
-Received: from localhost ([2620:10d:c090:400::5:48a9])
-        by smtp.gmail.com with ESMTPSA id 10-20020a170902c14a00b001933b4b1a49sm53850plj.183.2023.02.02.12.00.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 12:00:15 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 2 Feb 2023 10:00:14 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Cc:     Intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Dave Airlie <airlied@redhat.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Rob Clark <robdclark@chromium.org>,
-        =?iso-8859-1?Q?St=E9phane?= Marchesin <marcheu@chromium.org>,
-        "T . J . Mercier" <tjmercier@google.com>, Kenny.Ho@amd.com,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Brian Welty <brian.welty@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-Subject: Re: [RFC 10/12] cgroup/drm: Introduce weight based drm cgroup control
-Message-ID: <Y9wWTspETnYYodDc@slm.duckdns.org>
-References: <20230112165609.1083270-1-tvrtko.ursulin@linux.intel.com>
- <20230112165609.1083270-11-tvrtko.ursulin@linux.intel.com>
- <Y9R2N8sl+7f8Zacv@slm.duckdns.org>
- <27b7882e-1201-b173-6f56-9ececb5780e8@linux.intel.com>
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3NoqwPWGdPAAWq3tFe6UZV9Xjkz8TFbiEHT4UnURl68=;
+        b=cPcRyRq8e8p7mqQ71fEjkxKXuIps8MxDWC63nk0NM97d6SoWazQ1YXynNy4DWMzriE
+         XgLuLpvp/Aotuuf8LNvRpBEU8ma7gC0PfkWl1+kwSmTon/nLW9Rv4uMZ+3UveXRFsdyn
+         aVwAkIzYsVe+3GwS3dzZyZN4EHOzOg3l8Z/7sAzpS9CZKF6T6hzKqPtlSehRJahirDaj
+         E+pLn9uKQsefKAd+tofL9AuxrrTKGHCsK3Drv3epxTP8UUNHqRMk8UVxah6lf7NqEzI3
+         jDrcETJMHsbmbbrwke8QwgeYDs8F2Re/2Sfw2zPqiJS3StNUWe7hhQd7Y5Od3v5CXgsN
+         sqjQ==
+X-Gm-Message-State: AO0yUKXC274iYQSXl0Tw4z+auXrgiEXV854N7QB4SjbY0PclXkfSTpfc
+        QsQ+ZKUIRtEJ9D5XTBQ+AKJUIg==
+X-Google-Smtp-Source: AK7set+rkkWRJNhGP6gyYP8lfc64qT2+M4TGBD1kvog85pXPp56JMHboaZCnQxFv3pufpNjZiZNnxQ==
+X-Received: by 2002:a05:6402:5288:b0:49d:a87f:ba7b with SMTP id en8-20020a056402528800b0049da87fba7bmr7635461edb.39.1675368024344;
+        Thu, 02 Feb 2023 12:00:24 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id el8-20020a056402360800b004a2470f920esm160692edb.25.2023.02.02.12.00.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Feb 2023 12:00:23 -0800 (PST)
+Message-ID: <8766f07e-a5d2-b59c-d130-f8cc2da64556@linaro.org>
+Date:   Thu, 2 Feb 2023 22:00:22 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <27b7882e-1201-b173-6f56-9ececb5780e8@linux.intel.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 4/6] dt-bindings: mailbox: qcom: add compatible for the
+ IPQ5332 SoC
+Content-Language: en-GB
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Kathiravan T <quic_kathirav@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org,
+        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, jassisinghbrar@gmail.com,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230202145208.2328032-1-quic_kathirav@quicinc.com>
+ <20230202145208.2328032-5-quic_kathirav@quicinc.com>
+ <3a346606-576b-ab89-78f5-5bbaca729090@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <3a346606-576b-ab89-78f5-5bbaca729090@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 02/02/2023 17:35, Krzysztof Kozlowski wrote:
+> On 02/02/2023 15:52, Kathiravan T wrote:
+>> Add the mailbox compatible for the IPQ5332 SoC.
+>>
+>> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
+>> ---
+>>   .../devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml     | 3 +++
+>>   1 file changed, 3 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml b/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml
+>> index 943f9472ae10..8d8cd1bbe67e 100644
+>> --- a/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml
+>> +++ b/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml
+>> @@ -18,6 +18,7 @@ properties:
+>>       oneOf:
+> 
+> - items:
+>      - enum:
+>          - qcom,ipq5332-apcs-apps-global
+>      - const: qcom,ipq6018-apcs-apps-global
+> 
+> and drop the next patch
 
-On Thu, Feb 02, 2023 at 02:26:06PM +0000, Tvrtko Ursulin wrote:
-> When you say active/inactive - to what you are referring in the cgroup
-> world? Offline/online? For those my understanding was offline was a
-> temporary state while css is getting destroyed.
-
-Oh, it's just based on activity. So, for example, iocost puts a cgroup on
-its active list which is canned periodically when an IO is issued from an
-inactive cgroup. If an active cgroup doesn't have any activity between two
-scans, it becomes inactive and dropped from the list. drm can prolly use the
-same approach?
-
-> Also, I am really postponing implementing those changes until I hear at
-> least something from the DRM community.
-
-Yeah, that sounds like a good idea.
-
-Thanks.
+Is it still ok even if the two devices are not fully compatible (iow, 
+using different PLL types)?
 
 -- 
-tejun
+With best wishes
+Dmitry
+
