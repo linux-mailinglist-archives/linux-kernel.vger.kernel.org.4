@@ -2,164 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8855E687B77
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 12:06:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB053687B7D
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 12:07:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229495AbjBBLF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 06:05:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59616 "EHLO
+        id S230017AbjBBLHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 06:07:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231894AbjBBLFn (ORCPT
+        with ESMTP id S229991AbjBBLGw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 06:05:43 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9941B84B4A
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 03:05:01 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id n28-20020a05600c3b9c00b003ddca7a2bcbso1063681wms.3
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 03:05:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=84LdQG7FtMDJskUXUfOk9gQLMSBtSXh4k9NsYiJXRp8=;
-        b=YY/PxCI0eSZTB1pdl42r362jpO42bOCq9Yw+LX8Ec62FpLPKaXUgZMLo4Up3JrS8Mp
-         w/GqZ+LnGAQ/5Pj5cAd2zhHn6wzlhbFjrftMDnUqEhBMAlV1EQV0dNVXzBALcKPmHHe5
-         NPly/afncSbS4UlFwDmGuDJxRC79BghUj/WdQ+RF205Q76FrLNzY6z3WqmJfgTOwOkGY
-         uccm2bazfSmmgIa7yT6+oV+DNtsBK3Z/ydro3dd5QZ3k7Nt0Uxciowi5vfJXF3jeHPsP
-         ELWV3AgenUEy3XigQD2p6ix69Fn5VHeqgUwHjfloJ369zdyxPEgbUYu5j7uE/cgZvDzt
-         haag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=84LdQG7FtMDJskUXUfOk9gQLMSBtSXh4k9NsYiJXRp8=;
-        b=EbRhBluzKruFqxWmfgEhyc1pOi79rYOiGc+WrTiklm/J+xrGnhcY7cheIsbw6aBDwz
-         cGIF3a7USP4LTC1eQUJHRQJqP/QU3EPRqElU7mFJV8++J+KKpZjxjfOiQfMWW8t7w8+p
-         tmtV62LyKdihq2lDN7X3y/zofNgKg/5ywc99AmsEKvDYxMxYHWgd3/TEL4drEEiED8ns
-         wHSHcFbcNKYNzczq9Y6DhX6e6HHi5yxyL4zewvcYcj4CVSscHNb+18G8HY9gI3KV51DW
-         K3HrsRs/DY2KYKJIImozNn+Uy8ZfuSTRaR0LRiUQnqGGuYtUzCDEB75osHi9OwoPwdbB
-         CSvw==
-X-Gm-Message-State: AO0yUKXloHju/c8p7ASHJ8fsapXlXgz5p9BbjdICfgMjtLh4GEcISbuM
-        dS563TeD5P4i2TxwcpiVlh+76A==
-X-Google-Smtp-Source: AK7set9bhwS4j0q/7L9EvuG4nE3Tl5dVTO9q14HaPAJVMDLA/gZQo/8p5swe04iHnL1tsJwtBlw2iw==
-X-Received: by 2002:a1c:7906:0:b0:3d3:49db:9b25 with SMTP id l6-20020a1c7906000000b003d349db9b25mr5335894wme.26.1675335892189;
-        Thu, 02 Feb 2023 03:04:52 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id r38-20020a05600c322600b003dd7edcc960sm4125824wmp.45.2023.02.02.03.04.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 03:04:51 -0800 (PST)
-Message-ID: <e706bb89-bb79-33e3-f319-268ec4695015@linaro.org>
-Date:   Thu, 2 Feb 2023 12:04:49 +0100
+        Thu, 2 Feb 2023 06:06:52 -0500
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.214])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4980E1206E;
+        Thu,  2 Feb 2023 03:06:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=5BWjL
+        d1/jaEBccjludNTfPy3Z/B05OXtOx+r4AztbjY=; b=qdBYC9xRAg87mLEPd00qD
+        9hXuyHGWQuuURF/BRRb3NHeWzBNMq2xVOGlGTjd8D4KfEFXYtq5xPoj5OT6BuCd2
+        brWwhlKen3/gOhDp4qPfSursxccvyOmpm8Yyfj5L8EglB2yEJ3xCThMrDQWpIfl0
+        9UMTDOmFJOn9hVs2+wO4Zk=
+Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
+        by zwqz-smtp-mta-g4-0 (Coremail) with SMTP id _____wDX0+8ImdtjYQxBCg--.48198S2;
+        Thu, 02 Feb 2023 19:05:44 +0800 (CST)
+From:   Zheng Wang <zyytlz.wz@163.com>
+To:     colyli@suse.de
+Cc:     hackerzheng666@gmail.com, kent.overstreet@gmail.com,
+        linux-bcache@vger.kernel.org, linux-kernel@vger.kernel.org,
+        security@kernel.org, alex000young@gmail.com,
+        Zheng Wang <zyytlz.wz@163.com>
+Subject: [PATCH] bcache: Fix a NULL or wild pointer dereference in btree_split
+Date:   Thu,  2 Feb 2023 19:05:43 +0800
+Message-Id: <20230202110543.27548-1-zyytlz.wz@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 15/23] interconnect: exynos: fix registration race
-Content-Language: en-US
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@samsung.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20230201101559.15529-1-johan+linaro@kernel.org>
- <20230201101559.15529-16-johan+linaro@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230201101559.15529-16-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _____wDX0+8ImdtjYQxBCg--.48198S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7tF1UXF1xZw15CFWDJFW3GFg_yoW8Wr4xpF
+        4xWFy3trW8Xr4jk3y5X3W0vF9Yv3WaqFWYk3s5ua48ZasxZr1fCFy0k34jvryUurs7Xa17
+        tr1Fvw15XF1UtaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziaLv_UUUUU=
+X-Originating-IP: [111.206.145.21]
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/xtbBzg4KU2I0XNTkLgAAsN
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/02/2023 11:15, Johan Hovold wrote:
-> The current interconnect provider registration interface is inherently
-> racy as nodes are not added until the after adding the provider. This
-> can specifically cause racing DT lookups to trigger a NULL-pointer
-> deference when either a NULL pointer or not fully initialised node is
-> returned from exynos_generic_icc_xlate().
-> 
-> Switch to using the new API where the provider is not registered until
-> after it has been fully initialised.
-> 
-> Fixes: 2f95b9d5cf0b ("interconnect: Add generic interconnect driver for Exynos SoCs")
-> Cc: stable@vger.kernel.org      # 5.11
-> Cc: Sylwester Nawrocki <s.nawrocki@samsung.com>
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->  drivers/interconnect/samsung/exynos.c | 20 ++++++++++----------
->  1 file changed, 10 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/interconnect/samsung/exynos.c b/drivers/interconnect/samsung/exynos.c
-> index e70665899482..72e42603823b 100644
-> --- a/drivers/interconnect/samsung/exynos.c
-> +++ b/drivers/interconnect/samsung/exynos.c
-> @@ -98,12 +98,13 @@ static int exynos_generic_icc_remove(struct platform_device *pdev)
->  	struct exynos_icc_priv *priv = platform_get_drvdata(pdev);
->  	struct icc_node *parent_node, *node = priv->node;
->  
-> +	icc_provider_deregister(&priv->provider);
-> +
->  	parent_node = exynos_icc_get_parent(priv->dev->parent->of_node);
->  	if (parent_node && !IS_ERR(parent_node))
->  		icc_link_destroy(node, parent_node);
->  
->  	icc_nodes_remove(&priv->provider);
-> -	icc_provider_del(&priv->provider);
->  
->  	return 0;
->  }
-> @@ -132,15 +133,11 @@ static int exynos_generic_icc_probe(struct platform_device *pdev)
->  	provider->inter_set = true;
->  	provider->data = priv;
->  
-> -	ret = icc_provider_add(provider);
-> -	if (ret < 0)
-> -		return ret;
-> +	icc_provider_init(provider);
->  
->  	icc_node = icc_node_create(pdev->id);
-> -	if (IS_ERR(icc_node)) {
-> -		ret = PTR_ERR(icc_node);
-> -		goto err_prov_del;
-> -	}
-> +	if (IS_ERR(icc_node))
-> +		return PTR_ERR(icc_node);
->  
->  	priv->node = icc_node;
->  	icc_node->name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "%pOFn",
-> @@ -171,14 +168,17 @@ static int exynos_generic_icc_probe(struct platform_device *pdev)
->  			goto err_pmqos_del;
->  	}
->  
-> +	ret = icc_provider_register(provider);
-> +	if (ret < 0)
-> +		goto err_pmqos_del;
+In btree_split, btree_node_alloc_replacement() is assigned to
+n1 and return error code or NULL on failure. n1->c->cache is
+passed to block_bytes. So there is a dereference of it
+ without checks, which may lead to wild pointer dereference or
+  NULL pointer dereference depending on n1. The initial code only
+  judge the error code but igore the NULL pointer.
+So does n2 and n3.
 
-If I understand correctly there is no need for icc_link_destroy() in
-error path here, right? Even in case of probe retry (defer or whatever
-reason) - the link will be removed with icc_nodes_remove()?
+Fix this bug by adding IS_ERR_OR_NULL check of n1, n2 and n3.
 
-Best regards,
-Krzysztof
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger.
+
+Fixes: cafe56359144 ("bcache: A block layer cache")
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+---
+ drivers/md/bcache/btree.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/md/bcache/btree.c b/drivers/md/bcache/btree.c
+index 147c493a989a..d5ed382fc43c 100644
+--- a/drivers/md/bcache/btree.c
++++ b/drivers/md/bcache/btree.c
+@@ -2206,7 +2206,7 @@ static int btree_split(struct btree *b, struct btree_op *op,
+ 	}
+ 
+ 	n1 = btree_node_alloc_replacement(b, op);
+-	if (IS_ERR(n1))
++	if (IS_ERR_OR_NULL(n1))
+ 		goto err;
+ 
+ 	split = set_blocks(btree_bset_first(n1),
+@@ -2218,12 +2218,12 @@ static int btree_split(struct btree *b, struct btree_op *op,
+ 		trace_bcache_btree_node_split(b, btree_bset_first(n1)->keys);
+ 
+ 		n2 = bch_btree_node_alloc(b->c, op, b->level, b->parent);
+-		if (IS_ERR(n2))
++		if (IS_ERR_OR_NULL(n2))
+ 			goto err_free1;
+ 
+ 		if (!b->parent) {
+ 			n3 = bch_btree_node_alloc(b->c, op, b->level + 1, NULL);
+-			if (IS_ERR(n3))
++			if (IS_ERR_OR_NULL(n3))
+ 				goto err_free2;
+ 		}
+ 
+-- 
+2.25.1
 
