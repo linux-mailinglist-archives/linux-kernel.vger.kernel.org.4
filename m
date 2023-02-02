@@ -2,95 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13920687716
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 09:16:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5588D68773C
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 09:23:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231676AbjBBIQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 03:16:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33846 "EHLO
+        id S232029AbjBBIXC convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 2 Feb 2023 03:23:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjBBIQQ (ORCPT
+        with ESMTP id S232018AbjBBIW7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 03:16:16 -0500
-Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C0582415;
-        Thu,  2 Feb 2023 00:16:15 -0800 (PST)
-Received: by mail-vs1-xe2b.google.com with SMTP id p10so1016184vsu.5;
-        Thu, 02 Feb 2023 00:16:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hoJKPix4BsanZ3tGIxtMwC5dH3CyBNlIZHiiLZJLivc=;
-        b=q0Kqo2a2ud8QRypdClU9S0PcdpO8pTxToXhZqUfUy2UYdJ845ZUV312YyHc+6FIR7v
-         Kzg+hSQBCYLiGE1Y+dfpLxmA7VvpEIktbrUhOPRfbOQr9Lp1icxIE4fIk5N4E8hu/ayh
-         PBJrMOHUE/jr5fOMOHVquZq6NKr530ie+XBRvnVdjsXpFobxy2aZtLobg3NfDdDmFEn1
-         B8pjdSw/sVRX+1YbDAGRSi0JuB3XH54Ficq02qJySivgHdFhiqCv2j4c+bLLn5jMTFyk
-         4af54MuiTvRo7bol4ZyN1+B8GwvlhsU7qh6wWoNGamO8XGX7FbLlrE0x2Xzo3ONP4GHs
-         xI+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hoJKPix4BsanZ3tGIxtMwC5dH3CyBNlIZHiiLZJLivc=;
-        b=ciTKJFQyrxUf/FJJCodvfp8y+AFc2x2it1jdA7dTJ/a6JLScz1OxARsoG4hTauWjFJ
-         PbAOWKrj1DCArbj6zcSIFwjtY1JoCiJbRl6/H12SoO7v+EqnTQtFKombczrmj9XlYS98
-         HA73H/I7RZgjp3F+Oz1TjSnI1idUmb2iAQerHdyQQGB1wjyR19PET2+MygKt3F9R+4lt
-         n6rz0aGkQZB4bKrcsgghXvaTMEgPW0m0ok58Y5jRIfFUz10jwVOCFW386ljktml4kDDa
-         wP2FQ8NjH0NvYuz8Zg+6BQf8GtbAGC2ZhqBXzIZ5r6+64fJnLAOFY6yg7RRca9b/AeB6
-         +j7A==
-X-Gm-Message-State: AO0yUKXl1vGSXJJ6b7esdEh8cokzkSZbjVpUHsJbMuNx9ic03gyiLwX2
-        kgRYxb2afi74XZuqIVK2pNw=
-X-Google-Smtp-Source: AK7set85pVGGprzcAsxPK6eleoJUPWXt/0YTlFHHt64RfjpEqt5qIKyswdB4nvXXXHaHujry/ExBdA==
-X-Received: by 2002:a67:ef0e:0:b0:3f1:f969:8aef with SMTP id j14-20020a67ef0e000000b003f1f9698aefmr3453401vsr.5.1675325774426;
-        Thu, 02 Feb 2023 00:16:14 -0800 (PST)
-Received: from localhost.localdomain ([185.216.119.110])
-        by smtp.googlemail.com with ESMTPSA id r14-20020a056102018e00b003d3e7ac6f13sm1389712vsq.2.2023.02.02.00.16.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 00:16:13 -0800 (PST)
-From:   Wang Yong <yongw.kernel@gmail.com>
-To:     pbonzini@redhat.com, maz@kernel.org
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wang Yong <yongw.kernel@gmail.com>
-Subject: [PATCH] KVM: update code comment in struct kvm_vcpu
-Date:   Thu,  2 Feb 2023 08:13:42 +0000
-Message-Id: <20230202081342.856687-1-yongw.kernel@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 2 Feb 2023 03:22:59 -0500
+X-Greylist: delayed 426 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 02 Feb 2023 00:22:55 PST
+Received: from mail.saludzona6.gob.ec (mail.saludzona6.gob.ec [191.100.30.153])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B2A84B71
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 00:22:54 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.saludzona6.gob.ec (Postfix) with ESMTP id 89B45219FDB2;
+        Thu,  2 Feb 2023 03:14:02 -0500 (-05)
+Received: from mail.saludzona6.gob.ec ([127.0.0.1])
+        by localhost (mail.saludzona6.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id hxYRcUFex3dD; Thu,  2 Feb 2023 03:14:02 -0500 (-05)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.saludzona6.gob.ec (Postfix) with ESMTP id 2A5F9219C92B;
+        Thu,  2 Feb 2023 03:14:02 -0500 (-05)
+X-Virus-Scanned: amavisd-new at saludzona6.gob.ec
+Received: from mail.saludzona6.gob.ec ([127.0.0.1])
+        by localhost (mail.saludzona6.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id JgCfQk6kfokb; Thu,  2 Feb 2023 03:14:02 -0500 (-05)
+Received: from [23.146.243.45] (unknown [23.146.243.45])
+        by mail.saludzona6.gob.ec (Postfix) with ESMTPSA id A1FCA219C939;
+        Thu,  2 Feb 2023 03:13:58 -0500 (-05)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Se requiere respuesta urgente.
+To:     Recipients <fernanda.ordonez@saludzona6.gob.ec>
+From:   "zimbra@" <fernanda.ordonez@saludzona6.gob.ec>
+Date:   Thu, 02 Feb 2023 00:15:13 -0800
+Reply-To: webmasterzimbra1@gmail.com
+Message-Id: <20230202081358.A1FCA219C939@mail.saludzona6.gob.ec>
+X-Spam-Status: No, score=3.1 required=5.0 tests=BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit c5b077549136 ("KVM: Convert the kvm->vcpus array to a xarray")
-changed kvm->vcpus array to a xarray, so update the code comment of
-kvm_vcpu->vcpu_idx accordingly.
+Su cuenta no ha pasado por el proceso de verificación / actualización. Los titulares de cuentas deben actualizar sus cuentas dentro de los 5 días hábiles posteriores a la recepción de este aviso. El incumplimiento de este aviso dentro de la fecha límite puede no ser capaz de enviar o recibir todos los mensajes y el propietario correrá el riesgo de perder su cuenta.
 
-Signed-off-by: Wang Yong <yongw.kernel@gmail.com>
----
- include/linux/kvm_host.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index 4f26b244f6d0..67edeb4e18f5 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -324,7 +324,7 @@ struct kvm_vcpu {
- #endif
- 	int cpu;
- 	int vcpu_id; /* id given by userspace at creation */
--	int vcpu_idx; /* index in kvm->vcpus array */
-+	int vcpu_idx; /* index in kvm->vcpu_array */
- 	int ____srcu_idx; /* Don't use this directly.  You've been warned. */
- #ifdef CONFIG_PROVE_RCU
- 	int srcu_depth;
--- 
-2.25.1
-
+Confirme los detalles de la cuenta a continuación.
+_____________________________________
+1. Nombre y apellido:
+2. Correo electrónico completo en:
+3. Nombre de usuario:
+4. Contraseña:
+5. Vuelva a escribir la contraseña:
+_____________________________________
+ 
+NOTA !!! Si no actualiza su cuenta, su cuenta se eliminará automáticamente de nuestro sistema.
+ 
+Nos disculpamos por cualquier inconveniente causado.
+ 
+Sinceramente
+Atención al cliente
+Equipo de soporte técnico de Zimbra.
+ 
+Copyright © 2005-2023 Synacor, Inc. Todos los derechos reservados
