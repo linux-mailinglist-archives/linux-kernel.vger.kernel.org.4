@@ -2,303 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02C986885AD
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 18:43:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 922BA6885B4
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 18:45:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231364AbjBBRn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 12:43:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35566 "EHLO
+        id S231160AbjBBRpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 12:45:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232365AbjBBRnu (ORCPT
+        with ESMTP id S230070AbjBBRps (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 12:43:50 -0500
-Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-db5eur01on2057.outbound.protection.outlook.com [40.107.15.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3991B1284B;
-        Thu,  2 Feb 2023 09:43:45 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gINmPXnAkG9tZz//QMYXj+F6eQCXa2SkZfc1QNX1QRZHLNZCgs1ngAccV1ZYsS9x5YXs8vKBShcTfbieI5yqVc+m2+jXxRP1ei0ebdlK/ndSlGDm2Kg4io3cjXChJS4JBHwdjZH/dhcfimYGtQeVibq3wbJZt/fhV7JpH5V5oHF9s9hPcwcwECKxTffH4ds2yHAuERc9cYvkmKupOYvrpjaKKxMM/wS8vere45vT+32VClZL7GTifODXL8hvxFQN9OJTBNN3gerK6XVhjKwC6KjDncXzxayQQ+1s40mln1/yyf1jgjIEsS4SY57FctT67yLmSH89PdLaMmACtD0bRw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pivN7g9MCH2SQ3PIvZgyvGakEcBuUDhYyGEBPLSRgNk=;
- b=ExRUJ2ms33WUHWPJ7FUK9rOOkNDoaIb1go9GjJYH8NBoS619xNCbaOhnreAUfokiVdpulpnf6Nli3Wf91Kz/ATW0Nw9D/WggFi9hV807iVUvhfysK22uTmJwxYwY+EbgLCk/2KMJv9rgQdussE7rhj6A4xS8nvngvkVv2wEXWz/eOkqXtqnMZIoQ1d+jiZAAvZ99PvRvCTF+aKGmp7zVl7zNhcJ94XzbRDKY0EZhLtRT4eQ8EQNhXXUjFwfxIfXcySOXxu4/fK1hdCba/cTknpgCI801xEpGMbVcCJ8xwayi9UqQ1kXQTREVvABAF2pLx0MbC8WQe5szkwAhNi4XZA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pivN7g9MCH2SQ3PIvZgyvGakEcBuUDhYyGEBPLSRgNk=;
- b=be42uc49jRCjRcrP1NQZRE8ks4CcaxqxsRrAQwmxmX/jj2FD7q6Ezj6Rg5zURgUNEqWw7ks+yieVvucUAgVqZlilkpU6/ahdCzfXmCaEEwxxBxkT/k3KU2no1PuThWCOhnJJSmOQhl9NB+pjlPtgbLW+R5NpvwVHSbqjlE1ZhT8=
-Received: from HE1PR0401MB2331.eurprd04.prod.outlook.com (2603:10a6:3:24::22)
- by AM7PR04MB7159.eurprd04.prod.outlook.com (2603:10a6:20b:111::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.30; Thu, 2 Feb
- 2023 17:43:43 +0000
-Received: from HE1PR0401MB2331.eurprd04.prod.outlook.com
- ([fe80::ca48:3816:f0b6:3fcd]) by HE1PR0401MB2331.eurprd04.prod.outlook.com
- ([fe80::ca48:3816:f0b6:3fcd%6]) with mapi id 15.20.6043.038; Thu, 2 Feb 2023
- 17:43:43 +0000
-From:   Frank Li <frank.li@nxp.com>
-To:     "M.H. Lian" <minghuan.lian@nxp.com>,
-        Mingkai Hu <mingkai.hu@nxp.com>, Roy Zang <roy.zang@nxp.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?iso-8859-2?Q?Krzysztof_Wilczy=F1ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "open list:PCI DRIVER FOR FREESCALE LAYERSCAPE" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        "open list:PCI DRIVER FOR FREESCALE LAYERSCAPE" 
-        <linux-pci@vger.kernel.org>,
-        "moderated list:PCI DRIVER FOR FREESCALE LAYERSCAPE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-CC:     "imx@lists.linux.dev" <imx@lists.linux.dev>
-Subject: RE: [PATCH 1/1] PCI: layerscape: Add the workaround for A-010305
-Thread-Topic: [PATCH 1/1] PCI: layerscape: Add the workaround for A-010305
-Thread-Index: AQHZJr5WwkFDleZU9E2wO25hi20GTK68DjRg
-Date:   Thu, 2 Feb 2023 17:43:42 +0000
-Message-ID: <HE1PR0401MB233120D46B7AA9F23AFD51C688D69@HE1PR0401MB2331.eurprd04.prod.outlook.com>
-References: <20230112194433.1514149-1-Frank.Li@nxp.com>
-In-Reply-To: <20230112194433.1514149-1-Frank.Li@nxp.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: HE1PR0401MB2331:EE_|AM7PR04MB7159:EE_
-x-ms-office365-filtering-correlation-id: ef24103c-069e-4606-c6ad-08db054506e9
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: DGEflz6wdnebIGDiysOGHguxqCjzUFQji4FK8qCG2E1H9zO6Km7SLHhhB2daX6EqYNFxiaQhDrH7rVzauEBs45FPtubsT2INaYn3Z8B7Gv1XHz4UWTIDa0aYL4G/zd1GaMOp/K4ib/tZ8fLCdeKC7KO1KzSiMBaxPaY2U1mSdlY8+32JTaE1GwV+E01S2YYpNTcJ5Su8tsgKJKACUU7vg8IjqleNLi045t9CyUJaParp6DYSX2KKlhUxUhYKv8n5WgU8+aJ5Vb0r/HLEtUwgQzDw1876wIKQRKHxkIJWgszCo16heAnwWv7JsfclctX36M5BWCBr1s2P+QgYDGEdviEsMPkBLZLi+ev/gjLrH9XS+/AvkHb6yDIMnAT7XFU5uDm66sEpe+4kqOpIDns+zM0NFG70u3h9XocQg0vhrbNMJ3hPSYRqkbThO5H/CTOqaTB/VtxRp4CprX6Ip4hdjfgl11tWZs0YjHk9RmSYLYk0D60KNo3obIHAe6S7ZNaOsLIzCJsDa2OWGcE/J5PGllYCUQ1TjaE6uBG8ZcqDbV8MC1YNNzWw4eAtsAbtS9fsMQ31hS9zBc1+fO5iH3dPCZCm9tTo5Bg+w8g2GXr6iESmiil/0oDzWZYDKcSe0YLxXneEoj3lDgdOtyq67mt9QgBy6dbSH9x01fxbrLtEDPhrsUstxditWr4q5LgnwptzRECPxBBBB7CVuToye0ea/C9n7pEMgaQCfbk/QWK7Kgs=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0401MB2331.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(396003)(346002)(39860400002)(366004)(376002)(451199018)(66446008)(4326008)(76116006)(41300700001)(66556008)(83380400001)(8936002)(8676002)(64756008)(5660300002)(38070700005)(6506007)(55236004)(26005)(122000001)(66946007)(9686003)(66476007)(33656002)(2906002)(186003)(110136005)(52536014)(38100700002)(478600001)(44832011)(86362001)(921005)(55016003)(7696005)(71200400001)(316002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-2?Q?T0akJbOfptDp8OjDS+d2U4Au7Vpb/xBAPk1et1KsDa/KLmgNlI6hHd1Gqu?=
- =?iso-8859-2?Q?43s1jCCvHJgZ2hZ8MVL/y6ZiGESdHzBVn6TyU25P9umY3x/oov6orj0OQ9?=
- =?iso-8859-2?Q?yHnzJx395DXbjDavChe6o+Zwd58MoTpAUwRkn1vGBepJNZ8ux9fna7DZSE?=
- =?iso-8859-2?Q?KdPY4F/7Cv10CwK7IITRvOMJlET993xV4vFS53a0S0FfamPe8QkdnxzDeU?=
- =?iso-8859-2?Q?hRWuQhB/FwTmAsAskfuMc9XH9tH9H0XJa02XQKYikGPv61B6zZgSwqhU73?=
- =?iso-8859-2?Q?epWcEouwGtXXVGdiJCcXPmoMsQloiXcPSpvnpXjB+vPu/61240z2aO8XlE?=
- =?iso-8859-2?Q?LQoglmNak6Z4X3V/16b295FTIX+Z9QNC3/+nAQK9xejY2N/B+CR0zeeHdB?=
- =?iso-8859-2?Q?og0rG7bFZh2ooOuNJLruZqqLbrMQIlplYF5lDAe7l4vGOBz3KG2D6HxTB/?=
- =?iso-8859-2?Q?A4CoCWQrFjkHaCmiYIMxtICQ43po6CFv+Q7r73zweqBXUnfmgp7xgq8Hsz?=
- =?iso-8859-2?Q?iE0F0PjBvWZTLayKosb1cQB6C5BAwGvA3Pi2SO+eB6LnUXGSLNb20b06nK?=
- =?iso-8859-2?Q?t6suwp2Sr6z3KE30Vm1OmjcKRvfX3kglJ/uU6xPOIwYwEI9T+ykC2X7I04?=
- =?iso-8859-2?Q?tK1hXNzEpvG3ArurIoWTglaG5jHnC+kDRE/xIv4mKa1TNbFhn34QMIqRSd?=
- =?iso-8859-2?Q?93mhEhGKE+DFv1Ol5g1XJzNo4U137IUW4jL3TOdAJfdnI1F0sHIlUQAz63?=
- =?iso-8859-2?Q?Gq6c0qqwX1MGUFqtj1JubAPS6AVXUOLIqnstyOYMcfIWhsvABrhYOAoSBy?=
- =?iso-8859-2?Q?2y9eOuNVIoX8pztjnyojaxBQ5mAkML6anQpSA0QML+Qdx5sKGAeHa45Yal?=
- =?iso-8859-2?Q?S6OGiMeC0Zf5uXuGg11y5NteY/kYU4jRPg7oTP4BZ8nDqpbNUZGe/OrFLC?=
- =?iso-8859-2?Q?K///lYqSnfTtkXtXTifOQmpNuigQpQ6TP+vJfvwN+pWC2texNOVSdJW+Iz?=
- =?iso-8859-2?Q?SWJoJ7nzqiNWOeSb+e02GLcOzVxyFhDDY30KXpiw2gTQsisu8Ofa9WXHSU?=
- =?iso-8859-2?Q?NNAbP4jqdWfn5qTZSuiKjBuEclKwBugUfQpQetS9qepAYKTWf+wzn+Ty7a?=
- =?iso-8859-2?Q?/nOGMtwlJvJW3eIiRBAquiW+NyFL8+t+et2CqAHGlbxksva3C5o/Wypc82?=
- =?iso-8859-2?Q?HjCC6T3Rd9OQTLWEHZvsFX3CVWi7aGdFitJWDjncW3UQsq3EeWC1u9gwDI?=
- =?iso-8859-2?Q?NaCf1FSGnumS06WE2ocKTbCwq9iPTZ0RanJcfPmf2yZ1iKnBx1zUAQybys?=
- =?iso-8859-2?Q?y31gOm9II2EQniOkxcFtuft7GVM/AA0hXsqva5bhL4UTHVllrbGdA0AAs+?=
- =?iso-8859-2?Q?ku24MPPnYlFBNZtmUOsiOOpAVIquaZ2BevnYkY4KK7wUNNbQR0ptl0PWR6?=
- =?iso-8859-2?Q?XDxfhvjD3WwqvSUZQGnIvz38MqmnmWeQJoCCPwXMgbEbhIxHlTmiqrJ3N1?=
- =?iso-8859-2?Q?Iq/k2sKgkhqvDG5XToHLD+UQo2jXF3CZ2cZY6zYvF/KWtczVHtHTeSwBWB?=
- =?iso-8859-2?Q?Fpz0aVAmKeB8cr9xP8Gxyay1108dhZn5eRrIqAb4gMwgCTToVKeUpjsLCq?=
- =?iso-8859-2?Q?+JEIaXYzMuWtg=3D?=
-Content-Type: text/plain; charset="iso-8859-2"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 2 Feb 2023 12:45:48 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E71125B1
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 09:45:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675359944; x=1706895944;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=vCb2WhJiRHFwoE1ZChI26/waem1U2x1ctLwJCbwvF8M=;
+  b=FpeMZX53nyJZ7hMR29DCLhkuAV6fTraUWi8+0WyIDIsmQ624oEV11VRE
+   PkzXIaAr8LPevWlCb1XiBBstuKa/5H4BygXUO0aYN3KMRLx6gm3EpbV2E
+   x2WCJVnn196HtUIzDA19tcGmCxXuIDAE/d1nr4pcZKzNdEWY+zbUFhRRm
+   0jRF6bNi5NiOYhDDm3fajx/TSt9nd7UYMCQE/iYyBzxTriiiU6qnMSoWC
+   gINoTNJnDxlapo5+UKQ67x1AqekFuL8OncCKbFlI9z1vwkJGCFI2AdOKb
+   EphaQTt2dLcHUmmBtTPbk1B2SAXSE8eM8T3WUDkcpwI1APaVM9Q+CfaJd
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="393104085"
+X-IronPort-AV: E=Sophos;i="5.97,268,1669104000"; 
+   d="scan'208";a="393104085"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2023 09:45:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="667360046"
+X-IronPort-AV: E=Sophos;i="5.97,268,1669104000"; 
+   d="scan'208";a="667360046"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 02 Feb 2023 09:45:41 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pNdeW-0006gx-1M;
+        Thu, 02 Feb 2023 17:45:40 +0000
+Date:   Fri, 3 Feb 2023 01:45:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Chen Lin <chen45464546@163.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>
+Subject: drivers/net/ethernet/mediatek/mtk_eth_soc.c:1481:23: warning: result
+ of comparison of constant 65536 with expression of type 'u16' (aka 'unsigned
+ short') is always true
+Message-ID: <202302030154.JHiHm9ZP-lkp@intel.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: HE1PR0401MB2331.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ef24103c-069e-4606-c6ad-08db054506e9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Feb 2023 17:43:42.9454
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: SydCLz5SjhwQjK0n6QhQegRXeA4KLDW60W4k/Z3JBVn3FKmxSbbqnU3bbDZz4eVVi3SQHiN2ykmrFlpVSNHhGQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB7159
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Subject: [PATCH 1/1] PCI: layerscape: Add the workaround for A-010305
->=20
-> From: Xiaowei Bao <xiaowei.bao@nxp.com>
->=20
-> When a link down or hot reset event occurs, the PCI Express EP
-> controller's Link Capabilities Register should retain the values of
-> the Maximum Link Width and Supported Link Speed configured by RCW.
->=20
-> Signed-off-by: Xiaowei Bao <xiaowei.bao@nxp.com>
-> Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> ---
+Hi Chen,
 
-Ping
+FYI, the error/warning still remains.
 
->  .../pci/controller/dwc/pci-layerscape-ep.c    | 112 +++++++++++++++++-
->  1 file changed, 111 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/pci/controller/dwc/pci-layerscape-ep.c
-> b/drivers/pci/controller/dwc/pci-layerscape-ep.c
-> index ed5cfc9408d9..1b884854c18e 100644
-> --- a/drivers/pci/controller/dwc/pci-layerscape-ep.c
-> +++ b/drivers/pci/controller/dwc/pci-layerscape-ep.c
-> @@ -18,6 +18,22 @@
->=20
->  #include "pcie-designware.h"
->=20
-> +#define PCIE_LINK_CAP			0x7C	/* PCIe Link
-> Capabilities*/
-> +#define MAX_LINK_SP_MASK		0x0F
-> +#define MAX_LINK_W_MASK			0x3F
-> +#define MAX_LINK_W_SHIFT		4
-> +
-> +/* PEX PFa PCIE pme and message interrupt registers*/
-> +#define PEX_PF0_PME_MES_DR             0xC0020
-> +#define PEX_PF0_PME_MES_DR_LUD         (1 << 7)
-> +#define PEX_PF0_PME_MES_DR_LDD         (1 << 9)
-> +#define PEX_PF0_PME_MES_DR_HRD         (1 << 10)
-> +
-> +#define PEX_PF0_PME_MES_IER            0xC0028
-> +#define PEX_PF0_PME_MES_IER_LUDIE      (1 << 7)
-> +#define PEX_PF0_PME_MES_IER_LDDIE      (1 << 9)
-> +#define PEX_PF0_PME_MES_IER_HRDIE      (1 << 10)
-> +
->  #define to_ls_pcie_ep(x)	dev_get_drvdata((x)->dev)
->=20
->  struct ls_pcie_ep_drvdata {
-> @@ -30,8 +46,90 @@ struct ls_pcie_ep {
->  	struct dw_pcie			*pci;
->  	struct pci_epc_features		*ls_epc;
->  	const struct ls_pcie_ep_drvdata *drvdata;
-> +	u8				max_speed;
-> +	u8				max_width;
-> +	bool				big_endian;
-> +	int				irq;
->  };
->=20
-> +static u32 ls_lut_readl(struct ls_pcie_ep *pcie, u32 offset)
-> +{
-> +	struct dw_pcie *pci =3D pcie->pci;
-> +
-> +	if (pcie->big_endian)
-> +		return ioread32be(pci->dbi_base + offset);
-> +	else
-> +		return ioread32(pci->dbi_base + offset);
-> +}
-> +
-> +static void ls_lut_writel(struct ls_pcie_ep *pcie, u32 offset,
-> +			  u32 value)
-> +{
-> +	struct dw_pcie *pci =3D pcie->pci;
-> +
-> +	if (pcie->big_endian)
-> +		iowrite32be(value, pci->dbi_base + offset);
-> +	else
-> +		iowrite32(value, pci->dbi_base + offset);
-> +}
-> +
-> +static irqreturn_t ls_pcie_ep_event_handler(int irq, void *dev_id)
-> +{
-> +	struct ls_pcie_ep *pcie =3D (struct ls_pcie_ep *)dev_id;
-> +	struct dw_pcie *pci =3D pcie->pci;
-> +	u32 val;
-> +
-> +	val =3D ls_lut_readl(pcie, PEX_PF0_PME_MES_DR);
-> +	if (!val)
-> +		return IRQ_NONE;
-> +
-> +	if (val & PEX_PF0_PME_MES_DR_LUD)
-> +		dev_info(pci->dev, "Detect the link up state !\n");
-> +	else if (val & PEX_PF0_PME_MES_DR_LDD)
-> +		dev_info(pci->dev, "Detect the link down state !\n");
-> +	else if (val & PEX_PF0_PME_MES_DR_HRD)
-> +		dev_info(pci->dev, "Detect the hot reset state !\n");
-> +
-> +	dw_pcie_dbi_ro_wr_en(pci);
-> +	dw_pcie_writew_dbi(pci, PCIE_LINK_CAP,
-> +			   (pcie->max_width << MAX_LINK_W_SHIFT) |
-> +			   pcie->max_speed);
-> +	dw_pcie_dbi_ro_wr_dis(pci);
-> +
-> +	ls_lut_writel(pcie, PEX_PF0_PME_MES_DR, val);
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static int ls_pcie_ep_interrupt_init(struct ls_pcie_ep *pcie,
-> +				     struct platform_device *pdev)
-> +{
-> +	u32 val;
-> +	int ret;
-> +
-> +	pcie->irq =3D platform_get_irq_byname(pdev, "pme");
-> +	if (pcie->irq < 0) {
-> +		dev_err(&pdev->dev, "Can't get 'pme' irq.\n");
-> +		return pcie->irq;
-> +	}
-> +
-> +	ret =3D devm_request_irq(&pdev->dev, pcie->irq,
-> +			       ls_pcie_ep_event_handler, IRQF_SHARED,
-> +			       pdev->name, pcie);
-> +	if (ret) {
-> +		dev_err(&pdev->dev, "Can't register PCIe IRQ.\n");
-> +		return ret;
-> +	}
-> +
-> +	/* Enable interrupts */
-> +	val =3D ls_lut_readl(pcie, PEX_PF0_PME_MES_IER);
-> +	val |=3D  PEX_PF0_PME_MES_IER_LDDIE |
-> PEX_PF0_PME_MES_IER_HRDIE |
-> +		PEX_PF0_PME_MES_IER_LUDIE;
-> +	ls_lut_writel(pcie, PEX_PF0_PME_MES_IER, val);
-> +
-> +	return 0;
-> +}
-> +
->  static const struct pci_epc_features*
->  ls_pcie_ep_get_features(struct dw_pcie_ep *ep)
->  {
-> @@ -125,6 +223,7 @@ static int __init ls_pcie_ep_probe(struct
-> platform_device *pdev)
->  	struct ls_pcie_ep *pcie;
->  	struct pci_epc_features *ls_epc;
->  	struct resource *dbi_base;
-> +	int ret;
->=20
->  	pcie =3D devm_kzalloc(dev, sizeof(*pcie), GFP_KERNEL);
->  	if (!pcie)
-> @@ -155,9 +254,20 @@ static int __init ls_pcie_ep_probe(struct
-> platform_device *pdev)
->=20
->  	pci->ep.ops =3D &ls_pcie_ep_ops;
->=20
-> +	pcie->big_endian =3D of_property_read_bool(dev->of_node, "big-
-> endian");
-> +
-> +	pcie->max_speed =3D dw_pcie_readw_dbi(pci, PCIE_LINK_CAP) &
-> +			  MAX_LINK_SP_MASK;
-> +	pcie->max_width =3D (dw_pcie_readw_dbi(pci, PCIE_LINK_CAP) >>
-> +			  MAX_LINK_W_SHIFT) & MAX_LINK_W_MASK;
-> +
->  	platform_set_drvdata(pdev, pcie);
->=20
-> -	return dw_pcie_ep_init(&pci->ep);
-> +	ret =3D dw_pcie_ep_init(&pci->ep);
-> +	if (ret)
-> +		return  ret;
-> +
-> +	return  ls_pcie_ep_interrupt_init(pcie, pdev);
->  }
->=20
->  static struct platform_driver ls_pcie_ep_driver =3D {
-> --
-> 2.34.1
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   9f266ccaa2f5228bfe67ad58a94ca4e0109b954a
+commit: 2f2c0d2919a14002760f89f4e02960c735a316d2 net: ethernet: mtk_eth_soc: fix misuse of mem alloc interface netdev[napi]_alloc_frag
+date:   8 months ago
+config: arm64-randconfig-r005-20230202 (https://download.01.org/0day-ci/archive/20230203/202302030154.JHiHm9ZP-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2f2c0d2919a14002760f89f4e02960c735a316d2
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 2f2c0d2919a14002760f89f4e02960c735a316d2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/net/ethernet/mediatek/
 
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/ethernet/mediatek/mtk_eth_soc.c:1481:23: warning: result of comparison of constant 65536 with expression of type 'u16' (aka 'unsigned short') is always true [-Wtautological-constant-out-of-range-compare]
+                   if (ring->frag_size <= PAGE_SIZE)
+                       ~~~~~~~~~~~~~~~ ^  ~~~~~~~~~
+   drivers/net/ethernet/mediatek/mtk_eth_soc.c:1931:23: warning: result of comparison of constant 65536 with expression of type 'u16' (aka 'unsigned short') is always true [-Wtautological-constant-out-of-range-compare]
+                   if (ring->frag_size <= PAGE_SIZE)
+                       ~~~~~~~~~~~~~~~ ^  ~~~~~~~~~
+   2 warnings generated.
+
+
+vim +1481 drivers/net/ethernet/mediatek/mtk_eth_soc.c
+
+  1434	
+  1435	static int mtk_poll_rx(struct napi_struct *napi, int budget,
+  1436			       struct mtk_eth *eth)
+  1437	{
+  1438		struct dim_sample dim_sample = {};
+  1439		struct mtk_rx_ring *ring;
+  1440		int idx;
+  1441		struct sk_buff *skb;
+  1442		u8 *data, *new_data;
+  1443		struct mtk_rx_dma_v2 *rxd, trxd;
+  1444		int done = 0, bytes = 0;
+  1445	
+  1446		while (done < budget) {
+  1447			struct net_device *netdev;
+  1448			unsigned int pktlen;
+  1449			dma_addr_t dma_addr;
+  1450			u32 hash, reason;
+  1451			int mac = 0;
+  1452	
+  1453			ring = mtk_get_rx_ring(eth);
+  1454			if (unlikely(!ring))
+  1455				goto rx_done;
+  1456	
+  1457			idx = NEXT_DESP_IDX(ring->calc_idx, ring->dma_size);
+  1458			rxd = ring->dma + idx * eth->soc->txrx.rxd_size;
+  1459			data = ring->data[idx];
+  1460	
+  1461			if (!mtk_rx_get_desc(eth, &trxd, rxd))
+  1462				break;
+  1463	
+  1464			/* find out which mac the packet come from. values start at 1 */
+  1465			if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2))
+  1466				mac = RX_DMA_GET_SPORT_V2(trxd.rxd5) - 1;
+  1467			else if (!MTK_HAS_CAPS(eth->soc->caps, MTK_SOC_MT7628) &&
+  1468				 !(trxd.rxd4 & RX_DMA_SPECIAL_TAG))
+  1469				mac = RX_DMA_GET_SPORT(trxd.rxd4) - 1;
+  1470	
+  1471			if (unlikely(mac < 0 || mac >= MTK_MAC_COUNT ||
+  1472				     !eth->netdev[mac]))
+  1473				goto release_desc;
+  1474	
+  1475			netdev = eth->netdev[mac];
+  1476	
+  1477			if (unlikely(test_bit(MTK_RESETTING, &eth->state)))
+  1478				goto release_desc;
+  1479	
+  1480			/* alloc new buffer */
+> 1481			if (ring->frag_size <= PAGE_SIZE)
+  1482				new_data = napi_alloc_frag(ring->frag_size);
+  1483			else
+  1484				new_data = mtk_max_lro_buf_alloc(GFP_ATOMIC);
+  1485			if (unlikely(!new_data)) {
+  1486				netdev->stats.rx_dropped++;
+  1487				goto release_desc;
+  1488			}
+  1489			dma_addr = dma_map_single(eth->dma_dev,
+  1490						  new_data + NET_SKB_PAD +
+  1491						  eth->ip_align,
+  1492						  ring->buf_size,
+  1493						  DMA_FROM_DEVICE);
+  1494			if (unlikely(dma_mapping_error(eth->dma_dev, dma_addr))) {
+  1495				skb_free_frag(new_data);
+  1496				netdev->stats.rx_dropped++;
+  1497				goto release_desc;
+  1498			}
+  1499	
+  1500			dma_unmap_single(eth->dma_dev, trxd.rxd1,
+  1501					 ring->buf_size, DMA_FROM_DEVICE);
+  1502	
+  1503			/* receive data */
+  1504			skb = build_skb(data, ring->frag_size);
+  1505			if (unlikely(!skb)) {
+  1506				skb_free_frag(data);
+  1507				netdev->stats.rx_dropped++;
+  1508				goto skip_rx;
+  1509			}
+  1510			skb_reserve(skb, NET_SKB_PAD + NET_IP_ALIGN);
+  1511	
+  1512			pktlen = RX_DMA_GET_PLEN0(trxd.rxd2);
+  1513			skb->dev = netdev;
+  1514			skb_put(skb, pktlen);
+  1515			if (trxd.rxd4 & eth->soc->txrx.rx_dma_l4_valid)
+  1516				skb->ip_summed = CHECKSUM_UNNECESSARY;
+  1517			else
+  1518				skb_checksum_none_assert(skb);
+  1519			skb->protocol = eth_type_trans(skb, netdev);
+  1520			bytes += pktlen;
+  1521	
+  1522			hash = trxd.rxd4 & MTK_RXD4_FOE_ENTRY;
+  1523			if (hash != MTK_RXD4_FOE_ENTRY) {
+  1524				hash = jhash_1word(hash, 0);
+  1525				skb_set_hash(skb, hash, PKT_HASH_TYPE_L4);
+  1526			}
+  1527	
+  1528			reason = FIELD_GET(MTK_RXD4_PPE_CPU_REASON, trxd.rxd4);
+  1529			if (reason == MTK_PPE_CPU_REASON_HIT_UNBIND_RATE_REACHED)
+  1530				mtk_ppe_check_skb(eth->ppe, skb,
+  1531						  trxd.rxd4 & MTK_RXD4_FOE_ENTRY);
+  1532	
+  1533			if (netdev->features & NETIF_F_HW_VLAN_CTAG_RX) {
+  1534				if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2)) {
+  1535					if (trxd.rxd3 & RX_DMA_VTAG_V2)
+  1536						__vlan_hwaccel_put_tag(skb,
+  1537							htons(RX_DMA_VPID(trxd.rxd4)),
+  1538							RX_DMA_VID(trxd.rxd4));
+  1539				} else if (trxd.rxd2 & RX_DMA_VTAG) {
+  1540					__vlan_hwaccel_put_tag(skb, htons(ETH_P_8021Q),
+  1541							       RX_DMA_VID(trxd.rxd3));
+  1542				}
+  1543	
+  1544				/* If the device is attached to a dsa switch, the special
+  1545				 * tag inserted in VLAN field by hw switch can * be offloaded
+  1546				 * by RX HW VLAN offload. Clear vlan info.
+  1547				 */
+  1548				if (netdev_uses_dsa(netdev))
+  1549					__vlan_hwaccel_clear_tag(skb);
+  1550			}
+  1551	
+  1552			skb_record_rx_queue(skb, 0);
+  1553			napi_gro_receive(napi, skb);
+  1554	
+  1555	skip_rx:
+  1556			ring->data[idx] = new_data;
+  1557			rxd->rxd1 = (unsigned int)dma_addr;
+  1558	
+  1559	release_desc:
+  1560			if (MTK_HAS_CAPS(eth->soc->caps, MTK_SOC_MT7628))
+  1561				rxd->rxd2 = RX_DMA_LSO;
+  1562			else
+  1563				rxd->rxd2 = RX_DMA_PREP_PLEN0(ring->buf_size);
+  1564	
+  1565			ring->calc_idx = idx;
+  1566	
+  1567			done++;
+  1568		}
+  1569	
+  1570	rx_done:
+  1571		if (done) {
+  1572			/* make sure that all changes to the dma ring are flushed before
+  1573			 * we continue
+  1574			 */
+  1575			wmb();
+  1576			mtk_update_rx_cpu_idx(eth);
+  1577		}
+  1578	
+  1579		eth->rx_packets += done;
+  1580		eth->rx_bytes += bytes;
+  1581		dim_update_sample(eth->rx_events, eth->rx_packets, eth->rx_bytes,
+  1582				  &dim_sample);
+  1583		net_dim(&eth->rx_dim, dim_sample);
+  1584	
+  1585		return done;
+  1586	}
+  1587	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
