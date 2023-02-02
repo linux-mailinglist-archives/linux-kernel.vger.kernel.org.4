@@ -2,95 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D79B687DC7
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 13:45:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3728D687DA6
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 13:41:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232424AbjBBMpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 07:45:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45120 "EHLO
+        id S230259AbjBBMlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 07:41:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232294AbjBBMpg (ORCPT
+        with ESMTP id S229881AbjBBMlt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 07:45:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED00C8D41C;
-        Thu,  2 Feb 2023 04:45:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BC17361B03;
-        Thu,  2 Feb 2023 12:40:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1EDD2C433A0;
-        Thu,  2 Feb 2023 12:40:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675341618;
-        bh=lKCownz5/4U7NVc3nPT9kCP+pGhNqlrUFsCLB1dLSZ0=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=JVe/OTmrFEQVDGUsoFaYQa33xZic5PZtBvJmiXXg7uLXOfRVvvbYppgx/bDw06VGh
-         JfusuWHTw5xOZ9MvsmdfNZyTnxUr+YOGPnxsw3bpFkHC9PzX1ooxntjZW7gHCmglca
-         YlC1zFHZVY4ifr51wQkj6TnbCGHFHN7kd3x+tcypYlj9p9secdTmVF6IEaX3D6WKKP
-         YqhpXvYQV6a7vfgfg3FCS7zFBAWr+qVlfh54Ks5cKl/xlV7Y3/Qn6xlXj+gARRVBv5
-         qkWWSsJ3o5UmMEYQX3UughlVL7DfEpRrEWxjPjoYT5v+1LMvNTOW4MyfDOc+tS77Lp
-         SxJx4yAP8m/Kg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 00A73C0C40E;
-        Thu,  2 Feb 2023 12:40:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 2 Feb 2023 07:41:49 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 699188DAFD;
+        Thu,  2 Feb 2023 04:41:12 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id a2so1301920wrd.6;
+        Thu, 02 Feb 2023 04:41:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uqbgRqyTVLRbe/zevz7M7Ult5EWX7ZO+3KY6VnfNffA=;
+        b=ixgo/Ztz3YhqK1Tx+im0ksvpFeC9dnwA2/UW2untG+lMVxspfHWYpARW9LxbP9SRts
+         dDuJjo4jT7LYiDN5FDwL9k2ZZJAgWMl2dOdNBwmm5puMrGvO0v3F957GfhPrvSBnxP40
+         irwbeX9UEowPJxusMiZOQt4qGQhijxzzU+J1PmoQ5xeIAdc8pTSAmyUv6Yl9CFq9G/5F
+         xhraGrt7MeUNKrfWB89vrdxMCswvQeFEKJiJfRMD6Rfohrm8OpdfexlubS+WBNT3ypHF
+         V5fGeF84hG13oEEhUcn6gfk+xftOtDgUtyavflq//SV9lOfxLdRadIXCvi0eFXfD+G76
+         8OJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uqbgRqyTVLRbe/zevz7M7Ult5EWX7ZO+3KY6VnfNffA=;
+        b=tAolWi2wzVUDf9oZPjgHotgFVFcJJUEjFOheGHT8vMXX022xZlNue+YAGye+IX1Gia
+         kInzfT2Z+CbSrMmcx1x6+r4COqPY/RmDyyLoWoCqbgQxXRDOBr1otk5PghZVbzIVom3L
+         lBNv0UGdiZ9gFUpZwygL2SUccQnaYy+TMk6KmUnMUYv5xKDhPxZ17XbMLYJ12OsUyETe
+         mIotDOPa2Z1Orb6zTtoMmddYnrTvCRyxwk7t9nKz5/b49FIyWvcsHWr4o2cVnFDIxYZz
+         W8nXnBN+8jsD/bgD8O9dkngk6soydk3il8q1Y8+B49z2ybaTeZB6S5jqSB7S68ME+WIH
+         Tncw==
+X-Gm-Message-State: AO0yUKVfouS0YOhRhzqcwaNvhA3LW3onDjJx8mDWyPUfuGSSVzJ/SM9C
+        LBH/qi31mccf1yzEefRrPN8lF223lXBgSg==
+X-Google-Smtp-Source: AK7set9aEuxXXfoNrQHqYo270n4J50ZYLhNmtpJb/+iD6yWf6MxfBT/EoBt7tbs96HbAiffh857HzA==
+X-Received: by 2002:a5d:6ad0:0:b0:2bf:9527:ce62 with SMTP id u16-20020a5d6ad0000000b002bf9527ce62mr4907395wrw.60.1675341642666;
+        Thu, 02 Feb 2023 04:40:42 -0800 (PST)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id r28-20020adfa15c000000b002bfd137ecddsm18017534wrr.11.2023.02.02.04.40.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Feb 2023 04:40:42 -0800 (PST)
+Message-ID: <cd82e2a1-dbf4-88ee-f658-f695ae9ef56a@gmail.com>
+Date:   Thu, 2 Feb 2023 13:40:40 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v4 1/4] selftests: net: udpgso_bench_rx: Fix 'used
- uninitialized' compiler warning
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167534161799.16818.2148957756242883137.git-patchwork-notify@kernel.org>
-Date:   Thu, 02 Feb 2023 12:40:17 +0000
-References: <20230201001612.515730-1-andrei.gherzan@canonical.com>
-In-Reply-To: <20230201001612.515730-1-andrei.gherzan@canonical.com>
-To:     Andrei Gherzan <andrei.gherzan@canonical.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, shuah@kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v6 0/6] add support for MT8195 VPPSYS on MMSYS and MUTEX
+Content-Language: en-US
+To:     Moudy Ho <moudy.ho@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-clk@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20230118032122.29956-1-moudy.ho@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20230118032122.29956-1-moudy.ho@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Whole series queued for the next merge window.
 
-This series was applied to netdev/net.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
+Thanks!
 
-On Wed,  1 Feb 2023 00:16:10 +0000 you wrote:
-> This change fixes the following compiler warning:
+On 18/01/2023 04:21, Moudy Ho wrote:
+> Changes since v5:
+> - Depend on :
+>    [1] https://patchwork.kernel.org/project/linux-mediatek/list/?series=713031
 > 
-> /usr/include/x86_64-linux-gnu/bits/error.h:40:5: warning: ‘gso_size’ may
-> be used uninitialized [-Wmaybe-uninitialized]
->    40 |     __error_noreturn (__status, __errnum, __format,
->    __va_arg_pack ());
->          |
-> 	 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 	 udpgso_bench_rx.c: In function ‘main’:
-> 	 udpgso_bench_rx.c:253:23: note: ‘gso_size’ was declared here
-> 	   253 |         int ret, len, gso_size, budget = 256;
+> Changes since v4:
+> - Rebase on linux-next.
+> - Remove MMSYS fallback compatible.
+> - Migrate MT8195 VPPSYS0/1 from clock to mtk-mmsys driver.
 > 
-> [...]
-
-Here is the summary with links:
-  - [net,v4,1/4] selftests: net: udpgso_bench_rx: Fix 'used uninitialized' compiler warning
-    https://git.kernel.org/netdev/net/c/c03c80e3a03f
-  - [net,v4,2/4] selftests: net: udpgso_bench_rx/tx: Stop when wrong CLI args are provided
-    https://git.kernel.org/netdev/net/c/db9b47ee9f5f
-  - [net,v4,3/4] selftests: net: udpgso_bench: Fix racing bug between the rx/tx programs
-    https://git.kernel.org/netdev/net/c/dafe93b9ee21
-  - [net,v4,4/4] selftests: net: udpgso_bench_tx: Cater for pending datagrams zerocopy benchmarking
-    https://git.kernel.org/netdev/net/c/329c9cd769c2
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+> Changes since v3:
+> - Rebase on linux-next.
+> 
+> Changes since v2:
+> - Depend on :
+>    [1] https://patchwork.kernel.org/project/linux-mediatek/list/?series=681097
+> - Split dts settings into two patches based on belonging to MMSYS or MUTEX.
+> 
+> Changes since v1:
+> - Depend on :
+>    [1] https://patchwork.kernel.org/project/linux-mediatek/list/?series=681097
+> - Add compatible names to VPPSYS0 and VPPSYS1 in MMSYS binding file.
+> - Fix VPPSYS's MMSYS and MUTEX dts to pass the dtsb_check.
+> - Rename mtk_mmsys_merge_config() and mtk_mmsys_rsz_dcm_config() to
+>    mtk_mmsys_vpp_rsz_merge_config() and mtk_mmsys_vpp_rsz_dcm_config().
+> - Clean up mtk_mmsys_vpp_rsz_dcm_config().
+> - Add a comment to mtk_mutex_write_mod() and clean it up for use in more
+>    than 32 mods.
+> 
+> Hi,
+> 
+> This series add support for MT8195's two VPPSYS(Video Processor Pipe Subsystem),
+> under which there will be corresponding MMSYS and MUTEX settings that
+> need to be configured.
+> 
+> Moudy Ho (1):
+>    arm64: dts: mediatek: mt8195: add MUTEX configuration for VPPSYS
+> 
+> Roy-CW.Yeh (5):
+>    dt-bindings: soc: mediatek: Add support for MT8195 VPPSYS
+>    arm64: dts: mediatek: mt8195: add MMSYS configuration for VPPSYS
+>    soc: mediatek: mmsys: add config api for RSZ switching and DCM
+>    soc: mediatek: mutex: Add mtk_mutex_set_mod support to set MOD1
+>    soc: mediatek: mutex: support MT8195 VPPSYS
+> 
+>   .../bindings/soc/mediatek/mediatek,mutex.yaml |   1 +
+>   arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  26 +++-
+>   drivers/soc/mediatek/mt8195-mmsys.h           |  13 ++
+>   drivers/soc/mediatek/mtk-mmsys.c              |  42 ++++++
+>   drivers/soc/mediatek/mtk-mutex.c              | 135 +++++++++++++++++-
+>   include/linux/soc/mediatek/mtk-mmsys.h        |   4 +
+>   include/linux/soc/mediatek/mtk-mutex.h        |  35 +++++
+>   7 files changed, 245 insertions(+), 11 deletions(-)
+> 
