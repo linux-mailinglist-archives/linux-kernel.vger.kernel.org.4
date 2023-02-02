@@ -2,175 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9294F688806
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 21:10:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0498868880D
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 21:10:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232478AbjBBUJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 15:09:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51540 "EHLO
+        id S232603AbjBBUK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 15:10:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231936AbjBBUJx (ORCPT
+        with ESMTP id S230070AbjBBUKX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 15:09:53 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6CAC7DBC5;
-        Thu,  2 Feb 2023 12:09:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675368591; x=1706904591;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EdGFswneWv/1WxwuBCK/pyMs4jxFBv++s6r7X4nvUeI=;
-  b=a9XWL4BmAh0bwTFVYZmPQdlW78S0cdz8eqYFbN+ISWFr+uF31b437qLo
-   w2xZLDZScKTeBB98cViYbBSQWLyXIO7VS5a+MK00RYcrgieMtQufRsfbA
-   FFdUZ0Q4tbFABecl+2D1wLoahXr+e5jGnXojg902UR0N7CguCIplVeP1D
-   Wkh/k+FjY2H9kTsbmUM251bjkfcxj9HY27zLbLXXdJG2cbNZiKEnuSZ12
-   3WL2pINEzT8+E0W5U5trjewMXcvVnreV945DATWwzoR3cf1SVPqprF3P9
-   ta1HkEdQi5kBjX2Whrk+PMtTm6rvyKZ7M7VGb0zu9St17FQdEWRmabLBb
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="308899347"
-X-IronPort-AV: E=Sophos;i="5.97,268,1669104000"; 
-   d="scan'208";a="308899347"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2023 12:09:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="994239335"
-X-IronPort-AV: E=Sophos;i="5.97,268,1669104000"; 
-   d="scan'208";a="994239335"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 02 Feb 2023 12:09:47 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pNftz-0006oI-0G;
-        Thu, 02 Feb 2023 20:09:47 +0000
-Date:   Fri, 3 Feb 2023 04:08:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>, robh+dt@kernel.org,
-        broonie@kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
-        jarkko@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, skomatineni@nvidia.com, ldewangan@nvidia.com,
-        Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Subject: Re: [PATCH 2/4] tpm: tegra: Support SPI tpm wait state detect
-Message-ID: <202302030428.MRyuAj03-lkp@intel.com>
-References: <20230202161750.21210-3-kyarlagadda@nvidia.com>
+        Thu, 2 Feb 2023 15:10:23 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8FC67D2A2;
+        Thu,  2 Feb 2023 12:10:21 -0800 (PST)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 312K7Lj6001915;
+        Thu, 2 Feb 2023 20:10:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=w9Xm2c23ybA3d5ETV1KVEB5XO3UXo1W7M3lqJi5nADQ=;
+ b=NhM+ov+O8mN2uwrdN8u0TSayqnExrHn5MgDe3KkapBdN0PZrq1nFJWzM5Q0gYPvZQvK8
+ 7Rz7BoCQI5bmSI+dU6ITQzd6sGd1jHPQJjvL+02lbTx0Tv8gVXhi5uNOg1hMMk1eUoz5
+ hhPlxVvB3r5QuEchQiWu/UcIMzwOHuioCR3BD1XmTn+sU/8H1yUsAh/0zORT2CBV3ty6
+ +yRwaC5GLnyPfcHM7ldcBdUX8ZCQb3hwJK5oghHV80pGf0yIQwTPjHKDqmlIytyZaKy+
+ G49+aDobKUFtJligZmtj40Tw+sbNHsw/RtT7yHRTuLUZVc6pPB/nxV0uRlmMWlgsZyr1 jg== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nfqt3kete-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Feb 2023 20:10:07 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 312KA6RF021373
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 2 Feb 2023 20:10:06 GMT
+Received: from [10.110.99.204] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 2 Feb 2023
+ 12:10:05 -0800
+Message-ID: <74594853-6ab9-c44d-6f67-38d65fc46466@quicinc.com>
+Date:   Thu, 2 Feb 2023 12:10:04 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230202161750.21210-3-kyarlagadda@nvidia.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [RFT PATCH v2 2/3] drm/msm/dsi: Stop unconditionally powering up
+ DSI hosts at modeset
+Content-Language: en-US
+To:     Doug Anderson <dianders@chromium.org>
+CC:     <dri-devel@lists.freedesktop.org>, Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Sean Paul <sean@poorly.run>, Jonas Karlman <jonas@kwiboo.se>,
+        Vinod Koul <vkoul@kernel.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        <freedreno@lists.freedesktop.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20230131141756.RFT.v2.1.I723a3761d57ea60c5dd754c144aed6c3b2ea6f5a@changeid>
+ <20230131141756.RFT.v2.2.I4cfeab9d0e07e98ead23dd0736ab4461e6c69002@changeid>
+ <43095d93-29c8-b30a-08c0-0a452770c1ce@quicinc.com>
+ <CAD=FV=X6A4aZVCaqhT9yP0tD82R3fnaDak67w+p8+Z=WkaRxfw@mail.gmail.com>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <CAD=FV=X6A4aZVCaqhT9yP0tD82R3fnaDak67w+p8+Z=WkaRxfw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: bfA7HV8UXRTuB82Wtoq4iHgIatb5n-Xn
+X-Proofpoint-GUID: bfA7HV8UXRTuB82Wtoq4iHgIatb5n-Xn
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-02_14,2023-02-02_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ bulkscore=0 adultscore=0 mlxlogscore=999 impostorscore=0
+ priorityscore=1501 mlxscore=0 phishscore=0 spamscore=0 lowpriorityscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302020180
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krishna,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on char-misc/char-misc-testing]
-[also build test WARNING on char-misc/char-misc-next char-misc/char-misc-linus broonie-spi/for-next robh/for-next linus/master v6.2-rc6 next-20230202]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Krishna-Yarlagadda/dt-bindings-tpm-Add-compatible-for-Tegra-TPM/20230203-002113
-patch link:    https://lore.kernel.org/r/20230202161750.21210-3-kyarlagadda%40nvidia.com
-patch subject: [PATCH 2/4] tpm: tegra: Support SPI tpm wait state detect
-config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20230203/202302030428.MRyuAj03-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/9a454b022e5273e483b968f1998e0b177e71fcb2
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Krishna-Yarlagadda/dt-bindings-tpm-Add-compatible-for-Tegra-TPM/20230203-002113
-        git checkout 9a454b022e5273e483b968f1998e0b177e71fcb2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash drivers/char/tpm/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/char/tpm/tpm_tis_spi_tegra.c:23:5: warning: no previous prototype for 'tpm_tis_spi_tegra_transfer' [-Wmissing-prototypes]
-      23 | int tpm_tis_spi_tegra_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-vim +/tpm_tis_spi_tegra_transfer +23 drivers/char/tpm/tpm_tis_spi_tegra.c
+On 2/1/2023 6:33 AM, Doug Anderson wrote:
+> Hi,
+> 
+> On Tue, Jan 31, 2023 at 3:32 PM Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
+>>
+>> On 1/31/2023 2:18 PM, Douglas Anderson wrote:
+>>> In commit 7d8e9a90509f ("drm/msm/dsi: move DSI host powerup to modeset
+>>> time"), we moved powering up DSI hosts to modeset time. This wasn't
+>>> because it was an elegant design, but there were no better options.
+>>>
+>>> That commit actually ended up breaking ps8640, and thus was born
+>>> commit ec7981e6c614 ("drm/msm/dsi: don't powerup at modeset time for
+>>> parade-ps8640") as a temporary hack to un-break ps8640 by moving it to
+>>> the old way of doing things. It turns out that ps8640 _really_ doesn't
+>>> like its pre_enable() function to be called after
+>>> dsi_mgr_bridge_power_on(). Specifically (from experimentation, not
+>>> because I have any inside knowledge), it looks like the assertion of
+>>> "RST#" in the ps8640 runtime resume handler seems like it's not
+>>> allowed to happen after dsi_mgr_bridge_power_on()
+>>>
+>>> Recently, Dave Stevenson's series landed allowing bridges some control
+>>> over pre_enable ordering. The meaty commit for our purposes is commit
+>>> 4fb912e5e190 ("drm/bridge: Introduce pre_enable_prev_first to alter
+>>> bridge init order"). As documented by that series, if a bridge doesn't
+>>> set "pre_enable_prev_first" then we should use the old ordering.
+>>>
+>>> Now that we have the commit ("drm/bridge: tc358762: Set
+>>> pre_enable_prev_first") we can go back to the old ordering, which also
+>>> allows us to remove the ps8640 special case.
+>>>
+>>> One last note is that even without reverting commit 7d8e9a90509f
+>>> ("drm/msm/dsi: move DSI host powerup to modeset time"), if you _just_
+>>> revert the ps8640 special case and try it out then it doesn't seem to
+>>> fail anymore. I spent time bisecting / debugging this and it turns out
+>>> to be mostly luck, so we still want this patch to make sure it's
+>>> solid. Specifically the reason it sorta works these days is because
+>>> we implemented wait_hpd_asserted() in ps8640 now, plus the magic of
+>>> "pm_runtime" autosuspend. The fact that we have wait_hpd_asserted()
+>>> implemented means that we actually power the bridge chip up just a wee
+>>> bit earlier and then the bridge happens to stay on because of
+>>> autosuspend and thus ends up powered before dsi_mgr_bridge_power_on().
+>>>
+>>> Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>
+>>> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+>>> Cc: Abhinav Kumar <quic_abhinavk@quicinc.com>
+>>> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+>>> ---
+>>>
+>>> Changes in v2:
+>>> - Don't fold dsi_mgr_bridge_power_on() back into dsi_mgr_bridge_pre_enable()
+>>>
+>>>    drivers/gpu/drm/msm/dsi/dsi_manager.c | 38 +--------------------------
+>>>    1 file changed, 1 insertion(+), 37 deletions(-)
+>>>
+>>> diff --git a/drivers/gpu/drm/msm/dsi/dsi_manager.c b/drivers/gpu/drm/msm/dsi/dsi_manager.c
+>>> index 1bbac72dad35..2197a54b9b96 100644
+>>> --- a/drivers/gpu/drm/msm/dsi/dsi_manager.c
+>>> +++ b/drivers/gpu/drm/msm/dsi/dsi_manager.c
+>>> @@ -34,32 +34,6 @@ static struct msm_dsi_manager msm_dsim_glb;
+>>>    #define IS_SYNC_NEEDED()    (msm_dsim_glb.is_sync_needed)
+>>>    #define IS_MASTER_DSI_LINK(id)      (msm_dsim_glb.master_dsi_link_id == id)
+>>>
+>>> -#ifdef CONFIG_OF
+>>> -static bool dsi_mgr_power_on_early(struct drm_bridge *bridge)
+>>> -{
+>>> -     struct drm_bridge *next_bridge = drm_bridge_get_next_bridge(bridge);
+>>> -
+>>> -     /*
+>>> -      * If the next bridge in the chain is the Parade ps8640 bridge chip
+>>> -      * then don't power on early since it seems to violate the expectations
+>>> -      * of the firmware that the bridge chip is running.
+>>> -      *
+>>> -      * NOTE: this is expected to be a temporary special case. It's expected
+>>> -      * that we'll eventually have a framework that allows the next level
+>>> -      * bridge to indicate whether it needs us to power on before it or
+>>> -      * after it. When that framework is in place then we'll use it and
+>>> -      * remove this special case.
+>>> -      */
+>>> -     return !(next_bridge && next_bridge->of_node &&
+>>> -              of_device_is_compatible(next_bridge->of_node, "parade,ps8640"));
+>>> -}
+>>> -#else
+>>> -static inline bool dsi_mgr_power_on_early(struct drm_bridge *bridge)
+>>> -{
+>>> -     return true;
+>>> -}
+>>> -#endif
+>>> -
+>>>    static inline struct msm_dsi *dsi_mgr_get_dsi(int id)
+>>>    {
+>>>        return msm_dsim_glb.dsi[id];
+>>> @@ -265,12 +239,6 @@ static void dsi_mgr_bridge_power_on(struct drm_bridge *bridge)
+>>>        int ret;
+>>>
+>>>        DBG("id=%d", id);
+>>> -     if (!msm_dsi_device_connected(msm_dsi))
+>>> -             return;
+>>> -
+>>> -     /* Do nothing with the host if it is slave-DSI in case of bonded DSI */
+>>> -     if (is_bonded_dsi && !IS_MASTER_DSI_LINK(id))
+>>> -             return;
+>>>
+>>
+>> Why are these two checks removed?
+> 
+> After this patch there is now one caller to this function and the one
+> caller does those exact same two checks immediately before calling
+> this function. Thus, they no longer do anything useful.
+> 
+> -Doug
 
-    22	
-  > 23	int tpm_tis_spi_tegra_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
-    24				       u8 *in, const u8 *out)
-    25	{
-    26		struct tpm_tis_spi_phy *phy = to_tpm_tis_spi_phy(data);
-    27		int ret = 0;
-    28		struct spi_message m;
-    29		struct spi_transfer spi_xfer[3];
-    30		u8 transfer_len;
-    31	
-    32		spi_bus_lock(phy->spi_device->master);
-    33	
-    34		while (len) {
-    35			transfer_len = min_t(u16, len, MAX_SPI_FRAMESIZE);
-    36	
-    37			spi_message_init(&m);
-    38			phy->iobuf[0] = (in ? 0x80 : 0) | (transfer_len - 1);
-    39			phy->iobuf[1] = 0xd4;
-    40			phy->iobuf[2] = addr >> 8;
-    41			phy->iobuf[3] = addr;
-    42	
-    43			memset(&spi_xfer, 0, sizeof(spi_xfer));
-    44	
-    45			spi_xfer[0].tx_buf = phy->iobuf;
-    46			spi_xfer[0].len = 1;
-    47			spi_message_add_tail(&spi_xfer[0], &m);
-    48	
-    49			spi_xfer[1].tx_buf = phy->iobuf + 1;
-    50			spi_xfer[1].len = 3;
-    51			spi_message_add_tail(&spi_xfer[1], &m);
-    52	
-    53			if (out) {
-    54				spi_xfer[2].tx_buf = &phy->iobuf[4];
-    55				spi_xfer[2].rx_buf = NULL;
-    56				memcpy(&phy->iobuf[4], out, transfer_len);
-    57				out += transfer_len;
-    58			}
-    59			if (in) {
-    60				spi_xfer[2].tx_buf = NULL;
-    61				spi_xfer[2].rx_buf = &phy->iobuf[4];
-    62			}
-    63			spi_xfer[2].len = transfer_len;
-    64			spi_message_add_tail(&spi_xfer[2], &m);
-    65	
-    66			reinit_completion(&phy->ready);
-    67			ret = spi_sync_locked(phy->spi_device, &m);
-    68			if (ret < 0)
-    69				goto exit;
-    70	
-    71			if (in) {
-    72				memcpy(in, &phy->iobuf[4], transfer_len);
-    73				in += transfer_len;
-    74			}
-    75	
-    76			len -= transfer_len;
-    77		}
-    78	
-    79	exit:
-    80		spi_bus_unlock(phy->spi_device->master);
-    81		return ret;
-    82	}
-    83	
+Ack, understood. dsi_mgr_bridge_pre_enable() has the same checks. Hence,
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
