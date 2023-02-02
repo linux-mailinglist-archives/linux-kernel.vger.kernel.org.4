@@ -2,81 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F98D687A7A
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 11:43:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 287CA687A77
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 11:43:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232678AbjBBKn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 05:43:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40530 "EHLO
+        id S232502AbjBBKnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 05:43:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232560AbjBBKnY (ORCPT
+        with ESMTP id S232432AbjBBKnI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 05:43:24 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 203FC81B2C
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 02:42:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675334555;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ho+ccJtLtBpITLkLYhs6bIYgWBkO7LdUscEjHhHLUMw=;
-        b=fPAAq/280g7kAYq24zTTEyG7ffLE8nTar6bA0eZlCHk8TjA5XBvTy0ZC8g+Fo8uEcYdD7O
-        DUVnQ4SbyIe0+7N48DHDpJ1nU8BaTCB+w7mbZUgblDXj/e/7tkgh7vxggasIVepBeDaP83
-        eov/Jtce6dPr5NhYY2hLCt2+TdpfVks=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-636-nvhH61iRNXyF5jozhzAfPg-1; Thu, 02 Feb 2023 05:42:32 -0500
-X-MC-Unique: nvhH61iRNXyF5jozhzAfPg-1
-Received: by mail-qk1-f199.google.com with SMTP id q21-20020a05620a0d9500b0070572ccdbf9so1072040qkl.10
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 02:42:32 -0800 (PST)
+        Thu, 2 Feb 2023 05:43:08 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2701726
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 02:42:57 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id r18so995483pgr.12
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 02:42:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=igel-co-jp.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ldGt9CJfPI87gpBgmJqLjVS33kkn4ot4dZ1LzRIHTPU=;
+        b=EtrrguGOFagT+7kLAk6uTCf2dZGN0V2lCd1mIKii+4o1yT5n+YV479v6rWAtqm2894
+         EABYCzqBz/fN0oOMwM36Nc4O0fdp75HasO+9aAwoPjBMW4W2zcwIQgfkF+9EpEO9xn4o
+         Z6ctl6ZFxsBKfXQwhY63l3R8/ALoTj59C0Fh3wdAH5WIRVI2hODdscuiwrLQYb9GWb/G
+         O1LtgdXqkxmXCrRTUwfgY5dCuAKAdPHsHXRVDaQ5lGBXymtSHAUmrc+pl7NnlwWRWMbO
+         IJx1h97Zk6ylX+8ravr91EOpEZcOkJXEyaQ45X0bW61KQkKlmO/4g4W5CGF7wlsAFF12
+         TCVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ho+ccJtLtBpITLkLYhs6bIYgWBkO7LdUscEjHhHLUMw=;
-        b=3o25vhc1Myxh8BF16u+wHHlXKCYp4Z+V5k1ct+nwQW9QTp0wxR7vpd8+gHtW4mV4CB
-         eoDVDVuSB0JXpoaJGUlHhEC79QIyuo7r8+anaKCd4fpswa2xkfmvcgK+d77H1UZ/dsDO
-         wV06yEWZeDOXsNi8nPfDonOzmVQZ7l8ItEJpv/OA4WKGEyGqz6lbi64tCo7GLZbnEbkI
-         sPgjgAl/hWsX6QvDIHZPFS2h8f7U+CKdneyt85YTK1YRhBQl93eJMcMf5yeH/Hm8JrdG
-         E+zLCAZ3z4VdW/qh0j8rPwRz/roGsMWII6NDo0T0s72gOLLKLoZsliZFnJXpRTZEzWsP
-         hYzw==
-X-Gm-Message-State: AO0yUKUdmmTFm+yTl+qhHy8pkm1V5qNTS34XCjeWeOjhlm6DlvIt6AHK
-        txQzz/WWQSLTVEC8skcaZ+numJpv97HAsStO3pd3exJDmN7smqjosEfQX6Tr8lpIAn69hFqIYiS
-        86z9EmO79JFgXg1RFCr6+MRgO
-X-Received: by 2002:a05:622a:17c4:b0:3b8:5199:f841 with SMTP id u4-20020a05622a17c400b003b85199f841mr10073751qtk.0.1675334551794;
-        Thu, 02 Feb 2023 02:42:31 -0800 (PST)
-X-Google-Smtp-Source: AK7set9l9YbYKqY1fhf6MsOWze02notkxE8uOqZ+/rtvlhTb1RriumkksBnO6Q76zJf7Wp/YB33EhA==
-X-Received: by 2002:a05:622a:17c4:b0:3b8:5199:f841 with SMTP id u4-20020a05622a17c400b003b85199f841mr10073723qtk.0.1675334551459;
-        Thu, 02 Feb 2023 02:42:31 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-113-28.dyn.eolo.it. [146.241.113.28])
-        by smtp.gmail.com with ESMTPSA id jt9-20020a05622aa00900b003b80fdaa14dsm13565916qtb.73.2023.02.02.02.42.29
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ldGt9CJfPI87gpBgmJqLjVS33kkn4ot4dZ1LzRIHTPU=;
+        b=grdc41fSZjKZ6NWUUrLydbV17IMlzuLNZqhhq2dxtcqpgcBuZuUzWtjCapeKNyW4VR
+         XyxeDX7vC4C+UUlL14WCYagHqVNIEo5B6jcx9EJuk4YTf0NgSOSqfPO7Gao6a+6CYAY3
+         MQzrNq/N6Aifgt0OiV0AtS0vRFvDMGsx3dmpzMpDoiWn67OiGRfOsc0ErBIU8mj1a332
+         pN3jEuL/oHSImcD7tgtP8g4GqBIUrRa10jgJft3Eh99rb2C1h1iGqBE7OUEyv9gP/LLB
+         N0VmQz6O2LJepbK2mWWIGa6ULSUaoAtk/iRKq/jTwqFJAC6tHCv7Zej4c/kotx63mx3Z
+         axrQ==
+X-Gm-Message-State: AO0yUKX0t2yL9lNPpcZddSb8lq/M6P5GxCwh4zvC7wk/l/P1piamCYpQ
+        gZgKEVFDeLWrEc8+xrcZMY6Kr2piMc94hDh2
+X-Google-Smtp-Source: AK7set/Rs7+nLs58UmDprCnbeh0PTlwwm4Q7EdQOVVglBIKiQVz3PTwKOQuKPXet1bSUyYwrziJkYg==
+X-Received: by 2002:a05:6a00:248c:b0:58d:abd5:504a with SMTP id c12-20020a056a00248c00b0058dabd5504amr6366086pfv.31.1675334576527;
+        Thu, 02 Feb 2023 02:42:56 -0800 (PST)
+Received: from tyrell.hq.igel.co.jp (napt.igel.co.jp. [219.106.231.132])
+        by smtp.gmail.com with ESMTPSA id u144-20020a627996000000b0055f209690c0sm13294220pfc.50.2023.02.02.02.42.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 02:42:30 -0800 (PST)
-Message-ID: <9f37bea4eeb6340f5c20e74d134033d037fe969f.camel@redhat.com>
-Subject: Re: [PATCH net-next 11/13] rxrpc: Show consumed and freed packets
- as non-dropped in dropwatch
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     David Howells <dhowells@redhat.com>, netdev@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org
-Date:   Thu, 02 Feb 2023 11:42:28 +0100
-In-Reply-To: <20230131171227.3912130-12-dhowells@redhat.com>
-References: <20230131171227.3912130-1-dhowells@redhat.com>
-         <20230131171227.3912130-12-dhowells@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+        Thu, 02 Feb 2023 02:42:56 -0800 (PST)
+From:   Shunsuke Mie <mie@igel.co.jp>
+To:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Rusty Russell <rusty@rustcorp.com.au>
+Cc:     kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, Shunsuke Mie <mie@igel.co.jp>
+Subject: [PATCH] vringh: fix a typo in comments for vringh_kiov
+Date:   Thu,  2 Feb 2023 19:42:48 +0900
+Message-Id: <20230202104248.2040652-1-mie@igel.co.jp>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,36 +70,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-01-31 at 17:12 +0000, David Howells wrote:
-> Set a reason when freeing a packet that has been consumed such that
-> dropwatch doesn't complain that it has been dropped.
->=20
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> cc: Marc Dionne <marc.dionne@auristor.com>
-> cc: linux-afs@lists.infradead.org
-> ---
->  net/rxrpc/skbuff.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/net/rxrpc/skbuff.c b/net/rxrpc/skbuff.c
-> index ebe0c75e7b07..944320e65ea8 100644
-> --- a/net/rxrpc/skbuff.c
-> +++ b/net/rxrpc/skbuff.c
-> @@ -63,7 +63,7 @@ void rxrpc_free_skb(struct sk_buff *skb, enum rxrpc_skb=
-_trace why)
->  	if (skb) {
->  		int n =3D atomic_dec_return(select_skb_count(skb));
->  		trace_rxrpc_skb(skb, refcount_read(&skb->users), n, why);
-> -		kfree_skb(skb);
-> +		kfree_skb_reason(skb, SKB_CONSUMED);
+Probably it is a simple copy error from struct vring_iov.
 
-Just for the records, and not intending blocking this series, IMHO:
+Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
+---
+ include/linux/vringh.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-		consume_skb(skb);=20
-
-would probably be more straight-forward/clear.
-
-Cheers,
-
-Paolo
+diff --git a/include/linux/vringh.h b/include/linux/vringh.h
+index 212892cf9822..1991a02c6431 100644
+--- a/include/linux/vringh.h
++++ b/include/linux/vringh.h
+@@ -92,7 +92,7 @@ struct vringh_iov {
+ };
+ 
+ /**
+- * struct vringh_iov - kvec mangler.
++ * struct vringh_kiov - kvec mangler.
+  *
+  * Mangles kvec in place, and restores it.
+  * Remaining data is iov + i, of used - i elements.
+-- 
+2.25.1
 
