@@ -2,83 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B13E687F97
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 15:11:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 290F5687F99
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 15:11:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231932AbjBBOLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 09:11:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56742 "EHLO
+        id S232073AbjBBOLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 09:11:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjBBOLM (ORCPT
+        with ESMTP id S232047AbjBBOLP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 09:11:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B62DE88F13
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 06:11:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 74458B8266A
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 14:11:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEB0BC4339B;
-        Thu,  2 Feb 2023 14:11:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675347069;
-        bh=gBdaWyT3fPaApgmaz3AU3hrMLEA89JaIs6+g1TDSppM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=lAnVZyNHprfWqUF/wAqyHEyrJuuxchV5O5U28OSvwGQlf2CaqDMHZCzNczPMXBDWw
-         ajW0AHu9KpeHrFCC3s1GxpgkCrzxmfA/pqdm03PPrsVuhEmBMgsWJggY8oP/qi5u1a
-         KDtKm/huij4AqTnAuz7ijqO9qPuuW0bp9AOfoiC4=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nadav Amit <namit@vmware.com>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH] misc: vmw_balloon: fix memory leak with using debugfs_lookup()
-Date:   Thu,  2 Feb 2023 15:11:00 +0100
-Message-Id: <20230202141100.2291188-1-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.39.1
+        Thu, 2 Feb 2023 09:11:15 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA65689F84;
+        Thu,  2 Feb 2023 06:11:14 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id c10-20020a17090a1d0a00b0022e63a94799so5671051pjd.2;
+        Thu, 02 Feb 2023 06:11:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Zmn9aG+g2MgvvZdKGq0cOCKAqQNwYCChOTwo43AoVjo=;
+        b=p03eVzC7layVFGq+/E+REGWDF7B3L1JL2txOEMT2Y/tVilUB3QRsnzQjLneoox17K+
+         ydt+AQguPgfOZDT+1t3rmzNSJ/Em1wjQvdRDyTETue2oCXZR/IDN/nAMWQXJCJxEn/uU
+         M6WGTBdqQqmBEu5TefQEuZqG1OB3E8m7NYQOcOKWljsOgzw8xkVq7MfEkZh6j7KpNbrb
+         yxNL1MsCCUY/MskCjpDQ188MVbimWrSpvvZM5XmrGaD+YK5Rsgu0Jynd/ioP7xLPMFjm
+         xS3FpDpdTmib+61hmRrseYZWgCzC1QElYTmh51FQhjGNcGLeK0EFXtCg/Gqgk3vnMuOr
+         4z0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Zmn9aG+g2MgvvZdKGq0cOCKAqQNwYCChOTwo43AoVjo=;
+        b=GpHmUsJQxONie5Z2cWCWQIhBkS0M8vxIquu/TunQ4vDZQCt9OJM4dOweBCwChc6Gg/
+         yvtba0cWOSABf3/rBLJ3gv1qHTSsBvPjN3d0cmq16ouFh0QcP4BOgJh9J9QEkM6I7v3U
+         jToe8hhG5z6q0rjAucgUughWn4vIxh+fcCeSckwEnKA2bpMDIru75uRXjxzbDjHc/phg
+         etoyp5JkC4Cckzk9gZb5+01yChwP52p+rW/YWARWg5EPPD4x/fEQ6NXlragt1H36ND7n
+         pD3DCpU6u6Mh3qSTY2ChCbfY2HGp+As5EeqEvmi1C2Ax+u2F+hIacQ+wjB6rGwOUB2vm
+         y3Gg==
+X-Gm-Message-State: AO0yUKXBOMeS0PNB5N9pFLPuK3TrzhBHCUoo42efm7jdzSlGYFJiJkYJ
+        Bpe7qHBjOnYnoCOLe/UGNl7aC8eeoRCQdgzPB7Q=
+X-Google-Smtp-Source: AK7set8fbD5gow+pRV8G/ely3X4hQzCHM7o0gEbg6InNFHalbse0fwW+sn9GPJzU7eJaI8hR97ushTua+oN3zYL5DAs=
+X-Received: by 2002:a17:90a:a592:b0:22c:2281:5a5a with SMTP id
+ b18-20020a17090aa59200b0022c22815a5amr550910pjq.108.1675347073882; Thu, 02
+ Feb 2023 06:11:13 -0800 (PST)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1089; i=gregkh@linuxfoundation.org; h=from:subject; bh=gBdaWyT3fPaApgmaz3AU3hrMLEA89JaIs6+g1TDSppM=; b=owGbwMvMwCRo6H6F97bub03G02pJDMm3j5ScCXXcbd9hLvzNuSpMKnGtT0GjQ//lP4JuC3dN817K rb2zI5aFQZCJQVZMkeXLNp6j+ysOKXoZ2p6GmcPKBDKEgYtTACbyRoVhQYtV4NdfeQIruB+c+HWlUy 5wWum8SQwLlhUyN316M8Or+MSmy6uqpKe8eVITAQA=
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230202110543.27548-1-zyytlz.wz@163.com> <50656A90-E0D4-4800-880C-406EBDD784FC@suse.de>
+In-Reply-To: <50656A90-E0D4-4800-880C-406EBDD784FC@suse.de>
+From:   Zheng Hacker <hackerzheng666@gmail.com>
+Date:   Thu, 2 Feb 2023 22:11:01 +0800
+Message-ID: <CAJedcCxWcyvzTWG2sZquGXO92qH=yV_wjaU0WtXpVT=SC13wbw@mail.gmail.com>
+Subject: Re: [PATCH] bcache: Fix a NULL or wild pointer dereference in btree_split
+To:     Coly Li <colyli@suse.de>
+Cc:     Zheng Wang <zyytlz.wz@163.com>,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        linux-bcache@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        security@kernel.org, alex000young@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When calling debugfs_lookup() the result must have dput() called on it,
-otherwise the memory will leak over time.  To make things simpler, just
-call debugfs_lookup_and_remove() instead which handles all of the logic at
-once.
+Coly Li <colyli@suse.de> =E4=BA=8E2023=E5=B9=B42=E6=9C=882=E6=97=A5=E5=91=
+=A8=E5=9B=9B 20:22=E5=86=99=E9=81=93=EF=BC=9A
 
-Cc: Nadav Amit <namit@vmware.com>
-Cc: VMware PV-Drivers Reviewers <pv-drivers@vmware.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/misc/vmw_balloon.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Hmm, there should be something to be fixed, but not the non-exist NULL de=
+reference.
+>
+> If you look inside btree_node_alloc_replacement(), you may find __bch_btr=
+ee_node_alloc() which does the real work indeed. And yes, I would suggest y=
+ou to improve a bit inside __bch_btree_node_alloc().
+>
+> 1088 struct btree *__bch_btree_node_alloc(struct cache_set *c, struct btr=
+ee_op *op,
+> [snipped]
+> 1093         struct btree *b =3D ERR_PTR(-EAGAIN);
+> 1094
+> 1095         mutex_lock(&c->bucket_lock);
+> 1096 retry:
+> 1097         if (__bch_bucket_alloc_set(c, RESERVE_BTREE, &k.key, wait))
+> 1098                 goto err;
+> [snipped]
+> 1102
+> 1103         b =3D mca_alloc(c, op, &k.key, level);
+> 1104         if (IS_ERR(b))
+> 1105                 goto err_free;
+> 1106
+> 1107         if (!b) {
+> 1108                 cache_bug(c,
+> 1109                         "Tried to allocate bucket that was in btree =
+cache");
+> 1110                 goto retry;
+> 1111         }
+> 1112
+>
+> From the above code, at line 1097 if __bch_bucket_alloc_set() returns non=
+-zero value, the code will jump to label err: and returns ERR_PTR(-EAGAIN).=
+ But if the code fails at line 1103 and b is set to NULL, at line 1110 the =
+code will jump back to label retry: and calls __bch_bucket_alloc_set() agai=
+n. If the second time __bch_bucket_alloc_set() returns non-zero value and t=
+he code jumps to label err:, a NULL pointer other than ERR_PTR(-EAGAIN) wil=
+l be returned. This inconsistent return value on same location at line 1097=
+ seems incorrect, where ERR_PTR(-EAGAIN) should be returned IMHO.
+>
+> Therefore I feel that =E2=80=9Cb =3D ERR_PTR(-EAGAIN)=E2=80=9D should be =
+moved to the location after label retry:, then btree_node_alloc_replacement=
+() will only return error code, and no NULL pointer returned.
+>
+> After this change, all following IS_ERR_OR_NULL() checks to btree_node_al=
+loc_replacement() are unnecessary and IS_ERR() just enough, because no NULL=
+ will be returned.
+>
+> This is a nice catch. I=E2=80=99d like to have it to be fixed. I do appre=
+ciate if you want to compose two patches for the fix. Otherwise I can handl=
+e it myself.
+>
+Hi Coly,
 
-diff --git a/drivers/misc/vmw_balloon.c b/drivers/misc/vmw_balloon.c
-index 61a2be712bf7..9ce9b9e0e9b6 100644
---- a/drivers/misc/vmw_balloon.c
-+++ b/drivers/misc/vmw_balloon.c
-@@ -1709,7 +1709,7 @@ static void __init vmballoon_debugfs_init(struct vmballoon *b)
- static void __exit vmballoon_debugfs_exit(struct vmballoon *b)
- {
- 	static_key_disable(&balloon_stat_enabled.key);
--	debugfs_remove(debugfs_lookup("vmmemctl", NULL));
-+	debugfs_lookup_and_remove("vmmemctl", NULL);
- 	kfree(b->stats);
- 	b->stats = NULL;
- }
--- 
-2.39.1
+Thanks for your reply and detailed explaination! As you explain, I
+found __bch_btree_node_alloc may return NULL in some situation. So I
+add some more check in upper code.
+Your suggestion is more constructive. It'll make the function more
+clear for other developer. I'd like to help with the patch. And you
+have kindly pointed the right way to fix.
+ May I merge fix it in one patch with the commit msg "refactor
+__bch_btree_node_alloc to avoid poential NULL dereference"? Because I
+think if __bch_btree_node_alloc returns
+NULL to bch_btree_node_alloc, the function
+btree_node_alloc_replacement will strill return NULL to n1 in
+btree_split. I think the possibility is low, if it's not proper,
+please feel free
+to let me know.
 
+Best regards,
+Zheng Wang
