@@ -2,120 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D330C687659
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 08:27:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCCCE68765C
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 08:28:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230116AbjBBH1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 02:27:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57604 "EHLO
+        id S230372AbjBBH2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 02:28:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbjBBH1Q (ORCPT
+        with ESMTP id S230156AbjBBH2R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 02:27:16 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 712C068106;
-        Wed,  1 Feb 2023 23:27:15 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id u21so1066071edv.3;
-        Wed, 01 Feb 2023 23:27:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=y1GINEHnv1gu6lznwNAhoMfT9UtzwsG0ur+qj4v5n9o=;
-        b=VccljSJOxO09q3vStd2j/BKsk0yx0mMDZz0tfQUMDz+bgivwtxNZzaBhWmMH3AqnGR
-         dPcVn7GZkTRwpHLBfaVijDFvFVqo1OZm5ap8tS6ZpQRzZtTRMNjjFX+saenQV0RHEyc9
-         ADnx3bXXwj4zBQ2fE+aUAtFI9DbId3WBknIk09O035J9KZNRrSsBuMoFJCtoKg1rivDf
-         5QAGSS/Khx4oRhIfvQZ+TCmkffco+iiK1ndUl6YVscTl419g25vLocpZmgYI3dO5lw6M
-         bSaGakyAOXOmEvZh+zCTgHpJbHmZh62k/ks0Z7dAOI/VvMxNF7LQvPazW9cR74tXy/Vp
-         BV4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=y1GINEHnv1gu6lznwNAhoMfT9UtzwsG0ur+qj4v5n9o=;
-        b=YaKjFznM6HD21Jpy95iah9Ozwrb0LXQaQJm7cFN67VSgkmMZT7uSmI+BEFb09SvKSH
-         25/0EodNxky2C59Z5uxP1aesihmiQreTXYGFi/ybrWALcMohwXNMdiUOIS8V0A61BGa7
-         szglBHO2QTTDD+i0b1RC8ba9V2EFkl5+7NfR35Pv3KcASKVy8KrGUcXVccXj2Sj02y1s
-         LhFlt5gfZ3JDJS4YbWfcd6TGa3eDVT/YkeG/flkuyED+Ejsm4YUQkhX0YID3bA15CpJY
-         xeSF+sI6wSJ/jm5Cb/Xpfr3En1E9mlyg/cDM0rRycRONUXIYxp+DHL0mN7FWpANuYYAq
-         VtiQ==
-X-Gm-Message-State: AO0yUKWJv5xviedYfUFxGvJuOQz7R8TtPJVKZw3EAz2agGgnxihb9Sd7
-        iwfaBGEzDCJOO62AIdu/OAhoIYSBBywTYpPr
-X-Google-Smtp-Source: AK7set/wWkhOxY8QrAHVg6gJn4n5qWwY2uvAJjUUddtOBq1alUQRNOCbJ1DZdmimHYmgdFJkoWVt6g==
-X-Received: by 2002:a05:6402:3219:b0:4a2:223d:4514 with SMTP id g25-20020a056402321900b004a2223d4514mr5631397eda.8.1675322833723;
-        Wed, 01 Feb 2023 23:27:13 -0800 (PST)
-Received: from localhost ([169.150.196.150])
-        by smtp.gmail.com with ESMTPSA id b4-20020a50b404000000b004a245350e0fsm5966713edh.36.2023.02.01.23.27.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Feb 2023 23:27:13 -0800 (PST)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Thu, 02 Feb 2023 08:27:08 +0100
-Message-Id: <CQ7WDMLZJV70.39ULEVF528YB8@vincent>
-Cc:     "Greg KH" <gregkh@linuxfoundation.org>,
-        "Miguel Ojeda" <ojeda@kernel.org>,
-        "Alex Gaynor" <alex.gaynor@gmail.com>,
-        "Wedson Almeida Filho" <wedsonaf@gmail.com>,
-        "Gary Guo" <gary@garyguo.net>,
-        =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3] rust: MAINTAINERS: Add the zulip link
-From:   "Vincenzo Palazzo" <vincenzopalazzodev@gmail.com>
-To:     "Boqun Feng" <boqun.feng@gmail.com>,
-        <rust-for-linux@vger.kernel.org>
-X-Mailer: aerc 0.14.0-38-gb2afc8117fb7
-References: <CANiq72mGk72tvLx+uH-puXZ=MvAA9dzNVqTXYmPq2iadwYuyWA@mail.gmail.com> <20230201184525.272909-1-boqun.feng@gmail.com>
-In-Reply-To: <20230201184525.272909-1-boqun.feng@gmail.com>
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+        Thu, 2 Feb 2023 02:28:17 -0500
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2052.outbound.protection.outlook.com [40.107.95.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2EF53F2A3
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 23:28:15 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ipnGckK7wShcAorrvjhhJ+FcaD74FLasoUKRIVgWckNxcAl7VXmo8Mi3mml6cR1j9eBvYIyx/C/K7YR8FK9cEb3Gbzzqzvg1QaGhj0ahXRRVYO9ClpSR85eOp5zG01rR/T1f1QWaHbGpGDeq6p6QNZ9B8HNY/8Txfv76GbE8dhI0pZFFcIOTIvS5/zQfK63gsNSf6Li7psdhractTKoXQbD0JxcnkWIe08ERaIPooekNkFaNe+OEgYRMPXL4+1h3+cgi6HGpxMzilCXsYYMVvxbwJ1DnRp3a8wZhWNbO1i8G7DfbuWERo9YZtOnExjIC8LuMyFXQxiF17Eqi3c2EjA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vSx87uuFJZ4ISGevB8rVmAS2QW2Smi1RVMFylHUJLJs=;
+ b=ONaQ7UUZwzCUCQldpJ0z88hHcWKOgAEFhk14fKx2uxXyvXJ77gQ9L51KSn0qInIBs8D8krQiwuKFTPuXcWw6zq95puSGkVMkad4meAtGcu1vT++MbV1T0brh/SbA/ZIVBPYUx0haieaObOhHdg6oXkJdvPm2Y64CUaqZh9ZVoXPXHMFESIRyVIAUqiLnTxDcoFheiQRFUKMz+29ixxZfilY8qDMbaJtFovlO8wl2T6jsK1GttoezpX3A8kG5JaWmhC5YMKU4y2SNhoPNnkhEAbwY/Vcr++2jSYc3tU9SHLxzSXOVvqObF80Ih1CJNZfa2h1mg8y0gruZzd9nsrY11w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.233) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vSx87uuFJZ4ISGevB8rVmAS2QW2Smi1RVMFylHUJLJs=;
+ b=g4W2MgPkL8cl5fgQ9ZYqWNSETNonBbhq0D1YLwnj0za6mDg50fNfgtwMBXzsNWVCxr2HSDk7ED3IwroyIcVvHx0k0PeFJkxlw3BKniDwK//EwHS/en+EdOk0VF+XWqcH7LSRtDHbRYeE59sXWQBBP5xKduuth2honV135gfaLbHuGcizoZOSmyDxm61fszjZSmhWypjcjH4tf5xaSzCUz6YWUbmX27t0sAkhI//6LUA47TDOOPuPWJj5PHELXEOdKTjvfRUTag0XO8Iq9ioDsVwKvBBnhVd7mLo52E1huDnjMHeiOO2fZ/dQ1bsmJTFGMmSkBSsTgDqDLyGpYt2MSw==
+Received: from MW4PR04CA0159.namprd04.prod.outlook.com (2603:10b6:303:85::14)
+ by PH7PR12MB6882.namprd12.prod.outlook.com (2603:10b6:510:1b8::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.25; Thu, 2 Feb
+ 2023 07:28:13 +0000
+Received: from CO1NAM11FT093.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:85:cafe::96) by MW4PR04CA0159.outlook.office365.com
+ (2603:10b6:303:85::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.27 via Frontend
+ Transport; Thu, 2 Feb 2023 07:28:13 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.233) by
+ CO1NAM11FT093.mail.protection.outlook.com (10.13.175.59) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6064.27 via Frontend Transport; Thu, 2 Feb 2023 07:28:13 +0000
+Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
+ (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 1 Feb 2023
+ 23:28:07 -0800
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Wed, 1 Feb 2023 23:28:07 -0800
+Received: from Asurada-Nvidia (10.127.8.11) by mail.nvidia.com
+ (10.126.190.180) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36 via Frontend
+ Transport; Wed, 1 Feb 2023 23:28:07 -0800
+Date:   Wed, 1 Feb 2023 23:28:05 -0800
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+CC:     <kevin.tian@intel.com>, <yi.l.liu@intel.com>,
+        <iommu@lists.linux.dev>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 1/3] iommufd: Add devices_users to track the
+ hw_pagetable usage by device
+Message-ID: <Y9tmBW/wnZJ0JyBk@Asurada-Nvidia>
+References: <Y9gfbx/fszb0aTJn@nvidia.com>
+ <Y9gi0UaE1PlKVzmn@Asurada-Nvidia>
+ <Y9gqFwDNd3VKQvC3@nvidia.com>
+ <Y9oNSUbDe1YOTj+b@Asurada-Nvidia>
+ <Y9qK3nJHjU4Bvxaf@nvidia.com>
+ <Y9qlb0SZWEpJs0v1@Asurada-Nvidia>
+ <Y9qxdinaS6anoWhH@nvidia.com>
+ <Y9q8llC0JVokHLf7@Asurada-Nvidia>
+ <Y9rE6L8Nr0xShiKy@nvidia.com>
+ <Y9rW01eROepZuMt3@Asurada-Nvidia>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <Y9rW01eROepZuMt3@Asurada-Nvidia>
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT093:EE_|PH7PR12MB6882:EE_
+X-MS-Office365-Filtering-Correlation-Id: 35fcf490-8fdd-47a1-06f4-08db04ef0b61
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: v1EU1HqTGKB8LOlyn8CT5v1qOAcP71MYDVogVD6ZDgKjti/XtY2OJIyXSr25+OEo1ymqaWmmDngzvaiTy1PmPfouM4hBis4GpHk4wCwWbCTbJfy3whFAmEqHTOKBWJBYux3NgBJreSK2opYZxPWhuuZZImwBLVLWU3s3LXWz6TMXbncSToadPxWtDv+xH1wFf+yl8PzUYt+EDbtRUfXQcCD/41O0ihdu50fjVSVK8swBG+L9VMcG9/Kuf16zoYCARTrZHgGEo1piphtRsL+htGgxo/9qb78ZFsJp+akMv3Wttj1frgwiePvBh9d9Yj/FknxGt3CzWASz1TEbf6IxZYx/+kHglHcMtHNqMz5DfZymH5Vq1mGFAz2BzxFTvj1ckBjNjEqeNTImRXC2F+NgZr9vLHeLHoVuzZ1plLWDtF8J6Zf4RLEurp+FCie5uL6dJKYaVyJ1qnSFMUlRZOfPiSve8bPfxunHOQDB10D5WhvLDcCCJoVUUxj86+/1ghl0mNwqGCnhx+gk2zy0W/WfT+r2gA8pBtFKqnCl7Xz9esALncugP7F7IMw6Ey0OIVoDGh3jmKHoP+8iFHJFeE6BgvqBn+s3WhJLROug3dVFQ7QTzUJ6jEq402a8D3j9hNuYxiKjFcv9ZQ2OPhpSkiPXB5b3tFvbSg5+aTJfm6j3hoGpZ4psZcV3V2KVTJiIKEgdNYYtiNBYpWdlwtEuoUBBwQ==
+X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(396003)(376002)(136003)(346002)(451199018)(36840700001)(46966006)(40470700004)(316002)(40480700001)(82740400003)(6636002)(54906003)(70586007)(8676002)(41300700001)(7636003)(478600001)(70206006)(4326008)(36860700001)(9686003)(26005)(186003)(40460700003)(47076005)(8936002)(336012)(55016003)(426003)(83380400001)(82310400005)(33716001)(6862004)(2906002)(5660300002)(86362001)(356005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Feb 2023 07:28:13.6722
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 35fcf490-8fdd-47a1-06f4-08db04ef0b61
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT093.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6882
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed Feb 1, 2023 at 7:45 PM CET, Boqun Feng wrote:
-> Zulip organization "rust-for-linux" was created 2 years ago[1] and has
-> proven to be a great place for Rust related discussion, therefore
-> add the information in MAINTAINERS file so that newcomers have more
-> options to find guide and help.
->
-> Link: https://lore.kernel.org/rust-for-linux/CANiq72=3DxVaMQkgCA9rspjV8bh=
-WDGqAn4x78B0_4U1WBJYj1PiA@mail.gmail.com/ [1]
-> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-> ---
-Reviewed-by: Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
+On Wed, Feb 01, 2023 at 01:18:08PM -0800, Nicolin Chen wrote:
+> On Wed, Feb 01, 2023 at 04:00:40PM -0400, Jason Gunthorpe wrote:
+> > On Wed, Feb 01, 2023 at 11:25:10AM -0800, Nicolin Chen wrote:
+> > 
+> > > The "finalise" is one of the very first lines of the attach_dev()
+> > > callback function in SMMU driver, though it might still undesirably
+> > > fail the replace().
+> > 
+> > It won't get that far.
+> > 
+> > Remember how this all works - only autodomains have the special path
+> > that allocates a domain, attaches the empty domain, and then populates
+> > it with the ioas. We made this special path specifically to accomodate
+> > the current ARM drivers, otherwise they wouldn't work at all.
+> 
+> Yes.
+> 
+> > replace can't do this - replace must always start out with a
+> > pre-existing hwpt that was allocated with a dedicated hwpt allocation
+> > ioctl.
+> > 
+> > Wwhen the hwpt was allocated it must be linked to the IOAS at that
+> > time, because we definately don't do defered IOAS linkage.
+> >
+> > So on ARM when you create an unfinalizes iommu_domain it cannot be
+> > added to the IOAS (because it has an empty aperture) and creation will
+> > fail, or worse, it will get added to an empty IOAS and make the IOAS
+> > permanently unusable.
+> 
+> IIUIC, user space might add some IOVA mappings to the hwpt/iopt,
+> before doing a replace(). If we do a deferred IOAS linkage to
+> this hwpt/iopt, it will cause a problem because we are adding
+> the reserved region for the MSI window later than IOMMU_IOAS_MAP
+> calls. Thus, "we definately don't do defered IOAS linkage".
+> 
+> With this justification, I think I should include my patch of
+> moving iopt_table_add/remove_domain(), in the replace series.
 
+I just posted the replace series. But I found that the base
+line (without the nesting series) allocates iommu_domains
+always with the ->domain_alloc() op. So, we cannot actually
+move the iopt_table_add_domain() in the replace series, as I
+intended to.
 
-> v2 -> v3:
->
-> 	*	Commit message improvement per Miguel.
-> 	*	Reorder the line after "B:" as suggested by Miguel.
->
-> v1 -> v2:
->
-> 	* 	As suggested by Greg KH, add commit message.
->  MAINTAINERS | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 42fc47c6edfd..80fc5f050f28 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -18222,6 +18222,7 @@ L:	rust-for-linux@vger.kernel.org
->  S:	Supported
->  W:	https://github.com/Rust-for-Linux/linux
->  B:	https://github.com/Rust-for-Linux/linux/issues
-> +C:	zulip://rust-for-linux.zulipchat.com
->  T:	git https://github.com/Rust-for-Linux/linux.git rust-next
->  F:	Documentation/rust/
->  F:	rust/
-> --=20
-> 2.39.1
+Yet, a great news is that our nesting series replaces the
+domain_alloc() op entirely with ->domain_alloc_user() for all
+the iommu_domain allocations, including for auto_domains. So,
+we can completely move iopt_table_add_domain() to the hwpt
+allocation function. And we don't really need a big change
+in the SMMU driver nor Robin's patch that passes in dev ptr
+to domain_alloc() op. And even this device_users refcount in
+this patch is no longer needed. It also simplifies the shared
+device locking situation, if I am not missing anything.
 
+So, in short, we'll have to wait for ->domain_alloc_user()
+patch (in the nesting series) to unblock the problem that we
+discussed above regarding the iopt_table_add_domain().
+
+Thanks
+Nic
