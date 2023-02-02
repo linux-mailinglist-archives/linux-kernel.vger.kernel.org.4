@@ -2,121 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C693687315
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 02:35:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 148F568731A
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 02:41:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231607AbjBBBfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 20:35:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45404 "EHLO
+        id S230147AbjBBBlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 20:41:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbjBBBfG (ORCPT
+        with ESMTP id S229551AbjBBBlO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 20:35:06 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3866F217;
-        Wed,  1 Feb 2023 17:35:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675301705; x=1706837705;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=J/ZbnOOWGQyaltpY5ZXjym/QBf6OsO4SuT5wCLUEGkg=;
-  b=aNXu8Rb+ddH5uQFHrMGPuXtdErRAISZq87h1K4hM8I5IvDIf0FeWdQpc
-   Xjsb6+Su+Q+gtuzUf2IlrEeguC6EZsCjw4BDHgEsJFp6F3UKdoa5SKoMS
-   b0f+UAGueMTFbim4rJ+XCCiVanTbMygtRXXo6fjTvDLbbCsA+IsZpmzwC
-   K3TgXK3TTkprj3CBnKaFuGT5e1cZK9KfuXQ1O0hvJUPTZiPe5xfXwZq7+
-   DpFJedL+q6dLt/d+0DNhg6xN5yiB0MVNR+ZJlJ6YNhTScCAs/ZJxQ+mon
-   KUn/RmKwUMhWMX3dHePe/1/1uFeEcl+bjiSJ7jGu6sl/J/iDjBp1jqpT1
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="355658942"
-X-IronPort-AV: E=Sophos;i="5.97,266,1669104000"; 
-   d="scan'208";a="355658942"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 17:35:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="728647972"
-X-IronPort-AV: E=Sophos;i="5.97,266,1669104000"; 
-   d="scan'208";a="728647972"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 01 Feb 2023 17:35:01 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pNOVB-0005zs-0I;
-        Thu, 02 Feb 2023 01:35:01 +0000
-Date:   Thu, 2 Feb 2023 09:34:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ajit Khaparde <ajit.khaparde@broadcom.com>
-Cc:     oe-kbuild-all@lists.linux.dev, andrew.gospodarek@broadcom.com,
-        davem@davemloft.net, edumazet@google.com, jgg@ziepe.ca,
-        kuba@kernel.org, leon@kernel.org, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, michael.chan@broadcom.com,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        selvin.xavier@broadcom.com, gregkh@linuxfoundation.org,
-        Leon Romanovsky <leonro@nvidia.com>
-Subject: Re: [PATCH net-next v10 1/8] bnxt_en: Add auxiliary driver support
-Message-ID: <202302020909.KDHYiYu4-lkp@intel.com>
-References: <20230201204500.19420-2-ajit.khaparde@broadcom.com>
+        Wed, 1 Feb 2023 20:41:14 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 155DB7750D
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 17:41:12 -0800 (PST)
+Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4P6hMH269ZzfYn6;
+        Thu,  2 Feb 2023 09:40:59 +0800 (CST)
+Received: from huawei.com (10.175.103.91) by kwepemi500024.china.huawei.com
+ (7.221.188.100) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 2 Feb
+ 2023 09:41:08 +0800
+From:   Zeng Heng <zengheng4@huawei.com>
+To:     <mingo@redhat.com>, <bp@alien8.de>, <jroedel@suse.de>,
+        <vbabka@suse.cz>, <hpa@zytor.com>, <tglx@linutronix.de>,
+        <eric.devolder@oracle.com>, <bhe@redhat.com>, <tiwai@suse.de>,
+        <keescook@chromium.org>, <dave.hansen@linux.intel.com>
+CC:     <linux-kernel@vger.kernel.org>, <x86@kernel.org>,
+        <liwei391@huawei.com>, <xiexiuqi@huawei.com>
+Subject: [PATCH v3] x86/kdump: Handle blocked NMIs interrupt to avoid kdump crashes
+Date:   Thu, 2 Feb 2023 09:40:53 +0800
+Message-ID: <20230202014053.3604176-1-zengheng4@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230201204500.19420-2-ajit.khaparde@broadcom.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500024.china.huawei.com (7.221.188.100)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ajit,
+If the cpu panics within the NMI interrupt context,
+there could be unhandled NMI interrupts in the
+background which are blocked by processor until
+next IRET instruction executes. Since that, it
+prevents nested execution of the NMI handler.
 
-I love your patch! Perhaps something to improve:
+In case of IRET execution during kdump reboot and
+no proper NMIs handler registered at that point
+(such as during EFI loader), we need to handle these
+blocked NMI interrupts in advance to avoid kdump
+crashes.
 
-[auto build test WARNING on net-next/master]
+Because asm_exc_nmi() has the ability to handle
+nested NMIs, here call iret_to_self() and execute
+IRET instruction in order to trigger and handle the
+possible blocked NMIs interrupts in advance before
+the IDT set invalidate.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ajit-Khaparde/bnxt_en-Add-auxiliary-driver-support/20230202-044848
-patch link:    https://lore.kernel.org/r/20230201204500.19420-2-ajit.khaparde%40broadcom.com
-patch subject: [PATCH net-next v10 1/8] bnxt_en: Add auxiliary driver support
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20230202/202302020909.KDHYiYu4-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/896eba0b6cd806dd11640cafa66d35f8b483f550
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Ajit-Khaparde/bnxt_en-Add-auxiliary-driver-support/20230202-044848
-        git checkout 896eba0b6cd806dd11640cafa66d35f8b483f550
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/ethernet/broadcom/bnxt/
+Provide one of test case to reproduce the concerned
+issue, and here is the steps:
+  1. # cat uncorrected
+     CPU 1 BANK 4
+     STATUS uncorrected 0xc0
+     MCGSTATUS  EIPV MCIP
+     ADDR 0x1234
+     RIP 0xdeadbabe
+     RAISINGCPU 0
+     MCGCAP SER CMCI TES 0x6
+  2. # modprobe mce_inject
+  3. # mce-inject uncorrected
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+Mce-inject would trigger kernel panic under NMI
+interrupt context. In addition, we need another NMI
+interrupt raise (such as from watchdog) during panic
+process. Set proper watchdog threshold value and/or
+add an artificial delay to make sure watchdog interrupt
+raise during the panic procedure and the involved
+issue would occur.
 
-All warnings (new ones prefixed by >>):
+Fixes: ca0e22d4f011 ("x86/boot/compressed/64: Always switch to own page table")
+Signed-off-by: Zeng Heng <zengheng4@huawei.com>
+Suggested-by: Borislav Petkov <bp@alien8.de>
+---
+  v1: add dummy NMI interrupt handler in EFI loader
+  v2: tidy up changelog, add comments (by Ingo Molnar)
+  v3: add iret_to_self() to deal with blocked NMIs in advance
 
-   drivers/net/ethernet/broadcom/bnxt/bnxt_ulp.c: In function 'bnxt_aux_dev_release':
->> drivers/net/ethernet/broadcom/bnxt/bnxt_ulp.c:483:22: warning: unused variable 'bp' [-Wunused-variable]
-     483 |         struct bnxt *bp = netdev_priv(aux_priv->edev->net);
-         |                      ^~
+ arch/x86/kernel/crash.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
+diff --git a/arch/x86/kernel/crash.c b/arch/x86/kernel/crash.c
+index 305514431f26..3aaca680a639 100644
+--- a/arch/x86/kernel/crash.c
++++ b/arch/x86/kernel/crash.c
+@@ -41,6 +41,7 @@
+ #include <asm/intel_pt.h>
+ #include <asm/crash.h>
+ #include <asm/cmdline.h>
++#include <asm/sync_core.h>
 
-vim +/bp +483 drivers/net/ethernet/broadcom/bnxt/bnxt_ulp.c
+ /* Used while preparing memory map entries for second kernel */
+ struct crash_memmap_data {
+@@ -143,6 +144,19 @@ void native_machine_crash_shutdown(struct pt_regs *regs)
 
-   478	
-   479	static void bnxt_aux_dev_release(struct device *dev)
-   480	{
-   481		struct bnxt_aux_priv *aux_priv =
-   482			container_of(dev, struct bnxt_aux_priv, aux_dev.dev);
- > 483		struct bnxt *bp = netdev_priv(aux_priv->edev->net);
-   484	
-   485		ida_free(&bnxt_aux_dev_ids, aux_priv->id);
-   486		kfree(aux_priv->edev);
-   487		kfree(aux_priv);
-   488	}
-   489	
+ 	crash_smp_send_stop();
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
++	/*
++	 * If the cpu panics within the NMI interrupt context,
++	 * there may be unhandled NMI interrupts which are
++	 * blocked by processor until next IRET instruction
++	 * executes.
++	 *
++	 * In case of IRET execution during kdump reboot and
++	 * no proper NMIs handler registered at that point,
++	 * we trigger and handle blocked NMIs in advance to
++	 * avoid kdump crashes.
++	 */
++	iret_to_self();
++
+ 	/*
+ 	 * VMCLEAR VMCSs loaded on this cpu if needed.
+ 	 */
+--
+2.25.1
+
