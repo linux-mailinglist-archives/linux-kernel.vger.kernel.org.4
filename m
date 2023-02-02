@@ -2,140 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49554687C15
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 12:19:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9482C687C19
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 12:21:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230404AbjBBLTa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 06:19:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49664 "EHLO
+        id S231237AbjBBLVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 06:21:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbjBBLT2 (ORCPT
+        with ESMTP id S229662AbjBBLVc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 06:19:28 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00B2223667
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 03:19:26 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id d26so1265367eds.12
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 03:19:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5lqBGy3xyiLZ+uDQPzZ1hsLEdYkc91Ze4wrm9P+Lw80=;
-        b=RJwRtlKXAU2yQGFCUlKvMZBg3wHojpszX+YYkT1OAyb1nukVCBTsHmoHRtSP8GAYNg
-         Poc83j6BNYiJ8ewxRNBaitufk3cTBuYTonbJi48av2yUiLsubOF2ajHIn+8CkdV6AHLm
-         z81WuJwWJUdNj8gEu97EUuud/+UeT/Yy9wboCffYYCrS+Ydgos9eUuhwabRiZZUPPEFD
-         +0YX7bG/soas5GZ92Vo0Zp8Ta4T77lfzIjYBdclPaE4SdremAStzXBP+MY2ujhj16EjY
-         2m/nnLBThX4V9DVnkkYKo32s2WLYu9Sx2JOOrHX89cnzr++Yk+2NdR7Vzf8o43WupCq5
-         71ZA==
+        Thu, 2 Feb 2023 06:21:32 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D0B069B15
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 03:20:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675336854;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9fG+mLi1sHTSjuOd5Ks82kJWa6WXxxrGWKTgpND0+ng=;
+        b=GVSn030zh2s1XDtA6gmlST4omo3hoPXfyuI7d6JAyNYD1kaA3Cm8ibow0uU183OFvrKnvT
+        ASqY+r1JecWskFjFaAYCeV0PZrmMa9albq/ybiY/nd0/Gy894JQEAxtV2zrAyr358DuKBi
+        8yKMT9IKPcsjfz8/6K6aPke6PUNTokQ=
+Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com
+ [209.85.215.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-19-Bgh-srgSOhy7bBkm9inaIw-1; Thu, 02 Feb 2023 06:20:53 -0500
+X-MC-Unique: Bgh-srgSOhy7bBkm9inaIw-1
+Received: by mail-pg1-f200.google.com with SMTP id bk2-20020a056a02028200b004a7e2a790d2so866873pgb.18
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 03:20:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5lqBGy3xyiLZ+uDQPzZ1hsLEdYkc91Ze4wrm9P+Lw80=;
-        b=0M+jP9EaJrzQWsf4Im4TglUWT4rjhc/P/T/px5J/wdV+hTVEBTO0RX10U/U76LJxpf
-         6nmh/x2ZMp8OGHx7IQnI7aUz2dtodLyipoj4suZ9p8t1TmF0hFO93FEUhWdOLs+Q856L
-         hLFRQJuO4Jr+1xBupIx4HUwfHMbiFbVRsO16tngJglmHleue8ztnkSnvqUkYot7TLUhr
-         NfRtvcb1T19MUw2ZxhK5d5g3JBVGVGU9CAeCCiQ4fxHHSi20PH20/vQm/6YXSO0IdnSp
-         KPDmsaOjutx6uhlor8hWa6L/Gjl9ZmBKu6xdMp6IgeRzQfLx33utBL+2koUpMgxa5X+t
-         O+hA==
-X-Gm-Message-State: AO0yUKWrStNwbe0VBVveSYoMv+NyE9RKXVOmdBhtqrzMZ3/70RXuSu6L
-        xMbjYZYNdHMpiXNwuiUHdfLVTA==
-X-Google-Smtp-Source: AK7set/vEiR/9/5KwI31m2BtJbT7NVoCdcuzNNO/1JzUew9cQH1z9NQ6sS/gMsYr4isYZn/LvUPTVg==
-X-Received: by 2002:a05:6402:4cb:b0:492:8c77:7da9 with SMTP id n11-20020a05640204cb00b004928c777da9mr5414198edw.9.1675336765547;
-        Thu, 02 Feb 2023 03:19:25 -0800 (PST)
-Received: from [192.168.1.101] (abyl20.neoplus.adsl.tpnet.pl. [83.9.31.20])
-        by smtp.gmail.com with ESMTPSA id a20-20020a50ff14000000b004a211283100sm9249762edu.44.2023.02.02.03.19.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 03:19:25 -0800 (PST)
-Message-ID: <d90e1d20-37f7-19c8-1375-dc6cf8856097@linaro.org>
-Date:   Thu, 2 Feb 2023 12:19:22 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9fG+mLi1sHTSjuOd5Ks82kJWa6WXxxrGWKTgpND0+ng=;
+        b=VV3TVGsZIwP0lkkBjujp8uU0CKqjkBT0ZKqkBRhVQpg+WTsiJgRc5toafJ8y8sS1Th
+         nmjdvyv9CdI8st7F57C3D2POET3tHNzp1z3Rc345C1DuOAVP8VtskjX1pizpMhjhyNi2
+         /TRACJWXknuXk7tkEqZpQSKA+YaBTcSUuQFKuzzgWnnopQQkYgTOjzmULJwFyOe8c6DZ
+         K69rNlVhdzLQjcb4nek9NUmp2MKfsbZATzcc1x7fjZNqhKk0Wn1s5f9eMiCCDyHG5Vn2
+         ZOtcpW0jkHytc/ZSxR03GfWhm1To6PIptTPskSZrwXGtXcKU3TcbEZ46FyhdBnI6tGHx
+         YUfQ==
+X-Gm-Message-State: AO0yUKUq4aAzpZkUhmssSvP+Qbuayoo6HxYrio2yYXmTnoJcAaSWxpZe
+        0J3eeKLxuD4Ug6p9TYs5zdaW/tJvCjtJUskjMLmE1PEmsXO0jU9i/IZYdwH8EbwZC/Wat7f7zAx
+        3Z+b7bIxG2t7ehoZNEXVoJmRr+OkdwwgCbebp3JO4
+X-Received: by 2002:a17:90a:c254:b0:22c:5548:d7e5 with SMTP id d20-20020a17090ac25400b0022c5548d7e5mr521247pjx.27.1675336852286;
+        Thu, 02 Feb 2023 03:20:52 -0800 (PST)
+X-Google-Smtp-Source: AK7set82+wN39UJY3aGt0nV0PlH4EFUnLP8c4ca1tpS6HDyuJGTUC63XeRr8meu1LI3/H5oInHQ99YQUAAZkiPqy3yk=
+X-Received: by 2002:a17:90a:c254:b0:22c:5548:d7e5 with SMTP id
+ d20-20020a17090ac25400b0022c5548d7e5mr521244pjx.27.1675336852028; Thu, 02 Feb
+ 2023 03:20:52 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v2] arm64: dts: qcom: msm8992-lg-bullhead: Correct memory
- overlaps with the SMEM and MPSS memory regions
-To:     Jamie Douglass <jamiemdouglass@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Petr Vorel <petr.vorel@gmail.com>,
-        Dominik Kobinski <dominikkobinski314@gmail.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Petr Vorel <pvorel@suse.cz>
-References: <20230202054819.16079-1-jamiemdouglass@gmail.com>
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230202054819.16079-1-jamiemdouglass@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230117172649.52465-1-wander@redhat.com> <875yd4k8qd.ffs@tglx>
+ <CAAq0SUkN38V00HqV3Hk3ee_-=vfkKxG9xtR3n=4gAT+zCs+=Zg@mail.gmail.com>
+ <87fsc6i6ud.ffs@tglx> <CAAq0SU=FmkSyS=-SQJBoHYEtZExK3Qn9Wqcn-c+BnmfVeO3q6g@mail.gmail.com>
+ <20230131175350.s7eiz55fozlhaegh@fedora> <87k010zevz.ffs@tglx>
+In-Reply-To: <87k010zevz.ffs@tglx>
+From:   Wander Lairson Costa <wander@redhat.com>
+Date:   Thu, 2 Feb 2023 08:20:40 -0300
+Message-ID: <CAAq0SUkykcMBZqFpgM=KCZTpxWmD12eCWFZxk+AYNS8K_QBcnQ@mail.gmail.com>
+Subject: Re: [PATCH] rtmutex: ensure we wake up the top waiter
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "open list:LOCKING PRIMITIVES" <linux-kernel@vger.kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Feb 2, 2023 at 5:07 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+>
+> On Tue, Jan 31 2023 at 14:53, Wander Lairson Costa wrote:
+> > On Tue, Jan 31, 2023 at 02:46:19PM -0300, Wander Lairson Costa wrote:
+> >> > If you have traces which show the sequence of lock events leading to
+> >> > this problem, then you should be able to decode the scenario. If you
+> >> > fail to extract the information, then please provide the traces so we
+> >> > can stare at them.
+> >> >
+> >>
+> >> Here we go:
+> >>
+> >> Let L1 and L2 be two spinlocks.
+> >>
+> >> Let T1 be a task holding L1 and blocked on L2. T1, currently, is the top
+> >> waiter of L2.
+> >>
+> >> Let T2 be the task holding L2.
+> >>
+> >> Let T3 be a task trying to acquire L1.
+> >>
+> >> The following events will lead to a state in which the wait queue of L2
+> >> isn't empty but nobody holds it.
+>
+> That explains it nicely. Care to resend with proper explanations in the
+> changelog?
+>
 
+Sure thing, thanks.
 
-On 2.02.2023 06:48, Jamie Douglass wrote:
-> The memory region reserved by a previous commit (see fixes tag below)
-> overlaps with the SMEM and MPSS memory regions, causing error messages in
-> dmesg:
-> 	OF: reserved mem: OVERLAP DETECTED!
-> 	reserved@5000000 (0x0000000005000000--0x0000000007200000)
-> 	overlaps with smem_region@6a00000
-> 	(0x0000000006a00000--0x0000000006c00000)
-> 
-> 	OF: reserved mem: OVERLAP DETECTED!
-> 	reserved@6c00000 (0x0000000006c00000--0x0000000007200000)
-> 	overlaps with memory@7000000
-> 	(0x0000000007000000--0x000000000ca00000)
-> 
-> This patch resolves both of these by splitting the previously reserved
-> memory region into two sections either side of the SMEM region and by
-> cutting off the second memory region to 0x7000000.
-> 
-> Fixes: 22c7e1a0fa45 ("arm64: dts: msm8992-bullhead: add memory hole region")
-> Signed-off-by: Jamie Douglass <jamiemdouglass@gmail.com>
-> Reviewed-by: Petr Vorel <pvorel@suse.cz>
-> Tested-by: Petr Vorel <pvorel@suse.cz>
-> 
-> ---
-> v1 -> v2: Added detail about second memory overlap and fixed commit to commit
-> message
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
->  arch/arm64/boot/dts/qcom/msm8992-lg-bullhead.dtsi | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/msm8992-lg-bullhead.dtsi b/arch/arm64/boot/dts/qcom/msm8992-lg-bullhead.dtsi
-> index 79de9cc395c4..5e375ea73c79 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8992-lg-bullhead.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/msm8992-lg-bullhead.dtsi
-> @@ -53,8 +53,13 @@ cont_splash_mem: memory@3400000 {
->  			no-map;
->  		};
->  
-> -		removed_region: reserved@5000000 {
-> -			reg = <0 0x05000000 0 0x2200000>;
-> +		reserved@5000000 {
-> +			reg = <0x0 0x05000000 0x0 0x1a00000>;
-> +			no-map;
-> +		};
-> +
-> +		reserved@6c00000 {
-> +			reg = <0x0 0x06c00000 0x0 0x400000>;
->  			no-map;
->  		};
->  	};
