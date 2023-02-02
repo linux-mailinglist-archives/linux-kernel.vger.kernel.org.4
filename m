@@ -2,113 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79A8A6875C3
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 07:18:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0302E6875C5
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 07:19:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231454AbjBBGSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 01:18:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55470 "EHLO
+        id S230094AbjBBGTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 01:19:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231594AbjBBGS2 (ORCPT
+        with ESMTP id S230204AbjBBGTM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 01:18:28 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA66D66FB9;
-        Wed,  1 Feb 2023 22:18:27 -0800 (PST)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3124GC7w013713;
-        Thu, 2 Feb 2023 06:18:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=OHG0ro/UZYxoArmD1HlyMM7ZrFyvrEcBVSGEmebwlrs=;
- b=giOG0r3vodTLK469GiReXYAVrgamjB3W4olFhiPMcuQcdOUuF6XmJfS+zT0Irdx9bjF8
- mQviUbK1xl0MmX7SC0Gx8fm4IR6hWjkU5cpbUwm8E2jSGM+ogwagJ+hVJ2oVlcm5XXOZ
- s35u0zRLtCUUNXHm6MLBOP3ZHI/Vz8UGC1RJejokNSqR8Ck2B2QgsEVXDg3BTYtjv8y6
- XS4QuYQFX12MhQZZs9eroZCMj8cNXuCjh61n/zBCmkXnbRrR6Ad5sWmY+cTkA0UIVoIP
- QZNmLtV6mONwSwesyKRPyk9TPpux8zTd4wpjTARCkwYwa6H0j+rIZ5prmPc9HR341udj 6g== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nfm9g2f5h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Feb 2023 06:18:22 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3126ILHG018826
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 2 Feb 2023 06:18:21 GMT
-Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Wed, 1 Feb 2023 22:18:16 -0800
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-To:     <swboyd@chromium.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>, <robh+dt@kernel.org>,
-        <broonie@kernel.org>, <quic_plai@quicinc.com>,
-        <konrad.dybcio@somainline.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_rohkumar@quicinc.com>
-CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Subject: [PATCH v7 5/5] clk: qcom: lpassaudiocc-sc7280: Skip lpass_aon_cc_pll config
-Date:   Thu, 2 Feb 2023 11:47:33 +0530
-Message-ID: <1675318653-28352-6-git-send-email-quic_srivasam@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1675318653-28352-1-git-send-email-quic_srivasam@quicinc.com>
-References: <1675318653-28352-1-git-send-email-quic_srivasam@quicinc.com>
+        Thu, 2 Feb 2023 01:19:12 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F176474ED;
+        Wed,  1 Feb 2023 22:19:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0661C615F2;
+        Thu,  2 Feb 2023 06:19:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB8E5C433EF;
+        Thu,  2 Feb 2023 06:19:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675318750;
+        bh=6xVy9dVamZI7gmmEzbNj10pwoYuJsIbEypFo0Ly+oSE=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=MH2PlScttKkJ8L9i3MHuyqbOxDreiQ+KHwP6+kJufOqJi+UvsWmYFGJstE5pKFMDn
+         Q4oUKPf64y3OQx7ITz3jYZF9ivClKbAXbkheGYxtdwfZPfMXMPpHx41Wc5yqyyQWbi
+         OaAUZvC1+nqd03VSSznxGj/fH2IZmLiX8W6rC6xHUn30IRtkx4pGRhhxA0uTaxnTqc
+         F+TrO0RXbvl0FNxnKZw8aI9uq7ZccNe7gwcKSv7AHYgLIXlhUOwxa8PvRkaZlpG0ug
+         d7lE+y8cFhmdYstJO0doJlDMXgyYT4OjWDXHS3pLyhBLO0HzubJ006nQ+XuSDQAJOQ
+         Y6uhYGWaP6bjw==
+Date:   Thu, 02 Feb 2023 06:19:07 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Hal Feng <hal.feng@starfivetech.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org
+CC:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Ben Dooks <ben.dooks@sifive.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        linux-kernel@vger.kernel.org
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v3_6/7=5D_riscv=3A_dts=3A_starfive=3A?= =?US-ASCII?Q?_Add_initial_StarFive_JH7110_device_tree?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <0ff800a1-5e90-64bc-af53-2736e698c9e4@starfivetech.com>
+References: <20221220011247.35560-1-hal.feng@starfivetech.com> <20221220011247.35560-7-hal.feng@starfivetech.com> <0db7824b-184d-dfae-f61d-3048392c9895@starfivetech.com> <39F228FA-2298-4813-9BDE-7100DE920213@kernel.org> <0ff800a1-5e90-64bc-af53-2736e698c9e4@starfivetech.com>
+Message-ID: <A6312791-75C5-478A-8B76-27F293B43DD6@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: k24pNZr1JKsh9kZ4Ztdz48aVQD8I-g_F
-X-Proofpoint-GUID: k24pNZr1JKsh9kZ4Ztdz48aVQD8I-g_F
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-01_15,2023-01-31_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
- malwarescore=0 clxscore=1015 spamscore=0 impostorscore=0 phishscore=0
- priorityscore=1501 mlxlogscore=999 suspectscore=0 lowpriorityscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302020058
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Skip lpass_aon_cc_pll configuration for ADSP based platforms
-based on qcom,adsp-pil-mode property.
-This is to avoid ADSP out of reset fail.
 
-Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Tested-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
----
- drivers/clk/qcom/lpassaudiocc-sc7280.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/clk/qcom/lpassaudiocc-sc7280.c b/drivers/clk/qcom/lpassaudiocc-sc7280.c
-index 8e2f433..76611a3 100644
---- a/drivers/clk/qcom/lpassaudiocc-sc7280.c
-+++ b/drivers/clk/qcom/lpassaudiocc-sc7280.c
-@@ -847,7 +847,13 @@ static int lpass_aon_cc_sc7280_probe(struct platform_device *pdev)
- 		goto exit;
- 	}
- 
--	clk_lucid_pll_configure(&lpass_aon_cc_pll, regmap, &lpass_aon_cc_pll_config);
-+	/*
-+	 * ADSP firmware is in control of this PLL frequency when
-+	 * remoteproc is used. Skip frequency configuration in that
-+	 * case.
-+	 */
-+	if (!of_property_read_bool(pdev->dev.of_node, "qcom,adsp-pil-mode"))
-+		clk_lucid_pll_configure(&lpass_aon_cc_pll, regmap, &lpass_aon_cc_pll_config);
- 
- 	ret = qcom_cc_really_probe(pdev, &lpass_aon_cc_sc7280_desc, regmap);
- 	if (ret) {
--- 
-2.7.4
+On 2 February 2023 02:42:32 GMT, Hal Feng <hal=2Efeng@starfivetech=2Ecom> =
+wrote:
+>On Tue, 31 Jan 2023 06:17:17 +0000, Conor Dooley wrote:
+>> On 31 January 2023 02:00:26 GMT, Hal Feng <hal=2Efeng@starfivetech=2Eco=
+m> wrote:
+>>>On Tue, 20 Dec 2022 09:12:46 +0800, Hal Feng wrote:
+>>>> From: Emil Renner Berthing <kernel@esmil=2Edk>
+>>>>=20
+>>>> Add initial device tree for the JH7110 RISC-V SoC by StarFive
+>>>> Technology Ltd=2E
+>>>>=20
+>>>> Signed-off-by: Emil Renner Berthing <kernel@esmil=2Edk>
+>>>> Co-developed-by: Jianlong Huang <jianlong=2Ehuang@starfivetech=2Ecom>
+>>>> Signed-off-by: Jianlong Huang <jianlong=2Ehuang@starfivetech=2Ecom>
+>>>> Co-developed-by: Hal Feng <hal=2Efeng@starfivetech=2Ecom>
+>>>> Signed-off-by: Hal Feng <hal=2Efeng@starfivetech=2Ecom>
+>>>> ---
+>>>>  arch/riscv/boot/dts/starfive/jh7110=2Edtsi | 411 +++++++++++++++++++=
+++++
+>>>>  1 file changed, 411 insertions(+)
+>>>>  create mode 100644 arch/riscv/boot/dts/starfive/jh7110=2Edtsi
+>>>
+>>>I wanna add i2c nodes (i2c0-6) in the next version, so someone else
+>>>can use them when they submit i2c driver patches=2E
+>>=20
+>> All of the other series depend on this one for enablement,
+>> so unless the binding for i2c is already upstream I'd advise keeping it=
+ separate=2E
+>
+>The i2c IP of JH7110 is from Synopsys and the same as the i2c IP in JH710=
+0=2E
+>The binding and driver for i2c are already upstream=2E It works as long a=
+s we
+>add the i2c nodes and configure pins for i2c in device tree=2E It will si=
+mplify
+>the dependency if we do that=2E
+
+Please make sure that you add a device specific compatible for jh7110 then=
+, thanks=2E
+
+>By the way, I am checking the ISA of U74-MC on JH7110 with someone else=
+=2E
+>I will reply you today=2E
+
+Cool!
 
