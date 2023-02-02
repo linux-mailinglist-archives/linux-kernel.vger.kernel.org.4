@@ -2,139 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09FD2687455
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 05:17:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74F0A687466
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 05:23:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbjBBEQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 23:16:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55386 "EHLO
+        id S230526AbjBBEXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 23:23:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230054AbjBBEQ4 (ORCPT
+        with ESMTP id S229632AbjBBEXR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 23:16:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA8B379CB9
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 20:16:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675311370;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0Evaq+uKsw2JRl30GbWwAirFdc+12RiKunGeodqBwPs=;
-        b=f9KOh7U5KNO9sxhmoFUSwqcQkT3LKhlscMA6qKmZ86vf1MZQRJLDj4eDMrWxMUpGnSnyKL
-        fphp+BIMvSnyQtddMmcCq0xhOAtwgfl2GawyyDvHKF3/ztqLdQsLUXMqWEvPCGs+3PRY5x
-        IgJfClZyjc89EChUhEaLDD1+NnQlHBA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-180-PDaMvEVqNfKTVNph2AOpwQ-1; Wed, 01 Feb 2023 23:16:07 -0500
-X-MC-Unique: PDaMvEVqNfKTVNph2AOpwQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 27A7F800050;
-        Thu,  2 Feb 2023 04:16:06 +0000 (UTC)
-Received: from T590 (ovpn-8-25.pek2.redhat.com [10.72.8.25])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id C7E90140EBF4;
-        Thu,  2 Feb 2023 04:15:57 +0000 (UTC)
-Date:   Thu, 2 Feb 2023 12:15:52 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Tejun Heo <tj@kernel.org>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        "Dennis Zhou (Facebook)" <dennisszhou@gmail.com>,
-        ming.lei@redhat.com
-Subject: Re: [PATCH v4 2/2] blk-cgroup: Flush stats at blkgs destruction path
-Message-ID: <Y9s4+Nop1eluWmJ4@T590>
-References: <20221215033132.230023-1-longman@redhat.com>
- <20221215033132.230023-3-longman@redhat.com>
+        Wed, 1 Feb 2023 23:23:17 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE07151C6F;
+        Wed,  1 Feb 2023 20:23:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675311794; x=1706847794;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jRjDoncShj8+SssxokKgsGrrecQq1hGkUGW2vyCqEh0=;
+  b=UANfDHhxCQuGbKePnFUAefodDR+/fh2cFQfYB6DHHoftuyGap3TT/nno
+   y+2YuBiBurBrvbs1kyrqVLlaGHvBEnV+pgMPmtxVRc0rjaxNB/y3/Kt5U
+   xXEJnwZU7Q/P920ig8DD02qcC+aIn2N/ey4/yPdx1NQ1QRAZY90+ftt2a
+   5NRPtVTLeWwgS74eihSO12R9VDqLxsws77aehAwQiWwp0lAb//fXxZM/X
+   5jqrWqQfhDcj3SKrEQtWlFIU+4stvivfM0GoFwXJ4V5OJuNwabiv3O3ye
+   wmdQnk7v1/NDXy15pxkGTvj0Zv3ntqqzia93wS4GRZbclf+43btq1zdPO
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="311992907"
+X-IronPort-AV: E=Sophos;i="5.97,266,1669104000"; 
+   d="scan'208";a="311992907"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 20:23:13 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="642736779"
+X-IronPort-AV: E=Sophos;i="5.97,266,1669104000"; 
+   d="scan'208";a="642736779"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 01 Feb 2023 20:23:09 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pNR7s-00068m-34;
+        Thu, 02 Feb 2023 04:23:08 +0000
+Date:   Thu, 2 Feb 2023 12:22:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kalyan Thota <quic_kalyant@quicinc.com>,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Kalyan Thota <quic_kalyant@quicinc.com>,
+        linux-kernel@vger.kernel.org, robdclark@chromium.org,
+        dianders@chromium.org, swboyd@chromium.org,
+        quic_vpolimer@quicinc.com, dmitry.baryshkov@linaro.org,
+        quic_abhinavk@quicinc.com, marijn.suijten@somainline.org
+Subject: Re: [v1 3/3] drm/msm/disp/dpu1: reserve the resources on topology
+ change
+Message-ID: <202302021238.o9yx7MKs-lkp@intel.com>
+References: <1675092092-26412-4-git-send-email-quic_kalyant@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221215033132.230023-3-longman@redhat.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+In-Reply-To: <1675092092-26412-4-git-send-email-quic_kalyant@quicinc.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 10:31:32PM -0500, Waiman Long wrote:
-> As noted by Michal, the blkg_iostat_set's in the lockless list
-> hold reference to blkg's to protect against their removal. Those
-> blkg's hold reference to blkcg. When a cgroup is being destroyed,
-> cgroup_rstat_flush() is only called at css_release_work_fn() which
-> is called when the blkcg reference count reaches 0. This circular
-> dependency will prevent blkcg and some blkgs from being freed after
-> they are made offline.
-> 
-> It is less a problem if the cgroup to be destroyed also has other
-> controllers like memory that will call cgroup_rstat_flush() which will
-> clean up the reference count. If block is the only controller that uses
-> rstat, these offline blkcg and blkgs may never be freed leaking more
-> and more memory over time.
-> 
-> To prevent this potential memory leak, a new cgroup_rstat_css_cpu_flush()
-> function is added to flush stats for a given css and cpu. This new
-> function will be called at blkgs destruction path, blkcg_destroy_blkgs(),
-> whenever there are still pending stats to be flushed. This will release
-> the references to blkgs allowing them to be freed and indirectly allow
-> the freeing of blkcg.
-> 
-> Fixes: 3b8cc6298724 ("blk-cgroup: Optimize blkcg_rstat_flush()")
-> Signed-off-by: Waiman Long <longman@redhat.com>
-> Acked-by: Tejun Heo <tj@kernel.org>
-> ---
->  block/blk-cgroup.c     | 16 ++++++++++++++++
->  include/linux/cgroup.h |  1 +
->  kernel/cgroup/rstat.c  | 18 ++++++++++++++++++
->  3 files changed, 35 insertions(+)
-> 
-> diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
-> index ca28306aa1b1..a2a1081d9d1d 100644
-> --- a/block/blk-cgroup.c
-> +++ b/block/blk-cgroup.c
-> @@ -1084,6 +1084,8 @@ struct list_head *blkcg_get_cgwb_list(struct cgroup_subsys_state *css)
->   */
->  static void blkcg_destroy_blkgs(struct blkcg *blkcg)
->  {
-> +	int cpu;
-> +
->  	/*
->  	 * blkcg_destroy_blkgs() shouldn't be called with all the blkcg
->  	 * references gone.
-> @@ -1093,6 +1095,20 @@ static void blkcg_destroy_blkgs(struct blkcg *blkcg)
->  
->  	might_sleep();
->  
-> +	/*
-> +	 * Flush all the non-empty percpu lockless lists to release the
-> +	 * blkg references held by those lists which, in turn, will
-> +	 * allow those blkgs to be freed and release their references to
-> +	 * blkcg. Otherwise, they may not be freed at all becase of this
-> +	 * circular dependency resulting in memory leak.
-> +	 */
-> +	for_each_possible_cpu(cpu) {
-> +		struct llist_head *lhead = per_cpu_ptr(blkcg->lhead, cpu);
-> +
-> +		if (!llist_empty(lhead))
-> +			cgroup_rstat_css_cpu_flush(&blkcg->css, cpu);
-> +	}
+Hi Kalyan,
 
-I guess it is possible for new iostat_cpu to be added just after the
-llist_empty() check.
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on drm-misc/drm-misc-next]
+[also build test ERROR on drm/drm-next drm-exynos/exynos-drm-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.2-rc6 next-20230201]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Kalyan-Thota/drm-msm-disp-dpu1-clear-dspp-reservations-in-rm-release/20230130-232224
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/1675092092-26412-4-git-send-email-quic_kalyant%40quicinc.com
+patch subject: [v1 3/3] drm/msm/disp/dpu1: reserve the resources on topology change
+config: riscv-randconfig-r042-20230130 (https://download.01.org/0day-ci/archive/20230202/202302021238.o9yx7MKs-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/4c49c3233fc18f3b746a96b5ff4ce5008da3bfec
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Kalyan-Thota/drm-msm-disp-dpu1-clear-dspp-reservations-in-rm-release/20230130-232224
+        git checkout 4c49c3233fc18f3b746a96b5ff4ce5008da3bfec
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/gpu/drm/msm/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c:2091:6: error: conflicting types for 'dpu_encoder_prepare_commit'
+   void dpu_encoder_prepare_commit(struct drm_encoder *drm_enc)
+        ^
+   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h:155:6: note: previous declaration is here
+   void dpu_encoder_prepare_commit(struct drm_encoder *drm_enc,
+        ^
+   1 error generated.
+--
+>> drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c:443:38: error: too few arguments to function call, expected 2, have 1
+                           dpu_encoder_prepare_commit(encoder);
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~        ^
+   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h:155:6: note: 'dpu_encoder_prepare_commit' declared here
+   void dpu_encoder_prepare_commit(struct drm_encoder *drm_enc,
+        ^
+   1 error generated.
 
 
-Thanks,
-Ming
+vim +/dpu_encoder_prepare_commit +2091 drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
 
+ae4d721ce10057a Abhinav Kumar     2022-04-26  2090  
+25fdd5933e4c0f5 Jeykumar Sankaran 2018-06-27 @2091  void dpu_encoder_prepare_commit(struct drm_encoder *drm_enc)
+25fdd5933e4c0f5 Jeykumar Sankaran 2018-06-27  2092  {
+25fdd5933e4c0f5 Jeykumar Sankaran 2018-06-27  2093  	struct dpu_encoder_virt *dpu_enc;
+25fdd5933e4c0f5 Jeykumar Sankaran 2018-06-27  2094  	struct dpu_encoder_phys *phys;
+25fdd5933e4c0f5 Jeykumar Sankaran 2018-06-27  2095  	int i;
+25fdd5933e4c0f5 Jeykumar Sankaran 2018-06-27  2096  
+25fdd5933e4c0f5 Jeykumar Sankaran 2018-06-27  2097  	if (!drm_enc) {
+25fdd5933e4c0f5 Jeykumar Sankaran 2018-06-27  2098  		DPU_ERROR("invalid encoder\n");
+25fdd5933e4c0f5 Jeykumar Sankaran 2018-06-27  2099  		return;
+25fdd5933e4c0f5 Jeykumar Sankaran 2018-06-27  2100  	}
+25fdd5933e4c0f5 Jeykumar Sankaran 2018-06-27  2101  	dpu_enc = to_dpu_encoder_virt(drm_enc);
+25fdd5933e4c0f5 Jeykumar Sankaran 2018-06-27  2102  
+25fdd5933e4c0f5 Jeykumar Sankaran 2018-06-27  2103  	for (i = 0; i < dpu_enc->num_phys_encs; i++) {
+25fdd5933e4c0f5 Jeykumar Sankaran 2018-06-27  2104  		phys = dpu_enc->phys_encs[i];
+b6fadcade627040 Drew Davenport    2019-12-06  2105  		if (phys->ops.prepare_commit)
+25fdd5933e4c0f5 Jeykumar Sankaran 2018-06-27  2106  			phys->ops.prepare_commit(phys);
+25fdd5933e4c0f5 Jeykumar Sankaran 2018-06-27  2107  	}
+25fdd5933e4c0f5 Jeykumar Sankaran 2018-06-27  2108  }
+25fdd5933e4c0f5 Jeykumar Sankaran 2018-06-27  2109  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
