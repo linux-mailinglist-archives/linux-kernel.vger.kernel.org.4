@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15894688AD8
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 00:32:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62D4A688ADB
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 00:32:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233245AbjBBXcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 18:32:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50698 "EHLO
+        id S233258AbjBBXcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 18:32:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233200AbjBBXch (ORCPT
+        with ESMTP id S233202AbjBBXcj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 18:32:37 -0500
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DED1BB469
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 15:32:35 -0800 (PST)
-Received: by mail-pf1-x44a.google.com with SMTP id a18-20020a62bd12000000b0056e7b61ec78so1672685pff.17
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 15:32:35 -0800 (PST)
+        Thu, 2 Feb 2023 18:32:39 -0500
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A842102
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 15:32:37 -0800 (PST)
+Received: by mail-pf1-x449.google.com with SMTP id u18-20020a62ed12000000b00593cc641da4so1684746pfh.0
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 15:32:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jMfzYGpjLscA+cSHKjv+qODVcyrrlHVghJg0aaO0KBk=;
-        b=OvrbEiCpGPYcK17eFl9Y8Nb0T74F1qeKRRPkLoOMDwdi/dRXxR6NuAQjAW9zXsUR0O
-         NeVP3CBQfbmSZRDn3VjHms7iVR+lkrD9000HVofhlapWdM0H6OVWwh++RAm98vZ+5dhx
-         bufiNX/dvrtyw3cumBPhgl4x+7y0E+G53ahhpnQuHNJSZ5luwRgX/jLAWcgel9dI3QjA
-         SRu0TbgVgGpsoeFXfGAVryIKlsdRcV06r0T1Ttoz+3041WIcgTRlSdDg+usnZ1TMOPDz
-         Rf9IFZN9Y+yLtQ9bRc+UBoG9YZg5Aztk+JWK5oqw6+zVPOqc/gIiW520ZtukWzKTIrxg
-         lJvQ==
+        bh=0NNiCqwzESyAJCUAtzOveFlWcEoCPQvaoYU5oWya4UE=;
+        b=hOhCADwPkxUGmi7V1P/nnFPjlarle5tUS/LLXkpE2OMQZSESuPz1Yg7ch5+w2lQPvZ
+         Tg/E8g4ve+TuLwEeRfChTbEYbLJeSDJDBhmLL+z83Q3UbkFRR/7iALI3n//9YzuETtUk
+         /td2TUtQtadczPSW8P9uXTi/L7bXWxzWMSBHRmqrt9SBSEfcBH/jtfBlcjWv7c1f+PLe
+         QQJMnYWOv7ywl4B7eaZ7s3dALT60pveMbI3kcs7UOtDp14gKlyebUk9ejlg7acW+153Z
+         oPfBCDEgRhQOIX+ZejkUx9YYjTBJC43e4lfmtvzzmccRB1Rl0AHErHGP8WlCALz8YStS
+         jSAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jMfzYGpjLscA+cSHKjv+qODVcyrrlHVghJg0aaO0KBk=;
-        b=HDGfM44Xwuczs+INQEE2XHvGfx5K2/8FSCW327KAewWNMXSpVGHrJh5SYALVWsVLUD
-         vNDM7SuruJ8cxWTfNvGFZVlBmloxVrcjwYUrEkzEzpFO+r58Ks/cE8R78Ydt8BHLnbnk
-         zm39O52CXQAr1DiRf4BdXpPLtwKlmiFys4KMnCG8Oa8kwCiewegjssDqatLrAOLCPs6Z
-         7f3sgDQkmLEToi0o/ucfZ1Q/mkqPyjzDECL2GhFIj8NqPNEWo0/gfqtmoSUJrRyEVlRj
-         0/lWmVEm8klmVeeDHNYuOd66b9bkJM4hHqnesJrjBZqfEopHYIin9+wAYMEH7pJybEaG
-         q91Q==
-X-Gm-Message-State: AO0yUKVRabAu6b0/aUD3rJZgDCWvxKBA4eR7AN+pxXN2dZYhPEJZAMht
-        Vf4WaThZMgADGpD/hBk3u42sRJGdiXJ6ZLLR
-X-Google-Smtp-Source: AK7set9GQneKggPkDbKmlHsZPDxNqqKNqpt3nFbEgf1JtVVy4xckZ6axh9mOcnrxgc0XPi+3Fc6kG5az9ihIBd8Y
+        bh=0NNiCqwzESyAJCUAtzOveFlWcEoCPQvaoYU5oWya4UE=;
+        b=0w5HWkXlV2dKp3opUL8RAjLFQaV/gNOeO2uWaTpcl4CEEZ93ROLehhbUYx6JhnwWZ2
+         PJS9XdrFCQd8sz8avgX0vamZRmTFGfPNxtiJj5Fod6SelEQMu32sBvuBLxC/MamMfBG5
+         Vezt4E/wUD/kbiP5AyUiTIMwMrAMvwsZknVwnjE4kh9hfSXnxa87V+buPVxSxcwT4fEw
+         Ml9ZwXWQZZJJ0mfFQmgrxFvgUE0BfuPNHVjDY9ufTnzhkWbRuwgB96jdIoqWfiHEU9Xe
+         /niSj353OZDKwgQTkUpllw3271k63pvh2MjIaKRECLfCoO05TSpA1DdgdrcrhV40Pphw
+         wPgg==
+X-Gm-Message-State: AO0yUKWTtlOpKDZBaPYSf+xafcSyIuCKaHpDdk4ZvhZHt9j5u9tcda8C
+        M289KjW3cWF55wC9A2Gw1Yr8u6+J4OqF2l4j
+X-Google-Smtp-Source: AK7set/gX+d7qL2VYRm0mNT1mURMK3jqpTnNExhfErr1wouO0vmd1XoXrrDp0BwbdxbCN+7oo8RXZwzOeOx6nPe4
 X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
- (user=yosryahmed job=sendgmr) by 2002:a17:90a:7f93:b0:22c:aacd:86c5 with SMTP
- id m19-20020a17090a7f9300b0022caacd86c5mr992815pjl.76.1675380755306; Thu, 02
- Feb 2023 15:32:35 -0800 (PST)
-Date:   Thu,  2 Feb 2023 23:32:28 +0000
+ (user=yosryahmed job=sendgmr) by 2002:a17:903:1c8:b0:193:9ec:fc13 with SMTP
+ id e8-20020a17090301c800b0019309ecfc13mr1942596plh.33.1675380757137; Thu, 02
+ Feb 2023 15:32:37 -0800 (PST)
+Date:   Thu,  2 Feb 2023 23:32:29 +0000
 In-Reply-To: <20230202233229.3895713-1-yosryahmed@google.com>
 Mime-Version: 1.0
 References: <20230202233229.3895713-1-yosryahmed@google.com>
 X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
-Message-ID: <20230202233229.3895713-2-yosryahmed@google.com>
-Subject: [RFC PATCH v1 1/2] mm: vmscan: refactor updating reclaimed pages in reclaim_state
+Message-ID: <20230202233229.3895713-3-yosryahmed@google.com>
+Subject: [RFC PATCH v1 2/2] mm: vmscan: ignore non-LRU-based reclaim in memcg reclaim
 From:   Yosry Ahmed <yosryahmed@google.com>
 To:     Alexander Viro <viro@zeniv.linux.org.uk>,
         "Darrick J. Wong" <djwong@kernel.org>,
@@ -75,7 +75,7 @@ Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,172 +83,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During reclaim, we keep track of pages reclaimed from other means than
-LRU-based reclaim through scan_control->reclaim_state->reclaimed_slab,
-which we stash a pointer to in current task_struct.
+We keep track of different types of reclaimed pages through
+reclaim_state->reclaimed, and we add them to the reported number of
+reclaimed pages. For non-memcg reclaim, this makes sense. For memcg
+reclaim, we have no clue if those pages are charged to the memcg under
+reclaim.
 
-However, we keep track of more than just reclaimed slab pages through
-this. We also use it for clean file pages dropped through pruned inodes,
-and xfs buffer pages freed. Rename reclaimed_slab to reclaimed, and add
-a helper function that wraps updating it through current.
+Slab pages are shared by different memcgs, so a freed slab page may have
+only been partially charged to the memcg under reclaim. The same goes
+for clean file pages from pruned inodes or xfs buffer pages, there is no
+way to link them to the memcg under reclaim.
+
+Stop reporting those freed pages as reclaimed pages during memcg
+reclaim. This should make the return value of writing to memory.reclaim,
+and may help reduce unnecessary reclaim retries during memcg charging.
+
+Generally, this should make the return value of
+try_to_free_mem_cgroup_pages() more accurate. In some limited cases (e.g.
+freed a slab page that was mostly charged to the memcg under reclaim),
+the return value of try_to_free_mem_cgroup_pages() can be
+underestimated, but this should be fine as it is mostly called in a
+retry loop.
 
 Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
 ---
- fs/inode.c           |  3 +--
- fs/xfs/xfs_buf.c     |  3 +--
- include/linux/swap.h |  5 ++++-
- mm/slab.c            |  3 +--
- mm/slob.c            |  6 ++----
- mm/slub.c            |  5 ++---
- mm/vmscan.c          | 17 +++++++++++++++--
- 7 files changed, 26 insertions(+), 16 deletions(-)
+ mm/vmscan.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/inode.c b/fs/inode.c
-index f453eb58fd03..adf0a7725054 100644
---- a/fs/inode.c
-+++ b/fs/inode.c
-@@ -863,8 +863,7 @@ static enum lru_status inode_lru_isolate(struct list_head *item,
- 				__count_vm_events(KSWAPD_INODESTEAL, reap);
- 			else
- 				__count_vm_events(PGINODESTEAL, reap);
--			if (current->reclaim_state)
--				current->reclaim_state->reclaimed_slab += reap;
-+			report_freed_pages(reap);
- 		}
- 		iput(inode);
- 		spin_lock(lru_lock);
-diff --git a/fs/xfs/xfs_buf.c b/fs/xfs/xfs_buf.c
-index 54c774af6e1c..060079f1e966 100644
---- a/fs/xfs/xfs_buf.c
-+++ b/fs/xfs/xfs_buf.c
-@@ -286,8 +286,7 @@ xfs_buf_free_pages(
- 		if (bp->b_pages[i])
- 			__free_page(bp->b_pages[i]);
- 	}
--	if (current->reclaim_state)
--		current->reclaim_state->reclaimed_slab += bp->b_page_count;
-+	report_freed_pages(bp->b_page_count);
- 
- 	if (bp->b_pages != bp->b_page_array)
- 		kmem_free(bp->b_pages);
-diff --git a/include/linux/swap.h b/include/linux/swap.h
-index 2787b84eaf12..bc1d8b326453 100644
---- a/include/linux/swap.h
-+++ b/include/linux/swap.h
-@@ -153,13 +153,16 @@ union swap_header {
-  * memory reclaim
-  */
- struct reclaim_state {
--	unsigned long reclaimed_slab;
-+	/* pages reclaimed outside of LRU-based reclaim */
-+	unsigned long reclaimed;
- #ifdef CONFIG_LRU_GEN
- 	/* per-thread mm walk data */
- 	struct lru_gen_mm_walk *mm_walk;
- #endif
- };
- 
-+void report_freed_pages(unsigned long pages);
-+
- #ifdef __KERNEL__
- 
- struct address_space;
-diff --git a/mm/slab.c b/mm/slab.c
-index 29300fc1289a..452db5913356 100644
---- a/mm/slab.c
-+++ b/mm/slab.c
-@@ -1395,8 +1395,7 @@ static void kmem_freepages(struct kmem_cache *cachep, struct slab *slab)
- 	smp_wmb();
- 	__folio_clear_slab(folio);
- 
--	if (current->reclaim_state)
--		current->reclaim_state->reclaimed_slab += 1 << order;
-+	report_freed_pages(1 << order);
- 	unaccount_slab(slab, order, cachep);
- 	__free_pages(folio_page(folio, 0), order);
- }
-diff --git a/mm/slob.c b/mm/slob.c
-index fe567fcfa3a3..71ee00e9dd46 100644
---- a/mm/slob.c
-+++ b/mm/slob.c
-@@ -61,7 +61,7 @@
- #include <linux/slab.h>
- 
- #include <linux/mm.h>
--#include <linux/swap.h> /* struct reclaim_state */
-+#include <linux/swap.h> /* report_freed_pages() */
- #include <linux/cache.h>
- #include <linux/init.h>
- #include <linux/export.h>
-@@ -211,9 +211,7 @@ static void slob_free_pages(void *b, int order)
- {
- 	struct page *sp = virt_to_page(b);
- 
--	if (current->reclaim_state)
--		current->reclaim_state->reclaimed_slab += 1 << order;
--
-+	report_freed_pages(1 << order);
- 	mod_node_page_state(page_pgdat(sp), NR_SLAB_UNRECLAIMABLE_B,
- 			    -(PAGE_SIZE << order));
- 	__free_pages(sp, order);
-diff --git a/mm/slub.c b/mm/slub.c
-index 13459c69095a..5145ad2467e9 100644
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -11,7 +11,7 @@
-  */
- 
- #include <linux/mm.h>
--#include <linux/swap.h> /* struct reclaim_state */
-+#include <linux/swap.h> /* report_freed_pages() */
- #include <linux/module.h>
- #include <linux/bit_spinlock.h>
- #include <linux/interrupt.h>
-@@ -2063,8 +2063,7 @@ static void __free_slab(struct kmem_cache *s, struct slab *slab)
- 	/* Make the mapping reset visible before clearing the flag */
- 	smp_wmb();
- 	__folio_clear_slab(folio);
--	if (current->reclaim_state)
--		current->reclaim_state->reclaimed_slab += pages;
-+	report_freed_pages(pages);
- 	unaccount_slab(slab, order, s);
- 	__free_pages(folio_page(folio, 0), order);
- }
 diff --git a/mm/vmscan.c b/mm/vmscan.c
-index bd6637fcd8f9..63a27d2f6f31 100644
+index 63a27d2f6f31..207998b16e5f 100644
 --- a/mm/vmscan.c
 +++ b/mm/vmscan.c
-@@ -204,6 +204,19 @@ static void set_task_reclaim_state(struct task_struct *task,
- 	task->reclaim_state = rs;
- }
+@@ -6181,7 +6181,7 @@ static void shrink_node(pg_data_t *pgdat, struct scan_control *sc)
  
-+/*
-+ * reclaim_report_freed_pages: report pages freed outside of LRU-based reclaim
-+ * @pages: number of pages freed
-+ *
-+ * If the current process is undergoing a reclaim operation,
-+ * increment the number of reclaimed pages by @pages.
-+ */
-+void report_freed_pages(unsigned long pages)
-+{
-+	if (current->reclaim_state)
-+		current->reclaim_state->reclaimed += pages;
-+}
-+
- LIST_HEAD(shrinker_list);
- DECLARE_RWSEM(shrinker_rwsem);
- 
-@@ -6169,8 +6182,8 @@ static void shrink_node(pg_data_t *pgdat, struct scan_control *sc)
  	shrink_node_memcgs(pgdat, sc);
  
- 	if (reclaim_state) {
--		sc->nr_reclaimed += reclaim_state->reclaimed_slab;
--		reclaim_state->reclaimed_slab = 0;
-+		sc->nr_reclaimed += reclaim_state->reclaimed;
-+		reclaim_state->reclaimed = 0;
+-	if (reclaim_state) {
++	if (reclaim_state && !cgroup_reclaim(sc)) {
+ 		sc->nr_reclaimed += reclaim_state->reclaimed;
+ 		reclaim_state->reclaimed = 0;
  	}
- 
- 	/* Record the subtree's reclaim efficiency */
 -- 
 2.39.1.519.gcb327c4b5f-goog
 
