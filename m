@@ -2,74 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A06386889F3
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 23:43:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D380F6889F7
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 23:45:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232785AbjBBWno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 17:43:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55016 "EHLO
+        id S231819AbjBBWpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 17:45:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232431AbjBBWnn (ORCPT
+        with ESMTP id S231744AbjBBWpD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 17:43:43 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D9386A315
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 14:43:42 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-4fa63c84621so34294407b3.20
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 14:43:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ETyfBjp/kDN4jefKK3Q6zUxbaFrFVt3ACbzabZOwIuE=;
-        b=f+YzL74Biy2AeE/Zv7pl/NQCIMJRpyiBH1LQMN3/bPSp6adF98sWUVFEwoLqYrIBb/
-         DOVb7otliIKxY4YUT9qhHBiCjbR9+0a/ItIQlht2WP6mWTWOr0eYmi3AsCnwZOGbhRRg
-         bBSyUM8ZJbdDUVrRIMqJitkLWOY7x1tO1GoyqR8HUq+jitRYiv7pI4q1I41omUzKjp+P
-         v2SkAtSoTa7EsvXYotDrR3Tqzjl6XANJKeUV/uollY/5OpQnwaLe/e2rLlM7iwQMzvxC
-         WsS1KDS12DFVrGGYl6ju5odsW6Z/mLL1fzb5sJBvBwkeVoEG45+KzS+YS/HHMmuHxmem
-         2y2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ETyfBjp/kDN4jefKK3Q6zUxbaFrFVt3ACbzabZOwIuE=;
-        b=o4FST9g1+yqSP/FWee4zx9uWJzvN+UcYj/35/WyEu8F3bVWfKYUMT+ekEjEUteX+Yz
-         o5+A09P3u6uZ+j4lKo/kfb35y/AVSlCMMDYjlyJHt5WCrpUjaTh4YoBa3zOzLHnfm5VD
-         o3lODqEjRnFuYydSTOxjldyUIXJdZoFGuu/sdkrPPptPly/0B1Gc4o7Tq/lmaIwFk7sv
-         79dRe+YJjdgPkYKreKazeOtcs/x7BL+nQr+DRXbZRkU+ixkg9Lug8VuW5UtABmbrTHYU
-         MWNz52BNxqMe5IgjKDTifohNG690wcYKrkqdcnqO4KdWbncLF/a5lzeE/rTeNQBUNaNQ
-         RM0A==
-X-Gm-Message-State: AO0yUKXS1iGGqkF+8JdCREdEEsKcz816s5ps8C4tfEYWTOvsPBMETor9
-        5hBX1sBekX+dbN3Ma8BoFmSHQ5RTEAqh
-X-Google-Smtp-Source: AK7set/rWasqhCe1rRkmQpf716Pzhpp5i99MJwOKd7NBWl/NsSb8CYPvVep2h7PP5FQmT5YBD92oe1PMprOL
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:3bb5:4c1f:1143:605])
- (user=irogers job=sendgmr) by 2002:a81:6d48:0:b0:525:196c:d720 with SMTP id
- i69-20020a816d48000000b00525196cd720mr47098ywc.278.1675377821580; Thu, 02 Feb
- 2023 14:43:41 -0800 (PST)
-Date:   Thu,  2 Feb 2023 14:42:53 -0800
-Message-Id: <20230202224253.40283-1-irogers@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
-Subject: [PATCH v1] tools/resolve_btfids: Tidy HOST_OVERRIDES
-From:   Ian Rogers <irogers@google.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Connor OBrien <connoro@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        Thu, 2 Feb 2023 17:45:03 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E8069B3B;
+        Thu,  2 Feb 2023 14:44:58 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P7DPh2x5jz4xGq;
+        Fri,  3 Feb 2023 09:44:55 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1675377896;
+        bh=6wZYEA3Bc4iGOhxen05MNQBeHSf3sRdVjqTcfmUFB2s=;
+        h=Date:From:To:Cc:Subject:From;
+        b=lF0qN0f4T5MQfonwxYClmpGhgaDTkty9mI/4V7YIYoZtpx/+SWPXrnSyb/rU577wH
+         P6g3iKqOxh5f9CWakZ1VSO2OeHKYHZhCjVwA4x9eiWjqp3Glyo51dt3QrlBcGL6Vop
+         0AI7o63oVFJtjFUahuzk9iAjXaFAuMDbKEs8Qw/VUqfDlfgqbfnjA0rD4LukwR0U6J
+         wTmd12tKaxNIBK1f9o6iG/Z/VNWb5NukzDiEhAwxGVUCCPwdojHKaigynC/dzPcr+8
+         DbzzxmOSWaSZw/5M98asBzwNnGVTv49J/xYUHF5nCIfiuO/gVc4ZBAk5hqa4PUvUJP
+         HAx+LDJuza1NQ==
+Date:   Fri, 3 Feb 2023 09:44:54 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Alexander Duyck <alexanderduyck@fb.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Xin Long <lucien.xin@gmail.com>
+Subject: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20230203094454.5766f160@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/s/FRUrAPveFg9cpX4M.mCl9";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,33 +54,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Don't set EXTRA_CFLAGS to HOSTCFLAGS, ensure CROSS_COMPILE isn't
-passed through.
+--Sig_/s/FRUrAPveFg9cpX4M.mCl9
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-This patch is based on top of:
-https://lore.kernel.org/bpf/20230202112839.1131892-1-jolsa@kernel.org/
+Hi all,
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/bpf/resolve_btfids/Makefile | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Today's linux-next merge of the net-next tree got a conflict in:
 
-diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-index abdd68ac08f4..2abdd85b4a08 100644
---- a/tools/bpf/resolve_btfids/Makefile
-+++ b/tools/bpf/resolve_btfids/Makefile
-@@ -17,9 +17,9 @@ else
-   MAKEFLAGS=--no-print-directory
- endif
- 
--# always use the host compiler
-+# Overrides for the prepare step libraries.
- HOST_OVERRIDES := AR="$(HOSTAR)" CC="$(HOSTCC)" LD="$(HOSTLD)" ARCH="$(HOSTARCH)" \
--		  EXTRA_CFLAGS="$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)"
-+		  CROSS_COMPILE=""
- 
- RM      ?= rm
- HOSTCC  ?= gcc
--- 
-2.39.1.519.gcb327c4b5f-goog
+  net/core/gro.c
 
+between commit:
+
+  7d2c89b32587 ("skb: Do mix page pool and page referenced frags in GRO")
+
+from the net tree and commit:
+
+  b1a78b9b9886 ("net: add support for ipv4 big tcp")
+
+from the net-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc net/core/gro.c
+index 4bac7ea6e025,b15f85546bdd..000000000000
+--- a/net/core/gro.c
++++ b/net/core/gro.c
+@@@ -162,17 -162,10 +162,19 @@@ int skb_gro_receive(struct sk_buff *p,=20
+  	struct sk_buff *lp;
+  	int segs;
+ =20
+ +	/* Do not splice page pool based packets w/ non-page pool
+ +	 * packets. This can result in reference count issues as page
+ +	 * pool pages will not decrement the reference count and will
+ +	 * instead be immediately returned to the pool or have frag
+ +	 * count decremented.
+ +	 */
+ +	if (p->pp_recycle !=3D skb->pp_recycle)
+ +		return -ETOOMANYREFS;
+ +
+- 	/* pairs with WRITE_ONCE() in netif_set_gro_max_size() */
+- 	gro_max_size =3D READ_ONCE(p->dev->gro_max_size);
++ 	/* pairs with WRITE_ONCE() in netif_set_gro(_ipv4)_max_size() */
++ 	gro_max_size =3D p->protocol =3D=3D htons(ETH_P_IPV6) ?
++ 			READ_ONCE(p->dev->gro_max_size) :
++ 				READ_ONCE(p->dev->gro_ipv4_max_size);
+ =20
+  	if (unlikely(p->len + len >=3D gro_max_size || NAPI_GRO_CB(skb)->flush))
+  		return -E2BIG;
+
+--Sig_/s/FRUrAPveFg9cpX4M.mCl9
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPcPOcACgkQAVBC80lX
+0GwvCQf/UZLTuCF02LLqxZ+UdmtZy40lDfuMEcaiREJ1g1MtWBY+48XZ8bO2qJix
+nu1BkrArHYxo9mFctsOowVMLUZnSlxXDJSFlo6f2fJiPK4q38RosuF3Z7rVLEiLA
+z1jZ34+0O5R08u26hlu7LI72Og6I7y0PVmhldVjabiV8A0GoyaFEIxjEzRiIgZkA
+blA9uuM6Rxf72f8EKlgeCMia8aYVLXVbK5h4G5hBx/2LAAEQvVNNU2KNIPo5mzsL
+3bwPsa4MSLTP8fVC1hSUVObnbSWuEBtabhObw2G35GqnCbr3ka/MHhbj5l5fKUyD
+m/QgjUm0fMEw2rzME19Q3tSDKrFK/A==
+=xLLM
+-----END PGP SIGNATURE-----
+
+--Sig_/s/FRUrAPveFg9cpX4M.mCl9--
