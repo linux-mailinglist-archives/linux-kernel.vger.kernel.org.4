@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFE9568867C
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 19:30:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9102E688680
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 19:30:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232702AbjBBSaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 13:30:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33812 "EHLO
+        id S232840AbjBBSaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 13:30:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232463AbjBBS3o (ORCPT
+        with ESMTP id S232727AbjBBS3t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 13:29:44 -0500
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D42365ED4
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 10:28:48 -0800 (PST)
-Received: by mail-pl1-x64a.google.com with SMTP id p15-20020a170902a40f00b00192b2bbb7f8so1316789plq.14
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 10:28:48 -0800 (PST)
+        Thu, 2 Feb 2023 13:29:49 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CA9E7BBCE
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 10:28:55 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id u186-20020a2560c3000000b007c8e2cf3668so2499599ybb.14
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 10:28:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hvqHXEXjWYHTPhQcpfchQJxtERd1tvsiHPz9/kGUDP4=;
-        b=Ngf+eS881ONCbEyEVOMB8xVJqlLzJrgH97HgBnQSTrNlY2iSaBMTaZjWLKJhC/ZMi8
-         f8E2E1Yo82GSOrHqqL/9T/2trk8ldfp0OvAzru9ofatoVZJ5++/ZkNAT107ZyLhJ9mj7
-         0k4W5P7cDjIau9O0gNL76KPh0/FLqIx6PF++TzoEXG/T45kDNT4qJJvCWPG1Qw2neb45
-         hEWu3gh2LYGWBwcM0jz5VHLI5ifRaTnzPFxYXtqkvfUPBx2jWnmrSak8mhhkqdXC9Ll1
-         pNf4WNzVJIJa2VoHYHYvPp9Jb247Rog/b+/kFo7GwydGDFID/miKyzHVzW666Q6IU7aG
-         vHbA==
+        bh=2BER/1IEMd55LQsJILKozxqxXLopbafo2dDttN7vu9E=;
+        b=ISrUx6Kuco9AWdauP5MGzGSzbbY+lXEVtPZgbIuskIdrCJHulKZdtW9tchPow/b65W
+         r6mzDiLmuobwuNPQSb1bV2KFT+HyPogGNXEaSWcOfj8x1Q5iMIxrAUa0DmThF98fwoaS
+         zrXX6j1MEqV1WZqqSOGJOzErglfd4ZKsJ6cNUrgxapKSOurF4vPgRRSPMp6Q0nhA1B08
+         mTBtKS0K8UDTCVZQP+sWrDG3XitQfLOE9PayJASe6vHecnUas6f7iheUi6OydFSnCl0x
+         ruPNuic9DuThsqzjqnuyIc4piacsKGtz2B2XTB/3IqRTheKSefBJ4Qd/O0UzCVYaxZV2
+         7CRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hvqHXEXjWYHTPhQcpfchQJxtERd1tvsiHPz9/kGUDP4=;
-        b=OYOhmrHomCzjyFqc9E+ZW7uIt/xfhbnl92/0Xis3dwgfD2s0XZfDVVSbWLHGSEPffm
-         9cL9RgCg2A3hNFLaMMT5tMKoJc9ctI1hkeN06yowvoBPHfVGYT3gwXTLiyhJFdS7fmaC
-         6LHERJdV83SAMW/9dBIxOeNJXiKpgXHeujJqoSUJelD4Mq+M5I8En94e5WijAyY4Sxce
-         4QK2V+qMEnuTRe5xJEP7zjsdIKa8KdVPU7geft52sfKcYRmMx48bqZKoMZaE4JiaVWqp
-         dAq85GlWh+/KU5dAhofgQKcA6KrEZ13shT1kbv4fStpM/GTKlg5xVrMRjkrThsVhU8sN
-         3YmQ==
-X-Gm-Message-State: AO0yUKUb0PWWgAUiFrEd6oTKYqhbhY1VTGellmzUKN6pVVrp2X72eZ5Z
-        QtV0b0tWwrQpRZuFVKms2Jg2HD/lIZuJb+lVCJeUEzW3Z9IMxNXCMWWAv2ubOVNFfubyxLrgWnJ
-        VD1G4KfpDha8AjZIVBdfRCy4xLKE75kbXLdWsQIcIZADHDWnqculNo9gbZBUoB4QILrR78o6o
-X-Google-Smtp-Source: AK7set/NtWwoOpeBa6Jg5pAf/klctbTD0WEdINlfN4mc5N8KnV+UdUemvQc8UD0hJmQyC7s1euBXbsS2iH9q
+        bh=2BER/1IEMd55LQsJILKozxqxXLopbafo2dDttN7vu9E=;
+        b=H2mvV67FZ2wgIgu2LiTKYvcYDf3GfC3Ec4R2MtIELJT1e4oODmOaAtE81+kCxAzh9I
+         s9USIXMpJfzimyEHRFW8uTCNmtbeTV7fQdVqIWdtFDxmwD/e2HMrfROj5jEDHYSr9KqS
+         4cgdYC8YtfiCIb0OmFfNrFk6tw9VfLhUpQtXCZbVxRgEdE3RJOfe6xy3GmN/GgIP/FiL
+         zDk6GJxENIsn5DTEn/V4/DXMuUE6RQFjU5+Nw7aThncyg0T1X7njgUDMNxhb5iJqdqBo
+         r6sHpH4E6cTpIC7gzKoRNpwuL33yjt3p1RZHwldEJF/G87KyptUXxR6eYWWCTvpbYB37
+         /VRw==
+X-Gm-Message-State: AO0yUKVo0ywVc7ixNo85D/TaWod87WZfvCoQZ0o2uKD/jvwbKq31/rAB
+        0eicU4OE+cju2/GV8Fi2ms9AEaQ1zLyrGIrvALgbivtATwIhdOQT5RrKvsl2+jNE3HmZeX/r2q5
+        HzPfRddsQHthqbAIjlw4KXiw7yIzwPCnHUP4a6bXqPwxhiL+Nju+On/2cSNeZZi++Zb3zHciD
+X-Google-Smtp-Source: AK7set+39HFoPNq8UWIR8jmmvH/HsHhRQwm/tZzjufgYKKYKcDLx4/yXFYU+R1bqa0FXq3rZoHEDmPqDOoVM
 X-Received: from sweer.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:e45])
- (user=bgardon job=sendgmr) by 2002:a05:6a00:4208:b0:58e:2111:9c42 with SMTP
- id cd8-20020a056a00420800b0058e21119c42mr1702934pfb.22.1675362514256; Thu, 02
- Feb 2023 10:28:34 -0800 (PST)
-Date:   Thu,  2 Feb 2023 18:28:02 +0000
+ (user=bgardon job=sendgmr) by 2002:a81:1952:0:b0:521:e063:71e7 with SMTP id
+ 79-20020a811952000000b00521e06371e7mr5ywz.9.1675362516022; Thu, 02 Feb 2023
+ 10:28:36 -0800 (PST)
+Date:   Thu,  2 Feb 2023 18:28:03 +0000
 In-Reply-To: <20230202182809.1929122-1-bgardon@google.com>
 Mime-Version: 1.0
 References: <20230202182809.1929122-1-bgardon@google.com>
 X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
-Message-ID: <20230202182809.1929122-15-bgardon@google.com>
-Subject: [PATCH 14/21] KVM: x86/MMU: Factor Shadow MMU wrprot / clear dirty
- ops out of mmu.c
+Message-ID: <20230202182809.1929122-16-bgardon@google.com>
+Subject: [PATCH 15/21] KVM: x86/MMU: Remove unneeded exports from shadow_mmu.c
 From:   Ben Gardon <bgardon@google.com>
 To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
 Cc:     Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
@@ -66,7 +65,7 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,221 +73,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are several functions in mmu.c which bifrucate to the Shadow
-and/or TDP MMU implementations. In most of these, the Shadow MMU
-implementation is open-coded. Wrap these instances in a nice function
-which just needs kvm and slot arguments or similar. This matches the TDP
-MMU interface and will allow for some nice cleanups in a following
-commit.
+Now that the various dirty logging / wrprot function implementations are
+in shadow_mmu.c, do another round of cleanups to remove functions which
+no longer need to be exposed and can be marked static.
 
 No functional change intended.
 
 Signed-off-by: Ben Gardon <bgardon@google.com>
 ---
- arch/x86/kvm/mmu/mmu.c        | 52 ++++++----------------------
- arch/x86/kvm/mmu/shadow_mmu.c | 64 +++++++++++++++++++++++++++++++++++
- arch/x86/kvm/mmu/shadow_mmu.h | 15 ++++++++
- 3 files changed, 90 insertions(+), 41 deletions(-)
+ arch/x86/kvm/mmu/shadow_mmu.c | 32 +++++++++++++++++++-------------
+ arch/x86/kvm/mmu/shadow_mmu.h | 18 ------------------
+ 2 files changed, 19 insertions(+), 31 deletions(-)
 
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 9b217e04cab0e..44a00396284d5 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -377,23 +377,13 @@ static void kvm_mmu_write_protect_pt_masked(struct kvm *kvm,
- 				     struct kvm_memory_slot *slot,
- 				     gfn_t gfn_offset, unsigned long mask)
- {
--	struct kvm_rmap_head *rmap_head;
--
- 	if (tdp_mmu_enabled)
- 		kvm_tdp_mmu_clear_dirty_pt_masked(kvm, slot,
- 				slot->base_gfn + gfn_offset, mask, true);
- 
--	if (!kvm_memslots_have_rmaps(kvm))
--		return;
--
--	while (mask) {
--		rmap_head = gfn_to_rmap(slot->base_gfn + gfn_offset + __ffs(mask),
--					PG_LEVEL_4K, slot);
--		rmap_write_protect(rmap_head, false);
--
--		/* clear the first set bit */
--		mask &= mask - 1;
--	}
-+	if (kvm_memslots_have_rmaps(kvm))
-+		kvm_shadow_mmu_write_protect_pt_masked(kvm, slot, gfn_offset,
-+						       mask);
- }
- 
- /**
-@@ -410,23 +400,13 @@ static void kvm_mmu_clear_dirty_pt_masked(struct kvm *kvm,
- 					 struct kvm_memory_slot *slot,
- 					 gfn_t gfn_offset, unsigned long mask)
- {
--	struct kvm_rmap_head *rmap_head;
--
- 	if (tdp_mmu_enabled)
- 		kvm_tdp_mmu_clear_dirty_pt_masked(kvm, slot,
- 				slot->base_gfn + gfn_offset, mask, false);
- 
--	if (!kvm_memslots_have_rmaps(kvm))
--		return;
--
--	while (mask) {
--		rmap_head = gfn_to_rmap(slot->base_gfn + gfn_offset + __ffs(mask),
--					PG_LEVEL_4K, slot);
--		__rmap_clear_dirty(kvm, rmap_head, slot);
--
--		/* clear the first set bit */
--		mask &= mask - 1;
--	}
-+	if (kvm_memslots_have_rmaps(kvm))
-+		kvm_shadow_mmu_clear_dirty_pt_masked(kvm, slot, gfn_offset,
-+						     mask);
- }
- 
- /**
-@@ -484,16 +464,11 @@ bool kvm_mmu_slot_gfn_write_protect(struct kvm *kvm,
- 				    struct kvm_memory_slot *slot, u64 gfn,
- 				    int min_level)
- {
--	struct kvm_rmap_head *rmap_head;
--	int i;
- 	bool write_protected = false;
- 
--	if (kvm_memslots_have_rmaps(kvm)) {
--		for (i = min_level; i <= KVM_MAX_HUGEPAGE_LEVEL; ++i) {
--			rmap_head = gfn_to_rmap(gfn, i, slot);
--			write_protected |= rmap_write_protect(rmap_head, true);
--		}
--	}
-+	if (kvm_memslots_have_rmaps(kvm))
-+		write_protected |=
-+			kvm_shadow_mmu_write_protect_gfn(kvm, slot, gfn, min_level);
- 
- 	if (tdp_mmu_enabled)
- 		write_protected |=
-@@ -2915,8 +2890,7 @@ void kvm_mmu_slot_remove_write_access(struct kvm *kvm,
- {
- 	if (kvm_memslots_have_rmaps(kvm)) {
- 		write_lock(&kvm->mmu_lock);
--		walk_slot_rmaps(kvm, memslot, slot_rmap_write_protect,
--				start_level, KVM_MAX_HUGEPAGE_LEVEL, false);
-+		kvm_shadow_mmu_wrprot_slot(kvm, memslot, start_level);
- 		write_unlock(&kvm->mmu_lock);
- 	}
- 
-@@ -3067,11 +3041,7 @@ void kvm_mmu_slot_leaf_clear_dirty(struct kvm *kvm,
- {
- 	if (kvm_memslots_have_rmaps(kvm)) {
- 		write_lock(&kvm->mmu_lock);
--		/*
--		 * Clear dirty bits only on 4k SPTEs since the legacy MMU only
--		 * support dirty logging at a 4k granularity.
--		 */
--		walk_slot_rmaps_4k(kvm, memslot, __rmap_clear_dirty, false);
-+		kvm_shadow_mmu_clear_dirty_slot(kvm, memslot);
- 		write_unlock(&kvm->mmu_lock);
- 	}
- 
 diff --git a/arch/x86/kvm/mmu/shadow_mmu.c b/arch/x86/kvm/mmu/shadow_mmu.c
-index 32a24530cf19a..b93a6174717d3 100644
+index b93a6174717d3..dc5c4b9899cc6 100644
 --- a/arch/x86/kvm/mmu/shadow_mmu.c
 +++ b/arch/x86/kvm/mmu/shadow_mmu.c
-@@ -3453,3 +3453,67 @@ unsigned long kvm_shadow_mmu_shrink_scan(struct kvm *kvm, int pages_to_free)
- 
- 	return freed;
+@@ -634,8 +634,8 @@ unsigned int pte_list_count(struct kvm_rmap_head *rmap_head)
+ 	return count;
  }
+ 
+-struct kvm_rmap_head *gfn_to_rmap(gfn_t gfn, int level,
+-				  const struct kvm_memory_slot *slot)
++static struct kvm_rmap_head *gfn_to_rmap(gfn_t gfn, int level,
++					 const struct kvm_memory_slot *slot)
+ {
+ 	unsigned long idx;
+ 
+@@ -803,7 +803,7 @@ static bool spte_write_protect(u64 *sptep, bool pt_protect)
+ 	return mmu_spte_update(sptep, spte);
+ }
+ 
+-bool rmap_write_protect(struct kvm_rmap_head *rmap_head, bool pt_protect)
++static bool rmap_write_protect(struct kvm_rmap_head *rmap_head, bool pt_protect)
+ {
+ 	u64 *sptep;
+ 	struct rmap_iterator iter;
+@@ -842,8 +842,8 @@ static bool spte_wrprot_for_clear_dirty(u64 *sptep)
+  *	- W bit on ad-disabled SPTEs.
+  * Returns true iff any D or W bits were cleared.
+  */
+-bool __rmap_clear_dirty(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
+-			const struct kvm_memory_slot *slot)
++static bool __rmap_clear_dirty(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
++			       const struct kvm_memory_slot *slot)
+ {
+ 	u64 *sptep;
+ 	struct rmap_iterator iter;
+@@ -3057,6 +3057,11 @@ void kvm_mmu_pte_write(struct kvm_vcpu *vcpu, gpa_t gpa, const u8 *new,
+ 	write_unlock(&vcpu->kvm->mmu_lock);
+ }
+ 
++/* The return value indicates if tlb flush on all vcpus is needed. */
++typedef bool (*slot_rmaps_handler) (struct kvm *kvm,
++				    struct kvm_rmap_head *rmap_head,
++				    const struct kvm_memory_slot *slot);
 +
-+void kvm_shadow_mmu_write_protect_pt_masked(struct kvm *kvm,
-+					    struct kvm_memory_slot *slot,
-+					    gfn_t gfn_offset, unsigned long mask)
-+{
-+	struct kvm_rmap_head *rmap_head;
-+
-+	while (mask) {
-+		rmap_head = gfn_to_rmap(slot->base_gfn + gfn_offset + __ffs(mask),
-+					PG_LEVEL_4K, slot);
-+		rmap_write_protect(rmap_head, false);
-+
-+		/* clear the first set bit */
-+		mask &= mask - 1;
-+	}
-+}
-+
-+void kvm_shadow_mmu_clear_dirty_pt_masked(struct kvm *kvm,
-+					  struct kvm_memory_slot *slot,
-+					  gfn_t gfn_offset, unsigned long mask)
-+{
-+	struct kvm_rmap_head *rmap_head;
-+
-+	while (mask) {
-+		rmap_head = gfn_to_rmap(slot->base_gfn + gfn_offset + __ffs(mask),
-+					PG_LEVEL_4K, slot);
-+		__rmap_clear_dirty(kvm, rmap_head, slot);
-+
-+		/* clear the first set bit */
-+		mask &= mask - 1;
-+	}
-+}
-+
-+bool kvm_shadow_mmu_write_protect_gfn(struct kvm *kvm,
-+				      struct kvm_memory_slot *slot,
-+				      u64 gfn, int min_level)
-+{
-+	struct kvm_rmap_head *rmap_head;
-+	int i;
-+	bool write_protected = false;
-+
-+	if (kvm_memslots_have_rmaps(kvm)) {
-+		for (i = min_level; i <= KVM_MAX_HUGEPAGE_LEVEL; ++i) {
-+			rmap_head = gfn_to_rmap(gfn, i, slot);
-+			write_protected |= rmap_write_protect(rmap_head, true);
-+		}
-+	}
-+
-+	return write_protected;
-+}
-+
-+void kvm_shadow_mmu_clear_dirty_slot(struct kvm *kvm,
-+				     const struct kvm_memory_slot *memslot)
-+{
-+	walk_slot_rmaps_4k(kvm, memslot, __rmap_clear_dirty, false);
-+}
-+
-+void kvm_shadow_mmu_wrprot_slot(struct kvm *kvm,
-+				const struct kvm_memory_slot *memslot,
-+				int start_level)
-+{
-+	walk_slot_rmaps(kvm, memslot, slot_rmap_write_protect,
-+			start_level, KVM_MAX_HUGEPAGE_LEVEL, false);
-+}
+ static __always_inline bool __walk_slot_rmaps(struct kvm *kvm,
+ 					      const struct kvm_memory_slot *slot,
+ 					      slot_rmaps_handler fn,
+@@ -3087,20 +3092,21 @@ static __always_inline bool __walk_slot_rmaps(struct kvm *kvm,
+ 	return flush;
+ }
+ 
+-__always_inline bool walk_slot_rmaps(struct kvm *kvm,
+-				     const struct kvm_memory_slot *slot,
+-				     slot_rmaps_handler fn, int start_level,
+-				     int end_level, bool flush_on_yield)
++static __always_inline bool walk_slot_rmaps(struct kvm *kvm,
++					    const struct kvm_memory_slot *slot,
++					    slot_rmaps_handler fn,
++					    int start_level, int end_level,
++					    bool flush_on_yield)
+ {
+ 	return __walk_slot_rmaps(kvm, slot, fn, start_level, end_level,
+ 				 slot->base_gfn, slot->base_gfn + slot->npages - 1,
+ 				 flush_on_yield, false);
+ }
+ 
+-__always_inline bool walk_slot_rmaps_4k(struct kvm *kvm,
+-					const struct kvm_memory_slot *slot,
+-					slot_rmaps_handler fn,
+-					bool flush_on_yield)
++static __always_inline bool walk_slot_rmaps_4k(struct kvm *kvm,
++					       const struct kvm_memory_slot *slot,
++					       slot_rmaps_handler fn,
++					       bool flush_on_yield)
+ {
+ 	return walk_slot_rmaps(kvm, slot, fn, PG_LEVEL_4K,
+ 			       PG_LEVEL_4K, flush_on_yield);
 diff --git a/arch/x86/kvm/mmu/shadow_mmu.h b/arch/x86/kvm/mmu/shadow_mmu.h
-index 82eed9bb9bc9a..58f48293b4773 100644
+index 58f48293b4773..36fe8013931d2 100644
 --- a/arch/x86/kvm/mmu/shadow_mmu.h
 +++ b/arch/x86/kvm/mmu/shadow_mmu.h
-@@ -117,6 +117,21 @@ void kvm_shadow_mmu_zap_collapsible_sptes(struct kvm *kvm,
- bool kvm_shadow_mmu_has_zapped_obsolete_pages(struct kvm *kvm);
- unsigned long kvm_shadow_mmu_shrink_scan(struct kvm *kvm, int pages_to_free);
+@@ -39,11 +39,6 @@ struct pte_list_desc {
+ /* Only exported for debugfs.c. */
+ unsigned int pte_list_count(struct kvm_rmap_head *rmap_head);
  
-+void kvm_shadow_mmu_write_protect_pt_masked(struct kvm *kvm,
-+					    struct kvm_memory_slot *slot,
-+					    gfn_t gfn_offset, unsigned long mask);
-+void kvm_shadow_mmu_clear_dirty_pt_masked(struct kvm *kvm,
-+					  struct kvm_memory_slot *slot,
-+					  gfn_t gfn_offset, unsigned long mask);
-+bool kvm_shadow_mmu_write_protect_gfn(struct kvm *kvm,
-+				      struct kvm_memory_slot *slot,
-+				      u64 gfn, int min_level);
-+void kvm_shadow_mmu_clear_dirty_slot(struct kvm *kvm,
-+				     const struct kvm_memory_slot *memslot);
-+void kvm_shadow_mmu_wrprot_slot(struct kvm *kvm,
-+				const struct kvm_memory_slot *memslot,
-+				int start_level);
-+
- /* Exports from paging_tmpl.h */
- gpa_t paging32_gva_to_gpa(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu,
- 			  gpa_t vaddr, u64 access,
+-struct kvm_rmap_head *gfn_to_rmap(gfn_t gfn, int level,
+-				  const struct kvm_memory_slot *slot);
+-bool rmap_write_protect(struct kvm_rmap_head *rmap_head, bool pt_protect);
+-bool __rmap_clear_dirty(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
+-			const struct kvm_memory_slot *slot);
+ bool kvm_zap_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
+ 		  struct kvm_memory_slot *slot, gfn_t gfn, int level,
+ 		  pte_t unused);
+@@ -91,22 +86,9 @@ int kvm_shadow_mmu_get_walk(struct kvm_vcpu *vcpu, u64 addr, u64 *sptes,
+ void kvm_mmu_pte_write(struct kvm_vcpu *vcpu, gpa_t gpa, const u8 *new,
+ 		       int bytes, struct kvm_page_track_notifier_node *node);
+ 
+-/* The return value indicates if tlb flush on all vcpus is needed. */
+-typedef bool (*slot_rmaps_handler) (struct kvm *kvm,
+-				    struct kvm_rmap_head *rmap_head,
+-				    const struct kvm_memory_slot *slot);
+-bool walk_slot_rmaps(struct kvm *kvm, const struct kvm_memory_slot *slot,
+-		       slot_rmaps_handler fn, int start_level, int end_level,
+-		       bool flush_on_yield);
+-bool walk_slot_rmaps_4k(struct kvm *kvm, const struct kvm_memory_slot *slot,
+-			slot_rmaps_handler fn, bool flush_on_yield);
+-
+ void kvm_shadow_mmu_zap_obsolete_pages(struct kvm *kvm);
+ bool kvm_shadow_mmu_zap_gfn_range(struct kvm *kvm, gfn_t gfn_start, gfn_t gfn_end);
+ 
+-bool slot_rmap_write_protect(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
+-			     const struct kvm_memory_slot *slot);
+-
+ void kvm_shadow_mmu_try_split_huge_pages(struct kvm *kvm,
+ 					 const struct kvm_memory_slot *slot,
+ 					 gfn_t start, gfn_t end,
 -- 
 2.39.1.519.gcb327c4b5f-goog
 
