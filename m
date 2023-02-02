@@ -2,60 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 007096873BD
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 04:20:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E19576873BE
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 04:21:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231224AbjBBDT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 22:19:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52384 "EHLO
+        id S231509AbjBBDVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 22:21:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbjBBDT4 (ORCPT
+        with ESMTP id S229731AbjBBDVE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 22:19:56 -0500
+        Wed, 1 Feb 2023 22:21:04 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C40629E06
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 19:18:28 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1146575789
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 19:20:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675307908;
+        s=mimecast20190719; t=1675308015;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=0byIjFVLJjYccYZ4C0wxeuACvdHbraDwQ8DEwlpl42E=;
-        b=C+ncynslJeNjCF8LoZOLiDCSb3k7NH4VQrIWzvcoBJTq/sKq+FGLdK+VxSMZN90kjA6vnu
-        SDc+w0HSaA722J2d/cbVDZxx/pGJG3Gamxvm2pvkZTabpzz4R6IbQo1/4l106fDNKSgiXq
-        hOe7sOgPONOdGbNKwSr5WpgQHlSLau4=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=rK7R8Ymf//RLaf8YqF06g2e/AYVjMdAxmOF83wfnLdo=;
+        b=TI7QKUGmsEr87HL1NScuDA52d0H/FsJTKY/BwTAFDvXVhHLlvAYwXywkqg3FgF8Iy0SXEC
+        pKNIGCgozi1QG3qwWB79/QQCJaXN8Ri/uO72VvPYwAYPZpnYkQbYpgjihM7cDjtYy36jtz
+        uwqE/lJaft4rLGN+Q4nIl7zT35IFVwU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-209-T6uSgZiyM-KDNkGcQDrT6w-1; Wed, 01 Feb 2023 22:18:22 -0500
-X-MC-Unique: T6uSgZiyM-KDNkGcQDrT6w-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+ us-mta-295-eL-bS1ooPSu4NaxsFXnbeA-1; Wed, 01 Feb 2023 22:20:13 -0500
+X-MC-Unique: eL-bS1ooPSu4NaxsFXnbeA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4D94F29AA2D0;
-        Thu,  2 Feb 2023 03:18:21 +0000 (UTC)
-Received: from llong.com (unknown [10.22.32.115])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A9FDD2026D4B;
-        Thu,  2 Feb 2023 03:18:20 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        kernel-team@android.com, Waiman Long <longman@redhat.com>
-Subject: [PATCH 2/2] cgroup/cpuset: Don't update tasks' cpumasks for cpu offline events
-Date:   Wed,  1 Feb 2023 22:17:49 -0500
-Message-Id: <20230202031749.118146-3-longman@redhat.com>
-In-Reply-To: <20230202031749.118146-1-longman@redhat.com>
-References: <20230202031749.118146-1-longman@redhat.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 617F7802314;
+        Thu,  2 Feb 2023 03:20:12 +0000 (UTC)
+Received: from localhost (ovpn-12-116.pek2.redhat.com [10.72.12.116])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3BB31404BEC0;
+        Thu,  2 Feb 2023 03:20:10 +0000 (UTC)
+Date:   Thu, 2 Feb 2023 11:20:07 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Lorenzo Stoakes <lstoakes@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        akpm@linux-foundation.org, stephen.s.brennan@oracle.com,
+        urezki@gmail.com, willy@infradead.org, hch@infradead.org,
+        error27@gmail.com
+Subject: Re: [PATCH v4 3/7] mm/vmalloc.c: allow vread() to read out
+ vm_map_ram areas
+Message-ID: <Y9sr56DqC+JCXt7z@MiWiFi-R3L-srv>
+References: <20230201091339.61761-1-bhe@redhat.com>
+ <20230201091339.61761-4-bhe@redhat.com>
+ <Y9rImPGSF/EQ1Xey@lucifer>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9rImPGSF/EQ1Xey@lucifer>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,108 +65,168 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is a known issue that when a task is in a non-root v1 cpuset, a cpu
-offline event will cause that cpu to be lost from the task's cpumask
-permanently as the cpus_allowed mask won't get back that cpu when it
-becomes online again. A partial workaround for this type of single
-cpu offline/online sequence is to leave the offline cpu in the task's
-cpumask and do the update only if new cpus are added. It also has the
-benefit of reducing the overhead of a cpu offline event.
+On 02/01/23 at 08:16pm, Lorenzo Stoakes wrote:
+> On Wed, Feb 01, 2023 at 05:13:35PM +0800, Baoquan He wrote:
+> > Currently, vread can read out vmalloc areas which is associated with
+> > a vm_struct. While this doesn't work for areas created by vm_map_ram()
+> > interface because it doesn't have an associated vm_struct. Then in vread(),
+> > these areas are all skipped.
+> >
+> > Here, add a new function vmap_ram_vread() to read out vm_map_ram areas.
+> > The area created with vmap_ram_vread() interface directly can be handled
+> > like the other normal vmap areas with aligned_vread(). While areas
+> > which will be further subdivided and managed with vmap_block need
+> > carefully read out page-aligned small regions and zero fill holes.
+> >
+> > Signed-off-by: Baoquan He <bhe@redhat.com>
+> > ---
+> >  mm/vmalloc.c | 87 +++++++++++++++++++++++++++++++++++++++++++++++-----
+> >  1 file changed, 80 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> > index ab4825050b5c..5a3ea6cb7ec2 100644
+> > --- a/mm/vmalloc.c
+> > +++ b/mm/vmalloc.c
+> > @@ -3544,6 +3544,67 @@ static int aligned_vread(char *buf, char *addr, unsigned long count)
+> >  	return copied;
+> >  }
+> >
+> > +static void vmap_ram_vread(char *buf, char *addr, int count, unsigned long flags)
+> > +{
+> > +	char *start;
+> > +	struct vmap_block *vb;
+> > +	unsigned long offset;
+> > +	unsigned int rs, re, n;
+> > +
+> > +	/*
+> > +	 * If it's area created by vm_map_ram() interface directly, but
+> > +	 * not further subdividing and delegating management to vmap_block,
+> > +	 * handle it here.
+> > +	 */
+> > +	if (!(flags & VMAP_BLOCK)) {
+> > +		aligned_vread(buf, addr, count);
+> > +		return;
+> > +	}
+> > +
+> > +	/*
+> > +	 * Area is split into regions and tracked with vmap_block, read out
+> > +	 * each region and zero fill the hole between regions.
+> > +	 */
+> > +	vb = xa_load(&vmap_blocks, addr_to_vb_idx((unsigned long)addr));
+> > +	if (!vb)
+> > +		goto finished;
+> > +
+> > +	spin_lock(&vb->lock);
+> > +	if (bitmap_empty(vb->used_map, VMAP_BBMAP_BITS)) {
+> > +		spin_unlock(&vb->lock);
+> > +		goto finished;
+> > +	}
+> > +	for_each_set_bitrange(rs, re, vb->used_map, VMAP_BBMAP_BITS) {
+> > +		if (!count)
+> > +			break;
+> > +		start = vmap_block_vaddr(vb->va->va_start, rs);
+> > +		while (addr < start) {
+> > +			if (count == 0)
+> > +				break;
+> 
+> Bit pedantic, but you're using the `if (!count)` form of checking whether it's
+> zero above, but here you explicitly check it, would be good to keep both consistent.
 
-Note that the scheduler is able to ignore the offline cpus and so
-leaving offline cpus in the cpumask won't do any harm.
+Yeah, sounds good. Will change.
 
-Some cpus will still be lost if more than one cpu become offline
-initially and then become online again. Or when set_cpus_allowed_ptr()
-is somehow called. There can also be a discrepancy between cpus_allowed
-and the task's cpumask.
+> 
+> Given you're checking here, perhaps you could simply drop the previous check?
 
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- kernel/cgroup/cpuset.c | 28 ++++++++++++++++++++--------
- 1 file changed, 20 insertions(+), 8 deletions(-)
+Well, maybe no. The previous "if (!count)" is checking if count is 0
+after the 'count -=n;' line at the end of the for_each loop. While this
+"if (count == 0)" is checking if count is 0 after 'count--;' at the end
+of while loop. Not sure if I got your point.
 
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index cbf749fc05d9..207bafdb05e8 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -3332,7 +3332,7 @@ static void remove_tasks_in_empty_cpuset(struct cpuset *cs)
- static void
- hotplug_update_tasks_legacy(struct cpuset *cs,
- 			    struct cpumask *new_cpus, nodemask_t *new_mems,
--			    bool cpus_updated, bool mems_updated)
-+			    bool update_task_cpus, bool mems_updated)
- {
- 	bool is_empty;
- 
-@@ -3347,7 +3347,7 @@ hotplug_update_tasks_legacy(struct cpuset *cs,
- 	 * Don't call update_tasks_cpumask() if the cpuset becomes empty,
- 	 * as the tasks will be migrated to an ancestor.
- 	 */
--	if (cpus_updated && !cpumask_empty(cs->cpus_allowed))
-+	if (update_task_cpus && !cpumask_empty(cs->cpus_allowed))
- 		update_tasks_cpumask(cs);
- 	if (mems_updated && !nodes_empty(cs->mems_allowed))
- 		update_tasks_nodemask(cs);
-@@ -3371,11 +3371,14 @@ hotplug_update_tasks_legacy(struct cpuset *cs,
- static void
- hotplug_update_tasks(struct cpuset *cs,
- 		     struct cpumask *new_cpus, nodemask_t *new_mems,
--		     bool cpus_updated, bool mems_updated)
-+		     bool update_task_cpus, bool mems_updated)
- {
- 	/* A partition root is allowed to have empty effective cpus */
--	if (cpumask_empty(new_cpus) && !is_partition_valid(cs))
-+	if (cpumask_empty(new_cpus) && !is_partition_valid(cs)) {
- 		cpumask_copy(new_cpus, parent_cs(cs)->effective_cpus);
-+		update_task_cpus = true;
-+	}
-+
- 	if (nodes_empty(*new_mems))
- 		*new_mems = parent_cs(cs)->effective_mems;
- 
-@@ -3384,7 +3387,7 @@ hotplug_update_tasks(struct cpuset *cs,
- 	cs->effective_mems = *new_mems;
- 	spin_unlock_irq(&callback_lock);
- 
--	if (cpus_updated)
-+	if (update_task_cpus)
- 		update_tasks_cpumask(cs);
- 	if (mems_updated)
- 		update_tasks_nodemask(cs);
-@@ -3410,7 +3413,7 @@ static void cpuset_hotplug_update_tasks(struct cpuset *cs, struct tmpmasks *tmp)
- {
- 	static cpumask_t new_cpus;
- 	static nodemask_t new_mems;
--	bool cpus_updated;
-+	bool cpus_updated, update_task_cpus;
- 	bool mems_updated;
- 	struct cpuset *parent;
- retry:
-@@ -3512,12 +3515,21 @@ static void cpuset_hotplug_update_tasks(struct cpuset *cs, struct tmpmasks *tmp)
- 	if (mems_updated)
- 		check_insane_mems_config(&new_mems);
- 
-+	/*
-+	 * Update tasks' cpumasks only if new cpus are added. Some offline
-+	 * cpus may be left, but the scheduler has no problem ignoring those.
-+	 * The case of empty new_cpus will be handled inside
-+	 * hotplug_update_tasks().
-+	 */
-+	update_task_cpus = cpus_updated &&
-+			   !cpumask_subset(&new_cpus, cs->effective_cpus);
-+
- 	if (is_in_v2_mode())
- 		hotplug_update_tasks(cs, &new_cpus, &new_mems,
--				     cpus_updated, mems_updated);
-+				     update_task_cpus, mems_updated);
- 	else
- 		hotplug_update_tasks_legacy(cs, &new_cpus, &new_mems,
--					    cpus_updated, mems_updated);
-+					    update_task_cpus, mems_updated);
- 
- unlock:
- 	percpu_up_write(&cpuset_rwsem);
--- 
-2.31.1
+> 
+> > +			*buf = '\0';
+> > +			buf++;
+> > +			addr++;
+> > +			count--;
+> > +		}
+> > +		/*it could start reading from the middle of used region*/
+> > +		offset = offset_in_page(addr);
+> > +		n = ((re - rs + 1) << PAGE_SHIFT) - offset;
+> > +		if (n > count)
+> > +			n = count;
+> > +		aligned_vread(buf, start+offset, n);
+> > +
+> > +		buf += n;
+> > +		addr += n;
+> > +		count -= n;
+> > +	}
+> > +	spin_unlock(&vb->lock);
+> > +
+> > +finished:
+> > +	/* zero-fill the left dirty or free regions */
+> > +	if (count)
+> > +		memset(buf, 0, count);
+> > +}
+> > +
+> >  /**
+> >   * vread() - read vmalloc area in a safe way.
+> >   * @buf:     buffer for reading data
+> > @@ -3574,7 +3635,7 @@ long vread(char *buf, char *addr, unsigned long count)
+> >  	struct vm_struct *vm;
+> >  	char *vaddr, *buf_start = buf;
+> >  	unsigned long buflen = count;
+> > -	unsigned long n;
+> > +	unsigned long n, size, flags;
+> >
+> >  	addr = kasan_reset_tag(addr);
+> >
+> > @@ -3595,12 +3656,21 @@ long vread(char *buf, char *addr, unsigned long count)
+> >  		if (!count)
+> >  			break;
+> >
+> > -		if (!va->vm)
+> > +		vm = va->vm;
+> > +		flags = va->flags & VMAP_FLAGS_MASK;
+> > +		/*
+> > +		 * VMAP_BLOCK indicates a sub-type of vm_map_ram area, need
+> > +		 * be set together with VMAP_RAM.
+> > +		 */
+> > +		WARN_ON(flags == VMAP_BLOCK);
+> > +
+> > +		if (!vm && !flags)
+> >  			continue;
+> >
+> > -		vm = va->vm;
+> > -		vaddr = (char *) vm->addr;
+> > -		if (addr >= vaddr + get_vm_area_size(vm))
+> > +		vaddr = (char *) va->va_start;
+> > +		size = vm ? get_vm_area_size(vm) : va_size(va);
+> > +
+> > +		if (addr >= vaddr + size)
+> >  			continue;
+> >  		while (addr < vaddr) {
+> >  			if (count == 0)
+> > @@ -3610,10 +3680,13 @@ long vread(char *buf, char *addr, unsigned long count)
+> >  			addr++;
+> >  			count--;
+> >  		}
+> > -		n = vaddr + get_vm_area_size(vm) - addr;
+> > +		n = vaddr + size - addr;
+> >  		if (n > count)
+> >  			n = count;
+> > -		if (!(vm->flags & VM_IOREMAP))
+> > +
+> > +		if (flags & VMAP_RAM)
+> > +			vmap_ram_vread(buf, addr, n, flags);
+> > +		else if (!(vm->flags & VM_IOREMAP))
+> >  			aligned_vread(buf, addr, n);
+> >  		else /* IOREMAP area is treated as memory hole */
+> >  			memset(buf, 0, n);
+> > --
+> > 2.34.1
+> >
+> 
+> Other than the nit, feel free to add:-
+> 
+> Reviewed-by: Lorenzo Stoakes <lstoakes@gmail.com>
+> 
 
