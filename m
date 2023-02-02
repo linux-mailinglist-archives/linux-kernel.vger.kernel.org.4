@@ -2,139 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51A3D6884D8
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 17:53:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30E9D6884DA
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 17:54:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232421AbjBBQxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 11:53:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59720 "EHLO
+        id S232462AbjBBQx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 11:53:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232040AbjBBQxb (ORCPT
+        with ESMTP id S232442AbjBBQxt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 11:53:31 -0500
-Received: from mail-40135.protonmail.ch (mail-40135.protonmail.ch [185.70.40.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78EFF6CCAC
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 08:53:30 -0800 (PST)
-Date:   Thu, 02 Feb 2023 16:53:19 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1675356808; x=1675616008;
-        bh=CRMJsATKjRLIzIk/IM3Ofjd8VrM0+8WEYA35gsWakuk=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=OXYNP3hMhVDDNwxrF896QybQNZ5DyNssvDLLZ4ebhM5uypiDqD2WwqYVUTXk/MhdU
-         bMz98dX6tYPjSj09JSG1HiwTABKa7VIEYWTHOYvdDrSnLifUvwo3kRqQr0I7k9KgHf
-         Xud3Pn5RUhbwq+2mwrSbOFifYQRMQy9XBg8+vJhfjG2wvxImw+VhJWoawci64ZHLjB
-         M5MP+zThXGxcKUHBctuN8VcfQ66xCURRTSr3ZbOe2WVaoffFUiaA8xI0iFe3l1G+st
-         BkoA+YjaAtllTxKTPdiKPTOmvDT0GFjq4SerRWew8u5iqmUY8mJLZsALTOqwsNW9yF
-         7UrX5eh7zlUbg==
-To:     Boqun Feng <boqun.feng@gmail.com>
-From:   =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
-Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
-Subject: Re: [RFC 3/5] rust: sync: Arc: Introduces Arc::get_inner() helper
-Message-ID: <Hoc5Wk4Qi6ck20o1sqzOAXf0p01Ntezl4V2PxizHTorqRdDFeoWnlnWIpsu-nrom3U7EWiLC0KUfatrF18yjh5EiOThk3MBXGFraN8zycPI=@protonmail.com>
-In-Reply-To: <20230201232244.212908-4-boqun.feng@gmail.com>
-References: <20230201232244.212908-1-boqun.feng@gmail.com> <20230201232244.212908-4-boqun.feng@gmail.com>
-Feedback-ID: 27884398:user:proton
+        Thu, 2 Feb 2023 11:53:49 -0500
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 805276F735;
+        Thu,  2 Feb 2023 08:53:47 -0800 (PST)
+Received: by mail-ej1-f48.google.com with SMTP id ml19so7905053ejb.0;
+        Thu, 02 Feb 2023 08:53:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zkAFVysRmrk4KIVV03lhSp9/r+uaaj15Nxb8wMUj+w4=;
+        b=WkAEC5bC1TI6u0lXl4/53xohtSseufXMwBi+oCgcyEHq0q07a6vrE3gSbcinC+0/Xo
+         9F39hTlT6f7w8i5oOvdb88MkmgqvlTFNfvq9YAVdw54ons/UmxVIj/zZluU2pA3G/HTi
+         uPtZbbeog+riEs4c35lxSIPtT1duzL1DXZGMGzyD/VzxWnltFEZCLC55kSsAsaEmXNdj
+         PWnccUZnCWYmegLVwklNhOOA7WG2uAlnGX+NKSCJcVXGT5PRV4CbYc4lswO/2sXEiCPU
+         kfFs2kpaMkgphFpqgN4UbcSvgaKLFAysUxFvUv/97D9wkRuWZbpat0sSoSrlcP0qIe9k
+         CPUQ==
+X-Gm-Message-State: AO0yUKVyOZelSmkMa8PSKFui0LMrHEQ0/EIpwgl/v3bud6584nYJ59uU
+        pCptNzCEekbn+BGYS6oMRnSOpaAZTYb7NsciKX3+B3AY
+X-Google-Smtp-Source: AK7set9AdALOM3LcUlN3WH7cJYW7DNlfJzBEKbLKBUhyB7UyoyJEbselkHd4QCj19yLeghDijQxInKGg8RGP4kfdSR8=
+X-Received: by 2002:a17:906:9bd4:b0:87f:575a:9b67 with SMTP id
+ de20-20020a1709069bd400b0087f575a9b67mr2214925ejc.274.1675356826032; Thu, 02
+ Feb 2023 08:53:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230201223617.1306964-1-daniel.lezcano@linaro.org>
+In-Reply-To: <20230201223617.1306964-1-daniel.lezcano@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 2 Feb 2023 17:53:34 +0100
+Message-ID: <CAJZ5v0iGf-12iqqkK-JMzzg9CcQ_MtKxapb20zLYZAh1BaUMxQ@mail.gmail.com>
+Subject: Re: [PATCH v2] thermal/drivers/intel: Use generic trip points for quark_dts
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael@kernel.org, srinivas.pandruvada@linux.intel.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Daniel Lezcano <daniel.lezcano@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thursday, February 2nd, 2023 at 00:22, Boqun Feng <boqun.feng@gmail.com>=
- wrote:
-
-
-> Getting a `&ArcInner<T>` should always be safe from a `Arc<T>`,
->=20
-> therefore add this helper function to avoid duplicate unsafe
-> `ptr.as_ref()`.
->=20
-> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-
-Reviewed-by: Bj=C3=B6rn Roy Baron <bjorn3_gh@protonmail.com>
-
+On Wed, Feb 1, 2023 at 11:36 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> The thermal framework gives the possibility to register the trip
+> points with the thermal zone. When that is done, no get_trip_* ops are
+> needed and they can be removed.
+>
+> Convert ops content logic into generic trip points and register them with the
+> thermal zone.
+>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@kernel.org>
 > ---
->  rust/kernel/sync/arc.rs | 19 ++++++++++---------
->  1 file changed, 10 insertions(+), 9 deletions(-)
->=20
-> diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
-> index fbfceaa3096e..4d8de20c996f 100644
-> --- a/rust/kernel/sync/arc.rs
-> +++ b/rust/kernel/sync/arc.rs
-> @@ -201,6 +201,13 @@ impl<T: ?Sized> Arc<T> {
->          // reference can be created.
->          unsafe { ArcBorrow::new(self.ptr) }
->      }
+>
+> This patch applies on top of linux-pm/linux-next
+>
+>  V2:
+>    - Changed get_trip_temp() to return THERMAL_TEMP_INVALID
+>    - Register unconditonnaly the thermal trips
+>    - Fixed thermal_zone_device_register() call replaced by the
+>      _with_trips() version
+>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>  .../thermal/intel/intel_quark_dts_thermal.c   | 55 +++++++------------
+>  1 file changed, 20 insertions(+), 35 deletions(-)
+>
+> diff --git a/drivers/thermal/intel/intel_quark_dts_thermal.c b/drivers/thermal/intel/intel_quark_dts_thermal.c
+> index 3eafc6b0e6c3..97b843fa7568 100644
+> --- a/drivers/thermal/intel/intel_quark_dts_thermal.c
+> +++ b/drivers/thermal/intel/intel_quark_dts_thermal.c
+> @@ -84,6 +84,7 @@
+>  #define QRK_DTS_MASK_TP_THRES          0xFF
+>  #define QRK_DTS_SHIFT_TP               8
+>  #define QRK_DTS_ID_TP_CRITICAL         0
+> +#define QRK_DTS_ID_TP_HOT              1
+>  #define QRK_DTS_SAFE_TP_THRES          105
+>
+>  /* Thermal Sensor Register Lock */
+> @@ -104,6 +105,7 @@ struct soc_sensor_entry {
+>         u32 store_ptps;
+>         u32 store_dts_enable;
+>         struct thermal_zone_device *tzone;
+> +       struct thermal_trip trips[QRK_MAX_DTS_TRIPS];
+>  };
+>
+>  static struct soc_sensor_entry *soc_dts;
+> @@ -172,9 +174,9 @@ static int soc_dts_disable(struct thermal_zone_device *tzd)
+>         return ret;
+>  }
+>
+> -static int _get_trip_temp(int trip, int *temp)
+> +static int get_trip_temp(int trip)
+>  {
+> -       int status;
+> +       int status, temp;
+>         u32 out;
+>
+>         mutex_lock(&dts_update_mutex);
+> @@ -183,7 +185,7 @@ static int _get_trip_temp(int trip, int *temp)
+>         mutex_unlock(&dts_update_mutex);
+>
+>         if (status)
+> -               return status;
+> +               return THERMAL_TEMP_INVALID;
+>
+>         /*
+>          * Thermal Sensor Programmable Trip Point Register has 8-bit
+> @@ -191,21 +193,10 @@ static int _get_trip_temp(int trip, int *temp)
+>          * thresholds. The threshold value is always offset by its
+>          * temperature base (50 degree Celsius).
+>          */
+> -       *temp = (out >> (trip * QRK_DTS_SHIFT_TP)) & QRK_DTS_MASK_TP_THRES;
+> -       *temp -= QRK_DTS_TEMP_BASE;
+> +       temp = (out >> (trip * QRK_DTS_SHIFT_TP)) & QRK_DTS_MASK_TP_THRES;
+> +       temp -= QRK_DTS_TEMP_BASE;
+>
+> -       return 0;
+> -}
+> -
+> -static inline int sys_get_trip_temp(struct thermal_zone_device *tzd,
+> -                               int trip, int *temp)
+> -{
+> -       return _get_trip_temp(trip, temp);
+> -}
+> -
+> -static inline int sys_get_crit_temp(struct thermal_zone_device *tzd, int *temp)
+> -{
+> -       return _get_trip_temp(QRK_DTS_ID_TP_CRITICAL, temp);
+> +       return temp;
+>  }
+>
+>  static int update_trip_temp(struct soc_sensor_entry *aux_entry,
+> @@ -262,17 +253,6 @@ static inline int sys_set_trip_temp(struct thermal_zone_device *tzd, int trip,
+>         return update_trip_temp(tzd->devdata, trip, temp);
+>  }
+>
+> -static int sys_get_trip_type(struct thermal_zone_device *thermal,
+> -               int trip, enum thermal_trip_type *type)
+> -{
+> -       if (trip)
+> -               *type = THERMAL_TRIP_HOT;
+> -       else
+> -               *type = THERMAL_TRIP_CRITICAL;
+> -
+> -       return 0;
+> -}
+> -
+>  static int sys_get_curr_temp(struct thermal_zone_device *tzd,
+>                                 int *temp)
+>  {
+> @@ -315,10 +295,7 @@ static int sys_change_mode(struct thermal_zone_device *tzd,
+>
+>  static struct thermal_zone_device_ops tzone_ops = {
+>         .get_temp = sys_get_curr_temp,
+> -       .get_trip_temp = sys_get_trip_temp,
+> -       .get_trip_type = sys_get_trip_type,
+>         .set_trip_temp = sys_set_trip_temp,
+> -       .get_crit_temp = sys_get_crit_temp,
+>         .change_mode = sys_change_mode,
+>  };
+>
+> @@ -385,10 +362,18 @@ static struct soc_sensor_entry *alloc_soc_dts(void)
+>                         goto err_ret;
+>         }
+>
+> -       aux_entry->tzone = thermal_zone_device_register("quark_dts",
+> -                       QRK_MAX_DTS_TRIPS,
+> -                       wr_mask,
+> -                       aux_entry, &tzone_ops, NULL, 0, polling_delay);
+> +       aux_entry->trips[QRK_DTS_ID_TP_CRITICAL].temperature = get_trip_temp(QRK_DTS_ID_TP_CRITICAL);
+> +       aux_entry->trips[QRK_DTS_ID_TP_CRITICAL].type = THERMAL_TRIP_CRITICAL;
 > +
-> +    /// Returns a reference to the internal [`ArcInner`].
-> +    fn get_inner(&self) -> &ArcInner<T> {
-> +        // SAFETY: By the type invariant, there is necessarily a referen=
-ce to the object, so it is
-> +        // safe to dereference it.
-> +        unsafe { self.ptr.as_ref() }
-> +    }
->  }
->=20
->  impl<T: 'static> ForeignOwnable for Arc<T> {
-> @@ -233,9 +240,7 @@ impl<T: ?Sized> Deref for Arc<T> {
->      type Target =3D T;
->=20
->      fn deref(&self) -> &Self::Target {
-> -        // SAFETY: By the type invariant, there is necessarily a referen=
-ce to the object, so it is
-> -        // safe to dereference it.
-> -        unsafe { &self.ptr.as_ref().data }
-> +        &self.get_inner().data
->      }
->  }
->=20
-> @@ -244,7 +249,7 @@ impl<T: ?Sized> Clone for Arc<T> {
->          // INVARIANT: C `refcount_inc` saturates the refcount, so it can=
-not overflow to zero.
->          // SAFETY: By the type invariant, there is necessarily a referen=
-ce to the object, so it is
->          // safe to increment the refcount.
-> -        unsafe { bindings::refcount_inc(self.ptr.as_ref().refcount.get()=
-) };
-> +        unsafe { bindings::refcount_inc(self.get_inner().refcount.get())=
- };
->=20
->          // SAFETY: We just incremented the refcount. This increment is n=
-ow owned by the new `Arc`.
->          unsafe { Self::from_inner(self.ptr) }
-> @@ -253,11 +258,7 @@ impl<T: ?Sized> Clone for Arc<T> {
->=20
->  impl<T: ?Sized> Drop for Arc<T> {
->      fn drop(&mut self) {
-> -        // SAFETY: By the type invariant, there is necessarily a referen=
-ce to the object. We cannot
-> -        // touch `refcount` after it's decremented to a non-zero value b=
-ecause another thread/CPU
-> -        // may concurrently decrement it to zero and free it. It is ok t=
-o have a raw pointer to
-> -        // freed/invalid memory as long as it is never dereferenced.
-> -        let refcount =3D unsafe { self.ptr.as_ref() }.refcount.get();
-> +        let refcount =3D self.get_inner().refcount.get();
->=20
->          // INVARIANT: If the refcount reaches zero, there are no other i=
-nstances of `Arc`, and
->          // this instance is being dropped, so the broken invariant is no=
-t observable.
+> +       aux_entry->trips[QRK_DTS_ID_TP_HOT].temperature = get_trip_temp(QRK_DTS_ID_TP_HOT);
+> +       aux_entry->trips[QRK_DTS_ID_TP_HOT].type = THERMAL_TRIP_HOT;
+> +
+> +       aux_entry->tzone = thermal_zone_device_register_with_trips("quark_dts",
+> +                                                                  aux_entry->trips,
+> +                                                                  QRK_MAX_DTS_TRIPS,
+> +                                                                  wr_mask,
+> +                                                                  aux_entry, &tzone_ops,
+> +                                                                  NULL, 0, polling_delay);
+>         if (IS_ERR(aux_entry->tzone)) {
+>                 err = PTR_ERR(aux_entry->tzone);
+>                 goto err_ret;
 > --
-> 2.39.1
+
+Applied as 6.3 material with edited subject and changelog, thanks!
