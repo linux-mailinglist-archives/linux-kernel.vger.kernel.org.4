@@ -2,209 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0B6C6879FB
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 11:20:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16DB8687A0A
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 11:21:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232603AbjBBKUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 05:20:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54806 "EHLO
+        id S232645AbjBBKV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 05:21:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231819AbjBBKUJ (ORCPT
+        with ESMTP id S231570AbjBBKV0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 05:20:09 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A0731E1F2;
-        Thu,  2 Feb 2023 02:20:08 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id b5so1354899plz.5;
-        Thu, 02 Feb 2023 02:20:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WYdPpwB4cqZ09UY9AZTmULgMrRnwA57uYIK5ZvUq9NU=;
-        b=mPlOmdm9vhkfzx6sATpU11XjmAB9Jd4VDBNA4NNbhNiSqRoHVs+6tciuiIiI/DDJvF
-         MDN1wuxqj5+CCRc95w4jdG1q4cXXOrISMucmzFglKkOICRQDyNplcxpU8uOPpqHCXbnp
-         Y5Ad3S3rzZ5pEhOsdk1WJjOQ0GAo3iEDfK98FmljLHXViQ8oIKP3lvJiFk/T5hjC0KgY
-         ZyC0NYUcF5bkTiCUWpW3SEsbqcgRP7XRwxygDf4BHyl11HzbHctQGuGkU7iR9qke9zsq
-         CtgfjEj6XFVzVyXD1EsDyAr4lR8cq476iFqTIJX++7bVUTNvJ0IJXoF2ckfUylU/OlrI
-         KTnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WYdPpwB4cqZ09UY9AZTmULgMrRnwA57uYIK5ZvUq9NU=;
-        b=q5bvlO6mwcq1tp99xwPjxkZiWWRD59+0hG6IcfhqKd4X7Nc5B2Ip2ejeG36q5wBjdN
-         bJ55ByDBMFE+bN4TPuprnQIaOtXOSDW8UB31ROfSrUz3wtw1jwlvZpnsVCyCSZshbHzR
-         Wx6amr1jwCaRWC2lQSvb1rtOtK4szg5Nf9WmQXmpikN+LgA6wi18ejwKw4ClFD523M2z
-         EkQ5DBx9pFcC7oxI7sckae/7oWn/4mh0p69s/syKUWhrpHTgovRKBe01pcA+vVZFvzbc
-         jx6G62Xxy0Hxjf1SOFHrJ9IhPVgiCIvED62198ksgunMc/KqlDC5UoPBEiyU4mvb1zjG
-         ShlA==
-X-Gm-Message-State: AO0yUKVPG2aWBtfRDRCtHYLbRXu67LsoLR947vDQvFlf5R7z/cs+uU6H
-        jLo4BYylBootJwQLAVHgV1pTHGl7ZnWmCL3uz7o=
-X-Google-Smtp-Source: AK7set+/K0rn/HVvqn2fa9nmIEccZGasOamMEDNIKr0wT4QD6tc6FxdYOIl3uEH/jmSpfYTavUd3q73RPh4Kb8f4ZtU=
-X-Received: by 2002:a17:90b:228a:b0:22b:ed00:176a with SMTP id
- kx10-20020a17090b228a00b0022bed00176amr443109pjb.87.1675333207750; Thu, 02
- Feb 2023 02:20:07 -0800 (PST)
+        Thu, 2 Feb 2023 05:21:26 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F11199C0;
+        Thu,  2 Feb 2023 02:21:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675333286; x=1706869286;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=I3BObQyIUsuS842dSFNMbhIiOWbS9ICN9kPUAQN0188=;
+  b=Va5q1OF+YMnzitdPjOTwSx+C2/VtboYZ4Y5uyrxazS2ej7D2biET3KOd
+   7fauEJTX7coE8SouHc5gSsPO86trDieUk8mbOVzWG2U7h1jHsUN+dzVYY
+   ap+hSIEUV7Bl7vH7wZyO7fnwRctZYDF1udsXI3LKyY5hqHmsOA8dbdqPv
+   v5Q34hE42E8ec+aiPO+wdK/vpVmGHamNbeYptZHBQM48N4wVmnwW3krlO
+   6Sv5VxLqk+M3U7NMPfWqRba8wariVdq6M+YvrY7EtvHiCDhwUlhalOlNU
+   HNH1lDEe5NMD4ZJ07TAXbE0JSH8/smqaQF4kiNNEU9jRP6vsJQ9fr084f
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="327061548"
+X-IronPort-AV: E=Sophos;i="5.97,267,1669104000"; 
+   d="scan'208";a="327061548"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2023 02:21:25 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="728809060"
+X-IronPort-AV: E=Sophos;i="5.97,267,1669104000"; 
+   d="scan'208";a="728809060"
+Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.255.29.248]) ([10.255.29.248])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2023 02:21:22 -0800
+Message-ID: <d5147b2f-4698-b39f-e956-84db122e9822@linux.intel.com>
+Date:   Thu, 2 Feb 2023 18:21:20 +0800
 MIME-Version: 1.0
-References: <20230130085954.647845-1-suagrfillet@gmail.com>
-In-Reply-To: <20230130085954.647845-1-suagrfillet@gmail.com>
-From:   Song Shuai <suagrfillet@gmail.com>
-Date:   Thu, 2 Feb 2023 10:19:46 +0000
-Message-ID: <CAAYs2=jq9j9j-Qa+fexfDX_e=pETfL5j1-n4iy5=0CgDKrYukg@mail.gmail.com>
-Subject: Re: [PATCH] samples: ftrace: Include the nospec-branch.h only for x86
-To:     rostedt@goodmis.org, mhiramat@kernel.org, mark.rutland@arm.com,
-        peterz@infradead.org, jpoimboe@kernel.org, tglx@linutronix.de
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Cc:     baolu.lu@linux.intel.com, yi.l.liu@intel.com,
+        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v1 2/8] iommu: Introduce a new
+ iommu_group_replace_domain() API
+Content-Language: en-US
+To:     Nicolin Chen <nicolinc@nvidia.com>, jgg@nvidia.com,
+        kevin.tian@intel.com, joro@8bytes.org, will@kernel.org,
+        robin.murphy@arm.com, alex.williamson@redhat.com, shuah@kernel.org
+References: <cover.1675320212.git.nicolinc@nvidia.com>
+ <a98e622f41d76b64f5a7d0c758d8bda5e8043013.1675320212.git.nicolinc@nvidia.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <a98e622f41d76b64f5a7d0c758d8bda5e8043013.1675320212.git.nicolinc@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ping...
+On 2023/2/2 15:05, Nicolin Chen wrote:
+> +/**
+> + * iommu_group_replace_domain - replace the domain that a group is attached to
+> + * @new_domain: new IOMMU domain to replace with
+> + * @group: IOMMU group that will be attached to the new domain
+> + *
+> + * This API allows the group to switch domains without being forced to go to
+> + * the blocking domain in-between.
+> + *
+> + * If the attached domain is a core domain (e.g. a default_domain), it will act
+> + * just like the iommu_attach_group().
 
-Song Shuai <suagrfillet@gmail.com> =E4=BA=8E2023=E5=B9=B41=E6=9C=8830=E6=97=
-=A5=E5=91=A8=E4=B8=80 09:00=E5=86=99=E9=81=93=EF=BC=9A
->
-> When other architectures without the nospec functionality write their
-> direct-call functions of samples/ftrace/*.c, the including of
-> asm/nospec-branch.h must be taken care to fix the no header file found
-> error in building process.
->
-> This commit (ee3e2469b346 "x86/ftrace: Make it call depth tracking aware"=
-)
-> file-globally includes asm/nospec-branch.h providing CALL_DEPTH_ACCOUNT
-> for only x86 direct-call functions.
->
-> It seems better to move the including to `#ifdef CONFIG_X86_64`.
->
-> Signed-off-by: Song Shuai <suagrfillet@gmail.com>
-> ---
->  samples/ftrace/ftrace-direct-modify.c       | 2 +-
->  samples/ftrace/ftrace-direct-multi-modify.c | 2 +-
->  samples/ftrace/ftrace-direct-multi.c        | 2 +-
->  samples/ftrace/ftrace-direct-too.c          | 2 +-
->  samples/ftrace/ftrace-direct.c              | 2 +-
->  5 files changed, 5 insertions(+), 5 deletions(-)
->
-> diff --git a/samples/ftrace/ftrace-direct-modify.c b/samples/ftrace/ftrac=
-e-direct-modify.c
-> index de5a0f67f320..d93abbcb1f4c 100644
-> --- a/samples/ftrace/ftrace-direct-modify.c
-> +++ b/samples/ftrace/ftrace-direct-modify.c
-> @@ -3,7 +3,6 @@
->  #include <linux/kthread.h>
->  #include <linux/ftrace.h>
->  #include <asm/asm-offsets.h>
-> -#include <asm/nospec-branch.h>
->
->  extern void my_direct_func1(void);
->  extern void my_direct_func2(void);
-> @@ -26,6 +25,7 @@ static unsigned long my_ip =3D (unsigned long)schedule;
->  #ifdef CONFIG_X86_64
->
->  #include <asm/ibt.h>
-> +#include <asm/nospec-branch.h>
->
->  asm (
->  "      .pushsection    .text, \"ax\", @progbits\n"
-> diff --git a/samples/ftrace/ftrace-direct-multi-modify.c b/samples/ftrace=
-/ftrace-direct-multi-modify.c
-> index a825dbd2c9cf..b58c594efb51 100644
-> --- a/samples/ftrace/ftrace-direct-multi-modify.c
-> +++ b/samples/ftrace/ftrace-direct-multi-modify.c
-> @@ -3,7 +3,6 @@
->  #include <linux/kthread.h>
->  #include <linux/ftrace.h>
->  #include <asm/asm-offsets.h>
-> -#include <asm/nospec-branch.h>
->
->  extern void my_direct_func1(unsigned long ip);
->  extern void my_direct_func2(unsigned long ip);
-> @@ -24,6 +23,7 @@ extern void my_tramp2(void *);
->  #ifdef CONFIG_X86_64
->
->  #include <asm/ibt.h>
-> +#include <asm/nospec-branch.h>
->
->  asm (
->  "      .pushsection    .text, \"ax\", @progbits\n"
-> diff --git a/samples/ftrace/ftrace-direct-multi.c b/samples/ftrace/ftrace=
--direct-multi.c
-> index d955a2650605..c27cf130c319 100644
-> --- a/samples/ftrace/ftrace-direct-multi.c
-> +++ b/samples/ftrace/ftrace-direct-multi.c
-> @@ -5,7 +5,6 @@
->  #include <linux/ftrace.h>
->  #include <linux/sched/stat.h>
->  #include <asm/asm-offsets.h>
-> -#include <asm/nospec-branch.h>
->
->  extern void my_direct_func(unsigned long ip);
->
-> @@ -19,6 +18,7 @@ extern void my_tramp(void *);
->  #ifdef CONFIG_X86_64
->
->  #include <asm/ibt.h>
-> +#include <asm/nospec-branch.h>
->
->  asm (
->  "      .pushsection    .text, \"ax\", @progbits\n"
-> diff --git a/samples/ftrace/ftrace-direct-too.c b/samples/ftrace/ftrace-d=
-irect-too.c
-> index e13fb59a2b47..8139dce2a31c 100644
-> --- a/samples/ftrace/ftrace-direct-too.c
-> +++ b/samples/ftrace/ftrace-direct-too.c
-> @@ -4,7 +4,6 @@
->  #include <linux/mm.h> /* for handle_mm_fault() */
->  #include <linux/ftrace.h>
->  #include <asm/asm-offsets.h>
-> -#include <asm/nospec-branch.h>
->
->  extern void my_direct_func(struct vm_area_struct *vma,
->                            unsigned long address, unsigned int flags);
-> @@ -21,6 +20,7 @@ extern void my_tramp(void *);
->  #ifdef CONFIG_X86_64
->
->  #include <asm/ibt.h>
-> +#include <asm/nospec-branch.h>
->
->  asm (
->  "      .pushsection    .text, \"ax\", @progbits\n"
-> diff --git a/samples/ftrace/ftrace-direct.c b/samples/ftrace/ftrace-direc=
-t.c
-> index 1f769d0db20f..1d3d307ca33d 100644
-> --- a/samples/ftrace/ftrace-direct.c
-> +++ b/samples/ftrace/ftrace-direct.c
-> @@ -4,7 +4,6 @@
->  #include <linux/sched.h> /* for wake_up_process() */
->  #include <linux/ftrace.h>
->  #include <asm/asm-offsets.h>
-> -#include <asm/nospec-branch.h>
->
->  extern void my_direct_func(struct task_struct *p);
->
-> @@ -18,6 +17,7 @@ extern void my_tramp(void *);
->  #ifdef CONFIG_X86_64
->
->  #include <asm/ibt.h>
-> +#include <asm/nospec-branch.h>
->
->  asm (
->  "      .pushsection    .text, \"ax\", @progbits\n"
-> --
-> 2.20.1
->
+I am not following above two lines. Why and how could iommufd set a
+core domain to an iommu_group?
 
+> + */
+> +int iommu_group_replace_domain(struct iommu_group *group,
+> +			       struct iommu_domain *new_domain)
+> +{
+> +	int ret;
+> +
+> +	if (!new_domain)
+> +		return -EINVAL;
+> +
+> +	mutex_lock(&group->mutex);
+> +	ret = __iommu_group_set_domain(group, new_domain);
+> +	if (ret) {
+> +		if (__iommu_group_set_domain(group, group->domain))
+> +			__iommu_group_set_core_domain(group);
+> +	}
+> +	mutex_unlock(&group->mutex);
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_NS_GPL(iommu_group_replace_domain, IOMMUFD_INTERNAL);
 
---=20
-Thanks,
-Song
+Best regards,
+baolu
