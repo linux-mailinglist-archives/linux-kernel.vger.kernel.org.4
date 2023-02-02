@@ -2,87 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A881D68723E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 01:19:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEEB0687246
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 01:25:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229479AbjBBAT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 19:19:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39216 "EHLO
+        id S229662AbjBBAZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 19:25:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjBBATZ (ORCPT
+        with ESMTP id S229546AbjBBAZQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 19:19:25 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AD52A6D5E1;
-        Wed,  1 Feb 2023 16:19:24 -0800 (PST)
-Received: by linux.microsoft.com (Postfix, from userid 1052)
-        id 6706120B7102; Wed,  1 Feb 2023 16:19:24 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6706120B7102
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1675297164;
-        bh=4Dh1wm0+1J+7ggoI5S+eoWDvn+A0VT5pfhAZ4EHzjXY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jEeNLiLmjX64OuGsdTuBuNsk8WTsg1yq+Hv0Iy9ep5bGfVIoT/wb5fD2FoTH8XSRv
-         t7lmikGDu11HkkiNRAq/XW11kbtTpiFiugDEDhWnOEY7U0iR2hP94Fz+xH4mD/jg2d
-         d7uEQbmHKzS1D0fSpNdu4lNHgre4JmmAYNHb9xoM=
-Date:   Wed, 1 Feb 2023 16:19:24 -0800
-From:   Fan Wu <wufan@linux.microsoft.com>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
-        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
-        axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
-        eparis@redhat.com, paul@paul-moore.com, linux-doc@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
-        dm-devel@redhat.com, linux-audit@redhat.com,
-        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
-        Deven Bowers <deven.desai@linux.microsoft.com>
-Subject: Re: [RFC PATCH v9 16/16] documentation: add ipe documentation
-Message-ID: <20230202001924.GD9075@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <1675119451-23180-1-git-send-email-wufan@linux.microsoft.com>
- <1675119451-23180-17-git-send-email-wufan@linux.microsoft.com>
- <Y9iSP+RxY+1/o7PQ@debian.me>
+        Wed, 1 Feb 2023 19:25:16 -0500
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CDF46E42B
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 16:25:12 -0800 (PST)
+Received: by mail-vs1-xe32.google.com with SMTP id s24so138225vsi.12
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 16:25:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=uOj5gYFcFo2nSNe6rs6VnV4uLhL1q5oF8HA0wMZeAQA=;
+        b=fQp2tGhuU4Qt+fCd90XiHwNzA4+KcqhOJm/dLS5RVetkg0vL00+jrgo68FeHIw9Dqx
+         TEh3NTGFhCdbV1izlQ3yaaXYfIbXIjhxG5KvZohWs3rASRjzzoqoGoFizbKPPx12jSOx
+         wk9INqjwUc1iRGcJ8Y/QIsjCSJHEEpK/JRSu/jy7+4GG4H0ScWy54LkD8x0IzRoSXQ3M
+         O/bzWS8kzyA/QqLRQYJ+X7W7dctQF3cf+NQt3sklQLD4mrbdJS1W6d+I/3IXm8D0zWto
+         nPHMYIOPAPCmVpDPso7NGC3kmHzT/OIOppQyP11dmcBya7JE/ooa/Pyp8v/FPxGcAp6P
+         tCnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uOj5gYFcFo2nSNe6rs6VnV4uLhL1q5oF8HA0wMZeAQA=;
+        b=mxwZHaMLzhAiCxET++LLSrDLtQehd7KXnfkOt3f0EbxmMS5mjdilUbTy5FBztyYCVO
+         lSj/Q1/sVSsr8kuDPDL7wCVDnXXDEpaa3nZMDyl8RI7oHNBhmeSAnh1aYqiSsJH4B5sU
+         4I0/2XpoiEVhVC+KsUIdqrRfMDkIFVl3IGBGwEmJcYU1EK14hSPgzWW9Jnl48F6XFcbm
+         FNA4lw6ClARfxGRWAFWGjQOXwYOnErkUMve42VxFj3roYHwaXc/6kOiWiM930zMMQ6F0
+         wdb83f1QvLyXaL4QPPGVYYV73+KuWh7xswl3Z3ubybSzJ3dYDYkQKHFXc8T85Oi4s/j4
+         7V4A==
+X-Gm-Message-State: AO0yUKVfC8Si9jOw60DVgHUbYDbyYIffNeVWdTvrZFFUYjowQACUBckf
+        bhNX25+2Ik7n48fWlzu7cNAjgmdW8m3UoMxRtBMsnQ==
+X-Google-Smtp-Source: AK7set+BnkTPPKUmXKQj5Z2GFtPkMkUQ4tJDftb/C4R8/Y1jr4ySrhKWGJ49ZBXi0tyrBfeJ7rHqUriMtMmLgttFFng=
+X-Received: by 2002:a05:6102:34e8:b0:3f7:dda3:f85 with SMTP id
+ bi8-20020a05610234e800b003f7dda30f85mr716080vsb.66.1675297511231; Wed, 01 Feb
+ 2023 16:25:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9iSP+RxY+1/o7PQ@debian.me>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <Y9Li93O6Ffwcr+vn@x1n> <CADrL8HVJb9mA3Lbz5UKJ8EudTk9sGDY-pdRqvW3TGawD_bJB0A@mail.gmail.com>
+ <Y9f+jMLWy6ngpYuR@x1n> <CADrL8HX3sf6OO3PXS1g6b2dKf8b5phQ7oyNR0dVT=sAOdTmmqw@mail.gmail.com>
+ <Y9gzOqwKcu7p/PEw@x1n> <CADrL8HXX9YDFUxmPPsm2s3Pno0XXgAyFB40fV1PdtP9eb-5D2A@mail.gmail.com>
+ <Y9m/VVRABt0Blfjh@x1n> <CADrL8HXpfTE1+eE3rNGQyOr1QRtDtG5mBp-b3xcNX22QJRvPaQ@mail.gmail.com>
+ <Y9qRta3bd4JqjUHx@x1n> <CADrL8HU809O0cPa9hXjf3k+ob139SQqvxOvpqm6UEv=zrPjHSg@mail.gmail.com>
+ <Y9re82gctIZf08cX@x1n>
+In-Reply-To: <Y9re82gctIZf08cX@x1n>
+From:   James Houghton <jthoughton@google.com>
+Date:   Wed, 1 Feb 2023 16:24:33 -0800
+Message-ID: <CADrL8HVja_xJ9qczsd-fQfEPvEEXswhXQwoan=a_LSMyORvqww@mail.gmail.com>
+Subject: Re: [PATCH 21/46] hugetlb: use struct hugetlb_pte for walk_hugetlb_range
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        David Hildenbrand <david@redhat.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        "Zach O'Keefe" <zokeefe@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 10:59:59AM +0700, Bagas Sanjaya wrote:
-> On Mon, Jan 30, 2023 at 02:57:31PM -0800, Fan Wu wrote:
-> 
-> What about wordings below instead?
+On Wed, Feb 1, 2023 at 1:51 PM Peter Xu <peterx@redhat.com> wrote:
+>
+> On Wed, Feb 01, 2023 at 01:32:21PM -0800, James Houghton wrote:
+> > On Wed, Feb 1, 2023 at 8:22 AM Peter Xu <peterx@redhat.com> wrote:
+> > >
+> > > On Wed, Feb 01, 2023 at 07:45:17AM -0800, James Houghton wrote:
+> > > > On Tue, Jan 31, 2023 at 5:24 PM Peter Xu <peterx@redhat.com> wrote:
+> > > > >
+> > > > > On Tue, Jan 31, 2023 at 04:24:15PM -0800, James Houghton wrote:
+> > > > > > On Mon, Jan 30, 2023 at 1:14 PM Peter Xu <peterx@redhat.com> wrote:
+> > > > > > >
+> > > > > > > On Mon, Jan 30, 2023 at 10:38:41AM -0800, James Houghton wrote:
+> > > > > > > > On Mon, Jan 30, 2023 at 9:29 AM Peter Xu <peterx@redhat.com> wrote:
+> > > > > > > > >
+> > > > > > > > > On Fri, Jan 27, 2023 at 01:02:02PM -0800, James Houghton wrote:
+> > > > [snip]
+> > > > > > > > > Another way to not use thp mapcount, nor break smaps and similar calls to
+> > > > > > > > > page_mapcount() on small page, is to only increase the hpage mapcount only
+> > > > > > > > > when hstate pXd (in case of 1G it's PUD) entry being populated (no matter
+> > > > > > > > > as leaf or a non-leaf), and the mapcount can be decreased when the pXd
+> > > > > > > > > entry is removed (for leaf, it's the same as for now; for HGM, it's when
+> > > > > > > > > freeing pgtable of the PUD entry).
+> > > > > > > >
+> > > > > > > > Right, and this is doable. Also it seems like this is pretty close to
+> > > > > > > > the direction Matthew Wilcox wants to go with THPs.
+> > > > > > >
+> > > > > > > I may not be familiar with it, do you mean this one?
+> > > > > > >
+> > > > > > > https://lore.kernel.org/all/Y9Afwds%2FJl39UjEp@casper.infradead.org/
+> > > > > >
+> > > > > > Yep that's it.
+> > > > > >
+> > > > > > >
+> > > > > > > For hugetlb I think it should be easier to maintain rather than any-sized
+> > > > > > > folios, because there's the pgtable non-leaf entry to track rmap
+> > > > > > > information and the folio size being static to hpage size.
+> > > > > > >
+> > > > > > > It'll be different to folios where it can be random sized pages chunk, so
+> > > > > > > it needs to be managed by batching the ptes when install/zap.
+> > > > > >
+> > > > > > Agreed. It's probably easier for HugeTLB because they're always
+> > > > > > "naturally aligned" and yeah they can't change sizes.
+> > > > > >
+> > > > > > >
+> > > > > > > >
+> > > > > > > > Something I noticed though, from the implementation of
+> > > > > > > > folio_referenced()/folio_referenced_one(), is that folio_mapcount()
+> > > > > > > > ought to report the total number of PTEs that are pointing on the page
+> > > > > > > > (or the number of times page_vma_mapped_walk returns true). FWIW,
+> > > > > > > > folio_referenced() is never called for hugetlb folios.
+> > > > > > >
+> > > > > > > FWIU folio_mapcount is the thing it needs for now to do the rmap walks -
+> > > > > > > it'll walk every leaf page being mapped, big or small, so IIUC that number
+> > > > > > > should match with what it expects to see later, more or less.
+> > > > > >
+> > > > > > I don't fully understand what you mean here.
+> > > > >
+> > > > > I meant the rmap_walk pairing with folio_referenced_one() will walk all the
+> > > > > leaves for the folio, big or small.  I think that will match the number
+> > > > > with what got returned from folio_mapcount().
+> > > >
+> > > > See below.
+> > > >
+> > > > >
+> > > > > >
+> > > > > > >
+> > > > > > > But I agree the mapcount/referenced value itself is debatable to me, just
+> > > > > > > like what you raised in the other thread on page migration.  Meanwhile, I
+> > > > > > > am not certain whether the mapcount is accurate either because AFAICT the
+> > > > > > > mapcount can be modified if e.g. new page mapping established as long as
+> > > > > > > before taking the page lock later in folio_referenced().
+> > > > > > >
+> > > > > > > It's just that I don't see any severe issue either due to any of above, as
+> > > > > > > long as that information is only used as a hint for next steps, e.g., to
+> > > > > > > swap which page out.
+> > > > > >
+> > > > > > I also don't see a big problem with folio_referenced() (and you're
+> > > > > > right that folio_mapcount() can be stale by the time it takes the
+> > > > > > folio lock). It still seems like folio_mapcount() should return the
+> > > > > > total number of PTEs that map the page though. Are you saying that
+> > > > > > breaking this would be ok?
+> > > > >
+> > > > > I didn't quite follow - isn't that already doing so?
+> > > > >
+> > > > > folio_mapcount() is total_compound_mapcount() here, IIUC it is an
+> > > > > accumulated value of all possible PTEs or PMDs being mapped as long as it's
+> > > > > all or part of the folio being mapped.
+> > > >
+> > > > We've talked about 3 ways of handling mapcount:
+> > > >
+> > > > 1. The RFC v2 way, which is head-only, and we increment the compound
+> > > > mapcount for each PT mapping we have. So a PTE-mapped 2M page,
+> > > > compound_mapcount=512, subpage->_mapcount=0 (ignoring the -1 bias).
+> > > > 2. The THP-like way. If we are fully mapping the hugetlb page with the
+> > > > hstate-level PTE, we increment the compound mapcount, otherwise we
+> > > > increment subpage->_mapcount.
+> > > > 3. The RFC v1 way (the way you have suggested above), which is
+> > > > head-only, and we increment the compound mapcount if the hstate-level
+> > > > PTE is made present.
+> > >
+> > > Oh that's where it come from!  It took quite some months going through all
+> > > these, I can hardly remember the details.
+> > >
+> > > >
+> > > > With #1 and #2, there is no concern with folio_mapcount(). But with
+> > > > #3, folio_mapcount() for a PTE-mapped 2M page mapped in a single VMA
+> > > > would yield 1 instead of 512 (right?). That's what I mean.
+> > > >
+> > > > #1 has problems wrt smaps and migration (though there were other
+> > > > problems with those anyway that Mike has fixed), and #2 makes
+> > > > MADV_COLLAPSE slow to the point of being unusable for some
+> > > > applications.
+> > >
+> > > Ah so you're talking about after HGM being applied..  while I was only
+> > > talking about THPs.
+> > >
+> > > If to apply the logic here with idea 3), the worst case is we'll need to
+> > > have special care of HGM hugetlb in folio_referenced_one(), so the default
+> > > page_vma_mapped_walk() may not apply anymore - the resource is always in
+> > > hstate sized, so counting small ptes do not help too - we can just walk
+> > > until the hstate entry and do referenced++ if it's not none, at the
+> > > entrance of folio_referenced_one().
+> > >
+> > > But I'm not sure whether that'll be necessary at all, as I'm not sure
+> > > whether that path can be triggered at all in any form (where from the top
+> > > it should always be shrink_page_list()).  In that sense maybe we can also
+> > > consider adding a WARN_ON_ONCE() in folio_referenced() where it is a
+> > > hugetlb page that got passed in?  Meanwhile, adding a TODO comment
+> > > explaining that current walk won't work easily for HGM only, so when it
+> > > will be applicable to hugetlb we need to rework?
+> > >
+> > > I confess that's not pretty, though.  But that'll make 3) with no major
+> > > defect from function-wise.
+> >
+> > Another potential idea would be to add something like page_vmacount().
+> > For non-HugeTLB pages, page_vmacount() == page_mapcount(). Then for
+> > HugeTLB pages, we could keep a separate count (in one of the tail
+> > pages, I guess). And then in the places that matter (so smaps,
+> > migration, and maybe CoW and hwpoison), potentially change their calls
+> > to page_vmacount() instead of page_mapcount().
+> >
+> > Then to implement page_vmacount(), we do the RFC v1 mapcount approach
+> > (but like.... correctly this time). And then for page_mapcount(), we
+> > do the RFC v2 mapcount approach (head-only, once per PTE).
+> >
+> > Then we fix folio_referenced() without needing to special-case it for
+> > HugeTLB. :) Or we could just special-case it. *shrug*
+> >
+> > Does that sound reasonable? We still have the problem where a series
+> > of partially unmaps could leave page_vmacount() incremented, but I
+> > don't think that's a big problem.
+>
+> I'm afraid someone will stop you from introducing yet another definition of
+> mapcount, where others are trying to remove it. :)
+>
+> Or, can we just drop folio_referenced_arg.mapcount?  We need to keep:
+>
+>         if (!pra.mapcount)
+>                 return 0;
+>
+> By replacing it with folio_mapcount which is definitely something
+> worthwhile, but what about the rest?
+>
+> If it can be dropped, afaict it'll naturally work with HGM again.
+>
+> IIUC that's an optimization where we want to stop the rmap walk as long as
+> we found all the pages, however (1) IIUC it's not required to function, and
+> (2) it's not guaranteed to work as solid anyway.. As we've discussed
+> before: right after it reads mapcount (but before taking the page lock),
+> the mapcount can get decreased by 1, then it'll still need to loop over all
+> the vmas just to find that there's one "misterious" mapcount lost.
+>
+> Personally I really have no idea on how much that optimization can help.
 
-Thanks for the review!
->  
-> -IPE policy supports comments. The character '#' will function as a
-> -comment, ignoring all characters to the right of '#' until the newline.
-> +IPE policy supports comments. Any line which is prefixed with ``#`` will
-> +be ignored.
-This one is actually incorrect. The '#' can also appear at the end of a rule.
-So it is not only prefixed to a line.
+Ok, yeah, I think pra.mapcount can be removed too. (And we replace
+!pra.mapcount with !folio_mapcount().)
 
-Other than this part, everything looks great, I will take them in the next
-version.
+I don't see any other existing users of folio_mapcount() and
+total_mapcount() that are problematic. We do need to make sure to keep
+refcount and mapcount in sync though; it can be done.
 
--Fan
-
->  
->  -----------
-> 
-> Thanks.
-> 
-> -- 
-> An old man doll... just what I always wanted! - Clara
+So I'll compare this "RFC v1" way with the THP-like way and get you a
+performance comparison.
 
 
+- James
