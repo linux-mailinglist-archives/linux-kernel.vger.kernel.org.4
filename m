@@ -2,81 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35045687B84
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 12:07:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B80C8687BB3
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 12:10:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231160AbjBBLHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 06:07:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36118 "EHLO
+        id S230174AbjBBLKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 06:10:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbjBBLH3 (ORCPT
+        with ESMTP id S232460AbjBBLKD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 06:07:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A8B6B009
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 03:06:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675335949;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9M4NDpJqrMaRwiYT/VeraTjAir6oKB3t+zIsWAMAXf8=;
-        b=dpR3HoAcTyrYwWJNs4ZoX75HEjQuSbeNJ01qQwHuT/ICJce2VTirDcxAoL0lSbBwj1Cz07
-        IRITpoil6RzfcQWPAXSH16yIkinyGuZKDoWEz+GT4VvPHiNA0g+SnqwXkt+U36+q6n9b0b
-        y+8edX8TfMxNsHvxxAltwo2h7ni/3wc=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-663-EPs_h2FtOuu5M2lKcTJGfQ-1; Thu, 02 Feb 2023 06:05:47 -0500
-X-MC-Unique: EPs_h2FtOuu5M2lKcTJGfQ-1
-Received: by mail-ej1-f69.google.com with SMTP id sa8-20020a170906eda800b0087875c99e6bso1301433ejb.22
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 03:05:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9M4NDpJqrMaRwiYT/VeraTjAir6oKB3t+zIsWAMAXf8=;
-        b=IIVdhcI3Mh+39o7uLjD/T12dJETNkEIOzrsNt243qrvV9jetK6Fi8nLY40nUQ98na0
-         Z/8GhLRF8xqa36yeNxXttOeJUbITJmYT79hzUz6hGzWgeIb0v7Gb7SC3FSD8hL1Dr7Lo
-         IXGN+SohyeQGd5nGjBnOM58qsIlrQJzUwWRVFtq6Gs8jeIOU9PDEFMCV6nePk/u4gBg8
-         krq7SUzDQ/EzEu6gu7E/DHCPfHj4IS9X0yD1g422GacwiQcLJ6siMig7S3cH4ZGBadTo
-         YSSxY91kX88Ubw5DjZcwfoynuHT9O/wnJQvUsn80xXZjhDMZhBVKpiX2B8+iDCKmhfu6
-         gZ2g==
-X-Gm-Message-State: AO0yUKXmTm9iR3WGJwjcRMsnRivgnD8N33LlH/btzJWioSgE16hVKFoq
-        upJt+hc48aOw5+HvAy/Sq78QopObLCqHUxUy/qgxBeDRSYxvvfWd2RhVVjQ3BIGTrYmu31fBRCM
-        /16BNs/4Y7w+kHtvUZQIXOlz3
-X-Received: by 2002:a17:906:c0c3:b0:883:3c7d:944e with SMTP id bn3-20020a170906c0c300b008833c7d944emr5437055ejb.9.1675335946681;
-        Thu, 02 Feb 2023 03:05:46 -0800 (PST)
-X-Google-Smtp-Source: AK7set+fc8EWwrGtQ1phRFqugSVTLUZhZ3tA5/uyYMtzGXASHL4KhTuAfYpcQFuLTIxGgBC/ci0TuQ==
-X-Received: by 2002:a17:906:c0c3:b0:883:3c7d:944e with SMTP id bn3-20020a170906c0c300b008833c7d944emr5437035ejb.9.1675335946424;
-        Thu, 02 Feb 2023 03:05:46 -0800 (PST)
-Received: from [10.39.192.164] (5920ab7b.static.cust.trined.nl. [89.32.171.123])
-        by smtp.gmail.com with ESMTPSA id er12-20020a056402448c00b0049668426aa6sm10924515edb.24.2023.02.02.03.05.45
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 02 Feb 2023 03:05:45 -0800 (PST)
-From:   Eelco Chaudron <echaudro@redhat.com>
-To:     Eddy Tao <taoyuan_eddy@hotmail.com>
-Cc:     netdev@vger.kernel.org, dev@openvswitch.org,
-        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [ovs-dev] [PATCH net-next v3 1/1] net:openvswitch:reduce
- cpu_used_mask memory
-Date:   Thu, 02 Feb 2023 12:05:44 +0100
-X-Mailer: MailMate (1.14r5939)
-Message-ID: <561547E5-D4C2-4FD6-9B25-100719D4D379@redhat.com>
-In-Reply-To: <OS3P286MB2295FA2701BCE468E367607AF5D69@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
-References: <OS3P286MB2295FA2701BCE468E367607AF5D69@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
+        Thu, 2 Feb 2023 06:10:03 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DF236AC86;
+        Thu,  2 Feb 2023 03:09:35 -0800 (PST)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 312AZamq000969;
+        Thu, 2 Feb 2023 11:09:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=t6iPFNPeYgRzyXRHfMsbwcJXOpplwMl9gokhd0iu2vk=;
+ b=QRf7IzX8VRv0Szgl5FbhKhtfKS009CZLIRjYM5emLa+VrJYKkX6CFwmouVIsi3yFL/lt
+ Hp0OBfsBbHzRTpV7KkJa/vY7VPqcp/QOPqrjSoUr7Wet5+W9DQyShIYoQZ/t3XLbniAL
+ fBkVpkhNxbnTx2eQtGkAkkf/VPlg+XPjQaSgZY8UjWw+JfQcZJ1A8SOjbPvSxGGJ68FM
+ OHVdHBfeNi/z5M/81+8MEKby4SWX2wCl9Yr3N5ci1k7lQWG71fwNXf0iD7/Jq+Rm2Yf8
+ Mpo86nHffJIUYvuZNyJ4IWxcfDHJ58Rvj9sU7s8n0VtSimJNuFTIzePiW5Avmj+HhQm+ dw== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nfqsyagbp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Feb 2023 11:09:31 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 312B9Uw3023663
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 2 Feb 2023 11:09:30 GMT
+Received: from [10.50.17.72] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 2 Feb 2023
+ 03:09:23 -0800
+Message-ID: <05c01db8-1ca1-475f-8cb4-41fddff8b85a@quicinc.com>
+Date:   Thu, 2 Feb 2023 16:39:19 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 6/6] regulator: qcom_smd: Add support to define the bootup
+ voltage
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>, <agross@kernel.org>,
+        <andersson@kernel.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
+        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
+        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
+        <quic_poovendh@quicinc.com>, <quic_ipkumar@quicinc.com>
+References: <20230113150310.29709-1-quic_devipriy@quicinc.com>
+ <20230113150310.29709-7-quic_devipriy@quicinc.com>
+ <77d84408-166e-8a02-227a-67654a4d31f2@linaro.org>
+ <df6c1cd6-ea70-e65c-b4e8-3da80697242f@quicinc.com>
+ <cc037133-7c45-325f-4a1d-9855d033ae5c@linaro.org>
+ <6bb22160-5966-43d3-ffba-489b77b3a095@quicinc.com>
+ <de6e69d6-18cd-2732-9a18-f4dfd29be6dd@linaro.org>
+From:   Devi Priya <quic_devipriy@quicinc.com>
+In-Reply-To: <de6e69d6-18cd-2732-9a18-f4dfd29be6dd@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 8YlC8aBvDPrsPPWW_mNqLBdRyymzxTEI
+X-Proofpoint-ORIG-GUID: 8YlC8aBvDPrsPPWW_mNqLBdRyymzxTEI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-02_02,2023-02-02_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ suspectscore=0 bulkscore=0 phishscore=0 spamscore=0 lowpriorityscore=0
+ malwarescore=0 clxscore=1015 mlxscore=0 mlxlogscore=999 priorityscore=1501
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302020101
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -85,136 +94,96 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2 Feb 2023, at 11:32, Eddy Tao wrote:
-
-> Use actual CPU number instead of hardcoded value to decide the size
-> of 'cpu_used_mask' in 'struct sw_flow'. Below is the reason.
->
-> 'struct cpumask cpu_used_mask' is embedded in struct sw_flow.
-> Its size is hardcoded to CONFIG_NR_CPUS bits, which can be
-> 8192 by default, it costs memory and slows down ovs_flow_alloc
-> as well as the iteration of bits in cpu_used_mask when handling
-> netlink message from ofproto
-
-I=E2=80=99m trying to understand how this will decrease memory usage. The=
- size of the flow_cache stayed the same (actually it=E2=80=99s large due =
-to the extra pointer).
-
-Also do not understand why the iteration is less, as the mask is initiali=
-zed the same.
-
-Cheers,
-
-Eelco
-
-> To address this, redefine cpu_used_mask to pointer
-> append cpumask_size() bytes after 'stat' to hold cpumask
->
-> cpumask APIs like cpumask_next and cpumask_set_cpu never access
-> bits beyond cpu count, cpumask_size() bytes of memory is enough
->
-> Signed-off-by: Eddy Tao <taoyuan_eddy@hotmail.com>
-> ---
->  net/openvswitch/flow.c       | 8 +++++---
->  net/openvswitch/flow.h       | 2 +-
->  net/openvswitch/flow_table.c | 8 +++++---
->  3 files changed, 11 insertions(+), 7 deletions(-)
->
-> diff --git a/net/openvswitch/flow.c b/net/openvswitch/flow.c
-> index e20d1a973417..0109a5f86f6a 100644
-> --- a/net/openvswitch/flow.c
-> +++ b/net/openvswitch/flow.c
-> @@ -107,7 +107,7 @@ void ovs_flow_stats_update(struct sw_flow *flow, __=
-be16 tcp_flags,
->
->  					rcu_assign_pointer(flow->stats[cpu],
->  							   new_stats);
-> -					cpumask_set_cpu(cpu, &flow->cpu_used_mask);
-> +					cpumask_set_cpu(cpu, flow->cpu_used_mask);
->  					goto unlock;
->  				}
->  			}
-> @@ -135,7 +135,8 @@ void ovs_flow_stats_get(const struct sw_flow *flow,=
-
->  	memset(ovs_stats, 0, sizeof(*ovs_stats));
->
->  	/* We open code this to make sure cpu 0 is always considered */
-> -	for (cpu =3D 0; cpu < nr_cpu_ids; cpu =3D cpumask_next(cpu, &flow->cp=
-u_used_mask)) {
-> +	for (cpu =3D 0; cpu < nr_cpu_ids;
-> +	     cpu =3D cpumask_next(cpu, flow->cpu_used_mask)) {
->  		struct sw_flow_stats *stats =3D rcu_dereference_ovsl(flow->stats[cpu=
-]);
->
->  		if (stats) {
-> @@ -159,7 +160,8 @@ void ovs_flow_stats_clear(struct sw_flow *flow)
->  	int cpu;
->
->  	/* We open code this to make sure cpu 0 is always considered */
-> -	for (cpu =3D 0; cpu < nr_cpu_ids; cpu =3D cpumask_next(cpu, &flow->cp=
-u_used_mask)) {
-> +	for (cpu =3D 0; cpu < nr_cpu_ids;
-> +	     cpu =3D cpumask_next(cpu, flow->cpu_used_mask)) {
->  		struct sw_flow_stats *stats =3D ovsl_dereference(flow->stats[cpu]);
->
->  		if (stats) {
-> diff --git a/net/openvswitch/flow.h b/net/openvswitch/flow.h
-> index 073ab73ffeaa..b5711aff6e76 100644
-> --- a/net/openvswitch/flow.h
-> +++ b/net/openvswitch/flow.h
-> @@ -229,7 +229,7 @@ struct sw_flow {
->  					 */
->  	struct sw_flow_key key;
->  	struct sw_flow_id id;
-> -	struct cpumask cpu_used_mask;
-> +	struct cpumask *cpu_used_mask;
->  	struct sw_flow_mask *mask;
->  	struct sw_flow_actions __rcu *sf_acts;
->  	struct sw_flow_stats __rcu *stats[]; /* One for each CPU.  First one
-> diff --git a/net/openvswitch/flow_table.c b/net/openvswitch/flow_table.=
-c
-> index 0a0e4c283f02..dc6a174c3194 100644
-> --- a/net/openvswitch/flow_table.c
-> +++ b/net/openvswitch/flow_table.c
-> @@ -87,11 +87,12 @@ struct sw_flow *ovs_flow_alloc(void)
->  	if (!stats)
->  		goto err;
->
-> +	flow->cpu_used_mask =3D (struct cpumask *)&flow->stats[nr_cpu_ids];
->  	spin_lock_init(&stats->lock);
->
->  	RCU_INIT_POINTER(flow->stats[0], stats);
->
-> -	cpumask_set_cpu(0, &flow->cpu_used_mask);
-> +	cpumask_set_cpu(0, flow->cpu_used_mask);
->
->  	return flow;
->  err:
-> @@ -115,7 +116,7 @@ static void flow_free(struct sw_flow *flow)
->  					  flow->sf_acts);
->  	/* We open code this to make sure cpu 0 is always considered */
->  	for (cpu =3D 0; cpu < nr_cpu_ids;
-> -	     cpu =3D cpumask_next(cpu, &flow->cpu_used_mask)) {
-> +	     cpu =3D cpumask_next(cpu, flow->cpu_used_mask)) {
->  		if (flow->stats[cpu])
->  			kmem_cache_free(flow_stats_cache,
->  					(struct sw_flow_stats __force *)flow->stats[cpu]);
-> @@ -1196,7 +1197,8 @@ int ovs_flow_init(void)
->
->  	flow_cache =3D kmem_cache_create("sw_flow", sizeof(struct sw_flow)
->  				       + (nr_cpu_ids
-> -					  * sizeof(struct sw_flow_stats *)),
-> +					  * sizeof(struct sw_flow_stats *))
-> +				       + cpumask_size(),
->  				       0, 0, NULL);
->  	if (flow_cache =3D=3D NULL)
->  		return -ENOMEM;
-> -- =
-
-> 2.27.0
->
-> _______________________________________________
-> dev mailing list
-> dev@openvswitch.org
-> https://mail.openvswitch.org/mailman/listinfo/ovs-dev
-
+On 1/31/2023 6:14 PM, Konrad Dybcio wrote:
+> 
+> 
+> On 31.01.2023 10:28, Devi Priya wrote:
+>>
+>>
+>> On 1/27/2023 9:40 PM, Konrad Dybcio wrote:
+>>>
+>>>
+>>> On 27.01.2023 17:07, Devi Priya wrote:
+>>>>
+>>>>
+>>>> On 1/13/2023 9:07 PM, Konrad Dybcio wrote:
+>>>>>
+>>>>>
+>>>>> On 13.01.2023 16:03, devi priya wrote:
+>>>>>> Kernel does not know the initial voltage set by the bootloaders.
+>>>>>> During regulator registration, the voltage variable is just declared
+>>>>>> and it is zero. Based on that, the regulator framework considers current
+>>>>>> the voltage as zero and tries to bring up each regulator to minimum
+>>>>>> the supported voltage.
+>>>>>>
+>>>>>> This introduces a dip in the voltage during kernel boot and gets
+>>>>>> stabilized once the voltage scaling comes into picture.
+>>>>>>
+>>>>>> To avoid the voltage dip, adding support to define the
+>>>>>> bootup voltage set by the boodloaders and based on it, regulator
+>>>>>> framework understands that proper voltage is already set
+>>>>>>
+>>>>>> Co-developed-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+>>>>>> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+>>>>>> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
+>>>>>> ---
+>>>>> Or maybe hook it up to the spmi_regulator_common_get_voltage()
+>>>>> from the SPMI regulator driver and read the real voltage instead
+>>>>> of relying on hardcoded values thay may differ between boards?
+>>>>>
+>>>>> Konrad
+>>>> In IPQ9574, SPMI regulator is not used. We are using RPM-Glink communication and the regulators are controlled by RPM.
+>>>> In this case, we don't have an option to readback the bootup voltage and so, we have hardcoded the values
+>>> Unless something changed, RPM regulator framework is simply a
+>>> fancy front-end for communicating with the PMIC over SPMI, AFAIK..
+>>>
+>>> Konrad
+>> Currently in our driver, the voltage write request will be sent to RPM via GLINK which then writes it to the PMIC over I2C using the below APIs
+>> qcom_rpm_smd_write -> rpmsg_send
+>> In IPQ9574, we do not have SPMI support or the support to readback voltage.
+> Okay, I didn't quite catch that there's *only* an i2c PMIC on this
+> platform.. Looking at the MP5496 datasheet though, reading back
+> the voltage should be possible via simply reading the fields that
+> are used to set it.
+> 
+> Konrad
+The CPR regulator operates in closed loop mode and the RPM can 
+independently update the PMIC voltage.
+So, Performing an i2c read to the PMIC would introduce conflicts when 
+RPM uses the i2c for any of the voltage write or read operations.
+>>
+>>>>
+>>>>>>     drivers/regulator/qcom_smd-regulator.c | 6 +++++-
+>>>>>>     1 file changed, 5 insertions(+), 1 deletion(-)
+>>>>>>
+>>>>>> diff --git a/drivers/regulator/qcom_smd-regulator.c b/drivers/regulator/qcom_smd-regulator.c
+>>>>>> index 1eb17d378897..49a36b07397c 100644
+>>>>>> --- a/drivers/regulator/qcom_smd-regulator.c
+>>>>>> +++ b/drivers/regulator/qcom_smd-regulator.c
+>>>>>> @@ -800,6 +800,7 @@ struct rpm_regulator_data {
+>>>>>>         u32 id;
+>>>>>>         const struct regulator_desc *desc;
+>>>>>>         const char *supply;
+>>>>>> +    int boot_uV; /* To store the bootup voltage set by bootloaders */
+>>>>>>     };
+>>>>>>       static const struct rpm_regulator_data rpm_mp5496_regulators[] = {
+>>>>>> @@ -809,7 +810,7 @@ static const struct rpm_regulator_data rpm_mp5496_regulators[] = {
+>>>>>>     };
+>>>>>>       static const struct rpm_regulator_data rpm_ipq9574_mp5496_regulators[] = {
+>>>>>> -    { "s1", QCOM_SMD_RPM_SMPA, 1, &ipq9574_mp5496_smpa1, "s1" },
+>>>>>> +    { "s1", QCOM_SMD_RPM_SMPA, 1, &ipq9574_mp5496_smpa1, "s1", 875000 },
+>>>>>>         {}
+>>>>>>     };
+>>>>>>     @@ -1394,6 +1395,9 @@ static int rpm_regulator_init_vreg(struct qcom_rpm_reg *vreg, struct device *dev
+>>>>>>         vreg->type    = rpm_data->type;
+>>>>>>         vreg->id    = rpm_data->id;
+>>>>>>     +    if (rpm_data->boot_uV)
+>>>>>> +        vreg->uV = rpm_data->boot_uV;
+>>>>>> +
+>>>>>>         memcpy(&vreg->desc, rpm_data->desc, sizeof(vreg->desc));
+>>>>>>         vreg->desc.name = rpm_data->name;
+>>>>>>         vreg->desc.supply_name = rpm_data->supply;
+>>>> Best Regards,
+>>>> Devi Priya
+>> Best Regards,
+>> Devi Priya
