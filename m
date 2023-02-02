@@ -2,151 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5BC6687F8F
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 15:10:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A552687F88
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 15:09:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231956AbjBBOJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 09:09:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56356 "EHLO
+        id S231764AbjBBOJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 09:09:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbjBBOJz (ORCPT
+        with ESMTP id S229609AbjBBOJ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 09:09:55 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17EB389F84;
-        Thu,  2 Feb 2023 06:09:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675346994; x=1706882994;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3+PmYJAt+gLm3nMqcE/gerTYxQtrGS9tvLkR1pRwWLI=;
-  b=Outo3eMJpog4tnoIJqJ7w9xs9qaKZyQhq/7TzgMxDbgBS598vDJz8kur
-   5eQwvdw+37mw+pMxqtMG+iRHKTcsfK35mj+Q4F3aCMOVsaexYJuG9E9Cm
-   +olBKcXdXrTJocrwZm8JGAKcSHfC1TIqxwuZK7tqMzChsczsZns4e2aCE
-   QwN3wliLEkpWF4e7wHdT3GDH/DA9C0vlzUABA5BEnJVeFmyDDDbx+PXcM
-   mKSJ732u8CCzXp97c/9LWceAG161PjR9NP9rtRU2UOfxmT9/wfXnppWHF
-   WUBPUakAxB6T6thN9A2hVRWROVQzxB765UchaC1IirOtTTAQIEzjECpgr
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="355793865"
-X-IronPort-AV: E=Sophos;i="5.97,267,1669104000"; 
-   d="scan'208";a="355793865"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2023 06:09:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="733949410"
-X-IronPort-AV: E=Sophos;i="5.97,267,1669104000"; 
-   d="scan'208";a="733949410"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 02 Feb 2023 06:09:39 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pNaHN-0006Zo-2I;
-        Thu, 02 Feb 2023 14:09:33 +0000
-Date:   Thu, 2 Feb 2023 22:08:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kalyan Thota <quic_kalyant@quicinc.com>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Kalyan Thota <quic_kalyant@quicinc.com>,
-        linux-kernel@vger.kernel.org, robdclark@chromium.org,
-        dianders@chromium.org, swboyd@chromium.org,
-        quic_vpolimer@quicinc.com, dmitry.baryshkov@linaro.org,
-        quic_abhinavk@quicinc.com, marijn.suijten@somainline.org
-Subject: Re: [v1 3/3] drm/msm/disp/dpu1: reserve the resources on topology
- change
-Message-ID: <202302022254.37XyfGnR-lkp@intel.com>
-References: <1675092092-26412-4-git-send-email-quic_kalyant@quicinc.com>
+        Thu, 2 Feb 2023 09:09:26 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57BD087161;
+        Thu,  2 Feb 2023 06:09:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 467DD61B66;
+        Thu,  2 Feb 2023 14:09:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F10DCC4339B;
+        Thu,  2 Feb 2023 14:09:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1675346962;
+        bh=fcXByrYMeAYU0QEawUizJluIVGp45lsSXGtpusnK5H4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=qkCf7n/jq3U7En6Zb8foWGxOWszxPIiv35R1TFMs5MQfNxsXsR8aGMXrHMEW3sTIg
+         e2DlqdnjIcGct5PnHihqUIUrI5quCDkkE5KkIxWOCxiezGsKZqmABHg/zOY8vfEMhU
+         RJpXWxYqKYD77OH9VGce4I3KSri2GhRh65I7N3e4=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-hyperv@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] HV: hv_balloon: fix memory leak with using debugfs_lookup()
+Date:   Thu,  2 Feb 2023 15:09:18 +0100
+Message-Id: <20230202140918.2289522-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1675092092-26412-4-git-send-email-quic_kalyant@quicinc.com>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1073; i=gregkh@linuxfoundation.org; h=from:subject; bh=fcXByrYMeAYU0QEawUizJluIVGp45lsSXGtpusnK5H4=; b=owGbwMvMwCRo6H6F97bub03G02pJDMm3j/AwXnp9/q2R/p2bsi98QiwnsJbMM3LXV2q6Os2K48yE Lhe9jlgWBkEmBlkxRZYv23iO7q84pOhlaHsaZg4rE8gQBi5OAZiI/DWG+c6+Ni+rf1i6Lt3SfUxbdn NtwrGCKQzzs6MYGWq1bO/NY7mpek/urOjVZW3CAA==
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kalyan,
+When calling debugfs_lookup() the result must have dput() called on it,
+otherwise the memory will leak over time.  To make things simpler, just
+call debugfs_lookup_and_remove() instead which handles all of the logic
+at once.
 
-Thank you for the patch! Yet something to improve:
+Cc: "K. Y. Srinivasan" <kys@microsoft.com>
+Cc: Haiyang Zhang <haiyangz@microsoft.com>
+Cc: Wei Liu <wei.liu@kernel.org>
+Cc: Dexuan Cui <decui@microsoft.com>
+Cc: linux-hyperv@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/hv/hv_balloon.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on drm/drm-next drm-exynos/exynos-drm-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.2-rc6]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Kalyan-Thota/drm-msm-disp-dpu1-clear-dspp-reservations-in-rm-release/20230130-232224
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/1675092092-26412-4-git-send-email-quic_kalyant%40quicinc.com
-patch subject: [v1 3/3] drm/msm/disp/dpu1: reserve the resources on topology change
-config: arm64-randconfig-r034-20230129 (https://download.01.org/0day-ci/archive/20230202/202302022254.37XyfGnR-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/4c49c3233fc18f3b746a96b5ff4ce5008da3bfec
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Kalyan-Thota/drm-msm-disp-dpu1-clear-dspp-reservations-in-rm-release/20230130-232224
-        git checkout 4c49c3233fc18f3b746a96b5ff4ce5008da3bfec
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c:2091:6: error: conflicting types for 'dpu_encoder_prepare_commit'; have 'void(struct drm_encoder *)'
-    2091 | void dpu_encoder_prepare_commit(struct drm_encoder *drm_enc)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys.h:19,
-                    from drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c:29:
-   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h:155:6: note: previous declaration of 'dpu_encoder_prepare_commit' with type 'void(struct drm_encoder *, struct drm_crtc_state *)'
-     155 | void dpu_encoder_prepare_commit(struct drm_encoder *drm_enc,
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
---
-   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c: In function 'dpu_kms_prepare_commit':
->> drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c:443:25: error: too few arguments to function 'dpu_encoder_prepare_commit'
-     443 |                         dpu_encoder_prepare_commit(encoder);
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c:30:
-   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h:155:6: note: declared here
-     155 | void dpu_encoder_prepare_commit(struct drm_encoder *drm_enc,
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +2091 drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-
-ae4d721ce10057 Abhinav Kumar     2022-04-26  2090  
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27 @2091  void dpu_encoder_prepare_commit(struct drm_encoder *drm_enc)
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  2092  {
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  2093  	struct dpu_encoder_virt *dpu_enc;
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  2094  	struct dpu_encoder_phys *phys;
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  2095  	int i;
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  2096  
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  2097  	if (!drm_enc) {
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  2098  		DPU_ERROR("invalid encoder\n");
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  2099  		return;
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  2100  	}
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  2101  	dpu_enc = to_dpu_encoder_virt(drm_enc);
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  2102  
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  2103  	for (i = 0; i < dpu_enc->num_phys_encs; i++) {
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  2104  		phys = dpu_enc->phys_encs[i];
-b6fadcade62704 Drew Davenport    2019-12-06  2105  		if (phys->ops.prepare_commit)
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  2106  			phys->ops.prepare_commit(phys);
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  2107  	}
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  2108  }
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  2109  
-
+diff --git a/drivers/hv/hv_balloon.c b/drivers/hv/hv_balloon.c
+index cbe43e2567a7..64ac5bdee3a6 100644
+--- a/drivers/hv/hv_balloon.c
++++ b/drivers/hv/hv_balloon.c
+@@ -1963,7 +1963,7 @@ static void  hv_balloon_debugfs_init(struct hv_dynmem_device *b)
+ 
+ static void  hv_balloon_debugfs_exit(struct hv_dynmem_device *b)
+ {
+-	debugfs_remove(debugfs_lookup("hv-balloon", NULL));
++	debugfs_lookup_and_remove("hv-balloon", NULL);
+ }
+ 
+ #else
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.39.1
+
