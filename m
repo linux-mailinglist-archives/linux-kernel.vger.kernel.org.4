@@ -2,116 +2,333 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E8D86881F9
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 16:27:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBD23688227
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 16:28:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232846AbjBBP1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 10:27:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45022 "EHLO
+        id S232603AbjBBP2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 10:28:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232782AbjBBP1C (ORCPT
+        with ESMTP id S233033AbjBBP15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 10:27:02 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AD186FD38
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 07:26:23 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id j29-20020a05600c1c1d00b003dc52fed235so1694332wms.1
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 07:26:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7JvyQzIXrYzZCLKNZaj6R2VAhQkxcWFvbrbB71vdxiY=;
-        b=NFzaXziAMdjXMefgcdiIfAgykFIib8kqV4hgNeJjK7p5d5YDI2LqUstwoCbzQzurAz
-         io45S8prq1FQH4h5x5dwUpFdaBwyK3neV2Gx5dQQ3zg1scQDvsEqJkvO6Qh2+G4+8tdv
-         Vw+VGgpptbsjVhDVpNayJJ0o0V4+wF94Ou9oCfK9m6VtQdLQKEK5wNUFP9oU2jT5c8rL
-         DWsi+i/SGgJKRq4aN/PUXbz/yIxZjyi35j0Chyy649aw33SAdtKaUTOPhMB4aklU3Ktd
-         cd1N75tJ+YuGpuCsDmQ9thbyXUhda0nxpCxP7sBXIq8wgp/ZS1qiASJYyX1WVlJkXYr9
-         hZhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7JvyQzIXrYzZCLKNZaj6R2VAhQkxcWFvbrbB71vdxiY=;
-        b=s4euu0T1quD116lqTewOB+hAZUs5U/Zew63EH9v4wr9i+Y7ggPaQPBw7Eb8a6u/Hhi
-         T0FFVVcNR//d85PUXmiw0Bxur1Jz89KK9AEaF81fUgbijngklOxGjcJy9jKn38GpM0l4
-         WL+BJKb7p4ygAu6HEJeqLrguDDyaQ1vFpu06msYbefmXQtx+PB18WyFA3f1TCS/XxD3E
-         HOZoxlq6zWgz1k3DmxXITRuT80AU64fzwCNgkM/aeKcf14CGhBrVOlO7hNtdljWJ1URV
-         sp80or/DBDqed55W+kUwpM18X9fhm4vxJ6SdnCN38bqspQmxxPjxs6GIvWi29LfpHmZ8
-         0wEg==
-X-Gm-Message-State: AO0yUKVXKvvjh6+/SU3nuqKgl9MCzytzVc2nqtLEe5Cd9oobQdLKie7p
-        +y8rT7RNNKmiSMySQroMihpi8Q==
-X-Google-Smtp-Source: AK7set9A4n18kl9i4UwguaAeoWR339x/GVj5QRqPXZsZybE64WhTf8z+GJ2nA61mcrarXb55EnXjHg==
-X-Received: by 2002:a05:600c:601b:b0:3db:2063:425d with SMTP id az27-20020a05600c601b00b003db2063425dmr6128224wmb.2.1675351581811;
-        Thu, 02 Feb 2023 07:26:21 -0800 (PST)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id h16-20020a05600c351000b003dc521f336esm41967wmq.14.2023.02.02.07.26.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 07:26:21 -0800 (PST)
-Date:   Thu, 2 Feb 2023 16:26:20 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Atish Patra <atishp@rivosinc.com>
-Cc:     linux-kernel@vger.kernel.org, Anup Patel <anup@brainfault.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atishp@atishpatra.org>,
-        Eric Lin <eric.lin@sifive.com>, Guo Ren <guoren@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v4 05/14] RISC-V: KVM: Return correct code for hsm stop
- function
-Message-ID: <20230202152620.q4vfqqqtbz6cfyf4@orel>
-References: <20230201231250.3806412-1-atishp@rivosinc.com>
- <20230201231250.3806412-6-atishp@rivosinc.com>
+        Thu, 2 Feb 2023 10:27:57 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 98E517FA37;
+        Thu,  2 Feb 2023 07:27:23 -0800 (PST)
+Received: by linux.microsoft.com (Postfix, from userid 1127)
+        id D52F420B7102; Thu,  2 Feb 2023 07:27:01 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D52F420B7102
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1675351621;
+        bh=oCwKtfQntEI6E9lEvO40m8KDUFMSMXqD/uTbANH2dzU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qRvE7LWlGGNdj/SQkpG2Yo0y8cJRt1wWH157qayYKOEXXPaePwwnWLyQEcROl0mwB
+         9rGjGqY+839ySWldZcbX1fWUNx+ZNiNT+sEJwssKtFn3CW75aQt+xlrzHa9EUy5Wwv
+         C+wWyisbRy0Diif1KKhMDAfwabPEz+pi7MoideHY=
+Date:   Thu, 2 Feb 2023 07:27:01 -0800
+From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        Saurabh Singh Sengar <ssengar@microsoft.com>
+Subject: Re: [PATCH v2 3/6] Drivers: hv: vmbus: Convert acpi_device to
+ platform_device
+Message-ID: <20230202152701.GA15156@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1675188609-20913-1-git-send-email-ssengar@linux.microsoft.com>
+ <1675188609-20913-4-git-send-email-ssengar@linux.microsoft.com>
+ <BYAPR21MB1688C6978F68D904ABC00911D7D19@BYAPR21MB1688.namprd21.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230201231250.3806412-6-atishp@rivosinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <BYAPR21MB1688C6978F68D904ABC00911D7D19@BYAPR21MB1688.namprd21.prod.outlook.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 01, 2023 at 03:12:41PM -0800, Atish Patra wrote:
-> According to the SBI specification, the stop function can only
-> return error code SBI_ERR_FAILED. However, currently it returns
-> -EINVAL which will be mapped SBI_ERR_INVALID_PARAM.
+On Wed, Feb 01, 2023 at 06:32:29PM +0000, Michael Kelley (LINUX) wrote:
+> From: Saurabh Sengar <ssengar@linux.microsoft.com> Sent: Tuesday, January 31, 2023 10:10 AM
+> > 
+> > Use more generic platform device instead of acpi device. Also rename the
+> > function vmbus_acpi_remove to more generic name vmbus_mmio_remove.
+> > 
+> > Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+> > ---
+> >  drivers/hv/vmbus_drv.c | 78 +++++++++++++++++++++++++-----------------
+> >  1 file changed, 46 insertions(+), 32 deletions(-)
+> > 
+> > diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
+> > index d24dd65b33d4..49030e756b9f 100644
+> > --- a/drivers/hv/vmbus_drv.c
+> > +++ b/drivers/hv/vmbus_drv.c
+> > @@ -12,6 +12,7 @@
+> >  #include <linux/init.h>
+> >  #include <linux/module.h>
+> >  #include <linux/device.h>
+> > +#include <linux/platform_device.h>
+> >  #include <linux/interrupt.h>
+> >  #include <linux/sysctl.h>
+> >  #include <linux/slab.h>
+> > @@ -44,7 +45,7 @@ struct vmbus_dynid {
+> >  	struct hv_vmbus_device_id id;
+> >  };
+> > 
+> > -static struct acpi_device  *hv_acpi_dev;
+> > +static struct platform_device  *hv_dev;
+> > 
+> >  static int hyperv_cpuhp_online;
+> > 
+> > @@ -143,7 +144,7 @@ static DEFINE_MUTEX(hyperv_mmio_lock);
+> > 
+> >  static int vmbus_exists(void)
+> >  {
+> > -	if (hv_acpi_dev == NULL)
+> > +	if (hv_dev == NULL)
+> >  		return -ENODEV;
+> > 
+> >  	return 0;
+> > @@ -932,7 +933,7 @@ static int vmbus_dma_configure(struct device *child_device)
+> >  	 * On x86/x64 coherence is assumed and these calls have no effect.
+> >  	 */
+> >  	hv_setup_dma_ops(child_device,
+> > -		device_get_dma_attr(&hv_acpi_dev->dev) == DEV_DMA_COHERENT);
+> > +		device_get_dma_attr(&hv_dev->dev) == DEV_DMA_COHERENT);
+> >  	return 0;
+> >  }
+> > 
+> > @@ -2090,7 +2091,7 @@ int vmbus_device_register(struct hv_device
+> > *child_device_obj)
+> >  		     &child_device_obj->channel->offermsg.offer.if_instance);
+> > 
+> >  	child_device_obj->device.bus = &hv_bus;
+> > -	child_device_obj->device.parent = &hv_acpi_dev->dev;
+> > +	child_device_obj->device.parent = &hv_dev->dev;
+> >  	child_device_obj->device.release = vmbus_device_release;
+> > 
+> >  	child_device_obj->device.dma_parms = &child_device_obj->dma_parms;
+> > @@ -2262,7 +2263,7 @@ static acpi_status vmbus_walk_resources(struct
+> > acpi_resource *res, void *ctx)
+> >  	return AE_OK;
+> >  }
+> > 
+> > -static void vmbus_acpi_remove(struct acpi_device *device)
+> > +static void vmbus_mmio_remove(void)
+> >  {
+> >  	struct resource *cur_res;
+> >  	struct resource *next_res;
+> > @@ -2441,13 +2442,15 @@ void vmbus_free_mmio(resource_size_t start,
+> > resource_size_t size)
+> >  }
+> >  EXPORT_SYMBOL_GPL(vmbus_free_mmio);
+> > 
+> > -static int vmbus_acpi_add(struct acpi_device *device)
+> > +static int vmbus_acpi_add(struct platform_device *pdev)
+> >  {
+> >  	acpi_status result;
+> >  	int ret_val = -ENODEV;
+> > -	struct acpi_device *ancestor;
+> > +	struct platform_device *ancestor;
+> > +	struct acpi_device *adev = to_acpi_device(&pdev->dev);
 > 
-> Return an linux error code that maps to SBI_ERR_FAILED i.e doesn't map
-> to any other SBI error code. While EACCES is not the best error code
-> to describe the situation, it is close enough and will be replaced
-> with SBI error codes directly anyways.
-> 
-> Reviewed-by: Anup Patel <anup@brainfault.org>
-> Signed-off-by: Atish Patra <atishp@rivosinc.com>
-> ---
->  arch/riscv/kvm/vcpu_sbi_hsm.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/riscv/kvm/vcpu_sbi_hsm.c b/arch/riscv/kvm/vcpu_sbi_hsm.c
-> index 2e915ca..619ac0f 100644
-> --- a/arch/riscv/kvm/vcpu_sbi_hsm.c
-> +++ b/arch/riscv/kvm/vcpu_sbi_hsm.c
-> @@ -42,7 +42,7 @@ static int kvm_sbi_hsm_vcpu_start(struct kvm_vcpu *vcpu)
->  static int kvm_sbi_hsm_vcpu_stop(struct kvm_vcpu *vcpu)
->  {
->  	if (vcpu->arch.power_off)
-> -		return -EINVAL;
-> +		return -EACCES;
->  
->  	kvm_riscv_vcpu_power_off(vcpu);
->  
-> -- 
-> 2.25.1
->
+> This doesn't work.  The argument to vmbus_acpi_add() is a struct
+> platform_device, which has a struct device embedded in it (not a
+> pointer).   to_acpi_device() takes a struct device as an argument,
+> assuming that the struct device is embedded in a struct
+> acpi_device, which is not the case here.  The resulting local
+> variable adev is actually pointing to some (perhaps negative)
+> offset within the struct platform_device, and uses of adev are
+> getting unknown random data from within (or before) the
+> struct platform_device.
 
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+Thanks for review.
+If I understand correctly you are saying to change the argument of
+to_acpi_device from pointer to 'struct device'. I tried changing this
+statement to:
+"struct acpi_device *adev = to_acpi_device(pdev->dev);"
+
+However on compiling this code I see this error:
+./include/linux/container_of.h:19:28: error: invalid type argument of unary ‘*’ (have ‘struct device’)
+
+Please let me know if I missunderstood your suggestion.
+
+I would like to mention that this code has been tested and verified. 
+The purpose of this change was to assign the device node to the acpi
+firmware node, as seen in the line 
+
+"adev->fwnode.dev = &pdev->dev;".
+
+This was necessary because without it, the mlx driver would crash as
+it searches for the device in the acpi firmware node, which would
+otherwise be NULL. I am confident that the addresses are correctly
+assigned, as any issues with the assignments would have caused a panic.
+
+Regards,
+Saurabh
+
+> 
+> > 
+> > -	hv_acpi_dev = device;
+> > +	hv_dev = pdev;
+> > +	adev->fwnode.dev = &pdev->dev;
+> > 
+> >  	/*
+> >  	 * Older versions of Hyper-V for ARM64 fail to include the _CCA
+> > @@ -2456,15 +2459,16 @@ static int vmbus_acpi_add(struct acpi_device *device)
+> >  	 * up the ACPI device to behave as if _CCA is present and indicates
+> >  	 * hardware coherence.
+> >  	 */
+> > -	ACPI_COMPANION_SET(&device->dev, device);
+> > +	ACPI_COMPANION_SET(&pdev->dev, ACPI_COMPANION(&pdev->dev));
+> 
+> This statement seems tautological.  If ACPI_COMPANION(&pdev->dev)
+> returns a valid result,  why would the ACPI companion for &pdev->dev
+> need to be set?  The original code was setting the ACPI companion for the
+> embedded struct device to be the struct acpi_device.   I forget why this
+> wasn't already done for the VMBus device when it was originally parsed
+> from the ACPI DSDT ... 
+> 
+> >  	if (IS_ENABLED(CONFIG_ACPI_CCA_REQUIRED) &&
+> > -	    device_get_dma_attr(&device->dev) == DEV_DMA_NOT_SUPPORTED) {
+> > +	    device_get_dma_attr(&pdev->dev) == DEV_DMA_NOT_SUPPORTED) {
+> > +		struct acpi_device *adev_node = ACPI_COMPANION(&pdev->dev);
+> 
+> If earlier code in this function can get a correct pointer to the struct acpi_device,
+> then this statement shouldn't be necessary.  You already have it.
+> 
+> >  		pr_info("No ACPI _CCA found; assuming coherent device I/O\n");
+> > -		device->flags.cca_seen = true;
+> > -		device->flags.coherent_dma = true;
+> > +		adev_node->flags.cca_seen = true;
+> > +		adev_node->flags.coherent_dma = true;
+> >  	}
+> > 
+> > -	result = acpi_walk_resources(device->handle, METHOD_NAME__CRS,
+> > +	result = acpi_walk_resources(ACPI_HANDLE(&pdev->dev), METHOD_NAME__CRS,
+> 
+> Again, if you have a correct pointer to the struct acpi_device, then adev->handle
+> (like the original code) should be simpler than looking it up again with ACPI_HANDLE().  
+> 
+> >  					vmbus_walk_resources, NULL);
+> > 
+> >  	if (ACPI_FAILURE(result))
+> > @@ -2473,9 +2477,9 @@ static int vmbus_acpi_add(struct acpi_device *device)
+> >  	 * Some ancestor of the vmbus acpi device (Gen1 or Gen2
+> >  	 * firmware) is the VMOD that has the mmio ranges. Get that.
+> >  	 */
+> > -	for (ancestor = acpi_dev_parent(device); ancestor;
+> > -	     ancestor = acpi_dev_parent(ancestor)) {
+> > -		result = acpi_walk_resources(ancestor->handle, METHOD_NAME__CRS,
+> > +	for (ancestor = to_platform_device(pdev->dev.parent); ancestor;
+> > +	     ancestor = to_platform_device(ancestor->dev.parent)) {
+> > +		result = acpi_walk_resources(ACPI_HANDLE(&ancestor->dev), METHOD_NAME__CRS,
+> 
+> Similarly, if you get a correct pointer to the struct acpi_device, does the above
+> code need any changes?  I'm hoping not.
+> 
+> >  					     vmbus_walk_resources, NULL);
+> > 
+> >  		if (ACPI_FAILURE(result))
+> > @@ -2489,10 +2493,21 @@ static int vmbus_acpi_add(struct acpi_device *device)
+> > 
+> >  acpi_walk_err:
+> >  	if (ret_val)
+> > -		vmbus_acpi_remove(device);
+> > +		vmbus_mmio_remove();
+> >  	return ret_val;
+> >  }
+> > 
+> > +static int vmbus_platform_driver_probe(struct platform_device *pdev)
+> > +{
+> > +	return vmbus_acpi_add(pdev);
+> > +}
+> > +
+> > +static int vmbus_platform_driver_remove(struct platform_device *pdev)
+> > +{
+> > +	vmbus_mmio_remove();
+> > +	return 0;
+> > +}
+> > +
+> >  #ifdef CONFIG_PM_SLEEP
+> >  static int vmbus_bus_suspend(struct device *dev)
+> >  {
+> > @@ -2658,15 +2673,15 @@ static const struct dev_pm_ops vmbus_bus_pm = {
+> >  	.restore_noirq	= vmbus_bus_resume
+> >  };
+> > 
+> > -static struct acpi_driver vmbus_acpi_driver = {
+> > -	.name = "vmbus",
+> > -	.ids = vmbus_acpi_device_ids,
+> > -	.ops = {
+> > -		.add = vmbus_acpi_add,
+> > -		.remove = vmbus_acpi_remove,
+> > -	},
+> > -	.drv.pm = &vmbus_bus_pm,
+> > -	.drv.probe_type = PROBE_FORCE_SYNCHRONOUS,
+> > +static struct platform_driver vmbus_platform_driver = {
+> > +	.probe = vmbus_platform_driver_probe,
+> > +	.remove = vmbus_platform_driver_remove,
+> > +	.driver = {
+> > +		.name = "vmbus",
+> > +		.acpi_match_table = ACPI_PTR(vmbus_acpi_device_ids),
+> > +		.pm = &vmbus_bus_pm,
+> > +		.probe_type = PROBE_FORCE_SYNCHRONOUS,
+> > +	}
+> >  };
+> > 
+> >  static void hv_kexec_handler(void)
+> > @@ -2750,12 +2765,11 @@ static int __init hv_acpi_init(void)
+> >  	/*
+> >  	 * Get ACPI resources first.
+> >  	 */
+> > -	ret = acpi_bus_register_driver(&vmbus_acpi_driver);
+> > -
+> > +	ret = platform_driver_register(&vmbus_platform_driver);
+> >  	if (ret)
+> >  		return ret;
+> > 
+> > -	if (!hv_acpi_dev) {
+> > +	if (!hv_dev) {
+> >  		ret = -ENODEV;
+> >  		goto cleanup;
+> >  	}
+> > @@ -2785,8 +2799,8 @@ static int __init hv_acpi_init(void)
+> >  	return 0;
+> > 
+> >  cleanup:
+> > -	acpi_bus_unregister_driver(&vmbus_acpi_driver);
+> > -	hv_acpi_dev = NULL;
+> > +	platform_driver_unregister(&vmbus_platform_driver);
+> > +	hv_dev = NULL;
+> >  	return ret;
+> >  }
+> > 
+> > @@ -2839,7 +2853,7 @@ static void __exit vmbus_exit(void)
+> > 
+> >  	cpuhp_remove_state(hyperv_cpuhp_online);
+> >  	hv_synic_free();
+> > -	acpi_bus_unregister_driver(&vmbus_acpi_driver);
+> > +	platform_driver_unregister(&vmbus_platform_driver);
+> >  }
+> > 
+> > 
+> > --
+> > 2.25.1
