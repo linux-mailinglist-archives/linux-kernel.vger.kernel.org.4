@@ -2,72 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61925688760
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 20:12:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8ECC688762
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 20:13:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232605AbjBBTME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 14:12:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46498 "EHLO
+        id S232354AbjBBTNK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 14:13:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232671AbjBBTMC (ORCPT
+        with ESMTP id S229575AbjBBTNH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 14:12:02 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A11C5728C5
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 11:12:00 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id rm7-20020a17090b3ec700b0022c05558d22so2746563pjb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 11:12:00 -0800 (PST)
+        Thu, 2 Feb 2023 14:13:07 -0500
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 753ED7A9B
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 11:13:01 -0800 (PST)
+Received: by mail-il1-x12b.google.com with SMTP id z2so1187019ilq.2
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 11:13:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=K7OHh0J0Ql5aSy3qyWjVTPkkQu7eVgUi1CxOXIrtf7k=;
-        b=GkTDlC74VN0LYx7i34Xq23OMwfRBaJK4X8ce7obW5kvsJ2xcXG4/t3iDcGXDxZQOdY
-         dFs6xRtZIsBhTJkpi6sFtWiSsg33hfd8rjkmZvR8NbgGuiWa4r7GN9ouckV7/YXaKFK8
-         HpAy4Ta1RRjLF2i/tIe/DaMYbFlfJZcedLPNUKDOEYZqiSgBE5I2Olx5IiVn5VI8BxDN
-         fyilcgYTrAOudhpM4VernjxFkUUpFx1tz3vJkf02WQaLbMJNvmZqITaGCgYBFd4gJGki
-         PfyYiXPRzKh0DfC0+Vcexl4ccmD/qpOkjYzRYOvH/8f39/UCd0XpqUbAniPW3ZrVregs
-         N8VQ==
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Sze4SPkyx71GgTTpWniQiWnzfqpKfnGfdRyUcgKtQxI=;
+        b=P1iCtDSmhy7TDXIs4AHa31OwJPsSNlFkjffGNkhdzZac6S4KXHJhIw/yUKu21tcahe
+         MSVFuy8acefJgAVI8EFxdSOnbM7cGVKF5IeQQlt0hz1c22uykcdaVQyvFJm2cqXeYNdn
+         1xvJVsPAhKf+/aWWN7s7OMbvg7e8LhI5GCqfU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=K7OHh0J0Ql5aSy3qyWjVTPkkQu7eVgUi1CxOXIrtf7k=;
-        b=XYrRujDe5mYvawAbh8URD9MTxLFkS6iFpEOr9GWh8KcLQcYL5yoOVC+fhQop2VBRAT
-         rJxlBi6ytvak+16rGrZ4tx6PzlYeYopl/sG9Xvd8UbYkJac7Y9jryunvV0RoIl2Dz+ru
-         CeA5Ll9f25sbmZzJ1zh30B8VQ6sPCPqDhJXPRgrqZHjjG0/VvPI7fboLvNjsiV5nkKBo
-         KnQQrk4FikS/UQ4Xb7AhtJopzVu8QfJwR8N5juU1YKk2aYuezErfS95voLP20Y+oxC4b
-         0nE3azpV91QvQ8WCWt3E4ii5UajVf9taJPEvrnVUF/UzcJdda3bc4yNlj+FZrX2qImwu
-         stGQ==
-X-Gm-Message-State: AO0yUKXgiEFsHTjvDj5Zhj/mIz/i0gW765UI+DCONLAkl7L5fDrYryJ0
-        3xGrLVF55D0x8HWV1xWXLbAHIg==
-X-Google-Smtp-Source: AK7set/eUA6CqqdqvgAdf3irvd3yLDq36g0kqfoojL5H7Im2SgQ1uTFFpnQZLV7icKRe5ALSrIYqNA==
-X-Received: by 2002:a17:902:7406:b0:198:af4f:de07 with SMTP id g6-20020a170902740600b00198af4fde07mr74828pll.7.1675365120010;
-        Thu, 02 Feb 2023 11:12:00 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id l19-20020a637013000000b004d2f5bb9339sm149004pgc.15.2023.02.02.11.11.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 11:11:59 -0800 (PST)
-Date:   Thu, 2 Feb 2023 19:11:56 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yang Weijiang <weijiang.yang@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH] KVM: x86/pmu: Disallow legacy LBRs if architectural LBRs
- are available
-Message-ID: <Y9wK/LkBYusOv1DO@google.com>
-References: <20230128001427.2548858-1-seanjc@google.com>
- <f106a06e-ae6f-2c79-df87-721817aacc02@gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Sze4SPkyx71GgTTpWniQiWnzfqpKfnGfdRyUcgKtQxI=;
+        b=cwjU7H/GiK8sNZFt2HtyWKWEkXjbUafmQSIG1IGYwcS2s9VTH8ACrpFgTP+I6YeIMh
+         9Qound5eVFCWVr/17gY/0o2dY2ZE6WEE08rZDb+JW55/YoW6YTndBY3+OvVrF+KYknuH
+         5RVfy/rY+Xkx8XTyqYV/gY24DPuQCUbEw72eqT01YR8M6iEYyo+5ZLv0rQV0ok7rpBOf
+         NxbHXqFah/j8Pwj7DIDXS/UsiQAqrGm8jHGcdhRTwNwxMR8utEjRcE9AD6jX3ACqsSAU
+         puz3TRzO7XI+jHXow1TMXZsoOiRFYHFxZDkOfSfnzUrsP7cfvkRo6hBGuYuCpDsI4Vud
+         nrRQ==
+X-Gm-Message-State: AO0yUKUZm/tQzW48RN4pUbci2jtTOdUurvYA5d0IQIBh9+d+FpcNW1DX
+        /pjlM35Zm1ndC2hbSlFqESevIg==
+X-Google-Smtp-Source: AK7set/S3fSxSa2iWklBy+crpw5U360y/+JVsFZvjT2X4u/YMtdF4l70hlyn6wVLEqhsnhZHTl01Sw==
+X-Received: by 2002:a05:6e02:1746:b0:30d:bf1a:b174 with SMTP id y6-20020a056e02174600b0030dbf1ab174mr6291143ill.1.1675365180398;
+        Thu, 02 Feb 2023 11:13:00 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id ch14-20020a0566383e8e00b00388660ca27dsm179623jab.4.2023.02.02.11.12.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Feb 2023 11:12:59 -0800 (PST)
+Message-ID: <7d8f7371-6ca9-cb4b-5e82-2b2a21ee8ab8@linuxfoundation.org>
+Date:   Thu, 2 Feb 2023 12:12:58 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f106a06e-ae6f-2c79-df87-721817aacc02@gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3] docs: add workload-tracing document to admin-guide
+Content-Language: en-US
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     sshefali021@gmail.com, kstewart@linuxfoundation.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230131221105.39216-1-skhan@linuxfoundation.org>
+ <87edr8vu8q.fsf@meer.lwn.net>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <87edr8vu8q.fsf@meer.lwn.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,64 +74,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023, Like Xu wrote:
-> On 28/1/2023 8:14 am, Sean Christopherson wrote:
-> > Disallow enabling LBR support if the CPU supports architectural LBRs.
-> > Traditional LBR support is absent on CPU models that have architectural
-> > LBRs, and KVM doesn't yet support arch LBRs, i.e. KVM will pass through
-> > non-existent MSRs if userspace enables LBRs for the guest.
+On 2/2/23 10:43, Jonathan Corbet wrote:
+> Shuah Khan <skhan@linuxfoundation.org> writes:
 > 
-> True, we have call_trace due to MSR_ARCH_LBR_FROM_0 (0x1500) for example.
+>> Add a new section to the admin-guide with information of interest to
+>> application developers and system integrators doing analysis of the
+>> Linux kernel for safety critical applications.
+>>
+>> This section will contain documents supporting analysis of kernel
+>> interactions with applications, and key kernel subsystems expectations.
+>>
+>> Add a new workload-tracing document to this new section.
+>>
+>> Signed-off-by: Shefali Sharma <sshefali021@gmail.com>
+>> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+>> ---
+>> Changes since v2: Addressed review comments on v2
+>>
+>>   Documentation/admin-guide/index.rst           |  11 +
+>>   .../admin-guide/workload-tracing.rst          | 605 ++++++++++++++++++
+>>   2 files changed, 616 insertions(+)
+>>   create mode 100644 Documentation/admin-guide/workload-tracing.rst
 > 
-> > 
-> > Cc: stable@vger.kernel.org
-> > Cc: Yang Weijiang <weijiang.yang@intel.com>
-> > Cc: Like Xu <like.xu.linux@gmail.com>
+> I've applied this with a couple of sphinx tweaks, including:
 > 
-> Tested-by: Like Xu <likexu@tencent.com>
-> 
-> > Reported-by: Paolo Bonzini <pbonzini@redhat.com>
-> 
-> Fixes: 145dfad998ea ("KVM: VMX: Advertise PMU LBRs if and only if perf
-> supports LBRs")
 
-If we want a fixes, I'd argue this is more appropriate:
-
-  Fixes: be635e34c284 ("KVM: vmx/pmu: Expose LBR_FMT in the MSR_IA32_PERF_CAPABILITIES")
-
-Though I'd prefer not to blame KVM, there's not much we could have done in KVM
-to know that Intel would effectively break backwards compatibility.
-
-> > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > ---
-> > 
-> > Am I missing something that would prevent this scenario?
-> > 
-> >   arch/x86/kvm/vmx/vmx.c | 8 +++++---
-> >   1 file changed, 5 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> > index 8f0f67c75f35..77ee6b4a5ec4 100644
-> > --- a/arch/x86/kvm/vmx/vmx.c
-> > +++ b/arch/x86/kvm/vmx/vmx.c
-> > @@ -7761,9 +7761,11 @@ static u64 vmx_get_perf_capabilities(void)
-> >   	if (boot_cpu_has(X86_FEATURE_PDCM))
-> >   		rdmsrl(MSR_IA32_PERF_CAPABILITIES, host_perf_cap);
-> > -	x86_perf_get_lbr(&lbr);
-> > -	if (lbr.nr)
-> > -		perf_cap |= host_perf_cap & PMU_CAP_LBR_FMT;
-> > +	if (!cpu_feature_enabled(X86_FEATURE_ARCH_LBR)) {
+>> +.. SPDX-License-Identifier: (GPL-2.0+ OR CC-BY-4.0)
+>> +
+>> +Discovering Linux kernel subsystems used by a workload
+>> +++++++++++++++++++++++++++++++++++++++++++++++++++++++
 > 
-> To avoid changing this again in the Arch lbr enabling part, how about:
+> This doesn't follow our normal conventions, so I made it:
 > 
-> 	x86_perf_get_lbr(&lbr);
-> 	if (lbr.nr && cpu_feature_enabled(X86_FEATURE_ARCH_LBR) ==
-> 	    kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR))
-> 		perf_cap |= host_perf_cap & PMU_CAP_LBR_FMT;
+>> ======================================================
+>> Discovering Linux kernel subsystems used by a workload
+>> ======================================================
 > 
-> ?
+> Instead.
+> 
 
-I'd rather force arch LBR enabling to explicitly update this code.  And I'd prefer
-that KVM explicitly clear PMU_CAP_LBR_FMT when KVM can't use arch LBRs for whatever
-reason, both for documentation purposes and to avoid ordering dependencies between
-consuming vmx_get_perf_capabilities() and updating kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR).
+Thank you.
+
+-- Shuah
+
