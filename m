@@ -2,79 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E8716889FA
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 23:45:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06EA26889FF
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 23:46:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232539AbjBBWpq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 17:45:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55972 "EHLO
+        id S232991AbjBBWqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 17:46:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232900AbjBBWpm (ORCPT
+        with ESMTP id S232950AbjBBWqK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 17:45:42 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 071F16A315
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 14:45:36 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id lu11so10470477ejb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 14:45:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Yv+EBHuwHRJqAJbrlM2T5g6XZ+NYEb35c1jHq1XFpd8=;
-        b=DdKMwjtuuSPaZBdeG3xXuH/Vf6SecI9XZEr5bt0Spw83Pcj1Owzs7iX7s7BxsTmGMI
-         UZPTM/26GVxWvF202KSMVKHVxikMtw76xWAz+EcqEY648xsII+uwn0fWLtPJsYwF469t
-         BEYQsYcVHAKo57ThA27P8arJkjC8r9XxBZcDQ66TXgNBVS0AEI3K8psL6XBcPV2pIFT+
-         Ym2Z7iWu2jCunXWVN2qNBHMIunlon+8zbPUaSmKgUQOEKpmZR0L3f7U8Ctzc9esEDb/R
-         y5N114iwBcXGscpRLDTwcRH41E7dCdLk/SVfljai0oEw8iBnbOk+FNY0Xx/yLIT/oqSI
-         DHtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Yv+EBHuwHRJqAJbrlM2T5g6XZ+NYEb35c1jHq1XFpd8=;
-        b=f4waT3BOD27S6R7mgd7SbY6Ixco3ZKrmm6lKM5hQtG1CqNquklV0WGAZroMDm+fmcY
-         oaWqBu40gJe1d0VOCgmzYsBl7f+4cAu+KMb99qn6ZXQpLoIlVh9+A2Av7TVBI3g8r1CM
-         wdcc6UJvUJBfZztYDo9Y5GlqYCW7Xf7EZ85RquiGk8tp0u5WNCxzaKGzA5F2HFOVzJhB
-         5eLanfYM9R+3ntI4QViV/2fyEnu1hHVQHnHWGnVl2QLqsK/Vv4oZ9ozXQhRj3Z+6d5tW
-         Mg/cGiVrXREwEiLncfUrhROEi5ig81wm/WOylBNfaDhPlN9wZ1zK7YYrlqI0qadFofz9
-         FRPA==
-X-Gm-Message-State: AO0yUKXyZU93NN6oAsCE9qeuE4QTRWfOc3pUvoD7mjAddDqPoM7LKsVc
-        mTPa/6mErXn/vj9ePbJLr5Pmcg==
-X-Google-Smtp-Source: AK7set/R40EN2B7UrrceJs69WdSfiP2XjBzXCmGzAwIbF5ySDgMVbLqAPHFDkcmqb/TXIIugK9+DOg==
-X-Received: by 2002:a17:906:6a24:b0:86d:7c2d:f65b with SMTP id qw36-20020a1709066a2400b0086d7c2df65bmr10810332ejc.27.1675377935184;
-        Thu, 02 Feb 2023 14:45:35 -0800 (PST)
-Received: from [192.168.1.101] (abyl20.neoplus.adsl.tpnet.pl. [83.9.31.20])
-        by smtp.gmail.com with ESMTPSA id k7-20020a170906158700b0088385cd6166sm401506ejd.195.2023.02.02.14.45.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 14:45:34 -0800 (PST)
-Message-ID: <df4da23b-d589-7353-65b0-bedbd6c31412@linaro.org>
-Date:   Thu, 2 Feb 2023 23:45:33 +0100
+        Thu, 2 Feb 2023 17:46:10 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B6A46CC94
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 14:46:03 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-29-y36o5xIlPiWVEvSaXEynsQ-1; Thu, 02 Feb 2023 22:45:59 +0000
+X-MC-Unique: y36o5xIlPiWVEvSaXEynsQ-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.45; Thu, 2 Feb
+ 2023 22:45:57 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.045; Thu, 2 Feb 2023 22:45:57 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Linus Torvalds' <torvalds@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>
+CC:     "corbet@lwn.net" <corbet@lwn.net>,
+        "will@kernel.org" <will@kernel.org>,
+        "boqun.feng@gmail.com" <boqun.feng@gmail.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "dennis@kernel.org" <dennis@kernel.org>,
+        "tj@kernel.org" <tj@kernel.org>, "cl@linux.com" <cl@linux.com>,
+        "hca@linux.ibm.com" <hca@linux.ibm.com>,
+        "gor@linux.ibm.com" <gor@linux.ibm.com>,
+        "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
+        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
+        "svens@linux.ibm.com" <svens@linux.ibm.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "dwmw2@infradead.org" <dwmw2@infradead.org>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "penberg@kernel.org" <penberg@kernel.org>,
+        "rientjes@google.com" <rientjes@google.com>,
+        "iamjoonsoo.kim@lge.com" <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "roman.gushchin@linux.dev" <roman.gushchin@linux.dev>,
+        "42.hyeyoo@gmail.com" <42.hyeyoo@gmail.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>
+Subject: RE: [PATCH v2 00/10] Introduce cmpxchg128() -- aka. the demise of
+ cmpxchg_double()
+Thread-Topic: [PATCH v2 00/10] Introduce cmpxchg128() -- aka. the demise of
+ cmpxchg_double()
+Thread-Index: AQHZNz4vE8dWPUdohk2nkEpDmnikoa68PlfA
+Date:   Thu, 2 Feb 2023 22:45:57 +0000
+Message-ID: <fe484df93b1d437b84edfd85fed66191@AcuMS.aculab.com>
+References: <20230202145030.223740842@infradead.org>
+ <CAHk-=wiF6y7CwR1P5_73aK2f=x=RZjwgh3sgeO3Mczv4XcDc8g@mail.gmail.com>
+In-Reply-To: <CAHk-=wiF6y7CwR1P5_73aK2f=x=RZjwgh3sgeO3Mczv4XcDc8g@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH] cpufreq: qcom-hw: Fix cpufreq_driver->get() for non-LMH
- systems
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     Douglas Anderson <dianders@chromium.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>
-Cc:     swboyd@chromium.org, mka@chromium.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20230202140005.1.I4b30aaa027c73372ec4068cc0f0dc665af8b938d@changeid>
- <7968db3b-8545-0601-4302-301a4006f3bc@linaro.org>
-In-Reply-To: <7968db3b-8545-0601-4302-301a4006f3bc@linaro.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,121 +97,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+RnJvbTogTGludXMgVG9ydmFsZHMNCj4gU2VudDogMDIgRmVicnVhcnkgMjAyMyAxOTozOQ0KPiAN
+Cj4gT24gVGh1LCBGZWIgMiwgMjAyMyBhdCA3OjI5IEFNIFBldGVyIFppamxzdHJhIDxwZXRlcnpA
+aW5mcmFkZWFkLm9yZz4gd3JvdGU6DQo+ID4NCj4gPiAgLSBmaXhlZCB1cCB0aGUgaW5saW5lIGFz
+bSB0byB1c2UgJ3UxMjggKicgbWVtIGFyZ3VtZW50IHNvIHRoZSBjb21waWxlciBrbm93cw0KPiA+
+ICAgIGhvdyB3aWRlIHRoZSBtb2RpZmljYXRpb24gaXMuDQo+ID4gIC0gcmV3b3JrZWQgdGhlIHBl
+cmNwdSB0aGluZyB0byB1c2UgdW5pb24gYmFzZWQgdHlwZS1wdW5uaW5nIGluc3RlYWQgb2YNCj4g
+PiAgICBfR2VuZXJpYygpIGJhc2VkIGNhc3RzLg0KPiANCj4gTG9va3MgbG92ZWx5IHRvIG1lLiBU
+aGlzIHJlbW92ZWQgYWxsIG15IGNvbmNlcm5zIChleGNlcHQgZm9yIHRoZQ0KPiB0ZXN0aW5nIG9u
+ZSwgYnV0IGFsbCB0aGUgcGF0Y2hlcyBsb29rZWQgbmljZSBhbmQgY2xlYW4gdG8gbWUsIHNvDQo+
+IGNsZWFybHkgaXQgbXVzdCBiZSBwZXJmZWN0KS4NCg0KVGhlIGNoYW5nZSBpcyBhbG1vc3QgY2Vy
+dGFpbmx5IGZvciB0aGUgYmV0dGVyLg0KDQpCdXQgZGlkIEkgc3BvdCBvbmUgb2YgdGhlIGJpdHMg
+dXNpbmcgY21weGNoZzEyOCBqdXN0IHRvIGRvIGFuIGF0b21pYyB3cml0ZT8NCkkgdGhpbmsgaXQg
+d2FzIHVwZGF0aW5nIHNvbWUgaW50ZXJydXB0IGluZm8gdGhhdCB3YXMgYXQgZmlyc3QgZ2xhbmNl
+IG5vdA0KZGlzc2ltaWxhciB0byB0aGF0IHVzZWQgYnkgTVNJLVggKGl0IHdhc24ndCBNU0ktWCku
+DQoNCklmIHRoYXQgd2FzIGEgaGFyZHdhcmUgcmVnaXN0ZXIgdGhlbiBpdCBjb3VsZCB3ZWxsIHJl
+cXVpcmUgYSBmdWxsIGJ1cyBsb2NrLg0KVXNpbmcgYSB3cml0ZSBvZiBhIHNzZSAob3IgZXF1aXYp
+IDEyOGJpdCByZWdpc3RlciB3b3VsZCBiZSBhbiBhdG9taWMgd3JpdGUNCndpdGhvdXQgdGhlIGJ1
+cyBsb2NrIHByb2JsZW0uDQoNCkFsc28sIHRoYXQgaXMgb25seSBnb2luZyB0byB3b3JrIGlmIHRo
+ZSBoYXJkd2FyZS9sb2dpYyBzaWRlIGd1YXJhbnRlZXMgdG8NCnRyZWF0IGEgc2luZ2xlIHdyaXRl
+IGFzIGF0b21pYy4NCkkga25vdyB0aGVyZSBhcmUgTVNJLVggaW1wbGVtZW50YXRpb25zIG91dCB0
+aGVyZSB3aGVyZSB0aGUgY3B1IHdyaXRlDQp3aWxsIGJlIHNwbGl0IGludG8gZm91ciAzMmJpdCB3
+cml0ZXMgdG8gc29tZSBpbnRlcm5hbCBtZW1vcnkgYW5kIHRoZQ0KaGFyZHdhcmUgc2lkZSB3aWxs
+IGFsc28gZG8gbXVsdGlwbGUgYWNjZXNzZXMuDQooUHJldHR5IG11Y2ggYW55IGltcGxlbWVudGF0
+aW9uIG9uIGFuIGZwZ2Egd2lsbCBiZWhhdmUgbGlrZSB0aGF0LA0Kbm90IGp1c3QgdGhlIG9uZSBJ
+IHdyb3RlLikNCkkgZGlkbid0IHNlZSB0aGUgTVNJLVggY29kZSB0aGVyZSwgYnV0IEkgZG8gd29u
+ZGVyIGhvdyBpdCBzYWZlbHkgY2hhbmdlcw0KYWZmaW5pdGllcy4NCg0KCURhdmlkDQoNCi0NClJl
+Z2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0
+b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykN
+Cg==
 
-
-On 2.02.2023 23:35, Konrad Dybcio wrote:
-> 
-> 
-> On 2.02.2023 23:00, Douglas Anderson wrote:
->> On a sc7180-based Chromebook, when I go to
->> /sys/devices/system/cpu/cpu0/cpufreq I can see:
->>
->>   cpuinfo_cur_freq:2995200
->>   cpuinfo_max_freq:1804800
->>   scaling_available_frequencies:300000 576000 ... 1708800 1804800
->>   scaling_cur_freq:1804800
->>   scaling_max_freq:1804800
->>
->> As you can see the `cpuinfo_cur_freq` is bogus. It turns out that this
->> bogus info started showing up as of commit 205f5e984d30 ("cpufreq:
->> qcom-hw: Fix the frequency returned by cpufreq_driver->get()"). That
->> commit seems to assume that everyone is on the LMH bandwagon, but
->> sc7180 isn't.
->>
->> Let's go back to the old code in the case where LMH isn't used.
->>
->> Fixes: 205f5e984d30 ("cpufreq: qcom-hw: Fix the frequency returned by cpufreq_driver->get()")
->> Signed-off-by: Douglas Anderson <dianders@chromium.org>
->> ---
-> Actually I hit the exact same issue when working on CPRh-aware
-> cpufreq with manual OSM programming.. LMh gets enabled by the firmware
-> on most recent platforms, but it's not the case for some old-timers.
-> 
-Ignore this email, I can't read.
-
-Konrad
-> I figured that adding a bool broken_lmh_freq in driver data would be
-> a good middleground between reverting that patch and ignoring the
-> issue, because it *does* matter what this function reports on LMh-
-> enabled platforms (yes, the subsystems are bluepilled between each
-> other and OSM/EPSS does not know the *real* throttled frequency),
-> but obviously we don't want to report 2.99Ghz otherwise..
-> 
-> I think 7280 had an issue where a SoC-specific compatible was not
-> introduced when the DT part was first merged, same goes for 6115.
-> 6115 does have firmware-enabled LMh, not sure about 7280. In case
-> you wanted to go that route, I think it would be suitable to add
-> a blacklist of retroactively-broken platforms (match-by-machine-
-> compatible; don't scream at me bindings folks, I guess that's the
-> least messy solution) in addition to either matching the SoC-specific
-> compatible to epss_broken_lmh_driver_data.
-> 
-> Or we can forget about old DTs and just bind qcom,sc7180-cpufreq-hw
-> (and 7280, maybe? please check.) to this new driver data without
-> checking the machine compatible.
-> 
-> 
-> 
-> Konrad
->>
->>  drivers/cpufreq/qcom-cpufreq-hw.c | 24 +++++++++++++-----------
->>  1 file changed, 13 insertions(+), 11 deletions(-)
->>
->> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
->> index 9505a812d6a1..957cf6bb8c05 100644
->> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
->> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
->> @@ -143,40 +143,42 @@ static unsigned long qcom_lmh_get_throttle_freq(struct qcom_cpufreq_data *data)
->>  	return lval * xo_rate;
->>  }
->>  
->> -/* Get the current frequency of the CPU (after throttling) */
->> -static unsigned int qcom_cpufreq_hw_get(unsigned int cpu)
->> +/* Get the frequency requested by the cpufreq core for the CPU */
->> +static unsigned int qcom_cpufreq_get_freq(unsigned int cpu)
->>  {
->>  	struct qcom_cpufreq_data *data;
->> +	const struct qcom_cpufreq_soc_data *soc_data;
->>  	struct cpufreq_policy *policy;
->> +	unsigned int index;
->>  
->>  	policy = cpufreq_cpu_get_raw(cpu);
->>  	if (!policy)
->>  		return 0;
->>  
->>  	data = policy->driver_data;
->> +	soc_data = qcom_cpufreq.soc_data;
->>  
->> -	return qcom_lmh_get_throttle_freq(data) / HZ_PER_KHZ;
->> +	index = readl_relaxed(data->base + soc_data->reg_perf_state);
->> +	index = min(index, LUT_MAX_ENTRIES - 1);
->> +
->> +	return policy->freq_table[index].frequency;
->>  }
->>  
->> -/* Get the frequency requested by the cpufreq core for the CPU */
->> -static unsigned int qcom_cpufreq_get_freq(unsigned int cpu)
->> +static unsigned int qcom_cpufreq_hw_get(unsigned int cpu)
->>  {
->>  	struct qcom_cpufreq_data *data;
->> -	const struct qcom_cpufreq_soc_data *soc_data;
->>  	struct cpufreq_policy *policy;
->> -	unsigned int index;
->>  
->>  	policy = cpufreq_cpu_get_raw(cpu);
->>  	if (!policy)
->>  		return 0;
->>  
->>  	data = policy->driver_data;
->> -	soc_data = qcom_cpufreq.soc_data;
->>  
->> -	index = readl_relaxed(data->base + soc_data->reg_perf_state);
->> -	index = min(index, LUT_MAX_ENTRIES - 1);
->> +	if (data->throttle_irq >= 0)
->> +		return qcom_lmh_get_throttle_freq(data) / HZ_PER_KHZ;
->>  
->> -	return policy->freq_table[index].frequency;
->> +	return qcom_cpufreq_get_freq(cpu);
->>  }
->>  
->>  static unsigned int qcom_cpufreq_hw_fast_switch(struct cpufreq_policy *policy,
