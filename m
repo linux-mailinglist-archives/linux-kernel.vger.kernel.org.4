@@ -2,111 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9482C687C19
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 12:21:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CBF8687C1D
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 12:22:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231237AbjBBLVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 06:21:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50284 "EHLO
+        id S231661AbjBBLWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 06:22:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbjBBLVc (ORCPT
+        with ESMTP id S230404AbjBBLWf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 06:21:32 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D0B069B15
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 03:20:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675336854;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9fG+mLi1sHTSjuOd5Ks82kJWa6WXxxrGWKTgpND0+ng=;
-        b=GVSn030zh2s1XDtA6gmlST4omo3hoPXfyuI7d6JAyNYD1kaA3Cm8ibow0uU183OFvrKnvT
-        ASqY+r1JecWskFjFaAYCeV0PZrmMa9albq/ybiY/nd0/Gy894JQEAxtV2zrAyr358DuKBi
-        8yKMT9IKPcsjfz8/6K6aPke6PUNTokQ=
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com
- [209.85.215.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-19-Bgh-srgSOhy7bBkm9inaIw-1; Thu, 02 Feb 2023 06:20:53 -0500
-X-MC-Unique: Bgh-srgSOhy7bBkm9inaIw-1
-Received: by mail-pg1-f200.google.com with SMTP id bk2-20020a056a02028200b004a7e2a790d2so866873pgb.18
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 03:20:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9fG+mLi1sHTSjuOd5Ks82kJWa6WXxxrGWKTgpND0+ng=;
-        b=VV3TVGsZIwP0lkkBjujp8uU0CKqjkBT0ZKqkBRhVQpg+WTsiJgRc5toafJ8y8sS1Th
-         nmjdvyv9CdI8st7F57C3D2POET3tHNzp1z3Rc345C1DuOAVP8VtskjX1pizpMhjhyNi2
-         /TRACJWXknuXk7tkEqZpQSKA+YaBTcSUuQFKuzzgWnnopQQkYgTOjzmULJwFyOe8c6DZ
-         K69rNlVhdzLQjcb4nek9NUmp2MKfsbZATzcc1x7fjZNqhKk0Wn1s5f9eMiCCDyHG5Vn2
-         ZOtcpW0jkHytc/ZSxR03GfWhm1To6PIptTPskSZrwXGtXcKU3TcbEZ46FyhdBnI6tGHx
-         YUfQ==
-X-Gm-Message-State: AO0yUKUq4aAzpZkUhmssSvP+Qbuayoo6HxYrio2yYXmTnoJcAaSWxpZe
-        0J3eeKLxuD4Ug6p9TYs5zdaW/tJvCjtJUskjMLmE1PEmsXO0jU9i/IZYdwH8EbwZC/Wat7f7zAx
-        3Z+b7bIxG2t7ehoZNEXVoJmRr+OkdwwgCbebp3JO4
-X-Received: by 2002:a17:90a:c254:b0:22c:5548:d7e5 with SMTP id d20-20020a17090ac25400b0022c5548d7e5mr521247pjx.27.1675336852286;
-        Thu, 02 Feb 2023 03:20:52 -0800 (PST)
-X-Google-Smtp-Source: AK7set82+wN39UJY3aGt0nV0PlH4EFUnLP8c4ca1tpS6HDyuJGTUC63XeRr8meu1LI3/H5oInHQ99YQUAAZkiPqy3yk=
-X-Received: by 2002:a17:90a:c254:b0:22c:5548:d7e5 with SMTP id
- d20-20020a17090ac25400b0022c5548d7e5mr521244pjx.27.1675336852028; Thu, 02 Feb
- 2023 03:20:52 -0800 (PST)
+        Thu, 2 Feb 2023 06:22:35 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7D5149426
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 03:22:34 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pNXfg-0001dt-3R; Thu, 02 Feb 2023 12:22:28 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pNXfd-0029u4-Cq; Thu, 02 Feb 2023 12:22:26 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pNXfd-000GOV-Tw; Thu, 02 Feb 2023 12:22:25 +0100
+Date:   Thu, 2 Feb 2023 12:22:25 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Subject: Re: [PATCH] dt-bindings: pwm: mediatek: add mediatek,mt7986
+ compatible
+Message-ID: <20230202112225.r4wg2nqbcocbnmec@pengutronix.de>
+References: <70fe0b606d988958b87f89828b8728e2f68eaace.1675278958.git.daniel@makrotopia.org>
+ <20230202095733.kxh6jd5hbshhif44@pengutronix.de>
 MIME-Version: 1.0
-References: <20230117172649.52465-1-wander@redhat.com> <875yd4k8qd.ffs@tglx>
- <CAAq0SUkN38V00HqV3Hk3ee_-=vfkKxG9xtR3n=4gAT+zCs+=Zg@mail.gmail.com>
- <87fsc6i6ud.ffs@tglx> <CAAq0SU=FmkSyS=-SQJBoHYEtZExK3Qn9Wqcn-c+BnmfVeO3q6g@mail.gmail.com>
- <20230131175350.s7eiz55fozlhaegh@fedora> <87k010zevz.ffs@tglx>
-In-Reply-To: <87k010zevz.ffs@tglx>
-From:   Wander Lairson Costa <wander@redhat.com>
-Date:   Thu, 2 Feb 2023 08:20:40 -0300
-Message-ID: <CAAq0SUkykcMBZqFpgM=KCZTpxWmD12eCWFZxk+AYNS8K_QBcnQ@mail.gmail.com>
-Subject: Re: [PATCH] rtmutex: ensure we wake up the top waiter
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "open list:LOCKING PRIMITIVES" <linux-kernel@vger.kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="mysq7dcqb7ly26qb"
+Content-Disposition: inline
+In-Reply-To: <20230202095733.kxh6jd5hbshhif44@pengutronix.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 2, 2023 at 5:07 AM Thomas Gleixner <tglx@linutronix.de> wrote:
->
-> On Tue, Jan 31 2023 at 14:53, Wander Lairson Costa wrote:
-> > On Tue, Jan 31, 2023 at 02:46:19PM -0300, Wander Lairson Costa wrote:
-> >> > If you have traces which show the sequence of lock events leading to
-> >> > this problem, then you should be able to decode the scenario. If you
-> >> > fail to extract the information, then please provide the traces so we
-> >> > can stare at them.
-> >> >
-> >>
-> >> Here we go:
-> >>
-> >> Let L1 and L2 be two spinlocks.
-> >>
-> >> Let T1 be a task holding L1 and blocked on L2. T1, currently, is the top
-> >> waiter of L2.
-> >>
-> >> Let T2 be the task holding L2.
-> >>
-> >> Let T3 be a task trying to acquire L1.
-> >>
-> >> The following events will lead to a state in which the wait queue of L2
-> >> isn't empty but nobody holds it.
->
-> That explains it nicely. Care to resend with proper explanations in the
-> changelog?
->
 
-Sure thing, thanks.
+--mysq7dcqb7ly26qb
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Feb 02, 2023 at 10:57:34AM +0100, Uwe Kleine-K=F6nig wrote:
+> Hello,
+>=20
+> On Wed, Feb 01, 2023 at 07:25:57PM +0000, Daniel Golle wrote:
+> > Since commit 241eab76657f ("pwm: mediatek: Add support for MT7986")
+> > support for the 2 PWM channels implemented in MediaTek MT7986 SoCs has
+> > been added. Also add the compatible string to dt-bindings now that
+> > they have been converted to YAML.
+> >=20
+> > Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+> > ---
+> > This patch has previously been submitted, but we decided to deferr it u=
+ntil
+> > after the conversion to YAML which has now been done via commit
+> > 3e98855ca0cf ("dt-bindings: pwm: mediatek: Convert pwm-mediatek to DT s=
+chema")
+> > See
+> > https://patchwork.ozlabs.org/project/devicetree-bindings/patch/Y39PjU1B=
+qBB8tZ98@makrotopia.org/
+>=20
+> This commit is currently in next via the pwm tree. The easy options are
+> to take this commit via pwm, too, or wait till after tne next merge
+> window. I'm fine with the former.
+>=20
+> Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+
+However it wasn't sent to the linux-pwm list, so it doesn't appear in
+the pwm patchwork :-\
+
+I bounced it, but not sure that will make it appear there.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--mysq7dcqb7ly26qb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmPbnO4ACgkQwfwUeK3K
+7AlNKwgAlGG0ra8OtKfzugGoSYMltYXKZt32d4XG1V7KBQMvvLHn7Yhs3zZXI/A0
+FFlpdyo0qBzFmmddOmKvh5yaA6oVNANGuRpBebxRvcJ9XQuGH84EHMvAaDRlZeN3
+5hSHfqAvXtrs8XqXRrvC2nKrJMrEwLnj5u4kX3EUWbibwHMsGfZw9NXERkQHU7Tv
+CoeQKCWJElp9H3JC7QxGpu7YUo9VNuJ6tIpjf/kpxkzOSFAAkXJJ2PPWsQG+zgfv
+HnUbrzkwd5S1kQqNW8EIdH5tmE566AnZUPzTkHXBSRCpZWnDdnFsIlVYkn5a6xNE
+TwIihOEGnlogkwybgio3Ugh0A5coNw==
+=btCZ
+-----END PGP SIGNATURE-----
+
+--mysq7dcqb7ly26qb--
