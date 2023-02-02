@@ -2,118 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76A2C6877E2
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 09:50:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 505786877F0
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 09:53:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231922AbjBBIuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 03:50:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34550 "EHLO
+        id S232299AbjBBIxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 03:53:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230230AbjBBIur (ORCPT
+        with ESMTP id S232243AbjBBIxM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 03:50:47 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE518663E
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 00:50:37 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id q10so998720wrm.4
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 00:50:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lWsS/bWtmzpN07I8KCqWUmAN50eHOe+8qZxUIv9ebfk=;
-        b=DhE+qH2Jh0jcOidrifO6y3KFacKb/NTJtxQwmSfveojslNuY0ynUu/hmWt0zwGCl5j
-         RwIdGLze1WSWVVjV7f1TgHiVfI11qs2KRaP5FwfCwCTPzoOg8nFexWn7AxSetvk6ILNM
-         hzaxsAjh6Nxu+lBRdwDLnCkD9tNq5rrxZHfCUjoC4F+mbgGQ09sxZDNQUnrDBvrhJZW7
-         qMfBGpToy9EUsu025mNOZWYh1QoZRXzGG6k2YIjkIRYrWITr+/YqCAB15BBnHG8+8k3b
-         8wrFk6y+gzBQbtylAYs/jBG5R+zK01THylvRZocRcZgY6f6rQ6uQ8O7N56tWq6peDI4Q
-         9erQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lWsS/bWtmzpN07I8KCqWUmAN50eHOe+8qZxUIv9ebfk=;
-        b=dycAJjuz2pBZcw9M1E/wOBRkErmlwY1ObMh/TONFFli+Vnq7J9iMWB9ua2Z0hyTagV
-         9jDnacB7ypPDDXlI4kptsZujoHJLVJiihEg0PxKEOIwEQzKeo+KK377QGdtZQ+N6L/XT
-         ymmjcMkbbI/902gkHJ17m+7PeCv/5XNvUmLvUDkDYzehw3N6qBIHeuiy6MeEXy2D3DSc
-         119i6yaoWxJs82jOBuJujLPTZmZLTXp69DPvo6+EtiQ2CbXAOXEEkoSGVUII3oyETkoA
-         M31H99t+zNxLuMuZVcnrv7wUmq4iHxf981aMfktffllULWIIEwg7nWD80IuRAc2s1YhR
-         H5Ww==
-X-Gm-Message-State: AO0yUKWXfwwEb/lpamNsb8Zf2gZupovb28gOGz39RCBAIR79m6GSAy+c
-        RfjO07tHGNv96oJiuSoRqehvgQ==
-X-Google-Smtp-Source: AK7set9myootvaumTc3dok0xH8h+eb7NWBe3lMq35UW9l8J+0ooRSfnkXePoQFIOiooeOPeghyIV/Q==
-X-Received: by 2002:adf:c713:0:b0:2bf:e9dc:5536 with SMTP id k19-20020adfc713000000b002bfe9dc5536mr5744516wrg.45.1675327835629;
-        Thu, 02 Feb 2023 00:50:35 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id e10-20020a5d500a000000b002be0b1e556esm18993213wrt.59.2023.02.02.00.50.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 00:50:35 -0800 (PST)
-Message-ID: <d046c9b3-3cd0-0e2c-4db4-50e8e772bfb0@linaro.org>
-Date:   Thu, 2 Feb 2023 09:50:33 +0100
+        Thu, 2 Feb 2023 03:53:12 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6761272664
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 00:52:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675327943;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JPaVjyoJuKENDwrdqNad/mRuPE82XGCumCLGtU8F6T4=;
+        b=KPsMAy9NTqd8cu8jGIGJDlX+8iuD2VVdIo+I+WEUp9VFtiUkG82802nwk/2vSmLflfiyTa
+        FLL8lgP1L4v+h2VjcAsCJqZf62cXL+m7N5S3IlbY+qKPv3v8tUo9y9Gg8UsD53eQfvsp02
+        NtfH8Rdr/2pwXjbVlhzYIZgpR47s++o=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-148-gtgcvS6pN1mxe0nsIXIGpA-1; Thu, 02 Feb 2023 03:52:18 -0500
+X-MC-Unique: gtgcvS6pN1mxe0nsIXIGpA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1B8CB3C02584;
+        Thu,  2 Feb 2023 08:52:18 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.97])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 615FF140EBF6;
+        Thu,  2 Feb 2023 08:52:16 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <000000000000b0b3c005f3a09383@google.com>
+References: <000000000000b0b3c005f3a09383@google.com>
+To:     jhubbard@nvidia.com, David Hildenbrand <david@redhat.com>
+Cc:     syzbot <syzbot+a440341a59e3b7142895@syzkaller.appspotmail.com>,
+        dhowells@redhat.com, davem@davemloft.net, edumazet@google.com,
+        hch@lst.de, johannes@sipsolutions.net, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] general protection fault in skb_dequeue (3)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 3/3] dt-bindings: iio: adc: Require generic adc-chan
- name for channel nodes
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        phone-devel@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Jonathan Cameron <jic23@kernel.org>, iio@vger.kernel.org,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-References: <20230201204447.542385-1-marijn.suijten@somainline.org>
- <20230201204447.542385-4-marijn.suijten@somainline.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230201204447.542385-4-marijn.suijten@somainline.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <822862.1675327935.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Thu, 02 Feb 2023 08:52:15 +0000
+Message-ID: <822863.1675327935@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/02/2023 21:44, Marijn Suijten wrote:
-> As discussed in [1] it is more convenient to use a generic adc-chan node
-> name for ADC channels while storing a friendly - board-specific instead
-> of PMIC-specific - name in the label, if/when desired to overwrite the
-> channel description already contained (but previously unused) in the
-> driver [2].
-> 
-> Replace the .* name pattern with the adc-chan literal, but leave the
-> label property optional for bindings to choose to fall back a channel
-> label hardcoded in the driver [2] instead.
-> 
-> [1]: https://lore.kernel.org/linux-arm-msm/20221106193018.270106-1-marijn.suijten@somainline.org/T/#u
-> [2]: https://lore.kernel.org/linux-arm-msm/20230116220909.196926-4-marijn.suijten@somainline.org/
-> 
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> ---
->  .../bindings/iio/adc/qcom,spmi-vadc.yaml         | 16 +++++++++-------
->  1 file changed, 9 insertions(+), 7 deletions(-)
-> 
+Hi John, David,
 
+Could you have a look at this?
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> syzbot found the following issue on:
+> =
 
-Best regards,
-Krzysztof
+> HEAD commit:    80bd9028feca Add linux-next specific files for 20230131
+> git tree:       linux-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=3D1468e3694800=
+00
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D904dc2f450ea=
+ad4a
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3Da440341a59e3b7=
+142895
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binut=
+ils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D12c5d2be48=
+0000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D11259a794800=
+00
+> ...
+> The issue was bisected to:
+> =
+
+> commit 920756a3306a35f1c08f25207d375885bef98975
+> Author: David Howells <dhowells@redhat.com>
+> Date:   Sat Jan 21 12:51:18 2023 +0000
+> =
+
+>     block: Convert bio_iov_iter_get_pages to use iov_iter_extract_pages
+> =
+
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=3D170384f94=
+80000
+> final oops:     https://syzkaller.appspot.com/x/report.txt?x=3D148384f94=
+80000
+> console output: https://syzkaller.appspot.com/x/log.txt?x=3D108384f94800=
+00
+> ...
+> general protection fault, probably for non-canonical address 0xdffffc000=
+0000001: 0000 [#1] PREEMPT SMP KASAN
+> KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
+> CPU: 0 PID: 2838 Comm: kworker/u4:6 Not tainted 6.2.0-rc6-next-20230131-=
+syzkaller-09515-g80bd9028feca #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS =
+Google 01/12/2023
+> Workqueue: phy4 ieee80211_iface_work
+> RIP: 0010:__skb_unlink include/linux/skbuff.h:2321 [inline]
+> RIP: 0010:__skb_dequeue include/linux/skbuff.h:2337 [inline]
+> RIP: 0010:skb_dequeue+0xf5/0x180 net/core/skbuff.c:3511
+
+I don't think this is specifically related to anything networking.  I've r=
+un
+it a few times and weird stuff happens in various places.  I'm wondering i=
+f
+it's related to FOLL_PIN in some way.
+
+The syzbot test in question does the following:
+
+   #{"repeat":true,"procs":1,"slowdown":1,"sandbox":"none","sandbox_arg":0=
+,"netdev":true,"cgroups":true,"close_fds":true,"usb":true,"wifi":true,"sys=
+ctl":true,"tmpdir":true}
+   socket(0x0, 0x2, 0x0)
+   epoll_create(0x7)
+   r0 =3D creat(&(0x7f0000000040)=3D'./bus\x00', 0x9)
+   ftruncate(r0, 0x800)
+   lseek(r0, 0x200, 0x2)
+   r1 =3D open(&(0x7f0000000000)=3D'./bus\x00', 0x24000, 0x0)  <-- O_DIREC=
+T
+   sendfile(r0, r1, 0x0, 0x1dd00)
+
+Basically a DIO splice from a file to itself.
+
+I've hand-written my own much simpler tester (see attached).  You need to =
+run
+at least two copies in parallel, I think, to trigger the bug.  It's possib=
+le
+truncate is interfering somehow.
+
+David
+---
+#define _GNU_SOURCE =
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/sendfile.h>
+#include <sys/wait.h>
+
+#define file_size 0x800
+#define send_size 0x1dd00
+#define repeat_count 1000
+
+int main(int argc, char *argv[])
+{
+	int in, out, i, wt;
+
+	if (argc !=3D 2 || !argv[1][0]) {
+		fprintf(stderr, "Usage: %s <file>\n", argv[0]);
+		exit(2);
+	}
+
+	for (i =3D 0; i < repeat_count; i++) {
+		switch (fork()) {
+		case -1:
+			perror("fork");
+			exit(1);
+		case 0:
+			out =3D creat(argv[1], 0666);
+			if (out < 0) {
+				perror(argv[1]);
+				exit(1);
+			}
+
+			if (ftruncate(out, file_size) < 0) {
+				perror("ftruncate");
+				exit(1);
+			}
+
+			if (lseek(out, file_size, SEEK_SET) < 0) {
+				perror("lseek");
+				exit(1);
+			}
+
+			in =3D open(argv[1], O_RDONLY | O_DIRECT | O_NOFOLLOW);
+			if (in < 0) {
+				perror("open");
+				exit(1);
+			}
+
+			if (sendfile(out, in, NULL, send_size) < 0) {
+				perror("sendfile");
+				exit(1);
+			}
+			exit(0);
+
+		default:
+			if (wait(&wt) < 0) {
+				perror("wait");
+				exit(1);
+			}
+			break;
+		}
+	}
+
+	exit(0);
+}
 
