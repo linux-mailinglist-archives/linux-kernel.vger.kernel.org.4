@@ -2,83 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0904168784D
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:08:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FB9668784E
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:09:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232405AbjBBJIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 04:08:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50754 "EHLO
+        id S232411AbjBBJJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 04:09:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232375AbjBBJIX (ORCPT
+        with ESMTP id S232375AbjBBJJI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 04:08:23 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B29C5FD3
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 01:08:21 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 719246602EDA;
-        Thu,  2 Feb 2023 09:08:19 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1675328899;
-        bh=5IakbPPTAHlstWlMaParv0t58Oe6vt85g0wiRgRU03M=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=AhJLb6xZ/WrXG051Pd9hnZMFZididw3HEhWfNcyYmcyYlxZorcpLJ43/xX4lHOkHm
-         T7an22q8EKxOvfoZaT7MzjEC3zZr25DQC5iiTGrr76VQ6TWTSUcrSI8UIJ41lFUSan
-         87WsaiLeOOB0TOOBeIswrszW2PdYwP/UNQPE8qJI3xFMoBv/U8FYkfSPVA2fJrGlEW
-         f2oNjJi9cIwRguMO7le/Y7krXBonv6PjymZWsVyRelhDZgHTiztw/2U7ySsoTarioO
-         ojIUAPMIdNcjCMIZOsQoIgP+DRyZrZRXMyiar+6GKNyFavbySmPJv/j6R/+FLXz/Io
-         IR8ovNuCfoRPA==
-Message-ID: <4db8fb55-a02b-d98e-65f4-1a095c43104f@collabora.com>
-Date:   Thu, 2 Feb 2023 10:08:16 +0100
+        Thu, 2 Feb 2023 04:09:08 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A6BC5FD3
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 01:09:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1675328945; x=1706864945;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HvQ1ErRDgv3I6gZTIV6p/uans2CYAUlZVIT84V7vf/M=;
+  b=Wf6vtCmgKaEV/fjeZId1P+OAStI62peK/e6pSMRjG82gpk78N7sM/MMg
+   03i2oPZoInKAxiHaIPO5K/9pF0VEkKu7HIbZLcNdb+euATTwaKEGTuyvO
+   RAQO+LqzKTkJ04Zjqfl7Zkf67J/ndZ7YksvIXtdFnz32/YR+HHAcRLa9a
+   VU6YaxXlBS4vgUufUu16z11D7lr90MV8KHTaoc5quj2yFfWgkoLMPDW7b
+   +1zVrEKHd02Dhp6Wdhp6Pz/vs5R/4K8JlUthzgKsHGJ4RtoYf50DwV3PG
+   p+n9Wm6TPIatz/B5iM0trxkpU8MCwzM77nNxDHbKoX0peih0BLaXOD21/
+   w==;
+X-IronPort-AV: E=Sophos;i="5.97,267,1669100400"; 
+   d="asc'?scan'208";a="199047268"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Feb 2023 02:09:04 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 2 Feb 2023 02:09:04 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
+ Transport; Thu, 2 Feb 2023 02:09:02 -0700
+Date:   Thu, 2 Feb 2023 09:08:38 +0000
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Chen Guokai <chenguokai17@mails.ucas.ac.cn>
+CC:     <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+        <aou@eecs.berkeley.edu>, <rostedt@goodmis.org>, <mingo@redhat.com>,
+        <sfr@canb.auug.org.au>, <linux-riscv@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <liaochang1@huawei.com>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>
+Subject: Re: [PATCH v6 09/13] riscv/kprobe: Search free registers from unused
+ caller-saved ones
+Message-ID: <Y9t9ljSEJtnr835Y@wendy>
+References: <20230127130541.1250865-1-chenguokai17@mails.ucas.ac.cn>
+ <20230127130541.1250865-10-chenguokai17@mails.ucas.ac.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] MAINTAINERS: Update entry for MediaTek SoC support
-To:     matthias.bgg@kernel.org, arm@kernel.org, soc@kernel.org,
-        arnd@arndb.de, olof@lixom.net
-Cc:     matthias.bgg@gmail.com, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230201152256.19514-1-matthias.bgg@kernel.org>
-Content-Language: en-US
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230201152256.19514-1-matthias.bgg@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="aHQm0zwpXHrO71dn"
+Content-Disposition: inline
+In-Reply-To: <20230127130541.1250865-10-chenguokai17@mails.ucas.ac.cn>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 01/02/23 16:22, matthias.bgg@kernel.org ha scritto:
-> From: Matthias Brugger <matthias.bgg@gmail.com>
-> 
-> The linux-mediatek IRC channel has moved to liber.chat for quite some
-> time. Apart from that, not all patches are also send to LKML, so add
-> this ML explicitly.
-> 
-> And last but not least:
-> Angelo does a wunderfull job in reviewing patches for all kind of
-> devices from MediaTek.
-> 
-> Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
+--aHQm0zwpXHrO71dn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Is a R-b tag appropriate here to say "yes, go on with setting me as a reviewer"?
+Hey Chen,
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Was looking at the insn manipulation code in 4/13 and noticed a minor
+nit in this patch in the process.
 
-P.S.: Thank you :-)
+On Fri, Jan 27, 2023 at 09:05:37PM +0800, Chen Guokai wrote:
+> +/*
+> + * Register	ABI Name	Saver
+> + * x0		zero		--
+> + * x1		ra		Caller
+> + * x2		sp		Callee
+> + * x3		gp		--
+> + * x4		tp		--
+> + * x5-7 	t0-2		Caller
 
-Cheers,
-Angelo
+I know it's just a comment, but this line here has a space before the
+first tab that makes nvim unhappy.
 
+Thanks,
+Conor.
+
+
+--aHQm0zwpXHrO71dn
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY9t9igAKCRB4tDGHoIJi
+0iRMAP9UcWucUeNFvkwtiH1LHVHVWEqdLTuGy49K60zsCtS9uQEAtBfuqg0Ovlw3
+ybWuIvRwhcGgmKIQ6dTMACFSeuUXYAY=
+=qR8Q
+-----END PGP SIGNATURE-----
+
+--aHQm0zwpXHrO71dn--
