@@ -2,44 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDA3668815E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 16:12:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A31DE68815B
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 16:12:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231665AbjBBPM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 10:12:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55948 "EHLO
+        id S230323AbjBBPMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 10:12:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231827AbjBBPMy (ORCPT
+        with ESMTP id S232066AbjBBPMp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 10:12:54 -0500
+        Thu, 2 Feb 2023 10:12:45 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F738945D6
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 07:12:28 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E0592EDE;
+        Thu,  2 Feb 2023 07:12:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B58D61BC5
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 15:12:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CC70C433D2;
-        Thu,  2 Feb 2023 15:12:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675350739;
-        bh=RxwsXdM5vF3QKbjv+va1tNRqLPUWeljily2y8yLNGOo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=XxumIkuCc2EZQtiPTNUlcP8o/DgVsbV+UzZXRLKqsR70Dx5F6dWknhct4v8PGSERh
-         3Sd1uorAhu5dTJv7LUI+ba4Q7mMT1JtCpH5fMTmneKhikdXhkxqdwvu88yu/Rwsftf
-         mSlDfbEjRghmjhFrx4rr19E/ErS9disUDmGK02yM=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH] kernel/time/test_udelay.c: fix memory leak with using debugfs_lookup()
-Date:   Thu,  2 Feb 2023 16:12:14 +0100
-Message-Id: <20230202151214.2306822-1-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.39.1
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C7DB61BAC;
+        Thu,  2 Feb 2023 15:12:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C732AC433D2;
+        Thu,  2 Feb 2023 15:12:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675350729;
+        bh=FADAJ7fzOlAj6IlWfkCJlp2pM9Mc7N/7WkC1EFkVr6E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=D+JWXkktcZdpk+sJtWfWAUm/6ii8C9Z6B0+YMXdmxO+2q0Tv7ih8mv2D40/kIAaF3
+         GGv/znKepBtd8jW7asVpLY7ZPIhbREaNIuaT9ydleVbx+itZqwa6BPiOXdtY8w3raO
+         EmQT+3Dv7RBhD/4FwSn3qyntQU0U+WCxXa7ima3A8xoYNPjXQb7/GsL6eoTZAvTKtu
+         bT+vzQkcLpvVtyuBClIPmNb7Xyzrk+e/lmgqyjT3MCdEM1UpZCyH8UvSpTMqCyiA/Q
+         GSJLSGscUgYl0siR5b0oFIRalHhMKqBW0Ewl+LWa1UpBPKQQtbTzqXcL6XKHZKeZfi
+         jRF1g5Dijx9gA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pNbGL-0003yq-C3; Thu, 02 Feb 2023 16:12:34 +0100
+Date:   Thu, 2 Feb 2023 16:12:33 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 16/24] rtc: pm8xxx: add support for nvmem offset
+Message-ID: <Y9vS4TpVHDnGN0G/@hovoldconsulting.com>
+References: <20230126142057.25715-1-johan+linaro@kernel.org>
+ <20230126142057.25715-17-johan+linaro@kernel.org>
+ <Y9PpQkW3Rtm+bi2V@mail.local>
+ <Y9Py/+GpI8x8ldDG@hovoldconsulting.com>
+ <Y9P2L9sNiHIZt3On@mail.local>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=863; i=gregkh@linuxfoundation.org; h=from:subject; bh=RxwsXdM5vF3QKbjv+va1tNRqLPUWeljily2y8yLNGOo=; b=owGbwMvMwCRo6H6F97bub03G02pJDMm3L50yYwrXs1PIlzNsn/63MZnp79Put7ffFqz7x9MnFmie M02zI5aFQZCJQVZMkeXLNp6j+ysOKXoZ2p6GmcPKBDKEgYtTACai8pRhrqj+6v7U6nylqZ9PxfrnWC Tq3lrVyzA/6OCUPbu5vT89VHyla/o+Lf4N1/aXAA==
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9P2L9sNiHIZt3On@mail.local>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -49,29 +68,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When calling debugfs_lookup() the result must have dput() called on it,
-otherwise the memory will leak over time.  To make things simpler, just
-call debugfs_lookup_and_remove() instead which handles all of the logic
-at once.
+On Fri, Jan 27, 2023 at 05:05:03PM +0100, Alexandre Belloni wrote:
+> On 27/01/2023 16:51:27+0100, Johan Hovold wrote:
 
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- kernel/time/test_udelay.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > @@ -380,9 +478,23 @@ static int pm8xxx_rtc_probe(struct platform_device *pdev)
+> > > >  	rtc_dd->allow_set_time = of_property_read_bool(pdev->dev.of_node,
+> > > >  						      "allow-set-time");
+> > > >  
+> > > > +	rtc_dd->nvmem_cell = devm_nvmem_cell_get(&pdev->dev, "offset");
+> > > 
+> > > Maybe we should get something more specific than just "offset" so this
+> > > could be parsed in the RTC core at some point (this is the second RTC to
+> > > behave like this)
+> > 
+> > Yes, that thought crossed my mind, but it's an nvmem cell name (label)
+> > and not a generic devicetree property. If you look at the binding
+> > document I think the name makes sense given the current description, and
+> > I'm not sure changing to something like 'base' would be much of an
+> > improvement.
+> > 
+> > I also don't expect there to be more broken RTCs out there like these
+> > ones. Hopefully Qualcomm will even get this fixed at some point
+> > themselves.
+> > 
+> > And I assume you were think of the old Atmel driver which uses a timer
+> > counter and a scratch register as a base? That one is also a bit
+> > different in that the timer can be reset, just not set.
+> 
+> Nope, I'm thinking about the gamecube one and probably the nintendo
+> switch one which seems to behave similarly (no driver in the kernel
+> though).
 
-diff --git a/kernel/time/test_udelay.c b/kernel/time/test_udelay.c
-index 13b11eb62685..20d5df631570 100644
---- a/kernel/time/test_udelay.c
-+++ b/kernel/time/test_udelay.c
-@@ -149,7 +149,7 @@ module_init(udelay_test_init);
- static void __exit udelay_test_exit(void)
- {
- 	mutex_lock(&udelay_test_lock);
--	debugfs_remove(debugfs_lookup(DEBUGFS_FILENAME, NULL));
-+	debugfs_lookup_and_remove(DEBUGFS_FILENAME, NULL);
- 	mutex_unlock(&udelay_test_lock);
- }
- 
--- 
-2.39.1
+Found the gamecube one now (misread you comment above to imply that it
+was also out of tree).
 
+That one is also different in that the timer in that RTC can also be
+set (e.g. like the atmel one), but for consistency with some firmware an
+offset also needs to be read from SRAM (not NVRAM) and applied. That
+offset is also never updated by Linux.
+
+Johan
