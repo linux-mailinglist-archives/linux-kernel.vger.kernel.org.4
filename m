@@ -2,115 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 563CC687CFF
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 13:13:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4747C687D0F
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 13:17:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231731AbjBBMNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 07:13:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49090 "EHLO
+        id S231479AbjBBMRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 07:17:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbjBBMNQ (ORCPT
+        with ESMTP id S229848AbjBBMRJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 07:13:16 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4182689F98;
-        Thu,  2 Feb 2023 04:13:15 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so3578990wma.1;
-        Thu, 02 Feb 2023 04:13:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HaBK2gOP9VnPxAmCYXpgUSfZykqxTRkLrfI4y3qj9N8=;
-        b=jTAx61SYlxZsQ6Nk2B9Y7Hcv3Cxv5gUh1nyzMz56+eVNc6/QrUxORNmgHLaUy/HHrC
-         MTNnG1Sf+6k78VtBUjdWdJs7DBSWjuUYx4Lpl7P0IYguoW+VxS0i05ugVqJNEfvTl71W
-         rzWr4e02xWPWjz4n0Qs1MgZp05OebBOza9SM0pERQiU+m6z+KcWr7AD0wPlUbVY+phDD
-         CcPGOgfIsXwKyxfo9KBKziOcCNEOxaXWiZg/BSqlQi8U3+XQRnFwrB5CqJof48WGt7qU
-         jzBTLgQoVdd6pQPz6e4QejJMa2KnvCUFBtM9Eu835wZsVsYXC8BfA4S3fe0Q1e7HMeSN
-         Gcuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HaBK2gOP9VnPxAmCYXpgUSfZykqxTRkLrfI4y3qj9N8=;
-        b=Bu8Tr4OHQEfsyy2btXEascGqjN9nPBv3opd714AQMVsSoSe4fEe/Rd1sjtinFilyW8
-         SKUIK8hzuc6IbKvsNOA86BxB/BMFpZ2BFmVK7O4UxCLc+8wrjlvpPHUd49GzN1YmzyB9
-         cbBi2Wx65mGPyTgQSMn8qx5nM6cgvZRmo+3WNy19npUpq61RsKlgj+0wC/yiR+Vd04Ul
-         CUL6Pt7HYjYh06HoHbBiqAYcaPPbXt8Pg4/QorVqNrIGUadAmIWABbg9x12OUfBz76C7
-         526OYBHMvPbSE8qvwfYMb06jK8zmDsCm9FttSzYINZG5riM+1ZqJPZLrpaLzNLrGo/NY
-         FSlw==
-X-Gm-Message-State: AO0yUKVPBCuEFAn1h34QaImx8zNHXCQqHTpBKu4VUoPzJTmkZ7WQ5Ka8
-        3ajGvOyoPWJI4bqmXa0dxm8=
-X-Google-Smtp-Source: AK7set/K5mj4/wx7pJ8+9P/uHlj+hV029sdbYt8ULlEf6QKGQmw01oKjkNMwb1PqVH9W+ma85Fgu/w==
-X-Received: by 2002:a05:600c:4f41:b0:3d7:889:7496 with SMTP id m1-20020a05600c4f4100b003d708897496mr5473887wmq.17.1675339993794;
-        Thu, 02 Feb 2023 04:13:13 -0800 (PST)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id q9-20020a1ce909000000b003dc34edacf8sm4502198wmc.31.2023.02.02.04.13.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 04:13:13 -0800 (PST)
-Message-ID: <64d05d48-8e12-602d-7f64-4f29b56011b7@gmail.com>
-Date:   Thu, 2 Feb 2023 13:13:11 +0100
+        Thu, 2 Feb 2023 07:17:09 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B476FD38;
+        Thu,  2 Feb 2023 04:17:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 42DF461AF9;
+        Thu,  2 Feb 2023 12:17:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95437C433EF;
+        Thu,  2 Feb 2023 12:17:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675340227;
+        bh=kXuVYOYprEDAERc9ptWyMD0dUfVOl7wsMQbwhSMi7eU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OEfzBbqOC8Hqklq9IWsxlHAenMXr143GgEE5GC9FLVByvD6w1OGp/BLIRQJPl2zKP
+         RggMPeisymcQZCUneIu57XG3OcHTXx2kc2kK5Ui9PJENo8x0zJxUhniILVKlK1eYKa
+         rZ1nov43rLlcQLG6F5iPV76qXesHS70hea+0Wv2i6C1gDLfDtshPHM2StvWUZzRgSi
+         WTjuJ7xer7xYwz6L954tuYZCRhrXZ0VuZCX+FYEeWHUQTDqXdvbJW7BK166IrAqeUQ
+         FRzV48SorFgR73bQnAmPJE1wUylAP6HohDjXIV+Oqqk25lSkzQCJyrA909aw9CKgSw
+         PW4i3J7MnChhQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pNYWw-0001UF-Bx; Thu, 02 Feb 2023 13:17:31 +0100
+Date:   Thu, 2 Feb 2023 13:17:30 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Artur =?utf-8?B?xZp3aWdvxYQ=?= <a.swigon@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH 15/23] interconnect: exynos: fix registration race
+Message-ID: <Y9up2gKUpZXhI+J8@hovoldconsulting.com>
+References: <20230201101559.15529-1-johan+linaro@kernel.org>
+ <20230201101559.15529-16-johan+linaro@kernel.org>
+ <e706bb89-bb79-33e3-f319-268ec4695015@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v6 3/5] arm: dts: mediatek: Fix existing NAND controller
- node name
-Content-Language: en-US
-To:     Xiangsheng Hou <xiangsheng.hou@mediatek.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        benliang.zhao@mediatek.com, bin.zhang@mediatek.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-References: <20230201021500.26769-1-xiangsheng.hou@mediatek.com>
- <20230201021500.26769-4-xiangsheng.hou@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20230201021500.26769-4-xiangsheng.hou@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e706bb89-bb79-33e3-f319-268ec4695015@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Feb 02, 2023 at 12:04:49PM +0100, Krzysztof Kozlowski wrote:
+> On 01/02/2023 11:15, Johan Hovold wrote:
 
-
-On 01/02/2023 03:14, Xiangsheng Hou wrote:
-> Change the existing node name in order to match NAND controller DT
-> bindings.
+> > @@ -98,12 +98,13 @@ static int exynos_generic_icc_remove(struct platform_device *pdev)
+> >  	struct exynos_icc_priv *priv = platform_get_drvdata(pdev);
+> >  	struct icc_node *parent_node, *node = priv->node;
+> >  
+> > +	icc_provider_deregister(&priv->provider);
+> > +
+> >  	parent_node = exynos_icc_get_parent(priv->dev->parent->of_node);
+> >  	if (parent_node && !IS_ERR(parent_node))
+> >  		icc_link_destroy(node, parent_node);
+> >  
+> >  	icc_nodes_remove(&priv->provider);
+> > -	icc_provider_del(&priv->provider);
+> >  
+> >  	return 0;
+> >  }
+> > @@ -132,15 +133,11 @@ static int exynos_generic_icc_probe(struct platform_device *pdev)
+> >  	provider->inter_set = true;
+> >  	provider->data = priv;
+> >  
+> > -	ret = icc_provider_add(provider);
+> > -	if (ret < 0)
+> > -		return ret;
+> > +	icc_provider_init(provider);
+> >  
+> >  	icc_node = icc_node_create(pdev->id);
+> > -	if (IS_ERR(icc_node)) {
+> > -		ret = PTR_ERR(icc_node);
+> > -		goto err_prov_del;
+> > -	}
+> > +	if (IS_ERR(icc_node))
+> > +		return PTR_ERR(icc_node);
+> >  
+> >  	priv->node = icc_node;
+> >  	icc_node->name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "%pOFn",
+> > @@ -171,14 +168,17 @@ static int exynos_generic_icc_probe(struct platform_device *pdev)
+> >  			goto err_pmqos_del;
+> >  	}
+> >  
+> > +	ret = icc_provider_register(provider);
+> > +	if (ret < 0)
+> > +		goto err_pmqos_del;
 > 
-> Signed-off-by: Xiangsheng Hou <xiangsheng.hou@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> If I understand correctly there is no need for icc_link_destroy() in
+> error path here, right? Even in case of probe retry (defer or whatever
+> reason) - the link will be removed with icc_nodes_remove()?
 
-Queued for the next merge window, thanks!
+Correct, it is no longer needed after the first patch in this series.
 
-> ---
->   arch/arm/boot/dts/mt2701.dtsi | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm/boot/dts/mt2701.dtsi b/arch/arm/boot/dts/mt2701.dtsi
-> index 0a0fe8c5a405..ce6a4015fed5 100644
-> --- a/arch/arm/boot/dts/mt2701.dtsi
-> +++ b/arch/arm/boot/dts/mt2701.dtsi
-> @@ -359,7 +359,7 @@ thermal: thermal@1100b000 {
->   		mediatek,apmixedsys = <&apmixedsys>;
->   	};
->   
-> -	nandc: nfi@1100d000 {
-> +	nandc: nand-controller@1100d000 {
->   		compatible = "mediatek,mt2701-nfc";
->   		reg = <0 0x1100d000 0 0x1000>;
->   		interrupts = <GIC_SPI 56 IRQ_TYPE_LEVEL_LOW>;
+The exynos driver was the only driver that bothered to remove links
+explicitly, all the others expected the interconnect framework to do so
+when destroying nodes even if that was not case until now.
+
+Johan
