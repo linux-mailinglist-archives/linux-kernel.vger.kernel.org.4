@@ -2,144 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72D2A68774E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 09:27:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 492C068775D
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 09:27:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232120AbjBBI1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 03:27:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42344 "EHLO
+        id S230036AbjBBI1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 03:27:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjBBI1C (ORCPT
+        with ESMTP id S229602AbjBBI1l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 03:27:02 -0500
-Received: from mx0.infotecs.ru (mx0.infotecs.ru [91.244.183.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0688C8624D
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 00:26:58 -0800 (PST)
-Received: from mx0.infotecs-nt (localhost [127.0.0.1])
-        by mx0.infotecs.ru (Postfix) with ESMTP id E8FC013ED236;
-        Thu,  2 Feb 2023 11:26:56 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx0.infotecs.ru E8FC013ED236
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=infotecs.ru; s=mx;
-        t=1675326417; bh=P4Sz+Or5QkPB22EwbVluoSpgaCwjgCRN0S/0gr+vhzU=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=hUfRX5pCc32k5dkeDAzM5xQL98bzrQ3Aao7+lHC3atpQrZSEvTGKrTJgTNCRdhInz
-         5Cq+8V1yFtZMGIhjlZFI0zE7ML7YCTbolOQOMvmQvQFF+5Z5pJZab22Xz2YBBsjUKM
-         UWgefXPVUtuUUnMigIUKSqrqLVjIX2b9cqwahszs=
-Received: from msk-exch-01.infotecs-nt (msk-exch-01.infotecs-nt [10.0.7.191])
-        by mx0.infotecs-nt (Postfix) with ESMTP id E388D3069DA4;
-        Thu,  2 Feb 2023 11:26:56 +0300 (MSK)
-From:   Gavrilov Ilia <Ilia.Gavrilov@infotecs.ru>
-To:     "kim.phillips@amd.com" <kim.phillips@amd.com>
-CC:     Gavrilov Ilia <Ilia.Gavrilov@infotecs.ru>,
-        "Vincent.Wan@amd.com" <Vincent.Wan@amd.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "lvc-project@linuxtesting.org" <lvc-project@linuxtesting.org>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: [PATCH v2] iommu/amd: Add a length limitation for the ivrs_acpihid
- command-line parameter
-Thread-Topic: [PATCH v2] iommu/amd: Add a length limitation for the
- ivrs_acpihid command-line parameter
-Thread-Index: AQHZNuAcYYi++x82V0GUoMRoGydTPg==
-Date:   Thu, 2 Feb 2023 08:26:56 +0000
-Message-ID: <20230202082719.1513849-1-Ilia.Gavrilov@infotecs.ru>
-References: <39506e9f-9bbb-fcf6-b488-542fd3657eae@amd.com>
-In-Reply-To: <39506e9f-9bbb-fcf6-b488-542fd3657eae@amd.com>
-Accept-Language: ru-RU, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.17.0.10]
-x-exclaimer-md-config: 208ac3cd-1ed4-4982-a353-bdefac89ac0a
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 2 Feb 2023 03:27:41 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61484A258;
+        Thu,  2 Feb 2023 00:27:39 -0800 (PST)
+Received: from dggpeml500006.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4P6sNG3HPBzfYxK;
+        Thu,  2 Feb 2023 16:27:26 +0800 (CST)
+Received: from [10.174.178.240] (10.174.178.240) by
+ dggpeml500006.china.huawei.com (7.185.36.76) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Thu, 2 Feb 2023 16:27:36 +0800
+Subject: Re: [Question] neighbor entry doesn't switch to the STALE state after
+ the reachable timer expires
+To:     Julian Anastasov <ja@ssi.bg>
+CC:     Network Development <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Denis V. Lunev" <den@openvz.org>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Zhang Changzhong <zhangchangzhong@huawei.com>
+References: <b1d8722e-5660-c38e-848f-3220d642889d@huawei.com>
+ <99532c7f-161e-6d39-7680-ccc1f20349@ssi.bg>
+ <9ebd0210-a4bb-afda-8a4d-5041b8395d78@huawei.com>
+ <9ac5f4f6-36cc-cc6b-1220-f45db141656c@ssi.bg>
+ <1252089d-75db-a45c-d735-6883c772d95a@huawei.com>
+ <d95e4afc-3a95-a3a7-edd9-1bd13cdec90@ssi.bg>
+From:   Zhang Changzhong <zhangchangzhong@huawei.com>
+Message-ID: <dd4562bf-4663-6f26-ed61-977ade44a969@huawei.com>
+Date:   Thu, 2 Feb 2023 16:27:30 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
 MIME-Version: 1.0
-X-KLMS-Rule-ID: 1
-X-KLMS-Message-Action: clean
-X-KLMS-AntiSpam-Lua-Profiles: 175194 [Feb 02 2023]
-X-KLMS-AntiSpam-Version: 5.9.59.0
-X-KLMS-AntiSpam-Envelope-From: Ilia.Gavrilov@infotecs.ru
-X-KLMS-AntiSpam-Rate: 0
-X-KLMS-AntiSpam-Status: not_detected
-X-KLMS-AntiSpam-Method: none
-X-KLMS-AntiSpam-Auth: dkim=none
-X-KLMS-AntiSpam-Info: LuaCore: 502 502 69dee8ef46717dd3cb3eeb129cb7cc8dab9e30f6, {Tracking_from_domain_doesnt_match_to}, infotecs.ru:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
-X-MS-Exchange-Organization-SCL: -1
-X-KLMS-AntiSpam-Interceptor-Info: scan successful
-X-KLMS-AntiPhishing: Clean, bases: 2023/02/02 07:35:00
-X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, bases: 2023/02/02 02:42:00 #20830374
-X-KLMS-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <d95e4afc-3a95-a3a7-edd9-1bd13cdec90@ssi.bg>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.240]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500006.china.huawei.com (7.185.36.76)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 'acpiid' buffer in the parse_ivrs_acpihid function may overflow,
-because the string specifier in the format string sscanf()
-has no width limitation.
+On 2023/2/1 0:13, Julian Anastasov wrote:
+> 
+>> Just curious, why did you choose 'jiffies - MAX_JIFFY_OFFSET + 86400 * HZ'
+>> as the value of 'mint'?
+> 
+> 	It is too arbitrary :) Probably, just 'jiffies - MAX_JIFFY_OFFSET'
+> is enough or something depending on HZ/USER_HZ. I added 1 day for
+> timer to advance without leaving confirmed time behind the
+> jiffies - MAX_JIFFY_OFFSET zone but it is not needed.
+> 
+> 	What limits play here:
+> 
+> - the HZ/USER_HZ difference: jiffies_to_clock_t reports the 3 times
+> to user space, so we want to display values as large as possible.
+> Any HZ > 100 for USER_HZ=100 works for the jiffies - MAX_JIFFY_OFFSET.
+> HZ=100 does not work.
+> 
+> - users can use large values for sysctl vars which can keep the timer
+> running for long time and reach some outdated confirmed time
+> before neigh_add_timer() is called to correct it
+> 
+> 	If we choose mint = jiffies - MAX_JIFFY_OFFSET,
+> for 32-bit we will have:
+> 
+> Past                     Future
+> ++++++++++++++++++++++++++++++++++++++++++++++++++++
+> |  49  days   |  49 days  |         99 days        |
+> ++++++++++++++^+++++++++++^+++++++++++++++++++++++++
+>               ^           ^
+> DELAY+PROBE   |           |
+>             mint         now
+> 
+> - used/confirmed times should be up to 49 days behind jiffies but
+> we have 49 days to stay in timer without correcting them,
+> so they can go up to 99 days in the past before going in
+> the future and trigger the problem
+> 
+> - as we avoid the checks in neigh_timer_handler to save CPU cycles,
+> one needs crazy sysctl settings to keep the timer in DELAY+PROBE
+> states for 49 days. With default settings, it is no more than
+> half minute. In this case even
+> mint = jiffies - LONG_MAX + 86400 * HZ should work.
+> 
+> - REACHABLE state extends while confirmed time advances,
+> otherwise PROBE will need ARP reply to recheck the
+> times in neigh_add_timer while entering REACHABLE again
+> 
 
-Found by InfoTeCS on behalf of Linux Verification Center
-(linuxtesting.org) with SVACE.
+Wow, thank you so much for the detailed explanation! Are you planning
+to mainline it?
 
-Fixes: ca3bf5d47cec ("iommu/amd: Introduces ivrs_acpihid kernel parameter")
-Cc: stable@vger.kernel.org
-Signed-off-by: Ilia.Gavrilov <Ilia.Gavrilov@infotecs.ru>
----
-V2: Fix typo in the subject
- drivers/iommu/amd/init.c | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/iommu/amd/init.c b/drivers/iommu/amd/init.c
-index 467b194975b3..19a46b9f7357 100644
---- a/drivers/iommu/amd/init.c
-+++ b/drivers/iommu/amd/init.c
-@@ -3475,15 +3475,26 @@ static int __init parse_ivrs_hpet(char *str)
- 	return 1;
- }
-=20
-+#define ACPIID_LEN (ACPIHID_UID_LEN + ACPIHID_HID_LEN)
-+
- static int __init parse_ivrs_acpihid(char *str)
- {
- 	u32 seg =3D 0, bus, dev, fn;
- 	char *hid, *uid, *p, *addr;
--	char acpiid[ACPIHID_UID_LEN + ACPIHID_HID_LEN] =3D {0};
-+	char acpiid[ACPIID_LEN] =3D {0};
- 	int i;
-=20
- 	addr =3D strchr(str, '@');
- 	if (!addr) {
-+		addr =3D strchr(str, '=3D');
-+		if (!addr)
-+			goto not_found;
-+
-+		++addr;
-+
-+		if (strlen(addr) > ACPIID_LEN)
-+			goto not_found;
-+
- 		if (sscanf(str, "[%x:%x.%x]=3D%s", &bus, &dev, &fn, acpiid) =3D=3D 4 ||
- 		    sscanf(str, "[%x:%x:%x.%x]=3D%s", &seg, &bus, &dev, &fn, acpiid) =3D=
-=3D 5) {
- 			pr_warn("ivrs_acpihid%s option format deprecated; use ivrs_acpihid=3D%s=
-@%04x:%02x:%02x.%d instead\n",
-@@ -3496,6 +3507,9 @@ static int __init parse_ivrs_acpihid(char *str)
- 	/* We have the '@', make it the terminator to get just the acpiid */
- 	*addr++ =3D 0;
-=20
-+	if (strlen(str) > ACPIID_LEN + 1)
-+		goto not_found;
-+
- 	if (sscanf(str, "=3D%s", acpiid) !=3D 1)
- 		goto not_found;
-=20
---=20
-2.30.2
+Regards,
+Changzhong
