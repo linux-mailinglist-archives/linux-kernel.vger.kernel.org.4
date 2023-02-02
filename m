@@ -2,112 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDC8B688815
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 21:11:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC424688817
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 21:12:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232638AbjBBULb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 15:11:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53358 "EHLO
+        id S232690AbjBBUMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 15:12:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231185AbjBBUL2 (ORCPT
+        with ESMTP id S232494AbjBBUM1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 15:11:28 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B96847CC8B
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 12:11:26 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id h12so2755081wrv.10
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 12:11:26 -0800 (PST)
+        Thu, 2 Feb 2023 15:12:27 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA507C324
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 12:12:26 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id gr7so9341983ejb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 12:12:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QKfaeFsL9aNMopdxufkp2IOj7NlS3f6gXB+wFqAzJTE=;
-        b=vN3JI2ARCpraaEdQM11FGCQMOlnUl2EiBsUJBDzBVNgo+a+KL47mY0XwyQxzuuUwKT
-         Kid2yDxAk9fG4c7EQ7W3dH0jMRpCc6rXZGwnA65wacGBSS/Xjh9mhYQ3rDYt7Ks0olqL
-         qVY5H74w1ARtlNL5Z2YYH/FcM1TZsw7lBFQUHV4QCwLG/2CZtq8XBtNfTWTnaw7It3ri
-         Y2NlZNStd0XgikC9ARIVVMsuwiXvcx1TH3l31zP7I4oK1ljbiwBNAdkwjIJD1uYARB59
-         82F/ZqveA9BhXIJ1xZoUNwQPMBa7fLcMKEW/MUY7RcERm/uDTvqxcB6lkidtIwzs1O6B
-         PigQ==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=IHla39CiSn/iJKWSdMLdZQxGn8KNa71czZ//HIF7jnM=;
+        b=b8S977PCJvYsm5/wWBBCuQu2MDqR3X3fUtF8X1r8mnXi8t+O+XjMQWNZFQCdwK3bQu
+         bb2h40Lx6JiJTPlREK6y28ArbDlrecfcNjSuHQnO41A9KR2NvWMo8fBku8bWXW2ZsmOT
+         3i1S7Ci7/Mz77ZbG9n+tgyGlxlIcHYfqwqElIshS4Q7ZnQdxZJwxp6hOfOB3IdRqQktA
+         ly/hhMbpiYCBguunqDfA9g9Bu3cgo3d8McgbLXFFfupAu9Hqi1jppqaC0Qwjb+NRZC+h
+         nOm8+qHMKnw3bcVXpH6k/6Y+ne2nkjuHiDVxYx23qm/zBpVknekHllYAtdJURLIsp0U2
+         2E7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QKfaeFsL9aNMopdxufkp2IOj7NlS3f6gXB+wFqAzJTE=;
-        b=NxqDtlQ0NJxMSGSx6nErWxxWTGWY5Dw1IKkJLRKKR1Is8mDZGi2kyB4ugJmmKO2NSB
-         f2jr5gMx5Tn7KLDGRKQXeDk6epu3eL5ztwiDgf3ZEVgo+dI6WBKP8bHLjzRat6348yXO
-         exW+05aFEzVxDEtff0QP5H7ppVJVSh+8mw6ZD+hmtEwlUUkTw/D8O5ocRCdvEv2NyN1B
-         jZLNH13Tnk3R6y5Ot0sWoK8ZT381brxZWYT5ZwhxyKYSpu3oKvevRDYueteUYYiM0DW8
-         QuU4vBAwvq6gQ+nDFZA/ALp0Er8x+2vHE9kKYure4oe3T97OXKdjY8ZQGJ9aSVjQnMdU
-         OlsA==
-X-Gm-Message-State: AO0yUKWeKSviXf5ITPj4cE26A2z/W/8/5Vm9SeKHOxxfkB0AschSRnYF
-        1QgStycS0EJkpSxgaRRoGnURWg==
-X-Google-Smtp-Source: AK7set8XUGbekPpUIIJngK7BITDv4/cpkt+nT79mBe4msI9gfzSCAJH5ZupP7KZdQ0oyf4bB2i+fYQ==
-X-Received: by 2002:adf:e5c9:0:b0:2bf:e5fe:3674 with SMTP id a9-20020adfe5c9000000b002bfe5fe3674mr6256312wrn.24.1675368685149;
-        Thu, 02 Feb 2023 12:11:25 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id l25-20020adfa399000000b002bdd155ca4dsm316869wrb.48.2023.02.02.12.11.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 12:11:24 -0800 (PST)
-Message-ID: <f4a545c3-ef1f-39f0-25fd-d9563a950ce2@linaro.org>
-Date:   Thu, 2 Feb 2023 21:11:23 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IHla39CiSn/iJKWSdMLdZQxGn8KNa71czZ//HIF7jnM=;
+        b=pLVUDyi4Cserw/4wwWc6q0Z4KYxWo9Ht0GWnoHNVpDLPJyUkXF/SaxoWLhIcaRdxeN
+         +IXIetyx5IhWBXfiSLraPPVzzPx5RWeSgt8z7KvTSai8v+uM4kg11RBRkAULMA7OoMLz
+         +2Hg58CPdmz6IOeHWSz9dyqo+mFDIgNIyKy6a6vCl48pErTviilgHzer+umMrmZCc8ny
+         5ZhSbieDz50Uwg2d+352/YvuAuDRW/x2XTGhWVesvy0pVZw6fBb9jGdPnhsQyEkXcFrd
+         TX6dnKpVTOXck0gLNY3Sc33C3zv3pULNoxhn/zfUXEpF+se1HmhJnkS9CugQmoMvbr4r
+         Qitw==
+X-Gm-Message-State: AO0yUKVVw2roJsOyeMiWsg/0Ap2EgUxawoGZ+LBQVStGTFixJIZMthRY
+        4bhJO8DpjdBLtc6Df/jeRsaVJPG+GTVzQ6izAfWOOg==
+X-Google-Smtp-Source: AK7set9rIsutx+Ca2x+6Py7LpZCPwL53KUZH34ZDzhf5YBTLMNdyYbcMOhiSyZoKwKZW2sL2evQ4iBv7Bl6I/3PriEM=
+X-Received: by 2002:a17:906:2c42:b0:88a:b6ca:7d3a with SMTP id
+ f2-20020a1709062c4200b0088ab6ca7d3amr1942408ejh.1.1675368744381; Thu, 02 Feb
+ 2023 12:12:24 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v4 1/2] dt-bindings: leds-lp55xx: add ti,charge-pump-mode
-To:     Maarten Zanders <maarten.zanders@mind.be>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>
-Cc:     linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230202101032.26737-1-maarten.zanders@mind.be>
- <20230202101032.26737-2-maarten.zanders@mind.be>
- <20eb5589-8287-90bd-3703-2818b61c6ba3@linaro.org>
- <b9c6c74b-65d2-46bf-bd7c-e031d420f31c@mind.be>
- <5fbb6d80-7280-604a-3e1e-4bd98e9776cd@linaro.org>
- <fa47912f-ec10-f22b-0447-0b7c998711b3@mind.be>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <fa47912f-ec10-f22b-0447-0b7c998711b3@mind.be>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221101222520.never.109-kees@kernel.org> <20221101223321.1326815-5-keescook@chromium.org>
+ <CAMSo37W3gRkP02tSCxGX71ZDAt3WgPZrkTRTM6J1iQ4gvUS9vg@mail.gmail.com>
+ <CANDhNCogJrvt=yEXFK-xVmGjkcRxSNGZUqUeNw2MV9bFRrwPdQ@mail.gmail.com>
+ <63dbf04a.630a0220.2608a.0149@mx.google.com> <CANDhNCoJJs_jSAdr6uved=cK=-6+nzSJq3e_E3HgtiXHZXkVww@mail.gmail.com>
+ <63dc0a89.170a0220.49507.0091@mx.google.com> <CAMj1kXHTwFH-OADZ5nZXfZyuH-x7XJL3DMyiz2Tr_nCuup+xFA@mail.gmail.com>
+ <CAKwvOd=cuDb2NNK4uoUTYTLryFig47hvDQ08ta5XhjHsEhAG4A@mail.gmail.com>
+ <CABCJKuc+GvTHXu-CVedZs6CvPKJ8ySrVztkP2V3dsWn70xf7hA@mail.gmail.com> <63dc14a2.170a0220.beb2a.0275@mx.google.com>
+In-Reply-To: <63dc14a2.170a0220.beb2a.0275@mx.google.com>
+From:   Sami Tolvanen <samitolvanen@google.com>
+Date:   Thu, 2 Feb 2023 12:11:47 -0800
+Message-ID: <CABCJKueSasiWQvO2jZ-8KUF+c-dNgf87pR45sfHHCQMyyTvL0Q@mail.gmail.com>
+Subject: Re: [PATCH 5/6] driver core: Add __alloc_size hint to devm allocators
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        John Stultz <jstultz@google.com>,
+        Yongqin Liu <yongqin.liu@linaro.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Nishanth Menon <nm@ti.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Won Chung <wonchung@google.com>,
+        David Gow <davidgow@google.com>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-hardening@vger.kernel.org,
+        llvm@lists.linux.dev, Sumit Semwal <sumit.semwal@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/02/2023 15:12, Maarten Zanders wrote:
-> 
-> On 2/2/23 14:43, Krzysztof Kozlowski wrote:
->>
->> Strings in DTS are usually easier to for humans to read, but it's not a
->> requirement to use them. The problem of storing register values is that
->> binding is tied/coupled with hardware programming model, so you cannot
->> add a new device if the register value is a bit different (e.g.
->> LP55XX_CP_OFF is 0x1). You need entire new binding for such case. With
->> string - no need.
-> I understand and this is why I started with the string in the first 
-> place (as suggested by yourself in V1).
->> With binding constants (IDs) also no need, so was this
->> the intention? Just to be clear - it is then ID or binding constant, not
->> a value for hardware register.
->>
-> For simplicity sake, yes, now the setting is propagating directly into 
-> the register as a bit value. But this is how the current implementation 
-> of the drivers work. If we add a device in the future which indeed has 
-> different bit mappings, that driver will have to do a mapping of the DT 
-> binding to its own bit field definitions. I consider this DT binding as 
-> the "master", which is now conveniently chosen to match the register values.
+On Thu, Feb 2, 2023 at 11:53 AM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Thu, Feb 02, 2023 at 11:49:42AM -0800, Sami Tolvanen wrote:
+> > A quick look at Clang's source code suggests that Intrinsic::ubsantrap
+> > already accepts the handler ID (from the SanitizerHandler enum) as an
+> > argument and the arm64 LLVM back-end appears to encode the value as an
+> > immediate for the brk instruction. I didn't confirm that this actually
+> > works, but perhaps we just need to teach the kernel about the possible
+> > values?
+>
+> Oh excellent. Yeah, if that's all that's needed here that would be
+> great. What are the values?
 
-OK, that makes sense.
+The arm64 brk immediate encoding seems to be "ubsantrap arg | 'U' << 8":
 
-Best regards,
-Krzysztof
+https://github.com/llvm/llvm-project/blob/main/llvm/lib/Target/AArch64/AArch64InstrInfo.td#L7571
 
+The argument values come from the SanitizerHandler enum, which is
+populated from this list:
+
+https://github.com/llvm/llvm-project/blob/main/clang/lib/CodeGen/CodeGenFunction.h#L113
+
+Therefore, according to the tests, for ubsantrap(12) we'll get brk
+#0x550c, for example:
+
+https://github.com/llvm/llvm-project/blob/main/llvm/test/CodeGen/AArch64/ubsantrap.ll
+
+Sami
