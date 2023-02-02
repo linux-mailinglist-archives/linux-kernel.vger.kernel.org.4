@@ -2,204 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BF416881F0
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 16:26:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3E7F6881C7
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 16:24:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232913AbjBBP0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 10:26:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44532 "EHLO
+        id S232759AbjBBPYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 10:24:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231903AbjBBP02 (ORCPT
+        with ESMTP id S232806AbjBBPYH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 10:26:28 -0500
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on20601.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eae::601])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C01F6F735;
-        Thu,  2 Feb 2023 07:25:46 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TdSThlvzQGwVDk7Gntwvqqah6HFG+pduxQeW85hkI1dMOy+fuw8xriE9DOElJielv01JPUIoyqbfxs9freMlrGWeOt8uiGDO9S66keE8SC7/sJKV0FDPj9Smu1XLDcOPiUDzuUmTui4c8S1MiHLsCNZpa3ptpdEJ3e/ysbOzHH1m09L5Qp/vwZ6ddLetTEtN73diLw5nFveYZFE2cYeaFfm+hILTd1g3xeiW/NrruZPyUvrDlgA7iT08EFX01PxJKUfA0cpQVPqUV8N9dnv7ZxgSRtOtVym741sEmvEETE9rpzmFuiKOesQyAtA1qFK7FKkiO/VQX6VqwN+NjR/3hQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JrN+S0no9tJJWOPy0MesAGh9gOiwa6v7pOuBcPHrftY=;
- b=X0mek7sYEcwn3EHTn0hjiJiEOQxj6ZU+lxeDuC9yHoBqGFDl/4RXnMY/KkIw3xA3gcPB3LoMXKA4jXeOw+ncPoqWhtEJUvTouR/a2k/+L/sWu+/MY+PKcb0XNGliI1ysuz0WnyAWsBFMeMWdTYLkJx+zv5esFcTYY/yZVgBElnw7N4stmLr92J/TkyGeMNWViv/yAAxk+CkRzv+0SxmjqvrYmy1NqYlFqhMkORFFW+bvQ6pxjNIkOQ/QzEYoMJ/QXuXXE5Te9rFVVjF79gAtopa2hCKEZiFTgS7GuLMrXKr+rnlOed0pBYGiOpnrO7dJgQB7+BgV72irplOXgJLaGw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JrN+S0no9tJJWOPy0MesAGh9gOiwa6v7pOuBcPHrftY=;
- b=GqDQPuJjw0geLo+5XK3XQqDnAyydAS/Uwwym855nnx+PnSDokdWhSadppDJF+t/uJyA4C/XElL2jc0YdPj9TRa9w+HqPjlN6dgkFtWfX9No+cm0vDRLrU0OIiwD/ayeZB3eJGTpQfZI6cFmdwhBMsNmWExXurmA5YAiUqAcOhkk=
-Received: from BN9PR03CA0680.namprd03.prod.outlook.com (2603:10b6:408:10e::25)
- by DM4PR12MB5311.namprd12.prod.outlook.com (2603:10b6:5:39f::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.24; Thu, 2 Feb
- 2023 15:25:22 +0000
-Received: from BL02EPF000108EA.namprd05.prod.outlook.com
- (2603:10b6:408:10e::4) by BN9PR03CA0680.outlook.office365.com
- (2603:10b6:408:10e::25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.27 via Frontend
- Transport; Thu, 2 Feb 2023 15:25:22 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BL02EPF000108EA.mail.protection.outlook.com (10.167.241.203) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6064.21 via Frontend Transport; Thu, 2 Feb 2023 15:25:22 +0000
-Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 2 Feb
- 2023 09:25:22 -0600
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB05.amd.com
- (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 2 Feb
- 2023 09:25:21 -0600
-Received: from xhdsgoud40.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
- Transport; Thu, 2 Feb 2023 09:24:58 -0600
-From:   Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-To:     <broonie@kernel.org>, <miquel.raynal@bootlin.com>,
-        <richard@nod.at>, <vigneshr@ti.com>, <jic23@kernel.org>,
-        <tudor.ambarus@microchip.com>, <pratyush@kernel.org>,
-        <sanju.mehta@amd.com>, <chin-ting_kuo@aspeedtech.com>,
-        <clg@kaod.org>, <kdasu.kdev@gmail.com>, <f.fainelli@gmail.com>,
-        <rjui@broadcom.com>, <sbranden@broadcom.com>,
-        <eajames@linux.ibm.com>, <olteanv@gmail.com>, <han.xu@nxp.com>,
-        <john.garry@huawei.com>, <shawnguo@kernel.org>,
-        <s.hauer@pengutronix.de>, <narmstrong@baylibre.com>,
-        <khilman@baylibre.com>, <matthias.bgg@gmail.com>,
-        <haibo.chen@nxp.com>, <linus.walleij@linaro.org>,
-        <daniel@zonque.org>, <haojian.zhuang@gmail.com>,
-        <robert.jarzmik@free.fr>, <agross@kernel.org>,
-        <bjorn.andersson@linaro.org>, <heiko@sntech.de>,
-        <krzysztof.kozlowski@linaro.org>, <andi@etezian.org>,
-        <mcoquelin.stm32@gmail.com>, <alexandre.torgue@foss.st.com>,
-        <wens@csie.org>, <jernej.skrabec@gmail.com>, <samuel@sholland.org>,
-        <masahisa.kojima@linaro.org>, <jaswinder.singh@linaro.org>,
-        <rostedt@goodmis.org>, <mingo@redhat.com>,
-        <l.stelmach@samsung.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <alex.aring@gmail.com>, <stefan@datenfreihafen.org>,
-        <kvalo@kernel.org>
-CC:     <git@amd.com>, <linux-spi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <joel@jms.id.au>,
-        <andrew@aj.id.au>, <radu_nicolae.pirea@upb.ro>,
-        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <claudiu.beznea@microchip.com>,
-        <bcm-kernel-feedback-list@broadcom.com>, <fancer.lancer@gmail.com>,
-        <kernel@pengutronix.de>, <festevam@gmail.com>, <linux-imx@nxp.com>,
-        <jbrunet@baylibre.com>, <martin.blumenstingl@googlemail.com>,
-        <avifishman70@gmail.com>, <tmaimon77@gmail.com>,
-        <tali.perry1@gmail.com>, <venture@google.com>, <yuenn@google.com>,
-        <benjaminfair@google.com>, <yogeshgaur.83@gmail.com>,
-        <konrad.dybcio@somainline.org>, <alim.akhtar@samsung.com>,
-        <ldewangan@nvidia.com>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <michal.simek@amd.com>,
-        <linux-aspeed@lists.ozlabs.org>, <openbmc@lists.ozlabs.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-rpi-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>,
-        <linux-rockchip@lists.infradead.org>,
-        <linux-samsung-soc@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-sunxi@lists.linux.dev>, <linux-tegra@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-wpan@vger.kernel.org>,
-        <libertas-dev@lists.infradead.org>,
-        <linux-wireless@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
-        <lars@metafoo.de>, <Michael.Hennerich@analog.com>,
-        <linux-iio@vger.kernel.org>, <michael@walle.cc>,
-        <palmer@dabbelt.com>, <linux-riscv@lists.infradead.org>,
-        <amitrkcian2002@gmail.com>,
-        "Amit Kumar Mahapatra" <amit.kumar-mahapatra@amd.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH v3 05/13] staging: Replace all spi->chip_select and spi->cs_gpiod references with function call
-Date:   Thu, 2 Feb 2023 20:52:50 +0530
-Message-ID: <20230202152258.512973-6-amit.kumar-mahapatra@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230202152258.512973-1-amit.kumar-mahapatra@amd.com>
-References: <20230202152258.512973-1-amit.kumar-mahapatra@amd.com>
+        Thu, 2 Feb 2023 10:24:07 -0500
+X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 02 Feb 2023 07:24:04 PST
+Received: from esa1.hc3370-68.iphmx.com (esa1.hc3370-68.iphmx.com [216.71.145.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEEF476A1
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 07:24:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=citrix.com; s=securemail; t=1675351444;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=uWwpvteQUwmwKhSS9o8HppM0gMs4+njU0DW+fkM+w/E=;
+  b=KE4DO6o9X+dAgW78N4SGPMj3e3AjexT2EKFgPIJq6+RQ+OOEEYEGRwkQ
+   Owaz1siEEcHopvyQ9W02LIQW8JoLTRUtu6aoX+PSIwrd34++JnpTpdSlx
+   rZ0z03a52NU2qwndDJ3sraEf5nHMyDHRr0nVmzitUbCUaR75zVHXPS0NE
+   4=;
+Authentication-Results: esa1.hc3370-68.iphmx.com; dkim=none (message not signed) header.i=none
+X-SBRS: 4.0
+X-MesageID: 95796629
+X-Ironport-Server: esa1.hc3370-68.iphmx.com
+X-Remote-IP: 162.221.156.123
+X-Policy: $RELAYED
+IronPort-Data: A9a23:U78376tvwPfi9GgP+2kzYaQfMefnVGFeMUV32f8akzHdYApBsoF/q
+ tZmKW2Ob/iCZTb9e4x3btjn9BxQ65OHndBhSARtry9nESsa+JbJXdiXEBz9bniYRiHhoOCLz
+ O1FM4Wdc5pkJpP4jk3wWlQ0hSAkjclkfpKlVKiffHg0HVU/IMsYoUoLs/YjhYJ1isSODQqIu
+ Nfjy+XSI1bg0DNvWo4uw/vrRChH4bKj51v0gnRkPaoQ5AWGzSFPZH4iDfrZw0XQE9E88tGSH
+ 44v/JnhlkvF8hEkDM+Sk7qTWiXmlZaLYGBiIlIPM0STqkAqSh4ai87XB9JFAatjsB2bnsgZ9
+ Tl4ncfYpTHFnEH7sL91vxFwS0mSNEDdkVPNCSDXXce7lyUqf5ZwqhnH4Y5f0YAwo45K7W9yG
+ fMwGCsIXEuu1rOM2I34QctMiuU8NtTZI9ZK0p1g5Wmx4fcORJnCR+PB5MNC3Sd2jcdLdRrcT
+ 5NHM3w1Nk2GOkARfA5NU/rSn8/x7pX7WzBUtlOT47Yw+W/Q5AdwzKLsIJzefdniqcB9zxvH9
+ zyYpTWR7hcyJuzA12bY0yKXgerTwwfafZJJFb3o+as/6LGU7jNKU0BHPbehmtGlh0+xX9tZJ
+ 2QO9yYupLR0/0uuJvH2WwCjvHOe+xIRRddUO/c35AGE1uzf5APxLmMPRyNFZt0rnNU7STwjy
+ hmCmNaBLThutqCFDHGQ7LGZqRusNiUPa2wPfykJSU0C+daLnW0opkuRFJA5Svfz14CrX2iqm
+ FhmsRTSmZ0jlss5jIjqrGrfvHGnhLjFbxEv+zfICzfNAhxCWKapYImh6F7+5PlGLZqEQlTpg
+ EXoi/Ry/8hVU8jTyXXlrPElWejwuq3baGG0bUtHRcFJyti7x5K0kWm8ChlaLVwhDMsLcCSBj
+ KT76VIIv8870JdHgMZKj2ON5yYCl/CI+TfNDKq8gj9yjn9ZKme6ENlGPxL44owUuBFEfVsDE
+ Zmaa92wKn0RFL5qyjG7L89Ej+B2nH9gmTuMFcuhp/hC7VZ5TCfFIYrpzXPUNrxphE96iFq9H
+ ylj2zuilEwEDbyWjtj/+o8PN1EaRUXX9rivw/G7gtWre1I8cEl4Uq+5/F/UU9A990ijvruSr
+ y7Vt44x4AaXuEAr3i3RMSg+NuK0AcsvxZ/5VAR1VWuVN7EYSd7HxM8im1EfJ9HLKMQLISZIc
+ sQ4
+IronPort-HdrOrdr: A9a23:tKoZDqoRhagihA+plqALHG0aV5urL9V00zEX/kB9WHVpm5Oj+v
+ xGzc5w6farsl0ssSkb6Ku90KnpewK+yXcH2/hqAV7CZnishILMFu1fBOTZslrd8kHFl9K1kJ
+ 0QC5SWa+eAR2SS7/yKhjVQeuxIqLbozEnrv5am854Hd3AJV0gU1XYcNu/tKDwSeOApP/oEPa
+ vZwvACiyureHwRYMj+LGICRfL/q9rCk4+jSQIaBjY8gTP+wQ+A2frfKVy1zx0eWzRAzfMJ6m
+ 7eiTH04a2lrrWS1gLc7WnO9J5b8eGRheerRfb8xPT9GA+cyjpAV74RGIFqewpF4t1H3Wxa0e
+ UkZS1QevibpUmhOl1d6iGdpjUImAxel0MKj2XozEcL6PaJOw4SGo5Pg5lUfQDe7FdltNZg0L
+ hT12bcrJZPCwjc9R6NkeQg+Csa5XZcjEBS5dL7tUYvJrc2eftUt8gS7UlVGJAPEGbz750mCv
+ BnCIXZ6OxNeV2XYnjFti03qebcFkgbD1ODWAwPq8aV2z9ZkDRwyFYZ3tUWmjMF+IgmQ5dJ6u
+ zYOuBjla1ITMURcaVhbd1xCPefGyjIW1bBIWiSKVPoGOUOPG/MsYf+5PEv6OSjaPUzve4PcV
+ T6ISFlXEIJCjLT4Je1reN2Gzj2MRSAYQg=
+X-IronPort-AV: E=Sophos;i="5.97,267,1669093200"; 
+   d="scan'208";a="95796629"
+From:   =?UTF-8?q?Edwin=20T=C3=B6r=C3=B6k?= <edvin.torok@citrix.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     =?UTF-8?q?Edwin=20T=C3=B6r=C3=B6k?= <edvin.torok@citrix.com>,
+        "Christine Caulfield" <ccaulfie@redhat.com>,
+        David Teigland <teigland@redhat.com>,
+        <cluster-devel@redhat.com>
+Subject: [PATCH] DLM: increase socket backlog to avoid hangs with 16 nodes
+Date:   Thu, 2 Feb 2023 15:22:50 +0000
+Message-ID: <6b008b94e3b295f572502abec8ae15da46133a64.1675351367.git.edwin.torok@cloud.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF000108EA:EE_|DM4PR12MB5311:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6d202d06-f835-42d7-cff7-08db0531b38f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: G3yVV2eUeeaSFcpMMavWKG3bPVDfeZKn/uHfnSPGICVs0W24rRMHUOvlpsd5tVlfZeVO2CK4nsWrx58uqhufzfoK4rPNl2qvOFaH2wTZMtreD4eOs4XJH8fUvqDInGfy1o9+Hr366DwF4GTMMJpQl2tkwurkN924on2UkphxS/MmjKv5gGAtnPophTyyOeFP1dZEckruvd9tbgNHlQdJixEatI2KzdRYOkyQCYe9EgJflEaFMQGxdkM88qDd8rxWN40IHXuxu3r9WrqswHzD+8ES8eZDwuPq1didT9ki8qOqiDyOBKBKJisoMuWHAG4z9K9QIRwJzhvBhhNR5WXTJInKWYF1UoINCq6qhKPWIgSg3gDrIJW2+LL+j+zVfnYRUrWZUcI4llBNYFJg+cotkVAJGN+9dXPALuqXCH7tnIq6C+M6sVE4WgSu4U+TgLRnaVp/ACqYmu+cn1KwYQH4LzJZzWIilrJaCCj5RvSnVFwh6PW8pzNrCJjQougos7BN/AViQ9aMMloCz/wvxX/t94Sh14ocIZipZdYEWufQHfLSrk+sGOKRVBH4RayBgbCxhexm57jjtO+HPwdae7I6pjlyBzttthQfnezdm5IW0fm5k5HZfiqbxiyiV0YnXtbTYz4rwFCjp3je6QZjMGP/iQ2ru3YnjkBTRLeICGlDb2YZXtcMs/CF6Vg0as3Gyw5HfZOSubFjQ1kUaLJCRnn76JrQT+dqYGiPJ6syT9u6+5taED+tSum4mSxLZywTsHnFTbeFl3/7n99UvLIIq4Bu47ft5j/NBGxxni0PQlVz5g7LblDUdITtmvhweGpysQZlTws7ZgO+ZE/INleVcaxgWw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(376002)(39860400002)(396003)(136003)(346002)(451199018)(36840700001)(40470700004)(46966006)(70206006)(478600001)(86362001)(8936002)(4326008)(41300700001)(47076005)(8676002)(36860700001)(70586007)(83380400001)(336012)(426003)(2906002)(26005)(186003)(356005)(6666004)(82740400003)(921005)(81166007)(7406005)(7276002)(7366002)(7416002)(7336002)(5660300002)(40460700003)(36756003)(1076003)(40480700001)(2616005)(54906003)(110136005)(82310400005)(316002)(83996005)(2101003)(41080700001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Feb 2023 15:25:22.5577
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6d202d06-f835-42d7-cff7-08db0531b38f
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL02EPF000108EA.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5311
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Supporting multi-cs in spi drivers would require the chip_select & cs_gpiod
-members of struct spi_device to be an array. But changing the type of these
-members to array would break the spi driver functionality. To make the
-transition smoother introduced four new APIs to get/set the
-spi->chip_select & spi->cs_gpiod and replaced all spi->chip_select and
-spi->cs_gpiod references with get or set API calls.
-While adding multi-cs support in further patches the chip_select & cs_gpiod
-members of the spi_device structure would be converted to arrays & the
-"idx" parameter of the APIs would be used as array index i.e.,
-spi->chip_select[idx] & spi->cs_gpiod[idx] respectively.
+On a 16 node virtual cluster with e1000 NICs joining the 12th node prints
+SYN flood warnings for the DLM port:
+Dec 21 01:46:41 localhost kernel: [ 2146.516664] TCP: request_sock_TCP: Possible SYN flooding on port 21064. Sending cookies.  Check SNMP counters.
 
-Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reviewed-by: Michal Simek <michal.simek@amd.com>
+And then joining a DLM lockspace hangs:
+```
+Dec 21 01:49:00 localhost kernel: [ 2285.780913] INFO: task xapi-clusterd:17638 blocked for more than 120 seconds.                                                                     │
+Dec 21 01:49:00 localhost kernel: [ 2285.786476]       Not tainted 4.4.0+10 #1                                                                                                         │
+Dec 21 01:49:00 localhost kernel: [ 2285.789043] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.                                                             │
+Dec 21 01:49:00 localhost kernel: [ 2285.794611] xapi-clusterd   D ffff88001930bc58     0 17638      1 0x00000000                                                                      │
+Dec 21 01:49:00 localhost kernel: [ 2285.794615]  ffff88001930bc58 ffff880025593800 ffff880022433800 ffff88001930c000                                                                  │
+Dec 21 01:49:00 localhost kernel: [ 2285.794617]  ffff88000ef4a660 ffff88000ef4a658 ffff880022433800 ffff88000ef4a000                                                                  │
+Dec 21 01:49:00 localhost kernel: [ 2285.794619]  ffff88001930bc70 ffffffff8159f6b4 7fffffffffffffff ffff88001930bd10
+Dec 21 01:49:00 localhost kernel: [ 2285.794644]  [<ffffffff811570fe>] ? printk+0x4d/0x4f                                                                                              │
+Dec 21 01:49:00 localhost kernel: [ 2285.794647]  [<ffffffff810b1741>] ? __raw_callee_save___pv_queued_spin_unlock+0x11/0x20                                                           │
+Dec 21 01:49:00 localhost kernel: [ 2285.794649]  [<ffffffff815a085d>] wait_for_completion+0x9d/0x110                                                                                  │
+Dec 21 01:49:00 localhost kernel: [ 2285.794653]  [<ffffffff810979e0>] ? wake_up_q+0x80/0x80                                                                                           │
+Dec 21 01:49:00 localhost kernel: [ 2285.794661]  [<ffffffffa03fa4b8>] dlm_new_lockspace+0x908/0xac0 [dlm]                                                                             │
+Dec 21 01:49:00 localhost kernel: [ 2285.794665]  [<ffffffff810aaa60>] ? prepare_to_wait_event+0x100/0x100                                                                             │
+Dec 21 01:49:00 localhost kernel: [ 2285.794670]  [<ffffffffa0402e37>] device_write+0x497/0x6b0 [dlm]                                                                                  │
+Dec 21 01:49:00 localhost kernel: [ 2285.794673]  [<ffffffff811834f0>] ? handle_mm_fault+0x7f0/0x13b0                                                                                  │
+Dec 21 01:49:00 localhost kernel: [ 2285.794677]  [<ffffffff811b4438>] __vfs_write+0x28/0xd0                                                                                           │
+Dec 21 01:49:00 localhost kernel: [ 2285.794679]  [<ffffffff811b4b7f>] ? rw_verify_area+0x6f/0xd0                                                                                      ┤
+Dec 21 01:49:00 localhost kernel: [ 2285.794681]  [<ffffffff811b4dc1>] vfs_write+0xb1/0x190                                                                                            │
+Dec 21 01:49:00 localhost kernel: [ 2285.794686]  [<ffffffff8105ffc2>] ? __do_page_fault+0x302/0x420                                                                                   │
+Dec 21 01:49:00 localhost kernel: [ 2285.794688]  [<ffffffff811b5986>] SyS_write+0x46/0xa0                                                                                             │
+Dec 21 01:49:00 localhost kernel: [ 2285.794690]  [<ffffffff815a31ae>] entry_SYSCALL_64_fastpath+0x12/0x71
+```
+
+The previous limit of 5 seems like an arbitrary number, that doesn't match any
+known DLM cluster size upper bound limit.
+
+Signed-off-by: Edwin Török <edvin.torok@citrix.com>
+Cc: Christine Caulfield <ccaulfie@redhat.com>
+Cc: David Teigland <teigland@redhat.com>
+Cc: cluster-devel@redhat.com
 ---
- drivers/staging/fbtft/fbtft-core.c | 2 +-
- drivers/staging/greybus/spilib.c   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Notes from 2023:
+  This patch was initially developed on 21 Dec 2017, and in production use ever since.
+I expected to drop out of our patchqueue at the next kernel upgrade, however it
+hasn't, so I probably forgot to send it.
 
-diff --git a/drivers/staging/fbtft/fbtft-core.c b/drivers/staging/fbtft/fbtft-core.c
-index afaba94d1d1c..3a4abf3bae40 100644
---- a/drivers/staging/fbtft/fbtft-core.c
-+++ b/drivers/staging/fbtft/fbtft-core.c
-@@ -840,7 +840,7 @@ int fbtft_register_framebuffer(struct fb_info *fb_info)
- 		sprintf(text1, ", %zu KiB buffer memory", par->txbuf.len >> 10);
- 	if (spi)
- 		sprintf(text2, ", spi%d.%d at %d MHz", spi->master->bus_num,
--			spi->chip_select, spi->max_speed_hz / 1000000);
-+			spi_get_chipselect(spi, 0), spi->max_speed_hz / 1000000);
- 	dev_info(fb_info->dev,
- 		 "%s frame buffer, %dx%d, %d KiB video memory%s, fps=%lu%s\n",
- 		 fb_info->fix.id, fb_info->var.xres, fb_info->var.yres,
-diff --git a/drivers/staging/greybus/spilib.c b/drivers/staging/greybus/spilib.c
-index ad0700a0bb81..efb3bec58e15 100644
---- a/drivers/staging/greybus/spilib.c
-+++ b/drivers/staging/greybus/spilib.c
-@@ -237,7 +237,7 @@ static struct gb_operation *gb_spi_operation_create(struct gb_spilib *spi,
- 	request = operation->request->payload;
- 	request->count = cpu_to_le16(count);
- 	request->mode = dev->mode;
--	request->chip_select = dev->chip_select;
-+	request->chip_select = spi_get_chipselect(dev, 0);
+I haven't noticed this bug again with the patch applied, and the previous value
+of '5' seems like an arbitrary limit not matching any supported upper bounds
+on DLM cluster sizes, so this patch has (unintentionally) had a 5 year test
+cycle.
+
+Although the join hanging forever like that may still be a bug, if the SYN cookies
+consistently trigger it lets try to avoid the bug by avoiding the SYN cookies.
+---
+ fs/dlm/lowcomms.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/fs/dlm/lowcomms.c b/fs/dlm/lowcomms.c
+index 4450721ec..105c9138b 100644
+--- a/fs/dlm/lowcomms.c
++++ b/fs/dlm/lowcomms.c
+@@ -1774,7 +1774,7 @@ static int dlm_listen_for_all(void)
+ 	sock->sk->sk_data_ready = lowcomms_listen_data_ready;
+ 	release_sock(sock->sk);
  
- 	gb_xfer = &request->transfers[0];
- 	tx_data = gb_xfer + count;	/* place tx data after last gb_xfer */
+-	result = sock->ops->listen(sock, 5);
++	result = sock->ops->listen(sock, 128);
+ 	if (result < 0) {
+ 		dlm_close_sock(&listen_con.sock);
+ 		return result;
 -- 
-2.25.1
+2.34.1
 
