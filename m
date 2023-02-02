@@ -2,104 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0674F687839
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:05:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED5CA68784B
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:08:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232158AbjBBJFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 04:05:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47986 "EHLO
+        id S232392AbjBBJH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 04:07:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231760AbjBBJFL (ORCPT
+        with ESMTP id S229602AbjBBJH5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 04:05:11 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B86F9760
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 01:05:09 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id o18so1037993wrj.3
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 01:05:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Aas7g+6SlCahM4/JlKt9tccnwstoDHT1GhyyZDuflH0=;
-        b=KQzCWLPYLz6sS6DcKgNPc6EFZAxwOkCbtTsexR217dSXUPbHC3nYi2WxD9DQDjED05
-         ffQv1kIBRUlDvjY399KnyQs2maAWoJV0bEQBlNxBtJZLWbxODpZrpFPQPIi3Lx8jKOWy
-         s4o6+XeIpUuyggvq+nOxU9B3lR6HK3+/QXK2RhkFdLgj9I6RM6tb3VOGxbO4p7h9pJD8
-         /G5nJNrbnLjvxBit8PEoSrElFW5YRSVBfWsYN2r6C8tiIHfTinvZFgqQjbbk4nmuXRvm
-         LXG7kjYnd32dZn8O8uMcCgkqiPvkwVySm+eLsUN7E8IWquoWwLrXMBwfNkvS54U1og81
-         tymQ==
+        Thu, 2 Feb 2023 04:07:57 -0500
+Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D19DC5457E;
+        Thu,  2 Feb 2023 01:07:54 -0800 (PST)
+Received: by mail-il1-f169.google.com with SMTP id k12so511989ilv.10;
+        Thu, 02 Feb 2023 01:07:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Aas7g+6SlCahM4/JlKt9tccnwstoDHT1GhyyZDuflH0=;
-        b=PONtQvcnDOJ3kFMrntdR+L30yO4AeFdOk3ppsl49Ppm6s/v1kWk1oUA5Uh4cid8Xrb
-         J3OwMPBAmvQXgplLmnSy7KNwTjjd+bvEBsJTbC4WrkYajNvXervxCjFOBR/tSqWaOPDX
-         1kbTXiZC5y5etdFYj+b0mVCipQwDV8ceNWnns0hbvSbUZisSmASDx7BAhVd8Yb5uDLKf
-         SDTyxyf4xwsZvLx4lu5Q173gGeLnP2okKrfM05PhGcZLF8dQViD2f6SuPVveqrNRFtf+
-         EUsl11E5GwvrPHx4BFx7lWiZsFt+thQCX2rYdOabLlFprU2N1PqsqXsEPnVxuzvvEqeN
-         G5Hg==
-X-Gm-Message-State: AO0yUKXF/EtTAyd/bisdHhbH/0oj2MUfoIeZCKXjJiVj8CdRsVR6Y/rc
-        x+v8xP4RA9lpYWt+F8s59g749g==
-X-Google-Smtp-Source: AK7set8ZOU9bRmC1mxzolKIaIbHjOQkCc9aGTdJjEUm4NNeCFulVKYIvbggDfwzjSNz4W+mMWkA4Yw==
-X-Received: by 2002:a5d:6850:0:b0:2bf:e443:ea6e with SMTP id o16-20020a5d6850000000b002bfe443ea6emr4661447wrw.57.1675328707834;
-        Thu, 02 Feb 2023 01:05:07 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id f9-20020a056000128900b002bf95500254sm8356055wrx.64.2023.02.02.01.05.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 01:05:07 -0800 (PST)
-Message-ID: <b8703dbe-9b4e-86e7-b24d-ff3b3c315327@linaro.org>
-Date:   Thu, 2 Feb 2023 10:05:04 +0100
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zIRdF85vz4XW6DcLekDt+urDLZMgRkhDxffDT09XGig=;
+        b=v3/AjWBkPGYl8kZF6pnz+36Rs5AN0jHmUCERNFHTjZL+/aGN640pU7HIdm3j734V6i
+         Miy1Tcc3w9MfVzJyV8/iEFWWOO3xGh8EzbALzUYhUhD8VwjAKDMpjNO7O6G52etYmiFn
+         XWuqWZT7/M7y9XWEOHnL5f85f6aOxY7gS5x/L9ypzzBGKMlxH6TTZnIew14Vvdy+PvBs
+         yvkq0SWRG8WidfW1jUh4BSbNmZ4u8CfNNtTTeMPwqaiAURiLEJTzA0qONRvJ5FAer6Mk
+         SKzmpouLyjDAih6P8z3qEctda0plgayGq96lZOtyDWwqsfXqovXFOggjPaCsUGRsEWuQ
+         5M9w==
+X-Gm-Message-State: AO0yUKXbzENfXT0UsCFweJ1wnERo9ablNIXCQ83wIvQ2WH5q2P105Q/N
+        +p1KJDq17S7c0R9yalFC0X8=
+X-Google-Smtp-Source: AK7set8lXx3igPuv310qG/qtYBdKrnlNfIecy7hsXLIWasL58nylKiiZ/rDT5vvQZvxmn8FET4zRAw==
+X-Received: by 2002:a92:c56a:0:b0:310:eb55:3856 with SMTP id b10-20020a92c56a000000b00310eb553856mr1376591ilj.9.1675328873930;
+        Thu, 02 Feb 2023 01:07:53 -0800 (PST)
+Received: from noodle.cs.purdue.edu (switch-lwsn2133-z1r11.cs.purdue.edu. [128.10.127.250])
+        by smtp.googlemail.com with ESMTPSA id x12-20020a92dc4c000000b003110c59e2easm2060637ilq.37.2023.02.02.01.07.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Feb 2023 01:07:53 -0800 (PST)
+From:   Sungwoo Kim <iam@sung-woo.kim>
+To:     happiness.sung.woo@gmail.com
+Cc:     benquike@gmail.com, davem@davemloft.net, daveti@purdue.edu,
+        edumazet@google.com, johan.hedberg@gmail.com, kuba@kernel.org,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        luiz.dentz@gmail.com, marcel@holtmann.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, wuruoyu@me.com, Sungwoo Kim <iam@sung-woo.kim>
+Subject: [PATCH] Bluetooth: L2CAP: Fix use-after-free
+Date:   Thu,  2 Feb 2023 04:05:10 -0500
+Message-Id: <20230202090509.2774062-1-iam@sung-woo.kim>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230123091708.4112735-1-git@sung-woo.kim>
+References: <20230123091708.4112735-1-git@sung-woo.kim>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH V5 7/7] arm64: defconfig: Enable IPQ9574 SoC base configs
-Content-Language: en-US
-To:     Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, linus.walleij@linaro.org,
-        catalin.marinas@arm.com, will@kernel.org, p.zabel@pengutronix.de,
-        shawnguo@kernel.org, arnd@arndb.de, marcel.ziswiler@toradex.com,
-        dmitry.baryshkov@linaro.org, nfraprado@collabora.com,
-        broonie@kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
-        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
-        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
-        quic_poovendh@quicinc.com
-References: <20230202083031.10457-1-quic_devipriy@quicinc.com>
- <20230202083031.10457-8-quic_devipriy@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230202083031.10457-8-quic_devipriy@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/02/2023 09:30, Devi Priya wrote:
-> Enables clk & pinctrl related configs
+Due to the race condition between l2cap_sock_cleanup_listen and
+l2cap_sock_close_cb, l2cap_sock_kill can receive already freed sk,
+resulting in use-after-free inside l2cap_sock_kill.
+This patch prevent this by adding a null check in l2cap_sock_kill.
 
-"for Qualcomm IPQ9574 SoC".
+Context 1:
+l2cap_sock_cleanup_listen();
+  // context switched
+  l2cap_chan_lock(chan);
+  l2cap_sock_kill(sk); // <-- sk is already freed below
 
-Because defconfig is for all sub-architectures, thus IPQ9574 is
-non-obvious for most of people.
+Context 2:
+l2cap_chan_timeout();
+  l2cap_chan_lock(chan);
+  chan->ops->close(chan);
+    l2cap_sock_close_cb()
+    l2cap_sock_kill(sk); // <-- sk is freed here
+  l2cap_chan_unlock(chan);
 
-With above:
+Signed-off-by: Sungwoo Kim <iam@sung-woo.kim>
+---
+ net/bluetooth/l2cap_sock.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof
+diff --git a/net/bluetooth/l2cap_sock.c b/net/bluetooth/l2cap_sock.c
+index ca8f07f35..657704059 100644
+--- a/net/bluetooth/l2cap_sock.c
++++ b/net/bluetooth/l2cap_sock.c
+@@ -1245,7 +1245,7 @@ static int l2cap_sock_recvmsg(struct socket *sock, struct msghdr *msg,
+  */
+ static void l2cap_sock_kill(struct sock *sk)
+ {
+-	if (!sock_flag(sk, SOCK_ZAPPED) || sk->sk_socket)
++	if (!sk || !sock_flag(sk, SOCK_ZAPPED) || sk->sk_socket)
+ 		return;
+ 
+ 	BT_DBG("sk %p state %s", sk, state_to_string(sk->sk_state));
+-- 
+2.25.1
 
