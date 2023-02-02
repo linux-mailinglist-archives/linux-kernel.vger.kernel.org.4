@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ECC0688665
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 19:29:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEB65688667
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 19:29:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232566AbjBBS25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 13:28:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33296 "EHLO
+        id S232700AbjBBS3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 13:29:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232431AbjBBS2k (ORCPT
+        with ESMTP id S232568AbjBBS2l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 13:28:40 -0500
+        Thu, 2 Feb 2023 13:28:41 -0500
 Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA69563841
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 10:28:22 -0800 (PST)
-Received: by mail-pf1-x44a.google.com with SMTP id h11-20020a056a00230b00b00593b9e6ee79so1354491pfh.8
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 10:28:22 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74EC754542
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 10:28:24 -0800 (PST)
+Received: by mail-pf1-x44a.google.com with SMTP id v23-20020aa78097000000b005748c087db1so1356000pff.2
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 10:28:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=3LgqJvQdTUnDV8KRYP5nK1SQHicVLOIOxzAR2ICFNms=;
-        b=pTHp9YIB2s9i7ADRCxkxVMBN5TbosV9207UzxT5JLIoA0iiwHbPDOCF2B0ulq0gjTz
-         dmAyphmWqMmPznzay2s5DpCEp6NHjMRfjIIOhNALqfZq69tbr0GklWjDEBSb6T6yiMcI
-         Acuzx3NkksjEreIyP7FImla+4q+h2dTJ7RCe9MYgXigjsRFI8fyQnksSrbMoHYw8b91W
-         ziXGJ4LKf1/CT/L9ptzIHGgioiuiR31ITCTvKCYXTdb0PQKQH3W7HHV1V2qWrfBNepiz
-         dUAZbmAh8qZCWqN/6bAgBFqW5SsXLlahiTC1ecRRDFk1WgO502NqjIWWgNW35qFckskp
-         oU6A==
+        bh=23k7ngnnq1dagvKcwTov6zadXURGVa/hBCuLb+iV0g0=;
+        b=qlL/NRrpG/+vpCbk4ZkF9xxNrvsWRSi6Ew/JHzWHJRFEE18vAOAO0CiLpVr7HiCAIS
+         Xe+67hFPUl+94O9IvYmpLCQy2+x2p+BQrVc5ZrQIT6CqMJ4N9kHM1xwcuvqQSdloVLTl
+         4h9uMBNRWSRlWSp3i/vCULSGzs4w2spCcj5cGI0XJ7GVEtCFgRZS+QcocrikNW3ysSjD
+         0/27DxwuU9cVtWo6s0S9Vmak9nzECvFXw97c22bO2QBK2MLxHv3N+Z1FpfaQ5iGdvYz1
+         VjUJ6CgH/iBzlsETUhDGS6soZPFVpZQHzdogttMDnsowbI5LcqQ/mCsxEGfDGAwDjG0S
+         n4mQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=3LgqJvQdTUnDV8KRYP5nK1SQHicVLOIOxzAR2ICFNms=;
-        b=zD11s4snaAKynwU04nbOo5c4PJtohs6q+pvotVq3UGTmph/8mWN2R1F1Q0v/48J/Xx
-         +F/1dSWiKYJcsh32udctHZbeYuGbW/h40AVDhiWFDGxgA0AVI87htF9mDB6XhxW5ejOI
-         04MZ2B5j4ISrRDdxoamsHovoeBdVWDZOWM8Nc+CMX8/N9UnDiq/2fxjBSph4Qd9ETl4R
-         oZCRWHUejgKlG/+hnA/pfi7XdepsgK5/uCdcMP/wgASIqEmdM82yl+Mq14b2HZF/UpfW
-         TXaruhTEht/WfIXKO7GiteqOOUVr9HKB2CckMPTIQsHCMiCgVWajKXh7sL3UJwEtBBPJ
-         uV5A==
-X-Gm-Message-State: AO0yUKUojMN1tpMfL81WUZ+a23ouwpvZEuiAsoaEEtY/EeROw6yOAwGc
-        1u/i245EkuAaSb9H3/oOLAagcw2u3Zw=
-X-Google-Smtp-Source: AK7set8791yB3wjoH7FuBUwIUtJIVac8TGy0qezAzhWOiy6iUzV6fwbwC2DKjeSjG9TB4l1FbkQDVo+TZsI=
+        bh=23k7ngnnq1dagvKcwTov6zadXURGVa/hBCuLb+iV0g0=;
+        b=Ww0FZsoqWstDI3QG7hsJdUGvMdJsbxIxoHt/mEeWP4QGI5gV9T9kphvmhFMc+prQxy
+         87kVNaxW8YMi5UE08KaccdSYwzGZZOOXCbBOE04BBtJGygZwXo0mA1XieHqUsxheAymg
+         4V772L3FpdPnES5FGzWtSY2Lit4NPzln2LSMDBFNwpJ7YxOFoAf/l6F98nVo3LF0SVj7
+         c7VN0nAC9y0TdBz/fYREpQoxW/fkmXJOYdNCSSJBIZx+vIAFLaxuhnqgCDaLGvTPoDPJ
+         E8Qg+qokEm82xc+ZCtReaT82DcnvpnhVJhVNDbj88oFdXZyehstlODP4TQdFooOs04Tt
+         cJ+w==
+X-Gm-Message-State: AO0yUKUXi1eXSOo7jdCYoRwAg/lxgyGGXKiDO31WkKyOcdCUzzQGiSo6
+        +r70IKzFyB9NthqHudJJJZyAR0sY2Q4=
+X-Google-Smtp-Source: AK7set9nxsXLdOaC/swc1VO//GxkzUtI6Eo0OktLOLbkC37FgdLIBAWf3HiQs/s6L8HdWKAC3fbJ1/vLVQk=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90a:3da4:b0:22c:24f0:32f4 with SMTP id
- i33-20020a17090a3da400b0022c24f032f4mr755189pjc.93.1675362501969; Thu, 02 Feb
- 2023 10:28:21 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a63:5715:0:b0:477:c1a3:9a10 with SMTP id
+ l21-20020a635715000000b00477c1a39a10mr1205868pgb.33.1675362503600; Thu, 02
+ Feb 2023 10:28:23 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Thu,  2 Feb 2023 18:28:15 +0000
+Date:   Thu,  2 Feb 2023 18:28:16 +0000
 In-Reply-To: <20230202182817.407394-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20230202182817.407394-1-seanjc@google.com>
 X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
-Message-ID: <20230202182817.407394-2-seanjc@google.com>
-Subject: [PATCH v2 1/3] KVM: x86/mmu: Use EMULTYPE flag to track write #PFs to
- shadow pages
+Message-ID: <20230202182817.407394-3-seanjc@google.com>
+Subject: [PATCH v2 2/3] KVM: x86/mmu: Detect write #PF to shadow pages during
+ FNAME(fetch) walk
 From:   Sean Christopherson <seanjc@google.com>
 To:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>
@@ -65,7 +65,7 @@ Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,229 +73,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use a new EMULTYPE flag, EMULTYPE_WRITE_PF_TO_SP, to track page faults
-on self-changing writes to shadowed page tables instead of propagating
-that information to the emulator via a semi-persistent vCPU flag.  Using
-a flag in "struct kvm_vcpu_arch" is confusing, especially as implemented,
-as it's not at all obvious that clearing the flag only when emulation
-actually occurs is correct.
+From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 
-E.g. if KVM sets the flag and then retries the fault without ever getting
-to the emulator, the flag will be left set for future calls into the
-emulator.  But because the flag is consumed if and only if both
-EMULTYPE_PF and EMULTYPE_ALLOW_RETRY_PF are set, and because
-EMULTYPE_ALLOW_RETRY_PF is deliberately not set for direct MMUs, emulated
-MMIO, or while L2 is active, KVM avoids false positives on a stale flag
-since FNAME(page_fault) is guaranteed to be run and refresh the flag
-before it's ultimately consumed by the tail end of reexecute_instruction().
+Move the detection of write #PF to shadow pages, i.e. a fault on a write
+to a page table that is being shadowed by KVM that is used to translate
+the write itself, from FNAME(is_self_change_mapping) to FNAME(fetch).
+There is no need to detect the self-referential write before
+kvm_faultin_pfn() as KVM does not consume EMULTYPE_WRITE_PF_TO_SP for
+accesses that resolve to "error or no-slot" pfns, i.e. KVM doesn't allow
+retrying MMIO accesses or writes to read-only memslots.
 
+Detecting the EMULTYPE_WRITE_PF_TO_SP scenario in FNAME(fetch) will allow
+dropping FNAME(is_self_change_mapping) entirely, as the hugepage
+interaction can be deferred to kvm_mmu_hugepage_adjust().
+
+Cc: Huang Hang <hhuang@linux.alibaba.com>
+Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+Link: https://lore.kernel.org/r/20221213125538.81209-1-jiangshanlai@gmail.com
+[sean: split to separate patch, write changelog]
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/include/asm/kvm_host.h | 37 ++++++++++++++++++---------------
- arch/x86/kvm/mmu/mmu.c          |  5 +++--
- arch/x86/kvm/mmu/mmu_internal.h | 12 ++++++++++-
- arch/x86/kvm/mmu/paging_tmpl.h  |  4 +---
- arch/x86/kvm/x86.c              | 15 ++-----------
- 5 files changed, 37 insertions(+), 36 deletions(-)
+ arch/x86/kvm/mmu/paging_tmpl.h | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index 4d2bc08794e4..a0fa6333edbe 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -942,23 +942,6 @@ struct kvm_vcpu_arch {
- 
- 	u64 msr_kvm_poll_control;
- 
--	/*
--	 * Indicates the guest is trying to write a gfn that contains one or
--	 * more of the PTEs used to translate the write itself, i.e. the access
--	 * is changing its own translation in the guest page tables.  KVM exits
--	 * to userspace if emulation of the faulting instruction fails and this
--	 * flag is set, as KVM cannot make forward progress.
--	 *
--	 * If emulation fails for a write to guest page tables, KVM unprotects
--	 * (zaps) the shadow page for the target gfn and resumes the guest to
--	 * retry the non-emulatable instruction (on hardware).  Unprotecting the
--	 * gfn doesn't allow forward progress for a self-changing access because
--	 * doing so also zaps the translation for the gfn, i.e. retrying the
--	 * instruction will hit a !PRESENT fault, which results in a new shadow
--	 * page and sends KVM back to square one.
--	 */
--	bool write_fault_to_shadow_pgtable;
--
- 	/* set at EPT violation at this point */
- 	unsigned long exit_qualification;
- 
-@@ -1891,6 +1874,25 @@ u64 vcpu_tsc_khz(struct kvm_vcpu *vcpu);
-  * EMULTYPE_COMPLETE_USER_EXIT - Set when the emulator should update interruptibility
-  *				 state and inject single-step #DBs after skipping
-  *				 an instruction (after completing userspace I/O).
-+ *
-+ * EMULTYPE_WRITE_PF_TO_SP - Set when emulating an intercepted page fault that
-+ *			     is attempting to write a gfn that contains one or
-+ *			     more of the PTEs used to translate the write itself,
-+ *			     and the owning page table is being shadowed by KVM.
-+ *			     If emulation of the faulting instruction fails and
-+ *			     this flag is set, KVM will exit to userspace instead
-+ *			     of retrying emulation as KVM cannot make forward
-+ *			     progress.
-+ *
-+ *			     If emulation fails for a write to guest page tables,
-+ *			     KVM unprotects (zaps) the shadow page for the target
-+ *			     gfn and resumes the guest to retry the non-emulatable
-+ *			     instruction (on hardware).  Unprotecting the gfn
-+ *			     doesn't allow forward progress for a self-changing
-+ *			     access because doing so also zaps the translation for
-+ *			     the gfn, i.e. retrying the instruction will hit a
-+ *			     !PRESENT fault, which results in a new shadow page
-+ *			     and sends KVM back to square one.
-  */
- #define EMULTYPE_NO_DECODE	    (1 << 0)
- #define EMULTYPE_TRAP_UD	    (1 << 1)
-@@ -1900,6 +1902,7 @@ u64 vcpu_tsc_khz(struct kvm_vcpu *vcpu);
- #define EMULTYPE_VMWARE_GP	    (1 << 5)
- #define EMULTYPE_PF		    (1 << 6)
- #define EMULTYPE_COMPLETE_USER_EXIT (1 << 7)
-+#define EMULTYPE_WRITE_PF_TO_SP	    (1 << 8)
- 
- int kvm_emulate_instruction(struct kvm_vcpu *vcpu, int emulation_type);
- int kvm_emulate_instruction_from_buffer(struct kvm_vcpu *vcpu,
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index c91ee2927dd7..bf38575a1957 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -4203,7 +4203,7 @@ void kvm_arch_async_page_ready(struct kvm_vcpu *vcpu, struct kvm_async_pf *work)
- 	      work->arch.cr3 != vcpu->arch.mmu->get_guest_pgd(vcpu))
- 		return;
- 
--	kvm_mmu_do_page_fault(vcpu, work->cr2_or_gpa, 0, true);
-+	kvm_mmu_do_page_fault(vcpu, work->cr2_or_gpa, 0, true, NULL);
- }
- 
- static int __kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
-@@ -5664,7 +5664,8 @@ int noinline kvm_mmu_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa, u64 err
- 
- 	if (r == RET_PF_INVALID) {
- 		r = kvm_mmu_do_page_fault(vcpu, cr2_or_gpa,
--					  lower_32_bits(error_code), false);
-+					  lower_32_bits(error_code), false,
-+					  &emulation_type);
- 		if (KVM_BUG_ON(r == RET_PF_INVALID, vcpu->kvm))
- 			return -EIO;
- 	}
-diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
-index cc58631e2336..2cbb155c686c 100644
---- a/arch/x86/kvm/mmu/mmu_internal.h
-+++ b/arch/x86/kvm/mmu/mmu_internal.h
-@@ -240,6 +240,13 @@ struct kvm_page_fault {
- 	kvm_pfn_t pfn;
- 	hva_t hva;
- 	bool map_writable;
-+
-+	/*
-+	 * Indicates the guest is trying to write a gfn that contains one or
-+	 * more of the PTEs used to translate the write itself, i.e. the access
-+	 * is changing its own translation in the guest page tables.
-+	 */
-+	bool write_fault_to_shadow_pgtable;
- };
- 
- int kvm_tdp_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault);
-@@ -273,7 +280,7 @@ enum {
- };
- 
- static inline int kvm_mmu_do_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
--					u32 err, bool prefetch)
-+					u32 err, bool prefetch, int *emulation_type)
- {
- 	struct kvm_page_fault fault = {
- 		.addr = cr2_or_gpa,
-@@ -312,6 +319,9 @@ static inline int kvm_mmu_do_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
- 	else
- 		r = vcpu->arch.mmu->page_fault(vcpu, &fault);
- 
-+	if (fault.write_fault_to_shadow_pgtable && emulation_type)
-+		*emulation_type |= EMULTYPE_WRITE_PF_TO_SP;
-+
- 	/*
- 	 * Similar to above, prefetch faults aren't truly spurious, and the
- 	 * async #PF path doesn't do emulation.  Do count faults that are fixed
 diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
-index 57f0b75c80f9..5d2958299b4f 100644
+index 5d2958299b4f..f57d9074fb9b 100644
 --- a/arch/x86/kvm/mmu/paging_tmpl.h
 +++ b/arch/x86/kvm/mmu/paging_tmpl.h
-@@ -825,10 +825,8 @@ static int FNAME(page_fault)(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
- 	if (r)
+@@ -685,6 +685,9 @@ static int FNAME(fetch)(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
+ 
+ 		if (sp != ERR_PTR(-EEXIST))
+ 			link_shadow_page(vcpu, it.sptep, sp);
++
++		if (fault->write && table_gfn == fault->gfn)
++			fault->write_fault_to_shadow_pgtable = true;
+ 	}
+ 
+ 	kvm_mmu_hugepage_adjust(vcpu, fault);
+@@ -741,17 +744,13 @@ static int FNAME(fetch)(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
+  * created when kvm establishes shadow page table that stop kvm using large
+  * page size. Do it early can avoid unnecessary #PF and emulation.
+  *
+- * @write_fault_to_shadow_pgtable will return true if the fault gfn is
+- * currently used as its page table.
+- *
+  * Note: the PDPT page table is not checked for PAE-32 bit guest. It is ok
+  * since the PDPT is always shadowed, that means, we can not use large page
+  * size to map the gfn which is used as PDPT.
+  */
+ static bool
+ FNAME(is_self_change_mapping)(struct kvm_vcpu *vcpu,
+-			      struct guest_walker *walker, bool user_fault,
+-			      bool *write_fault_to_shadow_pgtable)
++			      struct guest_walker *walker, bool user_fault)
+ {
+ 	int level;
+ 	gfn_t mask = ~(KVM_PAGES_PER_HPAGE(walker->level) - 1);
+@@ -765,7 +764,6 @@ FNAME(is_self_change_mapping)(struct kvm_vcpu *vcpu,
+ 		gfn_t gfn = walker->gfn ^ walker->table_gfn[level - 1];
+ 
+ 		self_changed |= !(gfn & mask);
+-		*write_fault_to_shadow_pgtable |= !gfn;
+ 	}
+ 
+ 	return self_changed;
+@@ -826,7 +824,7 @@ static int FNAME(page_fault)(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
  		return r;
  
--	vcpu->arch.write_fault_to_shadow_pgtable = false;
--
  	is_self_change_mapping = FNAME(is_self_change_mapping)(vcpu,
--	      &walker, fault->user, &vcpu->arch.write_fault_to_shadow_pgtable);
-+	      &walker, fault->user, &fault->write_fault_to_shadow_pgtable);
+-	      &walker, fault->user, &fault->write_fault_to_shadow_pgtable);
++	      &walker, fault->user);
  
  	if (is_self_change_mapping)
  		fault->max_level = PG_LEVEL_4K;
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 508074e47bc0..de2a0d1c9c21 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -8427,7 +8427,6 @@ static int handle_emulation_failure(struct kvm_vcpu *vcpu, int emulation_type)
- }
- 
- static bool reexecute_instruction(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
--				  bool write_fault_to_shadow_pgtable,
- 				  int emulation_type)
- {
- 	gpa_t gpa = cr2_or_gpa;
-@@ -8498,7 +8497,7 @@ static bool reexecute_instruction(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
- 	 * be fixed by unprotecting shadow page and it should
- 	 * be reported to userspace.
- 	 */
--	return !write_fault_to_shadow_pgtable;
-+	return !(emulation_type & EMULTYPE_WRITE_PF_TO_SP);
- }
- 
- static bool retry_instruction(struct x86_emulate_ctxt *ctxt,
-@@ -8746,20 +8745,12 @@ int x86_emulate_instruction(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
- 	int r;
- 	struct x86_emulate_ctxt *ctxt = vcpu->arch.emulate_ctxt;
- 	bool writeback = true;
--	bool write_fault_to_spt;
- 
- 	if (unlikely(!kvm_can_emulate_insn(vcpu, emulation_type, insn, insn_len)))
- 		return 1;
- 
- 	vcpu->arch.l1tf_flush_l1d = true;
- 
--	/*
--	 * Clear write_fault_to_shadow_pgtable here to ensure it is
--	 * never reused.
--	 */
--	write_fault_to_spt = vcpu->arch.write_fault_to_shadow_pgtable;
--	vcpu->arch.write_fault_to_shadow_pgtable = false;
--
- 	if (!(emulation_type & EMULTYPE_NO_DECODE)) {
- 		kvm_clear_exception_queue(vcpu);
- 
-@@ -8780,7 +8771,6 @@ int x86_emulate_instruction(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
- 				return 1;
- 			}
- 			if (reexecute_instruction(vcpu, cr2_or_gpa,
--						  write_fault_to_spt,
- 						  emulation_type))
- 				return 1;
- 
-@@ -8859,8 +8849,7 @@ int x86_emulate_instruction(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
- 		return 1;
- 
- 	if (r == EMULATION_FAILED) {
--		if (reexecute_instruction(vcpu, cr2_or_gpa, write_fault_to_spt,
--					emulation_type))
-+		if (reexecute_instruction(vcpu, cr2_or_gpa, emulation_type))
- 			return 1;
- 
- 		return handle_emulation_failure(vcpu, emulation_type);
 -- 
 2.39.1.519.gcb327c4b5f-goog
 
