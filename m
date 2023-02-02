@@ -2,109 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 018D2688598
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 18:38:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D455D68859D
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 18:38:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231923AbjBBRiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 12:38:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59040 "EHLO
+        id S231252AbjBBRio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 12:38:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232148AbjBBRiG (ORCPT
+        with ESMTP id S232403AbjBBRif (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 12:38:06 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B028D22A22
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 09:38:04 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id mf7so8120282ejc.6
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 09:38:04 -0800 (PST)
+        Thu, 2 Feb 2023 12:38:35 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F3239BAE
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 09:38:32 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id be8so2586472plb.7
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 09:38:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=saZXT4FVI4lVk3lAqqpv+j8azrC1do2+12xZnwClNAM=;
-        b=GVi/xTjyB3KESWFYcVFDR1fCHGCx4+7VGvSUpv3OT9IkAB9UH7mvxN6VYoKtGqd4Cv
-         m26hvaATfW/2ZtlhhY7AAC3u1g0XZng8t70LNJC4R3zVGgNDxwaQSsoznqFPD/U+Xu8C
-         zi1NOmcagkVXROKb9fPFOZ4MwGAllb0UkBEB6nfeqjtXLd/Z2V++KxWSFNtUh0x7ejtP
-         6evq+mlmFhPHJt/R9tcr588Ycx7zpOrPXJmT+P6dR51sDF+keE+rvvOv92dta7Jl1iki
-         Y0KSDuV+lS4WWMyug3E70IKQjisdluqzaI1wBnjOEY8bsAvIJ6lhFDxsv2WajHVOnU7L
-         ew9A==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=ejS+fA6FXopXLvgXoYeghfO4Gq+OL51G2M5fMvFWUSA=;
+        b=b3x1gtRASyVfGRtlJoCkIywjYwfoZC5CtHFS2el8MYUbQdx4cgghkl94J/FCr8Wbbe
+         yZXH3ZnZxx/1IHJ/deyGQhwon38isJshX5XBUzawlFvToU3NKOzBSyShAMv3nOipxFL0
+         O0TYJ7toYRLtk2hDXrtiXCz8PYBmcOSUD5M/g=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=saZXT4FVI4lVk3lAqqpv+j8azrC1do2+12xZnwClNAM=;
-        b=zhbGdXJgXRgRUvT64oS9Ne8GYL2stOdUHNZeorH3S0GhR5iMkiP1GjA8IWtrKb/3qp
-         1PLPNf6ivB9TcX3/A/ZXYQJvhRarwoYoz2VIwICYiUDG/qIKgfiRINvlF6/DCK8fJeTZ
-         0KBvBJjUPk3cwKzr73UbxKyPW4MbZCIEar/TUMEMbUL921sMXFiHE1QR+AJue+wg3XGS
-         ZPmLWnKsAC1G1/zAHKSHDS+/ZWyAbsDzgyySKR6Yq01AH4hD6e4ilGa7o14rnmfpS5Tb
-         ZoHOEjZPZU9pQUhfbMb3ezfbz0IbVSyv9GUMYi43b4OHHPKLX9QCUvGrK+eb/2+7cASX
-         GuCw==
-X-Gm-Message-State: AO0yUKVZKBqNbhdi4tS4o/0er0AWSadex64liElEueLQu9hL0b5oExEj
-        MZ8Imb10wRCgewSHEIpbUdabORSoa+44yd2M2IY=
-X-Google-Smtp-Source: AK7set/Y2SR3n2MRHAu3EUPkTvHch5WOHuqf1YEfsOXaCZSdSQiTrqkIk22eV8b5+XXsA2UpZK2dswkBpVWIrXF5OY8=
-X-Received: by 2002:a17:907:990b:b0:887:9adb:da53 with SMTP id
- ka11-20020a170907990b00b008879adbda53mr1697307ejc.166.1675359482921; Thu, 02
- Feb 2023 09:38:02 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ejS+fA6FXopXLvgXoYeghfO4Gq+OL51G2M5fMvFWUSA=;
+        b=KvL8hr32vuFUf34FUmTLB26L6eu8hL/FMhLqV+iVF7ugamzSyOm1vPekS3Q6uXvleQ
+         LcWSfgO7OebszUjEseUThGEgp5M1zMVlmv4ad2o5s+SkjtKXsXXiCex2YX8N3p7qt3x8
+         A2eWc/PoHgjNTyrZ5ihcRRA1OKjOOt9Qy6hqH5mTd3HWvzc1Zk/y9gMCP32RvQdR0sju
+         YHHmuyTR3bpoN1sN5u492oC9Tj3cjTKhcyHbnn9qablnvQq4XUBxjeTwF7f5PPYWH+nC
+         XttiSPaSF+VyR4gAIUHW4nyh+76r3UWNBfjo+MA5v6Ssl/9iUOMHL4dyuzjplt8C5hWI
+         5aLw==
+X-Gm-Message-State: AO0yUKVIaTmPQxWMtfqS9Tfl3WGoleijVWdn1Z0mNCsoz1auq344gCVs
+        4wgO/c33oKh8T/hOVeyCVAKy4Q==
+X-Google-Smtp-Source: AK7set80/QWi2ZBrv8yRSPbkEc2D7xyp0jIgn+EHMwhfhvi+pHfUa4N0s+tXpJ+i+2BV4s1sZRxfLA==
+X-Received: by 2002:a17:902:d292:b0:197:90f8:f3b with SMTP id t18-20020a170902d29200b0019790f80f3bmr6363019plc.57.1675359511761;
+        Thu, 02 Feb 2023 09:38:31 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id 22-20020aa79256000000b0058baf8694e1sm13785961pfp.71.2023.02.02.09.38.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Feb 2023 09:38:31 -0800 (PST)
+Message-ID: <63dbf517.a70a0220.d9b66.9217@mx.google.com>
+X-Google-Original-Message-ID: <202302021738.@keescook>
+Date:   Thu, 2 Feb 2023 17:38:30 +0000
+From:   Kees Cook <keescook@chromium.org>
+To:     Juerg Haefliger <juerg.haefliger@canonical.com>
+Cc:     akpm@linux-foundation.org, Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Marco Elver <elver@google.com>,
+        Dan Li <ashimida@linux.alibaba.com>, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] arch/Kconfig: Fix indentation
+References: <20220518054801.364376-1-juergh@canonical.com>
+ <20230201162435.218368-1-juerg.haefliger@canonical.com>
 MIME-Version: 1.0
-Received: by 2002:a17:906:f748:b0:885:fee4:69db with HTTP; Thu, 2 Feb 2023
- 09:38:02 -0800 (PST)
-Reply-To: mrslorencegonzalez@gmail.com
-From:   "Mrs.lorence Gonzalez" <moutakilouimorou6@gmail.com>
-Date:   Thu, 2 Feb 2023 09:38:02 -0800
-Message-ID: <CAKP+CCtpOFxH8Xwi_B58JL0xKNgHDoc0QhobQP7EtHHuE2+maw@mail.gmail.com>
-Subject: HELLO MY DEAREST ONE
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,SUBJ_ALL_CAPS,T_HK_NAME_FM_MR_MRS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:62f listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [moutakilouimorou6[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [moutakilouimorou6[at]gmail.com]
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230201162435.218368-1-juerg.haefliger@canonical.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello My Dearest One,
+On Wed, Feb 01, 2023 at 05:24:35PM +0100, Juerg Haefliger wrote:
+> The convention for indentation seems to be a single tab. Help text is
+> further indented by an additional two whitespaces. Fix the lines that
+> violate these rules.
+> 
+> Signed-off-by: Juerg Haefliger <juerg.haefliger@canonical.com>
 
-Am a dying woman here in the hospital, i was diagnose as a Cancer
-patient over  2 Years ago. I am A business woman how dealing with Gold
-Exportation. I Am from Us California I have a charitable and
-unfulfilled project that am about to handover to you, if you are
-interested please reply.
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-Hope to hear from you.
-
-Regard
-
-mrslorencegonzalez@gmail.com
-
-Mrs.lorence Gonzalez
+-- 
+Kees Cook
