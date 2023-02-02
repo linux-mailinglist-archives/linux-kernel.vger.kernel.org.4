@@ -2,101 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F82C6888E4
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 22:18:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B62F66888E2
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 22:18:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232519AbjBBVSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 16:18:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34476 "EHLO
+        id S232689AbjBBVSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 16:18:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232515AbjBBVSi (ORCPT
+        with ESMTP id S229881AbjBBVSb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 16:18:38 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01BC36EADA;
-        Thu,  2 Feb 2023 13:18:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ADF46B82877;
-        Thu,  2 Feb 2023 21:18:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8058EC433D2;
-        Thu,  2 Feb 2023 21:18:33 +0000 (UTC)
-Date:   Thu, 2 Feb 2023 16:18:31 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     <shiju.jose@huawei.com>
-Cc:     <mhiramat@kernel.org>, <mchehab@kernel.org>,
-        <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
-        <jonathan.cameron@huawei.com>, <tanxiaofei@huawei.com>
-Subject: Re: [RFC PATCH 1/1] tracing: Fix poll() and select() do not work on
- per_cpu trace_pipe and trace_pipe_raw
-Message-ID: <20230202161831.6a4fca2a@rorschach.local.home>
-In-Reply-To: <20230202182309.742-2-shiju.jose@huawei.com>
-References: <20230202182309.742-2-shiju.jose@huawei.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 2 Feb 2023 16:18:31 -0500
+Received: from omta33.uswest2.a.cloudfilter.net (omta33.uswest2.a.cloudfilter.net [35.89.44.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C0B46A31A
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 13:18:30 -0800 (PST)
+Received: from eig-obgw-6019a.ext.cloudfilter.net ([10.0.30.145])
+        by cmsmtp with ESMTP
+        id Ng2ep5QctII8dNgyUpZ2IU; Thu, 02 Feb 2023 21:18:30 +0000
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with ESMTP
+        id NgyTpLxfDWk52NgyTpe4j2; Thu, 02 Feb 2023 21:18:29 +0000
+X-Authority-Analysis: v=2.4 cv=QOZ7+yHL c=1 sm=1 tr=0 ts=63dc28a5
+ a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=wTog8WU66it3cfrESHnF4A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10 a=m04uMKEZRckA:10
+ a=wYkD_t78qR0A:10 a=iox4zFpeAAAA:8 a=foHCeV_ZAAAA:8 a=VwQbUJbxAAAA:8
+ a=mdQ3zACRoVh8_Dy_WlkA:9 a=QEXdDO2ut3YA:10 a=WzC6qhA0u3u7Ye7llzcV:22
+ a=h8a9FgHX5U4dIE3jaWyr:22 a=AjGcO6oz07-iQ99wixmX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=z06T/nkFeiE9v5s4+CdVnUZn2OYhwUVRq1KHTfhar1c=; b=i2Oiqd0B5Rd7RGZA4MnBTpzvb2
+        J8gLRFxnbRWnKLkiFNihEIPu8/7lV9M4GNYIV3o663e1pt5g1S6hdJ7a/eBbpKcDNgyNneA1RwoVs
+        2eOjBlFTuJqs7XeYuOobRnqFWcT7GoYuAtCUaEY1taD189YznECNsXby38NIsjQIKBNcFzQ+2Ivot
+        wt6OfRU2Wn9KA9CsLhOgQr1547oqS9ccpi3TsxT1EYgBit6E/kWxwsb5uzmHsf0AelD3lUoBQz790
+        WX+iKoPuGEJabQ5a9qjxkqnObu5ArJ2hRhwfej8CHCd6HMfhwkanseJn1PxaW46lXfCxLUiW0LgLV
+        QvHVSKuw==;
+Received: from 187-162-31-110.static.axtel.net ([187.162.31.110]:42006 helo=[192.168.15.7])
+        by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1pNgyS-0034yj-LE;
+        Thu, 02 Feb 2023 15:18:28 -0600
+Message-ID: <bb43c410-bd8c-66fe-19a1-0f41442838eb@embeddedor.com>
+Date:   Thu, 2 Feb 2023 15:18:47 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH][next] ASoC: uapi: Replace zero-length arrays with
+ __DECLARE_FLEX_ARRAY() helper
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <YzIzUjUuJKf0mkKg@work>
+ <fcd83e77-a3fb-9061-771a-8509ea6f5950@embeddedor.com>
+ <Y9wmnfTi/p4FuRmd@sirena.org.uk>
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+In-Reply-To: <Y9wmnfTi/p4FuRmd@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 187.162.31.110
+X-Source-L: No
+X-Exim-ID: 1pNgyS-0034yj-LE
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 187-162-31-110.static.axtel.net ([192.168.15.7]) [187.162.31.110]:42006
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 2
+X-Org:  HG=hgshared;ORG=hostgator;
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfHJ47NBbJuTmodi7MjqCGSOlKjO3htDjuJDvjXCq/oZwHtufXiJI/2ylIa4PS5IChSZ3GktikZz3kopN294ITuw5jdh5i/ptGGRZyyVjLOTqKSfmAORs
+ 1yxxBvGXNDSrilh4Kz8W3biAPZDuPC3Xuhc+0CKpDTHT8SnM2LU2I7/WhHRlw0XIe2DhipDXhuccEK+eXhSt21oLO4z0/Wuv+D6EGCvblfRRWuvCqagt/joJ
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2 Feb 2023 18:23:09 +0000
-<shiju.jose@huawei.com> wrote:
 
-> From: Shiju Jose <shiju.jose@huawei.com>
+
+On 2/2/23 15:09, Mark Brown wrote:
+> On Thu, Feb 02, 2023 at 02:34:17PM -0600, Gustavo A. R. Silva wrote:
+>> Hi Takashi,
+>>
+>> I wonder if this can go through your tree.
+>>
+>> It's already been reviewed by a couple of people. :)
 > 
-> poll() and select() on per_cpu trace_pipe and trace_pipe_raw do not work
-> since kernel 6.1-rc6. This issue is seen after the commit
-> 42fb0a1e84ff525ebe560e2baf9451ab69127e2b ("tracing/ring-buffer: Have
-> polling block on watermark").
-> 
-> This issue is firstly detected and reported, when testing the CXL error
-> events in the rasdaemon and also erified using the test application for poll()
-> and select().
-> 
-> This issue occurs for the per_cpu case, when calling the ring_buffer_poll_wait(),
-> in kernel/trace/ring_buffer.c, with the buffer_percent > 0 and then wait until the
-> percentage of pages are available. The default value set for the buffer_percent is 50
-> in the kernel/trace/trace.c.
-> 
-> As a fix, allow userspace application could set buffer_percent as 0 through
-> the buffer_percent_fops, so that the task will wake up as soon as data is added
-> to any of the specific cpu buffer.
-> 
-> Fixes: 42fb0a1e84ff5 ("tracing/ring-buffer: Have polling block on watermark")
-> Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
-> ---
+> As documented in submitting-patches.rst please send patches to the
+> maintainers for the code you would like to change.  The normal kernel
+> workflow is that people apply patches from their inboxes, if they aren't
+> copied they are likely to not see the patch at all and it is much more
+> difficult to apply patches.
 
-This makes sense to me. I'm going to run a bunch of tests on this and
-see if anything else breaks.
+Yep; that's exactly what I did. :)
 
-Thanks!
+scripts/get_maintainer.pl --nokeywords --nogit --nogit-fallback include/uapi/sound/asoc.h
+Jaroslav Kysela <perex@perex.cz> (maintainer:SOUND)
+Takashi Iwai <tiwai@suse.com> (maintainer:SOUND)
+alsa-devel@alsa-project.org (moderated list:SOUND)
+linux-kernel@vger.kernel.org (open list)
 
--- Steve
+If you're one the maintainers of that file, you're clearly not listed as such.
 
-
->  kernel/trace/trace.c | 3 ---
->  1 file changed, 3 deletions(-)
-> 
-> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-> index a555a861b978..01164c78483a 100644
-> --- a/kernel/trace/trace.c
-> +++ b/kernel/trace/trace.c
-> @@ -9148,9 +9148,6 @@ buffer_percent_write(struct file *filp, const char __user *ubuf,
->  	if (val > 100)
->  		return -EINVAL;
->  
-> -	if (!val)
-> -		val = 1;
-> -
->  	tr->buffer_percent = val;
->  
->  	(*ppos)++;
-
+--
+Gustavo
