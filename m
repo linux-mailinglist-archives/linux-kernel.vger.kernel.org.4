@@ -2,51 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97549688167
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 16:14:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2C8868816A
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 16:14:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232498AbjBBPO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 10:14:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58012 "EHLO
+        id S231391AbjBBPOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 10:14:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229972AbjBBPOV (ORCPT
+        with ESMTP id S232712AbjBBPOr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 10:14:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1392140C7
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 07:14:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BB4E9B8268F
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 15:14:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FDCDC433D2;
-        Thu,  2 Feb 2023 15:14:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675350857;
-        bh=PUTozbY7ITrcSJ91h8ZeqAGIKgz32oJvRkMU4DQE528=;
-        h=From:To:Cc:Subject:Date:From;
-        b=YZHnWClZfzooZfXNcIM4b5fTYzgWngMeBrOjM5tzdnwNLvtxtGMmQSUFGNNGd/FDn
-         Ju7iC1LFOFEnbw1s6COIqXcNCnsET17sfZhJzT6SZMClOhO9XgL3LWLrPRu7GrBEAI
-         A2FrjoGxCAW98XmojnyEywelfnuNIvPUGtEbbQBE=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Chris Down <chris@chrisdown.name>,
-        Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        John Ogness <john.ogness@linutronix.de>
-Subject: [PATCH] kernel/printk/index.c: fix memory leak with using debugfs_lookup()
-Date:   Thu,  2 Feb 2023 16:14:11 +0100
-Message-Id: <20230202151411.2308576-1-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.39.1
+        Thu, 2 Feb 2023 10:14:47 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAEA32CFEE
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 07:14:36 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id d4-20020a05600c3ac400b003db1de2aef0so1661383wms.2
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 07:14:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=I16Z1KgxRWP5MyHAvbuxURW5bLdfVdGat8LdiyVkZ7U=;
+        b=VEUHLfU3cpYCINOO9LcLpYGlADqSXC15ZfI53t8aLaFHNN3NMUbf2x8wxcnck6Iuay
+         j4FQ6kiNcj+ysWf+meWmecn3IPVa1cG7jGRlpE9Vby85Ge8Qyok3xNr/j9si3PVy3/lp
+         KlQSpT7gjOYy/VljXUgCjlmBGpFhDpZsXdWFJm3g6pUmvI5/GC09tjIYY5u1wSBFMmZB
+         pjtHzE9+/7DnM4BxwYnA7OjYwA0srrOZFWLrp7V9RJ/5KzDCbftjsJOJqO1/RdvvxNRg
+         7OdrIg5Fc8L/je0Ym0Or4m0AecDgQe+b90Zx6nPHzmGf3T9LZcrIVrvKkaOw6EvUFH9f
+         Rtng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=I16Z1KgxRWP5MyHAvbuxURW5bLdfVdGat8LdiyVkZ7U=;
+        b=uJPslmwDZnm5yghmvxAezpxrBZQFwMXdlQcDOt7tK+6Z8E56hJjCSrbxtOINQJ94MX
+         +bGAC+CS5E6QAIS7ZWxPEkfqhdgpB+QIGvD06dl57IPBo+/nilyu1cO8rP85A2n8Xsal
+         zPiyeEoDYFYshtlOwV/2XIXGzdbCgnQ5CwgtSvV33arTXstNDzLsbMAhh6oPcNFsUsOO
+         uzo4CQNFKeNy+Wu8Upw9qBbU/LdVSblfh42lHk9I9mVF6fKQ2b6vHVaEQV7iSu1GqPCs
+         Dw57P7Ds6PeQV+DF+5uOK6zdIGyHbRhf7sU3Q12tBKOV6TexgQ4atGdYaxkRZRDL0bho
+         Ucmw==
+X-Gm-Message-State: AO0yUKWtUQizjtRMFBsm0f5Ib/BBoSDANI/TG5Zqc8eHucgi+W5kt7s9
+        NhVEpVHk373zrpxxnfG/TWsoWQ==
+X-Google-Smtp-Source: AK7set++OTtPGCP2P3+NgUI2qvWC34mJ3Zb5+a0gIgWMcAnUGLvAA2gRKgUzvEYkmiOl+mgEgbT78g==
+X-Received: by 2002:a05:600c:35d3:b0:3de:e8c5:d82c with SMTP id r19-20020a05600c35d300b003dee8c5d82cmr5645595wmq.29.1675350875212;
+        Thu, 02 Feb 2023 07:14:35 -0800 (PST)
+Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
+        by smtp.gmail.com with ESMTPSA id c7-20020a05600c0ac700b003d1d5a83b2esm4924261wmr.35.2023.02.02.07.14.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Feb 2023 07:14:34 -0800 (PST)
+Date:   Thu, 2 Feb 2023 16:14:33 +0100
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Atish Patra <atishp@rivosinc.com>
+Cc:     linux-kernel@vger.kernel.org, Anup Patel <anup@brainfault.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atishp@atishpatra.org>,
+        Eric Lin <eric.lin@sifive.com>, Guo Ren <guoren@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v4 04/14] RISC-V: KVM: Define a probe function for SBI
+ extension data structures
+Message-ID: <20230202151433.kspo2g7cqsccoqsq@orel>
+References: <20230201231250.3806412-1-atishp@rivosinc.com>
+ <20230201231250.3806412-5-atishp@rivosinc.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1164; i=gregkh@linuxfoundation.org; h=from:subject; bh=PUTozbY7ITrcSJ91h8ZeqAGIKgz32oJvRkMU4DQE528=; b=owGbwMvMwCRo6H6F97bub03G02pJDMm3LzsXq1lWH1ee0z7r5pPTm9KfPnvxPE16Ju/ujQYLTmbx ncnU6ohlYRBkYpAVU2T5so3n6P6KQ4pehranYeawMoEMYeDiFICJ8HswLLjwTWj1o8Qva505157j2M rUk1xo9oxhfv32udFSMY5M01czTe0K5DFryc8yBQA=
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230201231250.3806412-5-atishp@rivosinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,35 +81,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When calling debugfs_lookup() the result must have dput() called on it,
-otherwise the memory will leak over time.  To make things simpler, just
-call debugfs_lookup_and_remove() instead which handles all of the logic
-at once.
+On Wed, Feb 01, 2023 at 03:12:40PM -0800, Atish Patra wrote:
+> Currently the probe function just checks if an SBI extension is
+> registered or not. However, the extension may not want to advertise
+> itself depending on some other condition.
+> An additional extension specific probe function will allow
+> extensions to decide if they want to be advertised to the caller or
+> not. Any extension that does not require additional dependency checks
+> can avoid implementing this function.
+> 
+> Reviewed-by: Anup Patel <anup@brainfault.org>
+> Signed-off-by: Atish Patra <atishp@rivosinc.com>
+> ---
+>  arch/riscv/include/asm/kvm_vcpu_sbi.h |  3 +++
+>  arch/riscv/kvm/vcpu_sbi_base.c        | 13 +++++++++++--
+>  2 files changed, 14 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/riscv/include/asm/kvm_vcpu_sbi.h b/arch/riscv/include/asm/kvm_vcpu_sbi.h
+> index f79478a..45ba341 100644
+> --- a/arch/riscv/include/asm/kvm_vcpu_sbi.h
+> +++ b/arch/riscv/include/asm/kvm_vcpu_sbi.h
+> @@ -29,6 +29,9 @@ struct kvm_vcpu_sbi_extension {
+>  	int (*handler)(struct kvm_vcpu *vcpu, struct kvm_run *run,
+>  		       unsigned long *out_val, struct kvm_cpu_trap *utrap,
+>  		       bool *exit);
+> +
+> +	/* Extension specific probe function */
+> +	unsigned long (*probe)(struct kvm_vcpu *vcpu);
+>  };
+>  
+>  void kvm_riscv_vcpu_sbi_forward(struct kvm_vcpu *vcpu, struct kvm_run *run);
+> diff --git a/arch/riscv/kvm/vcpu_sbi_base.c b/arch/riscv/kvm/vcpu_sbi_base.c
+> index 5d65c63..846d518 100644
+> --- a/arch/riscv/kvm/vcpu_sbi_base.c
+> +++ b/arch/riscv/kvm/vcpu_sbi_base.c
+> @@ -19,6 +19,7 @@ static int kvm_sbi_ext_base_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
+>  {
+>  	int ret = 0;
+>  	struct kvm_cpu_context *cp = &vcpu->arch.guest_context;
+> +	const struct kvm_vcpu_sbi_extension *sbi_ext;
+>  
+>  	switch (cp->a6) {
+>  	case SBI_EXT_BASE_GET_SPEC_VERSION:
+> @@ -43,8 +44,16 @@ static int kvm_sbi_ext_base_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
+>  			 */
+>  			kvm_riscv_vcpu_sbi_forward(vcpu, run);
+>  			*exit = true;
+> -		} else
+> -			*out_val = kvm_vcpu_sbi_find_ext(cp->a0) ? 1 : 0;
+> +		} else {
+> +			sbi_ext = kvm_vcpu_sbi_find_ext(cp->a0);
+> +			if (sbi_ext) {
+> +				if (sbi_ext->probe)
+> +					*out_val = sbi_ext->probe(vcpu);
+> +				else
+> +					*out_val = 1;
+> +			} else
+> +				*out_val = 0;
 
-Cc: Chris Down <chris@chrisdown.name>
-Cc: Petr Mladek <pmladek@suse.com>
-Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: John Ogness <john.ogness@linutronix.de>
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- kernel/printk/index.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Conor points out elsewhere that we need {} on both arms if one arm needs
+it. We actually don't need {} on either arm, though, or even the if, if
+we rewrite as
 
-diff --git a/kernel/printk/index.c b/kernel/printk/index.c
-index c85be186a783..a6b27526baaf 100644
---- a/kernel/printk/index.c
-+++ b/kernel/printk/index.c
-@@ -145,7 +145,7 @@ static void pi_create_file(struct module *mod)
- #ifdef CONFIG_MODULES
- static void pi_remove_file(struct module *mod)
- {
--	debugfs_remove(debugfs_lookup(pi_get_module_name(mod), dfs_index));
-+	debugfs_lookup_and_remove(pi_get_module_name(mod), dfs_index);
- }
- 
- static int pi_module_notify(struct notifier_block *nb, unsigned long op,
--- 
-2.39.1
+ *out_val = sbi_ext && sbi_ext->probe ? sbi_ext->probe(vcpu) : !!sbi_ext;
 
+Thanks,
+drew
+
+> +		}
+>  		break;
+>  	case SBI_EXT_BASE_GET_MVENDORID:
+>  		*out_val = vcpu->arch.mvendorid;
+> -- 
+> 2.25.1
+> 
