@@ -2,160 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 895376884BB
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 17:44:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91C476884B9
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 17:44:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232307AbjBBQon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 11:44:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53722 "EHLO
+        id S232100AbjBBQod (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 11:44:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232115AbjBBQol (ORCPT
+        with ESMTP id S231665AbjBBQoc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 11:44:41 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60827646AE
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 08:43:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675356235;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vLGgg4w5fjKTg3ZGMKi4b1YcgIW3xdSURLS2xtogCsU=;
-        b=fRyMoD2q1Mop6NPALY9c2uKe5Rhk/1GfTW0af3vqH2DlIl99n5v0AwTtVD2M79Ya0xd6Xl
-        xgkhTWTIeKcc82IivBmts1cIQKk137fAZZ3NcviiG6423HQ9jtsuJdPQnGmY1AxuoRaQqG
-        b+Ltqdxv2kk8qgwWooAtyVirlRRQ7ac=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-402-dUJMhh15MPSYxViw9V6xQg-1; Thu, 02 Feb 2023 11:43:54 -0500
-X-MC-Unique: dUJMhh15MPSYxViw9V6xQg-1
-Received: by mail-qk1-f199.google.com with SMTP id h13-20020a05620a244d00b006fb713618b8so1669095qkn.0
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 08:43:54 -0800 (PST)
+        Thu, 2 Feb 2023 11:44:32 -0500
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 199254B8B5;
+        Thu,  2 Feb 2023 08:44:31 -0800 (PST)
+Received: by mail-ed1-f54.google.com with SMTP id n6so2607407edo.9;
+        Thu, 02 Feb 2023 08:44:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vLGgg4w5fjKTg3ZGMKi4b1YcgIW3xdSURLS2xtogCsU=;
-        b=B/PqUOztlN5W1w5NBH7qV5LWx74NyQLGHyJU6sU1oS4lKkImKBJqZ9FpSB1TnKJKAo
-         L5Hj4/um7S+Sr/VOntXaC3Pj5gez8bvrsMIoVlWMAZ4ppaIVp1AxVVSEampSRun2+NeN
-         ddnwAbT+BxXtgRZyrxHJlZYE6gC7vEeGe7XweLv0BQvziqIUUn7UyxX2XFFAXzEmmDAT
-         D8BzTK7aIUo+QhgJXcsuhY7F5/8joRyVyj4NHpAA5sfVbg5D6VYLJeeEGG+BH+W0bkJh
-         +O/OUlTDEeuFzxMp7SSYAuuzLYa5et4eLIaoG8QcReZ9NlnZKo8hOwLoruxoS74SWDrV
-         V6jg==
-X-Gm-Message-State: AO0yUKW4PwFCIPCGqZCb3dbhXaYqjc7MnXTHs5ojHTnJgHlO0vHOggpv
-        e8jXpQp03Ro5FEM0CPI2WsHY03ithMaO03hiQEGOzlVAGgD0lJt4R3nCYa2TPxAoe002Qfwwg/+
-        TH4+KiCryqK+BtekJmmTeyzay
-X-Received: by 2002:ac8:574f:0:b0:3b9:bd28:bb6c with SMTP id 15-20020ac8574f000000b003b9bd28bb6cmr9268600qtx.36.1675356233805;
-        Thu, 02 Feb 2023 08:43:53 -0800 (PST)
-X-Google-Smtp-Source: AK7set8npLnF2ztXqc6em28U8S/uZmIS8F+UsdTRM7+mksTrm4l1Z502h1Y4uJTTQH/IgeXd93Stng==
-X-Received: by 2002:ac8:574f:0:b0:3b9:bd28:bb6c with SMTP id 15-20020ac8574f000000b003b9bd28bb6cmr9268562qtx.36.1675356233479;
-        Thu, 02 Feb 2023 08:43:53 -0800 (PST)
-Received: from debian (2a01cb058918ce0063dc0e119f3f7ce5.ipv6.abo.wanadoo.fr. [2a01:cb05:8918:ce00:63dc:e11:9f3f:7ce5])
-        by smtp.gmail.com with ESMTPSA id n20-20020ac81e14000000b003b9a4a497a1sm6114637qtl.86.2023.02.02.08.43.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 08:43:53 -0800 (PST)
-Date:   Thu, 2 Feb 2023 17:43:49 +0100
-From:   Guillaume Nault <gnault@redhat.com>
-To:     Shigeru Yoshida <syoshida@redhat.com>
-Cc:     jchapman@katalix.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] l2tp: Avoid possible recursive deadlock in
- l2tp_tunnel_register()
-Message-ID: <Y9voRRiiWK/V7WQD@debian>
-References: <20230130154438.1373750-1-syoshida@redhat.com>
- <Y9f4eAhcJXhh0+c2@debian>
- <Y9qItT82LcJdJVlF@kernel-devel>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Px1xcB23kP4MnnGGoCIIfo3EkxqRE3bJUNzTnkZ3uHA=;
+        b=Ah8n2j73pdE0qNLJQ2I9u5mr5YcI7m+cfiffNlFnUrwiZy5zNSWima8F3/U215l7fy
+         4xProjV97YXHAeVRbe+bxqdDkpiEnH6smQZv8XK2mWwy2zqPdFitZu8ySn0oxp9eRmYx
+         UUYgaDoJ254rC70IeooVvsXe3JDYdjZHYXtD5MhiVjnIDJguMt3lVLXgewa9/P8+P9g0
+         iVpoc1nY81r+N/9ZNVnomkSp+7xfVVsKil2J6WN110WW3FSjQGH/nbdwDNLNmgZhzYw0
+         NbQkeWBUvdxDA937HpQLlGlaP+QlsoWrSvLdpVWg6IAFRvjgGd9cPs4zrzDEzH2fb+RF
+         zJIw==
+X-Gm-Message-State: AO0yUKVEGaazu0RGtAaOSq48l4lhJXTozMMqtHTK0MjtjLg+LhGxAjiX
+        Hrb43zncZWQgpoOngjA6XYorIWYm2TvxPas4YSU=
+X-Google-Smtp-Source: AK7set+jGfvAz09eI0nUDLd85R5enTo+FwH49qmQ0GzuaFTkZ68NhlEqlk632rxiUxb99M/+E3qXdk/UVwVl/IORYJQ=
+X-Received: by 2002:a05:6402:22ee:b0:4a2:1d19:ca14 with SMTP id
+ dn14-20020a05640222ee00b004a21d19ca14mr2180460edb.68.1675356269576; Thu, 02
+ Feb 2023 08:44:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9qItT82LcJdJVlF@kernel-devel>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230201210712.2170312-1-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20230201210712.2170312-1-srinivas.pandruvada@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 2 Feb 2023 17:44:18 +0100
+Message-ID: <CAJZ5v0ieQocb2oe1ggDCOos4HtkmypsadMkXCwH2J5XmRUdVyQ@mail.gmail.com>
+Subject: Re: [PATCH] thermal: intel_powerclamp: Return last requested state as cur_state
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
+        rui.zhang@intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 12:43:49AM +0900, Shigeru Yoshida wrote:
-> Hi Guillaume,
-> 
-> On Mon, Jan 30, 2023 at 06:03:52PM +0100, Guillaume Nault wrote:
-> > On Tue, Jan 31, 2023 at 12:44:38AM +0900, Shigeru Yoshida wrote:
-> > > This patch fixes the issue by returning error when a pppol2tp socket
-> > > itself is passed.
-> > 
-> > Fixes: 0b2c59720e65 ("l2tp: close all race conditions in l2tp_tunnel_register()")
-> > 
-> > > Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
-> > > ---
-> > >  net/l2tp/l2tp_ppp.c | 7 +++++--
-> > >  1 file changed, 5 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/net/l2tp/l2tp_ppp.c b/net/l2tp/l2tp_ppp.c
-> > > index db2e584c625e..88d1a339500b 100644
-> > > --- a/net/l2tp/l2tp_ppp.c
-> > > +++ b/net/l2tp/l2tp_ppp.c
-> > > @@ -702,11 +702,14 @@ static int pppol2tp_connect(struct socket *sock, struct sockaddr *uservaddr,
-> > >  			struct l2tp_tunnel_cfg tcfg = {
-> > >  				.encap = L2TP_ENCAPTYPE_UDP,
-> > >  			};
-> > > +			int dummy = 0;
-> > 
-> > There's no need to initialise dummy here. This is just confusing.
-> > We could even do without any extra variable and reuse error in
-> > sockfd_lookup().
-> > 
-> > >  			/* Prevent l2tp_tunnel_register() from trying to set up
-> > > -			 * a kernel socket.
-> > > +			 * a kernel socket.  Also, prevent l2tp_tunnel_register()
-> > > +			 * from trying to use pppol2tp socket itself.
-> > >  			 */
-> > > -			if (info.fd < 0) {
-> > > +			if (info.fd < 0 ||
-> > > +			    sock == sockfd_lookup(info.fd, &dummy)) {
-> > >  				error = -EBADF;
-> > >  				goto end;
-> > >  			}
-> > 
-> > That should work, but the real problem is calling l2tp_tunnel_register()
-> > under lock_sock(). We should instead get/create the tunnel before
-> > locking the pppol2tp socket.
-> 
-> Thank you so much for your comment, and sorry for the late response.
-> 
-> Do you mean we can call l2tp_tunnel_register() without pppol2tp socket
-> lock?
+On Wed, Feb 1, 2023 at 10:07 PM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> When the user is reading cur_state from the thermal cooling device for
+> Intel powerclamp device:
+> - It returns the idle ratio from Package C-state counters when
+> there is active idle injection session.
+> - -1, when there is no active idle injection session.
+>
+> This information is not very useful as the package C-state counters vary
+> a lot from read to read. Instead just return the last requested cur_state.
+>
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> ---
+>  drivers/thermal/intel/intel_powerclamp.c | 12 +-----------
+>  1 file changed, 1 insertion(+), 11 deletions(-)
+>
+> diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
+> index 2f4cbfdf26a0..72a45cf2708c 100644
+> --- a/drivers/thermal/intel/intel_powerclamp.c
+> +++ b/drivers/thermal/intel/intel_powerclamp.c
+> @@ -590,17 +590,7 @@ static int powerclamp_get_max_state(struct thermal_cooling_device *cdev,
+>  static int powerclamp_get_cur_state(struct thermal_cooling_device *cdev,
+>                                  unsigned long *state)
+>  {
+> -       if (clamping) {
+> -               if (poll_pkg_cstate_enable)
+> -                       *state = pkg_cstate_ratio_cur;
+> -               else
+> -                       *state = set_target_ratio;
+> -       } else {
+> -               /* to save power, do not poll idle ratio while not clamping */
+> -               *state = -1; /* indicates invalid state */
+> -       }
+> -
+> -       return 0;
+> +       return set_target_ratio;
 
-Yes. At this point, we're creating a new tunnel which is independant
-from the pppol2tp socket.
+*state = set_target_ratio;
+return 0;
 
-> I've read the source code of pppol2tp_connect(), but I'm not
-> sure why pppol2tp socket is locked at the beginning of this function.
-> If we can call l2tp_tunnel_register() without pppol2tp socket lock, I
-> think we can move lock_sock() after l2tp_tunnel_register().
+>  }
+>
+>  static int powerclamp_set_cur_state(struct thermal_cooling_device *cdev,
+> --
 
-Here are a few more details to be sure we're on the same page.
-
-Locking the pppol2tp socket remains necessary since we access and
-modify some of its protected attributes. But we can fetch or create
-the tunnel before working on the socket. For this, the only information
-we need to get from the socket is its netns. And calling sock_net(sk)
-without holding the socket lock is fine because user space sockets
-can't have their netns modified after initialisation.
-
-So the code for retrieving or creating the tunnel can be moved before
-the lock_sock(sk) call in pppol2tp_register(). Just make sure to adjust
-the error path accordingly. Also, a helper function might help to make
-the code more readable.
-
-> Thanks,
-> Shigeru
-> 
-> > 
-> 
-
+And please rebase it on top of the idle_inject series (which is being
+added to my bleeding-edge branch right now).
