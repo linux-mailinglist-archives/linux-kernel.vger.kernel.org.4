@@ -2,120 +2,300 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CBF8687C1D
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 12:22:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3641687C1F
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 12:24:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231661AbjBBLWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 06:22:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50748 "EHLO
+        id S231644AbjBBLYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 06:24:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230404AbjBBLWf (ORCPT
+        with ESMTP id S229616AbjBBLYM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 06:22:35 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7D5149426
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 03:22:34 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pNXfg-0001dt-3R; Thu, 02 Feb 2023 12:22:28 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pNXfd-0029u4-Cq; Thu, 02 Feb 2023 12:22:26 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pNXfd-000GOV-Tw; Thu, 02 Feb 2023 12:22:25 +0100
-Date:   Thu, 2 Feb 2023 12:22:25 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Subject: Re: [PATCH] dt-bindings: pwm: mediatek: add mediatek,mt7986
- compatible
-Message-ID: <20230202112225.r4wg2nqbcocbnmec@pengutronix.de>
-References: <70fe0b606d988958b87f89828b8728e2f68eaace.1675278958.git.daniel@makrotopia.org>
- <20230202095733.kxh6jd5hbshhif44@pengutronix.de>
+        Thu, 2 Feb 2023 06:24:12 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 95D4E89FA5
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 03:24:09 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6C3F7C14;
+        Thu,  2 Feb 2023 03:24:51 -0800 (PST)
+Received: from [10.1.31.33] (FVFF763DQ05P.cambridge.arm.com [10.1.31.33])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2E8803F64C;
+        Thu,  2 Feb 2023 03:24:08 -0800 (PST)
+Message-ID: <aacdd394-3008-a7fa-66a8-1db2a8fc1065@arm.com>
+Date:   Thu, 2 Feb 2023 11:24:06 +0000
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mysq7dcqb7ly26qb"
-Content-Disposition: inline
-In-Reply-To: <20230202095733.kxh6jd5hbshhif44@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH v2] coresight: tmc: Don't enable TMC when it's not ready.
+To:     Mike Leach <mike.leach@linaro.org>, Yabin Cui <yabinc@google.com>
+Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        James Clark <james.clark@arm.com>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <417c4e3a-6fa8-5210-dd27-669a5d9e255c@arm.com>
+ <20230127231001.1920947-1-yabinc@google.com>
+ <CAJ9a7VjZs_sHz=p-HQfE0gvqWx65776W8Y-gR3ATx-_k+vr7LQ@mail.gmail.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <CAJ9a7VjZs_sHz=p-HQfE0gvqWx65776W8Y-gR3ATx-_k+vr7LQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Mike,
 
---mysq7dcqb7ly26qb
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks for the comments, please note that I have queued this patch for next.
 
-On Thu, Feb 02, 2023 at 10:57:34AM +0100, Uwe Kleine-K=F6nig wrote:
-> Hello,
->=20
-> On Wed, Feb 01, 2023 at 07:25:57PM +0000, Daniel Golle wrote:
-> > Since commit 241eab76657f ("pwm: mediatek: Add support for MT7986")
-> > support for the 2 PWM channels implemented in MediaTek MT7986 SoCs has
-> > been added. Also add the compatible string to dt-bindings now that
-> > they have been converted to YAML.
-> >=20
-> > Signed-off-by: Daniel Golle <daniel@makrotopia.org>
-> > ---
-> > This patch has previously been submitted, but we decided to deferr it u=
-ntil
-> > after the conversion to YAML which has now been done via commit
-> > 3e98855ca0cf ("dt-bindings: pwm: mediatek: Convert pwm-mediatek to DT s=
-chema")
-> > See
-> > https://patchwork.ozlabs.org/project/devicetree-bindings/patch/Y39PjU1B=
-qBB8tZ98@makrotopia.org/
->=20
-> This commit is currently in next via the pwm tree. The easy options are
-> to take this commit via pwm, too, or wait till after tne next merge
-> window. I'm fine with the former.
->=20
-> Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+On 01/02/2023 20:43, Mike Leach wrote:
+> Hi,
+> 
+> On Fri, 27 Jan 2023 at 23:10, Yabin Cui <yabinc@google.com> wrote:
+>>
+>> If TMC ETR is enabled without being ready, in later use we may
+>> see AXI bus errors caused by accessing invalid addresses.
+>>
+>> Signed-off-by: Yabin Cui <yabinc@google.com>
+>> ---
+>> V1 -> V2: Make change to all TMCs instead of just ETR
+>>
+>>   .../hwtracing/coresight/coresight-tmc-core.c  |  4 +-
+>>   .../hwtracing/coresight/coresight-tmc-etf.c   | 43 +++++++++++++++----
+>>   .../hwtracing/coresight/coresight-tmc-etr.c   | 18 ++++++--
+>>   drivers/hwtracing/coresight/coresight-tmc.h   |  2 +-
+>>   4 files changed, 53 insertions(+), 14 deletions(-)
+>>
+>> diff --git a/drivers/hwtracing/coresight/coresight-tmc-core.c b/drivers/hwtracing/coresight/coresight-tmc-core.c
+>> index 07abf28ad725..c106d142e632 100644
+>> --- a/drivers/hwtracing/coresight/coresight-tmc-core.c
+>> +++ b/drivers/hwtracing/coresight/coresight-tmc-core.c
+>> @@ -31,7 +31,7 @@ DEFINE_CORESIGHT_DEVLIST(etb_devs, "tmc_etb");
+>>   DEFINE_CORESIGHT_DEVLIST(etf_devs, "tmc_etf");
+>>   DEFINE_CORESIGHT_DEVLIST(etr_devs, "tmc_etr");
+>>
+>> -void tmc_wait_for_tmcready(struct tmc_drvdata *drvdata)
+>> +int tmc_wait_for_tmcready(struct tmc_drvdata *drvdata)
+>>   {
+>>          struct coresight_device *csdev = drvdata->csdev;
+>>          struct csdev_access *csa = &csdev->access;
+>> @@ -40,7 +40,9 @@ void tmc_wait_for_tmcready(struct tmc_drvdata *drvdata)
+>>          if (coresight_timeout(csa, TMC_STS, TMC_STS_TMCREADY_BIT, 1)) {
+>>                  dev_err(&csdev->dev,
+>>                          "timeout while waiting for TMC to be Ready\n");
+>> +               return -EBUSY;
+>>          }
+>> +       return 0;
+>>   }
+>>
+>>   void tmc_flush_and_stop(struct tmc_drvdata *drvdata)
+>> diff --git a/drivers/hwtracing/coresight/coresight-tmc-etf.c b/drivers/hwtracing/coresight/coresight-tmc-etf.c
+>> index 4c4cbd1f7258..2840227e9135 100644
+>> --- a/drivers/hwtracing/coresight/coresight-tmc-etf.c
+>> +++ b/drivers/hwtracing/coresight/coresight-tmc-etf.c
+>> @@ -16,12 +16,19 @@
+>>   static int tmc_set_etf_buffer(struct coresight_device *csdev,
+>>                                struct perf_output_handle *handle);
+>>
+>> -static void __tmc_etb_enable_hw(struct tmc_drvdata *drvdata)
+>> +static int __tmc_etb_enable_hw(struct tmc_drvdata *drvdata)
+>>   {
+>> +       int rc = 0;
+>> +
+>>          CS_UNLOCK(drvdata->base);
+>>
+>>          /* Wait for TMCSReady bit to be set */
+>> -       tmc_wait_for_tmcready(drvdata);
+>> +       rc = tmc_wait_for_tmcready(drvdata);
+>> +       if (rc) {
+>> +               dev_err(&drvdata->csdev->dev, "fails to enable not ready TMC\n");
+>> +               CS_LOCK(drvdata->base);
+>> +               return rc;
+>> +       }
+>>
+>>          writel_relaxed(TMC_MODE_CIRCULAR_BUFFER, drvdata->base + TMC_MODE);
+>>          writel_relaxed(TMC_FFCR_EN_FMT | TMC_FFCR_EN_TI |
+>> @@ -33,6 +40,7 @@ static void __tmc_etb_enable_hw(struct tmc_drvdata *drvdata)
+>>          tmc_enable_hw(drvdata);
+>>
+>>          CS_LOCK(drvdata->base);
+>> +       return rc;
+>>   }
+>>
+>>   static int tmc_etb_enable_hw(struct tmc_drvdata *drvdata)
+>> @@ -42,8 +50,10 @@ static int tmc_etb_enable_hw(struct tmc_drvdata *drvdata)
+>>          if (rc)
+>>                  return rc;
+>>
+>> -       __tmc_etb_enable_hw(drvdata);
+>> -       return 0;
+>> +       rc = __tmc_etb_enable_hw(drvdata);
+>> +       if (rc)
+>> +               coresight_disclaim_device(drvdata->csdev);
+>> +       return rc;
+>>   }
+>>
+>>   static void tmc_etb_dump_hw(struct tmc_drvdata *drvdata)
+>> @@ -91,12 +101,19 @@ static void tmc_etb_disable_hw(struct tmc_drvdata *drvdata)
+>>          coresight_disclaim_device(drvdata->csdev);
+>>   }
+>>
+>> -static void __tmc_etf_enable_hw(struct tmc_drvdata *drvdata)
+>> +static int __tmc_etf_enable_hw(struct tmc_drvdata *drvdata)
+>>   {
+>> +       int rc = 0;
+>> +
+>>          CS_UNLOCK(drvdata->base);
+>>
+>>          /* Wait for TMCSReady bit to be set */
+>> -       tmc_wait_for_tmcready(drvdata);
+>> +       rc = tmc_wait_for_tmcready(drvdata);
+>> +       if (rc) {
+>> +               dev_err(&drvdata->csdev->dev, "fails to enable not ready TMC\n");
+>> +               CS_LOCK(drvdata->base);
+>> +               return rc;
+>> +       }
+>>
+>>          writel_relaxed(TMC_MODE_HARDWARE_FIFO, drvdata->base + TMC_MODE);
+>>          writel_relaxed(TMC_FFCR_EN_FMT | TMC_FFCR_EN_TI,
+>> @@ -105,6 +122,7 @@ static void __tmc_etf_enable_hw(struct tmc_drvdata *drvdata)
+>>          tmc_enable_hw(drvdata);
+>>
+>>          CS_LOCK(drvdata->base);
+>> +       return rc;
+>>   }
+>>
+>>   static int tmc_etf_enable_hw(struct tmc_drvdata *drvdata)
+>> @@ -114,8 +132,10 @@ static int tmc_etf_enable_hw(struct tmc_drvdata *drvdata)
+>>          if (rc)
+>>                  return rc;
+>>
+>> -       __tmc_etf_enable_hw(drvdata);
+>> -       return 0;
+>> +       rc = __tmc_etf_enable_hw(drvdata);
+>> +       if (rc)
+>> +               coresight_disclaim_device(drvdata->csdev);
+>> +       return rc;
+>>   }
+>>
+>>   static void tmc_etf_disable_hw(struct tmc_drvdata *drvdata)
+>> @@ -639,6 +659,7 @@ int tmc_read_unprepare_etb(struct tmc_drvdata *drvdata)
+>>          char *buf = NULL;
+>>          enum tmc_mode mode;
+>>          unsigned long flags;
+>> +       int rc = 0;
+>>
+>>          /* config types are set a boot time and never change */
+>>          if (WARN_ON_ONCE(drvdata->config_type != TMC_CONFIG_TYPE_ETB &&
+>> @@ -664,7 +685,11 @@ int tmc_read_unprepare_etb(struct tmc_drvdata *drvdata)
+>>                   * can't be NULL.
+>>                   */
+>>                  memset(drvdata->buf, 0, drvdata->size);
+>> -               __tmc_etb_enable_hw(drvdata);
+>> +               rc = __tmc_etb_enable_hw(drvdata);
+>> +               if (rc) {
+>> +                       spin_unlock_irqrestore(&drvdata->spinlock, flags);
+>> +                       return rc;
+>> +               }
+> 
+> There is a similar unprepare function in ETR - this should have similar updates.
+> 
+> 
+>>          } else {
+>>                  /*
+>>                   * The ETB/ETF is not tracing and the buffer was just read.
+>> diff --git a/drivers/hwtracing/coresight/coresight-tmc-etr.c b/drivers/hwtracing/coresight/coresight-tmc-etr.c
+>> index 867ad8bb9b0c..0811cb44588b 100644
+>> --- a/drivers/hwtracing/coresight/coresight-tmc-etr.c
+>> +++ b/drivers/hwtracing/coresight/coresight-tmc-etr.c
+>> @@ -983,15 +983,21 @@ static void tmc_sync_etr_buf(struct tmc_drvdata *drvdata)
+>>          etr_buf->ops->sync(etr_buf, rrp, rwp);
+>>   }
+>>
+>> -static void __tmc_etr_enable_hw(struct tmc_drvdata *drvdata)
+>> +static int __tmc_etr_enable_hw(struct tmc_drvdata *drvdata)
+>>   {
+>>          u32 axictl, sts;
+>>          struct etr_buf *etr_buf = drvdata->etr_buf;
+>> +       int rc = 0;
+>>
+>>          CS_UNLOCK(drvdata->base);
+>>
+>>          /* Wait for TMCSReady bit to be set */
+>> -       tmc_wait_for_tmcready(drvdata);
+>> +       rc = tmc_wait_for_tmcready(drvdata);
+>> +       if (rc) {
+>> +               dev_err(&drvdata->csdev->dev, "fails to enable not ready TMC\n");
+>> +               CS_LOCK(drvdata->base);
+>> +               return rc;
+>> +       }
+>>
+>>          writel_relaxed(etr_buf->size / 4, drvdata->base + TMC_RSZ);
+>>          writel_relaxed(TMC_MODE_CIRCULAR_BUFFER, drvdata->base + TMC_MODE);
+>> @@ -1032,6 +1038,7 @@ static void __tmc_etr_enable_hw(struct tmc_drvdata *drvdata)
+>>          tmc_enable_hw(drvdata);
+>>
+>>          CS_LOCK(drvdata->base);
+>> +       return rc;
+>>   }
+>>
+>>   static int tmc_etr_enable_hw(struct tmc_drvdata *drvdata,
+>> @@ -1060,7 +1067,12 @@ static int tmc_etr_enable_hw(struct tmc_drvdata *drvdata,
+>>          rc = coresight_claim_device(drvdata->csdev);
+>>          if (!rc) {
+>>                  drvdata->etr_buf = etr_buf;
+>> -               __tmc_etr_enable_hw(drvdata);
+>> +               rc = __tmc_etr_enable_hw(drvdata);
+>> +               if (rc) {
+>> +                       drvdata->etr_buf = NULL;
+>> +                       coresight_disclaim_device(drvdata->csdev);
+>> +                       tmc_etr_disable_catu(drvdata);
+>> +               }
+>>          }
+>>
+>>          return rc;
+>> diff --git a/drivers/hwtracing/coresight/coresight-tmc.h b/drivers/hwtracing/coresight/coresight-tmc.h
+>> index 66959557cf39..01c0382a29c0 100644
+>> --- a/drivers/hwtracing/coresight/coresight-tmc.h
+>> +++ b/drivers/hwtracing/coresight/coresight-tmc.h
+>> @@ -255,7 +255,7 @@ struct tmc_sg_table {
+>>   };
+>>
+>>   /* Generic functions */
+>> -void tmc_wait_for_tmcready(struct tmc_drvdata *drvdata);
+>> +int tmc_wait_for_tmcready(struct tmc_drvdata *drvdata);
+>>   void tmc_flush_and_stop(struct tmc_drvdata *drvdata);
+>>   void tmc_enable_hw(struct tmc_drvdata *drvdata);
+>>   void tmc_disable_hw(struct tmc_drvdata *drvdata);
+>> --
+>> 2.39.1.456.gfc5497dd1b-goog
+>>
+> 
+> The tmc_flush_and_stop() function also calls tmc_wait_for_tmcready().
 
-However it wasn't sent to the linux-pwm list, so it doesn't appear in
-the pwm patchwork :-\
+I think this already an error message there, when it fails to complete
+the flush.I thought of adding a WARN_ON, but thought it is not worth much.
 
-I bounced it, but not sure that will make it appear there.
+> 
+> The etb/etf_prepare_read operations disable the etb  /etf before a
+> read commences. For consistency  if this fails due to TMC not being
+> ready do we also need to fail the read prepare operations?
 
-Best regards
-Uwe
+I think that should be OK, as we can read what the TMC has already
+flushed/written to the memory.  A following session may not be able
+to use the ETR, which is fine.
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+Cheers
+Suzuki
 
---mysq7dcqb7ly26qb
-Content-Type: application/pgp-signature; name="signature.asc"
+> 
+> Regards
+> 
+> Mike
+> 
+> 
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmPbnO4ACgkQwfwUeK3K
-7AlNKwgAlGG0ra8OtKfzugGoSYMltYXKZt32d4XG1V7KBQMvvLHn7Yhs3zZXI/A0
-FFlpdyo0qBzFmmddOmKvh5yaA6oVNANGuRpBebxRvcJ9XQuGH84EHMvAaDRlZeN3
-5hSHfqAvXtrs8XqXRrvC2nKrJMrEwLnj5u4kX3EUWbibwHMsGfZw9NXERkQHU7Tv
-CoeQKCWJElp9H3JC7QxGpu7YUo9VNuJ6tIpjf/kpxkzOSFAAkXJJ2PPWsQG+zgfv
-HnUbrzkwd5S1kQqNW8EIdH5tmE566AnZUPzTkHXBSRCpZWnDdnFsIlVYkn5a6xNE
-TwIihOEGnlogkwybgio3Ugh0A5coNw==
-=btCZ
------END PGP SIGNATURE-----
-
---mysq7dcqb7ly26qb--
