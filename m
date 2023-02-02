@@ -2,102 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD84068879D
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 20:39:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D9776887A0
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 20:40:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232116AbjBBTjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 14:39:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60754 "EHLO
+        id S232718AbjBBTkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 14:40:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232529AbjBBTjh (ORCPT
+        with ESMTP id S231905AbjBBTkU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 14:39:37 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D6F7AE45
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 11:39:34 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id j17so4573726lfr.3
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 11:39:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=JmnIaySd7zoAM6xF2ibXT8yo+UTOpvQnMVr9b5O/7+w=;
-        b=ca1h9KkMFNsKgO7Ao0NeYlaifxp7NzGcaaakgNFyQLMxBSXDHTcSanf/uonLuKRR18
-         lO7gVsm341hb9Nhg1BLsB8gPuvWRYHLOlq9HV87cUF6Vj8wjTPtsHShRpe/Vd30GyM78
-         DjJAMh6ZqNcvDd+rLB79O+fNMlUiqjmmCA6so=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JmnIaySd7zoAM6xF2ibXT8yo+UTOpvQnMVr9b5O/7+w=;
-        b=irPj4O9Ly2PhkeCVdox/ZDm+4aNU6tkf985Z6El1oTvbb22SNHshlW4h4RnBGRQ4ix
-         ER1LyFytV+ARnCVBykMAt2/vpi0c+RoLfRkfbQIrCHQBWT/71yb4zCMNRZ265bML/pdQ
-         L7EIFtTnCj8BRX90oPov5xFkiQNyG5Bgdao10NUInGnwiSN2XpFE+sLlFjhENW1xSxfi
-         VfbdElxg2Vta5kYkBt+Lu+WRTO9zfzVpkXyWI3w+lHrFM1bljUK5+Gsy8ys5DymRs1ds
-         5G+FMHN+2PczdFgZlpsk111huwOOajqm6pbkcgBi7Cy+4LfPhy869mzhuuVqywJupw8s
-         Qe8Q==
-X-Gm-Message-State: AO0yUKXTMfM9NzMjaNp/LdYqIa6/htsHaub4RW2iSz4HkhNw/8ru/uNM
-        v9CW2QnCOAKhCI//FXaP+i7QLt77jLmfQwHhOUI=
-X-Google-Smtp-Source: AK7set9vkxvLWxixnMnygEWTTjPJTw3TvXVuMZVP+OhKO22Hc4pUhjpGSmgxDvWhy5U1bUL/+nLJDA==
-X-Received: by 2002:ac2:54af:0:b0:4cc:96fc:7b5d with SMTP id w15-20020ac254af000000b004cc96fc7b5dmr1782503lfk.52.1675366772154;
-        Thu, 02 Feb 2023 11:39:32 -0800 (PST)
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com. [209.85.167.52])
-        by smtp.gmail.com with ESMTPSA id w18-20020ac254b2000000b004cb430b5b38sm25570lfk.185.2023.02.02.11.39.30
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 11:39:31 -0800 (PST)
-Received: by mail-lf1-f52.google.com with SMTP id f34so4525295lfv.10
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 11:39:30 -0800 (PST)
-X-Received: by 2002:a17:906:f109:b0:882:e1b7:a90b with SMTP id
- gv9-20020a170906f10900b00882e1b7a90bmr2112186ejb.187.1675366759217; Thu, 02
- Feb 2023 11:39:19 -0800 (PST)
+        Thu, 2 Feb 2023 14:40:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6054577510;
+        Thu,  2 Feb 2023 11:40:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EC62061CC7;
+        Thu,  2 Feb 2023 19:40:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4BD07C4339E;
+        Thu,  2 Feb 2023 19:40:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675366818;
+        bh=RKhFRxkKw/oc1MHgIsGdTeY+HE5OfXv4GdCZPBtPHFc=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=CWjQW27d8ZOodn8t8hCYPfhIzr7DWRSeWLJSrYNvG/kc85m+oVH49B/BMG8qae5IB
+         ryD8wDM/siHuB7f/pJYvfE8r2/2taraKp9E/iP688zTr4kqGBcWAVgOqa11I0OzpPG
+         pFD3OxdYiiFEFXaNlWqsSDfCXZQPo5pds858biwK6wZ3HcmX4EY0vdgGO+EHrLZVj+
+         +qZqps9sdeh2M/Js1vOlU5EXibMF6RbxbaCdOyZBY92fJQRXn+1yiBFE+kgDElvy1G
+         Hm4yT4Bjuk3LET3gzHUtq1BcWLqxFDsVyDet2mK9a4hhfEIuElIrWu/Ur/9v1gp5zg
+         a+i+tIswm1eRA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 304FEE5254B;
+        Thu,  2 Feb 2023 19:40:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20230202145030.223740842@infradead.org>
-In-Reply-To: <20230202145030.223740842@infradead.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 2 Feb 2023 11:39:02 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wiF6y7CwR1P5_73aK2f=x=RZjwgh3sgeO3Mczv4XcDc8g@mail.gmail.com>
-Message-ID: <CAHk-=wiF6y7CwR1P5_73aK2f=x=RZjwgh3sgeO3Mczv4XcDc8g@mail.gmail.com>
-Subject: Re: [PATCH v2 00/10] Introduce cmpxchg128() -- aka. the demise of cmpxchg_double()
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     corbet@lwn.net, will@kernel.org, boqun.feng@gmail.com,
-        mark.rutland@arm.com, catalin.marinas@arm.com, dennis@kernel.org,
-        tj@kernel.org, cl@linux.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, joro@8bytes.org, suravee.suthikulpanit@amd.com,
-        robin.murphy@arm.com, dwmw2@infradead.org,
-        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
-        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
-        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
-        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-s390@vger.kernel.org,
-        iommu@lists.linux.dev, linux-arch@vger.kernel.org,
-        linux-crypto@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] net: ethernet: mtk_eth_soc: disable hardware DSA
+ untagging for second MAC
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167536681817.25016.12221190782721540650.git-patchwork-notify@kernel.org>
+Date:   Thu, 02 Feb 2023 19:40:18 +0000
+References: <20230128094232.2451947-1-arinc.unal@arinc9.com>
+In-Reply-To: <20230128094232.2451947-1-arinc.unal@arinc9.com>
+To:     None <arinc9.unal@gmail.com>
+Cc:     nbd@nbd.name, john@phrozen.org, sean.wang@mediatek.com,
+        Mark-MC.Lee@mediatek.com, lorenzo@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        matthias.bgg@gmail.com, arinc.unal@arinc9.com,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        erkin.bozoglu@xeront.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 2, 2023 at 7:29 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
->  - fixed up the inline asm to use 'u128 *' mem argument so the compiler knows
->    how wide the modification is.
->  - reworked the percpu thing to use union based type-punning instead of
->    _Generic() based casts.
+Hello:
 
-Looks lovely to me. This removed all my concerns (except for the
-testing one, but all the patches looked nice and clean to me, so
-clearly it must be perfect).
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-                Linus
+On Sat, 28 Jan 2023 12:42:32 +0300 you wrote:
+> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+> 
+> According to my tests on MT7621AT and MT7623NI SoCs, hardware DSA untagging
+> won't work on the second MAC. Therefore, disable this feature when the
+> second MAC of the MT7621 and MT7623 SoCs is being used.
+> 
+> Fixes: 2d7605a72906 ("net: ethernet: mtk_eth_soc: enable hardware DSA untagging")
+> Link: https://lore.kernel.org/netdev/6249fc14-b38a-c770-36b4-5af6d41c21d3@arinc9.com/
+> Tested-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> 
+> [...]
+
+Here is the summary with links:
+  - [net] net: ethernet: mtk_eth_soc: disable hardware DSA untagging for second MAC
+    https://git.kernel.org/netdev/net/c/a1f47752fd62
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
