@@ -2,88 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A735A6878BD
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:25:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86CD56878C3
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:26:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232318AbjBBJZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 04:25:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35580 "EHLO
+        id S231688AbjBBJ0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 04:26:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232405AbjBBJZH (ORCPT
+        with ESMTP id S229988AbjBBJ0f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 04:25:07 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42BD670991;
-        Thu,  2 Feb 2023 01:24:48 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6A2206602EEE;
-        Thu,  2 Feb 2023 09:24:46 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1675329887;
-        bh=GGlzxb9dTf55nUdjrZGMa6zqJ7/7TKIvIYIgKU9Rb5Q=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ZvUxkYeBF/qxbq81L6/3HDd//AT9Uxt1am7QMf3e6V6d6Zcehjp97kxk6TdFefmvs
-         B/c7D5eSdLngjBXHt8ZTlcQ4Qo51U298924xUKKrfkr6YVOvFNRW20cDK7EKzurQ7h
-         577xNPkTq9IDMrcUbs1UW3HV0mM7Z7R0RWVXPgJvxMPPaipdbKWZLA2ONEK6X+0D1/
-         0HOW5dXK7THS/ynnnJhv3QV93UCJMc0w5fVCUJmhdNJdJDCpndr23ZEb8TtM891Nr3
-         /3AeMYnjYskyIIlXcpP1yr2LqD2hMBAZVC18KVbnGsQWA21hAWw55R12nxpseI2otn
-         tVTp/5FdigjGw==
-Message-ID: <6fd35f0b-60ed-36ed-45bf-62346c0e220e@collabora.com>
-Date:   Thu, 2 Feb 2023 10:24:44 +0100
+        Thu, 2 Feb 2023 04:26:35 -0500
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10DB643452
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 01:26:34 -0800 (PST)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-510476ee20aso18550477b3.3
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 01:26:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=yMJLDKfiAh5d4q1e+8BHnfDMo0mUiYMeMc9aD1SEa10=;
+        b=fzeQZSHyw47SxC8Rtj+m5yBF+0xwnHJBbuQKxaz0Iac7/qtsy9fHhvgm89w6nwL6C2
+         w/4hH5m23kzrn5ChiLw1DtIeK9vkEqavU9lWOIfZbVp5g7FegM2+H3wdLVbMp6aTqXc0
+         WCILhVZe/eFsMU1Thw4veNWUgxMeVUW/ZIXLkHXiPBXsKPJkVsZqGLF0Ehlv3D022i++
+         FxV+9bkXjvpHaRNUCAraNsXt9ZhJ0E+HN24IoruY5J7mFvyDF2lgreSyJtqD0BZg8X5C
+         izALpjgrgmEu7FQsQ+w/LyRQ/Nsu6w/KxDM+YhzFB2MGOLHYm6ldNxd2kQ2k0Zb8Nf2U
+         dZPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yMJLDKfiAh5d4q1e+8BHnfDMo0mUiYMeMc9aD1SEa10=;
+        b=6F91L0nU7vBMdeUIkDmDzzwY8njAEVbl94FNLtkg/aPMWt+h3Frm8RJNwKD8cWiL17
+         bB4juL2tMGlScp7KjtyAKkQj5Xyk4mZnbWfbPcZgA0v8NUPtjyMV2ch0PKEmTqss+wgK
+         RdnnZOJt1HDw3eOJdr2WFXx8DHPvWB9/stLbrVAj7UaHL0/iD3a91vFoA249a7YTwoeW
+         EHaPCTgyUPJOSFmze9/aUyXOOWFLpnsjIKD8smnDeRzXBxDCMKklVbfRH7D5xNroHD2z
+         d38oX9dpnQbRxtirmOCfRktzOSSP72H0q0pQQTJq7f068e8FtkgxdXAVbuJG5DLnZbND
+         0ZCQ==
+X-Gm-Message-State: AO0yUKVY7sawn5UIZCWmzOQh4Sfmpa1uOecMm+3tlKQ1cYAW8IeTcbXl
+        V2x6nHR8m7iwGB0T/h6SjtwVgCwgYE8gEvRqwoAsIA==
+X-Google-Smtp-Source: AK7set8aXMGpKuLxzy9fQl+dGgdEeWWeapuh8k4nJ6zlAccjUYwWS0b7tuE6Jv3NgHgtrKXm51wDkn85QhM/rxFquZE=
+X-Received: by 2002:a05:690c:b82:b0:500:ac2c:80fb with SMTP id
+ ck2-20020a05690c0b8200b00500ac2c80fbmr617309ywb.90.1675329992984; Thu, 02 Feb
+ 2023 01:26:32 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 2/4] nvmem: add generic driver for devices with MMIO
- access
-Content-Language: en-US
-To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-References: <20230201064717.18410-1-zajec5@gmail.com>
- <20230201064717.18410-3-zajec5@gmail.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230201064717.18410-3-zajec5@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230123091708.4112735-1-git@sung-woo.kim> <20230202090509.2774062-1-iam@sung-woo.kim>
+In-Reply-To: <20230202090509.2774062-1-iam@sung-woo.kim>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Thu, 2 Feb 2023 10:26:21 +0100
+Message-ID: <CANn89i+hAht=g1F6kjPfq8eO4j6-2WEE+CNtRtq1S4UnwXEQaw@mail.gmail.com>
+Subject: Re: [PATCH] Bluetooth: L2CAP: Fix use-after-free
+To:     Sungwoo Kim <iam@sung-woo.kim>
+Cc:     happiness.sung.woo@gmail.com, benquike@gmail.com,
+        davem@davemloft.net, daveti@purdue.edu, johan.hedberg@gmail.com,
+        kuba@kernel.org, linux-bluetooth@vger.kernel.org,
+        linux-kernel@vger.kernel.org, luiz.dentz@gmail.com,
+        marcel@holtmann.org, netdev@vger.kernel.org, pabeni@redhat.com,
+        wuruoyu@me.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 01/02/23 07:47, Rafał Miłecki ha scritto:
-> From: Rafał Miłecki <rafal@milecki.pl>
-> 
-> With nvmem layouts in place we should now work on plain content access
-> NVMEM drivers (e.g. MMIO one). Actual NVMEM content handling should go
-> to layout drivers.
-> 
-> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+On Thu, Feb 2, 2023 at 10:07 AM Sungwoo Kim <iam@sung-woo.kim> wrote:
+>
+> Due to the race condition between l2cap_sock_cleanup_listen and
+> l2cap_sock_close_cb, l2cap_sock_kill can receive already freed sk,
+> resulting in use-after-free inside l2cap_sock_kill.
+> This patch prevent this by adding a null check in l2cap_sock_kill.
+>
+> Context 1:
+> l2cap_sock_cleanup_listen();
+>   // context switched
+>   l2cap_chan_lock(chan);
+>   l2cap_sock_kill(sk); // <-- sk is already freed below
 
-I agree but if you want to really bring on this change, you should add
-some kind of write support... and clocks... and regulators with different
-voltage levels (write/fuse-blow voltage, read voltage if any)...
+But sk is used in l2cap_sock_cleanup_listen()
+and should not be NULL...
 
-Describing this entire thing in device-tree should be possible, but then
-some SoCs may need a specific register sequence in order to enter writing
-mode, which is something that you can't just put in devicetree, so this
-driver should be a framework on its own - hence not as simple as proposed.
+while ((sk = bt_accept_dequeue(parent, NULL))) {
+  ...
+  l2cap_sock_kill(sk);
+  ..
+}
 
-Regards,
-Angelo
+It would help if you send us a stack trace ...
+
+>
+> Context 2:
+> l2cap_chan_timeout();
+>   l2cap_chan_lock(chan);
+>   chan->ops->close(chan);
+>     l2cap_sock_close_cb()
+>     l2cap_sock_kill(sk); // <-- sk is freed here
+>   l2cap_chan_unlock(chan);
+>
+
+Please add a Fixes: tag
+
+> Signed-off-by: Sungwoo Kim <iam@sung-woo.kim>
+> ---
+>  net/bluetooth/l2cap_sock.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/net/bluetooth/l2cap_sock.c b/net/bluetooth/l2cap_sock.c
+> index ca8f07f35..657704059 100644
+> --- a/net/bluetooth/l2cap_sock.c
+> +++ b/net/bluetooth/l2cap_sock.c
+> @@ -1245,7 +1245,7 @@ static int l2cap_sock_recvmsg(struct socket *sock, struct msghdr *msg,
+>   */
+>  static void l2cap_sock_kill(struct sock *sk)
+>  {
+> -       if (!sock_flag(sk, SOCK_ZAPPED) || sk->sk_socket)
+> +       if (!sk || !sock_flag(sk, SOCK_ZAPPED) || sk->sk_socket)
+>                 return;
+>
+>         BT_DBG("sk %p state %s", sk, state_to_string(sk->sk_state));
+> --
+> 2.25.1
+>
