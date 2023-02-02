@@ -2,160 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EECB6688A84
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 00:11:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3307A688A8B
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 00:14:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232882AbjBBXLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 18:11:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37612 "EHLO
+        id S233023AbjBBXN7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 18:13:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230057AbjBBXLS (ORCPT
+        with ESMTP id S230057AbjBBXNy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 18:11:18 -0500
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C957E6C3;
-        Thu,  2 Feb 2023 15:11:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=VAk2iSonWR2CNUR3YDs4R251h30dkaNOFz6qNY0ijSM=; b=SPGvTtegRKMQ50FQT1ai1VSmj4
-        qB6HhcHC1srkWgp1Tx0KWYZmDAbLU/J3V6UIDmvukssZYCnGrmo2U96z6+H+gmQjaqEZhXFYINitn
-        weNCCrv1l5Lm5uRLHRBSfKJxgM1H04Qs1A8/IGIIVjr68kAFur2YqGN2gDm+bTmNwwhdF6yPebdZR
-        FMsKfApNBzOP+m/ILOEUzzbGRLeaNyxNeH2j91m1faCiKgpdPeXy7vrPau1fXzSiL4+VlnaZAiszM
-        2bkG5LL1bP+aFYd2e0y6G0b8AlzgkDu4mb4IO4bH4DsAItDgMYSjDGjQOFWb3ZeQY9BdBB/cXo4VI
-        rzmwd1Tg==;
-Received: from sslproxy01.your-server.de ([78.46.139.224])
-        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1pNijZ-000CDg-On; Fri, 03 Feb 2023 00:11:13 +0100
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1pNijZ-0006nR-68; Fri, 03 Feb 2023 00:11:13 +0100
-Subject: Re: [PATCH bpf-next 2/3] bpf: Add KF_DEPRECATED kfunc flag
-To:     David Vernet <void@manifault.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@meta.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Kernel Team <kernel-team@meta.com>,
-        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-References: <20230202163056.658641-1-void@manifault.com>
- <20230202163056.658641-3-void@manifault.com>
- <CAADnVQJjmnEpXWL8-SAPt5zYXnFYeF8-wXXpA9shOhqUXNPw=g@mail.gmail.com>
- <Y9wq1Fy8sgpGB+pe@maniforge>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <1ea9adb3-851c-0c04-1655-07d9f3b7f3b0@iogearbox.net>
-Date:   Fri, 3 Feb 2023 00:11:12 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Thu, 2 Feb 2023 18:13:54 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44A82942C
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 15:13:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675379592;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4glrkB5ql6wUNYPNiI941jzqAV8teJiRbBLj9H6Yjs8=;
+        b=Wk0rrBGLhsAugMdz67a4sfrboAy7B6w+hXlbnLVJ0I03DajLv5Dq2O5p7aXHmZsN4WAwwO
+        aOf7+r58RkWdcj9f6O6PrZmSNf2Mv7hhF5DUZeHMz5/a3jjjw6tG4R3vz4lGvq8G74LW6i
+        acFzin1BF6YhznrUzdfR7kKB8PhiYqw=
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
+ [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-520-F2nT-d0gNsCs8Wmm3-QFxw-1; Thu, 02 Feb 2023 18:13:11 -0500
+X-MC-Unique: F2nT-d0gNsCs8Wmm3-QFxw-1
+Received: by mail-il1-f200.google.com with SMTP id j7-20020a056e02014700b00310d217f518so2197470ilr.2
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 15:13:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4glrkB5ql6wUNYPNiI941jzqAV8teJiRbBLj9H6Yjs8=;
+        b=yaDt44T3FiF2aY67ebtEc+owiss4UFXgT3D0pGtGB6c5JVxBDXff1j2PLujatPlQoF
+         2+ytLC6R9EWrTznhUneMDz7trfJGl+4Ym++APtpK+PIbcy84H+Viy6hl75iIBL99fZDp
+         WB4XLK6Ip5D6e6xLOJCdCHDqDIXlH3IT6BoQx43lNxB/zuFr+raWRVw02AIR4fEs8y12
+         pSYYiVJMwf6qu97O0UjvU0aFdH1DwLzya5NMMbN9rT+QgJXJYmAv6GQl4DCJ5qUw5Lrz
+         bLOQkLOd/fTcXuc7rORDR3rikGT2kWBZLgvzk2DfbECEO5kYPiUZJT7A7xCDl1efFSjq
+         CChg==
+X-Gm-Message-State: AO0yUKXxAU5ZZNV0uisZ6qvE4xAH0+rD9oU67jtYMdT2dn+QvGWNOH9m
+        MgOrCPj6QARRpuC4/x2cS3bzANHaW/kBsvhSexOiNyv2qLRpRiK5bbVU3mHelJyIHx/RwGXQZ37
+        RumG1ocaTDF1eUfg72vqZt06W
+X-Received: by 2002:a5e:8e04:0:b0:71f:2e0b:5c64 with SMTP id a4-20020a5e8e04000000b0071f2e0b5c64mr5453129ion.3.1675379590188;
+        Thu, 02 Feb 2023 15:13:10 -0800 (PST)
+X-Google-Smtp-Source: AK7set+b8pGPR77dGbU4qatHthpYCAIMQpARtX1qQ/2j2i7HMF8A+n6jNFbLyHBhEg+B3kM57ThseA==
+X-Received: by 2002:a5e:8e04:0:b0:71f:2e0b:5c64 with SMTP id a4-20020a5e8e04000000b0071f2e0b5c64mr5453113ion.3.1675379589952;
+        Thu, 02 Feb 2023 15:13:09 -0800 (PST)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id i30-20020a056638381e00b003bc39fc7505sm197983jav.62.2023.02.02.15.13.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Feb 2023 15:13:09 -0800 (PST)
+Date:   Thu, 2 Feb 2023 16:13:07 -0700
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     Matthew Rosato <mjrosato@linux.ibm.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "jgg@nvidia.com" <jgg@nvidia.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "farman@linux.ibm.com" <farman@linux.ibm.com>,
+        "pmorel@linux.ibm.com" <pmorel@linux.ibm.com>,
+        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
+        "frankja@linux.ibm.com" <frankja@linux.ibm.com>,
+        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "akrowiak@linux.ibm.com" <akrowiak@linux.ibm.com>,
+        "jjherne@linux.ibm.com" <jjherne@linux.ibm.com>,
+        "pasic@linux.ibm.com" <pasic@linux.ibm.com>,
+        "zhenyuw@linux.intel.com" <zhenyuw@linux.intel.com>,
+        "Wang, Zhi A" <zhi.a.wang@intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "intel-gvt-dev@lists.freedesktop.org" 
+        <intel-gvt-dev@lists.freedesktop.org>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3] vfio: fix deadlock between group lock and kvm lock
+Message-ID: <20230202161307.0c6aa23e.alex.williamson@redhat.com>
+In-Reply-To: <BN9PR11MB527618E281BEB8E479ABB0418CD69@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20230202162442.78216-1-mjrosato@linux.ibm.com>
+        <20230202124210.476adaf8.alex.williamson@redhat.com>
+        <BN9PR11MB527618E281BEB8E479ABB0418CD69@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <Y9wq1Fy8sgpGB+pe@maniforge>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.7/26800/Thu Feb  2 09:47:56 2023)
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/2/23 10:27 PM, David Vernet wrote:
-> On Thu, Feb 02, 2023 at 01:21:19PM -0800, Alexei Starovoitov wrote:
->> On Thu, Feb 2, 2023 at 8:31 AM David Vernet <void@manifault.com> wrote:
->>>
->>> Now that we have our kfunc lifecycle expectations clearly documented,
->>> and that KF_DEPRECATED is documented as an optional method for kfunc
->>> developers and maintainers to provide a deprecation story to BPF users,
->>> we need to actually implement the flag.
->>>
->>> This patch adds KF_DEPRECATED, and updates the verifier to issue a
->>> verifier log message if a deprecated kfunc is called. Currently, a BPF
->>> program either has to fail to verify, or be loaded with log level 2 in
->>> order to see the message. We could eventually enhance this to always
->>> be logged regardless of log level or verification status, or we could
->>> instead emit a warning to dmesg. This seems like the least controversial
->>> option for now.
->>>
->>> A subsequent patch will add a selftest that verifies this behavior.
->>>
->>> Signed-off-by: David Vernet <void@manifault.com>
->>> ---
->>>   include/linux/btf.h   | 1 +
->>>   kernel/bpf/verifier.c | 8 ++++++++
->>>   2 files changed, 9 insertions(+)
->>>
->>> diff --git a/include/linux/btf.h b/include/linux/btf.h
->>> index 49e0fe6d8274..a0ea788ee9b0 100644
->>> --- a/include/linux/btf.h
->>> +++ b/include/linux/btf.h
->>> @@ -71,6 +71,7 @@
->>>   #define KF_SLEEPABLE    (1 << 5) /* kfunc may sleep */
->>>   #define KF_DESTRUCTIVE  (1 << 6) /* kfunc performs destructive actions */
->>>   #define KF_RCU          (1 << 7) /* kfunc only takes rcu pointer arguments */
->>> +#define KF_DEPRECATED   (1 << 8) /* kfunc is slated to be removed or deprecated */
->>>
->>>   /*
->>>    * Tag marking a kernel function as a kfunc. This is meant to minimize the
->>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->>> index 4cc0e70ee71e..22adcf24f9e1 100644
->>> --- a/kernel/bpf/verifier.c
->>> +++ b/kernel/bpf/verifier.c
->>> @@ -8511,6 +8511,11 @@ static bool is_kfunc_rcu(struct bpf_kfunc_call_arg_meta *meta)
->>>          return meta->kfunc_flags & KF_RCU;
->>>   }
->>>
->>> +static bool is_kfunc_deprecated(const struct bpf_kfunc_call_arg_meta *meta)
->>> +{
->>> +       return meta->kfunc_flags & KF_DEPRECATED;
->>> +}
->>> +
->>>   static bool is_kfunc_arg_kptr_get(struct bpf_kfunc_call_arg_meta *meta, int arg)
->>>   {
->>>          return arg == 0 && (meta->kfunc_flags & KF_KPTR_GET);
->>> @@ -9646,6 +9651,9 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
->>>                          mark_btf_func_reg_size(env, regno, t->size);
->>>          }
->>>
->>> +       if (is_kfunc_deprecated(&meta))
->>> +               verbose(env, "calling deprecated kfunc %s\n", func_name);
->>> +
->>
->> Since prog will successfully load, no one will notice this message.
->>
->> I think we can skip patches 2 and 3 for now.
+On Thu, 2 Feb 2023 23:04:10 +0000
+"Tian, Kevin" <kevin.tian@intel.com> wrote:
 
-+1, the KF_DEPRECATED could probably for the time being just mentioned
-in doc.
+> > From: Alex Williamson <alex.williamson@redhat.com>
+> > Sent: Friday, February 3, 2023 3:42 AM
+> > 
+> > On Thu,  2 Feb 2023 11:24:42 -0500
+> > Matthew Rosato <mjrosato@linux.ibm.com> wrote:
+> >   
+> > > After 51cdc8bc120e, we have another deadlock scenario between the
+> > > kvm->lock and the vfio group_lock with two different codepaths acquiring
+> > > the locks in different order.  Specifically in vfio_open_device, vfio
+> > > holds the vfio group_lock when issuing device->ops->open_device but  
+> > some  
+> > > drivers (like vfio-ap) need to acquire kvm->lock during their open_device
+> > > routine;  Meanwhile, kvm_vfio_release will acquire the kvm->lock first
+> > > before calling vfio_file_set_kvm which will acquire the vfio group_lock.
+> > >
+> > > To resolve this, let's remove the need for the vfio group_lock from the
+> > > kvm_vfio_release codepath.  This is done by introducing a new spinlock to
+> > > protect modifications to the vfio group kvm pointer, and acquiring a kvm
+> > > ref from within vfio while holding this spinlock, with the reference held
+> > > until the last close for the device in question.
+> > >
+> > > Fixes: 51cdc8bc120e ("kvm/vfio: Fix potential deadlock on vfio group_lock")
+> > > Reported-by: Anthony Krowiak <akrowiak@linux.ibm.com>
+> > > Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
+> > > Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+> > > ---
+> > > Changes from v2:
+> > > * Relocate the new functions back to vfio_main and externalize to call
+> > >   from group (Kevin) since cdev will need this too
+> > > * s/vfio_kvm_*_kvm/vfio_device_*_kvm/ and only pass device as input.
+> > >   Handle new kvm_ref_lock directly inside vfio_device_get_kvm (Alex)
+> > > * Add assert_lockdep_held for dev_set lock (Alex)
+> > > * Internalize error paths for vfio_device_get_kvm_safe and now return
+> > >   void - either device->kvm is set with a ref taken or is NULL (Alex)
+> > > * Other flow suggestions to make the call path cleaner - Thanks! (Alex)
+> > > * Can't pass group->kvm to vfio_device_open, as it references the value
+> > >   outside of new lock.  Pass device->kvm to minimize changes in this
+> > >   fix (Alex, Yi)
+> > > Changes from v1:
+> > > * use spin_lock instead of spin_lock_irqsave (Jason)
+> > > * clear device->kvm_put as part of vfio_kvm_put_kvm (Yi)
+> > > * Re-arrange code to avoid referencing the group contents from within
+> > >   vfio_main (Kevin) which meant moving most of the code in this patch
+> > >   to group.c along with getting/dropping of the dev_set lock
+> > > ---
+> > >  drivers/vfio/group.c     | 32 ++++++++++++++----
+> > >  drivers/vfio/vfio.h      | 14 ++++++++
+> > >  drivers/vfio/vfio_main.c | 70 ++++++++++++++++++++++++++++++++++++--  
+> > --  
+> > >  include/linux/vfio.h     |  2 +-
+> > >  4 files changed, 103 insertions(+), 15 deletions(-)  
+> > 
+> > LGTM.  I'm not sure moving the functions to vfio_main really buys us
+> > anything since we're making so much use of group fields.  The cdev
+> > approach will necessarily be different, so the bulk of the get code will
+> > likely need to move back to group.c anyway.
+> >   
+> 
+> well my last comment was based on Matthew's v2 where the get code
+> gets a kvm passed in instead of implicitly retrieving group ref_lock
+> internally. In that case the get/put helpers only contain device logic
+> thus fit in vfio_main.c.
+> 
+> with v3 then they have to be in group.c since we don't want to use
+> group fields in vfio_main.c.
+> 
+> but I still think v2 of the helpers is slightly better. The only difference
+> between cdev and group when handling this race is using different
+> ref_lock. the symbol get/put part is exactly same. So even if we
+> merge v3 like this, very likely Yi has to change it back to v2 style
+> to share the get/put helpers while just leaving the ref_lock part
+> handled differently between the two path.
 
-> I can leave them out of the v2 version of the patch set, but the reason
-> I included them here is because I thought it would be odd to document
-> KF_DEPRECATED without actually upstreaming it. Agreed that it is
-> essentially 0 signal in its current form. Hopefully it could be expanded
-> soon to be louder and more noticeable by not relying on the env log,
-> which is wiped if the verifier passes, but that's separate from whether
-> KF_DEPRECATED in general is the API that we want to provide kfunc
-> developers (in which case at least 2 and 3 would add that in a
-> non-controversial form).
+I'm not really a fan of the asymmetry of the v2 version where the get
+helper needs to be called under the new kvm_ref_lock, but the put
+helper does not.  Having the get helper handle that makes the caller
+much cleaner.  Thanks,
 
-This ideally needs some form of prog load flag which would error upon
-use of kfuncs with deprecation tag, such that tools probing kernel for
-feature availability can notice.
+Alex
+
