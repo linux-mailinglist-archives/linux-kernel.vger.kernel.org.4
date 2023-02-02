@@ -2,161 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEED0688991
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 23:12:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70617688993
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 23:13:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232494AbjBBWME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 17:12:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38802 "EHLO
+        id S232790AbjBBWNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 17:13:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232445AbjBBWMB (ORCPT
+        with ESMTP id S232445AbjBBWNN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 17:12:01 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 539FC64682
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 14:11:59 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id o12so3384868ljp.11
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 14:11:59 -0800 (PST)
+        Thu, 2 Feb 2023 17:13:13 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 633B66D05C
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 14:13:12 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id k8-20020a05600c1c8800b003dc57ea0dfeso4765074wms.0
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 14:13:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DDBf9AfsyJbDtWjBnORPYU2pBf1EAExr7r+iEnI2UJk=;
-        b=DiQK1RYQzoUkORmBEz1Rkwi9p4a0tXqoRCrUVCeT+LRfAIZWk19mpwacI3+cO5xyfQ
-         X/unw6O6ZAPTICkvk+5xe4gMtll3sTUc2iD9XpTX63fkRrNHxkVjqi5JT0up7TNX9K7I
-         mxvMKxD7qHndz5uwVXyrdy+jbuUmOKccaQBi0=
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=u0GguDQPT3zLu/8MG92OfTe7PbfZZIh+XyJ3Yv2nDGw=;
+        b=WBsZPyJtSM1V86ca5l7Q9d4dBuslBYDnXyWaeVa2C2JiwcXjxM3fo9VyVR/K7fayeU
+         WL71Z4AWGoWCxQvI4kWWf4fkyCEZWOJQJEM9BM636cNwyeSPs61So9+uhqa980I+qe2Y
+         gNEt2o5RaXB2f+pN+U33YYnZOEvkXMlQyi966IDZjLDNJCqwQ+OhzxdA6r8r0NH/ycCK
+         KgkqHIQY0DgZqw/zc/Zj+aGC8zBnwnYfK5nmdJldB8e3R78b1Us8d6B/bTaXFW0FIM4A
+         b0lPAbbRwJVFL0yDlAJZQ//IJHIxWTWwpWLcCMUqfZ1mrpkvOqKWdfRYPSWSjZNdZUDg
+         4zmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DDBf9AfsyJbDtWjBnORPYU2pBf1EAExr7r+iEnI2UJk=;
-        b=p3pm/C9guac7pptEPkBe/TEeI7QfhZQyY7aASCZSYd2X5JIyhvRq+WxCgVUpKl1pZH
-         45FM8sdyW/SYY/vFqF2KuDl7vd/7gESFLS/QYleO1ZCN9XFGxqo7wmWWcN7jr9TC+LrH
-         p4UnVrJ1vCK26gMo3AwFrmJC3cdUkeAuPT8nbh3ptTK7+veKT2ZZ4g0IoRcrTUxmeK2X
-         4v6dQKW452oRZXS7JKTVgRxZOevQhM9GyDt4aJE3uXDut0ihwypnYVYvkQ2/94O7FkT/
-         WSvx9ZrlZv9YYnBjAM6B8OBZigzTgyG8Klfr1uLJhM1dpKV/NvjvsBclgHrP1mmAP+WI
-         IMhg==
-X-Gm-Message-State: AO0yUKUFFe5W3tyDA+OsyrOJw8sUB8ph0ov1koTi56NVDJi5PUS746Pp
-        lvjjWZxIezYfrYTlauTNwFUAmi+ahhvw+cvVuLZdlQ==
-X-Google-Smtp-Source: AK7set/RbA0pp+Qg8Rsnud2lgip3FiJpNc3sLz6lAva+5lxLZwIGc8AFOklF/KcPcvFq6MOUVDu6o3TNx1Z/7sHc9AM=
-X-Received: by 2002:a2e:a36c:0:b0:28b:7226:f203 with SMTP id
- i12-20020a2ea36c000000b0028b7226f203mr1266615ljn.207.1675375917469; Thu, 02
- Feb 2023 14:11:57 -0800 (PST)
-MIME-Version: 1.0
-References: <20230202070245.3311951-1-qiang1.zhang@intel.com>
- <7959A7ED-A47F-4472-9278-8582F1CCC6A9@joelfernandes.org> <PH0PR11MB5880DF541BB1D75E0DFC02FEDAD69@PH0PR11MB5880.namprd11.prod.outlook.com>
-In-Reply-To: <PH0PR11MB5880DF541BB1D75E0DFC02FEDAD69@PH0PR11MB5880.namprd11.prod.outlook.com>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Thu, 2 Feb 2023 17:11:45 -0500
-Message-ID: <CAEXW_YRSEu=O7FW=T5fOAWcRbejQUXVN+RoGcTN+xkd7xmJepA@mail.gmail.com>
-Subject: Re: [PATCH v2] rcutorture: Create nocb tasks only for
- CONFIG_RCU_NOCB_CPU=y kernels
-To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
-Cc:     "paulmck@kernel.org" <paulmck@kernel.org>,
-        "frederic@kernel.org" <frederic@kernel.org>,
-        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=u0GguDQPT3zLu/8MG92OfTe7PbfZZIh+XyJ3Yv2nDGw=;
+        b=Ybwt5mNjoCZpryaPrJWxc9n1N+w5hzuDpsRVbJR8BBGht4b0Ib0QXSzpEW5XH+qeTL
+         n+sz9nOBA6M/LxghQMYQIECwYAzZtOhMDQcmzkfkg9rSYMRAZV5mgufoN62VvWjXxRNO
+         jFcYlQst0umjEmWbCHPuPSNgsg9pqGvwJXOG+RyIyLvTTC72VFEnjXzwF+UHk9gkwSd2
+         q3/lYt9Tte638NWPJnHlg3gxo0uTZz4umWK27WQbowX/8NrBFTvYsRNWrxGMi1dupDyo
+         b87/WL7U2yaoguStUhsKy5cdirzh654umoE2IKECXq04oLyUDohy2eEKLfIWyDUFTAs6
+         3NYg==
+X-Gm-Message-State: AO0yUKWJZVOPQrqcGdplD3fHiMwftmRoU1XqBaFIB+Wp5TZMYGObLIN8
+        cv7ZClCo9jSi6jOdo7Du16U47mrIrMI=
+X-Google-Smtp-Source: AK7set/nXhbianujQl5UY3iXTQtvbalIwk7GTrBsr2v3khiFUhckhvAdEYN1g+jJ7C46ydLJYuaQmA==
+X-Received: by 2002:a05:600c:4f03:b0:3df:9858:c036 with SMTP id l3-20020a05600c4f0300b003df9858c036mr3066462wmq.11.1675375990816;
+        Thu, 02 Feb 2023 14:13:10 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id i10-20020a05600c354a00b003dd1c15e7fcsm6957128wmq.15.2023.02.02.14.13.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Feb 2023 14:13:10 -0800 (PST)
+Date:   Fri, 3 Feb 2023 01:13:06 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     'Guru Mehar Rachaputi' <gurumeharrachaputi@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] staging: pi433: modify bit_rate from u16 to u32
+Message-ID: <Y9w1crEwTInJzlWE@kadam>
+References: <Y9h42l/8EcPqn63x@combine-ThinkPad-S1-Yoga>
+ <Y9ilj812USHrSXe+@kroah.com>
+ <Y9jrOKMGl7ITKxhP@combine-ThinkPad-S1-Yoga>
+ <19e492521b4a4d31aa13c45e8616689b@AcuMS.aculab.com>
+ <Y9pno7gZHa+r/Rg3@kadam>
+ <08b38578bb0f4088aeedbf4b179d9c59@AcuMS.aculab.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <08b38578bb0f4088aeedbf4b179d9c59@AcuMS.aculab.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 2, 2023 at 4:25 PM Zhang, Qiang1 <qiang1.zhang@intel.com> wrote=
-:
->
->
-> > On Feb 2, 2023, at 1:57 AM, Zqiang <qiang1.zhang@intel.com> wrote:
-> >
-> > =EF=BB=BFWhen setting nocbs_nthreads to start rcutorture test with a no=
-n-zero value,
-> > the nocb tasks will be created and invoke rcu_nocb_cpu_offload/deoffloa=
-d()
-> > to toggle CPU's callback-offload state, but for CONFIG_RCU_NOCB_CPU=3Dn
-> > kernel, the rcu_nocb_cpu_offload/deoffload() is a no-op and this is als=
-o
-> > meaningless for torture_type is non-rcu.
-> >
-> > This commit therefore add member can_nocbs_toggle to rcu_torture_ops
-> > structure to avoid unnecessary nocb tasks creation.
-> >
-> > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> > ---
-> > kernel/rcu/rcutorture.c | 10 ++++++++--
-> > 1 file changed, 8 insertions(+), 2 deletions(-)
-> >
-> >Sorry if I am missing something but what is the point of adding more lin=
-es of code and complexity to handle this? Does it improve the test coverage=
- or reduce overhead?
-> >
-> >This is test code. I see no problem with cost of an extra unused task wi=
-th positive trade off of keeping the code simple=E2=80=A6
->
-> For nocbs_nthreads is non-zero and CONFIG_RCU_NOCB_CPU=3Dn kernels,
-> the rcu_nocb_cpu_offload/deoffload() is a no-op,  we create nocbs_nthread=
-s
-> kthreads and perform nocb toggle tests periodically, which is meaningless=
- and
-> will take extra cpu time.
+On Thu, Feb 02, 2023 at 10:02:25PM +0000, David Laight wrote:
+> From: Dan Carpenter
+> > Sent: 01 February 2023 13:23
+> > 
+> > On Wed, Feb 01, 2023 at 12:34:50PM +0000, David Laight wrote:
+> > > In reality having a uapi structure with embedded padding should
+> > > be banned.
+> > > But that would need a compiler attribute to enforce it.
+> > 
+> > It would be simple enough to grep the names of all the UAPI struct and
+> > use pahole to make a list of the existing structs which have holes.
+> > Then re-run the script every week and complain when new holey struct
+> > types are added.
+> > 
+> > You could do a similar thing with Smatch looking at copy_to/from_user()
+> > struct types.
+> 
+> Would it be possible to add aa attribute and check to sparse?
+> 
+> Might persuade people to use it instead of 'packed' for structures
+> that map defined byte layouts and so mustn't be holey - but are
+> never actually misaligned in memory.
 
-Ah, ok. I see what you did now, could you add these details to the
-changelog. One comment below:
+I mean, it's kind of a before and after thing where we have to allow
+all the existing code and complain about new code.  But yeah, we could
+use the __user annotation as well.  If we encountered a
+`struct oldabi_stat64 __user *statbuf` then complain if oldabi_stat64
+had a hole.  At the end, delete all the warnings that existed in the
+previously tested kernel.
 
-[...]
-> > @@ -569,6 +570,7 @@ static struct rcu_torture_ops rcu_ops =3D {
-> >    .stall_dur        =3D rcu_jiffies_till_stall_check,
-> >    .irq_capable        =3D 1,
-> >    .can_boost        =3D IS_ENABLED(CONFIG_RCU_BOOST),
-> > +    .can_nocbs_toggle    =3D IS_ENABLED(CONFIG_RCU_NOCB_CPU),
-> >    .extendables        =3D RCUTORTURE_MAX_EXTEND,
-> >    .name            =3D "rcu"
-> > };
-> > @@ -2356,7 +2358,7 @@ rcu_torture_print_module_parms(struct rcu_torture=
-_ops *cur_ops, const char *tag)
-> >         "n_barrier_cbs=3D%d "
-> >         "onoff_interval=3D%d onoff_holdoff=3D%d "
-> >         "read_exit_delay=3D%d read_exit_burst=3D%d "
-> > -         "nocbs_nthreads=3D%d nocbs_toggle=3D%d "
-> > +         "nocbs_nthreads=3D%d/%d nocbs_toggle=3D%d "
-> >         "test_nmis=3D%d\n",
-> >         torture_type, tag, nrealreaders, nfakewriters,
-> >         stat_interval, verbose, test_no_idle_hz, shuffle_interval,
-> > @@ -2368,7 +2370,7 @@ rcu_torture_print_module_parms(struct rcu_torture=
-_ops *cur_ops, const char *tag)
-> >         n_barrier_cbs,
-> >         onoff_interval, onoff_holdoff,
-> >         read_exit_delay, read_exit_burst,
-> > -         nocbs_nthreads, nocbs_toggle,
-> > +         nocbs_nthreads, cur_ops->can_nocbs_toggle, nocbs_toggle,
-> >         test_nmis);
-> > }
-> >
-> > @@ -3708,6 +3710,10 @@ rcu_torture_init(void)
-> >        pr_alert("rcu-torture: ->fqs NULL and non-zero fqs_duration, fqs=
- disabled.\n");
-> >        fqs_duration =3D 0;
-> >    }
-> > +    if (!cur_ops->can_nocbs_toggle && nocbs_nthreads !=3D 0) {
-> > +        pr_alert("rcu-torture: ->can_nocbs_toggle false and non-zero n=
-ocbs_nthreads, nocbs_toggle disabled.\n");
-> > +        nocbs_nthreads =3D 0;
-> > +    }
+regards,
+dan carpenter
 
-Instead of adding a hook, why not check for CONFIG_RCU_NOCB_CPU here?
-
-so like:
- if (cur_ops !=3D &rcu_ops || !IS_ENABLED(CONFIG_RCU_NOCB_CPU))
-   nocbs_nthreads =3D 0;
-
-Or will that not work for some reason? Just 2 line change and no ugly hooks=
- =3D)
-
-- Joel
