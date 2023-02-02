@@ -2,165 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7425B687599
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 06:51:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A3D268759E
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 06:52:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232177AbjBBFvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 00:51:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43564 "EHLO
+        id S231576AbjBBFwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 00:52:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232190AbjBBFvN (ORCPT
+        with ESMTP id S230502AbjBBFv5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 00:51:13 -0500
-Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2EEE1F5
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 21:50:26 -0800 (PST)
-Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
-  by mx.socionext.com with ESMTP; 02 Feb 2023 14:50:26 +0900
-Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
-        by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id E7A222058B4F;
-        Thu,  2 Feb 2023 14:50:25 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Thu, 2 Feb 2023 14:50:21 +0900
-Received: from [10.212.156.77] (unknown [10.212.156.77])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id 62B453D59;
-        Thu,  2 Feb 2023 14:50:25 +0900 (JST)
-Message-ID: <bb307806-fa02-d147-2c25-6b3b3bbd411b@socionext.com>
-Date:   Thu, 2 Feb 2023 14:50:25 +0900
+        Thu, 2 Feb 2023 00:51:57 -0500
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AFD950843
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 21:51:29 -0800 (PST)
+Received: by mail-oi1-x236.google.com with SMTP id p185so606459oif.2
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 21:51:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ILCvujNyyZTxSuALv1I1KaEgQ0h411mj7e3IcQ3tJpU=;
+        b=ElSNIgd/vsGEwlaPeBFKsemhS770s+1BVTND0AsJp1G482uurP/TdvNPMTzBqrgEG0
+         E3dr8zLUPqKRt1ERz2AFAeOn7cRuW+hi6LijISJrYuWSroLwxMz/Zl2dq08TvXnD70HQ
+         cT0v79aj5UYDNOZE5NVJg4WrFKx7k2VGpFjXK/q5WRFu37myfPQc5oxVorf/vr6xgbd/
+         h7mz3d/unvLmJOCbHWSeL3S6pOQS5OYAZHDB9xgkjhBwDkH5mfP8MN+V6EljxZJRydlm
+         +gQ21pbKvBMj9pt/VmNLsdG31bksbwfpBbOvzluYDBFUSFjTLx54oyRNK4W8TO7G87d9
+         OkOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ILCvujNyyZTxSuALv1I1KaEgQ0h411mj7e3IcQ3tJpU=;
+        b=zNTNnH24EW7grqM5LU6Fywk+DXz2SqCzW12GmoyBMH3yU65hcoWhcsqy3YgHbS3TLw
+         TXHmxvqNMkOxj6qyVHxCfQtltWiwsu7PXIIuTXB5H7N28YS2XCJraD8/I1MI3mKduG1E
+         8bGNw4y+/JZrYPeHN6mVpi2Vyxrj52ybK6Rk1DdaKvU0juLSKn82iOXvUKIkEa/KFAtX
+         eZ/eIRQvZkVnd80O3g2ZONio+QO7WTyO1CjkQXoLH3VpqFHJ6FoVBOGBQY7E9T2rqkC9
+         fOO6nDtecWeMuAB/eJlM1iOEFN59ff5BT3wR1RJ54IXx6vKAG2Yl4TW0MTslJoc6D1u7
+         KBMg==
+X-Gm-Message-State: AO0yUKUwbeAyIJekcyS8Ba2d4HeRcYk/NjHfm/WKomzP0HFF89sgTcEg
+        JpEGfZhoxRiwoqDqgDs6SnUJwBec9B61mP8hCWo2kATX
+X-Google-Smtp-Source: AK7set+hOVxeK+28sYneHBt7Ti2HfC75WsaRczZ4bJAZe5qdsqd55Bud+PRHxdSuQle4Kom/O1SSgvyOESHNbZVHBQE=
+X-Received: by 2002:a05:6808:913:b0:378:94fa:a719 with SMTP id
+ w19-20020a056808091300b0037894faa719mr103560oih.146.1675317088491; Wed, 01
+ Feb 2023 21:51:28 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] bus: unifier-system-bus: Remove open coded "ranges"
- parsing
-To:     Rob Herring <robh@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230201220011.247100-1-robh@kernel.org>
-Content-Language: en-US
-From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-In-Reply-To: <20230201220011.247100-1-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221228034617.58386-1-zh.nvgt@gmail.com> <CAO2zrtZjDj5U4CCwVWQcWfbXJa0hwRjjNRE7jtHshrEb-nEwEg@mail.gmail.com>
+ <CABb+yY3VtTYiyu0s470+Z0bQAPycec7gj+EF5kt=-zhufdutrQ@mail.gmail.com>
+In-Reply-To: <CABb+yY3VtTYiyu0s470+Z0bQAPycec7gj+EF5kt=-zhufdutrQ@mail.gmail.com>
+From:   Hang Zhang <zh.nvgt@gmail.com>
+Date:   Thu, 2 Feb 2023 00:51:17 -0500
+Message-ID: <CAO2zrtZew3=wB++==JFJ86DvZgttwF8xjaSVUUrY7HAX4469Ww@mail.gmail.com>
+Subject: Re: [PATCH] mailbox: mailbox-test: fix potential use-after-free issues
+To:     Jassi Brar <jassisinghbrar@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, sudeep.holla@arm.com,
+        lee.jones@linaro.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+On Thu, Feb 2, 2023 at 12:17 AM Jassi Brar <jassisinghbrar@gmail.com> wrote:
+>
+> On Wed, Feb 1, 2023 at 10:25 PM Hang Zhang <zh.nvgt@gmail.com> wrote:
+> >
+> > On Tue, Dec 27, 2022 at 10:46 PM Hang Zhang <zh.nvgt@gmail.com> wrote:
+> > >
+> > > mbox_test_message_write() is the .write handler of the message
+> > > debugfs interface, it operates on global pointers "tdev->signal"
+> > > and "tdev->message" (e.g., allocation, dereference, free and
+> > > nullification). However, these operations are not protected by any
+> > > locks, making use-after-free possible in the concurrent setting.
+> > > E.g., one invocation of the handler may have freed "tdev->signal"
+> > > but being preempted before nullifying the pointer, then another
+> > > invocation of the handler may dereference the now dangling pointer,
+> > > causing use-after-free. Similarly, "tdev->message", as a shared
+> > > pointer, may be manipulated by multiple invocations concurrently,
+> > > resulting in unexpected issues such as use-after-free.
+> > >
+> > > Fix these potential issues by protecting the above operations with
+> > > the spinlock "tdev->lock", which has already been deployed in other
+> > > handlers of the debugfs interface (e.g., .read). This patch introduces
+> > > the same lock to the .write handler.
+> > >
+> > > Signed-off-by: Hang Zhang <zh.nvgt@gmail.com>
+> > > ---
+> > >  drivers/mailbox/mailbox-test.c | 10 ++++++++--
+> > >  1 file changed, 8 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/drivers/mailbox/mailbox-test.c b/drivers/mailbox/mailbox-test.c
+> > > index 4555d678fadd..b2315261644a 100644
+> > > --- a/drivers/mailbox/mailbox-test.c
+> > > +++ b/drivers/mailbox/mailbox-test.c
+> > > @@ -97,6 +97,7 @@ static ssize_t mbox_test_message_write(struct file *filp,
+> > >         struct mbox_test_device *tdev = filp->private_data;
+> > >         void *data;
+> > >         int ret;
+> > > +       unsigned long flags;
+> > >
+> > >         if (!tdev->tx_channel) {
+> > >                 dev_err(tdev->dev, "Channel cannot do Tx\n");
+> > > @@ -110,9 +111,12 @@ static ssize_t mbox_test_message_write(struct file *filp,
+> > >                 return -EINVAL;
+> > >         }
+> > >
+> > > +       spin_lock_irqsave(&tdev->lock, flags);
+> > >         tdev->message = kzalloc(MBOX_MAX_MSG_LEN, GFP_KERNEL);
+> >
+> This is bad.  atomic context should not do things like alloc.
+> Also, please look up MAINTAINERS and cc authors.
+>
+> thanks.
 
-On 2023/02/02 7:00, Rob Herring wrote:
-> "ranges" is a standard property and we have common helper functions for
-> parsing it, so let's use them.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-> Compile tested only!
+Hi Jassi, thank you for your quick reply! We now cc'ed the major authors
+of the file identified from the commit history. While this patch is bad as
+you pointed out (sorry for that), do you think the concurrency issue here
+is valid and worth a fix? If so, we can seek to improve the patch with the
+help of the developers. Thank you very much!
 
-Please fix the driver's name.
-
-s/unifier-system-bus/uniphier-system-bus/
-
-> ---
->   drivers/bus/uniphier-system-bus.c | 54 +++++++------------------------
->   1 file changed, 11 insertions(+), 43 deletions(-)
-> 
-> diff --git a/drivers/bus/uniphier-system-bus.c
-> b/drivers/bus/uniphier-system-bus.c
-> index f70dedace20b..cb5c89ce7b86 100644
-> --- a/drivers/bus/uniphier-system-bus.c
-> +++ b/drivers/bus/uniphier-system-bus.c
-> @@ -176,10 +176,9 @@ static int uniphier_system_bus_probe(struct
-> platform_device *pdev)
->   {
->   	struct device *dev = &pdev->dev;
->   	struct uniphier_system_bus_priv *priv;
-> -	const __be32 *ranges;
-> -	u32 cells, addr, size;
-> -	u64 paddr;
-> -	int pna, bank, rlen, rone, ret;
-> +	struct of_range_parser parser;
-> +	struct of_range range;
-> +	int ret;
->   
->   	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
->   	if (!priv)
-> @@ -191,48 +190,17 @@ static int uniphier_system_bus_probe(struct
-> platform_device *pdev)
->   
->   	priv->dev = dev;
->   
-> -	pna = of_n_addr_cells(dev->of_node);
-> -
-> -	ret = of_property_read_u32(dev->of_node, "#address-cells",
-> &cells);
-> -	if (ret) {
-> -		dev_err(dev, "failed to get #address-cells\n");
-> -		return ret;
-> -	}
-> -	if (cells != 2) {
-> -		dev_err(dev, "#address-cells must be 2\n");
-> -		return -EINVAL;
-> -	}
-
-Don't you need to check the value of "#address-cells"?
-
-> -
-> -	ret = of_property_read_u32(dev->of_node, "#size-cells", &cells);
-> -	if (ret) {
-> -		dev_err(dev, "failed to get #size-cells\n");
-> +	ret = of_range_parser_init(&parser, dev->of_node);
-> +	if (ret)
->   		return ret;
-> -	}
-> -	if (cells != 1) {
-> -		dev_err(dev, "#size-cells must be 1\n");
-> -		return -EINVAL;
-> -	}
-
-Same as "#size-cells"
-
-> -	ranges = of_get_property(dev->of_node, "ranges", &rlen);
-> -	if (!ranges) {
-> -		dev_err(dev, "failed to get ranges property\n");
-> -		return -ENOENT;
-> -	}
-> -
-> -	rlen /= sizeof(*ranges);
-> -	rone = pna + 2;
-> -
-> -	for (; rlen >= rone; rlen -= rone) {
-> -		bank = be32_to_cpup(ranges++);
-> -		addr = be32_to_cpup(ranges++);
-> -		paddr = of_translate_address(dev->of_node, ranges);
-> -		if (paddr == OF_BAD_ADDR)
-> +	for_each_of_range(&parser, &range) {
-> +		if (range.cpu_addr == OF_BAD_ADDR)
->   			return -EINVAL;
-> -		ranges += pna;
-> -		size = be32_to_cpup(ranges++);
-> -
-> -		ret = uniphier_system_bus_add_bank(priv, bank, addr,
-> -						   paddr, size);
-> +		ret = uniphier_system_bus_add_bank(priv,
-> +						
-> upper_32_bits(range.bus_addr),
-> +						
-> lower_32_bits(range.bus_addr),
-> +						   range.cpu_addr,
-> range.size);
->   		if (ret)
->   			return ret;
->   	}
-
-I confirmed the value of all the arguments of uniphier_system_bus_add_bank()
-match the previous ones.
-
-Tested-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-
-Thank you,
-
----
-Best Regards
-Kunihiko Hayashi
+Best,
+Hang
