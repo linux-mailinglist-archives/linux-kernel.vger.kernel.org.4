@@ -2,320 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CCD168892B
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 22:47:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E20FF688938
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 22:48:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232660AbjBBVra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 16:47:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46722 "EHLO
+        id S232502AbjBBVsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 16:48:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbjBBVr0 (ORCPT
+        with ESMTP id S233136AbjBBVr7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 16:47:26 -0500
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2073.outbound.protection.outlook.com [40.107.220.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BCBF86615;
-        Thu,  2 Feb 2023 13:47:16 -0800 (PST)
+        Thu, 2 Feb 2023 16:47:59 -0500
+Received: from BN3PR00CU001-vft-obe.outbound.protection.outlook.com (mail-eastus2azon11020027.outbound.protection.outlook.com [52.101.56.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2370487146;
+        Thu,  2 Feb 2023 13:47:49 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JKFKqhaPmyEliPWHszF7EmlUiWTSMqRi9YrKNOqoWYo1Hrc1w4OMNlRV+D98I1lYDbRHQDOB8u3eIbL71sk2fKQjdFcZ4/TsP1qdzYyRf3rK1tQFXT62nwzmP+QLBdpah7m1ohBTYDuvbu38aVTMCKc0X5jYEB+iNY+IE/CXHkDY9Q2+NVWtzVhX4IqnZSuP8LOwhujmvwtd30Bi7DepOIz2yRKiiAdeSB91PQ8R1WC0es568+g5ifg1i7MsEb2FiehRFWmnj820MvpmTbq9F86jwvaCKEPJVMLqlPyjTFn4stQzWT9lxjZKnRgQwwEErwKHvhWICA3jNfqUtack1g==
+ b=T/yRlYG+sXETndMFBYx7SgEePM+PmqbMPFH3oHgmyCZEy64XXMpBiEMagXxm0EhZ3my0HQGpqcFjpaE78+Tps6z7jSskqIS+9YDKvR4t67NJxDZkpf8TnK7PN6F466qRVvsAk4YEHSJzRfy4v9P2dMYqPMn/OUf6/tldyulhBG3G1H15KKlztHjNyq7GSvM34q2W3GptMOmUkhvZcDN3eDF8RqmpDPxmX5liUUlX1gu1GsKfu/dWZksS3JguWYTRNdfLEE/y5p4N0BOKalk+rcWYBBgFlVJ/EKo/mXSjfuwtsTfCrXNyZ3BytvXif84dYJNDdfZ0byfU9/vvYSXd7g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1ovAuZpiTt1LtCVS4njkKI3b17HTdRLm1SUu+c4lkvo=;
- b=Zuht6BLAk13NPPdiAB0Tbym3GcAd/eWb/qkz5rboeWLqEBvD1DIo9IM/v+jKLZU1aG4OReg7cdCCPpEVVFR1joRvK45TptcYEANsxa9o4Tum/em5T8E/P8/RQmzQQrDf2L0GlkdE4nw4JuEYOPFUnzJHAyU4u1pEDCc99NYC0fGtaGE10jk84F2K/kzDyKsMc2DJ18tOCHlqSmL/hbGRgoVxMpg1NNn/wetsvgk/bGqscdU60KlwK6H/+ndxxAgvupZPUjwTdXakqwYJ0YAEDUhkwhO7Ot2vxPCFiD6f+4z+KKTi4BERKZ7qYAhEzqjEZnQ8rYnv4kQqgVLW1+Ebcw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=zytor.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ bh=+C7X/dha1iEPs2r4ThFcoPADFBU9Obtny5jywgqX9j4=;
+ b=N3808jultzv8INz3Xx0H7xskXMCPHyCpxd53lrAGmUe5MjvXu6wKrQXltqzalQYJbKlVuBgJfmpGGyh7Vp6TlqIvnKax6dpg8ASxX02KgswLBYZxvMn+33qLO8tFakoKxQePDeW5mB3xuLJ7Tsu83p2CV2At2h0LootrWlyzwzl43RfwVKCrPbORe1lMfExqk+fDs6mPfLQfaCfDx88v670rEjd4iMr1mqjfTou8Rq/uJdBDAIRkkTjFpO3J2yS3rpDBa8CjWPI/Cs+q1oZer83umAfvSGWbk76Vn+crWUbWxWSt+aM19/nz1sCoBq6xloslNeiQ8q+sUtDy6s1D6A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1ovAuZpiTt1LtCVS4njkKI3b17HTdRLm1SUu+c4lkvo=;
- b=nNUl5Jh9samnXi9aSO2ZtBhJlIptZ0Gyd4lCapvxmxiHqowuMZQT7FfjKpUSXrwV3z2FKy1nhaV3QBfkyojjfdjvQrDtCEsnibUrRst56ds+LC3Gml8IIKLKZKcvfbf/rohgueXBnDWQwBToHZFIvh2PCa1kZtUGEX7YYsn3HhI=
-Received: from MW2PR2101CA0007.namprd21.prod.outlook.com (2603:10b6:302:1::20)
- by DM8PR12MB5479.namprd12.prod.outlook.com (2603:10b6:8:38::18) with
+ bh=+C7X/dha1iEPs2r4ThFcoPADFBU9Obtny5jywgqX9j4=;
+ b=fesYZd/i1l9U1aBePQunFObirND2f1j2ratFRTTZ+W5f0ZpCUVQkRjSRakIR6/6gHj9ZoFcgLbxmVYkBpAefOMtdRPEhkJj5eTAWs1ERdmVmikbAJWFwd3Cmu1+DCm22SnjzBjWDjJxxfSFIFtuFyseWuy0ZeSeeiIsOJ45FDxc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+Received: from BY5PR21MB1443.namprd21.prod.outlook.com (2603:10b6:a03:21f::18)
+ by MN0PR21MB3534.namprd21.prod.outlook.com (2603:10b6:208:3d1::6) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.24; Thu, 2 Feb
- 2023 21:47:14 +0000
-Received: from CO1PEPF00001A60.namprd05.prod.outlook.com
- (2603:10b6:302:1:cafe::64) by MW2PR2101CA0007.outlook.office365.com
- (2603:10b6:302:1::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.7 via Frontend
- Transport; Thu, 2 Feb 2023 21:47:14 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1PEPF00001A60.mail.protection.outlook.com (10.167.241.7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6064.21 via Frontend Transport; Thu, 2 Feb 2023 21:47:14 +0000
-Received: from [127.0.1.1] (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 2 Feb
- 2023 15:47:12 -0600
-Subject: [RFC v2 PATCH 3/7] x86/resctrl: Rename rftype flags for consistency
-From:   Babu Moger <babu.moger@amd.com>
-To:     <fenghua.yu@intel.com>, <reinette.chatre@intel.com>
-CC:     <babu.moger@amd.com>, <tglx@linutronix.de>, <mingo@redhat.com>,
-        <bp@alien8.de>, <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        <hpa@zytor.com>, <corbet@lwn.net>, <linux-kernel@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <eranian@google.com>,
-        <peternewman@google.com>
-Date:   Thu, 2 Feb 2023 15:47:12 -0600
-Message-ID: <167537443207.647488.2343865571652545811.stgit@bmoger-ubuntu>
-In-Reply-To: <167537433143.647488.9641864719195184123.stgit@bmoger-ubuntu>
-References: <167537433143.647488.9641864719195184123.stgit@bmoger-ubuntu>
-User-Agent: StGit/1.1.dev103+g5369f4c
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.8; Thu, 2 Feb
+ 2023 21:47:44 +0000
+Received: from BY5PR21MB1443.namprd21.prod.outlook.com
+ ([fe80::baef:f69f:53c2:befc]) by BY5PR21MB1443.namprd21.prod.outlook.com
+ ([fe80::baef:f69f:53c2:befc%8]) with mapi id 15.20.6086.007; Thu, 2 Feb 2023
+ 21:47:44 +0000
+From:   Haiyang Zhang <haiyangz@microsoft.com>
+To:     linux-hyperv@vger.kernel.org, netdev@vger.kernel.org
+Cc:     haiyangz@microsoft.com, decui@microsoft.com, kys@microsoft.com,
+        paulros@microsoft.com, olaf@aepfle.de, vkuznets@redhat.com,
+        davem@davemloft.net, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: [PATCH net,v3] net: mana: Fix accessing freed irq affinity_hint
+Date:   Thu,  2 Feb 2023 13:47:17 -0800
+Message-Id: <1675374437-4917-1-git-send-email-haiyangz@microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+Content-Type: text/plain
+X-ClientProxiedBy: BYAPR03CA0018.namprd03.prod.outlook.com
+ (2603:10b6:a02:a8::31) To BY5PR21MB1443.namprd21.prod.outlook.com
+ (2603:10b6:a03:21f::18)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
+Sender: LKML haiyangz <lkmlhyz@microsoft.com>
+X-MS-Exchange-MessageSentRepresentingType: 2
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PEPF00001A60:EE_|DM8PR12MB5479:EE_
-X-MS-Office365-Filtering-Correlation-Id: 40599279-a371-4446-dc3d-08db05670c09
+X-MS-TrafficTypeDiagnostic: BY5PR21MB1443:EE_|MN0PR21MB3534:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1c268981-8c65-4242-098f-08db05671d5c
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: lUH6fObmYkzPpjUlqdyHrEZfQ4YOEN068tMe46qu3LqZI2ZzFIA+jX7XHA13b4/IRNUKUsKKFRdj08C9Tz4Yf7GP5TTYOwiqGFvNmlv6Ggm83RMLDhoYjZncwwQYldbPd1P4h0gvIe8+Dgtb1mlE+pXDHQXWshqnjtT1r9BUbGWH9HZfjd8aYYyNWzWz4zYFunEo9zssXQylZIT/BBpH+C6ZchNTn4IPU2eYOEcwpvy2/Rupc7AGadBvRyo0hn7m5qtIweH93jfnb122m8na42rEpcYD73SZrSyfqkjhU5+3awNJYJMkaJsb8bWRH/9oDEFKHqPAWepfBxAsI0T/u93DfGK3d0S9umCZU4oqrp+OMqqFfZ7RlCPwKNgH6Gf2RyqUuGXD/fse9eWLRgH1lKVQTiYFPMhrtLJzEgCXO8hzc8y17w/58ysytee7eHpMPJroV4xBogIsnWCPa+wjfsOdODXNfRfv0KK10VQ1UqXV94CsohJKAPHoBgpbmkSuZXxCT50a4vm2oSYpCQ4MRy51d0j2dkSQ77KsGmioGff52N3MceplmACjRUgr4r0makV9YIKYIu+M9csXcdCXEVonIoR4qxnL5CHJM/o6SJAExanuGeT4SllndcZ3Y45nHLa1rIT/8IYPXcvXetfb6M9gmEBLUDTfFNoZn4T4vqUCiEj8WsnZP9n4Xd+5vqLsQguG+kLQNOrNcGG9B0O3V2pqjgNMGmPpW/uaarhbs6LF0dVJftKf1hSzDr7S1DWit18MAdTjo2HzUqNnreuKzw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(7916004)(4636009)(396003)(346002)(376002)(39860400002)(136003)(451199018)(46966006)(40470700004)(36840700001)(47076005)(356005)(81166007)(82310400005)(103116003)(86362001)(40460700003)(40480700001)(36860700001)(82740400003)(33716001)(16576012)(44832011)(5660300002)(54906003)(110136005)(316002)(2906002)(4326008)(8676002)(41300700001)(70586007)(70206006)(7416002)(9686003)(16526019)(26005)(8936002)(83380400001)(336012)(478600001)(426003)(186003)(71626013)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Feb 2023 21:47:14.3081
+X-Microsoft-Antispam-Message-Info: /4PgxgL05SXc26hYeszyRM1ZfZ/YXgp43ZBjHmAI1asnsdVz8LcrfwFbcsNq7B0+tsV877SWuIK5++5d/aiTTPNGloMOnrsGmfL+TB57wMw1uDM9AM4J7y+0y51lTHjO2X+5SACvOg3B5h96plcCNGsbTJrJitIc9sZenFflFd93zekssE39HFGLsBG/2PE/Wvy/I708B3COUMN54IfpTcwJzpHY9d+egTrCHDb4ZyxZNEio4AXl79lW87eh7+X01POeVFfnF93yR2MQpbVBVD4wh8enGiw2CUM7xH5MHzClLIwOJ1TYgcTAFj50kxYpePlpJCj2q20F+bbmPeyrB9z6DzoSOkGnx03PpwtlaR0v8fHtP5zZ8BD9MolhYOJei+2OEmIYZuLDGKPyEhNaF+EPM2qVkt6RmJ9AdUSeV5po5lEdT6KjAnaA9TQHT0bYDHbM8ljBBuXPOfPwvxNz8Lo2a+x+TpHAOVdpK/5sM5X/lfTl4ia3nuSiRgkAtM8XDzxWSzpCpT4W5m1rd/5kf0AeHQNWoHHN4F8R/0PWKgROwBDcJ4f0rlgLl6TtqJJDwrMGKmyYNqWktHNNUOCbPmDZe9t5K2/twDkXYYKs+K5tqfYeQS9BX5zXGnGyw6G0G1S1ndwv0UkmhM7PPhGKl3/hQ5UouwxQ0ZN6T3MjPVIQrcK2VkLpMn1aROvEVpMRosL/CRxkshP+My8hspmSB21ksPL89O6mBC0DIEmRV2jGQMHqjZzg0Qs/cjYRVFSB
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR21MB1443.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(136003)(39860400002)(396003)(346002)(366004)(451199018)(2906002)(36756003)(2616005)(316002)(83380400001)(52116002)(6666004)(7846003)(186003)(6512007)(6486002)(26005)(41300700001)(10290500003)(6506007)(478600001)(66556008)(66476007)(66946007)(8676002)(4326008)(5660300002)(8936002)(82950400001)(82960400001)(38350700002)(38100700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7dytsCQqZGmkzvZy8h77+TW9WZFZgbZxlaEI7JTY6eL5Eho243bGey7MXaAV?=
+ =?us-ascii?Q?4M5hq/RFcrb0D3vJaVtpMi8O8qHsl597aJq5tdA/BdN4JhLoPt0qxPUFy3Nc?=
+ =?us-ascii?Q?W82jQWaPeZb7f3FKKXYhFgzQHkr+/Ie4iiRccXf+XaHpfThCOZC0b6g0bdQS?=
+ =?us-ascii?Q?Sk//iq2XUnC/BU08AmPsxZVYH1G87WJ1wpuYV75voemeMtMw7azL/t9x2/CZ?=
+ =?us-ascii?Q?a43VoRFwrUAN1/jVuY1gQ27Qq6Aurmr85UvZXgguH5GriZW9eqb6e4mrJa3C?=
+ =?us-ascii?Q?luwnhdiv25jOCF1AMMy9Cw59t/fjyeFcTd+a7XOJCUFIpfrSWwY+hiesrjm7?=
+ =?us-ascii?Q?fSFGvDrC1BaDW8SStOiGLqqn42w6CuAgGkLs54xge69GCv2SQLI2YnJKoxb8?=
+ =?us-ascii?Q?C1I1Vf6OG6LAeDrAYDvyvRSMWVAcaCOcZX2//08t3MIdudxRxKZNK3FfUvuz?=
+ =?us-ascii?Q?w96CoJ5Ew9IToJJZlo6tbMjJ3o5KVVwnVvXVqmEx2S4suU33N8BBQaofGWpK?=
+ =?us-ascii?Q?Ci9SOwzM7EmGv49gVJh6M4K1iTf0P5wvYqJMr+I8ItMtNqVECWY145REpHuG?=
+ =?us-ascii?Q?1jtgo2CE9XZyZ5+4LdXkk4iYD/O6k3sX63CA9cxAsiNBo/De1OcAqe5KbXZV?=
+ =?us-ascii?Q?VuU89YSd7ObIktWTa2Q2oEIj1oKaAOfDLwLuO3nqiIjkArkCeJAg+jQ7ert5?=
+ =?us-ascii?Q?fEgtUsJEi3H+d+Nvjw5JPt2m4HllIJKYlucbCriJEV6VDapQNIJ7UQ/nrbYK?=
+ =?us-ascii?Q?4GK8MHoQdenqTMnXgqfMS9h3pTvQov/LRvaCwtbpaihH8TYouMFVNWTQylVl?=
+ =?us-ascii?Q?sKf2gPIlnfVEGVLKuhKq/7JC+Hd2mryfxofFN3+/LF/JYWRWPaAqieRnURKJ?=
+ =?us-ascii?Q?Ff/6JHqZoxXVToM0rUUJ5pieFPOaQa0F2j7Hj+mYZLEcjClc/0dnEzAjznxB?=
+ =?us-ascii?Q?X9bqrQGZw/iGP8eZK2JVDeeRUzWc2OlZOcQL5UxMy/u7HF3N8GrucYwc0PVO?=
+ =?us-ascii?Q?L3LlbP0QnlSc011+lYY1rQ12qP/QEhBDcrhq8TmqqGv8AlxyQspoyg+G5jYI?=
+ =?us-ascii?Q?Jo6DLV0Dm4N0jdhCJKyE/+i6lvGiX6+fnDYDxPjwgRtd/P2xVk9JvIxrEMF5?=
+ =?us-ascii?Q?QNizsbtKb/QFUsAd6rZLrsQ0wqL66KhcNqBEoKU9+9Xyf4V9e81LnptMmN4M?=
+ =?us-ascii?Q?0m8kgvU8ZMvifGgY2O3hxDEWQHPLSc8cbtwkww1vVIqCb6xeAAlgT3xYrvNg?=
+ =?us-ascii?Q?Cz2MIJPDYZH8mDa3RzwSWD8ayvJoSf70ZISSgl3PR6fdEg051oOqbCf31llu?=
+ =?us-ascii?Q?Bxf7gn1DtEflApcq53LCmqTKp1iLNdTO9ghzAENZBdmtY8FoxjqIGy63JFZt?=
+ =?us-ascii?Q?nC7Qt691SKvCPkj5MVSL22SrOdj8ropaORGBkJl3oE8VwxNPmARb+k5mXHXu?=
+ =?us-ascii?Q?SAgGbNJSPOdRtnX9CWYu/okm6IqJ+D8TpMC3N5gUE7vtZGfxFuFfIchcu0QI?=
+ =?us-ascii?Q?5wX/XoYAfaOc1mOPqwBhkZNj9xaKoTEhX3kVh+0hjB+Ls49wFnUxMmJ0AZUG?=
+ =?us-ascii?Q?V1/SfqG+mdYOMHucMJ8Ngl5K9d6nig6SEpjh1rpKAcPI65GvTU7PczoKPHEu?=
+ =?us-ascii?Q?hQ=3D=3D?=
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1c268981-8c65-4242-098f-08db05671d5c
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR21MB1443.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Feb 2023 21:47:43.9617
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 40599279-a371-4446-dc3d-08db05670c09
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF00001A60.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR12MB5479
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2H23dkE0QzTckRegY8c00SQ754eHKYsDYelgffFakkY/CzIF4AxKodDceqvXUfRllyRu9do8rpFaI1YxxmrzBQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR21MB3534
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The rftype flags have two different prefixes even though they are used=0A=
-for the same purpose. Change the prefix to RFTYPE_ for all the flags.=0A=
-=0A=
-Signed-off-by: Babu Moger <babu.moger@amd.com>=0A=
----=0A=
- arch/x86/kernel/cpu/resctrl/internal.h |    8 +++---=0A=
- arch/x86/kernel/cpu/resctrl/rdtgroup.c |   42 ++++++++++++++++------------=
-----=0A=
- 2 files changed, 25 insertions(+), 25 deletions(-)=0A=
-=0A=
-diff --git a/arch/x86/kernel/cpu/resctrl/internal.h b/arch/x86/kernel/cpu/r=
-esctrl/internal.h=0A=
-index 571145d75d29..2cfc3c431d5b 100644=0A=
---- a/arch/x86/kernel/cpu/resctrl/internal.h=0A=
-+++ b/arch/x86/kernel/cpu/resctrl/internal.h=0A=
-@@ -248,10 +248,10 @@ struct rdtgroup {=0A=
- #define RFTYPE_TOP			BIT(6)=0A=
- #define RFTYPE_RES_CACHE		BIT(8)=0A=
- #define RFTYPE_RES_MB			BIT(9)=0A=
--#define RF_CTRL_INFO			(RFTYPE_INFO | RFTYPE_CTRL)=0A=
--#define RF_MON_INFO			(RFTYPE_INFO | RFTYPE_MON)=0A=
--#define RF_TOP_INFO			(RFTYPE_INFO | RFTYPE_TOP)=0A=
--#define RF_CTRL_BASE			(RFTYPE_BASE | RFTYPE_CTRL)=0A=
-+#define RFTYPE_CTRL_INFO		(RFTYPE_INFO | RFTYPE_CTRL)=0A=
-+#define RFTYPE_MON_INFO			(RFTYPE_INFO | RFTYPE_MON)=0A=
-+#define RFTYPE_TOP_INFO			(RFTYPE_INFO | RFTYPE_TOP)=0A=
-+#define RFTYPE_CTRL_BASE		(RFTYPE_BASE | RFTYPE_CTRL)=0A=
- =0A=
- /* List of all resource groups */=0A=
- extern struct list_head rdt_all_groups;=0A=
-diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/r=
-esctrl/rdtgroup.c=0A=
-index cccf3fb84b26..018a26b58154 100644=0A=
---- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c=0A=
-+++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c=0A=
-@@ -1691,77 +1691,77 @@ static struct rftype res_common_files[] =3D {=0A=
- 		.mode		=3D 0444,=0A=
- 		.kf_ops		=3D &rdtgroup_kf_single_ops,=0A=
- 		.seq_show	=3D rdt_last_cmd_status_show,=0A=
--		.fflags		=3D RF_TOP_INFO,=0A=
-+		.fflags		=3D RFTYPE_TOP_INFO,=0A=
- 	},=0A=
- 	{=0A=
- 		.name		=3D "num_closids",=0A=
- 		.mode		=3D 0444,=0A=
- 		.kf_ops		=3D &rdtgroup_kf_single_ops,=0A=
- 		.seq_show	=3D rdt_num_closids_show,=0A=
--		.fflags		=3D RF_CTRL_INFO,=0A=
-+		.fflags		=3D RFTYPE_CTRL_INFO,=0A=
- 	},=0A=
- 	{=0A=
- 		.name		=3D "mon_features",=0A=
- 		.mode		=3D 0444,=0A=
- 		.kf_ops		=3D &rdtgroup_kf_single_ops,=0A=
- 		.seq_show	=3D rdt_mon_features_show,=0A=
--		.fflags		=3D RF_MON_INFO,=0A=
-+		.fflags		=3D RFTYPE_MON_INFO,=0A=
- 	},=0A=
- 	{=0A=
- 		.name		=3D "num_rmids",=0A=
- 		.mode		=3D 0444,=0A=
- 		.kf_ops		=3D &rdtgroup_kf_single_ops,=0A=
- 		.seq_show	=3D rdt_num_rmids_show,=0A=
--		.fflags		=3D RF_MON_INFO,=0A=
-+		.fflags		=3D RFTYPE_MON_INFO,=0A=
- 	},=0A=
- 	{=0A=
- 		.name		=3D "cbm_mask",=0A=
- 		.mode		=3D 0444,=0A=
- 		.kf_ops		=3D &rdtgroup_kf_single_ops,=0A=
- 		.seq_show	=3D rdt_default_ctrl_show,=0A=
--		.fflags		=3D RF_CTRL_INFO | RFTYPE_RES_CACHE,=0A=
-+		.fflags		=3D RFTYPE_CTRL_INFO | RFTYPE_RES_CACHE,=0A=
- 	},=0A=
- 	{=0A=
- 		.name		=3D "min_cbm_bits",=0A=
- 		.mode		=3D 0444,=0A=
- 		.kf_ops		=3D &rdtgroup_kf_single_ops,=0A=
- 		.seq_show	=3D rdt_min_cbm_bits_show,=0A=
--		.fflags		=3D RF_CTRL_INFO | RFTYPE_RES_CACHE,=0A=
-+		.fflags		=3D RFTYPE_CTRL_INFO | RFTYPE_RES_CACHE,=0A=
- 	},=0A=
- 	{=0A=
- 		.name		=3D "shareable_bits",=0A=
- 		.mode		=3D 0444,=0A=
- 		.kf_ops		=3D &rdtgroup_kf_single_ops,=0A=
- 		.seq_show	=3D rdt_shareable_bits_show,=0A=
--		.fflags		=3D RF_CTRL_INFO | RFTYPE_RES_CACHE,=0A=
-+		.fflags		=3D RFTYPE_CTRL_INFO | RFTYPE_RES_CACHE,=0A=
- 	},=0A=
- 	{=0A=
- 		.name		=3D "bit_usage",=0A=
- 		.mode		=3D 0444,=0A=
- 		.kf_ops		=3D &rdtgroup_kf_single_ops,=0A=
- 		.seq_show	=3D rdt_bit_usage_show,=0A=
--		.fflags		=3D RF_CTRL_INFO | RFTYPE_RES_CACHE,=0A=
-+		.fflags		=3D RFTYPE_CTRL_INFO | RFTYPE_RES_CACHE,=0A=
- 	},=0A=
- 	{=0A=
- 		.name		=3D "min_bandwidth",=0A=
- 		.mode		=3D 0444,=0A=
- 		.kf_ops		=3D &rdtgroup_kf_single_ops,=0A=
- 		.seq_show	=3D rdt_min_bw_show,=0A=
--		.fflags		=3D RF_CTRL_INFO | RFTYPE_RES_MB,=0A=
-+		.fflags		=3D RFTYPE_CTRL_INFO | RFTYPE_RES_MB,=0A=
- 	},=0A=
- 	{=0A=
- 		.name		=3D "bandwidth_gran",=0A=
- 		.mode		=3D 0444,=0A=
- 		.kf_ops		=3D &rdtgroup_kf_single_ops,=0A=
- 		.seq_show	=3D rdt_bw_gran_show,=0A=
--		.fflags		=3D RF_CTRL_INFO | RFTYPE_RES_MB,=0A=
-+		.fflags		=3D RFTYPE_CTRL_INFO | RFTYPE_RES_MB,=0A=
- 	},=0A=
- 	{=0A=
- 		.name		=3D "delay_linear",=0A=
- 		.mode		=3D 0444,=0A=
- 		.kf_ops		=3D &rdtgroup_kf_single_ops,=0A=
- 		.seq_show	=3D rdt_delay_linear_show,=0A=
--		.fflags		=3D RF_CTRL_INFO | RFTYPE_RES_MB,=0A=
-+		.fflags		=3D RFTYPE_CTRL_INFO | RFTYPE_RES_MB,=0A=
- 	},=0A=
- 	/*=0A=
- 	 * Platform specific which (if any) capabilities are provided by=0A=
-@@ -1780,7 +1780,7 @@ static struct rftype res_common_files[] =3D {=0A=
- 		.kf_ops		=3D &rdtgroup_kf_single_ops,=0A=
- 		.write		=3D max_threshold_occ_write,=0A=
- 		.seq_show	=3D max_threshold_occ_show,=0A=
--		.fflags		=3D RF_MON_INFO | RFTYPE_RES_CACHE,=0A=
-+		.fflags		=3D RFTYPE_MON_INFO | RFTYPE_RES_CACHE,=0A=
- 	},=0A=
- 	{=0A=
- 		.name		=3D "mbm_total_bytes_config",=0A=
-@@ -1827,7 +1827,7 @@ static struct rftype res_common_files[] =3D {=0A=
- 		.kf_ops		=3D &rdtgroup_kf_single_ops,=0A=
- 		.write		=3D rdtgroup_schemata_write,=0A=
- 		.seq_show	=3D rdtgroup_schemata_show,=0A=
--		.fflags		=3D RF_CTRL_BASE,=0A=
-+		.fflags		=3D RFTYPE_CTRL_BASE,=0A=
- 	},=0A=
- 	{=0A=
- 		.name		=3D "mode",=0A=
-@@ -1835,14 +1835,14 @@ static struct rftype res_common_files[] =3D {=0A=
- 		.kf_ops		=3D &rdtgroup_kf_single_ops,=0A=
- 		.write		=3D rdtgroup_mode_write,=0A=
- 		.seq_show	=3D rdtgroup_mode_show,=0A=
--		.fflags		=3D RF_CTRL_BASE,=0A=
-+		.fflags		=3D RFTYPE_CTRL_BASE,=0A=
- 	},=0A=
- 	{=0A=
- 		.name		=3D "size",=0A=
- 		.mode		=3D 0444,=0A=
- 		.kf_ops		=3D &rdtgroup_kf_single_ops,=0A=
- 		.seq_show	=3D rdtgroup_size_show,=0A=
--		.fflags		=3D RF_CTRL_BASE,=0A=
-+		.fflags		=3D RFTYPE_CTRL_BASE,=0A=
- 	},=0A=
- =0A=
- };=0A=
-@@ -1899,7 +1899,7 @@ void __init thread_throttle_mode_init(void)=0A=
- 	if (!rft)=0A=
- 		return;=0A=
- =0A=
--	rft->fflags =3D RF_CTRL_INFO | RFTYPE_RES_MB;=0A=
-+	rft->fflags =3D RFTYPE_CTRL_INFO | RFTYPE_RES_MB;=0A=
- }=0A=
- =0A=
- void __init mbm_config_rftype_init(const char *config)=0A=
-@@ -1908,7 +1908,7 @@ void __init mbm_config_rftype_init(const char *config=
-)=0A=
- =0A=
- 	rft =3D rdtgroup_get_rftype_by_name(config);=0A=
- 	if (rft)=0A=
--		rft->fflags =3D RF_MON_INFO | RFTYPE_RES_CACHE;=0A=
-+		rft->fflags =3D RFTYPE_MON_INFO | RFTYPE_RES_CACHE;=0A=
- }=0A=
- =0A=
- /**=0A=
-@@ -2043,21 +2043,21 @@ static int rdtgroup_create_info_dir(struct kernfs_n=
-ode *parent_kn)=0A=
- 	if (IS_ERR(kn_info))=0A=
- 		return PTR_ERR(kn_info);=0A=
- =0A=
--	ret =3D rdtgroup_add_files(kn_info, RF_TOP_INFO);=0A=
-+	ret =3D rdtgroup_add_files(kn_info, RFTYPE_TOP_INFO);=0A=
- 	if (ret)=0A=
- 		goto out_destroy;=0A=
- =0A=
- 	/* loop over enabled controls, these are all alloc_capable */=0A=
- 	list_for_each_entry(s, &resctrl_schema_all, list) {=0A=
- 		r =3D s->res;=0A=
--		fflags =3D  r->fflags | RF_CTRL_INFO;=0A=
-+		fflags =3D  r->fflags | RFTYPE_CTRL_INFO;=0A=
- 		ret =3D rdtgroup_mkdir_info_resdir(s, s->name, fflags);=0A=
- 		if (ret)=0A=
- 			goto out_destroy;=0A=
- 	}=0A=
- =0A=
- 	for_each_mon_capable_rdt_resource(r) {=0A=
--		fflags =3D  r->fflags | RF_MON_INFO;=0A=
-+		fflags =3D  r->fflags | RFTYPE_MON_INFO;=0A=
- 		sprintf(name, "%s_MON", r->name);=0A=
- 		ret =3D rdtgroup_mkdir_info_resdir(r, name, fflags);=0A=
- 		if (ret)=0A=
-@@ -3554,7 +3554,7 @@ static int __init rdtgroup_setup_root(void)=0A=
- =0A=
- 	list_add(&rdtgroup_default.rdtgroup_list, &rdt_all_groups);=0A=
- =0A=
--	ret =3D rdtgroup_add_files(kernfs_root_to_node(rdt_root), RF_CTRL_BASE);=
-=0A=
-+	ret =3D rdtgroup_add_files(kernfs_root_to_node(rdt_root), RFTYPE_CTRL_BAS=
-E);=0A=
- 	if (ret) {=0A=
- 		kernfs_destroy_root(rdt_root);=0A=
- 		goto out;=0A=
-=0A=
+After calling irq_set_affinity_and_hint(), the cpumask pointer is
+saved in desc->affinity_hint, and will be used later when reading
+/proc/irq/<num>/affinity_hint. So the cpumask variable needs to be
+persistent. Otherwise, we are accessing freed memory when reading
+the affinity_hint file.
+
+Also, need to clear affinity_hint before free_irq(), otherwise there
+is a one-time warning and stack trace during module unloading:
+
+ [  243.948687] WARNING: CPU: 10 PID: 1589 at kernel/irq/manage.c:1913 free_irq+0x318/0x360
+ ...
+ [  243.948753] Call Trace:
+ [  243.948754]  <TASK>
+ [  243.948760]  mana_gd_remove_irqs+0x78/0xc0 [mana]
+ [  243.948767]  mana_gd_remove+0x3e/0x80 [mana]
+ [  243.948773]  pci_device_remove+0x3d/0xb0
+ [  243.948778]  device_remove+0x46/0x70
+ [  243.948782]  device_release_driver_internal+0x1fe/0x280
+ [  243.948785]  driver_detach+0x4e/0xa0
+ [  243.948787]  bus_remove_driver+0x70/0xf0
+ [  243.948789]  driver_unregister+0x35/0x60
+ [  243.948792]  pci_unregister_driver+0x44/0x90
+ [  243.948794]  mana_driver_exit+0x14/0x3fe [mana]
+ [  243.948800]  __do_sys_delete_module.constprop.0+0x185/0x2f0
+
+To fix the bug, use the persistent mask, cpumask_of(cpu#), and set
+affinity_hint to NULL before freeing the IRQ, as required by free_irq().
+
+Cc: stable@vger.kernel.org
+Fixes: 71fa6887eeca ("net: mana: Assign interrupts to CPUs based on NUMA nodes")
+Signed-off-by: Haiyang Zhang <haiyangz@microsoft.com>
+Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
+---
+ .../net/ethernet/microsoft/mana/gdma_main.c   | 37 ++++++-------------
+ 1 file changed, 11 insertions(+), 26 deletions(-)
+
+diff --git a/drivers/net/ethernet/microsoft/mana/gdma_main.c b/drivers/net/ethernet/microsoft/mana/gdma_main.c
+index b144f2237748..f9b8f372ec8a 100644
+--- a/drivers/net/ethernet/microsoft/mana/gdma_main.c
++++ b/drivers/net/ethernet/microsoft/mana/gdma_main.c
+@@ -1217,9 +1217,7 @@ static int mana_gd_setup_irqs(struct pci_dev *pdev)
+ 	unsigned int max_queues_per_port = num_online_cpus();
+ 	struct gdma_context *gc = pci_get_drvdata(pdev);
+ 	struct gdma_irq_context *gic;
+-	unsigned int max_irqs;
+-	u16 *cpus;
+-	cpumask_var_t req_mask;
++	unsigned int max_irqs, cpu;
+ 	int nvec, irq;
+ 	int err, i = 0, j;
+ 
+@@ -1240,21 +1238,7 @@ static int mana_gd_setup_irqs(struct pci_dev *pdev)
+ 		goto free_irq_vector;
+ 	}
+ 
+-	if (!zalloc_cpumask_var(&req_mask, GFP_KERNEL)) {
+-		err = -ENOMEM;
+-		goto free_irq;
+-	}
+-
+-	cpus = kcalloc(nvec, sizeof(*cpus), GFP_KERNEL);
+-	if (!cpus) {
+-		err = -ENOMEM;
+-		goto free_mask;
+-	}
+-	for (i = 0; i < nvec; i++)
+-		cpus[i] = cpumask_local_spread(i, gc->numa_node);
+-
+ 	for (i = 0; i < nvec; i++) {
+-		cpumask_set_cpu(cpus[i], req_mask);
+ 		gic = &gc->irq_contexts[i];
+ 		gic->handler = NULL;
+ 		gic->arg = NULL;
+@@ -1269,17 +1253,16 @@ static int mana_gd_setup_irqs(struct pci_dev *pdev)
+ 		irq = pci_irq_vector(pdev, i);
+ 		if (irq < 0) {
+ 			err = irq;
+-			goto free_mask;
++			goto free_irq;
+ 		}
+ 
+ 		err = request_irq(irq, mana_gd_intr, 0, gic->name, gic);
+ 		if (err)
+-			goto free_mask;
+-		irq_set_affinity_and_hint(irq, req_mask);
+-		cpumask_clear(req_mask);
++			goto free_irq;
++
++		cpu = cpumask_local_spread(i, gc->numa_node);
++		irq_set_affinity_and_hint(irq, cpumask_of(cpu));
+ 	}
+-	free_cpumask_var(req_mask);
+-	kfree(cpus);
+ 
+ 	err = mana_gd_alloc_res_map(nvec, &gc->msix_resource);
+ 	if (err)
+@@ -1290,13 +1273,12 @@ static int mana_gd_setup_irqs(struct pci_dev *pdev)
+ 
+ 	return 0;
+ 
+-free_mask:
+-	free_cpumask_var(req_mask);
+-	kfree(cpus);
+ free_irq:
+ 	for (j = i - 1; j >= 0; j--) {
+ 		irq = pci_irq_vector(pdev, j);
+ 		gic = &gc->irq_contexts[j];
++
++		irq_update_affinity_hint(irq, NULL);
+ 		free_irq(irq, gic);
+ 	}
+ 
+@@ -1324,6 +1306,9 @@ static void mana_gd_remove_irqs(struct pci_dev *pdev)
+ 			continue;
+ 
+ 		gic = &gc->irq_contexts[i];
++
++		/* Need to clear the hint before free_irq */
++		irq_update_affinity_hint(irq, NULL);
+ 		free_irq(irq, gic);
+ 	}
+ 
+-- 
+2.25.1
 
