@@ -2,137 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E48068896F
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 23:00:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8CFF688974
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 23:01:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232098AbjBBWAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 17:00:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59974 "EHLO
+        id S232594AbjBBWBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 17:01:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230496AbjBBWAp (ORCPT
+        with ESMTP id S232453AbjBBWBS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 17:00:45 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3928889B4
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 13:59:53 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so4730468wma.1
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 13:59:53 -0800 (PST)
+        Thu, 2 Feb 2023 17:01:18 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E354D7B408
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 14:00:55 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id f16-20020a17090a9b1000b0023058bbd7b2so2543194pjp.0
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 14:00:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GpQqIcYzW24NoE4rYiVknf6KZVN8LYqH5TXYzHdb+3M=;
-        b=mwh5EjD+CrWzvqutd8IljFnMGRQXj2tCaUtzf/ip7Fx/7JXdbc97L+E/EmTW9Oae73
-         9Ylt/v4jzuked0HEBtzU/q3pRrnsFRx+ZB7WxAQGE8qH+gWxbrIkpVhl87nxs73n9loO
-         fKG1uIuwKrHYhfZQ+GxXK4Cyn7XlbcZLSSv3McW7GHfVkWOwcoyIllOSckfARaD6G+cA
-         SLHOb1wgrhTf/xClLk9ydPorX3wtcu9Z8rh43CQLnMwktRcRnfudxaqmRpIG2SRkHYiC
-         o4fmZ7B88lQ0yrepdi8nofN2wQUWuoS+ZOn8VLEx2+i4Mzp60kYLRL2cVJ2vIsUzkfwR
-         LydA==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+vrP6x4T9y3LBVQTyEpVLcHcjo3vK9avyGJed9Ro+PY=;
+        b=fDff1QUaUePyrEO4K8PPJaKVKrS67CDWzshdJihkORr3Ui4KtY4IlqYfEDwINOUrgc
+         jcUkc/WY/hV+22kjwpG7NbLjhRLmn6hhUunsDgDto4c42tr1dygTqmITCJav1rljlcNB
+         +vzWl29h+6Euy34nzxUXIXoBhcDrFDyAD+Dd0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GpQqIcYzW24NoE4rYiVknf6KZVN8LYqH5TXYzHdb+3M=;
-        b=KmAhtIZo2Unj/DRh2UYzL1+6q36fEi4uiE26nKCxu10PkMfbAQpPJ9YsZ7chlxgW20
-         Htwtv/e6OOiKv5Zjc8VfmIG576ZoV6m2609uOKGFArMtbbfIXd4Y/jK0M/q341BKAK3k
-         UCEWiFPkK6wL5Eg+GIcujn6KsXxfxpKoNdXygtxzUOqvRU8RhOk6X1bcUabJc+ZLjHZ1
-         5Ssem3D7cEEMpz1cN4ccgzxbpyWVgLymoWa4ThlhRX2p03a6f5HvWetYCb+qIDBgh8Fn
-         vGM5Cd7tYH/yLl8Ckc6uoKJHxGY/o0G06IuYTL9k1Sc3SYz8bP3+faeopYOts7OReer/
-         J0fQ==
-X-Gm-Message-State: AO0yUKUH2hLPqQ9m7+CreiF5ATuD6FdKBg2pofpq3OfRwBNCTr1vKxEC
-        HjISjlmoAdc0R35Mfbp9sPDgrw==
-X-Google-Smtp-Source: AK7set8o50YFSBYeEBNtkAiBgAaIbG+rH/XDVtTCYV/fEyqOwguJihiZFYOvbTE8c29A7YdgzKGIMw==
-X-Received: by 2002:a05:600c:1c1f:b0:3dc:5e21:8aa2 with SMTP id j31-20020a05600c1c1f00b003dc5e218aa2mr7362676wms.34.1675375170436;
-        Thu, 02 Feb 2023 13:59:30 -0800 (PST)
-Received: from ?IPV6:2a02:6b6a:b566:0:98fe:e4ee:fc7e:cd71? ([2a02:6b6a:b566:0:98fe:e4ee:fc7e:cd71])
-        by smtp.gmail.com with ESMTPSA id l16-20020a1c7910000000b003dc1d668866sm5710640wme.10.2023.02.02.13.59.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 13:59:29 -0800 (PST)
-Message-ID: <702e3663-ceaa-c2b9-960f-1c909865f3d2@bytedance.com>
-Date:   Thu, 2 Feb 2023 21:59:29 +0000
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+vrP6x4T9y3LBVQTyEpVLcHcjo3vK9avyGJed9Ro+PY=;
+        b=fAjpeaJwzQCcCWUNSmHV3Lfr/flIJnnZY1KT6gn6XBjDJ9QGy8BQJPQI0ZLTWrhznl
+         w5wKeX7xkBuHMYA8Kpci3g+VVEp/zmo7O4FcQ7k1wsnWec1P2DQ/CN+BuIviH5TL3D7o
+         E6GicCuWV6ORRcngaLtf+jLQ8u3M6j7xRNofYym78+RbANJe1EZld9b8Y3EsbM5i6xZj
+         tx2fax1Or2pH4BTHQ5FxhZPH5sHR/WwmQ0fEJf03bRaHuB4jJwmU6YKj2/EAHJkgsjD0
+         mBqne1d0fj0UiRrx3L427Dh1ZIf3T2X10QDIj4HL/r5TyBadI/K1TRqRXAbLf1FHtC71
+         9Fbg==
+X-Gm-Message-State: AO0yUKUJSHN+/6U0qIufZ5sLsqYu5hGUGXwlHejUXEuWk9RECt7jX+OT
+        1wo94HCIuIVfCtVIGY1Fr/+QHQ==
+X-Google-Smtp-Source: AK7set+0gtbk39rHfzSVgEM302zYU0TbkQDgIf0uMcHrg3ewECuj1/fjtP9RbRAbvJ76kTaZkURYyA==
+X-Received: by 2002:a17:902:cf08:b0:194:a6e0:3ba with SMTP id i8-20020a170902cf0800b00194a6e003bamr8169139plg.54.1675375236301;
+        Thu, 02 Feb 2023 14:00:36 -0800 (PST)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:f71:fcf9:d3e0:e9c0])
+        by smtp.gmail.com with ESMTPSA id jb21-20020a170903259500b00192fc9e8552sm179629plb.0.2023.02.02.14.00.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Feb 2023 14:00:35 -0800 (PST)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>
+Cc:     swboyd@chromium.org, mka@chromium.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [PATCH] cpufreq: qcom-hw: Fix cpufreq_driver->get() for non-LMH systems
+Date:   Thu,  2 Feb 2023 14:00:23 -0800
+Message-Id: <20230202140005.1.I4b30aaa027c73372ec4068cc0f0dc665af8b938d@changeid>
+X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 0/9] Parallel CPU bringup for x86_64
-Content-Language: en-US
-To:     David Woodhouse <dwmw2@infradead.org>, tglx@linutronix.de,
-        arjan@linux.intel.com
-Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, x86@kernel.org, pbonzini@redhat.com,
-        paulmck@kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, rcu@vger.kernel.org, mimoja@mimoja.de,
-        hewenliang4@huawei.com, thomas.lendacky@amd.com, seanjc@google.com,
-        pmenzel@molgen.mpg.de, fam.zheng@bytedance.com,
-        punit.agrawal@bytedance.com, simon.evans@bytedance.com,
-        liangma@liangbit.com
-References: <20230201204338.1337562-1-usama.arif@bytedance.com>
- <de9c33a14c370d09cefaa331b18525e164436082.camel@infradead.org>
-From:   Usama Arif <usama.arif@bytedance.com>
-In-Reply-To: <de9c33a14c370d09cefaa331b18525e164436082.camel@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On a sc7180-based Chromebook, when I go to
+/sys/devices/system/cpu/cpu0/cpufreq I can see:
 
+  cpuinfo_cur_freq:2995200
+  cpuinfo_max_freq:1804800
+  scaling_available_frequencies:300000 576000 ... 1708800 1804800
+  scaling_cur_freq:1804800
+  scaling_max_freq:1804800
 
-On 02/02/2023 10:02, David Woodhouse wrote:
-> On Wed, 2023-02-01 at 20:43 +0000, Usama Arif wrote:
->> This patchseries is from the work done by David Woodhouse (v4: https://lore.kernel.org/all/20220201205328.123066-1-dwmw2@infradead.org/).
->> The parallel CPU bringup is disabled for all AMD CPUs in this version: (see discussions: https://lore.kernel.org/all/bc3f2b1332c4bb77558df8aa36493a55542fe5b9.camel@infradead.org/ and
->> https://lore.kernel.org/all/3b6ac86fdc800cac5806433daf14a9095be101e9.camel@infradead.org/).
->>
->> Doing INIT/SIPI/SIPI in parallel brings down the time for smpboot from ~700ms
->> to 100ms (85% improvement) on a server with 128 CPUs split across 2 NUMA
->> nodes.
->>
->> Adding another cpuhp state for do_wait_cpu_initialized to make sure cpu_init
->> is reached in parallel as proposed by David in v1 will bring it down further
->> to ~30ms. Making this change would be dependent on this patchseries, so they
->> could be explored if this gets merged.
->>
->> Changes across versions:
->> v2: Cut it back to just INIT/SIPI/SIPI in parallel for now, nothing more
->> v3: Clean up x2apic patch, add MTRR optimisation, lock topology update
->>      in preparation for more parallelisation.
->> v4: Fixes to the real mode parallelisation patch spotted by SeanC, to
->>      avoid scribbling on initial_gs in common_cpu_up(), and to allow all
->>      24 bits of the physical X2APIC ID to be used. That patch still needs
->>      a Signed-off-by from its original author, who once claimed not to
->>      remember writing it at all. But now we've fixed it, hopefully he'll
->>      admit it now :)
->> v5: rebase to v6.1 and remeasure performance, disable parallel bringup
->>      for AMD CPUs.
-> 
-> Thanks, Usama.
-> 
-> I've updated to v6.2-rc6 since there were a few more tweaks required
-> (and we should double-check that the new handling of cache_ap_init from
-> a dedicated cpuhp step works right if that ends up being done in
-> parallel).
-> 
-> I also fixed up the complaints from the test robot; including
-> <linux/smpboot.h> from smpboot.c and making do_cpu_up() static, and
-> putting #ifdef CONFIG_SMP around the 'are we booting the AP?' check and
-> code segment in head_64.S.
-> 
-> I've made the AMD thing a CPU bug as Peter suggested, and pushed it to
-> https://git.infradead.org/users/dwmw2/linux.git/shortlog/refs/heads/parallel-6.2-rc6
-> for you to do the real work of actually testing it :)
+As you can see the `cpuinfo_cur_freq` is bogus. It turns out that this
+bogus info started showing up as of commit 205f5e984d30 ("cpufreq:
+qcom-hw: Fix the frequency returned by cpufreq_driver->get()"). That
+commit seems to assume that everyone is on the LMH bandwagon, but
+sc7180 isn't.
 
-Thanks David! I have tested and reposted the v6.2-rc6 patches. One thing 
-I was mistaken about since I had rebased the patches together was that 
-the last 100ms to 30ms optimization was coming from parallelization in 
-x86/cpu:wait-init, when it seems to have a negligible affect. The last 
-70ms optimization was coming mainly from reusing timer calibration. Its 
-a simple patch and I have added it at the end of the series. The only 
-thing thats' missing was a sign-off from the author who I have added to 
-the latest series.
+Let's go back to the old code in the case where LMH isn't used.
+
+Fixes: 205f5e984d30 ("cpufreq: qcom-hw: Fix the frequency returned by cpufreq_driver->get()")
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+---
+
+ drivers/cpufreq/qcom-cpufreq-hw.c | 24 +++++++++++++-----------
+ 1 file changed, 13 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+index 9505a812d6a1..957cf6bb8c05 100644
+--- a/drivers/cpufreq/qcom-cpufreq-hw.c
++++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+@@ -143,40 +143,42 @@ static unsigned long qcom_lmh_get_throttle_freq(struct qcom_cpufreq_data *data)
+ 	return lval * xo_rate;
+ }
+ 
+-/* Get the current frequency of the CPU (after throttling) */
+-static unsigned int qcom_cpufreq_hw_get(unsigned int cpu)
++/* Get the frequency requested by the cpufreq core for the CPU */
++static unsigned int qcom_cpufreq_get_freq(unsigned int cpu)
+ {
+ 	struct qcom_cpufreq_data *data;
++	const struct qcom_cpufreq_soc_data *soc_data;
+ 	struct cpufreq_policy *policy;
++	unsigned int index;
+ 
+ 	policy = cpufreq_cpu_get_raw(cpu);
+ 	if (!policy)
+ 		return 0;
+ 
+ 	data = policy->driver_data;
++	soc_data = qcom_cpufreq.soc_data;
+ 
+-	return qcom_lmh_get_throttle_freq(data) / HZ_PER_KHZ;
++	index = readl_relaxed(data->base + soc_data->reg_perf_state);
++	index = min(index, LUT_MAX_ENTRIES - 1);
++
++	return policy->freq_table[index].frequency;
+ }
+ 
+-/* Get the frequency requested by the cpufreq core for the CPU */
+-static unsigned int qcom_cpufreq_get_freq(unsigned int cpu)
++static unsigned int qcom_cpufreq_hw_get(unsigned int cpu)
+ {
+ 	struct qcom_cpufreq_data *data;
+-	const struct qcom_cpufreq_soc_data *soc_data;
+ 	struct cpufreq_policy *policy;
+-	unsigned int index;
+ 
+ 	policy = cpufreq_cpu_get_raw(cpu);
+ 	if (!policy)
+ 		return 0;
+ 
+ 	data = policy->driver_data;
+-	soc_data = qcom_cpufreq.soc_data;
+ 
+-	index = readl_relaxed(data->base + soc_data->reg_perf_state);
+-	index = min(index, LUT_MAX_ENTRIES - 1);
++	if (data->throttle_irq >= 0)
++		return qcom_lmh_get_throttle_freq(data) / HZ_PER_KHZ;
+ 
+-	return policy->freq_table[index].frequency;
++	return qcom_cpufreq_get_freq(cpu);
+ }
+ 
+ static unsigned int qcom_cpufreq_hw_fast_switch(struct cpufreq_policy *policy,
+-- 
+2.39.1.519.gcb327c4b5f-goog
+
