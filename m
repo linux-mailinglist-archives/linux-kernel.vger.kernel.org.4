@@ -2,214 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E5CD68786E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:10:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7097687872
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:10:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231994AbjBBJKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 04:10:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51980 "EHLO
+        id S231540AbjBBJKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 04:10:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231970AbjBBJKB (ORCPT
+        with ESMTP id S231996AbjBBJKR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 04:10:01 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21A777E6DB
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 01:09:59 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id e10-20020a17090a630a00b0022bedd66e6dso4956465pjj.1
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 01:09:59 -0800 (PST)
+        Thu, 2 Feb 2023 04:10:17 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E240C80016
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 01:10:07 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id l8so832669wms.3
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 01:10:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igel-co-jp.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gcO0uxyztK7wrPRESDhnWawV9bJajYCn05I6EVJHO1Q=;
-        b=GH6KARO7thcAXAecHFCRqv2AThKvwRpSynFUPRyr/OZKPlK2yL0fvDQhRTEuxWPbag
-         soLM3KjFH60hrsUUukVibYDKMQm0sViyKG5mYZqPbfML2bae+Go5bIdqdw9B901M7ibu
-         wNT7zORKjzFmfIR2oCiVQM3HJyrFKC2BPqVxmkD7X27/Tbuv0DsrL5dChFH+9/NwvzIQ
-         EUYkhc2ftdhCYgF8ACeakDBIlsNguRxNJ82koXMxpahyWP6KNfGH647dLQIQkSf08b9Y
-         Kg9/9k7MncrjLlOlQrFvpRobgAOYtK7H68cuL5RxgyxNu+F+hxjmjIGD1BbGwHe4fB3M
-         210w==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GuHqxHFmMDzLu09crUNJ3iVIgq0Eo+XKZ1UhzXbjGWY=;
+        b=y6m5QULbu4jNV5tebNlgGWntIbntCPYG8aX60ks12N3geKsIihcX9z19Y4nqRXvGjE
+         AUVwhql2QqiBWVet+4bDO4tXJhOKGTf3Glgm421z8gQ1iqZ61seX6SBCHY0JJlP9uzhb
+         I0nNgGmhOjq9kVRPhQNUjewmLbOHKUKK1B1AVqslbLZk4/P+3sIVbi7BKF98+XPevHKG
+         y9Y+4x1M7BaElF2emPWqrAXSXmMOUuUKx9xq2sdGLuyYtwfSbB/gSOwfwwdcxsBb5lMO
+         PdbGHI7+vRSz9G7+imxZ7j/9Z95I3KySDZ/GWwFXRJaAw/L/uKppe/9gSLE2tcS231vo
+         oJRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gcO0uxyztK7wrPRESDhnWawV9bJajYCn05I6EVJHO1Q=;
-        b=J6zxQLhgFRzG0FpQlMLDhB6tvUsnuVECSlM5a9dTx/kIy8O07j4bI9G08xe9QXqM77
-         KTpUAmhZ7ELIcNKiHuDDYCoU5qhTInE+Hc6fsy+jp0MwjBJCXprNVbjDYfidOhivncAW
-         qoUByfUeFPIZAwceltsPJir9A49oZJ/g8JGNxbsfc0NZUdGHjyYg5Waj3EulIL1s6VSa
-         R9YFOm6yhdJHCd9zCAlaFhrE67e/+3b50K0xNHfKXwhkk4pI79JiTLRJRnvhrWed36Yf
-         cvL59DBDSphnB9OdY0y6kAdbc3KcQ9A59L0CzlRfoLG0XpuMX4V4qJ8V8Fm73rdMXsV+
-         oMcQ==
-X-Gm-Message-State: AO0yUKVh15JIGbWJ3TcrAZJzKvxFLxYoybgUMjnE5zlOrCgYiFwpLRfR
-        xKRAp05/KsboG8geazZLmihiYA==
-X-Google-Smtp-Source: AK7set/fXvDEmBQhH8c6B3dTk3eGn1u6YNr6DVl3bDrXS4EUzT2lgnlUWdYhoNLU3kNmqiqzSmYyqg==
-X-Received: by 2002:a17:903:2303:b0:195:f06f:84fc with SMTP id d3-20020a170903230300b00195f06f84fcmr7368514plh.40.1675328998631;
-        Thu, 02 Feb 2023 01:09:58 -0800 (PST)
-Received: from tyrell.hq.igel.co.jp (napt.igel.co.jp. [219.106.231.132])
-        by smtp.gmail.com with ESMTPSA id ik12-20020a170902ab0c00b001929827731esm13145968plb.201.2023.02.02.01.09.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 01:09:58 -0800 (PST)
-From:   Shunsuke Mie <mie@igel.co.jp>
-To:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Rusty Russell <rusty@rustcorp.com.au>
-Cc:     kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shunsuke Mie <mie@igel.co.jp>
-Subject: [RFC PATCH v2 7/7] vringh: IOMEM support
-Date:   Thu,  2 Feb 2023 18:09:34 +0900
-Message-Id: <20230202090934.549556-8-mie@igel.co.jp>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230202090934.549556-1-mie@igel.co.jp>
-References: <20230202090934.549556-1-mie@igel.co.jp>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GuHqxHFmMDzLu09crUNJ3iVIgq0Eo+XKZ1UhzXbjGWY=;
+        b=BFEWLUXsTVMbOdLSjxTYnjE+wUZuymvYSFZpWWtv9ahK+MDR2wOwzArvx7bWn1fU/i
+         y/45fiMDCmYG+NFo038ZGaGbobWpXk43c8hGooVNYwAFmMLZIttUqLHPPyV8es/sPTDx
+         oIJzjnr335irAe55jBGBvEzCw42uHI3IsP21D+09yyfw8ZkUAEIlRsE2HAObH544x/W1
+         5SuufGSnJ5OIZIgV7l+Qv4VCe3wMkstbt3EIYS0eo8nSek+1d/eLi5bEi5HRGCsZrvXx
+         gZ8vnd9I1HRfCm2I2BeTFaq6DgbL+4S22jalT8bgq80Ma5u5Pd6vNMhkOk3IEMQ02Bmu
+         MVFw==
+X-Gm-Message-State: AO0yUKXSVanZQVCZ10DmIEOY64ZXJMs3j8DTqidgIkbOwrIBlUaBz76K
+        LHldzZdLd55RKVgNKg76UJgYIg==
+X-Google-Smtp-Source: AK7set9K7JX00ufo3veGqKxE4YjIj8gUfpXxTTBR+WIGPUu7UI16cfzONV2wgp8xVOk6CMHqvUKP8w==
+X-Received: by 2002:a7b:c8c6:0:b0:3df:9858:c03b with SMTP id f6-20020a7bc8c6000000b003df9858c03bmr1306017wml.16.1675329006288;
+        Thu, 02 Feb 2023 01:10:06 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id t1-20020a1c7701000000b003b47b80cec3sm4046965wmi.42.2023.02.02.01.10.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Feb 2023 01:10:05 -0800 (PST)
+Message-ID: <50b797aa-adfe-b3d8-79db-c3ee2cb72f6a@linaro.org>
+Date:   Thu, 2 Feb 2023 10:10:04 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 1/7] dt-bindings: rtc: Move RV3028 to separate binding
+ file
+Content-Language: en-US
+To:     Frieder Schrempf <frieder@fris.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Rob Herring <robh@kernel.org>,
+        Thierry Reding <treding@nvidia.com>
+References: <20230201143431.863784-1-frieder@fris.de>
+ <20230201143431.863784-2-frieder@fris.de>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230201143431.863784-2-frieder@fris.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch introduces the new memory accessor for vringh. It is able to
-use vringh to virtio rings located on iomemory region.
+On 01/02/2023 15:34, Frieder Schrempf wrote:
+> From: Frieder Schrempf <frieder.schrempf@kontron.de>
+> 
+> The RV3028 driver uses properties that are not covered by the
+> trivial-rtc bindings. Use custom bindings for it.
+> 
+> Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+> ---
+>  .../bindings/rtc/microcrystal,rv3028.yaml     | 56 +++++++++++++++++++
+>  .../devicetree/bindings/rtc/trivial-rtc.yaml  |  2 -
+>  2 files changed, 56 insertions(+), 2 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/rtc/microcrystal,rv3028.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/rtc/microcrystal,rv3028.yaml b/Documentation/devicetree/bindings/rtc/microcrystal,rv3028.yaml
+> new file mode 100644
+> index 000000000000..4667ba86fd0c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/rtc/microcrystal,rv3028.yaml
+> @@ -0,0 +1,56 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/rtc/microcrystal,rv3028.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Microchip RV-3028 RTC
+> +
+> +allOf:
+> +  - $ref: "rtc.yaml#"
 
-Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
----
- drivers/vhost/Kconfig  |  6 ++++
- drivers/vhost/vringh.c | 76 ++++++++++++++++++++++++++++++++++++++++++
- include/linux/vringh.h |  8 +++++
- 3 files changed, 90 insertions(+)
+Drop quotes
 
-diff --git a/drivers/vhost/Kconfig b/drivers/vhost/Kconfig
-index 587fbae06182..a79a4efbc817 100644
---- a/drivers/vhost/Kconfig
-+++ b/drivers/vhost/Kconfig
-@@ -6,6 +6,12 @@ config VHOST_IOTLB
- 	  This option is selected by any driver which needs to support
- 	  an IOMMU in software.
- 
-+config VHOST_IOMEM
-+	tristate
-+	select VHOST_RING
-+	help
-+	  Generic IOMEM implementation for vhost and vringh.
-+
- config VHOST_RING
- 	tristate
- 	select VHOST_IOTLB
-diff --git a/drivers/vhost/vringh.c b/drivers/vhost/vringh.c
-index 46fb315483ed..e3d9c7281ad0 100644
---- a/drivers/vhost/vringh.c
-+++ b/drivers/vhost/vringh.c
-@@ -18,6 +18,9 @@
- #include <linux/highmem.h>
- #include <linux/vhost_iotlb.h>
- #endif
-+#if IS_REACHABLE(CONFIG_VHOST_IOMEM)
-+#include <linux/io.h>
-+#endif
- #include <uapi/linux/virtio_config.h>
- 
- static __printf(1,2) __cold void vringh_bad(const char *fmt, ...)
-@@ -1165,4 +1168,77 @@ EXPORT_SYMBOL(vringh_set_iotlb);
- 
- #endif
- 
-+#if IS_REACHABLE(CONFIG_VHOST_IOMEM)
-+
-+/* io-memory space access helpers. */
-+static int getu16_iomem(const struct vringh *vrh, u16 *val, const __virtio16 *p)
-+{
-+	*val = vringh16_to_cpu(vrh, ioread16(p));
-+	return 0;
-+}
-+
-+static int putu16_iomem(const struct vringh *vrh, __virtio16 *p, u16 val)
-+{
-+	iowrite16(cpu_to_vringh16(vrh, val), p);
-+	return 0;
-+}
-+
-+static int copydesc_iomem(const struct vringh *vrh, void *dst, const void *src,
-+			  size_t len)
-+{
-+	memcpy_fromio(dst, src, len);
-+	return 0;
-+}
-+
-+static int putused_iomem(const struct vringh *vrh, struct vring_used_elem *dst,
-+			 const struct vring_used_elem *src, unsigned int num)
-+{
-+	memcpy_toio(dst, src, num * sizeof(*dst));
-+	return 0;
-+}
-+
-+static int xfer_from_iomem(const struct vringh *vrh, void *src, void *dst,
-+			   size_t len)
-+{
-+	memcpy_fromio(dst, src, len);
-+	return 0;
-+}
-+
-+static int xfer_to_iomem(const struct vringh *vrh, void *dst, void *src,
-+			 size_t len)
-+{
-+	memcpy_toio(dst, src, len);
-+	return 0;
-+}
-+
-+static struct vringh_ops iomem_vringh_ops = {
-+	.getu16 = getu16_iomem,
-+	.putu16 = putu16_iomem,
-+	.xfer_from = xfer_from_iomem,
-+	.xfer_to = xfer_to_iomem,
-+	.putused = putused_iomem,
-+	.copydesc = copydesc_iomem,
-+	.range_check = no_range_check,
-+	.getrange = NULL,
-+};
-+
-+int vringh_init_iomem(struct vringh *vrh, u64 features, unsigned int num,
-+		      bool weak_barriers, gfp_t gfp, struct vring_desc *desc,
-+		      struct vring_avail *avail, struct vring_used *used)
-+{
-+	int err;
-+
-+	err = __vringh_init(vrh, features, num, weak_barriers, gfp, desc, avail,
-+			    used);
-+	if (err)
-+		return err;
-+
-+	memcpy(&vrh->ops, &iomem_vringh_ops, sizeof(iomem_vringh_ops));
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL(vringh_init_iomem);
-+
-+#endif
-+
- MODULE_LICENSE("GPL");
-diff --git a/include/linux/vringh.h b/include/linux/vringh.h
-index 89c73605c85f..420c2d0ed398 100644
---- a/include/linux/vringh.h
-+++ b/include/linux/vringh.h
-@@ -265,4 +265,12 @@ int vringh_init_iotlb(struct vringh *vrh, u64 features,
- 
- #endif /* CONFIG_VHOST_IOTLB */
- 
-+#if IS_REACHABLE(CONFIG_VHOST_IOMEM)
-+
-+int vringh_init_iomem(struct vringh *vrh, u64 features, unsigned int num,
-+		      bool weak_barriers, gfp_t gfp, struct vring_desc *desc,
-+		      struct vring_avail *avail, struct vring_used *used);
-+
-+#endif /* CONFIG_VHOST_IOMEM */
-+
- #endif /* _LINUX_VRINGH_H */
--- 
-2.25.1
+> +
+> +maintainers:
+> +  - Alexandre Belloni <alexandre.belloni@bootlin.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: microcrystal,rv3028
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  start-year: true
+
+This should be dropped as well and then...
+
+> +
+> +  trickle-resistor-ohms:
+> +    enum:
+> +      - 3000
+> +      - 5000
+> +      - 9000
+> +      - 15000
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+
+...switch to unevaluatedProperties: false
+
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        rtc@51 {
+
+Rob's pointed missing testing.
+
+But more important - please rebase your patches on current tree. Looks
+like all the changes are already done...
+
+Best regards,
+Krzysztof
 
