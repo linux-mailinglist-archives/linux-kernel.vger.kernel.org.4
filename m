@@ -2,71 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D57226877C5
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 09:46:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CD526877D1
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 09:49:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231835AbjBBIqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 03:46:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58990 "EHLO
+        id S231917AbjBBIsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 03:48:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229851AbjBBIqc (ORCPT
+        with ESMTP id S231737AbjBBIsi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 03:46:32 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AEFD83978
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 00:46:31 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id d8so1128633ljq.9
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 00:46:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=miraclelinux-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FA8JDpIGSybcyecjAm1yP7YpxXYmALaMtPYTAIfl8QI=;
-        b=i43zT4cTrxMg5QSe+BaoB3oS0//3yDsV7CgLHLHvtafF3lFDeOD3TJeP4WaHGyo6YN
-         JHesGoL+zJyCek1OdaZkbFmjHtTjQUZICJOsLFBM2vjg4+JkLuYy/nB08tic/7+LSskW
-         IamjMKRzlbldmVRUJMcrL1OPo3csQuVa9cRItuISGLnaU38MsTUe4XtaCFmN9yApYGZm
-         VvyGaYPilB5+I4cOx8FZPwjgMeYeVofW9TBWnFg6TnXtyg6oD1LFMxeVm6Q2uKqgDtox
-         H2Z+9U29otrMGhW0mcI2y68aqCc8TkOGSAl3kzkx15VBSXVWrWs2d1Uq4DBzLpFI6Zdl
-         UGaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FA8JDpIGSybcyecjAm1yP7YpxXYmALaMtPYTAIfl8QI=;
-        b=KKkksr1gAcq/Z81fQ5yD3QRLPvvv+QFlffzNI8Jjsc3nDlc/5rLQv4GMgQx4uXmCtU
-         1V5Kt4Zt6O8zSszQ9526Hf59wnWxaf4ba2NjSQqD0jk/cXglMyDa2OY+h9YpHIb3PRoP
-         uyx4S7krBFBnZNJEgYm+I2d7a0tpq3VgElF39q/AjD60FQ3BnnZlwj1Js4STZL1fxn/o
-         qBrV8MORLzn/q+Hhg4reNLd3xOMYDWpdCrLM3ipsiaiQtZ2EfOr0eYKQU2WPPJ8yGIB7
-         +IHNMAmdD261fqU42EbLUIr6c4A6fWIz2a6huOx6IaEK+pE5SxfDJcSx1fzUmwPFXdrw
-         yZyg==
-X-Gm-Message-State: AO0yUKVpqLmXBW1c8oOGxybYkYxTuB73yg9t1Yv3iPJfZ4OqYocYv7Bi
-        0FSFVR0f1++VArXRZNnGA9vSbhErXwGkI3faJsSL
-X-Google-Smtp-Source: AK7set9+YQHV1gAVbROorNlJcPuRIq/IYaTNwB99GqEg9PLvf3yQ6kv4YtB5417OJspqZ5laWIeBQGYpfBIhE6/QFn4=
-X-Received: by 2002:a2e:b6d4:0:b0:290:5165:1f05 with SMTP id
- m20-20020a2eb6d4000000b0029051651f05mr797752ljo.182.1675327589517; Thu, 02
- Feb 2023 00:46:29 -0800 (PST)
+        Thu, 2 Feb 2023 03:48:38 -0500
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2092.outbound.protection.outlook.com [40.107.255.92])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 065C845220
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 00:48:37 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lTq2GRRHt6FKJivm8ojbN/I4KT4gqQYHuTdcKddMqCui8IoRFw4QpTolqCLtKcOG9BTKGRMPAjHie9jrnJPHTNxK35FNMh/YXLISc5g4iv7350a9i7n9ON10nT2uBleSGweh4kfbVpow/HNP0Yl1HRnBmwnRK4XsGMp6Jdc9tcvjb7ijL327kzUU6L8qiwU0GrigcQ6sS/M0sgqcXPHr3BYkyL5hjZpxBuDFTITg+6DcEC5RNnhRMLt3SFugorxJtuXP5swiQU+Z6Q6j4536YvGplAEcdEJAbwIMUC2rt5nVxGtGBru8n1Sw/DU3QZ20HYEpiddQyKkGn1abwOT4Og==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wMsmnbmNXYRUEU5YT/7odIoE+ovaE20i3kq0sGhW1Ks=;
+ b=LXB8Gt0LBCfWp1bHJjApcJEpNcT2W+Js2AQzxeCBqwkYQNZYEaxPdqdCuCpmqBLfgUV4MIuXqzwhWh67zpRaWLWx8RfJs0SUekvLAhMfwDy+ZBFC0wdPc0RS11BPu1fDDHEC/QHbRh27A90yYSZpYefSa/Fh4M4SpGXDtpEwdpL8cCze9rDdi80ptQGI56NUXGlH8nCf8Jzg9NZoxQ3uIsn1iCnH8vo3M67qGFuDYZVtGN1tWakTzNJWVQq6RpdEzb8guq8ZKc/zjFCWMnoIiWEoUrccsqbaLgJ9mNMLT3q228HsxkVLYC4GLt490mb+bnGzYovr9gY3zs1BS7yFiQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wMsmnbmNXYRUEU5YT/7odIoE+ovaE20i3kq0sGhW1Ks=;
+ b=fUbgVoRQAPyW/PI4I+Z4bGopNLs28xgP+dgc9ctFjcudP2k23P09j3f2QBIGWJ1VY6ZV8kWuCkTirYUpYEq9M7suZ6Q3K/t3TFO0NTv6QRrvlCxcTAEHW+vYewEh5HGvBbHUIYYQl2/wlQguaxpPlRjJhXZ0rnt6a4N+bvziCpNZ33BzDslVWD5pGzZ+5ytKAvYSq0Py/8Rkfu7Ha+v7akdUVXrZtgXFO/Y42yoJv6eGaZXfro+wAYm3zz2cBz0DqFbNwwP+EHX6nBk2tTY9P28OLTikkRzbIgtdYg0698EK6NzfoIQFWqm1ntyjiLqG3d0YGQxSTvngqF5u8b4OZA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by KL1PR0601MB4514.apcprd06.prod.outlook.com (2603:1096:820:72::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.22; Thu, 2 Feb
+ 2023 08:48:29 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::3e52:d08c:ecf4:d572]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::3e52:d08c:ecf4:d572%5]) with mapi id 15.20.6064.022; Thu, 2 Feb 2023
+ 08:48:29 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     jaegeuk@kernel.org, chao@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Yangtao Li <frank.li@vivo.com>
+Subject: [PATCH v3 1/3] f2fs: fix to set ipu policy
+Date:   Thu,  2 Feb 2023 16:48:13 +0800
+Message-Id: <20230202084815.70791-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.35.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR04CA0184.apcprd04.prod.outlook.com
+ (2603:1096:4:14::22) To SEZPR06MB5269.apcprd06.prod.outlook.com
+ (2603:1096:101:78::6)
 MIME-Version: 1.0
-References: <20230128072258.3384037-1-boqun.feng@gmail.com>
-In-Reply-To: <20230128072258.3384037-1-boqun.feng@gmail.com>
-From:   Alice Ferrazzi <alice.ferrazzi@miraclelinux.com>
-Date:   Thu, 2 Feb 2023 17:45:52 +0900
-Message-ID: <CANgtXuMVnROWhjz2su7hXHja6DPO9yjq35wtDyfKAtLDZLnFWQ@mail.gmail.com>
-Subject: Re: [PATCH v2] rust: MAINTAINERS: Add the zulip link
-To:     Boqun Feng <boqun.feng@gmail.com>
-Cc:     rust-for-linux@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|KL1PR0601MB4514:EE_
+X-MS-Office365-Filtering-Correlation-Id: 412cf13c-a36f-4882-6127-08db04fa4194
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /3T1XnvRo/RiKTXFf5akE3u7AoQvbzg/rIzgV4sp9i15Dj2mwS8sc5eR+fr0GEqePTqMhVfjO15wYxzuYLnJyGP625Juu3p3fTsJjOeH3Ld1KHCrMDFvhi5bKC+ku2/v+o5qiPzHM/Nc9Y8abU0Ljp8RDjpHHHqtybQt4HNFaTt4exQUylIfJHcu21GpmJDSHPKslX/fl2nDbl8NOs3dYILdApliI5cc2buP2Z2Wbwr4CLFY3VrvbLWR1/RNQVEirnXVxB+fVKuOlfpnpYGn7rJY9KmJnwoYait/4q3JrvJsZDnHccS5y+UM6j+sShJuOUqdxM05GknHoAmlcJpHBpqbBkNM8Q14xFc/vUyrSdf81QGUQfE1RKx8IvvtR+mCeCt3rW8dU3q3aNcB0sGCjwSTSYNqShhJ98WSZMlZntXO495+fAX4uCX+3q560pc8BxlO7e5zYE1URTwr9oTvLE2QHwQAiZiJyAqIRGCgmQCE5N4ATOndBiHdNDnS5UneaMYaiy52ESaga0zdnvXjyRuWoSikaqr99RT0lj3fCwq1ipXdJPf8n17eIYySaPDRgDxXgu1k0T2pWQZ386xh1YUKcoZntH+bQc+4XZu5zK3vEkL3icNSOCycFz0NXAp9oZD4JK/dsA5eXjUXXrQNbdYT6maGBU7OPPdmHcXECgkpyfmQjkV68ZBqi3IDpr0ju5/pVassF+Vaubn+iFOgLy7uSzXfcdNY22nlI49eFvw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(396003)(346002)(39860400002)(136003)(366004)(451199018)(6512007)(1076003)(478600001)(8936002)(186003)(2906002)(107886003)(26005)(6666004)(52116002)(6506007)(2616005)(6486002)(86362001)(8676002)(5660300002)(83380400001)(4326008)(41300700001)(38350700002)(38100700002)(316002)(66556008)(66946007)(66476007)(36756003)(309714004);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?BWscXEltD3M9kLIRp3NAg2+tFE2p0KvkNwzTPWGhFr4Z1vxVXAkU0X0tZ4rA?=
+ =?us-ascii?Q?oSOh2bz8wdLRp9sFQT9yNmgmHZSGGkgGgOBU0/mNd9kU055H4A2D4XQECFB4?=
+ =?us-ascii?Q?KASE9VlYb9V/QQkmwP0ECjM4QgXAwLpWk1L5dxqlXsLuwN+Fz/+Tw0eN3ckf?=
+ =?us-ascii?Q?qNfmD4mBN2Dck1J5vk84G//q9zLhA6qYU+IxdhCQ9XcvPnjGueGwlZshl5xE?=
+ =?us-ascii?Q?Ya+gH1F/38F6/ogtxsfLiPx4QP4Y3JwHrkrIby/paXDy6NkMcaRy1cXpHCHq?=
+ =?us-ascii?Q?2+MSNbhHHKJKhzxv4N3SH3yJqwybt0CFwbbGJIIWwhVBCgXzet58BJxPxSGm?=
+ =?us-ascii?Q?xSnMjPyRyA8S8LPUiCqXnFuO4fvOjyU7FnxnanobuVqO6nfx/zPIHig73BJn?=
+ =?us-ascii?Q?YqJGk4WkfKnZHJJdUAg1zsU3wWUcgRKvkAnfDZoV56oUeCBhDCpTncIvkmDd?=
+ =?us-ascii?Q?nPEkzUSaEx6ppsWlhVcHPnR7y40V81Em/3YT51p3PdBgnmnG/pHPzvyfxaIZ?=
+ =?us-ascii?Q?D7rZ59ClVDCSQJhcWtR79oXwf+afhVrCVUFZJB5kzZjJJPYsjYVFWLcAJmvo?=
+ =?us-ascii?Q?+eJvx9bvdIAKiRaisq3KbAXCf8vAszZOB+pqjL0G/oOAwn8yuPDy2afmcGgC?=
+ =?us-ascii?Q?UuoONhInwuT33qY102hE6jSETCwjMN51Iat+MOV1zL60wphQoP+O0SuMVh+r?=
+ =?us-ascii?Q?PYBoCE3ZZk4BFbohlh68nuLi7RtCQfKPGeIfSVqvNDQMNOVvq1ZrqeyUCXiy?=
+ =?us-ascii?Q?SzKjhPF0bW0HhKfc2wmY00WyLH9wVGnM50FZWIpNLCDqRWFjOf2hIAWii7w2?=
+ =?us-ascii?Q?u0E2JixiGcFiUFT36qduxPC83qO8X54J4cLhhLlUSe/Tsw//Oqo7/lFeb7NN?=
+ =?us-ascii?Q?DAp9oCUdUtnCaSCVtcr8JR+z55o1VsPnwR3VAkgF4T6baW9yfTwfMBQWxE69?=
+ =?us-ascii?Q?qrYJ4bigAHV/P+feDRsLD0IiMsifSIERjrU1s/VTKmugz+W3ecGs8Y84fsr9?=
+ =?us-ascii?Q?f+MSJNnYT7nlGSzNlUOr3YvM1nOTFOKEIHI2mFZZIRK6bbxF1WZnfp3F3k+7?=
+ =?us-ascii?Q?NSZ4TpUVCNwCSddzPv4l2EYjyYNgIJjc7E/Hz8IxCl3DqPG1cxeCvfpxCtsP?=
+ =?us-ascii?Q?B5QwmGCxKayBGVLkgzxS5N1yoVr5eP8Ht8foFm9ohUSGWOf+qbhDp4onUMuZ?=
+ =?us-ascii?Q?lgSHPnEaO05lYCHiNn55OX6ViY0O6JT6r6D6GYijuJ9V6RZS+IS5dGJU7KFH?=
+ =?us-ascii?Q?ffhLWXRsSiy7WKJ35n9Feh4mV0D0QeS1H0XrueAyPUUjwAQQaEFZsYz1FpQq?=
+ =?us-ascii?Q?k4RPI/ZP+wjrF8FQDAsNViqtGwZXwUajG1zLphYtR3NDOL91QFU0giHU1Olq?=
+ =?us-ascii?Q?sdtq8+qJyey56XggjprB/qhUATo0C/UasrW0dWuT6yXmMUVFotPGRspPbvjM?=
+ =?us-ascii?Q?l1vk6xr4bv7lnfsKnJfU0gbqWD0eRVkNLCjnfOFJmG04tseLhsTBQcHSFpFJ?=
+ =?us-ascii?Q?hafqviJh64SvTElRWZtLicwkgLzeGzsB/m00/othNRLZPTedjnifGisxHa8G?=
+ =?us-ascii?Q?mNW6WFQxLNho6HKHUQ5AJL7ka6+QeApotSaBpuvo?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 412cf13c-a36f-4882-6127-08db04fa4194
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Feb 2023 08:48:29.3197
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: lvuXBKEKSb8RatGj+o3ykjlUz+Kv2blpEy6PptcENTyMHiVmGfSWl5CsmfoUab+Q099ZgkmneKS8M1+Awd7I2Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB4514
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,50 +111,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 28, 2023 at 4:23 PM Boqun Feng <boqun.feng@gmail.com> wrote:
->
-> Zulip organization "rust-for-linux" has been created since about 2 years
-> ago[1], and proven to be a great place for Rust related discussion,
-> therefore add the information in MAINTAINERS file so that newcomers have
-> more options to find guide and help.
->
-> [1]: https://lore.kernel.org/rust-for-linux/CANiq72=3DxVaMQkgCA9rspjV8bhW=
-DGqAn4x78B0_4U1WBJYj1PiA@mail.gmail.com/
->
-> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-> ---
-> v1 -> v2:
->
->         *       As suggested by Greg KH, add commit message.
->
->  MAINTAINERS | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 42fc47c6edfd..30161207f365 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -18219,6 +18219,7 @@ R:      Boqun Feng <boqun.feng@gmail.com>
->  R:     Gary Guo <gary@garyguo.net>
->  R:     Bj=C3=B6rn Roy Baron <bjorn3_gh@protonmail.com>
->  L:     rust-for-linux@vger.kernel.org
-> +C:     zulip://rust-for-linux.zulipchat.com
->  S:     Supported
->  W:     https://github.com/Rust-for-Linux/linux
->  B:     https://github.com/Rust-for-Linux/linux/issues
-> --
-> 2.39.1
->
+For LFS mode, it should update outplace and no need inplace update.
+When using LFS mode for small-volume devices, IPU will not be used,
+and the OPU writing method is actually used, but F2FS_IPU_FORCE can
+be read from the ipu_policy node, which is different from the actual
+situation. And remount to lfs mode should be disallowed when
+f2fs ipu is enabled, let's fix it.
 
-Looks ok also for me to try out the zulip:// URI scheme.
+Fixes: 84b89e5d943d ("f2fs: add auto tuning for small devices")
+Signed-off-by: Yangtao Li <frank.li@vivo.com>
+---
+v3:
+-add check in __sbi_store()
+-introduce IS_F2FS_IPU_DISABLE()
+-convert to f2fs_lfs_mode()
+ fs/f2fs/segment.h | 10 +++++++++-
+ fs/f2fs/super.c   | 13 +++++++++----
+ fs/f2fs/sysfs.c   |  9 +++++++++
+ 3 files changed, 27 insertions(+), 5 deletions(-)
 
-Reviewed-by: Alice Ferrazzi <alice.ferrazzi@miraclelinux.com>
+diff --git a/fs/f2fs/segment.h b/fs/f2fs/segment.h
+index 0f3f05cb8c29..8ee5e5db9287 100644
+--- a/fs/f2fs/segment.h
++++ b/fs/f2fs/segment.h
+@@ -670,6 +670,8 @@ static inline int utilization(struct f2fs_sb_info *sbi)
+ 
+ #define SMALL_VOLUME_SEGMENTS	(16 * 512)	/* 16GB */
+ 
++#define F2FS_IPU_DISABLE	0
++
+ enum {
+ 	F2FS_IPU_FORCE,
+ 	F2FS_IPU_SSR,
+@@ -679,10 +681,16 @@ enum {
+ 	F2FS_IPU_ASYNC,
+ 	F2FS_IPU_NOCACHE,
+ 	F2FS_IPU_HONOR_OPU_WRITE,
++	F2FS_IPU_MAX,
+ };
+ 
++static inline bool IS_F2FS_IPU_DISABLE(struct f2fs_sb_info *sbi)
++{
++	return SM_I(sbi)->ipu_policy == F2FS_IPU_DISABLE;
++}
++
+ #define F2FS_IPU_POLICY(name)					\
+-static inline int IS_##name(struct f2fs_sb_info *sbi)		\
++static inline bool IS_##name(struct f2fs_sb_info *sbi)		\
+ {								\
+ 	return SM_I(sbi)->ipu_policy & BIT(name);		\
+ }
+diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
+index fddff5deaed2..f06af2af215f 100644
+--- a/fs/f2fs/super.c
++++ b/fs/f2fs/super.c
+@@ -2302,6 +2302,12 @@ static int f2fs_remount(struct super_block *sb, int *flags, char *data)
+ 		}
+ 	}
+ #endif
++	if (f2fs_lfs_mode(sbi) && !IS_F2FS_IPU_DISABLE(sbi)) {
++		err = -EINVAL;
++		f2fs_warn(sbi, "LFS not compatible with IPU");
++		goto restore_opts;
++	}
++
+ 	/* disallow enable atgc dynamically */
+ 	if (no_atgc == !!test_opt(sbi, ATGC)) {
+ 		err = -EINVAL;
+@@ -4081,10 +4087,9 @@ static void f2fs_tuning_parameters(struct f2fs_sb_info *sbi)
+ 	/* adjust parameters according to the volume size */
+ 	if (MAIN_SEGS(sbi) <= SMALL_VOLUME_SEGMENTS) {
+ 		if (f2fs_block_unit_discard(sbi))
+-			SM_I(sbi)->dcc_info->discard_granularity =
+-						MIN_DISCARD_GRANULARITY;
+-		SM_I(sbi)->ipu_policy = BIT(F2FS_IPU_FORCE) |
+-					BIT(F2FS_IPU_HONOR_OPU_WRITE);
++			SM_I(sbi)->dcc_info->discard_granularity = MIN_DISCARD_GRANULARITY;
++		if (!f2fs_lfs_mode(sbi))
++			SM_I(sbi)->ipu_policy = BIT(F2FS_IPU_FORCE) | BIT(F2FS_IPU_HONOR_OPU_WRITE);
+ 	}
+ 
+ 	sbi->readdir_ra = true;
+diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
+index 3c6425f9ed0a..e1f1ebfa59d6 100644
+--- a/fs/f2fs/sysfs.c
++++ b/fs/f2fs/sysfs.c
+@@ -697,6 +697,15 @@ static ssize_t __sbi_store(struct f2fs_attr *a,
+ 		return count;
+ 	}
+ 
++	if (!strcmp(a->attr.name, "ipu_policy")) {
++		if (f2fs_lfs_mode(sbi))
++			return -EINVAL;
++		if (t >= BIT(F2FS_IPU_MAX))
++			return -EINVAL;
++		SM_I(sbi)->ipu_policy = (unsigned int)t;
++		return count;
++	}
++
+ 	*ui = (unsigned int)t;
+ 
+ 	return count;
+-- 
+2.25.1
 
---=20
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-Cybertrust Japan Co.,Ltd.
-Alice Ferrazzi
-alice.ferrazzi@miraclelinux.com
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
