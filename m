@@ -2,173 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B30F687E58
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 14:13:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6983687E5B
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 14:13:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230233AbjBBNNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 08:13:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45124 "EHLO
+        id S232261AbjBBNNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 08:13:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229972AbjBBNNX (ORCPT
+        with ESMTP id S232238AbjBBNNg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 08:13:23 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2066.outbound.protection.outlook.com [40.107.243.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AB066CCBC
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 05:13:23 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RV+BJAqf+NWIcCyMy/HwNYKoIUpOA5M10U8K+YWV79/QAfRnOzRuS12DCf/eX+VyE6EdCwKTHogeqR8XzYcMsFl5HP4/HSz3X2ztVdcQ9TVhg9sGAWI/7mmQg4wJSuNMI5jEOXJ02rtir/dqFDlCORiJRvUHSGnA8+BHdhGjn8jE/4rwl9IXB3pjjklEnbLQxu5nNRW5GOxTnvnZXplAIyf0O9g91qcW1DGNt6I6O3VfnvcPv2jaoKgwHZ3+2rbYB6MMRrF7+mWIDddoBBLIFKn+oXUY7RjKxuObYuBMzgbD0zgUchgNhP5t68GSMkBvREWlrl0oe2gRBWSSQZiLDQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DLb1taFcyyD/8FZH2kEiXlovFPlIPXgJ9FszW6bLwQo=;
- b=OgXgBSO+7vfsuLz2aLwiTMfXyNSuWrYB6NN76mSHmXbZMf5nq/Hvy0Miohlb5Rgv4v4saw8SxhjJtatuD0si/Uxuwn799wqbmXB+QB9NFn9bdR8MP4Tkab27T04Q4xbq6etOnsU7mcnKMkql/J7TCtnZljl/IHbj4nO9YPcGwMNnQbjopQgYFUQ2QnUiaZVuFOpJ0hn2r3zXdPaQY83a+aVXW9SXzkGal1DR1iQc9SFr3jb0ib/L9XnqeL+bvXmta3msh1ZPwGQ8uxvWLj8Gxi1wQu3lKqT0Je8YVxiI6a0zVyMnL5yWfnrrC+Tk7MzkImUe0KLer7ty2upnmf2DBg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DLb1taFcyyD/8FZH2kEiXlovFPlIPXgJ9FszW6bLwQo=;
- b=XvOKuGeIcKdWCtyLjkVtQotYx9rRK5+GnRVb9USv4feZbmX6CWeFXGInASGxYfCfbMVspCdFiEKXiJybD8F3LTUGn0CCq0xEaFe/1TSyFSpQwqIXk7hfEMx4swRfuuvjBQzoee/Wj65ReedONymPeCSDXOhwD8CSUeVOPAp+aYHJliiaeHkZdqP51HedP3lMAmsHFArpRBtQBBBFxT/Ob6EeSJYhZJbFqXysWB6KNNJ+TYeYVNjIYdZpsTHNIR6FgT1CDiQlYyXMNGumV3f8IWf3/KGHR2ElZKGyxcehy6jIDusqCmamBk0qWAxnkT8LLzv5sVYPlu//qciHLrZvYg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DM8PR12MB5400.namprd12.prod.outlook.com (2603:10b6:8:3b::12) by
- SJ0PR12MB6733.namprd12.prod.outlook.com (2603:10b6:a03:477::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6064.24; Thu, 2 Feb 2023 13:13:21 +0000
-Received: from DM8PR12MB5400.namprd12.prod.outlook.com
- ([fe80::9344:d2ae:739a:a358]) by DM8PR12MB5400.namprd12.prod.outlook.com
- ([fe80::9344:d2ae:739a:a358%8]) with mapi id 15.20.6064.025; Thu, 2 Feb 2023
- 13:13:21 +0000
-Message-ID: <77fee1c8-510f-d890-249a-ce9ac132e885@nvidia.com>
-Date:   Thu, 2 Feb 2023 15:13:14 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 1/7] vdpa: fix improper error message when adding vdpa
- dev
-To:     Si-Wei Liu <si-wei.liu@oracle.com>, mst@redhat.com,
-        jasowang@redhat.com, parav@nvidia.com
-Cc:     virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-References: <1675207345-22328-1-git-send-email-si-wei.liu@oracle.com>
- <1675207345-22328-2-git-send-email-si-wei.liu@oracle.com>
-Content-Language: en-US
-From:   Eli Cohen <elic@nvidia.com>
-In-Reply-To: <1675207345-22328-2-git-send-email-si-wei.liu@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR2P281CA0113.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:9d::8) To DM8PR12MB5400.namprd12.prod.outlook.com
- (2603:10b6:8:3b::12)
+        Thu, 2 Feb 2023 08:13:36 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A687C8EB61
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 05:13:34 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so3705242wma.1
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 05:13:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=j9yDCs0Y7OTh292qdnlfIHLlgC847OmMnA+2DT8LMRM=;
+        b=z2AUD13ZMuUC17YZOhb2tKu6oBFqG5VaXt1eTel0LXhdVDQ0NMl2aMuHo61yeOJ2NP
+         xOauqpFccCc0o1p+SKSA0GhJaH5CPeB/Xfl/nJqRN+SkH00Z3GdWk0q4bGv7Xjo65eD1
+         /FFw/158mNLG0Fd9Z91n62/Jaj0S/V9Xk2HyFWkDT7R0K/wyYTsXg32Jq40/tQb7kO/R
+         iq9BtvCsKYyQ2Lqs54/wesgvrtnuhLmU0+5UaK7+/pehLYXPIm55uinQOF2qq32NGigk
+         fGa39U7vIgDuQgGm1poO+vfZ7bPUEfbI6ohqTgXs/yuxUNcU4Rlu44QFEVJJD5Geplu8
+         U6dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=j9yDCs0Y7OTh292qdnlfIHLlgC847OmMnA+2DT8LMRM=;
+        b=pcLTzHi8YjqZOxYCDOPWsKC6ePecdftfyTjfzT+WEubZ22VPjJNMFZxg3Vg+TmtOzS
+         5mRU9g7GjJTvs0rupPT17o/Fx+Zdv3deVPRRJPI2MDwpWNJzKQkOVz1mu/2yQohbEk5n
+         pdRK/8oJPbNRPRNCjyYF8t9RvlqWEGOJiSQLlPkC9kygvsnQJ25ZKGI1wnASjs0BJrd8
+         4xP85DZh2z/S+aA/4pic2s4qGZpi04tAjewlMDm5KH3+I4rIs+8TV6wJeHkH4mM+jtyG
+         wPd53pFJCfkEQ/U9mZbaOQAEGYZCgF27CL0qXYUjIn4Vv6hOD2jPwP8DWnboKWMIq1WX
+         IMKQ==
+X-Gm-Message-State: AO0yUKVW9Yj7MX+2MbFu0fTsrmPCRBtNDgts92K+fv5IzdvQU6Ml7fQK
+        UzfOrqq/Bzbhd7a9N7OrCmGHnw==
+X-Google-Smtp-Source: AK7set+KODGDi2IxTwnwAsWZauQG0BT3oYD63HgP5RS89l7Z2Ot8fj4NDg2YKb5xDPONQiNhtdZNSQ==
+X-Received: by 2002:a05:600c:3c85:b0:3df:7007:b289 with SMTP id bg5-20020a05600c3c8500b003df7007b289mr3584675wmb.19.1675343613235;
+        Thu, 02 Feb 2023 05:13:33 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id e38-20020a05600c4ba600b003dc434900e1sm4697535wmp.34.2023.02.02.05.13.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Feb 2023 05:13:32 -0800 (PST)
+Message-ID: <bbd93ca7-4d8e-7d78-f560-9c50941e9052@linaro.org>
+Date:   Thu, 2 Feb 2023 14:13:31 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM8PR12MB5400:EE_|SJ0PR12MB6733:EE_
-X-MS-Office365-Filtering-Correlation-Id: 96bb46ad-7698-4283-6b2e-08db051f414e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gc95fDAAhIks+VRitIc2SodWDnnfyyAoaEfdvrb3Ks8JlCF1LFx/X6JFby+DKqSeehQ/eSVh2jumoEMJiPA+v8d9ymowMf/TcLluXCKzR+PGTYkgGTmTpm5v+4+6bKR1uODUYgZ4kdYhQGWdgwrEdT6MdC6kd6ddMDK/oFDHEte1qJMBdQ0htJAxG783hWE9nPVPfMVmbqs+ERCh3XwfAuiAXoEKIt0diREP5KG/IjAJ9YeVXuhUxjrFGCFLDMYL7flZPUDSEGdf9pnr6ERIn4Jj0BaliJJoklm2ZyfuVfx9kx4MnRj0ePm0+zqEojslGHQPoBzNlL2DFviiu6FSzXiE5uHIVpNRyHkpc4dsxtiEK3ik1kvzYzj9eOnXHhkDGvhPOrVfItXxwgs7215a/OiSiDjcOhO6IN40zdrtx2sndHeTYZBFvu02OU1ICqDhMjlRLpWPu1OQTr3mY02vQ6hEpPTNvnOSePxDqe89T+mGX62+Cy5UvZm5jAFC/VmjFksISYkuNYcK+LEhK7fJ/9nSE6EKhfhfn0faRNbeJyajka9cAgCdN8eaFek8qNRWU9daT25eU1IuB1NNycU5CZeJMO5zuGih80MrPSC74PdrjtauIYBWcQJWg1KlnlMG4JK0I/8oT5ffBCjZCdEiYef/ErnUeUDGVeu1H7Hcuv0AMgrVFCljKICn1DSALWQsMbTW2shzKvWe9cGlIWzp2Ji+a3x18EeXRAfTK1Q6GZA=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR12MB5400.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(346002)(39860400002)(136003)(376002)(366004)(451199018)(41300700001)(8936002)(8676002)(66946007)(31696002)(478600001)(66556008)(86362001)(6486002)(66476007)(4326008)(31686004)(316002)(36756003)(53546011)(6636002)(6506007)(6666004)(5660300002)(2906002)(6512007)(26005)(2616005)(38100700002)(186003)(83380400001)(15650500001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TUFmSE9yTHlkTUVJbU1ocDdZMzBnM2s1aTcrQWIzV1lTRmp0RWlFL1B1eHZo?=
- =?utf-8?B?MW5HSjNwd1ZzeTlMeWpLRXhwTDJKa01CSDJRcThVdmVwTk1EV01ia2pnT3Bi?=
- =?utf-8?B?NzdKL0M4b2NUZHVUemZTSmx2NXdwV0V2UmhjSVY0MFV0SEpqMlFhWW44bXps?=
- =?utf-8?B?TGU2cmdwYXNKaEdnWUxqYldkVjM2NUhQR1VWYit6SG9MTWhCUTN6dWk1amNw?=
- =?utf-8?B?NnVpektVY0JsNXVhWkppajdTTXVNQ1Y4N084aitxOE9pWnZUOGJUeEhOQXg2?=
- =?utf-8?B?RWZXc0JWaHdLNnBvRjhNYlVxbHVGdUFnL2VDeFFtZ1JMU2cxQkxleG15d01Y?=
- =?utf-8?B?dkpDLzJtYzFUUk9XYjVVc0RKMDY1LzNRWjZvaCtuZWI2YWVJVkYwVTFUSitK?=
- =?utf-8?B?OGtRbWdkNmVFVFpGZFlJTnBXdHJKR0hRbmhtbUFSeitwWC9rMkNQS24xQUc4?=
- =?utf-8?B?MzVHajNpWldyWnVOdGp5K0Urcit2YzIrQUtrRVJ0azlhL2tRTkpmUnFIR2FZ?=
- =?utf-8?B?RUltY3dWaVBpdFlNclg4dG90QXZwUHhaKytRZXRQNVFVczdiaU5CcHdNS0c1?=
- =?utf-8?B?UStyTndWdy9KOStXdWVWNW92aFlpZVdxbVNsRmk5NTZNdjJuY0xMbktXdEJx?=
- =?utf-8?B?SzhDMk1TWFZ3MmRlb1VRNEVVYkNLajR4SzEyWmxLN01idStlL2x4enF6KzF0?=
- =?utf-8?B?Q1c0N2NyRjZMMkQxcWhlUWhSWXRsSjZHRmNrT3dWaUR0R3Q0ZDRrMEVtYjFl?=
- =?utf-8?B?VnlQVkJXdXRWNjZlbjM3L052OHZnNitadWI2RDJDV2E1aFlXTmd3OFB3dm45?=
- =?utf-8?B?TkhISnhPWHRHb2tSNUxPVjliUUVSQVFmTjBndFo4SXVvc0N5cVllZG8rNnRX?=
- =?utf-8?B?cGRkZWdvd1hwZk5kZFdISUJZQnZzdkFEZFhJVWxxWnpoL1UzNFcvNnRiUE5R?=
- =?utf-8?B?ZHhwb1JWYjVoN05ZOWx6eHZVSEhmWDRIRkdhbHRRRXE0cGRsUk5BdHR6VktT?=
- =?utf-8?B?OVh0RUZaN0QrUlEvbkF0RkVCZERMTHFDektIN29EZE02QVFOT3FwSktIQTBp?=
- =?utf-8?B?UGRrWmMzbVNSUmVsZ0FjYjdEek44Q0E4ZnhwY2dwQzBrUWZkaXkvTmxaL3VD?=
- =?utf-8?B?WE56TVc5cDZoQVJjSDRBb2RXWWo2SE9Fb1NZQmgydTRyU1M5Uk1EZEx2dUcx?=
- =?utf-8?B?WVgyenc2dDJqTkZJeWZGN3dTd3BWOTBPTytaRlVraG04L2x0SHYvaEhlM1VM?=
- =?utf-8?B?UVIrUjExL0VQODlMMW9MUUNNeFlUMFYvcHNEb0dGRVpGazdkbEtsT3FCY2h1?=
- =?utf-8?B?V0c2WFhRYXdRWnFnOWdsa2d3WHIyR0J1TndtNU1mRjZPbHBXQStKSUJHVGY3?=
- =?utf-8?B?aFNUTFBBTGF1TW5FN1FNcEovMjVveW9KaGdmdjEwVjFWNE0rY2hZSHUwNkp4?=
- =?utf-8?B?c1hiREtjN0FleHJPbUxyMFZxVzhaejVxYnNXNHYyZ3poQ2xHd2NLMW9yM2JX?=
- =?utf-8?B?SEVKVldhSVNHcm5tZ3pZQzFiYWFmUFBkalhCNVpjR04rcE51UXNFaWNNMWor?=
- =?utf-8?B?YW9XSGJ4NEswTzk0L3ZjUlljQzdyWkZjVVJzTzQ1YXFkWjUwSlUrTEVlY1Fy?=
- =?utf-8?B?eW8xNTZFVnQ1ekY3YmVmYU05NUVKK1lhdk85ZDFkaFA2Ly90ZWhCSWphQVVY?=
- =?utf-8?B?R0pDVWl2c3hJcTY5b0FKTzkwTEZKS244RkNBQmRvMHdRQnh1NU9LQndReGc3?=
- =?utf-8?B?bVpWSS9DbVdQem1vUUlZM0QrU2lMampGSkxEQlpPK3JtcVBVTGswZnowQUk5?=
- =?utf-8?B?YzI5YXF1allnMGVYT0Z2Q3VJOElSWGE3UHFsRXpodmZTZC9kMDZ0QXdBaVNF?=
- =?utf-8?B?UXZETWRNbTdvaWZZTHhGcklUYnBmZHd0TVNJR3ZaRjk5cXVXc29WOEpOOVM5?=
- =?utf-8?B?cysxNmRUSzd3YUNSREtLYmRxU091c2tOanhsL2R3SU5JUlJKN0NGcXpvQi9P?=
- =?utf-8?B?VU1aRjh2NTBES3NLalNBUW02bU12cW0xYWVuUWlkTm1majIvdWlaWm0zclpH?=
- =?utf-8?B?VjJ3YUNydkh0Wit4YlpSbm80NHNhZFpnYzdwQmEwS3VwRndmVVJZMnNEWWlM?=
- =?utf-8?Q?Y8gzUrVE79BNddHUMGirvYhoB?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 96bb46ad-7698-4283-6b2e-08db051f414e
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR12MB5400.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Feb 2023 13:13:21.3963
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: DOxqgBQV6LzqHnwnob7IhZcfEKlXugg6EggeIRLypVNw5+NFfPHPkMHzyvKPPKtT
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6733
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v4 1/2] dt-bindings: leds-lp55xx: add ti,charge-pump-mode
+To:     Maarten Zanders <maarten.zanders@mind.be>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>
+Cc:     linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230202101032.26737-1-maarten.zanders@mind.be>
+ <20230202101032.26737-2-maarten.zanders@mind.be>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230202101032.26737-2-maarten.zanders@mind.be>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 01/02/2023 1:22, Si-Wei Liu wrote:
-> In below example, before the fix, mtu attribute is supported
-> by the parent mgmtdev, but the error message showing "All
-> provided are not supported" is just misleading.
->
-> $ vdpa mgmtdev show
-> vdpasim_net:
->    supported_classes net
->    max_supported_vqs 3
->    dev_features MTU MAC CTRL_VQ CTRL_MAC_ADDR ANY_LAYOUT VERSION_1 ACCESS_PLATFORM
->
-> $ vdpa dev add mgmtdev vdpasim_net name vdpasim0 mtu 5000 max_vqp 2
-> Error: vdpa: All provided attributes are not supported.
-> kernel answers: Operation not supported
->
-> After fix, the relevant error message will be like:
->
-> $ vdpa dev add mgmtdev vdpasim_net name vdpasim0 mtu 5000 max_vqp 2
-> Error: vdpa: Some provided attributes are not supported: 0x1000.
-> kernel answers: Operation not supported
-Reviewed-by: Eli Cohen <elic@nvidia.com>
-> Signed-off-by: Si-Wei Liu <si-wei.liu@oracle.com>
+On 02/02/2023 11:10, Maarten Zanders wrote:
+> Add a binding to configure the internal charge pump for lp55xx.
+> 
+> Signed-off-by: Maarten Zanders <maarten.zanders@mind.be>
 > ---
->   drivers/vdpa/vdpa.c | 6 ++++--
->   1 file changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/vdpa/vdpa.c b/drivers/vdpa/vdpa.c
-> index 8ef7aa1..3a82ca78 100644
-> --- a/drivers/vdpa/vdpa.c
-> +++ b/drivers/vdpa/vdpa.c
-> @@ -622,9 +622,11 @@ static int vdpa_nl_cmd_dev_add_set_doit(struct sk_buff *skb, struct genl_info *i
->   		err = PTR_ERR(mdev);
->   		goto err;
->   	}
+> 
+> Notes:
+>     v1: implement as bool to disable charge pump
+>     v2: rewrite to use string configuration, supporting all modes
+>     v3: simplification by replacing string option by u8 constant,
+>         removing previous Reviewed-by tags as it's a complete
+>         rewrite of the patch.
+>     v4: added notes
+
+
+> 
+>  .../devicetree/bindings/leds/leds-lp55xx.yaml          |  8 ++++++++
+>  include/dt-bindings/leds/leds-lp55xx.h                 | 10 ++++++++++
+>  2 files changed, 18 insertions(+)
+>  create mode 100644 include/dt-bindings/leds/leds-lp55xx.h
+> 
+> diff --git a/Documentation/devicetree/bindings/leds/leds-lp55xx.yaml b/Documentation/devicetree/bindings/leds/leds-lp55xx.yaml
+> index ae607911f1db..22e63d89d770 100644
+> --- a/Documentation/devicetree/bindings/leds/leds-lp55xx.yaml
+> +++ b/Documentation/devicetree/bindings/leds/leds-lp55xx.yaml
+> @@ -66,6 +66,12 @@ properties:
+>    '#size-cells':
+>      const: 0
+>  
+> +  ti,charge-pump-mode:
+> +    description:
+> +      Set the operating mode of the internal charge pump as defined in
+> +      <dt-bindings/leds/leds-lp55xx.h>. Defaults to auto.
+> +    $ref: /schemas/types.yaml#/definitions/uint8
 > +
->   	if ((config.mask & mdev->config_attr_mask) != config.mask) {
-> -		NL_SET_ERR_MSG_MOD(info->extack,
-> -				   "All provided attributes are not supported");
-> +		NL_SET_ERR_MSG_FMT_MOD(info->extack,
-> +				       "Some provided attributes are not supported: 0x%llx",
-> +				       config.mask & ~mdev->config_attr_mask);
->   		err = -EOPNOTSUPP;
->   		goto err;
->   	}
+>  patternProperties:
+>    '^multi-led@[0-8]$':
+>      type: object
+> @@ -152,6 +158,7 @@ additionalProperties: false
+>  examples:
+>    - |
+>      #include <dt-bindings/leds/common.h>
+> +    #include <dt-bindings/leds/leds-lp55xx.h>
+>  
+>      i2c {
+>          #address-cells = <1>;
+> @@ -164,6 +171,7 @@ examples:
+>              reg = <0x32>;
+>              clock-mode = /bits/ 8 <2>;
+>              pwr-sel = /bits/ 8 <3>;	/* D1~9 connected to VOUT */
+> +            ti,charge-pump-mode = /bits/ 8 <LP55XX_CP_BYPASS>;
+
+
+No. V2 was correct. What happened here? You got review for v2, but
+suddenly entire patch goes into other direction...
+
+Best regards,
+Krzysztof
+
