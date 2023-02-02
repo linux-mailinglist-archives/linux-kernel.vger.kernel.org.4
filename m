@@ -2,296 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EECED6876BF
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 08:50:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE9996876C3
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 08:52:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231814AbjBBHuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 02:50:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48010 "EHLO
+        id S231903AbjBBHwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 02:52:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbjBBHuW (ORCPT
+        with ESMTP id S229495AbjBBHwG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 02:50:22 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5904030FB;
-        Wed,  1 Feb 2023 23:50:21 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id bg26so705313wmb.0;
-        Wed, 01 Feb 2023 23:50:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xhMp2mcNadfnherTAzCDojpxmUZhldJPGeGKk3DUDdw=;
-        b=fzqTkx9BZu9JeeeRbdFqNm6cL4gmo3h3IUq9H3641OkHPcZTvxi8ONuIzME92axTGM
-         0hjUkMxjkN89IRpMs6xqxD5uJYi9qKJclY1pARyp7INeghvjHYzZlBdBYN51531aVNwb
-         Cq2hCMismhNGvIRj5HgBGTGC9B1QYC1eh+cXHNG86n/5Qj1IyfN9Npnpn0q95KpBIp2m
-         dSeRN7gJh3XzCGWLNZe6eQzAp3/jRcBd8UmxbR4E/Zp4U29dnOG4Qlyf3fBCnGtJKve8
-         G4xPgD8Hhf+ZzzYRv90SeHd8e1EgtZvKnFd69YRt4ySFcMXHgx5iOba2qo1nnp3fbg8Y
-         glDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xhMp2mcNadfnherTAzCDojpxmUZhldJPGeGKk3DUDdw=;
-        b=XSGUZl+eAwOWZ2NJ/maKpAyU7j1M+VxfyHjUXYmGgTdwlwbh5w0vkXAIHi/6aCFqiE
-         x3hgZEJdgQVsR35i/QBj6iAabMX7AFqzlJv0GfFNBFeufj6StY92Q0NWgJtZL5KnbA7u
-         w9wkM9uzoR1phpNiWTOKtEGA7hcmQ/HWefh+R7ZVgawW77uOLRBjYNKTGeB9RfEzcUu5
-         ZY6Vd8rvOXnb8Z+LeIos6FqixSnnXDOMwO0KtVMZwhxrBq7NBymw05AcoeCHUP/1pdiL
-         mpPdWA4tRppBGJA8Va5tmP7teEEwit5S6SvwYX38YSelVMxJ0SyZ3Ot/WFnXO3Z3VYGo
-         hYzg==
-X-Gm-Message-State: AO0yUKUXBbEnKi4DiicgXO9/w4Rhp91/fiey7oW1haBTdJgkUxF/T2n/
-        TeP3IuHrjZy25ue10wb+u33suzS56pssHDOA
-X-Google-Smtp-Source: AK7set+pJNBXPE4ov9v78QQVzztj0g5UU0VBXX6eom9QcypZ1csfbm9oTo4oH1gIei9EzqAfesDjFg==
-X-Received: by 2002:a05:600c:4446:b0:3dc:98a4:787d with SMTP id v6-20020a05600c444600b003dc98a4787dmr4828997wmn.3.1675324219691;
-        Wed, 01 Feb 2023 23:50:19 -0800 (PST)
-Received: from localhost.localdomain (staticline-31-182-169-137.toya.net.pl. [31.182.169.137])
-        by smtp.gmail.com with ESMTPSA id j25-20020a05600c1c1900b003daf6e3bc2fsm6188212wms.1.2023.02.01.23.50.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Feb 2023 23:50:19 -0800 (PST)
-Date:   Thu, 2 Feb 2023 08:49:53 +0100
-From:   Sebastian Grzywna <swiftgeek@gmail.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Pedro Falcato <pedro.falcato@gmail.com>,
-        linux-acpi@vger.kernel.org, Len Brown <lenb@kernel.org>,
-        linux-kernel@vger.kernel.org, rui.zhang@intel.com,
-        Hang Zhang <zh.nvgt@gmail.com>
-Subject: Re: [PATCH] ACPI: Make custom_method use per-open state
-Message-ID: <20230202084953.3035c6e3@gmail.com>
-In-Reply-To: <CAJZ5v0iXcRFamA+mE837=zHReBT-+8WmMeRDR7L9R+FVpLr25A@mail.gmail.com>
-References: <20230131233755.58942-1-pedro.falcato@gmail.com>
-        <CAJZ5v0iXcRFamA+mE837=zHReBT-+8WmMeRDR7L9R+FVpLr25A@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+        Thu, 2 Feb 2023 02:52:06 -0500
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCED830FB;
+        Wed,  1 Feb 2023 23:52:04 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jVC1XmJM9gk+/XiqByvXbQVAmVuuVseGHi9eQmLFGJxGiGBA2eZENE+Zl0561je90Fq/wtfsGYAXObf1Bu5kxRVwGRdYlsh5Kl6HBoZj+JvMXUkcHjgUZhjVf3y+Sc8hqrS9fLpsUB9nLK5Av53FO7FSnpC83USQoBQlX8hxoAnTJzNyjviCIf9UyY+WL0X//RAaAo5opaqfwFg3vcC5++ZbiBaE4+KmwMbKNYDv7jZ54MSdyUHNMY0nYiYQrqqUXtLhWQLLmNkCAE6eMdE34Qh8tGMd8SRTdU/GFrVfsgqsFiIi6YuGmiIoFkw4Q43gNi81cjh+fmcm6gRZLtvYIQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pWC9gcscFB7MnKqRBP53yaaf4KAk2vzynP4kGd7sIfc=;
+ b=FWyOL3UWjF4W5VGepdF6wHV06a/kq1CoxWnjSjkKS/osxkZIhR8oTv4iMLZiBYvQ8PejqRU9hTGofUW5GYxIHZ1+wtVhPVqQXm/YsGp9dcnnxCpdL381lYAN4octF20wQjXijX5Zwmf0UYctew7cniPOh4leocw4o1jxR3PkIuwjncGZeEwLtNWorURW3CvcOoA8HGY4wi8Bja6yWlfVbZByuhISLWDzBKCfAILcEO9htVYo6dNoquXn5UIMEvel69f4eWzJx6x7Nfr7mSEVTfQpt2JW+0U7i7gYAv8KeAZiAFoC0iTPcgvxcdQ9n/ZYpzT0a4fnNZCC43wAxVqhog==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pWC9gcscFB7MnKqRBP53yaaf4KAk2vzynP4kGd7sIfc=;
+ b=44ikaHtfg32GMJ0X1WbpXyiJbLe7NApHZMI6Xt/SgKjtdrp4EMtymuAhMxwxCnS37He+4XKWQYWb/ZsKGcUh5HheWsYlGL46/vrNkmrgwdxfOD5f8ooofe8sE77joZk59buj73zruf9su2Xyy+urXDhJixtJ547dBRUAo2u9u2k=
+Received: from MW5PR12MB5598.namprd12.prod.outlook.com (2603:10b6:303:193::11)
+ by PH7PR12MB5901.namprd12.prod.outlook.com (2603:10b6:510:1d5::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.27; Thu, 2 Feb
+ 2023 07:52:00 +0000
+Received: from MW5PR12MB5598.namprd12.prod.outlook.com
+ ([fe80::8585:d686:cae0:4a10]) by MW5PR12MB5598.namprd12.prod.outlook.com
+ ([fe80::8585:d686:cae0:4a10%4]) with mapi id 15.20.6064.024; Thu, 2 Feb 2023
+ 07:52:00 +0000
+From:   "Gaddam, Sarath Babu Naidu" <sarath.babu.naidu.gaddam@amd.com>
+To:     Vinod Koul <vkoul@kernel.org>
+CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "lars@metafoo.de" <lars@metafoo.de>,
+        "adrianml@alumnos.upm.es" <adrianml@alumnos.upm.es>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Simek, Michal" <michal.simek@amd.com>,
+        "Pandey, Radhey Shyam" <radhey.shyam.pandey@amd.com>,
+        "Sarangi, Anirudha" <anirudha.sarangi@amd.com>,
+        "Katakam, Harini" <harini.katakam@amd.com>,
+        "git (AMD-Xilinx)" <git@amd.com>
+Subject: RE: [PATCH V2 6/6] dmaengine: xilinx_dma: Program interrupt delay
+ timeout
+Thread-Topic: [PATCH V2 6/6] dmaengine: xilinx_dma: Program interrupt delay
+ timeout
+Thread-Index: AQHY/++1voKTnTLde0axfE0Yfexfaq6DV2WAgDhcHzA=
+Date:   Thu, 2 Feb 2023 07:52:00 +0000
+Message-ID: <MW5PR12MB55981EAC28AC5A32BF76CF7C87D69@MW5PR12MB5598.namprd12.prod.outlook.com>
+References: <20221124102745.2620370-1-sarath.babu.naidu.gaddam@amd.com>
+ <20221124102745.2620370-7-sarath.babu.naidu.gaddam@amd.com>
+ <Y6wh3W0S/pzTI4vL@matsya>
+In-Reply-To: <Y6wh3W0S/pzTI4vL@matsya>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MW5PR12MB5598:EE_|PH7PR12MB5901:EE_
+x-ms-office365-filtering-correlation-id: 6b2166b4-ff4e-46ce-65af-08db04f25db7
+x-ld-processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 3IpgeVcQaRBX3NPHCN3H+OTtpK78Cz3IwHbQyxsDPEuOHWNbSc+3ArRa1Qx6M3YdJX6ZnW2z7FZlJeCk26PChCxe8RL+QDO7etmRFhG5Dr4FoJbK/bvno2rWgmRHBoXJUUcxiPpDEk+wz9xzoJCcp+LIQeu9TlPVMtX8x9JV2l2KJjnO/CgWrCLAKGzV/aHSANdbKrmRWbNyyt1rHpTAMq2674ti1GS1UV/XWwAtfcwYaq0ojPdesUUs1stnlRrW1OiGRHzW9Spn3t5KVQvzwjYPGfkeRLCL+wTGk3Xotj02sofrKzRIDPWRqi76jFI5eMiIIWyDyQ81Zxv8+DPcUJ3aI83H7e/17yNvqPJLDFT8WEhimiri9wVeMdl6jdyeAtEhAk046KDCE2aa8bPL41DfGWzj4k+qlBBU3h/6uUQI9Bk3z2iWW7hYkzNgF2zY7zCtpt5sAEB9fTDIE+Bci0blhS/ArQEr9yW+/Ibs6MS9p+JfEzr+dKQgXI8kNMsU1DtTFpxRlN5OMy96RtGd+uSoOysGpCMGm4Pqn2AwZr/KcVZvTbgMIXLIQEgub7wnoxPi2qO/c1Eoag99FL9la+WK1Bu/JlBaoTs5egKPdfWNnO3fFiUWLjIh7jOBkVfO7mImQnVL9C2qVhLPZVRar3/xYKGuEepcSOVkFnVyMBOHItNnGNmhwKrRDBNusHxDBUsJWNa3prznbfoJeXnh/g==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW5PR12MB5598.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(376002)(136003)(366004)(346002)(39860400002)(451199018)(76116006)(66476007)(66946007)(66556008)(38100700002)(4326008)(83380400001)(8676002)(66446008)(64756008)(6916009)(54906003)(122000001)(316002)(6506007)(53546011)(26005)(186003)(9686003)(33656002)(7416002)(478600001)(5660300002)(86362001)(55016003)(41300700001)(38070700005)(71200400001)(7696005)(8936002)(52536014)(2906002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?HEZVOwTut+mKENfwROVLWkkZvQ8VCFytAGHtYtMuWvmPEnfil1koIvEir5Pa?=
+ =?us-ascii?Q?2YzXnKAqU9buBeX278xafPY9nhDiiOQHZGW67M2FrXDvxgZCkeZQSVSIvB73?=
+ =?us-ascii?Q?+xcjPguYzXDwDbFrrJLF/ffJNFfQXGXNAMROo59A0BytJnXbuUgQpFdahXkX?=
+ =?us-ascii?Q?yhDkJPZE//qsmeyfxSmHS+GVqyG7mwsFwebo6uopHoac9qNaU59/3DbceY4n?=
+ =?us-ascii?Q?Z1inMS60X0k+fcpDPVogp6Kj6qcnURK1YDLT3oJC7hEvAM/xh8lD3X976v3y?=
+ =?us-ascii?Q?CGOQJDSEIwOxEyJ/c/JUHHbZcskRaO2qYN0a3b0H4nKATIK/9GlDZL00UAUd?=
+ =?us-ascii?Q?j+1qOs2EaaeB3EA5SskWyNZA7M8cRq56rle2Ze/yF6Du9aBHNwdgAtdfBzEs?=
+ =?us-ascii?Q?3159b1Zi9MhsiMXY7KFOMdCcliCsp//gLRn0oUHpCaxYrh3Oyli/Mh9dKqbV?=
+ =?us-ascii?Q?Vx2rDV5ckuOZXMaYB2xeTn0FzAnw8OSQ9Y2XUNY6eY1oyqUnCQrHPm81p5RN?=
+ =?us-ascii?Q?PcukaxCsE/lgEJZBOm5YlzJVN77Rbl2NNt/tERjSsytOuU5OEgMO7hDT1PYD?=
+ =?us-ascii?Q?ea9kr3+8TyXwMNCzQTGYNF9oXlZLGEpdUVvJoFPselxKFfBYJiQmxo/3kAk+?=
+ =?us-ascii?Q?PjEK8Y3b1PFBrNPkjGNblQvh3TkPAknH1Ge6U5kZGZzGWnnAuUMwAZTkID01?=
+ =?us-ascii?Q?vDEfP8ejhV/R/4uHZkFGCRQcVRwe2sfzfSFAFWnus9swjNH2cPA8xmUDgN3T?=
+ =?us-ascii?Q?OgnoTZnLcBvK7rJ/cfBCIYc77n3pMd/+QDxgCgFKuK6+UXwJken5iv/2eTeh?=
+ =?us-ascii?Q?cvJgzhGXPMsMEOxtxCCpaZrHTLdziPsnx0yX6gxoIhYfAqvSpDWKlHpJefU5?=
+ =?us-ascii?Q?dCPXnGpaDWHgv9+s0bvwWOWfAZF4vuNonJfrwADSo+Nj024GFPgwffAJftvS?=
+ =?us-ascii?Q?nMKbEEC7hFhmH1XR5ZE2b/S8NdStikxs9rQyO778u3tyxrNpGVBjuW8Xt4fA?=
+ =?us-ascii?Q?eXSyWnOSGb7ggnzpPNq8Gn8pT+7TVNNoTQCkO3uyrG7zIKG6lT9GQ01Z27dx?=
+ =?us-ascii?Q?OU4L6/Be+XnRZs+H9tq2v3hynK2HvPbBD6tuRIbANw21pc0KGmK1lfKjBVIp?=
+ =?us-ascii?Q?zfz3kWxI78d0CD+aYMB9755OazIIjY1seF+cpQzdt+/AQT6qRmVLCIoMLryq?=
+ =?us-ascii?Q?LeY04TI8/vJBvkSK7fF93E0cchXonG5wi2KeCoezbeQewWCyeV4IRZ5AVlYU?=
+ =?us-ascii?Q?0LD0GIJS7uh71loZAQvwIdnMg/o78w92zo3qr2SAIvg0ekQHH7wwe0ZHeCSP?=
+ =?us-ascii?Q?IhdkDlU7vgsXsww+KcFvVE3o+xapOqa7BfB0lAB+DUtjl7t4/mSRgV89t9bQ?=
+ =?us-ascii?Q?6i+OCCJ3EM1cxSfZBVYrvWoG86TIJX3+hTIX+I4UK+HJSg3NZdr7Zqz/KtHz?=
+ =?us-ascii?Q?K9m4tXBcK9CxnlTrHfpTHaKf8P/QdKdCGiCyqPz0z6VOcnkxFgjDFRT4qe2O?=
+ =?us-ascii?Q?VFLCWR+7CDxnLfvofa10rov043I6yoPFAPnP5IFOWKhhte1KXsbxcTc/D/Xe?=
+ =?us-ascii?Q?QOJtu0YCaI3tmET49cI=3D?=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW5PR12MB5598.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6b2166b4-ff4e-46ce-65af-08db04f25db7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Feb 2023 07:52:00.3485
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: LVlNIuWsDva0C7ArHph30W3aPpNtweTVJrxxl0udUZzv/QkU8Bkw5UWVq3Ql7JXudX4qbqnQFWWT4FfCNi/Daw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5901
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dnia 2023-02-01, o godz. 19:34:48
-"Rafael J. Wysocki" <rafael@kernel.org> napisa=C5=82(a):
 
-> On Wed, Feb 1, 2023 at 12:38 AM Pedro Falcato
-> <pedro.falcato@gmail.com> wrote:
-> >
-> > Make custom_method keep its own per-file-open state instead of
-> > global state in order to avoid race conditions[1] and other
-> > possible conflicts with other concurrent users.
-> >
-> > Link:
-> > https://lore.kernel.org/linux-acpi/20221227063335.61474-1-zh.nvgt@gmail=
-.com/
-> > # [1] Reported-by: Hang Zhang <zh.nvgt@gmail.com> Cc: Swift Geek
-> > <swiftgeek@gmail.com> Signed-off-by: Pedro Falcato
-> > <pedro.falcato@gmail.com> ---
-> >  This patch addresses Hang's problems plus the ones raised by
-> > Rafael in his review (see link above).
-> > https://lore.kernel.org/lkml/2667007.mvXUDI8C0e@kreacher/ was
-> > submitted but since there were still people that wanted this
-> > feature, I took my time to write up a patch that should fix the
-> > issues. Hopefully the linux-acpi maintainers have not decided to
-> > remove custom_method just yet. =20
+
+> -----Original Message-----
+> From: Vinod Koul <vkoul@kernel.org>
+> Sent: Wednesday, December 28, 2022 4:31 PM
+> To: Gaddam, Sarath Babu Naidu
+> <sarath.babu.naidu.gaddam@amd.com>
+> Cc: robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org;
+> lars@metafoo.de; adrianml@alumnos.upm.es;
+> dmaengine@vger.kernel.org; devicetree@vger.kernel.org; linux-arm-
+> kernel@lists.infradead.org; linux-kernel@vger.kernel.org; Simek, Michal
+> <michal.simek@amd.com>; Pandey, Radhey Shyam
+> <radhey.shyam.pandey@amd.com>; Sarangi, Anirudha
+> <anirudha.sarangi@amd.com>; Katakam, Harini
+> <harini.katakam@amd.com>; git (AMD-Xilinx) <git@amd.com>
+> Subject: Re: [PATCH V2 6/6] dmaengine: xilinx_dma: Program interrupt
+> delay timeout
 >=20
-> Well, thanks for the patch, but yes, they have.  Sorry.
-=20
-Hi Rafael,
-Can you please explain why you don't want to keep it, given there's a
-patch? I find it really useful in my day-to-day as a firmware engineer.
-I don't see much happening in git history of
-drivers/acpi/custom_method.c , and I don't see anything that was
-specifically changed in it in past 10 years to keep it being
-functional. Without your more detailed explanation I have hard time
-understanding your decision to remove it, since I'm not a kernel
-developer myself.
-Thanks,
-Sebastian Grzywna
-
-> >  drivers/acpi/custom_method.c | 119
-> > +++++++++++++++++++++++++++-------- 1 file changed, 92
-> > insertions(+), 27 deletions(-)
+> On 24-11-22, 15:57, Sarath Babu Naidu Gaddam wrote:
+> > From: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
 > >
-> > diff --git a/drivers/acpi/custom_method.c
-> > b/drivers/acpi/custom_method.c index d39a9b47472..034fb14f118 100644
-> > --- a/drivers/acpi/custom_method.c
-> > +++ b/drivers/acpi/custom_method.c
-> > @@ -17,73 +17,138 @@ MODULE_LICENSE("GPL");
+> > Program IRQDelay for AXI DMA. The interrupt timeout mechanism
+> causes
+> > the DMA engine to generate an interrupt after the delay time period
+> > has expired. It enables dmaengine to respond in real-time even though
+> > interrupt coalescing is configured. It also remove the placeholder for
+> > delay interrupt and merge it with frame completion interrupt.
+> > Since by default interrupt delay timeout is disabled this feature
+> > addition has no functional impact on VDMA and CDMA IP's.
 > >
-> >  static struct dentry *cm_dentry;
+> > Signed-off-by: Radhey Shyam Pandey
+> <radhey.shyam.pandey@xilinx.com>
+> > Signed-off-by: Sarath Babu Naidu Gaddam
+> > <sarath.babu.naidu.gaddam@amd.com>
+> > ---
+> >  drivers/dma/xilinx/xilinx_dma.c | 20 +++++++++++---------
+> >  1 file changed, 11 insertions(+), 9 deletions(-)
 > >
-> > +struct custom_method_state {
-> > +       char *buf;
-> > +       u32 max_size;
-> > +       u32 uncopied_bytes;
-> > +       struct mutex lock;
-> > +};
-> > +
-> > +static int cm_open(struct inode *inode, struct file *file)
-> > +{
-> > +       struct custom_method_state *state;
-> > +
-> > +       state =3D kzalloc(sizeof(struct custom_method_state),
-> > GFP_KERNEL); +
-> > +       if (!state)
-> > +               return -ENOMEM;
-> > +
-> > +       file->private_data =3D state;
-> > +       mutex_init(&state->lock);
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +static int cm_release(struct inode *inode, struct file *file)
-> > +{
-> > +       struct custom_method_state *state;
-> > +
-> > +       state =3D file->private_data;
-> > +
-> > +       mutex_destroy(&state->lock);
-> > +
-> > +       /* Make sure the buf gets freed */
-> > +       kfree(state->buf);
-> > +
-> > +       kfree(state);
-> > +       return 0;
-> > +}
-> > +
-> >  /* /sys/kernel/debug/acpi/custom_method */
-> >
-> >  static ssize_t cm_write(struct file *file, const char __user
-> > *user_buf, size_t count, loff_t *ppos)
-> >  {
-> > -       static char *buf;
-> > -       static u32 max_size;
-> > -       static u32 uncopied_bytes;
-> > +       struct custom_method_state *state;
-> > +       char *buf;
-> >
-> >         struct acpi_table_header table;
-> >         acpi_status status;
-> >         int ret;
-> >
-> > +       state =3D file->private_data;
-> > +       buf =3D state->buf;
-> > +
-> >         ret =3D security_locked_down(LOCKDOWN_ACPI_TABLES);
-> >         if (ret)
-> >                 return ret;
-> >
-> > +       mutex_lock(&state->lock);
-> > +
-> >         if (!(*ppos)) {
-> >                 /* parse the table header to get the table length */
-> > -               if (count <=3D sizeof(struct acpi_table_header))
-> > -                       return -EINVAL;
-> > +               if (count <=3D sizeof(struct acpi_table_header)) {
-> > +                       count =3D -EINVAL;
-> > +                       goto out;
-> > +               }
-> > +
-> >                 if (copy_from_user(&table, user_buf,
-> > -                                  sizeof(struct
-> > acpi_table_header)))
-> > -                       return -EFAULT;
-> > -               uncopied_bytes =3D max_size =3D table.length;
-> > +                                  sizeof(struct
-> > acpi_table_header))) {
-> > +                       count =3D -EFAULT;
-> > +                       goto out;
-> > +               }
-> > +
-> > +               state->uncopied_bytes =3D state->max_size =3D
-> > table.length; /* make sure the buf is not allocated */
-> >                 kfree(buf);
-> > -               buf =3D kzalloc(max_size, GFP_KERNEL);
-> > -               if (!buf)
-> > -                       return -ENOMEM;
-> > +               buf =3D state->buf =3D kzalloc(state->max_size,
-> > GFP_KERNEL);
-> > +               if (!buf) {
-> > +                       count =3D -ENOMEM;
-> > +                       goto out;
-> > +               }
-> >         }
-> >
-> > -       if (buf =3D=3D NULL)
-> > -               return -EINVAL;
-> > +       /* Check if someone seeked ahead or if we errored out
-> > +        * (buf will be NULL)
-> > +        */
-> > +       if (buf =3D=3D NULL) {
-> > +               count =3D -EINVAL;
-> > +               goto out;
-> > +       }
-> >
-> > -       if ((*ppos > max_size) ||
-> > -           (*ppos + count > max_size) ||
-> > +       if ((*ppos > state->max_size) ||
-> > +           (*ppos + count > state->max_size) ||
-> >             (*ppos + count < count) ||
-> > -           (count > uncopied_bytes)) {
-> > -               kfree(buf);
-> > -               buf =3D NULL;
-> > -               return -EINVAL;
-> > +           (count > state->uncopied_bytes)) {
-> > +               count =3D -EINVAL;
-> > +               goto err_free;
-> >         }
-> >
-> >         if (copy_from_user(buf + (*ppos), user_buf, count)) {
-> > -               kfree(buf);
-> > -               buf =3D NULL;
-> > -               return -EFAULT;
-> > +               count =3D -EFAULT;
-> > +               goto err_free;
-> >         }
-> >
-> > -       uncopied_bytes -=3D count;
-> > +       state->uncopied_bytes -=3D count;
-> >         *ppos +=3D count;
-> >
-> > -       if (!uncopied_bytes) {
-> > +       if (!state->uncopied_bytes) {
-> >                 status =3D acpi_install_method(buf);
-> >                 kfree(buf);
-> > -               buf =3D NULL;
-> > -               if (ACPI_FAILURE(status))
-> > -                       return -EINVAL;
-> > +               state->buf =3D NULL;
-> > +
-> > +               if (ACPI_FAILURE(status)) {
-> > +                       count =3D -EINVAL;
-> > +                       goto out;
-> > +               }
-> > +
-> >                 add_taint(TAINT_OVERRIDDEN_ACPI_TABLE,
-> > LOCKDEP_NOW_UNRELIABLE); }
-> >
-> > +out:
-> > +       mutex_unlock(&state->lock);
-> > +       return count;
-> > +err_free:
-> > +       mutex_unlock(&state->lock);
-> > +       kfree(buf);
-> > +       state->buf =3D NULL;
-> >         return count;
-> >  }
-> >
-> >  static const struct file_operations cm_fops =3D {
-> >         .write =3D cm_write,
-> > +       .open =3D cm_open,
-> > +       .release =3D cm_release,
-> >         .llseek =3D default_llseek,
+> > diff --git a/drivers/dma/xilinx/xilinx_dma.c
+> > b/drivers/dma/xilinx/xilinx_dma.c index ce0c151d8f61..333d68ee3559
+> > 100644
+> > --- a/drivers/dma/xilinx/xilinx_dma.c
+> > +++ b/drivers/dma/xilinx/xilinx_dma.c
+> > @@ -173,8 +173,10 @@
+> >  #define XILINX_DMA_MAX_TRANS_LEN_MAX	23
+> >  #define XILINX_DMA_V2_MAX_TRANS_LEN_MAX	26
+> >  #define XILINX_DMA_CR_COALESCE_MAX	GENMASK(23, 16)
+> > +#define XILINX_DMA_CR_DELAY_MAX		GENMASK(31, 24)
+> >  #define XILINX_DMA_CR_CYCLIC_BD_EN_MASK	BIT(4)
+> >  #define XILINX_DMA_CR_COALESCE_SHIFT	16
+> > +#define XILINX_DMA_CR_DELAY_SHIFT	24
+> >  #define XILINX_DMA_BD_SOP		BIT(27)
+> >  #define XILINX_DMA_BD_EOP		BIT(26)
+> >  #define XILINX_DMA_COALESCE_MAX		255
+> > @@ -410,6 +412,7 @@ struct xilinx_dma_tx_descriptor {
+> >   * @stop_transfer: Differentiate b/w DMA IP's quiesce
+> >   * @tdest: TDEST value for mcdma
+> >   * @has_vflip: S2MM vertical flip
+> > + * @irq_delay: Interrupt delay timeout
+> >   */
+> >  struct xilinx_dma_chan {
+> >  	struct xilinx_dma_device *xdev;
+> > @@ -448,6 +451,7 @@ struct xilinx_dma_chan {
+> >  	int (*stop_transfer)(struct xilinx_dma_chan *chan);
+> >  	u16 tdest;
+> >  	bool has_vflip;
+> > +	u8 irq_delay;
 > >  };
 > >
-> > --
-> > 2.39.0
-> > =20
+> >  /**
+> > @@ -1560,6 +1564,9 @@ static void xilinx_dma_start_transfer(struct
+> xilinx_dma_chan *chan)
+> >  	if (chan->has_sg)
+> >  		xilinx_write(chan, XILINX_DMA_REG_CURDESC,
+> >  			     head_desc->async_tx.phys);
+> > +	reg  &=3D ~XILINX_DMA_CR_DELAY_MAX;
+> > +	reg  |=3D chan->irq_delay << XILINX_DMA_CR_DELAY_SHIFT;
+> > +	dma_ctrl_write(chan, XILINX_DMA_REG_DMACR, reg);
+> >
+> >  	xilinx_dma_start(chan);
+> >
+> > @@ -1887,15 +1894,8 @@ static irqreturn_t
+> xilinx_dma_irq_handler(int irq, void *data)
+> >  		}
+> >  	}
+> >
+> > -	if (status & XILINX_DMA_DMASR_DLY_CNT_IRQ) {
+> > -		/*
+> > -		 * Device takes too long to do the transfer when user
+> requires
+> > -		 * responsiveness.
+> > -		 */
+> > -		dev_dbg(chan->dev, "Inter-packet latency too long\n");
+> > -	}
+> > -
+> > -	if (status & XILINX_DMA_DMASR_FRM_CNT_IRQ) {
+> > +	if (status & (XILINX_DMA_DMASR_FRM_CNT_IRQ |
+> > +		      XILINX_DMA_DMASR_DLY_CNT_IRQ)) {
+> >  		spin_lock(&chan->lock);
+> >  		xilinx_dma_complete_descriptor(chan);
+> >  		chan->idle =3D true;
+> > @@ -2822,6 +2822,8 @@ static int xilinx_dma_chan_probe(struct
+> xilinx_dma_device *xdev,
+> >  	/* Retrieve the channel properties from the device tree */
+> >  	has_dre =3D of_property_read_bool(node, "xlnx,include-dre");
+> >
+> > +	of_property_read_u8(node, "xlnx,irq-delay", &chan->irq_delay);
+>=20
+> Same question here too
 
+This is an optional property. If it is not there, then driver programs
+ this value as zero and it does not break existing functionality. =20
+
+>=20
+> > +
+> >  	chan->genlock =3D of_property_read_bool(node, "xlnx,genlock-
+> mode");
+> >
+> >  	err =3D of_property_read_u32(node, "xlnx,datawidth", &value);
+> > --
+> > 2.25.1
+>=20
+> --
+> ~Vinod
