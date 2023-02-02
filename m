@@ -2,80 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86822687DD6
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 13:48:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4B05687DDC
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 13:50:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232254AbjBBMr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 07:47:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47902 "EHLO
+        id S232193AbjBBMu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 07:50:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232253AbjBBMrz (ORCPT
+        with ESMTP id S229721AbjBBMuZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 07:47:55 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 262548B7FD;
-        Thu,  2 Feb 2023 04:47:21 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id m16-20020a05600c3b1000b003dc4050c94aso1286828wms.4;
-        Thu, 02 Feb 2023 04:47:21 -0800 (PST)
+        Thu, 2 Feb 2023 07:50:25 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8BCA7;
+        Thu,  2 Feb 2023 04:50:21 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id bk16so1581721wrb.11;
+        Thu, 02 Feb 2023 04:50:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HaQNzpUAjABy/UuXZLlOvvbqix9SotqgoJqkxFf1bDI=;
-        b=Dofe0UtJYuhFHBDhvyTjPY051/tbsKRICVxIYfMj5JzEAyp2XhCRekp3ml+P4V+LS9
-         Z+LnmX3TS4gVgdva0YjNRrc46M5xVZGMEjqsy0kFVia2NTHodf4IpZfgn45bITRnCSSQ
-         OoLQtyJr74R3iS7eaJNIbYaIn9jgZVaog4j7J4yWGR6PuuYbA92juuLjRQNQlFDqqd3V
-         xHyjLlVs1lfaxINC1fy5PtatZqNQdCwCqes92EQ6v+nLOADICuBXGM2JLuglOUbdB+oD
-         OmDkJX0nOY/VOH9Xory0LJQiyYbRxqmoS5LYcqfFQGV9U9gdxD0oXFvo1OhkT6k/JDFB
-         nwcQ==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=w5NS+1c8Tu2PGFvK4AFEdfQ0iYep75esswQI1225dSM=;
+        b=S7yIohgxwKAADl61gLn3ethmknWpCDOxD611Nhp4wn7OpDjidJ+3j0AyxWK+QLhJb0
+         A7x2wzR8uKW8dVcVhy6KMC+9JBXqQYXP3cCLe9bdFzgMyociIRYLMdf7sOKQAOERQkVZ
+         TGHtUzYkbV3daP3VDzoLDiApjv6uDFHiUcdnZ58612cUZteYbEUBa+xkaIlMyYWLO/Gq
+         4x+QzKCbNdCNCVE2n4yEUAhbQGocwljziYZ20LaA1ibkMv0diz8W28XmCHtJB+KCru8w
+         86teva9QCv/IGpnfPvD0VeiR0dMWyPCc6RFJWeTygEACQ3211VfsZPHHOksyfSIrI1HC
+         ANpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HaQNzpUAjABy/UuXZLlOvvbqix9SotqgoJqkxFf1bDI=;
-        b=JFIp225TvSVPWo1M3nTYvg9Cie07nrlBs81INySMwchPabU4/8GBR6nhzvS6RvC6Op
-         hgcf0bD0pZqSDcqdjnFxlc/WOyW5HXjqxXssBRoEcub6zfgsyAm7dS1RKLN+kAvbV7AF
-         PdCSGVxgOa7jOSG5MKS74lpbbYJbDKinZ0P25ZY7TwkmHkdD2X+IXHPqyZvGKPHGXgtU
-         msk4viSwnnycDvk0sr13e6aEINJOk5N5ChKMkSG7guPQk6K2w0D6YqMtkU/7BSgU5AYC
-         h+sMpk8vUT2w3uONgLZNCAhGSEjNTIGe8n9IMgl3p2uwxDV/q0/MMQZ414F7vopzpn6u
-         mqSw==
-X-Gm-Message-State: AO0yUKXTz7qahnkZJ37RT1C6giMeByTQfSD/oIqG62GYqmqMj5Yk7ib/
-        0TfkhuQ4AfFCNqL9dOCRR3w=
-X-Google-Smtp-Source: AK7set+x2AmWIDXdhFrfTy/bx8g3UJH2OP9HnUmuyCSGvsnxLo89d5Ks7yWreZh1w0d4SEIBf2+OWw==
-X-Received: by 2002:a05:600c:3513:b0:3df:b5ae:5289 with SMTP id h19-20020a05600c351300b003dfb5ae5289mr2730154wmq.8.1675341990082;
-        Thu, 02 Feb 2023 04:46:30 -0800 (PST)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id l6-20020a05600c4f0600b003dafbd859a6sm5105962wmq.43.2023.02.02.04.46.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 04:46:29 -0800 (PST)
-Message-ID: <2e616aea-0a38-b33e-20d5-0c6254cdd616@gmail.com>
-Date:   Thu, 2 Feb 2023 13:46:28 +0100
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=w5NS+1c8Tu2PGFvK4AFEdfQ0iYep75esswQI1225dSM=;
+        b=jSAywSIPUIrBtiU9jtWlDBxJXqUmbJL6hgq2kPF+VulnDqhzkdq4rxBgUBJEE8Uj6p
+         hoCNkXLyb6d7OdVBLZEt3wwAKdhQFiWb9tasjE+vdufpuXyrjCMLkf1DMhs3lTds502O
+         cMnGxRpxZaCH+Eg4HlvgHhuv4JWeU4KBGK8rHD/KNFi7yWvASvSQPgFCBAWicZum3EaC
+         D6M24W2skJjaTAxYAPcLPoiog8FGRGhvwuxfztOxVQ56f4ZdzxTloqVUXR0CMUy9Wvfl
+         4RAkYAZZtW+omOy1RpG9g1nb5PV0mmbm6ikt1PmxKkmEa5WYcHfakuRNmVwdrGkpUyiC
+         rXvQ==
+X-Gm-Message-State: AO0yUKVxtpGYJYwhRP+dzWNij3qyHWS0McyhPu6dmBvtYrSBqgdUNNOI
+        PkW0Zi+retILCC6C+ACpo0w=
+X-Google-Smtp-Source: AK7set9GirxZBqSwgFAsMboxKE8Izp95X1pyquunjVvuEGOfw96gDntzRpcsoOrreA5T5hjVvI/7Pw==
+X-Received: by 2002:a05:6000:1285:b0:2bf:ee0f:9f04 with SMTP id f5-20020a056000128500b002bfee0f9f04mr6115932wrx.45.1675342219853;
+        Thu, 02 Feb 2023 04:50:19 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id d7-20020a056000114700b00241fab5a296sm19667773wrx.40.2023.02.02.04.50.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Feb 2023 04:50:19 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] i915/gvt: Fix spelling mistake "vender" -> "vendor"
+Date:   Thu,  2 Feb 2023 12:50:18 +0000
+Message-Id: <20230202125018.285523-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v5 2/3] soc: mediatek: mtk-svs: use common function to
- disable restore voltages
-Content-Language: en-US
-To:     Roger Lu <roger.lu@mediatek.com>,
-        Enric Balletbo Serra <eballetbo@gmail.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>
-Cc:     Fan Chen <fan.chen@mediatek.com>,
-        Jia-wei Chang <jia-wei.chang@mediatek.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20230202124104.16504-1-roger.lu@mediatek.com>
- <20230202124104.16504-3-roger.lu@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20230202124104.16504-3-roger.lu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -84,120 +78,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+There is a spelling mistake in a literal string. Fix it.
 
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/gpu/drm/i915/gvt/firmware.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 02/02/2023 13:41, Roger Lu wrote:
-> The timing of disabling SVS bank and restore default voltage is more
-> than one place. Therefore, add a common function to use for removing
-> the superfluous codes.
-> 
-> Signed-off-by: Roger Lu <roger.lu@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+diff --git a/drivers/gpu/drm/i915/gvt/firmware.c b/drivers/gpu/drm/i915/gvt/firmware.c
+index dce93738e98a..4dd52ac2043e 100644
+--- a/drivers/gpu/drm/i915/gvt/firmware.c
++++ b/drivers/gpu/drm/i915/gvt/firmware.c
+@@ -171,7 +171,7 @@ static int verify_firmware(struct intel_gvt *gvt,
+ 	mem = (fw->data + h->cfg_space_offset);
+ 
+ 	id = *(u16 *)(mem + PCI_VENDOR_ID);
+-	VERIFY("vender id", id, pdev->vendor);
++	VERIFY("vendor id", id, pdev->vendor);
+ 
+ 	id = *(u16 *)(mem + PCI_DEVICE_ID);
+ 	VERIFY("device id", id, pdev->device);
+-- 
+2.30.2
 
-Queued for the next merge window.
-
-Thanks!
-
-> ---
->   drivers/soc/mediatek/mtk-svs.c | 54 ++++++++++++++--------------------
->   1 file changed, 22 insertions(+), 32 deletions(-)
-> 
-> diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
-> index c9899f5df60a..299f580847bd 100644
-> --- a/drivers/soc/mediatek/mtk-svs.c
-> +++ b/drivers/soc/mediatek/mtk-svs.c
-> @@ -624,6 +624,25 @@ static int svs_adjust_pm_opp_volts(struct svs_bank *svsb)
->   	return ret;
->   }
->   
-> +static void svs_bank_disable_and_restore_default_volts(struct svs_platform *svsp,
-> +						       struct svs_bank *svsb)
-> +{
-> +	unsigned long flags;
-> +
-> +	if (svsb->mode_support == SVSB_MODE_ALL_DISABLE)
-> +		return;
-> +
-> +	spin_lock_irqsave(&svs_lock, flags);
-> +	svsp->pbank = svsb;
-> +	svs_switch_bank(svsp);
-> +	svs_writel_relaxed(svsp, SVSB_PTPEN_OFF, SVSEN);
-> +	svs_writel_relaxed(svsp, SVSB_INTSTS_VAL_CLEAN, INTSTS);
-> +	spin_unlock_irqrestore(&svs_lock, flags);
-> +
-> +	svsb->phase = SVSB_PHASE_ERROR;
-> +	svs_adjust_pm_opp_volts(svsb);
-> +}
-> +
->   #ifdef CONFIG_DEBUG_FS
->   static int svs_dump_debug_show(struct seq_file *m, void *p)
->   {
-> @@ -700,7 +719,6 @@ static ssize_t svs_enable_debug_write(struct file *filp,
->   {
->   	struct svs_bank *svsb = file_inode(filp)->i_private;
->   	struct svs_platform *svsp = dev_get_drvdata(svsb->dev);
-> -	unsigned long flags;
->   	int enabled, ret;
->   	char *buf = NULL;
->   
-> @@ -716,16 +734,8 @@ static ssize_t svs_enable_debug_write(struct file *filp,
->   		return ret;
->   
->   	if (!enabled) {
-> -		spin_lock_irqsave(&svs_lock, flags);
-> -		svsp->pbank = svsb;
-> +		svs_bank_disable_and_restore_default_volts(svsp, svsb);
->   		svsb->mode_support = SVSB_MODE_ALL_DISABLE;
-> -		svs_switch_bank(svsp);
-> -		svs_writel_relaxed(svsp, SVSB_PTPEN_OFF, SVSEN);
-> -		svs_writel_relaxed(svsp, SVSB_INTSTS_VAL_CLEAN, INTSTS);
-> -		spin_unlock_irqrestore(&svs_lock, flags);
-> -
-> -		svsb->phase = SVSB_PHASE_ERROR;
-> -		svs_adjust_pm_opp_volts(svsb);
->   	}
->   
->   	kfree(buf);
-> @@ -1508,16 +1518,7 @@ static int svs_init02(struct svs_platform *svsp)
->   out_of_init02:
->   	for (idx = 0; idx < svsp->bank_max; idx++) {
->   		svsb = &svsp->banks[idx];
-> -
-> -		spin_lock_irqsave(&svs_lock, flags);
-> -		svsp->pbank = svsb;
-> -		svs_switch_bank(svsp);
-> -		svs_writel_relaxed(svsp, SVSB_PTPEN_OFF, SVSEN);
-> -		svs_writel_relaxed(svsp, SVSB_INTSTS_VAL_CLEAN, INTSTS);
-> -		spin_unlock_irqrestore(&svs_lock, flags);
-> -
-> -		svsb->phase = SVSB_PHASE_ERROR;
-> -		svs_adjust_pm_opp_volts(svsb);
-> +		svs_bank_disable_and_restore_default_volts(svsp, svsb);
->   	}
->   
->   	return ret;
-> @@ -1563,23 +1564,12 @@ static int svs_suspend(struct device *dev)
->   {
->   	struct svs_platform *svsp = dev_get_drvdata(dev);
->   	struct svs_bank *svsb;
-> -	unsigned long flags;
->   	int ret;
->   	u32 idx;
->   
->   	for (idx = 0; idx < svsp->bank_max; idx++) {
->   		svsb = &svsp->banks[idx];
-> -
-> -		/* This might wait for svs_isr() process */
-> -		spin_lock_irqsave(&svs_lock, flags);
-> -		svsp->pbank = svsb;
-> -		svs_switch_bank(svsp);
-> -		svs_writel_relaxed(svsp, SVSB_PTPEN_OFF, SVSEN);
-> -		svs_writel_relaxed(svsp, SVSB_INTSTS_VAL_CLEAN, INTSTS);
-> -		spin_unlock_irqrestore(&svs_lock, flags);
-> -
-> -		svsb->phase = SVSB_PHASE_ERROR;
-> -		svs_adjust_pm_opp_volts(svsb);
-> +		svs_bank_disable_and_restore_default_volts(svsp, svsb);
->   	}
->   
->   	ret = reset_control_assert(svsp->rst);
