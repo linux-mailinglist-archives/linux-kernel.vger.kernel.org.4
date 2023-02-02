@@ -2,64 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19C62687A03
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 11:20:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5154468782E
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:03:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232230AbjBBKUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 05:20:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55362 "EHLO
+        id S232390AbjBBJDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 04:03:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232613AbjBBKUy (ORCPT
+        with ESMTP id S232240AbjBBJDc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 05:20:54 -0500
-X-Greylist: delayed 90837 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 02 Feb 2023 02:20:52 PST
-Received: from mail.corrib.pl (mail.corrib.pl [185.58.226.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF46D80FB6
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 02:20:52 -0800 (PST)
-Received: by mail.corrib.pl (Postfix, from userid 1001)
-        id 70325A42A9; Wed,  1 Feb 2023 09:06:25 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=corrib.pl; s=mail;
-        t=1675242400; bh=X6IEpSISwJiYlJ3uA866lskXve3r+4o2hf4z7VM6m5o=;
-        h=Date:From:To:Subject:From;
-        b=C8XFFpSry+GuzfzWFVekdhEhXYmvYDSjWN19Uu+1JxL9lonQYH23InXh0hL8JUYxC
-         WJoRDkeRk6esQ5jOSZmmHSCuUIR5hCsiwzBS0pk/mgHRUezZVXQkVXeLIsenzfq/vf
-         rHCpSwjSeoPeg9PWL24zMHCq+KMDleV1Ay+nUCo8C6Pinep1SZuHbng00rqvo359N3
-         ijPm4omHkRaN1tlUnrM94h81e1RKa72av46yaUgAsHMbNFjVBzS3JX6HgExXDpAodh
-         ZELQugtPnKjkwnq1QLqhei/ucdCMBr0lADm0nRjJB9WGLE/38qGa0rbH+jcaByOxJe
-         9IGNzEr38Z9wg==
-Received: by mail.corrib.pl for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 09:06:19 GMT
-Message-ID: <20230201074500-0.1.58.fhu4.0.w82lfq2ono@corrib.pl>
-Date:   Wed,  1 Feb 2023 09:06:19 GMT
-From:   =?UTF-8?Q? "Szczepan_Kie=C5=82basa" ?= 
-        <szczepan.kielbasa@corrib.pl>
-To:     <linux-kernel@vger.kernel.org>
-Subject: Faktoring
-X-Mailer: mail.corrib.pl
+        Thu, 2 Feb 2023 04:03:32 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B35454540
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 01:02:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675328566;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=De3EEQ1m72Gwo/6RnWtloeFaKS85eTsg/vaPSBwqp1U=;
+        b=WAp1Jiw1Et9/pJBJtxioBqs6UVbA22lXI8YZNGFV0sPwqHtfFbEBHK025bytECwel4n9Vw
+        Vtj8Y/2FrqhGKyE3y8FhI6RxCNesrb8xktQClGNDM9LRM+qhWFgcmg+tRz2Xfoc8dZKtzz
+        YCUttRt9D9VrhAVN52fywjQQ1SlP1qQ=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-311-OjQCRpqJO46ledfyuIVLZA-1; Thu, 02 Feb 2023 04:02:45 -0500
+X-MC-Unique: OjQCRpqJO46ledfyuIVLZA-1
+Received: by mail-wr1-f70.google.com with SMTP id o9-20020adfa109000000b002bfc062eaa8so105618wro.20
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 01:02:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=De3EEQ1m72Gwo/6RnWtloeFaKS85eTsg/vaPSBwqp1U=;
+        b=36GJC63IYuAaSTKUgrzd2vShv9srHNF1TJ/97MKirfSze95u8DHti3chx6MJJKdxfI
+         /wkMp2dRCfgPDaTkRIwxTiXLJk8v/sVfxztS9MuIAut8/ycRvu23gMu7vc3aBkU5Wumr
+         DsVjO9F39yOrtetVhS18P7uqNWmIDJe60KRqHhO0hU9VyGMJtLcVX7tYZr+4n1O7Fkhk
+         vTDBtOaZPdFFfH3VhO3OTUPeIbwaSCOyo3Zsiq7LM1VPT9EI7x4j9hUZ1QYaPqVXwcBp
+         mpdqzbkWDJ/9dooaKrIWn42sTlBuvIS4koaLJtDBPePUf8YqiNjcQMsk0V59IrVgoQJY
+         HWCA==
+X-Gm-Message-State: AO0yUKWkPhpD7e3lOAqXP65gDiQMDL1qyZNWI3JIsdXRrLiKbWWx2w0I
+        SE1x0gUan+C6y1kDWHw49B3oLhJkGWPMh/Vp3RZimIssaC2HLvqOYoFB2WNP4yGzmJi6WW+prRA
+        mYlbfp+yOI0dUPRcSiZvcc4Po
+X-Received: by 2002:a05:600c:5127:b0:3df:e1cc:94ff with SMTP id o39-20020a05600c512700b003dfe1cc94ffmr243172wms.28.1675328564399;
+        Thu, 02 Feb 2023 01:02:44 -0800 (PST)
+X-Google-Smtp-Source: AK7set+fCz01ItwOkICqUjPGvI9tDwbLemLD7FdONgucCuAKb9cdtz4cX1DC5V0lyMB/NcT5nCtZrQ==
+X-Received: by 2002:a05:600c:5127:b0:3df:e1cc:94ff with SMTP id o39-20020a05600c512700b003dfe1cc94ffmr243149wms.28.1675328564119;
+        Thu, 02 Feb 2023 01:02:44 -0800 (PST)
+Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
+        by smtp.gmail.com with ESMTPSA id t1-20020a1c7701000000b003b47b80cec3sm4027759wmi.42.2023.02.02.01.02.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Feb 2023 01:02:43 -0800 (PST)
+Message-ID: <e8065d6a-d2f9-60aa-8541-8dfc8e9b608f@redhat.com>
+Date:   Thu, 2 Feb 2023 10:02:42 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_VALIDITY_RPBL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [syzbot] general protection fault in skb_dequeue (3)
+Content-Language: en-US
+To:     David Howells <dhowells@redhat.com>, jhubbard@nvidia.com
+Cc:     syzbot <syzbot+a440341a59e3b7142895@syzkaller.appspotmail.com>,
+        davem@davemloft.net, edumazet@google.com, hch@lst.de,
+        johannes@sipsolutions.net, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+References: <000000000000b0b3c005f3a09383@google.com>
+ <822863.1675327935@warthog.procyon.org.uk>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <822863.1675327935@warthog.procyon.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dzie=C5=84 dobry,
+On 02.02.23 09:52, David Howells wrote:
+> Hi John, David,
+> 
+> Could you have a look at this?
+> 
+>> syzbot found the following issue on:
+>>
+>> HEAD commit:    80bd9028feca Add linux-next specific files for 20230131
+>> git tree:       linux-next
+>> console output: https://syzkaller.appspot.com/x/log.txt?x=1468e369480000
+>> kernel config:  https://syzkaller.appspot.com/x/.config?x=904dc2f450eaad4a
+>> dashboard link: https://syzkaller.appspot.com/bug?extid=a440341a59e3b7142895
+>> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+>> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12c5d2be480000
+>> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11259a79480000
+>> ...
+>> The issue was bisected to:
+>>
+>> commit 920756a3306a35f1c08f25207d375885bef98975
+>> Author: David Howells <dhowells@redhat.com>
+>> Date:   Sat Jan 21 12:51:18 2023 +0000
+>>
+>>      block: Convert bio_iov_iter_get_pages to use iov_iter_extract_pages
+>>
+>> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=170384f9480000
+>> final oops:     https://syzkaller.appspot.com/x/report.txt?x=148384f9480000
+>> console output: https://syzkaller.appspot.com/x/log.txt?x=108384f9480000
+>> ...
+>> general protection fault, probably for non-canonical address 0xdffffc0000000001: 0000 [#1] PREEMPT SMP KASAN
+>> KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
+>> CPU: 0 PID: 2838 Comm: kworker/u4:6 Not tainted 6.2.0-rc6-next-20230131-syzkaller-09515-g80bd9028feca #0
+>> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
+>> Workqueue: phy4 ieee80211_iface_work
+>> RIP: 0010:__skb_unlink include/linux/skbuff.h:2321 [inline]
+>> RIP: 0010:__skb_dequeue include/linux/skbuff.h:2337 [inline]
+>> RIP: 0010:skb_dequeue+0xf5/0x180 net/core/skbuff.c:3511
+> 
+> I don't think this is specifically related to anything networking.  I've run
+> it a few times and weird stuff happens in various places.  I'm wondering if
+> it's related to FOLL_PIN in some way.
+> 
+> The syzbot test in question does the following:
+> 
+>     #{"repeat":true,"procs":1,"slowdown":1,"sandbox":"none","sandbox_arg":0,"netdev":true,"cgroups":true,"close_fds":true,"usb":true,"wifi":true,"sysctl":true,"tmpdir":true}
+>     socket(0x0, 0x2, 0x0)
+>     epoll_create(0x7)
+>     r0 = creat(&(0x7f0000000040)='./bus\x00', 0x9)
+>     ftruncate(r0, 0x800)
+>     lseek(r0, 0x200, 0x2)
+>     r1 = open(&(0x7f0000000000)='./bus\x00', 0x24000, 0x0)  <-- O_DIRECT
+>     sendfile(r0, r1, 0x0, 0x1dd00)
+> 
+> Basically a DIO splice from a file to itself.
+> 
+> I've hand-written my own much simpler tester (see attached).  You need to run
+> at least two copies in parallel, I think, to trigger the bug.  It's possible
+> truncate is interfering somehow.
+> 
+> David
+> ---
+> #define _GNU_SOURCE
+> #include <stdio.h>
+> #include <stdlib.h>
+> #include <unistd.h>
+> #include <fcntl.h>
+> #include <sys/sendfile.h>
+> #include <sys/wait.h>
+> 
+> #define file_size 0x800
+> #define send_size 0x1dd00
+> #define repeat_count 1000
+> 
+> int main(int argc, char *argv[])
+> {
+> 	int in, out, i, wt;
+> 
+> 	if (argc != 2 || !argv[1][0]) {
+> 		fprintf(stderr, "Usage: %s <file>\n", argv[0]);
+> 		exit(2);
+> 	}
+> 
+> 	for (i = 0; i < repeat_count; i++) {
+> 		switch (fork()) {
+> 		case -1:
+> 			perror("fork");
+> 			exit(1);
+> 		case 0:
+> 			out = creat(argv[1], 0666);
+> 			if (out < 0) {
+> 				perror(argv[1]);
+> 				exit(1);
+> 			}
+> 
+> 			if (ftruncate(out, file_size) < 0) {
+> 				perror("ftruncate");
+> 				exit(1);
+> 			}
+> 
+> 			if (lseek(out, file_size, SEEK_SET) < 0) {
+> 				perror("lseek");
+> 				exit(1);
+> 			}
+> 
+> 			in = open(argv[1], O_RDONLY | O_DIRECT | O_NOFOLLOW);
+> 			if (in < 0) {
+> 				perror("open");
+> 				exit(1);
+> 			}
+> 
+> 			if (sendfile(out, in, NULL, send_size) < 0) {
+> 				perror("sendfile");
+> 				exit(1);
+> 			}
+> 			exit(0);
 
-rozwa=C5=BCali Pa=C5=84stwo wyb=C3=B3r finansowania, kt=C3=B3re spe=C5=82=
-ni potrzeby firmy, zapewniaj=C4=85c natychmiastowy dost=C4=99p do got=C3=B3=
-wki, bez zb=C4=99dnych przestoj=C3=B3w?=20
+[as raised on IRC]
 
-Przygotowali=C5=9Bmy rozwi=C4=85zania faktoringowe dopasowane do Pa=C5=84=
-stwa bran=C5=BCy i wielko=C5=9Bci firmy, dzi=C4=99ki kt=C3=B3rym, nie mus=
-z=C4=85 Pa=C5=84stwo martwi=C4=87 si=C4=99 o niewyp=C5=82acalno=C5=9B=C4=87=
- kontrahent=C3=B3w, poniewa=C5=BC transakcje s=C4=85 zabezpieczone i posi=
-adaj=C4=85 gwarancj=C4=99 sp=C5=82aty.=20
-Chc=C4=85 Pa=C5=84stwo przeanalizowa=C4=87 dost=C4=99pne opcje?
+At first, I wondered if that's related to shared anonymous pages getting 
+pinned R/O that would trigger COW-unsharing ... but I don't even see 
+where we are supposed to use FOLL_PIN vs. FOLL_GET here? IOW, we're not 
+even supposed to access user space memory (neither FOLL_GET nor 
+FOLL_PIN) but still end up with a change in behavior.
 
+-- 
+Thanks,
 
-Pozdrawiam
-Szczepan Kie=C5=82basa
+David / dhildenb
+
