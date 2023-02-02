@@ -2,105 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C66F688296
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 16:33:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D7796882BC
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 16:36:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233315AbjBBPda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 10:33:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52698 "EHLO
+        id S232116AbjBBPgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 10:36:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233319AbjBBPcl (ORCPT
+        with ESMTP id S232708AbjBBPfn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 10:32:41 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2F1F1ADDB
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 07:31:29 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id q5so2103274wrv.0
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 07:31:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sC/wHKFUWrBlFVfg/39DddKx7F/2jVJHWCKKjw4Tk6Q=;
-        b=A1fBqfKtRLNefZgiDi29pQOiCeE92HPv9hxBq0iFMFuZzvddgJcP62KI+X4eL2Qexq
-         X1rBGy9NdmUwjZhxW3eGaP9PIPVoZTeV/uF20me6MBAqPjNwSnJkxI4iZkF137XpuvHI
-         5CKr0hl1luqBCvNQZkjZsejXn+iDqIrLMBUe7936d7lfFZ/2sBjXLI3XAl+wC4ySQNop
-         HFY7DLFP/8s5aWyvkinQ/dWYUUEveNT+ZbsyxTDJFgpspQqtVP6ww1LHQqknlS8lEoAM
-         t0dczhrKguVqgdUIfe6wKrJQZYPYf4MlRwLgzh9s96Rn88VEpXzRDeDRaL4prRp/hqAx
-         qBcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sC/wHKFUWrBlFVfg/39DddKx7F/2jVJHWCKKjw4Tk6Q=;
-        b=EU4o3STliCBuw7fd0le9tR1WAp2gsUedn/FJO0M3pOsq97dtYM95zlMTC7ojCN/y3Y
-         PIqPL0WZ2e8AFjtMhSrPv8kSyFUhlQe65tH4MmL6+qIyWK/WywOfL50vcwfqH5ESTLjz
-         jTiDcnYfzS2ln+w05bytZfwLZlIuIaQqNMqxaw7f/UOET2d5d6KyF4ObST7zOAJ5x6ig
-         EluIODFoOgYG38Q2aT6tCK2nfwroBsvn0qheo1UcNCA+21up58ZSpSHk2DdHGQJ3jpYy
-         prn+N+Y/a6MAqC8ODg5UwKBehUbVt+bhb/kuZh2GkijnH06/Lbuh1otEe3JiBu5Oj7hv
-         a8Bw==
-X-Gm-Message-State: AO0yUKV0hPL56TUi6J+WSw9Vm4lADDDd44BunVlCaCLXpeKaf/eAdZe0
-        woXsjhgDU3E0lf7Lj9TKbJDBKA==
-X-Google-Smtp-Source: AK7set9dyLQ6/5ZzLauX+F+KTRoN6G57y2bDleM43oc92kGmTRl7MTADUwhvVdbR2ZtAOexuonjtDw==
-X-Received: by 2002:a5d:6481:0:b0:2bf:e895:3839 with SMTP id o1-20020a5d6481000000b002bfe8953839mr7755289wri.39.1675351816973;
-        Thu, 02 Feb 2023 07:30:16 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id p12-20020a056000018c00b002bfe08c566fsm14821183wrx.106.2023.02.02.07.30.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 07:30:16 -0800 (PST)
-Message-ID: <1b75ab1a-44c9-c4a8-7fa4-d601fc710d2a@linaro.org>
-Date:   Thu, 2 Feb 2023 16:30:15 +0100
+        Thu, 2 Feb 2023 10:35:43 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06695485AC
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 07:35:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675352104; x=1706888104;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hU+Gt/5Yu9M/7rlNN+qDySQonUycDkbqLPa/l+PoyVE=;
+  b=XLKF5jGkzYmwjfKC63NEtle1L0RH6qkHH1ioLJNTxds/YvPjKwcxfy8i
+   plObl+dV9kwDZk6dFGKWc6ryy6cnXKAQ/aDxka2IuM2P7uzXW2oLzejzG
+   yCgtMlb4an/v50B28RgUsaXyoI2161Z4RNsg2qsX7UgcFQsq1JQklyWAs
+   Ryl0xE8ecWimVi57oxwKIajjVjr1D/bt5cDNJ5iyg368bC6VF4HDYhla5
+   OvuQhH5hGIPRQcbymbdpY5+B8fydqYCcIljo0L6J/+Zyoe/N3sSHUJm5i
+   +wL6/74fzMOj+pEJcfIhgxCfzuuT2C+Q8XvkKZEDhJl83/3SYdNAPnm+L
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="393056460"
+X-IronPort-AV: E=Sophos;i="5.97,267,1669104000"; 
+   d="scan'208";a="393056460"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2023 07:31:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="667317636"
+X-IronPort-AV: E=Sophos;i="5.97,267,1669104000"; 
+   d="scan'208";a="667317636"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga007.fm.intel.com with ESMTP; 02 Feb 2023 07:31:20 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pNbYV-001EcV-0b;
+        Thu, 02 Feb 2023 17:31:19 +0200
+Date:   Thu, 2 Feb 2023 17:31:18 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
+        Alexander Usyskin <alexander.usyskin@intel.com>,
+        linux-kernel@vger.kernel.org,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH v1 1/1] mei: Move uuid_le_cmp() to its only user
+Message-ID: <Y9vXRk3ctpl0+p37@smile.fi.intel.com>
+References: <20230202145412.87569-1-andriy.shevchenko@linux.intel.com>
+ <20230202151759.GA28861@lst.de>
+ <Y9vVENZEjg1e43LT@smile.fi.intel.com>
+ <20230202152234.GA28999@lst.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 5/6] mailbox: qcom-apcs-ipc: add IPQ5332 APSS clock
- support
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Kathiravan T <quic_kathirav@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        jassisinghbrar@gmail.com, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230202145208.2328032-1-quic_kathirav@quicinc.com>
- <20230202145208.2328032-6-quic_kathirav@quicinc.com>
- <2433c2c7-664d-0d1f-12ae-374cbd093dc0@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <2433c2c7-664d-0d1f-12ae-374cbd093dc0@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230202152234.GA28999@lst.de>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/02/2023 16:16, Konrad Dybcio wrote:
+On Thu, Feb 02, 2023 at 04:22:34PM +0100, Christoph Hellwig wrote:
+> On Thu, Feb 02, 2023 at 05:21:52PM +0200, Andy Shevchenko wrote:
+> > On Thu, Feb 02, 2023 at 04:17:59PM +0100, Christoph Hellwig wrote:
+> > > On Thu, Feb 02, 2023 at 04:54:12PM +0200, Andy Shevchenko wrote:
+> > > > There is only a single user of uuid_le_cmp() API, let's make it private
+> > > > to that user.
+> > > 
+> > > Any reason this code can't just use guid_t and guid_equal?
+> > 
+> > It's part of ABI, while guid_* are for the internal use.
+> > 
+> > Eventually they may switch to the internal types, but it's up to MEI.
 > 
-> 
-> On 2.02.2023 15:52, Kathiravan T wrote:
->> IPQ5332 has the APSS clock controller utilizing the same register space
->> as the APCS, so provide access to the APSS utilizing a child device like
->> other IPQ chipsets.
->>
->> Like IPQ6018, the same controller and driver is used, so utilize IPQ6018
->> match data for IPQ5332.
->>
->> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
->> ---
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> How can a type name be part of a binary interface?
 
-While this is not the fault of this patch, but we keep adding
-compatibles with same driver data. I think this should start using
-fallbacks at some point...
+If I'm not mistaken there is a difference between simple __u8[16] and
+struct { __u8[16] } due to alignment. But data wise it's the same, of
+course. That said, it depends on how this type is being used in the
+any of ABI.
 
-Best regards,
-Krzysztof
+From the API perspective the guid_* are not visible to uAPI.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
