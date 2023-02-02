@@ -2,84 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C20E688046
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 15:40:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B3C668804F
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 15:44:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232477AbjBBOkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 09:40:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50426 "EHLO
+        id S232450AbjBBOn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 09:43:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232375AbjBBOkT (ORCPT
+        with ESMTP id S229662AbjBBOn4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 09:40:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA798B7DC;
-        Thu,  2 Feb 2023 06:40:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1089161B8D;
-        Thu,  2 Feb 2023 14:40:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 639F0C4339C;
-        Thu,  2 Feb 2023 14:40:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675348817;
-        bh=hefmgxWkP5BXpNz0IwCOCVrIKYFxyb05KsrnUYM6zLg=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=TMsCRPggYShlyWXR36L3bU5y9OmVPlz4LZTW8kzgyz8t1RbXP+koIF3tx/H9Ms3n3
-         2YkLafltK7eI5I+xcvO0NDGk49S/3SIliFgzjI38J1rEVNiLx9BwYz6Z9qnwGG5awF
-         WkobJ2SHOzEB5j/rCnfUP5K7XF7Ti9OMy726IHoFgIVrd6ZhzELVophFMKwDl56/BG
-         UIuqeHuy38qOF06Oj+jtu5b9TB0E8F1JLb4xXYuVfE8bQiR1+oB7W5/c1BMs2Tf+jq
-         /V++3D9k3tvkeuaT5v/URUV859TongqDGz1yEJ8wZu3gytMlDvp8UFlw3l2Nkh/Po6
-         jBHndSBPAfiIQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 49204E21EEC;
-        Thu,  2 Feb 2023 14:40:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 2 Feb 2023 09:43:56 -0500
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1728626E;
+        Thu,  2 Feb 2023 06:43:55 -0800 (PST)
+Received: by mail-ed1-f53.google.com with SMTP id be12so2229563edb.4;
+        Thu, 02 Feb 2023 06:43:55 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=h0Uvs+EgprBTmQ0jVYkQK7pz/LZJDEiugwmDCmQcPKg=;
+        b=d3+SjSDk5udxvdirVlfJh4PTiNubbg90sXvQFTo5R6QaBzmaH00x49aVzqjSwuKSuU
+         4V6+5Ync+362RmNXCQ6TXPuE0nL5FTUybjFnSzWjXSc9nCJXboM1Vc1ZmOog6/VhWjvD
+         nfs7nJ5muSlPPq2wk/GgHz2IMR7zopBgacV8eBwk4FAwRBvcnKTv9L2N7pWqLGZr3uzv
+         4To70VgaHkLJyZ7Zh4YXreDF54hyR7FZZFYBhgO5LkqvguAmZUdJ9ff+mXbrC9ZgYVMh
+         CzWhCdiFyGsLb1L1hwvqyCcEk3nMeXGLqGhh6tuM7LBDTL4mGQLU88xtg/retk+34896
+         NKEA==
+X-Gm-Message-State: AO0yUKUc8LXWn/pMkCKp/6yxwtJi4hoxzVLttkkIF4yIr/CRVW4MEd1M
+        SeiBupKtCaafyi6m097mvWn5hFC5HAii5XpeH5dUFYgG
+X-Google-Smtp-Source: AK7set8zXcku0FdlawfFg+hMPW0Pgx+DcdQPYQmJrlkn5C8kI3sGrRL/zulzapQslpt2wsc31bgjDky7O3Pe43xtOrs=
+X-Received: by 2002:a05:6402:40ce:b0:490:47c3:3d71 with SMTP id
+ z14-20020a05640240ce00b0049047c33d71mr2046481edb.31.1675349034088; Thu, 02
+ Feb 2023 06:43:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: dsa: Use sysfs_emit() to instead of sprintf()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167534881729.17586.13807179422963728944.git-patchwork-notify@kernel.org>
-Date:   Thu, 02 Feb 2023 14:40:17 +0000
-References: <20230201081438.3151-1-liubo03@inspur.com>
-In-Reply-To: <20230201081438.3151-1-liubo03@inspur.com>
-To:     Bo Liu <liubo03@inspur.com>
-Cc:     andrew@lunn.ch, f.fainelli@gmail.com, olteanv@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230118181622.33335-1-daniel.lezcano@linaro.org>
+ <20230118181622.33335-3-daniel.lezcano@linaro.org> <CAJZ5v0jbHR03UyJBMmBBYnSsZmGG0OXqLJvMfXxXKVn4Np4Egw@mail.gmail.com>
+ <beb367d8-dad7-87d9-7872-b81a4d3492ae@linaro.org> <CAJZ5v0hFG1VjzKubWkLYPXeGHN9sMt4SDdC_f-dLseaXpsAOKg@mail.gmail.com>
+ <c7c7d71d-28e1-310e-2c8f-e5ae53a09f78@linaro.org>
+In-Reply-To: <c7c7d71d-28e1-310e-2c8f-e5ae53a09f78@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 2 Feb 2023 15:43:42 +0100
+Message-ID: <CAJZ5v0hP_5kOG7kE13fTLRgdiQrz7fskeAWBNW48MSD5t7FnvA@mail.gmail.com>
+Subject: Re: [PATCH 3/3] thermal/drivers/intel: Use generic trip points for intel_soc_dts_iosf
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        srinivas.pandruvada@linux.intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rui.zhang@intel.com,
+        Daniel Lezcano <daniel.lezcano@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Thu, Feb 2, 2023 at 3:36 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>
+>
+> Hi Rafael,
+>
+> On 31/01/2023 20:17, Rafael J. Wysocki wrote:
+>
+> [ ... ]
+>
+> >>> Why should temp be overwritten here?
+> >>
+> >> You are correct. This is wrong.
+> >>
+> >> I think we should call get_trip_temp() before calling update_trip_temp()
+> >> instead of passing a zero temperature parameter
+> >
+> > update_trip_temp() is sort of a misnomer, because it is used for
+> > initializing a trip point for example in
+> > intel_soc_dts_iosf_add_read_only_critical_trip() and in this
+> > particular case get_trip_temp() need not be called before it.
+> >
+> > This driver seems to be in need of a cleanup.
+>
+> Will you take care of this cleanup ?
 
-This patch was applied to netdev/net-next.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Wed, 1 Feb 2023 03:14:38 -0500 you wrote:
-> Follow the advice of the Documentation/filesystems/sysfs.rst and show()
-> should only use sysfs_emit() or sysfs_emit_at() when formatting the
-> value to be returned to user space.
-> 
-> Signed-off-by: Bo Liu <liubo03@inspur.com>
-> ---
->  net/dsa/master.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-
-Here is the summary with links:
-  - net: dsa: Use sysfs_emit() to instead of sprintf()
-    https://git.kernel.org/netdev/net-next/c/b18ea3d9d214
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+I think I can do that, but I'm not sure how much time I will be able
+to allocate for that.  Let me try though.
