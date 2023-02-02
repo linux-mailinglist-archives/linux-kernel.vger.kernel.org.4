@@ -2,278 +2,393 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D40C568743E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 05:02:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F969687440
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 05:03:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232167AbjBBECW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 23:02:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49986 "EHLO
+        id S232184AbjBBEDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 23:03:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232163AbjBBECN (ORCPT
+        with ESMTP id S231651AbjBBEDK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 23:02:13 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 817417BBDE;
-        Wed,  1 Feb 2023 20:02:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675310531; x=1706846531;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Q6pt76n3GNc0XQSh5sHwG6/T5JVBFQK0A82aR9qxwdg=;
-  b=RiXIFgaidd7mguTArhHjE4iB/oeChdOuwQlDrfWgXhSN0FH3QhsiTDBv
-   hUwAFmUpDc8EK7zqTEO2RFJUJ2sGt/rH5DNL6Q6eWVKhv3gIruRafeEkx
-   GpJuZIFokTeLO3fQxtijrovIeFN9As/idnYTM8k4WIHL+iFiVVi/3zMWW
-   YWhCAfZQNWlL8h6P7CTMpsAusTqT3Nq6AxBW4Vn7s1q7cxaj/W0p4NGVQ
-   eZHQZ/mPc6EzwJ4bV8DBd0TtM2jPilD8H1FYulPQWESHIIm2uQa+otYYJ
-   xYV0u6aExXvXn9Kvs/w6WskhJncFh7kekVSnC4Ti3R37cLNwGdAyCZVCj
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="392926396"
-X-IronPort-AV: E=Sophos;i="5.97,266,1669104000"; 
-   d="scan'208";a="392926396"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 20:02:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="789139053"
-X-IronPort-AV: E=Sophos;i="5.97,266,1669104000"; 
-   d="scan'208";a="789139053"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 01 Feb 2023 20:02:08 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pNQnX-00067S-2Z;
-        Thu, 02 Feb 2023 04:02:07 +0000
-Date:   Thu, 2 Feb 2023 12:01:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next 2/4] bpf: treewide: Clean up BPF_ALU and BPF_JMP
-Message-ID: <202302021105.HU4McFMJ-lkp@intel.com>
-References: <1675254998-4951-3-git-send-email-yangtiezhu@loongson.cn>
+        Wed, 1 Feb 2023 23:03:10 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D919EC677
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 20:03:04 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id qw12so2521935ejc.2
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 20:03:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=/u7kcraNHuAzpF/FlOTnk1+soLNkuOEC/f42ZPPrEbk=;
+        b=Sqr+VnIHVWDCCafOSuSDJiKZ8IxylFm0NvciR/XtTy72+d+zLxvAhaFvkaGs3Pgkzi
+         W30yCMg3qoO7hPjUFp14kIaUmLlwC3x3HZ3K81rixrBv8C8DJB/rUXiDRvTTUilmhmfu
+         K7z5DEhp0w2tVNL5h9/cBcNABBE39TDMxTgIYW5wWy2HmtcQiN2luK07upBp26mM/JhF
+         0a4TTo7K3Q5DFxWg2SueOo94sgl9eAea4OK2v19PQq+K1ZWkn6PY/KvDqWNNy+k7uFEW
+         3RxCEbvMawQACTT4RybKlVcvYNC0IS47cw4bJqgmOppvdLRRm1ah0BpJsGNG8KN3+Htw
+         u7cA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/u7kcraNHuAzpF/FlOTnk1+soLNkuOEC/f42ZPPrEbk=;
+        b=yM5sPB/NIxHiSs0Xbtj27i3sjsETcXWtnXFUC2czNtkVDSajtLxfckitnhsEFUAbOp
+         jGg+Wv8sjY7ZnwLvGDWkPo5kFTv7Z58JRCvynWciq5s1CXlVSC4942RpmOLOSsJAYbEV
+         YdHkiMN/ylISyTlXVVrLAunP5fuSobN1zsQy/QI7feJewjQJhSOtqR1TvN1s+zugQQUw
+         8b9epyMt9HN8z4bAug7ellrnxUbsY4QUG8NLNVCvmZKL1ht5o4oJ+7bSnrDKyZyztWy+
+         00TKARKqf8nDYEhBZGFJ6EFYvIAR3wZvuSS9HCRGqWrKF/9mC+LYZdShzydqvpa4uIa9
+         lWGQ==
+X-Gm-Message-State: AO0yUKW5RUgSwtm0Gid/0GFwCiSd7+wu96bBIZrDNEVBh+xYipVoom1n
+        WINx8tysmxlycvXQwWnFZRGS8rDishhDx9dt60RECA==
+X-Google-Smtp-Source: AK7set/HhJA6O999jEKxuSb+jTxgWChM9BZJReaCpewmHhoYg4gKWAdlzKzOlF3VDwnI254VGPV3c2eMDaeyUIbwOL8=
+X-Received: by 2002:a17:906:1653:b0:88a:7cf5:5d33 with SMTP id
+ n19-20020a170906165300b0088a7cf55d33mr1571201ejd.100.1675310583189; Wed, 01
+ Feb 2023 20:03:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1675254998-4951-3-git-send-email-yangtiezhu@loongson.cn>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230201231250.3806412-1-atishp@rivosinc.com> <20230201231250.3806412-8-atishp@rivosinc.com>
+In-Reply-To: <20230201231250.3806412-8-atishp@rivosinc.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Thu, 2 Feb 2023 09:32:52 +0530
+Message-ID: <CAAhSdy2CegXrUBsbLJtXZ3yGwxSPAbp=W_iW-_FuD1e1tkZM2g@mail.gmail.com>
+Subject: Re: [PATCH v4 07/14] RISC-V: KVM: Add skeleton support for perf
+To:     Atish Patra <atishp@rivosinc.com>
+Cc:     linux-kernel@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Eric Lin <eric.lin@sifive.com>, Guo Ren <guoren@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Will Deacon <will@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tiezhu,
+On Thu, Feb 2, 2023 at 4:42 AM Atish Patra <atishp@rivosinc.com> wrote:
+>
+> This patch only adds barebone structure of perf implementation. Most of
+> the function returns zero at this point and will be implemented
+> fully in the future.
+>
+> Signed-off-by: Atish Patra <atishp@rivosinc.com>
 
-Thank you for the patch! Yet something to improve:
+Looks good to me.
 
-[auto build test ERROR on bpf-next/master]
+Reviewed-by: Anup Patel <anup@brainfault.org>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Tiezhu-Yang/bpf-Add-new-macro-BPF_ALU32-and-BPF_JMP64/20230201-203836
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/1675254998-4951-3-git-send-email-yangtiezhu%40loongson.cn
-patch subject: [PATCH bpf-next 2/4] bpf: treewide: Clean up BPF_ALU and BPF_JMP
-config: i386-randconfig-a016-20230130 (https://download.01.org/0day-ci/archive/20230202/202302021105.HU4McFMJ-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/9955f957cb218f711161ac710656be1164eaa3a3
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Tiezhu-Yang/bpf-Add-new-macro-BPF_ALU32-and-BPF_JMP64/20230201-203836
-        git checkout 9955f957cb218f711161ac710656be1164eaa3a3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash samples/
+Regards,
+Anup
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> samples/seccomp/bpf-fancy.c:38:3: error: use of undeclared identifier 'BPF_JMP64'
-                   SYSCALL(__NR_exit, ALLOW),
-                   ^
-   samples/seccomp/bpf-helper.h:56:11: note: expanded from macro 'SYSCALL'
-           BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, (nr), 0, 1), \
-                    ^
-   samples/seccomp/bpf-fancy.c:39:3: error: use of undeclared identifier 'BPF_JMP64'
-                   SYSCALL(__NR_exit_group, ALLOW),
-                   ^
-   samples/seccomp/bpf-helper.h:56:11: note: expanded from macro 'SYSCALL'
-           BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, (nr), 0, 1), \
-                    ^
-   samples/seccomp/bpf-fancy.c:40:3: error: use of undeclared identifier 'BPF_JMP64'
-                   SYSCALL(__NR_write, JUMP(&l, write_fd)),
-                   ^
-   samples/seccomp/bpf-helper.h:56:11: note: expanded from macro 'SYSCALL'
-           BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, (nr), 0, 1), \
-                    ^
-   samples/seccomp/bpf-fancy.c:40:23: error: use of undeclared identifier 'BPF_JMP64'
-                   SYSCALL(__NR_write, JUMP(&l, write_fd)),
-                                       ^
-   samples/seccomp/bpf-helper.h:50:11: note: expanded from macro 'JUMP'
-           BPF_JUMP(BPF_JMP64+BPF_JA, FIND_LABEL((labels), (label)), \
-                    ^
-   samples/seccomp/bpf-fancy.c:41:3: error: use of undeclared identifier 'BPF_JMP64'
-                   SYSCALL(__NR_read, JUMP(&l, read)),
-                   ^
-   samples/seccomp/bpf-helper.h:56:11: note: expanded from macro 'SYSCALL'
-           BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, (nr), 0, 1), \
-                    ^
-   samples/seccomp/bpf-fancy.c:41:22: error: use of undeclared identifier 'BPF_JMP64'
-                   SYSCALL(__NR_read, JUMP(&l, read)),
-                                      ^
-   samples/seccomp/bpf-helper.h:50:11: note: expanded from macro 'JUMP'
-           BPF_JUMP(BPF_JMP64+BPF_JA, FIND_LABEL((labels), (label)), \
-                    ^
-   samples/seccomp/bpf-fancy.c:44:3: error: use of undeclared identifier 'BPF_JMP64'
-                   LABEL(&l, read),
-                   ^
-   samples/seccomp/bpf-helper.h:53:11: note: expanded from macro 'LABEL'
-           BPF_JUMP(BPF_JMP64+BPF_JA, FIND_LABEL((labels), (label)), \
-                    ^
-   samples/seccomp/bpf-fancy.c:46:3: error: use of undeclared identifier 'BPF_JMP64'
-                   JNE(STDIN_FILENO, DENY),
-                   ^
-   samples/seccomp/bpf-helper.h:77:20: note: expanded from macro 'JNE'
-   #define JNE(x, jt) JNE32(x, EXPAND(jt))
-                      ^
-   samples/seccomp/bpf-helper.h:154:11: note: expanded from macro 'JNE32'
-           BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, (value), 1, 0), \
-                    ^
-   samples/seccomp/bpf-fancy.c:48:3: error: use of undeclared identifier 'BPF_JMP64'
-                   JNE((unsigned long)buf, DENY),
-                   ^
-   samples/seccomp/bpf-helper.h:77:20: note: expanded from macro 'JNE'
-   #define JNE(x, jt) JNE32(x, EXPAND(jt))
-                      ^
-   samples/seccomp/bpf-helper.h:154:11: note: expanded from macro 'JNE32'
-           BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, (value), 1, 0), \
-                    ^
-   samples/seccomp/bpf-fancy.c:50:3: error: use of undeclared identifier 'BPF_JMP64'
-                   JGE(sizeof(buf), DENY),
-                   ^
-   samples/seccomp/bpf-helper.h:80:20: note: expanded from macro 'JGE'
-   #define JGE(x, jt) JGE32(x, EXPAND(jt))
-                      ^
-   samples/seccomp/bpf-helper.h:162:11: note: expanded from macro 'JGE32'
-           BPF_JUMP(BPF_JMP64+BPF_JGE+BPF_K, (value), 0, 1), \
-                    ^
-   samples/seccomp/bpf-fancy.c:53:3: error: use of undeclared identifier 'BPF_JMP64'
-                   LABEL(&l, write_fd),
-                   ^
-   samples/seccomp/bpf-helper.h:53:11: note: expanded from macro 'LABEL'
-           BPF_JUMP(BPF_JMP64+BPF_JA, FIND_LABEL((labels), (label)), \
-                    ^
-   samples/seccomp/bpf-fancy.c:55:3: error: use of undeclared identifier 'BPF_JMP64'
-                   JEQ(STDOUT_FILENO, JUMP(&l, write_buf)),
-                   ^
-   samples/seccomp/bpf-helper.h:76:20: note: expanded from macro 'JEQ'
-   #define JEQ(x, jt) JEQ32(x, EXPAND(jt))
-                      ^
-   samples/seccomp/bpf-helper.h:150:11: note: expanded from macro 'JEQ32'
-           BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, (value), 0, 1), \
-                    ^
-   samples/seccomp/bpf-fancy.c:55:22: error: use of undeclared identifier 'BPF_JMP64'
-                   JEQ(STDOUT_FILENO, JUMP(&l, write_buf)),
-                                      ^
-   samples/seccomp/bpf-helper.h:50:11: note: expanded from macro 'JUMP'
-           BPF_JUMP(BPF_JMP64+BPF_JA, FIND_LABEL((labels), (label)), \
-                    ^
-   samples/seccomp/bpf-fancy.c:56:3: error: use of undeclared identifier 'BPF_JMP64'
-                   JEQ(STDERR_FILENO, JUMP(&l, write_buf)),
-                   ^
-   samples/seccomp/bpf-helper.h:76:20: note: expanded from macro 'JEQ'
-   #define JEQ(x, jt) JEQ32(x, EXPAND(jt))
-                      ^
-   samples/seccomp/bpf-helper.h:150:11: note: expanded from macro 'JEQ32'
-           BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, (value), 0, 1), \
-                    ^
-   samples/seccomp/bpf-fancy.c:56:22: error: use of undeclared identifier 'BPF_JMP64'
-                   JEQ(STDERR_FILENO, JUMP(&l, write_buf)),
---
->> samples/seccomp/bpf-helper.c:33:23: error: use of undeclared identifier 'BPF_JMP64'
-                   if (instr->code != (BPF_JMP64+BPF_JA))
-                                       ^
-   1 error generated.
---
->> samples/seccomp/dropper.c:33:12: error: use of undeclared identifier 'BPF_JMP64'
-                   BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, arch, 0, 3),
-                            ^
-   samples/seccomp/dropper.c:36:12: error: use of undeclared identifier 'BPF_JMP64'
-                   BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, nr, 0, 1),
-                            ^
->> samples/seccomp/dropper.c:42:33: error: invalid application of 'sizeof' to an incomplete type 'struct sock_filter[]'
-                   .len = (unsigned short)(sizeof(filter)/sizeof(filter[0])),
-                                                 ^~~~~~~~
-   3 errors generated.
---
->> samples/seccomp/bpf-direct.c:117:12: error: use of undeclared identifier 'BPF_JMP64'
-                   BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, __NR_rt_sigreturn, 0, 1),
-                            ^
-   samples/seccomp/bpf-direct.c:120:12: error: use of undeclared identifier 'BPF_JMP64'
-                   BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, __NR_sigreturn, 0, 1),
-                            ^
-   samples/seccomp/bpf-direct.c:123:12: error: use of undeclared identifier 'BPF_JMP64'
-                   BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, __NR_exit_group, 0, 1),
-                            ^
-   samples/seccomp/bpf-direct.c:125:12: error: use of undeclared identifier 'BPF_JMP64'
-                   BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, __NR_exit, 0, 1),
-                            ^
-   samples/seccomp/bpf-direct.c:127:12: error: use of undeclared identifier 'BPF_JMP64'
-                   BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, __NR_read, 1, 0),
-                            ^
-   samples/seccomp/bpf-direct.c:128:12: error: use of undeclared identifier 'BPF_JMP64'
-                   BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, __NR_write, 3, 2),
-                            ^
-   samples/seccomp/bpf-direct.c:132:12: error: use of undeclared identifier 'BPF_JMP64'
-                   BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, STDIN_FILENO, 4, 0),
-                            ^
-   samples/seccomp/bpf-direct.c:137:12: error: use of undeclared identifier 'BPF_JMP64'
-                   BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, STDOUT_FILENO, 1, 0),
-                            ^
-   samples/seccomp/bpf-direct.c:139:12: error: use of undeclared identifier 'BPF_JMP64'
-                   BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, STDERR_FILENO, 1, 2),
-                            ^
->> samples/seccomp/bpf-direct.c:146:33: error: invalid application of 'sizeof' to an incomplete type 'struct sock_filter[]'
-                   .len = (unsigned short)(sizeof(filter)/sizeof(filter[0])),
-                                                 ^~~~~~~~
-   10 errors generated.
---
->> samples/seccomp/user-trap.c:91:12: error: use of undeclared identifier 'BPF_JMP64'
-                   BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, nr, 0, 1),
-                            ^
->> samples/seccomp/user-trap.c:97:26: error: invalid application of 'sizeof' to an incomplete type 'struct sock_filter[]'
-                   .len = (unsigned short)ARRAY_SIZE(filter),
-                                          ^~~~~~~~~~~~~~~~~~
-   samples/seccomp/user-trap.c:24:30: note: expanded from macro 'ARRAY_SIZE'
-   #define ARRAY_SIZE(x) (sizeof(x) / sizeof(*(x)))
-                                ^~~
-   2 errors generated.
-
-
-vim +/BPF_JMP64 +38 samples/seccomp/bpf-fancy.c
-
-8ac270d1e29f042 Will Drewry 2012-04-12  26  
-8ac270d1e29f042 Will Drewry 2012-04-12  27  int main(int argc, char **argv)
-8ac270d1e29f042 Will Drewry 2012-04-12  28  {
-3a9af0bd34410a2 Kees Cook   2015-02-17  29  	struct bpf_labels l = {
-3a9af0bd34410a2 Kees Cook   2015-02-17  30  		.count = 0,
-3a9af0bd34410a2 Kees Cook   2015-02-17  31  	};
-8ac270d1e29f042 Will Drewry 2012-04-12  32  	static const char msg1[] = "Please type something: ";
-8ac270d1e29f042 Will Drewry 2012-04-12  33  	static const char msg2[] = "You typed: ";
-8ac270d1e29f042 Will Drewry 2012-04-12  34  	char buf[256];
-8ac270d1e29f042 Will Drewry 2012-04-12  35  	struct sock_filter filter[] = {
-8ac270d1e29f042 Will Drewry 2012-04-12  36  		/* TODO: LOAD_SYSCALL_NR(arch) and enforce an arch */
-8ac270d1e29f042 Will Drewry 2012-04-12  37  		LOAD_SYSCALL_NR,
-8ac270d1e29f042 Will Drewry 2012-04-12 @38  		SYSCALL(__NR_exit, ALLOW),
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> ---
+>  arch/riscv/include/asm/kvm_host.h     |   4 +
+>  arch/riscv/include/asm/kvm_vcpu_pmu.h |  78 +++++++++++++++
+>  arch/riscv/kvm/Makefile               |   1 +
+>  arch/riscv/kvm/vcpu.c                 |   7 ++
+>  arch/riscv/kvm/vcpu_pmu.c             | 136 ++++++++++++++++++++++++++
+>  5 files changed, 226 insertions(+)
+>  create mode 100644 arch/riscv/include/asm/kvm_vcpu_pmu.h
+>  create mode 100644 arch/riscv/kvm/vcpu_pmu.c
+>
+> diff --git a/arch/riscv/include/asm/kvm_host.h b/arch/riscv/include/asm/kvm_host.h
+> index 93f43a3..b90be9a 100644
+> --- a/arch/riscv/include/asm/kvm_host.h
+> +++ b/arch/riscv/include/asm/kvm_host.h
+> @@ -18,6 +18,7 @@
+>  #include <asm/kvm_vcpu_insn.h>
+>  #include <asm/kvm_vcpu_sbi.h>
+>  #include <asm/kvm_vcpu_timer.h>
+> +#include <asm/kvm_vcpu_pmu.h>
+>
+>  #define KVM_MAX_VCPUS                  1024
+>
+> @@ -228,6 +229,9 @@ struct kvm_vcpu_arch {
+>
+>         /* Don't run the VCPU (blocked) */
+>         bool pause;
+> +
+> +       /* Performance monitoring context */
+> +       struct kvm_pmu pmu_context;
+>  };
+>
+>  static inline void kvm_arch_hardware_unsetup(void) {}
+> diff --git a/arch/riscv/include/asm/kvm_vcpu_pmu.h b/arch/riscv/include/asm/kvm_vcpu_pmu.h
+> new file mode 100644
+> index 0000000..e2b4038
+> --- /dev/null
+> +++ b/arch/riscv/include/asm/kvm_vcpu_pmu.h
+> @@ -0,0 +1,78 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (c) 2023 Rivos Inc
+> + *
+> + * Authors:
+> + *     Atish Patra <atishp@rivosinc.com>
+> + */
+> +
+> +#ifndef __KVM_VCPU_RISCV_PMU_H
+> +#define __KVM_VCPU_RISCV_PMU_H
+> +
+> +#include <linux/perf/riscv_pmu.h>
+> +#include <asm/kvm_vcpu_sbi.h>
+> +#include <asm/sbi.h>
+> +
+> +#ifdef CONFIG_RISCV_PMU_SBI
+> +#define RISCV_KVM_MAX_FW_CTRS  32
+> +
+> +#if RISCV_KVM_MAX_FW_CTRS > 32
+> +#error "Maximum firmware counter can't exceed 32 without increasing the RISCV_MAX_COUNTERS"
+> +#endif
+> +
+> +#define RISCV_MAX_COUNTERS      64
+> +
+> +/* Per virtual pmu counter data */
+> +struct kvm_pmc {
+> +       u8 idx;
+> +       struct perf_event *perf_event;
+> +       uint64_t counter_val;
+> +       union sbi_pmu_ctr_info cinfo;
+> +       /* Event monitoring status */
+> +       bool started;
+> +};
+> +
+> +/* PMU data structure per vcpu */
+> +struct kvm_pmu {
+> +       struct kvm_pmc pmc[RISCV_MAX_COUNTERS];
+> +       /* Number of the virtual firmware counters available */
+> +       int num_fw_ctrs;
+> +       /* Number of the virtual hardware counters available */
+> +       int num_hw_ctrs;
+> +       /* A flag to indicate that pmu initialization is done */
+> +       bool init_done;
+> +       /* Bit map of all the virtual counter used */
+> +       DECLARE_BITMAP(pmc_in_use, RISCV_MAX_COUNTERS);
+> +};
+> +
+> +#define vcpu_to_pmu(vcpu) (&(vcpu)->arch.pmu_context)
+> +#define pmu_to_vcpu(pmu)  (container_of((pmu), struct kvm_vcpu, arch.pmu_context))
+> +
+> +int kvm_riscv_vcpu_pmu_num_ctrs(struct kvm_vcpu *vcpu, struct kvm_vcpu_sbi_return *retdata);
+> +int kvm_riscv_vcpu_pmu_ctr_info(struct kvm_vcpu *vcpu, unsigned long cidx,
+> +                               struct kvm_vcpu_sbi_return *retdata);
+> +int kvm_riscv_vcpu_pmu_ctr_start(struct kvm_vcpu *vcpu, unsigned long ctr_base,
+> +                                unsigned long ctr_mask, unsigned long flag, uint64_t ival,
+> +                                struct kvm_vcpu_sbi_return *retdata);
+> +int kvm_riscv_vcpu_pmu_ctr_stop(struct kvm_vcpu *vcpu, unsigned long ctr_base,
+> +                               unsigned long ctr_mask, unsigned long flag,
+> +                               struct kvm_vcpu_sbi_return *retdata);
+> +int kvm_riscv_vcpu_pmu_ctr_cfg_match(struct kvm_vcpu *vcpu, unsigned long ctr_base,
+> +                                    unsigned long ctr_mask, unsigned long flag,
+> +                                    unsigned long eidx, uint64_t evtdata,
+> +                                    struct kvm_vcpu_sbi_return *retdata);
+> +int kvm_riscv_vcpu_pmu_ctr_read(struct kvm_vcpu *vcpu, unsigned long cidx,
+> +                               struct kvm_vcpu_sbi_return *retdata);
+> +void kvm_riscv_vcpu_pmu_init(struct kvm_vcpu *vcpu);
+> +void kvm_riscv_vcpu_pmu_deinit(struct kvm_vcpu *vcpu);
+> +void kvm_riscv_vcpu_pmu_reset(struct kvm_vcpu *vcpu);
+> +
+> +#else
+> +struct kvm_pmu {
+> +};
+> +
+> +static inline void kvm_riscv_vcpu_pmu_init(struct kvm_vcpu *vcpu) {}
+> +static inline void kvm_riscv_vcpu_pmu_deinit(struct kvm_vcpu *vcpu) {}
+> +static inline void kvm_riscv_vcpu_pmu_reset(struct kvm_vcpu *vcpu) {}
+> +#endif /* CONFIG_RISCV_PMU_SBI */
+> +#endif /* !__KVM_VCPU_RISCV_PMU_H */
+> diff --git a/arch/riscv/kvm/Makefile b/arch/riscv/kvm/Makefile
+> index 019df920..5de1053 100644
+> --- a/arch/riscv/kvm/Makefile
+> +++ b/arch/riscv/kvm/Makefile
+> @@ -25,3 +25,4 @@ kvm-y += vcpu_sbi_base.o
+>  kvm-y += vcpu_sbi_replace.o
+>  kvm-y += vcpu_sbi_hsm.o
+>  kvm-y += vcpu_timer.o
+> +kvm-$(CONFIG_RISCV_PMU_SBI) += vcpu_pmu.o
+> diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
+> index 7c08567..7d010b0 100644
+> --- a/arch/riscv/kvm/vcpu.c
+> +++ b/arch/riscv/kvm/vcpu.c
+> @@ -138,6 +138,8 @@ static void kvm_riscv_reset_vcpu(struct kvm_vcpu *vcpu)
+>         WRITE_ONCE(vcpu->arch.irqs_pending, 0);
+>         WRITE_ONCE(vcpu->arch.irqs_pending_mask, 0);
+>
+> +       kvm_riscv_vcpu_pmu_reset(vcpu);
+> +
+>         vcpu->arch.hfence_head = 0;
+>         vcpu->arch.hfence_tail = 0;
+>         memset(vcpu->arch.hfence_queue, 0, sizeof(vcpu->arch.hfence_queue));
+> @@ -194,6 +196,9 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
+>         /* Setup VCPU timer */
+>         kvm_riscv_vcpu_timer_init(vcpu);
+>
+> +       /* setup performance monitoring */
+> +       kvm_riscv_vcpu_pmu_init(vcpu);
+> +
+>         /* Reset VCPU */
+>         kvm_riscv_reset_vcpu(vcpu);
+>
+> @@ -216,6 +221,8 @@ void kvm_arch_vcpu_destroy(struct kvm_vcpu *vcpu)
+>         /* Cleanup VCPU timer */
+>         kvm_riscv_vcpu_timer_deinit(vcpu);
+>
+> +       kvm_riscv_vcpu_pmu_deinit(vcpu);
+> +
+>         /* Free unused pages pre-allocated for G-stage page table mappings */
+>         kvm_mmu_free_memory_cache(&vcpu->arch.mmu_page_cache);
+>  }
+> diff --git a/arch/riscv/kvm/vcpu_pmu.c b/arch/riscv/kvm/vcpu_pmu.c
+> new file mode 100644
+> index 0000000..2dad37f
+> --- /dev/null
+> +++ b/arch/riscv/kvm/vcpu_pmu.c
+> @@ -0,0 +1,136 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2023 Rivos Inc
+> + *
+> + * Authors:
+> + *     Atish Patra <atishp@rivosinc.com>
+> + */
+> +
+> +#include <linux/errno.h>
+> +#include <linux/err.h>
+> +#include <linux/kvm_host.h>
+> +#include <linux/perf/riscv_pmu.h>
+> +#include <asm/csr.h>
+> +#include <asm/kvm_vcpu_sbi.h>
+> +#include <asm/kvm_vcpu_pmu.h>
+> +#include <linux/kvm_host.h>
+> +
+> +#define kvm_pmu_num_counters(pmu) ((pmu)->num_hw_ctrs + (pmu)->num_fw_ctrs)
+> +
+> +int kvm_riscv_vcpu_pmu_num_ctrs(struct kvm_vcpu *vcpu, struct kvm_vcpu_sbi_return *retdata)
+> +{
+> +       struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
+> +
+> +       retdata->out_val = kvm_pmu_num_counters(kvpmu);
+> +
+> +       return 0;
+> +}
+> +
+> +int kvm_riscv_vcpu_pmu_ctr_info(struct kvm_vcpu *vcpu, unsigned long cidx,
+> +                               struct kvm_vcpu_sbi_return *retdata)
+> +{
+> +       struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
+> +
+> +       if (cidx > RISCV_MAX_COUNTERS || cidx == 1) {
+> +               retdata->err_val = SBI_ERR_INVALID_PARAM;
+> +               return 0;
+> +       }
+> +
+> +       retdata->out_val = kvpmu->pmc[cidx].cinfo.value;
+> +
+> +       return 0;
+> +}
+> +
+> +int kvm_riscv_vcpu_pmu_ctr_start(struct kvm_vcpu *vcpu, unsigned long ctr_base,
+> +                                unsigned long ctr_mask, unsigned long flag, uint64_t ival,
+> +                                struct kvm_vcpu_sbi_return *retdata)
+> +{
+> +       /* TODO */
+> +       return 0;
+> +}
+> +
+> +int kvm_riscv_vcpu_pmu_ctr_stop(struct kvm_vcpu *vcpu, unsigned long ctr_base,
+> +                               unsigned long ctr_mask, unsigned long flag,
+> +                               struct kvm_vcpu_sbi_return *retdata)
+> +{
+> +       /* TODO */
+> +       return 0;
+> +}
+> +
+> +int kvm_riscv_vcpu_pmu_ctr_cfg_match(struct kvm_vcpu *vcpu, unsigned long ctr_base,
+> +                                    unsigned long ctr_mask, unsigned long flag,
+> +                                    unsigned long eidx, uint64_t evtdata,
+> +                                    struct kvm_vcpu_sbi_return *retdata)
+> +{
+> +       /* TODO */
+> +       return 0;
+> +}
+> +
+> +int kvm_riscv_vcpu_pmu_ctr_read(struct kvm_vcpu *vcpu, unsigned long cidx,
+> +                               struct kvm_vcpu_sbi_return *retdata)
+> +{
+> +       /* TODO */
+> +       return 0;
+> +}
+> +
+> +void kvm_riscv_vcpu_pmu_init(struct kvm_vcpu *vcpu)
+> +{
+> +       int i = 0, ret, num_hw_ctrs = 0, hpm_width = 0;
+> +       struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
+> +       struct kvm_pmc *pmc;
+> +
+> +       ret = riscv_pmu_get_hpm_info(&hpm_width, &num_hw_ctrs);
+> +       if (ret < 0 || !hpm_width || !num_hw_ctrs)
+> +               return;
+> +
+> +       /*
+> +        * It is guranteed that RISCV_KVM_MAX_FW_CTRS can't exceed 32 as
+> +        * that may exceed total number of counters more than RISCV_MAX_COUNTERS
+> +        */
+> +       kvpmu->num_hw_ctrs = num_hw_ctrs;
+> +       kvpmu->num_fw_ctrs = RISCV_KVM_MAX_FW_CTRS;
+> +
+> +       /*
+> +        * There is no correlation between the logical hardware counter and virtual counters.
+> +        * However, we need to encode a hpmcounter CSR in the counter info field so that
+> +        * KVM can trap n emulate the read. This works well in the migration use case as
+> +        * KVM doesn't care if the actual hpmcounter is available in the hardware or not.
+> +        */
+> +       for (i = 0; i < kvm_pmu_num_counters(kvpmu); i++) {
+> +               /* TIME CSR shouldn't be read from perf interface */
+> +               if (i == 1)
+> +                       continue;
+> +               pmc = &kvpmu->pmc[i];
+> +               pmc->idx = i;
+> +               if (i < kvpmu->num_hw_ctrs) {
+> +                       pmc->cinfo.type = SBI_PMU_CTR_TYPE_HW;
+> +                       if (i < 3)
+> +                               /* CY, IR counters */
+> +                               pmc->cinfo.width = 63;
+> +                       else
+> +                               pmc->cinfo.width = hpm_width;
+> +                       /*
+> +                        * The CSR number doesn't have any relation with the logical
+> +                        * hardware counters. The CSR numbers are encoded sequentially
+> +                        * to avoid maintaining a map between the virtual counter
+> +                        * and CSR number.
+> +                        */
+> +                       pmc->cinfo.csr = CSR_CYCLE + i;
+> +               } else {
+> +                       pmc->cinfo.type = SBI_PMU_CTR_TYPE_FW;
+> +                       pmc->cinfo.width = BITS_PER_LONG - 1;
+> +               }
+> +       }
+> +
+> +       kvpmu->init_done = true;
+> +}
+> +
+> +void kvm_riscv_vcpu_pmu_deinit(struct kvm_vcpu *vcpu)
+> +{
+> +       /* TODO */
+> +}
+> +
+> +void kvm_riscv_vcpu_pmu_reset(struct kvm_vcpu *vcpu)
+> +{
+> +       kvm_riscv_vcpu_pmu_deinit(vcpu);
+> +}
+> --
+> 2.25.1
+>
