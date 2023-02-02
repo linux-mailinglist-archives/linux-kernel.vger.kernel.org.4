@@ -2,129 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AC60687660
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 08:28:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F9C7687662
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 08:32:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231463AbjBBH2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 02:28:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58650 "EHLO
+        id S231433AbjBBHcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 02:32:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbjBBH2l (ORCPT
+        with ESMTP id S229602AbjBBHcH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 02:28:41 -0500
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB8067783;
-        Wed,  1 Feb 2023 23:28:39 -0800 (PST)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id D7B7F1883955;
-        Thu,  2 Feb 2023 07:28:36 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id C6C2C250007B;
-        Thu,  2 Feb 2023 07:28:36 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id A3BBE9B403E3; Thu,  2 Feb 2023 07:28:36 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Thu, 2 Feb 2023 02:32:07 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D406C20D16
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 23:32:04 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id rm7-20020a17090b3ec700b0022c05558d22so981174pjb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 23:32:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Tmb0HvG17lR3HM/pn9ITfJlpLMo0J+0/VmIcQoXEYTo=;
+        b=LCjAFhZjfg5vRuF/JcColBokHhNiC/Gil36UGcekT2zgvnPMp5/y9enM1V+67agyh0
+         PVlupnnNQlbO8jE+LRXyzYOGbDenj7OWCvWZltA8N+7sahG05JG0KT/NIOtV4rJRsxQQ
+         5JGFSt04Ty5S8fUxAROkQs6yZFGRBgyHa9FrInO0CQOVSTQ5xaoeLLqXzzO+9nnqgT0k
+         XMfWc96v+FtYTSUilBn9eaHu/9OYMu5671o4Bm8buPijZF1BptXLiTx+armGHyezU4c5
+         GRuV1LfGj/BbFvzxlYjmDVB5xdp1f+KINEGGO83xGktKBqyahGxmDOlbojHSACWed8e0
+         aatQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Tmb0HvG17lR3HM/pn9ITfJlpLMo0J+0/VmIcQoXEYTo=;
+        b=S8qUqhhjS0DhxfkKmhtCiJ/7FpMF/N42wh8DRl5hTkOGKpJxUMisEiCEh4XZOA+VZt
+         mYLCUs/SZNkS6h2nLasrFZRWM4sH5dmAPexDRscXcN3ftngzID9zUL3ZO4SLgkR3LWFC
+         LDC2hfLv79eh0ZIefy3jZGv268fC96sSxo+OXB2wtzOb47VBuLoe3AhvTBeAUoAvONVJ
+         mvP6RDRicYue2KNLxdYEtZb4PY9BNIsXeMBiXRqfbOALBk835TRbwxXpsz7yNF5Ptycj
+         j3TgHhNjw1ZGipynoiNuFz7ymbjuEVGScyzt7EE4E/tmm2tlQcAIF5uf7ipGOG8dg8eR
+         TOgw==
+X-Gm-Message-State: AO0yUKUJ3nXVdIDh0Wxc7yNtudgPfKGLwXZ3Se55Xg6QSDHnK6CbxpDR
+        aKRpuEiryzN7yoBaeVvqremj3w==
+X-Google-Smtp-Source: AK7set/PZSRWBrfcMrIphz9zbcCCectwhWEzsmK0x9GFFLGtbHN0aXgwuMF6LUXiG63FL6t7JD4N7A==
+X-Received: by 2002:a05:6a20:12ce:b0:be:c80b:a8c3 with SMTP id v14-20020a056a2012ce00b000bec80ba8c3mr6997681pzg.42.1675323124311;
+        Wed, 01 Feb 2023 23:32:04 -0800 (PST)
+Received: from sumit-X1.. ([223.178.209.222])
+        by smtp.gmail.com with ESMTPSA id o17-20020a170902d4d100b00196077ba463sm12959015plg.123.2023.02.01.23.32.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Feb 2023 23:32:03 -0800 (PST)
+From:   Sumit Garg <sumit.garg@linaro.org>
+To:     will@kernel.org, catalin.marinas@arm.com
+Cc:     mark.rutland@arm.com, daniel.thompson@linaro.org,
+        dianders@chromium.org, liwei391@huawei.com, mhiramat@kernel.org,
+        maz@kernel.org, ardb@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Sumit Garg <sumit.garg@linaro.org>
+Subject: [PATCH v6 0/2] arm64: Fix pending single-step debugging issues
+Date:   Thu,  2 Feb 2023 13:01:46 +0530
+Message-Id: <20230202073148.657746-1-sumit.garg@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Date:   Thu, 02 Feb 2023 08:28:36 +0100
-From:   netdev@kapio-technology.com
-To:     Ido Schimmel <idosch@idosch.org>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
-        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?UTF-8?Q?Cl=C3=A9m?= =?UTF-8?Q?ent_L=C3=A9ger?= 
-        <clement.leger@bootlin.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>
-Subject: Re: [PATCH net-next 1/5] net: bridge: add dynamic flag to switchdev
- notifier
-In-Reply-To: <Y9qrAup9Xt/ZDEG0@shredder>
-References: <20230130173429.3577450-1-netdev@kapio-technology.com>
- <20230130173429.3577450-2-netdev@kapio-technology.com>
- <Y9qrAup9Xt/ZDEG0@shredder>
-User-Agent: Gigahost Webmail
-Message-ID: <f27dd18d9d0b7ff8b693af8a58ea8616@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_BL_SPAMCOP_NET,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-02-01 19:10, Ido Schimmel wrote:
-> On Mon, Jan 30, 2023 at 06:34:25PM +0100, Hans J. Schultz wrote:
->> To be able to add dynamic FDB entries to drivers from userspace, the
->> dynamic flag must be added when sending RTM_NEWNEIGH events down.
->> 
->> Signed-off-by: Hans J. Schultz <netdev@kapio-technology.com>
->> ---
->>  include/net/switchdev.h   | 1 +
->>  net/bridge/br_switchdev.c | 2 ++
->>  2 files changed, 3 insertions(+)
->> 
->> diff --git a/include/net/switchdev.h b/include/net/switchdev.h
->> index ca0312b78294..aaf918d4ba67 100644
->> --- a/include/net/switchdev.h
->> +++ b/include/net/switchdev.h
->> @@ -249,6 +249,7 @@ struct switchdev_notifier_fdb_info {
->>  	u8 added_by_user:1,
->>  	   is_local:1,
->>  	   locked:1,
->> +	   is_dyn:1,
->>  	   offloaded:1;
->>  };
->> 
->> diff --git a/net/bridge/br_switchdev.c b/net/bridge/br_switchdev.c
->> index 7eb6fd5bb917..4420fcbbfdb2 100644
->> --- a/net/bridge/br_switchdev.c
->> +++ b/net/bridge/br_switchdev.c
->> @@ -136,6 +136,8 @@ static void br_switchdev_fdb_populate(struct 
->> net_bridge *br,
->>  	item->added_by_user = test_bit(BR_FDB_ADDED_BY_USER, &fdb->flags);
->>  	item->offloaded = test_bit(BR_FDB_OFFLOADED, &fdb->flags);
->>  	item->is_local = test_bit(BR_FDB_LOCAL, &fdb->flags);
->> +	item->is_dyn = !test_bit(BR_FDB_STATIC, &fdb->flags) &&
-> 
-> Why not 'is_static' and be consistent with the bridge flag like all the
-> other fields?
-> 
-> Regardless of how you name this field, it is irrelevant for
-> 'SWITCHDEV_FDB_ADD_TO_BRIDGE' notifications that all add FDB entries
-> with the 'BR_FDB_ADDED_BY_EXT_LEARN' flag set, which makes
-> 'BR_FDB_STATIC' irrelevant.
-> 
->> +		item->added_by_user;
-> 
-> Unclear why this is needed...
-> 
+This patch-set reworks pending fixes from Wei's series [1] to make
+single-step debugging via kgdb/kdb on arm64 work as expected. There was
+a prior discussion on ML [2] regarding if we should keep the interrupts
+enabled during single-stepping. So patch #1 follows suggestion from Will
+[3] to not disable interrupts during single stepping but rather skip
+single stepping within interrupt handler.
 
-The answer to those two questions lies in my earlier correspondences 
-(with Oltean) on the RFC version.
+[1] https://lore.kernel.org/all/20200509214159.19680-1-liwei391@huawei.com/
+[2] https://lore.kernel.org/all/CAD=FV=Voyfq3Qz0T3RY+aYWYJ0utdH=P_AweB=13rcV8GDBeyQ@mail.gmail.com/
+[3] https://lore.kernel.org/all/20200626095551.GA9312@willie-the-truck/
+
+Changes in v6:
+- Fix incorrect rescheduling check introduced by rework for v5.
+- Patch #2: s/kernel_regs_reset_single_step/kernel_rewind_single_step/
+- Collected Daniel's tags.
+
+Changes in v5:
+- Incorporated misc. comments from Mark.
+
+Changes in v4:
+- Rebased to the tip of mainline.
+- Picked up Doug's Tested-by tag.
+
+Changes in v3:
+- Reword commit descriptions as per Daniel's suggestions.
+
+Changes in v2:
+- Replace patch #1 to rather follow Will's suggestion.
+
+Sumit Garg (2):
+  arm64: entry: Skip single stepping into interrupt handlers
+  arm64: kgdb: Set PSTATE.SS to 1 to re-enable single-step
+
+ arch/arm64/include/asm/debug-monitors.h |  1 +
+ arch/arm64/kernel/debug-monitors.c      |  5 +++++
+ arch/arm64/kernel/entry-common.c        | 22 ++++++++++++++++++++--
+ arch/arm64/kernel/kgdb.c                |  2 ++
+ 4 files changed, 28 insertions(+), 2 deletions(-)
+
+-- 
+2.34.1
+
