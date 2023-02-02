@@ -2,175 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCCCE68765C
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 08:28:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AC60687660
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 08:28:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230372AbjBBH2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 02:28:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58434 "EHLO
+        id S231463AbjBBH2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 02:28:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230156AbjBBH2R (ORCPT
+        with ESMTP id S230004AbjBBH2l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 02:28:17 -0500
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2052.outbound.protection.outlook.com [40.107.95.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2EF53F2A3
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 23:28:15 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ipnGckK7wShcAorrvjhhJ+FcaD74FLasoUKRIVgWckNxcAl7VXmo8Mi3mml6cR1j9eBvYIyx/C/K7YR8FK9cEb3Gbzzqzvg1QaGhj0ahXRRVYO9ClpSR85eOp5zG01rR/T1f1QWaHbGpGDeq6p6QNZ9B8HNY/8Txfv76GbE8dhI0pZFFcIOTIvS5/zQfK63gsNSf6Li7psdhractTKoXQbD0JxcnkWIe08ERaIPooekNkFaNe+OEgYRMPXL4+1h3+cgi6HGpxMzilCXsYYMVvxbwJ1DnRp3a8wZhWNbO1i8G7DfbuWERo9YZtOnExjIC8LuMyFXQxiF17Eqi3c2EjA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vSx87uuFJZ4ISGevB8rVmAS2QW2Smi1RVMFylHUJLJs=;
- b=ONaQ7UUZwzCUCQldpJ0z88hHcWKOgAEFhk14fKx2uxXyvXJ77gQ9L51KSn0qInIBs8D8krQiwuKFTPuXcWw6zq95puSGkVMkad4meAtGcu1vT++MbV1T0brh/SbA/ZIVBPYUx0haieaObOhHdg6oXkJdvPm2Y64CUaqZh9ZVoXPXHMFESIRyVIAUqiLnTxDcoFheiQRFUKMz+29ixxZfilY8qDMbaJtFovlO8wl2T6jsK1GttoezpX3A8kG5JaWmhC5YMKU4y2SNhoPNnkhEAbwY/Vcr++2jSYc3tU9SHLxzSXOVvqObF80Ih1CJNZfa2h1mg8y0gruZzd9nsrY11w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.233) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vSx87uuFJZ4ISGevB8rVmAS2QW2Smi1RVMFylHUJLJs=;
- b=g4W2MgPkL8cl5fgQ9ZYqWNSETNonBbhq0D1YLwnj0za6mDg50fNfgtwMBXzsNWVCxr2HSDk7ED3IwroyIcVvHx0k0PeFJkxlw3BKniDwK//EwHS/en+EdOk0VF+XWqcH7LSRtDHbRYeE59sXWQBBP5xKduuth2honV135gfaLbHuGcizoZOSmyDxm61fszjZSmhWypjcjH4tf5xaSzCUz6YWUbmX27t0sAkhI//6LUA47TDOOPuPWJj5PHELXEOdKTjvfRUTag0XO8Iq9ioDsVwKvBBnhVd7mLo52E1huDnjMHeiOO2fZ/dQ1bsmJTFGMmSkBSsTgDqDLyGpYt2MSw==
-Received: from MW4PR04CA0159.namprd04.prod.outlook.com (2603:10b6:303:85::14)
- by PH7PR12MB6882.namprd12.prod.outlook.com (2603:10b6:510:1b8::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.25; Thu, 2 Feb
- 2023 07:28:13 +0000
-Received: from CO1NAM11FT093.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:85:cafe::96) by MW4PR04CA0159.outlook.office365.com
- (2603:10b6:303:85::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.27 via Frontend
- Transport; Thu, 2 Feb 2023 07:28:13 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.233) by
- CO1NAM11FT093.mail.protection.outlook.com (10.13.175.59) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6064.27 via Frontend Transport; Thu, 2 Feb 2023 07:28:13 +0000
-Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
- (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 1 Feb 2023
- 23:28:07 -0800
-Received: from drhqmail201.nvidia.com (10.126.190.180) by
- drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Wed, 1 Feb 2023 23:28:07 -0800
-Received: from Asurada-Nvidia (10.127.8.11) by mail.nvidia.com
- (10.126.190.180) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36 via Frontend
- Transport; Wed, 1 Feb 2023 23:28:07 -0800
-Date:   Wed, 1 Feb 2023 23:28:05 -0800
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-CC:     <kevin.tian@intel.com>, <yi.l.liu@intel.com>,
-        <iommu@lists.linux.dev>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/3] iommufd: Add devices_users to track the
- hw_pagetable usage by device
-Message-ID: <Y9tmBW/wnZJ0JyBk@Asurada-Nvidia>
-References: <Y9gfbx/fszb0aTJn@nvidia.com>
- <Y9gi0UaE1PlKVzmn@Asurada-Nvidia>
- <Y9gqFwDNd3VKQvC3@nvidia.com>
- <Y9oNSUbDe1YOTj+b@Asurada-Nvidia>
- <Y9qK3nJHjU4Bvxaf@nvidia.com>
- <Y9qlb0SZWEpJs0v1@Asurada-Nvidia>
- <Y9qxdinaS6anoWhH@nvidia.com>
- <Y9q8llC0JVokHLf7@Asurada-Nvidia>
- <Y9rE6L8Nr0xShiKy@nvidia.com>
- <Y9rW01eROepZuMt3@Asurada-Nvidia>
+        Thu, 2 Feb 2023 02:28:41 -0500
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB8067783;
+        Wed,  1 Feb 2023 23:28:39 -0800 (PST)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id D7B7F1883955;
+        Thu,  2 Feb 2023 07:28:36 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id C6C2C250007B;
+        Thu,  2 Feb 2023 07:28:36 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id A3BBE9B403E3; Thu,  2 Feb 2023 07:28:36 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <Y9rW01eROepZuMt3@Asurada-Nvidia>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT093:EE_|PH7PR12MB6882:EE_
-X-MS-Office365-Filtering-Correlation-Id: 35fcf490-8fdd-47a1-06f4-08db04ef0b61
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: v1EU1HqTGKB8LOlyn8CT5v1qOAcP71MYDVogVD6ZDgKjti/XtY2OJIyXSr25+OEo1ymqaWmmDngzvaiTy1PmPfouM4hBis4GpHk4wCwWbCTbJfy3whFAmEqHTOKBWJBYux3NgBJreSK2opYZxPWhuuZZImwBLVLWU3s3LXWz6TMXbncSToadPxWtDv+xH1wFf+yl8PzUYt+EDbtRUfXQcCD/41O0ihdu50fjVSVK8swBG+L9VMcG9/Kuf16zoYCARTrZHgGEo1piphtRsL+htGgxo/9qb78ZFsJp+akMv3Wttj1frgwiePvBh9d9Yj/FknxGt3CzWASz1TEbf6IxZYx/+kHglHcMtHNqMz5DfZymH5Vq1mGFAz2BzxFTvj1ckBjNjEqeNTImRXC2F+NgZr9vLHeLHoVuzZ1plLWDtF8J6Zf4RLEurp+FCie5uL6dJKYaVyJ1qnSFMUlRZOfPiSve8bPfxunHOQDB10D5WhvLDcCCJoVUUxj86+/1ghl0mNwqGCnhx+gk2zy0W/WfT+r2gA8pBtFKqnCl7Xz9esALncugP7F7IMw6Ey0OIVoDGh3jmKHoP+8iFHJFeE6BgvqBn+s3WhJLROug3dVFQ7QTzUJ6jEq402a8D3j9hNuYxiKjFcv9ZQ2OPhpSkiPXB5b3tFvbSg5+aTJfm6j3hoGpZ4psZcV3V2KVTJiIKEgdNYYtiNBYpWdlwtEuoUBBwQ==
-X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(396003)(376002)(136003)(346002)(451199018)(36840700001)(46966006)(40470700004)(316002)(40480700001)(82740400003)(6636002)(54906003)(70586007)(8676002)(41300700001)(7636003)(478600001)(70206006)(4326008)(36860700001)(9686003)(26005)(186003)(40460700003)(47076005)(8936002)(336012)(55016003)(426003)(83380400001)(82310400005)(33716001)(6862004)(2906002)(5660300002)(86362001)(356005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Feb 2023 07:28:13.6722
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 35fcf490-8fdd-47a1-06f4-08db04ef0b61
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT093.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6882
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Date:   Thu, 02 Feb 2023 08:28:36 +0100
+From:   netdev@kapio-technology.com
+To:     Ido Schimmel <idosch@idosch.org>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
+        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?UTF-8?Q?Cl=C3=A9m?= =?UTF-8?Q?ent_L=C3=A9ger?= 
+        <clement.leger@bootlin.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>
+Subject: Re: [PATCH net-next 1/5] net: bridge: add dynamic flag to switchdev
+ notifier
+In-Reply-To: <Y9qrAup9Xt/ZDEG0@shredder>
+References: <20230130173429.3577450-1-netdev@kapio-technology.com>
+ <20230130173429.3577450-2-netdev@kapio-technology.com>
+ <Y9qrAup9Xt/ZDEG0@shredder>
+User-Agent: Gigahost Webmail
+Message-ID: <f27dd18d9d0b7ff8b693af8a58ea8616@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 01, 2023 at 01:18:08PM -0800, Nicolin Chen wrote:
-> On Wed, Feb 01, 2023 at 04:00:40PM -0400, Jason Gunthorpe wrote:
-> > On Wed, Feb 01, 2023 at 11:25:10AM -0800, Nicolin Chen wrote:
-> > 
-> > > The "finalise" is one of the very first lines of the attach_dev()
-> > > callback function in SMMU driver, though it might still undesirably
-> > > fail the replace().
-> > 
-> > It won't get that far.
-> > 
-> > Remember how this all works - only autodomains have the special path
-> > that allocates a domain, attaches the empty domain, and then populates
-> > it with the ioas. We made this special path specifically to accomodate
-> > the current ARM drivers, otherwise they wouldn't work at all.
+On 2023-02-01 19:10, Ido Schimmel wrote:
+> On Mon, Jan 30, 2023 at 06:34:25PM +0100, Hans J. Schultz wrote:
+>> To be able to add dynamic FDB entries to drivers from userspace, the
+>> dynamic flag must be added when sending RTM_NEWNEIGH events down.
+>> 
+>> Signed-off-by: Hans J. Schultz <netdev@kapio-technology.com>
+>> ---
+>>  include/net/switchdev.h   | 1 +
+>>  net/bridge/br_switchdev.c | 2 ++
+>>  2 files changed, 3 insertions(+)
+>> 
+>> diff --git a/include/net/switchdev.h b/include/net/switchdev.h
+>> index ca0312b78294..aaf918d4ba67 100644
+>> --- a/include/net/switchdev.h
+>> +++ b/include/net/switchdev.h
+>> @@ -249,6 +249,7 @@ struct switchdev_notifier_fdb_info {
+>>  	u8 added_by_user:1,
+>>  	   is_local:1,
+>>  	   locked:1,
+>> +	   is_dyn:1,
+>>  	   offloaded:1;
+>>  };
+>> 
+>> diff --git a/net/bridge/br_switchdev.c b/net/bridge/br_switchdev.c
+>> index 7eb6fd5bb917..4420fcbbfdb2 100644
+>> --- a/net/bridge/br_switchdev.c
+>> +++ b/net/bridge/br_switchdev.c
+>> @@ -136,6 +136,8 @@ static void br_switchdev_fdb_populate(struct 
+>> net_bridge *br,
+>>  	item->added_by_user = test_bit(BR_FDB_ADDED_BY_USER, &fdb->flags);
+>>  	item->offloaded = test_bit(BR_FDB_OFFLOADED, &fdb->flags);
+>>  	item->is_local = test_bit(BR_FDB_LOCAL, &fdb->flags);
+>> +	item->is_dyn = !test_bit(BR_FDB_STATIC, &fdb->flags) &&
 > 
-> Yes.
+> Why not 'is_static' and be consistent with the bridge flag like all the
+> other fields?
 > 
-> > replace can't do this - replace must always start out with a
-> > pre-existing hwpt that was allocated with a dedicated hwpt allocation
-> > ioctl.
-> > 
-> > Wwhen the hwpt was allocated it must be linked to the IOAS at that
-> > time, because we definately don't do defered IOAS linkage.
-> >
-> > So on ARM when you create an unfinalizes iommu_domain it cannot be
-> > added to the IOAS (because it has an empty aperture) and creation will
-> > fail, or worse, it will get added to an empty IOAS and make the IOAS
-> > permanently unusable.
+> Regardless of how you name this field, it is irrelevant for
+> 'SWITCHDEV_FDB_ADD_TO_BRIDGE' notifications that all add FDB entries
+> with the 'BR_FDB_ADDED_BY_EXT_LEARN' flag set, which makes
+> 'BR_FDB_STATIC' irrelevant.
 > 
-> IIUIC, user space might add some IOVA mappings to the hwpt/iopt,
-> before doing a replace(). If we do a deferred IOAS linkage to
-> this hwpt/iopt, it will cause a problem because we are adding
-> the reserved region for the MSI window later than IOMMU_IOAS_MAP
-> calls. Thus, "we definately don't do defered IOAS linkage".
+>> +		item->added_by_user;
 > 
-> With this justification, I think I should include my patch of
-> moving iopt_table_add/remove_domain(), in the replace series.
+> Unclear why this is needed...
+> 
 
-I just posted the replace series. But I found that the base
-line (without the nesting series) allocates iommu_domains
-always with the ->domain_alloc() op. So, we cannot actually
-move the iopt_table_add_domain() in the replace series, as I
-intended to.
-
-Yet, a great news is that our nesting series replaces the
-domain_alloc() op entirely with ->domain_alloc_user() for all
-the iommu_domain allocations, including for auto_domains. So,
-we can completely move iopt_table_add_domain() to the hwpt
-allocation function. And we don't really need a big change
-in the SMMU driver nor Robin's patch that passes in dev ptr
-to domain_alloc() op. And even this device_users refcount in
-this patch is no longer needed. It also simplifies the shared
-device locking situation, if I am not missing anything.
-
-So, in short, we'll have to wait for ->domain_alloc_user()
-patch (in the nesting series) to unblock the problem that we
-discussed above regarding the iopt_table_add_domain().
-
-Thanks
-Nic
+The answer to those two questions lies in my earlier correspondences 
+(with Oltean) on the RFC version.
