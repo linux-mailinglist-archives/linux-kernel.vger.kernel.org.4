@@ -2,92 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11FFE687731
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 09:21:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA76C687738
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 09:22:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231945AbjBBIU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 03:20:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38418 "EHLO
+        id S231932AbjBBIWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 03:22:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231821AbjBBIU4 (ORCPT
+        with ESMTP id S231665AbjBBIWR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 03:20:56 -0500
-Received: from out-198.mta1.migadu.com (out-198.mta1.migadu.com [IPv6:2001:41d0:203:375::c6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE7F84B79
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 00:20:55 -0800 (PST)
-Message-ID: <3e3fd166-6a71-cec8-7d85-6d6b2515d7f6@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1675326053;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OUivNFXjv8moUaUjEogbM+eU3r3jETmBMqQBNTfTjgA=;
-        b=iaPbxOxJv1my76gfF2mKmO3Aa7Fbl6hRurWZVKqWhtaa2av/E9JIITQE1850MUBjirL3JX
-        IlDRJBnjMVA53TvYoeUJiYGAP2Tl2iWGg3N38IFeJtYxl/letInvEZcPMXvYeI1a6h6iV1
-        rqXog+PgBIdxPG82FvTgdZJE9OA0sg8=
-Date:   Thu, 2 Feb 2023 16:20:57 +0800
+        Thu, 2 Feb 2023 03:22:17 -0500
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B0DE834BB;
+        Thu,  2 Feb 2023 00:22:13 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4P6s4b6HpTz9xFrR;
+        Thu,  2 Feb 2023 16:13:51 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwBHE1qQcttjhtrmAA--.14473S2;
+        Thu, 02 Feb 2023 09:21:48 +0100 (CET)
+Message-ID: <903062f7b2e2709ae0e4416545ffadd91c132676.camel@huaweicloud.com>
+Subject: Re: [RFC PATCH v9 10/16] dm-verity: consume root hash digest and
+ signature data via LSM hook
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Fan Wu <wufan@linux.microsoft.com>
+Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
+        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
+        axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
+        eparis@redhat.com, paul@paul-moore.com, linux-doc@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        dm-devel@redhat.com, linux-audit@redhat.com,
+        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
+        Deven Bowers <deven.desai@linux.microsoft.com>
+Date:   Thu, 02 Feb 2023 09:21:24 +0100
+In-Reply-To: <20230201232639.GB9075@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1675119451-23180-1-git-send-email-wufan@linux.microsoft.com>
+         <1675119451-23180-11-git-send-email-wufan@linux.microsoft.com>
+         <4f029a41d80d883d9b4729cbc85211955c9efe8e.camel@huaweicloud.com>
+         <20230201232639.GB9075@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Subject: Re: [PATCH RFC] RDMA/rtrs: Don't call kobject_del for srv_path->kobj
-Content-Language: en-US
-To:     "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>,
-        "haris.iqbal@ionos.com" <haris.iqbal@ionos.com>,
-        "jinpu.wang@ionos.com" <jinpu.wang@ionos.com>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>
-Cc:     "jgg@ziepe.ca" <jgg@ziepe.ca>, "leon@kernel.org" <leon@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <1675261833-2-1-git-send-email-lizhijian@fujitsu.com>
- <6bcba397-f4f1-26df-f8cd-1dbebf111932@linux.dev>
- <d1751eec-3d48-a8c9-1e3b-3263a4a043a3@fujitsu.com>
- <b82cfec2-b679-7c5a-06fe-a540fddda0f3@linux.dev>
- <fe563b74-efff-2799-ceff-af7af7bf9171@fujitsu.com>
- <42e231f5-63bb-e145-ce80-d9651a9afee1@fujitsu.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Guoqing Jiang <guoqing.jiang@linux.dev>
-In-Reply-To: <42e231f5-63bb-e145-ce80-d9651a9afee1@fujitsu.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: GxC2BwBHE1qQcttjhtrmAA--.14473S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Kw4ftFW5tw1fXF4DKr4xtFb_yoW8JF4xpF
+        1UWayYgrn5KasrGrnaya1fArWIkrWYv343Xr15Xw18CF98ur1IvF1FkFW5Za9F9r95C3WF
+        vFW0qa47Zwn8A3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAQBF1jj4huJgABsl
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 2023-02-01 at 15:26 -0800, Fan Wu wrote:
+> On Tue, Jan 31, 2023 at 02:22:01PM +0100, Roberto Sassu wrote:
+> > On Mon, 2023-01-30 at 14:57 -0800, Fan Wu wrote:
+> > > From: Deven Bowers <deven.desai@linux.microsoft.com>
+> > > 
+> > > dm-verity provides a strong guarantee of a block device's integrity. As
+> > > a generic way to check the integrity of a block device, it provides
+> > > those integrity guarantees to its higher layers, including the filesystem
+> > > level.
+> > 
+> > I think you could reuse most of is_trusted_verity_target(), in
+> > particular dm_verity_get_root_digest().
+> > 
+> > And probably, the previous patch is not necessary.
+> > 
+> > Roberto
+> > 
+> Thanks for the info. This function seems could be used to get the roothash
+> but for saving the signature we still need the hook function in the previous
+> patch.
 
+Uhm, look at the LoadPin case. It does not need to temporarily store
+the root digest in a security blob. It evaluates it directly.
 
-On 2/2/23 15:59, lizhijian@fujitsu.com wrote:
-> 6af4609c18b3 seems make senses, so i don't want to revert it entirely if possible.
->
-> I have a update for this path like below, i am no longer get problem with this new update.
->
-> index c76ba29da1e2..5adba0f754b6 100644
-> --- a/drivers/infiniband/ulp/rtrs/rtrs-srv-sysfs.c
-> +++ b/drivers/infiniband/ulp/rtrs/rtrs-srv-sysfs.c
-> @@ -312,9 +312,8 @@ void rtrs_srv_destroy_path_files(struct rtrs_srv_path *srv_path)
->    
->           if (srv_path->kobj.state_in_sysfs) {
->                   sysfs_remove_group(&srv_path->kobj, &rtrs_srv_path_attr_group);
-> -               kobject_del(&srv_path->kobj);
->                   kobject_put(&srv_path->kobj);
-> +               rtrs_srv_destroy_once_sysfs_root_folders(srv_path);
->           }
->    
-> -       rtrs_srv_destroy_once_sysfs_root_folders(srv_path);
->    }
+Well, ok, dm_verity_loadpin_is_bdev_trusted() looks for trusted digests
+in the dm_verity_loadpin_trusted_root_digests list. So, something
+equivalent needs to be made for IPE (or you just get the digest).
+However, I find not introducing new hooks and evaluating the
+information directly more efficient.
 
-Hmm, I overlooked the kobject hierarchy 😅.
-
-        err = kobject_init_and_add(&srv_path->kobj, &ktype, 
-srv->kobj_paths,
-"%s", str);
-
-Pls send a formal patch, and feel free to add my Acked-by.
-
-Thanks,
-Guoqing
-
+Roberto
 
