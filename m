@@ -2,203 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ED1968877B
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 20:21:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0998568877A
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 20:20:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233132AbjBBTU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 14:20:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51714 "EHLO
+        id S233180AbjBBTUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 14:20:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233172AbjBBTUt (ORCPT
+        with ESMTP id S233166AbjBBTUs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 14:20:49 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71E7728C5
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 11:20:38 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id o36so2239639wms.1
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 11:20:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ojpftLu9RZ48oCgsI3CXWQo5/d0TOA3DD5XLCjKPEks=;
-        b=m9MP88UsHyvffDZ28DQtkYW8c3uBiWmuQ0KqgSBzQxFNpIhNi7+zCXDF5VihN5ipMS
-         vFrIhMAr08p9dNFciboRlVDxN1Y25rdEPPhDHMwy56bfCmemWzDrEiKlSC3vBIhZiU+c
-         AYwZfAIf6b3d7R87DcMgSgNDGLU0oqpR4lbupP/QOM84xdUNbM/ZJqSwIZEJOK5YctR8
-         rbR1Nql5tQHAhHiOf5mL5+hp7lTA49NBj32jvGQzHGB1r9f3s+2L/RuT0G0MXH3RiFLw
-         LGjvrq9QaA9dHn3Lm+jZKJFQzfHeGkgBFNyLvWtVTLUEeq04jrbylnkDkac2AzB3DGhR
-         m+RQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ojpftLu9RZ48oCgsI3CXWQo5/d0TOA3DD5XLCjKPEks=;
-        b=TXLlNxENczPou3YRivfFCBJoj956jidn5v7SO4F9CQQioke9m0YRq/dIY9tcWe3DKK
-         bslrQAyQlbiY+mh6kPg2IP9BN8NA5Nmk2WRB97Z5QlKmoGlGTb2cnASwntnCbiC6LB2Z
-         dtvHPcf6nj3KlcM/Mrfei4ScKJ0nh3TvsniVwGqRPzT7pAJQSugD140lrw18mY9t5ahP
-         nckfht859Te5JNS8lP4aZsywcqsmMaytp4rQa5RlNtvJ+1WQa0LMaugGlNnTzMOw0i+3
-         Gw2tNhSXfKIjAQGPELrqfoYN553gHnIT2XggdoD17XEET7kqkb8v31cYsTnJx70JB+O7
-         Q79Q==
-X-Gm-Message-State: AO0yUKWUHrHga2KVyt8RzsF7iH4oOHAkddC+oegx8VpnVwT/xTfyb2lc
-        yGWhlT/R8JMOu5nHIoS+0aA4tA==
-X-Google-Smtp-Source: AK7set+242SpxzERxHETlXpASiklMvwzw1v1vjO/YYQTyrY6+TZBXRVrPdKw51P8bEt0fWUcreF0wg==
-X-Received: by 2002:a05:600c:3505:b0:3dc:2137:d67d with SMTP id h5-20020a05600c350500b003dc2137d67dmr7165461wmq.16.1675365637172;
-        Thu, 02 Feb 2023 11:20:37 -0800 (PST)
-Received: from airbuntu (92.40.171.177.threembb.co.uk. [92.40.171.177])
-        by smtp.gmail.com with ESMTPSA id p11-20020a05600c468b00b003dc4050c97bsm7097614wmo.3.2023.02.02.11.20.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 11:20:36 -0800 (PST)
-Date:   Thu, 2 Feb 2023 19:20:34 +0000
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>, tj@kernel.org,
-        linux-kernel@vger.kernel.org, luca.abeni@santannapisa.it,
-        claudio@evidence.eu.com, tommaso.cucinotta@santannapisa.it,
-        bristot@redhat.com, mathieu.poirier@linaro.org,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        cgroups@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
-        Quentin Perret <qperret@google.com>
-Subject: Re: [PATCH v2] sched: cpuset: Don't rebuild sched domains on
- suspend-resume
-Message-ID: <20230202192018.acposzsasdu656a6@airbuntu>
-References: <20230120194822.962958-1-qyousef@layalina.io>
- <c4c2dec6-a72b-d675-fb42-be40e384ea2c@redhat.com>
- <20230125163546.pspvigh4groiwjy7@airbuntu>
- <45e0f8ea-d229-1ae7-5c12-7f0a64c6767a@redhat.com>
- <20230130130038.2qx3pkzut6ypqdub@airbuntu>
- <253ced33-c3a8-269f-90cc-b69e66b10370@redhat.com>
- <20230130194826.rxwk4ryvpyxemflm@airbuntu>
- <17537d7f-8734-2186-b27c-f39f3110ffe5@redhat.com>
- <20230131192223.jf3aydhafpmjg5z4@airbuntu>
- <6587af4f-5012-ef33-8e0e-d6c43d662e43@redhat.com>
+        Thu, 2 Feb 2023 14:20:48 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EEDA7DBD7;
+        Thu,  2 Feb 2023 11:20:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9DF0BB827C8;
+        Thu,  2 Feb 2023 19:20:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BD2CC4339C;
+        Thu,  2 Feb 2023 19:20:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675365640;
+        bh=JMF3AP3CosyLA5m89zkgGX3JGOxiecE9dcZ7MdoTDOs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ub+f1ALxZ0mlr3pdVXVfuO4S01WUZ7wG9HvoOV6fjMc4cJgfCl2Q7xA+uPDvReDv3
+         BLpS2MQX5dkerbo70NDvIvPZipMAUsxXDQ4HgCJNK4jFeDK/mUKK9kuuwnoYjfls7/
+         rPV3aZBjQpJfWNKYPO3qTWoNAftknJCm+frFRM5wiJOyzL3gCOfo76enQV6z15TBnN
+         bcG3S82A0PphyE5feyKqtt0Hte0zYkYPp3YbndxPnrRONS+1aPkGGYIuvG2WcXmgyM
+         23AQCbRB4Bcbzy+o8jSF0dmpjwfZOkdid+GSS+G7vDFrD8rcIr+HglMm/f3N9UrRzo
+         cpS3stvMco2Eg==
+Date:   Thu, 2 Feb 2023 19:20:38 +0000
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     stable@vger.kernel.org,
+        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
+        Kees Cook <keescook@chromium.org>,
+        SeongJae Park <sj@kernel.org>,
+        Seth Jenkins <sethjenkins@google.com>,
+        Jann Horn <jannh@google.com>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5.4 00/17] Backport oops_limit to 5.4
+Message-ID: <Y9wNBjIPg93EqCdI@gmail.com>
+References: <20230202044255.128815-1-ebiggers@kernel.org>
+ <Y9vwBL2+NWtwMnA4@sashalap>
+ <Y9v3G6UantaCo29G@sashalap>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6587af4f-5012-ef33-8e0e-d6c43d662e43@redhat.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y9v3G6UantaCo29G@sashalap>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/31/23 14:33, Waiman Long wrote:
+On Thu, Feb 02, 2023 at 12:47:07PM -0500, Sasha Levin wrote:
+> On Thu, Feb 02, 2023 at 12:16:52PM -0500, Sasha Levin wrote:
+> > On Wed, Feb 01, 2023 at 08:42:38PM -0800, Eric Biggers wrote:
+> > > This series backports the patchset
+> > > "exit: Put an upper limit on how often we can oops"
+> > > (https://lore.kernel.org/linux-mm/20221117233838.give.484-kees@kernel.org/T/#u)
+> > > to 5.4, as recommended at
+> > > https://googleprojectzero.blogspot.com/2023/01/exploiting-null-dereferences-in-linux.html
+> > > This follows the backports to 5.10 and 5.15 which already released.
+> > > 
+> > > This required backporting various prerequisite patches.
+> > > 
+> > > I've tested that oops_limit and warn_limit work correctly on x86_64.
+> > 
+> > Queued up all 3 backports, thanks!
 > 
-> On 1/31/23 14:22, Qais Yousef wrote:
-> > On 01/30/23 14:57, Waiman Long wrote:
-> > > On 1/30/23 14:48, Qais Yousef wrote:
-> > > > On 01/30/23 11:29, Waiman Long wrote:
-> > > > > On 1/30/23 08:00, Qais Yousef wrote:
-> > > > > 
-> > > > >           just skip the call here if the condition is right? Like
-> > > > > 
-> > > > >                   /* rebuild sched domains if cpus_allowed has changed */
-> > > > >                   if (cpus_updated || (force_rebuild && !cpuhp_tasks_frozen)) {
-> > > > >                           force_rebuild = false;
-> > > > >                           rebuild_sched_domains();
-> > > > >                   }
-> > > > > 
-> > > > >           Still, we will need to confirm that cpuhp_tasks_frozen will be cleared
-> > > > >           outside of the suspend/resume cycle.
-> > > > > 
-> > > > >       I think it's fine to use this variable from the cpuhp callback context only.
-> > > > >       Which I think this cpuset workfn is considered an extension of.
-> > > > > 
-> > > > >       But you're right, I can't use cpuhp_tasks_frozen directly in
-> > > > >       rebuild_root_domains() as I did in v1 because it doesn't get cleared after
-> > > > >       calling the last _cpu_up().
-> > > > > 
-> > > > > That is what I suspect. So we can't use that cpuhp_tasks_frozen variable here
-> > > > > in cpuset.
-> > > > > 
-> > > > >        force_rebuild will only be set after the last cpu
-> > > > >       is brought online though - so this should happen once at the end.
-> > > > > 
-> > > > > Perhaps you can add another tracking variable for detecting if suspend/resume
-> > > > > is in progress.
-> > > > I think cpuhp_tasks_frozen is meant for that. All users who cared so far
-> > > > belonged to the cpuhp callback. I think reading it from cpuset_hotplug_workfn()
-> > > > is fine too as this function will only run as a consequence of the cpuhp
-> > > > callback AFAICS. cpuset_cpu_active() takes care of not forcing a rebuild of
-> > > > sched_domains until the last cpu becomes active - so the part of it being done
-> > > > once at the end at resume is handled too.
-> > > Well we will have to add code to clear cpuhp_tasks_frozen at the end of
-> > > resume then. We don't want to affect other callers unless we are sure that
-> > > it won't affect them.
-> > Actually I think since the cpuset_hotplug_workfn() is called later, there's
-> > a chance to race with another cpuhp operation just after resume.
-> > 
-> > Anyway. I think we don't have to use this flag. But we'd have to better distill
-> > the reasons of why we force_rebuild.
-> > 
-> > Your 2 new users are tripping me so far - do they handle errors where the shape
-> > of cpuset changes? If yes, then we must take dl accounting update into
-> > consideration for these errors.
-> The 2 new users is for the cpuset cpu partition which is used to create a
-> secondary scheduling domain and hence have to call rebuilds_sched_domains()
-> to set it up. Those should not be used that frequently.
-
-Okay, thanks. So honouring these looks important, unlike the force_rebuild on
-suspend/resume.
-
+> ... and proceeded to drop the 4.19 and 4.14 backports which fail to
+> build:
 > 
-> > 
-> > Juri, I'd still would appreciate a confirmation from you that I'm not
-> > understanding things completely wrong.
-> > 
-> > > > It's just rebuild_sched_domains() will always assume it needs to clear and
-> > > > rebuild deadline accounting - which is not true for suspend/resume case. But
-> > > > now looking at other users of rebuild_sched_domains(), others might be getting
-> > > > the hit too. For example rebuild_sched_domains_locked() is called on
-> > > > update_relax_domain_level() which AFAIU should not impact dl accounting.
-> > > > 
-> > > > FWIW, I did capture a worst case scenario of 21ms because of
-> > > > rebuild_root_domains().
-> > > > 
-> > > > /me thinks rebuild_root_domains() is a misleading name too as it just fixes
-> > > > dl accounting but not rebuild the rd itself.
-> > > > 
-> > > > What makes sense to me now is to pass whether dl accounting requires updating
-> > > > to rebuild_sched_domains() as an arg so that the caller can decide whether the
-> > > > reason can affect dl accounting.
-> > > > 
-> > > > Or maybe pull rebuild_root_domains() out of the chain and let the caller call
-> > > > it directly. And probably rename it to update_do_rd_accounting() or something.
-> > > > 
-> > > > I'll continue to dig more..
-> > > Looking forward to see that.
-> > Another thought I had is maybe worth trying to optimize the rebuild root domain
-> > process. Interestingly in my system there are no dl tasks but
-> > 
-> > 	rebuilds_sched_domains()
-> > 	  cpuset_for_each_descendant_pre()
-> > 	    update_tasks_root_domain()
-> > 	      css_task_iter_next()
-> > 	        dl_add_task_root_domain()
-> > 
-> > seems to be going through every task in the hierarchy anyway which would
-> > explain the slow down. We can have special variants to iterate through
-> > hierarchies that ever seen a dl task attached to them and a special variant to
-> > iterate through dl tasks only in a css - but I'm not sure if I'm brave enough
-> > to go down this rabbit hole :D
-> 
-> Yes, it seems like we have to check every tasks in the system to see if they
-> are dl tasks. It can be expensive if there are a large number of tasks.
-> Maybe we should track the # of dl tasks in each cgroup and skip this
-> operation if there is none.
+> mm/kasan/report.c: In function 'kasan_end_report':
+> mm/kasan/report.c:175:16: error: 'KASAN_BIT_MULTI_SHOT' undeclared (first use in this function)
+>   175 |  if (!test_bit(KASAN_BIT_MULTI_SHOT, &kasan_flags))
 
-Yep, would be nice to have, hehe.
+Thanks, I'll fix that.  I had grepped for KASAN_BIT_MULTI_SHOT to make sure
+those branches had it, but I didn't notice it was defined later in the file :-(
 
-
-Cheers
-
---
-Qais Yousef
+- Eric
