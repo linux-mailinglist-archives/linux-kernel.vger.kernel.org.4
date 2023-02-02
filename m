@@ -2,155 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AA05687F0A
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 14:45:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30458687E7F
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 14:22:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232052AbjBBNpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 08:45:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42170 "EHLO
+        id S232537AbjBBNWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 08:22:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231932AbjBBNow (ORCPT
+        with ESMTP id S232406AbjBBNV5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 08:44:52 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03D4D8494C;
-        Thu,  2 Feb 2023 05:44:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=Fi1TJSrbKBgGwiN1zPJD1jdfo6snjXyIXipDR/qIHGc=; b=AwphTew0bQENfysvJP+DBsYrQX
-        RLKgc/+928vBlWPMPqjAFKMto9KwDfsYTJx6YuQA81obTxMr6G557bFaFpIrSjpV+bjFRwVKFq8pv
-        pFZaC5Emm9jg+m8HHSijQbBSuyEnOK+8VVlc63ah4eNBLdHu4wIV8lywt/CVZrZzPRNA=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pNZtQ-003tmJ-IY; Thu, 02 Feb 2023 14:44:48 +0100
-Date:   Thu, 2 Feb 2023 14:44:48 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        michael@walle.cc
-Subject: Re: [PATCH net-next] net: micrel: Add support for lan8841 PHY
-Message-ID: <Y9u+UNHht9OAhKHv@lunn.ch>
-References: <20230202094704.175665-1-horatiu.vultur@microchip.com>
+        Thu, 2 Feb 2023 08:21:57 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAAA58EB56;
+        Thu,  2 Feb 2023 05:21:19 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4P6zv66Ww4z4f3kKs;
+        Thu,  2 Feb 2023 21:21:06 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP3 (Coremail) with SMTP id _Ch0CgBnFCLDuNtjkVh3Cg--.20113S4;
+        Thu, 02 Feb 2023 21:21:09 +0800 (CST)
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+To:     jack@suse.cz, paolo.valente@linaro.org, axboe@kernel.dk,
+        tj@kernel.org, josef@toxicpanda.com
+Cc:     linux-block@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
+        yukuai1@huaweicloud.com, yi.zhang@huawei.com, yangerkun@huawei.com
+Subject: [PATCH -next v2] block, bfq: cleanup 'bfqg->online'
+Date:   Thu,  2 Feb 2023 21:45:04 +0800
+Message-Id: <20230202134504.2353787-1-yukuai1@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230202094704.175665-1-horatiu.vultur@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _Ch0CgBnFCLDuNtjkVh3Cg--.20113S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7CFWxZF4UWw1fKw4rWw45ZFb_yoW5JF1xpF
+        sFqF1UC3W3tFn5XFWj93WUZr10qan5C34jk3y8W390yFy7Cr1I9Fn0vw4rAFWIqFZxCFW5
+        Zr1rtrW8C3WjkFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvF14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+        Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
+        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+        0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AK
+        xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
+        fUoOJ5UUUUU
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> @@ -1172,19 +1189,18 @@ static int ksz9131_of_load_skew_values(struct phy_device *phydev,
->  #define KSZ9131RN_MMD_COMMON_CTRL_REG	2
-> +	/* 100BT Clause 40 improvenent errata */
-> +	phy_write_mmd(phydev, 28, LAN8841_ANALOG_CONTROL_1, 0x40);
-> +	phy_write_mmd(phydev, 28, LAN8841_ANALOG_CONTROL_10, 0x1);
+From: Yu Kuai <yukuai3@huawei.com>
 
-Please could you try to avoid magic numbers.
+After commit dfd6200a0954 ("blk-cgroup: support to track if policy is
+online"), there is no need to do this again in bfq.
 
-> +	/* 10M/100M Ethernet Signal Tuning Errata for Shorted-Center Tap
-> +	 * Magnetics
-> +	 */
-> +	ret = phy_read_mmd(phydev, 2, 0x2);
+However, 'pd->online' is protected by 'bfqd->lock', in order to make
+sure bfq won't see that 'pd->online' is still set after bfq_pd_offline(),
+clear it before bfq_pd_offline_() is called. This is fine because
+'pd->online' is only used in bfq policy and bfq_pd_offline() will move
+active bfqq to root cgroup anyway.
 
-KSZ9131RN_MMD_COMMON_CTRL_REG ?
+Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+---
+Changes in v2:
+ - clear 'pd->online' before calling bfq_pd_offline()
 
-> +	if (ret & BIT(14)) {
-> +		phy_write_mmd(phydev, 28,
-> +			      LAN8841_TX_LOW_I_CH_C_POWER_MANAGMENT, 0xbffc);
-> +		phy_write_mmd(phydev, 28,
-> +			      LAN8841_BTRX_POWER_DOWN, 0xaf);
-> +	}
-> +
-> +	/* LDO Adjustment errata */
-> +	phy_write_mmd(phydev, 28, LAN8841_ANALOG_CONTROL_11, 0x1000);
-> +
-> +	/* 100BT RGMII latency tuning errata */
-> +	phy_write_mmd(phydev, 1, LAN8841_ADC_CHANNEL_MASK, 0x0);
-> +	phy_write_mmd(phydev, 0, LAN8841_MMD0_REGISTER_17, 0xa);
+ block/bfq-cgroup.c  | 4 +---
+ block/bfq-iosched.h | 2 --
+ block/blk-cgroup.c  | 2 +-
+ 3 files changed, 2 insertions(+), 6 deletions(-)
 
-MDIO_MMD_PMAPMD	instead of 1.
+diff --git a/block/bfq-cgroup.c b/block/bfq-cgroup.c
+index b42956ab5550..a35136dae713 100644
+--- a/block/bfq-cgroup.c
++++ b/block/bfq-cgroup.c
+@@ -551,7 +551,6 @@ static void bfq_pd_init(struct blkg_policy_data *pd)
+ 	bfqg->bfqd = bfqd;
+ 	bfqg->active_entities = 0;
+ 	bfqg->num_queues_with_pending_reqs = 0;
+-	bfqg->online = true;
+ 	bfqg->rq_pos_tree = RB_ROOT;
+ }
+ 
+@@ -614,7 +613,7 @@ struct bfq_group *bfq_bio_bfqg(struct bfq_data *bfqd, struct bio *bio)
+ 			continue;
+ 		}
+ 		bfqg = blkg_to_bfqg(blkg);
+-		if (bfqg->online) {
++		if (bfqg->pd.online) {
+ 			bio_associate_blkg_from_css(bio, &blkg->blkcg->css);
+ 			return bfqg;
+ 		}
+@@ -985,7 +984,6 @@ static void bfq_pd_offline(struct blkg_policy_data *pd)
+ 
+ put_async_queues:
+ 	bfq_put_async_queues(bfqd, bfqg);
+-	bfqg->online = false;
+ 
+ 	spin_unlock_irqrestore(&bfqd->lock, flags);
+ 	/*
+diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
+index 75cc6a324267..69aaee52285a 100644
+--- a/block/bfq-iosched.h
++++ b/block/bfq-iosched.h
+@@ -1009,8 +1009,6 @@ struct bfq_group {
+ 
+ 	/* reference counter (see comments in bfq_bic_update_cgroup) */
+ 	refcount_t ref;
+-	/* Is bfq_group still online? */
+-	bool online;
+ 
+ 	struct bfq_entity entity;
+ 	struct bfq_sched_data sched_data;
+diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
+index cb110fc51940..a228dfe65253 100644
+--- a/block/blk-cgroup.c
++++ b/block/blk-cgroup.c
+@@ -491,9 +491,9 @@ static void blkg_destroy(struct blkcg_gq *blkg)
+ 		struct blkcg_policy *pol = blkcg_policy[i];
+ 
+ 		if (blkg->pd[i] && blkg->pd[i]->online) {
++			blkg->pd[i]->online = false;
+ 			if (pol->pd_offline_fn)
+ 				pol->pd_offline_fn(blkg->pd[i]);
+-			blkg->pd[i]->online = false;
+ 		}
+ 	}
+ 
+-- 
+2.31.1
 
-
-> +
-> +	return 0;
-> +}
-> +
-> +#define LAN8841_OUTPUT_CTRL			25
-> +#define LAN8841_OUTPUT_CTRL_INT_BUFFER		BIT(14)
-> +#define LAN8841_CTRL				31
-> +#define LAN8841_CTRL_INTR_POLARITY		BIT(14)
-> +static int lan8841_config_intr(struct phy_device *phydev)
-> +{
-> +	struct irq_data *irq_data;
-> +	int temp = 0;
-> +
-> +	irq_data = irq_get_irq_data(phydev->irq);
-> +	if (!irq_data)
-> +		return 0;
-> +
-> +	if (irqd_get_trigger_type(irq_data) & IRQ_TYPE_LEVEL_HIGH) {
-> +		/* Change polarity of the interrupt */
-> +		phy_modify(phydev, LAN8841_OUTPUT_CTRL,
-> +			   LAN8841_OUTPUT_CTRL_INT_BUFFER,
-> +			   LAN8841_OUTPUT_CTRL_INT_BUFFER);
-> +		phy_modify(phydev, LAN8841_CTRL,
-> +			   LAN8841_CTRL_INTR_POLARITY,
-> +			   LAN8841_CTRL_INTR_POLARITY);
-> +	} else {
-> +		/* It is enough to set INT buffer to open-drain because then
-> +		 * the interrupt will be active low.
-> +		 */
-> +		phy_modify(phydev, LAN8841_OUTPUT_CTRL,
-> +			   LAN8841_OUTPUT_CTRL_INT_BUFFER, 0);
-> +	}
-> +
-> +	/* enable / disable interrupts */
-> +	if (phydev->interrupts == PHY_INTERRUPT_ENABLED)
-> +		temp = LAN8814_INT_LINK;
-> +
-> +	return phy_write(phydev, LAN8814_INTC, temp);
-> +}
-> +
-> +static irqreturn_t lan8841_handle_interrupt(struct phy_device *phydev)
-> +{
-> +	int irq_status;
-> +
-> +	irq_status = phy_read(phydev, LAN8814_INTS);
-> +	if (irq_status < 0) {
-> +		phy_error(phydev);
-> +		return IRQ_NONE;
-> +	}
-> +
-> +	if (irq_status & LAN8814_INT_LINK) {
-> +		phy_trigger_machine(phydev);
-> +		return IRQ_HANDLED;
-> +	}
-> +
-> +	return IRQ_NONE;
-> +}
-> +
-> +#define LAN8841_OPERATION_MODE_STRAP_LOW_REGISTER 3
-> +#define LAN8841_OPERATION_MODE_STRAP_LOW_REGISTER_STRAP_RGMII_EN BIT(0)
-> +static int lan8841_probe(struct phy_device *phydev)
-> +{
-> +	int err;
-> +
-> +	err = kszphy_probe(phydev);
-> +	if (err)
-> +		return err;
-> +
-> +	if (phy_read_mmd(phydev, 2, LAN8841_OPERATION_MODE_STRAP_LOW_REGISTER) &
-
-MDIO_MMD_WIS ?
-
-	Andrew
