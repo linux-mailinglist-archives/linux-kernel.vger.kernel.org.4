@@ -2,211 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F04F76883CC
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 17:10:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 935436883D3
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 17:11:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231546AbjBBQK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 11:10:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49300 "EHLO
+        id S229974AbjBBQLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 11:11:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbjBBQK0 (ORCPT
+        with ESMTP id S232491AbjBBQL3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 11:10:26 -0500
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A97122112;
-        Thu,  2 Feb 2023 08:10:25 -0800 (PST)
-Received: by mail-qt1-x829.google.com with SMTP id z5so2348623qtn.8;
-        Thu, 02 Feb 2023 08:10:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+UgN8itriCu5k21j1t8HLwNK2BsKs2JF2gFNgZHnX4k=;
-        b=B/kOSS+2gaeNzEjq5Xs91kwvAsa3sb9lotmMVoHiUPlrr2mA/NUXV28isrxJlVXA1J
-         XmsxKubisR2K5JJ8g/bJ6RCJzXTmEcAAYGXz84F39T8NW3KgywQUQumHQeLgra36qZSU
-         KhHcXnD8kFzzRBcUum0LOa/YDVZeBDWeGI4HnzIxIlLQQrnDzV0WlNUk3QCdJY0i6i0u
-         eJhSeW4egLc9XBFC06L90GpP/oi/dJ6qxZhLsxHTn/xqSwzK/YgqadUQLdHrttAYP2B0
-         2/R7NRcrfXiV9Tfi2x606/jE2MrlXg/b9n0F07WVO5oEyNa4aTY2ZguS7wozVSiQDcRp
-         T60g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+UgN8itriCu5k21j1t8HLwNK2BsKs2JF2gFNgZHnX4k=;
-        b=Dsta/zu91ndsbcBcrICm4OGu+LlBdHVVGcEVkW72dv37tq+eYo4Ghr512tlSs3QCOh
-         4N3kbXhD0fUAiM+TIEkZNF1AghCGFpkaebDAHVs6b+pJtshXjRmywKa3mm/SVv+phibF
-         Ej9jxQjUts+e05fUNDiByscZe2/lc3rGwYF9fIPwHYCI7AWDYM578obwCbGbt812n8vv
-         Ro131fDdlbwzjHhD1XcsdKOIDLblBnDzHeE2yJfkjHRfEGLMyHILrR0ircVd9g4HoHB1
-         ou1xuhbvZ623pf1/wte7dl8P5vAUUR+pljf0mG3FSPXC5lY/KIYbcD4aeJ/pVfpZZ0r7
-         xPew==
-X-Gm-Message-State: AO0yUKVrt4/odls35v6tD5/IMEeePooBL12OqbR/0eNq09Qng9Zf84+w
-        3abf9OiFW9alBvkSc5PKlyM=
-X-Google-Smtp-Source: AK7set9y+6A8orJtX6tMwdAiseAV29K4ZIHGmEwmFqF5mM69HnWKogs6gqjAB2RuzAiN6vj9dID39Q==
-X-Received: by 2002:ac8:5ac2:0:b0:3b8:4e37:50ea with SMTP id d2-20020ac85ac2000000b003b84e3750eamr12697897qtd.58.1675354224733;
-        Thu, 02 Feb 2023 08:10:24 -0800 (PST)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id b4-20020a378004000000b0070736988c10sm14485459qkd.110.2023.02.02.08.10.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 08:10:23 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 4EAF727C005B;
-        Thu,  2 Feb 2023 11:10:23 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Thu, 02 Feb 2023 11:10:23 -0500
-X-ME-Sender: <xms:buDbYzDUzyKO_ynT2BM18e0MXgHsIY-gFHWCBb7fzvLNi1vw8jpqoQ>
-    <xme:buDbY5iUVg_nqiByHnCCMawpcSdoUnv5NOMHzF8ivV-vgctKTzF64Cc29ulbFs0G2
-    ezScJGsHFZ354m3zg>
-X-ME-Received: <xmr:buDbY-ks3hRnEBndqqtm-g2KYfCU6RshfrOzaiUWibmYg2Fxa7Oqj6JCU2k>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudefkedgkeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
-    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
-    htthgvrhhnpeehudfgudffffetuedtvdehueevledvhfelleeivedtgeeuhfegueeviedu
-    ffeivdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
-    gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
-    igmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:buDbY1zhoThO6r1UvGGJXsc9dSvTkpKrJvEotV1nf6GHT50Efke-qg>
-    <xmx:buDbY4RgeVJL9IVVxbxwHwfgb3FHseE1yXuN9C41NKGLcJXrtMoY9g>
-    <xmx:buDbY4ZM-xxXRAmmness5k94mzTPBRk9k1d_0Em2DID6p_2GfhV2Ng>
-    <xmx:b-DbY8aMtX1pXu3iditc_OysRtBGfKfnZtQNMC6dTYigzVdeKeBM0Q>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 2 Feb 2023 11:10:22 -0500 (EST)
-Date:   Thu, 2 Feb 2023 08:10:19 -0800
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Gary Guo <gary@garyguo.net>, Peter Zijlstra <peterz@infradead.org>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
-Subject: Re: [RFC 2/5] rust: sync: Arc: Introduces ArcInner::count()
-Message-ID: <Y9vga90K0aVfGUwW@boqun-archlinux>
-References: <20230201232244.212908-1-boqun.feng@gmail.com>
- <20230201232244.212908-3-boqun.feng@gmail.com>
- <Y9t+3u+2UcAFQc+r@hirez.programming.kicks-ass.net>
- <20230202142153.352ba479.gary@garyguo.net>
- <Y9vZu08L2WaLNJIc@kroah.com>
+        Thu, 2 Feb 2023 11:11:29 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477D66B9BA;
+        Thu,  2 Feb 2023 08:11:19 -0800 (PST)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 312EbJKm017301;
+        Thu, 2 Feb 2023 16:11:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=kLp6U+99a0FTm58M4V66rH/euSzf63BAL0NqOFS90Ws=;
+ b=KAQ/hbVRLPFIkUL2XpRKaduNxZHXAb1idu7t3o6YbnlqP8kviFlKH5c3S38GA4SaRB8b
+ /X1Ft64uUG3MCdkvRSzuavXgT9o5vfPYMKhfXVAZX/6E/JVnaepcdiDwzNEgW22tbVNR
+ gUDt/ZsM0n/2NJwgHswqQcI5TDF7anFv1LodZ6AoQTpQXwiRrlAqUPRyzlgEDVqKmWsC
+ CHNl/9s3rY9LyNtcP2wflSHvL1/nT6qegoMzJippfYuaWlqxp0oQg4kXe+wHslHy8QDo
+ iJlNzDNDq5phwb097mFSNp27g5TAFBu37rsfxq810l8Nwf1i0qc/uV3eo3SYFIUSBL35 hw== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nfqt3jy10-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Feb 2023 16:11:06 +0000
+Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 312GB5we031900
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 2 Feb 2023 16:11:05 GMT
+Received: from hu-ahari-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Thu, 2 Feb 2023 08:11:01 -0800
+From:   Anjana Hari <quic_ahari@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>
+CC:     <alim.akhtar@samsung.com>, <avri.altman@wdc.com>,
+        <bvanassche@acm.org>, <konrad.dybcio@linaro.org>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_narepall@quicinc.com>, <quic_nitirawa@quicinc.com>,
+        <quic_rampraka@quicinc.com>, Anjana Hari <quic_ahari@quicinc.com>
+Subject: [PATCH v5 0/1] scsi: ufs: Add hibernation callbacks
+Date:   Thu, 2 Feb 2023 21:40:44 +0530
+Message-ID: <20230202161045.3956-1-quic_ahari@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9vZu08L2WaLNJIc@kroah.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: SgR9sbVAiNG0W1rPZsZDNXos_aM6WuhD
+X-Proofpoint-GUID: SgR9sbVAiNG0W1rPZsZDNXos_aM6WuhD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-02_10,2023-02-02_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ bulkscore=0 adultscore=0 mlxlogscore=780 impostorscore=0
+ priorityscore=1501 mlxscore=0 phishscore=0 spamscore=0 lowpriorityscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302020144
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 04:41:47PM +0100, Greg KH wrote:
-> On Thu, Feb 02, 2023 at 02:21:53PM +0000, Gary Guo wrote:
-> > On Thu, 2 Feb 2023 10:14:06 +0100
-> > Peter Zijlstra <peterz@infradead.org> wrote:
-> > 
-> > > On Wed, Feb 01, 2023 at 03:22:41PM -0800, Boqun Feng wrote:
-> > > > This allows reading the current count of a refcount in an `ArcInner`.
-> > > > 
-> > > > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-> > > > ---
-> > > >  rust/helpers.c          | 6 ++++++
-> > > >  rust/kernel/sync/arc.rs | 9 +++++++++
-> > > >  2 files changed, 15 insertions(+)
-> > > > 
-> > > > diff --git a/rust/helpers.c b/rust/helpers.c
-> > > > index 09a4d93f9d62..afc5f1a39fef 100644
-> > > > --- a/rust/helpers.c
-> > > > +++ b/rust/helpers.c
-> > > > @@ -46,6 +46,12 @@ bool rust_helper_refcount_dec_and_test(refcount_t *r)
-> > > >  }
-> > > >  EXPORT_SYMBOL_GPL(rust_helper_refcount_dec_and_test);
-> > > >  
-> > > > +unsigned int rust_helper_refcount_read(refcount_t *r)
-> > > > +{
-> > > > +	return refcount_read(r);
-> > > > +}
-> > > > +EXPORT_SYMBOL_GPL(rust_helper_refcount_read);
-> > > > +
-> > > >  /*
-> > > >   * We use `bindgen`'s `--size_t-is-usize` option to bind the C `size_t` type
-> > > >   * as the Rust `usize` type, so we can use it in contexts where Rust
-> > > > diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
-> > > > index fc680a4a795c..fbfceaa3096e 100644
-> > > > --- a/rust/kernel/sync/arc.rs
-> > > > +++ b/rust/kernel/sync/arc.rs
-> > > > @@ -127,6 +127,15 @@ struct ArcInner<T: ?Sized> {
-> > > >      data: T,
-> > > >  }
-> > > >  
-> > > > +impl<T: ?Sized> ArcInner<T> {
-> > > > +    /// Returns the current reference count of [`ArcInner`].
-> > > > +    fn count(&self) -> u32 {
-> > > > +        // SAFETY: `self.refcount.get()` is always a valid pointer, and `refcount_read()` is a
-> > > > +        // normal atomic read (i.e. no data race) only requiring on the address is valid.
-> > > > +        unsafe { bindings::refcount_read(self.refcount.get()) }
-> > > > +    }
-> > > > +}  
-> > > 
-> > > This is completely unsafe vs concurrency. In order to enable correct
-> > > tracing of refcount manipulations we have the __refcount_*(.oldp) API.
-> > 
-> > Retrieving the reference count is safe. It's just that in many
-> > scenarios it's very hard to use the retrieved reference count
-> > correctly, because it might be concurrently changed.
-> 
-> Yes, so you really should never ever ever care about the value, and that
-> includes printing it out as it will be wrong the instant you read it.
-> 
+v5:
+-Removed extra hba->restore member introduced in previous
+patch, moved the concerned code to ufshcd_system_restore.
 
-Agreed.
+v4:
+-Addressed comments from Bart, removed runtime pm related
+code.
+-Address kernel bot compilation issues.
 
-> > But there are correct ways to use a refcount, e.g. if you own
-> > `Arc` and `.count()` returns 1, then you know that you are the
-> > exclusive owner of the `Arc` and nobody else is going to touch it.
-> 
-> But you should never know this, as it is not relevant.
-> 
-> So no, please don't allow printing out of a reference count, that will
-> only cause problems and allow people to think it is safe to do so.
-> 
+v3:
+-Address compilation issues
 
-People already do it, even in *security* code,
+v2:
+- Addressed Bart's comments
+- Moved core and host related changes to single patch
+- Note to Bart: Regrading the comment to pass "restore" as an
+argument instead of adding a new member to ufs_hba structure, adding
+new function argument in core file (ufshcd.c) is forcing us to make
+changes to other vendor files to fix the compilation errors. Hence
+we have retained our original change. Please let us know your inputs
+on this.
 
-security/keys/keyring.c:
+Initial version:
+- Adds hibernation callbacks - freeze, restore and thaw,
+	required for suspend to disk feature.
 
-	int key_link(struct key *keyring, struct key *key)
-	{
-		...
-		kenter("{%d,%d}", keyring->serial, refcount_read(&keyring->usage));
-		...
-	}
 
-Should we fix that?
+Anjana Hari (1):
+  scsi: ufs: Add hibernation callbacks
 
-Actually It is *safe* to do it, the existence of `ArcInner` proves the
-object can not be freed while reading the refcount. This is somewhat
-similar to the data_race() macro, we know there is a data race, but we
-don't care because of the way that we are going to use the value won't
-cause a problem.
+ drivers/ufs/core/ufshcd.c   | 51 +++++++++++++++++++++++++++++++++++++
+ drivers/ufs/host/ufs-qcom.c |  8 +++++-
+ include/ufs/ufshcd.h        |  4 +++
+ 3 files changed, 62 insertions(+), 1 deletion(-)
 
-What I propose is to print it in debug fmt only, anyway I'm OK to remove
-it, but I'm really confused about the reasoning here.
+-- 
+Qualcomm India Private Limited, on behalf of Qualcomm Innovation Center, Inc., is a member of Code Aurora Forum, a Linux Foundation Collaborative Project
 
-Regards,
-Boqun
-
-> Peter is right, please don't do this.
-> 
-> thanks,
-> 
-> greg k-h
