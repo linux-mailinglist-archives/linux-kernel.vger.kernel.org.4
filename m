@@ -2,85 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82F4A688595
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 18:37:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3132E68859C
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 18:38:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232182AbjBBRht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 12:37:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58306 "EHLO
+        id S232301AbjBBRiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 12:38:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232166AbjBBRhq (ORCPT
+        with ESMTP id S232217AbjBBRiJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 12:37:46 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCC8974A54
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 09:37:44 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id f16-20020a17090a9b1000b0023058bbd7b2so1916213pjp.0
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 09:37:44 -0800 (PST)
+        Thu, 2 Feb 2023 12:38:09 -0500
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE1122A22;
+        Thu,  2 Feb 2023 09:38:07 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id y19so2657126ljq.7;
+        Thu, 02 Feb 2023 09:38:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rT9lxIbE1aC6ouLgKeksCMpiSX53tsqaQ/chOF5F5DM=;
-        b=SSF/D16aUlH8isttzJP7c9uokQeid1v6qga5ijrReEho6oTeTzHdpUI7qyx4TP2066
-         FQ2Rmy9my5puz88apP1nVfqXbh5do5wpLLHxHmR+fBkQEVMMeC+XQFfLiUSicdWT6W4j
-         Kw+iGwKbVmwRADA09uBTkGY9vwEs4tO6uVmeo=
+        bh=Pu18wvor/2098cGUOM60SazY3XVfambrBIsbWzTxNr8=;
+        b=Bk7w/t2k4mB45Fer5doVPaURa09g7dbhJw9s2BkR8cwRQAivrlJKyhA/Kdp0Qf1srt
+         4YAbN/fuLmaplDGuGYCLCyPSTPrTQF7VyWxpf/FHCD46FpZ7hgX/0UYNr95gBKz/wup2
+         duJSZLd4mqFVNCEGzpTJy72YhZcNTugIpm00pZGouLKrx8MQRixFxckIsQkrgGXVPXTH
+         KvUy2WPHAuVa63tjx9phzOI7meJ9Ijz80a89tAfQ9Z3jPakXuAknX8+S5EpYty8zovZh
+         N0FRF1HAgZZhw92PawOV6mkODqdPd5NV0TMXHJigFKZZr4H8/mcJdQOC0jPupsNVq5It
+         sw0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=rT9lxIbE1aC6ouLgKeksCMpiSX53tsqaQ/chOF5F5DM=;
-        b=vdTPFQYqHKVf8Qu+gvNDt84kjTu9mDzZzft1JhNYEDU4jFlR+fWjC1veq9RZA3aZ/1
-         DXElFqhYwrxv8AKjW2tY4w2WaW44pBRXEPEeJ+yCqnTTYXvA3uWEMTKA3v7UMllkwUe+
-         cYrlHBXlJhFZLgWwjyn9BqrItSMTRznuBQU1T7w4OLkDmqwizZLlDlLvkk8L5aa+Ojfi
-         At1SvoHGAkxjODwgJuspo1ZCzyfkHSic5YuS9/SPoqFAJgxW34EksRv0H1ojqDJEmVjc
-         p19GeAe/E0sPZR1NX28hrWrNVdhYifnod+l4pFxrY+YoEcACVLsGGzuNRJ/Qn5YH6ysX
-         2eBw==
-X-Gm-Message-State: AO0yUKV3wGpSTdtzgV5yvvRLCp4HcX9gZCiZ2G/lvSis+MvqCQQygkOr
-        yadprbdu9nKrCVKbBT8VUzhWObtzqbZcZZ68aIVevA==
-X-Google-Smtp-Source: AK7set9jJjaTtddAE+vHzmZXbvQK5j0dCjR1vmVsYlKwkrY2TfxhEwHqMc5gioQc/nHfy1zMGj/DjeOsLtSOifxfOuU=
-X-Received: by 2002:a17:90a:6c62:b0:22c:445b:d81 with SMTP id
- x89-20020a17090a6c6200b0022c445b0d81mr671030pjj.104.1675359464436; Thu, 02
- Feb 2023 09:37:44 -0800 (PST)
+        bh=Pu18wvor/2098cGUOM60SazY3XVfambrBIsbWzTxNr8=;
+        b=pCUz4O+dybV4L247IGCSxvjzQiiMwoUduVJagiqh7d8h3Y3QBxcKkyGT2YOWNYrBWr
+         s5Y7XXOcVKe3Wkc9Tg/dXPrcOrXGyL4o9Hew9Tx5zuLkqN7WNOfvlXlEQYIp0AspB4N0
+         joZuNQcjeLdq7wjfDYulzYPejY0KB6oUUZEHcvyQUicRfdAzZsFCOzuX0ny43sU2aEt4
+         wPcaI8J1CvwYMI4omBOZYPUf071iPc/2ClBYiTp+z682lQxgF2CSzj4oJJ0vt+iuPwh7
+         VNPCmZHh73Dz6N4gAQcCtjeuihfxxKUsDhs6hWPGaGWFJmgyB/QlKOqBNpBgmaliVZ59
+         sVfg==
+X-Gm-Message-State: AO0yUKVC2nuKgjlNiE7Kv5+yB5lyIMKKgj403sAZ3zQGxYdKhFJd6njT
+        bphoNrRe6El1vLZy2Lp1VWi/l/jeBV+avdO3Klg=
+X-Google-Smtp-Source: AK7set9q3fCCrZR/wdr+F6ByZDjLnzGzS47BOOGjK/rvKj3YSOHJWox6kHztbQjG4aCqZPytddEKs4/NHwjssZ51PTI=
+X-Received: by 2002:a2e:5405:0:b0:290:613e:d49a with SMTP id
+ i5-20020a2e5405000000b00290613ed49amr1077923ljb.133.1675359485897; Thu, 02
+ Feb 2023 09:38:05 -0800 (PST)
 MIME-Version: 1.0
-References: <20230201163420.1579014-1-revest@chromium.org> <20230201163420.1579014-2-revest@chromium.org>
- <Y9vPAdFBJF/gKXaO@FVFF77S0Q05N.cambridge.arm.com>
-In-Reply-To: <Y9vPAdFBJF/gKXaO@FVFF77S0Q05N.cambridge.arm.com>
-From:   Florent Revest <revest@chromium.org>
-Date:   Thu, 2 Feb 2023 18:37:33 +0100
-Message-ID: <CABRcYmLrYXuP-yio0dy4WskENn81Qw2WS0ArMp=rdHuiGyjYhQ@mail.gmail.com>
-Subject: Re: [PATCH 1/8] ftrace: Replace uses of _ftrace_direct APIs with _ftrace_direct_multi
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        catalin.marinas@arm.com, will@kernel.org, rostedt@goodmis.org,
-        mhiramat@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kpsingh@kernel.org, jolsa@kernel.org,
-        xukuohai@huaweicloud.com
+References: <20230121042436.2661843-1-yury.norov@gmail.com>
+ <4dc2a367-d3b1-e73e-5f42-166e9cf84bac@gmail.com> <xhsmhv8kxh8tk.mognet@vschneid.remote.csb>
+ <4fa5d53d-d614-33b6-2d33-156281420507@gmail.com> <20230130122206.3b55a0a7@kernel.org>
+ <20230202093335.43586ecf@kernel.org>
+In-Reply-To: <20230202093335.43586ecf@kernel.org>
+From:   Yury Norov <yury.norov@gmail.com>
+Date:   Thu, 2 Feb 2023 09:37:54 -0800
+Message-ID: <CAAH8bW-JE1d97EgvaiY_-dHL8Tf585=vK_tjabUingZeCh5K2Q@mail.gmail.com>
+Subject: Re: [PATCH RESEND 0/9] sched: cpumask: improve on cpumask_local_spread()
+ locality
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Tariq Toukan <ttoukan.linux@gmail.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Barry Song <baohua@kernel.org>,
+        Ben Segall <bsegall@google.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Gal Pressman <gal@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Haniel Bristot de Oliveira <bristot@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jacob Keller <jacob.e.keller@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Lafreniere <peter@n8pjl.ca>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-crypto@vger.kernel.org, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 2, 2023 at 4:02 PM Mark Rutland <mark.rutland@arm.com> wrote:
-> Looking at samples/ftrace/, as of this patch we have a few samples that are
-> almost identical, modulo the function being traced, and some different register
-> shuffling for arguments:
+On Thu, Feb 2, 2023 at 9:33 AM Jakub Kicinski <kuba@kernel.org> wrote:
 >
-> * ftrace-direct.c and ftrace-direct-multi.c
-> * ftrace-direct-modify.c and ftrace-direct-modify
+> On Mon, 30 Jan 2023 12:22:06 -0800 Jakub Kicinski wrote:
+> > On Sun, 29 Jan 2023 10:07:58 +0200 Tariq Toukan wrote:
+> > > > Peter/Ingo, any objections to stashing this in tip/sched/core?
+> > >
+> > > Can you please look into it? So we'll have enough time to act (in
+> > > case...) during this kernel.
+> > >
+> > > We already missed one kernel...
+> >
+> > We really need this in linux-next by the end of the week. PTAL.
 >
-> ... perhaps it would be better to just delete the !multi versions ?
+> Peter, could you please take a look? Linux doesn't have an API for
+> basic, common sense IRQ distribution on AMD systems. It's important :(
 
-The multi versions hook two functions and the !multi hook just one but
-I agree that this granularity in coverage is probably just a
-maintenance burden and doesn't help with much! :)
-I'll delete the !multi in v2, as part of the patch 2 and patch 1 will
-just migrate the selftest to use the multi API.
+FWIW, it's already been in linux-next since mid-December through the
+bitmap branch, and no issues were reported so far.
+
+Thanks,
+Yury
