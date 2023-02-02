@@ -2,104 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50ED7687E81
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 14:22:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41F14687E82
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 14:22:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232425AbjBBNWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 08:22:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51878 "EHLO
+        id S231643AbjBBNWj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 08:22:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231643AbjBBNWM (ORCPT
+        with ESMTP id S231133AbjBBNWX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 08:22:12 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 708D88D409;
-        Thu,  2 Feb 2023 05:21:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=2J2GN+eHfYnJJb4luanL3FzdOaKZ0fJUF8VlKIVXn5U=; b=bb1ZE6Sgp02KlHwfuoPQ6GrHRf
-        UWYyBZttb0ZwiE/lKnLhlyw5CPgi53sAGsQ/yA6ABTTsnMLh/EalusT1ViKGaYi9EN1oUD8al5MIh
-        HeH95gvuESjcRNk8RZ0om/PFxzY4PF4CF1JJbpfwZ+odhCcjKtkuINr7BXdIy22CgCGo=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pNZWn-003tfq-LO; Thu, 02 Feb 2023 14:21:25 +0100
-Date:   Thu, 2 Feb 2023 14:21:25 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Bernhard Walle <bernhard@bwalle.de>, Wei Fang <wei.fang@nxp.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Shenwei Wang <shenwei.wang@nxp.com>,
-        Clark Wang <xiaoning.wang@nxp.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] net: fec: do not double-parse
- 'phy-reset-active-high' property
-Message-ID: <Y9u41VrbFeqjg+3n@lunn.ch>
-References: <20230201215320.528319-1-dmitry.torokhov@gmail.com>
- <20230201215320.528319-2-dmitry.torokhov@gmail.com>
- <Y9rtil2/y3ykeQoF@lunn.ch>
- <Y9r0EWOZbiBvkxj0@google.com>
- <Y9sM9ZMkvjlaFPdt@google.com>
+        Thu, 2 Feb 2023 08:22:23 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 28E5283952
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 05:22:14 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2E1CFC14;
+        Thu,  2 Feb 2023 05:22:56 -0800 (PST)
+Received: from [10.57.88.229] (unknown [10.57.88.229])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8F58A3F64C;
+        Thu,  2 Feb 2023 05:22:12 -0800 (PST)
+Message-ID: <0833e426-d03d-b856-3cb3-8fe97adbb8c1@arm.com>
+Date:   Thu, 2 Feb 2023 13:22:07 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9sM9ZMkvjlaFPdt@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] iommu/arm-smmu-v3: Enable PCI ATS in passthrough mode as
+ well
+Content-Language: en-GB
+To:     Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        iommu@lists.linux.dev, will@kernel.org, joro@8bytes.org
+Cc:     jean-philippe@linaro.org, darren@os.amperecomputing.com,
+        scott@os.amperecomputing.com
+References: <20230202124053.848792-1-gankulkarni@os.amperecomputing.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20230202124053.848792-1-gankulkarni@os.amperecomputing.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 01, 2023 at 05:08:05PM -0800, Dmitry Torokhov wrote:
-> On Wed, Feb 01, 2023 at 03:21:53PM -0800, Dmitry Torokhov wrote:
-> > On Wed, Feb 01, 2023 at 11:54:02PM +0100, Andrew Lunn wrote:
-> > > On Wed, Feb 01, 2023 at 01:53:20PM -0800, Dmitry Torokhov wrote:
-> > > > Conversion to gpiod API done in commit 468ba54bd616 ("fec: convert
-> > > > to gpio descriptor") clashed with gpiolib applying the same quirk to the
-> > > > reset GPIO polarity (introduced in commit b02c85c9458c). This results in
-> > > > the reset line being left active/device being left in reset state when
-> > > > reset line is "active low".
-> > > > 
-> > > > Remove handling of 'phy-reset-active-high' property from the driver and
-> > > > rely on gpiolib to apply needed adjustments to avoid ending up with the
-> > > > double inversion/flipped logic.
-> > > 
-> > > I searched the in tree DT files from 4.7 to 6.0. None use
-> > > phy-reset-active-high. I'm don't think it has ever had an in tree
-> > > user.
+On 2023-02-02 12:40, Ganapatrao Kulkarni wrote:
+> The current smmu-v3 driver does not enable PCI ATS for physical functions
+> of ATS capable End Points when booted in smmu bypass mode
+> (iommu.passthrough=1). This will not allow virtual functions to enable
+> ATS(even though EP supports it) while they are attached to a VM using
+> VFIO driver.
 > 
-> FTR I believe this was added in 4.6-rc1 (as 'phy-reset-active-low' in
-> first iteration by Bernhard Walle (CCed), so maybe he can tell us a bit
-> more about hardware and where it is still in service and whether this
-> quirk is still relevant.
+> This patch adds changes to enable ATS support for physical functions
+> in passthrough/bypass mode as well.
 > 
-> > > 
-> > > This property was marked deprecated Jul 18 2019. So i suggest we
-> > > completely drop it.
-> > 
-> > I'd be happy kill the quirk in gpiolibi-of.c if that is what we want to
-> > do, although DT people sometimes are pretty touchy about keeping
-> > backward compatibility.
+> Also, adding check to avoid disabling of ATS if it is not enabled,
+> to avoid unnecessary call-traces.
+> 
+> Signed-off-by: Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
+> ---
+>   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 10 +++++++---
+>   1 file changed, 7 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> index 6d5df91c5c46..5a605cb5ccef 100644
+> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> @@ -2313,11 +2313,16 @@ static void arm_smmu_enable_ats(struct arm_smmu_master *master)
+>   static void arm_smmu_disable_ats(struct arm_smmu_master *master)
+>   {
+>   	struct arm_smmu_domain *smmu_domain = master->domain;
+> +	struct pci_dev *pdev;
+>   
+>   	if (!master->ats_enabled)
+>   		return;
+>   
+> -	pci_disable_ats(to_pci_dev(master->dev));
+> +	pdev = to_pci_dev(master->dev);
+> +
+> +	if (pdev->ats_enabled)
 
-Generally, that is for in kernel users. When a new feature is added,
-you are also supposed to add an in kernel user. I could of missed it
-in my search, but i didn't find an in-kernel user. If there is one,
-then we should keep it. Otherwise, i would remove it.
+If the master->ats_enabled check above passes when ATS isn't actually 
+enabled, surely that's a bug?
 
-> > I believe this should not stop us from merging this patch though, as the
-> > code is currently broken when this deprecated property is not present.
+Robin.
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-
-    Andrew
+> +		pci_disable_ats(pdev);
+> +
+>   	/*
+>   	 * Ensure ATS is disabled at the endpoint before we issue the
+>   	 * ATC invalidation via the SMMU.
+> @@ -2453,8 +2458,7 @@ static int arm_smmu_attach_dev(struct iommu_domain *domain, struct device *dev)
+>   
+>   	master->domain = smmu_domain;
+>   
+> -	if (smmu_domain->stage != ARM_SMMU_DOMAIN_BYPASS)
+> -		master->ats_enabled = arm_smmu_ats_supported(master);
+> +	master->ats_enabled = arm_smmu_ats_supported(master);
+>   
+>   	arm_smmu_install_ste_for_dev(master);
+>   
