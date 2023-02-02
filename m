@@ -2,198 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2A1E6878D8
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:30:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 278DA6878DB
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:31:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231864AbjBBJay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 04:30:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39404 "EHLO
+        id S231947AbjBBJbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 04:31:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231339AbjBBJax (ORCPT
+        with ESMTP id S232079AbjBBJbs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 04:30:53 -0500
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6D5359B72
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 01:30:51 -0800 (PST)
-Received: by mail-lj1-x22e.google.com with SMTP id u27so1215932ljo.12
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 01:30:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kn+p2LYYjtrS2RWO9tALAnwisM7EY9rkbYqDL8CmUX4=;
-        b=mG4uvBQ1f8SK7Dx3CFWmtwoG+Rj4aAdSiap6UNGiH2Hei1njFX/e0h7WZ9D2SAGmsw
-         EwvFXJwkEanu0Qwk5HVBW7M21hq7rqpXA9pG+auTMjE4oznEotqj1L5cDkIiZBLFSU3Q
-         MqmwyCFjQUtAkv5nyAj7iVTx0YppLIGN9y/5o=
+        Thu, 2 Feb 2023 04:31:48 -0500
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 427AC59E6F;
+        Thu,  2 Feb 2023 01:31:47 -0800 (PST)
+Received: by mail-ed1-f45.google.com with SMTP id x7so1390071edr.0;
+        Thu, 02 Feb 2023 01:31:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=kn+p2LYYjtrS2RWO9tALAnwisM7EY9rkbYqDL8CmUX4=;
-        b=a0tXtNbve1RPSVxHFJPObNovLgjjMkSI3zXyD6NRoG8gpROsof9xmYNRLx/PK+mMEa
-         TvfXFRZ4uwKBaym3a8oL0jJHsFbLkbsiUSgVosfWCjUEpXDddHKOa6cpeYsO0FqoIf6p
-         GG5lWOapzhA6ohbFyF0q3v/v+HdydZB3NVabAX/KZkfzigJCoVh+pH0IpnDvQbhHYYdM
-         hYdKCh32nZRARleaXvta1QCaJKzXPBVigVrNv9JlTyIZdHOJadLl8AR5f3G1ZjrmwwdU
-         YwZrOwjb8IL2Edhx3wcfDPQxlpjFFEbM6Po5MerwozJaim7hvq+CuhYfslNyjh1zy9Hh
-         5R1g==
-X-Gm-Message-State: AO0yUKV1Ldww5f7iP8TSDeONURwT0+e0SqlgUBJgeY+0SKvUvrlZa7I4
-        U0LqK/57FaXyXFUPHIOcG2BpDDyZ+Mq5JG0ESofZAC7wHwHfBv2R
-X-Google-Smtp-Source: AK7set8Weqp+jsBne++gh2QsAaLnawWtpoxBWD+Utl/ASFFidXWVAjceHPpovOZGj7yDecthJEi1/4qO+crVsA+3tHs=
-X-Received: by 2002:a2e:9c9a:0:b0:28e:8831:e244 with SMTP id
- x26-20020a2e9c9a000000b0028e8831e244mr890177lji.4.1675330250046; Thu, 02 Feb
- 2023 01:30:50 -0800 (PST)
+        bh=ffpgR5z2JZo6pwKFf6fTkgFN1AbQFcPjb/i8EhiUIp0=;
+        b=PnZb8TfMK9LulumZbLHMdE9FvYIZNFF+ziO3KmXlRPbPkYrv52Ffb97jKAoCJn9avG
+         Fo0KNzsBIlCii7tOyRTJKk5x61Fn7p4bpXcdQ0qHAkseLFitxfwmyhJPiVdlX5ZZXsWs
+         VMJv5Q0lUCuHm9ARq5+2vdw6Zc80EfeXxUi/oKGORZBf8yorBMJY0KYrPGiu4sDIHFRk
+         tv6qM0sHVSUIr4jT7UPraXNTI7pHUma2bMLci8eZHbzOjXHhaP27vFtRZlVHwPYbLgUY
+         dA4ChUbqLxUwWhwfHAY6dwddBDRtP2pB0fsaPV2yIPHYI07ht6tApk19foHl4GaCpKq0
+         2X0g==
+X-Gm-Message-State: AO0yUKUqnLQ+2DJMLaQsOFHkFGK5qVxH4r2CnzUosFpoMjO3Y7OlkQlm
+        7d34YpYH9HtxPOCUC7pfcrwgujE7OA36qY4Steg=
+X-Google-Smtp-Source: AK7set9306TERMaXrdPKee5SdML+Gqydz/luQ9C1YIJFgYD0NZ/nYQnWiZBRLI5KkCDKzPTMZc9hEPaVfQaHClP1dUA=
+X-Received: by 2002:a50:cd8e:0:b0:4a2:480b:e164 with SMTP id
+ p14-20020a50cd8e000000b004a2480be164mr1594675edi.50.1675330305735; Thu, 02
+ Feb 2023 01:31:45 -0800 (PST)
 MIME-Version: 1.0
-References: <20230201034137.2463113-1-stevensd@google.com> <20230201230943.fg2q6fmvu7gggxar@box.shutemov.name>
-In-Reply-To: <20230201230943.fg2q6fmvu7gggxar@box.shutemov.name>
-From:   David Stevens <stevensd@chromium.org>
-Date:   Thu, 2 Feb 2023 18:30:38 +0900
-Message-ID: <CAD=HUj4=okVbwROVTCPb_WndA57WPK6hYE68un_M8miDbhCGNg@mail.gmail.com>
-Subject: Re: [PATCH] mm/khugepaged: skip shmem with armed userfaultfd
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
+References: <20230202034821.25123-1-tianruidong@linux.alibaba.com>
+In-Reply-To: <20230202034821.25123-1-tianruidong@linux.alibaba.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 2 Feb 2023 10:31:33 +0100
+Message-ID: <CAJZ5v0i=2f+NFHbyYNgL8vqkcf8ST=14-uqHqOUmL0JPVhmiBw@mail.gmail.com>
+Subject: Re: [PATCH] ACPICA: PCI: Undefined ACPI_ADR_SPACE_PCI_CONFIG when
+ CONFIG_PCI is unset
+To:     Ruidong Tian <tianruidong@linux.alibaba.com>
+Cc:     robert.moore@intel.com, rafael.j.wysocki@intel.com,
+        lenb@kernel.org, linux-acpi@vger.kernel.org,
+        acpica-devel@lists.linuxfoundation.org,
+        linux-kernel@vger.kernel.org, baolin.wang@linux.alibaba.com,
+        jkchen@linux.alibaba.com, xueshuai@linux.alibaba.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 2, 2023 at 8:09 AM Kirill A. Shutemov <kirill@shutemov.name> wrote:
+On Thu, Feb 2, 2023 at 4:48 AM Ruidong Tian
+<tianruidong@linux.alibaba.com> wrote:
 >
-> On Wed, Feb 01, 2023 at 12:41:37PM +0900, David Stevens wrote:
-> > From: David Stevens <stevensd@chromium.org>
-> >
-> > Collapsing memory in a vma that has an armed userfaultfd results in
-> > zero-filling any missing pages, which breaks user-space paging for those
-> > filled pages. Avoid khugepage bypassing userfaultfd by not collapsing
-> > pages in shmem reached via scanning a vma with an armed userfaultfd if
-> > doing so would zero-fill any pages.
+> ACPI core subsystem initialization will fail when Kernel disabled PCI but
+> ACPI tables still have PCI config address spaces.
 >
-> Could you elaborate on the failure? Will zero-filling the page prevent
-> userfaultfd from catching future access?
-
-Yes, zero-filling the page causes future major faults to be lost,
-since it populates the pages in the backing shmem. The path for
-anonymous memory in khugepaged does properly handle userfaultfd_armed,
-but the path for shmem does not.
-
-> A test-case would help a lot.
-
-Here's a sample program that demonstrates the issue. On a v6.1 kernel,
-no major fault is observed by the monitor thread. I used MADV_COLLAPSE
-to exercise khugepaged_scan_file, but you would get the same effect by
-replacing the madvise with a sleep and waiting for khugepaged to scan
-the test process.
-
-#define _GNU_SOURCE
-#include <inttypes.h>
-#include <stdio.h>
-#include <linux/userfaultfd.h>
-#include <threads.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <sys/mman.h>
-#include <sys/syscall.h>
-#include <sys/ioctl.h>
-#include <assert.h>
-
-int had_fault;
-
-int monitor_thread(void *arg) {
-  int ret, uffd = (int) (uintptr_t) arg;
-  struct uffd_msg msg;
-
-  ret = read(uffd, &msg, sizeof(msg));
-  assert(ret > 0);
-  assert(msg.event == UFFD_EVENT_PAGEFAULT);
-
-  had_fault = 1;
-
-  struct uffdio_zeropage zeropage;
-  zeropage.range.start = msg.arg.pagefault.address & ~0xfff;
-  zeropage.range.len = 4096;
-  zeropage.mode = 0;
-
-  ret = ioctl(uffd, UFFDIO_ZEROPAGE, &zeropage);
-  assert(ret >= 0);
-}
-
-int main() {
-  int ret;
-
-  int uffd = syscall(__NR_userfaultfd, 0);
-  assert(uffd >= 0);
-
-  struct uffdio_api uffdio_api;
-  uffdio_api.api = UFFD_API;
-  uffdio_api.features = UFFD_FEATURE_MISSING_SHMEM;
-  ret = ioctl(uffd, UFFDIO_API, &uffdio_api);
-  assert(ret >= 0);
-
-  int memfd = memfd_create("memfd", MFD_CLOEXEC);
-  assert(memfd >= 0);
-
-  ret = ftruncate(memfd, 2 * 1024 * 1024);
-  assert(ret >= 0);
-
-  uint8_t *addr = mmap(NULL, 2 * 1024 * 1024, PROT_READ | PROT_WRITE,
-MAP_SHARED, memfd, 0);
-  assert(addr != MAP_FAILED);
-
-  addr[0] = 0xff;
-
-  struct uffdio_register uffdio_register;
-  uffdio_register.range.start = (unsigned long) addr;
-  uffdio_register.range.len = 2 * 1024 * 1024;
-  uffdio_register.mode = UFFDIO_REGISTER_MODE_MISSING;
-  ret = ioctl(uffd, UFFDIO_REGISTER, &uffdio_register);
-  assert(ret >= 0);
-
-  thrd_t t;
-  ret = thrd_create(&t, monitor_thread, (void *) (uintptr_t) uffd);
-  assert(ret >= 0);
-
-  ret = madvise(addr, 2 * 1024 * 1024, 25 /* MADV_COLLAPSE */);
-  printf("madvise ret %d\n", ret);
-
-  addr[4096] = 0xff;
-
-  printf("%s major fault\n", had_fault ? "had" : "no");
-
-  return 0;
-}
-
-> And what prevents the same pages be filled (with zeros or otherwise) via
-> write(2) bypassing VMA checks? I cannot immediately see it.
-
-There isn't any such check. You can bypass userfaultfd on a shmem with
-write syscalls, or simply by writing to the shmem through a different
-vma. However, it is definitely possible for userspace to use shmem
-plus userfaultfd in a safe way. And the kernel shouldn't come along
-and break a setup that should be safe from the perspective of
-userspace.
-
-> BTW, there's already a check that prevent establishing PMD in the place if
-> VM_UFFD_WP is set.
+> Enable ACPI_ADR_SPACE_PCI_CONFIG in acpi_gbl_default_address_spaces
+> only when ACPI_PCI_CONFIGURED is defined.
 >
-> Maybe just an update of the check in retract_page_tables() from
-> userfaultfd_wp() to userfaultfd_armed() would be enough?
+> Signed-off-by: Ruidong Tian <tianruidong@linux.alibaba.com>
 
-It seems like it will be a little more complicated than that, because
-the target VM having an armed userfaultfd is a hard error condition.
-However, it might not be that difficult to modify collapse_file to
-rollback if necessary. I'll consider this approach for v2 of this
-patch.
+As an ACPICA change, this should first be submitted (as a pull
+request) to the upstream ACPICA project on GitHub.
 
--David
+Having done that, please resubmit the patch with a Link tag pointing
+to the corresponding upstream pull request.
 
-> I have very limited understanding of userfaultfd(). Sorry in advance for
-> stupid questions.
+Thanks!
+
+> ---
+>  drivers/acpi/acpica/evhandler.c | 2 ++
+>  include/acpi/acconfig.h         | 4 ++++
+>  2 files changed, 6 insertions(+)
+>
+> diff --git a/drivers/acpi/acpica/evhandler.c b/drivers/acpi/acpica/evhandler.c
+> index be9a05498adc..86057e39df8c 100644
+> --- a/drivers/acpi/acpica/evhandler.c
+> +++ b/drivers/acpi/acpica/evhandler.c
+> @@ -26,7 +26,9 @@ acpi_ev_install_handler(acpi_handle obj_handle,
+>  u8 acpi_gbl_default_address_spaces[ACPI_NUM_DEFAULT_SPACES] = {
+>         ACPI_ADR_SPACE_SYSTEM_MEMORY,
+>         ACPI_ADR_SPACE_SYSTEM_IO,
+> +#ifdef ACPI_PCI_CONFIGURED
+>         ACPI_ADR_SPACE_PCI_CONFIG,
+> +#endif
+>         ACPI_ADR_SPACE_DATA_TABLE
+>  };
+>
+> diff --git a/include/acpi/acconfig.h b/include/acpi/acconfig.h
+> index 151e40385673..28456120529f 100644
+> --- a/include/acpi/acconfig.h
+> +++ b/include/acpi/acconfig.h
+> @@ -162,7 +162,11 @@
+>  /* Maximum space_ids for Operation Regions */
+>
+>  #define ACPI_MAX_ADDRESS_SPACE          255
+> +#ifdef ACPI_PCI_CONFIGURED
+>  #define ACPI_NUM_DEFAULT_SPACES         4
+> +#else
+> +#define ACPI_NUM_DEFAULT_SPACES         3
+> +#endif
+>
+>  /* Array sizes.  Used for range checking also */
 >
 > --
->   Kiryl Shutsemau / Kirill A. Shutemov
+> 2.33.1
+>
