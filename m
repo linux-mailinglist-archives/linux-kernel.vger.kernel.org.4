@@ -2,122 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9AF66878F1
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:34:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CE006878F2
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:34:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232413AbjBBJeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 04:34:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42166 "EHLO
+        id S232479AbjBBJeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 04:34:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232129AbjBBJd6 (ORCPT
+        with ESMTP id S232390AbjBBJeD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 04:33:58 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B48DB449E;
-        Thu,  2 Feb 2023 01:33:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675330412; x=1706866412;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=aIiyDgv/qmZGr3jDNkPYzcbCICg4MgEqP2BLjAJlMts=;
-  b=QpoIQv+gp7esr1mFlbLmilipLrH1mQY8ByD9BrnCwCWYFP6KCYWff4fe
-   Pjx64K8Pp6oYAfMv/+kelzayPXgDSd2lP7vXg22c906Msr4hiY+KDI3bh
-   uB1YK69rXR4j4A6UKlUfRGfIhnqrtGC3GDdwGE9L+iD3ueF6UZGihK8Mn
-   f/SXE7G0ECXq0LFnaqiWbLuz95FwXn0ZiLlmnLVhxdnFj3cVpyR0YLfyM
-   OUCoz3Ql+UIx1V+9Qv0ORF20iCdEGFS/0hSI+X8+H6+kV1R0ooaEtzRA2
-   T+thDmmB0Q0da0wNySIPmgYA2yLr58hEIzbfeurEuScXNdqzxCgrMyY1d
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="308742904"
-X-IronPort-AV: E=Sophos;i="5.97,267,1669104000"; 
-   d="scan'208";a="308742904"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2023 01:33:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="697626494"
-X-IronPort-AV: E=Sophos;i="5.97,267,1669104000"; 
-   d="scan'208";a="697626494"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 02 Feb 2023 01:33:27 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pNVy6-0006O0-0g;
-        Thu, 02 Feb 2023 09:33:22 +0000
-Date:   Thu, 2 Feb 2023 17:32:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nick Desaulniers <ndesaulniers@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>, Nicolas Schier <nicolas@fjasle.eu>,
-        Jonathan Corbet <corbet@lwn.net>, llvm@lists.linux.dev,
-        linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Bill Wendling <morbo@google.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Yonghong Song <yhs@fb.com>,
-        Daniel Kolesa <q66@chimera-linux.org>,
-        Chris Mason <chris.mason@fusionio.com>
-Subject: Re: [PATCH] Documentation/llvm: add Chimera Linux, Google and Meta
- datacenters
-Message-ID: <202302021759.syE8waoZ-lkp@intel.com>
-References: <20230201192509.4124319-1-ndesaulniers@google.com>
+        Thu, 2 Feb 2023 04:34:03 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEFD127D61
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 01:33:11 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id pj3so1373714pjb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 01:33:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SbvMveejPnNY0dtntPgcfEf+7sqTjGePPLxtPF4gXZI=;
+        b=YduFipxFTmlAHpxZW30BY1Z/+xbuscdW+jMpyQIoTO5Wes61YwldcGudWmPnZc5hQC
+         oXDEKqC7EUbOShWgQIV8e72qrEzkb7Qzza/0X50BjcHcis2voFWhnLuNHOqLGyBzjqPD
+         V0xb20qXsu4TyE4XLEIV6a+ETrgeZ6CwlS1H5vgntybKTokYdri4vqoY2ibSaTwTnm+T
+         ePufc82B602pfSFf4urGw6BUrZobl6ES4EEqBwBxGKVVs7ZEBdWk5KnWezmSp8IPvYEK
+         sYmkJsK2XBqVtWtPJvnh4gob6ypzf3E/9r9sizvFfOiAOH5j+IIZYIGtbq0erlGMaSRq
+         UYQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SbvMveejPnNY0dtntPgcfEf+7sqTjGePPLxtPF4gXZI=;
+        b=pJtYmzKvVYp/uZKa6FAwRKWW1t2+jgEKuNQchvzZXLsFjNP2SC33Wy5OM5aRkixuN3
+         TInOu3+t6H0PpkqlZ5qHU67EMb4gmn8ojgtTWrsObtpHmcK+wMmXtZD4LQl4uLQz7Grs
+         qC+WveJWjXr47sECWLabHwAu/VaGzMzTpFh9MmYOQLGs9+tVwMDIlv/jdMIB11Pc57Vp
+         PrHJSwNkEQm77Mj3ZDevso7EVkjHNn/eVo+Yo2rYdkR809cBFdBSGgAbA5sJ59ZzW9G2
+         nJA9ye5RIMYmd9NqvSG9th2A5ulsDp/97NyHWtD5iaODnCEZcJAToFnIdiFetGSR0szd
+         VR5g==
+X-Gm-Message-State: AO0yUKWVctUTKHC2UTv9rMkLJtKgytvSCY02koB57CnC68JUCWgChD3a
+        1ZF6HEuN8ifdCw9w98b+jQAN8oiCHjs7c+ZR
+X-Google-Smtp-Source: AK7set+SYjhqLtHWEWxKvlhuML4XhqmA9D1c+JVtoi+6+bX+9bYjuAvpwXHu3l5witPhmx9ffaFCSg==
+X-Received: by 2002:a17:903:243:b0:196:82e2:799a with SMTP id j3-20020a170903024300b0019682e2799amr6960578plh.4.1675330391288;
+        Thu, 02 Feb 2023 01:33:11 -0800 (PST)
+Received: from C02DW0BEMD6R.bytedance.net ([139.177.225.243])
+        by smtp.gmail.com with ESMTPSA id c10-20020a170902848a00b0019254c19697sm13153343plo.289.2023.02.02.01.33.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Feb 2023 01:33:10 -0800 (PST)
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+To:     gregkh@linuxfoundation.org, rafael@kernel.org,
+        j.vosburgh@gmail.com, vfalico@gmail.com, andy@greyhouse.net,
+        vireshk@kernel.org, nm@ti.com, sboyd@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        netdev@vger.kernel.org, Qi Zheng <zhengqi.arch@bytedance.com>
+Subject: [PATCH 0/3] some minor fixes of error checking about debugfs_rename()
+Date:   Thu,  2 Feb 2023 17:32:53 +0800
+Message-Id: <20230202093256.32458-1-zhengqi.arch@bytedance.com>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230201192509.4124319-1-ndesaulniers@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nick,
+Since commit ff9fb72bc077 ("debugfs: return error values, not NULL") changed
+return value of debugfs_rename() in error cases from %NULL to %ERR_PTR(-ERROR).
+The comments and checks corresponding to debugfs_rename() should also be updated
+and fixed.
 
-I love your patch! Perhaps something to improve:
+Qi Zheng (3):
+  debugfs: update comment of debugfs_rename()
+  bonding: fix error checking in bond_debug_reregister()
+  PM/OPP: fix error checking in opp_migrate_dentry()
 
-[auto build test WARNING on masahiroy-kbuild/for-next]
-[also build test WARNING on masahiroy-kbuild/fixes linus/master v6.2-rc6 next-20230202]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Nick-Desaulniers/Documentation-llvm-add-Chimera-Linux-Google-and-Meta-datacenters/20230202-032729
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git for-next
-patch link:    https://lore.kernel.org/r/20230201192509.4124319-1-ndesaulniers%40google.com
-patch subject: [PATCH] Documentation/llvm: add Chimera Linux, Google and Meta datacenters
-reproduce:
-        # https://github.com/intel-lab-lkp/linux/commit/fb73005aa3c6a4052e30f0f0dc2c608bafd8acce
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Nick-Desaulniers/Documentation-llvm-add-Chimera-Linux-Google-and-Meta-datacenters/20230202-032729
-        git checkout fb73005aa3c6a4052e30f0f0dc2c608bafd8acce
-        make menuconfig
-        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
-        make htmldocs
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> Documentation/kbuild/llvm.rst:13: WARNING: Unknown target name: "chromeos https://www.chromium.org/chromium-os>".
-
-vim +13 Documentation/kbuild/llvm.rst
-
-fcf1b6a35c16ac5 Nick Desaulniers 2020-02-26  12  
-fcf1b6a35c16ac5 Nick Desaulniers 2020-02-26 @13  The Linux kernel has always traditionally been compiled with GNU toolchains
-fcf1b6a35c16ac5 Nick Desaulniers 2020-02-26  14  such as GCC and binutils. Ongoing work has allowed for `Clang
-fcf1b6a35c16ac5 Nick Desaulniers 2020-02-26  15  <https://clang.llvm.org/>`_ and `LLVM <https://llvm.org/>`_ utilities to be
-fcf1b6a35c16ac5 Nick Desaulniers 2020-02-26  16  used as viable substitutes. Distributions such as `Android
-fcf1b6a35c16ac5 Nick Desaulniers 2020-02-26  17  <https://www.android.com/>`_, `ChromeOS
-fb73005aa3c6a40 Nick Desaulniers 2023-02-01  18  https://www.chromium.org/chromium-os>`_, `OpenMandriva
-fb73005aa3c6a40 Nick Desaulniers 2023-02-01  19  <https://www.openmandriva.org/>`_, and `Chimera Linux
-fb73005aa3c6a40 Nick Desaulniers 2023-02-01  20  <https://chimera-linux.org/>`_ use Clang built kernels. Google's and Meta's
-fb73005aa3c6a40 Nick Desaulniers 2023-02-01  21  datacenter fleets also run kernels built with Clang.
-fb73005aa3c6a40 Nick Desaulniers 2023-02-01  22  
+ drivers/net/bonding/bond_debugfs.c | 2 +-
+ drivers/opp/debugfs.c              | 2 +-
+ fs/debugfs/inode.c                 | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.20.1
+
