@@ -2,112 +2,459 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A0086886E6
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 19:42:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A1466886EE
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 19:44:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232590AbjBBSmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 13:42:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51380 "EHLO
+        id S232735AbjBBSoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 13:44:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232900AbjBBSmq (ORCPT
+        with ESMTP id S232677AbjBBSnv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 13:42:46 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0057E59743
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 10:42:22 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id q19so3000410edd.2
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 10:42:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xcrcjjpdxvOP+BtTWSce/AMhT/iVFENiab+a0FrVMNY=;
-        b=Zq5rgzbS0KG7vA/hbRRwx8FMDWWoH+HMBofRc4RXhyH0JA+vo6cspQgeCOg073eYLg
-         JVW4O5Bl/vJP3zPtG8mBj2EZtEYdo2G712RAmmWCMto+zmX548hNamQBkmvM8GIwR7HN
-         Yf+2rVtyxzoy/6lYE8A/UbCTYq/HEG8ikcN1wUwtJ9AZNa1KpvppyWt654JYu1FMWP/C
-         HFGHb4C/P7dKZea/6an8hJz5BD85sgieJvm2Wv+6jomVI2gDarS1uxf0S5Ep145pWYQR
-         HomCcXEv8RjLDmdQbP3OrURKPLdOhIOaRxvZQG6iEqeG6Y/5p9h7hbqsSncnyUP+1qmw
-         scww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xcrcjjpdxvOP+BtTWSce/AMhT/iVFENiab+a0FrVMNY=;
-        b=kA18Tt5zQ5Tv68PLVQ6lhOjzoFIWej+Urx50Phs02scX5rI2wfa53CdWphl8s17K10
-         9PxKAcyNPGVqaofmyG2bVuJ4iMOcIxEPIBCeP27wdNWWpggzSbU7s2bWAX05eFWuOP0N
-         y9Xfa3DjgrxWAw4TIfti/x2gBDjGVpvFz4kmhC8/JYOPlkR/KgM9zyjXbMC3AxMdr88b
-         quujZTAC+FDGekTg9hJNaS98YCMoGtT0T+6TuYo1LzBbpCGvxEar4jiUR028EDFuyrVM
-         W1pEADRC0WXowdXplcGRkH5qDsEbIIY4zpL5aJv09IVWJ2CoVv8bqrSD+OC8vgMtn0Ri
-         g/tQ==
-X-Gm-Message-State: AO0yUKWtZmI9iKMZrPpf8gtxkB2aXqM30JphUwiIBswrgEa3Sx1qH54E
-        umOZ+JFUN3hRwwAOxD20Ifyzlg==
-X-Google-Smtp-Source: AK7set9QtIgxHBGYAaFywJ96klO+lAs7/+Uzw91KAaSUtY2UwhASS1NxneJienf7Xi743nxWcj9h6g==
-X-Received: by 2002:a50:ce47:0:b0:4a2:45e3:ede3 with SMTP id k7-20020a50ce47000000b004a245e3ede3mr7384955edj.14.1675363334632;
-        Thu, 02 Feb 2023 10:42:14 -0800 (PST)
-Received: from [192.168.1.101] (abyl20.neoplus.adsl.tpnet.pl. [83.9.31.20])
-        by smtp.gmail.com with ESMTPSA id eq6-20020a056402298600b00497d8613532sm81243edb.5.2023.02.02.10.42.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 10:42:14 -0800 (PST)
-Message-ID: <406e91ae-5477-4d8e-4e98-b30fc18e9e94@linaro.org>
-Date:   Thu, 2 Feb 2023 19:42:12 +0100
+        Thu, 2 Feb 2023 13:43:51 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAD736D05F;
+        Thu,  2 Feb 2023 10:43:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675363404; x=1706899404;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=++ASRvotZB1UEAtRLT9zmbE4W31Xp8NyYecizXotwAE=;
+  b=MCTGtiPcPeictYTiOHEAVAUW4dfBBtrc3khCAHwO02dorKeDgqKZs4W/
+   8bP4KTGydeu2dYhCZCtP6EvNXvWMFe//BmEy4/atIDfq0y1pQEV+XpfLu
+   gb44BY+R1CGWPiyA0nJraLVmuvTbS3lAAY8VWGPyGVcMxxRlStPsTQXDB
+   b5Kgn0/c867qCePbkhCZYhMeLQOGfNsNmMPPAm4ef8wG5evpY4qUVbaAG
+   mclCf9mhh4FlTZOYn5VLVjhOR7HI7ZythVUnYqf0he+0YQb8LhI05jU4S
+   MsSYLQvc0ZZmvregErxCmZmNKxJsLOxt8BERgoj0EGZf8JblBXmFjo/Pn
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="326233073"
+X-IronPort-AV: E=Sophos;i="5.97,268,1669104000"; 
+   d="scan'208";a="326233073"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2023 10:42:42 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="697779630"
+X-IronPort-AV: E=Sophos;i="5.97,268,1669104000"; 
+   d="scan'208";a="697779630"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.249.35.116])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2023 10:42:37 -0800
+Message-ID: <d08a1fc5-727c-7845-7aeb-729c5aa68189@intel.com>
+Date:   Thu, 2 Feb 2023 20:42:33 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH 5/6] mailbox: qcom-apcs-ipc: add IPQ5332 APSS clock
- support
+ Firefox/102.0 Thunderbird/102.7.1
+Subject: Re: [PATCH v2 1/5] drivers: mmc: sdhci-cadence: Reformat the code
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Kathiravan T <quic_kathirav@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+To:     Piyush Malgujar <pmalgujar@marvell.com>, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ulf.hansson@linaro.org,
         robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        jassisinghbrar@gmail.com, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230202145208.2328032-1-quic_kathirav@quicinc.com>
- <20230202145208.2328032-6-quic_kathirav@quicinc.com>
- <2433c2c7-664d-0d1f-12ae-374cbd093dc0@linaro.org>
- <1b75ab1a-44c9-c4a8-7fa4-d601fc710d2a@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <1b75ab1a-44c9-c4a8-7fa4-d601fc710d2a@linaro.org>
+        yamada.masahiro@socionext.com, devicetree@vger.kernel.org,
+        Brad Larson <blarson@amd.com>
+Cc:     jannadurai@marvell.com, cchavva@marvell.com,
+        Dhananjay Kangude <dkangude@cadence.com>
+References: <20230123192735.21136-1-pmalgujar@marvell.com>
+ <20230123192735.21136-2-pmalgujar@marvell.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20230123192735.21136-2-pmalgujar@marvell.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2.02.2023 16:30, Krzysztof Kozlowski wrote:
-> On 02/02/2023 16:16, Konrad Dybcio wrote:
->>
->>
->> On 2.02.2023 15:52, Kathiravan T wrote:
->>> IPQ5332 has the APSS clock controller utilizing the same register space
->>> as the APCS, so provide access to the APSS utilizing a child device like
->>> other IPQ chipsets.
->>>
->>> Like IPQ6018, the same controller and driver is used, so utilize IPQ6018
->>> match data for IPQ5332.
->>>
->>> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
->>> ---
->> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+On 23/01/23 21:27, Piyush Malgujar wrote:
+> From: Dhananjay Kangude <dkangude@cadence.com>
 > 
-> While this is not the fault of this patch, but we keep adding
-> compatibles with same driver data. I think this should start using
-> fallbacks at some point...
-Fair.
+> Reformat the code so that further SD6 changes could be
+> added and it could be isolated from SD4 related code.
+> Also renamed functions accordingly.
 
-Konrad
+It is good to have the renaming and white space changes
+in a separate patch, but there is also some restructuring
+in this patch that needs to be in 1 or more separate patches.
+
+There are also still some white space changes in the next
+patch.
+
 > 
-> Best regards,
-> Krzysztof
+> Signed-off-by: Dhananjay Kangude <dkangude@cadence.com>
+> Co-developed-by: Jayanthi Annadurai <jannadurai@marvell.com>
+> Signed-off-by: Jayanthi Annadurai <jannadurai@marvell.com>
+> Signed-off-by: Piyush Malgujar <pmalgujar@marvell.com>
+> ---
+>  drivers/mmc/host/sdhci-cadence.c | 165 ++++++++++++++++++++-----------
+>  1 file changed, 110 insertions(+), 55 deletions(-)
 > 
+> diff --git a/drivers/mmc/host/sdhci-cadence.c b/drivers/mmc/host/sdhci-cadence.c
+> index 6f2de54a598773879bf339aae8450f63e1251509..cb108ff9abda32767b356bb572abdf8626746cd6 100644
+> --- a/drivers/mmc/host/sdhci-cadence.c
+> +++ b/drivers/mmc/host/sdhci-cadence.c
+> @@ -15,14 +15,14 @@
+>  
+>  #include "sdhci-pltfm.h"
+>  
+> -/* HRS - Host Register Set (specific to Cadence) */
+> +/* SD 4.0 Controller HRS - Host Register Set (specific to Cadence) */
+>  #define SDHCI_CDNS_HRS04		0x10		/* PHY access port */
+> -#define   SDHCI_CDNS_HRS04_ACK			BIT(26)
+> -#define   SDHCI_CDNS_HRS04_RD			BIT(25)
+> -#define   SDHCI_CDNS_HRS04_WR			BIT(24)
+> -#define   SDHCI_CDNS_HRS04_RDATA		GENMASK(23, 16)
+> -#define   SDHCI_CDNS_HRS04_WDATA		GENMASK(15, 8)
+> -#define   SDHCI_CDNS_HRS04_ADDR			GENMASK(5, 0)
+> +#define SDHCI_CDNS_SD4_HRS04_ACK		BIT(26)
+> +#define SDHCI_CDNS_SD4_HRS04_RD			BIT(25)
+> +#define SDHCI_CDNS_SD4_HRS04_WR			BIT(24)
+> +#define SDHCI_CDNS_SD4_HRS04_RDATA		GENMASK(23, 16)
+> +#define SDHCI_CDNS_SD4_HRS04_WDATA		GENMASK(15, 8)
+> +#define SDHCI_CDNS_SD4_HRS04_ADDR		GENMASK(5, 0)
+>  
+>  #define SDHCI_CDNS_HRS06		0x18		/* eMMC control */
+>  #define   SDHCI_CDNS_HRS06_TUNE_UP		BIT(15)
+> @@ -38,7 +38,7 @@
+>  /* SRS - Slot Register Set (SDHCI-compatible) */
+>  #define SDHCI_CDNS_SRS_BASE		0x200
+>  
+> -/* PHY */
+> +/* PHY registers for SD4 controller */
+>  #define SDHCI_CDNS_PHY_DLY_SD_HS	0x00
+>  #define SDHCI_CDNS_PHY_DLY_SD_DEFAULT	0x01
+>  #define SDHCI_CDNS_PHY_DLY_UHS_SDR12	0x02
+> @@ -59,24 +59,43 @@
+>   */
+>  #define SDHCI_CDNS_MAX_TUNING_LOOP	40
+>  
+> -struct sdhci_cdns_phy_param {
+> +struct sdhci_cdns_priv;
+> +
+> +struct sdhci_cdns_sd4_phy_param {
+>  	u8 addr;
+>  	u8 data;
+>  };
+>  
+> +struct sdhci_cdns_data {
+> +	int (*phy_init)(struct sdhci_cdns_priv *priv);
+> +	int (*set_tune_val)(struct sdhci_host *host, unsigned int val);
+> +};
+> +
+> +struct sdhci_cdns_sd4_phy {
+> +	unsigned int nr_phy_params;
+> +	struct sdhci_cdns_sd4_phy_param phy_params[];
+> +};
+> +
+>  struct sdhci_cdns_priv {
+>  	void __iomem *hrs_addr;
+>  	bool enhanced_strobe;
+> -	unsigned int nr_phy_params;
+> -	struct sdhci_cdns_phy_param phy_params[];
+> +	const struct sdhci_cdns_data *cdns_data;
+> +	void *phy;
+>  };
+>  
+> -struct sdhci_cdns_phy_cfg {
+> +struct sdhci_cdns_sd4_phy_cfg {
+>  	const char *property;
+>  	u8 addr;
+>  };
+>  
+> -static const struct sdhci_cdns_phy_cfg sdhci_cdns_phy_cfgs[] = {
+> +struct sdhci_cdns_of_data {
+> +	const struct sdhci_pltfm_data *pltfm_data;
+> +	const struct sdhci_cdns_data *cdns_data;
+> +	int (*phy_probe)(struct platform_device *pdev,
+> +			 struct sdhci_cdns_priv *priv);
+> +};
+> +
+> +static const struct sdhci_cdns_sd4_phy_cfg sdhci_cdns_sd4_phy_cfgs[] = {
+>  	{ "cdns,phy-input-delay-sd-highspeed", SDHCI_CDNS_PHY_DLY_SD_HS, },
+>  	{ "cdns,phy-input-delay-legacy", SDHCI_CDNS_PHY_DLY_SD_DEFAULT, },
+>  	{ "cdns,phy-input-delay-sd-uhs-sdr12", SDHCI_CDNS_PHY_DLY_UHS_SDR12, },
+> @@ -90,80 +109,80 @@ static const struct sdhci_cdns_phy_cfg sdhci_cdns_phy_cfgs[] = {
+>  	{ "cdns,phy-dll-delay-strobe", SDHCI_CDNS_PHY_DLY_STROBE, },
+>  };
+>  
+> -static int sdhci_cdns_write_phy_reg(struct sdhci_cdns_priv *priv,
+> -				    u8 addr, u8 data)
+> +static int sdhci_cdns_sd4_write_phy_reg(struct sdhci_cdns_priv *priv,
+> +					u8 addr, u8 data)
+>  {
+>  	void __iomem *reg = priv->hrs_addr + SDHCI_CDNS_HRS04;
+>  	u32 tmp;
+>  	int ret;
+>  
+> -	ret = readl_poll_timeout(reg, tmp, !(tmp & SDHCI_CDNS_HRS04_ACK),
+> +	ret = readl_poll_timeout(reg, tmp, !(tmp & SDHCI_CDNS_SD4_HRS04_ACK),
+>  				 0, 10);
+>  	if (ret)
+>  		return ret;
+>  
+> -	tmp = FIELD_PREP(SDHCI_CDNS_HRS04_WDATA, data) |
+> -	      FIELD_PREP(SDHCI_CDNS_HRS04_ADDR, addr);
+> +	tmp = FIELD_PREP(SDHCI_CDNS_SD4_HRS04_WDATA, data) |
+> +	      FIELD_PREP(SDHCI_CDNS_SD4_HRS04_ADDR, addr);
+>  	writel(tmp, reg);
+>  
+> -	tmp |= SDHCI_CDNS_HRS04_WR;
+> +	tmp |= SDHCI_CDNS_SD4_HRS04_WR;
+>  	writel(tmp, reg);
+>  
+> -	ret = readl_poll_timeout(reg, tmp, tmp & SDHCI_CDNS_HRS04_ACK, 0, 10);
+> +	ret = readl_poll_timeout(reg, tmp, tmp & SDHCI_CDNS_SD4_HRS04_ACK, 0, 10);
+>  	if (ret)
+>  		return ret;
+>  
+> -	tmp &= ~SDHCI_CDNS_HRS04_WR;
+> +	tmp &= ~SDHCI_CDNS_SD4_HRS04_WR;
+>  	writel(tmp, reg);
+>  
+> -	ret = readl_poll_timeout(reg, tmp, !(tmp & SDHCI_CDNS_HRS04_ACK),
+> +	ret = readl_poll_timeout(reg, tmp, !(tmp & SDHCI_CDNS_SD4_HRS04_ACK),
+>  				 0, 10);
+>  
+>  	return ret;
+>  }
+>  
+> -static unsigned int sdhci_cdns_phy_param_count(struct device_node *np)
+> +static unsigned int sdhci_cdns_sd4_phy_param_count(struct device_node *np)
+>  {
+>  	unsigned int count = 0;
+>  	int i;
+>  
+> -	for (i = 0; i < ARRAY_SIZE(sdhci_cdns_phy_cfgs); i++)
+> -		if (of_property_read_bool(np, sdhci_cdns_phy_cfgs[i].property))
+> +	for (i = 0; i < ARRAY_SIZE(sdhci_cdns_sd4_phy_cfgs); i++)
+> +		if (of_property_read_bool(np, sdhci_cdns_sd4_phy_cfgs[i].property))
+>  			count++;
+>  
+>  	return count;
+>  }
+>  
+> -static void sdhci_cdns_phy_param_parse(struct device_node *np,
+> -				       struct sdhci_cdns_priv *priv)
+> +static void sdhci_cdns_sd4_phy_param_parse(struct device_node *np,
+> +					   struct sdhci_cdns_sd4_phy *phy)
+>  {
+> -	struct sdhci_cdns_phy_param *p = priv->phy_params;
+> +	struct sdhci_cdns_sd4_phy_param *p = phy->phy_params;
+>  	u32 val;
+>  	int ret, i;
+>  
+> -	for (i = 0; i < ARRAY_SIZE(sdhci_cdns_phy_cfgs); i++) {
+> -		ret = of_property_read_u32(np, sdhci_cdns_phy_cfgs[i].property,
+> +	for (i = 0; i < ARRAY_SIZE(sdhci_cdns_sd4_phy_cfgs); i++) {
+> +		ret = of_property_read_u32(np, sdhci_cdns_sd4_phy_cfgs[i].property,
+>  					   &val);
+>  		if (ret)
+>  			continue;
+>  
+> -		p->addr = sdhci_cdns_phy_cfgs[i].addr;
+> +		p->addr = sdhci_cdns_sd4_phy_cfgs[i].addr;
+>  		p->data = val;
+>  		p++;
+>  	}
+>  }
+>  
+> -static int sdhci_cdns_phy_init(struct sdhci_cdns_priv *priv)
+> +static int sdhci_cdns_sd4_phy_init(struct sdhci_cdns_priv *priv)
+>  {
+>  	int ret, i;
+> +	struct sdhci_cdns_sd4_phy *phy = priv->phy;
+>  
+> -	for (i = 0; i < priv->nr_phy_params; i++) {
+> -		ret = sdhci_cdns_write_phy_reg(priv, priv->phy_params[i].addr,
+> -					       priv->phy_params[i].data);
+> +	for (i = 0; i < phy->nr_phy_params; i++) {
+> +		ret = sdhci_cdns_sd4_write_phy_reg(priv, phy->phy_params[i].addr,
+> +						   phy->phy_params[i].data);
+>  		if (ret)
+>  			return ret;
+>  	}
+> -
+>  	return 0;
+>  }
+>  
+> @@ -202,7 +221,28 @@ static u32 sdhci_cdns_get_emmc_mode(struct sdhci_cdns_priv *priv)
+>  	return FIELD_GET(SDHCI_CDNS_HRS06_MODE, tmp);
+>  }
+>  
+> -static int sdhci_cdns_set_tune_val(struct sdhci_host *host, unsigned int val)
+> +static int sdhci_cdns_sd4_phy_probe(struct platform_device *pdev,
+> +				    struct sdhci_cdns_priv *priv)
+> +{
+> +	unsigned int nr_phy_params;
+> +	struct sdhci_cdns_sd4_phy *phy;
+> +	struct device *dev = &pdev->dev;
+> +
+> +	nr_phy_params = sdhci_cdns_sd4_phy_param_count(dev->of_node);
+> +	phy = devm_kzalloc(dev, struct_size(phy, phy_params, nr_phy_params),
+> +			   GFP_KERNEL);
+> +	if (!phy)
+> +		return -ENOMEM;
+> +
+> +	phy->nr_phy_params = nr_phy_params;
+> +
+> +	sdhci_cdns_sd4_phy_param_parse(dev->of_node, phy);
+> +	priv->phy = phy;
+> +
+> +	return 0;
+> +}
+> +
+> +static int sdhci_cdns_sd4_set_tune_val(struct sdhci_host *host, unsigned int val)
+>  {
+>  	struct sdhci_cdns_priv *priv = sdhci_cdns_priv(host);
+>  	void __iomem *reg = priv->hrs_addr + SDHCI_CDNS_HRS06;
+> @@ -255,7 +295,7 @@ static int sdhci_cdns_execute_tuning(struct sdhci_host *host, u32 opcode)
+>  		return 0;
+>  
+>  	for (i = 0; i < SDHCI_CDNS_MAX_TUNING_LOOP; i++) {
+> -		if (sdhci_cdns_set_tune_val(host, i) ||
+> +		if (sdhci_cdns_sd4_set_tune_val(host, i) ||
+>  		    mmc_send_tuning(host->mmc, opcode, NULL)) { /* bad */
+>  			cur_streak = 0;
+>  		} else { /* good */
+> @@ -272,7 +312,7 @@ static int sdhci_cdns_execute_tuning(struct sdhci_host *host, u32 opcode)
+>  		return -EIO;
+>  	}
+>  
+> -	return sdhci_cdns_set_tune_val(host, end_of_streak - max_streak / 2);
+> +	return sdhci_cdns_sd4_set_tune_val(host, end_of_streak - max_streak / 2);
+>  }
+>  
+>  static void sdhci_cdns_set_uhs_signaling(struct sdhci_host *host,
+> @@ -309,7 +349,7 @@ static void sdhci_cdns_set_uhs_signaling(struct sdhci_host *host,
+>  		sdhci_set_uhs_signaling(host, timing);
+>  }
+>  
+> -static const struct sdhci_ops sdhci_cdns_ops = {
+> +static const struct sdhci_ops sdhci_cdns_sd4_ops = {
+>  	.set_clock = sdhci_set_clock,
+>  	.get_timeout_clock = sdhci_cdns_get_timeout_clock,
+>  	.set_bus_width = sdhci_set_bus_width,
+> @@ -319,12 +359,23 @@ static const struct sdhci_ops sdhci_cdns_ops = {
+>  };
+>  
+>  static const struct sdhci_pltfm_data sdhci_cdns_uniphier_pltfm_data = {
+> -	.ops = &sdhci_cdns_ops,
+> +	.ops = &sdhci_cdns_sd4_ops,
+>  	.quirks2 = SDHCI_QUIRK2_PRESET_VALUE_BROKEN,
+>  };
+>  
+> -static const struct sdhci_pltfm_data sdhci_cdns_pltfm_data = {
+> -	.ops = &sdhci_cdns_ops,
+> +static const struct sdhci_pltfm_data sdhci_cdns_sd4_pltfm_data = {
+> +	.ops = &sdhci_cdns_sd4_ops,
+> +};
+> +
+> +static const struct sdhci_cdns_data sdhci_cdns_sd4_data = {
+> +	.phy_init = sdhci_cdns_sd4_phy_init,
+> +	.set_tune_val = sdhci_cdns_sd4_set_tune_val,
+> +};
+> +
+> +static const struct sdhci_cdns_of_data sdhci_cdns_sd4_of_data = {
+> +	.pltfm_data = &sdhci_cdns_sd4_pltfm_data,
+> +	.cdns_data = &sdhci_cdns_sd4_data,
+> +	.phy_probe = sdhci_cdns_sd4_phy_probe,
+>  };
+>  
+>  static void sdhci_cdns_hs400_enhanced_strobe(struct mmc_host *mmc,
+> @@ -350,11 +401,10 @@ static void sdhci_cdns_hs400_enhanced_strobe(struct mmc_host *mmc,
+>  static int sdhci_cdns_probe(struct platform_device *pdev)
+>  {
+>  	struct sdhci_host *host;
+> -	const struct sdhci_pltfm_data *data;
+> +	const struct sdhci_cdns_of_data *data;
+>  	struct sdhci_pltfm_host *pltfm_host;
+>  	struct sdhci_cdns_priv *priv;
+>  	struct clk *clk;
+> -	unsigned int nr_phy_params;
+>  	int ret;
+>  	struct device *dev = &pdev->dev;
+>  	static const u16 version = SDHCI_SPEC_400 << SDHCI_SPEC_VER_SHIFT;
+> @@ -368,12 +418,12 @@ static int sdhci_cdns_probe(struct platform_device *pdev)
+>  		return ret;
+>  
+>  	data = of_device_get_match_data(dev);
+> -	if (!data)
+> -		data = &sdhci_cdns_pltfm_data;
+> +	if (!data) {
+> +		return PTR_ERR(clk);
+> +		goto disable_clk;
+
+'return' followed by 'goto'
+
+Please review patches before submitting.
+
+> +	}
+>  
+> -	nr_phy_params = sdhci_cdns_phy_param_count(dev->of_node);
+> -	host = sdhci_pltfm_init(pdev, data,
+> -				struct_size(priv, phy_params, nr_phy_params));
+> +	host = sdhci_pltfm_init(pdev, data->pltfm_data, sizeof(*priv));
+>  	if (IS_ERR(host)) {
+>  		ret = PTR_ERR(host);
+>  		goto disable_clk;
+> @@ -383,9 +433,9 @@ static int sdhci_cdns_probe(struct platform_device *pdev)
+>  	pltfm_host->clk = clk;
+>  
+>  	priv = sdhci_pltfm_priv(pltfm_host);
+> -	priv->nr_phy_params = nr_phy_params;
+>  	priv->hrs_addr = host->ioaddr;
+>  	priv->enhanced_strobe = false;
+> +	priv->cdns_data = data->cdns_data;
+>  	host->ioaddr += SDHCI_CDNS_SRS_BASE;
+>  	host->mmc_host_ops.hs400_enhanced_strobe =
+>  				sdhci_cdns_hs400_enhanced_strobe;
+> @@ -398,9 +448,11 @@ static int sdhci_cdns_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		goto free;
+>  
+> -	sdhci_cdns_phy_param_parse(dev->of_node, priv);
+> +	ret = data->phy_probe(pdev, priv);
+> +	if (ret)
+> +		goto free;
+>  
+> -	ret = sdhci_cdns_phy_init(priv);
+> +	ret = priv->cdns_data->phy_init(priv);
+>  	if (ret)
+>  		goto free;
+>  
+> @@ -429,7 +481,7 @@ static int sdhci_cdns_resume(struct device *dev)
+>  	if (ret)
+>  		return ret;
+>  
+> -	ret = sdhci_cdns_phy_init(priv);
+> +	ret = priv->cdns_data->phy_init(priv);
+>  	if (ret)
+>  		goto disable_clk;
+>  
+> @@ -455,7 +507,10 @@ static const struct of_device_id sdhci_cdns_match[] = {
+>  		.compatible = "socionext,uniphier-sd4hc",
+>  		.data = &sdhci_cdns_uniphier_pltfm_data,
+>  	},
+> -	{ .compatible = "cdns,sd4hc" },
+> +	{
+> +		.compatible = "cdns,sd4hc",
+> +		.data = &sdhci_cdns_sd4_of_data,
+
+sdhci_cdns_uniphier_pltfm_data is a pointer to a struct sdhci_pltfm_data, but
+sdhci_cdns_sd4_of_data is a pointer to a struct sdhci_cdns_of_data.
+That is error prone.  For example, you dereference data->cdns_data
+unconditionally even though it does not exist for sdhci_cdns_uniphier_pltfm_data.
+
+Also this patch is in conflict with the approach taken by:
+
+https://lore.kernel.org/linux-mmc/20230119035136.21603-14-blarson@amd.com/
+
+> +	},
+>  	{ /* sentinel */ }
+>  };
+>  MODULE_DEVICE_TABLE(of, sdhci_cdns_match);
+
