@@ -2,65 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E2DA68878C
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 20:36:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA39168878E
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 20:37:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232036AbjBBTgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 14:36:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58676 "EHLO
+        id S232340AbjBBTh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 14:37:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229848AbjBBTgv (ORCPT
+        with ESMTP id S229848AbjBBTh0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 14:36:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFEDB2C64B
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 11:36:49 -0800 (PST)
+        Thu, 2 Feb 2023 14:37:26 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C04005C0E1;
+        Thu,  2 Feb 2023 11:37:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 80A8AB827E7
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 19:36:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5003CC4339B;
-        Thu,  2 Feb 2023 19:36:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D42F61CC6;
+        Thu,  2 Feb 2023 19:37:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 227E3C433D2;
+        Thu,  2 Feb 2023 19:37:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675366607;
-        bh=dKxC1/aDb9Kf4MWrvVY68hvT5wNWoEkjvF8SjH+2a8A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=J0wzoo7SEliOAAS/MwTXNi+kSwMV6sHTD/Q1RjnpWYWEHIpwHYg8WfqMHhZHCvo7v
-         gcNGS3Dp4EkGEYxxXoqu7DuT/g32emYCpYVny+BxgJBzOXCuzHv5MjQXHgRyzWvMRp
-         hJh/w9bYmuX8ij0aKHM4T4ErrjO2AVba0FphVDewSmNAI1g7WyIEBcMa8FvlKD57a+
-         RdrwGYBNbzFm/5hVv7zvnvfj53BqJXxGQ2pOzyNriJgHLoxdMIRpl4KtokjpkKOkCM
-         h43CS3AWNEYT4EKRJkyDFHNTpCeyPwMvaKiJ1qyTjZgnBRcKg4r7XtNPus/0H5mPa/
-         nPuQde+FLksmw==
-Date:   Thu, 2 Feb 2023 19:36:42 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     David Rau <david.rau.zg@renesas.com>,
-        "perex@perex.cz" <perex@perex.cz>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "tiwai@suse.com" <tiwai@suse.com>,
-        "support.opensource@diasemi.com" <support.opensource@diasemi.com>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] ASoC: da7219: Fix pole orientation detection on OMTP
- headsets when playing music
-Message-ID: <Y9wQygzbFyOWl54r@sirena.org.uk>
-References: <20221121050744.2278-1-david.rau.zg@renesas.com>
- <20230117195645.GA83401@roeck-us.net>
- <OS3PR01MB66416CEF9F6E5AE62D194BACCDC49@OS3PR01MB6641.jpnprd01.prod.outlook.com>
- <20230119161221.GA981953@roeck-us.net>
- <OS3PR01MB66416C10BF8E6400C84DAD02CDD09@OS3PR01MB6641.jpnprd01.prod.outlook.com>
- <38f09c4d-70d1-f65f-6e9b-4ad84eda4059@roeck-us.net>
- <Y9kE1cSUg2CQM5vq@sirena.org.uk>
- <20230202155101.GB1373010@roeck-us.net>
- <Y9vtIISfmpICi+9u@sirena.org.uk>
- <8f89eeac-b3ef-4137-80df-6cf044873b05@roeck-us.net>
+        s=k20201202; t=1675366643;
+        bh=4e46JInjnjZKjRFMgQ2weMULqLe3vkPvhBUGL2iO9W4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=swT4RJMJgm1m3BZS2L3c0weByeIpHR112Xp37PERpjxlHh5ba4Xq8QQkakegPF5qz
+         nnOmKROiAvinBP5lnL49KMWMz0s37jlyO7xb1Auc36om0btfUxWjO77hTwW97KonRt
+         Tpe9Tjd9KUAJfkIFQiW6JuFjxY4gZb89IsMShk+ZuPxEHHjBq7epJjjyvpbPwXaWjN
+         6nDilk6B5bmjtQ+sDtMGhVMK7WmboHxFFYfceeV+K0tVPCfoe8XJ++fJJOg9Xy/301
+         6B/ckEu296OBwB2bBhKNyptDwUR+H0k5UvTHLkqW28xVHDH0Jfhqxw4o9uwS/6k/Bs
+         oUCh833BeT0Nw==
+From:   SeongJae Park <sj@kernel.org>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     stable@vger.kernel.org,
+        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
+        Kees Cook <keescook@chromium.org>,
+        SeongJae Park <sj@kernel.org>,
+        Seth Jenkins <sethjenkins@google.com>,
+        Jann Horn <jannh@google.com>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andrey Ryabinin <aryabinin@virtuozzo.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Patricia Alfonso <trishalfonso@google.com>,
+        Peter Zijlstra <a.p.zijlstra@chello.nl>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        David Gow <davidgow@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH 4.19 03/16] mm: kasan: do not panic if both panic_on_warn and kasan_multishot set
+Date:   Thu,  2 Feb 2023 19:37:20 +0000
+Message-Id: <20230202193720.168040-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230202052604.179184-4-ebiggers@kernel.org>
+References: 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xVNftv7fOUYdi/3y"
-Content-Disposition: inline
-In-Reply-To: <8f89eeac-b3ef-4137-80df-6cf044873b05@roeck-us.net>
-X-Cookie: Swim at your own risk.
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -70,156 +73,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 1 Feb 2023 21:25:51 -0800 Eric Biggers <ebiggers@kernel.org> wrote:
 
---xVNftv7fOUYdi/3y
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> From: David Gow <davidgow@google.com>
+> 
+> commit be4f1ae978ffe98cc95ec49ceb95386fb4474974 upstream.
+> 
+> KASAN errors will currently trigger a panic when panic_on_warn is set.
+> This renders kasan_multishot useless, as further KASAN errors won't be
+> reported if the kernel has already paniced.  By making kasan_multishot
+> disable this behaviour for KASAN errors, we can still have the benefits of
+> panic_on_warn for non-KASAN warnings, yet be able to use kasan_multishot.
+> 
+> This is particularly important when running KASAN tests, which need to
+> trigger multiple KASAN errors: previously these would panic the system if
+> panic_on_warn was set, now they can run (and will panic the system should
+> non-KASAN warnings show up).
+> 
+> Signed-off-by: David Gow <davidgow@google.com>
+> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+> Tested-by: Andrey Konovalov <andreyknvl@google.com>
+> Reviewed-by: Andrey Konovalov <andreyknvl@google.com>
+> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+> Cc: Andrey Ryabinin <aryabinin@virtuozzo.com>
+> Cc: Dmitry Vyukov <dvyukov@google.com>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Juri Lelli <juri.lelli@redhat.com>
+> Cc: Patricia Alfonso <trishalfonso@google.com>
+> Cc: Peter Zijlstra <a.p.zijlstra@chello.nl>
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: Vincent Guittot <vincent.guittot@linaro.org>
+> Link: https://lkml.kernel.org/r/20200915035828.570483-6-davidgow@google.com
+> Link: https://lkml.kernel.org/r/20200910070331.3358048-6-davidgow@google.com
+> Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Signed-off-by: Eric Biggers <ebiggers@google.com>
+> ---
+>  mm/kasan/report.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/mm/kasan/report.c b/mm/kasan/report.c
+> index 5c169aa688fde..90fdb261a5e2d 100644
+> --- a/mm/kasan/report.c
+> +++ b/mm/kasan/report.c
+> @@ -176,7 +176,7 @@ static void kasan_end_report(unsigned long *flags)
+>  	pr_err("==================================================================\n");
+>  	add_taint(TAINT_BAD_PAGE, LOCKDEP_NOW_UNRELIABLE);
+>  	spin_unlock_irqrestore(&report_lock, *flags);
+> -	if (panic_on_warn)
+> +	if (panic_on_warn && !test_bit(KASAN_BIT_MULTI_SHOT, &kasan_flags))
+>  		panic("panic_on_warn set ...\n");
+>  	kasan_enable_current();
 
-On Thu, Feb 02, 2023 at 10:39:51AM -0800, Guenter Roeck wrote:
-> On 2/2/23 09:04, Mark Brown wrote:
 
-> > It's definitely unclear, there's a datasheet at [1] which does appear to
-> > explicitly call for a 512ms delay though (see figure 20 on page 50).  It
-> > does look like it should only be applied in the case where an inserted
-> > jack is detected (ie, when identifying an accessory or button press) and
-> > not when removal is detected though.
+Seems this introduced a build failure when CONFIG_KASAN is enabled, as also
+reported by Sasha[1].
 
-> The datasheet doesn't really suggest that a delay shall be applied using
-> msleep (ie in the code). The chip presumably debounces internally (see
+    mm/kasan/report.c: In function ‘kasan_end_report’:
+    mm/kasan/report.c:179:16: error: ‘KASAN_BIT_MULTI_SHOT’ undeclared (first use in this function)
+      179 |  if (!test_bit(KASAN_BIT_MULTI_SHOT, &kasan_flags))
+          |                ^~~~~~~~~~~~~~~~~~~~
+    arch/x86/include/asm/bitops.h:342:25: note: in definition of macro ‘test_bit’
+      342 |  (__builtin_constant_p((nr))  \
+          |                         ^~
+    mm/kasan/report.c:179:16: note: each undeclared identifier is reported only once for each function it appears in
+      179 |  if (!test_bit(KASAN_BIT_MULTI_SHOT, &kasan_flags))
+          |                ^~~~~~~~~~~~~~~~~~~~
+    arch/x86/include/asm/bitops.h:342:25: note: in definition of macro ‘test_bit’
+      342 |  (__builtin_constant_p((nr))  \
+          |                         ^~
+    mm/kasan/report.c:179:39: error: ‘kasan_flags’ undeclared (first use in this function)
+      179 |  if (!test_bit(KASAN_BIT_MULTI_SHOT, &kasan_flags))
+          |                                       ^~~~~~~~~~~
+    arch/x86/include/asm/bitops.h:343:30: note: in definition of macro ‘test_bit’
+      343 |   ? constant_test_bit((nr), (addr)) \
+          |                              ^~~~
 
-Obviously it doesn't call for an explicit implementation in the host.
+I confirmed dropping this patch fixes the build failure.  It causes a conflict
+to a following patch[1], but seems it's not that difficult to resolve.  I
+updated kernel/panic.c part of the patch like attached below to resolve the
+conflict.
 
-> jackdet_debounce and jackdet_rem_deb), and there is also jack_detect_rate
-> to configure the detection rate. The table seems to suggest (to me) that
-> there is an e_jack_insertion event, which would then be followed 64-512 ms
-> later with an e_jack_detect_complete event.
+[1] https://lore.kernel.org/stable/Y9v3G6UantaCo29G@sashalap/
+[2] https://lore.kernel.org/stable/20230202052604.179184-13-ebiggers@kernel.org/
 
-Right, I think what I was looking at was that in combination of the fact
-that there's a *much* longer window before the host clears the interrupt
-shown on the first JACK_IN.  It could be spurious and possibly just due
-to the host type check thing in the diagram but it smells real bad, like
-the hardware state machine has robustness issues or something.  The
-diagram currently doesn't quite correspond to the code since we have the
-delay applied unconditionally, and there's that undocumented
-register for the ground switch being managed.
 
-> Whatever is done in software is on top of that, or at least that is my
-> understanding, and not explained by anything in the datasheet.
+Thanks,
+SJ
 
-> Given that the chip itself supports debouncing internally, it is not clear
-> to me what the delay is actually supposed to accomplish. Soft debounce
-> on top of chip debounce ? I don't see that explained anywhere, though of
-> course I might be missing it.
 
-That's what it looks like it's trying to accomplish but as you say it's
-not exactly explicit.  I *suspect* it's trying to debounce in more cases
-than is needed.
+================================ >8 ===========================================
 
-> > > is not conceivable (or explained) why the ground switch is enabled only
-> > > to be disabled immediately afterwards if a jack was removed.
+diff --git a/kernel/panic.c b/kernel/panic.c
+index a078d413042f..08b8adc55b2b 100644
+--- a/kernel/panic.c
++++ b/kernel/panic.c
+@@ -125,6 +125,12 @@ void nmi_panic(struct pt_regs *regs, const char *msg)
+ }
+ EXPORT_SYMBOL(nmi_panic);
 
-> > It smells like there's a power benefit to leaving it disabled when
-> > unplugged (which seems plausible), and possibly like the detection is
-> > more stable with the ground switch enabled.  The ground switch is not
-> > documented AFAICT (it's in register 0xfb which isn't named and doesn't
-> > appear to appear in the datsheet from a quick search).  The code is
-> > leaving the switch enabled so long as an accessory is plugged.
++void check_panic_on_warn(const char *origin)
++{
++       if (panic_on_warn)
++               panic("%s: panic_on_warn set ...\n", origin);
++}
++
+ /**
+  *     panic - halt the system
+  *     @fmt: The text string to print
+@@ -540,8 +546,7 @@ void __warn(const char *file, int line, void *caller, unsigned taint,
+        if (args)
+                vprintk(args->fmt, args->args);
 
-> I understand. What I don't understand is that it is always enabled
-> in the interrupt handler, no matter if a jack was inserted or not,
-> only to be disabled immediately if the jack was disabled or after
-> insertion detection work is complete.
+-       if (panic_on_warn)
+-               panic("panic_on_warn set ...\n");
++       check_panic_on_warn("kernel");
 
-My guess was that it was making the detection more stable, it's
-surprising that it'd help with simple presence detection though.
+        print_modules();
 
-> > Are you saying this is actually crashing, or just that you're getting
-> > warnings about threads being blocked for too long (that was what was
-> > posted earlier in the thread)?  The only things I can see that look like
-
-> ChromeOS is configured to crash after stalled threads are detected (ie
-> after 120 seconds), so this is actually causing crashes.
-
-Ah, that's much more serious than I'd understood from the log you
-posted.
-
-> > they have the potential to actually lock up are the cancel_work_sync()
-> > calls but they were unchanged and the backtrace you showed was showing
-> > the thread in the msleep().  My guess would be that you've got systems
-> > where there are very frequent jack detection events (potentiallly with
-> > broken accessories, or possibly due to the ground switch putting things
-> > into the wrong priority) and that the interrupt is firing again as soon
-> > as the thread unmasks the primary interrupt which means it never
-> > actually stops running.
-
-> That is what I strongly suspect is happening. I don't know why exactly
-> the interrupt is firing continuously, but the hang is always in msleep().
-> One possibility might be that the event is actually a disconnect event,
-> and that enabling and immediately disabling the ground switch causes
-> another interrupt, which is then handled immediately, causing the hang.
-
-Could be.  I'd be willing to guess that it's not just one event but
-rather a stream of events of some kind.  Possibly if it's due to the
-ground switch it's spuriously detecting a constant stream of button
-presses for the affected systems, which don't produce any UI visible
-result which would cause users to pull the accessory for whatever
-reason?  Whatever's going on I bet it's broken accessories triggering it.
-
-> > My other guess would be that moving the delay that's been added to a
-> > delayed work would avoid the warnings, though you might want to manually
-> > keep the physical interrupt disabled while that's running which is fun.
-
-> I am not sure if that would fix anything. The current code sleeps, then
-> enables the ground switch and does the rest of the detection. I'd somewhat
-> understand the code if it would enable the ground switch after an "insertion
-> detected" interrupt, then wait for some amount of time and handle the rest
-> of the detection after waiting (even though that should really be handled by
-> the "detection complete" interrupt). But that isn't what it does.
-> If we were to implement the above, I suspect the result would be that the
-> interrupt still happens all the time, and the only difference would be that
-> it would be "silenced" while the delayed work is waiting to be scheduled.
-> That doesn't really fix the problem, it only works around it. But, sure,
-> it would be much better than the current situation.
-
-Yes, exactly - I was just looking at a refactoring in the code which
-would mitigate the immediate problem while keeping the current partially
-documented algorithm in place.
-
-> My "wild shot" fix would be to enable the ground switch after an insertion
-> event and to drop the software sleep entirely.
-
-That's entirely plausible to me, either together or possibly just one of
-those is actually needed.  Do you want to send a patch?
-
-> However, it is really impossible to know what the delay is for in the
-> first place. Looking into the code further, the sleep time actually matches
-> the configured jack detection rate. I have no idea why it would make sense
-> to wait for a detection cycle after an event, then enable the ground switch
-> and actually handle the event (which by then probably reports that jack
-> detection is complete after an insertion). I really don't understand
-> the logic behind that.
-
-This all smells like there's either a race condition in a state machine
-somewhere or the button detection needs a bit of help (though if it's
-the latter then it'd be conditional on a microphone having been
-detected).
-
-Hopefully David will get back to us with some explanation and ideally
-fix.
-
---xVNftv7fOUYdi/3y
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPcEMkACgkQJNaLcl1U
-h9BX8Qf+PrDNAOJFzWqrttDu9oAgYQJuDykPUqiH5b3Niw/t4PUQvsuMbTcozyYs
-QOnZEctgIKRLMfwvtTMxi4SwtvG7+74uTb+o/mbkZPOOxIOEbwSRSUQIvjD19riu
-PWHWDkiWDxQmXnLCUL07v4LJA5Rk3t1Jyaqu+jeD9bd9lk4qW72bJiDsKvVJBW1d
-M5LjDLMmODEJONHzNYoUBX6CJABY7jlzS41txrXeHXqASIIauHizti3DRhS9d5ty
-/+YJzwB1Qj+S7DgBHZR/U1I5LBuVFGq7AIHHMNnH7I/1XyJ4Y2xfSRDTc4jaoUUT
-CcmqpVi4btxYCZjq84qiu3BuVfPhmg==
-=tzH8
------END PGP SIGNATURE-----
-
---xVNftv7fOUYdi/3y--
