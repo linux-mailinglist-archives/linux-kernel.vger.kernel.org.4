@@ -2,63 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E4D8687721
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 09:19:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6D42687723
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 09:19:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231646AbjBBITP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 03:19:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36488 "EHLO
+        id S231726AbjBBITW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 03:19:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbjBBITM (ORCPT
+        with ESMTP id S231661AbjBBITQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 03:19:12 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B1840BFC
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 00:19:11 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id m13so1065243plx.13
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 00:19:11 -0800 (PST)
+        Thu, 2 Feb 2023 03:19:16 -0500
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F0684B79
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 00:19:15 -0800 (PST)
+Received: by mail-pl1-x642.google.com with SMTP id k13so1144486plg.0
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 00:19:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ufispace-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=BSLvoWKFIHzwbiFrmh/N7Zqs+NmVx/mQp/jfLVij8Fo=;
-        b=yR0zznsS7cpKWzf5jRRu1SGs5mdFv/ROA4gWJHdcf2U0ApQBKMCTIx7XJTvfyIhYx7
-         z4ZU+Wb8T/vM5vYb4/8lzB8hrv0hA4AyIZLJLJKteoRUwHCREgIqN9434HXAXY0iCRVB
-         ew05JPjLH1iedjt1pKPYk1qWZeaU1ybOS0C5znbVTEoDJiHSnoPmpsUE1YvA6FQgsJyz
-         vxj+xfCfPD0x3avfnnqNxuPXaPwST/M1hCpiPAJtLU0daE3NUFKGsngr+c7Uwm5Nd0Xf
-         GVAEwM9ozQ5XrzKfjU7heQNNdZR+iYLwPv7gH4vy2hRjXEwfTV0dqh0RksQSr4vqmvNd
-         mfMw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xYQEim1aMd1zzuJMmA4e6AobcW8EG99vfBVaZv6UaOI=;
+        b=0kR63NHO0bLqMO7x5f84eHCV8ztqxsEFVaUb1CzThkMCQ5grIfQEcq2AZusm6xl7qW
+         mUsf6YIHGE80/pLWp5Gz0wJTFYJ6C1vxx6D7/Xxv4wkcFNEc6CHVBY8QG4BlapBQzcU3
+         xiBc8x1aOVWxjWijQ+tJPfJzxc9PIhV2uI0g5smrtn4SnN/otn9p/zgd7beiEPoVdLT/
+         XmD3PceJcPJGjT5NCRdRsv7O4bjFpTyBWjpK4RDdL6oQoETWOREQE4hYA1Tye4J6zLqD
+         3JbYQxQJUxf89NPyjE/h5qhsmvjchNg9KznJhcNBVjM27uKd9j3+4/NkQ/hH6GQjjwwQ
+         Cmjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BSLvoWKFIHzwbiFrmh/N7Zqs+NmVx/mQp/jfLVij8Fo=;
-        b=K5WadOvs8rx3dNgFLBzkAM8TUxr5OjXmz7QLtu4hWttoxUPzUBQfwaB54a7hJbmsPS
-         jCVD7aL46IrUhq64AHFIFArmXJTr4iZk63oEUPfDGPeb6dKJpUCpaKQZaAJDDFuYU9D0
-         QxjcRlTr+Qm+u9MjMdcxI6EIntIIuVWiAVYGrtEFEFE5tLphJfN3kS9qPbNRn4qwCzli
-         OYfoOZ2VONyG/IGOorh+J8/q1aMbSMzZDFdSU3LuSKFu+vtbbinVEH+qAQk+DqKCknt2
-         yN8+zJm1NqsUQXve1GetymCWVkQN2xcOFrv3irJGk3qqvZXcq4MPAQItJYAgn1umWU3E
-         qZcg==
-X-Gm-Message-State: AO0yUKVs5GD6cmf17L9AjWazajyFfDb8dTH0ND4qQS6TFV7abddurC/x
-        mqQgys1gFMHbDGsfVePtHCM3uw==
-X-Google-Smtp-Source: AK7set9hjfIzs5B04/10d95IHbHrAEAa7w/n9b2kPsEqjrWUVEguQhrMFdHHr8eu1oqizGH77mcqXw==
-X-Received: by 2002:a17:903:24f:b0:196:3db5:c08b with SMTP id j15-20020a170903024f00b001963db5c08bmr6596565plh.69.1675325950749;
-        Thu, 02 Feb 2023 00:19:10 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xYQEim1aMd1zzuJMmA4e6AobcW8EG99vfBVaZv6UaOI=;
+        b=w2e+kkRL3tUClt6Vi7IqPXHWiLiKHl/FXCr5G5furmxd3wrTFKYatPpDm/d6QRLjHD
+         4gGrR766aJfF8PX/jXEnx2WAr+PWvdDSaB6CTH0Y1xtWi1pVQ3Q+TH0sgK8EV4NPSEf3
+         HSXA0Wjuz2oeIlvQghNixD8xso0h2XtU/6tOevhxQ1GK/v9rkkrgf86FtlAuYK46wzh2
+         BG1a5sZwGS1emS59qbF2r3YS2OjgYYc2c3DJ8cew8RqNjgJL7dwjVv6SIbe0rjZHJ1Aw
+         gd/ExZuXC48G15sIEBt+RaS1un2bNnZLYE64zBoOQqM3j4z9D6qSIQXX/MQXb6OTUFE7
+         xYww==
+X-Gm-Message-State: AO0yUKU62PGpD++WxCGyotUakbtsATsoNGxVo4TAjrw9IljklwBAb8xx
+        aCvL3BlC79yRznxCwrKwn1gpyw==
+X-Google-Smtp-Source: AK7set/ZVmhVHWKUZUM7FcTZVNEEzrtV4rjOjDXDVGcvHPkD8SzdYteHtyGI+iHyr8Zovw42x1EQ/w==
+X-Received: by 2002:a17:902:c3c5:b0:196:433e:2384 with SMTP id j5-20020a170902c3c500b00196433e2384mr5472705plj.57.1675325955317;
+        Thu, 02 Feb 2023 00:19:15 -0800 (PST)
 Received: from openbmc500G.LAB.ufispace (CH210-63-217-225.static.apol.com.tw. [210.63.217.225])
-        by smtp.gmail.com with ESMTPSA id y9-20020a1709029b8900b0019324fbec59sm13187552plp.41.2023.02.02.00.19.08
+        by smtp.gmail.com with ESMTPSA id y9-20020a1709029b8900b0019324fbec59sm13187552plp.41.2023.02.02.00.19.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 00:19:10 -0800 (PST)
+        Thu, 02 Feb 2023 00:19:14 -0800 (PST)
 From:   Jordan Chang <jordan.chang@ufispace.com>
 To:     linux-arm-kernel@lists.infradead.org,
         linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
         krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au,
         robh+dt@kernel.org
 Cc:     jay.tc.lin@ufispace.com, eason.ys.huang@ufispace.com
-Subject: [PATCH v2 0/3] Add Ufispace NCPLite platform device tree
-Date:   Thu,  2 Feb 2023 16:18:40 +0800
-Message-Id: <20230202081843.2358-1-jordan.chang@ufispace.com>
+Subject: [PATCH v2 1/3] dt-bindings: vendor-prefixes: Add prefix for Ufi Space
+Date:   Thu,  2 Feb 2023 16:18:41 +0800
+Message-Id: <20230202081843.2358-2-jordan.chang@ufispace.com>
 X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230202081843.2358-1-jordan.chang@ufispace.com>
+References: <20230202081843.2358-1-jordan.chang@ufispace.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -70,25 +73,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Ufispace NCPLite platform device tree, and add the compatible
-string in dt-bindings files.
+Add a vendor prefix for Ufi Space (https://www.ufispace.com).
 
-Changes for v2:
-- modify node name to generic one and check with dtbs_check
-- send-email without confidential mode
+Signed-off-by: Jordan Chang <jordan.chang@ufispace.com>
+---
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Jordan Chang (3):
-  dt-bindings: vendor-prefixes: Add prefix for Ufi Space
-  dt-bindings: arm: aspeed: document Ufispace NCPLite BMC
-  ARM: dts: aspeed: Add device tree for Ufispace NCPLite BMC
-
- .../bindings/arm/aspeed/aspeed.yaml           |   1 +
- .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
- arch/arm/boot/dts/Makefile                    |   1 +
- .../boot/dts/aspeed-bmc-ufispace-ncplite.dts  | 359 ++++++++++++++++++
- 4 files changed, 363 insertions(+)
- create mode 100644 arch/arm/boot/dts/aspeed-bmc-ufispace-ncplite.dts
-
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index 2f0151e9f6be..ab0dd1cb5ede 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -1344,6 +1344,8 @@ patternProperties:
+     description: Ubiquiti Networks
+   "^udoo,.*":
+     description: Udoo
++  "^ufispace,.*":
++    description: Ufi Space Co., Ltd.
+   "^ugoos,.*":
+     description: Ugoos Industrial Co., Ltd.
+   "^uniwest,.*":
 -- 
 2.39.0
 
