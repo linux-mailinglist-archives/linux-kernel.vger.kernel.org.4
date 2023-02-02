@@ -2,197 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2C6F68897B
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 23:02:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C162688979
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 23:02:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233115AbjBBWCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 17:02:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33648 "EHLO
+        id S232387AbjBBWCJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 17:02:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232842AbjBBWCE (ORCPT
+        with ESMTP id S232453AbjBBWCD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 17:02:04 -0500
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on20600.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eae::600])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2843A885C7
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 14:01:38 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Z5/3UsoGAUS0R7faGYflOROt4kk/FLBDsz1GvO3mBJIJ9HyYpyFKNlZKLy3s/2GmPkq97c9b7uwC6a/wyoOAtS2Vq8A+dCL+9qoKtZgZYQ5mLy2lP5//eXjlaYVtRafWJcymWD9fZPLMNJSNobLM3UoLgF1IesVShnTlL93Pl8jg2SMABJX91a/i9Excq60DOuZ1+pzqTF7B8yIwuuHp5LlOclYSe5Yy/ShZnyh9PBJ+COnrreC9FP6RlNeAiYTI/KEOGemefqg9gQsjdPsLa1r+xcwZY2SVI560BrafdKZ5QKrPg0c44ABqvR43/GYGk4tVGHTsMlENdvh3z7BBNw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cUMhWpP/ZPBOWKV8zzS/V0rVb+OUm8VH8Wq5sihnzbM=;
- b=OsVnXNQQnNMcP1WBXJgvdKFogj5XLCAr12G1C0ndXsmCW6/qnFWEfziOLazslTe32gO8IfjVtnOPox12419gOOt+Ij2M1111R6qzoSl7sO3k5Urt27f0d26y99VEYRKO1RVvP3o/WvirJhVqKhQNYqvZ0Kv28vK1N9dMX6exiFHcp7Zhm5892z7MQ8XOI2kH/ptUFbahAH5mcoWTKfrB1xJtCDrH0RvOFnn6ghTNjeIDa4NbK/TmM/frge48OkvR442sCIqIHoNNHcZdHdMlse92HWwnXH/J3LuA8eDSETOfwJwYBDhH+Ske9m2dPnZgM2HJmwJEE645BqIyLAlbKA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cUMhWpP/ZPBOWKV8zzS/V0rVb+OUm8VH8Wq5sihnzbM=;
- b=f+D/PRRKoaZydA03j/SVNl1Zo8FrZ4RusG78eo9cRksqMRYqvDDVj3XAPzsCQxzDMcwE8PkZfgieKEZhkJrl8BR8cst6Gu7zD11uK1oylr2zw3X2gTQEjkttGRafcS1mGV+Ifa/J/n0x5pKY0tYKVpGrGQR3Jw/ju7lfxBRQ0JSIT/fwyaxGfYGG54IF4wJ7ZKdeEes+fKWiSGOjsS+CwXt1DosGUbMBvildUUOCQPK4lTD7uHo+CiYwz5IZBbMk/jJdOJLU4R+kMI7zXZd6Y4xon3/5dS7WB2MOabBRZrwXoEDHdvgt1HQ+BYQt3CVBB8YOtEYT4xVVuUanGkD2Yw==
-Received: from PH0PR12MB5481.namprd12.prod.outlook.com (2603:10b6:510:d4::15)
- by DS7PR12MB5767.namprd12.prod.outlook.com (2603:10b6:8:76::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.27; Thu, 2 Feb
- 2023 22:01:19 +0000
-Received: from PH0PR12MB5481.namprd12.prod.outlook.com
- ([fe80::a891:beb7:5440:3f0]) by PH0PR12MB5481.namprd12.prod.outlook.com
- ([fe80::a891:beb7:5440:3f0%4]) with mapi id 15.20.6064.025; Thu, 2 Feb 2023
- 22:01:19 +0000
-From:   Parav Pandit <parav@nvidia.com>
-To:     Si-Wei Liu <si-wei.liu@oracle.com>,
-        "mst@redhat.com" <mst@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        Eli Cohen <elic@nvidia.com>
-CC:     "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 3/7] vdpa: validate provisioned device features against
- specified attribute
-Thread-Topic: [PATCH v2 3/7] vdpa: validate provisioned device features
- against specified attribute
-Thread-Index: AQHZNcrul/O2ZyBovE6TfvS9k66n+q67G64QgAEbwYCAAABlkA==
-Date:   Thu, 2 Feb 2023 22:01:19 +0000
-Message-ID: <PH0PR12MB5481281DC132B6424BF4DAD8DCD69@PH0PR12MB5481.namprd12.prod.outlook.com>
-References: <1675207345-22328-1-git-send-email-si-wei.liu@oracle.com>
- <1675207345-22328-4-git-send-email-si-wei.liu@oracle.com>
- <PH0PR12MB5481759D5CA6EB5C9D63C517DCD69@PH0PR12MB5481.namprd12.prod.outlook.com>
- <6b27b653-1d36-0ec8-c3c7-caaf1b896381@oracle.com>
-In-Reply-To: <6b27b653-1d36-0ec8-c3c7-caaf1b896381@oracle.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH0PR12MB5481:EE_|DS7PR12MB5767:EE_
-x-ms-office365-filtering-correlation-id: a63aa249-bb9c-4447-ffed-08db056903ca
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 6shcJUkw9eQGLEXbRqRhU1b5VQGrknA/zssDtQLWooUCVA+QGDSF9S+d869p8Mmn4aANaz2Na7O7wT6oShBzKtm1UocDj/M86xxO834THVRUB89WRZZV8oJFndqWKAl6Ru1ZBlIaIWZ9yUwQ/xFQsa4cWrZP2FjBP/kg08gQX+Cd1yrCO2a6L9VcGyFdcU5JzxI8NZN2sKQpGysj4nrh5wsTjQ/SuhFcdH/QgZWT+dwBZjCI0A55coaca+1r76IS27nTHjvk0eYA6v208celSakeeViluWqZjmD1Ewz586y7d2oxM/Za14W2davUXPAnQdc+TcNyNmGAiDf+eitHHMav7ttb2Y4r1BIvHipHjgN3JhKBqihxdy9Rn+NUzhlZATj9RU4doK7NwShuy6yaxVk0A0W5MhhYGE75x1d3VfAINJqTdfhh6KQPZ3Tc+Z2jQLBgogu6LJaM3d3iMVRvPocw3XSXWQxerCv1xFiweLTxyms1OuSXsVIN5Jw/MShhX+SFK7olcAUPcxLLn3ulhdHSGgp3rb9aof+o68goy6dbCzNc/5o+bj/K4SxXty5yQ9CBqF9AgGkwK6HDbIC1ZO+5L43CUb41BHxp/7vOYz9xyPhK33w6NH2pFGOdl9dX0dUsUWHZCvQE/xJRVEAgLAjqu1/bN8GAPAtjhyyTIlHy7U4lwjBas7HO89N8f+25bDwLzqxFIoolaGo49IIIuw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR12MB5481.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(136003)(396003)(376002)(346002)(39860400002)(451199018)(76116006)(5660300002)(33656002)(86362001)(8676002)(4326008)(38070700005)(55016003)(52536014)(41300700001)(8936002)(316002)(110136005)(54906003)(6636002)(66946007)(66476007)(66446008)(66556008)(64756008)(122000001)(38100700002)(53546011)(6506007)(478600001)(71200400001)(7696005)(9686003)(186003)(2906002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SHFVRDU1SGdIaHZZZ1dVTFU1Vk5nY0lMaTRGUWpqQVgxTEMrTG9TbDg0ZnVP?=
- =?utf-8?B?Zlk4NGFFWDE4bzVBMXdGRXZjWUM5MGFlQ1kvMFovaXExV201b2dsMzdvT2pW?=
- =?utf-8?B?d0V3ZHlXU0psTGV4SDd5SXhLV1ZXS0M3UnZhSVR0VlM3aldvUWZXLzJYRnI5?=
- =?utf-8?B?Zkl1bjdoaS9SSytIOEFGdDdrcUZkVHR2WVhKeU1sbmNzYVIvQzNDOUNJbTJ0?=
- =?utf-8?B?VVZuSlhzTytKaTRuTzFnaEtHQ0pReXBhbmkwMngvTXZHQ3hSQ3NNbVR2U2xt?=
- =?utf-8?B?eGltR1FYSHRRMUdTWUVIRU9BVytQQ2hUSWNtc2MwUUVlM3ZtOExXdm84N0Q2?=
- =?utf-8?B?NThzTlhSYVNXY05rdjJBYytjay9uTnZhODhUZjRoK2RqYnhJcW1Wd0lieVN4?=
- =?utf-8?B?WG1TeEFuVzZHVEN6dXE5cDFnT01jUFhadEx6TVcwZWUvNmdncld5SGQzSXht?=
- =?utf-8?B?c0c0ZlBVY01WRnVPOVh5SE1SQUtmZ1ZUcVJXMm1LNC9zYWJiY21oNW5PWnVN?=
- =?utf-8?B?c1Z1Q01HQ2FKY2dNOEJjTEtWT1NLV3ZjV0I4TUVma2QvSlJqbXRXQXQ1NW9h?=
- =?utf-8?B?MldHSDg0ZVVqK3hENTdMUUh2TXZDaHd6em1ybm1QZHVXYjJSWlVoMGFqMGZJ?=
- =?utf-8?B?SFVqa29ybjhXKzgwdFowOHJlazYxSzdTUEp1ellVUkVJdGNCbk5NeUNYS2Uz?=
- =?utf-8?B?UVdsbWR1eFk5ZEpqeUVtcU9mejg4L1dpMGZrYnVvWW5TQXlxVWpFY0ZKYXFR?=
- =?utf-8?B?RG9vUndIUDZDUmRRNis5aXQwRisrNlFRcmVCT1o4MWxFdU40SUxUdVB6Slhp?=
- =?utf-8?B?RmRvN3dUeUY3b2pFT0ZhcjNzSWEvb0I4RmZhMUY4UVNScnE2WUlNRTk5aTVj?=
- =?utf-8?B?QkFmcEh0MVFoWWNsSjh0UVl5Y3hkbGM2anAxaUR2cktyTXcxNXNGRFR1RnBI?=
- =?utf-8?B?czBDQTl2Zzc4WFhabU85MFVpN2RUWEU5ZjhvTnhrZkNFR3BpZzRxcXZ5dXU3?=
- =?utf-8?B?VXlLZ2t0S1V0UVgreG1vSnUyWnFzR2piL1lET21hOVM5a2s0OExBZ1FTcm5x?=
- =?utf-8?B?K01qWVJVakQyRkNxbnQzYXNoS0JlTUxIY20xQmRYZXJQOU0zVVNQWGQ1OEJi?=
- =?utf-8?B?N2xqejNyMVJvczh1d3hIMlJkSVdkckZCQVRsbGVhc0g4eSsrSjNhUUxFc0Q3?=
- =?utf-8?B?VkF0QXhOWE54cjB2TWt2OU1ydnZRVmY1dmxpYmFUZy81QzFRVW0rTVM1ZFNL?=
- =?utf-8?B?T0g0cGR4WEk5MXhqMHRiR05oaS83UEUrcHlKS1o3RkNtRXcrZFlVV2RVdGZr?=
- =?utf-8?B?MzdYNmpnWm1GWlJVT29WaGRvZHltY0w5dy9iQUZWdnozMWlYdTJTVXV6Y0JL?=
- =?utf-8?B?TGVDcUFOb2J6NmtIZEpGckJYdThWSnRCZU94TDl4UG11YTVtS3kyckxxWjdn?=
- =?utf-8?B?L21lSGNHV3dZa09xdXlUS0FXc2ZIT29SRS9kQUlOREt4a3V2Mjh5T0R4VFZ3?=
- =?utf-8?B?U0k0OWtUb3dsR0srb2hITDRQc1U5OXhEdlJsc1NjZTh2aXlYQk5JRzV3U1I4?=
- =?utf-8?B?Q2I1S0ptalZ5MEt2Nkc3amZPWlMyeHN3aFoxdHNLL2Z5emVtV0VLMnMwSzU2?=
- =?utf-8?B?NkhubndFcEtHZ2tIMURjL0Z0SXNzZUFvNmNpZ3lTZkFXdFhXZUgrYlhlUHdU?=
- =?utf-8?B?QmdYK3JqSUJYKzhZK3NHVHBlTXkxMkR0OEl6OVFpdnN2ZExSZkRpRkZ0WEJz?=
- =?utf-8?B?bkNpSDI5MXFWRFgxbE1VK1grcWdQWG1Zd0JrTWROY01kS3QyRzNtbGZYelI2?=
- =?utf-8?B?cnNqQk9QSXpNNEEzVnY3Y0M4NnNvUUlUREdId0VhUnpXbmFHQnRoUFdSWkdO?=
- =?utf-8?B?anRhUGxtTEJCbjRrK0QwVFNacmJkRklvcVc4dWE2NndlVkFiRld3Y2M5Tyt5?=
- =?utf-8?B?OXQ4cjVENHhyWmh4Qk9UdTJNc2RRR3NucUZIaER6V3MwbGZIQWozOWszR3Zt?=
- =?utf-8?B?M2duWldaeUNycXZPdEFabHJjSjV1M0hORjduYXE4MWxlNXAxYWNwT0tSRmpZ?=
- =?utf-8?B?d1BMejQxajBUYTQrMGJMNDJrdVlISGtEVllCNHBmUW9mcm1KamxsSTZ1QXdK?=
- =?utf-8?B?NG1TUGI2VGlTQ1pDRTZ1ZXFaSVB2djNRemhpdU9QdmFERURRWDY1R1J4c0VB?=
- =?utf-8?Q?FSCo7vbD75QJIaPuaMna5X0=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Thu, 2 Feb 2023 17:02:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E7A77D6E1;
+        Thu,  2 Feb 2023 14:01:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1CE6F61AE1;
+        Thu,  2 Feb 2023 22:01:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFDA1C433D2;
+        Thu,  2 Feb 2023 22:01:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675375291;
+        bh=HBJPKONk3bkIam13pz+zKjhOxtdFmVhfUC/fbULIJ6c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nssX31Yrs9k2sIxmaZrTuYHp25KLSMkllc0j3dsje0/FNkvbyvuR0HJ0VaICbU+7B
+         WLvJASsNKb4C4QYjYoXPwcI6egNaclEo9RkcuAF/at790eLniOJjsg+YcXrx4z7LP6
+         lOIaX6LGKmPxMtBKZ7G3DzFa8GoDrJHl8yR6Hr1H+D36ut2yYAo4F+Msnd4cbJY7UJ
+         /r1fL64E2KYl8DP+Xts8qrnOJIoiDNEHL4N2KUXIXDoY9cZjy+438rFNi6TPAVfhHx
+         eeaUT4niL3NZQZYtvXZf2y4FdGP99ruAbsPeiLlMzAb6moZm8EZ92DGjmpZTnp0GSm
+         GShUSNVWezCiQ==
+Date:   Thu, 2 Feb 2023 22:01:26 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Conor.Dooley@microchip.com, palmer@dabbelt.com, rppt@kernel.org
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, frowand.list@gmail.com,
+        robh+dt@kernel.org, mick@ics.forth.gr, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu,
+        Valentina.FernandezAlanis@microchip.com,
+        Daire.McNamara@microchip.com
+Subject: Re: RISC-V reserved memory problems
+Message-ID: <Y9wytv5KSt1ca+td@spud>
+References: <8e10bf15-9fa9-fe90-1656-35bf3e87e7f8@microchip.com>
+ <f8e67f82-103d-156c-deb0-d6d6e2756f5e@microchip.com>
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR12MB5481.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a63aa249-bb9c-4447-ffed-08db056903ca
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Feb 2023 22:01:19.5772
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: JEfZ+db59Swddw5QrQ0dym0GMe0KlG6UHOPIbUXp2xgz+BI4ws5PeiEuEU+Ce2WinBavvLKkH2p0Oxr1lMCxWQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5767
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        SPF_HELO_PASS,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="eZtN57855azcqZYC"
+Content-Disposition: inline
+In-Reply-To: <f8e67f82-103d-156c-deb0-d6d6e2756f5e@microchip.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQo+IEZyb206IFNpLVdlaSBMaXUgPHNpLXdlaS5saXVAb3JhY2xlLmNvbT4NCj4gU2VudDogVGh1
-cnNkYXksIEZlYnJ1YXJ5IDIsIDIwMjMgNDo1OSBQTQ0KPiANCj4gT24gMi8xLzIwMjMgOTowNSBQ
-TSwgUGFyYXYgUGFuZGl0IHdyb3RlOg0KPiA+DQo+ID4+IEZyb206IFNpLVdlaSBMaXUgPHNpLXdl
-aS5saXVAb3JhY2xlLmNvbT4NCj4gPj4gU2VudDogVHVlc2RheSwgSmFudWFyeSAzMSwgMjAyMyA2
-OjIyIFBNDQo+ID4+DQo+ID4+IFdpdGggZGV2aWNlIGZlYXR1cmUgcHJvdmlzaW9uaW5nLCB0aGVy
-ZSdzIGEgY2hhbmNlIGZvcg0KPiA+PiBtaXNjb25maWd1cmF0aW9uIHRoYXQgdGhlIHZkcGEgZmVh
-dHVyZSBhdHRyaWJ1dGUgc3VwcGxpZWQgaW4gJ3ZkcGENCj4gPj4gZGV2IGFkZCcgY29tbWFuZCBk
-b2Vzbid0IGdldCBzZWxlY3RlZCBvbiB0aGUgZGV2aWNlX2ZlYXR1cmVzIHRvIGJlDQo+ID4+IHBy
-b3Zpc2lvbmVkLiBGb3IgaW5zdGFuY2UsIHdoZW4gYSBAbWFjIGF0dHJpYnV0ZSBpcyBzcGVjaWZp
-ZWQsIHRoZQ0KPiA+PiBjb3JyZXNwb25kaW5nIGZlYXR1cmUgYml0IF9GX01BQyBpbiBkZXZpY2Vf
-ZmVhdHVyZXMgc2hvdWxkIGJlIHNldCBmb3INCj4gPj4gY29uc2lzdGVuY3kuIElmIHRoZXJlJ3Mg
-Y29uZmxpY3Qgb24gcHJvdmlzaW9uZWQgZmVhdHVyZXMgYWdhaW5zdCB0aGUgYXR0cmlidXRlLA0K
-PiBpdCBzaG91bGQgYmUgdHJlYXRlZCBhcyBhbiBlcnJvciB0byBmYWlsIHRoZSBhbWJpZ3VvdXMg
-Y29tbWFuZC4NCj4gPj4gTm90ZWQgdGhlIG9wcG9zaXRlIGlzIG5vdCBuZWNlc3NhcmlseSB0cnVl
-LCBmb3IgZS5nLiBpdCdzIG9rYXkgdG8NCj4gPj4gaGF2ZSBfRl9NQUMgc2V0IGluIGRldmljZV9m
-ZWF0dXJlcyB3aXRob3V0IHByb3ZpZGluZyBhIGNvcnJlc3BvbmRpbmcNCj4gPj4gQG1hYyBhdHRy
-aWJ1dGUsIGluIHdoaWNoIGNhc2UgdGhlIHZkcGEgdmVuZG9yIGRyaXZlciBjb3VsZCBsb2FkDQo+
-ID4+IGNlcnRhaW4gZGVmYXVsdCB2YWx1ZSBmb3IgYXR0cmlidXRlIHRoYXQgaXMgbm90IGV4cGxp
-Y2l0bHkgc3BlY2lmaWVkLg0KPiA+Pg0KPiA+PiBHZW5lcmFsaXplIHRoaXMgY2hlY2sgaW4gdmRw
-YSBjb3JlIHNvIHRoYXQgdGhlcmUncyBubyBkdXBsaWNhdGUgY29kZQ0KPiA+PiBpbiBlYWNoIHZl
-bmRvciBkcml2ZXIuDQo+ID4+DQo+ID4+IFNpZ25lZC1vZmYtYnk6IFNpLVdlaSBMaXUgPHNpLXdl
-aS5saXVAb3JhY2xlLmNvbT4NCj4gPj4gLS0tDQo+ID4+ICAgZHJpdmVycy92ZHBhL3ZkcGEuYyB8
-IDE4ICsrKysrKysrKysrKysrKysrKw0KPiA+PiAgIDEgZmlsZSBjaGFuZ2VkLCAxOCBpbnNlcnRp
-b25zKCspDQo+ID4+DQo+ID4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3ZkcGEvdmRwYS5jIGIvZHJp
-dmVycy92ZHBhL3ZkcGEuYyBpbmRleA0KPiA+PiAyMWM4YWEzLi4xZWJhOTc4DQo+ID4+IDEwMDY0
-NA0KPiA+PiAtLS0gYS9kcml2ZXJzL3ZkcGEvdmRwYS5jDQo+ID4+ICsrKyBiL2RyaXZlcnMvdmRw
-YS92ZHBhLmMNCj4gPj4gQEAgLTYwMSw4ICs2MDEsMjYgQEAgc3RhdGljIGludCB2ZHBhX25sX2Nt
-ZF9kZXZfYWRkX3NldF9kb2l0KHN0cnVjdA0KPiA+PiBza19idWZmICpza2IsIHN0cnVjdCBnZW5s
-X2luZm8gKmkNCj4gPj4gICAJCWNvbmZpZy5tYXNrIHw9DQo+ID4+IEJJVF9VTEwoVkRQQV9BVFRS
-X0RFVl9ORVRfQ0ZHX01BWF9WUVApOw0KPiA+PiAgIAl9DQo+ID4+ICAgCWlmIChubF9hdHRyc1tW
-RFBBX0FUVFJfREVWX0ZFQVRVUkVTXSkgew0KPiA+PiArCQl1NjQgbWlzc2luZyA9IDB4MFVMTDsN
-Cj4gPj4gKw0KPiA+PiAgIAkJY29uZmlnLmRldmljZV9mZWF0dXJlcyA9DQo+ID4+ICAgCQkJbmxh
-X2dldF91NjQobmxfYXR0cnNbVkRQQV9BVFRSX0RFVl9GRUFUVVJFU10pOw0KPiA+PiArCQlpZiAo
-bmxfYXR0cnNbVkRQQV9BVFRSX0RFVl9ORVRfQ0ZHX01BQ0FERFJdICYmDQo+ID4+ICsJCSAgICAh
-KGNvbmZpZy5kZXZpY2VfZmVhdHVyZXMgJiBCSVRfVUxMKFZJUlRJT19ORVRfRl9NQUMpKSkNCj4g
-Pj4gKwkJCW1pc3NpbmcgfD0gQklUX1VMTChWSVJUSU9fTkVUX0ZfTUFDKTsNCj4gPj4gKwkJaWYg
-KG5sX2F0dHJzW1ZEUEFfQVRUUl9ERVZfTkVUX0NGR19NVFVdICYmDQo+ID4+ICsJCSAgICAhKGNv
-bmZpZy5kZXZpY2VfZmVhdHVyZXMgJiBCSVRfVUxMKFZJUlRJT19ORVRfRl9NVFUpKSkNCj4gPj4g
-KwkJCW1pc3NpbmcgfD0gQklUX1VMTChWSVJUSU9fTkVUX0ZfTVRVKTsNCj4gPj4gKwkJaWYgKG5s
-X2F0dHJzW1ZEUEFfQVRUUl9ERVZfTkVUX0NGR19NQVhfVlFQXSAmJg0KPiA+PiArCQkgICAgY29u
-ZmlnLm5ldC5tYXhfdnFfcGFpcnMgPiAxICYmDQo+ID4+ICsJCSAgICAhKGNvbmZpZy5kZXZpY2Vf
-ZmVhdHVyZXMgJiBCSVRfVUxMKFZJUlRJT19ORVRfRl9NUSkpKQ0KPiA+PiArCQkJbWlzc2luZyB8
-PSBCSVRfVUxMKFZJUlRJT19ORVRfRl9NUSk7DQo+ID4+ICsJCWlmIChtaXNzaW5nKSB7DQo+ID4+
-ICsJCQlOTF9TRVRfRVJSX01TR19GTVRfTU9EKGluZm8tPmV4dGFjaywNCj4gPj4gKwkJCQkJICAg
-ICAgICJNaXNzaW5nIGZlYXR1cmVzIDB4JWxseCBmb3INCj4gPj4gcHJvdmlkZWQgYXR0cmlidXRl
-cyIsDQo+ID4+ICsJCQkJCSAgICAgICBtaXNzaW5nKTsNCj4gPj4gKwkJCXJldHVybiAtRUlOVkFM
-Ow0KPiA+PiArCQl9DQo+ID4+ICAgCQljb25maWcubWFzayB8PSBCSVRfVUxMKFZEUEFfQVRUUl9E
-RVZfRkVBVFVSRVMpOw0KPiA+PiAgIAl9DQo+ID4+DQo+ID4+IC0tDQo+ID4+IDEuOC4zLjENCj4g
-PiBWZHBhIHRoaXMgbGF5ZXIgY2FuIGxpa2VseSBkZXJpdmUgdGhlIGZlYXR1cmUgYml0cyBmb3Ig
-dGhlIHN1cHBsaWVkIGNvbmZpZyBmaWVsZHMNCj4gc28gdGhhdCB1c2VyIGRvZXNuJ3QgbmVlZCB0
-byBrZWVwIHRyYWNrIG9mIGJvdGguDQo+ID4gT25seSB0aG9zZSBmZWF0dXJlIGJpdHMgd2hpY2gg
-YXJlIHVucmVsYXRlZCB0byBhbnkgY29uZmlnLCBpcyB3aGF0IHVzZXIgc2hvdWxkDQo+IGJlIHNl
-dHRpbmcuDQo+IEl0J3Mgbm90IEkgY2FuJ3QgZG8gdGhpcywgYnV0IEphc29uIHdhbnRlZCB0byBo
-YXZlIGNsZWFyIHNlbWFudGljcyBhcm91bmQNCj4gbWlncmF0aW9uIGNvbXBhdGliaWxpdHkgZm9y
-IHRoZSBkcml2ZXIsIGFuZCBmb3IgdGhhdCB1c2VycyBoYXZlIHRvIGV4cGxpY2l0bHkNCj4gcHJv
-dmlkZSBkZXZpY2VfZmVhdHVyZXMgdGhhdCB3ZSBtYXkgZGVmaW5lIG5ldyBkcml2ZXIgYmVoYXZp
-b3IgKHJhdGhlciB0aGF0DQo+IGluaGVyaXRhbmNlIHdoaWNoIGlzIGltcGxpY2l0IGFuZCBub3Qg
-dW5pZm9ybWx5IGRlZmluZSBhY3Jvc3MgZHJpdmVycykgZm9yDQo+IGNvbXBhdGliaWxpdHkgdXNp
-bmcgdGhlIG5ldyB1QVBJLg0KTWFrZSBzZW5zZSB0byBleHBsaWNpdGx5IHRlbGwsIGp1c3QgcmVx
-dWlyZXMgbW9yZSBjYXJlZnVsIHBsdW1iaW5nIG9uIHRoZSB1c2VyIHNwYWNlIHNpZGUuDQpFdmVu
-dHVhbGx5IGl0IHdpbGwgZ2V0IG9yY2hlc3RyYXRlZCBieSBub24gdXNlciwgc28gaXQgc2hvdWxk
-IGJlIGZpbmUgdG8gZXhwbGljaXRseSBkZWZpbmUgaXQuDQo=
+
+--eZtN57855azcqZYC
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hullo Palmer, Mike & whoever else may read this,
+
+Just reviving this thread from a little while ago as I have been in the
+area again recently...
+
+On Tue, Aug 16, 2022 at 08:41:05PM +0000, Conor.Dooley@microchip.com wrote:
+> Hey all,
+> We've run into a bit of a problem with reserved memory on PolarFire, or
+> more accurately a pair of problems that seem to have opposite fixes.
+>=20
+> The first of these problems is triggered when trying to implement a
+> remoteproc driver. To get the reserved memory buffer, remoteproc
+> does an of_reserved_mem_lookup(), something like:
+>=20
+> 	np =3D of_parse_phandle(pdev->of_node, "memory-region", 0);
+> 	if (!np)
+> 		return -EINVAL;
+>=20
+> 	rmem =3D of_reserved_mem_lookup(np);
+> 	if (!rmem)
+> 		return -EINVAL;
+>=20
+> of_reserved_mem_lookup() then uses reserved_mem[i].name to try and find
+> a match - but this was triggering kernel panics for us. We did some
+> debugging and found that the name string's pointer was pointing to an
+> address in the 0x4000_0000 range. The minimum reproduction for this
+> crash is attached - it hacks in some print_reserved_mem()s into
+> setup_vm_final() around a tlb flush so you can see the before/after.
+> (You'll need a reserved memory node in your dts to replicate)
+>=20
+> The output is like so, with the same crash as in the remoteproc driver:
+>=20
+> [    0.000000] Linux version 6.0.0-rc1-00001-g0d9d6953d834 (conor@wendy) =
+(riscv64-unknown-linux-gnu-gcc (g5964b5cd727) 11.1.0, GNU ld (GNU Binutils)=
+ 2.37) #1 SMP Tue Aug 16 13:42:09 IST 2022
+
+[...]
+
+> [    0.000000] ---[ end Kernel panic - not syncing: Attempted to kill the=
+ idle task! ]---
+>=20
+> We traced this back to early_init_fdt_scan_reserved_mem() in
+> setup_bootmem() - moving it later back up the boot sequence to
+> after the dt has been remapped etc has fixed the problem for us.
+>=20
+> The least movement to get it working is attached, and also pushed
+> here: git.kernel.org/conor/c/1735589baefc
+
+This one is fixed now, as of commit 50e63dd8ed92 ("riscv: fix reserved
+memory setup").
+
+> The second problem is a bit more complicated to explain - but we
+> found the solution conflicted with the remoteproc fix as we had
+> to move early_init_fdt_scan_reserved_mem() _earlier_ in the boot
+> process to solve this one.
+>=20
+> We want to have a node in our devicetree that contains some memory
+> that is non-cached & marked as reserved-memory. Maybe we have just
+> missed something, but from what we've seen:
+> - the really early setup looks at the dtb, picks the highest bit
+>    of memory and puts the dtb etc there so it can start using it
+> - early_init_fdt_scan_reserved_mem() is then called, which figures
+>    out if memory is reserved or not.
+>=20
+> Unfortunately, the highest bit of memory is the non-cached bit so
+> everything falls over, but we can avoid this by moving the call to
+> early_init_fdt_scan_reserved_mem() above the dtb memblock alloc that
+> takes place right before it in setup_bootmem().
+>=20
+> Obviously, both of these changes are moving the function call in
+> opposite directions and we can only really do one of them. We are not
+> sure if what we are doing with the non-cached reserved-memory section
+> is just not permitted & cannot work - or if this is something that
+> was overlooked for RISC-V specifically and works for other archs.
+
+We ended up working around this one by making sure that U-Boot loaded
+the dtb to somewhere that would be inside the kernel's memory map, thus
+avoiding the remapping in the first place.
+
+We did run into another problem recently though, and 50e63dd8ed92 is
+kinda at fault for it.
+This particular issue was encountered with a devicetree where the
+top-most memory region was entirely reserved & was not observed prior
+to my fix for the first issue.
+
+On RISC-V, the boot sequence is something like:
+	setup_bootmem();
+	setup_vm_final();
+	unflatten_device_tree();
+	early_init_fdt_scan_reserved_mem();
+
+Whereas, before my patch it used to be (give-or-take):
+	setup_bootmem();
+	early_init_fdt_scan_reserved_mem();
+	setup_vm_final();
+	unflatten_device_tree();
+
+The difference being that we used to have scanned the reserved memory
+regions before calling setup_vm_final() & therefore know which regions
+we cannot use. As a reminder, calling early_init_fdt_scan_reserved_mem()
+before we've got the dt in a proper virtual memory address will cause
+the kernel to panic if it tries to read a reserved memory node's label.
+
+As we are now calling setup_vm_final() *before* we know what the
+reserved memory regions are & as RISC-V allocates memblocks from the top
+down, the allocations in setup_vm_final() will be done in the highest
+memory region.
+When early_init_fdt_scan_reserved_mem() then tries to reserve the
+entirety of that top-most memory region, the reservation fails as part
+of this region has already been allocated.
+In the scenario where I found this bug, that top-most region is non-
+cached memory & the kernel ends up panicking.
+The memblock debug code made this pretty easy to spot, otherwise I'd
+probably have spent more than just a few hours trying to figure out why
+it was panicking!
+
+My "this needs to be fixed today" solution for this problem was calling
+memblock_set_bottom_up(true) in setup_bootmem() & that's what we are
+going to carry downstream for now.
+
+I haven't tested it (yet) but I suspect that it would also fix our
+problem of the dtb being remapped into a non-cached region of memory
+that we would later go on to reserve too. Non-cached being an issue
+mainly due to the panicking, but failing to reserve (and using!) memory
+regions that are meant to be reserved is very far from ideal even when
+they are memory that the kernel can actually use.
+
+I have no idea if that is an acceptable solution for upstream though, so
+I guess this is me putting out feelers as to whether this is something I
+should send a patch to do *OR* if this is another sign of the issues
+that you (Mike, Palmer) mentioned in the past.
+If it isn't an acceptable solution, I'm not really too sure how to
+proceed!
+
+Cheers,
+Conor.
+
+
+--eZtN57855azcqZYC
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY9wytgAKCRB4tDGHoIJi
+0hQAAQDPfZU3MFF5IWgESEp24RybnfA8VsYIW1Vor96XK4WlBwD/ZvCP1WaUNlwU
+1kqHFMkUQaU9EnoUg+qEhMZH8m1ySgA=
+=+yyx
+-----END PGP SIGNATURE-----
+
+--eZtN57855azcqZYC--
