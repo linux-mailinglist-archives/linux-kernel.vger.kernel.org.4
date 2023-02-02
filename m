@@ -2,83 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DD046876B1
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 08:44:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95DF168767F
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 08:41:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232203AbjBBHoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 02:44:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39228 "EHLO
+        id S231718AbjBBHlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 02:41:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232195AbjBBHnj (ORCPT
+        with ESMTP id S229495AbjBBHlR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 02:43:39 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7A2A45FD3;
-        Wed,  1 Feb 2023 23:43:00 -0800 (PST)
-Received: from x64host.home (unknown [47.187.213.40])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 902872086209;
-        Wed,  1 Feb 2023 23:42:46 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 902872086209
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1675323767;
-        bh=rKRdvIoFhmLu94J10M1hjhJkCmPu9SVBqnqj3sarP8g=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=AwuokGIE5/2zTLGGDfA54LPomEEh7qwCRkhTmJIYot2YL+G8Pxg6t00zBSx9ozfwn
-         XAIDCY11tyypgPR9qacDC3jkRNwqdF08iZzegu5yEpvWZIN+T5IQuLMTIpB3RPDkqR
-         AQkghR7HK3d+Ht9bmmE8omlP23da//sjAl2DHYkc=
-From:   madvenka@linux.microsoft.com
-To:     jpoimboe@redhat.com, peterz@infradead.org, chenzhongjin@huawei.com,
-        mark.rutland@arm.com, broonie@kernel.org, nobuta.keiya@fujitsu.com,
-        sjitindarsingh@gmail.com, catalin.marinas@arm.com, will@kernel.org,
-        jamorris@linux.microsoft.com, linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        madvenka@linux.microsoft.com
-Subject: [RFC PATCH v3 22/22] arm64: Enable livepatch for ARM64
-Date:   Thu,  2 Feb 2023 01:40:36 -0600
-Message-Id: <20230202074036.507249-23-madvenka@linux.microsoft.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230202074036.507249-1-madvenka@linux.microsoft.com>
-References: <0337266cf19f4c98388e3f6d09f590d9de258dc7>
- <20230202074036.507249-1-madvenka@linux.microsoft.com>
+        Thu, 2 Feb 2023 02:41:17 -0500
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85678751AD;
+        Wed,  1 Feb 2023 23:41:15 -0800 (PST)
+Received: by mail-qt1-x82b.google.com with SMTP id v17so1040408qto.3;
+        Wed, 01 Feb 2023 23:41:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gv+MoihaaLJ+GntJnoIhpIsRh1NURAAHDjlWOnPclKA=;
+        b=npU+WUMTVfXfrE/GDt83SsmpOwynwv5m3h+YrlAIbCTjPy4428oobWmeVV4ECyahEU
+         e45Sy1TRYXz6BXvQp/fEnhOovHjmAsQEbn2blTrbO8VulFoNv1fgZTnXCULWUmFAmLvW
+         GDXv68gCG7KiplAF3V46DeYQcGljxA3RNRIkNMTXHhlnI0Jn20MXwUM+GIJ36asQHIdu
+         8RtFu/RC1A29np0dH+jat2w63NbNDTN6KYAbJyaW6B1W119/ngIXGxI9/BFf3quCJuTV
+         owwi2Wl+3y1NENc3AaUu/tzVhFZpj/NrZSm+FRoNDCEeqXt52zvUfM8myLhi/rvHJQy5
+         1coQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gv+MoihaaLJ+GntJnoIhpIsRh1NURAAHDjlWOnPclKA=;
+        b=J6C1K5naSkRij20fi8/zL3LMWMdahsW/TqULsFNFIWvTeWPuVqGTWGOulroBNccrb1
+         O9U+7fGAR7nrRjtO+9lV8jPFmikh0NO1HPzW2T5p9gtY9a1dBZHNH1K7gMPSyDWMWnPG
+         eRetsn/ROx6Rp6liPsaSr6gpY0EAnlFcGT4Dftfl9U8+A64dR7qDQIYabEIQn/umGQSF
+         0ROCal0O8IH4VoB1WEjwfF8l9MSW965ZF2MKsHeR2SEh0Pe3WfrxqIRwl5TeV1xWLdwM
+         2ouTOF6/1L8rky2oOg/iykuwBIKjAaAAeZCuGKhdqh9UAOBEAlIWuL19bCTcJgMELOBM
+         1SeQ==
+X-Gm-Message-State: AO0yUKXU+ro5hLX12KI0d3YutQ8XCAVOXpdvQntQV9dUKiIuG9tYGAo/
+        sClfu1GJutJAmpiYuUKEWPgSiskEhnV+OA==
+X-Google-Smtp-Source: AK7set+NbJWFQzIoxB3hk/UHZAHjQ6Vr11sMEdvxVo73BOmAP4/ycfdf2g0lXd+woh4hfgXtS3ZLrA==
+X-Received: by 2002:a05:622a:189d:b0:3b9:cd2a:f13d with SMTP id v29-20020a05622a189d00b003b9cd2af13dmr2140469qtc.59.1675323674576;
+        Wed, 01 Feb 2023 23:41:14 -0800 (PST)
+Received: from ?IPV6:2600:6c56:7d00:582f::64e? ([2600:6c56:7d00:582f::64e])
+        by smtp.googlemail.com with ESMTPSA id n7-20020a05620a222700b006fed58fc1a3sm7746210qkh.119.2023.02.01.23.41.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Feb 2023 23:41:14 -0800 (PST)
+Message-ID: <8b21feb3-624c-0c91-7dc7-708b5bb19a93@gmail.com>
+Date:   Thu, 2 Feb 2023 01:41:10 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v4 5/6] cpufreq: amd_pstate: Add guided mode control
+ support via sysfs
+Content-Language: en-US
+To:     Wyes Karny <wyes.karny@amd.com>,
+        Rafael J Wysocki <rafael@kernel.org>,
+        Huang Rui <ray.huang@amd.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Mario.Limonciello@amd.com, Perry.Yuan@amd.com
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Bagas Sanjaya <bagasdotme@gmail.com>,
+        santosh.shukla@amd.com, Len Brown <lenb@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Ananth Narayan <ananth.narayan@amd.com>,
+        gautham.shenoy@amd.com, Tor Vic <torvic9@mailbox.org>
+References: <20230131052141.96475-1-wyes.karny@amd.com>
+ <20230131052141.96475-6-wyes.karny@amd.com>
+From:   Russell Haley <yumpusamongus@gmail.com>
+In-Reply-To: <20230131052141.96475-6-wyes.karny@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
 
-Enable livepatch in arch/arm64/Kconfig.
 
-Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
----
- arch/arm64/Kconfig | 3 +++
- 1 file changed, 3 insertions(+)
+On 1/30/23 23:21, Wyes Karny wrote:
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 73c3f30a37c7..01f802935dda 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -232,6 +232,8 @@ config ARM64
- 	select HAVE_SOFTIRQ_ON_OWN_STACK
- 	select HAVE_STACK_VALIDATION	if FRAME_POINTER_VALIDATION
- 	select STACK_VALIDATION		if HAVE_STACK_VALIDATION
-+	select HAVE_RELIABLE_STACKTRACE	if STACK_VALIDATION
-+	select HAVE_LIVEPATCH		if HAVE_DYNAMIC_FTRACE_WITH_REGS && HAVE_RELIABLE_STACKTRACE
- 	help
- 	  ARM 64-bit (AArch64) Linux support.
- 
-@@ -2269,3 +2271,4 @@ source "drivers/acpi/Kconfig"
- 
- source "arch/arm64/kvm/Kconfig"
- 
-+source "kernel/livepatch/Kconfig"
--- 
-2.25.1
+> Only if the state requested matches
+> with the current state then -EBUSY value is returned.
 
+This differs from the behavior of intel_pstate, where writing the
+current state to the status file always succeeds.
+
+Why not do the same thing here?
