@@ -2,105 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F854687273
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 01:39:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E020687276
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 01:41:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229781AbjBBAjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 19:39:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44728 "EHLO
+        id S229548AbjBBAli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 19:41:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbjBBAjE (ORCPT
+        with ESMTP id S229654AbjBBAlh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 19:39:04 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57FEB1EBD4
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 16:38:09 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so2602443wmb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 16:38:09 -0800 (PST)
+        Wed, 1 Feb 2023 19:41:37 -0500
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ADE510CF
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 16:41:36 -0800 (PST)
+Received: by mail-pg1-x54a.google.com with SMTP id q130-20020a632a88000000b004a03cfb3ac6so156808pgq.6
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 16:41:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ysJlmM9nlJAmY9FF3751KAdsw1NaojV1QEcIsHtz84g=;
-        b=wlFxrwDeuRmjS6Yx5pqeXZSzZ1QwoQLFhH7gYuLp/HNtE9giqgDkoY5fZYbZ6A0XLu
-         7Y/flA0JC7K5lODPYOC4tv3SjSyg6YY8ElY67+in9t8CKYGHG5iumtcpk9glngnWwavG
-         U01Llmg5Lz5sp1ZIZ4xR4o8OKJdNFfOOTTNOMMqlri0pusWFXqtyBfDxZSJS5h6Vdyjz
-         mhAfM8QTa8zffYvmuBLnQJRPt/llkQeBjdbrSIK+Cx52Tg5ce1YIC2hY4NHi9Y/f27fg
-         WVi8uBlOooxRhpbOUVkGQhAIZP7v1ZiYq0ow896wtiNrSlmGiBsQPZoYt2YKOLIKcH0H
-         tp/g==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ki4d1amc34jkc//m/AGYcKlSJMLDGM1z24weSMYegUw=;
+        b=lAC5IQfuVVYZaNvem1btGD4sQHpdFvpjfm/4DkyoF9BMpfeeI5F0VcT2jZAUkFMaCe
+         4VdU+GZgPVmB13xUo8iLbjX3ABIxkXK2/lWIlQSxSHf8EtjutPt/C3gvjZzZJdmMDU/P
+         YXG5xXahFBOHdPPcZCEfnIq4TGllzWQuFuksb5ELSwcqMPX+6777p6+oFR3sjQD90b9j
+         wvxEaiaIH/dBDz0xPRN1AYH4j1gxpYBYUWrspjKFoVF7xj32L4ln0+iRTt6zOIQXlKE4
+         8QuAFgecCfbKF+LsJYTqd9a8gO3j3Tcv2Hq/EOcCQqU3K9wTgU5uLJkIpkkp/Fvzpvrb
+         x+kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ysJlmM9nlJAmY9FF3751KAdsw1NaojV1QEcIsHtz84g=;
-        b=yEIH5MRYd3fz6nAy2Cc1ODdLieBPwdVclTCOrr2TtU48/Mqdfyc5tuCucHVr3h6ku5
-         9NWCxTn+O6iogv3z4XsyUHYtnQSRXsZFlmpJDgTjJ+T16f006GjH3VMlvngEF5zjYdXU
-         xH37JNwmSOWxDcbwZ8GP3h3SRiQx5BE6Y6AJidBBKhevDmOG2m0wd/KzQqS4Y30wmQG+
-         ilMydDjeKOEyROTWRu98c1A/D5sC5edovktrQ+zPOb/JIG6TLfcPjGsj9GLl2oejvKqQ
-         IWWsu5vlN9VXeN++B8oF7ACOEM2fRF25i+LUzJAPPdlzYk//1P2HHq1AVvD/171pLqHM
-         JtEw==
-X-Gm-Message-State: AO0yUKWYMaZVbE4mswCXo02BG/tAkSAwPDEIyzMceQ4nmDXpvRM985Gq
-        GAJuwKxTPn2MlPVluB00Jzrb6hI3xxMSEgIS
-X-Google-Smtp-Source: AK7set8q0lFUeh/wpKIoRKCXiQhDqZfQuxvCaIKkLTDoel9Z6n2uUMIR7BuOXGLmzSzJm9o+Qc9mMQ==
-X-Received: by 2002:a05:600c:16c4:b0:3dc:4b87:a570 with SMTP id l4-20020a05600c16c400b003dc4b87a570mr4122153wmn.35.1675298283300;
-        Wed, 01 Feb 2023 16:38:03 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id k24-20020a05600c0b5800b003cfa622a18asm3135432wmr.3.2023.02.01.16.38.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Feb 2023 16:38:02 -0800 (PST)
-Message-ID: <8ffcfbf4-a146-11f8-cc86-b2c273f423c4@linaro.org>
-Date:   Thu, 2 Feb 2023 00:38:01 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCHv4 11/12] dmapool: link blocks across pages
-Content-Language: en-US
-To:     Keith Busch <kbusch@kernel.org>,
-        Bryan O'Donoghue <pure.logic@nexus-software.ie>
-Cc:     Keith Busch <kbusch@meta.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, willy@infradead.org, hch@lst.de,
-        tonyb@cybernetics.com, akpm@linux-foundation.org,
-        kernel-team@meta.com, linux-arm-msm@vger.kernel.org
-References: <20230126215125.4069751-1-kbusch@meta.com>
- <20230126215125.4069751-12-kbusch@meta.com>
- <CAJB8c05HgmDqMn9KwOi2P6+s-c8zt6-oiW6gOo==CDv6=HNahQ@mail.gmail.com>
- <Y9qk13UwzpzN+Y2q@kbusch-mbp.dhcp.thefacebook.com>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <Y9qk13UwzpzN+Y2q@kbusch-mbp.dhcp.thefacebook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ki4d1amc34jkc//m/AGYcKlSJMLDGM1z24weSMYegUw=;
+        b=JQHtGvBVk/2lCllkLT4oqUhdLGyI/91kTlUtLLYa86vE7f7+MX9jgoaabNOP84unKE
+         n/f+4TgLqVeao9/FRLcg2oaNWYW5E2z0r7RV1MoXH0cAjaSTXyPIMOgwiYTO9asjtf3N
+         sd+CH90UJ55F4sVf+aciBZuwnbEtcsZV6fvBRZAETQ65HTK0wBRxh2oqX6CbXZG09SB7
+         ZW4foG7p3xQu1LHCCvVGuqoJu0mKPhaUvvaphSLzZOeOGFsr2OHa4JdpLw87+Eg0d9z2
+         lVfs5fZ6zxsNbVEa462kc2hl7cwjz8NyfZ8iTXztTBDudTSSYM4rccLjnyOGGHjKTF3N
+         5FxA==
+X-Gm-Message-State: AO0yUKXwCfL2Ek15bKngaewuYMJc7L16JciueG5JKwbmk+E0i5k33kWw
+        X302wOc/Xth0AXFvxYTjrYGocPabBtM=
+X-Google-Smtp-Source: AK7set/ibaTucj5S+2mLkylmGNw0rkLHvVYpLtEbd/aGJVXbT1V8ve15HpfxeHvJnLpTUO6Iehbx+4iuQrI=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:90a:14c2:b0:22b:fcb6:c7c9 with SMTP id
+ k60-20020a17090a14c200b0022bfcb6c7c9mr173163pja.8.1675298495668; Wed, 01 Feb
+ 2023 16:41:35 -0800 (PST)
+Date:   Thu,  2 Feb 2023 00:40:33 +0000
+In-Reply-To: <20230109130605.2013555-1-eesposit@redhat.com>
+Mime-Version: 1.0
+References: <20230109130605.2013555-1-eesposit@redhat.com>
+X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
+Message-ID: <167529475172.840042.11178742445383557195.b4-ty@google.com>
+Subject: Re: [RFC PATCH 0/2] xapic: make sure x2APIC -> xapic transition correctly
+From:   Sean Christopherson <seanjc@google.com>
+To:     Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
+        Gautam Menghani <gautammenghani201@gmail.com>,
+        Zeng Guang <guang.zeng@intel.com>,
+        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
+        Jim Mattson <jmattson@google.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/02/2023 17:43, Keith Busch wrote:
-> On Wed, Feb 01, 2023 at 05:42:04PM +0000, Bryan O'Donoghue wrote:
->> On Thu, Jan 26, 2023 at 9:55 PM Keith Busch <kbusch@meta.com> wrote:
->> So.
->>
->> Somehow this commit has broken USB device mode for me with the
->> Chipidea IP on msm8916 and msm8939.
->>
->> Bisecting down I find this is the inflection point
->>
->> commit ced6d06a81fb69e2f625b0c4b272b687a3789faa (HEAD -> usb-test-delete)
+On Mon, 09 Jan 2023 08:06:03 -0500, Emanuele Giuseppe Esposito wrote:
+> The root cause is kvm_lapic_set_base() failing to handle x2APIC -> xapic ID
+> switch, which is addressed by patch 1.
+> Patch 2 provides a selftest to verify this behavior.
 > 
-> Thanks for the report. I'll look into this immediately.
+> This serie is an RFC because I think that commit ef40757743b47 already tries to
+> fix one such effect of the error made in kvm_lapic_set_base, but I am not sure
+> how such error described in the commit message is triggered, nor how to
+> reproduce it using a selftest. I don't think one can enable/disable x2APIC using
+> KVM_SET_LAPIC, and kvm_lapic_set_base() in kvm_apic_set_state() just takes care
+> of updating apic->base_address, since value == old_value.
+> The test in patch 2 fails with the fix in ef40757743b47.
+> 
+> [...]
 
-Just to confirm if I revert that patch on the tip of my working tree USB 
-device works again
+Applied to kvm-x86 apic, with the tweak of only stuffing the APIC_ID if the
+APIC is enabled.  I also heavily reworked the testcase (see feedback on that
+patch).
 
-Here's a dirty working tree
+Thanks!
 
-https://git.codelinaro.org/bryan.odonoghue/kernel/-/commits/linux-next-23-02-01-msm8939-nocpr
+[1/2] KVM: x86: Reinitialize xAPIC ID when userspace forces x2APIC => xAPIC
+      https://github.com/kvm-x86/linux/commit/052c3b99cbc8
+[2/2] KVM: selftests: Verify APIC_ID is set when forcing x2APIC=>xAPIC transition
+      https://github.com/kvm-x86/linux/commit/eb9819257631
 
----
-bod
+--
+https://github.com/kvm-x86/linux/tree/next
+https://github.com/kvm-x86/linux/tree/fixes
