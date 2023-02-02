@@ -2,99 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2568268761E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 08:01:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AD95687616
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 07:57:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230456AbjBBHBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 02:01:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45486 "EHLO
+        id S229916AbjBBG5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 01:57:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbjBBHBN (ORCPT
+        with ESMTP id S229546AbjBBG5l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 02:01:13 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C96D8307D
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 23:01:11 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id h4so946017lja.2
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 23:01:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6RPkQZwzCSh98zsjzzoNHs7/CVVvqXi24+J6zt37CWU=;
-        b=eQYQvVEeNh6GrV8MdWOCA/5ah+ioo03sXKFCDQYkNXEZmChGTT0z3qoR/kcWV3g1/T
-         yuCzb7Q7boaK/I8eCnExwjdL/W+o8IFDb0hRa8ONF3OnyZ72Q8M4Esr6sdjkOsQTYPGH
-         igbgzB/F7dfc87XMT37hVaFsRsSYBkWTiimHAabwnPuQ0UfI8GEbG+Hu74hmqriL4HJa
-         9em3Sg8bCf9xZMF5dRPn+6PhkGlsEThmBfiOYWcQJ+NwQU6wUMyy1en6b6l3DW62ANit
-         y+Aha6L22poHQZmn8wAiNXxTS9sJUbSyceUVWh7IIZGoGpvR4H4Cd4OrAQ5V8+DyvzgA
-         2+Ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6RPkQZwzCSh98zsjzzoNHs7/CVVvqXi24+J6zt37CWU=;
-        b=6RxUsvZKQXVrrEJXT4jrtaRZB4u5dg5GD6e+IU4gIuCEk2nNdyKiODNDoCo4WcnIgj
-         ZB6Q5+209YxfKDT70AyTDQJEXaFSzkvlLekZide4i/Aoy+wtgCSqOjyOaH0WTQm8ele1
-         lQ2uODR/37KOcGrexc3V6/GxYnYNsZR365lCzwHyjrD3Sy1tzpllitC6xOIB2nTlMbEz
-         yzrA1gksdXTtcepejYuQzWt0eZkpuBwWzY513r5VHyaTrFSRsxR9XQDQ/sA3Jt1jIEEz
-         w6Aca+p1Rd3K9peDCJxX7zs0sG+Vcr6xTQQkixjiVPOIgB/+wLnK+7/8DpHiLY8RpdTw
-         rnoA==
-X-Gm-Message-State: AO0yUKWuw32QNLQO3mOPTM5ZRNxHYZN39hsYyKnDywOa72bE1piNpPyb
-        fF9vYfOVN5Phc6BKyTYFfyNe1ONeWwADesH6KMkykw==
-X-Google-Smtp-Source: AK7set8eYoMskBn9g7b2mHv/miX35ovEm4VxCpwXRwArxQOTNJwt7VlGy2815FzYrrg+lVY75OJlVwNGKNf/NgHNLx8=
-X-Received: by 2002:a05:651c:146:b0:28a:a1d3:572f with SMTP id
- c6-20020a05651c014600b0028aa1d3572fmr771155ljd.20.1675321269189; Wed, 01 Feb
- 2023 23:01:09 -0800 (PST)
+        Thu, 2 Feb 2023 01:57:41 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45E2818ABE;
+        Wed,  1 Feb 2023 22:57:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675321060; x=1706857060;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Wzqp+Jk3onerpOsKwl6dtIABBtz+CT+6UyzxpOGfv20=;
+  b=EAhOvgqye7/fgluD6+RSdoHwWZlr5MrcOMBNjDfQIYB4yP+g/nuiCpAs
+   +93L4mCD8W9PLp6A4a/fHfpzOMoF+9zJt7tjqTB25XNZYKu3QWGjRvBZt
+   0QLoG5796h45eEF0ioFc7dozAlDxKQaVjLprErZr5SfXm7ig5wAxdA2kY
+   vMnZm0y6LOgdy37FvbLbLVTBOERK4m9wIHQwvHevZ/mEjtHdlgFgapp7X
+   0pBVa0rP4VmWv2Kh9/0l8akQMlZ6W14Zyg15s4pUVO9d+FCd0F1Y+wJO+
+   k4Hdu3jxTETEUz+hy7I6Y0O0Afrnt4VrO/9YFRxK099dFVYW3xALUJtRN
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="326069302"
+X-IronPort-AV: E=Sophos;i="5.97,266,1669104000"; 
+   d="scan'208";a="326069302"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 22:57:40 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="773747679"
+X-IronPort-AV: E=Sophos;i="5.97,266,1669104000"; 
+   d="scan'208";a="773747679"
+Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.129])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 22:57:38 -0800
+From:   Zqiang <qiang1.zhang@intel.com>
+To:     paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+        joel@joelfernandes.org
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] rcutorture: Create nocb tasks only for CONFIG_RCU_NOCB_CPU=y kernels
+Date:   Thu,  2 Feb 2023 15:02:45 +0800
+Message-Id: <20230202070245.3311951-1-qiang1.zhang@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <000000000000fea8c705e9a732af@google.com> <00000000000047848f05f3a4a32f@google.com>
-In-Reply-To: <00000000000047848f05f3a4a32f@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Thu, 2 Feb 2023 08:00:56 +0100
-Message-ID: <CACT4Y+Z1RhbV_=cQXSRtX94R0aUuFS2LXYQ5V7CySpPxMNzfTg@mail.gmail.com>
-Subject: Re: [syzbot] [ntfs3?] KASAN: use-after-free Read in hdr_find_e
-To:     syzbot <syzbot+c986d2a447ac6fb27b02@syzkaller.appspotmail.com>
-Cc:     almaz.alexandrovich@paragon-software.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ntfs3@lists.linux.dev, pjwatson999@gmail.com,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 1 Feb 2023 at 15:55, syzbot
-<syzbot+c986d2a447ac6fb27b02@syzkaller.appspotmail.com> wrote:
->
-> syzbot suspects this issue was fixed by commit:
->
-> commit 0e8235d28f3a0e9eda9f02ff67ee566d5f42b66b
-> Author: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-> Date:   Mon Oct 10 10:15:33 2022 +0000
->
->     fs/ntfs3: Check fields while reading
->
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1268739e480000
-> start commit:   55be6084c8e0 Merge tag 'timers-core-2022-10-05' of git://g..
-> git tree:       upstream
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=df75278aabf0681a
-> dashboard link: https://syzkaller.appspot.com/bug?extid=c986d2a447ac6fb27b02
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=164e92a4880000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=126f7ac6880000
->
-> If the result looks correct, please mark the issue as fixed by replying with:
->
-> #syz fix: fs/ntfs3: Check fields while reading
->
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+When setting nocbs_nthreads to start rcutorture test with a non-zero value,
+the nocb tasks will be created and invoke rcu_nocb_cpu_offload/deoffload()
+to toggle CPU's callback-offload state, but for CONFIG_RCU_NOCB_CPU=n
+kernel, the rcu_nocb_cpu_offload/deoffload() is a no-op and this is also
+meaningless for torture_type is non-rcu.
 
-Looks reasonable:
+This commit therefore add member can_nocbs_toggle to rcu_torture_ops
+structure to avoid unnecessary nocb tasks creation.
 
-#syz fix: fs/ntfs3: Check fields while reading
+Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+---
+ kernel/rcu/rcutorture.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
+index 297da28ce92d..ced0a8e1d765 100644
+--- a/kernel/rcu/rcutorture.c
++++ b/kernel/rcu/rcutorture.c
+@@ -383,6 +383,7 @@ struct rcu_torture_ops {
+ 	long cbflood_max;
+ 	int irq_capable;
+ 	int can_boost;
++	int can_nocbs_toggle;
+ 	int extendables;
+ 	int slow_gps;
+ 	int no_pi_lock;
+@@ -569,6 +570,7 @@ static struct rcu_torture_ops rcu_ops = {
+ 	.stall_dur		= rcu_jiffies_till_stall_check,
+ 	.irq_capable		= 1,
+ 	.can_boost		= IS_ENABLED(CONFIG_RCU_BOOST),
++	.can_nocbs_toggle	= IS_ENABLED(CONFIG_RCU_NOCB_CPU),
+ 	.extendables		= RCUTORTURE_MAX_EXTEND,
+ 	.name			= "rcu"
+ };
+@@ -2356,7 +2358,7 @@ rcu_torture_print_module_parms(struct rcu_torture_ops *cur_ops, const char *tag)
+ 		 "n_barrier_cbs=%d "
+ 		 "onoff_interval=%d onoff_holdoff=%d "
+ 		 "read_exit_delay=%d read_exit_burst=%d "
+-		 "nocbs_nthreads=%d nocbs_toggle=%d "
++		 "nocbs_nthreads=%d/%d nocbs_toggle=%d "
+ 		 "test_nmis=%d\n",
+ 		 torture_type, tag, nrealreaders, nfakewriters,
+ 		 stat_interval, verbose, test_no_idle_hz, shuffle_interval,
+@@ -2368,7 +2370,7 @@ rcu_torture_print_module_parms(struct rcu_torture_ops *cur_ops, const char *tag)
+ 		 n_barrier_cbs,
+ 		 onoff_interval, onoff_holdoff,
+ 		 read_exit_delay, read_exit_burst,
+-		 nocbs_nthreads, nocbs_toggle,
++		 nocbs_nthreads, cur_ops->can_nocbs_toggle, nocbs_toggle,
+ 		 test_nmis);
+ }
+ 
+@@ -3708,6 +3710,10 @@ rcu_torture_init(void)
+ 		pr_alert("rcu-torture: ->fqs NULL and non-zero fqs_duration, fqs disabled.\n");
+ 		fqs_duration = 0;
+ 	}
++	if (!cur_ops->can_nocbs_toggle && nocbs_nthreads != 0) {
++		pr_alert("rcu-torture: ->can_nocbs_toggle false and non-zero nocbs_nthreads, nocbs_toggle disabled.\n");
++		nocbs_nthreads = 0;
++	}
+ 	if (cur_ops->init)
+ 		cur_ops->init();
+ 
+-- 
+2.25.1
+
