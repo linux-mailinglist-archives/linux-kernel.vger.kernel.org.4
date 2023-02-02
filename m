@@ -2,114 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C187687D38
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 13:21:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80300687D3C
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 13:22:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232149AbjBBMVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 07:21:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53194 "EHLO
+        id S232108AbjBBMWr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 07:22:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232130AbjBBMVe (ORCPT
+        with ESMTP id S232159AbjBBMWp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 07:21:34 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BFCF8D604
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 04:21:24 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id c10-20020a05600c0a4a00b003db0636ff84so1267012wmq.0
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 04:21:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=v/4U8p8He8nf0F/Q+zKUZ6JAva9Y3IADx+ImOxMwVjs=;
-        b=DZVRTdZJ2TGTimuGoUq+e4aS2CgltVg9zGenQm3Q6L3Qknfq09JAq2Lk3bI3Ep+Xra
-         Y2YuJxGUB2Kj/j3uYg9GzAL0M4YVqii/ci1/1/VWgJA/yCTWEm10VkgqDYP8ZzckDPwx
-         dWYaVTrOnasI9nlHPfhiNudTvvBX6OLMXo1gcGVofXKgBGSPx5s904/ha6KiVkVW/eDn
-         0uZvqYUOxnXOXfj1ObF/PkqJiBf7w5apOEU/BviWew69ZimqYRHHwopcPUojTLBsJp9K
-         KBjoxfKoXTlrIGVRnyfocC5+Xj1BerZ6skEYjfON7I7uM7h3/WlsCnasF+OQojWp3oEv
-         EULA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=v/4U8p8He8nf0F/Q+zKUZ6JAva9Y3IADx+ImOxMwVjs=;
-        b=F/tYzi1LqsvxT05yssjxHeqqd3ZiFoaD8lU7rV/mD2p1fmVrQejNBGeX+H0kVxAggc
-         6fSuvPCfffV9hhSCiOQdXbK8nXexyI4vBVE6QHKmEif4DDQYqRRig5jWdBMR3hTYIC9i
-         NPh+NILrA1twOHk15uCBtpFzpJDiAmeaUaRXcwAetBtPrh5t4naGETmL0iiyY7N0q/OL
-         CI+iGuA+uzcoee4C8pWrObq2b7dhSlcKxUnJJMeaOGxuvCguqWR8fbRT1wTyGqJaQofs
-         CGaXOJtzN3iZ0h8Xq3B0ZHtZg9Wv8imV2FePpeDyIqFM2lCoQ6fQ3UK4ma2AEj+Jqie5
-         rlNg==
-X-Gm-Message-State: AO0yUKXm8aByzrIGsDe+WbqSLWAOeh9qHzfXZQ5hZYUJLDXHXGcAcJ2s
-        4Nhl7fAA4B467q/fhejMe5072A==
-X-Google-Smtp-Source: AK7set8gVqTsm/vSxOdXJguhERmSsywifTBAe6FbEDkp0QG4XpfNm6PCN3fFrU/+InV20PS1v4kD7w==
-X-Received: by 2002:a05:600c:19c6:b0:3db:2647:a012 with SMTP id u6-20020a05600c19c600b003db2647a012mr6298917wmq.40.1675340482770;
-        Thu, 02 Feb 2023 04:21:22 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id i22-20020a1c5416000000b003dc3f3d77e3sm4824975wmb.7.2023.02.02.04.21.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 04:21:22 -0800 (PST)
-Message-ID: <78155653-62ff-e367-e243-eb546ec285d1@linaro.org>
-Date:   Thu, 2 Feb 2023 13:21:19 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 20/23] memory: tegra30-emc: fix interconnect registration
- race
-Content-Language: en-US
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@samsung.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Dmitry Osipenko <digetx@gmail.com>
-References: <20230201101559.15529-1-johan+linaro@kernel.org>
- <20230201101559.15529-21-johan+linaro@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230201101559.15529-21-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Thu, 2 Feb 2023 07:22:45 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B74E719BD;
+        Thu,  2 Feb 2023 04:22:15 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id A18731FE38;
+        Thu,  2 Feb 2023 12:22:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1675340527; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7s887PXcrEEBLAv+jcmQ/g1QdFuKJpaS/1Q0bHletfI=;
+        b=yrfm5apZrNVowloDvmSxiDYpn7uBHqWUxP/h1QSK2RuPZ+sKCLKy6wDvhulJeE5C8L3Ri4
+        8ZGgm2EotNXinXiGpyzlmFzhUF/x6UvXrEycQqGrgevCdAtzvUKe8tC9n3h2RFek1e4eVo
+        ZlJ0hJYy1KVEX/0ocS8nWy95S8KrsX4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1675340527;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7s887PXcrEEBLAv+jcmQ/g1QdFuKJpaS/1Q0bHletfI=;
+        b=NF4eQGBYhc994GJPoUHxWrHkw2ImvVTtSPXGyz6wnF+LlFw38Ui1ymXEa3zMWCC22k8E64
+        UUrkg+n20iMbVrCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 62580139D0;
+        Thu,  2 Feb 2023 12:22:05 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 1t8nC+2q22O5DwAAMHmgww
+        (envelope-from <colyli@suse.de>); Thu, 02 Feb 2023 12:22:05 +0000
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.300.101.1.3\))
+Subject: Re: [PATCH] bcache: Fix a NULL or wild pointer dereference in
+ btree_split
+From:   Coly Li <colyli@suse.de>
+In-Reply-To: <20230202110543.27548-1-zyytlz.wz@163.com>
+Date:   Thu, 2 Feb 2023 20:21:52 +0800
+Cc:     hackerzheng666@gmail.com,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        linux-bcache@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        security@kernel.org, alex000young@gmail.com
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <50656A90-E0D4-4800-880C-406EBDD784FC@suse.de>
+References: <20230202110543.27548-1-zyytlz.wz@163.com>
+To:     Zheng Wang <zyytlz.wz@163.com>
+X-Mailer: Apple Mail (2.3731.300.101.1.3)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/02/2023 11:15, Johan Hovold wrote:
-> The current interconnect provider registration interface is inherently
-> racy as nodes are not added until the after adding the provider. This
-> can specifically cause racing DT lookups to fail.
-> 
-> Switch to using the new API where the provider is not registered until
-> after it has been fully initialised.
-> 
-> Fixes: d5ef16ba5fbe ("memory: tegra20: Support interconnect framework")
-> Cc: stable@vger.kernel.org      # 5.11
-> Cc: Dmitry Osipenko <digetx@gmail.com>
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+
+
+> 2023=E5=B9=B42=E6=9C=882=E6=97=A5 19:05=EF=BC=8CZheng Wang =
+<zyytlz.wz@163.com> =E5=86=99=E9=81=93=EF=BC=9A
+>=20
+> In btree_split, btree_node_alloc_replacement() is assigned to
+> n1 and return error code or NULL on failure. n1->c->cache is
+> passed to block_bytes. So there is a dereference of it
+> without checks, which may lead to wild pointer dereference or
+>  NULL pointer dereference depending on n1. The initial code only
+>  judge the error code but igore the NULL pointer.
+> So does n2 and n3.
+>=20
+> Fix this bug by adding IS_ERR_OR_NULL check of n1, n2 and n3.
+>=20
+> Note that, as a bug found by static analysis, it can be a false
+> positive or hard to trigger.
+>=20
+> Fixes: cafe56359144 ("bcache: A block layer cache")
+> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+
+Hmm, there should be something to be fixed, but not the non-exist NULL =
+dereference.
+
+If you look inside btree_node_alloc_replacement(), you may find =
+__bch_btree_node_alloc() which does the real work indeed. And yes, I =
+would suggest you to improve a bit inside __bch_btree_node_alloc().
+
+1088 struct btree *__bch_btree_node_alloc(struct cache_set *c, struct =
+btree_op *op,
+[snipped]
+1093         struct btree *b =3D ERR_PTR(-EAGAIN);
+1094
+1095         mutex_lock(&c->bucket_lock);
+1096 retry:
+1097         if (__bch_bucket_alloc_set(c, RESERVE_BTREE, &k.key, wait))
+1098                 goto err;
+[snipped]
+1102
+1103         b =3D mca_alloc(c, op, &k.key, level);
+1104         if (IS_ERR(b))
+1105                 goto err_free;
+1106
+1107         if (!b) {
+1108                 cache_bug(c,
+1109                         "Tried to allocate bucket that was in btree =
+cache");
+1110                 goto retry;
+1111         }
+1112
+
+=46rom the above code, at line 1097 if __bch_bucket_alloc_set() returns =
+non-zero value, the code will jump to label err: and returns =
+ERR_PTR(-EAGAIN). But if the code fails at line 1103 and b is set to =
+NULL, at line 1110 the code will jump back to label retry: and calls =
+__bch_bucket_alloc_set() again. If the second time =
+__bch_bucket_alloc_set() returns non-zero value and the code jumps to =
+label err:, a NULL pointer other than ERR_PTR(-EAGAIN) will be returned. =
+This inconsistent return value on same location at line 1097 seems =
+incorrect, where ERR_PTR(-EAGAIN) should be returned IMHO.
+
+Therefore I feel that =E2=80=9Cb =3D ERR_PTR(-EAGAIN)=E2=80=9D should be =
+moved to the location after label retry:, then =
+btree_node_alloc_replacement() will only return error code, and no NULL =
+pointer returned.
+
+After this change, all following IS_ERR_OR_NULL() checks to =
+btree_node_alloc_replacement() are unnecessary and IS_ERR() just enough, =
+because no NULL will be returned.
+
+This is a nice catch. I=E2=80=99d like to have it to be fixed. I do =
+appreciate if you want to compose two patches for the fix. Otherwise I =
+can handle it myself.
+
+Thanks.
+
+Coly Li
+
+
 > ---
-
-
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
+> drivers/md/bcache/btree.c | 6 +++---
+> 1 file changed, 3 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/md/bcache/btree.c b/drivers/md/bcache/btree.c
+> index 147c493a989a..d5ed382fc43c 100644
+> --- a/drivers/md/bcache/btree.c
+> +++ b/drivers/md/bcache/btree.c
+> @@ -2206,7 +2206,7 @@ static int btree_split(struct btree *b, struct =
+btree_op *op,
+> }
+>=20
+> n1 =3D btree_node_alloc_replacement(b, op);
+> - if (IS_ERR(n1))
+> + if (IS_ERR_OR_NULL(n1))
+> goto err;
+>=20
+> split =3D set_blocks(btree_bset_first(n1),
+> @@ -2218,12 +2218,12 @@ static int btree_split(struct btree *b, struct =
+btree_op *op,
+> trace_bcache_btree_node_split(b, btree_bset_first(n1)->keys);
+>=20
+> n2 =3D bch_btree_node_alloc(b->c, op, b->level, b->parent);
+> - if (IS_ERR(n2))
+> + if (IS_ERR_OR_NULL(n2))
+> goto err_free1;
+>=20
+> if (!b->parent) {
+> n3 =3D bch_btree_node_alloc(b->c, op, b->level + 1, NULL);
+> - if (IS_ERR(n3))
+> + if (IS_ERR_OR_NULL(n3))
+> goto err_free2;
+> }
+>=20
+> --=20
+> 2.25.1
+>=20
 
