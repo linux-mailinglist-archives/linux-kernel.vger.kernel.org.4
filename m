@@ -2,215 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3A1F6887CF
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 20:53:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 243326887D3
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 20:54:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229699AbjBBTxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 14:53:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42744 "EHLO
+        id S232721AbjBBTye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 14:54:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232452AbjBBTxr (ORCPT
+        with ESMTP id S232602AbjBBTyc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 14:53:47 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D2A81E2A1
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 11:53:45 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id qw12so9248639ejc.2
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 11:53:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HaDFfxxzuLwN75YKvylnJiXNpCrcwXxrygiD4ELDOQ8=;
-        b=XnDYP7IO5pP3GcYGNn52WSskJ+9C8pMoab6FbCgKr170kOCMuDWUXBcbX7btW0HnQo
-         EZKOEMsrplHxOm1VnWwjwTKunmvW/usk/seSp+huso6WA7eavXC1OKPn/G0Zh+NpOjrf
-         FRkxZSeMg3fOYkM0evBQOQQOw57ODLZi1FqsKgr0eNd1aQbrijkKnPz6Zd041HztH24H
-         8hf/GWL8cyM/R3GUmzJ0JHfUWy+bijeqr+whbQgljM4fZ2iW1UXdVWK8Ou0qravrvRGC
-         tSQ8dw0kFG90dyvw4RlZ2epCBXKnCJpQ1iSqVMR3GhhhAVeFVfgnj8wFfC1U851sD9Dj
-         UZxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HaDFfxxzuLwN75YKvylnJiXNpCrcwXxrygiD4ELDOQ8=;
-        b=H+XQ0L6iv35y8MSR07gz6m4/F3zYZWw7FLYCcFMXBh3i3tn3ACjrvX/Vf96ZKjdg5k
-         VhbR6dJmVZbCcw+E63uU8Ex66wXvMG1m9qHlxfrynTOvMaj1OV54Y8+RIPGNkXqGeRui
-         L7KrvYzL4fc8nuQAy9PM3g22Ghnea7QUDrcp39BBCrDEgL7owkS+ePJ+h1XU4HbF6h+g
-         iRYqkkUB4VO+TexF0nsRzM9LneW5rPEdRsgwifp2q02OQHShVb4VKDq0Ec5idHKfKaDW
-         +0BBnfLMGL8XAVXw+RnjcUgjU+c4sNkwvDMoJfBKMybJLq5q7A+sHDA9uvRpwfcYn9OM
-         PJtg==
-X-Gm-Message-State: AO0yUKUXRbMQZOIvJuSncOoyONrJJ6LLbKT6D1p2MP3mKX83Js2TTSS4
-        4Csax6HZwWdjrqjMdFJUJpoXPw==
-X-Google-Smtp-Source: AK7set8hm8gggwv/GPzDyAxsPPsvhLgacTc1mEed2aWQZaE/x/C55oTALWz/ayjBDYtn8nt5/jY/jA==
-X-Received: by 2002:a17:906:60d2:b0:86f:3dfa:4016 with SMTP id f18-20020a17090660d200b0086f3dfa4016mr8447911ejk.7.1675367623820;
-        Thu, 02 Feb 2023 11:53:43 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id a15-20020a50ff0f000000b004a2067d6ba4sm146536edu.52.2023.02.02.11.53.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 11:53:43 -0800 (PST)
-Message-ID: <3826e0e6-bb2b-409d-d1c3-ed361305bce3@linaro.org>
-Date:   Thu, 2 Feb 2023 21:53:41 +0200
+        Thu, 2 Feb 2023 14:54:32 -0500
+Received: from BN3PR00CU001-vft-obe.outbound.protection.outlook.com (mail-eastus2azon11020020.outbound.protection.outlook.com [52.101.56.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D46A4DBE5;
+        Thu,  2 Feb 2023 11:54:31 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BUnLT5WLmCRFQAFRESH0XizyYYsgdGmg1ujcHbPGvo811HvwsBZX8PUP8hCbzph+MAGWiLj2JqY62ujBORqEoh6bt587P2BYMIW5UweS476b0iL3kbFq43Og3y3nfUZq4Yx+tovDe0Z4MbSeG29OK48kFoTh4YhlgAKCuy6JfMauEoZ3XlyuC38zCggrfoBHfb8DhosgUuHyUJVrs8ecdclUo0e6RkDQ4Dvj9jG5V/0g2dznLs2lEKpEuY0dFGGn/oPbVMg58W5DirxPoCGqzeWHiSfQYKzj/M24IqHt2UbH5op1Ko77WZvPGM89gdiBYRfdo5Hw0zQs0Fwrmqq/qw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KVN1WlPFUu9If4QlzdfHOE8TSRylAvVvN8jB1ZJz53s=;
+ b=eviRjGIO3oPijfQnf8t/N4T1CmzVZzbZywd5f5rbZP4s8Tl5pd1sIIdfpA2d3cQh/eDEbzxP787CPX/uyFYIpHmoDuUbFa2nq2oN85KT5Ad1iUCvSVAmAMtzpMLoJRXPTz1IkBYW3kbh8CQNa5opw4lHbCZRnGNcL1IMSUPG7nIzpdkgtNNCE8LAix5SHfCAk10m2EOcv4GNTkitKZLGIQTCVW4kgbJs+qyU/4jTM9y6RHmfTdy3Atap/4yilLkhkXNuca+MVj/NrPXlR3ShDJpgwOUOMZJxFf+jgamK/46Mpr86rUDWEA+d5dcohTd4QxRbBNtu81TZBCEe2/IGfQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KVN1WlPFUu9If4QlzdfHOE8TSRylAvVvN8jB1ZJz53s=;
+ b=P/Fx5+FnHXCQgRJesXlJZSXE2VGOQu4DiBu58j5h26vcMiQVIsSUY+Igz3MqU1IYwv0wIruiLUEh8w0XQrsc333JoXFfZVEhfremHxuPS4LG5GyWacmN409Ufu9vd2sl3W7WB1DAMPxvIGZquhWhd77dfFg58R0r/Y62JYvu9SQ=
+Received: from PH7PR21MB3116.namprd21.prod.outlook.com (2603:10b6:510:1d0::10)
+ by DM4PR21MB3107.namprd21.prod.outlook.com (2603:10b6:8:63::5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6086.5; Thu, 2 Feb 2023 19:54:29 +0000
+Received: from PH7PR21MB3116.namprd21.prod.outlook.com
+ ([fe80::713f:be9e:c0cc:44ce]) by PH7PR21MB3116.namprd21.prod.outlook.com
+ ([fe80::713f:be9e:c0cc:44ce%3]) with mapi id 15.20.6086.004; Thu, 2 Feb 2023
+ 19:54:28 +0000
+From:   Haiyang Zhang <haiyangz@microsoft.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Paul Rosswurm <paulros@microsoft.com>,
+        "olaf@aepfle.de" <olaf@aepfle.de>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: RE: [PATCH net,v2] net: mana: Fix accessing freed irq affinity_hint
+Thread-Topic: [PATCH net,v2] net: mana: Fix accessing freed irq affinity_hint
+Thread-Index: AQHZNobEMZyFqcNhx06LWWmexoAl6a68DsoAgAAEbaA=
+Date:   Thu, 2 Feb 2023 19:54:28 +0000
+Message-ID: <PH7PR21MB311685D9BE6CC5F99E9CC2D0CAD69@PH7PR21MB3116.namprd21.prod.outlook.com>
+References: <1675288013-2481-1-git-send-email-haiyangz@microsoft.com>
+ <20230202113828.7f2a800c@kernel.org>
+In-Reply-To: <20230202113828.7f2a800c@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=5725e106-0fbf-4c51-ba2e-89c2155b597c;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-02-02T19:54:17Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH7PR21MB3116:EE_|DM4PR21MB3107:EE_
+x-ms-office365-filtering-correlation-id: 9b165fd5-4226-4d42-3ba0-08db05574b6f
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: wtRtZszQWipObQHbfS2nfpcijHfpGc1HjKLL5G05wqXwqCxLhSiybXVN9KoJSzfkTYPCZTfiYq417ZkaR+1sa7KlBlgMnfQnwb0zzyX1XPp1zgErc3ihuOjgFEvfCJh5upH9E37+xWAJyQXFQqhZTiGx8SXMVCVmCB890NgnrEhehKCZ/j08hphZmepSLnlSWNdRkQFYjq+gxZao41I7rthbwbiW8nw9wSUaBr87qQCgoLvIcHXjbGIb/5hwOwdxXPQiclRUs1k4jIcC351qWb49vnbZFdGkLhdlqQS2QmPbFXeP4fn/CmI7cSdTCqsoyGlcydE1SYKFMpZNWLnkw1by544URmwrRbIdsX7B9C9IJBAwyAoPGLCj000JzV37PHqlSk+xbh9sHjzi0TYYmwuLKPCMnoWQ9GvU7mM+wBmGCerVaVLhopaKXuYbHiJMW+k+P+iurhymk8SYs2LZ/mT7lzliLmJ6m5KWf8iPWA+BXrh5Ucp4nEnAY9iwyhMoiosChSYG266KcDnhWpWcLvoq5sY+dBkk1CVbpF8suXXcMmC6PEXyGEILIp/yzG4w6pzm9vZHC9nHppwTtpnplUpxFotgiPztXhonUKioWdTC322KcE/OhqgY9VfVAoQwkAC2ojpwvXgDEnQD1Cuf9ucRbrc68fQtqnPzfmTixmU1ndmrCtXGet+2Vty0nbNbr8Wr+/GUiCuiD/yVsu8jRvwobm3ELETFsYV/yokZYg41BnxcD5X3m6Phny59XiwU
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR21MB3116.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(376002)(39860400002)(366004)(396003)(346002)(451199018)(122000001)(66946007)(64756008)(66446008)(66476007)(66556008)(6916009)(4326008)(9686003)(8676002)(83380400001)(41300700001)(26005)(8936002)(5660300002)(52536014)(6506007)(186003)(4744005)(54906003)(76116006)(316002)(2906002)(8990500004)(10290500003)(38100700002)(82950400001)(7696005)(82960400001)(53546011)(55016003)(38070700005)(71200400001)(33656002)(86362001)(478600001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?4BfF6Qtpru2Ry7yarZlqkMPsQyBthdaCx4lsmCG+00v9+f+aURpVGb5xijwZ?=
+ =?us-ascii?Q?vceVq3Wb8aQSCVEsBOA47H+GDs0rviVzDRqn92B7QlgV+pjM3FfR3njWrTty?=
+ =?us-ascii?Q?OKD1AHzx5nPHxdapjfGt2ZKG7c7kl50qf5hIyCJ0dhjympW8BleRP2nW+2/Q?=
+ =?us-ascii?Q?zE6VPF2WSGr81QOnV2BlXo8RceM39LEdtQU3Ux6J3uTas/E6CD5K1gNhHExr?=
+ =?us-ascii?Q?IvRRZrLUvAxjT8g9rxJSpas/pj8Smw4blkKadUwFJgv37Bt3+XHEqtwRi8Mo?=
+ =?us-ascii?Q?Q9L7jfrVDkA5nmouaCiT2X/dp/RZlJpXXSIusAQ84fvhPjU8fVJebPb5CJA4?=
+ =?us-ascii?Q?2UpxEDWvNkqh8QyXgx0mAAQpqJNRWFIPWAbzMi21tLKiXzbKCEtDII8XtMal?=
+ =?us-ascii?Q?dRPjwF6L5ThL9ExB+u3dfwnl8Ca9En/tp/WLxUgcvwZUohhsdrSTA/Q1BnBG?=
+ =?us-ascii?Q?8dEYm4K0hgeYk79qq99H6blJBnhY/rWvNomoAz2nW6Kf7O707OIU7DPzCiR6?=
+ =?us-ascii?Q?/cc9dzWXHewHdN7qg8j6s6j9QL8y4m/Oy39pbIJshtuuNOHYAjsEMWuoQL50?=
+ =?us-ascii?Q?vTsWVSZWhzL8mdjKq8AuOfUnHJ+IkmMZwIlWQmTcR0D95n3dvzL3kPaDVPUb?=
+ =?us-ascii?Q?OEPqXv3dBGk3tCHHymgfCKses17jwGMgoB/8A6MOa7UgX4sGSjuRyBV9NJS2?=
+ =?us-ascii?Q?ipDdV/rbxOOfyAvazRgZwmrO281MFNmPd0PfZPUDDAfJNvmD0UY4FcD8dM/1?=
+ =?us-ascii?Q?UhT4qd++CirdIkMBZMGR3Uult1GbN0k54IAQMYMKyiHyf4sVu2QZLexZnkbH?=
+ =?us-ascii?Q?xZbrPmVbW/A2zGwdy9HjkBC4wbKBfV2xHPOg/nSZunYNRnS+Mz9B9WAlpYqT?=
+ =?us-ascii?Q?zihHfP12t/POX6iNXEh6tllzJXan1fkZd4k/49/iJ+8e7AoUCCALQ0LGUJWc?=
+ =?us-ascii?Q?BzX8r3bmdb6aPFmpu8NHJBrO2a8+T8l8eYkO9pK16fhTqXU7Lf4OMx8uw8bb?=
+ =?us-ascii?Q?ybs9nmMMuNEpbFwPvz5cDuCEgqbzCAxdBo4HJXSqI82njHH0z10Tqo9ndkhc?=
+ =?us-ascii?Q?w8GDAGed/2XI5332pjhz7CKJgjgDJOVH8JxIQ1idqYeRPW1Zc3pCUO7u1qHk?=
+ =?us-ascii?Q?Qn03pKjc/Mt+sOXDuG2gjTtnD2JUjDYzIIJxnbh63ajRxGLdGw54ffO/c7a3?=
+ =?us-ascii?Q?vFmyzymIpRV28qHS6qa+NQ2iPRlV2rhu3hZvx1X02x48V8yveKWfIC+FCgk9?=
+ =?us-ascii?Q?/N3FHt6NCg6b7FsIlkaQvSA2Hp0HYlhVM0xjdMgDfmxf5DIjHrYTggbGkdWO?=
+ =?us-ascii?Q?mc2nXdYjU5wQ1B4B16isUyPsX+wD8iOH/znV2zYvgMiVNtKxcbIid2fknYbQ?=
+ =?us-ascii?Q?6WJXE8Pll2X8hoDi4p5hR0iJL3Vk+pQE2HBFSngPuZx95KwANXt6yUw25e5Y?=
+ =?us-ascii?Q?LJs/NYSkKF0dVfB6wJQRtmSPqXkphg6q6QNcCx56mpIO9TpNQEOPnmIIumrs?=
+ =?us-ascii?Q?gETM1UqPDU6TDRXQeMWmY+B1FbGlYx6n4vZB0Q/OH0kZcp1lgT2Ef9c9FJok?=
+ =?us-ascii?Q?QY/8HMQVlLOdw6U275JuWjXnyilNCsJ1Ky9oGLt6?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH v2 1/2] PM: domains: Skip disabling unused domains if
- provider has sync_state
-Content-Language: en-GB
-To:     Matthias Kaehlcke <mka@chromium.org>,
-        Abel Vesa <abel.vesa@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        Doug Anderson <dianders@chromium.org>
-References: <20230127104054.895129-1-abel.vesa@linaro.org>
- <Y9v/z8CYik3faHh7@google.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <Y9v/z8CYik3faHh7@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR21MB3116.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9b165fd5-4226-4d42-3ba0-08db05574b6f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Feb 2023 19:54:28.8294
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: dF7iIDnss05mVgWqyUGF4ymHAF03CrPMOjmuI8+ktwRI5C1yxRNW6CQrreTa8viDY5hdOspO0C2bpnxObybQwg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR21MB3107
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/02/2023 20:24, Matthias Kaehlcke wrote:
-> Hi Abel,
-> 
-> On Fri, Jan 27, 2023 at 12:40:53PM +0200, Abel Vesa wrote:
->> Currently, there are cases when a domain needs to remain enabled until
->> the consumer driver probes. Sometimes such consumer drivers may be built
->> as modules. Since the genpd_power_off_unused is called too early for
->> such consumer driver modules to get a chance to probe, the domain, since
->> it is unused, will get disabled. On the other hand, the best time for
->> an unused domain to be disabled is on the provider's sync_state
->> callback. So, if the provider has registered a sync_state callback,
->> assume the unused domains for that provider will be disabled on its
->> sync_state callback. Also provide a generic sync_state callback which
->> disables all the domains unused for the provider that registers it.
->>
->> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
->> ---
->>
->> This approach has been applied for unused clocks as well.
->> With this patch merged in, all the providers that have sync_state
->> callback registered will leave the domains enabled unless the provider's
->> sync_state callback explicitly disables them. So those providers will
->> need to add the disabling part to their sync_state callback. On the
->> other hand, the platforms that have cases where domains need to remain
->> enabled (even if unused) until the consumer driver probes, will be able,
->> with this patch in, to run without the pd_ignore_unused kernel argument,
->> which seems to be the case for most Qualcomm platforms, at this moment.
-> 
-> I recently encountered a related issue on a Qualcomm platform with a
-> v6.2-rc kernel, which includes 3a39049f88e4 ("soc: qcom: rpmhpd: Use
-> highest corner until sync_state"). The issue involves a DT node with a
-> rpmhpd, the DT node is enabled, however the corresponding device driver
-> is not enabled in the kernel. In such a scenario the sync_state callback
-> is never called, because the genpd consumer never probes. As a result
-> the Always-on subsystem (AOSS) of the SoC doesn't enter sleep mode during
-> system suspend, which results in a substantially higher power consumption
-> in S3.
-> 
-> I wonder if genpd (and some other frameworks) needs something like
-> regulator_init_complete(), which turns off unused regulators 30s after
-> system boot. That's conceptually similar to the current
-> genpd_power_off_unused(), but would provide time for modules being loaded.
 
-I think the overall goal is to move away from ad-hoc implementations 
-like clk_disable_unused/genpd_power_off_unused/regulator_init_complete 
-towards the sync_state.
 
-So inherently one either has to provide drivers for all devices in 
-question or disable unused devices in DT.
+> -----Original Message-----
+> From: Jakub Kicinski <kuba@kernel.org>
+> Sent: Thursday, February 2, 2023 2:38 PM
+> To: Haiyang Zhang <haiyangz@microsoft.com>
+> Cc: linux-hyperv@vger.kernel.org; netdev@vger.kernel.org; Dexuan Cui
+> <decui@microsoft.com>; KY Srinivasan <kys@microsoft.com>; Paul Rosswurm
+> <paulros@microsoft.com>; olaf@aepfle.de; vkuznets@redhat.com;
+> davem@davemloft.net; linux-kernel@vger.kernel.org; stable@vger.kernel.org
+> Subject: Re: [PATCH net,v2] net: mana: Fix accessing freed irq affinity_h=
+int
+>=20
+> On Wed,  1 Feb 2023 13:46:53 -0800 Haiyang Zhang wrote:
+> > +		irq_set_affinity_and_hint(irq,
+> cpumask_of(cpumask_local_spread
+> > +					  (i, gc->numa_node)));
+>=20
+> The line break here looks ugly.
+> Please use a local variable for the mask or the cpu.
 
-> 
->> The v1 is here:
->> https://lore.kernel.org/all/20230126234013.3638425-1-abel.vesa@linaro.org/
->>
->> Changes since v1:
->>   * added a generic sync state callback to be registered by providers in
->>     order to disable the unused domains on their sync state. Also
->>     mentioned this in the commit message.
->>
->>   drivers/base/power/domain.c | 17 ++++++++++++++++-
->>   include/linux/pm_domain.h   |  3 +++
->>   2 files changed, 19 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
->> index 84662d338188..c2a5f77c01f3 100644
->> --- a/drivers/base/power/domain.c
->> +++ b/drivers/base/power/domain.c
->> @@ -1099,7 +1099,8 @@ static int __init genpd_power_off_unused(void)
->>   	mutex_lock(&gpd_list_lock);
->>   
->>   	list_for_each_entry(genpd, &gpd_list, gpd_list_node)
->> -		genpd_queue_power_off_work(genpd);
->> +		if (!dev_has_sync_state(genpd->provider->dev))
->> +			genpd_queue_power_off_work(genpd);
->>   
->>   	mutex_unlock(&gpd_list_lock);
->>   
->> @@ -1107,6 +1108,20 @@ static int __init genpd_power_off_unused(void)
->>   }
->>   late_initcall(genpd_power_off_unused);
->>   
->> +void genpd_power_off_unused_sync_state(struct device *dev)
->> +{
->> +	struct generic_pm_domain *genpd;
->> +
->> +	mutex_lock(&gpd_list_lock);
->> +
->> +	list_for_each_entry(genpd, &gpd_list, gpd_list_node)
->> +		if (genpd->provider->dev == dev)
->> +			genpd_queue_power_off_work(genpd);
->> +
->> +	mutex_unlock(&gpd_list_lock);
->> +}
->> +EXPORT_SYMBOL_GPL(genpd_power_off_unused_sync_state);
->> +
->>   #ifdef CONFIG_PM_SLEEP
->>   
->>   /**
->> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
->> index f776fb93eaa0..1fd5aa500c81 100644
->> --- a/include/linux/pm_domain.h
->> +++ b/include/linux/pm_domain.h
->> @@ -351,6 +351,7 @@ struct device *genpd_dev_pm_attach_by_id(struct device *dev,
->>   					 unsigned int index);
->>   struct device *genpd_dev_pm_attach_by_name(struct device *dev,
->>   					   const char *name);
->> +void genpd_power_off_unused_sync_state(struct device *dev);
->>   #else /* !CONFIG_PM_GENERIC_DOMAINS_OF */
->>   static inline int of_genpd_add_provider_simple(struct device_node *np,
->>   					struct generic_pm_domain *genpd)
->> @@ -419,6 +420,8 @@ struct generic_pm_domain *of_genpd_remove_last(struct device_node *np)
->>   {
->>   	return ERR_PTR(-EOPNOTSUPP);
->>   }
->> +
->> +static inline genpd_power_off_unused_sync_state(struct device *dev) {}
->>   #endif /* CONFIG_PM_GENERIC_DOMAINS_OF */
->>   
->>   #ifdef CONFIG_PM
->> -- 
->> 2.34.1
->>
-
--- 
-With best wishes
-Dmitry
-
+Will do.
