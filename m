@@ -2,80 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC7B0687C03
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 12:16:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D971687C0F
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 12:17:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231907AbjBBLQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 06:16:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45648 "EHLO
+        id S231811AbjBBLRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 06:17:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231207AbjBBLPx (ORCPT
+        with ESMTP id S229671AbjBBLRk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 06:15:53 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 855708AC2B;
-        Thu,  2 Feb 2023 03:15:52 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id f7so1619289edw.5;
-        Thu, 02 Feb 2023 03:15:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wpEflEFgONyZvi4WlCVrqQszvFR7vLDMgEvU+XA8+7w=;
-        b=F9HPADDYpgDBMmMTw31hsL/BPt7sHthFt72xAHYYI6C4/tsAnTR9FS5BP08bc1GDo3
-         DlNxEE3klfp5hJgGUiMrrQ2mXMAacJZUbuP6LwQWECphzi485IppWULASmHz4LQ0aNhe
-         xmD+ztykHvf7YxHzipN8QUabxTl21cADcR325iN5Z22Re7fK+YDv+KzZtQndt4y5qkdR
-         FvWv+JZ4jOrSNBvgP++Q08Zn2vgEBArx8wh4B7VvOiWaOtUyeJ4ZEG+usB/Ibqg1JjPd
-         Y7k9q6EN6VNFNdx2Qh5peMUR9I7rEkdi8CWxdUbf7hKziuzJzDOYs8600k1Q5nl5p6ld
-         vFyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wpEflEFgONyZvi4WlCVrqQszvFR7vLDMgEvU+XA8+7w=;
-        b=67jBChMPPxdws5c1h2zFqTRIDYzwaeqeBmQ0s3ErSy3/OP4PtHaRlISfa4KXFy4VRk
-         /ssAPlMuKzKqJMkAzlNtsjtndpTEL+yDu5l6rubtgdKvX5yWFezoviFR8Mv2MNRx6gF5
-         4w1dQRPZ3hQcvT7MOfItHCGRqAKW7hhPQDJr7R6X2skYnyr9qzsYV6F7+r+MUuN5uO8A
-         IGz6tz8Z44IZQargQ6Oc4yfu7CZ5w4Hs6qlNdCcXURM2SqgxgdvVsUe0SHnKM8WdbtNd
-         iK5lJjSmDcUUVDNZJpdaHKVIPhSA71s3nwoMvNs+3otoNTeyZidM1pWt6sFTg+EdFbnZ
-         PNYA==
-X-Gm-Message-State: AO0yUKV7Iely+RYqo802RLDsRqhpIclqTFhFwQyiph83epWiThbtY5sQ
-        pMHp21oc88VEw0jAa/x9T7oZ+ACL4jhAQZNov5Y=
-X-Google-Smtp-Source: AK7set/7vshqxPiS23f8zcEnLOB/WqJuLi7g76SaS9Fq+nI1GtacYnaPHdA3rg1UlpyFnJfbN29NT+FyA7W/0XKnnAM=
-X-Received: by 2002:aa7:d385:0:b0:49e:6501:57a2 with SMTP id
- x5-20020aa7d385000000b0049e650157a2mr1774099edq.43.1675336550794; Thu, 02 Feb
- 2023 03:15:50 -0800 (PST)
+        Thu, 2 Feb 2023 06:17:40 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22AD38D43D
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 03:16:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675336577;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=xIi9vln3QsfBPuD6i2p5w2uf69HfgfB1TTHqiCNJ3OA=;
+        b=jWgnA5mr+ZYCGK161gCL3g+Sunx2J3cq4daE7oalXqU/FlwD+HnHBccGOHyDCxHYCYgis2
+        UK6HVCrZuQmAv7tRaMwZIlnPDrYexmXmHQ17nAKIKubtr+SkiHJ38RvIfBen4ypIe+dVHY
+        jnP1sMvymzFVleHPL+BLe6nQJutVYuI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-219-NvYdvUsgOn-fMBFs1ohjoQ-1; Thu, 02 Feb 2023 06:16:14 -0500
+X-MC-Unique: NvYdvUsgOn-fMBFs1ohjoQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 488CD805F58;
+        Thu,  2 Feb 2023 11:16:14 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.97])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B3D47492C3E;
+        Thu,  2 Feb 2023 11:16:13 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+To:     Andy Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>
+cc:     dhowells@redhat.com, linux-kernel@vger.kernel.org
+Subject: Checkpatch errors that should be downgraded
 MIME-Version: 1.0
-References: <20230201135737.800527-1-jolsa@kernel.org>
-In-Reply-To: <20230201135737.800527-1-jolsa@kernel.org>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 2 Feb 2023 03:15:39 -0800
-Message-ID: <CAADnVQ+im7FwSqDcTLmMvfRcT9unwdHBeWG9Snw7W5Q-bcdWvg@mail.gmail.com>
-Subject: Re: [RFC 0/5] mm/bpf/perf: Store build id in file object
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Hao Luo <haoluo@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        bpf <bpf@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
-        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1068165.1675336573.1@warthog.procyon.org.uk>
+Date:   Thu, 02 Feb 2023 11:16:13 +0000
+Message-ID: <1068166.1675336573@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,26 +60,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 1, 2023 at 5:57 AM Jiri Olsa <jolsa@kernel.org> wrote:
->
-> hi,
-> we have a use cases for bpf programs to use binary file's build id.
->
-> After some attempts to add helpers/kfuncs [1] [2] Andrii had an idea [3]
-> to store build id directly in the file object. That would solve our use
-> case and might be beneficial for other profiling/tracing use cases with
-> bpf programs.
->
-> This RFC patchset adds new config CONFIG_FILE_BUILD_ID option, which adds
-> build id object pointer to the file object when enabled. The build id is
-> read/populated when the file is mmap-ed.
->
-> I also added bpf and perf changes that would benefit from this.
->
-> I'm not sure what's the policy on adding stuff to file object, so apologies
-> if that's out of line. I'm open to any feedback or suggestions if there's
-> better place or way to do this.
+In the trace headers, the following should probably be ignored:
 
-struct file represents all files while build_id is for executables only,
-and not all executables, but those currently running, so
-I think it's cleaner to put it into vm_area_struct.
+	CHECK: Lines should not end with a '('
+	#73: FILE: include/trace/events/rxrpc.h:1947:
+	+	    TP_STRUCT__entry(
+
+	CHECK: Lines should not end with a '('
+	#80: FILE: include/trace/events/rxrpc.h:1954:
+	+	    TP_fast_assign(
+
+as it's standard practice to bump the contents onto the next line for these
+two macros.
+
+Also checkpatch is wrong in giving this error:
+
+	ERROR: Macros with complex values should be enclosed in parentheses
+	#37: FILE: include/trace/events/rxrpc.h:425:
+	+#define rxrpc_sack_traces \
+	+	EM(rxrpc_sack_advance,			"ADV")	\
+	+	EM(rxrpc_sack_fill,			"FIL")	\
+	+	EM(rxrpc_sack_nack,			"NAK")	\
+	+	EM(rxrpc_sack_none,			"---")	\
+	+	E_(rxrpc_sack_oos,			"OOS")
+
+as the contents, when found in a trace header, are going to be used to
+generate a string table and maybe an enum.  It's standard practice, so if it
+could be ignored in trace headers or at least downgraded to a warning?
+
+Thanks,
+David
+
