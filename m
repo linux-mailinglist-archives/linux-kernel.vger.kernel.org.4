@@ -2,116 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BDFD688618
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 19:09:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0491B688619
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 19:09:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231778AbjBBSJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 13:09:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50592 "EHLO
+        id S232071AbjBBSJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 13:09:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229848AbjBBSJH (ORCPT
+        with ESMTP id S229881AbjBBSJH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 2 Feb 2023 13:09:07 -0500
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A7C1206C
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 10:09:06 -0800 (PST)
-Received: by mail-ej1-f53.google.com with SMTP id dr8so8292097ejc.12
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 10:09:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KTNk0BA5NM2oMhge3KzqOkD0ufAOyhldxWNhE6pIRMo=;
-        b=WmZV5nrhLAZoYwruYQ0B1F7QEq5giCZrfaxgd34v/rXS0lBEiPSSyvaO6vv5NhF9W2
-         G3B5hS0jh8XgWT2+yJL55OocCPM13NG055aVvrSU1Sew6qgdrE0R3z8iwSbCOC1qv6gE
-         02y6nXmfmUUdKGeZ5K35RwTm5uDTQ/hG0cYeFIYfM9CfjE1wNgCbScgzPmU86QDh8dQx
-         FA8LyGHXa0D04858KdUi2DEyBQjkFhzXgDjF55gZGqYP0ZmPnrhiogTYQqQzp/iYLKDf
-         IyRutNahm/KSLdPyHSTkny94sLVNpHRwzy9RKsYu3WrJRcecb8mHJMBpB2KLARPhKdOK
-         ZjHw==
-X-Gm-Message-State: AO0yUKUtQ+m6x01FbK2k8ShMLUmEvwaWIiAzdTw87l9fTpHkzPLkP9gi
-        f9X4tiJrMqnGZyLQTdHjRXrIvg7ip9Uugg==
-X-Google-Smtp-Source: AK7set+ikZ5pIJ3yDO30FYgZHmWdRV5lvyieAXCeXF3igMOfTjRElSj8xvqbq8MCXjISdZWvWpgY9g==
-X-Received: by 2002:a17:906:8a63:b0:888:7ce4:1dc1 with SMTP id hy3-20020a1709068a6300b008887ce41dc1mr7421458ejc.26.1675361344779;
-        Thu, 02 Feb 2023 10:09:04 -0800 (PST)
-Received: from localhost (fwdproxy-cln-034.fbsv.net. [2a03:2880:31ff:22::face:b00c])
-        by smtp.gmail.com with ESMTPSA id x10-20020a1709060a4a00b00880dbd4b6d4sm108421ejf.136.2023.02.02.10.09.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 10:09:04 -0800 (PST)
-From:   Breno Leitao <leitao@debian.org>
-To:     tglx@linutronix.de, bp@alien8.de,
-        pawan.kumar.gupta@linux.intel.com, paul@paul-moore.com
-Cc:     leit@meta.com, x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH] cpu/bugs: Disable CPU mitigations at compilation time
-Date:   Thu,  2 Feb 2023 10:08:58 -0800
-Message-Id: <20230202180858.1539234-1-leitao@debian.org>
-X-Mailer: git-send-email 2.30.2
+X-Greylist: delayed 162751 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 02 Feb 2023 10:09:06 PST
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33DF0E3A6;
+        Thu,  2 Feb 2023 10:09:06 -0800 (PST)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 48D347DE;
+        Thu,  2 Feb 2023 18:09:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 48D347DE
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1675361345; bh=2+a4mZYwqT3vzf0UQzfkcA5CdDxOuo7YvzN9jr8nkig=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=gY7ULbf3et5D4Qc/CNx/w7sCxqXxX6fR0sNacSV7nefpdle702hp6si3iizN6qwiE
+         uEIY7Q78a9h2RN4xfonCmMXE/H1WHGv23zZbRY3a8TD9z3xCs5/ly7iH92i4XVhMfk
+         m1+3SrM+pmOm5qUcXvYL8szbXDpSICOPir4Ff+tNZ80bHoZS0uhfOu3aabBosNVFfP
+         7pgupe9C5u4Sz6v8uZtM64S9OiXXXwx07OTa5szwYHdV6XxaRnf+mq/MpKQwaSbzh0
+         jfCb5rfx6sWATpmne99lGmlwL/b8o+ggGmLTspO1j2VtBWLoL4M3uxU9erIgFeIYC3
+         b3TsgnsFP3UgQ==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-doc@vger.kernel.org,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-mm@kvack.org,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>, nvdimm@lists.linux.dev,
+        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
+        Song Liu <song@kernel.org>, linux-raid@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, Jiri Pirko <jiri@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>, rcu@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, sparclinux@vger.kernel.org
+Subject: Re: [PATCH 0/9] Documentation: correct lots of spelling errors
+ (series 2)
+In-Reply-To: <20230129231053.20863-1-rdunlap@infradead.org>
+References: <20230129231053.20863-1-rdunlap@infradead.org>
+Date:   Thu, 02 Feb 2023 11:09:04 -0700
+Message-ID: <875yckvt1b.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Right now it is not possible to disable CPU vulnerabilities mitigations
-at build time. Mitigation needs to be disabled passing kernel
-parameters, such as 'mitigations=off'.
+Randy Dunlap <rdunlap@infradead.org> writes:
 
-This patch creates an easy way to disable mitigation during compilation
-time (CONFIG_DEFAULT_CPU_MITIGATIONS_OFF), so, insecure kernel users don't
-need to deal with kernel parameters when booting insecure kernels.
+> Maintainers of specific kernel subsystems are only Cc-ed on their
+> respective patches, not the entire series. [if all goes well]
+>
+> These patches are based on linux-next-20230127.
 
-Signed-off-by: Breno Leitao <leitao@debian.org>
----
- kernel/cpu.c     |  5 +++++
- security/Kconfig | 11 +++++++++++
- 2 files changed, 16 insertions(+)
+So I've applied a bunch of these
 
-diff --git a/kernel/cpu.c b/kernel/cpu.c
-index 6c0a92ca6bb5..497e9a3d3d77 100644
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -2727,8 +2727,13 @@ enum cpu_mitigations {
- 	CPU_MITIGATIONS_AUTO_NOSMT,
- };
- 
-+#ifdef CONFIG_DEFAULT_CPU_MITIGATIONS_OFF
-+static enum cpu_mitigations cpu_mitigations __ro_after_init =
-+	CPU_MITIGATIONS_OFF;
-+#else
- static enum cpu_mitigations cpu_mitigations __ro_after_init =
- 	CPU_MITIGATIONS_AUTO;
-+#endif
- 
- static int __init mitigations_parse_cmdline(char *arg)
- {
-diff --git a/security/Kconfig b/security/Kconfig
-index e6db09a779b7..a70427dc6ace 100644
---- a/security/Kconfig
-+++ b/security/Kconfig
-@@ -258,6 +258,17 @@ config LSM
- 
- 	  If unsure, leave this as the default.
- 
-+config CONFIG_DEFAULT_CPU_MITIGATIONS_OFF
-+	bool "Disable mitigations for CPU vulnerabilities by default"
-+	default n
-+	help
-+	  This option disable mitigations for CPU vulnerabilities by default.
-+	  This improves system performance, but it may also expose users
-+	  to several CPU vulnerabilities.
-+	  This has the same effect as passing `mitigations=off` kernel
-+	  parameter. The mitigations could be enabled back passing the
-+	  'mitigations' parameter.
-+
- source "security/Kconfig.hardening"
- 
- endmenu
--- 
-2.30.2
+>  [PATCH 1/9] Documentation: admin-guide: correct spelling
+>  [PATCH 2/9] Documentation: driver-api: correct spelling
 
+applied
+
+>  [PATCH 3/9] Documentation: hwmon: correct spelling
+>  [PATCH 4/9] Documentation: networking: correct spelling
+>  [PATCH 5/9] Documentation: RCU: correct spelling
+
+These have been taken up elsewhere
+
+>  [PATCH 6/9] Documentation: scsi/ChangeLog*: correct spelling
+>  [PATCH 7/9] Documentation: scsi: correct spelling
+
+I've left these for the SCSI folks for now.  Do we *really* want to be
+fixing spelling in ChangeLog files from almost 20 years ago?
+
+>  [PATCH 8/9] Documentation: sparc: correct spelling
+>  [PATCH 9/9] Documentation: userspace-api: correct spelling
+
+Applied.
+
+Thanks,
+
+jon
