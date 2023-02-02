@@ -2,85 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEEB0687246
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 01:25:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2933687270
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 01:38:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbjBBAZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 19:25:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40412 "EHLO
+        id S230361AbjBBAiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 19:38:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjBBAZQ (ORCPT
+        with ESMTP id S230373AbjBBAhp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 19:25:16 -0500
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CDF46E42B
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 16:25:12 -0800 (PST)
-Received: by mail-vs1-xe32.google.com with SMTP id s24so138225vsi.12
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 16:25:12 -0800 (PST)
+        Wed, 1 Feb 2023 19:37:45 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D9C757BC
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 16:37:27 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id e10-20020a17090a630a00b0022bedd66e6dso4032869pjj.1
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 16:37:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=uOj5gYFcFo2nSNe6rs6VnV4uLhL1q5oF8HA0wMZeAQA=;
-        b=fQp2tGhuU4Qt+fCd90XiHwNzA4+KcqhOJm/dLS5RVetkg0vL00+jrgo68FeHIw9Dqx
-         TEh3NTGFhCdbV1izlQ3yaaXYfIbXIjhxG5KvZohWs3rASRjzzoqoGoFizbKPPx12jSOx
-         wk9INqjwUc1iRGcJ8Y/QIsjCSJHEEpK/JRSu/jy7+4GG4H0ScWy54LkD8x0IzRoSXQ3M
-         O/bzWS8kzyA/QqLRQYJ+X7W7dctQF3cf+NQt3sklQLD4mrbdJS1W6d+I/3IXm8D0zWto
-         nPHMYIOPAPCmVpDPso7NGC3kmHzT/OIOppQyP11dmcBya7JE/ooa/Pyp8v/FPxGcAp6P
-         tCnA==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8S8LkIIV+AlMHhYoTbGzsUKCLPIHbJN6C9VR4H2aVWg=;
+        b=FeiR69FdPNiRLfW96Ofno781eV28FxmGlOp8XPDNf6L0BTinviMc13f10S7fI/W1P+
+         R1L8l1shqsIxAtPuQkiUJG4i6ayhIAxtjKKelxXYcnr1aOS+ajBLm4disbJKsFTeGP8t
+         tCiHlHRdoKPw0c8RlxG5TVI75ek5iH3P93tQqNDuTqb5EdXS4Ti9V02sILs+XWTl7qWz
+         InrfsZxE5B7QLWlfxyt4xHVtsL4SOK924yuE6KWi9avFYTo3GgqCZSomSTU61xuFd3DC
+         My5qm/2a2aWVOaB7RjteivwXIbDPW5v4GzIBdvFCIz13iQYkpHrL8EsU/8i6Se+D0J8F
+         /k/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uOj5gYFcFo2nSNe6rs6VnV4uLhL1q5oF8HA0wMZeAQA=;
-        b=mxwZHaMLzhAiCxET++LLSrDLtQehd7KXnfkOt3f0EbxmMS5mjdilUbTy5FBztyYCVO
-         lSj/Q1/sVSsr8kuDPDL7wCVDnXXDEpaa3nZMDyl8RI7oHNBhmeSAnh1aYqiSsJH4B5sU
-         4I0/2XpoiEVhVC+KsUIdqrRfMDkIFVl3IGBGwEmJcYU1EK14hSPgzWW9Jnl48F6XFcbm
-         FNA4lw6ClARfxGRWAFWGjQOXwYOnErkUMve42VxFj3roYHwaXc/6kOiWiM930zMMQ6F0
-         wdb83f1QvLyXaL4QPPGVYYV73+KuWh7xswl3Z3ubybSzJ3dYDYkQKHFXc8T85Oi4s/j4
-         7V4A==
-X-Gm-Message-State: AO0yUKVfC8Si9jOw60DVgHUbYDbyYIffNeVWdTvrZFFUYjowQACUBckf
-        bhNX25+2Ik7n48fWlzu7cNAjgmdW8m3UoMxRtBMsnQ==
-X-Google-Smtp-Source: AK7set+BnkTPPKUmXKQj5Z2GFtPkMkUQ4tJDftb/C4R8/Y1jr4ySrhKWGJ49ZBXi0tyrBfeJ7rHqUriMtMmLgttFFng=
-X-Received: by 2002:a05:6102:34e8:b0:3f7:dda3:f85 with SMTP id
- bi8-20020a05610234e800b003f7dda30f85mr716080vsb.66.1675297511231; Wed, 01 Feb
- 2023 16:25:11 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8S8LkIIV+AlMHhYoTbGzsUKCLPIHbJN6C9VR4H2aVWg=;
+        b=27TRa9hst3qd7RbFjwuPJmBlquBJzvBsbwxQ0WhT33EtGjFmVbvjJ8jA9Em8ZKrRdc
+         zB45gBuRCeiCTy7BFPX+yEk6gueuPbk0WHDxFT58/H/zEWGWMSxsCa+2nqAJ72duiNcU
+         jI7JHclRyOBXo1v12EhCdt6s6p29Rdysnxb0G/KzNc1hAxlR3/zb2kUZK8qs47iaJnx6
+         4NExYDoIcudEVVcKn63zTwUvJjR+wucEwwFqpXtF/zlvp+g/DffaoKbkWXWlhHQRk19o
+         fc8dnI3wCSb+CPSUIXxQ7loi7srU1yCL/UsNIa2Hp4+i/4JGNBWTCqAZGIbsoga5HYHe
+         55Wg==
+X-Gm-Message-State: AO0yUKWGWD5FuSUpmfSs4YjjGiU4a9nRKOTuhTBGwpeac9/18D/Z9vlf
+        GAa5c4LnbueJXiNf4c0RReQPMQ==
+X-Google-Smtp-Source: AK7set9qaZmHpUgiYk5goPmDLZfFaJSoQvNehVGDo9YWz1zOV7CvLxJuTAEvn3/yi7i8RkMr9S803g==
+X-Received: by 2002:a17:902:d903:b0:198:af4f:de0d with SMTP id c3-20020a170902d90300b00198af4fde0dmr133094plz.13.1675298247023;
+        Wed, 01 Feb 2023 16:37:27 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id s2-20020a170902988200b001966eaf7365sm8312658plp.17.2023.02.01.16.37.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Feb 2023 16:37:26 -0800 (PST)
+Date:   Thu, 2 Feb 2023 00:37:23 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Emanuele Giuseppe Esposito <eesposit@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
+        Gautam Menghani <gautammenghani201@gmail.com>,
+        Zeng Guang <guang.zeng@intel.com>,
+        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
+        Jim Mattson <jmattson@google.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH 2/2] KVM: selftests: APIC_ID must be correctly
+ updated when disabling x2apic
+Message-ID: <Y9sFw0PkuR5EPm4l@google.com>
+References: <20230109130605.2013555-1-eesposit@redhat.com>
+ <20230109130605.2013555-3-eesposit@redhat.com>
 MIME-Version: 1.0
-References: <Y9Li93O6Ffwcr+vn@x1n> <CADrL8HVJb9mA3Lbz5UKJ8EudTk9sGDY-pdRqvW3TGawD_bJB0A@mail.gmail.com>
- <Y9f+jMLWy6ngpYuR@x1n> <CADrL8HX3sf6OO3PXS1g6b2dKf8b5phQ7oyNR0dVT=sAOdTmmqw@mail.gmail.com>
- <Y9gzOqwKcu7p/PEw@x1n> <CADrL8HXX9YDFUxmPPsm2s3Pno0XXgAyFB40fV1PdtP9eb-5D2A@mail.gmail.com>
- <Y9m/VVRABt0Blfjh@x1n> <CADrL8HXpfTE1+eE3rNGQyOr1QRtDtG5mBp-b3xcNX22QJRvPaQ@mail.gmail.com>
- <Y9qRta3bd4JqjUHx@x1n> <CADrL8HU809O0cPa9hXjf3k+ob139SQqvxOvpqm6UEv=zrPjHSg@mail.gmail.com>
- <Y9re82gctIZf08cX@x1n>
-In-Reply-To: <Y9re82gctIZf08cX@x1n>
-From:   James Houghton <jthoughton@google.com>
-Date:   Wed, 1 Feb 2023 16:24:33 -0800
-Message-ID: <CADrL8HVja_xJ9qczsd-fQfEPvEEXswhXQwoan=a_LSMyORvqww@mail.gmail.com>
-Subject: Re: [PATCH 21/46] hugetlb: use struct hugetlb_pte for walk_hugetlb_range
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        David Hildenbrand <david@redhat.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        "Zach O'Keefe" <zokeefe@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230109130605.2013555-3-eesposit@redhat.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,189 +82,190 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 1, 2023 at 1:51 PM Peter Xu <peterx@redhat.com> wrote:
->
-> On Wed, Feb 01, 2023 at 01:32:21PM -0800, James Houghton wrote:
-> > On Wed, Feb 1, 2023 at 8:22 AM Peter Xu <peterx@redhat.com> wrote:
-> > >
-> > > On Wed, Feb 01, 2023 at 07:45:17AM -0800, James Houghton wrote:
-> > > > On Tue, Jan 31, 2023 at 5:24 PM Peter Xu <peterx@redhat.com> wrote:
-> > > > >
-> > > > > On Tue, Jan 31, 2023 at 04:24:15PM -0800, James Houghton wrote:
-> > > > > > On Mon, Jan 30, 2023 at 1:14 PM Peter Xu <peterx@redhat.com> wrote:
-> > > > > > >
-> > > > > > > On Mon, Jan 30, 2023 at 10:38:41AM -0800, James Houghton wrote:
-> > > > > > > > On Mon, Jan 30, 2023 at 9:29 AM Peter Xu <peterx@redhat.com> wrote:
-> > > > > > > > >
-> > > > > > > > > On Fri, Jan 27, 2023 at 01:02:02PM -0800, James Houghton wrote:
-> > > > [snip]
-> > > > > > > > > Another way to not use thp mapcount, nor break smaps and similar calls to
-> > > > > > > > > page_mapcount() on small page, is to only increase the hpage mapcount only
-> > > > > > > > > when hstate pXd (in case of 1G it's PUD) entry being populated (no matter
-> > > > > > > > > as leaf or a non-leaf), and the mapcount can be decreased when the pXd
-> > > > > > > > > entry is removed (for leaf, it's the same as for now; for HGM, it's when
-> > > > > > > > > freeing pgtable of the PUD entry).
-> > > > > > > >
-> > > > > > > > Right, and this is doable. Also it seems like this is pretty close to
-> > > > > > > > the direction Matthew Wilcox wants to go with THPs.
-> > > > > > >
-> > > > > > > I may not be familiar with it, do you mean this one?
-> > > > > > >
-> > > > > > > https://lore.kernel.org/all/Y9Afwds%2FJl39UjEp@casper.infradead.org/
-> > > > > >
-> > > > > > Yep that's it.
-> > > > > >
-> > > > > > >
-> > > > > > > For hugetlb I think it should be easier to maintain rather than any-sized
-> > > > > > > folios, because there's the pgtable non-leaf entry to track rmap
-> > > > > > > information and the folio size being static to hpage size.
-> > > > > > >
-> > > > > > > It'll be different to folios where it can be random sized pages chunk, so
-> > > > > > > it needs to be managed by batching the ptes when install/zap.
-> > > > > >
-> > > > > > Agreed. It's probably easier for HugeTLB because they're always
-> > > > > > "naturally aligned" and yeah they can't change sizes.
-> > > > > >
-> > > > > > >
-> > > > > > > >
-> > > > > > > > Something I noticed though, from the implementation of
-> > > > > > > > folio_referenced()/folio_referenced_one(), is that folio_mapcount()
-> > > > > > > > ought to report the total number of PTEs that are pointing on the page
-> > > > > > > > (or the number of times page_vma_mapped_walk returns true). FWIW,
-> > > > > > > > folio_referenced() is never called for hugetlb folios.
-> > > > > > >
-> > > > > > > FWIU folio_mapcount is the thing it needs for now to do the rmap walks -
-> > > > > > > it'll walk every leaf page being mapped, big or small, so IIUC that number
-> > > > > > > should match with what it expects to see later, more or less.
-> > > > > >
-> > > > > > I don't fully understand what you mean here.
-> > > > >
-> > > > > I meant the rmap_walk pairing with folio_referenced_one() will walk all the
-> > > > > leaves for the folio, big or small.  I think that will match the number
-> > > > > with what got returned from folio_mapcount().
-> > > >
-> > > > See below.
-> > > >
-> > > > >
-> > > > > >
-> > > > > > >
-> > > > > > > But I agree the mapcount/referenced value itself is debatable to me, just
-> > > > > > > like what you raised in the other thread on page migration.  Meanwhile, I
-> > > > > > > am not certain whether the mapcount is accurate either because AFAICT the
-> > > > > > > mapcount can be modified if e.g. new page mapping established as long as
-> > > > > > > before taking the page lock later in folio_referenced().
-> > > > > > >
-> > > > > > > It's just that I don't see any severe issue either due to any of above, as
-> > > > > > > long as that information is only used as a hint for next steps, e.g., to
-> > > > > > > swap which page out.
-> > > > > >
-> > > > > > I also don't see a big problem with folio_referenced() (and you're
-> > > > > > right that folio_mapcount() can be stale by the time it takes the
-> > > > > > folio lock). It still seems like folio_mapcount() should return the
-> > > > > > total number of PTEs that map the page though. Are you saying that
-> > > > > > breaking this would be ok?
-> > > > >
-> > > > > I didn't quite follow - isn't that already doing so?
-> > > > >
-> > > > > folio_mapcount() is total_compound_mapcount() here, IIUC it is an
-> > > > > accumulated value of all possible PTEs or PMDs being mapped as long as it's
-> > > > > all or part of the folio being mapped.
-> > > >
-> > > > We've talked about 3 ways of handling mapcount:
-> > > >
-> > > > 1. The RFC v2 way, which is head-only, and we increment the compound
-> > > > mapcount for each PT mapping we have. So a PTE-mapped 2M page,
-> > > > compound_mapcount=512, subpage->_mapcount=0 (ignoring the -1 bias).
-> > > > 2. The THP-like way. If we are fully mapping the hugetlb page with the
-> > > > hstate-level PTE, we increment the compound mapcount, otherwise we
-> > > > increment subpage->_mapcount.
-> > > > 3. The RFC v1 way (the way you have suggested above), which is
-> > > > head-only, and we increment the compound mapcount if the hstate-level
-> > > > PTE is made present.
-> > >
-> > > Oh that's where it come from!  It took quite some months going through all
-> > > these, I can hardly remember the details.
-> > >
-> > > >
-> > > > With #1 and #2, there is no concern with folio_mapcount(). But with
-> > > > #3, folio_mapcount() for a PTE-mapped 2M page mapped in a single VMA
-> > > > would yield 1 instead of 512 (right?). That's what I mean.
-> > > >
-> > > > #1 has problems wrt smaps and migration (though there were other
-> > > > problems with those anyway that Mike has fixed), and #2 makes
-> > > > MADV_COLLAPSE slow to the point of being unusable for some
-> > > > applications.
-> > >
-> > > Ah so you're talking about after HGM being applied..  while I was only
-> > > talking about THPs.
-> > >
-> > > If to apply the logic here with idea 3), the worst case is we'll need to
-> > > have special care of HGM hugetlb in folio_referenced_one(), so the default
-> > > page_vma_mapped_walk() may not apply anymore - the resource is always in
-> > > hstate sized, so counting small ptes do not help too - we can just walk
-> > > until the hstate entry and do referenced++ if it's not none, at the
-> > > entrance of folio_referenced_one().
-> > >
-> > > But I'm not sure whether that'll be necessary at all, as I'm not sure
-> > > whether that path can be triggered at all in any form (where from the top
-> > > it should always be shrink_page_list()).  In that sense maybe we can also
-> > > consider adding a WARN_ON_ONCE() in folio_referenced() where it is a
-> > > hugetlb page that got passed in?  Meanwhile, adding a TODO comment
-> > > explaining that current walk won't work easily for HGM only, so when it
-> > > will be applicable to hugetlb we need to rework?
-> > >
-> > > I confess that's not pretty, though.  But that'll make 3) with no major
-> > > defect from function-wise.
-> >
-> > Another potential idea would be to add something like page_vmacount().
-> > For non-HugeTLB pages, page_vmacount() == page_mapcount(). Then for
-> > HugeTLB pages, we could keep a separate count (in one of the tail
-> > pages, I guess). And then in the places that matter (so smaps,
-> > migration, and maybe CoW and hwpoison), potentially change their calls
-> > to page_vmacount() instead of page_mapcount().
-> >
-> > Then to implement page_vmacount(), we do the RFC v1 mapcount approach
-> > (but like.... correctly this time). And then for page_mapcount(), we
-> > do the RFC v2 mapcount approach (head-only, once per PTE).
-> >
-> > Then we fix folio_referenced() without needing to special-case it for
-> > HugeTLB. :) Or we could just special-case it. *shrug*
-> >
-> > Does that sound reasonable? We still have the problem where a series
-> > of partially unmaps could leave page_vmacount() incremented, but I
-> > don't think that's a big problem.
->
-> I'm afraid someone will stop you from introducing yet another definition of
-> mapcount, where others are trying to remove it. :)
->
-> Or, can we just drop folio_referenced_arg.mapcount?  We need to keep:
->
->         if (!pra.mapcount)
->                 return 0;
->
-> By replacing it with folio_mapcount which is definitely something
-> worthwhile, but what about the rest?
->
-> If it can be dropped, afaict it'll naturally work with HGM again.
->
-> IIUC that's an optimization where we want to stop the rmap walk as long as
-> we found all the pages, however (1) IIUC it's not required to function, and
-> (2) it's not guaranteed to work as solid anyway.. As we've discussed
-> before: right after it reads mapcount (but before taking the page lock),
-> the mapcount can get decreased by 1, then it'll still need to loop over all
-> the vmas just to find that there's one "misterious" mapcount lost.
->
-> Personally I really have no idea on how much that optimization can help.
+On Mon, Jan 09, 2023, Emanuele Giuseppe Esposito wrote:
+> Make sure the APIC_ID is correctly shifted in the right bit positions
+> when disabling x2APIC via KVM_SET_MSRS.
+> 
+> Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
+> ---
+>  .../selftests/kvm/x86_64/xapic_state_test.c   | 64 +++++++++++++++++++
+>  1 file changed, 64 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/kvm/x86_64/xapic_state_test.c b/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
+> index d7d37dae3eeb..6ebda7162a25 100644
+> --- a/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
+> +++ b/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
+> @@ -132,6 +132,62 @@ static void test_icr(struct xapic_vcpu *x)
+>  	__test_icr(x, -1ull & ~APIC_DM_FIXED_MASK);
+>  }
+>  
+> +static void _test_lapic_id
 
-Ok, yeah, I think pra.mapcount can be removed too. (And we replace
-!pra.mapcount with !folio_mapcount().)
+There's no need for the underscore since this is "lapic" vs. "apic", though I would
+prefer to name them both "apic" and go with double underscores, i.e. __test_apic_id().
 
-I don't see any other existing users of folio_mapcount() and
-total_mapcount() that are problematic. We do need to make sure to keep
-refcount and mapcount in sync though; it can be done.
+> (struct kvm_vcpu *vcpu, bool x2apic_enabled,
 
-So I'll compare this "RFC v1" way with the THP-like way and get you a
-performance comparison.
+Pass the entire apic_base value to avoid magic booleans, and then that also lets
+this helper do the vcpu_set_msr().
 
+> +			   int expected_id)
 
-- James
+There's no need to pass the expected APIC ID, it can be derived from vcpu->id.
+
+> +{
+> +	struct kvm_lapic_state xapic;
+> +
+> +	vcpu_ioctl(vcpu, KVM_GET_LAPIC, &xapic);
+> +	if (x2apic_enabled)
+> +		ASSERT_EQ(xapic.regs[APIC_ID], expected_id);
+> +	else
+> +		ASSERT_EQ(xapic.regs[0x23], expected_id);
+
+Oof.  It's gross (we need more helpers), but the APIC_ID should be read as a 32-bit
+value, both to fully validate x2APIC and to check that KVM doesn't leave bits set
+in the reserved portion of APIC_ID when in xAPIC mode.
+
+	apic_id = *((u32 *)&xapic.regs[APIC_ID]);
+
+And then shift the expected ID instead of the actual ID so that it's more obvious
+what went wrong on failure, e.g. generate errors like
+
+	APIC_ID not set back to xAPIC format; wanted = 1000000, got = 1
+
+versus just seeing '0' from the high byte.
+
+> +}
+> +
+> +static void test_apic_id(struct kvm_vcpu *vcpu, int id)
+> +{
+> +	int ret;
+> +	struct {
+> +		struct kvm_msrs info;
+> +		struct kvm_msr_entry entries[1];
+> +	} msr_data = {
+> +		.info.nmsrs = 1,
+> +		.entries[0].index = MSR_IA32_APICBASE,
+> +	};
+> +
+> +	/* vcpu is initialized with xAPIC enabled */
+> +	ret = __vcpu_ioctl(vcpu, KVM_GET_MSRS, &msr_data.info);
+> +	TEST_ASSERT(ret == 1, __KVM_IOCTL_ERROR("__vcpu_ioctl", ret));
+
+Use vcpu_get_msr().
+
+> +	ASSERT_EQ(msr_data.entries[0].data & MSR_IA32_APICBASE_ENABLE,
+> +		  MSR_IA32_APICBASE_ENABLE);
+
+This is hard to read.  I get annoyed with TEST_ASSERT() requiring a message, but
+in this case using ASSERT_EQ() to avoid the message is a net negative (I blinked
+a few times to figure out what it was asserting).
+
+		TEST_ASSERT(apic_base & MSR_IA32_APICBASE_ENABLE,
+			    "APIC not in ENABLED state at vCPU RESET");
+		TEST_ASSERT(!(apic_base & X2APIC_ENABLE),
+			    "APIC not in xAPIC mode at vCPU RESET");
+
+> +	ASSERT_EQ(msr_data.entries[0].data & X2APIC_ENABLE, 0);
+> +	_test_lapic_id(vcpu, false, id);
+> +
+> +	/* enable x2APIC */
+> +	msr_data.entries[0].data |= X2APIC_ENABLE;
+> +	ret = __vcpu_ioctl(vcpu, KVM_SET_MSRS, &msr_data.info);
+> +	TEST_ASSERT(ret == 1, __KVM_IOCTL_ERROR("__vcpu_ioctl", ret));
+> +	ASSERT_EQ(msr_data.entries[0].data & MSR_IA32_APICBASE_ENABLE,
+> +		  MSR_IA32_APICBASE_ENABLE);
+> +	ASSERT_EQ(msr_data.entries[0].data & X2APIC_ENABLE, X2APIC_ENABLE);
+> +	_test_lapic_id(vcpu, true, id);
+> +
+> +	/*
+> +	 * Check that disabling x2APIC correctly updates the APIC ID to the
+> +	 * xAPIC format.
+> +	 */
+> +	msr_data.entries[0].data ^= X2APIC_ENABLE;
+
+XOR works, but it obfuscates the code.  AND ~, or just use the original value.
+
+> +	ret = __vcpu_ioctl(vcpu, KVM_SET_MSRS, &msr_data.info);
+> +	TEST_ASSERT(ret == 1, __KVM_IOCTL_ERROR("__vcpu_ioctl", ret));
+> +	ASSERT_EQ(msr_data.entries[0].data & MSR_IA32_APICBASE_ENABLE,
+> +		  MSR_IA32_APICBASE_ENABLE);
+> +	ASSERT_EQ(msr_data.entries[0].data & X2APIC_ENABLE, 0);
+> +	_test_lapic_id(vcpu, false, id);
+> +}
+> +
+> +#define NCPUS 3
+> +
+>  int main(int argc, char *argv[])
+>  {
+>  	struct xapic_vcpu x = {
+> @@ -139,6 +195,14 @@ int main(int argc, char *argv[])
+>  		.is_x2apic = true,
+>  	};
+>  	struct kvm_vm *vm;
+> +	struct kvm_vcpu *vcpus[NCPUS] = { 0 };
+> +	int i;
+> +
+> +	vm = vm_create_with_vcpus(NCPUS, NULL, vcpus);
+> +	vm_enable_cap(vm, KVM_CAP_X2APIC_API, KVM_X2APIC_API_USE_32BIT_IDS);
+> +	for (i = 0; i < NCPUS; i++)
+> +		test_apic_id(vcpus[i], i);
+> +	kvm_vm_free(vm);
+
+I would prefer to put this in the helper, test_apic_id(), so that there isn't
+confusion between the number of vCPUs for that sub-test and the existing tests.
+
+This is what I ended up with:
+
+static void __test_apic_id(struct kvm_vcpu *vcpu, uint64_t apic_base)
+{
+	uint32_t apic_id, expected;
+	struct kvm_lapic_state xapic;
+
+	vcpu_set_msr(vcpu, MSR_IA32_APICBASE, apic_base);
+
+	vcpu_ioctl(vcpu, KVM_GET_LAPIC, &xapic);
+
+	expected = apic_base & X2APIC_ENABLE ? vcpu->id : vcpu->id << 24;
+	apic_id = *((u32 *)&xapic.regs[APIC_ID]);
+
+	TEST_ASSERT(apic_id == expected,
+		    "APIC_ID not set back to %s format; wanted = %x, got = %x",
+		    (apic_base & X2APIC_ENABLE) ? "x2APIC" : "xAPIC",
+		    expected, apic_id);
+}
+
+/*
+ * Verify that KVM switches the APIC_ID between xAPIC and x2APIC when userspace
+ * stuffs MSR_IA32_APICBASE.  Setting the APIC_ID when x2APIC is enabled and
+ * when the APIC transitions for DISABLED to ENABLED is architectural behavior
+ * (on Intel), whereas the x2APIC => xAPIC transition behavior is KVM ABI since
+ * attempted to transition from x2APIC to xAPIC without disabling the APIC is
+ * architecturally disallowed.
+ */
+static void test_apic_id(void)
+{
+	const uint32_t NR_VCPUS = 3;
+	struct kvm_vcpu *vcpus[NR_VCPUS];
+	uint64_t apic_base;
+	struct kvm_vm *vm;
+	int i;
+
+	vm = vm_create_with_vcpus(NR_VCPUS, NULL, vcpus);
+	vm_enable_cap(vm, KVM_CAP_X2APIC_API, KVM_X2APIC_API_USE_32BIT_IDS);
+
+	for (i = 0; i < NR_VCPUS; i++) {
+		apic_base = vcpu_get_msr(vcpus[i], MSR_IA32_APICBASE);
+
+		TEST_ASSERT(apic_base & MSR_IA32_APICBASE_ENABLE,
+			    "APIC not in ENABLED state at vCPU RESET");
+		TEST_ASSERT(!(apic_base & X2APIC_ENABLE),
+			    "APIC not in xAPIC mode at vCPU RESET");
+
+		__test_apic_id(vcpus[i], apic_base);
+		__test_apic_id(vcpus[i], apic_base | X2APIC_ENABLE);
+		__test_apic_id(vcpus[i], apic_base);
+	}
+
+	kvm_vm_free(vm);
+}
