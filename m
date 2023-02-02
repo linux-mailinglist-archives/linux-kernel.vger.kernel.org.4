@@ -2,218 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5093C68883E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 21:28:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42690688840
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 21:28:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232202AbjBBU17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 15:27:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33444 "EHLO
+        id S232392AbjBBU2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 15:28:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbjBBU15 (ORCPT
+        with ESMTP id S232297AbjBBU2b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 15:27:57 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F6A922038;
-        Thu,  2 Feb 2023 12:27:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9B8D6B82778;
-        Thu,  2 Feb 2023 20:27:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6710C433EF;
-        Thu,  2 Feb 2023 20:27:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675369673;
-        bh=/yv6z44DjS37fPnTEcfK9tOUPF+JjplCO3q90mk7/Nc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rFUOLQ7F6AYZI1xbHoOpVL9ux3EJlQ9bQW12TYvSvyFVAHHLXu0xL83sTnwOl7acU
-         8KKUYvjR5OU0cctleDSHDeMl6I/77YbfQOM8+mfNBvCq7BjrOd/mJM1rr88Szysx4d
-         yohKE5NqpsIxdR5eYQqX4OpvAtjvRK17Sjwk72y1LA0oaNCf6lnuw9X6dsXNqKccoa
-         Y6plnDhy3Mo11kk/kaqRP2dv101IDrZRZAu9LWpci2Tm5yXevcL5eZXqCLTWd2BhL7
-         exT00cbSb7RN58KHIYoSQENrQJt3GZf27YLBlVlHnqPo5hVhZsALrlDVYOD34gF37S
-         c5ZL/usVQQ8hA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 05C42405BE; Thu,  2 Feb 2023 17:27:49 -0300 (-03)
-Date:   Thu, 2 Feb 2023 17:27:49 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org, Song Liu <song@kernel.org>,
-        Hao Luo <haoluo@google.com>, bpf@vger.kernel.org
-Subject: Re: [PATCH 2/4] perf lock contention: Use lock_stat_find{,new}
-Message-ID: <Y9wcxfrL3J+nfp0P@kernel.org>
-References: <20230202050455.2187592-1-namhyung@kernel.org>
- <20230202050455.2187592-3-namhyung@kernel.org>
+        Thu, 2 Feb 2023 15:28:31 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 245F738E99
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 12:28:30 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id t12-20020a17090aae0c00b00229f4cff534so6405836pjq.1
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 12:28:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=kCeSKsaiEn0ZIK4bA5yE4w/pjc6DqI6l1J6JDIP3nQA=;
+        b=fyLHSpVqKD2jEZCRFdH9Hm9DZGY4bwXlC1M1zi883+qOV+pc56CQalsX0kjMJc8MI+
+         XYAi1mUqqlyTJ7C/Qd3A+4Tt26YQPzCnDidTIjuQ55zm0q+okDtQ8esuws3SJHpmMxDv
+         L8L2JLR26CAdCKs7V541FTwTpfsEYz2LHlPUE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kCeSKsaiEn0ZIK4bA5yE4w/pjc6DqI6l1J6JDIP3nQA=;
+        b=nIr8n+vZvUiwQCsokdyDdNU27wiOTxf3VJUg0mUhO9Cw0zdfsBMmnMz8IjbPeQ25zb
+         fvcWTEfi3+FH1tGviknjB3Mu9Y8eseZK7yV3580Dxk11H8tYY/g5KrwQBzEC74uw4qK8
+         93idpM0exg8O7utuJWEhLoLc6pLR8c/SU9X4NoIqU4suIpcI5GeY8tBkhHj1UEPWYQa/
+         9RMFeyXtrUdf0rSvTy6kR24HqBBbXA/cVH1PkUN/JI/W5GVn5v4NBNwctQsgwbbiSbT+
+         gavJvSAP6Q1zzFjLZyNCUHXbRAGp4Lzfz3Jb0TZT6il3IK1XuuNj0zlQs2cfu3tX9SzD
+         1MgQ==
+X-Gm-Message-State: AO0yUKUPgaGawkw3FdXQBkTQxpTmqIUS8NxW9uNCpHdqWM5XUvXix4Vb
+        Dd8tctMDizWOTqQqOs1tMAdVbgxnRcpvrKbc
+X-Google-Smtp-Source: AK7set8/0ss9qYyQiFWrVF9nmGsWNhlsjTyaztcZXm/XLquFezmkBOFFR1j2rtW4e/z2gad/W90XuQ==
+X-Received: by 2002:a17:903:230d:b0:196:4fe3:21b1 with SMTP id d13-20020a170903230d00b001964fe321b1mr8477930plh.27.1675369709462;
+        Thu, 02 Feb 2023 12:28:29 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id p6-20020a170902780600b001929f0b4582sm63943pll.300.2023.02.02.12.28.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Feb 2023 12:28:29 -0800 (PST)
+Message-ID: <63dc1ced.170a0220.f43a2.02c5@mx.google.com>
+X-Google-Original-Message-ID: <202302022028.@keescook>
+Date:   Thu, 2 Feb 2023 20:28:28 +0000
+From:   Kees Cook <keescook@chromium.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     Kevin Barnett <kevin.barnett@microsemi.com>,
+        Don Brace <don.brace@microchip.com>, storagedev@microchip.com,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 2/3][next] scsi: smartpqi: Replace one-element arrays
+ with flexible-array members
+References: <cover.1663816572.git.gustavoars@kernel.org>
+ <62bb7891b3a752e7302286030ba9fafe58dffb1e.1663816572.git.gustavoars@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230202050455.2187592-3-namhyung@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <62bb7891b3a752e7302286030ba9fafe58dffb1e.1663816572.git.gustavoars@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, Feb 01, 2023 at 09:04:53PM -0800, Namhyung Kim escreveu:
-> This is a preparation work to support complex keys of BPF maps.  Now it
-> has single value key according to the aggregation mode like stack_id or
-> pid.  But we want to use a combination of those keys.
+On Wed, Sep 21, 2022 at 11:29:29PM -0500, Gustavo A. R. Silva wrote:
+> One-element arrays are deprecated, and we are replacing them with flexible
+> array members instead. So, replace one-element array with flexible-array
+> member in structures report_phys_lun_8byte_wwid_list and
+> report_phys_lun_16byte_wwid_list.
 > 
-> Then lock_contention_read() should still aggregate the result based on
-> the key that was requested by user.  The other key info will be used for
-> filtering.
+> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE routines
+> on memcpy().
 > 
-> So instead of creating a lock_stat entry always, Check if it's already
-> there using lock_stat_find() first.
+> Link: https://github.com/KSPP/linux/issues/79
+> Link: https://github.com/KSPP/linux/issues/204
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-Hey, try building without libtraceevent-devel installed, should be
-equivalent to NO_LIBTRACEEVENT=1.
+Are there any binary differences after this patch? I assume not, so:
 
-At this point I think you should move bpf_lock_contention.o to inside
-that CONFIG_LIBTRACEEVENT if block.
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-perf-$(CONFIG_PERF_BPF_SKEL) += bpf_lock_contention.o
 
-ifeq ($(CONFIG_LIBTRACEEVENT),y)
-  perf-$(CONFIG_PERF_BPF_SKEL) += bpf_kwork.o
-endif
-
-I'm removing this series from tmp.perf/core for now.
-
-- Arnaldo
- 
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 > ---
->  tools/perf/builtin-lock.c             |  4 +--
->  tools/perf/util/bpf_lock_contention.c | 41 ++++++++++++++++-----------
->  tools/perf/util/lock-contention.h     |  3 ++
->  3 files changed, 30 insertions(+), 18 deletions(-)
+>  drivers/scsi/smartpqi/smartpqi.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
-> index 216a9a252bf4..0593c6e636c6 100644
-> --- a/tools/perf/builtin-lock.c
-> +++ b/tools/perf/builtin-lock.c
-> @@ -465,7 +465,7 @@ static struct lock_stat *pop_from_result(void)
->  	return container_of(node, struct lock_stat, rb);
->  }
+> diff --git a/drivers/scsi/smartpqi/smartpqi.h b/drivers/scsi/smartpqi/smartpqi.h
+> index d1756c9d1112..b31b42530674 100644
+> --- a/drivers/scsi/smartpqi/smartpqi.h
+> +++ b/drivers/scsi/smartpqi/smartpqi.h
+> @@ -982,12 +982,12 @@ struct report_phys_lun_16byte_wwid {
 >  
-> -static struct lock_stat *lock_stat_find(u64 addr)
-> +struct lock_stat *lock_stat_find(u64 addr)
->  {
->  	struct hlist_head *entry = lockhashentry(addr);
->  	struct lock_stat *ret;
-> @@ -477,7 +477,7 @@ static struct lock_stat *lock_stat_find(u64 addr)
->  	return NULL;
->  }
+>  struct report_phys_lun_8byte_wwid_list {
+>  	struct report_lun_header header;
+> -	struct report_phys_lun_8byte_wwid lun_entries[1];
+> +	struct report_phys_lun_8byte_wwid lun_entries[];
+>  };
 >  
-> -static struct lock_stat *lock_stat_findnew(u64 addr, const char *name, int flags)
-> +struct lock_stat *lock_stat_findnew(u64 addr, const char *name, int flags)
->  {
->  	struct hlist_head *entry = lockhashentry(addr);
->  	struct lock_stat *ret, *new;
-> diff --git a/tools/perf/util/bpf_lock_contention.c b/tools/perf/util/bpf_lock_contention.c
-> index 967ce168f163..c6f2db603d5a 100644
-> --- a/tools/perf/util/bpf_lock_contention.c
-> +++ b/tools/perf/util/bpf_lock_contention.c
-> @@ -254,12 +254,34 @@ int lock_contention_read(struct lock_contention *con)
->  	prev_key = NULL;
->  	while (!bpf_map_get_next_key(fd, prev_key, &key)) {
->  		s32 stack_id;
-> +		const char *name;
+>  struct report_phys_lun_16byte_wwid_list {
+>  	struct report_lun_header header;
+> -	struct report_phys_lun_16byte_wwid lun_entries[1];
+> +	struct report_phys_lun_16byte_wwid lun_entries[];
+>  };
 >  
->  		/* to handle errors in the loop body */
->  		err = -1;
->  
->  		bpf_map_lookup_elem(fd, &key, &data);
-> -		st = zalloc(sizeof(*st));
-> +
-> +		if (con->save_callstack) {
-> +			stack_id = key.aggr_key;
-> +			bpf_map_lookup_elem(stack, &stack_id, stack_trace);
-> +		}
-> +
-> +		st = lock_stat_find(key.aggr_key);
-> +		if (st != NULL) {
-> +			st->wait_time_total += data.total_time;
-> +			if (st->wait_time_max < data.max_time)
-> +				st->wait_time_max = data.max_time;
-> +			if (st->wait_time_min > data.min_time)
-> +				st->wait_time_min = data.min_time;
-> +
-> +			st->nr_contended += data.count;
-> +			if (st->nr_contended)
-> +				st->avg_wait_time = st->wait_time_total / st->nr_contended;
-> +			goto next;
-> +		}
-> +
-> +		name = lock_contention_get_name(con, &key, stack_trace);
-> +		st = lock_stat_findnew(key.aggr_key, name, data.flags);
->  		if (st == NULL)
->  			break;
->  
-> @@ -272,14 +294,6 @@ int lock_contention_read(struct lock_contention *con)
->  			st->avg_wait_time = data.total_time / data.count;
->  
->  		st->flags = data.flags;
-> -		st->addr = key.aggr_key;
-> -
-> -		stack_id = key.aggr_key;
-> -		bpf_map_lookup_elem(stack, &stack_id, stack_trace);
-> -
-> -		st->name = strdup(lock_contention_get_name(con, &key, stack_trace));
-> -		if (st->name == NULL)
-> -			break;
->  
->  		if (con->save_callstack) {
->  			st->callstack = memdup(stack_trace, stack_size);
-> @@ -287,19 +301,14 @@ int lock_contention_read(struct lock_contention *con)
->  				break;
->  		}
->  
-> -		hlist_add_head(&st->hash_entry, con->result);
-> +next:
->  		prev_key = &key;
->  
-> -		/* we're fine now, reset the values */
-> -		st = NULL;
-> +		/* we're fine now, reset the error */
->  		err = 0;
->  	}
->  
->  	free(stack_trace);
-> -	if (st) {
-> -		free(st->name);
-> -		free(st);
-> -	}
->  
->  	return err;
->  }
-> diff --git a/tools/perf/util/lock-contention.h b/tools/perf/util/lock-contention.h
-> index 17e594d57a61..39d5bfc77f4e 100644
-> --- a/tools/perf/util/lock-contention.h
-> +++ b/tools/perf/util/lock-contention.h
-> @@ -65,6 +65,9 @@ struct lock_stat {
->   */
->  #define MAX_LOCK_DEPTH 48
->  
-> +struct lock_stat *lock_stat_find(u64 addr);
-> +struct lock_stat *lock_stat_findnew(u64 addr, const char *name, int flags);
-> +
->  /*
->   * struct lock_seq_stat:
->   * Place to put on state of one lock sequence
+>  struct raid_map_disk_data {
 > -- 
-> 2.39.1.456.gfc5497dd1b-goog
+> 2.34.1
 > 
 
 -- 
-
-- Arnaldo
+Kees Cook
