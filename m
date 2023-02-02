@@ -2,145 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83018687538
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 06:29:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DA6568753B
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 06:30:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232163AbjBBF3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 00:29:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58794 "EHLO
+        id S229649AbjBBFaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 00:30:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231970AbjBBF20 (ORCPT
+        with ESMTP id S232112AbjBBF3I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 00:28:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD39827998;
-        Wed,  1 Feb 2023 21:28:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8EA94615EF;
-        Thu,  2 Feb 2023 05:28:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A436C433A1;
-        Thu,  2 Feb 2023 05:28:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675315691;
-        bh=lcs6AXLIFbqkFs6UrWf0Ln1qRWrFsNHR0PXy8tOjKNA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NjC6HerwNYZpDQWHNMEAMOutZtfItpkk143ioeMYmoqxhu5m9RxsfveJYd/9divWh
-         UH1XXeS0GcumS5+3MeUPWE8d7Db4xX1OT0WvLTfXkHMiX3BV92mW9H3upzxduZEEM1
-         5dmleyl/4f0zT0C2WUinAVirG4+tKVnfWDEVkR9CNKwPeeqY/48sDwPno66qEplyOU
-         4KcCTTJmup/jgGr6P2U3PXtWnKmL0crqJ+xDqn9KZ9Glogzq7NIUN0iEfSzqwqA9Ak
-         VGBIFaqph4V6WR5JffrXP2Ii1HHVozu15LGGi659U/e+etSoGfvRccQP334dNzKPMf
-         cfN/e1iF17j6g==
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     stable@vger.kernel.org
-Cc:     Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
-        Kees Cook <keescook@chromium.org>,
-        SeongJae Park <sj@kernel.org>,
-        Seth Jenkins <sethjenkins@google.com>,
-        Jann Horn <jannh@google.com>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, Petr Mladek <pmladek@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Marco Elver <elver@google.com>,
-        tangmeng <tangmeng@uniontech.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH 4.19 16/16] exit: Use READ_ONCE() for all oops/warn limit reads
-Date:   Wed,  1 Feb 2023 21:26:04 -0800
-Message-Id: <20230202052604.179184-17-ebiggers@kernel.org>
+        Thu, 2 Feb 2023 00:29:08 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 249004DCF6;
+        Wed,  1 Feb 2023 21:28:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=w67uANH4ICcPjfB8P29IxwXnWVdeW1WrLI1ybFP3zFc=; b=EgFOqzZgATVHmdjgAO46/5IsWl
+        RsxdGD2hL0Ruted5K+p7hu/ejZk6XfT+eQJetFvQSbrZhg7jfypEoXIKhQ5Z0d1elKhuKSsL4Ub18
+        W8w0Lb0Dd63DFKAoWs2Qy72lFcFO1N4jIsrO0KQMsACEcvQyRnWFOKvKuKgCcxjoYOI+yC9BTJghY
+        8LRhYT73bu82wd2BXbPv/xjhL6lsfxnq/9vnCXoruE9P184k9seNMKni6zWzxy3Cc50EEzkf3w+b1
+        0iOlj30H6PeZxWQ27SrEXpR8Gb3x7WOeWNoTAUdz3k4wYjY+WUCR+PGUxJvTEmD2LrE0JlHklgtMS
+        N2biYzzg==;
+Received: from [2601:1c2:d00:6a60::9526] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pNS8u-00ERRM-FW; Thu, 02 Feb 2023 05:28:16 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH] >>>>>>>>>>>>>>>>>>>>>>>>> BLURB <<<<<<<<<<<<<<<<<<<
+Date:   Wed,  1 Feb 2023 21:28:13 -0800
+Message-Id: <20230202052813.27427-1-rdunlap@infradead.org>
 X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230202052604.179184-1-ebiggers@kernel.org>
-References: <20230202052604.179184-1-ebiggers@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,SUBJ_ALL_CAPS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kees Cook <keescook@chromium.org>
 
-commit 7535b832c6399b5ebfc5b53af5c51dd915ee2538 upstream.
+../arch/sh/include/asm/checksum_32.h: In function 'csum_and_copy_from_user':
+../arch/sh/include/asm/checksum_32.h:53:14: error: implicit declaration of function 'access_ok' [-Werror=implicit-function-declaration]
+   53 |         if (!access_ok(src, len))
+      |              ^~~~~~~~~
 
-Use a temporary variable to take full advantage of READ_ONCE() behavior.
-Without this, the report (and even the test) might be out of sync with
-the initial test.
-
-Reported-by: Peter Zijlstra <peterz@infradead.org>
-Link: https://lore.kernel.org/lkml/Y5x7GXeluFmZ8E0E@hirez.programming.kicks-ass.net
-Fixes: 9fc9e278a5c0 ("panic: Introduce warn_limit")
-Fixes: d4ccd54d28d3 ("exit: Put an upper limit on how often we can oops")
-Cc: "Eric W. Biederman" <ebiederm@xmission.com>
-Cc: Jann Horn <jannh@google.com>
+Fixes: 7fe8970a78a1 ("sh32: convert to csum_and_copy_from_user()")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+Cc: Rich Felker <dalias@libc.org>
+Cc: linux-sh@vger.kernel.org
+Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
 Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Petr Mladek <pmladek@suse.com>
 Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Marco Elver <elver@google.com>
-Cc: tangmeng <tangmeng@uniontech.com>
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: Tiezhu Yang <yangtiezhu@loongson.cn>
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Eric Biggers <ebiggers@google.com>
 ---
- kernel/exit.c  | 6 ++++--
- kernel/panic.c | 7 +++++--
- 2 files changed, 9 insertions(+), 4 deletions(-)
+ arch/sh/include/asm/checksum_32.h |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/kernel/exit.c b/kernel/exit.c
-index b2f0aaf6bee78..02360ec3b1225 100644
---- a/kernel/exit.c
-+++ b/kernel/exit.c
-@@ -975,6 +975,7 @@ void __noreturn make_task_dead(int signr)
- 	 * Take the task off the cpu after something catastrophic has
- 	 * happened.
- 	 */
-+	unsigned int limit;
+diff -- a/arch/sh/include/asm/checksum_32.h b/arch/sh/include/asm/checksum_32.h
+--- a/arch/sh/include/asm/checksum_32.h
++++ b/arch/sh/include/asm/checksum_32.h
+@@ -7,6 +7,7 @@
+  */
  
- 	/*
- 	 * Every time the system oopses, if the oops happens while a reference
-@@ -986,8 +987,9 @@ void __noreturn make_task_dead(int signr)
- 	 * To make sure this can't happen, place an upper bound on how often the
- 	 * kernel may oops without panic().
- 	 */
--	if (atomic_inc_return(&oops_count) >= READ_ONCE(oops_limit) && oops_limit)
--		panic("Oopsed too often (kernel.oops_limit is %d)", oops_limit);
-+	limit = READ_ONCE(oops_limit);
-+	if (atomic_inc_return(&oops_count) >= limit && limit)
-+		panic("Oopsed too often (kernel.oops_limit is %d)", limit);
+ #include <linux/in6.h>
++#include <asm-generic/access_ok.h>
  
- 	do_exit(signr);
- }
-diff --git a/kernel/panic.c b/kernel/panic.c
-index dbb6e27d33e10..982ecba286c08 100644
---- a/kernel/panic.c
-+++ b/kernel/panic.c
-@@ -168,12 +168,15 @@ EXPORT_SYMBOL(nmi_panic);
- 
- void check_panic_on_warn(const char *origin)
- {
-+	unsigned int limit;
-+
- 	if (panic_on_warn)
- 		panic("%s: panic_on_warn set ...\n", origin);
- 
--	if (atomic_inc_return(&warn_count) >= READ_ONCE(warn_limit) && warn_limit)
-+	limit = READ_ONCE(warn_limit);
-+	if (atomic_inc_return(&warn_count) >= limit && limit)
- 		panic("%s: system warned too often (kernel.warn_limit is %d)",
--		      origin, warn_limit);
-+		      origin, limit);
- }
- 
- /**
--- 
-2.39.1
-
+ /*
+  * computes the checksum of a memory block at buff, length len,
