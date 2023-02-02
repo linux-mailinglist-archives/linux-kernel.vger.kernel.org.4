@@ -2,37 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DA706880E4
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 16:01:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B748A6880EA
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 16:02:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232256AbjBBPBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 10:01:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40500 "EHLO
+        id S231953AbjBBPCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 10:02:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjBBPA4 (ORCPT
+        with ESMTP id S232088AbjBBPCL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 10:00:56 -0500
-Received: from mta-65-225.siemens.flowmailer.net (mta-65-225.siemens.flowmailer.net [185.136.65.225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CAF61E28E
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 07:00:54 -0800 (PST)
-Received: by mta-65-225.siemens.flowmailer.net with ESMTPSA id 20230202150051f2b4f0df1809a26236
+        Thu, 2 Feb 2023 10:02:11 -0500
+X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 02 Feb 2023 07:01:59 PST
+Received: from mta-64-225.siemens.flowmailer.net (mta-64-225.siemens.flowmailer.net [185.136.64.225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39220222D4
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 07:01:57 -0800 (PST)
+Received: by mta-64-225.siemens.flowmailer.net with ESMTPSA id 20230202150052df0c5fd652493057c5
         for <linux-kernel@vger.kernel.org>;
-        Thu, 02 Feb 2023 16:00:52 +0100
+        Thu, 02 Feb 2023 16:00:53 +0100
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
  d=siemens.com; i=daniel.starke@siemens.com;
  h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
- bh=CGxEhyAoxwEddJ0xl4OF2ojfXEmQZFbiyIt4XcYZYMI=;
- b=oFm7tsEbzNjln8ACwbYSnM8fp5u8CRuWKKLUxzh4QBJSiSe2NXcTPMrOAYNrMOFzYSSOXe
- sUVP86thOq5sefEzlqiL2VWEeT2g6n9SZXzRotnTvT5jn43+U3w7lzz0bJf9HwLO/k8Kj6pG
- /quUsM1DNz0abYmXxhdJlbTsB3LBU=;
+ bh=YdcoFftLnFR/AK9G1BlGcWmP90uXq6edhg1S5lsCyRU=;
+ b=MD6mRlsfiPecqm31pMlgpw6gJKBqmkfeIeoKLZUgIDHWTJrsd5fABfT62ZY/IgJysdDBw3
+ 2DxsnoEXD41hpz5D36YnHIOJ2o8sEi6WcWdrRs8IuKjP1VeaaoBAXVwQYrq4UfOhj64/+3R1
+ GOHE6T5TFODzYf7MpD2NkhkMd9ANI=;
 From:   "D. Starke" <daniel.starke@siemens.com>
 To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
         jirislaby@kernel.org, ilpo.jarvinen@linux.intel.com
 Cc:     linux-kernel@vger.kernel.org,
         Daniel Starke <daniel.starke@siemens.com>
-Subject: [PATCH v2 2/3] tty: n_gsm: add RING/CD control support
-Date:   Thu,  2 Feb 2023 15:59:33 +0100
-Message-Id: <20230202145934.22641-2-daniel.starke@siemens.com>
+Subject: [PATCH v2 3/3] tty: n_gsm: add TIOCMIWAIT support
+Date:   Thu,  2 Feb 2023 15:59:34 +0100
+Message-Id: <20230202145934.22641-3-daniel.starke@siemens.com>
 In-Reply-To: <20230202145934.22641-1-daniel.starke@siemens.com>
 References: <20230202145934.22641-1-daniel.starke@siemens.com>
 MIME-Version: 1.0
@@ -51,40 +52,99 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Daniel Starke <daniel.starke@siemens.com>
 
-The status lines ring and carrier detect are used by the modem to signal
-incoming calls (RING) or an established connection (CD). This is
-implemented as physical lines on a standard RS232 connection. However,
-the muxer protocol encodes these status lines as modem bits IC and DV.
-These incoming lines are masked by tty driver (see tty_io.c) and cannot be
-set by a user application.
+Add support for the TIOCMIWAIT ioctl on the virtual ttys. This enables the
+user to wait for virtual modem signals like RING.
 
-Allow setting RING via TIOCM_OUT1 and CD via TIOCM_OUT2 to allow
-implementation of a modem or modem emulator.
+More work is needed to support also TIOCGICOUNT.
 
 Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
 ---
- drivers/tty/n_gsm.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/tty/n_gsm.c | 33 ++++++++++++++++++++++++++++++++-
+ 1 file changed, 32 insertions(+), 1 deletion(-)
 
 v1 -> v2:
-No changes.
+A remark regarding TIOCGICOUNT has been added to the commit message.
+Wake ups in gsm_dlci_close() and gsm_dlci_begin_close() have been added to
+cope with closed DLCI during TIOCMIWAIT.
+gsm_wait_modem_change() has been properly commented to highlight all use
+cases. Furthermore, the function has been simplified and a DLCI state
+condition added to the wait_event_interruptible() call to deal with DLCI
+termination during TIOCMIWAIT correctly.
+
+Link: https://lore.kernel.org/all/Y9pgT4VcW3oGaSbY@kroah.com/
 
 diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-index d068df1cf2fd..cf1ab7d619d9 100644
+index cf1ab7d619d9..4f710a6309a7 100644
 --- a/drivers/tty/n_gsm.c
 +++ b/drivers/tty/n_gsm.c
-@@ -546,6 +546,11 @@ static u8 gsm_encode_modem(const struct gsm_dlci *dlci)
- 		modembits |= MDM_IC;
- 	if (dlci->modem_tx & TIOCM_CD || dlci->gsm->initiator)
- 		modembits |= MDM_DV;
-+	/* special mappings for passive side to operate as UE */
-+	if (dlci->modem_tx & TIOCM_OUT1)
-+		modembits |= MDM_IC;
-+	if (dlci->modem_tx & TIOCM_OUT2)
-+		modembits |= MDM_DV;
- 	return modembits;
+@@ -1542,6 +1542,7 @@ static void gsm_process_modem(struct tty_struct *tty, struct gsm_dlci *dlci,
+ 	if (brk & 0x01)
+ 		tty_insert_flip_char(&dlci->port, 0, TTY_BREAK);
+ 	dlci->modem_rx = mlines;
++	wake_up_interruptible(&dlci->gsm->event);
  }
  
+ /**
+@@ -2129,7 +2130,7 @@ static void gsm_dlci_close(struct gsm_dlci *dlci)
+ 	/* A DLCI 0 close is a MUX termination so we need to kick that
+ 	   back to userspace somehow */
+ 	gsm_dlci_data_kick(dlci);
+-	wake_up(&dlci->gsm->event);
++	wake_up_all(&dlci->gsm->event);
+ }
+ 
+ /**
+@@ -2339,6 +2340,7 @@ static void gsm_dlci_begin_close(struct gsm_dlci *dlci)
+ 	dlci->state = DLCI_CLOSING;
+ 	gsm_command(dlci->gsm, dlci->addr, DISC|PF);
+ 	mod_timer(&dlci->t1, jiffies + gsm->t1 * HZ / 100);
++	wake_up_interruptible(&gsm->event);
+ }
+ 
+ /**
+@@ -3877,6 +3879,33 @@ static int gsm_modem_update(struct gsm_dlci *dlci, u8 brk)
+ 	return -EPROTONOSUPPORT;
+ }
+ 
++/**
++ * gsm_wait_modem_change - wait for modem status line change
++ * @dlci: channel
++ * @mask: modem status line bits
++ *
++ * The function returns if:
++ * - any given modem status line bit changed
++ * - the wait event function got interrupted (e.g. by a signal)
++ * - the underlying DLCI was closed
++ * - the underlying ldisc device was removed
++ */
++static int gsm_wait_modem_change(struct gsm_dlci *dlci, u32 mask)
++{
++	struct gsm_mux *gsm = dlci->gsm;
++	u32 old = dlci->modem_rx;
++	int ret;
++
++	ret = wait_event_interruptible(gsm->event, gsm->dead ||
++				       dlci->state != DLCI_OPEN ||
++				       (old ^ dlci->modem_rx) & mask);
++	if (gsm->dead)
++		return -ENODEV;
++	if (dlci->state != DLCI_OPEN)
++		return -EL2NSYNC;
++	return ret;
++}
++
+ static bool gsm_carrier_raised(struct tty_port *port)
+ {
+ 	struct gsm_dlci *dlci = container_of(port, struct gsm_dlci, port);
+@@ -4136,6 +4165,8 @@ static int gsmtty_ioctl(struct tty_struct *tty,
+ 		gsm_destroy_network(dlci);
+ 		mutex_unlock(&dlci->mutex);
+ 		return 0;
++	case TIOCMIWAIT:
++		return gsm_wait_modem_change(dlci, arg);
+ 	default:
+ 		return -ENOIOCTLCMD;
+ 	}
 -- 
 2.34.1
 
