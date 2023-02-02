@@ -2,126 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8BBF6878AD
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:23:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3340E6878B7
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:24:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231864AbjBBJX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 04:23:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34248 "EHLO
+        id S232002AbjBBJYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 04:24:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231819AbjBBJX0 (ORCPT
+        with ESMTP id S231977AbjBBJX6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 04:23:26 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29D8B39B8F
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 01:23:25 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id x7so1368707edr.0
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 01:23:25 -0800 (PST)
+        Thu, 2 Feb 2023 04:23:58 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A9A5421D
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 01:23:55 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id hx15so4070351ejc.11
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 01:23:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=P416tksoeHDPkWpCS/M1Q+zYFOilkGD7o2nwBtmZ5fw=;
-        b=r8fGA5KY3CdAVkyb1hWGQMShGCmNPQ+4vbsIioc/NbPsYgvK8fHqxdGeBmihbk1+XU
-         1xAns9vRGYUtiK6b7caRCbg/jM7yCnK0n+xXq2d55Qy5jLKyicccVGgojznDVQQQrWN3
-         eKX2jW1F+PEHtGXa2cLK+QGAzfHSbKeDCtkAWYEgzCWog01clTquCPVmZc16R6N9s3E0
-         WbUJ0PHeP3j+xXdik0U7fyUjKonH/gtGYyoiLZUfdROb60RveEab0XS2XBfaRCPMOy5d
-         UPm5k5XpwzKf/bJrTq02LXP1idwPVQ/8y9Ip9RXu5V1sJ6ih3kPO1JwgoullH/6g0d04
-         jk0g==
+        d=mind.be; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pylWIAOIiR5skZ+1kMPoVcH9WvFuUK+jl3IbeuDoWjc=;
+        b=JB/kNWdhKyrzvI6OOcUBul4X7b7Gc8XUGhuDDBnhnXc6sj9ZwK3XOlHV504iRfRWcL
+         bmDhDvWLSDGfkW4W9B3YXYrGYs5fJcKPzNH3eEbulmHOJkryhXG+g9YIenQBjmI9WdFW
+         sEPPjIxxc1z370K/kWS1JcUQ++P4vftF93fLBtCYX00XEfsLJpJVHQPfeYnYmTiLdKlb
+         /lLhZB9rd7touERwPcjW8TA6iiAz+Srwyj5eR76sT2ls2EyoGOk15ividhHpthXpiwn8
+         5f39fJHSwwUaColQDN58sfEZHhtWIVviD7fJlce0CBTwf/7/fQQixTluQEKXec9VxF5Y
+         n4Qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=P416tksoeHDPkWpCS/M1Q+zYFOilkGD7o2nwBtmZ5fw=;
-        b=DNC3KcPtoMRjN3B5zyuWAvgbuTQ6ZI62ApM7sadaErUwrK8g8ymqw1k2HMZliIstIL
-         V3zfMj1Oey065cBCa4cVvlQ6q0xs8pr0VpZy0uA4eoBkbBr0uohMtWw1CgdRMGAQHS4J
-         ERGGjhRnh9kkYPFjPalBiVW1BA4uRjoh4YMaH8w7VX17wf45h+Qlcua0TY+KBeIYTzXd
-         Jx6791y7fqXqNUfrvCpH21ptjGvn0s7dByam8LxBuFThvB7Mvd9pFYPkHKi9spu4Telq
-         ep2/4xLKXJl8dkRu2tOe8rO36b/md2YF59RVX8oDJZ5wj2LB3Pui9jqtgYBvqmmSMhhM
-         LNdA==
-X-Gm-Message-State: AO0yUKVtFkWBbcrOV8cesLRVxFsaPK7yEbilEJBlQf+OJlXxi7B2YYmW
-        aFgH/+ilonhS22L0M/hDl0HCYA==
-X-Google-Smtp-Source: AK7set+25TuvV+te8V0hts0u1AdgPZFTx1SxQLVFh2hhpbApcNWEKcoARoxg5zqYd+U9M+0vMFBirA==
-X-Received: by 2002:a05:6402:345a:b0:499:c343:30e5 with SMTP id l26-20020a056402345a00b00499c34330e5mr5967988edc.3.1675329803668;
-        Thu, 02 Feb 2023 01:23:23 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id c23-20020a170906155700b00869f2ca6a87sm11257469ejd.135.2023.02.02.01.23.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 01:23:23 -0800 (PST)
-Message-ID: <a27ab5a2-ff8a-b5b7-dcd1-afffd3d78d8a@linaro.org>
-Date:   Thu, 2 Feb 2023 11:23:21 +0200
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pylWIAOIiR5skZ+1kMPoVcH9WvFuUK+jl3IbeuDoWjc=;
+        b=WOifkIUTquDFP0fCJ5Y4yM5Zt97TASKQh2zRLSIN5V3W3X60/UN9cgENBwamrkhGAp
+         +uk7YAg8WpfvVRkuHSFGeXgfw7cB8iTzahs6SwHJ9NYgWBR2G/LLaiOspG/FuzyBoiqu
+         J6fcEylFQ1j/nd/kjNBuelpbGmnXbOatoMJckryHWWKDbOsELetRXGsHE7O9K5az58aN
+         fPCYZhlfaeFHqgsZCAx9fVEsJKwM5A9dpGEWwlGhsiRY9oHOYCrD917qjjxVdRc3F43p
+         db4+Z+l0RXCEKYjk0nfxvnUvK8zvEO0PXunLR3DmZmVvmW8O/ccyYM+JuZzZTzUkN5ac
+         mHrw==
+X-Gm-Message-State: AO0yUKUhJxHbpCczQ8XHPiLUZlehe8nhuKUYrivJSqTjGRdfkKs6PWvU
+        GXEV9jBUMf+/8AqKzCsA7Y/sNQ==
+X-Google-Smtp-Source: AK7set/n3JVz221kaZq3wXdWomFwew7p7XaEOoJoRxKDtdYwTnH+nnAIEsHoj4PcC7Dd4wFL9H5tFw==
+X-Received: by 2002:a17:907:1607:b0:7d3:c516:6ef4 with SMTP id hb7-20020a170907160700b007d3c5166ef4mr7261465ejc.20.1675329834223;
+        Thu, 02 Feb 2023 01:23:54 -0800 (PST)
+Received: from dtpc.zanders.be (78-22-137-109.access.telenet.be. [78.22.137.109])
+        by smtp.gmail.com with ESMTPSA id j4-20020a170906474400b00856ad9108e7sm11372658ejs.70.2023.02.02.01.23.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Feb 2023 01:23:53 -0800 (PST)
+From:   Maarten Zanders <maarten.zanders@mind.be>
+To:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>
+Cc:     Maarten Zanders <maarten.zanders@mind.be>,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/2] leds: lp55xx: configure internal charge pump
+Date:   Thu,  2 Feb 2023 10:23:23 +0100
+Message-Id: <20230202092325.21241-1-maarten.zanders@mind.be>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RESEND PATCH] arm64: defconfig: enable drivers required by the
- Qualcomm SA8775P platform
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Shawn Guo <shawnguo@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-References: <20230202085958.11055-1-brgl@bgdev.pl>
-Content-Language: en-GB
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230202085958.11055-1-brgl@bgdev.pl>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/02/2023 10:59, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> 
-> Enable the pinctrl, GCC clock and interconnect drivers in order to allow
-> booting SA8775P boards. The drivers need to be built-in for QUPv3 and
-> subsequently UART console to work.
-> 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+A new option in the devicetree "ti,charge-pump-mode" allows the user to
+configure the charge pump in a certain mode. The previous implementation
+was "auto" mode, which remains the default.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+v1 of the patch implemented a bool to disable the charge pump and had some
+issues in the yaml binding.
 
-Note, you didn't include linux-arm-msm into the To/Cc, so this patch 
-might miss Bjorn's patchwork.
+v2 implemented all options of the charge pump as a string which was too
+complex to parse & check.
 
-> ---
-> All drivers are now in next so let's enable them.
-> 
->   arch/arm64/configs/defconfig | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-> index 984553d55e17..998ca0e07689 100644
-> --- a/arch/arm64/configs/defconfig
-> +++ b/arch/arm64/configs/defconfig
-> @@ -560,6 +560,7 @@ CONFIG_PINCTRL_QCM2290=y
->   CONFIG_PINCTRL_QCS404=y
->   CONFIG_PINCTRL_QDF2XXX=y
->   CONFIG_PINCTRL_QCOM_SPMI_PMIC=y
-> +CONFIG_PINCTRL_SA8775P=y
->   CONFIG_PINCTRL_SC7180=y
->   CONFIG_PINCTRL_SC7280=y
->   CONFIG_PINCTRL_SC8180X=y
-> @@ -1352,6 +1353,7 @@ CONFIG_INTERCONNECT_QCOM_MSM8916=m
->   CONFIG_INTERCONNECT_QCOM_MSM8996=m
->   CONFIG_INTERCONNECT_QCOM_OSM_L3=m
->   CONFIG_INTERCONNECT_QCOM_QCS404=m
-> +CONFIG_INTERCONNECT_QCOM_SA8775P=y
->   CONFIG_INTERCONNECT_QCOM_SC7180=y
->   CONFIG_INTERCONNECT_QCOM_SC7280=y
->   CONFIG_INTERCONNECT_QCOM_SC8180X=y
+v3 (this version) replaces the string by constants.
+
+Maarten Zanders (2):
+  dt-bindings: leds-lp55xx: add ti,charge-pump-mode
+  leds: lp55xx: configure internal charge pump
+
+ .../devicetree/bindings/leds/leds-lp55xx.yaml  |  8 ++++++++
+ drivers/leds/leds-lp5521.c                     | 12 ++++++------
+ drivers/leds/leds-lp5523.c                     | 18 +++++++++++++-----
+ drivers/leds/leds-lp55xx-common.c              | 14 ++++++++++++++
+ drivers/leds/leds-lp8501.c                     |  8 ++++++--
+ include/dt-bindings/leds/leds-lp55xx.h         | 10 ++++++++++
+ include/linux/platform_data/leds-lp55xx.h      |  3 +++
+ 7 files changed, 60 insertions(+), 13 deletions(-)
+ create mode 100644 include/dt-bindings/leds/leds-lp55xx.h
 
 -- 
-With best wishes
-Dmitry
+2.37.3
 
