@@ -2,138 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 248766887C5
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 20:50:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58BBC6887CB
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 20:51:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232468AbjBBTuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 14:50:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40656 "EHLO
+        id S232645AbjBBTu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 14:50:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232085AbjBBTuL (ORCPT
+        with ESMTP id S232563AbjBBTu4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 14:50:11 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A6F28876;
-        Thu,  2 Feb 2023 11:50:11 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id o13so2917408pjg.2;
-        Thu, 02 Feb 2023 11:50:11 -0800 (PST)
+        Thu, 2 Feb 2023 14:50:56 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AECA86FD11
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 11:50:54 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id m8so3157005edd.10
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 11:50:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=0XqCItSDIlA9UN2KgN+ixgTMg/eGZMlJcrANVyohEDY=;
-        b=iNBaT8Z+Ig7zrOQHc1RHN6iLOys2Q0io9gpYMeH9LzsUki6o83huVNzd3aSQV5JEzL
-         QaQrK6iF24BTp/OaynHeDuVzOKVK72wVPLciBF0niO4O89anZ3czxsEFPo9KcbK3hZOt
-         xG4jzE2Scyetx+HzYrSSxtl9aOcoJWt7DO4NNuUYH0sVPe9PeEABvNn+l8pjQ4rYu3hh
-         1m/ogKgjMf6hFOFKPOWgr9Yndv0LRIChXjzkP0tt8mBZy2lLUtpjoTvaLh+fjVvLr1Kj
-         EyoozxTzk5b4ThayMM0cCuOkOqWvXk59XVYxSz5oynrw23D0jagogoyMumcW0Jk+MF/k
-         NQKw==
+        bh=vU6b1/DyW9VF99p038CT5rL7cz19rU/zHJDhT4ApbFc=;
+        b=qFo6Zs4zc/E7ttK81jaTeAILjmRH5v3tgoYVgjr6j/geeokXq8B3VKC1pad3rpZa5z
+         Hx9aluvyOeNlG/2t/IxUqJKbWmnWj8CdxyMA1jK8k/tj9FveSRBkAaYJC2Ks7QmLpinM
+         ho7p6AP7jt5VbSWhkHP8/2a0cLQP/b98mdx9WZGKea13BendXKvIiiLPwEp4sQg8W9Kr
+         4kPHEyZP2DzxfUYQpUpP7nLPaXwQ3NPYdyzX29/ZCFhWw1uNQqzcOktQep/WzBX59D0r
+         YeVPI49AW2fyIGS8rPUAfXPADxjZXADDlQGjJGGpUbZ+TB2SMs0YW4F/lM/HadrYG4Rr
+         S93Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0XqCItSDIlA9UN2KgN+ixgTMg/eGZMlJcrANVyohEDY=;
-        b=wMMiQFzHw7S22X1skFrobeXSOElW/CGRmNgFRIJdZSSD9QdGcXheDPZd1X19+kvw08
-         jhvdqhH/C+cYf+ZH9pjRUQvKq4C/XtPWfgSoeCDvj8c/LRI+jPkFBGazkN0jx0jT/WOf
-         uWsSxe5tFQw5wfnyj3nt1B6glfQSLUD0HZgKQHh95FNS981Lbfadc+pnC8MTU9hZhBgc
-         IwZy2m55Y5TrYQUOYQH7AWaIkHXVYhfZDmHw2RpVJhSKxD8dtKGuJPv7aQWAi1Q4iirT
-         dd9PQC+AlA6DWn6K55dAYm9w03hgAl2NTc1sJfElHSIRCl7gZ8f7ENlFz8NABILEStzA
-         e0cg==
-X-Gm-Message-State: AO0yUKVDpJH2yUzcwQ8aRlISgyzZBN0vbbYRWF8HQxC65VQd7x4PcM5z
-        78lRdlN/0p9xyde4LFIk6/M=
-X-Google-Smtp-Source: AK7set8UdMNY7Vm2C0NqcIGMDxS2MwKLVQ9fsxr+QAUN2RaNXftZlJ9+zwp/GclwyjOof6sss5w9Qg==
-X-Received: by 2002:a05:6a21:33a7:b0:be:a9c7:5d12 with SMTP id yy39-20020a056a2133a700b000bea9c75d12mr9659198pzb.18.1675367410339;
-        Thu, 02 Feb 2023 11:50:10 -0800 (PST)
-Received: from localhost ([2620:10d:c090:400::5:48a9])
-        by smtp.gmail.com with ESMTPSA id d5-20020a170902654500b001892af9472esm37767pln.261.2023.02.02.11.50.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 11:50:09 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 2 Feb 2023 09:50:08 -1000
-From:   "tj@kernel.org" <tj@kernel.org>
-To:     Lixiong Liu =?utf-8?B?KOWImOWIqembhCk=?= 
-        <Lixiong.Liu@mediatek.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
-        Wenju Xu =?utf-8?B?KOiuuOaWh+S4vik=?= <Wenju.Xu@mediatek.com>,
-        wsd_upstream <wsd_upstream@mediatek.com>,
-        Jing-Ting Wu =?utf-8?B?KOWQs+mdnOWptyk=?= 
-        <Jing-Ting.Wu@mediatek.com>,
-        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
-        WJ Wang =?utf-8?B?KOeOi+WGmyk=?= <wj.wang@mediatek.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Andress Kuo =?utf-8?B?KOmDreWtn+S/rik=?= 
-        <Andress.Kuo@mediatek.com>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>
-Subject: Re: cgroup user-after-free
-Message-ID: <Y9wT8At0MF1S5v0k@slm.duckdns.org>
-References: <697032f2331a92eec0e03e85e46cb78bd975a788.camel@mediatek.com>
- <Y8Cwdsk5pYNd8fX8@slm.duckdns.org>
- <f8b24df3bd009d112479e9d5db36ec4afff9bb71.camel@mediatek.com>
- <3bb8e65797b905e4e9d4fad93a8f4fe26b8958a4.camel@mediatek.com>
+        bh=vU6b1/DyW9VF99p038CT5rL7cz19rU/zHJDhT4ApbFc=;
+        b=DBFesRhl31vkv6UMgjCWDZqpyJHJFzlNiJIZUViwc0mavla3n2P+QzjpOG4oaVIcqn
+         9srhQmZCrcQ/Ke6aBxYer8K+UPPJrG456ZZbSfWlK3iE9YxtyH/B608V1L6vQjYqzenz
+         DGohmv/EPRaM1/GyWbLmHcXsgUIlTYSTin6pcjLiIq17R7H7E8nUqX9UD7Czp2EifstQ
+         KgqcNh82pV/Vhbgf2UsHu9SIjwyby3V36FIUOk1eyaIYNeDkfqFXGGOY+jdltPAH2EhM
+         gtUQ9nz/LZpS/EMcxT3gKHXXKvuxTDnorqHTyVtUiTaglw3Rp4mqNu6vhq7oMjonQjkR
+         6gjQ==
+X-Gm-Message-State: AO0yUKXjDCEXB/JXPj/K7nVe9vn4HwceaaESzV3SFlyG8arTJdJfK91V
+        afwoxb2CGkeWmhLpZ3eayxZ8iQ==
+X-Google-Smtp-Source: AK7set9amC5pThCDH+9E/vyf4TogzP4SRLeuHMPo01KOUugOmYukuiSJFsLqp102YzKiW0olzQcJrQ==
+X-Received: by 2002:a05:6402:22a7:b0:4a2:2d79:dce2 with SMTP id cx7-20020a05640222a700b004a22d79dce2mr7371719edb.10.1675367453255;
+        Thu, 02 Feb 2023 11:50:53 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id er18-20020a056402449200b0046892e493dcsm150837edb.26.2023.02.02.11.50.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Feb 2023 11:50:52 -0800 (PST)
+Message-ID: <093a50dc-8f9e-39c9-ba31-906628e54e35@linaro.org>
+Date:   Thu, 2 Feb 2023 21:50:51 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3bb8e65797b905e4e9d4fad93a8f4fe26b8958a4.camel@mediatek.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v6 11/12] arm64: dts: qcom: sm8550: Add PCIe PHYs and
+ controllers nodes
+To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20230202123902.3831491-1-abel.vesa@linaro.org>
+ <20230202123902.3831491-12-abel.vesa@linaro.org>
+Content-Language: en-GB
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230202123902.3831491-12-abel.vesa@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 01, 2023 at 06:04:04AM +0000, Lixiong Liu (刘利雄) wrote:
-> On Fri, 2023-01-13 at 13:40 +0800, lixiong liu wrote:
-> > > > Root cause: 
-> > > > cgroup_migrate_finish free cset’s cgroup,
-> > > > 
-> > > > but cgroup_sk_alloc use the freed cgroup,
-> > > > 
-> > > > then use-after-free happened.
-> > > 
-> > > Sounds similar to the problem fixed by 07fd5b6cdf3c ("cgroup: Use
-> > > separate
-> > > src/dst nodes when preloading css_sets for migration"). Can you try
-> > > it out?
-> > > 
-> > > Thanks.
-> > > 
-> > 
-> > 
-> > Thanks for your quick feedback.
-> > 
-> > 
-> >   
-> > But we encountered use-after-free version
-> > 
-> > already contains this patch.
-> > 
-> > 
-> > 
-> > So, with this patch will also encounter
-> > 
-> > this use-after-free.
-> > 
-> > Thanks!
-> > 
-> > 
->   Do you have any suggestion for this issue?
+On 02/02/2023 14:39, Abel Vesa wrote:
+> Add PCIe controllers and PHY nodes.
+> 
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> ---
+> 
+> This patch does not have a v3, but since it is now part of the same
+> patchset with the controller and the phy drivers patches, I had to
+> bump the version to 4.
+> 
+> The v5 was here:
+> https://lore.kernel.org/all/20230124124714.3087948-12-abel.vesa@linaro.org/
+> 
+> Changes since v5:
+>   * renamed nocsr_com to phy_nocsr as discussed off-list with Bjorn and Johan
+> 
+> Changes since v4:
+>   * renamed noc_aggr_4 back to noc_aggr
+>   * moved pinctrl properties out to MTP dts
+>   * renamed nocsr to nocsr_com
+> 
+> Changes since v2:
+>   * renamed the pcie_1_link_down_reset to simply link_down
+>   * dropped the pipe from clock-names
+>   * renamed aggre clock-names to noc_aggr_4
+>   * dropped the _pcie infix from cnoc_pcie_sf_axi
+>   * dropped the aux_phy clock from the pcie1
+>   
+> Changes since v1:
+>   * ordered pcie related nodes alphabetically in MTP dts
+>   * dropped the pipe_mux, phy_pipe and ref clocks from the pcie nodes
+>   * dropped the child node from the phy nodes, like Johan suggested,
+>     and updated to use the sc8280xp binding scheme
+>   * changed "pcie_1_nocsr_com_phy_reset" 2nd reset name of pcie1_phy
+>     to "nocsr"
+>   * reordered all pcie nodes properties to look similar to the ones
+>     from sc8280xp
+> 
+> 
+>   arch/arm64/boot/dts/qcom/sm8550.dtsi | 203 ++++++++++++++++++++++++++-
+>   1 file changed, 200 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+> index be2d85ee1f20..a85d2ae7d155 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+> @@ -740,9 +740,9 @@ gcc: clock-controller@100000 {
+>   			#reset-cells = <1>;
+>   			#power-domain-cells = <1>;
+>   			clocks = <&bi_tcxo_div2>, <&sleep_clk>,
+> -				 <0>,
+> -				 <0>,
+> -				 <0>,
+> +				 <&pcie0_phy>,
+> +				 <&pcie1_phy>,
+> +				 <&pcie_1_phy_aux_clk>,
+>   				 <&ufs_mem_phy 0>,
+>   				 <&ufs_mem_phy 1>,
+>   				 <&ufs_mem_phy 2>,
+> @@ -1641,6 +1641,203 @@ mmss_noc: interconnect@1780000 {
+>   			qcom,bcm-voters = <&apps_bcm_voter>;
+>   		};
+>   
+> +		pcie0: pci@1c00000 {
+> +			device_type = "pci";
+> +			compatible = "qcom,pcie-sm8550";
+> +			reg = <0 0x01c00000 0 0x3000>,
+> +			      <0 0x60000000 0 0xf1d>,
+> +			      <0 0x60000f20 0 0xa8>,
+> +			      <0 0x60001000 0 0x1000>,
+> +			      <0 0x60100000 0 0x100000>;
+> +			reg-names = "parf", "dbi", "elbi", "atu", "config";
+> +			#address-cells = <3>;
+> +			#size-cells = <2>;
+> +			ranges = <0x01000000 0x0 0x60200000 0 0x60200000 0x0 0x100000>,
+> +				 <0x02000000 0x0 0x60300000 0 0x60300000 0x0 0x3d00000>;
+> +			bus-range = <0x00 0xff>;
+> +
+> +			dma-coherent;
+> +
+> +			linux,pci-domain = <0>;
+> +			num-lanes = <2>;
+> +
+> +			interrupts = <GIC_SPI 141 IRQ_TYPE_LEVEL_HIGH>;
+> +			interrupt-names = "msi";
+> +
+> +			#interrupt-cells = <1>;
+> +			interrupt-map-mask = <0 0 0 0x7>;
+> +			interrupt-map = <0 0 0 1 &intc 0 0 0 149 IRQ_TYPE_LEVEL_HIGH>, /* int_a */
+> +					<0 0 0 2 &intc 0 0 0 150 IRQ_TYPE_LEVEL_HIGH>, /* int_b */
+> +					<0 0 0 3 &intc 0 0 0 151 IRQ_TYPE_LEVEL_HIGH>, /* int_c */
+> +					<0 0 0 4 &intc 0 0 0 152 IRQ_TYPE_LEVEL_HIGH>; /* int_d */
+> +
+> +			clocks = <&gcc GCC_PCIE_0_AUX_CLK>,
+> +				 <&gcc GCC_PCIE_0_CFG_AHB_CLK>,
+> +				 <&gcc GCC_PCIE_0_MSTR_AXI_CLK>,
+> +				 <&gcc GCC_PCIE_0_SLV_AXI_CLK>,
+> +				 <&gcc GCC_PCIE_0_SLV_Q2A_AXI_CLK>,
+> +				 <&gcc GCC_DDRSS_PCIE_SF_QTB_CLK>,
+> +				 <&gcc GCC_AGGRE_NOC_PCIE_AXI_CLK>;
+> +			clock-names = "aux",
+> +				      "cfg",
+> +				      "bus_master",
+> +				      "bus_slave",
+> +				      "slave_q2a",
+> +				      "ddrss_sf_tbu",
+> +				      "noc_aggr";
+> +
+> +			interconnects = <&pcie_noc MASTER_PCIE_0 0 &mc_virt SLAVE_EBI1 0>,
+> +					<&gem_noc MASTER_APPSS_PROC 0 &cnoc_main SLAVE_PCIE_0 0>;
+> +			interconnect-names = "pcie-mem", "cpu-pcie";
+> +
+> +			iommus = <&apps_smmu 0x1400 0x7f>;
+> +			iommu-map = <0x0   &apps_smmu 0x1400 0x1>,
+> +				    <0x100 &apps_smmu 0x1401 0x1>;
+> +
+> +			resets = <&gcc GCC_PCIE_0_BCR>;
+> +			reset-names = "pci";
+> +
+> +			power-domains = <&gcc PCIE_0_GDSC>;
+> +
+> +			phys = <&pcie0_phy>;
+> +			phy-names = "pciephy";
+> +
+> +			perst-gpios = <&tlmm 94 GPIO_ACTIVE_LOW>;
+> +			wake-gpios = <&tlmm 96 GPIO_ACTIVE_HIGH>;
 
-Unfortunately, there isn't a lot to latch onto. It's on an older kernel and
-there's no reproducer. Refcnting in the path is tricky and it wouldn't be
-too surprising for some bugs to be there. If you can repro on a recent
-kernel, that'd help a lot.
+As we have moved pinctrl to board files, it would be logical to also 
+move these gpios to the board file too. Following the same logic, each 
+board can use it's own set of perst/wake gpios for PCIe.
 
-Thanks.
+> +
+> +			status = "disabled";
+> +		};
+> +
+[skipped the rest]
 
 -- 
-tejun
+With best wishes
+Dmitry
+
