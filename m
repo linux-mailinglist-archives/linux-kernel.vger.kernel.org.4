@@ -2,127 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76D726887B7
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 20:44:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DB146887BC
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 20:46:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231836AbjBBTow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 14:44:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37926 "EHLO
+        id S232115AbjBBTqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 14:46:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbjBBTou (ORCPT
+        with ESMTP id S229761AbjBBTqX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 14:44:50 -0500
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBDEA40E6
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 11:44:49 -0800 (PST)
-Received: by mail-io1-xd2b.google.com with SMTP id y7so1165267iob.6
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 11:44:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zW6uiDjX0jvi0KnsG74BS2Ny9Z++lqjrUms7YqlbC3w=;
-        b=W7KW140j9bjIItgEbTHGwPmkp9SHFSrqkhS7h8mdF/rTE+wXm9V53It/vgmCixYZvX
-         27fRwUN3e1MfXJbax7eX8WHeAVRitVMuX8dZu/uztPEMRAWMTe05A+pAicUI26KCr9JD
-         P34O5cGxG6MLGrQTh6pmFB537/++GI/2wp2ubiU5K1xvEXrkES2jQHbA3o0Gd3UdSg1v
-         O6aoMOsz+Y2Lmx5DZFjsarh3UDXCC8HL8OJfK1aKbN5eylwQzxbzTAiu6fKtRyLa88E8
-         spmazj0ILdLKbrLMTeh5l63DSMxvhRw4E5GGuyMx5NTZDI8vHMCk7VprwfIES+YYjav5
-         hhcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zW6uiDjX0jvi0KnsG74BS2Ny9Z++lqjrUms7YqlbC3w=;
-        b=q8P0tTt+Bc1Hbgdk4kVI1lmtklOyYUfO2KKqKZEdMEp8bJF4Cxwagals/u3urfOi/D
-         KcTeE3s6wvVi4kLCmWv92puK2DZ2Xs2ZO0lPChGjJFm6YB72hQk7LgXpFKiEFIVvXumj
-         bj2YCMllRNJYirE6g0YpXfxD8Fl+o/iwVFP0gBvxdYW+LMX0rPuEjEMXK+DbTYsk0//I
-         KUMkyEJuPW5en2sOB9qHG3eoTrY7s2Bs1/5OXTLA+61Hgn85I8UoMlzJ/kae7hU9bHc/
-         BkxG0jTHPE6zdOtCRiX7+14xvsZkNgR9SH23dIM591MZPDYz+uz5x+1KVIsWB7avTm6l
-         DraQ==
-X-Gm-Message-State: AO0yUKXKzmD4YEG9Jo+nUuZB5L/54YZ1x1icWTG7tqfz1NgMSw/Al486
-        q9UCYcEFHIb16rvOg9+4hbNv8g==
-X-Google-Smtp-Source: AK7set8cgN/pC62fkOAyUojjf62IR0Bzj2uZMAJLlgTfn0waTcUdpqfiVe7o5oydE10BD/cocNSWFw==
-X-Received: by 2002:a05:6602:2acd:b0:6cc:8b29:9a73 with SMTP id m13-20020a0566022acd00b006cc8b299a73mr5163609iov.1.1675367089022;
-        Thu, 02 Feb 2023 11:44:49 -0800 (PST)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id x33-20020a0294a4000000b0039df8e7af39sm197545jah.41.2023.02.02.11.44.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 11:44:48 -0800 (PST)
-Message-ID: <fb27661f-59dd-98cd-203a-8fa86dc209d4@kernel.dk>
-Date:   Thu, 2 Feb 2023 12:44:47 -0700
+        Thu, 2 Feb 2023 14:46:23 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56B232D53;
+        Thu,  2 Feb 2023 11:46:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E7D3261CC7;
+        Thu,  2 Feb 2023 19:46:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 241E4C433D2;
+        Thu,  2 Feb 2023 19:46:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675367182;
+        bh=Cl+ZB49K+wR5GQHPN3c0zVbPF7vb5FMRvpQuIw92MqA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=m4TXHJ0RvwqX24zEyBFmZ6wwAoKizleLYo7T6lfCEcO7puu0Ye3p+3IBnc2aPKj34
+         7GUByvhd4xnFWJXOfLcLodbKwPs6e1cnL7Mq69M6IhQVR4fcgmOfIQIDPoCOTgoTLj
+         8eaVnO0tqcrOhnxg3W5V/aUGRpkK5IZW8lBL9DtQAseGOzpVb9l3qJsSG1QM4r9sFe
+         VaPXYSVpneRtxhAOZW3G0lzJe2VwPg6rESCIU+ntLlpCzX8gTcuQAzHIjUvj/FSdgg
+         rxQ+UwpKiQ1/NSesTcL757k2t5x75sOJGEHCz3vofwGRv7kgQJ9+w7ao9+S2i8Q05B
+         VjDz1AsLJ/oHg==
+Date:   Thu, 2 Feb 2023 11:46:21 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Moshe Shemesh <moshe@nvidia.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jiri Pirko <jiri@nvidia.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net-next 7/7] devlink: Move devlink dev selftest code to
+ dev
+Message-ID: <20230202114621.3f32dae1@kernel.org>
+In-Reply-To: <52392558-f79e-5980-4f10-47f111d69fc0@nvidia.com>
+References: <1675349226-284034-1-git-send-email-moshe@nvidia.com>
+        <1675349226-284034-8-git-send-email-moshe@nvidia.com>
+        <20230202101712.15a0169d@kernel.org>
+        <52392558-f79e-5980-4f10-47f111d69fc0@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [Syzkaller & bisect] There is "io_ring_exit_work" related Call
- Trace in v5.2-rc5 kernel
-Content-Language: en-US
-To:     Pengfei Xu <pengfei.xu@intel.com>,
-        Pavel Begunkov <asml.silence@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, heng.su@intel.com
-References: <Y9TgUupO5C39V/DW@xpf.sh.intel.com>
- <812a7e2d-14d6-78cd-5c6c-ce508fc7fc0d@gmail.com>
- <15161e5f-fe26-23e9-1d0a-ebd579d64d9f@gmail.com>
- <Y9t6tflIcFPy84S5@xpf.sh.intel.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <Y9t6tflIcFPy84S5@xpf.sh.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/2/23 1:56 AM, Pengfei Xu wrote:
-> Hi Pavel Begunkov,
+On Thu, 2 Feb 2023 21:33:52 +0200 Moshe Shemesh wrote:
+> On 02/02/2023 20:17, Jakub Kicinski wrote:
+> > On Thu, 2 Feb 2023 16:47:06 +0200 Moshe Shemesh wrote:  
+> >> Move devlink dev selftest callbacks and related code from leftover.c to
+> >> file dev.c. No functional change in this patch.  
+> > selftest I'd put in its own file. We don't want every command which
+> > doesn't have a specific sub-object to end up in dev.c, right?
+> > At least that was my initial thinking. I don't see any dependencies
+> > between the selftest code and the rest of the dev code either.
+> > WDYT?  
 > 
-> On 2023-02-01 at 15:52:47 +0000, Pavel Begunkov wrote:
->> On 1/28/23 14:49, Pavel Begunkov wrote:
->>> On 1/28/23 08:44, Pengfei Xu wrote:
->>>> Hi Pavel Begunkov and kernel expert,
->>>>
->>>> Greeting!
->>>>
->>>> There is "io_ring_exit_work" related Call Trace in v5.2-rc5 kernel in guest
->>>> on Sapphire Rapids server.
->>>
->>> Thanks for the report, we'll take a look
->>
->> Not reproducible for me. Apparently, the repro creates a normal ring
->> and immediately closes it, then io_ring_exit_work() hangs waiting to
->> the task to execute task_work.
->   Ah, I put the reproduced virtual machine in gitlab.
->   git clone https://gitlab.com/xupengfe/repro_vm_env.git
->   cd repro_vm_env
->   tar -xvf repro_vm_env.tar.gz
->   cd repro_vm_env; ./start3.sh  // it needs qemu-system-x86_64 and I used v7.1.0
->      //start3.sh will load bzImage_2241ab53cbb5cdb08a6b2d4688feb13971058f65 v6.2-rc5 kernel
->   In vm and login with root,  there is no password for root.
->   After login vm successfully, ./repro   to reproduce this issue.
->   It could be reproduced in about 6min.
+> I thought as it is devlink dev selftest, the sub-object is dev. 
+> Otherwise, what should be the rule here ?
 > 
->   If you already have qemu-system-x86_64, please ignore below info.
->   If you want to install qemu v7.1.0 version,
->   git clone https://github.com/qemu/qemu.git
->   cd qemu
->   git checkout -f v7.1.0
->   mkdir build
->   cd build
->   yum install -y ninja-build.x86_64
->   ../configure --target-list=x86_64-softmmu --enable-kvm --enable-vnc --enable-gtk --enable-sdl
->   make
->   make install
->   Done.
+> How do we decide if it should get its own file ?
 
-Are you sure you attached the right kconfig in the initial report? It
-is from 5.18.x.
+My thinking was that it should be much easier for newcomers to grok
+"what does it take to implement a devlink command" if most of the
+subcommands where in their own files, like in ethtool.
 
--- 
-Jens Axboe
-
-
+The implementation could have as well made selftest a subobject.
+But I don't feel strongly, if noone agrees we can apply as is and 
+see if dev.c does indeed start to grow out of proportion.
