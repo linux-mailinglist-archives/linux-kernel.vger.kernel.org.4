@@ -2,110 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C6F4687816
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:00:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A86E687818
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:01:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232365AbjBBJAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 04:00:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42486 "EHLO
+        id S232375AbjBBJBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 04:01:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232411AbjBBJAH (ORCPT
+        with ESMTP id S232372AbjBBJBN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 04:00:07 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC49B2D46
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 01:00:06 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id m5-20020a05600c4f4500b003db03b2559eso775483wmq.5
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 01:00:06 -0800 (PST)
+        Thu, 2 Feb 2023 04:01:13 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E3D154542
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 01:00:48 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id k8-20020a05600c1c8800b003dc57ea0dfeso3201049wms.0
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 01:00:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0KvHUQYIqU3JhTy0BEGMF/3U69tNws+YECbp0Y0ZcQw=;
-        b=0AAk3DCRZ9FNcs8Awka/8Ay/wufkGBvDUTSneCXcY+ONfJlxOU4a6TWqJCcpVyuKQe
-         oqGKhA5c1bmVXP4IlYn57UJEbeUhJ3w7RJQM1D0lvkGxSvCheZ1oeStT8KIkQTl6x0LL
-         ojl3bcosxzW8ZsIOn8jLzPgrjrvCA4KM8OOfe3lVOHo1w9xX5Fq8DEkgYsMxRqYilEFy
-         4fiPKo4cc9hTu9QfOMv1jESKInqXFtZVuuPGFfBuCPiU6EUhcZHUIzTHjWQRFbxMkJVm
-         dnZTP+xoCg8LkcOmPb+GBc/W2fyOuJLO/Aamu5/ffWU4k5SoGGwM1HssUzG0iabbeYla
-         iL8g==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TKq4treMgsTZRQILo8co/I9Ikhm/khYV4Rk1K1haA+o=;
+        b=ke2QSu79xcXZE3aviAuMKJB0RiGvC0HU1IkEzQCn9BWGIDp+8J87I596Wpl3vtefCY
+         T3LMFALxH2p68zIH22LzxnzCpsO7dI1RtjabOWdl7heuMF6yj2cD5xJyH5FnQUV3oKo8
+         XZYkO+7XyoFtwYgpCcx+WhkzemkNm5DkPP2MnkR457eQBgEYHf7v/XCJAN0RLVbfv3f4
+         kRVrO3l3JO/Z51P8/5Pw8ACYazE67NTJnc62fE3Qm6m3d7UWZvJGI6QFNWx85JAPAEWd
+         JSDT0yO+fxE7EDn3CQC4Ls0PAlVhM+le0+rXlAqV3/JSa+WsGLOytkI9c/OV9t0sL1vS
+         /fZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0KvHUQYIqU3JhTy0BEGMF/3U69tNws+YECbp0Y0ZcQw=;
-        b=7FuqP+KH0wrff9i3xonAIaT0Epzo16mKh4+ZDKXoeaL4Lby2dKQEw2g9IGU2KDCoDu
-         nN1qyk7D6OXrKXZHeMxOCF3B0yBga/vXwrdGY5xwaqFbw29hE4wW6zpuHYtPp9t69NSJ
-         0cXSe8D5XGdOLPBOo7mRBZWfsFPslU1+EqYd2YLiKCiIPdi6Pbipr0LFcSwgCiqP2L+j
-         zLOm+A0tby2s4QFaQq5n9PMWy1+qZ0XmJuv0VNo9ISf9uFEaRPEwN40NrPwRW5vgbQyC
-         a1mN4eBtdQtBvnCT6Lxy88/EyT4MxfH1eJTN06dXUUblAWgZJLDwFHDuebaSCmp47NSm
-         GGVg==
-X-Gm-Message-State: AO0yUKW0XyuS8vBTsisWRY34q7i8hcOpGIGnaGZHqN2zy4PM2DzA9lcP
-        7NO0ASThhkSGddR0sTBLltT6wg==
-X-Google-Smtp-Source: AK7set9TE0ceLCqmypT6IXrk6n16nsHYFmbKSwRvXNJe8tq88rqWZnFlWUl4XGIEjYT1X8niiI965A==
-X-Received: by 2002:a05:600c:4395:b0:3df:9858:c02c with SMTP id e21-20020a05600c439500b003df9858c02cmr1331757wmn.1.1675328405216;
-        Thu, 02 Feb 2023 01:00:05 -0800 (PST)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:bca7:7154:c412:82ab])
-        by smtp.gmail.com with ESMTPSA id h20-20020a05600c351400b003dc22ee5a2bsm4374694wmq.39.2023.02.02.01.00.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 01:00:04 -0800 (PST)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Shawn Guo <shawnguo@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [RESEND PATCH] arm64: defconfig: enable drivers required by the Qualcomm SA8775P platform
-Date:   Thu,  2 Feb 2023 09:59:58 +0100
-Message-Id: <20230202085958.11055-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.37.2
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TKq4treMgsTZRQILo8co/I9Ikhm/khYV4Rk1K1haA+o=;
+        b=utCUL6MgBlXQbHZ33XTmTFsZkFYJ7kqkaPKP/+1uQh+gYxBLyU3hWxoJRx/9dbExVe
+         wa5Twn7z9L1rXsijGfpW3t6iRkfXVe50l59GCsNgB7PQh/+PuDrJUfbtRNNwPEmuSXal
+         d9wkZ134ZW7oectCEVA1M9sdme+BdFAQeQyyWFDOU4m3e48yJMtnzLBjYyWDL0B1FBmv
+         yuD/jQVw0UyZP5F6s+MlEjOA1ZY89Kbes64OxqU2JqqwwepbX2CLmEuqJQ6XlEGejKgY
+         5QdMJl8mVRvNljn+LtWAdwsptcbK/K3aTEPKjRK/1sT40MwKwevIm33bnLwpqJA2lZRE
+         rdoA==
+X-Gm-Message-State: AO0yUKVYDM7lBCbPwX/toTMV45do62h1q33+4Y2/JSsOAeE4YgC0RBHm
+        JQdetMasw7oUaR78FY765lCh1w==
+X-Google-Smtp-Source: AK7set+tyNTV3l7sW0JxoBoTjOb8RNLhrkTDJKOM6kz+QcCPq6BNZ4oMn9RCe2ZwvLOjHwOTVQ7lcA==
+X-Received: by 2002:a05:600c:3d8a:b0:3dd:af7a:53ed with SMTP id bi10-20020a05600c3d8a00b003ddaf7a53edmr5251781wmb.11.1675328447118;
+        Thu, 02 Feb 2023 01:00:47 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id r12-20020a05600c424c00b003db0bb81b6asm4000970wmm.1.2023.02.02.01.00.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Feb 2023 01:00:46 -0800 (PST)
+Message-ID: <ac9be40d-bbcb-02b1-2708-61f88095111b@linaro.org>
+Date:   Thu, 2 Feb 2023 10:00:45 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v4 0/3] Add ASPEED AST2600 I2C new controller driver
+Content-Language: en-US
+To:     Ryan Chen <ryan_chen@aspeedtech.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+References: <20230201103359.1742140-1-ryan_chen@aspeedtech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230201103359.1742140-1-ryan_chen@aspeedtech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On 01/02/2023 11:33, Ryan Chen wrote:
+> This series add AST2600 i2c new register set driver. The i2c new
+> register set have new clock divider option for more flexiable generation.
+> And also have separate i2c master and slave register set for control.
+> 
+> v4:
+> -fix i2c-ast2600.c driver buffer mode use single buffer conflit in
+>  master slave mode both enable.
+> -fix kmemleak issue when use dma mode.
+> -fix typo aspeed,i2c-ast2600.yaml compatible is "aspeed,ast2600-i2c"
+> -fix typo aspeed,i2c-ast2600.ymal to aspeed,i2c-ast2600.yaml
+> 
 
-Enable the pinctrl, GCC clock and interconnect drivers in order to allow
-booting SA8775P boards. The drivers need to be built-in for QUPv3 and
-subsequently UART console to work.
+How this can be a v4? Where are all others?
 
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
----
-All drivers are now in next so let's enable them.
+https://lore.kernel.org/all/?q=dfn%3Aaspeed%2Ci2c-ast2600-global.yaml
+https://lore.kernel.org/all/?q=dfn%3Aaspeed%2Ci2c-ast2600.yaml
 
- arch/arm64/configs/defconfig | 2 ++
- 1 file changed, 2 insertions(+)
+I see it for the first time.
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 984553d55e17..998ca0e07689 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -560,6 +560,7 @@ CONFIG_PINCTRL_QCM2290=y
- CONFIG_PINCTRL_QCS404=y
- CONFIG_PINCTRL_QDF2XXX=y
- CONFIG_PINCTRL_QCOM_SPMI_PMIC=y
-+CONFIG_PINCTRL_SA8775P=y
- CONFIG_PINCTRL_SC7180=y
- CONFIG_PINCTRL_SC7280=y
- CONFIG_PINCTRL_SC8180X=y
-@@ -1352,6 +1353,7 @@ CONFIG_INTERCONNECT_QCOM_MSM8916=m
- CONFIG_INTERCONNECT_QCOM_MSM8996=m
- CONFIG_INTERCONNECT_QCOM_OSM_L3=m
- CONFIG_INTERCONNECT_QCOM_QCS404=m
-+CONFIG_INTERCONNECT_QCOM_SA8775P=y
- CONFIG_INTERCONNECT_QCOM_SC7180=y
- CONFIG_INTERCONNECT_QCOM_SC7280=y
- CONFIG_INTERCONNECT_QCOM_SC8180X=y
--- 
-2.37.2
+Best regards,
+Krzysztof
 
