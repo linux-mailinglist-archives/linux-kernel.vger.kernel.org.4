@@ -2,130 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2069E688AD0
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 00:30:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45E40688AD6
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 00:32:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233181AbjBBXaq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 18:30:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50048 "EHLO
+        id S233186AbjBBXci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 18:32:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233029AbjBBXao (ORCPT
+        with ESMTP id S233009AbjBBXcf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 18:30:44 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC99B4ED9
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 15:30:41 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id v23so3567185plo.1
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 15:30:41 -0800 (PST)
+        Thu, 2 Feb 2023 18:32:35 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B1CD2102
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 15:32:34 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id i17-20020a25be91000000b0082663f3eecbso3221537ybk.2
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 15:32:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+qIEFf4lkuaAJ41hgeWHLq+ZKzYMe5b/e69F8YhSfjI=;
-        b=j39QsNfUTd1EBZ3W48xVXAEh1RrDL4eVrnVKtQ1+n7HswprcJi5w/CW5l8+EvxX+Wy
-         ghEHlPYOINFHqnuPCSCJXazJQoZyXiCPpnfsWWfIGS9szBz7KuYj+Gx2oykfAMsUF9Dj
-         mY+4t9jU8ORGzY+3cMjOZwtImgLFu/s9wU48cbSPcbYeP6yt1SiSo9iBCj6I9ASPoQFX
-         Uwt8tYx2ULnUqQ3CoV1ZPk9FMaVh4WnTdlD93J20Ql3SmPJBDZs7O4JEDtTyN7E/hUKW
-         bpa9GltOnbpMWgmiolxHKaZqi/GwAW6DVhLzWpy+s2L+t1s8O81rdwi4Sq7x8n0LhePP
-         /+tw==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=wvPcslomLoHkLO8Yc6SUQeV30+piSf1wG3UvD93eRjk=;
+        b=q5PqSQK+++lHtbhZUFBCU+x4zpvrGh4pIKNqDt3jPaMwOvRLITz/8gh2vIwvbOGDXn
+         FHL9NUVDmtVGdSCj3mFBi6xfSbyUqEIbfHvKMj5uruVu3bVrC4szl3SkUVxsmgJJdA73
+         f0c3SqPtAbMisWYNFJZMbClTUB/2DVlUqbm73mTLpJAOTzCvliRc8Ua1t33hUrwY3x00
+         s0Bvg1ekxl+6tcU7L35HzxkbHl9Lbf25lU7EViogFcVu6T3rEY/kyMhRQM2LWbU1A9Kn
+         elaobooFLoeTUYtg7Z9LZd33Y+HOrY2Gl7eapgrfYntF6Elpt+jMwqYKaK3W3qIDHp5q
+         /cHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+qIEFf4lkuaAJ41hgeWHLq+ZKzYMe5b/e69F8YhSfjI=;
-        b=rr7B88Jt+X84VKbsPCfDtvOR2OKb7pxe57sV09TZIXBCCRsDhwerNf85QowjAlqPEz
-         amiXjz8AmrVjFINXd/oMg8+TLgMZYAcaGO0fZvQmJY3LhyFpwF3nKnO2O7zgzf9dUhjg
-         Q7WX+qbq52aiJ3PZ9u0ru/CvUjw8AwaUje1287Ti1vhX6q5/CRat97dmmI9QjTy+s3p7
-         CUF6G+LgMMYiiyELNoS3Tku42TRQr2n6B3AH1BbAKUsBQX/IgUYPUPtHUKORpppELrjG
-         J8JkhdUnvSiQua2675AlmXSALit+edJtgHgJ6Ntcf/D9YQRPR+BqwKm12/taiZsnXapN
-         c8bw==
-X-Gm-Message-State: AO0yUKXACfGC8gih8aMxa5GqkJBOedp7wgqhFkkpqD0JTvjVmByekxLK
-        z70Gtsy/sKadXCC3kTW6vQ4=
-X-Google-Smtp-Source: AK7set+NJTP0qUDL+M6Eqoexnv7grgn5vgBxeXVgON1Am0uoQL7AQgraRSw4/++WfiRasx2/qMSvzA==
-X-Received: by 2002:a17:902:dccb:b0:18f:a27c:fe with SMTP id t11-20020a170902dccb00b0018fa27c00femr6694377pll.55.1675380641171;
-        Thu, 02 Feb 2023 15:30:41 -0800 (PST)
-Received: from localhost ([2620:10d:c090:400::5:48a9])
-        by smtp.gmail.com with ESMTPSA id c6-20020a170902c1c600b00196519d8647sm233544plc.4.2023.02.02.15.30.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 15:30:40 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 2 Feb 2023 13:30:39 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
-        Michal Koutny <mkoutny@suse.com>, linux-kernel@vger.kernel.org
-Subject: Re: [RFC 2/5] workqueue: Warn when a new worker could not be created
-Message-ID: <Y9xHnwG39IHN/BBu@slm.duckdns.org>
-References: <20230201134543.13687-1-pmladek@suse.com>
- <20230201134543.13687-3-pmladek@suse.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230201134543.13687-3-pmladek@suse.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wvPcslomLoHkLO8Yc6SUQeV30+piSf1wG3UvD93eRjk=;
+        b=t6WQ9L1sXrfxMpa7HnyGH51lS0XQSIoF/3ngEXjOHIO5HfzYyiM0E+ARxB09Ki6XML
+         wxd2BguOdmyRNBE/5fL6jPXGbylKvGxYMBuppH81PSJPkKIVxYHJDmDFcKZTJ8sdzozj
+         uNAlUDVS8dRYnBdesbQOc8l8B6JUsVSGIP3BdHF+hy7nOatwG5AkQHFREgn7JM1GFPQS
+         qxbSiuLzycq7T4LbGm1Ew+YZx+cz+iurykzl0zryJ5dEkD59bC8GhbXbZ+kKthdqpguB
+         Hs93FFaAFcTILGuRG2GiDX7HMfNlo+3B4oL4CpYkI2FNyVy6Y0II8B0BE1hH9Vzn8oXS
+         M1hg==
+X-Gm-Message-State: AO0yUKW5pbnNPGymjkesbmz/YMUW+DNdWIIsDJaAL3THcdnGTGpsTAb2
+        mCutw0Kv+dO31sFOd/L9w/EfTeoGnZ/vCuJC
+X-Google-Smtp-Source: AK7set9kUtHsaRY6uXu6dJRkVwBjqCpF4UUcFJZVMG6LU7esmRkQZlJLDYJYrU6vi4GT4w30ZHbokAZ4HSwiHzRk
+X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
+ (user=yosryahmed job=sendgmr) by 2002:a25:9e90:0:b0:866:b2a0:6e9d with SMTP
+ id p16-20020a259e90000000b00866b2a06e9dmr104800ybq.203.1675380753703; Thu, 02
+ Feb 2023 15:32:33 -0800 (PST)
+Date:   Thu,  2 Feb 2023 23:32:27 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
+Message-ID: <20230202233229.3895713-1-yosryahmed@google.com>
+Subject: [RFC PATCH v1 0/2] Ignore non-LRU-based reclaim in memcg reclaim
+From:   Yosry Ahmed <yosryahmed@google.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        David Hildenbrand <david@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Peter Xu <peterx@redhat.com>, NeilBrown <neilb@suse.de>,
+        Shakeel Butt <shakeelb@google.com>,
+        Michal Hocko <mhocko@kernel.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-mm@kvack.org,
+        Yosry Ahmed <yosryahmed@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Reclaimed pages through other means than LRU-based reclaim are tracked
+through reclaim_state in struct scan_control, which is stashed in
+current task_struct. These pages are added to the number of reclaimed
+pages through LRUs. For memcg reclaim, these pages generally cannot be
+linked to the memcg under reclaim and can cause an overestimated count
+of reclaimed pages. This short series tries to address that.
 
-On Wed, Feb 01, 2023 at 02:45:40PM +0100, Petr Mladek wrote:
-> +static __printf(2, 3) __cold
-> +void __print_create_worker_failure(long err, const char *fmt, ...)
-> +{
-> +	spin_lock_irq(&create_worker_failed_lock);
-> +
-> +	/*
-> +	 * Report potentially repeated failures only once during a stall.
-> +	 * Otherwise, it might be noisy. Also slow serial console drivers
-> +	 * touch watchdogs so that more frequent messages would prevent
-> +	 * reaching the watchdog thresh.
-> +	 */
-> +	if (!create_worker_failed) {
-> +		va_list args;
-> +
-> +		va_start(args, fmt);
-> +		vprintk(fmt, args);
-> +		va_end(args);
-> +	}
-> +
-> +	create_worker_failed++;
-> +
-> +	spin_unlock_irq(&create_worker_failed_lock);
-> +}
+Patch 1 is just refactoring updating reclaim_state into a helper
+function, and renames reclaimed_slab to just reclaimed, with a comment
+describing its true purpose.
 
-That's pretty elaborate. Why not just use printk_ratelimited()?
+Patch 2 ignores pages reclaimed outside of LRU reclaim in memcg reclaim.
 
-> @@ -1931,12 +1992,16 @@ static struct worker *create_worker(struct worker_pool *pool)
->  
->  	/* ID is needed to determine kthread name */
->  	id = ida_alloc(&pool->worker_ida, GFP_KERNEL);
-> -	if (id < 0)
-> +	if (id < 0) {
-> +		print_create_worker_failure("workqueue: Failed to allocate a pool ID", id);
-                                                                             ^
-									  worker ID?
+The original draft was a little bit different. It also kept track of
+uncharged objcg pages, and reported them only in memcg reclaim and only
+if the uncharged memcg is in the subtree of the memcg under reclaim.
+This was an attempt to make reporting of memcg reclaim even more
+accurate, but was dropped due to questionable complexity vs benefit
+tradeoff. It can be revived if there is interest.
 
-> @@ -5880,8 +5950,10 @@ static void wq_watchdog_timer_fn(struct timer_list *unused)
->  
->  	rcu_read_unlock();
->  
-> -	if (lockup_detected)
-> +	if (lockup_detected) {
-> +		print_create_worker_failed_num();
->  		show_all_workqueues();
-> +	}
+Yosry Ahmed (2):
+  mm: vmscan: refactor updating reclaimed pages in reclaim_state
+  mm: vmscan: ignore non-LRU-based reclaim in memcg reclaim
 
-I'd just use printk_ratelimited() and leave it at that.
-
-Thanks.
+ fs/inode.c           |  3 +--
+ fs/xfs/xfs_buf.c     |  3 +--
+ include/linux/swap.h |  5 ++++-
+ mm/slab.c            |  3 +--
+ mm/slob.c            |  6 ++----
+ mm/slub.c            |  5 ++---
+ mm/vmscan.c          | 19 ++++++++++++++++---
+ 7 files changed, 27 insertions(+), 17 deletions(-)
 
 -- 
-tejun
+2.39.1.519.gcb327c4b5f-goog
+
