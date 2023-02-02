@@ -2,112 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68DD768797A
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:49:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AD7968797D
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:49:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232671AbjBBJtX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 04:49:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60388 "EHLO
+        id S232548AbjBBJtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 04:49:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232107AbjBBJtD (ORCPT
+        with ESMTP id S232598AbjBBJtK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 04:49:03 -0500
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E82A7BE4C;
-        Thu,  2 Feb 2023 01:48:34 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 592925C018A;
-        Thu,  2 Feb 2023 04:48:17 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 02 Feb 2023 04:48:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1675331297; x=1675417697; bh=CiULM1jpaz
-        VqNIAxfxvBsJCRH3PL/Pmm6+XQw+54KMc=; b=KyQ3TPJ6ldt2vk18DoLypbpxZH
-        bC/qlrC8AFAEWnkGCEPLMvv/x5+MHR2rN2uUR6zH/GgLabkXwsYwnzrs75U/CoqZ
-        hBgN7PHNNSqpRGkDeTJwzsqzK+91jwympMt9CXlnqgFaTagm0iouAYBEMkjcxu7k
-        Oe4nCOIzjzvcw4ohgZwQdDCPHPsHaVW1HIOzJ5vC/mma06tXY7kweVIKuitRid5w
-        /avqODo0qXRnZJ1WD3kDQo8vNOMNgYQqz1Idtis5N4lUcG8i3mThiZpiEU1aLTbX
-        byBREppWGJQjFkvV6yrNi2dhGBfRDBcjXP/Bp3B4WEMgX99fd8bQEExpjpKA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1675331297; x=1675417697; bh=CiULM1jpazVqNIAxfxvBsJCRH3PL
-        /Pmm6+XQw+54KMc=; b=jFqA/kFJhRg2Qfp/dWe9lzDaqGC02SZAJDCQvfcw8Ip6
-        vMCd3vP0yChhRijW4fTlAOs1n1/VzGzqwMxGtaNuK6X8DjzNpcALOl/31Lu2YP/8
-        baw+uDPo7ohak+wtbT94H+MXDXrpoo29Zk0ljmIaIBk4LWclU/m4Vqw+UXyGMsTy
-        PQP2DXoWV+FallqN9jqGTw6vNphrsUtBMCvct8IS5cnRf1Rt/Kf1sU3AASO+Xaax
-        kmMW5xWWiBNCwXjxn8tx+RwusMxlsvezKa/w44p16Mpim7OdH8YKuinykvwrdHuQ
-        pIIVcLr24D+Q+32j2U2avPgYXYIdMbMZWSVZiIjRVA==
-X-ME-Sender: <xms:4YbbY6zw2b47_A-ux_mkmUqoypeg6uf2i9MhdlW_PJO8-JlIovHLIg>
-    <xme:4YbbY2QdjF-uCfqKCqF9hhK0V-t-4eN_S8dsNw8HP5NWYjh-eNkrWhXedUBAf030m
-    0cwfx7HeGcV2-Jgl2s>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudefkedgtdejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:4YbbY8WzoFhaA9EzW3BUuWhtrlihuRdtWNPdTGf65LTISnaxRY6-8A>
-    <xmx:4YbbYwj1bvJzsjgf58aI9P-W5rmI2aEY4fAjpwRO70zwM_CFA1PiKg>
-    <xmx:4YbbY8BIB_lgzX7sf5R6vsdUQaPjtBlwGaioy1OZIdFzUhu_YC7m0A>
-    <xmx:4YbbYw6L0dAuX4OAX2feLMxXW2g8yiZNCuJa8yIrhJgCyxu9IPtYgw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 01C78B6044F; Thu,  2 Feb 2023 04:48:16 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-107-g82c3c54364-fm-20230131.002-g82c3c543
-Mime-Version: 1.0
-Message-Id: <566b855b-dbdd-4c10-aac2-262b64343ae6@app.fastmail.com>
-In-Reply-To: <20230201215320.528319-1-dmitry.torokhov@gmail.com>
-References: <20230201215320.528319-1-dmitry.torokhov@gmail.com>
-Date:   Thu, 02 Feb 2023 10:47:58 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
-        "Wei Fang" <wei.fang@nxp.com>, "Jakub Kicinski" <kuba@kernel.org>,
-        "Andrew Lunn" <andrew@lunn.ch>
-Cc:     "Shenwei Wang" <shenwei.wang@nxp.com>,
-        "Clark Wang" <xiaoning.wang@nxp.com>,
-        "NXP Linux Team" <linux-imx@nxp.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        "Paolo Abeni" <pabeni@redhat.com>,
-        "Marc Kleine-Budde" <mkl@pengutronix.de>,
-        Netdev <netdev@vger.kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] net: fec: restore handling of PHY reset line as optional
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 2 Feb 2023 04:49:10 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84CAB87D15;
+        Thu,  2 Feb 2023 01:48:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1F2B8B82272;
+        Thu,  2 Feb 2023 09:48:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B580C433D2;
+        Thu,  2 Feb 2023 09:48:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675331319;
+        bh=WCEiLESm2ErJPjaBal/9ZH056ER36/vOC8v5zxr8nDg=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=QU3DBFMaYt3H52FCXpQ/dn5eElV6wyf0aO2iEA7WX1mELk6K+v6U3A59kneLz2ZO2
+         lbbfzPKKkF5z/N9Qi4Lt0OAHOY0hak5++nTUrREWjXbhuXHELa9TKdYXl8FvhUPBza
+         7wmtImjIvVemz6PVlopJmINq3ppHmrnK4vuJaed+TwdLF5K25pJTq8fqNPbSjhLIDY
+         SPLp9g4A2kLnaFp9+UmjB3fuv/s07iw6IWMv4AgVGAJ05FjnnU/qOW80J6McKkMCen
+         Jax6YD/mIP35BiClLwjh8lTN0G4uXQkj8J9QOkMmciEQMj0BIfDnq0Dxoj3JP+SYgX
+         M9tO4ZMtealig==
+From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To:     Guo Ren <guoren@kernel.org>
+Cc:     palmer@rivosinc.com, conor.dooley@microchip.com,
+        liaochang1@huawei.com, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Bjorn Topel <bjorn.topel@gmail.com>
+Subject: Re: [PATCH] riscv: kprobe: Fixup misaligned load text
+In-Reply-To: <CAJF2gTSj12E9+peMF0rNY_psGDyEG5BbMY6V-s4dK0FpkCC9Yw@mail.gmail.com>
+References: <20230201064608.3486136-1-guoren@kernel.org>
+ <87tu05pvur.fsf@all.your.base.are.belong.to.us>
+ <CAJF2gTSj12E9+peMF0rNY_psGDyEG5BbMY6V-s4dK0FpkCC9Yw@mail.gmail.com>
+Date:   Thu, 02 Feb 2023 10:48:37 +0100
+Message-ID: <87cz6s75ze.fsf@all.your.base.are.belong.to.us>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 1, 2023, at 22:53, Dmitry Torokhov wrote:
-> Conversion of the driver to gpiod API done in 468ba54bd616 ("fec:
-> convert to gpio descriptor") incorrectly made reset line mandatory and
-> resulted in aborting driver probe in cases where reset line was not
-> specified (note: this way of specifying PHY reset line is actually
-> deprecated).
->
-> Switch to using devm_gpiod_get_optional() and skip manipulating reset
-> line if it can not be located.
->
-> Fixes: 468ba54bd616 ("fec: convert to gpio descriptor")
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> ---
->
-> v3: removed handling of 'phy-reset-active-high', it was moved to patch #2
-> v2: dropped conversion to generic device properties from the patch
+Guo Ren <guoren@kernel.org> writes:
 
-Thanks for fixing it,
+> On Wed, Feb 1, 2023 at 5:40 PM Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> w=
+rote:
+>>
+>> guoren@kernel.org writes:
+>>
+>> > From: Guo Ren <guoren@linux.alibaba.com>
+>> >
+>> > The current kprobe would cause a misaligned load for the probe point.
+>> > This patch fixup it with two half-word loads instead.
+>> >
+>> > Fixes: c22b0bcb1dd0 ("riscv: Add kprobes supported")
+>> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+>> > Signed-off-by: Guo Ren <guoren@kernel.org>
+>> > Link: https://lore.kernel.org/linux-riscv/878rhig9zj.fsf@all.your.base=
+.are.belong.to.us/
+>> > Reported-by: Bjorn Topel <bjorn.topel@gmail.com>
+>> > ---
+>> >  arch/riscv/kernel/probes/kprobes.c | 4 +++-
+>> >  1 file changed, 3 insertions(+), 1 deletion(-)
+>> >
+>> > diff --git a/arch/riscv/kernel/probes/kprobes.c b/arch/riscv/kernel/pr=
+obes/kprobes.c
+>> > index 41c7481afde3..c1160629cef4 100644
+>> > --- a/arch/riscv/kernel/probes/kprobes.c
+>> > +++ b/arch/riscv/kernel/probes/kprobes.c
+>> > @@ -74,7 +74,9 @@ int __kprobes arch_prepare_kprobe(struct kprobe *p)
+>> >               return -EILSEQ;
+>> >
+>> >       /* copy instruction */
+>> > -     p->opcode =3D *p->addr;
+>> > +     p->opcode =3D (kprobe_opcode_t)(*(u16 *)probe_addr);
+>> > +     if (GET_INSN_LENGTH(p->opcode) =3D=3D 4)
+>> > +             p->opcode |=3D (kprobe_opcode_t)(*(u16 *)(probe_addr + 2=
+))
+>> >       << 16;
+>>
+>> Ugh, those casts. :-( What about the memcpy variant you had in the other
+>> thread?
+> The memcpy version would force load probe_addr + 2. This one would
+> save an lh operation. The code text guarantees half-word alignment. No
+> misaligned load happened. Second, kprobe wouldn't write the last half
+> of 32b instruction.
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Ok, something more readable, like:
+
+diff --git a/arch/riscv/kernel/probes/kprobes.c b/arch/riscv/kernel/probes/=
+kprobes.c
+index f21592d20306..3602352ba175 100644
+--- a/arch/riscv/kernel/probes/kprobes.c
++++ b/arch/riscv/kernel/probes/kprobes.c
+@@ -50,14 +50,16 @@ static void __kprobes arch_simulate_insn(struct kprobe =
+*p, struct pt_regs *regs)
+=20
+ int __kprobes arch_prepare_kprobe(struct kprobe *p)
+ {
+-	unsigned long probe_addr =3D (unsigned long)p->addr;
++	u16 *insn =3D (u16 *)p->addr;
+=20
+-	if (probe_addr & 0x1)
++	if ((uintptr_t)insn & 0x1)
+ 		return -EILSEQ;
+=20
+ 	/* copy instruction */
+-	p->opcode =3D *p->addr;
+-
++	p->opcode =3D *insn++;
++	if (GET_INSN_LENGTH(p->opcode) =3D=3D 4)
++		p->opcode |=3D *insn << 16;
++=09
+ 	/* decode instruction */
+ 	switch (riscv_probe_decode_insn(p->addr, &p->ainsn.api)) {
+ 	case INSN_REJECTED:	/* insn not supported */
+
+
+Bj=C3=B6rn
