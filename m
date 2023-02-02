@@ -2,105 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E05D687F11
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 14:47:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03B3D687F1B
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 14:49:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232285AbjBBNrn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 08:47:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43798 "EHLO
+        id S231149AbjBBNs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 08:48:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230218AbjBBNrh (ORCPT
+        with ESMTP id S232238AbjBBNsx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 08:47:37 -0500
-Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 360AC8FB6C
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 05:47:22 -0800 (PST)
-Received: by mail-vk1-xa35.google.com with SMTP id b81so901634vkf.1
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 05:47:22 -0800 (PST)
+        Thu, 2 Feb 2023 08:48:53 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D3146B371
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 05:48:42 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id q10-20020a1cf30a000000b003db0edfdb74so4081270wmq.1
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 05:48:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=j4oCXdup8n6v8+NV1Y2tr9d5t5xzk71vogTRfgmjQAo=;
-        b=1e4Nqng+igmZ/sjJvxRnooaGcY+pPB2sg/FxoprfRpsjC5cQW8IZFzHDJJAbwwaY78
-         4NplP5dAh0zX4BcyTqf6pG1twOZPFll0xuyW6ikhN3RiLlVbWs/ko8SgrK7gGN1v49TS
-         trjUctTtWZ+98Uvm6w1ywzwfQOAmW2FspORdBESQdAYv3+WOuPD3Ckw5HjqNggqJiLO0
-         aTot93GIXsE/VprawkW07yqvz7UdANVnaDD8sMdpwKSHByyF/ittLdo3AAu6ws3Zbgoc
-         lejTDW61JzTbRqsDEyRipHtceS0DhEdebaVBX89rgNnj9qIlb9HG8r8W14q9JJlvQdGz
-         aYvg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cyL3kkiVp4mLz2Hp6hjic9mBVgDnqyFENCvNL4U+uOw=;
+        b=a3erPWZfy6c6wCP0keZLVHNiuJcUKRL8M45u6fm68U/7S05oURTsDpWuvdD1dae7Lo
+         dMNn4Oe0vMIoCssaewoXDrA2658XFrfu8xAXtHpTKPmys5WBz2K/uDIXdZutr+hesVa8
+         huJPK9JgF1TFUkS/SEBabUrVmc9QU8u/mXJhWl0/qOlc46XCXxRomwdo9U8XYmuc/yYU
+         yPzLrszUldhvaqLdQ0ljgpmycJ/EAptcyZGDkGSrA+NVdQEAeBY0lJwU9FIi1kzruKpt
+         I2kS8f8ScCqiJ+pgGmm2Gpq5iDD0nNaLcipc/Z5Dj0PjwC9XRo+UsnD0LyJjFOy/Td8a
+         js3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=j4oCXdup8n6v8+NV1Y2tr9d5t5xzk71vogTRfgmjQAo=;
-        b=7GGxtCXj2jgK6Dn0a5zCk30hoZdMgXUlmAC/lWX4NJp9GnCvk/X1C10RngC7nzpR83
-         jo2lhS8QyEik1vezj/Z8SDiohX99lpnWkBrUxOvTWn1Dzp2+0DVJVvFeKr+NQ45WJwrz
-         12IGFAnJNbrYwXaTHKqitw1Qqs2CZtXGtiVzDwG1qOWjR9nMcED+PN9Qq9Ep9SLOHMNw
-         zA+knbVIZopYGpvm/xTgI4QGorFl3iitE1ssSZmxm4qKRfoSfjBAxRW66Y5gHpDcy/Fb
-         ap8r3g4h/l/3uh6QlInfEXoIqy7NbkHI7DCFIOTVzLO2/Uc+k27xu6gMZ7fca4Cfpbj0
-         OSXA==
-X-Gm-Message-State: AO0yUKXkv7cS7FlKD2OF78w1ZHCax5Ntu2Ah2l0/fS0S8wjtVvmP3SuP
-        FyS44B4S2KeKQ9lYNLF/vLLvAZAoBf3p1pt2iNwz1w==
-X-Google-Smtp-Source: AK7set9hPhIWcpZYmygU9JQRV/1iD1bXGVCi4ox3CXAnd/nPJK3j3mhMIvfPBqdsldpRjnsmjXk2Q0qfO2TpUHdjtcE=
-X-Received: by 2002:a05:6122:1688:b0:3e1:db78:6cd9 with SMTP id
- 8-20020a056122168800b003e1db786cd9mr909715vkl.25.1675345641149; Thu, 02 Feb
- 2023 05:47:21 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cyL3kkiVp4mLz2Hp6hjic9mBVgDnqyFENCvNL4U+uOw=;
+        b=vo9rt0Xd30YwbFWCx4CrtNYORm/TlLU8TXG24lOMKr7yYU9rsLej3fSpIFtyJgNOJl
+         oEE5SPNjxodGDYmqck/Hx0iQbiuImLg8yTfOxiMQ6R3JZZuwPLq89k8TAz4WvUAeKOPQ
+         akv9vtoFohMvA/TP0JNGIVUvP2+40iYgwxoKM50UwPXhPsW0kN515RDcKoh53P7zQX8y
+         /VJ+HopzUCcSC8pksfcntQnpZ0WyeDqoHoKYdldy0I1678eOzGaf79vZ36/cLwWIzveR
+         t+b0kIl0i7nOl+mHkd6RwkuStlSlQOeMrsXHbIGHNZMvohzyFmTbPtnJwz0kHF/vao+P
+         TdpQ==
+X-Gm-Message-State: AO0yUKX2hAF7rta0KyamJmlMotTDkwvpNpGC3OM+l3Pf7AwWphJP3/ub
+        WcqtbjMhyHpiMwQwIJD9+J90CQ==
+X-Google-Smtp-Source: AK7set8hw1rDy3WxUj4JBGJtDz2ZH5OsTbomKDnSUP4x83gmZ2C5vO+e3kiiVY5jg1hc1N3lf9Ev1g==
+X-Received: by 2002:a05:600c:a07:b0:3df:db2f:66a with SMTP id z7-20020a05600c0a0700b003dfdb2f066amr2154590wmp.31.1675345720666;
+        Thu, 02 Feb 2023 05:48:40 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id v32-20020a05600c4da000b003dec22de1b1sm4402482wmp.10.2023.02.02.05.48.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Feb 2023 05:48:40 -0800 (PST)
+Message-ID: <db23ece7-0ae1-586b-c4ec-f3ff633118a1@linaro.org>
+Date:   Thu, 2 Feb 2023 14:48:39 +0100
 MIME-Version: 1.0
-References: <20230201150011.200613-1-brgl@bgdev.pl> <CACRpkdYEQkxEJ23Xt4hjwu3Jxct-QXZktdzze5Pf6SBNYj80Fg@mail.gmail.com>
- <CAMRc=MdDwSi+DDJmn3Yrnh5m8EK5EJEfLrejXHN0+0k41DKx3w@mail.gmail.com> <CACRpkdbLjcGUvycX9p=hYjMwS6UJOkUTOJvbEcNtddx5mnbSuQ@mail.gmail.com>
-In-Reply-To: <CACRpkdbLjcGUvycX9p=hYjMwS6UJOkUTOJvbEcNtddx5mnbSuQ@mail.gmail.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 2 Feb 2023 14:47:10 +0100
-Message-ID: <CAMRc=Me2wQTvx83nZSuaiagO3Z02Q55p6u1pXKnx9LkF10OY1g@mail.gmail.com>
-Subject: Re: [PATCH v3 0/2] pinctrl: qcom: add dt-bindings and driver for sa8775p-tlmm
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v5 1/4] powercap: idle_inject: Export symbols
+Content-Language: en-US
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rui.zhang@intel.com
+References: <20230201182854.2158535-1-srinivas.pandruvada@linux.intel.com>
+ <20230201182854.2158535-2-srinivas.pandruvada@linux.intel.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20230201182854.2158535-2-srinivas.pandruvada@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 2, 2023 at 1:54 PM Linus Walleij <linus.walleij@linaro.org> wrote:
->
-> On Thu, Feb 2, 2023 at 9:25 AM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
-> > On Wed, Feb 1, 2023 at 11:46 PM Linus Walleij <linus.walleij@linaro.org> wrote:
-> > >
-> > > On Wed, Feb 1, 2023 at 4:00 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
-> > >
-> > > > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> > > >
-> > > > This series contains the device-tree bindings and the pinctrl driver for the
-> > > > SA8775P platforms.
-> > > >
-> > > > v2 -> v3 (Changes in DT bindings only)
-> > > > - fix the gpio pattern property (platform has 148 GPIOs)
-> > > > - add blank lines for better readability
-> > >
-> > > v3 patch set applied, fixing the 149->148 number in the example
-> > > in patch 1!
-> > >
-> >
-> > Thanks! Seems like only patch 1/2 got into your branch?
->
-> That's confusing, it looks to me like they are both there?
-> https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git/log/?h=devel
->
-> Isn't "pinctrl: qcom: add the tlmm driver sa8775p platforms" patch 2/2?
->
+On 01/02/2023 19:28, Srinivas Pandruvada wrote:
+> Export symbols for external interfaces, so that they can be used in
+> other loadable modules.
+> 
+> Export is done under name space IDLE_INJECT.
+> 
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 
-Strange, didn't see it there before. Anyway, thanks a lot!
+(missing my ack from v3)
 
-Bart
+Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+
+> ---
+> v2/v3/v4/v5:
+> 	No change
+> 
+>   drivers/powercap/idle_inject.c | 7 +++++++
+>   1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/powercap/idle_inject.c b/drivers/powercap/idle_inject.c
+> index c03b5402c03b..ec02b370ec16 100644
+> --- a/drivers/powercap/idle_inject.c
+> +++ b/drivers/powercap/idle_inject.c
+> @@ -162,6 +162,7 @@ void idle_inject_set_duration(struct idle_inject_device *ii_dev,
+>   	if (!run_duration_us)
+>   		pr_debug("CPU is forced to 100 percent idle\n");
+>   }
+> +EXPORT_SYMBOL_NS_GPL(idle_inject_set_duration, IDLE_INJECT);
+>   
+>   /**
+>    * idle_inject_get_duration - idle and run duration retrieval helper
+> @@ -176,6 +177,7 @@ void idle_inject_get_duration(struct idle_inject_device *ii_dev,
+>   	*run_duration_us = READ_ONCE(ii_dev->run_duration_us);
+>   	*idle_duration_us = READ_ONCE(ii_dev->idle_duration_us);
+>   }
+> +EXPORT_SYMBOL_NS_GPL(idle_inject_get_duration, IDLE_INJECT);
+>   
+>   /**
+>    * idle_inject_set_latency - set the maximum latency allowed
+> @@ -187,6 +189,7 @@ void idle_inject_set_latency(struct idle_inject_device *ii_dev,
+>   {
+>   	WRITE_ONCE(ii_dev->latency_us, latency_us);
+>   }
+> +EXPORT_SYMBOL_NS_GPL(idle_inject_set_latency, IDLE_INJECT);
+>   
+>   /**
+>    * idle_inject_start - start idle injections
+> @@ -218,6 +221,7 @@ int idle_inject_start(struct idle_inject_device *ii_dev)
+>   
+>   	return 0;
+>   }
+> +EXPORT_SYMBOL_NS_GPL(idle_inject_start, IDLE_INJECT);
+>   
+>   /**
+>    * idle_inject_stop - stops idle injections
+> @@ -264,6 +268,7 @@ void idle_inject_stop(struct idle_inject_device *ii_dev)
+>   
+>   	cpu_hotplug_enable();
+>   }
+> +EXPORT_SYMBOL_NS_GPL(idle_inject_stop, IDLE_INJECT);
+>   
+>   /**
+>    * idle_inject_setup - prepare the current task for idle injection
+> @@ -339,6 +344,7 @@ struct idle_inject_device *idle_inject_register(struct cpumask *cpumask)
+>   
+>   	return NULL;
+>   }
+> +EXPORT_SYMBOL_NS_GPL(idle_inject_register, IDLE_INJECT);
+>   
+>   /**
+>    * idle_inject_unregister - unregister idle injection control device
+> @@ -359,6 +365,7 @@ void idle_inject_unregister(struct idle_inject_device *ii_dev)
+>   
+>   	kfree(ii_dev);
+>   }
+> +EXPORT_SYMBOL_NS_GPL(idle_inject_unregister, IDLE_INJECT);
+>   
+>   static struct smp_hotplug_thread idle_inject_threads = {
+>   	.store = &idle_inject_thread.tsk,
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
