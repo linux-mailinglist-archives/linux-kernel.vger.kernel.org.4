@@ -2,120 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EC556877D3
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 09:49:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92F906877DB
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 09:50:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232120AbjBBItH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 03:49:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60364 "EHLO
+        id S232217AbjBBIuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 03:50:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231964AbjBBIsx (ORCPT
+        with ESMTP id S232036AbjBBItz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 03:48:53 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE4C8397C
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 00:48:49 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so3165263wma.1
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 00:48:49 -0800 (PST)
+        Thu, 2 Feb 2023 03:49:55 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C6C87168
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 00:49:36 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id m2so3884601ejb.8
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 00:49:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZFT65b50EEkiLEb2HaxzSzyGNIdf4jjjnZMZ02pNxbc=;
-        b=LP0ZUiSsyi4nHzQoQvqdAPlPOzLOSvBFSP0kmazyxzYLGIk75m9Xk3IPbRL8T3rcuR
-         GGFcVGodyYDh7va4H9PezI3kk2e2fsTIB/B04QqljXElgfNm8TBn/TczP+T17mhCrtO+
-         MXq0f9NBQYTwmUqUV3BcHSaqsUdRoUir3ZHt4mj+9To0UWWc78XauRnojqnLNvSjmkR/
-         p1knqfu+Zmb8qL9OvgJthh9o5ZsFKJ5iT/IffPcsMJEOYjj+/7WGG6IX73D1fFywhnmO
-         zOSYMdjFcHzuysUJOACYY1NbbtOf8ZgT7xyxleQ8+OHioyY/gmjaVVtIAbbVLXbGOJUJ
-         kPww==
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=scOOV9S3a4QBlzHpx87cDvuev3VEso20BNEexdmKlT0=;
+        b=O3nVgV9gtylTwn60p8kK9nZJZAoCc9Ha3iSF7VeLPJh/boPlEGgsEPEHEFjH8JnJwd
+         6tmiA7JTfitRNVs4FO8C0pxnMHwq4vv6sZceQKNZJwi7VUaSVMVWPFml6hLKnt9kcd+Y
+         uLwneuso9EiX+opusRuUOkRANvzQqcZqDc3idsjXEGt2My08V6zhbGslYIXHKccK8Pcx
+         c8LZpp9pOB0rQT6HQaySWrbs/EMBFWRMArEOPwlGuHPcBgu1CNCVBt8RIc8hVREJ0uMB
+         /HdDYcwEVvfwxdLlcgZK8Q72tKxZ7W2tfRsQDTne3VkaW0T4ir1YHExTH9YtstvtmoAW
+         ocVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZFT65b50EEkiLEb2HaxzSzyGNIdf4jjjnZMZ02pNxbc=;
-        b=Q+NEihq4OoZWtmXs7Lvo/Qvdc/lXoF++K4Fwqqml+gznkYw5iOfVWCRRrWE1yrLFYH
-         Qz7TJMMc0o95ItYtxueUuXH7R6kRURa6vlIdpVk3Vl+G7jrK47X/hCe19fXaRD3CK7mn
-         9fBhiYrdD9pxLh/PsNcJ5l6+ksdW/r/uY57dThmzE/p5QLNfLpRZB6pEERzJdRzl4u88
-         kDySt+nElJjD1P/YmJJ+24w/zb+5LvKK8MkIN3bKlSr5EXSCkPQAFsV+0eHR5Ozxp8n3
-         DrF6t/TEffjW3WaYy0d/EydV1bSC+VVg3QZn0d54gme5E5hXcybsvwYaoCREKrBM4cJU
-         BjFA==
-X-Gm-Message-State: AO0yUKWoxcFa+2+Ax1pVDyRQnY2JvZm5eOv6LKGDtcS6T/cI/iYi7XsP
-        QMfY+IEb693T+0z9MG8uz0PZUw==
-X-Google-Smtp-Source: AK7set9QgHEGWI3XpDTcnKQyVSSTiAZeUr5//8Ru1lLuQLb2MMrZYTyyPXZEUw0AMbZfhxmjbeikYw==
-X-Received: by 2002:a05:600c:c12:b0:3df:df24:8f94 with SMTP id fm18-20020a05600c0c1200b003dfdf248f94mr512838wmb.27.1675327728536;
-        Thu, 02 Feb 2023 00:48:48 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id k10-20020adff28a000000b002b9b9445149sm11474924wro.54.2023.02.02.00.48.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 00:48:48 -0800 (PST)
-Message-ID: <24bac8be-c301-8efd-4392-e10db00d17f7@linaro.org>
-Date:   Thu, 2 Feb 2023 09:48:46 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=scOOV9S3a4QBlzHpx87cDvuev3VEso20BNEexdmKlT0=;
+        b=ss6cTkBaI89LP+Fntxy3sr8mGmUBH8LY6IWj0M4J3bqK2ZjrOStQlw1LVmllQsCb9F
+         8lGTgOhiuij5H4eR1Y6EYgv4VR3GaPuA8fJQRAZaXarnHTArHQTKOessfYmm5iqlooiY
+         ZeYlkBelsNc7BVZyQtxmpVpCS5q+0MO9vNbP8P9gecR+XleFmsAo73ohnSgLCXulI9wx
+         pBc5KKXwBGT2FNQUytHIB3d+8NjH3YeGSFPe0qVaPuSUp//LS8UapbXdV9h/cHOGauJ6
+         s+MEA1+JgiFYU323QHfOzxMFsnw+WehAXVaxbRdluKNnMmTLNf2kZlowVlnFNJ0ciPKI
+         pGOQ==
+X-Gm-Message-State: AO0yUKXVToWrhGiYBSbiDUpE2fvFsyx4WM+8SrI7pPiz5BDFwSsY86Hm
+        fd7NeUjRoohlHKzVuAQ3B43UZqPzdaKUWG7+JZFRtgMv5rpmuZSR
+X-Google-Smtp-Source: AK7set8SjP7qAzOcTogP1InH1AzFV1lpTeuCw9CVQKwooWB2cjtaB7tzWyOwcOgZfvqWksth3Uyd9cPPqpbjKz4stP0=
+X-Received: by 2002:a17:906:1653:b0:88a:7cf5:5d33 with SMTP id
+ n19-20020a170906165300b0088a7cf55d33mr1792317ejd.100.1675327774906; Thu, 02
+ Feb 2023 00:49:34 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2] arm64: dts: renesas: v2mevk2: Add uSD card and eMMC
- support
-Content-Language: en-US
-To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Magnus Damm <magnus.damm@gmail.com>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>
-References: <20230130191152.182826-1-fabrizio.castro.jz@renesas.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230130191152.182826-1-fabrizio.castro.jz@renesas.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,LOTS_OF_MONEY,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230128082847.3055316-1-apatel@ventanamicro.com>
+In-Reply-To: <20230128082847.3055316-1-apatel@ventanamicro.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Thu, 2 Feb 2023 14:19:23 +0530
+Message-ID: <CAAhSdy17dUdhn3ijVzps4J0k=_xH6GWC16CHHJPN_2E7xBwdbA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] RISC-V: KVM: Fix privilege mode setting in kvm_riscv_vcpu_trap_redirect()
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Andrew Jones <ajones@ventanamicro.com>, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/01/2023 20:11, Fabrizio Castro wrote:
-> The RZ/V2M EVK comes with a slot for a uSD card, and an eMMC.
-> Add support for the both of them.
-> 
-> Please note that the pinctrl driver for RZ/V2M doesn't support
-> interrupts yet, therefore the card detect pin has been connected
-> to the SDHI IP directly in this patch.
-> We'll connect the card detect pin to its corresponding GPIO when
-> we'll have driver support for interrupts in the RZ/V2M pinctrl
-> driver.
-> 
-> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+On Sat, Jan 28, 2023 at 1:58 PM Anup Patel <apatel@ventanamicro.com> wrote:
+>
+> The kvm_riscv_vcpu_trap_redirect() should set guest privilege mode
+> to supervisor mode because guest traps/interrupts are always handled
+> in virtual supervisor mode.
+>
+> Fixes: 9f7013265112 ("RISC-V: KVM: Handle MMIO exits for VCPU")
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+
+Queued this patch for Linux-6.3
+
+Thanks,
+Anup
+
 > ---
-
+>  arch/riscv/kvm/vcpu_exit.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/arch/riscv/kvm/vcpu_exit.c b/arch/riscv/kvm/vcpu_exit.c
+> index c9f741ab26f5..af7c4bc07929 100644
+> --- a/arch/riscv/kvm/vcpu_exit.c
+> +++ b/arch/riscv/kvm/vcpu_exit.c
+> @@ -160,6 +160,9 @@ void kvm_riscv_vcpu_trap_redirect(struct kvm_vcpu *vcpu,
+>
+>         /* Set Guest PC to Guest exception vector */
+>         vcpu->arch.guest_context.sepc = csr_read(CSR_VSTVEC);
 > +
-> +
-
-Just one blank line
-
->  &extal_clk {
->  	clock-frequency = <48000000>;
->  };
-> @@ -69,6 +118,26 @@ &i2c2 {
->  };
->  
->  &pinctrl {
-> +	emmc_pins: emmc {
-> +		emmc_pins_data {
-
-No underscores in node names.
-
-Best regards,
-Krzysztof
-
+> +       /* Set Guest privilege mode to supervisor */
+> +       vcpu->arch.guest_context.sstatus |= SR_SPP;
+>  }
+>
+>  /*
+> --
+> 2.34.1
+>
