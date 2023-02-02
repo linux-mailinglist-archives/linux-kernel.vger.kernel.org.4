@@ -2,235 +2,323 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E692687EB7
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 14:32:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 040C5687EBE
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 14:33:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231434AbjBBNcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 08:32:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33240 "EHLO
+        id S232178AbjBBNd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 08:33:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231364AbjBBNcE (ORCPT
+        with ESMTP id S230017AbjBBNdz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 08:32:04 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7BE7729A
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 05:32:02 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id l8so1394507wms.3
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 05:32:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=p8QJM+cDMWDwGnLdY1LGO5+3ANd8IL6QkYM6Adr66uY=;
-        b=E2uSmXmY4dmx866H1u+0MVNnU1IS7WPXRtRsG9r8ILYDjsmv87BaJji0oo/nGEyjMn
-         iTm1/N20f9oNM7YQh/0SE4XzQqjkiS8tg8nSTErWGytM0wxvVKZjSeDZATiyytNni0OF
-         5oR9X0q6f5drJ5jbfbzibc5nCO2zscS87jLlScA/h5H+6C9A4IJwopMo6j1iWz2kQvrT
-         XtGSS/mmQqEE25Kuq/RoKUhxhAlGr3lMSdwNV55AiHrcqaIc6BvKTii3TAxWT87ZbRst
-         QuKIkJVu2Vg1Ez/onQAhfwz8N5L9unF3YFoaMtyyYk+HkPsI/CqtYMOjHT18SMbMuuYf
-         Xf1g==
+        Thu, 2 Feb 2023 08:33:55 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B15CCC26
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 05:33:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675344790;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JW2l3Xkmr+SXpxgs6dhNgIWsAPA61tpPxWYF/gqOInU=;
+        b=dB5ikern3zlV5OG/5mbjLXpCUqJEb/uCI1BTzy5EnJK6vxKrsX0iWbOS8gLn5iofWG9POc
+        0nMxSTnMs1Z5bLMhrw8iNMvSIrv8zNDvloz+BBglloJMgQ0TCQlIkfmkaB+e6vXgKb/qaK
+        VV8rM3Q+OmVJhHH4+k62jPeiLjuqPWc=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-356-eKIPMsDzMkOUoIBbUXPwqA-1; Thu, 02 Feb 2023 08:33:09 -0500
+X-MC-Unique: eKIPMsDzMkOUoIBbUXPwqA-1
+Received: by mail-ed1-f70.google.com with SMTP id bq13-20020a056402214d00b004a25d8d7593so1464284edb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 05:33:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=p8QJM+cDMWDwGnLdY1LGO5+3ANd8IL6QkYM6Adr66uY=;
-        b=Iyu0jnY79rmHdUThpnYGD4lWxVaEjOdDXIC2uh3/k3Cr8Tb924/ClMI6sHubQo8zA9
-         Qohxcj7s8g4r1DQ+cTTrzsSlpTaf85tDgCxipzF8bcn1Fzj9UIQe3RM6zrcvgrUHV4cl
-         ObIRt5gkbxrlxRr0Jol897zXqgkw/t4c0pyFkNpXO3avrQWTH3bLHatmJGMLufZE34VN
-         C0I937Ul962+w1X1PGGJ5XtfW3ufpKlGWqtMg4PMk5utLy2HO0EG1UZ1KvFvX/OH1Aek
-         BA6V4f8xJXCGUEWIzDKYtfiPHnGgNI3DaCJJxdWjBNMRQNSculpSt8hYiZ1AL001Vex/
-         a6Wg==
-X-Gm-Message-State: AO0yUKVFfafsrommMKaLdnKQ/QWgQCJjb4+h3KZd7rxqB1IrstmG1krN
-        lmG8Wr4rkfOXpwEZSXvW1ht47g==
-X-Google-Smtp-Source: AK7set8wfPW5+yKtg0ak5ruu80kd+dHgySJOEnsHJrFEo1iX7A/CpQPPYwiIzpK5NXzm6KvEaGIykA==
-X-Received: by 2002:a05:600c:2b46:b0:3dc:4aa6:a8a9 with SMTP id e6-20020a05600c2b4600b003dc4aa6a8a9mr5650270wmf.7.1675344721184;
-        Thu, 02 Feb 2023 05:32:01 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id y21-20020a05600c341500b003dc522dd25esm4613487wmp.30.2023.02.02.05.32.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 05:32:00 -0800 (PST)
-Message-ID: <d69f2627-4669-5e30-6535-0a6bb98c365d@linaro.org>
-Date:   Thu, 2 Feb 2023 14:31:59 +0100
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JW2l3Xkmr+SXpxgs6dhNgIWsAPA61tpPxWYF/gqOInU=;
+        b=mbGKd6Mq3KfKNuPpmsb17/SSYkVSA68fDlhylFcOvVZ6MBwiQvhMLiyBNSmRk9aSwL
+         1ZzNSp9NI/vExYcIUD1I1u44638kYqULxopxcfYA9OEv/WeHOCz+84AKUZAwOf2Qywfn
+         Elyf7a/bixtow21jpVMgWFdcT/xutimPJqkW7COwqICBXpl0IziipY51tX0dAhQU/abF
+         qeIa1u+RtZxPlWallttgmABu/crfZXCft9gKlC+tj0o5qSGVBWgzNxvT9Sq5N1PV715I
+         DuMIq1yvIgAPDPd7YWz98NU2UGjPczePnRrUIUJvYJ/z3wQErmBnVM5bPuL6NUCvpvZv
+         Bfkg==
+X-Gm-Message-State: AO0yUKVZXOg66cpOG4Og6mkt08Bh0uT72SE0PrQipHhOYWIONkVY2t7I
+        3/LYj3SgyY8Hfa4ygWQu433cTHPA2rylodIiMY7BUKv524cDKvTiiazETu9511BBIaNAMH+/oQf
+        NTx4n6UJxYKTtjUJTN2iOnWJE
+X-Received: by 2002:a17:906:4fc7:b0:87b:1be:a8c2 with SMTP id i7-20020a1709064fc700b0087b01bea8c2mr7061932ejw.73.1675344788481;
+        Thu, 02 Feb 2023 05:33:08 -0800 (PST)
+X-Google-Smtp-Source: AK7set8haZKpnZh1fvKavrZjCqHNzCim4qXT2LuDL914MQ9+7IGhV6t4aAjeoLfRVtPp5HPsJ2AryA==
+X-Received: by 2002:a17:906:4fc7:b0:87b:1be:a8c2 with SMTP id i7-20020a1709064fc700b0087b01bea8c2mr7061908ejw.73.1675344788215;
+        Thu, 02 Feb 2023 05:33:08 -0800 (PST)
+Received: from [10.39.192.164] (5920ab7b.static.cust.trined.nl. [89.32.171.123])
+        by smtp.gmail.com with ESMTPSA id my31-20020a1709065a5f00b0088cf92eb0e1sm3512464ejc.150.2023.02.02.05.33.06
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 02 Feb 2023 05:33:06 -0800 (PST)
+From:   Eelco Chaudron <echaudro@redhat.com>
+To:     =?utf-8?b?6Zm2IOe8mA==?= <taoyuan_eddy@hotmail.com>
+Cc:     netdev@vger.kernel.org, dev@openvswitch.org,
+        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [ovs-dev] [PATCH net-next v3 1/1] net:openvswitch:reduce
+ cpu_used_mask memory
+Date:   Thu, 02 Feb 2023 14:33:06 +0100
+X-Mailer: MailMate (1.14r5939)
+Message-ID: <C31998DE-E4B5-4736-9134-8ABBA7F97A31@redhat.com>
+In-Reply-To: <OS3P286MB2295485449967D11E7A86A0DF5D69@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
+References: <OS3P286MB2295FA2701BCE468E367607AF5D69@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
+ <561547E5-D4C2-4FD6-9B25-100719D4D379@redhat.com>
+ <OS3P286MB22951B162C8A486E39F250BFF5D69@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
+ <B3DA2461-65EC-4EDB-8775-C8051CDD5043@redhat.com>
+ <OS3P286MB2295485449967D11E7A86A0DF5D69@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 1/3] thermal/drivers/intel: Use generic trip points for
- quark_dts
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     srinivas.pandruvada@linux.intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rui.zhang@intel.com,
-        Amit Kucheria <amitk@kernel.org>
-References: <20230118181622.33335-1-daniel.lezcano@linaro.org>
- <CAJZ5v0icjsLBNkDqm49az=GixfEoLHAtCm7H13uOUv7Hr6yO2Q@mail.gmail.com>
- <621aca19-6a44-9d42-6fde-1835035c28b4@linaro.org>
- <CAJZ5v0iOYH4WR5WoH=jL6VWKhB4CMeZv5V3U0Q_c_qdCJvvvBw@mail.gmail.com>
- <fedc35c2-1dc9-48af-f03f-fbb8566284fb@linaro.org>
- <CAJZ5v0h75VH4GQeBStfiAXrFJt1tL=1+nhP9=n_Ok=Txm3e_CA@mail.gmail.com>
- <e7e9704c-df97-2c27-2955-959d847a8bb8@linaro.org>
- <CAJZ5v0jHkL6Lit-0Cqg42i-vYRaD+zc4=g2XziCLSUPAeCpEcA@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0jHkL6Lit-0Cqg42i-vYRaD+zc4=g2XziCLSUPAeCpEcA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/02/2023 11:32, Rafael J. Wysocki wrote:
-> On Wed, Feb 1, 2023 at 8:27 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+
+
+On 2 Feb 2023, at 13:40, =E9=99=B6 =E7=BC=98 wrote:
+
+> Hi, Eelco:
+>
+>        I have a query regarding to the style check.
+> Though the './scripts/checkpatch.pl' emit no warning/error, the 'netdev=
+/checkpatch' still has one warning "WARNING: line length of 82 exceeds 80=
+ columns"
+> I went through the patch line by line and could not find any changed li=
+ne exceeding the 80 character limit.
+>
+> I am afraid that the netdev/checkpatch takes counts on the removed line=
+(old removed line has length exceeding 80 and i have revised that in the =
+patch already
+>
+> Is there any known issue regarding to the netdev/checkpatch?
+
+Not sure which netdev/checkpatch you are referring to. I always you the g=
+eneral kernel one in /script/checkpatch.pl.
+
+
+Your patch looks good to me with /script/checkpatch.pl --strict.
+
+> Best regards
+>
+> eddy
+>
+> ________________________________
+> =E5=8F=91=E4=BB=B6=E4=BA=BA: Eelco Chaudron <echaudro@redhat.com>
+> =E5=8F=91=E9=80=81=E6=97=B6=E9=97=B4: 2023=E5=B9=B42=E6=9C=882=E6=97=A5=
+ 11:44
+> =E6=94=B6=E4=BB=B6=E4=BA=BA: =E9=99=B6 =E7=BC=98 <taoyuan_eddy@hotmail.=
+com>
+> =E6=8A=84=E9=80=81: netdev@vger.kernel.org <netdev@vger.kernel.org>; de=
+v@openvswitch.org <dev@openvswitch.org>; linux-kernel@vger.kernel.org <li=
+nux-kernel@vger.kernel.org>; Eric Dumazet <edumazet@google.com>; Jakub Ki=
+cinski <kuba@kernel.org>; Paolo Abeni <pabeni@redhat.com>; David S. Mille=
+r <davem@davemloft.net>
+> =E4=B8=BB=E9=A2=98: Re: [ovs-dev] [PATCH net-next v3 1/1] net:openvswit=
+ch:reduce cpu_used_mask memory
+>
+>
+>
+> On 2 Feb 2023, at 12:26, =E9=99=B6 =E7=BC=98 wrote:
+>
+>> Hi, Eelco:
 >>
->> On 01/02/2023 19:47, Rafael J. Wysocki wrote:
->>> On Wed, Feb 1, 2023 at 11:42 AM Daniel Lezcano
->>> <daniel.lezcano@linaro.org> wrote:
->>>>
->>>> On 31/01/2023 20:11, Rafael J. Wysocki wrote:
->>>>> On Tue, Jan 31, 2023 at 5:41 PM Daniel Lezcano
->>>>> <daniel.lezcano@linaro.org> wrote:
->>>>>>
->>>>>> On 26/01/2023 15:15, Rafael J. Wysocki wrote:
->>>>>>> On Wed, Jan 18, 2023 at 7:16 PM Daniel Lezcano
->>>>>>> <daniel.lezcano@linaro.org> wrote:
->>>>>>>>
->>>>>>>> The thermal framework gives the possibility to register the trip
->>>>>>>> points with the thermal zone. When that is done, no get_trip_* ops are
->>>>>>>> needed and they can be removed.
->>>>>>>>
->>>>>>>> Convert ops content logic into generic trip points and register them with the
->>>>>>>> thermal zone.
->>>>>>>>
->>>>>>>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->>>>>>>> ---
->>>>>>
->>>>>> [ ... ]
->>>>>>
->>>>>>>> -       aux_entry->tzone = thermal_zone_device_register("quark_dts",
->>>>>>>> -                       QRK_MAX_DTS_TRIPS,
->>>>>>>> -                       wr_mask,
->>>>>>>> -                       aux_entry, &tzone_ops, NULL, 0, polling_delay);
->>>>>>>> +       err = get_trip_temp(QRK_DTS_ID_TP_CRITICAL, &temperature);
->>>>>>>> +       if (err)
->>>>>>>> +               goto err_ret;
->>>>>>>> +
->>>>>>>> +       aux_entry->trips[QRK_DTS_ID_TP_CRITICAL].temperature = temperature;
->>>>>>>> +       aux_entry->trips[QRK_DTS_ID_TP_CRITICAL].type = THERMAL_TRIP_CRITICAL;
->>>>>>>> +
->>>>>>>> +       err = get_trip_temp(QRK_DTS_ID_TP_HOT, &temperature);
->>>>>>>> +       if (err)
->>>>>>>> +               goto err_ret;
->>>>>>>
->>>>>>> If I'm not mistaken, this won't even try to register the thermal zone
->>>>>>> if at least one trip cannot be initialized, but previously it was
->>>>>>> registered in that case, but the trips that failed to respond were
->>>>>>> disabled.
->>>>>>>
->>>>>>> This is a change in behavior that would at least need to be documented
->>>>>>> in the changelog, but it isn't.
->>>>>>>
->>>>>>> I'm not sure if it is safe to make even, however.
->>>>>>
->>>>>> Thanks for catching this.
->>>>>>
->>>>>> Two solutions:
->>>>>>
->>>>>> 1. Set the temperature to THERMAL_TEMP_INVALID and change
->>>>>> get_thermal_trip() to return -EINVAL or -ERANGE if the temperature is
->>>>>> THERMAL_TEMP_INVALID
->>>>>>
->>>>>> 2. Register only the valid trip points.
->>>>>>
->>>>>> What would be the preferable way ?
->>>>>
->>>>> I think that the trip points that are registered currently need to
->>>>> still be registered after the change.
->>>>>
->>>>> Does registering a trip point with the temperature set to
->>>>> THERMAL_TEMP_INVALID cause it to be effectively disabled?
->>>>
->>>> The initial behavior before the changes is:
->>>>
->>>> The function thermal_zone_device_register() will go through all the trip
->>>> points and call thermal_zone_get_trip(), resulting in a call to
->>>> ops->get_trip_temp(). If the call fails, the trip point is tagged as
->>>> disabled and will stay in this state forever, so discarded in the trip
->>>> point crossed detection.
->>>>
->>>> That does not report an error and the trip point is showed in sysfs but
->>>> in a inconsistent state as it is actually disabled. Reading the trip
->>>> point will return an error or not, but it is in any case disabled in the
->>>> thermal framework. The userspace does not have the information about the
->>>> trip point being disabled, so showing it up regardless its state is
->>>> pointless and prone to confusion for the userspace.
->>>>
->>>> IMO, it would be more sane to register the trip points which are
->>>> actually valid, so invalid trip points are not showed up and does
->>>> prevent extra complexity in the thermal core to handle them.
+>>       Thanks for your time going through the detail.
+>> The thing is: sizeof(struct cpumask), with default CONFIG_NR_CPUS 8192=
+, has a size of 1024 bytes even on a system with only 4 cpus.
+>> While in practice the cpumask APIs like cpumask_next and cpumask_set_c=
+pu never access more than cpumask_size() of bytes in the bitmap
+>> My change used cpumask_size() (in above example, consume 8 bytes after=
+ alignement for the cpumask, it saved 1016 bytes for every flow.
+>
+> I looked at the wrong nr_cpumask_bits definition, so thanks for this ed=
+ucation :)
+>
+>> Your question reminded me to revisit the description "as well as the i=
+teration of bits in cpu_used_mask", after a second think, this statement =
+is not valid and should be removed.
+>> since the iteration API will not access the number of bytes decided by=
+ nr_cpu_ids(running CPUs)
+>>
+>> I will remove this statement after solving a final style issue in the =
+next submission.
+>
+> Thanks!
+>
+>
+>> Thanks
+>> eddy
+>> ________________________________
+>> =E5=8F=91=E4=BB=B6=E4=BA=BA: Eelco Chaudron <echaudro@redhat.com>
+>> =E5=8F=91=E9=80=81=E6=97=B6=E9=97=B4: 2023=E5=B9=B42=E6=9C=882=E6=97=A5=
+ 11:05
+>> =E6=94=B6=E4=BB=B6=E4=BA=BA: Eddy Tao <taoyuan_eddy@hotmail.com>
+>> =E6=8A=84=E9=80=81: netdev@vger.kernel.org <netdev@vger.kernel.org>; d=
+ev@openvswitch.org <dev@openvswitch.org>; linux-kernel@vger.kernel.org <l=
+inux-kernel@vger.kernel.org>; Eric Dumazet <edumazet@google.com>; Jakub K=
+icinski <kuba@kernel.org>; Paolo Abeni <pabeni@redhat.com>; David S. Mill=
+er <davem@davemloft.net>
+>> =E4=B8=BB=E9=A2=98: Re: [ovs-dev] [PATCH net-next v3 1/1] net:openvswi=
+tch:reduce cpu_used_mask memory
+>>
+>>
+>>
+>> On 2 Feb 2023, at 11:32, Eddy Tao wrote:
+>>
+>>> Use actual CPU number instead of hardcoded value to decide the size
+>>> of 'cpu_used_mask' in 'struct sw_flow'. Below is the reason.
 >>>
->>> Except when the trip point can be updated to become a valid one later,
->>> for example in response to a system configuration change.  That can
->>> happen to ACPI-provided trip points, for example.
+>>> 'struct cpumask cpu_used_mask' is embedded in struct sw_flow.
+>>> Its size is hardcoded to CONFIG_NR_CPUS bits, which can be
+>>> 8192 by default, it costs memory and slows down ovs_flow_alloc
+>>> as well as the iteration of bits in cpu_used_mask when handling
+>>> netlink message from ofproto
+>>
+>> I=E2=80=99m trying to understand how this will decrease memory usage. =
+The size of the flow_cache stayed the same (actually it=E2=80=99s large d=
+ue to the extra pointer).
+>>
+>> Also do not understand why the iteration is less, as the mask is initi=
+alized the same.
+>>
+>> Cheers,
+>>
+>> Eelco
+>>
+>>> To address this, redefine cpu_used_mask to pointer
+>>> append cpumask_size() bytes after 'stat' to hold cpumask
 >>>
->>> I don't think that this is an issue for this particular driver, but
->>> the core needs to handle that case anyway.
->>
->> Yes, but the point is the core code never handled that case.
-> 
-> True.
-> 
-> What I wanted to say, though, is that the core needs to allow
-> registering trip points with THERMAL_TEMP_INVALID without disabling
-> them automatically, so they can be updated and used later.
+>>> cpumask APIs like cpumask_next and cpumask_set_cpu never access
+>>> bits beyond cpu count, cpumask_size() bytes of memory is enough
+>>>
+>>> Signed-off-by: Eddy Tao <taoyuan_eddy@hotmail.com>
+>>> ---
+>>>  net/openvswitch/flow.c       | 8 +++++---
+>>>  net/openvswitch/flow.h       | 2 +-
+>>>  net/openvswitch/flow_table.c | 8 +++++---
+>>>  3 files changed, 11 insertions(+), 7 deletions(-)
+>>>
+>>> diff --git a/net/openvswitch/flow.c b/net/openvswitch/flow.c
+>>> index e20d1a973417..0109a5f86f6a 100644
+>>> --- a/net/openvswitch/flow.c
+>>> +++ b/net/openvswitch/flow.c
+>>> @@ -107,7 +107,7 @@ void ovs_flow_stats_update(struct sw_flow *flow, =
+__be16 tcp_flags,
+>>>
+>>>                                        rcu_assign_pointer(flow->stats=
+[cpu],
+>>>                                                           new_stats);=
 
-Ok, so it is fine with the current code AFAICT.
-
-The handle_thermal_trip() functions are discarding trips with 
-temperature below zero for hot and critical. The trip crossing detection 
-won't happen with these values.
-
-However PASSIVE and ACTIVE trip points are going through the throttling 
-governor callback with a -273000 trip temperature. I suppose those very 
-specific trip points initialized to THERMAL_TEMP_INVALID are not 
-associated with a cooling device, right ?
-
-
->> If the trip point fails when registering the thermal zone (and this is
->> not related to our changes), the trip point is added to the disabled
->> trips bitmap and then whatever the action to validate the trip point, it
->> remains disabled for the thermal framework. There is no action to enable
->> it (except I missed something).
->>
->>> Moreover, there is the case when trip points only become relevant when
->>> their temperatures are set via ops->set_trip_temp() and they are
->>> THERMAL_TEMP_INVALID initially, which needs to be handled by the core
->>> either.
->>
->> Ok, then I guess the simplest change is to assign THERMAL_TEMP_INVALID
->> in this driver, if get_trip_temp fails at the initialization time.
->>
->> Later we can add a thermal_zone_device_update_trips() with the needed
->> locking and actions related to the update.
-> 
-> Well, there is thermal_zone_device_update() and one of the events it
-> is supposed to handle is THERMAL_TRIP_CHANGED, so I'm not sure how the
-> new interface would differ from it?
-
-Yes, we may have to investigate if the event should trigger the update 
-or the update should trigger the event.
-
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+>>> -                                     cpumask_set_cpu(cpu, &flow->cpu=
+_used_mask);
+>>> +                                     cpumask_set_cpu(cpu, flow->cpu_=
+used_mask);
+>>>                                        goto unlock;
+>>>                                }
+>>>                        }
+>>> @@ -135,7 +135,8 @@ void ovs_flow_stats_get(const struct sw_flow *flo=
+w,
+>>>        memset(ovs_stats, 0, sizeof(*ovs_stats));
+>>>
+>>>        /* We open code this to make sure cpu 0 is always considered *=
+/
+>>> -     for (cpu =3D 0; cpu < nr_cpu_ids; cpu =3D cpumask_next(cpu, &fl=
+ow->cpu_used_mask)) {
+>>> +     for (cpu =3D 0; cpu < nr_cpu_ids;
+>>> +          cpu =3D cpumask_next(cpu, flow->cpu_used_mask)) {
+>>>                struct sw_flow_stats *stats =3D rcu_dereference_ovsl(f=
+low->stats[cpu]);
+>>>
+>>>                if (stats) {
+>>> @@ -159,7 +160,8 @@ void ovs_flow_stats_clear(struct sw_flow *flow)
+>>>        int cpu;
+>>>
+>>>        /* We open code this to make sure cpu 0 is always considered *=
+/
+>>> -     for (cpu =3D 0; cpu < nr_cpu_ids; cpu =3D cpumask_next(cpu, &fl=
+ow->cpu_used_mask)) {
+>>> +     for (cpu =3D 0; cpu < nr_cpu_ids;
+>>> +          cpu =3D cpumask_next(cpu, flow->cpu_used_mask)) {
+>>>                struct sw_flow_stats *stats =3D ovsl_dereference(flow-=
+>stats[cpu]);
+>>>
+>>>                if (stats) {
+>>> diff --git a/net/openvswitch/flow.h b/net/openvswitch/flow.h
+>>> index 073ab73ffeaa..b5711aff6e76 100644
+>>> --- a/net/openvswitch/flow.h
+>>> +++ b/net/openvswitch/flow.h
+>>> @@ -229,7 +229,7 @@ struct sw_flow {
+>>>                                         */
+>>>        struct sw_flow_key key;
+>>>        struct sw_flow_id id;
+>>> -     struct cpumask cpu_used_mask;
+>>> +     struct cpumask *cpu_used_mask;
+>>>        struct sw_flow_mask *mask;
+>>>        struct sw_flow_actions __rcu *sf_acts;
+>>>        struct sw_flow_stats __rcu *stats[]; /* One for each CPU.  Fir=
+st one
+>>> diff --git a/net/openvswitch/flow_table.c b/net/openvswitch/flow_tabl=
+e.c
+>>> index 0a0e4c283f02..dc6a174c3194 100644
+>>> --- a/net/openvswitch/flow_table.c
+>>> +++ b/net/openvswitch/flow_table.c
+>>> @@ -87,11 +87,12 @@ struct sw_flow *ovs_flow_alloc(void)
+>>>        if (!stats)
+>>>                goto err;
+>>>
+>>> +     flow->cpu_used_mask =3D (struct cpumask *)&flow->stats[nr_cpu_i=
+ds];
+>>>        spin_lock_init(&stats->lock);
+>>>
+>>>        RCU_INIT_POINTER(flow->stats[0], stats);
+>>>
+>>> -     cpumask_set_cpu(0, &flow->cpu_used_mask);
+>>> +     cpumask_set_cpu(0, flow->cpu_used_mask);
+>>>
+>>>        return flow;
+>>>  err:
+>>> @@ -115,7 +116,7 @@ static void flow_free(struct sw_flow *flow)
+>>>                                          flow->sf_acts);
+>>>        /* We open code this to make sure cpu 0 is always considered *=
+/
+>>>        for (cpu =3D 0; cpu < nr_cpu_ids;
+>>> -          cpu =3D cpumask_next(cpu, &flow->cpu_used_mask)) {
+>>> +          cpu =3D cpumask_next(cpu, flow->cpu_used_mask)) {
+>>>                if (flow->stats[cpu])
+>>>                        kmem_cache_free(flow_stats_cache,
+>>>                                        (struct sw_flow_stats __force =
+*)flow->stats[cpu]);
+>>> @@ -1196,7 +1197,8 @@ int ovs_flow_init(void)
+>>>
+>>>        flow_cache =3D kmem_cache_create("sw_flow", sizeof(struct sw_f=
+low)
+>>>                                       + (nr_cpu_ids
+>>> -                                       * sizeof(struct sw_flow_stats=
+ *)),
+>>> +                                       * sizeof(struct sw_flow_stats=
+ *))
+>>> +                                    + cpumask_size(),
+>>>                                       0, 0, NULL);
+>>>        if (flow_cache =3D=3D NULL)
+>>>                return -ENOMEM;
+>>> --
+>>> 2.27.0
+>>>
+>>> _______________________________________________
+>>> dev mailing list
+>>> dev@openvswitch.org
+>>> https://mail.openvswitch.org/mailman/listinfo/ovs-dev
 
