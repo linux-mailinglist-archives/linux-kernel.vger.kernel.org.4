@@ -2,60 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DBF06873B0
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 04:10:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 800736873B4
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 04:12:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbjBBDKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 22:10:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49332 "EHLO
+        id S231790AbjBBDMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 22:12:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbjBBDKR (ORCPT
+        with ESMTP id S231129AbjBBDM0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 22:10:17 -0500
-Received: from formenos.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C9661E2A8;
-        Wed,  1 Feb 2023 19:10:16 -0800 (PST)
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1pNPz1-006b2v-38; Thu, 02 Feb 2023 11:09:56 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Thu, 02 Feb 2023 11:09:55 +0800
-Date:   Thu, 2 Feb 2023 11:09:55 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Neal Liu <neal_liu@aspeedtech.com>
-Cc:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org
-Subject: Re: [PATCH-next] crypto: aspeed: fix type warnings
-Message-ID: <Y9spg/66x/wQ3x+g@gondor.apana.org.au>
-References: <20230202025600.2598548-1-neal_liu@aspeedtech.com>
+        Wed, 1 Feb 2023 22:12:26 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 099531EBDD
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 19:12:24 -0800 (PST)
+Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4P6kLs369qzJsC3;
+        Thu,  2 Feb 2023 11:10:45 +0800 (CST)
+Received: from localhost.localdomain (10.175.112.125) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Thu, 2 Feb 2023 11:12:21 +0800
+From:   Longlong Xia <xialonglong1@huawei.com>
+To:     <akpm@linux-foundation.org>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <chenwandun@huawei.com>, <wangkefeng.wang@huawei.com>,
+        <sunnanyong@huawei.com>
+Subject: [PATCH -next 0/3] cleanup of devtmpfs_*_node()
+Date:   Thu, 2 Feb 2023 03:10:43 +0000
+Message-ID: <20230202031046.1224338-1-xialonglong1@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230202025600.2598548-1-neal_liu@aspeedtech.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.112.125]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 10:56:00AM +0800, Neal Liu wrote:
->
-> @@ -302,7 +302,7 @@ static int aspeed_acry_rsa_ctx_copy(struct aspeed_acry_dev *acry_dev, void *buf,
->  static int aspeed_acry_rsa_transfer(struct aspeed_acry_dev *acry_dev)
->  {
->  	struct akcipher_request *req = acry_dev->req;
-> -	u8 *sram_buffer = (u8 *)acry_dev->acry_sram;
-> +	u8 *sram_buffer = (u8 __force *)acry_dev->acry_sram;
+In one test, when modprobe zram, no zram device was found in the /dev. 
+But don't see any errors printed in jouranls/dmesg. Later we found out 
+that the reason was that device_add() did not check its return value when
+calling devtmpfs_create_node(). So we hope to turn devtmpfs_*_node() & 
+devtmpfs_submit_req() into a function with no return value, and add some
+debug info in the handle() that actually processes the request to let the
+user know why the creation was not successful.
 
-Wouldn't it be better to keep the iomem marker and then use readb
-on sram_buffer?
+Patch [1] devtmpfs: convert to pr_fmt. 
+Patch [2] devtmpfs: add debug info to handle().
+Patch [3] devtmpfs: Remove return value of devtmpfs_*_node() & 
+devtmpfs_submit_req().
 
-Cheers,
+Longlong Xia (3):
+  devtmpfs: convert to pr_fmt
+  devtmpfs: add debug info to handle()
+  devtmpfs: remove return value of devtmpfs_*_node() &
+    devtmpfs_submit_req()
+
+ drivers/base/base.h     |  8 +++----
+ drivers/base/devtmpfs.c | 48 +++++++++++++++++++++++------------------
+ 2 files changed, 31 insertions(+), 25 deletions(-)
+
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+2.25.1
+
