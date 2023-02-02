@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E07C6881A9
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 16:22:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 538EF6881AA
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 16:22:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232479AbjBBPWj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 10:22:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39198 "EHLO
+        id S232346AbjBBPWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 10:22:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232127AbjBBPWh (ORCPT
+        with ESMTP id S232530AbjBBPWk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 10:22:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42EC966EFA;
-        Thu,  2 Feb 2023 07:22:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D265461BDF;
-        Thu,  2 Feb 2023 15:22:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13F2DC433D2;
-        Thu,  2 Feb 2023 15:22:33 +0000 (UTC)
-Date:   Thu, 2 Feb 2023 10:22:20 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Song Shuai <suagrfillet@gmail.com>
-Cc:     mhiramat@kernel.org, mark.rutland@arm.com, peterz@infradead.org,
-        jpoimboe@kernel.org, tglx@linutronix.de,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH] samples: ftrace: Include the nospec-branch.h only for
- x86
-Message-ID: <20230202102220.05fe0d0e@rorschach.local.home>
-In-Reply-To: <CAAYs2=jq9j9j-Qa+fexfDX_e=pETfL5j1-n4iy5=0CgDKrYukg@mail.gmail.com>
-References: <20230130085954.647845-1-suagrfillet@gmail.com>
-        <CAAYs2=jq9j9j-Qa+fexfDX_e=pETfL5j1-n4iy5=0CgDKrYukg@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 2 Feb 2023 10:22:40 -0500
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 684EFDE
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 07:22:39 -0800 (PST)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 0A65468C7B; Thu,  2 Feb 2023 16:22:35 +0100 (CET)
+Date:   Thu, 2 Feb 2023 16:22:34 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
+        Alexander Usyskin <alexander.usyskin@intel.com>,
+        linux-kernel@vger.kernel.org,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH v1 1/1] mei: Move uuid_le_cmp() to its only user
+Message-ID: <20230202152234.GA28999@lst.de>
+References: <20230202145412.87569-1-andriy.shevchenko@linux.intel.com> <20230202151759.GA28861@lst.de> <Y9vVENZEjg1e43LT@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9vVENZEjg1e43LT@smile.fi.intel.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2 Feb 2023 10:19:46 +0000
-Song Shuai <suagrfillet@gmail.com> wrote:
+On Thu, Feb 02, 2023 at 05:21:52PM +0200, Andy Shevchenko wrote:
+> On Thu, Feb 02, 2023 at 04:17:59PM +0100, Christoph Hellwig wrote:
+> > On Thu, Feb 02, 2023 at 04:54:12PM +0200, Andy Shevchenko wrote:
+> > > There is only a single user of uuid_le_cmp() API, let's make it private
+> > > to that user.
+> > 
+> > Any reason this code can't just use guid_t and guid_equal?
+> 
+> It's part of ABI, while guid_* are for the internal use.
+> 
+> Eventually they may switch to the internal types, but it's up to MEI.
 
-> Ping...
-
-Note, the "ping reminder" etiquette is a minimum of a week. Not 3 days.
-
--- Steve
+How can a type name be part of a binary interface?
