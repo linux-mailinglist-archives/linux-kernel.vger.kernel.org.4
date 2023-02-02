@@ -2,159 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EB04687F77
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 15:00:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6001B687F7B
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 15:01:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231866AbjBBOA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 09:00:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52700 "EHLO
+        id S231725AbjBBOBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 09:01:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231888AbjBBOAZ (ORCPT
+        with ESMTP id S229881AbjBBOBv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 09:00:25 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58B4D8E6AD
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 06:00:15 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id h12so1774393wrv.10
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 06:00:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=eMycSpSWqkLdJLuPU1kAliRBYKe3vnTJI8phLtEWdDI=;
-        b=aX1rwy2YkRI6JACyuVKP5etYUZPG7JUA1R0As0ErGFAkMlpt62aDBJPcsvUThjjLom
-         aHdlUs0Y6cY8dMz8yVgjfbpxGSITYHw/tENe8vYZTa+C3VCETc9gVSndANh7BGPRucVP
-         R0tKqZXPEBxJK7CU1Jh9mDaIMl2DIWJbDIMxIO+/uu35JSJIVJD1vWZOt1mmc88NiiR8
-         0uJvVQMHzoOz3hCH1BMHW6gHyKotDAAsfCIhxpAyANFwjLQYuQ8JhLBmZX6MsjH+pc2S
-         9Z3ShGePx1zGree3SOmONdQ8tYPk7U1WvD59xKqM+rfje4EhiK03hKx4EFr7ihC5IVvW
-         ZjHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eMycSpSWqkLdJLuPU1kAliRBYKe3vnTJI8phLtEWdDI=;
-        b=tTiXXT927M1za30TJ3ooPYYGvGHO8PaNrd3NdNuHzS8+/NMaO3BisaUHKquk3kZtc/
-         5eeG5vUi6VSONvo1MczeSzCUxD5OYvGXlCWFFW8fzQF1+VI0k8dkzYip5tliSY+VstZu
-         oi5EPENxoZ8t/K1aKBPq7WWKwTNI42Jq+nJtxcNTZgVDDUCoi/QL4eATB+nNEBPwQWOS
-         +QO8OXdROyl2IY3Ni0dGC5aHK7QFEajgTznSJnl3filAXVwdRXDHJ4K69cFSsIYrHR4e
-         7CGhGdWrWPsjH3Xb37QFiaWTFiIBGT5BmxuIihxOSg+HxJIJddkCI2JRTbc831qrPDeH
-         VVvQ==
-X-Gm-Message-State: AO0yUKWvOrUVtfbKrDTO7XQ6N4iD/5BXDmhIMU1t15Y2I7DyOw39aDMC
-        npcyJIZ3bCSYwAgMDpY2N7zVdyKjOaxF4ZTxFihqAg==
-X-Google-Smtp-Source: AK7set991hy80LggrGKuE0EGDn0gAr/4aLuvD+To3+bf8l/YlM8w4oAxF3edTa+/NMUuSWyoDpk+UbMMdtjLXw/6knk=
-X-Received: by 2002:adf:ffcb:0:b0:2bf:e95c:9918 with SMTP id
- x11-20020adfffcb000000b002bfe95c9918mr211434wrs.330.1675346413910; Thu, 02
- Feb 2023 06:00:13 -0800 (PST)
-MIME-Version: 1.0
-References: <20230125082333.1577572-3-alexghiti@rivosinc.com> <202302010819.RAsjyv6V-lkp@intel.com>
-In-Reply-To: <202302010819.RAsjyv6V-lkp@intel.com>
-From:   Alexandre Ghiti <alexghiti@rivosinc.com>
-Date:   Thu, 2 Feb 2023 15:00:02 +0100
-Message-ID: <CAHVXubht443DmB6qZMJ=Hyxz=xi65Dkd=PuN_2i=uf783z0B=Q@mail.gmail.com>
-Subject: Re: [PATCH v3 2/6] riscv: Rework kasan population functions
-To:     kernel test robot <lkp@intel.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Conor Dooley <conor@kernel.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-efi@vger.kernel.org,
-        oe-kbuild-all@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 2 Feb 2023 09:01:51 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8242A49564
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 06:01:50 -0800 (PST)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 312DK09v035941;
+        Thu, 2 Feb 2023 14:01:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type :
+ mime-version : subject : from : in-reply-to : date : cc :
+ content-transfer-encoding : message-id : references : to; s=pp1;
+ bh=aOJxgCZ6f0Yzo8ikMQNr+/LNb1OMA0y2U06rz9ATOyo=;
+ b=qeXR3+3CYFyWR7ieSTSVwiLgPCCZmZR7ZstAW8DIAe4Ksnowgtxt7dX+s1uHmFJqDdtx
+ AZ0XhhTDoL06cSOHoVJzYpWAZwl5F4+j2UeIRasJkY1crFQeIHZDDgmYHnV1B2oIBdpZ
+ JfpZbCpL01tFcMG5Y90ePIstImtSCq6YZbcUsCol762QXT/rLZzlZwLC5TZhLN+QMlwj
+ 8dMYPONoWt7fObG95O3dV630Z6ZWzOJXXYhEDNT3eSC49l9ZwPFEdYd1v74IMS+tbwoF
+ 1jSWSay3XgVVNkKhoKggZQduRB0j1KKy8vJu8QOKYUxi6MkQqhY33+v4vsAcpf9m5zno Kg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ngbasw8ut-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Feb 2023 14:01:36 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 312DZWs6028918;
+        Thu, 2 Feb 2023 14:01:35 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ngbasw8sw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Feb 2023 14:01:35 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 312DgrmT014953;
+        Thu, 2 Feb 2023 14:01:33 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3ncvttx8g4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Feb 2023 14:01:33 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 312E1Udd49938804
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 2 Feb 2023 14:01:30 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B35F42004E;
+        Thu,  2 Feb 2023 14:01:30 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 288AB20043;
+        Thu,  2 Feb 2023 14:01:29 +0000 (GMT)
+Received: from smtpclient.apple (unknown [9.43.126.173])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu,  2 Feb 2023 14:01:28 +0000 (GMT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.300.101.1.3\))
+Subject: Re: WARN include/linux/trace_recursion.h:162 (powerpc)
+From:   Sachin Sant <sachinp@linux.ibm.com>
+In-Reply-To: <Y9t6yoafrO5YqVgM@hirez.programming.kicks-ass.net>
+Date:   Thu, 2 Feb 2023 19:31:18 +0530
+Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>, bsingharora@gmail.com,
+        dja@axtens.net, paulus@ozlabs.org,
+        Michael Ellerman <mpe@ellerman.id.au>
+Content-Transfer-Encoding: 7bit
+Message-Id: <FD2608B2-6A0F-4235-9D54-55C067777E79@linux.ibm.com>
+References: <4C073F6A-C812-4C4A-BB7A-ECD10B75FB88@linux.ibm.com>
+ <Y9t6yoafrO5YqVgM@hirez.programming.kicks-ass.net>
+To:     Peter Zijlstra <peterz@infradead.org>
+X-Mailer: Apple Mail (2.3731.300.101.1.3)
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: gZKMzera-RCEUVveEvJFUKN-35xgIDYW
+X-Proofpoint-ORIG-GUID: 5u-KdGSWJEcRBp8g_ddfYh3PlYOeX2XJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-02_04,2023-02-02_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxlogscore=844
+ impostorscore=0 spamscore=0 lowpriorityscore=0 malwarescore=0
+ suspectscore=0 mlxscore=0 priorityscore=1501 bulkscore=0 phishscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302020126
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 1, 2023 at 1:16 AM kernel test robot <lkp@intel.com> wrote:
->
-> Hi Alexandre,
->
-> Thank you for the patch! Perhaps something to improve:
->
-> [auto build test WARNING on linus/master]
-> [also build test WARNING on v6.2-rc6 next-20230131]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Alexandre-Ghiti/riscv-Split-early-and-final-KASAN-population-functions/20230125-163113
-> patch link:    https://lore.kernel.org/r/20230125082333.1577572-3-alexghiti%40rivosinc.com
-> patch subject: [PATCH v3 2/6] riscv: Rework kasan population functions
-> config: riscv-randconfig-r006-20230201 (https://download.01.org/0day-ci/archive/20230201/202302010819.RAsjyv6V-lkp@intel.com/config)
-> compiler: riscv64-linux-gcc (GCC) 12.1.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/c18726e8d14edbd59ec19854b4eb06d83fff716f
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Alexandre-Ghiti/riscv-Split-early-and-final-KASAN-population-functions/20230125-163113
->         git checkout c18726e8d14edbd59ec19854b4eb06d83fff716f
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv olddefconfig
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/mm/
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
->
-> All warnings (new ones prefixed by >>):
->
-> >> arch/riscv/mm/kasan_init.c:442:6: warning: no previous prototype for 'create_tmp_mapping' [-Wmissing-prototypes]
->      442 | void create_tmp_mapping(void)
->          |      ^~~~~~~~~~~~~~~~~~
->
->
-> vim +/create_tmp_mapping +442 arch/riscv/mm/kasan_init.c
->
->    441
->  > 442  void create_tmp_mapping(void)
->    443  {
->    444          void *ptr;
->    445          p4d_t *base_p4d;
->    446
->    447          /*
->    448           * We need to clean the early mapping: this is hard to achieve "in-place",
->    449           * so install a temporary mapping like arm64 and x86 do.
->    450           */
->    451          memcpy(tmp_pg_dir, swapper_pg_dir, sizeof(pgd_t) * PTRS_PER_PGD);
->    452
->    453          /* Copy the last p4d since it is shared with the kernel mapping. */
->    454          if (pgtable_l5_enabled) {
->    455                  ptr = (p4d_t *)pgd_page_vaddr(*pgd_offset_k(KASAN_SHADOW_END));
->    456                  memcpy(tmp_p4d, ptr, sizeof(p4d_t) * PTRS_PER_P4D);
->    457                  set_pgd(&tmp_pg_dir[pgd_index(KASAN_SHADOW_END)],
->    458                          pfn_pgd(PFN_DOWN(__pa(tmp_p4d)), PAGE_TABLE));
->    459                  base_p4d = tmp_p4d;
->    460          } else {
->    461                  base_p4d = (p4d_t *)tmp_pg_dir;
->    462          }
->    463
->    464          /* Copy the last pud since it is shared with the kernel mapping. */
->    465          if (pgtable_l4_enabled) {
->    466                  ptr = (pud_t *)p4d_page_vaddr(*(base_p4d + p4d_index(KASAN_SHADOW_END)));
->    467                  memcpy(tmp_pud, ptr, sizeof(pud_t) * PTRS_PER_PUD);
->    468                  set_p4d(&base_p4d[p4d_index(KASAN_SHADOW_END)],
->    469                          pfn_p4d(PFN_DOWN(__pa(tmp_pud)), PAGE_TABLE));
->    470          }
->    471  }
->    472
+>> ---[ end trace 0000000000000000 ]---
+>> ------------[ cut here ]------------
+>> RCU not on for: shared_cede_loop+0xc/0x170
+>> 
+>> The code in question was added by
+>> commit d099dbfd330686a8c09cd8944bcc77a56f9e7815
+>>    cpuidle: tracing: Warn about !rcu_is_watching()
+> 
+> Note that by selecting ARCH_WANTS_NO_INSTR you effectively state to
+> abide by its rules.
+> 
+>  41b7a347bf14 ("powerpc: Book3S 64-bit outline-only KASAN support")
+> 
+> AFAICT the power code does not even attempt to do this.
+> 
+> For your idle path you want at least something like the below, but given
+> you don't have build time validation of noinstr I can't really tell and
+> you'll just have to run chase the stragglers.
+> 
 
-Ok, I have to declare this function static to quiet this warning,
-there will be a v4 soon then.
+Thanks for the feedback Peter. With the interim patch submitted by
+Michael, I no longer see this warning.
 
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests
