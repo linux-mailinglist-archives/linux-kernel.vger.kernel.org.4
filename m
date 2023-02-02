@@ -2,65 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D93B688103
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 16:04:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAD5F6880FC
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 16:04:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231546AbjBBPEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 10:04:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44404 "EHLO
+        id S232095AbjBBPD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 10:03:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232178AbjBBPD4 (ORCPT
+        with ESMTP id S231624AbjBBPDy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 10:03:56 -0500
-Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52359552A0;
-        Thu,  2 Feb 2023 07:03:36 -0800 (PST)
-Received: by mail-ot1-f41.google.com with SMTP id d21-20020a056830005500b0068bd2e0b25bso535976otp.1;
-        Thu, 02 Feb 2023 07:03:36 -0800 (PST)
+        Thu, 2 Feb 2023 10:03:54 -0500
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64EA8222D4;
+        Thu,  2 Feb 2023 07:03:33 -0800 (PST)
+Received: by mail-oi1-f180.google.com with SMTP id 20so873026oix.5;
+        Thu, 02 Feb 2023 07:03:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :mime-version:content-transfer-encoding:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=xhLIwzkmCznX0GHhQwC0/P1h3t8y8u+T1ODla0Zh5kk=;
-        b=awOJcQ48EQRuf8Fzslq07euRx9quaeEzYPhV15Bb4tP1sRvDRA4WGE6dRLEeJn7Mt9
-         y8jiURC7bnKk6tfH/gmy6QeiMBwchD/7/3sfIVs4lTHgdcN/K0E7xHfxn0TxxZhI6qp0
-         +V2T/FJn+skXsHCrFnIfbeB/eD39rMvqSlLNDjUbwPj0vuorg09KCdtDTR0xYGANUZkU
-         AADcVG3pCAzXsmh44SouWCZ3p1gPyPJEdZgstHzAn3ze067dpv7L+LQ/UTynhVcCA9zO
-         UonQOFRoD6emtwfj8exKSUpKovCQICDq05DEJ9PM1QdrnxCh8PHgpI5TfCaMzHX12/Pg
-         al7Q==
-X-Gm-Message-State: AO0yUKV9zVSFJ62tASB4Go7wou6Yi6eFfSMbc1gbkta0i8/gsf/yg2Nt
-        5J9azCh1C9uvhu+VxGB5JNY1p35EzQ==
-X-Google-Smtp-Source: AK7set9CBOiY1Y27c21v6wju0XHcELQW66Yw+qKAXhK9DVt099gofzi2TiGaQ0sIsd4bfdHS1s2fTQ==
-X-Received: by 2002:a05:6830:18f6:b0:68b:c2d2:8967 with SMTP id d22-20020a05683018f600b0068bc2d28967mr3312164otf.26.1675350215344;
-        Thu, 02 Feb 2023 07:03:35 -0800 (PST)
+        bh=UvTEwmvDcai5Hh/VZKSiaeACzpspNyaYbdFC4BxG9Vw=;
+        b=NuBaPNc+cBiB8pcsJMoB9Gd7opPc6aAu3+RiHf5TDwGFzRO9IJWTd1ySrMMmv81OvZ
+         WpqBTIZY/amaOBIhG6tbtlP5YBnf5ibKRhbiX6Ig83AyZxvUHAhN7mMXxMVZVb9zgbpw
+         89SntZ5xfaWuKQy819eCwlceQ1Ql9feKe5QzVaox3BP0CpZQyTxQWYTDHZI+jIyeJOyf
+         vBHP2hQPwW0iFDsTMmvBf2p6PzfOmDfmX6zi1t9SY+4aEoT9hu5q9+zTyVLtmHH7TMWG
+         4Ep+4cd17AX4cGa7W33VOdls0JEvuRittpg/YQypMlQq1EHxWwWavQpeuFLW162yWVy4
+         JV6A==
+X-Gm-Message-State: AO0yUKWvUNObkuvnFzZgna/mZxUpfjvCcvKXejAHY6biIQxuCGUFakJC
+        n8q9tDCJBQ2ZfbUBIDl4yQ==
+X-Google-Smtp-Source: AK7set+bA5yyR6vdQFFHDqhA79+FbXA1M9yolgiLz2mvM49bfLSzO8phSA+39jcZTwIbokmloj9QuA==
+X-Received: by 2002:a05:6808:d47:b0:378:7d9c:8d3c with SMTP id w7-20020a0568080d4700b003787d9c8d3cmr3783713oik.31.1675350212469;
+        Thu, 02 Feb 2023 07:03:32 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id p5-20020a056830318500b0068bce0cd4e1sm5411539ots.9.2023.02.02.07.03.34
+        by smtp.gmail.com with ESMTPSA id p184-20020acad8c1000000b003547a3401e6sm8087537oig.43.2023.02.02.07.03.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 07:03:34 -0800 (PST)
-Received: (nullmailer pid 1858084 invoked by uid 1000);
+        Thu, 02 Feb 2023 07:03:31 -0800 (PST)
+Received: (nullmailer pid 1858077 invoked by uid 1000);
         Thu, 02 Feb 2023 15:03:31 -0000
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
 From:   Rob Herring <robh@kernel.org>
-To:     Johan Jonker <jbx6244@gmail.com>
-Cc:     linux-usb@vger.kernel.org, robh+dt@kernel.org, heiko@sntech.de,
-        linux-arm-kernel@lists.infradead.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org
-In-Reply-To: <f8747552-d23b-c4cd-cb17-5033fb7f8eb6@gmail.com>
-References: <f8747552-d23b-c4cd-cb17-5033fb7f8eb6@gmail.com>
-Message-Id: <167535004008.1854256.11552006567095484269.robh@kernel.org>
-Subject: Re: [PATCH v1] dt-bindings: usb: rockchip,dwc3: update inno usb2
- phy binding name
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        linux-phy@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        devicetree@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>, vkoul@kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+In-Reply-To: <20230202132511.3983095-2-abel.vesa@linaro.org>
+References: <20230202132511.3983095-1-abel.vesa@linaro.org>
+ <20230202132511.3983095-2-abel.vesa@linaro.org>
+Message-Id: <167535003746.1854137.3170990536949157461.robh@kernel.org>
+Subject: Re: [PATCH v4 1/8] dt-bindings: phy: Add qcom,snps-eusb2-phy
+ schema file
 Date:   Thu, 02 Feb 2023 09:03:31 -0600
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -68,15 +71,34 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Thu, 02 Feb 2023 14:59:35 +0100, Johan Jonker wrote:
-> The binding for the inno usb2 phy was given a name in more a common format,
-> so update the reference in rockchip,dwc3.yaml as well.
+On Thu, 02 Feb 2023 15:25:04 +0200, Abel Vesa wrote:
+> The SM8550 SoC uses Synopsis eUSB2 PHY. Add a dt-binding schema
+> for the new driver.
 > 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 > ---
->  Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> The v3 version of this patch was here:
+> https://lore.kernel.org/all/20230126131415.1453741-2-abel.vesa@linaro.org/
+> 
+> Changes since v3:
+>  * removed blank line, like Rob suggested
+>  * dropped quotes and reset description, like Rob suggested
+>  * dropped the RPMH_CXO_PAD_CLK clock and the ref_src clock name
+>    to match the schema
+>  * fixed filenames of the includes in the example (sm8550-gcc and
+>    sm8550-tcsr)
+> 
+> Changes since v2:
+>  * none
+> 
+> Changes since v1:
+>  * dropped the "ref src" clock
+>  * dropped the usb-repeater property
+> 
+>  .../bindings/phy/qcom,snps-eusb2-phy.yaml     | 74 +++++++++++++++++++
+>  1 file changed, 74 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/phy/qcom,snps-eusb2-phy.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -85,12 +107,17 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-
+Documentation/devicetree/bindings/phy/qcom,snps-eusb2-phy.example.dts:20:18: fatal error: dt-bindings/clock/qcom,sm8550-tcsr.h: No such file or directory
+   20 |         #include <dt-bindings/clock/qcom,sm8550-tcsr.h>
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[1]: *** [scripts/Makefile.lib:434: Documentation/devicetree/bindings/phy/qcom,snps-eusb2-phy.example.dtb] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1508: dt_binding_check] Error 2
 
 doc reference errors (make refcheckdocs):
-Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml: Documentation/devicetree/bindings/phy/rockchip,inno-usb2phy.yaml
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/f8747552-d23b-c4cd-cb17-5033fb7f8eb6@gmail.com
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230202132511.3983095-2-abel.vesa@linaro.org
 
 The base for the series is generally the latest rc1. A different dependency
 should be noted in *this* patch.
