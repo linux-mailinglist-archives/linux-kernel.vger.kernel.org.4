@@ -2,64 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A14C9687A10
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 11:22:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0197C687A16
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 11:23:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232110AbjBBKWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 05:22:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56286 "EHLO
+        id S231876AbjBBKW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 05:22:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232646AbjBBKVy (ORCPT
+        with ESMTP id S231463AbjBBKW5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 05:21:54 -0500
+        Thu, 2 Feb 2023 05:22:57 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B876988991;
-        Thu,  2 Feb 2023 02:21:42 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3957719B9
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 02:22:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 45AD8B8258E;
-        Thu,  2 Feb 2023 10:21:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8EEDC433D2;
-        Thu,  2 Feb 2023 10:21:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 95787B8258E
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 10:22:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D773EC433D2;
+        Thu,  2 Feb 2023 10:22:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675333300;
-        bh=t2QWbka6v7vkNVodGFBJPfO8m9esNG/StESQ91OzWDY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WVvHV5iL8E3fvp4rq2PuesKawvlmbTmxUaK+116vTxU8BLo4jCqt43C5xHhsoFAg3
-         V91VwIKuhTWQGrWKs2nFHjaj3Aiy4koCHi0+x5X8oykQTUMonKHbARTJq1HaRYt//C
-         tEE9Tf7L5Mca7Lhb3nIpgZZacsGL9RYyxCeqNgjGLTiA1Xf1D5acw0pB5bPuJaZLEc
-         GGHQg0q3Lr3VXU0IQrvue45jddooWWXvMrVIENluqirXPfnFflaO/pFKeK2xrLfwn5
-         WYzZqiM8wo7pn94WDnPe5gJ1jV1iBQwOZYe4uJIQyQsd9wAa2i4RTCeEfcd/D19jj/
-         CsWnifHhCzO1w==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pNWjD-0006WZ-Cj; Thu, 02 Feb 2023 11:22:03 +0100
-Date:   Thu, 2 Feb 2023 11:22:03 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 17/24] rtc: pm8xxx: add copyright notice
-Message-ID: <Y9uOy6F9ZHhZtWPI@hovoldconsulting.com>
-References: <20230126142057.25715-1-johan+linaro@kernel.org>
- <20230126142057.25715-18-johan+linaro@kernel.org>
- <Y9Kk/AYBUfnoPCcP@mail.local>
- <Y9PL73mTJZ3hayur@hovoldconsulting.com>
- <f52c832f-0522-5b3e-8267-cb3dc8da5374@linaro.org>
+        s=k20201202; t=1675333373;
+        bh=qquQFaEWfR08XHbhtVrLnIslga9ScfKDaL9hdZA2H4Y=;
+        h=From:To:Cc:Subject:Date:From;
+        b=IT5dN+zpWq7CejGt94SSoFmwzkAO1PfAE9oVNwVK4pMhXeObyrYw1idm4bCrIfuo+
+         dbkf60lkFjZgoAnmxLojR4i/06y4btpEvwu9aApRKMt0jKwLfoNH8EpnIa5OOplbUw
+         13d28dWpxt5KVGBrN1ElCCSetGxsdo9Qz0AI1byILWRoz0W+oU41W/dpAyjZLIlOvx
+         kPsBU776MN/MoBl4Ucnm19/bVsEp1E/Lon0vrYv8kPl3A84Jj061WLaj21/vZDjFFB
+         U4eLTmFycUWbiTtLLVLzSnaLcwhcQW3O2+hpgpnupSfj0gFykIyvxBmAXHnWFJXyvi
+         C4UMlEL5EVmPA==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] ASoC: SOF: fix intel-soundwire link failure
+Date:   Thu,  2 Feb 2023 11:22:30 +0100
+Message-Id: <20230202102247.806749-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f52c832f-0522-5b3e-8267-cb3dc8da5374@linaro.org>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -69,45 +64,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 03:14:48PM +0100, Krzysztof Kozlowski wrote:
-> On 27/01/2023 14:04, Johan Hovold wrote:
-> > On Thu, Jan 26, 2023 at 05:06:20PM +0100, Alexandre Belloni wrote:
-> >> On 26/01/2023 15:20:50+0100, Johan Hovold wrote:
-> >>> Add a copyright notice for Linaro and add myself as a (primary) author
-> >>> of this driver.
-> >>>
-> >>> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> >>> ---
-> >>>  drivers/rtc/rtc-pm8xxx.c | 7 ++++++-
-> >>>  1 file changed, 6 insertions(+), 1 deletion(-)
-> >>>
-> >>> diff --git a/drivers/rtc/rtc-pm8xxx.c b/drivers/rtc/rtc-pm8xxx.c
-> >>> index 09816b9f6282..25bdd804b4d2 100644
-> >>> --- a/drivers/rtc/rtc-pm8xxx.c
-> >>> +++ b/drivers/rtc/rtc-pm8xxx.c
-> >>> @@ -1,5 +1,9 @@
-> >>>  // SPDX-License-Identifier: GPL-2.0-only
-> >>> -/* Copyright (c) 2010-2011, Code Aurora Forum. All rights reserved.
-> >>> +/*
-> >>> + * pm8xxx RTC driver
-> >>> + *
-> >>> + * Copyright (c) 2010-2011, Code Aurora Forum. All rights reserved.
-> >>> + * Copyright (c) 2023, Linaro Limited
-> >>
-> >> Is this really useful? The authoritative source is going to be git
-> >> anyway.
-> > 
-> > Sure, but in this case the driver ended up being almost completely
-> > reworked so I think it is warranted.
-> 
-> Copyright update is an effect of rework, not independent, thus it should
-> be squashed with the code doing the rework. Copyright updates on their
-> own do not make sense.
+From: Arnd Bergmann <arnd@arndb.de>
 
-I tend to agree, but there can be reasons for adding it separately as in
-this case where I wanted to highlight that I was adding a new entry. And
-it is still added along with the changes (i.e. as part of the series).
+My randconfig build setup ran into a rare build failure with
 
-But I'll squash it with the previous patch for v2.
+CONFIG_SND_SOC_SOF_INTEL_SOUNDWIRE_LINK_BASELINE=y
+CONFIG_SND_SOC_SOF_INTEL_SOUNDWIRE=m
+CONFIG_SOUNDWIRE=y
+CONFIG_SOUNDWIRE_INTEL=m
+CONFIG_SND_SOC_SOF_HDA=y
+CONFIG_SND_SOC_SOF_INTEL_TGL=y
 
-Johan
+x86_64-linux-ld: sound/soc/sof/intel/hda.o: in function `hda_init_caps':
+hda.c:(.text+0x691): undefined reference to `sdw_intel_cnl_hw_ops'
+x86_64-linux-ld: hda.c:(.text+0x6f2): undefined reference to `sdw_intel_probe'
+x86_64-linux-ld: sound/soc/sof/intel/hda.o: in function `hda_sdw_startup':
+hda.c:(.text+0x1c40): undefined reference to `sdw_intel_startup'
+x86_64-linux-ld: sound/soc/sof/intel/hda.o: in function `hda_sdw_process_wakeen':
+hda.c:(.text+0x1cb6): undefined reference to `sdw_intel_process_wakeen_event'
+x86_64-linux-ld: sound/soc/sof/intel/hda.o: in function `hda_dsp_interrupt_thread':
+hda.c:(.text+0x1d67): undefined reference to `sdw_intel_thread'
+x86_64-linux-ld: sound/soc/sof/intel/hda.o: in function `hda_dsp_remove':
+hda.c:(.text+0x2655): undefined reference to `sdw_intel_exit'
+
+My best understanding is that the definition of
+SND_SOC_SOF_INTEL_SOUNDWIRE_LINK_BASELINE was intended to avoid this
+problem, but got it wrong for the SND_SOC_SOF_INTEL_SOUNDWIRE=m case,
+where the 'select' is meant to set SOUNDWIRE_INTEL to the value of
+SND_SOC_SOF_INTEL_SOUNDWIRE_LINK_BASELINE rather than the intersection of
+SND_SOC_SOF_INTEL_SOUNDWIRE_LINK_BASELINE and SND_SOC_SOF_INTEL_SOUNDWIRE.
+
+Change the condition to check for SND_SOC_SOF_INTEL_SOUNDWIRE to be a
+boolean rather than a tristate expression in order to propagate this
+as intended.
+
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+I could not figure out if this is a recent regression or if the
+problem has existed for a long time and is just really hard to
+trigger. I first saw it on linux-next-20230201.
+---
+ sound/soc/sof/intel/Kconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/sound/soc/sof/intel/Kconfig b/sound/soc/sof/intel/Kconfig
+index 36a0e2bf30ff..715ba8a7f2f8 100644
+--- a/sound/soc/sof/intel/Kconfig
++++ b/sound/soc/sof/intel/Kconfig
+@@ -322,8 +322,8 @@ config SND_SOC_SOF_HDA_PROBES
+ 
+ config SND_SOC_SOF_INTEL_SOUNDWIRE_LINK_BASELINE
+ 	tristate
+-	select SOUNDWIRE_INTEL if SND_SOC_SOF_INTEL_SOUNDWIRE
+-	select SND_INTEL_SOUNDWIRE_ACPI if SND_SOC_SOF_INTEL_SOUNDWIRE
++	select SOUNDWIRE_INTEL if SND_SOC_SOF_INTEL_SOUNDWIRE != n
++	select SND_INTEL_SOUNDWIRE_ACPI if SND_SOC_SOF_INTEL_SOUNDWIRE != n
+ 
+ config SND_SOC_SOF_INTEL_SOUNDWIRE
+ 	tristate "SOF support for SoundWire"
+-- 
+2.39.0
+
