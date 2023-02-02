@@ -2,135 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CC416876BA
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 08:48:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8941C6876B5
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 08:47:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229495AbjBBHsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 02:48:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45512 "EHLO
+        id S229761AbjBBHrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 02:47:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232087AbjBBHsE (ORCPT
+        with ESMTP id S231814AbjBBHrS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 02:48:04 -0500
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1663984F84;
-        Wed,  1 Feb 2023 23:47:38 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 6F42A5C017E;
-        Thu,  2 Feb 2023 02:45:48 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 02 Feb 2023 02:45:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1675323948; x=1675410348; bh=txkTe9/GZE
-        SDTDDVEPfL4ADemETE8Vmr+PO/kEN4j4A=; b=fq8754XQ+nyGH/mWEOhRSr/J47
-        2IxNK1LP52dkJmfw5emJqRs57EkQ5JHP1UZ0H0JRaR/WbSrzuvK2CEHn7j++EDMU
-        LfyU4XFV3eBedHA6VJ3OAHuPPdtAzGbysHSY8i1u74M9WNSH0AVLeycyjEg6idcz
-        EGklPooKPPRaaSFkAdtShFzn/4YMJ5tu5B2XqrvlOlQNWYIfccGpRHu5q/7Yt1ZV
-        R68oftg+Ka7V7AompfB4G2Tf41dcN9vd/TgJRitugcQaITfdmeiurV/unTrDTY09
-        l56o8snzDN2OHBZVBH/IIIFKfCakYTHQKIqa2ak+0TJkOlJvJMd5RYx7dltw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1675323948; x=1675410348; bh=txkTe9/GZESDTDDVEPfL4ADemETE
-        8Vmr+PO/kEN4j4A=; b=rtZVrA3hJGNjaTokuG2nnfMBQtrvXVS2pw2iociZgG4u
-        xUGvr81FabDsnU6YkOTUZSvuRkAuukNTtSxFafgkbFS+VGMgaf2aI9ADCRVqwi6o
-        y16qmRZNk8WeEMpIU7x0qjy0Bp9oaTSPaOoHPWIgDbIxKkR7B0Pxo/6WtFCWUFQS
-        +boZ9mghufTI4By9otY/uFwFiLQnZ4DO4FM7sa/3fWKBxaRzGkOBx1y61hNHHXUa
-        bDOHBK+mOzxyl+imjXe9Zu1DAek4lwUZHkFQ2I2RfvUuaIpsrTcuvU1astjzIkx7
-        IO8Mcw/t1j6FmQsULcwHvzFdkfmM93whwUIWDD79Mg==
-X-ME-Sender: <xms:K2rbY5ERQ8U9ajf0QRUgG_CqxdaX_IFIoKOHW2JAXbFHKB6KO5D9yw>
-    <xme:K2rbY-Xc-Hb1SMbm3JtaeymiBjV-lsXIrRnLaqXdtfTn5M7OaTHBW6S2jC6XdgakR
-    hsvo9uIUnJqo8lKGwE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudefjedgudduhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:K2rbY7Ij6G4vFP-KV81Zi02oeaHZIK5bURc3zumKqtULgj5FBdoxgA>
-    <xmx:K2rbY_GK5FED-2yRirtbltu5CK7ysoGNW3AzRhoX8jzh1CksZDwFjw>
-    <xmx:K2rbY_Vyk4MN6aOoQaWjiFO2a9rl_ecu8LPVN6lNvidO49DwUPefnQ>
-    <xmx:LGrbY1fZ8XPA9HDRfMAFBORaMa8BTu0oT1P0FwF9ap1ZUyBZwFOJEg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id D1B3DB6044F; Thu,  2 Feb 2023 02:45:47 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-107-g82c3c54364-fm-20230131.002-g82c3c543
-Mime-Version: 1.0
-Message-Id: <980912a0-f5a0-4dea-9b5b-565d05bc4a6c@app.fastmail.com>
-In-Reply-To: <20230202053113.2782-1-rdunlap@infradead.org>
-References: <20230202053113.2782-1-rdunlap@infradead.org>
-Date:   Thu, 02 Feb 2023 08:45:29 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Randy Dunlap" <rdunlap@infradead.org>,
-        linux-kernel@vger.kernel.org
-Cc:     "Alexander Viro" <viro@zeniv.linux.org.uk>,
-        "Yoshinori Sato" <ysato@users.sourceforge.jp>,
-        "Rich Felker" <dalias@libc.org>, linux-sh@vger.kernel.org,
-        "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
-        "Andrew Morton" <akpm@linux-foundation.org>
-Subject: Re: [PATCH v2] sh: implicit access_ok() needs an #include
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 2 Feb 2023 02:47:18 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A42584B64;
+        Wed,  1 Feb 2023 23:46:54 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id z14so691869pgs.10;
+        Wed, 01 Feb 2023 23:46:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IGSOYxv/j/MNJQzPd2QdkN2kozRqA+JtR82Gzkjbx/4=;
+        b=nxTnHQkQPeB5wDvkC6I2tEqM1JicchQbGn7nXhk5Ewo/2PjyrAhpHOXkyE4PoLWuZG
+         PS/5Pz6lI6gdh1nybrUQUo/kscIDpth6EjQokxYoK2dCe/DV+BV8hV6Jr4ZZPQKjSYcA
+         6poExH2b8YRM+2tLAhykRrFo+LBgh/0uYKkmKliUlXXvF31woRaycJMxEFx/E7RzV4nt
+         dpobntcxRpZToU2GdM3LGnT+kH8DTs3oq4rrSGgtPb9WL75715b6hGM24UQbSRXE9J0v
+         /ipt46EVAFJtbQMw4brq6FNGuceARsqMOTxyyfn+5ryfUKR0RnsdGLiUkYejjkv16j1s
+         mw9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IGSOYxv/j/MNJQzPd2QdkN2kozRqA+JtR82Gzkjbx/4=;
+        b=l/TOrSMOcNNVMeE077x4JGKBKeM/FAfe8M08O1Yj8ii7N5CTePaaXUUVo0DFuiItV7
+         PKVxwSVQ92cSc0O1JaA/7Ziu1+swbzMZJQ4kbHcLuTXq+nSKqOJ5pWbwE9WKYrKrEc2V
+         chZRfr3qIuNMUD7naQvUaji/Vhemzd/GNGsvHSiMwCxY3OU2WSdEY2KUe7v/MAog44tO
+         etxAQNg+7o71lB0kMci3RybtiiDwddhIUKiAVZwGU6qKcAXpp6JE72zl2GRAT42wZTs/
+         wRuF25yjPdyXk7Fr4DIba3yiL8yjnv3N03CeJ2MTlVMRVy6fA2A+jkzfyGL24WifMSRn
+         mo4w==
+X-Gm-Message-State: AO0yUKX9LLoJCr5NIAa0vs7aDz9UwNvLXJDOo837O1kevngLx1/nrXqw
+        sEAmOc6MTD53PtUklQIkKMDXkpMFFzKx2w==
+X-Google-Smtp-Source: AK7set90d+GUZzx4Pc5ATKw/9I6NQuiioo26ysN+zhEnOBJIrfHMc5MfSjPdmPmmWgM/wFj4e21Hgg==
+X-Received: by 2002:a62:1e81:0:b0:593:d1ff:b8d4 with SMTP id e123-20020a621e81000000b00593d1ffb8d4mr1029258pfe.26.1675323956676;
+        Wed, 01 Feb 2023 23:45:56 -0800 (PST)
+Received: from [192.168.43.80] (subs02-180-214-232-23.three.co.id. [180.214.232.23])
+        by smtp.gmail.com with ESMTPSA id x30-20020aa79a5e000000b00589d8cbd882sm12730606pfj.150.2023.02.01.23.45.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Feb 2023 23:45:56 -0800 (PST)
+Message-ID: <9740934c-1bf6-87b0-408f-75089585e6ec@gmail.com>
+Date:   Thu, 2 Feb 2023 14:45:52 +0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v3] docs: add workload-tracing document to admin-guide
+Content-Language: en-US
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     sshefali021@gmail.com, kstewart@linuxfoundation.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230131221105.39216-1-skhan@linuxfoundation.org>
+ <Y9nkqhAS6EW2Lu8Z@debian.me> <875yclx8ay.fsf@meer.lwn.net>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <875yclx8ay.fsf@meer.lwn.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 2, 2023, at 06:31, Randy Dunlap wrote:
-> Building arch/sh/ has a build error/warning that is fixed by
-> adding an #include of a header file.
->
-> ../arch/sh/include/asm/checksum_32.h: In function 
-> 'csum_and_copy_from_user':
-> ../arch/sh/include/asm/checksum_32.h:53:14: error: implicit declaration 
-> of function 'access_ok' [-Werror=implicit-function-declaration]
->    53 |         if (!access_ok(src, len))
->       |              ^~~~~~~~~
->
-> Fixes: 7fe8970a78a1 ("sh32: convert to csum_and_copy_from_user()")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Al Viro <viro@zeniv.linux.org.uk>
-> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-> Cc: Rich Felker <dalias@libc.org>
-> Cc: linux-sh@vger.kernel.org
-> Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> ---
-> v2: add Subject: and patch description
-
-Thanks for the fix!
-
->
->  arch/sh/include/asm/checksum_32.h |    1 +
->  1 file changed, 1 insertion(+)
->
-> diff -- a/arch/sh/include/asm/checksum_32.h b/arch/sh/include/asm/checksum_32.h
-> --- a/arch/sh/include/asm/checksum_32.h
-> +++ b/arch/sh/include/asm/checksum_32.h
-> @@ -7,6 +7,7 @@
->   */
+On 2/2/23 06:41, Jonathan Corbet wrote:
+>> I think you haven't addressed my comments there [1], so I have to
+>> write the improv:
 > 
->  #include <linux/in6.h>
-> +#include <asm-generic/access_ok.h>
+> Bagas, could you *please* stop this?
+> 
 
-This will work correctly, but it is not the intended usage of the
-header. Anything in asm-generic/*.h should only be included by
-a particular header, usually the asm/*.h with the same name or in this
-case the asm/uaccess.h header.
+OK, withdrawn, thanks!
 
-I think the correct fix here is to include asm/uaccess.h instead
-of asm-generic/access_ok.h.
+Thus, without the improv,
 
-      Arnd
+Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
+-- 
+An old man doll... just what I always wanted! - Clara
+
