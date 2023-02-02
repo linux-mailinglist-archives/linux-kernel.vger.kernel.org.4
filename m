@@ -2,74 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40A566880D6
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 15:59:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03B516880E3
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 16:01:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231894AbjBBO7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 09:59:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39394 "EHLO
+        id S232148AbjBBPA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 10:00:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232096AbjBBO7o (ORCPT
+        with ESMTP id S229935AbjBBPA4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 09:59:44 -0500
-Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 405B62685
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 06:59:43 -0800 (PST)
-Received: by mail-vs1-xe2c.google.com with SMTP id h19so2077934vsv.13
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 06:59:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+oLCarSnbWm9l30IqXlSlJbB/Sspgw6Lli8fZQqOL3w=;
-        b=lR42T0OOHxZom/O2kIv5W9S/umO0DLaJuzIMSW1lHstX3IXJQKC4aY2Cdx7zkx1DyH
-         z/7Y7tLkZWBAHncNZcx0qJ0qd/+8PhEcBVTXgg691A7migWn0lvZiAw+WoS43M9yYAOF
-         pKgvsnCxdzXNJQZaeHx61h3hwrKL+kgcW0ylndtg2+iHNlQcgfQS7EZ1O9rKyuP+yl60
-         gYyNyfL3b7TMRhr7wJ5qIJH6uMrPkYwLGXEiu2UGAl3uDqHCHHJBK5nRqUFkSuPXQFmP
-         a6WEJ+6uz2xEjAdnYbRTViz88rdB1pDnEQYM8pAoVRPvA27pryAGHnM7j7PgkgmG7GZB
-         /CSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+oLCarSnbWm9l30IqXlSlJbB/Sspgw6Lli8fZQqOL3w=;
-        b=QwRJgGj5I6bDZVUt9uGdhIr1d8P6QmConhh7btYMFRWf2TdEKIY+dOc4l54iEdC599
-         WnEl49YXplnctoYea7cXZRByG2Xp99KRnjSwXQVFhIo6mTrrdO/Z5GRukh98vvPANKev
-         4QRfLG27Qsi7e/wP413yGi2sgBWJ5z30uB8PhAnZQYXJJ03GLVfhMTmAV6bt/fSY9gDe
-         8oaVMPdleCXTFIsAmOjTIDHmdBeSae3A1i1qkyLiHaMaM+RKiuFplbbgm2V+j5KimUj5
-         axAaEXJSGoIn/AehANJq8FbyMdPA+7UNrfcEqRfXzZ/B3RpD0+JipRPmaC5VAbTb3pWb
-         tLzA==
-X-Gm-Message-State: AO0yUKXfwO2P0AMGGH5PL4JpZ1NRylTvdu2KnPB+h9oeSTrBV47a5pZt
-        3TVY6eY/O0Q92F22mWe/Hagprn4SCfKYuVLnZ9DS4w==
-X-Google-Smtp-Source: AK7set/1VTblN/hGaphDW8ItFDqXbRBBkClqYBuZ91ZzszVwUlVtqXARv4RqxlDHHu+pSqXWJ80Yrhc7dPyfKyi7MUk=
-X-Received: by 2002:a05:6102:3ce:b0:3f0:f82a:1f8c with SMTP id
- n14-20020a05610203ce00b003f0f82a1f8cmr970844vsq.74.1675349982148; Thu, 02 Feb
- 2023 06:59:42 -0800 (PST)
+        Thu, 2 Feb 2023 10:00:56 -0500
+Received: from mta-64-227.siemens.flowmailer.net (mta-64-227.siemens.flowmailer.net [185.136.64.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AEA7234D5
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 07:00:52 -0800 (PST)
+Received: by mta-64-227.siemens.flowmailer.net with ESMTPSA id 20230202150049e6a85b5c5536ee66ec
+        for <linux-kernel@vger.kernel.org>;
+        Thu, 02 Feb 2023 16:00:50 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=daniel.starke@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
+ bh=TmNKWQTw0AoAXvhAuQ5lR2bAljisCn7vFHIBxeWBZsk=;
+ b=IP3xyubL3mkYcXQKBU4+FIypIv6VNds8tfQJaGltq9hzqOYEstHv8ybTNsTohxDeZU15QC
+ wS2vHMSZyBJFifJbvyak+VtgiaUMq1EgiZKvYCoXzdZ4lXkB+dbSRCO4Imr7LQ9ivCx6m5/k
+ Hi0tNAXeW+UQgyfpfo1tPSzf07Uuk=;
+From:   "D. Starke" <daniel.starke@siemens.com>
+To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, ilpo.jarvinen@linux.intel.com
+Cc:     linux-kernel@vger.kernel.org,
+        Daniel Starke <daniel.starke@siemens.com>
+Subject: [PATCH v2 1/3] tty: n_gsm: add keep alive support
+Date:   Thu,  2 Feb 2023 15:59:32 +0100
+Message-Id: <20230202145934.22641-1-daniel.starke@siemens.com>
 MIME-Version: 1.0
-References: <CA+G9fYuei_Tr-vN9GS7SfFyU1y9hNysnf=PB7kT0=yv4MiPgVg@mail.gmail.com>
- <Y9B4/pR5t2o51coY@monkey>
-In-Reply-To: <Y9B4/pR5t2o51coY@monkey>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 2 Feb 2023 20:29:31 +0530
-Message-ID: <CA+G9fYvC7RfM7Q+=S8N7dw9A88oa=HFyoDjz4=drSjBwXYYnLQ@mail.gmail.com>
-Subject: Re: selftests: memfd: run_hugetlbfs_test.sh - invalid opcode: 0000
- [#1] PREEMPT SMP
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-stable <stable@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Jeff Xu <jeffxu@google.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Pranith Kumar <bobby.prani@gmail.com>,
-        David Herrmann <dh.herrmann@gmail.com>
-Content-Type: multipart/mixed; boundary="0000000000009008a505f3b8d0e1"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-314044:519-21489:flowmailer
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,61 +46,297 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000009008a505f3b8d0e1
-Content-Type: text/plain; charset="UTF-8"
+From: Daniel Starke <daniel.starke@siemens.com>
 
-[Resending because logs.txt attachment was not successful ]
-Hi Mike,
+n_gsm is based on the 3GPP 07.010 and its newer version is the 3GPP 27.010.
+See https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
+The changes from 07.010 to 27.010 are non-functional. Therefore, I refer to
+the newer 27.010 here. Chapters 5.4.6.3.4 and 5.1.8.1.3 describe the test
+command which can be used to test the mux connection between both sides.
 
-On Wed, 25 Jan 2023 at 06:04, Mike Kravetz <mike.kravetz@oracle.com> wrote:
->
-> On 01/05/23 15:14, Naresh Kamboju wrote:
-> > While running selftests: memfd: run_hugetlbfs_test.sh on qemu_i386 and i386 the
-> > following invalid opcode was noticed on stable-rc 6.1 and  6.0.
-> >
-> > This is always reproducible on stable-rc 6.1 and  6.0 with qemu_i386 and i386.
-> > Build, config and test log details provided in the below links [1].
->
-> Hello Naresh,
->
-> I have tried to create this issue a few times without success.  Since I
-> do not have i386 HW, I am using qemu_i386.  If I use the supplied config,
-> my kernel does not boot.  I then try to modify config options which I
-> think are not relevant.  By the time I get to a config that will boot, I
-> can not recreate the issue. :(
->
-> Just curious if you have any suggestions?  Or, Wondering if anyone else has
-> suggestions on how to proceed?
+Currently, no algorithm is implemented to make use of this command. This
+requires that each multiplexed upper layer protocol supervises the
+underlying muxer connection to handle possible connection losses.
 
-Please install tuxmake and run attached script to reproduce reported issues,
-$ pip3 install tuxmake
-$ ./memfd-crash-test-qemu-i386.sh
+Introduce an ioctl commands and functions to optionally enable keep alive
+handling via the test command as described in chapter 5.4.6.3.4. A single
+incrementing octet is being used to distinguish between multiple retries.
+Retry count and interval are taken from the general parameters N2 and T2.
 
-This script downloads kernel Image and rootfs and runs run_hugetlbfs_test.sh.
-If you have any questions please get back to me.
+Note that support for the test command is mandatory and already present in
+the muxer implementation since the very first version.
+Also note that the previous ioctl structure gsm_config cannot be extended
+due to missing checks against zero of the field "unused".
 
-ref:
-https://tuxsuite.com/
+Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+---
+ drivers/tty/n_gsm.c         | 106 +++++++++++++++++++++++++++++++++++-
+ include/uapi/linux/gsmmux.h |  17 ++++--
+ 2 files changed, 117 insertions(+), 6 deletions(-)
 
-> --
-> Mike Kravetz
+v1 -> v2:
+The "unused" fields of "gsm_config" and "gsm_netconfig" have been marked as
+unusable due to missing checks against zero. See review comments.
+New ioctl commands GSMIOC_GETCONF_EXT and GSMIOC_SETCONF_EXT together with
+the structure gsm_config_ext have been added. Reserved fields are included
+for possible future extensions. Proper check against zero is done.
+Setting a different value for "keep_alive" via ioctl does not reset the
+already open DLCI anymore. This is not needed as there is no impact at the
+peer.
+gsm_control_keep_alive() has been changed to call spin_unlock_irqrestore()
+properly in every case.
 
---0000000000009008a505f3b8d0e1
-Content-Type: application/x-shellscript; 
-	name="memfd-crash-test-qemu-i386.sh"
-Content-Disposition: attachment; filename="memfd-crash-test-qemu-i386.sh"
-Content-Transfer-Encoding: base64
-Content-ID: <f_ldn82ilt0>
-X-Attachment-Id: f_ldn82ilt0
+Link: https://lore.kernel.org/all/Y9pfrFPngFVgQUN7@kroah.com/
 
-dHV4cnVuIC0tcnVudGltZSBwb2RtYW4gLS1kZXZpY2UgcWVtdS1pMzg2IC0ta2VybmVsIGh0dHBz
-Oi8vc3RvcmFnZS50dXhzdWl0ZS5jb20vcHVibGljL2xpbmFyby9sa2Z0L2J1aWxkcy8ySnJ6dlpj
-MjIzcGN0bEF4VmhDSWViSjhxMHcvYnpJbWFnZSAtLW1vZHVsZXMgaHR0cHM6Ly9zdG9yYWdlLnR1
-eHN1aXRlLmNvbS9wdWJsaWMvbGluYXJvL2xrZnQvYnVpbGRzLzJKcnp2WmMyMjNwY3RsQXhWaENJ
-ZWJKOHEwdy9tb2R1bGVzLnRhci54eiAtLXJvb3RmcyBodHRwczovL3N0b3JhZ2UudHV4Ym9vdC5j
-b20vZGViaWFuL2Jvb2t3b3JtL2kzODYvcm9vdGZzLmV4dDQueHogLS1wYXJhbWV0ZXJzIFNLSVBG
-SUxFPXNraXBmaWxlLWxrZnQueWFtbCAtLXNhdmUtb3V0cHV0IC0tbG9nLWZpbGUgLSAtLWJvb3Qt
-YXJncyBydyAtLW92ZXJsYXkgaHR0cHM6Ly9zdG9yYWdlLnR1eHN1aXRlLmNvbS9wdWJsaWMvbGlu
-YXJvL2xrZnQvYnVpbGRzLzJKcnp2WmMyMjNwY3RsQXhWaENJZWJKOHEwdy9rc2VsZnRlc3QudGFy
-Lnh6IC0tICdjZCAvbWVtZmQgJiYgLi9ydW5faHVnZXRsYmZzX3Rlc3Quc2gnCgo=
---0000000000009008a505f3b8d0e1--
+diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+index 5783801d6524..d068df1cf2fd 100644
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -318,6 +318,11 @@ struct gsm_mux {
+ 	struct gsm_control *pending_cmd;/* Our current pending command */
+ 	spinlock_t control_lock;	/* Protects the pending command */
+ 
++	/* Keep-alive */
++	struct timer_list ka_timer;	/* Keep-alive response timer */
++	u8 ka_num;			/* Keep-alive match pattern */
++	int ka_retries;			/* Keep-alive retry counter */
++
+ 	/* Configuration */
+ 	int adaption;		/* 1 or 2 supported */
+ 	u8 ftype;		/* UI or UIH */
+@@ -325,6 +330,7 @@ struct gsm_mux {
+ 	unsigned int t3;	/* Power wake-up timer in seconds. */
+ 	int n2;			/* Retry count */
+ 	u8 k;			/* Window size */
++	u32 keep_alive;		/* Control channel keep-alive in ms */
+ 
+ 	/* Statistics (not currently exposed) */
+ 	unsigned long bad_fcs;
+@@ -1897,11 +1903,13 @@ static void gsm_control_response(struct gsm_mux *gsm, unsigned int command,
+ 						const u8 *data, int clen)
+ {
+ 	struct gsm_control *ctrl;
++	struct gsm_dlci *dlci;
+ 	unsigned long flags;
+ 
+ 	spin_lock_irqsave(&gsm->control_lock, flags);
+ 
+ 	ctrl = gsm->pending_cmd;
++	dlci = gsm->dlci[0];
+ 	command |= 1;
+ 	/* Does the reply match our command */
+ 	if (ctrl != NULL && (command == ctrl->cmd || command == CMD_NSC)) {
+@@ -1916,6 +1924,54 @@ static void gsm_control_response(struct gsm_mux *gsm, unsigned int command,
+ 	/* Or did we receive the PN response to our PN command */
+ 	} else if (command == CMD_PN) {
+ 		gsm_control_negotiation(gsm, 0, data, clen);
++	/* Or did we receive the TEST response to our TEST command */
++	} else if (command == CMD_TEST && clen == 1 && *data == gsm->ka_num) {
++		gsm->ka_retries = -1; /* trigger new keep-alive message */
++		if (dlci && !dlci->dead)
++			mod_timer(&gsm->ka_timer,
++				  jiffies + gsm->keep_alive * HZ / 100);
++	}
++	spin_unlock_irqrestore(&gsm->control_lock, flags);
++}
++
++/**
++ * gsm_control_keep_alive	-	check timeout or start keep-alive
++ * @t: timer contained in our gsm object
++ *
++ * Called off the keep-alive timer expiry signaling that our link
++ * partner is not responding anymore. Link will be closed.
++ * This is also called to startup our timer.
++ */
++
++static void gsm_control_keep_alive(struct timer_list *t)
++{
++	struct gsm_mux *gsm = from_timer(gsm, t, ka_timer);
++	unsigned long flags;
++
++	spin_lock_irqsave(&gsm->control_lock, flags);
++	if (gsm->ka_num && gsm->ka_retries == 0) {
++		/* Keep-alive expired -> close the link */
++		if (debug & DBG_ERRORS)
++			pr_info("%s keep-alive timed out\n", __func__);
++		spin_unlock_irqrestore(&gsm->control_lock, flags);
++		if (gsm->dlci[0])
++			gsm_dlci_begin_close(gsm->dlci[0]);
++		return;
++	} else if (gsm->keep_alive && gsm->dlci[0] && !gsm->dlci[0]->dead) {
++		if (gsm->ka_retries > 0) {
++			/* T2 expired for keep-alive -> resend */
++			gsm->ka_retries--;
++		} else {
++			/* Start keep-alive timer */
++			gsm->ka_num++;
++			if (!gsm->ka_num)
++				gsm->ka_num++;
++			gsm->ka_retries = gsm->n2;
++		}
++		gsm_control_command(gsm, CMD_TEST, &gsm->ka_num,
++				    sizeof(gsm->ka_num));
++		mod_timer(&gsm->ka_timer,
++			  jiffies + gsm->t2 * HZ / 100);
+ 	}
+ 	spin_unlock_irqrestore(&gsm->control_lock, flags);
+ }
+@@ -2061,8 +2117,10 @@ static void gsm_dlci_close(struct gsm_dlci *dlci)
+ 		/* Ensure that gsmtty_open() can return. */
+ 		tty_port_set_initialized(&dlci->port, false);
+ 		wake_up_interruptible(&dlci->port.open_wait);
+-	} else
++	} else {
++		del_timer(&dlci->gsm->ka_timer);
+ 		dlci->gsm->dead = true;
++	}
+ 	/* A DLCI 0 close is a MUX termination so we need to kick that
+ 	   back to userspace somehow */
+ 	gsm_dlci_data_kick(dlci);
+@@ -2078,6 +2136,8 @@ static void gsm_dlci_close(struct gsm_dlci *dlci)
+ 
+ static void gsm_dlci_open(struct gsm_dlci *dlci)
+ {
++	struct gsm_mux *gsm = dlci->gsm;
++
+ 	/* Note that SABM UA .. SABM UA first UA lost can mean that we go
+ 	   open -> open */
+ 	del_timer(&dlci->t1);
+@@ -2087,8 +2147,15 @@ static void gsm_dlci_open(struct gsm_dlci *dlci)
+ 	if (debug & DBG_ERRORS)
+ 		pr_debug("DLCI %d goes open.\n", dlci->addr);
+ 	/* Send current modem state */
+-	if (dlci->addr)
++	if (dlci->addr) {
+ 		gsm_modem_update(dlci, 0);
++	} else {
++		/* Start keep-alive control */
++		gsm->ka_num = 0;
++		gsm->ka_retries = -1;
++		mod_timer(&gsm->ka_timer,
++			  jiffies + gsm->keep_alive * HZ / 100);
++	}
+ 	gsm_dlci_data_kick(dlci);
+ 	wake_up(&dlci->gsm->event);
+ }
+@@ -2840,6 +2907,7 @@ static void gsm_cleanup_mux(struct gsm_mux *gsm, bool disc)
+ 	/* Finish outstanding timers, making sure they are done */
+ 	del_timer_sync(&gsm->kick_timer);
+ 	del_timer_sync(&gsm->t2_timer);
++	del_timer_sync(&gsm->ka_timer);
+ 
+ 	/* Finish writing to ldisc */
+ 	flush_work(&gsm->tx_work);
+@@ -2987,6 +3055,7 @@ static struct gsm_mux *gsm_alloc_mux(void)
+ 	INIT_LIST_HEAD(&gsm->tx_data_list);
+ 	timer_setup(&gsm->kick_timer, gsm_kick_timer, 0);
+ 	timer_setup(&gsm->t2_timer, gsm_control_retransmit, 0);
++	timer_setup(&gsm->ka_timer, gsm_control_keep_alive, 0);
+ 	INIT_WORK(&gsm->tx_work, gsmld_write_task);
+ 	init_waitqueue_head(&gsm->event);
+ 	spin_lock_init(&gsm->control_lock);
+@@ -3003,6 +3072,7 @@ static struct gsm_mux *gsm_alloc_mux(void)
+ 	gsm->mru = 64;	/* Default to encoding 1 so these should be 64 */
+ 	gsm->mtu = 64;
+ 	gsm->dead = true;	/* Avoid early tty opens */
++	gsm->keep_alive = 0;	/* Disabled */
+ 
+ 	/* Store the instance to the mux array or abort if no space is
+ 	 * available.
+@@ -3138,6 +3208,28 @@ static int gsm_config(struct gsm_mux *gsm, struct gsm_config *c)
+ 	return 0;
+ }
+ 
++static void gsm_copy_config_ext_values(struct gsm_mux *gsm,
++				       struct gsm_config_ext *ce)
++{
++	memset(ce, 0, sizeof(*ce));
++	ce->keep_alive = gsm->keep_alive;
++}
++
++static int gsm_config_ext(struct gsm_mux *gsm, struct gsm_config_ext *ce)
++{
++	unsigned int i;
++
++	gsm->keep_alive = ce->keep_alive;
++	/*
++	 * Check that userspace doesn't put stuff in here to prevent breakages
++	 * in the future.
++	 */
++	for (i = 0; i < ARRAY_SIZE(ce->reserved); i++)
++		if (ce->reserved[i])
++			return -EINVAL;
++	return 0;
++}
++
+ /**
+  *	gsmld_output		-	write to link
+  *	@gsm: our mux
+@@ -3456,6 +3548,7 @@ static int gsmld_ioctl(struct tty_struct *tty, unsigned int cmd,
+ 		       unsigned long arg)
+ {
+ 	struct gsm_config c;
++	struct gsm_config_ext ce;
+ 	struct gsm_mux *gsm = tty->disc_data;
+ 	unsigned int base;
+ 
+@@ -3472,6 +3565,15 @@ static int gsmld_ioctl(struct tty_struct *tty, unsigned int cmd,
+ 	case GSMIOC_GETFIRST:
+ 		base = mux_num_to_base(gsm);
+ 		return put_user(base + 1, (__u32 __user *)arg);
++	case GSMIOC_GETCONF_EXT:
++		gsm_copy_config_ext_values(gsm, &ce);
++		if (copy_to_user((void __user *)arg, &ce, sizeof(ce)))
++			return -EFAULT;
++		return 0;
++	case GSMIOC_SETCONF_EXT:
++		if (copy_from_user(&ce, (void __user *)arg, sizeof(ce)))
++			return -EFAULT;
++		return gsm_config_ext(gsm, &ce);
+ 	default:
+ 		return n_tty_ioctl_helper(tty, cmd, arg);
+ 	}
+diff --git a/include/uapi/linux/gsmmux.h b/include/uapi/linux/gsmmux.h
+index cb8693b39cb7..98de2570d79b 100644
+--- a/include/uapi/linux/gsmmux.h
++++ b/include/uapi/linux/gsmmux.h
+@@ -19,8 +19,7 @@ struct gsm_config
+ 	unsigned int mtu;
+ 	unsigned int k;
+ 	unsigned int i;
+-	unsigned int unused[8];		/* Padding for expansion without
+-					   breaking stuff */
++	unsigned int unused[8];	/* Can not be used */
+ };
+ 
+ #define GSMIOC_GETCONF		_IOR('G', 0, struct gsm_config)
+@@ -29,9 +28,9 @@ struct gsm_config
+ struct gsm_netconfig {
+ 	unsigned int adaption;  /* Adaption to use in network mode */
+ 	unsigned short protocol;/* Protocol to use - only ETH_P_IP supported */
+-	unsigned short unused2;
++	unsigned short unused2;	/* Can not be used */
+ 	char if_name[IFNAMSIZ];	/* interface name format string */
+-	__u8 unused[28];        /* For future use */
++	__u8 unused[28];        /* Can not be used */
+ };
+ 
+ #define GSMIOC_ENABLE_NET      _IOW('G', 2, struct gsm_netconfig)
+@@ -40,4 +39,14 @@ struct gsm_netconfig {
+ /* get the base tty number for a configured gsmmux tty */
+ #define GSMIOC_GETFIRST		_IOR('G', 4, __u32)
+ 
++struct gsm_config_ext {
++	__u32 keep_alive;	/* Control channel keep-alive in 1/100th of a
++				 * second (0 to disable)
++				 */
++	__u32 reserved[7];	/* For future use */
++};
++
++#define GSMIOC_GETCONF_EXT	_IOR('G', 5, struct gsm_config_ext)
++#define GSMIOC_SETCONF_EXT	_IOW('G', 6, struct gsm_config_ext)
++
+ #endif
+-- 
+2.34.1
+
