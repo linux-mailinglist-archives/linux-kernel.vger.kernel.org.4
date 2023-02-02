@@ -2,150 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B80B6885A2
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 18:42:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91B9C6885A4
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 18:42:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232330AbjBBRmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 12:42:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33300 "EHLO
+        id S232348AbjBBRmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 12:42:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231835AbjBBRl6 (ORCPT
+        with ESMTP id S232358AbjBBRmE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 12:41:58 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F6F298DD
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 09:41:57 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id r18so1842232pgr.12
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 09:41:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=nfX5H9V5MrNKSKkgY4eT0EcmzgQwTbioJAoXOa/XrdM=;
-        b=IBZzloQpx+KZogx2fGBmgKgaUAbIFkVMpIm0OS/6MUGMRU1dp6fG86bwon2V5JrY66
-         kAdCfoVE0qvqVphmSTSn8iAhN6TrquxZf1GEkTI6WSPmva4mcCa1rGjGFSFRC9v1FXOw
-         oHqgNRGdHiN5ubnh7PWo8Bp0pGDrOy9xvWku8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nfX5H9V5MrNKSKkgY4eT0EcmzgQwTbioJAoXOa/XrdM=;
-        b=A+WYJfbBGI9iU1sDq2h2PpWlyNyCInrYAXaH8+If2LXddOTNCSNP6b990CPEuCb4MF
-         9Gyf4iGfKTqKOjHDnh+nvjbd2ARtBdO0QrF9qGzaKh48XSAoKRAgQuf3efJeHbVx6gw3
-         jzZtNNQqRRhjdqSvmbar+Y+19tqheQ5dx/hSqMCrbEW97hMS8z1QmrD3ndNat7BBL8Po
-         HwoB2dHO3nAWCmEbPxXEYbRNbRBTCWHAayUpmFEa6CgzT4tjKc0P8XWkD39X5dyOMREn
-         boLVK/xyJaDlJCjEC+XufoSw2BEBOs5GGvP8QKijPQXGw0aWVq0myaSLnaDqRmZ6HRLQ
-         JhdQ==
-X-Gm-Message-State: AO0yUKViYL71vtOPe30N/IeJWjx9bOmyFkjdEc7kZiCrH9aGPovE+Iel
-        1pfIURluoui1Dr/vESydWDanvn8xT22sBZr4lDhnDQ==
-X-Google-Smtp-Source: AK7set9CPjhJRe6HGlggG3wVT7dSPHFZm+o5JvOQnESuOBjfXgM5pycZKi4DteYQDc4MkI8O5W97QQpw38zisdpCXsk=
-X-Received: by 2002:a05:6a00:b41:b0:58b:c7ef:25ca with SMTP id
- p1-20020a056a000b4100b0058bc7ef25camr1848836pfo.51.1675359716731; Thu, 02 Feb
- 2023 09:41:56 -0800 (PST)
+        Thu, 2 Feb 2023 12:42:04 -0500
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2047.outbound.protection.outlook.com [40.107.21.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40495761DC;
+        Thu,  2 Feb 2023 09:42:02 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QJTMrJ/SVD1b9p6V5xhFp5VX4oEWn7NSkkn0Jrg5nI1T0t76tPaoOVE3X1jw/RdpLaUt780SKhSctWNkaPPr71Txc5YPSNd4+IOeM/cn2UvYuvmfKo5pZS9J5JFHyq8XafAC9S1eGtCTNdtMMsvAtdTrItjVG0qmxctjXXgxP0ykFBERx3vI9zBcHVvZOg4X/rkX7anuTwgM9sy7Yj11eOTBD5JQBVmRhl3PLYOZEuUSKmFy1bhYQt011SmH7jWFuPBvTyc2MMnYBPLrdGpKPgsS5AzKGfxtNlPHJ9HuSHjVYjSe1aEyX2VTS2h960l2SkOLDk84/WvCMzlNLj0JPw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DbOo0Z8RFB0uCmQUjakg5s3cSkg3H47DokYbcoxyLDI=;
+ b=mu/azQ1e5I1M1WGEV/JdUG8RWmnzlNYHPWf93iY2jSIqvsZIyXTUUFsVPzF9mqW9erO56mmiK0HghR10z+449ILoPehBtPGM8BE2I4WwEDEJaB+7VHwhKH8RFn52SOelzI8PdodQ4GQxCF5Qe4CLeXKdKXZsAVeeTJ1xxSV37iK2pQ1euxF4NV+TyjP7IXRg1Mp6JdqmjTIfiA4jkqRZ6s6Jz/UOdnQ9Gd9xwcWyj9GVQlZcJAqzED5O9Ivx1w9ljeWYcxFLmyxbwtvMaGd3a1SfbgnouCrZDhwsfZqAGprkwseJ4Zy3yguutWYoawVTYnOa1hSybHKd5wrrED4o9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DbOo0Z8RFB0uCmQUjakg5s3cSkg3H47DokYbcoxyLDI=;
+ b=daXZdkO9tQNbUMHQxXBChnJloSieYN4R1qc0kgQBw509UUQ0K6AwI+UR50e8XsTpTy0TciZ4W5FF9eMDAJWTu3KZ33gnT/iNcttzpZJykLXzYMK7cA6OdOoQakK9yH0PdumAZqctEYjyg9MKLePDTU1ArDJ+w5OvcQGXn+ngJck=
+Received: from HE1PR0401MB2331.eurprd04.prod.outlook.com (2603:10a6:3:24::22)
+ by AM8PR04MB7314.eurprd04.prod.outlook.com (2603:10a6:20b:1df::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.28; Thu, 2 Feb
+ 2023 17:41:58 +0000
+Received: from HE1PR0401MB2331.eurprd04.prod.outlook.com
+ ([fe80::ca48:3816:f0b6:3fcd]) by HE1PR0401MB2331.eurprd04.prod.outlook.com
+ ([fe80::ca48:3816:f0b6:3fcd%6]) with mapi id 15.20.6043.038; Thu, 2 Feb 2023
+ 17:41:58 +0000
+From:   Frank Li <frank.li@nxp.com>
+To:     Frank Li <frank.li@nxp.com>, "M.H. Lian" <minghuan.lian@nxp.com>,
+        Mingkai Hu <mingkai.hu@nxp.com>, Roy Zang <roy.zang@nxp.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        =?iso-8859-2?Q?Krzysztof_Wilczy=F1ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "open list:PCI DRIVER FOR FREESCALE LAYERSCAPE" 
+        <linuxppc-dev@lists.ozlabs.org>,
+        "open list:PCI DRIVER FOR FREESCALE LAYERSCAPE" 
+        <linux-pci@vger.kernel.org>,
+        "moderated list:PCI DRIVER FOR FREESCALE LAYERSCAPE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+CC:     "imx@lists.linux.dev" <imx@lists.linux.dev>
+Subject: RE: [EXT] [PATCH v2 1/1] PCI: layerscape: Add EP mode support for
+ ls1028a
+Thread-Topic: [EXT] [PATCH v2 1/1] PCI: layerscape: Add EP mode support for
+ ls1028a
+Thread-Index: AQHZJrz7UNBwg0aD+0SFGvc7zfwgFa68DdDQ
+Date:   Thu, 2 Feb 2023 17:41:58 +0000
+Message-ID: <HE1PR0401MB2331C19D7474E6EAA4DC29C888D69@HE1PR0401MB2331.eurprd04.prod.outlook.com>
+References: <20230112193442.1513372-1-Frank.Li@nxp.com>
+In-Reply-To: <20230112193442.1513372-1-Frank.Li@nxp.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: HE1PR0401MB2331:EE_|AM8PR04MB7314:EE_
+x-ms-office365-filtering-correlation-id: ebcde99f-8b4e-4af2-5e32-08db0544c89a
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: BOq1JZITNdg6T2Z8Tjc5dDiLKE4bFGeP2/QSGdrAi3+DdQ+QYXkrR4ziLactcau0mQC89aQdbYM66xQHVJf34/WYYOorJKv7TSVd2fJIl2cxN6XtZ7fAWhjX6DsEb2Jb0wjcyAaG9EGeXcCws8/DSf8o8hpgHMOXmVRYHbCcbJQKj6p6H57PHEgocXn+w/Pe3WKv1P38geFMMCoEY9hLXVa28SSWVGRzeXDC9ZOUZo/RJWUzEDu48teUgZInZqtPwPibE8aiC0wP+uRXc9uokyoI8cvOExUPyRucI8z86IFudH5QVHqn8PqNCAq/hsOwaZvorA7UObaGfZg3aiJym0lngDSZHpGB3UqLG2deaw4/CdskwpFYpUTOnMVUq3u9pJ2nurLZlwHJwbOYFr9Pz1JN0B6VX9A0Ejh0tV7qtMuCgiXHK3Q9/KVV4iZiIJQuIVaY9r+Atof/2HIg8jQzDFMHRVQ4nC6Tm8kRcX2VSM+APcKNb5CLGNMCFspRccSzz07FYoLvdaccPNnLPJuDOTCGMwVfMTEu+uyhWObJrJ/Ed0VTcXycRs6QgM1AOgqO6wz14MbxUaRkrgfn4ZrOzFhP1IxHLvWuyKyB4GSQSmXX8BUSal7Gech4PJaqEhHpL/xJQcPK7TFXGg6qG5t/BXWZK19dMN+JAu4peZQEejMmAiQndU63WZCWAQSPb1L9mbiKCO6oE0uaxbwIXtmWcmOSKx4tH0ymaqb+qIEbv4wmXTz38q4dsLnJjCut2wzt
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0401MB2331.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(136003)(366004)(396003)(39860400002)(346002)(451199018)(45080400002)(33656002)(71200400001)(921005)(38070700005)(55016003)(86362001)(38100700002)(26005)(122000001)(186003)(9686003)(966005)(478600001)(55236004)(6506007)(110136005)(7696005)(316002)(66946007)(76116006)(66476007)(66556008)(41300700001)(52536014)(4326008)(44832011)(5660300002)(2906002)(8936002)(66446008)(64756008)(8676002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-2?Q?jdG39mmqqBRbClVNiIxLH9P6mGKDTSfaOslcFzjC5LC/MtLMDOP6HT6+37?=
+ =?iso-8859-2?Q?7gO4veRV9GJ0t5JISaT8HYqJnX+Jvum/w0L345VRnOD4V0tSNbgHpgoXah?=
+ =?iso-8859-2?Q?OwUkNldQUUmCGN9dbomirctK36+rCz8o2oebL0Yl4cC4/i4f4VV9pgn7aC?=
+ =?iso-8859-2?Q?48MRDjIsFObuDQnGvxy5XOzeRy/IGS0zEuzUhf65Lp+L+dl3QdlWrKYiEC?=
+ =?iso-8859-2?Q?4w7XebXq1FJ9j2/USAtehp8pgqMfVxR9wfwaaZhS2nZTacaBd1cikjNcYE?=
+ =?iso-8859-2?Q?cvuUCDJCZm+OEvaLQ21Wa4vl5w0i90gIk+5hCfQlDCBm2+lqUKytnfG9t6?=
+ =?iso-8859-2?Q?rVEbKfz4rd0V1w3YyUF/rRn/zDU3/cjTckqTS81A11hP7a8fyMH16fcmTO?=
+ =?iso-8859-2?Q?gmXann5fX82tK2/FxoBO68jleJuudgfKKaatvqaBe1gp+4ZuTMMKnLYgxB?=
+ =?iso-8859-2?Q?HvM+wzupkrS+c6CCiuhHg93pC1+iAjWDlsZW41jjD9dGsas9iSRWe959RZ?=
+ =?iso-8859-2?Q?zwsl75h80je/0Xi27d1Xa6LQRxUUjXr9OzDF9yFFNxInSWeV9BZixWTiWq?=
+ =?iso-8859-2?Q?vrWOcUnO7ULiq54oLE5OIrex9rPWHsce8OsrPxSTIxm/VRcTSsWvMsoBqc?=
+ =?iso-8859-2?Q?9Pzhcznx+4O67C/zMONjMo7DLNuGwUiOlWghtNJb8h1LOATR7FjO42aBgS?=
+ =?iso-8859-2?Q?ot7kucFi2k6lDXSZ7TmfzV976xWjBUcgslnQ5HrvQbIWaD1mr/JFYM6gfA?=
+ =?iso-8859-2?Q?HfAtCoXlljKJwiuRjE1HSoZtbo13wKqgcLLkElwmElLOwZGiXVY4Z9wprx?=
+ =?iso-8859-2?Q?zPc4lDgKtKmDJMXW7kIGEQ9F5eetYcdN6DFo5IYhMnQg+RV0uqH89tHpPz?=
+ =?iso-8859-2?Q?wR82iPmAFxJ/D1IDjNFY5UhqfTt3BYj0Mwd+bm0wAkqdxK+HjAUZrkWx5A?=
+ =?iso-8859-2?Q?BDap78uG03doppPVhFT0nGxp3G31y4Q03DMWzJuIdH5pkG4Xbq9ex/SRQA?=
+ =?iso-8859-2?Q?Z+TQsKKvmQcgULZKRdFi27oXrvCOcuagrNTz94v8YjRJEoVdIOhfSwihcj?=
+ =?iso-8859-2?Q?SzNy50pSDLFuWQ87xJLhlVgdgHGErwoVAebeOcYH0b7bosTGI18tNW/Aws?=
+ =?iso-8859-2?Q?AoB3bOUWN6JFnYLL6sDdVkIcoIml77eT5xWmo0q09oQ0X9SxLmdZTdvsfa?=
+ =?iso-8859-2?Q?AXcO7AOhFoE0JLkzROFfxFb7eRm2EU65F5SUkNj+Y1ND1Qz83ObG4JTqur?=
+ =?iso-8859-2?Q?3gHhHIWAGRPzUSv1584rJKqfeq5irlkLk3OJ8PqjGnya0AuRtuC+vmBtJQ?=
+ =?iso-8859-2?Q?Qgh4bGfF920VfwLrjHjbdYy6hRBguyc9laMHQYLwX/B+kGi7QDfrbAbyBG?=
+ =?iso-8859-2?Q?vAcgl6M4MweYSgb5fcIaM1Jp9ddfa/xQBZqX9O6zpsr8WFhLrdxLjWWr7b?=
+ =?iso-8859-2?Q?J6kwmiKYzbfy22Rok/gqUOdQFTJ2087i2HJ/YMGrel+Zxi5Aq8OAuiGDik?=
+ =?iso-8859-2?Q?MU3nDG/BeMPO4EtlrGyESZCXVP4sg3rHKENluMjxA6E8zNmFI5fTziMCTb?=
+ =?iso-8859-2?Q?C/LDunSK8ihLts0L9V6pM0sgZjeghX+8N0wvZjeDjz8SlYKZJh6Mlb7Qql?=
+ =?iso-8859-2?Q?jDjstgIgRdGiA=3D?=
+Content-Type: text/plain; charset="iso-8859-2"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20230201163420.1579014-1-revest@chromium.org> <20230201163420.1579014-5-revest@chromium.org>
- <Y9vW99htjOphDXqY@FVFF77S0Q05N.cambridge.arm.com>
-In-Reply-To: <Y9vW99htjOphDXqY@FVFF77S0Q05N.cambridge.arm.com>
-From:   Florent Revest <revest@chromium.org>
-Date:   Thu, 2 Feb 2023 18:41:45 +0100
-Message-ID: <CABRcYmJQiyZE__JD=xyt-PhAwj0Jpo2kkgmLcm-cD58cryD0ZQ@mail.gmail.com>
-Subject: Re: [PATCH 4/8] ftrace: Store direct called addresses in their ops
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        catalin.marinas@arm.com, will@kernel.org, rostedt@goodmis.org,
-        mhiramat@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kpsingh@kernel.org, jolsa@kernel.org,
-        xukuohai@huaweicloud.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: HE1PR0401MB2331.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ebcde99f-8b4e-4af2-5e32-08db0544c89a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Feb 2023 17:41:58.4219
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: e83VLb3gbMnt7Mx8IgovRi+2N7Mg0KodkVjqAfb3J91ev7LE1wF/bvwgHvVkcy6AUTAe9gqh5J0scoh2WINroQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7314
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 2, 2023 at 4:30 PM Mark Rutland <mark.rutland@arm.com> wrote:
->
-> On Wed, Feb 01, 2023 at 05:34:16PM +0100, Florent Revest wrote:
-> > All direct calls are now registered using the register_ftrace_direct API
-> > so each ops can jump to only one direct-called trampoline.
-> >
-> > By storing the direct called trampoline address directly in the ops we
-> > can save one hashmap lookup in the direct call ops and implement arm64
-> > direct calls on top of call ops.
-> >
-> > Signed-off-by: Florent Revest <revest@chromium.org>
-> > ---
-> >  include/linux/ftrace.h | 3 +++
-> >  kernel/trace/ftrace.c  | 6 ++++--
-> >  2 files changed, 7 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-> > index a7dbd307c3a4..84f717f8959e 100644
-> > --- a/include/linux/ftrace.h
-> > +++ b/include/linux/ftrace.h
-> > @@ -321,6 +321,9 @@ struct ftrace_ops {
-> >       unsigned long                   trampoline_size;
-> >       struct list_head                list;
-> >       ftrace_ops_func_t               ops_func;
-> > +#ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
-> > +     unsigned long                   direct_call;
-> > +#endif
-> >  #endif
-> >  };
-> >
-> > diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-> > index cb77a0a208c7..b0426de11c45 100644
-> > --- a/kernel/trace/ftrace.c
-> > +++ b/kernel/trace/ftrace.c
-> > @@ -2577,9 +2577,8 @@ ftrace_add_rec_direct(unsigned long ip, unsigned long addr,
-> >  static void call_direct_funcs(unsigned long ip, unsigned long pip,
-> >                             struct ftrace_ops *ops, struct ftrace_regs *fregs)
-> >  {
-> > -     unsigned long addr;
-> > +     unsigned long addr = ops->direct_call;
-> >
-> > -     addr = ftrace_find_rec_direct(ip);
-> >       if (!addr)
-> >               return;
-> >
-> > @@ -5375,6 +5374,7 @@ int register_ftrace_direct(struct ftrace_ops *ops, unsigned long addr)
-> >       ops->func = call_direct_funcs;
-> >       ops->flags = MULTI_FLAGS;
-> >       ops->trampoline = FTRACE_REGS_ADDR;
-> > +     ops->direct_call = addr;
-> >
-> >       err = register_ftrace_function_nolock(ops);
-> >
-> > @@ -5445,6 +5445,7 @@ __modify_ftrace_direct(struct ftrace_ops *ops, unsigned long addr)
-> >       /* Enable the tmp_ops to have the same functions as the direct ops */
-> >       ftrace_ops_init(&tmp_ops);
-> >       tmp_ops.func_hash = ops->func_hash;
-> > +     tmp_ops.direct_call = addr;
-> >
-> >       err = register_ftrace_function_nolock(&tmp_ops);
-> >       if (err)
-> > @@ -5466,6 +5467,7 @@ __modify_ftrace_direct(struct ftrace_ops *ops, unsigned long addr)
-> >                       entry->direct = addr;
-> >               }
-> >       }
-> > +     ops->direct_call = addr;
->
-> AFAICT we don't synchronize threads when installing the tmp_ops, so IIUC on
-> arches with call_ops, there could be a a thread in the middle of ftrace_caller
-> which has loaded the ops pointer from the patch-site, but hasn't yet loaded the
-> ops::direct_func pointer, and could race with this assignment.
->
-> Given that, I think this needs to be:
->
->         WRITE_ONCE(ops->direct_call, addr);
->
-> ... in order to avoid the risk of the store being torn, and the ftrace_caller
-> trampoline loading a corrupted pointer.
 
-Good point, I'll do that in v2.
+> Subject: [EXT] [PATCH v2 1/1] PCI: layerscape: Add EP mode support for
+> ls1028a
+>=20
+> Caution: EXT Email
+>=20
+> From: Xiaowei Bao <xiaowei.bao@nxp.com>
+>=20
+> Add PCIe EP mode support for ls1028a.
+>=20
+> Signed-off-by: Xiaowei Bao <xiaowei.bao@nxp.com>
+> Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+> Signed-off-by: Frank Li <Frank.Li@nxp>
+> Acked-by:  Roy Zang <Roy.Zang@nxp.com>
+>=20
+
+[Frank Li] ping
+
+> ---
+>=20
+> Added
+> Signed-off-by: Frank Li <Frank.Li@nxp>
+> Acked-by:  Roy Zang <Roy.Zang@nxp.com>
+>=20
+>=20
+> All other patches were already accepte by maintainer in
+> https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Flore.=
+k
+> ernel.org%2Flkml%2F20211112223457.10599-1-
+> leoyang.li%40nxp.com%2F&data=3D05%7C01%7Cfrank.li%40nxp.com%7C29d1
+> 5c05d59346e552be08daf4d573e5%7C686ea1d3bc2b4c6fa92cd99c5c301635%
+> 7C0%7C0%7C638091494850726163%7CUnknown%7CTWFpbGZsb3d8eyJWIjo
+> iMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C30
+> 00%7C%7C%7C&sdata=3D0wnHTyuX%2FyLAiioKNvlFbBM83nVyF%2FCdhqsEmV
+> f2sI4%3D&reserved=3D0
+>=20
+> But missed this one.
+>=20
+> Re-post.
+>=20
+>  drivers/pci/controller/dwc/pci-layerscape-ep.c | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/drivers/pci/controller/dwc/pci-layerscape-ep.c
+> b/drivers/pci/controller/dwc/pci-layerscape-ep.c
+> index ad99707b3b99..ed5cfc9408d9 100644
+> --- a/drivers/pci/controller/dwc/pci-layerscape-ep.c
+> +++ b/drivers/pci/controller/dwc/pci-layerscape-ep.c
+> @@ -112,6 +112,7 @@ static const struct ls_pcie_ep_drvdata
+> lx2_ep_drvdata =3D {
+>  static const struct of_device_id ls_pcie_ep_of_match[] =3D {
+>         { .compatible =3D "fsl,ls1046a-pcie-ep", .data =3D &ls1_ep_drvdat=
+a },
+>         { .compatible =3D "fsl,ls1088a-pcie-ep", .data =3D &ls2_ep_drvdat=
+a },
+> +       { .compatible =3D "fsl,ls1028a-pcie-ep", .data =3D &ls1_ep_drvdat=
+a },
+>         { .compatible =3D "fsl,ls2088a-pcie-ep", .data =3D &ls2_ep_drvdat=
+a },
+>         { .compatible =3D "fsl,lx2160ar2-pcie-ep", .data =3D &lx2_ep_drvd=
+ata },
+>         { },
+> --
+> 2.34.1
+
