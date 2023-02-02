@@ -2,119 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D87AA6873DE
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 04:35:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E44076873E2
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 04:35:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231890AbjBBDfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 22:35:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60574 "EHLO
+        id S231921AbjBBDfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 22:35:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231705AbjBBDe5 (ORCPT
+        with ESMTP id S231705AbjBBDfS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 22:34:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D57559C
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 19:34:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675308851;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=J25aygLZYRtVKk3o+FCXZY8yPzqAyLq7HmtB3PexRQI=;
-        b=feZbXbqU8p2PR/AjNHlRI51GOXOZaUK8hpQQIW99HVwYKOk+Dqu/6wlRH9Bbn7t95ruKw0
-        hD6xasd0h0SnL/Pv6Q+M5KLrsjiTRZvgGbt2cJzV0juLUk4l2/cksCMmEqi0KPMGlX8eZX
-        fW6K9Jr/RA9kcr2cYXCZcTx+qBg4cuA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-641-QuSs4DsHPryOBrRHSCGjEQ-1; Wed, 01 Feb 2023 22:34:03 -0500
-X-MC-Unique: QuSs4DsHPryOBrRHSCGjEQ-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0EEAA811E6E;
-        Thu,  2 Feb 2023 03:34:02 +0000 (UTC)
-Received: from [10.22.32.115] (unknown [10.22.32.115])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C8238492B06;
-        Thu,  2 Feb 2023 03:34:00 +0000 (UTC)
-Message-ID: <773e2f22-211e-163f-64bb-15ae29ad161b@redhat.com>
-Date:   Wed, 1 Feb 2023 22:34:00 -0500
+        Wed, 1 Feb 2023 22:35:18 -0500
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBECC1420F;
+        Wed,  1 Feb 2023 19:35:12 -0800 (PST)
+Received: by mail-vs1-xe2a.google.com with SMTP id k4so512790vsc.4;
+        Wed, 01 Feb 2023 19:35:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=QiX3UcRTZwH0PLnaIsBgvLzcPBnC8tyuWq+Tqoi57VM=;
+        b=LQUc4BmX3WhY4mCYLPKfRRvqUABK3NtdI6frXZWIw2784c3oIQ4Vos7Gfhs7jCn7FK
+         ynUp9byn/0vh/mgPEfgfa2s6HUwC/x8103svoUAmaCr6lqe6qs+ynwJfzZgpGprvNqEa
+         K/fIl+LWWDS910UYITK51n3aU2u9jfgox/mCClFrVHeiduGiwSkhWUMy+45sDj4wPY+l
+         b5/3gDmJDha/kuSwQr68eyFDIoKXruksNowHFRr20PCvEL9wSAvc4tYoIVNHX6fLRDvW
+         4xHfgSrKFDpE065ma9Lr8QwzS8MfsoWf64vPignS7vm5f1KXPQQY7q0Nd285c7QcfD65
+         5v/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QiX3UcRTZwH0PLnaIsBgvLzcPBnC8tyuWq+Tqoi57VM=;
+        b=Zn6n2kuFcxwCGLNjGcSX93+joORiNiE/pbcXE6tnJU6vfz/2ka0botMq21SdvdP54X
+         bB6s3uBuh0PQdU6P5Xee8sVOQ2L2lsdU7sT75XTlf3EE5SKQnRqDdATne0c+owAc4q9p
+         cYXKmcu0XhypOhH9b+VqcbIHvBbxLmfqL4DmDM6DOqZ8L/V9ggz6mZ1yDjIJbHToMpvV
+         gHYuNo9niZ1N8ph9PSD0d7HxLKQ47wb5ue5AkApEexjisBYTcXQfS9qaXpVelLcX9957
+         2v0ypzuM+hWMObzT1GKKSUTCzMfcik4m76vz1YrloiC5dw2mRP/fohkcAutwPcqOLxo9
+         J8jw==
+X-Gm-Message-State: AO0yUKUMUmk5Qc5n6+6ptr8ZDh1nFU+CBvFcvDEyITuhdROg7Ss5aMeo
+        XlQhyE6kLD8s2Ba3zwGAQvLChfwM3axzW2aj28c=
+X-Google-Smtp-Source: AK7set97jRS3svZhsG5T+qiZsHY/NEQaMcAWihNka2rtA4CCpDWrOkoxXYP4/3EZzRL1yy4Mm6pL6xwG6axK7PFRcMA=
+X-Received: by 2002:a05:6102:1276:b0:3ee:4ef8:45d3 with SMTP id
+ q22-20020a056102127600b003ee4ef845d3mr691400vsg.64.1675308911888; Wed, 01 Feb
+ 2023 19:35:11 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 1/2] cpuset: Fix cpuset_cpus_allowed() to not filter
- offline CPUs
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        kernel-team@android.com, Zefan Li <lizefan.x@bytedance.com>,
-        Tejun Heo <tj@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org
-References: <20230131221719.3176-1-will@kernel.org>
- <20230131221719.3176-2-will@kernel.org>
- <6b068916-5e1b-a943-1aad-554964d8b746@redhat.com>
- <Y9otWX+MGOLDKU6t@hirez.programming.kicks-ass.net>
- <83e53632-27ed-8dde-84f4-68c6776d6da8@redhat.com>
- <a892d340-ea99-1562-0e70-176f02f195c2@redhat.com>
- <Y9rVVldS19oyIZ+g@hirez.programming.kicks-ass.net>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <Y9rVVldS19oyIZ+g@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221227095123.2447948-1-milkfafa@gmail.com> <20221227095123.2447948-8-milkfafa@gmail.com>
+ <b8f173c0-6d40-d6aa-543e-fa8b06557f4f@molgen.mpg.de> <CADnNmFr1naRfam=z0p-4hEugSDJy_HCK8XZyQJ0eFirnmwuH4A@mail.gmail.com>
+ <4d64e3f9-57a3-c6be-2709-36e9a1617bf9@molgen.mpg.de> <CADnNmFqFMBUj07oAZze3eeXAR0hbep4p9za=XNu5YrLVqUex=w@mail.gmail.com>
+In-Reply-To: <CADnNmFqFMBUj07oAZze3eeXAR0hbep4p9za=XNu5YrLVqUex=w@mail.gmail.com>
+From:   Kun-Fa Lin <milkfafa@gmail.com>
+Date:   Thu, 2 Feb 2023 11:35:00 +0800
+Message-ID: <CADnNmFqtUMnyCCnKfk3DUJ-VLgJdwC8X6fznVYCF6V5jeZ2bNw@mail.gmail.com>
+Subject: Re: [PATCH v10 7/7] media: nuvoton: Add driver for NPCM video capture
+ and encode engine
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        andrzej.p@collabora.com, kwliu@nuvoton.com,
+        devicetree@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, kflin@nuvoton.com,
+        linux-media@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/1/23 16:10, Peter Zijlstra wrote:
-> On Wed, Feb 01, 2023 at 01:46:11PM -0500, Waiman Long wrote:
->
->> Note that using cpus_allowed directly in cgroup v2 may not be right because
->> cpus_allowed may have no relationship to effective_cpus at all in some
->> cases, e.g.
->>
->>     root
->>      |
->>      V
->>      A (cpus_allowed = 1-4, effective_cpus = 1-4)
->>      |
->>      V
->>      B (cpus_allowed = 5-8, effective_cpus = 1-4)
->>
->> In the case of cpuset B, passing back cpus 5-8 as the allowed_cpus is wrong.
-> I think my patch as written does the right thing here. Since the
-> intersection of (1-4) and (5-8) is empty it will move up the hierarchy
-> and we'll end up with (1-4) from the cgroup side of things.
->
-> So the purpose of __cs_cpus_allowed() is to override the cpus_allowed of
-> the root set and force it to cpu_possible_mask.
->
-> Then cs_cpus_allowed() computes the intersection of cs->cpus_allowed and
-> all it's parents. This will, in the case of B above, result in the empty
-> mask.
->
-> Then cpuset_cpus_allowed() has a loop that starts with
-> task_cpu_possible_mask(), intersects that with cs_cpus_allowed() and if
-> the intersection of that and cpu_online_mask is empty, moves up the
-> hierarchy. Given cs_cpus_allowed(B) is the empty mask, we'll move to A.
->
-> Note that since we force the mask of root to cpu_possible_mask,
-> cs_cpus_allowed(root) will be a no-op and if we guarantee (in arch code)
-> that cpu_online_mask always has a non-empty intersection with
-> task_cpu_possible_mask(), this loop is guaranteed to terminate with a
-> viable mask.
+Hi Paul,
 
-I will take a closer look at that tomorrow. I will be more comfortable 
-ack'ing that if this is specific to v1 cpuset instead of applying this 
-in both v1 and v2 since it is only v1 that is problematic.
+> > >>> +MODULE_LICENSE("GPL");
+> > >>
+> > >> Not GPL v2?
 
-Cheers,
-Longman
+When using GPL v2, I got this warning from checkpatch.pl:
 
+WARNING: Prefer "GPL" over "GPL v2" - see commit bf7fbeeae6db
+("module: Cure the MODULE_LICENSE "GPL" vs. "GPL v2" bogosity")
+#2104: FILE: drivers/media/platform/nuvoton/npcm-video.c:1816:
++MODULE_LICENSE("GPL v2");
+
+It looks better to keep GPL, do you have any suggestions?
+
+Regards,
+Marvin
