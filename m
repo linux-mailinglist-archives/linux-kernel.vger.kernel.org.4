@@ -2,96 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C157A68744F
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 05:15:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09FD2687455
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 05:17:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbjBBEPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 23:15:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54874 "EHLO
+        id S230156AbjBBEQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 23:16:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbjBBEPk (ORCPT
+        with ESMTP id S230054AbjBBEQ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 23:15:40 -0500
+        Wed, 1 Feb 2023 23:16:56 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1956D79CB2
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 20:14:58 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA8B379CB9
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 20:16:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675311297;
+        s=mimecast20190719; t=1675311370;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=IkSvZazpJaCzeN4iB/UP5EFUCE7zPAFjyxOF4y5Wi/o=;
-        b=NQ45OAVMr57aODnY5ddwUgV3+/cOg9ofXseCiNPRWRDstYa/aqE/vGiLeTip+7qYS+lId+
-        FI9FORPJ+oUsFavoCw6JbE5A+1mjZLJpKu7n/t/TAsAu4kGSwyW/2R+cWDhrXkTroWpLf4
-        3NUZxFQqkcCc+3YUBw8r3G3MiOPSdWc=
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com
- [209.85.166.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-622-e3HsVHQhPte9P9wqXUJESw-1; Wed, 01 Feb 2023 23:14:55 -0500
-X-MC-Unique: e3HsVHQhPte9P9wqXUJESw-1
-Received: by mail-il1-f198.google.com with SMTP id v17-20020a92ab11000000b00310c6708243so505518ilh.23
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 20:14:55 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:organization:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IkSvZazpJaCzeN4iB/UP5EFUCE7zPAFjyxOF4y5Wi/o=;
-        b=5CKxJsDmQq9dF/Z1ei1hEQdqVFzlcuB9DYP7W1LPG5/jl8oSR3Zp1zd8kKgLYH7yRh
-         WokiAmaUbr4uLD2cOKaF3+aiiREeM8lJZVxbUky39fbHxb+DOpaGqSo8CCJsc4fdy6hY
-         p+jC15DzCCjrg5qhuQGQFs+GpzJZIwN/ixwmvYOMKuPDEt+IW+d0rMMcTW10t3qOvVEp
-         yh9l0ycarQ4IiIA+Wdy73+ipHts1QwTii17tYwF3ysnAO+GJIrrMQmO2yh1k9aB/seHo
-         Z2eX0wrMcmk7VwGtVJ7/kVIQPdExNNyYdRYsnPMWaEud2PufpMVx3nqpLGcC0epAGWAV
-         PQuA==
-X-Gm-Message-State: AO0yUKWnS00cZC6EUsTKE/bIWqEC/BRaWmVKLFUaB6c4/qjtrkdzI1VC
-        q7PPHR3poWu1QHTZCTFzSHzvu/5EbhKU44jj6UeKhh2G8IR6g1clU7dyFA0Fax1ManaEmxmbmIS
-        3pAZwwMjMHlufyXnKkZwkQDMd
-X-Received: by 2002:a05:6e02:b45:b0:310:aa02:4903 with SMTP id f5-20020a056e020b4500b00310aa024903mr4159246ilu.29.1675311294846;
-        Wed, 01 Feb 2023 20:14:54 -0800 (PST)
-X-Google-Smtp-Source: AK7set/RdjucV7vuU7onJfFNgb3o6687/AcURZBDpW/6jJHQ1GTN8KVhF58TgmLZvlpQ2kLQeel/yg==
-X-Received: by 2002:a05:6e02:b45:b0:310:aa02:4903 with SMTP id f5-20020a056e020b4500b00310aa024903mr4159233ilu.29.1675311294543;
-        Wed, 01 Feb 2023 20:14:54 -0800 (PST)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id t2-20020a02c902000000b003a650adf5b0sm7205298jao.95.2023.02.01.20.14.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Feb 2023 20:14:53 -0800 (PST)
-Date:   Wed, 1 Feb 2023 21:14:52 -0700
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     "Liu, Yi L" <yi.l.liu@intel.com>
-Cc:     Matthew Rosato <mjrosato@linux.ibm.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "farman@linux.ibm.com" <farman@linux.ibm.com>,
-        "pmorel@linux.ibm.com" <pmorel@linux.ibm.com>,
-        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
-        "frankja@linux.ibm.com" <frankja@linux.ibm.com>,
-        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "akrowiak@linux.ibm.com" <akrowiak@linux.ibm.com>,
-        "jjherne@linux.ibm.com" <jjherne@linux.ibm.com>,
-        "pasic@linux.ibm.com" <pasic@linux.ibm.com>,
-        "zhenyuw@linux.intel.com" <zhenyuw@linux.intel.com>,
-        "Wang, Zhi A" <zhi.a.wang@intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "intel-gvt-dev@lists.freedesktop.org" 
-        <intel-gvt-dev@lists.freedesktop.org>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] vfio: fix deadlock between group lock and kvm lock
-Message-ID: <20230201211452.429c8e34.alex.williamson@redhat.com>
-In-Reply-To: <DS0PR11MB75298437F96D08758DB92368C3D69@DS0PR11MB7529.namprd11.prod.outlook.com>
-References: <20230201192010.42748-1-mjrosato@linux.ibm.com>
-        <20230201162730.685b5332.alex.williamson@redhat.com>
-        <DS0PR11MB75298437F96D08758DB92368C3D69@DS0PR11MB7529.namprd11.prod.outlook.com>
-Organization: Red Hat
+        bh=0Evaq+uKsw2JRl30GbWwAirFdc+12RiKunGeodqBwPs=;
+        b=f9KOh7U5KNO9sxhmoFUSwqcQkT3LKhlscMA6qKmZ86vf1MZQRJLDj4eDMrWxMUpGnSnyKL
+        fphp+BIMvSnyQtddMmcCq0xhOAtwgfl2GawyyDvHKF3/ztqLdQsLUXMqWEvPCGs+3PRY5x
+        IgJfClZyjc89EChUhEaLDD1+NnQlHBA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-180-PDaMvEVqNfKTVNph2AOpwQ-1; Wed, 01 Feb 2023 23:16:07 -0500
+X-MC-Unique: PDaMvEVqNfKTVNph2AOpwQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 27A7F800050;
+        Thu,  2 Feb 2023 04:16:06 +0000 (UTC)
+Received: from T590 (ovpn-8-25.pek2.redhat.com [10.72.8.25])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id C7E90140EBF4;
+        Thu,  2 Feb 2023 04:15:57 +0000 (UTC)
+Date:   Thu, 2 Feb 2023 12:15:52 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, Tejun Heo <tj@kernel.org>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        "Dennis Zhou (Facebook)" <dennisszhou@gmail.com>,
+        ming.lei@redhat.com
+Subject: Re: [PATCH v4 2/2] blk-cgroup: Flush stats at blkgs destruction path
+Message-ID: <Y9s4+Nop1eluWmJ4@T590>
+References: <20221215033132.230023-1-longman@redhat.com>
+ <20221215033132.230023-3-longman@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221215033132.230023-3-longman@redhat.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -102,178 +69,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2 Feb 2023 03:46:59 +0000
-"Liu, Yi L" <yi.l.liu@intel.com> wrote:
-
-> > From: Alex Williamson <alex.williamson@redhat.com>
-> > Sent: Thursday, February 2, 2023 7:28 AM
-> > 
-> > On Wed,  1 Feb 2023 14:20:10 -0500
-> > Matthew Rosato <mjrosato@linux.ibm.com> wrote:
-> >   
-> > > After 51cdc8bc120e, we have another deadlock scenario between the
-> > > kvm->lock and the vfio group_lock with two different codepaths acquiring
-> > > the locks in different order.  Specifically in vfio_open_device, vfio
-> > > holds the vfio group_lock when issuing device->ops->open_device but  
-> > some  
-> > > drivers (like vfio-ap) need to acquire kvm->lock during their open_device
-> > > routine;  Meanwhile, kvm_vfio_release will acquire the kvm->lock first
-> > > before calling vfio_file_set_kvm which will acquire the vfio group_lock.
-> > >
-> > > To resolve this, let's remove the need for the vfio group_lock from the
-> > > kvm_vfio_release codepath.  This is done by introducing a new spinlock to
-> > > protect modifications to the vfio group kvm pointer, and acquiring a kvm
-> > > ref from within vfio while holding this spinlock, with the reference held
-> > > until the last close for the device in question.
-> > >
-> > > Fixes: 51cdc8bc120e ("kvm/vfio: Fix potential deadlock on vfio group_lock")
-> > > Reported-by: Anthony Krowiak <akrowiak@linux.ibm.com>
-> > > Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
-> > > Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
-> > > ---
-> > > Changes from v1:
-> > > * use spin_lock instead of spin_lock_irqsave (Jason)
-> > > * clear device->kvm_put as part of vfio_kvm_put_kvm (Yi)
-> > > * Re-arrange code to avoid referencing the group contents from within
-> > >   vfio_main (Kevin) which meant moving most of the code in this patch
-> > >   to group.c along with getting/dropping of the dev_set lock
-> > > ---
-> > >  drivers/vfio/group.c     | 90  
-> > +++++++++++++++++++++++++++++++++++++---  
-> > >  drivers/vfio/vfio.h      |  1 +
-> > >  drivers/vfio/vfio_main.c | 11 ++---
-> > >  include/linux/vfio.h     |  2 +-
-> > >  4 files changed, 91 insertions(+), 13 deletions(-)
-> > >
-> > > diff --git a/drivers/vfio/group.c b/drivers/vfio/group.c
-> > > index bb24b2f0271e..52f434861294 100644
-> > > --- a/drivers/vfio/group.c
-> > > +++ b/drivers/vfio/group.c
-> > > @@ -13,6 +13,9 @@
-> > >  #include <linux/vfio.h>
-> > >  #include <linux/iommufd.h>
-> > >  #include <linux/anon_inodes.h>
-> > > +#ifdef CONFIG_HAVE_KVM
-> > > +#include <linux/kvm_host.h>
-> > > +#endif
-> > >  #include "vfio.h"
-> > >
-> > >  static struct vfio {
-> > > @@ -154,6 +157,55 @@ static int vfio_group_ioctl_set_container(struct  
-> > vfio_group *group,  
-> > >  	return ret;
-> > >  }
-> > >
-> > > +#ifdef CONFIG_HAVE_KVM
-> > > +static bool vfio_kvm_get_kvm_safe(struct vfio_device *device, struct  
-> > kvm *kvm)
-> > 
-> > I'm tempted to name these vfio_device_get_kvm_safe() and only pass the
-> > vfio_device, where of course we can get the kvm pointer from the group
-> > internally.
-> >   
-> > > +{
-> > > +	void (*pfn)(struct kvm *kvm);
-> > > +	bool (*fn)(struct kvm *kvm);
-> > > +	bool ret;
-> > > +  
-> > 
-> > We should assert_lockdep_held(&device->dev_set->lock) in both of these
-> > since that seems to be what's protecting device->kvm and
-> > device->put_kvm.
-> > 
-> > If we change as above to get the kvm pointer from the group within this
-> > function, we can also move the kvm_ref_lock here, which seems to
-> > simplify the caller quite a bit.
-> >   
-> > > +	pfn = symbol_get(kvm_put_kvm);
-> > > +	if (WARN_ON(!pfn))
-> > > +		return false;
-> > > +
-> > > +	fn = symbol_get(kvm_get_kvm_safe);
-> > > +	if (WARN_ON(!fn)) {
-> > > +		symbol_put(kvm_put_kvm);
-> > > +		return false;
-> > > +	}
-> > > +
-> > > +	ret = fn(kvm);
-> > > +	if (ret)
-> > > +		device->put_kvm = pfn;
-> > > +	else
-> > > +		symbol_put(kvm_put_kvm);
-> > > +
-> > > +	symbol_put(kvm_get_kvm_safe);
-> > > +
-> > > +	return ret;
-> > > +}
-> > > +
-> > > +static void vfio_kvm_put_kvm(struct vfio_device *device)
-> > > +{
-> > > +	if (WARN_ON(!device->kvm || !device->put_kvm))
-> > > +		return;  
-> > 
-> > It simplifies the caller if we can use this even in the !device->kvm
-> > case.
-> >   
-> > > +
-> > > +	device->put_kvm(device->kvm);
-> > > +	device->put_kvm = NULL;
-> > > +	symbol_put(kvm_put_kvm);
-> > > +}
-> > > +
-> > > +#else
-> > > +static bool vfio_kvm_get_kvm_safe(struct vfio_device *device, struct  
-> > kvm *kvm)  
-> > > +{
-> > > +	return false;
-> > > +}
-> > > +
-> > > +static void vfio_kvm_put_kvm(struct vfio_device *device)
-> > > +{
-> > > +}
-> > > +#endif
-> > > +
-> > >  static int vfio_device_group_open(struct vfio_device *device)
-> > >  {
-> > >  	int ret;
-> > > @@ -164,14 +216,32 @@ static int vfio_device_group_open(struct  
-> > vfio_device *device)  
-> > >  		goto out_unlock;
-> > >  	}
-> > >
-> > > +	mutex_lock(&device->dev_set->lock);
-> > > +
-> > >  	/*
-> > > -	 * Here we pass the KVM pointer with the group under the lock.  If  
-> > the  
-> > > -	 * device driver will use it, it must obtain a reference and release it
-> > > -	 * during close_device.
-> > > +	 * Before the first device open, get the KVM pointer currently
-> > > +	 * associated with the group (if there is one) and obtain a reference
-> > > +	 * now that will be held until the open_count reaches 0 again.  Save
-> > > +	 * the pointer in the device for use by drivers.
-> > >  	 */
-> > > +	if (device->open_count == 0) {
-> > > +		spin_lock(&device->group->kvm_ref_lock);
-> > > +		if (device->group->kvm &&
-> > > +		    vfio_kvm_get_kvm_safe(device, device->group->kvm))
-> > > +			device->kvm = device->group->kvm;
-> > > +		spin_unlock(&device->group->kvm_ref_lock);
-> > > +	}
-> > > +
-> > >  	ret = vfio_device_open(device, device->group->iommufd,
-> > >  			       device->group->kvm);  
-> > 
-> > We're using device->group->kvm outside of kvm_ref_lock here, it should
-> > be using device->kvm.  
+On Wed, Dec 14, 2022 at 10:31:32PM -0500, Waiman Long wrote:
+> As noted by Michal, the blkg_iostat_set's in the lockless list
+> hold reference to blkg's to protect against their removal. Those
+> blkg's hold reference to blkcg. When a cgroup is being destroyed,
+> cgroup_rstat_flush() is only called at css_release_work_fn() which
+> is called when the blkcg reference count reaches 0. This circular
+> dependency will prevent blkcg and some blkgs from being freed after
+> they are made offline.
 > 
-> Existing code set device->kvm in the vfio_device_first_open() which is
-> called by vfio_device_open(). After above change, seems not necessary
-> to pass kvm pointer into the call chain. Isn't it?
+> It is less a problem if the cgroup to be destroyed also has other
+> controllers like memory that will call cgroup_rstat_flush() which will
+> clean up the reference count. If block is the only controller that uses
+> rstat, these offline blkcg and blkgs may never be freed leaking more
+> and more memory over time.
+> 
+> To prevent this potential memory leak, a new cgroup_rstat_css_cpu_flush()
+> function is added to flush stats for a given css and cpu. This new
+> function will be called at blkgs destruction path, blkcg_destroy_blkgs(),
+> whenever there are still pending stats to be flushed. This will release
+> the references to blkgs allowing them to be freed and indirectly allow
+> the freeing of blkcg.
+> 
+> Fixes: 3b8cc6298724 ("blk-cgroup: Optimize blkcg_rstat_flush()")
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> Acked-by: Tejun Heo <tj@kernel.org>
+> ---
+>  block/blk-cgroup.c     | 16 ++++++++++++++++
+>  include/linux/cgroup.h |  1 +
+>  kernel/cgroup/rstat.c  | 18 ++++++++++++++++++
+>  3 files changed, 35 insertions(+)
+> 
+> diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
+> index ca28306aa1b1..a2a1081d9d1d 100644
+> --- a/block/blk-cgroup.c
+> +++ b/block/blk-cgroup.c
+> @@ -1084,6 +1084,8 @@ struct list_head *blkcg_get_cgwb_list(struct cgroup_subsys_state *css)
+>   */
+>  static void blkcg_destroy_blkgs(struct blkcg *blkcg)
+>  {
+> +	int cpu;
+> +
+>  	/*
+>  	 * blkcg_destroy_blkgs() shouldn't be called with all the blkcg
+>  	 * references gone.
+> @@ -1093,6 +1095,20 @@ static void blkcg_destroy_blkgs(struct blkcg *blkcg)
+>  
+>  	might_sleep();
+>  
+> +	/*
+> +	 * Flush all the non-empty percpu lockless lists to release the
+> +	 * blkg references held by those lists which, in turn, will
+> +	 * allow those blkgs to be freed and release their references to
+> +	 * blkcg. Otherwise, they may not be freed at all becase of this
+> +	 * circular dependency resulting in memory leak.
+> +	 */
+> +	for_each_possible_cpu(cpu) {
+> +		struct llist_head *lhead = per_cpu_ptr(blkcg->lhead, cpu);
+> +
+> +		if (!llist_empty(lhead))
+> +			cgroup_rstat_css_cpu_flush(&blkcg->css, cpu);
+> +	}
 
-Yes, we can get it from the device.  I didn't check how much this
-bloats the patch though.  As a fix, it might make sense to save that
-refactoring for a follow-on patch.  Thanks,
+I guess it is possible for new iostat_cpu to be added just after the
+llist_empty() check.
 
-Alex
+
+Thanks,
+Ming
 
