@@ -2,84 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 040C5687EBE
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 14:33:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A13E0687EC4
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 14:35:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232178AbjBBNd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 08:33:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34106 "EHLO
+        id S232297AbjBBNfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 08:35:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbjBBNdz (ORCPT
+        with ESMTP id S231932AbjBBNfS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 08:33:55 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B15CCC26
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 05:33:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675344790;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JW2l3Xkmr+SXpxgs6dhNgIWsAPA61tpPxWYF/gqOInU=;
-        b=dB5ikern3zlV5OG/5mbjLXpCUqJEb/uCI1BTzy5EnJK6vxKrsX0iWbOS8gLn5iofWG9POc
-        0nMxSTnMs1Z5bLMhrw8iNMvSIrv8zNDvloz+BBglloJMgQ0TCQlIkfmkaB+e6vXgKb/qaK
-        VV8rM3Q+OmVJhHH4+k62jPeiLjuqPWc=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-356-eKIPMsDzMkOUoIBbUXPwqA-1; Thu, 02 Feb 2023 08:33:09 -0500
-X-MC-Unique: eKIPMsDzMkOUoIBbUXPwqA-1
-Received: by mail-ed1-f70.google.com with SMTP id bq13-20020a056402214d00b004a25d8d7593so1464284edb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 05:33:09 -0800 (PST)
+        Thu, 2 Feb 2023 08:35:18 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1D267C71F
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 05:35:17 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id dr8so5898447ejc.12
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 05:35:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mind.be; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Dm8Y8/3ZlugPk4EFTs/7wduXDkC6VnkhC2G4LVvwJd0=;
+        b=ZxX4QEHLRJ2PHthHrF3gSRPpnH5MZrugWjduzDgQ5JUWp43Fgtd3hvTFDU9oT2Jagx
+         PuYr0M9oDsz0l229rHER2zdssLFhxHkFjEzQEwZlh+lpfbbFtwvSIsxmllMxEUUe5xAT
+         s2q9RhN+Qz8kVWM/dRzDV8hJ7lribKEOXQOmEx9U5SHV6JNKtAX0w0KcWlBqWVlIzoJh
+         1tr2tbf7our8k/PbY4hgb5CE7AmJcRdTMzy0pCB/P6k1f/UW45lNLSq6caxD0w1hZs9F
+         jrKv3Y5Ev02jK6JqBhpN0s6riX5uGFNk3b1YRzr+EerNjyhYZ3+PHN5tR7h4A8Sw8J0Z
+         TPlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JW2l3Xkmr+SXpxgs6dhNgIWsAPA61tpPxWYF/gqOInU=;
-        b=mbGKd6Mq3KfKNuPpmsb17/SSYkVSA68fDlhylFcOvVZ6MBwiQvhMLiyBNSmRk9aSwL
-         1ZzNSp9NI/vExYcIUD1I1u44638kYqULxopxcfYA9OEv/WeHOCz+84AKUZAwOf2Qywfn
-         Elyf7a/bixtow21jpVMgWFdcT/xutimPJqkW7COwqICBXpl0IziipY51tX0dAhQU/abF
-         qeIa1u+RtZxPlWallttgmABu/crfZXCft9gKlC+tj0o5qSGVBWgzNxvT9Sq5N1PV715I
-         DuMIq1yvIgAPDPd7YWz98NU2UGjPczePnRrUIUJvYJ/z3wQErmBnVM5bPuL6NUCvpvZv
-         Bfkg==
-X-Gm-Message-State: AO0yUKVZXOg66cpOG4Og6mkt08Bh0uT72SE0PrQipHhOYWIONkVY2t7I
-        3/LYj3SgyY8Hfa4ygWQu433cTHPA2rylodIiMY7BUKv524cDKvTiiazETu9511BBIaNAMH+/oQf
-        NTx4n6UJxYKTtjUJTN2iOnWJE
-X-Received: by 2002:a17:906:4fc7:b0:87b:1be:a8c2 with SMTP id i7-20020a1709064fc700b0087b01bea8c2mr7061932ejw.73.1675344788481;
-        Thu, 02 Feb 2023 05:33:08 -0800 (PST)
-X-Google-Smtp-Source: AK7set8haZKpnZh1fvKavrZjCqHNzCim4qXT2LuDL914MQ9+7IGhV6t4aAjeoLfRVtPp5HPsJ2AryA==
-X-Received: by 2002:a17:906:4fc7:b0:87b:1be:a8c2 with SMTP id i7-20020a1709064fc700b0087b01bea8c2mr7061908ejw.73.1675344788215;
-        Thu, 02 Feb 2023 05:33:08 -0800 (PST)
-Received: from [10.39.192.164] (5920ab7b.static.cust.trined.nl. [89.32.171.123])
-        by smtp.gmail.com with ESMTPSA id my31-20020a1709065a5f00b0088cf92eb0e1sm3512464ejc.150.2023.02.02.05.33.06
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 02 Feb 2023 05:33:06 -0800 (PST)
-From:   Eelco Chaudron <echaudro@redhat.com>
-To:     =?utf-8?b?6Zm2IOe8mA==?= <taoyuan_eddy@hotmail.com>
-Cc:     netdev@vger.kernel.org, dev@openvswitch.org,
-        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [ovs-dev] [PATCH net-next v3 1/1] net:openvswitch:reduce
- cpu_used_mask memory
-Date:   Thu, 02 Feb 2023 14:33:06 +0100
-X-Mailer: MailMate (1.14r5939)
-Message-ID: <C31998DE-E4B5-4736-9134-8ABBA7F97A31@redhat.com>
-In-Reply-To: <OS3P286MB2295485449967D11E7A86A0DF5D69@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
-References: <OS3P286MB2295FA2701BCE468E367607AF5D69@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
- <561547E5-D4C2-4FD6-9B25-100719D4D379@redhat.com>
- <OS3P286MB22951B162C8A486E39F250BFF5D69@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
- <B3DA2461-65EC-4EDB-8775-C8051CDD5043@redhat.com>
- <OS3P286MB2295485449967D11E7A86A0DF5D69@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Dm8Y8/3ZlugPk4EFTs/7wduXDkC6VnkhC2G4LVvwJd0=;
+        b=0saLb4ib6EaVzR51EPqNIRguo/LnnbLJnKh6SyZboa5xxePjwM5xZE1qLFdIdtix86
+         bqrGtrBSFBFqf0XRRUdzE99xTz0IsfovStBPm2h11h5CkpJp7teC1xwDVZC/FNWVez+b
+         NqYQzva+suEiH7FfdtJT56lnkAyA3SGvMMef16S5rS+XqMsUUm3rgJdw/2GrqedwJ4z2
+         robO8250V62vxYwok4QtfeZHt2EMWBuLGPJ+L2qWknY0V+0wA3KjviiJF+azx9T6pyIx
+         9+xcJzUc5+3CFScslzDMn0TDxxhXi1FC13C27fumBx8P/ecLtASIAp0/Vb2Jk7nt863J
+         MgRA==
+X-Gm-Message-State: AO0yUKVg6TvX/DVfQEwYPqRQgIKD8Avdw7Y7VZtGN/ByvNHwF9tGKifo
+        XZZqsKOVqdDwOA36wkFkjJ4rSQ==
+X-Google-Smtp-Source: AK7set8Id5IUMAU6BaLsexzxecpuDQWzuzgrs/OxWb+fhW7c5RFMSwRiv+Q1hvrOFbz0EcBz4vVpvw==
+X-Received: by 2002:a17:907:8d16:b0:878:955e:b4a4 with SMTP id tc22-20020a1709078d1600b00878955eb4a4mr6973342ejc.33.1675344916237;
+        Thu, 02 Feb 2023 05:35:16 -0800 (PST)
+Received: from [192.168.2.9] (78-22-137-109.access.telenet.be. [78.22.137.109])
+        by smtp.gmail.com with ESMTPSA id o2-20020a1709064f8200b0088a2aebb146sm5534780eju.52.2023.02.02.05.35.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Feb 2023 05:35:15 -0800 (PST)
+Message-ID: <b9c6c74b-65d2-46bf-bd7c-e031d420f31c@mind.be>
+Date:   Thu, 2 Feb 2023 14:35:14 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v4 1/2] dt-bindings: leds-lp55xx: add ti,charge-pump-mode
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>
+Cc:     linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230202101032.26737-1-maarten.zanders@mind.be>
+ <20230202101032.26737-2-maarten.zanders@mind.be>
+ <20eb5589-8287-90bd-3703-2818b61c6ba3@linaro.org>
+From:   Maarten Zanders <maarten.zanders@mind.be>
+In-Reply-To: <20eb5589-8287-90bd-3703-2818b61c6ba3@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,238 +81,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+First off, bear with me here, I only recently started upstreaming 
+patches to kernel. It still feels like navigating an extremely busy 
+shipping lane... Either way, your feedback is highly valued.
+
+On 2/2/23 14:15, Krzysztof Kozlowski wrote:
+>
+>> diff --git a/include/dt-bindings/leds/leds-lp55xx.h b/include/dt-bindings/leds/leds-lp55xx.h
+>> new file mode 100644
+>> index 000000000000..8f59c1c12dee
+>> --- /dev/null
+>> +++ b/include/dt-bindings/leds/leds-lp55xx.h
+>> @@ -0,0 +1,10 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +#ifndef _DT_BINDINGS_LEDS_LP55XX_H
+>> +#define _DT_BINDINGS_LEDS_LP55XX_H
+>> +
+>> +#define LP55XX_CP_OFF		0
+>> +#define LP55XX_CP_BYPASS	1
+>> +#define LP55XX_CP_BOOST		2
+>> +#define LP55XX_CP_AUTO		3
+> Additionally, these are not used, so it's a dead binding. Drop. Sorry,
+> this is not the approach you should take.
+>
+> Best regards,
+> Krzysztof
+>
+These definitions are intended to be used in the DTS's, so it seems 
+normal to me that most of them go unused in the code? What am I missing?
+
+As for the changes v2 > v3, this was based on input I got on v2 from Lee 
+Jones, maintainer for leds, on the implementation of the parsing of this 
+option:
+
+>> +	pdata->charge_pump_mode = LP55XX_CP_AUTO;
+>> +	ret = of_property_read_string(np, "ti,charge-pump-mode", &pm);
+>> +	if (!ret) {
+>> +		for (cp_mode = LP55XX_CP_OFF;
+>> +		     cp_mode < ARRAY_SIZE(charge_pump_modes);
+>> +		     cp_mode++) {
+>> +			if (!strcasecmp(pm, charge_pump_modes[cp_mode])) {
+>> +				pdata->charge_pump_mode = cp_mode;
+>> +				break;
+>> +			}
+>> +		}
+>> +	}
+> A little over-engineered, no?
+>
+> Why not make the property a numerical value, then simply:
+>
+>    ret = of_property_read_u32(np, "ti,charge-pump-mode", &pdata->charge_pump_mode);
+>    if (ret)
+>            data->charge_pump_mode = LP55XX_CP_AUTO;
+
+I found examples of similar configuration options of both types with 
+other drivers in the kernel tree (ie string & uint8). I can appreciate 
+both viewpoints but unfortunately cannot comply with both.
 
 
-On 2 Feb 2023, at 13:40, =E9=99=B6 =E7=BC=98 wrote:
-
-> Hi, Eelco:
->
->        I have a query regarding to the style check.
-> Though the './scripts/checkpatch.pl' emit no warning/error, the 'netdev=
-/checkpatch' still has one warning "WARNING: line length of 82 exceeds 80=
- columns"
-> I went through the patch line by line and could not find any changed li=
-ne exceeding the 80 character limit.
->
-> I am afraid that the netdev/checkpatch takes counts on the removed line=
-(old removed line has length exceeding 80 and i have revised that in the =
-patch already
->
-> Is there any known issue regarding to the netdev/checkpatch?
-
-Not sure which netdev/checkpatch you are referring to. I always you the g=
-eneral kernel one in /script/checkpatch.pl.
-
-
-Your patch looks good to me with /script/checkpatch.pl --strict.
-
-> Best regards
->
-> eddy
->
-> ________________________________
-> =E5=8F=91=E4=BB=B6=E4=BA=BA: Eelco Chaudron <echaudro@redhat.com>
-> =E5=8F=91=E9=80=81=E6=97=B6=E9=97=B4: 2023=E5=B9=B42=E6=9C=882=E6=97=A5=
- 11:44
-> =E6=94=B6=E4=BB=B6=E4=BA=BA: =E9=99=B6 =E7=BC=98 <taoyuan_eddy@hotmail.=
-com>
-> =E6=8A=84=E9=80=81: netdev@vger.kernel.org <netdev@vger.kernel.org>; de=
-v@openvswitch.org <dev@openvswitch.org>; linux-kernel@vger.kernel.org <li=
-nux-kernel@vger.kernel.org>; Eric Dumazet <edumazet@google.com>; Jakub Ki=
-cinski <kuba@kernel.org>; Paolo Abeni <pabeni@redhat.com>; David S. Mille=
-r <davem@davemloft.net>
-> =E4=B8=BB=E9=A2=98: Re: [ovs-dev] [PATCH net-next v3 1/1] net:openvswit=
-ch:reduce cpu_used_mask memory
->
->
->
-> On 2 Feb 2023, at 12:26, =E9=99=B6 =E7=BC=98 wrote:
->
->> Hi, Eelco:
->>
->>       Thanks for your time going through the detail.
->> The thing is: sizeof(struct cpumask), with default CONFIG_NR_CPUS 8192=
-, has a size of 1024 bytes even on a system with only 4 cpus.
->> While in practice the cpumask APIs like cpumask_next and cpumask_set_c=
-pu never access more than cpumask_size() of bytes in the bitmap
->> My change used cpumask_size() (in above example, consume 8 bytes after=
- alignement for the cpumask, it saved 1016 bytes for every flow.
->
-> I looked at the wrong nr_cpumask_bits definition, so thanks for this ed=
-ucation :)
->
->> Your question reminded me to revisit the description "as well as the i=
-teration of bits in cpu_used_mask", after a second think, this statement =
-is not valid and should be removed.
->> since the iteration API will not access the number of bytes decided by=
- nr_cpu_ids(running CPUs)
->>
->> I will remove this statement after solving a final style issue in the =
-next submission.
->
-> Thanks!
->
->
->> Thanks
->> eddy
->> ________________________________
->> =E5=8F=91=E4=BB=B6=E4=BA=BA: Eelco Chaudron <echaudro@redhat.com>
->> =E5=8F=91=E9=80=81=E6=97=B6=E9=97=B4: 2023=E5=B9=B42=E6=9C=882=E6=97=A5=
- 11:05
->> =E6=94=B6=E4=BB=B6=E4=BA=BA: Eddy Tao <taoyuan_eddy@hotmail.com>
->> =E6=8A=84=E9=80=81: netdev@vger.kernel.org <netdev@vger.kernel.org>; d=
-ev@openvswitch.org <dev@openvswitch.org>; linux-kernel@vger.kernel.org <l=
-inux-kernel@vger.kernel.org>; Eric Dumazet <edumazet@google.com>; Jakub K=
-icinski <kuba@kernel.org>; Paolo Abeni <pabeni@redhat.com>; David S. Mill=
-er <davem@davemloft.net>
->> =E4=B8=BB=E9=A2=98: Re: [ovs-dev] [PATCH net-next v3 1/1] net:openvswi=
-tch:reduce cpu_used_mask memory
->>
->>
->>
->> On 2 Feb 2023, at 11:32, Eddy Tao wrote:
->>
->>> Use actual CPU number instead of hardcoded value to decide the size
->>> of 'cpu_used_mask' in 'struct sw_flow'. Below is the reason.
->>>
->>> 'struct cpumask cpu_used_mask' is embedded in struct sw_flow.
->>> Its size is hardcoded to CONFIG_NR_CPUS bits, which can be
->>> 8192 by default, it costs memory and slows down ovs_flow_alloc
->>> as well as the iteration of bits in cpu_used_mask when handling
->>> netlink message from ofproto
->>
->> I=E2=80=99m trying to understand how this will decrease memory usage. =
-The size of the flow_cache stayed the same (actually it=E2=80=99s large d=
-ue to the extra pointer).
->>
->> Also do not understand why the iteration is less, as the mask is initi=
-alized the same.
->>
->> Cheers,
->>
->> Eelco
->>
->>> To address this, redefine cpu_used_mask to pointer
->>> append cpumask_size() bytes after 'stat' to hold cpumask
->>>
->>> cpumask APIs like cpumask_next and cpumask_set_cpu never access
->>> bits beyond cpu count, cpumask_size() bytes of memory is enough
->>>
->>> Signed-off-by: Eddy Tao <taoyuan_eddy@hotmail.com>
->>> ---
->>>  net/openvswitch/flow.c       | 8 +++++---
->>>  net/openvswitch/flow.h       | 2 +-
->>>  net/openvswitch/flow_table.c | 8 +++++---
->>>  3 files changed, 11 insertions(+), 7 deletions(-)
->>>
->>> diff --git a/net/openvswitch/flow.c b/net/openvswitch/flow.c
->>> index e20d1a973417..0109a5f86f6a 100644
->>> --- a/net/openvswitch/flow.c
->>> +++ b/net/openvswitch/flow.c
->>> @@ -107,7 +107,7 @@ void ovs_flow_stats_update(struct sw_flow *flow, =
-__be16 tcp_flags,
->>>
->>>                                        rcu_assign_pointer(flow->stats=
-[cpu],
->>>                                                           new_stats);=
-
->>> -                                     cpumask_set_cpu(cpu, &flow->cpu=
-_used_mask);
->>> +                                     cpumask_set_cpu(cpu, flow->cpu_=
-used_mask);
->>>                                        goto unlock;
->>>                                }
->>>                        }
->>> @@ -135,7 +135,8 @@ void ovs_flow_stats_get(const struct sw_flow *flo=
-w,
->>>        memset(ovs_stats, 0, sizeof(*ovs_stats));
->>>
->>>        /* We open code this to make sure cpu 0 is always considered *=
-/
->>> -     for (cpu =3D 0; cpu < nr_cpu_ids; cpu =3D cpumask_next(cpu, &fl=
-ow->cpu_used_mask)) {
->>> +     for (cpu =3D 0; cpu < nr_cpu_ids;
->>> +          cpu =3D cpumask_next(cpu, flow->cpu_used_mask)) {
->>>                struct sw_flow_stats *stats =3D rcu_dereference_ovsl(f=
-low->stats[cpu]);
->>>
->>>                if (stats) {
->>> @@ -159,7 +160,8 @@ void ovs_flow_stats_clear(struct sw_flow *flow)
->>>        int cpu;
->>>
->>>        /* We open code this to make sure cpu 0 is always considered *=
-/
->>> -     for (cpu =3D 0; cpu < nr_cpu_ids; cpu =3D cpumask_next(cpu, &fl=
-ow->cpu_used_mask)) {
->>> +     for (cpu =3D 0; cpu < nr_cpu_ids;
->>> +          cpu =3D cpumask_next(cpu, flow->cpu_used_mask)) {
->>>                struct sw_flow_stats *stats =3D ovsl_dereference(flow-=
->stats[cpu]);
->>>
->>>                if (stats) {
->>> diff --git a/net/openvswitch/flow.h b/net/openvswitch/flow.h
->>> index 073ab73ffeaa..b5711aff6e76 100644
->>> --- a/net/openvswitch/flow.h
->>> +++ b/net/openvswitch/flow.h
->>> @@ -229,7 +229,7 @@ struct sw_flow {
->>>                                         */
->>>        struct sw_flow_key key;
->>>        struct sw_flow_id id;
->>> -     struct cpumask cpu_used_mask;
->>> +     struct cpumask *cpu_used_mask;
->>>        struct sw_flow_mask *mask;
->>>        struct sw_flow_actions __rcu *sf_acts;
->>>        struct sw_flow_stats __rcu *stats[]; /* One for each CPU.  Fir=
-st one
->>> diff --git a/net/openvswitch/flow_table.c b/net/openvswitch/flow_tabl=
-e.c
->>> index 0a0e4c283f02..dc6a174c3194 100644
->>> --- a/net/openvswitch/flow_table.c
->>> +++ b/net/openvswitch/flow_table.c
->>> @@ -87,11 +87,12 @@ struct sw_flow *ovs_flow_alloc(void)
->>>        if (!stats)
->>>                goto err;
->>>
->>> +     flow->cpu_used_mask =3D (struct cpumask *)&flow->stats[nr_cpu_i=
-ds];
->>>        spin_lock_init(&stats->lock);
->>>
->>>        RCU_INIT_POINTER(flow->stats[0], stats);
->>>
->>> -     cpumask_set_cpu(0, &flow->cpu_used_mask);
->>> +     cpumask_set_cpu(0, flow->cpu_used_mask);
->>>
->>>        return flow;
->>>  err:
->>> @@ -115,7 +116,7 @@ static void flow_free(struct sw_flow *flow)
->>>                                          flow->sf_acts);
->>>        /* We open code this to make sure cpu 0 is always considered *=
-/
->>>        for (cpu =3D 0; cpu < nr_cpu_ids;
->>> -          cpu =3D cpumask_next(cpu, &flow->cpu_used_mask)) {
->>> +          cpu =3D cpumask_next(cpu, flow->cpu_used_mask)) {
->>>                if (flow->stats[cpu])
->>>                        kmem_cache_free(flow_stats_cache,
->>>                                        (struct sw_flow_stats __force =
-*)flow->stats[cpu]);
->>> @@ -1196,7 +1197,8 @@ int ovs_flow_init(void)
->>>
->>>        flow_cache =3D kmem_cache_create("sw_flow", sizeof(struct sw_f=
-low)
->>>                                       + (nr_cpu_ids
->>> -                                       * sizeof(struct sw_flow_stats=
- *)),
->>> +                                       * sizeof(struct sw_flow_stats=
- *))
->>> +                                    + cpumask_size(),
->>>                                       0, 0, NULL);
->>>        if (flow_cache =3D=3D NULL)
->>>                return -ENOMEM;
->>> --
->>> 2.27.0
->>>
->>> _______________________________________________
->>> dev mailing list
->>> dev@openvswitch.org
->>> https://mail.openvswitch.org/mailman/listinfo/ovs-dev
+Best regards,
+Maarten
 
