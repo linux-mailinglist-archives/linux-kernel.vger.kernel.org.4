@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFC2B6882A5
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 16:35:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 771396882B2
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 16:36:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232462AbjBBPfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 10:35:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51056 "EHLO
+        id S232536AbjBBPfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 10:35:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233380AbjBBPfF (ORCPT
+        with ESMTP id S233270AbjBBPez (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 10:35:05 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EED2EB60;
-        Thu,  2 Feb 2023 07:34:28 -0800 (PST)
+        Thu, 2 Feb 2023 10:34:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3807C7BBD0;
+        Thu,  2 Feb 2023 07:34:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 77C96B821D8;
-        Thu,  2 Feb 2023 15:32:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95EBBC4339B;
-        Thu,  2 Feb 2023 15:32:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E94A61BEA;
+        Thu,  2 Feb 2023 15:33:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32748C433EF;
+        Thu,  2 Feb 2023 15:32:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675351963;
-        bh=W8DSv7qgYPkYexbSkX652KXx3YSfXCc85HIqh/JEfEs=;
+        s=korg; t=1675351980;
+        bh=iLS6jB8PnaUfJcgK7/7WcP/XfHedo1QulI0SnIMSF1c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DEAm3L+ScaUXx0lqCOkFb2NbfzMNsEb53lt2SHnoJq4EyD60t5/vFYWVHDVBrUZ/U
-         bZcV1Ms0UAHrNOTa5V51qe0DVgjAh53fAEqSeGNA7n3Wib2XwUI47OLrmCtWd8Lcvw
-         HDNo01wGlRLaffNIuQMvHNMO19ICuaWcZo+QZp1o=
+        b=q/yRI6r3i9fZcOWPYmkZzMVeJHrtZNlU7+MVXcum1wpWDHq6RgX06A+rhaXN8SWxf
+         7TYjJE4yc0BhQ1AoLkky02whJ8PdfQeh/eI3JazJjNkRvzC6qz1GZMEsUWYa6DmnMT
+         kXZnCupwJ+CNrvqxxR70R0GEkZpq1zpHckb9Vbys=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-usb@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 02/13] USB: ULPI: fix memory leak with using debugfs_lookup()
-Date:   Thu,  2 Feb 2023 16:32:24 +0100
-Message-Id: <20230202153235.2412790-2-gregkh@linuxfoundation.org>
+Subject: [PATCH 03/13] USB: uhci: fix memory leak with using debugfs_lookup()
+Date:   Thu,  2 Feb 2023 16:32:25 +0100
+Message-Id: <20230202153235.2412790-3-gregkh@linuxfoundation.org>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230202153235.2412790-1-gregkh@linuxfoundation.org>
 References: <20230202153235.2412790-1-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2357; i=gregkh@linuxfoundation.org; h=from:subject; bh=W8DSv7qgYPkYexbSkX652KXx3YSfXCc85HIqh/JEfEs=; b=owGbwMvMwCRo6H6F97bub03G02pJDMm3r0/UVkp89WAn02FrNf9z5yyC/X5mHn9oePvDzi0hp27y zk3z6YhlYRBkYpAVU2T5so3n6P6KQ4pehranYeawMoEMYeDiFICJLMlhmB/+akPvxpemyzeIGJsq6U u+2h9wg5VhrkRdbeb3g1MsnloYhlfM9PVdI3CiDAA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1405; i=gregkh@linuxfoundation.org; h=from:subject; bh=iLS6jB8PnaUfJcgK7/7WcP/XfHedo1QulI0SnIMSF1c=; b=owGbwMvMwCRo6H6F97bub03G02pJDMm3r09USimuWvPDbun5yTefmwb/6L5ly2bPxrH40QWnqYdP b/A17ohlYRBkYpAVU2T5so3n6P6KQ4pehranYeawMoEMYeDiFICJHHjNMN8nZjfrpZJXm9el6G5IkT rQzPxoXSrD/NKTO+q9Nm7y47zys+TkIdufbHVmbwE=
 X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -58,70 +58,38 @@ otherwise the memory will leak over time.  To make things simpler, just
 call debugfs_lookup_and_remove() instead which handles all of the logic
 at once.
 
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Alan Stern <stern@rowland.harvard.edu>
 Cc: linux-usb@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/common/ulpi.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
+ drivers/usb/host/uhci-hcd.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/usb/common/ulpi.c b/drivers/usb/common/ulpi.c
-index 67b780b256a9..a98b2108376a 100644
---- a/drivers/usb/common/ulpi.c
-+++ b/drivers/usb/common/ulpi.c
-@@ -271,7 +271,7 @@ static int ulpi_regs_show(struct seq_file *seq, void *data)
+diff --git a/drivers/usb/host/uhci-hcd.c b/drivers/usb/host/uhci-hcd.c
+index c22b51af83fc..7cdc2fa7c28f 100644
+--- a/drivers/usb/host/uhci-hcd.c
++++ b/drivers/usb/host/uhci-hcd.c
+@@ -536,8 +536,8 @@ static void release_uhci(struct uhci_hcd *uhci)
+ 	uhci->is_initialized = 0;
+ 	spin_unlock_irq(&uhci->lock);
+ 
+-	debugfs_remove(debugfs_lookup(uhci_to_hcd(uhci)->self.bus_name,
+-				      uhci_debugfs_root));
++	debugfs_lookup_and_remove(uhci_to_hcd(uhci)->self.bus_name,
++				  uhci_debugfs_root);
+ 
+ 	for (i = 0; i < UHCI_NUM_SKELQH; i++)
+ 		uhci_free_qh(uhci, uhci->skelqh[i]);
+@@ -700,7 +700,7 @@ static int uhci_start(struct usb_hcd *hcd)
+ 			uhci->frame, uhci->frame_dma_handle);
+ 
+ err_alloc_frame:
+-	debugfs_remove(debugfs_lookup(hcd->self.bus_name, uhci_debugfs_root));
++	debugfs_lookup_and_remove(hcd->self.bus_name, uhci_debugfs_root);
+ 
+ 	return retval;
  }
- DEFINE_SHOW_ATTRIBUTE(ulpi_regs);
- 
--#define ULPI_ROOT debugfs_lookup(KBUILD_MODNAME, NULL)
-+static struct dentry *ulpi_root;
- 
- static int ulpi_register(struct device *dev, struct ulpi *ulpi)
- {
-@@ -301,7 +301,7 @@ static int ulpi_register(struct device *dev, struct ulpi *ulpi)
- 		return ret;
- 	}
- 
--	root = debugfs_create_dir(dev_name(dev), ULPI_ROOT);
-+	root = debugfs_create_dir(dev_name(dev), ulpi_root);
- 	debugfs_create_file("regs", 0444, root, ulpi, &ulpi_regs_fops);
- 
- 	dev_dbg(&ulpi->dev, "registered ULPI PHY: vendor %04x, product %04x\n",
-@@ -349,8 +349,7 @@ EXPORT_SYMBOL_GPL(ulpi_register_interface);
-  */
- void ulpi_unregister_interface(struct ulpi *ulpi)
- {
--	debugfs_remove_recursive(debugfs_lookup(dev_name(&ulpi->dev),
--						ULPI_ROOT));
-+	debugfs_lookup_and_remove(dev_name(&ulpi->dev), ulpi_root);
- 	device_unregister(&ulpi->dev);
- }
- EXPORT_SYMBOL_GPL(ulpi_unregister_interface);
-@@ -360,12 +359,11 @@ EXPORT_SYMBOL_GPL(ulpi_unregister_interface);
- static int __init ulpi_init(void)
- {
- 	int ret;
--	struct dentry *root;
- 
--	root = debugfs_create_dir(KBUILD_MODNAME, NULL);
-+	ulpi_root = debugfs_create_dir(KBUILD_MODNAME, NULL);
- 	ret = bus_register(&ulpi_bus);
- 	if (ret)
--		debugfs_remove(root);
-+		debugfs_remove(ulpi_root);
- 	return ret;
- }
- subsys_initcall(ulpi_init);
-@@ -373,7 +371,7 @@ subsys_initcall(ulpi_init);
- static void __exit ulpi_exit(void)
- {
- 	bus_unregister(&ulpi_bus);
--	debugfs_remove_recursive(ULPI_ROOT);
-+	debugfs_remove(ulpi_root);
- }
- module_exit(ulpi_exit);
- 
 -- 
 2.39.1
 
