@@ -2,146 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C69C687ADF
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 11:52:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C557687AEF
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 11:56:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231216AbjBBKwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 05:52:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52504 "EHLO
+        id S231726AbjBBK4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 05:56:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232822AbjBBKwD (ORCPT
+        with ESMTP id S230246AbjBBK4t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 05:52:03 -0500
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CAEC8A7EA;
-        Thu,  2 Feb 2023 02:51:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=Z9tFqTf2Ygy2QKomIll6AMhCHGv+ELQEI5/5r7xbC98=; b=B7BCJJTSa/NJ20xZKC4ZGqFelI
-        hh0+teQkrP82TPAepMGQtXBKSjSPAemWCh1aSnHNq0X0y4UaIn9iah2oOAxc1TOM2Excq27JpmOCa
-        NNPSEkUB2cLwst1l3kYB/v2kMN9MWj0zrEZOaAV5FRxomHpUweq8IM6+qzhLPANSbjTGWfRzV+z2u
-        8OkiMKuBTSqxWjqJ3j4jX8t2jILK1iUkwtgDlUrO6apJKSfr6k/MGZpdZqtCfLBPQNSnAwRu2uoUg
-        +towGE9bBCbv2LxMS9tWJrzgs9Y4xdTbZe0M0wrclnj6KEIGG8XI80LbjHd1i3j5wiA7okmjr6ClC
-        6RuAx+3g==;
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1pNXAg-000EyE-56; Thu, 02 Feb 2023 11:50:26 +0100
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1pNXAf-000O2J-Ci; Thu, 02 Feb 2023 11:50:25 +0100
-Subject: Re: [PATCH 0/8] Add ftrace direct call for arm64
-To:     Xu Kuohai <xukuohai@huawei.com>,
-        Florent Revest <revest@chromium.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
-Cc:     catalin.marinas@arm.com, will@kernel.org, rostedt@goodmis.org,
-        mhiramat@kernel.org, mark.rutland@arm.com, ast@kernel.org,
-        andrii@kernel.org, kpsingh@kernel.org, jolsa@kernel.org,
-        xukuohai@huaweicloud.com
-References: <20230201163420.1579014-1-revest@chromium.org>
- <85af713d-00fe-b113-1331-1a44480c016f@huawei.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <eacfbd23-da92-3572-7f57-3de425117c8a@iogearbox.net>
-Date:   Thu, 2 Feb 2023 11:50:24 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Thu, 2 Feb 2023 05:56:49 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7C6E191
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 02:56:22 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id s67so1041970pgs.3
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 02:56:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bZGQd3ZEpfxEWx84AJ4S31lQeA7DALcbnss414kwTcQ=;
+        b=Fq1Jm4kPEFl3xG9CTLGkZqGijugCF5EjdmP3maNkfFSzj7483YEIlFW4dNuE4H1+Vk
+         nPjD6Zzj39eaKLWO8oqEpUAtmd8pLqvYyZ0wHFl9q3hG0lUaQ1UECvjYfb3gZRROuZUR
+         ft9oTETPHpUaW1ji6qmkmmV3C130M0nOHlSgfSWoIIZ2ehDL45UcKHW9djW17WJwBgus
+         ZdgZGdp8Rf/C2kkdNl0c94BE74UhImB7pdraRcEs13NLJXgjpgAXA6847mJeTjKyjpAq
+         mDMlCDFQyr2ACpYGKHoE7YJeq1cZRVAvhFmh2JBMkgIqBgWfw6QwILbVGq94sAEy1d2y
+         BCew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bZGQd3ZEpfxEWx84AJ4S31lQeA7DALcbnss414kwTcQ=;
+        b=SiW/8cOOdyJ+0c9MwcxE4enIQbWeyokZzUC0cvdYpIS509yQLfv9P/09fPFZkGoqYI
+         tyD5pG0djvDxBQxuODDIgwbBEWrWkMIlig7/2gwRlbElnNyGNQxQQE5vrdnE5c0gueXV
+         lncIlV/d/frQpdh6troa/sowV9wCd8IEFpdba2qOwD7xWuCIvau60w7285gbtZzORi3u
+         suXTX/T0tJ2cha5nsZhG6vW0S/qYY4ELtkWx6UC6b50qvnlvpbwC+mvgFX/A0h/ey/5o
+         XN8g26ecBc8z4Gd3US0B35zH9xywnzobh2+H359G2zuFZnvXU3j07d8hznwdAEX7xO6m
+         2qXg==
+X-Gm-Message-State: AO0yUKX2VVB6jwdN5NiO4DIOrLY7DVOV3qHQ7mFjO9C8lALMy+ZjGtGR
+        2jBIbyqurnJBUb3l4BWzD0QNNQ==
+X-Google-Smtp-Source: AK7set/qOspKd7ukDh0t1ooBxwcrETdnU7/QgWjdADcGUSDcZq/s27xvhFg7hwvYHKqEttTDiYzaBQ==
+X-Received: by 2002:a05:6a00:1d13:b0:593:b112:5cf2 with SMTP id a19-20020a056a001d1300b00593b1125cf2mr5589835pfx.2.1675335382252;
+        Thu, 02 Feb 2023 02:56:22 -0800 (PST)
+Received: from C02DW0BEMD6R.bytedance.net ([139.177.225.243])
+        by smtp.gmail.com with ESMTPSA id 144-20020a621996000000b0058bcb42dd1asm13262409pfz.111.2023.02.02.02.56.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Feb 2023 02:56:21 -0800 (PST)
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+To:     akpm@linux-foundation.org, roman.gushchin@linux.dev
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Qi Zheng <zhengqi.arch@bytedance.com>
+Subject: [PATCH] mm: shrinkers: fix deadlock in shrinker debugfs
+Date:   Thu,  2 Feb 2023 18:56:12 +0800
+Message-Id: <20230202105612.64641-1-zhengqi.arch@bytedance.com>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 MIME-Version: 1.0
-In-Reply-To: <85af713d-00fe-b113-1331-1a44480c016f@huawei.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.7/26800/Thu Feb  2 09:47:56 2023)
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/2/23 9:36 AM, Xu Kuohai wrote:
-> On 2/2/2023 12:34 AM, Florent Revest wrote:
->> This series adds ftrace direct call support to arm64.
->> This makes BPF tracing programs (fentry/fexit/fmod_ret/lsm) work on arm64.
->>
->> It is meant to apply on top of the arm64 tree which contains Mark Rutland's
->> series on CALL_OPS [1] under the for-next/ftrace tag.
->> > The first three patches consolidate the two existing ftrace APIs for registering
->> direct calls. They are split to make the reviewers lives easier but if it'd be a
->> preferred style, I'd be happy to squash them in the next revision.
->> Currently, there is both a _ftrace_direct and _ftrace_direct_multi API. Apart
->> from samples and selftests, there are no users of the _ftrace_direct API left
->> in-tree so this deletes it and renames the _ftrace_direct_multi API to
->> _ftrace_direct for simplicity.
->>
->> The main benefit of this refactoring is that, with the API that's left, an
->> ftrace_ops backing a direct call will only ever point to one direct call. We can
->> therefore store the direct called trampoline address in the ops (patch 4) and
->> look it up from the ftrace trampoline on arm64 (patch 7) in the case when the
->> destination would be out of reach of a BL instruction at the ftrace callsite.
->> (in this case, ftrace_caller acts as a lightweight intermediary trampoline)
->>
->> This series has been tested on both arm64 and x86_64 with:
->> 1- CONFIG_FTRACE_SELFTEST (cf: patch 6)
->> 2- samples/ftrace/*.ko (cf: patch 8)
->> 3- tools/testing/selftests/bpf/test_progs (both -t lsm and -t fentry_fexit)
+The debugfs_remove_recursive() is invoked by unregister_shrinker(),
+which is holding the write lock of shrinker_rwsem. It will waits
+for the handler of debugfs file complete. The handler also needs
+to hold the read lock of shrinker_rwsem to do something. So it
+may cause the following deadlock:
 
-Thanks a ton for working on this!
+ 	CPU0				CPU1
 
-> so it's time to update DENYLIST.aarch64 to unblock tests that failed due to lack of direct call.
+debugfs_file_get()
+shrinker_debugfs_count_show()/shrinker_debugfs_scan_write()
 
-+1, with regards to logistics, if possible it might be nice to eventually gets
-this into a feature branch on arm64 tree, then we could pull it too from there
-for bpf-next and hash out the BPF CI bits for arm64 in the meantime.
+     				unregister_shrinker()
+				--> down_write(&shrinker_rwsem);
+				    debugfs_remove_recursive()
+					// wait for (A)
+				    --> wait_for_completion();
 
->> This follows up on prior art by Xu Kuohai [2].
->> The implementation here is totally different but the fix for ftrace selftests
->> (patch 6) is a trivial rebase of a patch originally by Xu so I kept his
->> authorship and trailers untouched on that patch, I hope that's ok. >
-> 
-> that's ok for me, thanks.
-> 
->> 1: https://lore.kernel.org/all/20230123134603.1064407-1-mark.rutland@arm.com/
->> 2: https://lore.kernel.org/bpf/20220913162732.163631-1-xukuohai@huaweicloud.com/
->>
->> Florent Revest (7):
->>    ftrace: Replace uses of _ftrace_direct APIs with _ftrace_direct_multi
->>    ftrace: Remove the legacy _ftrace_direct API
->>    ftrace: Rename _ftrace_direct_multi APIs to _ftrace_direct APIs
->>    ftrace: Store direct called addresses in their ops
->>    ftrace: Make DIRECT_CALLS work WITH_ARGS and !WITH_REGS
->>    arm64: ftrace: Add direct call support
->>    arm64: ftrace: Add direct called trampoline samples support
->>
->> Xu Kuohai (1):
->>    ftrace: Fix dead loop caused by direct call in ftrace selftest
->>
->>   arch/arm64/Kconfig                          |   4 +
->>   arch/arm64/include/asm/ftrace.h             |  24 ++
->>   arch/arm64/kernel/asm-offsets.c             |   6 +
->>   arch/arm64/kernel/entry-ftrace.S            |  70 +++-
->>   arch/arm64/kernel/ftrace.c                  |  36 +-
->>   include/linux/ftrace.h                      |  51 +--
->>   kernel/bpf/trampoline.c                     |  14 +-
->>   kernel/trace/Kconfig                        |   2 +-
->>   kernel/trace/ftrace.c                       | 433 +-------------------
->>   kernel/trace/trace_selftest.c               |  14 +-
->>   samples/Kconfig                             |   2 +-
->>   samples/ftrace/ftrace-direct-modify.c       |  41 +-
->>   samples/ftrace/ftrace-direct-multi-modify.c |  44 +-
->>   samples/ftrace/ftrace-direct-multi.c        |  28 +-
->>   samples/ftrace/ftrace-direct-too.c          |  35 +-
->>   samples/ftrace/ftrace-direct.c              |  33 +-
->>   16 files changed, 333 insertions(+), 504 deletions(-)
->>
-> 
+    // wait for (B)
+--> down_read_killable(&shrinker_rwsem)
+debugfs_file_put() -- (A)
+
+				    up_write() -- (B)
+
+The down_read_killable() can be killed, so that the above deadlock
+can be recovered. But it still requires an extra kill action,
+otherwise it will block all subsequent shrinker-related operations,
+so it's better to fix it.
+
+Fixes: 5035ebc644ae ("mm: shrinkers: introduce debugfs interface for memory shrinkers")
+Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+---
+ include/linux/shrinker.h |  4 ++--
+ mm/shrinker_debug.c      | 13 ++++++++-----
+ mm/vmscan.c              |  6 +++++-
+ 3 files changed, 15 insertions(+), 8 deletions(-)
+
+diff --git a/include/linux/shrinker.h b/include/linux/shrinker.h
+index 71310efe2fab..0cf3e0d31433 100644
+--- a/include/linux/shrinker.h
++++ b/include/linux/shrinker.h
+@@ -107,7 +107,7 @@ extern void synchronize_shrinkers(void);
+ 
+ #ifdef CONFIG_SHRINKER_DEBUG
+ extern int shrinker_debugfs_add(struct shrinker *shrinker);
+-extern void shrinker_debugfs_remove(struct shrinker *shrinker);
++extern struct dentry *shrinker_debugfs_remove(struct shrinker *shrinker);
+ extern int __printf(2, 3) shrinker_debugfs_rename(struct shrinker *shrinker,
+ 						  const char *fmt, ...);
+ #else /* CONFIG_SHRINKER_DEBUG */
+@@ -115,7 +115,7 @@ static inline int shrinker_debugfs_add(struct shrinker *shrinker)
+ {
+ 	return 0;
+ }
+-static inline void shrinker_debugfs_remove(struct shrinker *shrinker)
++static inline struct dentry *shrinker_debugfs_remove(struct shrinker *shrinker)
+ {
+ }
+ static inline __printf(2, 3)
+diff --git a/mm/shrinker_debug.c b/mm/shrinker_debug.c
+index b05295bab322..39c3491e28a3 100644
+--- a/mm/shrinker_debug.c
++++ b/mm/shrinker_debug.c
+@@ -246,18 +246,21 @@ int shrinker_debugfs_rename(struct shrinker *shrinker, const char *fmt, ...)
+ }
+ EXPORT_SYMBOL(shrinker_debugfs_rename);
+ 
+-void shrinker_debugfs_remove(struct shrinker *shrinker)
++struct dentry *shrinker_debugfs_remove(struct shrinker *shrinker)
+ {
++	struct dentry *entry = shrinker->debugfs_entry;
++
+ 	lockdep_assert_held(&shrinker_rwsem);
+ 
+ 	kfree_const(shrinker->name);
+ 	shrinker->name = NULL;
+ 
+-	if (!shrinker->debugfs_entry)
+-		return;
++	if (entry) {
++		ida_free(&shrinker_debugfs_ida, shrinker->debugfs_id);
++		shrinker->debugfs_entry = NULL;
++	}
+ 
+-	debugfs_remove_recursive(shrinker->debugfs_entry);
+-	ida_free(&shrinker_debugfs_ida, shrinker->debugfs_id);
++	return entry;
+ }
+ 
+ static int __init shrinker_debugfs_init(void)
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index bd6637fcd8f9..74342caf8022 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -741,6 +741,8 @@ EXPORT_SYMBOL(register_shrinker);
+  */
+ void unregister_shrinker(struct shrinker *shrinker)
+ {
++	struct dentry *debugfs_entry;
++
+ 	if (!(shrinker->flags & SHRINKER_REGISTERED))
+ 		return;
+ 
+@@ -749,9 +751,11 @@ void unregister_shrinker(struct shrinker *shrinker)
+ 	shrinker->flags &= ~SHRINKER_REGISTERED;
+ 	if (shrinker->flags & SHRINKER_MEMCG_AWARE)
+ 		unregister_memcg_shrinker(shrinker);
+-	shrinker_debugfs_remove(shrinker);
++	debugfs_entry = shrinker_debugfs_remove(shrinker);
+ 	up_write(&shrinker_rwsem);
+ 
++	debugfs_remove_recursive(debugfs_entry);
++
+ 	kfree(shrinker->nr_deferred);
+ 	shrinker->nr_deferred = NULL;
+ }
+-- 
+2.20.1
 
