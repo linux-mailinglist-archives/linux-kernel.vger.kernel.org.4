@@ -2,177 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FE03687AFC
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 11:59:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD41B687B02
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 12:00:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232245AbjBBK72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 05:59:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57500 "EHLO
+        id S232318AbjBBLAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 06:00:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229988AbjBBK70 (ORCPT
+        with ESMTP id S229988AbjBBLAu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 05:59:26 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C75036CC8B
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 02:59:24 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id y1so1335784wru.2
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 02:59:24 -0800 (PST)
+        Thu, 2 Feb 2023 06:00:50 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1416F6CCBE
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 03:00:49 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id v10so1567110edi.8
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 03:00:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jrtc27.com; s=gmail.jrtc27.user;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UgTiIPOmBXxBHCBI1SPf1jYsG2ew/s8emelTVcWqHf4=;
-        b=P1qpBtdki4WxrIQDdZyF0/6Ft1BgTb9reSHsBkHTObHXZm7BXDLjR1iZ6CotQKJfdE
-         /+v+bohLXLLTthPJZoGMqlj4fLH2NKDhoRPv/5fILRZ5vnUkCpX0IPMQEHZ14Bo2YckI
-         eoWMZzYBsWEsAlxnhqObjdRaKXU1lXlbFJgLjhBpvgDzSbJyE80azV7nCvx5yA/oO6ay
-         M+oQLgFp+H8Q922L2xI9VHWn3bAtwS95NLB/ER+p6JuCPupGAVI2CMLkLOIr+d57wees
-         1rSjTmpp3pVeFKBx4gGm60S5b2s2cauSiRELF5/IYI57uXB8rcBjM0nHqJy2sowIUB4g
-         Fxuw==
+        d=mind.be; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hwqA0bBFdWXpkidocitSvFjFmrRrthZmwzOeQ241hAw=;
+        b=aipaeHLyimbrh1xIjYjK59ul9gAgvIOJ2htzisG3cM9E9fQBV4j9HyoWNS9L6ksC+8
+         3ojfsravWZC4EKP3hZbJN2NzYSKOU9CdewMmamb/G0tVnZ8zr+J+KQFvwneJ9hyvGC3g
+         yKFLProLre67toexwebebS1Ffcsfjm9VbjROVnCnpFILS7rm/9XfLKMKfky/AKMYtTBr
+         nV5tBgxlmzoPrSwUB8Q8dJKssXQiiuVneolusJouMWwU2YmPjwH/NK9XB/cIASBFTNU4
+         5F7a9H8sg0eCgKiSNNxsy2FV1UNaNz16KOWLBhvBrmYNfZFA7o086Z52L4dfUaLgXbH1
+         NZOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UgTiIPOmBXxBHCBI1SPf1jYsG2ew/s8emelTVcWqHf4=;
-        b=vhEzglRhHa+iffb54E4abbvsVrhbCgjxiWauPYEs48SjQs4ZJsQTvwEJ5ta6ufoOm7
-         Cc5kEP4qaAEngLbEd1WzIS6eHFCnP/QRh2DFQraa8SDOvc5c03gj1NIEjh+rudKpBQ0/
-         iv3hvQP0kI0oshm9eZEvprQBr/cCfaZ180+bWpXDi4jBLWIzgQGysOjWG2s3uNlhm/WO
-         cPu7nTR/IllKeOpzGR8wePKClomNuDJydv/RnMIO29jN6Rd3umJvWP+dpQSp8R/kg32k
-         T0QqJ2deNHe/pHx9yaGYGVq7brZodEFAafrSarYwOeaKs3q13MCf4trMGQRzEN+D/+1T
-         UbLA==
-X-Gm-Message-State: AO0yUKUjUwk2j220p0NJy4OTzwOCwM8LHjOu6WIdDO72riB1Yj+cgU6K
-        pf2GAzS6hiNGm6+4JS1HEhm9hA==
-X-Google-Smtp-Source: AK7set+pJGkZErNzearfcH92dOwxU8jILjbDFDcwGIsKvNIPaDT8LjSefGTMV9xz/L7MFQEJyTsuUw==
-X-Received: by 2002:a05:6000:2:b0:2bf:cbf0:e021 with SMTP id h2-20020a056000000200b002bfcbf0e021mr4738287wrx.71.1675335563311;
-        Thu, 02 Feb 2023 02:59:23 -0800 (PST)
-Received: from smtpclient.apple (global-5-143.n-2.net.cam.ac.uk. [131.111.5.143])
-        by smtp.gmail.com with ESMTPSA id u15-20020a5d6daf000000b002bfe266d710sm1266499wrs.90.2023.02.02.02.59.22
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 02 Feb 2023 02:59:22 -0800 (PST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH] riscv: kprobe: Fixup misaligned load text
-From:   Jessica Clarke <jrtc27@jrtc27.com>
-In-Reply-To: <87cz6s75ze.fsf@all.your.base.are.belong.to.us>
-Date:   Thu, 2 Feb 2023 10:59:22 +0000
-Cc:     Guo Ren <guoren@kernel.org>, Palmer Dabbelt <palmer@rivosinc.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        liaochang1@huawei.com, linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Bjorn Topel <bjorn.topel@gmail.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <5C373F4A-983E-4ACA-AAB0-54E629D5F501@jrtc27.com>
-References: <20230201064608.3486136-1-guoren@kernel.org>
- <87tu05pvur.fsf@all.your.base.are.belong.to.us>
- <CAJF2gTSj12E9+peMF0rNY_psGDyEG5BbMY6V-s4dK0FpkCC9Yw@mail.gmail.com>
- <87cz6s75ze.fsf@all.your.base.are.belong.to.us>
-To:     =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hwqA0bBFdWXpkidocitSvFjFmrRrthZmwzOeQ241hAw=;
+        b=2I74/M8f7/hvtXnc6NLSwZk/mSGrgq0/30AMaegCxtVDL2i5+1WBqMBTt7+88Z5vrl
+         2LwFRHv4UmnayLgbggxjT7hs3aps1p+U5XyFtTKe6aP1738aBJ66FQ+fJsNuikvcARE+
+         elT6JKF6xN8GP87rPaHZ+E82SxY566dUJhL30N1I1YjAlGNUPwgvsXaGlZ69fjLvXNCZ
+         HZEZxDa4GrhmeqfS41Faj1ZS/b2JciChOUsC5dgIBFldkVnfV4E9a1d58PkhBv5ZYimp
+         hEV6rkhhfWUGllE54Lwkb20tNRctemDUJYJBh/JQ4cHN3MIaxjfTY+CEqgKVKpUpDWPz
+         NM0A==
+X-Gm-Message-State: AO0yUKUl7WKIll3QOZEcuxbYBmRF+1WvH+iQtNcBZ+kx+c0KIT3b3+9M
+        XDjmHjNkx7fM+9aJ8HEs3dRGIA==
+X-Google-Smtp-Source: AK7set+lY4LEQD/RMWmnBoE2nzZ+sWoTI4ZajAngUzcOw3CeU/millZuUm/cSZxcpezLou5yUZOWVA==
+X-Received: by 2002:a05:6402:2b8a:b0:499:d1ca:6d83 with SMTP id fj10-20020a0564022b8a00b00499d1ca6d83mr5436747edb.2.1675335647543;
+        Thu, 02 Feb 2023 03:00:47 -0800 (PST)
+Received: from [192.168.2.9] (78-22-137-109.access.telenet.be. [78.22.137.109])
+        by smtp.gmail.com with ESMTPSA id r24-20020aa7cfd8000000b00495c3573b36sm11183798edy.32.2023.02.02.03.00.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Feb 2023 03:00:47 -0800 (PST)
+Message-ID: <74f30b27-6999-0f67-48e7-85f0acd19cb9@mind.be>
+Date:   Thu, 2 Feb 2023 12:00:46 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v3 0/2] leds: lp55xx: configure internal charge pump
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>
+Cc:     linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230202092325.21241-1-maarten.zanders@mind.be>
+ <71c9963c-98e3-d90b-116a-68a295feb24a@linaro.org>
+Content-Language: en-US
+From:   Maarten Zanders <maarten.zanders@mind.be>
+In-Reply-To: <71c9963c-98e3-d90b-116a-68a295feb24a@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2 Feb 2023, at 09:48, Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> wrote:
->=20
-> Guo Ren <guoren@kernel.org> writes:
->=20
->> On Wed, Feb 1, 2023 at 5:40 PM Bj=C3=B6rn T=C3=B6pel =
-<bjorn@kernel.org> wrote:
->>>=20
->>> guoren@kernel.org writes:
->>>=20
->>>> From: Guo Ren <guoren@linux.alibaba.com>
->>>>=20
->>>> The current kprobe would cause a misaligned load for the probe =
-point.
->>>> This patch fixup it with two half-word loads instead.
->>>>=20
->>>> Fixes: c22b0bcb1dd0 ("riscv: Add kprobes supported")
->>>> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
->>>> Signed-off-by: Guo Ren <guoren@kernel.org>
->>>> Link: =
-https://lore.kernel.org/linux-riscv/878rhig9zj.fsf@all.your.base.are.belon=
-g.to.us/
->>>> Reported-by: Bjorn Topel <bjorn.topel@gmail.com>
->>>> ---
->>>> arch/riscv/kernel/probes/kprobes.c | 4 +++-
->>>> 1 file changed, 3 insertions(+), 1 deletion(-)
->>>>=20
->>>> diff --git a/arch/riscv/kernel/probes/kprobes.c =
-b/arch/riscv/kernel/probes/kprobes.c
->>>> index 41c7481afde3..c1160629cef4 100644
->>>> --- a/arch/riscv/kernel/probes/kprobes.c
->>>> +++ b/arch/riscv/kernel/probes/kprobes.c
->>>> @@ -74,7 +74,9 @@ int __kprobes arch_prepare_kprobe(struct kprobe =
-*p)
->>>>              return -EILSEQ;
->>>>=20
->>>>      /* copy instruction */
->>>> -     p->opcode =3D *p->addr;
->>>> +     p->opcode =3D (kprobe_opcode_t)(*(u16 *)probe_addr);
->>>> +     if (GET_INSN_LENGTH(p->opcode) =3D=3D 4)
->>>> +             p->opcode |=3D (kprobe_opcode_t)(*(u16 *)(probe_addr =
-+ 2))
->>>>      << 16;
->>>=20
->>> Ugh, those casts. :-( What about the memcpy variant you had in the =
-other
->>> thread?
->> The memcpy version would force load probe_addr + 2. This one would
->> save an lh operation. The code text guarantees half-word alignment. =
-No
->> misaligned load happened. Second, kprobe wouldn't write the last half
->> of 32b instruction.
->=20
-> Ok, something more readable, like:
->=20
-> diff --git a/arch/riscv/kernel/probes/kprobes.c =
-b/arch/riscv/kernel/probes/kprobes.c
-> index f21592d20306..3602352ba175 100644
-> --- a/arch/riscv/kernel/probes/kprobes.c
-> +++ b/arch/riscv/kernel/probes/kprobes.c
-> @@ -50,14 +50,16 @@ static void __kprobes arch_simulate_insn(struct =
-kprobe *p, struct pt_regs *regs)
->=20
-> int __kprobes arch_prepare_kprobe(struct kprobe *p)
-> {
-> -	unsigned long probe_addr =3D (unsigned long)p->addr;
-> +	u16 *insn =3D (u16 *)p->addr;
->=20
-> -	if (probe_addr & 0x1)
-> +	if ((uintptr_t)insn & 0x1)
-> 		return -EILSEQ;
->=20
-> 	/* copy instruction */
-> -	p->opcode =3D *p->addr;
-> -
-> +	p->opcode =3D *insn++;
-> +	if (GET_INSN_LENGTH(p->opcode) =3D=3D 4)
-> +		p->opcode |=3D *insn << 16;
+Thanks for your feedback. V4 has been sent.
 
-*insn gets promoted to int not unsigned so this is UB if bit 15 is set.
-
-Jess
-
-> +=09
-> 	/* decode instruction */
-> 	switch (riscv_probe_decode_insn(p->addr, &p->ainsn.api)) {
-> 	case INSN_REJECTED:	/* insn not supported */
->=20
->=20
-> Bj=C3=B6rn
->=20
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
-
+On 2/2/23 10:34, Krzysztof Kozlowski wrote:
+> On 02/02/2023 10:23, Maarten Zanders wrote:
+>> A new option in the devicetree "ti,charge-pump-mode" allows the user to
+>> configure the charge pump in a certain mode. The previous implementation
+>> was "auto" mode, which remains the default.
+>>
+>> v1 of the patch implemented a bool to disable the charge pump and had some
+>> issues in the yaml binding.
+>>
+>> v2 implemented all options of the charge pump as a string which was too
+>> complex to parse & check.
+>>
+>> v3 (this version) replaces the string by constants.
+> Please resend without ignoring the feedback.
+>
+> Best regards,
+> Krzysztof
+>
