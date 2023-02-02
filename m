@@ -2,113 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2DF46881A5
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 16:22:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6E796881A7
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 16:22:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232120AbjBBPWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 10:22:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38420 "EHLO
+        id S232427AbjBBPWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 10:22:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231614AbjBBPWE (ORCPT
+        with ESMTP id S231614AbjBBPW3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 10:22:04 -0500
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93FD65FED;
-        Thu,  2 Feb 2023 07:22:02 -0800 (PST)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id EDF5020008;
-        Thu,  2 Feb 2023 15:21:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1675351320;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XNx1XchKzZSpJj1ujuH5U8jbslu3IqnhbHCw5cDW5jA=;
-        b=H4oDQ+Rr6ysWLSLtwPnOshk7gxyK4XPM8IhyHwwekTj89qge2tw0MGZKE2yyxZmoXIF3aI
-        d2jyqmfARSMb9Px1aT4/kcyggNP5xc8QxbN/ejBPJX8mQSWIHr61pm9L42+/zt0TdAqllZ
-        VG1SbAHJFYqWlN0WvhjCvfdZB0dQJ6P4ONDtCYVj7Puxgnvk9S33bYez3XyKbq3ioL8hoC
-        ThE2ituKWy0IrzYunOJsC3WnKlkVUJKZAoGLm54qkrU9Naqj8NnUdocTSIUzlt+vy7sh16
-        Oq9laYHpnjbQICtGKwFipH+TW49NsSrQcK15IimUGekqKnubwY851Kf+bbW2dQ==
-Date:   Thu, 2 Feb 2023 16:21:58 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 16/24] rtc: pm8xxx: add support for nvmem offset
-Message-ID: <Y9vVFtoIXglQpplh@mail.local>
-References: <20230126142057.25715-1-johan+linaro@kernel.org>
- <20230126142057.25715-17-johan+linaro@kernel.org>
- <Y9PpQkW3Rtm+bi2V@mail.local>
- <Y9Py/+GpI8x8ldDG@hovoldconsulting.com>
- <Y9P2L9sNiHIZt3On@mail.local>
- <Y9vS4TpVHDnGN0G/@hovoldconsulting.com>
+        Thu, 2 Feb 2023 10:22:29 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3D4B22798;
+        Thu,  2 Feb 2023 07:22:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=9oOxos7ZA6TGusK+7tBr/VRDF4lwgh3CYWYUksgrt8Y=; b=p6wz6eR0yP3QuKyu63HEk27AiP
+        eKJbFwjoa01zxVVXBk0BO9BrbUX7TIYxztkcEnxNvC+MfG35vdG72Mdh6L6EKu3R2n1MPUEM5YDKY
+        0qc/jVohvK5DR4iVsUwro3IDRMSoS689LNEBEJV9EJrxMcRnJPh5vCFrktxgMiw04QgcRhhhlU8k4
+        oXu8wzeIxTPFXXWCH59eAEi22qT5sWPy/QvoRTqZqQ2t5OgZ60qn1xiZBceB1LJ12bpAhhi8gyHTl
+        2H3XCptZqQgXcv5idfXwqxcQDQGWhXR0jUYiX8RBSIcdmAOrIw+jjSN3hsyn1ygFt04H7KWwMcKkR
+        3hI5FaFQ==;
+Received: from [2601:1c2:d00:6a60::9526]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pNbPk-00GJuW-Uc; Thu, 02 Feb 2023 15:22:17 +0000
+Message-ID: <ed617e7e-c4ca-109b-fa1a-2ffe9bd8a355@infradead.org>
+Date:   Thu, 2 Feb 2023 07:22:15 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9vS4TpVHDnGN0G/@hovoldconsulting.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2] sh: implicit access_ok() needs an #include
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20230202053113.2782-1-rdunlap@infradead.org>
+ <980912a0-f5a0-4dea-9b5b-565d05bc4a6c@app.fastmail.com>
+ <CAMuHMdWPyTRh_E-jRET0zObm1+RYcPy0YrnVr-+ozEO84F0DWw@mail.gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <CAMuHMdWPyTRh_E-jRET0zObm1+RYcPy0YrnVr-+ozEO84F0DWw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/02/2023 16:12:33+0100, Johan Hovold wrote:
-> On Fri, Jan 27, 2023 at 05:05:03PM +0100, Alexandre Belloni wrote:
-> > On 27/01/2023 16:51:27+0100, Johan Hovold wrote:
-> 
-> > > > > @@ -380,9 +478,23 @@ static int pm8xxx_rtc_probe(struct platform_device *pdev)
-> > > > >  	rtc_dd->allow_set_time = of_property_read_bool(pdev->dev.of_node,
-> > > > >  						      "allow-set-time");
-> > > > >  
-> > > > > +	rtc_dd->nvmem_cell = devm_nvmem_cell_get(&pdev->dev, "offset");
-> > > > 
-> > > > Maybe we should get something more specific than just "offset" so this
-> > > > could be parsed in the RTC core at some point (this is the second RTC to
-> > > > behave like this)
-> > > 
-> > > Yes, that thought crossed my mind, but it's an nvmem cell name (label)
-> > > and not a generic devicetree property. If you look at the binding
-> > > document I think the name makes sense given the current description, and
-> > > I'm not sure changing to something like 'base' would be much of an
-> > > improvement.
-> > > 
-> > > I also don't expect there to be more broken RTCs out there like these
-> > > ones. Hopefully Qualcomm will even get this fixed at some point
-> > > themselves.
-> > > 
-> > > And I assume you were think of the old Atmel driver which uses a timer
-> > > counter and a scratch register as a base? That one is also a bit
-> > > different in that the timer can be reset, just not set.
-> > 
-> > Nope, I'm thinking about the gamecube one and probably the nintendo
-> > switch one which seems to behave similarly (no driver in the kernel
-> > though).
-> 
-> Found the gamecube one now (misread you comment above to imply that it
-> was also out of tree).
-> 
-> That one is also different in that the timer in that RTC can also be
-> set (e.g. like the atmel one), but for consistency with some firmware an
-> offset also needs to be read from SRAM (not NVRAM) and applied. That
-> offset is also never updated by Linux.
 
-Yeah, I deally, the gamecube counter shouldn't be updated, the switch
-one doesn't seem to be updatable. I guess the idea being that games need
-to be able to know if you are messing with the RTC to get an advantage.
 
+On 2/2/23 00:22, Geert Uytterhoeven wrote:
+> Hi Arnd,
+> 
+> On Thu, Feb 2, 2023 at 8:52 AM Arnd Bergmann <arnd@arndb.de> wrote:
+>> On Thu, Feb 2, 2023, at 06:31, Randy Dunlap wrote:
+>>> Building arch/sh/ has a build error/warning that is fixed by
+>>> adding an #include of a header file.
+>>>
+>>> ../arch/sh/include/asm/checksum_32.h: In function
+>>> 'csum_and_copy_from_user':
+>>> ../arch/sh/include/asm/checksum_32.h:53:14: error: implicit declaration
+>>> of function 'access_ok' [-Werror=implicit-function-declaration]
+>>>    53 |         if (!access_ok(src, len))
+>>>       |              ^~~~~~~~~
+>>>
+>>> Fixes: 7fe8970a78a1 ("sh32: convert to csum_and_copy_from_user()")
+>>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+>>> Cc: Al Viro <viro@zeniv.linux.org.uk>
+>>> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+>>> Cc: Rich Felker <dalias@libc.org>
+>>> Cc: linux-sh@vger.kernel.org
+>>> Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+>>> Cc: Arnd Bergmann <arnd@arndb.de>
+>>> Cc: Andrew Morton <akpm@linux-foundation.org>
+>>> ---
+>>> v2: add Subject: and patch description
+>>
+>> Thanks for the fix!
+>>
+>>>
+>>>  arch/sh/include/asm/checksum_32.h |    1 +
+>>>  1 file changed, 1 insertion(+)
+>>>
+>>> diff -- a/arch/sh/include/asm/checksum_32.h b/arch/sh/include/asm/checksum_32.h
+>>> --- a/arch/sh/include/asm/checksum_32.h
+>>> +++ b/arch/sh/include/asm/checksum_32.h
+>>> @@ -7,6 +7,7 @@
+>>>   */
+>>>
+>>>  #include <linux/in6.h>
+>>> +#include <asm-generic/access_ok.h>
+>>
+>> This will work correctly, but it is not the intended usage of the
+>> header. Anything in asm-generic/*.h should only be included by
+>> a particular header, usually the asm/*.h with the same name or in this
+>> case the asm/uaccess.h header.
+>>
+>> I think the correct fix here is to include asm/uaccess.h instead
+>> of asm-generic/access_ok.h.
+> 
+> Which should already be there, or RSN:
+> https://lore.kernel.org/all/167514181688.11863.771497291150527329.git-patchwork-notify@kernel.org
+
+Good to see that. And thanks to both of you.
 
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+~Randy
