@@ -2,71 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7F516879CC
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 11:09:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83BC16879D1
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 11:10:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232535AbjBBKJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 05:09:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47738 "EHLO
+        id S232548AbjBBKKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 05:10:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232002AbjBBKJb (ORCPT
+        with ESMTP id S232002AbjBBKKu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 05:09:31 -0500
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 865DC8758F;
-        Thu,  2 Feb 2023 02:09:30 -0800 (PST)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 46D1168C7B; Thu,  2 Feb 2023 11:09:27 +0100 (CET)
-Date:   Thu, 2 Feb 2023 11:09:26 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     "Dr. David Alan Gilbert" <dave@treblig.org>
-Cc:     iommu@lists.linux.dev, mchehab@kernel.org, hch@lst.de,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: Regression: v4l/bttv vbi vs iommu
-Message-ID: <20230202100926.GA14931@lst.de>
-References: <Y9qSwkLxeMpffZK/@gallifrey>
+        Thu, 2 Feb 2023 05:10:50 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3BFC87152
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 02:10:45 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id x7so1495935edr.0
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 02:10:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mind.be; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+hlNY5B/klsyya+nH+r5oeG/sby85/Iq+6HEL0mAONI=;
+        b=CQq4zMFEwVHMP/JBxiPgS4Cpr/3BnidqfbYtvFHizhiFosbIn7PUBjIGPuJLmYByit
+         eNvJ9zpEA5Rxidc2r8bczi/GF2kLIlx+c1r90VC13EJCksnmHqGe9wfE1Y+T4WLYTShU
+         CNf2dV25KdJliCH9u4f4zivAb2H58Cj08OLdDhxqaMt2omy7BM9cAg7IGds1xHjQyD3y
+         zdRaGC/p2Q/3wqV3ADaHL8TciQjCiGafyEZ+Q4a/3Z6aIrJ8js09cth8BFjjRfU/K6+z
+         saCRQZX54/IzD00Eida9MpqntffrPOUKLeXwv/lvKZtptT8fEN7JRahp+aXX5t7KsIl0
+         iMtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+hlNY5B/klsyya+nH+r5oeG/sby85/Iq+6HEL0mAONI=;
+        b=53iPJX+MJGPpTGgOxWMbx757rYuH5lrpDQ8exJiCi2HiKqh7/XBwkBw+N1mhL+W00y
+         tcz3TVaHIgQqd94V0Ud3P35XTpEINGruTd641Z3QRxGrqrT0gDpYsupBOkSBiXMqc1lB
+         sx+fUQePlbsmnNnc6yowP141DmWWAB8BUN+D+lG4CWLYFBDNHysCMjAU1zKgsWdVIFuK
+         R/hGPwOmsGK5TJAViAy4lq4+t0NiG8MAWn69V6eejJoUKGfiuOo5Oom3WE5IZNk8T35W
+         9qyU+YqpQ4jc1bdzsaM+K+2bx+Ud8k24be/lvHH33quqnCP6C4C2Ad8i6ySG7gl6kTpV
+         CR8g==
+X-Gm-Message-State: AO0yUKUfyj+5FatPwf+gnnEuQI4rjzAmEOkVSO9GDNiNBactW13bTN0G
+        H5ZfHM8+820QxgVynJt1imgcqw==
+X-Google-Smtp-Source: AK7set86a/oyNTamZxxPN+DnRbu1WLx8yvhx7Ixw80NGnZCjxR05YMVeq7BUof9xLM1YngCYUYIdDA==
+X-Received: by 2002:a05:6402:913:b0:498:e0be:318b with SMTP id g19-20020a056402091300b00498e0be318bmr6139259edz.38.1675332644409;
+        Thu, 02 Feb 2023 02:10:44 -0800 (PST)
+Received: from dtpc.zanders.be (78-22-137-109.access.telenet.be. [78.22.137.109])
+        by smtp.gmail.com with ESMTPSA id t13-20020a50d70d000000b00458b41d9460sm11155816edi.92.2023.02.02.02.10.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Feb 2023 02:10:44 -0800 (PST)
+From:   Maarten Zanders <maarten.zanders@mind.be>
+To:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>
+Cc:     Maarten Zanders <maarten.zanders@mind.be>,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/2] leds: lp55xx: configure internal charge pump
+Date:   Thu,  2 Feb 2023 11:10:30 +0100
+Message-Id: <20230202101032.26737-1-maarten.zanders@mind.be>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9qSwkLxeMpffZK/@gallifrey>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 01, 2023 at 04:26:42PM +0000, Dr. David Alan Gilbert wrote:
-> f5ff79fddf0efecca538046b5cc20fb3ded2ec4f is the first bad commit
-> commit f5ff79fddf0efecca538046b5cc20fb3ded2ec4f
-> Author: Christoph Hellwig <hch@lst.de>
-> Date:   Sat Feb 26 16:40:21 2022 +0100
-> 
->     dma-mapping: remove CONFIG_DMA_REMAP
+A new option in the devicetree "ti,charge-pump-mode" allows the user to
+configure the charge pump in a certain mode. The previous implementation
+was "auto" mode, which remains the default.
 
-Which just enabled some code on common x86 configs that was already
-used on many other platforms.  In other words:  the code already
-was buggy, but got away with it on x86 so far as no one tested on
-e.g. arm or arm64.
+v1 of the patch implemented a bool to disable the charge pump and had some
+issues in the yaml binding.
 
-The bug is in videobuf_dma_init_kernel:
+v2 implemented all options of the charge pump as a string which was too
+complex to parse & check.
 
-	for (i = 0; i < nr_pages; i++) {
-		void *addr;
+v3 replaces the string by constants.
 
-		addr = dma_alloc_coherent(dma->dev, PAGE_SIZE,
-					  &(dma->dma_addr[i]), GFP_KERNEL);
-		if (addr == NULL)
-			goto out_free_pages;
+v4 resend with changelog (notes) in each patch
 
-		dma->vaddr_pages[i] = virt_to_page(addr);
-	}
-	dma->vaddr = vmap(dma->vaddr_pages, nr_pages, VM_MAP | VM_IOREMAP,
-			  PAGE_KERNEL);
+Maarten Zanders (2):
+  dt-bindings: leds-lp55xx: add ti,charge-pump-mode
+  leds: lp55xx: configure internal charge pump
 
-The address by dma_alloc_coherent is just a kernel virtual address,
-and virt_to_page must not be used on it as it could be vmalloc (as in
-this case) or various other really odd forms of memory.
+ .../devicetree/bindings/leds/leds-lp55xx.yaml  |  8 ++++++++
+ drivers/leds/leds-lp5521.c                     | 12 ++++++------
+ drivers/leds/leds-lp5523.c                     | 18 +++++++++++++-----
+ drivers/leds/leds-lp55xx-common.c              | 14 ++++++++++++++
+ drivers/leds/leds-lp8501.c                     |  8 ++++++--
+ include/dt-bindings/leds/leds-lp55xx.h         | 10 ++++++++++
+ include/linux/platform_data/leds-lp55xx.h      |  3 +++
+ 7 files changed, 60 insertions(+), 13 deletions(-)
+ create mode 100644 include/dt-bindings/leds/leds-lp55xx.h
+
+-- 
+2.37.3
 
