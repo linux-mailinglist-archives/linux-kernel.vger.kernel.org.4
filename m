@@ -2,81 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7732E6887DB
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 20:56:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54D516887E2
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 20:57:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232403AbjBBT4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 14:56:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44156 "EHLO
+        id S232726AbjBBT5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 14:57:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230070AbjBBT4c (ORCPT
+        with ESMTP id S230070AbjBBT5U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 14:56:32 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE9E7B43B
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 11:55:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675367748;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+/JM9kJaVGtFzg6Ri4FZyLnb2Sk0vyezm9m9AuJEgs8=;
-        b=WSdO0GCpYHtRRYexu3NKs3AaTeQFIt9W+T+d1cY+TxPRZxAmV8s9cd2BFUOt2fhQimE9AN
-        0BiPI4ly2H3yyaVJmOmnC0mJhcac2Gcto+qFqtK5lOOIfWllzvupAXpGGt3bAF0KdVY0st
-        WoK9aVbn+jxPwvsqm7sLprzyYJnC9Fk=
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com
- [209.85.210.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-358-wlw0G_lIOXmnxg-oKC58Lw-1; Thu, 02 Feb 2023 14:55:47 -0500
-X-MC-Unique: wlw0G_lIOXmnxg-oKC58Lw-1
-Received: by mail-pf1-f197.google.com with SMTP id n34-20020a056a000d6200b005912ead88aeso1463480pfv.3
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 11:55:47 -0800 (PST)
+        Thu, 2 Feb 2023 14:57:20 -0500
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C511E2A1
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 11:56:37 -0800 (PST)
+Received: by mail-qt1-f178.google.com with SMTP id m12so3221429qth.4
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 11:56:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+/JM9kJaVGtFzg6Ri4FZyLnb2Sk0vyezm9m9AuJEgs8=;
-        b=j1g72MtuCAOZfJd6P2xnHk5BrInEBI01E8e3xFBoAJbyp3ZQFXLhBzlInywAo6Rer5
-         lM6tsO6DN+OeF3N3MdLppp4crwy4eTKtusTpnniizWejjkfh7L1rxz8Sy3Tl58fdrfdJ
-         jrGUJrWFoeArNrBOqpd9SH7nMFcM026D+X0wTC0buMv1PNr0lf63mwxN/J+uFtDH/jpl
-         J27aXGBNxEXjNMcwta1zSM1fazOx570QNP/ipjUaxw3yVCgMEF0NveMn22z4780rW/Mx
-         QeoLSP/Aj14R3tb/ZrQZ4xbKnGwroshTho7xfDb7DO7MWM3UCkLPrnkv4WXakwB7VmkF
-         RGXA==
-X-Gm-Message-State: AO0yUKUvit6QCA9Viq3Bqpat1nmoKDPiBJ6ZQ9NxOXRRjWaOQOB3qrL3
-        xarRqaDLtXOijilNWwGrOgLHuH94BKeFMWEeSRKIHgASnHcaplUTfDWo9KlAepD+GLSL70U+/Ln
-        Ula7w1EVcSp29vsT+ReiFPLI6JGd8Z44gGYJRG4aa
-X-Received: by 2002:a62:1d11:0:b0:593:d1b9:2962 with SMTP id d17-20020a621d11000000b00593d1b92962mr1572027pfd.45.1675367746026;
-        Thu, 02 Feb 2023 11:55:46 -0800 (PST)
-X-Google-Smtp-Source: AK7set8ini/hVuBx1+o+8wNLYa1wuDaQg0HJE1K63a64m4cJswUvdlm6vvHBTDa9GiTFF9j4xKnDJxzk+hgU9oyQxgU=
-X-Received: by 2002:a62:1d11:0:b0:593:d1b9:2962 with SMTP id
- d17-20020a621d11000000b00593d1b92962mr1572019pfd.45.1675367745649; Thu, 02
- Feb 2023 11:55:45 -0800 (PST)
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=puPH7Nn4Vxt3kUnQKHCGR9XbgEDlt42vfosxQIpu+cs=;
+        b=ZQBAwRQXQM7IpNDrPxeXDMkj3mJaaJxqe3bVq2vK7T4k73XxaBQa5N7wP0RHM7m8Ph
+         oQMxVhUXwCX0u0K1QARSCQyrbqVHwGviTPCwnIsc5l+MpqE4TF7IFNf5+pxhAfdsEngO
+         063tKIDSrEPYJf8hcdqThzPAiaP/vD4h6wnhdg6UTp89JQ6bAlTApLlULxw2LS9oVDET
+         +FGCTWZOYVBvj0Qoh9B3GkaJYJ9WJOGzK2eySyWjPmWlqdTe43ESxgEsskjmDGleKh1/
+         Z5UC23n+li/7UgE5EWQcBXq3cEi6gFFlCZdFmDMrcO2fi5s7ZKlS9MGpE6C5QgOYe+yS
+         XBfg==
+X-Gm-Message-State: AO0yUKWfpIisGxDwjv7gxwn74BJtUlSFNfm2z6BzekxCAxOiGDsjq8Ne
+        gyer8JYHLuuaf1Ezn17Nd1Ul
+X-Google-Smtp-Source: AK7set92dyhIkHCdWF7e92O2MXu6mUmZ6lpekQmSoPBHbD1dR3CVvDYQ1CtAQ9IvY8M0gdRPR2pO1A==
+X-Received: by 2002:a05:622a:511:b0:3b8:6c68:6109 with SMTP id l17-20020a05622a051100b003b86c686109mr13439452qtx.21.1675367796153;
+        Thu, 02 Feb 2023 11:56:36 -0800 (PST)
+Received: from localhost (pool-68-160-166-30.bstnma.fios.verizon.net. [68.160.166.30])
+        by smtp.gmail.com with ESMTPSA id h6-20020a05620a10a600b007246f005d8bsm293223qkk.116.2023.02.02.11.56.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Feb 2023 11:56:35 -0800 (PST)
+Date:   Thu, 2 Feb 2023 14:56:34 -0500
+From:   Mike Snitzer <snitzer@kernel.org>
+To:     Demi Marie Obenour <demi@invisiblethingslab.com>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Roger Pau =?iso-8859-1?Q?Monn=E9?= <roger.pau@citrix.com>,
+        Alasdair Kergon <agk@redhat.com>,
+        Marek =?iso-8859-1?Q?Marczykowski-G=F3recki?= 
+        <marmarek@invisiblethingslab.com>, Juergen Gross <jgross@suse.com>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xen-devel@lists.xenproject.org, dm-devel@redhat.com
+Subject: Re: [RFC PATCH 0/7] Allow race-free block device handling
+Message-ID: <Y9wVcskXyOk3bbzC@redhat.com>
+References: <20230126033358.1880-1-demi@invisiblethingslab.com>
+ <Y9vp3XDEQAl7TLND@redhat.com>
+ <Y9wEF3rWfpiCKc2i@itl-email>
 MIME-Version: 1.0
-References: <20230201124541.62104-1-wander@redhat.com> <20230202183735.GA17563@redhat.com>
-In-Reply-To: <20230202183735.GA17563@redhat.com>
-From:   Wander Lairson Costa <wander@redhat.com>
-Date:   Thu, 2 Feb 2023 16:55:34 -0300
-Message-ID: <CAAq0SUmYbpTnVBe+FEn+wQjLsfaAv-uxP0QuNEpSh8iaxAD+1g@mail.gmail.com>
-Subject: Re: [PATCH v3] kernel/fork: beware of __put_task_struct calling context
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Hu Chunyu <chuhu@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y9wEF3rWfpiCKc2i@itl-email>
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,56 +68,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 2, 2023 at 3:37 PM, Oleg Nesterov <oleg@redhat.com> wrote:
->
-> On 02/01, Wander Lairson Costa wrote:
-> >
-> > Instead of calling __put_task_struct() directly, we defer it using
-> > call_rcu(). A more natural approach would use a workqueue, but since
-> > in PREEMPT_RT, we can't allocate dynamic memory from atomic context,
-> > the code would become more complex because we would need to put the
-> > work_struct instance in the task_struct and initialize it when we
-> > allocate a new task_struct.
->
-> I don't think I can ack the changes in PREEMPT_RT but this version LGTM.
->
->
->
->
-> just a couple of purely cosmetic nits, feel free to ignore...
->
-> > +static void __delayed_put_task_struct(struct rcu_head *rhp)
-> > +{
-> > +     struct task_struct *task = container_of(rhp, struct task_struct, rcu);
-> > +
-> > +     ___put_task_struct(task);
-> > +}
->
-> We already have delayed_put_task_struct() which differs very much.
-> Perhaps something like ___put_task_struct() will look less confusing.
->
+On Thu, Feb 02 2023 at  1:41P -0500,
+Demi Marie Obenour <demi@invisiblethingslab.com> wrote:
 
-___put_task_struct()? I already added a function with this name below.
+> On Thu, Feb 02, 2023 at 11:50:37AM -0500, Mike Snitzer wrote:
+> > On Wed, Jan 25 2023 at 10:33P -0500,
+> > Demi Marie Obenour <demi@invisiblethingslab.com> wrote:
+> > 
+> > > This work aims to allow userspace to create and destroy block devices
+> > > in a race-free and leak-free way,
+> > 
+> > "race-free and leak-free way" implies there both races and leaks in
+> > existing code. You're making claims that are likely very specific to
+> > your Xen use-case.  Please explain more carefully.
+> 
+> Will do in v2.
+> 
+> > > and to allow them to be exposed to
+> > > other Xen VMs via blkback without leaks or races.  It’s marked as RFC
+> > > for a few reasons:
+> > > 
+> > > - The code has been only lightly tested.  It might be unstable or
+> > >   insecure.
+> > > 
+> > > - The DM_DEV_CREATE ioctl gains a new flag.  Unknown flags were
+> > >   previously ignored, so this could theoretically break buggy userspace
+> > >   tools.
+> > 
+> > Not seeing a reason that type of DM change is needed. If you feel
+> > strongly about it send a separate patch and we can discuss it.
+> 
+> Patch 2/7 is the diskseq change.  v2 will contain a revised and tested
+> version with a greatly expanded commit message.
 
-> > +void __put_task_struct(struct task_struct *tsk)
-> > +{
-> > +     if (IS_ENABLED(CONFIG_PREEMPT_RT) && (!preemptible() || !in_task()))
-> > +             /*
-> > +              * under PREEMPT_RT, we can't call put_task_struct
-> > +              * in atomic context because it will indirectly
-> > +              * acquire sleeping locks.
-> > +              */
-> > +             call_rcu(&tsk->rcu, __delayed_put_task_struct);
->
-> Perhaps this deserves additional note to explain why is it safe to use tsk->rcu
-> union. May be this is obvious, but I was confused when I looked at the previous
-> version ;)
->
+I'm aware that 2/7 is where you make the DM change to disallow unknown
+flags, what I'm saying is I don't see a reason for that change.
 
-Makes sense, I will add it in the next version.
+Certainly doesn't look to be a requirement for everything else in that
+patch.
 
-> but again, feel free to ignore.
->
-> Oleg.
->
+So send a separate patch, but I'm inclined to _not_ accept it because
+it does potentially break some userspace.
+ 
+> > > - I have no idea if I got the block device reference counting and
+> > >   locking correct.
+> > 
+> > Your headers and justifcation for this line of work are really way too
+> > terse. Please take the time to clearly make the case for your changes
+> > in both the patch headers and code.
+> 
+> I will expand the commit message in v2, but I am not sure what you want
+> me to add to the code comments.  Would you mind explaining?
 
+Nothing specific about code, was just a general reminder (based on how
+terse the 2/7 header was).
+
+Mike
