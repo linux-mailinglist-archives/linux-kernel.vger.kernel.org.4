@@ -2,78 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EF9D688610
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 19:06:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEF58688612
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 19:07:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbjBBSGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 13:06:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48428 "EHLO
+        id S232345AbjBBSHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 13:07:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230121AbjBBSGr (ORCPT
+        with ESMTP id S231322AbjBBSGw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 13:06:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7F984F853;
-        Thu,  2 Feb 2023 10:06:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C7AC1B82784;
-        Thu,  2 Feb 2023 18:06:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A50AC4339B;
-        Thu,  2 Feb 2023 18:06:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675361201;
-        bh=Mi7i7JeEfblYcNj+79jZ4R7YcAf5fdTQ0/wtDDCo79A=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Ijis3VqaeNRTLTkSqgD62UsdOPBoJHW7q1QLWP0KaJvyDLVN5fnFl7e7Cap3W2eJL
-         I8a3vKnhBS2zPqW0uu375Ue1Mi4eRVrSbGfTEu3gAcozgsWyAn0trF+zFTSQKoEjYk
-         oW1xKgHJCHP5SswN2Ft0MCjlYTpd1RexxyXO2NAO9JYlRo2KPX3sASWQjrrRtqxttD
-         lv4kDyw82EFPXVJJk6cpNNJMojt2/g2d5cKbSg9v+OF9wZShA2viFdpdFQ2mygo6Pt
-         IhVU6B1HpMJI+J0znErDEbIsbCOD40SLWCCtoth9NmkjPArsTFYTw3bOSBv9UR+NmC
-         MObiengTuzJQQ==
-Date:   Thu, 2 Feb 2023 10:06:40 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Qingfang DENG <dqfext@gmail.com>
-Cc:     Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net] net: page_pool: use in_softirq() instead
-Message-ID: <20230202100640.350fcd08@kernel.org>
-In-Reply-To: <20230201220105.410fee4c@kernel.org>
-References: <20230202024417.4477-1-dqfext@gmail.com>
-        <20230201220105.410fee4c@kernel.org>
+        Thu, 2 Feb 2023 13:06:52 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10FA54F853
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 10:06:49 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id 5so2692383plo.3
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 10:06:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wnwgjrHepV+H3nCkJcaUs0IGb7Rlz+pPTaZ+oHX/Xh4=;
+        b=dCZLFetoHYEdLjXuduYmjGgC+4Qh1sS48dw6tEJC9xHF2s5tu+pwO3IPRYDMem9EBL
+         quSh3YnNAzpu0ODOMss1V7ge6VLGCl1r8zHkijeD0LMfvOg7Ev6CjMeUtjJyuhXIm21B
+         VVF0IhNRdolCFyP84SHwWLD63pDs60NwwhqdfTGhInuTRX7SoHPWoM2yb9gqvUmFwUIP
+         Hw99UcB6YxVYXDc0/DwAObc8mWZXKfc6OVyYLKc0OOczKtGrKRqm7e5FBfIIvJxAlNx+
+         QijuGiuItpKgmquxmJI6jf8aep3zfnA4x8BzUMQFPyS5hVw+lWIpbo8ay3l49bWbfl+9
+         HW2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wnwgjrHepV+H3nCkJcaUs0IGb7Rlz+pPTaZ+oHX/Xh4=;
+        b=xfUF2Mlw6JGCWSoBy25OdE+Wzt0QKdv9tANzBpVd1s1bQ1sqZJ0IrHOWE2+HqhNwod
+         Uv2KIKkFnhxfQClR77BUeIh5/BdKWUDXZvDeNHg6mm56wYaOvrWQhwtj0SJ0bbamarpi
+         ZASVE2pvjsCwyMIi79Wpgu3YG6RimyRwCGGN6qap45oqH5syIpqvY3LkhD/VLWNBsPKo
+         z9pv2hviqN+FPf2GxV+PYTzxn21v7NrgRDGQlC/0RQjSlVzUF5x4Wc2gWxPHpyJkfFHA
+         cvQDraZUU1zq53lAai80nJNCz/Tfq1tv+9y/y6rVHAEvOQkKHnlwkq7Zf+WK77/22dHD
+         +swQ==
+X-Gm-Message-State: AO0yUKXhVAtsxBgbpQ3UDUKryUD+ELmrbMUU9q7D6fXVtn3jsc0p9naX
+        eHUW/2r41IqjeB0UpaucJf/wrQ==
+X-Google-Smtp-Source: AK7set+5qH3JUjrkoBgHPl06pDMVhp8SO/e8uUOIcO+DUveaJLsEbcyP3GWObhd5xYnUTFYrZU6rxA==
+X-Received: by 2002:a17:902:c3c4:b0:198:af50:e4df with SMTP id j4-20020a170902c3c400b00198af50e4dfmr54828plj.5.1675361208333;
+        Thu, 02 Feb 2023 10:06:48 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id b15-20020aa7870f000000b0058119caa82csm13759528pfo.205.2023.02.02.10.06.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Feb 2023 10:06:47 -0800 (PST)
+Date:   Thu, 2 Feb 2023 18:06:44 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jianfeng Gao <jianfeng.gao@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH v2] KVM: x86/pmu: Disable all vPMU features support on
+ Intel hybrid CPUs
+Message-ID: <Y9v7tEXPlki7YOT4@google.com>
+References: <20230131085031.88939-1-likexu@tencent.com>
+ <Y9k7eyfmXjqW9lYF@google.com>
+ <afe1fdd8-9f3e-c988-cd38-476a6da26d46@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <afe1fdd8-9f3e-c988-cd38-476a6da26d46@gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 1 Feb 2023 22:01:05 -0800 Jakub Kicinski wrote:
-> On Thu,  2 Feb 2023 10:44:17 +0800 Qingfang DENG wrote:
-> > From: Qingfang DENG <qingfang.deng@siflower.com.cn>
+On Thu, Feb 02, 2023, Like Xu wrote:
+> On 1/2/2023 12:02 am, Sean Christopherson wrote:
+> > > diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
+> > > index 79988dafb15b..6a3995657e1e 100644
+> > > --- a/arch/x86/kvm/pmu.h
+> > > +++ b/arch/x86/kvm/pmu.h
+> > > @@ -166,9 +166,11 @@ static inline void kvm_init_pmu_capability(const struct kvm_pmu_ops *pmu_ops)
+> > >   	 /*
+> > >   	  * For Intel, only support guest architectural pmu
+> > > -	  * on a host with architectural pmu.
+> > > +	  * on a non-hybrid host with architectural pmu.
+> > >   	  */
+> > > -	if ((is_intel && !kvm_pmu_cap.version) || !kvm_pmu_cap.num_counters_gp)
+> > > +	if (!kvm_pmu_cap.num_counters_gp ||
+> > > +	    (is_intel && (!kvm_pmu_cap.version ||
+> > > +			  boot_cpu_has(X86_FEATURE_HYBRID_CPU))))
 > > 
-> > We use BH context only for synchronization, so we don't care if it's
-> > actually serving softirq or not.
+> > Why do this here instead of in perf_get_x86_pmu_capability()[*]?  The issue isn't
+> > restricted to Intel CPUs, it just so happens that Intel is the only x86 vendor
+> > that has shipped hybrid CPUs/PMUs.  Similarly, it's entirely possible to create a
+> > hybrid CPU with a fully homogeneous PMU.  IMO KVM should rely on the PMU's is_hybrid()
+> > and not the generic X86_FEATURE_HYBRID_CPU flag.
 > > 
-> > As a side node, in case of threaded NAPI, in_serving_softirq() will
-> > return false because it's in process context with BH off, making
-> > page_pool_recycle_in_cache() unreachable.  
+> > [*] https://lore.kernel.org/all/20230120004051.2043777-1-seanjc@google.com
 > 
-> LGTM, but I don't think this qualifies as a fix.
-> It's just a missed optimization, right?
+> As of today, other x86 vendors do not have hybrid core products in their
+> road maps. Before implementing the virtual hybrid vCPU model, there is
+> no practical value in talking about homogeneous PMU on hybrid vCPU
+> at the present stage.
 
-Well, nobody seems to have disagreed with me in 12h, so please drop the
-Fixes tags and repost against net-next :)
+Why not?  I assume Intel put a fair bit of effort into ensuring feature parity
+between P and E cores.  Other than time, money, and effort, I don't see any
+reason why Intel can't do the same for the PMU.
+
+> The perf interface only provides host PMU capabilities and the logic for
+> choosing to disable (or enable) vPMU based on perf input should be left
+> in the KVM part so that subsequent development work can add most code
+> to the just KVM, which is very helpful for downstream users to upgrade
+> loadable KVM module rather than the entire core kernel.
+> 
+> My experience interacting with the perf subsystem has taught me that
+> perf change required from KVM should be made as small as possible.
+
+I don't disagree, but I don't think that's relevant in this case.  Perf doesn't
+provide the necessary bits for KVM to virtualize a hybrid PMU, so unless KVM is
+somehow able to get away with enumerating a very stripped down vPMU, additional
+modifications to perf_get_x86_pmu_capability() will be required.
+
+What I care more about though is this ugliness in perf_get_x86_pmu_capability():
+
+	/*
+	 * KVM doesn't support the hybrid PMU yet.
+	 * Return the common value in global x86_pmu,
+	 * which available for all cores.
+	 */
+	cap->num_counters_gp	= x86_pmu.num_counters;
+
+I really don't want to leave that comment lying around as it's flat out wrong in
+that it obviously doesn't address the other differences beyond the number of
+counters.  And since there are dependencies on perf, my preference is to disable
+PMU enumeration in perf specifically so that whoever takes on vPMU enabling is
+forced to consider the perf side of things, and get buy in from the perf folks.
