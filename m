@@ -2,106 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E048B687AC9
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 11:47:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 836EA687A96
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 11:46:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232984AbjBBKrq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 05:47:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44910 "EHLO
+        id S232827AbjBBKqA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 2 Feb 2023 05:46:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232891AbjBBKrI (ORCPT
+        with ESMTP id S232632AbjBBKpZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 05:47:08 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B5618A7C0
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 02:46:44 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id q10-20020a1cf30a000000b003db0edfdb74so3838232wmq.1
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 02:46:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NBYpfci6bJvLrvFQ49ecH82tkXxXbCKUmgzFLjg4el0=;
-        b=IV0HiuAi4omysj4fCI6HyNCrRiZxJ3M9PQb/B8ZnttxwxWOakTsPsSn2aBc/LzPbG9
-         Nav/05cpTKC3hSMjSE+OJDO9rkQKQm3rFHutvN5AVMyENqL6te9N1L/WAwIrkJlRFR6O
-         53sLs3t8YUZAWuM3OKSJDmeJ+6X/XcniZjjY58aXApPCpYvz7nAkpK00o18s715p7O28
-         TA+mAHj2e4D/88KspeSf0FvgK9yvv9F3Kwcj1zAteffDvcAftj51UKPYLzpMxv+dVp6x
-         gsn8BpOrcWyPH1StV2zfXB6RwE5RMbrqcsND4xxyR7rZg+DlXajBAga07xjZ0sTJeVjT
-         MWuw==
+        Thu, 2 Feb 2023 05:45:25 -0500
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 948D5885D7;
+        Thu,  2 Feb 2023 02:45:10 -0800 (PST)
+Received: by mail-ej1-f48.google.com with SMTP id hx15so4642371ejc.11;
+        Thu, 02 Feb 2023 02:45:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=NBYpfci6bJvLrvFQ49ecH82tkXxXbCKUmgzFLjg4el0=;
-        b=KEr7vhPKUFWlqWDy/Ktb3ZiVy7pwf1uH5yROPa9NhZ39ipFiLdR7POJhXy1GXZhQV6
-         qoz88zJS4I+LPN85NTFKsEyU+hd4XV3LjZmsp2Es7jy7FGKNRiNC6gzOMS1ecfsZ3nNh
-         XeyDhZMPKuf5w7emHjgwIQJ5MClwM4sJEYH4xY4iuWcoRjJIyDh19NKQBMZyT3GIWMHJ
-         5jL2nVZOKp8sKlIHnayy6fCAfL0m9Wm83n9oyYBOg83fK09Cv+Y4YoJkrD164QULf/eP
-         Ay290454jVYAy2CBvS7F+njpsdosS+EEwbbCWjulY3M3oA3vj1yzzSXNNzsPTAtvC6YY
-         8FqA==
-X-Gm-Message-State: AO0yUKVdmLgytIeW488KLgif/D4mwGmtDazr5c8Dk4CbFOE2MNWksZcu
-        0CVxZ3G0U/0VBz7kn/V35PZowA==
-X-Google-Smtp-Source: AK7set9BgMrsUahDdhU/v7KzLJ+UK5dzjmaTSf0ACN2feFq6TzdVeruE+Z+F+abk8uMkySVyR8JNxw==
-X-Received: by 2002:a05:600c:5491:b0:3dc:16d3:8c95 with SMTP id iv17-20020a05600c549100b003dc16d38c95mr5611518wmb.30.1675334768418;
-        Thu, 02 Feb 2023 02:46:08 -0800 (PST)
-Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id n24-20020a05600c181800b003dc3f195abesm4307329wmp.39.2023.02.02.02.46.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 02:46:08 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Vinod Koul <vkoul@kernel.org>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        Luca Weiss <luca@z3ntu.xyz>, Iskren Chernev <me@iskren.info>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 10/10] arm64: dts: qcom: sm6115: correct TLMM gpio-ranges
-Date:   Thu,  2 Feb 2023 11:44:52 +0100
-Message-Id: <20230202104452.299048-11-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230202104452.299048-1-krzysztof.kozlowski@linaro.org>
-References: <20230202104452.299048-1-krzysztof.kozlowski@linaro.org>
+        bh=po7aQyjY/NTYpssfxPmIQc5nJCER56LXRnmfZ8cj9AE=;
+        b=2HKPgyqT1LS9CXxfW1HZOSEh/jRTpJldvNyS5+N7P8+UtV0HlE3qbwY8ap586L9Abm
+         XqqUhoJ+vuSqgHk/eRKtzNyHiMn7kL+uNd7lpq7ox/sA0dS6HARIW5YubI/IuxG/lvJf
+         c9ynYe3pkazzNhat7NOVV36bSwWaadr3Nm5bv1q9aCL4BwuXfQAvXCJyqeXeHOyzI1oq
+         UbE9mrF0dkWEofcL8wLHW2UnrQBmtbEzIx86SowQVPDniKOGkdrhgybvWYxsmTDjYhBk
+         psf2Hv8nJHe1L3Zav+6KUF+o/dJu6tf011kgHxP55lF/Tz0/0ddjNqele5yKpBW2NyKt
+         atRw==
+X-Gm-Message-State: AO0yUKXoAKTxIrqn8VzPbaowcnHwA8IyqjnJsW6mGPN23QbVhW5/+fYn
+        XRU2x8SCVJTA2D7YYOMuPQGZUJjscxmVnMuCHLk=
+X-Google-Smtp-Source: AK7set/SJyV8B7X24GPWCByzF5zo48o8FjN9pXhMtcFod1nL7p97Z+Yg7+/Q0kU0s0qNNpOZONRaJg6w41hn441KQ6Y=
+X-Received: by 2002:a17:906:e56:b0:884:3298:12b with SMTP id
+ q22-20020a1709060e5600b008843298012bmr1794851eji.125.1675334709049; Thu, 02
+ Feb 2023 02:45:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230131233755.58942-1-pedro.falcato@gmail.com>
+ <CAJZ5v0iXcRFamA+mE837=zHReBT-+8WmMeRDR7L9R+FVpLr25A@mail.gmail.com>
+ <20230202084953.3035c6e3@gmail.com> <CAJZ5v0iwO=xJ8A=vv4Khm6Z+Lb9hpZsZmyCjMeSHutMWRcp78g@mail.gmail.com>
+In-Reply-To: <CAJZ5v0iwO=xJ8A=vv4Khm6Z+Lb9hpZsZmyCjMeSHutMWRcp78g@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 2 Feb 2023 11:44:57 +0100
+Message-ID: <CAJZ5v0hbFNGugDJ3PGLzfNm7h7f8vTesUOZ0R_vkYGaxBWFCdQ@mail.gmail.com>
+Subject: Re: [PATCH] ACPI: Make custom_method use per-open state
+To:     "Marty E. Plummer" <hanetzer@startmail.com>,
+        Sebastian Grzywna <swiftgeek@gmail.com>
+Cc:     Pedro Falcato <pedro.falcato@gmail.com>,
+        linux-acpi@vger.kernel.org, Len Brown <lenb@kernel.org>,
+        linux-kernel@vger.kernel.org, rui.zhang@intel.com,
+        Hang Zhang <zh.nvgt@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Correct the number of GPIOs in TLMM pin controller.
+On Thu, Feb 2, 2023 at 11:03 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Thu, Feb 2, 2023 at 8:50 AM Sebastian Grzywna <swiftgeek@gmail.com> wrote:
+> >
+> > Dnia 2023-02-01, o godz. 19:34:48
+> > "Rafael J. Wysocki" <rafael@kernel.org> napisał(a):
+> >
+> > > On Wed, Feb 1, 2023 at 12:38 AM Pedro Falcato
+> > > <pedro.falcato@gmail.com> wrote:
+> > > >
+> > > > Make custom_method keep its own per-file-open state instead of
+> > > > global state in order to avoid race conditions[1] and other
+> > > > possible conflicts with other concurrent users.
+> > > >
+> > > > Link:
+> > > > https://lore.kernel.org/linux-acpi/20221227063335.61474-1-zh.nvgt@gmail.com/
+> > > > # [1] Reported-by: Hang Zhang <zh.nvgt@gmail.com> Cc: Swift Geek
+> > > > <swiftgeek@gmail.com> Signed-off-by: Pedro Falcato
+> > > > <pedro.falcato@gmail.com> ---
+> > > >  This patch addresses Hang's problems plus the ones raised by
+> > > > Rafael in his review (see link above).
+> > > > https://lore.kernel.org/lkml/2667007.mvXUDI8C0e@kreacher/ was
+> > > > submitted but since there were still people that wanted this
+> > > > feature, I took my time to write up a patch that should fix the
+> > > > issues. Hopefully the linux-acpi maintainers have not decided to
+> > > > remove custom_method just yet.
+> > >
+> > > Well, thanks for the patch, but yes, they have.  Sorry.
+> >
+> > Hi Rafael,
+> > Can you please explain why you don't want to keep it, given there's a
+> > patch?
+>
+> Because this interface was a bad idea to start with and its
+> implementation is questionable at the design level.
+>
+> Granted, at the time it was introduced, there was no alternative, but
+> there is the AML debugger in the kernel now and as far as debugging is
+> concerned, it is actually more powerful than custom_metod AFAICS.  See
+> Documentation/firmware-guide/acpi/aml-debugger.rst.
+>
+> If the AML debugger has problems, I would very much prefer fixing them
+> to the perpetual maintenance of custom_method.
+>
+> > I find it really useful in my day-to-day as a firmware engineer.
+> > I don't see much happening in git history of
+> > drivers/acpi/custom_method.c , and I don't see anything that was
+> > specifically changed in it in past 10 years to keep it being
+> > functional. Without your more detailed explanation I have hard time
+> > understanding your decision to remove it, since I'm not a kernel
+> > developer myself.
+>
+> It's been always conceptually questionable, problematic from the
+> security standpoint and implemented poorly.  Also its documentation is
+> outdated.
+>
+> The patches fixing its most apparent functional issues don't actually
+> address much of the above.
+>
+> The AML debugger should really be used for debug rather than
+> custom_method and honestly, what's the purpose of it beyond debug?
 
-Fixes: 97e563bf5ba1 ("arm64: dts: qcom: sm6115: Add basic soc dtsi")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm6115.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The above said, if people really do care about custom_method, it can
+be retained, but its documentation needs to be updated to cover the
+current requirements (according to Rui, they have changed after some
+upstream ACPICA changes).
 
-diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-index 50cb8a82ecd5..b9fff0b0ea1c 100644
---- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-@@ -363,7 +363,7 @@ tlmm: pinctrl@500000 {
- 			reg-names = "west", "south", "east";
- 			interrupts = <GIC_SPI 227 IRQ_TYPE_LEVEL_HIGH>;
- 			gpio-controller;
--			gpio-ranges = <&tlmm 0 0 121>;
-+			gpio-ranges = <&tlmm 0 0 114>; /* GPIOs + ufs_reset */
- 			#gpio-cells = <2>;
- 			interrupt-controller;
- 			#interrupt-cells = <2>;
--- 
-2.34.1
-
+Also note that the upstream ACPICA may not be guaranteed to avoid
+breaking this interface in the future, as it depends on
+acpi_install_method() that is provided by ACPICA specifically for the
+use in the AML debugger.
