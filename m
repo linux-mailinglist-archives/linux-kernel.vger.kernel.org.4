@@ -2,88 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AF2868736D
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 03:56:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 079AA687372
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 03:57:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230174AbjBBC4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 21:56:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37206 "EHLO
+        id S231576AbjBBC51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 21:57:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjBBC4P (ORCPT
+        with ESMTP id S229457AbjBBC50 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 21:56:15 -0500
-Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A498728CD
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 18:56:12 -0800 (PST)
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 3122iIF8098244;
-        Thu, 2 Feb 2023 10:44:18 +0800 (GMT-8)
-        (envelope-from neal_liu@aspeedtech.com)
-Received: from localhost.localdomain (192.168.10.10) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 2 Feb
- 2023 10:56:03 +0800
-From:   Neal Liu <neal_liu@aspeedtech.com>
-To:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
-        Neal Liu <neal_liu@aspeedtech.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
-        <linux-crypto@vger.kernel.org>
-Subject: [PATCH-next] crypto: aspeed: fix type warnings
-Date:   Thu, 2 Feb 2023 10:56:00 +0800
-Message-ID: <20230202025600.2598548-1-neal_liu@aspeedtech.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 1 Feb 2023 21:57:26 -0500
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7C574C1F;
+        Wed,  1 Feb 2023 18:57:25 -0800 (PST)
+Received: by mail-wm1-f53.google.com with SMTP id q8so353885wmo.5;
+        Wed, 01 Feb 2023 18:57:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rugLScTZxU9zmXkUzNWTJs6TN0JUzK3kK3L270nqD3E=;
+        b=e2c6MtKd0P3rj/MFKrGiRbNlfTte9N/W51jFfmk9vqzGsvcw/d6ptbUcqbvvuGNlIW
+         O7+yfAhHMEpPUEFYksLKzGFZ6v4W92ClCGvfsfcTpFTzxqqzJVKlKx/5B2zxlSL4nzSG
+         PUtIYa7SFiWZIy61sY+BoK9+UC9DbTpalQvJHqiP+RXXDQ0KTznDDX1R4Y1A5LKoSvye
+         DJIyIaPqQTLFIOgjpyrMRsRCnGLrUC09hUzl6JOdyHa3ozdY5PT+g7urNVx9HPbftGDM
+         iew2KbDGNK1hfiqijXIsehKdFGZJsM7NHrk7mz6RkpGZPeX3bDJlEhRDReROQMydkjwJ
+         om1w==
+X-Gm-Message-State: AO0yUKVoV8FRLTrF4J4Er7c+lp53abLizpJugM3tIwiYZgvpGK5JHiw2
+        qepFJWq4bWP95uVapWUMyJVRbT2f0K2Zei52yrs=
+X-Google-Smtp-Source: AK7set+4x3mLRO43hy8wdFiWggWvzTjoPwHJSzd/geddc5DTP3+z7hpYiCPdYgiYEaDiBuBDzl5ZYaFfChLSKCLhv1E=
+X-Received: by 2002:a05:600c:3150:b0:3dc:5844:6394 with SMTP id
+ h16-20020a05600c315000b003dc58446394mr82443wmo.131.1675306643749; Wed, 01 Feb
+ 2023 18:57:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [192.168.10.10]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 3122iIF8098244
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230105203231.1598936-1-namhyung@kernel.org> <CAM9d7cgJFZhSCnFcYU-5veSpJEyR3=OF_7KBtZLNwq2W2hYd-w@mail.gmail.com>
+ <Y9sTITGxhSv68uQE@kernel.org>
+In-Reply-To: <Y9sTITGxhSv68uQE@kernel.org>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Wed, 1 Feb 2023 18:57:12 -0800
+Message-ID: <CAM9d7ch1Yz1Y=7p070Xbw=+w2aMK=kvnBYPPecxZWOdN-bkLew@mail.gmail.com>
+Subject: Re: [RFC/PATCH] perf lock contention: Add -o/--lock-owner option
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Song Liu <song@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch fixes following warnings:
+On Wed, Feb 1, 2023 at 5:34 PM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
+>
+> Em Tue, Jan 24, 2023 at 09:59:27AM -0800, Namhyung Kim escreveu:
+> > Hello,
+> >
+> > Any feedback on this?
+>
+> Can you please refresh this one? I'll shortly push what I have to
+> tmp.perf/core and initiate the container build tests.
 
-1. sparse: incorrect type in assignment (different base types)
-Fix: change to __le32 type.
-2. sparse: cast removes address space '__iomem' of expression
-Fix: change to force cast.
+I have some other updates.  I'll post v2 later.
+Please feel free to go ahead.
 
-Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
----
- drivers/crypto/aspeed/aspeed-acry.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/crypto/aspeed/aspeed-acry.c b/drivers/crypto/aspeed/aspeed-acry.c
-index 164c524015f0..f8c733376469 100644
---- a/drivers/crypto/aspeed/aspeed-acry.c
-+++ b/drivers/crypto/aspeed/aspeed-acry.c
-@@ -252,7 +252,7 @@ static int aspeed_acry_rsa_ctx_copy(struct aspeed_acry_dev *acry_dev, void *buf,
- 				    enum aspeed_rsa_key_mode mode)
- {
- 	const u8 *src = xbuf;
--	u32 *dw_buf = (u32 *)buf;
-+	__le32 *dw_buf = (__le32 *)buf;
- 	int nbits, ndw;
- 	int i, j, idx;
- 	u32 data = 0;
-@@ -302,7 +302,7 @@ static int aspeed_acry_rsa_ctx_copy(struct aspeed_acry_dev *acry_dev, void *buf,
- static int aspeed_acry_rsa_transfer(struct aspeed_acry_dev *acry_dev)
- {
- 	struct akcipher_request *req = acry_dev->req;
--	u8 *sram_buffer = (u8 *)acry_dev->acry_sram;
-+	u8 *sram_buffer = (u8 __force *)acry_dev->acry_sram;
- 	struct scatterlist *out_sg = req->dst;
- 	static u8 dram_buffer[ASPEED_ACRY_SRAM_MAX_LEN];
- 	int leading_zero = 1;
--- 
-2.25.1
-
+Thanks,
+Namhyung
