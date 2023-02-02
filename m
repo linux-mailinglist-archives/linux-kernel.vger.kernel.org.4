@@ -2,108 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BDEC68878B
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 20:34:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E2DA68878C
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 20:36:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233163AbjBBTeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 14:34:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58022 "EHLO
+        id S232036AbjBBTgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 14:36:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229848AbjBBTeN (ORCPT
+        with ESMTP id S229848AbjBBTgv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 14:34:13 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2068.outbound.protection.outlook.com [40.107.237.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 885142C64B;
-        Thu,  2 Feb 2023 11:34:11 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XZ+4Ug8fM1q3M/dPpUZsmg099C9NYGmRHd6T9Ha8TbS7MepyWBMKdqL24UrzhRX8yqhB3EHElH4bkxKPXo4rNWtZ84zl+BsI1Xy7ujMbJFYMv1Ku4qZav/n1RVZz1onU9dXrvoCOz07nKohLw/iV62PQQeH4Wod8qVguBWKrstk6NT1uzfdhZ4L1wMJC2F9HEzmIjMBwaKbQBmIUGZsXf/g7HzvKwDUnumESva3PKHCaP3JuysfBHJYr+7qyD+c8RBKKJ2XimOKNexRzTxTn4EdDol2+QeVU4h3xGBTVgnH97LmxgmSeZut8zvaJoDCiGEglL+SmfmtZZ4bx3WT3NA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ST6S4MmwoEMA5I0j8P326vcCPpR/EUQptDM/zqhfzns=;
- b=Jbvs0GVnSKlFmGTbHnjhC2K3PxHBCavfBZxRVtB/ijGvgX0kWzBmnmBZRzR3zgke7dpVFfVIGAX++ObliDfLVVjyq4UlrQZODrljz/mREz1n+hJ9sVMjMYqe9E85CI6Nr/CXbJEZsuOM6t5WG0QL4iTnhHB4PbfUmpnoEZK+xGpOIXu6V7LJVW0porM+UGCOrdk0mhWy2cqu+YVvIpVDZ3/x7ym7qn0lDf9NWIEUi1K9lqTQbATrWyx6ImemENkFah5hzI1IeCZ5oo0iy+8giw7hzA5G3UPJx5bJtGlLtRrnL/ZoS4S1RNKh4mXnPaEP5d+yF2TLyuUCoHE32kc4VA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ST6S4MmwoEMA5I0j8P326vcCPpR/EUQptDM/zqhfzns=;
- b=A9JAGIIpJDZnH4+uALhi8kfbI0X1xx8cUb6/HaFOzK+Jgs2K6gSYzx/L5OT6LDvuTJojy3BEMmpS7bzTPMD+C9ROknPHItb0lF2Zgqa6gpdfSV8JTpqKOXSbXNvx1lysvQiqcGLymtxaCHaZPI/6p9+ngQtgUpFwGpY7VxdXlUh4v4uXQwLn5tQRlOHgeHL1m0X1HALzUIg3FWKTsT7Cz4BCi/I3lXLWEzsi8lTjsvDxrkshJlCNw6MP7VNJKGnQ06EcuX8lgsO5sFzEq7eCskcXV1+VkhcDfthwYSpk3//SBoVNzga6HeLg60eAhjcMFAGo1bqDZknW9cLYskZvAA==
-Received: from MW4PR03CA0170.namprd03.prod.outlook.com (2603:10b6:303:8d::25)
- by SJ0PR12MB7459.namprd12.prod.outlook.com (2603:10b6:a03:48d::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.27; Thu, 2 Feb
- 2023 19:34:09 +0000
-Received: from CO1NAM11FT086.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:8d:cafe::c8) by MW4PR03CA0170.outlook.office365.com
- (2603:10b6:303:8d::25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.27 via Frontend
- Transport; Thu, 2 Feb 2023 19:34:09 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- CO1NAM11FT086.mail.protection.outlook.com (10.13.175.73) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6064.27 via Frontend Transport; Thu, 2 Feb 2023 19:34:09 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 2 Feb 2023
- 11:33:57 -0800
-Received: from [172.27.0.20] (10.126.231.37) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 2 Feb 2023
- 11:33:55 -0800
-Message-ID: <52392558-f79e-5980-4f10-47f111d69fc0@nvidia.com>
-Date:   Thu, 2 Feb 2023 21:33:52 +0200
+        Thu, 2 Feb 2023 14:36:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFEDB2C64B
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 11:36:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 80A8AB827E7
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 19:36:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5003CC4339B;
+        Thu,  2 Feb 2023 19:36:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675366607;
+        bh=dKxC1/aDb9Kf4MWrvVY68hvT5wNWoEkjvF8SjH+2a8A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=J0wzoo7SEliOAAS/MwTXNi+kSwMV6sHTD/Q1RjnpWYWEHIpwHYg8WfqMHhZHCvo7v
+         gcNGS3Dp4EkGEYxxXoqu7DuT/g32emYCpYVny+BxgJBzOXCuzHv5MjQXHgRyzWvMRp
+         hJh/w9bYmuX8ij0aKHM4T4ErrjO2AVba0FphVDewSmNAI1g7WyIEBcMa8FvlKD57a+
+         RdrwGYBNbzFm/5hVv7zvnvfj53BqJXxGQ2pOzyNriJgHLoxdMIRpl4KtokjpkKOkCM
+         h43CS3AWNEYT4EKRJkyDFHNTpCeyPwMvaKiJ1qyTjZgnBRcKg4r7XtNPus/0H5mPa/
+         nPuQde+FLksmw==
+Date:   Thu, 2 Feb 2023 19:36:42 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     David Rau <david.rau.zg@renesas.com>,
+        "perex@perex.cz" <perex@perex.cz>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "tiwai@suse.com" <tiwai@suse.com>,
+        "support.opensource@diasemi.com" <support.opensource@diasemi.com>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ASoC: da7219: Fix pole orientation detection on OMTP
+ headsets when playing music
+Message-ID: <Y9wQygzbFyOWl54r@sirena.org.uk>
+References: <20221121050744.2278-1-david.rau.zg@renesas.com>
+ <20230117195645.GA83401@roeck-us.net>
+ <OS3PR01MB66416CEF9F6E5AE62D194BACCDC49@OS3PR01MB6641.jpnprd01.prod.outlook.com>
+ <20230119161221.GA981953@roeck-us.net>
+ <OS3PR01MB66416C10BF8E6400C84DAD02CDD09@OS3PR01MB6641.jpnprd01.prod.outlook.com>
+ <38f09c4d-70d1-f65f-6e9b-4ad84eda4059@roeck-us.net>
+ <Y9kE1cSUg2CQM5vq@sirena.org.uk>
+ <20230202155101.GB1373010@roeck-us.net>
+ <Y9vtIISfmpICi+9u@sirena.org.uk>
+ <8f89eeac-b3ef-4137-80df-6cf044873b05@roeck-us.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH net-next 7/7] devlink: Move devlink dev selftest code to
- dev
-Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     "David S. Miller" <davem@davemloft.net>,
-        Jiri Pirko <jiri@nvidia.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1675349226-284034-1-git-send-email-moshe@nvidia.com>
- <1675349226-284034-8-git-send-email-moshe@nvidia.com>
- <20230202101712.15a0169d@kernel.org>
-From:   Moshe Shemesh <moshe@nvidia.com>
-In-Reply-To: <20230202101712.15a0169d@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.231.37]
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT086:EE_|SJ0PR12MB7459:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8859c174-b637-4695-5aa0-08db0554749e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: c+halTPW1rsTRMh0UR98w5wmc0PCIZtZCrpymzmoVEM0rRA+HB90v9gDN8ziTmW4tRz9Dw3T07fgdXJnfnUdZX11r0pCyOtKl4cPra86PLlB3GkEJF+nwC2ztH71eVCB02ss8Ee9F/pMxqFvpnP9fmCLFE/8y9xBlVrZc8Xacfw4pc05iRdl0StdM705eisn299q/XYsWCapnWmbF5VP+qatYY0UEkVFiIHDP1CsxRzFphZtalHfZ6S9qaCOZ3/0VXTovKQYHSaebVrfqIyUb2cIPYBwyHx8jCMFJPr35x6OWKzT1K2xMJbnXQ3CyMWl50ebaI/AD/sTWd6sOSmUIFRJaLz7G1IqhyRSKx7T1JBjQbfUJdZBLeKF8mLH/2+VSD0dYqvBE5ZpM9pFrZoUl7G0ZhhL7xUfys0/KCHuvZxmGc2Oolj+z1lvhVry7c7cPZJgTqslaDYm/CwX2YJ2fGhDosiLxLG+i60nICfZ3SOm3zwBOkkQXttb5u+5qQamrmqPkdgmQWfV0Ss5doP1JUJdmla1gLM0Hss9xE4iyr/iqGgoTHEMoZk/HtnV7Qq8Agp6SSYxq1LiIZQsNgn/uIv45uEPdRrNXG0lA8EzlbD3JkH8hnGAopa+lpku/26kzTtZIyjYjzvmBK96L1Qk1xzj+gSKeVOo3j1IfmbCwoZY+F6UDR/ytEOKEAadlh98LpUknR7gV70q9juy7JaOeHBpDPfZ8f8AP9gVCDnD51U=
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(346002)(39860400002)(376002)(396003)(136003)(451199018)(36840700001)(46966006)(40470700004)(31686004)(336012)(316002)(47076005)(82310400005)(426003)(54906003)(6666004)(2616005)(16576012)(2906002)(36756003)(7636003)(36860700001)(356005)(82740400003)(40460700003)(53546011)(70206006)(4326008)(8676002)(70586007)(478600001)(26005)(186003)(16526019)(40480700001)(41300700001)(31696002)(86362001)(6916009)(8936002)(4744005)(5660300002)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Feb 2023 19:34:09.4046
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8859c174-b637-4695-5aa0-08db0554749e
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT086.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB7459
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="xVNftv7fOUYdi/3y"
+Content-Disposition: inline
+In-Reply-To: <8f89eeac-b3ef-4137-80df-6cf044873b05@roeck-us.net>
+X-Cookie: Swim at your own risk.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -111,22 +71,155 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 02/02/2023 20:17, Jakub Kicinski wrote:
-> External email: Use caution opening links or attachments
->
->
-> On Thu, 2 Feb 2023 16:47:06 +0200 Moshe Shemesh wrote:
->> Move devlink dev selftest callbacks and related code from leftover.c to
->> file dev.c. No functional change in this patch.
-> selftest I'd put in its own file. We don't want every command which
-> doesn't have a specific sub-object to end up in dev.c, right?
-> At least that was my initial thinking. I don't see any dependencies
-> between the selftest code and the rest of the dev code either.
-> WDYT?
+--xVNftv7fOUYdi/3y
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+On Thu, Feb 02, 2023 at 10:39:51AM -0800, Guenter Roeck wrote:
+> On 2/2/23 09:04, Mark Brown wrote:
 
-I thought as it is devlink dev selftest, the sub-object is dev. 
-Otherwise, what should be the rule here ?
+> > It's definitely unclear, there's a datasheet at [1] which does appear to
+> > explicitly call for a 512ms delay though (see figure 20 on page 50).  It
+> > does look like it should only be applied in the case where an inserted
+> > jack is detected (ie, when identifying an accessory or button press) and
+> > not when removal is detected though.
 
-How do we decide if it should get its own file ?
+> The datasheet doesn't really suggest that a delay shall be applied using
+> msleep (ie in the code). The chip presumably debounces internally (see
 
+Obviously it doesn't call for an explicit implementation in the host.
+
+> jackdet_debounce and jackdet_rem_deb), and there is also jack_detect_rate
+> to configure the detection rate. The table seems to suggest (to me) that
+> there is an e_jack_insertion event, which would then be followed 64-512 ms
+> later with an e_jack_detect_complete event.
+
+Right, I think what I was looking at was that in combination of the fact
+that there's a *much* longer window before the host clears the interrupt
+shown on the first JACK_IN.  It could be spurious and possibly just due
+to the host type check thing in the diagram but it smells real bad, like
+the hardware state machine has robustness issues or something.  The
+diagram currently doesn't quite correspond to the code since we have the
+delay applied unconditionally, and there's that undocumented
+register for the ground switch being managed.
+
+> Whatever is done in software is on top of that, or at least that is my
+> understanding, and not explained by anything in the datasheet.
+
+> Given that the chip itself supports debouncing internally, it is not clear
+> to me what the delay is actually supposed to accomplish. Soft debounce
+> on top of chip debounce ? I don't see that explained anywhere, though of
+> course I might be missing it.
+
+That's what it looks like it's trying to accomplish but as you say it's
+not exactly explicit.  I *suspect* it's trying to debounce in more cases
+than is needed.
+
+> > > is not conceivable (or explained) why the ground switch is enabled only
+> > > to be disabled immediately afterwards if a jack was removed.
+
+> > It smells like there's a power benefit to leaving it disabled when
+> > unplugged (which seems plausible), and possibly like the detection is
+> > more stable with the ground switch enabled.  The ground switch is not
+> > documented AFAICT (it's in register 0xfb which isn't named and doesn't
+> > appear to appear in the datsheet from a quick search).  The code is
+> > leaving the switch enabled so long as an accessory is plugged.
+
+> I understand. What I don't understand is that it is always enabled
+> in the interrupt handler, no matter if a jack was inserted or not,
+> only to be disabled immediately if the jack was disabled or after
+> insertion detection work is complete.
+
+My guess was that it was making the detection more stable, it's
+surprising that it'd help with simple presence detection though.
+
+> > Are you saying this is actually crashing, or just that you're getting
+> > warnings about threads being blocked for too long (that was what was
+> > posted earlier in the thread)?  The only things I can see that look like
+
+> ChromeOS is configured to crash after stalled threads are detected (ie
+> after 120 seconds), so this is actually causing crashes.
+
+Ah, that's much more serious than I'd understood from the log you
+posted.
+
+> > they have the potential to actually lock up are the cancel_work_sync()
+> > calls but they were unchanged and the backtrace you showed was showing
+> > the thread in the msleep().  My guess would be that you've got systems
+> > where there are very frequent jack detection events (potentiallly with
+> > broken accessories, or possibly due to the ground switch putting things
+> > into the wrong priority) and that the interrupt is firing again as soon
+> > as the thread unmasks the primary interrupt which means it never
+> > actually stops running.
+
+> That is what I strongly suspect is happening. I don't know why exactly
+> the interrupt is firing continuously, but the hang is always in msleep().
+> One possibility might be that the event is actually a disconnect event,
+> and that enabling and immediately disabling the ground switch causes
+> another interrupt, which is then handled immediately, causing the hang.
+
+Could be.  I'd be willing to guess that it's not just one event but
+rather a stream of events of some kind.  Possibly if it's due to the
+ground switch it's spuriously detecting a constant stream of button
+presses for the affected systems, which don't produce any UI visible
+result which would cause users to pull the accessory for whatever
+reason?  Whatever's going on I bet it's broken accessories triggering it.
+
+> > My other guess would be that moving the delay that's been added to a
+> > delayed work would avoid the warnings, though you might want to manually
+> > keep the physical interrupt disabled while that's running which is fun.
+
+> I am not sure if that would fix anything. The current code sleeps, then
+> enables the ground switch and does the rest of the detection. I'd somewhat
+> understand the code if it would enable the ground switch after an "insertion
+> detected" interrupt, then wait for some amount of time and handle the rest
+> of the detection after waiting (even though that should really be handled by
+> the "detection complete" interrupt). But that isn't what it does.
+> If we were to implement the above, I suspect the result would be that the
+> interrupt still happens all the time, and the only difference would be that
+> it would be "silenced" while the delayed work is waiting to be scheduled.
+> That doesn't really fix the problem, it only works around it. But, sure,
+> it would be much better than the current situation.
+
+Yes, exactly - I was just looking at a refactoring in the code which
+would mitigate the immediate problem while keeping the current partially
+documented algorithm in place.
+
+> My "wild shot" fix would be to enable the ground switch after an insertion
+> event and to drop the software sleep entirely.
+
+That's entirely plausible to me, either together or possibly just one of
+those is actually needed.  Do you want to send a patch?
+
+> However, it is really impossible to know what the delay is for in the
+> first place. Looking into the code further, the sleep time actually matches
+> the configured jack detection rate. I have no idea why it would make sense
+> to wait for a detection cycle after an event, then enable the ground switch
+> and actually handle the event (which by then probably reports that jack
+> detection is complete after an insertion). I really don't understand
+> the logic behind that.
+
+This all smells like there's either a race condition in a state machine
+somewhere or the button detection needs a bit of help (though if it's
+the latter then it'd be conditional on a microphone having been
+detected).
+
+Hopefully David will get back to us with some explanation and ideally
+fix.
+
+--xVNftv7fOUYdi/3y
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPcEMkACgkQJNaLcl1U
+h9BX8Qf+PrDNAOJFzWqrttDu9oAgYQJuDykPUqiH5b3Niw/t4PUQvsuMbTcozyYs
+QOnZEctgIKRLMfwvtTMxi4SwtvG7+74uTb+o/mbkZPOOxIOEbwSRSUQIvjD19riu
+PWHWDkiWDxQmXnLCUL07v4LJA5Rk3t1Jyaqu+jeD9bd9lk4qW72bJiDsKvVJBW1d
+M5LjDLMmODEJONHzNYoUBX6CJABY7jlzS41txrXeHXqASIIauHizti3DRhS9d5ty
+/+YJzwB1Qj+S7DgBHZR/U1I5LBuVFGq7AIHHMNnH7I/1XyJ4Y2xfSRDTc4jaoUUT
+CcmqpVi4btxYCZjq84qiu3BuVfPhmg==
+=tzH8
+-----END PGP SIGNATURE-----
+
+--xVNftv7fOUYdi/3y--
