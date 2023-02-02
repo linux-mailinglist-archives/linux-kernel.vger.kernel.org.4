@@ -2,84 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F956687543
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 06:33:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 656BA687545
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 06:35:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbjBBFdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 00:33:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59908 "EHLO
+        id S230432AbjBBFfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 00:35:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232198AbjBBFdJ (ORCPT
+        with ESMTP id S231345AbjBBFe2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 00:33:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D5927B427;
-        Wed,  1 Feb 2023 21:30:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 40901B824B2;
-        Thu,  2 Feb 2023 05:30:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E0CCDC4339E;
-        Thu,  2 Feb 2023 05:30:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675315816;
-        bh=0PQA0CdkO4lnxRGdtrno44wWf54jX/54YWYdBo/7vKU=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=u1mvu9oVbY29Qzoi2gb/bv7H3jOYPovXv3XMzQlsKkxcPB+IvZXja2PiM/XsivAfu
-         BuNhr647+wcbaqJmbGGZE0Eovlm4M+UU5yENz7df7c2JDNZA/UhfjvbLugr3ym+sS/
-         LpBBNlGYWr9pS0p4zd+maRglmqRgcZuW/3RRI6lCukx9900RWdf62tCcSjJzuenQMP
-         7ijqQGOoJDx6WDr0HnEHEjY8pjEcdMvTnfqHHuMpc5ofQT+8DFmnv5dYQuC83kEceT
-         ucM8OhhMyepMF+7K5bLDuDRY0fFnTtgm28KYTFAlCvsFREuCDXq0UJvLrswuEZXPuM
-         S07jMp0WYRGmg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C4AB1C0C40E;
-        Thu,  2 Feb 2023 05:30:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 2 Feb 2023 00:34:28 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32EC884B5C;
+        Wed,  1 Feb 2023 21:31:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=6xrDrgd0SgpMzq7Fih7w16pMOwi04Mj1hgwk0rtIR8g=; b=nUKgQ0CVxwQVVfCTHpke6jhRT9
+        EeJlUfJzGwXz9zQ9oXDM6mjMK8Qkvqsj4L05sphwzyZRqCdrHMbvSec+aGB7iEo8FyqmPrmUpNQrR
+        5pdFie01KZqO6FIVeVsJjfwKGu+cIVj7auniHEygyvyBrnwZHokJ3RzzXMR3NHA8K7xphYFZVROVH
+        dDsDvCxJ4RS87XDeoS1S2kOa3sN19xd9sEVO2dGjeJlGw42jmE2Y1yas8zdYrWvOldf4mOA5m+zIY
+        wrgh7inFeNY9WmCRaNf1QHl8GUJUU0wxuWNExlsfdCtHOvh7No7vM7GnYKmh/KUs+RZRvXS45m+AW
+        +wo07Bvw==;
+Received: from [2601:1c2:d00:6a60::9526] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pNSBl-00ERl0-Q3; Thu, 02 Feb 2023 05:31:13 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH v2] sh: implicit access_ok() needs an #include
+Date:   Wed,  1 Feb 2023 21:31:13 -0800
+Message-Id: <20230202053113.2782-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [net PATCH v2] octeontx2-af: Fix devlink unregister
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167531581680.11250.16211882708416024258.git-patchwork-notify@kernel.org>
-Date:   Thu, 02 Feb 2023 05:30:16 +0000
-References: <20230131061659.1025137-1-rkannoth@marvell.com>
-In-Reply-To: <20230131061659.1025137-1-rkannoth@marvell.com>
-To:     Ratheesh Kannoth <rkannoth@marvell.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, leon@kernel.org, jiri@resnulli.us,
-        sgoutham@marvell.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Building arch/sh/ has a build error/warning that is fixed by
+adding an #include of a header file.
 
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+../arch/sh/include/asm/checksum_32.h: In function 'csum_and_copy_from_user':
+../arch/sh/include/asm/checksum_32.h:53:14: error: implicit declaration of function 'access_ok' [-Werror=implicit-function-declaration]
+   53 |         if (!access_ok(src, len))
+      |              ^~~~~~~~~
 
-On Tue, 31 Jan 2023 11:46:59 +0530 you wrote:
-> Exact match feature is only available in CN10K-B.
-> Unregister exact match devlink entry only for
-> this silicon variant.
-> 
-> Fixes: 87e4ea29b030 ("octeontx2-af: Debugsfs support for exact match.")
-> Signed-off-by: Ratheesh Kannoth <rkannoth@marvell.com>
-> 
-> [...]
+Fixes: 7fe8970a78a1 ("sh32: convert to csum_and_copy_from_user()")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+Cc: Rich Felker <dalias@libc.org>
+Cc: linux-sh@vger.kernel.org
+Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+---
+v2: add Subject: and patch description
 
-Here is the summary with links:
-  - [net,v2] octeontx2-af: Fix devlink unregister
-    https://git.kernel.org/netdev/net/c/917d5e04d4dd
+ arch/sh/include/asm/checksum_32.h |    1 +
+ 1 file changed, 1 insertion(+)
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+diff -- a/arch/sh/include/asm/checksum_32.h b/arch/sh/include/asm/checksum_32.h
+--- a/arch/sh/include/asm/checksum_32.h
++++ b/arch/sh/include/asm/checksum_32.h
+@@ -7,6 +7,7 @@
+  */
+ 
+ #include <linux/in6.h>
++#include <asm-generic/access_ok.h>
+ 
+ /*
+  * computes the checksum of a memory block at buff, length len,
