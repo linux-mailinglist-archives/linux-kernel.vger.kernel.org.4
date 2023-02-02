@@ -2,61 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A000687676
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 08:37:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32B8168767B
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 08:39:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231362AbjBBHhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 02:37:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34850 "EHLO
+        id S231302AbjBBHjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 02:39:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbjBBHha (ORCPT
+        with ESMTP id S229618AbjBBHjR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 02:37:30 -0500
-Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66FCF83947;
-        Wed,  1 Feb 2023 23:37:25 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VajzpJw_1675323440;
-Received: from 30.97.49.35(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VajzpJw_1675323440)
-          by smtp.aliyun-inc.com;
-          Thu, 02 Feb 2023 15:37:21 +0800
-Message-ID: <02edb5d6-a232-eed6-0338-26f9a63cfdb6@linux.alibaba.com>
-Date:   Thu, 2 Feb 2023 15:37:20 +0800
+        Thu, 2 Feb 2023 02:39:17 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2059.outbound.protection.outlook.com [40.107.220.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4FAA6F22A;
+        Wed,  1 Feb 2023 23:39:16 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KYW318uCT/8jcPCqAqzQmHo6q3vx+yn4/yC+58IqilTOXiPtjO4DI8Zt/5UTG8eS7+4Sw8XpePxFiyz5mRK1fRIEt4fNEaqw/27j0+pTPyovvtoAFYmy5rLkl6bOioL1rqE39N6Kxb2heZf2b7MH7tw6E0qJ3da5IKo9NwI8qn25iVvSmB7SFlH/Vbl+Emfsy4vIMNMjzRfbc+peKm4aISWKBkafx6pX7b7EIVbanwJnKq1+6S0yN9LNSKboQEMRpRWonKZatWhHaT4F9zAmfq4mF7x1TTCfuQml8TZy+0dbcy9dHPEJHtGfTMONViQ71v7fgdgNakwuLyg7wqfQpA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5D3QjEPlpOrivUL5c7dGrVpnneBzN8A8hqSottti8e8=;
+ b=gMIyAri+PQf4qzacAqEKdqiU18hd/g6Ny+WGJUBV4tzuewRFhl/E7WpWZxElZWTa8lQ6+DzkphRBxuWfZl8F/WhSG4t94Op4rhyge5fqj0fVTajAo5yRMFKs73tH0YUXSBfgE3FUf2Dc+tl3dqcSElVM4DdHTi/fVeHblmwoYWTrDT1qlnM+0io5c7Dp3I7qpiAuK4tzD7aStUiZus3ZfpNCNeDvuVflKEx/NxP/QQX6yoSLO9U7PnHep6vKMW3JzkHlHCExMCuhqOMsrc+82dILy8xPz4nIiSQ3ISCyq7W8PHJxzKsUNUTt3Hnn0PkVZ4NTwngr4iLgzfRv5gK2+Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5D3QjEPlpOrivUL5c7dGrVpnneBzN8A8hqSottti8e8=;
+ b=rCRsrTaMAbVXI4RG1y3QXTO1Q/BNL82hAAvYhJbgHPJX+J5c2TbJ+xXa3n/VdXyxeB4TURZw4AeMQSL05g3QB1lpfrsciSItLvwrn7N67b4wg4rrp5aFYw1cqmQwwa3rSoPx7zl29dXmBnxxMMxHti0gohH4z+Jt+h7P/ucNjN0=
+Received: from MW5PR12MB5598.namprd12.prod.outlook.com (2603:10b6:303:193::11)
+ by MW5PR12MB5682.namprd12.prod.outlook.com (2603:10b6:303:19f::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.27; Thu, 2 Feb
+ 2023 07:39:14 +0000
+Received: from MW5PR12MB5598.namprd12.prod.outlook.com
+ ([fe80::8585:d686:cae0:4a10]) by MW5PR12MB5598.namprd12.prod.outlook.com
+ ([fe80::8585:d686:cae0:4a10%4]) with mapi id 15.20.6064.024; Thu, 2 Feb 2023
+ 07:39:14 +0000
+From:   "Gaddam, Sarath Babu Naidu" <sarath.babu.naidu.gaddam@amd.com>
+To:     Vinod Koul <vkoul@kernel.org>
+CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "lars@metafoo.de" <lars@metafoo.de>,
+        "adrianml@alumnos.upm.es" <adrianml@alumnos.upm.es>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Simek, Michal" <michal.simek@amd.com>,
+        "Pandey, Radhey Shyam" <radhey.shyam.pandey@amd.com>,
+        "Sarangi, Anirudha" <anirudha.sarangi@amd.com>,
+        "Katakam, Harini" <harini.katakam@amd.com>,
+        "git (AMD-Xilinx)" <git@amd.com>
+Subject: RE: [PATCH V2 3/6] dmaengine: xilinx_dma: Pass AXI4-Stream control
+ words to dma client
+Thread-Topic: [PATCH V2 3/6] dmaengine: xilinx_dma: Pass AXI4-Stream control
+ words to dma client
+Thread-Index: AQHY/++qo3SMgWHWmESnh+GAFjvf166DV0kAgDhaN+A=
+Date:   Thu, 2 Feb 2023 07:39:13 +0000
+Message-ID: <MW5PR12MB5598DFF156682670F0A8038B87D69@MW5PR12MB5598.namprd12.prod.outlook.com>
+References: <20221124102745.2620370-1-sarath.babu.naidu.gaddam@amd.com>
+ <20221124102745.2620370-4-sarath.babu.naidu.gaddam@amd.com>
+ <Y6whxpN7bgjU7ZvL@matsya>
+In-Reply-To: <Y6whxpN7bgjU7ZvL@matsya>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MW5PR12MB5598:EE_|MW5PR12MB5682:EE_
+x-ms-office365-filtering-correlation-id: 1f04669e-a0c1-47f5-1d23-08db04f094ec
+x-ld-processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: jx4cmjjGNKZgYTZo3yiUhExCLPAu5eg0Lc57w52g7TrfBtUY0FfDPjzQiQ7ja0BZ4kxn3R43RICUhpfysGomflOY+Cjk6u5h7sUDCVFgC6PtD8oLOI7tI17/zNYhkkZIER2B/yXUi8FPMpF3Bg8Hv+Q/cNpxFoOAim6VPqCrSI2hRSAz2HEk5/9wgdx+nmoBp4NeEuLFpeg0zpOeF/0Xn5B7SpB1R9bRoA65OBtW16kQHUX0nHsJ3SgW3IwgWF6mLWlwbzCCZ4WaTlcqs2eyOYT7RUirW/evKGjU7NQ6EDEuDUauOBe5eADDOSzGaHLGJ0sN68XqUNBjL8q/1nWzCclHQcxB4/mWLDKcBQ92Yf4Ebay9E0SEQ0juMGGWABEETe58nVso+FO2LHdjP5HZ8eWGn3nc9yKELP6VsXmYqSMDc4z0Z8vxtshIei6XWJPoC5EiHOCbt0rlh9u/kL323rpIc71w48NuPrQwGlnQQR19v+HIpwbj4YY9F1JV/DpPXZn2NvLMOok68rIHwN7P+9N4PB6DR58rJTjrqyeLfASnLf00xSBknolQ/OT7p+avaJr1cT9TH9ENGckGh0eigjRXI5qlSWJnOh2g7iZeNvcdAEZyAWxSIykMqOj7XILWQ7LUsKLjFhecRPpRQXxscrSEPnzD0JQcEAWFXJrTSpixIZevuoXzH9Uxu51CBF/055em/3Xdk8UW5ObEQ9vxxg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW5PR12MB5598.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(346002)(366004)(376002)(39860400002)(451199018)(55016003)(38070700005)(122000001)(38100700002)(7696005)(8676002)(2906002)(4326008)(54906003)(316002)(7416002)(76116006)(71200400001)(86362001)(5660300002)(8936002)(41300700001)(66946007)(52536014)(6506007)(53546011)(26005)(186003)(33656002)(66446008)(64756008)(66556008)(66476007)(478600001)(9686003)(6916009)(83380400001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?QI6nUpHr/X1c2w2UPZNs0C1CeT+CwqW6y1FPFR04T8+9d3lGdhRM4k4kLiEa?=
+ =?us-ascii?Q?izXHBcLX2Q6O7/iD5jv4aE422e14Mxq7cknPgiVvDNkdXBRCvzLpjX0NXnwO?=
+ =?us-ascii?Q?c++vtiTXFUHAOID/6Y6cgcoIzvtbRDZrUEKQilig6WylUreAFnLAbP0N1Ztl?=
+ =?us-ascii?Q?7kqeoXRmb7ChV2euNmXkdrn4Mz4Ym9oRWM/oAqNOmuR/Yc1TLt+XcZTMQ6Lf?=
+ =?us-ascii?Q?9kvm6d/0lBICJKiTR1Jc3pwN9Nl0sV1a0f219LGUN7J9AtvQUpExJQbuq/nD?=
+ =?us-ascii?Q?KSPj+oWuADhJbwskBW8DNSkxtsAqI6P1kqowlS5bEy/stjUFe2xKGZomwe7u?=
+ =?us-ascii?Q?SXmuii3Sjc4LFyfVrtRmQ8lvTPJgZeTa4PDqn5JxqPvuitRSskwU/e/9CWs5?=
+ =?us-ascii?Q?1/af1exJTapllSC+zBIK+jwOgpYCzI4WXkmqfmBqtIIzhHBtCRf5vrUmI+wj?=
+ =?us-ascii?Q?2ceXMQAUQsOnLD61exay1OYcaHY9bcHXeI/2ZUql16L0yfJlLMmSxF1DAEpv?=
+ =?us-ascii?Q?yJeI/l0Ay4bNn8M1PidbXhuJByx2riw5DDSkmxxDqBnYIFh1AEMU1WOgu1ZI?=
+ =?us-ascii?Q?KGmI1VAtYYXgpvaxS6K4jQheAcvq7y5eYtHFB+RVGMJiEOn0PVDNa7RDmT5n?=
+ =?us-ascii?Q?NFtp5uDTTtTQpxOyADkwAEL2yC7MOt27AtcCBwAUN4hmToDhxpxTP/jX515x?=
+ =?us-ascii?Q?/EyaPHuHr56fOd5zKMGfF72yXPtjbQImdfrxEY9nS8ameYFzRwRlSrkn+y9n?=
+ =?us-ascii?Q?qdbVE4oQYOuPsSYmpc+KoLLEbtiAZTze1S9AN28/PteRAQ7YsICfLnK0S1xT?=
+ =?us-ascii?Q?InYdzcRPA3lUpPusLVtK+SHieKxpShe3D1KhKHECsxZ9pCkIyYOIpF9S9uF8?=
+ =?us-ascii?Q?yCIFOSCa2nAwhmgnc9uxQunsb/Ez8r8ji7lmODgk7tzv5tAfcQ1M+iOFP4bO?=
+ =?us-ascii?Q?LABHNkHxuyALPXTxNtu2lKVxxgfgiuGlj1bKv1hxqLqRYkE0sWrGpeHGXfRm?=
+ =?us-ascii?Q?IbriMfk7yjKD9y5Q7HnYLZQmFmblXSjO5z/mkNd5ptIlV0hEBiQ7JK/2pyY2?=
+ =?us-ascii?Q?0rbcMKYT3Z5r1h/MGoEfAzyOWTjJHk01OYu8ghZAF0Y/mTlHj0VENoRPsUtK?=
+ =?us-ascii?Q?4jQW12ZGMu7VL63x4H5Y/MW3fJmxw+rN741GzzZPe7qSl8g8q1ULCSax3o5d?=
+ =?us-ascii?Q?E5lcph+0WNrdoBImwBGdLTPJqEl0KfyymzEaPSmNMkim1L5kMSpU6ykG3AOB?=
+ =?us-ascii?Q?/FucQKH6Qf7pRUcV8ICuGu57d4pheMDLg8VwpBug+YAoPz/F9F1teR6nKMHH?=
+ =?us-ascii?Q?Xk0cy6XrplQnKyIggPVm1seRGFU9SEgGlu3hIwPBpVvtfwDkJp1iC3WRDmwy?=
+ =?us-ascii?Q?ON8fxrjItXjuaIFPzaYv6K61CvLBK9JvtwFShVkRensMFcBt4h41evhx50iM?=
+ =?us-ascii?Q?N+UZ5UTcbf06gVZrbAIr3SGj4mWBmFIJ+84waC/qBW6KjqDZMg3o3+66FrDj?=
+ =?us-ascii?Q?igTlZOvbEZzD2uEvW+ppxd6cRJxJuNgFFSuKyATz4Hp12EU1LXK9czYv/WOJ?=
+ =?us-ascii?Q?b26CVFU26GFdljKKejA=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH v3 0/6] Composefs: an opportunistically sharing verified
- image filesystem
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     Alexander Larsson <alexl@redhat.com>,
-        Jingbo Xu <jefflexu@linux.alibaba.com>, gscrivan@redhat.com,
-        brauner@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, david@fromorbit.com,
-        viro@zeniv.linux.org.uk, Vivek Goyal <vgoyal@redhat.com>,
-        Miklos Szeredi <miklos@szeredi.hu>
-References: <cover.1674227308.git.alexl@redhat.com>
- <CAOQ4uxgGc33_QVBXMbQTnmbpHio4amv=W7ax2vQ1UMet0k_KoA@mail.gmail.com>
- <1ea88c8d1e666b85342374ed7c0ddf7d661e0ee1.camel@redhat.com>
- <CAOQ4uxinsBB-LpGh4h44m6Afv0VT5yWRveDG7sNvE2uJyEGOkg@mail.gmail.com>
- <5fb32a1297821040edd8c19ce796fc0540101653.camel@redhat.com>
- <CAOQ4uxhGX9NVxwsiBMP0q21ZRot6-UA0nGPp1wGNjgmKBjjBBA@mail.gmail.com>
- <b8601c976d6e5d3eccf6ef489da9768ad72f9571.camel@redhat.com>
- <e840d413-c1a7-d047-1a63-468b42571846@linux.alibaba.com>
- <2ef122849d6f35712b56ffbcc95805672980e185.camel@redhat.com>
- <8ffa28f5-77f6-6bde-5645-5fb799019bca@linux.alibaba.com>
- <51d9d1b3-2b2a-9b58-2f7f-f3a56c9e04ac@linux.alibaba.com>
- <071074ad149b189661681aada453995741f75039.camel@redhat.com>
- <0d2ef9d6-3b0e-364d-ec2f-c61b19d638e2@linux.alibaba.com>
- <de57aefc-30e8-470d-bf61-a1cca6514988@linux.alibaba.com>
- <CAOQ4uxgS+-MxydqgO8+NQfOs9N881bHNbov28uJYX9XpthPPiw@mail.gmail.com>
- <9c8e76a3-a60a-90a2-f726-46db39bc6558@linux.alibaba.com>
-In-Reply-To: <9c8e76a3-a60a-90a2-f726-46db39bc6558@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW5PR12MB5598.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1f04669e-a0c1-47f5-1d23-08db04f094ec
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Feb 2023 07:39:13.9752
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: yuFvosvd17Etk8Yd1wNmU1X6cQwUmhhkf/Ah8wF+XuYsF7qmws3OnhH0oK+My+lR3oomye8/A0FPMxrDaqWB6w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR12MB5682
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -65,180 +135,148 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2023/2/2 15:17, Gao Xiang wrote:
-> 
-> 
-> On 2023/2/2 14:37, Amir Goldstein wrote:
->> On Wed, Feb 1, 2023 at 1:22 PM Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
->>>
->>>
->>>
->>> On 2023/2/1 18:01, Gao Xiang wrote:
->>>>
->>>>
->>>> On 2023/2/1 17:46, Alexander Larsson wrote:
->>>>
->>>> ...
->>>>
->>>>>>
->>>>>>                                     | uncached(ms)| cached(ms)
->>>>>> ----------------------------------|-------------|-----------
->>>>>> composefs (with digest)           | 326         | 135
->>>>>> erofs (w/o -T0)                   | 264         | 172
->>>>>> erofs (w/o -T0) + overlayfs       | 651         | 238
->>>>>> squashfs (compressed)                | 538         | 211
->>>>>> squashfs (compressed) + overlayfs | 968         | 302
->>>>>
->>>>>
->>>>> Clearly erofs with sparse files is the best fs now for the ro-fs +
->>>>> overlay case. But still, we can see that the additional cost of the
->>>>> overlayfs layer is not negligible.
->>>>>
->>>>> According to amir this could be helped by a special composefs-like mode
->>>>> in overlayfs, but its unclear what performance that would reach, and
->>>>> we're then talking net new development that further complicates the
->>>>> overlayfs codebase. Its not clear to me which alternative is easier to
->>>>> develop/maintain.
->>>>>
->>>>> Also, the difference between cached and uncached here is less than in
->>>>> my tests. Probably because my test image was larger. With the test
->>>>> image I use, the results are:
->>>>>
->>>>>                                     | uncached(ms)| cached(ms)
->>>>> ----------------------------------|-------------|-----------
->>>>> composefs (with digest)           | 681         | 390
->>>>> erofs (w/o -T0) + overlayfs       | 1788        | 532
->>>>> squashfs (compressed) + overlayfs | 2547        | 443
->>>>>
->>>>>
->>>>> I gotta say it is weird though that squashfs performed better than
->>>>> erofs in the cached case. May be worth looking into. The test data I'm
->>>>> using is available here:
->>>>
->>>> As another wild guess, cached performance is a just vfs-stuff.
->>>>
->>>> I think the performance difference may be due to ACL (since both
->>>> composefs and squashfs don't support ACL).  I already asked Jingbo
->>>> to get more "perf data" to analyze this but he's now busy in another
->>>> stuff.
->>>>
->>>> Again, my overall point is quite simple as always, currently
->>>> composefs is a read-only filesystem with massive symlink-like files.
->>>> It behaves as a subset of all generic read-only filesystems just
->>>> for this specific use cases.
->>>>
->>>> In facts there are many options to improve this (much like Amir
->>>> said before):
->>>>     1) improve overlayfs, and then it can be used with any local fs;
->>>>
->>>>     2) enhance erofs to support this (even without on-disk change);
->>>>
->>>>     3) introduce fs/composefs;
->>>>
->>>> In addition to option 1), option 2) has many benefits as well, since
->>>> your manifest files can save real regular files in addition to composefs
->>>> model.
->>>
->>> (add some words..)
->>>
->>> My first response at that time (on Slack) was "kindly request
->>> Giuseppe to ask in the fsdevel mailing list if this new overlay model
->>> and use cases is feasable", if so, I'm much happy to integrate in to
->>> EROFS (in a cooperative way) in several ways:
->>>
->>>    - just use EROFS symlink layout and open such file in a stacked way;
->>>
->>> or (now)
->>>
->>>    - just identify overlayfs "trusted.overlay.redirect" in EROFS itself
->>>      and open file so such image can be both used for EROFS only and
->>>      EROFS + overlayfs.
->>>
->>> If that happened, then I think the overlayfs "metacopy" option can
->>> also be shown by other fs community people later (since I'm not an
->>> overlay expert), but I'm not sure why they becomes impossible finally
->>> and even not mentioned at all.
->>>
->>> Or if you guys really don't want to use EROFS for whatever reasons
->>> (EROFS is completely open-source, used, contributed by many vendors),
->>> you could improve squashfs, ext4, or other exist local fses with this
->>> new use cases (since they don't need any on-disk change as well, for
->>> example, by using some xattr), I don't think it's really hard.
->>>
->>
->> Engineering-wise, merging composefs features into EROFS
->> would be the simplest option and FWIW, my personal preference.
->>
->> However, you need to be aware that this will bring into EROFS
->> vfs considerations, such as  s_stack_depth nesting (which AFAICS
->> is not see incremented composefs?). It's not the end of the world, but this
->> is no longer plain fs over block game. There's a whole new class of bugs
->> (that syzbot is very eager to explore) so you need to ask yourself whether
->> this is a direction you want to lead EROFS towards.
-> 
-> I'd like to make a seperated Kconfig for this.  I consider this just because
-> currently composefs is much similar to EROFS but it doesn't have some ability
-> to keep real regular file (even some README, VERSION or Changelog in these
-> images) in its (composefs-called) manifest files. Even its on-disk super block
-> doesn't have a UUID now [1] and some boot sector for booting or some potential
-> hybird formats such as tar + EROFS, cpio + EROFS.
-> 
-> I'm not sure if those potential new on-disk features is unneeded even for
-> future composefs.  But if composefs laterly supports such on-disk features,
-> that makes composefs closer to EROFS even more.  I don't see disadvantage to
-> make these actual on-disk compatible (like ext2 and ext4).
-> 
-> The only difference now is manifest file itself I/O interface -- bio vs file.
-> but EROFS can be distributed to raw block devices as well, composefs can't.
-> 
-> Also, I'd like to seperate core-EROFS from advanced features (or people who
-> are interested to work on this are always welcome) and composefs-like model,
-> if people don't tend to use any EROFS advanced features, it could be disabled
-> from compiling explicitly.
+> -----Original Message-----
+> From: Vinod Koul <vkoul@kernel.org>
+> Sent: Wednesday, December 28, 2022 4:30 PM
+> To: Gaddam, Sarath Babu Naidu
+> <sarath.babu.naidu.gaddam@amd.com>
+> Cc: robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org;
+> lars@metafoo.de; adrianml@alumnos.upm.es;
+> dmaengine@vger.kernel.org; devicetree@vger.kernel.org; linux-arm-
+> kernel@lists.infradead.org; linux-kernel@vger.kernel.org; Simek, Michal
+> <michal.simek@amd.com>; Pandey, Radhey Shyam
+> <radhey.shyam.pandey@amd.com>; Sarangi, Anirudha
+> <anirudha.sarangi@amd.com>; Katakam, Harini
+> <harini.katakam@amd.com>; git (AMD-Xilinx) <git@amd.com>
+> Subject: Re: [PATCH V2 3/6] dmaengine: xilinx_dma: Pass AXI4-Stream
+> control words to dma client
+>=20
+> On 24-11-22, 15:57, Sarath Babu Naidu Gaddam wrote:
+> > From: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+> >
+> > Read DT property to check if AXI DMA is connected to streaming IP i.e
+> > axiethernet. If connected pass AXI4-Stream control words to dma client
+> > using metadata_ops dmaengine API.
+> >
+> > Signed-off-by: Radhey Shyam Pandey
+> <radhey.shyam.pandey@xilinx.com>
+> > ---
+> >  drivers/dma/xilinx/xilinx_dma.c | 37
+> > +++++++++++++++++++++++++++++++++
+> >  1 file changed, 37 insertions(+)
+> >
+> > diff --git a/drivers/dma/xilinx/xilinx_dma.c
+> > b/drivers/dma/xilinx/xilinx_dma.c index 8cd4e69dc7b4..f783ba86cb09
+> > 100644
+> > --- a/drivers/dma/xilinx/xilinx_dma.c
+> > +++ b/drivers/dma/xilinx/xilinx_dma.c
+> > @@ -493,6 +493,7 @@ struct xilinx_dma_config {
+> >   * @s2mm_chan_id: DMA s2mm channel identifier
+> >   * @mm2s_chan_id: DMA mm2s channel identifier
+> >   * @max_buffer_len: Max buffer length
+> > + * @has_axistream_connected: AXI DMA connected to AXI Stream IP
+> >   */
+> >  struct xilinx_dma_device {
+> >  	void __iomem *regs;
+> > @@ -511,6 +512,7 @@ struct xilinx_dma_device {
+> >  	u32 s2mm_chan_id;
+> >  	u32 mm2s_chan_id;
+> >  	u32 max_buffer_len;
+> > +	bool has_axistream_connected;
+> >  };
+> >
+> >  /* Macros */
+> > @@ -623,6 +625,29 @@ static inline void xilinx_aximcdma_buf(struct
+> xilinx_dma_chan *chan,
+> >  	}
+> >  }
+> >
+> > +/**
+> > + * xilinx_dma_get_metadata_ptr- Populate metadata pointer and
+> payload
+> > +length
+> > + * @tx: async transaction descriptor
+> > + * @payload_len: metadata payload length
+> > + * @max_len: metadata max length
+> > + * Return: The app field pointer.
+> > + */
+> > +static void *xilinx_dma_get_metadata_ptr(struct
+> dma_async_tx_descriptor *tx,
+> > +					 size_t *payload_len, size_t
+> *max_len) {
+> > +	struct xilinx_dma_tx_descriptor *desc =3D
+> to_dma_tx_descriptor(tx);
+> > +	struct xilinx_axidma_tx_segment *seg;
+> > +
+> > +	*max_len =3D *payload_len =3D sizeof(u32) *
+> XILINX_DMA_NUM_APP_WORDS;
+> > +	seg =3D list_first_entry(&desc->segments,
+> > +			       struct xilinx_axidma_tx_segment, node);
+> > +	return seg->hw.app;
+> > +}
+> > +
+> > +static struct dma_descriptor_metadata_ops
+> xilinx_dma_metadata_ops =3D {
+> > +	.get_ptr =3D xilinx_dma_get_metadata_ptr, };
+> > +
+> >  /* -------------------------------------------------------------------=
+----------
+> >   * Descriptors and segments alloc and free
+> >   */
+> > @@ -2219,6 +2244,9 @@ static struct dma_async_tx_descriptor
+> *xilinx_dma_prep_slave_sg(
+> >  		segment->hw.control |=3D XILINX_DMA_BD_EOP;
+> >  	}
+> >
+> > +	if (chan->xdev->has_axistream_connected)
+> > +		desc->async_tx.metadata_ops =3D
+> &xilinx_dma_metadata_ops;
+>=20
+> This is an optional property which is added now, what will happen if you
+> are on a system with older DT? This wont work there..
 
-Apart from that, I still fail to get some thoughts (apart from unprivileged
-mounts) how EROFS + overlayfs combination fails on automative real workloads
-aside from "ls -lR" (readdir + stat).
+Sorry, we missed this comment. If this optional property is not there,=20
+then driver does not export "metadata_ops" APIs and it does not=20
+break any existing functionality.=20
 
-And eventually we still need overlayfs for most use cases to do writable
-stuffs, anyway, it needs some words to describe why such < 1s difference is
-very very important to the real workload as you already mentioned before.
+Thanks,
+Sarath
 
-And with overlayfs lazy lookup, I think it can be close to ~100ms or better.
-
-> 
->>
->> Giuseppe expressed his plans to make use of the composefs method
->> inside userns one day. It is not a hard dependency, but I believe that
->> keeping the "RO efficient verifiable image format" functionality (EROFS)
->> separate from "userns composition of verifiable images" (overlayfs)
->> may benefit the userns mount goal in the long term.
-> 
-> If that is needed, I'm very happy to get more detailed path of this from
-> some discussion in LSF/MM/BPF 2023: how we get this (userns) reliably in
-> practice.
-> 
-> As of code lines, core EROFS on-disk format is quite simple (I don't think
-> total LOC is a barrier), if you see
->    fs/erofs/data.c
->    fs/erofs/namei.c
->    fs/erofs/dir.c
-> 
-> or
->     erofs_super_block
->     erofs_inode_compact
->     erofs_inode_extended
->     erofs_dirent
-> 
-> but for example, fs/erofs/super.c which is just used to enable EROFS advanced
-> features is almost 1000LOC now.  But most code is quite trivial, I don't think
-> these can cause any difference to userns plan.
-> 
-> Thanks,
-> Gao Xiang
-> 
-> [1] https://lore.kernel.org/r/CAOQ4uxjm7i+uO4o4470ACctsft1m18EiUpxBfCeT-Wyqf1FAYg@mail.gmail.com/
-> 
->>
->> Thanks,
->> Amir.
+>=20
+> > +
+> >  	return &desc->async_tx;
+> >
+> >  error:
+> > @@ -3065,6 +3093,11 @@ static int xilinx_dma_probe(struct
+> platform_device *pdev)
+> >  		}
+> >  	}
+> >
+> > +	if (xdev->dma_config->dmatype =3D=3D XDMA_TYPE_AXIDMA) {
+> > +		xdev->has_axistream_connected =3D
+> > +			of_property_read_bool(node, "xlnx,axistream-
+> connected");
+> > +	}
+> > +
+> >  	if (xdev->dma_config->dmatype =3D=3D XDMA_TYPE_VDMA) {
+> >  		err =3D of_property_read_u32(node, "xlnx,num-fstores",
+> >  					   &num_frames);
+> > @@ -3090,6 +3123,10 @@ static int xilinx_dma_probe(struct
+> platform_device *pdev)
+> >  	else
+> >  		xdev->ext_addr =3D false;
+> >
+> > +	/* Set metadata mode */
+> > +	if (xdev->has_axistream_connected)
+> > +		xdev->common.desc_metadata_modes =3D
+> DESC_METADATA_ENGINE;
+> > +
+> >  	/* Set the dma mask bits */
+> >  	err =3D dma_set_mask_and_coherent(xdev->dev,
+> DMA_BIT_MASK(addr_width));
+> >  	if (err < 0) {
+> > --
+> > 2.25.1
+>=20
+> --
+> ~Vinod
