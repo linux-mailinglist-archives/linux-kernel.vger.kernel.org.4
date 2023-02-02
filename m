@@ -2,71 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBB0B687A47
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 11:33:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EBA2687A56
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 11:34:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232261AbjBBKcr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 05:32:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33248 "EHLO
+        id S232712AbjBBKe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 05:34:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232462AbjBBKck (ORCPT
+        with ESMTP id S232746AbjBBKeH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 05:32:40 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F9CB37F1C;
-        Thu,  2 Feb 2023 02:32:39 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id q5so1298433wrv.0;
-        Thu, 02 Feb 2023 02:32:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=EejFREaRcGB12MROc0EjjXorli5U5zGmeKKwC+PD69Y=;
-        b=lkaOghGgKEQfqkgsXwmtwNQu620B8HWmBvHbt38srdgUNTDNN05Th8aLCqnBgb6VAx
-         ua3g8NumFJ08kJCBV0N0auJgpyo2Ffg7eNGBbDVcTIrq4jrgLp85fG2Xeb31asM3TY1l
-         q+TpSafFUrp0VhfvO0Vxx8r/JXY25T6ZFLFMILS6LVaMGBCFsR7ozAfKqwGpXdzFDVjO
-         it2+korIam7YnPh0UMeXmgAzG7r2YeaYZ6OB2J44ieMxlWhY0QlrCaxPVqIHh8ykkkx4
-         ikYVQNH46nff01C71lhV9E8qavSMde/Yd2940+5AoHarT41x1KG6U2TRDU/zxKdFprOh
-         q9sw==
+        Thu, 2 Feb 2023 05:34:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C2724ED26
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 02:33:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675333990;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gzY8WLXPZBGvGs13fwLVzvdB3zWOPAiALRIUHU5zbPE=;
+        b=IAkCbMir6+p4EmamJfiTwgX71gdCuLTAqAYLlGpBz2r9BjF+mhenguc2jCnZEJKRsqHjb/
+        a2XRAFunYMBpcprcKRr3MZsgUzYn2jEH02AVkt96BRWA9Ey8Z9+NRyJKItc40/8BaqzvOd
+        Nn2vL0cUu/+Byj5Nns7xnPHvawFcD2A=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-625-AqD6eUWHM7Co8h4SHKfI4Q-1; Thu, 02 Feb 2023 05:33:07 -0500
+X-MC-Unique: AqD6eUWHM7Co8h4SHKfI4Q-1
+Received: by mail-wm1-f70.google.com with SMTP id l31-20020a05600c1d1f00b003deab30bb8bso785803wms.2
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 02:33:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EejFREaRcGB12MROc0EjjXorli5U5zGmeKKwC+PD69Y=;
-        b=DjUvWCrPADrQyd8rVA4+ujrJ0/6RhBkxqF68rlCVxjpJh6YlLfFwuxom2SLMhi3K+Z
-         +VDaw282dVi60jBziKVi/yZAAuedSc5iaorDX+TQoacMgpKH5jIkUkcgoTpilnIu3vzf
-         nY/ulmpdDYQhpt9viOnLPx+F9A3mDimnMLw9sDXSnxxmxqi7BUou4hRWM7vuYlDJjGuZ
-         slG53kHAjZJq4WrdTsKj6WIrDT6dG5boOvJIcyybASCUhcSoBJX/N7jRQ7gQEns/qAaq
-         TXQjoKPLlkscpjSJ3+OS97c7wJ715VsxCTUyvLUp4yAVQIRG2PWN/CLdHnUzUrDKw3Eq
-         6aww==
-X-Gm-Message-State: AO0yUKXyjiYiksYi+26Um3sMouZ4CZ1/+VB60XfMvajI2Gc0S1zwTvcr
-        ncysL7Yw5DZf7dxvMd2HaU0=
-X-Google-Smtp-Source: AK7set8HdyNKLMuUjW2H8YE/xzHf42PoOyS1nBg2jpeu/DVWNlu8unfSe9+oQS4qNg3TDRb9x0a4og==
-X-Received: by 2002:a5d:5984:0:b0:2c3:bbfa:d509 with SMTP id n4-20020a5d5984000000b002c3bbfad509mr4366725wri.61.1675333957908;
-        Thu, 02 Feb 2023 02:32:37 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id h4-20020adfaa84000000b002bfbf4c3f9fsm19533001wrc.17.2023.02.02.02.32.36
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gzY8WLXPZBGvGs13fwLVzvdB3zWOPAiALRIUHU5zbPE=;
+        b=b+XVae/PVxo4Hs+GuYnZVyixjYEb24gUSqg1cHtWXg2CDNayO3CIf5RJv2VrZOR7OV
+         hU4fj+GYAzDmar71bwH53KzmkWOXb/7fp5+idEp2k1T69Gv6qb++Tc9ssDqBLqvVeUTU
+         C+OqLbgYfvSQkvUTlvM6cCEmx+qZXqIIW+bzwyrv5YOI4qIMQrv89SCs13Wd4bK0QTZy
+         ehcOCHzdGGTEq5GlU+m2Q9B2tK9IYxUOT3RJxg3FyxwyCUyi8giKWODmi4F6XL4blcqI
+         9MkjhcgWqG436N3q7PjFK6Q8R0HpJcQ7jiMlBZHZqdvAbpU0C0Rt8E+FH3DYfKAdUnjG
+         guqA==
+X-Gm-Message-State: AO0yUKUrofFI0VvHIDS/gIqJ3JUMmtOgKxKonOu91PXKzlwdozmMqm9N
+        y3MAn5tVR3B67P60FH9mVTtCCRyBmmv/LyUNJQ88DRaG7QLv1J5LkkOKjl33PG/RyQ4HPkWNMXR
+        /U84gpUTowRERiyDtJPwMVz5h
+X-Received: by 2002:a05:600c:4e4e:b0:3d2:bca5:10a2 with SMTP id e14-20020a05600c4e4e00b003d2bca510a2mr5273854wmq.22.1675333984808;
+        Thu, 02 Feb 2023 02:33:04 -0800 (PST)
+X-Google-Smtp-Source: AK7set/fHx8aUDAB0froK+lS+HWGLVJXUV/PDw9YBioywtgcQQqxlZhTuxBLUkkhhVkUE0oQ07IROQ==
+X-Received: by 2002:a05:600c:4e4e:b0:3d2:bca5:10a2 with SMTP id e14-20020a05600c4e4e00b003d2bca510a2mr5273840wmq.22.1675333984603;
+        Thu, 02 Feb 2023 02:33:04 -0800 (PST)
+Received: from redhat.com ([2a02:14f:1fc:826d:55d8:70a4:3d30:fc2f])
+        by smtp.gmail.com with ESMTPSA id p11-20020a1c544b000000b003dc4fd6e624sm4452688wmi.19.2023.02.02.02.33.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 02:32:37 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, Bruce zhao <zhaolei@awinic.com>,
-        Weidong Wang <wangweidong.a@awinic.com>,
-        Nick Li <liweilei@awinic.com>, alsa-devel@alsa-project.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] ASoC: codecs: aw88395: Fix spelling mistake "cersion" -> "version"
-Date:   Thu,  2 Feb 2023 10:32:36 +0000
-Message-Id: <20230202103236.270057-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        Thu, 02 Feb 2023 02:33:03 -0800 (PST)
+Date:   Thu, 2 Feb 2023 05:32:59 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Shunsuke Mie <mie@igel.co.jp>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        Rusty Russell <rusty@rustcorp.com.au>, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v2 1/7] vringh: fix a typo in comments for vringh_kiov
+Message-ID: <20230202053204-mutt-send-email-mst@kernel.org>
+References: <20230202090934.549556-1-mie@igel.co.jp>
+ <20230202090934.549556-2-mie@igel.co.jp>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230202090934.549556-2-mie@igel.co.jp>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,35 +80,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are spelling mistakes in dev_err messages. Fix them.
+On Thu, Feb 02, 2023 at 06:09:28PM +0900, Shunsuke Mie wrote:
+> Probably it is a simple copy error from struct vring_iov.
+> 
+> Fixes: f87d0fbb5798 ("vringh: host-side implementation of virtio rings.")
+> Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- sound/soc/codecs/aw88395/aw88395_lib.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Drop the fixes tag pls it's not really relevantfor comments.
+But the patch is correct, pls submit separately we can
+already apply this.
 
-diff --git a/sound/soc/codecs/aw88395/aw88395_lib.c b/sound/soc/codecs/aw88395/aw88395_lib.c
-index 34ae405bb43d..64dde972f3f0 100644
---- a/sound/soc/codecs/aw88395/aw88395_lib.c
-+++ b/sound/soc/codecs/aw88395/aw88395_lib.c
-@@ -890,7 +890,7 @@ int aw88395_dev_cfg_load(struct aw_device *aw_dev, struct aw_container *aw_cfg)
- 	case AW88395_CFG_HDR_VER:
- 		ret = aw_dev_load_cfg_by_hdr(aw_dev, cfg_hdr);
- 		if (ret < 0) {
--			dev_err(aw_dev->dev, "hdr_cersion[0x%x] parse failed",
-+			dev_err(aw_dev->dev, "hdr_version[0x%x] parse failed",
- 						cfg_hdr->hdr_version);
- 			return ret;
- 		}
-@@ -898,7 +898,7 @@ int aw88395_dev_cfg_load(struct aw_device *aw_dev, struct aw_container *aw_cfg)
- 	case AW88395_CFG_HDR_VER_V1:
- 		ret = aw_dev_load_cfg_by_hdr_v1(aw_dev, aw_cfg);
- 		if (ret < 0) {
--			dev_err(aw_dev->dev, "hdr_cersion[0x%x] parse failed",
-+			dev_err(aw_dev->dev, "hdr_version[0x%x] parse failed",
- 						cfg_hdr->hdr_version);
- 			return ret;
- 		}
--- 
-2.30.2
+> ---
+>  include/linux/vringh.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/vringh.h b/include/linux/vringh.h
+> index 212892cf9822..1991a02c6431 100644
+> --- a/include/linux/vringh.h
+> +++ b/include/linux/vringh.h
+> @@ -92,7 +92,7 @@ struct vringh_iov {
+>  };
+>  
+>  /**
+> - * struct vringh_iov - kvec mangler.
+> + * struct vringh_kiov - kvec mangler.
+>   *
+>   * Mangles kvec in place, and restores it.
+>   * Remaining data is iov + i, of used - i elements.
+> -- 
+> 2.25.1
 
