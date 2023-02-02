@@ -2,181 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AF75688553
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 18:25:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A43E368855B
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 18:29:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232553AbjBBRZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 12:25:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48860 "EHLO
+        id S232066AbjBBR3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 12:29:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232545AbjBBRZG (ORCPT
+        with ESMTP id S230011AbjBBR3c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 12:25:06 -0500
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E876B34A;
-        Thu,  2 Feb 2023 09:25:01 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id E89CD32003D3;
-        Thu,  2 Feb 2023 12:24:57 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Thu, 02 Feb 2023 12:24:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        invisiblethingslab.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1675358697; x=
-        1675445097; bh=TdYzennOAnAw0WjtkRlObGkWlu+kdBTnfKrmn3VbjsQ=; b=P
-        jCdE8pvN6Qx+Y0zL/Tj1zF45e5AO+a0haIl6mV9FX8LuMXpN5BmZx1IepTwho0Y6
-        msOL6mhGV6lQRd8whzeK9EFUERrb90vvUj3+jE9AHNlwUr9LbwJVwWFxJcN/6034
-        nmkeL7P4St2MkGhvG5CtohOWzVmuNSiw91Rrzy8itnqY1qWKdjb03kdfNqtIv1xx
-        Q66pmjyU8ZLMhGU1U6/gvfmSTaJpmK3op3fF/ft40nYnInh60/tAU/FfNsd8nF8M
-        7fwIct3uFYMmcLEejSLFb97ECcbwVnBiwAKIbSPdVc4BGY8fmzyuLhHpo62diulY
-        d+PuG/kgyarexLbSEU9mA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1675358697; x=1675445097; bh=TdYzennOAnAw0WjtkRlObGkWlu+k
-        dBTnfKrmn3VbjsQ=; b=AIXqg7SbjBcl4gHqfwOVHJ9z5LuJF0C9DbJgQHWTlLSH
-        asjcLBz9SUcOSJp8vgi9DfP5n37M00IZkUaOQXfl+ewpLHNVrt7sK5N2haEvrYwG
-        DdJhi5vNH9NryWLC2BhJgm1+ZSBYuxw432OVxK68FzZeVnodjaitrNc6vpzI7fEJ
-        zpwOpxHm42UzrJq9DVTXdZAbTCwtpIGnjL0zZxkhWnrPjT95yHUlmO9rFNZhlIzz
-        ffsnTcafuXA7h7MeAJHQ0VmKKCEbO3TdLkJAYpi4TZRBwunt7hXB0KOsoR6tYN1a
-        hTjP1dx3cM7tTMAk/81GRN4cIF8oOXec+urxt7nxRw==
-X-ME-Sender: <xms:6fHbY0i7gcYER7wJ7gUEsUve1nRA70KaOYBOpPqX5F2DDp4rtabztQ>
-    <xme:6fHbY9CJ1XGatCW0WDNg8sNnPtLttFURiNjOYV_wGHp5BALxxjAWGnkPtKGVcKSdW
-    Q8BlErBNMpGVQU>
-X-ME-Received: <xmr:6fHbY8Hl3LSEYJrk_bVvk73LP0MPYUL_ALlt1718mbj1oxktyEiE1Ti2XrM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudefkedgleeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtjeenucfhrhhomhepffgvmhhi
-    ucforghrihgvucfqsggvnhhouhhruceouggvmhhisehinhhvihhsihgslhgvthhhihhngh
-    hslhgrsgdrtghomheqnecuggftrfgrthhtvghrnhepvdejteegkefhteduhffgteffgeff
-    gfduvdfghfffieefieekkedtheegteehffelnecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomhepuggvmhhisehinhhvihhsihgslhgvthhhihhnghhs
-    lhgrsgdrtghomh
-X-ME-Proxy: <xmx:6fHbY1SlSOlJod2Y_RaPGYUaAl-1b674IMVYYtGxMot7Zlo1Iquu4A>
-    <xmx:6fHbYxyhKxYt3rMK_yRTfiynjrDVrgwl6vzamKMa6np-RHwikIxs9A>
-    <xmx:6fHbYz5dCfLB7rZmvW3cxzH1ROgtfu9z6lIOiStcdXjeOmYh3_WIbA>
-    <xmx:6fHbY5_svOWbAZ0q3BsVbOy0OUAFls6hqUW_mftshQ5HaLG_Ke1EsA>
-Feedback-ID: iac594737:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 2 Feb 2023 12:24:56 -0500 (EST)
-Date:   Thu, 2 Feb 2023 12:24:51 -0500
-From:   Demi Marie Obenour <demi@invisiblethingslab.com>
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 1/7] block: Support creating a struct file from a
- block device
-Message-ID: <Y9vx5spqFqDit0uA@itl-email>
-References: <20230126033358.1880-1-demi@invisiblethingslab.com>
- <20230126033358.1880-2-demi@invisiblethingslab.com>
- <Y9d692WEX/ZvBhXI@infradead.org>
- <Y9gZAJGgdjFtsm9I@itl-email>
- <Y9jW73uAtE3HdCou@infradead.org>
- <Y9lBlKD3U/jMug9j@itl-email>
- <Y9t5MtE2Xg53u07O@T590>
+        Thu, 2 Feb 2023 12:29:32 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F5866B362
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 09:29:30 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id hn2-20020a05600ca38200b003dc5cb96d46so4245696wmb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 09:29:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=lvGM9eziJ1k68OFs57HK7CmX4C1pnuT0xXcx3RcWcoc=;
+        b=AdT20GUynTqEAjFWLRiwJDHeTg9OVyD/NJx9CgNz8Nlabhgr7vIqAIqn0wehQPVmKj
+         MkpQI6O+zVIB2ssvkkqSRM7nidGXAdW5Ml1fLRot2Z7+f40QA/syC6OVYpI1M29JNY3V
+         7HrhV44UVIMSnhgS0vKtf+FnKr0Gb1+xetdmAXVA74prNxxVlWYTY88dcJcFPBfR9VdW
+         hnlkPI2c/bhXdqanOQl3kR8uKImrZpnMVNuKTknasGegwq80QK4CxqCETteuNPb0CID/
+         sWNV/EsztYc1SwXMa8JmSskggVj4ejzy+InL1+CLUvAJzozAe4CsmlmAj21VO5cvfldM
+         l/8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lvGM9eziJ1k68OFs57HK7CmX4C1pnuT0xXcx3RcWcoc=;
+        b=foZdi/ISzCaEXSW+NoWPvaMZXuqaiD1rNuO7Oa48MKwJNTg/ZdD+/zMgQJGO9qzahf
+         ktlUpOkBc5cnu0PYk6J5sfNUTFV9qfi8Um2RS58m1PVci9GF9P1dmL0T2WGtsfpDddyl
+         BoYFNF/5bvnUXxoJKDmoQQKjHJGTtv1MuHs8GgiVj3u8rPatYzbkcvsLnCoWYuHggcf3
+         30ngDeh6eX+eatGyaEDFelipwl7/DfzD2a+hX2miQfsblRPxCP9eduhVYYGcNVVkdTDo
+         d6qTKt6iMkEYe7x3RzaSyMWZaA+Ig92mHdzsAZlzUcyRFJQmvuBNO4oe7kTD+BlHCA2J
+         YDmg==
+X-Gm-Message-State: AO0yUKVLPwaFVpf61loVWOX0DNGYf2RvsZVNnMRNxgIYxUi/1q6/fm0h
+        ZEMxP249pfVRis9aPPER/Hzx3I0jJ0Ohilv0
+X-Google-Smtp-Source: AK7set9OffKgGD/0Kym8zdS6nkp8afzuz712+XsVPxnijRxeLh4Z15DP54mnav51F0CiusbcHI2IEw==
+X-Received: by 2002:a05:600c:19cd:b0:3dc:42d2:aedc with SMTP id u13-20020a05600c19cd00b003dc42d2aedcmr7019867wmq.23.1675358968993;
+        Thu, 02 Feb 2023 09:29:28 -0800 (PST)
+Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
+        by smtp.gmail.com with ESMTPSA id p30-20020a1c545e000000b003de2fc8214esm364845wmi.20.2023.02.02.09.29.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Feb 2023 09:29:28 -0800 (PST)
+Date:   Thu, 2 Feb 2023 18:29:27 +0100
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Atish Patra <atishp@rivosinc.com>
+Cc:     linux-kernel@vger.kernel.org, Anup Patel <anup@brainfault.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atishp@atishpatra.org>,
+        Eric Lin <eric.lin@sifive.com>, Guo Ren <guoren@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v4 08/14] RISC-V: KVM: Add SBI PMU extension support
+Message-ID: <20230202172927.jlwjkv6nbvhzcakw@orel>
+References: <20230201231250.3806412-1-atishp@rivosinc.com>
+ <20230201231250.3806412-9-atishp@rivosinc.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fpYsSSW8xpDjRdr5"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y9t5MtE2Xg53u07O@T590>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230201231250.3806412-9-atishp@rivosinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Feb 01, 2023 at 03:12:44PM -0800, Atish Patra wrote:
+> SBI PMU extension allows KVM guests to configure/start/stop/query about
+> the PMU counters in virtualized enviornment as well.
+> 
+> In order to allow that, KVM implements the entire SBI PMU extension.
+> 
+> Reviewed-by: Anup Patel <anup@brainfault.org>
+> Signed-off-by: Atish Patra <atishp@rivosinc.com>
+> ---
+>  arch/riscv/kvm/Makefile       |  2 +-
+>  arch/riscv/kvm/vcpu_sbi.c     | 11 +++++
+>  arch/riscv/kvm/vcpu_sbi_pmu.c | 85 +++++++++++++++++++++++++++++++++++
+>  3 files changed, 97 insertions(+), 1 deletion(-)
+>  create mode 100644 arch/riscv/kvm/vcpu_sbi_pmu.c
+> 
+> diff --git a/arch/riscv/kvm/Makefile b/arch/riscv/kvm/Makefile
+> index 5de1053..278e97c 100644
+> --- a/arch/riscv/kvm/Makefile
+> +++ b/arch/riscv/kvm/Makefile
+> @@ -25,4 +25,4 @@ kvm-y += vcpu_sbi_base.o
+>  kvm-y += vcpu_sbi_replace.o
+>  kvm-y += vcpu_sbi_hsm.o
+>  kvm-y += vcpu_timer.o
+> -kvm-$(CONFIG_RISCV_PMU_SBI) += vcpu_pmu.o
+> +kvm-$(CONFIG_RISCV_PMU_SBI) += vcpu_pmu.o vcpu_sbi_pmu.o
+> diff --git a/arch/riscv/kvm/vcpu_sbi.c b/arch/riscv/kvm/vcpu_sbi.c
+> index fe2897e..15fde15 100644
+> --- a/arch/riscv/kvm/vcpu_sbi.c
+> +++ b/arch/riscv/kvm/vcpu_sbi.c
+> @@ -20,6 +20,16 @@ static const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_v01 = {
+>  };
+>  #endif
+>  
+> +#ifdef CONFIG_RISCV_PMU_SBI
+> +extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_pmu;
+> +#else
+> +static const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_pmu = {
+> +	.extid_start = -1UL,
+> +	.extid_end = -1UL,
+> +	.handler = NULL,
+> +};
+> +#endif
+> +
+>  static const struct kvm_vcpu_sbi_extension *sbi_ext[] = {
+>  	&vcpu_sbi_ext_v01,
+>  	&vcpu_sbi_ext_base,
+> @@ -28,6 +38,7 @@ static const struct kvm_vcpu_sbi_extension *sbi_ext[] = {
+>  	&vcpu_sbi_ext_rfence,
+>  	&vcpu_sbi_ext_srst,
+>  	&vcpu_sbi_ext_hsm,
+> +	&vcpu_sbi_ext_pmu,
+>  	&vcpu_sbi_ext_experimental,
+>  	&vcpu_sbi_ext_vendor,
+>  };
+> diff --git a/arch/riscv/kvm/vcpu_sbi_pmu.c b/arch/riscv/kvm/vcpu_sbi_pmu.c
+> new file mode 100644
+> index 0000000..e028b0a
+> --- /dev/null
+> +++ b/arch/riscv/kvm/vcpu_sbi_pmu.c
+> @@ -0,0 +1,85 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2023 Rivos Inc
+> + *
+> + * Authors:
+> + *     Atish Patra <atishp@rivosinc.com>
+> + */
+> +
+> +#include <linux/errno.h>
+> +#include <linux/err.h>
+> +#include <linux/kvm_host.h>
+> +#include <asm/csr.h>
+> +#include <asm/sbi.h>
+> +#include <asm/kvm_vcpu_sbi.h>
+> +
+> +static int kvm_sbi_ext_pmu_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
+> +				   struct kvm_vcpu_sbi_return *retdata)
+> +{
+> +	int ret = 0;
+> +	struct kvm_cpu_context *cp = &vcpu->arch.guest_context;
+> +	struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
+> +	unsigned long funcid = cp->a6;
+> +	uint64_t temp;
+> +
+> +	/* Return not supported if PMU is not initialized */
+> +	if (!kvpmu->init_done)
+> +		return -EINVAL;
 
---fpYsSSW8xpDjRdr5
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 2 Feb 2023 12:24:51 -0500
-From: Demi Marie Obenour <demi@invisiblethingslab.com>
-To: Ming Lei <ming.lei@redhat.com>
-Cc: Christoph Hellwig <hch@infradead.org>, Jens Axboe <axboe@kernel.dk>,
-	Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>,
-	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 1/7] block: Support creating a struct file from a
- block device
+Shouldn't this be the following?
 
-On Thu, Feb 02, 2023 at 04:49:54PM +0800, Ming Lei wrote:
-> On Tue, Jan 31, 2023 at 11:27:59AM -0500, Demi Marie Obenour wrote:
-> > On Tue, Jan 31, 2023 at 12:53:03AM -0800, Christoph Hellwig wrote:
-> > > On Mon, Jan 30, 2023 at 02:22:39PM -0500, Demi Marie Obenour wrote:
-> > > > What do you recommend instead?  This solves a real problem for
-> > > > device-mapper users and I am not aware of a better solution.
-> > >=20
-> > > You could start with explaining the problem and what other methods
-> > > you tried that failed.  In the end it's not my job to fix your proble=
-m.
-> >=20
-> > I=E2=80=99m working on a =E2=80=9Cblock not-script=E2=80=9D (Xen block =
-device hotplug script
-> > written in C) for Qubes OS.  The current hotplug script is a shell
-> > script that takes a global lock, which serializes all invocations and
-> > significantly slows down VM creation and destruction.  My C program
-> > avoids this problem.
-> >=20
-> > One of the goals of the not-script is to never leak resources, even if
-> > it dies with SIGKILL or is never called with the =E2=80=9Cremove=E2=80=
-=9D argument to
->=20
-> If it dies, you still can restart one new instance for handling the device
-> leak by running one simple daemon to monitor if not-script is live.
+  if (!kvpmu->init_done)
+     retdata->err_val = SBI_ERR_NOT_SUPPORTED;
+     return 0;
+  }
 
-This requires userspace to maintain state that persists across process
-restarts, and is also non-compositional.  If there was a userspace
-daemon that was responsible for all block device management in the
-system, this would be more reasonable, but no such daemon exists.
-Furthermore, the amount of code required in userspace dwarfs the amount
-of code my patches add to the kernel, both in size and complexity.
+> +
+> +	switch (funcid) {
+> +	case SBI_EXT_PMU_NUM_COUNTERS:
+> +		ret = kvm_riscv_vcpu_pmu_num_ctrs(vcpu, retdata);
+> +		break;
+> +	case SBI_EXT_PMU_COUNTER_GET_INFO:
+> +		ret = kvm_riscv_vcpu_pmu_ctr_info(vcpu, cp->a0, retdata);
+> +		break;
+> +	case SBI_EXT_PMU_COUNTER_CFG_MATCH:
+> +#if defined(CONFIG_32BIT)
+> +		temp = ((uint64_t)cp->a5 << 32) | cp->a4;
+> +#else
+> +		temp = cp->a4;
+> +#endif
+> +		/*
+> +		 * This can fail if perf core framework fails to create an event.
+> +		 * Forward the error to the user space because its an error happened
 
-> > destroy the devices it created.  Therefore, whenever possible, it relies
-> > on automatic destruction of devices that are no longer used.  I have
->=20
-> This automatic destruction of devices is supposed to be done in
-> userspace, cause only userspace knows when device is needed, when
-> it is needed.
+"Forward the error to userspace because it's an error which happened within
+ the host kernel."
+                                        
+> +		 * within host kernel. The other option would be convert this to
+                                                                ^ to
+> +		 * an SBI error and forward to the guest.
+> +		 */
+> +		ret = kvm_riscv_vcpu_pmu_ctr_cfg_match(vcpu, cp->a0, cp->a1,
+> +						       cp->a2, cp->a3, temp, retdata);
+> +		break;
+> +	case SBI_EXT_PMU_COUNTER_START:
+> +#if defined(CONFIG_32BIT)
+> +		temp = ((uint64_t)cp->a4 << 32) | cp->a3;
+> +#else
+> +		temp = cp->a3;
+> +#endif
+> +		ret = kvm_riscv_vcpu_pmu_ctr_start(vcpu, cp->a0, cp->a1, cp->a2,
+> +						   temp, retdata);
+> +		break;
+> +	case SBI_EXT_PMU_COUNTER_STOP:
+> +		ret = kvm_riscv_vcpu_pmu_ctr_stop(vcpu, cp->a0, cp->a1, cp->a2, retdata);
+> +		break;
+> +	case SBI_EXT_PMU_COUNTER_FW_READ:
+> +		ret = kvm_riscv_vcpu_pmu_ctr_read(vcpu, cp->a0, retdata);
+> +		break;
+> +	default:
+> +		retdata->err_val = SBI_ERR_NOT_SUPPORTED;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +unsigned long kvm_sbi_ext_pmu_probe(struct kvm_vcpu *vcpu)
+> +{
+> +	struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
+> +
+> +	return kvpmu->init_done;
+> +}
+> +
+> +const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_pmu = {
+> +	.extid_start = SBI_EXT_PMU,
+> +	.extid_end = SBI_EXT_PMU,
+> +	.handler = kvm_sbi_ext_pmu_handler,
+> +	.probe = kvm_sbi_ext_pmu_probe,
+> +};
+> -- 
+> 2.25.1
+>
 
-In my use-case, the last reference to the device is held by the blkback
-driver in the kernel.  More generally, any case where a device is
-created for a single purpose and should be destroyed when no longer
-used will benefit from this.  Encrypted swap devices are a simple
-example, as they can be destroyed with a single =E2=80=9Cswapoff=E2=80=9D c=
-ommand.
---=20
-Sincerely,
-Demi Marie Obenour (she/her/hers)
-Invisible Things Lab
-
---fpYsSSW8xpDjRdr5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEEdodNnxM2uiJZBxxxsoi1X/+cIsEFAmPb8eUACgkQsoi1X/+c
-IsE57xAAorX9YUQEbfy0qh0sYcYBgp0kuH+jyjBKzwTNRnJG0dMtJPaWwnij/UBt
-GQkzQKfiefDJE69G1L2KJvmel2JMvHoYV77OkU1y4yaQ9IoY4doM320pVN5qy2+v
-e9UgA8L0y/ZcAiO83y/Oie/q9ZWleJwAdPDjoggEKWA/Rd6oSLqSXEondwgLCSfT
-huHPPH5knGx1mcpUv2WBYimuzeBg37cryCZzVhjFxsIejJhyrMZ8v2LxAeCMBRo/
-M23QxvPV6ozIWCWMYRa7oaCYGZVLh9pI8ALm2pLpRHH85VY7vyt9bBLUeB6Xx2/0
-fXSmWqJ0v7u/CnvOxY0qx5Pmj2Idf6T0eddZqvpUKz2fkrKw+H/lizHwZggi34wt
-UmQ9Y/Gd4V/byryJ3anbMbyuxvLqprxTkzVeuYtfWogmToF2uMgvtKRSvxlDBIw3
-v80kLHeeYHLyiCuAUzPwQF9esPTm5aWvGr3XhPUq0gv0SZRD50XBiKhL8Mxt7LjA
-2Y2Q96fdnj6+ARJdVkBysNS8FL9XfFhzOx5NmzIhXlmK+sTHujLtpJCgfzTPgCs+
-3/R9peIxnmFPzlzWAgkVcx9QLnR9jetv+NULAQgFsIW01Z7zVbvyN32XUS9OrdnY
-6uPQOxDx4YpHPIcN4aKz1Yu6/AQ62SkR663hJI/dT5t0gGMoDdg=
-=qgsi
------END PGP SIGNATURE-----
-
---fpYsSSW8xpDjRdr5--
+Thanks,
+drew
