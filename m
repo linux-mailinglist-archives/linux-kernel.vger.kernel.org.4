@@ -2,76 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84403688182
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 16:16:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87D0168817F
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 16:16:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232514AbjBBPQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 10:16:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60704 "EHLO
+        id S232772AbjBBPQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 10:16:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232628AbjBBPQq (ORCPT
+        with ESMTP id S232604AbjBBPQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 10:16:46 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF12692EE8
+        Thu, 2 Feb 2023 10:16:45 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A74192C38
         for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 07:16:44 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id mc11so6810132ejb.10
+Received: by mail-wr1-x436.google.com with SMTP id r2so2009858wrv.7
         for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 07:16:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zD84VEFRzA59hsw0tKWfWwMdLIT0/a/+q7byCEgsbro=;
-        b=IMIUFGidYMeJej6oq94xPl74Wcf3pVaqArds5hGhIzbPUuF5dHMF9yNZYDmIOk3v6p
-         2ACOat8NrDDe45iu7fQvD3MB7dtxQ+P/Cag1we22A8GTZNwP0K0jkdezNpiTvwBgjfqV
-         Rc0rhlIqGTrhsUmudjHXSYJygcXDXMb11OUikN96dkYI/lcvaWiLgujWvQtd+oJD028B
-         bF2p/Wx6CbRzqPlViY4Qi/25j5sOSAo7/6bC1bl/rEqygNlbJq5xinXF+i4Gio+/DvH8
-         vJOcPm2LkXl88woWJxPQiPwV3tIItKDiAg0eWeDnb9ys2pCe8zjfbS5zXRropFM1mpFk
-         lEhw==
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kFKtikxweyiapl+IexctfEvOemBJ00V0d++S9NjR+cA=;
+        b=Xxoh56A0bGbr6ATBS+F/o7XGC9BVns5iYvUq1bgY1JH3FFR2ms2tOlDI/KrPgl6x1/
+         CtUjKGWTSzFfyzOyDbToAsSzXeThYgu6/Sg5uH60HUXXpVx+tGj6993mBkC9ch9FL/cZ
+         lCj4mPFpEV6XvuV4Jd1c2n7eeKvgwml3FjysuBGFh4N3q8cNhGQ4oFlpx9ObLO3BZ8Di
+         WV8d2+WzrxtJYPSs+gU6wxiLUbbh/K2pno3etTmUnQTF1fFaFLxwFSk3/cZka4uYoMtB
+         DKPFEoHS45dhjS9NsQSRMTBPR3NEjmY/eWBZk9uPu1rNllZpEh5PN+kTZoPJZIS1PUqQ
+         8lJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zD84VEFRzA59hsw0tKWfWwMdLIT0/a/+q7byCEgsbro=;
-        b=gHNtQzILYNDUXqiJlUiqcqQekeRIBLbUprOqasvLVF6cyS62rsWt0rqhfqJdCU5mUf
-         wJRwv2/Mne+RPIHjY7wNm+EHCctyroVICXVFz1qWbStU24spV6o74UEdn582JzgRhVax
-         qYnkWuuD+ITGPz8UYbohJhJBFMCz5vZls5EQehpeqPm30aghT8W0gPCpIKDyBaSuoFuN
-         FUw6YorfY7sukiFdFc2nJiN6Q0vTFl1q1Wjmrdl7SKt+qBQqssGZcL0NBCqWKVNtEXvU
-         XVNzl0ZZre/whEAzaH6+5zpKalDe1rHro/KuOGein/TW43uojvPXTx6uJJ0Wtn0SR+s/
-         UFTQ==
-X-Gm-Message-State: AO0yUKWrFiqqmI5NprpGpkctyHVUwywkPXnZAt5fp0xcGyc3fOyCc+LZ
-        hbJXJomnQQzqZyFz+zSRJTNx1g==
-X-Google-Smtp-Source: AK7set9OLG5Fl/HxkXD3qR5wWeHKevH2Mgcbc8T5JAFPGupVN5Uy75fuy7rPSjLpC8lnqsI6ByX96Q==
-X-Received: by 2002:a17:906:5dcc:b0:884:930:b014 with SMTP id p12-20020a1709065dcc00b008840930b014mr6436385ejv.6.1675351003380;
-        Thu, 02 Feb 2023 07:16:43 -0800 (PST)
-Received: from [192.168.1.101] (abyl20.neoplus.adsl.tpnet.pl. [83.9.31.20])
-        by smtp.gmail.com with ESMTPSA id k2-20020a170906970200b008775b8a5a5fsm11590784ejx.198.2023.02.02.07.16.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 07:16:43 -0800 (PST)
-Message-ID: <2433c2c7-664d-0d1f-12ae-374cbd093dc0@linaro.org>
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kFKtikxweyiapl+IexctfEvOemBJ00V0d++S9NjR+cA=;
+        b=xHpmmmPwLUGsiEAb7HnS0azxr9j+dBItX8TlFp65KieD8MTVDjcE9yjjuS8VxpUF7v
+         KZhf5ddq8TUMPvUS90LOTADdbPr02ZrCWMwSHtbKWmcxayCZ5jdi6pr0QCQ2earvvPM2
+         8ZFcAWfe4R2ZQI6aMfMSPEuKgqrCmnKllVU8XH85Xn48r2dx8L+T/VRcqv1zAddBm93T
+         b/AzyS7Cpk17AepuI5+/1b7uAYaZwEIsGHNhR5OBwj5wHa8VpZdvhyHQcSDrkMHNvO7w
+         vfDFQxQhnSvYd0sNxkax8UC6ubhFZsHO5b8ktMr8CQapWjWBTVgioVSxyLT6vhxnuMAp
+         l9EA==
+X-Gm-Message-State: AO0yUKUvHcxC4/tTezC52MOdzcn135BtEdxJVLKZPXXVgjS2VntErCCc
+        HPLDG3AM8AMAmDHHJSRi7Pqy6Q==
+X-Google-Smtp-Source: AK7set9YcrVZ/I2ivVOBp6ZoJ4SQrCDwR3cYdEI9FCeixtQZ93JzJvaZ6A2Tfoc6K8O9v/+aSTjmzw==
+X-Received: by 2002:a5d:4d85:0:b0:2be:3ccd:7f37 with SMTP id b5-20020a5d4d85000000b002be3ccd7f37mr5600723wru.52.1675351002561;
+        Thu, 02 Feb 2023 07:16:42 -0800 (PST)
+Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
+        by smtp.gmail.com with ESMTPSA id a13-20020adfeecd000000b002bbedd60a9asm19927404wrp.77.2023.02.02.07.16.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Feb 2023 07:16:42 -0800 (PST)
 Date:   Thu, 2 Feb 2023 16:16:41 +0100
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Atish Patra <atishp@rivosinc.com>
+Cc:     linux-kernel@vger.kernel.org, Anup Patel <anup@brainfault.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atishp@atishpatra.org>,
+        Eric Lin <eric.lin@sifive.com>, Guo Ren <guoren@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v4 04/14] RISC-V: KVM: Define a probe function for SBI
+ extension data structures
+Message-ID: <20230202151641.6edhtlf7fz7xsmdy@orel>
+References: <20230201231250.3806412-1-atishp@rivosinc.com>
+ <20230201231250.3806412-5-atishp@rivosinc.com>
+ <20230202151433.kspo2g7cqsccoqsq@orel>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH 5/6] mailbox: qcom-apcs-ipc: add IPQ5332 APSS clock
- support
-Content-Language: en-US
-To:     Kathiravan T <quic_kathirav@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        jassisinghbrar@gmail.com, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230202145208.2328032-1-quic_kathirav@quicinc.com>
- <20230202145208.2328032-6-quic_kathirav@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230202145208.2328032-6-quic_kathirav@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230202151433.kspo2g7cqsccoqsq@orel>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,33 +83,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Feb 02, 2023 at 04:14:35PM +0100, Andrew Jones wrote:
+> On Wed, Feb 01, 2023 at 03:12:40PM -0800, Atish Patra wrote:
+> > Currently the probe function just checks if an SBI extension is
+> > registered or not. However, the extension may not want to advertise
+> > itself depending on some other condition.
+> > An additional extension specific probe function will allow
+> > extensions to decide if they want to be advertised to the caller or
+> > not. Any extension that does not require additional dependency checks
+> > can avoid implementing this function.
+> > 
+> > Reviewed-by: Anup Patel <anup@brainfault.org>
+> > Signed-off-by: Atish Patra <atishp@rivosinc.com>
+> > ---
+> >  arch/riscv/include/asm/kvm_vcpu_sbi.h |  3 +++
+> >  arch/riscv/kvm/vcpu_sbi_base.c        | 13 +++++++++++--
+> >  2 files changed, 14 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/arch/riscv/include/asm/kvm_vcpu_sbi.h b/arch/riscv/include/asm/kvm_vcpu_sbi.h
+> > index f79478a..45ba341 100644
+> > --- a/arch/riscv/include/asm/kvm_vcpu_sbi.h
+> > +++ b/arch/riscv/include/asm/kvm_vcpu_sbi.h
+> > @@ -29,6 +29,9 @@ struct kvm_vcpu_sbi_extension {
+> >  	int (*handler)(struct kvm_vcpu *vcpu, struct kvm_run *run,
+> >  		       unsigned long *out_val, struct kvm_cpu_trap *utrap,
+> >  		       bool *exit);
+> > +
+> > +	/* Extension specific probe function */
+> > +	unsigned long (*probe)(struct kvm_vcpu *vcpu);
+> >  };
+> >  
+> >  void kvm_riscv_vcpu_sbi_forward(struct kvm_vcpu *vcpu, struct kvm_run *run);
+> > diff --git a/arch/riscv/kvm/vcpu_sbi_base.c b/arch/riscv/kvm/vcpu_sbi_base.c
+> > index 5d65c63..846d518 100644
+> > --- a/arch/riscv/kvm/vcpu_sbi_base.c
+> > +++ b/arch/riscv/kvm/vcpu_sbi_base.c
+> > @@ -19,6 +19,7 @@ static int kvm_sbi_ext_base_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
+> >  {
+> >  	int ret = 0;
+> >  	struct kvm_cpu_context *cp = &vcpu->arch.guest_context;
+> > +	const struct kvm_vcpu_sbi_extension *sbi_ext;
+> >  
+> >  	switch (cp->a6) {
+> >  	case SBI_EXT_BASE_GET_SPEC_VERSION:
+> > @@ -43,8 +44,16 @@ static int kvm_sbi_ext_base_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
+> >  			 */
+> >  			kvm_riscv_vcpu_sbi_forward(vcpu, run);
+> >  			*exit = true;
+> > -		} else
+> > -			*out_val = kvm_vcpu_sbi_find_ext(cp->a0) ? 1 : 0;
+> > +		} else {
+> > +			sbi_ext = kvm_vcpu_sbi_find_ext(cp->a0);
+> > +			if (sbi_ext) {
+> > +				if (sbi_ext->probe)
+> > +					*out_val = sbi_ext->probe(vcpu);
+> > +				else
+> > +					*out_val = 1;
+> > +			} else
+> > +				*out_val = 0;
+> 
+> Conor points out elsewhere that we need {} on both arms if one arm needs
+> it. We actually don't need {} on either arm, though, or even the if, if
+> we rewrite as
+> 
+>  *out_val = sbi_ext && sbi_ext->probe ? sbi_ext->probe(vcpu) : !!sbi_ext;
+
+I sent too soon, I meant to add
+
+In any case,
+
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+
+Thanks,
+drew
 
 
-On 2.02.2023 15:52, Kathiravan T wrote:
-> IPQ5332 has the APSS clock controller utilizing the same register space
-> as the APCS, so provide access to the APSS utilizing a child device like
-> other IPQ chipsets.
 > 
-> Like IPQ6018, the same controller and driver is used, so utilize IPQ6018
-> match data for IPQ5332.
+> Thanks,
+> drew
 > 
-> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
->  drivers/mailbox/qcom-apcs-ipc-mailbox.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/mailbox/qcom-apcs-ipc-mailbox.c b/drivers/mailbox/qcom-apcs-ipc-mailbox.c
-> index 0e9f9cba8668..9d1f1b8671fc 100644
-> --- a/drivers/mailbox/qcom-apcs-ipc-mailbox.c
-> +++ b/drivers/mailbox/qcom-apcs-ipc-mailbox.c
-> @@ -141,6 +141,7 @@ static int qcom_apcs_ipc_remove(struct platform_device *pdev)
->  
->  /* .data is the offset of the ipc register within the global block */
->  static const struct of_device_id qcom_apcs_ipc_of_match[] = {
-> +	{ .compatible = "qcom,ipq5332-apcs-apps-global", .data = &ipq6018_apcs_data },
->  	{ .compatible = "qcom,ipq6018-apcs-apps-global", .data = &ipq6018_apcs_data },
->  	{ .compatible = "qcom,ipq8074-apcs-apps-global", .data = &ipq6018_apcs_data },
->  	{ .compatible = "qcom,msm8916-apcs-kpss-global", .data = &msm8916_apcs_data },
+> > +		}
+> >  		break;
+> >  	case SBI_EXT_BASE_GET_MVENDORID:
+> >  		*out_val = vcpu->arch.mvendorid;
+> > -- 
+> > 2.25.1
+> > 
