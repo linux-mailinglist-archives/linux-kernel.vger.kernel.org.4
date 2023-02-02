@@ -2,63 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2245F68875C
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 20:11:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61925688760
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 20:12:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233128AbjBBTLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 14:11:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46282 "EHLO
+        id S232605AbjBBTME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 14:12:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232671AbjBBTLb (ORCPT
+        with ESMTP id S232671AbjBBTMC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 14:11:31 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC9834C25
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 11:11:29 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id n13so2203349wmr.4
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 11:11:29 -0800 (PST)
+        Thu, 2 Feb 2023 14:12:02 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A11C5728C5
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 11:12:00 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id rm7-20020a17090b3ec700b0022c05558d22so2746563pjb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 11:12:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cmqPx/Zy279diCwL80ZzQVZT2Mcv1030GfDHO64ZwaM=;
-        b=rx8n/zPQAkVDgqYtXeVL8F0TnK38f8l/sJKC7Iw6IjH4QL1MAaJHL0FJeHMz1V21kf
-         Jbm9izq0xBt1iNhCYXs7gXTM7mhkddeSKb/oD1d9dPQ022nlIde3tKQsTklfZaKR4lX/
-         dxr34usvKTUG1ei0NbJu5KZ1RA9uQtIik7lHAXtSLR4lzA4IyQr6xcfOm9Uursp/AoIk
-         dYmXeGNB5CTGUmx/aJ494btV5e/xnEKwzUAqVUWjt6qrAzbibsdBwMDmeSzQvcl5Tt1i
-         Ak675YUxYRmrcjzLQnrP3ToqhGiNWjVYS2t7C9GL0GrFGoZXGiu5d6KKI0j6iskItLgC
-         rdtw==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=K7OHh0J0Ql5aSy3qyWjVTPkkQu7eVgUi1CxOXIrtf7k=;
+        b=GkTDlC74VN0LYx7i34Xq23OMwfRBaJK4X8ce7obW5kvsJ2xcXG4/t3iDcGXDxZQOdY
+         dFs6xRtZIsBhTJkpi6sFtWiSsg33hfd8rjkmZvR8NbgGuiWa4r7GN9ouckV7/YXaKFK8
+         HpAy4Ta1RRjLF2i/tIe/DaMYbFlfJZcedLPNUKDOEYZqiSgBE5I2Olx5IiVn5VI8BxDN
+         fyilcgYTrAOudhpM4VernjxFkUUpFx1tz3vJkf02WQaLbMJNvmZqITaGCgYBFd4gJGki
+         PfyYiXPRzKh0DfC0+Vcexl4ccmD/qpOkjYzRYOvH/8f39/UCd0XpqUbAniPW3ZrVregs
+         N8VQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cmqPx/Zy279diCwL80ZzQVZT2Mcv1030GfDHO64ZwaM=;
-        b=GyXewDQEZWELKoHcR7VCYkDbH/ULUgSZWyervmbMo5RIGqQZnv3Qp6exz5mMxCFkS9
-         0FX/iHiUIIg9SXPvZK/SUpGFaaIgpwN/EuZTFhyrnVzlkAs8GWuWUVw5RAjQfGP3NE4D
-         CO/ziWoAS9umm978cKTpoRR8LAHHAnfIyFgTfOJJTrk3L6ZijJwT6RLRNDXUYKJKcXRd
-         bkzE5UKH8BiEynzoqESqc8LlNaMh5dRlQ7hJJWhrdTQf6IP5VLMkK4qiMVTiOnBAXyNx
-         3DnIBB1vwyhvUwKQyKmAuWK3KXcktgOMsFcW3K9p9OeSlAcCXI8k6YvbEsu1v9/Kpn1i
-         rXZQ==
-X-Gm-Message-State: AO0yUKVNd+dmn6K5SAv9NUbenYRUmi1iO7bHObXF1K5BsW9OhRe3ti9M
-        vuw2C3FJY44KNHTxTIf4m0ZwDqngI462aw5bJU0h4g==
-X-Google-Smtp-Source: AK7set96hCXSN8RisUiNR5YsJkh6ScE8+8SR4F6BqhH6feHgPVQmnMOF+Dd5nQ7x6loD3WWBhySd5AaVOyA9RgQ/D6o=
-X-Received: by 2002:a05:600c:1da3:b0:3da:b40f:c734 with SMTP id
- p35-20020a05600c1da300b003dab40fc734mr372362wms.115.1675365087907; Thu, 02
- Feb 2023 11:11:27 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=K7OHh0J0Ql5aSy3qyWjVTPkkQu7eVgUi1CxOXIrtf7k=;
+        b=XYrRujDe5mYvawAbh8URD9MTxLFkS6iFpEOr9GWh8KcLQcYL5yoOVC+fhQop2VBRAT
+         rJxlBi6ytvak+16rGrZ4tx6PzlYeYopl/sG9Xvd8UbYkJac7Y9jryunvV0RoIl2Dz+ru
+         CeA5Ll9f25sbmZzJ1zh30B8VQ6sPCPqDhJXPRgrqZHjjG0/VvPI7fboLvNjsiV5nkKBo
+         KnQQrk4FikS/UQ4Xb7AhtJopzVu8QfJwR8N5juU1YKk2aYuezErfS95voLP20Y+oxC4b
+         0nE3azpV91QvQ8WCWt3E4ii5UajVf9taJPEvrnVUF/UzcJdda3bc4yNlj+FZrX2qImwu
+         stGQ==
+X-Gm-Message-State: AO0yUKXgiEFsHTjvDj5Zhj/mIz/i0gW765UI+DCONLAkl7L5fDrYryJ0
+        3xGrLVF55D0x8HWV1xWXLbAHIg==
+X-Google-Smtp-Source: AK7set/eUA6CqqdqvgAdf3irvd3yLDq36g0kqfoojL5H7Im2SgQ1uTFFpnQZLV7icKRe5ALSrIYqNA==
+X-Received: by 2002:a17:902:7406:b0:198:af4f:de07 with SMTP id g6-20020a170902740600b00198af4fde07mr74828pll.7.1675365120010;
+        Thu, 02 Feb 2023 11:12:00 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id l19-20020a637013000000b004d2f5bb9339sm149004pgc.15.2023.02.02.11.11.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Feb 2023 11:11:59 -0800 (PST)
+Date:   Thu, 2 Feb 2023 19:11:56 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yang Weijiang <weijiang.yang@intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH] KVM: x86/pmu: Disallow legacy LBRs if architectural LBRs
+ are available
+Message-ID: <Y9wK/LkBYusOv1DO@google.com>
+References: <20230128001427.2548858-1-seanjc@google.com>
+ <f106a06e-ae6f-2c79-df87-721817aacc02@gmail.com>
 MIME-Version: 1.0
-References: <20230202012348.885402-1-nhuck@google.com> <Y9vnte1xP5T+nZ6j@redhat.com>
-In-Reply-To: <Y9vnte1xP5T+nZ6j@redhat.com>
-From:   Nathan Huckleberry <nhuck@google.com>
-Date:   Thu, 2 Feb 2023 11:11:16 -0800
-Message-ID: <CAJkfWY5sYxPe1ArxSe3fkwqkOFSxxz9HDdF6XoL_Wc9g070hRg@mail.gmail.com>
-Subject: Re: dm-verity: Remove WQ_UNBOUND.
-To:     Mike Snitzer <snitzer@kernel.org>
-Cc:     mpatocka@redhat.com, linux-kernel@vger.kernel.org,
-        Eric Biggers <ebiggers@kernel.org>, dm-devel@redhat.com,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Alasdair Kergon <agk@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f106a06e-ae6f-2c79-df87-721817aacc02@gmail.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -70,65 +75,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Looks good. Thanks.
+On Tue, Jan 31, 2023, Like Xu wrote:
+> On 28/1/2023 8:14 am, Sean Christopherson wrote:
+> > Disallow enabling LBR support if the CPU supports architectural LBRs.
+> > Traditional LBR support is absent on CPU models that have architectural
+> > LBRs, and KVM doesn't yet support arch LBRs, i.e. KVM will pass through
+> > non-existent MSRs if userspace enables LBRs for the guest.
+> 
+> True, we have call_trace due to MSR_ARCH_LBR_FROM_0 (0x1500) for example.
+> 
+> > 
+> > Cc: stable@vger.kernel.org
+> > Cc: Yang Weijiang <weijiang.yang@intel.com>
+> > Cc: Like Xu <like.xu.linux@gmail.com>
+> 
+> Tested-by: Like Xu <likexu@tencent.com>
+> 
+> > Reported-by: Paolo Bonzini <pbonzini@redhat.com>
+> 
+> Fixes: 145dfad998ea ("KVM: VMX: Advertise PMU LBRs if and only if perf
+> supports LBRs")
 
-On Thu, Feb 2, 2023 at 8:41 AM Mike Snitzer <snitzer@kernel.org> wrote:
->
-> On Wed, Feb 01 2023 at  8:23P -0500,
-> Nathan Huckleberry <nhuck@google.com> wrote:
->
-> > Setting WQ_UNBOUND increases scheduler latency on ARM64.  This is likely
-> > due to the asymmetric architecture of ARM64 processors.
-> >
-> > I've been unable to reproduce the results that claim WQ_UNBOUND gives a
-> > performance boost on x86-64.
-> >
-> > This flag is causing performance issues for multiple subsystems within
-> > Android.  Notably, the same slowdown exists for decompression with
-> > EROFS.
-> >
-> > | open-prebuilt-camera  | WQ_UNBOUND | ~WQ_UNBOUND   |
-> > |-----------------------|------------|---------------|
-> > | verity wait time (us) | 11746      | 119 (-98%)    |
-> > | erofs wait time (us)  | 357805     | 174205 (-51%) |
-> >
-> > | sha256 ramdisk random read | WQ_UNBOUND    | ~WQ_UNBOUND |
-> > |----------------------------|-----------=---|-------------|
-> > | arm64 (accelerated)        | bw=42.4MiB/s  | bw=212MiB/s |
-> > | arm64 (generic)            | bw=16.5MiB/s  | bw=48MiB/s  |
-> > | x86_64 (generic)           | bw=233MiB/s   | bw=230MiB/s |
-> >
-> > Cc: Sami Tolvanen <samitolvanen@google.com>
-> > Cc: Eric Biggers <ebiggers@kernel.org>
-> > Signed-off-by: Nathan Huckleberry <nhuck@google.com>
+If we want a fixes, I'd argue this is more appropriate:
+
+  Fixes: be635e34c284 ("KVM: vmx/pmu: Expose LBR_FMT in the MSR_IA32_PERF_CAPABILITIES")
+
+Though I'd prefer not to blame KVM, there's not much we could have done in KVM
+to know that Intel would effectively break backwards compatibility.
+
+> > Signed-off-by: Sean Christopherson <seanjc@google.com>
 > > ---
-> >  drivers/md/dm-verity-target.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/md/dm-verity-target.c b/drivers/md/dm-verity-target.c
-> > index ccf5b852fbf7..020fd2341025 100644
-> > --- a/drivers/md/dm-verity-target.c
-> > +++ b/drivers/md/dm-verity-target.c
-> > @@ -1399,8 +1399,8 @@ static int verity_ctr(struct dm_target *ti, unsigned argc, char **argv)
-> >               goto bad;
-> >       }
-> >
-> > -     /* WQ_UNBOUND greatly improves performance when running on ramdisk */
-> > -     wq_flags = WQ_MEM_RECLAIM | WQ_UNBOUND;
-> > +     wq_flags = WQ_MEM_RECLAIM;
-> > +
-> >       /*
-> >        * Using WQ_HIGHPRI improves throughput and completion latency by
-> >        * reducing wait times when reading from a dm-verity device.
-> > --
-> > 2.39.1.456.gfc5497dd1b-goog
->
-> Hi,
->
-> I've discussed with Mikulas, tweaked your patch slightly but accepted
-> your change, please see:
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm.git/commit/?h=dm-6.3&id=6f30cc248507ee96c22ff4c3cbc86099ff12b7a9
->
-> Thanks,
-> Mike
+> > 
+> > Am I missing something that would prevent this scenario?
+> > 
+> >   arch/x86/kvm/vmx/vmx.c | 8 +++++---
+> >   1 file changed, 5 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> > index 8f0f67c75f35..77ee6b4a5ec4 100644
+> > --- a/arch/x86/kvm/vmx/vmx.c
+> > +++ b/arch/x86/kvm/vmx/vmx.c
+> > @@ -7761,9 +7761,11 @@ static u64 vmx_get_perf_capabilities(void)
+> >   	if (boot_cpu_has(X86_FEATURE_PDCM))
+> >   		rdmsrl(MSR_IA32_PERF_CAPABILITIES, host_perf_cap);
+> > -	x86_perf_get_lbr(&lbr);
+> > -	if (lbr.nr)
+> > -		perf_cap |= host_perf_cap & PMU_CAP_LBR_FMT;
+> > +	if (!cpu_feature_enabled(X86_FEATURE_ARCH_LBR)) {
+> 
+> To avoid changing this again in the Arch lbr enabling part, how about:
+> 
+> 	x86_perf_get_lbr(&lbr);
+> 	if (lbr.nr && cpu_feature_enabled(X86_FEATURE_ARCH_LBR) ==
+> 	    kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR))
+> 		perf_cap |= host_perf_cap & PMU_CAP_LBR_FMT;
+> 
+> ?
+
+I'd rather force arch LBR enabling to explicitly update this code.  And I'd prefer
+that KVM explicitly clear PMU_CAP_LBR_FMT when KVM can't use arch LBRs for whatever
+reason, both for documentation purposes and to avoid ordering dependencies between
+consuming vmx_get_perf_capabilities() and updating kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR).
