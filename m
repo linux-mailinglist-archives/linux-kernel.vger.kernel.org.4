@@ -2,188 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB88E68834B
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 16:55:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05BAC688324
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 16:55:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233046AbjBBPz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 10:55:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57104 "EHLO
+        id S232882AbjBBPyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 10:54:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233146AbjBBPy7 (ORCPT
+        with ESMTP id S232616AbjBBPys (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 10:54:59 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F236537D;
-        Thu,  2 Feb 2023 07:54:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AACE1B826ED;
-        Thu,  2 Feb 2023 15:54:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C479BC433AE;
-        Thu,  2 Feb 2023 15:54:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675353284;
-        bh=WgIpMYi4FWB9ExPnYPbTqydDNPPFYwbTWNzEsRMkHfI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Vge7gXX1vllHYmQoHm9pQrxWIYYRWTgDxbFNOy134RK4Q6YETyDfFW0IVcfNK0p1S
-         yLj0QR5Xeh5T9kVVgiLqwwgPSuGjEhzIWeQvA7zLnXiiL97zQPwc+r/crFfexH0tsf
-         29XliHm8VScyjMpBDwHr5ByuFlD7NlVRE7OkWZ4VDXhLGKa4yuddYebJGICsQ57c3T
-         MysR/jStftv3JW389sSWzDHE8OqdvkGTJOD6UXo6utApsdwAGLBACj48A9JEAm+E3t
-         msz60yb0ahhLMuhlnjQeBqlNmuJsSZTzuVj/Z6gCwJCFYHpnKKumRNQiWvquQJG9Cq
-         y2lITdMkhSJfA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1pNbvZ-0001mB-GF; Thu, 02 Feb 2023 16:55:09 +0100
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH v2 11/22] rtc: pm8xxx: clean up comments
-Date:   Thu,  2 Feb 2023 16:54:37 +0100
-Message-Id: <20230202155448.6715-12-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230202155448.6715-1-johan+linaro@kernel.org>
-References: <20230202155448.6715-1-johan+linaro@kernel.org>
+        Thu, 2 Feb 2023 10:54:48 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C26005B5B8
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 07:54:41 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id j29-20020a05600c1c1d00b003dc52fed235so1769084wms.1
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 07:54:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/oko1AtD/XSyITvqWacNf29ZVg1C2BAcH6xewV2Bxwc=;
+        b=lH8NhXATnGk9E/V8Qfu020E2KAmUSNQdczW9g4CL3jhDacpSB4MIIRHUB5inx0OSIm
+         IKBgIfgv9jmj/oR6dUdkaGsWY9zhVS17mRu6H8s4YRtLWfmS5j6Gxs4Gugm5UoaDIfyd
+         /wXKpYcCc4mGSAQuN5IWxB/IhCa8JneXOybHrWolqjlMn61Rt9H5HkPNKav7Sb9ZC1aK
+         yiEk1Ng5ZAbMI3iO+l9Ndmsxv9JslBaqFVDyV6q33dWYwWS3UhaCtCXCMZQwci1F6Ks0
+         wtECRkbnDLo+3wf4q3Wzd1z1OuLeGvZHG7axNBtmGe+dGcWVQaR6MEvWtwLUwZTpcCan
+         TNBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/oko1AtD/XSyITvqWacNf29ZVg1C2BAcH6xewV2Bxwc=;
+        b=LCLhGYBMpuue5n0JR+Vy93OTRqOCb/SUHx3OhvwIlxze5pmVIOnhyhyT3JFTCSc7p0
+         hHwr9enNvzZBdmhc/Lm+mgDv+nFI8qCMP0NdB9pScaW936uH/0p1gXAxO/qK1KctUqCf
+         jrepbBh6rL4fuU+TEhbI/a0XX3+KD1F+VBzabC/aXn39n3JuW/JCy7d3OjhMbD27Dnbx
+         k0yDFvl0VlJEtraXjqX7qrzxnhc+rOjSoMoA/yJH1VLnQ8Q08jBW2IsgHytp+0r4HrOJ
+         YvocDARIsKhBvPexwtuM1z1HvIWji+yD3MAnQeHYZA2OICAS+RypKIP1uxRnRY8thlJc
+         WTRQ==
+X-Gm-Message-State: AO0yUKUw9JLXP2/ekC4s64Jz1iLHc6JmYxwkSzIkJiC2LvV1QUg5pDeR
+        euL65j9P5nMRlQVpTGShJ4wwug==
+X-Google-Smtp-Source: AK7set9nxuLA4Rl0qj6e0anHvgyTf+KX0bcf8L9UJihEp9Etud61rhMgWmH5ObfVUKPW6EF2891gAA==
+X-Received: by 2002:a05:600c:3d99:b0:3df:6c44:e083 with SMTP id bi25-20020a05600c3d9900b003df6c44e083mr4656044wmb.7.1675353280238;
+        Thu, 02 Feb 2023 07:54:40 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id k19-20020a05600c1c9300b003dc43a10fa5sm156215wms.13.2023.02.02.07.54.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Feb 2023 07:54:39 -0800 (PST)
+Message-ID: <ce001aa9-c18e-553c-2b09-fed407348e78@linaro.org>
+Date:   Thu, 2 Feb 2023 16:54:38 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 3/3] thermal/drivers/intel: Use generic trip points for
+ intel_soc_dts_iosf
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     srinivas.pandruvada@linux.intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rui.zhang@intel.com,
+        Daniel Lezcano <daniel.lezcano@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>
+References: <20230118181622.33335-1-daniel.lezcano@linaro.org>
+ <20230118181622.33335-3-daniel.lezcano@linaro.org>
+ <CAJZ5v0jbHR03UyJBMmBBYnSsZmGG0OXqLJvMfXxXKVn4Np4Egw@mail.gmail.com>
+ <beb367d8-dad7-87d9-7872-b81a4d3492ae@linaro.org>
+ <CAJZ5v0hFG1VjzKubWkLYPXeGHN9sMt4SDdC_f-dLseaXpsAOKg@mail.gmail.com>
+ <c7c7d71d-28e1-310e-2c8f-e5ae53a09f78@linaro.org>
+ <CAJZ5v0hP_5kOG7kE13fTLRgdiQrz7fskeAWBNW48MSD5t7FnvA@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAJZ5v0hP_5kOG7kE13fTLRgdiQrz7fskeAWBNW48MSD5t7FnvA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clean up the driver comments somewhat and remove obsolete, incorrect or
-redundant ones.
+On 02/02/2023 15:43, Rafael J. Wysocki wrote:
+> On Thu, Feb 2, 2023 at 3:36 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>>
+>>
+>> Hi Rafael,
+>>
+>> On 31/01/2023 20:17, Rafael J. Wysocki wrote:
+>>
+>> [ ... ]
+>>
+>>>>> Why should temp be overwritten here?
+>>>>
+>>>> You are correct. This is wrong.
+>>>>
+>>>> I think we should call get_trip_temp() before calling update_trip_temp()
+>>>> instead of passing a zero temperature parameter
+>>>
+>>> update_trip_temp() is sort of a misnomer, because it is used for
+>>> initializing a trip point for example in
+>>> intel_soc_dts_iosf_add_read_only_critical_trip() and in this
+>>> particular case get_trip_temp() need not be called before it.
+>>>
+>>> This driver seems to be in need of a cleanup.
+>>
+>> Will you take care of this cleanup ?
+> 
+> I think I can do that, but I'm not sure how much time I will be able
+> to allocate for that.  Let me try though.
 
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- drivers/rtc/rtc-pm8xxx.c | 39 +++++++++++++++++----------------------
- 1 file changed, 17 insertions(+), 22 deletions(-)
+Great, thanks for your help
 
-diff --git a/drivers/rtc/rtc-pm8xxx.c b/drivers/rtc/rtc-pm8xxx.c
-index ea867b20573a..8a94a19e0d14 100644
---- a/drivers/rtc/rtc-pm8xxx.c
-+++ b/drivers/rtc/rtc-pm8xxx.c
-@@ -23,13 +23,13 @@
- 
- /**
-  * struct pm8xxx_rtc_regs - describe RTC registers per PMIC versions
-- * @ctrl: base address of control register
-- * @write: base address of write register
-- * @read: base address of read register
-- * @alarm_ctrl: base address of alarm control register
-- * @alarm_ctrl2: base address of alarm control2 register
-- * @alarm_rw: base address of alarm read-write register
-- * @alarm_en: alarm enable mask
-+ * @ctrl:		address of control register
-+ * @write:		base address of write registers
-+ * @read:		base address of read registers
-+ * @alarm_ctrl:		address of alarm control register
-+ * @alarm_ctrl2:	address of alarm control2 register
-+ * @alarm_rw:		base address of alarm read-write registers
-+ * @alarm_en:		alarm enable mask
-  */
- struct pm8xxx_rtc_regs {
- 	unsigned int ctrl;
-@@ -42,12 +42,12 @@ struct pm8xxx_rtc_regs {
- };
- 
- /**
-- * struct pm8xxx_rtc -  rtc driver internal structure
-- * @rtc:		rtc device for this driver.
-- * @regmap:		regmap used to access RTC registers
-- * @allow_set_time:	indicates whether writing to the RTC is allowed
-+ * struct pm8xxx_rtc -  RTC driver internal structure
-+ * @rtc:		RTC device
-+ * @regmap:		regmap used to access registers
-+ * @allow_set_time:	whether the time can be set
-  * @alarm_irq:		alarm irq number
-- * @regs:		rtc registers description.
-+ * @regs:		register description
-  * @dev:		device structure
-  */
- struct pm8xxx_rtc {
-@@ -90,7 +90,7 @@ static int pm8xxx_rtc_set_time(struct device *dev, struct rtc_time *tm)
- 	if (rc)
- 		return rc;
- 
--	/* Disable RTC H/w before writing on RTC register */
-+	/* Disable RTC */
- 	rc = regmap_update_bits(rtc_dd->regmap, regs->ctrl, PM8xxx_RTC_ENABLE, 0);
- 	if (rc)
- 		return rc;
-@@ -111,7 +111,7 @@ static int pm8xxx_rtc_set_time(struct device *dev, struct rtc_time *tm)
- 	if (rc)
- 		return rc;
- 
--	/* Enable RTC H/w after writing on RTC register */
-+	/* Enable RTC */
- 	rc = regmap_update_bits(rtc_dd->regmap, regs->ctrl, PM8xxx_RTC_ENABLE,
- 				PM8xxx_RTC_ENABLE);
- 	if (rc)
-@@ -242,7 +242,7 @@ static int pm8xxx_rtc_alarm_irq_enable(struct device *dev, unsigned int enable)
- 	if (rc)
- 		return rc;
- 
--	/* Clear Alarm register */
-+	/* Clear alarm register */
- 	if (!enable) {
- 		rc = regmap_bulk_write(rtc_dd->regmap, regs->alarm_rw, value,
- 				       sizeof(value));
-@@ -269,13 +269,13 @@ static irqreturn_t pm8xxx_alarm_trigger(int irq, void *dev_id)
- 
- 	rtc_update_irq(rtc_dd->rtc, 1, RTC_IRQF | RTC_AF);
- 
--	/* Clear the alarm enable bit */
-+	/* Disable alarm */
- 	rc = regmap_update_bits(rtc_dd->regmap, regs->alarm_ctrl,
- 				regs->alarm_en, 0);
- 	if (rc)
- 		return IRQ_NONE;
- 
--	/* Clear RTC alarm register */
-+	/* Clear alarm status */
- 	rc = regmap_update_bits(rtc_dd->regmap, regs->alarm_ctrl2,
- 				PM8xxx_RTC_ALARM_CLEAR, 0);
- 	if (rc)
-@@ -332,9 +332,6 @@ static const struct pm8xxx_rtc_regs pmk8350_regs = {
- 	.alarm_en	= BIT(7),
- };
- 
--/*
-- * Hardcoded RTC bases until IORESOURCE_REG mapping is figured out
-- */
- static const struct of_device_id pm8xxx_id_table[] = {
- 	{ .compatible = "qcom,pm8921-rtc", .data = &pm8921_regs },
- 	{ .compatible = "qcom,pm8058-rtc", .data = &pm8058_regs },
-@@ -382,7 +379,6 @@ static int pm8xxx_rtc_probe(struct platform_device *pdev)
- 
- 	device_init_wakeup(&pdev->dev, 1);
- 
--	/* Register the RTC device */
- 	rtc_dd->rtc = devm_rtc_allocate_device(&pdev->dev);
- 	if (IS_ERR(rtc_dd->rtc))
- 		return PTR_ERR(rtc_dd->rtc);
-@@ -390,7 +386,6 @@ static int pm8xxx_rtc_probe(struct platform_device *pdev)
- 	rtc_dd->rtc->ops = &pm8xxx_rtc_ops;
- 	rtc_dd->rtc->range_max = U32_MAX;
- 
--	/* Request the alarm IRQ */
- 	rc = devm_request_any_context_irq(&pdev->dev, rtc_dd->alarm_irq,
- 					  pm8xxx_alarm_trigger,
- 					  IRQF_TRIGGER_RISING,
+
 -- 
-2.39.1
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
