@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04728688683
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 19:30:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F3BD688672
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 19:30:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232934AbjBBSaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 13:30:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34150 "EHLO
+        id S232734AbjBBSaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 13:30:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232823AbjBBS3x (ORCPT
+        with ESMTP id S232622AbjBBS3X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 13:29:53 -0500
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440E47BBE4
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 10:28:56 -0800 (PST)
-Received: by mail-pl1-x649.google.com with SMTP id 5-20020a170902c20500b0019682a04155so1307478pll.19
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 10:28:56 -0800 (PST)
+        Thu, 2 Feb 2023 13:29:23 -0500
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE933CE3E
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 10:28:39 -0800 (PST)
+Received: by mail-pf1-x449.google.com with SMTP id a27-20020aa78e9b000000b00593f636220cso1361496pfr.11
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 10:28:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5z7kzwo6bFhkuATdWJN+pGPJy4Fvw6TYtZKMARZWD4Y=;
-        b=Jwl4LCtLIKrw/7ynBH+9YL/WMWqT6AlooFuOZxazMcXaLj1RrSAmieHktrDNixNcRq
-         p5sK/BuD90GIPzj+YyWjSfUISO3nKtg3o49YEClAeBNE/U/34GSLVTC/HsUqm/mE0p2y
-         DBJ9axV9yeTzNTWFYUQ/3arBLPp8VjZMSBxGhZk7rAUlEqBFFXBQXlrl5kSjQIGFKvMP
-         mrhGWST7M1Ei6QNaH6tH8oBeNL/odNyFxAwzEKtmbHyNBogtFLU5EG+Tbbus3rcMY4lv
-         OcuaeHkg2EvXvlyC7TaHOOUvDjq2wdnUMd7li9iWRxLLFFxYKaQ6roy341k4aQW/36Ag
-         KSYQ==
+        bh=qC/QhOftpR+PdNazZD7MOW3k7jLGZsIPHB5S26OPowU=;
+        b=r1a9O5Vve17d01xB8zezcTdgAlg0zf+sD9UAz4qcAMUw6GmPEg9i6PFdfS0Qo2hbZz
+         dmH62gkel4+bp++gx3KsQzO9hkJ3PfXwqOeVcG04pAA4INKjcm9IZXfVmvFdX0ZFdX7q
+         RRbS8huuFX/aPZzBu6FQ6BSGfdggwGarEUFvGhMUKKP3QTZ7/d9dVCLgqFGkLPM45bSm
+         mT4caN6RZDes88eDM/TIXJvSsg3HneHoRGMup7f44fn4YiqtA7NlyZxR2pRDtEXaLSIs
+         1wB2aQR7pBWHFsNLVz6Idp3Czx1UYu5T4aH1YZJ3kO8MiOmDKPARWd1CmaGiacbUZFoE
+         0Pvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5z7kzwo6bFhkuATdWJN+pGPJy4Fvw6TYtZKMARZWD4Y=;
-        b=gH39t4Qq2OKjct0SqREND4Kj4bpN7NQMYKJVWcymiztCb1zzIvGKtRfLyhAQ58dqLt
-         l/sFxPgN2bBFxXI3B6KzVxmIer80XSRWzM9j7wAnrNgEK2r3mxfMWkFjcllTZLpFnHIh
-         VmJG42eYuyPeFVv9ZCkLIg5BFgZTxxiZ44JKcOvkvylTXJ471zZso8KCS42iaUn+YKZl
-         x7A7oasoSLYfKtieNBD3se8vE350Hmq2TCAj/BZ5wzAFkyeJRw/ZrmwG/0Af3pQbhZUC
-         23BwcZHPDCgXKI6/RzF4elEJwAY4zwp23c8sdo3utZ1ZkMlBDEqK9y+1uZDLMo46EmUo
-         2JEg==
-X-Gm-Message-State: AO0yUKV46aJnd2DMca27djNO5AI8yGLjxqAikJq7SZPdVHiyanA/MH0v
-        ehbAe3U2FI8ChY0ilXC88ZPBVphOta2KB5edmp2Fc6VYKO/AwDjX27xfIusMnnArQkpIMti9Poo
-        LFswbtgcmmQoaHeVqQNidMqc3xe4UCL92mYmEN73vEUN4DSWrqcB9jLpwwotopNNmI4onoGxY
-X-Google-Smtp-Source: AK7set8L663E44RkcZEK40xBBSKHCCxNWKcUVyYKO0oPaNoCTycxxUG0cQWh8wBHV3CNc1K1IjDYfaCWbHz/
+        bh=qC/QhOftpR+PdNazZD7MOW3k7jLGZsIPHB5S26OPowU=;
+        b=uGh3jrEoTvb1Ett6hUSfBprLwxzXF3jSQND/wR60sx8ydAZ4ezomSYBoRVpp6F1U73
+         qET+J1LjTnsu8xB8V8QyelaBJInIGy+4rhiQdOgUfhTmZPLuodUtH7bAoMWSdXpJG6rK
+         S6ce4f3A3Zc+VWGIVHHfNG6CvchWVd76X2JonXaEpUs1ln/E9TODVg6xpaSwM3vjG+7y
+         30mXkW8iWB2pqd5cfWfoY71Rkpdoocgg7IRfgUljv4fff2RJWsljfONfMGEDZJRzZeBk
+         cE0ROWOG9cpfEEzUNCh5D7GRkHS4Tk0FJlLP63GZ17ozIReHMj3jahP/O4fUc4Zu27GY
+         EfLw==
+X-Gm-Message-State: AO0yUKWy6hGQDveLk2cJHUqwvzJx/usUm9ka7jydn+/72rbZt6+VA2+f
+        +BYXJRyJxMBJIYYH2mquGoakRSh3UWbNe0k52IOdyH+j4y+dwwSuUPgv5IUsu8QPHFq2oE87fwI
+        vFb7jiBpMPSP8Murhr65Lk00SOlrT9GwMAmqy/iGtpOBY2EWmaF1r9bW4z2CUagPoBQ4Z13x0
+X-Google-Smtp-Source: AK7set/jAQ1NfZlHaF5Qn0lnyCSHZuevPjSeGtv9HE76kB68dAGDKM6AVCKk8h+Y4dHAuXyCK0hrACvqz9rJ
 X-Received: from sweer.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:e45])
- (user=bgardon job=sendgmr) by 2002:a17:902:7608:b0:196:7555:f810 with SMTP id
- k8-20020a170902760800b001967555f810mr1769024pll.7.1675362517803; Thu, 02 Feb
- 2023 10:28:37 -0800 (PST)
-Date:   Thu,  2 Feb 2023 18:28:04 +0000
+ (user=bgardon job=sendgmr) by 2002:aa7:8104:0:b0:592:591c:f6dd with SMTP id
+ b4-20020aa78104000000b00592591cf6ddmr1613722pfi.7.1675362519372; Thu, 02 Feb
+ 2023 10:28:39 -0800 (PST)
+Date:   Thu,  2 Feb 2023 18:28:05 +0000
 In-Reply-To: <20230202182809.1929122-1-bgardon@google.com>
 Mime-Version: 1.0
 References: <20230202182809.1929122-1-bgardon@google.com>
 X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
-Message-ID: <20230202182809.1929122-17-bgardon@google.com>
-Subject: [PATCH 16/21] KVM: x86/MMU: Wrap uses of kvm_handle_gfn_range in mmu.c
+Message-ID: <20230202182809.1929122-18-bgardon@google.com>
+Subject: [PATCH 17/21] KVM: x86/MMU: Add kvm_shadow_mmu_ to the last few
+ functions in shadow_mmu.h
 From:   Ben Gardon <bgardon@google.com>
 To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
 Cc:     Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
@@ -65,7 +66,7 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,197 +74,275 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-handle_gfn_range + callback is not a bad interface, but it requires
-exporting the whole callback scheme to mmu.c. Simplify the interface
-with some basic wrapper functions, making the callback scheme internal
-to shadow_mmu.c.
+Fix up the names of the last few Shadow MMU functions in shadow_mmu.h.
+This gives a clean and obvious interface between the shared x86 MMU
+code and the Shadow MMU. There are still a few functions exported from
+paging_tmpl.h that are left as-is, but changing those will need to be
+done separately, if at all.
 
 No functional change intended.
 
 Signed-off-by: Ben Gardon <bgardon@google.com>
 ---
- arch/x86/kvm/mmu/mmu.c        |  8 +++---
- arch/x86/kvm/mmu/shadow_mmu.c | 54 +++++++++++++++++++++++++----------
- arch/x86/kvm/mmu/shadow_mmu.h | 25 ++++------------
- 3 files changed, 48 insertions(+), 39 deletions(-)
+ arch/x86/kvm/mmu/mmu.c        | 19 ++++++++-------
+ arch/x86/kvm/mmu/shadow_mmu.c | 44 +++++++++++++++++++----------------
+ arch/x86/kvm/mmu/shadow_mmu.h | 16 +++++++------
+ 3 files changed, 43 insertions(+), 36 deletions(-)
 
 diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 44a00396284d5..156ab2e4cd811 100644
+index 156ab2e4cd811..f5b9db00eff99 100644
 --- a/arch/x86/kvm/mmu/mmu.c
 +++ b/arch/x86/kvm/mmu/mmu.c
-@@ -490,7 +490,7 @@ bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
- 	bool flush = false;
+@@ -884,7 +884,7 @@ static int fast_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+ 		if (tdp_mmu_enabled)
+ 			sptep = kvm_tdp_mmu_fast_pf_get_last_sptep(vcpu, fault->addr, &spte);
+ 		else
+-			sptep = fast_pf_get_last_sptep(vcpu, fault->addr, &spte);
++			sptep = kvm_shadow_mmu_fast_pf_get_last_sptep(vcpu, fault->addr, &spte);
  
- 	if (kvm_memslots_have_rmaps(kvm))
--		flush = kvm_handle_gfn_range(kvm, range, kvm_zap_rmap);
-+		flush = kvm_shadow_mmu_unmap_gfn_range(kvm, range);
+ 		if (!is_shadow_present_pte(spte))
+ 			break;
+@@ -1073,7 +1073,7 @@ static int mmu_alloc_direct_roots(struct kvm_vcpu *vcpu)
+ 		root = kvm_tdp_mmu_get_vcpu_root_hpa(vcpu);
+ 		mmu->root.hpa = root;
+ 	} else if (shadow_root_level >= PT64_ROOT_4LEVEL) {
+-		root = mmu_alloc_root(vcpu, 0, 0, shadow_root_level);
++		root = kvm_shadow_mmu_alloc_root(vcpu, 0, 0, shadow_root_level);
+ 		mmu->root.hpa = root;
+ 	} else if (shadow_root_level == PT32E_ROOT_LEVEL) {
+ 		if (WARN_ON_ONCE(!mmu->pae_root)) {
+@@ -1084,8 +1084,8 @@ static int mmu_alloc_direct_roots(struct kvm_vcpu *vcpu)
+ 		for (i = 0; i < 4; ++i) {
+ 			WARN_ON_ONCE(IS_VALID_PAE_ROOT(mmu->pae_root[i]));
  
- 	if (tdp_mmu_enabled)
- 		flush = kvm_tdp_mmu_unmap_gfn_range(kvm, range, flush);
-@@ -503,7 +503,7 @@ bool kvm_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
- 	bool flush = false;
+-			root = mmu_alloc_root(vcpu, i << (30 - PAGE_SHIFT), 0,
+-					      PT32_ROOT_LEVEL);
++			root = kvm_shadow_mmu_alloc_root(vcpu,
++					i << (30 - PAGE_SHIFT), 0, PT32_ROOT_LEVEL);
+ 			mmu->pae_root[i] = root | PT_PRESENT_MASK |
+ 					   shadow_me_value;
+ 		}
+@@ -1663,7 +1663,7 @@ void kvm_mmu_new_pgd(struct kvm_vcpu *vcpu, gpa_t new_pgd)
+ 	 * count. Otherwise, clear the write flooding count.
+ 	 */
+ 	if (!new_role.direct)
+-		__clear_sp_write_flooding_count(
++		kvm_shadow_mmu_clear_sp_write_flooding_count(
+ 				to_shadow_page(vcpu->arch.mmu->root.hpa));
+ }
+ EXPORT_SYMBOL_GPL(kvm_mmu_new_pgd);
+@@ -2439,13 +2439,13 @@ int kvm_mmu_load(struct kvm_vcpu *vcpu)
+ 	r = mmu_topup_memory_caches(vcpu, !vcpu->arch.mmu->root_role.direct);
+ 	if (r)
+ 		goto out;
+-	r = mmu_alloc_special_roots(vcpu);
++	r = kvm_shadow_mmu_alloc_special_roots(vcpu);
+ 	if (r)
+ 		goto out;
+ 	if (vcpu->arch.mmu->root_role.direct)
+ 		r = mmu_alloc_direct_roots(vcpu);
+ 	else
+-		r = mmu_alloc_shadow_roots(vcpu);
++		r = kvm_shadow_mmu_alloc_shadow_roots(vcpu);
+ 	if (r)
+ 		goto out;
  
- 	if (kvm_memslots_have_rmaps(kvm))
--		flush = kvm_handle_gfn_range(kvm, range, kvm_set_pte_rmap);
-+		flush = kvm_shadow_mmu_set_spte_gfn(kvm, range);
+@@ -2674,7 +2674,8 @@ static int __kvm_mmu_create(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu)
+ 	 * generally doesn't use PAE paging and can skip allocating the PDP
+ 	 * table.  The main exception, handled here, is SVM's 32-bit NPT.  The
+ 	 * other exception is for shadowing L1's 32-bit or PAE NPT on 64-bit
+-	 * KVM; that horror is handled on-demand by mmu_alloc_special_roots().
++	 * KVM; that horror is handled on-demand by
++	 * kvm_shadow_mmu_alloc_special_roots().
+ 	 */
+ 	if (tdp_enabled && kvm_mmu_get_tdp_level(vcpu) > PT32E_ROOT_LEVEL)
+ 		return 0;
+@@ -2817,7 +2818,7 @@ int kvm_mmu_init_vm(struct kvm *kvm)
+ 			return r;
+ 	}
  
- 	if (tdp_mmu_enabled)
- 		flush |= kvm_tdp_mmu_set_spte_gfn(kvm, range);
-@@ -516,7 +516,7 @@ bool kvm_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
- 	bool young = false;
+-	node->track_write = kvm_mmu_pte_write;
++	node->track_write = kvm_shadow_mmu_pte_write;
+ 	node->track_flush_slot = kvm_mmu_invalidate_zap_pages_in_memslot;
+ 	kvm_page_track_register_notifier(kvm, node);
  
- 	if (kvm_memslots_have_rmaps(kvm))
--		young = kvm_handle_gfn_range(kvm, range, kvm_age_rmap);
-+		young = kvm_shadow_mmu_age_gfn_range(kvm, range);
- 
- 	if (tdp_mmu_enabled)
- 		young |= kvm_tdp_mmu_age_gfn_range(kvm, range);
-@@ -529,7 +529,7 @@ bool kvm_test_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
- 	bool young = false;
- 
- 	if (kvm_memslots_have_rmaps(kvm))
--		young = kvm_handle_gfn_range(kvm, range, kvm_test_age_rmap);
-+		young = kvm_shadow_mmu_test_age_gfn(kvm, range);
- 
- 	if (tdp_mmu_enabled)
- 		young |= kvm_tdp_mmu_test_age_gfn(kvm, range);
 diff --git a/arch/x86/kvm/mmu/shadow_mmu.c b/arch/x86/kvm/mmu/shadow_mmu.c
-index dc5c4b9899cc6..dfff65db97c3b 100644
+index dfff65db97c3b..eb4424fedd73a 100644
 --- a/arch/x86/kvm/mmu/shadow_mmu.c
 +++ b/arch/x86/kvm/mmu/shadow_mmu.c
-@@ -864,16 +864,16 @@ static bool __kvm_zap_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
- 	return kvm_zap_all_rmap_sptes(kvm, rmap_head);
+@@ -1404,14 +1404,14 @@ static int mmu_sync_children(struct kvm_vcpu *vcpu, struct kvm_mmu_page *parent,
+ 	return 0;
  }
  
--bool kvm_zap_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
--		  struct kvm_memory_slot *slot, gfn_t gfn, int level,
--		  pte_t unused)
-+static bool kvm_zap_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
-+			 struct kvm_memory_slot *slot, gfn_t gfn, int level,
-+			 pte_t unused)
+-void __clear_sp_write_flooding_count(struct kvm_mmu_page *sp)
++void kvm_shadow_mmu_clear_sp_write_flooding_count(struct kvm_mmu_page *sp)
  {
- 	return __kvm_zap_rmap(kvm, rmap_head, slot);
+ 	atomic_set(&sp->write_flooding_count,  0);
  }
  
--bool kvm_set_pte_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
--		      struct kvm_memory_slot *slot, gfn_t gfn, int level,
--		      pte_t pte)
-+static bool kvm_set_pte_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
-+			     struct kvm_memory_slot *slot, gfn_t gfn, int level,
-+			     pte_t pte)
+ static void clear_sp_write_flooding_count(u64 *spte)
  {
- 	u64 *sptep;
- 	struct rmap_iterator iter;
-@@ -980,9 +980,13 @@ static void slot_rmap_walk_next(struct slot_rmap_walk_iterator *iterator)
- 	     slot_rmap_walk_okay(_iter_);				\
- 	     slot_rmap_walk_next(_iter_))
+-	__clear_sp_write_flooding_count(sptep_to_sp(spte));
++	kvm_shadow_mmu_clear_sp_write_flooding_count(sptep_to_sp(spte));
+ }
  
--__always_inline bool kvm_handle_gfn_range(struct kvm *kvm,
--					  struct kvm_gfn_range *range,
--					  rmap_handler_t handler)
-+typedef bool (*rmap_handler_t)(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
-+			       struct kvm_memory_slot *slot, gfn_t gfn,
-+			       int level, pte_t pte);
-+
-+static __always_inline bool
-+kvm_handle_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range,
-+		     rmap_handler_t handler)
+ /*
+@@ -1482,7 +1482,7 @@ static struct kvm_mmu_page *kvm_mmu_find_shadow_page(struct kvm *kvm,
+ 				kvm_flush_remote_tlbs(kvm);
+ 		}
+ 
+-		__clear_sp_write_flooding_count(sp);
++		kvm_shadow_mmu_clear_sp_write_flooding_count(sp);
+ 
+ 		goto out;
+ 	}
+@@ -1607,12 +1607,13 @@ static union kvm_mmu_page_role kvm_mmu_child_role(u64 *sptep, bool direct,
+ 	 * Concretely, a 4-byte PDE consumes bits 31:22, while an 8-byte PDE
+ 	 * consumes bits 29:21.  To consume bits 31:30, KVM's uses 4 shadow
+ 	 * PDPTEs; those 4 PAE page directories are pre-allocated and their
+-	 * quadrant is assigned in mmu_alloc_root().   A 4-byte PTE consumes
+-	 * bits 21:12, while an 8-byte PTE consumes bits 20:12.  To consume
+-	 * bit 21 in the PTE (the child here), KVM propagates that bit to the
+-	 * quadrant, i.e. sets quadrant to '0' or '1'.  The parent 8-byte PDE
+-	 * covers bit 21 (see above), thus the quadrant is calculated from the
+-	 * _least_ significant bit of the PDE index.
++	 * quadrant is assigned in kvm_shadow_mmu_alloc_root().
++	 * A 4-byte PTE consumes bits 21:12, while an 8-byte PTE consumes
++	 * bits 20:12.  To consume bit 21 in the PTE (the child here), KVM
++	 * propagates that bit to the quadrant, i.e. sets quadrant to
++	 * '0' or '1'.  The parent 8-byte PDE covers bit 21 (see above), thus
++	 * the quadrant is calculated from the _least_ significant bit of the
++	 * PDE index.
+ 	 */
+ 	if (role.has_4_byte_gpte) {
+ 		WARN_ON_ONCE(role.level != PG_LEVEL_4K);
+@@ -2389,7 +2390,8 @@ int kvm_shadow_mmu_direct_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *faul
+  *  - Must be called between walk_shadow_page_lockless_{begin,end}.
+  *  - The returned sptep must not be used after walk_shadow_page_lockless_end.
+  */
+-u64 *fast_pf_get_last_sptep(struct kvm_vcpu *vcpu, gpa_t gpa, u64 *spte)
++u64 *kvm_shadow_mmu_fast_pf_get_last_sptep(struct kvm_vcpu *vcpu, gpa_t gpa,
++					   u64 *spte)
  {
- 	struct slot_rmap_walk_iterator iterator;
- 	bool ret = false;
-@@ -995,9 +999,9 @@ __always_inline bool kvm_handle_gfn_range(struct kvm *kvm,
+ 	struct kvm_shadow_walk_iterator iterator;
+ 	u64 old_spte;
+@@ -2442,7 +2444,8 @@ static int mmu_check_root(struct kvm_vcpu *vcpu, gfn_t root_gfn)
  	return ret;
  }
  
--bool kvm_age_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
--		  struct kvm_memory_slot *slot, gfn_t gfn, int level,
--		  pte_t unused)
-+static bool kvm_age_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
-+			 struct kvm_memory_slot *slot, gfn_t gfn, int level,
-+			 pte_t unused)
+-hpa_t mmu_alloc_root(struct kvm_vcpu *vcpu, gfn_t gfn, int quadrant, u8 level)
++hpa_t kvm_shadow_mmu_alloc_root(struct kvm_vcpu *vcpu, gfn_t gfn, int quadrant,
++				u8 level)
  {
- 	u64 *sptep;
- 	struct rmap_iterator iter;
-@@ -1009,9 +1013,9 @@ bool kvm_age_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
- 	return young;
+ 	union kvm_mmu_page_role role = vcpu->arch.mmu->root_role;
+ 	struct kvm_mmu_page *sp;
+@@ -2459,7 +2462,7 @@ hpa_t mmu_alloc_root(struct kvm_vcpu *vcpu, gfn_t gfn, int quadrant, u8 level)
+ 	return __pa(sp->spt);
  }
  
--bool kvm_test_age_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
--		       struct kvm_memory_slot *slot, gfn_t gfn,
--		       int level, pte_t unused)
-+static bool kvm_test_age_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
-+			      struct kvm_memory_slot *slot, gfn_t gfn,
-+			      int level, pte_t unused)
+-static int mmu_first_shadow_root_alloc(struct kvm *kvm)
++static int kvm_shadow_mmu_first_shadow_root_alloc(struct kvm *kvm)
  {
- 	u64 *sptep;
- 	struct rmap_iterator iter;
-@@ -3523,3 +3527,23 @@ void kvm_shadow_mmu_wrprot_slot(struct kvm *kvm,
- 	walk_slot_rmaps(kvm, memslot, slot_rmap_write_protect,
- 			start_level, KVM_MAX_HUGEPAGE_LEVEL, false);
+ 	struct kvm_memslots *slots;
+ 	struct kvm_memory_slot *slot;
+@@ -2520,7 +2523,7 @@ static int mmu_first_shadow_root_alloc(struct kvm *kvm)
+ 	return r;
  }
-+
-+bool kvm_shadow_mmu_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
-+{
-+	return kvm_handle_gfn_range(kvm, range, kvm_zap_rmap);
-+}
-+
-+bool kvm_shadow_mmu_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
-+{
-+	return kvm_handle_gfn_range(kvm, range, kvm_set_pte_rmap);
-+}
-+
-+bool kvm_shadow_mmu_age_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
-+{
-+	return kvm_handle_gfn_range(kvm, range, kvm_age_rmap);
-+}
-+
-+bool kvm_shadow_mmu_test_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
-+{
-+	return kvm_handle_gfn_range(kvm, range, kvm_test_age_rmap);
-+}
+ 
+-int mmu_alloc_shadow_roots(struct kvm_vcpu *vcpu)
++int kvm_shadow_mmu_alloc_shadow_roots(struct kvm_vcpu *vcpu)
+ {
+ 	struct kvm_mmu *mmu = vcpu->arch.mmu;
+ 	u64 pdptrs[4], pm_mask;
+@@ -2549,7 +2552,7 @@ int mmu_alloc_shadow_roots(struct kvm_vcpu *vcpu)
+ 		}
+ 	}
+ 
+-	r = mmu_first_shadow_root_alloc(vcpu->kvm);
++	r = kvm_shadow_mmu_first_shadow_root_alloc(vcpu->kvm);
+ 	if (r)
+ 		return r;
+ 
+@@ -2563,8 +2566,8 @@ int mmu_alloc_shadow_roots(struct kvm_vcpu *vcpu)
+ 	 * write-protect the guests page table root.
+ 	 */
+ 	if (mmu->cpu_role.base.level >= PT64_ROOT_4LEVEL) {
+-		root = mmu_alloc_root(vcpu, root_gfn, 0,
+-				      mmu->root_role.level);
++		root = kvm_shadow_mmu_alloc_root(vcpu, root_gfn, 0,
++						 mmu->root_role.level);
+ 		mmu->root.hpa = root;
+ 		goto set_root_pgd;
+ 	}
+@@ -2617,7 +2620,8 @@ int mmu_alloc_shadow_roots(struct kvm_vcpu *vcpu)
+ 		 */
+ 		quadrant = (mmu->cpu_role.base.level == PT32_ROOT_LEVEL) ? i : 0;
+ 
+-		root = mmu_alloc_root(vcpu, root_gfn, quadrant, PT32_ROOT_LEVEL);
++		root = kvm_shadow_mmu_alloc_root(vcpu, root_gfn, quadrant,
++						 PT32_ROOT_LEVEL);
+ 		mmu->pae_root[i] = root | pm_mask;
+ 	}
+ 
+@@ -2636,7 +2640,7 @@ int mmu_alloc_shadow_roots(struct kvm_vcpu *vcpu)
+ 	return r;
+ }
+ 
+-int mmu_alloc_special_roots(struct kvm_vcpu *vcpu)
++int kvm_shadow_mmu_alloc_special_roots(struct kvm_vcpu *vcpu)
+ {
+ 	struct kvm_mmu *mmu = vcpu->arch.mmu;
+ 	bool need_pml5 = mmu->root_role.level > PT64_ROOT_4LEVEL;
+@@ -3009,8 +3013,8 @@ static u64 *get_written_sptes(struct kvm_mmu_page *sp, gpa_t gpa, int *nspte)
+ 	return spte;
+ }
+ 
+-void kvm_mmu_pte_write(struct kvm_vcpu *vcpu, gpa_t gpa, const u8 *new,
+-		       int bytes, struct kvm_page_track_notifier_node *node)
++void kvm_shadow_mmu_pte_write(struct kvm_vcpu *vcpu, gpa_t gpa, const u8 *new,
++			      int bytes, struct kvm_page_track_notifier_node *node)
+ {
+ 	gfn_t gfn = gpa >> PAGE_SHIFT;
+ 	struct kvm_mmu_page *sp;
 diff --git a/arch/x86/kvm/mmu/shadow_mmu.h b/arch/x86/kvm/mmu/shadow_mmu.h
-index 36fe8013931d2..e4fbc842f524e 100644
+index e4fbc842f524e..4d39017873aa6 100644
 --- a/arch/x86/kvm/mmu/shadow_mmu.h
 +++ b/arch/x86/kvm/mmu/shadow_mmu.h
-@@ -39,26 +39,6 @@ struct pte_list_desc {
+@@ -39,7 +39,7 @@ struct pte_list_desc {
  /* Only exported for debugfs.c. */
  unsigned int pte_list_count(struct kvm_rmap_head *rmap_head);
  
--bool kvm_zap_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
--		  struct kvm_memory_slot *slot, gfn_t gfn, int level,
--		  pte_t unused);
--bool kvm_set_pte_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
--		      struct kvm_memory_slot *slot, gfn_t gfn, int level,
--		      pte_t pte);
--
--typedef bool (*rmap_handler_t)(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
--			       struct kvm_memory_slot *slot, gfn_t gfn,
--			       int level, pte_t pte);
--bool kvm_handle_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range,
--			  rmap_handler_t handler);
--
--bool kvm_age_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
--		  struct kvm_memory_slot *slot, gfn_t gfn, int level,
--		  pte_t unused);
--bool kvm_test_age_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
--		       struct kvm_memory_slot *slot, gfn_t gfn,
--		       int level, pte_t unused);
--
- void __clear_sp_write_flooding_count(struct kvm_mmu_page *sp);
+-void __clear_sp_write_flooding_count(struct kvm_mmu_page *sp);
++void kvm_shadow_mmu_clear_sp_write_flooding_count(struct kvm_mmu_page *sp);
  
  bool __kvm_shadow_mmu_prepare_zap_page(struct kvm *kvm, struct kvm_mmu_page *sp,
-@@ -114,6 +94,11 @@ void kvm_shadow_mmu_wrprot_slot(struct kvm *kvm,
- 				const struct kvm_memory_slot *memslot,
- 				int start_level);
+ 				       struct list_head *invalid_list,
+@@ -54,17 +54,19 @@ int kvm_shadow_mmu_make_pages_available(struct kvm_vcpu *vcpu);
+ int kvm_shadow_mmu_unprotect_page_virt(struct kvm_vcpu *vcpu, gva_t gva);
  
-+bool kvm_shadow_mmu_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range);
-+bool kvm_shadow_mmu_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range);
-+bool kvm_shadow_mmu_age_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range);
-+bool kvm_shadow_mmu_test_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range);
-+
- /* Exports from paging_tmpl.h */
- gpa_t paging32_gva_to_gpa(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu,
- 			  gpa_t vaddr, u64 access,
+ int kvm_shadow_mmu_direct_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault);
+-u64 *fast_pf_get_last_sptep(struct kvm_vcpu *vcpu, gpa_t gpa, u64 *spte);
++u64 *kvm_shadow_mmu_fast_pf_get_last_sptep(struct kvm_vcpu *vcpu, gpa_t gpa,
++					   u64 *spte);
+ 
+-hpa_t mmu_alloc_root(struct kvm_vcpu *vcpu, gfn_t gfn, int quadrant, u8 level);
+-int mmu_alloc_shadow_roots(struct kvm_vcpu *vcpu);
+-int mmu_alloc_special_roots(struct kvm_vcpu *vcpu);
++hpa_t kvm_shadow_mmu_alloc_root(struct kvm_vcpu *vcpu, gfn_t gfn, int quadrant,
++				u8 level);
++int kvm_shadow_mmu_alloc_shadow_roots(struct kvm_vcpu *vcpu);
++int kvm_shadow_mmu_alloc_special_roots(struct kvm_vcpu *vcpu);
+ 
+ int kvm_shadow_mmu_get_walk(struct kvm_vcpu *vcpu, u64 addr, u64 *sptes,
+ 			    int *root_level);
+ 
+-void kvm_mmu_pte_write(struct kvm_vcpu *vcpu, gpa_t gpa, const u8 *new,
+-		       int bytes, struct kvm_page_track_notifier_node *node);
++void kvm_shadow_mmu_pte_write(struct kvm_vcpu *vcpu, gpa_t gpa, const u8 *new,
++			      int bytes, struct kvm_page_track_notifier_node *node);
+ 
+ void kvm_shadow_mmu_zap_obsolete_pages(struct kvm *kvm);
+ bool kvm_shadow_mmu_zap_gfn_range(struct kvm *kvm, gfn_t gfn_start, gfn_t gfn_end);
 -- 
 2.39.1.519.gcb327c4b5f-goog
 
