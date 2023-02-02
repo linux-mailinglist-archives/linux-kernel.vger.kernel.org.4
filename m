@@ -2,129 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92B1B687446
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 05:09:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E6F5687447
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 05:09:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229618AbjBBEJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 23:09:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53256 "EHLO
+        id S231207AbjBBEJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 23:09:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbjBBEJ1 (ORCPT
+        with ESMTP id S230259AbjBBEJl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 23:09:27 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FDE1761DC
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 20:09:26 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id be12so776408edb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 20:09:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=TTJu9WAGKrGHk/ml0vQ4sKDRHcICD0LMTOQAJoDVC9E=;
-        b=viDjWUlS5WJStNg7sBNUvwL5mMHZQuzjK5aEYNb4Ft0akFH4gBbFQcToKZTrK+KGd8
-         s/PbmEkIy7XGRnNBo0ZzG9leDOUseTpyoRWdjForYYbc232Mt8t/k9FIL9kZ2GHTQ8lJ
-         yFD6nB7uBZTe07suK8Peq63Tqcu4dF/RLoVoW7xskUMa6TkwIpF8+eFKQjM/q2xMCA6H
-         1r7++suCgkT3RryiPexXMJ8bT3yn6w0ZRpcn6bkK/wcQSuKy47F4UYsaOLdxxPTTDpnt
-         /k/nMiLdN3bx1yM7ggNgLEfyX6zn0Ttx71A8XGM8yPQT+Mav8JkiN2jl7XyQrmJjJ0O6
-         U4dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TTJu9WAGKrGHk/ml0vQ4sKDRHcICD0LMTOQAJoDVC9E=;
-        b=PG0JFO6RZ7hjv3SuFgEW111QurT6YUa6kDQcxvYVGyj0qgIrloVJUkBN/A4d04b3VT
-         dTGR3LVWeuxQuvan7pEwQSvbRn3LuYj5aHYWfccb/2QJOyOF9h1aa+T5BwZefwoScZVb
-         36nlrWDsWdwf1JlSSYMva372RVblRxzVVYh6TpNVZWyca9iMhTb0V6i/xqjJ4PZoWS7k
-         F36RD4uXYi7GhVd15EWIMKAWVHzwIHVehaPhL1XdM4NbjMzrBD6y9E1DTQaDc0ioLEMP
-         AaLu6G3t9iTq7GhfcjH7Xi/UPQyPLXibhNounGRP+O0vm+IVsA00ftDP6iiZ1wf3Zbd3
-         AMhw==
-X-Gm-Message-State: AO0yUKWmfTJu4LvnaqjJuB2/db/ulqbIrXkozH4CExBh7+r7v3YItcGS
-        NB51drfeg4ZcLNQYMvW0uMKq9defJ7u/dplB2Nysb+xGA4TgfA==
-X-Google-Smtp-Source: AK7set9QzhOs2N4Qnsql14QROCMN0P3BspaWH8gwT5Gx/aBQLnwv74nrpL40AUNFn8KZ/a7tcpPDNQauWdF2KKCDNkY=
-X-Received: by 2002:a05:6402:25c1:b0:49c:1316:d9d1 with SMTP id
- x1-20020a05640225c100b0049c1316d9d1mr1478262edb.12.1675310964502; Wed, 01 Feb
- 2023 20:09:24 -0800 (PST)
+        Wed, 1 Feb 2023 23:09:41 -0500
+Received: from out-200.mta0.migadu.com (out-200.mta0.migadu.com [91.218.175.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 498247C336
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 20:09:39 -0800 (PST)
+Message-ID: <b82cfec2-b679-7c5a-06fe-a540fddda0f3@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1675310975;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zK/TAzHm0RtLrqdCRbnz2rIxx2M9pDyw9VFS3C2MaFI=;
+        b=HuN5ErL6UezfxuBBQY+gsMkccm5X7FD7m/GXFOMnC6B5mhIccibZkScOvCzktc2PD2BldK
+        hGJHh3KPn8D0bxUXIOy4rQeCPyPSBfeb7D5BUCMn3IvUdu8bb4f4okDR26PK0W8je3/KNR
+        ndCqAOyZdurQMi4XjG1sOtVJSG7yxM8=
+Date:   Thu, 2 Feb 2023 12:09:34 +0800
 MIME-Version: 1.0
-References: <CDDAB2D0-264E-42F3-8E31-BA210BEB8EC1@rivosinc.com>
-In-Reply-To: <CDDAB2D0-264E-42F3-8E31-BA210BEB8EC1@rivosinc.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Thu, 2 Feb 2023 09:39:14 +0530
-Message-ID: <CAAhSdy3PB6tM=Q9fXn_Hs95UvkXT7kyuWvw5S1Fqimwf7qB2TA@mail.gmail.com>
-Subject: Re: [PATCH V2] clocksource: riscv: Patch riscv_clock_next_event()
- jump before first use
-To:     Matt Evans <mev@rivosinc.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Atish Patra <atishp@rivosinc.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH RFC] RDMA/rtrs: Don't call kobject_del for srv_path->kobj
+Content-Language: en-US
+To:     "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>,
+        "haris.iqbal@ionos.com" <haris.iqbal@ionos.com>,
+        "jinpu.wang@ionos.com" <jinpu.wang@ionos.com>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>
+Cc:     "jgg@ziepe.ca" <jgg@ziepe.ca>, "leon@kernel.org" <leon@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <1675261833-2-1-git-send-email-lizhijian@fujitsu.com>
+ <6bcba397-f4f1-26df-f8cd-1dbebf111932@linux.dev>
+ <d1751eec-3d48-a8c9-1e3b-3263a4a043a3@fujitsu.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Guoqing Jiang <guoqing.jiang@linux.dev>
+In-Reply-To: <d1751eec-3d48-a8c9-1e3b-3263a4a043a3@fujitsu.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 2, 2023 at 1:19 AM Matt Evans <mev@rivosinc.com> wrote:
->
-> A static key is used to select between SBI and Sstc timer usage in
-> riscv_clock_next_event(), but currently the direction is resolved
-> after cpuhp_setup_state() is called (which sets the next event).  The
-> first event will therefore fall through the sbi_set_timer() path; this
-> breaks Sstc-only systems.  So, apply the jump patching before first
-> use.
->
-> Fixes: 9f7a8ff6391f ("RISC-V: Prefer sstc extension if available")
-> Signed-off-by: Matt Evans <mev@rivosinc.com>
 
-Looks good to me.
 
-Reviewed-by: Anup Patel <anup@brainfault.org>
+On 2/2/23 11:42, lizhijian@fujitsu.com wrote:
+> Thanks your reviewing @Guoqing
+>
+>> Thanks for the fix, it would be better to comment that why kobject_del can't
+>> be called here.
+> commmit f7452a7e96c1 ("RDMA/rtrs-srv: fix memory leak by missing kobject free")
+> memtioned a free_sess(), but i didn't get it exactly(no such function ?). So i have
+> not sorted it out.
 
-Regards,
-Anup
+It was renamed to free_path I believe.
 
-> ---
+> And hold on，with below change， kernel gets another WARNING.
+> I'm still working on it.
 >
-> V1 -> V2: Commit msg tweak.
->
->  drivers/clocksource/timer-riscv.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/clocksource/timer-riscv.c b/drivers/clocksource/timer-riscv.c
-> index 969a552da8d2..a36d173fd6cd 100644
-> --- a/drivers/clocksource/timer-riscv.c
-> +++ b/drivers/clocksource/timer-riscv.c
-> @@ -177,6 +177,11 @@ static int __init riscv_timer_init_dt(struct device_node *n)
->                 return error;
->         }
->
-> +       if (riscv_isa_extension_available(NULL, SSTC)) {
-> +               pr_info("Timer interrupt in S-mode is available via sstc extension\n");
-> +               static_branch_enable(&riscv_sstc_available);
-> +       }
-> +
->         error = cpuhp_setup_state(CPUHP_AP_RISCV_TIMER_STARTING,
->                          "clockevents/riscv/timer:starting",
->                          riscv_timer_starting_cpu, riscv_timer_dying_cpu);
-> @@ -184,11 +189,6 @@ static int __init riscv_timer_init_dt(struct device_node *n)
->                 pr_err("cpu hp setup state failed for RISCV timer [%d]\n",
->                        error);
->
-> -       if (riscv_isa_extension_available(NULL, SSTC)) {
-> -               pr_info("Timer interrupt in S-mode is available via sstc extension\n");
-> -               static_branch_enable(&riscv_sstc_available);
-> -       }
-> -
->         return error;
->  }
->
-> --
-> 2.30.2
->
->
+> [  125.034407] =========================
+> [  125.035490] WARNING: held lock freed!
+> [  125.036640] 6.2.0-rc6-roce-flush+ #53 Not tainted
+> [  125.038088] -------------------------
+> [  125.039143] kworker/0:3/63 is freeing memory ffff90bd01eaa000-ffff90bd01eaa7ff, with a lock still held there!
+> [  125.041660] ffff90bd01eaa118 (&srv->paths_mutex){+.+.}-{3:3}, at: rtrs_srv_destroy_once_sysfs_root_folders.isra.0+0x24/0x60 [rtrs_server]
+> [  125.044600] 3 locks held by kworker/0:3/63:
+> [  125.046091]  #0: ffff90bd05f8ed38 ((wq_completion)rtrs_server_wq){+.+.}-{0:0}, at: process_one_work+0x1f4/0x590
+> [  125.048876]  #1: ffff9ff4c085fe78 ((work_completion)(&srv_path->close_work)){+.+.}-{0:0}, at: process_one_work+0x1f4/0x590
+> [  125.051789]  #2: ffff90bd01eaa118 (&srv->paths_mutex){+.+.}-{3:3}, at: rtrs_srv_destroy_once_sysfs_root_folders.isra.0+0x24/0x60 [rtrs_server]
+> [  125.055167]
+> [  125.055167] stack backtrace:
+> [  125.057979] CPU: 0 PID: 63 Comm: kworker/0:3 Kdump: loaded Not tainted 6.2.0-rc6-roce-flush+ #53
+> [  125.060201] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+> [  125.063156] Workqueue: rtrs_server_wq rtrs_srv_close_work [rtrs_server]
+> [  125.065031] Call Trace:
+> [  125.065905]  <TASK>
+> [  125.066733]  dump_stack_lvl+0x45/0x5d
+> [  125.068003]  debug_check_no_locks_freed.cold+0x77/0x7c
+> [  125.069565]  ? device_release+0x34/0x90
+> [  125.070814]  __kmem_cache_free+0x74/0x190
+> [  125.072059]  device_release+0x34/0x90
+> [  125.073203]  kobject_put+0x8b/0x1d0
+> [  125.074385]  rtrs_srv_destroy_once_sysfs_root_folders.isra.0+0x35/0x60 [rtrs_server]
+> [  125.076456]  rtrs_srv_close_work+0x21/0x270 [rtrs_server]
+> [  125.078097]  process_one_work+0x274/0x590
+> [  125.079372]  worker_thread+0x4f/0x3d0
+> [  125.080508]  ? __pfx_worker_thread+0x10/0x10
+> [  125.081751]  kthread+0xe7/0x110
+> [  125.082778]  ? __pfx_kthread+0x10/0x10
+> [  125.083894]  ret_from_fork+0x2c/0x50
+> [  125.084991]  </TASK>
+
+Suppose it also happened during run your script, I guess it might be some
+racy conditions.
+
+$ while true;
+do
+         echo "sessname=foo path=ip:<ip address> device_path=/dev/nvme0n1" > /sys/devices/virtual/rnbd-client/ctl/map_device
+         echo "normal" > /sys/block/rnbd0/rnbd/unmap_device
+done
+
+
+Or does it disappear after revert 6af4609c18b3? If so, we can revert it
+first.
+
+Thanks,
+Guoqing
