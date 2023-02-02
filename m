@@ -2,103 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4882687E4E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 14:10:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F6C5687E50
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 14:10:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232135AbjBBNKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 08:10:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42330 "EHLO
+        id S232145AbjBBNKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 08:10:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231277AbjBBNKj (ORCPT
+        with ESMTP id S232081AbjBBNKk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 08:10:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 534A38C1C3;
-        Thu,  2 Feb 2023 05:10:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D586761A0F;
-        Thu,  2 Feb 2023 13:10:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 080DCC433EF;
-        Thu,  2 Feb 2023 13:10:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675343435;
-        bh=ouXElO1fFiss/pPy50hwCqRHtegyzt/i3epdgeUAFI4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FnXPGfg9kPjfplMHFVWxym0YoCT3EEzPAzMPxZUlORDNJYoyjKN6ugQRLDwzpHmKK
-         jN34UTZxx1tA9FBN3jdPRJfyR6ErxTNlO/A6oJtZjBv4Zp3lXg+7aNnknBJIvV2HfG
-         gKFdPoiERYZiNYmsvL+NF+XmedC7QYTiBdpd0woD74lUjtYVL5/EFyECtha+7yaUDx
-         drOgOjuSaSvpMLMdZv6eplmj5ucGdky8NV0o3uMtniZvsV/smS6z4KWa2emOZo1zUX
-         xGG9QZh3HTdsLwaQi4ZsQXeJc3k63Bnl2865+186RoACbj3cvkG/WfeSZ7VmIN6vVs
-         se8tDSYRdLCwg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 8358B405BE; Thu,  2 Feb 2023 10:10:32 -0300 (-03)
-Date:   Thu, 2 Feb 2023 10:10:32 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Sandipan Das <sandipan.das@amd.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        x86@kernel.org, peterz@infradead.org, bp@alien8.de,
-        namhyung@kernel.org, jolsa@kernel.org, tglx@linutronix.de,
-        mingo@redhat.com, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, dave.hansen@linux.intel.com,
-        james.clark@arm.com, irogers@google.com, eranian@google.com,
-        maddy@linux.ibm.com, kjain@linux.ibm.com, tmricht@linux.ibm.com,
-        ananth.narayan@amd.com, ravi.bangoria@amd.com,
-        santosh.shukla@amd.com
-Subject: Re: [PATCH v4 0/4] tools perf: Add branch speculation info
-Message-ID: <Y9u2SKUYL5RgC0Cb@kernel.org>
-References: <cover.1675333809.git.sandipan.das@amd.com>
- <Y9u0zJA05JNHpB+i@kernel.org>
+        Thu, 2 Feb 2023 08:10:40 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF7168E680
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 05:10:37 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id k4so5862533eje.1
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 05:10:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=amdkUoG7lUkYVoF3GeIRSbtSXbydNKaXHbarQ4XEWNQ=;
+        b=x6B4T+iSlZcnK2mOcptJh5ljpgTqY07B65Syri0RueqTee4rssolDnuhZQKgDOAMd1
+         T6tVgXixMbfGGF/iM0DoouRw6Qs4B8A4SgwxZ8oLskgFE7fyjsvtjycoBV5LcvnM4UUK
+         kD5RSfZ/VItgo+7k3A1bpJQ0awzlNrBe4oHz9SUpx7qmWD8oprGstyllABCueQXu6G7q
+         aD4Vbl1h8r/z8XNxjGnFAvibzmzuDwIC1E8r1uULXFJqMkdBUT4/9zu8vdWjhl/KUwMd
+         +m9rofSRV8rHMY4c5eKhxHhOB7u5HBCH9TitaPMou0tOWTfoxGB/ECUt4jlmnnYLK7oi
+         nxiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=amdkUoG7lUkYVoF3GeIRSbtSXbydNKaXHbarQ4XEWNQ=;
+        b=jgXWdYBJXbk8UiO7haJNCaQbIoJFnplhaY8Y8Fg8MYefLri4cA5vRpRX4znFDNYP8G
+         757TjXj6D8pSESwwo+OoCC6Vx6DnayOCfFKlK6vEtLkUxn6x1L/P26XQ9vwFafzNaBIT
+         ChQJZaR6dnMJgi8CC3vdHXGEwMZ8YQ5H7Y79SO82tPjxh2jXu7bdyVKrWVmGaePDXvcJ
+         uBYMsGQMSmA5AgwtFBTevyGE6NewGsuCK2sx2b2QzsMNqPxYPeEf0OJUyPshwFTQ8FfD
+         qxMh6b2g5PxOEIHWYDHp7U2REWhDzLciOCbOQDOIOTs5Vpz/U0WILqR7mYCIsulB7F8D
+         +BCw==
+X-Gm-Message-State: AO0yUKW35jSuEaCUAFqfhP0ig2oeOpntTi7XVzmSJBAw3giIiYyC+bP9
+        IFlAxMV5PRjxqzFgYudkBj6cuw==
+X-Google-Smtp-Source: AK7set+CgjXwDr07GW722S/WwYBErb5Vj7jl/gT27dDP/Uv0W2k85OZZEfhyjvLhyKYW9K9gpxVeAA==
+X-Received: by 2002:a17:906:5181:b0:878:79e6:4672 with SMTP id y1-20020a170906518100b0087879e64672mr6658337ejk.42.1675343436546;
+        Thu, 02 Feb 2023 05:10:36 -0800 (PST)
+Received: from localhost ([86.61.181.4])
+        by smtp.gmail.com with ESMTPSA id h1-20020a1709062dc100b0087bd2924e74sm10131524eji.205.2023.02.02.05.10.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Feb 2023 05:10:35 -0800 (PST)
+Date:   Thu, 2 Feb 2023 14:10:34 +0100
+From:   Jiri Pirko <jiri@resnulli.us>
+To:     Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+Cc:     nicolas.ferre@microchip.com, claudiu.beznea@microchip.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, andrew@lunn.ch, git@amd.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: macb: Perform zynqmp dynamic configuration only for
+ SGMII interface
+Message-ID: <Y9u2Skn6C0NMclWp@nanopsycho>
+References: <1675340779-27499-1-git-send-email-radhey.shyam.pandey@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y9u0zJA05JNHpB+i@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1675340779-27499-1-git-send-email-radhey.shyam.pandey@amd.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, Feb 02, 2023 at 10:04:12AM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Thu, Feb 02, 2023 at 05:56:13PM +0530, Sandipan Das escreveu:
-> > AMD Last Branch Record Extension Version 2 (LbrExtV2) provides branch
-> > speculation information and the perf UAPI is extended to provide this in
-> > a generic way. Make perf tool show this additional information.
-> > 
-> > The UAPI changes can be found in commit 93315e46b000 ("perf/core: Add
-> > speculation info to branch entries").
-> > 
-> > Requesting help from folks having access to big-endian systems to test
-> > changes in the sample parsing test as I was only able to test these in
-> > a ppc64 simulator.
-> 
-> I'll try folding some of these patches as 'perf test' must pass after
-> each of them, so that we keep the codebase bisectable.
-> 
-> Right now, after appling the first patch on this v4 series:
-> 
-> ⬢[acme@toolbox perf]$ perf test 27
->  27: Sample parsing                                                  : FAILED!
-> ⬢[acme@toolbox perf]$
+Thu, Feb 02, 2023 at 01:26:19PM CET, radhey.shyam.pandey@amd.com wrote:
+>In zynqmp platforms where firmware supports dynamic SGMII configuration
+>but has other non-SGMII ethernet devices, it fails them with no packets
+>received at the RX interface.
+>
+>To fix this behaviour perform SGMII dynamic configuration only
+>for the SGMII phy interface.
+>
+>Fixes: 32cee7818111 ("net: macb: Add zynqmp SGMII dynamic configuration support")
+>Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
 
-So this is what I did:
-
-$ git rebase -i HEAD~4
-pick 266d6702711d299c perf script: Show branch speculation info
-squash d2fa279aba8d2863 perf test sample-parsing: Update expected branch flags
-pick b335ad966cadcbfa perf session: Show branch speculation info in raw dump
-squash 272ce62f64e60fc7 perf test brstack: Update regex to include spec field
-
-And then combined the commit messages. Please have bisectability in
-mind, running 'perf test', and if it fails, add the fix to to 'perf
-test' on the patch that introduced the problem.
-
-Thanks,
-
-- Arnaldo
+Reviewed-by: Jiri Pirko <jiri@nvidia.com>
