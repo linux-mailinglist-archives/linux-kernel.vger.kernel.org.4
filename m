@@ -2,103 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB053687B7D
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 12:07:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35045687B84
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 12:07:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbjBBLHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 06:07:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36210 "EHLO
+        id S231160AbjBBLHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 06:07:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbjBBLGw (ORCPT
+        with ESMTP id S229761AbjBBLH3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 06:06:52 -0500
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.214])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4980E1206E;
-        Thu,  2 Feb 2023 03:06:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=5BWjL
-        d1/jaEBccjludNTfPy3Z/B05OXtOx+r4AztbjY=; b=qdBYC9xRAg87mLEPd00qD
-        9hXuyHGWQuuURF/BRRb3NHeWzBNMq2xVOGlGTjd8D4KfEFXYtq5xPoj5OT6BuCd2
-        brWwhlKen3/gOhDp4qPfSursxccvyOmpm8Yyfj5L8EglB2yEJ3xCThMrDQWpIfl0
-        9UMTDOmFJOn9hVs2+wO4Zk=
-Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
-        by zwqz-smtp-mta-g4-0 (Coremail) with SMTP id _____wDX0+8ImdtjYQxBCg--.48198S2;
-        Thu, 02 Feb 2023 19:05:44 +0800 (CST)
-From:   Zheng Wang <zyytlz.wz@163.com>
-To:     colyli@suse.de
-Cc:     hackerzheng666@gmail.com, kent.overstreet@gmail.com,
-        linux-bcache@vger.kernel.org, linux-kernel@vger.kernel.org,
-        security@kernel.org, alex000young@gmail.com,
-        Zheng Wang <zyytlz.wz@163.com>
-Subject: [PATCH] bcache: Fix a NULL or wild pointer dereference in btree_split
-Date:   Thu,  2 Feb 2023 19:05:43 +0800
-Message-Id: <20230202110543.27548-1-zyytlz.wz@163.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 2 Feb 2023 06:07:29 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A8B6B009
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 03:06:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675335949;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9M4NDpJqrMaRwiYT/VeraTjAir6oKB3t+zIsWAMAXf8=;
+        b=dpR3HoAcTyrYwWJNs4ZoX75HEjQuSbeNJ01qQwHuT/ICJce2VTirDcxAoL0lSbBwj1Cz07
+        IRITpoil6RzfcQWPAXSH16yIkinyGuZKDoWEz+GT4VvPHiNA0g+SnqwXkt+U36+q6n9b0b
+        y+8edX8TfMxNsHvxxAltwo2h7ni/3wc=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-663-EPs_h2FtOuu5M2lKcTJGfQ-1; Thu, 02 Feb 2023 06:05:47 -0500
+X-MC-Unique: EPs_h2FtOuu5M2lKcTJGfQ-1
+Received: by mail-ej1-f69.google.com with SMTP id sa8-20020a170906eda800b0087875c99e6bso1301433ejb.22
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 03:05:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9M4NDpJqrMaRwiYT/VeraTjAir6oKB3t+zIsWAMAXf8=;
+        b=IIVdhcI3Mh+39o7uLjD/T12dJETNkEIOzrsNt243qrvV9jetK6Fi8nLY40nUQ98na0
+         Z/8GhLRF8xqa36yeNxXttOeJUbITJmYT79hzUz6hGzWgeIb0v7Gb7SC3FSD8hL1Dr7Lo
+         IXGN+SohyeQGd5nGjBnOM58qsIlrQJzUwWRVFtq6Gs8jeIOU9PDEFMCV6nePk/u4gBg8
+         krq7SUzDQ/EzEu6gu7E/DHCPfHj4IS9X0yD1g422GacwiQcLJ6siMig7S3cH4ZGBadTo
+         YSSxY91kX88Ubw5DjZcwfoynuHT9O/wnJQvUsn80xXZjhDMZhBVKpiX2B8+iDCKmhfu6
+         gZ2g==
+X-Gm-Message-State: AO0yUKXmTm9iR3WGJwjcRMsnRivgnD8N33LlH/btzJWioSgE16hVKFoq
+        upJt+hc48aOw5+HvAy/Sq78QopObLCqHUxUy/qgxBeDRSYxvvfWd2RhVVjQ3BIGTrYmu31fBRCM
+        /16BNs/4Y7w+kHtvUZQIXOlz3
+X-Received: by 2002:a17:906:c0c3:b0:883:3c7d:944e with SMTP id bn3-20020a170906c0c300b008833c7d944emr5437055ejb.9.1675335946681;
+        Thu, 02 Feb 2023 03:05:46 -0800 (PST)
+X-Google-Smtp-Source: AK7set+fc8EWwrGtQ1phRFqugSVTLUZhZ3tA5/uyYMtzGXASHL4KhTuAfYpcQFuLTIxGgBC/ci0TuQ==
+X-Received: by 2002:a17:906:c0c3:b0:883:3c7d:944e with SMTP id bn3-20020a170906c0c300b008833c7d944emr5437035ejb.9.1675335946424;
+        Thu, 02 Feb 2023 03:05:46 -0800 (PST)
+Received: from [10.39.192.164] (5920ab7b.static.cust.trined.nl. [89.32.171.123])
+        by smtp.gmail.com with ESMTPSA id er12-20020a056402448c00b0049668426aa6sm10924515edb.24.2023.02.02.03.05.45
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 02 Feb 2023 03:05:45 -0800 (PST)
+From:   Eelco Chaudron <echaudro@redhat.com>
+To:     Eddy Tao <taoyuan_eddy@hotmail.com>
+Cc:     netdev@vger.kernel.org, dev@openvswitch.org,
+        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [ovs-dev] [PATCH net-next v3 1/1] net:openvswitch:reduce
+ cpu_used_mask memory
+Date:   Thu, 02 Feb 2023 12:05:44 +0100
+X-Mailer: MailMate (1.14r5939)
+Message-ID: <561547E5-D4C2-4FD6-9B25-100719D4D379@redhat.com>
+In-Reply-To: <OS3P286MB2295FA2701BCE468E367607AF5D69@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
+References: <OS3P286MB2295FA2701BCE468E367607AF5D69@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wDX0+8ImdtjYQxBCg--.48198S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7tF1UXF1xZw15CFWDJFW3GFg_yoW8Wr4xpF
-        4xWFy3trW8Xr4jk3y5X3W0vF9Yv3WaqFWYk3s5ua48ZasxZr1fCFy0k34jvryUurs7Xa17
-        tr1Fvw15XF1UtaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziaLv_UUUUU=
-X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/xtbBzg4KU2I0XNTkLgAAsN
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In btree_split, btree_node_alloc_replacement() is assigned to
-n1 and return error code or NULL on failure. n1->c->cache is
-passed to block_bytes. So there is a dereference of it
- without checks, which may lead to wild pointer dereference or
-  NULL pointer dereference depending on n1. The initial code only
-  judge the error code but igore the NULL pointer.
-So does n2 and n3.
 
-Fix this bug by adding IS_ERR_OR_NULL check of n1, n2 and n3.
 
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger.
+On 2 Feb 2023, at 11:32, Eddy Tao wrote:
 
-Fixes: cafe56359144 ("bcache: A block layer cache")
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
----
- drivers/md/bcache/btree.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+> Use actual CPU number instead of hardcoded value to decide the size
+> of 'cpu_used_mask' in 'struct sw_flow'. Below is the reason.
+>
+> 'struct cpumask cpu_used_mask' is embedded in struct sw_flow.
+> Its size is hardcoded to CONFIG_NR_CPUS bits, which can be
+> 8192 by default, it costs memory and slows down ovs_flow_alloc
+> as well as the iteration of bits in cpu_used_mask when handling
+> netlink message from ofproto
 
-diff --git a/drivers/md/bcache/btree.c b/drivers/md/bcache/btree.c
-index 147c493a989a..d5ed382fc43c 100644
---- a/drivers/md/bcache/btree.c
-+++ b/drivers/md/bcache/btree.c
-@@ -2206,7 +2206,7 @@ static int btree_split(struct btree *b, struct btree_op *op,
- 	}
- 
- 	n1 = btree_node_alloc_replacement(b, op);
--	if (IS_ERR(n1))
-+	if (IS_ERR_OR_NULL(n1))
- 		goto err;
- 
- 	split = set_blocks(btree_bset_first(n1),
-@@ -2218,12 +2218,12 @@ static int btree_split(struct btree *b, struct btree_op *op,
- 		trace_bcache_btree_node_split(b, btree_bset_first(n1)->keys);
- 
- 		n2 = bch_btree_node_alloc(b->c, op, b->level, b->parent);
--		if (IS_ERR(n2))
-+		if (IS_ERR_OR_NULL(n2))
- 			goto err_free1;
- 
- 		if (!b->parent) {
- 			n3 = bch_btree_node_alloc(b->c, op, b->level + 1, NULL);
--			if (IS_ERR(n3))
-+			if (IS_ERR_OR_NULL(n3))
- 				goto err_free2;
- 		}
- 
--- 
-2.25.1
+I=E2=80=99m trying to understand how this will decrease memory usage. The=
+ size of the flow_cache stayed the same (actually it=E2=80=99s large due =
+to the extra pointer).
+
+Also do not understand why the iteration is less, as the mask is initiali=
+zed the same.
+
+Cheers,
+
+Eelco
+
+> To address this, redefine cpu_used_mask to pointer
+> append cpumask_size() bytes after 'stat' to hold cpumask
+>
+> cpumask APIs like cpumask_next and cpumask_set_cpu never access
+> bits beyond cpu count, cpumask_size() bytes of memory is enough
+>
+> Signed-off-by: Eddy Tao <taoyuan_eddy@hotmail.com>
+> ---
+>  net/openvswitch/flow.c       | 8 +++++---
+>  net/openvswitch/flow.h       | 2 +-
+>  net/openvswitch/flow_table.c | 8 +++++---
+>  3 files changed, 11 insertions(+), 7 deletions(-)
+>
+> diff --git a/net/openvswitch/flow.c b/net/openvswitch/flow.c
+> index e20d1a973417..0109a5f86f6a 100644
+> --- a/net/openvswitch/flow.c
+> +++ b/net/openvswitch/flow.c
+> @@ -107,7 +107,7 @@ void ovs_flow_stats_update(struct sw_flow *flow, __=
+be16 tcp_flags,
+>
+>  					rcu_assign_pointer(flow->stats[cpu],
+>  							   new_stats);
+> -					cpumask_set_cpu(cpu, &flow->cpu_used_mask);
+> +					cpumask_set_cpu(cpu, flow->cpu_used_mask);
+>  					goto unlock;
+>  				}
+>  			}
+> @@ -135,7 +135,8 @@ void ovs_flow_stats_get(const struct sw_flow *flow,=
+
+>  	memset(ovs_stats, 0, sizeof(*ovs_stats));
+>
+>  	/* We open code this to make sure cpu 0 is always considered */
+> -	for (cpu =3D 0; cpu < nr_cpu_ids; cpu =3D cpumask_next(cpu, &flow->cp=
+u_used_mask)) {
+> +	for (cpu =3D 0; cpu < nr_cpu_ids;
+> +	     cpu =3D cpumask_next(cpu, flow->cpu_used_mask)) {
+>  		struct sw_flow_stats *stats =3D rcu_dereference_ovsl(flow->stats[cpu=
+]);
+>
+>  		if (stats) {
+> @@ -159,7 +160,8 @@ void ovs_flow_stats_clear(struct sw_flow *flow)
+>  	int cpu;
+>
+>  	/* We open code this to make sure cpu 0 is always considered */
+> -	for (cpu =3D 0; cpu < nr_cpu_ids; cpu =3D cpumask_next(cpu, &flow->cp=
+u_used_mask)) {
+> +	for (cpu =3D 0; cpu < nr_cpu_ids;
+> +	     cpu =3D cpumask_next(cpu, flow->cpu_used_mask)) {
+>  		struct sw_flow_stats *stats =3D ovsl_dereference(flow->stats[cpu]);
+>
+>  		if (stats) {
+> diff --git a/net/openvswitch/flow.h b/net/openvswitch/flow.h
+> index 073ab73ffeaa..b5711aff6e76 100644
+> --- a/net/openvswitch/flow.h
+> +++ b/net/openvswitch/flow.h
+> @@ -229,7 +229,7 @@ struct sw_flow {
+>  					 */
+>  	struct sw_flow_key key;
+>  	struct sw_flow_id id;
+> -	struct cpumask cpu_used_mask;
+> +	struct cpumask *cpu_used_mask;
+>  	struct sw_flow_mask *mask;
+>  	struct sw_flow_actions __rcu *sf_acts;
+>  	struct sw_flow_stats __rcu *stats[]; /* One for each CPU.  First one
+> diff --git a/net/openvswitch/flow_table.c b/net/openvswitch/flow_table.=
+c
+> index 0a0e4c283f02..dc6a174c3194 100644
+> --- a/net/openvswitch/flow_table.c
+> +++ b/net/openvswitch/flow_table.c
+> @@ -87,11 +87,12 @@ struct sw_flow *ovs_flow_alloc(void)
+>  	if (!stats)
+>  		goto err;
+>
+> +	flow->cpu_used_mask =3D (struct cpumask *)&flow->stats[nr_cpu_ids];
+>  	spin_lock_init(&stats->lock);
+>
+>  	RCU_INIT_POINTER(flow->stats[0], stats);
+>
+> -	cpumask_set_cpu(0, &flow->cpu_used_mask);
+> +	cpumask_set_cpu(0, flow->cpu_used_mask);
+>
+>  	return flow;
+>  err:
+> @@ -115,7 +116,7 @@ static void flow_free(struct sw_flow *flow)
+>  					  flow->sf_acts);
+>  	/* We open code this to make sure cpu 0 is always considered */
+>  	for (cpu =3D 0; cpu < nr_cpu_ids;
+> -	     cpu =3D cpumask_next(cpu, &flow->cpu_used_mask)) {
+> +	     cpu =3D cpumask_next(cpu, flow->cpu_used_mask)) {
+>  		if (flow->stats[cpu])
+>  			kmem_cache_free(flow_stats_cache,
+>  					(struct sw_flow_stats __force *)flow->stats[cpu]);
+> @@ -1196,7 +1197,8 @@ int ovs_flow_init(void)
+>
+>  	flow_cache =3D kmem_cache_create("sw_flow", sizeof(struct sw_flow)
+>  				       + (nr_cpu_ids
+> -					  * sizeof(struct sw_flow_stats *)),
+> +					  * sizeof(struct sw_flow_stats *))
+> +				       + cpumask_size(),
+>  				       0, 0, NULL);
+>  	if (flow_cache =3D=3D NULL)
+>  		return -ENOMEM;
+> -- =
+
+> 2.27.0
+>
+> _______________________________________________
+> dev mailing list
+> dev@openvswitch.org
+> https://mail.openvswitch.org/mailman/listinfo/ovs-dev
 
