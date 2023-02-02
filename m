@@ -2,108 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95B14687BB8
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 12:10:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6632687BB9
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 12:10:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231994AbjBBLKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 06:10:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39946 "EHLO
+        id S232200AbjBBLK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 06:10:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232553AbjBBLKF (ORCPT
+        with ESMTP id S231935AbjBBLKS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 06:10:05 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F265268AF0
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 03:09:37 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id d4-20020a05600c3ac400b003db1de2aef0so1085897wms.2
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 03:09:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zGhcwfRQP1vbMhQHFBN3FkAYqNe4cdk/CFn8QpsceBo=;
-        b=FDpSb+mwnlw8m5dHv+86Ui3ZrmgaXz6GfNCWc2N7biOdmOXsemof67Z+Ql7/ScD270
-         vlo8IXDmUvSzX9EhLRxmlbY9GUQ2qr7Mi+Uw9lo8o86w3HSbNgAb2Q3x2R43VIf1Bfyp
-         9SKdNxy+e8QEaLvjNrvMFx+Rq7O0NHz4qOzdedbPqbKPI2IRknH0xNWJ/J0HyJg2l+cm
-         A1rqYTSdb+EiYaI/wLKGn0+KRytAoOvUcEp4ERC4c/M6ajPmWxxUwL0Nuv8JlRXbwhKx
-         0L3YQMXEu7x+DqKQuRcOR0+LyW1/LcIUZxHzR4heBcWPZkJQ5sNvCrtOdfcYipx3Reww
-         7hvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zGhcwfRQP1vbMhQHFBN3FkAYqNe4cdk/CFn8QpsceBo=;
-        b=4qFoa2Qve8BXOByd3igTtv1hYRr6kmKYNC6VJGtG4GFick0PICXbLqScUyJSfdvtGd
-         Nn8a9wC4EXRVxGCZVfXJAn9hRl4pYeDAN2A9zzBf6UYAva6qdkH2uWzmxvbLNihbPZqe
-         lQeeBl3/e6vPzmXrO3BNwjgLh7/7uKR4XOMaAZUqbB55e6P/IGhLDf8dwDoUXWCpkfo6
-         V9o2bjEsu39yV2JpNcCWqVvAjuhdgI4gS7EyPigoV59925YDrkUrsmJKYYOkxPnZXGJk
-         nL7rlmLMcHeG/c+Smb+aa0MA9jHYBfze+Q5ehsmghJCMqmNCsiyRS6C202TtC03Gg7l5
-         zi8g==
-X-Gm-Message-State: AO0yUKVvj3CT1kUPyv2SkaHY3A3IK1SZpni+ulawcbeekRZx+zzoKEC2
-        0ZxxKtxqdq3iPscHJB6UrExTWQ==
-X-Google-Smtp-Source: AK7set97949CQomMTHJXrUmVYXoP68F1grpSho+nTxTkUvOOSDw/afzyYWDMSQ0qCS57Wk1H9+6yeg==
-X-Received: by 2002:a05:600c:35cc:b0:3dc:55e6:fffd with SMTP id r12-20020a05600c35cc00b003dc55e6fffdmr5502802wmq.15.1675336175028;
-        Thu, 02 Feb 2023 03:09:35 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id o6-20020a05600c2e0600b003dcc82ce53fsm4247203wmf.38.2023.02.02.03.09.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 03:09:34 -0800 (PST)
-Message-ID: <40d0fff4-5d1c-3e93-1eed-132c7e1aa92e@linaro.org>
-Date:   Thu, 2 Feb 2023 12:09:32 +0100
+        Thu, 2 Feb 2023 06:10:18 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 824336597;
+        Thu,  2 Feb 2023 03:09:57 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id C7E7124E255;
+        Thu,  2 Feb 2023 19:09:54 +0800 (CST)
+Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 2 Feb
+ 2023 19:09:54 +0800
+Received: from [192.168.120.55] (171.223.208.138) by EXMBX168.cuchost.com
+ (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 2 Feb
+ 2023 19:09:53 +0800
+Message-ID: <4529a646-1faf-c858-cfbe-1560ebeb1fba@starfivetech.com>
+Date:   Thu, 2 Feb 2023 19:09:53 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 16/23] interconnect: exynos: drop redundant link destroy
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v1 2/3] mmc: starfive: Add sdio/emmc driver support
+To:     Linus Walleij <linus.walleij@linaro.org>
+CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-mmc@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Jaehoon Chung <jh80.chung@samsung.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20221207131731.1291517-1-william.qiu@starfivetech.com>
+ <20221207131731.1291517-3-william.qiu@starfivetech.com>
+ <CACRpkdYP7MokLdRtxX9w7p80c=wHDHsoTYWrU53CnpsZ7o6aGg@mail.gmail.com>
 Content-Language: en-US
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@samsung.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230201101559.15529-1-johan+linaro@kernel.org>
- <20230201101559.15529-17-johan+linaro@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230201101559.15529-17-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+From:   William Qiu <william.qiu@starfivetech.com>
+In-Reply-To: <CACRpkdYP7MokLdRtxX9w7p80c=wHDHsoTYWrU53CnpsZ7o6aGg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [171.223.208.138]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX168.cuchost.com
+ (172.16.6.78)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/02/2023 11:15, Johan Hovold wrote:
-> There is no longer any need to explicitly destroy node links as this is
-> now done when the node is destroyed as part of icc_nodes_remove().
+
+
+On 2022/12/9 5:09, Linus Walleij wrote:
+> Hi William,
 > 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->  drivers/interconnect/samsung/exynos.c | 6 ------
->  1 file changed, 6 deletions(-)
+> thanks for your patch!
+> 
+> On Wed, Dec 7, 2022 at 2:17 PM William Qiu <william.qiu@starfivetech.com> wrote:
+> 
+>> Add sdio/emmc driver support for StarFive JH7110 soc.
+>>
+>> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
+> 
+> (...)
+>> +#include <linux/gpio.h>
+> 
+> Never include this legacy header in new code. Also: you don't use it.
+> 
+>> +#include <linux/mfd/syscon.h>
+>> +#include <linux/mmc/host.h>
+>> +#include <linux/module.h>
+>> +#include <linux/of_address.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/pm_runtime.h>
+> 
+> You're not using this include either.
+> 
+>> +#include <linux/regmap.h>
+>> +#include <linux/regulator/consumer.h>
+> 
+> Or this.
+> 
+>> +#define ALL_INT_CLR            0x1ffff
+>> +#define MAX_DELAY_CHAIN                32
+>> +
+>> +struct starfive_priv {
+>> +       struct device *dev;
+>> +       struct regmap *reg_syscon;
+>> +       u32 syscon_offset;
+>> +       u32 syscon_shift;
+>> +       u32 syscon_mask;
+>> +};
+>> +
+>> +static unsigned long dw_mci_starfive_caps[] = {
+>> +       MMC_CAP_CMD23,
+>> +       MMC_CAP_CMD23,
+>> +       MMC_CAP_CMD23
+>> +};
+>> +
+>> +static void dw_mci_starfive_set_ios(struct dw_mci *host, struct mmc_ios *ios)
+>> +{
+>> +       int ret;
+>> +       unsigned int clock;
+>> +
+>> +       if (ios->timing == MMC_TIMING_MMC_DDR52 || ios->timing == MMC_TIMING_UHS_DDR50) {
+>> +               clock = (ios->clock > 50000000 && ios->clock <= 52000000) ? 100000000 : ios->clock;
+>> +               ret = clk_set_rate(host->ciu_clk, clock);
+>> +               if (ret)
+>> +                       dev_dbg(host->dev, "Use an external frequency divider %uHz\n", ios->clock);
+>> +               host->bus_hz = clk_get_rate(host->ciu_clk);
+>> +       } else {
+>> +               dev_dbg(host->dev, "Using the internal divider\n");
+>> +       }
+>> +}
+>> +
+>> +static int dw_mci_starfive_execute_tuning(struct dw_mci_slot *slot,
+>> +                                            u32 opcode)
+>> +{
+>> +       static const int grade  = MAX_DELAY_CHAIN;
+>> +       struct dw_mci *host = slot->host;
+>> +       struct starfive_priv *priv = host->priv;
+>> +       int raise_point = -1, fall_point = -1;
+>> +       int err, prev_err = -1;
+> 
+> I don't like these default-init to -1. Can you just skip it and assign it
+> where it makes most sense instead?
+> 
+>> +       int found = 0;
+> 
+> This looks like a bool.
+> 
+>> +       int i;
+>> +       u32 regval;
+>> +
+>> +       for (i = 0; i < grade; i++) {
+>> +               regval = i << priv->syscon_shift;
+>> +               err = regmap_update_bits(priv->reg_syscon, priv->syscon_offset,
+>> +                                               priv->syscon_mask, regval);
+>> +               if (err)
+>> +                       return err;
+>> +               mci_writel(host, RINTSTS, ALL_INT_CLR);
+>> +
+>> +               err = mmc_send_tuning(slot->mmc, opcode, NULL);
+>> +               if (!err)
+>> +                       found = 1;
+>> +
+>> +               if (i > 0) {
+>> +                       if (err && !prev_err)
+>> +                               fall_point = i - 1;
+>> +                       if (!err && prev_err)
+>> +                               raise_point = i;
+>> +               }
+>> +
+>> +               if (raise_point != -1 && fall_point != -1)
+>> +                       goto tuning_out;
+> 
+> There are just these raise point (shouldn't this be "rise_point" in proper
+> english?) and fall point, this misses some comments explaining what is
+> going on, the code is not intuitively eviden. Rise and fall of *what* for
+> example.
+> 
+>> +
+>> +               prev_err = err;
+>> +               err = 0;
+>> +       }
+>> +
+>> +tuning_out:
+>> +       if (found) {
+>> +               if (raise_point == -1)
+>> +                       raise_point = 0;
+>> +               if (fall_point == -1)
+>> +                       fall_point = grade - 1;
+>> +               if (fall_point < raise_point) {
+>> +                       if ((raise_point + fall_point) >
+>> +                           (grade - 1))
+>> +                               i = fall_point / 2;
+>> +                       else
+>> +                               i = (raise_point + grade - 1) / 2;
+>> +               } else {
+>> +                       i = (raise_point + fall_point) / 2;
+>> +               }
+> 
+> Likewise here, explain what grade is, refer to the eMMC spec if necessary.
+> 
+> (...)
+>> +       ret = of_parse_phandle_with_fixed_args(host->dev->of_node,
+>> +                                               "starfive,sys-syscon", 3, 0, &args);
+>> +       if (ret) {
+>> +               dev_err(host->dev, "Failed to parse starfive,sys-syscon\n");
+>> +               return -EINVAL;
+>> +       }
+>> +
+>> +       priv->reg_syscon = syscon_node_to_regmap(args.np);
+>> +       of_node_put(args.np);
+>> +       if (IS_ERR(priv->reg_syscon))
+>> +               return PTR_ERR(priv->reg_syscon);
+>> +
+>> +       priv->syscon_offset = args.args[0];
+>> +       priv->syscon_shift  = args.args[1];
+>> +       priv->syscon_mask   = args.args[2];
+> 
+> Why should these three things be in the device tree instead of being derived
+> from the compatible-string or just plain hard-coded as #defines?
+> I don't get it.
+> 
+Hi Linus,
 
+I'm sorry to bother you, but as for the definition of syscon, after discussing with 
+my colleagues, we think it is easier to distinguish SDIO0 and SDIO1 by defining it in
+the device tree, and the code compatibility is better.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof
-
+Best Regards
+William Qiu
+>> +static int dw_mci_starfive_probe(struct platform_device *pdev)
+>> +{
+>> +       return dw_mci_pltfm_register(pdev, &starfive_data);
+>> +}
+>> +
+>> +static int dw_mci_starfive_remove(struct platform_device *pdev)
+>> +{
+>> +       return dw_mci_pltfm_remove(pdev);
+>> +}
+> 
+> Can't you just assign dw_mci_pltfm_remove() to .remove?
+> 
+> Other than these things, the driver looks good!
+> 
+> Yours,
+> Linus Walleij
