@@ -2,184 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E520687F73
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 15:00:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EB04687F77
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 15:00:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231855AbjBBOAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 09:00:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51884 "EHLO
+        id S231866AbjBBOA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 09:00:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232075AbjBBN77 (ORCPT
+        with ESMTP id S231888AbjBBOAZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 08:59:59 -0500
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBB4A8FB4D
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 05:59:52 -0800 (PST)
-Received: from fsav114.sakura.ne.jp (fsav114.sakura.ne.jp [27.133.134.241])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 312DxosL077687;
-        Thu, 2 Feb 2023 22:59:50 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav114.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav114.sakura.ne.jp);
- Thu, 02 Feb 2023 22:59:50 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav114.sakura.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 312Dxoom077683
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Thu, 2 Feb 2023 22:59:50 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <ed17797b-e732-0dd0-2b4e-dc293653c0ac@I-love.SAKURA.ne.jp>
-Date:   Thu, 2 Feb 2023 22:59:50 +0900
+        Thu, 2 Feb 2023 09:00:25 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58B4D8E6AD
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 06:00:15 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id h12so1774393wrv.10
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 06:00:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=eMycSpSWqkLdJLuPU1kAliRBYKe3vnTJI8phLtEWdDI=;
+        b=aX1rwy2YkRI6JACyuVKP5etYUZPG7JUA1R0As0ErGFAkMlpt62aDBJPcsvUThjjLom
+         aHdlUs0Y6cY8dMz8yVgjfbpxGSITYHw/tENe8vYZTa+C3VCETc9gVSndANh7BGPRucVP
+         R0tKqZXPEBxJK7CU1Jh9mDaIMl2DIWJbDIMxIO+/uu35JSJIVJD1vWZOt1mmc88NiiR8
+         0uJvVQMHzoOz3hCH1BMHW6gHyKotDAAsfCIhxpAyANFwjLQYuQ8JhLBmZX6MsjH+pc2S
+         9Z3ShGePx1zGree3SOmONdQ8tYPk7U1WvD59xKqM+rfje4EhiK03hKx4EFr7ihC5IVvW
+         ZjHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eMycSpSWqkLdJLuPU1kAliRBYKe3vnTJI8phLtEWdDI=;
+        b=tTiXXT927M1za30TJ3ooPYYGvGHO8PaNrd3NdNuHzS8+/NMaO3BisaUHKquk3kZtc/
+         5eeG5vUi6VSONvo1MczeSzCUxD5OYvGXlCWFFW8fzQF1+VI0k8dkzYip5tliSY+VstZu
+         oi5EPENxoZ8t/K1aKBPq7WWKwTNI42Jq+nJtxcNTZgVDDUCoi/QL4eATB+nNEBPwQWOS
+         +QO8OXdROyl2IY3Ni0dGC5aHK7QFEajgTznSJnl3filAXVwdRXDHJ4K69cFSsIYrHR4e
+         7CGhGdWrWPsjH3Xb37QFiaWTFiIBGT5BmxuIihxOSg+HxJIJddkCI2JRTbc831qrPDeH
+         VVvQ==
+X-Gm-Message-State: AO0yUKWvOrUVtfbKrDTO7XQ6N4iD/5BXDmhIMU1t15Y2I7DyOw39aDMC
+        npcyJIZ3bCSYwAgMDpY2N7zVdyKjOaxF4ZTxFihqAg==
+X-Google-Smtp-Source: AK7set991hy80LggrGKuE0EGDn0gAr/4aLuvD+To3+bf8l/YlM8w4oAxF3edTa+/NMUuSWyoDpk+UbMMdtjLXw/6knk=
+X-Received: by 2002:adf:ffcb:0:b0:2bf:e95c:9918 with SMTP id
+ x11-20020adfffcb000000b002bfe95c9918mr211434wrs.330.1675346413910; Thu, 02
+ Feb 2023 06:00:13 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Content-Language: en-US
-To:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>
-Cc:     Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Subject: [PATCH v3] locking/lockdep: add debug_show_all_lock_holders()
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230125082333.1577572-3-alexghiti@rivosinc.com> <202302010819.RAsjyv6V-lkp@intel.com>
+In-Reply-To: <202302010819.RAsjyv6V-lkp@intel.com>
+From:   Alexandre Ghiti <alexghiti@rivosinc.com>
+Date:   Thu, 2 Feb 2023 15:00:02 +0100
+Message-ID: <CAHVXubht443DmB6qZMJ=Hyxz=xi65Dkd=PuN_2i=uf783z0B=Q@mail.gmail.com>
+Subject: Re: [PATCH v3 2/6] riscv: Rework kasan population functions
+To:     kernel test robot <lkp@intel.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Conor Dooley <conor@kernel.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-efi@vger.kernel.org,
+        oe-kbuild-all@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, check_hung_uninterruptible_tasks() reports details of locks
-held in the system. Also, lockdep_print_held_locks() does not report
-details of locks held by a thread if that thread is in TASK_RUNNING state.
-Several years of experience of debugging without vmcore tells me that
-these limitations have been a barrier for understanding what went wrong
-in syzbot's "INFO: task hung in" reports.
+On Wed, Feb 1, 2023 at 1:16 AM kernel test robot <lkp@intel.com> wrote:
+>
+> Hi Alexandre,
+>
+> Thank you for the patch! Perhaps something to improve:
+>
+> [auto build test WARNING on linus/master]
+> [also build test WARNING on v6.2-rc6 next-20230131]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Alexandre-Ghiti/riscv-Split-early-and-final-KASAN-population-functions/20230125-163113
+> patch link:    https://lore.kernel.org/r/20230125082333.1577572-3-alexghiti%40rivosinc.com
+> patch subject: [PATCH v3 2/6] riscv: Rework kasan population functions
+> config: riscv-randconfig-r006-20230201 (https://download.01.org/0day-ci/archive/20230201/202302010819.RAsjyv6V-lkp@intel.com/config)
+> compiler: riscv64-linux-gcc (GCC) 12.1.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/c18726e8d14edbd59ec19854b4eb06d83fff716f
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Alexandre-Ghiti/riscv-Split-early-and-final-KASAN-population-functions/20230125-163113
+>         git checkout c18726e8d14edbd59ec19854b4eb06d83fff716f
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/mm/
+>
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+>
+> All warnings (new ones prefixed by >>):
+>
+> >> arch/riscv/mm/kasan_init.c:442:6: warning: no previous prototype for 'create_tmp_mapping' [-Wmissing-prototypes]
+>      442 | void create_tmp_mapping(void)
+>          |      ^~~~~~~~~~~~~~~~~~
+>
+>
+> vim +/create_tmp_mapping +442 arch/riscv/mm/kasan_init.c
+>
+>    441
+>  > 442  void create_tmp_mapping(void)
+>    443  {
+>    444          void *ptr;
+>    445          p4d_t *base_p4d;
+>    446
+>    447          /*
+>    448           * We need to clean the early mapping: this is hard to achieve "in-place",
+>    449           * so install a temporary mapping like arm64 and x86 do.
+>    450           */
+>    451          memcpy(tmp_pg_dir, swapper_pg_dir, sizeof(pgd_t) * PTRS_PER_PGD);
+>    452
+>    453          /* Copy the last p4d since it is shared with the kernel mapping. */
+>    454          if (pgtable_l5_enabled) {
+>    455                  ptr = (p4d_t *)pgd_page_vaddr(*pgd_offset_k(KASAN_SHADOW_END));
+>    456                  memcpy(tmp_p4d, ptr, sizeof(p4d_t) * PTRS_PER_P4D);
+>    457                  set_pgd(&tmp_pg_dir[pgd_index(KASAN_SHADOW_END)],
+>    458                          pfn_pgd(PFN_DOWN(__pa(tmp_p4d)), PAGE_TABLE));
+>    459                  base_p4d = tmp_p4d;
+>    460          } else {
+>    461                  base_p4d = (p4d_t *)tmp_pg_dir;
+>    462          }
+>    463
+>    464          /* Copy the last pud since it is shared with the kernel mapping. */
+>    465          if (pgtable_l4_enabled) {
+>    466                  ptr = (pud_t *)p4d_page_vaddr(*(base_p4d + p4d_index(KASAN_SHADOW_END)));
+>    467                  memcpy(tmp_pud, ptr, sizeof(pud_t) * PTRS_PER_PUD);
+>    468                  set_p4d(&base_p4d[p4d_index(KASAN_SHADOW_END)],
+>    469                          pfn_p4d(PFN_DOWN(__pa(tmp_pud)), PAGE_TABLE));
+>    470          }
+>    471  }
+>    472
 
-I initially thought that the cause of "INFO: task hung in" reports is
-due to over-stressing. But I understood that over-stressing is unlikely.
-I now consider that there likely is a deadlock/livelock bug where lockdep
-cannot report as a deadlock when "INFO: task hung in" is reported.
+Ok, I have to declare this function static to quiet this warning,
+there will be a v4 soon then.
 
-A typical case is that thread-1 is waiting for something to happen (e.g.
-wait_event_*()) with a lock held. When thread-2 tries to hold that lock
-using e.g. mutex_lock(), check_hung_uninterruptible_tasks() reports that
-thread-2 is hung and thread-1 is holding a lock which thread-2 is trying
-to hold. But currently check_hung_uninterruptible_tasks() cannot report
-the exact location of thread-1 which gives us an important hint for
-understanding why thread-1 is holding that lock for so long period.
-
-When check_hung_uninterruptible_tasks() reports a thread waiting for a
-lock, it is important to report backtrace of threads which already held
-that lock. Therefore, allow check_hung_uninterruptible_tasks() to report
-the exact location of threads which is holding any lock.
-
-debug_show_all_lock_holders() skips current thread if the caller is
-holding no lock, for reporting RCU lock taken inside that function is
-generally useless.
-
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
----
-Changes in v3:
-  Unshare debug_show_all_lock_holders() and debug_show_all_locks(),
-  suggested by Ingo Molnar <mingo@kernel.org>.
-
-Changes in v2:
-  Share debug_show_all_lock_holders() and debug_show_all_locks(),
-  suggested by Waiman Long <longman@redhat.com>.
-
- include/linux/debug_locks.h |  5 +++++
- kernel/hung_task.c          |  2 +-
- kernel/locking/lockdep.c    | 28 ++++++++++++++++++++++++++++
- 3 files changed, 34 insertions(+), 1 deletion(-)
-
-diff --git a/include/linux/debug_locks.h b/include/linux/debug_locks.h
-index dbb409d77d4f..0567d5ce5b4a 100644
---- a/include/linux/debug_locks.h
-+++ b/include/linux/debug_locks.h
-@@ -50,6 +50,7 @@ extern int debug_locks_off(void);
- #ifdef CONFIG_LOCKDEP
- extern void debug_show_all_locks(void);
- extern void debug_show_held_locks(struct task_struct *task);
-+extern void debug_show_all_lock_holders(void);
- extern void debug_check_no_locks_freed(const void *from, unsigned long len);
- extern void debug_check_no_locks_held(void);
- #else
-@@ -61,6 +62,10 @@ static inline void debug_show_held_locks(struct task_struct *task)
- {
- }
- 
-+static inline void debug_show_all_lock_holders(void)
-+{
-+}
-+
- static inline void
- debug_check_no_locks_freed(const void *from, unsigned long len)
- {
-diff --git a/kernel/hung_task.c b/kernel/hung_task.c
-index c71889f3f3fc..5fba784258b7 100644
---- a/kernel/hung_task.c
-+++ b/kernel/hung_task.c
-@@ -213,7 +213,7 @@ static void check_hung_uninterruptible_tasks(unsigned long timeout)
-  unlock:
- 	rcu_read_unlock();
- 	if (hung_task_show_lock)
--		debug_show_all_locks();
-+		debug_show_all_lock_holders();
- 
- 	if (hung_task_show_all_bt) {
- 		hung_task_show_all_bt = false;
-diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
-index e3375bc40dad..d9394de09b79 100644
---- a/kernel/locking/lockdep.c
-+++ b/kernel/locking/lockdep.c
-@@ -32,6 +32,7 @@
- #include <linux/sched/clock.h>
- #include <linux/sched/task.h>
- #include <linux/sched/mm.h>
-+#include <linux/sched/debug.h>
- #include <linux/delay.h>
- #include <linux/module.h>
- #include <linux/proc_fs.h>
-@@ -6511,6 +6512,33 @@ void debug_show_all_locks(void)
- 	pr_warn("=============================================\n\n");
- }
- EXPORT_SYMBOL_GPL(debug_show_all_locks);
-+
-+void debug_show_all_lock_holders(void)
-+{
-+	struct task_struct *g, *p;
-+
-+	if (unlikely(!debug_locks)) {
-+		pr_warn("INFO: lockdep is turned off.\n");
-+		return;
-+	}
-+	pr_warn("\nShowing all threads with locks held in the system:\n");
-+
-+	rcu_read_lock();
-+	for_each_process_thread(g, p) {
-+		if (!p->lockdep_depth)
-+			continue;
-+		if (p == current && p->lockdep_depth == 1)
-+			continue;
-+		sched_show_task(p);
-+		lockdep_print_held_locks(p);
-+		touch_nmi_watchdog();
-+		touch_all_softlockup_watchdogs();
-+	}
-+	rcu_read_unlock();
-+
-+	pr_warn("\n");
-+	pr_warn("=============================================\n\n");
-+}
- #endif
- 
- /*
--- 
-2.18.4
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests
