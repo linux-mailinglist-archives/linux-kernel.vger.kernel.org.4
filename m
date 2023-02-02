@@ -2,156 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E0F16879AF
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 11:02:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD87C687984
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:52:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232157AbjBBKCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 05:02:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42642 "EHLO
+        id S231207AbjBBJwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 04:52:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbjBBKCV (ORCPT
+        with ESMTP id S229595AbjBBJws (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 05:02:21 -0500
-X-Greylist: delayed 606 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 02 Feb 2023 02:02:19 PST
-Received: from out-154.mta1.migadu.com (out-154.mta1.migadu.com [95.215.58.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2BB875B3
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 02:02:18 -0800 (PST)
-Content-Type: text/plain;
-        charset=us-ascii
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1675331528;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LCBTDt5ICx8Mvi5W+/+gY2aaUdXSNOvE3rMuXJ+tKi8=;
-        b=PhVeP3jDB1n3NatercWXmqIzxQrWiQ3p3vD33qp0f1yK20MLk9VJ8i4aPAYHHzqiiYURz+
-        5PXAOZw2RCL4CtNccLoGB4shACHCh4IvceHoaFWCF/TfeMUtscf95Kh2MYVTkZXOjkms4a
-        GQs7d3Qr1k4ffDwiAIiOtcdj3WyAvEY=
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.300.101.1.3\))
-Subject: Re: [PATCH V2] arm64/mm: Intercept pfn changes in set_pte_at()
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Muchun Song <muchun.song@linux.dev>
-In-Reply-To: <Y9pZALdn3pKiJUeQ@arm.com>
-Date:   Thu, 2 Feb 2023 17:51:39 +0800
-Cc:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <A8DF7D56-C145-4B49-A034-022917B87C89@linux.dev>
-References: <20230109052816.405335-1-anshuman.khandual@arm.com>
- <e924c1aa-5f04-fd7f-52d4-7cf22c476016@arm.com>
- <20230126133321.GB29148@willie-the-truck>
- <d454c9a2-5300-b600-a2ae-21d82d338470@arm.com>
- <20230131154950.GB2646@willie-the-truck> <Y9pZALdn3pKiJUeQ@arm.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 2 Feb 2023 04:52:48 -0500
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F23AE6;
+        Thu,  2 Feb 2023 01:52:46 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4P6v542HL0z9xGYW;
+        Thu,  2 Feb 2023 17:44:24 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwDXVwPJh9tj+jnpAA--.15060S2;
+        Thu, 02 Feb 2023 10:52:21 +0100 (CET)
+Message-ID: <6ddfa7344d01b21a93d3909af9dac0ae5e2a79ee.camel@huaweicloud.com>
+Subject: Re: [RFC PATCH v9 13/16] ipe: enable support for fs-verity as a
+ trust provider
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Fan Wu <wufan@linux.microsoft.com>
+Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
+        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
+        axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
+        eparis@redhat.com, paul@paul-moore.com, linux-doc@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        dm-devel@redhat.com, linux-audit@redhat.com,
+        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
+        Deven Bowers <deven.desai@linux.microsoft.com>
+Date:   Thu, 02 Feb 2023 10:51:56 +0100
+In-Reply-To: <20230201235031.GC9075@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1675119451-23180-1-git-send-email-wufan@linux.microsoft.com>
+         <1675119451-23180-14-git-send-email-wufan@linux.microsoft.com>
+         <d62907da62b5e0b25c9d7bd4b3119a3d1827bd29.camel@huaweicloud.com>
+         <20230201235031.GC9075@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: LxC2BwDXVwPJh9tj+jnpAA--.15060S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7ZF1Dtry3CFyxuFWkCr4fAFb_yoW5JryfpF
+        WFkF48KrZ0qF17KF10y3W8Xw1akrWxKay7urn8uwn7Was5Zr9rtr1IyFWUWFn8CFy8ZryY
+        qF42yF15Z3s8AFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAQBF1jj4hv0wAAsQ
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 2023-02-01 at 15:50 -0800, Fan Wu wrote:
+> On Tue, Jan 31, 2023 at 03:00:08PM +0100, Roberto Sassu wrote:
+> > On Mon, 2023-01-30 at 14:57 -0800, Fan Wu wrote:
+> > > +/**
+> > > + * evaluate_fsv_sig_false - Analyze @ctx against a fsv sig false property.
+> > > + * @ctx: Supplies a pointer to the context being evaluated.
+> > > + * @p: Supplies a pointer to the property being evaluated.
+> > > + *
+> > > + * Return:
+> > > + * * true	- The current @ctx match the @p
+> > > + * * false	- The current @ctx doesn't match the @p
+> > > + */
+> > > +static bool evaluate_fsv_sig_false(const struct ipe_eval_ctx *const ctx,
+> > > +				   struct ipe_prop *p)
+> > > +{
+> > > +	return !ctx->ino ||
+> > > +	       !IS_VERITY(ctx->ino) ||
+> > > +	       !ctx->ipe_inode ||
+> > > +	       !ctx->ipe_inode->fs_verity_signed;
+> > > +}
+> > > +
+> > > +/**
+> > > + * evaluate_fsv_sig_true - Analyze @ctx against a fsv sig true property.
+> > > + * @ctx: Supplies a pointer to the context being evaluated.
+> > > + * @p: Supplies a pointer to the property being evaluated.
+> > > + *
+> > > + * Return:
+> > > + * * true - The current @ctx match the @p
+> > > + * * false - The current @ctx doesn't match the @p
+> > > + */
+> > > +static bool evaluate_fsv_sig_true(const struct ipe_eval_ctx *const ctx,
+> > > +				  struct ipe_prop *p)
+> > > +{
+> > > +	return ctx->ino &&
+> > > +	       IS_VERITY(ctx->ino) &&
+> > > +	       ctx->ipe_inode &&
+> > > +	       ctx->ipe_inode->fs_verity_signed;
+> > > +}
+> > 
+> > Isn't better to just define one function and prepend a ! in
+> > evaluate_property()?
+> Yes that's a better way to do it, I will take this idea.
+> 
+> > Not sure about the usefulness of the fsverity_signature= property as it
+> > is. I would at minimum allow to specify which keyring signatures are
+> > verified against, and ensure that the keyring has a restriction.
+> > 
+> > And maybe I would call fsverity_verify_signature() directly, after
+> > extending it to pass the desired keyring.
+> > 
+> Thanks for the suggestion.
+> For the initial version we only have the fsverity_signature property
+> to enable the policy can make decision based on the existence of the
+> signature. In the future we plan to add more properties to leverage
+> the remaining signature information so we can have the restrictions
+> you mentioned.
 
+Uhm, these boolean properties feel like something is missing. In my
+opinion, one cannot accept just any signature, but should be able to
+specify the approved signers.
 
-> On Feb 1, 2023, at 20:20, Catalin Marinas <catalin.marinas@arm.com> =
-wrote:
->=20
-> On Tue, Jan 31, 2023 at 03:49:51PM +0000, Will Deacon wrote:
->> On Fri, Jan 27, 2023 at 12:43:17PM +0000, Robin Murphy wrote:
->>> On 2023-01-26 13:33, Will Deacon wrote:
->>>> On Tue, Jan 24, 2023 at 11:11:49AM +0530, Anshuman Khandual wrote:
->>>>> On 1/9/23 10:58, Anshuman Khandual wrote:
->>>>>> Changing pfn on a user page table mapped entry, without first =
-going through
->>>>>> break-before-make (BBM) procedure is unsafe. This just updates =
-set_pte_at()
->>>>>> to intercept such changes, via an updated =
-pgattr_change_is_safe(). This new
->>>>>> check happens via __check_racy_pte_update(), which has now been =
-renamed as
->>>>>> __check_safe_pte_update().
->>>>>>=20
->>>>>> Cc: Catalin Marinas <catalin.marinas@arm.com>
->>>>>> Cc: Will Deacon <will@kernel.org>
->>>>>> Cc: Mark Rutland <mark.rutland@arm.com>
->>>>>> Cc: Andrew Morton <akpm@linux-foundation.org>
->>>>>> Cc: linux-arm-kernel@lists.infradead.org
->>>>>> Cc: linux-kernel@vger.kernel.org
->>>>>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->>>>>> ---
->>>>>> This applies on v6.2-rc3. This patch had some test time on an =
-internal CI
->>>>>> system without any issues being reported.
->>>>>=20
->>>>> Gentle ping, any updates on this patch ? Still any concerns ?
->>>>=20
->>>> I don't think we really got to the bottom of Mark's concerns with
->>>> unreachable ptes on the stack, did we? I also have vague =
-recollections
->>>> of somebody (Robin?) running into issues with the vmap code not =
-honouring
->>>> BBM.
->>>=20
->>> Doesn't ring a bell, so either it wasn't me, or it was many years =
-ago and
->>> about 5 levels deep into trying to fix something else :/
->>=20
->> Bah, sorry! Catalin reckons it may have been him talking about the =
-vmemmap.
->=20
-> Indeed. The discussion with Anshuman started from this thread:
->=20
-> =
-https://lore.kernel.org/all/20221025014215.3466904-1-mawupeng1@huawei.com/=
+Roberto
 
->=20
-> We already trip over the existing checks even without Anshuman's =
-patch,
-> though only by chance. We are not setting the software PTE_DIRTY on =
-the
-> new pte (we don't bother with this bit for kernel mappings).
->=20
-> Given that the vmemmap ptes are still live when such change happens =
-and
-> no-one came with a solution to the break-before-make problem, I =
-propose
-> we revert the arm64 part of commit 47010c040dec ("mm: hugetlb_vmemmap:
-> cleanup CONFIG_HUGETLB_PAGE_FREE_VMEMMAP*"). We just need this hunk:
->=20
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index 27b2592698b0..5263454a5794 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -100,7 +100,6 @@ config ARM64
-> 	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
-> 	select ARCH_WANT_FRAME_POINTERS
-> 	select ARCH_WANT_HUGE_PMD_SHARE if ARM64_4K_PAGES || =
-(ARM64_16K_PAGES && !ARM64_VA_BITS_36)
-> -	select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
-
-Maybe it is a little overkill for HVO as it can significantly minimize =
-the
-overhead of vmemmap on ARM64 servers for some workloads (like qemu, =
-DPDK).
-So I don't think disabling it is a good approach. Indeed, HVO broke BBM,
-but the waring does not affect anything since the tail vmemmap pages are
-supposed to be read-only. So, I suggest skipping warnings if it is the
-vmemmap address in set_pte_at(). What do you think of?
-
-Muchun,
-Thanks.
-
-> 	select ARCH_WANT_LD_ORPHAN_WARN
-> 	select ARCH_WANTS_NO_INSTR
-> 	select ARCH_WANTS_THP_SWAP if ARM64_4K_PAGES
->=20
-> --=20
-> Catalin
+> -Fan
+> 
+> > I would also split this patch in two, one for fsverity_digest= and one
+> > for fsverity_signature=.
+> > 
+> > Roberto
 
