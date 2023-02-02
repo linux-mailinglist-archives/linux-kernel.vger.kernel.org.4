@@ -2,117 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6507468798D
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:56:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8C42687992
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:56:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232200AbjBBJ4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 04:56:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37520 "EHLO
+        id S232056AbjBBJ4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 04:56:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232056AbjBBJ4H (ORCPT
+        with ESMTP id S232374AbjBBJ4X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 04:56:07 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C24F48934B;
-        Thu,  2 Feb 2023 01:55:52 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id m14so1122117wrg.13;
-        Thu, 02 Feb 2023 01:55:52 -0800 (PST)
+        Thu, 2 Feb 2023 04:56:23 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02DBC70D63
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 01:56:18 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id f34so2128446lfv.10
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 01:56:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Stgr6vfm0HEaVlIajYL/GQy19ItPErkJb1Nwjrj3VxQ=;
-        b=DGhHNeY4428AtR6ijDYnRHS5YEzktQbrxXUDsprWPLMjaYEw4F7GnvFM70lJcYjj8h
-         8i9qBfZfaPI7Sf+L4NdYZ5yB/FZ+H3VzuvC7ytWVjqxxBlVzm4imYkn9ExZbcW8P1jgK
-         reEzD0Vaf8RJY8ArKFVPeerkK8hOGFZZBOmPYZRnQXl0zfy4kX/t4aWWRY/27RgCPLPT
-         36P+m7BvZihLipw+MSMHUe2U0tVmnbAUoMolYY1kxSfzb+TYMOZNjQOPlUhXVSsktM1g
-         Z2l9r1JB5GxwtDozt2s3JZMUEfcwGlfvK5DcUT+REC4KreDg8CC344ipcaqk8q+LNqXo
-         jeIQ==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Et1yOPHuWuwUUtD1YE0TSilhNb27QJfJADrrMJq+0v0=;
+        b=TjptjBDiactzfKrHMuO2Z00fY2DaOBxUU6HUMSOrRXHJnPEL+5jjvxSoh4BfQpa350
+         TC9aT+jlpH8XKUj7b8C0N+h4kJBbE2FSoj3QgBqjYcDOTbCO1wh3X21X0wxp7P6hkxs2
+         JLCQmBvxI/6UfVDTmaNc8qL4tVi6rnFLyIJ2Q=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Stgr6vfm0HEaVlIajYL/GQy19ItPErkJb1Nwjrj3VxQ=;
-        b=SwNR5w4nfzThFMLeintf0tl31nRB6Wa3MGQlYaPSsgkeCnnGJJD6xkiwYAQnhDdaHq
-         f+I/eNf8Fh49KEjGQ/0ZQKqYt0BgQVP35yJIFZtMItbsUe2QQIp0MAMsJA2HxaOswP1d
-         NhzJ/xv1O2/6wwdsTTRCr8nfuxVbW53xUsyHFtctSJzA4CyGFW+V2zl6+njPGUUh01lD
-         oO/5xuUnRBny+qD6TDyQbbyjd8nTcMDjVzQaniloMVTItbjxiMnQCpBRLi93kN7UD2DO
-         9y78OVsc1BQyHyddKnS9XBT6MYrUcRzP5sJ4ZJdhZnu3ad3qJl6OGcu5+s5bhq0NMVxG
-         9tQg==
-X-Gm-Message-State: AO0yUKUQO+cKFRBIM0uLHPB1yT28k0BSOVcboUnLfb7ZKe+b8juWbNVW
-        7ZxNNJI8ML24iYFUVeYv5FauecI4cI8=
-X-Google-Smtp-Source: AK7set9+0KCJ4iG0B6Soqhj9NDaWHm930UPc8+G8z5nT+EeUjOSrCYTZjIZIelt1X/dZTH3B2Fl4nQ==
-X-Received: by 2002:a5d:4e02:0:b0:2bf:e1f8:c4b6 with SMTP id p2-20020a5d4e02000000b002bfe1f8c4b6mr5026167wrt.52.1675331751349;
-        Thu, 02 Feb 2023 01:55:51 -0800 (PST)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id p8-20020adff208000000b002423edd7e50sm19640568wro.32.2023.02.02.01.55.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 01:55:50 -0800 (PST)
-Message-ID: <44654beb-58d3-ff50-e495-938538c065cd@gmail.com>
-Date:   Thu, 2 Feb 2023 10:55:49 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Et1yOPHuWuwUUtD1YE0TSilhNb27QJfJADrrMJq+0v0=;
+        b=4wtDTLErRhEUYSWDyVonmWNYNCrisA8cTkrVwqy1HQyWDkHW6Pzea6NT13E7H1BD76
+         rRz6bi4CQs1yF2WtWBWOqZA3rMtirwbsQ1FBnz0XPX1xiCdcM8UT+fV39PB8ZsVaYfgk
+         nEnDt8Zel1jFRSqnOMe3bQWz4j7lef8qgOgRRhlPePS6STyH+H+f+22krEWIIBjVe/aW
+         JgBmoQk2XL0TSXrcFvjGZeoLN8R6S+RpZ/fO1MDZIh6z4ZStM86Xx0Y1gtxQ0+cinD7D
+         PrY4B6T/wpIPiHOjrobXoNfaLi6E1hQz39rLeSzJ/3g4tNxHukHgOkQLYpaXqLNsf2IK
+         Zqig==
+X-Gm-Message-State: AO0yUKXhwVtfbSggiWZ2zWIAGx4u7zU9Elk07HWGWZ3I4ik5gPkhx6g0
+        iH2bsDkbW3ebxtopNBbWBT0QLqzTS/Puupn9E4triA==
+X-Google-Smtp-Source: AK7set/+LRUeC+y7hURPLw3FDp13bWqyHKjm6FhqDKZXu/4BvgyeX2K9tedksP7JXqTzGG4YdKEE0oEkumQJliuj6/I=
+X-Received: by 2002:a19:5f54:0:b0:4cb:1ddd:3b5 with SMTP id
+ a20-20020a195f54000000b004cb1ddd03b5mr905136lfj.171.1675331776263; Thu, 02
+ Feb 2023 01:56:16 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] dt-bindings: pwm: mediatek: add mediatek,mt7986
- compatible
-Content-Language: en-US
-To:     Daniel Golle <daniel@makrotopia.org>, devicetree@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-References: <70fe0b606d988958b87f89828b8728e2f68eaace.1675278958.git.daniel@makrotopia.org>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <70fe0b606d988958b87f89828b8728e2f68eaace.1675278958.git.daniel@makrotopia.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230201034137.2463113-1-stevensd@google.com> <CAHbLzkpbV2LOoTpWwSOS+UUsYJiZX4vO78jZSr6xmpAGNGoH5w@mail.gmail.com>
+ <Y9rRCN9EfqzwYnDG@x1n>
+In-Reply-To: <Y9rRCN9EfqzwYnDG@x1n>
+From:   David Stevens <stevensd@chromium.org>
+Date:   Thu, 2 Feb 2023 18:56:04 +0900
+Message-ID: <CAD=HUj4FjuLpihQLGLzUu82vr5fdFFxfnyKNhApC6L67F5iV4g@mail.gmail.com>
+Subject: Re: [PATCH] mm/khugepaged: skip shmem with armed userfaultfd
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Yang Shi <shy828301@gmail.com>,
+        David Hildenbrand <david@redhat.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, Hugh Dickins <hughd@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Feb 2, 2023 at 5:52 AM Peter Xu <peterx@redhat.com> wrote:
+>
+> On Wed, Feb 01, 2023 at 09:36:37AM -0800, Yang Shi wrote:
+> > On Tue, Jan 31, 2023 at 7:42 PM David Stevens <stevensd@chromium.org> wrote:
+> > >
+> > > From: David Stevens <stevensd@chromium.org>
+> > >
+> > > Collapsing memory in a vma that has an armed userfaultfd results in
+> > > zero-filling any missing pages, which breaks user-space paging for those
+> > > filled pages. Avoid khugepage bypassing userfaultfd by not collapsing
+> > > pages in shmem reached via scanning a vma with an armed userfaultfd if
+> > > doing so would zero-fill any pages.
+> > >
+> > > Signed-off-by: David Stevens <stevensd@chromium.org>
+> > > ---
+> > >  mm/khugepaged.c | 35 ++++++++++++++++++++++++-----------
+> > >  1 file changed, 24 insertions(+), 11 deletions(-)
+> > >
+> > > diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+> > > index 79be13133322..48e944fb8972 100644
+> > > --- a/mm/khugepaged.c
+> > > +++ b/mm/khugepaged.c
+> > > @@ -1736,8 +1736,8 @@ static int retract_page_tables(struct address_space *mapping, pgoff_t pgoff,
+> > >   *    + restore gaps in the page cache;
+> > >   *    + unlock and free huge page;
+> > >   */
+> > > -static int collapse_file(struct mm_struct *mm, unsigned long addr,
+> > > -                        struct file *file, pgoff_t start,
+> > > +static int collapse_file(struct mm_struct *mm, struct vm_area_struct *vma,
+> > > +                        unsigned long addr, struct file *file, pgoff_t start,
+> > >                          struct collapse_control *cc)
+> > >  {
+> > >         struct address_space *mapping = file->f_mapping;
+> > > @@ -1784,6 +1784,9 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
+> > >          * be able to map it or use it in another way until we unlock it.
+> > >          */
+> > >
+> > > +       if (is_shmem)
+> > > +               mmap_read_lock(mm);
+> >
+> > If you release mmap_lock before then reacquire it here, the vma is not
+> > trusted anymore. It is not safe to use the vma anymore.
+> >
+> > Since you already read uffd_was_armed before releasing mmap_lock, so
+> > you could pass it directly to collapse_file w/o dereferencing vma
+> > again. The problem may be false positive (not userfaultfd armed
+> > anymore), but it should be fine. Khugepaged could collapse this area
+> > in the next round.
 
+I didn't notice this race condition. It should be possible to adapt
+hugepage_vma_revalidate for this situation, or at least to create an
+analogous situation.
 
-On 01/02/2023 20:25, Daniel Golle wrote:
-> Since commit 241eab76657f ("pwm: mediatek: Add support for MT7986")
-> support for the 2 PWM channels implemented in MediaTek MT7986 SoCs has
-> been added. Also add the compatible string to dt-bindings now that
-> they have been converted to YAML.
-> 
-> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+> Unfortunately that may not be enough.. because it's also possible that it
+> reads uffd_armed==false, released mmap_sem, passed it over to the scanner,
+> but then when scanning the file uffd got armed in parallel.
+>
+> There's another problem where the current vma may not have uffd armed,
+> khugepaged may think it has nothing to do with uffd and moved on with
+> collapsing, but actually it's armed in another vma of either the current mm
+> or just another mm's.
+>
+> It seems non-trivial too to safely check this across all the vmas, let's
+> say, by a reverse walk - the only safe way is to walk all the vmas and take
+> the write lock for every mm, but that's not only too heavy but also merely
+> impossible to always make it right because of deadlock issues and on the
+> order of mmap write lock to take..
+>
+> So far what I can still think of is, if we can extend shmem_inode_info and
+> have a counter showing how many uffd has been armed.  It can be a generic
+> counter too (e.g. shmem_inode_info.collapse_guard_counter) just to avoid
+> the page cache being collapsed under the hood, but I am also not aware of
+> whether it can be reused by other things besides uffd.
+>
+> Then when we do the real collapsing, say, when:
+>
+>                 xas_set_order(&xas, start, HPAGE_PMD_ORDER);
+>                 xas_store(&xas, hpage);
+>                 xas_unlock_irq(&xas);
+>
+> We may need to make sure that counter keeps static (probably by holding
+> some locks during the process) and we only do that last phase collapse if
+> counter==0.
+>
+> Similar checks in this patch can still be done, but that'll only service as
+> a role of failing faster before the ultimate check on the uffd_armed
+> counter.  Otherwise I just don't quickly see how to avoid race conditions.
 
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+I don't know if it's necessary to go that far. Userfaultfd plus shmem
+is inherently brittle. It's possible for userspace to bypass
+userfaultfd on a shmem mapping by accessing the shmem through a
+different mapping or simply by using the write syscall. It might be
+sufficient to say that the kernel won't directly bypass a VMA's
+userfaultfd to collapse the underlying shmem's pages. Although on the
+other hand, I guess it's not great for the presence of an unused shmem
+mapping lying around to cause khugepaged to have user-visible side
+effects.
 
-> ---
-> This patch has previously been submitted, but we decided to deferr it until
-> after the conversion to YAML which has now been done via commit
-> 3e98855ca0cf ("dt-bindings: pwm: mediatek: Convert pwm-mediatek to DT schema")
-> See
-> https://patchwork.ozlabs.org/project/devicetree-bindings/patch/Y39PjU1BqBB8tZ98@makrotopia.org/
-> 
-> Documentation/devicetree/bindings/pwm/mediatek,mt2712-pwm.yaml | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/pwm/mediatek,mt2712-pwm.yaml b/Documentation/devicetree/bindings/pwm/mediatek,mt2712-pwm.yaml
-> index dbc974bff9e9..8e176ba7a525 100644
-> --- a/Documentation/devicetree/bindings/pwm/mediatek,mt2712-pwm.yaml
-> +++ b/Documentation/devicetree/bindings/pwm/mediatek,mt2712-pwm.yaml
-> @@ -22,6 +22,7 @@ properties:
->             - mediatek,mt7623-pwm
->             - mediatek,mt7628-pwm
->             - mediatek,mt7629-pwm
-> +          - mediatek,mt7986-pwm
->             - mediatek,mt8183-pwm
->             - mediatek,mt8365-pwm
->             - mediatek,mt8516-pwm
-> 
-> base-commit: 66eee64b235411d512bed4d672c2d00683239daf
+-David
+
+> It'll be great if someone can come up with something better than above..
+> Copy Hugh too.
+>
+> Thanks,
+>
+> --
+> Peter Xu
+>
