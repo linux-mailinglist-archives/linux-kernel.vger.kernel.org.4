@@ -2,55 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C949687A1A
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 11:23:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 354F7687A23
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 11:25:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232462AbjBBKX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 05:23:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57540 "EHLO
+        id S232465AbjBBKZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 05:25:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232179AbjBBKXx (ORCPT
+        with ESMTP id S231876AbjBBKZn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 05:23:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D50D3B76C
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 02:23:52 -0800 (PST)
+        Thu, 2 Feb 2023 05:25:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2433E10433
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 02:25:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 58A2A61A41
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 10:23:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1679FC433EF;
-        Thu,  2 Feb 2023 10:23:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D83FAB8247A
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 10:25:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50B94C433EF;
+        Thu,  2 Feb 2023 10:25:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675333431;
-        bh=GQnjXYU/0vipHeT3iMCCPZhv1dMM4Kiss8fVyftaCCs=;
+        s=k20201202; t=1675333540;
+        bh=Gb3T6TsLfV5TwqGHgvcKYvFwI4gAsDkyqVqCfdmHoKw=;
         h=From:To:Cc:Subject:Date:From;
-        b=FO9KuJmGsOGokap/NEOXVwllrmT7/6YtYkfeRLa2ZwjrTHQ8zI26aUPp0/nfeN/t9
-         cCjFtnkV0KssN6qacocE4N7GjxfflefrDXQveEVBTwUnlElU2mExy2WxQfZKlBfS7K
-         OzuhIA636DPK8xJWjTIqf8hskhTkaHv6Bd4lDXGK/RdjnQCYLvghkCO/ZmcDrxHxF2
-         6/HD5LaqWB3sh7Oo3FI2rtBPSwh6EWDxMQC8g+XWGDreVmqxGZaVN7yFioYRFEcssv
-         dgo+j/smoUfTQO3+YoiJHuG2BIYZILCwOU7xMD3GfXCykI0vYvLbxrFwXsnAFcqgkK
-         aX4YKVSLCPpqQ==
+        b=DPpuP0HWq3SUWfvJp0qzlvYHWj9A4nfE0PfUhgnnwtEIO5/IfCGazWW6T453qZLJu
+         mRhd9CfsQMaL6hmPr6APq+RFjTFIaVmwL5ICcrGJLo5lFSuFpemdyxWsEf3ZJ9kbgr
+         0BVK9I1B1Srh/H/xt8LU0KfQuGvqpVFkygv9KRCShj6RTOVJyOkKIqu/erDM1OeHiy
+         dMwoa0//0pC34elUZEM9ImnCTaNF9sO9e8Zkmyce+LrsKKN3+76vBCsm/AsOkb7zTn
+         YWSSw4LyM+pTLMbszWohMM4+kHWjp26NRizRMTB0dbCS+EDDG78Z9khedCRjpommt/
+         kqAAeU8b9aKMQ==
 From:   Arnd Bergmann <arnd@kernel.org>
-To:     Emma Anholt <emma@anholt.net>, Maxime Ripard <mripard@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Zheng Bin <zhengbin13@huawei.com>,
-        Danilo Krummrich <dakr@redhat.com>,
-        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mcanal@igalia.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/vc4: allow DRM_VC4_KUNIT_TEST to be a loadable module
-Date:   Thu,  2 Feb 2023 11:23:32 +0100
-Message-Id: <20230202102346.868771-1-arnd@kernel.org>
+To:     Russell King <linux@armlinux.org.uk>, Arnd Bergmann <arnd@arndb.de>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ARM: proc-v7: fix out-of-range adr instruction
+Date:   Thu,  2 Feb 2023 11:25:32 +0100
+Message-Id: <20230202102538.999026-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,37 +53,39 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-In configurations with CONFIG_KUNIT=m, builting the unit test
-into the kernel causes a link failure:
+Before the change to CONFIG_ARCH_MULTIPLATFORM, some CONFIG_ARM_ERRATA_*
+options were always hidden, but now they are user visible in expert
+configurations, which caused a compile-time failure in randconfig
+builds with all of the errata enabled.
 
-arm-linux-gnueabi-ld: drivers/gpu/drm/vc4/tests/vc4_mock.o: in function `__build_mock':
-vc4_mock.c:(.text+0x6e): undefined reference to `kunit_do_failed_assertion'
-arm-linux-gnueabi-ld: vc4_mock.c:(.text+0x9c): undefined reference to `kunit_do_failed_assertion'
-arm-linux-gnueabi-ld: vc4_mock.c:(.text+0x100): undefined reference to `kunit_ptr_not_err_assert_format'
-...
+arch/arm/mm/proc-v7.S:545: Error: invalid constant (fffffffffffffbf4) after fixup
+/tmp/proc-v7-5b364b.s:1611:2: error: out of range pc-relative fixup value
+ adr r3, v7_crval
 
-Allow this to be a loadable module as well to have Kconfig
-sort out the dependencies correctly.
+The problem is that the extra code size puts the v7_crval definition just
+outside of the range of the 'adr' instruction. Use the adr_l macro instead
+to allow longer offsets.
 
-Fixes: f759f5b53f1c ("drm/vc4: tests: Introduce a mocking infrastructure")
+Fixes: 84fc86360623 ("ARM: make ARCH_MULTIPLATFORM user-visible")
+Suggested-by: Ard Biesheuvel <ardb@kernel.org>
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/gpu/drm/vc4/Kconfig | 2 +-
+ arch/arm/mm/proc-v7.S | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/vc4/Kconfig b/drivers/gpu/drm/vc4/Kconfig
-index f423941c028d..91dcf8d174d6 100644
---- a/drivers/gpu/drm/vc4/Kconfig
-+++ b/drivers/gpu/drm/vc4/Kconfig
-@@ -36,7 +36,7 @@ config DRM_VC4_HDMI_CEC
- 	  and want to use CEC.
- 
- config DRM_VC4_KUNIT_TEST
--	bool "KUnit tests for VC4" if !KUNIT_ALL_TESTS
-+	tristate "KUnit tests for VC4" if !KUNIT_ALL_TESTS
- 	depends on DRM_VC4 && KUNIT
- 	select DRM_KUNIT_TEST_HELPERS
- 	default KUNIT_ALL_TESTS
+diff --git a/arch/arm/mm/proc-v7.S b/arch/arm/mm/proc-v7.S
+index 6b4ef9539b68..fe1469aa5be5 100644
+--- a/arch/arm/mm/proc-v7.S
++++ b/arch/arm/mm/proc-v7.S
+@@ -544,7 +544,7 @@ __errata_finish:
+ 	mcr	p14, 6, r0, c0, c0, 0		@ stop userspace TEEHBR access
+ 1:
+ #endif
+-	adr	r3, v7_crval
++	adr_l	r3, v7_crval
+ 	ldmia	r3, {r3, r6}
+  ARM_BE8(orr	r6, r6, #1 << 25)		@ big-endian page tables
+ #ifdef CONFIG_SWP_EMULATE
 -- 
 2.39.0
 
