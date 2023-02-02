@@ -2,46 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E50768864A
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 19:24:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38C5B68864F
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 19:24:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232299AbjBBSYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 13:24:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57884 "EHLO
+        id S232447AbjBBSYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 13:24:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231695AbjBBSX7 (ORCPT
+        with ESMTP id S230233AbjBBSYV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 13:23:59 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC50C65F02;
-        Thu,  2 Feb 2023 10:23:57 -0800 (PST)
-Received: from lhrpeml500006.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4P76XB6ZHdz67bmq;
-        Fri,  3 Feb 2023 02:20:10 +0800 (CST)
-Received: from P_UKIT01-A7bmah.china.huawei.com (10.48.151.167) by
- lhrpeml500006.china.huawei.com (7.191.161.198) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Thu, 2 Feb 2023 18:23:55 +0000
-From:   <shiju.jose@huawei.com>
-To:     <mchehab@kernel.org>, <linux-edac@vger.kernel.org>
-CC:     <rostedt@goodmis.org>, <mhiramat@kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>, <tanxiaofei@huawei.com>,
-        <jonathan.cameron@huawei.com>, <linuxarm@huawei.com>,
-        <shiju.jose@huawei.com>
-Subject: [RFC PATCH 1/1] rasdaemon: Fix poll() on per_cpu trace_pipe_raw do not retun
-Date:   Thu, 2 Feb 2023 18:23:51 +0000
-Message-ID: <20230202182352.792-1-shiju.jose@huawei.com>
-X-Mailer: git-send-email 2.26.0.windows.1
+        Thu, 2 Feb 2023 13:24:21 -0500
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 871535EFBD
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 10:24:20 -0800 (PST)
+Received: by mail-yb1-xb2e.google.com with SMTP id 74so3072669ybl.12
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 10:24:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=s9NS8aTMNXwzeLlthekcCZHp7SQir7/xZefiPP7egKI=;
+        b=ZPrIb7wo+lofZV5pa5YbET3hAij+R6gpmGf56bGzIiJJZm+b1Ydw+1BC5EDCg2BRow
+         DbYAkHwSC6cnMronH3NtmDtuswD6tOv1DfX+TKKrEx03PJQaXqg/IZx3QuurzljeH5mJ
+         Dhw7d+sAJ5ylmkLJZLxFcgRhg9vpP/91oQdt5ywhgqHdD47r4rU36XdbzTm25eOxOI1f
+         TjiMYRf3uyMJrt3faPsFxTFVo25AhVanE7TU8icH+qr8A38Aii6b39F4sPLQ0rIAhjka
+         bOy1FLkVCcegtisV0H4khc5iWpFJyjpX0m35PRB5Fvo9nUMDpO+FxWF5rxT5xj2++t1n
+         7qow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=s9NS8aTMNXwzeLlthekcCZHp7SQir7/xZefiPP7egKI=;
+        b=Ckvx5r8Kib/qGKQ+xaa5GpR5KfEEZuT2dKKs0HDhGewW+12lkIW7qCb2Lb2IUxNqhO
+         EKlqLoD1KOlMzPn28Uy9G3G6bHLX+6i5Twx8ZLsDQpehAa5a5Wc2z6rNRPp3lyQYxM1F
+         o3AAEO/ImgUHvslEW0yqlSVwbY9IAsA7UXCNNUHekmeNX0cPIxbcboHlG25fVaBREMQl
+         a4AoXeIGC8XM4hLSSFkfSaHB0P0jHMifyQbvw88g2tzHJIJd20UoPyJGaE133yWaYNVD
+         fVYQVS9+3bSr0nEpTVd/Yr+hQ18oFlGF2593unngk64kBCfMotivcss/B4o3K88UT1T3
+         U5Iw==
+X-Gm-Message-State: AO0yUKW+28a7flGs5imUo7RM1wcFVxm1psOv/eaIMGoG2+TsykbpVYIA
+        Hj6XTWjDF72ap3d8YA9GO3ZG5gqusIACJx52UEG1Rg==
+X-Google-Smtp-Source: AK7set8AggMm56FhRMju0xnLlIqmwLNBbTYCISFZ/w6URWQ+GAck8xfnfOOCoJEKrQU2oWewAHldfm04bzdjrW+WeRA=
+X-Received: by 2002:a25:ae01:0:b0:7fb:feb3:3828 with SMTP id
+ a1-20020a25ae01000000b007fbfeb33828mr1066702ybj.450.1675362259617; Thu, 02
+ Feb 2023 10:24:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.48.151.167]
-X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
- lhrpeml500006.china.huawei.com (7.191.161.198)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <1675312377-4782-1-git-send-email-zhaoyang.huang@unisoc.com> <Y9tz+0J9fw+Z+O+O@dhcp22.suse.cz>
+In-Reply-To: <Y9tz+0J9fw+Z+O+O@dhcp22.suse.cz>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Thu, 2 Feb 2023 10:24:08 -0800
+Message-ID: <CALvZod5E0s9Vu3wq-Fuvs9z=ViMADn3aNL0f56ELGmFzxKCtkg@mail.gmail.com>
+Subject: Re: [PATCH] mm: introduce entrance for root_mem_cgroup's current
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        Zhaoyang Huang <huangzhaoyang@gmail.com>, ke.wang@unisoc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,88 +73,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shiju Jose <shiju.jose@huawei.com>
+On Thu, Feb 2, 2023 at 12:27 AM Michal Hocko <mhocko@suse.com> wrote:
+>
+> On Thu 02-02-23 12:32:57, zhaoyang.huang wrote:
+> > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> >
+> > Introducing memory.root_current for the memory charges on root_mem_cgroup.
+>
+> Charges are not currently accounted for the root memcg universally. See
+> try_charge which is used for all user space and skmem charges. I am not
+> 100% sure about objcg based accounting because there is no explicit
+> check for the root memcg but this might be hidden somewhere as well.
 
-The error events are not received in the rasdaemon since kernel 6.1-rc6.
-This issue is firstly detected and reported, when testing the CXL error
-events in the rasdaemon.
+Yes in __get_obj_cgroup_from_memcg(). However the reason to use
+try_charge_memcg() to bypass root check was to avoid the race with
+reparenting. More details in c5c8b16b596e ("mm: memcontrol: fix
+root_mem_cgroup charging").
 
-Debugging showed, poll() on trace_pipe_raw in the ras-events.c do not return.
-and this issue is seen after the commit
-42fb0a1e84ff525ebe560e2baf9451ab69127e2b ("tracing/ring-buffer: Have
-polling block on watermark").
+>
+> That means that the patch as is doesn't really provide and usable value.
+> The root exemption has been removed in the past but that has been
+> reverted due to a regression. See ce00a967377b ("mm: memcontrol: revert
+> use of root_mem_cgroup res_counter") for more.
+>
 
-This also verified using the test application for poll()
-and select() on trace_pipe_raw.
-
-There is also a bug reported on this issue, 
-https://lore.kernel.org/all/31eb3b12-3350-90a4-a0d9-d1494db7cf74@oracle.com/
-
-This issue occurs for the per_cpu case, when calling the ring_buffer_poll_wait(),
-in kernel/trace/ring_buffer.c, with the buffer_percent > 0 and then wait until the
-percentage of pages are available. The default value set for the buffer_percent is 50
-in the kernel/trace/trace.c.
-
-As a fix, rasdaemon set buffer_percent = 0 through the
-/sys/kernel/debug/tracing/instances/rasdaemon/buffer_percent, then the task will
-wake up as soon as data is added to any of the specific cpu buffer and
-poll() on per_cpu/cpuX/trace_pipe_raw does not block indefinitely.
-
-Depends on kernel patch
-tracing: Fix poll() and select() do not work on per_cpu trace_pipe and trace_pipe_raw
-
-Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
----
- ras-events.c | 29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
-
-diff --git a/ras-events.c b/ras-events.c
-index 3691311..72225a9 100644
---- a/ras-events.c
-+++ b/ras-events.c
-@@ -383,6 +383,8 @@ static int read_ras_event_all_cpus(struct pthread_data *pdata,
- 	int warnonce[n_cpus];
- 	char pipe_raw[PATH_MAX];
- 	int legacy_kernel = 0;
-+	int fd;
-+	char buf[2];
- #if 0
- 	int need_sleep = 0;
- #endif
-@@ -402,6 +404,33 @@ static int read_ras_event_all_cpus(struct pthread_data *pdata,
- 		return -ENOMEM;
- 	}
- 
-+	/* Fix for poll() do not return on per_cpu trace_pipe and
-+	 * trace_pipe_raw with the default buffer_percent in the kernel trace,
-+	 * introduced by the following change in the kernel
-+	 * https://lore.kernel.org/all/20221020231427.41be3f26@gandalf.local.home/T/#u.
-+	 * Set buffer_percent to 0 so that poll() returned immediately
-+	 * when the trace data is available in the ras per_cpu trace pipe_raw */
-+	fd = open_trace(pdata[0].ras, "buffer_percent", O_RDWR);
-+	if (fd < 0) {
-+		log(TERM, LOG_ERR, "Can't open trace buffer_percent\n");
-+		return -1;
-+	}
-+	size = write(fd, "0", 1);
-+	if (size <= 0) {
-+		log(TERM, LOG_ERR, "Can't set rasdaemon trace buffer_percent\n");
-+		return -1;
-+	}
-+	size = read(fd, buf, 1);
-+	if (size <= 0) {
-+		log(TERM, LOG_ERR, "Can't read rasdaemon trace buffer_percent\n");
-+		return -1;
-+	}
-+	if (atoi(buf) != 0) {
-+		log(TERM, LOG_ERR, "Can't verify rasdaemon trace buffer_percent\n");
-+		return -1;
-+	}
-+	close(fd);
-+
- 	for (i = 0; i < (n_cpus + 1); i++)
- 		fds[i].fd = -1;
- 
--- 
-2.25.1
-
+One advantage I can see is if someone is looking for usage for all top
+containers (alive or zombie) but I wanted to know if that was the real
+motivation behind the patch.
