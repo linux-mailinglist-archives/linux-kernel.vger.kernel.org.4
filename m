@@ -2,181 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8A75687D47
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 13:26:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96CF5687D4B
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 13:27:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232094AbjBBM0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 07:26:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56752 "EHLO
+        id S232218AbjBBM1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 07:27:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbjBBM0k (ORCPT
+        with ESMTP id S231989AbjBBM1M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 07:26:40 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2058.outbound.protection.outlook.com [40.107.223.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7357DF74F;
-        Thu,  2 Feb 2023 04:26:39 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AkOllQ7hckxpgZ9zHY6Rom52G62fCESDijE5xXM5of4/J85xuJPjMHJUk4Cs4V7E/aUpfJXeE83pAQurbS0zjWhxJaDU4ox/iyihDj0SDh+UFpaRWkL5AtMCHgJC4dtWzeGjw87tCKunUiA1SYKiX2pjzKSs8s3ZqAWaOnordsnB1gYDKzbi8MmwseMJfLgzORf/HeEfcldrbG5GBdo2alZD/9G5BRe086qeMe5Lw6She3Hz81wjny8czuvTm+6de5Y4vRcpBPmpJyMkYiCZRbBxb43s4hJHi98Z92A+dQI7mpp6eG6OwAGA05oJhzmLXPp9S0cVzcl7J0fhh/B6mQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yTFJ57VJ1ka4KsAV3uh0+G+Ov9YHg1wOnlM5TiRYY3c=;
- b=DQF/YkLPvTKSM9xgV6A/Fz59sDVvY1RskbJQpFMIJC83p4OOg0UKw26DoJaNo7ZxZygInxS0wDJFxLOZgKl3IvJi7brkQ4e6FVra+P3pGLackWJvKWVVJNgAoK9g+zI4JIIpexkvc5GVHyguRxBoCbJhxAbvlbTYu6AsjE+db7XMFZTU5pzU05uD7fpRuevsJPlRHKai/vPJALtAD1Awqxx/kdceXmvpqVgCPKUEHA0DUmNMOTcxrUbFpJeLtJ2vUa5rt8C+oTj9y+Lw5Xoo6zRzcmKmr3WSCynrE/32aqhb1NfWu/hir0i1p3IZhIpTER61Nx/67LLac2Qp1fDdjw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=amd.com smtp.mailfrom=xilinx.com;
- dmarc=fail (p=quarantine sp=quarantine pct=100) action=quarantine
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yTFJ57VJ1ka4KsAV3uh0+G+Ov9YHg1wOnlM5TiRYY3c=;
- b=mw1TsCTRsbriYDqaZ9kKz/J+9bRagjWoqJnJORDjQHL9wuIS7cdh2dLbzHlg2ZhNoeQqWkkPfX+MJ2ueyjVW9LAroZ4+09aeeqKLmlRgwgTKEvkNNVh9KzXm25xT2GI3fgNXA1Z9hrbcsfzg8lAFzivquu6BcTKLBJrBP/Trd8o=
-Received: from DS7P222CA0022.NAMP222.PROD.OUTLOOK.COM (2603:10b6:8:2e::25) by
- SA1PR02MB8494.namprd02.prod.outlook.com (2603:10b6:806:1f9::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.27; Thu, 2 Feb
- 2023 12:26:37 +0000
-Received: from DM3NAM02FT020.eop-nam02.prod.protection.outlook.com
- (2603:10b6:8:2e:cafe::25) by DS7P222CA0022.outlook.office365.com
- (2603:10b6:8:2e::25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.27 via Frontend
- Transport; Thu, 2 Feb 2023 12:26:37 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=fail action=quarantine header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com; pr=C
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- DM3NAM02FT020.mail.protection.outlook.com (10.13.4.146) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6043.33 via Frontend Transport; Thu, 2 Feb 2023 12:26:37 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Thu, 2 Feb 2023 04:26:35 -0800
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Thu, 2 Feb 2023 04:26:35 -0800
-Envelope-to: git@amd.com,
- radhey.shyam.pandey@amd.com,
- davem@davemloft.net,
- edumazet@google.com,
- kuba@kernel.org,
- andrew@lunn.ch,
- claudiu.beznea@microchip.com,
- nicolas.ferre@microchip.com,
- pabeni@redhat.com,
- linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org
-Received: from [172.23.64.3] (port=38489 helo=xhdvnc103.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <radhey.shyam.pandey@xilinx.com>)
-        id 1pNYfj-0008IC-AG; Thu, 02 Feb 2023 04:26:35 -0800
-Received: by xhdvnc103.xilinx.com (Postfix, from userid 13245)
-        id 822FB1055BA; Thu,  2 Feb 2023 17:56:34 +0530 (IST)
-From:   Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-To:     <nicolas.ferre@microchip.com>, <claudiu.beznea@microchip.com>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <andrew@lunn.ch>
-CC:     <git@amd.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-Subject: [PATCH] net: macb: Perform zynqmp dynamic configuration only for SGMII interface
-Date:   Thu, 2 Feb 2023 17:56:19 +0530
-Message-ID: <1675340779-27499-1-git-send-email-radhey.shyam.pandey@amd.com>
-X-Mailer: git-send-email 2.1.1
+        Thu, 2 Feb 2023 07:27:12 -0500
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE5E51555C;
+        Thu,  2 Feb 2023 04:27:07 -0800 (PST)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 312BUPKm026936;
+        Thu, 2 Feb 2023 13:26:44 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=Mw+N7TEGy05SvmwycC0dGQdQOuDcVYkf3U7In0Q6HSY=;
+ b=dUJllfI2kLaMSbNxYx4Gh+cwh71Hp+zjd0UY5aGq/Gyb+bc8UjZy96fbqm0aLXeGSp8T
+ UWaFom8rtKttrd3t4ApvmVK90TxMjyL7U8fCvl3VesRva8sGHh08QdzNmWZTglcrJ+I4
+ IISwNw1LcxuvWyNtq+7kvRfFOTrFh90mGzxqTU5Bxns9SuaKNG9byO8JWIthiZ5hNb3b
+ A8RA/9kzHF9C2DXxKP9zrtuqZ/atDbZYvlKMzSS8yG8ick1DEs1PoFt6IME9wI+s9Lil
+ 9CpLXv3LTlbSM3GrkFg6QRtJlZObn/FHSQhLDIMwchQLUxhFgC3luveOGXnYSHeoeKwK bw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3nfn3dgrth-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Feb 2023 13:26:44 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E5A88100034;
+        Thu,  2 Feb 2023 13:26:42 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A7293216EE6;
+        Thu,  2 Feb 2023 13:26:42 +0100 (CET)
+Received: from [10.201.21.93] (10.201.21.93) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Thu, 2 Feb
+ 2023 13:26:42 +0100
+Message-ID: <4b616f6c-2df3-e2c5-162e-356111d18bb9@foss.st.com>
+Date:   Thu, 2 Feb 2023 13:26:41 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM3NAM02FT020:EE_|SA1PR02MB8494:EE_
-X-MS-Office365-Filtering-Correlation-Id: b7554366-4873-42e9-ff2a-08db0518bae8
-X-MS-Exchange-SenderADCheck: 0
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: FQRyq6fwZ4M3qnJRhXdfGZKdwrpiFoUnkqWRmgPycKWnS+eLcC04XZSJW9zu2fq/xnaFic0lfsZ+iYj//0d7o0VdDR0yONE07AfhRWDee0uXxKY8EJkMLXcn73/mLPzdeGZaNMT2cBmVJWVuTNE1wROIEjOmE75lBeu+LVchF1C11LS8uLKi3VLikqLv6Uhau15+Me+HES7PayoJsr2TaYHgmMDgdRfLJL2ZRJGJMmEXyWICVFGBAUEbCVX3raX+kir5oSKAPkEbsKpjHn8PZ1UAp9iVEbuw17q/OFPdvun0KWOTuMqICccdKGp7D0LiL8iMJttZwLjdspuOZIH7SbvS6mFGUGBOojOaChlxjusiPIhrms29aBuKRTfBwEme758BO/76X60IhyL7UmESvSWmLJzET+WuCNuaofP0O8XUZfAj44plq3bCr5javd1Mbl+gfcrIkJRnV/TuE98QXfxxXAhcPlEIExhm9f1r3489igVJ+BrmbTFVxC85nPU/sOtks7njIw8hqWSI0U+O8Alpv0Tl0WQUZpKCxnDpwWCPttSZQvcTQUuwo+zdFroCIhb37gOFSVBgA9Hff8TvcNQdljgJHhILz50inmxi4EgagOdeDx88KM5OTtrVZfliQqy0hiFfcW56pqtFVt5my0UwyTFvJ7VVUrhF9xesvq/oJWOD8G/DkutmGLjLmg3ZFjJ/0BsWJXSStrkcV06sjXYHfwUsGqKPWbLKTHvTpb0=
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230025)(39860400002)(346002)(396003)(136003)(376002)(451199018)(40470700004)(46966006)(36840700001)(5660300002)(7416002)(40480700001)(36756003)(36860700001)(2906002)(82740400003)(7636003)(40460700003)(47076005)(336012)(42882007)(6266002)(2616005)(26005)(186003)(356005)(82310400005)(83170400001)(83380400001)(54906003)(110136005)(42186006)(70206006)(70586007)(478600001)(6666004)(8676002)(316002)(41300700001)(4326008)(8936002)(102446001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Feb 2023 12:26:37.5461
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b7554366-4873-42e9-ff2a-08db0518bae8
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT020.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR02MB8494
-X-Spam-Status: No, score=1.1 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
-        DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] ARM: dts: stm32: Update part number NVMEM description on
+ stm32mp131
+To:     Patrick Delaunay <patrick.delaunay@foss.st.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+References: <20230118134948.1.Ica923e4a2407c976dcf3d65c266c27c883734dd8@changeid>
+Content-Language: en-US
+From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
+In-Reply-To: <20230118134948.1.Ica923e4a2407c976dcf3d65c266c27c883734dd8@changeid>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.201.21.93]
+X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-02_04,2023-02-02_01,2022-06-22_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In zynqmp platforms where firmware supports dynamic SGMII configuration
-but has other non-SGMII ethernet devices, it fails them with no packets
-received at the RX interface.
+On 1/18/23 13:49, Patrick Delaunay wrote:
+> The STM32MP13x Device Part Number (also named RPN in reference manual)
+> only uses the first 12 bits in OTP4, all the other bit are reserved and
+> they can be different of zero; they must be masked in NVMEM result, so
+> the number of bits must be defined in the nvmem cell description.
+> 
+> Fixes: 1da8779c0029 ("ARM: dts: stm32: add STM32MP13 SoCs support")
+> Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
+> ---
+> 
+>   arch/arm/boot/dts/stm32mp131.dtsi | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/arm/boot/dts/stm32mp131.dtsi b/arch/arm/boot/dts/stm32mp131.dtsi
+> index f50051e81ee3..2f186a0ae92e 100644
+> --- a/arch/arm/boot/dts/stm32mp131.dtsi
+> +++ b/arch/arm/boot/dts/stm32mp131.dtsi
+> @@ -1233,6 +1233,7 @@ bsec: efuse@5c005000 {
+>   
+>   			part_number_otp: part_number_otp@4 {
+>   				reg = <0x4 0x2>;
+> +				bits = <0 12>;
+>   			};
+>   			ts_cal1: calib@5c {
+>   				reg = <0x5c 0x2>;
+Applied on stm32-next.
 
-To fix this behaviour perform SGMII dynamic configuration only
-for the SGMII phy interface.
-
-Fixes: 32cee7818111 ("net: macb: Add zynqmp SGMII dynamic configuration support")
-Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
----
- drivers/net/ethernet/cadence/macb_main.c | 31 ++++++++++++------------
- 1 file changed, 16 insertions(+), 15 deletions(-)
-
-diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
-index 72e42820713d..6cda31520c42 100644
---- a/drivers/net/ethernet/cadence/macb_main.c
-+++ b/drivers/net/ethernet/cadence/macb_main.c
-@@ -4627,25 +4627,26 @@ static int init_reset_optional(struct platform_device *pdev)
- 		if (ret)
- 			return dev_err_probe(&pdev->dev, ret,
- 					     "failed to init SGMII PHY\n");
--	}
- 
--	ret = zynqmp_pm_is_function_supported(PM_IOCTL, IOCTL_SET_GEM_CONFIG);
--	if (!ret) {
--		u32 pm_info[2];
-+		ret = zynqmp_pm_is_function_supported(PM_IOCTL, IOCTL_SET_GEM_CONFIG);
-+		if (!ret) {
-+			u32 pm_info[2];
-+
-+			ret = of_property_read_u32_array(pdev->dev.of_node, "power-domains",
-+							 pm_info, ARRAY_SIZE(pm_info));
-+			if (ret) {
-+				dev_err(&pdev->dev, "Failed to read power management information\n");
-+				goto err_out_phy_exit;
-+			}
-+			ret = zynqmp_pm_set_gem_config(pm_info[1], GEM_CONFIG_FIXED, 0);
-+			if (ret)
-+				goto err_out_phy_exit;
- 
--		ret = of_property_read_u32_array(pdev->dev.of_node, "power-domains",
--						 pm_info, ARRAY_SIZE(pm_info));
--		if (ret) {
--			dev_err(&pdev->dev, "Failed to read power management information\n");
--			goto err_out_phy_exit;
-+			ret = zynqmp_pm_set_gem_config(pm_info[1], GEM_CONFIG_SGMII_MODE, 1);
-+			if (ret)
-+				goto err_out_phy_exit;
- 		}
--		ret = zynqmp_pm_set_gem_config(pm_info[1], GEM_CONFIG_FIXED, 0);
--		if (ret)
--			goto err_out_phy_exit;
- 
--		ret = zynqmp_pm_set_gem_config(pm_info[1], GEM_CONFIG_SGMII_MODE, 1);
--		if (ret)
--			goto err_out_phy_exit;
- 	}
- 
- 	/* Fully reset controller at hardware level if mapped in device tree */
--- 
-2.25.1
-
+Thanks.
+Alex
