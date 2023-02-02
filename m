@@ -2,176 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E813B6886EB
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 19:43:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C152688717
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 19:50:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232997AbjBBSnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 13:43:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53630 "EHLO
+        id S232435AbjBBSuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 13:50:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232922AbjBBSnq (ORCPT
+        with ESMTP id S231546AbjBBSur (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 13:43:46 -0500
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C55BF5454F;
-        Thu,  2 Feb 2023 10:43:15 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 8123A3200645;
-        Thu,  2 Feb 2023 13:42:35 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Thu, 02 Feb 2023 13:42:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        invisiblethingslab.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1675363355; x=
-        1675449755; bh=lg2mMVgKWzumdcP+F9hZgcsYrteBCJhK/JelW6EYdVY=; b=C
-        uTXDseVzBiQj9h2D+NuYP2jUT0tW3Lmilaa0/HVSPpcoiD3KfygKzgQY6EimkjGJ
-        r5FPB9IdV+dObh+fV0OrZLfZju61Sb6vtG1NmYLcIF3/TDhRTlZSI3Pu/JQhgjs5
-        zeRqriMqf8Jbp0rN18pCjM+1Lt5t/VTltANRbn4K9r5dCYs5JqXLdqLwY0TsTT3j
-        31hBdBZCBzFrcgq7waSac0sKHGrR/49IS6TWidI6ddBpWjEPzPR7SFcCRg6b4FUR
-        GRYPIRccsAsOCVdMLmydp4wk+cRTUS5Xxon9Fq4sn8BQsZP+FfM/yxM/3FqncdQ2
-        BPo8XZ+FTMxYV+HznS63Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1675363355; x=1675449755; bh=lg2mMVgKWzumdcP+F9hZgcsYrteB
-        CJhK/JelW6EYdVY=; b=cxgzpT9otQWxsLIA+yjsDC7ZP5F0KwVUpP3jph2vdxZ5
-        +mitzO+3QYTvVvmnpmL8EKvzBAOOpiKA0KefZzv7ciC8KpwXn3TYPeIYKEQpHe7O
-        H0pbjMXOqtg5yoRYP3hsvSdXQz7CwXFX/HIQ7fJ5wURTZGtn01qKIf1v7RCIoaw9
-        KzXvF2sdBjzYNlhKlrJ+2dde8e9oV5rizIAthd4k6Q22qZzoKVRj6R2UMwQOFMnW
-        BVM5W5A2aZAJVzpHPoIqj9GNAFpK/H+Rbs09rSxRASrPjVDyjJtMFuZop9KbSzaj
-        2PUaxc67TE8Tua6UJ1edW8stqxg4x7nrkZ/k9QJsUQ==
-X-ME-Sender: <xms:GgTcY74wnNYRNp3neyFioCfGY8gsdr3kkbZ9pBLxQDI8nBScyPiT-A>
-    <xme:GgTcYw6Raa_0cT5CF0vH53DC7qhHu1c4ldmSTDbYu_ApbkSwpwgEOQ6B8dI-8kN9-
-    meCH_9gcInE36s>
-X-ME-Received: <xmr:GgTcYyevjVy9ZEXxI7N76kG2I57m3hoyPOkTgeDH3NCz60GkNk1wkK_tBk4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudefkedgudduvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehgtderredttdejnecuhfhrohhmpeffvghm
-    ihcuofgrrhhivgcuqfgsvghnohhurhcuoeguvghmihesihhnvhhishhisghlvghthhhinh
-    hgshhlrggsrdgtohhmqeenucggtffrrghtthgvrhhnpedvjeetgeekhfetudfhgfetffeg
-    fffguddvgffhffeifeeikeektdehgeetheffleenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpeguvghmihesihhnvhhishhisghlvghthhhinhhg
-    shhlrggsrdgtohhm
-X-ME-Proxy: <xmx:GgTcY8IJiELPiUPl16hearWJ8KrYflnS8vJ3WcyZZjvqvQzEHt65DA>
-    <xmx:GgTcY_I3zAOvarV3gwgLMxeoGw3-GDJ7cFbqKY6IHEJ773hLxHQ2wg>
-    <xmx:GgTcY1zaNQiMs9pq8JTL8Jk0u2h4Pdy67KTvedibqCA-tnGC7CQuEA>
-    <xmx:GwTcY8p6sUmqTz0YfWHoddsK_tGu_jBhadfD6KT9DQiI0nHglxbFRw>
-Feedback-ID: iac594737:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 2 Feb 2023 13:42:33 -0500 (EST)
-Date:   Thu, 2 Feb 2023 13:41:29 -0500
-From:   Demi Marie Obenour <demi@invisiblethingslab.com>
-To:     Mike Snitzer <snitzer@kernel.org>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>,
-        Alasdair Kergon <agk@redhat.com>,
-        Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>, Juergen Gross <jgross@suse.com>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xen-devel@lists.xenproject.org, dm-devel@redhat.com
-Subject: Re: [RFC PATCH 0/7] Allow race-free block device handling
-Message-ID: <Y9wEF3rWfpiCKc2i@itl-email>
-References: <20230126033358.1880-1-demi@invisiblethingslab.com>
- <Y9vp3XDEQAl7TLND@redhat.com>
+        Thu, 2 Feb 2023 13:50:47 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2F1B2D48
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 10:50:46 -0800 (PST)
+Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com [209.85.215.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 069C041AE5
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 18:41:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1675363300;
+        bh=5/sqWycvEAPjqsnTBo2U8a25upaJIykotUumaHLpuvI=;
+        h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
+         Content-Type:Date:Message-ID;
+        b=Jp0SLAwAjgWlgrMPH+V08scSUlhMWZhTGvHYNSIbXaetUh7lvWIc1MhmGvELSkuEB
+         QaSYL7Msya+q+q5GOjqSu11oStJJg598XFy4/e8idIXt0+GSsBSvuw8PV9HRfY+0Hr
+         IUsqPQnDK3p6jgmMY7lwfFJRYsuPwYPd8r9zpjfEPHEGTsKvNOu5F+dR98bWbI8adf
+         nFCG6+vzKNQzOVxybiwEa7DQyhLhT8CbcfNl8wHbuH6LX9CgpEmbxebjSjaoHr9SqK
+         G4IfBuJ3JF6URMLHPTUoaSe0p8sSANtyAeiobQx5/TxOVTs7jVAFHiJNGI1LxgRWYH
+         Nn8I2sxlUDhjw==
+Received: by mail-pg1-f197.google.com with SMTP id 127-20020a630685000000b004ec5996dcc0so1379926pgg.8
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 10:41:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:content-transfer-encoding:content-id:mime-version
+         :comments:references:in-reply-to:subject:cc:to:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5/sqWycvEAPjqsnTBo2U8a25upaJIykotUumaHLpuvI=;
+        b=5i/FmGmpoQOxb8nFmpuMymyhz/mKP/VfezGQXT/S21LRsZk60GmEGxWg/epRk4SZVW
+         l1HmW+UykdHFSg5DqdWytxfY7BWye8ua0IVtIVQg/zy+e/ACfKtyJkt7paOhhuS2QT24
+         jiofEojJ6uOIUl5rr+SuGDlthKyjztSc0wI9I2dWg8XwTL9Wb3G6QP/HEeraJrqeG3XU
+         i9fAmHU3N8zH9IKgVE+vj859YSFJ2raLtFoDtqa+M0coeiOfsWiNeO9p8VJGrvOkBSxy
+         OV4zwOdK/4ytZFSI2cqX9vzntBZE27JGApTxLEooW3+Veap0gMzS6RmuufMlu9CrRtR7
+         L+qg==
+X-Gm-Message-State: AO0yUKUqWoYexh2yJ8BwlqTxFBoBLiQ0vpQVeceqA81hzZ+d/lqjI1DK
+        DdvHdMxbtqpZThPWlALpAQW+RcIWG0UpNePsuR5+9hMhnaRhajJim1YEceDm7fmMR211NfoZolb
+        IoWhJELSfjrPs0x2YkOueurhu3ulxl1a3smBMvXAVNQ==
+X-Received: by 2002:a17:90b:1d82:b0:22c:169b:ec44 with SMTP id pf2-20020a17090b1d8200b0022c169bec44mr7704078pjb.31.1675363298639;
+        Thu, 02 Feb 2023 10:41:38 -0800 (PST)
+X-Google-Smtp-Source: AK7set/iID5T6tsp9eWmtXNZbOFdFo2GTi9PEDvqAxvwzPCco64WaniWJlyIzIuuMqZESDriKrnLfQ==
+X-Received: by 2002:a17:90b:1d82:b0:22c:169b:ec44 with SMTP id pf2-20020a17090b1d8200b0022c169bec44mr7704065pjb.31.1675363298369;
+        Thu, 02 Feb 2023 10:41:38 -0800 (PST)
+Received: from famine.localdomain ([50.125.80.253])
+        by smtp.gmail.com with ESMTPSA id b1-20020a17090aa58100b00229d7f2abd4sm163842pjq.54.2023.02.02.10.41.37
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 02 Feb 2023 10:41:37 -0800 (PST)
+Received: by famine.localdomain (Postfix, from userid 1000)
+        id 6FD985FEAC; Thu,  2 Feb 2023 10:41:37 -0800 (PST)
+Received: from famine (localhost [127.0.0.1])
+        by famine.localdomain (Postfix) with ESMTP id 680F29FB5C;
+        Thu,  2 Feb 2023 10:41:37 -0800 (PST)
+From:   Jay Vosburgh <jay.vosburgh@canonical.com>
+To:     Qi Zheng <zhengqi.arch@bytedance.com>
+cc:     gregkh@linuxfoundation.org, rafael@kernel.org, vfalico@gmail.com,
+        andy@greyhouse.net, vireshk@kernel.org, nm@ti.com,
+        sboyd@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH 2/3] bonding: fix error checking in bond_debug_reregister()
+In-reply-to: <20230202093256.32458-3-zhengqi.arch@bytedance.com>
+References: <20230202093256.32458-1-zhengqi.arch@bytedance.com> <20230202093256.32458-3-zhengqi.arch@bytedance.com>
+Comments: In-reply-to Qi Zheng <zhengqi.arch@bytedance.com>
+   message dated "Thu, 02 Feb 2023 17:32:55 +0800."
+X-Mailer: MH-E 8.6+git; nmh 1.6; Emacs 29.0.50
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="0LK2ZHUlLOwPgDgy"
-Content-Disposition: inline
-In-Reply-To: <Y9vp3XDEQAl7TLND@redhat.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <20120.1675363297.1@famine>
+Content-Transfer-Encoding: quoted-printable
+Date:   Thu, 02 Feb 2023 10:41:37 -0800
+Message-ID: <20121.1675363297@famine>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Qi Zheng <zhengqi.arch@bytedance.com> wrote:
 
---0LK2ZHUlLOwPgDgy
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 2 Feb 2023 13:41:29 -0500
-From: Demi Marie Obenour <demi@invisiblethingslab.com>
-To: Mike Snitzer <snitzer@kernel.org>
-Cc: Jens Axboe <axboe@kernel.dk>,
-	Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>,
-	Alasdair Kergon <agk@redhat.com>,
-	Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>,
-	Juergen Gross <jgross@suse.com>, linux-block@vger.kernel.org,
-	linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
-	dm-devel@redhat.com
-Subject: Re: [RFC PATCH 0/7] Allow race-free block device handling
+>Since commit ff9fb72bc077 ("debugfs: return error values,
+>not NULL") changed return value of debugfs_rename() in
+>error cases from %NULL to %ERR_PTR(-ERROR), we should
+>also check error values instead of NULL.
+>
+>Fixes: ff9fb72bc077 ("debugfs: return error values, not NULL")
+>Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
 
-On Thu, Feb 02, 2023 at 11:50:37AM -0500, Mike Snitzer wrote:
-> On Wed, Jan 25 2023 at 10:33P -0500,
-> Demi Marie Obenour <demi@invisiblethingslab.com> wrote:
->=20
-> > This work aims to allow userspace to create and destroy block devices
-> > in a race-free and leak-free way,
->=20
-> "race-free and leak-free way" implies there both races and leaks in
-> existing code. You're making claims that are likely very specific to
-> your Xen use-case.  Please explain more carefully.
+Acked-by: Jay Vosburgh <jay.vosburgh@canonical.com>
 
-Will do in v2.
+>---
+> drivers/net/bonding/bond_debugfs.c | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
+>
+>diff --git a/drivers/net/bonding/bond_debugfs.c b/drivers/net/bonding/bon=
+d_debugfs.c
+>index 4f9b4a18c74c..594094526648 100644
+>--- a/drivers/net/bonding/bond_debugfs.c
+>+++ b/drivers/net/bonding/bond_debugfs.c
+>@@ -76,7 +76,7 @@ void bond_debug_reregister(struct bonding *bond)
+> =
 
-> > and to allow them to be exposed to
-> > other Xen VMs via blkback without leaks or races.  It=E2=80=99s marked =
-as RFC
-> > for a few reasons:
-> >=20
-> > - The code has been only lightly tested.  It might be unstable or
-> >   insecure.
-> >=20
-> > - The DM_DEV_CREATE ioctl gains a new flag.  Unknown flags were
-> >   previously ignored, so this could theoretically break buggy userspace
-> >   tools.
->=20
-> Not seeing a reason that type of DM change is needed. If you feel
-> strongly about it send a separate patch and we can discuss it.
+> 	d =3D debugfs_rename(bonding_debug_root, bond->debug_dir,
+> 			   bonding_debug_root, bond->dev->name);
+>-	if (d) {
+>+	if (!IS_ERR(d)) {
+> 		bond->debug_dir =3D d;
+> 	} else {
+> 		netdev_warn(bond->dev, "failed to reregister, so just unregister old o=
+ne\n");
+>-- =
 
-Patch 2/7 is the diskseq change.  v2 will contain a revised and tested
-version with a greatly expanded commit message.
-
-> > - I have no idea if I got the block device reference counting and
-> >   locking correct.
->=20
-> Your headers and justifcation for this line of work are really way too
-> terse. Please take the time to clearly make the case for your changes
-> in both the patch headers and code.
-
-I will expand the commit message in v2, but I am not sure what you want
-me to add to the code comments.  Would you mind explaining?
---=20
-Sincerely,
-Demi Marie Obenour (she/her/hers)
-Invisible Things Lab
-
---0LK2ZHUlLOwPgDgy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEEdodNnxM2uiJZBxxxsoi1X/+cIsEFAmPcBBUACgkQsoi1X/+c
-IsEkFA/9GXzWAuv/0q2ZJqJ64sluumHTrJNuenjIiibpb2PmaUs036H9r2jQYDI4
-Lsxw3M3/9AYwGFpj/mhV5uBJutDasM3xTROoY5VqdO6vTeueaXUCefc+CGNzXNzZ
-3o018mxFSPwKDaOBrCsiOuNsHtVzaOnO/TGuBW3HcYafDKFTWhDoprhfzL9mkwBY
-21Ly74WUVB+S3fhURF+XgGoPKlQlaI8u6uJvW+wPQYei/LZqm5Gcpj5sqIhomFgM
-yTA6l097aOj6ULLkScDW91sj30OJLc7qN5V+FtU27tRZWEzIcY5cl4/IL9KcAfGi
-bcQcQ2Z7WPcjqLLuUxB2C5dfR6id/CmDnplOBRD0TAVzbUCJCEciClYHxPxljE6q
-/mSqAfuBhO3ryA7z8xMYsYVz0SpdgnQqXXhxaZslSA4r0ACdEsytMu0YPPpIby7M
-BjV5Sx2xuLaw/McuiptVktbvKknJAqw79ZecjU03d3Ga3/sA8dZC4JBGRj90cOMT
-WPHUORPPmepxyX6n28rH/mdcsFDAzllbi37fReeJCKEEmrT5aCa8pyry1Rl2V6fi
-ub+T46oghFHgl63y0Timr6eamgqV3CHGczHiKMcA0Mclv4shWUyaId0bzAGn/RLR
-vpbwX0CGu7m1vnqsskbtLq1ThblONmQWtVFcFrqykfZMeqs2KtM=
-=aeu1
------END PGP SIGNATURE-----
-
---0LK2ZHUlLOwPgDgy--
+>2.20.1
+>
