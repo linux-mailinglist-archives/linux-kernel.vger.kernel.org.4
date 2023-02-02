@@ -2,112 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70617688993
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 23:13:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 669CE688999
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 23:15:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232790AbjBBWNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 17:13:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39602 "EHLO
+        id S232445AbjBBWPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 17:15:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232445AbjBBWNN (ORCPT
+        with ESMTP id S229645AbjBBWPx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 17:13:13 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 633B66D05C
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 14:13:12 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id k8-20020a05600c1c8800b003dc57ea0dfeso4765074wms.0
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 14:13:12 -0800 (PST)
+        Thu, 2 Feb 2023 17:15:53 -0500
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC9013D68
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 14:15:52 -0800 (PST)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-50aa54cc7c0so45506807b3.8
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 14:15:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=u0GguDQPT3zLu/8MG92OfTe7PbfZZIh+XyJ3Yv2nDGw=;
-        b=WBsZPyJtSM1V86ca5l7Q9d4dBuslBYDnXyWaeVa2C2JiwcXjxM3fo9VyVR/K7fayeU
-         WL71Z4AWGoWCxQvI4kWWf4fkyCEZWOJQJEM9BM636cNwyeSPs61So9+uhqa980I+qe2Y
-         gNEt2o5RaXB2f+pN+U33YYnZOEvkXMlQyi966IDZjLDNJCqwQ+OhzxdA6r8r0NH/ycCK
-         KgkqHIQY0DgZqw/zc/Zj+aGC8zBnwnYfK5nmdJldB8e3R78b1Us8d6B/bTaXFW0FIM4A
-         b0lPAbbRwJVFL0yDlAJZQ//IJHIxWTWwpWLcCMUqfZ1mrpkvOqKWdfRYPSWSjZNdZUDg
-         4zmQ==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=19V0e97JoWZ67eUcIY5neNgqP4C3AsW402fTkFZrQZk=;
+        b=AfeZaaL1aLPhIB152+5ci5G7/wre5jroesPOHlH7PgLb2mHXiR8n/aS7MZach7yvwS
+         Qk21Y8FGM3xZmNh/ahI/f2VsPSR0o20RhS/RIM2JttgspyDkkgjXvh0YWao6IUtfdUhJ
+         Vz99yX7Q7qsxM2iWIB3IXB738UfGFHQ+RG43UarZoneNAapvuao0q6lh44MD5GY/rZTw
+         BYYIyOkpA6kEMBQVb26T0yAdhdv3bgpTgn7vaxxLN/hgf6nxLFaraIZjM7FaTCQBE2ga
+         B3s9HEZrJS7UojumIuGVBKBJgdPx0u+kGB4bqLbIDLFXJcYa12ZNF2IG6btWQmMXjqYG
+         OKHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=u0GguDQPT3zLu/8MG92OfTe7PbfZZIh+XyJ3Yv2nDGw=;
-        b=Ybwt5mNjoCZpryaPrJWxc9n1N+w5hzuDpsRVbJR8BBGht4b0Ib0QXSzpEW5XH+qeTL
-         n+sz9nOBA6M/LxghQMYQIECwYAzZtOhMDQcmzkfkg9rSYMRAZV5mgufoN62VvWjXxRNO
-         jFcYlQst0umjEmWbCHPuPSNgsg9pqGvwJXOG+RyIyLvTTC72VFEnjXzwF+UHk9gkwSd2
-         q3/lYt9Tte638NWPJnHlg3gxo0uTZz4umWK27WQbowX/8NrBFTvYsRNWrxGMi1dupDyo
-         b87/WL7U2yaoguStUhsKy5cdirzh654umoE2IKECXq04oLyUDohy2eEKLfIWyDUFTAs6
-         3NYg==
-X-Gm-Message-State: AO0yUKWJZVOPQrqcGdplD3fHiMwftmRoU1XqBaFIB+Wp5TZMYGObLIN8
-        cv7ZClCo9jSi6jOdo7Du16U47mrIrMI=
-X-Google-Smtp-Source: AK7set/nXhbianujQl5UY3iXTQtvbalIwk7GTrBsr2v3khiFUhckhvAdEYN1g+jJ7C46ydLJYuaQmA==
-X-Received: by 2002:a05:600c:4f03:b0:3df:9858:c036 with SMTP id l3-20020a05600c4f0300b003df9858c036mr3066462wmq.11.1675375990816;
-        Thu, 02 Feb 2023 14:13:10 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id i10-20020a05600c354a00b003dd1c15e7fcsm6957128wmq.15.2023.02.02.14.13.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 14:13:10 -0800 (PST)
-Date:   Fri, 3 Feb 2023 01:13:06 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     David Laight <David.Laight@aculab.com>
-Cc:     'Guru Mehar Rachaputi' <gurumeharrachaputi@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] staging: pi433: modify bit_rate from u16 to u32
-Message-ID: <Y9w1crEwTInJzlWE@kadam>
-References: <Y9h42l/8EcPqn63x@combine-ThinkPad-S1-Yoga>
- <Y9ilj812USHrSXe+@kroah.com>
- <Y9jrOKMGl7ITKxhP@combine-ThinkPad-S1-Yoga>
- <19e492521b4a4d31aa13c45e8616689b@AcuMS.aculab.com>
- <Y9pno7gZHa+r/Rg3@kadam>
- <08b38578bb0f4088aeedbf4b179d9c59@AcuMS.aculab.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=19V0e97JoWZ67eUcIY5neNgqP4C3AsW402fTkFZrQZk=;
+        b=GflmNx6GyBcl5qzYuoHdklsaoKAUeKPjk/MYiBxcGFgL7MhTjeQHwd7haY5LGcPcQ3
+         RDJvAbiAW33A8IeQ7YjH345OqB8iOreYqyBQ9PqcaDDTwlX6gXxsbbo5UzUkBPrtfpxr
+         KhskGErWlr+9AdNVjIGDY9iP34YtyIp2TTYWDsd0Er6U1+mSRZFEfut39chmFxKtU7XM
+         3ViQrKQefpTaHBj2zAkmkVFUtch2tLN3mdZ6EzqBbjFBpsP96RODxW2+EAXj9+BvL8KX
+         gCZ1vFSmmraOYnl7BXu6QrfaaHcYx5aWxX6bmRQ2ZfpDMZVD9R2GBBaCfNKcQmz1Bgcz
+         ky8g==
+X-Gm-Message-State: AO0yUKXHvJMGlPw6eETH8M/ryNxv1uo9vXEzviJl/EpZPib7Ke3i+cZz
+        dlSxdooOPK9feWTkg4fqlrjkS6LdoKgStJOEK9XdnZATvFZbeA==
+X-Google-Smtp-Source: AK7set8pUL+pN6rjicEsRGrTUBOiwilyWNtzSCpLc1Ftf2R+TSJHgSqaJ1+Xyu3Jbt4bc8Psfldvzhca+5psDBZMHRA=
+X-Received: by 2002:a05:690c:23c1:b0:4dc:818f:f9f2 with SMTP id
+ do1-20020a05690c23c100b004dc818ff9f2mr759395ywb.469.1675376151782; Thu, 02
+ Feb 2023 14:15:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <08b38578bb0f4088aeedbf4b179d9c59@AcuMS.aculab.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230202153235.2412790-1-gregkh@linuxfoundation.org> <20230202153235.2412790-5-gregkh@linuxfoundation.org>
+In-Reply-To: <20230202153235.2412790-5-gregkh@linuxfoundation.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 2 Feb 2023 23:15:40 +0100
+Message-ID: <CACRpkdbDihXa8DRmF_XbRvh3hQ_4g8c6eQQbWRRRhEn_MuLBjA@mail.gmail.com>
+Subject: Re: [PATCH 05/13] USB: fotg210: fix memory leak with using debugfs_lookup()
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 10:02:25PM +0000, David Laight wrote:
-> From: Dan Carpenter
-> > Sent: 01 February 2023 13:23
-> > 
-> > On Wed, Feb 01, 2023 at 12:34:50PM +0000, David Laight wrote:
-> > > In reality having a uapi structure with embedded padding should
-> > > be banned.
-> > > But that would need a compiler attribute to enforce it.
-> > 
-> > It would be simple enough to grep the names of all the UAPI struct and
-> > use pahole to make a list of the existing structs which have holes.
-> > Then re-run the script every week and complain when new holey struct
-> > types are added.
-> > 
-> > You could do a similar thing with Smatch looking at copy_to/from_user()
-> > struct types.
-> 
-> Would it be possible to add aa attribute and check to sparse?
-> 
-> Might persuade people to use it instead of 'packed' for structures
-> that map defined byte layouts and so mustn't be holey - but are
-> never actually misaligned in memory.
+On Thu, Feb 2, 2023 at 4:33 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 
-I mean, it's kind of a before and after thing where we have to allow
-all the existing code and complain about new code.  But yeah, we could
-use the __user annotation as well.  If we encountered a
-`struct oldabi_stat64 __user *statbuf` then complain if oldabi_stat64
-had a hole.  At the end, delete all the warnings that existed in the
-previously tested kernel.
+> When calling debugfs_lookup() the result must have dput() called on it,
+> otherwise the memory will leak over time.  To make things simpler, just
+> call debugfs_lookup_and_remove() instead which handles all of the logic
+> at once.
+>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: linux-usb@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-regards,
-dan carpenter
+Thanks Greg!
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
+Yours,
+Linus Walleij
