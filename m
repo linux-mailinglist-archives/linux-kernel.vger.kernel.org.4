@@ -2,96 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A101D687DE3
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 13:52:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28081687DEA
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 13:53:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232067AbjBBMwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 07:52:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51956 "EHLO
+        id S232124AbjBBMw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 07:52:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbjBBMwE (ORCPT
+        with ESMTP id S229666AbjBBMwz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 07:52:04 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E9A268A
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 04:52:03 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id e15so1994707ybn.10
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 04:52:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=iTEsYvNbhZUvr3t5FDyaBPDIayK5soN0V1YA6KoE95Q=;
-        b=PPfSS12X5711vg3bhuNrJmUVkzvhGet/0lNfQTXDPw/wtNntkEWqMG9cO2+AQaapQi
-         MZJcaRC71fY2ZMHLvVtk19QBWC1mCJPijp0uWxSPYRqKKnRf1wK8sVEE8LuBsjsuG+5t
-         x1Qfdfr93US48KlEdOPNzlN6NNSHJoWxD+ccOAxBTB+PoK6YHr6Fn8j8ialUwaevYP2c
-         aixY6bNdQwbQ+vFjTT8ZPOtdFdyJvVNLLrIZFSz/pqtkbGzYjg1HuIz6De2bTmz4GpwA
-         Qam0sl8kV1yAtcdu12tzoopbHGDis2sPmqKBDume7Nod8LxoXbavP03tvajPG2IFZ/lT
-         sPbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iTEsYvNbhZUvr3t5FDyaBPDIayK5soN0V1YA6KoE95Q=;
-        b=4TyHqNpDfOE8JX8DYWu5xQQcHYZLmODCzyv8RBsz+JbTmYAbkwwfFkLm4e2xW7KfLV
-         t36Zm71pmo0uUyNEzJXCG5eJcWnkQciwF2eCstjDOOQ0O6RG4970H3F+L9icOFfK4WIm
-         2+7RxFquvqkhwRhrmmMbDyL/rit3xN103HD0DZwm6qNEFpek+hp/gZAiIiEYyEgQ8LSK
-         M+owrsosHiuMizjNW2gglGbrquB99/bnaoYtGYoRcEkfnBDG0CxV7/xMEV0fGlCDej8c
-         UhTqBVrouPehTufx0DJkEBerbFecu4ksrUvn+Hr+NeKlurrHH7hfojKiSi9FVJvVR7kh
-         4f7g==
-X-Gm-Message-State: AO0yUKV1BR5sg7MMr9U7hxqRcVtYaSGpjjIue0KTsfpHYb3zpzUDZdUL
-        quSSjTCwhrKHTAfzT9UseeRp8KNHD853VWNeUR8smiua7+mC9A==
-X-Google-Smtp-Source: AK7set/IzybDVeByN7olzBbtRq2zPCd8ReB2ZColcl64XBQe7/HYO17UuFBtuhM1xYbR1EXmfXF7asG9PYGE8qn+MFw=
-X-Received: by 2002:a25:fe0a:0:b0:7ca:9b40:72a7 with SMTP id
- k10-20020a25fe0a000000b007ca9b4072a7mr435003ybe.130.1675342322566; Thu, 02
- Feb 2023 04:52:02 -0800 (PST)
+        Thu, 2 Feb 2023 07:52:55 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D55A7;
+        Thu,  2 Feb 2023 04:52:55 -0800 (PST)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 312C3gva028808;
+        Thu, 2 Feb 2023 12:52:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=fOUMm9vaY0LQvEz1no9qV2e22/3sAj99TdI12zctCso=;
+ b=aau+3DPTkYLZrJ/MhHlt00lxqX2MoJ77BRl4qNyWYi07HHFJcvyTggz/FyKIWXnWdLTZ
+ yNlhiyrBWIfQGLr71pnvFPY6m53gUd0CZIIeG9pdf7cGI7oHPDybVHN10ePkQRXxZZd4
+ ocWQ0dVDv/387PU74Aa2PgXi5wuMaT53mjNya4R4QCMGEBZTn/jkK/OAx/5tAx8Lcg/K
+ bMAX0ZCf0R6TWUOFaxQuh45FDCC5BP0so6OFSwwmMvEkiDO+81Y5T3Cn6jsKBwUXJMxH
+ ZBQCqhQT72b9qi9Ke/NOruwJtuK+ZEpUqt7KHjOqRKTVQ3X5YqwH4r9uiG4vChFnVdWK oQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ng78h1bqs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Feb 2023 12:52:51 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 312BJxOq019471;
+        Thu, 2 Feb 2023 12:52:50 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ng78h1bq9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Feb 2023 12:52:50 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 312A1TJN006508;
+        Thu, 2 Feb 2023 12:52:49 GMT
+Received: from smtprelay03.wdc07v.mail.ibm.com ([9.208.129.113])
+        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3ncvtmt8tf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Feb 2023 12:52:49 +0000
+Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
+        by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 312CqlVL12321518
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 2 Feb 2023 12:52:47 GMT
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 29E4B58053;
+        Thu,  2 Feb 2023 12:52:47 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C61315805D;
+        Thu,  2 Feb 2023 12:52:44 +0000 (GMT)
+Received: from [9.65.253.123] (unknown [9.65.253.123])
+        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Thu,  2 Feb 2023 12:52:44 +0000 (GMT)
+Message-ID: <ee256360-b35b-55c1-d25b-b7abb065df3a@linux.ibm.com>
+Date:   Thu, 2 Feb 2023 07:52:44 -0500
 MIME-Version: 1.0
-References: <20221207131731.1291517-1-william.qiu@starfivetech.com>
- <20221207131731.1291517-3-william.qiu@starfivetech.com> <CACRpkdYP7MokLdRtxX9w7p80c=wHDHsoTYWrU53CnpsZ7o6aGg@mail.gmail.com>
- <4529a646-1faf-c858-cfbe-1560ebeb1fba@starfivetech.com>
-In-Reply-To: <4529a646-1faf-c858-cfbe-1560ebeb1fba@starfivetech.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 2 Feb 2023 13:51:51 +0100
-Message-ID: <CACRpkdYAP_WYwfiFxXybqqa8OJw98cxUwJgW0RUCgLLGaV+LJQ@mail.gmail.com>
-Subject: Re: [PATCH v1 2/3] mmc: starfive: Add sdio/emmc driver support
-To:     William Qiu <william.qiu@starfivetech.com>
-Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-mmc@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jaehoon Chung <jh80.chung@samsung.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v2] vfio: fix deadlock between group lock and kvm lock
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>
+Cc:     "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "jgg@nvidia.com" <jgg@nvidia.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "farman@linux.ibm.com" <farman@linux.ibm.com>,
+        "pmorel@linux.ibm.com" <pmorel@linux.ibm.com>,
+        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
+        "frankja@linux.ibm.com" <frankja@linux.ibm.com>,
+        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "akrowiak@linux.ibm.com" <akrowiak@linux.ibm.com>,
+        "jjherne@linux.ibm.com" <jjherne@linux.ibm.com>,
+        "pasic@linux.ibm.com" <pasic@linux.ibm.com>,
+        "zhenyuw@linux.intel.com" <zhenyuw@linux.intel.com>,
+        "Wang, Zhi A" <zhi.a.wang@intel.com>,
+        "Christopherson, , Sean" <seanjc@google.com>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "intel-gvt-dev@lists.freedesktop.org" 
+        <intel-gvt-dev@lists.freedesktop.org>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230201192010.42748-1-mjrosato@linux.ibm.com>
+ <20230201162730.685b5332.alex.williamson@redhat.com>
+ <BN9PR11MB5276B8F3F6735FF2616128868CD69@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Language: en-US
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+In-Reply-To: <BN9PR11MB5276B8F3F6735FF2616128868CD69@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: XcjC1Kt46PxL2S8wVIGhF-mMiGdE2aU3
+X-Proofpoint-ORIG-GUID: o81pid3WShnfEElUozHn3d2Sh9_qJ-gl
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-02_04,2023-02-02_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ mlxlogscore=999 suspectscore=0 spamscore=0 priorityscore=1501
+ impostorscore=0 mlxscore=0 adultscore=0 lowpriorityscore=0 bulkscore=0
+ phishscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302020112
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 2, 2023 at 12:10 PM William Qiu
-<william.qiu@starfivetech.com> wrote:
-> On 2022/12/9 5:09, Linus Walleij wrote:
+On 2/1/23 11:10 PM, Tian, Kevin wrote:
+>> From: Alex Williamson <alex.williamson@redhat.com>
+>> Sent: Thursday, February 2, 2023 7:28 AM
+>>>
+>>> +#ifdef CONFIG_HAVE_KVM
+>>> +static bool vfio_kvm_get_kvm_safe(struct vfio_device *device, struct kvm
+>> *kvm)
+>>
+>> I'm tempted to name these vfio_device_get_kvm_safe() and only pass the
+>> vfio_device, where of course we can get the kvm pointer from the group
+>> internally.
+>>
+> 
+> I have a different thought. In the end the cdev series also need the similar
+> safe get/put logic then it's better to keep it in vfio_main.c called by
+> the group/cdev path individually.
 
-> >> +       priv->syscon_offset = args.args[0];
-> >> +       priv->syscon_shift  = args.args[1];
-> >> +       priv->syscon_mask   = args.args[2];
-> >
-> > Why should these three things be in the device tree instead of being derived
-> > from the compatible-string or just plain hard-coded as #defines?
-> > I don't get it.
-> >
-> Hi Linus,
->
-> I'm sorry to bother you, but as for the definition of syscon, after discussing with
-> my colleagues, we think it is easier to distinguish SDIO0 and SDIO1 by defining it in
-> the device tree, and the code compatibility is better.
-
-OK sounds good looking forward to seeing the result :)
-
-Yours,
-Linus Walleij
+Ah, I hadn't considered the cdev series - OK, I can move the functions back into vfio_main and externalize both via drivers/vfio/vfio.h so they can be called from group.c for this fix and then available to vfio_main.c already for cdev.
