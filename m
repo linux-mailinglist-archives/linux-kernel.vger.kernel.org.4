@@ -2,209 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEC696883A3
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 17:04:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECF9268839F
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 17:03:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230317AbjBBQEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 11:04:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43690 "EHLO
+        id S232625AbjBBQD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 11:03:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232882AbjBBQEi (ORCPT
+        with ESMTP id S232178AbjBBQD0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 11:04:38 -0500
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB28568ACF
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 08:04:34 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 8CA5F3200488;
-        Thu,  2 Feb 2023 11:04:33 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Thu, 02 Feb 2023 11:04:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vda.io; h=cc:cc
-        :content-transfer-encoding:date:date:from:from:in-reply-to
-        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
-         s=fm1; t=1675353873; x=1675440273; bh=fPMUagweHBbVyfH14G8PdZBkK
-        cUxF349AZ7jhefIG2k=; b=jfZbERYQN6HgYy4MiUpq0CGLKLE6/oeFvGtMntOZq
-        DYrj7QDFG6Dbs5ecpUU/uSQgNYPK0sI4skJfH3LtkbRcCr5s1otaYER7PV8aiedl
-        8yaLUkSIrN4x5e2p20FArwlpfaegJsV0mXBM0/9RsIwcfYIIAS63meF9lVzk+uxu
-        AZCGqr3V2XA3+PxReuUtPjo2zYu/xjCr4sgkbPuIfACpOJnFq4oIjnJKH5OXD8nP
-        9KkHDzF3IrOMssYC0PMQOlQ9c4dmFby+dnZWFgrYFfS1iTqyaorTCcmbInMjHhPR
-        PjjqdsYYUpkwqIXn9MgNcURsFjFNuC67I1UlF7ayjQbzQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1675353873; x=1675440273; bh=fPMUagweHBbVyfH14G8PdZBkKcUxF349AZ7
-        jhefIG2k=; b=flMzm0Iq4vLFjhksZUgViI/2wCOFE2FfPryZL8JEplhn7CaLlmK
-        fzU4BH2BsyisD+VYowmAxdy63oSBvYLYK/SEMwIN1r4RNmHO3h1s+UStXUx/3GsI
-        NpfN3YOjeP81UyCFbySyhVCmVx0QKHKacBXkj2eqFAZJ8h2qduNs5Q2PZhNIaKAo
-        Ip7fRillu6UQq32/4m85+53F62pWCYk0/ELfbODzPdbdDXR24MTY+7yi1M8GIMbN
-        iy5pqTXgy9UBsLCWXgug8OtaDpI8wJnN9cxiRjcLZm99D/6OB36YJBBsPdcKqIdB
-        s/q2qtenMzIR/uoVRa2Mp8KH3EUWH3oB4MA==
-X-ME-Sender: <xms:EN_bYzImusq_0GDIEPj3puEvPY1fBb0B4aYalwdWT5GEo_KXqXdjFg>
-    <xme:EN_bY3JLoWnxMuYZzGTNSOJyaHiKilRBPjcBQEi9NnxUjwRFFFy6evtyrgBMogR-G
-    jJrQfI_st297iuGQOQ>
-X-ME-Received: <xmr:EN_bY7vj7UO2FLg1laCiIDPSYEdxETdz2zPCTClyFoF2B-Bk88J7YlBAL8tDZJ3Lwb17cwL4PTMOr69mA-ujWvHHSpFX>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudefkedgkedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
-    ertddtnecuhfhrohhmpeggihhntggvnhhtucffrghgohhnnhgvrghuuceovhesvhgurgdr
-    ihhoqeenucggtffrrghtthgvrhhnpeeifefhieeiudeuffeukefhtedtffegveelkeefff
-    dthfefkedthefgjeeuledutdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhep
-    mhgrihhlfhhrohhmpehvsehvuggrrdhioh
-X-ME-Proxy: <xmx:EN_bY8ZkKwZJzqm6oyrkERBi_M1FerMwCvkl6virvHrvkVrti9nspg>
-    <xmx:EN_bY6aQz3Mtwsaoogutf21y2fIrIQUEl6jjHx5zuz2_RHCuegx_6g>
-    <xmx:EN_bYwBXRJnSGQbAePa7aTKv2upUOKB-7bAZqZ659IfyrEItDOUe4A>
-    <xmx:Ed_bY9wCJGVgdK-hiPk-EWwfb7LIH7IMBcJGreJxlpXjo7uxpngq-A>
-Feedback-ID: ic7094478:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 2 Feb 2023 11:04:31 -0500 (EST)
-From:   Vincent Dagonneau <v@vda.io>
-To:     linux-kernel@vger.kernel.org
-Cc:     w@1wt.eu, Vincent Dagonneau <v@vda.io>
-Subject: [PATCH] tools/nolibc: Add stdint.h
-Date:   Thu,  2 Feb 2023 11:02:37 -0500
-Message-Id: <20230202160236.25342-1-v@vda.io>
-X-Mailer: git-send-email 2.39.1
+        Thu, 2 Feb 2023 11:03:26 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D92165EE1
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 08:03:19 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id mi9so2325097pjb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 08:03:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=CnTJJs+O/feHF+dtKsJMe8sGkEuF3IoD/Hd0PvzGTMk=;
+        b=ntILpNHieOlE1eQKlkEswLTzNxqODvW4UIylIlF6hRS4jdzdpSLvn5nG5RoRgG5Bgq
+         7dtxWITAVyjEVlmVQEt+iwH5zHcmfrsV4Mbfgcv6+8WIcYe3lyUI/lCYgCEbPbobufSg
+         tlsMycMU1nsX+x/tnC/hgF7+7XRGmF/xIPhf2SbzUu7YzpbCIJdC91xHSfrT+IGiyNSw
+         WnWs3CV2L1WfkgW0hE2JjG2CjOibBcKNyyjTJCxc0PXFNA0WhsENL27S+uPlTUnuVy7d
+         6uEmdPwBOPvmmKVh9UQK1XtRrbudvo6yxsVfABu1Etqug+ce3HqVqlaFHfGrMqudkjYk
+         ARpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CnTJJs+O/feHF+dtKsJMe8sGkEuF3IoD/Hd0PvzGTMk=;
+        b=BKuQf9Z8pMmnQkuye4BUjLu0d5Zn4myCZda/wzOnRjRJ6093TSSVw72I65ubctGyp9
+         fhhM697MDcvx8lzyJSQONp3zr6FU2elInj5ABNdePAUgbuX/3cKlzVvXKDUGuJdJ0PVT
+         U6dp2E2jyaHRDm4i9FwxKy0nq+Y3l0ogeqlEQKeBlyK69wfL1w6gl8qQRVcue60Yw6P+
+         UwsOVX50m6VskRksmuL2WI+V8X8usHgxx6td795PWB8OLnjKmH5TUicjJRhCdYe4gpRb
+         9oXbEcmn/0iYA1dlTIQyeTDAEzqgc61ghpv7ZXDETCx1Hek41sdle0GGrprXz1BoJ7M8
+         ml/A==
+X-Gm-Message-State: AO0yUKUbXKkzr8E4G6ok8BKjZxREB0kpnC2N8ex32PJZWwLdeVXnm/AQ
+        dEZGY4NANj8YTAvaOl2jBjhXDg==
+X-Google-Smtp-Source: AK7set/Di2re5uFl+ne06GLzugwEpNOWcHIFlsRKD8jsMY/VPWb1pFEIyTdJ5++rLnhtQtcIzFRFxQ==
+X-Received: by 2002:a17:902:7795:b0:191:4367:7fde with SMTP id o21-20020a170902779500b0019143677fdemr323109pll.0.1675353799009;
+        Thu, 02 Feb 2023 08:03:19 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id d2-20020a170903230200b00189c4b8ca21sm13923789plh.18.2023.02.02.08.03.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Feb 2023 08:03:18 -0800 (PST)
+Date:   Thu, 2 Feb 2023 16:03:14 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yuan ZhaoXiong <yuanzhaoxiong@baidu.com>
+Cc:     pbonzini@redhat.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, mlevitsk@redhat.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: SVM: fix calculate dest mask incorrectly in x2apic
+ mode.
+Message-ID: <Y9vewvcdjKkaFS87@google.com>
+References: <1675328830-37483-1-git-send-email-yuanzhaoxiong@baidu.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1675328830-37483-1-git-send-email-yuanzhaoxiong@baidu.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, Feb 02, 2023, Yuan ZhaoXiong wrote:
+> ICRH bits 31:16 is cluster id and bits 15:0 is dest mask when x2apic is
+> enabled.
+> 
+> Fixes: 603ccef42ce9 ("KVM: x86: SVM: fix avic_kick_target_vcpus_fast")
+> 
+> Signed-off-by: Yuan ZhaoXiong <yuanzhaoxiong@baidu.com>
+> ---
+>  arch/x86/kvm/svm/avic.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+> index 6919dee..03b1e27 100644
+> --- a/arch/x86/kvm/svm/avic.c
+> +++ b/arch/x86/kvm/svm/avic.c
+> @@ -378,7 +378,7 @@ static int avic_kick_target_vcpus_fast(struct kvm *kvm, struct kvm_lapic *source
+>  
+>  		if (apic_x2apic_mode(source)) {
+>  			/* 16 bit dest mask, 16 bit cluster id */
+> -			bitmap = dest & 0xFFFF0000;
+> +			bitmap = dest & 0xFFFF;
 
-I was testing out nolibc with some simple programs originally linked
-against glibc. I noticed a quick fix for some of them was to have an
-stdint.h with limits macros.
+Already fixed in the Paolo's tree, commit da3fb46d226a ("KVM: SVM: Fix x2APIC
+Logical ID calculation for avic_kick_target_vcpus_fast").
 
-Here are the changes I made. I've got a couple more ideas for fleshing
-out nolibc, let me know if you are interested in contributions.
+In case you have more APIC/AVIC related fixes/bugs, a big pile of fixes are queued
+for 6.3, see commit f15a87c00690 ("Merge branch 'kvm-lapic-fix-and-cleanup' into HEAD").
 
-Add stdint.h and moved the relevant definitions from std.h. Also added
-macros for limits and *_least_* types.
-
----
- tools/include/nolibc/std.h    | 15 +------
- tools/include/nolibc/stdint.h | 77 +++++++++++++++++++++++++++++++++++
- 2 files changed, 78 insertions(+), 14 deletions(-)
- create mode 100644 tools/include/nolibc/stdint.h
-
-diff --git a/tools/include/nolibc/std.h b/tools/include/nolibc/std.h
-index 1747ae125392..c65ddf2e4db1 100644
---- a/tools/include/nolibc/std.h
-+++ b/tools/include/nolibc/std.h
-@@ -18,20 +18,7 @@
- #define NULL ((void *)0)
- #endif
- 
--/* stdint types */
--typedef unsigned char       uint8_t;
--typedef   signed char        int8_t;
--typedef unsigned short     uint16_t;
--typedef   signed short      int16_t;
--typedef unsigned int       uint32_t;
--typedef   signed int        int32_t;
--typedef unsigned long long uint64_t;
--typedef   signed long long  int64_t;
--typedef unsigned long        size_t;
--typedef   signed long       ssize_t;
--typedef unsigned long     uintptr_t;
--typedef   signed long      intptr_t;
--typedef   signed long     ptrdiff_t;
-+#include <stdint.h>
- 
- /* those are commonly provided by sys/types.h */
- typedef unsigned int          dev_t;
-diff --git a/tools/include/nolibc/stdint.h b/tools/include/nolibc/stdint.h
-new file mode 100644
-index 000000000000..1f11fffe2119
---- /dev/null
-+++ b/tools/include/nolibc/stdint.h
-@@ -0,0 +1,77 @@
-+/* SPDX-License-Identifier: LGPL-2.1 OR MIT */
-+/*
-+ * Standard definitions and types for NOLIBC
-+ * Copyright (C) 2023 Vincent Dagonneau <v@vda.io>
-+ */
-+
-+#ifndef _NOLIBC_STDINT_H
-+#define _NOLIBC_STDINT_H
-+
-+typedef unsigned char       uint8_t;
-+typedef   signed char        int8_t;
-+typedef unsigned short     uint16_t;
-+typedef   signed short      int16_t;
-+typedef unsigned int       uint32_t;
-+typedef   signed int        int32_t;
-+typedef unsigned long long uint64_t;
-+typedef   signed long long  int64_t;
-+typedef unsigned long        size_t;
-+typedef   signed long       ssize_t;
-+typedef unsigned long     uintptr_t;
-+typedef   signed long      intptr_t;
-+typedef   signed long     ptrdiff_t;
-+
-+typedef   int8_t       int_least8_t;
-+typedef  uint8_t      uint_least8_t;
-+typedef  int16_t      int_least16_t;
-+typedef uint16_t     uint_least16_t;
-+typedef  int32_t      int_least32_t;
-+typedef uint32_t     uint_least32_t;
-+typedef  int64_t      int_least64_t;
-+typedef uint64_t     uint_least64_t;
-+
-+typedef  int64_t           intmax_t;
-+typedef uint64_t          uintmax_t;
-+
-+/* limits of integral types */
-+
-+#define        INT8_MIN  (-128)
-+#define       INT16_MIN  (-32767-1)
-+#define       INT32_MIN  (-2147483647-1)
-+#define       INT64_MIN  (-9223372036854775807-1)
-+
-+#define        INT8_MAX  (127)
-+#define       INT16_MAX  (32767)
-+#define       INT32_MAX  (2147483647)
-+#define       INT64_MAX  (9223372036854775807)
-+
-+#define       UINT8_MAX  (255)
-+#define      UINT16_MAX  (65535)
-+#define      UINT32_MAX  (4294967295U)
-+#define      UINT64_MAX  (18446744073709551615)
-+
-+#define  INT_LEAST8_MIN  (-128)
-+#define INT_LEAST16_MIN  (-32767-1)
-+#define INT_LEAST32_MIN  (-2147483647-1)
-+#define INT_LEAST64_MIN  (-9223372036854775807-1)
-+
-+#define  INT_LEAST8_MAX  (127)
-+#define INT_LEAST16_MAX  (32767)
-+#define INT_LEAST32_MAX  (2147483647)
-+#define INT_LEAST64_MAX  (9223372036854775807)
-+
-+#define  UINT_LEAST8_MAX  (255)
-+#define UINT_LEAST16_MAX  (65535)
-+#define UINT_LEAST32_MAX  (4294967295U)
-+#define UINT_LEAST64_MAX  (18446744073709551615)
-+
-+#define         SIZE_MAX  (18446744073709551615UL)
-+
-+#define       INTPTR_MIN  (-9223372036854775807L-1)
-+#define       INTPTR_MAX  (9223372036854775807L)
-+#define      UINTPTR_MAX  (18446744073709551615UL)
-+
-+#define      PTRDIFF_MIN  (-9223372036854775807L-1)
-+#define      PTRDIFF_MAX  (9223372036854775807L)
-+
-+#endif /* _NOLIBC_STDINT_H */
--- 
-2.39.1
-
+Thanks!
