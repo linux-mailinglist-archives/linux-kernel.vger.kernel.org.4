@@ -2,125 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54D516887E2
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 20:57:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 090776887DE
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 20:57:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232726AbjBBT5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 14:57:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44314 "EHLO
+        id S232580AbjBBT5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 14:57:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230070AbjBBT5U (ORCPT
+        with ESMTP id S230070AbjBBT5M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 14:57:20 -0500
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C511E2A1
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 11:56:37 -0800 (PST)
-Received: by mail-qt1-f178.google.com with SMTP id m12so3221429qth.4
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 11:56:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=puPH7Nn4Vxt3kUnQKHCGR9XbgEDlt42vfosxQIpu+cs=;
-        b=ZQBAwRQXQM7IpNDrPxeXDMkj3mJaaJxqe3bVq2vK7T4k73XxaBQa5N7wP0RHM7m8Ph
-         oQMxVhUXwCX0u0K1QARSCQyrbqVHwGviTPCwnIsc5l+MpqE4TF7IFNf5+pxhAfdsEngO
-         063tKIDSrEPYJf8hcdqThzPAiaP/vD4h6wnhdg6UTp89JQ6bAlTApLlULxw2LS9oVDET
-         +FGCTWZOYVBvj0Qoh9B3GkaJYJ9WJOGzK2eySyWjPmWlqdTe43ESxgEsskjmDGleKh1/
-         Z5UC23n+li/7UgE5EWQcBXq3cEi6gFFlCZdFmDMrcO2fi5s7ZKlS9MGpE6C5QgOYe+yS
-         XBfg==
-X-Gm-Message-State: AO0yUKWfpIisGxDwjv7gxwn74BJtUlSFNfm2z6BzekxCAxOiGDsjq8Ne
-        gyer8JYHLuuaf1Ezn17Nd1Ul
-X-Google-Smtp-Source: AK7set92dyhIkHCdWF7e92O2MXu6mUmZ6lpekQmSoPBHbD1dR3CVvDYQ1CtAQ9IvY8M0gdRPR2pO1A==
-X-Received: by 2002:a05:622a:511:b0:3b8:6c68:6109 with SMTP id l17-20020a05622a051100b003b86c686109mr13439452qtx.21.1675367796153;
-        Thu, 02 Feb 2023 11:56:36 -0800 (PST)
-Received: from localhost (pool-68-160-166-30.bstnma.fios.verizon.net. [68.160.166.30])
-        by smtp.gmail.com with ESMTPSA id h6-20020a05620a10a600b007246f005d8bsm293223qkk.116.2023.02.02.11.56.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 11:56:35 -0800 (PST)
-Date:   Thu, 2 Feb 2023 14:56:34 -0500
-From:   Mike Snitzer <snitzer@kernel.org>
-To:     Demi Marie Obenour <demi@invisiblethingslab.com>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Roger Pau =?iso-8859-1?Q?Monn=E9?= <roger.pau@citrix.com>,
-        Alasdair Kergon <agk@redhat.com>,
-        Marek =?iso-8859-1?Q?Marczykowski-G=F3recki?= 
-        <marmarek@invisiblethingslab.com>, Juergen Gross <jgross@suse.com>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xen-devel@lists.xenproject.org, dm-devel@redhat.com
-Subject: Re: [RFC PATCH 0/7] Allow race-free block device handling
-Message-ID: <Y9wVcskXyOk3bbzC@redhat.com>
-References: <20230126033358.1880-1-demi@invisiblethingslab.com>
- <Y9vp3XDEQAl7TLND@redhat.com>
- <Y9wEF3rWfpiCKc2i@itl-email>
+        Thu, 2 Feb 2023 14:57:12 -0500
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2048.outbound.protection.outlook.com [40.107.20.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F337B43B;
+        Thu,  2 Feb 2023 11:57:10 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DyTFKpLTB65iaSwC8M6kWt+vl6B5Q3MhXgkHMLdbX0ztvA5+FFQdB8rgdoWBLGA6lPo+pHTmbS6GVTHv6k7MTQd4zOupe4UMloMCgzDGhXUNlU/qdYLh1lQDx9pq3mwqcIoFOnnADtRtDAHC1WANrF63Pj+3GLrbcjYkWXSI8ZSdWKUK/FmAEU5UHe6LmOQ7/p7mCgUhm7gXRuLqKBOJsrQssuC+8qZQPkxK4Nd6IAfCZO/Gb+iylxFU6QntvUHsHnKoN0ZuhENwylX3ymY2GqjH68bTrEy0TwNCGhLCkfIUOXZt5CuMLlutRUh4r1mk8myiMDCYak4vj83RRbh/LQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SgGg6+yfRLA++qkTj+tbFiARxZI5JF/QPzJAOdqpzxk=;
+ b=AxBnCkpYDTGASupSJd6jrAE5TSjjvvpcF31dUvPKLmobs+29JNWZ1ZM9Gh0G7+SiAmbFnevEGz+pW9V0Jpvnoopj5+EWRXmU9cvrdS6hZqOnQrsCyaLMzBTBteaqgcwfdhq1Bdx6OqfaD4ekQvs8WnM1z10vT+kuHGuPyg2SIalnn97Idla8ziHb8YOadSGqBnuZJcJ0gP8Bzp1OJPSPPLZp2sxgIkiGULMGTsuHVUP/ziiQnU1HtpjcuaZrFyCtFVU5gj1ddUvobocf8d8ti25hyX+ZPmxYa4C0mucOIfsSGixppX9KGHDfmI9yPyfUE++QVd3Efv3deBDj1NxlpQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
+ dkim=pass header.d=siemens.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SgGg6+yfRLA++qkTj+tbFiARxZI5JF/QPzJAOdqpzxk=;
+ b=N97ipzjXFL+5nuAZ9ThrXFJQv13Q//aPN5Aq6/15exlwVtFWWSTtUzvPaOuWgwIOtomP8GxrEo8kYF4RJ+uaQTHOzDMgblXzJBwVHk32sbEcmx/oGDS34tybiF48mhRhp3cC1Q61ffj5gNr8bQOjCfJ11L6vmUb7jC+9//p2FLdqPODUvbEByNP4re4EFAp5zeBeDEaSzjfmgIvuD0Gggs5QjdVt71TRskXPBZxmeiqKyE7YTCCY7PSgqXZ7bLJYg39x+H884vl48jn0VjFT6mUuhowuYtzVb7llFIX7ffvY43VqlQG9U0GHBlL7C8A8x7UAczj8QjKcIfc9bwssrw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=siemens.com;
+Received: from PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:269::8)
+ by AS8PR10MB7523.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:5ae::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.25; Thu, 2 Feb
+ 2023 19:57:08 +0000
+Received: from PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::ee44:171b:4c40:d42c]) by PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::ee44:171b:4c40:d42c%4]) with mapi id 15.20.6064.028; Thu, 2 Feb 2023
+ 19:57:08 +0000
+Date:   Thu, 2 Feb 2023 20:57:04 +0100
+From:   Henning Schild <henning.schild@siemens.com>
+To:     Lee Jones <lee@kernel.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Pavel Machek <pavel@ucw.cz>, linux-leds@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: Re: [PATCH v4] leds: simatic-ipc-leds-gpio: make sure we have the
+ GPIO providing driver
+Message-ID: <20230202205704.12a5fbff@md1za8fc.ad001.siemens.net>
+In-Reply-To: <Y8mv8PzL1UsP9gNh@google.com>
+References: <20221007153323.1326-1-henning.schild@siemens.com>
+        <Y8mv8PzL1UsP9gNh@google.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.35; x86_64-pc-linux-gnu)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR3P281CA0074.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:1f::12) To PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:102:269::8)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y9wEF3rWfpiCKc2i@itl-email>
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PA4PR10MB5780:EE_|AS8PR10MB7523:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8f522b03-13f6-44a1-1740-08db0557aa00
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 0bAIpnzD/3bBsJleLVFbg8K+KTbcNCqSsVvmFa0WSAj0qhKddIxfSh62EqIzmrg+UkDvf46z9gG4qRn2zdvM3U2dayvYlZmBXGlDsVGrx/5KxRRn2m+CoYxX6VaOfEP47/9IiIhUPMttdpVvNa4RKVMzbiNkV+h455toENC/i69RQluJCGh3u6XYeJSNwmZa/4+tPkND5LoeBkh0ynqxhXVz4sRJOjvH56KgCDLPq7dCC6ruLcX18egnbe9fukS65gHoUi9ghkMrpxLKNIZGi45AKwGato9LAQW67pZbSf3w7lHmnavfNoPESZ4+sRDryCTjq4pK4/hhhvH/Lz2gLr92+V4derKBucbV15zCBH1feISvlvOh2Hy0os4dymTqq9fhvRqXeLzw6GSLwqawxSS2N0neyelt5aPM4F5lF+xB5WIzc2bT8xw3hOhlw/jGj0LbTwbI1RdhrILBShfNH/N60AvC1ueiMkwVvCz4ScEpNbKQEB6lJxevmr63Hc+QHo4M1wQbiOvr6Cr6CsP62pz1d6moYvdcXRdclSacv52bIjhTUx+MJCK2gvfJO5dqrbBZmyNDg95Ozf/+gjwLZzNhQD+W/mk1UD/mG71D0TeAiR407zJiXIa0CGdoPjMu/AUH7u/0HYVt8vel/iaalw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(346002)(366004)(396003)(39860400002)(136003)(451199018)(82960400001)(5660300002)(54906003)(316002)(83380400001)(86362001)(66556008)(186003)(6512007)(2906002)(6486002)(9686003)(478600001)(38100700002)(6666004)(4326008)(6916009)(44832011)(66476007)(1076003)(8936002)(66946007)(8676002)(41300700001)(6506007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?xME9zAGaYoQGWuzE21S3RHAQTmgWnev6UiB+A7jol94bJoIw20JXVenGNpZq?=
+ =?us-ascii?Q?islHdzOlf/X76M/PU0e4IKpIxaZK/IGGtcTJ4nZJCBtOC1Uz3vnx2CxMUmNt?=
+ =?us-ascii?Q?fq2ljWUn4eCGgSTPrJ3CodMt08AAhiFO9Ih9ehBY5e0f/7tv3cemDuXdEuDC?=
+ =?us-ascii?Q?TTzwgyEq8QfioIzqC6d5n6fUs1+FlgsgyFSyPhjq9GWFByyJqpazJ89R0UAB?=
+ =?us-ascii?Q?AqJB3cX8iqgJf5jDbqfezPrOKhui70CELRqzFwcvxmlEYFd1/vIaA1QZZ2eS?=
+ =?us-ascii?Q?k4nEg0jBITsMtH6PvVna9bA5ikE8BEy7cEGgfSaY3TsSJRIJwxSb2XIgSDY+?=
+ =?us-ascii?Q?JJtPL4QVY2CLxVBz05QpJOLR43plkyThucEUtzsLfeEOXVEyfuCXD/jck/n0?=
+ =?us-ascii?Q?IngopLJFrCJ6izqmz2eCCKKx8YsDTa8SOczLxaFqLq2oHdts+2RbNrAtEiqs?=
+ =?us-ascii?Q?kbaM0gpSdxNoJ+2L67mppaBpFWQmlZ+yy/LJJS3AeXLRbYN63dDuHjbEkytt?=
+ =?us-ascii?Q?B2sCCgPdGoceSPCES6G6+a/kLOZvm+aVY2PkUpLS/g5EIADFVTkcEBXyR/m5?=
+ =?us-ascii?Q?kJa+9QJ/LQYSLjFDI2xaOXAp7OH5CK/sU0gj+5jQypiLA+urpdriz8isu3/i?=
+ =?us-ascii?Q?MWEmAPHi+8IU1ocbNYfVviXjhaJpTzRxLWg9ZE/SC7Iyktry4V2jEkswCoPb?=
+ =?us-ascii?Q?VfEvhmhR/zLeaMuuLZMzM4jjDqb4DMf+A2Zg5vmO3QqjKdzlpjF2YRHgkwNq?=
+ =?us-ascii?Q?516vWrMs8x/PWXhJXiGd1qYoef7scEDc4Cn5zVIV30hKhU2S1icyiYwlCoGY?=
+ =?us-ascii?Q?y+dxhjs6eH5fQBnkJDvg39Eto1UnUl/VVvzjBHjIRpDVCF0tWKPxr1b0nL9B?=
+ =?us-ascii?Q?NYi12w7pUZqEz3aDoc7fmF0LU4JKUGVDUYclQuO++Xya9hLt8g7MuhKHqFxr?=
+ =?us-ascii?Q?b+fwF94QsOpaUZ40QNOAg4QpgvYj0WnVG+wMvfMQTm794jczv0KU3PPnkV1w?=
+ =?us-ascii?Q?b4yZCQvNvbNw6wC4RlmpXwq/1Uk8MoX4s/vUAIVOIUfFknwyBhVPjMtkfiBF?=
+ =?us-ascii?Q?4PHDRFQ05vFtPH1aNOV61Hm+bkQUTqWm6/IrwNfDf5WTTsv1sSKYNUXkLQ6y?=
+ =?us-ascii?Q?+qf31dcA+0+onm1gll6IO5tYcN7oukw7fOP+dIn+9rkJM5MMrtkX1Ka8UfK7?=
+ =?us-ascii?Q?d25xcYOE+dfdaBHAJZd8VvBQNjeaGweJY0Klby9m2JFAmHKOwS6LwaRRvG14?=
+ =?us-ascii?Q?U2HFYbGUKbGpodtrptbKXffARXQRI+VigIiEtQ1TSW+GJFrF06y96kyLyqrN?=
+ =?us-ascii?Q?pZvqH6TJZIeP8RSbi7+FFzjTqUQUf/OQQqCE9J6b3vYOPPne4g6HBQAw9Usa?=
+ =?us-ascii?Q?A7RPfTFAdMx3fIXzdy+Mf0Z5mQFE1yZcYGIKnZ8dQFI/d3vCeCL6f0YDFywx?=
+ =?us-ascii?Q?a6KMPQQwfeHdqhd2kdWWlOSqhhAnFwFcDWqqK6YwR3EmbppFLuQZLsUV809F?=
+ =?us-ascii?Q?KJH+hUrmjqD6azrZ7yN5yAv0IxpcLBdifqt3pbRAW1bdo+ZQXhVsfu93isyJ?=
+ =?us-ascii?Q?2ZgZu12t+cJn63MqEJJYSSBzloBVdbwOjuv4XwXVNxK8/dm+tsdS0GASTekF?=
+ =?us-ascii?Q?e5pXy9u9C1eJah1Y8TEy3hPT5xMNKXm9MEoO/axCne1TCjnoGqKdSdtTnZ0W?=
+ =?us-ascii?Q?vYEYyA=3D=3D?=
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8f522b03-13f6-44a1-1740-08db0557aa00
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Feb 2023 19:57:07.9545
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: wm6wFUuDqaHM9BWn3EN43JgOzGaWLvpuS6UJuvAdIt1kwEBrg+7vRz9sdR/tQX96ZcHQr/6ki6DPdnXneyJwtF1rQswE/tr/CWveNXg/Sc4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR10MB7523
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02 2023 at  1:41P -0500,
-Demi Marie Obenour <demi@invisiblethingslab.com> wrote:
+Am Thu, 19 Jan 2023 21:02:40 +0000
+schrieb Lee Jones <lee@kernel.org>:
 
-> On Thu, Feb 02, 2023 at 11:50:37AM -0500, Mike Snitzer wrote:
-> > On Wed, Jan 25 2023 at 10:33P -0500,
-> > Demi Marie Obenour <demi@invisiblethingslab.com> wrote:
-> > 
-> > > This work aims to allow userspace to create and destroy block devices
-> > > in a race-free and leak-free way,
-> > 
-> > "race-free and leak-free way" implies there both races and leaks in
-> > existing code. You're making claims that are likely very specific to
-> > your Xen use-case.  Please explain more carefully.
+> On Fri, 07 Oct 2022, Henning Schild wrote:
 > 
-> Will do in v2.
-> 
-> > > and to allow them to be exposed to
-> > > other Xen VMs via blkback without leaks or races.  It’s marked as RFC
-> > > for a few reasons:
-> > > 
-> > > - The code has been only lightly tested.  It might be unstable or
-> > >   insecure.
-> > > 
-> > > - The DM_DEV_CREATE ioctl gains a new flag.  Unknown flags were
-> > >   previously ignored, so this could theoretically break buggy userspace
-> > >   tools.
+> > If we register a "leds-gpio" platform device for GPIO pins that do
+> > not exist we get a -EPROBE_DEFER and the probe will be tried again
+> > later. If there is no driver to provide that pin we will poll
+> > forever and also create a lot of log messages.
 > > 
-> > Not seeing a reason that type of DM change is needed. If you feel
-> > strongly about it send a separate patch and we can discuss it.
-> 
-> Patch 2/7 is the diskseq change.  v2 will contain a revised and tested
-> version with a greatly expanded commit message.
-
-I'm aware that 2/7 is where you make the DM change to disallow unknown
-flags, what I'm saying is I don't see a reason for that change.
-
-Certainly doesn't look to be a requirement for everything else in that
-patch.
-
-So send a separate patch, but I'm inclined to _not_ accept it because
-it does potentially break some userspace.
- 
-> > > - I have no idea if I got the block device reference counting and
-> > >   locking correct.
+> > So check if that GPIO driver is configured, if so it will come up
+> > eventually. If not, we exit our probe function early and do not even
+> > bother registering the "leds-gpio". This method was chosen over
+> > "Kconfig depends" since this way we can add support for more
+> > devices and GPIO backends more easily without "depends":ing on all
+> > GPIO backends.
 > > 
-> > Your headers and justifcation for this line of work are really way too
-> > terse. Please take the time to clearly make the case for your changes
-> > in both the patch headers and code.
+> > Fixes: a6c80bec3c93 ("leds: simatic-ipc-leds-gpio: Add GPIO version
+> > of Siemens driver") Reviewed-by: Andy Shevchenko
+> > <andy.shevchenko@gmail.com> Signed-off-by: Henning Schild
+> > <henning.schild@siemens.com> ---
+> >  drivers/leds/simple/simatic-ipc-leds-gpio.c | 2 ++
+> >  1 file changed, 2 insertions(+)  
 > 
-> I will expand the commit message in v2, but I am not sure what you want
-> me to add to the code comments.  Would you mind explaining?
+> FYI: I'm going to try my best not to take another one like this.
 
-Nothing specific about code, was just a general reminder (based on how
-terse the 2/7 header was).
+You will not have to. I now understood how to improve on that as i am
+adding more variants needing more gpio controller drivers.
 
-Mike
+> Please try to improve the whole situation for you next submission.
+> 
+> Applied, thanks.
+
+I hope this is still in the branches for a merge. It should be applied.
+It does fix a problem but using a wrong pattern, but a pattern that is
+already in use.
+
+So this will fix 6.1 and above in the short term.
+
+In the long term i will restructure to individual drivers which have a
+clear dependency chain in Kconfig. I will use inheritance to arrive at
+minimal code duplication and will use Kconfig switch default
+inheritance to ease configuration.
+
+Such restructuring patches will have to be written first, but they will
+come. Either stand-alone or together with the next machine.
+
+regards,
+Henning
+
+
+
