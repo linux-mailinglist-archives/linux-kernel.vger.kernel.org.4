@@ -2,223 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DEFB6889AD
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 23:26:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F40176889B5
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 23:27:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbjBBW0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 17:26:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44988 "EHLO
+        id S230169AbjBBW1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 17:27:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbjBBW0G (ORCPT
+        with ESMTP id S230373AbjBBW1K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 17:26:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F17FDCC04
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 14:25:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675376717;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=B8BHBNa+yNC4hDxX+kSVeo8iDcZfNEIlhda9yEMbHoc=;
-        b=T0VJaApelDWowy8Isl9fqAbIKemmrDgRnNCMmrmlDj1grXv0L9ubz5tVXkMHoSew9IZqLX
-        a84CDL/FrO7uyPNE96iOtcc0Cyu99udXaJfbs25vKFtDBUKXavVuFYRE3vsWpt7JBMqgF3
-        sRphwikt4UIlQpVy65KUybtm1cZwNX4=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-324-HGrorYAaO7OLHlOatt38WA-1; Thu, 02 Feb 2023 17:25:16 -0500
-X-MC-Unique: HGrorYAaO7OLHlOatt38WA-1
-Received: by mail-ej1-f72.google.com with SMTP id z2-20020a1709060be200b0088b579825f9so2443185ejg.18
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 14:25:15 -0800 (PST)
+        Thu, 2 Feb 2023 17:27:10 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 238EC10249
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 14:27:09 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id b3so5200015lfv.2
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 14:27:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rNl1d9WjdzfG8r6+o/TTbbJlOXijTqxl4wlecMFWfHc=;
+        b=W86IfmDtu2J4p+3OYOZAQ2kPhD4TOuckQrtBxpeHkGS4TFNPokFEKLLjCxRVjJzpnT
+         /tMtxDN6d3ao0Yr4ZUPI8JgXfGBBZR0Zrlcu3uRRYTTwu2dDMHLktXbmieOoq62CMAMz
+         8Rb5vGERLKakT/KMKZHBcOQs8aXITcg3SPmhI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=B8BHBNa+yNC4hDxX+kSVeo8iDcZfNEIlhda9yEMbHoc=;
-        b=P/KE5gR+3QLF/7KfjAhZU+hIHsLGwUMw0/WkmXjtQMSpckD+rNHnhqU6pevwGrISkH
-         FW+DaDhMvn+3L3yCwOAIdxGkD/CwOdjQ7+v7+Ulx8SBFlWlp8T7f2pTFTQZmwxIsyRuE
-         coSc8l/GJ1iNjcVvC66czATxVrM6L/kZyvAyfurP9C7JFBGwitRsRYsYnbf4RH3XlRxz
-         5ZWmeW7QR9DItF3xA2WMraY/8/bkxtdU6MnHAumuy18Ynn+obqVvMhXNhW7F8TAf2QOO
-         fWFf3iDJMvKentPlHvboG1+SD8w1n25ofU8SOndLEwqGmmIGHZphWhgdwzG94xtQgrZa
-         FGVg==
-X-Gm-Message-State: AO0yUKUQjWCobVeb8vKqtpVHKAKOL8vEHIfyHQgC9HIO2gcvPMkga/Ux
-        voF9pdqJE1YDZd6SoKnaNhfrGReKZherR7gwBqOliNWoJICFf7Mau8ub8pSxM08rEsC39aeXtzL
-        95Xi4I5Ls2THQxrvQP2HE+AUAgTrrltN9OzdOwPL5
-X-Received: by 2002:a05:6402:360a:b0:499:cfee:8d96 with SMTP id el10-20020a056402360a00b00499cfee8d96mr2481751edb.21.1675376714505;
-        Thu, 02 Feb 2023 14:25:14 -0800 (PST)
-X-Google-Smtp-Source: AK7set/RS3nWD5I2qidy/TUBFe5KzmDNDoQo3pywjpkX7ZNqRxjHHFLYfFeOAyYKMUUZ3YPLVMy4JsWgYmPMR6yaBs0=
-X-Received: by 2002:a05:6402:360a:b0:499:cfee:8d96 with SMTP id
- el10-20020a056402360a00b00499cfee8d96mr2481747edb.21.1675376714326; Thu, 02
- Feb 2023 14:25:14 -0800 (PST)
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rNl1d9WjdzfG8r6+o/TTbbJlOXijTqxl4wlecMFWfHc=;
+        b=DUCRG6RsB+KxJGoym/1gRhnGZkni9LiaP8AcfFDpNH9umUl24vqB/8zDEOupK7BlIK
+         KnvKece0pDq0uXVUoGDP7TLyOsC3gDnCrnwd8YAqZ/QxeGnCL/yVfhnnagCJNfVQ/cYG
+         S/k9V0bUPYTe2EuwCGucQ5MRWTEe9Wwigo9tKTJrr9JH6IWfKmoP/CPEPOcJ3n292SOg
+         EMrVM3wNus2zpypc7AiQ6Wo/J3wpXRbgo9AMU1+W6esziNy8knwhDoARaeEWv8fo+B/b
+         SycFz6D6isgPj3WSZ2Lnf73qjQbt5gmepRUvcB1lThuAMu7m2FBGrPmvsrFoZ5gPw9KS
+         0/Lg==
+X-Gm-Message-State: AO0yUKXel+j2pZOQHNl8Q5PFo5ARyFKJierqB74x8+Rh2snETaLFsnvy
+        TaqqPvJrTeKmD+PCBf3+0q89OTNKjmgXvEHywdhx7g==
+X-Google-Smtp-Source: AK7set8BLWiiUSmP1ZnKxPXJ1C4jOaYXgC8mhhJgjy8MjW3z0hLNlQVz0f5qVXMSJuwF1hP61XhwjGdZrkB7RksH74E=
+X-Received: by 2002:ac2:5a19:0:b0:4d8:775b:a58f with SMTP id
+ q25-20020ac25a19000000b004d8775ba58fmr1607468lfn.73.1675376827426; Thu, 02
+ Feb 2023 14:27:07 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 2 Feb 2023 14:27:06 -0800
 MIME-Version: 1.0
-References: <6b008b94e3b295f572502abec8ae15da46133a64.1675351367.git.edwin.torok@cloud.com>
-In-Reply-To: <6b008b94e3b295f572502abec8ae15da46133a64.1675351367.git.edwin.torok@cloud.com>
-From:   Alexander Aring <aahringo@redhat.com>
-Date:   Thu, 2 Feb 2023 17:25:02 -0500
-Message-ID: <CAK-6q+gJ_JOo1KXwGsYPc1fkKnYLM3vNSZXuxxVSrdZbROzYug@mail.gmail.com>
-Subject: Re: [Cluster-devel] [PATCH] DLM: increase socket backlog to avoid
- hangs with 16 nodes
-To:     =?UTF-8?B?RWR3aW4gVMO2csO2aw==?= <edvin.torok@citrix.com>
-Cc:     linux-kernel@vger.kernel.org, cluster-devel@redhat.com
+In-Reply-To: <Y81G3X7TSNk57hqc@kroah.com>
+References: <20230113204548.578798-1-swboyd@chromium.org> <Y81G3X7TSNk57hqc@kroah.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Thu, 2 Feb 2023 14:27:06 -0800
+Message-ID: <CAE-0n52WYuDhozGijwJoMOL9PLRQshLCMAJsWvudz4KdS+jN=Q@mail.gmail.com>
+Subject: Re: [PATCH 5.15.y v2 0/5] phy: qcom-qmp-combo: Backport some stable fixes
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Johan Hovold <johan+linaro@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Thu, Feb 2, 2023 at 10:37 AM Edwin T=C3=B6r=C3=B6k <edvin.torok@citrix.c=
-om> wrote:
+Quoting Greg KH (2023-01-22 06:23:25)
+> On Fri, Jan 13, 2023 at 12:45:43PM -0800, Stephen Boyd wrote:
+> > After the qmp phy driver was split it looks like 5.15.y stable kernels
+> > aren't getting fixes like commit 7a7d86d14d07 ("phy: qcom-qmp-combo: fix
+> > broken power on") which is tagged for stable 5.10. Trogdor boards use
+> > the qmp phy on 5.15.y kernels, so I backported the fixes I could find
+> > that looked like we may possibly trip over at some point.
+> >
+> > USB and DP work on my Trogdor.Lazor board with this set.
+> >
+> > Changes from v1 (https://lore.kernel.org/r/20230113005405.3992011-1-swboyd@chromium.org):
+> >  * New patch for memleak on probe deferal to avoid compat issues
+> >  * Update "fix broken power on" patch for pcie/ufs phy
+> >
+> > Johan Hovold (5):
+> >   phy: qcom-qmp-combo: disable runtime PM on unbind
+> >   phy: qcom-qmp-combo: fix memleak on probe deferral
+> >   phy: qcom-qmp-usb: fix memleak on probe deferral
+> >   phy: qcom-qmp-combo: fix broken power on
+> >   phy: qcom-qmp-combo: fix runtime suspend
+> >
+> >  drivers/phy/qualcomm/phy-qcom-qmp.c | 97 ++++++++++++++++++-----------
+> >  1 file changed, 61 insertions(+), 36 deletions(-)
+> >
+> > Cc: Johan Hovold <johan+linaro@kernel.org>
+> > Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > Cc: Vinod Koul <vkoul@kernel.org>
+> >
+> > base-commit: d57287729e229188e7d07ef0117fe927664e08cb
+> > --
+> > https://chromeos.dev
+> >
 >
-> On a 16 node virtual cluster with e1000 NICs joining the 12th node prints
-> SYN flood warnings for the DLM port:
-> Dec 21 01:46:41 localhost kernel: [ 2146.516664] TCP: request_sock_TCP: P=
-ossible SYN flooding on port 21064. Sending cookies.  Check SNMP counters.
+> For obvious reasons, I can't take this series if newer kernel releases
+> do not also contain all of these (no would you want me to.)
 >
-> And then joining a DLM lockspace hangs:
-> ```
-> Dec 21 01:49:00 localhost kernel: [ 2285.780913] INFO: task xapi-clusterd=
-:17638 blocked for more than 120 seconds.                                  =
-                                   =E2=94=82
-> Dec 21 01:49:00 localhost kernel: [ 2285.786476]       Not tainted 4.4.0+=
-10 #1                                                                      =
-                                   =E2=94=82
-> Dec 21 01:49:00 localhost kernel: [ 2285.789043] "echo 0 > /proc/sys/kern=
-el/hung_task_timeout_secs" disables this message.                          =
-                                   =E2=94=82
-> Dec 21 01:49:00 localhost kernel: [ 2285.794611] xapi-clusterd   D ffff88=
-001930bc58     0 17638      1 0x00000000                                   =
-                                   =E2=94=82
-> Dec 21 01:49:00 localhost kernel: [ 2285.794615]  ffff88001930bc58 ffff88=
-0025593800 ffff880022433800 ffff88001930c000                               =
-                                   =E2=94=82
-> Dec 21 01:49:00 localhost kernel: [ 2285.794617]  ffff88000ef4a660 ffff88=
-000ef4a658 ffff880022433800 ffff88000ef4a000                               =
-                                   =E2=94=82
-> Dec 21 01:49:00 localhost kernel: [ 2285.794619]  ffff88001930bc70 ffffff=
-ff8159f6b4 7fffffffffffffff ffff88001930bd10
-> Dec 21 01:49:00 localhost kernel: [ 2285.794644]  [<ffffffff811570fe>] ? =
-printk+0x4d/0x4f                                                           =
-                                   =E2=94=82
-> Dec 21 01:49:00 localhost kernel: [ 2285.794647]  [<ffffffff810b1741>] ? =
-__raw_callee_save___pv_queued_spin_unlock+0x11/0x20                        =
-                                   =E2=94=82
-> Dec 21 01:49:00 localhost kernel: [ 2285.794649]  [<ffffffff815a085d>] wa=
-it_for_completion+0x9d/0x110                                               =
-                                   =E2=94=82
-> Dec 21 01:49:00 localhost kernel: [ 2285.794653]  [<ffffffff810979e0>] ? =
-wake_up_q+0x80/0x80                                                        =
-                                   =E2=94=82
-> Dec 21 01:49:00 localhost kernel: [ 2285.794661]  [<ffffffffa03fa4b8>] dl=
-m_new_lockspace+0x908/0xac0 [dlm]                                          =
-                                   =E2=94=82
-> Dec 21 01:49:00 localhost kernel: [ 2285.794665]  [<ffffffff810aaa60>] ? =
-prepare_to_wait_event+0x100/0x100                                          =
-                                   =E2=94=82
-> Dec 21 01:49:00 localhost kernel: [ 2285.794670]  [<ffffffffa0402e37>] de=
-vice_write+0x497/0x6b0 [dlm]                                               =
-                                   =E2=94=82
-> Dec 21 01:49:00 localhost kernel: [ 2285.794673]  [<ffffffff811834f0>] ? =
-handle_mm_fault+0x7f0/0x13b0                                               =
-                                   =E2=94=82
-> Dec 21 01:49:00 localhost kernel: [ 2285.794677]  [<ffffffff811b4438>] __=
-vfs_write+0x28/0xd0                                                        =
-                                   =E2=94=82
-> Dec 21 01:49:00 localhost kernel: [ 2285.794679]  [<ffffffff811b4b7f>] ? =
-rw_verify_area+0x6f/0xd0                                                   =
-                                   =E2=94=A4
-> Dec 21 01:49:00 localhost kernel: [ 2285.794681]  [<ffffffff811b4dc1>] vf=
-s_write+0xb1/0x190                                                         =
-                                   =E2=94=82
-> Dec 21 01:49:00 localhost kernel: [ 2285.794686]  [<ffffffff8105ffc2>] ? =
-__do_page_fault+0x302/0x420                                                =
-                                   =E2=94=82
-> Dec 21 01:49:00 localhost kernel: [ 2285.794688]  [<ffffffff811b5986>] Sy=
-S_write+0x46/0xa0                                                          =
-                                   =E2=94=82
-> Dec 21 01:49:00 localhost kernel: [ 2285.794690]  [<ffffffff815a31ae>] en=
-try_SYSCALL_64_fastpath+0x12/0x71
-> ```
->
-> The previous limit of 5 seems like an arbitrary number, that doesn't matc=
-h any
-> known DLM cluster size upper bound limit.
->
-> Signed-off-by: Edwin T=C3=B6r=C3=B6k <edvin.torok@citrix.com>
-> Cc: Christine Caulfield <ccaulfie@redhat.com>
-> Cc: David Teigland <teigland@redhat.com>
-> Cc: cluster-devel@redhat.com
-> ---
-> Notes from 2023:
->   This patch was initially developed on 21 Dec 2017, and in production us=
-e ever since.
-> I expected to drop out of our patchqueue at the next kernel upgrade, howe=
-ver it
-> hasn't, so I probably forgot to send it.
->
-> I haven't noticed this bug again with the patch applied, and the previous=
- value
-> of '5' seems like an arbitrary limit not matching any supported upper bou=
-nds
-> on DLM cluster sizes, so this patch has (unintentionally) had a 5 year te=
-st
-> cycle.
+> So can you please also provide a backported series for 6.1.y so that
+> these can be considered?
 
-Correct, I guess the 128 coming from dlm_controld 128 max node
-boundary [0] and I think it's okay to change it to 128, especially if
-you start a cluster every "mostly" node wants to connect() at the same
-time and the backlog of 5 could be not enough to handle them.
-From my understanding the connect() will return -ECONNREFUSED in the
-case of backlog is full. As I see the code of kernel v4.0 dlm at this
-point will _not_ slow down a reattempt to run connect() again, see
-[1].
-
->
-> Although the join hanging forever like that may still be a bug, if the SY=
-N cookies
-> consistently trigger it lets try to avoid the bug by avoiding the SYN coo=
-kies.
-
-right, it should work even with 1 as a backlog... after digging into
-the code. My guess is that [2] ran into the MAX_CONNECT_RETRIES
-condition and we do _not_ reset con->retries to 0 if connect() [3]
-fails. If this happens we are kind of stuck and we would not try to
-connect() again. Means you run into the hung task situation, because
-e.g. ping_members() will not succeed.
-
-The current upstream code does not have any limitations of trying
-retries and will always wait some time to try a connect() again if it
-fails. It should retry to connect so long the cluster manager tells
-dlm kernel that a specific node is still part of a lockspace resource
-and there is a transmission happening to this particular node. However
-I think pumping this value to the maximum amount of possible nodes in
-a cluster is not a bad idea.
-
-There is still a question of "why seeing SYN flooding" warning, but as
-I said there are a lot of connect() happening at the beginning at
-mostly the same time starting a cluster and some of them retrying
-connect() fast.
-
-...
-
-- Alex
-
-[0] https://pagure.io/dlm/blob/c1e2ee574794e0dea68fd45783991ef7b1835901/f/d=
-lm_controld/dlm_daemon.h#_177
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
-/fs/dlm/lowcomms.c?h=3Dv4.0#n1226
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
-/fs/dlm/lowcomms.c?h=3Dv4.0#n1168
-[3] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
-/fs/dlm/lowcomms.c?h=3Dv4.0#n1220
-
+Sure. All of the patches have been applied to 6.1.y except for the last
+one, which picks cleanly, c7b98de745cf ("phy: qcom-qmp-combo: fix
+runtime suspend"). I can send that over.
