@@ -2,81 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B0E368893C
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 22:50:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A44A68893F
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 22:50:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230117AbjBBVuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 16:50:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50120 "EHLO
+        id S232129AbjBBVu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 16:50:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230011AbjBBVuI (ORCPT
+        with ESMTP id S233054AbjBBVuY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 16:50:08 -0500
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 616BF1A95E;
-        Thu,  2 Feb 2023 13:49:26 -0800 (PST)
-Received: by mail-oi1-f175.google.com with SMTP id j21so2632758oie.4;
-        Thu, 02 Feb 2023 13:49:26 -0800 (PST)
+        Thu, 2 Feb 2023 16:50:24 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106B410C6
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 13:49:54 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id j17so5068350lfr.3
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 13:49:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KDgDu4Pg6Xihc/t0MuyIpqIzGcYpSCTohlnE5v2ocN4=;
+        b=E1GIRojfvxs42+81MLxR/crCAkmGa0m7dglBBaSPcKfBcrb70wqCF4vLE0F5FRVIcz
+         YxqXb0Z8Esm5uf3ctMLJVPXZFter8aeyB90SEQT1Y0dxU1Eic2jaxjmERcPwB+tyIVMU
+         DtgPX32JZJxL2eaOEVtlLcpeqwueU9dKrXMoE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UXW7/lUbSjpYWVlJlGqM54KI3OSQHsjjhBbib+nvF1g=;
-        b=3RJNa7koinc7mEk3ppZBfApN6JOlzUaRZIAjEebEfqQNyCM3TY6zeGKo/qeiEu5F8t
-         kpk/9O1CAybIN6q7LnhNALvQBzv1MoXtqPWjagTfCODulKJwiJOd+85wzJZGqOY/sxvl
-         TNkCY+GHTg15Ifjut/H5MdEYXDQuhRJ1yZpyFNPwysiNlRSRcoKs5skUZ+ynNlxgRAPi
-         y6B8GiSTTuUMKPSR30Jd2uq7o7g/lgNOt5vklPHrQptp47SP9UDeU0sYjJnawTK3/Bek
-         sHxi5PG5QqhheWvXJ+wea5ASRQe+PmwYF9Xue6x6izw9istQjYeQ0d1eOqzhbZSYEUH0
-         jYxA==
-X-Gm-Message-State: AO0yUKWtGEwbDu2NJ6oZ5o9kRfqw3zlqDQ5i8KuyO1uRRUASDgqw0X7+
-        ctTTT8LWJlIRvdEVz+3fEg==
-X-Google-Smtp-Source: AK7set990Xxf5sx8jmyGReXFqOd7t3qi2d4ril4HjTaHWa86PG/UDSm2/3qj0/UOtZb8eORu+AVCUA==
-X-Received: by 2002:a05:6808:20a:b0:35e:910d:10e6 with SMTP id l10-20020a056808020a00b0035e910d10e6mr3670327oie.9.1675374519648;
-        Thu, 02 Feb 2023 13:48:39 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r24-20020a0568080ab800b003783caeaf61sm169035oij.13.2023.02.02.13.48.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 13:48:39 -0800 (PST)
-Received: (nullmailer pid 2780551 invoked by uid 1000);
-        Thu, 02 Feb 2023 21:48:38 -0000
-Date:   Thu, 2 Feb 2023 15:48:38 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Johan Jonker <jbx6244@gmail.com>
-Cc:     linux-rockchip@lists.infradead.org,
-        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
-        gregkh@linuxfoundation.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        robh+dt@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] dt-bindings: usb: rockchip,dwc3: update inno usb2 phy
- binding name
-Message-ID: <167537451786.2780496.5603789940127974377.robh@kernel.org>
-References: <f8747552-d23b-c4cd-cb17-5033fb7f8eb6@gmail.com>
+        bh=KDgDu4Pg6Xihc/t0MuyIpqIzGcYpSCTohlnE5v2ocN4=;
+        b=wiuWR/DmDcQOxVMQHjWiN46Qm4BiFC8qNbZbuERT0uXqr/ZzemA+yEKgMItZMNKx4o
+         KMuCquYRB1bR1NqrYGjFF3v92LehAfqrt2FPu1o8eeQV43qFit+46o29D7lnLJ3xRZKs
+         v3pP2I2l+cUmw3pj+WfSGjYrrzCm90LXtpDLcElZOVYLl5qg3ba8BAn0RF7oPmKmA0dI
+         z32EQVGeETYhJPTpAPf/C8g/4cJ+PsaRB5RR67LMGl1wj4+KNy9z2bjNYsR8qL3ZJoHo
+         vM+fht+9ikDHIAzIYwczbQuMEaOQEfRBtjhCa4exkILlfBj69zwb1W+LEjhU/7c0wLPU
+         XZBA==
+X-Gm-Message-State: AO0yUKUVKfoYFXwI7RYz9F+dLtrzpuP+B8NuclIx3ouy1SB4aOK+ovVk
+        kg2sj5w6Vc62FfA/4n2MuD155sef+jm7O7jLzwVXIQ==
+X-Google-Smtp-Source: AK7set8tw6glWzk+9yeJqW1TWOCmFoiQcVBfgfEBkbXcPo7ThefbfwmGxv6nVfCiz4o5sPmEjXJ7Pl4PU3COKQNMYv8=
+X-Received: by 2002:a19:7005:0:b0:4d8:7552:2c19 with SMTP id
+ h5-20020a197005000000b004d875522c19mr1166727lfc.34.1675374587154; Thu, 02 Feb
+ 2023 13:49:47 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 2 Feb 2023 13:49:46 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f8747552-d23b-c4cd-cb17-5033fb7f8eb6@gmail.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <Y85l4aQmEW0iOHHa@hovoldconsulting.com>
+References: <20230113204548.578798-1-swboyd@chromium.org> <20230113204548.578798-6-swboyd@chromium.org>
+ <Y85l4aQmEW0iOHHa@hovoldconsulting.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Thu, 2 Feb 2023 13:49:46 -0800
+Message-ID: <CAE-0n52ky-ugoOe4yWZNNsma=HSp1MbTT+A=Bu9+R_=jBeTNoA@mail.gmail.com>
+Subject: Re: [PATCH 5.15.y v2 5/5] phy: qcom-qmp-combo: fix runtime suspend
+To:     Johan Hovold <johan@kernel.org>
+Cc:     stable@vger.kernel.org, Johan Hovold <johan+linaro@kernel.org>,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Quoting Johan Hovold (2023-01-23 02:48:01)
+> On Fri, Jan 13, 2023 at 12:45:48PM -0800, Stephen Boyd wrote:
+> > diff --git a/drivers/phy/qualcomm/phy-qcom-qmp.c b/drivers/phy/qualcomm/phy-qcom-qmp.c
+> > index b8646eaf1767..64a42e28e99f 100644
+> > --- a/drivers/phy/qualcomm/phy-qcom-qmp.c
+> > +++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
+> > @@ -4985,15 +4985,11 @@ static void qcom_qmp_phy_disable_autonomous_mode(struct qmp_phy *qphy)
+> >  static int __maybe_unused qcom_qmp_phy_runtime_suspend(struct device *dev)
+> >  {
+> >       struct qcom_qmp *qmp = dev_get_drvdata(dev);
+> > -     struct qmp_phy *qphy = qmp->phys[0];
+> > +     struct qmp_phy *qphy = qmp->usb_phy;
+> >       const struct qmp_phy_cfg *cfg = qphy->cfg;
+> >
+> >       dev_vdbg(dev, "Suspending QMP phy, mode:%d\n", qphy->mode);
+> >
+> > -     /* Supported only for USB3 PHY and luckily USB3 is the first phy */
+> > -     if (cfg->type != PHY_TYPE_USB3)
+> > -             return 0;
+>
+> This is still not correct as this code would now be executed also for
+> PCIe and UFS PHYs, which wasn't the case before.
 
-On Thu, 02 Feb 2023 14:59:35 +0100, Johan Jonker wrote:
-> The binding for the inno usb2 phy was given a name in more a common format,
-> so update the reference in rockchip,dwc3.yaml as well.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
-> ---
->  Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-
-Acked-by: Rob Herring <robh@kernel.org>
-
+Ah right. So weirdly, the conditional should be kept.
