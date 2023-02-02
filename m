@@ -2,148 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C0F268786D
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:10:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EAF3687852
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:09:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231971AbjBBJKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 04:10:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51966 "EHLO
+        id S232434AbjBBJJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 04:09:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232453AbjBBJJ7 (ORCPT
+        with ESMTP id S230169AbjBBJJn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 04:09:59 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2887C73A
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 01:09:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=tnkWpw83pHyhopF+Eh9g6wj1gGqqjXj0A521d21vmBA=; b=M7DwTQf8PzNfNNtNaQ3xD2Qxza
-        2P6vPTsALdZ6+2kWxcOBUFgzjITVHY7EFYDzuRk1fkJgpezTQ+bI/JhdSBniMAsEPGsBHBNpjCRkF
-        0eAeDjEHzSK3Evr3dg0v5cutazmrt4Fpoh6wNCQsZGt+vTufZ7Ltnbs8RF08zxcYQBsmP9NCO3hPo
-        5/1b2t/a4SJgzu/glUDzS6iQyIdapTGgzhimnksIYaCLL4UEkDd5/8IqkNoT4s0FVkAnSG60TK5Mj
-        4DvytJMS4OIe9GK6uODMfX9z45sE7PG4tvF9U7QuZIyoKpn496u2oVudFZEfkogFjBMWU5ztFvTqu
-        yIvYA+9g==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pNVaw-00DFZ4-7Z; Thu, 02 Feb 2023 09:09:27 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6185C3001E5;
-        Thu,  2 Feb 2023 10:09:22 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 4D7F523F2C5B0; Thu,  2 Feb 2023 10:09:22 +0100 (CET)
-Date:   Thu, 2 Feb 2023 10:09:22 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Zeng Heng <zengheng4@huawei.com>
-Cc:     mingo@redhat.com, bp@alien8.de, jroedel@suse.de, vbabka@suse.cz,
-        hpa@zytor.com, tglx@linutronix.de, eric.devolder@oracle.com,
-        bhe@redhat.com, tiwai@suse.de, keescook@chromium.org,
-        dave.hansen@linux.intel.com, linux-kernel@vger.kernel.org,
-        x86@kernel.org, liwei391@huawei.com, xiexiuqi@huawei.com
-Subject: Re: [PATCH v3] x86/kdump: Handle blocked NMIs interrupt to avoid
- kdump crashes
-Message-ID: <Y9t9wvQ0HRwCs1Xh@hirez.programming.kicks-ass.net>
-References: <20230202014053.3604176-1-zengheng4@huawei.com>
+        Thu, 2 Feb 2023 04:09:43 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E1F5FD3
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 01:09:41 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id n20-20020a17090aab9400b00229ca6a4636so4985027pjq.0
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 01:09:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=igel-co-jp.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=10hCW48KPbvjfvXEjrjQ+Mgg8cpIPYTv4D/tTAJDTFA=;
+        b=8EMNDhCqTbFttbka/+TAiSeV5HrHEpPPTDWCdd+pC75E+2UqrAgvMajQc0EkjbagyX
+         9n/0ZfjnRY8rUa+nIoXcW7SqLt4UxhjTntX5RNDx0A4bTmCkZ1dUofksYyMCwUplG0ZK
+         khdSJiOtcrutRo1WdLqkenS+9CMGQ52nG60Rw+43cN28AWgHp3X0vKj7xoOdW4Oij+p2
+         PH1+Hqzp/LlbRe+bNIAeHcitIsnEfGKgqPxC1LNuG6nP3gu7h+TNyhPGv7CGuOaksqsB
+         xEFUWl3qxYUaT3dz2n9sGR8Fx60EGP4Xk6Tcmx1lhpa+jY/tS/gNaQb+fyrgR2X0Xx7v
+         KQmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=10hCW48KPbvjfvXEjrjQ+Mgg8cpIPYTv4D/tTAJDTFA=;
+        b=1ZmR4Zz8/ZeIN7Had5fVphlexHoyKWnHkptUa5IhkFrXySj+54+Kd6B5v6zclHwBIt
+         OnK8b5lx/LMLpUCB4nnPnuSkDVZ/6d3M5KTl7FxTy8X0Gpsgi1oVgKjycMgP2NFQjM0N
+         nhxK2eOB5gWp4FUxGpfIoLGApQGeWXdoIIFpTLDGgdP8Cj7JIdM2CFrST5o4SC3UK+Vs
+         O5h6mPrSdvXUZhgQgRvvADisekZZYHuexZT9gRMpGCNAMJUhwU5F4mMkmmUuqfTDh5CM
+         xOjwRKT4cgZSFnYGPuSA1lFVRJPkRdBBpeZf8noo5Cmf0AcsuJbpTZp5y1u2vRAyHC1A
+         MDiw==
+X-Gm-Message-State: AO0yUKXVhwA1pUAv5/ODR6sOLOSRZc2/RccSQa9TXK6Sszi/1VyoFR6B
+        DU6daMibfpN/EwvZXbddRU5KeKX8JbLZE7Dl
+X-Google-Smtp-Source: AK7set8TRDrnyQM34c60qrfKukf3YMCoIk81aVwwaJ/9ofFNhvBNL5Xdej/Gen3KhJgGunl2ZBfRDA==
+X-Received: by 2002:a05:6a20:6987:b0:bb:bb46:bb9e with SMTP id t7-20020a056a20698700b000bbbb46bb9emr6437176pzk.39.1675328981236;
+        Thu, 02 Feb 2023 01:09:41 -0800 (PST)
+Received: from tyrell.hq.igel.co.jp (napt.igel.co.jp. [219.106.231.132])
+        by smtp.gmail.com with ESMTPSA id ik12-20020a170902ab0c00b001929827731esm13145968plb.201.2023.02.02.01.09.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Feb 2023 01:09:40 -0800 (PST)
+From:   Shunsuke Mie <mie@igel.co.jp>
+To:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Rusty Russell <rusty@rustcorp.com.au>
+Cc:     kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shunsuke Mie <mie@igel.co.jp>
+Subject: [RFC PATCH v2 0/7] Introduce a vringh accessor for IO memory
+Date:   Thu,  2 Feb 2023 18:09:27 +0900
+Message-Id: <20230202090934.549556-1-mie@igel.co.jp>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230202014053.3604176-1-zengheng4@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 09:40:53AM +0800, Zeng Heng wrote:
-> If the cpu panics within the NMI interrupt context,
-> there could be unhandled NMI interrupts in the
-> background which are blocked by processor until
-> next IRET instruction executes. Since that, it
-> prevents nested execution of the NMI handler.
-> 
-> In case of IRET execution during kdump reboot and
-> no proper NMIs handler registered at that point
-> (such as during EFI loader), we need to handle these
-> blocked NMI interrupts in advance to avoid kdump
-> crashes.
-> 
-> Because asm_exc_nmi() has the ability to handle
-> nested NMIs, here call iret_to_self() and execute
-> IRET instruction in order to trigger and handle the
-> possible blocked NMIs interrupts in advance before
-> the IDT set invalidate.
-> 
-> Provide one of test case to reproduce the concerned
-> issue, and here is the steps:
->   1. # cat uncorrected
->      CPU 1 BANK 4
->      STATUS uncorrected 0xc0
->      MCGSTATUS  EIPV MCIP
->      ADDR 0x1234
->      RIP 0xdeadbabe
->      RAISINGCPU 0
->      MCGCAP SER CMCI TES 0x6
->   2. # modprobe mce_inject
->   3. # mce-inject uncorrected
-> 
-> Mce-inject would trigger kernel panic under NMI
-> interrupt context. In addition, we need another NMI
-> interrupt raise (such as from watchdog) during panic
-> process. Set proper watchdog threshold value and/or
-> add an artificial delay to make sure watchdog interrupt
-> raise during the panic procedure and the involved
-> issue would occur.
-> 
-> Fixes: ca0e22d4f011 ("x86/boot/compressed/64: Always switch to own page table")
-> Signed-off-by: Zeng Heng <zengheng4@huawei.com>
-> Suggested-by: Borislav Petkov <bp@alien8.de>
-> ---
->   v1: add dummy NMI interrupt handler in EFI loader
->   v2: tidy up changelog, add comments (by Ingo Molnar)
->   v3: add iret_to_self() to deal with blocked NMIs in advance
-> 
->  arch/x86/kernel/crash.c | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
-> 
-> diff --git a/arch/x86/kernel/crash.c b/arch/x86/kernel/crash.c
-> index 305514431f26..3aaca680a639 100644
-> --- a/arch/x86/kernel/crash.c
-> +++ b/arch/x86/kernel/crash.c
-> @@ -41,6 +41,7 @@
->  #include <asm/intel_pt.h>
->  #include <asm/crash.h>
->  #include <asm/cmdline.h>
-> +#include <asm/sync_core.h>
-> 
->  /* Used while preparing memory map entries for second kernel */
->  struct crash_memmap_data {
-> @@ -143,6 +144,19 @@ void native_machine_crash_shutdown(struct pt_regs *regs)
-> 
->  	crash_smp_send_stop();
-> 
-> +	/*
-> +	 * If the cpu panics within the NMI interrupt context,
-> +	 * there may be unhandled NMI interrupts which are
-> +	 * blocked by processor until next IRET instruction
-> +	 * executes.
-> +	 *
-> +	 * In case of IRET execution during kdump reboot and
-> +	 * no proper NMIs handler registered at that point,
-> +	 * we trigger and handle blocked NMIs in advance to
-> +	 * avoid kdump crashes.
-> +	 */
-> +	iret_to_self();
-> +
->  	/*
->  	 * VMCLEAR VMCSs loaded on this cpu if needed.
->  	 */
+Vringh is a host-side implementation of virtio rings, and supports the
+vring located on three kinds of memories, userspace, kernel space and a
+space translated iotlb.
 
-I never remember the shutdown paths -- do we force wipe the PMU
-registers somewhere before this?
+The goal of this patchset is to refactor vringh and introduce a new vringh
+accessor for the vring located on the io memory region. The io memory
+accessor (iomem) is used by a driver that is not published yet, but I'm
+planning to publish it. Also changes of drivers affected by this patchset
+are not included yet. e.g. caif_virtio and vdpa (sim_net,blk, net/mlx5)
+drivers.
+
+This patchset can separate into 4 parts:
+1. Fix a typo in the vringh header[1/7]
+2. Enable a retpoline on virtio/vringh_test [2/7]
+2. Unify the vringh APIs and change related [3, 4, 5, 6/7]
+3. Support IOMEM to vringh [7/7]
+
+This first part is just for typo fixing. The second part changes build
+options of virtio/vringh_test. The change bring the test close to linux
+kernel in retpoline. In the third part, unify the vringh API for each
+accessors that are user, kern and iotlb. The main point is struct
+vringh_ops that fill the gap between all accessors. The final part
+introduces an iomem support to vringh according to the unified API in the
+second part.
+
+Those changes are tested for the user accessor using vringh_test and kern
+and iomem using a non published driver, but I think I can add a link to a
+patchset for the driver in the next version of this patchset.
+
+v2:
+- Add a build options to enable the retpoline in vringh_test
+- Add experimental results of the API unification
+
+v1: https://lore.kernel.org/virtualization/20221227022528.609839-1-mie@igel.co.jp/
+- Initial patchset
+
+Shunsuke Mie (7):
+  vringh: fix a typo in comments for vringh_kiov
+  tools/virtio: enable to build with retpoline
+  vringh: remove vringh_iov and unite to vringh_kiov
+  tools/virtio: convert to new vringh user APIs
+  vringh: unify the APIs for all accessors
+  tools/virtio: convert to use new unified vringh APIs
+  vringh: IOMEM support
+
+ drivers/vhost/Kconfig      |   6 +
+ drivers/vhost/vringh.c     | 721 ++++++++++++-------------------------
+ include/linux/vringh.h     | 147 +++-----
+ tools/virtio/Makefile      |   2 +-
+ tools/virtio/vringh_test.c | 123 ++++---
+ 5 files changed, 357 insertions(+), 642 deletions(-)
+
+-- 
+2.25.1
+
