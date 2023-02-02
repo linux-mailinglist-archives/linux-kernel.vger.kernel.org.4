@@ -2,223 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 686AD6889EE
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 23:37:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C08126889EB
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 23:37:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233061AbjBBWhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 17:37:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52780 "EHLO
+        id S232760AbjBBWhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 17:37:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232950AbjBBWhe (ORCPT
+        with ESMTP id S232940AbjBBWhG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 17:37:34 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 377D4719BD;
-        Thu,  2 Feb 2023 14:37:09 -0800 (PST)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 312Krteq031923;
-        Thu, 2 Feb 2023 22:36:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Zb2iiTn/hxWLIV0At+HfK90unnptLpCLFr+PlLGfKH4=;
- b=kPxJgKUqsrVeSB2tSnPBWTgiI7HgbJ0LVzvWWWH+naUFLQ05RKNRzNbtQkg1kHswHuXH
- B7k3JiZckOZJKr6b48b6apLighkKI0z4r6b+Q0VQxrmKj1aJrGlk8M0R45+raStpI7tu
- TwXHAamBStc4ZUYAwaHnXOvZ347SPVsLvXBL/ZjxMUq8GhR+Hdini2cu/7xkha3VK69p
- WF664pI+JPqlttDiBwwbUo7EbadazuKiAT2UoRkb6D3ygLZqRnRJmAw80Ksli0fPfuKY
- 1jOqOrIvy5t/VTIIGcFV3PzgmcsxoPRODKzKFXEG42e5ovdZC5cndvDXERra7fCHw73A 4A== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nfqsybup9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Feb 2023 22:36:54 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 312Mar6x010723
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 2 Feb 2023 22:36:53 GMT
-Received: from [10.110.99.204] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 2 Feb 2023
- 14:36:52 -0800
-Message-ID: <0419b0c8-fb30-f8df-1b9a-19e106680948@quicinc.com>
-Date:   Thu, 2 Feb 2023 14:36:52 -0800
+        Thu, 2 Feb 2023 17:37:06 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74A236E439
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 14:36:58 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id 7so2407155pgh.7
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 14:36:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jJIjI8aVILzxy49H/1WVETofEOZKWrwoil8C6yJU34M=;
+        b=TS7z12waCgHNK8scuaeZcY9iXVXxztSCKLyhAdlsafxo65SclPE0GAEYUILo87Rrcm
+         WSHueqBx6sskpFUv/nY1MxwBAv11gHtMgFRuVPcVCKV2HqtoToBBAZRa3hHkD8L3erBi
+         CCHZlpEWnFbimb1YZP3ZW5VdQn3sTQwWC1FsqlSBvGaQh/4NIOK3Fi+30uaa4CbgLQE2
+         83DTJv6xjwzKmCPaGWC5/QysOAew7mdqLnkbNkEiUVOphxLOv13nVKabMz+rk2Aw879k
+         1Pr2DvDgLMx6PEbduKvi0phzSdrSeI/q8FZBWc6F4zN/oVMllamtFpqhKuwaomDWhu/4
+         +mhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jJIjI8aVILzxy49H/1WVETofEOZKWrwoil8C6yJU34M=;
+        b=DyNz96d94P+VOIxpkKaOACz/WNWhWfC56cphDa17iksE+2RIJpsNUZwSoHUYm++AL2
+         0wthXOK0eQiFTNqFgKikYmFWXUBstD3uqxd/ZLxvjOttUPUEOAsqXwM7eGTHM8agvMUv
+         NUxufLdliZftvPUlpV7ZSGjCaFSMjqnJnJnh2AkfnE6NEzJYnjE9x82mn5F4RaAxRAr+
+         egAjFM8f/1yf/qMwGl4K9AUaEAg/g4BrAX7k7Hg/Z+Or2Yi16qrb7rdrhQ6WDQqabxSS
+         m/NnrpMhgKQP19X0YEfcEdfNn4o2el4x+BM0KKmQsoFwpolBzCwPd2rnKfESHzJlWMR9
+         DziA==
+X-Gm-Message-State: AO0yUKWrkhfslyKxPANN//bkVQix4Chww6CSiX0T0Y+XFctBAISu3Uj0
+        XLzX65T5g5YZt11H6VRNXzqmCxnjuywnogCx
+X-Google-Smtp-Source: AK7set99ECqA8iYUBaSdqVtiLp1DjFqCHwr0KwQWbR1FqE1Yj74VVC0a/r86LrInW3OMA//Mtn/UNA==
+X-Received: by 2002:aa7:8a10:0:b0:593:a226:38ee with SMTP id m16-20020aa78a10000000b00593a22638eemr6277197pfa.25.1675377418393;
+        Thu, 02 Feb 2023 14:36:58 -0800 (PST)
+Received: from dread.disaster.area (pa49-181-4-128.pa.nsw.optusnet.com.au. [49.181.4.128])
+        by smtp.gmail.com with ESMTPSA id r16-20020aa79ed0000000b005938bd2bfd3sm191750pfq.120.2023.02.02.14.36.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Feb 2023 14:36:57 -0800 (PST)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1pNiCL-00Adiw-Qg; Fri, 03 Feb 2023 09:36:53 +1100
+Date:   Fri, 3 Feb 2023 09:36:53 +1100
+From:   Dave Chinner <david@fromorbit.com>
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Leonardo Bras <leobras@redhat.com>,
+        Yair Podemsky <ypodemsk@redhat.com>, P J P <ppandit@redhat.com>
+Subject: Re: [PATCH v3] fs/buffer.c: update per-CPU bh_lru cache via RCU
+Message-ID: <20230202223653.GF937597@dread.disaster.area>
+References: <Y9qM68F+nDSYfrJ1@tpad>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [Freedreno] [RFT PATCH v2 3/3] drm/msm/dsi: More properly handle
- errors in regards to dsi_mgr_bridge_power_on()
-Content-Language: en-US
-To:     Douglas Anderson <dianders@chromium.org>,
-        <dri-devel@lists.freedesktop.org>, Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     <freedreno@lists.freedesktop.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        <linux-arm-msm@vger.kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        David Airlie <airlied@gmail.com>, Sean Paul <sean@poorly.run>,
-        <linux-kernel@vger.kernel.org>
-References: <20230131141756.RFT.v2.1.I723a3761d57ea60c5dd754c144aed6c3b2ea6f5a@changeid>
- <20230131141756.RFT.v2.3.I3c87b53c4ab61a7d5e05f601a4eb44c7e3809a01@changeid>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <20230131141756.RFT.v2.3.I3c87b53c4ab61a7d5e05f601a4eb44c7e3809a01@changeid>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ze0mav3Cf9-e3WS1O6K6m670fF7H8_r5
-X-Proofpoint-ORIG-GUID: ze0mav3Cf9-e3WS1O6K6m670fF7H8_r5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-02_14,2023-02-02_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- suspectscore=0 bulkscore=0 phishscore=0 spamscore=0 lowpriorityscore=0
- malwarescore=0 clxscore=1015 mlxscore=0 mlxlogscore=859 priorityscore=1501
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302020201
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9qM68F+nDSYfrJ1@tpad>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Doug
-
-On 1/31/2023 2:18 PM, Douglas Anderson wrote:
-> In commit 7d8e9a90509f ("drm/msm/dsi: move DSI host powerup to modeset
-> time") the error handling with regards to dsi_mgr_bridge_power_on()
-> got a bit worse. Specifically if we failed to power the bridge on then
-> nothing would really notice. The modeset function couldn't return an
-> error and thus we'd blindly go forward and try to do the pre-enable.
+On Wed, Feb 01, 2023 at 01:01:47PM -0300, Marcelo Tosatti wrote:
 > 
-> In commit ec7981e6c614 ("drm/msm/dsi: don't powerup at modeset time
-> for parade-ps8640") we added a special case to move the powerup back
-> to pre-enable time for ps8640. When we did that, we didn't try to
-> recover the old/better error handling just for ps8640.
-> 
-> In the patch ("drm/msm/dsi: Stop unconditionally powering up DSI hosts
-> at modeset") we've now moved the powering up back to exclusively being
-> during pre-enable. That means we can add the better error handling
-> back in, so let's do it. To do so we'll add a new function
-> dsi_mgr_bridge_power_off() that's matches how errors were handled
-> prior to commit 7d8e9a90509f ("drm/msm/dsi: move DSI host powerup to
-> modeset time").
-> 
-> NOTE: Now that we have dsi_mgr_bridge_power_off(), it feels as if we
-> should be calling it in dsi_mgr_bridge_post_disable(). That would make
-> some sense, but doing so would change the current behavior and thus
-> should be a separate patch. Specifically:
-> * dsi_mgr_bridge_post_disable() always calls dsi_mgr_phy_disable()
->    even in the slave-DSI case of bonded DSI. We'd need to add special
->    handling for this if it's truly needed.
-> * dsi_mgr_bridge_post_disable() calls msm_dsi_phy_pll_save_state()
->    midway through the poweroff.
-> * dsi_mgr_bridge_post_disable() has a different order of some of the
->    poweroffs / IRQ disables.
-> For now we'll leave dsi_mgr_bridge_post_disable() alone.
-> 
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
-> 
-> Changes in v2:
-> - ("More properly handle errors...") new for v2.
-> 
->   drivers/gpu/drm/msm/dsi/dsi_manager.c | 32 ++++++++++++++++++++++-----
->   1 file changed, 26 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi_manager.c b/drivers/gpu/drm/msm/dsi/dsi_manager.c
-> index 2197a54b9b96..28b8012a21f2 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi_manager.c
-> +++ b/drivers/gpu/drm/msm/dsi/dsi_manager.c
-> @@ -228,7 +228,7 @@ static void msm_dsi_manager_set_split_display(u8 id)
->   	}
->   }
->   
-> -static void dsi_mgr_bridge_power_on(struct drm_bridge *bridge)
-> +static int dsi_mgr_bridge_power_on(struct drm_bridge *bridge)
->   {
->   	int id = dsi_mgr_bridge_get_id(bridge);
->   	struct msm_dsi *msm_dsi = dsi_mgr_get_dsi(id);
-> @@ -268,14 +268,31 @@ static void dsi_mgr_bridge_power_on(struct drm_bridge *bridge)
->   	if (is_bonded_dsi && msm_dsi1)
->   		msm_dsi_host_enable_irq(msm_dsi1->host);
->   
-> -	return;
-> +	return 0;
->   
->   host1_on_fail:
->   	msm_dsi_host_power_off(host);
->   host_on_fail:
->   	dsi_mgr_phy_disable(id);
->   phy_en_fail:
-> -	return;
-> +	return ret;
-> +}
-> +
-> +static void dsi_mgr_bridge_power_off(struct drm_bridge *bridge)
-> +{
-> +	int id = dsi_mgr_bridge_get_id(bridge);
-> +	struct msm_dsi *msm_dsi = dsi_mgr_get_dsi(id);
-> +	struct msm_dsi *msm_dsi1 = dsi_mgr_get_dsi(DSI_1);
-> +	struct mipi_dsi_host *host = msm_dsi->host;
-> +	bool is_bonded_dsi = IS_BONDED_DSI();
-> +
-> +	msm_dsi_host_disable_irq(host);
-> +	if (is_bonded_dsi && msm_dsi1) {
-> +		msm_dsi_host_disable_irq(msm_dsi1->host);
-> +		msm_dsi_host_power_off(msm_dsi1->host);
-> +	}
+> umount calls invalidate_bh_lrus which IPIs each
 
-The order of disabling the IRQs should be opposite of how they were enabled.
+via invalidate_bdev(). So this is only triggered on unmount of
+filesystems that use the block device mapping directly, right?
 
-So while enabling it was DSI0 and then DSI1.
+Or is the problem that userspace is polling the block device (e.g.
+udisks, blkid, etc) whilst the filesystem is mounted and populating
+the block device mapping with cached pages so invalidate_bdev()
+always does work even when the filesystem doesn't actually use the
+bdev mapping?
 
-Hence while disabling it should be DSI1 and then DSI0.
+> CPU that has non empty per-CPU buffer_head cache:
+> 
+>        	on_each_cpu_cond(has_bh_in_lru, invalidate_bh_lru, NULL, 1);
+> 
+> This interrupts CPUs which might be executing code sensitive
+> to interferences.
+> 
+> To avoid the IPI, free the per-CPU caches remotely via RCU.
+> Two bh_lrus structures for each CPU are allocated: one is being
+> used (assigned to per-CPU bh_lru pointer), and the other is
+> being freed (or idle).
 
-So the order here should be
+Rather than adding more complexity to the legacy bufferhead code,
+wouldn't it be better to switch the block device mapping to use
+iomap+folios and get rid of the use of bufferheads altogether?
 
-DSI1 irq disable
-DSI0 irq disable
-DSI1 host power off
-DSI0 host power off
+Cheers,
 
-> +	msm_dsi_host_power_off(host);
-> +	dsi_mgr_phy_disable(id);
->   }
->   
->   static void dsi_mgr_bridge_pre_enable(struct drm_bridge *bridge)
-> @@ -295,7 +312,11 @@ static void dsi_mgr_bridge_pre_enable(struct drm_bridge *bridge)
->   	if (is_bonded_dsi && !IS_MASTER_DSI_LINK(id))
->   		return;
->   
-> -	dsi_mgr_bridge_power_on(bridge);
-> +	ret = dsi_mgr_bridge_power_on(bridge);
-> +	if (ret) {
-> +		dev_err(&msm_dsi->pdev->dev, "Power on failed: %d\n", ret);
-> +		return;
-> +	}
->   
->   	ret = msm_dsi_host_enable(host);
->   	if (ret) {
-> @@ -316,8 +337,7 @@ static void dsi_mgr_bridge_pre_enable(struct drm_bridge *bridge)
->   host1_en_fail:
->   	msm_dsi_host_disable(host);
->   host_en_fail:
-> -
-> -	return;
-> +	dsi_mgr_bridge_power_off(bridge);
->   }
->   
->   void msm_dsi_manager_tpg_enable(void)
+Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
