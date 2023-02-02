@@ -2,87 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B5306886CE
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 19:41:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9EE06886E0
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 19:41:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232171AbjBBSlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 13:41:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49432 "EHLO
+        id S232995AbjBBSlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 13:41:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231663AbjBBSlL (ORCPT
+        with ESMTP id S232897AbjBBSlj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 13:41:11 -0500
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A45711F913
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 10:40:32 -0800 (PST)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-169ba826189so3693022fac.2
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 10:40:32 -0800 (PST)
+        Thu, 2 Feb 2023 13:41:39 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FD675454F
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 10:40:58 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id pv1-20020a17090b3c8100b0022c1ab71110so3267494pjb.7
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 10:40:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0iQTxPvvHgGFpXzg5jYGYDQguwxIKatIb2kx0yBrFd4=;
-        b=b01gByBTK4JtlziYSxiyk2IWVquBg9v1PW0C3V2cKFtDcrCRjIa7Cr4ByMZUOVcvO4
-         8FFbHcKURJcsAVXLj1x/gFtyYUJRVruGeOrIdDtwFRuHZ1AuFCyDTiZlO3U76e8X6ECh
-         xAKsv6EFq+RKiHeqMHM9F8sE10oFYgr9rdFk7WDJ6GC18Y0CRJuHhNY/sMXKoddgI3ER
-         ntHhXIHlcjOvE/eODkiczkwKiBcok6bi7MfkaQ+F6gLeJj5fraa78SRBeh25lDoZO9QV
-         KZYRMd+FtXwYYiBOgEwvOMHZfyOEyfH4KxL+LDtapYb8WcUskOUfc6Fb1EpKgNqQDq5l
-         q0xQ==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=eq0ulXMOCofqygUrvWm3TIivHTQgIXHPYH8AiMJK0m4=;
+        b=bDN/F5+92U9ElOjd1SYVToTojhMiCQYGQISkGNS8PM1648rxpmyQ3QKgjpbuD7I6NN
+         qgetR+X51HYf/Go5JRnPXrz/iM74aLFsI8+br9BFEftVOgmDNsLHwaB1qw0+VMzC20A8
+         HcuOaUGFY1AxKT4gJhCOEpLXLd0wWSBkjJzCwQ7RCoA7mJidt+kpy9/MlXB3fc8bK+yj
+         cfMq7T27ZekbeZSzpoVUUL5feMw7KQLg5NJp/9e/ehTgzTMM1ygK+zTnWoYtRJZ0SUbF
+         Iyjst+/jW7a/xd+sXjMmitt5XKMM75YACl+e0+JckvsO187i7FaslLnv8YG5Y1nNWjvu
+         Ndtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0iQTxPvvHgGFpXzg5jYGYDQguwxIKatIb2kx0yBrFd4=;
-        b=z8Buc9kL/MzUurbv0LKCqpOG2cmLn26AZgtcj63oue7cfjZY9fpCatkSc0+EkEjgJa
-         psi7msyhN2XOzSl+NN/2M7U15DyIvu3Qrii1HbKOw9VSAiyeGFuGlceq1cZx+zFRKqWj
-         rNURR9X/46XVGtCRcuZyV0xSaqKo6geNVhCVSA8JKrdG3kX7b9OVa0PwT71KVMtd/3/d
-         nFCxWC28TvtBJofUIEfDw0bHZOTspr3LWrK61kUa8mmeCHgO5ulLkcM3gHek5lRxP1Xj
-         z+94s0Hq/vX/Eq34tTxn9PZPoaR+hBf7JOPkyi0UcPbbtPOKfb8rpO7ZToDH16G+OtL9
-         7Dwg==
-X-Gm-Message-State: AO0yUKVh+Fr/VGX8CV2MywLJSbv15MTsRQ3mXe6sPFwamrGJPjPIow/n
-        QmzFienn46GJeVqL8aStVCk=
-X-Google-Smtp-Source: AK7set9hY+74Jj5ZVi4xaB9SbvMGHbNwV52nGeQh+zcQT7xkpXoXuoWJLxt9dxELarKmk4g9E+PArA==
-X-Received: by 2002:a05:6870:d62b:b0:163:9403:4d0c with SMTP id a43-20020a056870d62b00b0016394034d0cmr3544341oaq.47.1675363194050;
-        Thu, 02 Feb 2023 10:39:54 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l6-20020a4a2706000000b004a3527e8279sm150072oof.0.2023.02.02.10.39.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 10:39:53 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <8f89eeac-b3ef-4137-80df-6cf044873b05@roeck-us.net>
-Date:   Thu, 2 Feb 2023 10:39:51 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     David Rau <david.rau.zg@renesas.com>,
-        "perex@perex.cz" <perex@perex.cz>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "tiwai@suse.com" <tiwai@suse.com>,
-        "support.opensource@diasemi.com" <support.opensource@diasemi.com>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20221121050744.2278-1-david.rau.zg@renesas.com>
- <20230117195645.GA83401@roeck-us.net>
- <OS3PR01MB66416CEF9F6E5AE62D194BACCDC49@OS3PR01MB6641.jpnprd01.prod.outlook.com>
- <20230119161221.GA981953@roeck-us.net>
- <OS3PR01MB66416C10BF8E6400C84DAD02CDD09@OS3PR01MB6641.jpnprd01.prod.outlook.com>
- <38f09c4d-70d1-f65f-6e9b-4ad84eda4059@roeck-us.net>
- <Y9kE1cSUg2CQM5vq@sirena.org.uk> <20230202155101.GB1373010@roeck-us.net>
- <Y9vtIISfmpICi+9u@sirena.org.uk>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] ASoC: da7219: Fix pole orientation detection on OMTP
- headsets when playing music
-In-Reply-To: <Y9vtIISfmpICi+9u@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eq0ulXMOCofqygUrvWm3TIivHTQgIXHPYH8AiMJK0m4=;
+        b=IKaKcwy0WAlNB+49TvKctWle3o5XOynXojA+jux+49DdmgYDfVaVhJKUT62rgK9zt4
+         SV6ShfsCFFkPZW314i8TVOquwxy2XbFjuRfVCFxXF6BeRwOt+kK+RMlWqibY4kiTQhu5
+         PY9xYNkkS6udjbqG5SrGt1fi632amtdpIEYCNpcMoykG92Z1km1A8eCBEOev5MPioe2E
+         4WrbGKT+Gmc4N8pBeYaZLbWx5JCvrZP2DixZiSWTojFe5Z46dB3+YA2Ka2sMX6P7tJ5T
+         aZHXIjs8+haImowf/PqmdHrKFa4iU93a3mFXHTzrIojgUXldj+A98NUMkUZ+jAIyxg/d
+         f/iw==
+X-Gm-Message-State: AO0yUKUbDxJozBzHOy/o43b3oWYk1ufgGOGBmJA6oanL/Y25idyXjlAQ
+        3B92nns+iAH8RcACF43TyNlwZwtQNNazwmON8q0VxVa+Mh7BubJPBNuGRbxe9aQE5S1OPfJLKgR
+        ihQYMBNZ6ubqmRcq4ylqk85ixhRxrG+qe+oQqn0pJpyN/ieHLnn+GWpg268gS2cGqpFVv/t8=
+X-Google-Smtp-Source: AK7set/0YEW8im9qYiikDlyp4cuSXMahQOw9o82iZ/sT06lXQeZm+uxoXQpRb9CiyBeI6aNrNQUdmu7G8zqO
+X-Received: from jstultz-noogler2.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:600])
+ (user=jstultz job=sendgmr) by 2002:a63:475f:0:b0:4da:d745:98da with SMTP id
+ w31-20020a63475f000000b004dad74598damr1241724pgk.46.1675363222206; Thu, 02
+ Feb 2023 10:40:22 -0800 (PST)
+Date:   Thu,  2 Feb 2023 18:40:18 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
+Message-ID: <20230202184018.2576687-1-jstultz@google.com>
+Subject: [RESEND][PATCH v3] trace: Add trace points for tasklet entry/exit
+From:   John Stultz <jstultz@google.com>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Lingutla Chandrasekhar <clingutla@codeaurora.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>, kernel-team@android.com,
+        "J . Avila" <elavila@google.com>, John Stultz <jstultz@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,144 +71,145 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/2/23 09:04, Mark Brown wrote:
-> On Thu, Feb 02, 2023 at 07:51:01AM -0800, Guenter Roeck wrote:
->> On Tue, Jan 31, 2023 at 12:08:53PM +0000, Mark Brown wrote:
->>> On Mon, Jan 30, 2023 at 10:16:06PM -0800, Guenter Roeck wrote:
-> 
->>>> I'll see if I can implement a downstream fix.
-> 
->>> If you implement something I don't see a reason not to post it upstream.
-> 
->> I had a look into the code, and concluded that it is too complex for anyone
->> who doesn't know it to find a proper fix. For example, for an outsider it
-> 
-> It's definitely unclear, there's a datasheet at [1] which does appear to
-> explicitly call for a 512ms delay though (see figure 20 on page 50).  It
-> does look like it should only be applied in the case where an inserted
-> jack is detected (ie, when identifying an accessory or button press) and
-> not when removal is detected though.
-> 
+From: Lingutla Chandrasekhar <clingutla@codeaurora.org>
 
-The datasheet doesn't really suggest that a delay shall be applied using
-msleep (ie in the code). The chip presumably debounces internally (see
-jackdet_debounce and jackdet_rem_deb), and there is also jack_detect_rate
-to configure the detection rate. The table seems to suggest (to me) that
-there is an e_jack_insertion event, which would then be followed 64-512 ms
-later with an e_jack_detect_complete event.
+Tasklets are supposed to finish their work quickly and
+should not block the current running process, but it is not
+guaranteed that. Currently softirq_entry/exit can be used to
+know total tasklets execution time, but not helpful to track
+individual tasklet's execution time. With that we can't find
+any culprit tasklet function, which is taking more time.
 
-Whatever is done in software is on top of that, or at least that is my
-understanding, and not explained by anything in the datasheet.
+Add tasklet_entry/exit trace point support to track
+individual tasklet execution.
 
-Given that the chip itself supports debouncing internally, it is not clear
-to me what the delay is actually supposed to accomplish. Soft debounce
-on top of chip debounce ? I don't see that explained anywhere, though of
-course I might be missing it.
+Trivial usage example:
+   # echo 1 > /sys/kernel/debug/tracing/events/irq/tasklet_entry/enable
+   # echo 1 > /sys/kernel/debug/tracing/events/irq/tasklet_exit/enable
+   # cat /sys/kernel/debug/tracing/trace
+ # tracer: nop
+ #
+ # entries-in-buffer/entries-written: 4/4   #P:4
+ #
+ #                                _-----=> irqs-off/BH-disabled
+ #                               / _----=> need-resched
+ #                              | / _---=> hardirq/softirq
+ #                              || / _--=> preempt-depth
+ #                              ||| / _-=> migrate-disable
+ #                              |||| /     delay
+ #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
+ #              | |         |   |||||     |         |
+           <idle>-0       [003] ..s1.   314.011428: tasklet_entry: tasklet=0xffffa01ef8db2740 function=tcp_tasklet_func
+           <idle>-0       [003] ..s1.   314.011432: tasklet_exit: tasklet=0xffffa01ef8db2740 function=tcp_tasklet_func
+           <idle>-0       [003] ..s1.   314.017369: tasklet_entry: tasklet=0xffffa01ef8db2740 function=tcp_tasklet_func
+           <idle>-0       [003] ..s1.   314.017371: tasklet_exit: tasklet=0xffffa01ef8db2740 function=tcp_tasklet_func
 
->> is not conceivable (or explained) why the ground switch is enabled only
->> to be disabled immediately afterwards if a jack was removed.
-> 
-> It smells like there's a power benefit to leaving it disabled when
-> unplugged (which seems plausible), and possibly like the detection is
-> more stable with the ground switch enabled.  The ground switch is not
-> documented AFAICT (it's in register 0xfb which isn't named and doesn't
-> appear to appear in the datsheet from a quick search).  The code is
-> leaving the switch enabled so long as an accessory is plugged.
-> 
+This patch has been carried in the Android tree for awhile
+so I wanted to submit it for review upstream. Feedback would
+be appreciated!
 
-I understand. What I don't understand is that it is always enabled
-in the interrupt handler, no matter if a jack was inserted or not,
-only to be disabled immediately if the jack was disabled or after
-insertion detection work is complete.
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: kernel-team@android.com
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Lingutla Chandrasekhar <clingutla@codeaurora.org>
+[elavila: Port to android-mainline]
+Signed-off-by: J. Avila <elavila@google.com>
+[jstultz: Rebased to upstream, cut unused trace points, added
+ comments for the tracepoints, reworded commit]
+Signed-off-by: John Stultz <jstultz@google.com>
+---
+v2:
+* Added tasklet pointer to the trace event as suggested by Steven
+v3:
+* Minor tweak to commit to show usage and output example
+---
+ include/trace/events/irq.h | 47 ++++++++++++++++++++++++++++++++++++++
+ kernel/softirq.c           |  9 ++++++--
+ 2 files changed, 54 insertions(+), 2 deletions(-)
 
-Overall it is not clear what the impact of enabling ground switch
-actually is. What is really odd is that the original code only enabled
-ground switch once during initialization and disabled it either
-after a disconnect or after insertion detection was complete,
-but never re-enabled it. Now it is briefly enabled in the interrupt
-handler, but only after sleeping.
-
->> This is now the top crash reason on affected Chromebooks (so far I
->> identified Asus C424, HP SeaStar, and HP StingRay) with this patch
->> applied. I am inclined to revert it from all ChromeOS kernel branches.
->> At least for us the cure for the problem is much worse than the problem
->> itself.
-> 
-> Are you saying this is actually crashing, or just that you're getting
-> warnings about threads being blocked for too long (that was what was
-> posted earlier in the thread)?  The only things I can see that look like
-
-ChromeOS is configured to crash after stalled threads are detected (ie
-after 120 seconds), so this is actually causing crashes.
-
-> they have the potential to actually lock up are the cancel_work_sync()
-> calls but they were unchanged and the backtrace you showed was showing
-> the thread in the msleep().  My guess would be that you've got systems
-> where there are very frequent jack detection events (potentiallly with
-> broken accessories, or possibly due to the ground switch putting things
-> into the wrong priority) and that the interrupt is firing again as soon
-> as the thread unmasks the primary interrupt which means it never
-> actually stops running.
-> 
-
-That is what I strongly suspect is happening. I don't know why exactly
-the interrupt is firing continuously, but the hang is always in msleep().
-One possibility might be that the event is actually a disconnect event,
-and that enabling and immediately disabling the ground switch causes
-another interrupt, which is then handled immediately, causing the hang.
-
-> It's possible that reordering things so that the delay is only applied
-> if DA7219_JACK_INSERTION_STS_MASK is set would help, that'd need some
-> motion of the interrupt acking as well.  That's probably a good idea in
-> general, it's what the datasheet seems to call for and would lead to
-> prompter removal detection.  However if the issue is systems with broken
-> accessories constantly firing spurious button events they'd still be
-> seeing the delay.
-> 
-> My other guess would be that moving the delay that's been added to a
-> delayed work would avoid the warnings, though you might want to manually
-> keep the physical interrupt disabled while that's running which is fun.
-> Possibly also tuning down the delay given that as you say 500ms is
-> rather a long potential delay even in the context of jack debounces,
-> though if it is bad accessories then there's probably a bit of luck
-> involved in the original code not triggering issues and any debounce is
-> likely to cause fun, and like I say the datasheet does seem to say that
-> this is the appropriate delay.
-> 
-> You'd end up with something along the lines of
-> 
-> 	disable_irq();
-> 	schedule_delayed_work(delay, current_irq_code);
-> 
-
-I am not sure if that would fix anything. The current code sleeps, then
-enables the ground switch and does the rest of the detection. I'd somewhat
-understand the code if it would enable the ground switch after an "insertion
-detected" interrupt, then wait for some amount of time and handle the rest
-of the detection after waiting (even though that should really be handled by
-the "detection complete" interrupt). But that isn't what it does.
-If we were to implement the above, I suspect the result would be that the
-interrupt still happens all the time, and the only difference would be that
-it would be "silenced" while the delayed work is waiting to be scheduled.
-That doesn't really fix the problem, it only works around it. But, sure,
-it would be much better than the current situation.
-
-My "wild shot" fix would be to enable the ground switch after an insertion
-event and to drop the software sleep entirely.
-
-However, it is really impossible to know what the delay is for in the
-first place. Looking into the code further, the sleep time actually matches
-the configured jack detection rate. I have no idea why it would make sense
-to wait for a detection cycle after an event, then enable the ground switch
-and actually handle the event (which by then probably reports that jack
-detection is complete after an insertion). I really don't understand
-the logic behind that.
-
-Guenter
-
-> in the IRQ handler then call enable_irq() on the way out of the new
-> delayed_work.  That would keep the same flow but not look like the task
-> is running which should avoid setting off the hung task alarm.
-> 
-> [1] https://www.renesas.com/us/en/document/dst/da7219-datasheet?r=1563341
+diff --git a/include/trace/events/irq.h b/include/trace/events/irq.h
+index eeceafaaea4c..a07b4607b663 100644
+--- a/include/trace/events/irq.h
++++ b/include/trace/events/irq.h
+@@ -160,6 +160,53 @@ DEFINE_EVENT(softirq, softirq_raise,
+ 	TP_ARGS(vec_nr)
+ );
+ 
++DECLARE_EVENT_CLASS(tasklet,
++
++	TP_PROTO(struct tasklet_struct *t, void *func),
++
++	TP_ARGS(t, func),
++
++	TP_STRUCT__entry(
++		__field(	void *,	tasklet)
++		__field(	void *,	func)
++	),
++
++	TP_fast_assign(
++		__entry->tasklet = t;
++		__entry->func = func;
++	),
++
++	TP_printk("tasklet=%ps function=%ps", __entry->tasklet, __entry->func)
++);
++
++/**
++ * tasklet_entry - called immediately before the tasklet is run
++ * @t: tasklet pointer
++ * @func: tasklet callback or function being run
++ *
++ * Used to find individual tasklet execution time
++ */
++DEFINE_EVENT(tasklet, tasklet_entry,
++
++	TP_PROTO(struct tasklet_struct *t, void *func),
++
++	TP_ARGS(t, func)
++);
++
++/**
++ * tasklet_exit - called immediately after the tasklet is run
++ * @t: tasklet pointer
++ * @func: tasklet callback or function being run
++ *
++ * Used to find individual tasklet execution time
++ */
++DEFINE_EVENT(tasklet, tasklet_exit,
++
++	TP_PROTO(struct tasklet_struct *t, void *func),
++
++	TP_ARGS(t, func)
++);
++
+ #endif /*  _TRACE_IRQ_H */
+ 
+ /* This part must be outside protection */
+diff --git a/kernel/softirq.c b/kernel/softirq.c
+index c8a6913c067d..1b725510dd0f 100644
+--- a/kernel/softirq.c
++++ b/kernel/softirq.c
+@@ -793,10 +793,15 @@ static void tasklet_action_common(struct softirq_action *a,
+ 		if (tasklet_trylock(t)) {
+ 			if (!atomic_read(&t->count)) {
+ 				if (tasklet_clear_sched(t)) {
+-					if (t->use_callback)
++					if (t->use_callback) {
++						trace_tasklet_entry(t, t->callback);
+ 						t->callback(t);
+-					else
++						trace_tasklet_exit(t, t->callback);
++					} else {
++						trace_tasklet_entry(t, t->func);
+ 						t->func(t->data);
++						trace_tasklet_exit(t, t->func);
++					}
+ 				}
+ 				tasklet_unlock(t);
+ 				continue;
+-- 
+2.39.1.519.gcb327c4b5f-goog
 
