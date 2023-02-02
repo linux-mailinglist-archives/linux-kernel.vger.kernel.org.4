@@ -2,117 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A749E6883AD
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 17:07:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBF016883C7
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 17:09:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231964AbjBBQHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 11:07:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45808 "EHLO
+        id S232335AbjBBQJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 11:09:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230317AbjBBQHo (ORCPT
+        with ESMTP id S232297AbjBBQJm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 11:07:44 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D86873C2B0
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 08:07:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675354020;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=K7phcfiE83fVwz5I8bWRnbFjaiLhRCsY0h7b3g24mK8=;
-        b=AW496yp2glKYX90OUYaHtuuGXVy+pO2vCOPu3U/eqrxBJb/1aifyPa4E2eT6Nsibj/wGAA
-        TWO9tljCuFdD+8dgGMhVlf47CHsWUTZPvqhiTGEDGcYLqJqqnpxCw64sCDaG8pYDG3ukbP
-        mniapK6/BXwr1Ak/skk4rJvzLu22WuU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-630-_-kt1zdcP-2gghTR1sSrxA-1; Thu, 02 Feb 2023 11:06:56 -0500
-X-MC-Unique: _-kt1zdcP-2gghTR1sSrxA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 2 Feb 2023 11:09:42 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D94556B036;
+        Thu,  2 Feb 2023 08:09:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9945938288A7;
-        Thu,  2 Feb 2023 16:06:52 +0000 (UTC)
-Received: from [10.22.8.157] (unknown [10.22.8.157])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B6C1E140EBF6;
-        Thu,  2 Feb 2023 16:06:51 +0000 (UTC)
-Message-ID: <d630ca53-71f0-c735-fbc3-e826479aa86b@redhat.com>
-Date:   Thu, 2 Feb 2023 11:06:51 -0500
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 71AF661BF4;
+        Thu,  2 Feb 2023 16:09:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54ABEC433EF;
+        Thu,  2 Feb 2023 16:09:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675354177;
+        bh=xjNBvclZKFnIHn9hRQhrxBHvSbPwMKJe/L5bKZulUDM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YKwX9vpOm7OPqRcBWD60/Kcla5InDbtRaafHfflIRtWCcFuEscArPK7Z1O2px2hiz
+         PoR6bR4dy7UePHOGngn1BGINwwcmRhCjt9xulXO+gV8O909OctHENGX9EkKynHVP2p
+         2plz2lqZrjOnkQYxDzcW1yxDPGTYLhyE+nX28LtVHKf3D+DxFZc718+NZ+KtscHv8S
+         6O9DQoTp1gtB7frsriKqaBoNdirBk5ktfBq1FKK3FayD7GZR5M0EKUqE5vUkotW2YM
+         m0/DTMLvSCDVVDKpOiBpxhTXOO8rhXuitPP2kImZ+oZTk5LzApRg94WusgYUrXP2n9
+         aw3zRwi7sStQg==
+Date:   Thu, 2 Feb 2023 17:09:31 +0100
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     Matt Ranostay <mranostay@ti.com>, robh@kernel.org
+Cc:     rogerq@kernel.org, kw@linux.com, bhelgaas@google.com,
+        krzysztof.kozlowski@linaro.org, vigneshr@ti.com,
+        tjoseph@cadence.com, sergio.paracuellos@gmail.com,
+        pthombar@cadence.com, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 3/5] PCI: j721e: Add PCIe 4x lane selection support
+Message-ID: <Y9vgO51IRfx1by3P@lpieralisi>
+References: <20221124081221.1206167-1-mranostay@ti.com>
+ <20221124081221.1206167-4-mranostay@ti.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 1/2] cpuset: Fix cpuset_cpus_allowed() to not filter
- offline CPUs
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        kernel-team@android.com, Zefan Li <lizefan.x@bytedance.com>,
-        Tejun Heo <tj@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org
-References: <20230131221719.3176-1-will@kernel.org>
- <20230131221719.3176-2-will@kernel.org>
- <6b068916-5e1b-a943-1aad-554964d8b746@redhat.com>
- <Y9t1sP/6nFht7RSN@hirez.programming.kicks-ass.net>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <Y9t1sP/6nFht7RSN@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221124081221.1206167-4-mranostay@ti.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/2/23 03:34, Peter Zijlstra wrote:
-> On Tue, Jan 31, 2023 at 11:14:27PM -0500, Waiman Long wrote:
->
->> A major concern I have is the overhead of creating a poor man version of v2
->> cpus_allowed. This issue can be worked around even for cpuset v1 if it is
->> mounted with the cpuset_v2_mode option to behave more like v2 in its cpumask
->> handling. Alternatively we may be able to provide a config option to make
->> this the default for v1 without the special mount option, if necessary.
-> It is equally broken for v2, it masks against effective_cpus. Not to
-> mention it explicitly starts with cpu_online_mask.
+Hi Rob,
 
-After taking a close look at the patch, my understanding of what it is 
-doing is as follows:
+I think your comment:
 
-v2: cpus_allowed will not be affected by hotplug. So the new 
-cpuset_cpus_allowed() will return effective_cpus + offline cpus that 
-should have been part of effective_cpus if online before masking it with 
-allowable cpus and then go up the cpuset hierarchy if necessary.
+https://lore.kernel.org/linux-pci/CAL_JsqJ5cOLXhD-73esmhVwMEWGT+w3SJC14Z0jY4tQJQRA7iw@mail.gmail.com
 
-v1: cpus_allowed is equivalent to v2 effective_cpus. It starts at the 
-current cpuset and move up the hierarchy if necessary to find a cpuset 
-that have at least one allowable cpu.
+was related to the commit log wording and not necessarily
+the actual diff. Please let me know if you are happy with
+this change and I shall merge the series.
 
-First of all, it does not take into account of the v2 partition feature 
-that may cause it to produce incorrect result if partition is enabled 
-somewhere. Secondly, I don't see any benefit other than having some 
-additional offline cpu available in a task's cpumask which the scheduler 
-will ignore anyway. v2 is able to recover a previously offlined cpu. So 
-we don't gain any net benefit other than the going up the cpuset 
-hierarchy part.
+Thanks,
+Lorenzo
 
-For v1, I agree we should go up the cpuset hierarchy to find a usable 
-cpuset. Instead of introducing such a complexity in 
-cpuset_cpus_allowed(), my current preference is to do the hierarchy 
-climbing part in an enhanced cpuset_cpus_allowed_fallback() after an 
-initial failure of cpuset_cpus_allowed(). That will be easier to 
-understand than having such complexity and overhead in 
-cpuset_cpus_allowed() alone.
-
-I will work on a patchset to do that as a counter offer.
-
-Cheers,
-Longman
-
-
-
+On Thu, Nov 24, 2022 at 12:12:19AM -0800, Matt Ranostay wrote:
+> Add support for setting of two-bit field that allows selection of 4x lane
+> PCIe which was previously limited to only 2x lanes.
+> 
+> Signed-off-by: Matt Ranostay <mranostay@ti.com>
+> Reviewed-by: Vignesh Raghavendra <vigneshr@ti.com>
+> ---
+>  drivers/pci/controller/cadence/pci-j721e.c | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/cadence/pci-j721e.c b/drivers/pci/controller/cadence/pci-j721e.c
+> index 8990f58d64d5..dab3db9be6d8 100644
+> --- a/drivers/pci/controller/cadence/pci-j721e.c
+> +++ b/drivers/pci/controller/cadence/pci-j721e.c
+> @@ -42,7 +42,6 @@ enum link_status {
+>  };
+>  
+>  #define J721E_MODE_RC			BIT(7)
+> -#define LANE_COUNT_MASK			BIT(8)
+>  #define LANE_COUNT(n)			((n) << 8)
+>  
+>  #define GENERATION_SEL_MASK		GENMASK(1, 0)
+> @@ -52,6 +51,7 @@ struct j721e_pcie {
+>  	struct clk		*refclk;
+>  	u32			mode;
+>  	u32			num_lanes;
+> +	u32			max_lanes;
+>  	void __iomem		*user_cfg_base;
+>  	void __iomem		*intd_cfg_base;
+>  	u32			linkdown_irq_regfield;
+> @@ -205,11 +205,15 @@ static int j721e_pcie_set_lane_count(struct j721e_pcie *pcie,
+>  {
+>  	struct device *dev = pcie->cdns_pcie->dev;
+>  	u32 lanes = pcie->num_lanes;
+> +	u32 mask = GENMASK(8, 8);
+>  	u32 val = 0;
+>  	int ret;
+>  
+> +	if (pcie->max_lanes == 4)
+> +		mask = GENMASK(9, 8);
+> +
+>  	val = LANE_COUNT(lanes - 1);
+> -	ret = regmap_update_bits(syscon, offset, LANE_COUNT_MASK, val);
+> +	ret = regmap_update_bits(syscon, offset, mask, val);
+>  	if (ret)
+>  		dev_err(dev, "failed to set link count\n");
+>  
+> @@ -439,6 +443,8 @@ static int j721e_pcie_probe(struct platform_device *pdev)
+>  	ret = of_property_read_u32(node, "num-lanes", &num_lanes);
+>  	if (ret || num_lanes > data->max_lanes)
+>  		num_lanes = 1;
+> +
+> +	pcie->max_lanes = data->max_lanes;
+>  	pcie->num_lanes = num_lanes;
+>  
+>  	if (dma_set_mask_and_coherent(dev, DMA_BIT_MASK(48)))
+> -- 
+> 2.38.GIT
+> 
