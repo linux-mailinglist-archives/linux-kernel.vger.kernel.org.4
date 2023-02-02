@@ -2,226 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CB75688542
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 18:19:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EAEC688546
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 18:20:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232413AbjBBRTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 12:19:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45192 "EHLO
+        id S232555AbjBBRUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 12:20:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbjBBRTe (ORCPT
+        with ESMTP id S232545AbjBBRUC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 12:19:34 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 713852BF2E
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 09:19:32 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id n6so2721850edo.9
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 09:19:32 -0800 (PST)
+        Thu, 2 Feb 2023 12:20:02 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A547B2B626;
+        Thu,  2 Feb 2023 09:19:59 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id v3so1816141pgh.4;
+        Thu, 02 Feb 2023 09:19:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=mime-version:subject:user-agent:references:in-reply-to:message-id
-         :date:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=o49IlYmgBIwmhdaxGiOjXK8q0/En+/dcB7RWume3khc=;
-        b=HiHVO0vHeyWkaxD8VcGZXnwzGUc182tBxi5+TKtZ2eBbX8szhQ0BHj/kRoQe7id1Kd
-         jClQbf4HbiQRiL7caplIKLOrur36piMhso5JVsnNQnY9I+uJ9YiSrYzPpbaNgNZxXlkF
-         K9RFU0WtOB3eUF4pD0J5nmoWqxxRxt6+TSuRg=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LBhU5vxFQWiGkZ1Ym1DhxsTa46TKoDmY8TSwDgIfrcA=;
+        b=j6ugQEAth2CJuXBVM7zd3QWC9vX/lDyxoKyO7dHeCODFaQ7aQ1A7I6yC2IlpzseVMH
+         ovZ7teT3CLsK2B7Wny80ef/4Daq2zmpzjV2TTT0CbWlKYzYVEJGjLteG8p24AzMFcU/X
+         hTrJK3Pl79UBXVpEPMMJ5CCINrf3/u01HAjyO/aukeZN0VRzMCcs90lHcVD5GRidMD/0
+         0/dS23FBkB7LlYcTiKwq+K0srdfVdNXJuvVoxUd/IRVU395Yugz0Iup/YrhZ8bsx5IwH
+         +3KrZPsFxgF+hL9FKmG/UNXE71cEx0/shvGaNF+Hjt0aW6WGOE2qzwQSjeDrWs+F/4UI
+         g9UQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:subject:user-agent:references:in-reply-to:message-id
-         :date:cc:to:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=o49IlYmgBIwmhdaxGiOjXK8q0/En+/dcB7RWume3khc=;
-        b=gna2/RUv0pkqkapUzlaMTRK9XrBwsO0HY1+Zjg3sCiezQ+H6gQpXqwIiW0wtJYSk+/
-         o8NrE6F+evwyPwYP6lwC6T/wvhTC4DKfih/pCbtGuSSQtU6vUPLkX9DlhhLCADRg0KKt
-         6/NtjRT3ZFWZh202L7tktI/TiDbVWqk+WoYEIWEr9/oNZ55WhUNZzH/IEAJmOVVQdynb
-         F0rwufDNZ2K0WpyY2wzVGygG+GNqENqKlJM0mo83k78rmt2me11TR1aIMhImhqUFAqhB
-         N0qGHrABtQqcj5j3JCi+aZpDCrxw0eTARASAhEeGzBwAc05tjOTDlflwmoeRCgB8dNWa
-         mfCQ==
-X-Gm-Message-State: AO0yUKXMINdJZXgqKxUqY36jdnBBCNTJY4/e1+eYOyVjHXTolcOmKfxd
-        y0OXME6OdO8NTSS+72uerBnYxg==
-X-Google-Smtp-Source: AK7set80xx+Vx8ETHcrki+ZuU+Tr95Gu87uLKpi+Zlsy8wKVgjyICjGAIr69H+ZRG6PzIU96dPUvAA==
-X-Received: by 2002:aa7:cfc3:0:b0:499:70a8:f918 with SMTP id r3-20020aa7cfc3000000b0049970a8f918mr6677576edy.16.1675358370959;
-        Thu, 02 Feb 2023 09:19:30 -0800 (PST)
-Received: from [192.168.178.38] (f215227.upc-f.chello.nl. [80.56.215.227])
-        by smtp.gmail.com with ESMTPSA id ka6-20020a170907920600b0088f8a61eb48sm48572ejb.154.2023.02.02.09.19.29
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 02 Feb 2023 09:19:30 -0800 (PST)
-From:   Arend Van Spriel <arend.vanspriel@broadcom.com>
-To:     Hector Martin <marcan@marcan.st>,
-        Jonas Gorski <jonas.gorski@gmail.com>,
-        "'Hector Martin' via BRCM80211-DEV-LIST,PDL" 
-        <brcm80211-dev-list.pdl@broadcom.com>
-CC:     Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexander Prutskov <alep@cypress.com>,
-        "Chi-Hsien Lin" <chi-hsien.lin@cypress.com>,
-        Wright Feng <wright.feng@cypress.com>,
-        Ian Lin <ian.lin@infineon.com>,
-        Soontak Lee <soontak.lee@cypress.com>,
-        Joseph chuang <jiac@cypress.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Aditya Garg <gargaditya08@live.com>, <asahi@lists.linux.dev>,
-        <linux-wireless@vger.kernel.org>,
-        <brcm80211-dev-list.pdl@broadcom.com>,
-        <SHA-cyfmac-dev-list@infineon.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Hauke Mehrtens <hauke@hauke-m.de>
-Date:   Thu, 02 Feb 2023 18:19:28 +0100
-Message-ID: <1861323f100.279b.9b12b7fc0a3841636cfb5e919b41b954@broadcom.com>
-In-Reply-To: <4fb4af22-d115-de62-3bda-c1ae02e097ee@marcan.st>
-References: <20230131112840.14017-1-marcan@marcan.st>
- <20230131112840.14017-2-marcan@marcan.st>
- <CAOiHx=mYxFx0kr5s=4X_qywZBpPqCbrNjLnTXfigPOnqZSxjag@mail.gmail.com>
- <4fb4af22-d115-de62-3bda-c1ae02e097ee@marcan.st>
-User-Agent: AquaMail/1.41.0 (build: 104100234)
-Subject: Re: [PATCH v2 1/5] brcmfmac: Drop all the RAW device IDs
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LBhU5vxFQWiGkZ1Ym1DhxsTa46TKoDmY8TSwDgIfrcA=;
+        b=lGgKgcKl9duKeu7hMoEXtUjjusX0oSJUOtwQ8bwHVgonKwgoUKxSGsa2WnSC/Jtcvl
+         50MfZg9x1C6UrdIETaCv5RRIOJqn/UX8yzykX/pYTksOLK3I83qEEeQ7+1lr6UFr4ZcQ
+         5Hlu79/ivu2Ag8tGwtcr79Iy9KxECvcGkq1vGp7w5tLOqqzTn06DAcRkzlZEmSIStQi9
+         aSxWO7ikcKI4tgn6PyoVkErVBvZjintVRJZJpIbFYe4/KrViUDZHWd9ti41ZYcT6zzgh
+         fHqzUdDWo4dTzBIXgd8oiW3oRvu7SqMoaW9hsVgOmybR3Vtenry6aIhCNyoRGx9/O8jv
+         l7Fg==
+X-Gm-Message-State: AO0yUKUAF1oO9VlRTGpZf9DMwY9G9Ssb/EPptnbK9KP++2UkgytEQLWb
+        a8QePA4PfSOFwJMibwVxkgOffHf9CeOGPWZarG0=
+X-Google-Smtp-Source: AK7set++U/x9d1ue4wwOlpibFnwGdM6lnb5yrJcbsm5Yidl4/qHjy7Rul6UOloTRu/EKfH5fmW6VPoCDmy/htze4SGo=
+X-Received: by 2002:a63:5150:0:b0:4d0:370b:5027 with SMTP id
+ r16-20020a635150000000b004d0370b5027mr1221968pgl.8.1675358398948; Thu, 02 Feb
+ 2023 09:19:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000095af2505f3bac4c9"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230202151504.542958-1-zyytlz.wz@163.com> <965141BE-C3CB-4C15-9B12-381BB463325B@suse.de>
+In-Reply-To: <965141BE-C3CB-4C15-9B12-381BB463325B@suse.de>
+From:   Zheng Hacker <hackerzheng666@gmail.com>
+Date:   Fri, 3 Feb 2023 01:19:46 +0800
+Message-ID: <CAJedcCyXkUGGXwxXs8Q7u+x94ZH2MbKEBV-Fp557hESDuF0gbA@mail.gmail.com>
+Subject: Re: [PATCH] bcache: Fix __bch_btree_node_alloc to make the failure
+ behavior consistent
+To:     Coly Li <colyli@suse.de>
+Cc:     Zheng Wang <zyytlz.wz@163.com>,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        linux-bcache@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        alex000young@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000095af2505f3bac4c9
-Content-Type: text/plain; format=flowed; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-
-On February 2, 2023 6:25:28 AM "'Hector Martin' via BRCM80211-DEV-LIST,PDL" 
-<brcm80211-dev-list.pdl@broadcom.com> wrote:
-
-> On 31/01/2023 23.17, Jonas Gorski wrote:
->> On Tue, 31 Jan 2023 at 12:36, Hector Martin <marcan@marcan.st> wrote:
->>>
->>> These device IDs are only supposed to be visible internally, in devices
->>> without a proper OTP. They should never be seen in devices in the wild,
->>> so drop them to avoid confusion.
->>
->> I think these can still show up in embedded platforms where the
->> OTP/SPROM is provided on-flash.
->>
->> E.g. https://forum.archive.openwrt.org/viewtopic.php?id=55367&p=4
->> shows this bootlog on an BCM4709A0 router with two BCM43602 wifis:
->>
->> [    3.237132] pci 0000:01:00.0: [14e4:aa52] type 00 class 0x028000
->> [    3.237174] pci 0000:01:00.0: reg 0x10: [mem 0x00000000-0x00007fff 64bit]
->> [    3.237199] pci 0000:01:00.0: reg 0x18: [mem 0x00000000-0x003fffff 64bit]
->> [    3.237302] pci 0000:01:00.0: supports D1 D2
->> ...
->> [    3.782384] pci 0001:03:00.0: [14e4:aa52] type 00 class 0x028000
->> [    3.782440] pci 0001:03:00.0: reg 0x10: [mem 0x00000000-0x00007fff 64bit]
->> [    3.782474] pci 0001:03:00.0: reg 0x18: [mem 0x00000000-0x003fffff 64bit]
->> [    3.782649] pci 0001:03:00.0: supports D1 D2
->>
->> 0xaa52 == 43602 (BRCM_PCIE_43602_RAW_DEVICE_ID)
->>
->> Rafał can probably provide more info there.
->>
->> Regards
->> Jonas
+Coly Li <colyli@suse.de> =E4=BA=8E2023=E5=B9=B42=E6=9C=883=E6=97=A5=E5=91=
+=A8=E4=BA=94 00:23=E5=86=99=E9=81=93=EF=BC=9A
 >
-> Arend, any comments on these platforms?
+>
+>
+> > 2023=E5=B9=B42=E6=9C=882=E6=97=A5 23:15=EF=BC=8CZheng Wang <zyytlz.wz@1=
+63.com> =E5=86=99=E9=81=93=EF=BC=9A
+> >
+> > In some specific situation, the return value of __bch_btree_node_alloc =
+may
+> > be NULL. This may lead to poential NULL pointer dereference in caller
+> > function like a calling chaion :
+> > btree_split->bch_btree_node_alloc->__bch_btree_node_alloc.
+> >
+> > Fix it by initialize return value in __bch_btree_node_alloc before retu=
+rn.
+> >
+> > Fixes: cafe56359144 ("bcache: A block layer cache")
+> > Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+> > ---
+> > drivers/md/bcache/btree.c | 10 ++++++----
+> > drivers/md/bcache/super.c |  2 +-
+> > 2 files changed, 7 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/md/bcache/btree.c b/drivers/md/bcache/btree.c
+> > index 147c493a989a..35346c1d7c3c 100644
+> > --- a/drivers/md/bcache/btree.c
+> > +++ b/drivers/md/bcache/btree.c
+> > @@ -1090,10 +1090,12 @@ struct btree *__bch_btree_node_alloc(struct cac=
+he_set *c, struct btree_op *op,
+> >     struct btree *parent)
+> > {
+> > BKEY_PADDED(key) k;
+> > - struct btree *b =3D ERR_PTR(-EAGAIN);
+> > + struct btree *b;
+> >
+> > mutex_lock(&c->bucket_lock);
+> > retry:
+> > + /* return ERR_PTR(-EAGAIN) when it fails */
+> > + b =3D ERR_PTR(-EAGAIN);
+> > if (__bch_bucket_alloc_set(c, RESERVE_BTREE, &k.key, wait))
+> > goto err;
+> >
+>
+>
+> The above change can be a single patch.
+>
+> And the rested change can be another cleanup patch.
+>
+> > @@ -1138,7 +1140,7 @@ static struct btree *btree_node_alloc_replacement=
+(struct btree *b,
+> > {
+> > struct btree *n =3D bch_btree_node_alloc(b->c, op, b->level, b->parent)=
+;
+> >
+> > - if (!IS_ERR_OR_NULL(n)) {
+> > + if (!IS_ERR(n)) {
+> > mutex_lock(&n->write_lock);
+> > bch_btree_sort_into(&b->keys, &n->keys, &b->c->sort);
+> > bkey_copy_key(&n->key, &b->key);
+> > @@ -1352,7 +1354,7 @@ static int btree_gc_coalesce(struct btree *b, str=
+uct btree_op *op,
+> >
+> > for (i =3D 0; i < nodes; i++) {
+> > new_nodes[i] =3D btree_node_alloc_replacement(r[i].b, NULL);
+> > - if (IS_ERR_OR_NULL(new_nodes[i]))
+> > + if (IS_ERR(new_nodes[i]))
+> > goto out_nocoalesce;
+> > }
+> >
+> > @@ -1669,7 +1671,7 @@ static int bch_btree_gc_root(struct btree *b, str=
+uct btree_op *op,
+> > if (should_rewrite) {
+> > n =3D btree_node_alloc_replacement(b, NULL);
+> >
+> > - if (!IS_ERR_OR_NULL(n)) {
+> > + if (!IS_ERR(n)) {
+> > bch_btree_node_write_sync(n);
+> >
+> > bch_btree_set_root(n);
+> > diff --git a/drivers/md/bcache/super.c b/drivers/md/bcache/super.c
+> > index ba3909bb6bea..92de714fe75e 100644
+> > --- a/drivers/md/bcache/super.c
+> > +++ b/drivers/md/bcache/super.c
+> > @@ -2088,7 +2088,7 @@ static int run_cache_set(struct cache_set *c)
+> >
+> > err =3D "cannot allocate new btree root";
+> > c->root =3D __bch_btree_node_alloc(c, NULL, 0, true, NULL);
+> > - if (IS_ERR_OR_NULL(c->root))
+> > + if (IS_ERR(c->root))
+> > goto err;
+> >
+> > mutex_lock(&c->root->write_lock);
+>
+> And there will be 2 patches as I suggested.
+>
 
-Huh? I already replied to that couple of days ago or did I only imagine 
-doing that.
+Got it. It's a little bit late now. I might make that tomorrow ^_^
 
-Regards,
-Arend
-
-
-
-
---00000000000095af2505f3bac4c9
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-2Gzj3QNJRLsZu1TLyOyBBIr/BE7UiY3RabgRzknBGAPmzhS+fmyM8OtM5BYBsFBrSUFtZZO2p/tf
-Nbc24J2zf2peoZ8MK+7WQqummYlOnz+FyDkA9EybeNMcS5C+xi/PAgMBAAGjggHdMIIB2TAOBgNV
-HQ8BAf8EBAMCBaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJl
-Lmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYI
-KwYBBQUHMAGGNWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24y
-Y2EyMDIwME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3
-dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqG
-OGh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3Js
-MCcGA1UdEQQgMB6BHGFyZW5kLnZhbnNwcmllbEBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYB
-BQUHAwQwHwYDVR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFIikAXd8CEtv
-ZbDflDRnf3tuStPuMA0GCSqGSIb3DQEBCwUAA4IBAQCdS5XCYx6k2GGZui9DlFsFm75khkqAU7rT
-zBX04sJU1+B1wtgmWTVIzW7ugdtDZ4gzaV0S9xRhpDErjJaltxPbCylb1DEsLj+AIvBR34caW6ZG
-sQk444t0HPb29HnWYj+OllIGMbdJWr0/P95ZrKk2bP24ub3ZP/8SyzrohfIba9WZKMq6g2nTLZE3
-BtkeSGJx/8dy0h8YmRn+adOrxKXHxhSL8BNn8wsmIZyYWe6fRcBtO3Ks2DOLyHCdkoFlN8x9VUQF
-N2ulEgqCbRKkx+qNirW86eF138lr1gRxzclu/38ko//MmkAYR/+hP3WnBll7zbpIt0jc9wyFkSqH
-p8a1MYICbTCCAmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1z
-YTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMTv1t
-bpIzNUky46LXMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDMwGh4Kfa9F+psfZmi
-mNmrT7Uc2lQayhvkksE9sFavaTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJ
-BTEPFw0yMzAyMDIxNzE5MzFaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFl
-AwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzAL
-BglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAUNTDGCXmLbVcVHPsSjPi5g3hQmbdCMq3yEDc
-D46QHBQY43XZl5YR+M4aXELsSSy6/0woS3VmFKy5vnezO9qafoiNJl5kJiV4nyJTmhkZaVUiBfsG
-Y8VeREoYheUm6szEysdzCuiPNhDTe6CVDqtdf24fyA6KyU8QyNTcm/lEDMvCpDz68Go1Jpq4hJr4
-XNwaUZi1xaDH0s+PB21vhH//LLsjKceAbAOaIcuTFq9CZeweeeM4ALdz7usrf/KN9Xy+78OmvvU5
-0UxA2ibsYVk8kJ0lzUok3A9eVAuSho501CmTl5jru252O8I+VS1ig9zE+Bv++cRLUwmgZDi1p90u
-Zw==
---00000000000095af2505f3bac4c9--
+Best regards,
+Zheng Wang
