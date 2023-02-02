@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7099687E3F
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 14:04:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEF99687E45
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 14:05:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231614AbjBBNEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 08:04:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38844 "EHLO
+        id S231949AbjBBNFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 08:05:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232040AbjBBNEW (ORCPT
+        with ESMTP id S231643AbjBBNFo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 08:04:22 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D0B78E4A7;
-        Thu,  2 Feb 2023 05:04:18 -0800 (PST)
+        Thu, 2 Feb 2023 08:05:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 669D88E4A0
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 05:05:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B8F4EB82159;
-        Thu,  2 Feb 2023 13:04:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32376C433EF;
-        Thu,  2 Feb 2023 13:04:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0249861B1D
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 13:05:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3600C433D2;
+        Thu,  2 Feb 2023 13:05:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675343055;
-        bh=yUVM3WLXNypwBHB8GqC6IeD6PXsyotuZI3Y/nrlc7yg=;
+        s=k20201202; t=1675343133;
+        bh=KfapbWZaHoGL2lh75PlRq+/iMY1cexe2VdJrOWRjZsk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=V1HMe1Q+jFkkWbvWwukx7s4dD5Lw7QVNoB51ZAxboi/8pg0HD2z7C6Ll2oXSSYGpK
-         ipbT7WqvfOQx16iqvIxptetN4Q7HRqL012FFgyo9Qug/MVhdGVDMep8WHuU/wTR+RI
-         TpuVcyaOuT7/fwNUUblCYI5BteInXY5jDmutK4lcrMxc+1fyl4daPDRC++NDKz5OO1
-         LXBG9Dr8ulRR0+qN5FgF28HR8yc1wl7t38BAIkCW5qqfqSd8Q3ZQ57QO/pFmTVAwug
-         s72NbzBR6/YTkMEb5Mf62AyOfjexatq0IBUwF2T2NHyu3K5e+HFQDqQRzk6DKKwxl8
-         JH2QAAMsU3nzw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id A98F6405BE; Thu,  2 Feb 2023 10:04:12 -0300 (-03)
-Date:   Thu, 2 Feb 2023 10:04:12 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Sandipan Das <sandipan.das@amd.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        x86@kernel.org, peterz@infradead.org, bp@alien8.de,
-        namhyung@kernel.org, jolsa@kernel.org, tglx@linutronix.de,
-        mingo@redhat.com, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, dave.hansen@linux.intel.com,
-        james.clark@arm.com, irogers@google.com, eranian@google.com,
-        maddy@linux.ibm.com, kjain@linux.ibm.com, tmricht@linux.ibm.com,
-        ananth.narayan@amd.com, ravi.bangoria@amd.com,
-        santosh.shukla@amd.com
-Subject: Re: [PATCH v4 0/4] tools perf: Add branch speculation info
-Message-ID: <Y9u0zJA05JNHpB+i@kernel.org>
-References: <cover.1675333809.git.sandipan.das@amd.com>
+        b=YK13koIN2gnXc469qf/9k9La3ph+csCibap5vcuqGJE+8Hy2LrBEf4B2yAPV/w7h6
+         Nuf3QpHGm+Wn16/BIrp/mrc3meqhMvRZO/bPon0zGydLMWw2C6xzOQ2NkUD/+KGmut
+         QWUIdocqn55FkMzRI5oY6y12uxx497Lkt4a9n1QvhzaWZOVBcg+lQ4tPqYALwL5pfY
+         AORJMBJsJ1NmStBnwAAS1gaBjc5GwM4QQl2UsdlrS3kYdyy1N9dGEWAxIfEYs3Xu0E
+         a3vvbscn8VK1P8ciiKCuUhUk54YdUGVOOzPI5TFTCbbiW6D175bmVkvb4nI3BCYHov
+         AkChSan7JfKqw==
+Date:   Thu, 2 Feb 2023 18:35:29 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Kishon Vijay Abraham I <kishon@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v7 1/3] phy: mediatek: remove temporary variable @mask_
+Message-ID: <Y9u1GXaVJ0FKXWnu@matsya>
+References: <20230118084343.26913-1-chunfeng.yun@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cover.1675333809.git.sandipan.das@amd.com>
-X-Url:  http://acmel.wordpress.com
+In-Reply-To: <20230118084343.26913-1-chunfeng.yun@mediatek.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -64,68 +63,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, Feb 02, 2023 at 05:56:13PM +0530, Sandipan Das escreveu:
-> AMD Last Branch Record Extension Version 2 (LbrExtV2) provides branch
-> speculation information and the perf UAPI is extended to provide this in
-> a generic way. Make perf tool show this additional information.
+On 18-01-23, 16:43, Chunfeng Yun wrote:
+> Remove the temporary @mask_, this may cause build warning when use clang
+> compiler for powerpc, but can't reproduce it when compile for arm64.
+> the build warning is caused by:
 > 
-> The UAPI changes can be found in commit 93315e46b000 ("perf/core: Add
-> speculation info to branch entries").
+> "warning: result of comparison of constant 18446744073709551615 with
+> expression of type (aka 'unsigned long') is always false
+> [-Wtautological-constant-out-of-range-compare]"
 > 
-> Requesting help from folks having access to big-endian systems to test
-> changes in the sample parsing test as I was only able to test these in
-> a ppc64 simulator.
+> More information provided in below lore link.
+> 
+> After removing @mask_, there is a "CHECK:MACRO_ARG_REUSE" when run
+> checkpatch.pl, but due to @mask is constant, no reuse problem will happen.
 
-I'll try folding some of these patches as 'perf test' must pass after
-each of them, so that we keep the codebase bisectable.
-
-Right now, after appling the first patch on this v4 series:
-
-⬢[acme@toolbox perf]$ perf test 27
- 27: Sample parsing                                                  : FAILED!
-⬢[acme@toolbox perf]$
-
-- Arnaldo
- 
-> Previous versions can be found at:
-> v3: https://lore.kernel.org/all/cover.1675057032.git.sandipan.das@amd.com/
-> v2: https://lore.kernel.org/all/cover.1664356751.git.sandipan.das@amd.com/
-> v1: https://lore.kernel.org/all/cover.1660217326.git.sandipan.das@amd.com/
-> 
-> Changes in v4:
-> - Update tests that were failing due to changes in perf output and
->   sample parsing (thanks to Arnaldo for reporting).
-> 
-> Changes in v3:
-> - Drop tools-side UAPI changes as they have already been added by other
->   commits.
-> - Rebase on top of latest perf/core.
-> 
-> Changes in v2:
-> - Drop msr-index.h related changes for now.
-> - Rebase on top of latest perf/core.
-> - Fix UAPI breakage introduced by the ARM64 BRBE changes to perf branch
->   entry.
-> 
-> Sandipan Das (4):
->   perf script: Show branch speculation info
->   perf session: Show branch speculation info in raw dump
->   perf test sample-parsing: Update expected branch flags
->   perf test brstack: Update regex to include spec field
-> 
->  tools/perf/builtin-script.c            |  5 +++--
->  tools/perf/tests/sample-parsing.c      |  2 +-
->  tools/perf/tests/shell/test_brstack.sh | 18 +++++++++---------
->  tools/perf/util/branch.c               | 15 +++++++++++++++
->  tools/perf/util/branch.h               |  2 ++
->  tools/perf/util/evsel.c                | 15 ++++++++++++---
->  tools/perf/util/session.c              |  5 +++--
->  7 files changed, 45 insertions(+), 17 deletions(-)
-> 
-> -- 
-> 2.34.1
-> 
+Applied, thanks
 
 -- 
-
-- Arnaldo
+~Vinod
