@@ -2,143 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C6736888EC
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 22:21:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E6DC6888EE
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 22:22:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232653AbjBBVVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 16:21:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35754 "EHLO
+        id S232772AbjBBVWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 16:22:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232011AbjBBVVd (ORCPT
+        with ESMTP id S229974AbjBBVWu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 16:21:33 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42E306DB1B;
-        Thu,  2 Feb 2023 13:21:32 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id gr7so9861274ejb.5;
-        Thu, 02 Feb 2023 13:21:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=gSyJPeHxN6glqF50Jf3a9ZSuNsTot5DI62NEtSRA9us=;
-        b=FsXdaugBi4veiEDNI7QHXEDaFz4OdEee/wHMOYm7CfGKxtza2J57Rv6BWlIBupunrY
-         TTUKMoN6JAhAkohHlVCZgIDuGvo/1+XUBvS7ClBOv/i52MtPiDyzQfLXdzFNtmwhLmv9
-         r7vITFgimeudrBKgiBQJCcOGOs3NOtkePG2hU02COwtMVaE6CSPfOeSBHI3CSh/rEMVg
-         fkZhuPOBr34EB+tj23ZLHsnVUQ+pFvLyfaKGd9wgOmOE5iRGZ2G8fjuLvtq8jr4V2pzY
-         HZNXrd2TO2lO5QNX0xJmBFG99S2lDRChbyO6WWodrAwLOS2NCpNkaXE40+9el6w7JESE
-         Rh5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gSyJPeHxN6glqF50Jf3a9ZSuNsTot5DI62NEtSRA9us=;
-        b=VdPclpnTdyJ9ZAoPkXZBEfdfQUYYlQ3uG2YNyJQr0yW54KiBKVOp0/dzipZPm10JS2
-         +eyvJpjDJwJwLxT2Tls9W2fYtOnDmyq3Hm/V2FYl1pUYXpCSOz1wdLqWUmubqItnzlio
-         WHxjd/oXLvDVrlgHgqYaw7Mhs2n3U3p5jINka8E2UnZe2LxzAXzXEQmwJKyz9kNwhKRJ
-         Y25WsRkZfVwofclcNWgmTiR7gDFIhSV/qxxYagIz2gldQnYCePtuB+aQ6WZhtqVtz8wK
-         b1fXOiFJ3DNnW2M0ftbw07m8/tppqYX8ckEbQvyJY3ybpkGEQdNThNARUkzBwI4jwXYl
-         0vGw==
-X-Gm-Message-State: AO0yUKVWFpJNXLtYtP2RZyemnCHFZP/Yzj+6JzMIRAEinDEpsqtCNC7C
-        QgLroYMq9dH9nbRS1CCxjImZ5NR7x6+P3x3n3DA=
-X-Google-Smtp-Source: AK7set/97qq3TZuGbibfCSy2G7vqNMrsQUGT0EAEq0g81eyVrVysCCP5tqXMHKoqJxk8y4oRfJRNEabmzbjQ/1DBY3w=
-X-Received: by 2002:a17:906:fc20:b0:86e:429b:6a20 with SMTP id
- ov32-20020a170906fc2000b0086e429b6a20mr2277052ejb.247.1675372890547; Thu, 02
- Feb 2023 13:21:30 -0800 (PST)
+        Thu, 2 Feb 2023 16:22:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD5C6A331;
+        Thu,  2 Feb 2023 13:22:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8A598B826B4;
+        Thu,  2 Feb 2023 21:22:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9214C433EF;
+        Thu,  2 Feb 2023 21:22:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675372966;
+        bh=DMBzSDwPxDgAMg6vL3XOtJEZFFB+1JnCiCLBzaVACBs=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=Xu8Ky/MyzhuD0RUSRlyaMmkJwto2MXNKqJ5jTxwrTNSyTnT+PRz4Gq1NMZDyqHKL7
+         Uo0ZT7t2DKOxAe+KKyO3duJSjW+x5sIX5wpTZX6WydQJbZFGW4ofE1zA8GWEEBrrjz
+         lMN7y2Uxz/lBDZelGtpexF1FiX10e28B8+Tc6QG9dZdDlTBxL8MPBHFePqIIXJ+4zy
+         VXRmePei+pgoawrxDcmwW7z2Bt7Z77C3/57KJe2HdRNsg0SybXH9WN2xpR2X4hrPDP
+         jlmQdXvQmntqgr3PPtc33RCiey2+oz7Tvk650gB6C9n7Vpx27/qCDOfJSve9ZraKsJ
+         F1IA0boFT49Gw==
+Message-ID: <7b7edc8bacb863915d00673f9e03d38798341a69.camel@kernel.org>
+Subject: Re: [PATCH] NFSD: fix deny mode logic in nfs4_upgrade_open
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Chuck Lever III <chuck.lever@oracle.com>,
+        Dai Ngo <dai.ngo@oracle.com>
+Cc:     Pumpkin <cc85nod@gmail.com>,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Date:   Thu, 02 Feb 2023 16:22:44 -0500
+In-Reply-To: <CBAFB3E5-5737-47A7-8234-3A771E908C4F@oracle.com>
+References: <20230202073611.13106-1-cc85nod@gmail.com>
+         <CBAFB3E5-5737-47A7-8234-3A771E908C4F@oracle.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
 MIME-Version: 1.0
-References: <20230202163056.658641-1-void@manifault.com> <20230202163056.658641-3-void@manifault.com>
-In-Reply-To: <20230202163056.658641-3-void@manifault.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 2 Feb 2023 13:21:19 -0800
-Message-ID: <CAADnVQJjmnEpXWL8-SAPt5zYXnFYeF8-wXXpA9shOhqUXNPw=g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/3] bpf: Add KF_DEPRECATED kfunc flag
-To:     David Vernet <void@manifault.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@meta.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Kernel Team <kernel-team@meta.com>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 2, 2023 at 8:31 AM David Vernet <void@manifault.com> wrote:
->
-> Now that we have our kfunc lifecycle expectations clearly documented,
-> and that KF_DEPRECATED is documented as an optional method for kfunc
-> developers and maintainers to provide a deprecation story to BPF users,
-> we need to actually implement the flag.
->
-> This patch adds KF_DEPRECATED, and updates the verifier to issue a
-> verifier log message if a deprecated kfunc is called. Currently, a BPF
-> program either has to fail to verify, or be loaded with log level 2 in
-> order to see the message. We could eventually enhance this to always
-> be logged regardless of log level or verification status, or we could
-> instead emit a warning to dmesg. This seems like the least controversial
-> option for now.
->
-> A subsequent patch will add a selftest that verifies this behavior.
->
-> Signed-off-by: David Vernet <void@manifault.com>
-> ---
->  include/linux/btf.h   | 1 +
->  kernel/bpf/verifier.c | 8 ++++++++
->  2 files changed, 9 insertions(+)
->
-> diff --git a/include/linux/btf.h b/include/linux/btf.h
-> index 49e0fe6d8274..a0ea788ee9b0 100644
-> --- a/include/linux/btf.h
-> +++ b/include/linux/btf.h
-> @@ -71,6 +71,7 @@
->  #define KF_SLEEPABLE    (1 << 5) /* kfunc may sleep */
->  #define KF_DESTRUCTIVE  (1 << 6) /* kfunc performs destructive actions */
->  #define KF_RCU          (1 << 7) /* kfunc only takes rcu pointer arguments */
-> +#define KF_DEPRECATED   (1 << 8) /* kfunc is slated to be removed or deprecated */
->
->  /*
->   * Tag marking a kernel function as a kfunc. This is meant to minimize the
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 4cc0e70ee71e..22adcf24f9e1 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -8511,6 +8511,11 @@ static bool is_kfunc_rcu(struct bpf_kfunc_call_arg_meta *meta)
->         return meta->kfunc_flags & KF_RCU;
->  }
->
-> +static bool is_kfunc_deprecated(const struct bpf_kfunc_call_arg_meta *meta)
-> +{
-> +       return meta->kfunc_flags & KF_DEPRECATED;
-> +}
-> +
->  static bool is_kfunc_arg_kptr_get(struct bpf_kfunc_call_arg_meta *meta, int arg)
->  {
->         return arg == 0 && (meta->kfunc_flags & KF_KPTR_GET);
-> @@ -9646,6 +9651,9 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
->                         mark_btf_func_reg_size(env, regno, t->size);
->         }
->
-> +       if (is_kfunc_deprecated(&meta))
-> +               verbose(env, "calling deprecated kfunc %s\n", func_name);
-> +
+On Thu, 2023-02-02 at 19:41 +0000, Chuck Lever III wrote:
+>=20
+> > On Feb 2, 2023, at 2:36 AM, Pumpkin <cc85nod@gmail.com> wrote:
+> >=20
+> > If the upgrading deny mode is invalid or conflicts with other client, w=
+e
+> > should try to resolve it, but the if-condition makes those error handli=
+ng
+> > cannot be executed.
+> >=20
+> > Signed-off-by: Pumpkin <cc85nod@gmail.com>
+> > ---
+> > fs/nfsd/nfs4state.c | 2 +-
+> > 1 file changed, 1 insertion(+), 1 deletion(-)
+> >=20
+> > diff --git a/fs/nfsd/nfs4state.c b/fs/nfsd/nfs4state.c
+> > index 4ef529379..ebdfaf0f9 100644
+> > --- a/fs/nfsd/nfs4state.c
+> > +++ b/fs/nfsd/nfs4state.c
+> > @@ -5298,7 +5298,7 @@ nfs4_upgrade_open(struct svc_rqst *rqstp, struct =
+nfs4_file *fp,
+> > 	/* test and set deny mode */
+> > 	spin_lock(&fp->fi_lock);
+> > 	status =3D nfs4_file_check_deny(fp, open->op_share_deny);
+> > -	if (status =3D=3D nfs_ok) {
+> > +	if (status !=3D nfs_ok) {
+> > 		if (status !=3D nfserr_share_denied) {
+>=20
+> if status =3D=3D nfs_ok then status will definitely not equal
+> share_denied. So this check is a bit nonsensical as it stands.
+>=20
+> Usually I prefer "switch (status)" in situations like this
+> because that avoids this kind of issue and I find it easier
+> to read quickly.
+>=20
+> Jeff, you are the original author of this function, and
+> Dai, your commit is the last one to touch this area. Can
+> you guys have a look? The one-liner looks correct, but I
+> might be missing something.
+>=20
 
-Since prog will successfully load, no one will notice this message.
+Yeah, that code is clearly broken and it looks like it was done in
+3d69427151806 (NFSD: add support for share reservation conflict to
+courteous server).
 
-I think we can skip patches 2 and 3 for now.
+I don't believe that one-liner is correct though. If the result is
+nfs_ok, then we want to set the deny mode here and that won't happen.
+
+Something like this maybe? (completely untested):
+
+---------------8<-------------------
+
+diff --git a/fs/nfsd/nfs4state.c b/fs/nfsd/nfs4state.c
+index c39e43742dd6..af22dfdc6fcc 100644
+--- a/fs/nfsd/nfs4state.c
++++ b/fs/nfsd/nfs4state.c
+@@ -5282,16 +5282,17 @@ nfs4_upgrade_open(struct svc_rqst *rqstp, struct nf=
+s4_file *fp,
+        /* test and set deny mode */
+        spin_lock(&fp->fi_lock);
+        status =3D nfs4_file_check_deny(fp, open->op_share_deny);
+-       if (status =3D=3D nfs_ok) {
+-               if (status !=3D nfserr_share_denied) {
+-                       set_deny(open->op_share_deny, stp);
+-                       fp->fi_share_deny |=3D
+-                               (open->op_share_deny & NFS4_SHARE_DENY_BOTH=
+);
+-               } else {
+-                       if (nfs4_resolve_deny_conflicts_locked(fp, false,
+-                                       stp, open->op_share_deny, false))
+-                               status =3D nfserr_jukebox;
+-               }
++       switch (status) {
++       case nfs_ok:
++               set_deny(open->op_share_deny, stp);
++               fp->fi_share_deny |=3D
++                       (open->op_share_deny & NFS4_SHARE_DENY_BOTH);
++               break;
++       case nfserr_share_denied:
++               if (nfs4_resolve_deny_conflicts_locked(fp, false,
++                               stp, open->op_share_deny, false))
++                       status =3D nfserr_jukebox;
++               break;
+        }
+        spin_unlock(&fp->fi_lock);
+
+--=20
+Jeff Layton <jlayton@kernel.org>
