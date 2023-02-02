@@ -2,72 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 515BE6886C4
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 19:39:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF2996886DB
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 19:41:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232145AbjBBSjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 13:39:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46002 "EHLO
+        id S232717AbjBBSl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 13:41:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230169AbjBBSji (ORCPT
+        with ESMTP id S232468AbjBBSlU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 13:39:38 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C6C979F25
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 10:38:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675363067;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=13Fcd1d4Gee3BKElvOUgZHCzkM2hbpWCpU1mCmHYLgA=;
-        b=TawWOe3lViSXFIV73trUOwb/xE4q0c3IgFUDKzzMKjfuhaaFmNMuTanEEqckDm6Kr1kGZd
-        V5hUJKLO4GFCoiciBsrwbQm4hruFrMvh6V0rQx2u9qUIorMCj5kXIaD8rB26ubC8n5hW4/
-        bola4tYm19OZrofCWR99PjpX5qK4i7Q=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-9-w7HcwcL4MW22lDetfn-lfA-1; Thu, 02 Feb 2023 13:37:43 -0500
-X-MC-Unique: w7HcwcL4MW22lDetfn-lfA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 186F42A59542;
-        Thu,  2 Feb 2023 18:37:43 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (ovpn-192-48.brq.redhat.com [10.40.192.48])
-        by smtp.corp.redhat.com (Postfix) with SMTP id E13B1404BEC0;
-        Thu,  2 Feb 2023 18:37:39 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Thu,  2 Feb 2023 19:37:39 +0100 (CET)
-Date:   Thu, 2 Feb 2023 19:37:35 +0100
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     Wander Lairson Costa <wander@redhat.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Hu Chunyu <chuhu@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>
-Subject: Re: [PATCH v3] kernel/fork: beware of __put_task_struct calling
- context
-Message-ID: <20230202183735.GA17563@redhat.com>
-References: <20230201124541.62104-1-wander@redhat.com>
+        Thu, 2 Feb 2023 13:41:20 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AE6611161;
+        Thu,  2 Feb 2023 10:40:46 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id b5so2789095plz.5;
+        Thu, 02 Feb 2023 10:40:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=44Tbffij6x8u6hWa9nzBypn4C/WCHwZ/yEGRnTnWNXY=;
+        b=rjnWzErP110NEcFFiTyfqcQ6xcLE5gMNRpNMeRBoWB1t6rDsl7kuyEWITkxTo/NNQm
+         4pSwc3LkFezu3cPR0AV+rOsT6/su4KFBIuOsAeMVmBoNtmyx5g8paPDsyZJm622BaDjB
+         Vi2nT0WFruIPR/CpxyQPtw2Sltf0xMZOXlg0m/ekKYQFL2l7mT0iN4OTg3i9whljpcO5
+         dM3WwIqFA2ei2fbrxWtqpJKK5du9htLMypIbdtQOXqJOaYdIUVH3d0aK1guSY3rkiGhg
+         cZEHSXDPXvGI7Ca9N8GhylUQAfUB6BIq+Rb7qQ9yk8Z7chjtOm3yB1l5/pDnVaUh5cQR
+         2vzA==
+X-Gm-Message-State: AO0yUKVQxXVwwbz+Tfey46h2aYEzSK/KTJRzmbxJv3o4bF5UkokGMbII
+        5XxwsUg3dQ2JFZfo/EPCUoc=
+X-Google-Smtp-Source: AK7set8fNbiiFYW7OdcSiJFzCCcd6PnkVskd+HRqyruGtnlqpt0Vn1V/D3WSUtrSKyM8at7NMHKKxw==
+X-Received: by 2002:a17:902:c403:b0:196:6599:3538 with SMTP id k3-20020a170902c40300b0019665993538mr8710126plk.22.1675363146577;
+        Thu, 02 Feb 2023 10:39:06 -0800 (PST)
+Received: from ?IPV6:2620:15c:211:201:bf7f:37aa:6a01:bf09? ([2620:15c:211:201:bf7f:37aa:6a01:bf09])
+        by smtp.gmail.com with ESMTPSA id l2-20020a170902ec0200b00198a96c6b7csm4082247pld.305.2023.02.02.10.39.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Feb 2023 10:39:05 -0800 (PST)
+Message-ID: <8540c721-6bb9-3542-d9bd-940b59d3a7a4@acm.org>
+Date:   Thu, 2 Feb 2023 10:39:02 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230201124541.62104-1-wander@redhat.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [dm-devel] [PATCH 0/9] Documentation: correct lots of spelling
+ errors (series 2)
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org
+Cc:     nvdimm@lists.linux.dev, linux-doc@vger.kernel.org,
+        Song Liu <song@kernel.org>, dm-devel@redhat.com,
+        netdev@vger.kernel.org, Zefan Li <lizefan.x@bytedance.com>,
+        sparclinux@vger.kernel.org,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Alasdair Kergon <agk@redhat.com>,
+        Dave Jiang <dave.jiang@intel.com>, linux-scsi@vger.kernel.org,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-media@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        linux-raid@vger.kernel.org, Tejun Heo <tj@kernel.org>,
+        Jiri Pirko <jiri@nvidia.com>, cgroups@vger.kernel.org,
+        Dan Williams <dan.j.williams@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-hwmon@vger.kernel.org, rcu@vger.kernel.org,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-mm@kvack.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        dmaengine@vger.kernel.org, "David S. Miller" <davem@davemloft.net>
+References: <20230129231053.20863-1-rdunlap@infradead.org>
+ <875yckvt1b.fsf@meer.lwn.net>
+ <a2c560bb-3b5c-ca56-c5c2-93081999281d@infradead.org>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <a2c560bb-3b5c-ca56-c5c2-93081999281d@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,47 +94,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/01, Wander Lairson Costa wrote:
->
-> Instead of calling __put_task_struct() directly, we defer it using
-> call_rcu(). A more natural approach would use a workqueue, but since
-> in PREEMPT_RT, we can't allocate dynamic memory from atomic context,
-> the code would become more complex because we would need to put the
-> work_struct instance in the task_struct and initialize it when we
-> allocate a new task_struct.
+On 2/2/23 10:33, Randy Dunlap wrote:
+> On 2/2/23 10:09, Jonathan Corbet wrote:
+>> Randy Dunlap <rdunlap@infradead.org> writes:
+>>>   [PATCH 6/9] Documentation: scsi/ChangeLog*: correct spelling
+>>>   [PATCH 7/9] Documentation: scsi: correct spelling
+>>
+>> I've left these for the SCSI folks for now.  Do we *really* want to be
+>> fixing spelling in ChangeLog files from almost 20 years ago?
+> 
+> That's why I made it a separate patch -- so the SCSI folks can decide that...
 
-I don't think I can ack the changes in PREEMPT_RT but this version LGTM.
+How about removing the Documentation/scsi/ChangeLog.* files? I'm not 
+sure these changelogs are still useful since these duplicate information 
+that is already available in the output of git log ${driver_directory}.
 
+Thanks,
 
+Bart.
 
-
-just a couple of purely cosmetic nits, feel free to ignore...
-
-> +static void __delayed_put_task_struct(struct rcu_head *rhp)
-> +{
-> +	struct task_struct *task = container_of(rhp, struct task_struct, rcu);
-> +
-> +	___put_task_struct(task);
-> +}
-
-We already have delayed_put_task_struct() which differs very much.
-Perhaps something like ___put_task_struct() will look less confusing.
-
-> +void __put_task_struct(struct task_struct *tsk)
-> +{
-> +	if (IS_ENABLED(CONFIG_PREEMPT_RT) && (!preemptible() || !in_task()))
-> +		/*
-> +		 * under PREEMPT_RT, we can't call put_task_struct
-> +		 * in atomic context because it will indirectly
-> +		 * acquire sleeping locks.
-> +		 */
-> +		call_rcu(&tsk->rcu, __delayed_put_task_struct);
-
-Perhaps this deserves additional note to explain why is it safe to use tsk->rcu
-union. May be this is obvious, but I was confused when I looked at the previous
-version ;)
-
-but again, feel free to ignore.
-
-Oleg.
 
