@@ -2,176 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0C5D6884D2
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 17:52:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51A3D6884D8
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 17:53:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232443AbjBBQwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 11:52:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58084 "EHLO
+        id S232421AbjBBQxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 11:53:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232391AbjBBQv7 (ORCPT
+        with ESMTP id S232040AbjBBQxb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 11:51:59 -0500
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E8036DFFD;
-        Thu,  2 Feb 2023 08:51:58 -0800 (PST)
-Received: by mail-qt1-x834.google.com with SMTP id h24so2499184qta.12;
-        Thu, 02 Feb 2023 08:51:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=g6NUjptHk0fH85aQHPjlgY3CxEXtEbFDu06Q/GWoLvY=;
-        b=gm8KEJ8oqSK/U9WtKR1ygOSkG2inMR+ZzHRDvsIRe/xV/uX52TnZG2ywApIxXp3WNU
-         xKJKtWNu4kw0UD0wllu2/+ReettyIc1OWIOxR4s75ODZQ471q54gdWfQ8e7FXVaSI3vH
-         gGUUErVYZJVZ0amqUuscQ5dm63lrKOGYnONT3QLIZsKfFsEgcjkh/8HGBaKsn10Ba4ut
-         mT09FY9Rm1u5K7R7TtGMYH3EljHDNp/QOStU5rGgPqCunGWSCBOJzXNN4bb/VDULlA6T
-         BWtpt+LND2p4bM/zdoD6zpeT2CDN/F+cYY/ZSnxID6skIfnax32SGOYfRMkKNRPEeUBJ
-         ehSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=g6NUjptHk0fH85aQHPjlgY3CxEXtEbFDu06Q/GWoLvY=;
-        b=tjCD4HMh8bBjveFJthSUh0XGunnKR3jvqH+Zkt5vHrrM6SerOUi7/jDTLqVkACeaUV
-         KvwUHfoX6myLpH0hxarpM8jS92WNq0VQXt+usBZcTK9DaucM696HgvUse0r351ofwD20
-         UDhMIWLMO60gjOJZkAC/HBISKVL6SlH5wHmPRKFGRGspQyILvfo/QCdhKPqzVcEMT5R9
-         J2LMJlJgqDt5cWlsY3KiI2DI59mwrITHHbnMCGmHZKHYnbwaoBVgz6aj1yWCkDSXTul1
-         4Z98BqNN4uHcPzINHJKmcaQCVARAN26kQZiLIZDoPN2wRLHdiuds9tAd2vin5pDjH5UT
-         OhWQ==
-X-Gm-Message-State: AO0yUKUQhmqfKSYETHoLAqM40HeoZpJuDynYY7opXSTgbhUj7TWg7+2N
-        uXgrMFx3sJK5rkKqTOHeIMM=
-X-Google-Smtp-Source: AK7set870+xc59VzNjqpnfgpqgo1//KsoMpihKZROOK9ktLKkhiWT5O/F+QUwmB7MeKFFPv7oHVNqQ==
-X-Received: by 2002:a05:622a:189f:b0:3b8:6ae9:b107 with SMTP id v31-20020a05622a189f00b003b86ae9b107mr13064658qtc.17.1675356717316;
-        Thu, 02 Feb 2023 08:51:57 -0800 (PST)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id l11-20020a05620a28cb00b007259807a512sm83143qkp.12.2023.02.02.08.51.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 08:51:56 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailauth.nyi.internal (Postfix) with ESMTP id D38DB27C0054;
-        Thu,  2 Feb 2023 11:51:55 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Thu, 02 Feb 2023 11:51:55 -0500
-X-ME-Sender: <xms:K-rbY2U7HbDyqtPmr33SboMYQfcV3N-9lZZIpxaDEA-RmiyV70QkGw>
-    <xme:K-rbYykk4d7z3YeFKP7mPYLOuUUwyaeHnDhJKJInFooD_dUrlokPgUH2LxkjOsuJs
-    A0_WXc5e-8SHUDcsQ>
-X-ME-Received: <xmr:K-rbY6aThQd4Atpsh20GRVYrYzsEBxRNnJRV3oHDwLGAqbXfm4F49jFnhvU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudefkedgkeelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
-    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
-    htthgvrhhnpeehudfgudffffetuedtvdehueevledvhfelleeivedtgeeuhfegueeviedu
-    ffeivdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
-    gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
-    igmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:K-rbY9Vtcow9wCprHEiZXbVIbnU7Ln_mSXi55v6a_tfnWykiLhGEBA>
-    <xmx:K-rbYwnmBc61Mr48hIa7BcLpCqLu9Z_ReXvgJPvRAWVV2TR1l07l0w>
-    <xmx:K-rbYyekYWRob3ZpLTzzLbPoTMHbt8ltLDNTM1bmEmqytR2mc8vdKg>
-    <xmx:K-rbY6cOVYAttjiRmpIcFos2tMh6z9xxewLIhim4pBefqv1cwo8DZA>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 2 Feb 2023 11:51:54 -0500 (EST)
-Date:   Thu, 2 Feb 2023 08:51:51 -0800
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Gary Guo <gary@garyguo.net>, Peter Zijlstra <peterz@infradead.org>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thu, 2 Feb 2023 11:53:31 -0500
+Received: from mail-40135.protonmail.ch (mail-40135.protonmail.ch [185.70.40.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78EFF6CCAC
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 08:53:30 -0800 (PST)
+Date:   Thu, 02 Feb 2023 16:53:19 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1675356808; x=1675616008;
+        bh=CRMJsATKjRLIzIk/IM3Ofjd8VrM0+8WEYA35gsWakuk=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=OXYNP3hMhVDDNwxrF896QybQNZ5DyNssvDLLZ4ebhM5uypiDqD2WwqYVUTXk/MhdU
+         bMz98dX6tYPjSj09JSG1HiwTABKa7VIEYWTHOYvdDrSnLifUvwo3kRqQr0I7k9KgHf
+         Xud3Pn5RUhbwq+2mwrSbOFifYQRMQy9XBg8+vJhfjG2wvxImw+VhJWoawci64ZHLjB
+         M5MP+zThXGxcKUHBctuN8VcfQ66xCURRTSr3ZbOe2WVaoffFUiaA8xI0iFe3l1G+st
+         BkoA+YjaAtllTxKTPdiKPTOmvDT0GFjq4SerRWew8u5iqmUY8mJLZsALTOqwsNW9yF
+         7UrX5eh7zlUbg==
+To:     Boqun Feng <boqun.feng@gmail.com>
+From:   =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
+Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
         Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Miguel Ojeda <ojeda@kernel.org>,
         Alex Gaynor <alex.gaynor@gmail.com>,
         Wedson Almeida Filho <wedsonaf@gmail.com>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Gary Guo <gary@garyguo.net>,
         Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
-Subject: Re: [RFC 2/5] rust: sync: Arc: Introduces ArcInner::count()
-Message-ID: <Y9vqJ1h2nkaFRpOY@boqun-archlinux>
-References: <20230201232244.212908-1-boqun.feng@gmail.com>
- <20230201232244.212908-3-boqun.feng@gmail.com>
- <Y9t+3u+2UcAFQc+r@hirez.programming.kicks-ass.net>
- <20230202142153.352ba479.gary@garyguo.net>
- <Y9vZu08L2WaLNJIc@kroah.com>
- <Y9vga90K0aVfGUwW@boqun-archlinux>
- <Y9viM2POUsSnbKUh@kroah.com>
+Subject: Re: [RFC 3/5] rust: sync: Arc: Introduces Arc::get_inner() helper
+Message-ID: <Hoc5Wk4Qi6ck20o1sqzOAXf0p01Ntezl4V2PxizHTorqRdDFeoWnlnWIpsu-nrom3U7EWiLC0KUfatrF18yjh5EiOThk3MBXGFraN8zycPI=@protonmail.com>
+In-Reply-To: <20230201232244.212908-4-boqun.feng@gmail.com>
+References: <20230201232244.212908-1-boqun.feng@gmail.com> <20230201232244.212908-4-boqun.feng@gmail.com>
+Feedback-ID: 27884398:user:proton
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9viM2POUsSnbKUh@kroah.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 05:17:55PM +0100, Greg KH wrote:
-[...]
-> > > > But there are correct ways to use a refcount, e.g. if you own
-> > > > `Arc` and `.count()` returns 1, then you know that you are the
-> > > > exclusive owner of the `Arc` and nobody else is going to touch it.
-> > > 
-> > > But you should never know this, as it is not relevant.
-> > > 
-> > > So no, please don't allow printing out of a reference count, that will
-> > > only cause problems and allow people to think it is safe to do so.
-> > > 
-> > 
-> > People already do it, even in *security* code,
-> > 
-> > security/keys/keyring.c:
-> > 
-> > 	int key_link(struct key *keyring, struct key *key)
-> > 	{
-> > 		...
-> > 		kenter("{%d,%d}", keyring->serial, refcount_read(&keyring->usage));
-> > 		...
-> > 	}
-> > 
-> > Should we fix that?
-> 
-> Yes.  But really, that's debugging code, it probably should all be
-> removed now.
-> 
+On Thursday, February 2nd, 2023 at 00:22, Boqun Feng <boqun.feng@gmail.com>=
+ wrote:
 
-Well, there are also printings in proc_keys_show() and
-proc_key_users_show() in security/keys/proc.c, and I think it's hard to
-remove these since they are userspace related.
 
-Anyway I realise I could have done a better job explaining what I'm
-doing here:
+> Getting a `&ArcInner<T>` should always be safe from a `Arc<T>`,
+>=20
+> therefore add this helper function to avoid duplicate unsafe
+> `ptr.as_ref()`.
+>=20
+> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
 
-I want to read refcount in a later patch, which make Arc<T> implement
-Debug trait/interface, and that allows user to print Arc<T> for debug
-purposes, e.g.
+Reviewed-by: Bj=C3=B6rn Roy Baron <bjorn3_gh@protonmail.com>
 
-	pr_info!("{:#x?}", a); // a is an "Arc<T">
-
-that's the only usage of the reading from refcount. I could open code an
-FFI call in that implementation, but I thought maybe I could add a
-helper function, hence the "count" function. And since "count" is a
-private function, so no one can use it outside this
-rust/kernel/sync/arc.rs file, therefore mis-usage by outsiders are
-impossible.
-
-Maybe I made things confusing because I just learned the language and
-wanted to try out a few things which made things complicated (for
-review), hope the above explanation undo some of the confusion I
-created.
-
-As I said, I'm open to remove the printing of the refcount, and if you
-and Peter think maybe it's OK to do that after the explanation above,
-I will improve the patch to make things clear ;-)
-
-Regards,
-Boqun
-
-> thanks,
-> 
-> greg k-h
+> ---
+>  rust/kernel/sync/arc.rs | 19 ++++++++++---------
+>  1 file changed, 10 insertions(+), 9 deletions(-)
+>=20
+> diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
+> index fbfceaa3096e..4d8de20c996f 100644
+> --- a/rust/kernel/sync/arc.rs
+> +++ b/rust/kernel/sync/arc.rs
+> @@ -201,6 +201,13 @@ impl<T: ?Sized> Arc<T> {
+>          // reference can be created.
+>          unsafe { ArcBorrow::new(self.ptr) }
+>      }
+> +
+> +    /// Returns a reference to the internal [`ArcInner`].
+> +    fn get_inner(&self) -> &ArcInner<T> {
+> +        // SAFETY: By the type invariant, there is necessarily a referen=
+ce to the object, so it is
+> +        // safe to dereference it.
+> +        unsafe { self.ptr.as_ref() }
+> +    }
+>  }
+>=20
+>  impl<T: 'static> ForeignOwnable for Arc<T> {
+> @@ -233,9 +240,7 @@ impl<T: ?Sized> Deref for Arc<T> {
+>      type Target =3D T;
+>=20
+>      fn deref(&self) -> &Self::Target {
+> -        // SAFETY: By the type invariant, there is necessarily a referen=
+ce to the object, so it is
+> -        // safe to dereference it.
+> -        unsafe { &self.ptr.as_ref().data }
+> +        &self.get_inner().data
+>      }
+>  }
+>=20
+> @@ -244,7 +249,7 @@ impl<T: ?Sized> Clone for Arc<T> {
+>          // INVARIANT: C `refcount_inc` saturates the refcount, so it can=
+not overflow to zero.
+>          // SAFETY: By the type invariant, there is necessarily a referen=
+ce to the object, so it is
+>          // safe to increment the refcount.
+> -        unsafe { bindings::refcount_inc(self.ptr.as_ref().refcount.get()=
+) };
+> +        unsafe { bindings::refcount_inc(self.get_inner().refcount.get())=
+ };
+>=20
+>          // SAFETY: We just incremented the refcount. This increment is n=
+ow owned by the new `Arc`.
+>          unsafe { Self::from_inner(self.ptr) }
+> @@ -253,11 +258,7 @@ impl<T: ?Sized> Clone for Arc<T> {
+>=20
+>  impl<T: ?Sized> Drop for Arc<T> {
+>      fn drop(&mut self) {
+> -        // SAFETY: By the type invariant, there is necessarily a referen=
+ce to the object. We cannot
+> -        // touch `refcount` after it's decremented to a non-zero value b=
+ecause another thread/CPU
+> -        // may concurrently decrement it to zero and free it. It is ok t=
+o have a raw pointer to
+> -        // freed/invalid memory as long as it is never dereferenced.
+> -        let refcount =3D unsafe { self.ptr.as_ref() }.refcount.get();
+> +        let refcount =3D self.get_inner().refcount.get();
+>=20
+>          // INVARIANT: If the refcount reaches zero, there are no other i=
+nstances of `Arc`, and
+>          // this instance is being dropped, so the broken invariant is no=
+t observable.
+> --
+> 2.39.1
