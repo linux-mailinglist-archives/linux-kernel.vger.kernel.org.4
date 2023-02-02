@@ -2,134 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 325B7687EA8
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 14:25:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37D0E687EAF
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 14:30:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232650AbjBBNZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 08:25:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54880 "EHLO
+        id S231868AbjBBNax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 08:30:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232406AbjBBNZ2 (ORCPT
+        with ESMTP id S230070AbjBBNaw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 08:25:28 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC398F505
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 05:25:26 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id c10-20020a05600c0a4a00b003db0636ff84so1410984wmq.0
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 05:25:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9jGFMCiguKGryaoAn0SNvBKZYZzpMv/Cxo3gmJXUAvU=;
-        b=Q0nGlU4S0bSD/UX4rTKb0p3wqKbKyOL4iLlxMVELuyssyKPJHxIbINv7y0uqF87lEi
-         ZyQASXlWFZuZ2n84IxePO1euYw1wLVE/lXlwdVTsqG21EHOgqEwmIX2E6GXgQ6wveN93
-         NjLcaDBGVVe7HqYhnvMi1DH1taEOx4BfOWfVkPNldkNZSe3qGtKiaP+KeDzYLOTCZrRL
-         k5O3W/iLXtsMYpow+OLbnzOxQwtpklkuiNE9iJEsnn9o03eIAbIlcaJa3tpMDFN03KTL
-         s7ds8Zl3KBQwvFp/XtN7wGvwCVsG2dmoaTDq9V3fAReRa65QCE+qZDZ02qsvVJU19IuN
-         8PCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9jGFMCiguKGryaoAn0SNvBKZYZzpMv/Cxo3gmJXUAvU=;
-        b=bDczJDbp1ostJ2zAtMRxiCAw//MNhWbkWnf8K/Lo0L8jN7MsrmBWdwIGpkFXYlZF3Q
-         8Ns2YHTroY7GXImnjr7CDsJ3Sw5SMUTNvBDOZIc1Rz3H0NGyMvaBmUlNWO7nQ2k2Ofn7
-         +l5u7yWVJNKmrIa7PdkJ9uXKQsUN2oa4zb+RDTcRqONO8F/UysTes44RWakmWIwAc8sN
-         4hMfj1aLWftFJfeJTVD05PfEbtBJHB8rPIWW0xFXMEhFGX10un4OPWi71UWKSpSrbjO/
-         /jy6GmTORht1Y5IulmumfgI0RnKB9v0v8ww0DgQV1++001NF+WUe0YDnI3jtT/iI6HtH
-         iomA==
-X-Gm-Message-State: AO0yUKWOZRL+U6vV96/K1aC6K58Qkrce9LmdUfIuvv3rp3otMm0D/muE
-        zi4vnsc/JQbzxdTOt5MB9FwMFjtQ1udFco7b
-X-Google-Smtp-Source: AK7set+UvAdQxq6+cg3WB7Mq/FbFIglThwiAUTflItZHlhvvfJIZFKQpUXyUhtVmRy7ECmM65o0qCw==
-X-Received: by 2002:a05:600c:5113:b0:3d0:761b:f86 with SMTP id o19-20020a05600c511300b003d0761b0f86mr6077028wms.28.1675344324570;
-        Thu, 02 Feb 2023 05:25:24 -0800 (PST)
-Received: from hackbox.lan ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id e22-20020a05600c449600b003db06224953sm4690943wmo.41.2023.02.02.05.25.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 05:25:24 -0800 (PST)
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh@kernel.org>,
+        Thu, 2 Feb 2023 08:30:52 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF6211B;
+        Thu,  2 Feb 2023 05:30:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675344651; x=1706880651;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ko6eIKDR7GQnGfkJ9453bCB4FUln9M60/sS1sBmialE=;
+  b=dnFZu2pWKbPJm147HmVVAoGTWUf+IdvFRH8rWHK1yPcvSmx50cWtt0Dp
+   4ioyr+dFV/yK/HPm81rMamPvvddRwjlBMGvSnRWg+IDsRYc/6ZoSHy3n+
+   6Qjoq3OWQnOiwWCV3hGDchGeHntIht6KipCqbBajhV3oVRsoy5P/LcUyX
+   5D8ZnpSIiIVUSb38JkW2Se804JVScGMkPk9mMYjiTYSck/LDBZHsNLfs+
+   j+h1zjEu2FzzfYdnLVCPbFR8LcgNf4d7EjJ1ZuDoEWpru/0yc+dYxjJhX
+   jG9xIWVcgL0+q2qU97noSE6M3pyZ2gT+REqkiM8r0bkZvSZNzZWVuXz4l
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="308094351"
+X-IronPort-AV: E=Sophos;i="5.97,267,1669104000"; 
+   d="scan'208";a="308094351"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2023 05:30:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="665282268"
+X-IronPort-AV: E=Sophos;i="5.97,267,1669104000"; 
+   d="scan'208";a="665282268"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002.jf.intel.com with ESMTP; 02 Feb 2023 05:30:46 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pNZfo-001Bo3-03;
+        Thu, 02 Feb 2023 15:30:44 +0200
+Date:   Thu, 2 Feb 2023 15:30:43 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Okan Sahin <okan.sahin@analog.com>
+Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4 8/8] arm64: dts: qcom: sm8550-mtp: Add USB PHYs and HC nodes
-Date:   Thu,  2 Feb 2023 15:25:11 +0200
-Message-Id: <20230202132511.3983095-9-abel.vesa@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230202132511.3983095-1-abel.vesa@linaro.org>
-References: <20230202132511.3983095-1-abel.vesa@linaro.org>
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        William Breathitt Gray <william.gray@linaro.org>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        Marcus Folkesson <marcus.folkesson@gmail.com>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        Ramona Bolboaca <ramona.bolboaca@analog.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org
+Subject: Re: [PATCH v4 2/5] drivers: regulator: Add ADI MAX77541/MAX77540
+ Regulator Support
+Message-ID: <Y9u7A096Tbe1Cj9d@smile.fi.intel.com>
+References: <20230201103534.108136-1-okan.sahin@analog.com>
+ <20230201103534.108136-3-okan.sahin@analog.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230201103534.108136-3-okan.sahin@analog.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable USB HC and PHYs nodes on SM8550 MTP board.
+On Wed, Feb 01, 2023 at 01:35:15PM +0300, Okan Sahin wrote:
+> Regulator driver for both MAX77541 and MAX77540.
+> The MAX77541 is a high-efficiency step-down converter
+> with two 3A switching phases for single-cell Li+ battery
+> and 5VDC systems.
+> 
+> The MAX77540 is a high-efficiency step-down converter
+> with two 3A switching phases.
 
-Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
----
+...
 
-Changes since v3:
- * none
+With
 
-Changes since v2:
- * none
+> +	struct device *dev = &pdev->dev;
 
-NOTE: This patch has been already merged. It is here only to provide
-context for the rest of the patchset. There is a change with respect to
-the clocks, but that will be sent as a separate/individual fix patch.
+to be here the following can be shortened
 
- arch/arm64/boot/dts/qcom/sm8550-mtp.dts | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+> +	struct max77541 *max77541 = dev_get_drvdata(pdev->dev.parent);
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8550-mtp.dts b/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
-index 265862d0e44f..03862132fe41 100644
---- a/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
-@@ -550,6 +550,28 @@ &ufs_mem_phy {
- 	status = "okay";
- };
- 
-+&usb_1 {
-+	status = "okay";
-+};
-+
-+&usb_1_dwc3 {
-+	dr_mode = "peripheral";
-+};
-+
-+&usb_1_hsphy {
-+	vdd-supply = <&vreg_l1e_0p88>;
-+	vdda12-supply = <&vreg_l3e_1p2>;
-+
-+	status = "okay";
-+};
-+
-+&usb_dp_qmpphy {
-+	vdda-phy-supply = <&vreg_l3e_1p2>;
-+	vdda-pll-supply = <&vreg_l3f_0p91>;
-+
-+	status = "okay";
-+};
-+
- &xo_board {
- 	clock-frequency = <76800000>;
- };
+	struct max77541 *max77541 = dev_get_drvdata(dev->parent);
+
+> +	struct regulator_config config = {};
+> +	const struct regulator_desc *desc;
+> +	struct device *dev = &pdev->dev;
+> +	struct regulator_dev *rdev;
+> +	int i;
+
+> +	config.dev = pdev->dev.parent;
+
+	config.dev = dev->parent;
+
+...
+
+> +static const struct platform_device_id max77541_regulator_platform_id[] = {
+> +	{ "max77540-regulator", },
+> +	{ "max77541-regulator", },
+
+Inner commas are not required.
+
+> +	{  /* sentinel */  }
+> +};
+
 -- 
-2.34.1
+With Best Regards,
+Andy Shevchenko
+
 
