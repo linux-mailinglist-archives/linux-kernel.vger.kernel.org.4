@@ -2,139 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6D11688766
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 20:14:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62D8C688769
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 20:15:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233041AbjBBTOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 14:14:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48304 "EHLO
+        id S233049AbjBBTPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 14:15:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231546AbjBBTOv (ORCPT
+        with ESMTP id S233027AbjBBTO7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 14:14:51 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2077.outbound.protection.outlook.com [40.107.244.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EE8122A0C;
-        Thu,  2 Feb 2023 11:14:50 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QYiZyLdOdY+0KM1aXTlDosSI0Ov3cQVj0ZD193/yiTQnO7/QXPx2vWXz6kExMe4LyKWNMZISlxhMqmF1bspBK6DjpZ0UzCwT817XzASAoFOzx3eEAyd+G86WHdIuRBHGNpaBUsyMQTqNKHKNzLn/GbBHgU/4Jd881/HL6D6kEoAnBI0D71EJtEwi9vkyzJmbZjJZ5r9bspepU3hhb6FRhLgDXj/PgRqq5v5u3nfIIQPv+FxfVanBPTcC/DbYfKW8Mu4OFgAdgk5LvCWoCRU8GqEjUvPkoWMYueDFarKIW7vzt6TeZvXWMkydD9mcWjklfTg6e437ug8RMCXM/zCmLA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ayK3m7LFcRxlCJnKnJ5T+qisd0sWgO95paTqhqMb8Ig=;
- b=A/IcQntpvtgcHwZahQn4q2vs3O/hFu2Ryw0UA7sHMvyy3hSh7u0IIF4Qg7h5ySD5ellGvJnC/AjxtGr/TJqSRty+lxF73mYTfTKDicYx6PPFMTXij49U9/9JiQetZAX3oLjlx1Uug48dRx7RdRnW7wkaWkKIQjA9OaTVXhQrAFLxczS0CMx2FQT3B7j1sLH4szFmmiYAEQ2vuJf3Nk0g20g/3r8pEX1NLVgyM0YVqmbQZDz3q9tsVNWd8QMMtWxzFgTu5sP/Q9cnS2njK+QLKx+zRP1E+3G2XyCkd8lDHrWjWes/l+O/8HuDIAkb+3Nswr2ZgXJFgNeNGMd6ffKigA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ayK3m7LFcRxlCJnKnJ5T+qisd0sWgO95paTqhqMb8Ig=;
- b=EFa6cj9xp3GmeJ5cikCUNpuYja4esq4jV9jIBqzaXTyZa+0DwYxXhG1aWi+IAaRukcYN+8OkXE+u8NvwNHSfBuikdBL5XeLl3Ns7SjUWvg5ZUV+4a5z1mR1vB1LdSUVyDe4THIeKgl6VfJq0wo4WybxXWz1LQg/xkeEBUZLLYr1iWbfE8ZB4OgOUMT1NXYCoxKjNrX2TkbpJVrKJnsNZuzYb3K95AmUBvHOF5Rq7psgHH5Ps3tzUlJm7tqXjU2xlGSl6wcGKYdLaamrPoqrdYq3PoYU6/PQShpzNPgV2P/jVYTJVunYnmjGrtzYCDdkuZRBYtRdzxNViJUFFud9p7Q==
-Received: from BN0PR10CA0011.namprd10.prod.outlook.com (2603:10b6:408:143::13)
- by SJ0PR12MB5407.namprd12.prod.outlook.com (2603:10b6:a03:3ac::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.27; Thu, 2 Feb
- 2023 19:14:48 +0000
-Received: from BN8NAM11FT016.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:143:cafe::8a) by BN0PR10CA0011.outlook.office365.com
- (2603:10b6:408:143::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.24 via Frontend
- Transport; Thu, 2 Feb 2023 19:14:48 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- BN8NAM11FT016.mail.protection.outlook.com (10.13.176.97) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6064.27 via Frontend Transport; Thu, 2 Feb 2023 19:14:47 +0000
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 2 Feb 2023
- 11:14:35 -0800
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail202.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 2 Feb 2023
- 11:14:35 -0800
-Received: from Asurada-Nvidia (10.127.8.11) by mail.nvidia.com (10.129.68.7)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36 via Frontend
- Transport; Thu, 2 Feb 2023 11:14:34 -0800
-Date:   Thu, 2 Feb 2023 11:14:32 -0800
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     Baolu Lu <baolu.lu@linux.intel.com>
-CC:     <jgg@nvidia.com>, <kevin.tian@intel.com>, <joro@8bytes.org>,
-        <will@kernel.org>, <robin.murphy@arm.com>,
-        <alex.williamson@redhat.com>, <shuah@kernel.org>,
-        <yi.l.liu@intel.com>, <linux-kernel@vger.kernel.org>,
-        <iommu@lists.linux.dev>, <kvm@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v1 2/8] iommu: Introduce a new
- iommu_group_replace_domain() API
-Message-ID: <Y9wLmBZzkZk2Mkh9@Asurada-Nvidia>
-References: <cover.1675320212.git.nicolinc@nvidia.com>
- <a98e622f41d76b64f5a7d0c758d8bda5e8043013.1675320212.git.nicolinc@nvidia.com>
- <d5147b2f-4698-b39f-e956-84db122e9822@linux.intel.com>
+        Thu, 2 Feb 2023 14:14:59 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 925DC7DBD8
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 11:14:56 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id t18so2664507wro.1
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 11:14:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=cuuIDYYSQu+C3zWqyLE6YBJV/AlT1XUkT6NrSVIsSuE=;
+        b=paYr8zpf2I9DEpZpSdQqKH6MFWICVpFPHEc5nqN1UqZtu6lMw6GAW//VoL4MUfVa5v
+         yiIlPL8cyEXfBFDJUv98dYAj/ak2RWRCXiKVHTSqDT8J02gBI21rkwI7YXHxYNpgjfr6
+         mnt0FXNdznM9UwttacKMmWHtJWJ/+S0t8eMB+G4o430IAZfzHJfnsO48yzd7/pVkko8e
+         Rw9ARI3wu4sbEqYnMm/5kPZLQ4WHJLyvvGpCB6nyAiO/ao7aaQGtg3xLvqZH5I+Wx/v7
+         +BaxR3DbwmzLwQMuQoJSAwaqlpbIm2WO8grklNPfGpMneI9tWux2Ke4XyoNbsexfNreS
+         AC/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cuuIDYYSQu+C3zWqyLE6YBJV/AlT1XUkT6NrSVIsSuE=;
+        b=dDMde7XY781LHtZYJxOafnYvKqX/rleX8exn/iFRkfLaeeZW5rapNjw4p5MtR86y24
+         TrynAIsidY6icb/ihfSH2GojIPE7j2XA9ZlVxhU2rXmbQdeyQeemzDDoyC8xwNbP+JRV
+         9tRPPA4zGf75B6xhdKcZFuyUmOhexf+eNL6WmoK7bqHmg4Rmi+6mnPmhR/e1/2yjV3UH
+         nDkTWwjfyN5RoU22x85C+O7SjQhiTBBixrR/76mLDyrLpytIoKZHTzma6mCyGlvCHuch
+         5saRUk7N4s2cTJaYsyvjhyItR0GtQWpBVr6r/0NHc30Z3kElnLzJGT/l/Qr2m7PvZaTl
+         iWxw==
+X-Gm-Message-State: AO0yUKUBAcpmHGKkzcTMpec8iMcsOScDj5IV0njuRmQknMQdksknrFMi
+        wHbboUnnk8Obc7GWlHeEm5TRqA==
+X-Google-Smtp-Source: AK7set8oLT+QQSd09IoTQr0pHXnNO7smD9ydEOJi6rTJeX1mL3b6kg1hQfa/4e19wPlccDPY0MhAWQ==
+X-Received: by 2002:adf:e30e:0:b0:2bb:e868:6a45 with SMTP id b14-20020adfe30e000000b002bbe8686a45mr5938309wrj.56.1675365295107;
+        Thu, 02 Feb 2023 11:14:55 -0800 (PST)
+Received: from 1.. ([79.115.63.122])
+        by smtp.gmail.com with ESMTPSA id k4-20020a5d4284000000b002bdc19f8e8asm213552wrq.79.2023.02.02.11.14.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Feb 2023 11:14:54 -0800 (PST)
+From:   Tudor Ambarus <tudor.ambarus@linaro.org>
+To:     pratyush@kernel.org, michael@walle.cc,
+        Alexander.Stein@tq-group.com, lrannou@baylibre.com
+Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Tudor Ambarus <tudor.ambarus@linaro.org>,
+        stable@vger.kernel.org
+Subject: [PATCH v2] mtd: spi-nor: Fix shift-out-of-bounds in spi_nor_set_erase_type
+Date:   Thu,  2 Feb 2023 21:14:51 +0200
+Message-Id: <20230202191451.35142-1-tudor.ambarus@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <d5147b2f-4698-b39f-e956-84db122e9822@linux.intel.com>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT016:EE_|SJ0PR12MB5407:EE_
-X-MS-Office365-Filtering-Correlation-Id: 379f8396-f1b4-47e0-390a-08db0551c060
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nvA6dib1McixQM5sYotFV4L3ZzY0yyulQElCH4/TPjJ06C7eYFlHV0/MA9xKSpRbzb1GjokQDj1/8Hb3fg8JyqYSVx3XCbw9XLn3pw+9fI5rCcTmr3VIBu8SJPXpk/MSNh/zVDqRr9QhjR0/iUZLdiUAqSBsy9x72buyYcgROUcgbEnUEgB9+Xe4S3gq84l6JQkSv/1HgedafrQlxTA/HNW89KRXDK+SyVVqmBZoXoK6QlOHnwJTbZxeHLatWBwaOtZVHs2Mq9AqaBmaPI5h1F3Jv3xHIsYaq9zYhMdFYLLjyE2HFML27LWsOCc23QV54XH2xQZJ5VS0E8Rb5RDmt9oJDRAGpT+aa9kHkvIl40R2e/gz5L+HSCCQpIYMvHvmbWpblTZp7L+3v1hGFh394iJuriCLsMGU8yC3Dikl79BvRq3CUnoVBuf74ByfmoPHdpxhxu36mgLO8EYrS4IWdwi7AUnLeyEbyyYLLEr1QgNBlhAvVcHHg0r2JkBcl6mpD4GwMVJTlf0AU4cA2tmXPJgvygiSqRxVs4n8IRjvMGa9vIG49zHjZmEZgMTlJmwgupWn+R5Lj7bm35gxHVon/NrHzFjldb5bKgT6zZZXcx0mn42/Tbprkzl0dESqCgdAJ3299frdJnNGxrQt42pz2baxNceri4bQeafuMrby0fC6Nivr53ndD2jYDrHOurgH2ex73gZ36WAEF9W1PD97pQ==
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(396003)(346002)(136003)(376002)(451199018)(36840700001)(46966006)(40470700004)(33716001)(356005)(82310400005)(40460700003)(86362001)(53546011)(186003)(83380400001)(26005)(6916009)(426003)(336012)(70206006)(70586007)(9686003)(8676002)(54906003)(316002)(4326008)(478600001)(2906002)(7636003)(82740400003)(7416002)(40480700001)(41300700001)(5660300002)(8936002)(55016003)(47076005)(36860700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Feb 2023 19:14:47.9047
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 379f8396-f1b4-47e0-390a-08db0551c060
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT016.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5407
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3822; i=tudor.ambarus@linaro.org; h=from:subject; bh=iKQGjGNpvhffSxY5NHmj2gjmtWquRWoatIrxAXoi2HA=; b=owEBbQGS/pANAwAKAUtVT0eljRTpAcsmYgBj3Aurob14sGr7fKmeOulA00hcONr8iP9bQNd8Z S6GXR9C6e2JATMEAAEKAB0WIQQdQirKzw7IbV4d/t9LVU9HpY0U6QUCY9wLqwAKCRBLVU9HpY0U 6YiTB/9ey4lz/jh5tK1eAzCGIvHMnC9hiLk2cyw6nJT+PQy6zp25EU4qvxCdr07+T/ho/k+8Ij/ hwTMRdLusG3F/dGirDWkSlXY8f8zOVQIoV7GCqN6IembhSujyVdnX1/JO2XXLWOFN/g1bpI8kV/ Tn6Xwovy5hK7tp2jLRXjEcejLernMQcrLT7kioFq8uAq8HYRMj/MSPr0vAe8dY6+b3UBtmk40qj pvjBlNICPmoIV4QcvYFP4ULMYzpGtEEkCKf/lq7VpGE6Roib2JFkunkwxu3t//ObG2mnK3DhBb3 C/tIamnBuPvZ/k41SBSBYc2DCtqvsS5KFVZXNcjrNddXxYKO
+X-Developer-Key: i=tudor.ambarus@linaro.org; a=openpgp; fpr=280B06FD4CAAD2980C46DDDF4DB1B079AD29CF3D
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 06:21:20PM +0800, Baolu Lu wrote:
-> External email: Use caution opening links or attachments
-> 
-> 
-> On 2023/2/2 15:05, Nicolin Chen wrote:
-> > +/**
-> > + * iommu_group_replace_domain - replace the domain that a group is attached to
-> > + * @new_domain: new IOMMU domain to replace with
-> > + * @group: IOMMU group that will be attached to the new domain
-> > + *
-> > + * This API allows the group to switch domains without being forced to go to
-> > + * the blocking domain in-between.
-> > + *
-> > + * If the attached domain is a core domain (e.g. a default_domain), it will act
-> > + * just like the iommu_attach_group().
-> 
-> I am not following above two lines. Why and how could iommufd set a
-> core domain to an iommu_group?
+spi_nor_set_erase_type() was used either to set or to mask out an erase
+type. When we used it to mask out an erase type a shift-out-of-bounds
+was hit:
+UBSAN: shift-out-of-bounds in drivers/mtd/spi-nor/core.c:2237:24
+shift exponent 4294967295 is too large for 32-bit type 'int'
 
-Perhaps this isn't the best narrative. What it's supposed to say
-is that this function acts as an iommu_attach_group() call if the
-device is "detached", yet we have changed the semantics about the
-word "detach". So, what should the correct way to write such a
-note?
+size_shift and size_mask were not used anyway when erase size was set to
+zero, so the functionality was not affected. The setting of the
+size_{shift, mask} and of the opcode are unnecessary when the erase size
+is zero, as throughout the code just the erase size is considered to
+determine whether an erase type is supported or not. Setting the opcode
+to 0xFF was wrong too as nobody guarantees that 0xFF is an unused opcode.
+Thus condition the setting of these params by the erase size. This will
+fix the shift-out-of-bounds too. While here avoid a superfluous
+dereference and use 'size' directly.
 
-Thanks
-Nic
+Fixes: 5390a8df769e ("mtd: spi-nor: add support to non-uniform SFDP SPI NOR flash memories")
+Cc: stable@vger.kernel.org
+Reported-by: Alexander Stein <Alexander.Stein@tq-group.com>
+Suggested-by: Louis Rannou <lrannou@baylibre.com>
+Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+---
+v1 at https://lore.kernel.org/r/20211106075616.95401-1-tudor.ambarus@microchip.com/
+
+ drivers/mtd/spi-nor/core.c | 20 ++++++++++++++++----
+ drivers/mtd/spi-nor/core.h |  1 +
+ drivers/mtd/spi-nor/sfdp.c |  4 ++--
+ 3 files changed, 19 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+index 247d1014879a..9b90d941d87a 100644
+--- a/drivers/mtd/spi-nor/core.c
++++ b/drivers/mtd/spi-nor/core.c
+@@ -2019,10 +2019,22 @@ void spi_nor_set_erase_type(struct spi_nor_erase_type *erase, u32 size,
+ 			    u8 opcode)
+ {
+ 	erase->size = size;
+-	erase->opcode = opcode;
+-	/* JEDEC JESD216B Standard imposes erase sizes to be power of 2. */
+-	erase->size_shift = ffs(erase->size) - 1;
+-	erase->size_mask = (1 << erase->size_shift) - 1;
++
++	if (size) {
++		erase->opcode = opcode;
++		/* JEDEC JESD216B imposes erase sizes to be power of 2. */
++		erase->size_shift = ffs(size) - 1;
++		erase->size_mask = (1 << erase->size_shift) - 1;
++	}
++}
++
++/**
++ * spi_nor_mask_erase_type() - mask out an SPI NOR erase type
++ * @erase:	pointer to a structure that describes a SPI NOR erase type
++ */
++void spi_nor_mask_erase_type(struct spi_nor_erase_type *erase)
++{
++	erase->size = 0;
+ }
+ 
+ /**
+diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
+index f6d012e1f681..25423225c29d 100644
+--- a/drivers/mtd/spi-nor/core.h
++++ b/drivers/mtd/spi-nor/core.h
+@@ -681,6 +681,7 @@ void spi_nor_set_pp_settings(struct spi_nor_pp_command *pp, u8 opcode,
+ 
+ void spi_nor_set_erase_type(struct spi_nor_erase_type *erase, u32 size,
+ 			    u8 opcode);
++void spi_nor_mask_erase_type(struct spi_nor_erase_type *erase);
+ struct spi_nor_erase_region *
+ spi_nor_region_next(struct spi_nor_erase_region *region);
+ void spi_nor_init_uniform_erase_map(struct spi_nor_erase_map *map,
+diff --git a/drivers/mtd/spi-nor/sfdp.c b/drivers/mtd/spi-nor/sfdp.c
+index fd4daf8fa5df..298ab5e53a8c 100644
+--- a/drivers/mtd/spi-nor/sfdp.c
++++ b/drivers/mtd/spi-nor/sfdp.c
+@@ -875,7 +875,7 @@ static int spi_nor_init_non_uniform_erase_map(struct spi_nor *nor,
+ 	 */
+ 	for (i = 0; i < SNOR_ERASE_TYPE_MAX; i++)
+ 		if (!(regions_erase_type & BIT(erase[i].idx)))
+-			spi_nor_set_erase_type(&erase[i], 0, 0xFF);
++			spi_nor_mask_erase_type(&erase[i]);
+ 
+ 	return 0;
+ }
+@@ -1089,7 +1089,7 @@ static int spi_nor_parse_4bait(struct spi_nor *nor,
+ 			erase_type[i].opcode = (dwords[SFDP_DWORD(2)] >>
+ 						erase_type[i].idx * 8) & 0xFF;
+ 		else
+-			spi_nor_set_erase_type(&erase_type[i], 0u, 0xFF);
++			spi_nor_mask_erase_type(&erase_type[i]);
+ 	}
+ 
+ 	/*
+-- 
+2.34.1
+
