@@ -2,190 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E8E46889E6
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 23:37:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 686AD6889EE
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 23:37:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232836AbjBBWgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 17:36:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51996 "EHLO
+        id S233061AbjBBWhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 17:37:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232888AbjBBWgs (ORCPT
+        with ESMTP id S232950AbjBBWhe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 17:36:48 -0500
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 420766C127;
-        Thu,  2 Feb 2023 14:36:39 -0800 (PST)
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20230202223635euoutp028aa85a05136d84479868026cc689723e~AIt10sLuV3268532685euoutp02k;
-        Thu,  2 Feb 2023 22:36:35 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20230202223635euoutp028aa85a05136d84479868026cc689723e~AIt10sLuV3268532685euoutp02k
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1675377395;
-        bh=gVVzobgWD0G710KRWrH/TSkLkwxMnOuivRvOp9v6yRM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NMSNvXT8Ab+F1nvnspXW57dvOd9mwSVHrFr8sT5NmeyH3GeipkcHKvyStl+j+QuHz
-         B3Bc0IfhJ74vzK9laRhPNAhmhCoQUw+wHH8P+1CLqFCEjgBvwsgKVdnxLLMmajCJO0
-         4UPuPMef0hjWI3Fv+O1x6YXcCLLfM+DymxDXB/GU=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20230202223635eucas1p109b71e662fe17b031b4418058286079b~AIt1VpyHE0574105741eucas1p1J;
-        Thu,  2 Feb 2023 22:36:35 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id 3D.C1.13597.3FA3CD36; Thu,  2
-        Feb 2023 22:36:35 +0000 (GMT)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20230202223633eucas1p2d9ec5e0fee227cb5a1bcb81c3c137859~AItz__UUS1056510565eucas1p2M;
-        Thu,  2 Feb 2023 22:36:33 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230202223633eusmtrp1b5669b54abbfb025d772f3525741d56f~AItz_aQDl1505515055eusmtrp1f;
-        Thu,  2 Feb 2023 22:36:33 +0000 (GMT)
-X-AuditID: cbfec7f4-1f1ff7000000351d-35-63dc3af349dc
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 09.17.02722.1FA3CD36; Thu,  2
-        Feb 2023 22:36:33 +0000 (GMT)
-Received: from localhost (unknown [106.120.51.111]) by eusmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20230202223633eusmtip12c1b8a24bb4e64544e26c2a3b62aa921~AItzwQ-py1095610956eusmtip11;
-        Thu,  2 Feb 2023 22:36:33 +0000 (GMT)
-From:   Lukasz Stelmach <l.stelmach@samsung.com>
-To:     Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 02/13] net: Replace all spi->chip_select and
- spi->cs_gpiod references with function call
-Date:   Thu, 02 Feb 2023 23:36:33 +0100
-In-Reply-To: <20230202152258.512973-3-amit.kumar-mahapatra@amd.com> (Amit
-        Kumar Mahapatra's message of "Thu, 2 Feb 2023 20:52:47 +0530")
-Message-ID: <dleftjedr7itji.fsf%l.stelmach@samsung.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 2 Feb 2023 17:37:34 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 377D4719BD;
+        Thu,  2 Feb 2023 14:37:09 -0800 (PST)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 312Krteq031923;
+        Thu, 2 Feb 2023 22:36:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Zb2iiTn/hxWLIV0At+HfK90unnptLpCLFr+PlLGfKH4=;
+ b=kPxJgKUqsrVeSB2tSnPBWTgiI7HgbJ0LVzvWWWH+naUFLQ05RKNRzNbtQkg1kHswHuXH
+ B7k3JiZckOZJKr6b48b6apLighkKI0z4r6b+Q0VQxrmKj1aJrGlk8M0R45+raStpI7tu
+ TwXHAamBStc4ZUYAwaHnXOvZ347SPVsLvXBL/ZjxMUq8GhR+Hdini2cu/7xkha3VK69p
+ WF664pI+JPqlttDiBwwbUo7EbadazuKiAT2UoRkb6D3ygLZqRnRJmAw80Ksli0fPfuKY
+ 1jOqOrIvy5t/VTIIGcFV3PzgmcsxoPRODKzKFXEG42e5ovdZC5cndvDXERra7fCHw73A 4A== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nfqsybup9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Feb 2023 22:36:54 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 312Mar6x010723
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 2 Feb 2023 22:36:53 GMT
+Received: from [10.110.99.204] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 2 Feb 2023
+ 14:36:52 -0800
+Message-ID: <0419b0c8-fb30-f8df-1b9a-19e106680948@quicinc.com>
+Date:   Thu, 2 Feb 2023 14:36:52 -0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-="; micalg="pgp-sha256";
-        protocol="application/pgp-signature"
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrHKsWRmVeSWpSXmKPExsWy7djPc7qfre4kG0ybKGDxZ7GqxZzzLSwW
-        F7b1sVpc3jWHzeLYAjGLb6ffMDqwebRe+svmsWXlTSaPTas62Tze77vK5vF5k1wAaxSXTUpq
-        TmZZapG+XQJXxrJt95kK9olVvD9xlaWB8ZNQFyMnh4SAicS1l0tZQWwhgRWMEss6I7oYuYDs
-        L4wS9x98g0p8ZpSY8UwXpqG5q5MJIr6cUeL7Fk2IhheMEhu37Adq4OBgE9CTWLs2AqRGRMBc
-        4uqS/2D1zALFEkt/dTKD2MIChRIrj0wGi7MIqEpcuncBLM4p0MUoMWFOOYjNC9T7b+49sBpR
-        AUuJP88+skPEBSVOznzCAjEzV2Lm+TeMIDdICDzhkLj3+zwLxKEuEpe2HWKFsIUlXh3fwg5h
-        y0icntzDAtHQzijRdGUhK4QzgVHic0cTE0SVtcSdc7/YIGxHiePXzzCCfCYhwCdx460gxGY+
-        iUnbpjNDhHklOtqgIaoisa5/D9QNUhK9r1YwQtgeEmvf3WWEBNY0Rol5O6eyT2BUmIXkoVlI
-        HpoFNJZZQFNi/S59iLC2xLKFr5khbFuJdevesyxgZF3FKJ5aWpybnlpslJdarlecmFtcmpeu
-        l5yfu4kRmIxO/zv+ZQfj8lcf9Q4xMnEwHmJUAWp+tGH1BUYplrz8vFQlEd4r824nC/GmJFZW
-        pRblxxeV5qQWH2KU5mBREufVtj2ZLCSQnliSmp2aWpBaBJNl4uCUamCaLVv+ttBc784JJUv/
-        i53RlpHfqz1ENgeabW8ylhQQnHZa43H9QnPLz4s/7F7g13zzitSRB93si5ebysvzzNjX+NUp
-        6dv2k1dr2WwmWSwKKouUOPJkv+du21eJh6vMju899HP1gyfLfshYNjnduMJUvnlb9Kn32zaY
-        BE90fh7qcVWmvL9qobypWNjqA4kZ4R8/OQv+cBRTl7x2zSI0YI7FTNaAjulx4bE1SgF//FvE
-        /K+90ffrLWad5n7pfq7SpjbFDVpmYhcn/dbcI7fByoHZSi0zuuyOYsSreqFXDgcqtc/dtFu/
-        2zB2t4pxc/vNr/3xz/Zaxp5XniR7zsR42bEdbw448PYoiPKbLdli4arEUpyRaKjFXFScCAAF
-        W89OwQMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrGIsWRmVeSWpSXmKPExsVy+t/xu7ofre4kG8w5YmjxZ7GqxZzzLSwW
-        F7b1sVpc3jWHzeLYAjGLb6ffMDqwebRe+svmsWXlTSaPTas62Tze77vK5vF5k1wAa5SeTVF+
-        aUmqQkZ+cYmtUrShhZGeoaWFnpGJpZ6hsXmslZGpkr6dTUpqTmZZapG+XYJexrJt95kK9olV
-        vD9xlaWB8ZNQFyMnh4SAiURzVydTFyMXh5DAUkaJgyeOMXcxcgAlpCRWzk2HqBGW+HOtiw2i
-        5hmjROvv34wgNWwCehJr10aA1IgImEtcXfKfCcRmFiiWeHDwE5gtLFAosfLIZDBbSMBJ4vTV
-        WWA2i4CqxKV7F5hBbE6BLkaJCXPKQWxeoDn/5t4DqxEVsJT48+wjO0RcUOLkzCcsEPOzJb6u
-        fs48gVFgFpLULCSpWUDXMQtoSqzfpQ8R1pZYtvA1M4RtK7Fu3XuWBYysqxhFUkuLc9Nziw31
-        ihNzi0vz0vWS83M3MQIjaduxn5t3MM579VHvECMTB+MhRhWgzkcbVl9glGLJy89LVRLhvTLv
-        drIQb0piZVVqUX58UWlOavEhRlOg1yYyS4km5wNjPK8k3tDMwNTQxMzSwNTSzFhJnNezoCNR
-        SCA9sSQ1OzW1ILUIpo+Jg1OqgSnnZekLd1u20xtC805pJv9eIW9/sLria1Hv+yL1IxyBjQ7z
-        KwI4ZTZfLD94L1iq/t+zTt/VzM+fdztsFc7vaGzbYCX78FBCxH1mrfqt2W/qOpb/qzTI0THJ
-        cy2vKc/V1Hn4zchSdlr1t0z7Awa3ovuNr7KkLfkQlXH4SIeBRs4UNlmR1zc3GL3WON03S9mh
-        dHOAif7a01IX9/HJRG5TFvszZ9/h9N64vS8D4q6oM759/+nEOqWdpv+0WHZl1u9Q083f9r/1
-        56KgNx4X2Z9O1jBs2/nb++g875SL/8/63EpaZPxIX+H8GqOppp4fWtW6GZMK2DccUOyJ3n3R
-        g/V0pM29fxPDF5w+YVIbuf9NjhJLcUaioRZzUXEiABqG4us5AwAA
-X-CMS-MailID: 20230202223633eucas1p2d9ec5e0fee227cb5a1bcb81c3c137859
-X-Msg-Generator: CA
-X-RootMTR: 20230202223633eucas1p2d9ec5e0fee227cb5a1bcb81c3c137859
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20230202223633eucas1p2d9ec5e0fee227cb5a1bcb81c3c137859
-References: <20230202152258.512973-3-amit.kumar-mahapatra@amd.com>
-        <CGME20230202223633eucas1p2d9ec5e0fee227cb5a1bcb81c3c137859@eucas1p2.samsung.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [Freedreno] [RFT PATCH v2 3/3] drm/msm/dsi: More properly handle
+ errors in regards to dsi_mgr_bridge_power_on()
+Content-Language: en-US
+To:     Douglas Anderson <dianders@chromium.org>,
+        <dri-devel@lists.freedesktop.org>, Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     <freedreno@lists.freedesktop.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        <linux-arm-msm@vger.kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        David Airlie <airlied@gmail.com>, Sean Paul <sean@poorly.run>,
+        <linux-kernel@vger.kernel.org>
+References: <20230131141756.RFT.v2.1.I723a3761d57ea60c5dd754c144aed6c3b2ea6f5a@changeid>
+ <20230131141756.RFT.v2.3.I3c87b53c4ab61a7d5e05f601a4eb44c7e3809a01@changeid>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <20230131141756.RFT.v2.3.I3c87b53c4ab61a7d5e05f601a4eb44c7e3809a01@changeid>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: ze0mav3Cf9-e3WS1O6K6m670fF7H8_r5
+X-Proofpoint-ORIG-GUID: ze0mav3Cf9-e3WS1O6K6m670fF7H8_r5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-02_14,2023-02-02_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ suspectscore=0 bulkscore=0 phishscore=0 spamscore=0 lowpriorityscore=0
+ malwarescore=0 clxscore=1015 mlxscore=0 mlxlogscore=859 priorityscore=1501
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302020201
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Hi Doug
 
-It was <2023-02-02 czw 20:52>, when Amit Kumar Mahapatra wrote:
-> Supporting multi-cs in spi drivers would require the chip_select & cs_gpi=
-od
-> members of struct spi_device to be an array. But changing the type of the=
-se
-> members to array would break the spi driver functionality. To make the
-> transition smoother introduced four new APIs to get/set the
-> spi->chip_select & spi->cs_gpiod and replaced all spi->chip_select and
-> spi->cs_gpiod references with get or set API calls.
-> While adding multi-cs support in further patches the chip_select & cs_gpi=
-od
-> members of the spi_device structure would be converted to arrays & the
-> "idx" parameter of the APIs would be used as array index i.e.,
-> spi->chip_select[idx] & spi->cs_gpiod[idx] respectively.
->
-> Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-> Reviewed-by: Michal Simek <michal.simek@amd.com>
+On 1/31/2023 2:18 PM, Douglas Anderson wrote:
+> In commit 7d8e9a90509f ("drm/msm/dsi: move DSI host powerup to modeset
+> time") the error handling with regards to dsi_mgr_bridge_power_on()
+> got a bit worse. Specifically if we failed to power the bridge on then
+> nothing would really notice. The modeset function couldn't return an
+> error and thus we'd blindly go forward and try to do the pre-enable.
+> 
+> In commit ec7981e6c614 ("drm/msm/dsi: don't powerup at modeset time
+> for parade-ps8640") we added a special case to move the powerup back
+> to pre-enable time for ps8640. When we did that, we didn't try to
+> recover the old/better error handling just for ps8640.
+> 
+> In the patch ("drm/msm/dsi: Stop unconditionally powering up DSI hosts
+> at modeset") we've now moved the powering up back to exclusively being
+> during pre-enable. That means we can add the better error handling
+> back in, so let's do it. To do so we'll add a new function
+> dsi_mgr_bridge_power_off() that's matches how errors were handled
+> prior to commit 7d8e9a90509f ("drm/msm/dsi: move DSI host powerup to
+> modeset time").
+> 
+> NOTE: Now that we have dsi_mgr_bridge_power_off(), it feels as if we
+> should be calling it in dsi_mgr_bridge_post_disable(). That would make
+> some sense, but doing so would change the current behavior and thus
+> should be a separate patch. Specifically:
+> * dsi_mgr_bridge_post_disable() always calls dsi_mgr_phy_disable()
+>    even in the slave-DSI case of bonded DSI. We'd need to add special
+>    handling for this if it's truly needed.
+> * dsi_mgr_bridge_post_disable() calls msm_dsi_phy_pll_save_state()
+>    midway through the poweroff.
+> * dsi_mgr_bridge_post_disable() has a different order of some of the
+>    poweroffs / IRQ disables.
+> For now we'll leave dsi_mgr_bridge_post_disable() alone.
+> 
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
 > ---
->  drivers/net/ethernet/adi/adin1110.c            | 2 +-
->  drivers/net/ethernet/asix/ax88796c_main.c      | 2 +-
+> 
+> Changes in v2:
+> - ("More properly handle errors...") new for v2.
+> 
+>   drivers/gpu/drm/msm/dsi/dsi_manager.c | 32 ++++++++++++++++++++++-----
+>   1 file changed, 26 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/dsi/dsi_manager.c b/drivers/gpu/drm/msm/dsi/dsi_manager.c
+> index 2197a54b9b96..28b8012a21f2 100644
+> --- a/drivers/gpu/drm/msm/dsi/dsi_manager.c
+> +++ b/drivers/gpu/drm/msm/dsi/dsi_manager.c
+> @@ -228,7 +228,7 @@ static void msm_dsi_manager_set_split_display(u8 id)
+>   	}
+>   }
+>   
+> -static void dsi_mgr_bridge_power_on(struct drm_bridge *bridge)
+> +static int dsi_mgr_bridge_power_on(struct drm_bridge *bridge)
+>   {
+>   	int id = dsi_mgr_bridge_get_id(bridge);
+>   	struct msm_dsi *msm_dsi = dsi_mgr_get_dsi(id);
+> @@ -268,14 +268,31 @@ static void dsi_mgr_bridge_power_on(struct drm_bridge *bridge)
+>   	if (is_bonded_dsi && msm_dsi1)
+>   		msm_dsi_host_enable_irq(msm_dsi1->host);
+>   
+> -	return;
+> +	return 0;
+>   
+>   host1_on_fail:
+>   	msm_dsi_host_power_off(host);
+>   host_on_fail:
+>   	dsi_mgr_phy_disable(id);
+>   phy_en_fail:
+> -	return;
+> +	return ret;
+> +}
+> +
+> +static void dsi_mgr_bridge_power_off(struct drm_bridge *bridge)
+> +{
+> +	int id = dsi_mgr_bridge_get_id(bridge);
+> +	struct msm_dsi *msm_dsi = dsi_mgr_get_dsi(id);
+> +	struct msm_dsi *msm_dsi1 = dsi_mgr_get_dsi(DSI_1);
+> +	struct mipi_dsi_host *host = msm_dsi->host;
+> +	bool is_bonded_dsi = IS_BONDED_DSI();
+> +
+> +	msm_dsi_host_disable_irq(host);
+> +	if (is_bonded_dsi && msm_dsi1) {
+> +		msm_dsi_host_disable_irq(msm_dsi1->host);
+> +		msm_dsi_host_power_off(msm_dsi1->host);
+> +	}
 
-For ax88796c
-Acked-by: Lukasz Stelmach <l.stelmach@samsung.com>
+The order of disabling the IRQs should be opposite of how they were enabled.
 
-Thanks.
+So while enabling it was DSI0 and then DSI1.
 
->  drivers/net/ethernet/davicom/dm9051.c          | 2 +-
->  drivers/net/ethernet/qualcomm/qca_debug.c      | 2 +-
->  drivers/net/ieee802154/ca8210.c                | 2 +-
->  drivers/net/wan/slic_ds26522.c                 | 2 +-
->  drivers/net/wireless/marvell/libertas/if_spi.c | 2 +-
->  drivers/net/wireless/silabs/wfx/bus_spi.c      | 2 +-
->  drivers/net/wireless/st/cw1200/cw1200_spi.c    | 2 +-
->  9 files changed, 9 insertions(+), 9 deletions(-)
->
+Hence while disabling it should be DSI1 and then DSI0.
 
-[...]
+So the order here should be
 
-> --- a/drivers/net/ethernet/asix/ax88796c_main.c
-> +++ b/drivers/net/ethernet/asix/ax88796c_main.c
-> @@ -1006,7 +1006,7 @@ static int ax88796c_probe(struct spi_device *spi)
->  	ax_local->mdiobus->parent =3D &spi->dev;
->=20=20
->  	snprintf(ax_local->mdiobus->id, MII_BUS_ID_SIZE,
-> -		 "ax88796c-%s.%u", dev_name(&spi->dev), spi->chip_select);
-> +		 "ax88796c-%s.%u", dev_name(&spi->dev), spi_get_chipselect(spi, 0));
->=20=20
->  	ret =3D devm_mdiobus_register(&spi->dev, ax_local->mdiobus);
->  	if (ret < 0) {
+DSI1 irq disable
+DSI0 irq disable
+DSI1 host power off
+DSI0 host power off
 
-[...]
-
-=2D-=20
-=C5=81ukasz Stelmach
-Samsung R&D Institute Poland
-Samsung Electronics
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEXpuyqjq9kGEVr9UQsK4enJilgBAFAmPcOvEACgkQsK4enJil
-gBBFfAf+LyND8/gjCylBNt7dTY3hKO00SkUXx6a05q1IlpefmnqZT0yft7oOQXwl
-JP0KaUIeFwoByUpqpp9hzVpNcj+7qTPlpgIuI+t5fpUw2RTD6SZ2rsCiBKmtlN5/
-bTORNHHcCTYTH94yWEm66ijd3mgbz9M8X3eWhxirDgsU6zCE0AtXPzDzkRLv5xbX
-W4J+MK5Dsd8dvQ5uJ27LyJn0jF1jI6NQtxlno81DYxvhc/DnH7Nx/MFO5Jr2gAZm
-zw+jorF8IW4XOHVexTQBWpBvyXzhn6GFlX6SzoRMYa48Gbw2fNeSxHEoaAnhOh4r
-yezVLOhcR3ZGuPNzXSPXwnyNbwIpuA==
-=Vt06
------END PGP SIGNATURE-----
---=-=-=--
+> +	msm_dsi_host_power_off(host);
+> +	dsi_mgr_phy_disable(id);
+>   }
+>   
+>   static void dsi_mgr_bridge_pre_enable(struct drm_bridge *bridge)
+> @@ -295,7 +312,11 @@ static void dsi_mgr_bridge_pre_enable(struct drm_bridge *bridge)
+>   	if (is_bonded_dsi && !IS_MASTER_DSI_LINK(id))
+>   		return;
+>   
+> -	dsi_mgr_bridge_power_on(bridge);
+> +	ret = dsi_mgr_bridge_power_on(bridge);
+> +	if (ret) {
+> +		dev_err(&msm_dsi->pdev->dev, "Power on failed: %d\n", ret);
+> +		return;
+> +	}
+>   
+>   	ret = msm_dsi_host_enable(host);
+>   	if (ret) {
+> @@ -316,8 +337,7 @@ static void dsi_mgr_bridge_pre_enable(struct drm_bridge *bridge)
+>   host1_en_fail:
+>   	msm_dsi_host_disable(host);
+>   host_en_fail:
+> -
+> -	return;
+> +	dsi_mgr_bridge_power_off(bridge);
+>   }
+>   
+>   void msm_dsi_manager_tpg_enable(void)
