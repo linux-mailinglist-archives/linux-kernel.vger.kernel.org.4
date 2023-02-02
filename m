@@ -2,188 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B80C8687BB3
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 12:10:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A8A3687BB7
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 12:10:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230174AbjBBLKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 06:10:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39942 "EHLO
+        id S231959AbjBBLKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 06:10:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232460AbjBBLKD (ORCPT
+        with ESMTP id S232396AbjBBLKA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 06:10:03 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DF236AC86;
-        Thu,  2 Feb 2023 03:09:35 -0800 (PST)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 312AZamq000969;
-        Thu, 2 Feb 2023 11:09:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=t6iPFNPeYgRzyXRHfMsbwcJXOpplwMl9gokhd0iu2vk=;
- b=QRf7IzX8VRv0Szgl5FbhKhtfKS009CZLIRjYM5emLa+VrJYKkX6CFwmouVIsi3yFL/lt
- Hp0OBfsBbHzRTpV7KkJa/vY7VPqcp/QOPqrjSoUr7Wet5+W9DQyShIYoQZ/t3XLbniAL
- fBkVpkhNxbnTx2eQtGkAkkf/VPlg+XPjQaSgZY8UjWw+JfQcZJ1A8SOjbPvSxGGJ68FM
- OHVdHBfeNi/z5M/81+8MEKby4SWX2wCl9Yr3N5ci1k7lQWG71fwNXf0iD7/Jq+Rm2Yf8
- Mpo86nHffJIUYvuZNyJ4IWxcfDHJ58Rvj9sU7s8n0VtSimJNuFTIzePiW5Avmj+HhQm+ dw== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nfqsyagbp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Feb 2023 11:09:31 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 312B9Uw3023663
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 2 Feb 2023 11:09:30 GMT
-Received: from [10.50.17.72] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 2 Feb 2023
- 03:09:23 -0800
-Message-ID: <05c01db8-1ca1-475f-8cb4-41fddff8b85a@quicinc.com>
-Date:   Thu, 2 Feb 2023 16:39:19 +0530
+        Thu, 2 Feb 2023 06:10:00 -0500
+Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494591631D;
+        Thu,  2 Feb 2023 03:09:32 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4P6wzB22gGz4f3kp4;
+        Thu,  2 Feb 2023 19:09:26 +0800 (CST)
+Received: from [10.174.176.117] (unknown [10.174.176.117])
+        by APP4 (Coremail) with SMTP id gCh0CgDHd6vkmdtjMDR2Cw--.56257S2;
+        Thu, 02 Feb 2023 19:09:28 +0800 (CST)
+Subject: Re: [PATCH] blk-ioprio: Introduce promote-to-rt policy
+To:     Bart Van Assche <bvanassche@acm.org>, linux-block@vger.kernel.org
+Cc:     Jan Kara <jack@suse.cz>, Jens Axboe <axboe@kernel.dk>,
+        cgroups@vger.kernel.org, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, houtao1@huawei.com
+References: <20230201045227.2203123-1-houtao@huaweicloud.com>
+ <8c068af3-7199-11cf-5c69-a523c7c22d9a@acm.org>
+From:   Hou Tao <houtao@huaweicloud.com>
+Message-ID: <4f7dcb3e-2d5a-cae3-0e1c-a82bcc3d2217@huaweicloud.com>
+Date:   Thu, 2 Feb 2023 19:09:24 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 6/6] regulator: qcom_smd: Add support to define the bootup
- voltage
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>, <agross@kernel.org>,
-        <andersson@kernel.org>, <lgirdwood@gmail.com>,
-        <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
-        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
-        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
-        <quic_poovendh@quicinc.com>, <quic_ipkumar@quicinc.com>
-References: <20230113150310.29709-1-quic_devipriy@quicinc.com>
- <20230113150310.29709-7-quic_devipriy@quicinc.com>
- <77d84408-166e-8a02-227a-67654a4d31f2@linaro.org>
- <df6c1cd6-ea70-e65c-b4e8-3da80697242f@quicinc.com>
- <cc037133-7c45-325f-4a1d-9855d033ae5c@linaro.org>
- <6bb22160-5966-43d3-ffba-489b77b3a095@quicinc.com>
- <de6e69d6-18cd-2732-9a18-f4dfd29be6dd@linaro.org>
-From:   Devi Priya <quic_devipriy@quicinc.com>
-In-Reply-To: <de6e69d6-18cd-2732-9a18-f4dfd29be6dd@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+In-Reply-To: <8c068af3-7199-11cf-5c69-a523c7c22d9a@acm.org>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 8YlC8aBvDPrsPPWW_mNqLBdRyymzxTEI
-X-Proofpoint-ORIG-GUID: 8YlC8aBvDPrsPPWW_mNqLBdRyymzxTEI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-02_02,2023-02-02_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- suspectscore=0 bulkscore=0 phishscore=0 spamscore=0 lowpriorityscore=0
- malwarescore=0 clxscore=1015 mlxscore=0 mlxlogscore=999 priorityscore=1501
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302020101
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Language: en-US
+X-CM-TRANSID: gCh0CgDHd6vkmdtjMDR2Cw--.56257S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Cr47Kr4DAFWrKFW8AFy8Grg_yoW8uFy3pF
+        48CFykJrZYqFy8Jr1kXa18GrWUA3y3J3WUJF1FqF98uw48Kw10gw4FqFn2gFyfGa1kXrn8
+        Jw4DJrWUua45Aw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvab4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
+        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
+        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q
+        6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
+        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv
+        67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyT
+        uYvjxUrR6zUUUUU
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
+On 2/2/2023 1:33 AM, Bart Van Assche wrote:
+> On 1/31/23 20:52, Hou Tao wrote:
+>>   /**
+>>    * enum prio_policy - I/O priority class policy.
+>>    * @POLICY_NO_CHANGE: (default) do not modify the I/O priority class.
+>> @@ -27,21 +34,30 @@
+>>    * @POLICY_RESTRICT_TO_BE: modify IOPRIO_CLASS_NONE and IOPRIO_CLASS_RT into
+>>    *        IOPRIO_CLASS_BE.
+>>    * @POLICY_ALL_TO_IDLE: change the I/O priority class into IOPRIO_CLASS_IDLE.
+>> - *
+>> + * @POLICY_PROMOTE_TO_RT: modify IOPRIO_CLASS_NONE and IOPRIO_CLASS_BE into
+>> + *         IOPRIO_CLASS_RT.
+>>    * See also <linux/ioprio.h>.
+>>    */
+>>   enum prio_policy {
+>> -    POLICY_NO_CHANGE    = 0,
+>> -    POLICY_NONE_TO_RT    = 1,
+>> -    POLICY_RESTRICT_TO_BE    = 2,
+>> -    POLICY_ALL_TO_IDLE    = 3,
+>> +    POLICY_NO_CHANGE    = IOPRIO_CLASS_NONE,
+>> +    POLICY_NONE_TO_RT    = IOPRIO_CLASS_RT,
+>> +    POLICY_RESTRICT_TO_BE    = IOPRIO_CLASS_BE,
+>> +    POLICY_ALL_TO_IDLE    = IOPRIO_CLASS_IDLE,
+>> +    POLICY_PROMOTE_TO_RT    = IOPRIO_CLASS_RT | IOPRIO_POL_PROMOTION,
+>> +};
+>
+> The above change complicates the ioprio code. Additionally, I'm concerned that
+> it makes the ioprio code slower. Has it been considered to keep the numerical
+> values for the existing policies, to assign the number 4 to
+> POLICY_PROMOTE_TO_RT and to use a lookup-array in blkcg_set_ioprio() to
+> convert the policy number into an IOPRIO_CLASS value?
+For the slowness, do you meaning the extra dereference of blkcg->ioprio->policy
+when policy is no-change or the handle of IOPRIO_POL_PROMOTION in
+blkcg_set_ioprio()? It seems other functions (e.g., ioprio_show_prio_policy()
+and ioprio_set_prio_policy()) are not on the hot path. Using a lookup array in
+blkcg_set_ioprio() to do the conversion will also be OK, although it will
+introduce an extra lookup each time when policy is not no-change. I don't have
+strong preference. If you are OK with lookup array in blkcg_set_ioprio(), will
+do it in v2.
+>
+> Thanks,
+>
+> Bart.
+>
+>
+> .
 
-On 1/31/2023 6:14 PM, Konrad Dybcio wrote:
-> 
-> 
-> On 31.01.2023 10:28, Devi Priya wrote:
->>
->>
->> On 1/27/2023 9:40 PM, Konrad Dybcio wrote:
->>>
->>>
->>> On 27.01.2023 17:07, Devi Priya wrote:
->>>>
->>>>
->>>> On 1/13/2023 9:07 PM, Konrad Dybcio wrote:
->>>>>
->>>>>
->>>>> On 13.01.2023 16:03, devi priya wrote:
->>>>>> Kernel does not know the initial voltage set by the bootloaders.
->>>>>> During regulator registration, the voltage variable is just declared
->>>>>> and it is zero. Based on that, the regulator framework considers current
->>>>>> the voltage as zero and tries to bring up each regulator to minimum
->>>>>> the supported voltage.
->>>>>>
->>>>>> This introduces a dip in the voltage during kernel boot and gets
->>>>>> stabilized once the voltage scaling comes into picture.
->>>>>>
->>>>>> To avoid the voltage dip, adding support to define the
->>>>>> bootup voltage set by the boodloaders and based on it, regulator
->>>>>> framework understands that proper voltage is already set
->>>>>>
->>>>>> Co-developed-by: Praveenkumar I <quic_ipkumar@quicinc.com>
->>>>>> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
->>>>>> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
->>>>>> ---
->>>>> Or maybe hook it up to the spmi_regulator_common_get_voltage()
->>>>> from the SPMI regulator driver and read the real voltage instead
->>>>> of relying on hardcoded values thay may differ between boards?
->>>>>
->>>>> Konrad
->>>> In IPQ9574, SPMI regulator is not used. We are using RPM-Glink communication and the regulators are controlled by RPM.
->>>> In this case, we don't have an option to readback the bootup voltage and so, we have hardcoded the values
->>> Unless something changed, RPM regulator framework is simply a
->>> fancy front-end for communicating with the PMIC over SPMI, AFAIK..
->>>
->>> Konrad
->> Currently in our driver, the voltage write request will be sent to RPM via GLINK which then writes it to the PMIC over I2C using the below APIs
->> qcom_rpm_smd_write -> rpmsg_send
->> In IPQ9574, we do not have SPMI support or the support to readback voltage.
-> Okay, I didn't quite catch that there's *only* an i2c PMIC on this
-> platform.. Looking at the MP5496 datasheet though, reading back
-> the voltage should be possible via simply reading the fields that
-> are used to set it.
-> 
-> Konrad
-The CPR regulator operates in closed loop mode and the RPM can 
-independently update the PMIC voltage.
-So, Performing an i2c read to the PMIC would introduce conflicts when 
-RPM uses the i2c for any of the voltage write or read operations.
->>
->>>>
->>>>>>     drivers/regulator/qcom_smd-regulator.c | 6 +++++-
->>>>>>     1 file changed, 5 insertions(+), 1 deletion(-)
->>>>>>
->>>>>> diff --git a/drivers/regulator/qcom_smd-regulator.c b/drivers/regulator/qcom_smd-regulator.c
->>>>>> index 1eb17d378897..49a36b07397c 100644
->>>>>> --- a/drivers/regulator/qcom_smd-regulator.c
->>>>>> +++ b/drivers/regulator/qcom_smd-regulator.c
->>>>>> @@ -800,6 +800,7 @@ struct rpm_regulator_data {
->>>>>>         u32 id;
->>>>>>         const struct regulator_desc *desc;
->>>>>>         const char *supply;
->>>>>> +    int boot_uV; /* To store the bootup voltage set by bootloaders */
->>>>>>     };
->>>>>>       static const struct rpm_regulator_data rpm_mp5496_regulators[] = {
->>>>>> @@ -809,7 +810,7 @@ static const struct rpm_regulator_data rpm_mp5496_regulators[] = {
->>>>>>     };
->>>>>>       static const struct rpm_regulator_data rpm_ipq9574_mp5496_regulators[] = {
->>>>>> -    { "s1", QCOM_SMD_RPM_SMPA, 1, &ipq9574_mp5496_smpa1, "s1" },
->>>>>> +    { "s1", QCOM_SMD_RPM_SMPA, 1, &ipq9574_mp5496_smpa1, "s1", 875000 },
->>>>>>         {}
->>>>>>     };
->>>>>>     @@ -1394,6 +1395,9 @@ static int rpm_regulator_init_vreg(struct qcom_rpm_reg *vreg, struct device *dev
->>>>>>         vreg->type    = rpm_data->type;
->>>>>>         vreg->id    = rpm_data->id;
->>>>>>     +    if (rpm_data->boot_uV)
->>>>>> +        vreg->uV = rpm_data->boot_uV;
->>>>>> +
->>>>>>         memcpy(&vreg->desc, rpm_data->desc, sizeof(vreg->desc));
->>>>>>         vreg->desc.name = rpm_data->name;
->>>>>>         vreg->desc.supply_name = rpm_data->supply;
->>>> Best Regards,
->>>> Devi Priya
->> Best Regards,
->> Devi Priya
