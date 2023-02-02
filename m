@@ -2,94 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 810A3687762
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 09:30:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2104687784
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 09:32:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230373AbjBBIak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 03:30:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45838 "EHLO
+        id S232338AbjBBIci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 03:32:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230389AbjBBIai (ORCPT
+        with ESMTP id S232319AbjBBIcX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 03:30:38 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B668A6F
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 00:30:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A620CB82272
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 08:30:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD9CAC433EF;
-        Thu,  2 Feb 2023 08:30:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675326633;
-        bh=LCXuWsDdc9vTBEm/T0S/TKzXhbPd8atKxOeq6WosyWA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ETI9joJFd+kAcZtxjuNryfCmXq2ydkUCE6LJ1+dDimjNhjq0PAA3Vk3HsgN0zRseF
-         GgLWIxpiCceDVEwSGv6kQFAer3DF4fVIGThfUvYOSBtf0z9Hcrzd64OBi79L/OFAKX
-         ypu8GHFXVkJEK3Eci4ac5HxqRxQN5MPIyB/VIuBc=
-Date:   Thu, 2 Feb 2023 09:30:30 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Longlong Xia <xialonglong1@huawei.com>
-Cc:     rafael@kernel.org, linux-kernel@vger.kernel.org,
-        chenwandun@huawei.com, wangkefeng.wang@huawei.com,
-        sunnanyong@huawei.com
-Subject: Re: [PATCH -next 2/3] devtmpfs: add debug info to handle()
-Message-ID: <Y9t0pqN/1PaUlKoT@kroah.com>
-References: <20230202033203.1239239-1-xialonglong1@huawei.com>
- <20230202033203.1239239-3-xialonglong1@huawei.com>
+        Thu, 2 Feb 2023 03:32:23 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1619387595;
+        Thu,  2 Feb 2023 00:32:14 -0800 (PST)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3127OKNj029812;
+        Thu, 2 Feb 2023 08:31:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=qcppdkim1;
+ bh=1E7KEBBYZ5bLXQHYsH+o+DFJLF2aRnrLuqJT7vKcoHw=;
+ b=ZcMmbLqzFaRAT/SPdV4k7vzDXMCbBFJmJ93JpyzWAoIPdfxZ9TIlnkXgK2BmdmePQIe3
+ Ryf0SVuT5m5GvKQmEJirZjiSrxj4UZUjUDoeBb92BdYefhe49pxK64R7QqAL7+UvWpJx
+ hZwVc5AWUpqYHraPv3zo/dlTVMXx8f2OhkoQEhep4eyK6vvm9aZ7lpQT1ng+TzYreUVI
+ DOYkcrVPAyC66n+fV4cj7rxni+lK9BVMUilsCM6OQFH9kBmvBhwALLm76mfVedFtWQC7
+ IllZ3IyCLhte8AVMgyTiVLyGGoUP7rg2jpnGh8yaRpw6Cx2sNv5z4a9GvdCa8k9yFDb9 qg== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nfnyhjd5a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Feb 2023 08:31:59 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3128Vw3O000539
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 2 Feb 2023 08:31:58 GMT
+Received: from devipriy-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Thu, 2 Feb 2023 00:31:49 -0800
+From:   Devi Priya <quic_devipriy@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <linus.walleij@linaro.org>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <p.zabel@pengutronix.de>, <shawnguo@kernel.org>, <arnd@arndb.de>,
+        <marcel.ziswiler@toradex.com>, <dmitry.baryshkov@linaro.org>,
+        <nfraprado@collabora.com>, <broonie@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
+        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
+        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
+        <quic_poovendh@quicinc.com>
+Subject: [PATCH V5 7/7] arm64: defconfig: Enable IPQ9574 SoC base configs
+Date:   Thu, 2 Feb 2023 14:00:31 +0530
+Message-ID: <20230202083031.10457-8-quic_devipriy@quicinc.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20230202083031.10457-1-quic_devipriy@quicinc.com>
+References: <20230202083031.10457-1-quic_devipriy@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230202033203.1239239-3-xialonglong1@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 5WOGSddzsVZzw2tPBOkQsX3heMFXj7ut
+X-Proofpoint-ORIG-GUID: 5WOGSddzsVZzw2tPBOkQsX3heMFXj7ut
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-01_15,2023-01-31_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=777
+ priorityscore=1501 bulkscore=0 adultscore=0 spamscore=0 clxscore=1015
+ impostorscore=0 suspectscore=0 mlxscore=0 lowpriorityscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302020079
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 03:32:02AM +0000, Longlong Xia wrote:
-> The devtmpfs_*_node() are used to mount/unmount devices to /dev, but their
-> callers don't check their return value, so we don't know the reason for
-> the failure. Let's add some debug info in handle() to help users know
-> why failed.
-> 
-> Signed-off-by: Longlong Xia <xialonglong1@huawei.com>
-> ---
->  drivers/base/devtmpfs.c | 12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/base/devtmpfs.c b/drivers/base/devtmpfs.c
-> index ae72d4ba8547..77ca64f708ce 100644
-> --- a/drivers/base/devtmpfs.c
-> +++ b/drivers/base/devtmpfs.c
-> @@ -389,10 +389,18 @@ static __initdata DECLARE_COMPLETION(setup_done);
->  static int handle(const char *name, umode_t mode, kuid_t uid, kgid_t gid,
->  		  struct device *dev)
->  {
-> +	int ret;
-> +
->  	if (mode)
-> -		return handle_create(name, mode, uid, gid, dev);
-> +		ret = handle_create(name, mode, uid, gid, dev);
->  	else
-> -		return handle_remove(name, dev);
-> +		ret = handle_remove(name, dev);
-> +
-> +	if (ret)
-> +		pr_err_ratelimited("failed to %s %s, ret = %d\n",
-> +				   mode ? "create" : "remove", name, ret);
+Enables clk & pinctrl related configs
 
-As you have a struct device * here, why not use dev_err() instead?
+Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+---
+ Changes in V5:
+	- No changes
 
-And why rate limited?  What is going to cause this to be spammed with
-lots and lots of failures?  What were you doing that caused a failure
-here, how is it triggered?
+ arch/arm64/configs/defconfig | 2 ++
+ 1 file changed, 2 insertions(+)
 
-thanks,
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index a8c74a419d95..3f6d883b4bb2 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -556,6 +556,7 @@ CONFIG_PINCTRL_IMX93=y
+ CONFIG_PINCTRL_MSM=y
+ CONFIG_PINCTRL_IPQ8074=y
+ CONFIG_PINCTRL_IPQ6018=y
++CONFIG_PINCTRL_IPQ9574=y
+ CONFIG_PINCTRL_MSM8916=y
+ CONFIG_PINCTRL_MSM8953=y
+ CONFIG_PINCTRL_MSM8976=y
+@@ -1131,6 +1132,7 @@ CONFIG_QCOM_CLK_SMD_RPM=y
+ CONFIG_QCOM_CLK_RPMH=y
+ CONFIG_IPQ_GCC_6018=y
+ CONFIG_IPQ_GCC_8074=y
++CONFIG_IPQ_GCC_9574=y
+ CONFIG_MSM_GCC_8916=y
+ CONFIG_MSM_GCC_8994=y
+ CONFIG_MSM_MMCC_8996=y
+-- 
+2.17.1
 
-greg k-h
