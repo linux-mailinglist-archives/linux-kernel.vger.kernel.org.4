@@ -2,88 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE253687BC1
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 12:10:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1808687BC9
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 12:12:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232239AbjBBLKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 06:10:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40442 "EHLO
+        id S232260AbjBBLMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 06:12:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232120AbjBBLKV (ORCPT
+        with ESMTP id S232051AbjBBLMF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 06:10:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0BE49754;
-        Thu,  2 Feb 2023 03:10:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4109761AE4;
-        Thu,  2 Feb 2023 11:10:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 98283C4339C;
-        Thu,  2 Feb 2023 11:10:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675336217;
-        bh=i1XmpH5nFD5KatiJd8PdfMED3WBVaS8RfChHbqKsLq8=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=uDRejtrbeDiNTQ/ZGplqCfS5zDJxYXOWI03wW8o5MosfAkGHU444SKC1zaWkX3m7l
-         hjofhYHR6KBVDCYxBTAo+2ECwX7a0Qw5iCyakdvKamHESwSEHczfe4MxpFIN0oZICP
-         DjMCOw1Sf06SNDJTPFLh68aHOBKZq04/gFV3GR+28Ej6IuhHW1dG3Zx88sshZ1INVc
-         4eEoXZd+gRP6LmhlgRYg8wfS9nttzfimKoBK98rAfZ4Oo+vnA3EjlAAVDQGdRls2FZ
-         vAREUfnhCc6guZ7YRffetldFa7sddnl/s/UE9YwdzLNZ+XCxdaJt6IB9wqXrvGosUl
-         ApHFCVRA/S+MQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 75FA5E50D67;
-        Thu,  2 Feb 2023 11:10:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 2 Feb 2023 06:12:05 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 605989777;
+        Thu,  2 Feb 2023 03:11:42 -0800 (PST)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 312BATK6013238;
+        Thu, 2 Feb 2023 11:11:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=WAE33EFYbYTeu5TKHx+nj2dZPELgdhfF95h1Tywlwiw=;
+ b=FgvHFYh6TfFpi9+SMTtVoOQgrapK2VY/NcqAMurNBylvxvRGJojE0L++8GHGVzXgPEhN
+ NSqrxrnUMFzgYucmLpfkIbPwt1m060CrMEoJKldiT2YrM+aVvZqiP2nOcvy01Z4bgrx9
+ DwH7B7RtEFuCGSgwlRyltVr94MHrC+2HgV4tc53+nX9ZKPXFMbhl0FuAnhbfQxiLp+tv
+ EOZzXKWk0pQHqvBzzEXSdDqfOoJqXMqARVoan2gALXeBT8Yulx0GK3CSgfLV+LXFaEXo
+ j0AWFNzTHYrFVlNlKivEISyKO0ahtZ/qS3ty72fHBihMWeKbZlYSG1yGZEY+UgG6haf/ kA== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nfm9g30x3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Feb 2023 11:11:36 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 312BBY8P021505
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 2 Feb 2023 11:11:34 GMT
+Received: from hu-mojha-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Thu, 2 Feb 2023 03:11:31 -0800
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <lee@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Mukesh Ojha <quic_mojha@quicinc.com>
+Subject: [PATCH v4] dt-bindings: mfd: qcom,tcsr: Add compatible for sm8450
+Date:   Thu, 2 Feb 2023 16:41:24 +0530
+Message-ID: <1675336284-548-1-git-send-email-quic_mojha@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: =?utf-8?q?=5BPATCH=5D_selftests/bpf=3A_remove_duplicate_include_hea?=
-        =?utf-8?q?der_in_files?=
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167533621747.1751.226846406285857027.git-patchwork-notify@kernel.org>
-Date:   Thu, 02 Feb 2023 11:10:17 +0000
-References: <202301311440516312161@zte.com.cn>
-In-Reply-To: <202301311440516312161@zte.com.cn>
-To:     <ye.xingchen@zte.com.cn>
-Cc:     ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net,
-        kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, mykolal@fb.com, shuah@kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: WwKLyvkfuqzSskuX4Mih5d2VnzykaMRC
+X-Proofpoint-GUID: WwKLyvkfuqzSskuX4Mih5d2VnzykaMRC
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-02_02,2023-02-02_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
+ malwarescore=0 clxscore=1015 spamscore=0 impostorscore=0 phishscore=0
+ priorityscore=1501 mlxlogscore=662 suspectscore=0 lowpriorityscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302020102
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Document the qcom,sm8450-tcsr compatible.
 
-This patch was applied to bpf/bpf-next.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
+Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+Change in v4:
+  - added Acked-by.
 
-On Tue, 31 Jan 2023 14:40:51 +0800 (CST) you wrote:
-> From: ye xingchen <ye.xingchen@zte.com.cn>
-> 
-> linux/net_tstamp.h is included more than once.
-> 
-> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
-> ---
->  tools/testing/selftests/bpf/xdp_hw_metadata.c | 1 -
->  1 file changed, 1 deletion(-)
+Change in v3:
+  - Align with new format mentioned at
+    Documentation/devicetree/bindings/arm/qcom-soc.yaml    
 
-Here is the summary with links:
-  - selftests/bpf: remove duplicate include header in files
-    https://git.kernel.org/bpf/bpf-next/c/4bc32df7a9c3
+Change in v2:
+  - Considering here it as v2 as this patch came out from comment
+    made on its v1 https://lore.kernel.org/lkml/c5dc8042-717b-22eb-79f6-d18ab10d6685@linaro.org/
 
-You are awesome, thank you!
+
+ Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml b/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
+index adcae6c..4290062 100644
+--- a/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
++++ b/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
+@@ -26,6 +26,7 @@ properties:
+           - qcom,sdm630-tcsr
+           - qcom,sdm845-tcsr
+           - qcom,sm8150-tcsr
++          - qcom,sm8450-tcsr
+           - qcom,tcsr-apq8064
+           - qcom,tcsr-apq8084
+           - qcom,tcsr-ipq6018
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.7.4
 
