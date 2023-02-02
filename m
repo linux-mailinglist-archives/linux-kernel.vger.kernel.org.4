@@ -2,183 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A30A5688802
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 21:09:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9294F688806
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 21:10:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232241AbjBBUJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 15:09:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51238 "EHLO
+        id S232478AbjBBUJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 15:09:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231322AbjBBUJP (ORCPT
+        with ESMTP id S231936AbjBBUJx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 15:09:15 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 970C16EADB;
-        Thu,  2 Feb 2023 12:09:09 -0800 (PST)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 312K5Zf0030590;
-        Thu, 2 Feb 2023 20:08:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : content-type : mime-version; s=pp1;
- bh=qA3uetDnh5K8SDSrjjFDBGsSe3mOGPcwWz+hIKsXPQE=;
- b=LeL+x7hvQ2H80MdzqIq8DRoAuhKoBsFMKhYC2ruMBnh10UqKXU0ZiihDYMyTP9UY+kBR
- wbVTn2RMrFLIqBDzmtHtgLks2vz3t8pD48TVwletf65UVu35+0XU6TEuLiNwi+wobhMA
- A2u9dJep2cxVuooaxxqMGm+Lh24ah9C4vLtm8YxRryjPS+AhoYy++wqYVVC//EOT9Mp5
- cVOV8oFvVwin48E4wVYkHc3vNgNlpq2AxJvAWqW2flD/Uf87v6ui+BBDFIb8XXkXQkVA
- CmVVh5JwKltBJSIN56tbj6AHbhkxYvLp/3ipWhVrxOOjQrzWyc33jsiAk8gtA5dGPOOf pw== 
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ngcyjma80-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Feb 2023 20:08:54 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 312EttMI013226;
-        Thu, 2 Feb 2023 20:08:52 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3ncvshcq5w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Feb 2023 20:08:52 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 312K8mcX45285834
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 2 Feb 2023 20:08:48 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 822D820040;
-        Thu,  2 Feb 2023 20:08:48 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1D2D120049;
-        Thu,  2 Feb 2023 20:08:48 +0000 (GMT)
-Received: from osiris (unknown [9.171.10.177])
-        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Thu,  2 Feb 2023 20:08:48 +0000 (GMT)
-Date:   Thu, 2 Feb 2023 21:08:46 +0100
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: [GIT PULL] s390 fixes for 6.2-rc7
-Message-ID: <Y9wYTnwXVwg/3Dv3@osiris>
+        Thu, 2 Feb 2023 15:09:53 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6CAC7DBC5;
+        Thu,  2 Feb 2023 12:09:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675368591; x=1706904591;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EdGFswneWv/1WxwuBCK/pyMs4jxFBv++s6r7X4nvUeI=;
+  b=a9XWL4BmAh0bwTFVYZmPQdlW78S0cdz8eqYFbN+ISWFr+uF31b437qLo
+   w2xZLDZScKTeBB98cViYbBSQWLyXIO7VS5a+MK00RYcrgieMtQufRsfbA
+   FFdUZ0Q4tbFABecl+2D1wLoahXr+e5jGnXojg902UR0N7CguCIplVeP1D
+   Wkh/k+FjY2H9kTsbmUM251bjkfcxj9HY27zLbLXXdJG2cbNZiKEnuSZ12
+   3WL2pINEzT8+E0W5U5trjewMXcvVnreV945DATWwzoR3cf1SVPqprF3P9
+   ta1HkEdQi5kBjX2Whrk+PMtTm6rvyKZ7M7VGb0zu9St17FQdEWRmabLBb
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="308899347"
+X-IronPort-AV: E=Sophos;i="5.97,268,1669104000"; 
+   d="scan'208";a="308899347"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2023 12:09:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="994239335"
+X-IronPort-AV: E=Sophos;i="5.97,268,1669104000"; 
+   d="scan'208";a="994239335"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 02 Feb 2023 12:09:47 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pNftz-0006oI-0G;
+        Thu, 02 Feb 2023 20:09:47 +0000
+Date:   Fri, 3 Feb 2023 04:08:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>, robh+dt@kernel.org,
+        broonie@kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
+        jarkko@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, skomatineni@nvidia.com, ldewangan@nvidia.com,
+        Krishna Yarlagadda <kyarlagadda@nvidia.com>
+Subject: Re: [PATCH 2/4] tpm: tegra: Support SPI tpm wait state detect
+Message-ID: <202302030428.MRyuAj03-lkp@intel.com>
+References: <20230202161750.21210-3-kyarlagadda@nvidia.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: uZsbdLOLv9m-3P5MMxvZgRvHvcWrFDin
-X-Proofpoint-GUID: uZsbdLOLv9m-3P5MMxvZgRvHvcWrFDin
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-02_13,2023-02-02_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1015
- mlxscore=0 mlxlogscore=999 impostorscore=0 phishscore=0 lowpriorityscore=0
- suspectscore=0 bulkscore=0 malwarescore=0 priorityscore=1501 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302020179
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230202161750.21210-3-kyarlagadda@nvidia.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Linus,
+Hi Krishna,
 
-please pull a couple of s390 fixes.
+Thank you for the patch! Perhaps something to improve:
 
-Thanks,
-Heiko
+[auto build test WARNING on char-misc/char-misc-testing]
+[also build test WARNING on char-misc/char-misc-next char-misc/char-misc-linus broonie-spi/for-next robh/for-next linus/master v6.2-rc6 next-20230202]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-The following changes since commit 41e1992665a2701fa025a8b76970c43b4148446f:
+url:    https://github.com/intel-lab-lkp/linux/commits/Krishna-Yarlagadda/dt-bindings-tpm-Add-compatible-for-Tegra-TPM/20230203-002113
+patch link:    https://lore.kernel.org/r/20230202161750.21210-3-kyarlagadda%40nvidia.com
+patch subject: [PATCH 2/4] tpm: tegra: Support SPI tpm wait state detect
+config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20230203/202302030428.MRyuAj03-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/9a454b022e5273e483b968f1998e0b177e71fcb2
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Krishna-Yarlagadda/dt-bindings-tpm-Add-compatible-for-Tegra-TPM/20230203-002113
+        git checkout 9a454b022e5273e483b968f1998e0b177e71fcb2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash drivers/char/tpm/
 
-  s390: workaround invalid gcc-11 out of bounds read warning (2023-01-17 19:00:59 +0100)
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-are available in the Git repository at:
+All warnings (new ones prefixed by >>):
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-6.2-4
+>> drivers/char/tpm/tpm_tis_spi_tegra.c:23:5: warning: no previous prototype for 'tpm_tis_spi_tegra_transfer' [-Wmissing-prototypes]
+      23 | int tpm_tis_spi_tegra_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
 
-for you to fetch changes up to 7ab41c2c08a32132ba8c14624910e2fe8ce4ba4b:
 
-  s390/decompressor: specify __decompress() buf len to avoid overflow (2023-01-31 18:54:21 +0100)
+vim +/tpm_tis_spi_tegra_transfer +23 drivers/char/tpm/tpm_tis_spi_tegra.c
 
-----------------------------------------------------------------
-s390 fixes for 6.2-rc7
+    22	
+  > 23	int tpm_tis_spi_tegra_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
+    24				       u8 *in, const u8 *out)
+    25	{
+    26		struct tpm_tis_spi_phy *phy = to_tpm_tis_spi_phy(data);
+    27		int ret = 0;
+    28		struct spi_message m;
+    29		struct spi_transfer spi_xfer[3];
+    30		u8 transfer_len;
+    31	
+    32		spi_bus_lock(phy->spi_device->master);
+    33	
+    34		while (len) {
+    35			transfer_len = min_t(u16, len, MAX_SPI_FRAMESIZE);
+    36	
+    37			spi_message_init(&m);
+    38			phy->iobuf[0] = (in ? 0x80 : 0) | (transfer_len - 1);
+    39			phy->iobuf[1] = 0xd4;
+    40			phy->iobuf[2] = addr >> 8;
+    41			phy->iobuf[3] = addr;
+    42	
+    43			memset(&spi_xfer, 0, sizeof(spi_xfer));
+    44	
+    45			spi_xfer[0].tx_buf = phy->iobuf;
+    46			spi_xfer[0].len = 1;
+    47			spi_message_add_tail(&spi_xfer[0], &m);
+    48	
+    49			spi_xfer[1].tx_buf = phy->iobuf + 1;
+    50			spi_xfer[1].len = 3;
+    51			spi_message_add_tail(&spi_xfer[1], &m);
+    52	
+    53			if (out) {
+    54				spi_xfer[2].tx_buf = &phy->iobuf[4];
+    55				spi_xfer[2].rx_buf = NULL;
+    56				memcpy(&phy->iobuf[4], out, transfer_len);
+    57				out += transfer_len;
+    58			}
+    59			if (in) {
+    60				spi_xfer[2].tx_buf = NULL;
+    61				spi_xfer[2].rx_buf = &phy->iobuf[4];
+    62			}
+    63			spi_xfer[2].len = transfer_len;
+    64			spi_message_add_tail(&spi_xfer[2], &m);
+    65	
+    66			reinit_completion(&phy->ready);
+    67			ret = spi_sync_locked(phy->spi_device, &m);
+    68			if (ret < 0)
+    69				goto exit;
+    70	
+    71			if (in) {
+    72				memcpy(in, &phy->iobuf[4], transfer_len);
+    73				in += transfer_len;
+    74			}
+    75	
+    76			len -= transfer_len;
+    77		}
+    78	
+    79	exit:
+    80		spi_bus_unlock(phy->spi_device->master);
+    81		return ret;
+    82	}
+    83	
 
-- With CONFIG_VMAP_STACK enabled it is not possible to load the s390
-  specific diag288_wdt watchdog module. Reason is that a pointer to a
-  string is passed to an inline assembly; this string however is located on
-  the stack, while the instruction within the inline assembly expects a
-  physicial address. Fix this by copying the string to a kmalloc'ed buffer.
-
-- The diag288_wdt watchdog module does not indicate that it accesses memory
-  from an inline assembly, which it does. Add "memory" to the clobber list
-  to prevent the compiler from optimizing code incorrectly away.
-
-- Pass size of the uncompressed kernel image to __decompress() call.
-  Otherwise the kernel image decompressor may corrupt/overwrite an
-  initrd. This was reported to happen on s390 after commit 2aa14b1ab2c4
-  ("zstd: import usptream v1.5.2").
-
-----------------------------------------------------------------
-Alexander Egorenkov (2):
-      watchdog: diag288_wdt: do not use stack buffers for hardware data
-      watchdog: diag288_wdt: fix __diag288() inline assembly
-
-Vasily Gorbik (1):
-      s390/decompressor: specify __decompress() buf len to avoid overflow
-
- arch/s390/boot/decompressor.c  |  2 +-
- drivers/watchdog/diag288_wdt.c | 15 ++++++++++++---
- 2 files changed, 13 insertions(+), 4 deletions(-)
-
-diff --git a/arch/s390/boot/decompressor.c b/arch/s390/boot/decompressor.c
-index 8dcd7af2911a..b519a1f045d8 100644
---- a/arch/s390/boot/decompressor.c
-+++ b/arch/s390/boot/decompressor.c
-@@ -80,6 +80,6 @@ void *decompress_kernel(void)
- 	void *output = (void *)decompress_offset;
- 
- 	__decompress(_compressed_start, _compressed_end - _compressed_start,
--		     NULL, NULL, output, 0, NULL, error);
-+		     NULL, NULL, output, vmlinux.image_size, NULL, error);
- 	return output;
- }
-diff --git a/drivers/watchdog/diag288_wdt.c b/drivers/watchdog/diag288_wdt.c
-index 4cb10877017c..6ca5d9515d85 100644
---- a/drivers/watchdog/diag288_wdt.c
-+++ b/drivers/watchdog/diag288_wdt.c
-@@ -86,7 +86,7 @@ static int __diag288(unsigned int func, unsigned int timeout,
- 		"1:\n"
- 		EX_TABLE(0b, 1b)
- 		: "+d" (err) : "d"(__func), "d"(__timeout),
--		  "d"(__action), "d"(__len) : "1", "cc");
-+		  "d"(__action), "d"(__len) : "1", "cc", "memory");
- 	return err;
- }
- 
-@@ -268,12 +268,21 @@ static int __init diag288_init(void)
- 	char ebc_begin[] = {
- 		194, 197, 199, 201, 213
- 	};
-+	char *ebc_cmd;
- 
- 	watchdog_set_nowayout(&wdt_dev, nowayout_info);
- 
- 	if (MACHINE_IS_VM) {
--		if (__diag288_vm(WDT_FUNC_INIT, 15,
--				 ebc_begin, sizeof(ebc_begin)) != 0) {
-+		ebc_cmd = kmalloc(sizeof(ebc_begin), GFP_KERNEL);
-+		if (!ebc_cmd) {
-+			pr_err("The watchdog cannot be initialized\n");
-+			return -ENOMEM;
-+		}
-+		memcpy(ebc_cmd, ebc_begin, sizeof(ebc_begin));
-+		ret = __diag288_vm(WDT_FUNC_INIT, 15,
-+				   ebc_cmd, sizeof(ebc_begin));
-+		kfree(ebc_cmd);
-+		if (ret != 0) {
- 			pr_err("The watchdog cannot be initialized\n");
- 			return -EINVAL;
- 		}
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
