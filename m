@@ -2,136 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AD7968797D
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:49:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E0F16879AF
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 11:02:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232548AbjBBJtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 04:49:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60294 "EHLO
+        id S232157AbjBBKCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 05:02:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232598AbjBBJtK (ORCPT
+        with ESMTP id S229991AbjBBKCV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 04:49:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84CAB87D15;
-        Thu,  2 Feb 2023 01:48:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1F2B8B82272;
-        Thu,  2 Feb 2023 09:48:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B580C433D2;
-        Thu,  2 Feb 2023 09:48:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675331319;
-        bh=WCEiLESm2ErJPjaBal/9ZH056ER36/vOC8v5zxr8nDg=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=QU3DBFMaYt3H52FCXpQ/dn5eElV6wyf0aO2iEA7WX1mELk6K+v6U3A59kneLz2ZO2
-         lbbfzPKKkF5z/N9Qi4Lt0OAHOY0hak5++nTUrREWjXbhuXHELa9TKdYXl8FvhUPBza
-         7wmtImjIvVemz6PVlopJmINq3ppHmrnK4vuJaed+TwdLF5K25pJTq8fqNPbSjhLIDY
-         SPLp9g4A2kLnaFp9+UmjB3fuv/s07iw6IWMv4AgVGAJ05FjnnU/qOW80J6McKkMCen
-         Jax6YD/mIP35BiClLwjh8lTN0G4uXQkj8J9QOkMmciEQMj0BIfDnq0Dxoj3JP+SYgX
-         M9tO4ZMtealig==
-From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     palmer@rivosinc.com, conor.dooley@microchip.com,
-        liaochang1@huawei.com, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Bjorn Topel <bjorn.topel@gmail.com>
-Subject: Re: [PATCH] riscv: kprobe: Fixup misaligned load text
-In-Reply-To: <CAJF2gTSj12E9+peMF0rNY_psGDyEG5BbMY6V-s4dK0FpkCC9Yw@mail.gmail.com>
-References: <20230201064608.3486136-1-guoren@kernel.org>
- <87tu05pvur.fsf@all.your.base.are.belong.to.us>
- <CAJF2gTSj12E9+peMF0rNY_psGDyEG5BbMY6V-s4dK0FpkCC9Yw@mail.gmail.com>
-Date:   Thu, 02 Feb 2023 10:48:37 +0100
-Message-ID: <87cz6s75ze.fsf@all.your.base.are.belong.to.us>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        Thu, 2 Feb 2023 05:02:21 -0500
+X-Greylist: delayed 606 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 02 Feb 2023 02:02:19 PST
+Received: from out-154.mta1.migadu.com (out-154.mta1.migadu.com [95.215.58.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2BB875B3
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 02:02:18 -0800 (PST)
+Content-Type: text/plain;
+        charset=us-ascii
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1675331528;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LCBTDt5ICx8Mvi5W+/+gY2aaUdXSNOvE3rMuXJ+tKi8=;
+        b=PhVeP3jDB1n3NatercWXmqIzxQrWiQ3p3vD33qp0f1yK20MLk9VJ8i4aPAYHHzqiiYURz+
+        5PXAOZw2RCL4CtNccLoGB4shACHCh4IvceHoaFWCF/TfeMUtscf95Kh2MYVTkZXOjkms4a
+        GQs7d3Qr1k4ffDwiAIiOtcdj3WyAvEY=
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.300.101.1.3\))
+Subject: Re: [PATCH V2] arm64/mm: Intercept pfn changes in set_pte_at()
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Muchun Song <muchun.song@linux.dev>
+In-Reply-To: <Y9pZALdn3pKiJUeQ@arm.com>
+Date:   Thu, 2 Feb 2023 17:51:39 +0800
+Cc:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Message-Id: <A8DF7D56-C145-4B49-A034-022917B87C89@linux.dev>
+References: <20230109052816.405335-1-anshuman.khandual@arm.com>
+ <e924c1aa-5f04-fd7f-52d4-7cf22c476016@arm.com>
+ <20230126133321.GB29148@willie-the-truck>
+ <d454c9a2-5300-b600-a2ae-21d82d338470@arm.com>
+ <20230131154950.GB2646@willie-the-truck> <Y9pZALdn3pKiJUeQ@arm.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Guo Ren <guoren@kernel.org> writes:
-
-> On Wed, Feb 1, 2023 at 5:40 PM Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> w=
-rote:
->>
->> guoren@kernel.org writes:
->>
->> > From: Guo Ren <guoren@linux.alibaba.com>
->> >
->> > The current kprobe would cause a misaligned load for the probe point.
->> > This patch fixup it with two half-word loads instead.
->> >
->> > Fixes: c22b0bcb1dd0 ("riscv: Add kprobes supported")
->> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
->> > Signed-off-by: Guo Ren <guoren@kernel.org>
->> > Link: https://lore.kernel.org/linux-riscv/878rhig9zj.fsf@all.your.base=
-.are.belong.to.us/
->> > Reported-by: Bjorn Topel <bjorn.topel@gmail.com>
->> > ---
->> >  arch/riscv/kernel/probes/kprobes.c | 4 +++-
->> >  1 file changed, 3 insertions(+), 1 deletion(-)
->> >
->> > diff --git a/arch/riscv/kernel/probes/kprobes.c b/arch/riscv/kernel/pr=
-obes/kprobes.c
->> > index 41c7481afde3..c1160629cef4 100644
->> > --- a/arch/riscv/kernel/probes/kprobes.c
->> > +++ b/arch/riscv/kernel/probes/kprobes.c
->> > @@ -74,7 +74,9 @@ int __kprobes arch_prepare_kprobe(struct kprobe *p)
->> >               return -EILSEQ;
->> >
->> >       /* copy instruction */
->> > -     p->opcode =3D *p->addr;
->> > +     p->opcode =3D (kprobe_opcode_t)(*(u16 *)probe_addr);
->> > +     if (GET_INSN_LENGTH(p->opcode) =3D=3D 4)
->> > +             p->opcode |=3D (kprobe_opcode_t)(*(u16 *)(probe_addr + 2=
-))
->> >       << 16;
->>
->> Ugh, those casts. :-( What about the memcpy variant you had in the other
->> thread?
-> The memcpy version would force load probe_addr + 2. This one would
-> save an lh operation. The code text guarantees half-word alignment. No
-> misaligned load happened. Second, kprobe wouldn't write the last half
-> of 32b instruction.
-
-Ok, something more readable, like:
-
-diff --git a/arch/riscv/kernel/probes/kprobes.c b/arch/riscv/kernel/probes/=
-kprobes.c
-index f21592d20306..3602352ba175 100644
---- a/arch/riscv/kernel/probes/kprobes.c
-+++ b/arch/riscv/kernel/probes/kprobes.c
-@@ -50,14 +50,16 @@ static void __kprobes arch_simulate_insn(struct kprobe =
-*p, struct pt_regs *regs)
-=20
- int __kprobes arch_prepare_kprobe(struct kprobe *p)
- {
--	unsigned long probe_addr =3D (unsigned long)p->addr;
-+	u16 *insn =3D (u16 *)p->addr;
-=20
--	if (probe_addr & 0x1)
-+	if ((uintptr_t)insn & 0x1)
- 		return -EILSEQ;
-=20
- 	/* copy instruction */
--	p->opcode =3D *p->addr;
--
-+	p->opcode =3D *insn++;
-+	if (GET_INSN_LENGTH(p->opcode) =3D=3D 4)
-+		p->opcode |=3D *insn << 16;
-+=09
- 	/* decode instruction */
- 	switch (riscv_probe_decode_insn(p->addr, &p->ainsn.api)) {
- 	case INSN_REJECTED:	/* insn not supported */
 
 
-Bj=C3=B6rn
+> On Feb 1, 2023, at 20:20, Catalin Marinas <catalin.marinas@arm.com> =
+wrote:
+>=20
+> On Tue, Jan 31, 2023 at 03:49:51PM +0000, Will Deacon wrote:
+>> On Fri, Jan 27, 2023 at 12:43:17PM +0000, Robin Murphy wrote:
+>>> On 2023-01-26 13:33, Will Deacon wrote:
+>>>> On Tue, Jan 24, 2023 at 11:11:49AM +0530, Anshuman Khandual wrote:
+>>>>> On 1/9/23 10:58, Anshuman Khandual wrote:
+>>>>>> Changing pfn on a user page table mapped entry, without first =
+going through
+>>>>>> break-before-make (BBM) procedure is unsafe. This just updates =
+set_pte_at()
+>>>>>> to intercept such changes, via an updated =
+pgattr_change_is_safe(). This new
+>>>>>> check happens via __check_racy_pte_update(), which has now been =
+renamed as
+>>>>>> __check_safe_pte_update().
+>>>>>>=20
+>>>>>> Cc: Catalin Marinas <catalin.marinas@arm.com>
+>>>>>> Cc: Will Deacon <will@kernel.org>
+>>>>>> Cc: Mark Rutland <mark.rutland@arm.com>
+>>>>>> Cc: Andrew Morton <akpm@linux-foundation.org>
+>>>>>> Cc: linux-arm-kernel@lists.infradead.org
+>>>>>> Cc: linux-kernel@vger.kernel.org
+>>>>>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+>>>>>> ---
+>>>>>> This applies on v6.2-rc3. This patch had some test time on an =
+internal CI
+>>>>>> system without any issues being reported.
+>>>>>=20
+>>>>> Gentle ping, any updates on this patch ? Still any concerns ?
+>>>>=20
+>>>> I don't think we really got to the bottom of Mark's concerns with
+>>>> unreachable ptes on the stack, did we? I also have vague =
+recollections
+>>>> of somebody (Robin?) running into issues with the vmap code not =
+honouring
+>>>> BBM.
+>>>=20
+>>> Doesn't ring a bell, so either it wasn't me, or it was many years =
+ago and
+>>> about 5 levels deep into trying to fix something else :/
+>>=20
+>> Bah, sorry! Catalin reckons it may have been him talking about the =
+vmemmap.
+>=20
+> Indeed. The discussion with Anshuman started from this thread:
+>=20
+> =
+https://lore.kernel.org/all/20221025014215.3466904-1-mawupeng1@huawei.com/=
+
+>=20
+> We already trip over the existing checks even without Anshuman's =
+patch,
+> though only by chance. We are not setting the software PTE_DIRTY on =
+the
+> new pte (we don't bother with this bit for kernel mappings).
+>=20
+> Given that the vmemmap ptes are still live when such change happens =
+and
+> no-one came with a solution to the break-before-make problem, I =
+propose
+> we revert the arm64 part of commit 47010c040dec ("mm: hugetlb_vmemmap:
+> cleanup CONFIG_HUGETLB_PAGE_FREE_VMEMMAP*"). We just need this hunk:
+>=20
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index 27b2592698b0..5263454a5794 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -100,7 +100,6 @@ config ARM64
+> 	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
+> 	select ARCH_WANT_FRAME_POINTERS
+> 	select ARCH_WANT_HUGE_PMD_SHARE if ARM64_4K_PAGES || =
+(ARM64_16K_PAGES && !ARM64_VA_BITS_36)
+> -	select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+
+Maybe it is a little overkill for HVO as it can significantly minimize =
+the
+overhead of vmemmap on ARM64 servers for some workloads (like qemu, =
+DPDK).
+So I don't think disabling it is a good approach. Indeed, HVO broke BBM,
+but the waring does not affect anything since the tail vmemmap pages are
+supposed to be read-only. So, I suggest skipping warnings if it is the
+vmemmap address in set_pte_at(). What do you think of?
+
+Muchun,
+Thanks.
+
+> 	select ARCH_WANT_LD_ORPHAN_WARN
+> 	select ARCH_WANTS_NO_INSTR
+> 	select ARCH_WANTS_THP_SWAP if ARM64_4K_PAGES
+>=20
+> --=20
+> Catalin
+
