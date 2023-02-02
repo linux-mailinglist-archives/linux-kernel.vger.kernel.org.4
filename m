@@ -2,135 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BD6F6876F7
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 09:05:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62C83687700
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 09:07:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230287AbjBBIFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 03:05:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57688 "EHLO
+        id S232113AbjBBIHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 03:07:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbjBBIF3 (ORCPT
+        with ESMTP id S232057AbjBBIHv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 03:05:29 -0500
-Received: from mx0.infotecs.ru (mx0.infotecs.ru [91.244.183.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF43CA35
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 00:05:27 -0800 (PST)
-Received: from mx0.infotecs-nt (localhost [127.0.0.1])
-        by mx0.infotecs.ru (Postfix) with ESMTP id D1D26104943A;
-        Thu,  2 Feb 2023 11:05:22 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx0.infotecs.ru D1D26104943A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=infotecs.ru; s=mx;
-        t=1675325123; bh=9Oqp75BixNkux9SygXqMuKmFPr/E9t9JHbS1PuBL4dE=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=fpuHBxITVC5M8u0gXZoDpplTHD3R5r325hGiLRI19fY81CGOdDC8imIWGeRPWtPfC
-         lhfviGJuC6AlNy0gIWkMZXa8ZkaoUZgAQo8SP6T0FNoglNH3XLjhL/DJFr/C0xB7TI
-         NJitehrYTk8tloMnbSOSQrGyopKtaYlmv/i7re1g=
-Received: from msk-exch-02.infotecs-nt (msk-exch-02.infotecs-nt [10.0.7.192])
-        by mx0.infotecs-nt (Postfix) with ESMTP id CD90B30A8127;
-        Thu,  2 Feb 2023 11:05:22 +0300 (MSK)
-From:   Gavrilov Ilia <Ilia.Gavrilov@infotecs.ru>
-To:     Kim Phillips <kim.phillips@amd.com>, Joerg Roedel <joro@8bytes.org>
-CC:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Wan Zongshun <Vincent.Wan@amd.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "lvc-project@linuxtesting.org" <lvc-project@linuxtesting.org>
-Subject: Re: [PATCH] iommu/amd: @Add a length limitation for the ivrs_acpihid
- command-line parameter
-Thread-Topic: [PATCH] iommu/amd: @Add a length limitation for the ivrs_acpihid
- command-line parameter
-Thread-Index: AQHZNt0ZVMqor8E7oU2uXGP1Yfs9UA==
-Date:   Thu, 2 Feb 2023 08:05:22 +0000
-Message-ID: <54fe84de-5144-3ec0-1329-2e9dca41ab17@infotecs.ru>
-References: <20230130083843.802106-1-Ilia.Gavrilov@infotecs.ru>
- <39506e9f-9bbb-fcf6-b488-542fd3657eae@amd.com>
-In-Reply-To: <39506e9f-9bbb-fcf6-b488-542fd3657eae@amd.com>
-Accept-Language: ru-RU, en-US
-Content-Language: ru-RU
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.17.0.10]
-x-exclaimer-md-config: 208ac3cd-1ed4-4982-a353-bdefac89ac0a
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <2B0D37E79BA76A458153168438879B6D@infotecs.ru>
-Content-Transfer-Encoding: base64
+        Thu, 2 Feb 2023 03:07:51 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71725841AB;
+        Thu,  2 Feb 2023 00:07:50 -0800 (PST)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3127vrc2030763;
+        Thu, 2 Feb 2023 08:07:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=kHKUuSYm3LymHhPCVgFFgfXxLfapU3xg+Ifkfu8XDK8=;
+ b=sLUudWI8Tf+aEK0KWmW6KhNl6Fck+49UIavJwP/VvGe2K1pUIiKIz+su38gLtaN+jBLi
+ jMTdRFSkOLjk4s4PQtf3CuVtBO1odrrPRgaNJ7g0PbQhqpcyA+xNIPyFiCSMkCnecz0M
+ NLvvOBNTElnfKgZPden3UhKm761H8f7HTiarNpeVMR+CTLv3ThWTafc9or1DPN93X78j
+ mKW9hj0TT2aRjt7WbSb6pUJ3dXuLaFVks1bId8QaRq6fl8dnQ3ZEVTg82UgNOc/01flq
+ Lx2CqYSFruWphGiE//+a675BgoVe3vSAcqqnZfcvLjlaHEdp3BU5LhM03fU4pypCkGL9 AA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ng98fr6wr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Feb 2023 08:07:06 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31280nfx003066;
+        Thu, 2 Feb 2023 08:07:05 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ng98fr6vn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Feb 2023 08:07:05 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31200lw5027465;
+        Thu, 2 Feb 2023 08:07:03 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3ncvttwvsr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Feb 2023 08:07:03 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 312870M944761368
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 2 Feb 2023 08:07:00 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B7C5420040;
+        Thu,  2 Feb 2023 08:07:00 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E1ABE2004B;
+        Thu,  2 Feb 2023 08:06:53 +0000 (GMT)
+Received: from [9.43.0.232] (unknown [9.43.0.232])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu,  2 Feb 2023 08:06:53 +0000 (GMT)
+Message-ID: <8d72c776-cb5f-adfe-ba5c-9f258d8720fe@linux.ibm.com>
+Date:   Thu, 2 Feb 2023 13:36:52 +0530
 MIME-Version: 1.0
-X-KLMS-Rule-ID: 1
-X-KLMS-Message-Action: clean
-X-KLMS-AntiSpam-Lua-Profiles: 175194 [Feb 02 2023]
-X-KLMS-AntiSpam-Version: 5.9.59.0
-X-KLMS-AntiSpam-Envelope-From: Ilia.Gavrilov@infotecs.ru
-X-KLMS-AntiSpam-Rate: 0
-X-KLMS-AntiSpam-Status: not_detected
-X-KLMS-AntiSpam-Method: none
-X-KLMS-AntiSpam-Auth: dkim=none
-X-KLMS-AntiSpam-Info: LuaCore: 502 502 69dee8ef46717dd3cb3eeb129cb7cc8dab9e30f6, {Tracking_msgid_8}, {Tracking_from_domain_doesnt_match_to}, d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2;infotecs.ru:7.1.1
-X-MS-Exchange-Organization-SCL: -1
-X-KLMS-AntiSpam-Interceptor-Info: scan successful
-X-KLMS-AntiPhishing: Clean, bases: 2023/02/02 07:35:00
-X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, bases: 2023/02/02 02:42:00 #20830374
-X-KLMS-AntiVirus-Status: Clean, skipped
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v5 00/15] jevents/pmu-events improvements
+Content-Language: en-US
+To:     Ian Rogers <irogers@google.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Rob Herring <robh@kernel.org>,
+        Kang Minchul <tegongkang@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sandipan Das <sandipan.das@amd.com>,
+        Jing Zhang <renyu.zj@linux.alibaba.com>,
+        linuxppc-dev@lists.ozlabs.org
+Cc:     Stephane Eranian <eranian@google.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Caleb Biggers <caleb.biggers@intel.com>
+References: <20230126233645.200509-1-irogers@google.com>
+From:   kajoljain <kjain@linux.ibm.com>
+In-Reply-To: <20230126233645.200509-1-irogers@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: WehzE3LcxbUa5cRYGgq377huCWqAsiNf
+X-Proofpoint-GUID: x7-IN_h9wAfUmeFLrekZ37zv9MgerZzI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-01_15,2023-01-31_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ priorityscore=1501 suspectscore=0 lowpriorityscore=0 clxscore=1015
+ impostorscore=0 bulkscore=0 mlxscore=0 mlxlogscore=999 malwarescore=0
+ phishscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302020076
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMi8yLzIzIDAzOjQ0LCBLaW0gUGhpbGxpcHMgd3JvdGU6DQo+IE5vdCBzdXJlIHdoYXQgdGhh
-dCAnQCcgaXMgZG9pbmcgaW4gdGhlIHN1YmplY3QgbGluZS4uLg0KPiANCg0KU29ycnksIHRoaXMg
-aXMgbXkgdHlwby4NCkknbGwgZml4IGl0IGluIFYyLg0KDQo+IE9uIDEvMzAvMjMgMjozOCBBTSwg
-R2F2cmlsb3YgSWxpYSB3cm90ZToNCj4+IFRoZSAnYWNwaWlkJyBidWZmZXIgaW4gdGhlIHBhcnNl
-X2l2cnNfYWNwaWhpZCBmdW5jdGlvbiBtYXkgb3ZlcmZsb3csDQo+PiBiZWNhdXNlIHRoZSBzdHJp
-bmcgc3BlY2lmaWVyIGluIHRoZSBmb3JtYXQgc3RyaW5nIHNzY2FuZigpDQo+PiBoYXMgbm8gd2lk
-dGggbGltaXRhdGlvbi4NCj4+DQo+PiBGb3VuZCBieSBJbmZvVGVDUyBvbiBiZWhhbGYgb2YgTGlu
-dXggVmVyaWZpY2F0aW9uIENlbnRlcg0KPj4gKGxpbnV4dGVzdGluZy5vcmcpIHdpdGggU1ZBQ0Uu
-DQo+Pg0KPj4gRml4ZXM6IGNhM2JmNWQ0N2NlYyAoImlvbW11L2FtZDogSW50cm9kdWNlcyBpdnJz
-X2FjcGloaWQga2VybmVsIA0KPj4gcGFyYW1ldGVyIikNCj4+IFNpZ25lZC1vZmYtYnk6IElsaWEu
-R2F2cmlsb3YgPElsaWEuR2F2cmlsb3ZAaW5mb3RlY3MucnU+DQo+IA0KPiBjYzogc3RhYmxlPw0K
-PiANCg0KSSdsbCBhZGQgaXQgdG8gVjIuDQo+PiAtLS0NCj4+IMKgIGRyaXZlcnMvaW9tbXUvYW1k
-L2luaXQuYyB8IDE2ICsrKysrKysrKysrKysrKy0NCj4+IMKgIDEgZmlsZSBjaGFuZ2VkLCAxNSBp
-bnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pDQo+Pg0KPj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMv
-aW9tbXUvYW1kL2luaXQuYyBiL2RyaXZlcnMvaW9tbXUvYW1kL2luaXQuYw0KPj4gaW5kZXggNDY3
-YjE5NDk3NWIzLi4xOWE0NmI5ZjczNTcgMTAwNjQ0DQo+PiAtLS0gYS9kcml2ZXJzL2lvbW11L2Ft
-ZC9pbml0LmMNCj4+ICsrKyBiL2RyaXZlcnMvaW9tbXUvYW1kL2luaXQuYw0KPj4gQEAgLTM0NzUs
-MTUgKzM0NzUsMjYgQEAgc3RhdGljIGludCBfX2luaXQgcGFyc2VfaXZyc19ocGV0KGNoYXIgKnN0
-cikNCj4+IMKgwqDCoMKgwqAgcmV0dXJuIDE7DQo+PiDCoCB9DQo+PiArI2RlZmluZSBBQ1BJSURf
-TEVOIChBQ1BJSElEX1VJRF9MRU4gKyBBQ1BJSElEX0hJRF9MRU4pDQo+PiArDQo+PiDCoCBzdGF0
-aWMgaW50IF9faW5pdCBwYXJzZV9pdnJzX2FjcGloaWQoY2hhciAqc3RyKQ0KPj4gwqAgew0KPj4g
-wqDCoMKgwqDCoCB1MzIgc2VnID0gMCwgYnVzLCBkZXYsIGZuOw0KPj4gwqDCoMKgwqDCoCBjaGFy
-ICpoaWQsICp1aWQsICpwLCAqYWRkcjsNCj4+IC3CoMKgwqAgY2hhciBhY3BpaWRbQUNQSUhJRF9V
-SURfTEVOICsgQUNQSUhJRF9ISURfTEVOXSA9IHswfTsNCj4+ICvCoMKgwqAgY2hhciBhY3BpaWRb
-QUNQSUlEX0xFTl0gPSB7MH07DQo+PiDCoMKgwqDCoMKgIGludCBpOw0KPj4gwqDCoMKgwqDCoCBh
-ZGRyID0gc3RyY2hyKHN0ciwgJ0AnKTsNCj4+IMKgwqDCoMKgwqAgaWYgKCFhZGRyKSB7DQo+PiAr
-wqDCoMKgwqDCoMKgwqAgYWRkciA9IHN0cmNocihzdHIsICc9Jyk7DQo+PiArwqDCoMKgwqDCoMKg
-wqAgaWYgKCFhZGRyKQ0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZ290byBub3RfZm91bmQ7
-DQo+PiArDQo+PiArwqDCoMKgwqDCoMKgwqAgKythZGRyOw0KPj4gKw0KPj4gK8KgwqDCoMKgwqDC
-oMKgIGlmIChzdHJsZW4oYWRkcikgPiBBQ1BJSURfTEVOKQ0KPj4gK8KgwqDCoMKgwqDCoMKgwqDC
-oMKgwqAgZ290byBub3RfZm91bmQ7DQo+PiArDQo+PiDCoMKgwqDCoMKgwqDCoMKgwqAgaWYgKHNz
-Y2FuZihzdHIsICJbJXg6JXguJXhdPSVzIiwgJmJ1cywgJmRldiwgJmZuLCBhY3BpaWQpID09IA0K
-Pj4gNCB8fA0KPj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc3NjYW5mKHN0ciwgIlsleDol
-eDoleC4leF09JXMiLCAmc2VnLCAmYnVzLCAmZGV2LCAmZm4sIA0KPj4gYWNwaWlkKSA9PSA1KSB7
-DQo+PiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBwcl93YXJuKCJpdnJzX2FjcGloaWQlcyBv
-cHRpb24gZm9ybWF0IGRlcHJlY2F0ZWQ7IHVzZSANCj4+IGl2cnNfYWNwaWhpZD0lc0AlMDR4OiUw
-Mng6JTAyeC4lZCBpbnN0ZWFkXG4iLA0KPj4gQEAgLTM0OTYsNiArMzUwNyw5IEBAIHN0YXRpYyBp
-bnQgX19pbml0IHBhcnNlX2l2cnNfYWNwaWhpZChjaGFyICpzdHIpDQo+PiDCoMKgwqDCoMKgIC8q
-IFdlIGhhdmUgdGhlICdAJywgbWFrZSBpdCB0aGUgdGVybWluYXRvciB0byBnZXQganVzdCB0aGUg
-DQo+PiBhY3BpaWQgKi8NCj4+IMKgwqDCoMKgwqAgKmFkZHIrKyA9IDA7DQo+PiArwqDCoMKgIGlm
-IChzdHJsZW4oc3RyKSA+IEFDUElJRF9MRU4gKyAxKQ0KPj4gK8KgwqDCoMKgwqDCoMKgIGdvdG8g
-bm90X2ZvdW5kOw0KPj4gKw0KPj4gwqDCoMKgwqDCoCBpZiAoc3NjYW5mKHN0ciwgIj0lcyIsIGFj
-cGlpZCkgIT0gMSkNCj4+IMKgwqDCoMKgwqDCoMKgwqDCoCBnb3RvIG5vdF9mb3VuZDsNCj4gDQo+
-IFRoYXQgd29ya3MsIG9yLCB0aGlzIGZpeCBtaWdodCBiZSBhYmxlIHRvIGJlIG1hZGUgbW9yZSBi
-cmllZiBpZg0KPiB3ZSBjb3VsZCB0cmFuc2Zvcm0gYWxsIHRoZSBzc2NhbmYncyAnJXMncyB0bzoN
-Cj4gDQo+ICIlIiBfX3N0cmluZ2lmeShBQ1BJSURfTEVOKSAicyINCj4gDQoNCkkgdHJpZWQgdG8g
-dXNlIF9fc3RyaW5naWZ5LCBidXQgSSBkaWRuJ3QgZmluZCBhIGJyaWVmIHdheSB0byBkbyBpdCAN
-CmNvcnJlY3RseSBmb3IgdGhlIGV4cHJlc3Npb24gKEFDUElISURfVUlEX0xBTiArIEFDUElISURf
-SElEX0xBTikuIFRoZSANCnByZXByb2Nlc3NvciBkb2VzIG5vdCBldmFsdWF0ZXMgYSBjb25zdGFu
-dCwgYnV0IHNpbXBseSBzdWJzdGl0dXRlcyAoMjU2KzkpLg0KDQo+IGJ1dCB0aGUgbGF0dGVyIG1p
-Z2h0IG1ha2UgdGhlIGFscmVhZHkgbG9uZyBzc2NhbmYgbGluZSBsZW5ndGhzIGxvbmdlci4uLg0K
-PiAgPiBFaXRoZXIgd2F5Og0KPiANCj4gUmV2aWV3ZWQtYnk6IEtpbSBQaGlsbGlwcyA8a2ltLnBo
-aWxsaXBzQGFtZC5jb20+DQo+IA0KPiBLaW0NCg0KVGhhbmsgeW91IGZvciByZXZpZXcuDQoNCg==
+Patchset looks goot to me
+
+Reviewed-By: Kajol Jain<kjain@linux.ibm.com>
+
+On 1/27/23 05:06, Ian Rogers wrote:
+> Add an optimization to jevents using the metric code, rewrite metrics
+> in terms of each other in order to minimize size and improve
+> readability. For example, on Power8
+> other_stall_cpi is rewritten from:
+> "PM_CMPLU_STALL / PM_RUN_INST_CMPL - PM_CMPLU_STALL_BRU_CRU / PM_RUN_INST_CMPL - PM_CMPLU_STALL_FXU / PM_RUN_INST_CMPL - PM_CMPLU_STALL_VSU / PM_RUN_INST_CMPL - PM_CMPLU_STALL_LSU / PM_RUN_INST_CMPL - PM_CMPLU_STALL_NTCG_FLUSH / PM_RUN_INST_CMPL - PM_CMPLU_STALL_NO_NTF / PM_RUN_INST_CMPL"
+> to:
+> "stall_cpi - bru_cru_stall_cpi - fxu_stall_cpi - vsu_stall_cpi - lsu_stall_cpi - ntcg_flush_cpi - no_ntf_stall_cpi"
+> Which more closely matches the definition on Power9.
+> 
+> A limitation of the substitutions are that they depend on strict
+> equality and the shape of the tree. This means that for "a + b + c"
+> then a substitution of "a + b" will succeed while "b + c" will fail
+> (the LHS for "+ c" is "a + b" not just "b").
+> 
+> Separate out the events and metrics in the pmu-events tables saving
+> 14.8% in the table size while making it that metrics no longer need to
+> iterate over all events and vice versa. These changes remove evsel's
+> direct metric support as the pmu_event no longer has a metric to
+> populate it. This is a minor issue as the code wasn't working
+> properly, metrics for this are rare and can still be properly ran
+> using '-M'.
+> 
+> Add an ability to just build certain models into the jevents generated
+> pmu-metrics.c code. This functionality is appropriate for operating
+> systems like ChromeOS, that aim to minimize binary size and know all
+> the target CPU models.
+> 
+> v5. s/list/List/ in a type annotation to fix Python 3.6 as reported by
+>     John Garry <john.g.garry@oracle.com>. Fix a bug in metric_test.py
+>     where a bad character was imported. To avoid similar regressions,
+>     run metric_test.py before generating pmu-events.c.
+> v4. Better support the implementor/model style --model argument for
+>     jevents.py. Add #slots test fix. On some patches add reviewed-by
+>     John Garry <john.g.garry@oracle.com> and Kajol
+>     Jain<kjain@linux.ibm.com>.
+> v3. Rebase an incorporate review comments from John Garry
+>     <john.g.garry@oracle.com>, in particular breaking apart patch 4
+>     into 3 patches. The no jevents breakage and then later fix is
+>     avoided in this series too.
+> v2. Rebase. Modify the code that skips rewriting a metric with the
+>     same name with itself, to make the name check case insensitive.
+> 
+> Ian Rogers (15):
+>   perf jevents metric: Correct Function equality
+>   perf jevents metric: Add ability to rewrite metrics in terms of others
+>   perf jevents: Rewrite metrics in the same file with each other
+>   perf pmu-events: Add separate metric from pmu_event
+>   perf pmu-events: Separate the metrics from events for no jevents
+>   perf pmu-events: Remove now unused event and metric variables
+>   perf stat: Remove evsel metric_name/expr
+>   perf jevents: Combine table prefix and suffix writing
+>   perf pmu-events: Introduce pmu_metrics_table
+>   perf jevents: Generate metrics and events as separate tables
+>   perf jevents: Add model list option
+>   perf pmu-events: Fix testing with JEVENTS_ARCH=all
+>   perf jevents: Correct bad character encoding
+>   tools build: Add test echo-cmd
+>   perf jevents: Run metric_test.py at compile-time
+> 
+>  tools/build/Makefile.build               |   1 +
+>  tools/perf/arch/arm64/util/pmu.c         |  11 +-
+>  tools/perf/arch/powerpc/util/header.c    |   4 +-
+>  tools/perf/builtin-list.c                |  20 +-
+>  tools/perf/builtin-stat.c                |   1 -
+>  tools/perf/pmu-events/Build              |  16 +-
+>  tools/perf/pmu-events/empty-pmu-events.c | 108 ++++++-
+>  tools/perf/pmu-events/jevents.py         | 357 +++++++++++++++++++----
+>  tools/perf/pmu-events/metric.py          |  79 ++++-
+>  tools/perf/pmu-events/metric_test.py     |  15 +-
+>  tools/perf/pmu-events/pmu-events.h       |  26 +-
+>  tools/perf/tests/expand-cgroup.c         |   4 +-
+>  tools/perf/tests/parse-metric.c          |   4 +-
+>  tools/perf/tests/pmu-events.c            |  69 ++---
+>  tools/perf/util/cgroup.c                 |   1 -
+>  tools/perf/util/evsel.c                  |   2 -
+>  tools/perf/util/evsel.h                  |   2 -
+>  tools/perf/util/expr.h                   |   1 +
+>  tools/perf/util/expr.l                   |   8 +-
+>  tools/perf/util/metricgroup.c            | 207 +++++++------
+>  tools/perf/util/metricgroup.h            |   4 +-
+>  tools/perf/util/parse-events.c           |   2 -
+>  tools/perf/util/pmu.c                    |  44 +--
+>  tools/perf/util/pmu.h                    |  10 +-
+>  tools/perf/util/print-events.c           |  32 +-
+>  tools/perf/util/print-events.h           |   3 +-
+>  tools/perf/util/python.c                 |   7 -
+>  tools/perf/util/stat-shadow.c            | 112 -------
+>  tools/perf/util/stat.h                   |   1 -
+>  29 files changed, 681 insertions(+), 470 deletions(-)
+>  mode change 100644 => 100755 tools/perf/pmu-events/metric_test.py
+> 
