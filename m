@@ -2,66 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F0BB687A2A
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 11:28:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D89E8687A2C
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 11:28:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231761AbjBBK2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 05:28:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59314 "EHLO
+        id S231520AbjBBK20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 05:28:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbjBBK2S (ORCPT
+        with ESMTP id S232606AbjBBK2X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 05:28:18 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCA5D2884D
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 02:28:16 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id a2so961850wrd.6
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 02:28:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9fd/EVephwRZl8a27MQolPx0SCPi7ZbqIhcNy0drk3Q=;
-        b=IbevH9LssY/ncZPrz3XLuoF1WUTDgBmpm7l7H93Kckw3TpzVjO9BnyicZBN4Ghc8PQ
-         EGnhMOVuuqHll8zdtGX4mU4582KUuy5NhxkCR99pUGrtkFaN+0GUeaizGAwC45PGxNYD
-         bEGMbI90AXp33l8Jdl7gvufn2A0A7uw/bzmvxC0NkYQ4S/SVWeEDbPMW67MXfzsfqf2I
-         jTCRwgn/NeZvPXv34YMB1lAIeKDqfVJN0dwls5IVy2g/I8dmYV3qJTWUdC3grzNvc2Fl
-         MicIuRUZNqJUJF61C7PEELQjJuaXSOG6B1g19pK+fTcYJCZ1ai8t5N3L6LtfDD+Y21iK
-         SzLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9fd/EVephwRZl8a27MQolPx0SCPi7ZbqIhcNy0drk3Q=;
-        b=yctX1bIPM3sjm5bLA/Zjo8X/oGnpspBU1QDWMdT6EzHVGJfzBmzbnHLLbMFxcpVPuM
-         4Odtukj3cYNJUr1juTCJt5SxmLYF5FRn6CNLkWpyBsIPE+e57ClSoPA7IKISA3jXkjyd
-         4y52PdYm2RwrbPwB2817s0wBuVyEix9+zTawe8Do4IlC/GVK9Ssa3kL02sukg2aNcrY6
-         SWn6M+KmPtFRFARifeprWFpVPZ02YyR4C26kfNJHnWR0um6XH/yr+G00W+RR/xFZBAyH
-         dFh56ZmjzjbAwZb47WF3Qf/0pBnn/weMfUN0jw4YI7bE2pj7pO8t8tKGmKMTT+GqXq0C
-         QCyA==
-X-Gm-Message-State: AO0yUKWN1NcoXK3A9ZDBjsgA8fdy0aEhPXr8ZTXX8rfWrhlYMwYESQ9j
-        qigU+ggZgOjGAGqr3xW7xpfrHA==
-X-Google-Smtp-Source: AK7set+EZI6RfmE90YEkhx7B8wEw91rIBWePZ+A8N48lU8UzEE7tKXzi6k3i0H+2Pnopb9Wo4dTC6w==
-X-Received: by 2002:adf:e192:0:b0:2bd:fa1d:5291 with SMTP id az18-20020adfe192000000b002bdfa1d5291mr5925705wrb.67.1675333695275;
-        Thu, 02 Feb 2023 02:28:15 -0800 (PST)
-Received: from vingu-book.. ([2a01:e0a:f:6020:b82f:886:2209:1492])
-        by smtp.gmail.com with ESMTPSA id c7-20020adffb47000000b002ba2646fd30sm21444439wrs.36.2023.02.02.02.28.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 02:28:14 -0800 (PST)
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-To:     daniel.lezcano@linaro.org, rafael@kernel.org, amitk@kernel.org,
-        rui.zhang@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Vincent Guittot <vincent.guittot@linaro.org>
-Subject: [PATCH] tools/lib/thermal: fix thermal_sampling_exit()
-Date:   Thu,  2 Feb 2023 11:28:12 +0100
-Message-Id: <20230202102812.453357-1-vincent.guittot@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Thu, 2 Feb 2023 05:28:23 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE0A239BB8;
+        Thu,  2 Feb 2023 02:28:21 -0800 (PST)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pNWpH-0008CR-12; Thu, 02 Feb 2023 11:28:19 +0100
+Message-ID: <3a196414-68d8-29c9-24cc-2b8cb4c9d358@leemhuis.info>
+Date:   Thu, 2 Feb 2023 11:28:16 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Content-Language: en-US, de-DE
+From:   "Linux kernel regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+To:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     linux-integrity@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux kernel regressions list <regressions@lists.linux.dev>,
+        reach622@mailcuk.com, 1138267643@qq.com,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+Subject: [regression] Bug 216989 - since 6.1 systems with AMD Ryzen stutter
+ when fTPM is enabled
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1675333701;09b4a742;
+X-HE-SMSGID: 1pNWpH-0008CR-12
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,28 +49,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-thermal_sampling_init() suscribes to THERMAL_GENL_SAMPLING_GROUP_NAME group
-so thermal_sampling_exit() should unsubscribe from the same group.
+Hi, this is your Linux kernel regression tracker.
 
-Fixes: 47c4b0de080a ("tools/lib/thermal: Add a thermal library")
-Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
----
- tools/lib/thermal/sampling.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I noticed a regression report in bugzilla.kernel.org. As many (most?)
+kernel developer don't keep an eye on it, I decided to forward it by
+mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=216989 :
 
-diff --git a/tools/lib/thermal/sampling.c b/tools/lib/thermal/sampling.c
-index ee818f4e9654..70577423a9f0 100644
---- a/tools/lib/thermal/sampling.c
-+++ b/tools/lib/thermal/sampling.c
-@@ -54,7 +54,7 @@ int thermal_sampling_fd(struct thermal_handler *th)
- thermal_error_t thermal_sampling_exit(struct thermal_handler *th)
- {
- 	if (nl_unsubscribe_thermal(th->sk_sampling, th->cb_sampling,
--				   THERMAL_GENL_EVENT_GROUP_NAME))
-+				   THERMAL_GENL_SAMPLING_GROUP_NAME))
- 		return THERMAL_ERROR;
- 
- 	nl_thermal_disconnect(th->sk_sampling, th->cb_sampling);
--- 
-2.34.1
+>  reach622@mailcuk.com 2023-02-02 02:49:48 UTC
+> 
+> Linux kernel >=6.1 exhibits a stuttering issue that occurs once every few hours. See https://www.reddit.com/r/archlinux/comments/zvgev0/audio_stuttering_issues_with_kernel_611/ https://www.reddit.com/r/linux_gaming/comments/zzqaf7/having_intermittent_stutters_with_a_ryzen_cpu/ https://bbs.archlinux.org/viewtopic.php?id=282333 for detailed information.
+> 
+> The stutter lasts for 1-2 seconds and causes the framerate of the display to decrease dramatically and causes bursts in audio output.
+> 
+> Additional info:
+> 
+> * linux 6.1.0 or later
+> 
+> Steps to reproduce:
+> 
+> * Use Linux kernel >=6.1
+> 
+> * Use AMD Ryzen CPU with fTPM enabled
+> 
+> * Wait for a few hours
+> 
+> [reply] [−] Comment 1 Bell 2023-02-02 03:33:24 UTC
+> 
+> Hey, Let me add some extra information to help.
+> 1. this issue can happen in 6.2-rc6 without loading third-party kernel modules. (NVIDIA or Virtualbox and so)
+> 2. some guy on the Desktop/Laptop who can disable ftpm and did eliminate the problem.
+> 3. this problem can happen in newer AMD processors from the 4000 series to the 6000 series.
+> 4. this problem isn't caused by the dedicated graphics card I guess, here are some combinations that stuttering can happen:
+> AMD(built-in GPU) + NVIDIA  Laptop
+> AMD(No built-in GPU) + AMD(dedicated) Desktop
+> AMD(built-in GPU) + AMD(dedicated) Laptop/Desktop
+> AMD + AMD(Built-in GPU only) Laptop
+> all suffer from this.
+> 
+> Hope this can help :)
 
+See the ticket for more details.
+
+I briefly looked into the links and found this:
+https://www.amd.com/en/support/kb/faq/pa-410
+
+> 
+> Intermittent System Stutter Experienced with fTPM Enabled on Windows® 10
+> and 11
+> Article Number
+> PA-410
+> 
+> This documentation provides information on improving intermittent
+> performance stutter(s) on select PCs running Windows® 10 and 11 with
+> Firmware Trusted Platform Module (“fTPM”) enabled.
+> 
+> 
+> 
+> Issue Description
+> 
+> AMD has determined that select AMD Ryzen™ system configurations may
+> intermittently perform extended fTPM-related memory transactions in SPI
+> flash memory (“SPIROM”) located on the motherboard, which can lead to
+> temporary pauses in system interactivity or responsiveness until the
+> transaction is concluded.
+> 
+> 
+> 
+> Update and Workaround
+> 
+>     Update: Affected PCs will require a motherboard system BIOS (sBIOS)
+> update containing enhanced modules for fTPM interaction with SPIROM. AMD
+> expects that flashable customer sBIOS files to be available starting in
+> early May, 2022. Exact BIOS availability timing for a specific
+> motherboard depends on the testing and integration schedule of your
+> manufacturer. Flashable updates for motherboards will be based on AMD
+> AGESA 1207 (or newer).
+> 
+>     Workaround: As an immediate solution, affected customers dependent
+> on fTPM functionality for Trusted Platform Module support may instead
+> use a hardware TPM (“dTPM”) device for trusted computing. Platform dTPM
+> modules utilize onboard non-volatile memory (NVRAM) that supersedes the
+> TPM/SPIROM interaction described in this article.
+> 
+>         COMPATIBILITY: Please check with your system or motherboard
+> manufacturer to ensure that your platform supports add-in dTPM modules
+> before attempting or implementing this workaround.
+> 
+>         WARNING: If switching an active system from fTPM to dTPM, it is
+> critical that you disable TPM-backed encryption systems (e.g. BitLocker
+> Drive Encryption) and/or back up vital system data prior to switching
+> TPM devices. You must have full administrative access to the system, or
+> explicit support from your IT administrator if the system is managed.
+> For more information on transferring ownership to a new TPM device,
+> please visit this Microsoft webpage.
+> 
+
+So it's a firmware problem, but apparently one that Linux only triggers
+since 6.1.
+
+Jason, could the hwrng changes have anything to do with this?
+
+A bisection really would be helpful, but I guess that is not easy as the
+problem apparently only shows up after some time...
+
+
+Anyway:
+
+[TLDR for the rest of this mail: I'm adding this report to the list of
+tracked Linux kernel regressions; the text you find below is based on a
+few templates paragraphs you might have encountered already in similar
+form.]
+
+BTW, let me use this mail to also add the report to the list of tracked
+regressions to ensure it's doesn't fall through the cracks:
+
+#regzbot introduced: v6.0..v6.1
+https://bugzilla.kernel.org/show_bug.cgi?id=216989
+#regzbot title: tpm: systems with AMD Ryzen stutter when fTPM is enabled
+#regzbot ignore-activity
+
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply and tell me -- ideally
+while also telling regzbot about it, as explained by the page listed in
+the footer of this mail.
+
+Developers: When fixing the issue, remember to add 'Link:' tags pointing
+to the report (e.g. the buzgzilla ticket and maybe this mail as well, if
+this thread sees some discussion). See page linked in footer for details.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
