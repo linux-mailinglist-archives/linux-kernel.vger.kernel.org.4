@@ -2,69 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFFFE688653
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 19:27:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A94B8688655
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 19:28:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231760AbjBBS1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 13:27:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59840 "EHLO
+        id S229804AbjBBS2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 13:28:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231513AbjBBS13 (ORCPT
+        with ESMTP id S230140AbjBBS2O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 13:27:29 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48F3962799
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 10:27:28 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id m199so3359353ybm.4
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 10:27:28 -0800 (PST)
+        Thu, 2 Feb 2023 13:28:14 -0500
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DFFA15CB2
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 10:28:12 -0800 (PST)
+Received: by mail-pf1-x449.google.com with SMTP id k14-20020aa7972e000000b00593a8232ac3so1359069pfg.22
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 10:28:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pjDgomZIywp7e6CSQ2Vxhlha4qbmdscu2vXAz8lYKTA=;
-        b=kBmTcd8o1o1lVFPHTCamTTlrH1XgzC6/Lm8P51JWY63/kZfoZBGAxxVnl7fM/nB325
-         IxzufFGHbol1OmmWvAiywYQ+Fy1QBuXWrZwLlN1qQ9z7IxRm32vgeSaVK119yYYHHSqD
-         TChuw3JNRefL7J6YRb8mNWhTuYUswyasUCYKhDwn09eouJjPhcFUN0BUZQV2duIsSs/+
-         fYf40hTpoQqE25xwSQupwMUMWfX4lPXh6vDLt1AW/718EH/LIEdCdGVP5lsYKzieKxN9
-         ASVVs6xST3c54vncqQG/W+tR2N8h6Dj53Uzd1jGD1vjnvlqo65wzLMf6u8eqeM5CeZar
-         VTgw==
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=0+SBcx6MVrgVk2LoIRaHLt69jku4c6rTYPgXbWSbqGk=;
+        b=Q5aRqr2sxq2uX4adungANbB3rre1+leu5U94x534oEHG3jQYGfB1uazHzkIWOlqGpy
+         /z4TBMvW1Svu0LZamqE7g5s3jlKbKuih5/C6XwBaJgE5AW9xerqakVfbN2FEm9JY1XhN
+         I9TTllwSDjMN9g01dh7skwySOK78XhJuXdQKMSt4lj/gaYH8lsKeWYVhZydc70p64JrM
+         J8YMri7UEGb4yA+G3KTzc5QYpzSKlsBqTcS/qgCCEb8sipemc3wWQwlLDFBd9upsjfQY
+         SPUmZBRLkxrcgFgKGCjTIAtoeJXKWV+eihHSlIHTkLcfyvL/yZfmlKnrr+d/1+B2kgDK
+         GeDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pjDgomZIywp7e6CSQ2Vxhlha4qbmdscu2vXAz8lYKTA=;
-        b=27YN+2DtllVFv4Mth3XQquKUMDGdPAOQ155zDGBxoKTlBGlGKIzk15mQdrfFtf6ai2
-         Xpo7jV8q7k+nNSKegjuhOpPEXUtJ7AMqV1KcY/yj90i6rEI7pQu8MlBcIIGPgzKF9t2d
-         WxgnNn3YzUPaWVSIujuEeDZW8emge+qPbdLGsMb6klFTtLLY1iuLZmtLcEW6Hqn8aay1
-         Bd/oRj7upS72vPrGZTrZmXHuHEgNs1jnH3tSm9ZvtswYKccHVGgaTAIDTHRGj2Qjh3fY
-         BWLZsQSv0s8wYAh9s+gadLBmrKTGkbAcD50tOvSFP0SKEK3GMuyFXjyk9PzvSgOUCMXy
-         wmbw==
-X-Gm-Message-State: AO0yUKUkZRgNg63Ar6WDTxDb62Me9LSdwtMzYmYfYqlMgn6qxpABUB6h
-        DojTMFjSn5hso5GqLPKs6Tm2OYmCRappcWVZqJONTg==
-X-Google-Smtp-Source: AK7set/Hnx6lJHCqj73tIGeDFi1YJ8GWSUaM63IsKEvF4eFWlNkSiVnp42bGA0R4p4mwFHS+jEPi0S9fHu83FSWWH1Y=
-X-Received: by 2002:a25:ada8:0:b0:836:46e3:fa42 with SMTP id
- z40-20020a25ada8000000b0083646e3fa42mr593380ybi.228.1675362447371; Thu, 02
- Feb 2023 10:27:27 -0800 (PST)
-MIME-Version: 1.0
-References: <20230202155626.1829121-1-hannes@cmpxchg.org>
-In-Reply-To: <20230202155626.1829121-1-hannes@cmpxchg.org>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Thu, 2 Feb 2023 10:27:16 -0800
-Message-ID: <CALvZod6m-XOb6LvjAD0wXv1doP_LJb1yUJ-QRpJt3H+G=xyQXg@mail.gmail.com>
-Subject: Re: [RFC PATCH] mm: memcontrol: don't account swap failures not due
- to cgroup limits
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Michal Hocko <mhocko@suse.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Tejun Heo <tj@kernel.org>, linux-mm@kvack.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Christian Brauner <brauner@kernel.org>
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0+SBcx6MVrgVk2LoIRaHLt69jku4c6rTYPgXbWSbqGk=;
+        b=oMpcSUQEOzgRWqs9VpTCw3tsUUj+7TSaMKlBuVYq7PXngVyqEdkB8RcY+1rGECRSLM
+         LJC91afvTc2aSWhOKbY6yjvwm2tpAogdh25yfIFNugzujhaRP0gWX8s9JvMpiIgOz2IS
+         Rhtqv1yPYsQfN2u3nmqNz72KeOJw+lMLe0PhObuJcNQOAJOKA4Wa7Qx7FUlxlPnwTMWv
+         oEiBBP4bti4GWzyDGHgQqaXgClCi2XDl5WID1C3/1K6yXOJipvzEgbfxgJ6qhNe2zPul
+         qWaIhYkl3niZioJxGw8X7T9Je3DIJFizrM9kbIQOqMPoZKISVwfrFm98QIjTouVhS1g0
+         iVjQ==
+X-Gm-Message-State: AO0yUKXK99u+Kh4PSxeDjEa1gI4e+phMlYdxQjJ8FzDX+05uqtUNjEMN
+        vkjzXpr801Kpw4f1ujPKD735/6pYJEqXqX5SzSiH1Ly+Y8ZLEZYuGULa4ApQMEa8LDPuuWZ1py2
+        BhCv54PxXK7gndll4Qe/UGusKa45J/EiBLfcH2po+I2nwnHQjuxT+VulsnGJ8sIf0nz7RwfXL
+X-Google-Smtp-Source: AK7set91y1jj7PTgsJ5vCMdecR8eG7ZR8ipAA11/zzQ08GevhxMRiFrc6z6IefELTRiYqRf+6XlVagoBGRU4
+X-Received: from sweer.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:e45])
+ (user=bgardon job=sendgmr) by 2002:a17:90b:ec2:b0:22c:4751:82b2 with SMTP id
+ gz2-20020a17090b0ec200b0022c475182b2mr726051pjb.56.1675362491780; Thu, 02 Feb
+ 2023 10:28:11 -0800 (PST)
+Date:   Thu,  2 Feb 2023 18:27:48 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
+Message-ID: <20230202182809.1929122-1-bgardon@google.com>
+Subject: [PATCH 00/21] KVM: x86/MMU: Formalize the Shadow MMU
+From:   Ben Gardon <bgardon@google.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Ben Gardon <bgardon@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,58 +71,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 2, 2023 at 7:56 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
->
-> Christian reports the following situation in a cgroup that doesn't
-> have memory.swap.max configured:
->
->   $ cat memory.swap.events
->   high 0
->   max 0
->   fail 6218
->
-> Upon closer examination, this is an ARM64 machine that doesn't support
-> swapping out THPs. In that case, the first get_swap_page() fails, and
-> the kernel falls back to splitting the THP and swapping the 4k
-> constituents one by one. /proc/vmstat confirms this with a high rate
-> of thp_swpout_fallback events.
->
-> While the behavior can ultimately be explained, it's unexpected and
-> confusing. I see three choices how to address this:
->
-> a) Specifically exlude THP fallbacks from being counted, as the
->    failure is transient and the memory is ultimately swapped.
->
->    Arguably, though, the user would like to know if their cgroup's
->    swap limit is causing high rates of THP splitting during swapout.
->
-> b) Only count cgroup swap events when they are actually due to a
->    cgroup's own limit. Exclude failures that are due to physical swap
->    shortage or other system-level conditions (like !THP_SWAP). Also
->    count them at the level where the limit is configured, which may be
->    above the local cgroup that holds the page-to-be-swapped.
->
->    This is in line with how memory.swap.high, memory.high and
->    memory.max events are counted.
->
->    However, it's a change in documented behavior.
->
-> c) Leave it as is. The documentation says system-level events are
->    counted, so stick to that.
->
->    This is the conservative option, but isn't very user friendly.
->    Cgroup events are usually due to a local control choice made by the
->    user. Mixing in events that are beyond the user's control makes it
->    difficult to id root causes and configure the system properly.
->
-> Implement option b).
+This series makes the Shadow MMU a distinct part of the KVM x86 MMU,
+implemented in separate files, with a defined interface to common code.
 
-I prefer option b too.
+When the TDP (Two Dimensional Paging) MMU was added to x86 KVM, it came in
+a separate file with a (reasonably) clear interface. This lead to many
+points in the KVM MMU like this:
 
->
-> Reported-by: Christian Brauner <brauner@kernel.org>
-> Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
+if (tdp_mmu_on())
+	kvm_tdp_mmu_do_stuff()
 
-Acked-by: Shakeel Butt <shakeelb@google.com>
+if (memslots_have_rmaps())
+	/* Do whatever was being done before */
 
-I think we should CC stable as well for early exposure.
+The implementations of various functions which preceded the TDP MMU have
+remained scattered around mmu.c with no clear identity or interface. Over the
+last couple years, the KVM x86 community has settled on calling the KVM MMU
+implementation which preceded the TDP MMU the "Shadow MMU", as it grew
+from shadow paging, which supported virtualization on hardware pre-TDP.
+(Note that the Shadow MMU can also build TDP page tables, and doesn't
+only do shadow paging, so the meaning is a bit overloaded.)
+
+Splitting it out into separate files will give a clear interface and make it
+easier to distinguish common x86 MMU code from the code specific to the two
+MMU implementations.
+
+Patches 1-3 are cleanups from Sean
+
+Patches 4-6 prepare for the refactor by adding files and exporting
+functions.
+
+Patch 7 the big move, transferring 3.5K lines from mmu.c to
+shadow_mmu.c
+(It may be best if whoever ends up preparing the pull request with
+this patch just dumps my version and re-does the move so that no code is
+lost.)
+
+Patches 8 and 9 move the includes for paging_tmpl.h to shadow_mmu.c
+
+Patches 10-17 clean up the interface between the Shadow MMU and
+common MMU code.
+
+The last few patches are in response to feedback on the RFC and move
+additional code to the Shadow MMU.
+
+Patch 7 is an enormous change, and doing it all at once in a single
+commit all but guarantees merge conflicts and makes it hard to review. I
+don't have a good answer to this problem as there's no easy way to move
+3.5K lines between files. I tried moving the code bit-by-bit but the
+intermediate steps added complexity and ultimately the 50+ patches it
+created didn't seem any easier to review.
+Doing the big move all at once at least makes it easier to get past when
+doing Git archeology, and doing it at the beginning of the series allows the
+rest of the commits to still show up in Git blame.
+
+I've tested this series on an Intel Skylake host with kvm-unit-tests and
+selftests.
+
+RFC -> v1:
+ - RFC: https://lore.kernel.org/all/20221221222418.3307832-1-bgardon@google.com/
+ - Moved some more Shadow MMU content to shadow_mmu.c. David Matlack
+   pointed out some code I'd missed in the first pass. Added commits
+   to the end of the series to achieve this.
+ - Dropped is_cpuid_PSE36 and moved all the BUILD_MMU_ROLE*() macros
+   to mmu_internal, also as suggested by David Matlack.
+ - Added copyright comments to the tops of shadow_mmu.c and .h
+ - Tacked some cleanups from Sean onto the beginning of the series.
+
+Ben Gardon (18):
+  KVM: x86/MMU: Add shadow_mmu.(c|h)
+  KVM: x86/MMU: Expose functions for the Shadow MMU
+  KVM: x86/mmu: Get rid of is_cpuid_PSE36()
+  KVM: x86/MMU: Move the Shadow MMU implementation to shadow_mmu.c
+  KVM: x86/MMU: Expose functions for paging_tmpl.h
+  KVM: x86/MMU: Move paging_tmpl.h includes to shadow_mmu.c
+  KVM: x86/MMU: Clean up Shadow MMU exports
+  KVM: x86/MMU: Cleanup shrinker interface with Shadow MMU
+  KVM: x86/MMU: Clean up naming of exported Shadow MMU functions
+  KVM: x86/MMU: Fix naming on prepare / commit zap page functions
+  KVM: x86/MMU: Factor Shadow MMU wrprot / clear dirty ops out of mmu.c
+  KVM: x86/MMU: Remove unneeded exports from shadow_mmu.c
+  KVM: x86/MMU: Wrap uses of kvm_handle_gfn_range in mmu.c
+  KVM: x86/MMU: Add kvm_shadow_mmu_ to the last few functions in
+    shadow_mmu.h
+  KVM: x86/mmu: Move split cache topup functions to shadow_mmu.c
+  KVM: x86/mmu: Move Shadow MMU part of kvm_mmu_zap_all() to
+    shadow_mmu.h
+  KVM: x86/mmu: Move Shadow MMU init/teardown to shadow_mmu.c
+  KVM: x86/mmu: Split out Shadow MMU lockless walk begin/end
+
+Sean Christopherson (3):
+  KVM: x86/mmu: Rename slot rmap walkers to add clarity and clean up
+    code
+  KVM: x86/mmu: Replace comment with an actual lockdep assertion on
+    mmu_lock
+  KVM: x86/mmu: Clean up mmu.c functions that put return type on
+    separate line
+
+ arch/x86/kvm/Makefile           |    2 +-
+ arch/x86/kvm/debugfs.c          |    1 +
+ arch/x86/kvm/mmu/mmu.c          | 4834 ++++---------------------------
+ arch/x86/kvm/mmu/mmu_internal.h |   87 +-
+ arch/x86/kvm/mmu/paging_tmpl.h  |   15 +-
+ arch/x86/kvm/mmu/shadow_mmu.c   | 3692 +++++++++++++++++++++++
+ arch/x86/kvm/mmu/shadow_mmu.h   |  132 +
+ 7 files changed, 4498 insertions(+), 4265 deletions(-)
+ create mode 100644 arch/x86/kvm/mmu/shadow_mmu.c
+ create mode 100644 arch/x86/kvm/mmu/shadow_mmu.h
+
+
+base-commit: 7cb79f433e75b05d1635aefaa851cfcd1cb7dc4f
+-- 
+2.39.1.519.gcb327c4b5f-goog
+
