@@ -2,228 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC8F0687650
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 08:18:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27B0B687654
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 08:23:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231345AbjBBHSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 02:18:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55308 "EHLO
+        id S229595AbjBBHX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 02:23:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230417AbjBBHSC (ORCPT
+        with ESMTP id S229711AbjBBHXZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 02:18:02 -0500
-Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B2739756;
-        Wed,  1 Feb 2023 23:17:59 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VajqMs._1675322276;
-Received: from 30.97.49.35(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VajqMs._1675322276)
-          by smtp.aliyun-inc.com;
-          Thu, 02 Feb 2023 15:17:57 +0800
-Message-ID: <9c8e76a3-a60a-90a2-f726-46db39bc6558@linux.alibaba.com>
-Date:   Thu, 2 Feb 2023 15:17:55 +0800
+        Thu, 2 Feb 2023 02:23:25 -0500
+Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2074.outbound.protection.outlook.com [40.107.104.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2B3964DBA;
+        Wed,  1 Feb 2023 23:23:23 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZxrJ3UlMKUTeUZH1PxuAXblU2fuPotsiv+kVgHSBDrOYXJPNXc+KeitkjB29NUg8qVvkvcaKdQPB7fF2QSq0y33iwuDv0zK1f872yoVy46UObkpj8/FPmL61OYc0YmYNiVcG15gHWXZusMBPztUrhE2kZxC58yjVELwaez7ieoWpvus3RKIQbGDJwVka32UT7N5iP+s/r/TSPeX6b7wlZCHNq0CEFmje35hWPeLj2+MqYnP6+kMeMEeH/Z+JH3qCe1HvhXtMpirBHpj/+u9WCmtqFG8MAVWLPqHVl35JT6kd5JthiP+vckf3caaWk6TbrvNURTPPGHaSwOILsyL/yQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kpXAf4rT0EV/kp49ABgsGgUTTXI/iQzLbh1P70oKpRE=;
+ b=K6Pxq0vjBz+ecDYeBNCJzybpgoSG3ML/9ipfZczLUKxA0QI+crL8qSOspOBw+j6q+dgRH6Yt+bAjdswqC3TbSUQQmyydrdLdK1pE6OwSJER1KAdaoGXhhPjT461WzxmwNlyhBeSHgkm4UcRHKqLX+eebUSft69gXgIS7mBABFMiG/No0yQICn4kvJud9mNdVQ8uVnhA6cc+zaF1o9fdDMIDXFdjw99BENGoMdE4UF3GdNMGWel9JKzd/2G0P0qbOMp4YMMi+nmaWFOtBHgMaClR1szqTNYoeyA89JT9832hWfZroRQVUwhcmI9/F+XZnQ5346MDH//MN0zuNhOhE5Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kpXAf4rT0EV/kp49ABgsGgUTTXI/iQzLbh1P70oKpRE=;
+ b=sxe7pkniP6wWLe4xj6F3lfPIeEZyFInekVeXWjPL09ooA8XyqE6kQFtlLYL4Cv7jBjJXKysU7oMLKxD3kIKpEru1kFZ6zaavJaTrV/VRWyJg2+nvKtKJvk9nufOLF289rI7vvLmUFnNcfvvp5MqygSQbQs1gVOfsdazcgDc0mF0hmy0ulmifTaTL+pTXomfboXR7NBfnQMf6BE/lCUBhaid1K6V58gKmOZhUkxQ9E5ASImgziRW5pNSirNikGqgqCoUR98fZemstGvwzmSbRwLEIlmwerqmvh24B3jl2vkgpo52vb8ybB3rrrlTnHNqrBPUqZOZRPguNXigZHjhEGg==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by PAYP264MB3320.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:11c::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.27; Thu, 2 Feb
+ 2023 07:23:20 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::2cfb:d4c:1932:b097]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::2cfb:d4c:1932:b097%5]) with mapi id 15.20.6064.024; Thu, 2 Feb 2023
+ 07:23:20 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Song Liu <song@kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "hch@lst.de" <hch@lst.de>,
+        "kernel-team@meta.com" <kernel-team@meta.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v8] module: replace module_layout with module_memory
+Thread-Topic: [PATCH v8] module: replace module_layout with module_memory
+Thread-Index: AQHZNo0Y6b+trPxN0k2Icbg1mllenK67QVkA
+Date:   Thu, 2 Feb 2023 07:23:20 +0000
+Message-ID: <1559bd58-0cc7-e643-ff0f-7be5e39992f1@csgroup.eu>
+References: <20230201223219.355006-1-song@kernel.org>
+In-Reply-To: <20230201223219.355006-1-song@kernel.org>
+Accept-Language: fr-FR, en-US
+Content-Language: fr-FR
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MRZP264MB2988:EE_|PAYP264MB3320:EE_
+x-ms-office365-filtering-correlation-id: 20038da4-6574-427f-7508-08db04ee5cb2
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: hV/CF1LmmL1k6hBiFNCvtiGrwPm7JJZnd3UW9FHOmennc9tBzXcdw5uD3Y94Dae5sn6XzifO77Eexh9z4bpl/PzFJTUuqqhqCESfImjX1Tfj5/kufedh3n75F9QRARMN1Pc2hH1aoBbfo3OypXis4h+a2r3ySmOqGRuIi+qlYyzptuB4xaCyhdd8x7zSmGMi6oZJ3rlpZ5B3O6j8EffdQzr8OA7Jv6Oz5uoDgMReJmDsGJJbZ5ofPdYP2pMmheszSFn3ryNZhOZFk1MiYBQzx1xZ1TMd5T3cmrpvSOXsKPJCdNNJ/1ADxXU7NkmibXKylucevphjsnZBb9MCUIvJNust7JzBCt8tAY7BtVxO/vPrUYixRBVws4E1zYusWwCs6Pgs4jWsG3FT0hdtRVXGc2CHwry1/rxWdLmO8smfQFmA1xEdGtF7mrwFgNTc0rSmXr1q5FoY4TsgmOrOChSFsNwxf9MTH6WLiknw0vZjk8HwkaW9iNpxxpxYZsEQBHEwmRQ8hYGoszi+/IQFDiCWi+xbd/skqq4nR7/L6m00WcoYOAL7SElojdsKl0yOkAGz6lDNG5UUiTlKEfuwALWeK5IH2zrDTLp8kSfsy0Ln9o2ITN+nrU80IRXE+npt8Pc/Ecuoi94guTcCAzFu5rWv3uiAN9SNPoltq4eYWRtBZyL1RvaiZoyZ2lPwOXdjDD6ajXklUAN9yvbOQPLRlj/W1cz4g4gp/UKAEr5oYUKOMuz+0lgzniUAlt2ObwjzCT2vsvYm8RsHFREy6FtE3aE0Qw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(346002)(366004)(376002)(39850400004)(396003)(451199018)(31696002)(36756003)(38100700002)(122000001)(38070700005)(86362001)(8676002)(91956017)(4326008)(76116006)(66946007)(66476007)(66556008)(64756008)(66446008)(71200400001)(6486002)(110136005)(54906003)(5660300002)(41300700001)(8936002)(2906002)(44832011)(478600001)(316002)(186003)(6506007)(26005)(6512007)(83380400001)(2616005)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Z2dDMnBOdkhNeXU3K1laUGlLL2pEc3BhdXRsSzg0V1dLbEUzbTJTRWg0eSsy?=
+ =?utf-8?B?Yk9vYW5uUi9pQjl1elM2eEhRZ3pucjBPZTFkNW45NllCR0NKZ3phNWZTdFEz?=
+ =?utf-8?B?aUNLZ2h0Z0RYbVVCaWJObEJmREpNUFM4bXkvNjNScWZsc3VpN0hMWWF4N2JY?=
+ =?utf-8?B?QlI3WW5QSEN0RnNObk9MMzh4RXdOQndBd3BnUnJlRVFFRVFzR2I2UFozd2o4?=
+ =?utf-8?B?MzBjdm8ydDVDc1NnYUhuWUx5bUgyK1U5UUhYOGtRZSs1bmNLUy9OME85bUZp?=
+ =?utf-8?B?eDJ4Yk5EeGpNMDhvT01rMlE1Y0hGc0tZbzNlNDJEc1J1elRGL25sNkpLb0xl?=
+ =?utf-8?B?cTAyVUw5cUV5VFBscVJPN1l2VWVCV2NGeWpCcmh6L0R6UzZQbmM0akNzdEJP?=
+ =?utf-8?B?RUFCaG0wYmhac0l5azQ1WWdLL2pCNUNPL014N2VXdGZjVHcvcDBiY3RsRjJH?=
+ =?utf-8?B?cUxuc09TMUJSakJoZjVpR1RWN0pTc3BGdm9lRk9UWEUwdmMwbUgzeGxmeHhG?=
+ =?utf-8?B?b0ZXQnJDdG9KWllFWVQvVStFOHRDeEl5SDg2NS9veGwva0lncy9Md3B3QXdz?=
+ =?utf-8?B?aHVyTmRzWEYvblJHV1VQdk1sVzZyZkhYemtvanV1VC9yeUlMdGNUZWR6V3FR?=
+ =?utf-8?B?VXB6RmxuRWFKWTBibEpmbUoyTDBJSHJjOEZpTUR0QUxBcGZERFZhcWVBZmd2?=
+ =?utf-8?B?SDgrMWkxd0dCa0FUZGRESG44eSsrVHZTeEl4R0JtU3l5RXo2eXphSEZSVDdt?=
+ =?utf-8?B?N3k3WjdrOTRkbVZTeDhCVHUrcXFYZzRScEl2anZGNm5JVHJBYzZoNzd4Umpl?=
+ =?utf-8?B?NmpkczZWZ0N5Y1JSazFyZVlFb2hDbWdoZk54RURlazhnLzVBaVBxVjNFYm44?=
+ =?utf-8?B?a3poV0c1NTZ4cEdaVzVjSjVlbEQwWDdGV0sxWUZXOUJxcGplTDlnS0pubUw1?=
+ =?utf-8?B?a3JhNEtTRy8zRlU3dkhGMWovUTNXYWZ6M3h1L3JUcmFnSDZab1RjTkxUQ1lC?=
+ =?utf-8?B?cGZzd0ZQZTlXSTQ4VEZ4SktZNGtEUjJFWmpiWG95V0R5SElqS0hndG9IYWpG?=
+ =?utf-8?B?R0IwZEpQR1NyRzVNUHFDQklGczd2RFdPRENlaisvZm1iT09nbTdRU3FzT0V5?=
+ =?utf-8?B?TXZJQUdoTkRYOGNVeHJzRms0Z3FyZjIzMVQzRG9oV3ZQWGFOcm04Z0htWU9R?=
+ =?utf-8?B?cmo2YWxNaHZFMUxTR0NETTlYblBZQzYzRlp6dHJEVEp0U0FGSVZPaTBqWEdU?=
+ =?utf-8?B?NmJpeXVQUlkzVTNGUElBSHJhTFI5M2hYMHo5SExjWE9tUnkwalh4ajhDWXg3?=
+ =?utf-8?B?emx4QVgwZVNrOXBhTUJJVndQY3VlK291Y0V6RjdKRERLaU95UXFLeWJ1dEFP?=
+ =?utf-8?B?YXc3Yko1Tmd3VzlpcEtNRFdLVXdSd25yZ04rRlZ4eng0em95QTE1aS9QR2NL?=
+ =?utf-8?B?TzNjLytGbTZOVVd5b2hVNDlGUTg1aEZxTk03UnFUR044eFJJTEsyYlg2OU90?=
+ =?utf-8?B?RmhnTEZMY2xqbTJpVDBjNC9sc0V2YzVlemFuNTFraXhMWEl3U3JESk9PR3dw?=
+ =?utf-8?B?bzRmZWcxZ1U3cnRtbWxWN2Z1dzh3dlFQS2NRdjZhTk1BVTlYVVNHQ2JadmZM?=
+ =?utf-8?B?NW9vYllENmx4NkFoOXlrcHNpYytCZkoydjQyRFdrcnFoZUNuZGhQdTZqd2tY?=
+ =?utf-8?B?djB1Vmh5dGRoa3djOUV1LzNGVGlpdEhQQm1OSFA1Qnc2Ti9XTEVHMUIraWdw?=
+ =?utf-8?B?R3NnaEJad0lCalF3MkFLd1RMalU2U3FoVlR6TUdIV0pHZWIwL2tMYUlKVjVN?=
+ =?utf-8?B?MHYzanFqWkN6OTcwUEkvcFJEem9UOWRKWkp0eklOTGUwZkM4VFJtTzJpMHVN?=
+ =?utf-8?B?VVJiMTNmMDZCT2I5eWp1eC9KcG5SVk5pcW5HcHhmWnFUY0RIc2tJY0grM3RL?=
+ =?utf-8?B?SDVac0lHVUdYVGtsK2wzaG5GeU9NdVZRWHoxNU9Bd2d2elFNMS9vRzdZaDl0?=
+ =?utf-8?B?MEREUGovRU1XdkRnMXp3ZTE4R3Z1RTk3U0NWUUcxVlZadnJYSllrRTJYS0Ru?=
+ =?utf-8?B?YXlGZVRiT0M1cHg5OWc2TmVHQms1SmFkNmNQT0FaaDlmazNTdDZWNHlCaTkx?=
+ =?utf-8?B?SjNjNTA4UGVzeFNDRmNWczVXTGExbUdLRGpQZ2NaaTNDaXBzcHBySzN0ZlJY?=
+ =?utf-8?B?UlE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <9800726DDB57BD4AB30F74D52D2F0553@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH v3 0/6] Composefs: an opportunistically sharing verified
- image filesystem
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     Alexander Larsson <alexl@redhat.com>,
-        Jingbo Xu <jefflexu@linux.alibaba.com>, gscrivan@redhat.com,
-        brauner@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, david@fromorbit.com,
-        viro@zeniv.linux.org.uk, Vivek Goyal <vgoyal@redhat.com>,
-        Miklos Szeredi <miklos@szeredi.hu>
-References: <cover.1674227308.git.alexl@redhat.com>
- <CAOQ4uxgGc33_QVBXMbQTnmbpHio4amv=W7ax2vQ1UMet0k_KoA@mail.gmail.com>
- <1ea88c8d1e666b85342374ed7c0ddf7d661e0ee1.camel@redhat.com>
- <CAOQ4uxinsBB-LpGh4h44m6Afv0VT5yWRveDG7sNvE2uJyEGOkg@mail.gmail.com>
- <5fb32a1297821040edd8c19ce796fc0540101653.camel@redhat.com>
- <CAOQ4uxhGX9NVxwsiBMP0q21ZRot6-UA0nGPp1wGNjgmKBjjBBA@mail.gmail.com>
- <b8601c976d6e5d3eccf6ef489da9768ad72f9571.camel@redhat.com>
- <e840d413-c1a7-d047-1a63-468b42571846@linux.alibaba.com>
- <2ef122849d6f35712b56ffbcc95805672980e185.camel@redhat.com>
- <8ffa28f5-77f6-6bde-5645-5fb799019bca@linux.alibaba.com>
- <51d9d1b3-2b2a-9b58-2f7f-f3a56c9e04ac@linux.alibaba.com>
- <071074ad149b189661681aada453995741f75039.camel@redhat.com>
- <0d2ef9d6-3b0e-364d-ec2f-c61b19d638e2@linux.alibaba.com>
- <de57aefc-30e8-470d-bf61-a1cca6514988@linux.alibaba.com>
- <CAOQ4uxgS+-MxydqgO8+NQfOs9N881bHNbov28uJYX9XpthPPiw@mail.gmail.com>
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-In-Reply-To: <CAOQ4uxgS+-MxydqgO8+NQfOs9N881bHNbov28uJYX9XpthPPiw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 20038da4-6574-427f-7508-08db04ee5cb2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Feb 2023 07:23:20.6827
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: BMBF3ivoX4X9p3opjadQ7mVDzt74MnZcDSN6aDxQYmqWR5C/S6i27ZdHua6SaorTgajKveQgVlLOUi/nSaMmZxSOsG+5YAhpCZa6AXUcyWw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAYP264MB3320
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023/2/2 14:37, Amir Goldstein wrote:
-> On Wed, Feb 1, 2023 at 1:22 PM Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
->>
->>
->>
->> On 2023/2/1 18:01, Gao Xiang wrote:
->>>
->>>
->>> On 2023/2/1 17:46, Alexander Larsson wrote:
->>>
->>> ...
->>>
->>>>>
->>>>>                                     | uncached(ms)| cached(ms)
->>>>> ----------------------------------|-------------|-----------
->>>>> composefs (with digest)           | 326         | 135
->>>>> erofs (w/o -T0)                   | 264         | 172
->>>>> erofs (w/o -T0) + overlayfs       | 651         | 238
->>>>> squashfs (compressed)                | 538         | 211
->>>>> squashfs (compressed) + overlayfs | 968         | 302
->>>>
->>>>
->>>> Clearly erofs with sparse files is the best fs now for the ro-fs +
->>>> overlay case. But still, we can see that the additional cost of the
->>>> overlayfs layer is not negligible.
->>>>
->>>> According to amir this could be helped by a special composefs-like mode
->>>> in overlayfs, but its unclear what performance that would reach, and
->>>> we're then talking net new development that further complicates the
->>>> overlayfs codebase. Its not clear to me which alternative is easier to
->>>> develop/maintain.
->>>>
->>>> Also, the difference between cached and uncached here is less than in
->>>> my tests. Probably because my test image was larger. With the test
->>>> image I use, the results are:
->>>>
->>>>                                     | uncached(ms)| cached(ms)
->>>> ----------------------------------|-------------|-----------
->>>> composefs (with digest)           | 681         | 390
->>>> erofs (w/o -T0) + overlayfs       | 1788        | 532
->>>> squashfs (compressed) + overlayfs | 2547        | 443
->>>>
->>>>
->>>> I gotta say it is weird though that squashfs performed better than
->>>> erofs in the cached case. May be worth looking into. The test data I'm
->>>> using is available here:
->>>
->>> As another wild guess, cached performance is a just vfs-stuff.
->>>
->>> I think the performance difference may be due to ACL (since both
->>> composefs and squashfs don't support ACL).  I already asked Jingbo
->>> to get more "perf data" to analyze this but he's now busy in another
->>> stuff.
->>>
->>> Again, my overall point is quite simple as always, currently
->>> composefs is a read-only filesystem with massive symlink-like files.
->>> It behaves as a subset of all generic read-only filesystems just
->>> for this specific use cases.
->>>
->>> In facts there are many options to improve this (much like Amir
->>> said before):
->>>     1) improve overlayfs, and then it can be used with any local fs;
->>>
->>>     2) enhance erofs to support this (even without on-disk change);
->>>
->>>     3) introduce fs/composefs;
->>>
->>> In addition to option 1), option 2) has many benefits as well, since
->>> your manifest files can save real regular files in addition to composefs
->>> model.
->>
->> (add some words..)
->>
->> My first response at that time (on Slack) was "kindly request
->> Giuseppe to ask in the fsdevel mailing list if this new overlay model
->> and use cases is feasable", if so, I'm much happy to integrate in to
->> EROFS (in a cooperative way) in several ways:
->>
->>    - just use EROFS symlink layout and open such file in a stacked way;
->>
->> or (now)
->>
->>    - just identify overlayfs "trusted.overlay.redirect" in EROFS itself
->>      and open file so such image can be both used for EROFS only and
->>      EROFS + overlayfs.
->>
->> If that happened, then I think the overlayfs "metacopy" option can
->> also be shown by other fs community people later (since I'm not an
->> overlay expert), but I'm not sure why they becomes impossible finally
->> and even not mentioned at all.
->>
->> Or if you guys really don't want to use EROFS for whatever reasons
->> (EROFS is completely open-source, used, contributed by many vendors),
->> you could improve squashfs, ext4, or other exist local fses with this
->> new use cases (since they don't need any on-disk change as well, for
->> example, by using some xattr), I don't think it's really hard.
->>
-> 
-> Engineering-wise, merging composefs features into EROFS
-> would be the simplest option and FWIW, my personal preference.
-> 
-> However, you need to be aware that this will bring into EROFS
-> vfs considerations, such as  s_stack_depth nesting (which AFAICS
-> is not see incremented composefs?). It's not the end of the world, but this
-> is no longer plain fs over block game. There's a whole new class of bugs
-> (that syzbot is very eager to explore) so you need to ask yourself whether
-> this is a direction you want to lead EROFS towards.
-
-I'd like to make a seperated Kconfig for this.  I consider this just because
-currently composefs is much similar to EROFS but it doesn't have some ability
-to keep real regular file (even some README, VERSION or Changelog in these
-images) in its (composefs-called) manifest files. Even its on-disk super block
-doesn't have a UUID now [1] and some boot sector for booting or some potential
-hybird formats such as tar + EROFS, cpio + EROFS.
-
-I'm not sure if those potential new on-disk features is unneeded even for
-future composefs.  But if composefs laterly supports such on-disk features,
-that makes composefs closer to EROFS even more.  I don't see disadvantage to
-make these actual on-disk compatible (like ext2 and ext4).
-
-The only difference now is manifest file itself I/O interface -- bio vs file.
-but EROFS can be distributed to raw block devices as well, composefs can't.
-
-Also, I'd like to seperate core-EROFS from advanced features (or people who
-are interested to work on this are always welcome) and composefs-like model,
-if people don't tend to use any EROFS advanced features, it could be disabled
-from compiling explicitly.
-
-> 
-> Giuseppe expressed his plans to make use of the composefs method
-> inside userns one day. It is not a hard dependency, but I believe that
-> keeping the "RO efficient verifiable image format" functionality (EROFS)
-> separate from "userns composition of verifiable images" (overlayfs)
-> may benefit the userns mount goal in the long term.
-
-If that is needed, I'm very happy to get more detailed path of this from
-some discussion in LSF/MM/BPF 2023: how we get this (userns) reliably in
-practice.
-
-As of code lines, core EROFS on-disk format is quite simple (I don't think
-total LOC is a barrier), if you see
-   fs/erofs/data.c
-   fs/erofs/namei.c
-   fs/erofs/dir.c
-
-or
-    erofs_super_block
-    erofs_inode_compact
-    erofs_inode_extended
-    erofs_dirent
-
-but for example, fs/erofs/super.c which is just used to enable EROFS advanced
-features is almost 1000LOC now.  But most code is quite trivial, I don't think
-these can cause any difference to userns plan.
-
-Thanks,
-Gao Xiang
-
-[1] https://lore.kernel.org/r/CAOQ4uxjm7i+uO4o4470ACctsft1m18EiUpxBfCeT-Wyqf1FAYg@mail.gmail.com/
-
-> 
-> Thanks,
-> Amir.
+DQoNCkxlIDAxLzAyLzIwMjMgw6AgMjM6MzIsIFNvbmcgTGl1IGEgw6ljcml0wqA6DQo+IG1vZHVs
+ZV9sYXlvdXQgbWFuYWdlcyBkaWZmZXJlbnQgdHlwZXMgb2YgbWVtb3J5ICh0ZXh0LCBkYXRhLCBy
+b2RhdGEsIGV0Yy4pDQo+IGluIG9uZSBhbGxvY2F0aW9uLCB3aGljaCBpcyBwcm9ibGVtYXRpYyBm
+b3Igc29tZSByZWFzb25zOg0KPiANCj4gMS4gSXQgaXMgaGFyZCB0byBlbmFibGUgQ09ORklHX1NU
+UklDVF9NT0RVTEVfUldYLg0KPiAyLiBJdCBpcyBoYXJkIHRvIHVzZSBodWdlIHBhZ2VzIGluIG1v
+ZHVsZXMgKGFuZCBub3QgYnJlYWsgc3RyaWN0IHJ3eCkuDQo+IDMuIE1hbnkgYXJjaHMgdXNlcyBt
+b2R1bGVfbGF5b3V0IGZvciBhcmNoLXNwZWNpZmljIGRhdGEsIGJ1dCBpdCBpcyBub3QNCj4gICAg
+IG9idmlvdXMgaG93IHRoZXNlIGRhdGEgYXJlIHVzZWQgKGFyZSB0aGV5IFJPLCBSWCwgb3IgUlc/
+KQ0KPiANCj4gSW1wcm92ZSB0aGUgc2NlbmFyaW8gYnkgcmVwbGFjaW5nIDIgKG9yIDMpIG1vZHVs
+ZV9sYXlvdXQgcGVyIG1vZHVsZSB3aXRoDQo+IHVwIHRvIDcgbW9kdWxlX21lbW9yeSBwZXIgbW9k
+dWxlOg0KPiANCj4gICAgICAgICAgTU9EX1RFWFQsDQo+ICAgICAgICAgIE1PRF9EQVRBLA0KPiAg
+ICAgICAgICBNT0RfUk9EQVRBLA0KPiAgICAgICAgICBNT0RfUk9fQUZURVJfSU5JVCwNCj4gICAg
+ICAgICAgTU9EX0lOSVRfVEVYVCwNCj4gICAgICAgICAgTU9EX0lOSVRfREFUQSwNCj4gICAgICAg
+ICAgTU9EX0lOSVRfUk9EQVRBLA0KPiANCj4gYW5kIGFsbG9jYXRpbmcgdGhlbSBzZXBhcmF0ZWx5
+LiBUaGlzIGFkZHMgc2xpZ2h0bHkgbW9yZSBlbnRyaWVzIHRvDQo+IG1vZF90cmVlIChmcm9tIHVw
+IHRvIDMgZW50cmllcyBwZXIgbW9kdWxlLCB0byB1cCB0byA3IGVudHJpZXMgcGVyDQo+IG1vZHVs
+ZSkuIEhvd2V2ZXIsIHRoaXMgYXQgbW9zdCBhZGRzIGEgc21hbGwgY29uc3RhbnQgb3ZlcmhlYWQg
+dG8NCj4gX19tb2R1bGVfYWRkcmVzcygpLCB3aGljaCBpcyBleHBlY3RlZCB0byBiZSBmYXN0Lg0K
+PiANCj4gVmFyaW91cyBhcmNocyB1c2UgbW9kdWxlX2xheW91dCBmb3IgZGlmZmVyZW50IGRhdGEu
+IFRoZXNlIGRhdGEgYXJlIHB1dA0KPiBpbnRvIGRpZmZlcmVudCBtb2R1bGVfbWVtb3J5IGJhc2Vk
+IG9uIHRoZWlyIGxvY2F0aW9uIGluIG1vZHVsZV9sYXlvdXQuDQo+IElPVywgZGF0YSB0aGF0IHVz
+ZWQgdG8gZ28gd2l0aCB0ZXh0IGlzIGFsbG9jYXRlZCB3aXRoIE1PRF9NRU1fVFlQRV9URVhUOw0K
+PiBkYXRhIHRoYXQgdXNlZCB0byBnbyB3aXRoIGRhdGEgaXMgYWxsb2NhdGVkIHdpdGggTU9EX01F
+TV9UWVBFX0RBVEEsIGV0Yy4NCj4gDQo+IG1vZHVsZV9tZW1vcnkgc2ltcGxpZmllcyBxdWl0ZSBz
+b21lIG9mIHRoZSBtb2R1bGUgY29kZS4gRm9yIGV4YW1wbGUsDQo+IEFSQ0hfV0FOVFNfTU9EVUxF
+U19EQVRBX0lOX1ZNQUxMT0MgaXMgYSBsb3QgY2xlYW5lciwgYXMgaXQganVzdCB1c2VzIGENCj4g
+ZGlmZmVyZW50IGFsbG9jYXRvciBmb3IgdGhlIGRhdGEuIGtlcm5lbC9tb2R1bGUvc3RyaWN0X3J3
+eC5jIGlzIGFsc28NCj4gbXVjaCBjbGVhbmVyIHdpdGggbW9kdWxlX21lbW9yeS4NCj4gDQo+IFNp
+Z25lZC1vZmYtYnk6IFNvbmcgTGl1IDxzb25nQGtlcm5lbC5vcmc+DQo+IENjOiBMdWlzIENoYW1i
+ZXJsYWluIDxtY2dyb2ZAa2VybmVsLm9yZz4NCj4gQ2M6IFRob21hcyBHbGVpeG5lciA8dGdseEBs
+aW51dHJvbml4LmRlPg0KPiBDYzogUGV0ZXIgWmlqbHN0cmEgPHBldGVyekBpbmZyYWRlYWQub3Jn
+Pg0KPiBDYzogR3VlbnRlciBSb2VjayA8bGludXhAcm9lY2stdXMubmV0Pg0KPiBDYzogQ2hyaXN0
+b3BoZSBMZXJveSA8Y2hyaXN0b3BoZS5sZXJveUBjc2dyb3VwLmV1Pg0KPiANCg0KICAgQ0FMTCAg
+ICBzY3JpcHRzL2NoZWNrc3lzY2FsbHMuc2gNCiAgIENDICAgICAga2VybmVsL21vZHVsZS9tYWlu
+Lm8NCmtlcm5lbC9tb2R1bGUvbWFpbi5jOiBJbiBmdW5jdGlvbiAnbW9kX21lbV91c2Vfdm1hbGxv
+Yyc6DQprZXJuZWwvbW9kdWxlL21haW4uYzoxMTc1OjE2OiBlcnJvcjogaW1wbGljaXQgZGVjbGFy
+YXRpb24gb2YgZnVuY3Rpb24gDQonbW9kX21lbV9pc19jb3JlX2RhdGEnOyBkaWQgeW91IG1lYW4g
+J21vZF9tZW1fdHlwZV9pc19jb3JlX2RhdGEnPyANClstV2Vycm9yPWltcGxpY2l0LWZ1bmN0aW9u
+LWRlY2xhcmF0aW9uXQ0KICAxMTc1IHwgICAgICAgICByZXR1cm4gbW9kX21lbV9pc19jb3JlX2Rh
+dGEodHlwZSk7DQogICAgICAgfCAgICAgICAgICAgICAgICBefn5+fn5+fn5+fn5+fn5+fn5+fg0K
+ICAgICAgIHwgICAgICAgICAgICAgICAgbW9kX21lbV90eXBlX2lzX2NvcmVfZGF0YQ0KY2MxOiBz
+b21lIHdhcm5pbmdzIGJlaW5nIHRyZWF0ZWQgYXMgZXJyb3JzDQptYWtlWzNdOiAqKiogW3Njcmlw
+dHMvTWFrZWZpbGUuYnVpbGQ6MjUyOiBrZXJuZWwvbW9kdWxlL21haW4ub10gRXJyb3IgMQ0KbWFr
+ZVsyXTogKioqIFtzY3JpcHRzL01ha2VmaWxlLmJ1aWxkOjUwNDoga2VybmVsL21vZHVsZV0gRXJy
+b3IgMg0KbWFrZVsxXTogKioqIFtzY3JpcHRzL01ha2VmaWxlLmJ1aWxkOjUwNDoga2VybmVsXSBF
+cnJvciAyDQptYWtlOiAqKiogW01ha2VmaWxlOjIwMjQ6IC5dIEVycm9yIDINCg==
