@@ -2,109 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94CD96872BA
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 02:05:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76A046872CA
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 02:09:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230080AbjBBBFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 20:05:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53066 "EHLO
+        id S230295AbjBBBJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 20:09:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbjBBBFV (ORCPT
+        with ESMTP id S229470AbjBBBJC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 20:05:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56AD76A69;
-        Wed,  1 Feb 2023 17:05:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DDA6C619BF;
-        Thu,  2 Feb 2023 01:05:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 165CBC433D2;
-        Thu,  2 Feb 2023 01:05:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675299919;
-        bh=H1y6Z1HA81YIsbsvUefZwr5ZCwOaYjAnlrJr9bYlWwE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tZ8P9i6w0heFH3F+q8F9WsKxI4nZ9osUwXK2d3RPLUHWcHJWN/x9dSRK5+6sxe2ic
-         aJcLPpOj2k4IQdD1P/Qow5YhljLokXRofP3843Tyzjid9an+lFaQwHv9wkk9KzA9t2
-         tXrm8/SETneNP3YEpOP8iN/JTKga7F/Oje6THCdSPtf5X9OQ43vxfkCjwl+LjXqjoY
-         1js/F2jXbG9h9NNxZLjkFOUea8fYIxoH2DR05EAjPee+/MAEwyPjebY+8uh5pV61zG
-         5OmRZyuPa7i/limbKyJ+CXIOuDIsegys+wZ4+KFT7tD69eNBvFayUq9lO7OHWYo7c2
-         ZILgA9s9TH9LQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 59EB5405BE; Wed,  1 Feb 2023 22:05:16 -0300 (-03)
-Date:   Wed, 1 Feb 2023 22:05:16 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Sandipan Das <sandipan.das@amd.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        x86@kernel.org, peterz@infradead.org, bp@alien8.de,
-        namhyung@kernel.org, jolsa@kernel.org, tglx@linutronix.de,
-        mingo@redhat.com, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, dave.hansen@linux.intel.com,
-        james.clark@arm.com, irogers@google.com, eranian@google.com,
-        ananth.narayan@amd.com, ravi.bangoria@amd.com,
-        santosh.shukla@amd.com
-Subject: Re: [PATCH v3 0/2] tools perf: Add branch speculation info
-Message-ID: <Y9sMTJpltOp43wy0@kernel.org>
-References: <cover.1675057032.git.sandipan.das@amd.com>
+        Wed, 1 Feb 2023 20:09:02 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B286D3F2A9;
+        Wed,  1 Feb 2023 17:08:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675300139; x=1706836139;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=2E9LVcJw3Kk6q7B8/ENCBNmYX418E19egKvZ3PU0pdA=;
+  b=npLb678luk+QFjh54XlgrmchfiBAoHOkqe/4ExF6vOxZ3oLkjc51e6qc
+   gGjYHEmlEGpJZC9wWjp1+Wjt09jT9PKQoJbF9e7rRtopat9oPJHNt1+A2
+   sYOSGxB0rnTNBkYm0nXxWWUPToHRwbPW3B8bN4MrmCapZOyuAmWUQCS4/
+   Ru+wmguKXIUVanFU830hxbSQCej6kCD6YWRUK8xDgElzTOjpsVJXiiXub
+   cdxIrxRElK+3WsXIj4DVAUoP1riEzgJ8J2uemG47ljCjjC7xz9X0z1GGp
+   GmpqbrfCqo5ZKsI63mzYMHknOGyrOdexpeYWsAd6VU4U2SMfbI8xnv76R
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="355654298"
+X-IronPort-AV: E=Sophos;i="5.97,266,1669104000"; 
+   d="scan'208";a="355654298"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 17:08:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="665087923"
+X-IronPort-AV: E=Sophos;i="5.97,266,1669104000"; 
+   d="scan'208";a="665087923"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by orsmga002.jf.intel.com with ESMTP; 01 Feb 2023 17:08:15 -0800
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     hdegoede@redhat.com, markgross@kernel.org
+Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH 0/7]  Add TPMI support
+Date:   Wed,  1 Feb 2023 17:07:31 -0800
+Message-Id: <20230202010738.2186174-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1675057032.git.sandipan.das@amd.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Jan 30, 2023 at 11:29:14AM +0530, Sandipan Das escreveu:
-> AMD Last Branch Record Extension Version 2 (LbrExtV2) provides branch
-> speculation information and the perf UAPI is extended to provide this in
-> a generic way. Make perf tool show this additional information.
-> 
-> The UAPI changes can be found in commit 93315e46b000 ("perf/core: Add
-> speculation info to branch entries").
-> 
-> Previous versions can be found at:
-> v2: https://lore.kernel.org/all/cover.1664356751.git.sandipan.das@amd.com/
-> v1: https://lore.kernel.org/all/cover.1660217326.git.sandipan.das@amd.com/
+The TPMI (Topology Aware Register and PM Capsule Interface) provides a
+flexible, extendable and PCIe enumerable MMIO interface for PM features.
 
-Thanks, applied.
+For example Intel Speed Select Technology (Intel SST) can replace all
+mailbox commands with direct MMIO access. This reduces latency for
+SST commands and also defines an architectural interface which will
+persist for several next generations.
 
-- Arnaldo
+Also Intel RAPL (Running Average Power Limit) provides a MMIO
+interface using TPMI. This has advantage over traditional MSR
+(Model Specific Register) interface, where a thread needs to be scheduled
+on the target CPU to read or write. Also the RAPL features vary between
+CPU models, and hence lot of model specific code. Here TPMI provides an
+architectural interface by providing hierarchical tables and fields,
+which will not need any model specific implementation.
 
- 
-> Changes in v3:
-> - Drop tools-side UAPI changes as they have already been added by other
->   commits.
-> - Rebase on top of latest perf/core.
-> 
-> Changes in v2:
-> - Drop msr-index.h related changes for now.
-> - Rebase on top of latest perf/core.
-> - Fix UAPI breakage introduced by the ARM64 BRBE changes to perf branch
->   entry.
-> 
-> Sandipan Das (2):
->   perf script: Show branch speculation info
->   perf session: Show branch speculation info in raw dump
-> 
->  tools/perf/builtin-script.c |  5 +++--
->  tools/perf/util/branch.c    | 15 +++++++++++++++
->  tools/perf/util/branch.h    |  2 ++
->  tools/perf/util/evsel.c     | 15 ++++++++++++---
->  tools/perf/util/session.c   |  5 +++--
->  5 files changed, 35 insertions(+), 7 deletions(-)
-> 
-> -- 
-> 2.34.1
-> 
+Same value is for Intel Uncore frequency where MSR interface can't
+be used because of multiple domains.
+
+The TPMI interface uses a PCI VSEC structure to expose the location of
+MMIO region, which is handled by Intel VSEC driver. Intel VSEC driver is
+already present in upstream kernel.
+
+This series contains the base driver, which parses TPMI MMIO region
+and creates device nodes for supported features. The current set of
+PM feature support includes, Intel Speed Select, RAPL, Uncore frequency
+scaling.
+
+The first there patches updates Intel VSEC driver to add TPMI VSEC ID
+and enhance to reuse the code.
+The next three patches adds TPMI base driver support.
+The last patch adds MAINTAINERS entry.
+
+The TPMI documentation can be downloaded from:
+https://github.com/intel/tpmi_power_management
+
+This series cleanly applies on 6.2-rc1.
+
+Srinivas Pandruvada (7):
+  platform/x86/intel/vsec: Add TPMI ID
+  platform/x86/intel/vsec: Enhance and Export intel_vsec_add_aux()
+  platform/x86/intel/vsec: Support private data
+  platform/x86/intel: Intel TPMI enumeration driver
+  platform/x86/intel/tpmi: Process CPU package mapping
+  platform/x86/intel/tpmi: ADD tpmi external interface for tpmi feature
+    drivers
+  MAINTAINERS: Add entry for TPMI driver
+
+ MAINTAINERS                         |   6 +
+ drivers/platform/x86/intel/Kconfig  |  13 +
+ drivers/platform/x86/intel/Makefile |   4 +
+ drivers/platform/x86/intel/tpmi.c   | 415 ++++++++++++++++++++++++++++
+ drivers/platform/x86/intel/vsec.c   |  21 +-
+ drivers/platform/x86/intel/vsec.h   |   6 +
+ include/linux/intel_tpmi.h          |  30 ++
+ 7 files changed, 490 insertions(+), 5 deletions(-)
+ create mode 100644 drivers/platform/x86/intel/tpmi.c
+ create mode 100644 include/linux/intel_tpmi.h
 
 -- 
+2.31.1
 
-- Arnaldo
