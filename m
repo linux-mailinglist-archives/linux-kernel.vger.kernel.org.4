@@ -2,192 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 377C2687376
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 03:58:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1FEF687394
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 04:02:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231614AbjBBC6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 21:58:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39220 "EHLO
+        id S231863AbjBBDC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 22:02:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjBBC6g (ORCPT
+        with ESMTP id S231668AbjBBDBc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 21:58:36 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 03AC4761D7;
-        Wed,  1 Feb 2023 18:58:33 -0800 (PST)
-Received: from loongson.cn (unknown [10.20.42.133])
-        by gateway (Coremail) with SMTP id _____8DxnfDYJttj_QMMAA--.24879S3;
-        Thu, 02 Feb 2023 10:58:32 +0800 (CST)
-Received: from [10.20.42.133] (unknown [10.20.42.133])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxyubXJttjXPkmAA--.42517S3;
-        Thu, 02 Feb 2023 10:58:31 +0800 (CST)
-Message-ID: <66c2ec8e-404a-23fa-97ed-644071010300@loongson.cn>
-Date:   Thu, 2 Feb 2023 10:58:31 +0800
+        Wed, 1 Feb 2023 22:01:32 -0500
+Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8522179CA3;
+        Wed,  1 Feb 2023 19:01:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1675306878; x=1706842878;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=q05uX48M20nMrd/E/JzYkhFE8vi24nWdzw3LRUurN1U=;
+  b=HcX5rpOtFb98NVhPN9jx9aTIl4HH2p3sZo/+yHAtAeX7rjPglZrGXsHG
+   uEOinYadteFZAD2tNtbTxstkviR2OE7IJDfFc85bfyK9FAGe1DYH501Q3
+   KhLovxwG3N/PsgTywlvcZMRcltXCrjOGkAMYh5G8kJoXkq5ousMfiAXZH
+   w=;
+X-IronPort-AV: E=Sophos;i="5.97,266,1669075200"; 
+   d="scan'208";a="177554059"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2a-m6i4x-83883bdb.us-west-2.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2023 03:01:17 +0000
+Received: from EX13MTAUWB002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2a-m6i4x-83883bdb.us-west-2.amazon.com (Postfix) with ESMTPS id 650DA61AE4;
+        Thu,  2 Feb 2023 03:01:16 +0000 (UTC)
+Received: from EX19D010UWA004.ant.amazon.com (10.13.138.204) by
+ EX13MTAUWB002.ant.amazon.com (10.43.161.202) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.45; Thu, 2 Feb 2023 03:01:15 +0000
+Received: from u9aa42af9e4c55a.ant.amazon.com (10.43.161.198) by
+ EX19D010UWA004.ant.amazon.com (10.13.138.204) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1118.24; Thu, 2 Feb 2023 03:01:15 +0000
+From:   Munehisa Kamata <kamatam@amazon.com>
+To:     <surenb@google.com>
+CC:     <ebiggers@kernel.org>, <hannes@cmpxchg.org>, <hdanton@sina.com>,
+        <kamatam@amazon.com>, <linux-kernel@vger.kernel.org>,
+        <linux-mm@kvack.org>, <mengcc@amazon.com>, <stable@vger.kernel.org>
+Subject: [PATCH] sched/psi: fix use-after-free in ep_remove_wait_queue()
+Date:   Wed, 1 Feb 2023 19:00:23 -0800
+Message-ID: <20230202030023.1847084-1-kamatam@amazon.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <CAJuCfpFZ3B4530TgsSHqp5F_gwfrDujwRYewKReJru==MdEHQg@mail.gmail.com>
+References: <CAJuCfpFZ3B4530TgsSHqp5F_gwfrDujwRYewKReJru==MdEHQg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v6 1/3] drm/lsdc: add drm driver for loongson display
- controller
-Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>,
-        Sui Jingfeng <15330273260@189.cn>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Zack Rusin <zackr@vmware.com>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Sam Ravnborg <sam@ravnborg.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Randy Dunlap <rdunlap@infradead.org>
-References: <20220203082546.3099-1-15330273260@189.cn>
- <20220203082546.3099-2-15330273260@189.cn>
- <20220203085851.yqstkfgt4dz7rcnw@houat>
- <4dd6d32a-9818-1adf-cb3f-20c183ae2020@189.cn>
- <20220209083633.mlfbiydi7cbpgexa@houat>
-From:   suijingfeng <suijingfeng@loongson.cn>
-In-Reply-To: <20220209083633.mlfbiydi7cbpgexa@houat>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxyubXJttjXPkmAA--.42517S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxXF1DuF17CF17tr4ktr1kXwb_yoWruFW3pr
-        Z0yF98Ka1qqry8Xryqqw4DtFsa9rs5Kry2qry5Jr12kF15Kr1fCr18GrZrCa1kJrWDGw1Y
-        v3W5CF98Ka1Y9aDanT9S1TB71UUUU17qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bqkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        n4kS14v26r1q6r43M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E
-        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
-        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
-        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUtVW8ZwC20s026c02F40E14v26r1j6r18MI
-        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41l
-        IxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIx
-        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2
-        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jTq2NUUUUU=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.43.161.198]
+X-ClientProxiedBy: EX13P01UWB003.ant.amazon.com (10.43.161.209) To
+ EX19D010UWA004.ant.amazon.com (10.13.138.204)
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+If a non-root cgroup gets removed when there is a thread that registered
+trigger and is polling on a pressure file within the cgroup, the polling
+waitqueue gets freed without clearing the queue and reference, then it can
+result in use-after-free as below. Use wake_up_pollfree() instead to
+ensure that the queue and reference are cleared before freeing.
 
-On 2022/2/9 16:36, Maxime Ripard wrote:
-> On Fri, Feb 04, 2022 at 12:41:37AM +0800, Sui Jingfeng wrote:
->>>> +static int lsdc_primary_plane_atomic_check(struct drm_plane *plane,
->>>> +					   struct drm_atomic_state *state)
->>>> +{
->>>> +	struct drm_device *ddev = plane->dev;
->>>> +	struct lsdc_device *ldev = to_lsdc(ddev);
->>>> +	struct drm_plane_state *old_plane_state = drm_atomic_get_old_plane_state(state, plane);
->>>> +	struct drm_plane_state *new_plane_state = drm_atomic_get_new_plane_state(state, plane);
->>>> +	struct drm_framebuffer *new_fb = new_plane_state->fb;
->>>> +	struct drm_framebuffer *old_fb = old_plane_state->fb;
->>>> +	struct drm_crtc *crtc = new_plane_state->crtc;
->>>> +	u32 new_format = new_fb->format->format;
->>>> +	struct drm_crtc_state *new_crtc_state;
->>>> +	struct lsdc_crtc_state *priv_crtc_state;
->>>> +	int ret;
->>>> +
->>>> +	if (!crtc)
->>>> +		return 0;
->>>> +
->>>> +	new_crtc_state = drm_atomic_get_new_crtc_state(state, crtc);
->>>> +	if (WARN_ON(!new_crtc_state))
->>>> +		return -EINVAL;
->>>> +
->>>> +	priv_crtc_state = to_lsdc_crtc_state(new_crtc_state);
->>>> +
->>>> +	ret = drm_atomic_helper_check_plane_state(new_plane_state,
->>>> +						  new_crtc_state,
->>>> +						  DRM_PLANE_HELPER_NO_SCALING,
->>>> +						  DRM_PLANE_HELPER_NO_SCALING,
->>>> +						  false,
->>>> +						  true);
->>>> +	if (ret)
->>>> +		return ret;
->>>> +
->>>> +	/*
->>>> +	 * Require full modeset if enabling or disabling a plane,
->>>> +	 * or changing its position, size, depth or format.
->>>> +	 */
->>>> +	if ((!new_fb || !old_fb ||
->>>> +	     old_plane_state->crtc_x != new_plane_state->crtc_x ||
->>>> +	     old_plane_state->crtc_y != new_plane_state->crtc_y ||
->>>> +	     old_plane_state->crtc_w != new_plane_state->crtc_w ||
->>>> +	     old_plane_state->crtc_h != new_plane_state->crtc_h ||
->>>> +	     old_fb->format->format != new_format))
->>>> +		new_crtc_state->mode_changed = true;
->>>> +
->>>> +
->>>> +	priv_crtc_state->pix_fmt = lsdc_primary_get_default_format(crtc);
->>> Storing the pixel format in the CRTC state is weird? What would happen
->>> if you have a primary plane and a cursor in different formats?
->>>
->>> Also, reading the default format from a register doesn't look right.
->>> atomic_check can occur at any time, including before a previous commit,
->>> or while the hardware is disabled. You should rely on either a constant
->>> or the previous state here.
->>>
->> Currently, private CRTC state(priv_crtc_state) is not get used by the cursor's
->> atomic_check() and atomic_update(). I means this is only for the primary plane.
->> And both and the primary and the cursor using  XRGB8888 format, what I really
->> want here is let the atomic_update to update the framebuffer's format, because
->> the firmware (pmon) of some board set the framebuffer's format as RGB565.
-> atomic_update will be called each time the plane state is changed, so it
-> won't be an issue: when the first state will be committed, your
-> atomic_update function will be called and thus you'll overwrite what was
-> left of the firmware setup.
+ BUG: KASAN: use-after-free in _raw_spin_lock_irqsave+0x60/0xc0
+ Write of size 4 at addr ffff88810e625328 by task a.out/4404
 
-I am agree with you that  the format is a property of the plane, the 
-code using wrong abstraction.
+ CPU: 19 PID: 4404 Comm: a.out Not tainted 6.2.0-rc6 #38
+ Hardware name: Amazon EC2 c5a.8xlarge/, BIOS 1.0 10/16/2017
+ Call Trace:
+ <TASK>
+ dump_stack_lvl+0x73/0xa0
+ print_report+0x16c/0x4e0
+ ? _printk+0x59/0x80
+ ? __virt_addr_valid+0xb8/0x130
+ ? _raw_spin_lock_irqsave+0x60/0xc0
+ kasan_report+0xc3/0xf0
+ ? _raw_spin_lock_irqsave+0x60/0xc0
+ kasan_check_range+0x2d2/0x310
+ _raw_spin_lock_irqsave+0x60/0xc0
+ remove_wait_queue+0x1a/0xa0
+ ep_free+0x12c/0x170
+ ep_eventpoll_release+0x26/0x30
+ __fput+0x202/0x400
+ task_work_run+0x11d/0x170
+ do_exit+0x495/0x1130
+ ? update_cfs_rq_load_avg+0x2c2/0x2e0
+ do_group_exit+0x100/0x100
+ get_signal+0xd67/0xde0
+ ? finish_task_switch+0x15f/0x3a0
+ arch_do_signal_or_restart+0x2a/0x2b0
+ exit_to_user_mode_prepare+0x94/0x100
+ syscall_exit_to_user_mode+0x20/0x40
+ do_syscall_64+0x52/0x90
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+ RIP: 0033:0x7f8e392bfb91
+ Code: Unable to access opcode bytes at 0x7f8e392bfb67.
+ RSP: 002b:00007fff261e08d8 EFLAGS: 00000246 ORIG_RAX: 0000000000000022
+ RAX: fffffffffffffdfe RBX: 0000000000000000 RCX: 00007f8e392bfb91
+ RDX: 0000000000000001 RSI: 00007fff261e08e8 RDI: 0000000000000004
+ RBP: 00007fff261e0920 R08: 0000000000400780 R09: 00007f8e3960f240
+ R10: 00000000000003df R11: 0000000000000246 R12: 00000000004005a0
+ R13: 00007fff261e0a00 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
 
-this is because i am confused by our DC hardware at that time. 
-atomic_update is failed to update
+ Allocated by task 4404:
+ kasan_set_track+0x3d/0x60
+ __kasan_kmalloc+0x85/0x90
+ psi_trigger_create+0x113/0x3e0
+ pressure_write+0x146/0x2e0
+ cgroup_file_write+0x11c/0x250
+ kernfs_fop_write_iter+0x186/0x220
+ vfs_write+0x3d8/0x5c0
+ ksys_write+0x90/0x110
+ do_syscall_64+0x43/0x90
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-the FB format because our CRTC hardware has bug. It can only success 
-update fb format with CRTC
+ Freed by task 4407:
+ kasan_set_track+0x3d/0x60
+ kasan_save_free_info+0x27/0x40
+ ____kasan_slab_free+0x11d/0x170
+ slab_free_freelist_hook+0x87/0x150
+ __kmem_cache_free+0xcb/0x180
+ psi_trigger_destroy+0x2e8/0x310
+ cgroup_file_release+0x4f/0xb0
+ kernfs_drain_open_files+0x165/0x1f0
+ kernfs_drain+0x162/0x1a0
+ __kernfs_remove+0x1fb/0x310
+ kernfs_remove_by_name_ns+0x95/0xe0
+ cgroup_addrm_files+0x67f/0x700
+ cgroup_destroy_locked+0x283/0x3c0
+ cgroup_rmdir+0x29/0x100
+ kernfs_iop_rmdir+0xd1/0x140
+ vfs_rmdir+0xfe/0x240
+ do_rmdir+0x13d/0x280
+ __x64_sys_rmdir+0x2c/0x30
+ do_syscall_64+0x43/0x90
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-reset bit set in drm_crtc_funcs.reset(). Otherwise the CRTC still using 
-RGB565 format to parse the
+Link: https://lore.kernel.org/lkml/20230106224859.4123476-1-kamatam@amazon.com/
+Fixes: 0e94682b73bf ("psi: introduce psi monitor")
+Cc: stable@vger.kernel.org
+Signed-off-by: Munehisa Kamata <kamatam@amazon.com>
+Signed-off-by: Mengchi Cheng <mengcc@amazon.com>
+---
+ kernel/sched/psi.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-RGBX8888 frame buffer.  We finally found the hardware bug via debugfs, 
-just dump the register value.
-
-we found that the fb format didn't get update. The hardware bug leading 
-us using the wrong abstraction.
-
-we do not understand the DRM core fully at that time. We have revised 
-our patch, thank you point out that.
-
->> If the hardware's format is same with the plane state, then there is no need to
->> update the FB's format register, save a function call, right?
-> My point was more about the fact that you're using the wrong abstraction
-> there. The format is a property of the plane, not from the CRTC. In KMS
-> (and in most drivers), you can have multiple planes with different
-> formats all attached to the same CRTC just fine.
->
-> Maxime
-
-Our CRTC have cursor plane and primary plane, composite is doing by the 
-CRTC hardware automatically.
-
-there no depth property, the cursor is always on the top of the CRTC.  
-If the CRTC format is not same format
-
-I think we should convert the format of cursor to the format of primary 
-plane at atomic_update, by introduce
-
-a shadow plane. Thanks for your guiding.
+diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+index 8ac8b81bfee6..6e66c15f6450 100644
+--- a/kernel/sched/psi.c
++++ b/kernel/sched/psi.c
+@@ -1343,10 +1343,11 @@ void psi_trigger_destroy(struct psi_trigger *t)
+ 
+ 	group = t->group;
+ 	/*
+-	 * Wakeup waiters to stop polling. Can happen if cgroup is deleted
+-	 * from under a polling process.
++	 * Wakeup waiters to stop polling and clear the queue to prevent it from
++	 * being accessed later. Can happen if cgroup is deleted from under a
++	 * polling process otherwise.
+ 	 */
+-	wake_up_interruptible(&t->event_wait);
++	wake_up_pollfree(&t->event_wait);
+ 
+ 	mutex_lock(&group->trigger_lock);
+ 
+-- 
+2.38.1
 
