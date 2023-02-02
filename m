@@ -2,354 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EE2E687393
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 04:02:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96F5A687399
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 04:04:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231827AbjBBDCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 22:02:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40528 "EHLO
+        id S230048AbjBBDEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 22:04:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231646AbjBBDBP (ORCPT
+        with ESMTP id S229630AbjBBDEh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 22:01:15 -0500
-Received: from out28-193.mail.aliyun.com (out28-193.mail.aliyun.com [115.124.28.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 575BA78AC4;
-        Wed,  1 Feb 2023 19:01:10 -0800 (PST)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436316|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.00946298-0.254234-0.736303;FP=17941338626237517524|1|1|10|0|-1|-1|-1;HT=ay29a033018047208;MF=frank.sae@motor-comm.com;NM=1;PH=DS;RN=18;RT=18;SR=0;TI=SMTPD_---.R7sRqoM_1675306865;
-Received: from sun-VirtualBox..(mailfrom:Frank.Sae@motor-comm.com fp:SMTPD_---.R7sRqoM_1675306865)
-          by smtp.aliyun-inc.com;
-          Thu, 02 Feb 2023 11:01:06 +0800
-From:   Frank Sae <Frank.Sae@motor-comm.com>
-To:     Peter Geis <pgwipeout@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        yanhong.wang@starfivetech.com
-Cc:     xiaogang.fan@motor-comm.com, fei.zhang@motor-comm.com,
-        hua.sun@motor-comm.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Frank <Frank.Sae@motor-comm.com>,
-        devicetree@vger.kernel.org
-Subject: [PATCH net-next v5 5/5] net: phy: Add driver for Motorcomm yt8531 gigabit ethernet phy
-Date:   Thu,  2 Feb 2023 11:00:37 +0800
-Message-Id: <20230202030037.9075-6-Frank.Sae@motor-comm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230202030037.9075-1-Frank.Sae@motor-comm.com>
-References: <20230202030037.9075-1-Frank.Sae@motor-comm.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 1 Feb 2023 22:04:37 -0500
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DAA855BF
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 19:04:36 -0800 (PST)
+Received: by mail-pf1-x449.google.com with SMTP id c75-20020a621c4e000000b00592501ac524so260328pfc.6
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 19:04:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=NEMJGeDtED5Z6IXdZ3S6Hy8H0y0x1giIRcxgJ32fnIg=;
+        b=IUDfU2t601spzzSukrWYsRkhVVuFKcEjzY1zoCUJ+BNtssxo6h3ZsnGfMhfV7sCflt
+         oCllChT4V4waSsyTlm6mEl5O5gGWRUH2WcssjMTwkQwOQB+TfC30rcoiG3sX2cJyGzhd
+         SeVdUFx2iNAQya5u2pCh5zyzn5qAmM0xp9+gR8n2nFUHYJ+Kr6nbv9IMHdKY9x4yvFP2
+         NUKdHS1FwL7z1z1tblaaakzn4jZTyWn+8IeIhYLfxxOmDA0G0BqAoEssM3IVhbMZqlDz
+         mh18EzM6mNIgGtlQo563UxTdq1C2qEtxzBDcbwr6jBFatKL1cH5vuGT0oqn54b7bXZp1
+         rVYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NEMJGeDtED5Z6IXdZ3S6Hy8H0y0x1giIRcxgJ32fnIg=;
+        b=rd8IAtM4/jYFzdGFZOt0qXQV96g+hCicX5XOiZAsAar8uB9RiAaZAOsIVwLYyJ080c
+         Fe2M9VWf2IJ3DoDfLjvE2fWsNvEg420K9eTo/2scNl37cZjxg8zc1zW+SRUZgpwJbIdZ
+         KS5/6hBn84jG3rXr3sKIdKEB4LOL+A8CRJTejMM83dV2i6nRntfl5NLzMHni19pp/qMx
+         wmHJRj855XSttc49/1OSCC0EbyyBNoHOlc454dKNs7X0GPyNF9kRHaKDAJOomhZdiAvs
+         0X8LzJM1qIAUgXRAxG2aT3O6Zr3nYoiZV+kQyMHxN7v60QukZVo+IXPv0cbFl0Bvny7H
+         H4lA==
+X-Gm-Message-State: AO0yUKUJFlVSHkpf6RjcNhYPG0/ZXn7nFsCTvF2tiH84RWbSpJQn9ivD
+        EVcv8dPEqi0wFoCiH/nrhkJ3aSUq1ZM=
+X-Google-Smtp-Source: AK7set8p/ktYLQoJTnacFwCM35IRUMm7RmR/mfVJLmqZJdjlY8foiDQEShkFDOci1t6wuDjBEOuu4EDIz3U=
+X-Received: from avagin.kir.corp.google.com ([2620:0:1008:11:eee0:dc42:a911:8b59])
+ (user=avagin job=sendgmr) by 2002:a63:6d07:0:b0:4ef:2f60:f762 with SMTP id
+ i7-20020a636d07000000b004ef2f60f762mr759784pgc.22.1675307075696; Wed, 01 Feb
+ 2023 19:04:35 -0800 (PST)
+Date:   Wed,  1 Feb 2023 19:04:23 -0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
+Message-ID: <20230202030429.3304875-1-avagin@google.com>
+Subject: [PATCH 0/6 v5] seccomp: add the synchronous mode for seccomp_unotify
+From:   Andrei Vagin <avagin@google.com>
+To:     Kees Cook <keescook@chromium.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Christian Brauner <brauner@kernel.org>,
+        Chen Yu <yu.c.chen@intel.com>, avagin@gmail.com,
+        Andrei Vagin <avagin@google.com>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Peter Oskolkov <posk@google.com>,
+        Tycho Andersen <tycho@tycho.pizza>,
+        Will Drewry <wad@chromium.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- Add a driver for the motorcomm yt8531 gigabit ethernet phy. We have
- verified the driver on AM335x platform with yt8531 board. On the
- board, yt8531 gigabit ethernet phy works in utp mode, RGMII
- interface, supports 1000M/100M/10M speeds, and wol(magic package).
+seccomp_unotify allows more privileged processes do actions on behalf
+of less privileged processes.
 
-Signed-off-by: Frank Sae <Frank.Sae@motor-comm.com>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
----
- drivers/net/phy/Kconfig     |   2 +-
- drivers/net/phy/motorcomm.c | 208 +++++++++++++++++++++++++++++++++++-
- 2 files changed, 207 insertions(+), 3 deletions(-)
+In many cases, the workflow is fully synchronous. It means a target
+process triggers a system call and passes controls to a supervisor
+process that handles the system call and returns controls back to the
+target process. In this context, "synchronous" means that only one
+process is running and another one is waiting.
 
-diff --git a/drivers/net/phy/Kconfig b/drivers/net/phy/Kconfig
-index f5df2edc94a5..54874555c921 100644
---- a/drivers/net/phy/Kconfig
-+++ b/drivers/net/phy/Kconfig
-@@ -257,7 +257,7 @@ config MOTORCOMM_PHY
- 	tristate "Motorcomm PHYs"
- 	help
- 	  Enables support for Motorcomm network PHYs.
--	  Currently supports the YT8511, YT8521, YT8531S Gigabit Ethernet PHYs.
-+	  Currently supports YT85xx Gigabit Ethernet PHYs.
- 
- config NATIONAL_PHY
- 	tristate "National Semiconductor PHYs"
-diff --git a/drivers/net/phy/motorcomm.c b/drivers/net/phy/motorcomm.c
-index bdc6a55d59f1..ee7c37dfdca0 100644
---- a/drivers/net/phy/motorcomm.c
-+++ b/drivers/net/phy/motorcomm.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0+
- /*
-- * Motorcomm 8511/8521/8531S PHY driver.
-+ * Motorcomm 8511/8521/8531/8531S PHY driver.
-  *
-  * Author: Peter Geis <pgwipeout@gmail.com>
-  * Author: Frank <Frank.Sae@motor-comm.com>
-@@ -14,6 +14,7 @@
- 
- #define PHY_ID_YT8511		0x0000010a
- #define PHY_ID_YT8521		0x0000011a
-+#define PHY_ID_YT8531		0x4f51e91b
- #define PHY_ID_YT8531S		0x4f51e91a
- 
- /* YT8521/YT8531S Register Overview
-@@ -517,6 +518,61 @@ static int ytphy_set_wol(struct phy_device *phydev, struct ethtool_wolinfo *wol)
- 	return phy_restore_page(phydev, old_page, ret);
- }
- 
-+static int yt8531_set_wol(struct phy_device *phydev,
-+			  struct ethtool_wolinfo *wol)
-+{
-+	const u16 mac_addr_reg[] = {
-+		YTPHY_WOL_MACADDR2_REG,
-+		YTPHY_WOL_MACADDR1_REG,
-+		YTPHY_WOL_MACADDR0_REG,
-+	};
-+	const u8 *mac_addr;
-+	u16 mask, val;
-+	int ret;
-+	u8 i;
-+
-+	if (wol->wolopts & WAKE_MAGIC) {
-+		mac_addr = phydev->attached_dev->dev_addr;
-+
-+		/* Store the device address for the magic packet */
-+		for (i = 0; i < 3; i++) {
-+			ret = ytphy_write_ext_with_lock(phydev, mac_addr_reg[i],
-+							((mac_addr[i * 2] << 8)) |
-+							(mac_addr[i * 2 + 1]));
-+			if (ret < 0)
-+				return ret;
-+		}
-+
-+		/* Enable WOL feature */
-+		mask = YTPHY_WCR_PULSE_WIDTH_MASK | YTPHY_WCR_INTR_SEL;
-+		val = YTPHY_WCR_ENABLE | YTPHY_WCR_INTR_SEL;
-+		val |= YTPHY_WCR_TYPE_PULSE | YTPHY_WCR_PULSE_WIDTH_672MS;
-+		ret = ytphy_modify_ext_with_lock(phydev, YTPHY_WOL_CONFIG_REG,
-+						 mask, val);
-+		if (ret < 0)
-+			return ret;
-+
-+		/* Enable WOL interrupt */
-+		ret = phy_modify(phydev, YTPHY_INTERRUPT_ENABLE_REG, 0,
-+				 YTPHY_IER_WOL);
-+		if (ret < 0)
-+			return ret;
-+	} else {
-+		/* Disable WOL feature */
-+		mask = YTPHY_WCR_ENABLE | YTPHY_WCR_INTR_SEL;
-+		ret = ytphy_modify_ext_with_lock(phydev, YTPHY_WOL_CONFIG_REG,
-+						 mask, 0);
-+
-+		/* Disable WOL interrupt */
-+		ret = phy_modify(phydev, YTPHY_INTERRUPT_ENABLE_REG,
-+				 YTPHY_IER_WOL, 0);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
-+	return 0;
-+}
-+
- static int yt8511_read_page(struct phy_device *phydev)
- {
- 	return __phy_read(phydev, YT8511_PAGE_SELECT);
-@@ -767,6 +823,17 @@ static int ytphy_rgmii_clk_delay_config(struct phy_device *phydev)
- 	return ytphy_modify_ext(phydev, YT8521_RGMII_CONFIG1_REG, mask, val);
- }
- 
-+static int ytphy_rgmii_clk_delay_config_with_lock(struct phy_device *phydev)
-+{
-+	int ret;
-+
-+	phy_lock_mdio_bus(phydev);
-+	ret = ytphy_rgmii_clk_delay_config(phydev);
-+	phy_unlock_mdio_bus(phydev);
-+
-+	return ret;
-+}
-+
- /**
-  * yt8521_probe() - read chip config then set suitable polling_mode
-  * @phydev: a pointer to a &struct phy_device
-@@ -891,6 +958,43 @@ static int yt8521_probe(struct phy_device *phydev)
- 					  val);
- }
- 
-+static int yt8531_probe(struct phy_device *phydev)
-+{
-+	struct device_node *node = phydev->mdio.dev.of_node;
-+	u16 mask, val;
-+	u32 freq;
-+
-+	if (of_property_read_u32(node, "motorcomm,clk-out-frequency-hz", &freq))
-+		freq = YTPHY_DTS_OUTPUT_CLK_DIS;
-+
-+	switch (freq) {
-+	case YTPHY_DTS_OUTPUT_CLK_DIS:
-+		mask = YT8531_SCR_SYNCE_ENABLE;
-+		val = 0;
-+		break;
-+	case YTPHY_DTS_OUTPUT_CLK_25M:
-+		mask = YT8531_SCR_SYNCE_ENABLE | YT8531_SCR_CLK_SRC_MASK |
-+		       YT8531_SCR_CLK_FRE_SEL_125M;
-+		val = YT8531_SCR_SYNCE_ENABLE |
-+		      FIELD_PREP(YT8531_SCR_CLK_SRC_MASK,
-+				 YT8531_SCR_CLK_SRC_REF_25M);
-+		break;
-+	case YTPHY_DTS_OUTPUT_CLK_125M:
-+		mask = YT8531_SCR_SYNCE_ENABLE | YT8531_SCR_CLK_SRC_MASK |
-+		       YT8531_SCR_CLK_FRE_SEL_125M;
-+		val = YT8531_SCR_SYNCE_ENABLE | YT8531_SCR_CLK_FRE_SEL_125M |
-+		      FIELD_PREP(YT8531_SCR_CLK_SRC_MASK,
-+				 YT8531_SCR_CLK_SRC_PLL_125M);
-+		break;
-+	default:
-+		phydev_warn(phydev, "Freq err:%u\n", freq);
-+		return -EINVAL;
-+	}
-+
-+	return ytphy_modify_ext_with_lock(phydev, YTPHY_SYNCE_CFG_REG, mask,
-+					  val);
-+}
-+
- /**
-  * ytphy_utp_read_lpa() - read LPA then setup lp_advertising for utp
-  * @phydev: a pointer to a &struct phy_device
-@@ -1387,6 +1491,94 @@ static int yt8521_config_init(struct phy_device *phydev)
- 	return phy_restore_page(phydev, old_page, ret);
- }
- 
-+static int yt8531_config_init(struct phy_device *phydev)
-+{
-+	struct device_node *node = phydev->mdio.dev.of_node;
-+	int ret;
-+
-+	ret = ytphy_rgmii_clk_delay_config_with_lock(phydev);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (of_property_read_bool(node, "motorcomm,auto-sleep-disabled")) {
-+		/* disable auto sleep */
-+		ret = ytphy_modify_ext_with_lock(phydev,
-+						 YT8521_EXTREG_SLEEP_CONTROL1_REG,
-+						 YT8521_ESC1R_SLEEP_SW, 0);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
-+	if (of_property_read_bool(node, "motorcomm,keep-pll-enabled")) {
-+		/* enable RXC clock when no wire plug */
-+		ret = ytphy_modify_ext_with_lock(phydev,
-+						 YT8521_CLOCK_GATING_REG,
-+						 YT8521_CGR_RX_CLK_EN, 0);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+/**
-+ * yt8531_link_change_notify() - Adjust the tx clock direction according to
-+ * the current speed and dts config.
-+ * @phydev: a pointer to a &struct phy_device
-+ *
-+ * NOTE: This function is only used to adapt to VF2 with JH7110 SoC. Please
-+ * keep "motorcomm,tx-clk-adj-enabled" not exist in dts when the soc is not
-+ * JH7110.
-+ */
-+static void yt8531_link_change_notify(struct phy_device *phydev)
-+{
-+	struct device_node *node = phydev->mdio.dev.of_node;
-+	bool tx_clk_adj_enabled = false;
-+	bool tx_clk_1000_inverted;
-+	bool tx_clk_100_inverted;
-+	bool tx_clk_10_inverted;
-+	u16 val = 0;
-+	int ret;
-+
-+	if (of_property_read_bool(node, "motorcomm,tx-clk-adj-enabled"))
-+		tx_clk_adj_enabled = true;
-+
-+	if (!tx_clk_adj_enabled)
-+		return;
-+
-+	if (of_property_read_bool(node, "motorcomm,tx-clk-10-inverted"))
-+		tx_clk_10_inverted = true;
-+	if (of_property_read_bool(node, "motorcomm,tx-clk-100-inverted"))
-+		tx_clk_100_inverted = true;
-+	if (of_property_read_bool(node, "motorcomm,tx-clk-1000-inverted"))
-+		tx_clk_1000_inverted = true;
-+
-+	if (phydev->speed < 0)
-+		return;
-+
-+	switch (phydev->speed) {
-+	case SPEED_1000:
-+		if (tx_clk_1000_inverted)
-+			val = YT8521_RC1R_TX_CLK_SEL_INVERTED;
-+		break;
-+	case SPEED_100:
-+		if (tx_clk_100_inverted)
-+			val = YT8521_RC1R_TX_CLK_SEL_INVERTED;
-+		break;
-+	case SPEED_10:
-+		if (tx_clk_10_inverted)
-+			val = YT8521_RC1R_TX_CLK_SEL_INVERTED;
-+		break;
-+	default:
-+		return;
-+	}
-+
-+	ret = ytphy_modify_ext_with_lock(phydev, YT8521_RGMII_CONFIG1_REG,
-+					 YT8521_RC1R_TX_CLK_SEL_INVERTED, val);
-+	if (ret < 0)
-+		phydev_warn(phydev, "Modify TX_CLK_SEL err:%d\n", ret);
-+}
-+
- /**
-  * yt8521_prepare_fiber_features() -  A small helper function that setup
-  * fiber's features.
-@@ -1969,6 +2161,17 @@ static struct phy_driver motorcomm_phy_drvs[] = {
- 		.suspend	= yt8521_suspend,
- 		.resume		= yt8521_resume,
- 	},
-+	{
-+		PHY_ID_MATCH_EXACT(PHY_ID_YT8531),
-+		.name		= "YT8531 Gigabit Ethernet",
-+		.probe		= yt8531_probe,
-+		.config_init	= yt8531_config_init,
-+		.suspend	= genphy_suspend,
-+		.resume		= genphy_resume,
-+		.get_wol	= ytphy_get_wol,
-+		.set_wol	= yt8531_set_wol,
-+		.link_change_notify = yt8531_link_change_notify,
-+	},
- 	{
- 		PHY_ID_MATCH_EXACT(PHY_ID_YT8531S),
- 		.name		= "YT8531S Gigabit Ethernet",
-@@ -1990,7 +2193,7 @@ static struct phy_driver motorcomm_phy_drvs[] = {
- 
- module_phy_driver(motorcomm_phy_drvs);
- 
--MODULE_DESCRIPTION("Motorcomm 8511/8521/8531S PHY driver");
-+MODULE_DESCRIPTION("Motorcomm 8511/8521/8531/8531S PHY driver");
- MODULE_AUTHOR("Peter Geis");
- MODULE_AUTHOR("Frank");
- MODULE_LICENSE("GPL");
-@@ -1998,6 +2201,7 @@ MODULE_LICENSE("GPL");
- static const struct mdio_device_id __maybe_unused motorcomm_tbl[] = {
- 	{ PHY_ID_MATCH_EXACT(PHY_ID_YT8511) },
- 	{ PHY_ID_MATCH_EXACT(PHY_ID_YT8521) },
-+	{ PHY_ID_MATCH_EXACT(PHY_ID_YT8531) },
- 	{ PHY_ID_MATCH_EXACT(PHY_ID_YT8531S) },
- 	{ /* sentinel */ }
- };
--- 
-2.34.1
+The new WF_CURRENT_CPU flag advises the scheduler to move the wakee to
+the current CPU. For such synchronous workflows, it makes context
+switches a few times faster.
+
+Right now, each interaction takes 12=C2=B5s. With this patch, it takes abou=
+t
+3=C2=B5s.
+
+v2: clean up the first patch and add the test.
+v3: update commit messages and a few fixes suggested by Kees Cook.
+v4: update the third patch to avoid code duplications (suggested by
+    Peter Zijlstra)
+    Add the benchmark to the perf bench set.
+v5: Update the author email. No code changes.
+
+Kees is ready to take this patch set, but wants to get Acks from the
+sched folks.
+
+Cc: Andy Lutomirski <luto@amacapital.net>
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Juri Lelli <juri.lelli@redhat.com>
+Cc: Peter Oskolkov <posk@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Tycho Andersen <tycho@tycho.pizza>
+Cc: Will Drewry <wad@chromium.org>
+Cc: Vincent Guittot <vincent.guittot@linaro.org>
+
+Andrei Vagin (4):
+  seccomp: don't use semaphore and wait_queue together
+  sched: add a few helpers to wake up tasks on the current cpu
+  seccomp: add the synchronous mode for seccomp_unotify
+  selftest/seccomp: add a new test for the sync mode of
+    seccomp_user_notify
+
+Peter Oskolkov (1):
+  sched: add WF_CURRENT_CPU and externise ttwu
+
+ include/linux/completion.h                    |   1 +
+ include/linux/swait.h                         |   2 +-
+ include/linux/wait.h                          |   3 +
+ include/uapi/linux/seccomp.h                  |   4 +
+ kernel/sched/completion.c                     |  26 ++-
+ kernel/sched/core.c                           |   5 +-
+ kernel/sched/fair.c                           |   4 +
+ kernel/sched/sched.h                          |  13 +-
+ kernel/sched/swait.c                          |   8 +-
+ kernel/sched/wait.c                           |   5 +
+ kernel/seccomp.c                              |  72 +++++++-
+ tools/arch/x86/include/uapi/asm/unistd_32.h   |   3 +
+ tools/arch/x86/include/uapi/asm/unistd_64.h   |   3 +
+ tools/perf/bench/Build                        |   1 +
+ tools/perf/bench/bench.h                      |   1 +
+ tools/perf/bench/sched-seccomp-notify.c       | 167 ++++++++++++++++++
+ tools/perf/builtin-bench.c                    |   1 +
+ tools/testing/selftests/seccomp/seccomp_bpf.c |  55 ++++++
+ 18 files changed, 346 insertions(+), 28 deletions(-)
+ create mode 100644 tools/perf/bench/sched-seccomp-notify.c
+
+--=20
+2.37.2
 
