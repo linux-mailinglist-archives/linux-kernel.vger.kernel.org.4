@@ -2,153 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B9F46873B5
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 04:12:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 958FA6873BB
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 04:19:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231874AbjBBDMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 22:12:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49932 "EHLO
+        id S230004AbjBBDTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 22:19:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231733AbjBBDM2 (ORCPT
+        with ESMTP id S229848AbjBBDTL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 22:12:28 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03AAC1E9F0
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 19:12:26 -0800 (PST)
-Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4P6kHY1gtFzJqrH;
-        Thu,  2 Feb 2023 11:07:53 +0800 (CST)
-Received: from localhost.localdomain (10.175.112.125) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Thu, 2 Feb 2023 11:12:22 +0800
-From:   Longlong Xia <xialonglong1@huawei.com>
-To:     <akpm@linux-foundation.org>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <chenwandun@huawei.com>, <wangkefeng.wang@huawei.com>,
-        <sunnanyong@huawei.com>
-Subject: [PATCH -next 3/3] devtmpfs: remove return value of devtmpfs_*_node() & devtmpfs_submit_req()
-Date:   Thu, 2 Feb 2023 03:10:46 +0000
-Message-ID: <20230202031046.1224338-4-xialonglong1@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230202031046.1224338-1-xialonglong1@huawei.com>
-References: <20230202031046.1224338-1-xialonglong1@huawei.com>
+        Wed, 1 Feb 2023 22:19:11 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8384E29E03
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 19:18:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675307905;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=TnLYuETykZ3l9f+iMHZlyv3/ZWGHek1M/oMz9w9vUAU=;
+        b=FLe0Q682C5w/7z1R29D42kDpli5XxPSVxJqHm2lhNC0cGLbGuBaCy/Rf0fn7gNdE5SMF8D
+        4xDnYJvdmAhItDxOPcpd64p6BAEmg4V0o2CWxNdbKVjXjqU/8wxL8aBgXJ80PThLZ47gDJ
+        mE3pvGayGnEIQDTu6ufsLxbpS1EpcWM=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-626-w2-jySeQPwqs4FzipE0c8w-1; Wed, 01 Feb 2023 22:18:20 -0500
+X-MC-Unique: w2-jySeQPwqs4FzipE0c8w-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2CAD538149AC;
+        Thu,  2 Feb 2023 03:18:20 +0000 (UTC)
+Received: from llong.com (unknown [10.22.32.115])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9AC252026D4B;
+        Thu,  2 Feb 2023 03:18:19 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        kernel-team@android.com, Waiman Long <longman@redhat.com>
+Subject: [PATCH 0/2] cgroup/cpuset: Make hotplug code more efficient
+Date:   Wed,  1 Feb 2023 22:17:47 -0500
+Message-Id: <20230202031749.118146-1-longman@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Because the return value of devtmpfs_*_node() and devtmpfs_submit_req()
-are not used by their callers, change them into void functions.
+This small patch series makes the cpuset hotplug a bit more efficient
+by eliminating unnecessary task iteration and cpu/node masks update
+when an hotplug event (online/offline) happens.
 
-Signed-off-by: Longlong Xia <xialonglong1@huawei.com>
----
- drivers/base/base.h     |  8 ++++----
- drivers/base/devtmpfs.c | 20 +++++++++-----------
- 2 files changed, 13 insertions(+), 15 deletions(-)
+These patches can also avoid the known problem of missing a previously
+gone offline cpu in v1 cpuset after a single cpu offline and online
+sequence.
 
-diff --git a/drivers/base/base.h b/drivers/base/base.h
-index 2208af509ce8..ffb7321e39cf 100644
---- a/drivers/base/base.h
-+++ b/drivers/base/base.h
-@@ -198,11 +198,11 @@ extern void fw_devlink_drivers_done(void);
- void device_pm_move_to_tail(struct device *dev);
- 
- #ifdef CONFIG_DEVTMPFS
--int devtmpfs_create_node(struct device *dev);
--int devtmpfs_delete_node(struct device *dev);
-+void devtmpfs_create_node(struct device *dev);
-+void devtmpfs_delete_node(struct device *dev);
- #else
--static inline int devtmpfs_create_node(struct device *dev) { return 0; }
--static inline int devtmpfs_delete_node(struct device *dev) { return 0; }
-+static inline void devtmpfs_create_node(struct device *dev) { }
-+static inline void devtmpfs_delete_node(struct device *dev) { }
- #endif
- 
- void software_node_notify(struct device *dev);
-diff --git a/drivers/base/devtmpfs.c b/drivers/base/devtmpfs.c
-index 77ca64f708ce..3c4e61c99b77 100644
---- a/drivers/base/devtmpfs.c
-+++ b/drivers/base/devtmpfs.c
-@@ -103,7 +103,7 @@ static inline int is_blockdev(struct device *dev)
- static inline int is_blockdev(struct device *dev) { return 0; }
- #endif
- 
--static int devtmpfs_submit_req(struct req *req, const char *tmp)
-+static void devtmpfs_submit_req(struct req *req, const char *tmp)
- {
- 	init_completion(&req->done);
- 
-@@ -116,24 +116,22 @@ static int devtmpfs_submit_req(struct req *req, const char *tmp)
- 	wait_for_completion(&req->done);
- 
- 	kfree(tmp);
--
--	return req->err;
- }
- 
--int devtmpfs_create_node(struct device *dev)
-+void devtmpfs_create_node(struct device *dev)
- {
- 	const char *tmp = NULL;
- 	struct req req;
- 
- 	if (!thread)
--		return 0;
-+		return;
- 
- 	req.mode = 0;
- 	req.uid = GLOBAL_ROOT_UID;
- 	req.gid = GLOBAL_ROOT_GID;
- 	req.name = device_get_devnode(dev, &req.mode, &req.uid, &req.gid, &tmp);
- 	if (!req.name)
--		return -ENOMEM;
-+		return;
- 
- 	if (req.mode == 0)
- 		req.mode = 0600;
-@@ -144,25 +142,25 @@ int devtmpfs_create_node(struct device *dev)
- 
- 	req.dev = dev;
- 
--	return devtmpfs_submit_req(&req, tmp);
-+	devtmpfs_submit_req(&req, tmp);
- }
- 
--int devtmpfs_delete_node(struct device *dev)
-+void devtmpfs_delete_node(struct device *dev)
- {
- 	const char *tmp = NULL;
- 	struct req req;
- 
- 	if (!thread)
--		return 0;
-+		return;
- 
- 	req.name = device_get_devnode(dev, NULL, NULL, NULL, &tmp);
- 	if (!req.name)
--		return -ENOMEM;
-+		return;
- 
- 	req.mode = 0;
- 	req.dev = dev;
- 
--	return devtmpfs_submit_req(&req, tmp);
-+	devtmpfs_submit_req(&req, tmp);
- }
- 
- static int dev_mkdir(const char *name, umode_t mode)
+Waiman Long (2):
+  cgroup/cpuset: Skip task update if hotplug doesn't affect current
+    cpuset
+  cgroup/cpuset: Don't update tasks' cpumasks for cpu offline events
+
+ kernel/cgroup/cpuset.c | 31 +++++++++++++++++++++++--------
+ 1 file changed, 23 insertions(+), 8 deletions(-)
+
 -- 
-2.25.1
+2.31.1
 
