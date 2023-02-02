@@ -2,125 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FF9468837A
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 16:56:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E34BB688393
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 16:59:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233296AbjBBP4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 10:56:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57504 "EHLO
+        id S233485AbjBBP7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 10:59:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233223AbjBBPzH (ORCPT
+        with ESMTP id S233240AbjBBP7O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 10:55:07 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F67AAD0E;
-        Thu,  2 Feb 2023 07:54:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D5CE8B826EE;
-        Thu,  2 Feb 2023 15:54:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81EAAC4332A;
-        Thu,  2 Feb 2023 15:54:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675353285;
-        bh=6djvmuAChIFeJKMJvy/scNkMFP3hnJhKKtF5jokukOg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=r6SUVO4EU/hNfLuDItJpqcKznhgeYxVBZ/K3xDo5aYROrdPEufLEreqp+tJ3cx9KO
-         sj64n7NicEFNeLfV4pvxV8pG/7BBfCZQ78Mw3hHpcPnouII3C3EWZFTvjiwoKpK6kS
-         JHkiwSPykZmX8Qpeadpi5HMoz6i6hiaJbM4lrIug2C0DauZccDlCfjO4I77ZpOMgYl
-         z+kV4YNeNLhx9nhbJMun7gik9M2+hMXXV8lWRwIhAwfuTWR1JCeqM+2GV5qp96qIQP
-         23+gLx62W6skWuZzxBYD+lmyYybQ3wka9VcCKiWUitb6B6bdYn4WQEKBjr7/zFiQQt
-         8av9qE2G7ywaA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1pNbva-0001mj-Ey; Thu, 02 Feb 2023 16:55:10 +0100
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH v2 22/22] arm64: dts: qcom: sc8280xp-x13s: enable rtc
-Date:   Thu,  2 Feb 2023 16:54:48 +0100
-Message-Id: <20230202155448.6715-23-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230202155448.6715-1-johan+linaro@kernel.org>
-References: <20230202155448.6715-1-johan+linaro@kernel.org>
+        Thu, 2 Feb 2023 10:59:14 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 782637AE6A
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 07:58:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675353504; x=1706889504;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=vbVDVAAUARNDAAzJjCEGUkkigILnGy4guEaov72UCxQ=;
+  b=T3P5vyeUbJEk/yuRplxrzSsemHWTXlCU4cXyf9eR8nxNDWpCgSnIOa4E
+   GeZb5hszBd12QaH18fwC09LR38do34nvNdIoOn+OYomirNUopk2pDhB7i
+   4rX76BSkGu+ezF2r9X3b/GLSj8LAk7icgvBkaYGtCwESI7eV1NWgtt3qp
+   b/wJSznQiZ3AUhIU/t7QiIJu6uCP+4tuB29ljgHqTrFzntV6EUGFcVYTB
+   tIDZZGNba1xHfwH3U3KxrRjat0PpqfDudHKENt+90lZnC5DWF0/dGCSmy
+   ZpQM0RNVgdCpn1O8uBta9Xp5e2ai+jsMPpVq/PTPORF8hXgSwSva1DEu3
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="308129742"
+X-IronPort-AV: E=Sophos;i="5.97,267,1669104000"; 
+   d="scan'208";a="308129742"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2023 07:55:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="615333117"
+X-IronPort-AV: E=Sophos;i="5.97,267,1669104000"; 
+   d="scan'208";a="615333117"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 02 Feb 2023 07:55:37 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pNbw0-0006dQ-14;
+        Thu, 02 Feb 2023 15:55:36 +0000
+Date:   Thu, 02 Feb 2023 23:55:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:perf/urgent] BUILD SUCCESS
+ 4f64a6c9f6f11e8b7314f8e27e2c4568706009e6
+Message-ID: <63dbdced.SpQKUzVpaeZX0mLs%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Lenovo X13s firmware does not implement the UEFI time runtime
-services so the RTC in the PM8280K PMIC needs to be accessed directly.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git perf/urgent
+branch HEAD: 4f64a6c9f6f11e8b7314f8e27e2c4568706009e6  perf: Fix perf_event_pmu_context serialization
 
-To complicate things further, the RTC control and time registers are
-read-only on this platform so an offset must be stored in some other
-machine-specific non-volatile memory which an RTC driver can take into
-account when reading or updating the time.
+elapsed time: 1412m
 
-The UEFI firmware (and Windows) use a UEFI variable for this:
+configs tested: 68
+configs skipped: 2
 
-	882f8c2b-9646-435f-8de5-f208ff80c1bd-RTCInfo
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-but the offset can only be accessed via the Qualcomm UEFI Secure
-Application residing in the TEE as the firmware does not implement the
-variable runtime services either.
+gcc tested configs:
+x86_64                            allnoconfig
+arc                                 defconfig
+alpha                               defconfig
+s390                             allmodconfig
+x86_64               randconfig-a001-20230130
+s390                                defconfig
+x86_64               randconfig-a003-20230130
+x86_64               randconfig-a002-20230130
+ia64                             allmodconfig
+s390                             allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                          rhel-8.3-func
+x86_64               randconfig-a006-20230130
+x86_64               randconfig-a005-20230130
+x86_64               randconfig-a004-20230130
+i386                 randconfig-a001-20230130
+i386                 randconfig-a004-20230130
+i386                 randconfig-a003-20230130
+i386                 randconfig-a002-20230130
+i386                 randconfig-a005-20230130
+i386                 randconfig-a006-20230130
+um                             i386_defconfig
+um                           x86_64_defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+alpha                            allyesconfig
+arc                              allyesconfig
+powerpc                           allnoconfig
+sh                               allmodconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+arc                  randconfig-r043-20230129
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+arm                  randconfig-r046-20230129
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-bpf
+arm                  randconfig-r046-20230130
+arc                  randconfig-r043-20230130
+i386                                defconfig
+i386                             allyesconfig
+arm                                 defconfig
+arm64                            allyesconfig
+arm                              allyesconfig
 
-While it is possible to access this UEFI variable from Linux on the
-X13s, this requires using a fairly complex and reverse-engineered
-firmware interface. As the only benefit of doing so is to make sure that
-the UEFI (Windows) and Linux time never gets out of sync, it seems
-preferable to use the PMIC scratch registers for storing an offset
-instead. This also avoids flash wear in case of RTC drift, etc.
+clang tested configs:
+x86_64                          rhel-8.3-rust
+x86_64               randconfig-a014-20230130
+x86_64               randconfig-a012-20230130
+x86_64               randconfig-a013-20230130
+x86_64               randconfig-a011-20230130
+x86_64               randconfig-a015-20230130
+x86_64               randconfig-a016-20230130
+i386                 randconfig-a013-20230130
+i386                 randconfig-a012-20230130
+i386                 randconfig-a014-20230130
+i386                 randconfig-a011-20230130
+i386                 randconfig-a015-20230130
+i386                 randconfig-a016-20230130
+hexagon              randconfig-r041-20230129
+riscv                randconfig-r042-20230129
+riscv                randconfig-r042-20230130
+hexagon              randconfig-r045-20230130
+hexagon              randconfig-r041-20230130
+hexagon              randconfig-r045-20230129
+s390                 randconfig-r044-20230129
+s390                 randconfig-r044-20230130
 
-So instead of using the UEFI RTC offset, reserve four bytes in one of
-the PMIC SDAM scratch-register blocks to hold the RTC offset.
-
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- .../dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-index db406f7774de..6e88e0bb6871 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-@@ -683,6 +683,21 @@ &pmk8280_pon_resin {
- 	status = "okay";
- };
- 
-+&pmk8280_rtc {
-+	nvmem-cells = <&rtc_offset>;
-+	nvmem-cell-names = "offset";
-+
-+	status = "okay";
-+};
-+
-+&pmk8280_sdam_6 {
-+	status = "okay";
-+
-+	rtc_offset: rtc-offset@bc {
-+		reg = <0xbc 0x4>;
-+	};
-+};
-+
- &pmk8280_vadc {
- 	status = "okay";
- 
 -- 
-2.39.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
