@@ -2,76 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8CFE687A6C
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 11:39:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20E4B687A6F
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 11:40:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232487AbjBBKje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 05:39:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38794 "EHLO
+        id S232431AbjBBKkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 05:40:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232678AbjBBKj2 (ORCPT
+        with ESMTP id S231743AbjBBKkb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 05:39:28 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D0688F26
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 02:39:20 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id t18so1289452wro.1
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 02:39:20 -0800 (PST)
+        Thu, 2 Feb 2023 05:40:31 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C79525C0C5
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 02:40:30 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id rm7-20020a17090b3ec700b0022c05558d22so1386787pjb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 02:40:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:cc:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=E16wygEHabf7g5WwgI/WeZjDwUEJd7wtPZx3B4LLZ6Q=;
-        b=DX1bgzezZkwhczfa75PPliTCZT/jhNaclYJe9hDbK7yfKE/BbuQ/+8BoISuTUUSWmc
-         UaR5aST3E5QlSNPcchS2ENKKIws4tGPsRY1+QWmuD80CclfjSdOapU2cAG1USa1iQ4HN
-         Stx3VTwCvJ63sfghhPJ3q+SNDEWcm/ofoxiz00IdYHvVKw7L3wRzpQKPws4/WQQ13S97
-         Z+IlcEoxlAdiV/s9xqPyrKCFY27GRP4o6RcgIqLtr5/fDVjV48h5nijYk8s4rBKbRKt2
-         EFczsYyV1UIxJuAejf0PgLLfGGIUk2a8CvcROQ2aVRV8ZHKTlv13QS6LLLqhcpNkEC99
-         uxVA==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PexX/V0c+w21JwIUEKWHSc7QoYhjon5sMZqAPNZ76zo=;
+        b=DSuetR/giXwCr7xl33WxRX4Hvfsvzbp00ZCg/YSjdN59Da6JVxqgvCvj75vLHYOwOH
+         ltR2lE/nv3y8xMordBsJkMhC+SwyN0Z4Lod37n8akuTFQ6P8lxDmG4ljBUXUe9IP+sU6
+         IB38AJQ9pTHm5zxM34c1mAK1pHIn9Y40T5m+0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:cc:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=E16wygEHabf7g5WwgI/WeZjDwUEJd7wtPZx3B4LLZ6Q=;
-        b=GMl33m34obVPX8G1KgWlhJdfrZjYSY65QXqTP/PA+6SubKcXyoZBE9ZaC3VQ6L1Hhj
-         RViubh8mkJco7VKR6yg6I6zzdEtNMwwtAR937K7WmMSt4ra30wmLpwKWqVbkE9WVZSKk
-         rJyE9h2iVbTqN2HLwOL1QuCscGQ7s+9Jv4xQKxEBx13KxUTGQpKdyaycSO1WAfI+a/DJ
-         HeT3gdboX3Z64T9S8tWszTlrVA+CXE0S7djbi1Ks7Wp9/35SaFT8maPv3BRQlVpXB41b
-         VTjwI3C6WvnzQJKW1HTv+siPu/YQZYwFX5hujK5LEJ5oSNLcE9kSDvaOjSeNBSIiAg8k
-         uUdw==
-X-Gm-Message-State: AO0yUKWMVNSByXiN5RYzNkF7nflpPXWOcNCN8tVJe+M6lzwOkcewS/0v
-        8WL+cAboB05ZaxQQjZk3J9GplA==
-X-Google-Smtp-Source: AK7set++iSIEmdZMwcH5G08gFH9wtE/hZDXBIYxoWjMEBG7Kiw/IZAeL/6eb/huO7D1KeqzaYqsBhw==
-X-Received: by 2002:a5d:6b89:0:b0:2bf:b571:1f18 with SMTP id n9-20020a5d6b89000000b002bfb5711f18mr5692034wrx.61.1675334358663;
-        Thu, 02 Feb 2023 02:39:18 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id a4-20020adffb84000000b002bc7f64efa3sm19235865wrr.29.2023.02.02.02.39.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 02:39:18 -0800 (PST)
-Message-ID: <3481774e-2494-447b-a3ce-0267de296e5f@linaro.org>
-Date:   Thu, 2 Feb 2023 11:39:17 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFT PATCH 00/14] ARM/arm64: dts: qcom: correct TLMM gpio-ranges
-Content-Language: en-US
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PexX/V0c+w21JwIUEKWHSc7QoYhjon5sMZqAPNZ76zo=;
+        b=cN1a4BmAsBJSjXWBPAMDzhH3gANgla7T1C5Ye8Slc+HuTHNWcA5yhf/j23kXUBQKQZ
+         d9RxxWDrgdfBBOKH90g6B0FvUyPBO/68yvq5vTSEdIYWqjRNAALV2bY1l/TbqO7EJjIj
+         Tf+RKi9iCZaHFiRFOVeFpPeBkoSrmZfGM2V5OnKR83AkNMI1ZrOwzIMXABIXxMCjcIhQ
+         nm4da5GK4EU6HopEQXnsyQ+4G3DQ29RZtDY1/dy3ZaX3QTBOJpZThnhWBBQtqVOk/19x
+         5RLENM8T1lK0P8LUICsC5AJOMG1xB85ENgusFXTRP/Ot8wXSfX/6wbBIsIB84rCIiX7U
+         Dh/w==
+X-Gm-Message-State: AO0yUKXSyu2ZHpsGbpCdyhpICLIYF6svMkJhNm1qNJwTIEBhY98EzzXd
+        n2Q9LtEwv4nL4Aj78VGy40GJxA==
+X-Google-Smtp-Source: AK7set+sw1iMXd99AlKQYQp6TJaHlmdMupoaYMb79i2bbcIgiPzqroi3GNubMJIp+d05hWuhQI1HZw==
+X-Received: by 2002:a17:903:32c9:b0:196:2e92:e546 with SMTP id i9-20020a17090332c900b001962e92e546mr7508552plr.44.1675334430339;
+        Thu, 02 Feb 2023 02:40:30 -0800 (PST)
+Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:68a6:9bbd:a36a:4d1f])
+        by smtp.gmail.com with ESMTPSA id jk22-20020a170903331600b00194c82c2a7bsm13365706plb.224.2023.02.02.02.40.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Feb 2023 02:40:30 -0800 (PST)
+From:   Chen-Yu Tsai <wenst@chromium.org>
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Chen-Yu Tsai <wenst@chromium.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230201155105.282708-1-krzysztof.kozlowski@linaro.org>
-Cc:     Stephan Gerhold <stephan@gerhold.net>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230201155105.282708-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
+        <nfraprado@collabora.com>, soc@kernel.org
+Subject: [PATCH] arm64: dts: mediatek: mt8195: Fix vdosys* compatible strings
+Date:   Thu,  2 Feb 2023 18:40:14 +0800
+Message-Id: <20230202104014.2931517-1-wenst@chromium.org>
+X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,25 +72,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/02/2023 16:50, Krzysztof Kozlowski wrote:
-> Hi,
-> 
-> Correct the number of GPIOs in TLMM pin controller.
-> 
-> I really hope I got it right... The last number of gpio-ranges is the number of
-> GPIOs. See: Documentation/devicetree/bindings/gpio/gpio.txt
-> 
-> The examples in bindings were fixed here:
-> https://lore.kernel.org/linux-arm-msm/20230201153019.269718-1-krzysztof.kozlowski@linaro.org/T/#t
-> 
-> Not realy tested, but I do not expect troubles, unless I missed some obvious
-> stuff (like a number in pinctrl driver).
-> 
+When vdosys1 was initially added, it was incorrectly assumed to be
+compatible with vdosys0, and thus both had the same mt8195-mmsys
+compatible attached.
 
-As pointed out by Stephan, this is mostly incorrect and needs fixes.
-There will be a v2.
+This has since been corrected in commit b237efd47df7 ("dt-bindings:
+arm: mediatek: mmsys: change compatible for MT8195") and commit
+82219cfbef18 ("dt-bindings: arm: mediatek: mmsys: add vdosys1 compatible
+for MT8195"). The device tree needs to be fixed as well, otherwise
+the vdosys1 block fails to work, and causes its dependent power domain
+controller to not work either.
 
+Change the compatible string of vdosys1 to "mediatek,mt8195-vdosys1".
+While at it, also add the new "mediatek,mt8195-vdosys0" compatible to
+vdosys0.
 
-Best regards,
-Krzysztof
+Fixes: 6aa5b46d1755 ("arm64: dts: mt8195: Add vdosys and vppsys clock nodes")
+Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+---
+
+Since we are at -rc6 and Matthias already sent out pull requests, I've
+CC-ed soc@ so that this may be picked up directly on top of them. This
+should be merged for -next.
+
+Thanks
+
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+index 5ffcfd8da31d..93ba274c3f42 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+@@ -2439,7 +2439,7 @@ vencsys_core1: clock-controller@1b000000 {
+ 		};
+ 
+ 		vdosys0: syscon@1c01a000 {
+-			compatible = "mediatek,mt8195-mmsys", "syscon";
++			compatible = "mediatek,mt8195-vdosys0", "mediatek,mt8195-mmsys", "syscon";
+ 			reg = <0 0x1c01a000 0 0x1000>;
+ 			mboxes = <&gce0 0 CMDQ_THR_PRIO_4>;
+ 			#clock-cells = <1>;
+@@ -2625,7 +2625,7 @@ larb1: larb@1c019000 {
+ 		};
+ 
+ 		vdosys1: syscon@1c100000 {
+-			compatible = "mediatek,mt8195-mmsys", "syscon";
++			compatible = "mediatek,mt8195-vdosys1", "syscon";
+ 			reg = <0 0x1c100000 0 0x1000>;
+ 			#clock-cells = <1>;
+ 		};
+-- 
+2.39.1.456.gfc5497dd1b-goog
 
