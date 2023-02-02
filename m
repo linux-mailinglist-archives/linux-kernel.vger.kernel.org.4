@@ -2,183 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D7F3688896
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 21:53:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FA7B68889D
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 21:56:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232999AbjBBUxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 15:53:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49036 "EHLO
+        id S233019AbjBBU45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 15:56:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbjBBUxk (ORCPT
+        with ESMTP id S229881AbjBBU4z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 15:53:40 -0500
-Received: from mail.multiname.org (h4.multiname.org [94.130.68.253])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B6EE820C0;
-        Thu,  2 Feb 2023 12:53:35 -0800 (PST)
-Received: from raab.fritz.box (unknown [IPv6:2a02:1748:dd5c:fec0:221:9bff:fe61:eebd])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by mail.multiname.org (Postfix) with ESMTPSA id 4P79x82c1fzPLtZ3;
-        Thu,  2 Feb 2023 21:53:32 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ccbib.org; s=20220806;
-        t=1675371212;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Fcfs/jm/jBXmkn9R9xK8ZL6qp9KpPkXu/dbzTp+JAMI=;
-        b=oE0QGnR5kQ4uzOThwvheH0wWypMZxZdaiyBRZ6bG1w8Sl7zvPI9Ox2qHtilYtZRx8veMaM
-        YuvW9cAtd2dArmT9mATTIXK+rxlS0/lXhzNVDqqrNMMcuABxgRzt2KISjcly2Y8/EL5gXX
-        ff8H3/ZOlxVe2aUiR8pTeKyrzH7nHsIK1mqxk20bRz3x3Ke6e1Z34iEPV7qPfW+/JG56wv
-        Uz/vPm1h0lqPZ9XfFeTjdF1H9/vZeM5GuSN2EL6EGh38Ynr1BDtRaXKAOd4f3yd2IjzI/T
-        erRtfKp3l7kXGwdBnHdosmv/slkUN2I/ekJlVoNb4migbV1wzM5xpBwyEEMTrcfVO2UbR8
-        3ArEAStOSSTCgHS9hUq9mhYBSKM3EWtFczR9J/OVy20YfsJCHGOnqnSCAChICGrIPgi6F3
-        yfd70CYlj94hEfCd1Tk96nIuo+/hN1/QLuzh3PWzCmaVt1zENl36y/vScHZfh94UERHaom
-        Mmd7gSm5ot9UY8f3RhPCBSTnBSLUZ5fZJZyYLDCU5DuyllpS/Tpe3oWXC2ZWcOsf0zCUVB
-        Hc6AQVJ8riMej8Jl8jvsSRwmdDNQFazm2AQ953DKoz2y2Xfrdj4K+D4SOIxuv2EtK4YuJW
-        yJPlAHi1O8h1hQojHFxCAFVG7Zk5KEDBJFj7arRuNOt1bNYXgjZcc=
-Message-ID: <9219a1dd4371a106f9eda9c90ef96066f9ff6446.camel@ccbib.org>
-Subject: Re: [PATCH 1/2] iio: dht11: forked a driver version that polls
- sensor's signal from GPIO
-From:   Harald Geyer <harald@ccbib.org>
-To:     pelzi@flying-snail.de
-Cc:     jic23@kernel.org, lars@metafoo.de, linux-iio@vger.kernel.org,
+        Thu, 2 Feb 2023 15:56:55 -0500
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF27820C8
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 12:56:54 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id E507232005CA;
+        Thu,  2 Feb 2023 15:56:53 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 02 Feb 2023 15:56:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1675371413; x=1675457813; bh=2exx0+SI5e
+        rrgXygQAlDXpkSzhbDxEscB9KluUx0KHA=; b=Qzjcpe7vT26CEt2Q3ikvTvcnY8
+        ZRoXxBErphhAPkty8iZaknH1I0xM6SNKI+gV3aOAfJ/eDa6k+ViQF7Gi+aHLmV+l
+        DeVWo7S83dmxfX002OP3gio4RVq2dnavM5JvnajTAYWpfQHrRR3cmz12VBGS5ZdE
+        JPPycIKVJUtDpBpNln/f/fOailtpR4OmQg2JkPEspeLN6Ff+D4LudKyZl6UfXWCr
+        L/dxmDWw44kbhb6N9QBQVItuIR2mP8vR51UbIHSQbksO6k87w93eUhEwkIQ5i4pL
+        MFGU6R9cdjGC7TtrpH9a1Ls/5oMNJC3HoWlnGZ9Qukr/W5FSvrnKf9JgPTnA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1675371413; x=1675457813; bh=2exx0+SI5errg
+        XygQAlDXpkSzhbDxEscB9KluUx0KHA=; b=rxH7SgLmuHljP748Aoon8zEMo9GOS
+        RxvyTUWRTrtAJdChNcpVcrhq+LuuDfkAEVhMrBrjwI1nBghLKJV/gM+XU1vzhI/U
+        1chimswCfcEpEIwu+H6sLbysCiftBlT2fTO5HuGOsjr6fXkFunPzRgmx20pNx2m0
+        NkuPK0tOzSCZP8P5b9I7E7kh8Bo0+oPapfIOTnxjxRudD65mN7eoWrL49BBw07GU
+        KQvqDx0Oz3DyVvIxLleNqjygSMOtz1cmWwlQnMj3+4m/7THrXnRQp++u7BXva8xI
+        vOfRABI3ksZ5bYjijvp+8pDaKtyAZpi7jMDHQBLoQOufCkFf8pqP53iBQ==
+X-ME-Sender: <xms:lSPcYzxss-DqJRL0H6DU8qj4F5cSNKnjxlpiN5Vv1OKSwLvnxcgyRQ>
+    <xme:lSPcY7QZ6fYJMVPz7nzIDtyijF-NDk8_c8-uYQbwdMhjCJ-YywQxYA8FyagV8fBAE
+    mN8B1h9kCj0v1DivN0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudefkedgudegtdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepgfffvedutdeltdfhudeitddvvddtleefkefhgefgveevlefgiedtieelfeef
+    gfeinecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:lSPcY9UBqE-qof7f81cQaTuuYZUj6c367Goz7New3hoZh_fXWi_iwg>
+    <xmx:lSPcY9iRbYdNxv34G_0pSIGjhnXdNLrpM0G6yd39ciH_6Ff4TN5EKw>
+    <xmx:lSPcY1DtEhqrBvhCPosTRe_2mF1NOajaDJ1auChPKzgS33m3jOXSBw>
+    <xmx:lSPcYy4ARNoVf0ov__xVgNKZ2AncfyuWzydAzQIdne-8qX7yH8hjeg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 4472BB60450; Thu,  2 Feb 2023 15:56:53 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-107-g82c3c54364-fm-20230131.002-g82c3c543
+Mime-Version: 1.0
+Message-Id: <98b46fed-4b4d-46f0-8975-d07df36534be@app.fastmail.com>
+Date:   Thu, 02 Feb 2023 21:53:40 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc:     soc@kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Date:   Thu, 02 Feb 2023 21:53:31 +0100
-In-Reply-To: <d03ec6a7-62c0-0a82-a0f0-d2030ed5723d@feldner-bv.de>
-References: <Y9groXq2oI6lqFea@debian-qemu.internal.flying-snail.de>
-         <ee14f0c8bfbae887d21f827baece8b6e@ccbib.org>
-         <d03ec6a7-62c0-0a82-a0f0-d2030ed5723d@feldner-bv.de>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: [GIT PULL] ARM: SoC fixes for 6.2, part 3
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Mittwoch, dem 01.02.2023 um 13:51 +0100 schrieb
-pelzi@flying-snail.de:
-> I understand that the first priority is in finding out if there is 
-> actually a proper
-> use case for a polling implementation at all. Only then, it might be 
-> worth to extend
-> the existing dht11 module by an polling alternative.
-> 
-> Am 31.01.23 um 11:18 schrieb harald@ccbib.org:
-> > On 2023-01-30 21:42, Andreas Feldner wrote:
-> > > On a BananaPi M2 Zero, the existing, IRQ based dht11 driver is
-> > > not 
-> > > working,
-> > > but missing most IRQs.
-> > 
-> > That's quite surprising as the driver works well on many similar
-> > systems
-> > based on Allwinner SoCs. I suspect the problem is with your setup.
-> > Maybe
-> > some other (polling?) driver is slowing everything down.
-> 
-> Can you give me a hint how to look for signs of such a situation?
+The following changes since commit 2241ab53cbb5cdb08a6b2d4688feb13971058=
+f65:
 
-The obvious things to try:
+  Linux 6.2-rc5 (2023-01-21 16:27:01 -0800)
 
-Enabling debug output for the dht11 driver, to look into which
-interrupts are actually missing: Is it a "block" of interrupts?
-Are they randomly distributed? Are they somewhat equally spaced?
-This should give some hints about the nature of the problem.
+are available in the Git repository at:
 
-Try to reproduce the problem on a minimal system:
-Unload as many modules as possible.
-Maybe just use a system on a ram disk.
-As little user space programms running as possbile.
-You might find OpenWRT helpful.
+  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-f=
+ixes-6.2-3
 
-Try other kernel versions. (Unlikely, but it might be some
-completely unrelated regression.)
+for you to fetch changes up to 5efb648042a1c3d1734e69ebbae2fe9477f4fc4d:
 
-Implement debugging output in your polling driver to investigate,
-why *that* performs so bad. It probably is the same issue.
+  ARM: dts: wpcm450: Add nuvoton,shm =3D <&shm> to FIU node (2023-02-01 =
+17:10:45 +0100)
 
-If this doesn't lead anywhere, then it is a tough problem, so
-let's for now assume, you find something.
+----------------------------------------------------------------
+ARM: SoC fixes for 6.2, part 3
 
+The majority of bugfixes is once more for the NXP i.MX platform,
+addressing issue with i.MX8M (UART, watchdog and ethernet) as well as
+imx8dxl power button and the USB modem on an imx7 board. The reason that
+i.MX always shows up here is obviously not that they are more buggy than
+the others, but they have the most boards and are good about getting
+fixes in quickly.
 
-> BTW I took some pride in building the board's system image from 
-> reproduceable sources: Debian kernel package 
-> linux-image-5.10.0-20-armmp-lpae, and the device tree from ﻿﻿﻿﻿
-> 
-> arch/arm/boot/dts/sun8i-h2-plus-bananapi-m2-zero.dts
-> 
-> So the setup should be reproducible, unlike other approaches
-> advertised 
-> in the BananaPi forum...
-> 
-> What I did is
-> 
-> - check /proc/interrupts. The highest volume interrupts there are two
-> instances of sunxi-mmc, one generating about 50 interrupts per
-> second, 
-> the other about 25. Those (and most) interrupts are GICv2, but the
-> GPIO 
-> releated are sunxi-pio-{level,edge}
-> 
-> - check dmesg: literally no messages apart from dht11_poll itself
-> 
-> - check top: sugov:0 is reported to eat 10% of one cpu, but I
-> understand 
-> that's expected and an artifact anyway. Changing the scaling governor
-> to 
-> "performance" eliminates this, but does not help in making the irq 
-> driven dht11 work.
-> 
-> - check vmstat: ir is between 50 and 200 apart from short spikes,
-> those 
-> probably related to a certain cron job
-> 
-> - check sysstat cpu, mem, threads, mutex: each of the 4 cores has a
-> low 
-> performance (a factor of 15 lower than a Raspberrypi 3), but
-> constant, 
-> low stddev, etc. No surprises running e.g. 8 threads instead of 4.
-> 
-> So, apart from the fact that it is missing about 3/4 of the IRQs the 
-> dht11 driver should get, I have no indication that something might be
-> wrong with the board or its setup. Where else should I look?
+The other DT fixes are for the Nuvoton wpcm450 flash controller and
+the i2c mux on an ASpeed board.
 
-There are many possible issues, that are difficult to investigate
-directly. E.g. cache poisoning, some code disabling interrupts just
-a bit to long etc. Thus the use of minimal systems.
+Lastly, there are updates to the MAINTAINERS entries for Mediatek,
+AMD/Seattle and NXP SoCs, as well as a lone code fix for error
+handling in the allwinner "rsb" bus driver.
 
-> 
-> > > Following the hints in Harald Geyer's comments I
-> > > tried to implement a version of the driver that is polling the
-> > > GPIO
-> > > sensor in a busy loop, not using IRQ altogether.
-> > 
-> > IIRC one readout takes about 80 milliseconds. That's a very long
-> > time for
-> > a busy loop. I doubt this is acceptable for inclusion in the
-> > kernel. Of
-> > course also Jonathan's comments apply.
-> 
-> Seems to be a bit less, just in case that matters. Given the timing 
-> chart I'd expect
-> 
-> on average: 200µs + 40 * 100µs = 4,2ms
-> 
-> worst case (device trying to send all one-bits): 200µs + 40 * 120µs =
-> 5,0ms
-> 
+----------------------------------------------------------------
+Ahmad Fatoum (1):
+      MAINTAINERS: match freescale ARM64 DT directory in i.MX entry
 
-Ack.
+Arnd Bergmann (2):
+      Merge tag 'sunxi-fixes-for-6.2-1' of https://git.kernel.org/pub/sc=
+m/linux/kernel/git/sunxi/linux into arm/fixes
+      Merge tag 'imx-fixes-6.2-2' of git://git.kernel.org/pub/scm/linux/=
+kernel/git/shawnguo/linux into arm/fixes
 
-Good luck,
-Harald
+Eddie James (1):
+      ARM: dts: aspeed: Fix pca9849 compatible
 
+Fabio Estevam (2):
+      arm64: dts: imx8m-venice: Remove incorrect 'uart-has-rtscts'
+      ARM: dts: imx7d-smegw01: Fix USB host over-current polarity
 
+Frank Li (1):
+      arm64: dts: freescale: imx8dxl: fix sc_pwrkey's property name linu=
+x,keycode
+
+Jonathan Neusch=C3=A4fer (1):
+      ARM: dts: wpcm450: Add nuvoton,shm =3D <&shm> to FIU node
+
+Krzysztof Kozlowski (1):
+      MAINTAINERS: amd: drop inactive Brijesh Singh
+
+Marek Vasut (1):
+      arm64: dts: imx8mm: Reinstate GPIO watchdog always-running propert=
+y on eDM SBC
+
+Matthias Brugger (1):
+      MAINTAINERS: Update entry for MediaTek SoC support
+
+Philippe Schenker (1):
+      arm64: dts: imx8mm-verdin: Do not power down eth-phy
+
+Pierluigi Passaro (1):
+      arm64: dts: imx8mm: Fix pad control for UART1_DTE_RX
+
+Yuan Can (1):
+      bus: sunxi-rsb: Fix error handling in sunxi_rsb_init()
+
+ MAINTAINERS                                                   | 11 ++++=
+++++---
+ arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts                  |  2 +-
+ arch/arm/boot/dts/imx7d-smegw01.dts                           |  3 ++-
+ arch/arm/boot/dts/nuvoton-wpcm450.dtsi                        |  1 +
+ arch/arm64/boot/dts/freescale/imx8dxl.dtsi                    |  2 +-
+ arch/arm64/boot/dts/freescale/imx8mm-data-modul-edm-sbc.dts   |  1 +
+ arch/arm64/boot/dts/freescale/imx8mm-pinfunc.h                |  2 +-
+ .../boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs232-rts.dtso |  1 -
+ .../boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs232-rts.dtso |  1 -
+ arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx.dtsi       |  1 -
+ arch/arm64/boot/dts/freescale/imx8mm-venice-gw7901.dts        |  3 ---
+ arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dts        |  3 ---
+ arch/arm64/boot/dts/freescale/imx8mm-venice-gw7903.dts        |  1 -
+ arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi              |  1 +
+ arch/arm64/boot/dts/freescale/imx8mn-venice-gw7902.dts        |  1 -
+ arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts        |  1 -
+ drivers/bus/sunxi-rsb.c                                       |  8 ++++=
++++-
+ 17 files changed, 23 insertions(+), 20 deletions(-)
