@@ -2,107 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 431646882C7
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 16:37:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB7D36882CA
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 16:38:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232841AbjBBPhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 10:37:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59126 "EHLO
+        id S232840AbjBBPhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 10:37:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233241AbjBBPgt (ORCPT
+        with ESMTP id S233401AbjBBPhJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 10:36:49 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F01866A716
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 07:36:18 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id t7so2076016wrp.5
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 07:36:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=B4SCdiQNUp1vdTPbVGC7rojAZMjL5CcEHONPaTvlx+M=;
-        b=DKxsY5Mm1hJbLh6dFB81BN4TqdUNtmMXFkkTR+0tv2wgV4IELONO+pKd7FpDGWevVO
-         Tbuxyy+qHSloHeD7knsITw/rNTOZX+ZJHDPJV4l551ZJzBU3QyJwonMbLY+VAOIzmYmH
-         AtnV0RBOo9J19dKT1XgO5W+NsSO7D3X9cxH0ojKawH6fu/N8Gz/VZ+zMu/NX+/365SA5
-         3zdGYODvKztZ+LmGRldOB5afOyA54LP3RLtAhOJEP5wmAf/JwT/J8GrE8UDEQHo4jcGJ
-         1x9bbqGGilR4mSGHRx5w3vB5c0vOcY1y1hh3XahvKZdV2NREln4OoNVbQT4Byo3uJdeo
-         dLTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=B4SCdiQNUp1vdTPbVGC7rojAZMjL5CcEHONPaTvlx+M=;
-        b=ID3RhymWQ+TwGWKNdLDnUIbF8SPRTbrPgzqmd7KPTccD1GclchRL3WDiCKorcLEvzv
-         SChYFIuTR5DJFWOFKgsEU9Pw3b57bd0luf3bVaW7p0V1Y8bQtdkdJKcb6Va/+a4z7B5N
-         Oz70WYQeFQzrNxy/QysM4YOIMO8YbdInCp++iLiwQ13199Xg+ZX+jJRS4sMlx8RUZ22Y
-         leaF6gdmV/9Gv0BEdwcamPbr9E9j37Pj8bucLRoRzZJ1SJmmrbOnZzNIXTlz3cf4gzFR
-         H1c+OhwaVKDKGwz9bSZ3zyN7M1AuqvoSxPKH0jSXReb715ecS7P85VMAA2R5kXQmLzV+
-         lc6Q==
-X-Gm-Message-State: AO0yUKUcIMdRtpM3QVRiVmG2NyjFgzxwQcIFsUyGhbJGrbxtSJKALhDa
-        RRPvwcxr12MA7+vrGPAj7j9X8Q==
-X-Google-Smtp-Source: AK7set+dXX4n5wzK3ZiMPIbn7fONMSV5qv1A9RaQSJcv8zd4XajPSghDl3Ux2QntyamQxdx+oyyBYg==
-X-Received: by 2002:a5d:4d47:0:b0:2bf:b4d1:af03 with SMTP id a7-20020a5d4d47000000b002bfb4d1af03mr5713861wru.30.1675352117264;
-        Thu, 02 Feb 2023 07:35:17 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id o6-20020adfe806000000b002bdf8dd6a8bsm19746658wrm.80.2023.02.02.07.35.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 07:35:16 -0800 (PST)
-Message-ID: <3a346606-576b-ab89-78f5-5bbaca729090@linaro.org>
-Date:   Thu, 2 Feb 2023 16:35:14 +0100
+        Thu, 2 Feb 2023 10:37:09 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22BB980025;
+        Thu,  2 Feb 2023 07:36:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6340CB82686;
+        Thu,  2 Feb 2023 15:35:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EC41C433EF;
+        Thu,  2 Feb 2023 15:35:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1675352143;
+        bh=CUkACK2HdhrbT9JJSVOy6ZjSUjRIl9SuwgXFjsN3DTQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EFwcsxv21LoqcrgA6sf/+ExloW3CW4aRCPO6D6aJ1xMra9JYEoeRYwa7+ewVHKXxY
+         QChxREN1BgXVrBXYIWdxUY1QDOn6WrJO+uwOR2HRI7j60NbqMpvJ9PCxq1aLdbIUPL
+         rB75Z+WzqxpbvFFksuoTNl28vRJSujT7ECZFclGU=
+Date:   Thu, 2 Feb 2023 16:35:40 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH] can: etas_es58x: do not send disable channel command if
+ device is unplugged
+Message-ID: <Y9vYTPURT4hDSH4n@kroah.com>
+References: <20230128133815.1796221-1-mailhol.vincent@wanadoo.fr>
+ <20230202151622.sotqfwmgwwtgv4dl@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 4/6] dt-bindings: mailbox: qcom: add compatible for the
- IPQ5332 SoC
-Content-Language: en-US
-To:     Kathiravan T <quic_kathirav@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, jassisinghbrar@gmail.com,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230202145208.2328032-1-quic_kathirav@quicinc.com>
- <20230202145208.2328032-5-quic_kathirav@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230202145208.2328032-5-quic_kathirav@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230202151622.sotqfwmgwwtgv4dl@pengutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/02/2023 15:52, Kathiravan T wrote:
-> Add the mailbox compatible for the IPQ5332 SoC.
+On Thu, Feb 02, 2023 at 04:16:22PM +0100, Marc Kleine-Budde wrote:
+> On 28.01.2023 22:38:15, Vincent Mailhol wrote:
+> > When turning the network interface down, es58x_stop() is called and
+> > will send a command to the ES58x device to disable the channel
+> > c.f. es58x_ops::disable_channel().
+> > 
+> > However, if the device gets unplugged while the network interface is
+> > still up, es58x_ops::disable_channel() will obviously fail to send the
+> > URB command and the driver emits below error message:
+> > 
+> >   es58x_submit_urb: USB send urb failure: -ENODEV
+> > 
+> > Check the usb device state before sending the disable channel command
+> > in order to silence above error message.
+> > 
+> > Update the documentation of es58x_stop() accordingly.
+> > 
+> > The check being added in es58x_stop() is:
+> > 
+> >   	if (es58x_dev->udev->state >= USB_STATE_UNAUTHENTICATED)
+> > 
+> > This is just the negation of the check done in usb_submit_urb()[1].
+> > 
+> > [1] usb_submit_urb(), verify usb device's state.
+> > Link: https://elixir.bootlin.com/linux/v6.1/source/drivers/usb/core/urb.c#L384
+> > 
+> > Fixes: 8537257874e9 ("can: etas_es58x: add core support for ETAS ES58X CAN USB interfaces")
+> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> > ---
+> > As far as I know, there doesn't seem to be an helper function to check
+> > udev->state values. If anyone is aware of such helper function, let me
+> > know..
 > 
-> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
-> ---
->  .../devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml     | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml b/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml
-> index 943f9472ae10..8d8cd1bbe67e 100644
-> --- a/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml
-> +++ b/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml
-> @@ -18,6 +18,7 @@ properties:
->      oneOf:
+> The constant USB_STATE_UNAUTHENTICATED is not used very often in the
+> kernel. Maybe Greg can point out what is best to do here.
 
-- items:
-    - enum:
-        - qcom,ipq5332-apcs-apps-global
-    - const: qcom,ipq6018-apcs-apps-global
+Don't do anything in the driver here, except maybe turn off that useless
+"error message" in the urb submission function?  A USB driver shouldn't
+be poking around in the state of the device at all, as it's about to go
+away if it's been physically removed.
 
-and drop the next patch
+The urb submission will fail if the device is removed, handle the error
+and move on, that's a totally normal situation as you say it happens a
+lot :)
 
+Don't spam error logs for common things please.
 
-Best regards,
-Krzysztof
+thanks,
 
+greg k-h
