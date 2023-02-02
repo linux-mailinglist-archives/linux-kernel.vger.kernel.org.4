@@ -2,124 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9621687F0C
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 14:47:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15654687F0D
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 14:47:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231932AbjBBNq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 08:46:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42872 "EHLO
+        id S231678AbjBBNrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 08:47:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbjBBNq4 (ORCPT
+        with ESMTP id S229801AbjBBNrA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 08:46:56 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2050.outbound.protection.outlook.com [40.107.223.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A04AA8494C;
-        Thu,  2 Feb 2023 05:46:51 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=D99qPRN4LI7ih64TjqF3mokzC2SizWG4jXgQgh1GsuJetWu+F3amPCBgENmUWy0QO/WXCaKF4c8jXJQDljREy/7FlK408Z1uN9CUdN21B+s+m/wQsvGclwJAS8+fqkhAO2FnVLjvvt1gvG2vBErE7ihQhcalFQGIoN70Vg1X0MvMpIyoB25Pv/KZO45vXJwu3pdMeK0ssNcfn20DrNQuXymO2F3xMQJ8G47nSiSqrXYVPiv71/MB1oeDEs2DRgIIbXQ7RWaFLpDw5RalECx32bg0HvtBfCJBsRXXQ6J2bUbDABgejB5t5QlbWgASgDWxxAkyyPOR3CFUzIsvqMUg9w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1Gb70/0OCBm65vg5e1eACxl2NwtYBe6Om7HgQKGz25s=;
- b=WKm7Ll7AgHJ4rIvbeeM1ydkdwMfDf20EMhUU0Xq5019oLFuZ1T26eqmoSOFB4Hor6x1Bcm5Vnu4s8FsIXYCSUk9UsxmHbl2X/qDYFEmxt1jKhjWaG+dgmfg7zJVDTHIFuvEZHLB9fzutEhRqh43xx9Ce7wCxm1bm0Se2/cuRESI3ckjzS1R6gmTLxEEbwSzDogD5LS5c5sBM87BaPur9j+e2N9Kni9Jc817VJdEyAPNsLv2lI3c012rNo2+5b9gQK2WR5tmaNCtiZJacJcg05aVZwUYhCOt4e+qY6t8NxrXjidsYTPQYvAv8VF29ZK0PQ11nxdQ8QShAix51ha8Dvw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=microchip.com smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1Gb70/0OCBm65vg5e1eACxl2NwtYBe6Om7HgQKGz25s=;
- b=rttLkfMIexW5Dw+tnbKA75FsK+/Bj6XNnDlVx5xfYxTaiQ/XVvs8vG5JGxyWk6yirutod5Qe0Sd4qjWMHUig+3+8EBDY8tKcXKcZttbGLSIFo4SNkVDoaYpLzXvmX5gKhi19GUqSO1L7am262qJ+utjNu5sIFnZQpFwkf2CBQ/o=
-Received: from BN9PR03CA0636.namprd03.prod.outlook.com (2603:10b6:408:13b::11)
- by BY5PR12MB4935.namprd12.prod.outlook.com (2603:10b6:a03:1d9::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.27; Thu, 2 Feb
- 2023 13:46:49 +0000
-Received: from BN8NAM11FT038.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:13b:cafe::be) by BN9PR03CA0636.outlook.office365.com
- (2603:10b6:408:13b::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.27 via Frontend
- Transport; Thu, 2 Feb 2023 13:46:48 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT038.mail.protection.outlook.com (10.13.176.246) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6064.28 via Frontend Transport; Thu, 2 Feb 2023 13:46:48 +0000
-Received: from [10.254.241.50] (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 2 Feb
- 2023 07:46:44 -0600
-Message-ID: <e426613f-b7ac-fd09-2476-ee4a991ffbf3@amd.com>
-Date:   Thu, 2 Feb 2023 14:46:41 +0100
+        Thu, 2 Feb 2023 08:47:00 -0500
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A7258CA8D;
+        Thu,  2 Feb 2023 05:46:59 -0800 (PST)
+Received: by mail-qt1-x834.google.com with SMTP id s4so1809567qtx.6;
+        Thu, 02 Feb 2023 05:46:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Mo+SEOezsbE8/zRzmM/AGT3mfXlrDoWt6YuGQwoJR3M=;
+        b=XqKkdJHlHGLfyg9SnNj2JFbMHu7vrI/I49ind7XZA4hfOY0CqirSgDjEo5czcAIOB/
+         zU5XC0P/VJzc4+8Dmywg8DaLgoz0tyjtOSaaP8crOb7gLikuCS6/0kquLC4ITMA9wEV/
+         PU5Nxkb2U/Vq1qcWWhyFtJ0sa8wvxqz8qEeT08gMXgT6C1XNprb/1XabNdPUKb09P+2+
+         RcTch8gpCsc2W8DYb4OrdX6EGxDDD5v94CU7PuRtI/vtB1lYLRsQEVmIUGaqzM13YjK3
+         agJgpcqbF+sUt9TjR8jWJ1JoRZQEamsoNtJXNFSjrS4hJ0ViMf1aqM3Y8TFkJlkWa2c+
+         iUxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Mo+SEOezsbE8/zRzmM/AGT3mfXlrDoWt6YuGQwoJR3M=;
+        b=MVpbUcnaZBKTCyy0KusSEZalzJS4AYi6UHZ1qOWRFUumd3EN06kHpwf/xM3bX7cs3Q
+         K4RgYCiv8ZGnqx3kEQ8IWziZ1LwtRW7kf3VkQZZNkxk300rwUm/SnExVaVzIoCj976e+
+         HSWUY05y66ct59Bl06jffIrCy+sWhEI6bm8DeMqUTeiidY9IhBPffMrP5VKlhkm3EsBz
+         dPkK7bAO7eVXPs67TtysPO1TOXsHBhzxG4p4PBk4tulw7uSU9KmuLEom8dJF/3SAmDnc
+         OU+t6gH6yhPEZw251dHinuU29OyCS++nycpKUJTwDCowZdA8m5wj1gtFaGHWhb8AsL0Q
+         PT8w==
+X-Gm-Message-State: AO0yUKWFsghT0yokWPZhjiamYRw3bsP+mPUJV8uEHcZIE+CY8iN3Dd8z
+        kHi7/J3T3Yyt1bBpcMOz+UlC4tHcX9w=
+X-Google-Smtp-Source: AK7set8bCDl1Lc9j2OYYsK0ZMgOMt4ECR64zRzNZqXOvN9enP6yDY70UN6A3NP9uXen54Cn1ciwiUw==
+X-Received: by 2002:ac8:5990:0:b0:3b8:ea9b:cbc6 with SMTP id e16-20020ac85990000000b003b8ea9bcbc6mr11562756qte.56.1675345618354;
+        Thu, 02 Feb 2023 05:46:58 -0800 (PST)
+Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
+        by smtp.gmail.com with ESMTPSA id b6-20020a37b206000000b00718e853f83csm12521424qkf.106.2023.02.02.05.46.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Feb 2023 05:46:57 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 1567F27C0054;
+        Thu,  2 Feb 2023 08:46:56 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Thu, 02 Feb 2023 08:46:57 -0500
+X-ME-Sender: <xms:0L7bY_0HR80RaC1z1-fABJoCy4sgCGlAzffuD55QaJdkBSb7QJRszQ>
+    <xme:0L7bY-HQnUPPPxYiWHQuJ5ObT7KrAKoTQQm9ViIk4xaplDBSD8YhcntCGull_8Ue_
+    qKd5PDkWey9-e2a8Q>
+X-ME-Received: <xmr:0L7bY_5tqDiibT87ZyeQhyBliKv0QwQglxQFyLeTsxwdNrrvi11VTYRO5gmXHdOMlpUTjlzDXKBinHUkwzR1dWT8eUo_-vTvX-0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudefkedgheegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
+    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
+    htthgvrhhnpeehudfgudffffetuedtvdehueevledvhfelleeivedtgeeuhfegueeviedu
+    ffeivdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
+    gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
+    igmhgvrdhnrghmvg
+X-ME-Proxy: <xmx:0L7bY011lGHLmkv8OdiLSeyDTA3QHDUgVPYdNz0W818TvLJ0dfQdZA>
+    <xmx:0L7bYyHk2BKxc2_o21UFdeZpJZe0ahA4AEfDd01jMmNhSyCNAO3JEQ>
+    <xmx:0L7bY19koVAFAEzxhm2BQWt3DQq6IgbKJGEbizV4NLBGVZsRCBaXvw>
+    <xmx:0L7bY6_ANMp8HOSwvcHxTkDfdi9Km5A8Hg3Jt7HWQOQLVaslvG_Opg>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 2 Feb 2023 08:46:55 -0500 (EST)
+Date:   Thu, 2 Feb 2023 05:46:53 -0800
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
+Subject: Re: [RFC 2/5] rust: sync: Arc: Introduces ArcInner::count()
+Message-ID: <Y9u+zbyD8xvphNzb@Boquns-Mac-mini.local>
+References: <20230201232244.212908-1-boqun.feng@gmail.com>
+ <20230201232244.212908-3-boqun.feng@gmail.com>
+ <Y9t+3u+2UcAFQc+r@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] net: macb: Perform zynqmp dynamic configuration only for
- SGMII interface
-Content-Language: en-US
-To:     Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>,
-        <nicolas.ferre@microchip.com>, <claudiu.beznea@microchip.com>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <andrew@lunn.ch>
-CC:     <git@amd.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1675340779-27499-1-git-send-email-radhey.shyam.pandey@amd.com>
-From:   Michal Simek <michal.simek@amd.com>
-In-Reply-To: <1675340779-27499-1-git-send-email-radhey.shyam.pandey@amd.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT038:EE_|BY5PR12MB4935:EE_
-X-MS-Office365-Filtering-Correlation-Id: edd770b7-4294-4036-1721-08db0523ee70
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: SAzcVxVr++uM/feVnju77K5q0IfJva8rUK8RCMp798Ipb0Vlm/RLbcI5B/gnae55G6SQ+eYgc0muVJ6Rhoo9tznQvKQ78vaufnOgTsqbz6LBYTUKKt+AAIkUdnFY1Gfs9rrVwncFWTqyM/bfKTIitAhtFzztIMUh0onwRWO/SyZstypnmGXE+yMXCjmlYcdTwiEm4nWj9qfAUg9axg1XuVgWeKLl1bW91vuBOV8gEH/ilrPyMWdKrb2XJA68am39ldxMRowru4+HP2iamgDQ/+P/MA/VzsDypy49FBv5QyoE7SWPG8Bhv8x+U+ynyqR9k2TJPFY9rnZO5Y8n562jsu1IW6Q8g3CrtyOnyt/5eWOxbW+eK98aC3lFu6Xbzr2XNq/vKoWpVeic6tE68ULErIjPp61LlD3v8+kNbnllOeN7Asr2hT7eo5nBYgFdTK43fhE9HL/6H00dWYw2dU79cx6lsDj9wybYW8bcB2ItF+ZV4FgLpTHlBbO1Fc0U/no8Ry49EIJw8ITSSsFfFJTrLuvKbh9QboL8F7YpkfhfuDgwIURzK8xHkfoZoUbhbRyV4pMGep+QJzPTbjiS/lV6OOPyAGHq0l10yeIMFW64Vq9UGKDekPe0Bqg+ccrH5mWhLhoyiDyZXPEft+TmSjDF/jDho8td/gg8DkWZtCFf13w1YcPNQ7KCDA6QtatL7IciF66C3M6XciRW0pgcxYmR2A8zj8s2wSczIFUwtaqZ6nkfjJzLGAflI1L1PtGVjhB/8XILlGiuJvayGs/MWwZI8w==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(136003)(396003)(346002)(39860400002)(376002)(451199018)(46966006)(40470700004)(36840700001)(16526019)(47076005)(186003)(426003)(26005)(36860700001)(110136005)(356005)(2906002)(82310400005)(478600001)(2616005)(86362001)(44832011)(54906003)(6666004)(16576012)(5660300002)(53546011)(8936002)(31686004)(316002)(81166007)(8676002)(31696002)(82740400003)(4326008)(36756003)(40480700001)(40460700003)(70586007)(70206006)(4744005)(336012)(41300700001)(36900700001)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Feb 2023 13:46:48.4906
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: edd770b7-4294-4036-1721-08db0523ee70
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT038.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4935
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9t+3u+2UcAFQc+r@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2/2/23 13:26, Radhey Shyam Pandey wrote:
-> In zynqmp platforms where firmware supports dynamic SGMII configuration
-> but has other non-SGMII ethernet devices, it fails them with no packets
-> received at the RX interface.
+On Thu, Feb 02, 2023 at 10:14:06AM +0100, Peter Zijlstra wrote:
+> On Wed, Feb 01, 2023 at 03:22:41PM -0800, Boqun Feng wrote:
+> > This allows reading the current count of a refcount in an `ArcInner`.
+> > 
+> > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> > ---
+> >  rust/helpers.c          | 6 ++++++
+> >  rust/kernel/sync/arc.rs | 9 +++++++++
+> >  2 files changed, 15 insertions(+)
+> > 
+> > diff --git a/rust/helpers.c b/rust/helpers.c
+> > index 09a4d93f9d62..afc5f1a39fef 100644
+> > --- a/rust/helpers.c
+> > +++ b/rust/helpers.c
+> > @@ -46,6 +46,12 @@ bool rust_helper_refcount_dec_and_test(refcount_t *r)
+> >  }
+> >  EXPORT_SYMBOL_GPL(rust_helper_refcount_dec_and_test);
+> >  
+> > +unsigned int rust_helper_refcount_read(refcount_t *r)
+> > +{
+> > +	return refcount_read(r);
+> > +}
+> > +EXPORT_SYMBOL_GPL(rust_helper_refcount_read);
+> > +
+> >  /*
+> >   * We use `bindgen`'s `--size_t-is-usize` option to bind the C `size_t` type
+> >   * as the Rust `usize` type, so we can use it in contexts where Rust
+> > diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
+> > index fc680a4a795c..fbfceaa3096e 100644
+> > --- a/rust/kernel/sync/arc.rs
+> > +++ b/rust/kernel/sync/arc.rs
+> > @@ -127,6 +127,15 @@ struct ArcInner<T: ?Sized> {
+> >      data: T,
+> >  }
+> >  
+> > +impl<T: ?Sized> ArcInner<T> {
+> > +    /// Returns the current reference count of [`ArcInner`].
+> > +    fn count(&self) -> u32 {
+> > +        // SAFETY: `self.refcount.get()` is always a valid pointer, and `refcount_read()` is a
+> > +        // normal atomic read (i.e. no data race) only requiring on the address is valid.
+> > +        unsafe { bindings::refcount_read(self.refcount.get()) }
+> > +    }
+> > +}
 > 
-> To fix this behaviour perform SGMII dynamic configuration only
-> for the SGMII phy interface.
+> This is completely unsafe vs concurrency. In order to enable correct
+> tracing of refcount manipulations we have the __refcount_*(.oldp) API.
 > 
-> Fixes: 32cee7818111 ("net: macb: Add zynqmp SGMII dynamic configuration support")
-> Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
 
-Reported-by: Michal Simek <michal.simek@amd.com>
-Tested-by: Michal Simek <michal.simek@amd.com>
+Interesting.
 
-Thanks,
-Michal
+> Admittedly, I have no idea how to sanely wire that up in this thing, but
+> it seems odd to me to have this 'safe' language display fundamentally
+> unsafe data like this.
+
+Right now the only use of this "data" is for debugging display, the
+"count" function is private, so no one outside Arc can mis-use it, in
+that sense, I think it's still safe?
+
+Regards,
+Boqun
