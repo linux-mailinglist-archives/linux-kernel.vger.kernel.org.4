@@ -2,123 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06EBD688834
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 21:23:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1114688838
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 21:24:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231731AbjBBUXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 15:23:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58848 "EHLO
+        id S232875AbjBBUX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 15:23:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232353AbjBBUXS (ORCPT
+        with ESMTP id S232893AbjBBUXt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 15:23:18 -0500
-Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02CB96B34E;
-        Thu,  2 Feb 2023 12:23:17 -0800 (PST)
-Received: from [127.0.0.1] ([73.223.250.219])
-        (authenticated bits=0)
-        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 312KLhl02116280
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Thu, 2 Feb 2023 12:21:43 -0800
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 312KLhl02116280
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2023010601; t=1675369310;
-        bh=dXToUAE7pJaQg5q02/GLa3Mz5KxM6AhfOCiviB9LkQ0=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=UFfeQLpd1CqaHNn2oWCKbjD/Ifu3loYs//M/YBH4IzNZ5zM+uQu+ca+o7wZeN5w3F
-         DsbUdz66y666X/uc3jG3vgwkg5rRf6GtVkLag+fJE2MvpK5A0UNEmO1M3fnQXeE1Lo
-         Fnl4Ppvdj9DkLLQ/AJYxM7e3cAS5zRrO/+4y12Pny3EZtxFITNqL4C9j1UlDEGI9HH
-         V7hreJiSU/iR392Npg1nWQoPfZXJyKUx9354wvJDSamVNEibIAyoENMY/UFznsWzLs
-         NKi29eZOby3JTQ76f7S8MgceIaH2aMGDaJX/L7Onx4h96zynB+LoMD69Q9XjMUGe2n
-         iFW315XTSuLfQ==
-Date:   Thu, 02 Feb 2023 12:21:41 -0800
-From:   "H. Peter Anvin" <hpa@zytor.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        torvalds@linux-foundation.org
-CC:     corbet@lwn.net, will@kernel.org, peterz@infradead.org,
-        boqun.feng@gmail.com, mark.rutland@arm.com,
-        catalin.marinas@arm.com, dennis@kernel.org, tj@kernel.org,
-        cl@linux.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        joro@8bytes.org, suravee.suthikulpanit@amd.com,
-        robin.murphy@arm.com, dwmw2@infradead.org,
-        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
-        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
-        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
-        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-s390@vger.kernel.org,
-        iommu@lists.linux.dev, linux-arch@vger.kernel.org,
-        linux-crypto@vger.kernel.org
-Subject: Re: [PATCH v2 01/10] cyrpto/b128ops: Remove struct u128
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20230202152655.250913242@infradead.org>
-References: <20230202145030.223740842@infradead.org> <20230202152655.250913242@infradead.org>
-Message-ID: <6B45ADCF-4E3C-4D01-92AB-87BFF6BEE744@zytor.com>
+        Thu, 2 Feb 2023 15:23:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51D8F7A84
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 12:23:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675369380;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RJI0C60WJGK2M/6vyBhzt6buIMsXF8h2vBudSlcCqtU=;
+        b=LFcv1dQ+h3/TKTBcUvNFefXi/Ux0IV7vDy+TrBlI2VyfCZQ4fnURcCRKfSQsrpdAuaHRTs
+        NppkCKsEFguu6fme3oHyZXQV15Jd4VYuYKuWeri0DU5iLeEsvReK7LO6m7rIurbAkzQ5SG
+        oAy0UBHmlVjdMPBwO5HpL6QNaYIrfoI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-198-f9xXDgAnO-W9B1M0GMovRw-1; Thu, 02 Feb 2023 15:22:54 -0500
+X-MC-Unique: f9xXDgAnO-W9B1M0GMovRw-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CE7393C38FE2;
+        Thu,  2 Feb 2023 20:22:53 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (ovpn-192-48.brq.redhat.com [10.40.192.48])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 0FE36492C3E;
+        Thu,  2 Feb 2023 20:22:49 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Thu,  2 Feb 2023 21:22:50 +0100 (CET)
+Date:   Thu, 2 Feb 2023 21:22:46 +0100
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Wander Lairson Costa <wander@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Hu Chunyu <chuhu@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>
+Subject: Re: [PATCH v3] kernel/fork: beware of __put_task_struct calling
+ context
+Message-ID: <20230202202245.GB17563@redhat.com>
+References: <20230201124541.62104-1-wander@redhat.com>
+ <20230202183735.GA17563@redhat.com>
+ <CAAq0SUmYbpTnVBe+FEn+wQjLsfaAv-uxP0QuNEpSh8iaxAD+1g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAq0SUmYbpTnVBe+FEn+wQjLsfaAv-uxP0QuNEpSh8iaxAD+1g@mail.gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On February 2, 2023 6:50:31 AM PST, Peter Zijlstra <peterz@infradead=2Eorg>=
- wrote:
->Per git-grep u128_xor() and its related struct u128 are unused except
->to implement {be,le}128_xor()=2E Remove them to free up the namespace=2E
+On 02/02, Wander Lairson Costa wrote:
 >
->Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead=2Eorg>
->---
-> include/crypto/b128ops=2Eh |   14 +++-----------
-> 1 file changed, 3 insertions(+), 11 deletions(-)
+> > We already have delayed_put_task_struct() which differs very much.
+> > Perhaps something like ___put_task_struct() will look less confusing.
+> >
 >
->--- a/include/crypto/b128ops=2Eh
->+++ b/include/crypto/b128ops=2Eh
->@@ -50,10 +50,6 @@
-> #include <linux/types=2Eh>
->=20
-> typedef struct {
->-	u64 a, b;
->-} u128;
->-
->-typedef struct {
-> 	__be64 a, b;
-> } be128;
->=20
->@@ -61,20 +57,16 @@ typedef struct {
-> 	__le64 b, a;
-> } le128;
->=20
->-static inline void u128_xor(u128 *r, const u128 *p, const u128 *q)
->+static inline void be128_xor(be128 *r, const be128 *p, const be128 *q)
-> {
-> 	r->a =3D p->a ^ q->a;
-> 	r->b =3D p->b ^ q->b;
-> }
->=20
->-static inline void be128_xor(be128 *r, const be128 *p, const be128 *q)
->-{
->-	u128_xor((u128 *)r, (u128 *)p, (u128 *)q);
->-}
->-
-> static inline void le128_xor(le128 *r, const le128 *p, const le128 *q)
-> {
->-	u128_xor((u128 *)r, (u128 *)p, (u128 *)q);
->+	r->a =3D p->a ^ q->a;
->+	r->b =3D p->b ^ q->b;
-> }
->=20
-> #endif /* _CRYPTO_B128OPS_H */
->
->
+> ___put_task_struct()? I already added a function with this name below.
 
-Can we centralize these ordered types, too?
+Ah, I meant ___put_task_struct_rcu() or something like this. Bug again
+this is just cosmetic nit, please ignore
+
+> > > +void __put_task_struct(struct task_struct *tsk)
+> > > +{
+> > > +     if (IS_ENABLED(CONFIG_PREEMPT_RT) && (!preemptible() || !in_task()))
+> > > +             /*
+> > > +              * under PREEMPT_RT, we can't call put_task_struct
+> > > +              * in atomic context because it will indirectly
+> > > +              * acquire sleeping locks.
+> > > +              */
+> > > +             call_rcu(&tsk->rcu, __delayed_put_task_struct);
+> >
+> > Perhaps this deserves additional note to explain why is it safe to use tsk->rcu
+> > union. May be this is obvious, but I was confused when I looked at the previous
+> > version ;)
+> >
+>
+> Makes sense, I will add it in the next version.
+
+Thanks ;)
+
+Oleg.
+
