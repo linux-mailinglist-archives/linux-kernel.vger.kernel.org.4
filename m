@@ -2,151 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66E31687657
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 08:26:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D330C687659
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 08:27:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231362AbjBBH03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 02:26:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57014 "EHLO
+        id S230116AbjBBH1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 02:27:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbjBBH01 (ORCPT
+        with ESMTP id S229595AbjBBH1Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 02:26:27 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E6C66FBE;
-        Wed,  1 Feb 2023 23:26:26 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id 7so674546pgh.7;
-        Wed, 01 Feb 2023 23:26:26 -0800 (PST)
+        Thu, 2 Feb 2023 02:27:16 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 712C068106;
+        Wed,  1 Feb 2023 23:27:15 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id u21so1066071edv.3;
+        Wed, 01 Feb 2023 23:27:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ld+oANwBtzsv6bJz5Tu+JDSsYqqL3LUCBuAOz5v+nbA=;
-        b=YtbjYfhiyinlEdWQ14gqm44CRGJNvufLBOtdvBZl9ot+j9cYgqQdDEjZ2rrviOKFk2
-         WHNzSo0qPyW9/MZYOge73y54NKCwbv2hKMs0XkmyFPDGgkCnlMk9VoBb7PTLOz3F8Q5T
-         Fh0LcWzIQvk3bEVnpg0XMN1CgnijuAMWC4bHsKj9zP5pf2W9UA0mZSuUgH8VO8owan8F
-         d6HGZeJmsRgzdolMR1L6BsSYOjNIBNVUjOo20Sf2AI3acDKUmeTWDsX7l2sq2PXNrDZm
-         S3/Kr0nbL+45vl1gdHLvRRwDGhh9wHTM/XbKQ9wenKYH/kqxohqPznDtcnoo3XDfevFJ
-         7mew==
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=y1GINEHnv1gu6lznwNAhoMfT9UtzwsG0ur+qj4v5n9o=;
+        b=VccljSJOxO09q3vStd2j/BKsk0yx0mMDZz0tfQUMDz+bgivwtxNZzaBhWmMH3AqnGR
+         dPcVn7GZkTRwpHLBfaVijDFvFVqo1OZm5ap8tS6ZpQRzZtTRMNjjFX+saenQV0RHEyc9
+         ADnx3bXXwj4zBQ2fE+aUAtFI9DbId3WBknIk09O035J9KZNRrSsBuMoFJCtoKg1rivDf
+         5QAGSS/Khx4oRhIfvQZ+TCmkffco+iiK1ndUl6YVscTl419g25vLocpZmgYI3dO5lw6M
+         bSaGakyAOXOmEvZh+zCTgHpJbHmZh62k/ks0Z7dAOI/VvMxNF7LQvPazW9cR74tXy/Vp
+         BV4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ld+oANwBtzsv6bJz5Tu+JDSsYqqL3LUCBuAOz5v+nbA=;
-        b=0nDj3tbRMBnasBKntH5jz1txQfbSF8mjCH6Ld5luhV66CpgS+jpZ3y15v0eQfHT1cw
-         Yfd4DuboS8JYQbJxM3V6QZ6JzgAEoBlt94+4R0dnn1Zf73CY8kr3HFNCnjQ7tFz1S9J7
-         TgMBSlHv9+6yJz0i3KuWy8dsay2Rd63p22KaBxScFgwCjsA/LBCjlW4x30wIZXcjZT4e
-         w1PG3PHYbKiSFDxiA64dpDuq8nac607GKg+HK/DW6pL9x4Bejvuk9syF8jDuKQyxN7Il
-         dKB+GZLshpApgf2exEQblmYR6+RR4Fl7oPRST9tu8YhH7V1hgMZvD/HouJ8yKeTODsZO
-         jsww==
-X-Gm-Message-State: AO0yUKUID0HjEH74mpI0g1uwQXlj65z/X9V0J99HbTYFEfLoyUkIrbtz
-        ELcjrtbafKPe2C82VijHanPhzR2Ht/7E9/dE9u0=
-X-Google-Smtp-Source: AK7set/pphT6Xfy1D+SzvXtqRuqMRWCpo6dRBaHk93CigYZ4LKRxAwNgNy39EJ7oGhHD3uNDBInLQA==
-X-Received: by 2002:a05:6a00:21d1:b0:58b:ca43:9c05 with SMTP id t17-20020a056a0021d100b0058bca439c05mr5965754pfj.16.1675322785746;
-        Wed, 01 Feb 2023 23:26:25 -0800 (PST)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id s8-20020a056a00178800b0058e12372079sm6427061pfg.29.2023.02.01.23.26.22
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=y1GINEHnv1gu6lznwNAhoMfT9UtzwsG0ur+qj4v5n9o=;
+        b=YaKjFznM6HD21Jpy95iah9Ozwrb0LXQaQJm7cFN67VSgkmMZT7uSmI+BEFb09SvKSH
+         25/0EodNxky2C59Z5uxP1aesihmiQreTXYGFi/ybrWALcMohwXNMdiUOIS8V0A61BGa7
+         szglBHO2QTTDD+i0b1RC8ba9V2EFkl5+7NfR35Pv3KcASKVy8KrGUcXVccXj2Sj02y1s
+         LhFlt5gfZ3JDJS4YbWfcd6TGa3eDVT/YkeG/flkuyED+Ejsm4YUQkhX0YID3bA15CpJY
+         xeSF+sI6wSJ/jm5Cb/Xpfr3En1E9mlyg/cDM0rRycRONUXIYxp+DHL0mN7FWpANuYYAq
+         VtiQ==
+X-Gm-Message-State: AO0yUKWJv5xviedYfUFxGvJuOQz7R8TtPJVKZw3EAz2agGgnxihb9Sd7
+        iwfaBGEzDCJOO62AIdu/OAhoIYSBBywTYpPr
+X-Google-Smtp-Source: AK7set/wWkhOxY8QrAHVg6gJn4n5qWwY2uvAJjUUddtOBq1alUQRNOCbJ1DZdmimHYmgdFJkoWVt6g==
+X-Received: by 2002:a05:6402:3219:b0:4a2:223d:4514 with SMTP id g25-20020a056402321900b004a2223d4514mr5631397eda.8.1675322833723;
+        Wed, 01 Feb 2023 23:27:13 -0800 (PST)
+Received: from localhost ([169.150.196.150])
+        by smtp.gmail.com with ESMTPSA id b4-20020a50b404000000b004a245350e0fsm5966713edh.36.2023.02.01.23.27.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Feb 2023 23:26:24 -0800 (PST)
-Message-ID: <afe1fdd8-9f3e-c988-cd38-476a6da26d46@gmail.com>
-Date:   Thu, 2 Feb 2023 15:26:15 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH v2] KVM: x86/pmu: Disable all vPMU features support on
- Intel hybrid CPUs
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jianfeng Gao <jianfeng.gao@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>
-References: <20230131085031.88939-1-likexu@tencent.com>
- <Y9k7eyfmXjqW9lYF@google.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-In-Reply-To: <Y9k7eyfmXjqW9lYF@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Wed, 01 Feb 2023 23:27:13 -0800 (PST)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Thu, 02 Feb 2023 08:27:08 +0100
+Message-Id: <CQ7WDMLZJV70.39ULEVF528YB8@vincent>
+Cc:     "Greg KH" <gregkh@linuxfoundation.org>,
+        "Miguel Ojeda" <ojeda@kernel.org>,
+        "Alex Gaynor" <alex.gaynor@gmail.com>,
+        "Wedson Almeida Filho" <wedsonaf@gmail.com>,
+        "Gary Guo" <gary@garyguo.net>,
+        =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3] rust: MAINTAINERS: Add the zulip link
+From:   "Vincenzo Palazzo" <vincenzopalazzodev@gmail.com>
+To:     "Boqun Feng" <boqun.feng@gmail.com>,
+        <rust-for-linux@vger.kernel.org>
+X-Mailer: aerc 0.14.0-38-gb2afc8117fb7
+References: <CANiq72mGk72tvLx+uH-puXZ=MvAA9dzNVqTXYmPq2iadwYuyWA@mail.gmail.com> <20230201184525.272909-1-boqun.feng@gmail.com>
+In-Reply-To: <20230201184525.272909-1-boqun.feng@gmail.com>
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/2/2023 12:02 am, Sean Christopherson wrote:
-> On Tue, Jan 31, 2023, Like Xu wrote:
->> From: Like Xu <likexu@tencent.com>
->>
->> Disable KVM support for virtualizing PMUs on hosts with hybrid PMUs until
->> KVM gains a sane way to enumeration the hybrid vPMU to userspace and/or
->> gains a mechanism to let userspace opt-in to the dangers of exposing a
->> hybrid vPMU to KVM guests.
->>
->> Virtualizing a hybrid PMU, or at least part of a hybrid PMU, is possible,
->> but it requires userspace to pin vCPUs to pCPUs to prevent migrating a
->> vCPU between a big core and a little core, requires the VMM to accurately
->> enumerate the topology to the guest (if exposing a hybrid CPU to the
->> guest), and also requires the VMM to accurately enumerate the vPMU
->> capabilities to the guest.
->>
->> The last point is especially problematic, as KVM doesn't control which
->> pCPU it runs on when enumerating KVM's vPMU capabilities to userspace.
->> For now, simply disable vPMU support on hybrid CPUs to avoid inducing
->> seemingly random #GPs in guests.
->>
->> Reported-by: Jianfeng Gao <jianfeng.gao@intel.com>
->> Cc: Peter Zijlstra <peterz@infradead.org>
->> Suggested-by: Sean Christopherson <seanjc@google.com>
->> Signed-off-by: Like Xu <likexu@tencent.com>
->> ---
->> v1: https://lore.kernel.org/all/20230120004051.2043777-1-seanjc@google.com/
->>   arch/x86/kvm/pmu.h | 6 ++++--
->>   1 file changed, 4 insertions(+), 2 deletions(-)
->>
->> diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
->> index 79988dafb15b..6a3995657e1e 100644
->> --- a/arch/x86/kvm/pmu.h
->> +++ b/arch/x86/kvm/pmu.h
->> @@ -166,9 +166,11 @@ static inline void kvm_init_pmu_capability(const struct kvm_pmu_ops *pmu_ops)
->>   
->>   	 /*
->>   	  * For Intel, only support guest architectural pmu
->> -	  * on a host with architectural pmu.
->> +	  * on a non-hybrid host with architectural pmu.
->>   	  */
->> -	if ((is_intel && !kvm_pmu_cap.version) || !kvm_pmu_cap.num_counters_gp)
->> +	if (!kvm_pmu_cap.num_counters_gp ||
->> +	    (is_intel && (!kvm_pmu_cap.version ||
->> +			  boot_cpu_has(X86_FEATURE_HYBRID_CPU))))
-> 
-> Why do this here instead of in perf_get_x86_pmu_capability()[*]?  The issue isn't
-> restricted to Intel CPUs, it just so happens that Intel is the only x86 vendor
-> that has shipped hybrid CPUs/PMUs.  Similarly, it's entirely possible to create a
-> hybrid CPU with a fully homogeneous PMU.  IMO KVM should rely on the PMU's is_hybrid()
-> and not the generic X86_FEATURE_HYBRID_CPU flag.
-> 
-> [*] https://lore.kernel.org/all/20230120004051.2043777-1-seanjc@google.com
+On Wed Feb 1, 2023 at 7:45 PM CET, Boqun Feng wrote:
+> Zulip organization "rust-for-linux" was created 2 years ago[1] and has
+> proven to be a great place for Rust related discussion, therefore
+> add the information in MAINTAINERS file so that newcomers have more
+> options to find guide and help.
+>
+> Link: https://lore.kernel.org/rust-for-linux/CANiq72=3DxVaMQkgCA9rspjV8bh=
+WDGqAn4x78B0_4U1WBJYj1PiA@mail.gmail.com/ [1]
+> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> ---
+Reviewed-by: Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
 
-As of today, other x86 vendors do not have hybrid core products in their
-road maps. Before implementing the virtual hybrid vCPU model, there is
-no practical value in talking about homogeneous PMU on hybrid vCPU
-at the present stage.
 
-The perf interface only provides host PMU capabilities and the logic for
-choosing to disable (or enable) vPMU based on perf input should be left
-in the KVM part so that subsequent development work can add most code
-to the just KVM, which is very helpful for downstream users to upgrade
-loadable KVM module rather than the entire core kernel.
+> v2 -> v3:
+>
+> 	*	Commit message improvement per Miguel.
+> 	*	Reorder the line after "B:" as suggested by Miguel.
+>
+> v1 -> v2:
+>
+> 	* 	As suggested by Greg KH, add commit message.
+>  MAINTAINERS | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 42fc47c6edfd..80fc5f050f28 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -18222,6 +18222,7 @@ L:	rust-for-linux@vger.kernel.org
+>  S:	Supported
+>  W:	https://github.com/Rust-for-Linux/linux
+>  B:	https://github.com/Rust-for-Linux/linux/issues
+> +C:	zulip://rust-for-linux.zulipchat.com
+>  T:	git https://github.com/Rust-for-Linux/linux.git rust-next
+>  F:	Documentation/rust/
+>  F:	rust/
+> --=20
+> 2.39.1
 
-My experience interacting with the perf subsystem has taught me that
-perf change required from KVM should be made as small as possible.
-I assume that Peterz's timely "Acked-by" also implies his preference.
-
-Thanks,
-Like Xu
