@@ -2,171 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 782E2688A81
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 00:10:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EECB6688A84
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 00:11:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232964AbjBBXK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 18:10:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36886 "EHLO
+        id S232882AbjBBXLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 18:11:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231185AbjBBXKZ (ORCPT
+        with ESMTP id S230057AbjBBXLS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 18:10:25 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2064.outbound.protection.outlook.com [40.107.223.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DEEF7E072;
-        Thu,  2 Feb 2023 15:10:24 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Yn1HJ/n0g2L7P6E/0+wQC9ReIPEE30y4Osbt0PVzUzrven4PS0/NVsyxiVzdrWTS2G8b1D9gIk5Rjt2eZynl1jrtYipKsb/LMAJuOeBR7l5oEfbbQ+uZ3vSbzoHLmRwc4LYL5cWIEX8pKpnEKQkvjtYgSf12beSqW3Rw5FeMeHVRUig5PNtIo1HtYCg+Xv5ujJlplUo0J9GNttjJI1q8DX07p67cloSsfsF46ZftxcFqvMNgvUOmRurUJKOQr6OHGvWjGjifDQnFEshNYFR4vCB6EP/lLe8FoYA11wd6CKyCJB/67TWCmvqzOVvCRRmqBGUOQDaNj1bfr0WnBJ6juw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Tr2Ebzf1DRZmEpW8tFadmDos1lad6Am+wKvd3NzT8r0=;
- b=mfLYXmAHa6HNq18aU7nBQ9NVU3sGQw+V+r0e6IgwXmbODh8GzKqvR6OL1i//+AX/8RdCLZwXCrBZdYJFY9xn6fPM24DWJpQCIGcMI3wuLEk09MB8wV/CZhN5SR7hvu5B77SXnwqUJvYonr9jYS6UP6/XX//CKYcVbldT2kJNIQV1qBbEeNuC/k6dtUIraZkmFfdo05RwJyQ1+qgKYIHSPfTfrKp4fIKFMXDR3t3/FhS7KA4Ynv1mdeyQqGREs+pLWQZjZzXlqkGw+nwtJhOByx4MM4vESXkrqJqgYw300fUfmDCAVmfJq+e4upyilJjP2hb4y/8gBatyWPvrF6Z7xA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Tr2Ebzf1DRZmEpW8tFadmDos1lad6Am+wKvd3NzT8r0=;
- b=CiCiTU1utKHQqVYMmaj1rCnCwfcon7zLqCyWOTO2fTDkEN9i6xpRuPaMfVZH0QckysKWTDZvvmvPIEugOvP7utwQZ/X+7w1m4xXeB7VAoTwtnsY5ghI8WBh6ynUiw6M+YInAVjgbkT2AmMEr1dufssIv8tz5gytB8IjZwERnqnU0Qf27MQodoIvjGZ5TSiGsbuXTN+NRCjZi3i88Wv4N0B1b3yO+6lhHbOsjtQyyKYtdEd71fN5E3GUrochBsrNKWsAWjiRqqJTuflIXcleUKzpkq4Pn3lIe+IW3euyM9S9USkL2rffdlhxXJ+CzD6vuAmGPFTJTzGzuAirTqw0DQw==
-Received: from DS7PR03CA0024.namprd03.prod.outlook.com (2603:10b6:5:3b8::29)
- by SA1PR12MB6822.namprd12.prod.outlook.com (2603:10b6:806:25d::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.38; Thu, 2 Feb
- 2023 23:10:22 +0000
-Received: from DM6NAM11FT094.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3b8:cafe::7c) by DS7PR03CA0024.outlook.office365.com
- (2603:10b6:5:3b8::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.28 via Frontend
- Transport; Thu, 2 Feb 2023 23:10:22 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- DM6NAM11FT094.mail.protection.outlook.com (10.13.172.195) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6064.28 via Frontend Transport; Thu, 2 Feb 2023 23:10:22 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 2 Feb 2023
- 15:10:11 -0800
-Received: from [10.110.48.28] (10.126.230.37) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 2 Feb 2023
- 15:10:10 -0800
-Message-ID: <1d8a8b32-920c-2c25-a530-c316c05adaea@nvidia.com>
-Date:   Thu, 2 Feb 2023 15:10:10 -0800
+        Thu, 2 Feb 2023 18:11:18 -0500
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C957E6C3;
+        Thu,  2 Feb 2023 15:11:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=VAk2iSonWR2CNUR3YDs4R251h30dkaNOFz6qNY0ijSM=; b=SPGvTtegRKMQ50FQT1ai1VSmj4
+        qB6HhcHC1srkWgp1Tx0KWYZmDAbLU/J3V6UIDmvukssZYCnGrmo2U96z6+H+gmQjaqEZhXFYINitn
+        weNCCrv1l5Lm5uRLHRBSfKJxgM1H04Qs1A8/IGIIVjr68kAFur2YqGN2gDm+bTmNwwhdF6yPebdZR
+        FMsKfApNBzOP+m/ILOEUzzbGRLeaNyxNeH2j91m1faCiKgpdPeXy7vrPau1fXzSiL4+VlnaZAiszM
+        2bkG5LL1bP+aFYd2e0y6G0b8AlzgkDu4mb4IO4bH4DsAItDgMYSjDGjQOFWb3ZeQY9BdBB/cXo4VI
+        rzmwd1Tg==;
+Received: from sslproxy01.your-server.de ([78.46.139.224])
+        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1pNijZ-000CDg-On; Fri, 03 Feb 2023 00:11:13 +0100
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1pNijZ-0006nR-68; Fri, 03 Feb 2023 00:11:13 +0100
+Subject: Re: [PATCH bpf-next 2/3] bpf: Add KF_DEPRECATED kfunc flag
+To:     David Vernet <void@manifault.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@meta.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Kernel Team <kernel-team@meta.com>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+References: <20230202163056.658641-1-void@manifault.com>
+ <20230202163056.658641-3-void@manifault.com>
+ <CAADnVQJjmnEpXWL8-SAPt5zYXnFYeF8-wXXpA9shOhqUXNPw=g@mail.gmail.com>
+ <Y9wq1Fy8sgpGB+pe@maniforge>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <1ea9adb3-851c-0c04-1655-07d9f3b7f3b0@iogearbox.net>
+Date:   Fri, 3 Feb 2023 00:11:12 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [syzbot] general protection fault in skb_dequeue (3)
+In-Reply-To: <Y9wq1Fy8sgpGB+pe@maniforge>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     David Howells <dhowells@redhat.com>,
-        David Hildenbrand <david@redhat.com>
-CC:     syzbot <syzbot+a440341a59e3b7142895@syzkaller.appspotmail.com>,
-        <davem@davemloft.net>, <edumazet@google.com>, <hch@lst.de>,
-        <johannes@sipsolutions.net>, <kuba@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-wireless@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <pabeni@redhat.com>,
-        <syzkaller-bugs@googlegroups.com>
-References: <000000000000b0b3c005f3a09383@google.com>
- <822863.1675327935@warthog.procyon.org.uk>
-From:   John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <822863.1675327935@warthog.procyon.org.uk>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.230.37]
-X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT094:EE_|SA1PR12MB6822:EE_
-X-MS-Office365-Filtering-Correlation-Id: d2c596f6-8bbd-454b-e1fd-08db0572a926
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BZRrvyFHKMgIgjkhRhF9RnH5FgF8iX+Av65aX/qIZSnajL/4tFT5QOGEEvwvjrxfm8WNTfy+du1hDUBPDW5j4ZP8Az4ki2tSg6mD9XojHlcbZdD6faxhPqDXC0m+4YiKer2pxKpcIrxjE6dKd0M3lTaDnZh6oKMrOKJhEFATMa9oqlZzNRT80rr6NVndjeaqHfcHs0NGN7U7osy/sd3cBy5Ce73AkFss2hJE5tSjZCabA7F5p/x9wVPvYNYM2JU7YGX4VZugsvHgrwxF5xR7oyNMrsWgX3qkubdCueuyZH3mGIBXpG9hlniTu/039+O9V8Oi2jTuHLZdJP5p3l8/Hv5Qcv1TJ+2R6CYdK0zBJYWGHcAvmU5K6snTlOWBSC5RlwpjesO/vAn233mH1O7dUj4ahSL3kxLS4+76QAERMUEqTeCCzUM7KZhERxIysF9/5wzavRt+6b77Lt8T1LlL+B74PS7aDbpvnhNEFvjuucNoWdEsBM2PN+0wNQo4Ipmyx4t/C4/iqgVkeG3zOCga1otin0pjkAptid7NFSGy94J0F+m+dBVUYh6hQmfbVCTU1/LjLwKydKVGQKpMtxQfXLzqVHMWgipPnCsYKkyo0aSPDxLmqo7ZGulrVWuT6PUS11+Ycx+v7oHb31/ys3LRxLfWlztQeszpcWrlDKKjXme9DEGwPcH08FH1iFdGrI9hili09UmG4/qgDtnvQ3UCWhG27dL2ZlnG07W5FZB9mX0=
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(376002)(39860400002)(346002)(136003)(396003)(451199018)(46966006)(36840700001)(40470700004)(41300700001)(4326008)(31686004)(70206006)(70586007)(83380400001)(8676002)(316002)(16576012)(426003)(8936002)(36756003)(16526019)(7416002)(54906003)(186003)(47076005)(26005)(356005)(36860700001)(2906002)(40480700001)(5660300002)(40460700003)(110136005)(478600001)(53546011)(7636003)(82740400003)(82310400005)(336012)(31696002)(86362001)(2616005)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Feb 2023 23:10:22.3959
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d2c596f6-8bbd-454b-e1fd-08db0572a926
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT094.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB6822
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.7/26800/Thu Feb  2 09:47:56 2023)
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/2/23 00:52, David Howells wrote:
-> Hi John, David,
-> 
-> Could you have a look at this?
+On 2/2/23 10:27 PM, David Vernet wrote:
+> On Thu, Feb 02, 2023 at 01:21:19PM -0800, Alexei Starovoitov wrote:
+>> On Thu, Feb 2, 2023 at 8:31 AM David Vernet <void@manifault.com> wrote:
+>>>
+>>> Now that we have our kfunc lifecycle expectations clearly documented,
+>>> and that KF_DEPRECATED is documented as an optional method for kfunc
+>>> developers and maintainers to provide a deprecation story to BPF users,
+>>> we need to actually implement the flag.
+>>>
+>>> This patch adds KF_DEPRECATED, and updates the verifier to issue a
+>>> verifier log message if a deprecated kfunc is called. Currently, a BPF
+>>> program either has to fail to verify, or be loaded with log level 2 in
+>>> order to see the message. We could eventually enhance this to always
+>>> be logged regardless of log level or verification status, or we could
+>>> instead emit a warning to dmesg. This seems like the least controversial
+>>> option for now.
+>>>
+>>> A subsequent patch will add a selftest that verifies this behavior.
+>>>
+>>> Signed-off-by: David Vernet <void@manifault.com>
+>>> ---
+>>>   include/linux/btf.h   | 1 +
+>>>   kernel/bpf/verifier.c | 8 ++++++++
+>>>   2 files changed, 9 insertions(+)
+>>>
+>>> diff --git a/include/linux/btf.h b/include/linux/btf.h
+>>> index 49e0fe6d8274..a0ea788ee9b0 100644
+>>> --- a/include/linux/btf.h
+>>> +++ b/include/linux/btf.h
+>>> @@ -71,6 +71,7 @@
+>>>   #define KF_SLEEPABLE    (1 << 5) /* kfunc may sleep */
+>>>   #define KF_DESTRUCTIVE  (1 << 6) /* kfunc performs destructive actions */
+>>>   #define KF_RCU          (1 << 7) /* kfunc only takes rcu pointer arguments */
+>>> +#define KF_DEPRECATED   (1 << 8) /* kfunc is slated to be removed or deprecated */
+>>>
+>>>   /*
+>>>    * Tag marking a kernel function as a kfunc. This is meant to minimize the
+>>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>>> index 4cc0e70ee71e..22adcf24f9e1 100644
+>>> --- a/kernel/bpf/verifier.c
+>>> +++ b/kernel/bpf/verifier.c
+>>> @@ -8511,6 +8511,11 @@ static bool is_kfunc_rcu(struct bpf_kfunc_call_arg_meta *meta)
+>>>          return meta->kfunc_flags & KF_RCU;
+>>>   }
+>>>
+>>> +static bool is_kfunc_deprecated(const struct bpf_kfunc_call_arg_meta *meta)
+>>> +{
+>>> +       return meta->kfunc_flags & KF_DEPRECATED;
+>>> +}
+>>> +
+>>>   static bool is_kfunc_arg_kptr_get(struct bpf_kfunc_call_arg_meta *meta, int arg)
+>>>   {
+>>>          return arg == 0 && (meta->kfunc_flags & KF_KPTR_GET);
+>>> @@ -9646,6 +9651,9 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+>>>                          mark_btf_func_reg_size(env, regno, t->size);
+>>>          }
+>>>
+>>> +       if (is_kfunc_deprecated(&meta))
+>>> +               verbose(env, "calling deprecated kfunc %s\n", func_name);
+>>> +
+>>
+>> Since prog will successfully load, no one will notice this message.
+>>
+>> I think we can skip patches 2 and 3 for now.
 
-Sure. So far, I have reproduced a crash using your simplified test
-program (it required three simulaneous running copies), and will look
-deeper now.
++1, the KF_DEPRECATED could probably for the time being just mentioned
+in doc.
 
-In case it illuminates anything, the crash looked like this (below), and
-was obtained *without* setting KASAN. Also a minor point: this is from a
-git branch of the last commit in the series (commit fd20d0c1852e "block:
-convert bio_map_user_iov to use iov_iter_extract_pages"), rather than
-from top of linux-next.
+> I can leave them out of the v2 version of the patch set, but the reason
+> I included them here is because I thought it would be odd to document
+> KF_DEPRECATED without actually upstreaming it. Agreed that it is
+> essentially 0 signal in its current form. Hopefully it could be expanded
+> soon to be louder and more noticeable by not relying on the env log,
+> which is wiped if the verifier passes, but that's separate from whether
+> KF_DEPRECATED in general is the API that we want to provide kfunc
+> developers (in which case at least 2 and 3 would add that in a
+> non-controversial form).
 
-Kernel panic - not syncing: corrupted stack end detected inside scheduler
-CPU: 2 PID: 27177 Comm: syzbot_howells Not tainted 6.2.0-rc5-hubbard-github+ #3
-Hardware name: ASUS X299-A/PRIME X299-A, BIOS 1503 08/03/2018
-Call Trace:
-  <TASK>
-  dump_stack_lvl+0x4c/0x63
-  panic+0x113/0x2c4
-  ? folio_wait_bit_common+0xf6/0x360
-  __schedule+0xd1b/0xd20
-  schedule+0x5d/0xe0
-  io_schedule+0x42/0x70
-  folio_wait_bit_common+0x123/0x360
-  ? __pfx_wake_page_function+0x10/0x10
-  folio_wait_writeback+0x24/0x100
-  __filemap_fdatawait_range+0x7a/0x120
-  ? filemap_fdatawrite_wbc+0x69/0x80
-  ? __filemap_fdatawrite_range+0x58/0x80
-  filemap_write_and_wait_range+0x84/0xb0
-  __iomap_dio_rw+0x183/0x830
-  ? __lock_acquire+0x3b4/0x2620
-  iomap_dio_rw+0xe/0x40
-  ext4_file_read_iter+0x141/0x1c0
-  generic_file_splice_read+0x90/0x160
-  splice_direct_to_actor+0xb1/0x210
-  ? __pfx_direct_splice_actor+0x10/0x10
-  do_splice_direct+0x8c/0xd0
-  do_sendfile+0x352/0x600
-  do_syscall_64+0x37/0x90
-  entry_SYSCALL_64_after_hwframe+0x72/0xdc
-RIP: 0033:0x7f322d5116be
-Code: c3 0f 1f 00 4c 89 d2 4c 89 c6 e9 fd fd ff ff 0f 1f 44 00 00 31 c0 c3 0f 1f 44 00 00 f3 0f 1e fa 49 89 ca b8 28 00 00 00 0f 05 <48> 3d 01 f0 ff ff8
-RSP: 002b:00007ffd8c914538 EFLAGS: 00000202 ORIG_RAX: 0000000000000028
-RAX: ffffffffffffffda RBX: 00007ffd8c914678 RCX: 00007f322d5116be
-RDX: 0000000000000000 RSI: 0000000000000004 RDI: 0000000000000003
-RBP: 0000000000000003 R08: 0000000000000001 R09: 00007f322d7f6740
-R10: 000000000001dd00 R11: 0000000000000202 R12: 0000000000000000
-R13: 00007ffd8c914690 R14: 0000558a11e29d78 R15: 00007f322d843020
-  </TASK>
-
-thanks,
--- 
-John Hubbard
-NVIDIA
+This ideally needs some form of prog load flag which would error upon
+use of kfuncs with deprecation tag, such that tools probing kernel for
+feature availability can notice.
