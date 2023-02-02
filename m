@@ -2,95 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33FD6687743
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 09:25:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEA0C687747
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 09:26:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232067AbjBBIZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 03:25:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41456 "EHLO
+        id S232076AbjBBI0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 03:26:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232018AbjBBIZ1 (ORCPT
+        with ESMTP id S231789AbjBBIZ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 03:25:27 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08CD57EDA;
-        Thu,  2 Feb 2023 00:25:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 655E3CE28A7;
-        Thu,  2 Feb 2023 08:25:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16152C433D2;
-        Thu,  2 Feb 2023 08:25:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675326321;
-        bh=tWMBNqHdTBWKvlhJurXo0FhnokQnQjkhjzX7RHBFQXY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ramUz4EvWEIigPPzuPEzH9FkHZd9F5Cj2xtEZanHDF218uR8vBMYbeofAjdtqNhoR
-         DxSVqIUzx6f4DzZC+ZtAUt1W7vByGFS9e8cJekbbocBFrIzK5B2NJkBy3ClLJCUMCV
-         AZY6dj6jzqSbvDEKWV6+02UIlPUs6vyoHTlbdUHA6QNzoHwp0VNuwWhccoiRQbL+HP
-         jEW+aY1Gnxls08S0sX+x31kyhW7Smw+fQUK7DwhofLvD8WTr48cfvak2/qLdj1tbhl
-         MKJPRIeVGZU3OeuiLXyz5NkMdrbqJSTL9iYs44cCNpZQfvZrjjy4H160MYIVxIhc5C
-         x0y4cqD6s/h0Q==
-Date:   Thu, 2 Feb 2023 10:25:17 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Haiyang Zhang <haiyangz@microsoft.com>
-Cc:     linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
-        decui@microsoft.com, kys@microsoft.com, paulros@microsoft.com,
-        olaf@aepfle.de, vkuznets@redhat.com, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH net,v2] net: mana: Fix accessing freed irq affinity_hint
-Message-ID: <Y9tzbZDZmVoFV2bx@unreal>
-References: <1675288013-2481-1-git-send-email-haiyangz@microsoft.com>
+        Thu, 2 Feb 2023 03:25:59 -0500
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84B0DEF84
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 00:25:57 -0800 (PST)
+Received: by mail-vs1-xe32.google.com with SMTP id a24so1047733vsl.2
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 00:25:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=dySXG4mZAAK7k0xvpRqN+47QGjuEgNdkN7HEObQW1oA=;
+        b=rJEEsof/MmsLjXWluFAZBoJOPBT2cDiV9CJUpO0y1rGVczlYwa20BN75TcXm8p4Yvz
+         x8FIQcc5xAEvh7/v2BCUSU27Bpvm8lNWTlT3tIBMFp00kUyhNpPEEg5R80IA0hGfmUXw
+         6s42db5fKy0OqLl08I8A8KosX7u465m86QyE5BcL3NKPGq8XZKI24h3alv8O2Ao78QRK
+         QIrlNygLcT1LhdtHzAVfaGH1xF7Cxz5D832UUgSycsO2nfwKuB6Dblo2VtcDOfoLIepb
+         TC3FKqh1RRNqxz1uPyo4ZOBrCRJqX5XWkpZCpG9N/GXgxC4a8/lF3DUm3EbaFa3OSduV
+         si0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dySXG4mZAAK7k0xvpRqN+47QGjuEgNdkN7HEObQW1oA=;
+        b=zXcwb/dtidWWvsVg4zXp+YTEMWV+3nxmeeynArY/Q0QlLIZF5pF6zI2fCHJrbwMmpT
+         mNVRwnTT/L3ou3YLG4QP/FHkqV9EZsRoGvZXFx1WW/aXEMnFMLMlhc2l9Y0aO782+FjA
+         73jBaXZt1Cq3eVO3sZNKyhAEcfdeRDWIRKQTBcgtYf2R429jWQld1YuojDj2+7Xu7PyZ
+         gbhZS+M2d2dfhEZpZp/HjNksjiXtgDWxDiwMkkGNVxKGm49MxaV7sm72zep2J4frTtXo
+         DlmBI3moJscDggR/XXHYsntD6fdb61h3gZJoCi4XEfhZzobdRwEROZ1A8m5lduhpXleS
+         0TRQ==
+X-Gm-Message-State: AO0yUKUwnOY6vZEq7yKC/SXRGwF7CduN9i/WmfMzt+p02BIoQhkk0Vlq
+        YuujdGxxDVwbQfWYBAWCJ9BolVJoicJawxrS5DfDIw==
+X-Google-Smtp-Source: AK7set/zlobdzp0LIIzLsRU3WPQnJbsxhDsOriAVNIOEhGcv4WVs2/wcn7b35rFFhbtcBatzY7mRPkcviIgVIiBCwpo=
+X-Received: by 2002:a67:e002:0:b0:3fe:b46c:7889 with SMTP id
+ c2-20020a67e002000000b003feb46c7889mr990452vsl.78.1675326356657; Thu, 02 Feb
+ 2023 00:25:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1675288013-2481-1-git-send-email-haiyangz@microsoft.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230201150011.200613-1-brgl@bgdev.pl> <CACRpkdYEQkxEJ23Xt4hjwu3Jxct-QXZktdzze5Pf6SBNYj80Fg@mail.gmail.com>
+In-Reply-To: <CACRpkdYEQkxEJ23Xt4hjwu3Jxct-QXZktdzze5Pf6SBNYj80Fg@mail.gmail.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Thu, 2 Feb 2023 09:25:45 +0100
+Message-ID: <CAMRc=MdDwSi+DDJmn3Yrnh5m8EK5EJEfLrejXHN0+0k41DKx3w@mail.gmail.com>
+Subject: Re: [PATCH v3 0/2] pinctrl: qcom: add dt-bindings and driver for sa8775p-tlmm
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 01, 2023 at 01:46:53PM -0800, Haiyang Zhang wrote:
-> After calling irq_set_affinity_and_hint(), the cpumask pointer is
-> saved in desc->affinity_hint, and will be used later when reading
-> /proc/irq/<num>/affinity_hint. So the cpumask variable needs to be
-> persistent. Otherwise, we are accessing freed memory when reading
-> the affinity_hint file.
-> 
-> Also, need to clear affinity_hint before free_irq(), otherwise there
-> is a one-time warning and stack trace during module unloading:
-> 
->  [  243.948687] WARNING: CPU: 10 PID: 1589 at kernel/irq/manage.c:1913 free_irq+0x318/0x360
->  ...
->  [  243.948753] Call Trace:
->  [  243.948754]  <TASK>
->  [  243.948760]  mana_gd_remove_irqs+0x78/0xc0 [mana]
->  [  243.948767]  mana_gd_remove+0x3e/0x80 [mana]
->  [  243.948773]  pci_device_remove+0x3d/0xb0
->  [  243.948778]  device_remove+0x46/0x70
->  [  243.948782]  device_release_driver_internal+0x1fe/0x280
->  [  243.948785]  driver_detach+0x4e/0xa0
->  [  243.948787]  bus_remove_driver+0x70/0xf0
->  [  243.948789]  driver_unregister+0x35/0x60
->  [  243.948792]  pci_unregister_driver+0x44/0x90
->  [  243.948794]  mana_driver_exit+0x14/0x3fe [mana]
->  [  243.948800]  __do_sys_delete_module.constprop.0+0x185/0x2f0
-> 
-> To fix the bug, use the persistent mask, cpumask_of(cpu#), and set
-> affinity_hint to NULL before freeing the IRQ, as required by free_irq().
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 71fa6887eeca ("net: mana: Assign interrupts to CPUs based on NUMA nodes")
-> Signed-off-by: Haiyang Zhang <haiyangz@microsoft.com>
-> ---
->  .../net/ethernet/microsoft/mana/gdma_main.c   | 35 ++++++-------------
->  1 file changed, 10 insertions(+), 25 deletions(-)
-> 
+On Wed, Feb 1, 2023 at 11:46 PM Linus Walleij <linus.walleij@linaro.org> wrote:
+>
+> On Wed, Feb 1, 2023 at 4:00 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+>
+> > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> >
+> > This series contains the device-tree bindings and the pinctrl driver for the
+> > SA8775P platforms.
+> >
+> > v2 -> v3 (Changes in DT bindings only)
+> > - fix the gpio pattern property (platform has 148 GPIOs)
+> > - add blank lines for better readability
+>
+> v3 patch set applied, fixing the 149->148 number in the example
+> in patch 1!
+>
 
-Thanks,
-Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
+Thanks! Seems like only patch 1/2 got into your branch?
+
+Bart
