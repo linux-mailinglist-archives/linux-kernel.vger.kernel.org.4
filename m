@@ -2,105 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7865687E32
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 14:00:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC1BC687E33
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 14:02:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232518AbjBBNAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 08:00:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33358 "EHLO
+        id S231482AbjBBNCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 08:02:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232527AbjBBNAK (ORCPT
+        with ESMTP id S229991AbjBBNCL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 08:00:10 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 656668E4AC;
-        Thu,  2 Feb 2023 04:59:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1675342774; x=1706878774;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=l+6j3bIkI3D5xNchH0czU8eucYVEM7sYgP+6GkMs3tk=;
-  b=OxSsIfqyLrh9uu+vES8XplLrbxqwa2M+Acz4JZ4joo9SQrBdzQsQ1D6i
-   5Gx9IA8kpPmU9sf2KGdvfNBTEwfiZSCSXqCzYv5dQdeiK2io9V3EWh4wB
-   OkOFCLg4B0r7cXVdtkVVlz1qXDxe56Z9CHP5XUUTiREzsGLrUi+Ha0u2h
-   NAXEp5b+YzsnG71yLXBFUDaW6+MJNjNf/FTFTlZ0rVDFEPZY7Tdn0v2jz
-   nwNB/KjivT8Ylftq/W4N5u3ivqZMeYk2Kqkjxw+sX0lPqyL6uR7SOw6V6
-   DlZiGrXoEqVXB8JnVilHXcjUZFdFgZN5fYMKPu8L3Qu6eeqNtphZuPjN+
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.97,267,1669100400"; 
-   d="scan'208";a="135252111"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Feb 2023 05:59:27 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Thu, 2 Feb 2023 05:59:26 -0700
-Received: from che-lt-i67786lx.microchip.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Thu, 2 Feb 2023 05:59:22 -0700
-From:   Rakesh Sankaranarayanan <rakesh.sankaranarayanan@microchip.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <andrew@lunn.ch>, <f.fainelli@gmail.com>, <olteanv@gmail.com>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <woojung.huh@microchip.com>,
-        <UNGLinuxDriver@microchip.com>, <linux@armlinux.org.uk>
-Subject: [RFC PATCH net-next 11/11] net: dsa: microchip: lan937x: update multicast table
-Date:   Thu, 2 Feb 2023 18:29:30 +0530
-Message-ID: <20230202125930.271740-12-rakesh.sankaranarayanan@microchip.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230202125930.271740-1-rakesh.sankaranarayanan@microchip.com>
-References: <20230202125930.271740-1-rakesh.sankaranarayanan@microchip.com>
+        Thu, 2 Feb 2023 08:02:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 208498EB77;
+        Thu,  2 Feb 2023 05:01:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E51E3B82659;
+        Thu,  2 Feb 2023 13:00:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BBFAC433EF;
+        Thu,  2 Feb 2023 13:00:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675342858;
+        bh=I0+XpsfrXiVq4NvEITPXhBwMxT7p8ZjJTJTvge/hres=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BAjsjxwkjObm/cxEp/X8gz+pQL/2Nk3RGbA2VMYjM0TqAuYA294c0hFu9HHWMRS6r
+         tZEiNpA1cgPxGr7P5wfL2gFJSMaNdXQZgWggexxz4YX98CFDj07L5kw9spE7cPex6R
+         ccxKEElIpl2ejeLQMjmYajDjhy1Ctma2FFS+mDr9Fiky5DMeIfLzq0mg/lPsmSEGEB
+         DQgRhBGi6YxjUAObefBiGqJkNIXIGIF3YIp7hE4uVXwndSUg94lr1W2ovq4Grl7gNw
+         Zpih1ZcNj1V4dkiAKyHXj4xcqamUips8kuwVuVs3HwddmpGU7t7on0kTNYkoRKcBvD
+         FFmbvzjCXfkBw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id DDE5C405BE; Thu,  2 Feb 2023 10:00:55 -0300 (-03)
+Date:   Thu, 2 Feb 2023 10:00:55 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Carsten Haitzler <Carsten.Haitzler@arm.com>
+Cc:     Diederik de Haas <didi.debian@cknow.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <Mark.Rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 0/2] Script style improvements in lib/coresight.sh
+Message-ID: <Y9u0B2RBiZYrJ5Kk@kernel.org>
+References: <20230201214945.127474-1-didi.debian@cknow.org>
+ <b13301b1-104f-ebb5-6b2a-3d6cc3eba8a3@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b13301b1-104f-ebb5-6b2a-3d6cc3eba8a3@arm.com>
+X-Url:  http://acmel.wordpress.com
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Program multicast table for cascaded port in second switch with
-default port forward value since it is the host port for second switch.
-Current driver program the same for cpu port in first switch.
+Em Thu, Feb 02, 2023 at 08:38:46AM +0000, Carsten Haitzler escreveu:
+> On 2/1/23 21:49, Diederik de Haas wrote:
+> > These 2 patches improve the efficiency and quality of the
+> > lib/coresight.sh script.
+> >
+> > The first one uses grep's `-c` parameter to count the results instead of
+> > piping it to `wc -l`.
+> > The second one replaces the use of backticks (`...`) with $(...) as the
+> > former has several potential issues while the latter does not.
+> >
+> > Diederik de Haas (2):
+> >    perf test: Replace 'grep | wc -l' with 'grep -c'
+> >    perf test: Replace legacy `...` with $(...)
+> >
+> >   tools/perf/tests/shell/lib/coresight.sh | 18 +++++++++---------
+> >   1 file changed, 9 insertions(+), 9 deletions(-)
+> >
+> ACK to all of this series.
 
-Signed-off-by: Rakesh Sankaranarayanan <rakesh.sankaranarayanan@microchip.com>
----
- drivers/net/dsa/microchip/ksz9477.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Thanks, added to the two patches, that I processed yesterday, still in
+tmp.perf/core.
 
-diff --git a/drivers/net/dsa/microchip/ksz9477.c b/drivers/net/dsa/microchip/ksz9477.c
-index 4c12131098b1..521d8c2e1540 100644
---- a/drivers/net/dsa/microchip/ksz9477.c
-+++ b/drivers/net/dsa/microchip/ksz9477.c
-@@ -1116,18 +1116,22 @@ void ksz9477_config_cpu_port(struct dsa_switch *ds)
- 
- int ksz9477_enable_stp_addr(struct ksz_device *dev)
- {
-+	u32 fwd_port = BIT(dev->cpu_port);
- 	const u32 *masks;
- 	u32 data;
- 	int ret;
- 
- 	masks = dev->info->masks;
- 
-+	if (dev->ds->index == 1)
-+		fwd_port = BIT(dev->dsa_port);
-+
- 	/* Enable Reserved multicast table */
- 	ksz_cfg(dev, REG_SW_LUE_CTRL_0, SW_RESV_MCAST_ENABLE, true);
- 
- 	/* Set the Override bit for forwarding BPDU packet to CPU */
- 	ret = ksz_write32(dev, REG_SW_ALU_VAL_B,
--			  ALU_V_OVERRIDE | BIT(dev->cpu_port));
-+			  ALU_V_OVERRIDE | fwd_port);
- 	if (ret < 0)
- 		return ret;
- 
--- 
-2.34.1
-
+- Arnaldo
