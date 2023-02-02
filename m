@@ -2,90 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAE3E688733
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 19:56:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EBEF688735
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 19:57:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232543AbjBBS4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 13:56:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38470 "EHLO
+        id S233093AbjBBS5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 13:57:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231635AbjBBS4v (ORCPT
+        with ESMTP id S233092AbjBBS5G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 13:56:51 -0500
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC4FD7D99D
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 10:56:41 -0800 (PST)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-520dad0a7d2so39031837b3.5
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 10:56:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=LtNgvCo2oTHEiKopp90V0O7XCGsFhK/RxZsHKCR63ks=;
-        b=LrK+WfLmKwdRQHt/LiBQdJnHysNiaPCxZlA7JNmEHd4luIwC2Whh9/6MbF7mlsYTPB
-         Jp8rqYjfebQyi24GQKpUvOKei59glITHDUgkAMGHhYhruzxkLCpR45y6fwUBziuJ0VL+
-         maFIYp2sQZ9dPkfrCO8Ht83u3RjyIHVTiakAODC4zhCWY3nB+nOD1OWx5rHUfcP5rFad
-         WZ1Wp4gsFLmUbhkmtu0qb+jDWKNnejZkucuGqlu+yUO5HTHiXKSU/owrE/ENWvD6krcu
-         Yas6UOaq4YmJnkr4sBt9taPWvDWTEeusQezaLsW8Ffld+TLhuSpgczdR0xEit/12dZUx
-         Ywlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LtNgvCo2oTHEiKopp90V0O7XCGsFhK/RxZsHKCR63ks=;
-        b=e27IzJv/wpwwm1AvheHyxns8PSSaXkAepmyajujgJFPabn1dXOPR8bIZhrEa41Grig
-         bLYWq8PrtPyqadW3bBksxmkS4GOL/TgtFR9vxyH1BHjx1RvI/YvCptN5+vb4snFCO4fD
-         wYtdtGonw8Gs/SdBUtgIJTICWKlF9SwBJAGFD9Sy0BKz/pJhiiB0gXiOtfoA2W8bAO5k
-         GG+EEmEOsGqH6iUtdYVKGhcT+CntNVmAbzpxwhmvUksWtzGS3zxkTc9Pgphpr796Diqb
-         te0Sg+dPcuOOykIqkq17Kq+mb0v4wIRiFb4ir3VA/IDJrDwC49B7zWCo9kHKlAf9ul89
-         adYA==
-X-Gm-Message-State: AO0yUKV4qhVWi979JlrOtK3izAB3s8pfPEGsaUNp5hM6G9pDvlKlcju7
-        z99R5EWGBMff1sXs+gJI3URzaeEIAAKtYQV0Sv8l
-X-Google-Smtp-Source: AK7set+OUDqGn8Z+7j+Ty2VVT8mhQmN6lNPvR4vFF+dIe6K2N8c9ihLcTibuzT6TLRDAmatY0gIn7AIA6gKd2v9lV6U=
-X-Received: by 2002:a05:690c:82c:b0:500:81cf:8017 with SMTP id
- by12-20020a05690c082c00b0050081cf8017mr811909ywb.212.1675364200573; Thu, 02
- Feb 2023 10:56:40 -0800 (PST)
+        Thu, 2 Feb 2023 13:57:06 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 847177D988;
+        Thu,  2 Feb 2023 10:56:51 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 2846524DC94;
+        Fri,  3 Feb 2023 02:56:43 +0800 (CST)
+Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 3 Feb
+ 2023 02:56:43 +0800
+Received: from [172.16.16.234] (113.72.144.195) by EXMBX172.cuchost.com
+ (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 3 Feb
+ 2023 02:56:42 +0800
+Message-ID: <df6755ed-a358-ea01-d89e-f3c004b9c297@starfivetech.com>
+Date:   Fri, 3 Feb 2023 02:56:41 +0800
 MIME-Version: 1.0
-References: <20221101222520.never.109-kees@kernel.org> <20221101223321.1326815-5-keescook@chromium.org>
- <CAMSo37W3gRkP02tSCxGX71ZDAt3WgPZrkTRTM6J1iQ4gvUS9vg@mail.gmail.com>
- <CANDhNCogJrvt=yEXFK-xVmGjkcRxSNGZUqUeNw2MV9bFRrwPdQ@mail.gmail.com> <63dbf04a.630a0220.2608a.0149@mx.google.com>
-In-Reply-To: <63dbf04a.630a0220.2608a.0149@mx.google.com>
-From:   John Stultz <jstultz@google.com>
-Date:   Thu, 2 Feb 2023 10:56:29 -0800
-Message-ID: <CANDhNCoJJs_jSAdr6uved=cK=-6+nzSJq3e_E3HgtiXHZXkVww@mail.gmail.com>
-Subject: Re: [PATCH 5/6] driver core: Add __alloc_size hint to devm allocators
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Yongqin Liu <yongqin.liu@linaro.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Nishanth Menon <nm@ti.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Won Chung <wonchung@google.com>,
-        David Gow <davidgow@google.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-hardening@vger.kernel.org,
-        llvm@lists.linux.dev, Sumit Semwal <sumit.semwal@linaro.org>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v3 6/7] riscv: dts: starfive: Add initial StarFive JH7110
+ device tree
+Content-Language: en-US
+To:     Conor Dooley <conor.dooley@microchip.com>
+CC:     Conor Dooley <conor@kernel.org>, <linux-riscv@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Ben Dooks <ben.dooks@sifive.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        "Philipp Zabel" <p.zabel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20221220011247.35560-1-hal.feng@starfivetech.com>
+ <20221220011247.35560-7-hal.feng@starfivetech.com> <Y6zHy9oL4xzl+6Rd@spud>
+ <c507e0b2-5ca3-cffe-55d2-873ed8c24e3d@starfivetech.com>
+ <Y9og8Q2UnJ452KH/@wendy>
+From:   Hal Feng <hal.feng@starfivetech.com>
+In-Reply-To: <Y9og8Q2UnJ452KH/@wendy>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.72.144.195]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX172.cuchost.com
+ (172.16.6.92)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,51 +71,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 2, 2023 at 9:18 AM Kees Cook <keescook@chromium.org> wrote:
-> On Wed, Feb 01, 2023 at 12:11:41AM -0800, John Stultz wrote:
-> > On Tue, Jan 31, 2023 at 11:36 PM Yongqin Liu <yongqin.liu@linaro.org> wrote:
-> > > This change causes "Kernel panic - not syncing: BRK handler: Fatal exception"
-> > > for the android-mainline based hikey960 build, with this commit reverted,
-> > > there is no problem for the build to boot to the homescreen.
-> > > Not sure if you have any idea about it and give some suggestions.
-> > >
-> > > Here is part of the kernel panic log:
-...
-> > Here as nr_sensors=1, we allocate only one structure for the array.
-> > But then below that, we modify two entries, writing past the valid
-> > array, and corrupting data when writing the second sensor values.
-> >
-> > data->sensor[0].id = HI3660_BIG_SENSOR;
-> > data->sensor[0].irq_name = "tsensor_a73";
-> > data->sensor[0].data = data;
-> >
-> > data->sensor[1].id = HI3660_LITTLE_SENSOR;
-> > data->sensor[1].irq_name = "tsensor_a53";
-> > data->sensor[1].data = data;
-> >
-> > I suspect nr_sensors needs to be set to 2.
-> >
-> > Nice work, Kees!
->
-> Yay for compilers! :)
+On Wed, 1 Feb 2023 08:21:05 +0000, Conor Dooley wrote:
+> On Wed, Feb 01, 2023 at 03:21:48PM +0800, Hal Feng wrote:
+>> On Wed, 28 Dec 2022 22:48:43 +0000, Conor Dooley wrote:
+>> > On Tue, Dec 20, 2022 at 09:12:46AM +0800, Hal Feng wrote:
+> 
+>> >> +/ {
+>> >> +	compatible = "starfive,jh7110";
+>> >> +	#address-cells = <2>;
+>> >> +	#size-cells = <2>;
+>> >> +
+>> >> +	cpus {
+>> >> +		#address-cells = <1>;
+>> >> +		#size-cells = <0>;
+>> >> +
+>> >> +		S76_0: cpu@0 {
+>> >> +			compatible = "sifive,u74-mc", "riscv";
+>> > 
+>> > The label here says S76 but the compatible says u74-mc.
+>> 
+>> U74-MC has 5 cores including 1 * S7 core and 4 * U74 cores.
+>> 
+>> > Which is correct? Your docs say S7 and S76, so I would imagine that it
+>> > is actually an S76?
+>> 
+>> I found SiFive website [1] call it S76, but call it S7 in other places.
+>> So I misunderstood this. Considering the ISA difference you described
+>> as below, I think it's proper to change the label to "S7_0".
+> 
+> I'm less worried about the label & more interested in the compatible.
+> hart0 is, as you say, not a u74. Should we not be adding a "sifive,s7"
+> compatible string to Documentation/devicetree/bindings/riscv/cpus.yaml
+> and using that here instead?
 
-Well, I know it's not trivial to make the compilers catch these
-things, so yay for you and others putting in all the effort on this as
-well.
+First of all, it's my fault that I didn't check the revision of U74-MC
+manual, so most of my previous replies might not make sense.
 
-That said, making sense of the error message isn't completely trivial
-either. I've been seeing a few cases recently of some of the new
-compiler tooling (I pinged you earlier on a CFI one) causing errors
-that developers aren't really sure how to address.  I know sometimes
-it's not easy to surface the errors with context to what was wrong,
-but at the risk of intense bike shedding, is there some way to provide
-something like "Likely array bounds error" instead of just "BRK
-handler: Fatal exception"?
+If we add a new compatible string for S7, should we change the compatibles
+of hart1~3 to "sifive,u74" also? And then, there may be no point keeping some
+compatible strings of core complex like "sifive,u74-mc" and "sifive,u54-mc".
+I'm not sure about this.
 
-> Was a patch sent to fix this driver?
+> 
+>> 
+>> [1] https://www.sifive.com/cores/essential
+>> 
+>> > 
+>> >> +			reg = <0>;
+>> >> +			d-cache-block-size = <64>;
+>> >> +			d-cache-sets = <64>;
+>> >> +			d-cache-size = <8192>;
+>> >> +			d-tlb-sets = <1>;
+>> >> +			d-tlb-size = <40>;
+>> >> +			device_type = "cpu";
+>> >> +			i-cache-block-size = <64>;
+>> >> +			i-cache-sets = <64>;
+>> >> +			i-cache-size = <16384>;
+>> >> +			i-tlb-sets = <1>;
+>> >> +			i-tlb-size = <40>;
+>> >> +			mmu-type = "riscv,sv39";
+>> >> +			next-level-cache = <&ccache>;
+>> >> +			riscv,isa = "rv64imac";
+>> > 
+>> > While I was poking around trying to see if there was some logic behind
+>> > that compatible, I noticed that SiFive's docs for the S76 say it is
+>> > RV64GBC *but* the docs for the u74-mc say "4xRV64GBC and 1xRV64IMAC".
+>> > I assume that rv64imac is the correct one here?
+>> 
+>> Yes, "RV64IMAC" is correct. The monitor core in U74-MC is a
+>> S7-series core, not S76.
+> 
+> Cool, thanks.
 
-I think YongQin is looking into it (either setting the nr_sensors
-value to 2 or dropping the second sensor access).
+Now I think it might be another version of S76.
 
-thanks
--john
+> 
+>> >> +			tlb-split;
+>> >> +			status = "disabled";
+>> >> +
+>> >> +			cpu0_intc: interrupt-controller {
+>> >> +				compatible = "riscv,cpu-intc";
+>> >> +				interrupt-controller;
+>> >> +				#interrupt-cells = <1>;
+>> >> +			};
+>> >> +		};
+>> >> +
+>> >> +		U74_1: cpu@1 {
+>> >> +			compatible = "sifive,u74-mc", "riscv";
+>> >> +			reg = <1>;
+>> >> +			d-cache-block-size = <64>;
+>> >> +			d-cache-sets = <64>;
+>> >> +			d-cache-size = <32768>;
+>> >> +			d-tlb-sets = <1>;
+>> >> +			d-tlb-size = <40>;
+>> >> +			device_type = "cpu";
+>> >> +			i-cache-block-size = <64>;
+>> >> +			i-cache-sets = <64>;
+>> >> +			i-cache-size = <32768>;
+>> >> +			i-tlb-sets = <1>;
+>> >> +			i-tlb-size = <40>;
+>> >> +			mmu-type = "riscv,sv39";
+>> >> +			next-level-cache = <&ccache>;
+>> >> +			riscv,isa = "rv64imafdc";
+>> > 
+>> > That also begs the question:
+>> > Do your u74s support RV64GBC, as the (current) SiFive documentation
+>> > suggests?
+>> 
+>> Actually, U74 doesn't support the full B extension, and the SiFive doc [1]
+> 
+> Yeah, I knew asking that question that the "RV64GBC" in SiFive's online
+> documentation was using outdated terminology. Also, that is not the doc
+> for your core complex as far as I can tell. That is the document for
+> impid 0x0621_1222, whereas (IIRC) your core is 0x0421_0427.
+> Jess and I had a look one evening but could not find the 21G1.02.00
+> revision of this document, which is the one corresponding to 0x421_0427.
+> See Table 92 for more details.
+
+I found the 21G1.02.00 revision on StarFive internal net, but I'm not sure
+whether I can make it public and I am checking this. This revision records
+that the ISA of 21G1.02.00 U74 is "RV64GCB" and ISA of 21G1.02.00 S7 is
+"RV64IMACB". I am asking someone to check with SiFive whether both 21G1.02.00
+U74 and S7 support the full B extension.
+
+> 
+>> describes the ISA of U74 is "RV64GC_Zba_Zbb_Sscofpmf" which "G" includes
+>> "IMAFD".
+> 
+> I could not find the 21G1.02.00 version of this document online, but I
+> was able to find the 21G1.01.00 version of it & that version does not
+> support the Sscofpmf extension (but does have Zba/Zbb support).
+> 
+>> "_Zba_Zbb_Sscofpmf" is not shown in other device trees such as
+>> jh7100.dtsi and fu740-c000.dtsi, so I didn't show them here.
+> 
+> Just because other devicetrees omit them, doesn't mean that you should
+> too!
+> This compatible should be an accurate description of your hardware, so
+> you should add what you actually have.
+
+Will keep it in mind. Thank you.
+
+Best regards,
+Hal
+
+> If you have Zba and Zbb, then add them.
+> I would double check against your internal documentation for 21G2.02.00
+> as to whether you do have Sscofpmf, and if you do, add that too!
+> 
+> That way, whenever support for those extensions lands, the jh7110 will
+> automatically pick it up, rather than needing to have them retrofitted.
+> 
+>> [1] https://sifive.cdn.prismic.io/sifive/2dd11994-693c-4360-8aea-5453d8642c42_u74mc_core_complex_manual_21G3.pdf
