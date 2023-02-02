@@ -2,93 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE8E4688343
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 16:55:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FC68688323
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 16:54:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233075AbjBBPzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 10:55:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56742 "EHLO
+        id S232576AbjBBPyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 10:54:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233076AbjBBPy4 (ORCPT
+        with ESMTP id S231695AbjBBPyo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 10:54:56 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5DFD5CE68;
-        Thu,  2 Feb 2023 07:54:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 72E2FB826E5;
-        Thu,  2 Feb 2023 15:54:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 183E3C433A4;
-        Thu,  2 Feb 2023 15:54:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675353284;
-        bh=+e6vabk7nnIxKnRB4DqirjDl+9Kx3GaOJxRWKeLLfb0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ciZXDGizJFd1TJYfJJ/zS/Q8jiKYC7lr27aPbJQ38ShGvTs4ajMm8t3XmKzfDviVT
-         CFTE2visdDCHaZGNqG/i/LnRq+IHZRtbCgJs2R/Te4G0oHNHSAm5cEXk3tLv7n5MJ/
-         +RK1vfbEoqzKE+wXXw2Buugo8fv+VIbgejO6htZEjbRFXaNKr84Em6KgRKemmJyhap
-         4DpiB5jvwTIn9YTSP2zlXZ7J0Dp1QqCpcUIv8IEEdVTYNA93t2CvcCoTfn5d6eMEQw
-         /KIMQjWG7G98uNySrX1ICfmLoVf6lj+osMK6n8gDvRgnoLLIbPWCiLMVmo1+uS9CA8
-         q0BJbuLUkFStQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1pNbvZ-0001lw-1n; Thu, 02 Feb 2023 16:55:09 +0100
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH v2 06/22] rtc: pm8xxx: drop unused register defines
-Date:   Thu,  2 Feb 2023 16:54:32 +0100
-Message-Id: <20230202155448.6715-7-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230202155448.6715-1-johan+linaro@kernel.org>
-References: <20230202155448.6715-1-johan+linaro@kernel.org>
+        Thu, 2 Feb 2023 10:54:44 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 110D0677A2;
+        Thu,  2 Feb 2023 07:54:38 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F3FAFC14;
+        Thu,  2 Feb 2023 07:55:19 -0800 (PST)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.27.141])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DD3763F64C;
+        Thu,  2 Feb 2023 07:54:35 -0800 (PST)
+Date:   Thu, 2 Feb 2023 15:54:33 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Florent Revest <revest@chromium.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        catalin.marinas@arm.com, will@kernel.org, rostedt@goodmis.org,
+        mhiramat@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kpsingh@kernel.org, jolsa@kernel.org,
+        xukuohai@huaweicloud.com
+Subject: Re: [PATCH 5/8] ftrace: Make DIRECT_CALLS work WITH_ARGS and
+ !WITH_REGS
+Message-ID: <Y9vcua0+JzjmTICO@FVFF77S0Q05N.cambridge.arm.com>
+References: <20230201163420.1579014-1-revest@chromium.org>
+ <20230201163420.1579014-6-revest@chromium.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230201163420.1579014-6-revest@chromium.org>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drop the original register defines which have been used since commit
-c8d523a4b053 ("drivers/rtc/rtc-pm8xxx.c: rework to support pm8941 rtc").
+On Wed, Feb 01, 2023 at 05:34:17PM +0100, Florent Revest wrote:
+> Direct called trampolines can be called in two ways:
+> - either from the ftrace callsite. In this case, they do not access any
+>   struct ftrace_regs nor pt_regs
+> - Or, if a ftrace ops is also attached, from the end of a ftrace
+>   trampoline. In this case, the call_direct_funcs ops is in charge of
+>   setting the direct call trampoline's address in a struct ftrace_regs
+> 
+> Since "ftrace: pass fregs to arch_ftrace_set_direct_caller()", the later
+> case no longer requires a full pt_regs.
 
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- drivers/rtc/rtc-pm8xxx.c | 6 ------
- 1 file changed, 6 deletions(-)
+Minor nit, but could we please have the commit ID, e.g.
 
-diff --git a/drivers/rtc/rtc-pm8xxx.c b/drivers/rtc/rtc-pm8xxx.c
-index dc7e659cbb2a..90027a7cfb12 100644
---- a/drivers/rtc/rtc-pm8xxx.c
-+++ b/drivers/rtc/rtc-pm8xxx.c
-@@ -12,12 +12,6 @@
- #include <linux/slab.h>
- #include <linux/spinlock.h>
- 
--/* RTC Register offsets from RTC CTRL REG */
--#define PM8XXX_ALARM_CTRL_OFFSET	0x01
--#define PM8XXX_RTC_WRITE_OFFSET		0x02
--#define PM8XXX_RTC_READ_OFFSET		0x06
--#define PM8XXX_ALARM_RW_OFFSET		0x0A
--
- /* RTC_CTRL register bit fields */
- #define PM8xxx_RTC_ENABLE		BIT(7)
- #define PM8xxx_RTC_ALARM_CLEAR		BIT(0)
--- 
-2.39.1
+| Since commit:
+| 
+|   9705bc70960459ae ("ftrace: pass fregs to arch_ftrace_set_direct_caller()")
+| 
+| The latter case no longer requires a full pt_regs.
 
+> It only needs a struct
+> ftrace_regs so DIRECT_CALLS can work with both WITH_ARGS or WITH_REGS.
+> With architectures like arm64 already abandoning WITH_REGS in favor of
+> WITH_ARGS, it's important to have DIRECT_CALLS work WITH_ARGS only.
+> 
+> Signed-off-by: Florent Revest <revest@chromium.org>
+> ---
+>  kernel/trace/Kconfig  | 2 +-
+>  kernel/trace/ftrace.c | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
+> index 5df427a2321d..4496a7c69810 100644
+> --- a/kernel/trace/Kconfig
+> +++ b/kernel/trace/Kconfig
+> @@ -257,7 +257,7 @@ config DYNAMIC_FTRACE_WITH_REGS
+>  
+>  config DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+>  	def_bool y
+> -	depends on DYNAMIC_FTRACE_WITH_REGS
+> +	depends on DYNAMIC_FTRACE_WITH_REGS || DYNAMIC_FTRACE_WITH_ARGS
+>  	depends on HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+>  
+>  config DYNAMIC_FTRACE_WITH_CALL_OPS
+> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+> index b0426de11c45..73b6f6489ba1 100644
+> --- a/kernel/trace/ftrace.c
+> +++ b/kernel/trace/ftrace.c
+> @@ -5282,7 +5282,7 @@ static LIST_HEAD(ftrace_direct_funcs);
+>  
+>  static int register_ftrace_function_nolock(struct ftrace_ops *ops);
+>  
+> -#define MULTI_FLAGS (FTRACE_OPS_FL_DIRECT | FTRACE_OPS_FL_SAVE_REGS)
+> +#define MULTI_FLAGS (FTRACE_OPS_FL_DIRECT)
+
+Unfortunately, I think this is broken for architectures where:
+
+* DYNAMIC_FTRACE_WITH_DIRECT_CALLS=y
+* DYNAMIC_FTRACE_WITH_REGS=y
+* DYNAMIC_FTRACE_WITH_ARGS=n
+
+... since those might pass a NULL ftrace_regs around, and so when using the
+list ops arch_ftrace_set_direct_caller() might blow up accessing an element of
+ftrace_regs.
+
+It looks like 32-bit x86 is the only case with that combination, and its
+ftrace_caller implementation passes a NULL regs, so I reckon that'll blow up.
+However, it looks like there aren't any FTRACE_DIRECT samples wired up for
+32-bit x86, so I'm not aware of a test case we can use.
+
+We could make the FTRACE_OPS_FL_SAVE_REGS flag conditional, or we could
+implement DYNAMIC_FTRACE_WITH_ARGS for 32-bit x86 and have
+DYNAMIC_FTRACE_WITH_DIRECT_CALLS depend solely on that.
+
+Thanks,
+Mark.
