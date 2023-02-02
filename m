@@ -2,247 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60871687802
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 09:57:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F275687807
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 09:57:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231876AbjBBI5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 03:57:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39576 "EHLO
+        id S232283AbjBBI5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 03:57:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231371AbjBBI5A (ORCPT
+        with ESMTP id S231917AbjBBI5k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 03:57:00 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D071659FC
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 00:56:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=fZ2qGIEG1+HHCeVmgMD6WYjReeu6GPcoIzM/OMi6JCs=; b=GYcVPrBPR7qarxKP1K5DxZ4EaF
-        hQbIx1OZxgX7QEjJL1YqTWz2K7Sfk1VQouNH2s/ZRAuSioNtKgc+RHdxolQZPotvK7OrlgUaP5igH
-        DSCKicvs2A16BXdLQ54R1U+touWs33VeDnOFRd/ugrimVHKndfZrbDQRcvNer7bdYOmB8naX78yHt
-        QCJ4UqutBn9PaR7pdyvZ6ZgwX0BUIPBh7KsQKMO+9coaOt+gWHGaE23VqGWeTJBzF1Pzq1JS5H8LW
-        0Qx9lqO4vVz9tTsW3wVT2w+G8n/3+KXqTnGuusDu+Acmraq0LupFsHQtyk6+00HEb24LZaw1n8bLL
-        SkwDi/gQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pNVOe-00DF3Q-8O; Thu, 02 Feb 2023 08:56:44 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C16A6300137;
-        Thu,  2 Feb 2023 09:56:42 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 9F50223F2C5B0; Thu,  2 Feb 2023 09:56:42 +0100 (CET)
-Date:   Thu, 2 Feb 2023 09:56:42 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Sachin Sant <sachinp@linux.ibm.com>
-Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>, bsingharora@gmail.com,
-        dja@axtens.net, paulus@ozlabs.org, mpe@ellerman.id.au
-Subject: Re: WARN include/linux/trace_recursion.h:162 (powerpc)
-Message-ID: <Y9t6yoafrO5YqVgM@hirez.programming.kicks-ass.net>
-References: <4C073F6A-C812-4C4A-BB7A-ECD10B75FB88@linux.ibm.com>
+        Thu, 2 Feb 2023 03:57:40 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7492A790AF
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 00:57:37 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id o36so818640wms.1
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 00:57:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IMiqUodml6uBOLajfZK6hc14FkG0GweLDtekS4XSxl0=;
+        b=tG+xBN5Ejl7wU+JxdQXLH7IUd4en7sOPdSp1l6XzoC77o9VA4zCb/zf0HtVhXelPt6
+         KR/7Wj/G6ejyvPtdEKd0OeZ8ZoHtM+kqKekS02afzNglfro8r6gIG2rZGVfA5lIZqPP3
+         ZTgx+lzzOHeOH6WfDH7OXhONdD+OCpebDSfJAnJrg0PGo9jn375awJTi9FcQUWaiZsEJ
+         EhhpOrK+CeMOvapWaCez9xOUEQFkhTB06xRdw6H5UZUUq/Hr6kgyN0JTPln2M47PFPMc
+         FL92uvovQ19axKkHOJwbifSib92Cq0G2tBsg/mxFdzB953Fan3q68OUnFHa2KdkGc2mB
+         ByDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IMiqUodml6uBOLajfZK6hc14FkG0GweLDtekS4XSxl0=;
+        b=atoRS80lTAlLW9h0wXFEv+IPl5NkE+zL+Jnp3DdHY0+Hkv+7NcgJMeboF+qMyvc2qg
+         nUNCxzYTCH3RoWxgygfpbf1AGkwC6JpWEnpjp2+Cgo0SMPkKvlhSijTyM3msvlv0JNiK
+         pPHqlQktOArbyI2mFfZbcU8fTGc068b3S7xMTX6w2S/E49o8eDvT84wKSFQOWCBdZQwf
+         tY0MpgK5CHoGOMXxgFKwfg0X8pHgPgvnHdb7o9Pu7w8kd2lwNmthObzXLZxxsdZqiI7Y
+         Hkwk8CxBYo/4AqUqHj3hvoqa7+IEDC02IXP2WcsR/kK2ic7JUfTsqfNd6ksG5FsxUdQW
+         pOKg==
+X-Gm-Message-State: AO0yUKXnU4CiTUmIvuFZHK4rYDNyw/0CGNrD2UUmsirgKyapzAa5lPkR
+        OIR8j09YlP1aXnYEzZLIYNGEAQ==
+X-Google-Smtp-Source: AK7set9lWEW3d6A+NKvJN5QuCV0g6pCrziUQhEsGu/uZbaYXw7aieUCyeaBUlrgTMYcQhdApt+AFSg==
+X-Received: by 2002:a7b:c3c6:0:b0:3da:22a6:7b6b with SMTP id t6-20020a7bc3c6000000b003da22a67b6bmr5172403wmj.13.1675328256059;
+        Thu, 02 Feb 2023 00:57:36 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id u1-20020a05600c00c100b003a3442f1229sm4059403wmm.29.2023.02.02.00.57.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Feb 2023 00:57:35 -0800 (PST)
+Message-ID: <b0f55494-3a17-4d87-7b8f-5b078503cb53@linaro.org>
+Date:   Thu, 2 Feb 2023 09:57:33 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4C073F6A-C812-4C4A-BB7A-ECD10B75FB88@linux.ibm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v4 2/3] dt-bindings: i2c-ast2600: Add support for AST2600
+ i2C driver
+Content-Language: en-US
+To:     Ryan Chen <ryan_chen@aspeedtech.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+References: <20230201103359.1742140-1-ryan_chen@aspeedtech.com>
+ <20230201103359.1742140-3-ryan_chen@aspeedtech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230201103359.1742140-3-ryan_chen@aspeedtech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 01:46:32PM +0530, Sachin Sant wrote:
-> Following warning is seen with 6.2.0-rc6-next-20230201 on a
-> Power10 server.
+On 01/02/2023 11:33, Ryan Chen wrote:
+> AST2600 support new register set for I2C controller, add bindings document
+> to support driver of i2c new register mode controller.
 > 
-> ------------[ cut here ]------------
-> RCU not on for: check_return_regs_valid+0xc/0x1e0
-> WARNING: CPU: 9 PID: 0 at include/linux/trace_recursion.h:162 arch_ftrace_ops_list_func+0x2c0/0x2e0
-> Modules linked in: kmem device_dax rpadlpar_io rpaphp uinput torture vmac poly1305_generic chacha_generic chacha20poly1305 n_gsm pps_ldisc ppp_synctty ppp_async ppp_generic serport slcan can_dev slip slhc snd_hrtimer snd_seq snd_seq_device snd_timer snd soundcore pcrypt crypto_user n_hdlc dummy veth tun nfsv3 nfs_acl nfs lockd grace fscache netfs brd overlay exfat vfat fat btrfs blake2b_generic xor raid6_pq zstd_compress xfs loop sctp ip6_udp_tunnel udp_tunnel libcrc32c dm_mod bonding tls rfkill sunrpc nd_pmem nd_btt dax_pmem papr_scm pseries_rng libnvdimm vmx_crypto ext4 mbcache jbd2 sd_mod t10_pi crc64_rocksoft crc64 sg ibmvscsi scsi_transport_srp ibmveth fuse [last unloaded: ipistorm(O)]
-> CPU: 9 PID: 0 Comm: swapper/9 Tainted: G O 6.2.0-rc6-next-20230201 #1
-> Hardware name: IBM,9080-HEX POWER10 (raw) 0x800200 0xf000006 of:IBM,FW1030.00 (NH1030_026) hv:phyp pSeries
-> NIP: c0000000002ee8a0 LR: c0000000002ee89c CTR: 0000000000725d90
-> REGS: c0000003c372f530 TRAP: 0700 Tainted: G O (6.2.0-rc6-next-20230201)
-> MSR: 8000000000021033 <SF,ME,IR,DR,RI,LE> CR: 28002824 XER: 00000002
-> CFAR: c000000000159fe0 IRQMASK: 3 
-> GPR00: c0000000002ee89c c0000003c372f7d0 c0000000013d0e00 0000000000000031 
-> GPR04: 00000001000055ef c0000003c372f5a0 c0000003c372f598 0000000000000027 
-> GPR08: c000000efef48010 000000000559c4c9 0000000000000027 c000000002928150 
-> GPR12: 0000000048002824 c000000effff5300 c000000000034fc0 0000000000000000 
-> GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
-> GPR20: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
-> GPR24: 0000000000000000 c000000000035770 c000000000034fbc c0000003c372f8a0 
-> GPR28: 0000000000000000 c0000003c3686600 0000000000000000 0000000000000000 
-> NIP [c0000000002ee8a0] arch_ftrace_ops_list_func+0x2c0/0x2e0
-> LR [c0000000002ee89c] arch_ftrace_ops_list_func+0x2bc/0x2e0
-> Call Trace:
-> [c0000003c372f7d0] [c0000000002ee89c] arch_ftrace_ops_list_func+0x2bc/0x2e0 (unreliable)
-> [c0000003c372f870] [c000000000080bb4] ftrace_call+0x4/0x50
-> [c0000003c372fa20] [c000000000035770] interrupt_exit_kernel_prepare+0xb0/0x250
-> [c0000003c372fa70] [c00000000000da68] interrupt_return_srr_kernel+0x8/0x18c
-> --- interrupt: 900 at plpar_hcall_norets_notrace+0x18/0x2c
-> NIP: c0000000000faf80 LR: c000000000b5c5f8 CTR: 0000000000000000
-> REGS: c0000003c372faa0 TRAP: 0900 Tainted: G O (6.2.0-rc6-next-20230201)
-> MSR: 800000000280b033 <SF,VEC,VSX,EE,FP,ME,IR,DR,RI,LE> CR: 22000284 XER: 00000000
-> CFAR: 0000000000000000 IRQMASK: 0 
-> GPR00: 0000000000000000 c0000003c372fd40 c0000000013d0e00 0000000000000000 
-> GPR04: 00000000000000c0 0000000000000080 00132735029f6191 0000000000000110 
-> GPR08: 000000000001f400 0000000000000001 0000000000000000 0000000000000000 
-> GPR12: 0000000000000090 c000000effff5300 0000000000000000 000000001eef7920 
-> GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
-> GPR20: 0000000000000000 0000000000000000 0000000000000000 c0000000029f9a00 
-> GPR24: 0000000000000001 0000073e58cd47b6 0000000000000000 0000000000000001 
-> GPR28: c0000000029f9a00 0000000000000001 c0000000021620a8 c0000000021620b0 
-> NIP [c0000000000faf80] plpar_hcall_norets_notrace+0x18/0x2c
-> LR [c000000000b5c5f8] check_and_cede_processor+0x48/0x60
-> --- interrupt: 900
-> [c0000003c372fd40] [c0000003c372fd70] 0xc0000003c372fd70 (unreliable)
-> [c0000003c372fda0] [c000000000b5c8d8] shared_cede_loop+0x78/0x170
-> [c0000003c372fde0] [c000000000efb518] cpuidle_enter_state+0xa8/0x558
-> [c0000003c372fe80] [c000000000b59660] cpuidle_enter+0x50/0x70
-> [c0000003c372fec0] [c0000000001ccd2c] call_cpuidle+0x4c/0x80
-> [c0000003c372fee0] [c0000000001d3fa0] do_idle+0x350/0x3b0
-> [c0000003c372ff60] [c0000000001d4238] cpu_startup_entry+0x38/0x40
-> [c0000003c372ff90] [c000000000065360] start_secondary+0x290/0x2a0
-> [c0000003c372ffe0] [c00000000000e358] start_secondary_prolog+0x10/0x14
-> Code: 3b800000 4bfffdbc 60000000 60000000 3c62ffe0 39200001 3d420164 7f44d378 386330a8 992a7de9 4be6b661 60000000 <0fe00000> fb010060 60000000 60000000 
-> ---[ end trace 0000000000000000 ]---
-> ------------[ cut here ]------------
-> RCU not on for: shared_cede_loop+0xc/0x170
+> Signed-off-by: Ryan Chen <ryan_chen@aspeedtech.com>
+> ---
+>  .../bindings/i2c/aspeed,i2c-ast2600.yaml      | 78 +++++++++++++++++++
+>  1 file changed, 78 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/i2c/aspeed,i2c-ast2600.yaml
 > 
-> The code in question was added by
-> commit d099dbfd330686a8c09cd8944bcc77a56f9e7815
->     cpuidle: tracing: Warn about !rcu_is_watching()
+> diff --git a/Documentation/devicetree/bindings/i2c/aspeed,i2c-ast2600.yaml b/Documentation/devicetree/bindings/i2c/aspeed,i2c-ast2600.yaml
+> new file mode 100644
+> index 000000000000..b7d7bc303e77
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/i2c/aspeed,i2c-ast2600.yaml
+> @@ -0,0 +1,78 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/i2c/aspeed,i2c-ast2600.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: AST2600 I2C Controller on the AST26XX SoCs Device Tree Bindings
+> +
+> +maintainers:
+> +  - Ryan Chen <ryan_chen@aspeedtech.com>
+> +
+> +allOf:
+> +  - $ref: /schemas/i2c/i2c-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - aspeed,ast2600-i2c
 
-Note that by selecting ARCH_WANTS_NO_INSTR you effectively state to
-abide by its rules.
+NAK. It's already there. Please do not waste our time in submitting
+duplicated drivers.
 
-  41b7a347bf14 ("powerpc: Book3S 64-bit outline-only KASAN support")
+Best regards,
+Krzysztof
 
-AFAICT the power code does not even attempt to do this.
-
-For your idle path you want at least something like the below, but given
-you don't have build time validation of noinstr I can't really tell and
-you'll just have to run chase the stragglers.
-
----
-diff --git a/arch/powerpc/kernel/irq_64.c b/arch/powerpc/kernel/irq_64.c
-index eb2b380e52a0..4dfd4caff1b7 100644
---- a/arch/powerpc/kernel/irq_64.c
-+++ b/arch/powerpc/kernel/irq_64.c
-@@ -323,7 +323,7 @@ EXPORT_SYMBOL(arch_local_irq_restore);
-  * disabled and marked as such, so the local_irq_enable() call
-  * in arch_cpu_idle() will properly re-enable everything.
-  */
--bool prep_irq_for_idle(void)
-+__cpuidle bool prep_irq_for_idle(void)
- {
- 	/*
- 	 * First we need to hard disable to ensure no interrupt
-@@ -339,9 +339,6 @@ bool prep_irq_for_idle(void)
- 	if (lazy_irq_pending())
- 		return false;
- 
--	/* Tell lockdep we are about to re-enable */
--	trace_hardirqs_on();
--
- 	/*
- 	 * Mark interrupts as soft-enabled and clear the
- 	 * PACA_IRQ_HARD_DIS from the pending mask since we
-diff --git a/drivers/cpuidle/cpuidle-pseries.c b/drivers/cpuidle/cpuidle-pseries.c
-index 1bad4d2b7be3..96737a8a979b 100644
---- a/drivers/cpuidle/cpuidle-pseries.c
-+++ b/drivers/cpuidle/cpuidle-pseries.c
-@@ -33,16 +33,17 @@ static struct cpuidle_state *cpuidle_state_table __read_mostly;
- static u64 snooze_timeout __read_mostly;
- static bool snooze_timeout_en __read_mostly;
- 
--static int snooze_loop(struct cpuidle_device *dev,
--			struct cpuidle_driver *drv,
--			int index)
-+static __cpuidle
-+int snooze_loop(struct cpuidle_device *dev,
-+		struct cpuidle_driver *drv,
-+		int index)
- {
- 	u64 snooze_exit_time;
- 
- 	set_thread_flag(TIF_POLLING_NRFLAG);
- 
- 	pseries_idle_prolog();
--	local_irq_enable();
-+	raw_local_irq_enable();
- 	snooze_exit_time = get_tb() + snooze_timeout;
- 	dev->poll_time_limit = false;
- 
-@@ -65,14 +66,14 @@ static int snooze_loop(struct cpuidle_device *dev,
- 	HMT_medium();
- 	clear_thread_flag(TIF_POLLING_NRFLAG);
- 
--	local_irq_disable();
-+	raw_local_irq_disable();
- 
- 	pseries_idle_epilog();
- 
- 	return index;
- }
- 
--static void check_and_cede_processor(void)
-+static __cpuidle void check_and_cede_processor(void)
- {
- 	/*
- 	 * Ensure our interrupt state is properly tracked,
-@@ -216,9 +217,10 @@ static int __init parse_cede_parameters(void)
- #define NR_DEDICATED_STATES	2 /* snooze, CEDE */
- static u8 cede_latency_hint[NR_DEDICATED_STATES];
- 
--static int dedicated_cede_loop(struct cpuidle_device *dev,
--				struct cpuidle_driver *drv,
--				int index)
-+static __cpuidle
-+int dedicated_cede_loop(struct cpuidle_device *dev,
-+			struct cpuidle_driver *drv,
-+			int index)
- {
- 	u8 old_latency_hint;
- 
-@@ -230,7 +232,7 @@ static int dedicated_cede_loop(struct cpuidle_device *dev,
- 	HMT_medium();
- 	check_and_cede_processor();
- 
--	local_irq_disable();
-+	raw_local_irq_disable();
- 	get_lppaca()->donate_dedicated_cpu = 0;
- 	get_lppaca()->cede_latency_hint = old_latency_hint;
- 
-@@ -239,9 +241,10 @@ static int dedicated_cede_loop(struct cpuidle_device *dev,
- 	return index;
- }
- 
--static int shared_cede_loop(struct cpuidle_device *dev,
--			struct cpuidle_driver *drv,
--			int index)
-+static __cpuidle
-+int shared_cede_loop(struct cpuidle_device *dev,
-+		     struct cpuidle_driver *drv,
-+		     int index)
- {
- 
- 	pseries_idle_prolog();
-@@ -255,7 +258,7 @@ static int shared_cede_loop(struct cpuidle_device *dev,
- 	 */
- 	check_and_cede_processor();
- 
--	local_irq_disable();
-+	raw_local_irq_disable();
- 	pseries_idle_epilog();
- 
- 	return index;
