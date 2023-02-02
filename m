@@ -2,80 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 250C86874C1
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 05:57:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B373F6874C4
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 05:57:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbjBBE5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 23:57:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44158 "EHLO
+        id S231546AbjBBE5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 23:57:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbjBBE5B (ORCPT
+        with ESMTP id S230361AbjBBE5V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 23:57:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA33064690;
-        Wed,  1 Feb 2023 20:56:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5D678B82434;
-        Thu,  2 Feb 2023 04:56:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9F1EC433EF;
-        Thu,  2 Feb 2023 04:56:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675313817;
-        bh=7XwK8ePhXg9mBRmThdaiiB/Lfdu0j8YeXRGT+wCySPI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Z/UFCmjnbwoyYmqOVwxCTa3fRkDZXSv//xpEXQv6G8jOz6DGWEklxMNIWVlF1pXCM
-         2fgDhAua+dY2U8Sr0kG7kr/uDiGclDayHelL+ruJzeHG2TnfZ8IL5yg6zLdLEOXpiV
-         7ErwWt8we2luAb281sDcdOjOY/sv2pgc1dllnktY9muqpaN9cyComAjKvo3MbGQU3s
-         e0fHYTJm08E8q7LmKp2cEQvk34fZDEEm9ys6lnqYunEfAfSD2paw6MgCIBOL4ymwUv
-         Rs1FisOs6RKjGj2OAfrBrzUIMZ93XfNO0HN2s9kYvD4xZ0MWvDh/fPkAcQuSaRr2MI
-         hjVaz2LJqMbug==
-Date:   Wed, 1 Feb 2023 20:56:55 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Munehisa Kamata <kamatam@amazon.com>
-Cc:     surenb@google.com, hannes@cmpxchg.org, hdanton@sina.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        mengcc@amazon.com, stable@vger.kernel.org
-Subject: Re: [PATCH] sched/psi: fix use-after-free in ep_remove_wait_queue()
-Message-ID: <Y9tCl4r/qjqsrVj9@sol.localdomain>
-References: <CAJuCfpFZ3B4530TgsSHqp5F_gwfrDujwRYewKReJru==MdEHQg@mail.gmail.com>
- <20230202030023.1847084-1-kamatam@amazon.com>
+        Wed, 1 Feb 2023 23:57:21 -0500
+Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E130B66F82;
+        Wed,  1 Feb 2023 20:57:18 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R351e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VajAYu4_1675313834;
+Received: from 30.221.130.224(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VajAYu4_1675313834)
+          by smtp.aliyun-inc.com;
+          Thu, 02 Feb 2023 12:57:15 +0800
+Message-ID: <64348226-0be8-4fb4-8f1e-1f118511bdc7@linux.alibaba.com>
+Date:   Thu, 2 Feb 2023 12:57:14 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230202030023.1847084-1-kamatam@amazon.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH v3 0/6] Composefs: an opportunistically sharing verified
+ image filesystem
+Content-Language: en-US
+To:     Alexander Larsson <alexl@redhat.com>,
+        Gao Xiang <hsiangkao@linux.alibaba.com>,
+        Amir Goldstein <amir73il@gmail.com>, gscrivan@redhat.com,
+        brauner@kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        david@fromorbit.com, viro@zeniv.linux.org.uk,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Miklos Szeredi <miklos@szeredi.hu>
+References: <cover.1674227308.git.alexl@redhat.com>
+ <CAOQ4uxgGc33_QVBXMbQTnmbpHio4amv=W7ax2vQ1UMet0k_KoA@mail.gmail.com>
+ <1ea88c8d1e666b85342374ed7c0ddf7d661e0ee1.camel@redhat.com>
+ <CAOQ4uxinsBB-LpGh4h44m6Afv0VT5yWRveDG7sNvE2uJyEGOkg@mail.gmail.com>
+ <5fb32a1297821040edd8c19ce796fc0540101653.camel@redhat.com>
+ <CAOQ4uxhGX9NVxwsiBMP0q21ZRot6-UA0nGPp1wGNjgmKBjjBBA@mail.gmail.com>
+ <b8601c976d6e5d3eccf6ef489da9768ad72f9571.camel@redhat.com>
+ <e840d413-c1a7-d047-1a63-468b42571846@linux.alibaba.com>
+ <2ef122849d6f35712b56ffbcc95805672980e185.camel@redhat.com>
+ <8ffa28f5-77f6-6bde-5645-5fb799019bca@linux.alibaba.com>
+ <51d9d1b3-2b2a-9b58-2f7f-f3a56c9e04ac@linux.alibaba.com>
+ <071074ad149b189661681aada453995741f75039.camel@redhat.com>
+From:   Jingbo Xu <jefflexu@linux.alibaba.com>
+In-Reply-To: <071074ad149b189661681aada453995741f75039.camel@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 01, 2023 at 07:00:23PM -0800, Munehisa Kamata wrote:
-> diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-> index 8ac8b81bfee6..6e66c15f6450 100644
-> --- a/kernel/sched/psi.c
-> +++ b/kernel/sched/psi.c
-> @@ -1343,10 +1343,11 @@ void psi_trigger_destroy(struct psi_trigger *t)
->  
->  	group = t->group;
->  	/*
-> -	 * Wakeup waiters to stop polling. Can happen if cgroup is deleted
-> -	 * from under a polling process.
-> +	 * Wakeup waiters to stop polling and clear the queue to prevent it from
-> +	 * being accessed later. Can happen if cgroup is deleted from under a
-> +	 * polling process otherwise.
->  	 */
-> -	wake_up_interruptible(&t->event_wait);
-> +	wake_up_pollfree(&t->event_wait);
->  
->  	mutex_lock(&group->trigger_lock);
 
-wake_up_pollfree() should only be used in extremely rare cases.  Why can't the
-lifetime of the waitqueue be fixed instead?
 
-- Eric
+On 2/1/23 5:46 PM, Alexander Larsson wrote:
+> On Wed, 2023-02-01 at 12:28 +0800, Jingbo Xu wrote:
+>> Hi all,
+>>
+>> There are some updated performance statistics with different
+>> combinations on my test environment if you are interested.
+>>
+>>
+>> On 1/27/23 6:24 PM, Gao Xiang wrote:
+>>> ...
+>>>
+>>> I've made a version and did some test, it can be fetched from:
+>>> git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git
+>>> -b
+>>> experimental
+>>>
+>>
+>> Setup
+>> ======
+>> CPU: x86_64 Intel(R) Xeon(R) Platinum 8269CY CPU @ 2.50GHz
+>> Disk: 6800 IOPS upper limit
+>> OS: Linux v6.2 (with composefs v3 patchset)
+> 
+> For the record, what was the filesystem backing the basedir files?
+> 
+>> I build erofs/squashfs images following the scripts attached on [1],
+>> with each file in the rootfs tagged with "metacopy" and "redirect"
+>> xattr.
+>>
+>> The source rootfs is from the docker image of tensorflow [2].
+>>
+>> The erofs images are built with mkfs.erofs with support for sparse
+>> file
+>> added [3].
+>>
+>> [1]
+>> https://lore.kernel.org/linux-fsdevel/5fb32a1297821040edd8c19ce796fc0540101653.camel@redhat.com/
+>> [2]
+>> https://hub.docker.com/layers/tensorflow/tensorflow/2.10.0/images/sha256-7f9f23ce2473eb52d17fe1b465c79c3a3604047343e23acc036296f512071bc9?context=explore
+>> [3]
+>> https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/commit/?h=experimental&id=7c49e8b195ad90f6ca9dfccce9f6e3e39a8676f6
+>>
+>>
+>>
+>> Image size
+>> ===========
+>> 6.4M large.composefs
+>> 5.7M large.composefs.w/o.digest (w/o --compute-digest)
+>> 6.2M large.erofs
+>> 5.2M large.erofs.T0 (with -T0, i.e. w/o nanosecond timestamp)
+>> 1.7M large.squashfs
+>> 5.8M large.squashfs.uncompressed (with -noI -noD -noF -noX)
+>>
+>> (large.erofs.T0 is built without nanosecond timestamp, so that we get
+>> smaller disk inode size (same with squashfs).)
+>>
+>>
+>> Runtime Perf
+>> =============
+>>
+>> The "uncached" column is tested with:
+>> hyperfine -p "echo 3 > /proc/sys/vm/drop_caches" "ls -lR $MNTPOINT"
+>>
+>>
+>> While the "cached" column is tested with:
+>> hyperfine -w 1 "ls -lR $MNTPOINT"
+>>
+>>
+>> erofs and squashfs are mounted with loopback device.
+>>
+>>
+>>                                   | uncached(ms)| cached(ms)
+>> ----------------------------------|-------------|-----------
+>> composefs (with digest)           | 326         | 135
+>> erofs (w/o -T0)                   | 264         | 172
+>> erofs (w/o -T0) + overlayfs       | 651         | 238
+>> squashfs (compressed)	            | 538         | 211
+>> squashfs (compressed) + overlayfs | 968         | 302
+> 
+> 
+> Clearly erofs with sparse files is the best fs now for the ro-fs +
+> overlay case. But still, we can see that the additional cost of the
+> overlayfs layer is not negligible. 
+> 
+> According to amir this could be helped by a special composefs-like mode
+> in overlayfs, but its unclear what performance that would reach, and
+> we're then talking net new development that further complicates the
+> overlayfs codebase. Its not clear to me which alternative is easier to
+> develop/maintain.
+> 
+> Also, the difference between cached and uncached here is less than in
+> my tests. Probably because my test image was larger. With the test
+> image I use, the results are:
+> 
+>                                   | uncached(ms)| cached(ms)
+> ----------------------------------|-------------|-----------
+> composefs (with digest)           | 681         | 390
+> erofs (w/o -T0) + overlayfs       | 1788        | 532
+> squashfs (compressed) + overlayfs | 2547        | 443
+> 
+> 
+> I gotta say it is weird though that squashfs performed better than
+> erofs in the cached case. May be worth looking into. The test data I'm
+> using is available here:
+>   
+> https://my.owndrive.com/index.php/s/irHJXRpZHtT3a5i
+> 
+> 
+
+Hi,
+
+I also tested upon the rootfs you given.
+
+
+Setup
+======
+CPU: x86_64 Intel(R) Xeon(R) Platinum 8269CY CPU @ 2.50GHz
+Disk: 11800 IOPS upper limit
+OS: Linux v6.2 (with composefs v3 patchset)
+FS of backing objects: xfs
+
+
+Image size
+===========
+8.6M large.composefs (with --compute-digest)
+7.6M large.composefs.wo.digest (w/o --compute-digest)
+8.9M large.erofs
+7.4M large.erofs.T0 (with -T0, i.e. w/o nanosecond timestamp)
+2.6M large.squashfs.compressed
+8.2M large.squashfs.uncompressed (with -noI -noD -noF -noX)
+
+
+Runtime Perf
+=============
+
+The "uncached" column is tested with:
+hyperfine -p "echo 3 > /proc/sys/vm/drop_caches" "ls -lR $MNTPOINT"
+
+
+While the "cached" column is tested with:
+hyperfine -w 1 "ls -lR $MNTPOINT"
+
+
+erofs and squashfs are mounted with loopback device.
+
+				  | uncached(ms)| cached(ms)
+----------------------------------|-------------|-----------
+composefs			  | 408		| 176
+erofs			  	  | 308		| 190
+erofs     + overlayfs	  	  | 1097	| 294
+erofs.hack			  | 298		| 187
+erofs.hack + overlayfs	  	  | 524		| 283
+squashfs (compressed)		  | 770		| 265
+squashfs (compressed) + overlayfs | 1600	| 372
+squashfs (uncompressed)		  | 646		| 223
+squashfs (uncompressed)+overlayfs | 1480	| 330
+
+- all erofs mounted with "noacl"
+- composefs: using large.composefs
+- erofs: using large.erofs
+- erofs.hack: using large.erofs.hack where each file in the erofs layer
+redirecting to the same lower block, e.g.
+"/objects/00/02bef8682cac782594e542d1ec6e031b9f7ac40edcfa6a1eb6d15d3b1ab126",
+to evaluate the potential optimization of composefs like "lazy lookup"
+in overlayfs
+- squashfs (compressed): using large.squashfs.compressed
+- squashfs (uncompressed): using large.squashfs.uncompressed
+
+
+-- 
+Thanks,
+Jingbo
