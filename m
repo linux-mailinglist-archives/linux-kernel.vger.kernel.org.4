@@ -2,82 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 235766879A1
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:58:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 104D26879A7
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:59:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231895AbjBBJ6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 04:58:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40586 "EHLO
+        id S232124AbjBBJ7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 04:59:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230246AbjBBJ6n (ORCPT
+        with ESMTP id S229710AbjBBJ7R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 04:58:43 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93E4A8759A
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 01:58:40 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id m2so4357190ejb.8
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 01:58:40 -0800 (PST)
+        Thu, 2 Feb 2023 04:59:17 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E7587D25
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 01:59:15 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id q5so1209327wrv.0
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 01:59:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kku2DhhU4VWgvfyOCU5nzUE3POH4k+SsLMWcUvaMZuQ=;
-        b=d3JMFgsKkm45dGp7zv/adGjs4L/Gp2Q4SPdCLvaKmBIWCEyYpFJqjteI0sdyKvac2p
-         AmKihJbDIU7+nBwd7FeOyZHxV57m2X7YstituxEaFR2raDC9y3o9mJCuMtGNbQrSD4AA
-         U4g+/aRfGloVlLvA8p1cSX+ooq8VwNNAmG1FyTPQJs5DYO5UxbJkISZwBGavjQq+MQ7Q
-         Hfkdyt1wwrQwC0gE3Q3ZwXW01js9eATZTal5n1rl0togMLXfAF2OewVTU9/JBr33Ws/O
-         ECy+n1m7Xj6fnldvSKWGCeNCEqnHpMUWaXNMrHNEb03vaquITnooypN8dcX/97+Ur5RO
-         fVSA==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wHea8kyU+V/tcWLN+5K+aynGDqOYuX+1Dl2ZaVpPFKg=;
+        b=MFBzdipPXKtdkcxhQzUed4P6WfvKxBjO0TtgDHWsyFCMK2nKN6/95UXNaSuL4WYsQN
+         XTLAeiRM+9tgYqMZmUoe4FqPNlkUci62TfGNeSlSsdnV9BOpOluMoTrpLNeekuxSDw2A
+         gvsKBmUVQHvdmt0aVeYUnNL0JaoEYEH+qMM0Lxgeouzm510qDkUBza8CUmXSS8/1IXOy
+         VRNFV6nIzYTLsFjtb7YMZf1j0ohw6LEL5SSSLYZSkiu8QkLxoVJzo0zlt7XT5kh0D7Gl
+         7Y1fwp2bqItIzF745xEzOK2wB3XP1FteYZemHss8cdkR9lSkPsXxi+F1wXcmCPh6Wqbp
+         rcSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kku2DhhU4VWgvfyOCU5nzUE3POH4k+SsLMWcUvaMZuQ=;
-        b=f9S/u6nnT7/krsKkUh4dvV9F2mHE4D8S34Qn66RKkRnk0u0TPbvQjNCRST8u03AnZk
-         PXpDz0T/NreiBRVyzGQ9H9qYWzgKBulpAzvczt0GHdxTI+vxUTCNWMQ7u4SaUVWOTa7B
-         jlJDtl73rLbx6JUKdCenXfgvO+MK6z0E2Hl5xfVBdRnbnQ5qdCMDUeC957VVpIeJhS6O
-         1e9Hu14Z2fCnBHVqXF34uPeLEQrtdG9YXK52kuRWTF3oPKNZrvBPCAc+gBslH6NV8Ouq
-         wBbQ+37WPCQ86ZZvDKCMAIqEEFNt0xsF2+34TE1wplgrGErpsYZaoC6QpWuNH1MgOcp4
-         x/Jg==
-X-Gm-Message-State: AO0yUKWxcgL9zUCZWd3IJLVod3HRZW/qhl8GI4ScWy30HeWsIvkXO23W
-        WDX+NlenhzD7288/vz+t1GKs6hPr3e79otOCd4Tctw==
-X-Google-Smtp-Source: AK7set+cpMZoUBbLi7y62qKLOfzTpowS10SFktJUS64MEwyyN0nazQkW2SZ0qBCAUtin9d4sf1E9nAl+TK9Tnd013IM=
-X-Received: by 2002:a17:906:ca41:b0:88b:a2de:ed92 with SMTP id
- jx1-20020a170906ca4100b0088ba2deed92mr1679750ejb.193.1675331918961; Thu, 02
- Feb 2023 01:58:38 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wHea8kyU+V/tcWLN+5K+aynGDqOYuX+1Dl2ZaVpPFKg=;
+        b=2GmmD2n9Z9pA097xsMPbUHA5kKWBvvZDoGiiz+5cTu1VUPFzBGzrK5++qHTwgawaYl
+         lbn6LAG8eqmIKBnvILsVIHOj/wQ2G2kSqiBqG+3pJnouHuf81ZonTdF9lmILVhrppOBC
+         39GCvxVc9PlpHz5R/rzcvnNOFwn34M3pZj1emUojbtcUyZTN4gTzWCgfqpk3JCoe84AG
+         ICp0+rnGEGj9Xb0xT2NTk9wSg9F+yLtNrwrc/SN9yHL42UHFjnhA4NMMYh8r7E0sYtUE
+         I0KxVZDHBnXlsBSpqHrwqRvmLrySJWf/q+bIIKn+vuQ/1JRrPwKkGeq0ROIlg5Nha0Pt
+         ECPQ==
+X-Gm-Message-State: AO0yUKUAQpiyma2OdvpLWePTp26ZuDPoD5bBkhlNGtNh7PJL5VslJhyx
+        k1DaiYK0qRx0p2lrpvhJ6QpCdA==
+X-Google-Smtp-Source: AK7set+K1gY9InG0OadSWT9wI7lDZtoEXwN78191Z9C6Nt91Cvqchnzmy6P3BgVXSAcDMqWOdcoYfg==
+X-Received: by 2002:a05:6000:2:b0:2bf:cbf0:e021 with SMTP id h2-20020a056000000200b002bfcbf0e021mr4594751wrx.71.1675331953785;
+        Thu, 02 Feb 2023 01:59:13 -0800 (PST)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id o6-20020adfe806000000b002bdf8dd6a8bsm19098512wrm.80.2023.02.02.01.59.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Feb 2023 01:59:12 -0800 (PST)
+Message-ID: <e5acd00c-7a53-a789-8dab-a69cffda34f5@linaro.org>
+Date:   Thu, 2 Feb 2023 09:59:11 +0000
 MIME-Version: 1.0
-References: <20220812143055.12938-1-olivier.masse@nxp.com> <20220812143055.12938-2-olivier.masse@nxp.com>
- <30534fadb8172088eddef46ae71d87c167cbf32e.camel@nxp.com> <CAFA6WYOMCswgHHxsgc9Hgi7rmTPaZDqce=BixvYoFTfL0bTFDQ@mail.gmail.com>
- <PA4PR04MB75204E8D2B959893A04D55F388D69@PA4PR04MB7520.eurprd04.prod.outlook.com>
- <CAFA6WYPGT8xZnB1idcxcHT1bvM=0kwFssBQbn063-qg=czM-ZQ@mail.gmail.com>
-In-Reply-To: <CAFA6WYPGT8xZnB1idcxcHT1bvM=0kwFssBQbn063-qg=czM-ZQ@mail.gmail.com>
-From:   Etienne Carriere <etienne.carriere@linaro.org>
-Date:   Thu, 2 Feb 2023 10:58:27 +0100
-Message-ID: <CAN5uoS8XgvAKVwKHx-uOe3hAa4Jrd5FJt6xNOG5s-simkRND9w@mail.gmail.com>
-Subject: Re: [EXT] Re: [PATCH v2 1/1] tee: new ioctl to a register tee_shm
- from a dmabuf file descriptor
-To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     Cyrille Fleury <cyrille.fleury@nxp.com>,
-        Olivier Masse <olivier.masse@nxp.com>,
-        "fredgc@google.com" <fredgc@google.com>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
-        "afd@ti.com" <afd@ti.com>,
-        "op-tee@lists.trustedfirmware.org" <op-tee@lists.trustedfirmware.org>,
-        "jens.wiklander@linaro.org" <jens.wiklander@linaro.org>,
-        "joakim.bech@linaro.org" <joakim.bech@linaro.org>,
-        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
-        Peter Griffin <peter.griffin@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "christian.koenig@amd.com" <christian.koenig@amd.com>,
-        =?UTF-8?Q?Cl=C3=A9ment_Faure?= <clement.faure@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v9 08/27] mailbox: Add Gunyah message queue mailbox
+Content-Language: en-US
+To:     Elliot Berman <quic_eberman@quicinc.com>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Alex Elder <elder@linaro.org>,
+        Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jassi Brar <jassisinghbrar@gmail.com>
+Cc:     Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230120224627.4053418-1-quic_eberman@quicinc.com>
+ <20230120224627.4053418-9-quic_eberman@quicinc.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20230120224627.4053418-9-quic_eberman@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,499 +94,391 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2 Feb 2023 at 09:35, Sumit Garg <sumit.garg@linaro.org> wrote:
->
-> Hi Cyrille,
->
-> Please don't top post as it makes it harder to follow-up.
->
-> On Thu, 2 Feb 2023 at 13:26, Cyrille Fleury <cyrille.fleury@nxp.com> wrot=
-e:
-> >
-> > Hi Sumit, all
-> >
-> > Upstream OP-TEE should support registering a dmabuf since a while, give=
-n how widely dmabuf is used in Linux for passing buffers around between dev=
-ices.
-> >
-> > Purpose of the new register_tee_shm ioctl is to allow OPTEE to use memo=
-ry allocated from the exiting linux dma buffer. We don't need to have secur=
-e dma-heap up streamed.
-> >
-> > You mentioned secure dma-buffer, but secure dma-buffer is a dma-buffer,=
- so the work to be done for secure or "regular" dma buffers by the register=
-_tee_shm ioctl is 100% the same.
-> >
-> > The scope of this ioctl is limited to what existing upstream dma-buffer=
-s are:
-> >         -> sharing buffers for hardware (DMA) access across multiple de=
-vice drivers and subsystems, and for synchronizing asynchronous hardware ac=
-cess.
-> >        -> It means continuous memory only.
-> >
-> > So if we reduce the scope of register tee_shm to exiting dma-buffer are=
-a, the current patch does the job.
->
-> Do you have a corresponding real world use-case supported by upstream
-> OP-TEE? AFAIK, the Secure Data Path (SDP) use-case is the one
-> supported in OP-TEE upstream but without secure dmabuf heap [1]
-> available, the new ioctl can't be exercised.
->
-> [1] https://github.com/OP-TEE/optee_test/blob/master/host/xtest/sdp_basic=
-.h#L15
-
-OP-TEE has some SDP test taht can exercice SDP: 'xtest regression_1014'.
-https://github.com/OP-TEE/optee_test/blob/3.20.0/host/xtest/regression_1000=
-.c#L1256
-
-The test relies on old staged ION + local secure dmabuf heaps no more
-maintained, so this test is currently not functional.
-If we upgrade the test to mainline dmabuf alloc means, and apply the
-change discussed here, we should be able to regularly test SDP in
-OP-TEE project CI.
-The part to update is the userland allocation of the dmabuf:
-https://github.com/OP-TEE/optee_test/blob/3.20.0/host/xtest/sdp_basic.c#L91
-
-br,
-etienne
 
 
->
-> -Sumit
->
-> >
-> > Regards.
-> >
-> > -----Original Message-----
-> > From: Sumit Garg <sumit.garg@linaro.org>
-> > Sent: Wednesday, February 1, 2023 6:34 AM
-> > To: Olivier Masse <olivier.masse@nxp.com>
-> > Cc: fredgc@google.com; linux-media@vger.kernel.org; linaro-mm-sig@lists=
-.linaro.org; afd@ti.com; op-tee@lists.trustedfirmware.org; jens.wiklander@l=
-inaro.org; joakim.bech@linaro.org; sumit.semwal@linaro.org; Peter Griffin <=
-peter.griffin@linaro.org>; linux-kernel@vger.kernel.org; etienne.carriere@l=
-inaro.org; dri-devel@lists.freedesktop.org; christian.koenig@amd.com; Cl=C3=
-=A9ment Faure <clement.faure@nxp.com>; Cyrille Fleury <cyrille.fleury@nxp.c=
-om>
-> > Subject: [EXT] Re: [PATCH v2 1/1] tee: new ioctl to a register tee_shm =
-from a dmabuf file descriptor
-> >
-> > Caution: EXT Email
-> >
-> > Hi Olivier,
-> >
-> > On Fri, 27 Jan 2023 at 16:24, Olivier Masse <olivier.masse@nxp.com> wro=
-te:
-> > >
-> > > Hi Joakim,
-> > > Hi Etienne,
-> > >
-> > > Let me bring back this pull request for OPTEE Linux driver.
-> > >
-> > > Last feedback was from Christian K=C3=B6nig and Sumit Garg.
-> > > From Christian:
-> > > > Just two comments:
-> > > >
-> > > > 1. Dmitry is working on a change which renames some functions and
-> > > > makes it mandatory to call them with the dma_resv lock held.
-> > > >
-> > > > Depending on how you want to upstream this change you will certainl=
-y
-> > > > run into conflicts with that.
-> > >
-> > > Is there any update on these changes ?
-> > >
-> > > >
-> > > > 2. Would it be possible to do this dynamically? In other words does
-> > > > the tee driver has a concept of buffers moving around?
-> > >
-> > > We do not support dynamic secure memory heap.
-> > >
-> > > From Sumit:
-> > > > What limits you to extend this feature to non-contiguous memory
-> > > > buffers? I believe that should be possible with OP-TEE dynamic
-> > > > shared memory which gives you the granularity to register a list of=
- pages.
-> > >
-> > > Our solution use a fixed protected reserved memory region and do not
-> > > rely on a dynamic protection managed in secure.
-> > >
-> > > The scope of this implementation rely on a static memory region
-> > > handled by a specific DMA Heap type.
-> > >
-> >
-> > AFAIR, the last review for v2 is here [1]. So we need to have this secu=
-re DMA heap upstream in order for ioctl added by this patch to be usable.
-> >
-> > [1] https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2=
-Flists.trustedfirmware.org%2Farchives%2Flist%2Fop-tee%40lists.trustedfirmwa=
-re.org%2Fmessage%2FM3WLO7RNG22OR4744BY6XNG2GLIYMNHN%2F&data=3D05%7C01%7Ccyr=
-ille.fleury%40nxp.com%7Cb24461a4e7284314dff408db0415f23e%7C686ea1d3bc2b4c6f=
-a92cd99c5c301635%7C0%7C0%7C638108264533221384%7CUnknown%7CTWFpbGZsb3d8eyJWI=
-joiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%=
-7C&sdata=3D6pRAqnMlJ0TX000YmlgTkPKn411VBC%2Bj29O9KhJjJOg%3D&reserved=3D0
-> >
-> > -Sumit
-> >
-> > > Best regards,
-> > > Olivier MASSE
-> > >
-> > >
-> > > On ven., 2022-08-12 at 16:30 +0200, Olivier Masse wrote:
-> > > > From: Etienne Carriere <etienne.carriere@linaro.org>
-> > > >
-> > > > This change allows userland to create a tee_shm object that refers
-> > > > to a dmabuf reference.
-> > > >
-> > > > Userland provides a dmabuf file descriptor as buffer reference.
-> > > > The created tee_shm object exported as a brand new dmabuf reference
-> > > > used to provide a clean fd to userland. Userland shall closed this
-> > > > new fd to release the tee_shm object resources. The initial dmabuf
-> > > > resources are tracked independently through original dmabuf file
-> > > > descriptor.
-> > > >
-> > > > Once the buffer is registered and until it is released, TEE driver
-> > > > keeps a refcount on the registered dmabuf structure.
-> > > >
-> > > > This change only support dmabuf references that relates to
-> > > > physically contiguous memory buffers.
-> > > >
-> > > > New tee_shm flag to identify tee_shm objects built from a registere=
-d
-> > > > dmabuf: TEE_SHM_EXT_DMA_BUF. Such tee_shm structures are flagged
-> > > > with TEE_SHM_EXT_DMA_BUF.
-> > > >
-> > > > Co-Developed-by: Etienne Carriere <etienne.carriere@linaro.org>
-> > > > Signed-off-by: Olivier Masse <olivier.masse@nxp.com>
-> > > > Reported-by: kernel test robot <lkp@intel.com>
-> > > > From:
-> > > > https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2=
-Fgi
-> > > > thub.com%2Flinaro-swg%2Flinux.git&data=3D05%7C01%7Ccyrille.fleury%4=
-0nx
-> > > > p.com%7Cb24461a4e7284314dff408db0415f23e%7C686ea1d3bc2b4c6fa92cd99c=
-5
-> > > > c301635%7C0%7C0%7C638108264533221384%7CUnknown%7CTWFpbGZsb3d8eyJWIj=
-o
-> > > > iMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%=
-7
-> > > > C%7C%7C&sdata=3D8jbFPaF%2B5JBed4Uvo1hsJiB%2BP71KUgJmnW%2BIi3zLfok%3=
-D&r
-> > > > eserved=3D0 (cherry picked from commit
-> > > > 41e21e5c405530590dc2dd10b2a8dbe64589840f)
-> > > > ---
-> > > >  drivers/tee/tee_core.c   | 38 +++++++++++++++
-> > > >  drivers/tee/tee_shm.c    | 99
-> > > > +++++++++++++++++++++++++++++++++++++++-
-> > > >  include/linux/tee_drv.h  | 11 +++++  include/uapi/linux/tee.h | 29
-> > > > ++++++++++++
-> > > >  4 files changed, 175 insertions(+), 2 deletions(-)
-> > > >
-> > > > diff --git a/drivers/tee/tee_core.c b/drivers/tee/tee_core.c index
-> > > > 8aa1a4836b92..7c45cbf85eb9 100644
-> > > > --- a/drivers/tee/tee_core.c
-> > > > +++ b/drivers/tee/tee_core.c
-> > > > @@ -355,6 +355,42 @@ tee_ioctl_shm_register(struct tee_context *ctx=
-,
-> > > >       return ret;
-> > > >  }
-> > > >
-> > > > +static int tee_ioctl_shm_register_fd(struct tee_context *ctx,
-> > > > +                                  struct
-> > > > tee_ioctl_shm_register_fd_data __user *udata)
-> > > > +{
-> > > > +     struct tee_ioctl_shm_register_fd_data data;
-> > > > +     struct tee_shm *shm;
-> > > > +     long ret;
-> > > > +
-> > > > +     if (copy_from_user(&data, udata, sizeof(data)))
-> > > > +             return -EFAULT;
-> > > > +
-> > > > +     /* Currently no input flags are supported */
-> > > > +     if (data.flags)
-> > > > +             return -EINVAL;
-> > > > +
-> > > > +     shm =3D tee_shm_register_fd(ctx, data.fd);
-> > > > +     if (IS_ERR(shm))
-> > > > +             return -EINVAL;
-> > > > +
-> > > > +     data.id =3D shm->id;
-> > > > +     data.flags =3D shm->flags;
-> > > > +     data.size =3D shm->size;
-> > > > +
-> > > > +     if (copy_to_user(udata, &data, sizeof(data)))
-> > > > +             ret =3D -EFAULT;
-> > > > +     else
-> > > > +             ret =3D tee_shm_get_fd(shm);
-> > > > +
-> > > > +     /*
-> > > > +      * When user space closes the file descriptor the shared memo=
-ry
-> > > > +      * should be freed or if tee_shm_get_fd() failed then it will
-> > > > +      * be freed immediately.
-> > > > +      */
-> > > > +     tee_shm_put(shm);
-> > > > +     return ret;
-> > > > +}
-> > > > +
-> > > >  static int params_from_user(struct tee_context *ctx, struct
-> > > > tee_param *params,
-> > > >                           size_t num_params,
-> > > >                           struct tee_ioctl_param __user *uparams) @=
-@
-> > > > -829,6 +865,8 @@ static long tee_ioctl(struct file *filp, unsigned
-> > > > int cmd, unsigned long arg)
-> > > >               return tee_ioctl_shm_alloc(ctx, uarg);
-> > > >       case TEE_IOC_SHM_REGISTER:
-> > > >               return tee_ioctl_shm_register(ctx, uarg);
-> > > > +     case TEE_IOC_SHM_REGISTER_FD:
-> > > > +             return tee_ioctl_shm_register_fd(ctx, uarg);
-> > > >       case TEE_IOC_OPEN_SESSION:
-> > > >               return tee_ioctl_open_session(ctx, uarg);
-> > > >       case TEE_IOC_INVOKE:
-> > > > diff --git a/drivers/tee/tee_shm.c b/drivers/tee/tee_shm.c index
-> > > > 836872467dc6..55a3fbbb022e 100644
-> > > > --- a/drivers/tee/tee_shm.c
-> > > > +++ b/drivers/tee/tee_shm.c
-> > > > @@ -4,6 +4,7 @@
-> > > >   */
-> > > >  #include <linux/anon_inodes.h>
-> > > >  #include <linux/device.h>
-> > > > +#include <linux/dma-buf.h>
-> > > >  #include <linux/idr.h>
-> > > >  #include <linux/mm.h>
-> > > >  #include <linux/sched.h>
-> > > > @@ -12,6 +13,14 @@
-> > > >  #include <linux/uio.h>
-> > > >  #include "tee_private.h"
-> > > >
-> > > > +/* extra references appended to shm object for registered shared
-> > > > memory */
-> > > > +struct tee_shm_dmabuf_ref {
-> > > > +     struct tee_shm shm;
-> > > > +     struct dma_buf *dmabuf;
-> > > > +     struct dma_buf_attachment *attach;
-> > > > +     struct sg_table *sgt;
-> > > > +};
-> > > > +
-> > > >  static void shm_put_kernel_pages(struct page **pages, size_t
-> > > > page_count)
-> > > >  {
-> > > >       size_t n;
-> > > > @@ -71,7 +80,16 @@ static void release_registered_pages(struct
-> > > > tee_shm *shm)
-> > > >
-> > > >  static void tee_shm_release(struct tee_device *teedev, struct
-> > > > tee_shm *shm)  {
-> > > > -     if (shm->flags & TEE_SHM_POOL) {
-> > > > +     if (shm->flags & TEE_SHM_EXT_DMA_BUF) {
-> > > > +             struct tee_shm_dmabuf_ref *ref;
-> > > > +
-> > > > +             ref =3D container_of(shm, struct tee_shm_dmabuf_ref,
-> > > > shm);
-> > > > +             dma_buf_unmap_attachment(ref->attach, ref->sgt,
-> > > > +                                      DMA_BIDIRECTIONAL);
-> > > > +
-> > > > +             dma_buf_detach(ref->dmabuf, ref->attach);
-> > > > +             dma_buf_put(ref->dmabuf);
-> > > > +     } else if (shm->flags & TEE_SHM_POOL) {
-> > > >               teedev->pool->ops->free(teedev->pool, shm);
-> > > >       } else if (shm->flags & TEE_SHM_DYNAMIC) {
-> > > >               int rc =3D teedev->desc->ops->shm_unregister(shm->ctx=
-,
-> > > > shm);
-> > > > @@ -195,7 +213,7 @@ struct tee_shm *tee_shm_alloc_user_buf(struct
-> > > > tee_context *ctx, size_t size)
-> > > >   * tee_client_invoke_func(). The memory allocated is later freed
-> > > > with a
-> > > >   * call to tee_shm_free().
-> > > >   *
-> > > > - * @returns a pointer to 'struct tee_shm'
-> > > > + * @returns a pointer to 'struct tee_shm' on success, and ERR_PTR
-> > > > + on
-> > > > failure
-> > > >   */
-> > > >  struct tee_shm *tee_shm_alloc_kernel_buf(struct tee_context *ctx,
-> > > > size_t size)  { @@ -229,6 +247,83 @@ struct tee_shm
-> > > > *tee_shm_alloc_priv_buf(struct tee_context *ctx, size_t size)  }
-> > > > EXPORT_SYMBOL_GPL(tee_shm_alloc_priv_buf);
-> > > >
-> > > > +struct tee_shm *tee_shm_register_fd(struct tee_context *ctx, int
-> > > > +fd) {
-> > > > +     struct tee_shm_dmabuf_ref *ref;
-> > > > +     int rc;
-> > > > +
-> > > > +     if (!tee_device_get(ctx->teedev))
-> > > > +             return ERR_PTR(-EINVAL);
-> > > > +
-> > > > +     teedev_ctx_get(ctx);
-> > > > +
-> > > > +     ref =3D kzalloc(sizeof(*ref), GFP_KERNEL);
-> > > > +     if (!ref) {
-> > > > +             rc =3D -ENOMEM;
-> > > > +             goto err_put_tee;
-> > > > +     }
-> > > > +
-> > > > +     refcount_set(&ref->shm.refcount, 1);
-> > > > +     ref->shm.ctx =3D ctx;
-> > > > +     ref->shm.id =3D -1;
-> > > > +
-> > > > +     ref->dmabuf =3D dma_buf_get(fd);
-> > > > +     if (IS_ERR(ref->dmabuf)) {
-> > > > +             rc =3D PTR_ERR(ref->dmabuf);
-> > > > +             goto err_put_dmabuf;
-> > > > +     }
-> > > > +
-> > > > +     ref->attach =3D dma_buf_attach(ref->dmabuf, &ref->shm.ctx-
-> > > > >teedev->dev);
-> > > > +     if (IS_ERR(ref->attach)) {
-> > > > +             rc =3D PTR_ERR(ref->attach);
-> > > > +             goto err_detach;
-> > > > +     }
-> > > > +
-> > > > +     ref->sgt =3D dma_buf_map_attachment(ref->attach,
-> > > > DMA_BIDIRECTIONAL);
-> > > > +     if (IS_ERR(ref->sgt)) {
-> > > > +             rc =3D PTR_ERR(ref->sgt);
-> > > > +             goto err_unmap_attachement;
-> > > > +     }
-> > > > +
-> > > > +     if (sg_nents(ref->sgt->sgl) !=3D 1) {
-> > > > +             rc =3D PTR_ERR(ref->sgt->sgl);
-> > > > +             goto err_unmap_attachement;
-> > > > +     }
-> > > > +
-> > > > +     ref->shm.paddr =3D sg_dma_address(ref->sgt->sgl);
-> > > > +     ref->shm.size =3D sg_dma_len(ref->sgt->sgl);
-> > > > +     ref->shm.flags =3D TEE_SHM_EXT_DMA_BUF;
-> > > > +
-> > > > +     mutex_lock(&ref->shm.ctx->teedev->mutex);
-> > > > +     ref->shm.id =3D idr_alloc(&ref->shm.ctx->teedev->idr, &ref->s=
-hm,
-> > > > +                             1, 0, GFP_KERNEL);
-> > > > +     mutex_unlock(&ref->shm.ctx->teedev->mutex);
-> > > > +     if (ref->shm.id < 0) {
-> > > > +             rc =3D ref->shm.id;
-> > > > +             goto err_idr_remove;
-> > > > +     }
-> > > > +
-> > > > +     return &ref->shm;
-> > > > +
-> > > > +err_idr_remove:
-> > > > +     mutex_lock(&ctx->teedev->mutex);
-> > > > +     idr_remove(&ctx->teedev->idr, ref->shm.id);
-> > > > +     mutex_unlock(&ctx->teedev->mutex);
-> > > > +err_unmap_attachement:
-> > > > +     dma_buf_unmap_attachment(ref->attach, ref->sgt,
-> > > > DMA_BIDIRECTIONAL);
-> > > > +err_detach:
-> > > > +     dma_buf_detach(ref->dmabuf, ref->attach);
-> > > > +err_put_dmabuf:
-> > > > +     dma_buf_put(ref->dmabuf);
-> > > > +     kfree(ref);
-> > > > +err_put_tee:
-> > > > +     teedev_ctx_put(ctx);
-> > > > +     tee_device_put(ctx->teedev);
-> > > > +
-> > > > +     return ERR_PTR(rc);
-> > > > +}
-> > > > +EXPORT_SYMBOL_GPL(tee_shm_register_fd);
-> > > > +
-> > > >  static struct tee_shm *
-> > > >  register_shm_helper(struct tee_context *ctx, unsigned long addr,
-> > > >                   size_t length, u32 flags, int id) diff --git
-> > > > a/include/linux/tee_drv.h b/include/linux/tee_drv.h index
-> > > > 911cad324acc..40ddd5376c2d 100644
-> > > > --- a/include/linux/tee_drv.h
-> > > > +++ b/include/linux/tee_drv.h
-> > > > @@ -25,6 +25,7 @@
-> > > >  #define TEE_SHM_USER_MAPPED  BIT(1)  /* Memory mapped in user spac=
-e
-> > > > */
-> > > >  #define TEE_SHM_POOL         BIT(2)  /* Memory allocated from pool
-> > > > */
-> > > >  #define TEE_SHM_PRIV         BIT(3)  /* Memory private to TEE driv=
-er
-> > > > */
-> > > > +#define TEE_SHM_EXT_DMA_BUF     BIT(4)  /* Memory with dma-buf
-> > > > handle */
-> > > >
-> > > >  struct device;
-> > > >  struct tee_device;
-> > > > @@ -276,6 +277,16 @@ struct tee_shm *tee_shm_alloc_kernel_buf(struc=
-t
-> > > > tee_context *ctx, size_t size);  struct tee_shm
-> > > > *tee_shm_register_kernel_buf(struct tee_context *ctx,
-> > > >                                           void *addr, size_t
-> > > > length);
-> > > >
-> > > > +/**
-> > > > + * tee_shm_register_fd() - Register shared memory from file
-> > > > descriptor
-> > > > + *
-> > > > + * @ctx:     Context that allocates the shared memory
-> > > > + * @fd:              Shared memory file descriptor reference
-> > > > + *
-> > > > + * @returns a pointer to 'struct tee_shm' on success, and ERR_PTR
-> > > > + on
-> > > > failure
-> > > > + */
-> > > > +struct tee_shm *tee_shm_register_fd(struct tee_context *ctx, int
-> > > > fd);
-> > > > +
-> > > >  /**
-> > > >   * tee_shm_is_dynamic() - Check if shared memory object is of the
-> > > > dynamic kind
-> > > >   * @shm:     Shared memory handle
-> > > > diff --git a/include/uapi/linux/tee.h b/include/uapi/linux/tee.h
-> > > > index 25a6c534beb1..baf3cd7cfdac 100644
-> > > > --- a/include/uapi/linux/tee.h
-> > > > +++ b/include/uapi/linux/tee.h
-> > > > @@ -121,6 +121,35 @@ struct tee_ioctl_shm_alloc_data {
-> > > >  #define TEE_IOC_SHM_ALLOC    _IOWR(TEE_IOC_MAGIC, TEE_IOC_BASE + 1=
-,
-> > > > \
-> > > >                                    struct tee_ioctl_shm_alloc_data)
-> > > >
-> > > > +/**
-> > > > + * struct tee_ioctl_shm_register_fd_data - Shared memory
-> > > > +registering
-> > > > argument
-> > > > + * @fd:              [in] File descriptor identifying the shared
-> > > > memory
-> > > > + * @size:    [out] Size of shared memory to allocate
-> > > > + * @flags:   [in] Flags to/from allocation.
-> > > > + * @id:              [out] Identifier of the shared memory
-> > > > + *
-> > > > + * The flags field should currently be zero as input. Updated by
-> > > > + the
-> > > > call
-> > > > + * with actual flags as defined by TEE_IOCTL_SHM_* above.
-> > > > + * This structure is used as argument for TEE_IOC_SHM_REGISTER_FD
-> > > > below.
-> > > > + */
-> > > > +struct tee_ioctl_shm_register_fd_data {
-> > > > +     __s64 fd;
-> > > > +     __u64 size;
-> > > > +     __u32 flags;
-> > > > +     __s32 id;
-> > > > +} __attribute__ ((aligned (8)));
-> > > > +
-> > > > +/**
-> > > > + * TEE_IOC_SHM_REGISTER_FD - register a shared memory from a file
-> > > > descriptor
-> > > > + *
-> > > > + * Returns a file descriptor on success or < 0 on failure
-> > > > + *
-> > > > + * The returned file descriptor refers to the shared memory object
-> > > > in kernel
-> > > > + * land. The shared memory is freed when the descriptor is closed.
-> > > > + */
-> > > > +#define TEE_IOC_SHM_REGISTER_FD      _IOWR(TEE_IOC_MAGIC,
-> > > > TEE_IOC_BASE + 8, \
-> > > > +                                  struct
-> > > > tee_ioctl_shm_register_fd_data)
-> > > > +
-> > > >  /**
-> > > >   * struct tee_ioctl_buf_data - Variable sized buffer
-> > > >   * @buf_ptr: [in] A __user pointer to a buffer
+On 20/01/2023 22:46, Elliot Berman wrote:
+> Gunyah message queues are a unidirectional inter-VM pipe for messages up
+> to 1024 bytes. This driver supports pairing a receiver message queue and
+> a transmitter message queue to expose a single mailbox channel.
+> 
+> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+> ---
+>   Documentation/virt/gunyah/message-queue.rst |   8 +
+>   MAINTAINERS                                 |   1 +
+>   drivers/mailbox/Makefile                    |   2 +
+>   drivers/mailbox/gunyah-msgq.c               | 214 ++++++++++++++++++++
+>   include/linux/gunyah.h                      |  59 +++++-
+>   5 files changed, 283 insertions(+), 1 deletion(-)
+>   create mode 100644 drivers/mailbox/gunyah-msgq.c
+> 
+> diff --git a/Documentation/virt/gunyah/message-queue.rst b/Documentation/virt/gunyah/message-queue.rst
+> index 0667b3eb1ff9..082085e981e0 100644
+> --- a/Documentation/virt/gunyah/message-queue.rst
+> +++ b/Documentation/virt/gunyah/message-queue.rst
+> @@ -59,3 +59,11 @@ vIRQ: two TX message queues will have two vIRQs (and two capability IDs).
+>         |               |         |                 |         |               |
+>         |               |         |                 |         |               |
+>         +---------------+         +-----------------+         +---------------+
+> +
+> +Gunyah message queues are exposed as mailboxes. To create the mailbox, create
+> +a mbox_client and call `gh_msgq_init`. On receipt of the RX_READY interrupt,
+> +all messages in the RX message queue are read and pushed via the `rx_callback`
+> +of the registered mbox_client.
+> +
+> +.. kernel-doc:: drivers/mailbox/gunyah-msgq.c
+> +   :identifiers: gh_msgq_init
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index fe19e71efc6d..d02e8abe6457 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -9049,6 +9049,7 @@ S:	Supported
+>   F:	Documentation/devicetree/bindings/firmware/gunyah-hypervisor.yaml
+>   F:	Documentation/virt/gunyah/
+>   F:	arch/arm64/gunyah/
+> +F:	drivers/mailbox/gunyah-msgq.c
+>   F:	drivers/virt/gunyah/
+>   F:	include/linux/gunyah.h
+>   
+> diff --git a/drivers/mailbox/Makefile b/drivers/mailbox/Makefile
+> index fc9376117111..5f929bb55e9a 100644
+> --- a/drivers/mailbox/Makefile
+> +++ b/drivers/mailbox/Makefile
+> @@ -55,6 +55,8 @@ obj-$(CONFIG_MTK_CMDQ_MBOX)	+= mtk-cmdq-mailbox.o
+>   
+>   obj-$(CONFIG_ZYNQMP_IPI_MBOX)	+= zynqmp-ipi-mailbox.o
+>   
+> +obj-$(CONFIG_GUNYAH)		+= gunyah-msgq.o
+> +
+>   obj-$(CONFIG_SUN6I_MSGBOX)	+= sun6i-msgbox.o
+>   
+>   obj-$(CONFIG_SPRD_MBOX)		+= sprd-mailbox.o
+> diff --git a/drivers/mailbox/gunyah-msgq.c b/drivers/mailbox/gunyah-msgq.c
+> new file mode 100644
+> index 000000000000..caa283f7248b
+> --- /dev/null
+> +++ b/drivers/mailbox/gunyah-msgq.c
+> @@ -0,0 +1,214 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +
+> +#include <linux/mailbox_controller.h>
+> +#include <linux/module.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/gunyah.h>
+> +#include <linux/printk.h>
+> +#include <linux/init.h>
+> +#include <linux/slab.h>
+> +#include <linux/wait.h>
+> +
+> +#define mbox_chan_to_msgq(chan) (container_of(chan->mbox, struct gh_msgq, mbox))
+> +
+> +static irqreturn_t gh_msgq_rx_irq_handler(int irq, void *data)
+> +{
+> +	struct gh_msgq *msgq = data;
+> +	struct gh_msgq_rx_data rx_data;
+> +	unsigned long gh_err;
+> +	bool ready = true;
+> +
+> +	while (ready) {
+> +		gh_err = gh_hypercall_msgq_recv(msgq->rx_ghrsc->capid,
+> +				(uintptr_t)&rx_data.data, sizeof(rx_data.data),
+you should proabably use  GH_MSGQ_MAX_MSG_SIZE instead of calling sizeof 
+for every loop.
+
+> +				&rx_data.length, &ready);
+> +		if (gh_err == GH_ERROR_OK) {
+> +			mbox_chan_received_data(gh_msgq_chan(msgq), &rx_data);
+> +		} else if (gh_err == GH_ERROR_MSGQUEUE_EMPTY) {
+> +			break;
+> +		} else {
+> +			pr_warn("Failed to receive data from msgq for %s: %zd\n",
+> +				msgq->mbox.dev ? dev_name(msgq->mbox.dev) : "", gh_err);
+> +			break;
+> +		}
+> +	}
+> +
+> +	return IRQ_HANDLED;
+> +}
+How about making this more readable.
+also use of gh_ in local variables is not really adding any value.
+
+while (ready) {
+	err = gh_hypercall_msgq_recv(...);
+	if (err) {
+		if (err != GH_ERROR_MSGQUEUE_EMPTY)
+                 	dev_warn(msgq->mbox.dev, "Failed to receive data 
+%zd\n", err);
+         		break;
+
+                }
+	mbox_chan_received_data(gh_msgq_chan(msgq), &rx_data);
+}
+
+
+> +
+> +static irqreturn_t gh_msgq_tx_irq_handler(int irq, void *data)
+> +{
+> +	struct gh_msgq *msgq = data;
+> +
+> +	mbox_chan_txdone(gh_msgq_chan(msgq), 0);
+What is this irq for? Is it for tx done ack?
+
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static void gh_msgq_txdone_tasklet(struct tasklet_struct *tasklet)
+> +{
+> +	struct gh_msgq *msgq = container_of(tasklet, struct gh_msgq, txdone_tasklet);
+> +
+> +	mbox_chan_txdone(gh_msgq_chan(msgq), msgq->last_ret);
+> +}
+> +
+> +static int gh_msgq_send_data(struct mbox_chan *chan, void *data)
+> +{
+> +	struct gh_msgq *msgq = mbox_chan_to_msgq(chan);
+> +	struct gh_msgq_tx_data *msgq_data = data;
+> +	u64 tx_flags = 0;
+> +	unsigned long ret;
+> +	bool ready;
+> +
+> +	if (msgq_data->push)
+> +		tx_flags |= GH_HYPERCALL_MSGQ_TX_FLAGS_PUSH;
+> +
+> +	ret = gh_hypercall_msgq_send(msgq->tx_ghrsc->capid, msgq_data->length,
+> +					(uintptr_t)msgq_data->data, tx_flags, &ready);
+> +
+> +	/**
+> +	 * unlikely because Linux tracks state of msgq and should not try to
+> +	 * send message when msgq is full.
+> +	 */
+> +	if (unlikely(ret == GH_ERROR_MSGQUEUE_FULL))
+> +		return -EAGAIN;
+> +
+> +	/**
+> +	 * Propagate all other errors to client. If we return error to mailbox
+> +	 * framework, then no other messages can be sent and nobody will know
+> +	 * to retry this message.
+> +	 */
+> +	msgq->last_ret = gh_remap_error(ret);
+> +
+> +	/**
+> +	 * This message was successfully sent, but message queue isn't ready to
+> +	 * receive more messages because it's now full. Mailbox framework
+> +	 * requires that we only report that message was transmitted when
+> +	 * we're ready to transmit another message. We'll get that in the form
+> +	 * of tx IRQ once the other side starts to drain the msgq.
+> +	 */
+> +	if (ret == GH_ERROR_OK && !ready)
+> +		return 0;
+> +
+> +	/**
+> +	 * We can send more messages. Mailbox framework requires that tx done
+> +	 * happens asynchronously to sending the message. Gunyah message queues
+> +	 * tell us right away on the hypercall return whether we can send more
+> +	 * messages. To work around this, defer the txdone to a tasklet.
+> +	 */
+> +	tasklet_schedule(&msgq->txdone_tasklet);
+> +
+> +	return 0;
+> +}
+> +
+> +static struct mbox_chan_ops gh_msgq_ops = {
+> +	.send_data = gh_msgq_send_data,
+> +};
+> +
+> +/**
+> + * gh_msgq_init() - Initialize a Gunyah message queue with an mbox_client
+> + * @parent: optional, device parent used for the mailbox controller
+> + * @msgq: Pointer to the gh_msgq to initialize
+> + * @cl: A mailbox client to bind to the mailbox channel that the message queue creates
+> + * @tx_ghrsc: optional, the transmission side of the message queue
+> + * @rx_ghrsc: optional, the receiving side of the message queue
+> + *
+> + * At least one of tx_ghrsc and rx_ghrsc should be not NULL. Most message queue use cases come with
+> + * a pair of message queues to facilitate bidirectional communication. When tx_ghrsc is set,
+> + * the client can send messages with mbox_send_message(gh_msgq_chan(msgq), msg). When rx_ghrsc
+> + * is set, the mbox_client should register an .rx_callback() and the message queue driver will
+> + * push all available messages upon receiving the RX ready interrupt. The messages should be
+> + * consumed or copied by the client right away as the gh_msgq_rx_data will be replaced/destroyed
+> + * after the callback.
+> + *
+> + * Returns - 0 on success, negative otherwise
+> + */
+> +int gh_msgq_init(struct device *parent, struct gh_msgq *msgq, struct mbox_client *cl,
+> +		     struct gunyah_resource *tx_ghrsc, struct gunyah_resource *rx_ghrsc)
+> +{
+> +	int ret;
+> +
+> +	/* Must have at least a tx_ghrsc or rx_ghrsc and that they are the right device types */
+> +	if ((!tx_ghrsc && !rx_ghrsc) ||
+> +	    (tx_ghrsc && tx_ghrsc->type != GUNYAH_RESOURCE_TYPE_MSGQ_TX) ||
+> +	    (rx_ghrsc && rx_ghrsc->type != GUNYAH_RESOURCE_TYPE_MSGQ_RX))
+> +		return -EINVAL;
+> +
+> +	if (gh_api_version() != GUNYAH_API_V1) {
+> +		pr_warn("Unrecognized gunyah version: %u. Currently supported: %d\n",
+> +			gh_api_version(), GUNYAH_API_V1);
+how about using dev_err here?
+
+> +		return -ENODEV;
+
+-EOPNOTSUPP?
+
+> +	}
+> +
+> +	if (!gh_api_has_feature(GH_API_FEATURE_MSGQUEUE))
+> +		return -EOPNOTSUPP;
+> +
+> +	msgq->tx_ghrsc = tx_ghrsc;
+> +	msgq->rx_ghrsc = rx_ghrsc;
+> +
+> +	msgq->mbox.dev = parent;
+> +	msgq->mbox.ops = &gh_msgq_ops;
+> +	msgq->mbox.num_chans = 1;
+> +	msgq->mbox.chans = kcalloc(msgq->mbox.num_chans, sizeof(*msgq->mbox.chans), GFP_KERNEL);
+> +	if (!msgq->mbox.chans)
+> +		return -ENOMEM;
+
+new line here would be nice.
+> +	msgq->mbox.txdone_irq = true;
+> +
+> +	if (msgq->tx_ghrsc) {
+> +		ret = request_irq(msgq->tx_ghrsc->irq, gh_msgq_tx_irq_handler, 0, "gh_msgq_tx",
+> +				msgq);
+> +		if (ret)
+> +			goto err_chans;
+> +	}
+> +
+> +	if (msgq->rx_ghrsc) {
+> +		ret = request_threaded_irq(msgq->rx_ghrsc->irq, NULL, gh_msgq_rx_irq_handler,
+> +						IRQF_ONESHOT, "gh_msgq_rx", msgq);
+> +		if (ret)
+> +			goto err_tx_irq;
+> +	}
+> +
+> +	tasklet_setup(&msgq->txdone_tasklet, gh_msgq_txdone_tasklet);
+
+AFAIU, this looks like duplicating what core already has with 
+TXDONE_BY_POLL.
+
+can we not use
+txdone_poll = true
+and implement last_tx_done callback to use hrtimer from the core to tick tx.
+
+--srini
+> +
+> +	ret = mbox_controller_register(&msgq->mbox);
+> +	if (ret)
+> +		goto err_rx_irq;
+> +
+> +	ret = mbox_bind_client(gh_msgq_chan(msgq), cl);
+> +	if (ret)
+> +		goto err_mbox;
+> +
+> +	return 0;
+> +err_mbox:
+> +	mbox_controller_unregister(&msgq->mbox);
+> +err_rx_irq:
+> +	if (msgq->rx_ghrsc)
+> +		free_irq(msgq->rx_ghrsc->irq, msgq);
+> +err_tx_irq:
+> +	if (msgq->tx_ghrsc)
+> +		free_irq(msgq->tx_ghrsc->irq, msgq);
+> +err_chans:
+> +	kfree(msgq->mbox.chans);
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(gh_msgq_init);
+> +
+> +void gh_msgq_remove(struct gh_msgq *msgq)
+> +{
+> +	mbox_controller_unregister(&msgq->mbox);
+> +
+> +	if (msgq->rx_ghrsc)
+> +		free_irq(msgq->rx_ghrsc->irq, msgq);
+> +
+> +	if (msgq->tx_ghrsc)
+> +		free_irq(msgq->tx_ghrsc->irq, msgq);
+> +
+> +	kfree(msgq->mbox.chans);
+> +}
+> +EXPORT_SYMBOL_GPL(gh_msgq_remove);
+> +
+> +MODULE_LICENSE("GPL");
+> +MODULE_DESCRIPTION("Gunyah Message Queue Driver");
+> diff --git a/include/linux/gunyah.h b/include/linux/gunyah.h
+> index b5f61c14ec1e..5d6fc9f88718 100644
+> --- a/include/linux/gunyah.h
+> +++ b/include/linux/gunyah.h
+> @@ -8,10 +8,67 @@
+>   
+>   #include <linux/bitfield.h>
+>   #include <linux/errno.h>
+> +#include <linux/interrupt.h>
+>   #include <linux/limits.h>
+> +#include <linux/mailbox_controller.h>
+> +#include <linux/mailbox_client.h>
+>   #include <linux/types.h>
+>   
+> -/* Common Gunyah macros */
+> +/* Follows resource manager's resource types for VM_GET_HYP_RESOURCES */
+> +enum gunyah_resource_type {
+> +	GUNYAH_RESOURCE_TYPE_BELL_TX	= 0,
+> +	GUNYAH_RESOURCE_TYPE_BELL_RX	= 1,
+> +	GUNYAH_RESOURCE_TYPE_MSGQ_TX	= 2,
+> +	GUNYAH_RESOURCE_TYPE_MSGQ_RX	= 3,
+> +	GUNYAH_RESOURCE_TYPE_VCPU	= 4,
+> +};
+> +
+> +struct gunyah_resource {
+> +	enum gunyah_resource_type type;
+> +	u64 capid;
+> +	int irq;
+> +};
+> +
+> +/**
+> + * Gunyah Message Queues
+> + */
+> +
+> +#define GH_MSGQ_MAX_MSG_SIZE	240
+> +
+> +struct gh_msgq_tx_data {
+> +	size_t length;
+> +	bool push;
+> +	char data[];
+> +};
+> +
+> +struct gh_msgq_rx_data {
+> +	size_t length;
+> +	char data[GH_MSGQ_MAX_MSG_SIZE];
+> +};
+> +
+> +struct gh_msgq {
+> +	struct gunyah_resource *tx_ghrsc;
+> +	struct gunyah_resource *rx_ghrsc;
+> +
+> +	/* msgq private */
+> +	int last_ret; /* Linux error, not GH_STATUS_* */
+> +	struct mbox_controller mbox;
+> +	struct tasklet_struct txdone_tasklet;
+> +};
+> +
+> +
+> +int gh_msgq_init(struct device *parent, struct gh_msgq *msgq, struct mbox_client *cl,
+> +		     struct gunyah_resource *tx_ghrsc, struct gunyah_resource *rx_ghrsc);
+> +void gh_msgq_remove(struct gh_msgq *msgq);
+> +
+> +static inline struct mbox_chan *gh_msgq_chan(struct gh_msgq *msgq)
+> +{
+> +	return &msgq->mbox.chans[0];
+> +}
+> +
+> +/******************************************************************************/
+> +/* Common arch-independent macros and definitions for Gunyah hypercalls */
+> +
+>   #define GH_CAPID_INVAL	U64_MAX
+>   #define GH_VMID_ROOT_VM	0xff
+>   
