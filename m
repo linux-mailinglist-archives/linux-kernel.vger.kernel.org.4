@@ -2,57 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6632687BB9
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 12:10:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 598DE687BBF
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 12:10:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232200AbjBBLK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 06:10:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40206 "EHLO
+        id S232396AbjBBLKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 06:10:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231935AbjBBLKS (ORCPT
+        with ESMTP id S232110AbjBBLKV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 06:10:18 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 824336597;
-        Thu,  2 Feb 2023 03:09:57 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id C7E7124E255;
-        Thu,  2 Feb 2023 19:09:54 +0800 (CST)
-Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 2 Feb
- 2023 19:09:54 +0800
-Received: from [192.168.120.55] (171.223.208.138) by EXMBX168.cuchost.com
- (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 2 Feb
- 2023 19:09:53 +0800
-Message-ID: <4529a646-1faf-c858-cfbe-1560ebeb1fba@starfivetech.com>
-Date:   Thu, 2 Feb 2023 19:09:53 +0800
+        Thu, 2 Feb 2023 06:10:21 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F106EEB5F;
+        Thu,  2 Feb 2023 03:10:18 -0800 (PST)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3127rsqG026411;
+        Thu, 2 Feb 2023 11:10:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=3WhFaPOhscTrfIH3ywSSfnIMEnBXCiKTfxwcK+0XWk8=;
+ b=nEr7EEgCu4X1lctEFeRF2MNc78b55psxxN08y16c7yl+dMKP1OnbIEBk2F9EB0XbrgxJ
+ vPymFP9GzYN+q8MHpOKAaMLMHDRKdBepnWz3RYEGq+c8Z3Ku6wWD2J9augrmrwo6zxgB
+ twVnyeEXRyGAojAV66emeyjSFnl7jCCbcFkLGk//zsBaEzKj+JIGHSbEEH4QiDoC21lS
+ IWh7Qed43+4pF79H72YM9dDJMhk24Amw++aI2qizzR4Bc15X1/dzccfBejZOP0ht6Gyh
+ 3VUlTpUp+VSKLI3NjG5LRinV5FI6/ruEljCWDJRmO1HEgoujsMnl5vi6OuS+lOOQlgKd 1g== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ng969rd4b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Feb 2023 11:10:15 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 312BA686005011
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 2 Feb 2023 11:10:06 GMT
+Received: from [10.50.17.72] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 2 Feb 2023
+ 03:10:00 -0800
+Message-ID: <afe30fbd-08e8-287d-3a7e-f5f5be0ce3b6@quicinc.com>
+Date:   Thu, 2 Feb 2023 16:39:56 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v1 2/3] mmc: starfive: Add sdio/emmc driver support
-To:     Linus Walleij <linus.walleij@linaro.org>
-CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-mmc@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Jaehoon Chung <jh80.chung@samsung.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221207131731.1291517-1-william.qiu@starfivetech.com>
- <20221207131731.1291517-3-william.qiu@starfivetech.com>
- <CACRpkdYP7MokLdRtxX9w7p80c=wHDHsoTYWrU53CnpsZ7o6aGg@mail.gmail.com>
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 6/6] regulator: qcom_smd: Add support to define the bootup
+ voltage
 Content-Language: en-US
-From:   William Qiu <william.qiu@starfivetech.com>
-In-Reply-To: <CACRpkdYP7MokLdRtxX9w7p80c=wHDHsoTYWrU53CnpsZ7o6aGg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX168.cuchost.com
- (172.16.6.78)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
+        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
+        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
+        <quic_poovendh@quicinc.com>
+References: <20230113150310.29709-1-quic_devipriy@quicinc.com>
+ <20230113150310.29709-7-quic_devipriy@quicinc.com>
+ <3813f262-8d36-2b1c-2230-cbb5a161d4c1@linaro.org>
+From:   Devi Priya <quic_devipriy@quicinc.com>
+In-Reply-To: <3813f262-8d36-2b1c-2230-cbb5a161d4c1@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 68wcw6h2oEYBrAmJ0KpMukq0J8yrlx9v
+X-Proofpoint-GUID: 68wcw6h2oEYBrAmJ0KpMukq0J8yrlx9v
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-02_02,2023-02-02_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ suspectscore=0 impostorscore=0 priorityscore=1501 mlxlogscore=999
+ malwarescore=0 bulkscore=0 adultscore=0 spamscore=0 clxscore=1015
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302020102
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -61,180 +91,66 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2022/12/9 5:09, Linus Walleij wrote:
-> Hi William,
-> 
-> thanks for your patch!
-> 
-> On Wed, Dec 7, 2022 at 2:17 PM William Qiu <william.qiu@starfivetech.com> wrote:
-> 
->> Add sdio/emmc driver support for StarFive JH7110 soc.
+On 1/31/2023 3:07 PM, Dmitry Baryshkov wrote:
+> On 13/01/2023 17:03, devi priya wrote:
+>> Kernel does not know the initial voltage set by the bootloaders.
+>> During regulator registration, the voltage variable is just declared
+>> and it is zero. Based on that, the regulator framework considers current
+>> the voltage as zero and tries to bring up each regulator to minimum
+>> the supported voltage.
 >>
->> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
+>> This introduces a dip in the voltage during kernel boot and gets
+>> stabilized once the voltage scaling comes into picture.
+>>
+>> To avoid the voltage dip, adding support to define the
+>> bootup voltage set by the boodloaders and based on it, regulator
+>> framework understands that proper voltage is already set
+>>
+>> Co-developed-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+>> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+>> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
+>> ---
+>>   drivers/regulator/qcom_smd-regulator.c | 6 +++++-
+>>   1 file changed, 5 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/regulator/qcom_smd-regulator.c 
+>> b/drivers/regulator/qcom_smd-regulator.c
+>> index 1eb17d378897..49a36b07397c 100644
+>> --- a/drivers/regulator/qcom_smd-regulator.c
+>> +++ b/drivers/regulator/qcom_smd-regulator.c
+>> @@ -800,6 +800,7 @@ struct rpm_regulator_data {
+>>       u32 id;
+>>       const struct regulator_desc *desc;
+>>       const char *supply;
+>> +    int boot_uV; /* To store the bootup voltage set by bootloaders */
+>>   };
+>>   static const struct rpm_regulator_data rpm_mp5496_regulators[] = {
+>> @@ -809,7 +810,7 @@ static const struct rpm_regulator_data 
+>> rpm_mp5496_regulators[] = {
+>>   };
+>>   static const struct rpm_regulator_data 
+>> rpm_ipq9574_mp5496_regulators[] = {
+>> -    { "s1", QCOM_SMD_RPM_SMPA, 1, &ipq9574_mp5496_smpa1, "s1" },
+>> +    { "s1", QCOM_SMD_RPM_SMPA, 1, &ipq9574_mp5496_smpa1, "s1", 875000 },
 > 
-> (...)
->> +#include <linux/gpio.h>
+> I think this is a peculiarity of the particular board that than a 
+> property of the PMIC. Please describe this in the board or SoC DTS if 
+> the value can not be read using the software .
 > 
-> Never include this legacy header in new code. Also: you don't use it.
-> 
->> +#include <linux/mfd/syscon.h>
->> +#include <linux/mmc/host.h>
->> +#include <linux/module.h>
->> +#include <linux/of_address.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/pm_runtime.h>
-> 
-> You're not using this include either.
-> 
->> +#include <linux/regmap.h>
->> +#include <linux/regulator/consumer.h>
-> 
-> Or this.
-> 
->> +#define ALL_INT_CLR            0x1ffff
->> +#define MAX_DELAY_CHAIN                32
+The bootup voltage is actually blown into the OTP register of the PMIC 
+and so, it remains the same across boards for IPQ9574 SoC
+>>       {}
+>>   };
+>> @@ -1394,6 +1395,9 @@ static int rpm_regulator_init_vreg(struct 
+>> qcom_rpm_reg *vreg, struct device *dev
+>>       vreg->type    = rpm_data->type;
+>>       vreg->id    = rpm_data->id;
+>> +    if (rpm_data->boot_uV)
+>> +        vreg->uV = rpm_data->boot_uV;
 >> +
->> +struct starfive_priv {
->> +       struct device *dev;
->> +       struct regmap *reg_syscon;
->> +       u32 syscon_offset;
->> +       u32 syscon_shift;
->> +       u32 syscon_mask;
->> +};
->> +
->> +static unsigned long dw_mci_starfive_caps[] = {
->> +       MMC_CAP_CMD23,
->> +       MMC_CAP_CMD23,
->> +       MMC_CAP_CMD23
->> +};
->> +
->> +static void dw_mci_starfive_set_ios(struct dw_mci *host, struct mmc_ios *ios)
->> +{
->> +       int ret;
->> +       unsigned int clock;
->> +
->> +       if (ios->timing == MMC_TIMING_MMC_DDR52 || ios->timing == MMC_TIMING_UHS_DDR50) {
->> +               clock = (ios->clock > 50000000 && ios->clock <= 52000000) ? 100000000 : ios->clock;
->> +               ret = clk_set_rate(host->ciu_clk, clock);
->> +               if (ret)
->> +                       dev_dbg(host->dev, "Use an external frequency divider %uHz\n", ios->clock);
->> +               host->bus_hz = clk_get_rate(host->ciu_clk);
->> +       } else {
->> +               dev_dbg(host->dev, "Using the internal divider\n");
->> +       }
->> +}
->> +
->> +static int dw_mci_starfive_execute_tuning(struct dw_mci_slot *slot,
->> +                                            u32 opcode)
->> +{
->> +       static const int grade  = MAX_DELAY_CHAIN;
->> +       struct dw_mci *host = slot->host;
->> +       struct starfive_priv *priv = host->priv;
->> +       int raise_point = -1, fall_point = -1;
->> +       int err, prev_err = -1;
+>>       memcpy(&vreg->desc, rpm_data->desc, sizeof(vreg->desc));
+>>       vreg->desc.name = rpm_data->name;
+>>       vreg->desc.supply_name = rpm_data->supply;
 > 
-> I don't like these default-init to -1. Can you just skip it and assign it
-> where it makes most sense instead?
-> 
->> +       int found = 0;
-> 
-> This looks like a bool.
-> 
->> +       int i;
->> +       u32 regval;
->> +
->> +       for (i = 0; i < grade; i++) {
->> +               regval = i << priv->syscon_shift;
->> +               err = regmap_update_bits(priv->reg_syscon, priv->syscon_offset,
->> +                                               priv->syscon_mask, regval);
->> +               if (err)
->> +                       return err;
->> +               mci_writel(host, RINTSTS, ALL_INT_CLR);
->> +
->> +               err = mmc_send_tuning(slot->mmc, opcode, NULL);
->> +               if (!err)
->> +                       found = 1;
->> +
->> +               if (i > 0) {
->> +                       if (err && !prev_err)
->> +                               fall_point = i - 1;
->> +                       if (!err && prev_err)
->> +                               raise_point = i;
->> +               }
->> +
->> +               if (raise_point != -1 && fall_point != -1)
->> +                       goto tuning_out;
-> 
-> There are just these raise point (shouldn't this be "rise_point" in proper
-> english?) and fall point, this misses some comments explaining what is
-> going on, the code is not intuitively eviden. Rise and fall of *what* for
-> example.
-> 
->> +
->> +               prev_err = err;
->> +               err = 0;
->> +       }
->> +
->> +tuning_out:
->> +       if (found) {
->> +               if (raise_point == -1)
->> +                       raise_point = 0;
->> +               if (fall_point == -1)
->> +                       fall_point = grade - 1;
->> +               if (fall_point < raise_point) {
->> +                       if ((raise_point + fall_point) >
->> +                           (grade - 1))
->> +                               i = fall_point / 2;
->> +                       else
->> +                               i = (raise_point + grade - 1) / 2;
->> +               } else {
->> +                       i = (raise_point + fall_point) / 2;
->> +               }
-> 
-> Likewise here, explain what grade is, refer to the eMMC spec if necessary.
-> 
-> (...)
->> +       ret = of_parse_phandle_with_fixed_args(host->dev->of_node,
->> +                                               "starfive,sys-syscon", 3, 0, &args);
->> +       if (ret) {
->> +               dev_err(host->dev, "Failed to parse starfive,sys-syscon\n");
->> +               return -EINVAL;
->> +       }
->> +
->> +       priv->reg_syscon = syscon_node_to_regmap(args.np);
->> +       of_node_put(args.np);
->> +       if (IS_ERR(priv->reg_syscon))
->> +               return PTR_ERR(priv->reg_syscon);
->> +
->> +       priv->syscon_offset = args.args[0];
->> +       priv->syscon_shift  = args.args[1];
->> +       priv->syscon_mask   = args.args[2];
-> 
-> Why should these three things be in the device tree instead of being derived
-> from the compatible-string or just plain hard-coded as #defines?
-> I don't get it.
-> 
-Hi Linus,
-
-I'm sorry to bother you, but as for the definition of syscon, after discussing with 
-my colleagues, we think it is easier to distinguish SDIO0 and SDIO1 by defining it in
-the device tree, and the code compatibility is better.
-
-Best Regards
-William Qiu
->> +static int dw_mci_starfive_probe(struct platform_device *pdev)
->> +{
->> +       return dw_mci_pltfm_register(pdev, &starfive_data);
->> +}
->> +
->> +static int dw_mci_starfive_remove(struct platform_device *pdev)
->> +{
->> +       return dw_mci_pltfm_remove(pdev);
->> +}
-> 
-> Can't you just assign dw_mci_pltfm_remove() to .remove?
-> 
-> Other than these things, the driver looks good!
-> 
-> Yours,
-> Linus Walleij
+Best Regards,
+Devi Priya
