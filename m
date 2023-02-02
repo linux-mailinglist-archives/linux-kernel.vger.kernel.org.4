@@ -2,72 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C827768759F
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 06:53:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7A746875A0
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 07:01:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbjBBFxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 00:53:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46116 "EHLO
+        id S229974AbjBBGBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 01:01:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230454AbjBBFx0 (ORCPT
+        with ESMTP id S229471AbjBBGBI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 00:53:26 -0500
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE5CF46171
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 21:53:18 -0800 (PST)
-Received: by mail-il1-f199.google.com with SMTP id b16-20020a92ce10000000b003125834f6a5so647510ilo.3
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 21:53:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=F5X3PEWTVkHnwFAbIlbT7YNh0EaczW0sbZvQk9H2knQ=;
-        b=VmnZ8/pY8ce3Xnan5BMQ7ki5vAbSfgujD3LOMUa8sZc2Eu5n5+LbYkW+hE75K+ZFRx
-         ojnMQKQrTtTZllG664ETj5MRCPMThMH16/T6QgUu4itLU7x80vvL0g10ekhHWVE2Hjkb
-         iVzzWCqjVh4DIURz4c60eNNyh0Nf8SzKaUrYe6Vsh8brTVBr76ZXUstejEKcLvcyTCFG
-         KGBIh593FT8fLQfvVApHfMR2qme0K023BD0GZ+OmgWVLWmddyqcaPVfjZzmi+jZzpFXj
-         0Ikmpbj2NZE+kMyjpXBUJ/KgOkC7CBhl3AMmvrEhjv02IpLPz1lwmC6E+NeICWT/+leY
-         5mYw==
-X-Gm-Message-State: AO0yUKX4EofdNuUs1SKrATz4kavZi9ylOS35d8IUUjfuUKZN0h63dp9Q
-        FeyfzF0e1JaNJSYOjPqpAOqlCt92skVD3DMcNbz3hhjwOC8L
-X-Google-Smtp-Source: AK7set+DnsN7U0QwpHa+DKS5CVGCdrgz4brE1tjyuO4LuGYCXUuSDVFGZD5wJ0PIXY3Wec5knp91LLHnHmzUryPg08kHGor3VuJh
+        Thu, 2 Feb 2023 01:01:08 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2FF75CD2F;
+        Wed,  1 Feb 2023 22:01:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CF476154E;
+        Thu,  2 Feb 2023 06:01:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6835FC433EF;
+        Thu,  2 Feb 2023 06:01:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675317666;
+        bh=W4PCtIoPHqMjZz87oYbuJcDIyOhDoAR6qCTIFYNoCP8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ujaa4ZyEv+z27/qk/4xB2YOOGBHiI10vZVEy7EzL/lWS4ArFvq+mNFcQOhYL+RKbv
+         1IaHCiU2Kb7MQHWBsZ0AF06BXZ+bsvxDhihMesKtOwfal2SZMYlkMMGJLLUZ9MZv04
+         1S/Cocy5n1a2JNceS2gBbCjZTxh37ico9qy2AKlMixZdnC8Zx2HU3YVFvWik7sg1XG
+         bL2wOhKGK/WeIXqHjO5/Q/i7ROuDKMZx9JtqNwv3TOUPW0QsXMba1lTfFHxSVaLDEU
+         qXJQq/0xgMyWGbtR9WEvGtULZxLvPehnKKY22z6OcBxBsQTMe6J5GKdyOvoIn5ltRL
+         L7vKMRw46dS0g==
+Date:   Wed, 1 Feb 2023 22:01:05 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Qingfang DENG <dqfext@gmail.com>
+Cc:     Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net] net: page_pool: use in_softirq() instead
+Message-ID: <20230201220105.410fee4c@kernel.org>
+In-Reply-To: <20230202024417.4477-1-dqfext@gmail.com>
+References: <20230202024417.4477-1-dqfext@gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a02:6645:0:b0:3b3:32b:e595 with SMTP id
- l5-20020a026645000000b003b3032be595mr1251643jaf.3.1675317198269; Wed, 01 Feb
- 2023 21:53:18 -0800 (PST)
-Date:   Wed, 01 Feb 2023 21:53:18 -0800
-In-Reply-To: <20230201233913.650-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007d356005f3b12efa@google.com>
-Subject: Re: [syzbot] general protection fault in skb_dequeue (3)
-From:   syzbot <syzbot+a440341a59e3b7142895@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu,  2 Feb 2023 10:44:17 +0800 Qingfang DENG wrote:
+> From: Qingfang DENG <qingfang.deng@siflower.com.cn>
+> 
+> We use BH context only for synchronization, so we don't care if it's
+> actually serving softirq or not.
+> 
+> As a side node, in case of threaded NAPI, in_serving_softirq() will
+> return false because it's in process context with BH off, making
+> page_pool_recycle_in_cache() unreachable.
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
-
-Reported-and-tested-by: syzbot+a440341a59e3b7142895@syzkaller.appspotmail.com
-
-Tested on:
-
-commit:         9f266cca Merge tag 'for_linus' of git://git.kernel.org..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=10ae0ac3480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=723d250bd16cf869
-dashboard link: https://syzkaller.appspot.com/bug?extid=a440341a59e3b7142895
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=126ad755480000
-
-Note: testing is done by a robot and is best-effort only.
+LGTM, but I don't think this qualifies as a fix.
+It's just a missed optimization, right?
