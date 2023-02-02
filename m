@@ -2,121 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59F91688A09
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 23:51:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66C58688A0D
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 23:51:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbjBBWvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 17:51:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58020 "EHLO
+        id S232542AbjBBWvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 17:51:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231146AbjBBWvK (ORCPT
+        with ESMTP id S231442AbjBBWvf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 17:51:10 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 761AA23C49
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 14:50:43 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id h16so3088480wrz.12
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 14:50:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gmNw6gCZpx4RvIbwFLXsxH5+IgysNjAa6GJEESnvefg=;
-        b=Dqbw8Xha2h2/HgfPheKArV4xHxovX8Fd4p8XMUUrKSix7F7lh3OYyfLwEH3viWYlvd
-         Vm23GOGPlDf3FCjr6uE7pJkD0admsUWPxAL6plLMsCtjCr9w1pExZaXi03w2lYW09YhE
-         RoRwhtz6o1O4E9WlEoRIIrK7FY9ipvM33fym+53YNVPfxnryF6P9hAt2oJex+eG/PXqM
-         bpO0P2eDVdpjN9bEvp9wxWBb5/rv+B8SrMPyneGkCncnSV97Xeo0UftFR+nXWekdNldV
-         rQJ/XJKGFfE7MWOEym7mSOf8FCgCp3e7IudH5N2hvcBDkRZENmw3Uc2xRCoVABIQiTIC
-         JW9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gmNw6gCZpx4RvIbwFLXsxH5+IgysNjAa6GJEESnvefg=;
-        b=hF1Q8PutvnoSnY0PXBDVlGMEAss+24agnK3sYf+5ZMyIM3cYPcvD8DzT+/RtoFv6Qs
-         bOulMpfpTAeDlYqNVNOwgiLf24VSaRCbX2zYzfLZM/Z29sBJ/RMHF5NmVPtSgByafaTI
-         +Goteu71/OGk9c3opbikUQioQ6lHPAfxkZdHe8FW6mkgsNGGX9yyeo6sBoOaRISV4yB/
-         sk/7/UQT7TDnYUErIDk/2sEBqqv0+dBzO11DQtMF19Ucx+kYMORu6hfXeMwRZdN0qkYZ
-         xOYJjdalMZllDk6SqfI3MJxn2bUVNI6+gRQ7pVVg+PS5imJaZgbcEcxK2HGJTGTq47bh
-         5LEQ==
-X-Gm-Message-State: AO0yUKVz1ktWHhImpWVYmURo/5+Pnqzugz5GiiTtWrBEsm9D7JPJG0Io
-        2dfyVoBYdxaMXz/oQ9fuLDbmUA==
-X-Google-Smtp-Source: AK7set8KEmD64bD4UhoJ72eD7ad0O5B8iXzZ67UVg99cNn/bPeBnj8WdLKGnttqzbBBJ4l1QgvgXiw==
-X-Received: by 2002:a05:6000:1a45:b0:2bf:dd17:5657 with SMTP id t5-20020a0560001a4500b002bfdd175657mr7409948wry.49.1675378241976;
-        Thu, 02 Feb 2023 14:50:41 -0800 (PST)
-Received: from ?IPV6:2a02:6b6a:b566:0:98fe:e4ee:fc7e:cd71? ([2a02:6b6a:b566:0:98fe:e4ee:fc7e:cd71])
-        by smtp.gmail.com with ESMTPSA id l2-20020a05600002a200b002bfd687a96dsm599053wry.16.2023.02.02.14.50.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 14:50:41 -0800 (PST)
-Message-ID: <fb3e75fa-1a6f-0570-218f-ba9133fb72c6@bytedance.com>
-Date:   Thu, 2 Feb 2023 22:50:40 +0000
+        Thu, 2 Feb 2023 17:51:35 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A326C6C118;
+        Thu,  2 Feb 2023 14:51:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=wNaqigkQxIukar7avGzK7dviESW0b0iyFkV+nOTVZXI=; b=YJLI29zIn6dVUJAjAkE9q8ztpi
+        gHxij6TvruKtv2kYPv8fiA8fX8hIgk/40xQxFu7tbrUtLoQdssiWrdPsSCWWE/iW5IFtFYXaomcD2
+        k2EgenkMRZjLFqEDMMUzy3/Snacp65dogGgCCpgnTMAkQFEmefzXKo83u78QhYEToWN5F4PTGMRgB
+        LVSsxLSWjssLl3o2BIpQeb19HNFfHguT3ME/cQXCnIZmK4AiU4gIVwOt9IPOdvX00nNNanHxHAzQv
+        J59t6aOaMUJg/fqNLwx8ptqtiFq8DNM0g1cPeZ38/kAiKESZuWJrc9cCntXfqyKDAs7/x+7sd8KGR
+        bCh+B5HQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pNiQS-00DnTW-1U; Thu, 02 Feb 2023 22:51:28 +0000
+Date:   Thu, 2 Feb 2023 22:51:27 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     Marcelo Tosatti <mtosatti@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Leonardo Bras <leobras@redhat.com>,
+        Yair Podemsky <ypodemsk@redhat.com>, P J P <ppandit@redhat.com>
+Subject: Re: [PATCH v3] fs/buffer.c: update per-CPU bh_lru cache via RCU
+Message-ID: <Y9w+b1MJ10uPDROI@casper.infradead.org>
+References: <Y9qM68F+nDSYfrJ1@tpad>
+ <20230202223653.GF937597@dread.disaster.area>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [External] Re: [PATCH v6 06/11] x86/smpboot: Support parallel
- startup of secondary CPUs
-Content-Language: en-US
-To:     David Woodhouse <dwmw2@infradead.org>, tglx@linutronix.de,
-        arjan@linux.intel.com
-Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, x86@kernel.org, pbonzini@redhat.com,
-        paulmck@kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, rcu@vger.kernel.org, mimoja@mimoja.de,
-        hewenliang4@huawei.com, thomas.lendacky@amd.com, seanjc@google.com,
-        pmenzel@molgen.mpg.de, fam.zheng@bytedance.com,
-        punit.agrawal@bytedance.com, simon.evans@bytedance.com,
-        liangma@liangbit.com
-References: <20230202215625.3248306-1-usama.arif@bytedance.com>
- <20230202215625.3248306-7-usama.arif@bytedance.com>
- <dac090d2a61137b9e2fecd6cb3bfb4d5a9656fb6.camel@infradead.org>
-From:   Usama Arif <usama.arif@bytedance.com>
-In-Reply-To: <dac090d2a61137b9e2fecd6cb3bfb4d5a9656fb6.camel@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230202223653.GF937597@dread.disaster.area>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 02/02/2023 22:30, David Woodhouse wrote:
-> On Thu, 2023-02-02 at 21:56 +0000, Usama Arif wrote:
->> @@ -1515,6 +1530,17 @@ void __init native_smp_prepare_cpus(unsigned int max_cpus)
->>   
->>          speculative_store_bypass_ht_init();
->>   
->> +       /*
->> +        * We can do 64-bit AP bringup in parallel if the CPU reports its
->> +        * APIC ID in CPUID leaf 0x0B. Otherwise it's too hard. And not
->> +        * for SEV-ES guests because they can't use CPUID that early.
->> +        * Also, some AMD CPUs crash when doing parallel cpu bringup, disable
->> +        * it for all AMD CPUs to be on the safe side.
->> +        */
->> +       if (IS_ENABLED(CONFIG_X86_32) || boot_cpu_data.cpuid_level < 0x0B ||
->> +           cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT))
->> +               do_parallel_bringup = false;
->> +
->>          snp_set_wakeup_secondary_cpu();
->>   }
+On Fri, Feb 03, 2023 at 09:36:53AM +1100, Dave Chinner wrote:
+> On Wed, Feb 01, 2023 at 01:01:47PM -0300, Marcelo Tosatti wrote:
+> > 
+> > umount calls invalidate_bh_lrus which IPIs each
 > 
-> Oops, I thought I'd removed those two lines about AMD in the comment
-> when I removed the actual code that did so. Turns out we remove those
-> lines again in the *next* patch instead.
+> via invalidate_bdev(). So this is only triggered on unmount of
+> filesystems that use the block device mapping directly, right?
+> 
+> Or is the problem that userspace is polling the block device (e.g.
+> udisks, blkid, etc) whilst the filesystem is mounted and populating
+> the block device mapping with cached pages so invalidate_bdev()
+> always does work even when the filesystem doesn't actually use the
+> bdev mapping?
+> 
+> > CPU that has non empty per-CPU buffer_head cache:
+> > 
+> >        	on_each_cpu_cond(has_bh_in_lru, invalidate_bh_lru, NULL, 1);
+> > 
+> > This interrupts CPUs which might be executing code sensitive
+> > to interferences.
+> > 
+> > To avoid the IPI, free the per-CPU caches remotely via RCU.
+> > Two bh_lrus structures for each CPU are allocated: one is being
+> > used (assigned to per-CPU bh_lru pointer), and the other is
+> > being freed (or idle).
+> 
+> Rather than adding more complexity to the legacy bufferhead code,
+> wouldn't it be better to switch the block device mapping to use
+> iomap+folios and get rid of the use of bufferheads altogether?
 
-Ah, sorry about that, should have caught it while reviewing before 
-posting. To think of it, it might be better to squash this and next AMD 
-disabling patch, if anyone testing on AMD ever happens to check out at 
-this specific patch, their machine might not boot :). Will repost only 
-after getting the OK for the rest of the patches along with addressing 
-any other comments that come up.
-
-Thanks,
-Usama
-
+Pretty sure ext4's journalling relies on the blockdev using
+buffer_heads.  At least, I did a conversion of blockdev to use
+mpage_readahead() and ext4 stopped working.
