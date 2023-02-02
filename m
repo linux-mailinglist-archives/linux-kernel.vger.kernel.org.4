@@ -2,249 +2,407 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C172D6884AB
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 17:40:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 793B46884B0
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 17:41:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232118AbjBBQkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 11:40:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51024 "EHLO
+        id S232050AbjBBQlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 11:41:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230047AbjBBQkn (ORCPT
+        with ESMTP id S231922AbjBBQla (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 11:40:43 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 482576A33D;
-        Thu,  2 Feb 2023 08:40:42 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id gr7so7634633ejb.5;
-        Thu, 02 Feb 2023 08:40:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1JxadcUmstQQisxG5SMmC/yE89rXvA6AYxcU2YUnVDQ=;
-        b=F0H3B8NAgseBrYAc9OhvFrrJcHUs5RxsmEgusiWeYI4oHZkbOFHj9Ncu15Uvbi4tCO
-         GCoGClEA/o94QYw0U1UfeOAEL80uwq+5tCfPJWGsWnHH8HpmO1lWGzeCrAsIdF4Fu6zR
-         kNR+WhBg1xqNyaBWvq3l+bklN9GSWeF5rkZflnjP5JjP6Pm7phnd2Ab56G7cA8boFLp0
-         xzt+aopsRq/bEYAtjRCwCMmTji3jBwX9xCOCD4tzAC2fkbovQWodfYFH0SLzujYlkR2S
-         3SeXJQSQvZdrRrWbPhPWjXi7p2pGkVjdnp+X80CVTlvacpypSO18F0i1MgCSG84IgzXR
-         jpqA==
+        Thu, 2 Feb 2023 11:41:30 -0500
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC9216A33D;
+        Thu,  2 Feb 2023 08:41:19 -0800 (PST)
+Received: by mail-ej1-f48.google.com with SMTP id p26so7532399ejx.13;
+        Thu, 02 Feb 2023 08:41:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1JxadcUmstQQisxG5SMmC/yE89rXvA6AYxcU2YUnVDQ=;
-        b=kIYh5nPLxn++Y2JG3hn9AfOEfKPVuMBW1ZEk0WdU+5sMNs9QBxkQVMOlwQqn3TTvrq
-         52J8oee9p/Z7OnuEfLBVRRO+DUav15ojCYfDXFKk04c5V3dQzTC6rehhpczLrw8quLIT
-         Pj221va3ZlAci508fXMS1WnqJo++wgUN2Oj2KWfGn2cfnRDnyCmCGPbKOxi23vtODWML
-         7jT64ztKn0tW//fuQq54g2EFZSGvWHEb0+0ajvH4sgtNXmM1/xiknndhKYd5kLqy9DlQ
-         X9PjkONYDnVLt8nnQSMSGNiymkc1QhaL5J5yDoGCpruDEYkxB3EhWg10my6BlBlWJmNc
-         6ntA==
-X-Gm-Message-State: AO0yUKWPAXovexVWMXoxw29qPbOUTZ8tYZvL3wVSLY6zLi5FNHgFEaS4
-        MLKj3YLcOsHbzLsza1RYve8=
-X-Google-Smtp-Source: AK7set8DElzpOFybgSqmpPkVSDP76pQ9uMXg+BggB0EZ9TIGd1XdSGpOOvGTm4L9iJVvil59yp3mTw==
-X-Received: by 2002:a17:906:c156:b0:88d:ba89:1835 with SMTP id dp22-20020a170906c15600b0088dba891835mr2844484ejc.6.1675356040636;
-        Thu, 02 Feb 2023 08:40:40 -0800 (PST)
-Received: from jernej-laptop.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
-        by smtp.gmail.com with ESMTPSA id by13-20020a0564021b0d00b004a277d55a6csm3387108edb.1.2023.02.02.08.40.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 08:40:40 -0800 (PST)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     broonie@kernel.org, miquel.raynal@bootlin.com, richard@nod.at,
-        vigneshr@ti.com, jic23@kernel.org, tudor.ambarus@microchip.com,
-        pratyush@kernel.org, sanju.mehta@amd.com,
-        chin-ting_kuo@aspeedtech.com, clg@kaod.org, kdasu.kdev@gmail.com,
-        f.fainelli@gmail.com, rjui@broadcom.com, sbranden@broadcom.com,
-        eajames@linux.ibm.com, olteanv@gmail.com, han.xu@nxp.com,
-        john.garry@huawei.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        narmstrong@baylibre.com, khilman@baylibre.com,
-        matthias.bgg@gmail.com, haibo.chen@nxp.com,
-        linus.walleij@linaro.org, daniel@zonque.org,
-        haojian.zhuang@gmail.com, robert.jarzmik@free.fr,
-        agross@kernel.org, bjorn.andersson@linaro.org, heiko@sntech.de,
-        krzysztof.kozlowski@linaro.org, andi@etezian.org,
-        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
-        wens@csie.org, samuel@sholland.org, masahisa.kojima@linaro.org,
-        jaswinder.singh@linaro.org, rostedt@goodmis.org, mingo@redhat.com,
-        l.stelmach@samsung.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, alex.aring@gmail.com,
-        stefan@datenfreihafen.org, kvalo@kernel.org,
-        Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
-        palmer@dabbelt.com
-Cc:     git@amd.com, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, joel@jms.id.au, andrew@aj.id.au,
-        radu_nicolae.pirea@upb.ro, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        bcm-kernel-feedback-list@broadcom.com, fancer.lancer@gmail.com,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
-        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-        venture@google.com, yuenn@google.com, benjaminfair@google.com,
-        yogeshgaur.83@gmail.com, konrad.dybcio@somainline.org,
-        alim.akhtar@samsung.com, ldewangan@nvidia.com,
-        thierry.reding@gmail.com, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
-        netdev@vger.kernel.org, linux-wpan@vger.kernel.org,
-        libertas-dev@lists.infradead.org, linux-wireless@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-iio@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v3 01/13] spi: Replace all spi->chip_select and spi->cs_gpiod
- references with function call
-Date:   Thu, 02 Feb 2023 17:40:35 +0100
-Message-ID: <4802797.31r3eYUQgx@jernej-laptop>
-In-Reply-To: <20230202152258.512973-2-amit.kumar-mahapatra@amd.com>
-References: <20230202152258.512973-1-amit.kumar-mahapatra@amd.com>
- <20230202152258.512973-2-amit.kumar-mahapatra@amd.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pMEUzV79djPNglFPNvQyYDYgkjJYNlqfDHh5F9nZxs8=;
+        b=MKKcBwg7vyYYR+n6nx1RCzljdMUX4SOi4lwms3q6pwlrh445DoRfOFC9x8ZtftynoK
+         hAyOMNn8Dbt2P4IVDRoFslTwwzfJEzUCOYcLp5u0Lf7NXHdLEaKZXNv0R/rjYIVJwp+y
+         Je+XV9/MFCgkDcfN2GN62wPHii9pWQdmsagM5Jq8wedzX4P1w/lHq1aFLKSfvjDkB8+X
+         z7pyvuQlKgsZfvJvSfQZWWi+vvGroSUrxIVDKRThDbzFBHG1iaAZVUMpmxYprsWxNESc
+         bNbtP5ahBeIHnevHriENMGkuHHPaZAQ868C697wM97ObBxbkp/NJCnoBNk7ppkKXCir2
+         NHeA==
+X-Gm-Message-State: AO0yUKVwlT/XNgFBX0uaQiog3SJOkavRC93J6YX3H3osz9ZGvfXOAeBf
+        fVCWctwAtIjvsGSNcrYRIx89FEldp4p5z7Irj/bywKSYoyE=
+X-Google-Smtp-Source: AK7set/A7dtKM6+llIyRXiYZ2Rsj+dEqnMf9dnYDNwCm+hZvD+0mwFbKmPKMEM2RZRmIFLyrIwxAFMMwyXua6oxA0LY=
+X-Received: by 2002:a17:906:2f88:b0:844:44e0:1c4e with SMTP id
+ w8-20020a1709062f8800b0084444e01c4emr2185153eji.291.1675356078239; Thu, 02
+ Feb 2023 08:41:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+References: <20230201182854.2158535-1-srinivas.pandruvada@linux.intel.com> <20230201182854.2158535-5-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20230201182854.2158535-5-srinivas.pandruvada@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 2 Feb 2023 17:41:06 +0100
+Message-ID: <CAJZ5v0g0oVj974A22z5HaYK_JE8SuL82kvwA21=g9EM=-JqPnQ@mail.gmail.com>
+Subject: Re: [PATCH v5 4/4] thermal/drivers/intel_powerclamp: Add additional
+ module params
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
+        rui.zhang@intel.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+First, I would say "Add two module parameters" in the subject.
 
-Dne =C4=8Detrtek, 02. februar 2023 ob 16:22:46 CET je Amit Kumar Mahapatra=
-=20
-napisal(a):
-> Supporting multi-cs in spi drivers would require the chip_select & cs_gpi=
-od
-> members of struct spi_device to be an array. But changing the type of the=
-se
-> members to array would break the spi driver functionality. To make the
-> transition smoother introduced four new APIs to get/set the
-> spi->chip_select & spi->cs_gpiod and replaced all spi->chip_select and
-> spi->cs_gpiod references with get or set API calls.
-> While adding multi-cs support in further patches the chip_select & cs_gpi=
-od
-> members of the spi_device structure would be converted to arrays & the
-> "idx" parameter of the APIs would be used as array index i.e.,
-> spi->chip_select[idx] & spi->cs_gpiod[idx] respectively.
->=20
-> Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-> Acked-by: Heiko Stuebner <heiko@sntech.de> # Rockchip drivers
-> Reviewed-by: Michal Simek <michal.simek@amd.com>
-> Reviewed-by: C=C3=A9dric Le Goater <clg@kaod.org> # Aspeed driver
-> Reviewed-by: Dhruva Gole <d-gole@ti.com> # SPI Cadence QSPI
-> Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com> # spi-stm32-qs=
-pi
-> Acked-by: William Zhang <william.zhang@broadcom.com> # bcm63xx-hsspi driv=
-er
+On Wed, Feb 1, 2023 at 7:35 PM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> In some use cases, it is desirable to only inject idle on certain set
+> of CPUs. For example on Alder Lake systems, it is possible that we force
+> idle only on P-Cores for thermal reasons. Also the idle percent can be
+> more than 50% if we only choose partial set of CPUs in the system.
+>
+> Introduce module parameters for setting cpumask and max_idle.
+
+"Introduce 2 new module parameters for this purpose."
+
+> They can be only changed when the cooling device is inactive. This module
+> already have other module parameters. There is no change done for
+> those parameters.
+
+s/have/has/
+
+"... other parameters that are not affected by this change."
+
+> cpumask (Read/Write): A bit mask of CPUs to inject idle. The format of
+> this bitmask is same as used in other subsystems like in
+> /proc/irq/*/smp_affinity. The mask is comma separated 32 bit groups.
+> Each CPU is one bit. For example for 256 CPU system the full mask is:
+> ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff
+> The leftmost mask is for CPU 0-32.
+>
+> max_idle (Read/Write): Maximum injected idle time to the total CPU time
+> ratio in percent range from 1 to 100. Even if the cooling device max_state
+> is always 100 (100%), this parameter allows to add a max idle percent
+> limit. The default is 50, to match the current implementation of powerclamp
+> driver. Also doesn't allow value more than 75, if the cpumask includes
+> every CPU present in the system.
+>
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 > ---
->  drivers/spi/spi-altera-core.c     |  2 +-
->  drivers/spi/spi-amd.c             |  4 ++--
->  drivers/spi/spi-ar934x.c          |  2 +-
->  drivers/spi/spi-armada-3700.c     |  4 ++--
->  drivers/spi/spi-aspeed-smc.c      | 13 +++++++------
->  drivers/spi/spi-at91-usart.c      |  2 +-
->  drivers/spi/spi-ath79.c           |  4 ++--
->  drivers/spi/spi-atmel.c           | 26 +++++++++++++-------------
->  drivers/spi/spi-au1550.c          |  4 ++--
->  drivers/spi/spi-axi-spi-engine.c  |  2 +-
->  drivers/spi/spi-bcm-qspi.c        | 10 +++++-----
->  drivers/spi/spi-bcm2835.c         | 19 ++++++++++---------
->  drivers/spi/spi-bcm2835aux.c      |  4 ++--
->  drivers/spi/spi-bcm63xx-hsspi.c   | 22 +++++++++++-----------
->  drivers/spi/spi-bcm63xx.c         |  2 +-
->  drivers/spi/spi-cadence-quadspi.c |  5 +++--
->  drivers/spi/spi-cadence-xspi.c    |  4 ++--
->  drivers/spi/spi-cadence.c         |  4 ++--
->  drivers/spi/spi-cavium.c          |  8 ++++----
->  drivers/spi/spi-coldfire-qspi.c   |  8 ++++----
->  drivers/spi/spi-davinci.c         | 18 +++++++++---------
->  drivers/spi/spi-dln2.c            |  6 +++---
->  drivers/spi/spi-dw-core.c         |  2 +-
->  drivers/spi/spi-dw-mmio.c         |  4 ++--
->  drivers/spi/spi-falcon.c          |  2 +-
->  drivers/spi/spi-fsi.c             |  2 +-
->  drivers/spi/spi-fsl-dspi.c        | 16 ++++++++--------
->  drivers/spi/spi-fsl-espi.c        |  6 +++---
->  drivers/spi/spi-fsl-lpspi.c       |  2 +-
->  drivers/spi/spi-fsl-qspi.c        |  6 +++---
->  drivers/spi/spi-fsl-spi.c         |  2 +-
->  drivers/spi/spi-geni-qcom.c       |  6 +++---
->  drivers/spi/spi-gpio.c            |  4 ++--
->  drivers/spi/spi-gxp.c             |  4 ++--
->  drivers/spi/spi-hisi-sfc-v3xx.c   |  2 +-
->  drivers/spi/spi-img-spfi.c        | 14 +++++++-------
->  drivers/spi/spi-imx.c             | 30 +++++++++++++++---------------
->  drivers/spi/spi-ingenic.c         |  4 ++--
->  drivers/spi/spi-intel.c           |  2 +-
->  drivers/spi/spi-jcore.c           |  4 ++--
->  drivers/spi/spi-lantiq-ssc.c      |  6 +++---
->  drivers/spi/spi-mem.c             |  4 ++--
->  drivers/spi/spi-meson-spicc.c     |  2 +-
->  drivers/spi/spi-microchip-core.c  |  6 +++---
->  drivers/spi/spi-mpc512x-psc.c     |  8 ++++----
->  drivers/spi/spi-mpc52xx.c         |  2 +-
->  drivers/spi/spi-mt65xx.c          |  6 +++---
->  drivers/spi/spi-mt7621.c          |  2 +-
->  drivers/spi/spi-mux.c             |  8 ++++----
->  drivers/spi/spi-mxic.c            | 10 +++++-----
->  drivers/spi/spi-mxs.c             |  2 +-
->  drivers/spi/spi-npcm-fiu.c        | 20 ++++++++++----------
->  drivers/spi/spi-nxp-fspi.c        | 10 +++++-----
->  drivers/spi/spi-omap-100k.c       |  2 +-
->  drivers/spi/spi-omap-uwire.c      |  8 ++++----
->  drivers/spi/spi-omap2-mcspi.c     | 24 ++++++++++++------------
->  drivers/spi/spi-orion.c           |  4 ++--
->  drivers/spi/spi-pci1xxxx.c        |  4 ++--
->  drivers/spi/spi-pic32-sqi.c       |  2 +-
->  drivers/spi/spi-pic32.c           |  4 ++--
->  drivers/spi/spi-pl022.c           |  4 ++--
->  drivers/spi/spi-pxa2xx.c          |  6 +++---
->  drivers/spi/spi-qcom-qspi.c       |  2 +-
->  drivers/spi/spi-rb4xx.c           |  2 +-
->  drivers/spi/spi-rockchip-sfc.c    |  2 +-
->  drivers/spi/spi-rockchip.c        | 26 ++++++++++++++------------
->  drivers/spi/spi-rspi.c            | 10 +++++-----
->  drivers/spi/spi-s3c64xx.c         |  2 +-
->  drivers/spi/spi-sc18is602.c       |  4 ++--
->  drivers/spi/spi-sh-msiof.c        |  6 +++---
->  drivers/spi/spi-sh-sci.c          |  2 +-
->  drivers/spi/spi-sifive.c          |  6 +++---
->  drivers/spi/spi-sn-f-ospi.c       |  2 +-
->  drivers/spi/spi-st-ssc4.c         |  2 +-
->  drivers/spi/spi-stm32-qspi.c      | 12 ++++++------
->  drivers/spi/spi-sun4i.c           |  2 +-
->  drivers/spi/spi-sun6i.c           |  2 +-
+> v5
+> New patch
+>
+>  .../driver-api/thermal/intel_powerclamp.rst   |  22 +++
+>  drivers/thermal/intel/intel_powerclamp.c      | 169 ++++++++++++++++--
+>  2 files changed, 173 insertions(+), 18 deletions(-)
+>
+> diff --git a/Documentation/driver-api/thermal/intel_powerclamp.rst b/Documentation/driver-api/thermal/intel_powerclamp.rst
+> index 3f6dfb0b3ea6..d805e28b7a45 100644
+> --- a/Documentation/driver-api/thermal/intel_powerclamp.rst
+> +++ b/Documentation/driver-api/thermal/intel_powerclamp.rst
+> @@ -26,6 +26,8 @@ By:
+>             - Generic Thermal Layer (sysfs)
+>             - Kernel APIs (TBD)
+>
+> +       (*) Module Parameters
+> +
+>  INTRODUCTION
+>  ============
+>
+> @@ -318,3 +320,23 @@ device, a PID based userspace thermal controller can manage to
+>  control CPU temperature effectively, when no other thermal influence
+>  is added. For example, a UltraBook user can compile the kernel under
+>  certain temperature (below most active trip points).
+> +
+> +Module Parameters
+> +=================
+> +
+> +``cpumask`` (RW)
+> +       A bit mask of CPUs to inject idle. The format of the bitmask is same as
+> +       used in other subsystems like in /proc/irq/*/smp_affinity. The mask is
+> +       comma separated 32 bit groups. Each CPU is one bit. For example for a 256
+> +       CPU system the full mask is:
+> +       ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff
+> +
+> +       The leftmost mask is for CPU 0-32.
+> +
+> +``max_idle`` (RW)
+> +       Maximum injected idle time to the total CPU time ratio in percent range
+> +       from 1 to 100. Even if the cooling device max_state is always 100 (100%),
+> +       this parameter allows to add a max idle percent limit. The default is 50,
+> +       to match the current implementation of powerclamp driver. Also doesn't
+> +       allow value more than 75, if the cpumask includes every CPU present in
+> +       the system.
 
-=46or sun4i, sun6i:
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+I'm not sure if this is driver-api.  It's admin-guide rather IMO.
 
-Best regards,
-Jernej
+> diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
+> index 850195ebe5e0..68830b726da2 100644
+> --- a/drivers/thermal/intel/intel_powerclamp.c
+> +++ b/drivers/thermal/intel/intel_powerclamp.c
+> @@ -37,7 +37,7 @@
+>  #include <asm/mwait.h>
+>  #include <asm/cpu_device_id.h>
+>
+> -#define MAX_TARGET_RATIO (50U)
+> +#define MAX_TARGET_RATIO (100U)
+>  /* For each undisturbed clamping period (no extra wake ups during idle time),
+>   * we increment the confidence counter for the given target ratio.
+>   * CONFIDENCE_OK defines the level where runtime calibration results are
+> @@ -109,6 +109,135 @@ static const struct kernel_param_ops duration_ops = {
+>  module_param_cb(duration, &duration_ops, &duration, 0644);
+>  MODULE_PARM_DESC(duration, "forced idle time for each attempt in msec.");
+>
+> +#define DEFAULT_MAX_IDLE       50
+> +#define MAX_ALL_CPU_IDLE       75
+> +
+> +static u8 max_idle = DEFAULT_MAX_IDLE;
+> +
+> +static cpumask_var_t idle_injection_cpu_mask;
+> +
+> +static int allocate_idle_injection_mask(void)
+> +{
+> +       /* This mask is allocated only one time and freed during module exit */
+> +       if (!idle_injection_cpu_mask) {
 
->  drivers/spi/spi-synquacer.c       |  6 +++---
->  drivers/spi/spi-tegra114.c        | 28 ++++++++++++++--------------
->  drivers/spi/spi-tegra20-sflash.c  |  2 +-
->  drivers/spi/spi-tegra20-slink.c   |  6 +++---
->  drivers/spi/spi-tegra210-quad.c   |  8 ++++----
->  drivers/spi/spi-ti-qspi.c         | 16 ++++++++--------
->  drivers/spi/spi-topcliff-pch.c    |  4 ++--
->  drivers/spi/spi-wpcm-fiu.c        | 12 ++++++------
->  drivers/spi/spi-xcomm.c           |  2 +-
->  drivers/spi/spi-xilinx.c          |  6 +++---
->  drivers/spi/spi-xlp.c             |  4 ++--
->  drivers/spi/spi-zynq-qspi.c       |  2 +-
->  drivers/spi/spi-zynqmp-gqspi.c    |  2 +-
->  drivers/spi/spidev.c              |  6 +++---
->  include/trace/events/spi.h        | 10 +++++-----
->  92 files changed, 315 insertions(+), 310 deletions(-)
+I would do
 
+if (idle_injection_cpu_mask)
+         return 0;
 
+here and rearrange the rest of the function accordingly.
 
+> +               if (!zalloc_cpumask_var(&idle_injection_cpu_mask, GFP_KERNEL))
+> +                       return -ENOMEM;
+> +
+> +               cpumask_copy(idle_injection_cpu_mask, cpu_present_mask);
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +static int cpumask_set(const char *arg, const struct kernel_param *kp)
+> +{
+> +       int ret;
+> +
+> +       mutex_lock(&powerclamp_lock);
+> +
+> +       /* Can't set mask when cooling device is in use */
+> +       if (powerclamp_data.clamping) {
+> +               ret = -EAGAIN;
+> +               goto skip_cpumask_set;
+> +       }
+> +
+> +       /*
+> +        * When module parameters are passed from kernel command line
+> +        * during insmod, the module parameter callback is called
+> +        * before powerclamp_init(), so we can't assume that some
+> +        * cpumask can be allocated before here.
+> +        */
+> +       ret = allocate_idle_injection_mask();
+
+Could it be allocated by powerclamp_init(), though?  It is not useful
+before that function runs anyway.
+
+> +       if (ret)
+> +               goto skip_cpumask_set;
+> +
+> +       ret = bitmap_parse(arg, strlen(arg), cpumask_bits(idle_injection_cpu_mask),
+
+So this would replace the existing idle_injection_cpu_mask even if it
+is going to fail later.
+
+> +                          nr_cpumask_bits);
+> +       if (ret)
+> +               goto skip_cpumask_set;
+> +
+> +       if (cpumask_empty(idle_injection_cpu_mask)) {
+> +               ret = -EINVAL;
+> +               goto skip_cpumask_set;
+> +       }
+> +
+> +       if (cpumask_equal(cpu_present_mask, idle_injection_cpu_mask) &&
+
+Should this check be against cpu_online_mask instead?  Arguably
+offline CPUs don't matter here.
+
+> +                         max_idle > MAX_ALL_CPU_IDLE) {
+> +               ret = -EINVAL;
+> +               goto skip_cpumask_set;
+> +       }
+> +
+> +       mutex_unlock(&powerclamp_lock);
+> +
+> +       return 0;
+> +
+> +skip_cpumask_set:
+> +       mutex_unlock(&powerclamp_lock);
+> +
+> +       return ret;
+> +}
+> +
+> +static int cpumask_get(char *buf, const struct kernel_param *kp)
+> +{
+> +       if (!idle_injection_cpu_mask)
+> +               return -EINVAL;
+
+I would return -ENODEV here.
+
+> +
+> +       return bitmap_print_to_pagebuf(false, buf, cpumask_bits(idle_injection_cpu_mask),
+> +                                      nr_cpumask_bits);
+> +}
+> +
+> +static const struct kernel_param_ops cpumask_ops = {
+> +       .set = cpumask_set,
+> +       .get = cpumask_get,
+> +};
+> +
+> +module_param_cb(cpumask, &cpumask_ops, NULL, 0644);
+> +MODULE_PARM_DESC(cpumask, "Mask of CPUs to use for idle injection.");
+> +
+> +static int max_idle_set(const char *arg, const struct kernel_param *kp)
+> +{
+> +       u8 _max_idle;
+
+new_max_idle would be slightly better I think.
+
+> +       int ret = 0;
+> +
+> +       mutex_lock(&powerclamp_lock);
+> +
+> +       /* Can't set mask when cooling device is in use */
+> +       if (powerclamp_data.clamping) {
+> +               ret = -EAGAIN;
+> +               goto skip_limit_set;
+> +       }
+> +
+> +       ret = kstrtou8(arg, 10, &_max_idle);
+> +       if (ret)
+> +               goto skip_limit_set;
+> +
+> +       if (_max_idle > MAX_TARGET_RATIO) {
+> +               ret = -EINVAL;
+> +               goto skip_limit_set;
+> +       }
+> +
+> +       if (idle_injection_cpu_mask && cpumask_equal(cpu_present_mask, idle_injection_cpu_mask) &&
+> +           _max_idle > MAX_ALL_CPU_IDLE) {
+
+The same check is done here and in cpumask_set().  Could it be done in
+a separate function called from here and from there?
+
+> +               ret = -EINVAL;
+> +               goto skip_limit_set;
+> +       }
+> +
+> +       max_idle = _max_idle;
+> +
+> +skip_limit_set:
+> +       mutex_unlock(&powerclamp_lock);
+> +
+> +       return ret;
+> +}
+> +
+> +static const struct kernel_param_ops max_idle_ops = {
+> +       .set = max_idle_set,
+> +       .get = param_get_int,
+> +};
+> +
+> +module_param_cb(max_idle, &max_idle_ops, &max_idle, 0644);
+> +MODULE_PARM_DESC(max_idle, "maximum injected idle time to the total CPU time ratio in percent range:1-100");
+> +
+>  struct powerclamp_calibration_data {
+>         unsigned long confidence;  /* used for calibration, basically a counter
+>                                     * gets incremented each time a clamping
+> @@ -342,6 +471,10 @@ static unsigned int get_run_time(void)
+>         unsigned int compensated_ratio;
+>         unsigned int runtime;
+>
+> +       /* No compensation for non systemwide idle injection */
+> +       if (max_idle > MAX_ALL_CPU_IDLE)
+> +               return (duration * 100 / powerclamp_data.target_ratio - duration);
+> +
+>         /*
+>          * make sure user selected ratio does not take effect until
+>          * the next round. adjust target_ratio if user has changed
+> @@ -460,21 +593,11 @@ static void trigger_idle_injection(void)
+>   */
+>  static int powerclamp_idle_injection_register(void)
+>  {
+> -       /*
+> -        * The idle inject core will only inject for online CPUs,
+> -        * So we can register for all present CPUs. In this way
+> -        * if some CPU goes online/offline while idle inject
+> -        * is registered, nothing additional calls are required.
+> -        * The same runtime and idle time is applicable for
+> -        * newly onlined CPUs if any.
+> -        *
+> -        * Here cpu_present_mask can be used as is.
+> -        * cast to (struct cpumask *) is required as the
+> -        * cpu_present_mask is const struct cpumask *, otherwise
+> -        * there will be compiler warnings.
+> -        */
+> -       ii_dev = idle_inject_register_full((struct cpumask *)cpu_present_mask,
+> -                                          idle_inject_update);
+> +       if (cpumask_equal(cpu_present_mask, idle_injection_cpu_mask))
+> +               ii_dev = idle_inject_register_full(idle_injection_cpu_mask, idle_inject_update);
+> +       else
+> +               ii_dev = idle_inject_register(idle_injection_cpu_mask);
+> +
+>         if (!ii_dev) {
+>                 pr_err("powerclamp: idle_inject_register failed\n");
+>                 return -EAGAIN;
+> @@ -510,7 +633,7 @@ static int start_power_clamp(void)
+>         ret = powerclamp_idle_injection_register();
+>         if (!ret) {
+>                 trigger_idle_injection();
+> -               if (poll_pkg_cstate_enable)
+> +               if (poll_pkg_cstate_enable && max_idle < MAX_ALL_CPU_IDLE)
+
+Why is the additional check needed here?
+
+>                         schedule_delayed_work(&poll_pkg_cstate_work, 0);
+>         }
+>
+> @@ -565,7 +688,7 @@ static int powerclamp_set_cur_state(struct thermal_cooling_device *cdev,
+>         mutex_lock(&powerclamp_lock);
+>
+>         new_target_ratio = clamp(new_target_ratio, 0UL,
+> -                               (unsigned long) (MAX_TARGET_RATIO - 1));
+> +                               (unsigned long) (max_idle - 1));
+>         if (!powerclamp_data.target_ratio && new_target_ratio > 0) {
+>                 pr_info("Start idle injection to reduce power\n");
+>                 powerclamp_data.target_ratio = new_target_ratio;
+> @@ -656,6 +779,13 @@ static int __init powerclamp_init(void)
+>
+>         /* probe cpu features and ids here */
+>         retval = powerclamp_probe();
+> +       if (retval)
+> +               return retval;
+> +
+> +       mutex_lock(&powerclamp_lock);
+> +       retval = allocate_idle_injection_mask();
+> +       mutex_unlock(&powerclamp_lock);
+> +
+>         if (retval)
+>                 return retval;
+>
+> @@ -689,6 +819,9 @@ static void __exit powerclamp_exit(void)
+>
+>         cancel_delayed_work_sync(&poll_pkg_cstate_work);
+>         debugfs_remove_recursive(debug_dir);
+> +
+> +       if (idle_injection_cpu_mask)
+> +               free_cpumask_var(idle_injection_cpu_mask);
+>  }
+>  module_exit(powerclamp_exit);
+>
+> --
