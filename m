@@ -2,102 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4B05687DDC
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 13:50:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A101D687DE3
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 13:52:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232193AbjBBMu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 07:50:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51034 "EHLO
+        id S232067AbjBBMwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 07:52:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbjBBMuZ (ORCPT
+        with ESMTP id S230233AbjBBMwE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 07:50:25 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8BCA7;
-        Thu,  2 Feb 2023 04:50:21 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id bk16so1581721wrb.11;
-        Thu, 02 Feb 2023 04:50:21 -0800 (PST)
+        Thu, 2 Feb 2023 07:52:04 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E9A268A
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 04:52:03 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id e15so1994707ybn.10
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 04:52:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=w5NS+1c8Tu2PGFvK4AFEdfQ0iYep75esswQI1225dSM=;
-        b=S7yIohgxwKAADl61gLn3ethmknWpCDOxD611Nhp4wn7OpDjidJ+3j0AyxWK+QLhJb0
-         A7x2wzR8uKW8dVcVhy6KMC+9JBXqQYXP3cCLe9bdFzgMyociIRYLMdf7sOKQAOERQkVZ
-         TGHtUzYkbV3daP3VDzoLDiApjv6uDFHiUcdnZ58612cUZteYbEUBa+xkaIlMyYWLO/Gq
-         4x+QzKCbNdCNCVE2n4yEUAhbQGocwljziYZ20LaA1ibkMv0diz8W28XmCHtJB+KCru8w
-         86teva9QCv/IGpnfPvD0VeiR0dMWyPCc6RFJWeTygEACQ3211VfsZPHHOksyfSIrI1HC
-         ANpw==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=iTEsYvNbhZUvr3t5FDyaBPDIayK5soN0V1YA6KoE95Q=;
+        b=PPfSS12X5711vg3bhuNrJmUVkzvhGet/0lNfQTXDPw/wtNntkEWqMG9cO2+AQaapQi
+         MZJcaRC71fY2ZMHLvVtk19QBWC1mCJPijp0uWxSPYRqKKnRf1wK8sVEE8LuBsjsuG+5t
+         x1Qfdfr93US48KlEdOPNzlN6NNSHJoWxD+ccOAxBTB+PoK6YHr6Fn8j8ialUwaevYP2c
+         aixY6bNdQwbQ+vFjTT8ZPOtdFdyJvVNLLrIZFSz/pqtkbGzYjg1HuIz6De2bTmz4GpwA
+         Qam0sl8kV1yAtcdu12tzoopbHGDis2sPmqKBDume7Nod8LxoXbavP03tvajPG2IFZ/lT
+         sPbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=w5NS+1c8Tu2PGFvK4AFEdfQ0iYep75esswQI1225dSM=;
-        b=jSAywSIPUIrBtiU9jtWlDBxJXqUmbJL6hgq2kPF+VulnDqhzkdq4rxBgUBJEE8Uj6p
-         hoCNkXLyb6d7OdVBLZEt3wwAKdhQFiWb9tasjE+vdufpuXyrjCMLkf1DMhs3lTds502O
-         cMnGxRpxZaCH+Eg4HlvgHhuv4JWeU4KBGK8rHD/KNFi7yWvASvSQPgFCBAWicZum3EaC
-         D6M24W2skJjaTAxYAPcLPoiog8FGRGhvwuxfztOxVQ56f4ZdzxTloqVUXR0CMUy9Wvfl
-         4RAkYAZZtW+omOy1RpG9g1nb5PV0mmbm6ikt1PmxKkmEa5WYcHfakuRNmVwdrGkpUyiC
-         rXvQ==
-X-Gm-Message-State: AO0yUKVxtpGYJYwhRP+dzWNij3qyHWS0McyhPu6dmBvtYrSBqgdUNNOI
-        PkW0Zi+retILCC6C+ACpo0w=
-X-Google-Smtp-Source: AK7set9GirxZBqSwgFAsMboxKE8Izp95X1pyquunjVvuEGOfw96gDntzRpcsoOrreA5T5hjVvI/7Pw==
-X-Received: by 2002:a05:6000:1285:b0:2bf:ee0f:9f04 with SMTP id f5-20020a056000128500b002bfee0f9f04mr6115932wrx.45.1675342219853;
-        Thu, 02 Feb 2023 04:50:19 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id d7-20020a056000114700b00241fab5a296sm19667773wrx.40.2023.02.02.04.50.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 04:50:19 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] i915/gvt: Fix spelling mistake "vender" -> "vendor"
-Date:   Thu,  2 Feb 2023 12:50:18 +0000
-Message-Id: <20230202125018.285523-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        bh=iTEsYvNbhZUvr3t5FDyaBPDIayK5soN0V1YA6KoE95Q=;
+        b=4TyHqNpDfOE8JX8DYWu5xQQcHYZLmODCzyv8RBsz+JbTmYAbkwwfFkLm4e2xW7KfLV
+         t36Zm71pmo0uUyNEzJXCG5eJcWnkQciwF2eCstjDOOQ0O6RG4970H3F+L9icOFfK4WIm
+         2+7RxFquvqkhwRhrmmMbDyL/rit3xN103HD0DZwm6qNEFpek+hp/gZAiIiEYyEgQ8LSK
+         M+owrsosHiuMizjNW2gglGbrquB99/bnaoYtGYoRcEkfnBDG0CxV7/xMEV0fGlCDej8c
+         UhTqBVrouPehTufx0DJkEBerbFecu4ksrUvn+Hr+NeKlurrHH7hfojKiSi9FVJvVR7kh
+         4f7g==
+X-Gm-Message-State: AO0yUKV1BR5sg7MMr9U7hxqRcVtYaSGpjjIue0KTsfpHYb3zpzUDZdUL
+        quSSjTCwhrKHTAfzT9UseeRp8KNHD853VWNeUR8smiua7+mC9A==
+X-Google-Smtp-Source: AK7set/IzybDVeByN7olzBbtRq2zPCd8ReB2ZColcl64XBQe7/HYO17UuFBtuhM1xYbR1EXmfXF7asG9PYGE8qn+MFw=
+X-Received: by 2002:a25:fe0a:0:b0:7ca:9b40:72a7 with SMTP id
+ k10-20020a25fe0a000000b007ca9b4072a7mr435003ybe.130.1675342322566; Thu, 02
+ Feb 2023 04:52:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <20221207131731.1291517-1-william.qiu@starfivetech.com>
+ <20221207131731.1291517-3-william.qiu@starfivetech.com> <CACRpkdYP7MokLdRtxX9w7p80c=wHDHsoTYWrU53CnpsZ7o6aGg@mail.gmail.com>
+ <4529a646-1faf-c858-cfbe-1560ebeb1fba@starfivetech.com>
+In-Reply-To: <4529a646-1faf-c858-cfbe-1560ebeb1fba@starfivetech.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 2 Feb 2023 13:51:51 +0100
+Message-ID: <CACRpkdYAP_WYwfiFxXybqqa8OJw98cxUwJgW0RUCgLLGaV+LJQ@mail.gmail.com>
+Subject: Re: [PATCH v1 2/3] mmc: starfive: Add sdio/emmc driver support
+To:     William Qiu <william.qiu@starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-mmc@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jaehoon Chung <jh80.chung@samsung.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a spelling mistake in a literal string. Fix it.
+On Thu, Feb 2, 2023 at 12:10 PM William Qiu
+<william.qiu@starfivetech.com> wrote:
+> On 2022/12/9 5:09, Linus Walleij wrote:
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/gpu/drm/i915/gvt/firmware.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> >> +       priv->syscon_offset = args.args[0];
+> >> +       priv->syscon_shift  = args.args[1];
+> >> +       priv->syscon_mask   = args.args[2];
+> >
+> > Why should these three things be in the device tree instead of being derived
+> > from the compatible-string or just plain hard-coded as #defines?
+> > I don't get it.
+> >
+> Hi Linus,
+>
+> I'm sorry to bother you, but as for the definition of syscon, after discussing with
+> my colleagues, we think it is easier to distinguish SDIO0 and SDIO1 by defining it in
+> the device tree, and the code compatibility is better.
 
-diff --git a/drivers/gpu/drm/i915/gvt/firmware.c b/drivers/gpu/drm/i915/gvt/firmware.c
-index dce93738e98a..4dd52ac2043e 100644
---- a/drivers/gpu/drm/i915/gvt/firmware.c
-+++ b/drivers/gpu/drm/i915/gvt/firmware.c
-@@ -171,7 +171,7 @@ static int verify_firmware(struct intel_gvt *gvt,
- 	mem = (fw->data + h->cfg_space_offset);
- 
- 	id = *(u16 *)(mem + PCI_VENDOR_ID);
--	VERIFY("vender id", id, pdev->vendor);
-+	VERIFY("vendor id", id, pdev->vendor);
- 
- 	id = *(u16 *)(mem + PCI_DEVICE_ID);
- 	VERIFY("device id", id, pdev->device);
--- 
-2.30.2
+OK sounds good looking forward to seeing the result :)
 
+Yours,
+Linus Walleij
