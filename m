@@ -2,212 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0498868880D
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 21:10:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CFCA688811
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 21:10:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232603AbjBBUK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 15:10:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52134 "EHLO
+        id S232528AbjBBUKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 15:10:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230070AbjBBUKX (ORCPT
+        with ESMTP id S232512AbjBBUKm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 15:10:23 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8FC67D2A2;
-        Thu,  2 Feb 2023 12:10:21 -0800 (PST)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 312K7Lj6001915;
-        Thu, 2 Feb 2023 20:10:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=w9Xm2c23ybA3d5ETV1KVEB5XO3UXo1W7M3lqJi5nADQ=;
- b=NhM+ov+O8mN2uwrdN8u0TSayqnExrHn5MgDe3KkapBdN0PZrq1nFJWzM5Q0gYPvZQvK8
- 7Rz7BoCQI5bmSI+dU6ITQzd6sGd1jHPQJjvL+02lbTx0Tv8gVXhi5uNOg1hMMk1eUoz5
- hhPlxVvB3r5QuEchQiWu/UcIMzwOHuioCR3BD1XmTn+sU/8H1yUsAh/0zORT2CBV3ty6
- +yRwaC5GLnyPfcHM7ldcBdUX8ZCQb3hwJK5oghHV80pGf0yIQwTPjHKDqmlIytyZaKy+
- G49+aDobKUFtJligZmtj40Tw+sbNHsw/RtT7yHRTuLUZVc6pPB/nxV0uRlmMWlgsZyr1 jg== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nfqt3kete-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Feb 2023 20:10:07 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 312KA6RF021373
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 2 Feb 2023 20:10:06 GMT
-Received: from [10.110.99.204] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 2 Feb 2023
- 12:10:05 -0800
-Message-ID: <74594853-6ab9-c44d-6f67-38d65fc46466@quicinc.com>
-Date:   Thu, 2 Feb 2023 12:10:04 -0800
+        Thu, 2 Feb 2023 15:10:42 -0500
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 481347EFCA
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 12:10:36 -0800 (PST)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-5249a65045aso9450797b3.13
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 12:10:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=aMAjimDlKMwUcRFDQ6b+VBfedyOvbLyBE+vOI+tSfHA=;
+        b=kyF+/plr5E/Ea/CcC8kG3DZtLYwmW3pbaj7ub7BWG0oOmUWEs0ikGKms709xZ3r46a
+         fS7/eLvB6OiRfJsQp73/xjkOdf4G6I4FnffK8HFGbsX3nuet1hVVnM8RCxxsPhZqXauh
+         yTbOzle222FWt7Wu3vu0dxPxYG5oHgB02m+paWO1aDZtPtA4vBqOc4bS2gapXOCToqGM
+         UUzG8sVKIM+PeBZts0WxdKwxlr0k3szWFpNBVDkGgXGsfaK/35+ADzW+Tjti47JUCMCE
+         zSkdeSfuPAXbUqU43dOSHwnYFZn5HT1g36N0MkXCDgfHIHxC3hbU6ACLIr2UwUTMAM5u
+         ibWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aMAjimDlKMwUcRFDQ6b+VBfedyOvbLyBE+vOI+tSfHA=;
+        b=W9k53A4aowblPsCdZyoEvOsL7cH2BhuBN1ywoI33m2v91v8UOf+0jdnxyCrKbD9RQ9
+         k98dNL4QKCy4j2lWK9cwRYBO0bQHRdoLdC0j7y0bEq3NOXHDa+paLSPYm2S48n5yopuL
+         2U73T2IffAb3QhtHUCBAIGIiGrTJgfkBnLDurAb7lEnSS6ntBbB0DPjszeZNb6z2Q0lu
+         AqP4vF0XGoxymIs9mWpmM8+EdBEcML5LBu1gZCSqKK9d2sfQbTheHVpiAAU70wWAkb0e
+         RjctKbDiNPME1UTM/Q0a5ktQxOva7KAB3kGmSQnfNv2/PYQNI9SXTbcoViE+E0czjSiT
+         XYYQ==
+X-Gm-Message-State: AO0yUKUg/nNTfVv6hJTpdN/+N5WsbDfbUSL38Eiunxa4m1NHG4n9Dtua
+        WUlaKrDDk0J1MQkyN0kSGBKBq9NSlKvLhKFgKUU71Q==
+X-Google-Smtp-Source: AK7set9AqY68emvr60gryS7o515sri+M7IT/v1XYZ0VEeOpgfCcezGt7jhwHyJF5LmQMbsFZMGLvgpHWm+XynGoijC0=
+X-Received: by 2002:a05:690c:39f:b0:50f:9101:875f with SMTP id
+ bh31-20020a05690c039f00b0050f9101875fmr855576ywb.392.1675368635261; Thu, 02
+ Feb 2023 12:10:35 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [RFT PATCH v2 2/3] drm/msm/dsi: Stop unconditionally powering up
- DSI hosts at modeset
-Content-Language: en-US
-To:     Doug Anderson <dianders@chromium.org>
-CC:     <dri-devel@lists.freedesktop.org>, Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Sean Paul <sean@poorly.run>, Jonas Karlman <jonas@kwiboo.se>,
-        Vinod Koul <vkoul@kernel.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        <freedreno@lists.freedesktop.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20230131141756.RFT.v2.1.I723a3761d57ea60c5dd754c144aed6c3b2ea6f5a@changeid>
- <20230131141756.RFT.v2.2.I4cfeab9d0e07e98ead23dd0736ab4461e6c69002@changeid>
- <43095d93-29c8-b30a-08c0-0a452770c1ce@quicinc.com>
- <CAD=FV=X6A4aZVCaqhT9yP0tD82R3fnaDak67w+p8+Z=WkaRxfw@mail.gmail.com>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <CAD=FV=X6A4aZVCaqhT9yP0tD82R3fnaDak67w+p8+Z=WkaRxfw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: bfA7HV8UXRTuB82Wtoq4iHgIatb5n-Xn
-X-Proofpoint-GUID: bfA7HV8UXRTuB82Wtoq4iHgIatb5n-Xn
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-02_14,2023-02-02_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
- bulkscore=0 adultscore=0 mlxlogscore=999 impostorscore=0
- priorityscore=1501 mlxscore=0 phishscore=0 spamscore=0 lowpriorityscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302020180
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <Y9q8Ec1CJILZz7dj@ip-172-31-38-16.us-west-2.compute.internal>
+ <20230202014810.744-1-hdanton@sina.com> <Y9wVNF5IBCYVz5jU@ip-172-31-38-16.us-west-2.compute.internal>
+In-Reply-To: <Y9wVNF5IBCYVz5jU@ip-172-31-38-16.us-west-2.compute.internal>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Thu, 2 Feb 2023 21:10:23 +0100
+Message-ID: <CANn89iLWZb-Uf_9a41ofBtVsHjBwHzbOVn+V_QrksnB9y80m6w@mail.gmail.com>
+Subject: Re: [RFC] net: add new socket option SO_SETNETNS
+To:     Alok Tiagi <aloktiagi@gmail.com>
+Cc:     Hillf Danton <hdanton@sina.com>, ebiederm@xmission.com,
+        netdev@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Feb 2, 2023 at 8:55 PM Alok Tiagi <aloktiagi@gmail.com> wrote:
+>
+> On Thu, Feb 02, 2023 at 09:48:10AM +0800, Hillf Danton wrote:
+> > On Wed, 1 Feb 2023 19:22:57 +0000 aloktiagi <aloktiagi@gmail.com>
+> > > @@ -1535,6 +1535,52 @@ int sk_setsockopt(struct sock *sk, int level, int optname,
+> > >             WRITE_ONCE(sk->sk_txrehash, (u8)val);
+> > >             break;
+> > >
+> > > +   case SO_SETNETNS:
+> > > +   {
+> > > +           struct net *other_ns, *my_ns;
+> > > +
+> > > +           if (sk->sk_family != AF_INET && sk->sk_family != AF_INET6) {
+> > > +                   ret = -EOPNOTSUPP;
+> > > +                   break;
+> > > +           }
+> > > +
+> > > +           if (sk->sk_type != SOCK_STREAM && sk->sk_type != SOCK_DGRAM) {
+> > > +                   ret = -EOPNOTSUPP;
+> > > +                   break;
+> > > +           }
+> > > +
+> > > +           other_ns = get_net_ns_by_fd(val);
+> > > +           if (IS_ERR(other_ns)) {
+> > > +                   ret = PTR_ERR(other_ns);
+> > > +                   break;
+> > > +           }
+> > > +
+> > > +           if (!ns_capable(other_ns->user_ns, CAP_NET_ADMIN)) {
+> > > +                   ret = -EPERM;
+> > > +                   goto out_err;
+> > > +           }
+> > > +
+> > > +           /* check that the socket has never been connected or recently disconnected */
+> > > +           if (sk->sk_state != TCP_CLOSE || sk->sk_shutdown & SHUTDOWN_MASK) {
+> > > +                   ret = -EOPNOTSUPP;
+> > > +                   goto out_err;
+> > > +           }
+> > > +
+> > > +           /* check that the socket is not bound to an interface*/
+> > > +           if (sk->sk_bound_dev_if != 0) {
+> > > +                   ret = -EOPNOTSUPP;
+> > > +                   goto out_err;
+> > > +           }
+> > > +
+> > > +           my_ns = sock_net(sk);
+> > > +           sock_net_set(sk, other_ns);
+> > > +           put_net(my_ns);
+> > > +           break;
+> >
+> >               cpu 0                           cpu 2
+> >               ---                             ---
+> >                                               ns = sock_net(sk);
+> >               my_ns = sock_net(sk);
+> >               sock_net_set(sk, other_ns);
+> >               put_net(my_ns);
+> >                                               ns is invalid ?
+>
+> That is the reason we want the socket to be in an un-connected state. That
+> should help us avoid this situation.
 
+This is not enough....
 
-On 2/1/2023 6:33 AM, Doug Anderson wrote:
-> Hi,
-> 
-> On Tue, Jan 31, 2023 at 3:32 PM Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
->>
->> On 1/31/2023 2:18 PM, Douglas Anderson wrote:
->>> In commit 7d8e9a90509f ("drm/msm/dsi: move DSI host powerup to modeset
->>> time"), we moved powering up DSI hosts to modeset time. This wasn't
->>> because it was an elegant design, but there were no better options.
->>>
->>> That commit actually ended up breaking ps8640, and thus was born
->>> commit ec7981e6c614 ("drm/msm/dsi: don't powerup at modeset time for
->>> parade-ps8640") as a temporary hack to un-break ps8640 by moving it to
->>> the old way of doing things. It turns out that ps8640 _really_ doesn't
->>> like its pre_enable() function to be called after
->>> dsi_mgr_bridge_power_on(). Specifically (from experimentation, not
->>> because I have any inside knowledge), it looks like the assertion of
->>> "RST#" in the ps8640 runtime resume handler seems like it's not
->>> allowed to happen after dsi_mgr_bridge_power_on()
->>>
->>> Recently, Dave Stevenson's series landed allowing bridges some control
->>> over pre_enable ordering. The meaty commit for our purposes is commit
->>> 4fb912e5e190 ("drm/bridge: Introduce pre_enable_prev_first to alter
->>> bridge init order"). As documented by that series, if a bridge doesn't
->>> set "pre_enable_prev_first" then we should use the old ordering.
->>>
->>> Now that we have the commit ("drm/bridge: tc358762: Set
->>> pre_enable_prev_first") we can go back to the old ordering, which also
->>> allows us to remove the ps8640 special case.
->>>
->>> One last note is that even without reverting commit 7d8e9a90509f
->>> ("drm/msm/dsi: move DSI host powerup to modeset time"), if you _just_
->>> revert the ps8640 special case and try it out then it doesn't seem to
->>> fail anymore. I spent time bisecting / debugging this and it turns out
->>> to be mostly luck, so we still want this patch to make sure it's
->>> solid. Specifically the reason it sorta works these days is because
->>> we implemented wait_hpd_asserted() in ps8640 now, plus the magic of
->>> "pm_runtime" autosuspend. The fact that we have wait_hpd_asserted()
->>> implemented means that we actually power the bridge chip up just a wee
->>> bit earlier and then the bridge happens to stay on because of
->>> autosuspend and thus ends up powered before dsi_mgr_bridge_power_on().
->>>
->>> Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>
->>> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->>> Cc: Abhinav Kumar <quic_abhinavk@quicinc.com>
->>> Signed-off-by: Douglas Anderson <dianders@chromium.org>
->>> ---
->>>
->>> Changes in v2:
->>> - Don't fold dsi_mgr_bridge_power_on() back into dsi_mgr_bridge_pre_enable()
->>>
->>>    drivers/gpu/drm/msm/dsi/dsi_manager.c | 38 +--------------------------
->>>    1 file changed, 1 insertion(+), 37 deletions(-)
->>>
->>> diff --git a/drivers/gpu/drm/msm/dsi/dsi_manager.c b/drivers/gpu/drm/msm/dsi/dsi_manager.c
->>> index 1bbac72dad35..2197a54b9b96 100644
->>> --- a/drivers/gpu/drm/msm/dsi/dsi_manager.c
->>> +++ b/drivers/gpu/drm/msm/dsi/dsi_manager.c
->>> @@ -34,32 +34,6 @@ static struct msm_dsi_manager msm_dsim_glb;
->>>    #define IS_SYNC_NEEDED()    (msm_dsim_glb.is_sync_needed)
->>>    #define IS_MASTER_DSI_LINK(id)      (msm_dsim_glb.master_dsi_link_id == id)
->>>
->>> -#ifdef CONFIG_OF
->>> -static bool dsi_mgr_power_on_early(struct drm_bridge *bridge)
->>> -{
->>> -     struct drm_bridge *next_bridge = drm_bridge_get_next_bridge(bridge);
->>> -
->>> -     /*
->>> -      * If the next bridge in the chain is the Parade ps8640 bridge chip
->>> -      * then don't power on early since it seems to violate the expectations
->>> -      * of the firmware that the bridge chip is running.
->>> -      *
->>> -      * NOTE: this is expected to be a temporary special case. It's expected
->>> -      * that we'll eventually have a framework that allows the next level
->>> -      * bridge to indicate whether it needs us to power on before it or
->>> -      * after it. When that framework is in place then we'll use it and
->>> -      * remove this special case.
->>> -      */
->>> -     return !(next_bridge && next_bridge->of_node &&
->>> -              of_device_is_compatible(next_bridge->of_node, "parade,ps8640"));
->>> -}
->>> -#else
->>> -static inline bool dsi_mgr_power_on_early(struct drm_bridge *bridge)
->>> -{
->>> -     return true;
->>> -}
->>> -#endif
->>> -
->>>    static inline struct msm_dsi *dsi_mgr_get_dsi(int id)
->>>    {
->>>        return msm_dsim_glb.dsi[id];
->>> @@ -265,12 +239,6 @@ static void dsi_mgr_bridge_power_on(struct drm_bridge *bridge)
->>>        int ret;
->>>
->>>        DBG("id=%d", id);
->>> -     if (!msm_dsi_device_connected(msm_dsi))
->>> -             return;
->>> -
->>> -     /* Do nothing with the host if it is slave-DSI in case of bonded DSI */
->>> -     if (is_bonded_dsi && !IS_MASTER_DSI_LINK(id))
->>> -             return;
->>>
->>
->> Why are these two checks removed?
-> 
-> After this patch there is now one caller to this function and the one
-> caller does those exact same two checks immediately before calling
-> this function. Thus, they no longer do anything useful.
-> 
-> -Doug
+Another thread might look at sock_net(sk), for example from inet_diag
+or tcp timers
+(which can be fired even in un-connected state)
 
-Ack, understood. dsi_mgr_bridge_pre_enable() has the same checks. Hence,
+Even UDP sockets can receive packets while being un-connected,
+and they need to deref the net pointer.
 
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+Currently there is no protection about sock_net(sk) being changed on the fly,
+and the struct net could disappear and be freed.
+
+There are ~1500 uses of sock_net(sk) in the kernel, I do not think
+you/we want to audit all
+of them to check what could go wrong...
