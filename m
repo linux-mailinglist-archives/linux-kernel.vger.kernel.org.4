@@ -2,82 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DB146887BC
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 20:46:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AD286887B6
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 20:44:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232115AbjBBTqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 14:46:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38434 "EHLO
+        id S231451AbjBBToU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 14:44:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbjBBTqX (ORCPT
+        with ESMTP id S229761AbjBBToQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 14:46:23 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56B232D53;
-        Thu,  2 Feb 2023 11:46:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E7D3261CC7;
-        Thu,  2 Feb 2023 19:46:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 241E4C433D2;
-        Thu,  2 Feb 2023 19:46:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675367182;
-        bh=Cl+ZB49K+wR5GQHPN3c0zVbPF7vb5FMRvpQuIw92MqA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=m4TXHJ0RvwqX24zEyBFmZ6wwAoKizleLYo7T6lfCEcO7puu0Ye3p+3IBnc2aPKj34
-         7GUByvhd4xnFWJXOfLcLodbKwPs6e1cnL7Mq69M6IhQVR4fcgmOfIQIDPoCOTgoTLj
-         8eaVnO0tqcrOhnxg3W5V/aUGRpkK5IZW8lBL9DtQAseGOzpVb9l3qJsSG1QM4r9sFe
-         VaPXYSVpneRtxhAOZW3G0lzJe2VwPg6rESCIU+ntLlpCzX8gTcuQAzHIjUvj/FSdgg
-         rxQ+UwpKiQ1/NSesTcL757k2t5x75sOJGEHCz3vofwGRv7kgQJ9+w7ao9+S2i8Q05B
-         VjDz1AsLJ/oHg==
-Date:   Thu, 2 Feb 2023 11:46:21 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Moshe Shemesh <moshe@nvidia.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jiri Pirko <jiri@nvidia.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net-next 7/7] devlink: Move devlink dev selftest code to
- dev
-Message-ID: <20230202114621.3f32dae1@kernel.org>
-In-Reply-To: <52392558-f79e-5980-4f10-47f111d69fc0@nvidia.com>
-References: <1675349226-284034-1-git-send-email-moshe@nvidia.com>
-        <1675349226-284034-8-git-send-email-moshe@nvidia.com>
-        <20230202101712.15a0169d@kernel.org>
-        <52392558-f79e-5980-4f10-47f111d69fc0@nvidia.com>
+        Thu, 2 Feb 2023 14:44:16 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C5F9E3A5;
+        Thu,  2 Feb 2023 11:44:15 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id h24so4564837lfv.6;
+        Thu, 02 Feb 2023 11:44:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Rd7kT/8tJcFEXchoRyQMnasMBTHYEkNO+aCP72ohTdQ=;
+        b=RF0WK8SpEC+vqYABtaQMiRUaOoW3slBnOWi0J/jNWhbr0nbE3n9EUmobrXNtUoTebq
+         XAhQJOVnMq0I0s0D4aWnGH3W995PNGmGg8tuA9ta3zPYV3/kbxseSbdWHfdwix4W928+
+         Cb84Un1O6Zt4rChCPjiiHSLPy3kf5FtqLNzbWRvJYRJFaP7q8HazqNZRYBTl030EFdkZ
+         YWI1W+00ZEsjM32Pk6pVdeWHzybKU0pgXymeEnqPksYArrhGaxMpAaMSk+Vf/2F8rVDE
+         tFa1V5OCv35xFXSjqogD96Ghdj85ItCtUoJKsztmru0qA3/UDHEaick1Q8S07ejjyOJF
+         IPiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Rd7kT/8tJcFEXchoRyQMnasMBTHYEkNO+aCP72ohTdQ=;
+        b=r3qOG/ftSzqE5ud4pns7FRdg6X6XKr8AhXlWfyrDRyn+GC0gDa+BRvEeoRAMbEhiQ5
+         ODAN4j4yOQn3zSo0l6jbzJHXlBOfUjQafqZUt2fgIFolzXaNa0ijJdwCVfv6SPgGoADr
+         3rzbGmX/t9pt18CMj7SD3EbRKDWLsMyvHsF2HiYDQO0MTFDMgPGSrSp6wDCEGq5nhec6
+         X4PlxFRVlSOb6pH/rjdGwBx93uCxDtp1zFhs/vM8nF21ZETopsSXQuNsmaXwov/NeOTR
+         v3rltUUoAMT4yVbZHKYaVeDPPwW/j2/gNokq59lSTMeEOfw2szEoUHk4MX45xrk0szrS
+         FtCw==
+X-Gm-Message-State: AO0yUKU6N8B3RTsway7nz8rvQC6ANVNxXxjOKEmXTd5gmhPeT5/OYEe9
+        dV7wI8iTibhSCZm7b7+AK4k=
+X-Google-Smtp-Source: AK7set/i5qFQMeHr8m6as7nzFHFJ0I2T9wnYlyJfxm3tDEiP6zZ2ZCF+JP8mzIHANAGBMc9l+So33g==
+X-Received: by 2002:ac2:510a:0:b0:4d0:1f8b:b1bd with SMTP id q10-20020ac2510a000000b004d01f8bb1bdmr1941719lfb.32.1675367053145;
+        Thu, 02 Feb 2023 11:44:13 -0800 (PST)
+Received: from [10.0.0.100] (host-213-145-197-218.kaisa-laajakaista.fi. [213.145.197.218])
+        by smtp.gmail.com with ESMTPSA id s26-20020a19771a000000b004d57fc74f2csm26484lfc.266.2023.02.02.11.44.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Feb 2023 11:44:12 -0800 (PST)
+Message-ID: <df621345-1afd-1e0a-bd28-b5bd3e483e6d@gmail.com>
+Date:   Thu, 2 Feb 2023 21:46:32 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] dt-bindings: ti,k3: Use common ti,k3-sci-common.yaml
+ schema
+To:     Rob Herring <robh@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Grygorii Strashko <grygorii.strashko@ti.com>
+Cc:     Peter Ujfalusi <peter.ujfalusi@ti.com>, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230125221339.3057322-1-robh@kernel.org>
+Content-Language: en-US
+From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
+In-Reply-To: <20230125221339.3057322-1-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2 Feb 2023 21:33:52 +0200 Moshe Shemesh wrote:
-> On 02/02/2023 20:17, Jakub Kicinski wrote:
-> > On Thu, 2 Feb 2023 16:47:06 +0200 Moshe Shemesh wrote:  
-> >> Move devlink dev selftest callbacks and related code from leftover.c to
-> >> file dev.c. No functional change in this patch.  
-> > selftest I'd put in its own file. We don't want every command which
-> > doesn't have a specific sub-object to end up in dev.c, right?
-> > At least that was my initial thinking. I don't see any dependencies
-> > between the selftest code and the rest of the dev code either.
-> > WDYT?  
-> 
-> I thought as it is devlink dev selftest, the sub-object is dev. 
-> Otherwise, what should be the rule here ?
-> 
-> How do we decide if it should get its own file ?
 
-My thinking was that it should be much easier for newcomers to grok
-"what does it take to implement a devlink command" if most of the
-subcommands where in their own files, like in ethtool.
 
-The implementation could have as well made selftest a subobject.
-But I don't feel strongly, if noone agrees we can apply as is and 
-see if dev.c does indeed start to grow out of proportion.
+On 26/01/2023 00:13, Rob Herring wrote:
+> Instead of redefining the 'ti,sci' and 'ti,sci-dev-id' properties multiple
+> times, reference the common schema where they are defined. Most cases
+> using these properties already do this, just udma and ringacc need to be
+> fixed.
+
+Acked-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
+
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>   .../devicetree/bindings/dma/ti/k3-udma.yaml         |  9 +--------
+>   .../devicetree/bindings/soc/ti/k3-ringacc.yaml      | 13 ++++---------
+>   2 files changed, 5 insertions(+), 17 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/dma/ti/k3-udma.yaml b/Documentation/devicetree/bindings/dma/ti/k3-udma.yaml
+> index 7ff428ad3aae..97f6ae9b1236 100644
+> --- a/Documentation/devicetree/bindings/dma/ti/k3-udma.yaml
+> +++ b/Documentation/devicetree/bindings/dma/ti/k3-udma.yaml
+> @@ -44,6 +44,7 @@ description: |
+>   
+>   allOf:
+>     - $ref: "../dma-controller.yaml#"
+> +  - $ref: /schemas/arm/keystone/ti,k3-sci-common.yaml#
+>   
+>   properties:
+>     "#dma-cells":
+> @@ -78,14 +79,6 @@ properties:
+>   
+>     msi-parent: true
+>   
+> -  ti,sci:
+> -    description: phandle to TI-SCI compatible System controller node
+> -    $ref: /schemas/types.yaml#/definitions/phandle
+> -
+> -  ti,sci-dev-id:
+> -    description: TI-SCI device id of UDMAP
+> -    $ref: /schemas/types.yaml#/definitions/uint32
+> -
+>     ti,ringacc:
+>       description: phandle to the ring accelerator node
+>       $ref: /schemas/types.yaml#/definitions/phandle
+> diff --git a/Documentation/devicetree/bindings/soc/ti/k3-ringacc.yaml b/Documentation/devicetree/bindings/soc/ti/k3-ringacc.yaml
+> index ddea3d41971d..22cf9002fee7 100644
+> --- a/Documentation/devicetree/bindings/soc/ti/k3-ringacc.yaml
+> +++ b/Documentation/devicetree/bindings/soc/ti/k3-ringacc.yaml
+> @@ -25,6 +25,9 @@ description: |
+>     The Ring Accelerator is a hardware module that is responsible for accelerating
+>     management of the packet queues. The K3 SoCs can have more than one RA instances
+>   
+> +allOf:
+> +  - $ref: /schemas/arm/keystone/ti,k3-sci-common.yaml#
+> +
+>   properties:
+>     compatible:
+>       items:
+> @@ -54,14 +57,6 @@ properties:
+>       $ref: /schemas/types.yaml#/definitions/uint32
+>       description: TI-SCI RM subtype for GP ring range
+>   
+> -  ti,sci:
+> -    $ref: /schemas/types.yaml#/definitions/phandle-array
+> -    description: phandle on TI-SCI compatible System controller node
+> -
+> -  ti,sci-dev-id:
+> -    $ref: /schemas/types.yaml#/definitions/uint32
+> -    description: TI-SCI device id of the ring accelerator
+> -
+>   required:
+>     - compatible
+>     - reg
+> @@ -72,7 +67,7 @@ required:
+>     - ti,sci
+>     - ti,sci-dev-id
+>   
+> -additionalProperties: false
+> +unevaluatedProperties: false
+>   
+>   examples:
+>     - |
+
+-- 
+Péter
