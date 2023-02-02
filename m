@@ -2,120 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29FA468783C
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:05:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C2C668783E
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:06:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232107AbjBBJFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 04:05:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48750 "EHLO
+        id S232273AbjBBJGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 04:06:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231760AbjBBJFr (ORCPT
+        with ESMTP id S231760AbjBBJGr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 04:05:47 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on20717.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e88::717])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 488F29760;
-        Thu,  2 Feb 2023 01:05:45 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OaBjbUdCsW9Hn0WwnByutkhxyxhtMZiN6Q8tCDAQpbTD5Nfso8JIbhmXshnswJZvaeYMB59AZxE5v4P9RbQkzBB3PHATB3RV3pfiIy1kgRFGqQoiYU+gTC83rqmyL/taMp8lKu9Ws7q6c8muHJiWvf/Sz9+1yu1gYp30y0bZ+41ovikpiYm2nQ9no5WabZKFE2q2phfSP91+M/5pavuZtAP5OeXIX7rMKv7WKPXUg7aht9RFtDPuIHEuCqsVq3grte92Z8gkqxWuB3dVbIkXQ+8jWMkS8KLOP88PmqDnWHIWlNYbTxTsEI2C/2iGPF18rIg1xWz11IjTRddu/UCorw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4HW0EXn1679bQeLLICxWfrOSYg9d7k+k6WT5Dt3LY1M=;
- b=eocuc3FuYXeBTL3VI5sfvH6NHWi2VS8HUZSFktXlW3UArg6Tx4km6RGiQRilJJmfyczYRpLPcIahp83kiGLD3bGfI2wfMmWO3q27fyGtxpOFtPZflUVVid4iroCpt1oChaqr/xRELheZ05emSnIgub2J9EKksHi4UOUUMeWUk/ygLxDuzgIQMpKeEHyuc17jpan16Bh7tGudZ4UrpahH7LyC6tgWZRHD8nguio2YHJQUhvZfqrydCcli7x4+1WYCl73u1HtbzQnPb30Fa/TjZXLltX/IyBE6GsgS7rqea/8Il6utYONtjjMwx1buPf+51lntd5NyGpvl3e4D+LbIjg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4HW0EXn1679bQeLLICxWfrOSYg9d7k+k6WT5Dt3LY1M=;
- b=jWEj9U69FxcRg8NCUioqxNwwVXT55e+peZdZGTHj/gtWYgjQ8wG3BZHu5tgXgIUeHegKtOAo5vnIQ7dajD5kA9CGlM7z9eY5/tBmP5ig1zj5RVAes5avpuU1WdTLRGx1mfwirOwFOvOoFXajdX4GVcfYsWarokGLUYIWJta/fe0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from BY3PR13MB4834.namprd13.prod.outlook.com (2603:10b6:a03:36b::10)
- by BL0PR13MB4417.namprd13.prod.outlook.com (2603:10b6:208:1c5::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.24; Thu, 2 Feb
- 2023 09:05:42 +0000
-Received: from BY3PR13MB4834.namprd13.prod.outlook.com
- ([fe80::1cd0:5238:2916:882]) by BY3PR13MB4834.namprd13.prod.outlook.com
- ([fe80::1cd0:5238:2916:882%4]) with mapi id 15.20.6064.027; Thu, 2 Feb 2023
- 09:05:42 +0000
-Date:   Thu, 2 Feb 2023 10:05:35 +0100
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Eelco Chaudron <echaudro@redhat.com>
-Cc:     Fedor Pchelkin <pchelkin@ispras.ru>,
-        Pravin B Shelar <pshelar@ovn.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        dev@openvswitch.org, linux-kernel@vger.kernel.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        lvc-project@linuxtesting.org
-Subject: Re: [PATCH v2] net: openvswitch: fix flow memory leak in
- ovs_flow_cmd_new
-Message-ID: <Y9t832LOl5FsC3dv@corigine.com>
-References: <20230201210218.361970-1-pchelkin@ispras.ru>
- <4331E34B-4237-48D0-B4E0-016E45176FD1@redhat.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4331E34B-4237-48D0-B4E0-016E45176FD1@redhat.com>
-X-ClientProxiedBy: AM9P250CA0020.EURP250.PROD.OUTLOOK.COM
- (2603:10a6:20b:21c::25) To BY3PR13MB4834.namprd13.prod.outlook.com
- (2603:10b6:a03:36b::10)
+        Thu, 2 Feb 2023 04:06:47 -0500
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0232CF75E
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 01:06:45 -0800 (PST)
+Received: by mail-il1-f200.google.com with SMTP id g5-20020a92d7c5000000b00310afb74005so874540ilq.11
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 01:06:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7BexTbuzCJcM40PhEyrA9kwTjm0ZWEgvvczrpWvtMrM=;
+        b=gDgJDnHQZVBjOkDJdAaoheQR3dPz3DUeUApFOH9V9Ks0wDab5enzKoQboYhZejvnG+
+         81vI0/EMEIWAClVeEa+OdnbUH+vMa+CdGucWTjmrI9RH+QoZcAl7ktwLBiQ+AkCmMIeg
+         1hAnWUEUuSQYjwIArNj9yih9x/Te0b2vQFKEQFPvfpyd6HG+cxaN9FHGnsdnTpXglJBy
+         sR3VpKLGDg9Hj36Rybi0VFFtV38lh/5P2vWuGrFKz8FTpS/FXUtMkawgODTvapuEX18h
+         RPhMP1LjobE8eG9TDInHKaI8VOZWYVkCtRjGi9dTXvMgGVD1/V+9viUea+7jV8Myf3Ya
+         3egA==
+X-Gm-Message-State: AO0yUKXwYWF272/7gQ2ZUndpKXrOfR7U+8lsA+QpHBU3d8RicxcAi19R
+        b8n73DLcMRkDu0vWAah4NgNeVDUaoyuBfRNxOr/5YDAetTpB
+X-Google-Smtp-Source: AK7set/PyaiO/Q8bsEdXym6R0hcjEha7YpZGp5e0svpEFtW4eBa27teIjia89X481X5fkd0NAn/4lpwPAzwTw/2bDiy3S/nBGo4B
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY3PR13MB4834:EE_|BL0PR13MB4417:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6619315f-e357-4afe-6564-08db04fca923
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: HWkeziKSCJMwWDAEo+FXc9XcMVj67mWYfRUqNYagY6HXQnkrmQjU7V7Eo6+8O/iiAv56nkgu8DFT9O/z84aukdqt7kKC9KSX6xnuBiydGLeEIEy89CxPEAedlofd6LguC2hNRp/H6GiwEtQVL0cva28PDhjwNJFeO6hCr/qGz30OoEe4efc8M7p4yMcyxNt9JYwAsoltb9Xts6vluo57G0DzDm6PLzeCXd7u1QnHSzJ3IklJwcGGoEC2cYzX6qzWA9I8tZqcBcsjYWjBw7h14RNUklR1eC3UfyOlCcf1k0VgnoBtmbLS+Vd/w0xTIL54KI4xHEwJQK7KUGnYdy1/GYLuFl5IT5W8iebsx0W5ooIRE8dG8PBqpBwjz8HkbWFu7SykjwxmJKST20RDdazWEeTtRIrgtGCOwSTuObAp++syvVRo2u+1/N6lJQZts9R3MSHbeNNkICTdRTRJBgzC9druxJv25gEcSB3rKAMczmAfZ8MicZY+JqF6A5kWdlpl460K9/pODhg6NdOE7WFgMBvopeQO0ty8z6QfVZ7auS8SLBbWT5JPTKW69cddlbUf1222L5pzvjN7+gjW8KDeQo6x9CeMPUFz2e4UVALqyIHjItKtreOHlgv2+OjnKba5cUctlgQtAUrnEUTn3bG7dVeKFFh6oBWJzUj4zL0cElJIAJEygxqdYZj9qIBVfMMD4KKHCdZB91PWbKhgGTi8ZDnxhjOh7DEgPCn1IxFxkBkBasDJKn2F1uFImnSfQ5sC
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY3PR13MB4834.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39830400003)(366004)(376002)(396003)(346002)(136003)(451199018)(7416002)(316002)(6486002)(86362001)(478600001)(38100700002)(2616005)(6666004)(6512007)(186003)(6506007)(53546011)(5660300002)(54906003)(83380400001)(36756003)(2906002)(66476007)(66556008)(6916009)(8936002)(41300700001)(8676002)(44832011)(4326008)(66946007)(505234007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?tFgo8dgjBeYSpMmXdhDPSaMWeWohFWSbILJGeAVpbISMFwL9UtSO6MIDKHUs?=
- =?us-ascii?Q?CuAdV8n8+EmkIE5mDu2/qpGRHhcoqeuN6a2Ve1uirKfYrfV8f1P793bNtkhS?=
- =?us-ascii?Q?i5CWYIswfp6U6MS1tAF3RDE4xPe88MCEYknBKsteDS4jiLhcuZ657rYH8XKV?=
- =?us-ascii?Q?i4t87cECCGEAvKmUNEA3jMsXmgYIFRQuKxHYoxsz3Nwl/1ExdZQrd1I8xlqe?=
- =?us-ascii?Q?pKNeq2xoUGuS3INqpwfCZpZ9x92+D3F43jV/MBia43PR8/ifKTdyZeDJ4fTx?=
- =?us-ascii?Q?CeajspNjHzE/49wPiDkR2pFDcqjKPPyPJsjdHH1FTnmXq7NQRpgMh+8MEnAb?=
- =?us-ascii?Q?im0+oDzQjuUSWyzThSqdLbv9NDZcGtMyt20hyqXIaZc4seb/kn4LZmDkrpY1?=
- =?us-ascii?Q?3EJRpE1tAB3QwVXYcHhpbwp1UUfy8YQQhPI1kvKyGb0VKYr2warBf9X7nfmF?=
- =?us-ascii?Q?midZ3eCSPOp7mJN79ykGCT1+GrxWxolMbwfPQjIp3uJUvog57BncZwdA4ezN?=
- =?us-ascii?Q?pJdzsVmJjsX8B/cF6esMOpJvfYZGKYj9ImLlKY/7RbhX84Zt3pwAsra49SwS?=
- =?us-ascii?Q?JuOppEw989I3Un9Pkcf35EOtxFQca2fe79Ru56GWTDcO1Sx3dp5YRwhBqO7E?=
- =?us-ascii?Q?HcCFmAoxb9s3xQ1kUFuPUBRc+vk6M8NFXkC5niliI4T43v/OYLvZjwhC1UNH?=
- =?us-ascii?Q?/b+gjFvSiwOjsxBIt3rbmf2DKo6KGxYe66kq8F9dQFtLljEWXcmpPk3e+gSK?=
- =?us-ascii?Q?Ru2NAwVsaaSpGIg63Xgxr9D1CtTaS/kqR9pwWsJurwNmScH90npsEihGMFnI?=
- =?us-ascii?Q?evOl/2xmU3VOZfi8TKYL9r8nlQ0q9Yl0m85jURZMcizE93c8gZzpTNs75YDO?=
- =?us-ascii?Q?aP9inKxRk19b73oRNbOeGam2KWYPArUDidH/oL5xgPtQth4qhafYHC1xqz/4?=
- =?us-ascii?Q?7PwtNYWcZA0023xw8SWhvcBEGa10pa5rTi8vpAXt7+Jff6Mr1EFGt8ArYfof?=
- =?us-ascii?Q?wqGwIVgTXLK7IXIA0ZmFuCaMWA+bPnpHCs71tQb0GxvYSOZEUuYqsDG8cG1P?=
- =?us-ascii?Q?Ra5HKIaWOanWemZD9QpxpF/yJogPErd8giTBsLBtsex5U3XJvPPbL8pedCZ0?=
- =?us-ascii?Q?/iT/Umv3sozRNSL2rth8LtbZHd5fEDCVK6k4vcxtx760znzakila9qvpjPMw?=
- =?us-ascii?Q?nHhILLghDw0aQQATb84pZApmFMQamA9OWTDXuxYW0W1LSCW58vSe/0uFGnZE?=
- =?us-ascii?Q?BYR7N9DytQCWT2cqDu+sdSiQ9M8Ak60qMnO4pw89YQrp31aVVQujJyapl2sF?=
- =?us-ascii?Q?Mf0L7KPk6A8pnDz3HL/E4JQQ2dAVeO2ebmAscOfpjERtfxd/o8Plb0qWkhIc?=
- =?us-ascii?Q?El7k2mrr7cZ8wqECrLaUTBc9VsgdsVYWbldI3t2aj3E5ptaXmMj4FJcdBcJU?=
- =?us-ascii?Q?ApSPGvmct7dECLHC+7KEXib9LdB6mTpFzWQjP95Z7D98XFc3eKTmjGerXdbH?=
- =?us-ascii?Q?MyiNFhPCWjBn34Wi5zGqzz5/qHSwNcdYnMFJPct+6ScRsLtnrJ3o1+VSgmOi?=
- =?us-ascii?Q?4m1FZ/EjfWsb63mKx+JTIadYvSQh1EowPDoA6pRJSG6TZRFVHU6PVAcc6XnU?=
- =?us-ascii?Q?AoGJFKcWX7eqBbAkEtID2x5QIamgtv0wu7MizTAHkJkvHaS3dXTeQz/gi8vP?=
- =?us-ascii?Q?MWcrCQ=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6619315f-e357-4afe-6564-08db04fca923
-X-MS-Exchange-CrossTenant-AuthSource: BY3PR13MB4834.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Feb 2023 09:05:42.0714
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: xme6LD638rHjlpULhFjPqSL6uUuo8yathIK+OCPhQ0Le086qbAPZG5pjqkPyLqvuqTxcZFpg0QrLHdoNlU0LTJn9JXQ7DX+CvfooZRQuGZs=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR13MB4417
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no
+X-Received: by 2002:a5d:9b86:0:b0:71b:3f4f:95f9 with SMTP id
+ r6-20020a5d9b86000000b0071b3f4f95f9mr1174877iom.30.1675328805274; Thu, 02 Feb
+ 2023 01:06:45 -0800 (PST)
+Date:   Thu, 02 Feb 2023 01:06:45 -0800
+In-Reply-To: <00000000000008f1d405f1999228@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000052099f05f3b3e298@google.com>
+Subject: Re: [syzbot] WARNING in __usbnet_read_cmd/usb_submit_urb
+From:   syzbot <syzbot+2a0e7abd24f1eb90ce25@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        mailhol.vincent@wanadoo.fr, mkl@pengutronix.de, oneukum@suse.com,
+        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -123,55 +57,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 09:11:04AM +0100, Eelco Chaudron wrote:
-> 
-> 
-> On 1 Feb 2023, at 22:02, Fedor Pchelkin wrote:
-> 
-> > Syzkaller reports a memory leak of new_flow in ovs_flow_cmd_new() as it is
-> > not freed when an allocation of a key fails.
-> >
-> > BUG: memory leak
-> > unreferenced object 0xffff888116668000 (size 632):
-> >   comm "syz-executor231", pid 1090, jiffies 4294844701 (age 18.871s)
-> >   hex dump (first 32 bytes):
-> >     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-> >     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-> >   backtrace:
-> >     [<00000000defa3494>] kmem_cache_zalloc include/linux/slab.h:654 [inline]
-> >     [<00000000defa3494>] ovs_flow_alloc+0x19/0x180 net/openvswitch/flow_table.c:77
-> >     [<00000000c67d8873>] ovs_flow_cmd_new+0x1de/0xd40 net/openvswitch/datapath.c:957
-> >     [<0000000010a539a8>] genl_family_rcv_msg_doit+0x22d/0x330 net/netlink/genetlink.c:739
-> >     [<00000000dff3302d>] genl_family_rcv_msg net/netlink/genetlink.c:783 [inline]
-> >     [<00000000dff3302d>] genl_rcv_msg+0x328/0x590 net/netlink/genetlink.c:800
-> >     [<000000000286dd87>] netlink_rcv_skb+0x153/0x430 net/netlink/af_netlink.c:2515
-> >     [<0000000061fed410>] genl_rcv+0x24/0x40 net/netlink/genetlink.c:811
-> >     [<000000009dc0f111>] netlink_unicast_kernel net/netlink/af_netlink.c:1313 [inline]
-> >     [<000000009dc0f111>] netlink_unicast+0x545/0x7f0 net/netlink/af_netlink.c:1339
-> >     [<000000004a5ee816>] netlink_sendmsg+0x8e7/0xde0 net/netlink/af_netlink.c:1934
-> >     [<00000000482b476f>] sock_sendmsg_nosec net/socket.c:651 [inline]
-> >     [<00000000482b476f>] sock_sendmsg+0x152/0x190 net/socket.c:671
-> >     [<00000000698574ba>] ____sys_sendmsg+0x70a/0x870 net/socket.c:2356
-> >     [<00000000d28d9e11>] ___sys_sendmsg+0xf3/0x170 net/socket.c:2410
-> >     [<0000000083ba9120>] __sys_sendmsg+0xe5/0x1b0 net/socket.c:2439
-> >     [<00000000c00628f8>] do_syscall_64+0x30/0x40 arch/x86/entry/common.c:46
-> >     [<000000004abfdcf4>] entry_SYSCALL_64_after_hwframe+0x61/0xc6
-> >
-> > To fix this the patch rearranges the goto labels to reflect the order of
-> > object allocations and adds appropriate goto statements on the error
-> > paths.
-> >
-> > Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
-> >
-> > Fixes: 68bb10101e6b ("openvswitch: Fix flow lookup to use unmasked key")
-> > Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
-> > Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
-> > ---
-> > v1->v2: make goto statements structured
-> 
-> Thanks for fixing this, the changes look good.
-> 
-> Acked-by: Eelco Chaudron <echaudro@redhat.com>
+syzbot has found a reproducer for the following issue on:
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+HEAD commit:    9f266ccaa2f5 Merge tag 'for_linus' of git://git.kernel.org..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=103b6ea5480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=94f93727847d4d81
+dashboard link: https://syzkaller.appspot.com/bug?extid=2a0e7abd24f1eb90ce25
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13c8afb3480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14bebfb5480000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/710b69f64bd2/disk-9f266cca.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/f155d6966517/vmlinux-9f266cca.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/07672b7ba2df/bzImage-9f266cca.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+2a0e7abd24f1eb90ce25@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+usb 1-1: BOGUS control dir, pipe 80000280 doesn't match bRequestType c0
+WARNING: CPU: 0 PID: 4645 at drivers/usb/core/urb.c:411 usb_submit_urb+0x14a7/0x1880 drivers/usb/core/urb.c:411
+Modules linked in:
+CPU: 1 PID: 4645 Comm: dhcpcd Not tainted 6.2.0-rc6-syzkaller-00050-g9f266ccaa2f5 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
+RIP: 0010:usb_submit_urb+0x14a7/0x1880 drivers/usb/core/urb.c:411
+Code: 7c 24 40 e8 ab 4c 80 fb 48 8b 7c 24 40 e8 71 14 01 ff 45 89 e8 44 89 f1 4c 89 e2 48 89 c6 48 c7 c7 20 b0 fa 8a e8 d3 ab be 03 <0f> 0b e9 9f ee ff ff e8 7d 4c 80 fb 0f b6 1d 17 b2 5c 08 31 ff 41
+RSP: 0018:ffffc9000355f5a0 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: ffff888017d2c058 RCX: 0000000000000000
+RDX: ffff88801f901d40 RSI: ffffffff816680ec RDI: fffff520006abea6
+RBP: ffff88801cc501e0 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000080000000 R11: 0000000000000000 R12: ffff888017a92d98
+R13: 00000000000000c0 R14: 0000000080000280 R15: ffff888017a25200
+FS:  00007f2a38e6d740(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f2f3dabf300 CR3: 0000000021a8d000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ usb_start_wait_urb+0x101/0x4b0 drivers/usb/core/message.c:58
+ usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
+ usb_control_msg+0x320/0x4a0 drivers/usb/core/message.c:153
+ __usbnet_read_cmd+0xb9/0x390 drivers/net/usb/usbnet.c:2010
+ usbnet_read_cmd+0x96/0xf0 drivers/net/usb/usbnet.c:2068
+ pl_vendor_req drivers/net/usb/plusb.c:60 [inline]
+ pl_set_QuickLink_features drivers/net/usb/plusb.c:75 [inline]
+ pl_reset+0x2f/0xf0 drivers/net/usb/plusb.c:85
+ usbnet_open+0xcc/0x5d0 drivers/net/usb/usbnet.c:889
+ __dev_open+0x297/0x4d0 net/core/dev.c:1417
+ __dev_change_flags+0x587/0x750 net/core/dev.c:8530
+ dev_change_flags+0x97/0x170 net/core/dev.c:8602
+ devinet_ioctl+0x15a2/0x1d70 net/ipv4/devinet.c:1147
+ inet_ioctl+0x33f/0x380 net/ipv4/af_inet.c:979
+ sock_do_ioctl+0xcc/0x230 net/socket.c:1169
+ sock_ioctl+0x1f8/0x680 net/socket.c:1286
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __x64_sys_ioctl+0x197/0x210 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f2a38f5b0e7
+Code: 3c 1c e8 1c ff ff ff 85 c0 79 87 49 c7 c4 ff ff ff ff 5b 5d 4c 89 e0 41 5c c3 66 0f 1f 84 00 00 00 00 00 b8 10 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 61 9d 0c 00 f7 d8 64 89 01 48
+RSP: 002b:00007ffd77152e38 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007f2a38e6d6c8 RCX: 00007f2a38f5b0e7
+RDX: 00007ffd77163028 RSI: 0000000000008914 RDI: 0000000000000018
+RBP: 00007ffd771731d8 R08: 00007ffd77162fe8 R09: 00007ffd77162f98
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffd77163028 R14: 0000000000000028 R15: 0000000000008914
+ </TASK>
 
