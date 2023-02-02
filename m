@@ -2,48 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4E88688572
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 18:33:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B21C688576
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 18:33:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230424AbjBBRdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 12:33:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54758 "EHLO
+        id S232088AbjBBRdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 12:33:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbjBBRdf (ORCPT
+        with ESMTP id S229916AbjBBRdo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 12:33:35 -0500
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51BEB9003;
-        Thu,  2 Feb 2023 09:33:24 -0800 (PST)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        Thu, 2 Feb 2023 12:33:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17A0C74A44;
+        Thu,  2 Feb 2023 09:33:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id CEF037DE;
-        Thu,  2 Feb 2023 17:33:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net CEF037DE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1675359204; bh=Z8ouCrwZGf5TPEAW7UNG69yKQc0d40zGiy1VZrJBEvU=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=FCFUGwFVlhJFXnKTURiyGkFMYRg+uJdc6bwqUGMsZSGyMlvmCX6CxKuLfj1bYe+PH
-         baJA5LsOWOlnLkboxDjHC6zBmMDVhSm7JeXf/BGm71rmRSE3LgrK16zCjQSRJwpXXe
-         CZY3g7rs6O+O81JTETOEfTEl5qr8n/aZHeP9T1D9gkYxvyj7x0cd4Ky0FWDdq/pbOz
-         DjfHJMmV3xhA2uQi5kqwi2WHEcWzeGZqFWmf3HsYWMP8H3ukAadp3z0D8tJN2pKuBB
-         B1hLHn3q2MPL8e8m1+LtwYTE+xAsKEDqH6n79JGoaT4BuPXihV/APpvPZcAIWfJQMa
-         B8zM2scFPySsQ==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v3 0/3] docs/mm: remove useless markup
-In-Reply-To: <20230201094156.991542-1-rppt@kernel.org>
-References: <20230201094156.991542-1-rppt@kernel.org>
-Date:   Thu, 02 Feb 2023 10:33:22 -0700
-Message-ID: <87ilgkvuot.fsf@meer.lwn.net>
+        by ams.source.kernel.org (Postfix) with ESMTPS id B99A8B82768;
+        Thu,  2 Feb 2023 17:33:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E4DCC4339B;
+        Thu,  2 Feb 2023 17:33:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675359217;
+        bh=jWpsupyz5OCnrBf7xdkbmxZaIA2WX22mnR+/HQKkP3Y=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=OhFq/JiPBa5ABY88fWTVqNuxugI2btGa9Q5645hYmS+5CqgOej38MY46FshP77q6c
+         a+2pJJOASsY7M5EEWV7JsOXUUmECPRfdPUTrBoj6mOP9yUku06jpHWWfZoS6Z+SI4G
+         eW3PD49Bt5ogYj2wxo3NYgvisBi0nOl1/0E+4KHyFCp54Ku048DIpn0U/8iQImwsqw
+         O2JAdJptdKps/x3oJGFEvouviGFitVu61LIphCLiECS2w5OUnAx6VBuUp2pK0fqLj0
+         gMXbTdW2jxJENrA7x2ncpRXj4h5KW9zAZZUeUDt75Qpwr7FgHkrRdNm9o11dT8+wp5
+         AiN2tQ2lPWnJg==
+Date:   Thu, 2 Feb 2023 09:33:35 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Tariq Toukan <ttoukan.linux@gmail.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Barry Song <baohua@kernel.org>,
+        Ben Segall <bsegall@google.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Gal Pressman <gal@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Haniel Bristot de Oliveira <bristot@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jacob Keller <jacob.e.keller@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Lafreniere <peter@n8pjl.ca>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-crypto@vger.kernel.org, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org
+Subject: Re: [PATCH RESEND 0/9] sched: cpumask: improve on
+ cpumask_local_spread() locality
+Message-ID: <20230202093335.43586ecf@kernel.org>
+In-Reply-To: <20230130122206.3b55a0a7@kernel.org>
+References: <20230121042436.2661843-1-yury.norov@gmail.com>
+        <4dc2a367-d3b1-e73e-5f42-166e9cf84bac@gmail.com>
+        <xhsmhv8kxh8tk.mognet@vschneid.remote.csb>
+        <4fa5d53d-d614-33b6-2d33-156281420507@gmail.com>
+        <20230130122206.3b55a0a7@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,34 +87,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mike Rapoport <rppt@kernel.org> writes:
+On Mon, 30 Jan 2023 12:22:06 -0800 Jakub Kicinski wrote:
+> On Sun, 29 Jan 2023 10:07:58 +0200 Tariq Toukan wrote:
+> > > Peter/Ingo, any objections to stashing this in tip/sched/core?  
+> > 
+> > Can you please look into it? So we'll have enough time to act (in 
+> > case...) during this kernel.
+> > 
+> > We already missed one kernel...  
+> 
+> We really need this in linux-next by the end of the week. PTAL.
 
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
->
-> Hi,
->
-> Following Jon's gripe about top-of-file labels [1], I went ahead and
-> updated admin-guide/mm and mm docs to use file names instead of labels for
-> document cross-referencing.
->
-> [1] https://lore.kernel.org/all/87r0vh9n17.fsf@meer.lwn.net
->
-> v3:
-> * fix more missed references in zn_CH translation (kbuild)
-> * add markup removal in Documentation/mm/physical_memory.rst as the
->   first patch in the series to keep Fixe: and Acked-by: tags
-> * rebase on docs-next
->
-> v2: https://lore.kernel.org/all/20230131144220.822989-1-rppt@kernel.org
-> * fix missed reference in zn_CH translation (kbuild)
->
-> v1: https://lore.kernel.org/all/20230129075018.207678-1-rppt@kernel.org
->
-> Mike Rapoport (IBM) (3):
->   docs/mm: Physical Memory: remove useless markup
->   docs/mm: remove useless markup
->   docs/admin-guide/mm: remove useless markup
-
-Applied, thanks for the cleanup!
-
-jon
+Peter, could you please take a look? Linux doesn't have an API for
+basic, common sense IRQ distribution on AMD systems. It's important :(
