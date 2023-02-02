@@ -2,117 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD9F3687BD8
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 12:12:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E07BC687BE1
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 12:13:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232202AbjBBLMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 06:12:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43814 "EHLO
+        id S231185AbjBBLNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 06:13:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbjBBLMu (ORCPT
+        with ESMTP id S230174AbjBBLNj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 06:12:50 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75BA4EB54;
-        Thu,  2 Feb 2023 03:12:45 -0800 (PST)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31278hgN024984;
-        Thu, 2 Feb 2023 11:12:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=lGOeiNcI8SsLloD/yR8WJw3AVyExKfKx6S6uiu95xOY=;
- b=MAwn20UqRYb7FmO4QXpvohOXqbKqlR2HpAGwW1XdxCmEx8qMvmNUDvSzeHxLLySk8xiO
- OXQJ/i6AJGYQvKsK/dEDAQyFhMnYL5EIwPGm93imLGbhAsCDR7p4VF/CQeObjIiew5BY
- B0VQ71jSz9PqdiN5qQmYEpS13/1VQNiGF82xWvKF81/aHUJW90OVlx203hxsB7HoIYU3
- 4xH0Wg/BlJzWzV1a9Wmv0Tk1PSM4uHiMOJSdaFkLtbPMWfo3ZQ5PZj0AEfMLJodQCC5d
- 5ql3FDXP9Bkq7Lu4Gq6iCf148zgGCWnjN2lEsA86PAs8is3Ro8qTWstaLjbKE8EOsZms Cg== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nfnyhjrj5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Feb 2023 11:12:25 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 312BCNiL008270
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 2 Feb 2023 11:12:23 GMT
-Received: from [10.50.17.72] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 2 Feb 2023
- 03:12:13 -0800
-Message-ID: <9ac04156-bbbe-5cc6-e6cb-7a29ccff22b4@quicinc.com>
-Date:   Thu, 2 Feb 2023 16:42:09 +0530
+        Thu, 2 Feb 2023 06:13:39 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A7A786EBE
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 03:13:37 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id q10-20020a1cf30a000000b003db0edfdb74so3874956wmq.1
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 03:13:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eyViLD6E5jWQUyig/4yWOniALXO9ZkrdBk4rdwCVU3U=;
+        b=DYHClRngcqEE1zDJ0lS0ihNs5fy2CIGpITprFV0BuWpU//9ue4k4yx4vIm4jxJqJsu
+         RIeiasaRH9g8y+pGGIh95QCCJlMI4ycpZ7KlZKUhrBsa9RVDIrXcYhXdUgTUBGpAz4bo
+         JZwuyu0y9FZeBvXdlslShFgdRHvIjEo5G6euQEEw0MseOjNJD1Ue1l3CDm1hVaQgeOBo
+         qRrnlcc+SJ4ET8VQlW9msUD0sfNCixZUZ3mcd/CLJAlIb5WsiNOb9btuwz0797JhprdN
+         vQuEAhyVUm3nfutPmd6AfpPp+GL8qnAuokaV+r9qm0+XbtJ+CrCfmMlI+j1iOwtHPi3u
+         Ct1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eyViLD6E5jWQUyig/4yWOniALXO9ZkrdBk4rdwCVU3U=;
+        b=KHD21i/dFe0HkNk4HSRpxoKJCjU6ccOKq2KQYz8mSg7YVAvKt8esxx6yMeB8kZBl2A
+         0gqSiD/FDuLSJPegTnzbgtIi3cFbVJB8ybTRG2xdMrh+k0jjUzy/mPtximrNtXSzzDa/
+         ruSGpe9zToTRSKP35o1xdc6EAq5mSU1HC51Vqd8Qkphh+EA+IYEziXlBR9fQ5JyKCE3/
+         XQFuQiX8JRU9xkDm05WfyhJSmsGeLCoqvZy7HTeQC0N8Q9vCvFGnS5OrXNivw5uSBFji
+         eHE4MCK0amKTab7OnTTn7So4uM8Up8CB/IFrxPlGD9jYXK3NvG/MgZmYbw2MJyAVTc2M
+         4lKg==
+X-Gm-Message-State: AO0yUKWSFuWUDReS4FuvT2EQ2Oksl5E20ct4Oi7zXf+7t6Qgmf/aES+g
+        ZMTSMrWHBizWBXtCE4r7INE2iw==
+X-Google-Smtp-Source: AK7set/MyADSM2GxOa7cX3Nl14EN2MXbfx5PvgBCExukm1vrfPZ/qnHvzT1fTuQac1PO0alosodmAg==
+X-Received: by 2002:a7b:ce11:0:b0:3dd:37a5:dc90 with SMTP id m17-20020a7bce11000000b003dd37a5dc90mr5483376wmc.32.1675336416011;
+        Thu, 02 Feb 2023 03:13:36 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id u1-20020a05600c00c100b003a3442f1229sm4416676wmm.29.2023.02.02.03.13.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Feb 2023 03:13:35 -0800 (PST)
+Message-ID: <57dbcbc6-b497-53db-5a45-abce0e4dcf37@linaro.org>
+Date:   Thu, 2 Feb 2023 12:13:33 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH V5 7/7] arm64: defconfig: Enable IPQ9574 SoC base configs
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 00/23] interconnect: fix racy provider registration
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <linus.walleij@linaro.org>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <p.zabel@pengutronix.de>, <shawnguo@kernel.org>, <arnd@arndb.de>,
-        <marcel.ziswiler@toradex.com>, <dmitry.baryshkov@linaro.org>,
-        <nfraprado@collabora.com>, <broonie@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
-        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
-        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
-        <quic_poovendh@quicinc.com>
-References: <20230202083031.10457-1-quic_devipriy@quicinc.com>
- <20230202083031.10457-8-quic_devipriy@quicinc.com>
- <b8703dbe-9b4e-86e7-b24d-ff3b3c315327@linaro.org>
-From:   Devi Priya <quic_devipriy@quicinc.com>
-In-Reply-To: <b8703dbe-9b4e-86e7-b24d-ff3b3c315327@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230201101559.15529-1-johan+linaro@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230201101559.15529-1-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: qZ8rsJrQlP20Wvo4R11G2vxjYoP6IBCP
-X-Proofpoint-ORIG-GUID: qZ8rsJrQlP20Wvo4R11G2vxjYoP6IBCP
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-02_02,2023-02-02_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=466
- priorityscore=1501 bulkscore=0 adultscore=0 spamscore=0 clxscore=1015
- impostorscore=0 suspectscore=0 mlxscore=0 lowpriorityscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302020102
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 01/02/2023 11:15, Johan Hovold wrote:
+> The current interconnect provider interface is inherently racy as
+> providers are expected to be registered before being fully initialised.
+> 
+> This can specifically cause racing DT lookups to fail as I recently
+> noticed when the Qualcomm cpufreq driver failed to probe:
+> 
+> 	of_icc_xlate_onecell: invalid index 0
+>         cpu cpu0: error -EINVAL: error finding src node
+>         cpu cpu0: dev_pm_opp_of_find_icc_paths: Unable to get path0: -22
+>         qcom-cpufreq-hw: probe of 18591000.cpufreq failed with error -22
+> 
+> This only happens very rarely, but the bug is easily reproduced by
+> increasing the race window by adding an msleep() after registering
+> osm-l3 interconnect provider.
+> 
+> Note that the Qualcomm cpufreq driver is especially susceptible to this
+> race as the interconnect path is looked up from the CPU nodes so that
+> driver core does not guarantee the probe order even when device links
+> are enabled (which they not always are).
+> 
+> This series adds a new interconnect provider registration API which is
+> used to fix up the interconnect drivers before removing the old racy
+> API.
+> 
 
+So is there a dependency or not? Can you make it clear that I shouldn't
+take memory controller bits?
 
-On 2/2/2023 2:35 PM, Krzysztof Kozlowski wrote:
-> On 02/02/2023 09:30, Devi Priya wrote:
->> Enables clk & pinctrl related configs
-> 
-> "for Qualcomm IPQ9574 SoC".
-> 
-> Because defconfig is for all sub-architectures, thus IPQ9574 is
-> non-obvious for most of people.Okay, got it
-> 
-> With above:
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-Sure, Thank you!
-> 
-> Best regards,
-> Krzysztof
-> 
-Best Regards,
-Devi Priya
+Best regards,
+Krzysztof
+
