@@ -2,94 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E44076873E2
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 04:35:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 456FA6873F9
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 04:38:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231921AbjBBDfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 22:35:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33186 "EHLO
+        id S232110AbjBBDiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 22:38:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231705AbjBBDfS (ORCPT
+        with ESMTP id S232022AbjBBDie (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 22:35:18 -0500
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBECC1420F;
-        Wed,  1 Feb 2023 19:35:12 -0800 (PST)
-Received: by mail-vs1-xe2a.google.com with SMTP id k4so512790vsc.4;
-        Wed, 01 Feb 2023 19:35:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=QiX3UcRTZwH0PLnaIsBgvLzcPBnC8tyuWq+Tqoi57VM=;
-        b=LQUc4BmX3WhY4mCYLPKfRRvqUABK3NtdI6frXZWIw2784c3oIQ4Vos7Gfhs7jCn7FK
-         ynUp9byn/0vh/mgPEfgfa2s6HUwC/x8103svoUAmaCr6lqe6qs+ynwJfzZgpGprvNqEa
-         K/fIl+LWWDS910UYITK51n3aU2u9jfgox/mCClFrVHeiduGiwSkhWUMy+45sDj4wPY+l
-         b5/3gDmJDha/kuSwQr68eyFDIoKXruksNowHFRr20PCvEL9wSAvc4tYoIVNHX6fLRDvW
-         4xHfgSrKFDpE065ma9Lr8QwzS8MfsoWf64vPignS7vm5f1KXPQQY7q0Nd285c7QcfD65
-         5v/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QiX3UcRTZwH0PLnaIsBgvLzcPBnC8tyuWq+Tqoi57VM=;
-        b=Zn6n2kuFcxwCGLNjGcSX93+joORiNiE/pbcXE6tnJU6vfz/2ka0botMq21SdvdP54X
-         bB6s3uBuh0PQdU6P5Xee8sVOQ2L2lsdU7sT75XTlf3EE5SKQnRqDdATne0c+owAc4q9p
-         cYXKmcu0XhypOhH9b+VqcbIHvBbxLmfqL4DmDM6DOqZ8L/V9ggz6mZ1yDjIJbHToMpvV
-         gHYuNo9niZ1N8ph9PSD0d7HxLKQ47wb5ue5AkApEexjisBYTcXQfS9qaXpVelLcX9957
-         2v0ypzuM+hWMObzT1GKKSUTCzMfcik4m76vz1YrloiC5dw2mRP/fohkcAutwPcqOLxo9
-         J8jw==
-X-Gm-Message-State: AO0yUKUMUmk5Qc5n6+6ptr8ZDh1nFU+CBvFcvDEyITuhdROg7Ss5aMeo
-        XlQhyE6kLD8s2Ba3zwGAQvLChfwM3axzW2aj28c=
-X-Google-Smtp-Source: AK7set97jRS3svZhsG5T+qiZsHY/NEQaMcAWihNka2rtA4CCpDWrOkoxXYP4/3EZzRL1yy4Mm6pL6xwG6axK7PFRcMA=
-X-Received: by 2002:a05:6102:1276:b0:3ee:4ef8:45d3 with SMTP id
- q22-20020a056102127600b003ee4ef845d3mr691400vsg.64.1675308911888; Wed, 01 Feb
- 2023 19:35:11 -0800 (PST)
+        Wed, 1 Feb 2023 22:38:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75EA47B79D;
+        Wed,  1 Feb 2023 19:38:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 284AAB823F6;
+        Thu,  2 Feb 2023 03:38:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BC14C4339C;
+        Thu,  2 Feb 2023 03:38:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675309104;
+        bh=8GlZd68+4GdEpugeLuTwpZAYZlhX8nffQvGke0BiXsY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=dTL8edCYQ7BvU6RjB4z+2mTJGO3Ko15of/lXcJODalcE6Mex4LEJUssTrRzCj1zRy
+         LtrEXoj20thMLOZaGqldZ3MCoxNPQv/zs6K56YLqNeknGZW29BfbPLn87A83YAocY3
+         AKfB4/w1pxpORWT47j2vnksn+5SQgbGPP68uN/tC/PYSKufeXU1vALDIVTP2fUtXrA
+         T+jFFitOXUdle4+t5/1MDUfpOUcqtGnIpGt57hmLQbRi2qmxz55k0ibmupxDRjdOx/
+         k3ZKjJbm7cIXkSmrEHeuNXQkcJ+b0e4Urec+/mHe152rzjPAiS4mUyynCZjsCb0V4i
+         yeM7L1kOyeIJQ==
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Ben Hutchings <ben@decadent.org.uk>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Tom Rix <trix@redhat.com>, llvm@lists.linux.dev
+Subject: [PATCH v4 0/6] kbuild: improve source package builds
+Date:   Thu,  2 Feb 2023 12:37:10 +0900
+Message-Id: <20230202033716.341858-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20221227095123.2447948-1-milkfafa@gmail.com> <20221227095123.2447948-8-milkfafa@gmail.com>
- <b8f173c0-6d40-d6aa-543e-fa8b06557f4f@molgen.mpg.de> <CADnNmFr1naRfam=z0p-4hEugSDJy_HCK8XZyQJ0eFirnmwuH4A@mail.gmail.com>
- <4d64e3f9-57a3-c6be-2709-36e9a1617bf9@molgen.mpg.de> <CADnNmFqFMBUj07oAZze3eeXAR0hbep4p9za=XNu5YrLVqUex=w@mail.gmail.com>
-In-Reply-To: <CADnNmFqFMBUj07oAZze3eeXAR0hbep4p9za=XNu5YrLVqUex=w@mail.gmail.com>
-From:   Kun-Fa Lin <milkfafa@gmail.com>
-Date:   Thu, 2 Feb 2023 11:35:00 +0800
-Message-ID: <CADnNmFqtUMnyCCnKfk3DUJ-VLgJdwC8X6fznVYCF6V5jeZ2bNw@mail.gmail.com>
-Subject: Re: [PATCH v10 7/7] media: nuvoton: Add driver for NPCM video capture
- and encode engine
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-        venture@google.com, yuenn@google.com, benjaminfair@google.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        andrzej.p@collabora.com, kwliu@nuvoton.com,
-        devicetree@vger.kernel.org, openbmc@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, kflin@nuvoton.com,
-        linux-media@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
 
-> > >>> +MODULE_LICENSE("GPL");
-> > >>
-> > >> Not GPL v2?
+This series improve deb-pkg and (src)rpm-pkg so they can build
+without cleaning the kernel tree.
+The debian source package will switch to 3.0 (quilt).
 
-When using GPL v2, I got this warning from checkpatch.pl:
+My next plans are:
 
-WARNING: Prefer "GPL" over "GPL v2" - see commit bf7fbeeae6db
-("module: Cure the MODULE_LICENSE "GPL" vs. "GPL v2" bogosity")
-#2104: FILE: drivers/media/platform/nuvoton/npcm-video.c:1816:
-+MODULE_LICENSE("GPL v2");
+ - add 'srcdeb-pkg' target
 
-It looks better to keep GPL, do you have any suggestions?
+ - add more compression mode
 
-Regards,
-Marvin
+ - rewrite snap-pkg and delete the old tar macro
+
+
+
+Masahiro Yamada (6):
+  kbuild: add a tool to generate a list of files ignored by git
+  kbuild: deb-pkg: create source package without cleaning
+  kbuild: rpm-pkg: build binary packages from source rpm
+  kbuild: srcrpm-pkg: create source package without cleaning
+  kbuild: deb-pkg: hide KDEB_SOURCENAME from Makefile
+  kbuild: deb-pkg: switch over to format 3.0 (quilt)
+
+ Makefile                 |   4 +
+ scripts/.gitignore       |   1 +
+ scripts/Makefile         |   2 +-
+ scripts/Makefile.package |  94 +++---
+ scripts/gen-exclude.c    | 623 +++++++++++++++++++++++++++++++++++++++
+ scripts/package/mkdebian |  23 +-
+ scripts/package/mkspec   |   8 +-
+ 7 files changed, 706 insertions(+), 49 deletions(-)
+ create mode 100644 scripts/gen-exclude.c
+
+-- 
+2.34.1
+
