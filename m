@@ -2,78 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7D946879ED
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 11:15:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEA4E6879EB
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 11:15:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232475AbjBBKPc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 05:15:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52162 "EHLO
+        id S232285AbjBBKPZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 2 Feb 2023 05:15:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231917AbjBBKP0 (ORCPT
+        with ESMTP id S231917AbjBBKPX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 05:15:26 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E38E527981;
-        Thu,  2 Feb 2023 02:15:25 -0800 (PST)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3128J2ko007928;
-        Thu, 2 Feb 2023 10:15:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=2EbbVrVKhxvbj1uYMv77+4MNtoSyJ4b/lq6gFHp1A/w=;
- b=J/6HU5JpGB6QrSKTC+NwZXoVz6hhRbkz+rD29buuJnneZfUbGf4aHZMUw3hTp7WlzrJU
- S2ucjQ1ZkeHK+kh4FWbNhFoO8smzbUi1hR2l16i0n39BqityGEdq/qWggO/2UDf9H2eV
- VZB0ClPN6kd7u3GJxu41RxWvfYnOV/xnV59w7BoNfavxJm1qi8XeC0jkcZVdEbvi5byK
- kg0YGnBXG7/W2nVDWz15GTxAqBGRVYWrQblIzwNIVtdY6FyIDgn9xIzNd4tHtvTaY8H9
- pHhqN46M0AQEGItLz0K9hhPF6r31zgM/VW/Aw/pgLDLZcE9hFhmOQx35Im4kes0ULeMv eA== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nfm9cttsb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Feb 2023 10:15:23 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 312AFMZa016089
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 2 Feb 2023 10:15:22 GMT
-Received: from [10.216.19.238] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 2 Feb 2023
- 02:14:48 -0800
-Message-ID: <10d91214-4106-7a9d-b1ac-68df1aa5f6c9@quicinc.com>
-Date:   Thu, 2 Feb 2023 15:44:45 +0530
+        Thu, 2 Feb 2023 05:15:23 -0500
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BAC8719B8;
+        Thu,  2 Feb 2023 02:15:21 -0800 (PST)
+Received: (Authenticated sender: hadess@hadess.net)
+        by mail.gandi.net (Postfix) with ESMTPSA id 1A9CB240009;
+        Thu,  2 Feb 2023 10:15:17 +0000 (UTC)
+Message-ID: <2474ab138c5fbea089bd787d7a885a96e6a57bd1.camel@hadess.net>
+Subject: Re: [PATCH] HID: use standard debug APIs
+From:   Bastien Nocera <hadess@hadess.net>
+To:     Thomas =?ISO-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 02 Feb 2023 11:15:17 +0100
+In-Reply-To: <20230129215352.oglktngi2rvp6sfd@t-8ch.de>
+References: <20221223-hid-dbg-v1-1-5dcf8794f7f9@weissschuh.net>
+         <20230129215352.oglktngi2rvp6sfd@t-8ch.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH V2] Serial: core: Add compat ioctl support
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <jirislaby@kernel.org>, <linux-serial@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_msavaliy@quicinc.com>,
-        <quic_vnivarth@quicinc.com>, <quic_vtanuku@quicinc.com>,
-        <quic_arandive@quicinc.com>
-References: <20230125113418.7221-1-quic_vdadhani@quicinc.com>
- <Y9EfYCBngFAG+RBw@kroah.com>
-From:   Viken Dadhaniya <quic_vdadhani@quicinc.com>
-In-Reply-To: <Y9EfYCBngFAG+RBw@kroah.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: U8gd3PA-P3pKF3TIKFv0JcnBw2G3MlZz
-X-Proofpoint-GUID: U8gd3PA-P3pKF3TIKFv0JcnBw2G3MlZz
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-02_02,2023-02-02_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- suspectscore=0 spamscore=0 clxscore=1015 impostorscore=0
- lowpriorityscore=0 phishscore=0 adultscore=0 mlxlogscore=999
- priorityscore=1501 mlxscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2302020094
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,50 +41,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Sun, 2023-01-29 at 21:53 +0000, Thomas Weißschuh wrote:
+> Hi Jiri, hi Benjamin,
+> 
+> On Fri, Dec 23, 2022 at 09:30:19PM +0000, Thomas Weißschuh wrote:
+> > The custom "debug" module parameter is fairly inflexible.
+> > It can only manage debugging for all calls dbg_hid() at the same
+> > time.
+> > 
+> > Furthermore it creates a mismatch between calls to hid_dbg() which
+> > can
+> > be managed by CONFIG_DYNAMIC_DEBUG and dbg_hid() which is managed
+> > by the
+> > module parameter.
+> > 
+> > Furthermore the change to pr_debug() allows the debugging
+> > statements to
+> > be completely compiled-out if desired.
+> > 
+> > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> > ---
+> > 
+> > Note: This removes the possibility to enable debugging for the HID
+> > core
+> > and all drivers at the same time.
+> > If this is still desirable it could probably be implemented with
+> > the new
+> > DYNAMIC_DEBUG class feature.
+> > ---
+> >  drivers/hid/hid-core.c | 9 ---------
+> >  include/linux/hid.h    | 8 +-------
+> >  2 files changed, 1 insertion(+), 16 deletions(-)
+> > 
+> > diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
+> > index bd47628da6be..4facfb446986 100644
+> > --- a/drivers/hid/hid-core.c
+> > +++ b/drivers/hid/hid-core.c
+> > @@ -41,11 +41,6 @@
+> >  
+> >  #define DRIVER_DESC "HID core driver"
+> >  
+> > -int hid_debug = 0;
+> > -module_param_named(debug, hid_debug, int, 0600);
+> > -MODULE_PARM_DESC(debug, "toggle HID debugging messages");
+> > -EXPORT_SYMBOL_GPL(hid_debug);
+> > -
+> >  static int hid_ignore_special_drivers = 0;
+> >  module_param_named(ignore_special_drivers,
+> > hid_ignore_special_drivers, int, 0600);
+> >  MODULE_PARM_DESC(ignore_special_drivers, "Ignore any special
+> > drivers and handle all devices by generic driver");
+> > @@ -2909,10 +2904,6 @@ static int __init hid_init(void)
+> >  {
+> >         int ret;
+> >  
+> > -       if (hid_debug)
+> > -               pr_warn("hid_debug is now used solely for parser
+> > and driver debugging.\n"
+> > -                       "debugfs is now used for inspecting the
+> > device (report descriptor, reports)\n");
+> > -
+> >         ret = bus_register(&hid_bus_type);
+> >         if (ret) {
+> >                 pr_err("can't register hid bus\n");
+> > diff --git a/include/linux/hid.h b/include/linux/hid.h
+> > index 8677ae38599e..676f501507aa 100644
+> > --- a/include/linux/hid.h
+> > +++ b/include/linux/hid.h
+> > @@ -882,8 +882,6 @@ static inline bool hid_is_usb(struct hid_device
+> > *hdev)
+> >  
+> >  /* HID core API */
+> >  
+> > -extern int hid_debug;
+> > -
+> >  extern bool hid_ignore(struct hid_device *);
+> >  extern int hid_add_device(struct hid_device *);
+> >  extern void hid_destroy_device(struct hid_device *);
+> > @@ -1191,11 +1189,7 @@ int hid_pidff_init(struct hid_device *hid);
+> >  #define hid_pidff_init NULL
+> >  #endif
+> >  
+> > -#define dbg_hid(fmt,
+> > ...)                                              \
+> > -do
+> > {                                                                  
+> >  \
+> > -       if
+> > (hid_debug)                                                  \
+> > -               printk(KERN_DEBUG "%s: " fmt, __FILE__,
+> > ##__VA_ARGS__); \
+> > -} while (0)
+> > +#define dbg_hid(fmt, ...) pr_debug("%s: " fmt, __FILE__,
+> > ##__VA_ARGS__)
+> >  
+> >  #define hid_err(hid, fmt, ...)                         \
+> >         dev_err(&(hid)->dev, fmt, ##__VA_ARGS__)
+> 
+> any feedback on this patch?
+> 
+> Please note that this is *not* the same as the already merged
+> 34ba3657a503 ("HID: i2c-hid: switch to standard debugging APIs")
 
-"Can you point us at the out-of-tree code please?"
+You can add:
+Tested-by: Bastien Nocera <hadess@hadess.net>
+to this one
 
-Please refer: 
-https://git.codelinaro.org/clo/la/kernel/msm-5.10/-/blob/KERNEL.PLATFORM.1.0.r3-01300-kernel.0/drivers/tty/serial/msm_geni_serial.c#L750
+I tested it as a way to debug the Logitech G903 regression.
 
-Thanks
+I should note that it's pretty weird to have a dbg_hid() and a
+hid_dbg() that do pretty much the same thing, but that was a pre-
+existing problem.
 
-Viken Dadhaniya
+> 
+> > ---
+> > base-commit: 51094a24b85e29138b7fa82ef1e1b4fe19c90046
+> > change-id: 20221223-hid-dbg-2f3eeddddd53
+> > 
+> > Best regards,
+> > -- 
+> > Thomas Weißschuh <linux@weissschuh.net>
+> 
+> Thanks,
+> Thomas
 
-
-On 1/25/2023 5:54 PM, Greg KH wrote:
-> On Wed, Jan 25, 2023 at 05:04:18PM +0530, Viken Dadhaniya wrote:
->> Current serial core driver doesn't support compat_ioctl
->> due to which 32-bit application is not able to send
->> ioctls to driver on a 64-bit platform.
->>
->> Added compat_ioctl support in serial core to handle
->> ioctls from 32-bit applications on a 64-bit platform.
->>
->> Signed-off-by: Viken Dadhaniya <quic_vdadhani@quicinc.com>
->> ---
->>   drivers/tty/serial/serial_core.c | 7 +++++++
->>   1 file changed, 7 insertions(+)
->>
->> diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
->> index b9fbbee598b8..ad4c3a5a3d29 100644
->> --- a/drivers/tty/serial/serial_core.c
->> +++ b/drivers/tty/serial/serial_core.c
->> @@ -1601,6 +1601,12 @@ uart_ioctl(struct tty_struct *tty, unsigned int cmd, unsigned long arg)
->>   	return ret;
->>   }
->>   
->> +static long
->> +uart_compat_ioctl(struct tty_struct *tty, unsigned int cmd, unsigned long arg)
->> +{
->> +	return (long)uart_ioctl(tty, cmd, arg);
-> How does this "fix" your out-of-tree driver at all?  What command is
-> being sent that has this incorrect that this simple "pass through" is
-> going to solve?
->
-> Can you point us at the out-of-tree code please?
->
-> thanks,
->
-> greg k-h
