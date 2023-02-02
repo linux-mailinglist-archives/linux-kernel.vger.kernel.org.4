@@ -2,170 +2,478 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87D0168817F
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 16:16:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B896D68818C
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 16:18:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232772AbjBBPQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 10:16:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60716 "EHLO
+        id S231778AbjBBPSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 10:18:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232604AbjBBPQp (ORCPT
+        with ESMTP id S231932AbjBBPSn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 10:16:45 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A74192C38
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 07:16:44 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id r2so2009858wrv.7
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 07:16:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kFKtikxweyiapl+IexctfEvOemBJ00V0d++S9NjR+cA=;
-        b=Xxoh56A0bGbr6ATBS+F/o7XGC9BVns5iYvUq1bgY1JH3FFR2ms2tOlDI/KrPgl6x1/
-         CtUjKGWTSzFfyzOyDbToAsSzXeThYgu6/Sg5uH60HUXXpVx+tGj6993mBkC9ch9FL/cZ
-         lCj4mPFpEV6XvuV4Jd1c2n7eeKvgwml3FjysuBGFh4N3q8cNhGQ4oFlpx9ObLO3BZ8Di
-         WV8d2+WzrxtJYPSs+gU6wxiLUbbh/K2pno3etTmUnQTF1fFaFLxwFSk3/cZka4uYoMtB
-         DKPFEoHS45dhjS9NsQSRMTBPR3NEjmY/eWBZk9uPu1rNllZpEh5PN+kTZoPJZIS1PUqQ
-         8lJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kFKtikxweyiapl+IexctfEvOemBJ00V0d++S9NjR+cA=;
-        b=xHpmmmPwLUGsiEAb7HnS0azxr9j+dBItX8TlFp65KieD8MTVDjcE9yjjuS8VxpUF7v
-         KZhf5ddq8TUMPvUS90LOTADdbPr02ZrCWMwSHtbKWmcxayCZ5jdi6pr0QCQ2earvvPM2
-         8ZFcAWfe4R2ZQI6aMfMSPEuKgqrCmnKllVU8XH85Xn48r2dx8L+T/VRcqv1zAddBm93T
-         b/AzyS7Cpk17AepuI5+/1b7uAYaZwEIsGHNhR5OBwj5wHa8VpZdvhyHQcSDrkMHNvO7w
-         vfDFQxQhnSvYd0sNxkax8UC6ubhFZsHO5b8ktMr8CQapWjWBTVgioVSxyLT6vhxnuMAp
-         l9EA==
-X-Gm-Message-State: AO0yUKUvHcxC4/tTezC52MOdzcn135BtEdxJVLKZPXXVgjS2VntErCCc
-        HPLDG3AM8AMAmDHHJSRi7Pqy6Q==
-X-Google-Smtp-Source: AK7set9YcrVZ/I2ivVOBp6ZoJ4SQrCDwR3cYdEI9FCeixtQZ93JzJvaZ6A2Tfoc6K8O9v/+aSTjmzw==
-X-Received: by 2002:a5d:4d85:0:b0:2be:3ccd:7f37 with SMTP id b5-20020a5d4d85000000b002be3ccd7f37mr5600723wru.52.1675351002561;
-        Thu, 02 Feb 2023 07:16:42 -0800 (PST)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id a13-20020adfeecd000000b002bbedd60a9asm19927404wrp.77.2023.02.02.07.16.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 07:16:42 -0800 (PST)
-Date:   Thu, 2 Feb 2023 16:16:41 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Atish Patra <atishp@rivosinc.com>
-Cc:     linux-kernel@vger.kernel.org, Anup Patel <anup@brainfault.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atishp@atishpatra.org>,
-        Eric Lin <eric.lin@sifive.com>, Guo Ren <guoren@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v4 04/14] RISC-V: KVM: Define a probe function for SBI
- extension data structures
-Message-ID: <20230202151641.6edhtlf7fz7xsmdy@orel>
-References: <20230201231250.3806412-1-atishp@rivosinc.com>
- <20230201231250.3806412-5-atishp@rivosinc.com>
- <20230202151433.kspo2g7cqsccoqsq@orel>
+        Thu, 2 Feb 2023 10:18:43 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 992CD5956F;
+        Thu,  2 Feb 2023 07:18:10 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8F30DC14;
+        Thu,  2 Feb 2023 07:18:05 -0800 (PST)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.27.141])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6CFD83F64C;
+        Thu,  2 Feb 2023 07:17:21 -0800 (PST)
+Date:   Thu, 2 Feb 2023 15:17:18 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Florent Revest <revest@chromium.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        catalin.marinas@arm.com, will@kernel.org, rostedt@goodmis.org,
+        mhiramat@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kpsingh@kernel.org, jolsa@kernel.org,
+        xukuohai@huaweicloud.com
+Subject: Re: [PATCH 3/8] ftrace: Rename _ftrace_direct_multi APIs to
+ _ftrace_direct APIs
+Message-ID: <Y9vT/l9wH9pqf9nR@FVFF77S0Q05N.cambridge.arm.com>
+References: <20230201163420.1579014-1-revest@chromium.org>
+ <20230201163420.1579014-4-revest@chromium.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230202151433.kspo2g7cqsccoqsq@orel>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230201163420.1579014-4-revest@chromium.org>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 04:14:35PM +0100, Andrew Jones wrote:
-> On Wed, Feb 01, 2023 at 03:12:40PM -0800, Atish Patra wrote:
-> > Currently the probe function just checks if an SBI extension is
-> > registered or not. However, the extension may not want to advertise
-> > itself depending on some other condition.
-> > An additional extension specific probe function will allow
-> > extensions to decide if they want to be advertised to the caller or
-> > not. Any extension that does not require additional dependency checks
-> > can avoid implementing this function.
-> > 
-> > Reviewed-by: Anup Patel <anup@brainfault.org>
-> > Signed-off-by: Atish Patra <atishp@rivosinc.com>
-> > ---
-> >  arch/riscv/include/asm/kvm_vcpu_sbi.h |  3 +++
-> >  arch/riscv/kvm/vcpu_sbi_base.c        | 13 +++++++++++--
-> >  2 files changed, 14 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/arch/riscv/include/asm/kvm_vcpu_sbi.h b/arch/riscv/include/asm/kvm_vcpu_sbi.h
-> > index f79478a..45ba341 100644
-> > --- a/arch/riscv/include/asm/kvm_vcpu_sbi.h
-> > +++ b/arch/riscv/include/asm/kvm_vcpu_sbi.h
-> > @@ -29,6 +29,9 @@ struct kvm_vcpu_sbi_extension {
-> >  	int (*handler)(struct kvm_vcpu *vcpu, struct kvm_run *run,
-> >  		       unsigned long *out_val, struct kvm_cpu_trap *utrap,
-> >  		       bool *exit);
-> > +
-> > +	/* Extension specific probe function */
-> > +	unsigned long (*probe)(struct kvm_vcpu *vcpu);
-> >  };
-> >  
-> >  void kvm_riscv_vcpu_sbi_forward(struct kvm_vcpu *vcpu, struct kvm_run *run);
-> > diff --git a/arch/riscv/kvm/vcpu_sbi_base.c b/arch/riscv/kvm/vcpu_sbi_base.c
-> > index 5d65c63..846d518 100644
-> > --- a/arch/riscv/kvm/vcpu_sbi_base.c
-> > +++ b/arch/riscv/kvm/vcpu_sbi_base.c
-> > @@ -19,6 +19,7 @@ static int kvm_sbi_ext_base_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
-> >  {
-> >  	int ret = 0;
-> >  	struct kvm_cpu_context *cp = &vcpu->arch.guest_context;
-> > +	const struct kvm_vcpu_sbi_extension *sbi_ext;
-> >  
-> >  	switch (cp->a6) {
-> >  	case SBI_EXT_BASE_GET_SPEC_VERSION:
-> > @@ -43,8 +44,16 @@ static int kvm_sbi_ext_base_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
-> >  			 */
-> >  			kvm_riscv_vcpu_sbi_forward(vcpu, run);
-> >  			*exit = true;
-> > -		} else
-> > -			*out_val = kvm_vcpu_sbi_find_ext(cp->a0) ? 1 : 0;
-> > +		} else {
-> > +			sbi_ext = kvm_vcpu_sbi_find_ext(cp->a0);
-> > +			if (sbi_ext) {
-> > +				if (sbi_ext->probe)
-> > +					*out_val = sbi_ext->probe(vcpu);
-> > +				else
-> > +					*out_val = 1;
-> > +			} else
-> > +				*out_val = 0;
+On Wed, Feb 01, 2023 at 05:34:15PM +0100, Florent Revest wrote:
+> Now that the original _ftrace_direct APIs are gone, the "_multi"
+> suffixes only add confusion.
 > 
-> Conor points out elsewhere that we need {} on both arms if one arm needs
-> it. We actually don't need {} on either arm, though, or even the if, if
-> we rewrite as
-> 
->  *out_val = sbi_ext && sbi_ext->probe ? sbi_ext->probe(vcpu) : !!sbi_ext;
+> Signed-off-by: Florent Revest <revest@chromium.org>
+> ---
+>  include/linux/ftrace.h                      | 16 +++++------
+>  kernel/bpf/trampoline.c                     | 14 ++++-----
+>  kernel/trace/ftrace.c                       | 32 ++++++++++-----------
+>  kernel/trace/trace_selftest.c               |  7 +++--
+>  samples/Kconfig                             |  2 +-
+>  samples/ftrace/ftrace-direct-modify.c       |  8 +++---
+>  samples/ftrace/ftrace-direct-multi-modify.c |  8 +++---
+>  samples/ftrace/ftrace-direct-multi.c        |  6 ++--
+>  samples/ftrace/ftrace-direct-too.c          |  6 ++--
+>  samples/ftrace/ftrace-direct.c              |  6 ++--
+>  10 files changed, 53 insertions(+), 52 deletions(-)
 
-I sent too soon, I meant to add
+This looks like a sensible cleanup to me.
 
-In any case,
+As with the last two patches, on x86_64 the kernel builds cleanly, the
+FTRACE_STARTUP_TEST is happy, and loading each of the ftrace_direct*.ko samples
+works fine. So:
 
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+Acked-by: Mark Rutland <mark.rutland@arm.com>
+Tested-by: Mark Rutland <mark.rutland@arm.com>
 
 Thanks,
-drew
+Mark.
 
-
+> diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
+> index 2d7c85e47c2d..a7dbd307c3a4 100644
+> --- a/include/linux/ftrace.h
+> +++ b/include/linux/ftrace.h
+> @@ -398,10 +398,10 @@ struct ftrace_func_entry {
+>  #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+>  extern int ftrace_direct_func_count;
+>  unsigned long ftrace_find_rec_direct(unsigned long ip);
+> -int register_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr);
+> -int unregister_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr);
+> -int modify_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr);
+> -int modify_ftrace_direct_multi_nolock(struct ftrace_ops *ops, unsigned long addr);
+> +int register_ftrace_direct(struct ftrace_ops *ops, unsigned long addr);
+> +int unregister_ftrace_direct(struct ftrace_ops *ops, unsigned long addr);
+> +int modify_ftrace_direct(struct ftrace_ops *ops, unsigned long addr);
+> +int modify_ftrace_direct_nolock(struct ftrace_ops *ops, unsigned long addr);
+>  
+>  #else
+>  struct ftrace_ops;
+> @@ -410,19 +410,19 @@ static inline unsigned long ftrace_find_rec_direct(unsigned long ip)
+>  {
+>  	return 0;
+>  }
+> -static inline int register_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
+> +static inline int register_ftrace_direct(struct ftrace_ops *ops, unsigned long addr)
+>  {
+>  	return -ENODEV;
+>  }
+> -static inline int unregister_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
+> +static inline int unregister_ftrace_direct(struct ftrace_ops *ops, unsigned long addr)
+>  {
+>  	return -ENODEV;
+>  }
+> -static inline int modify_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
+> +static inline int modify_ftrace_direct(struct ftrace_ops *ops, unsigned long addr)
+>  {
+>  	return -ENODEV;
+>  }
+> -static inline int modify_ftrace_direct_multi_nolock(struct ftrace_ops *ops, unsigned long addr)
+> +static inline int modify_ftrace_direct_nolock(struct ftrace_ops *ops, unsigned long addr)
+>  {
+>  	return -ENODEV;
+>  }
+> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+> index d0ed7d6f5eec..150b53316df2 100644
+> --- a/kernel/bpf/trampoline.c
+> +++ b/kernel/bpf/trampoline.c
+> @@ -39,14 +39,14 @@ static int bpf_tramp_ftrace_ops_func(struct ftrace_ops *ops, enum ftrace_ops_cmd
+>  	int ret = 0;
+>  
+>  	if (cmd == FTRACE_OPS_CMD_ENABLE_SHARE_IPMODIFY_SELF) {
+> -		/* This is called inside register_ftrace_direct_multi(), so
+> +		/* This is called inside register_ftrace_direct(), so
+>  		 * tr->mutex is already locked.
+>  		 */
+>  		lockdep_assert_held_once(&tr->mutex);
+>  
+>  		/* Instead of updating the trampoline here, we propagate
+> -		 * -EAGAIN to register_ftrace_direct_multi(). Then we can
+> -		 * retry register_ftrace_direct_multi() after updating the
+> +		 * -EAGAIN to register_ftrace_direct(). Then we can
+> +		 * retry register_ftrace_direct() after updating the
+>  		 * trampoline.
+>  		 */
+>  		if ((tr->flags & BPF_TRAMP_F_CALL_ORIG) &&
+> @@ -198,7 +198,7 @@ static int unregister_fentry(struct bpf_trampoline *tr, void *old_addr)
+>  	int ret;
+>  
+>  	if (tr->func.ftrace_managed)
+> -		ret = unregister_ftrace_direct_multi(tr->fops, (long)old_addr);
+> +		ret = unregister_ftrace_direct(tr->fops, (long)old_addr);
+>  	else
+>  		ret = bpf_arch_text_poke(ip, BPF_MOD_CALL, old_addr, NULL);
+>  
+> @@ -215,9 +215,9 @@ static int modify_fentry(struct bpf_trampoline *tr, void *old_addr, void *new_ad
+>  
+>  	if (tr->func.ftrace_managed) {
+>  		if (lock_direct_mutex)
+> -			ret = modify_ftrace_direct_multi(tr->fops, (long)new_addr);
+> +			ret = modify_ftrace_direct(tr->fops, (long)new_addr);
+>  		else
+> -			ret = modify_ftrace_direct_multi_nolock(tr->fops, (long)new_addr);
+> +			ret = modify_ftrace_direct_nolock(tr->fops, (long)new_addr);
+>  	} else {
+>  		ret = bpf_arch_text_poke(ip, BPF_MOD_CALL, old_addr, new_addr);
+>  	}
+> @@ -243,7 +243,7 @@ static int register_fentry(struct bpf_trampoline *tr, void *new_addr)
+>  
+>  	if (tr->func.ftrace_managed) {
+>  		ftrace_set_filter_ip(tr->fops, (unsigned long)ip, 0, 1);
+> -		ret = register_ftrace_direct_multi(tr->fops, (long)new_addr);
+> +		ret = register_ftrace_direct(tr->fops, (long)new_addr);
+>  	} else {
+>  		ret = bpf_arch_text_poke(ip, BPF_MOD_CALL, NULL, new_addr);
+>  	}
+> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+> index 5efe201428fa..cb77a0a208c7 100644
+> --- a/kernel/trace/ftrace.c
+> +++ b/kernel/trace/ftrace.c
+> @@ -5312,7 +5312,7 @@ static void remove_direct_functions_hash(struct ftrace_hash *hash, unsigned long
+>  }
+>  
+>  /**
+> - * register_ftrace_direct_multi - Call a custom trampoline directly
+> + * register_ftrace_direct - Call a custom trampoline directly
+>   * for multiple functions registered in @ops
+>   * @ops: The address of the struct ftrace_ops object
+>   * @addr: The address of the trampoline to call at @ops functions
+> @@ -5333,7 +5333,7 @@ static void remove_direct_functions_hash(struct ftrace_hash *hash, unsigned long
+>   *  -ENODEV  - @ip does not point to a ftrace nop location (or not supported)
+>   *  -ENOMEM  - There was an allocation failure.
+>   */
+> -int register_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
+> +int register_ftrace_direct(struct ftrace_ops *ops, unsigned long addr)
+>  {
+>  	struct ftrace_hash *hash, *free_hash = NULL;
+>  	struct ftrace_func_entry *entry, *new;
+> @@ -5391,11 +5391,11 @@ int register_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
+>  	}
+>  	return err;
+>  }
+> -EXPORT_SYMBOL_GPL(register_ftrace_direct_multi);
+> +EXPORT_SYMBOL_GPL(register_ftrace_direct);
+>  
+>  /**
+> - * unregister_ftrace_direct_multi - Remove calls to custom trampoline
+> - * previously registered by register_ftrace_direct_multi for @ops object.
+> + * unregister_ftrace_direct - Remove calls to custom trampoline
+> + * previously registered by register_ftrace_direct for @ops object.
+>   * @ops: The address of the struct ftrace_ops object
+>   *
+>   * This is used to remove a direct calls to @addr from the nop locations
+> @@ -5406,7 +5406,7 @@ EXPORT_SYMBOL_GPL(register_ftrace_direct_multi);
+>   *  0 on success
+>   *  -EINVAL - The @ops object was not properly registered.
+>   */
+> -int unregister_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
+> +int unregister_ftrace_direct(struct ftrace_ops *ops, unsigned long addr)
+>  {
+>  	struct ftrace_hash *hash = ops->func_hash->filter_hash;
+>  	int err;
+> @@ -5426,10 +5426,10 @@ int unregister_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
+>  	ops->trampoline = 0;
+>  	return err;
+>  }
+> -EXPORT_SYMBOL_GPL(unregister_ftrace_direct_multi);
+> +EXPORT_SYMBOL_GPL(unregister_ftrace_direct);
+>  
+>  static int
+> -__modify_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
+> +__modify_ftrace_direct(struct ftrace_ops *ops, unsigned long addr)
+>  {
+>  	struct ftrace_hash *hash;
+>  	struct ftrace_func_entry *entry, *iter;
+> @@ -5476,7 +5476,7 @@ __modify_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
+>  }
+>  
+>  /**
+> - * modify_ftrace_direct_multi_nolock - Modify an existing direct 'multi' call
+> + * modify_ftrace_direct_nolock - Modify an existing direct 'multi' call
+>   * to call something else
+>   * @ops: The address of the struct ftrace_ops object
+>   * @addr: The address of the new trampoline to call at @ops functions
+> @@ -5493,19 +5493,19 @@ __modify_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
+>   * Returns: zero on success. Non zero on error, which includes:
+>   *  -EINVAL - The @ops object was not properly registered.
+>   */
+> -int modify_ftrace_direct_multi_nolock(struct ftrace_ops *ops, unsigned long addr)
+> +int modify_ftrace_direct_nolock(struct ftrace_ops *ops, unsigned long addr)
+>  {
+>  	if (check_direct_multi(ops))
+>  		return -EINVAL;
+>  	if (!(ops->flags & FTRACE_OPS_FL_ENABLED))
+>  		return -EINVAL;
+>  
+> -	return __modify_ftrace_direct_multi(ops, addr);
+> +	return __modify_ftrace_direct(ops, addr);
+>  }
+> -EXPORT_SYMBOL_GPL(modify_ftrace_direct_multi_nolock);
+> +EXPORT_SYMBOL_GPL(modify_ftrace_direct_nolock);
+>  
+>  /**
+> - * modify_ftrace_direct_multi - Modify an existing direct 'multi' call
+> + * modify_ftrace_direct - Modify an existing direct 'multi' call
+>   * to call something else
+>   * @ops: The address of the struct ftrace_ops object
+>   * @addr: The address of the new trampoline to call at @ops functions
+> @@ -5519,7 +5519,7 @@ EXPORT_SYMBOL_GPL(modify_ftrace_direct_multi_nolock);
+>   * Returns: zero on success. Non zero on error, which includes:
+>   *  -EINVAL - The @ops object was not properly registered.
+>   */
+> -int modify_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
+> +int modify_ftrace_direct(struct ftrace_ops *ops, unsigned long addr)
+>  {
+>  	int err;
+>  
+> @@ -5529,11 +5529,11 @@ int modify_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
+>  		return -EINVAL;
+>  
+>  	mutex_lock(&direct_mutex);
+> -	err = __modify_ftrace_direct_multi(ops, addr);
+> +	err = __modify_ftrace_direct(ops, addr);
+>  	mutex_unlock(&direct_mutex);
+>  	return err;
+>  }
+> -EXPORT_SYMBOL_GPL(modify_ftrace_direct_multi);
+> +EXPORT_SYMBOL_GPL(modify_ftrace_direct);
+>  #endif /* CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS */
+>  
+>  /**
+> diff --git a/kernel/trace/trace_selftest.c b/kernel/trace/trace_selftest.c
+> index 9b7f10cbc51d..06218fc9374b 100644
+> --- a/kernel/trace/trace_selftest.c
+> +++ b/kernel/trace/trace_selftest.c
+> @@ -874,7 +874,8 @@ trace_selftest_startup_function_graph(struct tracer *trace,
+>  	 * and make sure we get graph trace.
+>  	 */
+>  	ftrace_set_filter_ip(&direct, (unsigned long)DYN_FTRACE_TEST_NAME, 0, 0);
+> -	ret = register_ftrace_direct_multi(&direct, (unsigned long)trace_direct_tramp);
+> +	ret = register_ftrace_direct(&direct,
+> +				     (unsigned long)trace_direct_tramp);
+>  	if (ret)
+>  		goto out;
+>  
+> @@ -894,8 +895,8 @@ trace_selftest_startup_function_graph(struct tracer *trace,
+>  
+>  	unregister_ftrace_graph(&fgraph_ops);
+>  
+> -	ret = unregister_ftrace_direct_multi(&direct,
+> -				       (unsigned long) trace_direct_tramp);
+> +	ret = unregister_ftrace_direct(&direct,
+> +				       (unsigned long)trace_direct_tramp);
+>  	if (ret)
+>  		goto out;
+>  
+> diff --git a/samples/Kconfig b/samples/Kconfig
+> index 0d81c00289ee..e85998ca354d 100644
+> --- a/samples/Kconfig
+> +++ b/samples/Kconfig
+> @@ -38,7 +38,7 @@ config SAMPLE_FTRACE_DIRECT
+>  	  that hooks to wake_up_process and prints the parameters.
+>  
+>  config SAMPLE_FTRACE_DIRECT_MULTI
+> -	tristate "Build register_ftrace_direct_multi() example"
+> +	tristate "Build register_ftrace_direct() on multiple ips example"
+>  	depends on DYNAMIC_FTRACE_WITH_DIRECT_CALLS && m
+>  	depends on HAVE_SAMPLE_FTRACE_DIRECT_MULTI
+>  	help
+> diff --git a/samples/ftrace/ftrace-direct-modify.c b/samples/ftrace/ftrace-direct-modify.c
+> index e1e6c286970c..0f1b8859e1e1 100644
+> --- a/samples/ftrace/ftrace-direct-modify.c
+> +++ b/samples/ftrace/ftrace-direct-modify.c
+> @@ -116,7 +116,7 @@ static int simple_thread(void *arg)
+>  		if (ret)
+>  			continue;
+>  		t ^= 1;
+> -		ret = modify_ftrace_direct_multi(&direct, tramps[t]);
+> +		ret = modify_ftrace_direct(&direct, tramps[t]);
+>  		if (!ret)
+>  			my_tramp = tramps[t];
+>  		WARN_ON_ONCE(ret);
+> @@ -132,7 +132,7 @@ static int __init ftrace_direct_init(void)
+>  	int ret;
+>  
+>  	ftrace_set_filter_ip(&direct, (unsigned long) my_ip, 0, 0);
+> -	ret = register_ftrace_direct_multi(&direct, my_tramp);
+> +	ret = register_ftrace_direct(&direct, my_tramp);
+>  	if (!ret)
+>  		simple_tsk = kthread_run(simple_thread, NULL, "event-sample-fn");
+>  	return ret;
+> @@ -141,12 +141,12 @@ static int __init ftrace_direct_init(void)
+>  static void __exit ftrace_direct_exit(void)
+>  {
+>  	kthread_stop(simple_tsk);
+> -	unregister_ftrace_direct_multi(&direct, my_tramp);
+> +	unregister_ftrace_direct(&direct, my_tramp);
+>  }
+>  
+>  module_init(ftrace_direct_init);
+>  module_exit(ftrace_direct_exit);
+>  
+>  MODULE_AUTHOR("Steven Rostedt");
+> -MODULE_DESCRIPTION("Example use case of using modify_ftrace_direct_multi()");
+> +MODULE_DESCRIPTION("Example use case of using modify_ftrace_direct()");
+>  MODULE_LICENSE("GPL");
+> diff --git a/samples/ftrace/ftrace-direct-multi-modify.c b/samples/ftrace/ftrace-direct-multi-modify.c
+> index d52370cad0b6..407c56325e65 100644
+> --- a/samples/ftrace/ftrace-direct-multi-modify.c
+> +++ b/samples/ftrace/ftrace-direct-multi-modify.c
+> @@ -123,7 +123,7 @@ static int simple_thread(void *arg)
+>  		if (ret)
+>  			continue;
+>  		t ^= 1;
+> -		ret = modify_ftrace_direct_multi(&direct, tramps[t]);
+> +		ret = modify_ftrace_direct(&direct, tramps[t]);
+>  		if (!ret)
+>  			my_tramp = tramps[t];
+>  		WARN_ON_ONCE(ret);
+> @@ -141,7 +141,7 @@ static int __init ftrace_direct_multi_init(void)
+>  	ftrace_set_filter_ip(&direct, (unsigned long) wake_up_process, 0, 0);
+>  	ftrace_set_filter_ip(&direct, (unsigned long) schedule, 0, 0);
+>  
+> -	ret = register_ftrace_direct_multi(&direct, my_tramp);
+> +	ret = register_ftrace_direct(&direct, my_tramp);
+>  
+>  	if (!ret)
+>  		simple_tsk = kthread_run(simple_thread, NULL, "event-sample-fn");
+> @@ -151,12 +151,12 @@ static int __init ftrace_direct_multi_init(void)
+>  static void __exit ftrace_direct_multi_exit(void)
+>  {
+>  	kthread_stop(simple_tsk);
+> -	unregister_ftrace_direct_multi(&direct, my_tramp);
+> +	unregister_ftrace_direct(&direct, my_tramp);
+>  }
+>  
+>  module_init(ftrace_direct_multi_init);
+>  module_exit(ftrace_direct_multi_exit);
+>  
+>  MODULE_AUTHOR("Jiri Olsa");
+> -MODULE_DESCRIPTION("Example use case of using modify_ftrace_direct_multi()");
+> +MODULE_DESCRIPTION("Example use case of using modify_ftrace_direct()");
+>  MODULE_LICENSE("GPL");
+> diff --git a/samples/ftrace/ftrace-direct-multi.c b/samples/ftrace/ftrace-direct-multi.c
+> index ec1088922517..42a94806a446 100644
+> --- a/samples/ftrace/ftrace-direct-multi.c
+> +++ b/samples/ftrace/ftrace-direct-multi.c
+> @@ -73,17 +73,17 @@ static int __init ftrace_direct_multi_init(void)
+>  	ftrace_set_filter_ip(&direct, (unsigned long) wake_up_process, 0, 0);
+>  	ftrace_set_filter_ip(&direct, (unsigned long) schedule, 0, 0);
+>  
+> -	return register_ftrace_direct_multi(&direct, (unsigned long) my_tramp);
+> +	return register_ftrace_direct(&direct, (unsigned long) my_tramp);
+>  }
+>  
+>  static void __exit ftrace_direct_multi_exit(void)
+>  {
+> -	unregister_ftrace_direct_multi(&direct, (unsigned long) my_tramp);
+> +	unregister_ftrace_direct(&direct, (unsigned long) my_tramp);
+>  }
+>  
+>  module_init(ftrace_direct_multi_init);
+>  module_exit(ftrace_direct_multi_exit);
+>  
+>  MODULE_AUTHOR("Jiri Olsa");
+> -MODULE_DESCRIPTION("Example use case of using register_ftrace_direct_multi()");
+> +MODULE_DESCRIPTION("Example use case of using register_ftrace_direct()");
+>  MODULE_LICENSE("GPL");
+> diff --git a/samples/ftrace/ftrace-direct-too.c b/samples/ftrace/ftrace-direct-too.c
+> index 0e907092e2c0..7ee5dd3cc61d 100644
+> --- a/samples/ftrace/ftrace-direct-too.c
+> +++ b/samples/ftrace/ftrace-direct-too.c
+> @@ -76,17 +76,17 @@ static int __init ftrace_direct_init(void)
+>  {
+>  	ftrace_set_filter_ip(&direct, (unsigned long) handle_mm_fault, 0, 0);
+>  
+> -	return register_ftrace_direct_multi(&direct, (unsigned long) my_tramp);
+> +	return register_ftrace_direct(&direct, (unsigned long) my_tramp);
+>  }
+>  
+>  static void __exit ftrace_direct_exit(void)
+>  {
+> -	unregister_ftrace_direct_multi(&direct, (unsigned long)my_tramp);
+> +	unregister_ftrace_direct(&direct, (unsigned long)my_tramp);
+>  }
+>  
+>  module_init(ftrace_direct_init);
+>  module_exit(ftrace_direct_exit);
+>  
+>  MODULE_AUTHOR("Steven Rostedt");
+> -MODULE_DESCRIPTION("Another example use case of using register_ftrace_direct_multi()");
+> +MODULE_DESCRIPTION("Another example use case of using register_ftrace_direct()");
+>  MODULE_LICENSE("GPL");
+> diff --git a/samples/ftrace/ftrace-direct.c b/samples/ftrace/ftrace-direct.c
+> index e446c38f6b58..5ffce87fa83e 100644
+> --- a/samples/ftrace/ftrace-direct.c
+> +++ b/samples/ftrace/ftrace-direct.c
+> @@ -69,17 +69,17 @@ static int __init ftrace_direct_init(void)
+>  {
+>  	ftrace_set_filter_ip(&direct, (unsigned long) wake_up_process, 0, 0);
+>  
+> -	return register_ftrace_direct_multi(&direct, (unsigned long) my_tramp);
+> +	return register_ftrace_direct(&direct, (unsigned long) my_tramp);
+>  }
+>  
+>  static void __exit ftrace_direct_exit(void)
+>  {
+> -	unregister_ftrace_direct_multi(&direct, (unsigned long)my_tramp);
+> +	unregister_ftrace_direct(&direct, (unsigned long)my_tramp);
+>  }
+>  
+>  module_init(ftrace_direct_init);
+>  module_exit(ftrace_direct_exit);
+>  
+>  MODULE_AUTHOR("Steven Rostedt");
+> -MODULE_DESCRIPTION("Example use case of using register_ftrace_direct_multi()");
+> +MODULE_DESCRIPTION("Example use case of using register_ftrace_direct()");
+>  MODULE_LICENSE("GPL");
+> -- 
+> 2.39.1.519.gcb327c4b5f-goog
 > 
-> Thanks,
-> drew
-> 
-> > +		}
-> >  		break;
-> >  	case SBI_EXT_BASE_GET_MVENDORID:
-> >  		*out_val = vcpu->arch.mvendorid;
-> > -- 
-> > 2.25.1
-> > 
