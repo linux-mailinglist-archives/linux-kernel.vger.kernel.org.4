@@ -2,104 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB7D36882CA
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 16:38:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29343688436
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 17:20:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232840AbjBBPhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 10:37:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58384 "EHLO
+        id S232834AbjBBQUk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 11:20:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233401AbjBBPhJ (ORCPT
+        with ESMTP id S232693AbjBBQUC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 10:37:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22BB980025;
-        Thu,  2 Feb 2023 07:36:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6340CB82686;
-        Thu,  2 Feb 2023 15:35:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EC41C433EF;
-        Thu,  2 Feb 2023 15:35:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675352143;
-        bh=CUkACK2HdhrbT9JJSVOy6ZjSUjRIl9SuwgXFjsN3DTQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EFwcsxv21LoqcrgA6sf/+ExloW3CW4aRCPO6D6aJ1xMra9JYEoeRYwa7+ewVHKXxY
-         QChxREN1BgXVrBXYIWdxUY1QDOn6WrJO+uwOR2HRI7j60NbqMpvJ9PCxq1aLdbIUPL
-         rB75Z+WzqxpbvFFksuoTNl28vRJSujT7ECZFclGU=
-Date:   Thu, 2 Feb 2023 16:35:40 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH] can: etas_es58x: do not send disable channel command if
- device is unplugged
-Message-ID: <Y9vYTPURT4hDSH4n@kroah.com>
-References: <20230128133815.1796221-1-mailhol.vincent@wanadoo.fr>
- <20230202151622.sotqfwmgwwtgv4dl@pengutronix.de>
+        Thu, 2 Feb 2023 11:20:02 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D9A6B357;
+        Thu,  2 Feb 2023 08:20:01 -0800 (PST)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pNbdz-0001bp-Tc; Thu, 02 Feb 2023 16:36:59 +0100
+Message-ID: <ee3a168f-66e3-14a3-3890-90dc5c8153d1@leemhuis.info>
+Date:   Thu, 2 Feb 2023 16:36:59 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230202151622.sotqfwmgwwtgv4dl@pengutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Content-Language: en-US, de-DE
+To:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linux regressions mailing list <regressions@lists.linux.dev>
+References: <fabdb45fa44db2531f0dbe5e88545c49dfb87040.1675252073.git.linux@leemhuis.info>
+ <1f217c94-b90f-359a-2142-0d3ae5d84fc6@leemhuis.info>
+ <20230202150856.lchr76nqih3vdul6@nitro.local>
+From:   Thorsten Leemhuis <linux@leemhuis.info>
+Subject: Re: [PATCH v1] docs: describe how to quickly build Linux
+In-Reply-To: <20230202150856.lchr76nqih3vdul6@nitro.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1675354801;116bfef1;
+X-HE-SMSGID: 1pNbdz-0001bp-Tc
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 04:16:22PM +0100, Marc Kleine-Budde wrote:
-> On 28.01.2023 22:38:15, Vincent Mailhol wrote:
-> > When turning the network interface down, es58x_stop() is called and
-> > will send a command to the ES58x device to disable the channel
-> > c.f. es58x_ops::disable_channel().
-> > 
-> > However, if the device gets unplugged while the network interface is
-> > still up, es58x_ops::disable_channel() will obviously fail to send the
-> > URB command and the driver emits below error message:
-> > 
-> >   es58x_submit_urb: USB send urb failure: -ENODEV
-> > 
-> > Check the usb device state before sending the disable channel command
-> > in order to silence above error message.
-> > 
-> > Update the documentation of es58x_stop() accordingly.
-> > 
-> > The check being added in es58x_stop() is:
-> > 
-> >   	if (es58x_dev->udev->state >= USB_STATE_UNAUTHENTICATED)
-> > 
-> > This is just the negation of the check done in usb_submit_urb()[1].
-> > 
-> > [1] usb_submit_urb(), verify usb device's state.
-> > Link: https://elixir.bootlin.com/linux/v6.1/source/drivers/usb/core/urb.c#L384
-> > 
-> > Fixes: 8537257874e9 ("can: etas_es58x: add core support for ETAS ES58X CAN USB interfaces")
-> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> > ---
-> > As far as I know, there doesn't seem to be an helper function to check
-> > udev->state values. If anyone is aware of such helper function, let me
-> > know..
+On 02.02.23 16:08, Konstantin Ryabitsev wrote:
+> On Thu, Feb 02, 2023 at 12:15:36PM +0100, Linux kernel regression tracking (Thorsten Leemhuis) wrote:
+>> Then I tried creating a shallow clone like this:
+>>
+>> git clone
+>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>> --depth 1 -b v6.1
+>> git remote set-branches --add origin master
+>> git fetch --all --shallow-exclude=v6.1
+>> git remote add -t linux-6.1.y linux-stable
+>> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+>> git fetch --all --shallow-exclude=v6.1
+>>
+>> This took only roundabout 2 minutes and downloads & stores ~512 MByte
+>> data (without checkout).
 > 
-> The constant USB_STATE_UNAUTHENTICATED is not used very often in the
-> kernel. Maybe Greg can point out what is best to do here.
+> Can we also include the option of just downloading the tarball, if it's a
+> released version? That's the fastest and most lightweight option 100% of the
+> time. :)
 
-Don't do anything in the driver here, except maybe turn off that useless
-"error message" in the urb submission function?  A USB driver shouldn't
-be poking around in the state of the device at all, as it's about to go
-away if it's been physically removed.
+Don't worry, that was in there and will stay in there:
 
-The urb submission will fail if the device is removed, handle the error
-and move on, that's a totally normal situation as you say it happens a
-lot :)
++   If you plan to only build one particular kernel version, download
+its source
++   archive from https://kernel.org; afterwards extract its content to
+'~/linux/'
++   and change into the directory created during extraction.
+>> Not totally sure, but the shallow clone somehow feels more appropriate
+>> for the use case (reminder, there is a "quickly" in the document title),
+>> even if such a clone is less flexible (e.g. users have to manually add
+>> stable branches they are interested it; and they need to be careful when
+>> using git fetch).
+>>
+>> That's why I now strongly consider using the shallow clone method by
+>> default in v2 of this text. Or does that also create a lot of load on
+>> the servers? Or are there other strong reason why using a shallow clone
+>> might be a bad idea for this use case?
+> 
+> As I mentioned elsewhere, this is only a problem when it's done in batch mode
+> by CI systems. A full clone uses pregenerated pack files and is very cheap,
+> because it's effectively a sendfile operation. A shallow clone requires
+> generating a brand new pack, compressing it, and then keeping it around in
+> memory for the duration of the clone process. Not a big deal when a few humans
+> here and there do it, but when 50 CI nodes do it all at once, it effectively
+> becomes a DDoS. :)
 
-Don't spam error logs for common things please.
+Thx again for your insights, much appreciated.
 
-thanks,
-
-greg k-h
+Ciao, Thorsten
