@@ -2,154 +2,313 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F760688CAC
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 02:42:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D079A688CAF
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 02:42:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231956AbjBCBmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 20:42:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60816 "EHLO
+        id S232047AbjBCBmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 20:42:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231917AbjBCBmE (ORCPT
+        with ESMTP id S231917AbjBCBmg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 20:42:04 -0500
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2064.outbound.protection.outlook.com [40.107.102.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53E3A875BF;
-        Thu,  2 Feb 2023 17:42:00 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OPcv9JL+zYuxf1uFkUvDrfd8R52TgKBx3Of/5vZcklK0kuecxK5T2JMrLbOK3hZLL253Bh9TdP+2Tc/gO9flob03UM/X+aSN1CUImLOrY95htzvlet2+1ptFIhTBXvutheOKGWl0way+X6veMyZ4l9w+4lsZX6pc5d16IzjX46r3VHj9ZmpYh/7YqWnQTqSrYqxXKm5up8rjRhMHp5LwCFaZv301rKQ43CUMdC9tw1E6RvlNXqKRNwmd2rNNgmsmbS+U3tTN3LfA95AjxQVwtoPLi4p1LsJnbLFg2GfsFnym86Azbb7He0PQnpbzA83b4ceS03Zy7smeJc6e8mfphw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gUMnkjHfhr9zF1Xjh8hLRI3HibDx1bvNnoEG+R3HSo0=;
- b=CyCtZxSPpJjVkMdgAnNBFi3wpJ2zQx5fXqWaeN/LWx0mcGbtzyK4xePzQMT+KUgXllWPmkQnGgqj4f3DZIAYHMeUCwckCFg8D8osbxajaunpO4dGBbOR4qfvHxpdzhqJh8CZ1+HUdN0YJhtFEDHnx8XPMmFi5LZ0uvvt7rww0rzEFmIudbIM4B77thp8BWm4DlfydqKgEDnckcLNx8qcxwFVGRw62x8REYTQEE85yE+egpD6wKCGnlZDnaEdsZ0SapR+hMnNcnp1T+CYauKSAgeQ98/6qfcPb++xyOJWLIt3FyBLODoQ5iOd8CdT0ASMYeqdLdIbAFew5E84nW8XlQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gUMnkjHfhr9zF1Xjh8hLRI3HibDx1bvNnoEG+R3HSo0=;
- b=rv5Lg+18NrPBZaBcBJyqaAzTXKyE4pltqTIyr/Bj0dLsumIFrqFnYqnyLAAD2OoWDYqUDT7kN2Bn+/O0U6/wldtf0u2ov+nd1DpsAikdzCFYWqzoH9wFs3CBHKlFJaJnZTe/bH3F3Uvmnmi0k0bwp7CjYWxYktzi5iKV0QbETdC9B9CBp9BUQjpof4O0NeE+P+Ee/3/nZdnlwcQaOWAn2y79XSXooWDqhK/+IDrOs23rkB9EabPZ5/Om7h8bf18Y5RikzjRszdyVPE0QDd4zFe5ak12fSKjEi6zbpJdpTmdicQJeKAOmvwzZBNvnn+/9MOT3CfVz9S4LpT/JezG/1A==
-Received: from BN6PR17CA0060.namprd17.prod.outlook.com (2603:10b6:405:75::49)
- by PH8PR12MB7232.namprd12.prod.outlook.com (2603:10b6:510:224::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.38; Fri, 3 Feb
- 2023 01:41:58 +0000
-Received: from BL02EPF0000EE3D.namprd05.prod.outlook.com
- (2603:10b6:405:75:cafe::8) by BN6PR17CA0060.outlook.office365.com
- (2603:10b6:405:75::49) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.29 via Frontend
- Transport; Fri, 3 Feb 2023 01:41:58 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- BL02EPF0000EE3D.mail.protection.outlook.com (10.167.241.134) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6064.17 via Frontend Transport; Fri, 3 Feb 2023 01:41:57 +0000
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 2 Feb 2023
- 17:41:35 -0800
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail202.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 2 Feb 2023
- 17:41:35 -0800
-Received: from Asurada-Nvidia (10.127.8.11) by mail.nvidia.com (10.129.68.9)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36 via Frontend
- Transport; Thu, 2 Feb 2023 17:41:34 -0800
-Date:   Thu, 2 Feb 2023 17:41:33 -0800
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     Baolu Lu <baolu.lu@linux.intel.com>
-CC:     <jgg@nvidia.com>, <kevin.tian@intel.com>, <joro@8bytes.org>,
-        <will@kernel.org>, <robin.murphy@arm.com>,
-        <alex.williamson@redhat.com>, <shuah@kernel.org>,
-        <yi.l.liu@intel.com>, <linux-kernel@vger.kernel.org>,
-        <iommu@lists.linux.dev>, <kvm@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v1 2/8] iommu: Introduce a new
- iommu_group_replace_domain() API
-Message-ID: <Y9xmTRQH7wjb07gl@Asurada-Nvidia>
-References: <cover.1675320212.git.nicolinc@nvidia.com>
- <a98e622f41d76b64f5a7d0c758d8bda5e8043013.1675320212.git.nicolinc@nvidia.com>
- <d5147b2f-4698-b39f-e956-84db122e9822@linux.intel.com>
- <Y9wLmBZzkZk2Mkh9@Asurada-Nvidia>
- <58837041-c0ea-2c65-4ed5-6b2d2189415e@linux.intel.com>
+        Thu, 2 Feb 2023 20:42:36 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 49BBB885E5;
+        Thu,  2 Feb 2023 17:42:28 -0800 (PST)
+Received: from loongson.cn (unknown [10.180.13.185])
+        by gateway (Coremail) with SMTP id _____8Cx+emCZtxjtwoNAA--.26245S3;
+        Fri, 03 Feb 2023 09:42:26 +0800 (CST)
+Received: from [10.180.13.185] (unknown [10.180.13.185])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxbL6AZtxjgigoAA--.13013S3;
+        Fri, 03 Feb 2023 09:42:24 +0800 (CST)
+Subject: Re: [PATCH v4] pipe: use __pipe_{lock,unlock} instead of spinlock
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Christian Brauner (Microsoft)" <brauner@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        maobibo <maobibo@loongson.cn>,
+        Matthew Wilcox <willy@infradead.org>,
+        Sedat Dilek <sedat.dilek@gmail.com>
+References: <20230129060452.7380-1-zhanghongchen@loongson.cn>
+From:   Hongchen Zhang <zhanghongchen@loongson.cn>
+Message-ID: <f1b30cc1-018a-b8a4-7363-69af2709775f@loongson.cn>
+Date:   Fri, 3 Feb 2023 09:42:24 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <58837041-c0ea-2c65-4ed5-6b2d2189415e@linux.intel.com>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF0000EE3D:EE_|PH8PR12MB7232:EE_
-X-MS-Office365-Filtering-Correlation-Id: 63bc3783-6553-4002-80f8-08db0587d621
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0HhV2VOXY9+IntXFx5zFNm9Kv47UBnxifIdcO7NtRrmjvtaNItQw51GO8sB1f3iPyu1BaYWLuOEXKatwVCT8iszGwLdLA1GaZWEzdfQfK6vVPH7flssGPfAA+xV7fm5CXeFVWJ5NVmXrcnmYKQVqNwoE+HYpHCz1zqkOyxamKnx6ZzbdG21NYTfUK0f87Bdmxa2c/SG9Q6myhCC9X/cpXdOTvDD9PYgOuKPgIEUeGZyyfIHGuPnnkizKAoBxUH1BZG+4HCnqn08+OHeqUnOgZatmZhVT3mdb6e50y4CVinyd++FjtOiAQhugE+5cfHuUm04eW7JL0mpex0NyZHuNqVJma9fVRZolW71GlECbRqNq0M1mklnUvtvU6WCv1wofD9dW+Jv1CZIwfaGZ02/LXnvy8zRhx1f8gHraVh14W3Q70HieEavICMC6XCWRPPXk3cLR/sWTnh9xGUy+CVtXsKIq/GA6r9ZLa1qQKww5a8GOgOO5uNBsU7Jn39ku5HlF1KGQMT2lktGf95jSpi6QdWPuolcZnMxVbYd6T7Y1hFvBE7Juk35/gmLGLNCPD9QkNB9i0Jv1LpEW+WOfc+VH8jADdVmH5Em3KF2hVySGaBvfOie9hjjIRjtmJtp+HxhHArGafK4awb1eQUg+8kI73er5EfePtbyaaqph/gwHge46eZrV5qDsvhj/Z+IkpyCKmPMXsNtlsplOHyZwraw10A==
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(136003)(396003)(376002)(346002)(451199018)(36840700001)(46966006)(40470700004)(41300700001)(86362001)(5660300002)(336012)(316002)(40480700001)(83380400001)(55016003)(8936002)(82310400005)(54906003)(6916009)(47076005)(7416002)(8676002)(70206006)(70586007)(426003)(4326008)(33716001)(478600001)(82740400003)(26005)(186003)(40460700003)(7636003)(9686003)(36860700001)(356005)(53546011)(2906002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Feb 2023 01:41:57.2425
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 63bc3783-6553-4002-80f8-08db0587d621
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL02EPF0000EE3D.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7232
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230129060452.7380-1-zhanghongchen@loongson.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8DxbL6AZtxjgigoAA--.13013S3
+X-CM-SenderInfo: x2kd0w5krqwupkhqwqxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBjvJXoW3JF4fAryftw1kJr4rCFWxZwb_yoW3Xw17pa
+        yftF43urW8Ar10g34xGrsxuF1Sg395WF4UGrW8GF10vF9rGry0gFs7KFyakrn5Grs7CryY
+        vF4jqasYvw1UA37anT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bDAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UM2kK
+        e7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
+        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280
+        aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2
+        xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC
+        6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
+        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF
+        0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0x
+        vE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+        6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07jOiSdUUUUU=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 09:33:44AM +0800, Baolu Lu wrote:
-> External email: Use caution opening links or attachments
-> 
-> 
-> On 2023/2/3 3:14, Nicolin Chen wrote:
-> > On Thu, Feb 02, 2023 at 06:21:20PM +0800, Baolu Lu wrote:
-> > > External email: Use caution opening links or attachments
-> > > 
-> > > 
-> > > On 2023/2/2 15:05, Nicolin Chen wrote:
-> > > > +/**
-> > > > + * iommu_group_replace_domain - replace the domain that a group is attached to
-> > > > + * @new_domain: new IOMMU domain to replace with
-> > > > + * @group: IOMMU group that will be attached to the new domain
-> > > > + *
-> > > > + * This API allows the group to switch domains without being forced to go to
-> > > > + * the blocking domain in-between.
-> > > > + *
-> > > > + * If the attached domain is a core domain (e.g. a default_domain), it will act
-> > > > + * just like the iommu_attach_group().
-> > > I am not following above two lines. Why and how could iommufd set a
-> > > core domain to an iommu_group?
-> > Perhaps this isn't the best narrative. What it's supposed to say
-> > is that this function acts as an iommu_attach_group() call if the
-> > device is "detached", yet we have changed the semantics about the
-> > word "detach". So, what should the correct way to write such a
-> > note?
-> 
-> How could this interface be used as detaching a domain from a group?
-> Even it could be used, doesn't it act as an iommu_detach_group()?
+Hi Linus,
 
-No. I didn't say that. It doesn't act as detach(), but attach()
-when a device is already "detached".
+   Sorry to bother you. Can you help review this patch?
+   I tested this patch with the test code in you commit 0ddad21d3e99,
+and the result looks better after applied this patch.
 
-The original statement is saying, "if the attached domain is a
-core domain", i.e. the device is detach()-ed, "it will act just
-like the iommu_attach_group()".
+Best Regards
+Hongchen Zhang
 
-Thanks
-Nic
+On 2023/1/29 am 2:04, Hongchen Zhang wrote:
+> Use spinlock in pipe_{read,write} cost too much time,IMO
+> pipe->{head,tail} can be protected by __pipe_{lock,unlock}.
+> On the other hand, we can use __pipe_{lock,unlock} to protect
+> the pipe->{head,tail} in pipe_resize_ring and
+> post_one_notification.
+> 
+> Reminded by Matthew, I tested this patch using UnixBench's pipe
+> test case on a x86_64 machine,and get the following data:
+> 1) before this patch
+> System Benchmarks Partial Index  BASELINE       RESULT    INDEX
+> Pipe Throughput                   12440.0     493023.3    396.3
+>                                                          ========
+> System Benchmarks Index Score (Partial Only)              396.3
+> 
+> 2) after this patch
+> System Benchmarks Partial Index  BASELINE       RESULT    INDEX
+> Pipe Throughput                   12440.0     507551.4    408.0
+>                                                          ========
+> System Benchmarks Index Score (Partial Only)              408.0
+> 
+> so we get ~3% speedup.
+> 
+> Reminded by Andrew, I tested this patch with the test code in
+> Linus's 0ddad21d3e99 and get following result:
+> 1) before this patch
+>           13,136.54 msec task-clock           #    3.870 CPUs utilized
+>           1,186,779      context-switches     #   90.342 K/sec
+>             668,867      cpu-migrations       #   50.917 K/sec
+>                 895      page-faults          #   68.131 /sec
+>      29,875,711,543      cycles               #    2.274 GHz
+>      12,372,397,462      instructions         #    0.41  insn per cycle
+>       2,480,235,723      branches             #  188.804 M/sec
+>          47,191,943      branch-misses        #    1.90% of all branches
+> 
+>         3.394806886 seconds time elapsed
+> 
+>         0.037869000 seconds user
+>         0.189346000 seconds sys
+> 
+> 2) after this patch
+> 
+>           12,395.63 msec task-clock          #    4.138 CPUs utilized
+>           1,193,381      context-switches    #   96.274 K/sec
+>             585,543      cpu-migrations      #   47.238 K/sec
+>               1,063      page-faults         #   85.756 /sec
+>      27,691,587,226      cycles              #    2.234 GHz
+>      11,738,307,999      instructions        #    0.42  insn per cycle
+>       2,351,299,522      branches            #  189.688 M/sec
+>          45,404,526      branch-misses       #    1.93% of all branches
+> 
+>         2.995280878 seconds time elapsed
+> 
+>         0.010615000 seconds user
+>         0.206999000 seconds sys
+> After adding this patch, the time used on this test program becomes less.
+> 
+> Signed-off-by: Hongchen Zhang <zhanghongchen@loongson.cn>
+> 
+> v4:
+>    - fixes a typo in changelog when reviewed by Sedat.
+> v3:
+>    - fixes the error reported by kernel test robot <oliver.sang@intel.com>
+>      Link: https://lore.kernel.org/oe-lkp/202301061340.c954d61f-oliver.sang@intel.com
+>    - add perf stat data for the test code in Linus's 0ddad21d3e99 in
+>      commit message.
+> v2:
+>    - add UnixBench test data in commit message
+>    - fixes the test error reported by kernel test robot <lkp@intel.com>
+>      by adding the missing fs.h header file.
+> ---
+>   fs/pipe.c                 | 22 +---------------------
+>   include/linux/pipe_fs_i.h | 12 ++++++++++++
+>   kernel/watch_queue.c      |  8 ++++----
+>   3 files changed, 17 insertions(+), 25 deletions(-)
+> 
+> diff --git a/fs/pipe.c b/fs/pipe.c
+> index 42c7ff41c2db..4355ee5f754e 100644
+> --- a/fs/pipe.c
+> +++ b/fs/pipe.c
+> @@ -98,16 +98,6 @@ void pipe_unlock(struct pipe_inode_info *pipe)
+>   }
+>   EXPORT_SYMBOL(pipe_unlock);
+>   
+> -static inline void __pipe_lock(struct pipe_inode_info *pipe)
+> -{
+> -	mutex_lock_nested(&pipe->mutex, I_MUTEX_PARENT);
+> -}
+> -
+> -static inline void __pipe_unlock(struct pipe_inode_info *pipe)
+> -{
+> -	mutex_unlock(&pipe->mutex);
+> -}
+> -
+>   void pipe_double_lock(struct pipe_inode_info *pipe1,
+>   		      struct pipe_inode_info *pipe2)
+>   {
+> @@ -253,8 +243,7 @@ pipe_read(struct kiocb *iocb, struct iov_iter *to)
+>   	 */
+>   	was_full = pipe_full(pipe->head, pipe->tail, pipe->max_usage);
+>   	for (;;) {
+> -		/* Read ->head with a barrier vs post_one_notification() */
+> -		unsigned int head = smp_load_acquire(&pipe->head);
+> +		unsigned int head = pipe->head;
+>   		unsigned int tail = pipe->tail;
+>   		unsigned int mask = pipe->ring_size - 1;
+>   
+> @@ -322,14 +311,12 @@ pipe_read(struct kiocb *iocb, struct iov_iter *to)
+>   
+>   			if (!buf->len) {
+>   				pipe_buf_release(pipe, buf);
+> -				spin_lock_irq(&pipe->rd_wait.lock);
+>   #ifdef CONFIG_WATCH_QUEUE
+>   				if (buf->flags & PIPE_BUF_FLAG_LOSS)
+>   					pipe->note_loss = true;
+>   #endif
+>   				tail++;
+>   				pipe->tail = tail;
+> -				spin_unlock_irq(&pipe->rd_wait.lock);
+>   			}
+>   			total_len -= chars;
+>   			if (!total_len)
+> @@ -506,16 +493,13 @@ pipe_write(struct kiocb *iocb, struct iov_iter *from)
+>   			 * it, either the reader will consume it or it'll still
+>   			 * be there for the next write.
+>   			 */
+> -			spin_lock_irq(&pipe->rd_wait.lock);
+>   
+>   			head = pipe->head;
+>   			if (pipe_full(head, pipe->tail, pipe->max_usage)) {
+> -				spin_unlock_irq(&pipe->rd_wait.lock);
+>   				continue;
+>   			}
+>   
+>   			pipe->head = head + 1;
+> -			spin_unlock_irq(&pipe->rd_wait.lock);
+>   
+>   			/* Insert it into the buffer array */
+>   			buf = &pipe->bufs[head & mask];
+> @@ -1260,14 +1244,12 @@ int pipe_resize_ring(struct pipe_inode_info *pipe, unsigned int nr_slots)
+>   	if (unlikely(!bufs))
+>   		return -ENOMEM;
+>   
+> -	spin_lock_irq(&pipe->rd_wait.lock);
+>   	mask = pipe->ring_size - 1;
+>   	head = pipe->head;
+>   	tail = pipe->tail;
+>   
+>   	n = pipe_occupancy(head, tail);
+>   	if (nr_slots < n) {
+> -		spin_unlock_irq(&pipe->rd_wait.lock);
+>   		kfree(bufs);
+>   		return -EBUSY;
+>   	}
+> @@ -1303,8 +1285,6 @@ int pipe_resize_ring(struct pipe_inode_info *pipe, unsigned int nr_slots)
+>   	pipe->tail = tail;
+>   	pipe->head = head;
+>   
+> -	spin_unlock_irq(&pipe->rd_wait.lock);
+> -
+>   	/* This might have made more room for writers */
+>   	wake_up_interruptible(&pipe->wr_wait);
+>   	return 0;
+> diff --git a/include/linux/pipe_fs_i.h b/include/linux/pipe_fs_i.h
+> index 6cb65df3e3ba..f5084daf6eaf 100644
+> --- a/include/linux/pipe_fs_i.h
+> +++ b/include/linux/pipe_fs_i.h
+> @@ -2,6 +2,8 @@
+>   #ifndef _LINUX_PIPE_FS_I_H
+>   #define _LINUX_PIPE_FS_I_H
+>   
+> +#include <linux/fs.h>
+> +
+>   #define PIPE_DEF_BUFFERS	16
+>   
+>   #define PIPE_BUF_FLAG_LRU	0x01	/* page is on the LRU */
+> @@ -223,6 +225,16 @@ static inline void pipe_discard_from(struct pipe_inode_info *pipe,
+>   #define PIPE_SIZE		PAGE_SIZE
+>   
+>   /* Pipe lock and unlock operations */
+> +static inline void __pipe_lock(struct pipe_inode_info *pipe)
+> +{
+> +	mutex_lock_nested(&pipe->mutex, I_MUTEX_PARENT);
+> +}
+> +
+> +static inline void __pipe_unlock(struct pipe_inode_info *pipe)
+> +{
+> +	mutex_unlock(&pipe->mutex);
+> +}
+> +
+>   void pipe_lock(struct pipe_inode_info *);
+>   void pipe_unlock(struct pipe_inode_info *);
+>   void pipe_double_lock(struct pipe_inode_info *, struct pipe_inode_info *);
+> diff --git a/kernel/watch_queue.c b/kernel/watch_queue.c
+> index a6f9bdd956c3..92e46cfe9419 100644
+> --- a/kernel/watch_queue.c
+> +++ b/kernel/watch_queue.c
+> @@ -108,7 +108,7 @@ static bool post_one_notification(struct watch_queue *wqueue,
+>   	if (!pipe)
+>   		return false;
+>   
+> -	spin_lock_irq(&pipe->rd_wait.lock);
+> +	__pipe_lock(pipe);
+>   
+>   	mask = pipe->ring_size - 1;
+>   	head = pipe->head;
+> @@ -135,17 +135,17 @@ static bool post_one_notification(struct watch_queue *wqueue,
+>   	buf->offset = offset;
+>   	buf->len = len;
+>   	buf->flags = PIPE_BUF_FLAG_WHOLE;
+> -	smp_store_release(&pipe->head, head + 1); /* vs pipe_read() */
+> +	pipe->head = head + 1;
+>   
+>   	if (!test_and_clear_bit(note, wqueue->notes_bitmap)) {
+> -		spin_unlock_irq(&pipe->rd_wait.lock);
+> +		__pipe_unlock(pipe);
+>   		BUG();
+>   	}
+>   	wake_up_interruptible_sync_poll_locked(&pipe->rd_wait, EPOLLIN | EPOLLRDNORM);
+>   	done = true;
+>   
+>   out:
+> -	spin_unlock_irq(&pipe->rd_wait.lock);
+> +	__pipe_unlock(pipe);
+>   	if (done)
+>   		kill_fasync(&pipe->fasync_readers, SIGIO, POLL_IN);
+>   	return done;
+> 
+
