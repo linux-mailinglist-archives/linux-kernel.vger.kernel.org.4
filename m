@@ -2,187 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10E04689CB0
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 16:05:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6FAF689CB1
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 16:06:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233702AbjBCPFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 10:05:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46104 "EHLO
+        id S233697AbjBCPGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 10:06:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233695AbjBCPF2 (ORCPT
+        with ESMTP id S233362AbjBCPGf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 10:05:28 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B3DA1453
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 07:05:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=7qLqfd/zT7JNgg/tFf8ngVkPA8WMUxu4Pyp8kYe9SCw=; b=CQWt5HnYYEqKe3zzi1h0uaHCK6
-        y68K65o74N8REbEhKxfU8Bj4D32Q1eU/m5R/5CYGpj9zc6MzXxiMsqZDz8bQLt7PlR0154t/MsTIh
-        G1A+7fn6ODNNJhABJJuQjirD+w1VF+IzGgpuOK7WQhreSQ3apg8Y1TtA0GHbIXAl1lguIUiNk2COZ
-        /8wd7NCnu/oN1kvMNDqvediIJde3R+JCZ7DyAmt2jTMvWbzy9Inxw7wV3hqF+0o1fN6n99//ohKYe
-        /5NgDMEB45Ohdunt71bK8dWa0zhTdFucfeWGT7f+5v04tlpB9G5cIfhGEnU9Uos3yVf7C4jLVo3m3
-        dU0rKxJQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pNxbw-005XPB-2T;
-        Fri, 03 Feb 2023 15:04:22 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7305930012F;
-        Fri,  3 Feb 2023 16:04:55 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 57BEE23F3C7F0; Fri,  3 Feb 2023 16:04:55 +0100 (CET)
-Date:   Fri, 3 Feb 2023 16:04:55 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     x86@kernel.org, Masami Hiramatsu <mhiramat@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC] x86/alternative: Support relocations in alternatives
-Message-ID: <Y90ilxBFMAQZ/dRg@hirez.programming.kicks-ass.net>
-References: <Y9py2a5Xw0xbB8ou@hirez.programming.kicks-ass.net>
- <Y90IaYHDbCN9P0OX@zn.tnic>
+        Fri, 3 Feb 2023 10:06:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB647EFE9
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 07:06:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B9FD9B82AE4
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 15:06:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64892C433D2
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 15:06:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675436791;
+        bh=g7ucNJwx7l3G44S624zXuPhBPXVNsrOuucXlLkdMUBs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=IyuCKowejciYTxL7rIw7nwxqKEDohzs6Z8l31x8unE8AOzArIGKnuXHqCDTFnFfJa
+         xzX3ZfyNITeTYVC0Tfteo2x6RKfq/PgBcWfRRbSrYZIqIOJc6kKKqjVEJEtK/NawA2
+         4X6m046TmIXl7M0jWKrTaDOzY1j8kKWb1wD9GYy02Tfpdhk6FvnZ0sB+0Gw1kG4cyJ
+         EvdPsJ/vCYZ15H8OHFDjwf4mzyYJ6cBgfvqJiskZNIdj/8ZfKm/8kdoN8dOUDuQ9rk
+         gnhOqUAGZzhNHRK5Aryxupz80oEpNsLkPs5vc9qLf0S6hnNA2lBKZ069HdNu7mwpP+
+         BR/b26RtqcYsg==
+Received: by mail-vs1-f51.google.com with SMTP id i185so5644043vsc.6
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 07:06:31 -0800 (PST)
+X-Gm-Message-State: AO0yUKWRmlPA/lcgIkhLMl9x0LFkTZX5USIrfETaZLr2cq5o4lmh6JkZ
+        W1JGi4inWQj4Ltb4evnwFMxQiBmIXwpDORhLCw==
+X-Google-Smtp-Source: AK7set8Nhnn7wPSzRx1stDc4WyoPHokzsjm4Jbuqhwu/Fvwbp8JHZeU2bh2zPRMbFHGHETFoXimql9IuzxUQaVxotB0=
+X-Received: by 2002:a67:d507:0:b0:3e9:107e:cc55 with SMTP id
+ l7-20020a67d507000000b003e9107ecc55mr1407707vsj.6.1675436790281; Fri, 03 Feb
+ 2023 07:06:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y90IaYHDbCN9P0OX@zn.tnic>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230201220011.247100-1-robh@kernel.org> <bb307806-fa02-d147-2c25-6b3b3bbd411b@socionext.com>
+In-Reply-To: <bb307806-fa02-d147-2c25-6b3b3bbd411b@socionext.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Fri, 3 Feb 2023 09:06:17 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLfq6U3OORsKE962f2RZ7kQXLNEb2ShzrWqGY+=oVsf=g@mail.gmail.com>
+Message-ID: <CAL_JsqLfq6U3OORsKE962f2RZ7kQXLNEb2ShzrWqGY+=oVsf=g@mail.gmail.com>
+Subject: Re: [PATCH] bus: unifier-system-bus: Remove open coded "ranges" parsing
+To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 02:13:13PM +0100, Borislav Petkov wrote:
-> On Wed, Feb 01, 2023 at 03:10:33PM +0100, Peter Zijlstra wrote:
-> > (sorry for the repost, forgot lkml)
-> 
-> Btw, you need to rediff this against tip/master. There's alt_instr.flags
-> change in there which conflicts with yours.
-> 
-> > +static void __always_inline
-> > +apply_reloc(int n, void *ptr, uintptr_t diff)
-> > +{
-> > +	switch (n) {
-> > +	case 1: apply_reloc_n(8, ptr, diff); break;
-> > +	case 2: apply_reloc_n(16, ptr, diff); break;
-> > +	case 4: apply_reloc_n(32, ptr, diff); break;
-> > +	default: BUG();
-> > +	}
-> > +}
-> > +
-> > +static void __init_or_module noinline
-> > +apply_relocation(u8 *instr, size_t len, u8 *dest, u8 *src, size_t src_len)
-> 
-> First param is instr, third is dest.
-> 
-> at the call site you have
-> 
-> apply_relocation(insn_buff, a->instrlen, instr, replacement, a->replacementlen);
-> 
-> and instr is third param. Let's call the function params:
-> 
-> static void __init_or_module noinline
-> apply_relocation(u8 *insn_buff, size_t len, u8 *instr, u8 *repl, size_t repl_len)
+On Wed, Feb 1, 2023 at 11:50 PM Kunihiko Hayashi
+<hayashi.kunihiko@socionext.com> wrote:
+>
+> Hi Rob,
+>
+> On 2023/02/02 7:00, Rob Herring wrote:
+> > "ranges" is a standard property and we have common helper functions for
+> > parsing it, so let's use them.
+> >
+> > Signed-off-by: Rob Herring <robh@kernel.org>
+> > ---
+> > Compile tested only!
+>
+> Please fix the driver's name.
+>
+> s/unifier-system-bus/uniphier-system-bus/
 
-How about:
+doh!
 
-  apply_relocation(u8 *buf, size_t len, u8 *dst, u8 *src, size_t src_len)
+>
+> > ---
+> >   drivers/bus/uniphier-system-bus.c | 54 +++++++------------------------
+> >   1 file changed, 11 insertions(+), 43 deletions(-)
+> >
+> > diff --git a/drivers/bus/uniphier-system-bus.c
+> > b/drivers/bus/uniphier-system-bus.c
+> > index f70dedace20b..cb5c89ce7b86 100644
+> > --- a/drivers/bus/uniphier-system-bus.c
+> > +++ b/drivers/bus/uniphier-system-bus.c
+> > @@ -176,10 +176,9 @@ static int uniphier_system_bus_probe(struct
+> > platform_device *pdev)
+> >   {
+> >       struct device *dev = &pdev->dev;
+> >       struct uniphier_system_bus_priv *priv;
+> > -     const __be32 *ranges;
+> > -     u32 cells, addr, size;
+> > -     u64 paddr;
+> > -     int pna, bank, rlen, rone, ret;
+> > +     struct of_range_parser parser;
+> > +     struct of_range range;
+> > +     int ret;
+> >
+> >       priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> >       if (!priv)
+> > @@ -191,48 +190,17 @@ static int uniphier_system_bus_probe(struct
+> > platform_device *pdev)
+> >
+> >       priv->dev = dev;
+> >
+> > -     pna = of_n_addr_cells(dev->of_node);
+> > -
+> > -     ret = of_property_read_u32(dev->of_node, "#address-cells",
+> > &cells);
+> > -     if (ret) {
+> > -             dev_err(dev, "failed to get #address-cells\n");
+> > -             return ret;
+> > -     }
+> > -     if (cells != 2) {
+> > -             dev_err(dev, "#address-cells must be 2\n");
+> > -             return -EINVAL;
+> > -     }
+>
+> Don't you need to check the value of "#address-cells"?
 
-Because I get horribly confused by the whole instr and repl thing.
+Doesn't your schema do that?
 
-> > +{
-> > +	struct insn insn;
-> > +	int i = 0;
-> > +
-> > +	for (;;) {
-> > +		if (insn_decode_kernel(&insn, &instr[i]))
-> 
-> I guess say a warning here so that we catch when it goes into the fields early.
+It's not the kernel's job to validate the DT. If it is, then it does a
+terrible job.
 
-Sure..
+> > -
+> > -     ret = of_property_read_u32(dev->of_node, "#size-cells", &cells);
+> > -     if (ret) {
+> > -             dev_err(dev, "failed to get #size-cells\n");
+> > +     ret = of_range_parser_init(&parser, dev->of_node);
+> > +     if (ret)
+> >               return ret;
+> > -     }
+> > -     if (cells != 1) {
+> > -             dev_err(dev, "#size-cells must be 1\n");
+> > -             return -EINVAL;
+> > -     }
+>
+> Same as "#size-cells"
 
-> > +			return;
-> > +
-> > +		switch (insn.opcode.bytes[0]) {
-> > +		case 0x0f:
-> > +			if (insn.opcode.bytes[1] < 0x80 ||
-> > +			    insn.opcode.bytes[1] > 0x8f)
-> > +				break;
-> > +
-> > +			fallthrough;	/* Jcc.d32 */
-> > +		case 0x70 ... 0x7f:	/* Jcc.d8 */
-> > +		case JMP8_INSN_OPCODE:
-> > +		case JMP32_INSN_OPCODE:
-> > +		case CALL_INSN_OPCODE:
-> > +			u8 *target = src + i + insn.length + insn.immediate.value;
-> > +			if (target < src || target > src + src_len) {
-> > +				apply_reloc(insn.immediate.nbytes,
-> > +					    instr + i + insn_offset_immediate(&insn),
-> > +					    src - dest);
-> > +			}
-> 
-> Uff, it took me a while to parse this. So this can be simpler. The basic
-> math is:
-> 
-> 	new_offset = next_rip - target_address;
-> 
-> where
-> 	next_rip = instr + insn.length;
-> 
-> and I admit that my function was a bit clumsy but I think yours can be
-> made simpler while keeping it cleaner.
+While the address clearly needs cells to hold the chip select, there's
+no reason to restrict the size cells.
 
-I'm not sure what you're saying here... so let me walk through the whole
-thing (specifically the immediate case, since that's what you quote). So
-what we need is:
+>
+> I confirmed the value of all the arguments of uniphier_system_bus_add_bank()
+> match the previous ones.
+>
+> Tested-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 
-	src_imm = target - src_next_ip			(1)
+Thanks.
 
-what we want is:
-
-	dst_imm = target - dst_next_ip			(2)
-
-so what we do is rework (1) as an expression for target like:
-
-	target = src_imm + src_next_ip			(1a)
-
-and substitute in (2) to get:
-
-	dst_imm = (src_imm + src_next_ip) - dst_next_ip	(3)
-
-Now, since the instruction stream is 'identical' at src and dest
-we can state that:
-
-	src_next_ip = src + ip_offset
-	dst_next_ip = dst + ip_offset			(4)
-
-Substitute (4) in (3) and observe ip_offset being cancelled out to
-obtain:
-
-	dst_imm = src_imm + (src + ip_offset) - (dst + ip_offset)
-	        = src_imm + src - dst + ip_offset - ip_offset
-	        = src_imm + src - dst			(5)
-
-The very thing I did.
-
-IOW, we can correct the displacement without caring about which actual
-instruction in the stream we're correcting since the relative offset is
-given by 'src - dst'. IOW, we don't give a crap about insn.length in
-this case ;-)
-
-> Also, calling this all "reloc" here is kinda confusing because this is not a
-> relocation but the offset from the next RIP to the target of the
-> JMP/CALL.
-
-Well, we do relocate the instructions... They go from one place to
-another.
+Rob
