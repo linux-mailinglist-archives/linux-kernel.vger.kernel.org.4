@@ -2,74 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBF6F688B96
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 01:14:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E4C1688B9A
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 01:16:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233306AbjBCAOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 19:14:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49078 "EHLO
+        id S231463AbjBCAP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 19:15:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232869AbjBCAOg (ORCPT
+        with ESMTP id S229554AbjBCAP5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 19:14:36 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E9862B08E
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 16:14:35 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id m2so10935158ejb.8
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 16:14:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zaQNMCliREGWsw5ki7EtaX9v0ELmXISaiv3DWIK5tsM=;
-        b=DNx+UcYaPWB2GGHKmyI05nUP2WYo9nCEWB9i9rv59hvwdIew6+8E9ozFSDnwkqiR/0
-         Bc5nu3ZshSHO9QfHyblOyJTTpZXUJwvxo9yU57+Y+2n/dX7I04FlrcVUmHVDqPivx+sn
-         ex8/Ybm+pudw+c7E2XO7oyziEhp2m6tWVP3gw=
+        Thu, 2 Feb 2023 19:15:57 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DA2073058
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 16:15:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675383312;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZZii04idi4snEs1Pp8F67oc8bCMrsdYL6FcEHVrhkW0=;
+        b=CDHfLDHUOLRs2Mr0nNgoM7pkTQbu667vAoOf2iaG8/tTDyfGkfoxvamzD1pP/jY63bPRHL
+        EJHchhXot0QTV/2PQ/k2d7BQQuMCz/3ko+kb7zCliYRW5iG99EkAjFwfVwHpTb4Ll6iMdD
+        RfMuSg3L6C8DHOPpXJnvi2nikUR9XFI=
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com
+ [209.85.166.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-241-zVPQPBbaOyKO6jmmHRy-vg-1; Thu, 02 Feb 2023 19:15:11 -0500
+X-MC-Unique: zVPQPBbaOyKO6jmmHRy-vg-1
+Received: by mail-il1-f198.google.com with SMTP id c11-20020a056e020bcb00b0030be9d07d63so2318672ilu.0
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 16:15:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zaQNMCliREGWsw5ki7EtaX9v0ELmXISaiv3DWIK5tsM=;
-        b=37te++t8COKsi/pf7hEY/v8wd88e8n7rT9mP/armjDh6cWn+WhZiqg3IVqB9/1g7Ht
-         STqhbyvtBzMdyU7Ao8fG1folp+0ZWhIJ47N/agn3Yw7NJ6TOdFv7Rg+HMC3xt+oVU5L6
-         pRmWLKhKDW0w5HblA3TQ6kMwVyY2xgNGfXAqZ7075YAP8jrUZVap83A4Ufh/T3hmei36
-         P+lXMu4k2kfE2sPqC4Fhe7WbJwcQmaDZRB9ur4jw8wuJGqSFUoqCUquk+uQz6/dPLDFJ
-         B3kaSPryoYokCD+9MZRA85nz3QXjKOOq+OJaSiTDuemjK5UDQ806Cx2a+QAJo9+KWf94
-         bnjQ==
-X-Gm-Message-State: AO0yUKXBOEP3T/YFTrqdgfHuENaGyz9vpm7QkPxp70K0Mc6NNfqwh5yo
-        6X8gDH+J1koyemUF1SM+YouSv4ZmOiHXaSDvjezTWw==
-X-Google-Smtp-Source: AK7set+72qWxzvszIJcUfCpb+KIxZzP6ebCdFGHkO1LHPb4QUuS90chcyJS3Z7g/jONo1wOXdPVX8w==
-X-Received: by 2002:a17:906:184a:b0:88d:777a:9ca6 with SMTP id w10-20020a170906184a00b0088d777a9ca6mr7589196eje.18.1675383273790;
-        Thu, 02 Feb 2023 16:14:33 -0800 (PST)
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com. [209.85.208.44])
-        by smtp.gmail.com with ESMTPSA id ox4-20020a170907100400b008874c903ec5sm513119ejb.43.2023.02.02.16.14.31
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 16:14:32 -0800 (PST)
-Received: by mail-ed1-f44.google.com with SMTP id m8so3707073edd.10
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 16:14:31 -0800 (PST)
-X-Received: by 2002:a50:d715:0:b0:4a2:649a:72eb with SMTP id
- t21-20020a50d715000000b004a2649a72ebmr2549747edi.70.1675383271716; Thu, 02
- Feb 2023 16:14:31 -0800 (PST)
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZZii04idi4snEs1Pp8F67oc8bCMrsdYL6FcEHVrhkW0=;
+        b=nqcFNCMMw1GgWdC/n+EMK9F1/yM1T1FR31o9+DTteoUYXg0al5MT9SlVkXNk/CT0xY
+         6RvuLZzIdDWYKffis9iY+kOqo7MVj3VMI0YaEBngcr6FgpRgRgBvD2ygpQq8Y/FPvfP2
+         pFymGHguHktVeedshXH5BQZ9eL86ivV+QcbSJlUINn7Kr0n/nFHp4HD1Z1WKE4RHXNHF
+         7IHk2TXKWDS2y+svqktJhTEJaXGOvSlEUFbKkeBVlFTDhxzm9HdrjVlXBBvkf5F5HcLG
+         wHgU9jNtG76oy5TF2+9/JmiVKWtoij6bm4rsgBE9WyNNYzN0Te1CSPhsYPKX9ST8doPU
+         H6EQ==
+X-Gm-Message-State: AO0yUKVS/hus11ZU12KmQN3X39VU9vNDFZ6K4pbNW7pOezjU0HXMQcF4
+        08H8MwlG9/4X7dpcI8Ee2olw+TNoi+9VYl46LndxQwTbbiiRxd1gCU/a6lcV3HchJIpdrR+V/Oj
+        kMEXdEq6x/ycxyhi0GDE9umjG
+X-Received: by 2002:a05:6e02:1a46:b0:311:20f:bc77 with SMTP id u6-20020a056e021a4600b00311020fbc77mr6285773ilv.6.1675383309924;
+        Thu, 02 Feb 2023 16:15:09 -0800 (PST)
+X-Google-Smtp-Source: AK7set+lbPEIbkCglkbHrVZ7yC7ELtrZRYRaCyZ0+Iv+658LyqnW2+LBjhq8imActoVACDnw9RK2Jg==
+X-Received: by 2002:a05:6e02:1a46:b0:311:20f:bc77 with SMTP id u6-20020a056e021a4600b00311020fbc77mr6285749ilv.6.1675383309714;
+        Thu, 02 Feb 2023 16:15:09 -0800 (PST)
+Received: from x1 (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
+        by smtp.gmail.com with ESMTPSA id w193-20020a022aca000000b003a5de29178esm371182jaw.104.2023.02.02.16.15.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Feb 2023 16:15:08 -0800 (PST)
+Date:   Thu, 2 Feb 2023 19:15:07 -0500
+From:   Brian Masney <bmasney@redhat.com>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFT PATCH 05/14] arm64: dts: qcom: sc8280xp: correct TLMM
+ gpio-ranges
+Message-ID: <Y9xSCwgUxHDeppz7@x1>
+References: <20230201155105.282708-1-krzysztof.kozlowski@linaro.org>
+ <20230201155105.282708-6-krzysztof.kozlowski@linaro.org>
+ <Y9xAEoc0QXe222D0@x1>
+ <25f5a750-b51c-7d7b-0d50-5b2f78de8512@linaro.org>
+ <Y9xOeZjAQmQqLOa1@x1>
+ <1319a973-26ae-8c11-d967-8720aaf894df@linaro.org>
 MIME-Version: 1.0
-References: <20230202232517.8695-1-michael.christie@oracle.com> <20230202232517.8695-2-michael.christie@oracle.com>
-In-Reply-To: <20230202232517.8695-2-michael.christie@oracle.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 2 Feb 2023 16:14:15 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjTzdQr7xNm53ZUJT0jxaxSYLkf8XT2S1CoxnyFgVafKg@mail.gmail.com>
-Message-ID: <CAHk-=wjTzdQr7xNm53ZUJT0jxaxSYLkf8XT2S1CoxnyFgVafKg@mail.gmail.com>
-Subject: Re: [PATCH v11 1/8] fork: Make IO worker options flag based
-To:     Mike Christie <michael.christie@oracle.com>
-Cc:     hch@infradead.org, stefanha@redhat.com, jasowang@redhat.com,
-        mst@redhat.com, sgarzare@redhat.com,
-        virtualization@lists.linux-foundation.org, brauner@kernel.org,
-        ebiederm@xmission.com, konrad.wilk@oracle.com,
-        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1319a973-26ae-8c11-d967-8720aaf894df@linaro.org>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,38 +89,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 2, 2023 at 3:25 PM Mike Christie
-<michael.christie@oracle.com> wrote:
+On Fri, Feb 03, 2023 at 01:05:35AM +0100, Konrad Dybcio wrote:
+> On 3.02.2023 00:59, Brian Masney wrote:
+> > For others quick reference, Konrad is talking about this line from
+> > sa8540p-ride.dts:
+> > 
+> > 	reset-gpios = <&tlmm 228 GPIO_ACTIVE_LOW>;
+> > 
+> > I noticed that earlier but assumed this was one based. However, looking
+> > at pinctrl-sc8280xp.c I see gpio0..gpio227 defined.
 >
->  struct kernel_clone_args {
->         u64 flags;
-> +       u32 worker_flags;
->         int __user *pidfd;
->         int __user *child_tid;
->         int __user *parent_tid;
+> + gpio229 is the reset pin for the UFS card slot
 
-Minor nit: please put this next to "exit_signal".
+We don't have the UFS card slot on the sa8540p exposed. However, it is
+available on the sa8295p.
 
-As it is, you've put a new 32-bit field in between two 64-bit fields
-and are generating extra pointless padding.
+The original DTS in upstream listed 230 pins, however pinctrl-sc8280xp.c
+lists 233 pins and the two UFS pins match what we have in DTS.
 
-We have that padding by "exit_signal" already, so let's just use it.
+static const struct pinctrl_pin_desc sc8280xp_pins[] = {
+        PINCTRL_PIN(0, "GPIO_0"),
+	...
+	PINCTRL_PIN(227, "GPIO_227"),
+	PINCTRL_PIN(228, "UFS_RESET"),
+	PINCTRL_PIN(229, "UFS1_RESET"),
+	PINCTRL_PIN(230, "SDC2_CLK"),
+	PINCTRL_PIN(231, "SDC2_CMD"),
+	PINCTRL_PIN(232, "SDC2_DATA"),
 
-Also, I like moving those flags to a "flags" field, but can we please
-make it consistent? We have that "args->kthread" field too, which is
-100% analogous to args->io_thread.
+Rescind-Reviewed-by: Brian Masney <bmasney@redhat.com>
 
-So don't make a bit field for io_thread, and then not do the same for kthread.
-
-Finally, why isn't this all just a bitfield - every single case would
-seem to prefer something like
-
-     if (args->user_worker) ..
-
-instead of
-
-    if (args->worker_flags & USER_WORKER)
-
-which would seem to make everything simpler still?
-
-            Linus
