@@ -2,128 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B43A688D5F
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 03:52:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D6E5688D61
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 03:53:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231883AbjBCCwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 21:52:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57704 "EHLO
+        id S231760AbjBCCxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 21:53:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231277AbjBCCwg (ORCPT
+        with ESMTP id S230230AbjBCCxH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 21:52:36 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A3F224120
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 18:52:34 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id me3so11702223ejb.7
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 18:52:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=luv07tBojTy7MY/o/x6jvDqHfjxZ27LUynL/zLyVKVU=;
-        b=qRqNR8+nyEtLHlZsejQjsKv1LXzYBM9Rw+XvcEOL2I9GdUGMFq474nl8SljoN3hJD0
-         4PagynT8yAuquNNgWmlcGwxzp8XPIZ4smQqcy9NueLPNKkCY4xAZP8tClgdbmh4KwFRB
-         x2nscpp2uaBVoOT8z17atSE3o2M+TkTzYS2y+LIth93HBoxfq0hn5sW4pCz24ymSgzif
-         IxU12SzVyauGvn2FU8Hv3Du6+qJLnRPMEdNh6UwbMYNpYjxiPjhFGeQb2pEu6e6v2uEb
-         wyYJP8Kori99MNH+4DigXEknMfzoMObOUzT/NS/5IQ0QDmvDDML+DaQPpYSo/H7em8+z
-         1V9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=luv07tBojTy7MY/o/x6jvDqHfjxZ27LUynL/zLyVKVU=;
-        b=VKbEY+sUsZHVB5+bN4hio0ZjEw5FJfLWP/cWoFM7MOny5xowsR1kKr8Wzwazwf3zBZ
-         jOXSY86XciuHVzmAxSs/2baQYI7baCg5WISFYA4wjS1goUAyyc24KABpYVtNL00Cus8q
-         BnjbudPu2tiSk27vQ5Y8w+Ip4CMWMOjnG9/hxrpUu3Cb/oMWH6UheGuiHfn9AuFcye5y
-         AmZnI1GqSh2Q59vSmUX211hwf/9Yb6MQRuKsAdEbdK6TVG5q2BKMqC8lG2v8wGdrcxWv
-         DaB8+eMtmqqOtwK/NuEMbBEZjS4y/QZs4ddGPcohunGWSp0m5LelOFavQ5N30F/iStUy
-         ixBQ==
-X-Gm-Message-State: AO0yUKXCT/YmYEQGdrhkUOTgdizQjXGA3d2gaJoK2JjyZFXmlh8by2qz
-        /fLvE7QHxbkAXXwRhb7OT7jClw==
-X-Google-Smtp-Source: AK7set+2Q+lIS7/A1H+HmFJ2+W4s8LEh9MtAQWMxacurGlMZL52NZgqFm+ulHrvoRV0ikL9R7NN3aQ==
-X-Received: by 2002:a17:906:261b:b0:887:d8b0:27c5 with SMTP id h27-20020a170906261b00b00887d8b027c5mr9757802ejc.52.1675392752756;
-        Thu, 02 Feb 2023 18:52:32 -0800 (PST)
-Received: from [192.168.1.101] (abyl20.neoplus.adsl.tpnet.pl. [83.9.31.20])
-        by smtp.gmail.com with ESMTPSA id rn26-20020a170906d93a00b008845c668408sm655770ejb.169.2023.02.02.18.52.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 18:52:32 -0800 (PST)
-Message-ID: <3e46ab75-9b46-415e-0585-29523c5277b1@linaro.org>
-Date:   Fri, 3 Feb 2023 03:52:30 +0100
+        Thu, 2 Feb 2023 21:53:07 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE4AE22A0E;
+        Thu,  2 Feb 2023 18:53:05 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P7Kw04n6gz4xZj;
+        Fri,  3 Feb 2023 13:53:04 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1675392784;
+        bh=YVCnkJKekD9jf5cUhxiuiMU4drjtSui1/krseXp+DSc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=dZgvAMh1qgHF8WH/CFSlL6SBA4B55pUJ/feaXaq6CGabzG/kqmU07XP4MOCDu1D24
+         NAuXFhN292m9u5G/VNlZknw8roKsS1QSOJQtL8V6vCBHvdiA/XXnq+eRjIhg2A0Nsq
+         Kk2sq6mz0yAjibhNwjdlRdaS+usi7ewW01Q1/9Rwn0OYDHzmGEeRjWARZc92dNHpW0
+         M+GXMInqjXjN+N/84nZIYB6ZZv0viiW7xQWSRYz87yI53hWsmMTEcSQdTps+AQEjzH
+         PHVT2raDBkTr8P8ydkXwCh9K2rv58Eq2XBAjd8UWtpcr2UngagYrrRvx4PE9PO1xed
+         VrteuaoRBbS3Q==
+Date:   Fri, 3 Feb 2023 13:53:03 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the drivers-x86 tree
+Message-ID: <20230203135303.32da1fc6@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH 06/23] interconnect: qcom: rpm: fix probe child-node error
- handling
-Content-Language: en-US
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20230201101559.15529-1-johan+linaro@kernel.org>
- <20230201101559.15529-7-johan+linaro@kernel.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230201101559.15529-7-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/Q6zMJiKUPGUxHfzpyW4b_fV";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/Q6zMJiKUPGUxHfzpyW4b_fV
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-On 1.02.2023 11:15, Johan Hovold wrote:
-> Make sure to clean up and release resources properly also in case probe
-> fails when populating child devices.
-> 
-> Fixes: e39bf2972c6e ("interconnect: icc-rpm: Support child NoC device probe")
-> Cc: stable@vger.kernel.org      # 5.17
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+After merging the drivers-x86 tree, today's linux-next build (htmldocs)
+produced this warning:
 
-Konrad
->  drivers/interconnect/qcom/icc-rpm.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-> index df3196f72536..91778cfcbc65 100644
-> --- a/drivers/interconnect/qcom/icc-rpm.c
-> +++ b/drivers/interconnect/qcom/icc-rpm.c
-> @@ -541,8 +541,11 @@ int qnoc_probe(struct platform_device *pdev)
->  	platform_set_drvdata(pdev, qp);
->  
->  	/* Populate child NoC devices if any */
-> -	if (of_get_child_count(dev->of_node) > 0)
-> -		return of_platform_populate(dev->of_node, NULL, NULL, dev);
-> +	if (of_get_child_count(dev->of_node) > 0) {
-> +		ret = of_platform_populate(dev->of_node, NULL, NULL, dev);
-> +		if (ret)
-> +			goto err;
-> +	}
->  
->  	return 0;
->  err:
+include/media/v4l2-subdev.h:1088: warning: Function parameter or member 'pr=
+ivacy_led' not described in 'v4l2_subdev'
+
+Introduced by commit
+
+  10d96e289fbd ("media: v4l2-core: Make the v4l2-core code enable/disable t=
+he privacy LED if present")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Q6zMJiKUPGUxHfzpyW4b_fV
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPcdw8ACgkQAVBC80lX
+0Gxk8wf/RYVrcn1ylnl3Tqb1eIQ7jFoFA2DoxS+pucLNTXg9CICoHzD8pg97Wm90
+5UWi/CkrfVFh44tfIUiQwOzsX/XOct/SQjEL6u90+QmvLcoE6fp/kjJ2tjUnaAfF
+v7TyI5yH7sbgz5M/aF0tqFdbGY4exT6rD2Tctfk4pqz1TTpcZt0XHBONCHYRWTCu
+4NO0JzGitJSm2k5kUzbBn21hzwrH4RYqv2eGzBVVQvYSS2DhMi+T6ul0jcKCZ8Sc
+7ofImc6vT7vl7HZF9QnzUqncuB4z/b1/m+1SNuOKgdEs7CgsM/47lx5dyL73BgZ6
+2yPQRV5XUPB5UNZGzvQ7LzJXzjK1Zw==
+=1DXa
+-----END PGP SIGNATURE-----
+
+--Sig_/Q6zMJiKUPGUxHfzpyW4b_fV--
