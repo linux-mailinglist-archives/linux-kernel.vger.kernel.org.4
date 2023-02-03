@@ -2,94 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 798266890B5
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 08:22:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7F446890BF
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 08:26:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231820AbjBCHWe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 02:22:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44730 "EHLO
+        id S232001AbjBCHZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 02:25:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjBCHWc (ORCPT
+        with ESMTP id S231426AbjBCHZN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 02:22:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34AA8A45;
-        Thu,  2 Feb 2023 23:22:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4ADF661DA4;
-        Fri,  3 Feb 2023 07:22:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E371C433EF;
-        Fri,  3 Feb 2023 07:22:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675408949;
-        bh=icTa3capbXXz6Tr5vVLT7o8x/2rzWpy+HrEApn3fCe4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DuXiPY9UdzDQjrqndWYCKpH9LMj0wHpXawtCOAUgprKRkGh6hjr8qP5lBBlMIzv5g
-         DTCvPOcrpRomQFnFTFINj3xI8pLhezHzLpLtnxKN6Vc0aZnlp041YEski9iqPcOL2G
-         ItkWuYMCuHva5mK+68a4iDRW1DOqGSvW6w0hQYxucXfzSJT8niaYym+wRh2EJW870O
-         OHH1jdyPeFMmzRCOsn5K28eD3W19GpINXxCpmKauMtpSNH3c5ONeFM9xna2Dv/kjfH
-         Ghj8gD6JFNtM8AWUmuily+7KB8YmcvvwchJxxV+IaQ93QWO6Tn3Obf4y1bN07yu/D6
-         ogeFhMrqpu8Cg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pNqPP-0008K5-Nc; Fri, 03 Feb 2023 08:22:55 +0100
-Date:   Fri, 3 Feb 2023 08:22:55 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 17/22] rtc: pm8xxx: add support for nvmem offset
-Message-ID: <Y9y2T+mrzDk5IVq9@hovoldconsulting.com>
-References: <20230202155448.6715-1-johan+linaro@kernel.org>
- <20230202155448.6715-18-johan+linaro@kernel.org>
- <8a3eb2d3-5cdf-8bdb-63f5-ab89798d38e6@linaro.org>
+        Fri, 3 Feb 2023 02:25:13 -0500
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0239B8B7E8;
+        Thu,  2 Feb 2023 23:25:13 -0800 (PST)
+Received: by mail-qt1-x835.google.com with SMTP id f10so4648892qtv.1;
+        Thu, 02 Feb 2023 23:25:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6LgYhyoMoRD4udtqUM2qBfSLhp8K9vGhmae+KRWIDmA=;
+        b=HA37JagceU+abjL5kPNzvDagNL5AOgjiRcW/ybO5fy5cSplpB0lW5fCzHny5V7G0Um
+         XZRcJrBEVkyYUiTjI/KzSLspqfBHaT5TezxzzgPaPHMAcRbVSzarMf+KoUZ7JUjWCkUr
+         cJZIyTF6eme9KyHfyVvWYBn9knp2pAIly9s41gZVYkV3Rikd9Srz3QuFfO/291Oot89r
+         Shw9qdK4jnWNWKroLMLz9s36B2o2REaxNNFCqCgcxF9AN06v1fBOxZEfosxQOVfQyxo2
+         CBzhKfQRI+trl2V1Te6DqVBYsVkWaJi1v7lINZGe33VJ29DVZq6tM1OwUgxPm3SnrOUi
+         SbZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6LgYhyoMoRD4udtqUM2qBfSLhp8K9vGhmae+KRWIDmA=;
+        b=YRq7Brn/L3Epl8D4G7Opxw2i55sAXsU/7kxTBLVUcNJY4kyAvW6cmoq/NNDmQPdJL0
+         HJ4uX8MWL+X9h3HiF19+gYFHjmogQF9BPqKe2Ru7hCGT5Dw1ypm/kvy2giLht43l0xj8
+         CSDzd9aABZpMSvpQcM1tNwTd7rr/32xcpjh9BxWcXtOZYh8i/STQaiaChBoJkCY4pmAr
+         30sD0ouZ9Sg0OBDvhAYoPybca1jvOxo114Ewt6f94o1EegD6+qa8kcAZZisehUMxENG6
+         yHVTOVX7LAsLezO+eYDRwaFKAMdJYaMcKxzuNhvS0esx3xCgbJdBWM+WwivZccfDCIwU
+         zjqw==
+X-Gm-Message-State: AO0yUKXNfEnDp79m4KFZWUeSBlM0aapDn3bAWEBHLGPFjJTYV0WNPnnr
+        GzAJUGpWyMLnarslyTruD3I=
+X-Google-Smtp-Source: AK7set8Iz3xLH2kZr3/wVm96lRXUAOUO0li4ogNMbg2Gus2eCliywWx5Xj1LTSlGT71cWLbdV2nE2Q==
+X-Received: by 2002:a05:622a:1a0e:b0:3b1:c538:7026 with SMTP id f14-20020a05622a1a0e00b003b1c5387026mr15317547qtb.42.1675409112127;
+        Thu, 02 Feb 2023 23:25:12 -0800 (PST)
+Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
+        by smtp.gmail.com with ESMTPSA id s8-20020ac85cc8000000b003b9b4028d63sm1130863qta.80.2023.02.02.23.25.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Feb 2023 23:25:11 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailauth.nyi.internal (Postfix) with ESMTP id B9B5127C0054;
+        Fri,  3 Feb 2023 02:25:10 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Fri, 03 Feb 2023 02:25:10 -0500
+X-ME-Sender: <xms:1rbcYyMbUdYO9c3B1_4jTca788jFo6r61tYxIjd9wYzSthldutgUJg>
+    <xme:1rbcYw8cJMU1ze8bbAuFip5Mm-UgriWmHkSFhrTzaVoxawN8uT1SYlFMwtBRLMFBy
+    l-O-1Dt0AdX-mYE6Q>
+X-ME-Received: <xmr:1rbcY5TEyTjPVccNNf6Mp2EvshVe5jU6gHmcUGOzwzrWSx_LOo7hcnbJy99f6t5ohJgc5Nt72Ci0tb8R2MA9-gpuDIBGIEQ-MRs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudefledguddthecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
+    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
+    grthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveei
+    udffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
+    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
+    higihmvgdrnhgrmhgv
+X-ME-Proxy: <xmx:1rbcYysX2Uk80gckibCTSJWg-VyiOCOujMEvb1ktghARaaGOK82T5g>
+    <xmx:1rbcY6dDJ15UYQ5kWgp9SSSIWfgWff2d272cbBJMWso7zDU5POR4YQ>
+    <xmx:1rbcY210Wg7NnpYXHpsLalBvLhpY5tqUwCVMOJonMQ7_QJ71N6JYTA>
+    <xmx:1rbcYw1sFxGjacLx1aOTt43dYkSiECwxvqJPmTzKflmxfxWV4CrujQ>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 3 Feb 2023 02:25:09 -0500 (EST)
+Date:   Thu, 2 Feb 2023 23:25:08 -0800
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
+Subject: Re: [RFC 2/5] rust: sync: Arc: Introduces ArcInner::count()
+Message-ID: <Y9y21JyuPF1nCCzr@Boquns-Mac-mini.local>
+References: <20230201232244.212908-1-boqun.feng@gmail.com>
+ <20230201232244.212908-3-boqun.feng@gmail.com>
+ <Y9t+3u+2UcAFQc+r@hirez.programming.kicks-ass.net>
+ <20230202142153.352ba479.gary@garyguo.net>
+ <Y9vZu08L2WaLNJIc@kroah.com>
+ <Y9vga90K0aVfGUwW@boqun-archlinux>
+ <Y9viM2POUsSnbKUh@kroah.com>
+ <Y9vqJ1h2nkaFRpOY@boqun-archlinux>
+ <CANiq72kMZ9XQvte41Mzu4oXX=ujGRCrGDZDiYUBVD3=JTGG57g@mail.gmail.com>
+ <Y9yaBybest8JBu8A@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8a3eb2d3-5cdf-8bdb-63f5-ab89798d38e6@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y9yaBybest8JBu8A@kroah.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 04:31:54AM +0100, Konrad Dybcio wrote:
-> 
-> 
-> On 2.02.2023 16:54, Johan Hovold wrote:
-> > On many Qualcomm platforms the PMIC RTC control and time registers are
-> > read-only so that the RTC time can not be updated. Instead an offset
-> > needs be stored in some machine-specific non-volatile memory, which the
-> > driver can take into account.
+On Fri, Feb 03, 2023 at 06:22:15AM +0100, Greg KH wrote:
+> On Thu, Feb 02, 2023 at 10:47:12PM +0100, Miguel Ojeda wrote:
+> > On Thu, Feb 2, 2023 at 5:52 PM Boqun Feng <boqun.feng@gmail.com> wrote:
+> > >
+> > > As I said, I'm open to remove the printing of the refcount, and if you
+> > > and Peter think maybe it's OK to do that after the explanation above,
 > > 
-> > Add support for storing a 32-bit offset from the Epoch in an nvmem cell
-> > so that the RTC time can be set on such platforms.
+> > Perhaps part of the confusion came from the overloaded "safe" term.
 > > 
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > ---
-> That's gonna be a stupid question, but just to make sure..
+> > When Gary and Boqun used the term "safe", they meant it in the Rust
+> > sense, i.e. calling the method will not allow to introduce undefined
+> > behavior. While I think Peter and Greg are using the term to mean
+> > something different.
 > 
-> SDAM is rewritable, right? So that when somebody sets the time to
-> year 2077 by mistake, they won't have to put up with it for the next
-> 50 years? :D
+> Yes, I mean it in a "this is not giving you the value you think you are
+> getting and you can not rely on it for anything at all as it is going to
+> be incorrect" meaning.
+> 
+> Which in kernel code means "this is not something you should do".
+> 
 
-Heh, yes, it is re-writeable. Otherwise, using SDAM wouldn't really have
-been an alternative to using the UEFI offset. :)
+Now what really confuses me is why kref_read() is safe.. or how this is
+different than kref_read(). Needless to say that ArcInner::count() can
+guarantee not reading 0 (because of the type invariants) but kref_read()
+cannot..
 
-These registers are reset if you lose battery power so you'd be back at
-1970 as expected if that ever happens too.
+Regards,
+Boqun
 
-Johan
+> thanks,
+> 
+> greg k-h
