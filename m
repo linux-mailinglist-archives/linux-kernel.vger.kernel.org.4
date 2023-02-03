@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8440668A567
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 23:06:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5D9C68A576
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 23:07:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233971AbjBCWGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 17:06:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56654 "EHLO
+        id S233333AbjBCWHG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 17:07:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233960AbjBCWF6 (ORCPT
+        with ESMTP id S233568AbjBCWGa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 17:05:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C3A6AF0F4;
-        Fri,  3 Feb 2023 14:05:57 -0800 (PST)
+        Fri, 3 Feb 2023 17:06:30 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72628AF6A2;
+        Fri,  3 Feb 2023 14:06:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D802562029;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 65018B82C2A;
+        Fri,  3 Feb 2023 22:05:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7129AC433A7;
         Fri,  3 Feb 2023 22:05:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EA0FC4339C;
-        Fri,  3 Feb 2023 22:05:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675461956;
-        bh=c/F3dYyrvAqz6wprj56ksl9t+Sypivhl5og5kpg5L6s=;
+        s=k20201202; t=1675461958;
+        bh=xE5ZmRzKMxAFPrHiSIoJTZlCDR5ti+ono/cm0PWjfeU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tptDeVHqMjvz4+S0iYtQ6xPGjXx4/3Ccw0/deBnVQWH7nF/I1PUzMSxGVylz0Dgty
-         AzsbQwHn8cZPxBUugokyhG+G0x2v6NoabtKRTQA82/NRgKmcfhf6btWGLkhuu4gvDr
-         iPy6MN24l25pW+tYGwzziJgtrgbb/FUXeFjmOjDxILCnJVSlMUDQj2lEcR3JRnIesk
-         Dw5PWj95Y97QxX9ZAyCSFBPbOnnhyZPRJSQlNLCo9O1M5lihchoQsVEP5LMfayPIdB
-         kkNaXSVZQ/FMqtdgmpcj9piJkDTn0P0bTWRd5a6/2HOK7g3HyTWXT6NY4jitXMiTqa
-         uDGktzLGFC0eg==
+        b=bWyWlCGQ8ixOuALZdKCzLss/6SMXhh1P0jHxv5K8dz+pGFJWRKFe/rDpdYt/pbEBy
+         Cv20t60IqNd4k2OPeeakryqDZQBCSnCIFbZYn4w8Wh4hZfyxfuwPiu4jwkipYMyAjx
+         3wjdyLJq2+oQSUZX9lPMnbCOK9kacUFdHpR/7gDTkVlFBlenq2ALG85m81cnxhAlqT
+         DUmyvxZm4cJjdO0Y03EgNOuJPyX9ZAC+k2Whi2B9zytn0fu/YSFoO3CbU5ghN7eGNf
+         AnlKFwVCJfplEUcEgqGsH3y9cSX006B8L7WqnSyPF5fCyXIzVXK57ufqsSU1oTeXrl
+         yrsQBm2IXfrYQ==
 From:   Josh Poimboeuf <jpoimboe@kernel.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     jgross@suse.com, richard.henderson@linaro.org,
@@ -54,9 +54,9 @@ Cc:     jgross@suse.com, richard.henderson@linaro.org,
         dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
         mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
         paulmck@kernel.org
-Subject: [PATCH 08/22] loongarch/cpu: Mark play_dead() __noreturn
-Date:   Fri,  3 Feb 2023 14:05:17 -0800
-Message-Id: <7b6c893031048242da4a7256cd5da876292b8abb.1675461757.git.jpoimboe@kernel.org>
+Subject: [PATCH 09/22] mips/cpu: Expose play_dead()'s prototype definition
+Date:   Fri,  3 Feb 2023 14:05:18 -0800
+Message-Id: <a532966831383927f5f4fbec0a1e13304588685a.1675461757.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <cover.1675461757.git.jpoimboe@kernel.org>
 References: <cover.1675461757.git.jpoimboe@kernel.org>
@@ -72,27 +72,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-play_dead() doesn't return.  Annotate it as such.  By extension this
-also makes arch_cpu_idle_dead() noreturn.
+Include <asm/smp.h> to make sure play_dead() matches its prototype going
+forward.
 
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- arch/loongarch/include/asm/smp.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/mips/kernel/smp-bmips.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/loongarch/include/asm/smp.h b/arch/loongarch/include/asm/smp.h
-index d82687390b4a..416b653bccb4 100644
---- a/arch/loongarch/include/asm/smp.h
-+++ b/arch/loongarch/include/asm/smp.h
-@@ -99,7 +99,7 @@ static inline void __cpu_die(unsigned int cpu)
- 	loongson_cpu_die(cpu);
- }
+diff --git a/arch/mips/kernel/smp-bmips.c b/arch/mips/kernel/smp-bmips.c
+index f5d7bfa3472a..df9158e8329d 100644
+--- a/arch/mips/kernel/smp-bmips.c
++++ b/arch/mips/kernel/smp-bmips.c
+@@ -38,6 +38,7 @@
+ #include <asm/traps.h>
+ #include <asm/barrier.h>
+ #include <asm/cpu-features.h>
++#include <asm/smp.h>
  
--extern void play_dead(void);
-+extern void __noreturn play_dead(void);
- #endif
+ static int __maybe_unused max_cpus = 1;
  
- #endif /* __ASM_SMP_H */
 -- 
 2.39.0
 
