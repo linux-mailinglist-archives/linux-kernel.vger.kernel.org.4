@@ -2,173 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39DE468A0E4
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 18:53:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A141668A0E6
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 18:54:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232983AbjBCRxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 12:53:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59770 "EHLO
+        id S233126AbjBCRyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 12:54:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231216AbjBCRxU (ORCPT
+        with ESMTP id S231755AbjBCRyC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 12:53:20 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2080.outbound.protection.outlook.com [40.107.237.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1513725952;
-        Fri,  3 Feb 2023 09:53:19 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KGecZPgIqr103gFUz+xPR7x8d5QF2fnmCP1kinmEg6eN12COitHAESJQGPlB9gqQZZSnmPy+Wf+7XMYomuhfGmE517EKOh87ZWQHt+Jktdtadhmj5xWNGsWAAOt0BIi6MgTNex+ULIz4PnKK26oOtxNeol+6UNnxLwvpKKJbYFrZXIFiMA76/kfVYYC3KeRsu7dJWmN4uhHPleXSFc4uJZVcfj26Dz7TKjPLvH2VEr/06soDgSsLKJfP5TOLH7fpRg4GDHUI21m24UMjNMfGAwhHvEjQtRsqGeMPhwFQz7U8g6SXnFZ5hZaDNnCBdoeARXGkMRFQRyO7vn9huEaDSw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OgUuY8vcE8F2ZzbsE+TE7PDo41+oKeTWt6CgfbQ6tYE=;
- b=Z0GkRt693UTaukH3xrGkLE6oplYhL2LkN9AyDIwVkjiwW6oVmaHqm782l928+LgGQyQySxdMUQCKLqZdqxZju+k7qr5uh06WKRYWcAymTGqWtOXxEv++KdiPUQrChKcXdRQsjR/ntI1tR2+E6JGnJAiOItRx/+KLsyyFIDuY8qmjHh0NW1yPTdfp8HXDZsYk+CMHM+Q3/+9GwgfHhm+07LbOpI+JmVfy1eKNVLHx5ytIg3S9hmCq8J0vNp6w8VDE4KJd6eT0RZTjxp4Kz0CallFOX0jSJrz95dsuTpFPuJYFj+6N85LD6RKMlLY5HV25PtDllePQqaKcVVbjp5v1iQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OgUuY8vcE8F2ZzbsE+TE7PDo41+oKeTWt6CgfbQ6tYE=;
- b=atqTjwfa+VU06tO2lQbeISR370elxESfnvCEQnb/iTZxNkguNNdTSTGPDzbbHGyOxWd5eV8nvFjxDdTCZq2v1JsC3S/xU6E+7tjKBZMlfT+iV93pvSROKF34I06r7iVZ8QFxQqLle21HisTHrdSULSJOqvORylJ1CLXe2Eo4njR1FYwGPpEkuI7zZa61PI9LM9xfunEc79sxlfBI+dca6a0zbAGdmVVwB0RWsupSAfRo5ExdeIxTMnxPGDEzKPGqmLLTvRkBnJQMS+8+255NjszWVFrg2msLrLsmV58rnfExIUlMNyB7qxd/ut/XlPXnZ+KfxVwHyVD+zYwwUEcm9A==
-Received: from DS7PR07CA0023.namprd07.prod.outlook.com (2603:10b6:5:3af::28)
- by SN7PR12MB7323.namprd12.prod.outlook.com (2603:10b6:806:29a::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.31; Fri, 3 Feb
- 2023 17:53:17 +0000
-Received: from DM6NAM11FT111.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3af:cafe::42) by DS7PR07CA0023.outlook.office365.com
- (2603:10b6:5:3af::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.31 via Frontend
- Transport; Fri, 3 Feb 2023 17:53:16 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- DM6NAM11FT111.mail.protection.outlook.com (10.13.173.26) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6064.31 via Frontend Transport; Fri, 3 Feb 2023 17:53:16 +0000
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 3 Feb 2023
- 09:53:06 -0800
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail205.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 3 Feb 2023
- 09:53:06 -0800
-Received: from Asurada-Nvidia (10.127.8.13) by mail.nvidia.com (10.129.68.9)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36 via Frontend
- Transport; Fri, 3 Feb 2023 09:53:05 -0800
-Date:   Fri, 3 Feb 2023 09:53:04 -0800
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-CC:     "Tian, Kevin" <kevin.tian@intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>
-Subject: Re: [PATCH v1 2/8] iommu: Introduce a new
- iommu_group_replace_domain() API
-Message-ID: <Y91KAHxQIDnaGbYs@Asurada-Nvidia>
-References: <cover.1675320212.git.nicolinc@nvidia.com>
- <a98e622f41d76b64f5a7d0c758d8bda5e8043013.1675320212.git.nicolinc@nvidia.com>
- <BN9PR11MB5276BB497D32073A1F4CBE238CD79@BN9PR11MB5276.namprd11.prod.outlook.com>
- <Y90iOAmnBtqQtmiA@ziepe.ca>
+        Fri, 3 Feb 2023 12:54:02 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02EDE32521
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 09:54:01 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id z1so5995039plg.6
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 09:54:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=9RKTKl/Bb3c4duHC9Bqed53UuuEJJvB8k+GUCNePruY=;
+        b=HQ0vQysX1kKI8O+PparDZ35dBYNpcFDWtsPkazH7LUJi2OaBa11iyQ9FQsErdO66dx
+         1UzzputCQRuAr/bCctGzAZwa0d+aDQ1lgiTzHsFutD6VgNmqAwFcIqJ3F8Tcxz5a8QLk
+         /pYo5xZE+h1m4VZPPnBgpQttdWfm3JlDR1S2M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9RKTKl/Bb3c4duHC9Bqed53UuuEJJvB8k+GUCNePruY=;
+        b=jGkVE/8yXdkFHnljqLVANLTTUHx1SDwqSFa/j74HyD8Dm9+vXbGaGryhgWt3KcihGe
+         DEF78N7Ho3hZWY7f4q9FoHbajDlUmag8+kzVmjmid2g/1KeIyNkxYRN6dtmcDpc+n91v
+         QXsssrZpCfUSMJBH+6NL6lzzSo1PS2XqoKzC19pTHyqupCSw5UldAnGeQSJcXhpRzSvD
+         vGtiPcrvVoWsKrMQOVl+y8ukcF0hnRNDWlfu+kA2JglsuYJR4B3UPHGixV8fES3mLoX0
+         9DhQTa/o0y5gbXK/qW2i7xZKmfKhb2AUwBnfkw3AtYgXeugu4kLWq66um1BPBWdla+rm
+         CazA==
+X-Gm-Message-State: AO0yUKVlEbAlktrgrxXZjKNDvuIsqk35rFtIiuu+9A4fIrkoYeq++y50
+        0ojdDRjPwhf0b2l3u3FCE4rLFQ==
+X-Google-Smtp-Source: AK7set/EmLEgIMfPrEdynvHAK1GlETqG/9g9kQULpuLqRZcPGdmTTgRxZ2UAdRqjHzv/ZYrfp0Ow/w==
+X-Received: by 2002:a05:6a20:8420:b0:bc:246c:9be4 with SMTP id c32-20020a056a20842000b000bc246c9be4mr15305808pzd.45.1675446840510;
+        Fri, 03 Feb 2023 09:54:00 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id t5-20020a637805000000b004c974bb9a4esm1737998pgc.83.2023.02.03.09.53.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Feb 2023 09:53:59 -0800 (PST)
+Message-ID: <63dd4a37.630a0220.e4652.35de@mx.google.com>
+X-Google-Original-Message-ID: <202302031752.@keescook>
+Date:   Fri, 3 Feb 2023 17:53:59 +0000
+From:   Kees Cook <keescook@chromium.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     "Darrick J. Wong" <djwong@kernel.org>, linux-xfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH][next] xfs: Replace one-element arrays with
+ flexible-array members
+References: <Y9xiYmVLRIKdpJcC@work>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y90iOAmnBtqQtmiA@ziepe.ca>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT111:EE_|SN7PR12MB7323:EE_
-X-MS-Office365-Filtering-Correlation-Id: bdd2463a-acc0-447a-e285-08db060f874c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: iCXKWHzrRBVfB0nlsR31YXJMyRM6a7SZoPCMIsllhiqy/fudK1zoDP1RUAMnOSC4AxOnBoYFRvYA3QXsqwZyQtop61KxhlpG3EKKDtaj6Xxdw70jaXSwFN6xMx3L2ZQ6HXUjR0KF+0MMMhYiHD9tIVbMsVjJ9s4n+QclOXjmHIqvAAidYLAg7RvPAIryVxwBX9d0TptQX6jNrCT40m5W9bq2tQPbS9nnINrB60ENRK9VIqqwJylRGwApsbZoO7AlD5Ke8WvE/qH+VG86vuEaa04bV24+ugvkS+xA9oHwvPjjhQZ1NQX1luduge+gUas4SKctMedsNy5FOlawXrmtNwAxvwca1lOxib9EENdPigZVMZzF+0b60iccphg2AXu9GfLeAyuuEzd9c5JOO1nX7ounCs1XUSeU5Oal8uwNn17P/V54HVZqnW4AIMdpw3XqkcL1zjP/hK/Q81rKLfMRxt4ftKLGeUE5OM18aZvL6GfA48xvXa6sX1boeEYX8PfEnlqZxlx02UGQvnzfLkJ33DfVsRrxq1wpmfM/B/C2rPfUxD/MlYqRpn7hEo9g5lVPzUJs4b/wcH5COROJP+QXS1MKf1HoR0yJHBSCeHAI04P5UVt2ten93gUfV6GnRzVeIGiFeYBDi944U1PpCJ9q0uk9ORcgEi5LCbs4cGjtCr3hcrnFBh/+OyPjUsHWQskeC3Avv0QsDQosQMTyxD0uIQ==
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(376002)(39860400002)(346002)(396003)(136003)(451199018)(46966006)(36840700001)(40470700004)(4326008)(8676002)(82740400003)(82310400005)(83380400001)(6636002)(54906003)(40480700001)(336012)(2906002)(316002)(356005)(70206006)(55016003)(70586007)(40460700003)(478600001)(47076005)(7636003)(426003)(9686003)(26005)(186003)(8936002)(36860700001)(6862004)(7416002)(41300700001)(86362001)(33716001)(5660300002)(66899018);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Feb 2023 17:53:16.5733
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: bdd2463a-acc0-447a-e285-08db060f874c
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT111.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7323
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <Y9xiYmVLRIKdpJcC@work>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 11:03:20AM -0400, Jason Gunthorpe wrote:
-> > > + */
-> > > +int iommu_group_replace_domain(struct iommu_group *group,
-> > > +			       struct iommu_domain *new_domain)
-> > 
-> > what actual value does 'replace' give us? It's just a wrapper of
-> > __iommu_group_set_domain() then calling it set_domain is
-> > probably clearer. You can clarify the 'replace' behavior in the
-> > comment.
+On Thu, Feb 02, 2023 at 07:24:50PM -0600, Gustavo A. R. Silva wrote:
+> One-element arrays are deprecated, and we are replacing them with flexible
+> array members instead. So, replace one-element arrays with flexible-array
+> members in structures xfs_attr_leaf_name_local and
+> xfs_attr_leaf_name_remote.
 > 
-> As the APIs are setup:
+> The only binary differences reported after the changes are all like
+> these:
 > 
-> attach demands that no domain is currently set (eg the domain must be blocking)
+> fs/xfs/libxfs/xfs_attr_leaf.o
+> _@@ -435,7 +435,7 @@
+>       3b8:      movzbl 0x2(%rbx),%eax
+>       3bc:      rol    $0x8,%bp
+>       3c0:      movzwl %bp,%ebp
+> -     3c3:      lea    0x2(%rax,%rbp,1),%ebx
+> +     3c3:      lea    0x3(%rax,%rbp,1),%ebx
+>       3c7:      call   3cc <xfs_attr_leaf_entsize+0x8c>
+>                         3c8: R_X86_64_PLT32     __tsan_func_exit-0x4
+>       3cc:      or     $0x3,%ebx
+> _@@ -454,7 +454,7 @@
+>       3ea:      movzbl 0x8(%rbx),%ebx
+>       3ee:      call   3f3 <xfs_attr_leaf_entsize+0xb3>
+>                         3ef: R_X86_64_PLT32     __tsan_func_exit-0x4
+> -     3f3:      add    $0xa,%ebx
+> +     3f3:      add    $0xb,%ebx
+>       3f6:      or     $0x3,%ebx
+>       3f9:      add    $0x1,%ebx
+>       3fc:      mov    %ebx,%eax
 > 
-> replace permits the domain to be currently set
-> 
-> 'set' vs 'attach' is really unclear what the intended difference is.
-> 
-> We could also address this by simply removing the protection from
-> attach, but it is not so clear if that is safe for the few users.
+> similar changes in fs/xfs/scrub/attr.o and fs/xfs/xfs.o object files.
 
-I can add a couple of lines to the commit message to make things
-clear.
+I usually turn off the sanitizers for the A/B build comparisons to make
+it easier to read the results. It looks like it _grew_ in size here,
+though?
 
-> > > +{
-> > > +	int ret;
-> > > +
-> > > +	if (!new_domain)
-> > > +		return -EINVAL;
-> > > +
-> > > +	mutex_lock(&group->mutex);
-> > > +	ret = __iommu_group_set_domain(group, new_domain);
-> > > +	if (ret) {
-> > > +		if (__iommu_group_set_domain(group, group->domain))
-> > > +			__iommu_group_set_core_domain(group);
-> > > +	}
-> > 
-> > Can you elaborate the error handling here? Ideally if
-> > __iommu_group_set_domain() fails then group->domain shouldn't
-> > be changed. 
+> And the reason for this is because of the round_up() macro called in
+> functions xfs_attr_leaf_entsize_remote() and xfs_attr_leaf_entsize_local(),
+> which is compensanting for the one-byte reduction in size (due to the
+> flex-array transformation) of structures xfs_attr_leaf_name_remote and
+> xfs_attr_leaf_name_local. So, sizes remain the same before and after
+> changes.
 > 
-> That isn't what it implements though. The internal helper leaves
-> things in a mess, it is for the caller to fix it, and it depends on
-> the caller what that means.
+> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+> routines on memcpy() and help us make progress towards globally
+> enabling -fstrict-flex-arrays=3 [1].
 > 
-> In this case the API cannot retain a hidden reference to the new
-> domain, so it must be purged, one way or another.
+> Link: https://github.com/KSPP/linux/issues/79
+> Link: https://github.com/KSPP/linux/issues/251
+> Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-Considering it is a bit different than the existing APIs like
-iommu_attach_group(), perhaps I should add a line of comments
-in the fallback routine.
+If xfstests pass, this seems good to me. Thanks!
 
-Thanks
-Nic
+Reviewed-by: Kees Cook <keescook@chromium.org>
+
+-- 
+Kees Cook
