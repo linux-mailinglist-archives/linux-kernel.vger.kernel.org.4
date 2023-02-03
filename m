@@ -2,74 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02CD46891A2
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 09:10:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BB1C6891AF
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 09:11:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232157AbjBCIJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 03:09:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45936 "EHLO
+        id S231871AbjBCIKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 03:10:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232742AbjBCII4 (ORCPT
+        with ESMTP id S232542AbjBCIJa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 03:08:56 -0500
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3C6895D11
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 00:06:51 -0800 (PST)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-5249a65045aso26619497b3.13
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 00:06:51 -0800 (PST)
+        Fri, 3 Feb 2023 03:09:30 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB2111144
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 00:08:10 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id q5so3934876wrv.0
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 00:08:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vsQ1fz/5ts1oSbk5jHHBvcB4Ie2MesFk+szUUh6A4jY=;
-        b=LrIwQLQExZfBlHn96+8T9yAYVF7blScAuSGTxSWxoA4gsaRWuliWlI/EmEpMiQszqy
-         ItKdQsPVYDFI28Tee4ozKKOFmJpNbUFnzqLlySzvHIFtJMmeYJEU/FQDQPxO9tGnWImb
-         ChxHReQT5QbqbWjN8sBcG4F9yrFw8JdAZ/oJRU2puvshBFvS43slCt/lWOAXEoBsrYSQ
-         zLyAozAoYMY8rclOnYjO6ztyX7NdziBo1sVv9jsOBETK/jrWOGrchy1uLIGUrODiaV46
-         Jmu17ImPhr9sA4dYAIyM8v/9YE1/IZlGVvl5wislwhzJmfmZs3Yz7Cg4FgPWs61G7dUH
-         Y35A==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=g7K3x1KoZ0SY31LR0/m8kYHO83BED7q9ShhIFN2VocU=;
+        b=O8fO3Yv5/AyKSPGueF6cDOqOUHJDjxLZ/ZoN6O64VbMigib8iKS2qYuNw+KAD29JC0
+         XC9BAsfb1xQK/piER6sRDNdHAxj5J/uQAJb3JP/h+b7PbYYjaWQKPP3UwLdDmxk+IiVK
+         k4EK95HM46FxuqXw2VNuw7QcYt0VmYLOPz7Ka0Uo2VCl9gaOBMTpiqXqSxT8jlx7KhLQ
+         o5ZU80U9Od7JbtN/Vi8+jZWK7eLk821xS+U232fKaco00PN9insUJ7K6RBw6vW2Zaf9k
+         07/7Tm7qe83QLEYxIRGB6u3S2/rUeCkO/6dzTIMDpHP0qp3aTx+peIsy+3+XEup0SBSN
+         aFWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vsQ1fz/5ts1oSbk5jHHBvcB4Ie2MesFk+szUUh6A4jY=;
-        b=2GSYHjAr2IhL99O3W37B1+hXg3XX3sIoO1DMTBmEjZdl+4OLHAycRg1AjnvurEzjuq
-         xzjdOMXZlt6Wnml1SjsqzfarqXJ5rE9WbQFioFsPLL/TjSZavURSBALWbMWYgkBWNqUC
-         iOfhsHvqhuNQo+GeeSUOHy72PNu320TMBKko8EdUbj9VLaCt/9EdOmmzKpDaWU7zsnq1
-         9wmyXYa8BKZuPQBSVc7fFsH8HIiCHEDb8MqyLbzOFt8bGsfZmxTBNudt26BYEtzOaFhP
-         9XQFskl4aYLugN5Zo0fWepeAatthw4bvoGnUhnNhN6GGbbVCDIsKMz/EzxeFvPMeZpeH
-         qgrA==
-X-Gm-Message-State: AO0yUKUW/B0X2gODfxMI0I0UpTC+MHTvJIJjXSVqLd8hZesd3jrs1etT
-        cYuS92YzLHbZnTQVlMPxob4s2ju4R5Bb9cJ5pB5aUQ==
-X-Google-Smtp-Source: AK7set/o+IabmEdqaU/6vnUZGJwr98FRwvsJQoYCYLMkAqoqU7g2zvHizcifaV74heDDmMnxUXCX16hSI10n6ex5G1g=
-X-Received: by 2002:a81:2515:0:b0:4fd:417b:7b8a with SMTP id
- l21-20020a812515000000b004fd417b7b8amr1014395ywl.404.1675411611090; Fri, 03
- Feb 2023 00:06:51 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=g7K3x1KoZ0SY31LR0/m8kYHO83BED7q9ShhIFN2VocU=;
+        b=guCFB/3wkuQzwwo8Io1v8r9Sr9kGQYqYbRQNBA/DZZlQCoHJwyZ79Ok+CMPne+9Jwe
+         GybxbCI1fup+JdPlDI/AU4sHL2/1SjRWGJss8sQhbAAg4WgDxXaJoMrJCe8dkpsKWRSk
+         r9K0i6j7DI/6OT8j8kXh1UyJeYxAbIE8m3Mb7oVbgnNdBKKUortikwW1knbNOTZFeFjf
+         xILbrZp2TViaTyqOWCVA+ncTrFJ9nktbKlIIKC1ENLNMx97d1YwWVjBGanBbVIt1IS4i
+         OyK/SbG3I0JITVRom3o4uGPqM3uw9VkFiO2rsnwsUaCQ0JEBrnMV9puS6BLTlowlCn6m
+         1FgA==
+X-Gm-Message-State: AO0yUKWLu6BAqJQiN77UFLnG9FAhSdoSe0tX/oAJyN4ryPf2RhMOunJ7
+        O9+CyCRglqXkayN0A+pnGYhZbzeZUuwoIhYNwQE=
+X-Google-Smtp-Source: AK7set8jRwvrWFKr2PO+lainT8LGHKHAEY59qPHfhztf4/eWwH0fOilrYQom+wwpiU3u7Ne4DYU89Q==
+X-Received: by 2002:a05:6000:10c2:b0:2c3:d9d1:e341 with SMTP id b2-20020a05600010c200b002c3d9d1e341mr339713wrx.33.1675411688943;
+        Fri, 03 Feb 2023 00:08:08 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:7407:d8b9:ec7a:537? ([2a01:e0a:982:cbb0:7407:d8b9:ec7a:537])
+        by smtp.gmail.com with ESMTPSA id o5-20020a5d6845000000b002bdff778d87sm1355584wrw.34.2023.02.03.00.08.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Feb 2023 00:08:08 -0800 (PST)
+Message-ID: <581da0b5-fcdf-aa02-cab8-3c0e65dd48f8@linaro.org>
+Date:   Fri, 3 Feb 2023 09:08:07 +0100
 MIME-Version: 1.0
-References: <20230130093229.27489-1-nylon.chen@sifive.com> <20230130093229.27489-3-nylon.chen@sifive.com>
- <20230130101707.pdvabl3na2wpwxqu@pengutronix.de>
-In-Reply-To: <20230130101707.pdvabl3na2wpwxqu@pengutronix.de>
-From:   Nylon Chen <nylon.chen@sifive.com>
-Date:   Fri, 3 Feb 2023 16:06:38 +0800
-Message-ID: <CAHh=Yk85NHbm9eUKLm75GUP4gSP5eYFjVabTUXseyB6wHD4D=Q@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] pwm: sifive: change the PWM controlled LED algorithm
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     aou@eecs.berkeley.edu, conor@kernel.org,
-        emil.renner.berthing@canonical.com, geert+renesas@glider.be,
-        heiko@sntech.de, krzysztof.kozlowski+dt@linaro.org,
-        palmer@dabbelt.com, paul.walmsley@sifive.com, robh+dt@kernel.org,
-        thierry.reding@gmail.com, devicetree@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, nylon7717@gmail.com,
-        zong.li@sifive.com, greentime.hu@sifive.com,
-        vincent.chen@sifive.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH] drm/bridge: panel: Set orientation on panel_bridge
+ connector
+Content-Language: en-US
+To:     Doug Anderson <dianders@chromium.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     John Keeping <john@metanate.com>, Sam Ravnborg <sam@ravnborg.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Robert Foss <rfoss@kernel.org>,
+        Jonas Karlman <jonas@kwiboo.se>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Stephen Boyd <swboyd@chromium.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>
+References: <20230120114313.2087015-1-john@metanate.com>
+ <CAD=FV=UPD6c+NY8Ub37N7LmrRFpcr6gKOh0Os14DaKrf3bKo2A@mail.gmail.com>
+ <Y8uo7vIcQ6caH9pu@ravnborg.org> <Y8wnswk++tvr9xMe@donbot>
+ <Y81Px74OUYt21nj4@pendragon.ideasonboard.com> <Y856rWmtA4tQCcZz@donbot>
+ <Y86wO8nvFbC81b1S@pendragon.ideasonboard.com>
+ <CAD=FV=UwMS86RKR9dqzOnjEhKxh=d=EJPfjcCOvWZMjVVQsmKw@mail.gmail.com>
+Organization: Linaro Developer Services
+In-Reply-To: <CAD=FV=UwMS86RKR9dqzOnjEhKxh=d=EJPfjcCOvWZMjVVQsmKw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,74 +90,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Uwe,
+On 03/02/2023 01:45, Doug Anderson wrote:
+> Hi,
+> 
+> On Mon, Jan 23, 2023 at 8:05 AM Laurent Pinchart
+> <laurent.pinchart@ideasonboard.com> wrote:
+>>
+>> Hi John,
+>>
+>> On Mon, Jan 23, 2023 at 12:16:45PM +0000, John Keeping wrote:
+>>> On Sun, Jan 22, 2023 at 05:01:27PM +0200, Laurent Pinchart wrote:
+>>>> On Sat, Jan 21, 2023 at 05:58:11PM +0000, John Keeping wrote:
+>>>>> On Sat, Jan 21, 2023 at 09:57:18AM +0100, Sam Ravnborg wrote:
+>>>>>> On Fri, Jan 20, 2023 at 01:44:38PM -0800, Doug Anderson wrote:
+>>>>>>> On Fri, Jan 20, 2023 at 3:43 AM John Keeping wrote:
+>>>>>>>>
+>>>>>>>> Commit 15b9ca1641f0 ("drm: Config orientation property if panel provides
+>>>>>>>> it") added a helper to set the panel panel orientation early but only
+>>>>>>>> connected this for drm_bridge_connector, which constructs a panel bridge
+>>>>>>>> with DRM_BRIDGE_ATTACH_NO_CONNECTOR and creates the connector itself.
+>>>>>>>>
+>>>>>>>> When the DRM_BRIDGE_ATTACH_NO_CONNECTOR flag is not specified and the
+>>>>>>>> panel_bridge creates its own connector the orientation is not set unless
+>>>>>>>> the panel does it in .get_modes which is too late and leads to a warning
+>>>>>>>> splat from __drm_mode_object_add() because the device is already
+>>>>>>>> registered.
+>>>>>>>>
+>>>>>>>> Call the necessary function to set add the orientation property when the
+>>>>>>>> connector is created so that it is available before the device is
+>>>>>>>> registered.
+>>>>>>>
+>>>>>>> I have no huge objection to your patch and it looks OK to me. That
+>>>>>>> being said, my understanding is that:
+>>>>>>>
+>>>>>>> 1. DRM_BRIDGE_ATTACH_NO_CONNECTOR is "the future" and not using the
+>>>>>>> flag is "deprecated".
+>>>>>>
+>>>>>> Correct.
+>>>>>> Could we take a look at how much is required to move the relevant driver
+>>>>>> to use DRM_BRIDGE_ATTACH_NO_CONNECTOR?
+>>>>>>
+>>>>>> If this is too much work now we may land this simple patch, but the
+>>>>>> preference is to move all drivers to the new bridge handling and thus
+>>>>>> asking display drivers to create the connector.
+>>>>
+>>>> I fully agree with Doug and Sam here. Let's see if we can keep the yak
+>>>> shaving minimal :-)
+>>>>
+>>>>>> What display driver are we dealing with here?
+>>>>>
+>>>>> This is dw-mipi-dsi-rockchip which uses the component path in
+>>>>> dw-mipi-dsi (and, in fact, is the only driver using that mode of
+>>>>> dw-mipi-dsi).
+>>>>>
+>>>>> I'm not familiar enough with DRM to say whether it's easy to convert to
+>>>>> DRM_BRIDGE_ATTACH_NO_CONNECTOR - should dw-mipi-dsi-rockchip be moving
+>>>>> to use dw-mipi-dsi as a bridge driver or should dw_mipi_dsi_bind() have
+>>>>> a drm_bridge_attach_flags argument?  But I'm happy to test patches if it
+>>>>> looks easy to convert to you :-)
+>>>>
+>>>> I'd go for the former (use dw_mipi_dsi_probe() and acquire the DSI
+>>>> bridge with of_drm_find_bridge() instead of using the component
+>>>> framework) if possible, but I don't know how intrusive that would be.
+>>>
+>>> I'm a bit confused about what's required since dw-mipi-dsi-rockchip
+>>> already uses dw_mipi_dsi_probe(),
+>>
+>> Indeed, my bad.
+>>
+>>> but I think moving away from the
+>>> component framework would be significant work as that's how the MIPI
+>>> subdriver fits in to the overall Rockchip display driver.
+>>
+>> It will be some work, yes. It however doesn't mean that the whole
+>> Rockchip display driver needs to move away from the component framework,
+>> it can be limited to the DSI encoder. It's not immediately clear to me
+>> why the DSI encoder uses the component framework in the first place, and
+>> if it would be difficult to move away from it.
+>>
+>>> Any changes / modernisation to the Rockchip MIPI driver look like it
+>>> will take more time than I have available to spend on this, so I'd
+>>> really like to see this patch land as it's a simple fix to an existing
+>>> working code path.
+>>
+>> So who volunteers for fixing it properly ? :-)
+>>
+>> I'll let Doug and Sam decide regarding mering this patch.
+> 
+> This thread seems to have gone silent.
+> 
+> I'm inclined to merge this patch (removing the "Fixes" tag) since it's
+> a one-line fix. While we want to encourage people to move to "the
+> future", it seems like it would be better to wait until someone is
+> trying to land something more intrusive than a 1-line fix before truly
+> forcing the issue.
+> 
+> I'll plan to merge the patch to drm-misc-next early next week assuming
+> there are no objections.
 
-Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de> =E6=96=BC 2023=E5=B9=
-=B41=E6=9C=8830=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=886:17=E5=AF=AB=
-=E9=81=93=EF=BC=9A
->
-> On Mon, Jan 30, 2023 at 05:32:29PM +0800, Nylon Chen wrote:
-> > The `frac` variable represents the pulse inactive time, and the result =
-of
-> > this algorithm is the pulse active time. Therefore, we must reverse the
-> > result.
-> >
-> > The reference is SiFive FU740-C000 Manual[0].
-> >
-> > [0]: https://sifive.cdn.prismic.io/sifive/1a82e600-1f93-4f41-b2d8-86ed8=
-b16acba_fu740-c000-manual-v1p6.pdf
-> >
-> > Signed-off-by: Nylon Chen <nylon.chen@sifive.com>
-> > ---
-> >  drivers/pwm/pwm-sifive.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/pwm/pwm-sifive.c b/drivers/pwm/pwm-sifive.c
-> > index 62b6acc6373d..a5eda165d071 100644
-> > --- a/drivers/pwm/pwm-sifive.c
-> > +++ b/drivers/pwm/pwm-sifive.c
-> > @@ -158,6 +158,7 @@ static int pwm_sifive_apply(struct pwm_chip *chip, =
-struct pwm_device *pwm,
-> >       frac =3D DIV64_U64_ROUND_CLOSEST(num, state->period);
-> >       /* The hardware cannot generate a 100% duty cycle */
-> >       frac =3D min(frac, (1U << PWM_SIFIVE_CMPWIDTH) - 1);
-> > +     frac =3D (1U << PWM_SIFIVE_CMPWIDTH) - 1 - frac;
->
-> The same problem exists in pwm_sifive_get_state(), doesn't it?
->
-> As fixing this is an interruptive change anyhow, this is the opportunity
-> to align the driver to the rules tested by PWM_DEBUG.
->
-> The problems I see in the driver (only checked quickly, so I might be
-> wrong):
->
+I'm ok for that,
 
->  - state->period !=3D ddata->approx_period isn't necessarily a problem. I=
-f
->    state->period > ddata->real_period that's fine and the driver should
->    continue
->
->  - frac =3D DIV64_U64_ROUND_CLOSEST(num, state->period);
->    is wrong for two reasons:
->    it should round down and use the real period.
-are you mean state->period is a redundancy variable so we can use
-ddata->real_period directly?
+Neil
 
-it seems reasonable, but I don't get your point, why do we need to
-change the algorithm to DIV_ROUND_DOWN_ULL() and change the if-else
-condition.
+> 
+> -Doug
 
-frac =3D DIV_ROUND_DOWN_ULL(num, ddata->real_period);
-if (state->period < ddata->approx_period) {
-    ...
-}
-
->
-> Best regards
-> Uwe
->
-> --
-> Pengutronix e.K.                           | Uwe Kleine-K=C3=B6nig       =
-     |
-> Industrial Linux Solutions                 | https://www.pengutronix.de/ =
-|
