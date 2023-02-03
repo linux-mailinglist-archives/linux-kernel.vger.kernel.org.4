@@ -2,48 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17283689FBF
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 17:55:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 334E8689FC3
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 17:56:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233560AbjBCQzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 11:55:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45092 "EHLO
+        id S233571AbjBCQ4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 11:56:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233469AbjBCQzn (ORCPT
+        with ESMTP id S232601AbjBCQ4a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 11:55:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04BE592ED8;
-        Fri,  3 Feb 2023 08:55:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7B589B82B5D;
-        Fri,  3 Feb 2023 16:55:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67AB0C433D2;
-        Fri,  3 Feb 2023 16:55:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675443336;
-        bh=B//YUVaIiSV2E2LbWZWR0CqUFx1R9kgHWXA//oVYOPY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BkABXimJeg2L6LOoJYfXZJzHkkQRBWIYRK3PhqIho3/A8ztv4tFpTnyVEcqnNmMf2
-         rTHntBckGDws8SYRWPN8XIO0o7cgWwqY7oeXW/wN5lmBcJwJLHVoxuc7zCWc4jGt3c
-         X6QZDqacUsj/8VLWyCJ3Bdd1ZZjhJcTtdZ7B3ATs=
-Date:   Fri, 3 Feb 2023 17:55:32 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "D. Starke" <daniel.starke@siemens.com>
-Cc:     linux-serial@vger.kernel.org, jirislaby@kernel.org,
-        ilpo.jarvinen@linux.intel.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/4] tty: n_gsm: add keep alive support
-Message-ID: <Y908hEeZdDw/0Wkp@kroah.com>
-References: <20230203145023.6012-1-daniel.starke@siemens.com>
- <20230203145023.6012-2-daniel.starke@siemens.com>
+        Fri, 3 Feb 2023 11:56:30 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6149D65ECF
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 08:56:21 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id n13so4338325wmr.4
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 08:56:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RMq+cvkWvF/UyzkbPjmrpsXN3fJwSAqaVKuerACOW48=;
+        b=VIHlZoavFky86n+pjOnc6s8Bq2hhYfhmtq3eD6KH8MPQ6QBjrQ9WctPpMcO4+DWXuh
+         RUt3EFdfmp3xzbflCdH3Hb8tAmMAzZ1oXWSdDIjWQhFOHZW0HM+TXpbmO4ap2E0dUUbX
+         suaOLOSpkONs36ga7weJJh0UlmRqCOS1HoUSwJOYa6OyX9MXTcTA9TYV7CO0Jbblm8DT
+         9bOag6GDyxlDZi7SqgaEEHRNeoRi5aGImimcq5lHBty8khEMSf3IsWJycwJQMk5oCazx
+         8k7WjokcpBLGk1rLatCrwN7BALRvP/gwAPaxFkwk2355PWRD0qcrbnLNT6cmmPyeObjm
+         zM1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RMq+cvkWvF/UyzkbPjmrpsXN3fJwSAqaVKuerACOW48=;
+        b=6TigFJLRRqZQX1ohXvv0DpzJ7nAhumQ1fxtOkdqsmz/bIc10PJkd816b4O//lXD7yZ
+         5UHj4EwxYbOYlaVByBbmHY940p5b0IGD/QPyGoUHKoVFksOSgQNG5MOgk6cyqvZK4t4U
+         c/SxIGlebTYkWUXLs+ZInBnJTlR5ECEO6Ig30z1YFj0hhA/Bz/Yhw/hqxsl3vJfpBr48
+         x+W7mgfp7aC9Ljfrf5xdhJxwacEy9KlEeaULAYxqF9wIarFc+ZPFO76+3Mcz15b+fxuw
+         TnqBNPS+eRnTkliWSNRjZEU9V0Jd1+iRSKLw0YrD+IOAj3QSk26M2w6LR+vsx8zCFE4g
+         BTeA==
+X-Gm-Message-State: AO0yUKUoN/Q26Af80T/wepVwlYiLNVbxKs7ucFV8ZDFrT0TwT+tjPDoN
+        m2Y+YXYOYuxGoTSZtQvDq9OPjA==
+X-Google-Smtp-Source: AK7set9NjJxn74aZueYcfentd77BomFUbSMlvUzVg0sncnweknpQHZlamRhQeOfZrjq9rSw+s3P+MQ==
+X-Received: by 2002:a05:600c:491c:b0:3dd:1b02:23b7 with SMTP id f28-20020a05600c491c00b003dd1b0223b7mr9727024wmp.10.1675443379954;
+        Fri, 03 Feb 2023 08:56:19 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id q10-20020a05600c330a00b003dc3f195abesm3125534wmp.39.2023.02.03.08.56.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Feb 2023 08:56:19 -0800 (PST)
+Message-ID: <5e57cf49-6348-7878-0e01-51e5e1359fa8@linaro.org>
+Date:   Fri, 3 Feb 2023 17:56:17 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230203145023.6012-2-daniel.starke@siemens.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 4.19 00/80] 4.19.272-rc1 review
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230203101015.263854890@linuxfoundation.org>
+ <CA+G9fYvd8D3LfxPg2afZXKFC3WNHrhyE7c3fFLViaG4WhJeHVg@mail.gmail.com>
+ <5ed630fd-8bd7-4b80-9fa8-a3dab2eb0447@linaro.org>
+ <4e5a447b-1796-513c-135a-f9e9c870d88a@roeck-us.net>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <4e5a447b-1796-513c-135a-f9e9c870d88a@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,22 +84,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 03:50:21PM +0100, D. Starke wrote:
-> +struct gsm_config_ext {
-> +	__u32 keep_alive;	/* Control channel keep-alive in 1/100th of a
-> +				 * second (0 to disable)
-> +				 */
-> +	__u32 reserved[7];	/* For future use */
+On 03/02/2023 16:51, Guenter Roeck wrote:
+> On 2/3/23 04:28, Krzysztof Kozlowski wrote:
+>> On 03/02/2023 12:04, Naresh Kamboju wrote:
+>>> On Fri, 3 Feb 2023 at 15:48, Greg Kroah-Hartman
+>>> <gregkh@linuxfoundation.org> wrote:
+>>>>
+>>>> This is the start of the stable review cycle for the 4.19.272 release.
+>>>> There are 80 patches in this series, all will be posted as a response
+>>>> to this one.  If anyone has any issues with these being applied, please
+>>>> let me know.
+>>>>
+>>>> Responses should be made by Sun, 05 Feb 2023 10:09:58 +0000.
+>>>> Anything received after that time might be too late.
+>>>>
+>>>> The whole patch series can be found in one patch at:
+>>>>          https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.272-rc1.gz
+>>>> or in the git tree and branch at:
+>>>>          git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
+>>>> and the diffstat can be found below.
+>>>>
+>>>> thanks,
+>>>>
+>>>> greg k-h
+>>>>
+>>>
+>>> Following patch caused build error on arm,
+>>>
+>>>> Gaosheng Cui <cuigaosheng1@huawei.com>
+>>>>      memory: mvebu-devbus: Fix missing clk_disable_unprepare in mvebu_devbus_probe()
+>>>
+>>> drivers/memory/mvebu-devbus.c: In function 'mvebu_devbus_probe':
+>>> drivers/memory/mvebu-devbus.c:297:8: error: implicit declaration of
+>>> function 'devm_clk_get_enabled'
+>>> [-Werror=implicit-function-declaration]
+>>>    297 |  clk = devm_clk_get_enabled(&pdev->dev, NULL);
+>>>        |        ^~~~~~~~~~~~~~~~~~~~
+>>
+>> Already reported:
+>> https://lore.kernel.org/all/202302020048.ZsmUJDHo-lkp@intel.com/
+>>
+> 
+> I don't usually check if release candidate reports have been reported already.
+> If I know about it, I may add a reference to the report, but typically I still
+> report it.
+> 
+> Personally I find it discouraging to get those "already reported" e-mails.
+> To me it sounds like "hey, you didn't do your job properly". It should not matter
+> if a problem was already reported or not, and I find it valuable if it is
+> reported multiple times because it gives an indication of the level of test
+> coverage. I would find it better if people would use something like "Also
+> reported:" instead. But then maybe I am just oversensitive, who knows.
+> 
+> Anyway, yes, I noticed this problem as well (and probably overlooked it
+> in my previous report to Greg - sorry for that).
+> 
 
-You are not checking these fields, so this means any future use of them
-will not be allowed (like the problem you have which required this new
-structure.)
+Let me rephrase it then:
 
-Please, always verify that the values here are 0, and if not, error out
-with -EINVAL.  That's the only way you can properly reserve this for
-future use.  The kernel documentation about "how to write an ioctl"
-should describe all of this, right?
+This topic is already discussed here:
+https://lore.kernel.org/all/202302020048.ZsmUJDHo-lkp@intel.com/
 
-thanks,
+I proposed to drop both broken backports - mvebu-devbus and
+atmel-sdramc, because they require new features in common clock
+framework API.
 
-greg k-h
+Best regards,
+Krzysztof
+
