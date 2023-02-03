@@ -2,158 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6FAF689CB1
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 16:06:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DADA689CB7
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 16:07:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233697AbjBCPGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 10:06:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47256 "EHLO
+        id S233720AbjBCPHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 10:07:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233362AbjBCPGf (ORCPT
+        with ESMTP id S233657AbjBCPHK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 10:06:35 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB647EFE9
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 07:06:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B9FD9B82AE4
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 15:06:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64892C433D2
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 15:06:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675436791;
-        bh=g7ucNJwx7l3G44S624zXuPhBPXVNsrOuucXlLkdMUBs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=IyuCKowejciYTxL7rIw7nwxqKEDohzs6Z8l31x8unE8AOzArIGKnuXHqCDTFnFfJa
-         xzX3ZfyNITeTYVC0Tfteo2x6RKfq/PgBcWfRRbSrYZIqIOJc6kKKqjVEJEtK/NawA2
-         4X6m046TmIXl7M0jWKrTaDOzY1j8kKWb1wD9GYy02Tfpdhk6FvnZ0sB+0Gw1kG4cyJ
-         EvdPsJ/vCYZ15H8OHFDjwf4mzyYJ6cBgfvqJiskZNIdj/8ZfKm/8kdoN8dOUDuQ9rk
-         gnhOqUAGZzhNHRK5Aryxupz80oEpNsLkPs5vc9qLf0S6hnNA2lBKZ069HdNu7mwpP+
-         BR/b26RtqcYsg==
-Received: by mail-vs1-f51.google.com with SMTP id i185so5644043vsc.6
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 07:06:31 -0800 (PST)
-X-Gm-Message-State: AO0yUKWRmlPA/lcgIkhLMl9x0LFkTZX5USIrfETaZLr2cq5o4lmh6JkZ
-        W1JGi4inWQj4Ltb4evnwFMxQiBmIXwpDORhLCw==
-X-Google-Smtp-Source: AK7set8Nhnn7wPSzRx1stDc4WyoPHokzsjm4Jbuqhwu/Fvwbp8JHZeU2bh2zPRMbFHGHETFoXimql9IuzxUQaVxotB0=
-X-Received: by 2002:a67:d507:0:b0:3e9:107e:cc55 with SMTP id
- l7-20020a67d507000000b003e9107ecc55mr1407707vsj.6.1675436790281; Fri, 03 Feb
- 2023 07:06:30 -0800 (PST)
+        Fri, 3 Feb 2023 10:07:10 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 286FEA0E99;
+        Fri,  3 Feb 2023 07:07:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=DFUkqlIb1koR34QSR5KYPFYQ+oC2ej0KqthqG2wrzL8=; b=QTLBPiQNVGLCOGdfPgtGITnHy8
+        VdbEIQzfUpVRnoHj6uEvO9vNTNXB3Y5GAKE52fN3jq0ciwAKlSiiJniPLlZ9mW7lpssuUH3AHoauX
+        tZVG9s5oncmxw8GO3wfZRHq52EYoApCHer2IBgXz0X8NmYslkeLdNfL7irqEC8W1Hl1CskyZtzQk3
+        di4ZfKsWGctoXkMvrHi/SoFhY8QeTD9OaEUlRQ6qGCXYvAaL8p8cvhaNwgS3XvjDjxRXDUWl9PdWk
+        gclC2AyLWzE0WqfI2Atf8bmUX8wg49kdHjsRVo0OPzlYU1ARyDAyaa6dpiJLpDabruhiyI+kS6Ylf
+        Qbl9VHoQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pNxeb-00EOZb-KF; Fri, 03 Feb 2023 15:07:05 +0000
+Date:   Fri, 3 Feb 2023 15:07:05 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Brian Foster <bfoster@redhat.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-afs@lists.infradead.org,
+        linux-btrfs@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-mm@kvack.org, Hugh Dickins <hughd@google.com>,
+        linux-kernel@vger.kernel.org, fstests@vger.kernel.org
+Subject: Re: [PATCH 1/5] truncate: Zero bytes after 'oldsize' if we're
+ expanding the file
+Message-ID: <Y90jGVTFxU/QLM5o@casper.infradead.org>
+References: <20230202204428.3267832-1-willy@infradead.org>
+ <20230202204428.3267832-2-willy@infradead.org>
+ <Y90FYG+tNtBIl62S@bfoster>
 MIME-Version: 1.0
-References: <20230201220011.247100-1-robh@kernel.org> <bb307806-fa02-d147-2c25-6b3b3bbd411b@socionext.com>
-In-Reply-To: <bb307806-fa02-d147-2c25-6b3b3bbd411b@socionext.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Fri, 3 Feb 2023 09:06:17 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqLfq6U3OORsKE962f2RZ7kQXLNEb2ShzrWqGY+=oVsf=g@mail.gmail.com>
-Message-ID: <CAL_JsqLfq6U3OORsKE962f2RZ7kQXLNEb2ShzrWqGY+=oVsf=g@mail.gmail.com>
-Subject: Re: [PATCH] bus: unifier-system-bus: Remove open coded "ranges" parsing
-To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y90FYG+tNtBIl62S@bfoster>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 1, 2023 at 11:50 PM Kunihiko Hayashi
-<hayashi.kunihiko@socionext.com> wrote:
->
-> Hi Rob,
->
-> On 2023/02/02 7:00, Rob Herring wrote:
-> > "ranges" is a standard property and we have common helper functions for
-> > parsing it, so let's use them.
-> >
-> > Signed-off-by: Rob Herring <robh@kernel.org>
+On Fri, Feb 03, 2023 at 08:00:16AM -0500, Brian Foster wrote:
+> On Thu, Feb 02, 2023 at 08:44:23PM +0000, Matthew Wilcox (Oracle) wrote:
+> > POSIX requires that "If the file size is increased, the extended area
+> > shall appear as if it were zero-filled".  It is possible to use mmap to
+> > write past EOF and that data will become visible instead of zeroes.
+> > This fixes the problem for the filesystems which simply call
+> > truncate_setsize().  More complex filesystems will need their own
+> > patches.
+> > 
+> > Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 > > ---
-> > Compile tested only!
->
-> Please fix the driver's name.
->
-> s/unifier-system-bus/uniphier-system-bus/
+> >  mm/truncate.c | 7 +++++--
+> >  1 file changed, 5 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/mm/truncate.c b/mm/truncate.c
+> > index 7b4ea4c4a46b..cebfc5415e9a 100644
+> > --- a/mm/truncate.c
+> > +++ b/mm/truncate.c
+> > @@ -763,9 +763,12 @@ void truncate_setsize(struct inode *inode, loff_t newsize)
+> >  	loff_t oldsize = inode->i_size;
+> >  
+> >  	i_size_write(inode, newsize);
+> > -	if (newsize > oldsize)
+> > +	if (newsize > oldsize) {
+> >  		pagecache_isize_extended(inode, oldsize, newsize);
+> > -	truncate_pagecache(inode, newsize);
+> > +		truncate_pagecache(inode, oldsize);
+> > +	} else {
+> > +		truncate_pagecache(inode, newsize);
+> > +	}
+> 
+> I don't think this alone quite addresses the problem. Looking at ext4
+> for example, if the eof page is dirty and writeback occurs between the
+> i_size update (because writeback also zeroes the post-eof portion of the
+> page) and the truncate_setsize() call, we end up with pagecache
+> inconsistency because pagecache truncate doesn't dirty the page it
+> zeroes.
+> 
+> So for example, with this series plus a nefariously placed
+> filemap_flush() in ext4_setattr():
+> 
+> # xfs_io -fc "truncate 1" -c "mmap 0 1k" -c "mwrite 0 10" -c "truncate 5" -c "mread -v 0 5" /mnt/file
+> 00000000:  58 00 00 00 00  X....
+> # umount /mnt/; mount <dev> /mnt/
+> # xfs_io -c "mmap 0 1k" -c "mread -v 0 5" /mnt/file 
+> 00000000:  58 58 58 58 58  XXXXX
 
-doh!
+Hm, so switch the order of i_size_write() and truncate_pagecache()?
+There could still be a store between old-EOF and new-EOF from another
+thread, which would then be visible, but I don't think you could prove
+that store should have been zeroed.  Not from the thread doing the
+ftruncate() anyway -- I think the thread doing the store could prove
+it, but that thread is relying on undefined behaviour anyway.
 
->
-> > ---
-> >   drivers/bus/uniphier-system-bus.c | 54 +++++++------------------------
-> >   1 file changed, 11 insertions(+), 43 deletions(-)
-> >
-> > diff --git a/drivers/bus/uniphier-system-bus.c
-> > b/drivers/bus/uniphier-system-bus.c
-> > index f70dedace20b..cb5c89ce7b86 100644
-> > --- a/drivers/bus/uniphier-system-bus.c
-> > +++ b/drivers/bus/uniphier-system-bus.c
-> > @@ -176,10 +176,9 @@ static int uniphier_system_bus_probe(struct
-> > platform_device *pdev)
-> >   {
-> >       struct device *dev = &pdev->dev;
-> >       struct uniphier_system_bus_priv *priv;
-> > -     const __be32 *ranges;
-> > -     u32 cells, addr, size;
-> > -     u64 paddr;
-> > -     int pna, bank, rlen, rone, ret;
-> > +     struct of_range_parser parser;
-> > +     struct of_range range;
-> > +     int ret;
-> >
-> >       priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> >       if (!priv)
-> > @@ -191,48 +190,17 @@ static int uniphier_system_bus_probe(struct
-> > platform_device *pdev)
-> >
-> >       priv->dev = dev;
-> >
-> > -     pna = of_n_addr_cells(dev->of_node);
-> > -
-> > -     ret = of_property_read_u32(dev->of_node, "#address-cells",
-> > &cells);
-> > -     if (ret) {
-> > -             dev_err(dev, "failed to get #address-cells\n");
-> > -             return ret;
-> > -     }
-> > -     if (cells != 2) {
-> > -             dev_err(dev, "#address-cells must be 2\n");
-> > -             return -EINVAL;
-> > -     }
->
-> Don't you need to check the value of "#address-cells"?
-
-Doesn't your schema do that?
-
-It's not the kernel's job to validate the DT. If it is, then it does a
-terrible job.
-
-> > -
-> > -     ret = of_property_read_u32(dev->of_node, "#size-cells", &cells);
-> > -     if (ret) {
-> > -             dev_err(dev, "failed to get #size-cells\n");
-> > +     ret = of_range_parser_init(&parser, dev->of_node);
-> > +     if (ret)
-> >               return ret;
-> > -     }
-> > -     if (cells != 1) {
-> > -             dev_err(dev, "#size-cells must be 1\n");
-> > -             return -EINVAL;
-> > -     }
->
-> Same as "#size-cells"
-
-While the address clearly needs cells to hold the chip select, there's
-no reason to restrict the size cells.
-
->
-> I confirmed the value of all the arguments of uniphier_system_bus_add_bank()
-> match the previous ones.
->
-> Tested-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-
-Thanks.
-
-Rob
