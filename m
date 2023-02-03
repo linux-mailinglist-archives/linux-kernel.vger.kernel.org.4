@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79F65688EE2
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 06:16:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F137688EE5
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 06:17:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231855AbjBCFQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 00:16:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34172 "EHLO
+        id S231364AbjBCFRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 00:17:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbjBCFQn (ORCPT
+        with ESMTP id S231868AbjBCFRD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 00:16:43 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61171627B5
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 21:16:42 -0800 (PST)
+        Fri, 3 Feb 2023 00:17:03 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104027C72E
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 21:17:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675401402; x=1706937402;
+  t=1675401421; x=1706937421;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=fBj9BcM+x9JVRwYAuZm5QbjM81Ix0WefJPCuSwxeVy8=;
-  b=gTqF6ertAL53QQk1B70tZrcqWIiMWfbW6lr9rEDyXtAbI6U7neGrnOl1
-   YJCfJmACLfBN1xoMV3jYXsfovmo+0IQCGDY4BvsGSinSatgPbVh9QLOgs
-   lgmcql9DL4w2texpGYwW7NkCWOFVM3cJDUgwgRXOIEdghUDkYeLm7igDr
-   aA2YRi9DDXod2sKyFBSYxUseMVaZY9DrXKVPpkyZYLxI9D8+M+XueIAgw
-   4VO1obOfZ3+NTTBbQgclVz4AYxqrs414tPP8u9PlKQHGzxfk9l4QjdW/5
-   OcDXiu14cBr3Cu3RkVMXw5OZiBlbmiVlGGNgE/1J+e6rjuibh5v18e8EE
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="308997125"
+  bh=UwEbxpMiIeNhNaDyZ4gVeCCP6rW4xDsVtHatq6vGkEs=;
+  b=E4GyJO2uG0GCpWlFzYQrKDwO7WAASaBIwLpurFseYJJO4TD+Ool72yNg
+   A8B2hddKihj2uyvirSs9+4Sw7IN+Ri1zqZXD0ceTDRjEsMcUiSe5Bfu7r
+   Slar/KU8NwB5sHFaOqxgqDtzBIoFjkR1yR3E6PdWzTNa00uF1tNErMbuL
+   X4R1G3b8zcnDqMpK5c2W3COHF6YP0+pakYyxZN3FEOSAAdFkxmMnmwVyW
+   0Bq2mtEzgF42Ud2BzwsW+aPyu66icnenfgpLfWq0G8tnkJjLJjxB3YTxl
+   3YZzPcnrRVC22kbkvJ7IACNJnuBeuBFQZRzrmMpiC2USfVDQ90JSCIU7u
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="308304280"
 X-IronPort-AV: E=Sophos;i="5.97,269,1669104000"; 
-   d="scan'208";a="308997125"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2023 21:16:41 -0800
+   d="scan'208";a="308304280"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2023 21:17:00 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="774174245"
+X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="697950238"
 X-IronPort-AV: E=Sophos;i="5.97,269,1669104000"; 
-   d="scan'208";a="774174245"
+   d="scan'208";a="697950238"
 Received: from chenyu-dev.sh.intel.com ([10.239.158.170])
-  by fmsmga002.fm.intel.com with ESMTP; 02 Feb 2023 21:16:37 -0800
+  by orsmga001.jf.intel.com with ESMTP; 02 Feb 2023 21:16:54 -0800
 From:   Chen Yu <yu.c.chen@intel.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Vincent Guittot <vincent.guittot@linaro.org>,
@@ -59,10 +59,11 @@ Cc:     Mel Gorman <mgorman@techsingularity.net>,
         Tianchen Ding <dtcccc@linux.alibaba.com>,
         Joel Fernandes <joel@joelfernandes.org>,
         Josh Don <joshdon@google.com>, Hillf Danton <hdanton@sina.com>,
-        linux-kernel@vger.kernel.org, Chen Yu <yu.c.chen@intel.com>
-Subject: [PATCH v5 1/2] sched/fair: Record the average duration of a task
-Date:   Fri,  3 Feb 2023 13:17:59 +0800
-Message-Id: <155aa36ba14b8a1f8e6c3ccda7999125edfff990.1675361144.git.yu.c.chen@intel.com>
+        linux-kernel@vger.kernel.org, Chen Yu <yu.c.chen@intel.com>,
+        kernel test robot <yujie.liu@intel.com>
+Subject: [PATCH v5 2/2] sched/fair: Introduce SIS_SHORT to wake up short task on current CPU
+Date:   Fri,  3 Feb 2023 13:18:13 +0800
+Message-Id: <1b8af8d99da99a20449288ab4fbba64dc05057ce.1675361144.git.yu.c.chen@intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1675361144.git.yu.c.chen@intel.com>
 References: <cover.1675361144.git.yu.c.chen@intel.com>
@@ -70,130 +71,313 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Record the average duration of a task, as there is a requirement
-to leverage this information for better task placement.
+[Problem Statement]
+For a workload that is doing frequent context switches, the throughput
+scales well until the number of instances reaches a peak point. After
+that peak point, the throughput drops significantly if the number of
+instances continues to increase.
 
-At first thought the (p->se.sum_exec_runtime / p->nvcsw)
-can be used to measure the task duration. However, the
-history long past was factored too heavily in such a formula.
-Ideally, the old activity should decay and not affect
-the current status too much.
+The will-it-scale context_switch1 test case exposes the issue. The
+test platform has 112 CPUs per LLC domain. The will-it-scale launches
+1, 8, 16 ... 112 instances respectively. Each instance is composed
+of 2 tasks, and each pair of tasks would do ping-pong scheduling via
+pipe_read() and pipe_write(). No task is bound to any CPU.
+It is found that, once the number of instances is higher than
+56(112 tasks in total, every CPU has 1 task), the throughput
+drops accordingly if the instance number continues to increase:
 
-Although something based on PELT can be used, se.util_avg might
-not be appropriate to describe the task duration:
-Task p1 and task p2 are doing frequent ping-pong scheduling on
-one CPU, both p1 and p2 have a short duration, but the util_avg
-can be up to 50%, which is inconsistent with task duration.
+          ^
+throughput|
+          |                 X
+          |               X   X X
+          |             X         X X
+          |           X               X
+          |         X                   X
+          |       X
+          |     X
+          |   X
+          | X
+          |
+          +-----------------.------------------->
+                            56
+                                 number of instances
 
-It was found that there was once a similar feature to track the
-duration of a task:
-commit ad4b78bbcbab ("sched: Add new wakeup preemption mode: WAKEUP_RUNNING")
-Unfortunately, it was reverted because it was an experiment. Pick the
-patch up again, by recording the average duration when a task voluntarily
-switches out.
+[Symptom analysis]
 
-For example, suppose on CPU1, task p1 and p2 run alternatively:
+The performance downgrading was caused by a high system idle
+percentage(around 20% ~ 30%). The CPUs waste a lot of time in
+idle and do nothing. As a comparison, if set CPU affinity to
+these workloads and stops them from migrating among CPUs,
+the idle percentage drops to nearly 0%, and the throughput
+increases a lot. This indicates room for optimization.
 
- --------------------> time
+The cause is the race condition between select_task_rq() and
+the task enqueue.
 
- | p1 runs 1ms | p2 preempt p1 | p1 switch in, runs 0.5ms and blocks |
-               ^               ^                                     ^
- |_____________|               |_____________________________________|
-                                                                     ^
-                                                                     |
-                                                                  p1 dequeued
+Suppose there are nr_cpus pairs of ping-pong scheduling
+tasks. For example, p0' and p0 are ping-pong scheduling,
+so do p1' <=> p1, and p2'<=> p2. None of these tasks are
+bound to any CPUs. The problem can be summarized as:
+more than 1 wakers are stacked on 1 CPU, which slows down
+waking up their wakees:
 
-p1's duration in one section is (1 + 0.5)ms. Because if p2 does not
-preempt p1, p1 can run 1.5ms. This reflects the nature of a task:
-how long it wishes to run at most.
+CPU0					CPU1				CPU2
+
+p0'					p1' => idle			p2'
+
+try_to_wake_up(p0)							try_to_wake_up(p2);
+CPU1 = select_task_rq(p0);						CPU1 = select_task_rq(p2);
+ttwu_queue(p0, CPU1);							ttwu_queue(p2, CPU1);
+  __ttwu_queue_wakelist(p0, CPU1);
+    WRITE_ONCE(CPU1->ttwu_pending, 1);
+    __smp_call_single_queue(CPU1, p0);	=> ttwu_list->p0
+					quiting cpuidle_idle_call()
+
+									  __ttwu_queue_wakelist(p2, CPU1);
+									    WRITE_ONCE(CPU1->ttwu_pending, 1);
+					ttwu_list->p2->p0	<=	    __smp_call_single_queue(CPU1, p2);
+
+p0' => idle
+					sched_ttwu_pending()
+					  enqueue_task(p2 and p0)
+
+					idle => p2
+
+					...
+					p2 time slice expires
+					...
+									!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+								<===	!!! p2 delays the wake up of p0' !!!
+									!!! causes long idle on CPU0     !!!
+					p2 => p0			!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+					p0 wakes up p0'
+
+idle => p0'
+
+Since there are many waker/wakee pairs in the system, the chain reaction
+causes many CPUs to be victims. These idle CPUs wait for their waker to
+be scheduled.
+
+Tiancheng has mentioned the above issue here[1].
+
+[Proposal]
+The root cause is that there is no strict synchronization of
+select_task_rq() and the set of ttwu_pending flag among several CPUs.
+And this might be by design because the scheduler prefers parallel
+wakeup.
+
+Avoid this problem indirectly. If a system is busy, and if the waker
+and wakee are both short duration tasks, wake up the wakee on current CPU.
+
+The reason is that, if the waker is a short-duration task, it might
+relinquish the CPU soon, and the wakee has the chance to be scheduled.
+On the other hand, if the wakee is a short duration task, putting it on
+non-idle CPU would bring minimal impact to the running task. No idle
+core in the system indicates that this mechanism should not inhibit
+spreading the tasks if the system is not busy.
+
+This wake up strategy can be viewed as dynamic WF_SYNC. Except that
+WF_SYNC does not treat non-idle CPU as candidate CPU.
+
+[Benchmark results]
+The baseline is v6.2-rc1 tip:sched/core, on top of
+Commit be06c7d02443a ("cpuidle: Fix poll_idle() noinstr annotation").
+The test platform has 2 x 56C/112T and 224 CPUs in total. C-states
+deeper than C1E are disabled. Turbo is disabled. CPU frequency governor
+is performance.
+
+will-it-scale
+=============
+case			load		baseline	compare%
+context_switch1		224 groups	1.00		+1262.06%
+
+There is a huge improvement in fast context switch test case, especially
+when the number of groups equals the CPUs.
+
+netperf
+=======
+case            	load    	baseline(std%)	compare%( std%)
+TCP_RR          	56-threads	 1.00 (  0.86)	 -0.16 (  0.98)
+TCP_RR          	112-threads	 1.00 (  0.65)	 +0.24 (  0.50)
+TCP_RR          	168-threads	 1.00 (  5.87)	 +4.99 (  4.81)
+TCP_RR          	224-threads	 1.00 (  4.63)	+687.45 (  3.77)
+TCP_RR          	280-threads	 1.00 (  9.91)	 +0.39 ( 13.05)
+TCP_RR          	336-threads	 1.00 ( 21.27)	 +0.08 ( 15.32)
+TCP_RR          	392-threads	 1.00 ( 40.60)	+20.30 ( 30.95)
+TCP_RR          	448-threads	 1.00 ( 29.85)	 +0.05 ( 33.18)
+UDP_RR          	56-threads	 1.00 (  2.46)	 -0.19 (  2.50)
+UDP_RR          	112-threads	 1.00 ( 12.59)	 +0.00 ( 12.31)
+UDP_RR          	168-threads	 1.00 ( 18.55)	 +6.33 ( 62.39)
+UDP_RR          	224-threads	 1.00 ( 13.31)	+131.74 ( 22.13)
+UDP_RR          	280-threads	 1.00 ( 32.69)	 -0.54 ( 23.84)
+UDP_RR          	336-threads	 1.00 ( 28.52)	 +0.14 ( 26.45)
+UDP_RR          	392-threads	 1.00 ( 26.80)	 +0.23 ( 32.52)
+UDP_RR          	448-threads	 1.00 ( 41.65)	 -0.20 ( 42.97)
+
+There is significant 600+% improvement for TCP_RR and 100+% for UDP_RR
+when the number of threads equals the CPUs.
+
+tbench
+======
+case            	load    	baseline(std%)	compare%( std%)
+loopback        	56-threads	 1.00 (  1.05)	 +0.56 (  0.48)
+loopback        	112-threads	 1.00 (  1.04)	 +0.83 (  0.65)
+loopback        	168-threads	 1.00 ( 29.60)	+37.37 ( 33.77)
+loopback        	224-threads	 1.00 (  0.22)	 +0.11 (  0.02)
+loopback        	280-threads	 1.00 (  0.04)	 -0.11 (  0.06)
+loopback        	336-threads	 1.00 (  0.10)	 -0.11 (  0.11)
+loopback        	392-threads	 1.00 (  0.42)	 -0.06 (  0.05)
+loopback        	448-threads	 1.00 (  0.08)	 +0.19 (  0.07)
+
+There is no noticeable impact on tbench. And there is run-to-run variance
+in 168 threads case, with or without this patch applied. It might be
+another issue and need to be investigated later.
+
+hackbench
+=========
+case            	load    	baseline(std%)	compare%( std%)
+process-pipe    	1-groups	 1.00 ( 11.63)	+10.24 ( 17.85)
+process-sockets 	1-groups	 1.00 ( 15.36)	-17.58 ( 20.96)
+threads-pipe    	1-groups	 1.00 (  2.78)	 +2.86 (  4.14)
+threads-sockets 	1-groups	 1.00 (  1.44)	 -0.57 (  1.09)
+process-pipe    	2-groups	 1.00 (  4.93)	 -3.48 (  8.04)
+process-sockets 	2-groups	 1.00 (  2.44)	 -3.76 (  2.34)
+threads-pipe    	2-groups	 1.00 (  2.26)	 +4.36 (  1.77)
+threads-sockets 	2-groups	 1.00 (  2.50)	 +1.86 (  4.46)
+process-pipe    	4-groups	 1.00 (  1.97)	+13.06 (  7.60)
+process-sockets 	4-groups	 1.00 (  0.11)	 -0.57 (  0.66)
+threads-pipe    	4-groups	 1.00 (  2.48)	 +1.90 (  3.81)
+threads-sockets 	4-groups	 1.00 (  2.41)	 +0.28 (  1.78)
+process-pipe    	8-groups	 1.00 (  1.45)	 +1.62 (  0.13)
+process-sockets 	8-groups	 1.00 (  0.21)	 +0.05 (  0.33)
+threads-pipe    	8-groups	 1.00 (  0.36)	 -1.19 (  0.85)
+threads-sockets 	8-groups	 1.00 (  0.39)	 +1.03 (  0.33)
+
+Overall there is no noticeable impact on hackbench. There is a large
+run-to-run variance when the load is low, with or without this patch
+applied. Similar to tbench, this issue needs to be investigated too.
+
+schbench
+========
+case            	load    	baseline(std%)	compare%( std%)
+normal          	1-mthreads	 1.00 (  0.53)	 -0.22 (  1.33)
+normal          	2-mthreads	 1.00 (  3.04)	 -3.53 (  4.88)
+normal          	4-mthreads	 1.00 (  2.28)	 +1.73 (  1.66)
+normal          	8-mthreads	 1.00 (  2.18)	 -1.75 (  1.42)
+
+There should be no impact on schbench in theory, because the default task
+duration of schbench is 30 ms, which is much longer than the short task
+threshold.
+
+[Limitations/Miscellaneous]
+
+[a]
+Peter has suggested[2] comparing task duration with the cost of searching
+for an idle CPU. If the latter is higher, then give up the scan, to
+achieve better task affine. However, this method does not fit in the case
+encountered in this patch. Because there are plenty of (fast)idle CPUs in
+the system, it will not take too long to find an idle CPU. The bottleneck is
+caused by the race condition mentioned above.
+
+[b]
+The short task threshold is sysctl_sched_min_granularity / 8.
+According to get_update_sysctl_factor(), the sysctl_sched_min_granularity
+could be 0.75 msec * 4 for SCHED_TUNABLESCALING_LOG,
+or 0.75 msec * ncpus for SCHED_TUNABLESCALING_LINEAR.
+Choosing 8 as the divisor is a trade-off. Thanks Honglei for pointing
+this out.
+
+[c]
+SIS_SHORT leverages SIS_PROP to do better task placement. If the scan
+number suggested by SIS_PROP is smaller than 60% of llc_weight, it
+indicates that the util_avg% of the LLC domain is higher than 50%.
+The 50% util_avg indicates a half-busy LLC domain, which makes a double
+confirm with !has_idle_core, to not stack tasks if the system has idle
+CPUs. System busier than this could lower its bar to choose a
+compromised "idle" CPU.
+
+[1] https://lore.kernel.org/lkml/9ed75cad-3718-356f-21ca-1b8ec601f335@linux.alibaba.com/
+[2] https://lore.kernel.org/lkml/Y2O8a%2FOhk1i1l8ao@hirez.programming.kicks-ass.net/
 
 Suggested-by: Tim Chen <tim.c.chen@intel.com>
-Suggested-by: Vincent Guittot <vincent.guittot@linaro.org>
+Suggested-by: K Prateek Nayak <kprateek.nayak@amd.com>
+Tested-by: kernel test robot <yujie.liu@intel.com>
 Signed-off-by: Chen Yu <yu.c.chen@intel.com>
 ---
- include/linux/sched.h |  3 +++
- kernel/sched/core.c   |  2 ++
- kernel/sched/debug.c  |  1 +
- kernel/sched/fair.c   | 13 +++++++++++++
- 4 files changed, 19 insertions(+)
+ kernel/sched/fair.c     | 26 ++++++++++++++++++++++++++
+ kernel/sched/features.h |  1 +
+ 2 files changed, 27 insertions(+)
 
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 4df2b3e76b30..e21709402a31 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -557,6 +557,9 @@ struct sched_entity {
- 	u64				prev_sum_exec_runtime;
- 
- 	u64				nr_migrations;
-+	u64				prev_sleep_sum_runtime;
-+	/* average duration of a task */
-+	u64				dur_avg;
- 
- #ifdef CONFIG_FAIR_GROUP_SCHED
- 	int				depth;
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 03b8529db73f..b805c5bdc7ff 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -4379,6 +4379,8 @@ static void __sched_fork(unsigned long clone_flags, struct task_struct *p)
- 	p->se.prev_sum_exec_runtime	= 0;
- 	p->se.nr_migrations		= 0;
- 	p->se.vruntime			= 0;
-+	p->se.dur_avg			= 0;
-+	p->se.prev_sleep_sum_runtime	= 0;
- 	INIT_LIST_HEAD(&p->se.group_node);
- 
- #ifdef CONFIG_FAIR_GROUP_SCHED
-diff --git a/kernel/sched/debug.c b/kernel/sched/debug.c
-index 1637b65ba07a..8d64fba16cfe 100644
---- a/kernel/sched/debug.c
-+++ b/kernel/sched/debug.c
-@@ -1024,6 +1024,7 @@ void proc_sched_show_task(struct task_struct *p, struct pid_namespace *ns,
- 	__PS("nr_involuntary_switches", p->nivcsw);
- 
- 	P(se.load.weight);
-+	P(se.dur_avg);
- #ifdef CONFIG_SMP
- 	P(se.avg.load_sum);
- 	P(se.avg.runnable_sum);
 diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index d4db72f8f84e..aa16611c7263 100644
+index aa16611c7263..d50097e5fcc1 100644
 --- a/kernel/sched/fair.c
 +++ b/kernel/sched/fair.c
-@@ -6271,6 +6271,18 @@ enqueue_task_fair(struct rq *rq, struct task_struct *p, int flags)
+@@ -6489,6 +6489,20 @@ static int wake_wide(struct task_struct *p)
+ 	return 1;
+ }
  
- static void set_next_buddy(struct sched_entity *se);
- 
-+static inline void dur_avg_update(struct task_struct *p, bool task_sleep)
++/*
++ * If a task switches in and then voluntarily relinquishes the
++ * CPU quickly, it is regarded as a short duration task.
++ *
++ * SIS_SHORT tries to wake up the short wakee on current CPU. This
++ * aims to avoid race condition among CPUs due to frequent context
++ * switch.
++ */
++static inline int is_short_task(struct task_struct *p)
 +{
-+	u64 dur;
-+
-+	if (!task_sleep)
-+		return;
-+
-+	dur = p->se.sum_exec_runtime - p->se.prev_sleep_sum_runtime;
-+	p->se.prev_sleep_sum_runtime = p->se.sum_exec_runtime;
-+	update_avg(&p->se.dur_avg, dur);
++	return sched_feat(SIS_SHORT) && p->se.dur_avg &&
++	       ((p->se.dur_avg * 8) < sysctl_sched_min_granularity);
 +}
 +
  /*
-  * The dequeue_task method is called before nr_running is
-  * decreased. We remove the task from the rbtree and
-@@ -6343,6 +6355,7 @@ static void dequeue_task_fair(struct rq *rq, struct task_struct *p, int flags)
+  * The purpose of wake_affine() is to quickly determine on which CPU we can run
+  * soonest. For the purpose of speed we only consider the waking and previous
+@@ -6525,6 +6539,11 @@ wake_affine_idle(int this_cpu, int prev_cpu, int sync)
+ 	if (available_idle_cpu(prev_cpu))
+ 		return prev_cpu;
  
- dequeue_throttle:
- 	util_est_update(&rq->cfs, p, task_sleep);
-+	dur_avg_update(p, task_sleep);
- 	hrtick_update(rq);
++	/* The only running task is a short duration one. */
++	if (cpu_rq(this_cpu)->nr_running == 1 &&
++	    is_short_task(rcu_dereference(cpu_curr(this_cpu))))
++		return this_cpu;
++
+ 	return nr_cpumask_bits;
  }
  
+@@ -6899,6 +6918,13 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
+ 			/* overloaded LLC is unlikely to have idle cpu/core */
+ 			if (nr == 1)
+ 				return -1;
++
++			if (!has_idle_core && this == target &&
++			    (5 * nr < 3 * sd->span_weight) &&
++			    cpu_rq(target)->nr_running <= 1 &&
++			    is_short_task(p) &&
++			    is_short_task(rcu_dereference(cpu_curr(target))))
++				return target;
+ 		}
+ 	}
+ 
+diff --git a/kernel/sched/features.h b/kernel/sched/features.h
+index ee7f23c76bd3..efdc29c42161 100644
+--- a/kernel/sched/features.h
++++ b/kernel/sched/features.h
+@@ -62,6 +62,7 @@ SCHED_FEAT(TTWU_QUEUE, true)
+  */
+ SCHED_FEAT(SIS_PROP, false)
+ SCHED_FEAT(SIS_UTIL, true)
++SCHED_FEAT(SIS_SHORT, true)
+ 
+ /*
+  * Issue a WARN when we do multiple update_rq_clock() calls
 -- 
 2.25.1
 
