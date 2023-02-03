@@ -2,130 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6E01688EED
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 06:23:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D739D688EF1
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 06:24:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231748AbjBCFXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 00:23:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36932 "EHLO
+        id S231819AbjBCFYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 00:24:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231185AbjBCFXS (ORCPT
+        with ESMTP id S230230AbjBCFYm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 00:23:18 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC353C2B0;
-        Thu,  2 Feb 2023 21:23:16 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id on9-20020a17090b1d0900b002300a96b358so3952048pjb.1;
-        Thu, 02 Feb 2023 21:23:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=R9Al5IgfTAXRchBvFsd8KHoDxMsWlvFtFMC8MfqxpJs=;
-        b=CVpzx6OeNkGU3rRXC6PcXEzYF0Lmo5pQHI8yZobfDC2+War/IUoq4rplgc54ROqSnz
-         qAcBdMqdl5JH2BFeaEda3mX9cx9eQW8pZWWNU7OFtrs5pe2pePnNDivyI+C38IRJ6GTq
-         EKe54v+qakVRUEgGDlomkDb3xXHYXfO8ElaEUmB1kFYmGgDeuj2BkfEaCE4slfXwB9Xb
-         6P9KXM6mJBe8s0jIpMn0RtnuiQeoVyZ1PGKqjU3/GwCrAKC3+FYJxfeUJCXfZtphgNAU
-         mmOjv+VFkuN6q73gKUclGeQa+5vxkwdFqxm0dTUvPKuoF4j6EmrdflOeUJHJkXYUj6TI
-         6nkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=R9Al5IgfTAXRchBvFsd8KHoDxMsWlvFtFMC8MfqxpJs=;
-        b=R9C0BkKsd1+xqzQ7pcHWu111nFEcsMyPHIeCv9xT6cn1L4gt/PLtZM/2S/+kvnacWK
-         TYghYayYZA2kTaNq9yPdfZRbdU8QVDIf4Ss83BYYNDXYnDeIZAQ+j2Hkt05TvtpNd/jB
-         pxnByJAjibMm8iKXwqxw9ILloKITPEhTfSjZ7JicqyJTd+SuKUTgdGYB2877eof+ry9c
-         lMG73O4VAgO8EwTRq7RB/YpRwpzY6JpEVtDTaQPqeYKbFkd0tEu4JqUkGNXPkdTghiV9
-         naD877eOKgumUpmN2nfnCYhboQ+gXa4HiZJybNR6iNB8AzTO4aR/l6TYDLEif0B94SOW
-         ZcmQ==
-X-Gm-Message-State: AO0yUKVSm+qAKs2onyz0yEE4d2uEXohV1wLZGE7uGHdvx/vsANVWLYtc
-        xEa27r4kO7O6lKtJ3HSZn9o=
-X-Google-Smtp-Source: AK7set+zd9ZiKwFgx4hfM+/7+UOyxzIAR1hNtMF9N4dpoUga9mKgwiwr09Ho5r/ItUxOnCv7AexCNQ==
-X-Received: by 2002:a17:90b:4d12:b0:22c:9912:39e with SMTP id mw18-20020a17090b4d1200b0022c9912039emr3842185pjb.36.1675401796098;
-        Thu, 02 Feb 2023 21:23:16 -0800 (PST)
-Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:1a:efea::75b])
-        by smtp.gmail.com with ESMTPSA id r6-20020a17090a4dc600b002271b43e528sm4025076pjl.33.2023.02.02.21.23.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 21:23:15 -0800 (PST)
-Message-ID: <3bfbbaa1-69f8-0f33-a4dc-5a10758e603a@gmail.com>
-Date:   Fri, 3 Feb 2023 13:23:02 +0800
+        Fri, 3 Feb 2023 00:24:42 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE8A1F5C1;
+        Thu,  2 Feb 2023 21:24:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4589F61D68;
+        Fri,  3 Feb 2023 05:24:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7FFBC433D2;
+        Fri,  3 Feb 2023 05:24:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675401880;
+        bh=xXuXX/4dXghFD9OuRNy9yclf9Tgd8hQw+zZIPTdTdxw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=LC+H23DawUteZ0zmGUmwaUJnUbqf3sFlyJ5fMm0dk8HlAkBLCoTfWdVZtU05gVIap
+         Pac6w7xDvg1WAOIkV/49ZpMPuPRuPrONuoiih+ssj/icnHk389ctRC+b55L7ANZUwB
+         qVmgNllrdRkNG88gfxSHbvMTnpkiUAJm01muRHzj3ic4HY8T/iOMUpVG/VcEymedrJ
+         8B03pgYind9b86TfY9dxX9vK6EsdDIsH15bTSenOGTBT7CXXKnh5ExtAIYNeViYu/E
+         sU5BWMaTTbOb0O9mbAg/l2s5i8iIBy3okWR+8JKr+q2+Hzwkurf7u4duMtgPkp6GA9
+         odai2NZ4RDX/g==
+Date:   Thu, 2 Feb 2023 21:24:38 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Clark Wang <xiaoning.wang@nxp.com>
+Cc:     peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
+        joabreu@synopsys.com, davem@davemloft.net, edumazet@google.com,
+        pabeni@redhat.com, mcoquelin.stm32@gmail.com,
+        linux@armlinux.org.uk, andrew@lunn.ch, hkallweit1@gmail.com,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-imx@nxp.com
+Subject: Re: [PATCH V3 1/2] net: phylink: add a function to resume phy alone
+ to fix resume issue with WoL enabled
+Message-ID: <20230202212438.18ebcc38@kernel.org>
+In-Reply-To: <20230202081559.3553637-1-xiaoning.wang@nxp.com>
+References: <20230202081559.3553637-1-xiaoning.wang@nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [RFC PATCH V3 07/16] drivers: hv: Decrypt percpu hvcall input arg
- page in sev-snp enlightened guest
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "jgross@suse.com" <jgross@suse.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "kirill@shutemov.name" <kirill@shutemov.name>,
-        "jiangshan.ljs@antgroup.com" <jiangshan.ljs@antgroup.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "ashish.kalra@amd.com" <ashish.kalra@amd.com>,
-        "srutherford@google.com" <srutherford@google.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "anshuman.khandual@arm.com" <anshuman.khandual@arm.com>,
-        "pawan.kumar.gupta@linux.intel.com" 
-        <pawan.kumar.gupta@linux.intel.com>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "daniel.sneddon@linux.intel.com" <daniel.sneddon@linux.intel.com>,
-        "alexander.shishkin@linux.intel.com" 
-        <alexander.shishkin@linux.intel.com>,
-        "sandipan.das@amd.com" <sandipan.das@amd.com>,
-        "ray.huang@amd.com" <ray.huang@amd.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "michael.roth@amd.com" <michael.roth@amd.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "venu.busireddy@oracle.com" <venu.busireddy@oracle.com>,
-        "sterritt@google.com" <sterritt@google.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "samitolvanen@google.com" <samitolvanen@google.com>,
-        "fenghua.yu@intel.com" <fenghua.yu@intel.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-References: <20230122024607.788454-1-ltykernel@gmail.com>
- <20230122024607.788454-8-ltykernel@gmail.com>
- <BYAPR21MB16880F982D51474B0911D528D7D09@BYAPR21MB1688.namprd21.prod.outlook.com>
-From:   Tianyu Lan <ltykernel@gmail.com>
-In-Reply-To: <BYAPR21MB16880F982D51474B0911D528D7D09@BYAPR21MB1688.namprd21.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/1/2023 2:02 AM, Michael Kelley (LINUX) wrote:
->> @@ -134,6 +136,17 @@ int hv_common_cpu_init(unsigned int cpu)
->>   	if (!(*inputarg))
->>   		return -ENOMEM;
->>
->> +	if (hv_isolation_type_en_snp()) {
->> +		ret = set_memory_decrypted((unsigned long)*inputarg, pgcount);
-> You used "pgcount" here in response to a comment on v2 of the
-> patch.  But the corresponding re-encryption in hv_common_cpu_die()
-> uses a fixed value of "1".   The two cases should be consistent.  Either
-> assert that hv_root_partition will never be true in an SNP VM, in which
-> case hard coding "1" is OK.  Or properly calculate the number of pages
-> in both cases so they are consistent.
+On Thu,  2 Feb 2023 16:15:59 +0800 Clark Wang wrote:
+> Issue we met:
+> On some platforms, mac cannot work after resumed from the suspend with WoL
+> enabled.
 > 
+> The cause of the issue:
+> 1. phylink_resolve() is in a workqueue which will not be executed immediately.
+>    This is the call sequence:
+>        phylink_resolve()->phylink_link_up()->pl->mac_ops->mac_link_up()
+>    For stmmac driver, mac_link_up() will set the correct speed/duplex...
+>    values which are from link_state.
+> 2. In stmmac_resume(), it will call stmmac_hw_setup() after called the
+>    phylink_resume(), because mac need phy rx_clk to do the reset.
+>    stmmac_core_init() is called in function stmmac_hw_setup(), which will
+>    reset the mac and set the speed/duplex... to default value.
+> Conclusion: Because phylink_resolve() cannot determine when it is called, it
+>             cannot be guaranteed to be called after stmmac_core_init().
+> 	    Once stmmac_core_init() is called after phylink_resolve(),
+> 	    the mac will be misconfigured and cannot be used.
+> 
+> In order to avoid this problem, add a function called phylink_phy_resume()
+> to resume phy separately. This eliminates the need to call phylink_resume()
+> before stmmac_hw_setup().
+> 
+> Add another judgement before called phy_start() in phylink_start(). This way
+> phy_start() will not be called multiple times when resumes. At the same time,
+> it may not affect other drivers that do not use phylink_phy_resume().
+> 
+> Signed-off-by: Clark Wang <xiaoning.wang@nxp.com>
 
-Agree. We should keep the logic in both hv_common_cpu_init() and 
-hv_common_cpu_die(). Will fix it.
+Patch 2/2 never made it to the list. You'll need to repost.
+While I have you - some minor nit picks:
+
+> +/**
+> + * phylink_phy_resume() - resume phy alone
+> + * @pl: a pointer to a &struct phylink returned from phylink_create()
+> + *
+> + * In the MAC driver using phylink, if the MAC needs the clock of the phy
+
+You use MAC in capital letters buy phy in lower case, be consistent.
+
+> + * when it resumes, can call this function to resume the phy separately.
+
+missing "it" ? Otherwise the sentence is missing a subject.
+
+> + * Then proceed to MAC resume operations.
+> + */
+> +void phylink_phy_resume(struct phylink *pl)
+> +{
+> +	ASSERT_RTNL();
+> +
+> +	if (!test_bit(PHYLINK_DISABLE_MAC_WOL, &pl->phylink_disable_state)
+> +	    && pl->phydev) {
+
+&& goes at the end of the line, not start
+
+> +		phy_start(pl->phydev);
+> +		pl->mac_resume_phy_separately = true;
+> +	}
+> +
+> +}
+> +EXPORT_SYMBOL_GPL(phylink_phy_resume);
