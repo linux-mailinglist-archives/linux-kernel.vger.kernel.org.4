@@ -2,108 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8400268A5D6
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 23:11:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9F2F68A5E6
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 23:15:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233147AbjBCWLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 17:11:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35076 "EHLO
+        id S232254AbjBCWPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 17:15:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234108AbjBCWLi (ORCPT
+        with ESMTP id S233372AbjBCWOq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 17:11:38 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4B9B3DFB
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 14:09:38 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id g2so7989583ybk.8
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 14:09:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=w6DST1msg//zK6dqyeoLsLRtE2+Zc6NidDMAyM3y9l4=;
-        b=b7STVl52IVA9hkjASfhfcXCUlfa/SPSFSi9vp21EkIFJnD/dktb8krAwZczgf2oE59
-         Q4aGScOqwoNq6T99frVjRBWEhngy424X7jQ3nPPQFP/A3ri8C1D6xX06CY0Y5gBilCWT
-         UPLbJtWci1TypWVcHBmh+AzKTuORzwWhNt8OqYmPYsQ7/GTXEs4xeDdr2QfQWGZjh1zn
-         vp/syqO1Wq//OeM+JpwWxOef/mMWrzMDGNxK4zmYEsUdF7+HBlIFNxkCW/LHwkefJXOW
-         0k+hJtMN0uzn6/aN/ymW5mOONqS842ZhaZCCrQ3XVbc2oUlC/F4khqT4i3Fgz1WO+0ug
-         N/cA==
+        Fri, 3 Feb 2023 17:14:46 -0500
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E52FAFA54;
+        Fri,  3 Feb 2023 14:13:49 -0800 (PST)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-16a19aa2ddbso358163fac.4;
+        Fri, 03 Feb 2023 14:13:49 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=w6DST1msg//zK6dqyeoLsLRtE2+Zc6NidDMAyM3y9l4=;
-        b=K5P6UcDJbISCSAMBByGdDKFWP4K9HirWwrx8z75A9jV6r7grSPjGA4pZnStBhB79qs
-         AWEvFbduni5hamergmGJcFPbGRcBCxAAVMiEf78+g6+piO4Z7M4puiti5eYUMbh1EDTa
-         wdOGTf+kGGd8nc1zDawDUluKo8E737w7dFHkghAOyEu27gAQG0gXbrrzaChtQp0Dk0hH
-         tG5mc5q/qP3sbyFTshsfKlMzBx7tYh/U24b6kyABgtINx3vwFroUpI8KmkhGc8jTyH3M
-         VcqHjGphbeDKTQvrywYEKG1YM4j1vqHOcjwIR+v9j5ZZOpJsym/Q49kL6lfyt2VC60yy
-         LHSA==
-X-Gm-Message-State: AO0yUKXM3E9IRPckNSZ+NXw5uPf+KEfSXKznN+Hka1rcIjSpxn62rMAF
-        hBnqoFCiKJ2v9z2mfjfpe/sGlSHpf2kJkuQJubZhmA==
-X-Google-Smtp-Source: AK7set/dYbftPq3C5etClfX4WoO8g9dNllRTOgBQiziRssFh3DeIdQGLyRovOAPyjbGGuqBDH3ZJ05/Jr8WM2IjR0fA=
-X-Received: by 2002:a25:dd04:0:b0:80b:69f5:3966 with SMTP id
- u4-20020a25dd04000000b0080b69f53966mr1312029ybg.519.1675462142547; Fri, 03
- Feb 2023 14:09:02 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Fw6PdFuIKHRtNujVdzDiLXE+QWd5QhNLUNrYUFzLxWI=;
+        b=d9M36FBuGgXPJq+f9+5Gr61p4k/lpA326lPPaMv2PiLDZP2Uosaxo1hl9UOw3VV2s0
+         7a3An/AfKKTzefa97UVkkuM+AH14z39pvDX2AHBN3oGRV2Z94nBNS5eAuXcuDedBho0k
+         yFb14qgXUFNBmZRZDGYRAtFVd3bdOawtaq+mVFCH0ZqtGnWfhg2sZGMsUmd/cDw3lsz1
+         bbETp5L8C1DGhIpW4kHCuUiw25JruYsckzuHD6EuXZ/cSOCUU8Z8blCUEx/CLe9wfTOV
+         rc7NWOHMIgm0dnz9xAFuu9asooQ4s+UTxp8Ooryi16WIlmSw8mTDzM3HR/TK7JIeoZ53
+         O96w==
+X-Gm-Message-State: AO0yUKXnxOJqORzxSwqFPZtbAs/IItDXqFM19q8JXcqzXv5aKwlR9gvJ
+        PXIhreYIfM32ZD5kvUGwgw==
+X-Google-Smtp-Source: AK7set+FUHHTZB3BEZz2tOg2sXyUbAQ0yGNVCYMUkcQxtdquZlVLxAI6lNIJ6COfA7ceDlJ/QUpg5A==
+X-Received: by 2002:a05:6870:2192:b0:169:de47:db82 with SMTP id l18-20020a056870219200b00169de47db82mr4237685oae.24.1675462125484;
+        Fri, 03 Feb 2023 14:08:45 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id j22-20020a056870531600b00160323101efsm1264189oan.42.2023.02.03.14.08.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Feb 2023 14:08:45 -0800 (PST)
+Received: (nullmailer pid 962653 invoked by uid 1000);
+        Fri, 03 Feb 2023 22:08:44 -0000
+Date:   Fri, 3 Feb 2023 16:08:44 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Herve Codina <herve.codina@bootlin.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH 1/3] dt-bindings: sound: Add the Renesas X9250
+ potentiometers
+Message-ID: <20230203220844.GA955510-robh@kernel.org>
+References: <20230203111422.142479-1-herve.codina@bootlin.com>
+ <20230203111422.142479-2-herve.codina@bootlin.com>
 MIME-Version: 1.0
-References: <20221212183720.4062037-1-vipinsh@google.com> <20221212183720.4062037-13-vipinsh@google.com>
- <Y9r0q9cuK/ifu+OW@google.com> <CAHVum0fEmEAQSxozb1BTTy-d3UGrsvhjt8V5FXQPrX5wOYqpPQ@mail.gmail.com>
- <Y9wGQx89zI3TMU1Y@google.com> <CAHVum0dFG6gFTQ=JzMkX5Yw-BO7jtUEQyVww6TpN9wk_hQMpqw@mail.gmail.com>
-In-Reply-To: <CAHVum0dFG6gFTQ=JzMkX5Yw-BO7jtUEQyVww6TpN9wk_hQMpqw@mail.gmail.com>
-From:   Vipin Sharma <vipinsh@google.com>
-Date:   Fri, 3 Feb 2023 14:08:26 -0800
-Message-ID: <CAHVum0cDxK=wmd+UB9meZVm5h3tcGdkDJL=fK_jx19NhfikBSg@mail.gmail.com>
-Subject: Re: [Patch v4 12/13] KVM: selftests: Make vCPU exit reason test
- assertion common.
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     pbonzini@redhat.com, vkuznets@redhat.com, dmatlack@google.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        m Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230203111422.142479-2-herve.codina@bootlin.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 2, 2023 at 10:59 AM Vipin Sharma <vipinsh@google.com> wrote:
->
-> On Thu, Feb 2, 2023 at 10:51 AM Sean Christopherson <seanjc@google.com> wrote:
-> >
-> > On Thu, Feb 02, 2023, Vipin Sharma wrote:
-> > > On Wed, Feb 1, 2023 at 3:24 PM Sean Christopherson <seanjc@google.com> wrote:
-> > > > I love the cleanup, but in the future, please don't squeeze KVM-wide changes in
-> > > > the middle of an otherwise arch-specific series unless it's absolutely necessary.
-> > > > I get why you added the macro before copy-pasting more code into a new test, but
-> > > > the unfortunate side effect is that complicates grabbing the entire series.
-> > > >
-> > >
-> > > Make sense. So what is preferable:
-> > > 1. Make the big cleanup identified during a series as the last patches
-> > > in that series?
-> > > 2. Have two series and big cleanups rebased on top of the initial series?
-> > >
-> > > Or, both 1 & 2 are acceptable depending on the cleanup?
-> >
-> >   3. Post the cleanup independently, but make a note so that maintainers know
-> >      that there may be conflicts and/or missed cleanup opportunities.
-> >
-Small question:
-Will it be fine if I use the current kvm/queue head or do you prefer
-if I take one of your kvm-x86/linux branches?
+On Fri, Feb 03, 2023 at 12:14:20PM +0100, Herve Codina wrote:
+> The Renesas X9250 is a quad digitally controlled potentiometers.
+> 
+> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> ---
+>  .../bindings/sound/renesas,x9250.yaml         | 60 +++++++++++++++++++
+>  1 file changed, 60 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/sound/renesas,x9250.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/sound/renesas,x9250.yaml b/Documentation/devicetree/bindings/sound/renesas,x9250.yaml
+> new file mode 100644
+> index 000000000000..ad29ef465a18
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/sound/renesas,x9250.yaml
+> @@ -0,0 +1,60 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/sound/renesas,x9250.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Renesas X9250 quad potentiometers
+> +
+> +maintainers:
+> +  - Herve Codina <herve.codina@bootlin.com>
+> +
+> +description: |
+> +  The Renesas X9250 is a quad digitally controlled potentiometers.
+
+...is a chip with quad...
+
+> +
+> +  In the audio path, it can be present on amplifiers designs and it can be used
+> +  in ALSA as an auxiliary audio device to control these amplifiers.
+
+ALSA? Linux details should not be in bindings.
+
+> +
+> +allOf:
+> +  - $ref: /schemas/spi/spi-peripheral-props.yaml
+> +  - $ref: dai-common.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: renesas,x9250
+> +
+> +  reg:
+> +    description:
+> +      SPI device address.
+> +    maxItems: 1
+> +
+> +  spi-max-frequency:
+> +    maximum: 2000000
+> +
+> +patternProperties:
+> +  "^renesas,cmd[0-3]-invert$":
+> +    description:
+> +      The related command is inverted meaning that the minimum command value
+> +      set the wiper to Rh and the maximum command value set the wiper to Rl.
+> +      Without this property, the minimum command value set the wiper to Rl and
+> +      the maximum to Rh.
+> +    type: boolean
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    spi {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +        x9250@0 {
+> +            compatible = "renesas,x9250";
+> +            reg = <0>;
+> +            spi-max-frequency = <2000000>;
+> +            renesas,cmd3-invert;
+> +        };
+> +    };
+> -- 
+> 2.39.0
+> 
