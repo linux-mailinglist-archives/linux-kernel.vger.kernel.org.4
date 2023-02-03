@@ -2,137 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95480689F7E
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 17:41:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABDEA689F83
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 17:45:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232805AbjBCQlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 11:41:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34644 "EHLO
+        id S233060AbjBCQp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 11:45:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231240AbjBCQln (ORCPT
+        with ESMTP id S230309AbjBCQp1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 11:41:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFFF3193E1
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 08:40:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675442459;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=PcrmDD4uHCC6UG1ke8fLxCH03JicWyxdUu0tRYYVEIs=;
-        b=PPKwgFRkacXRxVfmMf+goxkvV2Zd6U45fcd/xOfhCJwFekl89PKjrxbnpAXo1p9957Oaj8
-        XdU8ewPOp6dkYKKHRZOe1w357/uJU8pBxm8AtosDKjf6xou+jd8OUdkfi3fXnhd9CFwSAx
-        SioIGDqi64IYQ9fV11uyvVaMSZfaoo8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-518-UxN4cLx1OnKzZvt6K7GIsw-1; Fri, 03 Feb 2023 11:40:54 -0500
-X-MC-Unique: UxN4cLx1OnKzZvt6K7GIsw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 3 Feb 2023 11:45:27 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 364106950A;
+        Fri,  3 Feb 2023 08:45:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 69989800B24;
-        Fri,  3 Feb 2023 16:40:54 +0000 (UTC)
-Received: from llong.com (unknown [10.22.18.35])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 940C5140EBF4;
-        Fri,  3 Feb 2023 16:40:53 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        kernel-team@android.com, Waiman Long <longman@redhat.com>
-Subject: [PATCH] cgroup/cpuset: Don't filter offline CPUs in cpuset_cpus_allowed() for top cpuset tasks
-Date:   Fri,  3 Feb 2023 11:40:40 -0500
-Message-Id: <20230203164040.213437-1-longman@redhat.com>
+        by sin.source.kernel.org (Postfix) with ESMTPS id 808E8CE30CC;
+        Fri,  3 Feb 2023 16:45:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E89CAC433D2;
+        Fri,  3 Feb 2023 16:45:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1675442722;
+        bh=jFqyihOG2qysQhfUaE8WHd7ywz99MsnZfWzodwPNilo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=G6/WWc8hp0Xk23in/lJm56NhvcRndfWU6EugJe+EpyH8lVaJbXQHAouLzK6COs5l/
+         tp5oFNUXrjFKfBMxZC7BG6+9NtuLxh/CiFa3KuVDOqaGx+0mHS0y7b+hxSb3TwheYN
+         URwF5W1FCr5VeSUjxnogdwB8URnYC2CoMQ8CYSdE=
+Date:   Fri, 3 Feb 2023 17:45:19 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Eric Biggers <ebiggers@kernel.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.4 000/134] 5.4.231-rc1 review
+Message-ID: <Y906Hz3UWYxoxYdD@kroah.com>
+References: <20230203101023.832083974@linuxfoundation.org>
+ <20230203155619.GA3176223@roeck-us.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230203155619.GA3176223@roeck-us.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 8f9ea86fdf99 ("sched: Always preserve the user
-requested cpumask"), relax_compatible_cpus_allowed_ptr() is calling
-__sched_setaffinity() unconditionally. This helps to expose a bug in
-the current cpuset hotplug code where the cpumasks of the tasks in
-the top cpuset are not updated at all when some CPUs become online or
-offline. It is likely caused by the fact that some of the tasks in the
-top cpuset, like percpu kthreads, cannot have their cpu affinity changed.
+On Fri, Feb 03, 2023 at 07:56:19AM -0800, Guenter Roeck wrote:
+> On Fri, Feb 03, 2023 at 11:11:45AM +0100, Greg Kroah-Hartman wrote:
+> > This is the start of the stable review cycle for the 5.4.231 release.
+> > There are 134 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> > 
+> > Responses should be made by Sun, 05 Feb 2023 10:09:58 +0000.
+> > Anything received after that time might be too late.
+> > 
+> 
+> Building ia64:defconfig ... failed
+> --------------
+> Error log:
+> <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+> arch/ia64/kernel/mca_drv.c: In function 'mca_handler_bh':
+> arch/ia64/kernel/mca_drv.c:179:9: error: implicit declaration of function 'make_task_dead'
+> 
+> Caused by "exit: Add and use make_task_dead.". Did that really have to be backported ?
 
-One way to reproduce this as suggested by Peter is:
- - boot machine
- - offline all CPUs except one
- - taskset -p ffffffff $$
- - online all CPUs
+Yup, it does!
 
-Fix this by allowing cpuset_cpus_allowed() to return a wider mask that
-includes offline CPUs for those tasks that are in the top cpuset. For
-tasks not in the top cpuset, the old rule applies and only online CPUs
-will be returned in the mask since hotplug events will update their
-cpumasks accordingly.
+Eric, any help with this?
 
-Fixes: 8f9ea86fdf99 ("sched: Always preserve the user requested cpumask")
-Reported-by: Will Deacon <will@kernel.org>
-Originally-from: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- kernel/cgroup/cpuset.c | 27 +++++++++++++++++++++++++--
- 1 file changed, 25 insertions(+), 2 deletions(-)
+thanks,
 
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index 207bafdb05e8..11554e5845f7 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -3707,15 +3707,38 @@ void __init cpuset_init_smp(void)
-  * Description: Returns the cpumask_var_t cpus_allowed of the cpuset
-  * attached to the specified @tsk.  Guaranteed to return some non-empty
-  * subset of cpu_online_mask, even if this means going outside the
-- * tasks cpuset.
-+ * tasks cpuset, except when the task is in the top cpuset.
-  **/
- 
- void cpuset_cpus_allowed(struct task_struct *tsk, struct cpumask *pmask)
- {
- 	unsigned long flags;
-+	struct cpuset *cs;
- 
- 	spin_lock_irqsave(&callback_lock, flags);
--	guarantee_online_cpus(tsk, pmask);
-+	rcu_read_lock();
-+
-+	cs = task_cs(tsk);
-+	if (cs != &top_cpuset)
-+		guarantee_online_cpus(tsk, pmask);
-+	/*
-+	 * TODO: Tasks in the top cpuset won't get update to their cpumasks
-+	 * when a hotplug online/offline event happens. So we include all
-+	 * offline cpus in the allowed cpu list.
-+	 */
-+	if ((cs == &top_cpuset) || cpumask_empty(pmask)) {
-+		const struct cpumask *possible_mask = task_cpu_possible_mask(tsk);
-+
-+		/*
-+		 * We first exclude cpus allocated to partitions. If there is no
-+		 * allowable online cpu left, we fall back to all possible cpus.
-+		 */
-+		cpumask_andnot(pmask, possible_mask, top_cpuset.subparts_cpus);
-+		if (!cpumask_intersects(pmask, cpu_online_mask))
-+			cpumask_copy(pmask, possible_mask);
-+	}
-+
-+	rcu_read_unlock();
- 	spin_unlock_irqrestore(&callback_lock, flags);
- }
- 
--- 
-2.31.1
-
+greg k-h
