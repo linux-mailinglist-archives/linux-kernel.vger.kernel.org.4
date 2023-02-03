@@ -2,67 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4050068A2A9
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 20:12:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F7AE68A2BA
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 20:15:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233544AbjBCTMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 14:12:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53844 "EHLO
+        id S233548AbjBCTPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 14:15:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231614AbjBCTM3 (ORCPT
+        with ESMTP id S231614AbjBCTPD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 14:12:29 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF0A319A;
-        Fri,  3 Feb 2023 11:12:27 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id o18so5541642wrj.3;
-        Fri, 03 Feb 2023 11:12:27 -0800 (PST)
+        Fri, 3 Feb 2023 14:15:03 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42BA0EF9C
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 11:15:02 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id n2so1719917pgb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 11:15:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=AmueeR1r+Pv6K2HKhW/3+N9H6LekItY8oM3MVMLPerQ=;
-        b=dTluxkRiBVrieaHhxN28vltBfM7wA+yVVbajlr2FP//gsMhldzzcAED829eguPdNPh
-         Szxv8d0ksUiuZtg7hbXLMwknm7Key9yh1kozVQ1IMoyMKfpb8aLmnmApC/F9w6gY16ig
-         Xxs5xbkAUTkgsPOqA2o+9vt0Ju/9ANh7EhfqFG7fCzt6zHCH4s6hTVTwwphMup7vI6ap
-         6a7hojGXln5a6kjp2StR0h902W517330xzuEEl5uEOXtXQ+kza5SoQzOfoZFQQegUZIR
-         qRF4CrEf/mLNFoJBPDduKjSNCbnwcF7sEIc13Ny/R/sQhbK0sFlwDVoXtj3teB8qcS0m
-         2uVw==
+        bh=GCsSpYaGKhPjbk4A0vQjSKCG3qz3zy/WsExyWKyZKmA=;
+        b=JKhUeYVBuHCXlMroGMkXpiwxOsTL5Ky0TyKPWUUHkDZu+SdhPWnSXq6dNzjgXMOXMM
+         cSVU+1nSXcxJeELtOM+fY4mLbf2qO0zUthYN0KL8uK9P9xWqjzoKK1iXFQixJiK4w5pH
+         fio9fKnzkECnXKnVPehLPMMr041wgcS2mXPCnmTW3H3MSdY+1BJReIdgpI8/xJ4c5wDn
+         EKJVi8vZ0rDa2cGIuQCMNaEBtpNcVLzvaSfWZxKTvvYfgNnNuUomGHby37JE+2XcGFG3
+         X8MWC3yqq6UO6i188UD+vS2sVH2uwaeUChZvlN+N2BsycmXFQcrgqdvnfnQQeYZ2LsCg
+         HleQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=AmueeR1r+Pv6K2HKhW/3+N9H6LekItY8oM3MVMLPerQ=;
-        b=tX2WTSO9SPkZOv+L4ZN+l2unc4wOIQeiYbjL8UEzmaxbYOqpsfF/tIzuKlklF/fAQL
-         skbju4J1Lx4vJGSE2DXNhTBO804tPHrv3eO1NaetlxLQVhF1bg5T9vWTo1KG5YChla/V
-         M+ojiqmOtKugtf/mAdN14WDTMPOHoiGIMYrzMbui/ewPaKNB9v0yQUZJWzPn5rdXiT0S
-         2+y6vtsAq57V5nayuaVZzjucmLBRXLVZUOKd+ijUPjgdjRyE+nwdPItBJbmp4UFwxxTi
-         FTRyJuqdngiLRtblSv7I+Y380wZFOPu+3daSkCqIiSmLkHEKZcoNBd7O8Y5IlHLQhtFn
-         IQnw==
-X-Gm-Message-State: AO0yUKUFtzbIMPp917X98/d3a1szegSeYW8CigIYfMd3tVWVVQPZD0rt
-        vTlLAOLblsGnuYVkoFFr0YVAgwdZajHrHf460Zs=
-X-Google-Smtp-Source: AK7set/lc2LwYkyFInEoj6aYasOk1YuG7EjCu8tmD5aNJ0wtvauUr8lqBeTFc2UHmrKuqdUsNh9/0tbN6uQDF/J1L0g=
-X-Received: by 2002:adf:fa0c:0:b0:2bf:ed1d:3898 with SMTP id
- m12-20020adffa0c000000b002bfed1d3898mr268224wrr.162.1675451546080; Fri, 03
- Feb 2023 11:12:26 -0800 (PST)
+        bh=GCsSpYaGKhPjbk4A0vQjSKCG3qz3zy/WsExyWKyZKmA=;
+        b=f7QzLF9XUnguxgMLe4iSt0FxUQ/5QBmI6xGH7R8NTKLyF48lukh4WSDUkkQdcGVVvZ
+         PbPtyhJnwldgzfCfQjp9THXX22RgFrySrZhe0+61zf+e46lmXokT28IWyHBVmROislI7
+         oqQqenLivC/VfXkyX9p8PgCZKUol/OviEtG/sumTN8LPFEeXgMc9/aefHDlMg2zzM/S7
+         wPe1qAgnV4zVh/8LCs3QK94LDT/F40GSH8Fg5SEHN0zwe5Btah2Jv7vhs0zY9xj7c67S
+         Madm64PC4Ow8Hh1v3H5L9RJa/vgzJLjza4rFnXfE5WHyCfNLkhn04LJ+2U1vihNAnR0y
+         IuRA==
+X-Gm-Message-State: AO0yUKVezJpzAHM52zpdtiqHIIbjwEV6VndLbJXnhknP9Smfo9aESLQE
+        DcqjL2HXNR5T5qa059RwR4Vh8Ro5AIZR//po4FSU+g==
+X-Google-Smtp-Source: AK7set8D1/GoK5Fl4fYWNhlGPY7s1qPfwAeWGwTNA2dp3/dqT4Lp4AIx+R6OunUD8NUCzoZnUYmbp3nMfC/+JjD3zGA=
+X-Received: by 2002:aa7:9045:0:b0:593:adfa:8a1e with SMTP id
+ n5-20020aa79045000000b00593adfa8a1emr2481029pfo.8.1675451701299; Fri, 03 Feb
+ 2023 11:15:01 -0800 (PST)
 MIME-Version: 1.0
-References: <20221218232217.1713283-1-evanhensbergen@icloud.com>
- <20230124023834.106339-1-ericvh@kernel.org> <2302787.WOG5zRkYfl@silver>
-In-Reply-To: <2302787.WOG5zRkYfl@silver>
-From:   Eric Van Hensbergen <ericvh@gmail.com>
-Date:   Fri, 3 Feb 2023 13:12:14 -0600
-Message-ID: <CAFkjPTk=OwqKksY5AYzW4UOzKTbhg-GeWvVQtr0d_SU-F2GZQw@mail.gmail.com>
-Subject: Re: [PATCH v3 00/11] Performance fixes for 9p filesystem
-To:     Christian Schoenebeck <linux_oss@crudebyte.com>
-Cc:     v9fs-developer@lists.sourceforge.net, asmadeus@codewreck.org,
-        rminnich@gmail.com, lucho@ionkov.net,
-        Eric Van Hensbergen <ericvh@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+References: <20230203173946.gonna.972-kees@kernel.org>
+In-Reply-To: <20230203173946.gonna.972-kees@kernel.org>
+From:   Fangrui Song <maskray@google.com>
+Date:   Fri, 3 Feb 2023 11:14:49 -0800
+Message-ID: <CAFP8O3LdXO4-w57KeX+E2D2rOAv-bK47ur0=8XLgfEkXgB=5eg@mail.gmail.com>
+Subject: Re: [PATCH v2] arm64: Support Clang UBSAN trap codes for better reporting
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        John Stultz <jstultz@google.com>,
+        Yongqin Liu <yongqin.liu@linaro.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Yury Norov <yury.norov@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Marco Elver <elver@google.com>,
+        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Alexander Potapenko <glider@google.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,121 +82,287 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christian, thanks for the feedback -- will dig in and see if I can
-find what's gone south here.  Clearly my approach to writeback without
-writeback_fid didn't cover all the corner cases and thats the cause of
-the fault.  Can I get a better idea of how to reproduce - you booted
-with a root 9p file system, and then tried to build...what?
+On Fri, Feb 3, 2023 at 9:39 AM Kees Cook <keescook@chromium.org> wrote:
+>
+> When building with CONFIG_UBSAN_TRAP=y on arm64, Clang encodes the UBSAN
+> check (handler) type in the esr. Extract this and actually report these
+> traps as coming from the specific UBSAN check that tripped.
+>
+> Before:
+>
+>   Internal error: BRK handler: 00000000f20003e8 [#1] PREEMPT SMP
+>
+> After:
+>
+>   Internal error: UBSAN: shift out of bounds: 00000000f2005514 [#1] PREEMPT SMP
+>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: John Stultz <jstultz@google.com>
+> Cc: Yongqin Liu <yongqin.liu@linaro.org>
+> Cc: Sami Tolvanen <samitolvanen@google.com>
+> Cc: Ard Biesheuvel <ardb@kernel.org>
+> Cc: Yury Norov <yury.norov@gmail.com>
+> Cc: Andrey Konovalov <andreyknvl@gmail.com>
+> Cc: Marco Elver <elver@google.com>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: llvm@lists.linux.dev
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+> v2: improve commit log, limit report strings to actual configs, document mappings
+> v1: https://lore.kernel.org/lkml/20230202223653.never.473-kees@kernel.org/
 
-Performance degradation is interesting, runs counter to the
-unit-testing and benchmarking I did, but I didn't do something as
-logical as a build to check -- need to tease apart whether this is a
-read problem, a write problem...or both.  My intuition is that its on
-the write side, but as part of going through the code I made the cache
-code a lot more pessimistic so its possible I inadvertently killed an
-optimistic optimization.
+Thanks. I'll add the Linux kernel use to
+https://maskray.me/blog/2023-01-29-all-about-undefined-behavior-sanitizer
+when this lands:)
 
-Finally, just to clarify, the panic you had at the end happened with
-readahead?  Seems interesting because clearly it thought it was
-writing back something that it shouldn't have been writing back (since
-writeback caches weren't enabled).   I'm thinking something was marked
-as dirty even though the underlying system just wrote-through the
-change and so the writeback isn't actually required.  This may also be
-an indicator of the performance issue if we are actually writing
-through the data in addition to an unnecessary write-back (which I
-also worry is writing back bad data in the second case).
+> ---
+>  arch/arm64/include/asm/brk-imm.h |  2 +
+>  arch/arm64/kernel/traps.c        | 21 ++++++++++
+>  include/linux/ubsan.h            |  9 +++++
+>  lib/Makefile                     |  2 -
+>  lib/ubsan.c                      | 67 ++++++++++++++++++++++++++++++++
+>  lib/ubsan.h                      | 32 +++++++++++++++
+>  6 files changed, 131 insertions(+), 2 deletions(-)
+>  create mode 100644 include/linux/ubsan.h
+>
+> diff --git a/arch/arm64/include/asm/brk-imm.h b/arch/arm64/include/asm/brk-imm.h
+> index 6e000113e508..3f0f0d03268b 100644
+> --- a/arch/arm64/include/asm/brk-imm.h
+> +++ b/arch/arm64/include/asm/brk-imm.h
+> @@ -28,6 +28,8 @@
+>  #define BUG_BRK_IMM                    0x800
+>  #define KASAN_BRK_IMM                  0x900
+>  #define KASAN_BRK_MASK                 0x0ff
+> +#define UBSAN_BRK_IMM                  0x5500
+> +#define UBSAN_BRK_MASK                 0x00ff
 
-Can you give me an idea of what the other misbehaviors were?
+Q: How is 0x5500 derived?
 
-      -eric
+>  #define CFI_BRK_IMM_TARGET             GENMASK(4, 0)
+>  #define CFI_BRK_IMM_TYPE               GENMASK(9, 5)
+> diff --git a/arch/arm64/kernel/traps.c b/arch/arm64/kernel/traps.c
+> index 4c0caa589e12..87f42eb1c950 100644
+> --- a/arch/arm64/kernel/traps.c
+> +++ b/arch/arm64/kernel/traps.c
+> @@ -26,6 +26,7 @@
+>  #include <linux/syscalls.h>
+>  #include <linux/mm_types.h>
+>  #include <linux/kasan.h>
+> +#include <linux/ubsan.h>
+>  #include <linux/cfi.h>
+>
+>  #include <asm/atomic.h>
+> @@ -1074,6 +1075,19 @@ static struct break_hook kasan_break_hook = {
+>  };
+>  #endif
+>
+> +#ifdef CONFIG_UBSAN_TRAP
+> +static int ubsan_handler(struct pt_regs *regs, unsigned long esr)
+> +{
+> +       die(report_ubsan_failure(regs, esr & UBSAN_BRK_MASK), regs, esr);
+> +       return DBG_HOOK_HANDLED;
+> +}
+> +
+> +static struct break_hook ubsan_break_hook = {
+> +       .fn     = ubsan_handler,
+> +       .imm    = UBSAN_BRK_IMM,
+> +       .mask   = UBSAN_BRK_MASK,
+> +};
+> +#endif
+>
+>  #define esr_comment(esr) ((esr) & ESR_ELx_BRK64_ISS_COMMENT_MASK)
+>
+> @@ -1091,6 +1105,10 @@ int __init early_brk64(unsigned long addr, unsigned long esr,
+>  #ifdef CONFIG_KASAN_SW_TAGS
+>         if ((esr_comment(esr) & ~KASAN_BRK_MASK) == KASAN_BRK_IMM)
+>                 return kasan_handler(regs, esr) != DBG_HOOK_HANDLED;
+> +#endif
+> +#ifdef CONFIG_UBSAN_TRAP
+> +       if ((esr_comment(esr) & ~UBSAN_BRK_MASK) == UBSAN_BRK_IMM)
+> +               return ubsan_handler(regs, esr) != DBG_HOOK_HANDLED;
+>  #endif
+>         return bug_handler(regs, esr) != DBG_HOOK_HANDLED;
+>  }
+> @@ -1104,6 +1122,9 @@ void __init trap_init(void)
+>         register_kernel_break_hook(&fault_break_hook);
+>  #ifdef CONFIG_KASAN_SW_TAGS
+>         register_kernel_break_hook(&kasan_break_hook);
+> +#endif
+> +#ifdef CONFIG_UBSAN_TRAP
+> +       register_kernel_break_hook(&ubsan_break_hook);
+>  #endif
 
-On Thu, Feb 2, 2023 at 5:27 AM Christian Schoenebeck
-<linux_oss@crudebyte.com> wrote:
+IIUC, the break hook is a list so CONFIG_KASAN_SW_TAGS
+(kernel-hwaddress) can be used with CONFIG_UBSAN_TRAP.
+
+>         debug_traps_init();
+>  }
+> diff --git a/include/linux/ubsan.h b/include/linux/ubsan.h
+> new file mode 100644
+> index 000000000000..bff7445498de
+> --- /dev/null
+> +++ b/include/linux/ubsan.h
+> @@ -0,0 +1,9 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef _LINUX_UBSAN_H
+> +#define _LINUX_UBSAN_H
+> +
+> +#ifdef CONFIG_UBSAN_TRAP
+> +const char *report_ubsan_failure(struct pt_regs *regs, u32 check_type);
+> +#endif
+> +
+> +#endif
+> diff --git a/lib/Makefile b/lib/Makefile
+> index 4d9461bfea42..81b988bf9448 100644
+> --- a/lib/Makefile
+> +++ b/lib/Makefile
+> @@ -340,9 +340,7 @@ quiet_cmd_build_OID_registry = GEN     $@
+>  clean-files    += oid_registry_data.c
 >
-> On Tuesday, January 24, 2023 3:38:23 AM CET Eric Van Hensbergen wrote:
-> > This is the third version of a patch series which adds a number
-> > of features to improve read/write performance in the 9p filesystem.
-> > Mostly it focuses on fixing caching to help utilize the recently
-> > increased MSIZE limits and also fixes some problematic behavior
-> > within the writeback code.
-> >
-> > All together, these show roughly 10x speed increases on simple
-> > file transfers.  Future patch sets will improve cache consistency
-> > and directory caching.
-> >
-> > These patches are also available on github:
-> > https://github.com/v9fs/linux/tree/ericvh/for-next
-> > and on kernel.org:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/ericvh/v9fs.git
-> >
-> > Tested against qemu, cpu, and diod with fsx, dbench, and some
-> > simple benchmarks.
+>  obj-$(CONFIG_UCS2_STRING) += ucs2_string.o
+> -ifneq ($(CONFIG_UBSAN_TRAP),y)
+>  obj-$(CONFIG_UBSAN) += ubsan.o
+> -endif
 >
-> Looks like this needs more work.
+>  UBSAN_SANITIZE_ubsan.o := n
+>  KASAN_SANITIZE_ubsan.o := n
+> diff --git a/lib/ubsan.c b/lib/ubsan.c
+> index 60c7099857a0..f05ae85fc268 100644
+> --- a/lib/ubsan.c
+> +++ b/lib/ubsan.c
+> @@ -18,6 +18,71 @@
 >
-> I only had a glimpse on your patches yet, but made some tests by doing
-> compilations on guest on top of a 9p root fs [1], msize=500k. Under that
-> scenario:
+>  #include "ubsan.h"
 >
-> * loose: this is suprisingly the only mode where I can see some performance
-> increase, over "loose" on master it compiled ~5% faster, but I also got some
-> misbehaviours on guest.
+> +#ifdef CONFIG_UBSAN_TRAP
+> +/*
+> + * Only include matches for UBSAN checks that are actually compiled in.
+> + * The mappings of struct SanitizerKind (the -fsanitize=xxx args) to
+> + * enum SanitizerHandler (the traps) in Clang is in clang/lib/CodeGen/.
+> + */
+> +const char *report_ubsan_failure(struct pt_regs *regs, u32 check_type)
+> +{
+> +       switch (check_type) {
+> +#ifdef CONFIG_UBSAN_BOUNDS
+> +       /*
+> +        * SanitizerKind::ArrayBounds and SanitizerKind::LocalBounds
+> +        * emit SanitizerHandler::OutOfBounds.
+> +        */
+> +       case ubsan_out_of_bounds:
+> +               return "UBSAN: array index out of bounds";
+> +#endif
+> +#ifdef CONFIG_UBSAN_SHIFT
+> +       /*
+> +        * SanitizerKind::ShiftBase and SanitizerKind::ShiftExponent
+> +        * emit SanitizerHandler::ShiftOutOfBounds.
+> +        */
+> +       case ubsan_shift_out_of_bounds:
+> +               return "UBSAN: shift out of bounds";
+> +#endif
+> +#ifdef CONFIG_UBSAN_DIV_ZERO
+> +       /*
+> +        * SanitizerKind::IntegerDivideByZero emits
+> +        * SanitizerHandler::DivremOverflow.
+> +        */
+> +       case ubsan_divrem_overflow:
+> +               return "UBSAN: divide/remainder overflow";
+> +#endif
+> +#ifdef CONFIG_UBSAN_UNREACHABLE
+> +       /*
+> +        * SanitizerKind::Unreachable emits
+> +        * SanitizerHandler::BuiltinUnreachable.
+> +        */
+> +       case ubsan_builtin_unreachable:
+> +               return "UBSAN: unreachable code";
+> +#endif
+> +#if defined(CONFIG_UBSAN_BOOL) || defined(CONFIG_UBSAN_ENUM)
+> +       /*
+> +        * SanitizerKind::Bool and SanitizerKind::Enum emit
+> +        * SanitizerHandler::LoadInvalidValue.
+> +        */
+> +       case ubsan_load_invalid_value:
+> +               return "UBSAN: loading invalid value";
+> +#endif
+> +#ifdef CONFIG_UBSAN_ALIGNMENT
+> +       /*
+> +        * SanitizerKind::Alignment emits SanitizerHandler::TypeMismatch
+> +        * or SanitizerHandler::AlignmentAssumption.
+> +        */
+> +       case ubsan_alignment_assumption:
+> +               return "UBSAN: alignment assumption";
+> +       case ubsan_type_mismatch:
+> +               return "UBSAN: type mismatch";
+> +#endif
+> +       default:
+> +               return "UBSAN: unrecognized failure code";
+> +       }
+> +}
+
+I wonder whether keeping the dash-prefixed name is better since that
+matches compiler-rt/lib/ubsan.
+People can search for "add-overflow" and get cross references from
+compiler-rt/lib/ubsan, instead of needing to knowing that "addition
+overflow" is another name for "add-overflow".
+
+> +
+> +#else
+>  static const char * const type_check_kinds[] = {
+>         "load of",
+>         "store to",
+> @@ -384,3 +449,5 @@ void __ubsan_handle_alignment_assumption(void *_data, unsigned long ptr,
+>         ubsan_epilogue();
+>  }
+>  EXPORT_SYMBOL(__ubsan_handle_alignment_assumption);
+> +
+> +#endif /* !CONFIG_UBSAN_TRAP */
+> diff --git a/lib/ubsan.h b/lib/ubsan.h
+> index 9a0b71c5ff9f..cc5cb94895a6 100644
+> --- a/lib/ubsan.h
+> +++ b/lib/ubsan.h
+> @@ -2,6 +2,38 @@
+>  #ifndef _LIB_UBSAN_H
+>  #define _LIB_UBSAN_H
 >
-> * writeahead: no performance results, as compilation already aborts when
-> trying to detect a compiler. I had to restore a previous snapshot to repair
-> things after this test.
->
-> * readahead: significant performance drop. In comparison to "loose" on master
-> compilation takes 6 times longer with "readahead". There are some severe
-> misbehaviours on guest as well, and after boot I get this warning:
->
-> [    5.782846] folio expected an open fid inode->i_private=0000000000000000
-> [    5.786641] WARNING: CPU: 0 PID: 321 at fs/9p/vfs_addr.c:174 v9fs_vfs_write_folio_locked (fs/9p/vfs_addr.c:174 (discriminator 3)) 9p
-> [    5.792496] Modules linked in: ppdev(E) bochs(E) sg(E) drm_vram_helper(E) joydev(E) evdev(E) drm_kms_helper(E) serio_raw(E) drm_ttm_helper(E) pcsp)
-> [    5.816806] CPU: 0 PID: 321 Comm: chown Tainted: G            E      6.2.0-rc6+ #61
-> [    5.821694] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.1-0-g3208b098f51a-prebuilt.qemu.org 04/01/2014
-> [    5.827362] RIP: 0010:v9fs_vfs_write_folio_locked (fs/9p/vfs_addr.c:174 (discriminator 3)) 9p
->
-> Code starting with the faulting instruction
-> ===========================================
->         ...
-> [    5.835360] RSP: 0018:ffffc900007d3a38 EFLAGS: 00010282
-> [    5.836982] RAX: 0000000000000000 RBX: ffff888106c86680 RCX: 0000000000000000
-> [    5.838877] RDX: 0000000000000001 RSI: ffffffff821eb1e6 RDI: 00000000ffffffff
-> [    5.841179] RBP: ffffea0004279300 R08: 0000000000000000 R09: 00000000ffffefff
-> [    5.843039] R10: ffffc900007d38e8 R11: ffffffff824bede8 R12: 0000000000000000
-> [    5.844850] R13: 00000000ffffffea R14: 0000000000000014 R15: 0000000000000014
-> [    5.846366] FS:  00007fd0fc4a0580(0000) GS:ffff88842fc00000(0000) knlGS:0000000000000000
-> [    5.848250] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [    5.849386] CR2: 00007fd0fc38f4f0 CR3: 0000000100302000 CR4: 00000000000006f0
-> [    5.850824] Call Trace:
-> [    5.851622]  <TASK>
-> [    5.852052] v9fs_vfs_writepage (fs/9p/vfs_addr.c:207) 9p
-> [    5.852841] __writepage (mm/page-writeback.c:2537)
-> [    5.853438] write_cache_pages (mm/page-writeback.c:2473)
-> [    5.854205] ? __pfx___writepage (mm/page-writeback.c:2535)
-> [    5.855309] ? delete_node (lib/radix-tree.c:575)
-> [    5.856122] ? radix_tree_delete_item (lib/radix-tree.c:1432)
-> [    5.857101] do_writepages (mm/page-writeback.c:2564 mm/page-writeback.c:2552 mm/page-writeback.c:2583)
-> [    5.857954] ? radix_tree_delete_item (lib/radix-tree.c:1432)
-> [    5.859103] filemap_fdatawrite_wbc (mm/filemap.c:389 mm/filemap.c:378)
-> [    5.860043] __filemap_fdatawrite_range (mm/filemap.c:422)
-> [    5.861050] filemap_write_and_wait_range (mm/filemap.c:682 mm/filemap.c:665)
-> [    5.862132] v9fs_vfs_setattr_dotl (./include/linux/pagemap.h:60 fs/9p/vfs_inode_dotl.c:583) 9p
-> [    5.863312] notify_change (fs/attr.c:486)
-> [    5.864043] ? chown_common (fs/open.c:736)
-> [    5.864793] chown_common (fs/open.c:736)
-> [    5.865538] ? preempt_count_add (./include/linux/ftrace.h:977 kernel/sched/core.c:5737 kernel/sched/core.c:5734 kernel/sched/core.c:5762)
-> [    5.866420] do_fchownat (fs/open.c:768)
-> [    5.867419] __x64_sys_fchownat (fs/open.c:782 fs/open.c:779 fs/open.c:779)
-> [    5.868319] do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
-> [    5.869116] entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:120)
-> [    5.871008] RIP: 0033:0x7fd0fc3b7b9a
->
-> Best regards,
-> Christian Schoenebeck
->
-> [1] https://wiki.qemu.org/Documentation/9p_root_fs
+> +/*
+> + * ABI defined by Clang's UBSAN enum SanitizerHandler:
+> + * https://github.com/llvm/llvm-project/blob/release/16.x/clang/lib/CodeGen/CodeGenFunction.h#L113
+> + */
+> +enum ubsan_checks {
+> +       ubsan_add_overflow,
+> +       ubsan_builtin_unreachable,
+> +       ubsan_cfi_check_fail,
+> +       ubsan_divrem_overflow,
+> +       ubsan_dynamic_type_cache_miss,
+> +       ubsan_float_cast_overflow,
+> +       ubsan_function_type_mismatch,
+> +       ubsan_implicit_conversion,
+> +       ubsan_invalid_builtin,
+> +       ubsan_invalid_objc_cast,
+> +       ubsan_load_invalid_value,
+> +       ubsan_missing_return,
+> +       ubsan_mul_overflow,
+> +       ubsan_negate_overflow,
+> +       ubsan_nullability_arg,
+> +       ubsan_nullability_return,
+> +       ubsan_nonnull_arg,
+> +       ubsan_nonnull_return,
+> +       ubsan_out_of_bounds,
+> +       ubsan_pointer_overflow,
+> +       ubsan_shift_out_of_bounds,
+> +       ubsan_sub_overflow,
+> +       ubsan_type_mismatch,
+> +       ubsan_alignment_assumption,
+> +       ubsan_vla_bound_not_positive,
+> +};
+> +
+>  enum {
+>         type_kind_int = 0,
+>         type_kind_float = 1,
+> --
+> 2.34.1
 >
 >
->
+
+Reviewed-by: Fangrui Song <maskray@google.com>
