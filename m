@@ -2,96 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2783688FA5
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 07:26:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAFD5688FAE
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 07:30:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231705AbjBCGZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 01:25:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60654 "EHLO
+        id S231465AbjBCGae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 01:30:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231315AbjBCGZ4 (ORCPT
+        with ESMTP id S229837AbjBCGaa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 01:25:56 -0500
-Received: from smtp.smtpout.orange.fr (smtp-12.smtpout.orange.fr [80.12.242.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 648BA53B0E
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 22:25:54 -0800 (PST)
-Received: from [192.168.1.18] ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id NpW9pzOCvftdHNpW9puWnL; Fri, 03 Feb 2023 07:25:52 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Fri, 03 Feb 2023 07:25:52 +0100
-X-ME-IP: 86.243.2.178
-Message-ID: <dd1c45ad-7af2-8df1-a3ab-0db99dd25934@wanadoo.fr>
-Date:   Fri, 3 Feb 2023 07:25:45 +0100
+        Fri, 3 Feb 2023 01:30:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2079023319
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 22:30:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AF12F61CC8
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 06:30:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E8BEC433EF;
+        Fri,  3 Feb 2023 06:30:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675405828;
+        bh=j6I7zaAES9oltJCRwDO/7+UEDLvZ7GINMhpnILkQXUo=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=mInjAoh3BTeCCcM5IeeR8jvO7wVCIrKyBP6eOVYV6NdaZ6xL9NG06/+voAtY/NscN
+         sIhzQE8MuUaZ0fgHuH3AtJL/Cu3EFqgsEA+z1mN8HZAIfFpSkEkLs0/cgNd/vEzcu8
+         gN8sPDXyCA9Wd5z11DQPttPdME4BsSvZ6hyofD9G+RR0syeIXyQKidltsmxkeC6ljs
+         bnutrPDZihk0YUE3RV9mN+oOO05+rF5iJDHC1c8EyiWNmOv1ZC/l70HktQ7Qj4YNmS
+         Wuqdu1UmnDypfEtoVZDla0QO7ItArq9+qV4UsxmzNMn93ANIZyNlMWvT/CxEwpP3Nw
+         0D5KMEzf2Arbw==
+Date:   Fri, 03 Feb 2023 06:30:24 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     JeeHeng Sia <jeeheng.sia@starfivetech.com>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>
+CC:     "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Leyfoon Tan <leyfoon.tan@starfivetech.com>,
+        Mason Huo <mason.huo@starfivetech.com>
+Subject: =?US-ASCII?Q?RE=3A_=5BPATCH_v3_4/4=5D_RISC-V=3A_Add_arch_functi?= =?US-ASCII?Q?ons_to_support_hibernation/suspend-to-disk?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <debdfe40909c4b4787868b11730170c9@EXMBX066.cuchost.com>
+References: <20230127091051.1465278-1-jeeheng.sia@starfivetech.com> <20230127091051.1465278-5-jeeheng.sia@starfivetech.com> <Y9hTGo6dfgeusW4B@spud> <debdfe40909c4b4787868b11730170c9@EXMBX066.cuchost.com>
+Message-ID: <26A8AAC0-D477-45CD-A7D1-55218992B25F@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] wifi: plfxlc: fix potential NULL pointer dereference in
- plfxlc_usb_wreq_async()
-To:     Zheng Wang <zyytlz.wz@163.com>, srini.raju@purelifi.com
-Cc:     kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230203041644.581649-1-zyytlz.wz@163.com>
-Content-Language: fr
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20230203041644.581649-1-zyytlz.wz@163.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 03/02/2023 à 05:16, Zheng Wang a écrit :
-> Although the usb_alloc_urb uses GFP_ATOMIC, tring to make sure the memory
->   allocated not to be NULL. But in some low-memory situation, it's still
->   possible to return NULL. It'll pass urb as argument in
->   usb_fill_bulk_urb, which will finally lead to a NULL pointer dereference.
-> 
-> Fix it by adding additional check.
-> 
-> Note that, as a bug found by static analysis, it can be a false
-> positive or hard to trigger.
-> 
-> Fixes: 68d57a07bfe5 ("wireless: add plfxlc driver for pureLiFi X, XL, XC devices")
-> 
-> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
-> ---
->   drivers/net/wireless/purelifi/plfxlc/usb.c | 7 +++++++
->   1 file changed, 7 insertions(+)
-> 
-> diff --git a/drivers/net/wireless/purelifi/plfxlc/usb.c b/drivers/net/wireless/purelifi/plfxlc/usb.c
-> index 76d0a778636a..ac149aa64908 100644
-> --- a/drivers/net/wireless/purelifi/plfxlc/usb.c
-> +++ b/drivers/net/wireless/purelifi/plfxlc/usb.c
-> @@ -496,10 +496,17 @@ int plfxlc_usb_wreq_async(struct plfxlc_usb *usb, const u8 *buffer,
->   	struct urb *urb = usb_alloc_urb(0, GFP_ATOMIC);
->   	int r;
->   
-> +	if (!urb) {
-> +		r = -ENOMEM;
-> +		kfree(urb);
 
-Hi,
-why kfree() in such a case?
 
-CJ
+On 3 February 2023 03:43:35 GMT, JeeHeng Sia <jeeheng=2Esia@starfivetech=
+=2Ecom> wrote:
+>
+>
+>> -----Original Message-----
+>> From: Conor Dooley <conor@kernel=2Eorg>
+>> Sent: Tuesday, 31 January, 2023 7:31 AM
+>> To: JeeHeng Sia <jeeheng=2Esia@starfivetech=2Ecom>; Alexandre Ghiti <al=
+exghiti@rivosinc=2Ecom>
+>> Cc: paul=2Ewalmsley@sifive=2Ecom; palmer@dabbelt=2Ecom; aou@eecs=2Eberk=
+eley=2Eedu; linux-riscv@lists=2Einfradead=2Eorg; linux-
+>> kernel@vger=2Ekernel=2Eorg; Leyfoon Tan <leyfoon=2Etan@starfivetech=2Ec=
+om>; Mason Huo <mason=2Ehuo@starfivetech=2Ecom>
+>> Subject: Re: [PATCH v3 4/4] RISC-V: Add arch functions to support hiber=
+nation/suspend-to-disk
+>>=20
+>> +CC Alex
+>>=20
+>> Alex, could you take a look at the page table bits here when you get a
+>> chance please?
+>>=20
+>> > + * @a0 - destination
+>> > + * @a1 - source
+>> > + */
+>> > +	=2Emacro	copy_page a0, a1
+>> > +		lui	a2, 0x1
+>> > +		add	a2, a2, a0
+>> > +=2E1 :
+>> > +		REG_L	t0, 0(a1)
+>> > +		REG_L	t1, SZREG(a1)
+>> > +
+>> > +		REG_S	t0, 0(a0)
+>> > +		REG_S	t1, SZREG(a0)
+>> > +
+>> > +		addi	a0, a0, 2 * SZREG
+>> > +		addi	a1, a1, 2 * SZREG
+>> > +		bne	a2, a0, =2E1
+>>=20
+>> allmodconfig, clang 15=2E0=2E4:
+>>=20
+>> <instantiation>:3:1: error: unexpected token at start of statement
+>> =2E1 :
+>> ^
+>> /stuff/linux/arch/riscv/kernel/hibernate-asm=2ES:83:2: note: while in m=
+acro instantiation
+>>  copy_page a0, a1
+>>  ^
+>> <instantiation>:12:15: error: unknown operand
+>>   bne a2, a0, =2E1
+>>               ^
+>> /stuff/linux/arch/riscv/kernel/hibernate-asm=2ES:83:2: note: while in m=
+acro instantiation
+>>  copy_page a0, a1
+>>  ^
+>> make[5]: *** [/stuff/linux/scripts/Makefile=2Ebuild:384: arch/riscv/ker=
+nel/hibernate-asm=2Eo] Error 1
+>Hi Conor, I couldn't reproduce the above error, could you share the build=
+ command please?
 
-> +		goto out;
-> +	}
->   	usb_fill_bulk_urb(urb, udev, usb_sndbulkpipe(udev, EP_DATA_OUT),
->   			  (void *)buffer, buffer_len, complete_fn, context);
->   
->   	r = usb_submit_urb(urb, GFP_ATOMIC);
-> +
-> +out:
->   	if (r)
->   		dev_err(&udev->dev, "Async write submit failed (%d)\n", r);
->   
+It was just allmodconfig with LLVM=3D1
 
+>>=20
+>> > +	=2Eendm
+>> > +
+>> >  #endif	/* __ASM_ASSEMBLER_H */
+>=20
+>> Thanks,
+>> Conor=2E
+>
