@@ -2,137 +2,514 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEE66689FF4
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 18:07:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 624EC689FFA
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 18:08:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232806AbjBCRHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 12:07:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53698 "EHLO
+        id S233740AbjBCRIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 12:08:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232102AbjBCRG6 (ORCPT
+        with ESMTP id S233560AbjBCRIT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 12:06:58 -0500
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2C39D06F;
-        Fri,  3 Feb 2023 09:06:57 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 292A65C039C;
-        Fri,  3 Feb 2023 12:06:57 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Fri, 03 Feb 2023 12:06:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1675444017; x=1675530417; bh=VxXJxYIPXv5W1b2DuSTnG3h266yM
-        n84BrwVZXf0OoBE=; b=FF9EwHkwa0Zr/2YgDkYkO260VoVYDFPfdSKIw0xooXry
-        POePgsM/c0pJ4275GEWJCj5+R2viqbMMxLWnlJu7PBFfP+p7nqWnlkpI/JyIjgvM
-        0BAsN2x3u8KEWhaQamirT/bZGqOUc9Nb+IqdFHay0v1VtPhb9WsAOFzZFHYpVPrm
-        ufNgPrK42fo31lVBnNYqODjPWWfxPTXWmqxspIX5OMPa881YYqPx5SwBssMYh/dr
-        XEWjfg+V220WXBlFZieLX5wZXmaOuVXePunwWkPm9XjwDVAEM7DaivKJcFH7ZjCG
-        y4VHyCoLJu/hMY3gfpYyjmH6ADsgspjUeC/1GampaQ==
-X-ME-Sender: <xms:Lz_dY9taAdul_ZgZWNaTYO-qEVnby_sHLAszHSg0iXBGR2nm7Akr7w>
-    <xme:Lz_dY2eNDmvUzyk0GXNsDIfmdWhY95FcXjARRvNykL6YYoedPRXAttapptS5ODLlC
-    VfQpnQEO-lSMNM>
-X-ME-Received: <xmr:Lz_dYwwXkUzytces8t_usahexlD6gvX9QQ4Exhh44r92pdNEMguh4a6bHdllPQED2ZBGR9DaRftVgJgqv8E1k-0vx70>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudegtddgledvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepkfguohcu
-    ufgthhhimhhmvghluceoihguohhstghhsehiughoshgthhdrohhrgheqnecuggftrfgrth
-    htvghrnhepvddufeevkeehueegfedtvdevfefgudeifeduieefgfelkeehgeelgeejjeeg
-    gefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepih
-    guohhstghhsehiughoshgthhdrohhrgh
-X-ME-Proxy: <xmx:Lz_dY0MEb-DwR57d-j_Gl-qLoBo2Z2kGUXLpxK3y3eZrGTywkU1aLQ>
-    <xmx:Lz_dY9_GIJH5wlD0jcqqs9nty6r4MtnZ0z4h2c9ReT_7obPRqhxGrw>
-    <xmx:Lz_dY0WjG3Y2VkkVQbZf0UXtx70DtwKKjWlkjI6FlsMJSQrXRk3YGg>
-    <xmx:MT_dY5J8Liv0IRcIZMEe9Y35dJrpbgugWCoCx2bhz1ku66IpEUCVRg>
-Feedback-ID: i494840e7:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 3 Feb 2023 12:06:54 -0500 (EST)
-Date:   Fri, 3 Feb 2023 19:06:51 +0200
-From:   Ido Schimmel <idosch@idosch.org>
-To:     netdev@kapio-technology.com
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
-        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>
-Subject: Re: [PATCH net-next 1/5] net: bridge: add dynamic flag to switchdev
- notifier
-Message-ID: <Y90/K8BPHijxFZci@shredder>
-References: <20230130173429.3577450-1-netdev@kapio-technology.com>
- <20230130173429.3577450-2-netdev@kapio-technology.com>
- <Y9qrAup9Xt/ZDEG0@shredder>
- <f27dd18d9d0b7ff8b693af8a58ea8616@kapio-technology.com>
- <Y9vgz4x/O+dIp+0/@shredder>
- <766efaf94fcb6362c5ceb176ad7955f1@kapio-technology.com>
- <Y90y9u+4PxWk4b9E@shredder>
- <4188a35c3c260d8ea2b5f8b2ac0ae6b2@kapio-technology.com>
+        Fri, 3 Feb 2023 12:08:19 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F2689EE32
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 09:07:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675444043;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=n/LlZDn23HB324SQHQ+0J+ByiKAzljtqAhnLrmeqO/k=;
+        b=aG9n/SHA7uoUtxXw9jk8b7ulvjs0IHz/kUQQGQmPkttWutsh9St3s+6+j8KqwYYw60MpwI
+        MSpt+EVK0pXns4ZYAdezkJ+tvGiVVJAE8juuLnwjRqYKTxroZjM2e2GJISDXmiouwcG+Ln
+        FZ3PGwDDJkwFZJT5EujYoPZB/cX9ZrQ=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-616-sH77CVEjN_u_uPqCsapZMg-1; Fri, 03 Feb 2023 12:07:20 -0500
+X-MC-Unique: sH77CVEjN_u_uPqCsapZMg-1
+Received: by mail-qk1-f199.google.com with SMTP id x12-20020a05620a258c00b007051ae500a2so3645973qko.15
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 09:07:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=n/LlZDn23HB324SQHQ+0J+ByiKAzljtqAhnLrmeqO/k=;
+        b=slMfsejN8uxzBla0ipM0lAXxhgnPopU5th9gwEXyolDHGXphcGc1tU/JUeJVaLPvvF
+         tOGZq4jpHlbxktg4jF8VuOjSDuunoaHd/XxAAiJrX1Ioz0uDyqKfzQQ2UMEohyVFVw8Z
+         psdHfs18I9DpKRCsPHRHuqKdpRsQkUOTs7RlMuHept03xMEXsuHaDHpV2lEh18TsKnWj
+         qWIBdwtmEmGVs8m+gP7I9bkZEOJRRsD4ZW8AavxvCwSxoumd71n11feUD8JnVTpOzjs/
+         lE44MO0nF4WP4kt9u1Z9BsMmwod1POND+leCVS8d8voGHXobbVumyZTNFUuz6ZVEKqaB
+         0d+w==
+X-Gm-Message-State: AO0yUKV5vGZj1pmMEzEBEBx/WGE7QKk9gEshC3BaEdX9Sc4syWBH/pfD
+        9sxGSjaDEoilehHPkA/P5dJN2S0ZGL4cTb92LDCRy2PWyGugGMc660ZkXRN3+iAYPARA6qdu3O8
+        B9+nfCb3AE5ulfbl40YQ03u0=
+X-Received: by 2002:a05:6214:411a:b0:56a:eea2:9361 with SMTP id kc26-20020a056214411a00b0056aeea29361mr1622135qvb.31.1675444039983;
+        Fri, 03 Feb 2023 09:07:19 -0800 (PST)
+X-Google-Smtp-Source: AK7set9cGKgBgCh7EecMUjgYhNdUPt9dhzc6F9lAG303dYZcktvmshEiSF0R5vFKoznNPSooh+2SBQ==
+X-Received: by 2002:a05:6214:411a:b0:56a:eea2:9361 with SMTP id kc26-20020a056214411a00b0056aeea29361mr1622078qvb.31.1675444039544;
+        Fri, 03 Feb 2023 09:07:19 -0800 (PST)
+Received: from klayman.redhat.com (net-2-34-30-183.cust.vodafonedsl.it. [2.34.30.183])
+        by smtp.gmail.com with ESMTPSA id b13-20020ac801cd000000b003a6a19ee4f0sm1884287qtg.33.2023.02.03.09.07.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Feb 2023 09:07:19 -0800 (PST)
+From:   Marco Pagani <marpagan@redhat.com>
+To:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>
+Cc:     Marco Pagani <marpagan@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-fpga@vger.kernel.org
+Subject: [RFC PATCH 3/4] fpga: add fake FPGA manager
+Date:   Fri,  3 Feb 2023 18:06:52 +0100
+Message-Id: <20230203170653.414990-4-marpagan@redhat.com>
+X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230203170653.414990-1-marpagan@redhat.com>
+References: <20230203170653.414990-1-marpagan@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4188a35c3c260d8ea2b5f8b2ac0ae6b2@kapio-technology.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 05:27:43PM +0100, netdev@kapio-technology.com wrote:
-> On 2023-02-03 17:14, Ido Schimmel wrote:
-> > 
-> > OK, so can't this hunk:
-> > 
-> > ```
-> > 	if (fdb_info->is_dyn)
-> > 		fdb_flags |= DSA_FDB_FLAG_DYNAMIC;
-> > ```
-> > 
-> > Become:
-> > 
-> > ```
-> > 	if (fdb_info->is_dyn && !fdb_info->added_by_user)
-> > 		fdb_flags |= DSA_FDB_FLAG_DYNAMIC;
-> > ```
-> > 
-> > ?
-> > 
-> > Then there is no need to fold 'added_by_user' into 'is_dyn' in the
-> > bridge driver. I *think* this is the change Vladimir asked you to do.
-> 
-> I suppose you mean?:
->  	if (fdb_info->is_dyn && fdb_info->added_by_user)
->  		fdb_flags |= DSA_FDB_FLAG_DYNAMIC;
+Add fake FPGA manager platform driver with support functions.
+The driver checks the programming sequence using KUnit expectations.
+This module is part of the KUnit test suite for the FPGA subsystem.
 
-Yes
+Signed-off-by: Marco Pagani <marpagan@redhat.com>
+---
+ drivers/fpga/tests/fake-fpga-mgr.c | 365 +++++++++++++++++++++++++++++
+ drivers/fpga/tests/fake-fpga-mgr.h |  42 ++++
+ 2 files changed, 407 insertions(+)
+ create mode 100644 drivers/fpga/tests/fake-fpga-mgr.c
+ create mode 100644 drivers/fpga/tests/fake-fpga-mgr.h
+
+diff --git a/drivers/fpga/tests/fake-fpga-mgr.c b/drivers/fpga/tests/fake-fpga-mgr.c
+new file mode 100644
+index 000000000000..9daf328353d8
+--- /dev/null
++++ b/drivers/fpga/tests/fake-fpga-mgr.c
+@@ -0,0 +1,365 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Driver for fake FPGA manager
++ *
++ * Copyright (C) 2023 Red Hat, Inc. All rights reserved.
++ *
++ * Author: Marco Pagani <marpagan@redhat.com>
++ */
++
++#include <linux/types.h>
++#include <linux/device.h>
++#include <linux/platform_device.h>
++#include <linux/fpga/fpga-mgr.h>
++#include <kunit/test.h>
++
++#include "fake-fpga-mgr.h"
++
++#define FAKE_FPGA_MGR_DEV_NAME	"fake_fpga_mgr"
++
++#define FAKE_HEADER_BYTE	0x3f
++#define FAKE_HEADER_SIZE	FPGA_TEST_BIT_BLOCK
++
++struct fake_mgr_priv {
++	int rcfg_count;
++	bool op_parse_header;
++	bool op_write_init;
++	bool op_write;
++	bool op_write_sg;
++	bool op_write_complete;
++	struct kunit *test;
++};
++
++struct fake_mgr_data {
++	struct kunit *test;
++};
++
++static void check_header(struct kunit *test, const u8 *buf);
++
++static enum fpga_mgr_states op_state(struct fpga_manager *mgr)
++{
++	struct fake_mgr_priv *priv;
++
++	priv = mgr->priv;
++
++	if (priv->test)
++		kunit_info(priv->test, "Fake FPGA manager: state\n");
++
++	return FPGA_MGR_STATE_UNKNOWN;
++}
++
++static u64 op_status(struct fpga_manager *mgr)
++{
++	struct fake_mgr_priv *priv;
++
++	priv = mgr->priv;
++
++	if (priv->test)
++		kunit_info(priv->test, "Fake FPGA manager: status\n");
++
++	return 0;
++}
++
++static int op_parse_header(struct fpga_manager *mgr, struct fpga_image_info *info,
++			   const char *buf, size_t count)
++{
++	struct fake_mgr_priv *priv;
++
++	priv = mgr->priv;
++
++	if (priv->test) {
++		kunit_info(priv->test, "Fake FPGA manager: parse_header\n");
++
++		KUNIT_EXPECT_EQ(priv->test, mgr->state,
++				FPGA_MGR_STATE_PARSE_HEADER);
++
++		check_header(priv->test, buf);
++	}
++
++	priv->op_parse_header = true;
++
++	return 0;
++}
++
++static int op_write_init(struct fpga_manager *mgr, struct fpga_image_info *info,
++			 const char *buf, size_t count)
++{
++	struct fake_mgr_priv *priv;
++
++	priv = mgr->priv;
++
++	if (priv->test) {
++		kunit_info(priv->test, "Fake FPGA manager: write_init\n");
++
++		KUNIT_EXPECT_EQ(priv->test, mgr->state,
++				FPGA_MGR_STATE_WRITE_INIT);
++	}
++
++	priv->op_write_init = true;
++
++	return 0;
++}
++
++static int op_write(struct fpga_manager *mgr, const char *buf, size_t count)
++{
++	struct fake_mgr_priv *priv;
++
++	priv = mgr->priv;
++
++	if (priv->test) {
++		kunit_info(priv->test, "Fake FPGA manager: write\n");
++
++		KUNIT_EXPECT_EQ(priv->test, mgr->state,
++				FPGA_MGR_STATE_WRITE);
++	}
++
++	priv->op_write = true;
++
++	return 0;
++}
++
++static int op_write_sg(struct fpga_manager *mgr, struct sg_table *sgt)
++{
++	struct fake_mgr_priv *priv;
++
++	priv = mgr->priv;
++
++	if (priv->test) {
++		kunit_info(priv->test, "Fake FPGA manager: write_sg\n");
++
++		KUNIT_EXPECT_EQ(priv->test, mgr->state,
++				FPGA_MGR_STATE_WRITE);
++	}
++
++	priv->op_write_sg = true;
++
++	return 0;
++}
++
++static int op_write_complete(struct fpga_manager *mgr, struct fpga_image_info *info)
++{
++	struct fake_mgr_priv *priv;
++
++	priv = mgr->priv;
++
++	if (priv->test) {
++		kunit_info(priv->test, "Fake FPGA manager: write_complete\n");
++
++		KUNIT_EXPECT_EQ(priv->test, mgr->state,
++				FPGA_MGR_STATE_WRITE_COMPLETE);
++	}
++
++	priv->op_write_complete = true;
++	priv->rcfg_count++;
++
++	return 0;
++}
++
++static void op_fpga_remove(struct fpga_manager *mgr)
++{
++	struct fake_mgr_priv *priv;
++
++	priv = mgr->priv;
++
++	if (priv->test)
++		kunit_info(priv->test, "Fake FPGA manager: remove\n");
++}
++
++static const struct fpga_manager_ops fake_fpga_mgr_ops = {
++	.initial_header_size = FAKE_HEADER_SIZE,
++	.skip_header = false,
++	.state = op_state,
++	.status = op_status,
++	.parse_header = op_parse_header,
++	.write_init = op_write_init,
++	.write = op_write,
++	.write_sg = op_write_sg,
++	.write_complete = op_write_complete,
++	.fpga_remove = op_fpga_remove,
++};
++
++/**
++ * fake_fpga_mgr_register - register a fake FPGA manager
++ * @mgr_ctx: fake FPGA manager context data structure.
++ * @test: KUnit test context object.
++ *
++ * Return: 0 if registration succeeded, an error code otherwise.
++ */
++int fake_fpga_mgr_register(struct fake_fpga_mgr *mgr_ctx, struct kunit *test)
++{
++	struct fake_mgr_data pdata;
++	int ret;
++
++	pdata.test = test;
++
++	mgr_ctx->pdev = platform_device_alloc(FAKE_FPGA_MGR_DEV_NAME,
++					      PLATFORM_DEVID_AUTO);
++	if (IS_ERR(mgr_ctx->pdev)) {
++		pr_err("Fake FPGA manager device allocation failed\n");
++		return -ENOMEM;
++	}
++
++	platform_device_add_data(mgr_ctx->pdev, &pdata, sizeof(pdata));
++
++	ret = platform_device_add(mgr_ctx->pdev);
++	if (ret) {
++		pr_err("Fake FPGA manager device add failed\n");
++		platform_device_put(mgr_ctx->pdev);
++		return ret;
++	}
++
++	mgr_ctx->mgr = platform_get_drvdata(mgr_ctx->pdev);
++
++	if (test)
++		kunit_info(test, "Fake FPGA manager registered\n");
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(fake_fpga_mgr_register);
++
++/**
++ * fake_fpga_mgr_unregister - unregister a fake FPGA manager
++ * @mgr_ctx: fake FPGA manager context data structure.
++ */
++void fake_fpga_mgr_unregister(struct fake_fpga_mgr *mgr_ctx)
++{
++	struct fake_mgr_priv *priv;
++	struct kunit *test;
++
++	priv = mgr_ctx->mgr->priv;
++	test = priv->test;
++
++	if (mgr_ctx->pdev) {
++		platform_device_unregister(mgr_ctx->pdev);
++		if (test)
++			kunit_info(test, "Fake FPGA manager unregistered\n");
++	}
++}
++EXPORT_SYMBOL_GPL(fake_fpga_mgr_unregister);
++
++/**
++ * fake_fpga_mgr_get_rcfg_count - get the number of reconfigurations
++ * @mgr_ctx: fake FPGA manager context data structure.
++ *
++ * Return: number of reconfigurations.
++ */
++int fake_fpga_mgr_get_rcfg_count(const struct fake_fpga_mgr *mgr_ctx)
++{
++	struct fake_mgr_priv *priv;
++
++	priv = mgr_ctx->mgr->priv;
++
++	return priv->rcfg_count;
++}
++EXPORT_SYMBOL_GPL(fake_fpga_mgr_get_rcfg_count);
++
++/**
++ * fake_fpga_mgr_fill_header - fill the bitstream buffer with the test header
++ * @mgr_ctx: fake FPGA manager context data structure.
++ */
++void fake_fpga_mgr_fill_header(u8 *buf)
++{
++	int i;
++
++	for (i = 0; i < FAKE_HEADER_SIZE; i++)
++		buf[i] = FAKE_HEADER_BYTE;
++}
++EXPORT_SYMBOL_GPL(fake_fpga_mgr_fill_header);
++
++static void check_header(struct kunit *test, const u8 *buf)
++{
++	int i;
++
++	for (i = 0; i < FAKE_HEADER_SIZE; i++)
++		KUNIT_EXPECT_EQ(test, buf[i], FAKE_HEADER_BYTE);
++}
++
++static void clear_op_flags(struct fake_mgr_priv *priv)
++{
++	priv->op_parse_header = false;
++	priv->op_write_init = false;
++	priv->op_write = false;
++	priv->op_write_sg = false;
++	priv->op_write_complete = false;
++}
++
++/**
++ * fake_fpga_mgr_check_write_buf - check if programming using a buffer succeeded
++ * @mgr_ctx: fake FPGA manager context data structure.
++ */
++void fake_fpga_mgr_check_write_buf(struct fake_fpga_mgr *mgr_ctx)
++{
++	struct fake_mgr_priv *priv;
++
++	priv = mgr_ctx->mgr->priv;
++
++	if (priv->test) {
++		KUNIT_EXPECT_EQ(priv->test, priv->op_parse_header, true);
++		KUNIT_EXPECT_EQ(priv->test, priv->op_write_init, true);
++		KUNIT_EXPECT_EQ(priv->test, priv->op_write, true);
++		KUNIT_EXPECT_EQ(priv->test, priv->op_write_complete, true);
++	}
++
++	clear_op_flags(priv);
++}
++EXPORT_SYMBOL_GPL(fake_fpga_mgr_check_write_buf);
++
++/**
++ * fake_fpga_mgr_check_write_sg - check if programming using a s.g. table succeeded
++ * @mgr_ctx: fake FPGA manager context data structure.
++ */
++void fake_fpga_mgr_check_write_sg(struct fake_fpga_mgr *mgr_ctx)
++{
++	struct fake_mgr_priv *priv;
++
++	priv = mgr_ctx->mgr->priv;
++
++	if (priv->test) {
++		KUNIT_EXPECT_EQ(priv->test, priv->op_parse_header, true);
++		KUNIT_EXPECT_EQ(priv->test, priv->op_write_init, true);
++		KUNIT_EXPECT_EQ(priv->test, priv->op_write_sg, true);
++		KUNIT_EXPECT_EQ(priv->test, priv->op_write_complete, true);
++	}
++
++	clear_op_flags(priv);
++}
++EXPORT_SYMBOL_GPL(fake_fpga_mgr_check_write_sg);
++
++static int fake_fpga_mgr_probe(struct platform_device *pdev)
++{
++	struct device *dev;
++	struct fake_mgr_priv *priv;
++	struct fake_mgr_data *pdata;
++	struct fpga_manager *mgr;
++
++	dev = &pdev->dev;
++	pdata = dev_get_platdata(dev);
++
++	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
++	if (!priv)
++		return -ENOMEM;
++
++	priv->test = pdata->test;
++
++	mgr = devm_fpga_mgr_register(dev, "Fake FPGA Manager",
++				     &fake_fpga_mgr_ops, priv);
++	if (IS_ERR(mgr))
++		return PTR_ERR(mgr);
++
++	platform_set_drvdata(pdev, mgr);
++
++	return 0;
++}
++
++static struct platform_driver fake_fpga_mgr_drv = {
++	.driver = {
++		.name = FAKE_FPGA_MGR_DEV_NAME
++	},
++	.probe = fake_fpga_mgr_probe,
++};
++
++module_platform_driver(fake_fpga_mgr_drv);
++
++MODULE_AUTHOR("Marco Pagani <marpagan@redhat.com>");
++MODULE_DESCRIPTION("Fake FPGA Manager");
++MODULE_LICENSE("GPL v2");
+diff --git a/drivers/fpga/tests/fake-fpga-mgr.h b/drivers/fpga/tests/fake-fpga-mgr.h
+new file mode 100644
+index 000000000000..5cecb6f646c9
+--- /dev/null
++++ b/drivers/fpga/tests/fake-fpga-mgr.h
+@@ -0,0 +1,42 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Header file for fake FPGA manager
++ *
++ * Copyright (C) 2023 Red Hat, Inc. All rights reserved.
++ *
++ * Author: Marco Pagani <marpagan@redhat.com>
++ */
++
++#ifndef __FPGA_FAKE_MGR_H
++#define __FPGA_FAKE_MGR_H
++
++#include <linux/fpga/fpga-mgr.h>
++#include <linux/platform_device.h>
++#include <kunit/test.h>
++
++#define FPGA_TEST_BIT_BLOCK	1024
++
++/**
++ * struct fake_fpga_mgr - fake FPGA manager context data structure
++ *
++ * @mgr: FPGA manager.
++ * @pdev: platform device of the FPGA manager.
++ */
++struct fake_fpga_mgr {
++	struct fpga_manager *mgr;
++	struct platform_device *pdev;
++};
++
++int fake_fpga_mgr_register(struct fake_fpga_mgr *mgr_ctx, struct kunit *test);
++
++void fake_fpga_mgr_unregister(struct fake_fpga_mgr *mgr_ctx);
++
++int fake_fpga_mgr_get_rcfg_count(const struct fake_fpga_mgr *mgr_ctx);
++
++void fake_fpga_mgr_fill_header(u8 *buf);
++
++void fake_fpga_mgr_check_write_buf(struct fake_fpga_mgr *mgr_ctx);
++
++void fake_fpga_mgr_check_write_sg(struct fake_fpga_mgr *mgr_ctx);
++
++#endif /* __FPGA_FAKE_MGR_H */
+-- 
+2.39.1
+
