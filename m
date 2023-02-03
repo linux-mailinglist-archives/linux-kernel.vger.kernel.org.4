@@ -2,118 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25F4E688CEA
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 03:09:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6FBE688CF6
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 03:13:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232088AbjBCCI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 21:08:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41820 "EHLO
+        id S231579AbjBCCNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 21:13:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjBCCI5 (ORCPT
+        with ESMTP id S229699AbjBCCNa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 21:08:57 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 396AD68114;
-        Thu,  2 Feb 2023 18:08:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9390861D63;
-        Fri,  3 Feb 2023 02:08:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E557FC4339B;
-        Fri,  3 Feb 2023 02:08:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675390134;
-        bh=9SFVMDLXP6rCxw0koy5AsHtvGYm4KS5eagd3gakC66Q=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=h2naxLKy2Uss1KEo2gbiTB7Jr985m1oWr3pC7QD/Qky7TZICT+6Wb1+kinNfll89a
-         35TkDelMkbayRnL+GGsK+o2r4zaRESh6FYjhJKj88Ka2MqFPOgtdjywUywk6W7dXtW
-         x3g2jSbN0U/qq9aEl6B4L/xUlWn7d3vkE4ve0kvMJPRI8mZ2Yb9gzlZI5BWkDqQQod
-         qE3+9WoIb++WfibqIaHxwnQLiP/CvAtlpD0vlzSkFXTVf6cQQ0POJgVIU9qykH1Qb8
-         5NuFF0623cgffWWwd6sXw95AqpldiG2BFu0ppu+xF6T1kSlG9twjw2kB78yP5NWyuH
-         CF5RIMTM2REkw==
-Received: by mail-ej1-f42.google.com with SMTP id hx15so11468718ejc.11;
-        Thu, 02 Feb 2023 18:08:54 -0800 (PST)
-X-Gm-Message-State: AO0yUKU+DdEIlK50fRB2DK1IXcx2XOpTNJVPda8iedc/rbTR/MaSO+T0
-        +37jmIz8Nlqw28/XvufJIMcC0Cjhau9tkbeucEQ=
-X-Google-Smtp-Source: AK7set/ydpY+oP3Z+t+NArVdALXiqzOsn4rcGlM7loxkZ8n+4hJG8dOtM1ETH3IvToN2WCewRC5xSUJ3FVILiorZwGg=
-X-Received: by 2002:a17:906:338d:b0:879:b98d:eb0b with SMTP id
- v13-20020a170906338d00b00879b98deb0bmr2023573eja.88.1675390133191; Thu, 02
- Feb 2023 18:08:53 -0800 (PST)
+        Thu, 2 Feb 2023 21:13:30 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 396594FC13;
+        Thu,  2 Feb 2023 18:13:29 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id o13so3706236pjg.2;
+        Thu, 02 Feb 2023 18:13:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=PC+7eG5v0On9Uzu9MVNYf6K7hpU6NVQjdEiMJ0VLGkE=;
+        b=keeD+V9wpUp/nx8XgqGbTDMyVi0M+fEtrWsSUmBnyKxJ4GDuH5fRH5bva6YnBJQ7Te
+         3R+y3OR1wV7+BPGIVYvb9dVndsyhG06OhrzRJRuOaK9wbxkkupuyZfImtnGbQ+873biL
+         Ab4xrFrOT7STQQ8uA6Opqf8YhfTIW7YSovexF6s0EiXIMfh72FFHcZdStvshG7ZqRd3t
+         o6UjYhBPrdTtnzP4dOxB1MZh1WnlmnbX9k/Dr5n7ZLTLr39PtlFVZL/CRKJOT/KeNIvK
+         PGoFwfPPw8iRgJ/CR41VFOiCs6tEqOAiU6zT8MbvX73I16AaXbmu0AxQuEBj0AvSGEoN
+         IHnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PC+7eG5v0On9Uzu9MVNYf6K7hpU6NVQjdEiMJ0VLGkE=;
+        b=W0tQZ9R+dYg1UyIvmT8vHDWBY3pwcjVZXZdSQ4PuIit9oQchhwpCLuvlh/Z10wooAd
+         6BpjvhPTNHHOTXOvX+syFNAjE+8JyzutMqfLzUXFdoIUIywHO4skhI7X9MCSggl3jeHO
+         Ng3HQXrVUpKU/6Pa0l4bX5YiiBYWW6PHh0tGJLjJJCZ8OYkcuUfC41besOh3WsTEDOiO
+         AZC9kMBFgvu9xfazF9777kJYLqaseY7/UvYnuwapsxfFwrI5hcAOBjx2gmcKmD/ScQe+
+         KxX6mk43L/LkBElzOk5zwZoxyLRygwM7yWW1h5JvunJfMtFKBaKurpJf/mulXoQty6TJ
+         s9Lg==
+X-Gm-Message-State: AO0yUKUPqZclwn9+ttbfF8XZWMZqAdQpL+Lvb14Mp77n4lXQqeUqWULe
+        ClLLJaQtfs01jzVFmBqErVMxUYDS68M=
+X-Google-Smtp-Source: AK7set87d/ZMAvBdw3n2FldFklqJRVFQHeTMq32URlTMIzi6XUEgshQfFV8JHTzbVRAq2OrBUaqp7g==
+X-Received: by 2002:a17:90a:19d7:b0:22c:6d7c:c521 with SMTP id 23-20020a17090a19d700b0022c6d7cc521mr8593408pjj.45.1675390408407;
+        Thu, 02 Feb 2023 18:13:28 -0800 (PST)
+Received: from moohyul.svl.corp.google.com ([2620:15c:2d4:203:6755:96ed:3f18:dac4])
+        by smtp.gmail.com with ESMTPSA id fs23-20020a17090af29700b0022c942b8683sm497249pjb.56.2023.02.02.18.13.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Feb 2023 18:13:27 -0800 (PST)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     acme@kernel.org, jolsa@kernel.org
+Cc:     peterz@infradead.org, mingo@redhat.com, irogers@google.com,
+        linux-kernel@vger.kernel.org, adrian.hunter@intel.com,
+        linux-perf-users@vger.kernel.org, song@kernel.org,
+        haoluo@google.com, bpf@vger.kernel.org, juri.lelli@redhat.com
+Subject: [PATCH v2 0/3] perf lock contention: Improve aggr x filter combination
+Date:   Thu,  2 Feb 2023 18:13:21 -0800
+Message-Id: <20230203021324.143540-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
 MIME-Version: 1.0
-References: <20230202084238.2408516-1-chenhuacai@loongson.cn> <ccf74ebd-ccc1-4de5-a425-dcde4ac39a8d@app.fastmail.com>
-In-Reply-To: <ccf74ebd-ccc1-4de5-a425-dcde4ac39a8d@app.fastmail.com>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Fri, 3 Feb 2023 10:08:42 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H6kuzfjw5i8-6L_68c50nsXzFipHY5hxtbShuv16bqRbg@mail.gmail.com>
-Message-ID: <CAAhV-H6kuzfjw5i8-6L_68c50nsXzFipHY5hxtbShuv16bqRbg@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: Make -mstrict-align be configurable
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>, loongarch@lists.linux.dev,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>, guoren <guoren@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Arnd,
+Hello,
 
-On Thu, Feb 2, 2023 at 5:47 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Thu, Feb 2, 2023, at 09:42, Huacai Chen wrote:
-> > Introduce Kconfig option ARCH_STRICT_ALIGN to make -mstrict-align be
-> > configurable.
-> >
-> > Not all LoongArch cores support h/w unaligned access, we can use the
-> > -mstrict-align build parameter to prevent unaligned accesses.
-> >
-> > This option is disabled by default to optimise for performance, but you
-> > can enabled it manually if you want to run kernel on systems without h/w
-> > unaligned access support.
-> >
-> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
->
-> This feels like it's a way too low-level option, I would not expect
-> users to be able to answer this correctly.
->
-> What I would do instead is to have Kconfig options for specific
-> CPU implementations and derive the alignment requirements from
-> that.
-You mean provide something like CONFIG_CPU_XXXX as MIPS do?  That
-seems not a good idea, too. If there are more than 3 CONFIG_CPU_XXXX,
-the complexity is more than CONFIG_ARCH_STRICT_ALIGN. Then users are
-also unable to do a correct selection. On the other hand, we can add
-more words under CONFIG_ARCH_STRICT_ALIGN to describe which processors
-support hardware unaligned accesses.
+The callstack filter can be useful to debug lock issues but it has a
+limitation that it only works with caller aggregation mode (which is the
+default setting).  IOW it cannot filter by callstack when showing tasks
+or lock addresses/names.
 
-Huacai
+But sometimes users want to use the filter for other aggregation mode.
+Like "show me lock addresses/names from this caller only" or "show me
+tasks having these callers".
 
->
-> > +config ARCH_STRICT_ALIGN
-> > +     bool "Enable -mstrict-align to prevent unaligned accesses"
-> > +     help
-> > +       Not all LoongArch cores support h/w unaligned access, we can use
-> > +       -mstrict-align build parameter to prevent unaligned accesses.
-> > +
-> > +       This is disabled by default to optimise for performance, you can
-> > +       enabled it manually if you want to run kernel on systems without
-> > +       h/w unaligned access support.
-> > +
->
->
-> There is already a global CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
-> option, I think you should use that one instead of adding another
-> one. Setting HAVE_EFFICIENT_UNALIGNED_ACCESS for CPUs that can
-> do unaligned access will enable some important optimizations in
-> the network stack and a few other places.
->
->     Arnd
+When it's using tracepoint events from the data file, the situation is
+good since the tracepoints have all the necessary info.  But when using
+BPF it needs to extend the key of lock stat BPF map to have more than
+one info like 'pid + stack_id' or 'lock_addr + stack_id'.  As callstack
+filter works in userspace, it should save the both info.
+
+With this change we can now use the -S/--callstack-filter with the
+-t/--threads option or -l/--lock-addr option.  It's also possible to use
+it with other filter options.
+
+The following example shows the top 5 tasks that have contention
+somewhere in the epoll handling.
+
+  $ sudo perf lock con -abt -S epoll -E5 -- sleep 1
+   contended   total wait     max wait     avg wait          pid   comm
+
+           2     58.64 us     32.38 us     29.32 us      1514752   Chrome_IOThread
+           3     29.31 us     12.65 us      9.77 us         3773   Xorg
+           1     17.45 us     17.45 us     17.45 us      1514906   Chrome_ChildIOT
+           1     15.41 us     15.41 us     15.41 us      1515382   Chrome_ChildIOT
+           1     12.52 us     12.52 us     12.52 us       293878   IPC I/O Parent
+
+You get get the code at 'perf/lock-filter-v1' branch in
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
+
+Thanks,
+Namhyung
+
+Namhyung Kim (3):
+  perf lock contention: Factor out lock_contention_get_name()
+  perf lock contention: Use lock_stat_find{,new}
+  perf lock contention: Support filters for different aggregation
+
+ tools/perf/builtin-lock.c                     |  79 ++++----
+ tools/perf/util/Build                         |   5 +-
+ tools/perf/util/bpf_lock_contention.c         | 180 +++++++++++-------
+ .../perf/util/bpf_skel/lock_contention.bpf.c  |  15 +-
+ tools/perf/util/bpf_skel/lock_data.h          |   4 +-
+ tools/perf/util/lock-contention.h             |   5 +
+ 6 files changed, 178 insertions(+), 110 deletions(-)
+
+-- 
+2.39.1.519.gcb327c4b5f-goog
+
