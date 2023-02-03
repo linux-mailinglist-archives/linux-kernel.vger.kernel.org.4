@@ -2,231 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A564B68A037
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 18:28:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D581868A038
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 18:28:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230230AbjBCR2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 12:28:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36432 "EHLO
+        id S232970AbjBCR2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 12:28:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232637AbjBCR2W (ORCPT
+        with ESMTP id S231614AbjBCR2l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 12:28:22 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB31C99D5F
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 09:28:20 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id m2so5940571plg.4
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 09:28:20 -0800 (PST)
+        Fri, 3 Feb 2023 12:28:41 -0500
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A38C69D58A
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 09:28:38 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id m10so149912ljp.3
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 09:28:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ivfgvtp7uyI6tFocYx9rlHpXWHlxTiWABls8e5bmayM=;
-        b=cII6dLlsUwSoucT/nmPeQoMnw/26U3F9vvjbcZ4OHwLnNL7MbuUXkoVM614WvT3/u+
-         MqRtckfcicHKnzzU/LhfSR1OWXypKA3bQUCHE2YxkBrtxTlr9se0FHvHU9dru6RvWwkr
-         fIdN/XxhLiRVwp44QHsUjIdCONrA8NcoTzPMaRjOJ2kAIxjfnPCVJ+U8RvZcF0RH2rOZ
-         hhdDQp9ZkW4voFM+ffTUQPTSpRsFVJImXLZggCnGX9UB9qBq0KDrMpEHIHjcI4MXGrB6
-         jnwwQTSxmc6vsbxYcn8l5Y+nB0yyHq+z61YUEQRbt0gzDteCWzLUM/rJU/BjPDyPq2i3
-         27ag==
+        d=joelfernandes.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=jcGTJkSRElQWrb9yzcLonI7fxCZr7wWW4tGlsk/tHYo=;
+        b=HZemfMfg8ngdOQaiHKp61kFhQhBx4H8DjoSZ2hwoAfU8dIBMaPwuXFV9vTGbO2Qt8I
+         kJTovuBQ9jvLogqEDEg9ewtiTnD0uWz9ZnRcYB4kzFV5QXXnjekDYsypq1VWnTbB+roe
+         P0GL2eGH4MwkOvrIMROoGCqCbueJrnomuVCSE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ivfgvtp7uyI6tFocYx9rlHpXWHlxTiWABls8e5bmayM=;
-        b=RGgLvqBozQSYg1E5/i5K8C2+z/8ejenOkeBwT7iDcv1zc4Heb7yhvf509+5WJdqyuY
-         WlnM/2DGC1fv0ymWeqM1+Hdi2ZR+S41aYKVr3pUp6GZa6uPLtS9D99IoOoNOwleLvlC7
-         ythXCg14YkuBNIeVoD4OnYAVxKDnXZRZ3dtxG1s76m2nnpHqP+97IBaKEEavDggjH1Jn
-         do/oQd7f94wzya251tFcPcv+qjUxCz82wXJ0GT3lSmipdciDQO08PiqJkksTuKzY9k5d
-         U1jvHTLOviZEizAOoC48xNu/5IrjBloSgT42qHMN+scAaFE1/Mp4nCVcCNnnCypOpeBa
-         ERQQ==
-X-Gm-Message-State: AO0yUKUQ4J6FzVkbt6R0y7WKxnjnwaEWV9Td28GUqhRCzI5GFOcfyLKe
-        EFcZQOnMN4dA8cy33Fmxq3XUA4Hx37FPhU3mQzI=
-X-Google-Smtp-Source: AK7set8pTRwRmGavRUH0Zl4ThwgbwvysCaK8vH1nc0DIWFJ9BC2u2xn5S1kIJOnjSBNVaYdUkyU+/A==
-X-Received: by 2002:a17:902:f803:b0:198:af4f:de0f with SMTP id ix3-20020a170902f80300b00198af4fde0fmr123258plb.15.1675445300118;
-        Fri, 03 Feb 2023 09:28:20 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id y2-20020a62b502000000b00581013fcbe1sm2030578pfe.159.2023.02.03.09.28.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 09:28:19 -0800 (PST)
-Date:   Fri, 3 Feb 2023 17:28:13 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jianfeng Gao <jianfeng.gao@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v2] KVM: x86/pmu: Disable all vPMU features support on
- Intel hybrid CPUs
-Message-ID: <Y91DUmMjCLzIXlp+@google.com>
-References: <20230131085031.88939-1-likexu@tencent.com>
- <Y9k7eyfmXjqW9lYF@google.com>
- <afe1fdd8-9f3e-c988-cd38-476a6da26d46@gmail.com>
- <Y9v7tEXPlki7YOT4@google.com>
- <7dc66398-aa0c-991f-3fa9-43aac8c710fd@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jcGTJkSRElQWrb9yzcLonI7fxCZr7wWW4tGlsk/tHYo=;
+        b=Y8wHikU0sYdw/YUper2CunpX8z+nEgzBtRDeSuzCaC39u6FYI1FqwwUUZUVjmra2xj
+         5xoVQrVR8IrufM2quEMNh2g8uOvdOsW9uxjZIjM6blAaNwXvKkYmDReJ7ptJgmsVAneC
+         J6dQILI1anOEzOA2XQ3lZlmdhmd1p2/LsiDjSsFvoKMIMfw1kgWmWUf7IzuF0ljHYd8c
+         ieSlc6R+L44d+Xz+HYN3JaVBooF5BcJUhHiM+bOY3EYJmA6gUrgU3evHIUUOXhG/mWoM
+         r9v4j/hqHChcuO69JBP/a6chmxbHZ1PKzAwZ5/s+SxAMkPpvKCBz3t4yfClLbEPU1EF2
+         T+Nw==
+X-Gm-Message-State: AO0yUKU4FrCCvHIb+0zU5c7t7TKbddabm2Dk/o2wac6tuPM3diM+UNQF
+        xp5QQFWest8FBpox4l64UCFb4RpG+/yFr+avYByEvQ==
+X-Google-Smtp-Source: AK7set8Yk0648zK1MtTlHr9QZTzO8Q2mF54xVfOqjS88dn2Pzz+iu5ndoEDcQBPegvC5KLwv4J7OGvgYw2j7CQBPBDg=
+X-Received: by 2002:a2e:a36c:0:b0:28b:7226:f203 with SMTP id
+ i12-20020a2ea36c000000b0028b7226f203mr1747427ljn.207.1675445316825; Fri, 03
+ Feb 2023 09:28:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7dc66398-aa0c-991f-3fa9-43aac8c710fd@gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230203014021.3408798-1-qiang1.zhang@intel.com>
+In-Reply-To: <20230203014021.3408798-1-qiang1.zhang@intel.com>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Fri, 3 Feb 2023 12:28:25 -0500
+Message-ID: <CAEXW_YSUZ8VZnkGBnPxaYH6Lj0Xd8JB4B3AJVrGwP1Sv4yHKBw@mail.gmail.com>
+Subject: Re: [PATCH v3] rcutorture: Create nocb tasks only for
+ CONFIG_RCU_NOCB_CPU=y kernels
+To:     Zqiang <qiang1.zhang@intel.com>
+Cc:     paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+        rcu@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023, Like Xu wrote:
-> On 3/2/2023 2:06 am, Sean Christopherson wrote:
-> > On Thu, Feb 02, 2023, Like Xu wrote:
-> > > On 1/2/2023 12:02 am, Sean Christopherson wrote:
-> > > The perf interface only provides host PMU capabilities and the logic for
-> > > choosing to disable (or enable) vPMU based on perf input should be left
-> > > in the KVM part so that subsequent development work can add most code
-> > > to the just KVM, which is very helpful for downstream users to upgrade
-> > > loadable KVM module rather than the entire core kernel.
-> > > 
-> > > My experience interacting with the perf subsystem has taught me that
-> > > perf change required from KVM should be made as small as possible.
-> > 
-> > I don't disagree, but I don't think that's relevant in this case.  Perf doesn't
-> > provide the necessary bits for KVM to virtualize a hybrid PMU, so unless KVM is
-> > somehow able to get away with enumerating a very stripped down vPMU, additional
-> > modifications to perf_get_x86_pmu_capability() will be required.
-> > 
-> > What I care more about though is this ugliness in perf_get_x86_pmu_capability():
-> > 
-> > 	/*
-> > 	 * KVM doesn't support the hybrid PMU yet.
-> > 	 * Return the common value in global x86_pmu,
-> > 	 * which available for all cores.
-> 
-> I would have expected w/ current code base, vpmu (excluding pebs and lbr, intel_pt)
-> to continue to work on any type of pCPU until you decide to disable them completely.
+On Thu, Feb 2, 2023 at 8:35 PM Zqiang <qiang1.zhang@intel.com> wrote:
+>
+> When setting nocbs_nthreads to start rcutorture test with a non-zero value,
+> the nocb tasks will be created and invoke rcu_nocb_cpu_offload/deoffload()
+> to toggle CPU's callback-offload state, but for CONFIG_RCU_NOCB_CPU=n
+> kernel, the rcu_nocb_cpu_offload/deoffload() is a no-op and this is also
+> meaningless for torture_type is non-rcu.
+>
+> This commit therefore add member can_nocbs_toggle to rcu_torture_ops
+> structure to avoid unnecessary nocb tasks creation.
+>
+> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
 
-Didn't follow this.
+Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 
-> Moreover, the caller of perf_get_x86_pmu_capability() may be more than just KVM,
-> it may be technically ebpf helpers. The diff on comments from v1 can be applied to
-> this version (restrict KVM semantics), and it makes the status quo clearer
-> to KVM users.
+thanks,
 
-In that case, eBPF is just as hosed, no?  And given that the only people that have
-touched perf_get_x86_pmu_capability() in its 11+ years of existence are all KVM
-people, I have a hard time believing there is meaningful use outside of KVM.
+ - Joel
 
-> > 	 */
-> > 	cap->num_counters_gp	= x86_pmu.num_counters;
-> > 
-> > I really don't want to leave that comment lying around as it's flat out wrong in
-> > that it obviously doesn't address the other differences beyond the number of
-> > counters.  And since there are dependencies on perf, my preference is to disable
-> > PMU enumeration in perf specifically so that whoever takes on vPMU enabling is
-> > forced to consider the perf side of things, and get buy in from the perf folks.
-> 
-> The perf_get_x86_pmu_capability() obviously needs to be revamped,
-> but until real effective KVM enabling work arrives, any inconsequential intrusion
-> into perf/core code will only lead to trivial system maintenance.
 
-Trivial doesn't mean useless or unnecessary though.  IMO, there's value in capturing,
-in code, that perf_get_x86_pmu_capability() doesn't properly support hybrid vPMUs.
-
-That said, poking around perf, checking is_hybrid() is wrong.  This quirk suggests
-that if E-cores are disabled via BIOS, (a) X86_FEATURE_HYBRID_CPU is _supposed_ to
-be cleared, and (b) the base PMU will reflect the P-core PMU.  I.e. someone can
-enable vPMU by disabling E-cores.
-
-                /*
-                 * Quirk: For some Alder Lake machine, when all E-cores are disabled in
-                 * a BIOS, the leaf 0xA will enumerate all counters of P-cores. However,
-                 * the X86_FEATURE_HYBRID_CPU is still set. The above codes will
-                 * mistakenly add extra counters for P-cores. Correct the number of
-                 * counters here.
-                 */
-                if ((pmu->num_counters > 8) || (pmu->num_counters_fixed > 4)) {
-                        pmu->num_counters = x86_pmu.num_counters;
-                        pmu->num_counters_fixed = x86_pmu.num_counters_fixed;
-                }
-
-Side topic, someone (*cough* Intel) should fix that, e.g. detect the scenario
-during boot and manually clear X86_FEATURE_HYBRID_CPU.
-
-I'm also ok explicitly disabling support in KVM, but since we need to update
-perf as well (that KVM comment needs to go), I don't see any reason not to also
-update perf_get_x86_pmu_capability().
-
-How about this?  Maybe split over two patches to separate the KVM and perf changes?
-
-diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
-index 85a63a41c471..d096b04bf80e 100644
---- a/arch/x86/events/core.c
-+++ b/arch/x86/events/core.c
-@@ -2974,17 +2974,19 @@ unsigned long perf_misc_flags(struct pt_regs *regs)
- 
- void perf_get_x86_pmu_capability(struct x86_pmu_capability *cap)
- {
--       if (!x86_pmu_initialized()) {
-+       /* This API doesn't currently support enumerating hybrid PMUs. */
-+       if (WARN_ON_ONCE(cpu_feature_enabled(X86_FEATURE_HYBRID_CPU)) ||
-+           !x86_pmu_initialized()) {
-                memset(cap, 0, sizeof(*cap));
-                return;
-        }
- 
-+       /*
-+        * Note, hybrid CPU models get tracked as having hybrid PMUs even when
-+        * all E-cores are disabled via BIOS.  When E-cores are disabled, the
-+        * base PMU holds the correct number of counters for P-cores.
-+        */
-        cap->version            = x86_pmu.version;
--       /*
--        * KVM doesn't support the hybrid PMU yet.
--        * Return the common value in global x86_pmu,
--        * which available for all cores.
--        */
-        cap->num_counters_gp    = x86_pmu.num_counters;
-        cap->num_counters_fixed = x86_pmu.num_counters_fixed;
-        cap->bit_width_gp       = x86_pmu.cntval_bits;
-diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
-index cdb91009701d..933165663703 100644
---- a/arch/x86/kvm/pmu.h
-+++ b/arch/x86/kvm/pmu.h
-@@ -165,15 +165,27 @@ static inline void kvm_init_pmu_capability(void)
- {
-        bool is_intel = boot_cpu_data.x86_vendor == X86_VENDOR_INTEL;
- 
--       perf_get_x86_pmu_capability(&kvm_pmu_cap);
--
--        /*
--         * For Intel, only support guest architectural pmu
--         * on a host with architectural pmu.
--         */
--       if ((is_intel && !kvm_pmu_cap.version) || !kvm_pmu_cap.num_counters_gp)
-+       /*
-+        * Hybrid PMUs don't play nice with virtualization unless userspace
-+        * pins vCPUs _and_ can enumerate accurate informations to the guest.
-+        * Disable vPMU support for hybrid PMUs until KVM gains a way to let
-+        * userspace opt into the dangers of hybrid vPMUs.
-+       */
-+       if (cpu_feature_enabled(X86_FEATURE_HYBRID_CPU))
-                enable_pmu = false;
- 
-+       if (enable_pmu) {
-+               perf_get_x86_pmu_capability(&kvm_pmu_cap);
-+
-+               /*
-+                * For Intel, only support guest architectural pmu
-+                * on a host with architectural pmu.
-+                */
-+               if ((is_intel && !kvm_pmu_cap.version) ||
-+                   !kvm_pmu_cap.num_counters_gp)
-+                       enable_pmu = false;
-+       }
-+
-        if (!enable_pmu) {
-                memset(&kvm_pmu_cap, 0, sizeof(kvm_pmu_cap));
-                return;
-
+> ---
+>  kernel/rcu/rcutorture.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>
+> diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
+> index 297da28ce92d..d01127e0e8cd 100644
+> --- a/kernel/rcu/rcutorture.c
+> +++ b/kernel/rcu/rcutorture.c
+> @@ -3708,6 +3708,12 @@ rcu_torture_init(void)
+>                 pr_alert("rcu-torture: ->fqs NULL and non-zero fqs_duration, fqs disabled.\n");
+>                 fqs_duration = 0;
+>         }
+> +       if (nocbs_nthreads != 0 && (cur_ops != &rcu_ops ||
+> +                                       !IS_ENABLED(CONFIG_RCU_NOCB_CPU))) {
+> +               pr_alert("rcu-torture types: %s and CONFIG_RCU_NOCB_CPU=%d, nocb toggle disabled.\n",
+> +                               cur_ops->name, IS_ENABLED(CONFIG_RCU_NOCB_CPU));
+> +               nocbs_nthreads = 0;
+> +       }
+>         if (cur_ops->init)
+>                 cur_ops->init();
+>
+> --
+> 2.25.1
+>
