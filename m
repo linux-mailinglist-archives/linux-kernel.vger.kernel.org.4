@@ -2,140 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E437688F81
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 07:10:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C8CE688F8A
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 07:12:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231635AbjBCGKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 01:10:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53258 "EHLO
+        id S231261AbjBCGM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 01:12:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231725AbjBCGKk (ORCPT
+        with ESMTP id S231307AbjBCGM0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 01:10:40 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D21E18C1F8
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 22:10:09 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id u27so4225191ljo.12
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 22:10:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VqL0SQ3sFdYoa5P5qE3J+IqmzxCHfdLil4//qOukaOY=;
-        b=Ug0du6ZsUuXTJu6b3g/CGY8kqC4yyxZB4v/TH0a89VeM3IhOpSyX55eq8qEs/jU1OC
-         lISjBlt0MuhKlmyU8/vzTW3o0VULRH0LDGyH814Tn92cJLfR6LZj1HxF7Tcmn0YNfW3+
-         s+IvXr32+m0vKdefX5RYLBPOpwCRp/xQNrA+U=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VqL0SQ3sFdYoa5P5qE3J+IqmzxCHfdLil4//qOukaOY=;
-        b=SCoiVKN5eq+3Z4maZy7GW6247pXpaVfXHj56+CC9NTafrzXQvE2ou0Uk+rh6tj/trn
-         OBOV3/lqsDPhaUHzpNgPCsHBwFzuHIYn81golhLZNvNlL6Y8LISenM+ZZF4Y5Izs6DBz
-         otRixvgrM4sA2zsEmwGTw6dr9a2q0847wUsDTQR+71OY4hNaH7xbY14yu8EbGFRQmOcI
-         CP6+Ck0f1SNVXqqQzh5DgYFthOR0G2Dyei7GHApB1Ow882SKPH8+UBIv7GrtZNcz3DyQ
-         9CwGcOebTY8zVo3m0orWXKQTbMGG2bTK5Lb88vO0v0SLbQRdD78r0CRpRPZBeVMytVU8
-         pS8g==
-X-Gm-Message-State: AO0yUKXfbs1dvWFsfrtt+b/0rRK4ZQ3aOmCQ8GX/f4BOSl7PslNHUq4m
-        fjN91A3Ho+UQeuTpW5fzyHcItDCDKZwtXk0lJNNw2g==
-X-Google-Smtp-Source: AK7set9VpFMQa1cflzV+xHjqLU7Pbdkzpmn80Ts81v7rzpqniWrtnJHa39GjAeGUKP5DTjFoa3kLC/wUf05URmhGwtY=
-X-Received: by 2002:a2e:8781:0:b0:290:5b7c:4838 with SMTP id
- n1-20020a2e8781000000b002905b7c4838mr1659971lji.51.1675404607785; Thu, 02 Feb
- 2023 22:10:07 -0800 (PST)
+        Fri, 3 Feb 2023 01:12:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B9578B7FF
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 22:11:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675404649;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Kg33H3/wUydkKVCKyNEhJogbcog6B4rvz4IVVy4bwwA=;
+        b=X8iMMfUjV97xE8xwD47JM0wQwYbjvbmUmSEiMKAkGUnnpGcFQjm98M5rfNEdVK6goQ7Nv0
+        WHvX6fVnt3OQTn7dsIF0veX2QeTs1xluUsY8Omg6arGhBv4WlN8CsRHF5lPGra0CKJoBLI
+        Tq9sja+wyp2WuRdoEBat8Z/Qi3xmdYw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-335-pNHOeXd8MCuw1ZjvvZCBSQ-1; Fri, 03 Feb 2023 01:10:47 -0500
+X-MC-Unique: pNHOeXd8MCuw1ZjvvZCBSQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AA85185A588;
+        Fri,  3 Feb 2023 06:10:46 +0000 (UTC)
+Received: from q.redhat.com (unknown [10.66.61.39])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id F387E2026FFB;
+        Fri,  3 Feb 2023 06:10:40 +0000 (UTC)
+From:   shahuang@redhat.com
+To:     kvm@vger.kernel.org
+Cc:     Shaoqin Huang <shahuang@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        David Matlack <dmatlack@google.com>,
+        linux-arm-kernel@lists.infradead.org (moderated list:KERNEL VIRTUAL
+        MACHINE FOR ARM64 (KVM/arm64)),
+        kvmarm@lists.linux.dev (open list:KERNEL VIRTUAL MACHINE FOR ARM64
+        (KVM/arm64)),
+        kvmarm@lists.cs.columbia.edu (moderated list:KERNEL VIRTUAL MACHINE FOR
+        ARM64 (KVM/arm64)),
+        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] KVM: selftests: Remove redundant setbuf()
+Date:   Fri,  3 Feb 2023 14:10:36 +0800
+Message-Id: <20230203061038.277655-1-shahuang@redhat.com>
 MIME-Version: 1.0
-References: <20230201034137.2463113-1-stevensd@google.com> <CAHbLzkpbV2LOoTpWwSOS+UUsYJiZX4vO78jZSr6xmpAGNGoH5w@mail.gmail.com>
- <Y9rRCN9EfqzwYnDG@x1n> <CAD=HUj4FjuLpihQLGLzUu82vr5fdFFxfnyKNhApC6L67F5iV4g@mail.gmail.com>
- <CAHbLzko_cXrOQCsQC3g_id06Jkcg3=9dsVe+MwuzAh+iC9dDDA@mail.gmail.com> <Y9wbmuEq0QjZATE6@x1n>
-In-Reply-To: <Y9wbmuEq0QjZATE6@x1n>
-From:   David Stevens <stevensd@chromium.org>
-Date:   Fri, 3 Feb 2023 15:09:55 +0900
-Message-ID: <CAD=HUj6E8e4QFPHgADQ2Rspr6BnAa8n08WtyqZhsJ5iQ9qR1+w@mail.gmail.com>
-Subject: Re: [PATCH] mm/khugepaged: skip shmem with armed userfaultfd
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Yang Shi <shy828301@gmail.com>,
-        David Hildenbrand <david@redhat.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, Hugh Dickins <hughd@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > > I don't know if it's necessary to go that far. Userfaultfd plus shmem
-> > > is inherently brittle. It's possible for userspace to bypass
-> > > userfaultfd on a shmem mapping by accessing the shmem through a
-> > > different mapping or simply by using the write syscall.
->
-> Yes this is possible, but this is user-visible operation - no matter it was
-> a read()/write() from another process, or mmap()ed memory accesses.
-> Khugepaged merges ptes in a way that is out of control of users.  That's
-> something the user can hardly control.
->
-> AFAICT currently file-based uffd missing mode all works in that way.  IOW
-> the user should have full control of the file/inode under the hood to make
-> sure there will be nothing surprising.  Otherwise I don't really see how
-> the missing mode can work solidly since it's page cache based.
->
-> > > It might be sufficient to say that the kernel won't directly bypass a
-> > > VMA's userfaultfd to collapse the underlying shmem's pages. Although on
-> > > the other hand, I guess it's not great for the presence of an unused
-> > > shmem mapping lying around to cause khugepaged to have user-visible
-> > > side effects.
->
-> Maybe it works for your use case already, for example, if in your app the
-> shmem is only and always be mapped once?  However that doesn't seem like a
-> complete solution to me.
+From: Shaoqin Huang <shahuang@redhat.com>
 
-We're using userfaultfd for guest memory for a VM. We do have
-sandboxed device processes. However, thinking about it a bit more,
-this approach would probably cause issues with device hotplug.
+Since setbuf(stdout, NULL) has been called in kvm_util.c with
+__attribute((constructor)). Selftests no need to setup it in their own
+code.
 
-> There's nothing that will prevent another mapping being established, and
-> right after that happens it'll stop working, because khugepaged can notice
-> that new mm/vma which doesn't register with uffd at all, and thinks it a
-> good idea to collapse the shmem page cache again.  Uffd will silently fail
-> in another case even if not immediately in your current app/reproducer.
->
-> Again, I don't think what I propose above is anything close to good.. It'll
-> literally disable any collapsing possibility for a shmem node as long as
-> any small portion of the inode mapping address space got registered by any
-> process with uffd.  I just don't see any easier approach so far.
+Signed-off-by: Shaoqin Huang <shahuang@redhat.com>
+---
+ tools/testing/selftests/kvm/aarch64/page_fault_test.c          | 2 --
+ .../selftests/kvm/x86_64/exit_on_emulation_failure_test.c      | 3 ---
+ 2 files changed, 5 deletions(-)
 
-Maybe we can make things easier by being more precise about what bug
-we're trying to fix. Strictly speaking, I don't think what we're
-concerned about is whether or not userfaultfd is registered on a
-particular VMA at a particular point in time. I think what we're
-actually concerned about is that when userspace has a page with an
-armed userfaultfd that it knows is missing, that page should not be
-filled by khugepaged. If userspace doesn't know that a userfaultfd
-armed page is missing, then even if khugepaged fills that page, as far
-as userspace is concerned, the page was filled by khugepaged before
-userfaultfd was armed.
+diff --git a/tools/testing/selftests/kvm/aarch64/page_fault_test.c b/tools/testing/selftests/kvm/aarch64/page_fault_test.c
+index beb944fa6fd4..513b20bec3c2 100644
+--- a/tools/testing/selftests/kvm/aarch64/page_fault_test.c
++++ b/tools/testing/selftests/kvm/aarch64/page_fault_test.c
+@@ -1093,8 +1093,6 @@ int main(int argc, char *argv[])
+ 	enum vm_mem_backing_src_type src_type;
+ 	int opt;
+ 
+-	setbuf(stdout, NULL);
+-
+ 	src_type = DEFAULT_VM_MEM_SRC;
+ 
+ 	while ((opt = getopt(argc, argv, "hm:s:")) != -1) {
+diff --git a/tools/testing/selftests/kvm/x86_64/exit_on_emulation_failure_test.c b/tools/testing/selftests/kvm/x86_64/exit_on_emulation_failure_test.c
+index 37c61f712fd5..e334844d6e1d 100644
+--- a/tools/testing/selftests/kvm/x86_64/exit_on_emulation_failure_test.c
++++ b/tools/testing/selftests/kvm/x86_64/exit_on_emulation_failure_test.c
+@@ -26,9 +26,6 @@ int main(int argc, char *argv[])
+ 	struct kvm_vcpu *vcpu;
+ 	struct kvm_vm *vm;
+ 
+-	/* Tell stdout not to buffer its content */
+-	setbuf(stdout, NULL);
+-
+ 	TEST_REQUIRE(kvm_has_cap(KVM_CAP_EXIT_ON_EMULATION_FAILURE));
+ 
+ 	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
+-- 
+2.39.0
 
-If that's a valid way to look at it, then I think the fact that
-collapse_file locks hpage provides most of the necessary locking. From
-there, we need to check whether there are any VMAs with armed
-userfaultfds that might have observed a missing page. I think that can
-be done while iterating over VMAs in retract_page_tables without
-acquiring any mmap_lock by adding some memory barriers to
-userfaultfd_set_vm_flags and userfaultfd_armed. It is possible that a
-userfaultfd gets registered on a particular VMA after we check its
-flags but before the collapse finishes. I think the only observability
-hole left would be operations on the shmem file descriptor that don't
-actually lock pages (e.g. SEEK_DATA/SEEK_HOLE), which are hopefully
-solvable with some more thought.
-
--David
-
-> Thanks,
->
-> --
-> Peter Xu
->
