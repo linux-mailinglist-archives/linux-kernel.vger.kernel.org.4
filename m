@@ -2,86 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 331B368A5FF
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 23:18:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D246568A605
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 23:19:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233088AbjBCWSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 17:18:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41898 "EHLO
+        id S231216AbjBCWTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 17:19:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232842AbjBCWSE (ORCPT
+        with ESMTP id S232254AbjBCWTM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 17:18:04 -0500
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B0F991C1;
-        Fri,  3 Feb 2023 14:17:41 -0800 (PST)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-15fe106c7c7so8320604fac.8;
-        Fri, 03 Feb 2023 14:17:41 -0800 (PST)
+        Fri, 3 Feb 2023 17:19:12 -0500
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D10FC5274;
+        Fri,  3 Feb 2023 14:19:04 -0800 (PST)
+Received: by mail-oi1-f176.google.com with SMTP id p185so5425027oif.2;
+        Fri, 03 Feb 2023 14:19:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gUrr0IRNP888NJVJRikfFM8e8Hjhl/dyleNefwL6jZM=;
-        b=D7Wb1VmqAQLzzLX6/lWJpjqPzeG89LaI9CTn9C/01R1YU2kaCaMYQMwOYVRm3gFIVf
-         gbxscrWnvYnc2E9DhkBPNDNqKoHpqbS3Eo3VJJT67I4jkoHWMs382qqZLk4ayLgRZQC1
-         83zi8NXlF7K+SmYL1sdV7dvrsbMnrO7HqaPGTYqiVbHN9YwM+qqjO73j71HucaIUl6z9
-         Kh4wa6brOM62DD2Pt3YR61h9Z6IWazbSNgl6rHIn0dKZ2cd61nCmU496F2yNj5xigccA
-         aIStItdH1KtA4INiYAAbDUx9xZyJqpoIfkiLr0cYt3q6VIkrLjDN0kzjXZhBga1JWfkb
-         vi7Q==
-X-Gm-Message-State: AO0yUKWBDabW0xWPVQ4p2arbT1yIHimIKbHxZWnadNOYOChVt8vTcDAL
-        NmH0gJAoZ0mIK4UwAc22Hw==
-X-Google-Smtp-Source: AK7set9BDbXlIrsix7B+Xn6jevwpsyBraI89SA/kv+GpUb3JC6Tktlxd8yo09/X3EqVdoQT6WFgRBQ==
-X-Received: by 2002:a05:6870:e0cf:b0:163:8f96:9b28 with SMTP id a15-20020a056870e0cf00b001638f969b28mr6068171oab.38.1675462660712;
-        Fri, 03 Feb 2023 14:17:40 -0800 (PST)
+        bh=xz7mkrAc9rf4bEO9DpYPqziiB6T4pUaDTbPT9kD5rv4=;
+        b=NodZIamsdJOtJN3YyfEMAysb6tWgdjPvkwPqwhHeN1YGsJp/Uh4iVORIWbp5RJtkBF
+         2T81yQ72SUPp3+Sy7O0z6erAl03ip99IFUmJ/o1wf3EUBjus0i8IfJq1MQuX+la5ge15
+         V/skGJlGnIVbK6DzU95HoLw5JpYonPrj9lKk9Vs/Vc2xpl2+MHT1GKu0wG6zebno/WVF
+         6gMT1ATWcFStXRflpJP93fhH7SMXMaVW7svM5OrkqSGyHwtLddGAQJVU2rFpWl8v2ObO
+         T7rv/BGyBDbhevadCZqutY7vmMY+GJxd+ZtHfQC/kph7fNVn4hJpin3cvGvpwo2WDfVJ
+         H58w==
+X-Gm-Message-State: AO0yUKV0A1HLaYP28V/e06Q7DiS2jRO7AjMPsOicqVupHm1S7+T4lhWV
+        3QM40XAZ9qCCYzvs/+8QS/YtVheBrw==
+X-Google-Smtp-Source: AK7set996pMn13s0+JVwnxBhq8tsU1OIPQspa04bKgq7Mk39OnuHF5ORb+d0WuVlw+/0Gc0z1KYK2g==
+X-Received: by 2002:aca:2816:0:b0:37a:bc9b:5a4f with SMTP id 22-20020aca2816000000b0037abc9b5a4fmr4098759oix.55.1675462743812;
+        Fri, 03 Feb 2023 14:19:03 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id ea48-20020a056870073000b00143824af059sm1299797oab.7.2023.02.03.14.17.39
+        by smtp.gmail.com with ESMTPSA id s191-20020acaa9c8000000b003631fe1810dsm1257429oie.47.2023.02.03.14.19.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 14:17:40 -0800 (PST)
-Received: (nullmailer pid 972273 invoked by uid 1000);
-        Fri, 03 Feb 2023 22:17:39 -0000
-Date:   Fri, 3 Feb 2023 16:17:39 -0600
+        Fri, 03 Feb 2023 14:19:03 -0800 (PST)
+Received: (nullmailer pid 974028 invoked by uid 1000);
+        Fri, 03 Feb 2023 22:19:02 -0000
+Date:   Fri, 3 Feb 2023 16:19:02 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+Cc:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        devicetree@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        linux-gpio@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: Re: [PATCH 3/5] dt-bindings: pinctrl: qcom,sm8450-lpass-lpi: correct
- GPIO name pattern
-Message-ID: <167546265881.972223.14637122018009341404.robh@kernel.org>
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/5] dt-bindings: pinctrl: qcom,sc8280xp-lpass-lpi:
+ correct gpio-ranges
+Message-ID: <20230203221902.GA973487-robh@kernel.org>
 References: <20230203164854.390080-1-krzysztof.kozlowski@linaro.org>
- <20230203164854.390080-3-krzysztof.kozlowski@linaro.org>
+ <20230203164854.390080-4-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230203164854.390080-3-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+In-Reply-To: <20230203164854.390080-4-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Fri, 03 Feb 2023 17:48:52 +0100, Krzysztof Kozlowski wrote:
-> The SM8450 LPASS pin controller has GPIOs 0-22, so narrow the pattern of
-> possible GPIO names.
+On Fri, Feb 03, 2023 at 05:48:53PM +0100, Krzysztof Kozlowski wrote:
+> The SC8280XP LPASS pin controller has GPIOs 0-18, so correct the number
+> of GPIOs in gpio-ranges.
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->  .../bindings/pinctrl/qcom,sm8450-lpass-lpi-pinctrl.yaml         | 2 +-
+>  .../bindings/pinctrl/qcom,sc8280xp-lpass-lpi-pinctrl.yaml       | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
 
 Acked-by: Rob Herring <robh@kernel.org>
-
