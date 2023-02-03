@@ -2,158 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A13A68A180
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 19:20:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D72268A182
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 19:21:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233380AbjBCSUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 13:20:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51448 "EHLO
+        id S233394AbjBCSVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 13:21:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230230AbjBCSUt (ORCPT
+        with ESMTP id S230230AbjBCSVP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 13:20:49 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7510FA8A0D;
-        Fri,  3 Feb 2023 10:20:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 112C261FC5;
-        Fri,  3 Feb 2023 18:20:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47D0FC433D2;
-        Fri,  3 Feb 2023 18:20:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675448447;
-        bh=3D+/sZZJmLI9fYcwlfraDrdIRTAmIP2cDnIjI/PzcSM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=LKf4mIORaBua0cHD1bhn4kid4fjCZXFof1Ia/hXLrofBPF72QXlGOr9u11xm06uru
-         hMyNoPUJcW6WYd7eJuYJZrDZXpkyNlgnp5bsFYAHIhngWlWbaxCgZbSzQZCkaqefYi
-         r8874MLJveiWJBkcrpj6bvSzB9SOYC9ZFYHWVw/zRAAGWiKRarbYY5Ekm92pxQZNfR
-         gjebtgSN0bz2QvthrYPFJnEFVivVzNWg4q49aFDIsMu6/dev5VA0uAYC6M/e9UcZ7d
-         yAXgi3zL9Pa+Bc6VDkwaEbm+zoPQyIH55FeqrOb7ui/3hnAaV92a5VYraCMqti7X1S
-         8zbUcvZjilSYA==
-Date:   Fri, 3 Feb 2023 12:20:45 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Baolu Lu <baolu.lu@linux.intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Matt Fagnani <matt.fagnani@bell.net>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Vasant Hegde <vasant.hegde@amd.com>,
-        Tony Zhu <tony.zhu@intel.com>, linux-pci@vger.kernel.org,
-        iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Alex Williamson <alex.williamson@redhat.com>
-Subject: Re: [PATCH v3 1/1] PCI: Add translated request only flag for
- pci_enable_pasid()
-Message-ID: <20230203182045.GA1972366@bhelgaas>
+        Fri, 3 Feb 2023 13:21:15 -0500
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B728A9121;
+        Fri,  3 Feb 2023 10:21:14 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1675448455; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=gLAiOwe07/bEw/oJjB1ieVZQpcRfDa/FzB71vs5P8bJ7U/sz8m/qX72VXZa5nYXjvTLzHVVJIu+uimIlIzhAjnlfz5PJCO7eRmaCHqrb9vDWGGT1xcLjEn3J769jI3rezdTCT1j3l5LcwgjzsGQNaOMSiRhehFLPkI0FRpKN/tM=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1675448455; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=yUtfqLVzdOYg9WyJPcHo+LVr7DkxewoBgkCmk5Ny6hg=; 
+        b=mO3XYGvINqT0a2FwSyH3kK9l5NXcZMkVtg8kp5NFW5FUo1g6AA51fy6CBOcx3W2LtRynuxhLsvJPMS87+gZZcv1lcScsUgMU5vzIednHIKGSKc8uTs4qMbDmBxXdY6h/jgO+DdndRe8eFdVvwJt0mBoB4iOAYAuIZBJy2+wFrSI=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1675448455;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=yUtfqLVzdOYg9WyJPcHo+LVr7DkxewoBgkCmk5Ny6hg=;
+        b=S5BsZgqh1ovGWZgiWB/Wpri0pbxjHrOQAiWdIDwDS02sfumVg4vfNAshmwq/fLT/
+        /US+W/ENkWKI6Xb43IBjyR24/HTfRDGWoyBLS2fJ9jqyu7W/e9Ezc+xY2HJx6rvafu9
+        frEdLX4LbMYIQN0jd3seryJyF25TQhlIl1yh/ttY=
+Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
+        with SMTPS id 1675448452891469.6679163758016; Fri, 3 Feb 2023 10:20:52 -0800 (PST)
+Message-ID: <75d3758a-5502-03a4-b3a2-990f9339705b@arinc9.com>
+Date:   Fri, 3 Feb 2023 21:20:48 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9wg0Znc0tRWj4O9@nvidia.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 4/5] arm: dts: mt7623: mux phy0 on Bananapi BPI-R2
+To:     frank-w@public-files.de, arinc9.unal@gmail.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        erkin.bozoglu@xeront.com, Sean Wang <sean.wang@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>
+References: <20230201185656.17164-1-arinc.unal@arinc9.com>
+ <20230201185656.17164-5-arinc.unal@arinc9.com>
+ <AC473057-266B-4403-9270-8007E0EC257C@public-files.de>
+Content-Language: en-US
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <AC473057-266B-4403-9270-8007E0EC257C@public-files.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc Alex in case you're interested in the ACS angle]
-
-On Thu, Feb 02, 2023 at 04:45:05PM -0400, Jason Gunthorpe wrote:
-> On Thu, Feb 02, 2023 at 02:12:49PM -0600, Bjorn Helgaas wrote:
-> > On Thu, Feb 02, 2023 at 11:08:25AM +0800, Baolu Lu wrote:
-> > > ...
-> > 
-> > > ACS is unnecessary for the devices that only use translated
-> > > memory request for PASID. All translated addresses are granted
-> > > by the Linux kernel which ensures that such addresses will never
-> > > be in a P2P address, i.e., it's not contained in any bridge
-> > > aperture, will *always* be routed toward the RC.
-> > 
-> > Re 201007ef707a ("PCI: Enable PASID only when ACS RR & UF enabled
-> > on upstream path"), does that commit actually *fix* anything?  I
-> > wonder whether we could revert it completely.
-> > 
-> > The intent of 201007ef707a is to use ACS to prevent misrouting,
-> > which would happen if a TLP contained an address that *looked*
-> > like a PCI bus address, i.e., it was inside a host bridge
-> > aperture, but was *intended* to reach an IOMMU or main memory
-> > directly.
+On 3.02.2023 18:36, Frank Wunderlich wrote:
+> Am 1. Februar 2023 19:56:55 MEZ schrieb arinc9.unal@gmail.com:
+>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+>>
+>> Mux the MT7530 switch's phy0 to gmac5 which is wired to the SoC's gmac1.
+>> This achieves 2 Gbps total bandwidth to the CPU using the second RGMII.
+>>
+>> With this, the interface name to access phy0 changes from wan to eth1.
+>>
+>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+>> ---
+>> arch/arm/boot/dts/mt7623n-bananapi-bpi-r2.dts | 15 ++++++++++-----
+>> 1 file changed, 10 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/arch/arm/boot/dts/mt7623n-bananapi-bpi-r2.dts b/arch/arm/boot/dts/mt7623n-bananapi-bpi-r2.dts
+>> index dc9b4f99eb8b..64700253fd35 100644
+>> --- a/arch/arm/boot/dts/mt7623n-bananapi-bpi-r2.dts
+>> +++ b/arch/arm/boot/dts/mt7623n-bananapi-bpi-r2.dts
+>> @@ -182,6 +182,12 @@ fixed-link {
+>> 	};
+>> };
+>>
+>> +&gmac1 {
+>> +	status = "okay";
+>> +	phy-mode = "rgmii";
+>> +	phy-handle = <&ethphy0>;
+>> +};
+>> +
+>> &eth {
+>> 	status = "okay";
+>>
+>> @@ -189,6 +195,10 @@ mdio-bus {
+>> 		#address-cells = <1>;
+>> 		#size-cells = <0>;
+>>
+>> +		ethphy0: ethernet-phy@0 {
+>> +			reg = <0>;
+>> +		};
+>> +
+>> 		switch@1f {
+>> 			compatible = "mediatek,mt7530";
+>> 			reg = <0x1f>;
+>> @@ -200,11 +210,6 @@ ports {
+>> 				#address-cells = <1>;
+>> 				#size-cells = <0>;
+>>
+>> -				port@0 {
+>> -					reg = <0>;
+>> -					label = "wan";
+>> -				};
+>> -
+>> 				port@1 {
+>> 					reg = <1>;
+>> 					label = "lan0";
 > 
-> Yes.
+> Hi
 > 
-> > 201007ef707a only affects pci_enable_pasid(), so I think we
-> > already avoid this misrouting by restricting DMA address
-> > allocation for both non-IOMMU scenarios and non-PASID IOMMU
-> > scenarios.
+> I still see Problem with "renaming" the wan from users PoV. I got another way of using second gmac for wan some time ago using vlan-aware bridge (have not tested with recent kernel versions).
 > 
-> There is no restriction on DMA address allocation with PASID.
+> Maybe this works for you too? If yes imho it will be a better way.
 > 
-> The typical PASID use case is to point the PASID at the CPU page
-> table and then all VA's are fair game by userspace. There is no
-> carve out like the DMA API has to protect from bus address
-> confusion.
+> https://github.com/frank-w/BPI-Router-Linux/commit/c92b648bac996b34dc75a4fff15d7fb429bfe74b
 
-I think you're saying that for (Requester ID, PASID, Untranslated
-Address), the Untranslated Address is not restricted at all, and it
-may look like a PCI bus address.
+Frank, the comment section of that page is full of my comments testing 
+it out and chatting with you. I don't understand why you're wording it 
+like it's new to me.
 
-> > So what about PASID mappings, e.g., consider a mapping of
-> > (Requester ID, PASID, Untranslated Address) -> Translated Address?
-> > If either the Untranslated Address or the Translated Address looks
-> > like a PCI bus address, a Memory Request or Translation Request
-> > could be misrouted.
 > 
-> The PCI rules are a bit complicated:
->  - A simple MemRd/Wr with a PASID will be routed according to the
->    address. This can be mis-routed
->  - A ATS translation request with a PASID is always routed to the host
->    bridge
-
-From a PCIe point of view, I think these cases are equivalent because
-a PASID prefix doesn't affect routing (sec 2.2.10.4).  A Translation
-Request includes an Untranslated Address, and if that happens to look
-like a PCI bus address, I think it will be mis-routed just like a
-MemRd/Wr would be.
-
->  - A MemRd/Wr with Translated set and no PASID is always routed to the
->    correct destination, even if that is not the host bridge
-
-I don't think Address Type 10b ("Translated") affects routing.  A
-MemRd/Wr should be routed to a PCI peer if the Translated Address is
-inside a host bridge aperture, or to the host bridge otherwise.
-
-> > Do IOMMUs allocate (PASID, Untranslated Addresses) that look like
-> > PCI bus addresses?
+> Have same for r64/mt7622 in my tree...
 > 
-> Yes, because it is mapped to a mm_struct userspace can use any mmap
-> to access any valid address as an IOVA and thus PASID tagged
-> translation must never become confused with bus addresses.
+> It should use eth1 for wan-traffic too but is full userspace configuration without breaking userspace for users not wanting it.
 
-If PCI bus addresses are carved out of the Translated Address arena,
-the MemRd/Wr TLPs should be fine, but I think the Translation Requests
-that include Untranslated Addresses are still a problem.
+If your argument is that connecting the wan port to the second mac 
+should stay off mainline and to be left to the individual to do so, to 
+not break the existing userspace configuration, this hack will need much 
+more complex changes to the userspace configuration compared to this patch.
 
-> Further, and worse, the common use model for PASID SVA is for
-> userspace to directly submit IOVA to the device for operation. If
-> userspace can submit a hostile IOVA and cause DMA to reach something
-> that is not the host bridge then system security is completely
-> wrecked.
-> 
-> So, as an API in Linux we felt it was best to only enable PASID if
-> PASID is secure and truely isolated, otherwise leave PASID off. The
-> use cases for insecure PASID seem small.
+On top of this, you still need to change the devicetree to enable gmac1. 
+And it will cause issues due to the nature of this method. Frames with 
+the same MAC address will appear on different interfaces which will 
+flood the kernel log, if eth1 were to be put in a bridge with other 
+interfaces.
 
-The patch under discussion is intended to fix a v6.2-rc1 regression
-added by 201007ef707a ("PCI: Enable PASID only when ACS RR & UF
-enabled on upstream path").
+To summarise:
+					This patch	Your method
+Changes to the devicetree		Yes	(-)	Yes	(-)
+Changes to the userspace configuration	Yes	(-)	Yes	(-)
+Changes required in userspace		Simple	(+)	Complex	(-)
+Does it work properly?			Yes	(+)	No	(-)
 
-Are we on track to fix this before v6.2?  I don't have a clear
-understanding of how we know this change is safe and it only affects
-AMD GPU and not other devices below the same IOMMU.
+Using this patch would be the proper way to connect the wan port to the 
+second mac.
 
-Bjorn
+I can also argue that I see no good reason to not want this, therefore 
+this should be the default way. The UTP port for the wan port is 
+seperated from the other 4 ports which already supports that this 
+should've been there when the DT of this device was added in the first 
+place.
+
+If someone were to not want this, they could change the devicetree to 
+fit their own purpose.
+
+I did this on GnuBee GB-PC1 and it was easily addressed on gnubee-tools, 
+a tool for building a firmware image for the said device.
+
+https://github.com/neilbrown/gnubee-tools/commit/e1cdab9fd5f03ec4582176ab6eac9157df2a6f21
+
+To conclude, in my opinion, gaining 2 Gbps total bandwidth to the CPU at 
+the expense of a tiny change in userspace configuration is absolutely 
+worth it. You clearly don't think that way and that's fine. It's up to 
+the maintainer, Matthias, to decide. Matthias can take the remaining 
+patches if they please.
+
+Arınç
