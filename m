@@ -2,261 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15BA3688DE0
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 04:19:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52058688DDA
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 04:18:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231903AbjBCDTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 22:19:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46512 "EHLO
+        id S231913AbjBCDSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 22:18:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232272AbjBCDS4 (ORCPT
+        with ESMTP id S230196AbjBCDSc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 22:18:56 -0500
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B2C530DC;
-        Thu,  2 Feb 2023 19:18:46 -0800 (PST)
-Received: by mail-pl1-x644.google.com with SMTP id n13so3969771plf.11;
-        Thu, 02 Feb 2023 19:18:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EoGM7XRz0NZ0b6mw+q1l4grA9yKTex8169ZS160dcgc=;
-        b=LAYoO2jHuYh9BSeeauAsVBpKHu3MDRm6RHxQMurlHAQknWS6gvHda8E9DnSvxHbqZ5
-         kR2HddgphBX7H8unFVpIRIYHhvscbjlLVZRTmZEsw+CTJbyQjnxGFVdVxxu/MqHcMxte
-         pPGbeSjP39vX0dlIBIivxysmr0xdXFrLtLPLxQgvvRIZT96iZgiflgG7ao3nGzu8xszE
-         z/mTipwcKnLswdz9LN+39Q8Qrvq8EUVForGIX8vYyeNDAl8r9O7PCh7R0zKD20peFV7A
-         dkEd9rjpXr/M+1hPJKTKncrdcxA33vzKuDsGtJWQY6MJgKgEFQxLh/H7vx1GwrneZzQ4
-         CnVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EoGM7XRz0NZ0b6mw+q1l4grA9yKTex8169ZS160dcgc=;
-        b=iPqz/RmfoeOHHINvnmqLNtRXz9zOlWFd5Yy4l8N6oYcKFrW78oRj3rKMpAhl3o/I+w
-         DfTN8EAU3DEkfbfOdKVDJpDLTV/CWmKfwNo+XnlB0ANUeXFifAKp/kY6zTAsvabGx5Xu
-         aI/LoksNFUz0Vp7To8XRJDw3J+AUuLJPzHxtM037IkIoG9UdcXXCHrh8ept+cALw9tJ9
-         /Ylp3I4Ejhi0sHIAALNfqkppoXJw+E7hrMUaKi8pG0O1D+UNnb8Y6+IVy6Z6P1uai8px
-         MPGI0mVv5twgwQFL41W0SUNrb49QraTo2RUT6tFxWD4AtuiN0NqHRAIDag8i5Qp+y731
-         1C9g==
-X-Gm-Message-State: AO0yUKXGxVNdtd+OiEdo0IRWSemcXyiZAPoRvFn3MqdgEllXOqddUtdj
-        tbQelr9TuETs56GtEeuUsd4=
-X-Google-Smtp-Source: AK7set+fh9niTzV6bNDk2mIMsd5eSjfHj1yS6Gdv/GTiSy5CKm/sFxd6l/89OtbIJEajFZp+tG36Cg==
-X-Received: by 2002:a17:902:e888:b0:196:2949:3ca7 with SMTP id w8-20020a170902e88800b0019629493ca7mr10454960plg.7.1675394325544;
-        Thu, 02 Feb 2023 19:18:45 -0800 (PST)
-Received: from localhost.localdomain ([203.205.141.16])
-        by smtp.gmail.com with ESMTPSA id a9-20020a170902ee8900b001899c2a0ae0sm416009pld.40.2023.02.02.19.18.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 19:18:45 -0800 (PST)
-From:   menglong8.dong@gmail.com
-X-Google-Original-From: imagedong@tencent.com
-To:     andrii.nakryiko@gmail.com, alan.maguire@oracle.com
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Menglong Dong <imagedong@tencent.com>
-Subject: [PATCH bpf-next 2/2] selftests/bpf: add test for legacy/perf kprobe/uprobe attach mode
-Date:   Fri,  3 Feb 2023 11:17:42 +0800
-Message-Id: <20230203031742.1730761-3-imagedong@tencent.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230203031742.1730761-1-imagedong@tencent.com>
-References: <20230203031742.1730761-1-imagedong@tencent.com>
+        Thu, 2 Feb 2023 22:18:32 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F90B23652;
+        Thu,  2 Feb 2023 19:18:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675394311; x=1706930311;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=IAVrdyU7SUG1n2ySXvR3lW7L1iBU+Rd8/BYmuWxFtIk=;
+  b=GvJhckVRt8PPJ/anCatFCxsH6/eEoN2ZAItcZ1fwmOiII/yrkkugjSCD
+   PEkgrEmuNXRtPqxSUKIwFiENLAZSKjvfVWvY/vWoXtuyqfO6UbH0oRwXv
+   WNMmMkcNgrWmkD01bV9cv1cYuqKNRtVxA81RsExirx+p+5+IRmJ3d7L74
+   1o+sFjg2EXuWdoE0eeQ19ZqZC9hWCWLXF+mi0HYg4tENYmFiAtBE4/he4
+   qpTGcR8g4a+oD+ikmrCAwdWIlmDCwoNp+KeM+JIywPPvd0sMGPraUwAwg
+   PUuMHhsqPn/cu1qN5NYuuFr3Z7G4cKWDrrZ51CJQ8ex6fcYlJCMJK7aZr
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="355985044"
+X-IronPort-AV: E=Sophos;i="5.97,269,1669104000"; 
+   d="scan'208";a="355985044"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2023 19:18:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="734167353"
+X-IronPort-AV: E=Sophos;i="5.97,269,1669104000"; 
+   d="scan'208";a="734167353"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 02 Feb 2023 19:18:29 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pNmaq-00001G-1e;
+        Fri, 03 Feb 2023 03:18:28 +0000
+Date:   Fri, 3 Feb 2023 11:18:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Allen Ballway <ballway@chromium.org>, benjamin.tissoires@redhat.com
+Cc:     oe-kbuild-all@lists.linux.dev, jikos@kernel.org,
+        lukas.bulwahn@gmail.com, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Allen Ballway <ballway@chromium.org>
+Subject: Re: [PATCH] HID: multitouch: Fix typo in config check
+Message-ID: <202302031117.u6FdSXY2-lkp@intel.com>
+References: <20230202144149.1.I7f213388b358718068c63acb698dc4937716cf35@changeid>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230202144149.1.I7f213388b358718068c63acb698dc4937716cf35@changeid>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Menglong Dong <imagedong@tencent.com>
+Hi Allen,
 
-Add the testing for kprobe/uprobe attaching in legacy and perf mode.
-And the testing passed:
+Thank you for the patch! Yet something to improve:
 
-./test_progs -t attach_probe
-$5       attach_probe:OK
-Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+[auto build test ERROR on hid/for-next]
+[also build test ERROR on next-20230202]
+[cannot apply to linus/master v6.2-rc6]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Signed-off-by: Menglong Dong <imagedong@tencent.com>
----
- .../selftests/bpf/prog_tests/attach_probe.c   | 61 ++++++++++++++++++-
- .../selftests/bpf/progs/test_attach_probe.c   | 32 ++++++++++
- 2 files changed, 92 insertions(+), 1 deletion(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Allen-Ballway/HID-multitouch-Fix-typo-in-config-check/20230202-224919
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-next
+patch link:    https://lore.kernel.org/r/20230202144149.1.I7f213388b358718068c63acb698dc4937716cf35%40changeid
+patch subject: [PATCH] HID: multitouch: Fix typo in config check
+config: x86_64-randconfig-a006 (https://download.01.org/0day-ci/archive/20230203/202302031117.u6FdSXY2-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/a2331d08db1030f3e3f2e0d9c9232780c27d954a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Allen-Ballway/HID-multitouch-Fix-typo-in-config-check/20230202-224919
+        git checkout a2331d08db1030f3e3f2e0d9c9232780c27d954a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/attach_probe.c b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-index 9566d9d2f6ee..5f6212ac0b6d 100644
---- a/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-+++ b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-@@ -23,15 +23,22 @@ static noinline void trigger_func3(void)
- 	asm volatile ("");
- }
- 
-+/* attach point for legacy uprobe */
-+static noinline void trigger_func4(void)
-+{
-+	asm volatile ("");
-+}
-+
- static char test_data[] = "test_data";
- 
- void test_attach_probe(void)
- {
-+	ssize_t uprobe_offset, uprobe4_offset, ref_ctr_offset;
- 	DECLARE_LIBBPF_OPTS(bpf_uprobe_opts, uprobe_opts);
- 	struct bpf_link *kprobe_link, *kretprobe_link;
- 	struct bpf_link *uprobe_link, *uretprobe_link;
-+	DECLARE_LIBBPF_OPTS(bpf_kprobe_opts, opts);
- 	struct test_attach_probe* skel;
--	ssize_t uprobe_offset, ref_ctr_offset;
- 	struct bpf_link *uprobe_err_link;
- 	bool legacy;
- 	char *mem;
-@@ -86,6 +93,25 @@ void test_attach_probe(void)
- 		goto cleanup;
- 	skel->links.handle_kretprobe = kretprobe_link;
- 
-+	/* manual-attach kprobe in legacy mode */
-+	opts.retprobe = false;
-+	opts.mode = PROBE_MODE_LEGACY;
-+	kprobe_link = bpf_program__attach_kprobe_opts(skel->progs.handle_kprobe_legacy,
-+						      SYS_NANOSLEEP_KPROBE_NAME,
-+						      &opts);
-+	if (!ASSERT_OK_PTR(kprobe_link, "attach_kprobe_legacy"))
-+		goto cleanup;
-+	skel->links.handle_kprobe_legacy = kprobe_link;
-+
-+	/* manual-attach kprobe in perf mode */
-+	opts.mode = PROBE_MODE_PERF;
-+	kprobe_link = bpf_program__attach_kprobe_opts(skel->progs.handle_kprobe_perf,
-+						      SYS_NANOSLEEP_KPROBE_NAME,
-+						      &opts);
-+	if (!ASSERT_OK_PTR(kprobe_link, "attach_kprobe_perf"))
-+		goto cleanup;
-+	skel->links.handle_kprobe_perf = kprobe_link;
-+
- 	/* auto-attachable kprobe and kretprobe */
- 	skel->links.handle_kprobe_auto = bpf_program__attach(skel->progs.handle_kprobe_auto);
- 	ASSERT_OK_PTR(skel->links.handle_kprobe_auto, "attach_kprobe_auto");
-@@ -110,6 +136,32 @@ void test_attach_probe(void)
- 	if (!legacy)
- 		ASSERT_GT(uprobe_ref_ctr, 0, "uprobe_ref_ctr_after");
- 
-+	uprobe4_offset = get_uprobe_offset(&trigger_func4);
-+	if (!ASSERT_GE(uprobe4_offset, 0, "uprobe4_offset"))
-+		goto cleanup;
-+
-+	uprobe_opts.mode = PROBE_MODE_LEGACY;
-+	uprobe_opts.ref_ctr_offset = 0;
-+	uprobe_link = bpf_program__attach_uprobe_opts(skel->progs.handle_uprobe_legacy,
-+						      0 /* self pid */,
-+						      "/proc/self/exe",
-+						      uprobe4_offset,
-+						      &uprobe_opts);
-+	if (!ASSERT_OK_PTR(uprobe_link, "attach_uprobe_legacy"))
-+		goto cleanup;
-+	skel->links.handle_uprobe_legacy = uprobe_link;
-+
-+	uprobe_opts.mode = PROBE_MODE_PERF;
-+	uprobe_opts.ref_ctr_offset = legacy ? 0 : ref_ctr_offset;
-+	uprobe_link = bpf_program__attach_uprobe_opts(skel->progs.handle_uprobe_perf,
-+						      0 /* self pid */,
-+						      "/proc/self/exe",
-+						      uprobe_offset,
-+						      &uprobe_opts);
-+	if (!ASSERT_OK_PTR(uprobe_link, "attach_uprobe_perf"))
-+		goto cleanup;
-+	skel->links.handle_uprobe_perf = uprobe_link;
-+
- 	/* if uprobe uses ref_ctr, uretprobe has to use ref_ctr as well */
- 	uprobe_opts.retprobe = true;
- 	uprobe_opts.ref_ctr_offset = legacy ? 0 : ref_ctr_offset;
-@@ -207,11 +259,18 @@ void test_attach_probe(void)
- 	/* trigger & validate sleepable uprobe attached by name */
- 	trigger_func3();
- 
-+	/* trigger & validate uprobe in legacy mode */
-+	trigger_func4();
-+
- 	ASSERT_EQ(skel->bss->kprobe_res, 1, "check_kprobe_res");
- 	ASSERT_EQ(skel->bss->kprobe2_res, 11, "check_kprobe_auto_res");
-+	ASSERT_EQ(skel->bss->kprobe3_res, 3, "check_kprobe_legacy_res");
-+	ASSERT_EQ(skel->bss->kprobe4_res, 4, "check_kprobe_perf_res");
- 	ASSERT_EQ(skel->bss->kretprobe_res, 2, "check_kretprobe_res");
- 	ASSERT_EQ(skel->bss->kretprobe2_res, 22, "check_kretprobe_auto_res");
- 	ASSERT_EQ(skel->bss->uprobe_res, 3, "check_uprobe_res");
-+	ASSERT_EQ(skel->bss->uprobe2_res, 4, "check_uprobe_legacy_res");
-+	ASSERT_EQ(skel->bss->uprobe3_res, 5, "check_uprobe_perf_res");
- 	ASSERT_EQ(skel->bss->uretprobe_res, 4, "check_uretprobe_res");
- 	ASSERT_EQ(skel->bss->uprobe_byname_res, 5, "check_uprobe_byname_res");
- 	ASSERT_EQ(skel->bss->uretprobe_byname_res, 6, "check_uretprobe_byname_res");
-diff --git a/tools/testing/selftests/bpf/progs/test_attach_probe.c b/tools/testing/selftests/bpf/progs/test_attach_probe.c
-index a1e45fec8938..6674deea5686 100644
---- a/tools/testing/selftests/bpf/progs/test_attach_probe.c
-+++ b/tools/testing/selftests/bpf/progs/test_attach_probe.c
-@@ -9,9 +9,13 @@
- 
- int kprobe_res = 0;
- int kprobe2_res = 0;
-+int kprobe3_res = 0;
-+int kprobe4_res = 0;
- int kretprobe_res = 0;
- int kretprobe2_res = 0;
- int uprobe_res = 0;
-+int uprobe2_res = 0;
-+int uprobe3_res = 0;
- int uretprobe_res = 0;
- int uprobe_byname_res = 0;
- int uretprobe_byname_res = 0;
-@@ -30,6 +34,20 @@ int handle_kprobe(struct pt_regs *ctx)
- 	return 0;
- }
- 
-+SEC("kprobe")
-+int handle_kprobe_legacy(struct pt_regs *ctx)
-+{
-+	kprobe3_res = 3;
-+	return 0;
-+}
-+
-+SEC("kprobe")
-+int handle_kprobe_perf(struct pt_regs *ctx)
-+{
-+	kprobe4_res = 4;
-+	return 0;
-+}
-+
- SEC("ksyscall/nanosleep")
- int BPF_KSYSCALL(handle_kprobe_auto, struct __kernel_timespec *req, struct __kernel_timespec *rem)
- {
-@@ -69,6 +87,20 @@ int handle_uprobe(struct pt_regs *ctx)
- 	return 0;
- }
- 
-+SEC("uprobe")
-+int handle_uprobe_legacy(struct pt_regs *ctx)
-+{
-+	uprobe2_res = 4;
-+	return 0;
-+}
-+
-+SEC("uprobe")
-+int handle_uprobe_perf(struct pt_regs *ctx)
-+{
-+	uprobe3_res = 5;
-+	return 0;
-+}
-+
- SEC("uretprobe")
- int handle_uretprobe(struct pt_regs *ctx)
- {
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   ld: vmlinux.o: in function `hid_lookup_quirk':
+>> drivers/hid/hid-quirks.c:1305: undefined reference to `i2c_hid_get_dmi_quirks'
+
+
+vim +1305 drivers/hid/hid-quirks.c
+
+d5d3e202753cc0 Benjamin Tissoires 2017-11-20  1258  
+d5d3e202753cc0 Benjamin Tissoires 2017-11-20  1259  /**
+0603616a5bf6cd Randy Dunlap       2021-01-19  1260   * hid_lookup_quirk - return any quirks associated with a HID device
+d5d3e202753cc0 Benjamin Tissoires 2017-11-20  1261   * @hdev: the HID device to look for
+d5d3e202753cc0 Benjamin Tissoires 2017-11-20  1262   *
+d5d3e202753cc0 Benjamin Tissoires 2017-11-20  1263   * Description:
+d5d3e202753cc0 Benjamin Tissoires 2017-11-20  1264   *     Given a HID device, return any quirks associated with that device.
+d5d3e202753cc0 Benjamin Tissoires 2017-11-20  1265   *
+0603616a5bf6cd Randy Dunlap       2021-01-19  1266   * Return: an unsigned long quirks value.
+d5d3e202753cc0 Benjamin Tissoires 2017-11-20  1267   */
+d5d3e202753cc0 Benjamin Tissoires 2017-11-20  1268  unsigned long hid_lookup_quirk(const struct hid_device *hdev)
+d5d3e202753cc0 Benjamin Tissoires 2017-11-20  1269  {
+d5d3e202753cc0 Benjamin Tissoires 2017-11-20  1270  	unsigned long quirks = 0;
+d5d3e202753cc0 Benjamin Tissoires 2017-11-20  1271  	const struct hid_device_id *quirk_entry = NULL;
+d5d3e202753cc0 Benjamin Tissoires 2017-11-20  1272  
+d5d3e202753cc0 Benjamin Tissoires 2017-11-20  1273  	/* NCR devices must not be queried for reports */
+d5d3e202753cc0 Benjamin Tissoires 2017-11-20  1274  	if (hdev->bus == BUS_USB &&
+d5d3e202753cc0 Benjamin Tissoires 2017-11-20  1275  	    hdev->vendor == USB_VENDOR_ID_NCR &&
+d5d3e202753cc0 Benjamin Tissoires 2017-11-20  1276  	    hdev->product >= USB_DEVICE_ID_NCR_FIRST &&
+d5d3e202753cc0 Benjamin Tissoires 2017-11-20  1277  	    hdev->product <= USB_DEVICE_ID_NCR_LAST)
+d5d3e202753cc0 Benjamin Tissoires 2017-11-20  1278  		return HID_QUIRK_NO_INIT_REPORTS;
+d5d3e202753cc0 Benjamin Tissoires 2017-11-20  1279  
+d5158e020c4593 Niels Skou Olsen   2017-10-04  1280  	/* These devices must be ignored if version (bcdDevice) is too old */
+d5158e020c4593 Niels Skou Olsen   2017-10-04  1281  	if (hdev->bus == BUS_USB && hdev->vendor == USB_VENDOR_ID_JABRA) {
+d5158e020c4593 Niels Skou Olsen   2017-10-04  1282  		switch (hdev->product) {
+d5158e020c4593 Niels Skou Olsen   2017-10-04  1283  		case USB_DEVICE_ID_JABRA_SPEAK_410:
+d5158e020c4593 Niels Skou Olsen   2017-10-04  1284  			if (hdev->version < 0x0111)
+d5158e020c4593 Niels Skou Olsen   2017-10-04  1285  				return HID_QUIRK_IGNORE;
+d5158e020c4593 Niels Skou Olsen   2017-10-04  1286  			break;
+d5158e020c4593 Niels Skou Olsen   2017-10-04  1287  		case USB_DEVICE_ID_JABRA_SPEAK_510:
+d5158e020c4593 Niels Skou Olsen   2017-10-04  1288  			if (hdev->version < 0x0214)
+d5158e020c4593 Niels Skou Olsen   2017-10-04  1289  				return HID_QUIRK_IGNORE;
+d5158e020c4593 Niels Skou Olsen   2017-10-04  1290  			break;
+d5158e020c4593 Niels Skou Olsen   2017-10-04  1291  		}
+d5158e020c4593 Niels Skou Olsen   2017-10-04  1292  	}
+d5158e020c4593 Niels Skou Olsen   2017-10-04  1293  
+d5d3e202753cc0 Benjamin Tissoires 2017-11-20  1294  	mutex_lock(&dquirks_lock);
+d5d3e202753cc0 Benjamin Tissoires 2017-11-20  1295  	quirk_entry = hid_exists_dquirk(hdev);
+d5d3e202753cc0 Benjamin Tissoires 2017-11-20  1296  	if (quirk_entry)
+d5d3e202753cc0 Benjamin Tissoires 2017-11-20  1297  		quirks = quirk_entry->driver_data;
+6e65d9d5492f37 Benjamin Tissoires 2017-11-20  1298  	else
+6e65d9d5492f37 Benjamin Tissoires 2017-11-20  1299  		quirks = hid_gets_squirk(hdev);
+d5d3e202753cc0 Benjamin Tissoires 2017-11-20  1300  	mutex_unlock(&dquirks_lock);
+d5d3e202753cc0 Benjamin Tissoires 2017-11-20  1301  
+a2f416bf062a38 Allen Ballway      2023-01-10  1302  	/* Get quirks specific to I2C devices */
+a2331d08db1030 Allen Ballway      2023-02-02  1303  	if (IS_ENABLED(CONFIG_I2C_HID_CORE) && IS_ENABLED(CONFIG_DMI) &&
+a2f416bf062a38 Allen Ballway      2023-01-10  1304  	    hdev->bus == BUS_I2C)
+a2f416bf062a38 Allen Ballway      2023-01-10 @1305  		quirks |= i2c_hid_get_dmi_quirks(hdev->vendor, hdev->product);
+
 -- 
-2.39.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
