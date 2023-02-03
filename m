@@ -2,113 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89545689138
+	by mail.lfdr.de (Postfix) with ESMTP id 618D1689137
 	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 08:49:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232204AbjBCHtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 02:49:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34388 "EHLO
+        id S232346AbjBCHtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 02:49:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230384AbjBCHs6 (ORCPT
+        with ESMTP id S232261AbjBCHtK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 02:48:58 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4638492C3C
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 23:48:57 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id l37-20020a05600c1d2500b003dfe46a9801so1707667wms.0
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 23:48:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=v5gfpczBzl62sAvBqjyZghlCn5Q/6Yh+maXELEJGN6Y=;
-        b=HAO2CNODWncVDUlMlFhIV6G/1KE+6/Sw6jH7FCGny1is7RMq7DDZWism/cSfO1QPmY
-         YWpE7obG92rNxg0WDwlz+/itQXkq4uMNl05IuIg+/pAkBmLGzxSGwi5gdT98lReGF6c2
-         OCy8iXA3/12Ozd8KXYIQDIF/TTUXgLnq+3AJzeZhb/6wHRa7CKIo/ZS5MtOTt/uU055F
-         NRHplid1x2R11lA+5CO3Jpjo9z04B70XPxxXHQSs/6Et8FsOkIK3SUEPRvFlBNjnwzst
-         OWF32m2lvF3SPrp18G/+YqmIQFNAgipHr3RGG5TK6SizVkqhhVw0i8U2LJfShkhBH1Hc
-         E70A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=v5gfpczBzl62sAvBqjyZghlCn5Q/6Yh+maXELEJGN6Y=;
-        b=GJP+EoxZzTEitWa9lMWBAo6ZTg9LlSzdZorASiL8lCsZc3dr+t9AVTeDW3K9jk7pbf
-         fb6RTEt5oS7J56A6bh20WFwgpmfj9z2eSHRWFiOYhPWEozE69RDeiti40olB8hblqHzZ
-         Oo/tuxO8HlZmOUGGtALNL30gObOLCgUzMay/QGdRDAcoqMTFR3EIxVOkCADMRR6RQxwE
-         3HaqXWBjxIIjXeGz88z0SOaB+KT30E4ec7Nc7IO7Tpg7lk+j5ruXFTvGpjnmX6oM5mjK
-         BgX7JxJ/0sShx823wQE5rUQUHbG1aBjZ9iZy2YEz7KRYBQazQvDV2z1UwFMVPFygzfTs
-         grQQ==
-X-Gm-Message-State: AO0yUKWPQaiYxNYSJnn7tlRzJB9NOAK26kL6GEwmKV+JUvihxN0oETmF
-        tL8wQ4z+Xn8nnXFMErI37Od/5g==
-X-Google-Smtp-Source: AK7set+oqhPulJShRtcIKzg8mOnQKZu7gCG1/8sG+jlfV7LfKIvKHyV6ok09Mw27P/viyjbWaw/7mQ==
-X-Received: by 2002:a05:600c:1c22:b0:3dc:37d0:e9df with SMTP id j34-20020a05600c1c2200b003dc37d0e9dfmr8634479wms.14.1675410535780;
-        Thu, 02 Feb 2023 23:48:55 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id y6-20020a7bcd86000000b003dc4480df80sm7001220wmj.34.2023.02.02.23.48.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 23:48:55 -0800 (PST)
-Message-ID: <e2d4c841-b3f9-a23e-6977-4015f8f9de5f@linaro.org>
-Date:   Fri, 3 Feb 2023 08:48:53 +0100
+        Fri, 3 Feb 2023 02:49:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5266E93AE0;
+        Thu,  2 Feb 2023 23:49:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EB88261DFB;
+        Fri,  3 Feb 2023 07:49:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2AD6C433D2;
+        Fri,  3 Feb 2023 07:49:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1675410548;
+        bh=vN66KilCS2TdtkWLbd7o9q7+fAzrvWojr2M77i+Cs8I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RiEtO29crIdub9myRyFJWQ0h5j9XKzbUy16DYzkJAPF87fHnkNXbOE2/MicX3mCkQ
+         O5HOcRklssZ/fh7GB35yTdfRtPbxLMu9WN4ko9+NMntq3VuS7s4wdUK6GqH4/7hdlK
+         QTlypBEj5a8IkHDkklOhF6dTMjU6XGlaMBLzLrpI=
+Date:   Fri, 3 Feb 2023 08:49:05 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     "Guozihua (Scott)" <guozihua@huawei.com>
+Cc:     Sasha Levin <sashal@kernel.org>, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org, zohar@linux.ibm.com,
+        paul@paul-moore.com, luhuaxin1@huawei.com
+Subject: Re: [PATCH 4.19 0/3] Backport handling -ESTALE policy update failure
+ to 4.19
+Message-ID: <Y9y8cYNR6TnAjnHS@kroah.com>
+References: <20230201023952.30247-1-guozihua@huawei.com>
+ <Y9vw6RhQ6KJ5+E1I@sashalap>
+ <02723ce8-0ad4-7860-b76c-7d2b30710dcf@huawei.com>
+ <Y9y7c5sEX5phLybE@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 1/9] ASoC: dt-bindings: create component common schema
-Content-Language: en-US
-To:     Jerome Brunet <jbrunet@baylibre.com>,
-        Mark Brown <broonie@kernel.org>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org
-Cc:     linux-amlogic@lists.infradead.org,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org
-References: <20230202183653.486216-1-jbrunet@baylibre.com>
- <20230202183653.486216-2-jbrunet@baylibre.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230202183653.486216-2-jbrunet@baylibre.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9y7c5sEX5phLybE@kroah.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/02/2023 19:36, Jerome Brunet wrote:
-> All DAIs are component but not all components are DAI.
-> Move the component properties (sound-name-prefix ATM) to a separate schema
-> file so it can be used by non-DAI components, such as auxiliary devices.
+On Fri, Feb 03, 2023 at 08:44:51AM +0100, Greg KH wrote:
+> On Fri, Feb 03, 2023 at 09:10:13AM +0800, Guozihua (Scott) wrote:
+> > On 2023/2/3 1:20, Sasha Levin wrote:
+> > > On Wed, Feb 01, 2023 at 10:39:49AM +0800, GUO Zihua wrote:
+> > >> This series backports patches in order to resolve the issue discussed
+> > >> here:
+> > >> https://lore.kernel.org/selinux/389334fe-6e12-96b2-6ce9-9f0e8fcb85bf@huawei.com/
+> > >>
+> > >> This required backporting the non-blocking LSM policy update mechanism
+> > >> prerequisite patches.
+> > > 
+> > > Do we not need this on newer kernels? Why only 4.19?
+> > > 
+> > Hi Sasha.
+> > 
+> > The issue mentioned in this patch was fixed already in the newer kernel.
+> > All three patches here are backports from mainline.
 > 
-> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
+> Ok, now queued up, thanks.
 
+Nope, I've now dropped them all as you did not include the needed fix up
+commits as well.  We can not add patches to the stable tree that are
+known broken, right?
 
-> -properties:
-> -  sound-name-prefix:
-> -    $ref: /schemas/types.yaml#/definitions/string
-> -    description: |
-> -      Card implementing the routing property define the connection between
-> -      audio components as list of string pair. Component using the same
-> -      sink/source names may use this property to prepend the name of their
-> -      sinks/sources with the provided string.
-> +allOf:
-> +  - $ref: component-common.yaml#
->  
-> +properties:
->    '#sound-dai-cells': true
->  
+How well did you test this?  I see at least 3 missing patches that you
+should have had in this patch series for it to work properly.
 
-Probably we should require sound-dai-cells at some point, but anyway:
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+greg k-h
