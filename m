@@ -2,125 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68F4A68A0FD
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 18:56:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4993368A102
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 18:57:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232519AbjBCR4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 12:56:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35344 "EHLO
+        id S232960AbjBCR5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 12:57:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231216AbjBCR4l (ORCPT
+        with ESMTP id S231766AbjBCR5R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 12:56:41 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9C381CF79;
-        Fri,  3 Feb 2023 09:56:40 -0800 (PST)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 313HHJMs007086;
-        Fri, 3 Feb 2023 17:56:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : reply-to : references : mime-version :
- content-type : in-reply-to; s=qcppdkim1;
- bh=02KT45rBrJ4pSEsR3ymDPFQ/Q7yUORWGKR/1Ihcy3i4=;
- b=e4cO3uJrTp5d/ejqFs1JvXhj4LKJmY5O0vG00Tgm6+2Vw1xawi8YCt7wlmsTP8CI2wpj
- upnDtkJ/ej5lKhAwPiuaMqXUYCX3k4Ityo2wucgdOFg+cB+gkvHrmSL1T2DiYHToEZyu
- 31mw4pkbzTpOZSnGGl7qzjYKRWKuP4MluYxGqXJvQAFDaYlvzfeCK7jRCv8bidiXP46d
- iyz47O5VsXP/TFzFKFgCmRL7VKh4nsHOFpEJj7tn4uA7WI0J+ZJ6y5zH0guxlzZJbQCN
- Dhgln3gVP8zMBSn5w9k8JhCXBr7caZekN5HfD0EknVah06WKyJeLnf1xOGQXvSAGb9Vl Kg== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ngns2j7f8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Feb 2023 17:56:27 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 313HuQta025792
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 3 Feb 2023 17:56:26 GMT
-Received: from quicinc.com (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 3 Feb 2023
- 09:56:19 -0800
-Date:   Fri, 3 Feb 2023 23:26:16 +0530
-From:   Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>
-To:     Elliot Berman <quic_eberman@quicinc.com>
-CC:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Alex Elder <elder@linaro.org>,
-        Murali Nalajala <quic_mnalajal@quicinc.com>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        "Carl van Schaik" <quic_cvanscha@quicinc.com>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v9 21/27] gunyah: vm_mgr: Add framework to add VM
- Functions
-Message-ID: <20230203175616.GD332@quicinc.com>
-Reply-To: Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>
-References: <20230120224627.4053418-1-quic_eberman@quicinc.com>
- <20230120224627.4053418-22-quic_eberman@quicinc.com>
- <20230203093704.GC332@quicinc.com>
+        Fri, 3 Feb 2023 12:57:17 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82806367ED
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 09:57:16 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id f16-20020a17090a9b1000b0023058bbd7b2so5039302pjp.0
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 09:57:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=8WT95F+iS0qJ3SEQvMux6Ahdn4GMfowtUA6O/anLIZM=;
+        b=JD6SPQ9aZzihVAy5oLJLWN+5hgdKbIBF2rpSwem3ale/1ZPxtGrY7JT5LqyOlN8N9a
+         gQvpi4Ibc6CooqHBwRgwSulyLggbq2A9QwMp+NnDESjOVQBx/1iprLWtv+KW/MWFk3fR
+         eFi87mm+flJSCzzGchzGmKBjVXtatjyWYwkhs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8WT95F+iS0qJ3SEQvMux6Ahdn4GMfowtUA6O/anLIZM=;
+        b=Ucb1PNDqsyZ23aNeI4nzDjQhtYOtFYzr3mFRwa4fdDIo4t/I13wHi5lPqyRgcXFtwt
+         xfgFba4OJr2plwULDxhD68EP1Aa+4v/SPseEI1gRxFKvLBkSuHpSYKLb+6HPV6CMbtxn
+         ntJ3I3hrfxxNBGcvb4MM0N3o5MuspxBo8X1yuBxZrQaz8AmLbE6V7z/kGGc3gg7f9rRT
+         WPD2nS0f51gf8equeHLN5YWwsJDUImzYKt1biAL+d3sPx/5d19K86B/o/zD//QzMXVaA
+         cy7HYTOAmSr09k39mA9NktzGTvG1jBlZ53E+4cJTRnKtlPUVith+84PVsf0KFmhPyV7q
+         Vx1w==
+X-Gm-Message-State: AO0yUKXr01EsHGdJNNT46c6XVAqbBQznZGaLS94W8I4OyPLGP/rHQUqM
+        w/X4Qm4VPs8EPoWVuGOW8bXFtg==
+X-Google-Smtp-Source: AK7set+iYFPlIHXpZDz4pifedq9Mx+/38gPmSWF0Ge7/VAK65kqXpKh8i2Cce6utIuqc++7/MnqoYg==
+X-Received: by 2002:a17:902:f14d:b0:198:dd32:f0e1 with SMTP id d13-20020a170902f14d00b00198dd32f0e1mr2737051plb.0.1675447036042;
+        Fri, 03 Feb 2023 09:57:16 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id a21-20020a170902b59500b00186748fe6ccsm1872269pls.214.2023.02.03.09.57.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Feb 2023 09:57:15 -0800 (PST)
+Message-ID: <63dd4afb.170a0220.27b4d.3935@mx.google.com>
+X-Google-Original-Message-ID: <202302031755.@keescook>
+Date:   Fri, 3 Feb 2023 17:57:15 +0000
+From:   Kees Cook <keescook@chromium.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     Amitkumar Karwar <amitkarwar@gmail.com>,
+        Ganapathi Bhat <ganapathi017@gmail.com>,
+        Sharvari Harisangam <sharvari.harisangam@nxp.com>,
+        Xinming Hu <huxinming820@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH][next] wifi: mwifiex: Replace one-element array with
+ flexible-array member
+References: <Y9xkjXeElSEQ0FPY@work>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230203093704.GC332@quicinc.com>
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: YpG8-ONnZ_wPj4MJJBKvgU-vb4mH8Op8
-X-Proofpoint-ORIG-GUID: YpG8-ONnZ_wPj4MJJBKvgU-vb4mH8Op8
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-03_17,2023-02-03_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1015
- spamscore=0 malwarescore=0 priorityscore=1501 suspectscore=0 mlxscore=0
- adultscore=0 mlxlogscore=881 impostorscore=0 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302030164
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y9xkjXeElSEQ0FPY@work>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Srivatsa Vaddagiri <quic_svaddagi@quicinc.com> [2023-02-03 15:07:14]:
-
-> * Elliot Berman <quic_eberman@quicinc.com> [2023-01-20 14:46:20]:
+On Thu, Feb 02, 2023 at 07:34:05PM -0600, Gustavo A. R. Silva wrote:
+> One-element arrays are deprecated, and we are replacing them with flexible
+> array members instead. So, replace one-element array with flexible-array
+> member in struct mwifiex_ie_types_rates_param_set.
 > 
-> > +static struct gunyah_vm_function_driver *__find_function(const char name[GUNYAH_FUNCTION_NAME_SIZE])
-> > +	__must_hold(functions_lock)
-> > +{
-> > +	struct gunyah_vm_function_driver *iter, *drv = NULL;
-> > +
-> > +	list_for_each_entry(iter, &functions, list) {
-> > +		if (!strncmp(iter->name, name, GUNYAH_FUNCTION_NAME_SIZE)) {
-> > +			drv = iter;
-> > +			break;
-> > +		}
-> > +	}
+> These are the only binary differences I see after the change:
 > 
-> Not sure how much of a hot path this is going to sit in. I can imagine VM boot
-> to be in fast path for some cases (VMs spawned on usecase boundaries - I think
-> some VMs like in Amazon firecracker boot in fraction of a second). This
-> indirection could cost that a bit (linear search + strcmp for the right
-> function). IMHO a direct interface (ex: ADD_IOEVENTFD) will be more efficient.
+> mwifiex.o
+> _@@ -50154,7 +50154,7 @@
+>                         23514: R_X86_64_32S     kmalloc_caches+0x50
+>     23518:      call   2351d <mwifiex_scan_networks+0x11d>
+>                         23519: R_X86_64_PLT32   __tsan_read8-0x4
+> -   2351d:      mov    $0x225,%edx
+> +   2351d:      mov    $0x224,%edx
+>     23522:      mov    $0xdc0,%esi
+>     23527:      mov    0x0(%rip),%rdi        # 2352e <mwifiex_scan_networks+0x12e>
+>                         2352a: R_X86_64_PC32    kmalloc_caches+0x4c
+> scan.o
+> _@@ -5582,7 +5582,7 @@
+>                         4394: R_X86_64_32S      kmalloc_caches+0x50
+>      4398:      call   439d <mwifiex_scan_networks+0x11d>
+>                         4399: R_X86_64_PLT32    __tsan_read8-0x4
+> -    439d:      mov    $0x225,%edx
+> +    439d:      mov    $0x224,%edx
+>      43a2:      mov    $0xdc0,%esi
+>      43a7:      mov    0x0(%rip),%rdi        # 43ae <mwifiex_scan_networks+0x12e>
+>                         43aa: R_X86_64_PC32     kmalloc_caches+0x4c
+> 
+> and the reason for that is the following line:
+> 
+> drivers/net/wireless/marvell/mwifiex/scan.c:
+> 1517         scan_cfg_out = kzalloc(sizeof(union mwifiex_scan_cmd_config_tlv),
+> 1518                                GFP_KERNEL);
+> 
+> sizeof(union mwifiex_scan_cmd_config_tlv) is now one-byte smaller due to the
+> flex-array transformation:
+> 
+>   46 union mwifiex_scan_cmd_config_tlv {
+>   47         /* Scan configuration (variable length) */
+>   48         struct mwifiex_scan_cmd_config config;
+>   49         /* Max allocated block */
+>   50         u8 config_alloc_buf[MAX_SCAN_CFG_ALLOC];
+>   51 };
 
-At the minimum, I think you can make iter->name an enum, which will make the
-search faster.
+Interesting! So this looks like it's fixing a minor bug in the original
+implementation which was allocation 1 byte too much.
 
--vatsa
+> 
+> Notice that MAX_SCAN_CFG_ALLOC is defined in terms of
+> sizeof(struct mwifiex_ie_types_rates_param_set), see:
+> 
+>   26 /* Memory needed to store supported rate */
+>   27 #define RATE_TLV_MAX_SIZE   (sizeof(struct mwifiex_ie_types_rates_param_set) \
+>   28                                 + HOSTCMD_SUPPORTED_RATES)
+> 
+>   37 /* Maximum memory needed for a mwifiex_scan_cmd_config with all TLVs at max */
+>   38 #define MAX_SCAN_CFG_ALLOC (sizeof(struct mwifiex_scan_cmd_config)        \
+>   39                                 + sizeof(struct mwifiex_ie_types_num_probes)   \
+>   40                                 + sizeof(struct mwifiex_ie_types_htcap)       \
+>   41                                 + CHAN_TLV_MAX_SIZE                 \
+>   42                                 + RATE_TLV_MAX_SIZE                 \
+>   43                                 + WILDCARD_SSID_TLV_MAX_SIZE)
 
+Yeah, the config_alloc_buf size appears to be very specifically
+calculated, so this seems sane to me.
+
+> 
+> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+> routines on memcpy() and help us make progress towards globally
+> enabling -fstrict-flex-arrays=3 [1].
+> 
+> Link: https://github.com/KSPP/linux/issues/79
+> Link: https://github.com/KSPP/linux/issues/252
+> Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+
+Reviewed-by: Kees Cook <keescook@chromium.org>
+
+-- 
+Kees Cook
