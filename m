@@ -2,178 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B2FD689C60
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 15:57:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8288E689C57
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 15:57:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232603AbjBCO5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 09:57:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38576 "EHLO
+        id S233137AbjBCO45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 09:56:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231614AbjBCO5Q (ORCPT
+        with ESMTP id S233703AbjBCO4q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 09:57:16 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10CAC9EE01
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 06:56:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675436185;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1i7X5PzCBbRsJjDeQvGRkONq09RnZNi3b/olrwD/UP0=;
-        b=YttA7QJGyA3opiXWl1sHDSJ4GbyxPOjCuzj63s18ovPbhrZYuFXLPqNdW1qRic/kn6DwGS
-        079PGF4aEnIefWiOdgKmRMN5Qgbqmxx9NufOnUju1H/lIQbCF7zK9VgFFBsm9UvYIpjvxX
-        AwYLLaYyZNLsYUgu86EKYsdRMxcHFmA=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-70-vbM-x8fRM6mXLSI5p5R3Gg-1; Fri, 03 Feb 2023 09:56:24 -0500
-X-MC-Unique: vbM-x8fRM6mXLSI5p5R3Gg-1
-Received: by mail-qt1-f198.google.com with SMTP id u11-20020ac8050b000000b003ba115c1b72so219861qtg.23
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 06:56:24 -0800 (PST)
+        Fri, 3 Feb 2023 09:56:46 -0500
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE41AA0030;
+        Fri,  3 Feb 2023 06:56:37 -0800 (PST)
+Received: by mail-qt1-f175.google.com with SMTP id h24so5645243qta.12;
+        Fri, 03 Feb 2023 06:56:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1i7X5PzCBbRsJjDeQvGRkONq09RnZNi3b/olrwD/UP0=;
-        b=Nlff6c018mNesEoMCLN7eUMbfgLOJqyffakBkB4I3AxaGrw3VGDiFZmXNwtp3mRlwO
-         wep+E92MaT+UUhiVzPi6m+jUNPF5RZEj32j8ci2irwTTMmAmYL8Iqis+R3sxYe80qopx
-         wEYIze729WAkxkMnAuunPsqauoG4eWx3odjumeCeOGpeGh93jJXYysMmFp8jxD5rtRbV
-         RgaFBf6MchcBj4XQs5CkTPG1qKfc71h5T2YHvG3bbe7Qg3JcWuLHhPJbTw7mkQFii5zb
-         HPUiPXAJAcl0PtXOxgu6SGUQWvIHqALuDvoldWe9AVP+/XaeyzclRJDq+4dOvsraFPMH
-         xJUg==
-X-Gm-Message-State: AO0yUKUJ4VIPTQoXqspe8WDkQbsSz7mK76YYe5wiE4F8773AOzjPSxRc
-        zqpMHF4pDrGQTgu5RrKRpXUFCCA8AFo3Pi6kiIsZ9mNgQDVsUn7adqkhBroradFfRGIvGacGst1
-        Y+tjyiQTVmWlZLPy+inomJfUs
-X-Received: by 2002:a05:622a:a15:b0:3b8:695b:aad1 with SMTP id bv21-20020a05622a0a1500b003b8695baad1mr17767763qtb.1.1675436183657;
-        Fri, 03 Feb 2023 06:56:23 -0800 (PST)
-X-Google-Smtp-Source: AK7set+zyBMgYG3jpeNczzlTJfUDlZXixdNcX7huiAdKK4p5M4hddFKCUFkWqcjtL35shPysL6E0fg==
-X-Received: by 2002:a05:622a:a15:b0:3b8:695b:aad1 with SMTP id bv21-20020a05622a0a1500b003b8695baad1mr17767736qtb.1.1675436183360;
-        Fri, 03 Feb 2023 06:56:23 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id i15-20020a05620a27cf00b006fba0a389a4sm1881958qkp.88.2023.02.03.06.56.21
+        h=user-agent:in-reply-to:content-transfer-encoding
+         :content-disposition:mime-version:references:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ylXOWkGcAO7RMXbscWu9tfQhDOTwvWqF/Ni/iG4xFzM=;
+        b=atv9pF+Sxc49qSHerXZ6ac8gQEoUPbXbgUPHmOLkEeWUHboxm+r+4hwekjZAeTQ1LD
+         i6+uLOtQW66IIvVS8s7QlX0Stv2mwoPlvqpeCNYZz3YObAtEjZrAw3uKqrHIhC5KZuZe
+         esegXSpCx2viaHA428WlabRQPaqzN0SvH0TDcIN2YFdaYN2L2jVj9loT9r85Run7Yjm7
+         TdSnezR536K5oynuRiJhiE2tOZ4NrmB77IjF5bvdF0IZu81yRkFZu+k8vsEe/6Bf2DLC
+         byQqzRmZ+03N12oxuOlplWQXz6zU6V5AB5SR+I9IDq6wPg0N4XtL36e3zbvlxTK+NVBZ
+         Kg4A==
+X-Gm-Message-State: AO0yUKVeEMR2QD5fNwCRlUDljE31PbUAOU4MmBkAm10kf0IFu+xVO3lU
+        6iSJI9lpXcgIYy1ARao75qs=
+X-Google-Smtp-Source: AK7set8+0Wevv5R9DB/9UEXJTMhZnNTu39v5HyBFWdm+RojDtbne94MHLQJdrr55cBX/G9xDEdfBnw==
+X-Received: by 2002:ac8:7fd5:0:b0:3b9:b817:e9ae with SMTP id b21-20020ac87fd5000000b003b9b817e9aemr19346773qtk.5.1675436196579;
+        Fri, 03 Feb 2023 06:56:36 -0800 (PST)
+Received: from maniforge ([2620:10d:c091:480::1:dd5a])
+        by smtp.gmail.com with ESMTPSA id p17-20020a05622a00d100b003b64f1b1f40sm1716576qtw.40.2023.02.03.06.56.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 06:56:22 -0800 (PST)
-Date:   Fri, 3 Feb 2023 09:56:21 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     David Stevens <stevensd@chromium.org>
-Cc:     Yang Shi <shy828301@gmail.com>,
-        David Hildenbrand <david@redhat.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, Hugh Dickins <hughd@google.com>
-Subject: Re: [PATCH] mm/khugepaged: skip shmem with armed userfaultfd
-Message-ID: <Y90gleGzaqD6jJ8n@x1n>
-References: <20230201034137.2463113-1-stevensd@google.com>
- <CAHbLzkpbV2LOoTpWwSOS+UUsYJiZX4vO78jZSr6xmpAGNGoH5w@mail.gmail.com>
- <Y9rRCN9EfqzwYnDG@x1n>
- <CAD=HUj4FjuLpihQLGLzUu82vr5fdFFxfnyKNhApC6L67F5iV4g@mail.gmail.com>
- <CAHbLzko_cXrOQCsQC3g_id06Jkcg3=9dsVe+MwuzAh+iC9dDDA@mail.gmail.com>
- <Y9wbmuEq0QjZATE6@x1n>
- <CAD=HUj6E8e4QFPHgADQ2Rspr6BnAa8n08WtyqZhsJ5iQ9qR1+w@mail.gmail.com>
+        Fri, 03 Feb 2023 06:56:36 -0800 (PST)
+Date:   Fri, 3 Feb 2023 08:56:33 -0600
+From:   David Vernet <void@manifault.com>
+To:     Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@meta.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        brouer@redhat.com, corbet@lwn.net, linux-doc@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2] bpf/docs: Document kfunc lifecycle /
+ stability expectations
+Message-ID: <Y90goYWyA6d7DWTK@maniforge>
+References: <20230202223557.744110-1-void@manifault.com>
+ <20230202223557.744110-2-void@manifault.com>
+ <87cz6qew8l.fsf@toke.dk>
+ <Y90eeaT1W2cPYzMB@maniforge>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <CAD=HUj6E8e4QFPHgADQ2Rspr6BnAa8n08WtyqZhsJ5iQ9qR1+w@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y90eeaT1W2cPYzMB@maniforge>
+User-Agent: Mutt/2.2.9 (2022-11-12)
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 03:09:55PM +0900, David Stevens wrote:
-> > > > I don't know if it's necessary to go that far. Userfaultfd plus shmem
-> > > > is inherently brittle. It's possible for userspace to bypass
-> > > > userfaultfd on a shmem mapping by accessing the shmem through a
-> > > > different mapping or simply by using the write syscall.
-> >
-> > Yes this is possible, but this is user-visible operation - no matter it was
-> > a read()/write() from another process, or mmap()ed memory accesses.
-> > Khugepaged merges ptes in a way that is out of control of users.  That's
-> > something the user can hardly control.
-> >
-> > AFAICT currently file-based uffd missing mode all works in that way.  IOW
-> > the user should have full control of the file/inode under the hood to make
-> > sure there will be nothing surprising.  Otherwise I don't really see how
-> > the missing mode can work solidly since it's page cache based.
-> >
-> > > > It might be sufficient to say that the kernel won't directly bypass a
-> > > > VMA's userfaultfd to collapse the underlying shmem's pages. Although on
-> > > > the other hand, I guess it's not great for the presence of an unused
-> > > > shmem mapping lying around to cause khugepaged to have user-visible
-> > > > side effects.
-> >
-> > Maybe it works for your use case already, for example, if in your app the
-> > shmem is only and always be mapped once?  However that doesn't seem like a
-> > complete solution to me.
+On Fri, Feb 03, 2023 at 08:47:21AM -0600, David Vernet wrote:
+> On Fri, Feb 03, 2023 at 02:04:10PM +0100, Toke Høiland-Jørgensen wrote:
+> > David Vernet <void@manifault.com> writes:
+> > 
+> > > BPF kernel <-> kernel API stability has been discussed at length over
+> > > the last several weeks and months. Now that we've largely aligned over
+> > > kfuncs being the way forward, and BPF helpers being considered frozen,
+> > > it's time to document the expectations for kfunc lifecycles and
+> > > stability so that everyone (BPF users, kfunc developers, and
+> > > maintainers) are all aligned, and have a crystal-clear understanding of
+> > > the expectations surrounding kfuncs.
+> > >
+> > > To do that, this patch adds that documentation to the main kfuncs
+> > > documentation page via a new 'kfunc lifecycle expectations' section. The
+> > > patch describes how decisions are made in the kernel regarding whether
+> > > to include, keep, deprecate, or change / remove a kfunc. As described
+> > > very overtly in the patch itself, but likely worth highlighting here:
+> > >
+> > > "kfunc stability" does not mean, nor ever will mean, "BPF APIs may block
+> > > development elsewhere in the kernel".
+> > >
+> > > Rather, the intention and expectation is for kfuncs to be treated like
+> > > EXPORT_SYMBOL_GPL symbols in the kernel. The goal is for kfuncs to be a
+> > > safe and valuable option for maintainers and kfunc developers to extend
+> > > the kernel, without tying anyone's hands, or imposing any kind of
+> > > restrictions on maintainers in the same way that UAPI changes do.
+> > >
+> > > In addition to the 'kfunc lifecycle expectations' section, this patch
+> > > also adds documentation for a new KF_DEPRECATED kfunc flag which kfunc
+> > > authors or maintainers can choose to add to kfuncs if and when they
+> > > decide to deprecate them. Note that as described in the patch itself, a
+> > > kfunc need not be deprecated before being changed or removed -- this
+> > > flag is simply provided as an available deprecation mechanism for those
+> > > that want to provide a deprecation story / timeline to their users.
+> > > When necessary, kfuncs may be changed or removed to accommodate changes
+> > > elsewhere in the kernel without any deprecation at all.
+> > >
+> > > Signed-off-by: David Vernet <void@manifault.com>
+> > 
+> > Some comments below, but otherwise please add my:
+> > 
+> > Co-developed-by: Toke Høiland-Jørgensen <toke@redhat.com>
+> > 
+> > should we Cc the next version to linux-api@vger as well just to get a
+> > bit more visibility in case others have comments?
 > 
-> We're using userfaultfd for guest memory for a VM. We do have
-> sandboxed device processes. However, thinking about it a bit more,
-> this approach would probably cause issues with device hotplug.
+> Yes, good idea, will do.
 > 
-> > There's nothing that will prevent another mapping being established, and
-> > right after that happens it'll stop working, because khugepaged can notice
-> > that new mm/vma which doesn't register with uffd at all, and thinks it a
-> > good idea to collapse the shmem page cache again.  Uffd will silently fail
-> > in another case even if not immediately in your current app/reproducer.
-> >
-> > Again, I don't think what I propose above is anything close to good.. It'll
-> > literally disable any collapsing possibility for a shmem node as long as
-> > any small portion of the inode mapping address space got registered by any
-> > process with uffd.  I just don't see any easier approach so far.
->
-> Maybe we can make things easier by being more precise about what bug
-> we're trying to fix. Strictly speaking, I don't think what we're
-> concerned about is whether or not userfaultfd is registered on a
-> particular VMA at a particular point in time. I think what we're actually
-> concerned about is that when userspace has a page with an armed
-> userfaultfd that it knows is missing, that page should not be filled by
-> khugepaged. If userspace doesn't know that a userfaultfd armed page is
-> missing, then even if khugepaged fills that page, as far as userspace is
-> concerned, the page was filled by khugepaged before userfaultfd was
-> armed.
-
-IMHO that's a common issue to solve with registrations on uffd missing
-mode, and what I'm aware of as a common solution to it is, for shmem,
-punching holes where we do hope to receive a message.  It should only
-happen _after_ the missing mode registration is successful.
-
-At least that's what we do with QEMU's postcopy.
-
+> > 
+> > > ---
+> > >  Documentation/bpf/kfuncs.rst | 138 +++++++++++++++++++++++++++++++++--
+> > >  1 file changed, 133 insertions(+), 5 deletions(-)
+> > >
+> > > diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
+> > > index 0bd07b39c2a4..4135f3111b67 100644
+> > > --- a/Documentation/bpf/kfuncs.rst
+> > > +++ b/Documentation/bpf/kfuncs.rst
+> > > @@ -13,7 +13,7 @@ BPF Kernel Functions or more commonly known as kfuncs are functions in the Linux
+> > >  kernel which are exposed for use by BPF programs. Unlike normal BPF helpers,
+> > >  kfuncs do not have a stable interface and can change from one kernel release to
+> > >  another. Hence, BPF programs need to be updated in response to changes in the
+> > > -kernel.
+> > > +kernel. See :ref:`BPF_kfunc_lifecycle_expectations` for more information.
+> > >  
+> > >  2. Defining a kfunc
+> > >  ===================
+> > > @@ -238,6 +238,32 @@ single argument which must be a trusted argument or a MEM_RCU pointer.
+> > >  The argument may have reference count of 0 and the kfunc must take this
+> > >  into consideration.
+> > >  
+> > > +.. _KF_deprecated_flag:
+> > > +
+> > > +2.4.9 KF_DEPRECATED flag
+> > > +------------------------
+> > > +
+> > > +The KF_DEPRECATED flag is used for kfuncs which are expected to be changed or
+> > > +removed in a subsequent kernel release. Deprecated kfuncs may be removed at any
+> > > +time, though if possible (and when applicable), developers are encouraged to
+> > > +provide users with a deprecation window to ease the burden of migrating off of
+> > > +the kfunc.
+> > 
+> > 
+> > 
+> > I think the "may be removed at any time" is a bit odd here. If someone
+> > wants to just remove a kfunc, why bother with the deprecation flag at
+> > all? Besides, that whole "deprecation is optional" bit is explained
 > 
-> If that's a valid way to look at it, then I think the fact that
-> collapse_file locks hpage provides most of the necessary locking.
+> I definitely agree that the phrasing could be improved, but my intention
+> with that phrase was actually to answer the exact nuanced question you
+> posed. I think we need to clarify that KF_DEPRECATED is an optional tool
+> that developers can use to provide a softer deprecation story to their
+> users, rather than a flag that exists as part of a larger, strict
+> deprecation policy. Otherwise, I think it would be unclear to someone
+> reading this when and why they would need to use the flag. I liked your
+> suggestion below, and proposed a bit of extra text to try and capture
+> this point. Lmk what you think.
+> 
+> > below, in this section we're just explaining the flag. So I'd just drop
+> > this bit and combine the first two paragraphs as:
+> > 
+> > "The KF_DEPRECATED flag is used for kfuncs which are scheduled to be
+> > changed or removed in a subsequent kernel release. A kfunc that is
+> > marked with KF_DEPRECATED should also have any relevant information
+> > captured in its kernel doc. Such information typically includes the
+> > kfunc's expected remaining lifespan, a recommendation for new
+> > functionality that can replace it if any is available, and possibly a
+> > rationale for why it is being removed."
+> 
+> I like this -- are you OK with adding this in a small subsequent
+> paragraph to address the point I made above?
+> 
+> Note that KF_DEPRECATED is simply a tool that developers can choose to
+> use to ease their users' burden of migrating off of a kfunc. While
+> developers are encouraged to use KF_DEPRECATED to provide a
+> transitionary deprecation period to users of their kfunc, doing so is
+> not strictly required, and the flag does not exist as part of any larger
+> kfunc deprecation policy.
 
-The hpage is still not visible to the page cache at all, not until it is
-used to replace the small pages, right?  Do you mean "when holding the page
-lock of the existing small pages"?
+Nevermind, after reading this a few more times, I think what you
+proposed above is sufficient. Will not be including this extra paragraph
+in v3.
 
-> From there, we need to check whether there are any VMAs with armed
-> userfaultfds that might have observed a missing page. I think that can be
-> done while iterating over VMAs in retract_page_tables without acquiring
-
-I am not 100% sure how this works.  AFAICT we retract pgtables only if we
-have already collapsed the page.  I don't see how it can be undone?
-
-> any mmap_lock by adding some memory barriers to userfaultfd_set_vm_flags
-> and userfaultfd_armed. It is possible that a userfaultfd gets registered
-> on a particular VMA after we check its flags but before the collapse
-> finishes. I think the only observability hole left would be operations on
-> the shmem file descriptor that don't actually lock pages
-> (e.g. SEEK_DATA/SEEK_HOLE), which are hopefully solvable with some more
-> thought.
-
-So it's possible that I just didn't grasp the fundamental idea of the new
-proposal on how it works at all.  If you're confident with the idea I'd be
-also glad to read the patch directly; maybe that'll help to explain stuff.
-
-Thanks,
-
--- 
-Peter Xu
-
+[...]
