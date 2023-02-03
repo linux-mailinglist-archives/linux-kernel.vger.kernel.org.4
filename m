@@ -2,152 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42CD668A336
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 20:45:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E323268A337
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 20:46:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233545AbjBCTpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 14:45:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43654 "EHLO
+        id S233612AbjBCTqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 14:46:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbjBCTph (ORCPT
+        with ESMTP id S229853AbjBCTqS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 14:45:37 -0500
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51C5C9DCB3;
-        Fri,  3 Feb 2023 11:45:36 -0800 (PST)
-Received: by mail-pj1-f49.google.com with SMTP id f16-20020a17090a9b1000b0023058bbd7b2so5302550pjp.0;
-        Fri, 03 Feb 2023 11:45:36 -0800 (PST)
+        Fri, 3 Feb 2023 14:46:18 -0500
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD0719DCB3;
+        Fri,  3 Feb 2023 11:46:17 -0800 (PST)
+Received: by mail-qv1-xf32.google.com with SMTP id q10so3499858qvt.10;
+        Fri, 03 Feb 2023 11:46:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=81irN639b02GEcmRvaoW91apai4NlHhMmcLeIDey+EM=;
+        b=T+xYQpi0k8whPSdL51LPz8QhAgaaD2lXc+aswRpA+PXhKBY8YyG04h+w5Zue9Z0C8o
+         gOJumH5ZZY0SJfx0Qv4n058mLQWBep2Z1nJYEsgwdxceusLf130oNMpkya81a2u5Ubuo
+         GafpLRPSW4bIfYlusp9xxPa2DpUvJpf+CF9fc3oRC4M6PS64N7AKQksywMyRFVFoEk6N
+         90y2IQ8zctFy7ILq94Dmkh3cSrGG4h7RY+uft1WPtIatYM/pS9M4/FCyO/mtNQ8Wm2L/
+         36lb9fxezSOzNBA/NDX9yEy1ZyNZsANHu2veCkYAEia08TVa4pPxxQbj5jTYo88LqeWN
+         rymw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xj5Tu5E7CoXMz7arwXQAyRVyy8gsxIDydTYsQXxz6MI=;
-        b=eRHLknci8CkKlOiAS1V3rJd+h+Gz+LMf9htRD2ZP0/ZqKxX66hOUxl1nUHFDa48K5D
-         OdmegWpOsMDi6mdUh+HBIo0IDSVre4xyZ8Z1nNtmzxq9WUhXxh6pumRaeF60QEt03vCU
-         Iu7moFogf2F3oBfL7R4mFljX/L+nMUf6ggsiUAW69FANv4M/xBjFGJc+pYNUjDb7TRi1
-         qDgokkLDS4/fi4LBu61bndIHSJkaa6OlVOc0irOz5QfLsDb9MEuUHVfVI8q80MTsSxTb
-         yLEIbfHV2nhqisrCjz38tZIYxn2kE7ZyHpWpMBJwBHohDu7HMLKZPyPi7gZCSIermwuF
-         tTYw==
-X-Gm-Message-State: AO0yUKXVZShTuZhvh1pa0l8YvNpUeJMlCERhWyO8oRBBpgMfsVgoaRQI
-        NN62Ga7yZbdMa5ZXYUZZVeen+ZwSLIY=
-X-Google-Smtp-Source: AK7set8nM63+1pdXNGI6Lh0b+Jhps5kT2dzVbEI+pm1NCG1DTXT02+dcEWAhm+o+/xxoiYvyp3PF6A==
-X-Received: by 2002:a05:6a20:d906:b0:bc:e64b:e79b with SMTP id jd6-20020a056a20d90600b000bce64be79bmr7074418pzb.1.1675453535679;
-        Fri, 03 Feb 2023 11:45:35 -0800 (PST)
-Received: from ?IPV6:2620:15c:211:201:b752:5d03:ec5e:7be5? ([2620:15c:211:201:b752:5d03:ec5e:7be5])
-        by smtp.gmail.com with ESMTPSA id g20-20020aa796b4000000b0058bb0fb6295sm2219377pfk.26.2023.02.03.11.45.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Feb 2023 11:45:34 -0800 (PST)
-Message-ID: <aedc240d-7c9e-248a-52d2-c9775f3e8ca1@acm.org>
-Date:   Fri, 3 Feb 2023 11:45:32 -0800
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=81irN639b02GEcmRvaoW91apai4NlHhMmcLeIDey+EM=;
+        b=gEoHG00z4WcxA/27tw1zNGVFCZrXM93abyibEHL6IQaHj0C2Sta6mawJLzrFC91Qzi
+         Jkvb2TyVCGuzuQrdNLNr89IdBeuDJGyjKbr5y9A/n18jGoG7Mv5EDcaPQLgg+pzY8x2H
+         ryAmv3g7MKGyRfiWu6ifb08Fga6WFcsguw/UyKmwhJ2n26rUt4nMXd/bAZBa8RxX7Lxr
+         sBt6XqxefNVunG4/APDfeF1IPlLTEv1Kpr4mkQTJxiotIGdg6norsDCVxllbVgkIO2l/
+         nlzUOClRlxqyUeskddKuOUkYjLpiBTJLcZly2FeFlHT+W4r100/XnNcg1/SZozYNft9m
+         0uFA==
+X-Gm-Message-State: AO0yUKXe3Pg+LBg+k5ZXsMuIHMkWecZhc8LDJQAJtqi4SOxGMkrqAjb0
+        rLuA3CREtDLF5a9fnk3nxxrGBaDlAjs=
+X-Google-Smtp-Source: AK7set/RfsZMziHQcq5BP7Gmtzasl8hL7vvzAoIn2kQ4KTjtXfiqjnj5TRM18FDZiFudtK+Gcp0hog==
+X-Received: by 2002:a05:6214:cab:b0:53a:6241:a50f with SMTP id s11-20020a0562140cab00b0053a6241a50fmr23961779qvs.9.1675453577010;
+        Fri, 03 Feb 2023 11:46:17 -0800 (PST)
+Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
+        by smtp.gmail.com with ESMTPSA id h67-20020a376c46000000b0070495934152sm2428208qkc.48.2023.02.03.11.46.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Feb 2023 11:46:16 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 5D66327C0054;
+        Fri,  3 Feb 2023 14:46:14 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Fri, 03 Feb 2023 14:46:15 -0500
+X-ME-Sender: <xms:hmTdY7WxKwEnZ8-yP0PzyihlJ5F3cqj4sXPY1WOThGtEScOOakG7mg>
+    <xme:hmTdYzlkFdI6ZwcULyLlllmpmmZi0X3DzpOeVTiOc4LVgOWhRqOqZGAUCZMs0AKgJ
+    fhOhvFi4wIczE5t8Q>
+X-ME-Received: <xmr:hmTdY3Y6E3XdeUOmTrHTe8kmzC7g_xQthubPQA6k2w0O1luhpfPSQw6hJCs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudegtddguddvgecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
+    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
+    grthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveei
+    udffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
+    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
+    higihmvgdrnhgrmhgv
+X-ME-Proxy: <xmx:hmTdY2VUYZ12_wZxtt--ThR9C2cw_bcUEb6ZlfCmlVhCsjJB53C6Dw>
+    <xmx:hmTdY1lxoxNkdDq7Ccd-aagxNgtoP5_hZt3ypjE9lp4XMCbh7Sftmw>
+    <xmx:hmTdYzfVX2HfxiOPD2az7hfdEoUpeIJzkxCg4LSmKB9pbde6cjjo2Q>
+    <xmx:hmTdY-cLHZDgf5Mm_qYB0JrngOciF1_sxjqigRzRP2DUu6QHAWbibw>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 3 Feb 2023 14:46:14 -0500 (EST)
+Date:   Fri, 3 Feb 2023 11:46:07 -0800
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Gary Guo <gary@garyguo.net>
+Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
+Subject: Re: [RFC 4/5] rust: sync: impl Debug for {Unique,}Arc
+Message-ID: <Y91kf/IMiYNw8BdR@boqun-archlinux>
+References: <20230201232244.212908-1-boqun.feng@gmail.com>
+ <20230201232244.212908-5-boqun.feng@gmail.com>
+ <20230202142804.753c898c.gary@garyguo.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] blk-ioprio: Introduce promote-to-rt policy
-Content-Language: en-US
-To:     Hou Tao <houtao@huaweicloud.com>, linux-block@vger.kernel.org
-Cc:     Jan Kara <jack@suse.cz>, Jens Axboe <axboe@kernel.dk>,
-        cgroups@vger.kernel.org, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, houtao1@huawei.com
-References: <20230201045227.2203123-1-houtao@huaweicloud.com>
- <8c068af3-7199-11cf-5c69-a523c7c22d9a@acm.org>
- <4f7dcb3e-2d5a-cae3-0e1c-a82bcc3d2217@huaweicloud.com>
- <b6b3c498-e90b-7d1f-6ad5-a31334e433ae@acm.org>
- <beb7782e-72a4-c350-3750-23a767c88753@huaweicloud.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <beb7782e-72a4-c350-3750-23a767c88753@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230202142804.753c898c.gary@garyguo.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/2/23 17:48, Hou Tao wrote:
-> I don't get it on how to remove IOPRIO_POL_PROMOTION when calculating the final
-> ioprio for bio. IOPRIO_POL_PROMOTION is not used for IOPRIO_CLASS values but
-> used to determinate on how to calculate the final ioprio for bio: choosing the
-> maximum or minimum between blkcg ioprio and original bio bi_ioprio.
+On Thu, Feb 02, 2023 at 02:28:04PM +0000, Gary Guo wrote:
+> On Wed,  1 Feb 2023 15:22:43 -0800
+> Boqun Feng <boqun.feng@gmail.com> wrote:
+> 
+> > This allows printing macros to print the data and the refcount nubmer
+> > of these struct for debugging purposes.
+> > 
+> > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> > ---
+> >  rust/kernel/sync/arc.rs | 13 +++++++++++++
+> >  1 file changed, 13 insertions(+)
+> > 
+> > diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
+> > index 4d8de20c996f..f143d8305c36 100644
+> > --- a/rust/kernel/sync/arc.rs
+> > +++ b/rust/kernel/sync/arc.rs
+> > @@ -474,6 +474,7 @@ impl<T: ?Sized> Deref for ArcBorrow<'_, T> {
+> >  ///
+> >  /// # test().unwrap();
+> >  /// ```
+> > +#[derive(Debug)]
+> 
+> I don't think this should be a `#[derive(Debug)]`. For `UniqueArc` the
+> refcount field in `Arc` is useless, and we should just delegate the
+> `Debug` impl to that of deref, just like `Display` does.
+> 
 
-Do the block layer code changes shown below implement the functionality that you
-need?
+I was just being lazy ;-) Will change this in v2.
 
-Thanks,
+Regards,
+Boqun
 
-Bart.
-
-
-
-diff --git a/block/blk-ioprio.c b/block/blk-ioprio.c
-index 8bb6b8eba4ce..4a56da95168e 100644
---- a/block/blk-ioprio.c
-+++ b/block/blk-ioprio.c
-@@ -27,6 +27,8 @@
-   * @POLICY_RESTRICT_TO_BE: modify IOPRIO_CLASS_NONE and IOPRIO_CLASS_RT into
-   *		IOPRIO_CLASS_BE.
-   * @POLICY_ALL_TO_IDLE: change the I/O priority class into IOPRIO_CLASS_IDLE.
-+ * @POLICY_PROMOTE_TO_RT: modify IOPRIO_CLASS_NONE and IOPRIO_CLASS_BE into
-+ * 		IOPRIO_CLASS_RT.
-   *
-   * See also <linux/ioprio.h>.
-   */
-@@ -35,6 +37,7 @@ enum prio_policy {
-  	POLICY_NONE_TO_RT	= 1,
-  	POLICY_RESTRICT_TO_BE	= 2,
-  	POLICY_ALL_TO_IDLE	= 3,
-+	POLICY_PROMOTE_TO_RT,
-  };
-
-  static const char *policy_name[] = {
-@@ -42,6 +45,7 @@ static const char *policy_name[] = {
-  	[POLICY_NONE_TO_RT]	= "none-to-rt",
-  	[POLICY_RESTRICT_TO_BE]	= "restrict-to-be",
-  	[POLICY_ALL_TO_IDLE]	= "idle",
-+	[POLICY_PROMOTE_TO_RT]	= "promote-to-rt",
-  };
-
-  static struct blkcg_policy ioprio_policy;
-@@ -189,17 +193,23 @@ void blkcg_set_ioprio(struct bio *bio)
-  	if (!blkcg || blkcg->prio_policy == POLICY_NO_CHANGE)
-  		return;
-
--	/*
--	 * Except for IOPRIO_CLASS_NONE, higher I/O priority numbers
--	 * correspond to a lower priority. Hence, the max_t() below selects
--	 * the lower priority of bi_ioprio and the cgroup I/O priority class.
--	 * If the bio I/O priority equals IOPRIO_CLASS_NONE, the cgroup I/O
--	 * priority is assigned to the bio.
--	 */
--	prio = max_t(u16, bio->bi_ioprio,
--			IOPRIO_PRIO_VALUE(blkcg->prio_policy, 0));
--	if (prio > bio->bi_ioprio)
--		bio->bi_ioprio = prio;
-+	if (blkcg->prio_policy == PROMOTE_TO_RT) {
-+		if (IOPRIO_PRIO_CLASS(bio->bi_ioprio) != IOPRIO_CLASS_RT)
-+			bio->bi_ioprio = IOPRIO_CLASS_RT;
-+	} else {
-+		/*
-+		 * Except for IOPRIO_CLASS_NONE, higher I/O priority numbers
-+		 * correspond to a lower priority. Hence, the max_t() below
-+		 * selects the lower priority of bi_ioprio and the cgroup I/O
-+		 * priority class.  If the bio I/O priority equals
-+		 * IOPRIO_CLASS_NONE, the cgroup I/O priority is assigned to the
-+		 * bio.
-+		 */
-+		prio = max_t(u16, bio->bi_ioprio,
-+			     IOPRIO_PRIO_VALUE(blkcg->prio_policy, 0));
-+		if (prio > bio->bi_ioprio)
-+			bio->bi_ioprio = prio;
-+	}
-  }
-
-  void blk_ioprio_exit(struct gendisk *disk)
-
+> Best,
+> Gary
