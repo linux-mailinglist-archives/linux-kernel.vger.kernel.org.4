@@ -2,77 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 634D368939C
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 10:27:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AA6B68939F
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 10:27:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231665AbjBCJ05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 04:26:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45316 "EHLO
+        id S231744AbjBCJ0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 04:26:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232222AbjBCJ0z (ORCPT
+        with ESMTP id S231240AbjBCJ0m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 04:26:55 -0500
-Received: from dilbert.mork.no (dilbert.mork.no [IPv6:2a01:4f9:c010:a439::d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 739246E89;
-        Fri,  3 Feb 2023 01:26:50 -0800 (PST)
-Received: from canardo.dyn.mork.no ([IPv6:2a01:799:c9a:3200:0:0:0:1])
-        (authenticated bits=0)
-        by dilbert.mork.no (8.15.2/8.15.2) with ESMTPSA id 3139PiLf773660
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-        Fri, 3 Feb 2023 09:25:45 GMT
-Received: from miraculix.mork.no ([IPv6:2a01:799:c9a:3202:549f:9f7a:c9d8:875b])
-        (authenticated bits=0)
-        by canardo.dyn.mork.no (8.15.2/8.15.2) with ESMTPSA id 3139PcbS1534444
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-        Fri, 3 Feb 2023 10:25:38 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1675416339; bh=VBtFXiOaxjapiMDewgSuvRBSynlE/nLpzbKpUvxzZ4U=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=T+WP/6kLczsZbbKv+POC7djUJLTqQWawcXIjaJh0dxew66z6DdtXzOluohHttOPfm
-         cCcq4mR9tptxsD34OuqlIDjWHIdBy1a4MMAuBsIsL0x0laZebqITfRFj/voICcHRUH
-         SIk67RuPLR+/9DRaqtUqQgkkx9xfdS6ESIzGlyJQ=
-Received: (nullmailer pid 337756 invoked by uid 1000);
-        Fri, 03 Feb 2023 09:25:38 -0000
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Jianhui Zhao <zhaojh329@gmail.com>
-Subject: Re: [PATCH 8/9] net: ethernet: mtk_eth_soc: switch to external PCS
- driver
-Organization: m
-References: <cover.1675407169.git.daniel@makrotopia.org>
-        <3bac780184867e111c3a1567d8b55658abd931da.1675407169.git.daniel@makrotopia.org>
-Date:   Fri, 03 Feb 2023 10:25:38 +0100
-In-Reply-To: <3bac780184867e111c3a1567d8b55658abd931da.1675407169.git.daniel@makrotopia.org>
-        (Daniel Golle's message of "Fri, 3 Feb 2023 07:06:10 +0000")
-Message-ID: <87357nt819.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Fri, 3 Feb 2023 04:26:42 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D2B5C0E5
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 01:25:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675416352;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZnduDc6Rpr9xpj+zpBLdT5wXh2NwNpe5gny76xfCzIQ=;
+        b=Nh35i/9szJLFG7vXSuOtzkZuvyXMitwyX1EfOkI7ftm1ro+xWqFRbOvytg8N1UEqbIuZn1
+        du1SDGI7xyWEZ69N6RtKNeXBjddP18LxbJBduHhZ7Lgs0/HxaupKZ7TalQ2i5cJr46SjxY
+        HKkuIzRkpP743icR2z7MxnOktLjexyU=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-12-W6a5WFwfO2Oxk8sSFot66g-1; Fri, 03 Feb 2023 04:25:50 -0500
+X-MC-Unique: W6a5WFwfO2Oxk8sSFot66g-1
+Received: by mail-ej1-f72.google.com with SMTP id wz4-20020a170906fe4400b0084c7e7eb6d0so3516643ejb.19
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 01:25:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZnduDc6Rpr9xpj+zpBLdT5wXh2NwNpe5gny76xfCzIQ=;
+        b=LcNTKYowYBf0c/KBjhJb1c+oPAOtWdRt6dgNjhw+28jvbUDXOl0GRHraSoDC0oIp+i
+         AYeCmbaaYdn+8z64Eb0Ip22hzbjuOQS9ZZFZ6aruAkSr1I6euyVH3nixEV/ry7NPRtNX
+         qwq/wxUrEIRCBUTlp4l4n7/pVZkyRZzEYDQ7r6aodRhas0EbVH7735ok7hdQjASgpcvL
+         qsazN6XlS0XX1cH0irJrv6Wuf9tMHkX17DG9iBT0AJxVLJErFOzxz+f+5LvfoaufPhxA
+         estBLPz9BUo4vYb/IKliJa00WzEixOgfaRCnqHMp2Qrn17Sn0WuGNAbSasVz57R/5Fc4
+         XeAA==
+X-Gm-Message-State: AO0yUKUaUSWkwdiXMHgR0Ufi8C45v/fKmV/uYflbobdkC9IMfnaIU+D3
+        pbQmCquRJSuGBSPU76kRnigLG7n447EBRo1NTbm5iF6wVRoIf/Nz05NGuvhU0adKWXA3q3G11t7
+        0YMI/vAY28dKdGJsZX5yofVo1
+X-Received: by 2002:a17:906:9f18:b0:88d:ba89:1855 with SMTP id fy24-20020a1709069f1800b0088dba891855mr3898066ejc.38.1675416349336;
+        Fri, 03 Feb 2023 01:25:49 -0800 (PST)
+X-Google-Smtp-Source: AK7set9Fz23akz5qDbcVCijsJi+YvA5JMmznb3rtTdiKFlGYpAM+nvj9HeTSbsYr/Ny7lJMBTwZAxg==
+X-Received: by 2002:a17:906:9f18:b0:88d:ba89:1855 with SMTP id fy24-20020a1709069f1800b0088dba891855mr3898059ejc.38.1675416349216;
+        Fri, 03 Feb 2023 01:25:49 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id g13-20020aa7d1cd000000b004a028d443f9sm838884edp.55.2023.02.03.01.25.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Feb 2023 01:25:48 -0800 (PST)
+Message-ID: <1fbd2b2e-49a8-ffea-6715-217d4fe278d5@redhat.com>
+Date:   Fri, 3 Feb 2023 10:25:48 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 0.103.7 at canardo
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: linux-next: build warning after merge of the drivers-x86 tree
+Content-Language: en-US, nl
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Mark Gross <markgross@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20230203135303.32da1fc6@canb.auug.org.au>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230203135303.32da1fc6@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,20 +82,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Daniel Golle <daniel@makrotopia.org> writes:
+Hi,
 
-> -		ss->pcs[i].ana_rgc3 =3D ana_rgc3;
-> -		ss->pcs[i].regmap =3D syscon_node_to_regmap(np);
-> -
-> -		ss->pcs[i].flags =3D 0;
-> +		flags =3D 0;
->  		if (of_property_read_bool(np, "pn_swap"))
-> -			ss->pcs[i].flags |=3D MTK_SGMII_FLAG_PN_SWAP;
-> +			flags |=3D MTK_SGMII_FLAG_PN_SWAP;
->=20=20
+On 2/3/23 03:53, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the drivers-x86 tree, today's linux-next build (htmldocs)
+> produced this warning:
+> 
+> include/media/v4l2-subdev.h:1088: warning: Function parameter or member 'privacy_led' not described in 'v4l2_subdev'
+> 
+> Introduced by commit
+> 
+>   10d96e289fbd ("media: v4l2-core: Make the v4l2-core code enable/disable the privacy LED if present")
 
-patch 1 added "mediatek,pn_swap" so this doesn't apply.  We've all done
-last minute cleanups - never a good idea :-)
+Thank you for reporting this. It seems I didn't have much luck with my
+latest for-next push.
+
+I'm testing an updated for-next with this fixed now and I'll push that
+out shortly.
+
+Regards,
+
+Hans
 
 
-Bj=C3=B8rn
