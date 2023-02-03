@@ -2,407 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B26868A27C
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 20:04:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6D6A68A27F
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 20:05:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233295AbjBCTE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 14:04:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48614 "EHLO
+        id S233394AbjBCTFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 14:05:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233199AbjBCTEU (ORCPT
+        with ESMTP id S233209AbjBCTFN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 14:04:20 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2100121283;
-        Fri,  3 Feb 2023 11:04:17 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id m2so6223798plg.4;
-        Fri, 03 Feb 2023 11:04:17 -0800 (PST)
+        Fri, 3 Feb 2023 14:05:13 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A15BAAE859
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 11:04:45 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id j1so78899pjd.0
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 11:04:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xv2Em6KNiGaU6QjEB8S2E3cr0KOpR5Jc9laazewASFk=;
-        b=HwyZleEvFQv+a0d7MkRwkz23KIAZdIe5KUwjzU/ZcdmnU0J60Fnt+TRVyVWM5i0ARo
-         YoI/T+fLVqBOoEWmNnIWzqmh6CF9yIsr6Qv8PSt5yRBWO4lfO/BhslI+GgSJB4qNXHKV
-         f/TKHCxjsCnzNmSNhCQzRcr9IkcnE5oyHbmk8JEcAKRddJAkwCI7VGYZxifrW3Tr6WIm
-         HdxF4lRROLKUMyCc4ZIVs1huLN8JdK7uz6H3g9etbfzYwBAySqhuOJM8W2Jo7jGIt/Tn
-         e6QVuhJyazBNXcDK59gVRs6wWbPZKAY0d+kFjmNOsxB35rccz43p1jyVDRH/yElujNvR
-         hrkg==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=oo+cKWPEpO2P7RN4zwy1Qd55HkzgWFy9L7T7gDL31nA=;
+        b=gTdG2KorutmiQNyxFEPOV9rMuAr4eAnvBj7vMpFlDNzfEk3oPMJvwZnusYta/UmMM9
+         793g9QhfVtBRSmrSfPndOdJN65JClVwUyk6CC62nul4toTsipo4quHHtotRbcqIg1Ef/
+         PGbej4rh+YcSpJSuMAnkhqc1YXoZt/ytHIXpE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xv2Em6KNiGaU6QjEB8S2E3cr0KOpR5Jc9laazewASFk=;
-        b=Rwbw8x5tLER67UeFNI4tjkOatj11r1gDc1WU9Z5G17as3LEJRUwxKncCcaC3m96sKr
-         7JGPJEzjt5/NFBlFl8oPSTJWwdr53GXtnbV6ADBmrma/ffJvSy+utNDroEiCzJK0cSY1
-         OyU999TN5I8WlTBhmQL6rIP8odn4dPnQ0AafHaPc9czssqOW/V6Z4GgC3pTwyqoKkARI
-         jthA9Kq0/hhGqhxF10BmkOLYvUdsuAulfXbJFmbDuQywLmcRHcgaExlZWZDVznpj1CaB
-         DrMwd9LLHpu6z3k834snizghvlw2CEyqMmLKuKxlS7Qpg2Jiz9Mded1FIvLfV1Kl3bjD
-         +LVg==
-X-Gm-Message-State: AO0yUKXXy9p3f0MqEVGT8gA4PcklW6u8Ecvs0haBKGF3KvCv3P7+NdYa
-        HWxdad6w660ZSVTUNuuKksE=
-X-Google-Smtp-Source: AK7set9HotqUUCNuJMOi2vhBQ7GifcOr9y6Pa3VmeJv3LiXHw5XZAslumbxMFgWMRI3JzCCjENiJHg==
-X-Received: by 2002:a17:90a:e7c6:b0:22c:51b0:6b49 with SMTP id kb6-20020a17090ae7c600b0022c51b06b49mr11259985pjb.37.1675451056516;
-        Fri, 03 Feb 2023 11:04:16 -0800 (PST)
-Received: from localhost (fwdproxy-prn-002.fbsv.net. [2a03:2880:ff:2::face:b00c])
-        by smtp.gmail.com with ESMTPSA id v12-20020a17090a0c8c00b0022be7a9e196sm5331387pja.1.2023.02.03.11.04.16
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oo+cKWPEpO2P7RN4zwy1Qd55HkzgWFy9L7T7gDL31nA=;
+        b=wg0sDRbtEVOkCw1X3fDUu6gFG9XJ0M9zD7Wupa6uwMIXcyXRVZc811yt/b1WnvQKBw
+         EfeN45RNnoJyln4oJJK4/kjbRue95WNiuLb7YHexjXZOlvk6xETnaJDPrD0LOdJjfQWp
+         h3zY5Q+fgZpUpFpoIid3tI/IXw3yx1yAOewEhEkraCEp6oKkXVpxHt2HvXT+2efIiexJ
+         YysEODl4PVrOfY1qyPOrjRnJam4UxYnC4ekjDo5Z3yftiSIfOQTTZ/Vbt15bT0luHMxH
+         oqNPbcoxMQ4ULumHQL3wUOha+PUe1nATbaZNAJbvjmHn+PQLs7cc2Qd2EiEV2eD8T8Vf
+         WM8Q==
+X-Gm-Message-State: AO0yUKVDsygbs007tlctQncd08ulJ2JrHj0OHyXDQmtlTJpkF90Xttlv
+        0UKIR8Bnd1mCZ+uuGOkbILcGI1C+Gc/p2O+looE=
+X-Google-Smtp-Source: AK7set9H6v9nr05hTQf2r0CEJ5i21ZnzeRuOt0NDWByly/VLH+B2Nbu3d7bepYZPUftSDEWtZo+IUA==
+X-Received: by 2002:a05:6a21:338a:b0:bc:6e88:7f58 with SMTP id yy10-20020a056a21338a00b000bc6e887f58mr14503202pzb.51.1675451085184;
+        Fri, 03 Feb 2023 11:04:45 -0800 (PST)
+Received: from google.com ([2620:15c:9d:200:7617:a96c:96d2:ed12])
+        by smtp.gmail.com with ESMTPSA id v14-20020a170902e8ce00b001949c680b52sm1936334plg.193.2023.02.03.11.04.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 11:04:16 -0800 (PST)
-From:   Nhat Pham <nphamcs@gmail.com>
-To:     akpm@linux-foundation.org
-Cc:     hannes@cmpxchg.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, bfoster@redhat.com,
-        willy@infradead.org, linux-api@vger.kernel.org,
-        kernel-team@meta.com
-Subject: [PATCH v9 3/3] selftests: Add selftests for cachestat
-Date:   Fri,  3 Feb 2023 11:04:13 -0800
-Message-Id: <20230203190413.2559707-4-nphamcs@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230203190413.2559707-1-nphamcs@gmail.com>
-References: <20230203190413.2559707-1-nphamcs@gmail.com>
+        Fri, 03 Feb 2023 11:04:44 -0800 (PST)
+Date:   Fri, 3 Feb 2023 11:04:42 -0800
+From:   Ryan Neph <ryanneph@chromium.org>
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     Rob Clark <robdclark@chromium.org>,
+        David Airlie <airlied@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, dri-devel@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, Yiwei Zhang <zzyiwei@chromium.org>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Emil Velikov <emil.velikov@collabora.com>
+Subject: Re: [PATCH] drm/virtio: exbuf->fence_fd unmodified on interrupted
+ wait
+Message-ID: <20230203190442.krow5p3bd5u27pg4@google.com>
+References: <20230126225815.1518839-1-ryanneph@chromium.org>
+ <dee14d1b-fc28-e867-b425-ab11c31d799d@collabora.com>
+ <CAJs_Fx4w-a0t9ekHvV55Ys6dYuTsKMa=az9E3UZcsej5AYNdGQ@mail.gmail.com>
+ <08560b81-5f97-bd6f-3af0-68cba6bc0bd8@collabora.com>
+ <3d347ccc-5867-4a64-a94c-c6141624571e@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3d347ccc-5867-4a64-a94c-c6141624571e@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Test cachestat on a newly created file, /dev/ files, and /proc/ files.
-Also test on a shmem file (which can also be tested with huge pages
-since tmpfs supports huge pages).
+On Thu, Feb 02, 2023 at 05:24:34AM +0300, Dmitry Osipenko wrote:
+> On 2/2/23 05:17, Dmitry Osipenko wrote:
+> > On 2/1/23 18:48, Rob Clark wrote:
+> >> On Wed, Feb 1, 2023 at 5:28 AM Dmitry Osipenko
+> >> <dmitry.osipenko@collabora.com> wrote:
+> >>>
+> >>> On 1/27/23 01:58, Ryan Neph wrote:
+> >>>> An interrupted dma_fence_wait() becomes an -ERESTARTSYS returned
+> >>>> to userspace ioctl(DRM_IOCTL_VIRTGPU_EXECBUFFER) calls, prompting to
+> >>>> retry the ioctl(), but the passed exbuf->fence_fd has been reset to -1,
+> >>>> making the retry attempt fail at sync_file_get_fence().
+> >>>>
+> >>>> The uapi for DRM_IOCTL_VIRTGPU_EXECBUFFER is changed to retain the
+> >>>> passed value for exbuf->fence_fd when returning ERESTARTSYS or EINTR.
+> >>>>
+> >>>> Fixes: 2cd7b6f08bc4 ("drm/virtio: add in/out fence support for explicit synchronization")
+> >>>> Signed-off-by: Ryan Neph <ryanneph@chromium.org>
+> >>>> ---
+> >>>>
+> >>>>  drivers/gpu/drm/virtio/virtgpu_ioctl.c | 9 ++++++---
+> >>>>  include/uapi/drm/virtgpu_drm.h         | 3 +++
+> >>>>  2 files changed, 9 insertions(+), 3 deletions(-)
+> >>>>
+> >>>> diff --git a/drivers/gpu/drm/virtio/virtgpu_ioctl.c b/drivers/gpu/drm/virtio/virtgpu_ioctl.c
+> >>>> index 9f4a90493aea..ffce4e2a409a 100644
+> >>>> --- a/drivers/gpu/drm/virtio/virtgpu_ioctl.c
+> >>>> +++ b/drivers/gpu/drm/virtio/virtgpu_ioctl.c
+> >>>> @@ -132,6 +132,8 @@ static int virtio_gpu_execbuffer_ioctl(struct drm_device *dev, void *data,
+> >>>>       uint64_t fence_ctx;
+> >>>>       uint32_t ring_idx;
+> >>>>
+> >>>> +     exbuf->fence_fd = -1;
+> >>>> +
+> >>>>       fence_ctx = vgdev->fence_drv.context;
+> >>>>       ring_idx = 0;
+> >>>>
+> >>>> @@ -152,8 +154,6 @@ static int virtio_gpu_execbuffer_ioctl(struct drm_device *dev, void *data,
+> >>>>               ring_idx = exbuf->ring_idx;
+> >>>>       }
+> >>>>
+> >>>> -     exbuf->fence_fd = -1;
+> >>>
+> >>> Is there any userspace relying on this -1 behaviour? Wouldn't be better
+> >>> to remove this offending assignment?
+> >>
+> >> Looking at current mesa, removing the assignment should be ok (and
+> >> more consistent with other drivers).  But I can't say if this was
+> >> always true, or that there aren't other non-mesa users, so I can see
+> >> the argument for the more conservative uabi change that this patch
+> >> went with.
+> > 
+> > Realistically, Mesa is the only user of this IOCTL. In general, in a
+> > such case of doubt, I'll do the UABI change and then wait for complains.
+> > If there is a complaint, then the change is reverted. Also will be good
+> > to know about existence of other users :)
+> > 
+> > Given that -1 already wasn't consistently set for all error code paths,
+> > it's tempting to see it removed.
+> > 
+> > The code change of this patch is trivial, hence should fine to keep the
+> > -1 if you prefer that, but the patch won't apply cleanly to the stable
+> > kernels because of the "exbuf->fence_fd = -1" movement. If stable
+> > maintainers won't put effort into rebasing the patch, then better to do
+> > the removal and live with a cleaner driver code, IMO.
+> 
+> Although, there will be a merge conflict either way. I'll give the r-b,
+> still removing -1 feels more attractive to me.
 
-Signed-off-by: Nhat Pham <nphamcs@gmail.com>
----
- MAINTAINERS                                   |   7 +
- tools/testing/selftests/Makefile              |   1 +
- tools/testing/selftests/cachestat/.gitignore  |   2 +
- tools/testing/selftests/cachestat/Makefile    |   8 +
- .../selftests/cachestat/test_cachestat.c      | 256 ++++++++++++++++++
- 5 files changed, 274 insertions(+)
- create mode 100644 tools/testing/selftests/cachestat/.gitignore
- create mode 100644 tools/testing/selftests/cachestat/Makefile
- create mode 100644 tools/testing/selftests/cachestat/test_cachestat.c
+I'm not opposed to removing the "exbuf->fence_fd = -1" on error. I made the
+v1 patch with extra care to fix the known issue while minimizing the uabi
+change, but I'd prefer to see it changed too; thanks for the comments.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a198da986146..792a866353ec 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -4552,6 +4552,13 @@ S:	Supported
- F:	Documentation/filesystems/caching/cachefiles.rst
- F:	fs/cachefiles/
- 
-+CACHESTAT: PAGE CACHE STATS FOR A FILE
-+M:	Nhat Pham <nphamcs@gmail.com>
-+M:	Johannes Weiner <hannes@cmpxchg.org>
-+L:	linux-mm@kvack.org
-+S:	Maintained
-+F:	tools/testing/selftests/cachestat/test_cachestat.c
-+
- CADENCE MIPI-CSI2 BRIDGES
- M:	Maxime Ripard <mripard@kernel.org>
- L:	linux-media@vger.kernel.org
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 0464b2c6c1e4..3cad0b38c5c2 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -4,6 +4,7 @@ TARGETS += amd-pstate
- TARGETS += arm64
- TARGETS += bpf
- TARGETS += breakpoints
-+TARGETS += cachestat
- TARGETS += capabilities
- TARGETS += cgroup
- TARGETS += clone3
-diff --git a/tools/testing/selftests/cachestat/.gitignore b/tools/testing/selftests/cachestat/.gitignore
-new file mode 100644
-index 000000000000..d6c30b43a4bb
---- /dev/null
-+++ b/tools/testing/selftests/cachestat/.gitignore
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+test_cachestat
-diff --git a/tools/testing/selftests/cachestat/Makefile b/tools/testing/selftests/cachestat/Makefile
-new file mode 100644
-index 000000000000..fca73aaa7d14
---- /dev/null
-+++ b/tools/testing/selftests/cachestat/Makefile
-@@ -0,0 +1,8 @@
-+# SPDX-License-Identifier: GPL-2.0
-+TEST_GEN_PROGS := test_cachestat
-+
-+CFLAGS += $(KHDR_INCLUDES)
-+CFLAGS += -Wall
-+CFLAGS += -lrt
-+
-+include ../lib.mk
-diff --git a/tools/testing/selftests/cachestat/test_cachestat.c b/tools/testing/selftests/cachestat/test_cachestat.c
-new file mode 100644
-index 000000000000..d44b6d435444
---- /dev/null
-+++ b/tools/testing/selftests/cachestat/test_cachestat.c
-@@ -0,0 +1,256 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#define _GNU_SOURCE
-+
-+#include <stdio.h>
-+#include <stdbool.h>
-+#include <linux/kernel.h>
-+#include <linux/mman.h>
-+#include <sys/mman.h>
-+#include <sys/shm.h>
-+#include <sys/syscall.h>
-+#include <unistd.h>
-+#include <string.h>
-+#include <fcntl.h>
-+#include <errno.h>
-+
-+#include "../kselftest.h"
-+
-+static const char * const dev_files[] = {
-+	"/dev/zero", "/dev/null", "/dev/urandom",
-+	"/proc/version", "/proc"
-+};
-+static const int cachestat_nr = 451;
-+
-+void print_cachestat(struct cachestat *cs)
-+{
-+	ksft_print_msg(
-+	"Using cachestat: Cached: %lu, Dirty: %lu, Writeback: %lu, Evicted: %lu, Recently Evicted: %lu\n",
-+	cs->nr_cache, cs->nr_dirty, cs->nr_writeback,
-+	cs->nr_evicted, cs->nr_recently_evicted);
-+}
-+
-+bool write_exactly(int fd, size_t filesize)
-+{
-+	char data[filesize];
-+	bool ret = true;
-+	int random_fd = open("/dev/urandom", O_RDONLY);
-+
-+	if (random_fd < 0) {
-+		ksft_print_msg("Unable to access urandom.\n");
-+		ret = false;
-+		goto out;
-+	} else {
-+		int remained = filesize;
-+		char *cursor = data;
-+
-+		while (remained) {
-+			ssize_t read_len = read(random_fd, cursor, remained);
-+
-+			if (read_len <= 0) {
-+				ksft_print_msg("Unable to read from urandom.\n");
-+				ret = false;
-+				goto close_random_fd;
-+			}
-+
-+			remained -= read_len;
-+			cursor += read_len;
-+		}
-+
-+		/* write random data to fd */
-+		remained = filesize;
-+		cursor = data;
-+		while (remained) {
-+			ssize_t write_len = write(fd, cursor, remained);
-+
-+			if (write_len <= 0) {
-+				ksft_print_msg("Unable write random data to file.\n");
-+				ret = false;
-+				goto close_random_fd;
-+			}
-+
-+			remained -= write_len;
-+			cursor += write_len;
-+		}
-+	}
-+
-+close_random_fd:
-+	close(random_fd);
-+out:
-+	return ret;
-+}
-+
-+/*
-+ * Open/create the file at filename, (optionally) write random data to it
-+ * (exactly num_pages), then test the cachestat syscall on this file.
-+ *
-+ * If test_fsync == true, fsync the file, then check the number of dirty
-+ * pages.
-+ */
-+bool test_cachestat(const char *filename, bool write_random, bool create,
-+		bool test_fsync, unsigned long num_pages, int open_flags,
-+		mode_t open_mode)
-+{
-+	size_t PS = sysconf(_SC_PAGESIZE);
-+	int filesize = num_pages * PS;
-+	bool ret = true;
-+	long syscall_ret;
-+	struct cachestat cs;
-+
-+	int fd = open(filename, open_flags, open_mode);
-+
-+	if (fd == -1) {
-+		ksft_print_msg("Unable to create/open file.\n");
-+		goto out;
-+	} else {
-+		ksft_print_msg("Create/open %s\n", filename);
-+	}
-+
-+	if (write_random) {
-+		if (!write_exactly(fd, filesize)) {
-+			ksft_print_msg("Unable to access urandom.\n");
-+			ret = false;
-+			goto out1;
-+		}
-+	}
-+
-+	syscall_ret = syscall(cachestat_nr, fd, 0, filesize, &cs, 0);
-+
-+	ksft_print_msg("Cachestat call returned %ld\n", syscall_ret);
-+
-+	if (syscall_ret) {
-+		ksft_print_msg("Cachestat returned non-zero.\n");
-+		ret = false;
-+		goto out1;
-+
-+	} else {
-+		print_cachestat(&cs);
-+
-+		if (write_random) {
-+			if (cs.nr_cache + cs.nr_evicted != num_pages) {
-+				ksft_print_msg(
-+					"Total number of cached and evicted pages is off.\n");
-+				ret = false;
-+			}
-+		}
-+	}
-+
-+	if (test_fsync) {
-+		if (fsync(fd)) {
-+			ksft_print_msg("fsync fails.\n");
-+			ret = false;
-+		} else {
-+			syscall_ret = syscall(cachestat_nr, fd, 0, filesize, &cs, 0);
-+
-+			ksft_print_msg("Cachestat call (after fsync) returned %ld\n",
-+				syscall_ret);
-+
-+			if (!syscall_ret) {
-+				print_cachestat(&cs);
-+
-+				if (cs.nr_dirty) {
-+					ret = false;
-+					ksft_print_msg(
-+						"Number of dirty should be zero after fsync.\n");
-+				}
-+			} else {
-+				ksft_print_msg("Cachestat (after fsync) returned non-zero.\n");
-+				ret = false;
-+				goto out1;
-+			}
-+		}
-+	}
-+
-+out1:
-+	close(fd);
-+
-+	if (create)
-+		remove(filename);
-+out:
-+	return ret;
-+}
-+
-+bool test_cachestat_shmem(void)
-+{
-+	size_t PS = sysconf(_SC_PAGESIZE);
-+	size_t filesize = PS * 512 * 2; /* 2 2MB huge pages */
-+	int syscall_ret;
-+	off_t off = PS;
-+	size_t compute_len = PS * 512;
-+	char *filename = "tmpshmcstat";
-+	struct cachestat cs;
-+	bool ret = true;
-+	unsigned long num_pages = compute_len / PS;
-+	int fd = shm_open(filename, O_CREAT | O_RDWR, 0600);
-+
-+	if (fd < 0) {
-+		ksft_print_msg("Unable to create shmem file.\n");
-+		ret = false;
-+		goto out;
-+	}
-+
-+	if (ftruncate(fd, filesize)) {
-+		ksft_print_msg("Unable to trucate shmem file.\n");
-+		ret = false;
-+		goto close_fd;
-+	}
-+
-+	if (!write_exactly(fd, filesize)) {
-+		ksft_print_msg("Unable to write to shmem file.\n");
-+		ret = false;
-+		goto close_fd;
-+	}
-+
-+	syscall_ret = syscall(cachestat_nr, fd, off, compute_len, &cs, 0);
-+
-+	if (syscall_ret) {
-+		ksft_print_msg("Cachestat returned non-zero.\n");
-+		ret = false;
-+		goto close_fd;
-+	} else {
-+		print_cachestat(&cs);
-+		if (cs.nr_cache + cs.nr_evicted != num_pages) {
-+			ksft_print_msg(
-+				"Total number of cached and evicted pages is off.\n");
-+			ret = false;
-+		}
-+	}
-+
-+close_fd:
-+	shm_unlink(filename);
-+out:
-+	return ret;
-+}
-+
-+int main(void)
-+{
-+	int ret = 0;
-+
-+	for (int i = 0; i < 5; i++) {
-+		const char *dev_filename = dev_files[i];
-+
-+		if (test_cachestat(dev_filename, false, false, false,
-+			4, O_RDONLY, 0400))
-+			ksft_test_result_pass("cachestat works with %s\n", dev_filename);
-+		else {
-+			ksft_test_result_fail("cachestat fails with %s\n", dev_filename);
-+			ret = 1;
-+		}
-+	}
-+
-+	if (test_cachestat("tmpfilecachestat", true, true,
-+		true, 4, O_CREAT | O_RDWR, 0400 | 0600))
-+		ksft_test_result_pass("cachestat works with a normal file\n");
-+	else {
-+		ksft_test_result_fail("cachestat fails with normal file\n");
-+		ret = 1;
-+	}
-+
-+	if (test_cachestat_shmem())
-+		ksft_test_result_pass("cachestat works with a shmem file\n");
-+	else {
-+		ksft_test_result_fail("cachestat fails with a shmem file\n");
-+		ret = 1;
-+	}
-+
-+	return ret;
-+}
--- 
-2.30.2
+I'll follow up with a v2 that removes the modification of "exbuf->fence_fd"
+unless the IOCTL succeeds.
