@@ -2,71 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37F43688B40
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 01:00:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A773688B46
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 01:01:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233384AbjBCAAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 19:00:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38874 "EHLO
+        id S233228AbjBCABT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 19:01:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233393AbjBCAAk (ORCPT
+        with ESMTP id S233375AbjBCABP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 19:00:40 -0500
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E24D84196;
-        Thu,  2 Feb 2023 16:00:36 -0800 (PST)
-Received: by mail-ot1-f51.google.com with SMTP id n25-20020a9d7119000000b0068bd8c1e836so938561otj.3;
-        Thu, 02 Feb 2023 16:00:36 -0800 (PST)
+        Thu, 2 Feb 2023 19:01:15 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7F2841B3
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 16:01:00 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id on9-20020a17090b1d0900b002300a96b358so3415880pjb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 16:01:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=87LqBY1cmxJIDzlBwcArixEGRBUdoaZyq1gL8jLOlBo=;
+        b=DLV66Jzr/7xWnW/DB5gYUzwmub8DiPYt26/ICu8uqaIhyj/Y69zetvYZjUSTNA7JP4
+         oVFIW77wI167XlBLdmGFDdBQltemXKC02tY+062ITt7Fz7d2TNa4f42A+jhli5StHy08
+         4llhwpGMDi0YoGL3ASI82cb0n+Jneqd4L8TQs/k8Bl7K34gebF7CtuiqCdXKrXEMHzWG
+         +78I7Fd6vJv9IAIj+P8oUAjNdRi92lx+gwfIj1aM6vDJk7BZXhxx+xsLu76rYXE4iMux
+         BKyGx4MS/N9hjYr2+vYpvxDJcYByMMdDkUAB25zywwQdmKUb4WsI5MtyEeLjFgjw4eg+
+         aFbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fCzaKa5wkmjbvUEOBMnFEymMS89zsiOi/X15uYFryEI=;
-        b=yM4EikrZrixpWCBAM8VuwpG2GRapZuCEnIliM8nUP74abPCdFWrBo3yGs4VKfn2nyp
-         AvjG7qM8lD1MhVvvKpJYt3gwRlVhCaxFE2NPyGcV33A2UsnHVLIfQ9CtKknuRmN9MMP/
-         FL5xaOBHfjY9z96DOuAibzP5oVdGANwnwVmBqApOuQ3LAzOUDgDnIYFVlkAhU/czf25l
-         y3jmm2TVy9KkpEWgUmBF3hIgBYI1+7sJUXM1MFE0gHGhyiXfBgK4rcN4Pej3qJg0XNlw
-         aoFVxGxmYrmpmiXlrZpSqwHv/XA86BKZJO6LD71FktvKgEveVCxm9YHBKmp5IW0WHv5D
-         dulg==
-X-Gm-Message-State: AO0yUKVbtPgfNrNxJ6iyZGtHEBwBj0jx58WCEkbcloAkNaJ3v7E61BG0
-        thPF9Et1L7yJMlhGLu0ZWQ==
-X-Google-Smtp-Source: AK7set+ExJfRFgsfqruk4gT1abA+BYAJ5I/vJg18pYkyZR0kFWh6DGOtIJc7j+wk81UnZ1J+Q+Xc1A==
-X-Received: by 2002:a05:6830:6184:b0:68b:d1c7:4eb4 with SMTP id cb4-20020a056830618400b0068bd1c74eb4mr5646404otb.16.1675382435582;
-        Thu, 02 Feb 2023 16:00:35 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id z3-20020a05683010c300b0068d542f630fsm410456oto.76.2023.02.02.16.00.34
+        bh=87LqBY1cmxJIDzlBwcArixEGRBUdoaZyq1gL8jLOlBo=;
+        b=ljm3u0V6l00z8O3KvY7/6aTUpTFjMFD7vv8mAoM7Tv0yU/duzBv4rGeZBHIB/hYy3V
+         DQb1ZeSQelbwblwGnAfObCzudyWrt7APJ76DBe80puwSdr1Ibe9Gg3ykIQ35znUT+D+H
+         M6tHeZuc0Lr8h3w4Ww2Dkg4Xu5bELA7IzNKYqwdjU+sBtwb8pZzi/O6yuBVgG4tdTUPx
+         8gWbe8YC5Qwk49ysQ8hPQgvpgWDx4PpME1SRbXvAQ5kaeE6VQp06CUEIvjRl9bqCWfqK
+         qu7sHBCefAk5PItXSqx8B7nTl+XBkYqE9/9Q8e+fsAjz8De3uz6KVrqQVgKasetJdK/C
+         H9jA==
+X-Gm-Message-State: AO0yUKUY/ooFWqHVl80Lft1ArzF5LFeWx0toJqMqp8jW7UtVnBQOsmtf
+        AcUEcyaejvDxJ/haN3jbCx8fPg==
+X-Google-Smtp-Source: AK7set9JaCKtnriracbwmug7u2ZHT3TTrBbzfIKwL1tiM1SyRqwMx3ca50uMJGBzPDJ4jy/LfeFDhg==
+X-Received: by 2002:a17:902:f0d1:b0:198:dec0:c926 with SMTP id v17-20020a170902f0d100b00198dec0c926mr231076pla.21.1675382460437;
+        Thu, 02 Feb 2023 16:01:00 -0800 (PST)
+Received: from dread.disaster.area (pa49-181-4-128.pa.nsw.optusnet.com.au. [49.181.4.128])
+        by smtp.gmail.com with ESMTPSA id x190-20020a6263c7000000b00593a1f7c3dbsm292980pfb.10.2023.02.02.16.00.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 16:00:35 -0800 (PST)
-Received: (nullmailer pid 2934210 invoked by uid 1000);
-        Fri, 03 Feb 2023 00:00:34 -0000
-Date:   Thu, 2 Feb 2023 18:00:34 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Vladimir Lypak <vladimir.lypak@gmail.com>,
-        devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Luca Weiss <luca@z3ntu.xyz>, Rob Herring <robh+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Iskren Chernev <me@iskren.info>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 01/10] dt-bindings: pinctrl: qcom,msm8226: correct
- GPIO name pattern
-Message-ID: <167538243377.2934157.17799698260403483858.robh@kernel.org>
-References: <20230202104452.299048-1-krzysztof.kozlowski@linaro.org>
- <20230202104452.299048-2-krzysztof.kozlowski@linaro.org>
+        Thu, 02 Feb 2023 16:00:59 -0800 (PST)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1pNjVh-00AfBG-Cq; Fri, 03 Feb 2023 11:00:57 +1100
+Date:   Fri, 3 Feb 2023 11:00:57 +1100
+From:   Dave Chinner <david@fromorbit.com>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        David Hildenbrand <david@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Peter Xu <peterx@redhat.com>, NeilBrown <neilb@suse.de>,
+        Shakeel Butt <shakeelb@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [RFC PATCH v1 0/2] Ignore non-LRU-based reclaim in memcg reclaim
+Message-ID: <20230203000057.GS360264@dread.disaster.area>
+References: <20230202233229.3895713-1-yosryahmed@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230202104452.299048-2-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+In-Reply-To: <20230202233229.3895713-1-yosryahmed@google.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,16 +88,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Feb 02, 2023 at 11:32:27PM +0000, Yosry Ahmed wrote:
+> Reclaimed pages through other means than LRU-based reclaim are tracked
+> through reclaim_state in struct scan_control, which is stashed in
+> current task_struct. These pages are added to the number of reclaimed
+> pages through LRUs. For memcg reclaim, these pages generally cannot be
+> linked to the memcg under reclaim and can cause an overestimated count
+> of reclaimed pages. This short series tries to address that.
 
-On Thu, 02 Feb 2023 11:44:43 +0100, Krzysztof Kozlowski wrote:
-> The MSM8226 TLMM pin controller has GPIOs 0-116, so correct the pattern
-> to bring back missing 107-109.
+Can you explain why memcg specific reclaim is calling shrinkers that
+are not marked with SHRINKER_MEMCG_AWARE?
+
+i.e. only objects that are directly associated with memcg aware
+shrinkers should be accounted to the memcg, right? If the cache is
+global (e.g the xfs buffer cache) then they aren't marked with
+SHRINKER_MEMCG_AWARE and so should only be called for root memcg
+(i.e. global) reclaim contexts.
+
+So if you are having accounting problems caused by memcg specific
+reclaim on global caches freeing non-memcg accounted memory, isn't
+the problem the way the shrinkers are being called?
+
+> Patch 1 is just refactoring updating reclaim_state into a helper
+> function, and renames reclaimed_slab to just reclaimed, with a comment
+> describing its true purpose.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../devicetree/bindings/pinctrl/qcom,msm8226-pinctrl.yaml       | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Patch 2 ignores pages reclaimed outside of LRU reclaim in memcg reclaim.
 > 
+> The original draft was a little bit different. It also kept track of
+> uncharged objcg pages, and reported them only in memcg reclaim and only
+> if the uncharged memcg is in the subtree of the memcg under reclaim.
+> This was an attempt to make reporting of memcg reclaim even more
+> accurate, but was dropped due to questionable complexity vs benefit
+> tradeoff. It can be revived if there is interest.
+> 
+> Yosry Ahmed (2):
+>   mm: vmscan: refactor updating reclaimed pages in reclaim_state
+>   mm: vmscan: ignore non-LRU-based reclaim in memcg reclaim
+> 
+>  fs/inode.c           |  3 +--
 
-Acked-by: Rob Herring <robh@kernel.org>
+Inodes and inode mapping pages are directly charged to the memcg
+that allocated them and the shrinker is correctly marked as
+SHRINKER_MEMCG_AWARE. Freeing the pages attached to the inode will
+account them correctly to the related memcg, regardless of which
+memcg is triggering the reclaim.  Hence I'm not sure that skipping
+the accounting of the reclaimed memory is even correct in this case;
+I think the code should still be accounting for all pages that
+belong to the memcg being scanned that are reclaimed, not ignoring
+them altogether...
 
+-Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
