@@ -2,456 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30E5E68A289
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 20:08:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAB8868A294
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 20:09:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233522AbjBCTIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 14:08:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52084 "EHLO
+        id S233501AbjBCTJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 14:09:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233537AbjBCTIp (ORCPT
+        with ESMTP id S231614AbjBCTJX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 14:08:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C844833458
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 11:08:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Fri, 3 Feb 2023 14:09:23 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD47EA;
+        Fri,  3 Feb 2023 11:09:22 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2328561FCD
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 19:08:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E16CC433EF;
-        Fri,  3 Feb 2023 19:08:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675451317;
-        bh=PLy7nIzT0Hh+eJ9UpG1OoVc4Yg4XopwOWxLc0qRjqlU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=X16y26f59GZ7xfsaeZ1V0iduK7YhJ6aoMgUHLSdoLkAHQypR/WFVp5Dh85gi22dTF
-         YqF8CNXV+BLsa1+VwyH0s5pFl6akWoo16IZZOGPCMaUOmSaxoiCEaTwI/SvWFJyoOj
-         SfAQl22CFy2MvyeBcFQH+LPSZTrZhKwNVdx7tSxOy5caLTWQvS35j3iAmHYTFM0GpY
-         yGz8WyGCocVn5DoNbK4GRDwZo/oEKldU3JAOvPiw1c0bFfW0VI9flXA3rn++0xq2O5
-         Y2dRzggaCK7aDshgZH5OiUcL8Jo21bEEY6tSQoqNKWwEaDIY7JW19byybWn3o+Z62y
-         Gk29/h/DizRsw==
-Received: by pali.im (Postfix)
-        id 6765F723; Fri,  3 Feb 2023 20:08:34 +0100 (CET)
-Date:   Fri, 3 Feb 2023 20:08:34 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Scott Wood <oss@buserror.net>, Sinan Akman <sinan@writeme.com>,
-        Martin Kennedy <hurricos@gmail.com>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/8] powerpc/85xx: p2020: Move all P2020 machine
- descriptions to p2020.c
-Message-ID: <20230203190834.yzxi4aaup5yhebj2@pali>
-References: <20221224211425.14983-1-pali@kernel.org>
- <20221224211425.14983-4-pali@kernel.org>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C593D1EC04E2;
+        Fri,  3 Feb 2023 20:09:20 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1675451360;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=LXY2XoEteH+dNqMW7AfnSnTBOxxYLXAUN7HmaIMxBkM=;
+        b=N8WcH7X0tVKglRYLqZtDwZoK8S+1l2pz7CtwpUyF9jIHUhxEgOvmxEiarZF7XyQmhxIttC
+        4RpkcwEUAfMrKVn+FwZuu3wBPI67biMbhwYr4g060noTNhZ0fBz+HtT1rvxDsfYWg32T7n
+        b/qJbY+RUHNvJw2Y50jVoYs5SSZFBig=
+Date:   Fri, 3 Feb 2023 20:09:15 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>
+Subject: Re: [PATCH v5 07/39] x86: Add user control-protection fault handler
+Message-ID: <Y91b2x8pSFtmB+w6@zn.tnic>
+References: <20230119212317.8324-1-rick.p.edgecombe@intel.com>
+ <20230119212317.8324-8-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221224211425.14983-4-pali@kernel.org>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230119212317.8324-8-rick.p.edgecombe@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Saturday 24 December 2022 22:14:20 Pali Rohár wrote:
-> This moves machine descriptions and all related code for all P2020 boards
-> into new p2020.c source file. This change also copies helper static
-> functions from other mpc85xx*.c files into p2020.c, which are required for
-> machine descriptions. This is preparation for code de-duplication and
-> providing one unified machine description for all P2020 boards. In
-> follow-up patches would be copied functions refactored and simplified to be
-> specific just for P2020 boards.
+On Thu, Jan 19, 2023 at 01:22:45PM -0800, Rick Edgecombe wrote:
+> Subject: Re: [PATCH v5 07/39] x86: Add user control-protection fault handler
+
+Subject: x86/shstk: Add...
+
+> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
 > 
-> Signed-off-by: Pali Rohár <pali@kernel.org>
-> ---
->  arch/powerpc/platforms/85xx/Makefile      |   2 +
->  arch/powerpc/platforms/85xx/mpc85xx_ds.c  |  23 --
->  arch/powerpc/platforms/85xx/mpc85xx_rdb.c |  44 ----
->  arch/powerpc/platforms/85xx/p2020.c       | 273 ++++++++++++++++++++++
->  4 files changed, 275 insertions(+), 67 deletions(-)
->  create mode 100644 arch/powerpc/platforms/85xx/p2020.c
+> A control-protection fault is triggered when a control-flow transfer
+> attempt violates Shadow Stack or Indirect Branch Tracking constraints.
+> For example, the return address for a RET instruction differs from the copy
+> on the shadow stack.
 
-Here is same patch, but generated by git -M and -C options. Maybe it is more readable?
+...
 
- arch/powerpc/platforms/85xx/Makefile               |   2 +
- arch/powerpc/platforms/85xx/mpc85xx_ds.c           |  23 ----
- arch/powerpc/platforms/85xx/mpc85xx_rdb.c          |  44 -------
- .../platforms/85xx/{mpc85xx_ds.c => p2020.c}       | 134 ++++++++++++++-------
- 4 files changed, 91 insertions(+), 112 deletions(-)
+> diff --git a/arch/x86/kernel/cet.c b/arch/x86/kernel/cet.c
+> new file mode 100644
+> index 000000000000..33d7d119be26
+> --- /dev/null
+> +++ b/arch/x86/kernel/cet.c
+> @@ -0,0 +1,152 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <linux/ptrace.h>
+> +#include <asm/bugs.h>
+> +#include <asm/traps.h>
+> +
+> +enum cp_error_code {
+> +	CP_EC        = (1 << 15) - 1,
 
-diff --git a/arch/powerpc/platforms/85xx/Makefile b/arch/powerpc/platforms/85xx/Makefile
-index 260fbad7967b..1ad261b4eeb6 100644
---- a/arch/powerpc/platforms/85xx/Makefile
-+++ b/arch/powerpc/platforms/85xx/Makefile
-@@ -23,6 +23,8 @@ obj-$(CONFIG_P1010_RDB)   += p1010rdb.o
- obj-$(CONFIG_P1022_DS)    += p1022_ds.o
- obj-$(CONFIG_P1022_RDK)   += p1022_rdk.o
- obj-$(CONFIG_P1023_RDB)   += p1023_rdb.o
-+obj-$(CONFIG_MPC85xx_DS)  += p2020.o
-+obj-$(CONFIG_MPC85xx_RDB) += p2020.o
- obj-$(CONFIG_TWR_P102x)   += twr_p102x.o
- obj-$(CONFIG_CORENET_GENERIC)   += corenet_generic.o
- obj-$(CONFIG_FB_FSL_DIU)	+= t1042rdb_diu.o
-diff --git a/arch/powerpc/platforms/85xx/mpc85xx_ds.c b/arch/powerpc/platforms/85xx/mpc85xx_ds.c
-index 9a6d637ef54a..05aac997b5ed 100644
---- a/arch/powerpc/platforms/85xx/mpc85xx_ds.c
-+++ b/arch/powerpc/platforms/85xx/mpc85xx_ds.c
-@@ -168,7 +168,6 @@ static int __init mpc8544_ds_probe(void)
- 
- machine_arch_initcall(mpc8544_ds, mpc85xx_common_publish_devices);
- machine_arch_initcall(mpc8572_ds, mpc85xx_common_publish_devices);
--machine_arch_initcall(p2020_ds, mpc85xx_common_publish_devices);
- 
- /*
-  * Called very early, device-tree isn't unflattened
-@@ -178,14 +177,6 @@ static int __init mpc8572_ds_probe(void)
- 	return !!of_machine_is_compatible("fsl,MPC8572DS");
- }
- 
--/*
-- * Called very early, device-tree isn't unflattened
-- */
--static int __init p2020_ds_probe(void)
--{
--	return !!of_machine_is_compatible("fsl,P2020DS");
--}
--
- define_machine(mpc8544_ds) {
- 	.name			= "MPC8544 DS",
- 	.probe			= mpc8544_ds_probe,
-@@ -213,17 +204,3 @@ define_machine(mpc8572_ds) {
- 	.calibrate_decr		= generic_calibrate_decr,
- 	.progress		= udbg_progress,
- };
--
--define_machine(p2020_ds) {
--	.name			= "P2020 DS",
--	.probe			= p2020_ds_probe,
--	.setup_arch		= mpc85xx_ds_setup_arch,
--	.init_IRQ		= mpc85xx_ds_pic_init,
--#ifdef CONFIG_PCI
--	.pcibios_fixup_bus	= fsl_pcibios_fixup_bus,
--	.pcibios_fixup_phb      = fsl_pcibios_fixup_phb,
--#endif
--	.get_irq		= mpic_get_irq,
--	.calibrate_decr		= generic_calibrate_decr,
--	.progress		= udbg_progress,
--};
-diff --git a/arch/powerpc/platforms/85xx/mpc85xx_rdb.c b/arch/powerpc/platforms/85xx/mpc85xx_rdb.c
-index b6129c148fea..05f1ed635735 100644
---- a/arch/powerpc/platforms/85xx/mpc85xx_rdb.c
-+++ b/arch/powerpc/platforms/85xx/mpc85xx_rdb.c
-@@ -108,8 +108,6 @@ static void __init mpc85xx_rdb_setup_arch(void)
- 	printk(KERN_INFO "MPC85xx RDB board from Freescale Semiconductor\n");
- }
- 
--machine_arch_initcall(p2020_rdb, mpc85xx_common_publish_devices);
--machine_arch_initcall(p2020_rdb_pc, mpc85xx_common_publish_devices);
- machine_arch_initcall(p1020_mbg_pc, mpc85xx_common_publish_devices);
- machine_arch_initcall(p1020_rdb, mpc85xx_common_publish_devices);
- machine_arch_initcall(p1020_rdb_pc, mpc85xx_common_publish_devices);
-@@ -122,13 +120,6 @@ machine_arch_initcall(p1024_rdb, mpc85xx_common_publish_devices);
- /*
-  * Called very early, device-tree isn't unflattened
-  */
--static int __init p2020_rdb_probe(void)
--{
--	if (of_machine_is_compatible("fsl,P2020RDB"))
--		return 1;
--	return 0;
--}
--
- static int __init p1020_rdb_probe(void)
- {
- 	if (of_machine_is_compatible("fsl,P1020RDB"))
-@@ -153,13 +144,6 @@ static int __init p1021_rdb_pc_probe(void)
- 	return 0;
- }
- 
--static int __init p2020_rdb_pc_probe(void)
--{
--	if (of_machine_is_compatible("fsl,P2020RDB-PC"))
--		return 1;
--	return 0;
--}
--
- static int __init p1025_rdb_probe(void)
- {
- 	return of_machine_is_compatible("fsl,P1025RDB");
-@@ -180,20 +164,6 @@ static int __init p1024_rdb_probe(void)
- 	return of_machine_is_compatible("fsl,P1024RDB");
- }
- 
--define_machine(p2020_rdb) {
--	.name			= "P2020 RDB",
--	.probe			= p2020_rdb_probe,
--	.setup_arch		= mpc85xx_rdb_setup_arch,
--	.init_IRQ		= mpc85xx_rdb_pic_init,
--#ifdef CONFIG_PCI
--	.pcibios_fixup_bus	= fsl_pcibios_fixup_bus,
--	.pcibios_fixup_phb      = fsl_pcibios_fixup_phb,
--#endif
--	.get_irq		= mpic_get_irq,
--	.calibrate_decr		= generic_calibrate_decr,
--	.progress		= udbg_progress,
--};
--
- define_machine(p1020_rdb) {
- 	.name			= "P1020 RDB",
- 	.probe			= p1020_rdb_probe,
-@@ -222,20 +192,6 @@ define_machine(p1021_rdb_pc) {
- 	.progress		= udbg_progress,
- };
- 
--define_machine(p2020_rdb_pc) {
--	.name			= "P2020RDB-PC",
--	.probe			= p2020_rdb_pc_probe,
--	.setup_arch		= mpc85xx_rdb_setup_arch,
--	.init_IRQ		= mpc85xx_rdb_pic_init,
--#ifdef CONFIG_PCI
--	.pcibios_fixup_bus	= fsl_pcibios_fixup_bus,
--	.pcibios_fixup_phb      = fsl_pcibios_fixup_phb,
--#endif
--	.get_irq		= mpic_get_irq,
--	.calibrate_decr		= generic_calibrate_decr,
--	.progress		= udbg_progress,
--};
--
- define_machine(p1025_rdb) {
- 	.name			= "P1025 RDB",
- 	.probe			= p1025_rdb_probe,
-diff --git a/arch/powerpc/platforms/85xx/mpc85xx_ds.c b/arch/powerpc/platforms/85xx/p2020.c
-similarity index 65%
-copy from arch/powerpc/platforms/85xx/mpc85xx_ds.c
-copy to arch/powerpc/platforms/85xx/p2020.c
-index 9a6d637ef54a..d65d4c88ac47 100644
---- a/arch/powerpc/platforms/85xx/mpc85xx_ds.c
-+++ b/arch/powerpc/platforms/85xx/p2020.c
-@@ -1,11 +1,9 @@
- // SPDX-License-Identifier: GPL-2.0-or-later
- /*
-- * MPC85xx DS Board Setup
-+ * Freescale P2020 board Setup
-  *
-- * Author Xianghua Xiao (x.xiao@freescale.com)
-- * Roy Zang <tie-fei.zang@freescale.com>
-- * 	- Add PCI/PCI Exprees support
-- * Copyright 2007 Freescale Semiconductor Inc.
-+ * Copyright 2007,2009,2012-2013 Freescale Semiconductor Inc.
-+ * Copyright 2022 Pali Rohár <pali@kernel.org>
-  */
- 
- #include <linux/stddef.h>
-@@ -17,6 +15,7 @@
- #include <linux/interrupt.h>
- #include <linux/of_irq.h>
- #include <linux/of_platform.h>
-+#include <linux/fsl/guts.h>
- 
- #include <asm/time.h>
- #include <asm/machdep.h>
-@@ -27,6 +26,8 @@
- #include <asm/i8259.h>
- #include <asm/swiotlb.h>
- 
-+#include <soc/fsl/qe/qe.h>
-+
- #include <sysdev/fsl_soc.h>
- #include <sysdev/fsl_pci.h>
- #include "smp.h"
-@@ -41,6 +42,8 @@
- #define DBG(fmt, args...)
- #endif
- 
-+#ifdef CONFIG_MPC85xx_DS
-+
- #ifdef CONFIG_PPC_I8259
- static void mpc85xx_8259_cascade(struct irq_desc *desc)
- {
-@@ -62,18 +65,11 @@ static void __init mpc85xx_ds_pic_init(void)
- 	struct device_node *cascade_node = NULL;
- 	int cascade_irq;
- #endif
--	if (of_machine_is_compatible("fsl,MPC8572DS-CAMP")) {
--		mpic = mpic_alloc(NULL, 0,
--			MPIC_NO_RESET |
--			MPIC_BIG_ENDIAN |
--			MPIC_SINGLE_DEST_CPU,
--			0, 256, " OpenPIC  ");
--	} else {
--		mpic = mpic_alloc(NULL, 0,
--			  MPIC_BIG_ENDIAN |
--			  MPIC_SINGLE_DEST_CPU,
--			0, 256, " OpenPIC  ");
--	}
-+
-+	mpic = mpic_alloc(NULL, 0,
-+		  MPIC_BIG_ENDIAN |
-+		  MPIC_SINGLE_DEST_CPU,
-+		0, 256, " OpenPIC  ");
- 
- 	BUG_ON(mpic == NULL);
- 	mpic_init(mpic);
-@@ -142,9 +138,27 @@ static void __init mpc85xx_ds_uli_init(void)
- #endif
- }
- 
-+#endif /* CONFIG_MPC85xx_DS */
-+
-+#ifdef CONFIG_MPC85xx_RDB
-+static void __init mpc85xx_rdb_pic_init(void)
-+{
-+	struct mpic *mpic;
-+
-+	mpic = mpic_alloc(NULL, 0,
-+	  MPIC_BIG_ENDIAN |
-+	  MPIC_SINGLE_DEST_CPU,
-+	  0, 256, " OpenPIC  ");
-+
-+	BUG_ON(mpic == NULL);
-+	mpic_init(mpic);
-+}
-+#endif /* CONFIG_MPC85xx_RDB */
-+
- /*
-  * Setup the architecture
-  */
-+#ifdef CONFIG_MPC85xx_DS
- static void __init mpc85xx_ds_setup_arch(void)
- {
- 	if (ppc_md.progress)
-@@ -157,38 +171,65 @@ static void __init mpc85xx_ds_setup_arch(void)
- 
- 	printk("MPC85xx DS board from Freescale Semiconductor\n");
- }
-+#endif /* CONFIG_MPC85xx_DS */
- 
--/*
-- * Called very early, device-tree isn't unflattened
-- */
--static int __init mpc8544_ds_probe(void)
-+#ifdef CONFIG_MPC85xx_RDB
-+static void __init mpc85xx_rdb_setup_arch(void)
- {
--	return !!of_machine_is_compatible("MPC8544DS");
-+	if (ppc_md.progress)
-+		ppc_md.progress("mpc85xx_rdb_setup_arch()", 0);
-+
-+	mpc85xx_smp_init();
-+
-+	fsl_pci_assign_primary();
-+
-+#ifdef CONFIG_QUICC_ENGINE
-+	mpc85xx_qe_par_io_init();
-+#endif	/* CONFIG_QUICC_ENGINE */
-+
-+	printk(KERN_INFO "MPC85xx RDB board from Freescale Semiconductor\n");
- }
-+#endif /* CONFIG_MPC85xx_RDB */
- 
--machine_arch_initcall(mpc8544_ds, mpc85xx_common_publish_devices);
--machine_arch_initcall(mpc8572_ds, mpc85xx_common_publish_devices);
-+#ifdef CONFIG_MPC85xx_DS
- machine_arch_initcall(p2020_ds, mpc85xx_common_publish_devices);
-+#endif /* CONFIG_MPC85xx_DS */
- 
--/*
-- * Called very early, device-tree isn't unflattened
-- */
--static int __init mpc8572_ds_probe(void)
--{
--	return !!of_machine_is_compatible("fsl,MPC8572DS");
--}
-+#ifdef CONFIG_MPC85xx_RDB
-+machine_arch_initcall(p2020_rdb, mpc85xx_common_publish_devices);
-+machine_arch_initcall(p2020_rdb_pc, mpc85xx_common_publish_devices);
-+#endif /* CONFIG_MPC85xx_RDB */
- 
- /*
-  * Called very early, device-tree isn't unflattened
-  */
-+#ifdef CONFIG_MPC85xx_DS
- static int __init p2020_ds_probe(void)
- {
- 	return !!of_machine_is_compatible("fsl,P2020DS");
- }
-+#endif /* CONFIG_MPC85xx_DS */
-+
-+#ifdef CONFIG_MPC85xx_RDB
-+static int __init p2020_rdb_probe(void)
-+{
-+	if (of_machine_is_compatible("fsl,P2020RDB"))
-+		return 1;
-+	return 0;
-+}
-+
-+static int __init p2020_rdb_pc_probe(void)
-+{
-+	if (of_machine_is_compatible("fsl,P2020RDB-PC"))
-+		return 1;
-+	return 0;
-+}
-+#endif /* CONFIG_MPC85xx_RDB */
- 
--define_machine(mpc8544_ds) {
--	.name			= "MPC8544 DS",
--	.probe			= mpc8544_ds_probe,
-+#ifdef CONFIG_MPC85xx_DS
-+define_machine(p2020_ds) {
-+	.name			= "P2020 DS",
-+	.probe			= p2020_ds_probe,
- 	.setup_arch		= mpc85xx_ds_setup_arch,
- 	.init_IRQ		= mpc85xx_ds_pic_init,
- #ifdef CONFIG_PCI
-@@ -199,12 +240,14 @@ define_machine(mpc8544_ds) {
- 	.calibrate_decr		= generic_calibrate_decr,
- 	.progress		= udbg_progress,
- };
--
--define_machine(mpc8572_ds) {
--	.name			= "MPC8572 DS",
--	.probe			= mpc8572_ds_probe,
--	.setup_arch		= mpc85xx_ds_setup_arch,
--	.init_IRQ		= mpc85xx_ds_pic_init,
-+#endif /* CONFIG_MPC85xx_DS */
-+
-+#ifdef CONFIG_MPC85xx_RDB
-+define_machine(p2020_rdb) {
-+	.name			= "P2020 RDB",
-+	.probe			= p2020_rdb_probe,
-+	.setup_arch		= mpc85xx_rdb_setup_arch,
-+	.init_IRQ		= mpc85xx_rdb_pic_init,
- #ifdef CONFIG_PCI
- 	.pcibios_fixup_bus	= fsl_pcibios_fixup_bus,
- 	.pcibios_fixup_phb      = fsl_pcibios_fixup_phb,
-@@ -214,11 +257,11 @@ define_machine(mpc8572_ds) {
- 	.progress		= udbg_progress,
- };
- 
--define_machine(p2020_ds) {
--	.name			= "P2020 DS",
--	.probe			= p2020_ds_probe,
--	.setup_arch		= mpc85xx_ds_setup_arch,
--	.init_IRQ		= mpc85xx_ds_pic_init,
-+define_machine(p2020_rdb_pc) {
-+	.name			= "P2020RDB-PC",
-+	.probe			= p2020_rdb_pc_probe,
-+	.setup_arch		= mpc85xx_rdb_setup_arch,
-+	.init_IRQ		= mpc85xx_rdb_pic_init,
- #ifdef CONFIG_PCI
- 	.pcibios_fixup_bus	= fsl_pcibios_fixup_bus,
- 	.pcibios_fixup_phb      = fsl_pcibios_fixup_phb,
-@@ -227,3 +270,4 @@ define_machine(p2020_ds) {
- 	.calibrate_decr		= generic_calibrate_decr,
- 	.progress		= udbg_progress,
- };
-+#endif /* CONFIG_MPC85xx_RDB */
+That looks like a mask, so
+
+	CP_EC_MASK
+
+I guess.
+
+> +
+> +	CP_RET       = 1,
+> +	CP_IRET      = 2,
+> +	CP_ENDBR     = 3,
+> +	CP_RSTRORSSP = 4,
+> +	CP_SETSSBSY  = 5,
+> +
+> +	CP_ENCL	     = 1 << 15,
+> +};
+
+...
+
+> +static void do_user_cp_fault(struct pt_regs *regs, unsigned long error_code)
+> +{
+> +	struct task_struct *tsk;
+> +	unsigned long ssp;
+> +
+> +	/*
+> +	 * An exception was just taken from userspace. Since interrupts are disabled
+> +	 * here, no scheduling should have messed with the registers yet and they
+> +	 * will be whatever is live in userspace. So read the SSP before enabling
+> +	 * interrupts so locking the fpregs to do it later is not required.
+> +	 */
+> +	rdmsrl(MSR_IA32_PL3_SSP, ssp);
+> +
+> +	cond_local_irq_enable(regs);
+> +
+> +	tsk = current;
+
+Hmm, should you read current before you enable interrupts? Not that it
+changes from under us...
+
+> +	tsk->thread.error_code = error_code;
+> +	tsk->thread.trap_nr = X86_TRAP_CP;
+> +
+> +	/* Ratelimit to prevent log spamming. */
+> +	if (show_unhandled_signals && unhandled_signal(tsk, SIGSEGV) &&
+> +	    __ratelimit(&cpf_rate)) {
+> +		pr_emerg("%s[%d] control protection ip:%lx sp:%lx ssp:%lx error:%lx(%s)%s",
+> +			 tsk->comm, task_pid_nr(tsk),
+> +			 regs->ip, regs->sp, ssp, error_code,
+> +			 cp_err_string(error_code),
+> +			 error_code & CP_ENCL ? " in enclave" : "");
+> +		print_vma_addr(KERN_CONT " in ", regs->ip);
+> +		pr_cont("\n");
+> +	}
+> +
+> +	force_sig_fault(SIGSEGV, SEGV_CPERR, (void __user *)0);
+> +	cond_local_irq_disable(regs);
+> +}
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
