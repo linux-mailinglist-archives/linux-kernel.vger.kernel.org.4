@@ -2,84 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D05668A224
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 19:41:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1CD668A226
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 19:42:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233676AbjBCSli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 13:41:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34424 "EHLO
+        id S233647AbjBCSmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 13:42:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233606AbjBCSld (ORCPT
+        with ESMTP id S233260AbjBCSmO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 13:41:33 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31966A640B
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 10:41:32 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id be8so6142970plb.7
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 10:41:32 -0800 (PST)
+        Fri, 3 Feb 2023 13:42:14 -0500
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80817A58E2;
+        Fri,  3 Feb 2023 10:41:59 -0800 (PST)
+Received: by mail-qt1-x830.google.com with SMTP id h24so6589287qtr.0;
+        Fri, 03 Feb 2023 10:41:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Cn1ilt9CXu68kWVudz6MPv9G5X8jU8YjMqpSgc7Tn+g=;
-        b=XVRfE7KZ96kUXnbwCAulTyZIfAPDcnownBSqk5Y3zjOlf0JvaGsecZQGPfFDEgYxzn
-         /Vu/Ya3+pG8qgiG9wXNTWTNynt0NglLqATwLeLvan97Q6holYvnf3ZPq8UQiLpsaPv2V
-         KeMLowFsRoKXEhCKwj09qOPIdbTjcL7+c+TMxbdSTKNR3RQFCNk6/g6nKXygjDkgFSjz
-         PAN9X9glsEwV2LfuR5xGUIti8PaJDvsvznqtWyBIbODEaJkLgo6limUqFgvZ9Y+TVFJh
-         gjg7SrN+FgksbwX2zYaP3j630WE0s5pStFCC1d8OsxgxVSofeRXg1Ir14LGkeUzhAWZH
-         2X9w==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Cug0hlfDT36Dqw7jW/V5xSD4WJgWtg61okF6HbuI67I=;
+        b=QVlAEAfi41Sh2E24X+wje0kCV9S5nVzwiYF1UyN0oKYqyI6kYUqZNp7PCls/pjdSpz
+         IRbBLpHRcYcsk9yfCVwxUPBv1wgLjtQC/vivo7i2gwVFfx30NGR+QsyLdjft7yN7jDKi
+         1iaOyC5ncB/B628hz5iW5J0EZiAHtaKxtC32NOEFoUduGVk5byBUDsXIguB9cnXoXIQr
+         2QJKVgxu8Svx4yLSyHLos5Q+10klGsUhQsmOK+CBBvhg5ohhVPL9OwU7gUwg4CENI5Nm
+         5Cny0E1BoXgl5BVxESR3az6Zdh2H4Zl/qXWOh8bOz5UJHqX+pYQJ/F7xWEkURKUT7lWa
+         8d6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Cn1ilt9CXu68kWVudz6MPv9G5X8jU8YjMqpSgc7Tn+g=;
-        b=WLpwbEK3SbbjokK0M7XjtZkv54L5HShk+hT/dWdQTBWphT9CZk6rwJnzaAGGmKvxID
-         WfdgeQk2zN0M94GgTAUZndQ4GyR3+Iogcqq6OUwdn6UIM18ZXJT/C0CldBMVOuvxxmYm
-         RZySXgqVbk5Ot+HjhB5KZ1cWGNTXoIOGZDd4Xa38SLM20jV3c9D4dPvEd9ZYitEf5cU8
-         SU3RCcGPXyrKfSPz8Qm5vdi5tUI90z/VjIUqqfHtYuGlnQDNNGDdlPJG9JGcf833tpXA
-         1+kDPEauy6g79hvvuQsrrQG1YGPr43D2tGjmAIcR+DXc/ZQS8OqOmVWssZoJdL5sVCDz
-         sjDg==
-X-Gm-Message-State: AO0yUKVCOuUOV4BPqIIhWsOIB1zuYJR/yFI7cWcK/R9/JJQJa5r9Vg/Y
-        8x80O5w/B8h9P7hai8iq+JLesw==
-X-Google-Smtp-Source: AK7set81ndZ6iqL6SCLrZ4yXsjNr0LajPm5EI4Bs27dAno1HwoKfEuLTFYxjXvbxcfsUY/E3yzW2Zw==
-X-Received: by 2002:a17:903:210d:b0:198:af4f:de0a with SMTP id o13-20020a170903210d00b00198af4fde0amr10312ple.10.1675449691546;
-        Fri, 03 Feb 2023 10:41:31 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id e15-20020a63ae4f000000b004f06ccd76bcsm1793496pgp.70.2023.02.03.10.41.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 10:41:31 -0800 (PST)
-Date:   Fri, 3 Feb 2023 18:41:27 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     shahuang@redhat.com
-Cc:     kvm@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        David Matlack <dmatlack@google.com>,
-        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
-        <kvmarm@lists.linux.dev>,
-        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
-        <kvmarm@lists.cs.columbia.edu>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] KVM: selftests: Remove redundant setbuf()
-Message-ID: <Y91VV+WWrakREsN6@google.com>
-References: <20230203061038.277655-1-shahuang@redhat.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Cug0hlfDT36Dqw7jW/V5xSD4WJgWtg61okF6HbuI67I=;
+        b=f9X4IyNKQfX0wS1QVoyghIH2hd8MxKdVu+OBG9j4ggmiWGA1GMQBSOGnKyC3h9boII
+         JGnT0qfHlFPsOprKaJ1iqerK0jGp34jubZhwfbTSFMIlimaEwHZTCos0EB0dQF7bGczC
+         kBrpQo8p65m7nIfHE6WBWp4xflFcJGCNQ5HEiz4fq2RW5rJ6KiI5u6cfSKb+SonG64Pv
+         9UMpv8e/P1+jpPcM2ON8EIG6TDubrfocMdaW+xXQycZRyuIwi1kj9qmTbl0efMqw/hEL
+         GNZLnU7RaiEeQfeu5YtKJV2mcU8x7G3WFzjAKwZ032PZM548n/NQpJK9iiTsljnIp8CS
+         x1aQ==
+X-Gm-Message-State: AO0yUKWBk3Jgh6dhDIRpc/Jf+6k7Xm/L7eVXoNmtrDRPTmhb/qVfQZ9N
+        TYqZcSx8yDUtYVzVVZGfpnslt1RN9qhHnw==
+X-Google-Smtp-Source: AK7set+yKBp9Lzl4KayhlSB33ocRyQjHvACLYd6X6UX7mV/n2SUrn2vJNFEpDouXWZPthOGFenA/cA==
+X-Received: by 2002:ac8:5c48:0:b0:3b9:a965:7af2 with SMTP id j8-20020ac85c48000000b003b9a9657af2mr21237410qtj.45.1675449718550;
+        Fri, 03 Feb 2023 10:41:58 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id bk19-20020a05620a1a1300b006f9f3c0c63csm2352729qkb.32.2023.02.03.10.41.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Feb 2023 10:41:57 -0800 (PST)
+Message-ID: <ca5b519c-c349-297c-1780-53275e0c8579@gmail.com>
+Date:   Fri, 3 Feb 2023 10:41:53 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230203061038.277655-1-shahuang@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 5.4 000/134] 5.4.231-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230203101023.832083974@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230203101023.832083974@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,17 +79,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023, shahuang@redhat.com wrote:
-> From: Shaoqin Huang <shahuang@redhat.com>
+On 2/3/23 02:11, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.231 release.
+> There are 134 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Since setbuf(stdout, NULL) has been called in kvm_util.c with
-> __attribute((constructor)). Selftests no need to setup it in their own
-> code.
+> Responses should be made by Sun, 05 Feb 2023 10:09:58 +0000.
+> Anything received after that time might be too late.
 > 
-> Signed-off-by: Shaoqin Huang <shahuang@redhat.com>
-> ---
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.231-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Reviewed-by: Sean Christopherson <seanjc@google.com>
+On ARCH_BRCMSTB using 32-bit and 64-bit, build tested on BMIPS_GENERIC:
 
-Oliver/Marc, want to grab this one?  I doubt there will be conflicts, but IIRC
-there are a handful of in-flight changes for aarch64/page_fault_test.c.
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
+
