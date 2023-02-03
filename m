@@ -2,183 +2,461 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE59468901A
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 08:07:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F5DF68901D
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 08:07:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232234AbjBCHFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 02:05:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56608 "EHLO
+        id S232230AbjBCHG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 02:06:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232258AbjBCHFU (ORCPT
+        with ESMTP id S229837AbjBCHG4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 02:05:20 -0500
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2074.outbound.protection.outlook.com [40.107.22.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C42222CC;
-        Thu,  2 Feb 2023 23:05:10 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=O1BtWLNf2VrjpPfM57pv2ot1bfuZPXhOspOEB2jjNUUtVWY9y/z8CdgfLe4De43E1659ArpDHYDtKcF2jHaBpbDvlA0m84+ski1r2eiPXFLkTL4yt2GtA0FXDfqM27GXnygbhxbVcu6cHIv8sjGElhPE9WInhfgm6v/ACmhqcbV22b7dIR8Yv1gMeAzgY0+b3kRI1gOycrss8lcoY6mtqFhCIn3Tt6t5vN8Gf0pCo2r9mS/q4b/LFGYZUThlUL6+USil43CdHaVEA76P7Zv/+sz8sLK/s8TAN1WZIWt19SHU2VwTAUeyKNn/w2aFI34hccQ/3yxoyGcnDzcevBpMjw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BnOUj5TLMf2PZxo7PDKEU2yiIsuRDwt/vGTXTVee/B0=;
- b=R+jImaa103jDIh3D0PyAenI/aGvkk80ZQqvjWofcuiIG2dtw0Ze9wzbR7TCLTjM8TSC8/YNIaJPKQLCeDS+akGi/kgKIzKQlVglN69GI+tJcCuYpzKUjWH41Ia1WwiY5AxPXcXLt6TihVp+7oSJtpvoqq80kY/z8DVXI65zN4VGm8QtSnuuym/fzOFBlK1IJDeIfuMNyJG6GTzf+DT104ZqtyfE+6FAWNyQcbkeZ2JFB1rM5hg2PHzHu5cLePC3ddNqP2sPmyDN+Wakt6+ukuTMaKPptkCHp59N0yWqAiEVa/BA95MF2A56QGsGqgDB5JaRV1/+pOK7cUKHJvzS6eg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BnOUj5TLMf2PZxo7PDKEU2yiIsuRDwt/vGTXTVee/B0=;
- b=h2xNANVDvaruHO2hDp5vCG5Oxwfxsmt6kKeJPLzrx5YMHE5LM+lK+ZKVSIAra7VCHBVy2UUZ6t3Dj3rZ3waltPXaSblzc/KQKen9sId3xJvNHptpZoj/wXlFuChW1zEYeKglyGq7AWeOiwzAeylYinlv/vnU8MlLOVJ3gscfT709YJGqns1JGn3wDYbEXMQHy4q2Ct/kzaRZVFybEdBszGboCsL2o3HNSGGTBpE/3bensDMXtxyvZY03iiHhMbDm8nuuD33YNVXN0Vq27uPzV1rh1/yyBx9aMhZ/cfIaQfs+A1NyHI5vC5sPEWQ0X09rswTYb54yng6pdcqUiEr2vA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VE1PR04MB6560.eurprd04.prod.outlook.com (2603:10a6:803:122::25)
- by VI1PR04MB7133.eurprd04.prod.outlook.com (2603:10a6:800:126::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.22; Fri, 3 Feb
- 2023 07:05:07 +0000
-Received: from VE1PR04MB6560.eurprd04.prod.outlook.com
- ([fe80::e138:4fc3:705c:d178]) by VE1PR04MB6560.eurprd04.prod.outlook.com
- ([fe80::e138:4fc3:705c:d178%6]) with mapi id 15.20.6064.024; Fri, 3 Feb 2023
- 07:05:07 +0000
-Message-ID: <513e2851-9098-b510-588e-1e68d44d23fc@suse.com>
-Date:   Fri, 3 Feb 2023 08:05:04 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 1/3] acpi/processor: fix evaluating _PDC method when
- running as Xen dom0
-Content-Language: en-US
-To:     Josef Johansson <josef@oderland.se>
-Cc:     xen-devel@lists.xenproject.org, x86@kernel.org,
-        linux-acpi@vger.kernel.org, Roger Pau Monne <roger.pau@citrix.com>,
-        linux-kernel@vger.kernel.org
-References: <20221121102113.41893-1-roger.pau@citrix.com>
- <20221121102113.41893-2-roger.pau@citrix.com>
- <952fdc14-a8e5-a59a-9c7d-af1adf361d77@oderland.se>
-From:   Jan Beulich <jbeulich@suse.com>
-In-Reply-To: <952fdc14-a8e5-a59a-9c7d-af1adf361d77@oderland.se>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR2P281CA0052.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:93::15) To VE1PR04MB6560.eurprd04.prod.outlook.com
- (2603:10a6:803:122::25)
+        Fri, 3 Feb 2023 02:06:56 -0500
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B7FD206B7;
+        Thu,  2 Feb 2023 23:06:54 -0800 (PST)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1pNq9p-0000t1-2y;
+        Fri, 03 Feb 2023 08:06:50 +0100
+Date:   Fri, 3 Feb 2023 07:05:08 +0000
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>
+Cc:     Jianhui Zhao <zhaojh329@gmail.com>,
+        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
+Subject: [PATCH 6/9] net: ethernet: mtk_eth_soc: ppe: add support for flow
+ accounting
+Message-ID: <7ce673e90b72e1a19b7657bebc2ca8d1ea596f96.1675407169.git.daniel@makrotopia.org>
+References: <cover.1675407169.git.daniel@makrotopia.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VE1PR04MB6560:EE_|VI1PR04MB7133:EE_
-X-MS-Office365-Filtering-Correlation-Id: ace03b3d-b680-43c5-a094-08db05b4fad4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0hV/69WOu7eCLyTjgxftEWTKauPnF0kOJM1a5QkoXU3cHUU8yffCeacgVYZxq0TMqelfMdTqY2wGrVsxslypbeNP7ELXFiP0zZsFUt0eO+w00icoxLmxdK7ym66D+0cbtCJ78FRT+m8ExWyLpHK8ZKP6y7yanU04KjK1xrFzV8E3jTnVg2UW9U51nYi47rbz4S/e4IUjLlT+HFgTn2oJC/OaBPKchTQSWO8sexdSHCnQve9R6FXwn7e37LQENhFvcQeMA8vd3AbiNlbSVxoljloXzbDXXGGSGXKKh9LF1gOCTJf3yq3gzYmG0qTp+GFhiV37FM/+gaz8cMa5jXmyRjPEac6EK8HaRgjqwGfWkwHPHivFCmZipRs9AOQHmMytU5/YbHR7L222aOQLEbkvSC+uhd5rdeL6aB0QFlbl8KwxulgB5dv2CsTzmHXT9oVB4M+Q7vbJA77nTsH8x0lwdk3fjuRqbiclU0YT9uyc3JqPZgMLQiwHTEEMsCcnDxCuro88Xflw2hIZrNWd9pZiB20/jtZzbwi7l8ZUZXIX8ED8TNVtpKh6iIWozbvVydREdcWc0pd22fjdGe3yPlhnC1jxLxGvFo1WoBhlvHBNMQ433cEn+/YbGOSGPk7CMItStBZiY6CkSg1X7VUzlsC36ZDyOdPAxJm93n7gq4YK8jpKQL/ewuPLyaJgOyWi5KiE3pfiswjMed2T3NXVfevUm03IO5RPdifd4QindPmzL2s=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6560.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(376002)(346002)(136003)(366004)(396003)(39860400002)(451199018)(4326008)(66946007)(66556008)(6916009)(8676002)(83380400001)(26005)(8936002)(41300700001)(6506007)(5660300002)(6512007)(66476007)(186003)(31686004)(2906002)(316002)(38100700002)(53546011)(6486002)(6666004)(2616005)(478600001)(31696002)(36756003)(86362001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eWgxYnJDV2FXcUVmcjAydTd0eDR0NlhBc3NNLy9DdmptcTBvUG0yZHZqY2o0?=
- =?utf-8?B?Wjd5V29ZUnY3bExuMkNkYkIrc3NHVURYMVM1eHA1U1d0WU1Tem5vWWpuaHRQ?=
- =?utf-8?B?T08xd3U1Z3pKbVA1NDQwT1FWakdsSDlXcWNVUGtYTmpOUFhZc3I4aDhrVzQv?=
- =?utf-8?B?RFdxS0k4VGM3Yk40cjcvL1NkSTYzQkUzeStoRXRXa08rNjZzbm0yU2c4Y1dm?=
- =?utf-8?B?LzA1Y05nSUh1ZitkMkg0MzdWUWJjbjc2akpKa25SWk5rWUNiMFZkMFRxeVFC?=
- =?utf-8?B?UjF3eC9jWE1BLzdrTzJmbGpCOWdjckdUZ2ZMcDVOZHVnVG42cDIreUxYWkUx?=
- =?utf-8?B?Nml0cWZScXpXTXlPN3c1OVFyUVBQNEpDMkhJaXhuOERaY1c5OXZZeXQ2cGxI?=
- =?utf-8?B?UUhRUlR5OXFNQm9OQ29XZFBrM2ZmZ3dQaTRwaGJ1Y3FzNUh3WGFuNnBqQURk?=
- =?utf-8?B?NlozemNnYW5DZFFCYTBsNDdjYTlta1NEK3FTL3hHenZQcDhiWjBUempJMmY5?=
- =?utf-8?B?Y3JXNDZRb1Y2K2Rzemh4ZXpUS3JtMWRteUpVQnVzT2NKYnlaSkZqUkhnaml5?=
- =?utf-8?B?T1hCRmwxcHYxL3BHOTZBSmtnY0QvNlB0R3oyQVNVWnRtV2xUSnppS0FxSTl4?=
- =?utf-8?B?U0xlYWY2NjVLekZJZXpDUERwV2xKb0pORmRyQVREbGdqQmxiaHNIaktCTVBZ?=
- =?utf-8?B?UE53ZWZMS2lhNXBGamdTcTQzV3N4TXFhSlE1RGlGb1pjSkE1Q1dENjhsd0Fo?=
- =?utf-8?B?Mnk5OHNtcFdBajBnL0dIem5LUkwwbjBEZW9pZUlmaHQ5SW85QzV3MElsWXRw?=
- =?utf-8?B?NGhLSnAyeUF0TEViVnVpOEdrVGQ0cVorcEpPeE1SS0hYYUVxSFlBWFNVemNG?=
- =?utf-8?B?ckd2VnM2ZE9xbVg4NytpQm5jUXVBa0xwb3c3RmtmTitJWjlxVU5ldFNPS0l2?=
- =?utf-8?B?SXdDcWw1dkJYSCtHS2NLTEZVbXRjQ3N5Z2E5R0NXOFBNdFAwc0w5LzkzeHh0?=
- =?utf-8?B?SkY2OERhbHR4UmdsSGxCMkNNVXZlYy85dW1TcVBDUFF3NnRkZEtwQWQxN2pt?=
- =?utf-8?B?QmFPQWdrSmhGekRxZTE3c0hyRG4zNmdIbEpyaklhdVdOOUt3eUMwNEdrNjh5?=
- =?utf-8?B?NytaYStDcTdvWW44YWZvUk9sMGEzS204ek80NVBGTWFEWjBzQ084WTFYSFNT?=
- =?utf-8?B?VnpGQzJVUkw2akd6V29QL1FxcjlHQkZCNTNZV2dvZVk3eS9qWjJYQUxxUXRM?=
- =?utf-8?B?bDhtTUZnR1Jxa3doWmZ3d2FvQWJ4RVNiZGZURXMwSmxyS3ZOMjI1d1g4b1JG?=
- =?utf-8?B?NlV5d3MzR2FHalFJaUl4MlYvMW9jZDM1YlE5T0F5UmVLVGR3ZTlwL0dtTGNq?=
- =?utf-8?B?cExVN2g2djQwT3VHWFh5aUlESi9pQ3BYdjl3Y3grcTlGN09VZ0dkV0xXc3Nt?=
- =?utf-8?B?MEdEK29DbnY2WHdseXNaZ0hKaGJRK3NQQ0pwQTZjRnRXaldGcXlhMUVaWjhi?=
- =?utf-8?B?cVZBK0pxS3dYV2F5RGlJcmFpdkZnS3llclBQcHE3QUlub0ZJTCttUWVUdHhw?=
- =?utf-8?B?LzdIb1hEczVqWUIxY2NBMUEwaXBPUlRKc2cvOEI5THZPbGY4b0dCZ0owRk4w?=
- =?utf-8?B?dHYxR3M3amhyUVA2eXJUTVhjcmJPbTBoWUQ0d1gybGxqMUZRNnhoUHplN1Y0?=
- =?utf-8?B?VFNjdEZYdHdrYlJYOEVzNitKcFR5TENvTmYzMFdTeTV4QW5lbGRtRVhEQThK?=
- =?utf-8?B?TVRBQnQ4WkRQYVZ5cEN2VWZaek1GeFJUMis2dzlkeU00UzkvZkgrLzdzTFZV?=
- =?utf-8?B?T2o5UGxCOWZVY0EwNlZsVlhNUE9sdFJOcFc3bDVxOFFQMVVVSzNneFduSXZ0?=
- =?utf-8?B?My9KbFc3b2pWaTQ1TTdnM1lhaGJYYW5JSXhtU1NGOHMwSi9LMk1jUVJWQkZj?=
- =?utf-8?B?RXJnL3ZHMmt6OG1MSDVsWlRMcVhwM3NxVlU5ckxucjJKR1R0MFJiMEtpT254?=
- =?utf-8?B?cTZSZnRjL0xxMVFhS2NRVmV3WmsvZ3RNVTBGUzRIOCtkZm9CbXZicUhXdnBS?=
- =?utf-8?B?MVg5ektlSGVLaE85NUw0dVpoT0Fmb1RSQlp1dngwN3VFOEh5U0ppWUhyVlND?=
- =?utf-8?Q?n6rTn3eevYyvWpeBBa48TlE9q?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ace03b3d-b680-43c5-a094-08db05b4fad4
-X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6560.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Feb 2023 07:05:06.6985
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4WhyymPM/XO21ZNovBoGrzM2UGoqoqGVu3+N4UZLOhoZ2vp4vRzhLppJDJY++whLd7oYVsHFFmXyN3iPOmJNBQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB7133
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1675407169.git.daniel@makrotopia.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30.01.2023 10:21, Josef Johansson wrote:
-> On 11/21/22 11:21, Roger Pau Monne wrote:
->> --- a/arch/x86/xen/enlighten.c
->> +++ b/arch/x86/xen/enlighten.c
->> @@ -346,3 +346,30 @@ void xen_arch_unregister_cpu(int num)
->>   }
->>   EXPORT_SYMBOL(xen_arch_unregister_cpu);
->>   #endif
->> +
->> +#ifdef CONFIG_XEN_DOM0
->> +bool __init xen_processor_present(uint32_t acpi_id)
->> +{
->> +	unsigned int i, maxid;
->> +	struct xen_platform_op op = {
->> +		.cmd = XENPF_get_cpuinfo,
->> +		.interface_version = XENPF_INTERFACE_VERSION,
->> +	};
->> +	int ret = HYPERVISOR_platform_op(&op);
->> +
->> +	if (ret)
->> +		return false;
->> +
->> +	maxid = op.u.pcpu_info.max_present;
->> +	for (i = 0; i <= maxid; i++) {
->> +		op.u.pcpu_info.xen_cpuid = i;
->> +		ret = HYPERVISOR_platform_op(&op);
->> +		if (ret)
->> +			continue;
->> +		if (op.u.pcpu_info.acpi_id == acpi_id)
->> +			return op.u.pcpu_info.flags & XEN_PCPU_FLAGS_ONLINE;
->> +	}
->> +
->> +	return false;
->> +}
-> My compiler (Default GCC on Fedora 32, compiling for Qubes) complain 
-> loudly that the below was missing.
-> 
-> +}
-> +EXPORT_SYMBOL(xen_processor_present);
-> 
-> `ERROR: MODPOST xen_processor_present 
-> [drivers/xen/xen-acpi-processor.ko] undefined!`
-> 
-> Same thing with xen_sanitize_pdc in the next patch.
-> 
-> +}
-> +EXPORT_SYMBOL(xen_sanitize_pdc);
-> 
-> Everything compiled fine after those changes.
+The PPE units found in MT7622 and newer support packet and byte
+accounting of hw-offloaded flows. Add support for reading those counters
+as found in MediaTek's SDK[1], make them accessible via debugfs and add
+them to the flow offload stats.
 
-Except that you may not export __init symbols. The section mismatch checker
-should actually complain about that.
+[1]: https://git01.mediatek.com/plugins/gitiles/openwrt/feeds/mtk-openwrt-feeds/+/bc6a6a375c800dc2b80e1a325a2c732d1737df92
+Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+---
+ drivers/net/ethernet/mediatek/mtk_eth_soc.c   |   8 +-
+ drivers/net/ethernet/mediatek/mtk_eth_soc.h   |   1 +
+ drivers/net/ethernet/mediatek/mtk_ppe.c       | 110 +++++++++++++++++-
+ drivers/net/ethernet/mediatek/mtk_ppe.h       |  24 +++-
+ .../net/ethernet/mediatek/mtk_ppe_debugfs.c   |   9 +-
+ .../net/ethernet/mediatek/mtk_ppe_offload.c   |   7 ++
+ drivers/net/ethernet/mediatek/mtk_ppe_regs.h  |  14 +++
+ 7 files changed, 168 insertions(+), 5 deletions(-)
 
-Jan
+diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+index f09cd6a132c9..d50dea1f20f3 100644
+--- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
++++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+@@ -4708,7 +4708,9 @@ static int mtk_probe(struct platform_device *pdev)
+ 			u32 ppe_addr = eth->soc->reg_map->ppe_base + i * 0x400;
+ 
+ 			eth->ppe[i] = mtk_ppe_init(eth, eth->base + ppe_addr,
+-						   eth->soc->offload_version, i);
++						   eth->soc->offload_version, i,
++						   eth->soc->has_accounting);
++
+ 			if (!eth->ppe[i]) {
+ 				err = -ENOMEM;
+ 				goto err_deinit_ppe;
+@@ -4830,6 +4832,7 @@ static const struct mtk_soc_data mt7622_data = {
+ 	.required_pctl = false,
+ 	.offload_version = 2,
+ 	.hash_offset = 2,
++	.has_accounting = true,
+ 	.foe_entry_size = sizeof(struct mtk_foe_entry) - 16,
+ 	.txrx = {
+ 		.txd_size = sizeof(struct mtk_tx_dma),
+@@ -4867,6 +4870,7 @@ static const struct mtk_soc_data mt7629_data = {
+ 	.hw_features = MTK_HW_FEATURES,
+ 	.required_clks = MT7629_CLKS_BITMAP,
+ 	.required_pctl = false,
++	.has_accounting = true,
+ 	.txrx = {
+ 		.txd_size = sizeof(struct mtk_tx_dma),
+ 		.rxd_size = sizeof(struct mtk_rx_dma),
+@@ -4887,6 +4891,7 @@ static const struct mtk_soc_data mt7981_data = {
+ 	.offload_version = 2,
+ 	.hash_offset = 4,
+ 	.foe_entry_size = sizeof(struct mtk_foe_entry),
++	.has_accounting = true,
+ 	.txrx = {
+ 		.txd_size = sizeof(struct mtk_tx_dma_v2),
+ 		.rxd_size = sizeof(struct mtk_rx_dma_v2),
+@@ -4907,6 +4912,7 @@ static const struct mtk_soc_data mt7986_data = {
+ 	.offload_version = 2,
+ 	.hash_offset = 4,
+ 	.foe_entry_size = sizeof(struct mtk_foe_entry),
++	.has_accounting = true,
+ 	.txrx = {
+ 		.txd_size = sizeof(struct mtk_tx_dma_v2),
+ 		.rxd_size = sizeof(struct mtk_rx_dma_v2),
+diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.h b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
+index 20d8ea20f164..982482712e0a 100644
+--- a/drivers/net/ethernet/mediatek/mtk_eth_soc.h
++++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
+@@ -1085,6 +1085,7 @@ struct mtk_soc_data {
+ 	u8		hash_offset;
+ 	u16		foe_entry_size;
+ 	netdev_features_t hw_features;
++	bool		has_accounting;
+ 	struct {
+ 		u32	txd_size;
+ 		u32	rxd_size;
+diff --git a/drivers/net/ethernet/mediatek/mtk_ppe.c b/drivers/net/ethernet/mediatek/mtk_ppe.c
+index 6883eb34cd8b..26fa89afc69a 100644
+--- a/drivers/net/ethernet/mediatek/mtk_ppe.c
++++ b/drivers/net/ethernet/mediatek/mtk_ppe.c
+@@ -74,6 +74,46 @@ static int mtk_ppe_wait_busy(struct mtk_ppe *ppe)
+ 	return ret;
+ }
+ 
++static int mtk_ppe_mib_wait_busy(struct mtk_ppe *ppe)
++{
++	int ret;
++	u32 val;
++
++	ret = readl_poll_timeout(ppe->base + MTK_PPE_MIB_SER_CR, val,
++				 !(val & MTK_PPE_MIB_SER_CR_ST),
++				 20, MTK_PPE_WAIT_TIMEOUT_US);
++
++	if (ret)
++		dev_err(ppe->dev, "MIB table busy");
++
++	return ret;
++}
++
++static int mtk_mib_entry_read(struct mtk_ppe *ppe, u16 index, u64 *bytes, u64 *packets)
++{
++	u32 val, cnt_r0, cnt_r1, cnt_r2;
++	u32 byte_cnt_low, byte_cnt_high, pkt_cnt_low, pkt_cnt_high;
++
++	val = FIELD_PREP(MTK_PPE_MIB_SER_CR_ADDR, index) | MTK_PPE_MIB_SER_CR_ST;
++	ppe_w32(ppe, MTK_PPE_MIB_SER_CR, val);
++
++	if (mtk_ppe_mib_wait_busy(ppe))
++		return -ETIMEDOUT;
++
++	cnt_r0 = readl(ppe->base + MTK_PPE_MIB_SER_R0);
++	cnt_r1 = readl(ppe->base + MTK_PPE_MIB_SER_R1);
++	cnt_r2 = readl(ppe->base + MTK_PPE_MIB_SER_R2);
++
++	byte_cnt_low = FIELD_GET(MTK_PPE_MIB_SER_R0_BYTE_CNT_LOW, cnt_r0);
++	byte_cnt_high = FIELD_GET(MTK_PPE_MIB_SER_R1_BYTE_CNT_HIGH, cnt_r1);
++	pkt_cnt_low = FIELD_GET(MTK_PPE_MIB_SER_R1_PKT_CNT_LOW, cnt_r1);
++	pkt_cnt_high = FIELD_GET(MTK_PPE_MIB_SER_R2_PKT_CNT_HIGH, cnt_r2);
++	*bytes = ((u64)byte_cnt_high << 32) | byte_cnt_low;
++	*packets = (pkt_cnt_high << 16) | pkt_cnt_low;
++
++	return 0;
++}
++
+ static void mtk_ppe_cache_clear(struct mtk_ppe *ppe)
+ {
+ 	ppe_set(ppe, MTK_PPE_CACHE_CTL, MTK_PPE_CACHE_CTL_CLEAR);
+@@ -458,6 +498,13 @@ __mtk_foe_entry_clear(struct mtk_ppe *ppe, struct mtk_flow_entry *entry)
+ 		hwe->ib1 &= ~MTK_FOE_IB1_STATE;
+ 		hwe->ib1 |= FIELD_PREP(MTK_FOE_IB1_STATE, MTK_FOE_STATE_INVALID);
+ 		dma_wmb();
++		if (ppe->accounting) {
++			struct mtk_foe_accounting *acct;
++
++			acct = ppe->acct_table + entry->hash * sizeof(*acct);
++			acct->packets = 0;
++			acct->bytes = 0;
++		}
+ 	}
+ 	entry->hash = 0xffff;
+ 
+@@ -565,6 +612,9 @@ __mtk_foe_entry_commit(struct mtk_ppe *ppe, struct mtk_foe_entry *entry,
+ 	wmb();
+ 	hwe->ib1 = entry->ib1;
+ 
++	if (ppe->accounting)
++		*mtk_foe_entry_ib2(eth, hwe) |= MTK_FOE_IB2_MIB_CNT;
++
+ 	dma_wmb();
+ 
+ 	mtk_ppe_cache_clear(ppe);
+@@ -756,14 +806,42 @@ int mtk_ppe_prepare_reset(struct mtk_ppe *ppe)
+ 	return mtk_ppe_wait_busy(ppe);
+ }
+ 
++struct mtk_foe_accounting *mtk_foe_entry_get_mib(struct mtk_ppe *ppe, u32 index,
++						 struct mtk_foe_accounting *diff)
++{
++	struct mtk_foe_accounting *acct;
++	int size = sizeof(struct mtk_foe_accounting);
++	u64 bytes, packets;
++
++	if (!ppe->accounting)
++		return NULL;
++
++	if (mtk_mib_entry_read(ppe, index, &bytes, &packets))
++		return NULL;
++
++	acct = ppe->acct_table + index * size;
++
++	acct->bytes += bytes;
++	acct->packets += packets;
++
++	if (diff) {
++		diff->bytes = bytes;
++		diff->packets = packets;
++	}
++
++	return acct;
++}
++
+ struct mtk_ppe *mtk_ppe_init(struct mtk_eth *eth, void __iomem *base,
+-			     int version, int index)
++			     int version, int index, bool accounting)
+ {
+ 	const struct mtk_soc_data *soc = eth->soc;
+ 	struct device *dev = eth->dev;
+ 	struct mtk_ppe *ppe;
+ 	u32 foe_flow_size;
+ 	void *foe;
++	struct mtk_mib_entry *mib;
++	struct mtk_foe_accounting *acct;
+ 
+ 	ppe = devm_kzalloc(dev, sizeof(*ppe), GFP_KERNEL);
+ 	if (!ppe)
+@@ -778,6 +856,7 @@ struct mtk_ppe *mtk_ppe_init(struct mtk_eth *eth, void __iomem *base,
+ 	ppe->eth = eth;
+ 	ppe->dev = dev;
+ 	ppe->version = version;
++	ppe->accounting = accounting;
+ 
+ 	foe = dmam_alloc_coherent(ppe->dev,
+ 				  MTK_PPE_ENTRIES * soc->foe_entry_size,
+@@ -793,6 +872,25 @@ struct mtk_ppe *mtk_ppe_init(struct mtk_eth *eth, void __iomem *base,
+ 	if (!ppe->foe_flow)
+ 		goto err_free_l2_flows;
+ 
++	if (accounting) {
++		mib = dmam_alloc_coherent(ppe->dev, MTK_PPE_ENTRIES * sizeof(*mib),
++					  &ppe->mib_phys, GFP_KERNEL);
++		if (!mib)
++			return NULL;
++
++		memset(mib, 0, MTK_PPE_ENTRIES * sizeof(*mib));
++
++		ppe->mib_table = mib;
++
++		acct = devm_kzalloc(dev, MTK_PPE_ENTRIES * sizeof(*acct),
++				    GFP_KERNEL);
++
++		if (!acct)
++			return NULL;
++
++		ppe->acct_table = acct;
++	}
++
+ 	mtk_ppe_debugfs_init(ppe, index);
+ 
+ 	return ppe;
+@@ -922,6 +1020,16 @@ void mtk_ppe_start(struct mtk_ppe *ppe)
+ 		ppe_w32(ppe, MTK_PPE_DEFAULT_CPU_PORT1, 0xcb777);
+ 		ppe_w32(ppe, MTK_PPE_SBW_CTRL, 0x7f);
+ 	}
++
++	if (ppe->accounting && ppe->mib_phys) {
++		ppe_w32(ppe, MTK_PPE_MIB_TB_BASE, ppe->mib_phys);
++		ppe_m32(ppe, MTK_PPE_MIB_CFG, MTK_PPE_MIB_CFG_EN,
++			MTK_PPE_MIB_CFG_EN);
++		ppe_m32(ppe, MTK_PPE_MIB_CFG, MTK_PPE_MIB_CFG_RD_CLR,
++			MTK_PPE_MIB_CFG_RD_CLR);
++		ppe_m32(ppe, MTK_PPE_MIB_CACHE_CTL, MTK_PPE_MIB_CACHE_CTL_EN,
++			MTK_PPE_MIB_CFG_RD_CLR);
++	}
+ }
+ 
+ int mtk_ppe_stop(struct mtk_ppe *ppe)
+diff --git a/drivers/net/ethernet/mediatek/mtk_ppe.h b/drivers/net/ethernet/mediatek/mtk_ppe.h
+index 5e8bc48252b1..db43fc9762bd 100644
+--- a/drivers/net/ethernet/mediatek/mtk_ppe.h
++++ b/drivers/net/ethernet/mediatek/mtk_ppe.h
+@@ -57,6 +57,7 @@ enum {
+ #define MTK_FOE_IB2_MULTICAST		BIT(8)
+ 
+ #define MTK_FOE_IB2_WDMA_QID2		GENMASK(13, 12)
++#define MTK_FOE_IB2_MIB_CNT		BIT(15)
+ #define MTK_FOE_IB2_WDMA_DEVIDX		BIT(16)
+ #define MTK_FOE_IB2_WDMA_WINFO		BIT(17)
+ 
+@@ -285,16 +286,34 @@ struct mtk_flow_entry {
+ 	unsigned long cookie;
+ };
+ 
++struct mtk_mib_entry {
++	u32	byt_cnt_l;
++	u16	byt_cnt_h;
++	u32	pkt_cnt_l;
++	u8	pkt_cnt_h;
++	u8	_rsv0;
++	u32	_rsv1;
++} __packed;
++
++struct mtk_foe_accounting {
++	u64	bytes;
++	u64	packets;
++};
++
+ struct mtk_ppe {
+ 	struct mtk_eth *eth;
+ 	struct device *dev;
+ 	void __iomem *base;
+ 	int version;
+ 	char dirname[5];
++	bool accounting;
+ 
+ 	void *foe_table;
+ 	dma_addr_t foe_phys;
+ 
++	struct mtk_mib_entry *mib_table;
++	dma_addr_t mib_phys;
++
+ 	u16 foe_check_time[MTK_PPE_ENTRIES];
+ 	struct hlist_head *foe_flow;
+ 
+@@ -304,7 +323,8 @@ struct mtk_ppe {
+ };
+ 
+ struct mtk_ppe *mtk_ppe_init(struct mtk_eth *eth, void __iomem *base,
+-			     int version, int index);
++			     int version, int index, bool accounting);
++
+ void mtk_ppe_deinit(struct mtk_eth *eth);
+ void mtk_ppe_start(struct mtk_ppe *ppe);
+ int mtk_ppe_stop(struct mtk_ppe *ppe);
+@@ -359,5 +379,7 @@ int mtk_foe_entry_commit(struct mtk_ppe *ppe, struct mtk_flow_entry *entry);
+ void mtk_foe_entry_clear(struct mtk_ppe *ppe, struct mtk_flow_entry *entry);
+ int mtk_foe_entry_idle_time(struct mtk_ppe *ppe, struct mtk_flow_entry *entry);
+ int mtk_ppe_debugfs_init(struct mtk_ppe *ppe, int index);
++struct mtk_foe_accounting *mtk_foe_entry_get_mib(struct mtk_ppe *ppe, u32 index,
++						 struct mtk_foe_accounting *diff);
+ 
+ #endif
+diff --git a/drivers/net/ethernet/mediatek/mtk_ppe_debugfs.c b/drivers/net/ethernet/mediatek/mtk_ppe_debugfs.c
+index 391b071bcff3..39775740340b 100644
+--- a/drivers/net/ethernet/mediatek/mtk_ppe_debugfs.c
++++ b/drivers/net/ethernet/mediatek/mtk_ppe_debugfs.c
+@@ -82,6 +82,7 @@ mtk_ppe_debugfs_foe_show(struct seq_file *m, void *private, bool bind)
+ 		struct mtk_foe_entry *entry = mtk_foe_get_entry(ppe, i);
+ 		struct mtk_foe_mac_info *l2;
+ 		struct mtk_flow_addr_info ai = {};
++		struct mtk_foe_accounting *acct;
+ 		unsigned char h_source[ETH_ALEN];
+ 		unsigned char h_dest[ETH_ALEN];
+ 		int type, state;
+@@ -95,6 +96,8 @@ mtk_ppe_debugfs_foe_show(struct seq_file *m, void *private, bool bind)
+ 		if (bind && state != MTK_FOE_STATE_BIND)
+ 			continue;
+ 
++		acct = mtk_foe_entry_get_mib(ppe, i, NULL);
++
+ 		type = FIELD_GET(MTK_FOE_IB1_PACKET_TYPE, entry->ib1);
+ 		seq_printf(m, "%05x %s %7s", i,
+ 			   mtk_foe_entry_state_str(state),
+@@ -153,9 +156,11 @@ mtk_ppe_debugfs_foe_show(struct seq_file *m, void *private, bool bind)
+ 		*((__be16 *)&h_dest[4]) = htons(l2->dest_mac_lo);
+ 
+ 		seq_printf(m, " eth=%pM->%pM etype=%04x"
+-			      " vlan=%d,%d ib1=%08x ib2=%08x\n",
++			      " vlan=%d,%d ib1=%08x ib2=%08x"
++			      " packets=%lld bytes=%lld\n",
+ 			   h_source, h_dest, ntohs(l2->etype),
+-			   l2->vlan1, l2->vlan2, entry->ib1, ib2);
++			   l2->vlan1, l2->vlan2, entry->ib1, ib2,
++			   acct->packets, acct->bytes);
+ 	}
+ 
+ 	return 0;
+diff --git a/drivers/net/ethernet/mediatek/mtk_ppe_offload.c b/drivers/net/ethernet/mediatek/mtk_ppe_offload.c
+index 81afd5ee3fbf..832e11ad9a16 100644
+--- a/drivers/net/ethernet/mediatek/mtk_ppe_offload.c
++++ b/drivers/net/ethernet/mediatek/mtk_ppe_offload.c
+@@ -497,6 +497,7 @@ static int
+ mtk_flow_offload_stats(struct mtk_eth *eth, struct flow_cls_offload *f)
+ {
+ 	struct mtk_flow_entry *entry;
++	struct mtk_foe_accounting diff;
+ 	u32 idle;
+ 
+ 	entry = rhashtable_lookup(&eth->flow_table, &f->cookie,
+@@ -507,6 +508,12 @@ mtk_flow_offload_stats(struct mtk_eth *eth, struct flow_cls_offload *f)
+ 	idle = mtk_foe_entry_idle_time(eth->ppe[entry->ppe_index], entry);
+ 	f->stats.lastused = jiffies - idle * HZ;
+ 
++	if (entry->hash != 0xFFFF) {
++		mtk_foe_entry_get_mib(eth->ppe[entry->ppe_index], entry->hash, &diff);
++		f->stats.pkts += diff.packets;
++		f->stats.bytes += diff.bytes;
++	}
++
+ 	return 0;
+ }
+ 
+diff --git a/drivers/net/ethernet/mediatek/mtk_ppe_regs.h b/drivers/net/ethernet/mediatek/mtk_ppe_regs.h
+index 0fdb983b0a88..a2e61b3eb006 100644
+--- a/drivers/net/ethernet/mediatek/mtk_ppe_regs.h
++++ b/drivers/net/ethernet/mediatek/mtk_ppe_regs.h
+@@ -149,6 +149,20 @@ enum {
+ 
+ #define MTK_PPE_MIB_TB_BASE			0x338
+ 
++#define MTK_PPE_MIB_SER_CR			0x33C
++#define MTK_PPE_MIB_SER_CR_ST			BIT(16)
++#define MTK_PPE_MIB_SER_CR_ADDR			GENMASK(13, 0)
++
++#define MTK_PPE_MIB_SER_R0			0x340
++#define MTK_PPE_MIB_SER_R0_BYTE_CNT_LOW		GENMASK(31, 0)
++
++#define MTK_PPE_MIB_SER_R1			0x344
++#define MTK_PPE_MIB_SER_R1_PKT_CNT_LOW		GENMASK(31, 16)
++#define MTK_PPE_MIB_SER_R1_BYTE_CNT_HIGH	GENMASK(15, 0)
++
++#define MTK_PPE_MIB_SER_R2			0x348
++#define MTK_PPE_MIB_SER_R2_PKT_CNT_HIGH		GENMASK(23, 0)
++
+ #define MTK_PPE_MIB_CACHE_CTL			0x350
+ #define MTK_PPE_MIB_CACHE_CTL_EN		BIT(0)
+ #define MTK_PPE_MIB_CACHE_CTL_FLUSH		BIT(2)
+-- 
+2.39.1
+
