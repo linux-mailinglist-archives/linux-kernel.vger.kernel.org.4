@@ -2,107 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66D11689C11
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 15:42:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3962F689C13
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 15:42:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232100AbjBCOlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 09:41:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55596 "EHLO
+        id S233373AbjBCOmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 09:42:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231233AbjBCOlq (ORCPT
+        with ESMTP id S231233AbjBCOmH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 09:41:46 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C05414C00;
-        Fri,  3 Feb 2023 06:41:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 0BCE8CE303C;
-        Fri,  3 Feb 2023 14:41:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73A98C433A0;
-        Fri,  3 Feb 2023 14:41:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675435301;
-        bh=aSsCAsgpLn8Nh2RoLgCu1FwifDval96mr38LdqDofP4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=lQARH19+JJc/qQ657fHWRjoOsZ7uM7xGiTACSr4Z7TpaOID0SQHPeDW1QSfCSSE+y
-         a7bvfj0+8l0DsbwuGhkXfD6tLSaqmaapz01S1pmZeBEzDTxoLUaWXrDIoLXfSjBN1u
-         SEInskwTuXKoSXMlk5EkrMREPMPc0BkoN/609UxQYw4JQaBy/5+J3AlbBZWXlrBq9v
-         MaDKx8xxgipmb23CH6Qp5lITlrfLoMdfZ3hrxaWijHjU/N6z+E+oqrrRXDBazAvz5s
-         HYsR/VzG4OSByOG/aDq9RSIKohWhmqU2Lhsv08cHrA6ll/XsfyGCdukZmgZlOK+0ZA
-         9NNAmk+GRo9Fw==
-Received: by mail-vs1-f46.google.com with SMTP id e9so5575958vsj.3;
-        Fri, 03 Feb 2023 06:41:41 -0800 (PST)
-X-Gm-Message-State: AO0yUKUvlUzp9VMJeHLeMm76KuF75w666Q90UfgvFAiQU4iYnVzk+zuH
-        QJOCgH5EFxG9zlq6enxwXe5zO+xvjRRqK3OGMg==
-X-Google-Smtp-Source: AK7set91RP4lU4aTvuhe1XUgAHWEWaGbEJPsanRYf49Cujn2Gdpsc3aBBiPBWZFzfWUsAj6GCPQGp5EnCAQIU7z2r0w=
-X-Received: by 2002:a05:6102:3e0c:b0:3b5:1fe4:f1c2 with SMTP id
- j12-20020a0561023e0c00b003b51fe4f1c2mr1612207vsv.0.1675435300404; Fri, 03 Feb
- 2023 06:41:40 -0800 (PST)
+        Fri, 3 Feb 2023 09:42:07 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 475CD8B7F5;
+        Fri,  3 Feb 2023 06:42:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675435320; x=1706971320;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=RMCMtJ0+2KFqymFuG/b0xBs6EMQkwUieM72Qnjw5wF4=;
+  b=HMtGY4GlHOsiZmFQIVY7ZkE/9UxkFXHTHo/08DovjHkssvBEF+HwvRTd
+   nbqXTTMFNabvZrj1F1bNG+ppep25yG79UjxYLPVvCgQ5CPPJGWwPFeDxK
+   oYGIWHJ7gl109+gyTPiquR8rBYIcIZmNKuNBp65Iutkh2v7Gb9SXuwTOp
+   Jhq7mtsLIZWZuO5AzSjZa7pXGCPO03Gn4moWah1BXCAPIbyTbsnPvgyVe
+   Uzt/wAXjWuaF7YyfvLnB1b1ezD1H9aqofctOPEgAZ3afgq5gjWdXPoXty
+   UpTUGpKdePR7FIshLr12QAbvwBks6t+alLrfcvv5c/OOVDN3l97+jJLw1
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="316756523"
+X-IronPort-AV: E=Sophos;i="5.97,270,1669104000"; 
+   d="scan'208";a="316756523"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2023 06:41:59 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="696177527"
+X-IronPort-AV: E=Sophos;i="5.97,270,1669104000"; 
+   d="scan'208";a="696177527"
+Received: from rmoone2-mobl.amr.corp.intel.com (HELO [10.251.22.49]) ([10.251.22.49])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2023 06:41:58 -0800
+Message-ID: <e4350e62-b1b4-ad1f-d757-959dace44402@linux.intel.com>
+Date:   Fri, 3 Feb 2023 06:41:50 -0800
 MIME-Version: 1.0
-References: <20230203-dt-bindings-network-class-v1-0-452e0375200d@jannau.net>
-In-Reply-To: <20230203-dt-bindings-network-class-v1-0-452e0375200d@jannau.net>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Fri, 3 Feb 2023 08:41:28 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKD7gD86_B93M19rBCWn+rmSw24vOGEhqi9Nvne1Xixwg@mail.gmail.com>
-Message-ID: <CAL_JsqKD7gD86_B93M19rBCWn+rmSw24vOGEhqi9Nvne1Xixwg@mail.gmail.com>
-Subject: Re: [PATCH RFC 0/3] dt-bindings: net: Add network-class.yaml schema
-To:     Janne Grunau <j@jannau.net>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mailing List <devicetree-spec@vger.kernel.org>,
-        Kalle Valo <kvalo@kernel.org>, van Spriel <arend@broadcom.com>,
-        =?UTF-8?B?SsOpcsO0bWUgUG91aWxsZXI=?= <jerome.pouiller@silabs.com>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [External] Re: [PATCH v6 06/11] x86/smpboot: Support parallel
+ startup of secondary CPUs
+To:     David Woodhouse <dwmw2@infradead.org>,
+        Usama Arif <usama.arif@bytedance.com>, tglx@linutronix.de
+Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, x86@kernel.org, pbonzini@redhat.com,
+        paulmck@kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, rcu@vger.kernel.org, mimoja@mimoja.de,
+        hewenliang4@huawei.com, thomas.lendacky@amd.com, seanjc@google.com,
+        pmenzel@molgen.mpg.de, fam.zheng@bytedance.com,
+        punit.agrawal@bytedance.com, simon.evans@bytedance.com,
+        liangma@liangbit.com
+References: <20230202215625.3248306-1-usama.arif@bytedance.com>
+ <20230202215625.3248306-7-usama.arif@bytedance.com>
+ <dac090d2a61137b9e2fecd6cb3bfb4d5a9656fb6.camel@infradead.org>
+ <fb3e75fa-1a6f-0570-218f-ba9133fb72c6@bytedance.com>
+ <fb72e7ae7b78e75a53acdb62960bdee8de5cb207.camel@infradead.org>
+Content-Language: en-US
+From:   Arjan van de Ven <arjan@linux.intel.com>
+In-Reply-To: <fb72e7ae7b78e75a53acdb62960bdee8de5cb207.camel@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 3, 2023 at 7:56 AM Janne Grunau <j@jannau.net> wrote:
->
-> The Devicetree Specification, Release v0.3 specifies in section 4.3.1
-> a "Network Class Binding". This covers MAC address and maximal frame
-> size properties. "local-mac-address" and "mac-address" with a fixed
-> address-size of 48 bits is already in the ethernet-controller.yaml
-> schema so move those over.
-> I think the only commonly used values for address-size are 48 and 64
-> bits (EUI-48 and EUI-64). Unfortunately I was not able to restrict the
-> mac-address size based on the address-size. This seems to be an side
-> effect of the array definition and I was not able to restrict "minItems"
-> or "maxItems" based on the address-size value in an "if"-"then"-"else"
-> block.
-> An easy way out would be to restrict address-size to 48-bits for now.
+On 2/3/2023 12:14 AM, David Woodhouse wrote:
+> On Thu, 2023-02-02 at 22:50 +0000, Usama Arif wrote:
+>>
+>> Ah, sorry about that, should have caught it while reviewing before
+>> posting. To think of it, it might be better to squash this and next AMD
+>> disabling patch, if anyone testing on AMD ever happens to check out at
+>> this specific patch, their machine might not boot :).
+>>
+> 
+> Nah, we don't actually *enable* parallel boot until the next patch
+> anyway. At this point we're only laying the groundwork. I think it's
+> best separate.
+> 
+>> Will repost only after getting the OK for the rest of the patches
+>> along with addressing any other comments that come up.
+> 
+> Ack. And hopefully the missing SoB from both Thomas and Arjan for their
+> parts. Part of the reasoning for the lack of SoB from Arjan might have
+> been that we haven't finished doing the thinking about how this works
+> in all cases, with non-constant TSC and other stuff. Let's make sure we
+> give that a long hard stare.
 
-I've never seen 64-bits used...
+most of it is that I need to sit down for some real time and have a think through it ;)
 
-> I've ignored "max-frame-size" since the description in
-> ethernet-controller.yaml claims there is a contradiction in the
-> Devicetree specification. I suppose it is describing the property
-> "max-frame-size" with "Specifies maximum packet length ...".
+for all the common cases / modern HW it will be ok... but all the rest???
 
-Please include it and we'll fix the spec. It is clearly wrong. 2 nios
-boards use 1518 and the consumer for them says it is MTU. Everything
-else clearly uses mtu with 1500 or 9000.
+maybe we need a strict(er) safety valve on where this is used and then over time
+widen the usage?
 
-> My understanding from the dt-schema README is that network-class.yaml
-> should live in the dt-schema repository since it describes properties
-> from the Devicetree specification. How is the synchronization handled in
-> this case? The motivation for this series is to fix dtbs_check failures
-> for Apple silicon devices both in the tree and upcoming ones.
+(after all, a regression means revert, and maybe it's better to only revert "add CPU type X" than
+revert the whole series)
 
-Let's add it to the kernel, then later we can copy it to dtschema,
-bump the minimum version the kernel requires, and delete the kernel
-copy.
-
-Rob
