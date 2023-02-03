@@ -2,74 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C4D968A6E7
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 00:26:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A1F368A6EB
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 00:31:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232929AbjBCX0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 18:26:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44062 "EHLO
+        id S231701AbjBCXbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 18:31:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231176AbjBCX0Z (ORCPT
+        with ESMTP id S229626AbjBCXbA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 18:26:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC15AA6BA1;
-        Fri,  3 Feb 2023 15:26:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4CFEBB82C4F;
-        Fri,  3 Feb 2023 23:26:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C786C433D2;
-        Fri,  3 Feb 2023 23:26:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675466782;
-        bh=Q5g8PSh1zSKFvJTbAZ547zknZ1HdU7Xx46yuow9NTHU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aD7SedxVfkNqU8z1wNCRjhgdXwkMCjRC8juKxEKd5F3RD6tmvcybpVwYpS7/EfXVw
-         nduyAWuSR/wNhEEoSzupN9ZiiTEJcThkj2szGBB6bJLsjdCh6Brm85YuQ1cc34cNdS
-         r0h3vwAoKxDwarosQ778/jM8LQnEi9wPd4lFvy2zfZ+gYcNltVPJQK1euoGJjG2+8V
-         NMimPMkmXoGmDiVOlcb9cI9DZp8TGuDOpWiwaHEmkR9LBp5uQbqeWgLXAo5Mo8JZEA
-         mHosWCf4mX9ug7Nnt46gVpBykf2CnokJ+jSNsxq6QIWNRwjyyN6izpVRENuVYkDKRE
-         KfvmGjkmIQc+w==
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     konrad.dybcio@linaro.org, krzysztof.kozlowski+dt@linaro.org,
-        Rajendra Nayak <quic_rjendra@quicinc.com>, robh+dt@kernel.org,
-        agross@kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mka@chromium.org,
-        dianders@chromium.org
-Subject: Re: (subset) [PATCH v4 1/2] dt-bindings: arm: qcom: Document the sc7280 CRD Pro boards
-Date:   Fri,  3 Feb 2023 15:28:41 -0800
-Message-Id: <167546690943.378525.11095474745334895422.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20221216112918.1243-1-quic_rjendra@quicinc.com>
-References: <20221216112918.1243-1-quic_rjendra@quicinc.com>
+        Fri, 3 Feb 2023 18:31:00 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED731F4A8;
+        Fri,  3 Feb 2023 15:30:59 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id dr8so19493203ejc.12;
+        Fri, 03 Feb 2023 15:30:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=awV/5XZjt2KEg87Bf/oa/VcPR36YkggADN6IG+/kHnU=;
+        b=KBaP1kJIyjx67NBfRIntmzyQWCIjJg+Fg435SSWO7zLbkMtGKZYNQQ5HokhIIA60sE
+         WffYDlu6x5ArBynez4C6FMR3UV395pTjC5Pkqduj4De98lcEnXrHF3htvXWB2Z+qOvzr
+         cHFhj9BYj0/dWCYaq4X6QoKBxaAPFUD8XbpXLsRNWzbWzWCLgVn9VolBmvji5JmwGDq4
+         Ra8a5+ItO8kvj/mxsaQfhuzwbVUw5EdFZ/TCo27SRy43M9mKCrCBXyMHmD/e9pu50bI1
+         ZDVtVTj4pLvmBjzQWVEc7Nzx2Fw0KsKHp3dTqaCKVMfsTdeHx/VsA1Q4yBfmFOmqaI8Z
+         F6ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=awV/5XZjt2KEg87Bf/oa/VcPR36YkggADN6IG+/kHnU=;
+        b=khEBFY13fJ/7JQe++8vrq+KmbaUP9rb3BIvgl5L6qwEIsGSqtMWXjtAErBo+h7PmjQ
+         HcXshFgQp1BejI5zgLzSoyfl6yw2asLLDBlvnUPEN3TcYR6oLI1sScoZjFkArKKYoygB
+         9/YAtK93J+MwI3wF803H0W+qPqS/4lBdZIJqlynTjBG2Yd7BjHKE4Q2itbapGrLJzaGQ
+         h8l3y0rzH+Sgvx5TskBhumXRsFBnUL3YwiwfRCClvv2ZzzYa1OIyZRzCyDMw+OSXB9LD
+         UTVSf04Kz5Zp5h3uGigUXxN9RYecTlPmE3H2fSns1U0PTUsheHsMr3IrRg81GpaU82kR
+         0A3w==
+X-Gm-Message-State: AO0yUKUSJZ4ecLNajgnfwEhidJoxjHyzfVFQ+0e3fTN9pxWDgJD7I4cO
+        ZxyY1+Yh8PnYgBxAPzZ6IIg=
+X-Google-Smtp-Source: AK7set/2GkFmiMzurtR/PYCAUMldAoVJ+T91vca/Cqd+u5hBB2MhV6abELpyLq2WN0iXq1emFgShYg==
+X-Received: by 2002:a17:907:2d28:b0:88e:682e:3a9e with SMTP id gs40-20020a1709072d2800b0088e682e3a9emr13757225ejc.61.1675467058238;
+        Fri, 03 Feb 2023 15:30:58 -0800 (PST)
+Received: from skbuf ([188.26.57.116])
+        by smtp.gmail.com with ESMTPSA id m19-20020a1709061ed300b0088ed7de4821sm2024587ejj.158.2023.02.03.15.30.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Feb 2023 15:30:57 -0800 (PST)
+Date:   Sat, 4 Feb 2023 01:30:55 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Rakesh Sankaranarayanan <rakesh.sankaranarayanan@microchip.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        andrew@lunn.ch, f.fainelli@gmail.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
+        linux@armlinux.org.uk
+Subject: Re: [RFC PATCH net-next 06/11] net: dsa: microchip: lan937x: get
+ cascade tag protocol
+Message-ID: <20230203233055.vdctyjmdeam4tj5p@skbuf>
+References: <20230202125930.271740-1-rakesh.sankaranarayanan@microchip.com>
+ <20230202125930.271740-7-rakesh.sankaranarayanan@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230202125930.271740-7-rakesh.sankaranarayanan@microchip.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 16 Dec 2022 16:59:17 +0530, Rajendra Nayak wrote:
-> Add compatibles for the Pro SKU of the sc7280 CRD boards
-> which come with a Pro variant of the qcard.
-> The Pro qcard variant has smps9 from pm8350c ganged up with
-> smps7 and smps8.
+On Thu, Feb 02, 2023 at 06:29:25PM +0530, Rakesh Sankaranarayanan wrote:
+> Update ksz_get_tag_protocol to return separate tag protocol if
+> switch is connected in cascade mode. Variable ds->dst->last_switch
+> will contain total number of switches registered. For cascaded
+> connection alone, this will be more than zero.
+
+Nope, last_switch does not contain the total number of switches
+registered, but the index of the last switch in this tree. DSA does not
+assume that the indices are consecutive.
+
+If you make any assumption in the driver regarding switch numbering in a
+cascade setup, it is an assumption that a device tree writer who is not
+you needs to know about. So you must document it in
+Documentation/devicetree/bindings/net/dsa/microchip,lan937x.yaml.
+
 > 
+> Signed-off-by: Rakesh Sankaranarayanan <rakesh.sankaranarayanan@microchip.com>
+> ---
+>  drivers/net/dsa/microchip/ksz_common.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
 > 
+> diff --git a/drivers/net/dsa/microchip/ksz_common.c b/drivers/net/dsa/microchip/ksz_common.c
+> index adf8391dd29f..2160a3e61a5a 100644
+> --- a/drivers/net/dsa/microchip/ksz_common.c
+> +++ b/drivers/net/dsa/microchip/ksz_common.c
+> @@ -2567,9 +2567,13 @@ static enum dsa_tag_protocol ksz_get_tag_protocol(struct dsa_switch *ds,
+>  	    dev->chip_id == KSZ9567_CHIP_ID)
+>  		proto = DSA_TAG_PROTO_KSZ9477;
+>  
+> -	if (is_lan937x(dev))
+> +	if (is_lan937x(dev)) {
+>  		proto = DSA_TAG_PROTO_LAN937X_VALUE;
+>  
+> +		if (ds->dst->last_switch)
+> +			proto = DSA_TAG_PROTO_LAN937X_CASCADE_VALUE;
+> +	}
 
-Applied, thanks!
+Also nope, see the comment on patch 1.
 
-[2/2] arm64: dts: qcom: sc7280: Add a herobrine CRD Pro SKU
-      commit: f816cda0ab2b0250e225dfda41c107733a74faf7
-
-Best regards,
--- 
-Bjorn Andersson <andersson@kernel.org>
+> +
+>  	return proto;
+>  }
+>  
+> -- 
+> 2.34.1
+> 
