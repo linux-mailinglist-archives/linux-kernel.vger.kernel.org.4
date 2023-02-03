@@ -2,51 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAAB9689861
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 13:17:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 249B8689864
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 13:20:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231819AbjBCMRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 07:17:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59692 "EHLO
+        id S232138AbjBCMUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 07:20:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231610AbjBCMRU (ORCPT
+        with ESMTP id S229799AbjBCMUF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 07:17:20 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 395EF9DEDE;
-        Fri,  3 Feb 2023 04:17:19 -0800 (PST)
+        Fri, 3 Feb 2023 07:20:05 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F9070D55;
+        Fri,  3 Feb 2023 04:20:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675426639; x=1706962639;
-  h=from:to:cc:subject:date:message-id;
-  bh=HDkCFge+HqbMLRAoh8YMHpbr8i9UoJQNnlQE7bkgs/E=;
-  b=kBxQ5785R40kP66iMabySlwvUvAEF1F4E9dr3G90TWcfDiKfADNms5Wl
-   BuLhZDaW5/2YB3K1HVUTc8pqm4YEtlLiwe75h+0tzglFN+4UcaAWhQKBa
-   I5xiSIGh9fin7za/gq0gZu9n6uUchGi7PkOTHYcnF/GpaFYXqfK5k5qnO
-   JPEdzh5VhgtK8aYlCT0CqKD4H1Us7fGQEUzOTbT5uD8taZU+97mmExfOH
-   IbEqgt57nekgioRqz1e+muCBFYK76XBt3lTsmXRhaty+7JlhGRRAhxjoq
-   mAw3p4DYxvpZv1VBxdcrkrNZ2C176cyfCpPa1sHCgGnq8dbM7o3W3YvE/
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="328749774"
+  t=1675426803; x=1706962803;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+Vdo0YGzZ1ka9qHdi9M3e75lauC6FuFXPxqZRrVJUKs=;
+  b=lxlFAxqL4OpkS7yh07XIX2henXxHpJQokGUp0RPPtXVYlvzC5mUsjrqP
+   QrejBkCH0aNFHl/fkfmeNJGEQ4gMzlrdWe2EWGUGB2OuRsF5HaaOm8/xI
+   JjhnVMqbLa4+o0rMypLif+PmHczhpaT4ZHmZ7VntN7/1W8jOShyrwGZD8
+   nfcqE8GhuQp62PysxkGdMeGJrDDboj81AWAYjYM2vdRQ8ZqR9//I7e29G
+   MRbx9GxO8QbdUooC0uRcsGAjbH5xYJ273R+nE/dlOUrm1leUnkb+OZo5p
+   EyeZ98CdYW/q+2YL+5AW2gghoN/+H//+V3mb4tit132zKox1oCi17xTsU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="326432126"
 X-IronPort-AV: E=Sophos;i="5.97,270,1669104000"; 
-   d="scan'208";a="328749774"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2023 04:17:18 -0800
+   d="scan'208";a="326432126"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2023 04:20:03 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="665701557"
+X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="615697909"
 X-IronPort-AV: E=Sophos;i="5.97,270,1669104000"; 
-   d="scan'208";a="665701557"
-Received: from uzel-8i-t02.iind.intel.com ([10.49.2.69])
-  by orsmga002.jf.intel.com with ESMTP; 03 Feb 2023 04:17:16 -0800
-From:   aman.kumar@intel.com
-To:     vkoul@kernel.org, dmaengine@vger.kernel.org
-Cc:     andriy.shevchenko@linux.intel.com, srikanth.thokala@intel.com,
-        aman.kumar@intel.com, mallikarjunappa.sangannavar@intel.com,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1 1/1] dmaengine: idma64: Update bytes_transferred field
-Date:   Fri,  3 Feb 2023 17:47:02 +0530
-Message-Id: <20230203121702.15725-1-aman.kumar@intel.com>
-X-Mailer: git-send-email 2.17.1
+   d="scan'208";a="615697909"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 03 Feb 2023 04:19:59 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pNv2s-0000TJ-1B;
+        Fri, 03 Feb 2023 12:19:58 +0000
+Date:   Fri, 3 Feb 2023 20:19:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sam Protsenko <semen.protsenko@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     oe-kbuild-all@lists.linux.dev, Tomasz Figa <tomasz.figa@gmail.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        David Virag <virag.david003@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 6/6] clk: samsung: exynos5433: Extract PM support to
+ common ARM64 layer
+Message-ID: <202302032018.WKygXXHK-lkp@intel.com>
+References: <20230203060924.8257-7-semen.protsenko@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230203060924.8257-7-semen.protsenko@linaro.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -56,48 +76,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aman Kumar <aman.kumar@intel.com>
+Hi Sam,
 
-Currently when 8250 data transfer is done, bytes_tranferred always returns
-0 at /sys/devices/pci0000\:\:**.*/dma/dma*chan*/bytes_transferred.
-In many cases it gives false impression that data is not being
-trasferred via DMA.
+Thank you for the patch! Yet something to improve:
 
-So, updating the bytes_transferred field to count the bytes
-whenever there is data transfer using idma64.
+[auto build test ERROR on krzk/for-next]
+[also build test ERROR on linus/master v6.2-rc6]
+[cannot apply to next-20230203]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Co-developed-by: Srikanth Thokala <srikanth.thokala@intel.com>
-Signed-off-by: Srikanth Thokala <srikanth.thokala@intel.com>
-Signed-off-by: Aman Kumar <aman.kumar@intel.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/dma/idma64.c | 4 ++++
- 1 file changed, 4 insertions(+)
+url:    https://github.com/intel-lab-lkp/linux/commits/Sam-Protsenko/clk-samsung-Don-t-pass-reg_base-to-samsung_clk_register_pll/20230203-141059
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git for-next
+patch link:    https://lore.kernel.org/r/20230203060924.8257-7-semen.protsenko%40linaro.org
+patch subject: [PATCH 6/6] clk: samsung: exynos5433: Extract PM support to common ARM64 layer
+config: openrisc-randconfig-r003-20230202 (https://download.01.org/0day-ci/archive/20230203/202302032018.WKygXXHK-lkp@intel.com/config)
+compiler: or1k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/7fc08f82f3096e6f1c747f00b9d56c029b0b7a0f
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Sam-Protsenko/clk-samsung-Don-t-pass-reg_base-to-samsung_clk_register_pll/20230203-141059
+        git checkout 7fc08f82f3096e6f1c747f00b9d56c029b0b7a0f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=openrisc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=openrisc SHELL=/bin/bash drivers/clk/samsung/
 
-diff --git a/drivers/dma/idma64.c b/drivers/dma/idma64.c
-index c33087c5cd02..8880d2b91bf5 100644
---- a/drivers/dma/idma64.c
-+++ b/drivers/dma/idma64.c
-@@ -137,8 +137,11 @@ static void idma64_chan_irq(struct idma64 *idma64, unsigned short c,
- 		u32 status_err, u32 status_xfer)
- {
- 	struct idma64_chan *idma64c = &idma64->chan[c];
-+	struct dma_chan_percpu *stat;
- 	struct idma64_desc *desc;
- 
-+	stat = this_cpu_ptr(idma64c->vchan.chan.local);
-+
- 	spin_lock(&idma64c->vchan.lock);
- 	desc = idma64c->desc;
- 	if (desc) {
-@@ -149,6 +152,7 @@ static void idma64_chan_irq(struct idma64 *idma64, unsigned short c,
- 			dma_writel(idma64, CLEAR(XFER), idma64c->mask);
- 			desc->status = DMA_COMPLETE;
- 			vchan_cookie_complete(&desc->vdesc);
-+			stat->bytes_transferred += desc->length;
- 			idma64_start_transfer(idma64c);
- 		}
- 
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/clk/samsung/clk-exynos-arm64.c: In function 'exynos_arm64_cmu_prepare_pm':
+>> drivers/clk/samsung/clk-exynos-arm64.c:136:17: error: implicit declaration of function 'kfree'; did you mean 'vfree'? [-Werror=implicit-function-declaration]
+     136 |                 kfree(data->clk_save);
+         |                 ^~~~~
+         |                 vfree
+   cc1: some warnings being treated as errors
+
+
+vim +136 drivers/clk/samsung/clk-exynos-arm64.c
+
+   114	
+   115	static int __init exynos_arm64_cmu_prepare_pm(struct device *dev,
+   116			const struct samsung_cmu_info *cmu)
+   117	{
+   118		struct exynos_arm64_cmu_data *data = dev_get_drvdata(dev);
+   119		int i;
+   120	
+   121		data->clk_save = samsung_clk_alloc_reg_dump(cmu->clk_regs,
+   122							    cmu->nr_clk_regs);
+   123		if (!data->clk_save)
+   124			return -ENOMEM;
+   125	
+   126		data->nr_clk_save = cmu->nr_clk_regs;
+   127		data->clk_suspend = cmu->suspend_regs;
+   128		data->nr_clk_suspend = cmu->nr_suspend_regs;
+   129		data->nr_pclks = of_clk_get_parent_count(dev->of_node);
+   130		if (!data->nr_pclks)
+   131			return 0;
+   132	
+   133		data->pclks = devm_kcalloc(dev, sizeof(struct clk *), data->nr_pclks,
+   134					   GFP_KERNEL);
+   135		if (!data->pclks) {
+ > 136			kfree(data->clk_save);
+   137			return -ENOMEM;
+   138		}
+   139	
+   140		for (i = 0; i < data->nr_pclks; i++) {
+   141			struct clk *clk = of_clk_get(dev->of_node, i);
+   142	
+   143			if (IS_ERR(clk)) {
+   144				kfree(data->clk_save);
+   145				while (--i >= 0)
+   146					clk_put(data->pclks[i]);
+   147				return PTR_ERR(clk);
+   148			}
+   149			data->pclks[i] = clk;
+   150		}
+   151	
+   152		return 0;
+   153	}
+   154	
+
 -- 
-2.17.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
