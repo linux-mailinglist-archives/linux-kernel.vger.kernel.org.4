@@ -2,143 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A773688B46
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 01:01:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24A4E688B4E
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 01:02:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233228AbjBCABT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 19:01:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39328 "EHLO
+        id S231462AbjBCACh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 19:02:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233375AbjBCABP (ORCPT
+        with ESMTP id S233455AbjBCACS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 19:01:15 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7F2841B3
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 16:01:00 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id on9-20020a17090b1d0900b002300a96b358so3415880pjb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 16:01:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=87LqBY1cmxJIDzlBwcArixEGRBUdoaZyq1gL8jLOlBo=;
-        b=DLV66Jzr/7xWnW/DB5gYUzwmub8DiPYt26/ICu8uqaIhyj/Y69zetvYZjUSTNA7JP4
-         oVFIW77wI167XlBLdmGFDdBQltemXKC02tY+062ITt7Fz7d2TNa4f42A+jhli5StHy08
-         4llhwpGMDi0YoGL3ASI82cb0n+Jneqd4L8TQs/k8Bl7K34gebF7CtuiqCdXKrXEMHzWG
-         +78I7Fd6vJv9IAIj+P8oUAjNdRi92lx+gwfIj1aM6vDJk7BZXhxx+xsLu76rYXE4iMux
-         BKyGx4MS/N9hjYr2+vYpvxDJcYByMMdDkUAB25zywwQdmKUb4WsI5MtyEeLjFgjw4eg+
-         aFbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=87LqBY1cmxJIDzlBwcArixEGRBUdoaZyq1gL8jLOlBo=;
-        b=ljm3u0V6l00z8O3KvY7/6aTUpTFjMFD7vv8mAoM7Tv0yU/duzBv4rGeZBHIB/hYy3V
-         DQb1ZeSQelbwblwGnAfObCzudyWrt7APJ76DBe80puwSdr1Ibe9Gg3ykIQ35znUT+D+H
-         M6tHeZuc0Lr8h3w4Ww2Dkg4Xu5bELA7IzNKYqwdjU+sBtwb8pZzi/O6yuBVgG4tdTUPx
-         8gWbe8YC5Qwk49ysQ8hPQgvpgWDx4PpME1SRbXvAQ5kaeE6VQp06CUEIvjRl9bqCWfqK
-         qu7sHBCefAk5PItXSqx8B7nTl+XBkYqE9/9Q8e+fsAjz8De3uz6KVrqQVgKasetJdK/C
-         H9jA==
-X-Gm-Message-State: AO0yUKUY/ooFWqHVl80Lft1ArzF5LFeWx0toJqMqp8jW7UtVnBQOsmtf
-        AcUEcyaejvDxJ/haN3jbCx8fPg==
-X-Google-Smtp-Source: AK7set9JaCKtnriracbwmug7u2ZHT3TTrBbzfIKwL1tiM1SyRqwMx3ca50uMJGBzPDJ4jy/LfeFDhg==
-X-Received: by 2002:a17:902:f0d1:b0:198:dec0:c926 with SMTP id v17-20020a170902f0d100b00198dec0c926mr231076pla.21.1675382460437;
-        Thu, 02 Feb 2023 16:01:00 -0800 (PST)
-Received: from dread.disaster.area (pa49-181-4-128.pa.nsw.optusnet.com.au. [49.181.4.128])
-        by smtp.gmail.com with ESMTPSA id x190-20020a6263c7000000b00593a1f7c3dbsm292980pfb.10.2023.02.02.16.00.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 16:00:59 -0800 (PST)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1pNjVh-00AfBG-Cq; Fri, 03 Feb 2023 11:00:57 +1100
-Date:   Fri, 3 Feb 2023 11:00:57 +1100
-From:   Dave Chinner <david@fromorbit.com>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        David Hildenbrand <david@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Peter Xu <peterx@redhat.com>, NeilBrown <neilb@suse.de>,
-        Shakeel Butt <shakeelb@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [RFC PATCH v1 0/2] Ignore non-LRU-based reclaim in memcg reclaim
-Message-ID: <20230203000057.GS360264@dread.disaster.area>
-References: <20230202233229.3895713-1-yosryahmed@google.com>
+        Thu, 2 Feb 2023 19:02:18 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 926AA83942;
+        Thu,  2 Feb 2023 16:02:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675382522; x=1706918522;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=rfd1D0jUhVyLYpmuXaGcLYydtkJWOKsbArTz6nxUNf0=;
+  b=ZdSLbz6RG3O8ZJ/N9qj+O01/TUICJiYrKn+z0OPRAjKxl84Bj9JdTnuA
+   gySn3mYfpFDGHu3FAJz5oMFrZOhOGrFhQTNF5FeyvgEmK4K2GOpJy+ivU
+   +fmWf2c1lrCwvE4yv76RXpDo+DSpXA882eTG4FVtHJu08Dcgx886dM1io
+   MQJQD86EmrKZ+OCezp3taaOGKYhLeqIMkeLeaexoJIMUTErmWzfBzY+h4
+   A6uWohJkpUY96lJzZ6pPejCUFX0s/BjBLV1MUhDjWfT8ptJZZhaf43OiZ
+   BD/kIvw+iqA+0ehK8MF++78CU3wyd29egnW4EZ7zMEveZMSK8i8hshBSE
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="308948497"
+X-IronPort-AV: E=Sophos;i="5.97,268,1669104000"; 
+   d="scan'208";a="308948497"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2023 16:01:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="643088355"
+X-IronPort-AV: E=Sophos;i="5.97,268,1669104000"; 
+   d="scan'208";a="643088355"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga006.jf.intel.com with ESMTP; 02 Feb 2023 16:01:33 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 2 Feb 2023 16:01:32 -0800
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Thu, 2 Feb 2023 16:01:32 -0800
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.169)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Thu, 2 Feb 2023 16:01:31 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VWk7f+Lk7Cwjgxw4bFV1eEcCKWEWLisCXkWYp8os0pcaukWuuWGnseGXLYgMQN4f0hKTfxabyz9DQQdW+AfXlla9ZUDkoRZjEFICol4Q43mOZF/96rM2x+ir8/Xe2PkMb6v+nTvZG/xZSA8LAdu+MQ3us9qIekdzj/e3bH1z084/82T7N5Kbo7i7BT3kFKlQ9TCNHKHst/QZmQ8tF9CQpDYlZB9rktDCF8EtFHIAWD+Rbbq/p04K5Afy1kRV6kDlFEF8673shYqolxJjLr1h/z73mecyCm7+YZutp/Kzxdgj+7i7/0cMLmIzT/mDh3VqKncF7cW4idm965SCnvPvng==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rfd1D0jUhVyLYpmuXaGcLYydtkJWOKsbArTz6nxUNf0=;
+ b=eGWLnCCCckQNwICC42aY+yC8Sxd7f9qisnlX0WowrfUmKdYFEbCvVs+nVfiB0t6CG1gi7Io8v6T3ILTRk6BgZ91QbqhI4nQvz02Nr744I05gUJ+LgrRbUX4otyoT3NumlfYJ5g5CAh3SArY3pL5vH5rYqv+6+vllIxB4Z7W8ELCZG0AJxtdFx7NsaCi5eY4HnNV+Iq6cOXt4TYhTNyW1SugVcM3caLxbE/bMchfrigESdSNSnP/Q701g6YYuDY9J0TlYuh5TUxbYRhijD3NhUojMFgi9fJ/LH48HxbVbRxqruMgj/6E3SxVwYI8CO6OPJDWY+Nte6yvGG98u9earRw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from MW4PR11MB5823.namprd11.prod.outlook.com (2603:10b6:303:186::12)
+ by SJ0PR11MB5200.namprd11.prod.outlook.com (2603:10b6:a03:2df::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.27; Fri, 3 Feb
+ 2023 00:01:30 +0000
+Received: from MW4PR11MB5823.namprd11.prod.outlook.com
+ ([fe80::ee2c:e87b:970a:a3f4]) by MW4PR11MB5823.namprd11.prod.outlook.com
+ ([fe80::ee2c:e87b:970a:a3f4%7]) with mapi id 15.20.6064.027; Fri, 3 Feb 2023
+ 00:01:30 +0000
+From:   "Winiarska, Iwona" <iwona.winiarska@intel.com>
+To:     "linux@roeck-us.net" <linux@roeck-us.net>,
+        "zev@bewilderbeest.net" <zev@bewilderbeest.net>
+CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "stable@kernel.org" <stable@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "pierre-louis.bossart@linux.intel.com" 
+        <pierre-louis.bossart@linux.intel.com>,
+        "jae.hyun.yoo@linux.intel.com" <jae.hyun.yoo@linux.intel.com>,
+        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>
+Subject: Re: [PATCH] hwmon: (peci/cputemp) Fix off-by-one in coretemp_label
+ allocation
+Thread-Topic: [PATCH] hwmon: (peci/cputemp) Fix off-by-one in coretemp_label
+ allocation
+Thread-Index: AQHZNqyrmfAMR2uvx0O6gLacv31meq68V/cA
+Date:   Fri, 3 Feb 2023 00:01:30 +0000
+Message-ID: <c4b9beb89c62c35fa6ae81b78f6f8243c5a4e4aa.camel@intel.com>
+References: <20230202021825.21486-1-zev@bewilderbeest.net>
+In-Reply-To: <20230202021825.21486-1-zev@bewilderbeest.net>
+Accept-Language: en-US, pl-PL
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MW4PR11MB5823:EE_|SJ0PR11MB5200:EE_
+x-ms-office365-filtering-correlation-id: 70d72c26-9036-43f2-eb27-08db0579cdca
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: RvLDfvley/ipFUm9ZKiod7Y8c0M6IfPVF+kJUX6SAwwxnwfbaIIc7K6xYZI1Pb52av1MGmEYKZVEvyisZ87Cz2hxw5aqVOG9CidjD9zkCsr5T7d09ZLI0s+tkNapB7SckyvdXY4TfKPlZqsc2kOPL4CVv3r9IB8uW43NAUiGUkALoHqJP3iLAuhj7jcZrn/4pUMXG6ck52ESF4rNEYALpz2TDkVpF0+TxHCsKETiW1ZrhvkV9zboFWYUpnxFmGEaPLY4MV0Na6KXyt7J75TRtpRD5xnvpuLlU+tzY6eHA37NSXv6W6kniozBbj0fE079VDbzFwD4D3B/gumJ0CUM3MYsWHmcAPf6zVCwIJ+dvECMc0SeKVgJg3gAPNW5DLtQpCX7jqVndmedCQm6RRAXq6pmScUqlJfdsXFb4mJKWjlfAlfKJC0a+NmpFukJc4g/8Rp58mSx3w8SFYpB1L6IPe+j1+wYSlQXNe3FAp4jE4m5AVjUHIlonFwQmAx6MJrfUQ0AZ8CjELwapJA8ublZ3lmBs0p7bYilUBzRHJw40JvByCnl62mIGn/ZvTkLGzLE94SZXmKB0z1Uax+AUJqaXFsWTFzrL2MXa/g6lW+Kzk72KvjYn2wu0WJg89FuzQ6ADNKq+EdpJizt+cysAyzaybqgqe69H6YZzJpSPcuUgN2v7N8BfY/vTlUYDEAWvmFUQhqAgKNiyeTRO/92ejaHTA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR11MB5823.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(136003)(346002)(376002)(396003)(366004)(451199018)(122000001)(86362001)(38100700002)(66946007)(66556008)(66446008)(8676002)(38070700005)(36756003)(91956017)(6486002)(66476007)(64756008)(316002)(76116006)(71200400001)(54906003)(110136005)(4326008)(8936002)(41300700001)(5660300002)(7416002)(2906002)(186003)(82960400001)(478600001)(6512007)(26005)(6506007)(83380400001)(2616005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?R3FHRG1tdlRvR2dnTnhVMWhndXA4Y3BQa1YvY0VEemV1SklLQ0U1MGIzQXox?=
+ =?utf-8?B?WUtGU0cxaTAveWdZZHpoa1A0YzluTW1xZzNNZ0lLWHpjWjd5RC9idDZ0MEVh?=
+ =?utf-8?B?SnE0RzJDQVFrTmpVZDlibkJuYk8xVVQ1a0NqVTdFaktzYnVTR0dvL25uMnR0?=
+ =?utf-8?B?Q3VkM0pJMFI3ZjBENEFHVGh1Vy9rdDR2dGd2bXczTUVMUTNQQ1lIRHBTK1Y1?=
+ =?utf-8?B?enZuNkprMDhtd0wyUmtWR2VLcE1QNFNWTDNLc1BVZnVaZFRzbUJUaFNqNGpD?=
+ =?utf-8?B?K3VzUmJzVk1Nb1hicnd2dDA0Zy9vU1JsanlnblNPbC9MYjJERnIveVpOcTJD?=
+ =?utf-8?B?WlN5ZE95YllmYi9Xak9TMFE3NlVUcm1Md0JtY3locHN1MTYyOGNHaGhHZTlD?=
+ =?utf-8?B?T3d6bjg2dFlibytkOG5tRjlmdkJKTDZDNjM5NWhTdWVDY0RlVXR4dkxjVDhD?=
+ =?utf-8?B?dWpONWptcnhzem82YjB1TlFKeTBGMjFFbWRIZ2lNbnhwOWYwZ0dCS2J3aElp?=
+ =?utf-8?B?elh2QWlwdTExNVJKbkYyeGpHM1Urc2E2dWMwWWJhaldqa2xxeGlDTk1LSWF2?=
+ =?utf-8?B?elNqdjdiUzF5cStmc0RJVE13VTQrZk9QTUhiSlcvTzZvZlRXcjlrNTRxNWZ6?=
+ =?utf-8?B?eHlxSDJsbUVoeSt6THcwVEViZi9PR0dUWVR6dmlJQnRVcm4zSElMSEl5ZFJO?=
+ =?utf-8?B?MlY0eUxiWEFZanVNRnFsQ09KNm1Xa3dnUU9FVStUNGs0WVZTdkpvS3FYQ0xG?=
+ =?utf-8?B?enF3RkVmeEdWdjk3SHo0L3Fsb3N0UWZYZ2Jad2t1NEdCSHVoSEdseklYZnFH?=
+ =?utf-8?B?c2VLc00vV1YrZ2V4OXNYMUQrbkxzYWNJMFY3ekgyTWlJR1JSeFBoMDdIVkU2?=
+ =?utf-8?B?MHI4WGF3b2x4b3B6WHdmazZqa0xiby9DQSswNE9WSW1DN09iSHBIN0FxUVU0?=
+ =?utf-8?B?SmVrcWxLZ0NyOGwwNXFiTlozV0Z1MENwTm9LbURMdStudkdTZ2Q2Y0hrSVFP?=
+ =?utf-8?B?YndxQTB4NDh3WmZ1cVMyRE1vTWE1Y2h0cGdRV0d5NW9iQ29WY3hGeFJyQ09k?=
+ =?utf-8?B?RVpNS25rbCtTbnJtU1FDQlRyWEhuSi9DYzExdVpHbTF5S2NxUFZ0L2U1L2dS?=
+ =?utf-8?B?dW1jb0RwRnIzcm9hWXVRcEZFSXEzTitWcVBaRjdZcFhrbXh1aDYweGVyU0Ur?=
+ =?utf-8?B?aFRpQ25SYmtFMkVoWFhwbkhrR1F2SkNkUVFvQ0NBZk9jeWtyOUpXZ04xQmNU?=
+ =?utf-8?B?eFhIR1NvTkZOZGZieW1Fc29LZFdsMHNrWXkvVGtmbmtJaERLZW1DZ3FjMVBC?=
+ =?utf-8?B?YkxQRWU5N1hTS3Z3OHA3dnk2Zk4rTUg4ZFBBYlVvZURuMGYzbUIrN1NwT3B5?=
+ =?utf-8?B?djRoZy9uYUVBeld2WnpGL3pMWnpWRU0zWWpJcFZnNzVaWE1lMnZNVXhCc3VZ?=
+ =?utf-8?B?SXdpcEJ0eHRjVFRRRHlkMDF0Nmlac0Z4em1iUGRnUlFzYWh6akhvdDA4UnRF?=
+ =?utf-8?B?RWVYa2dGYjdTSmdQMTJlVlVUV1pPbkZSZ0crZnhEc2pvT2U3OW5sVEYvTm9D?=
+ =?utf-8?B?TVFNcVphcmc5c09OY3B4Q0s4NDVRTnJXSGVUZHRuSEd5VUQ5RUpKbDlBVUV5?=
+ =?utf-8?B?MThNMzBDK3d3OWhGZUtNeXNVeU04M2xZcVRRSmh2bWRwSkJ3d21QME1Ga2Np?=
+ =?utf-8?B?dlZQa0VqZndLaEVrWFZaOVlETlNMUWlXbXBBalRYcXRZdFA2R1lQV1JlbWFF?=
+ =?utf-8?B?bVNtR3NCNVpZZ05KMDFHTk4wSWJLWCtnbnlJVmlBMjdWRWF2am5YQ1dybEtm?=
+ =?utf-8?B?OWR0OTNMYmx0eFVwQ3RDYWxuUkxCMmx1ZnlQWklEcC9BaU5oeTdidURObzR5?=
+ =?utf-8?B?aWE1NTZlMU9uaGwrbE8yVGZzbUovRytGY0YxcDZqTGR0REFFR1lYdzBQbkN6?=
+ =?utf-8?B?YzRlNkN4Y1VCQUdtWVREUXBCUnFySWZCZTRVQjVxZkpDcC9CT1l5ZmxRTU9a?=
+ =?utf-8?B?THE1ZlV4WCtSL3JxRnQrN2JmSG81TTAwOVlYdzR2T3V6elNzcU83bHFDMTIr?=
+ =?utf-8?B?TzdPRnVxUzNZZmdRQjZ2UjR0OTFCREtsOFN1U2lhYmVKVHk2bmpjWEhCbDU4?=
+ =?utf-8?B?VWpiUmsxSHhtL0lsRi9OQ0MwU1g3bUFTUW9IWGJMUWN4Sm5zeGxLODZYTFVm?=
+ =?utf-8?B?eEE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <93408599F09F744D9B7A6DA01E6A4052@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230202233229.3895713-1-yosryahmed@google.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW4PR11MB5823.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 70d72c26-9036-43f2-eb27-08db0579cdca
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Feb 2023 00:01:30.4241
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: uz7xrfD6GSQuaxM8EsMAP/Y5Vvg9pIPbCIei51L5SbxSPy83T6oy4QzG1WEtOap/TSbti+vPc40tZ7ysAT1g/zue4vkbJ2PG8hM5UXUy+js=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5200
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 11:32:27PM +0000, Yosry Ahmed wrote:
-> Reclaimed pages through other means than LRU-based reclaim are tracked
-> through reclaim_state in struct scan_control, which is stashed in
-> current task_struct. These pages are added to the number of reclaimed
-> pages through LRUs. For memcg reclaim, these pages generally cannot be
-> linked to the memcg under reclaim and can cause an overestimated count
-> of reclaimed pages. This short series tries to address that.
-
-Can you explain why memcg specific reclaim is calling shrinkers that
-are not marked with SHRINKER_MEMCG_AWARE?
-
-i.e. only objects that are directly associated with memcg aware
-shrinkers should be accounted to the memcg, right? If the cache is
-global (e.g the xfs buffer cache) then they aren't marked with
-SHRINKER_MEMCG_AWARE and so should only be called for root memcg
-(i.e. global) reclaim contexts.
-
-So if you are having accounting problems caused by memcg specific
-reclaim on global caches freeing non-memcg accounted memory, isn't
-the problem the way the shrinkers are being called?
-
-> Patch 1 is just refactoring updating reclaim_state into a helper
-> function, and renames reclaimed_slab to just reclaimed, with a comment
-> describing its true purpose.
-> 
-> Patch 2 ignores pages reclaimed outside of LRU reclaim in memcg reclaim.
-> 
-> The original draft was a little bit different. It also kept track of
-> uncharged objcg pages, and reported them only in memcg reclaim and only
-> if the uncharged memcg is in the subtree of the memcg under reclaim.
-> This was an attempt to make reporting of memcg reclaim even more
-> accurate, but was dropped due to questionable complexity vs benefit
-> tradeoff. It can be revived if there is interest.
-> 
-> Yosry Ahmed (2):
->   mm: vmscan: refactor updating reclaimed pages in reclaim_state
->   mm: vmscan: ignore non-LRU-based reclaim in memcg reclaim
-> 
->  fs/inode.c           |  3 +--
-
-Inodes and inode mapping pages are directly charged to the memcg
-that allocated them and the shrinker is correctly marked as
-SHRINKER_MEMCG_AWARE. Freeing the pages attached to the inode will
-account them correctly to the related memcg, regardless of which
-memcg is triggering the reclaim.  Hence I'm not sure that skipping
-the accounting of the reclaimed memory is even correct in this case;
-I think the code should still be accounting for all pages that
-belong to the memcg being scanned that are reclaimed, not ignoring
-them altogether...
-
--Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+T24gV2VkLCAyMDIzLTAyLTAxIGF0IDE4OjE4IC0wODAwLCBaZXYgV2Vpc3Mgd3JvdGU6DQo+IFRo
+ZSBmaW5kX2xhc3RfYml0KCkgY2FsbCBwcm9kdWNlcyB0aGUgaW5kZXggb2YgdGhlIGhpZ2hlc3Qt
+bnVtYmVyZWQNCj4gY29yZSBpbiBjb3JlX21hc2s7IGJlY2F1c2UgY29yZXMgYXJlIG51bWJlcmVk
+IGZyb20gemVybywgdGhlIG51bWJlciBvZg0KPiBlbGVtZW50cyB3ZSBuZWVkIHRvIGFsbG9jYXRl
+IGlzIG9uZSBtb3JlIHRoYW4gdGhhdC4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IFpldiBXZWlzcyA8
+emV2QGJld2lsZGVyYmVlc3QubmV0Pg0KPiBDYzogc3RhYmxlQGtlcm5lbC5vcmfCoCMgdjUuMTgN
+Cj4gRml4ZXM6IGJmMzYwOGYzMzhlOSAoImh3bW9uOiBwZWNpOiBBZGQgY3B1dGVtcCBkcml2ZXIi
+KQ0KDQpUaGFua3MgZm9yIGNhdGNoaW5nIGl0Lg0KDQpSZXZpZXdlZC1ieTogSXdvbmEgV2luaWFy
+c2thIDxpd29uYS53aW5pYXJza2FAaW50ZWwuY29tPg0KDQo+IC0tLQ0KPiDCoGRyaXZlcnMvaHdt
+b24vcGVjaS9jcHV0ZW1wLmMgfCAyICstDQo+IMKgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9u
+KCspLCAxIGRlbGV0aW9uKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9od21vbi9wZWNp
+L2NwdXRlbXAuYyBiL2RyaXZlcnMvaHdtb24vcGVjaS9jcHV0ZW1wLmMNCj4gaW5kZXggZWM5ODUx
+ZGFmMmU4Li5mMTNjYzQxNzBmNTggMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvaHdtb24vcGVjaS9j
+cHV0ZW1wLmMNCj4gKysrIGIvZHJpdmVycy9od21vbi9wZWNpL2NwdXRlbXAuYw0KPiBAQCAtNDMx
+LDcgKzQzMSw3IEBAIHN0YXRpYyBpbnQgY3JlYXRlX3RlbXBfbGFiZWwoc3RydWN0IHBlY2lfY3B1
+dGVtcCAqcHJpdikNCj4gwqDCoMKgwqDCoMKgwqDCoHVuc2lnbmVkIGxvbmcgY29yZV9tYXggPSBm
+aW5kX2xhc3RfYml0KHByaXYtPmNvcmVfbWFzaywNCj4gQ09SRV9OVU1TX01BWCk7DQo+IMKgwqDC
+oMKgwqDCoMKgwqBpbnQgaTsNCj4gwqANCj4gLcKgwqDCoMKgwqDCoMKgcHJpdi0+Y29yZXRlbXBf
+bGFiZWwgPSBkZXZtX2t6YWxsb2MocHJpdi0+ZGV2LCBjb3JlX21heCAqIHNpemVvZihjaGFyDQo+
+ICopLCBHRlBfS0VSTkVMKTsNCj4gK8KgwqDCoMKgwqDCoMKgcHJpdi0+Y29yZXRlbXBfbGFiZWwg
+PSBkZXZtX2t6YWxsb2MocHJpdi0+ZGV2LCAoY29yZV9tYXggKyAxKSAqDQo+IHNpemVvZihjaGFy
+ICopLCBHRlBfS0VSTkVMKTsNCj4gwqDCoMKgwqDCoMKgwqDCoGlmICghcHJpdi0+Y29yZXRlbXBf
+bGFiZWwpDQo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIC1FTk9NRU07
+DQo+IMKgDQoNCg==
