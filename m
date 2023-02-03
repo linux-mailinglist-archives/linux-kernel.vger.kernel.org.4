@@ -2,80 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 134B06892C2
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 09:53:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A06D46892D8
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 09:57:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232049AbjBCIx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 03:53:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50532 "EHLO
+        id S231989AbjBCI4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 03:56:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231827AbjBCIxY (ORCPT
+        with ESMTP id S230435AbjBCI4s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 03:53:24 -0500
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C54E920697
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 00:53:21 -0800 (PST)
-Received: by mail-io1-f71.google.com with SMTP id d24-20020a5d9bd8000000b006ee2ddf6d77so2677623ion.6
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 00:53:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HKmKJPDbIloaVF9wxjUKzLZJm032XxjfFf+EFpRM0Yk=;
-        b=8EgeS09PVC42EZYgxDHx+GjooUH6DcWhjT3fjbBO5YlxbK/LTBpFte01jaP/02wqiK
-         cWsXJCxtSfFbuUUGKnS7vWFXmI0ykILOb2Vva3MuqRryl/fiRog+xfZhwclCaX4EhEAJ
-         VQRV0lkddyxRuqOPACXri42vCJzny9zV9P0s3QW1pDy/SzGlo0hTHuDyJe4ftQj/5oDY
-         lu+5jijl4krtaEj3BkGwYx5fkmpwy5+r8cS3Ff9Pw42h2Otm9WIjBOqkS5BspR6unhGY
-         czUlluIHayF0ArpWdu1iZej5lxhrdEQbD73JpbdZk0d7zitalGz/ssPA7a8vyPWwF6Yt
-         xpGA==
-X-Gm-Message-State: AO0yUKXK22rY3mbuE9x+OhABiqy5zkIka1vQp5tQtwkm7bhbVaU3hzqb
-        d4Y9gU3iO6MNILqgKf7piTA8LOB6sgD8a5rfKzCSrn31s6iU
-X-Google-Smtp-Source: AK7set992YEjU59mc5KBs7LOS8DgjU2Yp0XuHbujD6DIew8NCUbNVWokx5RUonIbg1J0OqznsgdoGqUe6RiTEkrlZf+r1Sdtfvj2
+        Fri, 3 Feb 2023 03:56:48 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E87381B2D
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 00:56:46 -0800 (PST)
+Received: from dggpemm100009.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4P7TzN5blxzfZ4D;
+        Fri,  3 Feb 2023 16:56:32 +0800 (CST)
+Received: from [10.174.179.24] (10.174.179.24) by
+ dggpemm100009.china.huawei.com (7.185.36.113) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Fri, 3 Feb 2023 16:56:44 +0800
+Subject: Re: [PATCH RFC] arm64/vmalloc: use module region only for
+ module_alloc() if CONFIG_RANDOMIZE_BASE is set
+To:     Ard Biesheuvel <ardb@kernel.org>, Will Deacon <will@kernel.org>
+References: <20221227092634.445212-1-liushixin2@huawei.com>
+ <b93ec55c-f6f0-274a-e7d6-edb419b4be8a@huawei.com>
+ <20230129134147.f19ca0641f1133f3e3bc185b@linux-foundation.org>
+ <20230131150644.GA2605@willie-the-truck>
+ <20230131150750.GB2605@willie-the-truck>
+ <CAMj1kXGaxehOcrQqFZNA+C3dTk_H8sBr_1wsN3_KN82nXVaG_g@mail.gmail.com>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>
+From:   Liu Shixin <liushixin2@huawei.com>
+Message-ID: <5ecc890a-453a-ba2d-9c5e-073127067799@huawei.com>
+Date:   Fri, 3 Feb 2023 16:56:43 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.7.1
 MIME-Version: 1.0
-X-Received: by 2002:a02:ac8e:0:b0:3b1:92c0:ac28 with SMTP id
- x14-20020a02ac8e000000b003b192c0ac28mr2337676jan.74.1675414401053; Fri, 03
- Feb 2023 00:53:21 -0800 (PST)
-Date:   Fri, 03 Feb 2023 00:53:21 -0800
-In-Reply-To: <000000000000cbd8aa05f1fd2516@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000039fb2d05f3c7d0ed@google.com>
-Subject: Re: [syzbot] [ext4?] INFO: task hung in ext4_evict_ea_inode
-From:   syzbot <syzbot+38e6635a03c83c76297a@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, alim.akhtar@samsung.com,
-        avri.altman@wdc.com, beanhuo@micron.com, bvanassche@acm.org,
-        hdanton@sina.com, jejb@linux.ibm.com, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        martin.petersen@oracle.com, syzkaller-bugs@googlegroups.com,
-        tytso@mit.edu, wsa+renesas@sang-engineering.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <CAMj1kXGaxehOcrQqFZNA+C3dTk_H8sBr_1wsN3_KN82nXVaG_g@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.24]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm100009.china.huawei.com (7.185.36.113)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has bisected this issue to:
 
-commit 82ede9c19839079e7953a47895729852a440080c
-Author: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Date:   Tue Jun 21 14:46:53 2022 +0000
 
-    scsi: ufs: core: Fix typos in error messages
+On 2023/2/1 0:03, Ard Biesheuvel wrote:
+> On Tue, 31 Jan 2023 at 16:07, Will Deacon <will@kernel.org> wrote:
+>> Now really adding Ard...
+>>
+>> On Tue, Jan 31, 2023 at 03:06:44PM +0000, Will Deacon wrote:
+>>> +Ard -- full thread here:
+>>>
+>>> https://lore.kernel.org/all/20221227092634.445212-1-liushixin2@huawei.com/
+>>>
+>>> On Sun, Jan 29, 2023 at 01:41:47PM -0800, Andrew Morton wrote:
+>>>> On Sun, 29 Jan 2023 10:44:31 +0800 Liu Shixin <liushixin2@huawei.com> wrote:
+>>>>
+>>>>> Hi,
+>>>>>
+>>>>>
+>>>>> This patch seems to have been lost in the corner. Recently I've meet this problem again
+>>>>>
+>>>>> on v6.1, so I would like to propose this patch again.
+>>>>>
+>>>>>
+>>>>> Thanks,
+>>>>>
+>>>>>
+>>>>> On 2022/12/27 17:26, Liu Shixin wrote:
+>>>>>> After I add a 10GB pmem device, I got the following error message when
+>>>>>> insert module:
+>>>>>>
+>>>>>>  insmod: vmalloc error: size 16384, vm_struct allocation failed,
+>>>>>>  mode:0xcc0(GFP_KERNEL), nodemask=(null),cpuset=/,mems_allowed=0
+>>>>>>
+>>>>>> If CONFIG_RANDOMIZE_BASE is set, the module region can be located in the
+>>>>>> vmalloc region entirely. Although module_alloc() can fall back to a 2GB
+>>>>>> window if ARM64_MODULE_PLTS is set, the module region is still easily
+>>>>>> exhausted because the module region is located at bottom of vmalloc region
+>>>>>> and the vmalloc region is allocated from bottom to top.
+>>>>>>
+>>>>>> Skip module region if not calling from module_alloc().
+>>>>>>
+>>>> I'll assume this is for the arm tree.
+>>>>
+>>>> Acked-by: Andrew Morton <akpm@linux-foundation.org>
+>>> This looks like the same issue previously reported at:
+>>>
+>>> https://lore.kernel.org/all/e6a804de-a5f7-c551-ffba-e09d04e438fc@hisilicon.com/
+>>>
+>>> where Ard had a few suggestions but, afaict, they didn't help.
+>>>
+> Thanks for the cc.
+>
+> So this is a bit clunky, and I wonder whether we wouldn't be better
+> off just splitting the vmalloc region into two separate regions: one
+> for the kernel and modules, and one for everything else. That way, we
+> lose one bit of entropy in the randomized placement, but the default
+> 48-bit VA space is vast anway, and even on 39-bit VA configs (such as
+> Android), I seriously doubt that we come anywhere close to exhausting
+> the vmalloc space today.
+> .
+Thanks for your advice.
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=132b298b480000
-start commit:   a689b938df39 Merge tag 'block-2023-01-06' of git://git.ker..
-git tree:       upstream
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=10ab298b480000
-console output: https://syzkaller.appspot.com/x/log.txt?x=172b298b480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=33ad6720950f996d
-dashboard link: https://syzkaller.appspot.com/bug?extid=38e6635a03c83c76297a
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=114dd83a480000
+>
 
-Reported-by: syzbot+38e6635a03c83c76297a@syzkaller.appspotmail.com
-Fixes: 82ede9c19839 ("scsi: ufs: core: Fix typos in error messages")
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
