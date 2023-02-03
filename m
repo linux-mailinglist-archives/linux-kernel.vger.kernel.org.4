@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E36568A252
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 19:56:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6851E68A257
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 19:57:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232963AbjBCS4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 13:56:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43810 "EHLO
+        id S233023AbjBCS5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 13:57:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231205AbjBCS4q (ORCPT
+        with ESMTP id S232591AbjBCS5H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 13:56:46 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2081.outbound.protection.outlook.com [40.107.243.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 456F5196AC
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 10:56:44 -0800 (PST)
+        Fri, 3 Feb 2023 13:57:07 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2075.outbound.protection.outlook.com [40.107.243.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 706B7AA241;
+        Fri,  3 Feb 2023 10:57:02 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ViTiV3mBVO1bCGsZfLM4SAj7svfMxUKs7n5/8H6om9y+majqxaqML0xlaRSJDlcSSURjt5ORS4VRyklqAbJinPV7ZtVouuqevkqe0+vJRnloIEpE4fnbIPwSPDzNXxS5INeVR53uMWKvfxcGOHPLbiX5H8ndkhT6UP7KYS38+ZGgGIs73o6FhehmVU4IGA9bcJaY+RiJp1DOBS9HKnPm9J3Oa3vYmJeRlpiJk97Sc3ZmpxB7ID3PZnNZFBruFMWvVcTiWPx1J9dAo4MWq0EvhLuu/NEfDLCVimdM2D/s5dPG1d1tJKZu63yG7/OqN8le0IiORpE5dB6CIjUzWEwf2Q==
+ b=ehCcudjlt9u3AaxxBbbfeqwnr2aG7AjTweNYMb+nwIeTcfMQC4pxWPe9sM5PEgkk1sMlNPZGzKfNSGzastNb2xyUtTkkuAdwA7Aoa84LaAtC5CS7Pn8YnOeDKHQMgxxVACKHrPYz1agxgtnVQFJWRjFJiP6znL71j/a9CXHz/GE37mcWhebV3+awm8k3SO8g87BXkjKefm0V1MZeWskH9kSCGP54N5qepji6Cs6QS6iyGyZ6Ny3sGJvq5N+3DvrueGJoaJDNMN+U9BzeDyLWhfZ48wk9wRL5WFBQUVfMH3uLiDC92As4+l34G8pgHiZoq8Hpuq894rte0R3UPpcH3A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sQM9rlXMUu9gfe8YFTJWy72aP92xNgwICYYfE8EX5nI=;
- b=oNhy3jY8ywE1dWfhzGYETUQak4sQjVbMkhej/bbbib2qqy3t9B+WWahYpyI9y3ETbP5y7mpReB3qPUitIr0GDArR7wzW7BLYmCb2VDmHMuvGJYUpht1wyscI2jwdzFXmiz+TWy03TmnNkOGqZSwg0cnPk5R3ULC2rNk5lmixhe/t3i5TlN38E0SfLk0WGXQ1IKdRcJpWNtvQcLYfS7TFr4o9cu0t2yjXtNdcU1/+pDSFK/s9mb28GsxqOKu+OEIXGEtaUX6mkjrGvRYPCAUAV6mdTS6dBxjMJJMTTITefoCEfAsZ93DqM6dFCRio6C1sOKQBl6N4cVU/TJ1lZ7oRVw==
+ bh=XsrOscczDwQlGp1/Pgn/qU12NinS1MHesKSqNc/Eewg=;
+ b=N1+DRTweeh6srhqG9fLbOiYxNadC5HOQKBm0+0pTWK8Gk65RbTm+aHFmhGU4c+Wa5gfGgBr6I4JFM90CVhFeZCmGrfrRZEZ6hrc8FYhNmDWcPjGrHNhIfkYSae3Yt112jETYBuj9nyxRoqBLaXQBTRLna+wyiiDJQ4YW+fXP2bfXi4NqswW2FrmC03aGpm1S1q2cQi5lMhtdggS53QDhHnIo6U5HVCWTf3d8cnlMcBlKfYbx9Qlzcu9uX2iLwKaac8VV2fv5yr458kAskf0GePIhpN+ikwWofxu2V9Yqxhyu0R0JLz5jgX7QEOxxjoslRevvc189l6brp7jvsfwMBg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=knights.ucf.edu; dmarc=pass action=none
  header.from=knights.ucf.edu; dkim=pass header.d=knights.ucf.edu; arc=none
@@ -29,30 +29,33 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=knightsucfedu39751.onmicrosoft.com;
  s=selector2-knightsucfedu39751-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sQM9rlXMUu9gfe8YFTJWy72aP92xNgwICYYfE8EX5nI=;
- b=fGPyjjksi0ULKSuFZuKwg3WK+58H1qp2m9bSgvzjToPH2yNmcCnuzfWiZ2uqpcsxlVxcBrJkHVXtV6sp7rXr6mrxg7hi/stLw1lab+xUQ5E3lXv7ZjyOfV6asa7CDf82rQuFHlUkVl0Q6j6JIeO2iaNgFTI2Y+g0d4T/Oj1pqcE=
+ bh=XsrOscczDwQlGp1/Pgn/qU12NinS1MHesKSqNc/Eewg=;
+ b=aWvfiExLcMumrN5vQSp1KlHpnBrtIh43ugKrE1Djp3vicOruftR79PZlhizrZhnuBOY9/88CT5/nwJwTU63VcHBXqIDDWSrqCZNivkZHmW9DKu7ya5BGZqtemz5WJxx8fBx9Tfye+5Rqn+LBd7OPsItxeFfozUrkFJPgg9aBmmE=
 Received: from IA1PR07MB9830.namprd07.prod.outlook.com (2603:10b6:208:44b::14)
  by DM5PR07MB7894.namprd07.prod.outlook.com (2603:10b6:4:aa::39) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.28; Fri, 3 Feb
- 2023 18:56:42 +0000
+ 2023 18:56:59 +0000
 Received: from IA1PR07MB9830.namprd07.prod.outlook.com
  ([fe80::d883:f078:37f:dace]) by IA1PR07MB9830.namprd07.prod.outlook.com
  ([fe80::d883:f078:37f:dace%9]) with mapi id 15.20.6064.024; Fri, 3 Feb 2023
- 18:56:41 +0000
+ 18:56:59 +0000
 From:   Sanan Hasanov <sanan.hasanov@Knights.ucf.edu>
-To:     "jaegeuk@kernel.org" <jaegeuk@kernel.org>,
-        "chao@kernel.org" <chao@kernel.org>,
-        "linux-f2fs-devel@lists.sourceforge.net" 
-        <linux-f2fs-devel@lists.sourceforge.net>,
+To:     "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "bigeasy@linutronix.de" <bigeasy@linutronix.de>,
+        "claudiajkang@gmail.com" <claudiajkang@gmail.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 CC:     "contact@pgazz.com" <contact@pgazz.com>,
         "syzkaller@googlegroups.com" <syzkaller@googlegroups.com>
-Subject: KASAN: slab-out-of-bounds Read in f2fs_iget
-Thread-Topic: KASAN: slab-out-of-bounds Read in f2fs_iget
-Thread-Index: AQHZN/1XNusp4zIyiEC4U6RFRi8pVw==
-Date:   Fri, 3 Feb 2023 18:56:41 +0000
-Message-ID: <IA1PR07MB9830A51FD5E2F4BA573EE517ABD79@IA1PR07MB9830.namprd07.prod.outlook.com>
+Subject: WARNING in send_hsr_supervision_frame
+Thread-Topic: WARNING in send_hsr_supervision_frame
+Thread-Index: AQHZN/4f/hirPoKFyU6SeeV2GkbEpQ==
+Date:   Fri, 3 Feb 2023 18:56:59 +0000
+Message-ID: <IA1PR07MB9830DB757C1AAD78BFB84FA2ABD79@IA1PR07MB9830.namprd07.prod.outlook.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -62,41 +65,41 @@ authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=Knights.ucf.edu;
 x-ms-publictraffictype: Email
 x-ms-traffictypediagnostic: IA1PR07MB9830:EE_|DM5PR07MB7894:EE_
-x-ms-office365-filtering-correlation-id: b988f760-8455-489d-6124-08db06186333
+x-ms-office365-filtering-correlation-id: 8ca8c208-5a2b-4edf-706e-08db06186dc7
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ucB4xX3aV/vWzxJMlWV4CDPSezMRj0/V7bp3xWVosq7BTqjJrXU3ZrLH5c0IacW5Ue72Hb+Oydjeq6cVjLmWAGqPTacwjAlgijfMWEtWyYvRLB+wZutUDwflRg0apaDB97KwbsglAtQlMW7CCVh3xIAJlUPKfyStN6UFCpfOY5swAkGCla/eyOnulRPYqF/Zh3GKsj5/MYXJ1jKYHzideylqpls848vQDNyi7sdRB6jM6eNQ6Z9Ogqy3MlLf+PO0vl1inFoj7BcjlheedVnYeIL7f1OnhujElPXUpHuy9TlYN7cTIUcalYX7/j96iNxd/zAWOwt1vhysbsJmcjvhIsUL9tb15tt38zu+0tcyXz9bxHdCTwD8mmIDHdg/ej2Fjcrn6IbqHnCayj7lS1rrsCnEj5cw/RKjvbsnfuMIJ3vTwGVycpZo06z3Q7yea5QCAfkqDDjqHxIr8PXylbJZhKHVk5+EoR7D1PaBnEOFtPIe4tjFsVq7RYonTUm9s6v6o7uijapA3pxnxagDyXboB3FKOCMYyZh2c9H4EL16oyGmAhpGjt3e+fO0jU8Bra+vvqVyxlDeFDml6nLFV4ALQugwt4j9QnlQhRsY9jYtkkhGXEzgTY0hhSLZK15WutmTTkWvEnNuowq8yQImmzqpabnKiArsEwwYgHHqhcihEUwb8/OHWikEbJcDXcuPh7AHv0v0sgL4iCCOHcj6mtFOE9Lz7QjzcTs4cHvzby0fp9y6x7jXs4e99Q0xNugOZalumZDdUOByH+0jCY1eDHrREpsE0+VBmZxDC+C8vhkqpwnaov3iFJrcDkzmtNgwwPJoBvZHg/oJ7dAD3srJjjdmmg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR07MB9830.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(136003)(376002)(39860400002)(346002)(396003)(451199018)(5930299012)(478600001)(66446008)(2906002)(64756008)(4326008)(8676002)(41300700001)(52536014)(44832011)(8936002)(5660300002)(66476007)(316002)(76116006)(71200400001)(66556008)(91956017)(110136005)(54906003)(66946007)(7696005)(786003)(966005)(6506007)(83380400001)(26005)(38070700005)(9686003)(75432002)(186003)(122000001)(55016003)(33656002)(41320700001)(38100700002)(86362001)(505234007);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: i2rsi8+rM4GDgM5sS9CJbgrZiMdTlsjnNqwkwVMrWTBGO9CsKxTRAPBZNFWhjDkf2WRDNKSjXhNySLf/jbguivyJ+OcZJO/Y7lz1oTTvR9sphdE63ECE3mU1n/Nl0z6xAMD5OrrquHhInIBJMOTsybbkvSK7YvQx8/jYf1Vt0lJpU2fQx892H7KUuf3H/X6Ze7842BZYxrcqixxpGD0kth8aNe8W/HGXHd2gYlK3bpt12UL4lH9nwwD8EiOQplSGHZ+Pv5Qgg9s/MZtAmTzAvBiYiWJZtmlczmfCy34mZV25ADhbu5FGDFKm9gVkSFFE8pUPZrMyj+PLgvK87S5t2JUAXgg6bmPW2chawLaG5mRDHia+gGiz5yrUnTKNfQOpyNxK+phEOg3dOBjC3C6GjUxQsOmYCmxCNsjkcT24Kwcrp5vid+MyYAUhyz/hDSyMtXFLvXZ7Io3DL/s8OyCXtR+cTf/t1FF/g6cIpwZtz8OXAi6KsMVeC4fE//s+a55z6NI4UBCryFp+JmmLZE7t0mvV9wHMVZcOpCzx1Jo/lbjl25hPbriN9lJe8/YtLs32spwmA5KOvBZfHHTFfZoSeF9zfiX8hOHrzmGYJXSY31NXayR5rukvxFdhAlTJ+7M9pf0oypaqI3nKoadacT8VqIMgNu38oZ4gjLOnUpD9Rg5o49aWNfaugZugVM9owjrK7D1OR2pn9Fkf5rnFMJMcl/HofeK0VK4ZXm5xRB3W/YYeegysoOWqQ2iDCQPyRUdMI2Nk9xhvd+A6sKeb/wMDckaZLEfPDcVuiBL1cq9TWAc=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR07MB9830.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(136003)(376002)(39860400002)(346002)(396003)(451199018)(7116003)(5930299012)(478600001)(66446008)(2906002)(64756008)(4326008)(7416002)(8676002)(41300700001)(52536014)(44832011)(8936002)(5660300002)(66476007)(316002)(76116006)(71200400001)(66556008)(91956017)(45080400002)(110136005)(54906003)(66946007)(7696005)(786003)(966005)(6506007)(83380400001)(26005)(38070700005)(9686003)(75432002)(186003)(122000001)(55016003)(33656002)(41320700001)(38100700002)(86362001)(58493002);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?0o6EVf4b4rxXXYg+9hsS45PlOg/cPU5K4ce0DDkvAMF/W4M4EyoNaPuXkp?=
- =?iso-8859-1?Q?Hat+61RmT2dn+ilyw0SO6D5i+H8DZEwipKMp4j2DmEeOkA6VoJBQHXQpeB?=
- =?iso-8859-1?Q?Vbz0B5/6XhmqzXI55pEUNpPB8ErjwoFkjPdm5uM75A2d7FJhqg/auANgq1?=
- =?iso-8859-1?Q?2MtFxP5B2aquHWSM8tc7RcETBnueX/RG7biUNnTJnufFsAkdpikEap9huV?=
- =?iso-8859-1?Q?2HkTS6b9ytmiQLpx+99eRJM4dQxhOZW77K9+CyeL/yEJEZRQbzxThI8fOU?=
- =?iso-8859-1?Q?vO6s+UmQJVExEya1tkZ9DrmFEgc3aZvOWWOp++4F1kWsGZQ89Cax5pFF+T?=
- =?iso-8859-1?Q?biRxBMHC2LN+BBdJZkIqVyhZdeY+JOWBWR9YLXHEImlmo3ZH5Yqy0df+qF?=
- =?iso-8859-1?Q?3LuhDVPrN6OGQr/incj0S0CkJbqmPZkc5Lxx3WuB3DaznlLuhUgqgZRvcJ?=
- =?iso-8859-1?Q?savYUj9EfoluhBHJ2wWU84wb78m5CJeeG6gKpY0nu7eDdraOEMXyZtFW+R?=
- =?iso-8859-1?Q?MoapGFaQcj0Bt2ygmSuaEvxfcR78cHJ61HJrteRMAeosq9rPJYaUPpUcPu?=
- =?iso-8859-1?Q?sLvqyLKbhnU8llBcgx5w1oMOwkU3stiFL60PFCueqHP+MN5JVVjpawlhcJ?=
- =?iso-8859-1?Q?7xV0p4DCYYIvanaE3tcI4F608C4fpVhkLrvl/falY8JStF8M2CN0mD3xxC?=
- =?iso-8859-1?Q?CY7FCIAU0i5KTyWkL9NQAfqxWTmVFJO4xSpDJvt5tkrj1S80MVJco4/kgb?=
- =?iso-8859-1?Q?Or+sLcMG5thj9pHaWfaELV6s4mabikhe8LTNgGiup621CUXfbWAtJ5KD11?=
- =?iso-8859-1?Q?+A3wku6Roaux7dZaRYP+KXiZJ/sODRZg1axkj0hy8kO7c1f7lHS+E7UuxZ?=
- =?iso-8859-1?Q?PNxd9iMD6urHzsOvk+TK8sWODL/dRqWQz4B2SPMnVr3uUfL7+JYc62y5yQ?=
- =?iso-8859-1?Q?UU7VnznrvzrQTad5R1L/Q60dHodyxt3NaZOryLQvqTRy3uxa7ZSu6+DbYQ?=
- =?iso-8859-1?Q?IF3JAtv6hxcSJLqshSKIucxjsaz+TNbZlgHanzJozoHZ8er9fMUgmVnE7P?=
- =?iso-8859-1?Q?EevtV+bwM2XnWIfkZFEQRsdnCVSra5TBQc6mZ6sQ3LtDn/CFmRxG+kOTQS?=
- =?iso-8859-1?Q?FXs2F2wtOz8NnmJnYs8wKN8Uhjc4ckW0VrON1pnbgXxP1yRLooacpvTnJB?=
- =?iso-8859-1?Q?sPHHRrxi1cy1cbksWqCEfh5HinIc88zxerfpwBWG3h0/KWV2+UhIseNsJA?=
- =?iso-8859-1?Q?oT/Cn2VpuWGlmyOq9iAjmHfV0nOQ56HLtzwzuJP3Gyi++C1om5zqnK/qLq?=
- =?iso-8859-1?Q?ep5WMibcZmXaWCWKqa7plQDa4A9o0isDMW8xjm9TTiZSzKkkz0V2UmUvUd?=
- =?iso-8859-1?Q?srHASdw6rICkraY50Bq2EtCNQXTyF98jcOctNxmy3LB6G1QyH/eFcs8Lih?=
- =?iso-8859-1?Q?aI+ofbinP59TsRGJSB73/8XjSVrtOmRfwYYSQineY2Ju0mAhRkLxGkqnvp?=
- =?iso-8859-1?Q?V33BllXUkTQaz7S+90xUF634n10aYdMUy2h+ItC3xmZfNFs6ecc0j48J7o?=
- =?iso-8859-1?Q?0P6yb3ikbzonIebxpiEDchIryKAQ4JMVFEQX6H105p26qYMaAgQyF+KxUX?=
- =?iso-8859-1?Q?QNWHLsJNqBVWhMASajIERPWVrcLSbOl8N9x6Fut7VVzwCagr0NVgHXHg?=
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?4+OVnVwecCtB3jGkRxw1UC3rfeEDZNhWzgCS8d7ljfzZV22ca2H1ykxsOO?=
+ =?iso-8859-1?Q?hEn3UEOrPqyWHvUu54Qe1yBkpYbit25iy4WV8qbQMsQjdT7HnzMxRfwy0c?=
+ =?iso-8859-1?Q?uGdeZZR4CDVo8zHUcNOuv7jeck6deySlc49ZDCzoyemWHylJyLWHnsVH7t?=
+ =?iso-8859-1?Q?5P9XTM2HLHWrnqRHwwFgBc+L6LC/fDt4oG2ruZTmD+Af2x60UF13G97gRB?=
+ =?iso-8859-1?Q?3gjN0z4xM1Z/67ccDV3ksG5s2MHUMrmktwY0X0JcApwiLcfoH3wdyemcLT?=
+ =?iso-8859-1?Q?zJfL7uskV4O9J/x7QQifDdk5cJdaHV6gHL5U6NzhB9D30x8ljnzC92EHlU?=
+ =?iso-8859-1?Q?DsiWG4XhbV1U3j24y/xm6p11z4rPsaFCXJZnfHvgbKmrBKb/cdx/DmG/7A?=
+ =?iso-8859-1?Q?GcewnhDQOMMfFZSB0noo0fjeTjQ+Sk8GsYb7c/HhB7DOAkTobdv67ZA+61?=
+ =?iso-8859-1?Q?NKVcK+VhUZdoptMV9aO8i5kAWYHOS2QoTZE/YrePu7lZf9otAGD7FrPtVa?=
+ =?iso-8859-1?Q?YvnQal5WXek71C8ADFDbtyLjL+EEFpIifITkjl+6x5LK9Odsrb2SkPzo8Q?=
+ =?iso-8859-1?Q?EEq8y3e+9Afe4kCii0Jz+FIXJ/bXzmrHDYn7oWrBdz/AwHvpD8LKtWhL7K?=
+ =?iso-8859-1?Q?5Oy/elItcmSxyMJRXdWqm/riNvbybYE7pTzr7UAeg9ODDMMMJ4bZXBiqy9?=
+ =?iso-8859-1?Q?PNqCZLi6M6thf1fKXnX6wwMbw0XlV7wH790yc0/FN/Jd+AkLrHQ84WTNaZ?=
+ =?iso-8859-1?Q?4IWl3h6ZL7fUlI+4OgSeLct9AFUX6ghKgFU0XNbU2Eo+IVj0uuhBXG7udX?=
+ =?iso-8859-1?Q?TlK0XoR3cT4gkVX9RC8f/0hlDxg7cjWQHXqZGTdo7im38GcfqKarrX8ly5?=
+ =?iso-8859-1?Q?grXDZxks0aL/h41zsNgrsjuW6v3oDvv9tbbYL1PhyL3yavTumkAuZTj5QX?=
+ =?iso-8859-1?Q?7naYV6vjZPnW93JsCpNzehGExrjoK7bi0pK7QIYfuA/6ZokimBQPMRerCp?=
+ =?iso-8859-1?Q?SoFBSI6+7scfD7oWuw2ADJG7YAhfCzlXQo1zLLwMKglG6W0aTnovCofZiC?=
+ =?iso-8859-1?Q?bDfnQu/oqbL7He1xuht79GQxgVcwE26qWDXSk0liYHzgj5gz1MCUjdyV4l?=
+ =?iso-8859-1?Q?RT/9cIXa0tXb5lRKSlBmQRtz/liR9gAN4Xm6tfd+w7AFqB4lC/vqHYJlF7?=
+ =?iso-8859-1?Q?XTnRrUXBiC6fGHLoipPO+szV7FPowjNxiVKQjZUjFI7L3aChxQ5M1A1Heo?=
+ =?iso-8859-1?Q?Yhquhro/YoWzLyAhRlAkpspeSgUpdeDSFE8CEXIhh8sMW4P0s/lcFYqGqN?=
+ =?iso-8859-1?Q?pg9Jv9MGSwrgUE+Xj34mekNVxKit5wq7WNMEMYTrr+rDkheMPdujimYH0G?=
+ =?iso-8859-1?Q?NitYf6lmkzD8QWUbA7ylR2K9AHs+caQMr4AMUb6xV+cJYM96bbebyIjk3w?=
+ =?iso-8859-1?Q?BrjDb55P7iG4JzKGVc0EH0C0UqdiN7Y60+bx8M9tpBy/g6QDQJ4DxubS8Y?=
+ =?iso-8859-1?Q?eYwM5qHj/S3zoO/hclDFe04E6CL4tyGaBNEfcmTi/OQZVzBrHfh6zz1pId?=
+ =?iso-8859-1?Q?bidIsC21D1TXvWqOtpjU5RNbuq9094WYisTsW3anigrJbEaubXQqIwHTkw?=
+ =?iso-8859-1?Q?XkUJ+Ss5SPOdfMpDhyKAf5Wg0Ja67JceWAHUNEcZSckilS+1mJZMX4ug?=
  =?iso-8859-1?Q?=3D=3D?=
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
@@ -104,13 +107,13 @@ MIME-Version: 1.0
 X-OriginatorOrg: knights.ucf.edu
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: IA1PR07MB9830.namprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b988f760-8455-489d-6124-08db06186333
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Feb 2023 18:56:41.5881
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8ca8c208-5a2b-4edf-706e-08db06186dc7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Feb 2023 18:56:59.3200
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 5b16e182-78b3-412c-9196-68342689eeb7
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: As1Tm56Og4HqXD0q6TXuTNnxu/CkdmlyXRdyWRC5EEyJEgRCuxDj+M2CTIkBIzZpjIL37yw9VaP3P5sDOv9UgkS+m+oVdgeR7FNqP2sYb78=
+X-MS-Exchange-CrossTenant-userprincipalname: khEvetSnJiNL+JjYtr9q1hAhTAX5MBSifeNVy+4W/kdbS3ZBmB5ODS8oN0FNDGuK1pDOMSFr+2js/aLj8GubGv1dCoi+Gf77tr9GT6CRrbU=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR07MB7894
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
@@ -129,107 +132,114 @@ We found a bug using a modified kernel configuration file used by syzbot.=
 We enhanced the coverage of the configuration file using our tool, klocaliz=
 er.=0A=
 =0A=
-Kernel Branch: 6.2.0-rc6-next-20230201=0A=
-Kernel config:=A0https://drive.google.com/file/d/17UnUG1E5HyCPGz_HN8--CTXXx=
-SHV2e6z/view?usp=3Dsharing=0A=
-C Reproducer:=A0https://drive.google.com/file/d/1SUoN_Bud8DW-FHrE4bV-azXaAd=
-ITStS9/view?usp=3Dsharing=0A=
+Kernel Branch: 6.2.0-rc6-next-20230131=0A=
+Kernel config:=A0https://drive.google.com/file/d/1mvxgbYKz5x6HQqwa_NUGDe0Nx=
+UVuZN4W/view?usp=3Dsharing=0A=
+Unfortunately, we do not have a reproducer yet.=0A=
 =0A=
 Thank you!=0A=
 =0A=
 Best regards,=0A=
 Sanan Hasanov=0A=
 =0A=
-F2FS-fs (loop0): Magic Mismatch, valid(0xf2f52010) - read(0x0)=0A=
-F2FS-fs (loop0): Can't find valid F2FS filesystem in 1th superblock=0A=
-F2FS-fs (loop0): Found nat_bits in checkpoint=0A=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=0A=
-BUG: KASAN: slab-out-of-bounds in f2fs_iget+0x4acd/0x5550=0A=
-Read of size 4 at addr ffff888111be9bf8 by task syz-executor941/5911=0A=
-=0A=
-CPU: 3 PID: 5911 Comm: syz-executor941 Not tainted 6.2.0-rc6-next-20230201 =
-#1=0A=
+ieee802154 phy0 wpan0: encryption failed: -22=0A=
+ieee802154 phy1 wpan1: encryption failed: -22=0A=
+------------[ cut here ]------------=0A=
+HSR: Could not send supervision frame=0A=
+WARNING: CPU: 7 PID: 19728 at net/hsr/hsr_device.c:294 send_hsr_supervision=
+_frame+0x633/0x850=0A=
+Modules linked in:=0A=
+CPU: 7 PID: 19728 Comm: kworker/7:13 Not tainted 6.2.0-rc6-next-20230131+ #=
+1=0A=
 Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/=
 2014=0A=
+Workqueue: events fill_page_cache_func=0A=
+RIP: 0010:send_hsr_supervision_frame+0x633/0x850=0A=
+Code: 03 31 ff 89 de e8 ed f6 0d f9 84 db 0f 85 f8 fe ff ff e8 00 fc 0d f9 =
+48 c7 c7 e0 19 a6 89 c6 05 d3 e2 06 03 01 e8 dd d6 d4 f8 <0f> 0b e9 d9 fe f=
+f ff e8 e1 fb 0d f9 bb 3c 00 00 00 ba 01 00 00 00=0A=
+RSP: 0018:ffff88811a589c00 EFLAGS: 00010282=0A=
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000100=0A=
+RDX: ffff88804e384280 RSI: ffffffff816e1977 RDI: ffffffff816d7cb1=0A=
+RBP: ffff88811a589c40 R08: 0000000000000005 R09: 0000000000000000=0A=
+R10: 0000000000000101 R11: 0000000000000001 R12: ffff88811a589c70=0A=
+R13: ffff888117075000 R14: 0000000000000000 R15: 0000000000000017=0A=
+FS:  0000000000000000(0000) GS:ffff88811a580000(0000) knlGS:000000000000000=
+0=0A=
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033=0A=
+CR2: 00007fdbbd596438 CR3: 0000000057318000 CR4: 0000000000350ee0=0A=
 Call Trace:=0A=
-=A0<TASK>=0A=
-=A0dump_stack_lvl+0x178/0x260=0A=
-=A0print_report+0xc1/0x5e0=0A=
-=A0kasan_report+0xc0/0xf0=0A=
-=A0f2fs_iget+0x4acd/0x5550=0A=
-=A0f2fs_fill_super+0x4131/0x8490=0A=
-=A0mount_bdev+0x332/0x400=0A=
-=A0legacy_get_tree+0x109/0x220=0A=
-=A0vfs_get_tree+0x8d/0x350=0A=
-=A0path_mount+0x675/0x1e30=0A=
-=A0__x64_sys_mount+0x283/0x300=0A=
-=A0do_syscall_64+0x39/0x80=0A=
-=A0entry_SYSCALL_64_after_hwframe+0x63/0xcd=0A=
-RIP: 0033:0x7f5b5d4a67ee=0A=
-Code: 48 c7 c0 ff ff ff ff eb aa e8 ce 05 00 00 66 2e 0f 1f 84 00 00 00 00 =
-00 0f 1f 40 00 f3 0f 1e fa 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff f=
-f 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48=0A=
-RSP: 002b:00007ffecd308d08 EFLAGS: 00000286 ORIG_RAX: 00000000000000a5=0A=
-RAX: ffffffffffffffda RBX: 00007ffecd308d60 RCX: 00007f5b5d4a67ee=0A=
-RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007ffecd308d20=0A=
-RBP: 0000000000000003 R08: 00007ffecd308d60 R09: 00005555ffffffff=0A=
-R10: 0000000000000000 R11: 0000000000000286 R12: 00007ffecd308d20=0A=
-R13: 0000000000000004 R14: 0000000000000026 R15: 0000000000000000=0A=
-=A0</TASK>=0A=
+ <IRQ>=0A=
+ hsr_announce+0x122/0x390=0A=
+ call_timer_fn+0x1fa/0x840=0A=
+ __run_timers.part.0+0x6bf/0x950=0A=
+ run_timer_softirq+0xb7/0x1b0=0A=
+ __do_softirq+0x306/0xb22=0A=
+ __irq_exit_rcu+0x196/0x230=0A=
+ irq_exit_rcu+0xd/0x30=0A=
+ sysvec_apic_timer_interrupt+0xa5/0xc0=0A=
+ </IRQ>=0A=
+ <TASK>=0A=
+ asm_sysvec_apic_timer_interrupt+0x1f/0x30=0A=
+RIP: 0010:_raw_spin_unlock_irq+0x52/0x90=0A=
+Code: c7 c0 a0 4c 77 8a 48 ba 00 00 00 00 00 fc ff df 48 c1 e8 03 80 3c 10 =
+00 75 38 48 83 3d 16 6e e9 01 00 74 25 fb 0f 1f 44 00 00 <bf> 01 00 00 00 e=
+8 34 19 d0 f8 65 8b 05 e5 e8 75 77 85 c0 74 0c 4c=0A=
+RSP: 0018:ffff888027787310 EFLAGS: 00000282=0A=
+RAX: 1ffffffff14ee994 RBX: 0000000000000020 RCX: 1ffffffff1a9fcce=0A=
+RDX: dffffc0000000000 RSI: 0000000000000001 RDI: 0000000000000000=0A=
+RBP: ffff888027787318 R08: 0000000000000001 R09: ffffffff8d4f64d7=0A=
+R10: fffffbfff1a9ec9a R11: 0000000000000001 R12: ffff88810083a050=0A=
+R13: ffff8880277878a0 R14: ffff8880277874d8 R15: 0000000000000000=0A=
+ shrink_lruvec+0xd19/0x2770=0A=
+ shrink_node+0x8f2/0x1ed0=0A=
+ do_try_to_free_pages+0x3ff/0x18c0=0A=
+ try_to_free_pages+0x348/0xa20=0A=
+ __alloc_pages_slowpath.constprop.0+0xa0c/0x2590=0A=
+ __alloc_pages+0x51c/0x6e0=0A=
+ alloc_pages+0x1a5/0x260=0A=
+ __get_free_pages+0x10/0x50=0A=
+ fill_page_cache_func+0xae/0x240=0A=
+ process_one_work+0xa2d/0x1940=0A=
+ worker_thread+0x674/0x10b0=0A=
+ kthread+0x306/0x3d0=0A=
+ ret_from_fork+0x2c/0x50=0A=
+ </TASK>=0A=
+irq event stamp: 727444=0A=
+hardirqs last  enabled at (727454): [<ffffffff816d7284>] __up_console_sem+0=
+xf4/0x180=0A=
+hardirqs last disabled at (727463): [<ffffffff816d7269>] __up_console_sem+0=
+xd9/0x180=0A=
+softirqs last  enabled at (725494): [<ffffffff81534006>] __irq_exit_rcu+0x1=
+96/0x230=0A=
+softirqs last disabled at (726425): [<ffffffff81534006>] __irq_exit_rcu+0x1=
+96/0x230=0A=
+---[ end trace 0000000000000000 ]---=0A=
+ICMPv6: ndisc: ndisc_alloc_skb failed to allocate an skb=0A=
+loop6: detected capacity change from 0 to 128=0A=
+EXT4-fs (loop6): mounted filesystem 76b65be2-f6da-4727-8c75-0525a5b65a09 wi=
+thout journal. Quota mode: none.=0A=
+ext4 filesystem being mounted at /syzkaller-testdir455853457/syzkaller.BkvI=
+xk/371/mnt supports timestamps until 2038 (0x7fffffff)=0A=
+----------------=0A=
+Code disassembly (best guess):=0A=
+   0:	c7 c0 a0 4c 77 8a    	mov    $0x8a774ca0,%eax=0A=
+   6:	48 ba 00 00 00 00 00 	movabs $0xdffffc0000000000,%rdx=0A=
+   d:	fc ff df=0A=
+  10:	48 c1 e8 03          	shr    $0x3,%rax=0A=
+  14:	80 3c 10 00          	cmpb   $0x0,(%rax,%rdx,1)=0A=
+  18:	75 38                	jne    0x52=0A=
+  1a:	48 83 3d 16 6e e9 01 	cmpq   $0x0,0x1e96e16(%rip)        # 0x1e96e38=
 =0A=
-Allocated by task 1:=0A=
-=A0kasan_save_stack+0x22/0x40=0A=
-=A0kasan_set_track+0x25/0x30=0A=
-=A0__kasan_kmalloc+0x7c/0x90=0A=
-=A0snd_info_create_entry+0x51/0x420=0A=
-=A0snd_pcm_new_stream+0x4d2/0x1530=0A=
-=A0_snd_pcm_new+0x246/0x3f0=0A=
-=A0snd_pcm_new+0x3e/0x50=0A=
-=A0loopback_pcm_new+0x95/0x200=0A=
-=A0loopback_probe+0x294/0xe90=0A=
-=A0platform_probe+0xba/0x1b0=0A=
-=A0really_probe+0x236/0x8f0=0A=
-=A0__driver_probe_device+0x252/0x2d0=0A=
-=A0driver_probe_device+0x4c/0x1a0=0A=
-=A0__device_attach_driver+0x1ce/0x290=0A=
-=A0bus_for_each_drv+0x163/0x1e0=0A=
-=A0__device_attach+0x1f2/0x490=0A=
-=A0bus_probe_device+0x1e8/0x2a0=0A=
-=A0device_add+0x10d4/0x1c90=0A=
-=A0platform_device_add+0x35a/0x6f0=0A=
-=A0platform_device_register_full+0x396/0x4e0=0A=
-=A0alsa_card_loopback_init+0x167/0x2c0=0A=
-=A0do_one_initcall+0x141/0x860=0A=
-=A0kernel_init_freeable+0x5e4/0x8f0=0A=
-=A0kernel_init+0x1e/0x2c0=0A=
-=A0ret_from_fork+0x1f/0x30=0A=
+  21:	00=0A=
+  22:	74 25                	je     0x49=0A=
+  24:	fb                   	sti=0A=
+  25:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)=0A=
+* 2a:	bf 01 00 00 00       	mov    $0x1,%edi <-- trapping instruction=0A=
+  2f:	e8 34 19 d0 f8       	call   0xf8d01968=0A=
+  34:	65 8b 05 e5 e8 75 77 	mov    %gs:0x7775e8e5(%rip),%eax        # 0x777=
+5e920=0A=
+  3b:	85 c0                	test   %eax,%eax=0A=
+  3d:	74 0c                	je     0x4b=0A=
+  3f:	4c                   	rex.WR=0A=
 =0A=
-The buggy address belongs to the object at ffff888111be9800=0A=
-=A0which belongs to the cache kmalloc-512 of size 512=0A=
-The buggy address is located 752 bytes to the right of=0A=
-=A0allocated 264-byte region [ffff888111be9800, ffff888111be9908)=0A=
-=0A=
-The buggy address belongs to the physical page:=0A=
-page:00000000acf7864d refcount:1 mapcount:0 mapping:0000000000000000 index:=
-0x0 pfn:0x111be9=0A=
-flags: 0x17ffe0000000200(slab|node=3D0|zone=3D2|lastcpupid=3D0x3fff)=0A=
-raw: 017ffe0000000200 ffff888100040600 ffffea000446fa90 ffffea0004470e10=0A=
-raw: 0000000000000000 ffff888111be9000 0000000100000004 0000000000000000=0A=
-page dumped because: kasan: bad access detected=0A=
-=0A=
-Memory state around the buggy address:=0A=
-=A0ffff888111be9a80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc=0A=
-=A0ffff888111be9b00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc=0A=
->ffff888111be9b80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc=0A=
-=A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0=
- =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 ^=0A=
-=A0ffff888111be9c00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00=0A=
-=A0ffff888111be9c80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00=0A=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=0A=
-F2FS-fs (loop0): sanity_check_inode: inode (ino=3D3) is with extra_attr, bu=
-t extra_attr feature is off=0A=
-F2FS-fs (loop0): Failed to read root inode=0A=
