@@ -2,128 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3F3968A433
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 22:06:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1726C68A43F
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 22:07:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233716AbjBCVGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 16:06:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46008 "EHLO
+        id S233380AbjBCVH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 16:07:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233013AbjBCVGY (ORCPT
+        with ESMTP id S233294AbjBCVHF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 16:06:24 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CA539D048
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 13:03:44 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id o13so6256022pjg.2
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 13:03:44 -0800 (PST)
+        Fri, 3 Feb 2023 16:07:05 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25974A1472
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 13:05:20 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id v6-20020a17090ad58600b00229eec90a7fso8944288pju.0
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 13:05:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VP4/d3Y0Oqxsvz7Ftjj2BwTWqxgaXGOrnNFEq4FE3dU=;
-        b=QO4R8KsHTxyL5z8Huk798ZeR6tHbP7t8MPYHoYmmjpIasgvTEKtbj4o8s1hb/77oVL
-         GMgRrJLH+zRO1iickOIWDfT8oTgVv5+uQKQlw/Ck4Pm7rTGOEx2bIkD4Ebib7710No+a
-         +o12MSKGByhdJX8HgZ77+zCGNZZgENejJG6sw8c+etR04Ngj0jLMD8i6dSwbcrY2J1v4
-         zPgj48WxkJPHLqsHWq1jDtN0cgHzWcKV9Fs7YmeXu9loWbrddugVP8SNMwF7cMXRkQYY
-         H+gDqAHy0P93Ut/u3ROlSTKbqaOnLl1y59sTKM9yrpuLwCjGfVsQahDGL+SKsw79Ud02
-         ubOw==
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kRkhbVYx72n4TXeP74pzIeW0EWRz202u/hdkivmgX8E=;
+        b=bYQXV+7uhtyeNzG1HjS7VWvOmtEDV2Hag2GlbnJ4dTbFa1tjojwOOHGFe33i2GVo/O
+         +75H8AmDNH5t2zD4gbhvuTiWlL4BfQEZ2qmx+XYkucQAKyIwbA8X6tBFeHxYdShEQF8o
+         o2FTbtT/htoWaHFVHMOOXzQ+cQ1ZYjdwDSPNjEoccV8xYVIygFBS/cO78t0knDl3+xt3
+         9FE9WkjgQQop8k0xAZuuPDbhlU1dQmqflmjlLJtlUU8JSD3K5to2YPdVF99wNjqSmqik
+         eMH8mx8QxAdlmPmCZcmIRzFDFiS/e9t6m0Ja/7sKuNIkm17S+r0ImmVxo+fvkm1aPuaE
+         soog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VP4/d3Y0Oqxsvz7Ftjj2BwTWqxgaXGOrnNFEq4FE3dU=;
-        b=SCHm1TOnkPkKttzPXpze+0NJOhiqpoc0PpmJwJ393k0FVM1NwaDx5FzH7ZN9MNlOLo
-         Qzha3Og4WjbL4sO0ZIRizvOlyB8Aix9PTiG4Wzy3ww13KN8yoQFvmNB7VelI+BIjrZHU
-         ioFSfXEJ2BA7rwshRnlwp9piUBdzhsctaVCCAKHRJ7sEKpkwITzR+E25TzelGRWO2K9j
-         ELFZEaGHEjdXV82Ifc3kauIj6eeUEedfZqD0WDUK4WORbPlqVMWVycRG8UNLPBCO0/S7
-         dK8gycpnm4XT+9uzPFvfXE5wAEy3FOpkXXEAzA8RFTO/nrMHXHTTv/EdUmeAsviRKxaQ
-         x05Q==
-X-Gm-Message-State: AO0yUKW67lBQ1W7Ysyt4HkkwgEhDoRwmffdyXUbiHLps/BHnNf3/0tQk
-        6zG3ACmitUrTFv6rOKkH3K/QgQ==
-X-Google-Smtp-Source: AK7set9aTi4zteUq6Qmw6N81OlL7uUEGAJYUXTPDj/vmrkHjBpPjHLglXZeEUFHpscSIcH0tS0v85A==
-X-Received: by 2002:a17:903:1c7:b0:198:af50:e4df with SMTP id e7-20020a17090301c700b00198af50e4dfmr26104plh.5.1675458216128;
-        Fri, 03 Feb 2023 13:03:36 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id n19-20020a170902969300b00198e03c3ad4sm1825758plp.278.2023.02.03.13.03.35
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kRkhbVYx72n4TXeP74pzIeW0EWRz202u/hdkivmgX8E=;
+        b=o3BjTUI5iLFgjlp0oNB0MfvYS+6zH9LpIeEJMFGTKbR7x5cXHHGDMtbBiMR2jSgCZq
+         PNr3r+0bIQkf6XtxvBBwVdqX9oo7p64XXprBQQ5+hzz1JwvFc2Ajx3HSqcgl6OYbXV17
+         BIm3tFXEKGlUu3ouTwnpL3K/VEQH0To4i0xYFP1i3XMSZ24cbPMkFItgaXgS/UiwqrK4
+         lzaT8kHqB2/tfT0KKqMYsoB0FOxeMX7aUHgiHrcNBLPI0CykcJS0vXeonj/7BhrB/kfy
+         0mJ8OkhZD3C+CHGSfxy/RorvAyvXdj9trcVa9Jkn284c0MQNv0MAjwp7JNir6kGxjhY/
+         jlAg==
+X-Gm-Message-State: AO0yUKUCj3ApSsKEwP2QFGL/9XYiqYDj6TVjT/WUpuL3mYCCfgcRWgOV
+        iRKPcgPepEtGS/NGicFY9kFAuqo8IpU=
+X-Google-Smtp-Source: AK7set+WnQx5k9SxqLJOGh2THwS+yzAxAuiYmtpxkelfQZY45AU2AkmT8KNsMPDCOnAUcRfutLTNTQ==
+X-Received: by 2002:a17:90a:195a:b0:230:7079:aec1 with SMTP id 26-20020a17090a195a00b002307079aec1mr4644202pjh.29.1675458292830;
+        Fri, 03 Feb 2023 13:04:52 -0800 (PST)
+Received: from localhost ([2620:10d:c090:400::5:35e])
+        by smtp.gmail.com with ESMTPSA id r19-20020a17090b051300b0022bb3ee9b68sm2084214pjz.13.2023.02.03.13.04.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 13:03:35 -0800 (PST)
-Date:   Fri, 3 Feb 2023 21:03:31 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yang Weijiang <weijiang.yang@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH] KVM: x86/pmu: Disallow legacy LBRs if architectural LBRs
- are available
-Message-ID: <Y912o2iB96G8K1PP@google.com>
-References: <20230128001427.2548858-1-seanjc@google.com>
- <f106a06e-ae6f-2c79-df87-721817aacc02@gmail.com>
- <Y9wK/LkBYusOv1DO@google.com>
- <79bab707-6592-0c45-d21f-c3014362bb82@gmail.com>
+        Fri, 03 Feb 2023 13:04:52 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Fri, 3 Feb 2023 11:04:50 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Will Deacon <will@kernel.org>, Phil Auld <pauld@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] sched/core: Fix a missed update of user_cpus_ptr
+Message-ID: <Y9128uN5X8L3VTG3@slm.duckdns.org>
+References: <20230203181849.221943-1-longman@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <79bab707-6592-0c45-d21f-c3014362bb82@gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230203181849.221943-1-longman@redhat.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023, Like Xu wrote:
-> On 3/2/2023 3:11 am, Sean Christopherson wrote:
-> > On Tue, Jan 31, 2023, Like Xu wrote:
-> > > On 28/1/2023 8:14 am, Sean Christopherson wrote:
-> > > > Disallow enabling LBR support if the CPU supports architectural LBRs.
-> > > > Traditional LBR support is absent on CPU models that have architectural
-> > > > LBRs, and KVM doesn't yet support arch LBRs, i.e. KVM will pass through
-> > > > non-existent MSRs if userspace enables LBRs for the guest.
-> > > 
-> > > True, we have call_trace due to MSR_ARCH_LBR_FROM_0 (0x1500) for example.
-> > > 
-> > > > 
-> > > > Cc: stable@vger.kernel.org
-> > > > Cc: Yang Weijiang <weijiang.yang@intel.com>
-> > > > Cc: Like Xu <like.xu.linux@gmail.com>
-> > > 
-> > > Tested-by: Like Xu <likexu@tencent.com>
-> > > 
-> > > > Reported-by: Paolo Bonzini <pbonzini@redhat.com>
-> > > 
-> > > Fixes: 145dfad998ea ("KVM: VMX: Advertise PMU LBRs if and only if perf
-> > > supports LBRs")
-> > 
-> > If we want a fixes, I'd argue this is more appropriate:
-> > 
-> >    Fixes: be635e34c284 ("KVM: vmx/pmu: Expose LBR_FMT in the MSR_IA32_PERF_CAPABILITIES")
-> > 
-> > Though I'd prefer not to blame KVM, there's not much we could have done in KVM
-> > to know that Intel would effectively break backwards compatibility.
+On Fri, Feb 03, 2023 at 01:18:49PM -0500, Waiman Long wrote:
+> Since commit 8f9ea86fdf99 ("sched: Always preserve the user requested
+> cpumask"), a successful call to sched_setaffinity() should always save
+> the user requested cpu affinity mask in a task's user_cpus_ptr. However,
+> when the given cpu mask is the same as the current one, user_cpus_ptr
+> is not updated. Fix this by saving the user mask in this case too.
 > 
-> Personally, I assume the bigger role of the Fix tag is to help the stable tree's
-> bots make it easier to back port patches automatically, and there will be less
-> sense of blame for the developers.
+> Fixes: 8f9ea86fdf99 ("sched: Always preserve the user requested cpumask")
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>  kernel/sched/core.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index 30d9752e2ca5..91255f791df3 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -2951,8 +2951,11 @@ static int __set_cpus_allowed_ptr_locked(struct task_struct *p,
+>  	}
+>  
+>  	if (!(ctx->flags & SCA_MIGRATE_ENABLE)) {
+> -		if (cpumask_equal(&p->cpus_mask, ctx->new_mask))
+> +		if (cpumask_equal(&p->cpus_mask, ctx->new_mask)) {
+> +			if (ctx->flags & SCA_USER)
+> +				swap(p->user_cpus_ptr, ctx->user_mask);
+>  			goto out;
+> +		}
+>  
+>  		if (WARN_ON_ONCE(p == current &&
+>  				 is_migration_disabled(p) &&
 
-I don't mind adding a Fixes to aid stable, but then
+and this is for a separate bug and should go through the scheduler tree.
 
-  Fixes: be635e34c284 ("KVM: vmx/pmu: Expose LBR_FMT in the MSR_IA32_PERF_CAPABILITIES")
+Thanks.
 
-is still more correct, e.g. if there are kernel's that didn't get
-145dfad998ea ("KVM: VMX: Advertise PMU LBRs if and only if perf supports LBRs")
-for whatever reason.
-
-> In pmu scope, if a feature is not "architecture", I'm not surprised that a
-> new arrival will break compatibility, and sometimes kernel developers need to
-> plan ahead.
-
-Hrm, true, compatibility is usually a non-goal for uarch stuff.  I'll try to keep
-that in mind for future vPMU code.
-
-Thanks!
+-- 
+tejun
