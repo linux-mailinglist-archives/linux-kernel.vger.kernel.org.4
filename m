@@ -2,133 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 385A1689BAB
+	by mail.lfdr.de (Postfix) with ESMTP id CD10C689BAD
 	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 15:31:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233000AbjBCObJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 09:31:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47288 "EHLO
+        id S233411AbjBCObT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 09:31:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230042AbjBCObH (ORCPT
+        with ESMTP id S232507AbjBCObI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 09:31:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CDAC6E420
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 06:30:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675434619;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FGqA/t5BHooNtKKmgY/P/RvUeTIDhJpfv4X01I3UuzM=;
-        b=KzLKtn5J5FwDJ1xW53tYbqxuplKMAAGctSM8PUKQ9FfhxhD5kMUNjV5QmGhTHb9LN4k1JM
-        WyGG4nNHBPdm+kz7FuL6LCQl+M+t1yl+mEKLj/wLHK33qEkv00jPTKSn2Anz2n9FBO2sAB
-        Sdt2g8AcEwjfqUqtFHQABHkt3NWnZuk=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-456-bqGXDfoLPkGAiwgiHrhoaQ-1; Fri, 03 Feb 2023 09:30:18 -0500
-X-MC-Unique: bqGXDfoLPkGAiwgiHrhoaQ-1
-Received: by mail-wm1-f70.google.com with SMTP id h2-20020a1ccc02000000b003db1ded176dso2695909wmb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 06:30:17 -0800 (PST)
+        Fri, 3 Feb 2023 09:31:08 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 695BA918A4
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 06:30:39 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id qw12so15874149ejc.2
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 06:30:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=diag.uniroma1.it; s=google;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SCfhQWifsNy9CyCbBvmbmuvaOgWVqMDaXIzl8qBm0x4=;
+        b=z336Lb1iPJSZyYKXQhbaDhXihPVC0JsnENYUd0VWoG9KCS1hbFQ2FUSImZCiOpFZjm
+         2FLmhjgADdx2nD215OoUSwkjeovCQ1AaPweUZQR0Jl7oVRCkEIpVlrsZCGhYVrdLgtcQ
+         bl5yY12T+7obPeSltFQtzr8vVMn2JDgIBAHkQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=FGqA/t5BHooNtKKmgY/P/RvUeTIDhJpfv4X01I3UuzM=;
-        b=BdyA8gTa2uId+fwIiAeOHq+/gs206K7fhL9mbOnZ2GNepqSWR3DsjpyGczx8DydMp+
-         P1N9vW9iTetXgxc83U3+0/nqOABMY+SAc93LERILznvXPZ9Ny8ytcnTZ+n83ZjhMDEJJ
-         11rRJTHkmgVjGas0BAkDuEpb9hcUzRh8NJBrltsIzjfHq90m/jeJmDhHOu9CgtNTgdGD
-         ku8ElPmF1v6bpTevBFSrG5tRVkinERZPQumHJG5ryC5lZpYEOkGhnoKvVXKAkPb1cqPi
-         Ae6LQKDRPb+99hU+cNr4B0mENRpODSyGbdVzdJtyRJH4gJkVfaf1sw94HpbNx1Ic1m5G
-         Ry3Q==
-X-Gm-Message-State: AO0yUKUnuBxAGij+kv5Ta1iLuZBWSf6HKunO6SQ4i/NpRpUzR1LdHql0
-        BLtRDV+nEKnewh0gV6g115kbnxGrWMJrGrqcNrO32QV5xJZWzDiDlrXPDadSSsH8OX6hRDhqMqa
-        SeuSPjHXy/xWk0lrn/jFrsWt8
-X-Received: by 2002:a05:600c:3588:b0:3df:e1e9:200e with SMTP id p8-20020a05600c358800b003dfe1e9200emr4472891wmq.39.1675434616185;
-        Fri, 03 Feb 2023 06:30:16 -0800 (PST)
-X-Google-Smtp-Source: AK7set+3Fxk3nALXFhpoXy/lSyMSFcdmxLuZvgb86YYfx4M4JIQvKCJs/tKTkc3VpDPsDt8toFavpA==
-X-Received: by 2002:a05:600c:3588:b0:3df:e1e9:200e with SMTP id p8-20020a05600c358800b003dfe1e9200emr4472869wmq.39.1675434615896;
-        Fri, 03 Feb 2023 06:30:15 -0800 (PST)
-Received: from [192.168.3.108] (p5b0c6376.dip0.t-ipconnect.de. [91.12.99.118])
-        by smtp.gmail.com with ESMTPSA id h27-20020a05600c2cbb00b003db12112fcfsm3203111wmc.4.2023.02.03.06.30.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Feb 2023 06:30:15 -0800 (PST)
-Message-ID: <569308c6-558b-de6e-1e98-2f50c1c56755@redhat.com>
-Date:   Fri, 3 Feb 2023 15:30:12 +0100
+        bh=SCfhQWifsNy9CyCbBvmbmuvaOgWVqMDaXIzl8qBm0x4=;
+        b=sm+/7Qxw+IO2H60uOLm6Gn0T2eBj/3xpgeOMgqGez5Bl+/7GH6pBCt4eTJ15ZmF7y5
+         ojbUVVWqfpticLhbBlPew8N3QyhPra3uFoX1Xr56dbmbAoS8llrvKuceCxgvRXr9YI3P
+         CmINENCLHDDkuvPVzMsURXdqEcDQckJRMe2OQksgp7OsFbRPXNuLdlFmANQTS6qKI+iE
+         VUKCwN4Qz5G5EQyKHySH35N2aPgwWXRLKAfZ+Mp9MqVPR/7zoqBfCCEU87UTkkTtqFa7
+         V4QJppuYK63oV3j/0C59r3vGFNllhLOEje9EmrRXujwyU9BF8B/1N/yUKErPsg66pmqd
+         x5iA==
+X-Gm-Message-State: AO0yUKW+2FlX079E+57sCd5XhXkvmM6oJ7/ye27/ufsLf9ftLxXLn8u4
+        mJHQB0vQBaUuNvXH2hc4MjllXA==
+X-Google-Smtp-Source: AK7set9sAkOUEJC4Bqjify5ZxZ//da2iQy5f+Fu/o4MO9VpT8FY2V54/8QZ15B6Y8491Z43q7ve0fQ==
+X-Received: by 2002:a17:906:6a24:b0:87b:da77:eec2 with SMTP id qw36-20020a1709066a2400b0087bda77eec2mr14376037ejc.19.1675434637922;
+        Fri, 03 Feb 2023 06:30:37 -0800 (PST)
+Received: from [192.168.17.2] (wolkje-127.labs.vu.nl. [130.37.198.127])
+        by smtp.gmail.com with ESMTPSA id v17-20020a17090690d100b007b935641971sm1453388ejw.5.2023.02.03.06.30.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Feb 2023 06:30:37 -0800 (PST)
+From:   Pietro Borrello <borrello@diag.uniroma1.it>
+Subject: [PATCH net-next v2 0/2] tuntap: correctly initialize socket uid
+Date:   Fri, 03 Feb 2023 14:30:26 +0000
+Message-Id: <20230131-tuntap-sk-uid-v2-0-29ec15592813@diag.uniroma1.it>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v2 1/4] arm: include asm-generic/memory_model.h from
- page.h rather than memory.h
-Content-Language: en-US
-To:     Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Brian Cain <bcain@quicinc.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Matt Turner <mattst88@gmail.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Simek <monstr@monstr.eu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rich Felker <dalias@libc.org>,
-        Richard Weinberger <richard@nod.at>,
-        Russell King <linux@armlinux.org.uk>,
-        Stafford Horne <shorne@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Vineet Gupta <vgupta@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-mm@kvack.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
-        x86@kernel.org
-References: <20230129124235.209895-1-rppt@kernel.org>
- <20230129124235.209895-2-rppt@kernel.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230129124235.209895-2-rppt@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-B4-Tracking: v=1; b=H4sIAIIa3WMC/3WOwQqDMBBEf0X23JUkCmpP/Y/Sw6obXYqxJFEs4
+ r83eu9xeLyZ2SGwFw5wz3bwvEqQ2aVgbhl0I7mBUfqUwShTKF1ojIuL9MHwxkV6rGq2Xa1s2dY
+ GktNSYGw9uW48rYlCZH+Cj2cr2zX0BMcRHW8RXomMEuLsv9eDVV/8z9iqUSHZ0ja2VE3V9I9ea
+ MgXJ36eSOeSCo/j+AGoMCn/1AAAAA==
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Lorenzo Colitti <lorenzo@google.com>
+Cc:     Stephen Hemminger <stephen@networkplumber.org>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Pietro Borrello <borrello@diag.uniroma1.it>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1675434637; l=2185;
+ i=borrello@diag.uniroma1.it; s=20221223; h=from:subject:message-id;
+ bh=k7OkDWZh6ckrGB3KcTW6UKWAah2540gJFLAT/7iNFX0=;
+ b=vkf+XCAcN0KXWbS/7ktGZ8N/sUAXkaRTSZzm/rUkVcfzo5F2gGcrtPXfsEoEDzezcc1Ae65PFB2W
+ Qv9SOYx7BJDiSrTqkdhrTMKHdATiTYZtGQXkHgKqDajkeaSIfxnK
+X-Developer-Key: i=borrello@diag.uniroma1.it; a=ed25519;
+ pk=4xRQbiJKehl7dFvrG33o2HpveMrwQiUPKtIlObzKmdY=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29.01.23 13:42, Mike Rapoport wrote:
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> 
-> Makes it consistent with other architectures and allows for generic
-> definition of pfn_valid() in asm-generic/memory_model.h with clear override
-> in arch/arm/include/asm/page.h
-> 
-> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> ---
+sock_init_data() assumes that the `struct socket` passed in input is
+contained in a `struct socket_alloc` allocated with sock_alloc().
+However, tap_open() and tun_chr_open() pass a `struct socket` embedded
+in a `struct tap_queue` and `struct tun_file` respectively, both
+allocated with sk_alloc().
+This causes a type confusion when issuing a container_of() with
+SOCK_INODE() in sock_init_data() which results in assigning a wrong
+sk_uid to the `struct sock` in input.
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+Due to the type confusion, both sockets happen to have their uid set
+to 0, i.e. root.
+While it will be often correct, as tuntap devices require
+CAP_NET_ADMIN, it may not always be the case.
+Not sure how widespread is the impact of this, it seems the socket uid
+may be used for network filtering and routing, thus tuntap sockets may
+be incorrectly managed.
+Additionally, it seems a socket with an incorrect uid may be returned
+to the vhost driver when issuing a get_socket() on a tuntap device in
+vhost_net_set_backend().
 
+The proposed fix may not be the cleanest one, as it simply overrides
+the incorrect uid after the type confusion in sock_init_data()
+happens.
+While minimal, this may not be solid in case more logic relying on
+SOCK_INODE() is added to sock_init_data().
+The alternative fix would be to pass a NULL sock, and manually perform
+the assignments after the sock_init_data() call:
+```
+sk_set_socket(sk, sock);
+// and
+sk->sk_type	=	sock->type;
+RCU_INIT_POINTER(sk->sk_wq, &sock->wq);
+sock->sk	=	sk;
+sk->sk_uid	=	SOCK_INODE(sock)->i_uid;
+```
+
+Signed-off-by: Pietro Borrello <borrello@diag.uniroma1.it>
+---
+Changes in v2:
+- Shorten and format comments
+- Link to v1: https://lore.kernel.org/r/20230131-tuntap-sk-uid-v1-0-af4f9f40979d@diag.uniroma1.it
+
+---
+Pietro Borrello (2):
+      tun: tun_chr_open(): correctly initialize socket uid
+      tap: tap_open(): correctly initialize socket uid
+
+ drivers/net/tap.c | 4 ++++
+ drivers/net/tun.c | 5 +++++
+ 2 files changed, 9 insertions(+)
+---
+base-commit: 6d796c50f84ca79f1722bb131799e5a5710c4700
+change-id: 20230131-tuntap-sk-uid-78efc80f4b82
+
+Best regards,
 -- 
-Thanks,
-
-David / dhildenb
+Pietro Borrello <borrello@diag.uniroma1.it>
 
