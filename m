@@ -2,65 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36815688DCA
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 04:15:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10930688DDC
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 04:18:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232253AbjBCDPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 22:15:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44900 "EHLO
+        id S232358AbjBCDSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 22:18:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230228AbjBCDPC (ORCPT
+        with ESMTP id S232283AbjBCDSj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 22:15:02 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 511A076A2;
-        Thu,  2 Feb 2023 19:15:00 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 281BF24E13F;
-        Fri,  3 Feb 2023 11:14:59 +0800 (CST)
-Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 3 Feb
- 2023 11:14:59 +0800
-Received: from [192.168.120.49] (171.223.208.138) by EXMBX073.cuchost.com
- (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 3 Feb
- 2023 11:14:57 +0800
-Message-ID: <f22614b4-80ae-8b16-b53e-e43c44722668@starfivetech.com>
-Date:   Fri, 3 Feb 2023 11:14:56 +0800
+        Thu, 2 Feb 2023 22:18:39 -0500
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C3654545;
+        Thu,  2 Feb 2023 19:18:38 -0800 (PST)
+Received: by mail-pl1-x642.google.com with SMTP id m13so3962714plx.13;
+        Thu, 02 Feb 2023 19:18:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=p1ZRhY1eH/18xy31juzI6AkvdowOs5cnS48xbXSK4K0=;
+        b=IxH9dsQo0UYNYbzfyy0IXjkOnl7SKRobs7spNqCbsnIi2RR2KJqd4pvDMtDtgdh+Wd
+         cDPUGlyLrVBUhUEs+04LXD34ZYH21EUD8xMqqEcdtf6kMsBcOn3wXzAQaWxaLJw2gLVH
+         r03Pv4WRuelKwlZvt83D148LVT79iSUDnt3j99TX/pnCQ9epIC3KkTJTrO9omgimy6YD
+         IB2DnsihTUinV163GaWUnfZAxc2b0Q5kTcmOu8NatvqZVBGBgOOpW4XnupkRyHLgC6Ai
+         40n8QRyixYxoLFAB/KvJk6h+tqHd8NEjRV7PvXdMAuuyalWFHmpHn1zmZ1SeTFzVEITj
+         NcDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=p1ZRhY1eH/18xy31juzI6AkvdowOs5cnS48xbXSK4K0=;
+        b=igs0kUCHp/QB+zohV2NwO4uxLMw8O9RwcMQwZX78qKvaOHDnfxgO9QF2eidH7wYv1Y
+         200C6iJTc3sClOKQr3J7okTr3RKErQ3pMyPInSj45lYTIDdX7LCDyj26w1mspVL873az
+         Pjb2cn+3hel6n8RgkL8hlL6jZ0wvKwpxbFFDFBCA9NtprV9/BJfjqDi+ESek6knyJ+TW
+         gInJocCFFaRwUy9mt9yTCQb9Cvrusn82EUN8olPxTLGTo0GWGtWZUJVj+UuKvsG68Ooa
+         srmUm/W7uafTXwpFettviGydQ0VEa7r2BkdcD2L87H5t10B3+YVQD2lBUAnAou6I6gg2
+         RFHg==
+X-Gm-Message-State: AO0yUKXaqHb1JfaLj2Q0+tVTJhjDX6sDbKiKPN+cbe2f6lS7CJLASMl7
+        UryQgSVTldWEZNns2dF+6K0=
+X-Google-Smtp-Source: AK7set8IJZN0aIG27aYQtNaIL5/7eeF1kaRmE0qsq2d3Jc5wer2fUb8vMTEJbsXvwH3o6sQeNh1T4g==
+X-Received: by 2002:a17:902:ec8c:b0:191:3098:8b with SMTP id x12-20020a170902ec8c00b001913098008bmr3809811plg.58.1675394317600;
+        Thu, 02 Feb 2023 19:18:37 -0800 (PST)
+Received: from localhost.localdomain ([203.205.141.16])
+        by smtp.gmail.com with ESMTPSA id a9-20020a170902ee8900b001899c2a0ae0sm416009pld.40.2023.02.02.19.18.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Feb 2023 19:18:37 -0800 (PST)
+From:   menglong8.dong@gmail.com
+X-Google-Original-From: imagedong@tencent.com
+To:     andrii.nakryiko@gmail.com, alan.maguire@oracle.com
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Menglong Dong <imagedong@tencent.com>
+Subject: [PATCH bpf-next 0/2] libbpf: allow users to set kprobe/uprobe attach mode
+Date:   Fri,  3 Feb 2023 11:17:40 +0800
+Message-Id: <20230203031742.1730761-1-imagedong@tencent.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v4 6/7] riscv: dts: starfive: jh7110: Add ethernet device
- node
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <linux-riscv@lists.infradead.org>, <netdev@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>
-References: <20230118061701.30047-1-yanhong.wang@starfivetech.com>
- <20230118061701.30047-7-yanhong.wang@starfivetech.com>
- <55f020de-6058-67d2-ea68-6006186daee3@linaro.org>
-From:   yanhong wang <yanhong.wang@starfivetech.com>
-In-Reply-To: <55f020de-6058-67d2-ea68-6006186daee3@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS061.cuchost.com (172.16.6.21) To EXMBX073.cuchost.com
- (172.16.6.83)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,52 +73,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Menglong Dong <imagedong@tencent.com>
 
+By default, libbpf will attach the kprobe/uprobe eBPF program in the
+latest mode that supported by kernel. In this series, we add the support
+to let users manually attach kprobe/uprobe in legacy or perf mode in the
+1th patch.
 
-On 2023/1/18 23:51, Krzysztof Kozlowski wrote:
-> On 18/01/2023 07:17, Yanhong Wang wrote:
->> Add JH7110 ethernet device node to support gmac driver for the JH7110
->> RISC-V SoC.
->> 
->> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
->> ---
->>  arch/riscv/boot/dts/starfive/jh7110.dtsi | 93 ++++++++++++++++++++++++
->>  1 file changed, 93 insertions(+)
->> 
->> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
->> index c22e8f1d2640..c6de6e3b1a25 100644
->> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
->> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
->> @@ -433,5 +433,98 @@
->>  			reg-shift = <2>;
->>  			status = "disabled";
->>  		};
->> +
->> +		stmmac_axi_setup: stmmac-axi-config {
-> 
-> Why your bindings example is different?
-> 
+And in the 2th patch, we add the selftests for it.
 
-There are two gmacs on the StarFive VF2 board, and the two
-gmacs use the same configuration on axi, so the 
-stmmac_axi_setup is independent, which is different
-from the bindings example.
+*** BLURB HERE ***
 
+Menglong Dong (2):
+  libbpf: add support to set kprobe/uprobe attach mode
+  selftests/bpf: add test for legacy/perf kprobe/uprobe attach mode
 
-> Were the bindings tested? Ahh, no they were not... Can you send only
-> tested patches?
-> 
-> Was this tested?
-> 
-Yes, the bindings have been tested on the StarFive VF2 board and work normally.
+ tools/lib/bpf/libbpf.c                        | 30 ++++++++-
+ tools/lib/bpf/libbpf.h                        | 19 ++++++
+ .../selftests/bpf/prog_tests/attach_probe.c   | 61 ++++++++++++++++++-
+ .../selftests/bpf/progs/test_attach_probe.c   | 32 ++++++++++
+ 4 files changed, 140 insertions(+), 2 deletions(-)
 
->> +			snps,lpi_en;
->> +			snps,wr_osr_lmt = <4>;
->> +			snps,rd_osr_lmt = <4>;
->> +			snps,blen = <256 128 64 32 0 0 0>;
->> +		};
->> +
-> 
-> Best regards,
-> Krzysztof
-> 
+-- 
+2.39.0
+
