@@ -2,127 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A141668A0E6
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 18:54:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBD0D68A0EA
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 18:54:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233126AbjBCRyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 12:54:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60438 "EHLO
+        id S233426AbjBCRyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 12:54:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231755AbjBCRyC (ORCPT
+        with ESMTP id S232778AbjBCRyH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 12:54:02 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02EDE32521
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 09:54:01 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id z1so5995039plg.6
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 09:54:00 -0800 (PST)
+        Fri, 3 Feb 2023 12:54:07 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 045E339CD5
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 09:54:06 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id r27so1538514wrr.1
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 09:54:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=9RKTKl/Bb3c4duHC9Bqed53UuuEJJvB8k+GUCNePruY=;
-        b=HQ0vQysX1kKI8O+PparDZ35dBYNpcFDWtsPkazH7LUJi2OaBa11iyQ9FQsErdO66dx
-         1UzzputCQRuAr/bCctGzAZwa0d+aDQ1lgiTzHsFutD6VgNmqAwFcIqJ3F8Tcxz5a8QLk
-         /pYo5xZE+h1m4VZPPnBgpQttdWfm3JlDR1S2M=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=64/VDuUQiW+Vf3xea9SdqjgxeztAbXQzDh6Wov0b1Zo=;
+        b=MiESMRJeHTeosOgc+Zit64s/0KsfzCYox3nX5HMgTerJ3Vj2/PxImwLUOXO63HifSb
+         hY3i9w0/7z8R6dgpA4+G7ra2D/4T4R78aOAEX/uO0O9sPEZqswM1GQsn9jdSA+vE2RXq
+         Re+XeIT491Pu8UBDPZszcyWJLScsV2l69Q7Hta+LEWvBODzDgT6M4obDhmUmzoK4cHp4
+         hCbkorq1HjQGsO+CmZgZPWrv91+Q0qXQx9Uq99XYoaBpsk0OSiRe5DuOrLTrARIbX/Rw
+         3I7fkc9QTVWdKznZz3utw7nPd+CMewiTKbBBUMcrD0PmrVFJtviCGdEKWZTt4IgL3bAu
+         OhOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9RKTKl/Bb3c4duHC9Bqed53UuuEJJvB8k+GUCNePruY=;
-        b=jGkVE/8yXdkFHnljqLVANLTTUHx1SDwqSFa/j74HyD8Dm9+vXbGaGryhgWt3KcihGe
-         DEF78N7Ho3hZWY7f4q9FoHbajDlUmag8+kzVmjmid2g/1KeIyNkxYRN6dtmcDpc+n91v
-         QXsssrZpCfUSMJBH+6NL6lzzSo1PS2XqoKzC19pTHyqupCSw5UldAnGeQSJcXhpRzSvD
-         vGtiPcrvVoWsKrMQOVl+y8ukcF0hnRNDWlfu+kA2JglsuYJR4B3UPHGixV8fES3mLoX0
-         9DhQTa/o0y5gbXK/qW2i7xZKmfKhb2AUwBnfkw3AtYgXeugu4kLWq66um1BPBWdla+rm
-         CazA==
-X-Gm-Message-State: AO0yUKVlEbAlktrgrxXZjKNDvuIsqk35rFtIiuu+9A4fIrkoYeq++y50
-        0ojdDRjPwhf0b2l3u3FCE4rLFQ==
-X-Google-Smtp-Source: AK7set/EmLEgIMfPrEdynvHAK1GlETqG/9g9kQULpuLqRZcPGdmTTgRxZ2UAdRqjHzv/ZYrfp0Ow/w==
-X-Received: by 2002:a05:6a20:8420:b0:bc:246c:9be4 with SMTP id c32-20020a056a20842000b000bc246c9be4mr15305808pzd.45.1675446840510;
-        Fri, 03 Feb 2023 09:54:00 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id t5-20020a637805000000b004c974bb9a4esm1737998pgc.83.2023.02.03.09.53.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 09:53:59 -0800 (PST)
-Message-ID: <63dd4a37.630a0220.e4652.35de@mx.google.com>
-X-Google-Original-Message-ID: <202302031752.@keescook>
-Date:   Fri, 3 Feb 2023 17:53:59 +0000
-From:   Kees Cook <keescook@chromium.org>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     "Darrick J. Wong" <djwong@kernel.org>, linux-xfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] xfs: Replace one-element arrays with
- flexible-array members
-References: <Y9xiYmVLRIKdpJcC@work>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=64/VDuUQiW+Vf3xea9SdqjgxeztAbXQzDh6Wov0b1Zo=;
+        b=JGxjauxFeLrSBmUDIyVAlaG7izu8JlxDiXLJ1ZOqVANoRmHFhk0S+0rHPs+AgXBYeT
+         5Zak8mORtwAf1sY/1SyeDC+fy/zvChLGGC6rvh2EtBzzm9X0qtvyMUHzhiZQL3q6WWKr
+         GKrc0q22I5Zc7lUTa489D7f76FFXu1GwbTC0IdOERCEiDchBtBDO7iU2BycrKw7MYucR
+         ZvgaSba+yOIqMV3Q/f+aWgl4cCVNeXP09LnvOzA9ZK9RMyLFKt3z7lLUghEisuNNHKyM
+         zDNkV+xSOZJP8aKr6FdU6SlIPPCbTHDyajVI22KKGs7BoMSH+aHoc9VVM7q4voNCI9j7
+         5Z5Q==
+X-Gm-Message-State: AO0yUKVs1JrQ3Hh0JLCsK82LAK+NlrzkP1OVeXJG5y5ucgONR7Obso8b
+        c5SHh+su0HowLWsV3flTmIjm9w==
+X-Google-Smtp-Source: AK7set8C1hagDBeGxpuByAoF/bYki9T5Zrg5yh+v7Y7uNnn+YhIqnqw3/BynIyQMxVUgLdzFTAdj5A==
+X-Received: by 2002:a5d:5c09:0:b0:2be:5c4a:de6b with SMTP id cc9-20020a5d5c09000000b002be5c4ade6bmr10102366wrb.3.1675446844584;
+        Fri, 03 Feb 2023 09:54:04 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id f17-20020a5d4dd1000000b002bfad438811sm2480187wru.74.2023.02.03.09.54.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Feb 2023 09:54:04 -0800 (PST)
+Message-ID: <3b81bd45-766b-fe26-d9ec-2097e1fe5a0b@linaro.org>
+Date:   Fri, 3 Feb 2023 18:54:02 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9xiYmVLRIKdpJcC@work>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v4 1/2] dt-bindings: leds-lp55xx: add ti,charge-pump-mode
+Content-Language: en-US
+To:     Maarten Zanders <maarten.zanders@mind.be>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>
+Cc:     linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230202101032.26737-1-maarten.zanders@mind.be>
+ <20230202101032.26737-2-maarten.zanders@mind.be>
+ <28cf0c1f-ee5f-79e4-609a-2cdd24db9f1c@linaro.org>
+ <1452beba-19b0-7417-716e-a255c6aaa739@mind.be>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1452beba-19b0-7417-716e-a255c6aaa739@mind.be>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 07:24:50PM -0600, Gustavo A. R. Silva wrote:
-> One-element arrays are deprecated, and we are replacing them with flexible
-> array members instead. So, replace one-element arrays with flexible-array
-> members in structures xfs_attr_leaf_name_local and
-> xfs_attr_leaf_name_remote.
+On 03/02/2023 16:38, Maarten Zanders wrote:
 > 
-> The only binary differences reported after the changes are all like
-> these:
+> On 2/2/23 21:13, Krzysztof Kozlowski wrote:
+>> + ti,charge-pump-mode:
+>>> +    description:
+>>> +      Set the operating mode of the internal charge pump as defined in
+>>> +      <dt-bindings/leds/leds-lp55xx.h>. Defaults to auto.
+>>> +    $ref: /schemas/types.yaml#/definitions/uint8
+>> This should be then uint32
 > 
-> fs/xfs/libxfs/xfs_attr_leaf.o
-> _@@ -435,7 +435,7 @@
->       3b8:      movzbl 0x2(%rbx),%eax
->       3bc:      rol    $0x8,%bp
->       3c0:      movzwl %bp,%ebp
-> -     3c3:      lea    0x2(%rax,%rbp,1),%ebx
-> +     3c3:      lea    0x3(%rax,%rbp,1),%ebx
->       3c7:      call   3cc <xfs_attr_leaf_entsize+0x8c>
->                         3c8: R_X86_64_PLT32     __tsan_func_exit-0x4
->       3cc:      or     $0x3,%ebx
-> _@@ -454,7 +454,7 @@
->       3ea:      movzbl 0x8(%rbx),%ebx
->       3ee:      call   3f3 <xfs_attr_leaf_entsize+0xb3>
->                         3ef: R_X86_64_PLT32     __tsan_func_exit-0x4
-> -     3f3:      add    $0xa,%ebx
-> +     3f3:      add    $0xb,%ebx
->       3f6:      or     $0x3,%ebx
->       3f9:      add    $0x1,%ebx
->       3fc:      mov    %ebx,%eax
-> 
-> similar changes in fs/xfs/scrub/attr.o and fs/xfs/xfs.o object files.
+> Why is that? I specifically chose uint8 because other settings for LED 
+> are also uint8. The implementation is also uint8. I surely hope we'll 
+> never get to >256 modes for a charge pump.
 
-I usually turn off the sanitizers for the A/B build comparisons to make
-it easier to read the results. It looks like it _grew_ in size here,
-though?
+Because all IDs are unsigned int.
 
-> And the reason for this is because of the round_up() macro called in
-> functions xfs_attr_leaf_entsize_remote() and xfs_attr_leaf_entsize_local(),
-> which is compensanting for the one-byte reduction in size (due to the
-> flex-array transformation) of structures xfs_attr_leaf_name_remote and
-> xfs_attr_leaf_name_local. So, sizes remain the same before and after
-> changes.
-> 
-> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
-> routines on memcpy() and help us make progress towards globally
-> enabling -fstrict-flex-arrays=3 [1].
-> 
-> Link: https://github.com/KSPP/linux/issues/79
-> Link: https://github.com/KSPP/linux/issues/251
-> Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+Best regards,
+Krzysztof
 
-If xfstests pass, this seems good to me. Thanks!
-
-Reviewed-by: Kees Cook <keescook@chromium.org>
-
--- 
-Kees Cook
