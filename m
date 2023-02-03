@@ -2,129 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4967688C0D
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 01:43:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5C80688C14
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 01:46:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232424AbjBCAnk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 19:43:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39836 "EHLO
+        id S232507AbjBCAqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 19:46:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230021AbjBCAni (ORCPT
+        with ESMTP id S230021AbjBCAqH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 19:43:38 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 507D36537A
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 16:43:37 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id bk15so11080377ejb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 16:43:37 -0800 (PST)
+        Thu, 2 Feb 2023 19:46:07 -0500
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D7F266010
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 16:46:02 -0800 (PST)
+Received: by mail-qt1-x82c.google.com with SMTP id cr22so3988698qtb.10
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 16:46:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=chromium.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=M5SZoZOf4A1Tqrq26h6hgOv78mY8qXAzROlOIKANtsE=;
-        b=CHCoyYGBdRXOIoA+Jr7dkkawF4QVxNelCcER/Z8yLvuWU5rEVD95xnWe7+vQy9vp4e
-         DVDx7Zc7ndN58VVIxRJWxoclMnG3zPJ1ArBwZ1jd+P3PGKG9+DBtYR0F7vIB30AJCHRo
-         0LunAY9rQ0MfEk33PcW07KL6arMLZqus6t4zQ=
+        bh=A3ZdY21LXjE3PyX5fpTlE0/f6/GAdOiGr62nnKIP3aI=;
+        b=XqmKvE/220WSzs0GhJ44A5LIXEmpXnCvVQd9D5uzyUIT3830BQHAqJwInbX68g1gOX
+         48ZWklm9NO4kuHW00FcLFdeIknSgSmyrbbjZgFCCS2Tw2y8QXc0iRIm7jcY7UHd/ABe7
+         SQoKqAlY8t5PtyHQkpA6HfrNiOJoTDO6RtgWc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=M5SZoZOf4A1Tqrq26h6hgOv78mY8qXAzROlOIKANtsE=;
-        b=10e5/g+20QKL5jRrF4nEm+M5MTSo8Nh/XPm6vP93xnYkiFjVRVIx3GOpwFTxknnu4g
-         sEnUalHD87ALWcZ6drmFRVfnHYRtSAI5qXSN4AW3u8jwUHOmTxJganszB7r6ltCesp7k
-         po0vrMstUnqdItUGeU9sRmpgWdVVPfqrm+BbzrkOzRduhjwB0PI85+DpLNgfXrTcZeXf
-         /QzlAUcbdc/tEQCce9tzbCdn1OXGLlkbhHL9C5tEiMeSz0w3Fq81w6nTtElDPqIKrsh1
-         xjWraR59wjfp44mBq6JFOgWv3hGqai6pwvjNI0L5M1dPuoZNYVu/M+1Xrg/CPKHerFtR
-         OK3w==
-X-Gm-Message-State: AO0yUKUoT6RMJApibvAziB0b0c+gh20R67Zx0KvNKOm1ubHx7exxT7qC
-        l9OaNxplOFVNRehb/YDiRnPgzTZeohk5C4lMd5uzCQ==
-X-Google-Smtp-Source: AK7set+LDoKg1z23mEjuvZCU2Jyrd9j8Zr7ehDp9i+fLXzhtvuTST+hYeR1Dakyn/+K+VQ4tYPshCg==
-X-Received: by 2002:a17:906:6d8e:b0:888:1613:49bc with SMTP id h14-20020a1709066d8e00b00888161349bcmr7462654ejt.48.1675385015519;
-        Thu, 02 Feb 2023 16:43:35 -0800 (PST)
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com. [209.85.218.52])
-        by smtp.gmail.com with ESMTPSA id ke28-20020a17090798fc00b0088991314edesm548009ejc.7.2023.02.02.16.43.34
+        bh=A3ZdY21LXjE3PyX5fpTlE0/f6/GAdOiGr62nnKIP3aI=;
+        b=NmSg3lMRPirkQuxiYkCarI/KHUK7v+eh4DcsgdKWabfeV+AhpOsLu0foYuGvOCOiDB
+         2tIKw61bcWF4267Uy37l0Hxy/4/H7EwVnd0CyUp9Xwqys/fsUa6tiG9+Uo2m5cVqGPyu
+         FemRblgOPsSw/LtX5oy/FwA6WIJJ6Fu0cW2zrDk5NwVuPlCzV7etvx/r/h7EzaIVO7yl
+         2fVvIaR50CjB7AoiJlA5F8M8wHpkHvZRKieWARV18UaHT2y12EgbIssfUIopstnNDbVd
+         BzYAOC1+ViIpTPHtULYQqDaPQTDW1ClXSpQmnUL6f2Kpn+mDeIo9v6z6vWXFpvBSq6vI
+         szbg==
+X-Gm-Message-State: AO0yUKUQCoSe3K7mnXBqGRy1AvlMmTH2BqysBVxvmzAoZ/WUEOZXjgWb
+        jrhaHk7ZUm0rHEoH2vhGomp0//ReopRdg9CPWPg=
+X-Google-Smtp-Source: AK7set8fRF66MmIyexsGEw7YjcZoVIqmbas53PZr+C7R1wTIUXcUkYioLaUXv88/cGaO36Tew6/t9Q==
+X-Received: by 2002:a05:622a:1741:b0:3b6:92ce:b4f7 with SMTP id l1-20020a05622a174100b003b692ceb4f7mr12885427qtk.37.1675385161015;
+        Thu, 02 Feb 2023 16:46:01 -0800 (PST)
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
+        by smtp.gmail.com with ESMTPSA id bi15-20020a05620a318f00b006e99290e83fsm754155qkb.107.2023.02.02.16.45.58
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 16:43:34 -0800 (PST)
-Received: by mail-ej1-f52.google.com with SMTP id hx15so11046368ejc.11
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 16:43:34 -0800 (PST)
-X-Received: by 2002:a17:906:4f98:b0:87b:d510:77a8 with SMTP id
- o24-20020a1709064f9800b0087bd51077a8mr2541345eju.235.1675385014409; Thu, 02
- Feb 2023 16:43:34 -0800 (PST)
+        Thu, 02 Feb 2023 16:45:59 -0800 (PST)
+Received: by mail-yb1-f182.google.com with SMTP id d132so4521448ybb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 16:45:58 -0800 (PST)
+X-Received: by 2002:a25:9741:0:b0:804:3d1e:68af with SMTP id
+ h1-20020a259741000000b008043d1e68afmr1156308ybo.258.1675385158481; Thu, 02
+ Feb 2023 16:45:58 -0800 (PST)
 MIME-Version: 1.0
-References: <20230202232517.8695-1-michael.christie@oracle.com> <20230202232517.8695-7-michael.christie@oracle.com>
-In-Reply-To: <20230202232517.8695-7-michael.christie@oracle.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 2 Feb 2023 16:43:17 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wiEx+G7bwOj6MsHgpWavVkPAg6c1D1zcg4cgugg+ccrPQ@mail.gmail.com>
-Message-ID: <CAHk-=wiEx+G7bwOj6MsHgpWavVkPAg6c1D1zcg4cgugg+ccrPQ@mail.gmail.com>
-Subject: Re: [PATCH v11 6/8] vhost_task: Allow vhost layer to use copy_process
-To:     Mike Christie <michael.christie@oracle.com>
-Cc:     hch@infradead.org, stefanha@redhat.com, jasowang@redhat.com,
-        mst@redhat.com, sgarzare@redhat.com,
-        virtualization@lists.linux-foundation.org, brauner@kernel.org,
-        ebiederm@xmission.com, konrad.wilk@oracle.com,
-        linux-kernel@vger.kernel.org
+References: <20230120114313.2087015-1-john@metanate.com> <CAD=FV=UPD6c+NY8Ub37N7LmrRFpcr6gKOh0Os14DaKrf3bKo2A@mail.gmail.com>
+ <Y8uo7vIcQ6caH9pu@ravnborg.org> <Y8wnswk++tvr9xMe@donbot> <Y81Px74OUYt21nj4@pendragon.ideasonboard.com>
+ <Y856rWmtA4tQCcZz@donbot> <Y86wO8nvFbC81b1S@pendragon.ideasonboard.com>
+In-Reply-To: <Y86wO8nvFbC81b1S@pendragon.ideasonboard.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 2 Feb 2023 16:45:45 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=UwMS86RKR9dqzOnjEhKxh=d=EJPfjcCOvWZMjVVQsmKw@mail.gmail.com>
+Message-ID: <CAD=FV=UwMS86RKR9dqzOnjEhKxh=d=EJPfjcCOvWZMjVVQsmKw@mail.gmail.com>
+Subject: Re: [PATCH] drm/bridge: panel: Set orientation on panel_bridge connector
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     John Keeping <john@metanate.com>, Sam Ravnborg <sam@ravnborg.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Robert Foss <rfoss@kernel.org>,
+        Jonas Karlman <jonas@kwiboo.se>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Stephen Boyd <swboyd@chromium.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 2, 2023 at 3:25 PM Mike Christie
-<michael.christie@oracle.com> wrote:
+Hi,
+
+On Mon, Jan 23, 2023 at 8:05 AM Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
 >
-> +/**
-> + * vhost_task_start - start a vhost_task created with vhost_task_create
-> + * @vtsk: vhost_task to wake up
-> + * @namefmt: printf-style format string for the thread name
-> + */
-> +void vhost_task_start(struct vhost_task *vtsk, const char namefmt[], ...)
-> +{
-> +       char name[TASK_COMM_LEN];
-> +       va_list args;
-> +
-> +       va_start(args, namefmt);
-> +       vsnprintf(name, sizeof(name), namefmt, args);
-> +       set_task_comm(vtsk->task, name);
-> +       va_end(args);
-> +
-> +       wake_up_new_task(vtsk->task);
-> +}
+> Hi John,
+>
+> On Mon, Jan 23, 2023 at 12:16:45PM +0000, John Keeping wrote:
+> > On Sun, Jan 22, 2023 at 05:01:27PM +0200, Laurent Pinchart wrote:
+> > > On Sat, Jan 21, 2023 at 05:58:11PM +0000, John Keeping wrote:
+> > > > On Sat, Jan 21, 2023 at 09:57:18AM +0100, Sam Ravnborg wrote:
+> > > > > On Fri, Jan 20, 2023 at 01:44:38PM -0800, Doug Anderson wrote:
+> > > > > > On Fri, Jan 20, 2023 at 3:43 AM John Keeping wrote:
+> > > > > > >
+> > > > > > > Commit 15b9ca1641f0 ("drm: Config orientation property if panel provides
+> > > > > > > it") added a helper to set the panel panel orientation early but only
+> > > > > > > connected this for drm_bridge_connector, which constructs a panel bridge
+> > > > > > > with DRM_BRIDGE_ATTACH_NO_CONNECTOR and creates the connector itself.
+> > > > > > >
+> > > > > > > When the DRM_BRIDGE_ATTACH_NO_CONNECTOR flag is not specified and the
+> > > > > > > panel_bridge creates its own connector the orientation is not set unless
+> > > > > > > the panel does it in .get_modes which is too late and leads to a warning
+> > > > > > > splat from __drm_mode_object_add() because the device is already
+> > > > > > > registered.
+> > > > > > >
+> > > > > > > Call the necessary function to set add the orientation property when the
+> > > > > > > connector is created so that it is available before the device is
+> > > > > > > registered.
+> > > > > >
+> > > > > > I have no huge objection to your patch and it looks OK to me. That
+> > > > > > being said, my understanding is that:
+> > > > > >
+> > > > > > 1. DRM_BRIDGE_ATTACH_NO_CONNECTOR is "the future" and not using the
+> > > > > > flag is "deprecated".
+> > > > >
+> > > > > Correct.
+> > > > > Could we take a look at how much is required to move the relevant driver
+> > > > > to use DRM_BRIDGE_ATTACH_NO_CONNECTOR?
+> > > > >
+> > > > > If this is too much work now we may land this simple patch, but the
+> > > > > preference is to move all drivers to the new bridge handling and thus
+> > > > > asking display drivers to create the connector.
+> > >
+> > > I fully agree with Doug and Sam here. Let's see if we can keep the yak
+> > > shaving minimal :-)
+> > >
+> > > > > What display driver are we dealing with here?
+> > > >
+> > > > This is dw-mipi-dsi-rockchip which uses the component path in
+> > > > dw-mipi-dsi (and, in fact, is the only driver using that mode of
+> > > > dw-mipi-dsi).
+> > > >
+> > > > I'm not familiar enough with DRM to say whether it's easy to convert to
+> > > > DRM_BRIDGE_ATTACH_NO_CONNECTOR - should dw-mipi-dsi-rockchip be moving
+> > > > to use dw-mipi-dsi as a bridge driver or should dw_mipi_dsi_bind() have
+> > > > a drm_bridge_attach_flags argument?  But I'm happy to test patches if it
+> > > > looks easy to convert to you :-)
+> > >
+> > > I'd go for the former (use dw_mipi_dsi_probe() and acquire the DSI
+> > > bridge with of_drm_find_bridge() instead of using the component
+> > > framework) if possible, but I don't know how intrusive that would be.
+> >
+> > I'm a bit confused about what's required since dw-mipi-dsi-rockchip
+> > already uses dw_mipi_dsi_probe(),
+>
+> Indeed, my bad.
+>
+> > but I think moving away from the
+> > component framework would be significant work as that's how the MIPI
+> > subdriver fits in to the overall Rockchip display driver.
+>
+> It will be some work, yes. It however doesn't mean that the whole
+> Rockchip display driver needs to move away from the component framework,
+> it can be limited to the DSI encoder. It's not immediately clear to me
+> why the DSI encoder uses the component framework in the first place, and
+> if it would be difficult to move away from it.
+>
+> > Any changes / modernisation to the Rockchip MIPI driver look like it
+> > will take more time than I have available to spend on this, so I'd
+> > really like to see this patch land as it's a simple fix to an existing
+> > working code path.
+>
+> So who volunteers for fixing it properly ? :-)
+>
+> I'll let Doug and Sam decide regarding mering this patch.
 
-Ok, I like this more than what we do for the IO workers - they set
-their own names themselves once they start running, rather than have
-the creator do it like this.
+This thread seems to have gone silent.
 
-At the same time, my reaction to this was "why do we need to go
-through that temporary 'name[]' buffer at all?"
+I'm inclined to merge this patch (removing the "Fixes" tag) since it's
+a one-line fix. While we want to encourage people to move to "the
+future", it seems like it would be better to wait until someone is
+trying to land something more intrusive than a 1-line fix before truly
+forcing the issue.
 
-And I think this patch is very much correct to do so, because
-"copy_thread()" has already exposed the new thread to the rest of the
-world, even though it hasn't actually started running yet.
+I'll plan to merge the patch to drm-misc-next early next week assuming
+there are no objections.
 
-So I think this is all doing the right thing, and I like how it does
-it better than what io_uring does, BUT...
-
-It does make me think that maybe we should make that task name
-handling part of copy_process(), and simply create the task name
-before we need this careful set_task_comm() with a temporary buffer.
-
-Because if we just did it in copy_process() before the new task has
-been exposed anywhere,. we could just do it as
-
-        if (args->name)
-            vsnprintf(tsk->comm, TASK_COMM_LEN, "%s-%d", args->name, tsk->pid);
-
-or something like that.
-
-Not a big deal, it was just me reacting to this patch with "do we
-really need set_task_comm() when we're creating the task?"
-
-               Linus
+-Doug
