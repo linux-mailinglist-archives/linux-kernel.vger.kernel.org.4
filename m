@@ -2,271 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCCA668A162
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 19:14:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4964868A166
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 19:16:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233362AbjBCSOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 13:14:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47032 "EHLO
+        id S233006AbjBCSQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 13:16:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233269AbjBCSOI (ORCPT
+        with ESMTP id S232552AbjBCSP7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 13:14:08 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2045.outbound.protection.outlook.com [40.107.237.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1660530F1;
-        Fri,  3 Feb 2023 10:14:04 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ao+n+MgXroEWrNo6iVayuWo3UX0VsiKxA5Ec9bNGzEl7VuEZNfBL9hJpGlx+fXOyB9amKeJ3xK7LlEGwPzGvdFbucaKC3VBNwEuM8662S9FfbjVQBtnodq2RS41lLTdQZoC0DKfN5mg0n3XmSzA9/6eK5PHsY2QLoO7ao4sPNfJa8HQ13i04NjlWF8hQ2CP3hmkqUS78Y4s35GTySiEICk2eLTgUYJ9y2nklXnTjbBnRnhFhWgQMfiNuixYY6daFaHJ16NU1TsIVap+JAkrhGzTxvk0Q9luJ6zp1irBxi9ETDPBknHvuLb4cK28Q44LRqDe6kNjZh8QclYiyhBQfCw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=H09tGKyQXMqI0MRj5s0yXOQclDD20NlbGcWEfay9KTA=;
- b=E+NBItcOCp2/VirKNGjYdKmym5BL52uDWR/mEuN+OY/cl8m9wRhEuWfexIXyyyenz8rVee0uhpeg9CpExIqNYTa3RPaR4/xtJH6QU148r+1GmYOrEhAyBffUv+727/zrFcfbKWHkCZn6qP0pCymV6N9litQKWRwFU9pB5CPbBFiaE3dUSj+3QStnzc8yxfMPQ8gr5EHEPxMS87JaBvnzZYZGjlNkoaGdeRtR1xpZF+m7CXtwP0zuZhIINz6A/ejekJv5RVC3emXsmfIAXJbWuNRYHh34Sa2rqHsOvwZXZlbup0a07s2xsglWZHaZbtWppFren5QQO5yaaCXmLnSvyw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=H09tGKyQXMqI0MRj5s0yXOQclDD20NlbGcWEfay9KTA=;
- b=oBKifCTU9oYRCDykvnDld0pTJnDo+5c8hPHhIKMyjzI5afzcRAMxxtwKvbKw+4rBNQAsxaXhKm1e2+OaymA2h/j033XTsaSh1eu/kU/EyjXsy5rpPxA/t2/BSSun1U6PodDif/7VMuh++Es7z71uy6QYjOjkmlIfOs2xlSD2Uu4=
-Received: from BN9PR03CA0585.namprd03.prod.outlook.com (2603:10b6:408:10d::20)
- by DS0PR12MB8069.namprd12.prod.outlook.com (2603:10b6:8:f0::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6064.25; Fri, 3 Feb 2023 18:14:01 +0000
-Received: from BN8NAM11FT060.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:10d:cafe::a0) by BN9PR03CA0585.outlook.office365.com
- (2603:10b6:408:10d::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.31 via Frontend
- Transport; Fri, 3 Feb 2023 18:14:01 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- BN8NAM11FT060.mail.protection.outlook.com (10.13.177.211) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6064.31 via Frontend Transport; Fri, 3 Feb 2023 18:14:01 +0000
-Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 3 Feb
- 2023 12:14:01 -0600
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB05.amd.com
- (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 3 Feb
- 2023 12:14:00 -0600
-Received: from xsjlizhih40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
- Transport; Fri, 3 Feb 2023 12:14:00 -0600
-From:   Lizhi Hou <lizhi.hou@amd.com>
-To:     <vkoul@kernel.org>, <dmaengine@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Lizhi Hou <lizhi.hou@amd.com>, <max.zhen@amd.com>,
-        <sonal.santan@amd.com>, <larry.liu@amd.com>, <brian.xu@amd.com>,
-        <tumic@gpxsee.org>
-Subject: [RESEND PATCH V12 XDMA 2/2] dmaengine: xilinx: xdma: Add user logic interrupt support
-Date:   Fri, 3 Feb 2023 10:13:55 -0800
-Message-ID: <1675448035-72930-3-git-send-email-lizhi.hou@amd.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1675448035-72930-1-git-send-email-lizhi.hou@amd.com>
-References: <1675448035-72930-1-git-send-email-lizhi.hou@amd.com>
+        Fri, 3 Feb 2023 13:15:59 -0500
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF86E27995
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 10:15:58 -0800 (PST)
+Received: by mail-oi1-x22f.google.com with SMTP id r28so4858631oiw.3
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 10:15:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=b3t3H+aA2KgB4EAc83s9ir4SliyMLQWPAeErskn177Q=;
+        b=oEu2PRhO+MVkx90VLgdYyS9aKsEXIZcUQajibKOHHouCYkjo8/w5jghE1UOfnH+Sem
+         hyCOjkNLKNz/q7UQDjUY1fIAWdGB6XXnlQQVwEq1JnKJOqLVeub/ZJi5piL33q9ActHZ
+         ppzwpetCs3HninK06SkZqIf165gB70O5HKXvU8Tb9+hdlpEgDxVUeWO+YhK7n7Spf7KG
+         ZkYI5QDBXzJdImFn6zrHtKwTXQpTvoyisIPpAJIyPfi8auKXFrAeXBvcCZxRY2rv+EmH
+         Jj3AFPQtaS/0CpQC6sl2WqW15gw4ObSo9RqA2DMl0TPnJxBzQh4dU0JqC3Eexy2BM4KW
+         iLiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=b3t3H+aA2KgB4EAc83s9ir4SliyMLQWPAeErskn177Q=;
+        b=nSQ3o13lRsf7s2ui8bKNe0asgGSo5w0/T6u46mMs7OKs/xE/R78s6pf25Jfp0uIPOK
+         vLutcYrCAqn2NHy9XyQcRUJFp+AQAQhDtYvlPUkzEskZtvUI1q5S9mEO9Se1fmomO8kJ
+         mr0ingpTHH8bx+Hl40MDW/fH/tdBvTUdPDJ6P5zxGwAwucqb9DahbaIRkzJ2XoZBEnns
+         gXHyDp/Elv7twX9e6Tzb2oASJRCZ2VHVcwagXDXXCtPm15MrRQksb3JMPZNVseTAiGtD
+         y9UocBb7pdS7aAcFBSf3OqOxKbShfNvTFEt8An7sh984j60TEPBwlm8dU+BmD8uFSt7F
+         SV0Q==
+X-Gm-Message-State: AO0yUKXrvj2YFhTMaprytq9sQOxoewc7Uj2LmM1uHqNau3YycTRCsPzi
+        pXtZowQkKf/FnpK9xxem9tBINd/pPOuRxRlMexg=
+X-Google-Smtp-Source: AK7set9vjkE7o//vYuc1JhS77XzL5YZeTi+iclQY94ulHq8v4hgWcin4xF42ng4qxsn8v4qpvaGu0IC+ydiJ3PrDsw0=
+X-Received: by 2002:a05:6808:280e:b0:360:ffcc:3685 with SMTP id
+ et14-20020a056808280e00b00360ffcc3685mr385441oib.183.1675448158043; Fri, 03
+ Feb 2023 10:15:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT060:EE_|DS0PR12MB8069:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0c2e99cc-8ccb-4b00-63e9-08db06126d3b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: y6sJfj6RZORtFKRo5EGpMXNimaDKMSmgBowscWdWBXddOF5dV75d5ThsLmr7oJZKeJ1lGHhxzZ0ZanYG3YRcUo3W4Ls5svI5KYXpvhiIk9CzHg/EDm+dJcOt1HFyT80m67Bn2ZaPtPBkf/sbewPFEKnT0sCsgCp1QXUerOZ2+DbvGKnqdD5cuPWJMbgruDWPTgbOg/Khdwqg+oOoTHwuoO4SO7v5FnuYgBYdJb0rHxfrU/8OEvdhnXbhtaxCrf/KjbrgOV/GsXVFHnLygAuur1A3kiPdYj8bJWcA7A/HMfNmkqhSN9VGNORGitx1446vALg3ys13iv2Q6RYLHkQltARUPWnGUnE2Pv+GNNLTaRtUw+Zy5CpebaoDjpDZEt0Ge+6nhQsGDrnh+JiE7FL7Gty6ksQ6EDsp0iE8VzXHxrYY4pssaUoOKVvFcVsV26Tao0pXRei9VUCLcE2iXhYANp4mE/Ilfe72xbjAQcPUmMJTYGIV2Nw7Gc28QBkDHZe06unTFlZv/wK4pG0g8uhaTJmdfk5QhMHnDL6sfcAkWaIKAHbO2hNWVl+wyOwNgxH2ctMui8lbiY/rWx17fszrC9DiWa4z24NkMiuHX82LYVjqYAuyoeqi652pzw0gpRrhWYUlEUwr2GD7AlphAzDPmOD93bj+hcVeOkUs3F8d6YTYi1GUO/CSZjir7nCSKkrGSbYNzcjS231mk7YLDbkGd0p4U+NuJNW6/lhzXuU+P5Q=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(39860400002)(346002)(376002)(451199018)(36840700001)(40470700004)(46966006)(36860700001)(8936002)(6666004)(81166007)(44832011)(40460700003)(36756003)(478600001)(54906003)(40480700001)(110136005)(41300700001)(316002)(8676002)(70206006)(4326008)(86362001)(70586007)(5660300002)(26005)(82740400003)(186003)(356005)(426003)(47076005)(83380400001)(82310400005)(2616005)(2906002)(336012)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Feb 2023 18:14:01.4375
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0c2e99cc-8ccb-4b00-63e9-08db06126d3b
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT060.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8069
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20230203164937.4035503-1-robdclark@gmail.com>
+In-Reply-To: <20230203164937.4035503-1-robdclark@gmail.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Fri, 3 Feb 2023 10:15:56 -0800
+Message-ID: <CAF6AEGvanLri-+Z5KgmgSFX2ShB09T7X7wxcSQk_0JV7PKGRng@mail.gmail.com>
+Subject: Re: [PATCH] drm/i915: Move fd_install after last use of fence
+To:     dri-devel@lists.freedesktop.org
+Cc:     Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        Rob Clark <robdclark@chromium.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthew Auld <matthew.auld@intel.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Niranjana Vishwanathapura <niranjana.vishwanathapura@intel.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Nirmoy Das <nirmoy.das@intel.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        =?UTF-8?Q?Thomas_Hellstr=C3=B6m?= 
+        <thomas.hellstrom@linux.intel.com>,
+        intel-gfx@lists.freedesktop.org,
+        open list <linux-kernel@vger.kernel.org>,
+        jason.ekstrand@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Xilinx DMA/Bridge Subsystem for PCIe (XDMA) provides up to 16 user
-interrupt wires to user logic that generate interrupts to the host.
-This patch adds APIs to enable/disable user logic interrupt for a given
-interrupt wire index.
+On Fri, Feb 3, 2023 at 8:49 AM Rob Clark <robdclark@gmail.com> wrote:
+>
+> From: Rob Clark <robdclark@chromium.org>
+>
+> Because eb_composite_fence_create() drops the fence_array reference
+> after creation of the sync_file, only the sync_file holds a ref to the
+> fence.  But fd_install() makes that reference visable to userspace, so
+> it must be the last thing we do with the fence.
+>
 
-Signed-off-by: Lizhi Hou <lizhi.hou@amd.com>
-Signed-off-by: Sonal Santan <sonal.santan@amd.com>
-Signed-off-by: Max Zhen <max.zhen@amd.com>
-Signed-off-by: Brian Xu <brian.xu@amd.com>
-Tested-by: Martin Tuma <tumic@gpxsee.org>
----
- MAINTAINERS                  |  1 +
- drivers/dma/xilinx/xdma.c    | 81 ++++++++++++++++++++++++++++++++++++
- include/linux/dma/amd_xdma.h | 16 +++++++
- 3 files changed, 98 insertions(+)
- create mode 100644 include/linux/dma/amd_xdma.h
+Fixes: 00dae4d3d35d ("drm/i915: Implement SINGLE_TIMELINE with a syncobj (v4)")
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d598c4e23901..eaf6590dda19 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -22583,6 +22583,7 @@ L:	dmaengine@vger.kernel.org
- S:	Supported
- F:	drivers/dma/xilinx/xdma-regs.h
- F:	drivers/dma/xilinx/xdma.c
-+F:	include/linux/dma/amd_xdma.h
- F:	include/linux/platform_data/amd_xdma.h
- 
- XILINX ZYNQMP DPDMA DRIVER
-diff --git a/drivers/dma/xilinx/xdma.c b/drivers/dma/xilinx/xdma.c
-index 48efb75ef9b4..462109c61653 100644
---- a/drivers/dma/xilinx/xdma.c
-+++ b/drivers/dma/xilinx/xdma.c
-@@ -25,6 +25,7 @@
- #include <linux/dmapool.h>
- #include <linux/regmap.h>
- #include <linux/dmaengine.h>
-+#include <linux/dma/amd_xdma.h>
- #include <linux/platform_device.h>
- #include <linux/platform_data/amd_xdma.h>
- #include <linux/dma-mapping.h>
-@@ -687,6 +688,7 @@ static int xdma_set_vector_reg(struct xdma_device *xdev, u32 vec_tbl_start,
- static int xdma_irq_init(struct xdma_device *xdev)
- {
- 	u32 irq = xdev->irq_start;
-+	u32 user_irq_start;
- 	int i, j, ret;
- 
- 	/* return failure if there are not enough IRQs */
-@@ -729,6 +731,18 @@ static int xdma_irq_init(struct xdma_device *xdev)
- 		goto failed_init_c2h;
- 	}
- 
-+	/* config user IRQ registers if needed */
-+	user_irq_start = XDMA_CHAN_NUM(xdev);
-+	if (xdev->irq_num > user_irq_start) {
-+		ret = xdma_set_vector_reg(xdev, XDMA_IRQ_USER_VEC_NUM,
-+					  user_irq_start,
-+					  xdev->irq_num - user_irq_start);
-+		if (ret) {
-+			xdma_err(xdev, "failed to set user vectors: %d", ret);
-+			goto failed_init_c2h;
-+		}
-+	}
-+
- 	/* enable interrupt */
- 	ret = regmap_write(xdev->rmap, XDMA_IRQ_CHAN_INT_EN_W1S, ~0);
- 	if (ret)
-@@ -754,6 +768,73 @@ static bool xdma_filter_fn(struct dma_chan *chan, void *param)
- 	return chan_info->dir == xdma_chan->dir;
- }
- 
-+/**
-+ * xdma_disable_user_irq - Disable user interrupt
-+ * @pdev: Pointer to the platform_device structure
-+ * @irq_num: System IRQ number
-+ */
-+void xdma_disable_user_irq(struct platform_device *pdev, u32 irq_num)
-+{
-+	struct xdma_device *xdev = platform_get_drvdata(pdev);
-+	u32 index;
-+
-+	index = irq_num - xdev->irq_start;
-+	if (index < XDMA_CHAN_NUM(xdev) || index >= xdev->irq_num) {
-+		xdma_err(xdev, "invalid user irq number");
-+		return;
-+	}
-+	index -= XDMA_CHAN_NUM(xdev);
-+
-+	regmap_write(xdev->rmap, XDMA_IRQ_USER_INT_EN_W1C, 1 << index);
-+}
-+EXPORT_SYMBOL(xdma_disable_user_irq);
-+
-+/**
-+ * xdma_enable_user_irq - Enable user logic interrupt
-+ * @pdev: Pointer to the platform_device structure
-+ * @irq_num: System IRQ number
-+ */
-+int xdma_enable_user_irq(struct platform_device *pdev, u32 irq_num)
-+{
-+	struct xdma_device *xdev = platform_get_drvdata(pdev);
-+	u32 index;
-+	int ret;
-+
-+	index = irq_num - xdev->irq_start;
-+	if (index < XDMA_CHAN_NUM(xdev) || index >= xdev->irq_num) {
-+		xdma_err(xdev, "invalid user irq number");
-+		return -EINVAL;
-+	}
-+	index -= XDMA_CHAN_NUM(xdev);
-+
-+	ret = regmap_write(xdev->rmap, XDMA_IRQ_USER_INT_EN_W1S, 1 << index);
-+	if (ret)
-+		return ret;
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL(xdma_enable_user_irq);
-+
-+/**
-+ * xdma_get_user_irq - Get system IRQ number
-+ * @pdev: Pointer to the platform_device structure
-+ * @user_irq_index: User logic IRQ wire index
-+ *
-+ * Return: The system IRQ number allocated for the given wire index.
-+ */
-+int xdma_get_user_irq(struct platform_device *pdev, u32 user_irq_index)
-+{
-+	struct xdma_device *xdev = platform_get_drvdata(pdev);
-+
-+	if (XDMA_CHAN_NUM(xdev) + user_irq_index >= xdev->irq_num) {
-+		xdma_err(xdev, "invalid user irq index");
-+		return -EINVAL;
-+	}
-+
-+	return xdev->irq_start + XDMA_CHAN_NUM(xdev) + user_irq_index;
-+}
-+EXPORT_SYMBOL(xdma_get_user_irq);
-+
- /**
-  * xdma_remove - Driver remove function
-  * @pdev: Pointer to the platform_device structure
-diff --git a/include/linux/dma/amd_xdma.h b/include/linux/dma/amd_xdma.h
-new file mode 100644
-index 000000000000..ceba69ed7cb4
---- /dev/null
-+++ b/include/linux/dma/amd_xdma.h
-@@ -0,0 +1,16 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+/*
-+ * Copyright (C) 2022, Advanced Micro Devices, Inc.
-+ */
-+
-+#ifndef _DMAENGINE_AMD_XDMA_H
-+#define _DMAENGINE_AMD_XDMA_H
-+
-+#include <linux/interrupt.h>
-+#include <linux/platform_device.h>
-+
-+int xdma_enable_user_irq(struct platform_device *pdev, u32 irq_num);
-+void xdma_disable_user_irq(struct platform_device *pdev, u32 irq_num);
-+int xdma_get_user_irq(struct platform_device *pdev, u32 user_irq_index);
-+
-+#endif /* _DMAENGINE_AMD_XDMA_H */
--- 
-2.27.0
-
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> ---
+>  drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c | 14 +++++++-------
+>  1 file changed, 7 insertions(+), 7 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c b/drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c
+> index f266b68cf012..0f2e056c02dd 100644
+> --- a/drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c
+> +++ b/drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c
+> @@ -3476,38 +3476,38 @@ i915_gem_do_execbuffer(struct drm_device *dev,
+>
+>  err_request:
+>         eb_requests_get(&eb);
+>         err = eb_requests_add(&eb, err);
+>
+>         if (eb.fences)
+>                 signal_fence_array(&eb, eb.composite_fence ?
+>                                    eb.composite_fence :
+>                                    &eb.requests[0]->fence);
+>
+> +       if (unlikely(eb.gem_context->syncobj)) {
+> +               drm_syncobj_replace_fence(eb.gem_context->syncobj,
+> +                                         eb.composite_fence ?
+> +                                         eb.composite_fence :
+> +                                         &eb.requests[0]->fence);
+> +       }
+> +
+>         if (out_fence) {
+>                 if (err == 0) {
+>                         fd_install(out_fence_fd, out_fence->file);
+>                         args->rsvd2 &= GENMASK_ULL(31, 0); /* keep in-fence */
+>                         args->rsvd2 |= (u64)out_fence_fd << 32;
+>                         out_fence_fd = -1;
+>                 } else {
+>                         fput(out_fence->file);
+>                 }
+>         }
+>
+> -       if (unlikely(eb.gem_context->syncobj)) {
+> -               drm_syncobj_replace_fence(eb.gem_context->syncobj,
+> -                                         eb.composite_fence ?
+> -                                         eb.composite_fence :
+> -                                         &eb.requests[0]->fence);
+> -       }
+> -
+>         if (!out_fence && eb.composite_fence)
+>                 dma_fence_put(eb.composite_fence);
+>
+>         eb_requests_put(&eb);
+>
+>  err_vma:
+>         eb_release_vmas(&eb, true);
+>         WARN_ON(err == -EDEADLK);
+>         i915_gem_ww_ctx_fini(&eb.ww);
+>
+> --
+> 2.38.1
+>
