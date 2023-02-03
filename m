@@ -2,68 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66C59689082
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 08:19:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43DA46890AA
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 08:21:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232479AbjBCHSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 02:18:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40248 "EHLO
+        id S232109AbjBCHUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 02:20:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232159AbjBCHSb (ORCPT
+        with ESMTP id S230496AbjBCHUj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 02:18:31 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A8C5105
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 23:18:28 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id hx15so12786126ejc.11
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 23:18:28 -0800 (PST)
+        Fri, 3 Feb 2023 02:20:39 -0500
+Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA3B93AEB
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 23:20:05 -0800 (PST)
+Received: by mail-ua1-x92d.google.com with SMTP id h9so807416uag.9
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 23:20:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jg1o5S4wDItPpEBwTmMaDOJZkucoVf7whNEU2o61P+U=;
-        b=ADUfBOJ6G+rc3VG5guCAVf9JterCByIbLi0D6G+dIajLMzb1Z7tipk6aoGeGnhqD5T
-         AftoqfNsrtOHdHnLxMYm0/2Gz9fQU/YJAeYmw7l+3WkV59YF2sK5mB8fs7g+e5dkil52
-         qEYviL896zQh7lVaBbxfbB5wc0tYw5djmpWpM=
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=MOfBdQlx5iGO79hp8GsvnYFdh/l1zehQMo7xs4q/oVo=;
+        b=bw9lxWd5kf3X9mhBe+WB1U+QwWcYI4VrH7OvmBQFXuoORIoxkZ3jr0gLLLSSxjPz4H
+         EQksKl9SXFqjvrLRMbTkV78zb8/E8qZwTFjxJzW8hdYpqcTNw2CJUFr8S2TVihsdAo9e
+         YhQ19YicgiTlK5DRjMxRBzVkgMmzcFWrjRqMk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jg1o5S4wDItPpEBwTmMaDOJZkucoVf7whNEU2o61P+U=;
-        b=Ojm9AhKwhqb7dBYv7ZHd0yz6Z4Ez1SHODcZ/ArYnwylWw/0xyoM4YQm+9+UKKm2/2r
-         TAwtnJVf3jY5mj1/lvTFw/EWBWswQZjeI6Mgi1ZMBERj/S7SqG+P1qhAB3JHePFxDgWp
-         6LA/b43GBvaNwIwtqu6+F5HtI/U8ARMaFr6ck2rFoZU/BDWxn4Xj8tIOiFkyMVf+V8XM
-         0Uxhs1qD6j0xaa2k+aJ/MY7l+yRPBrn3cBGqjSSwgvphYQy3x1wEagHOwoUiJ0mIbquU
-         Zcn7WAmgX+B4LJ14z6Zdx3pLOUwSGdeUvvF4W+6XzwvwDoQZZJFpSue/behgdhK6URH7
-         7sNw==
-X-Gm-Message-State: AO0yUKWvPDPb2MBwae2XNTGgK4DRFn0azurjzMzotCdHE9Eqidnq8oyN
-        V/UQwNVmjwSXWOZG8pTYN0SroObrqKSPaoi5OwE=
-X-Google-Smtp-Source: AK7set9cs7RecCnW+SPHw9NZqf3dZHNqgoclJ+dCLqgMXQIQcl/i+44dQuZ/0FGBack3Z8gsqKNJEA==
-X-Received: by 2002:a17:906:885:b0:86f:356e:ba43 with SMTP id n5-20020a170906088500b0086f356eba43mr8923330eje.18.1675408706757;
-        Thu, 02 Feb 2023 23:18:26 -0800 (PST)
-Received: from [172.16.11.74] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id f17-20020a1709064dd100b0087276f66c6asm942812ejw.115.2023.02.02.23.18.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 23:18:26 -0800 (PST)
-Message-ID: <f484c11b-a221-b096-7ae6-91de7490b8a0@rasmusvillemoes.dk>
-Date:   Fri, 3 Feb 2023 08:18:24 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MOfBdQlx5iGO79hp8GsvnYFdh/l1zehQMo7xs4q/oVo=;
+        b=s3vGeg/E+T8symz5PtWeMomWeI0ULasS3u2+Q54qZHoyPylt6+LdjRB6kw8SRzeO7w
+         HzF0Eq87gH3sDCawHO6oqBimhBMbzZoMLlp0ms53d4kPTz/QLpCG7XAFnPINnEt1GQHN
+         Vc3pcfjFOhS6ztQJ39ixr131HVDAHYnlKAXxefg1YDdpz29Es0H4VCB0+n8WCR2GQEQv
+         XgdAhwjRQ5X5iK1G3wdgk4TzjLkUYeZ29pHK9aCtAC4KmDzUpCYOGGcCWXrclTsJTwAj
+         nIZSsW4l4vhCN9BKbZWNhLwGdXHVlqvkXsd864yQGA53/BYMchGQnIp3nyOFZxlF7zCI
+         j0TQ==
+X-Gm-Message-State: AO0yUKXcNoH9vx4THSWJO8cfvGGnwsSgsn+EIVy9ipUr9JqmUkBjmHx6
+        jVEWexRrK+F2hZx5mN0g4zpuK2CdhtmkVeFJI7wzVw==
+X-Google-Smtp-Source: AK7set/xR1ke0jWZt68bY6r2crHse1vwXsGaqnSXeErrScT1IfzUL7oiEe6uQtdtx91KsG76eEPfb4WI2IpvFowxPtM=
+X-Received: by 2002:ab0:6ca4:0:b0:5f0:4676:e4f1 with SMTP id
+ j4-20020ab06ca4000000b005f04676e4f1mr1475913uaa.44.1675408800845; Thu, 02 Feb
+ 2023 23:20:00 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: memchr() vs. memscan()
-Content-Language: en-US, da
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Kees Cook <keescook@chromium.org>
-References: <Y9vX95GpI272VKn0@smile.fi.intel.com>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-In-Reply-To: <Y9vX95GpI272VKn0@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20230119124848.26364-1-Garmin.Chang@mediatek.com> <20230119124848.26364-13-Garmin.Chang@mediatek.com>
+In-Reply-To: <20230119124848.26364-13-Garmin.Chang@mediatek.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Fri, 3 Feb 2023 15:19:49 +0800
+Message-ID: <CAGXv+5Fysy4iCvHEXWtf5oXCHkaKezPqcrGd8QzhnaTrYdyecA@mail.gmail.com>
+Subject: Re: [PATCH v5 12/19] clk: mediatek: Add MT8188 vdosys0 clock support
+To:     "Garmin.Chang" <Garmin.Chang@mediatek.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-clk@vger.kernel.org, netdev@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,22 +73,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/02/2023 16.34, Andy Shevchenko wrote:
-> Why do we have memchr() and memscan() implementations in lib/string.c?
-> As far as I can see the one may be derived from the other easily.
+On Thu, Jan 19, 2023 at 8:54 PM Garmin.Chang <Garmin.Chang@mediatek.com> wrote:
+>
+> Add MT8188 vdosys0 clock controller which provides clock gate
+> control in video system. This is integrated with mtk-mmsys
+> driver which will populate device by platform_device_register_data
+> to start vdosys clock driver.
+>
+> Signed-off-by: Garmin.Chang <Garmin.Chang@mediatek.com>
+> ---
+>  drivers/clk/mediatek/Makefile          |   3 +-
+>  drivers/clk/mediatek/clk-mt8188-vdo0.c | 134 +++++++++++++++++++++++++
+>  2 files changed, 136 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/clk/mediatek/clk-mt8188-vdo0.c
+>
+> diff --git a/drivers/clk/mediatek/Makefile b/drivers/clk/mediatek/Makefile
+> index 7d09e9fc6538..df78c0777fef 100644
+> --- a/drivers/clk/mediatek/Makefile
+> +++ b/drivers/clk/mediatek/Makefile
+> @@ -86,7 +86,8 @@ obj-$(CONFIG_COMMON_CLK_MT8186) += clk-mt8186-mcu.o clk-mt8186-topckgen.o clk-mt
+>  obj-$(CONFIG_COMMON_CLK_MT8188) += clk-mt8188-apmixedsys.o clk-mt8188-topckgen.o \
+>                                    clk-mt8188-peri_ao.o clk-mt8188-infra_ao.o \
+>                                    clk-mt8188-cam.o clk-mt8188-ccu.o clk-mt8188-img.o \
+> -                                  clk-mt8188-ipe.o clk-mt8188-mfg.o clk-mt8188-vdec.o
+> +                                  clk-mt8188-ipe.o clk-mt8188-mfg.o clk-mt8188-vdec.o \
+> +                                  clk-mt8188-vdo0.o
+>  obj-$(CONFIG_COMMON_CLK_MT8192) += clk-mt8192.o
+>  obj-$(CONFIG_COMMON_CLK_MT8192_AUDSYS) += clk-mt8192-aud.o
+>  obj-$(CONFIG_COMMON_CLK_MT8192_CAMSYS) += clk-mt8192-cam.o
+> diff --git a/drivers/clk/mediatek/clk-mt8188-vdo0.c b/drivers/clk/mediatek/clk-mt8188-vdo0.c
+> new file mode 100644
+> index 000000000000..30dd64374ace
+> --- /dev/null
+> +++ b/drivers/clk/mediatek/clk-mt8188-vdo0.c
+> @@ -0,0 +1,134 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +//
+> +// Copyright (c) 2022 MediaTek Inc.
+> +// Author: Garmin Chang <garmin.chang@mediatek.com>
+> +
+> +#include <linux/clk-provider.h>
+> +#include <linux/platform_device.h>
+> +#include <dt-bindings/clock/mediatek,mt8188-clk.h>
+> +
+> +#include "clk-gate.h"
+> +#include "clk-mtk.h"
+> +
+> +static const struct mtk_gate_regs vdo0_0_cg_regs = {
+> +       .set_ofs = 0x104,
+> +       .clr_ofs = 0x108,
+> +       .sta_ofs = 0x100,
+> +};
+> +
+> +static const struct mtk_gate_regs vdo0_1_cg_regs = {
+> +       .set_ofs = 0x114,
+> +       .clr_ofs = 0x118,
+> +       .sta_ofs = 0x110,
+> +};
+> +
+> +static const struct mtk_gate_regs vdo0_2_cg_regs = {
+> +       .set_ofs = 0x124,
+> +       .clr_ofs = 0x128,
+> +       .sta_ofs = 0x120,
+> +};
+> +
+> +#define GATE_VDO0_0(_id, _name, _parent, _shift)                       \
+> +       GATE_MTK(_id, _name, _parent, &vdo0_0_cg_regs, _shift, &mtk_clk_gate_ops_setclr)
+> +
+> +#define GATE_VDO0_1(_id, _name, _parent, _shift)                       \
+> +       GATE_MTK(_id, _name, _parent, &vdo0_1_cg_regs, _shift, &mtk_clk_gate_ops_setclr)
+> +
+> +#define GATE_VDO0_2(_id, _name, _parent, _shift)                       \
+> +       GATE_MTK(_id, _name, _parent, &vdo0_2_cg_regs, _shift, &mtk_clk_gate_ops_setclr)
+> +
+> +#define GATE_VDO0_2_FLAGS(_id, _name, _parent, _shift, _flags)         \
+> +       GATE_MTK_FLAGS(_id, _name, _parent, &vdo0_2_cg_regs, _shift,    \
+> +       &mtk_clk_gate_ops_setclr, _flags)
+> +
+> +static const struct mtk_gate vdo0_clks[] = {
+> +       /* VDO0_0 */
+> +       GATE_VDO0_0(CLK_VDO0_DISP_OVL0, "vdo0_disp_ovl0", "top_vpp", 0),
+> +       GATE_VDO0_0(CLK_VDO0_FAKE_ENG0, "vdo0_fake_eng0", "top_vpp", 2),
+> +       GATE_VDO0_0(CLK_VDO0_DISP_CCORR0, "vdo0_disp_ccorr0", "top_vpp", 4),
+> +       GATE_VDO0_0(CLK_VDO0_DISP_MUTEX0, "vdo0_disp_mutex0", "top_vpp", 6),
+> +       GATE_VDO0_0(CLK_VDO0_DISP_GAMMA0, "vdo0_disp_gamma0", "top_vpp", 8),
+> +       GATE_VDO0_0(CLK_VDO0_DISP_DITHER0, "vdo0_disp_dither0", "top_vpp", 10),
+> +       GATE_VDO0_0(CLK_VDO0_DISP_WDMA0, "vdo0_disp_wdma0", "top_vpp", 17),
+> +       GATE_VDO0_0(CLK_VDO0_DISP_RDMA0, "vdo0_disp_rdma0", "top_vpp", 19),
+> +       GATE_VDO0_0(CLK_VDO0_DSI0, "vdo0_dsi0", "top_vpp", 21),
+> +       GATE_VDO0_0(CLK_VDO0_DSI1, "vdo0_dsi1", "top_vpp", 22),
+> +       GATE_VDO0_0(CLK_VDO0_DSC_WRAP0, "vdo0_dsc_wrap0", "top_vpp", 23),
+> +       GATE_VDO0_0(CLK_VDO0_VPP_MERGE0, "vdo0_vpp_merge0", "top_vpp", 24),
+> +       GATE_VDO0_0(CLK_VDO0_DP_INTF0, "vdo0_dp_intf0", "top_vpp", 25),
+> +       GATE_VDO0_0(CLK_VDO0_DISP_AAL0, "vdo0_disp_aal0", "top_vpp", 26),
+> +       GATE_VDO0_0(CLK_VDO0_INLINEROT0, "vdo0_inlinerot0", "top_vpp", 27),
+> +       GATE_VDO0_0(CLK_VDO0_APB_BUS, "vdo0_apb_bus", "top_vpp", 28),
+> +       GATE_VDO0_0(CLK_VDO0_DISP_COLOR0, "vdo0_disp_color0", "top_vpp", 29),
+> +       GATE_VDO0_0(CLK_VDO0_MDP_WROT0, "vdo0_mdp_wrot0", "top_vpp", 30),
+> +       GATE_VDO0_0(CLK_VDO0_DISP_RSZ0, "vdo0_disp_rsz0", "top_vpp", 31),
+> +       /* VDO0_1 */
+> +       GATE_VDO0_1(CLK_VDO0_DISP_POSTMASK0, "vdo0_disp_postmask0", "top_vpp", 0),
+> +       GATE_VDO0_1(CLK_VDO0_FAKE_ENG1, "vdo0_fake_eng1", "top_vpp", 1),
+> +       GATE_VDO0_1(CLK_VDO0_DL_ASYNC2, "vdo0_dl_async2", "top_vpp", 5),
+> +       GATE_VDO0_1(CLK_VDO0_DL_RELAY3, "vdo0_dl_relay3", "top_vpp", 6),
+> +       GATE_VDO0_1(CLK_VDO0_DL_RELAY4, "vdo0_dl_relay4", "top_vpp", 7),
+> +       GATE_VDO0_1(CLK_VDO0_SMI_GALS, "vdo0_smi_gals", "top_vpp", 10),
+> +       GATE_VDO0_1(CLK_VDO0_SMI_COMMON, "vdo0_smi_common", "top_vpp", 11),
+> +       GATE_VDO0_1(CLK_VDO0_SMI_EMI, "vdo0_smi_emi", "top_vpp", 12),
+> +       GATE_VDO0_1(CLK_VDO0_SMI_IOMMU, "vdo0_smi_iommu", "top_vpp", 13),
+> +       GATE_VDO0_1(CLK_VDO0_SMI_LARB, "vdo0_smi_larb", "top_vpp", 14),
+> +       GATE_VDO0_1(CLK_VDO0_SMI_RSI, "vdo0_smi_rsi", "top_vpp", 15),
+> +       /* VDO0_2 */
+> +       GATE_VDO0_2(CLK_VDO0_DSI0_DSI, "vdo0_dsi0_dsi", "top_dsi_occ", 0),
+> +       GATE_VDO0_2(CLK_VDO0_DSI1_DSI, "vdo0_dsi1_dsi", "top_dsi_occ", 8),
+> +       GATE_VDO0_2_FLAGS(CLK_VDO0_DP_INTF0_DP_INTF, "vdo0_dp_intf0_dp_intf",
+> +               "top_edp", 16, CLK_SET_RATE_PARENT),
+> +};
+> +
+> +static int clk_mt8188_vdo0_probe(struct platform_device *pdev)
+> +{
+> +       struct device *dev = &pdev->dev;
+> +       struct device_node *node = dev->parent->of_node;
+> +       struct clk_hw_onecell_data *clk_data;
+> +       int r;
+> +
+> +       clk_data = mtk_alloc_clk_data(CLK_VDO0_NR_CLK);
+> +       if (!clk_data)
+> +               return -ENOMEM;
+> +
+> +       r = mtk_clk_register_gates(node, vdo0_clks, ARRAY_SIZE(vdo0_clks), clk_data);
 
-Well, memchr() is the C standard thing, and the one arches are more
-likely to (and do) provide custom implementations of. memscan() seems to
-be to memchr() as strchrnul() is to strchr(), and judging by the number
-of callers, I don't think any optimizations or a separate C
-implementation is really worth it. So yes, by all means we can replace
-its entire body by
+This API was changed. Please rebase onto the latest -next and update.
 
-  return memchr(addr, c, size) ?: addr + size;
-
-That's possibly even a win for the arches that do provide their own
-memchr(), but again, performance of this one doesn't matter at all. But
-the tiny kernel folks might appreciate this.
-
-Rasmus
-
+Angelo (CC-ed) also mentioned a new simple probe variant for non-DT
+clock drivers is being developed. He didn't mention a timeline though.
