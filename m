@@ -2,95 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B20FF68A444
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 22:09:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24BD668A449
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 22:10:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232365AbjBCVJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 16:09:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51812 "EHLO
+        id S232875AbjBCVKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 16:10:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233255AbjBCVJV (ORCPT
+        with ESMTP id S231183AbjBCVJb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 16:09:21 -0500
-Received: from out-197.mta1.migadu.com (out-197.mta1.migadu.com [95.215.58.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0907F8E6A8
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 13:08:14 -0800 (PST)
-Date:   Fri, 3 Feb 2023 21:08:00 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1675458492;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zF794bsssBgYs01gtLHUkS28EIicNc0l0YnvFt/94YI=;
-        b=gF+Ot9L7bvkYWgstVlN3IGR5gepXbOhnLUW+ryxf0GGE8OvgoAe8gh4332GPCHIBnUEDfl
-        OstQTXxU52klLCCbGsxtBPABUoe9zoYwljDknwyOPX3XqLcs69d34u9p3+onFADs6Ko7Qx
-        oTbdNErPix3LGrijaxdz/cn1jgoVGFY=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Oliver Upton <oliver.upton@linux.dev>
-To:     James Morse <james.morse@arm.com>
-Cc:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
-        kvmarm@lists.linux.dev, kvm@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
-        Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Borislav Petkov <bp@alien8.de>, H Peter Anvin <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Len Brown <lenb@kernel.org>,
-        Rafael Wysocki <rafael@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: Re: [RFC PATCH 29/32] KVM: arm64: Pass hypercalls to userspace
-Message-ID: <Y913sIqWxmf4O5oG@google.com>
-References: <20230203135043.409192-1-james.morse@arm.com>
- <20230203135043.409192-30-james.morse@arm.com>
+        Fri, 3 Feb 2023 16:09:31 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E7AA7038
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 13:08:42 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id r2so5749219wrv.7
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 13:08:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Y2BiUcMD8Gl7xNduYrxgFh6P8/MvqGGdxXMYMad5DGg=;
+        b=bAoCPRbAJBt+JF6p7NKN9nUbWJCzl9JgjlWwo4oWw0i1RxjTM5Xyd3hBMM4yK0bc1l
+         sY9jd40kD0RQ8Zc9pcOCO63jt9iGEOwdzupNjIcDIjKO0HUTpuJtrF0AS5BMKq6thQjC
+         xpJNWW49e1Cn9xfM4deqkZhVxJAcSsc2HaWIIxY54hveHg4XwKYLUU1ZTMkdxb4qWrdU
+         +RnduDoAsaACX2CEJZaGjADO2ziICn4ZWlPKpvGSWLZ4BGDo+x4uF6muKL7dPTXzIpLT
+         wGQRKyV4B5lNBKZF//ENrSNvuaKUPCfnHIrR51Yox+KHXIZqco/qTahBtFps/LzFulf9
+         ooOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y2BiUcMD8Gl7xNduYrxgFh6P8/MvqGGdxXMYMad5DGg=;
+        b=QzrwhpaE8pu9CpEKZNCSHKpFts2WmuXBuG/wiQJSEaJqBZC0o9HQT0ZZPY4i45qlK2
+         3UrTKghMXU8FogiZNSJUeqQWdUx64j6UJzP2JhYixzuAgNk/epOsmA63UESebCV6cfC+
+         isr0LwmIvBAlSMdFt98vJP0b1IytYRhXIWxPF/wvYLeU63kg+wCcdnt91onaQQBjQtC8
+         /YqK+MIvA2lZJlyGXOXcbIYX38UNw3YrMiEi+w3PtI+oa6LBjJ7zhdRyU49tNXtmcyjI
+         Oc/17SqcNJPYejSzCGA6/uinUmwvJClf1BF0LO9QWF4T2eMcwI0Fo9uxUBchIHVKvdJf
+         skyg==
+X-Gm-Message-State: AO0yUKW29pY1z5+kwRCTkt+OYpVIYWv2mtZBQ4nB5km0+X3PWgyHar04
+        crnF9EAXJwSl3awNgfJEzrprtQ==
+X-Google-Smtp-Source: AK7set9LoC2I3Ut0tnBQJCbcQRTGFMaNn+AQqxFQZJnMCPPocj+BKAfYbgUifsaihdzUDgpi6FNoQA==
+X-Received: by 2002:a5d:6f15:0:b0:2bc:8130:ccb8 with SMTP id ay21-20020a5d6f15000000b002bc8130ccb8mr10578220wrb.40.1675458520814;
+        Fri, 03 Feb 2023 13:08:40 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id bj24-20020a0560001e1800b002bded7da2b8sm2882153wrb.102.2023.02.03.13.08.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Feb 2023 13:08:40 -0800 (PST)
+Message-ID: <5651774d-3f60-ebb1-0613-83917d8c4bd9@linaro.org>
+Date:   Fri, 3 Feb 2023 22:08:38 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230203135043.409192-30-james.morse@arm.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH RFC 1/3] dt-bindings: net: Add network-class schema for
+ mac-address properties
+Content-Language: en-US
+To:     Janne Grunau <j@jannau.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mailing List <devicetree-spec@vger.kernel.org>,
+        Kalle Valo <kvalo@kernel.org>, van Spriel <arend@broadcom.com>,
+        =?UTF-8?B?SsOpcsO0bWUgUG91aWxsZXI=?= <jerome.pouiller@silabs.com>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org
+References: <20230203-dt-bindings-network-class-v1-0-452e0375200d@jannau.net>
+ <20230203-dt-bindings-network-class-v1-1-452e0375200d@jannau.net>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230203-dt-bindings-network-class-v1-1-452e0375200d@jannau.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi James,
+On 03/02/2023 14:56, Janne Grunau wrote:
+> The ethernet-controller schema specifies "mac-address" and
+> "local-mac-address" but other network devices such as wireless network
+> adapters use mac addresses as well.
+> The Devicetree Specification, Release v0.3 specifies in section 4.3.1
+> a generic "Network Class Binding" with "address-bits", "mac-address",
+> "local-mac-address" and "max-frame-size". This schema specifies the
+> "address-bits" property and moves "local-mac-address" and "mac-address"
+> over from ethernet-controller.yaml.
+> The schema currently does not restrict MAC address size based on
+> address-bits.
 
-On Fri, Feb 03, 2023 at 01:50:40PM +0000, James Morse wrote:
-> From: Jean-Philippe Brucker <jean-philippe@linaro.org>
-> 
-> When capability KVM_CAP_ARM_HVC_TO_USER is available, userspace can
-> request to handle all hypercalls that aren't handled by KVM.
+A nit below
 
-I would very much prefer we not go down this route. This capability
-effectively constructs an ABI out of what KVM presently does not
-implement. What would happen if KVM decides to implement a new set
-of hypercalls later down the road that were previously forwarded to
-userspace?
+>          phy-mode:
+> diff --git a/Documentation/devicetree/bindings/net/network-class.yaml b/Documentation/devicetree/bindings/net/network-class.yaml
+> new file mode 100644
+> index 000000000000..676aec1c458e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/network-class.yaml
+> @@ -0,0 +1,40 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/network-class.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Network Class Bindings
 
-Instead of a catch-all I think we should take the approach of having
-userspace explicitly request which hypercalls should be forwarded to
-userspace. I proposed something similar [1], but never got around to
-respinning it (oops).
+s/Bindings/Common Properties/
+Best regards,
+Krzysztof
 
-Let me dust those patches off and align with Marc's suggestions.
-
-[1]: https://lore.kernel.org/kvmarm/20221110015327.3389351-1-oliver.upton@linux.dev/
-
---
-Thanks,
-Oliver
