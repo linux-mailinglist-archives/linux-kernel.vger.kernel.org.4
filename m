@@ -2,135 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D222B68954C
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 11:18:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06F75689735
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 11:47:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233341AbjBCKRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 05:17:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38240 "EHLO
+        id S232716AbjBCKqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 05:46:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233043AbjBCKRi (ORCPT
+        with ESMTP id S232000AbjBCKqT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 05:17:38 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BBBF93AED;
-        Fri,  3 Feb 2023 02:16:55 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id cq16-20020a17090af99000b0022c9791ac39so8340453pjb.4;
-        Fri, 03 Feb 2023 02:16:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0ZbAUGn0r6doN6zThP1Zquzlxw14avp8efmj05+Io/4=;
-        b=Ywh4mnPVN3Y4k0f4DuulkG2miIzAXD2MOag6AoE9aqI4lk2/oCohsrtf8Gr8EPviVM
-         w5YHMEJEeyxv4Kxv5i6v3b/lUpqXFNx1osYHGwcvd5Y6A4ASt/XYopzNc7ULMCnsOI6d
-         IrSWoKHqFH3ZA9JFOpulvON/sgxK8lIDCGcFdofh7TQct/4Basch9lONK7Jz9jH6b2l5
-         lG9ZdPMIFHQYLtBy4nRdrdwKqfTKG98jS03kSpv/G7uTjB62apnvK8P8uUgwZxEBoWt6
-         TcPvwy+n7no1gkpCj3JC/uJM6ahYRPgSN0IO8wEZNDBK6v4Lg/AjhsnsKmGHKgxXIauL
-         JR8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=0ZbAUGn0r6doN6zThP1Zquzlxw14avp8efmj05+Io/4=;
-        b=UKRh5nSOnH5IZFXq5wKE4wJRxfxAhR9KvbcrJtOvIzAuTzb0UkpeLv9R4gDWEgr57d
-         EYg7GHHxE/mFoW4/mtnxyRZ3dHCsUxHeAPUIPwIwFGAGSR24MFC+oyvmHLjywQeUQQZw
-         nlu3cWw7vtorl5QXg3p/dNmTxYxYvciuqfiK41LdEkWDx4/gRW9f/JUMG3c4zyt2/Gfn
-         A/hp9zTCnfvI8AkPn7EOHn6OWcALSh1VHwX2eNv5IHzM0SYUu6PVYrbxlgcvI4+kqP3S
-         IrrCkf1uGN3r438thPqCZQS+PP1Jqpzhh8cFZoFPPJLu+c/m9kW3P9S2fn/dU/8oOlgP
-         WaWQ==
-X-Gm-Message-State: AO0yUKX/Oj3wgb2+KLy925JB9ZJ2HSjgNI1StGrqq3hidGUDSlZr8BHk
-        XxqafPT2d2uH74VGlRnIkYM=
-X-Google-Smtp-Source: AK7set8WbQ1iPrN5HSlN4f706F1IqNht5RVf+MEFDgPYm7h/efSiL2BKY4uYWAK+N6jAmo/6Qh0viw==
-X-Received: by 2002:a17:902:da92:b0:196:5839:b36a with SMTP id j18-20020a170902da9200b001965839b36amr11622683plx.8.1675419414829;
-        Fri, 03 Feb 2023 02:16:54 -0800 (PST)
-Received: from localhost (193-116-117-77.tpgi.com.au. [193.116.117.77])
-        by smtp.gmail.com with ESMTPSA id n19-20020a170902969300b00198e03c3ad4sm1002403plp.278.2023.02.03.02.16.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Feb 2023 02:16:54 -0800 (PST)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 03 Feb 2023 20:16:45 +1000
-Message-Id: <CQ8UM1FTPEUZ.3F2RONR3AJ5YP@bobo>
-From:   "Nicholas Piggin" <npiggin@gmail.com>
-To:     "Thomas Huth" <thuth@redhat.com>, <kvm@vger.kernel.org>,
-        "Paolo Bonzini" <pbonzini@redhat.com>,
-        "Sean Christopherson" <seanjc@google.com>
-Cc:     "Claudio Imbrenda" <imbrenda@linux.ibm.com>,
-        "Janosch Frank" <frankja@linux.ibm.com>,
-        "Suzuki K Poulose" <suzuki.poulose@arm.com>,
-        "Marc Zyngier" <maz@kernel.org>,
-        "David Hildenbrand" <david@redhat.com>,
-        <linux-kernel@vger.kernel.org>,
-        "Oliver Upton" <oliver.upton@linux.dev>,
-        "Zenghui Yu" <yuzenghui@huawei.com>,
-        "James Morse" <james.morse@arm.com>,
-        <kvm-riscv@lists.infradead.org>, <kvmarm@lists.linux.dev>,
-        "Christian Borntraeger" <borntraeger@linux.ibm.com>,
-        <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [PATCH 3/7] KVM: Move KVM_GET_NR_MMU_PAGES into the deprecation
- section
-X-Mailer: aerc 0.13.0
-References: <20230203094230.266952-1-thuth@redhat.com>
- <20230203094230.266952-4-thuth@redhat.com>
-In-Reply-To: <20230203094230.266952-4-thuth@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 3 Feb 2023 05:46:19 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4984A4FCFC;
+        Fri,  3 Feb 2023 02:46:18 -0800 (PST)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31399Crh004649;
+        Fri, 3 Feb 2023 10:19:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=OgCD+eDmUwSr0tq+6IKW/wdRsh3zCLJKVgwLN+2BJ8Q=;
+ b=pObvpSZ5Ml6vPRXfko2W1AGqSFXAPa3xSqsY85rX1kogXeLHIa9Lpu2fQtF/tBJenlye
+ S+sq0QYpm8sXSHXH0RRqdPvdULH9cPbNEETQ/1iJ09seNP4y+SpIjJZ6TJGldSEu65Dn
+ 539ttG+fblpcWCMeDiWm+AnRqqjIs9pynxvyWoj6vPIxOzI+vMGfe7VeWgbtf+NxNTs7
+ YTm1R60pNR+fm8HlZ1IGU585RQKv77c+ep+SuY8cgunOdI+E/BoWzmaBMzEmbXm76ubs
+ L2UTp3dsnWYQUS48wrFfjoPd7ySEE+38sENp+Kpsub+8vQdi8/PT6yJYOk4lgXtEp/zB 2A== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ngns2h7t0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Feb 2023 10:19:02 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 313AJ2n6015179
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 3 Feb 2023 10:19:02 GMT
+Received: from hu-mojha-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Fri, 3 Feb 2023 02:18:59 -0800
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Mukesh Ojha" <quic_mojha@quicinc.com>
+Subject: [PATCH v2] firmware: qcom_scm: modify qcom_scm_set_download_mode()
+Date:   Fri, 3 Feb 2023 15:47:15 +0530
+Message-ID: <1675419435-30726-1-git-send-email-quic_mojha@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: nnpK-Hl9mq6EX3d5Zhjq5PMxtybwU71k
+X-Proofpoint-ORIG-GUID: nnpK-Hl9mq6EX3d5Zhjq5PMxtybwU71k
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-03_06,2023-02-03_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1015
+ spamscore=0 malwarescore=0 priorityscore=1501 suspectscore=0 mlxscore=0
+ adultscore=0 mlxlogscore=999 impostorscore=0 phishscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302030095
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri Feb 3, 2023 at 7:42 PM AEST, Thomas Huth wrote:
-> The KVM_GET_NR_MMU_PAGES ioctl is quite questionable on 64-bit hosts
-> since it fails to return the full 64 bits of the value that can be
-> set with the corresponding KVM_SET_NR_MMU_PAGES call. This ioctl
-> likely has also never really been used by userspace applications
-> (at least not by QEMU and kvmtool which I checked), so it's better
-> to move it to the deprecation section in kvm.h to make it clear for
-> developers that this also should not be used in new code in the
-> future anymore.
+Modify qcom_scm_set_download_mode() such that it can support
+multiple modes. There is no functional change with this change.
 
-Did this get included in the series inadvertently?
+Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+---
+Changes in v2:
+  - Stop changing legacy scm id for dload mode.
 
-Thanks,
-Nick
+ drivers/firmware/qcom_scm.c | 15 +++++++--------
+ include/linux/qcom_scm.h    |  5 +++++
+ 2 files changed, 12 insertions(+), 8 deletions(-)
 
->
-> Signed-off-by: Thomas Huth <thuth@redhat.com>
-> ---
->  include/uapi/linux/kvm.h | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-> index 55155e262646..f55965a4cec7 100644
-> --- a/include/uapi/linux/kvm.h
-> +++ b/include/uapi/linux/kvm.h
-> @@ -83,6 +83,8 @@ struct kvm_debug_guest {
-> =20
->  #define __KVM_DEPRECATED_VCPU_W_0x87 _IOW(KVMIO, 0x87, struct kvm_debug_=
-guest)
-> =20
-> +#define KVM_GET_NR_MMU_PAGES _IO(KVMIO, 0x45)
-> +
->  /* *** End of deprecated interfaces *** */
-> =20
-> =20
-> @@ -1442,7 +1444,6 @@ struct kvm_vfio_spapr_tce {
->  #define KVM_CREATE_VCPU           _IO(KVMIO,   0x41)
->  #define KVM_GET_DIRTY_LOG         _IOW(KVMIO,  0x42, struct kvm_dirty_lo=
-g)
->  #define KVM_SET_NR_MMU_PAGES      _IO(KVMIO,   0x44)
-> -#define KVM_GET_NR_MMU_PAGES      _IO(KVMIO,   0x45)
->  #define KVM_SET_USER_MEMORY_REGION _IOW(KVMIO, 0x46, \
->  					struct kvm_userspace_memory_region)
->  #define KVM_SET_TSS_ADDR          _IO(KVMIO,   0x47)
-> --=20
-> 2.31.1
+diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
+index cdbfe54..6245b97 100644
+--- a/drivers/firmware/qcom_scm.c
++++ b/drivers/firmware/qcom_scm.c
+@@ -400,7 +400,7 @@ int qcom_scm_set_remote_state(u32 state, u32 id)
+ }
+ EXPORT_SYMBOL(qcom_scm_set_remote_state);
+ 
+-static int __qcom_scm_set_dload_mode(struct device *dev, bool enable)
++static int __qcom_scm_set_dload_mode(struct device *dev, enum qcom_download_mode mode)
+ {
+ 	struct qcom_scm_desc desc = {
+ 		.svc = QCOM_SCM_SVC_BOOT,
+@@ -410,12 +410,12 @@ static int __qcom_scm_set_dload_mode(struct device *dev, bool enable)
+ 		.owner = ARM_SMCCC_OWNER_SIP,
+ 	};
+ 
+-	desc.args[1] = enable ? QCOM_SCM_BOOT_SET_DLOAD_MODE : 0;
++	desc.args[1] = mode ? QCOM_SCM_BOOT_SET_DLOAD_MODE : 0;
+ 
+ 	return qcom_scm_call_atomic(__scm->dev, &desc, NULL);
+ }
+ 
+-static void qcom_scm_set_download_mode(bool enable)
++static void qcom_scm_set_download_mode(enum qcom_download_mode mode)
+ {
+ 	bool avail;
+ 	int ret = 0;
+@@ -424,10 +424,9 @@ static void qcom_scm_set_download_mode(bool enable)
+ 					     QCOM_SCM_SVC_BOOT,
+ 					     QCOM_SCM_BOOT_SET_DLOAD_MODE);
+ 	if (avail) {
+-		ret = __qcom_scm_set_dload_mode(__scm->dev, enable);
++		ret = __qcom_scm_set_dload_mode(__scm->dev, mode);
+ 	} else if (__scm->dload_mode_addr) {
+-		ret = qcom_scm_io_writel(__scm->dload_mode_addr,
+-				enable ? QCOM_SCM_BOOT_SET_DLOAD_MODE : 0);
++		ret = qcom_scm_io_writel(__scm->dload_mode_addr, mode);
+ 	} else {
+ 		dev_err(__scm->dev,
+ 			"No available mechanism for setting download mode\n");
+@@ -1410,7 +1409,7 @@ static int qcom_scm_probe(struct platform_device *pdev)
+ 	 * disabled below by a clean shutdown/reboot.
+ 	 */
+ 	if (download_mode)
+-		qcom_scm_set_download_mode(true);
++		qcom_scm_set_download_mode(QCOM_DOWNLOAD_FULLDUMP);
+ 
+ 	return 0;
+ }
+@@ -1419,7 +1418,7 @@ static void qcom_scm_shutdown(struct platform_device *pdev)
+ {
+ 	/* Clean shutdown, disable download mode to allow normal restart */
+ 	if (download_mode)
+-		qcom_scm_set_download_mode(false);
++		qcom_scm_set_download_mode(QCOM_DOWNLOAD_NODUMP);
+ }
+ 
+ static const struct of_device_id qcom_scm_dt_match[] = {
+diff --git a/include/linux/qcom_scm.h b/include/linux/qcom_scm.h
+index f833564..f9bc84e 100644
+--- a/include/linux/qcom_scm.h
++++ b/include/linux/qcom_scm.h
+@@ -14,6 +14,11 @@
+ #define QCOM_SCM_CPU_PWR_DOWN_L2_OFF	0x1
+ #define QCOM_SCM_HDCP_MAX_REQ_CNT	5
+ 
++enum qcom_download_mode {
++	QCOM_DOWNLOAD_NODUMP    = 0x00,
++	QCOM_DOWNLOAD_FULLDUMP  = 0x10,
++};
++
+ struct qcom_scm_hdcp_req {
+ 	u32 addr;
+ 	u32 val;
+-- 
+2.7.4
 
