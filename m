@@ -2,179 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B074689403
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 10:39:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C485768941B
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 10:41:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232789AbjBCJi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 04:38:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57628 "EHLO
+        id S233099AbjBCJlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 04:41:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232353AbjBCJiM (ORCPT
+        with ESMTP id S233034AbjBCJkq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 04:38:12 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 665B81DBB7;
-        Fri,  3 Feb 2023 01:38:10 -0800 (PST)
-Received: from kwepemm600009.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4P7Vv86c0xzfZ45;
-        Fri,  3 Feb 2023 17:37:56 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.56) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Fri, 3 Feb 2023 17:38:08 +0800
-From:   Weili Qian <qianweili@huawei.com>
-To:     <herbert@gondor.apana.org.au>
-CC:     <linux-kernel@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
-        <wangzhou1@hisilicon.com>, <liulongfang@huawei.com>,
-        Weili Qian <qianweili@huawei.com>
-Subject: [PATCH 5/5] crypto: hisilicon/qm - fix coding style issues
-Date:   Fri, 3 Feb 2023 17:37:30 +0800
-Message-ID: <20230203093730.49314-6-qianweili@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20230203093730.49314-1-qianweili@huawei.com>
-References: <20230203093730.49314-1-qianweili@huawei.com>
+        Fri, 3 Feb 2023 04:40:46 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93CD69B6F9
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 01:40:32 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id j29-20020a05600c1c1d00b003dc52fed235so3401752wms.1
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 01:40:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=BcOFFh4ezLvd92fNkjmz7wpV7RsvIbDnXNZc1TtGyfE=;
+        b=eXU3zeOvIS/sTiVvmDUhiTLRt6DYkGsjsFI1AX0qQb+Lg0yPfNg7WquyWULEMsAqc2
+         ZIZeFSJ5CAoW5nL5Ft/UIgrcUry9QB797rFehtOyLalYzeVP4IEAGrV4/J62yuAiaH0O
+         YK9kygwBhv/t9PBzbSUkC/vyoBgGtrNmJGhUVLspgxAy4lvs0EYULgVMcZsSXLDzLmfz
+         J5R5FAIleJ+jEyDEWvgt5njPch6JHQNk+xmyerW3JV7jPlHeiMiiyCGXtY7My8Nz96YP
+         3t3OZy2zPAyn0fO7zC8NAl4yePwNNZt5O8RcWhyeDaSYHqMHtlM+fg4jynGcBI+oflZa
+         K2Lw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BcOFFh4ezLvd92fNkjmz7wpV7RsvIbDnXNZc1TtGyfE=;
+        b=Az+mKU0L0LJTVhSLCepbwDMwAIBqpWg7KF/72MiRbjnxflHog/n/lCQ/FV7ajzTWWq
+         VcM0ebifzFYF4Iq7tYx/l13AmrL12G1sZnaQdxZjKKRAzdUwYZXF9119l0lbn/JYhmaI
+         vR5Qyvh6B5MHtJbn5W4RJc16B90btoLOG3Y/BDeVtBPx6jrznoqI9ou3aOsw6k/Mn2pp
+         eMUcnBdhBnhj85eN6mHXapC8Y3wKPWkcvzgpMFionueQd4xb8tuCK+lx2pYVy1m6RmSw
+         54THVQ3hjfEZZ+0aPOzxBD0ZCvYCo4kJ4gtHyEEMizW0floRWeSCxx61z7M6wrAiAi/y
+         pWJg==
+X-Gm-Message-State: AO0yUKUrsauYqLxzsYkrvPtRB7ii7kND7iWZQDKsUWfUh4McLj0LL8Bt
+        YUBIByYMbchPW9LP+5qg1Kbpbg==
+X-Google-Smtp-Source: AK7set9EIfUGCgZ5uGTG32ryzvXSU83lqMxBe2h4wXPjYKidwJ8U3BQjmte0UPJpZ9LnkSIAYZKdnA==
+X-Received: by 2002:a7b:cb07:0:b0:3d9:719a:8f7d with SMTP id u7-20020a7bcb07000000b003d9719a8f7dmr8813045wmj.35.1675417231027;
+        Fri, 03 Feb 2023 01:40:31 -0800 (PST)
+Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id q14-20020a7bce8e000000b003dc49e0132asm7027471wmj.1.2023.02.03.01.40.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Feb 2023 01:40:30 -0800 (PST)
+References: <20230202183653.486216-1-jbrunet@baylibre.com>
+ <20230202183653.486216-6-jbrunet@baylibre.com>
+ <512edf50-a74d-815d-1278-39fdeb1c2d35@linaro.org>
+User-agent: mu4e 1.8.10; emacs 28.2
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mark Brown <broonie@kernel.org>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org
+Cc:     linux-amlogic@lists.infradead.org,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/9] ASoC: dt-bindings: meson: convert axg pdm to schema
+Date:   Fri, 03 Feb 2023 10:37:51 +0100
+In-reply-to: <512edf50-a74d-815d-1278-39fdeb1c2d35@linaro.org>
+Message-ID: <1jtu03m6ia.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.69.192.56]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-1. Remove extra blank lines.
-2. Remove extra spaces.
-3. Use spaces instead of tabs around '=' and '\',
-to ensure consistent coding styles.
-4. Macros should be capital letters, change 'QM_SQC_VFT_NUM_MASK_v2'
-to 'QM_SQC_VFT_NUM_MASK_V2'.
 
-Signed-off-by: Weili Qian <qianweili@huawei.com>
----
- drivers/crypto/hisilicon/qm.c  | 29 ++++++++++++-----------------
- drivers/crypto/hisilicon/sgl.c |  1 -
- 2 files changed, 12 insertions(+), 18 deletions(-)
+On Fri 03 Feb 2023 at 09:01, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
-diff --git a/drivers/crypto/hisilicon/qm.c b/drivers/crypto/hisilicon/qm.c
-index 0b278bdbf527..a2e739be26a5 100644
---- a/drivers/crypto/hisilicon/qm.c
-+++ b/drivers/crypto/hisilicon/qm.c
-@@ -116,7 +116,7 @@
- #define QM_SQC_VFT_BASE_SHIFT_V2	28
- #define QM_SQC_VFT_BASE_MASK_V2		GENMASK(15, 0)
- #define QM_SQC_VFT_NUM_SHIFT_V2		45
--#define QM_SQC_VFT_NUM_MASK_v2		GENMASK(9, 0)
-+#define QM_SQC_VFT_NUM_MASK_V2		GENMASK(9, 0)
- 
- #define QM_ABNORMAL_INT_SOURCE		0x100000
- #define QM_ABNORMAL_INT_MASK		0x100004
-@@ -230,23 +230,23 @@
- #define QM_AUTOSUSPEND_DELAY		3000
- 
- #define QM_MK_CQC_DW3_V1(hop_num, pg_sz, buf_sz, cqe_sz) \
--	(((hop_num) << QM_CQ_HOP_NUM_SHIFT)	| \
--	((pg_sz) << QM_CQ_PAGE_SIZE_SHIFT)	| \
--	((buf_sz) << QM_CQ_BUF_SIZE_SHIFT)	| \
-+	(((hop_num) << QM_CQ_HOP_NUM_SHIFT) | \
-+	((pg_sz) << QM_CQ_PAGE_SIZE_SHIFT) | \
-+	((buf_sz) << QM_CQ_BUF_SIZE_SHIFT) | \
- 	((cqe_sz) << QM_CQ_CQE_SIZE_SHIFT))
- 
- #define QM_MK_CQC_DW3_V2(cqe_sz, cq_depth) \
- 	((((u32)cq_depth) - 1) | ((cqe_sz) << QM_CQ_CQE_SIZE_SHIFT))
- 
- #define QM_MK_SQC_W13(priority, orders, alg_type) \
--	(((priority) << QM_SQ_PRIORITY_SHIFT)	| \
--	((orders) << QM_SQ_ORDERS_SHIFT)	| \
-+	(((priority) << QM_SQ_PRIORITY_SHIFT) | \
-+	((orders) << QM_SQ_ORDERS_SHIFT) | \
- 	(((alg_type) & QM_SQ_TYPE_MASK) << QM_SQ_TYPE_SHIFT))
- 
- #define QM_MK_SQC_DW3_V1(hop_num, pg_sz, buf_sz, sqe_sz) \
--	(((hop_num) << QM_SQ_HOP_NUM_SHIFT)	| \
--	((pg_sz) << QM_SQ_PAGE_SIZE_SHIFT)	| \
--	((buf_sz) << QM_SQ_BUF_SIZE_SHIFT)	| \
-+	(((hop_num) << QM_SQ_HOP_NUM_SHIFT) | \
-+	((pg_sz) << QM_SQ_PAGE_SIZE_SHIFT) | \
-+	((buf_sz) << QM_SQ_BUF_SIZE_SHIFT) | \
- 	((u32)ilog2(sqe_sz) << QM_SQ_SQE_SIZE_SHIFT))
- 
- #define QM_MK_SQC_DW3_V2(sqe_sz, sq_depth) \
-@@ -706,7 +706,7 @@ static void qm_db_v2(struct hisi_qm *qm, u16 qn, u8 cmd, u16 index, u8 priority)
- 
- 	doorbell = qn | ((u64)cmd << QM_DB_CMD_SHIFT_V2) |
- 		   ((u64)randata << QM_DB_RAND_SHIFT_V2) |
--		   ((u64)index << QM_DB_INDEX_SHIFT_V2)	 |
-+		   ((u64)index << QM_DB_INDEX_SHIFT_V2) |
- 		   ((u64)priority << QM_DB_PRIORITY_SHIFT_V2);
- 
- 	writeq(doorbell, io_base);
-@@ -1304,7 +1304,7 @@ static int qm_get_vft_v2(struct hisi_qm *qm, u32 *base, u32 *number)
- 	sqc_vft = readl(qm->io_base + QM_MB_CMD_DATA_ADDR_L) |
- 		  ((u64)readl(qm->io_base + QM_MB_CMD_DATA_ADDR_H) << 32);
- 	*base = QM_SQC_VFT_BASE_MASK_V2 & (sqc_vft >> QM_SQC_VFT_BASE_SHIFT_V2);
--	*number = (QM_SQC_VFT_NUM_MASK_v2 &
-+	*number = (QM_SQC_VFT_NUM_MASK_V2 &
- 		   (sqc_vft >> QM_SQC_VFT_NUM_SHIFT_V2)) + 1;
- 
- 	return 0;
-@@ -3195,7 +3195,6 @@ static int qm_stop_started_qp(struct hisi_qm *qm)
- 	return 0;
- }
- 
--
- /**
-  * qm_clear_queues() - Clear all queues memory in a qm.
-  * @qm: The qm in which the queues will be cleared.
-@@ -3679,7 +3678,7 @@ static ssize_t qm_algqos_read(struct file *filp, char __user *buf,
- 	qos_val = ir / QM_QOS_RATE;
- 	ret = scnprintf(tbuf, QM_DBG_READ_LEN, "%u\n", qos_val);
- 
--	ret =  simple_read_from_buffer(buf, count, pos, tbuf, ret);
-+	ret = simple_read_from_buffer(buf, count, pos, tbuf, ret);
- 
- err_get_status:
- 	clear_bit(QM_RESETTING, &qm->misc_ctl);
-@@ -4176,13 +4175,10 @@ static void qm_dev_ecc_mbit_handle(struct hisi_qm *qm)
- 	if (!qm->err_status.is_dev_ecc_mbit &&
- 	    qm->err_status.is_qm_ecc_mbit &&
- 	    qm->err_ini->close_axi_master_ooo) {
--
- 		qm->err_ini->close_axi_master_ooo(qm);
--
- 	} else if (qm->err_status.is_dev_ecc_mbit &&
- 		   !qm->err_status.is_qm_ecc_mbit &&
- 		   !qm->err_ini->close_axi_master_ooo) {
--
- 		nfe_enb = readl(qm->io_base + QM_RAS_NFE_ENABLE);
- 		writel(nfe_enb & QM_RAS_NFE_MBIT_DISABLE,
- 		       qm->io_base + QM_RAS_NFE_ENABLE);
-@@ -4630,7 +4626,6 @@ static irqreturn_t qm_abnormal_irq(int irq, void *data)
- 	return IRQ_HANDLED;
- }
- 
--
- /**
-  * hisi_qm_dev_shutdown() - Shutdown device.
-  * @pdev: The device will be shutdown.
-diff --git a/drivers/crypto/hisilicon/sgl.c b/drivers/crypto/hisilicon/sgl.c
-index 2b6f2281cfd6..a07257a7e75f 100644
---- a/drivers/crypto/hisilicon/sgl.c
-+++ b/drivers/crypto/hisilicon/sgl.c
-@@ -250,7 +250,6 @@ hisi_acc_sg_buf_map_to_hw_sgl(struct device *dev,
- 		dev_err(dev, "Get SGL error!\n");
- 		dma_unmap_sg(dev, sgl, sg_n, DMA_BIDIRECTIONAL);
- 		return ERR_PTR(-ENOMEM);
--
- 	}
- 	curr_hw_sgl->entry_length_in_sgl = cpu_to_le16(pool->sge_nr);
- 	curr_hw_sge = curr_hw_sgl->sge_entries;
--- 
-2.33.0
+> On 02/02/2023 19:36, Jerome Brunet wrote:
+
+[...]
+
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - "#sound-dai-cells"
+>> +  - clocks
+>> +  - clock-names
+>> +
+>> +if:
+>
+> Keep in allOf here (need to move ref from top to here)
+>
+
+I'm not sure I get it. As it is, it seems to have the effect I had in
+mind while trying with dt_bindings_check.
+
+What does it do when putting the conditional under the AllOf section ?
+
+>> +  properties:
+>> +    compatible:
+>> +      contains:
+>> +        enum:
+>> +          - amlogic,g12a-pdm
+>> +          - amlogic,sm1-pdm
+>> +then:
+>> +  properties:
+>> +    resets:
+>> +      items:
+>> +        - description: Dedicated device reset line
+>
+> Define properties in top level properties.
+>
+>> +
+>> +  required:
+>> +    - resets
+>> +
+>> +unevaluatedProperties: false
+>
+>
+> Best regards,
+> Krzysztof
 
