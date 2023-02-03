@@ -2,126 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B775C689831
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 13:01:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65A01689833
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 13:01:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232662AbjBCMBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 07:01:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48884 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232618AbjBCMBR (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S232640AbjBCMBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Fri, 3 Feb 2023 07:01:17 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0054953DD
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 04:01:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=11y57wpqO0jUchP58rm0Hy4isyaoxOgtIaNkgxr4gwM=; b=krHJemkCKnjw1vySw4wbRPzonA
-        GcdbjfrMqf79LiiUZamIQYCi3trl34buHcBOCL70BfqcZcU1I0NiN1ZoLyraEGjz2ayCN1gi28sOk
-        0TfLdgORVpQDLYWXrVxp5FvGcLqZ9JLdPZrWaIXtp2shlKxzQdGhbyXIFlemETxUhIczihJm/XwmV
-        ugj5nUIg3p6ISceD4I4CQDYtg//bPylN9Z1nQce5jwSs3XHEwdj356/RrqIwLwblxYBOuQgCbGfsg
-        Wm0STDA54e+zNvxlyEMQbx2At28xTYPKco1dZwNaAAb6mCvQXWvnj05kWGdJeLi2rnHsP9XNh4eiq
-        stI7usYg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pNukR-00EHpx-Io; Fri, 03 Feb 2023 12:00:56 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 69B9C30013F;
-        Fri,  3 Feb 2023 13:00:54 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 4387D212BDE6A; Fri,  3 Feb 2023 13:00:54 +0100 (CET)
-Date:   Fri, 3 Feb 2023 13:00:54 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     Hillf Danton <hdanton@sina.com>, Ingo Molnar <mingo@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-kernel@vger.kernel.org, mcgrof@kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        syzkaller-bugs@googlegroups.com,
-        syzbot <syzbot+6cd18e123583550cf469@syzkaller.appspotmail.com>
-Subject: Re: [syzbot] WARNING: locking bug in umh_complete
-Message-ID: <Y9z3dvOH4SkQhU7w@hirez.programming.kicks-ass.net>
-References: <20230127014137.4906-1-hdanton@sina.com>
- <9d9b9652-c1ac-58e9-2eab-9256c17b1da2@I-love.SAKURA.ne.jp>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48854 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232562AbjBCMBO (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Feb 2023 07:01:14 -0500
+Received: from mail-vk1-xa2c.google.com (mail-vk1-xa2c.google.com [IPv6:2607:f8b0:4864:20::a2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ED85953FD
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 04:01:13 -0800 (PST)
+Received: by mail-vk1-xa2c.google.com with SMTP id t190so2426532vkb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 04:01:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=bVBPlUOA2Saz8Z2ELzkGmW92oTRqygdhDOd3NoQ2OvM=;
+        b=C0uuf321Wlpg5+wIml2URGup0sUV3eCPnVIs2mDubn8aIXCDxAhcQSy9bMxjMoDglN
+         WcXKKTa6sG7igE+h+BLd8BeJdcl8aT3AGLNm/QAUA8CLyEZ3tLodnzc9O6xFxOH9H2rm
+         RG7c3hxqIFNYoSIwwLgsm/pxZCwRhRha88p+JP4D/8dVsQxT5KKKcCaFXDWjhWbf4VwI
+         DKHc1USEDM+uqwVFaEleFuPeRlzU2HoNi+DorLJNKMj9937DweWd35ye2+U8oXmJA2Jn
+         suSVFvjiD+nJ1WVEq4UEg8W3YIvny6e1yTg4NCLHFkgbu2oeqlA3w0vuckXv9FQDGlIL
+         /Ong==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bVBPlUOA2Saz8Z2ELzkGmW92oTRqygdhDOd3NoQ2OvM=;
+        b=NJGWPi31joCVfXyoMrXuLAAg7YPokVDtbTI2GD88zzyfW5n42JApp4heu1xabyyYwp
+         A6QbmSjPbYVOlchEHgIyu+N24J/2aPOx66zvfDE2yTix58oURq7JEIxl5GPJCC0JfY6C
+         05Vrcgwu75e4tbAIBm5pc8xMWe1QREQKr1Uakyl3JhijXuW/16n0JgCQio7Vxmeq87rb
+         RSYHdLvMNogdchyr2F6Z28PmDRVl7hx96cVOVq41f5qRypEKnwbJmajPDvok9RRoX4ar
+         flVVpAYLu6ofMcMqlHOG9jIuYBfRiq3EIGKOWGNC7jwso5dvB2ajc3mXpQW8mIJHLuKB
+         zRXg==
+X-Gm-Message-State: AO0yUKWsQB0nFyTd6dNYr1vLTVMofB/Sq8qm1BgWGtsch8CVgHSBNrOe
+        8+7Mja/1SkdD2CO6SX3UVFAa41Zo2J/Cqgf7c2LzWg==
+X-Google-Smtp-Source: AK7set8Q/OFTvZSYsRPT84VinKFWhLoPFlGow5ONcJ4RtLja8SFxkXGoz+YFgryocUWfojsT3S3jNMO/0HXz/NNCAyc=
+X-Received: by 2002:a1f:6e0c:0:b0:3e1:95e8:fe1e with SMTP id
+ j12-20020a1f6e0c000000b003e195e8fe1emr1584545vkc.1.1675425672447; Fri, 03 Feb
+ 2023 04:01:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9d9b9652-c1ac-58e9-2eab-9256c17b1da2@I-love.SAKURA.ne.jp>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230128072737.2995881-3-apatel@ventanamicro.com> <mhng-0f9bdf58-5289-4db4-8fd7-38898824c44f@palmer-ri-x1c9>
+In-Reply-To: <mhng-0f9bdf58-5289-4db4-8fd7-38898824c44f@palmer-ri-x1c9>
+From:   Anup Patel <apatel@ventanamicro.com>
+Date:   Fri, 3 Feb 2023 17:31:01 +0530
+Message-ID: <CAK9=C2X8C4yswGhDwe1OzQXTELXQxp8=ayiFxh1aVMk4TxeDjw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/7] RISC-V: Detect AIA CSRs from ISA string
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     pbonzini@redhat.com, atishp@atishpatra.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        ajones@ventanamicro.com, anup@brainfault.org, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 07:22:43PM +0900, Tetsuo Handa wrote:
-> On 2023/01/27 10:41, Hillf Danton wrote:
+On Fri, Feb 3, 2023 at 5:54 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+>
+> On Fri, 27 Jan 2023 23:27:32 PST (-0800), apatel@ventanamicro.com wrote:
+> > We have two extension names for AIA ISA support: Smaia (M-mode AIA CSRs)
+> > and Ssaia (S-mode AIA CSRs).
+>
+> This has pretty much the same problem that we had with the other
+> AIA-related ISA string patches, where there's that ambiguity with the
+> non-ratified chapters.  IIRC when this came up in GCC the rough idea was
+> to try and document that we're going to interpret the standard ISA
+> strings that way, but now that we're doing custom ISA extensions it
+> seems saner to just define on here that removes the ambiguity.
+>
+> I just sent
+> <https://lore.kernel.org/r/20230203001201.14770-1-palmer@rivosinc.com/>
+> which documents that.
 
-> >> Call Trace:
-> >>  <TASK>
-> >>  lock_acquire kernel/locking/lockdep.c:5668 [inline]
-> >>  lock_acquire+0x1e3/0x630 kernel/locking/lockdep.c:5633
-> >>  __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
-> >>  _raw_spin_lock_irqsave+0x3d/0x60 kernel/locking/spinlock.c:162
-> >>  complete+0x1d/0x1f0 kernel/sched/completion.c:32
-> >>  umh_complete+0x32/0x90 kernel/umh.c:59
-> >>  call_usermodehelper_exec_sync kernel/umh.c:144 [inline]
-> >>  call_usermodehelper_exec_work+0x115/0x180 kernel/umh.c:167
-> >>  process_one_work+0x9bf/0x1710 kernel/workqueue.c:2289
-> >>  worker_thread+0x669/0x1090 kernel/workqueue.c:2436
-> >>  kthread+0x2e8/0x3a0 kernel/kthread.c:376
-> >>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
-> >>  </TASK>
-> > 
-> > This is an interesting case - given done initialized on stack, no garbage
-> > should have been detected by lockdep.
-> > 
-> > One explanation to the report is uaf on the waker side, and it can be
-> > tested with the diff below when a reproducer is available.
-> > 
-> > Hillf
-> > 
-> > --- a/kernel/umh.c
-> > +++ b/kernel/umh.c
-> > @@ -452,6 +452,12 @@ int call_usermodehelper_exec(struct subp
-> >  		/* umh_complete() will see NULL and free sub_info */
-> >  		if (xchg(&sub_info->complete, NULL))
-> >  			goto unlock;
-> > +		else {
-> > +			/* wait for umh_complete() to finish in a bid to avoid
-> > +			 * uaf because done is destructed
-> > +			 */
+I am not sure why you say that these are custom extensions.
 
-Invalid comment style at the very least.
+Multiple folks have clarified that both Smaia and Ssaia are frozen
+ISA extensions as-per RVI process. The individual chapters which
+are in the draft state have nothing to do with Smaia and Ssaia CSRs.
 
-> > +			wait_for_completion(&done);
-> > +		}
-> >  	}
-> >  
-> >  wait_done:
-> > --
-> 
-> Yes, this bug is caused by commit f5d39b020809 ("freezer,sched: Rewrite core freezer
-> logic"), for that commit for unknown reason omits wait_for_completion(&done) call
-> when wait_for_completion_state(&done, state) returned -ERESTARTSYS.
-> 
-> Peter, is it safe to restore wait_for_completion(&done) call?
+Please refer:
+https://github.com/riscv/riscv-aia/pull/36
+https://lists.riscv.org/g/tech-aia/message/336
+https://lists.riscv.org/g/tech-aia/message/337
 
-Urgh, that code is terrible.. the way I read it was that it would
-wait_for_completion_killable() if KILLABLE and assumed the
-second wait_for_completion() would NOP out because we'd already
-completed on the first.
+>
+> > We extend the ISA string parsing to detect Smaia and Ssaia extensions.
+> >
+> > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> > Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+> > ---
+> >  arch/riscv/include/asm/hwcap.h | 2 ++
+> >  arch/riscv/kernel/cpu.c        | 2 ++
+> >  arch/riscv/kernel/cpufeature.c | 2 ++
+> >  3 files changed, 6 insertions(+)
+> >
+> > diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
+> > index 86328e3acb02..341ef30a3718 100644
+> > --- a/arch/riscv/include/asm/hwcap.h
+> > +++ b/arch/riscv/include/asm/hwcap.h
+> > @@ -59,6 +59,8 @@ enum riscv_isa_ext_id {
+> >       RISCV_ISA_EXT_ZIHINTPAUSE,
+> >       RISCV_ISA_EXT_SSTC,
+> >       RISCV_ISA_EXT_SVINVAL,
+> > +     RISCV_ISA_EXT_SMAIA,
+> > +     RISCV_ISA_EXT_SSAIA,
+> >       RISCV_ISA_EXT_ID_MAX
+> >  };
+> >  static_assert(RISCV_ISA_EXT_ID_MAX <= RISCV_ISA_EXT_MAX);
+> > diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
+> > index 1b9a5a66e55a..a215ec929160 100644
+> > --- a/arch/riscv/kernel/cpu.c
+> > +++ b/arch/riscv/kernel/cpu.c
+> > @@ -162,6 +162,8 @@ arch_initcall(riscv_cpuinfo_init);
+> >   *    extensions by an underscore.
+> >   */
+> >  static struct riscv_isa_ext_data isa_ext_arr[] = {
+> > +     __RISCV_ISA_EXT_DATA(smaia, RISCV_ISA_EXT_SMAIA),
+> > +     __RISCV_ISA_EXT_DATA(ssaia, RISCV_ISA_EXT_SSAIA),
+>
+> This will conflict with that ISA string refactoring I just merged.  It
+> should be a pretty mechanical merge conflict, but if you want we can do
+> a shared tag with the first few patches and I can handle the merge
+> conflict locally.
 
-I don't see how adding a second wait is correct in the case of
--ERESTARTSYS, what's the stop this second wait to also get interrupted
-like that?
+I am planning to send this series as a second PR for Linux-6.3 after your
+PR (which includes ISA string refactoring) is merged. Is that okay with you?
 
-Should there be a loop?
+With that said, it would request you to ACK this patch as well.
+
+>
+> >       __RISCV_ISA_EXT_DATA(sscofpmf, RISCV_ISA_EXT_SSCOFPMF),
+> >       __RISCV_ISA_EXT_DATA(sstc, RISCV_ISA_EXT_SSTC),
+> >       __RISCV_ISA_EXT_DATA(svinval, RISCV_ISA_EXT_SVINVAL),
+> > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+> > index 93e45560af30..3c5b51f519d5 100644
+> > --- a/arch/riscv/kernel/cpufeature.c
+> > +++ b/arch/riscv/kernel/cpufeature.c
+> > @@ -228,6 +228,8 @@ void __init riscv_fill_hwcap(void)
+> >                               SET_ISA_EXT_MAP("zihintpause", RISCV_ISA_EXT_ZIHINTPAUSE);
+> >                               SET_ISA_EXT_MAP("sstc", RISCV_ISA_EXT_SSTC);
+> >                               SET_ISA_EXT_MAP("svinval", RISCV_ISA_EXT_SVINVAL);
+> > +                             SET_ISA_EXT_MAP("smaia", RISCV_ISA_EXT_SMAIA);
+> > +                             SET_ISA_EXT_MAP("ssaia", RISCV_ISA_EXT_SSAIA);
+> >                       }
+> >  #undef SET_ISA_EXT_MAP
+> >               }
+
+Thanks,
+Anup
