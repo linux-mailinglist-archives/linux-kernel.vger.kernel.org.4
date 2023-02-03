@@ -2,144 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A693A6898F1
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 13:37:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAF4F6898F8
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 13:41:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231766AbjBCMhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 07:37:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48468 "EHLO
+        id S232327AbjBCMlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 07:41:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbjBCMhl (ORCPT
+        with ESMTP id S229782AbjBCMlV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 07:37:41 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 006113C1A;
-        Fri,  3 Feb 2023 04:37:39 -0800 (PST)
-Received: from mercury (unknown [37.81.13.16])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id A4E126602F05;
-        Fri,  3 Feb 2023 12:37:38 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1675427858;
-        bh=R9s6ESmW0Hm/K3UO+BncVs9Xz+j5lpVT7/EFb4N15L8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Cyf18UrAigkJdHNrGRUzRxFVXMa4CPOnPHynGJuhhr0rU+POJnPuGzsLPegFV7DB9
-         GRpZakfaj2A7+TGAUmHM9sNJ0fCXl3Rx8leAvkX4teMzLgpesPzhn9sV/n3gykc4wf
-         8rmMEbsuCJ8X6dSLqtSTjiMQ+VkH1Eifro/Pt948lP7KRitcknFKu9dW79sz+O93ef
-         +2B3huv5nOIvsUEzQQ8FhZa+otjuDgDOOWDpyIVikZDFJEMpXDJu2Yo041I8I/sYz5
-         ayqRvBM1VxAiUYJo+TkzIk8oKJsQgkgDH3j8To5hA92ji3DGvhunFe/1YlDd4XD3FU
-         pA2uUrnIlIzng==
-Received: by mercury (Postfix, from userid 1000)
-        id 34BBD1060930; Fri,  3 Feb 2023 13:37:35 +0100 (CET)
-Date:   Fri, 3 Feb 2023 13:37:35 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     "Sicelo A. Mhlongo" <absicsz@gmail.com>
-Cc:     linux-pm@vger.kernel.org, pali@kernel.org, brauner@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] power: supply: bq27xxx: fix reporting critical level
-Message-ID: <20230203123735.g727eokllnqxqxft@mercury.elektranox.org>
-References: <20230102091326.3959978-1-absicsz@gmail.com>
+        Fri, 3 Feb 2023 07:41:21 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED75F9AFE5;
+        Fri,  3 Feb 2023 04:41:19 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id j25so999608wrc.4;
+        Fri, 03 Feb 2023 04:41:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wUsSYIJ5Tz555F5M3p6Mkzprl0XwwXoQ6mbWmaeqKQ4=;
+        b=lqg4jWZOLPMDuJUevwiU3PKXstpBRIxEztaJwC+/yyTe29SI53b7xwTHpHzacE/H3w
+         3GynsjnonNpm+qayq+h7WeEz8mPjMgGEVohgiDrEL2lWfGy7a5n+3TBQapLN0SXP5FVt
+         a4FmdJ7s06Aj0LJJ3W+7V92jU8r6vyWHTVebYnuuXu/nYtMl34/i4xyeTfwyForqoRl4
+         WLyAMFpVx/vsvKW+UN1rmHeUNGIzI2KeHdniOjybE6zZtD5ti305Vc1YH5brRfKVIdSs
+         EB0Ngzpr3hC2u97MsHsP1faEPZ+aCrWpj8E+GPn7Tfh709DSzySLLU5sUNku2s3cp4Y/
+         bRng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wUsSYIJ5Tz555F5M3p6Mkzprl0XwwXoQ6mbWmaeqKQ4=;
+        b=GuyGvAGsCCbiWbq7TaQKw9d8+HRk1bUUbC4cpd4Bg1tUfBxvwDNticnHBgS7zMC9Ad
+         42NR3myaRHKI4sMR1a6rNbceNw7yudL41vXEmA3xtAsaVqWkVp26RclJiXScY2BOPsi5
+         SRRNd362//7yIsNh9AnxERgbaXYi1eCi27IaRvnglFcqt905GstJIYubxlLR8T9IzN8j
+         T/ttB366tNEE+XhPZ0OKuxuCW6ArZOyNuOBT5DxhCQMWgxq/OEkitDEF5SOIkUnnYYZk
+         7kxGE/1vgOpkgAT1+sj+K44x3CQnveGygfjGeq35r3nXBd10X8IbQ7VUHt8JqAFq1pbf
+         gySA==
+X-Gm-Message-State: AO0yUKWGatGa7wmQnLR1x/sSMJxtAu0UOe8smzv8nmb1zY4EX03qzfSS
+        pP29B/T9EZ9IifhfdQtWI68=
+X-Google-Smtp-Source: AK7set/u6ucZ4Xt1/4vhI8xwGCRElt/NfY8y9mqBkVFA5PRChrvrq8xGZRUL81CyHImK8iM11KON6Q==
+X-Received: by 2002:a5d:5958:0:b0:2bf:cfc0:ac71 with SMTP id e24-20020a5d5958000000b002bfcfc0ac71mr7975159wri.53.1675428078335;
+        Fri, 03 Feb 2023 04:41:18 -0800 (PST)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id c12-20020adffb4c000000b002b6bcc0b64dsm1913495wrs.4.2023.02.03.04.41.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Feb 2023 04:41:17 -0800 (PST)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Fri, 3 Feb 2023 13:41:15 +0100
+To:     Ian Rogers <irogers@google.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>,
+        Connor OBrien <connoro@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] tools/resolve_btfids: Tidy HOST_OVERRIDES
+Message-ID: <Y90A67/wRUXMMsHt@krava>
+References: <20230202224253.40283-1-irogers@google.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="sxu4t5ja4ywc753r"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230102091326.3959978-1-absicsz@gmail.com>
+In-Reply-To: <20230202224253.40283-1-irogers@google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Feb 02, 2023 at 02:42:53PM -0800, Ian Rogers wrote:
+> Don't set EXTRA_CFLAGS to HOSTCFLAGS, ensure CROSS_COMPILE isn't
+> passed through.
+> 
+> This patch is based on top of:
+> https://lore.kernel.org/bpf/20230202112839.1131892-1-jolsa@kernel.org/
+> 
+> Signed-off-by: Ian Rogers <irogers@google.com>
 
---sxu4t5ja4ywc753r
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Acked-by: Jiri Olsa <jolsa@kernel.org>
 
-Hi,
+jirka
 
-On Mon, Jan 02, 2023 at 11:13:26AM +0200, Sicelo A. Mhlongo wrote:
-> The EDV1/SOC1 flag is set when the battery voltage drops below the
-> threshold set in EEPROM. From observing the capacity_level reported by
-> the driver, and reading the datasheet, EDV1 remains set even when
-> EDVF/SOCF gets set. Thus, bq27xxx_battery_capacity_level() never reaches
-> the CAPACITY_LEVEL_CRITICAL code path, since CAPACITY_LEVEL_LOW takes
-> precedence.
->=20
-> This commit fixes the issue by swapping the order in which the flags are
-> tested. It was tested with bq27200 in the Nokia N900.
->=20
-> Signed-off-by: Sicelo A. Mhlongo <absicsz@gmail.com>
 > ---
-
-Thanks, queued.
-
--- Sebastian
-
->  drivers/power/supply/bq27xxx_battery.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->=20
-> diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/suppl=
-y/bq27xxx_battery.c
-> index 8bf048fbd36a..5ff6f44fd47b 100644
-> --- a/drivers/power/supply/bq27xxx_battery.c
-> +++ b/drivers/power/supply/bq27xxx_battery.c
-> @@ -1917,10 +1917,10 @@ static int bq27xxx_battery_capacity_level(struct =
-bq27xxx_device_info *di,
->  	if (di->opts & BQ27XXX_O_ZERO) {
->  		if (di->cache.flags & BQ27000_FLAG_FC)
->  			level =3D POWER_SUPPLY_CAPACITY_LEVEL_FULL;
-> -		else if (di->cache.flags & BQ27000_FLAG_EDV1)
-> -			level =3D POWER_SUPPLY_CAPACITY_LEVEL_LOW;
->  		else if (di->cache.flags & BQ27000_FLAG_EDVF)
->  			level =3D POWER_SUPPLY_CAPACITY_LEVEL_CRITICAL;
-> +		else if (di->cache.flags & BQ27000_FLAG_EDV1)
-> +			level =3D POWER_SUPPLY_CAPACITY_LEVEL_LOW;
->  		else
->  			level =3D POWER_SUPPLY_CAPACITY_LEVEL_NORMAL;
->  	} else if (di->opts & BQ27Z561_O_BITS) {
-> @@ -1933,10 +1933,10 @@ static int bq27xxx_battery_capacity_level(struct =
-bq27xxx_device_info *di,
->  	} else {
->  		if (di->cache.flags & BQ27XXX_FLAG_FC)
->  			level =3D POWER_SUPPLY_CAPACITY_LEVEL_FULL;
-> -		else if (di->cache.flags & BQ27XXX_FLAG_SOC1)
-> -			level =3D POWER_SUPPLY_CAPACITY_LEVEL_LOW;
->  		else if (di->cache.flags & BQ27XXX_FLAG_SOCF)
->  			level =3D POWER_SUPPLY_CAPACITY_LEVEL_CRITICAL;
-> +		else if (di->cache.flags & BQ27XXX_FLAG_SOC1)
-> +			level =3D POWER_SUPPLY_CAPACITY_LEVEL_LOW;
->  		else
->  			level =3D POWER_SUPPLY_CAPACITY_LEVEL_NORMAL;
->  	}
-> --=20
-> 2.39.0
->=20
-
---sxu4t5ja4ywc753r
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmPdAA4ACgkQ2O7X88g7
-+popZg/7Bss64T/oszZI0vrXMH3RLROTdxaY+8wYzgCDIdLoNCZqY2ujbwgoFCsk
-Hi+UQijNtLY+4wHw3Vo8SHL3BkNO/A2qPkzeMPwbsRzKuOQSFr114zswplup8Bny
-yHwTPEdBOCyZVH3526oSsXoQjwnwPYb+R4nZ6eexbgFO1iNiiGQ5oXGsYS4aFWMB
-u1eu5tPrUkXQjP7/pEeyAr/vSuFJosWnAyA0ndaGosxMADi69zCkrTBhKEneAO/8
-L0LRS8nZmzrv+nmXJil8xK84BrSXtwLZJF71m1J9Ozm7oCYPNhdjpP+4St1tAqm1
-VNcPA3A9Asxw/K4KQ6TATk7gKde8ln7fdRXU8c/T2NBkuDFuEw/nQY/FKGqhxVNs
-1CGDRyt2EcoViTzrpnz6pZvJaxvypA90dQYM6C6/7rZmrfRiYb1QIeXnZ3lOXhbi
-ml0aHhHnFGmAe8QCkZxWkthFyJPi8zzbNPHhAvxqPjlGlEnlNAB+HV4EcY24z5L5
-AvZQx4tEy+BigP/gQHoJ3Xq6i6MAfk92aR1DAEN2+DIaNwfSGBf5VOGqJ4DmjNQF
-ZMFWqRZhb5SCNdiUD8Gegf4Z7gpqfQVjzjVqls8c8yXoeQecFGT7qhHXHIyzVchp
-lvd41E1h9wDxbs9oqiJUnZIsahZtmodTTtAWIRdRnATUWgqPqDs=
-=J924
------END PGP SIGNATURE-----
-
---sxu4t5ja4ywc753r--
+>  tools/bpf/resolve_btfids/Makefile | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
+> index abdd68ac08f4..2abdd85b4a08 100644
+> --- a/tools/bpf/resolve_btfids/Makefile
+> +++ b/tools/bpf/resolve_btfids/Makefile
+> @@ -17,9 +17,9 @@ else
+>    MAKEFLAGS=--no-print-directory
+>  endif
+>  
+> -# always use the host compiler
+> +# Overrides for the prepare step libraries.
+>  HOST_OVERRIDES := AR="$(HOSTAR)" CC="$(HOSTCC)" LD="$(HOSTLD)" ARCH="$(HOSTARCH)" \
+> -		  EXTRA_CFLAGS="$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)"
+> +		  CROSS_COMPILE=""
+>  
+>  RM      ?= rm
+>  HOSTCC  ?= gcc
+> -- 
+> 2.39.1.519.gcb327c4b5f-goog
+> 
