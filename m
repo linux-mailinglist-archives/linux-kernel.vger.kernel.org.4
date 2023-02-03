@@ -2,135 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB8F5689FE1
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 18:05:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64651689FE2
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 18:05:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233338AbjBCRFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 12:05:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51704 "EHLO
+        id S233544AbjBCRFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 12:05:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233228AbjBCREm (ORCPT
+        with ESMTP id S233560AbjBCREy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 12:04:42 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6510E9D06F;
-        Fri,  3 Feb 2023 09:04:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1917BB82B59;
-        Fri,  3 Feb 2023 17:04:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D3BDC433EF;
-        Fri,  3 Feb 2023 17:04:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675443878;
-        bh=nU73C6viOxbyUSqx/3DL5zkhAa9hnTEqq/1ERVAXrvE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rDCsBtBhgSbn/0F6fLu+O+sPq9XSJ3QiA8XtUWJ1UMWqzEFqJ2fCUDtknNCK8usZe
-         W4gFJM/CnSeIMKUZDE7PuAiue0aQT5Hdtl04snLDlGIoY+YE9bvNz89YrTxmIFXJv1
-         76aOMizO7TqVeu7PZN9xWtetvyZy+xWD1KFdlx6s=
-Date:   Fri, 3 Feb 2023 18:04:35 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>, stable@vger.kernel.org,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 4.19 00/80] 4.19.272-rc1 review
-Message-ID: <Y90+o7thxeMg369g@kroah.com>
-References: <20230203101015.263854890@linuxfoundation.org>
- <CA+G9fYvd8D3LfxPg2afZXKFC3WNHrhyE7c3fFLViaG4WhJeHVg@mail.gmail.com>
- <5ed630fd-8bd7-4b80-9fa8-a3dab2eb0447@linaro.org>
- <4e5a447b-1796-513c-135a-f9e9c870d88a@roeck-us.net>
- <5e57cf49-6348-7878-0e01-51e5e1359fa8@linaro.org>
+        Fri, 3 Feb 2023 12:04:54 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5ABE31F914
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 09:04:52 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 58449C14;
+        Fri,  3 Feb 2023 09:05:34 -0800 (PST)
+Received: from bogus (unknown [10.57.12.205])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AC3EF3F71E;
+        Fri,  3 Feb 2023 09:04:50 -0800 (PST)
+Date:   Fri, 3 Feb 2023 17:04:48 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Cristian Marussi <cristian.marussi@arm.com>
+Cc:     Etienne Carriere <etienne.carriere@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Sumit Garg <sumit.garg@linaro.org>
+Subject: Re: [PATCH 2/2] firmware: arm_scmi: optee: use optee system
+ invocation
+Message-ID: <20230203170448.v5iduw2rhpxc47f3@bogus>
+References: <20230130094157.1082712-1-etienne.carriere@linaro.org>
+ <20230130094157.1082712-2-etienne.carriere@linaro.org>
+ <Y90b6kxAtbookjty@pluto>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5e57cf49-6348-7878-0e01-51e5e1359fa8@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y90b6kxAtbookjty@pluto>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 05:56:17PM +0100, Krzysztof Kozlowski wrote:
-> On 03/02/2023 16:51, Guenter Roeck wrote:
-> > On 2/3/23 04:28, Krzysztof Kozlowski wrote:
-> >> On 03/02/2023 12:04, Naresh Kamboju wrote:
-> >>> On Fri, 3 Feb 2023 at 15:48, Greg Kroah-Hartman
-> >>> <gregkh@linuxfoundation.org> wrote:
-> >>>>
-> >>>> This is the start of the stable review cycle for the 4.19.272 release.
-> >>>> There are 80 patches in this series, all will be posted as a response
-> >>>> to this one.  If anyone has any issues with these being applied, please
-> >>>> let me know.
-> >>>>
-> >>>> Responses should be made by Sun, 05 Feb 2023 10:09:58 +0000.
-> >>>> Anything received after that time might be too late.
-> >>>>
-> >>>> The whole patch series can be found in one patch at:
-> >>>>          https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.272-rc1.gz
-> >>>> or in the git tree and branch at:
-> >>>>          git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
-> >>>> and the diffstat can be found below.
-> >>>>
-> >>>> thanks,
-> >>>>
-> >>>> greg k-h
-> >>>>
-> >>>
-> >>> Following patch caused build error on arm,
-> >>>
-> >>>> Gaosheng Cui <cuigaosheng1@huawei.com>
-> >>>>      memory: mvebu-devbus: Fix missing clk_disable_unprepare in mvebu_devbus_probe()
-> >>>
-> >>> drivers/memory/mvebu-devbus.c: In function 'mvebu_devbus_probe':
-> >>> drivers/memory/mvebu-devbus.c:297:8: error: implicit declaration of
-> >>> function 'devm_clk_get_enabled'
-> >>> [-Werror=implicit-function-declaration]
-> >>>    297 |  clk = devm_clk_get_enabled(&pdev->dev, NULL);
-> >>>        |        ^~~~~~~~~~~~~~~~~~~~
-> >>
-> >> Already reported:
-> >> https://lore.kernel.org/all/202302020048.ZsmUJDHo-lkp@intel.com/
-> >>
+On Fri, Feb 03, 2023 at 02:36:26PM +0000, Cristian Marussi wrote:
+> On Mon, Jan 30, 2023 at 10:41:57AM +0100, Etienne Carriere wrote:
+> > Changes SCMI optee transport to enable sys_service capability of
+> > its tee context to leverage provisioned system resources in OP-TEE
+> > preventing possible deadlock.
 > > 
-> > I don't usually check if release candidate reports have been reported already.
-> > If I know about it, I may add a reference to the report, but typically I still
-> > report it.
+> > Such deadlock could happen when many Linux clients invoke OP-TEE are
+> > are all suspended waiting for an OP-TEE RPC request access an SCMI
+> > resource through the SCMI OP-TEE PTA service.
 > > 
-> > Personally I find it discouraging to get those "already reported" e-mails.
-> > To me it sounds like "hey, you didn't do your job properly". It should not matter
-> > if a problem was already reported or not, and I find it valuable if it is
-> > reported multiple times because it gives an indication of the level of test
-> > coverage. I would find it better if people would use something like "Also
-> > reported:" instead. But then maybe I am just oversensitive, who knows.
+> > Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+> > ---
+> >  drivers/firmware/arm_scmi/optee.c | 3 +++
+> >  1 file changed, 3 insertions(+)
 > > 
-> > Anyway, yes, I noticed this problem as well (and probably overlooked it
-> > in my previous report to Greg - sorry for that).
-> > 
+> > diff --git a/drivers/firmware/arm_scmi/optee.c b/drivers/firmware/arm_scmi/optee.c
+> > index 2a7aeab40e54..91840345e946 100644
+> > --- a/drivers/firmware/arm_scmi/optee.c
+> > +++ b/drivers/firmware/arm_scmi/optee.c
+> > @@ -559,6 +559,9 @@ static int scmi_optee_service_probe(struct device *dev)
+> >  	if (IS_ERR(tee_ctx))
+> >  		return -ENODEV;
+> >  
+> > +	/* SCMI agent can used TEE system service resources */
+> > +	tee_ctx->sys_service = true;
+> > +
+> >  	agent = devm_kzalloc(dev, sizeof(*agent), GFP_KERNEL);
+> >  	if (!agent) {
+> >  		ret = -ENOMEM;
 > 
-> Let me rephrase it then:
+> LGTM.
 > 
-> This topic is already discussed here:
-> https://lore.kernel.org/all/202302020048.ZsmUJDHo-lkp@intel.com/
+> I suppose you'll sync-up with Sudeep for how to queue this whole series.
 > 
-> I proposed to drop both broken backports - mvebu-devbus and
-> atmel-sdramc, because they require new features in common clock
-> framework API.
 
-Ah, I totally missed that, again, seeing the good in the mess of the
-0-day reports here is hard and not obvious at all.  I ignored that and
-hence the problem was here.  I've dropped the offending commit now.
+I thought I had responded to this but not. Anyways since TEE changes are
+significant than SCMI, you can route it via TEE tree. In that case,
 
-thanks,
+Acked-by: Sudeep Holla <sudeep.holla@arm.com>
 
-greg k-h
+Let me know if that was not your plan.
+
+-- 
+Regards,
+Sudeep
