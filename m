@@ -2,105 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74A9D688D08
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 03:25:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55895688D0B
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 03:26:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231629AbjBCCZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 21:25:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46570 "EHLO
+        id S230317AbjBCC0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 21:26:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbjBCCZE (ORCPT
+        with ESMTP id S229667AbjBCC0f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 21:25:04 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 48BD34741C;
-        Thu,  2 Feb 2023 18:25:02 -0800 (PST)
-Received: from loongson.cn (unknown [10.180.13.185])
-        by gateway (Coremail) with SMTP id _____8AxW+p9cNxjcRENAA--.26401S3;
-        Fri, 03 Feb 2023 10:25:01 +0800 (CST)
-Received: from [10.180.13.185] (unknown [10.180.13.185])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Ax+717cNxjezEoAA--.12681S3;
-        Fri, 03 Feb 2023 10:25:00 +0800 (CST)
-Subject: Re: Re: [PATCH v4] pipe: use __pipe_{lock,unlock} instead of spinlock
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Christian Brauner (Microsoft)" <brauner@kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        maobibo <maobibo@loongson.cn>,
-        Matthew Wilcox <willy@infradead.org>,
-        Sedat Dilek <sedat.dilek@gmail.com>
-References: <20230129060452.7380-1-zhanghongchen@loongson.cn>
- <CAHk-=wjw-rrT59k6VdeLu4qUarQOzicsZPFGAO5J8TKM=oukUw@mail.gmail.com>
-From:   Hongchen Zhang <zhanghongchen@loongson.cn>
-Message-ID: <3abdd2bf-49ba-6c85-3ff6-29915eb40ac4@loongson.cn>
-Date:   Fri, 3 Feb 2023 10:24:58 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Thu, 2 Feb 2023 21:26:35 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DACC24741C;
+        Thu,  2 Feb 2023 18:26:33 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P7KKM2fklz4xwt;
+        Fri,  3 Feb 2023 13:26:31 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1675391192;
+        bh=icFT2EItQus7Dylw4jsLrPA9aj+5ZNs9mfl7Cxb1gFw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=UB9II4ceqUYoMjxRxAyBdZvOepHvUcWQz9tgkdH8dP2A2xjo60G9VUODCOpLcUNUW
+         r8RKy6cR2pAqgzAaCRWebeZLStJqPm3yVxPnx7u40wYH4puuGsBjaWOZHe++dQp3Vx
+         4XOTcoQABVQVP2KETRFhwawH7XM62H7vzCVT86yCcRbyUQ2fIhDEjs9KCjf+cgGUnM
+         dKv0UC4hpgGm0efDhkKsMR1uqdl137tpJU4tBFlkds1ol3In9ah0ERqV1RLzvy6ipC
+         pmE5VJD56+bDPuoZc6cxTmlmoEZYk0rYJeof1Kxzm8kuivFNk8bo2cqRUsEDwFrG+c
+         q45yvPD01bcJg==
+Date:   Fri, 3 Feb 2023 13:26:29 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Michael S. Tsirkin" <mst@redhat.com>,
+        David Miller <davem@davemloft.net>
+Cc:     Networking <netdev@vger.kernel.org>,
+        Laurent Vivier <lvivier@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the vhost tree
+Message-ID: <20230203132629.30cf161c@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <CAHk-=wjw-rrT59k6VdeLu4qUarQOzicsZPFGAO5J8TKM=oukUw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Ax+717cNxjezEoAA--.12681S3
-X-CM-SenderInfo: x2kd0w5krqwupkhqwqxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvdXoWrKrW5Kr4Dury5ZrWDZr45Awb_yoW3CrcEva
-        4F9rs7KwsrXr43X3WYqry3CrWSgw1kXr1Uu3s5Ar42qw1rta4DC3WrZr93ArW5JF48G347
-        CryUZ34agrWa9jkaLaAFLSUrUUUU8b8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
-        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUO
-        07kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
-        AFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
-        6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7
-        xvwVC2z280aVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1UM2kK
-        e7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
-        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280
-        aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2
-        xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC
-        6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
-        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF
-        0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0x
-        vE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv
-        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUxYiiDUUUU
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/783BGTTSd4b33Fmu8PmSwz2";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+--Sig_/783BGTTSd4b33Fmu8PmSwz2
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On 2023/1/29 下午3:33, Linus Torvalds wrote:
-> On Sat, Jan 28, 2023 at 10:05 PM Hongchen Zhang
-> <zhanghongchen@loongson.cn> wrote:
->>
->> Use spinlock in pipe_{read,write} cost too much time,IMO
->> pipe->{head,tail} can be protected by __pipe_{lock,unlock}.
->> On the other hand, we can use __pipe_{lock,unlock} to protect
->> the pipe->{head,tail} in pipe_resize_ring and
->> post_one_notification.
-> 
-> No, we really can't.
-> 
-> post_one_notification() is called under the RCU lock held, *and* with
-> a spinlock held.
-> 
-> It simply cannot do a sleeping lock like __pipe_lock().
-> 
-> So that patch is simply fundamentally buggy, I'm afraid.
-> 
->                  Linus
-> 
-Thanks for your review,Let me find out if there is any way to solve the
-problem you said.
+Hi all,
 
-Best Regards
-Hongchen Zhang
+The following commits are also in Linus Torvalds' tree as different
+commits (but the same patches):
 
+  022659ee3363 ("virtio_net: notify MAC address change on device initializa=
+tion")
+  d0aa1f8e8d63 ("virtio_net: disable VIRTIO_NET_F_STANDBY if VIRTIO_NET_F_M=
+AC is not set")
+
+These are commits
+
+  9f62d221a4b0 ("virtio_net: notify MAC address change on device initializa=
+tion")
+  7c06458c102e ("virtio_net: disable VIRTIO_NET_F_STANDBY if VIRTIO_NET_F_M=
+AC is not set")
+
+in the net-next tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/783BGTTSd4b33Fmu8PmSwz2
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPccNUACgkQAVBC80lX
+0Gz/Hgf/WXdBDXn1v7M9nnVxsbZJQplfFlitevFal2El09K8fIw5MAMJHaSieDgS
+R0TDuPIurmjQMMpBur3M/OqI6kxbxM3LNlvGNEPbMlbPvu2EWpU4HIO7zF3lRqVZ
+oxc++Br0NAbZD0/9DvJNVDrRmQAfTBO+GRVskRuuBfe5Q9CAgQH0JzF/Sg5dPawZ
+WaHi3AQq3slTwPXkvEQbqWUFthvkjBBQ894xR2Z8kd6FVHzkOymeG2dDhW5S1Dvi
+Jsb492jxAcJKnhoUHkyCK0U7vYOMqkQ8xrbKYB9ILSH1K6FVKp1PUm4N2wrD3XRO
+txwtd9E41W/av2jp3FVwTfIm/hXH0w==
+=FKvM
+-----END PGP SIGNATURE-----
+
+--Sig_/783BGTTSd4b33Fmu8PmSwz2--
