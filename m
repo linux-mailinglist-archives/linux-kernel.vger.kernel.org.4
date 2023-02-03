@@ -2,114 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA15C688B4B
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 01:02:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 078CF688B50
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 01:02:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232148AbjBCACZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 19:02:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40610 "EHLO
+        id S233375AbjBCACk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 19:02:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233161AbjBCACN (ORCPT
+        with ESMTP id S233160AbjBCAC1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 19:02:13 -0500
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 802D986615;
-        Thu,  2 Feb 2023 16:01:32 -0800 (PST)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-16332831ed0so4745889fac.10;
-        Thu, 02 Feb 2023 16:01:32 -0800 (PST)
+        Thu, 2 Feb 2023 19:02:27 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCC6A83275
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 16:02:26 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id bx22so531176pjb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 16:02:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=v/uoZPK/zWO0yibS8CdCNbFUWtgKpQlxSjVcWvpZrkc=;
+        b=Nu8867/F4vDAB9fNuH6rMWSRYVKaUfSWT7KA3ap7k5g623WXFwtXGy5XWgnXj9MVup
+         qHN/p3SbK0kn5xI7zocwHsFxgZdMZ6ZccPIZ03bCNv9C4/GUYhEe6vVQK8yifNI1P9UD
+         UDHR6pTZUh4ExAFbkqj0Y+ln4pfa8RTMBPRhs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XzCNlKDHqyGavA9ZfvqMT//V/aBYx/XujrMdimkMJgw=;
-        b=13KBZzkqpHcDf3+iBbnjxm6mniN+eLuricfPYDJlfjUxY/yOdkIqlySepxNb0x2Ywu
-         Nc4w0o/vFJwrq5YEV9holEG94ILQ/h+9U5K5qSgnB1NXR2e8d9/NV2/Ax3Cfz7ksiBE/
-         Ju7yDh4gbZJsK6YwPTlrxmMrfb7APpdvJolMX+Jlf/hjSNL4KgOBZe1JvFgUhZr+3D4E
-         7OwTS3ecmxukZnCj22Y+erdyA9vg/ouyEWluweCEMh56BXOxtFFfpD4+6ep+xkKKNidD
-         yinw8VBbHtqFmuGVvU00W0bWZ8oCziM8ANZ+co86DwoAGHHHVzIi8JQrXY8wHGxrFbi8
-         wtqA==
-X-Gm-Message-State: AO0yUKVFxQd6KKpj5gOA13V81jcfwaaPAvPhwyBg7YsTbDq0aqDyZ9qq
-        JTwFmTY5zmbXM9HF8ucSng==
-X-Google-Smtp-Source: AK7set9Vevd3I7OG7VcsGrL40svPIpgtKAFa3g7Lynam2B2jnkIcsZQDOMXxctq3yTo16ubt9Ymkxg==
-X-Received: by 2002:a05:6870:f28a:b0:15d:fe1e:2741 with SMTP id u10-20020a056870f28a00b0015dfe1e2741mr1607957oap.4.1675382492142;
-        Thu, 02 Feb 2023 16:01:32 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id dv18-20020a056870d89200b001639d2bc9desm368338oab.9.2023.02.02.16.01.31
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=v/uoZPK/zWO0yibS8CdCNbFUWtgKpQlxSjVcWvpZrkc=;
+        b=ncCDqkm1i5r2+zR1cbGa/FzNCDWwyDTWBUzdZl6x/1JY5qctRogvMXiN35LadafUTi
+         JuIHS3QbihysYbW0HvDDzfPkNrhM3Lg3FJsOInyral18nbgBqPpI6PWmM3o5Qak/15RS
+         a4SUQQbTtpd91zel17bwyuvTfLv1Z/Np6M0mpKjWAUy9iqxQ3vgS0IbD/pWzRT9mw+jf
+         Jq0IXBe5XOxS38XHIAZCpxY9N/tD4b2gxkl/zA6ZzV6bO6Z5q5p+WEEZojh+iDJYJMU9
+         G9JmxRU0HuIb7qMukZ6cjiL2LFzUyMAhN8ZrPjM+OpTki8IjHoS4AX70U/rx2IBnyyu2
+         NetQ==
+X-Gm-Message-State: AO0yUKV7Otnw0GMAg2GcTik6AHLpGiRcAm63zwtiCJ8GrYFhQ5cXDpo2
+        pQZHaqlE1qY1dJroWg9r+3FIXw==
+X-Google-Smtp-Source: AK7set/kzdkl0NIss0rGuyaBJv2SZPrgJMbP54clf2ry9p5GePxKjRGFVo07vZpBPElS/WlbO8mQhg==
+X-Received: by 2002:a17:90b:4d84:b0:22b:e7a8:d4d0 with SMTP id oj4-20020a17090b4d8400b0022be7a8d4d0mr8470470pjb.25.1675382546272;
+        Thu, 02 Feb 2023 16:02:26 -0800 (PST)
+Received: from kuabhs-cdev.c.googlers.com.com (252.157.168.34.bc.googleusercontent.com. [34.168.157.252])
+        by smtp.gmail.com with ESMTPSA id u11-20020a17090ae00b00b00227223c58ecsm414601pjy.42.2023.02.02.16.02.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 16:01:31 -0800 (PST)
-Received: (nullmailer pid 2935258 invoked by uid 1000);
-        Fri, 03 Feb 2023 00:01:30 -0000
-Date:   Thu, 2 Feb 2023 18:01:30 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Vinod Koul <vkoul@kernel.org>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        Luca Weiss <luca@z3ntu.xyz>, Iskren Chernev <me@iskren.info>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 02/10] dt-bindings: pinctrl: qcom,msm8909: correct
- GPIO name pattern and example
-Message-ID: <20230203000130.GA2934311-robh@kernel.org>
-References: <20230202104452.299048-1-krzysztof.kozlowski@linaro.org>
- <20230202104452.299048-3-krzysztof.kozlowski@linaro.org>
+        Thu, 02 Feb 2023 16:02:25 -0800 (PST)
+From:   Abhishek Kumar <kuabhs@chromium.org>
+To:     kvalo@kernel.org
+Cc:     kuabhs@chromium.org, davem@davemloft.net,
+        ath10k@lists.infradead.org, quic_mpubbise@quicinc.com,
+        netdev@vger.kernel.org, kuba@kernel.org,
+        linux-wireless@vger.kernel.org, pabeni@redhat.com,
+        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>
+Subject: [PATCH v2] ath10k: snoc: enable threaded napi on WCN3990
+Date:   Fri,  3 Feb 2023 00:01:40 +0000
+Message-Id: <20230203000116.v2.1.I5bb9c164a2d2025655dee810b983e01ecd81c14e@changeid>
+X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230202104452.299048-3-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 11:44:44AM +0100, Krzysztof Kozlowski wrote:
-> The MSM8909 TLMM pin controller has GPIOs 0-112, so narrow the pattern
-> and gpio-ranges in the example.
-> 
-> Fixes: c249ec7ba1b1 ("dt-bindings: pinctrl: Add DT schema for qcom,msm8909-tlmm")
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Reviewed-by: Stephan Gerhold <stephan@gerhold.net>
-> ---
->  .../devicetree/bindings/pinctrl/qcom,msm8909-tlmm.yaml        | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,msm8909-tlmm.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,msm8909-tlmm.yaml
-> index 449e6e34be61..85082adc1811 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/qcom,msm8909-tlmm.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,msm8909-tlmm.yaml
-> @@ -63,7 +63,7 @@ $defs:
->            subnode.
->          items:
->            oneOf:
-> -            - pattern: "^gpio([0-9]|[1-9][0-9]|10[0-9]|11[0-7])$"
-> +            - pattern: "^gpio([0-9]|[1-9][0-9]|10[0-9]|11[0-2])$"
->              - enum: [ sdc1_clk, sdc1_cmd, sdc1_data, sdc2_clk, sdc2_cmd,
->                        sdc2_data, qdsd_clk, qdsd_cmd, qdsd_data0, qdsd_data1,
->                        qdsd_data2, qdsd_data3 ]
-> @@ -127,7 +127,7 @@ examples:
->          interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
->          gpio-controller;
->          #gpio-cells = <2>;
-> -        gpio-ranges = <&tlmm 0 0 117>;
-> +        gpio-ranges = <&tlmm 0 0 113>;
+NAPI poll can be done in threaded context along with soft irq
+context. Threaded context can be scheduled efficiently, thus
+creating less of bottleneck during Rx processing. This patch is
+to enable threaded NAPI on ath10k driver.
 
-I thought 112 was the max?
+Based on testing, it was observed that on WCN3990, the CPU0 reaches
+100% utilization when napi runs in softirq context. At the same
+time the other CPUs are at low consumption percentage. This
+does not allow device to reach its maximum throughput potential.
+After enabling threaded napi, CPU load is balanced across all CPUs
+and following improvments were observed:
+- UDP_RX increase by ~22-25%
+- TCP_RX increase by ~15%
 
->          interrupt-controller;
->          #interrupt-cells = <2>;
->  
-> -- 
-> 2.34.1
-> 
+Here are some of the additional raw data with and without threaded napi:
+==================================================
+udp_rx(Without threaded NAPI)
+435.98+-5.16 : Channel 44
+439.06+-0.66 : Channel 157
+
+udp_rx(With threaded NAPI)
+509.73+-41.03 : Channel 44
+549.97+-7.62 : Channel 157
+===================================================
+udp_tx(Without threaded NAPI)
+461.31+-0.69  : Channel 44
+461.46+-0.78 : Channel 157
+
+udp_tx(With threaded NAPI)
+459.20+-0.77 : Channel 44
+459.78+-1.08 : Channel 157
+===================================================
+tcp_rx(Without threaded NAPI)
+472.63+-2.35 : Channel 44
+469.29+-6.31 : Channel 157
+
+tcp_rx(With threaded NAPI)
+498.49+-2.44 : Channel 44
+541.14+-40.65 : Channel 157
+===================================================
+tcp_tx(Without threaded NAPI)
+317.34+-2.37 : Channel 44
+317.01+-2.56 : Channel 157
+
+tcp_tx(With threaded NAPI)
+371.34+-2.36 : Channel 44
+376.95+-9.40 : Channel 157
+===================================================
+
+Tested-on: WCN3990 hw1.0 SNOC WLAN.HL.3.2.2-00696-QCAHLSWMTPL-1
+Signed-off-by: Abhishek Kumar <kuabhs@chromium.org>
+---
+
+Changes in v2:
+- Removed the hw param checks to add dev_set_threaded() to snoc.c
+- Added some more test data in the commit message.
+
+ drivers/net/wireless/ath/ath10k/snoc.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/net/wireless/ath/ath10k/snoc.c b/drivers/net/wireless/ath/ath10k/snoc.c
+index cfcb759a87de..0f6d2f67ff6b 100644
+--- a/drivers/net/wireless/ath/ath10k/snoc.c
++++ b/drivers/net/wireless/ath/ath10k/snoc.c
+@@ -927,6 +927,7 @@ static int ath10k_snoc_hif_start(struct ath10k *ar)
+ 
+ 	bitmap_clear(ar_snoc->pending_ce_irqs, 0, CE_COUNT_MAX);
+ 
++	dev_set_threaded(&ar->napi_dev, true);
+ 	ath10k_core_napi_enable(ar);
+ 	ath10k_snoc_irq_enable(ar);
+ 	ath10k_snoc_rx_post(ar);
+-- 
+2.39.1.519.gcb327c4b5f-goog
+
