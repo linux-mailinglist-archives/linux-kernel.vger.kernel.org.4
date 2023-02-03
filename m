@@ -2,107 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1960B689E70
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 16:39:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A566F689E73
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 16:40:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232766AbjBCPi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 10:38:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53056 "EHLO
+        id S233086AbjBCPkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 10:40:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232100AbjBCPiy (ORCPT
+        with ESMTP id S230180AbjBCPkG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 10:38:54 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E4518A7DA
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 07:38:33 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id qw12so16452679ejc.2
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 07:38:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mind.be; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=W9D1MtwohWAcSI+dqXIF3V/F6XwBaTkRzipfSL8tRIU=;
-        b=PbovNEv5EDv8GaV3xzbWFWOX+wZxwnJ9wtulJadvd2aJPRPjEEu1TZCv3EjkV71nPi
-         fvBH87FI1O+w1rsup6XgFuEwdu/zVnDm2ji/Gyc1twP0A+r9is+43dGJR06R0cLaoi8v
-         nBURDhCsdtg8SrH918xCJT8f15aB1wcFe1or/rF3/Kgd/YJj7VJtIeUsUaMIK20FewWY
-         qJdMRXWabVH6X6Wu0SpAJvgiKpRXDWfrngTjMIpyi8++gJtWTjXohFjSd9CONnXWov0Z
-         oRM7NEd+BPQcEqzSocE1jvlB3TKB4Guf+tIDTY5XYNYhHRD65l99H0i/o1sW7galLsBf
-         oCwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=W9D1MtwohWAcSI+dqXIF3V/F6XwBaTkRzipfSL8tRIU=;
-        b=OrfPi/EGX+jlWI2Ouj0sMsScHDBpATUHO1s92U148y9oEWMuj/gAOl8O9m1pYVVzoy
-         exD3Ri5lsuP4DrWi35oi+2iRCrmOrxvOJ+eZAaf07DzynDCynHteho6HLX/tEpdsgg7F
-         5XTc2ljQOOMrYeWi4lc7eVRx4nvYZV1FzEegZcALXdPGl6opHK/yc4OMxa7zk8Po//lW
-         k4YyWCkdo66taufhedoDjedZmtmUA89WTP7wqoKSm3RlORvppyQfCG/KCLTfMWyrNify
-         8rvSZESAty/fAy0aqSpnCKY+NGoaEe3IioKotlS4k58A+jEbqTRUy815oQ7A06s/YCMj
-         ZCPQ==
-X-Gm-Message-State: AO0yUKWcZZ9tZ0H5F0onGfdYAWmGBbtL0RZxgUL+r2oDhmMwPNETIL5Y
-        Wcuz/ka6p1vMXWjFG60oyBUdpg==
-X-Google-Smtp-Source: AK7set/n1bZMm/DBcUP7HFdnSACAio4aFr1UdewcRdhd8EFQdo2q7K4Jfxhz/uNDcak+BP0sUq+x0w==
-X-Received: by 2002:a17:906:2d4a:b0:883:5b33:e019 with SMTP id e10-20020a1709062d4a00b008835b33e019mr10385242eji.61.1675438712037;
-        Fri, 03 Feb 2023 07:38:32 -0800 (PST)
-Received: from [192.168.2.9] (78-22-137-109.access.telenet.be. [78.22.137.109])
-        by smtp.gmail.com with ESMTPSA id p2-20020a170906498200b00878803d4049sm1541899eju.93.2023.02.03.07.38.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Feb 2023 07:38:30 -0800 (PST)
-Message-ID: <1452beba-19b0-7417-716e-a255c6aaa739@mind.be>
-Date:   Fri, 3 Feb 2023 16:38:29 +0100
+        Fri, 3 Feb 2023 10:40:06 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A8F40F0;
+        Fri,  3 Feb 2023 07:40:04 -0800 (PST)
+Received: from [10.101.1.132] (ip-185-104-137-32.ptr.icomera.net [185.104.137.32])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: gtucker)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8D3B76602F05;
+        Fri,  3 Feb 2023 15:40:00 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1675438803;
+        bh=XT+0Kpt9XssEBiYGUgWT3AdMr3kbbqgonP7RwP555rg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=jqigyZMGKF1YMfy+M2oXL0oSp/6I7w5pkpOU3i3Si9moEQiYAhgkMqXB0fkoSW7u7
+         NjQgGL+nOrkmPLk1OaplN8c9lrAUAG2WhfmyRdjK1U5y2jioHtp7RtwCMlyVoUbbls
+         kBdjhW3DlIPVLO4wfTiadlMK725n2idbJ9M3ymobNojR/HQ09vMwEx9/Lg4nEFT438
+         jlKbSixk95Adn2uEJlnJ8QUJCX993zS7JJcTUeBbq/kDNtOx79OWzDuTUpuloR0V57
+         ieGBIOGkHEjfLilDc1zEYoY2F6NhWpcnWi0wKS9GMuVWxGd7kO0KjinZ6RITp29G0s
+         EUJ5pHRJfF4EQ==
+Message-ID: <6a7db0df-4f91-293a-35a9-2af77fa36dff@collabora.com>
+Date:   Fri, 3 Feb 2023 16:40:47 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v4 1/2] dt-bindings: leds-lp55xx: add ti,charge-pump-mode
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>
-Cc:     linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230202101032.26737-1-maarten.zanders@mind.be>
- <20230202101032.26737-2-maarten.zanders@mind.be>
- <28cf0c1f-ee5f-79e4-609a-2cdd24db9f1c@linaro.org>
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] selftests: add missing ')' in lib.mk
 Content-Language: en-US
-From:   Maarten Zanders <maarten.zanders@mind.be>
-In-Reply-To: <28cf0c1f-ee5f-79e4-609a-2cdd24db9f1c@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Nathan Chancellor <nathan@kernel.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Mark Brown <broonie@kernel.org>,
+        kernel@collabora.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+References: <7de08f7f11551d6b8195c3e5d801db2fae3f49a9.1660048017.git.guillaume.tucker@collabora.com>
+ <YvKM/J5xO8gKto+p@dev-arch.thelio-3990X>
+From:   Guillaume Tucker <guillaume.tucker@collabora.com>
+In-Reply-To: <YvKM/J5xO8gKto+p@dev-arch.thelio-3990X>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 09/08/2022 18:36, Nathan Chancellor wrote:
+> On Tue, Aug 09, 2022 at 03:20:46PM +0200, Guillaume Tucker wrote:
+>> Add missing closing ')' in lib.mk in a call to $error().  This only
+>> affects LLVM / Clang builds.
+>>
+>> Fixes: 795285ef2425 ("selftests: Fix clang cross compilation")
+>> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
+> 
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-On 2/2/23 21:13, Krzysztof Kozlowski wrote:
-> + ti,charge-pump-mode:
->> +    description:
->> +      Set the operating mode of the internal charge pump as defined in
->> +      <dt-bindings/leds/leds-lp55xx.h>. Defaults to auto.
->> +    $ref: /schemas/types.yaml#/definitions/uint8
-> This should be then uint32
+Ha, I see Mark just came up with the same fix many months later :)
+Shame this wasn't applied back then, for some reason...
 
-Why is that? I specifically chose uint8 because other settings for LED 
-are also uint8. The implementation is also uint8. I surely hope we'll 
-never get to >256 modes for a charge pump.
-
-
-> default: 3
-> (and drop last sentence about default)
-OK
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> Dual license.
-
-OK
-
-Best regards,
-Maarten
+Guillaume
 
