@@ -2,184 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6C9D6892BB
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 09:52:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16D8E6892C9
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 09:55:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232291AbjBCIvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 03:51:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49638 "EHLO
+        id S232442AbjBCIxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 03:53:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232223AbjBCIvT (ORCPT
+        with ESMTP id S231542AbjBCIx3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 03:51:19 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ECB328B321
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 00:51:15 -0800 (PST)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8Cx+ekCy9xja1cNAA--.26776S3;
-        Fri, 03 Feb 2023 16:51:14 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxJ70Cy9xjzIgoAA--.13281S2;
-        Fri, 03 Feb 2023 16:51:14 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] LoongArch: Add kprobe on ftrace support
-Date:   Fri,  3 Feb 2023 16:51:04 +0800
-Message-Id: <1675414264-28241-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf8DxJ70Cy9xjzIgoAA--.13281S2
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxCry5Ar43AF4DZrW3Zw1kKrg_yoWrXr47pF
-        9Iywnxtr47CFsF9FZIv3WUur1FyrWkZrW7G3ZIya4Syr1qqw15Xr1xu3yqqFy5GrWkK34f
-        WFySkryaka4fXa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        b7AYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2
-        IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4U
-        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x0EwIxGrwCFx2
-        IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
-        6r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
-        AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IY
-        s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr
-        0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8j-e5UUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 3 Feb 2023 03:53:29 -0500
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01olkn2025.outbound.protection.outlook.com [40.92.107.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E018A2C66A;
+        Fri,  3 Feb 2023 00:53:26 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VOmdN+r+SWk9lAjJ98rk7s4W1zntm89V4RbiiB+GT0HeV5E0+Q1B0F/YawApurc6a1N91UEsw2FW2ceuY45w3pigR2Y3Rv7LinXnjltUD4LfA/lygqmWOpdyTMG+69iYoHPK8uPKC1UfrQ2oQB26lr9cbuLC2mY3XnEUGnrzd3be/p4CdtjPuViKjokbRm9hhDQg7gfuRTZwszozTA5aXeU93Hqwu69+YfdIPAdDPdDwdpS25D/txllYqzenOhAemZGs5+1w5c7jFExe2a7CpfcyAb9cODK4t2zjuQBYvDrsJHWFaimEcEQdxxjJUgYc28bhxLce8ScBcOtX8dH8Aw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KtqbQdLv493zXb9EZS6kdPrDzcdP21q6asQPwvUEUOo=;
+ b=DqxGROjDttct7MCrb65BSFUHJ4t7eJ5BvbUYQ0iwbq0e1cycGqRdqTUJdEd8CK2pR6WEb0GIXA+jsxUxKrMWeCkOwMnFmzw2B66OCvDzNWAdJmrGVAGBUc25Cca8mFwt0WZ2sUEULG/q/yOWqYm5swklFeUuabZy6LCVMm61r05BmQdoLdx5eMQS2e4epJpguD+l5AJaOlo9vA24xIyPsZ119LJI03SIEm1XzKAjV/XUG/yb74bowgI2qwB/wogrRhBPBQV91d8ReEnNK2J5wujkSN7UBEFUMMRqBaLaN3Gh96ORbi4ESzF4FWdmz/adxe2XoRHyDn7TpmcWWOPZuw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KtqbQdLv493zXb9EZS6kdPrDzcdP21q6asQPwvUEUOo=;
+ b=UsdR7HwpPE7Nk4zXmaRfvCm3mXxa0HCyeGMd5+foPLIp4AQwrr6bM6XRSVjGQajz8t7IOIyQONkXOZQjDhpVQvWVdLLjvfweSgfUihndmoI0PJ6TF3Rl/L9I0i9E5JjTeHqz+K3OqsaXITrusfGZhVlTFohC03VR7CLBpG2UXH97Isqbw41ZAnjoAIt8vBgreyMvY0DlyMANLIWp31sWavTaUUCHTJLcN/u+ItGmnlNYOEOD+/5VQqihzbC7qroEExzsqORL1TpPX5iOUQKZb9h1nUNIkdi7ROOhbzjgUR/ygFoudvPWggHxojB9ifZVwT2livWl918SFoeH1Ubl3g==
+Received: from OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:19b::11)
+ by OS3P286MB1919.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:171::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.36; Fri, 3 Feb
+ 2023 08:53:24 +0000
+Received: from OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::9a1d:12f5:126c:9068]) by OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::9a1d:12f5:126c:9068%8]) with mapi id 15.20.6064.022; Fri, 3 Feb 2023
+ 08:53:23 +0000
+From:   Eddy Tao <taoyuan_eddy@hotmail.com>
+To:     netdev@vger.kernel.org
+Cc:     Eddy Tao <taoyuan_eddy@hotmail.com>,
+        Pravin B Shelar <pshelar@ovn.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, dev@openvswitch.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v5 1/1] net:openvswitch:reduce cpu_used_mask memory
+Date:   Fri,  3 Feb 2023 16:52:56 +0800
+Message-ID: <OS3P286MB22955AB6FF67B67778343FEDF5D79@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
+X-Mailer: git-send-email 2.27.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TMN:  [hg8SPq3bRRjXY7Nnh6hE4zaGMS1yovz/]
+X-ClientProxiedBy: SG2P153CA0002.APCP153.PROD.OUTLOOK.COM (2603:1096::12) To
+ OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:19b::11)
+X-Microsoft-Original-Message-ID: <20230203085257.254240-1-taoyuan_eddy@hotmail.com>
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: OS3P286MB2295:EE_|OS3P286MB1919:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0fb3c58e-bd35-4fae-4b23-08db05c41b82
+X-MS-Exchange-SLBlob-MailProps: Op6Ru+d2ciGZxW9SRnKHFeRtQv7uON2YAiNRMPEO9TWlGk+3SWraKATLMuVVUBM54pIykylzJYogXOPdlQ6xlrVI4+cPzxvjZ68UFmuU30tJexYliVvP1hjAj6nd+H9e1BaXjPB5KWHwQklzL2SeiAiajrmm8NF9a5QoQvmBM6urfGx2Hkc1zcRA9TZRJTThEoE5XrO7iyOoXuTlW7huFt5cQe1P4towky0Ah19Cy0x4F1UOk8W31+XW/ew7rEQGIVeyaqZivWG+Vf+9PrJuiQJyZ6sZvnyIlUIQXDgc2wnnlFde7sARoYBKK3XoPPXBdSgrOlaN6vk4PKa9bmfwlzNxbJoUjOSgif4jG6cUe0lWNKg04PIE61H5wzKcCcnZEAg8xVmxEJhRqxpTkbivqT88/G+xnOgeoAqo5geGfBiSFjpLkAvDPrUiaXoUsLtj60RJt6favtalHGEoWL+6i1oOytcBlkllw881B+IteHBKgxxiTLjqs8HwwjNL7dZytQQB/On/j3WQxpSZYppyKs8r3t/ag4Up1XlH0oDoST4rt+KN1JIYyY07q/ZrHjwQ4jAOXG2b4A6CQjIaCiWuTfpSwKL0J6XGVpRICzg8SehoUnieXPgJ1RmFiHenJKEcOAAo9UB6C7ogtI5LhmMF43aoVhEriPUWDL24WoGm1BtFaEPaeNK9MTIWTbr63kkIyD6ODgzGQ5tai94k0+vlxVfkKrOuK73t
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: AWK6oc5071L1s9i1Smv78gEhTOSD2pT50fQ4XeTWRxyN5rl0wpN6dizRF1vCZL1YT9E6dN28dSphKgSTr24yAG9yFrBvHSuLxaGMZyYcToe9RKruaJTR62Qq1DHil7cL/fd4HuGlctY9D22jZuErXWLo4n3SYyK9A69vkU/9JAMPFfZDWLxEkvAR6rxmj/whhYhiO+XCYPSPNgFtEFj5q6Nuzd7vADYqdsMf9atBSY8fA2MPocLh2QYFdDpZXdDKl7QibBJenUWy9htB8uTuE9GgY0B311NUUHp6wtllW8c4eCbBdkPVMJJ+i98xnEhjUcXR+V9Wh4Drh1Zy+AMoeW/fD/Vsepgij5xxuuDrFnS5aqNlwweptXGKfXjBGuTyfLrlx6xukZ1eqXd7fW7D+OzZwtKetAj3wF2zxsB0z0JNswJpZt4i58Uh8LouLLJt0cD+0mdVNLI2dJiFx45FszvWVL2U0TZCpDNAYoVHfwZ/Ry0lPEMvR3aYrW1oZg2Iam/YljD6AnNbEvpwYp3t36iO0RlK2ZfCrdZh1UsHRywdR5fkUHHh4Iy48NN+N8jy0b0DuqD4LbLoflxPQfp6E30KPjPqjLPB/Ix4zOnR5KWnE1uPDE7vaz6DFCJMpZnTo0X9XOtu+7FZUm4lAsI8Zw==
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6xYZk0Zv8kFfamK9w3Whbsqs1fFYbd2uoshwi/TjpZ8dqU0q1pZymW8tLOXJ?=
+ =?us-ascii?Q?hFEvWILKoy0n3bLhvZcjy8FEl2TcrKp7nkogMN5HYVnN2FAsD213B14C5lUA?=
+ =?us-ascii?Q?BTdkJ+2uI7Ox7ed+P25avWn+Yh30zu9DcY0cWmD1OuBq6Sf1GYDVl+AIOD3h?=
+ =?us-ascii?Q?fISRcXOL4YuOzadzrLNam50nuR9YZQw/dVKbACWMbK7a+ElS5sMUlBrQfHZv?=
+ =?us-ascii?Q?7TjY9ZvUjZR+g+F/w5Wsy89+c0fHTcKopKb9AsOquQ957wiVb8NNX6McfazF?=
+ =?us-ascii?Q?wWvflVNcg0QZ2KKqDe6to68xqY2evmd2NMbcIbVaM1DL4N5z9frYjnIOchMs?=
+ =?us-ascii?Q?hKVaTejgnItnXR5B4GMNe+6e3H/CzIUSSCRi90enEDmIgShNqG24erj0Q6NQ?=
+ =?us-ascii?Q?GC7Ue92/8QXypAeGV9HbvyLKa+WaSUuoURFqOlf5c+6BrmM1IZbj4ys9q+n1?=
+ =?us-ascii?Q?iYPCFkr7/jiIfgipMnz4ZWLh8DnPnqFDsosU5k7qWy2uINvX5JlhP2r3x+Kf?=
+ =?us-ascii?Q?msYRxgBPCCNiih7tGpFWqMbn07e2BSmoS3tGVRsYf4KBSQiEFNAO8ko8Ok10?=
+ =?us-ascii?Q?qWrrREQc7TRnpbMc9YVuGV2r+OoYr5e0afnZ0ipYldCEfjor3vpBhmDbbIBd?=
+ =?us-ascii?Q?QmHXG6efbfNU9E6PVEEVEQJRSs6BORVfeWJB5DCdV5TIQwlPbawN8bEphOwi?=
+ =?us-ascii?Q?xqHHoWfqNbKovpdSHTMMNfKQqIg0U1Y9SHml9k7HRqnICmFzKiBO1fAMecRI?=
+ =?us-ascii?Q?7sKgcDiLO1f8FWxlrc+dsMJZ/OTO5c3ANQvM+BV1Bizukz5eQ6nBfRtHPMob?=
+ =?us-ascii?Q?keYUk5jlgEpAwe1moThTTBZrl7kS50n5sdJ08WUyK36NuG6ykTJaggqDUyuE?=
+ =?us-ascii?Q?EAln0xHReQSLBF5g/pbnhSkz9LyaF67IJG83fLq6aOwMALAiflT2QrZ/cz85?=
+ =?us-ascii?Q?5AwMJ7GR6JAZZtmsOcwoXLHhAAha2QhSzdmjLfs59i02tECIbaWWsu9TRAw+?=
+ =?us-ascii?Q?uVTXqo3D359mXtodjaaRJFWcKeqRnnP8lHOniF5KhIuNuX4hpLQcfNWWQZCr?=
+ =?us-ascii?Q?S3QA01mGYqeesfemo9Pe1mg6s4UnRG+XjPHeecsI5E3UPxOYUISr778Mp/0/?=
+ =?us-ascii?Q?BqNmFt8stbzAGJgP6HFByb0N/eCnTsQlrSV39RROA1GfCRB0BcuQ9pDCBrbh?=
+ =?us-ascii?Q?n6/kLaI9pNf4WElcAy5mPsq8aivM08oz8Au2DhgoPgsAFBE0H57a9XrEa9ay?=
+ =?us-ascii?Q?QBd1gEhKBqLd0H63F8JyTENKIwR1wR5lI+MRtYgkF2qFQAG3ie0lhGJJuVlt?=
+ =?us-ascii?Q?stI=3D?=
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-05f45.templateTenant
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0fb3c58e-bd35-4fae-4b23-08db05c41b82
+X-MS-Exchange-CrossTenant-AuthSource: OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Feb 2023 08:53:23.9590
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS3P286MB1919
+X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_VALIDITY_RPBL,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add kprobe_ftrace_handler() and arch_prepare_kprobe_ftrace() to support
-kprobe on ftrace, the code is similar with x86 and riscv.
+Use actual CPU number instead of hardcoded value to decide the size
+of 'cpu_used_mask' in 'struct sw_flow'. Below is the reason.
 
-Here is a simple example:
+'struct cpumask cpu_used_mask' is embedded in struct sw_flow.
+Its size is hardcoded to CONFIG_NR_CPUS bits, which can be
+8192 by default, it costs memory and slows down ovs_flow_alloc
 
-  # echo 'p:myprobe kernel_clone' > /sys/kernel/debug/tracing/kprobe_events
-  # echo 'r:myretprobe kernel_clone $retval' >> /sys/kernel/debug/tracing/kprobe_events
-  # echo 1 > /sys/kernel/debug/tracing/events/kprobes/myprobe/enable
-  # echo 1 > /sys/kernel/debug/tracing/events/kprobes/myretprobe/enable
-  # echo 1 > /sys/kernel/debug/tracing/tracing_on
-  # cat /sys/kernel/debug/tracing/trace
-  # tracer: nop
-  #
-  # entries-in-buffer/entries-written: 2/2   #P:4
-  #
-  #                                _-----=> irqs-off/BH-disabled
-  #                               / _----=> need-resched
-  #                              | / _---=> hardirq/softirq
-  #                              || / _--=> preempt-depth
-  #                              ||| / _-=> migrate-disable
-  #                              |||| /     delay
-  #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
-  #              | |         |   |||||     |         |
-              bash-488     [002] .....  2041.190681: myprobe: (kernel_clone+0x0/0x40c)
-              bash-488     [002] .....  2041.190788: myretprobe: (__do_sys_clone+0x84/0xb8 <- kernel_clone) arg1=0x200
+To address this, redefine cpu_used_mask to pointer
+append cpumask_size() bytes after 'stat' to hold cpumask
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+cpumask APIs like cpumask_next and cpumask_set_cpu never access
+bits beyond cpu count, cpumask_size() bytes of memory is enough
+
+Signed-off-by: Eddy Tao <taoyuan_eddy@hotmail.com>
 ---
- arch/loongarch/Kconfig             |  1 +
- arch/loongarch/kernel/ftrace_dyn.c | 65 ++++++++++++++++++++++++++++++++++++++
- 2 files changed, 66 insertions(+)
+ net/openvswitch/flow.c       | 9 ++++++---
+ net/openvswitch/flow.h       | 2 +-
+ net/openvswitch/flow_table.c | 8 +++++---
+ 3 files changed, 12 insertions(+), 7 deletions(-)
 
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index 134a2f8..22a3e77 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -104,6 +104,7 @@ config LOONGARCH
- 	select HAVE_IRQ_EXIT_ON_IRQ_STACK
- 	select HAVE_IRQ_TIME_ACCOUNTING
- 	select HAVE_KPROBES
-+	select HAVE_KPROBES_ON_FTRACE
- 	select HAVE_KRETPROBES
- 	select HAVE_MOD_ARCH_SPECIFIC
- 	select HAVE_NMI
-diff --git a/arch/loongarch/kernel/ftrace_dyn.c b/arch/loongarch/kernel/ftrace_dyn.c
-index 0f07591..7b074c2 100644
---- a/arch/loongarch/kernel/ftrace_dyn.c
-+++ b/arch/loongarch/kernel/ftrace_dyn.c
-@@ -6,6 +6,7 @@
-  */
+diff --git a/net/openvswitch/flow.c b/net/openvswitch/flow.c
+index e20d1a973417..a56483eda015 100644
+--- a/net/openvswitch/flow.c
++++ b/net/openvswitch/flow.c
+@@ -107,7 +107,8 @@ void ovs_flow_stats_update(struct sw_flow *flow, __be16 tcp_flags,
  
- #include <linux/ftrace.h>
-+#include <linux/kprobes.h>
- #include <linux/uaccess.h>
+ 					rcu_assign_pointer(flow->stats[cpu],
+ 							   new_stats);
+-					cpumask_set_cpu(cpu, &flow->cpu_used_mask);
++					cpumask_set_cpu(cpu,
++						flow->cpu_used_mask);
+ 					goto unlock;
+ 				}
+ 			}
+@@ -135,7 +136,8 @@ void ovs_flow_stats_get(const struct sw_flow *flow,
+ 	memset(ovs_stats, 0, sizeof(*ovs_stats));
  
- #include <asm/inst.h>
-@@ -271,3 +272,67 @@ int ftrace_disable_ftrace_graph_caller(void)
- }
- #endif /* CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS */
- #endif /* CONFIG_FUNCTION_GRAPH_TRACER */
-+
-+#ifdef CONFIG_KPROBES_ON_FTRACE
-+/* Ftrace callback handler for kprobes -- called under preepmt disabled */
-+void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
-+			   struct ftrace_ops *ops, struct ftrace_regs *fregs)
-+{
-+	struct kprobe *p;
-+	struct pt_regs *regs;
-+	struct kprobe_ctlblk *kcb;
-+	int bit;
-+
-+	bit = ftrace_test_recursion_trylock(ip, parent_ip);
-+	if (bit < 0)
-+		return;
-+
-+	p = get_kprobe((kprobe_opcode_t *)ip);
-+	if (unlikely(!p) || kprobe_disabled(p))
-+		goto out;
-+
-+	regs = ftrace_get_regs(fregs);
-+	if (!regs)
-+		goto out;
-+
-+	kcb = get_kprobe_ctlblk();
-+	if (kprobe_running()) {
-+		kprobes_inc_nmissed_count(p);
-+	} else {
-+		unsigned long orig_ip = instruction_pointer(regs);
-+
-+		instruction_pointer_set(regs, ip);
-+
-+		__this_cpu_write(current_kprobe, p);
-+		kcb->kprobe_status = KPROBE_HIT_ACTIVE;
-+		if (!p->pre_handler || !p->pre_handler(p, regs)) {
-+			/*
-+			 * Emulate singlestep (and also recover regs->csr_era)
-+			 * as if there is a nop
-+			 */
-+			instruction_pointer_set(regs,
-+				(unsigned long)p->addr + MCOUNT_INSN_SIZE);
-+			if (unlikely(p->post_handler)) {
-+				kcb->kprobe_status = KPROBE_HIT_SSDONE;
-+				p->post_handler(p, regs, 0);
-+			}
-+			instruction_pointer_set(regs, orig_ip);
-+		}
-+
-+		/*
-+		 * If pre_handler returns !0, it changes regs->csr_era. We have to
-+		 * skip emulating post_handler.
-+		 */
-+		__this_cpu_write(current_kprobe, NULL);
-+	}
-+out:
-+	ftrace_test_recursion_unlock(bit);
-+}
-+NOKPROBE_SYMBOL(kprobe_ftrace_handler);
-+
-+int arch_prepare_kprobe_ftrace(struct kprobe *p)
-+{
-+	p->ainsn.insn = NULL;
-+	return 0;
-+}
-+#endif /* CONFIG_KPROBES_ON_FTRACE */
+ 	/* We open code this to make sure cpu 0 is always considered */
+-	for (cpu = 0; cpu < nr_cpu_ids; cpu = cpumask_next(cpu, &flow->cpu_used_mask)) {
++	for (cpu = 0; cpu < nr_cpu_ids;
++	     cpu = cpumask_next(cpu, flow->cpu_used_mask)) {
+ 		struct sw_flow_stats *stats = rcu_dereference_ovsl(flow->stats[cpu]);
+ 
+ 		if (stats) {
+@@ -159,7 +161,8 @@ void ovs_flow_stats_clear(struct sw_flow *flow)
+ 	int cpu;
+ 
+ 	/* We open code this to make sure cpu 0 is always considered */
+-	for (cpu = 0; cpu < nr_cpu_ids; cpu = cpumask_next(cpu, &flow->cpu_used_mask)) {
++	for (cpu = 0; cpu < nr_cpu_ids;
++	     cpu = cpumask_next(cpu, flow->cpu_used_mask)) {
+ 		struct sw_flow_stats *stats = ovsl_dereference(flow->stats[cpu]);
+ 
+ 		if (stats) {
+diff --git a/net/openvswitch/flow.h b/net/openvswitch/flow.h
+index 073ab73ffeaa..b5711aff6e76 100644
+--- a/net/openvswitch/flow.h
++++ b/net/openvswitch/flow.h
+@@ -229,7 +229,7 @@ struct sw_flow {
+ 					 */
+ 	struct sw_flow_key key;
+ 	struct sw_flow_id id;
+-	struct cpumask cpu_used_mask;
++	struct cpumask *cpu_used_mask;
+ 	struct sw_flow_mask *mask;
+ 	struct sw_flow_actions __rcu *sf_acts;
+ 	struct sw_flow_stats __rcu *stats[]; /* One for each CPU.  First one
+diff --git a/net/openvswitch/flow_table.c b/net/openvswitch/flow_table.c
+index 0a0e4c283f02..dc6a174c3194 100644
+--- a/net/openvswitch/flow_table.c
++++ b/net/openvswitch/flow_table.c
+@@ -87,11 +87,12 @@ struct sw_flow *ovs_flow_alloc(void)
+ 	if (!stats)
+ 		goto err;
+ 
++	flow->cpu_used_mask = (struct cpumask *)&flow->stats[nr_cpu_ids];
+ 	spin_lock_init(&stats->lock);
+ 
+ 	RCU_INIT_POINTER(flow->stats[0], stats);
+ 
+-	cpumask_set_cpu(0, &flow->cpu_used_mask);
++	cpumask_set_cpu(0, flow->cpu_used_mask);
+ 
+ 	return flow;
+ err:
+@@ -115,7 +116,7 @@ static void flow_free(struct sw_flow *flow)
+ 					  flow->sf_acts);
+ 	/* We open code this to make sure cpu 0 is always considered */
+ 	for (cpu = 0; cpu < nr_cpu_ids;
+-	     cpu = cpumask_next(cpu, &flow->cpu_used_mask)) {
++	     cpu = cpumask_next(cpu, flow->cpu_used_mask)) {
+ 		if (flow->stats[cpu])
+ 			kmem_cache_free(flow_stats_cache,
+ 					(struct sw_flow_stats __force *)flow->stats[cpu]);
+@@ -1196,7 +1197,8 @@ int ovs_flow_init(void)
+ 
+ 	flow_cache = kmem_cache_create("sw_flow", sizeof(struct sw_flow)
+ 				       + (nr_cpu_ids
+-					  * sizeof(struct sw_flow_stats *)),
++					  * sizeof(struct sw_flow_stats *))
++				       + cpumask_size(),
+ 				       0, 0, NULL);
+ 	if (flow_cache == NULL)
+ 		return -ENOMEM;
 -- 
-2.1.0
+2.27.0
 
