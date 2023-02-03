@@ -2,131 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA888688E76
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 05:11:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA362688E79
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 05:12:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232206AbjBCELs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 23:11:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45026 "EHLO
+        id S230424AbjBCEMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 23:12:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbjBCELp (ORCPT
+        with ESMTP id S232392AbjBCEMI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 23:11:45 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79AE5889B5;
-        Thu,  2 Feb 2023 20:11:44 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id nm12-20020a17090b19cc00b0022c2155cc0bso3811021pjb.4;
-        Thu, 02 Feb 2023 20:11:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=o6SutkkPN90XD99Vz5rZcOuOIBT6F073Izv3cfX4L6Y=;
-        b=LR+uushjFX5Yl32iRIfbrakVGmfD4q44AT0eKuy7DOqNEC9Bx2dJMbfs81NvcayfKk
-         OHC/qz/dpCJHl4W5ZrbZbJ0sCi7vonP+Zpk0zn1Bbey3rNhQcTIrPJ6Tj2PGsmH9ruR/
-         RelLFwe8neUWQ68jK0bIzxHC00h4Oon/nCjuQHb8bh6LE71XJozSrX6OMUe5MYn0f8xB
-         dD3a7JhIJDaXujzdh3B2u5bqTfwMPYDf6MewPhgMfEivY5OHmx5zNiQ2zdEFUgTqx96l
-         38N1R2IBlR0HAc7x0eZXUJMA2zfSWisF3hsZH/TXDwvwroVZOKfvW/HyFUk3t+KC3Okb
-         0Glw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=o6SutkkPN90XD99Vz5rZcOuOIBT6F073Izv3cfX4L6Y=;
-        b=XuA2gmuNBDEVm+SBpMEdcgAg+Z/W5Oln1UeW5gT+DCqv7/BVNqFFoO42NmHKfStTuH
-         +UI5UGxWY66Bn01F/J47lhd7o0MLl3/I+n7so6R7RYbqcSzL8sCwpNYvfPPIsNmBe8cP
-         NmQNFMBLwLczngslQ6es7Q2ey+6vAVRPNswh5pk7Sk9JNdX7HiqfjWcbeK3+Up9fDpWM
-         whQ//ok0g3VKKOYzyjy2HWvmv/rXQihE6mcH1Fayf2LFSoscLCYmL8jKHnFmxln46WPY
-         5XQm/f0OGaSf/SfbyNJE3xXI8BGWb7S0Qsab2moZ8ObDXL0eimiBmk7aDhoOQgog3Q9G
-         voqw==
-X-Gm-Message-State: AO0yUKV8CxHF8f7thjFYaD6qdozEx0PmZ3Z0yauax/lY0t+Fwv8Ukn/h
-        DJx4DUkwj/rmOw6jqy1dagU=
-X-Google-Smtp-Source: AK7set/ZCPGn5k2O6fvqA++fmfJfTUdpOPqgHayHUBGBgYGncgLTWQZkMXfmvlwKFCrilHS72RI9XA==
-X-Received: by 2002:a17:90b:4d10:b0:229:ee75:5d09 with SMTP id mw16-20020a17090b4d1000b00229ee755d09mr8904607pjb.40.1675397503892;
-        Thu, 02 Feb 2023 20:11:43 -0800 (PST)
-Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:18:efec::75b])
-        by smtp.gmail.com with ESMTPSA id a17-20020a17090a481100b00218a7808ec9sm461899pjh.8.2023.02.02.20.11.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 20:11:43 -0800 (PST)
-Message-ID: <0aea3782-b494-4c1b-1c74-2337bcdae3ef@gmail.com>
-Date:   Fri, 3 Feb 2023 12:11:31 +0800
+        Thu, 2 Feb 2023 23:12:08 -0500
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E37C289F98;
+        Thu,  2 Feb 2023 20:12:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=WrR//
+        zva4ZesymP/eKoj5KyCPnat+CUvA7ZEtVA4JNA=; b=nxOlHKommfrlibSizMmPx
+        DutsLeIDJQP8sGT9cquP1vr2436CwSUO2ewBsF8J9eyOmRVFaX/+GzZ0SLHJmkRg
+        petgKK4VnkZIGuJixy0LkGcz/CIAB5liAGPMhNhdCi5de9Ovf2ReMYnpfTLVicSU
+        jrj2cbuxWjEyNVPO8GL75U=
+Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
+        by zwqz-smtp-mta-g2-2 (Coremail) with SMTP id _____wBnbNCFidxj79KlCg--.56852S2;
+        Fri, 03 Feb 2023 12:11:49 +0800 (CST)
+From:   Zheng Wang <zyytlz.wz@163.com>
+To:     colyli@suse.de
+Cc:     hackerzheng666@gmail.com, kent.overstreet@gmail.com,
+        linux-bcache@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alex000young@gmail.com, Zheng Wang <zyytlz.wz@163.com>,
+        stable@vger.kernel.org
+Subject: [PATCH v3] bcache: Remove some unnecessary NULL point check for the  return value of __bch_btree_node_alloc-related pointer
+Date:   Fri,  3 Feb 2023 12:11:47 +0800
+Message-Id: <20230203041147.581389-1-zyytlz.wz@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [RFC PATCH V3 06/16] x86/hyperv: decrypt vmbus pages for sev-snp
- enlightened guest
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "jgross@suse.com" <jgross@suse.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "kirill@shutemov.name" <kirill@shutemov.name>,
-        "jiangshan.ljs@antgroup.com" <jiangshan.ljs@antgroup.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "ashish.kalra@amd.com" <ashish.kalra@amd.com>,
-        "srutherford@google.com" <srutherford@google.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "anshuman.khandual@arm.com" <anshuman.khandual@arm.com>,
-        "pawan.kumar.gupta@linux.intel.com" 
-        <pawan.kumar.gupta@linux.intel.com>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "daniel.sneddon@linux.intel.com" <daniel.sneddon@linux.intel.com>,
-        "alexander.shishkin@linux.intel.com" 
-        <alexander.shishkin@linux.intel.com>,
-        "sandipan.das@amd.com" <sandipan.das@amd.com>,
-        "ray.huang@amd.com" <ray.huang@amd.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "michael.roth@amd.com" <michael.roth@amd.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "venu.busireddy@oracle.com" <venu.busireddy@oracle.com>,
-        "sterritt@google.com" <sterritt@google.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "samitolvanen@google.com" <samitolvanen@google.com>,
-        "fenghua.yu@intel.com" <fenghua.yu@intel.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-References: <20230122024607.788454-1-ltykernel@gmail.com>
- <20230122024607.788454-7-ltykernel@gmail.com>
- <BYAPR21MB16882851012198FD7ADB5CD1D7D09@BYAPR21MB1688.namprd21.prod.outlook.com>
-From:   Tianyu Lan <ltykernel@gmail.com>
-In-Reply-To: <BYAPR21MB16882851012198FD7ADB5CD1D7D09@BYAPR21MB1688.namprd21.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _____wBnbNCFidxj79KlCg--.56852S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxAr48WF4xXrW3Aw4ktFWxtFb_yoW5CF1Dpr
+        W29ryayr97Xr4UCr9Yg3WvvFyfXw12vFWUWr93u3WfZry7AFyrCay0934jvrWUuFWxuF4U
+        Zr40yw1UXr4UtF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziIPfLUUUUU=
+X-Originating-IP: [111.206.145.21]
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/xtbBzgwLU2I0XNypJwAAsC
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/1/2023 1:58 AM, Michael Kelley (LINUX) wrote:
->> +
->> +			ret = set_memory_decrypted((unsigned long)
->> +				hv_cpu->post_msg_page, 1);
->> +			if (ret)
->> +				goto err_decrypt_msg_page;
->> +
->> +			memset(hv_cpu->synic_message_page, 0, PAGE_SIZE);
->> +			memset(hv_cpu->synic_event_page, 0, PAGE_SIZE);
->> +			memset(hv_cpu->post_msg_page, 0, PAGE_SIZE);
->> +		}
-> Having decrypted the pages here in hv_synic_alloc(), shouldn't
-> there be corresponding re-encryption in hv_synic_free()?
-> 
+Due to the previously fix of __bch_btree_node_alloc, the return value will
+never be a NULL pointer. So IS_ERR is enough to handle the failure
+ situation. Fix it by replacing IS_ERR_OR_NULL check to IS_ERR check.
 
-Yes, I ignore in this version and will fix it.
+Fixes: cafe56359144 ("bcache: A block layer cache")
+Cc: stable@vger.kernel.org
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+---
+v3:
+- Add Cc: stable@vger.kernel.org suggested by Eric
+v2:
+- Replace more checks
+---
+ drivers/md/bcache/btree.c | 10 +++++-----
+ drivers/md/bcache/super.c |  4 ++--
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-Thanks.
+diff --git a/drivers/md/bcache/btree.c b/drivers/md/bcache/btree.c
+index 147c493a989a..7c21e54468bf 100644
+--- a/drivers/md/bcache/btree.c
++++ b/drivers/md/bcache/btree.c
+@@ -1138,7 +1138,7 @@ static struct btree *btree_node_alloc_replacement(struct btree *b,
+ {
+ 	struct btree *n = bch_btree_node_alloc(b->c, op, b->level, b->parent);
+ 
+-	if (!IS_ERR_OR_NULL(n)) {
++	if (!IS_ERR(n)) {
+ 		mutex_lock(&n->write_lock);
+ 		bch_btree_sort_into(&b->keys, &n->keys, &b->c->sort);
+ 		bkey_copy_key(&n->key, &b->key);
+@@ -1340,7 +1340,7 @@ static int btree_gc_coalesce(struct btree *b, struct btree_op *op,
+ 	memset(new_nodes, 0, sizeof(new_nodes));
+ 	closure_init_stack(&cl);
+ 
+-	while (nodes < GC_MERGE_NODES && !IS_ERR_OR_NULL(r[nodes].b))
++	while (nodes < GC_MERGE_NODES && !IS_ERR(r[nodes].b))
+ 		keys += r[nodes++].keys;
+ 
+ 	blocks = btree_default_blocks(b->c) * 2 / 3;
+@@ -1352,7 +1352,7 @@ static int btree_gc_coalesce(struct btree *b, struct btree_op *op,
+ 
+ 	for (i = 0; i < nodes; i++) {
+ 		new_nodes[i] = btree_node_alloc_replacement(r[i].b, NULL);
+-		if (IS_ERR_OR_NULL(new_nodes[i]))
++		if (IS_ERR(new_nodes[i]))
+ 			goto out_nocoalesce;
+ 	}
+ 
+@@ -1487,7 +1487,7 @@ static int btree_gc_coalesce(struct btree *b, struct btree_op *op,
+ 	bch_keylist_free(&keylist);
+ 
+ 	for (i = 0; i < nodes; i++)
+-		if (!IS_ERR_OR_NULL(new_nodes[i])) {
++		if (!IS_ERR(new_nodes[i])) {
+ 			btree_node_free(new_nodes[i]);
+ 			rw_unlock(true, new_nodes[i]);
+ 		}
+@@ -1669,7 +1669,7 @@ static int bch_btree_gc_root(struct btree *b, struct btree_op *op,
+ 	if (should_rewrite) {
+ 		n = btree_node_alloc_replacement(b, NULL);
+ 
+-		if (!IS_ERR_OR_NULL(n)) {
++		if (!IS_ERR(n)) {
+ 			bch_btree_node_write_sync(n);
+ 
+ 			bch_btree_set_root(n);
+diff --git a/drivers/md/bcache/super.c b/drivers/md/bcache/super.c
+index ba3909bb6bea..7660962e7b8b 100644
+--- a/drivers/md/bcache/super.c
++++ b/drivers/md/bcache/super.c
+@@ -1724,7 +1724,7 @@ static void cache_set_flush(struct closure *cl)
+ 	if (!IS_ERR_OR_NULL(c->gc_thread))
+ 		kthread_stop(c->gc_thread);
+ 
+-	if (!IS_ERR_OR_NULL(c->root))
++	if (!IS_ERR(c->root))
+ 		list_add(&c->root->list, &c->btree_cache);
+ 
+ 	/*
+@@ -2088,7 +2088,7 @@ static int run_cache_set(struct cache_set *c)
+ 
+ 		err = "cannot allocate new btree root";
+ 		c->root = __bch_btree_node_alloc(c, NULL, 0, true, NULL);
+-		if (IS_ERR_OR_NULL(c->root))
++		if (IS_ERR(c->root))
+ 			goto err;
+ 
+ 		mutex_lock(&c->root->write_lock);
+-- 
+2.25.1
+
