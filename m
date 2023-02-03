@@ -2,73 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 441D8689F30
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 17:26:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEEB5689F36
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 17:27:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232054AbjBCQ0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 11:26:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49652 "EHLO
+        id S233034AbjBCQ1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 11:27:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233017AbjBCQ0l (ORCPT
+        with ESMTP id S232502AbjBCQ1I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 11:26:41 -0500
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7128EA6C1A
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 08:26:38 -0800 (PST)
-Received: by mail-il1-x130.google.com with SMTP id z2so2275623ilq.2
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 08:26:38 -0800 (PST)
+        Fri, 3 Feb 2023 11:27:08 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F09CAA6BA4;
+        Fri,  3 Feb 2023 08:26:54 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id mc11so16746980ejb.10;
+        Fri, 03 Feb 2023 08:26:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jzLSTilkTqHv5zqJq4XrgBlNDh4B17SJN2rgulEb5xk=;
-        b=d7kPQhIauFu7vhvmYuzzHJii3z93jbo8da5vvEAJvij6FF2hHODbovtTwaR//XIqB6
-         IDIvXVPISW0bwGn6f/uwmd8dHTwDSn2kOobXOqmYAgqMSghpBvDM48pRn5IzbuO+8qvj
-         YLDPv1eR3uAXHCfCs/3lhe8N2TuQC4ReiAR7M=
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=RUj1tb4TuSYwUwoIhNOw99sNhzHtGAEfhnWg+uq4J14=;
+        b=Asl8uQue9LWo08MaIkIb7jI1hRkLqzzudtQvDBpXIXqQkoxbdF/KLvIZZWQEXwvMPL
+         bMvtYu3kDoM3Ub2P8qPZk7gb/iij7N7PVRvrSQ4BysUH7hVGOpm5uyc227mcM/PAEiEZ
+         J+uoaJyFsFKUvfSBtY2fmSCxbDemT+ka2phibXCr/SauPiiEtHlXPsH/rhdDDC9Rx3/1
+         faQ+ppX0WmhLws/GI1EvYhGEqfcK7VzFbgWjcJirBtrr0FTn56MDjm0W3gTJW7rGi2i3
+         WHIoQhSkKqIWXhGqFNZtL0oGmQT8RKffugBYkey/NNNmOsjNTfePuW7lCLVVR72PvZvq
+         ZhwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jzLSTilkTqHv5zqJq4XrgBlNDh4B17SJN2rgulEb5xk=;
-        b=m3gzR6IoOFus0L2kyjmjTi4bQdilaZU6iVlnv5fpc4uLcM5julitT8YnfOKaeCJr+w
-         pGFvC9MX2M/GYwEeZyjy3ODv1+2Oor9GdpOJkPCvVPjT/m8zn9t9/lTjOQ0j/VvFg/u3
-         q8KRHP59o1WbjhAB2hwrZRbrilfIVDigM3HRukZsHt9ewIchIgRhRZ/O5ZdR6o/+0dc+
-         79f8UPdAJ8PAWRKLb+cBLl7awDZiRmigwZ/YXfTj3Eusx2xNbK2kTRozqxEpeLiXhmgx
-         5N56JwZH41RcUe2yJvBlXvGaPPGvmgitprLcxvhSo+IYOiHMpd6Scn/gQtXcinj25SH6
-         1UXg==
-X-Gm-Message-State: AO0yUKWU+1qe+Kbe8upvwtRKryw9A6CO7mhAzvijocmPwqDLuUX9QIfP
-        Wrafqem28jOdWisu933zNWCUpQ==
-X-Google-Smtp-Source: AK7set+SWBkzsLF7SwKMgA+I+wyLq5+0NPN1Gmn1itfKTHMLjlocRZMy3fHFcQDgtVDC6mqhqZ7xwg==
-X-Received: by 2002:a05:6e02:1ba7:b0:310:b84b:c893 with SMTP id n7-20020a056e021ba700b00310b84bc893mr7862837ili.1.1675441597740;
-        Fri, 03 Feb 2023 08:26:37 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id q21-20020a056638345500b003af38f526aesm943667jav.81.2023.02.03.08.26.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Feb 2023 08:26:37 -0800 (PST)
-Message-ID: <ebaaa261-84db-c118-2c2b-d8a31c90a1aa@linuxfoundation.org>
-Date:   Fri, 3 Feb 2023 09:26:36 -0700
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RUj1tb4TuSYwUwoIhNOw99sNhzHtGAEfhnWg+uq4J14=;
+        b=CaepQXhNhAGnu/mlFtIJ+D9A6nyalNsUZEVKEfevGCCQ4IpIYQcmNaes4txdpTud1U
+         igNrn3wLLi/h2K5eOjrBmYSyp0vyRksQXoLIAkqzMyuDQLyK1OJzFvqgdszRPtWyc6PN
+         Obhh9p6bIPREUS7r/6BQ7T36OYN5lXGC22fRiSRzwPRWb1pPjZZX2LVLX3VaEkBWep1Q
+         s2bHLhG7vq3Qtprod585jYZ2zwRRWB36459QPzzTuZVXhqbwLhBbHocBW+Z8uBWZSKuR
+         dipwBXICYvNB4WPMxgZDR5u5Xfb8X3rGoFV3iKiVTEdxubNnAE/amPj/uZ0xEKW/dsC2
+         pD6A==
+X-Gm-Message-State: AO0yUKXxDAYATs+FC50t3eN5M+SirioG0/M/eFokqeU4XauxnkTcj39z
+        oOsGqDF/s2+X6i9ieyv4s1ZcbC1i+3MhbfHRq00=
+X-Google-Smtp-Source: AK7set9ZvBjDxtOpPvZm4xJVgjoc5lWay022JeXGf0nkD85UtAmHom1fDaYmgZrZMxxjELD+WyybujbXQE5jPLUyEc0=
+X-Received: by 2002:a17:906:ca41:b0:88b:a2de:ed92 with SMTP id
+ jx1-20020a170906ca4100b0088ba2deed92mr3145596ejb.193.1675441613406; Fri, 03
+ Feb 2023 08:26:53 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] selftests: find echo binary to use -ne options
-Content-Language: en-US
-To:     Guillaume Tucker <guillaume.tucker@collabora.com>,
-        Guillaume Tucker <guillaume.tucker@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Gautam <gautammenghani201@gmail.com>
-Cc:     kernel@collabora.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernelci@lists.linux.dev,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230203152603.11450-1-guillaume.tucker@collabora.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230203152603.11450-1-guillaume.tucker@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+References: <20230130173429.3577450-1-netdev@kapio-technology.com>
+ <20230130173429.3577450-2-netdev@kapio-technology.com> <Y9qrAup9Xt/ZDEG0@shredder>
+ <f27dd18d9d0b7ff8b693af8a58ea8616@kapio-technology.com> <Y9vgz4x/O+dIp+0/@shredder>
+ <766efaf94fcb6362c5ceb176ad7955f1@kapio-technology.com> <Y90y9u+4PxWk4b9E@shredder>
+In-Reply-To: <Y90y9u+4PxWk4b9E@shredder>
+From:   Vladimir Oltean <olteanv@gmail.com>
+Date:   Fri, 3 Feb 2023 18:26:41 +0200
+Message-ID: <CA+h21hp5Eh3zF60J2mTZL+xenD7iMBXKG+Ui0t-oUzgwNwSw2g@mail.gmail.com>
+Subject: Re: [PATCH net-next 1/5] net: bridge: add dynamic flag to switchdev notifier
+To:     Ido Schimmel <idosch@idosch.org>
+Cc:     netdev@kapio-technology.com, davem@davemloft.net, kuba@kernel.org,
+        netdev@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
+        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,37 +98,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/3/23 08:26, Guillaume Tucker wrote:
-> Find the actual echo binary using $(which echo) and use it for
-> formatted output with -ne.  On some systems, the default echo command
-> doesn't handle the -e option and the output looks like this (arm64
-> build):
-> 
-> -ne Emit Tests for alsa
-> 
-> -ne Emit Tests for amd-pstate
-> 
-> -ne Emit Tests for arm64
-> 
-> This is for example the case with the KernelCI Docker images
-> e.g. kernelci/gcc-10:x86-kselftest-kernelci.  With the actual echo
-> binary (e.g. in /bin/echo), the output is formatted as expected (x86
-> build this time):
-> 
-> Emit Tests for alsa
-> Emit Tests for amd-pstate
-> Skipping non-existent dir: arm64
-> 
-> Only the install target is using "echo -ne" so keep the $ECHO variable
-> local to it.
-> 
-> Reported-by: "kernelci.org bot" <bot@kernelci.org>
-> Fixes: 3297a4df805d ("kselftests: Enable the echo command to print newlines in Makefile")
-> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
-> ---
+On Fri, 3 Feb 2023 at 18:14, Ido Schimmel <idosch@idosch.org> wrote:
+> I *think* this is the change Vladimir asked you to do.
 
-Thank you - will appear shortly in linuxk-selftest next.
-
-thanks,
--- Shuah
-
+Yup, although instead of "is_dyn", I would still prefer "!is_static",
+but again, that's a preference for bridge/switchdev maintainers to
+override.
