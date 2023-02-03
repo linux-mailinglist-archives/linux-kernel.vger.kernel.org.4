@@ -2,72 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D843689A30
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 14:52:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8D40689A3B
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 14:52:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231775AbjBCNwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 08:52:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33342 "EHLO
+        id S233010AbjBCNw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 08:52:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233067AbjBCNv4 (ORCPT
+        with ESMTP id S232204AbjBCNwN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 08:51:56 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6521FA146A;
-        Fri,  3 Feb 2023 05:51:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 53251B82AC9;
-        Fri,  3 Feb 2023 13:51:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0303CC433D2;
-        Fri,  3 Feb 2023 13:51:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675432285;
-        bh=KD3LsNmr8AeTUGEQmjS9XypGII1lkv0pPnS38zTLO0c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uOIeODnIR2cjzp+WhuNKJRp54lthxVAtxUI7ApJwmb/ADlWJ8VXMAemKt2wkAF0tj
-         1uvNVOqalYVNqAp/FJNPN1u7vGgamlJ8PdRoOCRveZOmMhPISA4Gdo5vGlga9ahle0
-         YRHHDZ+Ms9++QrSQfD6vrCHXR9wd9jQA+14DaZCTve0PaZP1Gz/28A9HjvlDhdYB7Q
-         Mm0CVBFE5zO8uD640jTwfSL1TskmBGqIBGwm9BJuytZYRyiC175jHG6hFMUDJJ4fky
-         dY+a5D2rD+dSFookB0u3i7//DVowI2cwYKt0Cb44a9iExSbeeD9wXQNkIgRCsCwjO7
-         bxQVoRN/V+r9A==
-Date:   Fri, 3 Feb 2023 19:21:21 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: Re: [PATCH v2] phy: qcom-qmp: Introduce Kconfig symbols for discrete
- drivers
-Message-ID: <Y90RWZAwL0vk7i5X@matsya>
-References: <20230202215330.2152726-1-swboyd@chromium.org>
+        Fri, 3 Feb 2023 08:52:13 -0500
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74A2B9AFC2;
+        Fri,  3 Feb 2023 05:51:56 -0800 (PST)
+Received: by mail-oi1-f175.google.com with SMTP id s124so4197825oif.1;
+        Fri, 03 Feb 2023 05:51:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=T0jj9gHXQzeTegxc5ifle/pC5AQPQL/9erpLdHEPqBc=;
+        b=1ZB8r7Z7iQ3P7JM5IRVKLKvNODm5ob/5ij3dT25eut+aI3Vf17PQUuwyE2dqdj8VEs
+         2KEntXtCEW68uWHDZN41Lt5HSZag8ntWTkM8k/a5wtIPf5YKx2sqf3xFaghnhTunXs6F
+         GPlv2Yt4Zp1RXsVIdLTIbPhd3Ppey+RQKq8PJ0wf107oNZcpF5PBUsIomW+/4uIuhxaN
+         rzGlntMbq7qRghCQqjiMmhC1ZywAcKICY0+64KIN833H5YdnDcttlscQcO9EW/f85fYZ
+         3Ejn+unaLEH86zouM1mBXazTx666TPxEIa4eQFK2UOoShxqgGu7D5bPdL3z0n3PVKd00
+         NIag==
+X-Gm-Message-State: AO0yUKXZ9LBRpifBEpWG0F5R1oe3y7EVkQUMfk72zpyjNQWnqd16peNq
+        3fTKA583eyR6b0ZthjIXyw==
+X-Google-Smtp-Source: AK7set9GnMjZPQwg4ZvZ1OCLOCzeHoNXp6WHCRFHCa42vbc9O0oYiYLXbh6m33mjRk69hL37c6pQwQ==
+X-Received: by 2002:aca:408b:0:b0:370:ac59:7226 with SMTP id n133-20020aca408b000000b00370ac597226mr4042902oia.11.1675432315646;
+        Fri, 03 Feb 2023 05:51:55 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id s191-20020acaa9c8000000b003631fe1810dsm793426oie.47.2023.02.03.05.51.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Feb 2023 05:51:55 -0800 (PST)
+Received: (nullmailer pid 4088845 invoked by uid 1000);
+        Fri, 03 Feb 2023 13:51:54 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230202215330.2152726-1-swboyd@chromium.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, robh+dt@kernel.org, jun.li@nxp.com,
+        balbi@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        Peng Fan <peng.fan@nxp.com>, devicetree@vger.kernel.org
+In-Reply-To: <20230203014526.1461386-1-peng.fan@oss.nxp.com>
+References: <20230203014526.1461386-1-peng.fan@oss.nxp.com>
+Message-Id: <167543212276.4084541.17286318072815310709.robh@kernel.org>
+Subject: Re: [PATCH V2] dt-bindings: usb: snps,dwc3: support i.MX8MQ
+Date:   Fri, 03 Feb 2023 07:51:54 -0600
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02-02-23, 13:53, Stephen Boyd wrote:
-> Introduce a config option for each QMP PHY driver now that the QMP PHY
-> mega-driver has been split up into different modules. This allows kernel
-> configurators to limit the binary size of the kernel by only compiling
-> in the QMP PHY driver that they need.
+
+On Fri, 03 Feb 2023 09:45:26 +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
 > 
-> Leave the old config QCOM_QMP in place and make it into a menuconfig so
-> that 'make olddefconfig' continues to work. Furthermore, set the default
-> of the new Kconfig symbols to be QCOM_QMP so that the transition is
-> smooth.
+> i.MX8MQ use Synopsys DesignWare USB3 Controller IP, so add the
+> compatible.
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+> 
+> V2:
+>  Rebased on linux-next, remove power-domains from v1
+> 
+>  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 12 +++++++-----
+>  1 file changed, 7 insertions(+), 5 deletions(-)
+> 
 
-Applied, thanks
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
--- 
-~Vinod
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/rockchip,dwc3.example.dtb: usb@fe800000: compatible: 'oneOf' conditional failed, one must be fixed:
+	['rockchip,rk3399-dwc3', 'snps,dwc3'] is too long
+	'fsl,imx8mq-dwc3' was expected
+	'snps,dwc3' was expected
+	'synopsys,dwc3' was expected
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/rockchip,dwc3.example.dtb: usb@fe800000: Unevaluated properties are not allowed ('compatible' was unexpected)
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/rockchip,dwc3.example.dtb: usb@fe800000: compatible: 'oneOf' conditional failed, one must be fixed:
+	['rockchip,rk3399-dwc3', 'snps,dwc3'] is too long
+	'fsl,imx8mq-dwc3' was expected
+	'snps,dwc3' was expected
+	'synopsys,dwc3' was expected
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/rockchip,dwc3.example.dtb: usb@fe800000: Unevaluated properties are not allowed ('compatible' was unexpected)
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/rockchip,dwc3.example.dtb: usb@fe800000: Unevaluated properties are not allowed ('dr_mode' was unexpected)
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230203014526.1461386-1-peng.fan@oss.nxp.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
