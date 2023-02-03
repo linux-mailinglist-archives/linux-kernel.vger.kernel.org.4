@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CF1C68A382
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 21:21:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FA6E68A387
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 21:28:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231593AbjBCUVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 15:21:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59728 "EHLO
+        id S232813AbjBCU2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 15:28:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbjBCUVi (ORCPT
+        with ESMTP id S229657AbjBCU2E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 15:21:38 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12237A7EC9
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 12:21:34 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id hn2-20020a05600ca38200b003dc5cb96d46so6798941wmb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 12:21:33 -0800 (PST)
+        Fri, 3 Feb 2023 15:28:04 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E319B75C
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 12:28:03 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id j29-20020a05600c1c1d00b003dc52fed235so4770050wms.1
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 12:28:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=m5sLjr7aYK315tj89Xz8yTzw8nhiBSznb+bT5o725x0=;
-        b=HLoFOX9M38kF2qyUXFQwXqSnMduKtNxMFBrU5CvSYknJxcduZ84ZUxf/VVFfkk+dwR
-         /WLjnjiBsb1y6V6GqLtfXH8j5KJDNyoWTaR76slT+yDk3LZqAJB1XDDj/ITC4vfTaEDc
-         qFfA1b2qa/H9ba7GlMKHQAetHgjPTM8d4A5x2BWt0AEtogp1MPI5kISnP7fI+Rk6HQNR
-         h71USPCrKliJYX5PoXeGf3p8mOTdD+tGnDRL5uvNeBQpeuYIDUzK7vnKZM0nDi3JChGc
-         rML/UuG3wp30vrDrWJF1gFFn9XzjnHdc5MkgTBcQ5cZL/ZP8JUtO3UVYFG8JILgMYRMf
-         2gQQ==
+        bh=OcaR471TXAjGr31MjNbqXuBFmDxa1S6cNX7l4YGYmRI=;
+        b=SezcXEcWF/dRKemlQQqQWL8NAYRbNZuSckOdAlUWdAlQWpoWXU5+usWAHMA82BZBLg
+         CXMBSlZbEGaxjypt6Nfl0LkI9duN6m5fNPGEgGmIGAZOb5oCE5TO/Od8nQwCnEPL40N0
+         zbUDICs8/GZ8i596nTr05XvUC7rjuRvdgdoAkptotziPI32OLe9w9GB3a75qEeMMne0x
+         UeQMPNIIWo2T08GbT02VdVoXOskEeQOdTZohR5myokK1bR3slxoQ7DzJMiGISiAKXEuk
+         5d6EiVdMUeAWT2NKr/JXCVXQ6bLsF6Hnct6TneOHGvketNvDbD5c9etecDSFFEnA+AJj
+         EcOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=m5sLjr7aYK315tj89Xz8yTzw8nhiBSznb+bT5o725x0=;
-        b=schY4YoPSgxuQxPMkxzt3pfUfv6ay8P1rIP4YxWtcvTsRPSdN5ih7Q9l1sKloJYFb9
-         iBXASUrGIigzmOj4rYY1i6gBaJmES3a4dh0ELoTaBmDLG54mgipQNh2yGdXZEQiqW+mH
-         fPELmdvIabhWpXkJtgOIiiUL23ynzw2eTWaZQaXrSw4QclJxrEzvLjr338IPZJklLGtg
-         yBLTYSBT17wq3xEecZYJno29mWyTlMrUKf0LBkLhxQ+WwQa4J0UvlMzgYZXItkpC72c1
-         TgL5HJNaE3+p/b3ohZqmml/GA6VzdmkT+ZJ6gsFyir+hMqQ0wwPVWDduAyBC7TWw0yci
-         /jVw==
-X-Gm-Message-State: AO0yUKVsJLEXmTRYQ6lv4iEx2Ke3gY8YXviIgsrXtPRbQyGnQjdB6X6Y
-        snpYSQhTlOz2/ZHZPnNz4/l2DQ==
-X-Google-Smtp-Source: AK7set8Gpfp/Oz+hFP5DrhCusCPg/cotAzMpidE7HBO1Avb+cX25jy40Vo3VZeQupr3Q20OM5Hxk4g==
-X-Received: by 2002:a05:600c:444f:b0:3da:c07:c5fe with SMTP id v15-20020a05600c444f00b003da0c07c5femr10596494wmn.5.1675455692569;
-        Fri, 03 Feb 2023 12:21:32 -0800 (PST)
+        bh=OcaR471TXAjGr31MjNbqXuBFmDxa1S6cNX7l4YGYmRI=;
+        b=h8Q3+eQGt1lHI5PlhAbpCacNae8qDKhxx/9ziLr03BlZqwWX0Ggtgo/QcikpzTTDGu
+         qi4qTV19/ZKCRk0rXrT/OrnW/b926sJJUG9yHvh6mCsHCeJCx0P1wuPOZq1IsWHgKuTA
+         BhUjfmM77egEihFEHQPAUS7icSFjq+ZkVYepWKrVcPLPRRFF6pdgxUmj2seZr3CpoHwG
+         fe2w5XzhdWvOWOUJUfLPOompFOepEEF7uGa9lHf+WzYjX98p5LRgzlnUEpHjOh8stydD
+         jAsqz3nOGc3wVfBHAX4t5EvXeQcofqFT3Mmn0oYzH3QoiynmQoQxPkxTsRi7hcHZMoRS
+         8zWg==
+X-Gm-Message-State: AO0yUKW/kCCQTF7wYDK1MyxQeN5Qlat12+tZrSvQRzvmEAxFkIY8lLYi
+        ADG9pR50T7EfF/fFu4SNGv978BFWuIum02iR
+X-Google-Smtp-Source: AK7set96RpaTqpX9Bfu005sId7DrlnJXnLTXqwwUkaTAzF2cO0cHdxloiYdhXNMOBbDNxsyHPR3krw==
+X-Received: by 2002:a05:600c:1c06:b0:3d9:fb89:4e3d with SMTP id j6-20020a05600c1c0600b003d9fb894e3dmr11971335wms.28.1675456081778;
+        Fri, 03 Feb 2023 12:28:01 -0800 (PST)
 Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id g10-20020a05600c310a00b003de77597f16sm3803784wmo.21.2023.02.03.12.21.31
+        by smtp.gmail.com with ESMTPSA id q9-20020a1ce909000000b003dc34edacf8sm8466662wmc.31.2023.02.03.12.28.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Feb 2023 12:21:32 -0800 (PST)
-Message-ID: <f9d9bbfc-507d-2092-6ae8-f80ab3d23bd1@linaro.org>
-Date:   Fri, 3 Feb 2023 21:21:30 +0100
+        Fri, 03 Feb 2023 12:28:01 -0800 (PST)
+Message-ID: <79474344-0bf1-ba0e-6bae-0ccb4e3a3aee@linaro.org>
+Date:   Fri, 3 Feb 2023 21:27:59 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
@@ -110,16 +110,9 @@ On 03/02/2023 20:34, Jerome Brunet wrote:
 >> Then define it as having cells:
 >>
 >> https://elixir.bootlin.com/linux/v5.18-rc1/source/Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml#L42
->>
-> 
-> The card is provided with the phandle.
-> Whether or not the phandle has cells or not has nothing do with card
-> driver. The card just consums sound-dai. I don't understand this comment.
 
-You said this is only a phandle. Then you have just two options - either
-this is one phandle without arguments (then change it as I asked
-originally) or this is one phandle with arguments (then change it to
-define the arguments like in example I gave you).
+Eh, it is already defined, so my advice is incorrect. Drop the ref and
+define maxItems.
 
 Best regards,
 Krzysztof
