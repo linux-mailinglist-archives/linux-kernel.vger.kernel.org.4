@@ -2,50 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C10568A0C5
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 18:48:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 769FC68A0C7
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 18:49:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232529AbjBCRsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 12:48:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53750 "EHLO
+        id S233228AbjBCRtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 12:49:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232394AbjBCRsj (ORCPT
+        with ESMTP id S233255AbjBCRtG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 12:48:39 -0500
-Received: from out-13.mta0.migadu.com (out-13.mta0.migadu.com [IPv6:2001:41d0:1004:224b::d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 605962069C
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 09:48:20 -0800 (PST)
-Date:   Fri, 3 Feb 2023 09:47:34 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1675446465;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LmsXysxMfYtegr5dVQ+/SDGY+y8MjYLbIXG3YSolM3M=;
-        b=O+uDUWm4eyxjCb1gbU5IMQ9MgqQPqYGTl1wGbSz3HvtnLCmrFlScdYFAl261orz5VDHMsW
-        2R3lojbaXHuTFKzwuRIxaKu8FU5Oh4xtX0tdLPnw8OG7DDmnDOX+PccpYgqVZxQ0S2+gGi
-        XkklnbdOgQuWaUEYXAXObCVWLzX5kcc=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-mm@kvack.org, Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/slub: fix memory leak with using debugfs_lookup()
-Message-ID: <Y91ItjBG25jaIrDO@P9FQF9L96D.corp.robot.car>
-References: <20230202142022.2300096-1-gregkh@linuxfoundation.org>
+        Fri, 3 Feb 2023 12:49:06 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5261110404;
+        Fri,  3 Feb 2023 09:48:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=7uos+Mc2JLD9U+b4knd+02QDLevvfvKGyAIjRrLhW2g=; b=JsiREVCjJi0npvy0C67Tr6vvo+
+        O7tnwn6nRPTxinD6ooH/g2zpV9ulDU2Op3VTRSk6vtzO6K7P2dwAJDwUhOUhu/k7BtCWhJM2tHeyE
+        ok+siDHFE17za8At6Gmfgbzt/gidoRnx1qWW6AfQFHKueHAL+Y5WfzUiPcNgACcSBf9I=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pO0Ad-0041z4-4m; Fri, 03 Feb 2023 18:48:19 +0100
+Date:   Fri, 3 Feb 2023 18:48:19 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        michael@walle.cc
+Subject: Re: [PATCH net-next v2] net: micrel: Add support for lan8841 PHY
+Message-ID: <Y91I45dzZyweVDiU@lunn.ch>
+References: <20230203122542.436305-1-horatiu.vultur@microchip.com>
+ <Y90YrXHeyR6f26Px@lunn.ch>
+ <20230203152548.nqrewntwi2tyx4pz@soft-dev3-1>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230202142022.2300096-1-gregkh@linuxfoundation.org>
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <20230203152548.nqrewntwi2tyx4pz@soft-dev3-1>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,26 +51,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 03:20:22PM +0100, Greg Kroah-Hartman wrote:
-> When calling debugfs_lookup() the result must have dput() called on it,
-> otherwise the memory will leak over time.  To make things simpler, just
-> call debugfs_lookup_and_remove() instead which handles all of the logic
-> at once.
+On Fri, Feb 03, 2023 at 04:25:48PM +0100, Horatiu Vultur wrote:
+> The 02/03/2023 15:22, Andrew Lunn wrote:
 > 
-> Cc: Christoph Lameter <cl@linux.com>
-> Cc: Pekka Enberg <penberg@kernel.org>
-> Cc: David Rientjes <rientjes@google.com>
-> Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Vlastimil Babka <vbabka@suse.cz>
-> Cc: Roman Gushchin <roman.gushchin@linux.dev>
-> Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-> Cc: linux-mm@kvack.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Hi Andrew,
+> 
+> > 
+> > > +{
+> > > +     char *rx_data_skews[4] = {"rxd0-skew-psec", "rxd1-skew-psec",
+> > > +                               "rxd2-skew-psec", "rxd3-skew-psec"};
+> > > +     char *tx_data_skews[4] = {"txd0-skew-psec", "txd1-skew-psec",
+> > > +                               "txd2-skew-psec", "txd3-skew-psec"};
+> > 
+> > Please take a read of
+> > Documentation/devicetree/bindings/net/micrel-ksz90x1.txt and then add
+> > a section which describes what these properties mean for this PHY,
+> > since nearly every microchip PHY has a different meaning :-(
+> 
+> I had a closer look at the datasheet of this PHY, and these properties
+> for lan8841 are the same for ksz9131, so actually I can reuse the
+> function 'ksz9131_config_init', to remove some of the duplicated code.
 
-Good catch!
+Great.
 
-Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
+> In this case maybe is enough to add the following change in
+> 'micrel-ksz90x1.txt' not to create a totally new section.
+> 
+>  KSZ9131:
+> +LAN8841:
 
-Thanks!
+Yes, that is good, and KSZ9131 is about the only one which actually
+gets this right, so it is a good you can reuse it.
+
+     Andrew
