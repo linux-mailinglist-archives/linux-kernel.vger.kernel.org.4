@@ -2,82 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79B65688D3F
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 03:48:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84CDA688D45
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 03:49:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231871AbjBCCsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 21:48:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54464 "EHLO
+        id S231426AbjBCCtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 21:49:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231635AbjBCCsP (ORCPT
+        with ESMTP id S231894AbjBCCtE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 21:48:15 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B2A2B1F5DA;
-        Thu,  2 Feb 2023 18:48:10 -0800 (PST)
-Received: from loongson.cn (unknown [10.20.42.133])
-        by gateway (Coremail) with SMTP id _____8DxSurpddxjJxUNAA--.26113S3;
-        Fri, 03 Feb 2023 10:48:09 +0800 (CST)
-Received: from [10.20.42.133] (unknown [10.20.42.133])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxY+Xkddxj6DUoAA--.43750S3;
-        Fri, 03 Feb 2023 10:48:06 +0800 (CST)
-Message-ID: <c5925b1c-8251-43e4-9ca2-6d3dfb45025d@loongson.cn>
-Date:   Fri, 3 Feb 2023 10:48:04 +0800
+        Thu, 2 Feb 2023 21:49:04 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB0388CC7
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 18:48:52 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id dr8so11622433ejc.12
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 18:48:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ssp0tYsGiD2wY3B3DGIo6QkUzze0YWa6hi7rXepDkb4=;
+        b=spkM/U5VoThD/brvY9ju/nMSYtv5QRq/KCCflZYFuQNLBWe3jtI+hjcvxUwoQCByE1
+         VR5eZmIYxtNYeGPKFulbHvnGN/0JFucqiP4uyABqW0n9PZ+tIQzft24GfjPyiL2koXeD
+         U3e9asI4QaAxfFUFXZeN+FgAoK+bvOPBr1Y4JawYJMXKz7/Ip8vFaJob05v7w1a9m1JK
+         KI9yaWTYSnByYpxu2QVQAeEFQxiDWcrCONp+t+HOlVbAtNA36e5fxxTKcWB2Oo0YEBWa
+         V1V3aBMM31BcieD3rdbCToqUWX201WMWj2RlAcoqEaJ72XWJ5pKcltCjtgySFqKOIjbv
+         n+rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ssp0tYsGiD2wY3B3DGIo6QkUzze0YWa6hi7rXepDkb4=;
+        b=wbBENlhEuWdBkYCmJRS9uZ/yT4Yq0/2hJtrW4WDyXnIttPCvs4PzYGWbL/gs40PuK8
+         eIm5c61P+xHHGGLE0zTo4jEhkEE1Aexscb30qVkPZesFT07g5U0dpsY9tLhoYn7mIu/d
+         K2b6iAzNLq6ecNqd7xSVkZa9CIYpQbteNU2IwmYUIuJNHungY5Hke+OWtKRVvycRG8EL
+         cvKbGK038F8zLnpxHc7PRKoeF3mXI2pIfiGZfdb5GTejx2y5su6gUkXM1b/xaJVXgqcl
+         1qIktCM/0YLS7PRXIjtoGIPYX45xKjsHNUElSEoVAr/BFIik9JLGh4mVMvwhWrpqC/NI
+         1zDg==
+X-Gm-Message-State: AO0yUKVp+Jm+emOSiwg+xaZfCCktr2143BPV/P2IBxAGA2SdMDSyXlSD
+        tYtdm1Zl8E7ZiSrkjLqp4sr6cg==
+X-Google-Smtp-Source: AK7set+whWb0bDbuWGa8nmgHnP15jP1PhF9qSUmyaBXg2Yk7Dw+pIOxVTOaw5W3axnbzV5RnBpnLQw==
+X-Received: by 2002:a17:906:c411:b0:889:14ec:21ae with SMTP id u17-20020a170906c41100b0088914ec21aemr8874834ejz.32.1675392530811;
+        Thu, 02 Feb 2023 18:48:50 -0800 (PST)
+Received: from [192.168.1.101] (abyl20.neoplus.adsl.tpnet.pl. [83.9.31.20])
+        by smtp.gmail.com with ESMTPSA id s13-20020a170906c30d00b0088842b00241sm657296ejz.114.2023.02.02.18.48.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Feb 2023 18:48:50 -0800 (PST)
+Message-ID: <b57730e5-e12a-e06e-a82b-9eddc5bdd8c7@linaro.org>
+Date:   Fri, 3 Feb 2023 03:48:47 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v11 7/7] drm/lsdc: add drm driver for loongson display
- controller
+ Thunderbird/102.7.0
+Subject: Re: [PATCH 03/23] interconnect: fix provider registration API
 Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>, Sui Jingfeng <15330273260@189.cn>
-Cc:     Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Zack Rusin <zackr@vmware.com>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Ilia Mirkin <imirkin@alum.mit.edu>,
-        Qing Zhang <zhangqing@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, kernel test robot <lkp@intel.com>
-References: <20220321162916.1116541-1-15330273260@189.cn>
- <20220321162916.1116541-8-15330273260@189.cn>
- <Yjo2R5LQrRICr7dC@robh.at.kernel.org>
-From:   suijingfeng <suijingfeng@loongson.cn>
-In-Reply-To: <Yjo2R5LQrRICr7dC@robh.at.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxY+Xkddxj6DUoAA--.43750S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvAXoW3Kr47ZryDZw1fGw4kXFyxXwb_yoW8WrW7Wo
-        WfZwsIvw1xtry2y345A34xXFZIv3sruw13Aa17ArnxCrWjg3Z8GF1aqw1rur4fCr43Aa18
-        Aa4jgws8AF4jv3Wfn29KB7ZKAUJUUUjU529EdanIXcx71UUUUU7KY7ZEXasCq-sGcSsGvf
-        J3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnRJU
-        UUPab4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s
-        0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84
-        ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1U
-        M2kKe7AKxVWUtVW8ZwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zV
-        CFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUtVWrXwAv7VC2
-        z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2
-        IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E
-        4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jw0_GFylx2IqxVAqx4xG67AKxVWUJVWUGw
-        C20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48J
-        MIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMI
-        IF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E
-        87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUShiSDUUUU
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+References: <20230201101559.15529-1-johan+linaro@kernel.org>
+ <20230201101559.15529-4-johan+linaro@kernel.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230201101559.15529-4-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -85,484 +93,147 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 2022/3/23 04:49, Rob Herring wrote:
-> On Tue, Mar 22, 2022 at 12:29:16AM +0800, Sui Jingfeng wrote:
->> From: suijingfeng <suijingfeng@loongson.cn>
->>
->> There is a display controller in loongson's LS2K1000 SoC and LS7A1000
->> bridge chip, the display controller is a PCI device in those chips. It
->> has two display pipes but with only one hardware cursor. Each way has
->> a DVO interface which provide RGB888 signals, vertical & horizontal
->> synchronisations, data enable and the pixel clock. Each CRTC is able to
->> scanout from 1920x1080 resolution at 60Hz, the maxmium resolution is
->> 2048x2048 according to the hardware spec. Loongson display controllers
->> are simple which require scanout buffers to be physically contiguous.
->>
->> For LS7A1000 bridge chip, the DC is equipped with a dedicated video RAM
->> which is typically 64MB or more. In this case, VRAM helper based driver
->> is intend to be used. While LS2K1000 is a SoC, only system memory is
->> available. Therefore CMA helper based driver is intend to be used. It is
->> possible to use VRAM helper based solution by carving out part of system
->> memory as VRAM though.
->>
->> For LS7A1000, there are 4 dedicated GPIOs whose control register is
->> located at the DC register space, They are used to emulate two way i2c.
->> One for DVO0, another for DVO1. LS2K1000 and LS2K0500 SoC don't have such
->> GPIO hardwared, they grab i2c adapter from other module, either general
->> purpose GPIO emulated i2c or hardware i2c adapter.
->>
->>      +------+            +-----------------------------------+
->>      | DDR4 |            |  +-------------------+            |
->>      +------+            |  | PCIe Root complex |   LS7A1000 |
->>         || MC0           |  +--++---------++----+            |
->>    +----------+  HT 3.0  |     ||         ||                 |
->>    | LS3A4000 |<-------->| +---++---+  +--++--+    +---------+   +------+
->>    |   CPU    |<-------->| | GC1000 |  | LSDC |<-->| DDR3 MC |<->| VRAM |
->>    +----------+          | +--------+  +-+--+-+    +---------+   +------+
->>         || MC1           +---------------|--|----------------+
->>      +------+                            |  |
->>      | DDR4 |          +-------+   DVO0  |  |  DVO1   +------+
->>      +------+   VGA <--|ADV7125|<--------+  +-------->|TFP410|--> DVI/HDMI
->>                        +-------+                      +------+
->>
->> The above picture give a simple usage of LS7A1000, note that the encoder
->> is not necessary adv7125 or tfp410, other candicates can be ch7034b,
->> sil9022, ite66121 and lt8618 etc.
->>
->> v2: Fixup warnings reported by kernel test robot
->>
->> v3: Fix more grammar mistakes in Kconfig reported by Randy Dunlap and give
->>      more details about lsdc.
->>
->> v4:
->>     1) Add dts required and explain why device tree is required.
->>     2) Give more description about lsdc and VRAM helper based driver.
->>     3) Fix warnings reported by kernel test robot.
->>     4) Introduce stride_alignment member into struct lsdc_chip_desc, the
->>        stride alignment is 256 bytes for ls7a1000, ls2k1000 and ls2k0500.
->>
->> v5:
->>     1) Using writel and readl replace writeq and readq, to fix kernel test
->>        robot report build error on other archtecture.
->>     2) Set default fb format to XRGB8888 at crtc reset time.
->>
->> v6:
->>     1) Explain why we are not switch to drm dridge subsystem on ls2k1000.
->>     2) Explain why tiny drm driver is not suitable for us.
->>     3) Give a short description of the trival dirty uppdate implement based
->>        on CMA helper.
->>
->> v7:
->>     1) Remove select I2C_GPIO and I2C_LS2X in Kconfig, it is not ready now
->>     2) Licensing issues are fixed suggested by Krzysztof Kozlowski.
->>     3) Remove lsdc_pixpll_print(), part of it move to debugfs.
->>     4) Set prefer_shadow to true if vram based driver is in using.
->>     5) Replace double blank lines with single line in all files.
->>     6) Verbose cmd line parameter is replaced with drm_dbg()
->>     7) All warnnings reported by ./scripts/checkpatch.pl --strict are fixed
->>     8) Get edid from dtb support is removed as suggested by Maxime Ripard
->>     9) Fix typos and various improvement
->>
->> v8:
->>     1) Drop damage update implement and its command line.
->>     2) Drop DRM_LSDC_VRAM_DRIVER config option as suggested by Maxime.
->>     3) Deduce DC's identification from its compatible property.
->>     4) Drop the board specific dts patch.
->>     5) Add documention about the display controller device node.
->>
->> v9:
->>     1) Fix the warnings reported by checkpatch script and fix typos
->>
->> v10:
->>     1) Pass `make dt_binding_check` validation
->>     2) Fix warnings reported by kernel test robot
->>
->> v11:
->>     1) Convert the driver to use drm bridge and of graph framework.
->>     2) Dump register value support through debugfs.
->>
->> Reported-by: kernel test robot <lkp@intel.com>
->> Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
->> Signed-off-by: Sui Jingfeng <15330273260@189.cn>
->> Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
->> ---
->>   drivers/gpu/drm/Kconfig             |   2 +
->>   drivers/gpu/drm/Makefile            |   1 +
->>   drivers/gpu/drm/lsdc/Kconfig        |  23 ++
->>   drivers/gpu/drm/lsdc/Makefile       |  13 +
->>   drivers/gpu/drm/lsdc/lsdc_crtc.c    | 396 +++++++++++++++++++
->>   drivers/gpu/drm/lsdc/lsdc_drv.c     | 547 ++++++++++++++++++++++++++
->>   drivers/gpu/drm/lsdc/lsdc_drv.h     | 197 ++++++++++
->>   drivers/gpu/drm/lsdc/lsdc_i2c.c     | 235 ++++++++++++
->>   drivers/gpu/drm/lsdc/lsdc_i2c.h     |  42 ++
->>   drivers/gpu/drm/lsdc/lsdc_irq.c     |  58 +++
->>   drivers/gpu/drm/lsdc/lsdc_irq.h     |  18 +
->>   drivers/gpu/drm/lsdc/lsdc_output.c  | 262 +++++++++++++
->>   drivers/gpu/drm/lsdc/lsdc_output.h  |  24 ++
->>   drivers/gpu/drm/lsdc/lsdc_pci_drv.c | 328 ++++++++++++++++
->>   drivers/gpu/drm/lsdc/lsdc_plane.c   | 470 +++++++++++++++++++++++
->>   drivers/gpu/drm/lsdc/lsdc_pll.c     | 574 ++++++++++++++++++++++++++++
->>   drivers/gpu/drm/lsdc/lsdc_pll.h     |  88 +++++
->>   drivers/gpu/drm/lsdc/lsdc_regs.h    | 220 +++++++++++
->>   18 files changed, 3498 insertions(+)
->>   create mode 100644 drivers/gpu/drm/lsdc/Kconfig
->>   create mode 100644 drivers/gpu/drm/lsdc/Makefile
->>   create mode 100644 drivers/gpu/drm/lsdc/lsdc_crtc.c
->>   create mode 100644 drivers/gpu/drm/lsdc/lsdc_drv.c
->>   create mode 100644 drivers/gpu/drm/lsdc/lsdc_drv.h
->>   create mode 100644 drivers/gpu/drm/lsdc/lsdc_i2c.c
->>   create mode 100644 drivers/gpu/drm/lsdc/lsdc_i2c.h
->>   create mode 100644 drivers/gpu/drm/lsdc/lsdc_irq.c
->>   create mode 100644 drivers/gpu/drm/lsdc/lsdc_irq.h
->>   create mode 100644 drivers/gpu/drm/lsdc/lsdc_output.c
->>   create mode 100644 drivers/gpu/drm/lsdc/lsdc_output.h
->>   create mode 100644 drivers/gpu/drm/lsdc/lsdc_pci_drv.c
->>   create mode 100644 drivers/gpu/drm/lsdc/lsdc_plane.c
->>   create mode 100644 drivers/gpu/drm/lsdc/lsdc_pll.c
->>   create mode 100644 drivers/gpu/drm/lsdc/lsdc_pll.h
->>   create mode 100644 drivers/gpu/drm/lsdc/lsdc_regs.h
-> [...]
->
->> diff --git a/drivers/gpu/drm/lsdc/lsdc_i2c.c b/drivers/gpu/drm/lsdc/lsdc_i2c.c
->> new file mode 100644
->> index 000000000000..55beed9266fa
->> --- /dev/null
->> +++ b/drivers/gpu/drm/lsdc/lsdc_i2c.c
->> @@ -0,0 +1,235 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * KMS driver for Loongson display controller
-> Not really a useful comment since every file has the same one.
->
->> + * Copyright (C) 2022 Loongson Corporation
->> + */
->> +
->> +/*
->> + * Authors:
->> + *      Sui Jingfeng <suijingfeng@loongson.cn>
->> + */
->> +
->> +#include <linux/i2c.h>
->> +#include <linux/pci.h>
->> +
->> +#include "lsdc_drv.h"
->> +#include "lsdc_regs.h"
->> +#include "lsdc_i2c.h"
->> +
->> +/*
->> + * ls7a_gpio_i2c_set - set the state of a gpio pin indicated by mask
->> + * @mask: gpio pin mask
->> + */
->> +static void ls7a_gpio_i2c_set(struct lsdc_i2c * const li2c, int mask, int state)
->> +{
->> +	unsigned long flags;
->> +	u8 val;
->> +
->> +	spin_lock_irqsave(&li2c->reglock, flags);
-> What are you protecting? Doesn't the caller serialize calls to these
-> functions?
->
->> +
->> +	if (state) {
->> +		val = readb(li2c->dir_reg);
->> +		val |= mask;
->> +		writeb(val, li2c->dir_reg);
->> +	} else {
->> +		val = readb(li2c->dir_reg);
->> +		val &= ~mask;
->> +		writeb(val, li2c->dir_reg);
->> +
->> +		val = readb(li2c->dat_reg);
->> +		if (state)
-> This condition is never true. We're in the 'else' because !state.
->
->> +			val |= mask;
->> +		else
->> +			val &= ~mask;
->> +		writeb(val, li2c->dat_reg);
-> Shouldn't you set the data register low first and then change the
-> direction? Otherwise, you may be driving high for a moment. However, if
-> high is always done by setting the direction as input,
 
-Setting the direction as input will get high, because the external
-pull-up resistor will pull the level up.
+On 1.02.2023 11:15, Johan Hovold wrote:
+> The current interconnect provider interface is inherently racy as
+> providers are expected to be added before being fully initialised.
+> 
+> Specifically, nodes are currently not added and the provider data is not
+> initialised until after registering the provider which can cause racing
+> DT lookups to fail.
+> 
+> Add a new provider API which will be used to fix up the interconnect
+> drivers.
+> 
+> The old API is reimplemented using the new interface and will be removed
+> once all drivers have been fixed.
+> 
+> Fixes: 11f1ceca7031 ("interconnect: Add generic on-chip interconnect API")
+> Fixes: 87e3031b6fbd ("interconnect: Allow endpoints translation via DT")
+> Cc: stable@vger.kernel.org      # 5.1
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-> why write the
-> data register each time? I'm assuming whatever is written to the dat_reg
-> is maintained regardless of pin state.
->
-Because we have only one data reg corresponding two direction(input and 
-output).
-
-our DC hardware design engineer is not good. :(
-
-Value written to the dat_reg will get flushed when pin state changed.
-
-Changed from output to input, for example. Otherwise, how can we read the pin level state back?
-
->> +	}
->> +
->> +	spin_unlock_irqrestore(&li2c->reglock, flags);
->> +}
->> +
->> +/*
->> + * ls7a_gpio_i2c_get - read value back from gpio pin
->> + * @mask: gpio pin mask
->> + */
->> +static int ls7a_gpio_i2c_get(struct lsdc_i2c * const li2c, int mask)
->> +{
->> +	unsigned long flags;
->> +	u8 val;
->> +
->> +	spin_lock_irqsave(&li2c->reglock, flags);
->> +
->> +	/* first set this pin as input */
->> +	val = readb(li2c->dir_reg);
->> +	val |= mask;
->> +	writeb(val, li2c->dir_reg);
->> +
->> +	/* then get level state from this pin */
->> +	val = readb(li2c->dat_reg);
->> +
->> +	spin_unlock_irqrestore(&li2c->reglock, flags);
->> +
->> +	return (val & mask) ? 1 : 0;
->> +}
->> +
->> +/* set the state on the i2c->sda pin */
->> +static void ls7a_i2c_set_sda(void *i2c, int state)
->> +{
->> +	struct lsdc_i2c * const li2c = (struct lsdc_i2c *)i2c;
->> +
->> +	return ls7a_gpio_i2c_set(li2c, li2c->sda, state);
->> +}
->> +
->> +/* set the state on the i2c->scl pin */
->> +static void ls7a_i2c_set_scl(void *i2c, int state)
->> +{
->> +	struct lsdc_i2c * const li2c = (struct lsdc_i2c *)i2c;
->> +
->> +	return ls7a_gpio_i2c_set(li2c, li2c->scl, state);
->> +}
->> +
->> +/* read the value from the i2c->sda pin */
->> +static int ls7a_i2c_get_sda(void *i2c)
->> +{
->> +	struct lsdc_i2c * const li2c = (struct lsdc_i2c *)i2c;
->> +
->> +	return ls7a_gpio_i2c_get(li2c, li2c->sda);
->> +}
->> +
->> +/* read the value from the i2c->scl pin */
->> +static int ls7a_i2c_get_scl(void *i2c)
->> +{
->> +	struct lsdc_i2c * const li2c = (struct lsdc_i2c *)i2c;
->> +
->> +	return ls7a_gpio_i2c_get(li2c, li2c->scl);
->> +}
->> +
->> +/*
->> + * mainly for dc in ls7a1000 which have builtin gpio emulated i2c
->> + *
->> + * @index : output channel index, 0 for DVO0, 1 for DVO1
->> + */
->> +struct lsdc_i2c *lsdc_create_i2c_chan(struct device *dev, void *base, unsigned int index)
->> +{
->> +	char compat[32] = {0};
->> +	unsigned int udelay = 5;
->> +	unsigned int timeout = 2200;
->> +	int nr = -1;
->> +	struct i2c_adapter *adapter;
->> +	struct lsdc_i2c *li2c;
->> +	struct device_node *i2c_np;
->> +	int ret;
->> +
->> +	li2c = devm_kzalloc(dev, sizeof(*li2c), GFP_KERNEL);
->> +	if (!li2c)
->> +		return ERR_PTR(-ENOMEM);
->> +
->> +	li2c->index = index;
->> +	li2c->dev = dev;
->> +
->> +	if (index == 0) {
->> +		li2c->sda = 0x01;
->> +		li2c->scl = 0x02;
->> +	} else if (index == 1) {
->> +		li2c->sda = 0x04;
->> +		li2c->scl = 0x08;
-> Just require this to be in DT rather than having some default.
->
-If only this driver  be used in embedded environment(like arms and 
-risc-v), relay on DT solely is the right way.
-
-But Loongson display controller have been applied in both PC class 
-desktop(using UEFI+ACPI) and  embedded environment(using DT),  this is 
-the key difference. I suddenly realize that  i didn't explain this fact 
-clearly at that time.
-
-The default code works in almost 99% case, through.
-
->> +	}
->> +
->> +	spin_lock_init(&li2c->reglock);
->> +
->> +	snprintf(compat, sizeof(compat), "lsdc,i2c-gpio-%d", index);
-> compatible values shouldn't have an index and you shouldn't need a
-> index in DT. You need to iterate over child nodes with matching
-> compatible.
->
->> +	i2c_np = of_find_compatible_node(dev->of_node, NULL, compat);
->> +	if (i2c_np) {
->> +		u32 sda, scl;
->> +
->> +		dev_dbg(dev, "Has %s property in the DT", compat);
->> +
->> +		/*  */
->> +		ret = of_property_read_u32(i2c_np, "sda", &sda);
-> Custom properties need a vendor prefix.
->
->> +		if (ret == 0)
->> +			li2c->sda = 1 << sda;
->> +
->> +		ret = of_property_read_u32(i2c_np, "scl", &scl);
->> +		if (ret == 0)
->> +			li2c->scl = 1 << scl;
->> +
->> +		/* Optional properties which made the driver more flexible */
->> +		of_property_read_u32(i2c_np, "udelay", &udelay);
->> +		of_property_read_u32(i2c_np, "timeout", &timeout);
-> These aren't documented. Do you really need them in DT?
->
->> +		of_property_read_u32(i2c_np, "reg", &nr);
->> +	}
->> +
->> +	dev_dbg(dev, "%s: sda=%u, scl=%u, nr=%d, udelay=%u, timeout=%u\n",
->> +		compat, li2c->sda, li2c->scl, nr, udelay, timeout);
->> +
->> +	li2c->reg_base = base;
->> +
->> +	li2c->dir_reg = li2c->reg_base + LS7A_DC_GPIO_DIR_REG;
->> +	li2c->dat_reg = li2c->reg_base + LS7A_DC_GPIO_DAT_REG;
->> +
->> +	li2c->bit.setsda = ls7a_i2c_set_sda;
->> +	li2c->bit.setscl = ls7a_i2c_set_scl;
->> +	li2c->bit.getsda = ls7a_i2c_get_sda;
->> +	li2c->bit.getscl = ls7a_i2c_get_scl;
->> +	li2c->bit.udelay = udelay;
->> +	li2c->bit.timeout = usecs_to_jiffies(timeout);
->> +	li2c->bit.data = li2c;
->> +
->> +	adapter = &li2c->adapter;
->> +	adapter->algo_data = &li2c->bit;
->> +	adapter->owner = THIS_MODULE;
->> +	adapter->class = I2C_CLASS_DDC;
->> +	adapter->dev.parent = dev;
->> +	adapter->nr = nr;
->> +	if (i2c_np) {
->> +		adapter->dev.of_node = i2c_np;
->> +		of_node_put(i2c_np);
->> +	}
->> +
->> +	strscpy(adapter->name, &compat[5], sizeof(adapter->name));
->> +
->> +	i2c_set_adapdata(adapter, li2c);
->> +
->> +	ret = i2c_bit_add_numbered_bus(adapter);
-> Why do you care what the bus number is? You shouldn't need to.
-
-Yes, we didn't need that. the i2c core will allocate one for us automatically.
-
-Your advice is valuable, thanks your kindness review.
-
->> +	if (ret) {
->> +		if (i2c_np)
->> +			of_node_put(i2c_np);
->> +
->> +		devm_kfree(dev, li2c);
->> +		return ERR_PTR(ret);
->> +	}
->> +
->> +	return li2c;
->> +}
->> +
->> +void lsdc_destroy_i2c(struct drm_device *ddev, struct lsdc_i2c *li2c)
->> +{
->> +	struct i2c_adapter *adapter;
->> +
->> +	if (li2c) {
->> +		adapter = &li2c->adapter;
->> +
->> +		if (adapter && adapter->dev.of_node)
->> +			of_node_put(adapter->dev.of_node);
->> +
->> +		devm_kfree(ddev->dev, li2c);
->> +	}
->> +}
->> +
->> +struct i2c_adapter *lsdc_get_i2c_adapter(struct lsdc_device *ldev,
->> +					 unsigned int index)
->> +{
->> +	const struct lsdc_chip_desc * const descp = ldev->desc;
->> +	struct lsdc_i2c *li2c;
->> +
->> +	if (index >= descp->num_of_crtc) {
->> +		drm_err(ldev->ddev, "I2c adapter is no more than %u, %u\n",
->> +			descp->num_of_crtc, index);
->> +		return NULL;
->> +	}
->> +
->> +	li2c = ldev->li2c[index];
->> +	if (li2c)
->> +		return &li2c->adapter;
->> +
->> +	return NULL;
->> +}
->> diff --git a/drivers/gpu/drm/lsdc/lsdc_i2c.h b/drivers/gpu/drm/lsdc/lsdc_i2c.h
->> new file mode 100644
->> index 000000000000..4ab825143eb4
->> --- /dev/null
->> +++ b/drivers/gpu/drm/lsdc/lsdc_i2c.h
->> @@ -0,0 +1,42 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +/*
->> + * KMS driver for Loongson display controller
->> + * Copyright (C) 2022 Loongson Corporation
->> + */
->> +
->> +/*
->> + * Authors:
->> + *      Sui Jingfeng <suijingfeng@loongson.cn>
->> + */
->> +
->> +#ifndef __LSDC_I2C__
->> +#define __LSDC_I2C__
->> +
->> +#include <linux/i2c.h>
->> +#include <linux/i2c-algo-bit.h>
->> +#include <linux/pci.h>
->> +
->> +struct lsdc_i2c {
->> +	struct device *dev;
->> +	struct i2c_adapter adapter;
->> +	struct i2c_algo_bit_data bit;
->> +	/* @reglock: protects concurrent register access */
->> +	spinlock_t reglock;
->> +	void __iomem *reg_base;
->> +	void __iomem *dir_reg;
->> +	void __iomem *dat_reg;
->> +	int index;
->> +	/* pin bit mask */
->> +	u8 sda;
->> +	u8 scl;
->> +};
->> +
->> +void lsdc_destroy_i2c(struct drm_device *ddev, struct lsdc_i2c *li2c);
->> +
->> +struct lsdc_i2c *lsdc_create_i2c_chan(struct device *dev,
->> +				      void *base,
->> +				      unsigned int index);
->> +
->> +struct i2c_adapter *lsdc_get_i2c_adapter(struct lsdc_device *ldev,
->> +					 unsigned int index);
->> +#endif
-
+Konrad
+>  drivers/interconnect/core.c           | 52 +++++++++++++++++++--------
+>  include/linux/interconnect-provider.h | 12 +++++++
+>  2 files changed, 50 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
+> index 43c5c8503ee8..93d27ff8eef6 100644
+> --- a/drivers/interconnect/core.c
+> +++ b/drivers/interconnect/core.c
+> @@ -1030,44 +1030,68 @@ int icc_nodes_remove(struct icc_provider *provider)
+>  EXPORT_SYMBOL_GPL(icc_nodes_remove);
+>  
+>  /**
+> - * icc_provider_add() - add a new interconnect provider
+> - * @provider: the interconnect provider that will be added into topology
+> + * icc_provider_init() - initialize a new interconnect provider
+> + * @provider: the interconnect provider to initialize
+> + *
+> + * Must be called before adding nodes to the provider.
+> + */
+> +void icc_provider_init(struct icc_provider *provider)
+> +{
+> +	WARN_ON(!provider->set);
+> +
+> +	INIT_LIST_HEAD(&provider->nodes);
+> +}
+> +EXPORT_SYMBOL_GPL(icc_provider_init);
+> +
+> +/**
+> + * icc_provider_register() - register a new interconnect provider
+> + * @provider: the interconnect provider to register
+>   *
+>   * Return: 0 on success, or an error code otherwise
+>   */
+> -int icc_provider_add(struct icc_provider *provider)
+> +int icc_provider_register(struct icc_provider *provider)
+>  {
+> -	if (WARN_ON(!provider->set))
+> -		return -EINVAL;
+>  	if (WARN_ON(!provider->xlate && !provider->xlate_extended))
+>  		return -EINVAL;
+>  
+>  	mutex_lock(&icc_lock);
+> -
+> -	INIT_LIST_HEAD(&provider->nodes);
+>  	list_add_tail(&provider->provider_list, &icc_providers);
+> -
+>  	mutex_unlock(&icc_lock);
+>  
+> -	dev_dbg(provider->dev, "interconnect provider added to topology\n");
+> +	dev_dbg(provider->dev, "interconnect provider registered\n");
+>  
+>  	return 0;
+>  }
+> -EXPORT_SYMBOL_GPL(icc_provider_add);
+> +EXPORT_SYMBOL_GPL(icc_provider_register);
+>  
+>  /**
+> - * icc_provider_del() - delete previously added interconnect provider
+> - * @provider: the interconnect provider that will be removed from topology
+> + * icc_provider_deregister() - deregister an interconnect provider
+> + * @provider: the interconnect provider to deregister
+>   */
+> -void icc_provider_del(struct icc_provider *provider)
+> +void icc_provider_deregister(struct icc_provider *provider)
+>  {
+>  	mutex_lock(&icc_lock);
+>  	WARN_ON(provider->users);
+> -	WARN_ON(!list_empty(&provider->nodes));
+>  
+>  	list_del(&provider->provider_list);
+>  	mutex_unlock(&icc_lock);
+>  }
+> +EXPORT_SYMBOL_GPL(icc_provider_deregister);
+> +
+> +int icc_provider_add(struct icc_provider *provider)
+> +{
+> +	icc_provider_init(provider);
+> +
+> +	return icc_provider_register(provider);
+> +}
+> +EXPORT_SYMBOL_GPL(icc_provider_add);
+> +
+> +void icc_provider_del(struct icc_provider *provider)
+> +{
+> +	WARN_ON(!list_empty(&provider->nodes));
+> +
+> +	icc_provider_deregister(provider);
+> +}
+>  EXPORT_SYMBOL_GPL(icc_provider_del);
+>  
+>  static const struct of_device_id __maybe_unused ignore_list[] = {
+> diff --git a/include/linux/interconnect-provider.h b/include/linux/interconnect-provider.h
+> index cd5c5a27557f..d12cd18aab3f 100644
+> --- a/include/linux/interconnect-provider.h
+> +++ b/include/linux/interconnect-provider.h
+> @@ -122,6 +122,9 @@ int icc_link_destroy(struct icc_node *src, struct icc_node *dst);
+>  void icc_node_add(struct icc_node *node, struct icc_provider *provider);
+>  void icc_node_del(struct icc_node *node);
+>  int icc_nodes_remove(struct icc_provider *provider);
+> +void icc_provider_init(struct icc_provider *provider);
+> +int icc_provider_register(struct icc_provider *provider);
+> +void icc_provider_deregister(struct icc_provider *provider);
+>  int icc_provider_add(struct icc_provider *provider);
+>  void icc_provider_del(struct icc_provider *provider);
+>  struct icc_node_data *of_icc_get_from_provider(struct of_phandle_args *spec);
+> @@ -167,6 +170,15 @@ static inline int icc_nodes_remove(struct icc_provider *provider)
+>  	return -ENOTSUPP;
+>  }
+>  
+> +static inline void icc_provider_init(struct icc_provider *provider) { }
+> +
+> +static inline int icc_provider_register(struct icc_provider *provider)
+> +{
+> +	return -ENOTSUPP;
+> +}
+> +
+> +static inline void icc_provider_deregister(struct icc_provider *provider) { }
+> +
+>  static inline int icc_provider_add(struct icc_provider *provider)
+>  {
+>  	return -ENOTSUPP;
