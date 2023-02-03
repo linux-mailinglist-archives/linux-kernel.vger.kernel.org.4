@@ -2,212 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EEA868923A
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 09:27:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC96C689244
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 09:31:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232335AbjBCI1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 03:27:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35798 "EHLO
+        id S231903AbjBCI3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 03:29:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232956AbjBCI0u (ORCPT
+        with ESMTP id S230144AbjBCI3G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 03:26:50 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5499233D1;
-        Fri,  3 Feb 2023 00:26:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675412808; x=1706948808;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=CMyHdPXX5PtWy3MOZtvoB8YWiT6NjXMDnRrUovdeaDE=;
-  b=Nam1kjOEy3UaIEHv3hKokvZT8w1L6+yBDXKxZlThA3tT+mxmIh60gbmx
-   OHfNFtCN9tyaObwY635O8gHsZvuhideWE+gXEJuKRpzc6Z3vZrj+cfec3
-   iJTeLWWhnwGnVpSvbcfQ7CINBbp9Facnr2EdoS3i/93L/HKlFg1Pxq3Zb
-   uFgirV5fLy8F51L6raJCxBAbvvqq85m6tiMpVGn0Q0dtltEJSXfKpCURM
-   +QEFNW7A5qeF7OCkVlJ+jknULZIGgp8POFZThrQUywnkoPssF2nPWJgQP
-   SP/XGaTxpMqwMRzc2tgmm7LmYzoSaCVV9QL3nLxYX3wlQrIqVIm1v8+mm
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="391088707"
-X-IronPort-AV: E=Sophos;i="5.97,269,1669104000"; 
-   d="scan'208";a="391088707"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2023 00:26:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="615626280"
-X-IronPort-AV: E=Sophos;i="5.97,269,1669104000"; 
-   d="scan'208";a="615626280"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga003.jf.intel.com with ESMTP; 03 Feb 2023 00:26:47 -0800
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 3 Feb 2023 00:26:47 -0800
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Fri, 3 Feb 2023 00:26:47 -0800
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.44) by
- edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Fri, 3 Feb 2023 00:26:46 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HI0nb8Uli9Uh4fTQuPs2aeHE7IEN5eZIUb9r7JQOAEzV3zTRy3WIvndPTrN1xWzUVYheqRPMdD4Wlb7irUhOVG47JG1AWZT97WDVDzcej+30BXPIgWeHIRgTjsuk6X1hkicnI8EMTDwKsPR0T/C8gBv7GyPUgWoHGBALdnkFbQKv8eQfI4txV27aTxb6d67CW8cdTIKtn+dIGk371CA+EMr2Oy0hTKg6VMYzcZAYYphg/2+lboXLQ0PrSVV8HGADOH+b4n3rnG8ffHxvrCftLuVzxc8pBWyCwtIkkYhGFMLEqQmJ8Wuz5lFpowCneVqyE1WAEFSZSmPPHB0Xj2jtFQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UfRsXrFI0gLgaEhN7xd23Ckhhe07raPURp9DgbNiugo=;
- b=lQwoxSZ6RpJsrnNdiiFEdVr12mPBg7v7TvYs1OClfym95v0Oqt0K0wcKUjEUicRcLH7lLU6RkZInWjLCZSFOOgMAkBizc7OUWyQgzrAeDh9WxjL+zuhVnl/TEdF352DF+q9XZJbvSsrsaMlZT5Zi9hmCOPNOT2/hJPuN80X+Yn/FXQ74frkTn87xYIiiNce48Eg4+MuXdT23WP+u+VlmBdGYVKobipW0gDjan4Ogm1zn/BIDAySSIlT7CH7G58nCPEJgajUD9nLoeETWtSelb4foj47LH+dZX80k57WI5sBjg57elCbgiG9DSMciBPWElVfz9gr7b9DpHWAY5I1JMg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by CY8PR11MB7337.namprd11.prod.outlook.com (2603:10b6:930:9d::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.24; Fri, 3 Feb
- 2023 08:26:45 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::6a8d:b95:e1b5:d79d]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::6a8d:b95:e1b5:d79d%8]) with mapi id 15.20.6064.027; Fri, 3 Feb 2023
- 08:26:45 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Nicolin Chen <nicolinc@nvidia.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "shuah@kernel.org" <shuah@kernel.org>
-CC:     "Liu, Yi L" <yi.l.liu@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>
-Subject: RE: [PATCH v1 2/8] iommu: Introduce a new
- iommu_group_replace_domain() API
-Thread-Topic: [PATCH v1 2/8] iommu: Introduce a new
- iommu_group_replace_domain() API
-Thread-Index: AQHZNtTMfIuYSgtAgESqEIXUquWnsq684BXw
-Date:   Fri, 3 Feb 2023 08:26:44 +0000
-Message-ID: <BN9PR11MB5276BB497D32073A1F4CBE238CD79@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <cover.1675320212.git.nicolinc@nvidia.com>
- <a98e622f41d76b64f5a7d0c758d8bda5e8043013.1675320212.git.nicolinc@nvidia.com>
-In-Reply-To: <a98e622f41d76b64f5a7d0c758d8bda5e8043013.1675320212.git.nicolinc@nvidia.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|CY8PR11MB7337:EE_
-x-ms-office365-filtering-correlation-id: ac23d1a3-f111-4a51-00f2-08db05c062b4
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: JROITvFdAYbYRj8SipZz9pbMOBRPhLVBUo2mGI4GVAz0z/L7lEqFQTAbbdHy90n3Gcwdq3jBckBczQJxXs5e4nvD9tX0cp2Je5qCs75NgQlPXF3YUDeeChy0o5Z72EqoRLaL1+SWNlRwJcUj/jsxmveoTJrCbbz6itlNBx1SoLldJy/GR4XWEUPaJVNjtwoQCFrErQE6ln5x6Ycfw/48EcaJI9uJVNgXwM/uPRulLhhXGlLg/Gg8GcUqYv1cudYWr3TPE75j+FTUmFjgm3tjB19P82xkpymeWvvkA0LwEVRf97FshHRELAdl2KoSQMwk7NK81TDl65jM/sHQn53C6gmsYTyiSyN6XTBzq8qSGCxChyKMZ1Nko+orTYaLW3jg9b5OhyH7dKyesACcPDibQt8py1EqlyNi/GPFCTihEm3+3gvt2H6cbUyq/G2fSfEqTfo9Q8JsLFh5JhPRfnQ6AHcpDPWrv9gFUJNVKa/U6nk0h26PByfGy5EruX4Fkwf60r9V5B8S53rINLT7ieN+/kt8zYX96BVZw38JVJhmcCQz8I/HKAPNR1WICZpL23F8qgV8XDr/3y9p6NmJ4sXnNs7zB7vAxXyMuDxTUGxvBfVJDLSvvKGxChWKNmWFlPLOZxf9njmLMUNkI7IWqAA8jbK66gNJuQH2F2u8UU5iuBCPyBvVA38k6JvL9ZyO2UyzWITxc58P6cWUyw9M1rLsKg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(376002)(136003)(346002)(396003)(366004)(39860400002)(451199018)(110136005)(66899018)(83380400001)(54906003)(2906002)(316002)(86362001)(478600001)(38100700002)(9686003)(55016003)(82960400001)(41300700001)(7416002)(8936002)(26005)(66476007)(52536014)(186003)(38070700005)(76116006)(71200400001)(64756008)(8676002)(66946007)(5660300002)(6506007)(66556008)(66446008)(7696005)(4326008)(33656002)(122000001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?RQX3kxSS+za4PcTX2acNHVlNd6Ay5dAjuDsfzR85B11X0CB6ySBVDWZk1Y13?=
- =?us-ascii?Q?SrEbBfDd7LZHgdVcRWKsZMTi+Q5JiypOIcH3Ji48LOoqqYZCaBW9BnGqIXjR?=
- =?us-ascii?Q?qzEakxEKbAXuSuTWNRXvDMAYw6sADk1IHZAsetBJIjAsWR4y+lbj4VDOwF76?=
- =?us-ascii?Q?AIYppMl1u9XvLVjwxVUN5edZLMrFRtuUuSivnGm3NPu7ijMmN/ytl+PXEyrA?=
- =?us-ascii?Q?0kfRNXl/oG8VvN1tsmrRmo0HwcdvTEmng2y4RfZSNGCVcCC6sVPDSLcs1yDW?=
- =?us-ascii?Q?mFr+2/oknEjUKxlx3WPxqgTk3Dm056wYezgU3FTC5wkS6l3rH01PuhxyMh5M?=
- =?us-ascii?Q?A7DRjw7HXfxIK4X2ltuoE3oHh+GU7itYbBn2PlxiUK9ZIGCZ6hfbaYVfKdOy?=
- =?us-ascii?Q?QqXJkH+26u4qMvg6QrxV5YQCwWS/1UQRZqgAClUySCqe9KQm2k6ksvshWvy3?=
- =?us-ascii?Q?hh094dbjEz5NvQkzHXg07EERITCrpDttJLL2SEPf5knMRWy/FrZSCBII3DOm?=
- =?us-ascii?Q?rs2nHwMja+8ZGTiitW46p+ljo9nN4hG/z7yXN1aNe4P8v5fPfD6ffP0/Pnps?=
- =?us-ascii?Q?gsPWTO0wARyrQN22RLb3LuOFgQcLI66JDA9nuwdq5UWQM/t8YGGPL3tvmBbs?=
- =?us-ascii?Q?Lm2k6O01+1HNPqXDGZvtwsYwe4nfP41knK66z8wQ2qam27O1L2aE9m0dHsev?=
- =?us-ascii?Q?8Aazhi9GZxVqlUaOXXSoiZfAzzeijaJ320J7Cb8nxkg9UjZcaNcVMF6R7U+C?=
- =?us-ascii?Q?UfDTRLe3v+ftHjn813DJ2UKMGI7XJfqya+gPqdamkvgsvAxQI3TKutIbBRir?=
- =?us-ascii?Q?bQqb55bmgQtf61WLQAi8q/HNJ4ceP1CV+KfhZVmsWl6KyMTM/J7qSFIP2rjt?=
- =?us-ascii?Q?nR7naXdA0UXZCULq2tNu9o4k2mA+Iib71U0jOS7olpzan1w7K8yS/Va/pzGX?=
- =?us-ascii?Q?Eb/HGkprMC4wmFwlhWnmj6WwMa5dKJh4FlJ0d5WWPN4LI1i8CWS1Wb90rQ52?=
- =?us-ascii?Q?2D3eeoMesQ9qNtj98Mr8Icomk8993EdEoU77sMgWO4O4rnY1Bmqzqd7s/0sC?=
- =?us-ascii?Q?BVuPKwprihmB6iO916hnR/M+Cdur3xGFMelDGvJn1mpYFHMC4BO6lMYUHjuR?=
- =?us-ascii?Q?dY+qbduR3ahl67T3VhljtqqAdWexV/ds/AcFF479hS3XpJIqu4xvdOqOxSkt?=
- =?us-ascii?Q?AGOskRQSV0O1AcN57cb7dQ3rmVoU1iX3r2MaPXX+KNmGBQvXQebjsSmornad?=
- =?us-ascii?Q?BhOif1S9LcB1ZqZuLO0Dao+gsOVqfyTYa3tGPOSt1PpuNXTLwc4ZJ0GXMase?=
- =?us-ascii?Q?6Zwef9HTYnf5pZwfI0i7ESH7NolrmQ4BHFrQDB2pkXtA1Rw7OzunqmMif9NG?=
- =?us-ascii?Q?UF4IJeD7PT4aZfRCHb5XNVP3ZZ1YNNFOX+JPsylMAwdkT3VdK9R5t2Tjg7GA?=
- =?us-ascii?Q?meb4C2y+E1O/PnRLYnKGOAs+Mgo/NLysDOaE1dzYUUBqG5DJZla9EmtU70FB?=
- =?us-ascii?Q?g1xcHX1ThW0WNl1Mahvpqa3pzhIxhP/rYyYQ0jw4WGtGFZuD3MD6lVcsfxBR?=
- =?us-ascii?Q?nIjFdMoy/EgHimcCb4RqJZZsYFem9wBPNzF95QgD?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 3 Feb 2023 03:29:06 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB2D72E82C
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 00:29:05 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id ud5so13286600ejc.4
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 00:29:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=dpL84PC61XGF4bI1Wp4i7V82ClX0FVUoqHPOZVNLf30=;
+        b=mHHKr460++WYAIvEx5JU2iUaIvdk9UW65RFfKcHiFc86BODpqyH67HRAwgBt2PXSV5
+         ZN9LDYktu3cp0FVv/f7qw61YCU9Xxi7jeKQiyWEV2twNstPED2916MeO0M8l6CmM2tde
+         GdwwPXRXM56HKTVpwsU3VlnOq0L/JxiCiij7MiZVQBEl7LsoObFEfZNYhFLShR2PqgkQ
+         ++d9WUJ7Rl+Lc5jA0b5m3jJV5Pnb2t0AA83/uEq4UyG2zH5A4If2filJQ2R6nbJr1S4p
+         7QSCPK2IZvcvylot16WOH17wpR9I/41zANfBN8nn5Q4+QOllVL5udWp8fIvLYM7/MyGO
+         nKpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dpL84PC61XGF4bI1Wp4i7V82ClX0FVUoqHPOZVNLf30=;
+        b=5ojN+xLSBXDt8sBR78oWoCWTlbEE8HF2NKDgkuAxz9mu8hykg5erOsuIG3yubgALtY
+         iqz85ajkbOSxee1JnHciCce/3/fqN1kN7OxTR+QEKRtOZVW6osFezqrxxU91j3JKh/le
+         vCEnjgHOQUZPqwrJ5MXeGRk7dzBtKwuT0U0Dm923BZS0FH+q4NVGu0jHT2/u8+tYPV12
+         cIyIlt1xVgh5WsiYECGeMytgL9jTKZqYwlx/GVMsirf/4qze/dMuP/2SbF+Nzn63A8Y2
+         y/39MtMoYEWvMmCQ1FNOdSwg4NU9OhhtPeF/EEeDrugQc0ZIBfXNO8WFxwS8HNbRiggP
+         PDCA==
+X-Gm-Message-State: AO0yUKXexXlhPUm0bTh2OHZlhqOKgAKBysGdCC5l6ZuznbC1GkHNCcO1
+        5cZr3VTu5UJ/ZNXrpMq3WHsNqA==
+X-Google-Smtp-Source: AK7set96VaXe7HSA/IoJo/3YWNZuEdA5SfkAOuZGoAYBrho81HrEjwcYQIWC05c//oqcQ0RyWiJIbw==
+X-Received: by 2002:a17:906:22c9:b0:878:61d8:d7c2 with SMTP id q9-20020a17090622c900b0087861d8d7c2mr9236402eja.39.1675412944139;
+        Fri, 03 Feb 2023 00:29:04 -0800 (PST)
+Received: from jade (h-46-59-78-111.A175.priv.bahnhof.se. [46.59.78.111])
+        by smtp.gmail.com with ESMTPSA id m24-20020a170906849800b0088b24b3aff8sm1021604ejx.183.2023.02.03.00.29.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Feb 2023 00:29:03 -0800 (PST)
+Date:   Fri, 3 Feb 2023 09:29:01 +0100
+From:   Jens Wiklander <jens.wiklander@linaro.org>
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     Masahisa Kojima <masahisa.kojima@linaro.org>,
+        Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org,
+        op-tee@lists.trustedfirmware.org,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: Re: [RFC PATCH 0/2] introduce op-tee based EFI Runtime Variable
+ Service
+Message-ID: <Y9zFzW2yj7uMI0XR@jade>
+References: <20230126132120.1661-1-masahisa.kojima@linaro.org>
+ <CAFA6WYMdTxkcFkSux7F3fwxx2OqHP9UzqbWxdGnxuzjNU75PxA@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ac23d1a3-f111-4a51-00f2-08db05c062b4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Feb 2023 08:26:45.0255
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Es8QZqkG8Iqa92AXMmx8skmAlO16zo30sESzNZDxU7U4LTrTi3nYgb/87n5THK2d1Dae4Oib7dteXA2BQrgrlw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR11MB7337
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAFA6WYMdTxkcFkSux7F3fwxx2OqHP9UzqbWxdGnxuzjNU75PxA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Nicolin Chen <nicolinc@nvidia.com>
-> Sent: Thursday, February 2, 2023 3:05 PM
->=20
-> All drivers are already required to support changing between active
-> UNMANAGED domains when using their attach_dev ops.
+Hi Sumit,
 
-All drivers which don't have *broken* UNMANAGED domain?
+On Thu, Feb 02, 2023 at 05:35:49PM +0530, Sumit Garg wrote:
+> Hi Masahisa,
+> 
+> On Thu, 26 Jan 2023 at 18:52, Masahisa Kojima
+> <masahisa.kojima@linaro.org> wrote:
+> >
+> > This RFC series introduces the op-tee based EFI Runtime Variable
+> > Service.
+> >
+> > The eMMC device is typically owned by the non-secure world(linux in
+> > this case). There is an existing solution utilizing eMMC RPMB partition
+> > for EFI Variables, it is implemented by interacting with
+> > OP-TEE, StandaloneMM(as EFI Variable Service Pseudo TA), eMMC driver
+> > and tee-supplicant. The last piece is the tee-based variable access
+> > driver to interact with OP-TEE and StandaloneMM.
+> >
+> 
+> After an overall look at the APIs, following are some initial comments:
+> - Is there any reason to have the edk2 specific StandaloneMM stack in
+> Linux to communicate with OP-TEE pseudo TA?
+> - I think the OP-TEE pseudo TA should be able to expose a rather
+> generic invoke commands such as:
+>      TEE_EFI_GET_VARIABLE
+>      TEE_EFI_GET_NEXT_VARIABLE
+>      TEE_EFI_SET_VARIABLE
+>   So it should no longer be tied to StMM stack and other TEE
+> implementations can re-use the abstracted interface to communicate
+> with its corresponding secure storage TA.
 
->=20
-> +/**
-> + * iommu_group_replace_domain - replace the domain that a group is
-> attached to
-> + * @new_domain: new IOMMU domain to replace with
-> + * @group: IOMMU group that will be attached to the new domain
-> + *
-> + * This API allows the group to switch domains without being forced to g=
-o to
-> + * the blocking domain in-between.
-> + *
-> + * If the attached domain is a core domain (e.g. a default_domain), it w=
-ill act
-> + * just like the iommu_attach_group().
+In the current setup we have the following layers in the kernel:
+1. efivar_operations
+2. MM
+3. PTA_STMM
+4. OP-TEE MSG
 
-I think you meant "the currently-attached domain", which implies a
-'detached' state as you replied to Baolu.
+and in the secure world:
+S1. internal to StMM
+S2. MM interface to StMM
+S3. PTA_STMM
+S4. OP-TEE MSG
 
-> + */
-> +int iommu_group_replace_domain(struct iommu_group *group,
-> +			       struct iommu_domain *new_domain)
+If I understand you correctly you'd like to see this instead:
+Kernel:
+1. efivar_operations
+2. PTA_EFIVAR
+4. OP-TEE MSG
 
-what actual value does 'replace' give us? It's just a wrapper of
-__iommu_group_set_domain() then calling it set_domain is
-probably clearer. You can clarify the 'replace' behavior in the
-comment.
+Since we still have the MM interface with StMM we'd have this in the secure
+world:
+S1. internal to StMM
+S2. MM interface to StMM
+S3. PTA_EFIVAR
+S4. OP-TEE MSG
 
-> +{
-> +	int ret;
-> +
-> +	if (!new_domain)
-> +		return -EINVAL;
-> +
-> +	mutex_lock(&group->mutex);
-> +	ret =3D __iommu_group_set_domain(group, new_domain);
-> +	if (ret) {
-> +		if (__iommu_group_set_domain(group, group->domain))
-> +			__iommu_group_set_core_domain(group);
-> +	}
+At S3 we'd have to convert between EFIVAR and MM messages. The
+difference is that we're moving the EFIVAR <-> MM conversion from the
+non-secure world into the secure world. We're still using OP-TEE
+specific communication at the fourth layer. So we're only moving problem
+around, I'd rather avoid growing the OP-TEE part in the secure world.
 
-Can you elaborate the error handling here? Ideally if
-__iommu_group_set_domain() fails then group->domain shouldn't
-be changed. Why do we need further housekeeping here?
+Cheers,
+Jens
 
+> 
+> -Sumit
+> 
+> > Masahisa Kojima (2):
+> >   efi: expose efivar generic ops register function
+> >   tee: Add op-tee helper functions for variable access
+> >
+> >  drivers/firmware/efi/efi.c           |  12 +
+> >  drivers/tee/optee/Kconfig            |  10 +
+> >  drivers/tee/optee/Makefile           |   1 +
+> >  drivers/tee/optee/mm_communication.h | 249 +++++++++++
+> >  drivers/tee/optee/optee_private.h    |   5 +-
+> >  drivers/tee/optee/optee_stmm_efi.c   | 598 +++++++++++++++++++++++++++
+> >  drivers/tee/tee_core.c               |  23 ++
+> >  include/linux/efi.h                  |   4 +
+> >  include/linux/tee_drv.h              |  23 ++
+> >  9 files changed, 924 insertions(+), 1 deletion(-)
+> >  create mode 100644 drivers/tee/optee/mm_communication.h
+> >  create mode 100644 drivers/tee/optee/optee_stmm_efi.c
+> >
+> > --
+> > 2.30.2
+> >
