@@ -2,57 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4A04689EE3
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 17:05:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 425C0689EDF
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 17:05:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232372AbjBCQFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 11:05:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36500 "EHLO
+        id S233385AbjBCQFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 11:05:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231168AbjBCQFq (ORCPT
+        with ESMTP id S233297AbjBCQFG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 11:05:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F40B9F9E7
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 08:04:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675440295;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=a9GxvJY6tIujAAbOqDif84FIm92SECZFywCQ9nH/kx0=;
-        b=gJOCZSqEEGVrAkTi5brU6A5pSHpYHA3udu272O8WeZDggkdSh66IAtUPyoXX81ld4Sk7dL
-        DsC0+rzExKx0sakTPjMkuQBTvmaRJPdlLCwNJxP4vBsH6L3NlsUzEDxQeNuh07vS3vIdp4
-        CFaL0Lsi8VrgTEMHb8JTe8FtW7Iy4t4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-130-pjN-YZmiMW2ddNDyrolo4w-1; Fri, 03 Feb 2023 11:04:52 -0500
-X-MC-Unique: pjN-YZmiMW2ddNDyrolo4w-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D6251857A81;
-        Fri,  3 Feb 2023 16:04:51 +0000 (UTC)
-Received: from redhat.com (ovpn-116-97.gru2.redhat.com [10.97.116.97])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id ED59253AA;
-        Fri,  3 Feb 2023 16:04:50 +0000 (UTC)
-From:   "Herton R. Krzesinski" <herton@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     bpf@vger.kernel.org, davem@davemloft.net, liuhangbin@gmail.com,
-        pabeni@redhat.com, gnault@redhat.com, jstancek@redhat.com,
-        prarit@redhat.com, torez@redhat.com, carlos@redhat.com,
-        dzickus@redhat.com, dhoward@redhat.com, kuba@kernel.org
-Subject: [PATCH] uapi: add missing ip/ipv6 header dependencies for linux/stddef.h
-Date:   Fri,  3 Feb 2023 13:04:48 -0300
-Message-Id: <20230203160448.1314205-1-herton@redhat.com>
+        Fri, 3 Feb 2023 11:05:06 -0500
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F866A2A4C;
+        Fri,  3 Feb 2023 08:05:03 -0800 (PST)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-51ba4b1b9feso73909487b3.11;
+        Fri, 03 Feb 2023 08:05:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7wIYdPVdo9w8wJeFawgcWpGlCHgpXqP0aU2proD/z4A=;
+        b=h7Y+KCF7rYYuzKa23/XVH7EqKMk5LTZnVw2PqeMnOFM+xWLo9NJHdhJ7VXQEzh/jEQ
+         43USwhMjApuBXpP8uDT4/9ZWtcfiac4as5JkOYvgtFByz33C36/DfwkQOIfY4SCuqGDK
+         Hv9r2B8MXFnnKurrI2YIIpkW+iLxoK+7IxwMN41GkLxe5SYkAMuhmyEdUiIf3h+NbtlV
+         Vjrsgdy/0uWZlA6GCyhPVQQLTybtIXlZAYgovWjXFPEmbkXmJ1R6oNLeW1Q9wjp7INOt
+         dpYwOYdzkRdvH3M1sRrIE5bOaaFyPkuU4ojNBjyPoq103GnN5D0iyOl6ib+Yx3KeeBsY
+         CkPA==
+X-Gm-Message-State: AO0yUKUt0cK5Wr875sm9z9U0bJzP+91+5+O4ghRPfaBfRmU8ORcDIFi3
+        96J/1/Ux8eteagW4UXGq2OK0nBZCNN5sEw==
+X-Google-Smtp-Source: AK7set/a/Eq2gP6R7fciPiamzKQR29gjZ+vbzZcYT0ptMjiTbNLQIWRvobf0piyfY0iq11BERjizRw==
+X-Received: by 2002:a0d:d648:0:b0:506:4342:1a2d with SMTP id y69-20020a0dd648000000b0050643421a2dmr7042060ywd.12.1675440302426;
+        Fri, 03 Feb 2023 08:05:02 -0800 (PST)
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
+        by smtp.gmail.com with ESMTPSA id r195-20020a37a8cc000000b0071ddbe8fe23sm2101905qke.24.2023.02.03.08.05.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Feb 2023 08:05:02 -0800 (PST)
+Received: by mail-yb1-f179.google.com with SMTP id 74so6528236ybl.12;
+        Fri, 03 Feb 2023 08:05:01 -0800 (PST)
+X-Received: by 2002:a5b:941:0:b0:865:e214:f4e3 with SMTP id
+ x1-20020a5b0941000000b00865e214f4e3mr352487ybq.604.1675440301482; Fri, 03 Feb
+ 2023 08:05:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+References: <20230113062339.1909087-1-hch@lst.de> <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
+ <20230116071306.GA15848@lst.de> <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
+ <20230203071423.GA24833@lst.de> <afd056a95d21944db1dc0c9708f692dd1f7bb757.camel@physik.fu-berlin.de>
+ <20230203083037.GA30738@lst.de> <d10fe31b2af6cf4e03618f38ca9d3ca5c72601ed.camel@physik.fu-berlin.de>
+ <CAMuHMdUitVfW088YOmqYm4kwbKwkwb22fAakHcu6boxv7dXDfQ@mail.gmail.com> <f6a60193-a5d1-c42c-158a-4b0bfe9c7538@infradead.org>
+In-Reply-To: <f6a60193-a5d1-c42c-158a-4b0bfe9c7538@infradead.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 3 Feb 2023 17:04:49 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWJ3XOBewDoU8umAHc6b83hJQge5xjY3Cxx03AvoiR7iQ@mail.gmail.com>
+Message-ID: <CAMuHMdWJ3XOBewDoU8umAHc6b83hJQge5xjY3Cxx03AvoiR7iQ@mail.gmail.com>
+Subject: Re: remove arch/sh
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-sh@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,57 +86,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 58e0be1ef6118 ("net: use struct_group to copy ip/ipv6
-header addresses"), ip and ipv6 headers started to use the __struct_group
-definition, which is defined at include/uapi/linux/stddef.h. However,
-linux/stddef.h isn't explicitly included in include/uapi/linux/{ip,ipv6}.h,
-which breaks build of xskxceiver bpf selftest if you install the uapi
-headers in the system:
+Hi Randy,
 
-$ make V=1 xskxceiver -C tools/testing/selftests/bpf
-...
-make: Entering directory '(...)/tools/testing/selftests/bpf'
-gcc -g -O0 -rdynamic -Wall -Werror (...)
-In file included from xskxceiver.c:79:
-/usr/include/linux/ip.h:103:9: error: expected specifier-qualifier-list before ‘__struct_group’
-  103 |         __struct_group(/* no tag */, addrs, /* no attrs */,
-      |         ^~~~~~~~~~~~~~
-...
+On Fri, Feb 3, 2023 at 4:57 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+> Is this "sh64" still accurate and applicable? from Documentation/kbuild/kbuild.rst:
+>
+> But some architectures such as x86 and sparc have aliases.
+>
+> - x86: i386 for 32 bit, x86_64 for 64 bit
+> - sh: sh for 32 bit, sh64 for 64 bit <<<<<<<<<<<<<<<
+> - sparc: sparc32 for 32 bit, sparc64 for 64 bit
 
-Include the missing <linux/stddef.h> dependency in ip.h and do the
-same for the ipv6.h header.
+No, support for sh64 was removed in commit 37744feebc086908
+("sh: remove sh5 support") in v5.8.
 
-Fixes: 58e0be1ef611 ("net: use struct_group to copy ip/ipv6 header addresses")
-Signed-off-by: Herton R. Krzesinski <herton@redhat.com>
----
- include/uapi/linux/ip.h   | 1 +
- include/uapi/linux/ipv6.h | 1 +
- 2 files changed, 2 insertions(+)
+Gr{oetje,eeting}s,
 
-diff --git a/include/uapi/linux/ip.h b/include/uapi/linux/ip.h
-index 874a92349bf5..283dec7e3645 100644
---- a/include/uapi/linux/ip.h
-+++ b/include/uapi/linux/ip.h
-@@ -18,6 +18,7 @@
- #ifndef _UAPI_LINUX_IP_H
- #define _UAPI_LINUX_IP_H
- #include <linux/types.h>
-+#include <linux/stddef.h>
- #include <asm/byteorder.h>
- 
- #define IPTOS_TOS_MASK		0x1E
-diff --git a/include/uapi/linux/ipv6.h b/include/uapi/linux/ipv6.h
-index 81f4243bebb1..53326dfc59ec 100644
---- a/include/uapi/linux/ipv6.h
-+++ b/include/uapi/linux/ipv6.h
-@@ -4,6 +4,7 @@
- 
- #include <linux/libc-compat.h>
- #include <linux/types.h>
-+#include <linux/stddef.h>
- #include <linux/in6.h>
- #include <asm/byteorder.h>
- 
--- 
-2.38.1
+                        Geert
 
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
