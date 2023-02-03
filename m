@@ -2,184 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C2CA68A4DE
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 22:48:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38A0868A4E6
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 22:50:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233614AbjBCVsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 16:48:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47424 "EHLO
+        id S233802AbjBCVum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 16:50:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233187AbjBCVsv (ORCPT
+        with ESMTP id S231593AbjBCVuk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 16:48:51 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8334F241C8;
-        Fri,  3 Feb 2023 13:48:49 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so6957034wmb.2;
-        Fri, 03 Feb 2023 13:48:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=F2MGbg/8o+abIGc0E3O5T3MnuHPupls9EiKUA8fQhWs=;
-        b=LqWK7bpbT4S9m5fLKLW7NM9LNTDKyFZAkMLH+YzTh4IS2z8utaMnRvo9mQnjhqwIdU
-         CEB4N+nrQ4zrJfRK57lRdROwzqMoLkfKzsD0QoZh5XE6Of8bBQDRvj8ry17gP733G+TF
-         r6OSL8JiNaCsD1zVicRF9MUlft9JdaTpbzNEZz1yFnb5FyIR3GKd98XLAkkenS6epiUX
-         YJqFfys5RLoyn/VkaW/SBfLsa8XjO2vUjdRO5n07hrxP/7TYx3bxTmHgJkTjzoSKZBeU
-         6CRMs2g5mp9cBzVy/lahNyx4bF68HuAGbWil4r4HARNnKEROdn32E35mlURQfWNYTUDD
-         7bCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=F2MGbg/8o+abIGc0E3O5T3MnuHPupls9EiKUA8fQhWs=;
-        b=mTUhosMThMK+YcYOdr/hmGnfNNyQM4kPNICqbDN6tcaHeJoAhLhR7ngN5VyITePIzo
-         a9vVwUkiUAQb+mibAsLC3rEocMSFmPQ0DkS+PXCZHVhW1ECMXkBkcDbGK7U4k7EDCGRG
-         FbnCufV7anzQvLlgnLwfczoXaZwHnJl+tIf4kuvn5p8h+ARkKow9YZMWKQT3MhXlNLsw
-         HzFXxvd6IiRA7GKvpEZp3dloYJVntPxYWMyw5zkQRVDZL0GtwX8LafW5XOBeIfiE3S4w
-         3fDI3vRxYX6zUs1YoYa7an7C4/+wuWsRYwMeI+mUkYnPX7Pjqr8Z0K3MpRtRvqm9TE9+
-         TE5Q==
-X-Gm-Message-State: AO0yUKW7BXM9T4RlmlPHiNdXzqpxSoz3EvVqYQkOAtN2aKXtiuR9FuqH
-        u4dLRKnhoSHVyrYi7hQD3hA=
-X-Google-Smtp-Source: AK7set85lrCYKEyfy05TF6DM5Y8P3A0rWOxyikWBgI5c4wbWzr7wHvuYxoTOE7UBY+5RMD9l5GPfQg==
-X-Received: by 2002:a05:600c:288:b0:3dc:1054:3acd with SMTP id 8-20020a05600c028800b003dc10543acdmr10916930wmk.17.1675460927888;
-        Fri, 03 Feb 2023 13:48:47 -0800 (PST)
-Received: from skbuf ([188.26.57.116])
-        by smtp.gmail.com with ESMTPSA id p16-20020a05600c469000b003a84375d0d1sm9596218wmo.44.2023.02.03.13.48.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 13:48:47 -0800 (PST)
-Date:   Fri, 3 Feb 2023 23:48:44 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Jianhui Zhao <zhaojh329@gmail.com>,
-        =?utf-8?B?QmrDuHJu?= Mork <bjorn@mork.no>
-Subject: Re: [PATCH 2/9] net: ethernet: mtk_eth_soc: set MDIO bus clock
- frequency
-Message-ID: <20230203214844.jqvhcdyuvrjf5dxg@skbuf>
-References: <cover.1675407169.git.daniel@makrotopia.org>
- <cover.1675407169.git.daniel@makrotopia.org>
- <a613b66b4872b5f3f09544138d03d5326a8f6f8b.1675407169.git.daniel@makrotopia.org>
- <a613b66b4872b5f3f09544138d03d5326a8f6f8b.1675407169.git.daniel@makrotopia.org>
+        Fri, 3 Feb 2023 16:50:40 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9CA028848;
+        Fri,  3 Feb 2023 13:50:39 -0800 (PST)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 313KCvTA014601;
+        Fri, 3 Feb 2023 21:50:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=8fF0xaPyJ2fnhwpEn/FBipTGJpdhy6LRkoj5J9EiAMI=;
+ b=Sv0YD25QmlZYo4KfhMcq+Ob2S+u2lLSJOvaPr5TjhS7mUly/UEDnX96rf8HioDPI8brG
+ gjGDF+LJD6nuj5HZTBGjQAnO0w4IZBfj11WO1Ns0URdLYEXkF36WiOU1jY42+zaLOgUf
+ xdEU+ZIJo6fZK4UacsJVluqfJ64IVCBJYn3yHbTM+zeTz5x8Pbsg21POS1bWHvj516aC
+ sBuHo09SXhF847Ij3TIResFrB5ec9gS+Zj2rm2+MsyBqJ0qf1kRe4tn2IaZAfCmd8wJD
+ RJGvaSBl2SXryHl7j25JNGHBstTfHri8sBRF4f1lgGJfuA3gOvEa0mSs5gosjWiNAsae gg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nh7by5epu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Feb 2023 21:50:33 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 313L03Fa029159;
+        Fri, 3 Feb 2023 21:50:33 GMT
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nh7by5ep4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Feb 2023 21:50:33 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 313Jdwg8004994;
+        Fri, 3 Feb 2023 21:50:32 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([9.208.129.114])
+        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3ncvv2awkn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Feb 2023 21:50:32 +0000
+Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
+        by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 313LoUD955181696
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 3 Feb 2023 21:50:30 GMT
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2AE6358056;
+        Fri,  3 Feb 2023 21:50:30 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4970F58052;
+        Fri,  3 Feb 2023 21:50:28 +0000 (GMT)
+Received: from li-2311da4c-2e09-11b2-a85c-c003041e9174.ibm.com.com (unknown [9.65.253.123])
+        by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Fri,  3 Feb 2023 21:50:28 +0000 (GMT)
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+To:     alex.williamson@redhat.com, pbonzini@redhat.com,
+        yi.l.liu@intel.com, jgg@nvidia.com
+Cc:     cohuck@redhat.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
+        borntraeger@linux.ibm.com, frankja@linux.ibm.com,
+        imbrenda@linux.ibm.com, david@redhat.com, akrowiak@linux.ibm.com,
+        jjherne@linux.ibm.com, pasic@linux.ibm.com,
+        zhenyuw@linux.intel.com, zhi.a.wang@intel.com, seanjc@google.com,
+        kevin.tian@intel.com, linux-s390@vger.kernel.org,
+        kvm@vger.kernel.org, intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/2] vfio: fix deadlock between group lock and kvm lock
+Date:   Fri,  3 Feb 2023 16:50:25 -0500
+Message-Id: <20230203215027.151988-1-mjrosato@linux.ibm.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a613b66b4872b5f3f09544138d03d5326a8f6f8b.1675407169.git.daniel@makrotopia.org>
- <a613b66b4872b5f3f09544138d03d5326a8f6f8b.1675407169.git.daniel@makrotopia.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: shi6oCLfkYNv_DFuG_4tvhjWbdhwSeNU
+X-Proofpoint-ORIG-GUID: Y7mSx3eIJ5Cy6ujhPs_isxzQcRS10p_3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-03_19,2023-02-03_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
+ suspectscore=0 phishscore=0 malwarescore=0 clxscore=1015 spamscore=0
+ impostorscore=0 priorityscore=1501 lowpriorityscore=0 mlxlogscore=398
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302030194
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 07:01:01AM +0000, Daniel Golle wrote:
-> Set MDIO bus clock frequency and allow setting a custom maximum
-> frequency from device tree.
-> 
-> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
-> ---
->  drivers/net/ethernet/mediatek/mtk_eth_soc.c | 25 +++++++++++++++++++++
->  drivers/net/ethernet/mediatek/mtk_eth_soc.h |  5 +++++
->  2 files changed, 30 insertions(+)
-> 
-> diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-> index a44ffff48c7b..9050423821dc 100644
-> --- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-> +++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-> @@ -790,7 +790,9 @@ static const struct phylink_mac_ops mtk_phylink_ops = {
->  static int mtk_mdio_init(struct mtk_eth *eth)
->  {
->  	struct device_node *mii_np;
-> +	int clk = 25000000, max_clk = 2500000, divider = 1;
+Hi Alex,
 
-Would be good if constant values (clk) weren't put in variables.
+Here is the latest group_lock vs kvm lock deadlock fix + a non-fix
+follow-on to remove the kvm argument from vfio_device_open and
+vfio_device_first_open.
 
->  	int ret;
-> +	u32 val;
->  
->  	mii_np = of_get_child_by_name(eth->dev->of_node, "mdio-bus");
->  	if (!mii_np) {
-> @@ -818,6 +820,29 @@ static int mtk_mdio_init(struct mtk_eth *eth)
->  	eth->mii_bus->parent = eth->dev;
->  
->  	snprintf(eth->mii_bus->id, MII_BUS_ID_SIZE, "%pOFn", mii_np);
-> +
-> +	if (!of_property_read_u32(mii_np, "clock-frequency", &val))
-> +		max_clk = val;
+Changes from v3:
+* Remove device->group->kvm reference in vfio_main by passing the
+  kvm in (Kevin)
+* Slight re-organization to make it easier for cdev to build upon
+  this later and keep symmetry between get/put (Alex)
+* Add follow-on patch that removes unused kvm argument (Yi)
 
-Checking for valid range? There should also probably be a dt-bindings
-patch for this.
+Changes from v2:
+* Relocate the new functions back to vfio_main and externalize to call
+  from group (Kevin) since cdev will need this too
+* s/vfio_kvm_*_kvm/vfio_device_*_kvm/ and only pass device as input.
+  Handle new kvm_ref_lock directly inside vfio_device_get_kvm (Alex)
+* Add assert_lockdep_held for dev_set lock (Alex)
+* Internalize error paths for vfio_device_get_kvm_safe and now return
+  void - either device->kvm is set with a ref taken or is NULL (Alex)
+* Other flow suggestions to make the call path cleaner - Thanks! (Alex)
+* Can't pass group->kvm to vfio_device_open, as it references the value
+  outside of new lock.  Pass device->kvm to minimize changes in this
+  fix (Alex, Yi)
 
-> +
-> +	while (clk / divider > max_clk) {
-> +		if (divider >= 63)
-> +			break;
-> +
-> +		divider++;
-> +	};
+Changes from v1:
+* use spin_lock instead of spin_lock_irqsave (Jason)
+* clear device->kvm_put as part of vfio_kvm_put_kvm (Yi)
+* Re-arrange code to avoid referencing the group contents from within
+  vfio_main (Kevin) which meant moving most of the code in this patch 
+  to group.c along with getting/dropping of the dev_set lock
 
-uhm, "divider = min(DIV_ROUND_UP(25000000, max_clk), 63);"? I don't
-think the compiler is smart enough to optimize away this loop.
+Matthew Rosato (2):
+  vfio: fix deadlock between group lock and kvm lock
+  vfio: no need to pass kvm pointer during device open
 
-> +
-> +	val = mtk_r32(eth, MTK_PPSC);
-> +	val |= PPSC_MDC_TURBO;
-> +	mtk_w32(eth, val, MTK_PPSC);
+ drivers/vfio/group.c     | 44 +++++++++++++++++++++----
+ drivers/vfio/vfio.h      | 18 +++++++++--
+ drivers/vfio/vfio_main.c | 70 +++++++++++++++++++++++++++++++++-------
+ include/linux/vfio.h     |  2 +-
+ 4 files changed, 113 insertions(+), 21 deletions(-)
 
-What does "TURBO" do and why do you set it unconditionally?
-
-> +
-> +	/* Configure MDC Divider */
-> +	val = mtk_r32(eth, MTK_PPSC);
-> +	val &= ~PPSC_MDC_CFG;
-> +	val |= FIELD_PREP(PPSC_MDC_CFG, divider);
-> +	mtk_w32(eth, val, MTK_PPSC);
-> +
-> +	dev_dbg(eth->dev, "MDC is running on %d Hz\n", clk / divider);
-> +
->  	ret = of_mdiobus_register(eth->mii_bus, mii_np);
->  
->  err_put_node:
-> diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.h b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-> index 7230dcb29315..724815ae18a0 100644
-> --- a/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-> +++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-> @@ -363,6 +363,11 @@
->  #define RX_DMA_VTAG_V2		BIT(0)
->  #define RX_DMA_L4_VALID_V2	BIT(2)
->  
-> +/* PHY Polling and SMI Master Control registers */
-> +#define MTK_PPSC		0x10000
-> +#define PPSC_MDC_CFG		GENMASK(29, 24)
-> +#define PPSC_MDC_TURBO		BIT(20)
-> +
->  /* PHY Indirect Access Control registers */
->  #define MTK_PHY_IAC		0x10004
->  #define PHY_IAC_ACCESS		BIT(31)
-> -- 
-> 2.39.1
-> 
+-- 
+2.39.1
 
