@@ -2,92 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA851688D53
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 03:51:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B30D688D59
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 03:52:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231871AbjBCCvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 21:51:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56926 "EHLO
+        id S231917AbjBCCv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 21:51:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbjBCCvr (ORCPT
+        with ESMTP id S231967AbjBCCvu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 21:51:47 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 109F24A1CB;
-        Thu,  2 Feb 2023 18:51:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675392705; x=1706928705;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=UxeZ8FJwNzkiSv+FCcjHMP+ssabzgfr3PcMLKiBT6p0=;
-  b=WTtTHnc4Iyd5y1FWOzWjW8o2fqGDG0DwHnj/sCgYtlbcsqpRMrklqY08
-   Kg5rxnbgcrAjYKs3qY9NPYh+vqPa40MWiHog4vU4fMNZh5o6zloThN5A1
-   hO5YpD4JCB+F87ccIKQfqp0SCOX+FoVJYfnDwIGRM7vLwI/65iUwfiSCQ
-   Tb2P1jpDehG3aBDW0IEGyvYOFV70c6PBCxS64UdBBLxI9nlUbiq1s8p/3
-   QCTMShQYagh8KJsayZCNglOjt93HKEZaqb5taDkYmE1UTNRsbR3NBrNnR
-   3Ivay3NHweWfdZeA3zHdiLdVXBtiY/kANh28GLDthssmho54U9gDvTUPA
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="414851328"
-X-IronPort-AV: E=Sophos;i="5.97,269,1669104000"; 
-   d="scan'208";a="414851328"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2023 18:51:44 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="615547679"
-X-IronPort-AV: E=Sophos;i="5.97,269,1669104000"; 
-   d="scan'208";a="615547679"
-Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.254.208.253]) ([10.254.208.253])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2023 18:51:35 -0800
-Message-ID: <018498d7-d966-6c87-d829-50270565147d@linux.intel.com>
-Date:   Fri, 3 Feb 2023 10:51:33 +0800
+        Thu, 2 Feb 2023 21:51:50 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8494A24120
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 18:51:48 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id ud5so11740136ejc.4
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 18:51:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9sK1kiPANM5sDtBtHkvFlyTj/KkhjaOrGhiblZmL0M0=;
+        b=BN0XufmHv1hppdkISK+rHRkSjyopgNv//ikIOSw9x6dd/6TnDBk2a/hxJkpK4y7Ikk
+         IVOvhDsrwfGccWQh3cnj5gCpDztzOXR1IfdMwGZUlYlUTV6NMHgdYCLNRu+fY9dgIye+
+         K47eMPtGoNdLMSgBv+MwyCcDg3ouGyeM/Ek6eRCj9nN2s9hL40hsGVyCiyImnaYmG8i6
+         ASI09fL39RqHHLVYwvm31mjIJDJAflckl53+/q9YMnhYI4GoQwb1j5XcOZLYb2u7hR7g
+         3M06fHsxioZTOyHF8FnQexA5yOqHQXJVVXnZNRQwputCIEMF47wd2fcLKLk2J2ZZn8th
+         +GwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9sK1kiPANM5sDtBtHkvFlyTj/KkhjaOrGhiblZmL0M0=;
+        b=ff9xEabZeXc+DGc82e4ishvnhjCt+saH3zpehhmZ8G9vAxjoDULwKWMNKgk2ct0z80
+         RGaY77FinIR41oOliFmLUYdLh3qHOAsppFf18nYhjAY7e3sygKEk3hAtI6pmK3QdJaDv
+         OLHysbIk5XYpY2p+jfdZnDl8aPrnntW31VZ1gT6C/gMh/KbOXWr6Z58ic5k1gyR86FjX
+         T4TbzLnsmjD2M6aJra+bunuWxBDt5IKzLNxQ7k7X6PNq/XwPie13ggCMrzA1VA6eY6vq
+         5llhC5WujsP3XJKZLIXBmiJ81kOvx5V6WF0Sigdcs+9mRo9FqVCUavTyWjmTyO5unAeX
+         yP2Q==
+X-Gm-Message-State: AO0yUKWUs77JY0IVxEic1RRcqbXq8frtUeJomi1oSCuuHFUfjcmBXf8G
+        CLIjHC5DU896SDebqtcA8za1Dg==
+X-Google-Smtp-Source: AK7set8mfugHn5qx02IsNAufb5ixSu47oCE4xj/+YoDcvfh4WICLCamx8dHktQnZIkraLPF4o+xIWQ==
+X-Received: by 2002:a17:907:c312:b0:88d:ba89:184a with SMTP id tl18-20020a170907c31200b0088dba89184amr3736949ejc.27.1675392707026;
+        Thu, 02 Feb 2023 18:51:47 -0800 (PST)
+Received: from [192.168.1.101] (abyl20.neoplus.adsl.tpnet.pl. [83.9.31.20])
+        by smtp.gmail.com with ESMTPSA id g4-20020a170906348400b007add62dafbasm653528ejb.157.2023.02.02.18.51.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Feb 2023 18:51:46 -0800 (PST)
+Message-ID: <90d2631d-c9e9-1c9b-c7de-6ec84d60096b@linaro.org>
+Date:   Fri, 3 Feb 2023 03:51:44 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Cc:     baolu.lu@linux.intel.com, corbet@lwn.net, will@kernel.org,
-        boqun.feng@gmail.com, mark.rutland@arm.com,
-        catalin.marinas@arm.com, dennis@kernel.org, tj@kernel.org,
-        cl@linux.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, joro@8bytes.org, suravee.suthikulpanit@amd.com,
-        robin.murphy@arm.com, dwmw2@infradead.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
-        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
-        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
-        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-s390@vger.kernel.org,
-        iommu@lists.linux.dev, linux-arch@vger.kernel.org,
-        linux-crypto@vger.kernel.org
-Subject: Re: [PATCH v2 07/10] x86,intel_iommu: Replace cmpxchg_double()
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH 05/23] interconnect: qcom: osm-l3: fix registration race
 Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>,
-        torvalds@linux-foundation.org
-References: <20230202145030.223740842@infradead.org>
- <20230202152655.624998774@infradead.org>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20230202152655.624998774@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+References: <20230201101559.15529-1-johan+linaro@kernel.org>
+ <20230201101559.15529-6-johan+linaro@kernel.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230201101559.15529-6-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/2/2 22:50, Peter Zijlstra wrote:
-> Signed-off-by: Peter Zijlstra (Intel)<peterz@infradead.org>
+
+
+On 1.02.2023 11:15, Johan Hovold wrote:
+> The current interconnect provider registration interface is inherently
+> racy as nodes are not added until the after adding the provider. This
+> can specifically cause racing DT lookups to fail:
+> 
+> 	of_icc_xlate_onecell: invalid index 0
+> 	cpu cpu0: error -EINVAL: error finding src node
+> 	cpu cpu0: dev_pm_opp_of_find_icc_paths: Unable to get path0: -22
+> 	qcom-cpufreq-hw: probe of 18591000.cpufreq failed with error -22
+> 
+> Switch to using the new API where the provider is not registered until
+> after it has been fully initialised.
+> 
+> Fixes: 5bc9900addaf ("interconnect: qcom: Add OSM L3 interconnect provider support")
+> Cc: stable@vger.kernel.org      # 5.7
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 > ---
->   drivers/iommu/intel/irq_remapping.c |    8 --
->   include/linux/dmar.h                |  125 +++++++++++++++++++-----------------
->   2 files changed, 68 insertions(+), 65 deletions(-)
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
-
-Best regards,
-baolu
+Konrad
+>  drivers/interconnect/qcom/osm-l3.c | 14 ++++++--------
+>  1 file changed, 6 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/interconnect/qcom/osm-l3.c b/drivers/interconnect/qcom/osm-l3.c
+> index 5fa171087425..3a1cbfe3e481 100644
+> --- a/drivers/interconnect/qcom/osm-l3.c
+> +++ b/drivers/interconnect/qcom/osm-l3.c
+> @@ -158,8 +158,8 @@ static int qcom_osm_l3_remove(struct platform_device *pdev)
+>  {
+>  	struct qcom_osm_l3_icc_provider *qp = platform_get_drvdata(pdev);
+>  
+> +	icc_provider_deregister(&qp->provider);
+>  	icc_nodes_remove(&qp->provider);
+> -	icc_provider_del(&qp->provider);
+>  
+>  	return 0;
+>  }
+> @@ -245,14 +245,9 @@ static int qcom_osm_l3_probe(struct platform_device *pdev)
+>  	provider->set = qcom_osm_l3_set;
+>  	provider->aggregate = icc_std_aggregate;
+>  	provider->xlate = of_icc_xlate_onecell;
+> -	INIT_LIST_HEAD(&provider->nodes);
+>  	provider->data = data;
+>  
+> -	ret = icc_provider_add(provider);
+> -	if (ret) {
+> -		dev_err(&pdev->dev, "error adding interconnect provider\n");
+> -		return ret;
+> -	}
+> +	icc_provider_init(provider);
+>  
+>  	for (i = 0; i < num_nodes; i++) {
+>  		size_t j;
+> @@ -275,12 +270,15 @@ static int qcom_osm_l3_probe(struct platform_device *pdev)
+>  	}
+>  	data->num_nodes = num_nodes;
+>  
+> +	ret = icc_provider_register(provider);
+> +	if (ret)
+> +		goto err;
+> +
+>  	platform_set_drvdata(pdev, qp);
+>  
+>  	return 0;
+>  err:
+>  	icc_nodes_remove(provider);
+> -	icc_provider_del(provider);
+>  
+>  	return ret;
+>  }
