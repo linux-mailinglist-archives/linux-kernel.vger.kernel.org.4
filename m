@@ -2,117 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AC2D68A350
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 20:58:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C23E768A354
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 21:00:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232929AbjBCT6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 14:58:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49412 "EHLO
+        id S233272AbjBCUAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 15:00:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231261AbjBCT6q (ORCPT
+        with ESMTP id S229782AbjBCUAg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 14:58:46 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F303EA6C07;
-        Fri,  3 Feb 2023 11:58:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675454326; x=1706990326;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EW5HLUVaym+yW2nbWH1WVFDR2aB9Cns0EuLP35Yjpyw=;
-  b=mMOtBYltpPEINMEbNoGLDMuEFBVAnXEOC4s8KlDPaG3gYuhj5NXRKu4z
-   KVVf/ZWkO1G77gNBuGneswFO1KA4aUQdXUI57UAyp4Repd1HSth7wTMNU
-   CKMBjGEoI0/kI77p59IWrqPb1GvhQhsLe5iDIjrWp5K5J40LM+I1/8GEx
-   aBuCtqcsJMo998wl1ewZGJirxAyD/FZwEOTFGol3fvmsmtFN5QpM60GyU
-   9NaDatvBbI7eeGCSVsifVQIgjzrDO3Y441ExLQ7a69397Zv5fl7NEf8hy
-   xsyJWnkSawjN2JhJS1wLqM/2pdXyJR71pHqL93lW2d4k2iJDEJ4PWPWUx
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="326536884"
-X-IronPort-AV: E=Sophos;i="5.97,271,1669104000"; 
-   d="scan'208";a="326536884"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2023 11:58:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="643361761"
-X-IronPort-AV: E=Sophos;i="5.97,271,1669104000"; 
-   d="scan'208";a="643361761"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 03 Feb 2023 11:58:14 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pO2CL-0000jV-1n;
-        Fri, 03 Feb 2023 19:58:13 +0000
-Date:   Sat, 4 Feb 2023 03:57:52 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Victor Hassan <victor@allwinnertech.com>, keescook@chromium.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        tony.luck@intel.com, gpiccoli@igalia.com,
-        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] pstore/blk: Export a method to implemente panic_write()
-Message-ID: <202302040337.IyKFZgIk-lkp@intel.com>
-References: <20230203113515.93540-1-victor@allwinnertech.com>
+        Fri, 3 Feb 2023 15:00:36 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47884A778D
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 12:00:31 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id mf7so18352921ejc.6
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 12:00:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sNZmUjalO4LYPOF+eUW4Y82TvsAb7nT3IdQ/0VgTds0=;
+        b=jRO/fAYuRFzZElK1szOUEDoXkIWGt9DLNv8LIQSon7G1JPsu0NOzevjM9U1nQ2uFcH
+         XPNXZAIIkMHZYgLD5JCkk/vNJEn147aFKV0AMOXJapzgLkYItcG0U7GqSRR9Z5cX31W9
+         YbQUK3ZuPQ0D7Lhq5uXjMRVURnc2o9MLqJhW9k9R0UqPf0QrJQ+KMZ8Q2Ige0M/0V3dX
+         kdNevz55C1T3VbHyb1lyn20CuxxFlyaPvtHnAiurioz9Ul8sbBaluJGm6OOK7OKDGMAC
+         frDZaX852xLspqd0U/4XFPQS90L8VAFlAzWbsY1mfz4Pwz4ODm8AVo7ch0G+oWQE8w2+
+         SJsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sNZmUjalO4LYPOF+eUW4Y82TvsAb7nT3IdQ/0VgTds0=;
+        b=xLBqKXV8TaKtfzB/T9MYRpvRzOg2zsbH4s+d8MfHkf8AkxFl7e8er0y8V6RCrw3YRv
+         N352nHE0CGFSlLmGfYyjFsnkyShP7OjVziAzLwnPoWmcof3/mT8YtPsYErVssf04HuLJ
+         fsfTivWq1b+AwbZqcpOxbDXxRBkwyTD3P/hTWP0tqna2KQbW5L/h1NiH4O4XeS6ftXov
+         xm0s8kxn6mAF8F+LZcoEfNKULWP+XWEz90wEkrSBSayZQacBdOtkeQBc5rZX+aL8Meny
+         638q1HAeFozoy1c1DSD0FT0mVZa13gfG6JOLZvVW7hN3yKTfWCX41SAO9q0/06hGDPKm
+         PWeQ==
+X-Gm-Message-State: AO0yUKW91aigZ2Gx5oNwotfu8CjIxmV3v5YQ9v/GvNVdu+5NgQWMAHDF
+        dV1eUO0qTRaVuQxfA/cKtLL/8A==
+X-Google-Smtp-Source: AK7set+Hqp7GLl37iJsFJtTsBfbQ7Klfcp1/GqtqztuTu8LNSWYByMnYkwJg7BMR+qyE6Y51Kd5CiA==
+X-Received: by 2002:a17:906:1181:b0:7c1:6e08:4c20 with SMTP id n1-20020a170906118100b007c16e084c20mr12474122eja.7.1675454429730;
+        Fri, 03 Feb 2023 12:00:29 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id u7-20020a1709060b0700b0087bdae9a1ebsm1823437ejg.94.2023.02.03.12.00.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Feb 2023 12:00:28 -0800 (PST)
+Message-ID: <9b8af6b3-9ab5-12f8-5576-1a93c58a26c1@linaro.org>
+Date:   Fri, 3 Feb 2023 22:00:27 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230203113515.93540-1-victor@allwinnertech.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [RFC PATCH v2 1/2] PM: domains: Skip disabling unused domains if
+ provider has sync_state
+Content-Language: en-GB
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Abel Vesa <abel.vesa@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-pm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        Doug Anderson <dianders@chromium.org>
+References: <20230127104054.895129-1-abel.vesa@linaro.org>
+ <Y9v/z8CYik3faHh7@google.com>
+ <3826e0e6-bb2b-409d-d1c3-ed361305bce3@linaro.org>
+ <Y9xhbq/MIOgssslh@google.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <Y9xhbq/MIOgssslh@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Victor,
+On 03/02/2023 03:20, Matthias Kaehlcke wrote:
+> Hi Dmitry,
+> 
+> On Thu, Feb 02, 2023 at 09:53:41PM +0200, Dmitry Baryshkov wrote:
+>> On 02/02/2023 20:24, Matthias Kaehlcke wrote:
+>>> Hi Abel,
+>>>
+>>> On Fri, Jan 27, 2023 at 12:40:53PM +0200, Abel Vesa wrote:
+>>>> Currently, there are cases when a domain needs to remain enabled until
+>>>> the consumer driver probes. Sometimes such consumer drivers may be built
+>>>> as modules. Since the genpd_power_off_unused is called too early for
+>>>> such consumer driver modules to get a chance to probe, the domain, since
+>>>> it is unused, will get disabled. On the other hand, the best time for
+>>>> an unused domain to be disabled is on the provider's sync_state
+>>>> callback. So, if the provider has registered a sync_state callback,
+>>>> assume the unused domains for that provider will be disabled on its
+>>>> sync_state callback. Also provide a generic sync_state callback which
+>>>> disables all the domains unused for the provider that registers it.
+>>>>
+>>>> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+>>>> ---
+>>>>
+>>>> This approach has been applied for unused clocks as well.
+>>>> With this patch merged in, all the providers that have sync_state
+>>>> callback registered will leave the domains enabled unless the provider's
+>>>> sync_state callback explicitly disables them. So those providers will
+>>>> need to add the disabling part to their sync_state callback. On the
+>>>> other hand, the platforms that have cases where domains need to remain
+>>>> enabled (even if unused) until the consumer driver probes, will be able,
+>>>> with this patch in, to run without the pd_ignore_unused kernel argument,
+>>>> which seems to be the case for most Qualcomm platforms, at this moment.
+>>>
+>>> I recently encountered a related issue on a Qualcomm platform with a
+>>> v6.2-rc kernel, which includes 3a39049f88e4 ("soc: qcom: rpmhpd: Use
+>>> highest corner until sync_state"). The issue involves a DT node with a
+>>> rpmhpd, the DT node is enabled, however the corresponding device driver
+>>> is not enabled in the kernel. In such a scenario the sync_state callback
+>>> is never called, because the genpd consumer never probes. As a result
+>>> the Always-on subsystem (AOSS) of the SoC doesn't enter sleep mode during
+>>> system suspend, which results in a substantially higher power consumption
+>>> in S3.
+>>>
+>>> I wonder if genpd (and some other frameworks) needs something like
+>>> regulator_init_complete(), which turns off unused regulators 30s after
+>>> system boot. That's conceptually similar to the current
+>>> genpd_power_off_unused(), but would provide time for modules being loaded.
+>>
+>> I think the overall goal is to move away from ad-hoc implementations like
+>> clk_disable_unused/genpd_power_off_unused/regulator_init_complete towards
+>> the sync_state.
+> 
+> I generally agree with the goal of using common mechanisms whenever possible.
+> 
+>> So inherently one either has to provide drivers for all devices in question
+>> or disable unused devices in DT.
+> 
+> I don't think that's a great solution, it essentially hands the issue down to
+> the users or downstream maintainers of the kernel, who might not be aware that
+> there is an issue, nor know about the specifics of genpd (or interconnects and
+> clocks which have similar problems).
 
-Thank you for the patch! Yet something to improve:
+The goal is to move the control down to individual drivers. Previously 
+we had issues with clk_disable_unused() disabling mdss/mdp clocks 
+incorrectly, which frequently led to broken display output. Other 
+clock/genpd/regulator drivers might have other internal dependencies. 
+Thus it is not really possible to handle resource shutdown in the common 
+  (framework) code.
 
-[auto build test ERROR on kees/for-next/pstore]
-[also build test ERROR on kees/for-next/kspp linus/master v6.2-rc6 next-20230203]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> In general symptoms are probably subtle, like a (potentially substantially)
+> increased power consumption during system suspend. The issue might have been
+> introduced by an update to a newer kernel, which now includes a DT node for a
+> new SoC feature which wasn't supported by the 'old' kernel. It's common
+> practice to use the 'old' .config, at least as a starting point, which
+> obviously doesn't enable the new driver. That happend to me with [1] when
+> testing v6.1. It took me quite some time to track the 'culprit' commit down
+> and then some debugging to understand what's going on. Shortly after that I
+> ran into a related issue involving genpds when testing v6.2-rc, which again
+> took a non-trivial amount of time to track down (and I'm familiar with the SoC
+> platform and the general nature of the issue). I don't think it's reasonable
+> to expect every user/downstream maintainer of an impacted system to go through
+> this, one person at a time.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Victor-Hassan/pstore-blk-Export-a-method-to-implemente-panic_write/20230203-193548
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/pstore
-patch link:    https://lore.kernel.org/r/20230203113515.93540-1-victor%40allwinnertech.com
-patch subject: [PATCH] pstore/blk: Export a method to implemente panic_write()
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20230204/202302040337.IyKFZgIk-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/368e42ba015da6c7bdd201b8fdb669e936307cbb
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Victor-Hassan/pstore-blk-Export-a-method-to-implemente-panic_write/20230203-193548
-        git checkout 368e42ba015da6c7bdd201b8fdb669e936307cbb
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/pstore/
+I think it would be nice to have some way of 'sync_pending' debug 
+available (compare this to debugfs/devices_deferred).
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+Note, we are trying to make sure that all supported drivers are enabled 
+at least as modules (if possible). If we fail, please send a patch 
+fixing the defconfig.
 
-All errors (new ones prefixed by >>):
+> Maybe there could be a generic solution for drivers with a 'sync_state'
+> callback, e.g. a the driver (or framework) could have a 'sync_state_timeout'
+> callback (or similar), which is called by the driver framework if 'sync_state'
+> wasn't called (for example) 30s after the device was probed. Then the provider
+> can power off or throttle unclaimed resources.
 
-   In file included from fs/pstore/blk.c:16:
->> include/linux/pstore_blk.h:32:41: error: must use 'enum' tag to refer to type 'pstore_blk_notifier_type'
-   typedef int (*pstore_blk_notifier_fn_t)(pstore_blk_notifier_type type,
-                                           ^
-                                           enum 
-   1 error generated.
-
-
-vim +32 include/linux/pstore_blk.h
-
-    31	
-  > 32	typedef	int (*pstore_blk_notifier_fn_t)(pstore_blk_notifier_type type,
-    33			struct pstore_device_info *dev);
-    34	
+I might be missing a point somewhere, but for me it looks like a logical 
+solution. Please send a proposal.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+With best wishes
+Dmitry
+
