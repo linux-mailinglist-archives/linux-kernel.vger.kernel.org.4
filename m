@@ -2,167 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 191AE688E47
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 04:56:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93491688E44
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 04:54:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232002AbjBCD4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 22:56:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37472 "EHLO
+        id S231770AbjBCDyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 22:54:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231751AbjBCD4M (ORCPT
+        with ESMTP id S229662AbjBCDyS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 22:56:12 -0500
-Received: from BN6PR00CU002-vft-obe.outbound.protection.outlook.com (mail-eastus2azon11021023.outbound.protection.outlook.com [52.101.57.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB6C52D15F;
-        Thu,  2 Feb 2023 19:56:09 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=P/4h7W+Yp1HP1VHgxDq/4l4rUWYHd8Q+JzmYiuP1fSRWxBIFmMAZEqwcccQ/s6q6bkUSfvyjtkQISa1qPrBhmW8t6drViErBUns/laoP39WfAvd+7MNsjttD2TV+fVkQgFQ2m565sC0ZHJ3o2ndY/cPizLtzsai04kOqAwIBteRlsnMFB3ej1uPw0OdG5GXeizCoSDHZ5FIq9adqnVKDw9p4RoV8v286KN3rFbc6ka40PCkf0yEMkQ4sV3DWjepXmiot6zBS8ThsdvNmH6YunEk8VEI/dlsAkheN4bVoJyoXJdqwnwX0mNi+lwyjPkBWlnJGm6M0vcQ0Gjj5xxeeTA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bto/D0odlwW0ihNJBV4oXEmQg3xpUlLLdZuoE9mghhk=;
- b=UFZRyNmS87o6XUddncQNuGHcFJhsDLKoOSg7QyF6OL197bSrFO2SHEE8WjtgMnQ03WMOUPnFYOiAQS01p6JRMyx7WKJMDQ5GUft3mL/xstQSPI1tuO6eMh84gXq6iCchzq+fyfDFAnXycTiUbTraFXiXDhlxbAGgPquudydqt9FnfLvD6+yG43JxPjh9eiYZHvCmF4OmWg3PX3LeMsEXBW9eLzxM9Ze+DYv4i2WOuXm9eOju3yjmlZP/9A3pM1Ou3HcFSitdIedctVw8bJ3qNcosVx1/J5E9EBXLJz4sRubzmnsJHIRQkQWYbgZspu5FTZp6cFFI2cRBZUtrRIt5NA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bto/D0odlwW0ihNJBV4oXEmQg3xpUlLLdZuoE9mghhk=;
- b=c5JdPP6C04YLD1bj3yjgRpjyFEFLGm56Wj7PhRay1KU9B/dys4uo3Dtx3lBXxWrzMxbSK1xvI/lpp2EIFcb5dy4WRROD7w4Rs0KI4Qjg0YKw4jcCtfCmChGN92ts27qsFg8JdN46lnlS1iyh6DZjAfV/07KfdiT+bPnkeLTt+lk=
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
- by CH2PR21MB1526.namprd21.prod.outlook.com (2603:10b6:610:84::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.7; Fri, 3 Feb
- 2023 03:56:07 +0000
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::9a9e:c614:a89f:396e]) by BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::9a9e:c614:a89f:396e%7]) with mapi id 15.20.6086.009; Fri, 3 Feb 2023
- 03:56:06 +0000
-From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
-CC:     KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] HV: hv_balloon: fix memory leak with using
- debugfs_lookup()
-Thread-Topic: [PATCH] HV: hv_balloon: fix memory leak with using
- debugfs_lookup()
-Thread-Index: AQHZNw/41mM1aBQkTUSPo77XIJemYq68luYg
-Date:   Fri, 3 Feb 2023 03:56:06 +0000
-Message-ID: <BYAPR21MB168826E0AF83D40DE0C704F9D7D79@BYAPR21MB1688.namprd21.prod.outlook.com>
-References: <20230202140918.2289522-1-gregkh@linuxfoundation.org>
-In-Reply-To: <20230202140918.2289522-1-gregkh@linuxfoundation.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=0470cfcf-ef8a-4b5b-b921-e4ba42e4d0b4;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-02-03T03:49:26Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|CH2PR21MB1526:EE_
-x-ms-office365-filtering-correlation-id: a8ec8129-61f4-4a22-58f1-08db059a93a4
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 8mDBJGPzXNc4EOpoVgxA/lheTT9THYFtjTE3NA6F+xNC6wd/AcnG+Wubk768LsjOzeQtlnYl8HEe13UI2PA3wvDXhHDo5Wh6o2OHg89D6tt6Ez4c3m+MXPR9+mtUmjowvTQg+MU/R6xf3vlBAA50+BsQ9YgwoCadH//rfVooGrcFrygsC8X58XfaNQCxgrzhGH4/pyhe011jicyhxEX5qyWV+/e+9Y2gqqO+YixGSxWRTzekoO40dTMgsQXYA0iVq+usQ1Aek4GM36Ouo1Loe3DYrI2Nh2ecVT2RK6ICiqU12C3sMFaQywnoLXcHI7ToTY/69yeZfpDctv2hy+ItL/+U1rZaZ06sTNssGSr9CtmPDwVyjVDGSitxS2GxoMlh6u/rETWwNry31jIMmWyjT96Njzom/j2HtzDAI+/3X0wEKkK/YysWypTwwiP3B04GHHr+9a2m3ToWPqXejZGLV6Q89Ka1HL9UHiP2id+CVcawaCXmjhiFNwPHonJB1mANNo29u9rhrOacv2KTl5XiVUjGwz2xaxrhdsr5sx2XOu6/ZgBTe+Xz5pb5oaQqhDo1/32HJT1GklO3LYEzfUC4EUhfitxcmLDkQCacmGiy/HrTxbV1H5HJj2w0NYbMOotQd3Y4UVBfq9h4zPTzc4+Q6kqoCbeSMfroYNtDqYPyh4FZi4AbqGCR8lYBT8ggvPT5iLTvNyTy7y3yoWHKkyxF7HuMTElZiVss7YvwjUFGCNLpKd0iGmbMaps9pfe6mWMH
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(396003)(39860400002)(376002)(136003)(366004)(451199018)(2906002)(33656002)(8990500004)(316002)(110136005)(54906003)(83380400001)(9686003)(186003)(26005)(71200400001)(76116006)(8676002)(66946007)(66446008)(66556008)(478600001)(66476007)(64756008)(4326008)(5660300002)(38070700005)(86362001)(8936002)(52536014)(41300700001)(10290500003)(82960400001)(38100700002)(82950400001)(122000001)(55016003)(6506007)(7696005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?OX7EnY0CBDLJx2fUSh/k9+8ZyB6x03e6IcSGoDe2FBovjiSEYbAUD4nQgZFC?=
- =?us-ascii?Q?illbFla/LxOkZWu38rOKrZdQ7snwAxymkUUqJtRORKZrdpqsUOGD4hA2Yy1A?=
- =?us-ascii?Q?0Ivqc5z5hZW//M6KxxsXcia2joy2C39/Z5dCFv1Nbl+qgeZC/Gs3/DD1znzB?=
- =?us-ascii?Q?N1Wbr4sdd5wRh4d7gPVUNnZG5VjPe4anAxpwsok2h7+ZoEen3CgRCAiDDNYx?=
- =?us-ascii?Q?bPGAeKE1KryAgAOAOK77lXnFBbNeOGTQlWVxxSCpYTmS2TedKCP5/xUuobcr?=
- =?us-ascii?Q?eeUPqgXyLtXYkXTrd8Q4BH6ho+LP0aSd2i2av6GOdc+KxaMTdbgJmH9alWSE?=
- =?us-ascii?Q?9w6mjoe40zjVW0RjFGexkEMY1pO80m735h3BD4QuI0QVupyQRXhi4iffDycg?=
- =?us-ascii?Q?GAxAgQv5cRT0ti3x7yyKqZ/cHeQre9h/rsvtbHy0y5q0UHJY7CMEQ1dm+AxE?=
- =?us-ascii?Q?ZmiQHAHR8NFViva7lSLvom/wJjKbV2ZX+N7KZ/r5IybEc86Ynohfxx+MOA4/?=
- =?us-ascii?Q?N3Yu2OLQjfLkSBmWO19UYvL6r6t9GtU2LYPRHdlHACJ2f0y68zT0FjpIwMEN?=
- =?us-ascii?Q?tcmcWYl2QbmE6wJKtJW0LruXZq/ElWTzsfdhvhhEoAWBpjPwB7tnXgOXwUI8?=
- =?us-ascii?Q?X1CWPc0v2A0nL2kTcBRVZ2F5zFVoRYk3lH8pHzGhJzQI2DrVzFT1klF0RyQ4?=
- =?us-ascii?Q?oo799FvzMPIm5Cfk/S/SurlrSoAGH8twsHTXQoWELYQJEzfo0gmsVR40BPeK?=
- =?us-ascii?Q?1h+EzwOF9BbCvG5upyHaO8/9MLKIMl89KrCL9Hjzf0KPPQcarc5S1UhMqQMP?=
- =?us-ascii?Q?yV2hncpSFXSNgmVHI3/+jVGOX35wwK0zHwVP8Ss8pbVxuiddYBcgIarIbL2T?=
- =?us-ascii?Q?aw9K+fqkyPmw9M1NPhiEi1Sc1N9Gekjnl+9ojvB6t+LEvpfc9kPGn8j+1aK6?=
- =?us-ascii?Q?mjXFnFiWM3Qu4dsobZD3nq2yWmRUIOuLiDFp3NPZgZacyeKoWSolWzyPdjR/?=
- =?us-ascii?Q?veqIk0ty4AGupe5ZtnV2p00D/HZtPAj04MPHp+RZRnRT2jgN8ZfKVCDkJGDr?=
- =?us-ascii?Q?yaxGfvpkVB5vpN6x5U6pq3Qratd6mBLPAkwH6LSmVHDf+sdNtTk6K/jRMbwM?=
- =?us-ascii?Q?nKNQ83/MB9Yamzia+Gxk97D1JjQCxAQwxrZHSGkZeWvlPgK4qfU4scGyuvHH?=
- =?us-ascii?Q?EKYRNVYyZpkzmYMQzyxNBGdEBwbeoN7SdJ0RhEFEy0smDyXd4VyfvIwqbAdk?=
- =?us-ascii?Q?XiUXFmSeoumWXLmjyM7vsbKrRrr18s9X8FX/MuTDyw5qLO8hrRjzCSqkbqGi?=
- =?us-ascii?Q?eR0l585ahL+9vb4cX1ED0W6oCt+zV5nw0uPnoNbdacAk1NK7Pg7okiFG3nWY?=
- =?us-ascii?Q?+jffWe+7+mGLVo8PF1x68MLkdacsso3as7gKXffelKchZXf5Go/6BRq5Vcdn?=
- =?us-ascii?Q?wMnX2S1lmPeR6Kk7JD7AIeM6fPdzT1H2E/ghkW76cW7rgQulY8Lh2abmM7tg?=
- =?us-ascii?Q?QwWs3O/cQ16khHo80l6gmIFOw/YvFUhrv30qEH1SyipVl++TQ/Dq8BUpx/rA?=
- =?us-ascii?Q?Tz6TtG8koNoTDG9WzpyjOKPneO1aiGV5oarkVUiGXAutqpf7PfKTb5tIuJVK?=
- =?us-ascii?Q?tQ=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 2 Feb 2023 22:54:18 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887B92366C;
+        Thu,  2 Feb 2023 19:54:16 -0800 (PST)
+Received: from dggpeml100012.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4P7MDZ47vszJsDg;
+        Fri,  3 Feb 2023 11:52:30 +0800 (CST)
+Received: from localhost.localdomain (10.67.175.61) by
+ dggpeml100012.china.huawei.com (7.185.36.121) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Fri, 3 Feb 2023 11:54:07 +0800
+From:   Zheng Yejian <zhengyejian1@huawei.com>
+To:     <rostedt@goodmis.org>
+CC:     <mhiramat@kernel.org>, <zanussi@kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-trace-kernel@vger.kernel.org>, <zhengyejian1@huawei.com>,
+        <wanghai38@huawei.com>
+Subject: [bug report] WARNINGs in rb_check_pages() and rb_handle_head_page()
+Date:   Fri, 3 Feb 2023 11:56:08 +0800
+Message-ID: <20230203035608.2336906-1-zhengyejian1@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a8ec8129-61f4-4a22-58f1-08db059a93a4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Feb 2023 03:56:06.2712
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 7/XPT6ny4XGHxQ2CldQp1/4voSsfgIo8Ie1KncN+kd5iKzfZ76BO7J8hlY3FfuRElp9E1Fz+ttgpN/mr8FPYoaYXoCCRJNxwu4AexOGzqiI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR21MB1526
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.175.61]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml100012.china.huawei.com (7.185.36.121)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org> Sent: Thursday, Febru=
-ary 2, 2023 6:09 AM
+Hi, steve
 
->=20
-> When calling debugfs_lookup() the result must have dput() called on it,
-> otherwise the memory will leak over time.  To make things simpler, just
-> call debugfs_lookup_and_remove() instead which handles all of the logic
-> at once.
->=20
-> Cc: "K. Y. Srinivasan" <kys@microsoft.com>
-> Cc: Haiyang Zhang <haiyangz@microsoft.com>
-> Cc: Wei Liu <wei.liu@kernel.org>
-> Cc: Dexuan Cui <decui@microsoft.com>
-> Cc: linux-hyperv@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+I happened to get two WARNINGs [1] [2] at same time when testing v5.10 with
+testcase 'func_profiler.tc':
+Link: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/tools/testing/selftests/ftrace/test.d/ftrace/func_profiler.tc
 
-Add a Fixes: tag?  This hv_balloon debugfs code was added in v6.0,
-And I see that debugfs_lookup_and_remove() was also added in v6.0.
+It seems a data race between ring_buffer writing and integrity checking.
+That is, head_page is moving when buffer is full and RB_FLAG is updating,
+however at same time RB_FLAG was cleared when doing integrity check:
+  rb_check_pages()            rb_handle_head_page():
+  --------                    --------
+  rb_head_page_deactivate()
+                              rb_head_page_set_normal()
+  rb_head_page_activate()
 
-Fixes: d180e0a1be6c ("Drivers: hv: Create debugfs file with hyper-v balloon=
- usage information")
+Mainline kernel seems have this problem as well, see the constructed
+testcase 'repro.sh' [3] and reproduction log [4].
 
-> ---
->  drivers/hv/hv_balloon.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/hv/hv_balloon.c b/drivers/hv/hv_balloon.c
-> index cbe43e2567a7..64ac5bdee3a6 100644
-> --- a/drivers/hv/hv_balloon.c
-> +++ b/drivers/hv/hv_balloon.c
-> @@ -1963,7 +1963,7 @@ static void  hv_balloon_debugfs_init(struct hv_dynm=
-em_device *b)
->=20
->  static void  hv_balloon_debugfs_exit(struct hv_dynmem_device *b)
->  {
-> -	debugfs_remove(debugfs_lookup("hv-balloon", NULL));
-> +	debugfs_lookup_and_remove("hv-balloon", NULL);
->  }
->=20
->  #else
+Integrity checking of ring_buffer on closing "trace" file seems not a good
+point, do you have any idea, steve?
 
-Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+1:
+One WARNING happened at
+Link: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/kernel/trace/ring_buffer.c?h=linux-5.10.y#n1492
+  Call Trace:
+   rb_check_pages
+   ring_buffer_read_finish
+   tracing_release
+
+2:
+The other WARNING happened at
+Link: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/kernel/trace/ring_buffer.c?h=linux-5.10.y#n2507
+  Call Trace:
+   rb_handle_head_page
+   rb_move_tail
+   __rb_reserve_next
+   rb_reserve_next_event
+   ring_buffer_lock_reserve
+   __trace_buffer_lock_reserve
+   trace_function
+   function_trace_call
+
+3:
+``` read_trace.sh
+  while true;
+  do
+    # the "trace" file is closed after read
+    head -1 /sys/kernel/tracing/trace > /dev/null
+  done
+```
+``` repro.sh
+  # function tracer will writing enough data into ring_buffer
+  echo function > /sys/kernel/tracing/current_tracer
+  ./read_trace.sh &
+  ./read_trace.sh &
+  ./read_trace.sh &
+  ./read_trace.sh &
+  ./read_trace.sh &
+  ./read_trace.sh &
+  ./read_trace.sh &
+  ./read_trace.sh &
+```
+
+4:
+------------[ cut here ]------------
+WARNING: CPU: 9 PID: 62 at kernel/trace/ring_buffer.c:2653 rb_move_tail+0x450/0x470
+Modules linked in:
+CPU: 9 PID: 62 Comm: ksoftirqd/9 Tainted: G        W          6.2.0-rc6+ #261
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.15.0-0-g2dd4b9b3f840-prebuilt.qemu.org 04/01/2014
+RIP: 0010:rb_move_tail+0x450/0x470
+Code: ff ff 4c 89 c8 f0 4d 0f b1 02 48 89 c2 48 83 e2 fc 49 39 d0 75 24 83 e0 03 83 f8 02 0f 84 e1 fb ff ff 48 8b 57 10 f0 ff 42 08 <0f> 0b 83 f8 02 0f 84 ce fb ff ff e9 db
+RSP: 0018:ffffb5564089bd00 EFLAGS: 00000203
+RAX: 0000000000000000 RBX: ffff9db385a2bf81 RCX: ffffb5564089bd18
+RDX: ffff9db281110100 RSI: 0000000000000fe4 RDI: ffff9db380145400
+RBP: ffff9db385a2bf80 R08: ffff9db385a2bfc0 R09: ffff9db385a2bfc2
+R10: ffff9db385a6c000 R11: ffff9db385a2bf80 R12: 0000000000000000
+R13: 00000000000003e8 R14: ffff9db281110100 R15: ffffffffbb006108
+FS:  0000000000000000(0000) GS:ffff9db3bdcc0000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00005602323024c8 CR3: 0000000022e0c000 CR4: 00000000000006e0
+Call Trace:
+ <TASK>
+ ring_buffer_lock_reserve+0x136/0x360
+ ? __do_softirq+0x287/0x2df
+ ? __pfx_rcu_softirq_qs+0x10/0x10
+ trace_function+0x21/0x110
+ ? __pfx_rcu_softirq_qs+0x10/0x10
+ ? __do_softirq+0x287/0x2df
+ function_trace_call+0xf6/0x120
+ 0xffffffffc038f097
+ ? rcu_softirq_qs+0x5/0x140
+ rcu_softirq_qs+0x5/0x140
+ __do_softirq+0x287/0x2df
+ run_ksoftirqd+0x2a/0x30
+ smpboot_thread_fn+0x188/0x220
+ ? __pfx_smpboot_thread_fn+0x10/0x10
+ kthread+0xe7/0x110
+ ? __pfx_kthread+0x10/0x10
+ ret_from_fork+0x2c/0x50
+ </TASK>
+---[ end trace 0000000000000000 ]---
