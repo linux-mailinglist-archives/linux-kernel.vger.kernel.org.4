@@ -2,106 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2DA768A20B
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 19:31:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C23E768A20E
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 19:32:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233035AbjBCSbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 13:31:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58498 "EHLO
+        id S233394AbjBCSc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 13:32:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232166AbjBCSbc (ORCPT
+        with ESMTP id S233076AbjBCScZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 13:31:32 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B6EC9F9F4;
-        Fri,  3 Feb 2023 10:31:32 -0800 (PST)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 313HIY0N019113;
-        Fri, 3 Feb 2023 18:31:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=qcppdkim1;
- bh=/xHCVgzwEu8Si5xmF4rnGUMeXh7iW2ylVEuGLmpdCA8=;
- b=N2tzG8E6kK41z2ugRxwcXmynMoMQCDKsFLLVobN4mKNZAJ81bQXydj9rWwwzkrQm170y
- +6JrWJjjybrf74FZfibyXuprfcHByV5obn7xiDgzYlVESk/h/RKUZwEbIlx3K/OKzhSQ
- COK58VFrOU7YnD36SeO1vKS8IGh4+FH44eIK/r6mvTNlK76SPNRNqzb6SCbDAnARzKVZ
- CQcouWgiIw8RmT+lY06Y8s2hcGSXvVo8zqCMOie2px7jJbB1ibXzVF8zX0lW/A+bgzAE
- T5Bxhj5U5KaRYOfbNb+ZtTLT0pkaBMKbxQoGjtA3pWeEFFyCYWAiKn8a55vn2yo59St7 0A== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ngwd01e1h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Feb 2023 18:31:29 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 313IVSeB009689
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 3 Feb 2023 18:31:28 GMT
-Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Fri, 3 Feb 2023 10:31:27 -0800
-From:   Elliot Berman <quic_eberman@quicinc.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-CC:     Elliot Berman <quic_eberman@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] MAINTAINERS: Add include/linux/qcom* to ARM/QUALCOMM
-Date:   Fri, 3 Feb 2023 10:31:14 -0800
-Message-ID: <20230203183115.2836316-1-quic_eberman@quicinc.com>
-X-Mailer: git-send-email 2.39.1
+        Fri, 3 Feb 2023 13:32:25 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3BF29F9F9
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 10:32:22 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id 5so283136pgd.3
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 10:32:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=t/r/tdNtEio5pHrqHpsU4GhzJOAAFbwX4UQBhIfUYzI=;
+        b=BPc+jTuImdUl6i7YWuZHIWyt8a1HiIwHNYvH4DnNyaxF/2b0RbjXhV4qvfa0UZvnA+
+         W52SQBnapfjReD3T6jWA8Oz1cULeRoBAbXxXgiu2HGpNI/5EbQHkyWC12vYw3tGK5eaL
+         b3Nd+CqbI4BQYp6yfakXYnAVoI4qHzHwz0NQJKP8dlIlFZNv+148qm+UQuKJu2ZAm6qQ
+         /w7bIELzUPIvmSf7/tp0OIladc8tq34OHXSe+mxN3nEZatp8U8NbBShnxL4UdajzDWnl
+         o5XhxblUPlKOZJqyaozGKvcKDsliLd5lrEfzzgDZmbiKTyAaEqe27VgPiJpI9942OXun
+         5Jqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=t/r/tdNtEio5pHrqHpsU4GhzJOAAFbwX4UQBhIfUYzI=;
+        b=lgXuqnRhoGLhKRjJ5RnP33Tm0SE89+/+ywn2fUgUmU69p9VVVSKFYOptjmdba1h4Uq
+         r6lRzbsPsnEBDm+zCz2iLT22dfy6hK7P20XLdC0s1Wd6kYmWywS6lgK6LGB7A2HXFwVb
+         uAL1vX7slMEhmKppUCKFeSMwGHPGYJA4sXQxV1CFBubTeagf7Fu4IU2rPyfg/WVAUa1f
+         2zmmo82EDHsgKATCZ1akg+gEtcp9QfeUeWJBjdiggG5lJTjQrBV5qqfu2nZxfq0Ke0R/
+         /TikhkT2A6FGKEKE/DBXOzekHcinRO+OYFp2JI72EWnfaqTNt6osgB/388oDsLyIzl2m
+         D4iQ==
+X-Gm-Message-State: AO0yUKUgQM+rRdqlwWeSFGelEO1eyXC4gPf5MJkpti7YLGpPqONAztiJ
+        hJV3YmjG/AKynkaO7ymdz2YqFzf3JGq5fKnf5ovvV9f6VcUZVg==
+X-Google-Smtp-Source: AK7set9EGu94D5bmmCGWT1d/a1xhQEgVm5Yu24YKiu9vf54MDu0QbmrepOdLl7Ewfc2TeoxBL5s8hn2kI4Kd5Or3Xkw=
+X-Received: by 2002:a05:6a00:1254:b0:593:9627:d117 with SMTP id
+ u20-20020a056a00125400b005939627d117mr2585879pfi.6.1675449142390; Fri, 03 Feb
+ 2023 10:32:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: DY5w-TLKt7DRWx41NBK_pSts5fipYwKz
-X-Proofpoint-ORIG-GUID: DY5w-TLKt7DRWx41NBK_pSts5fipYwKz
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-03_17,2023-02-03_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
- adultscore=0 impostorscore=0 phishscore=0 bulkscore=0 mlxscore=0
- priorityscore=1501 spamscore=0 mlxlogscore=849 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302030170
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Darrell Kavanagh <darrell.kavanagh@gmail.com>
+Date:   Fri, 3 Feb 2023 18:32:11 +0000
+Message-ID: <CAMxBKG1RwbRJMG0cKcnbyKgznXeZLL+Zp1zXeOnxpYU0NkOO8A@mail.gmail.com>
+Subject: drm: panel-orientation-quirks: Add quirk for Lenovo IdeaPad Duet 3 10IGL5
+To:     maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, airlied@gmail.com, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Hans de Goede <hdegoede@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ARM/QUALCOMM support currently includes include/linux/*/qcom* but is
-missing a few Qualcomm headers directly in include/linux/.
+Hi,
 
-This effectively adds following headers directly under ARM/QUALCOMM.
- - include/linux/qcom-geni-se.h
- - include/linux/qcom_scm.h
+This is another Lenovo with detachable keyboard and 1200x1920 screen
+mounted sideways.
 
-Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+The following has been tested with 6.2.0-rc6.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f2c3d471fe8f..752cddd73bf8 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2724,6 +2724,7 @@ F:	drivers/spi/spi-qup.c
- F:	drivers/tty/serial/msm_serial.c
- F:	drivers/usb/dwc3/dwc3-qcom.c
- F:	include/dt-bindings/*/qcom*
-+F:	include/linux/qcom*
- F:	include/linux/*/qcom*
- F:	include/linux/soc/qcom/
- 
+Thanks,
+Darrell
 
-base-commit: 3866989ec2c319341e2cf69ec6116269b634a271
--- 
-2.39.1
-
+index 3659f04..590bb7b 100644
+--- a/kernel/drm_panel_orientation
+_quirks.c
++++ b/kernel/linux-6.2-rc6/drivers/gpu/drm/drm_panel_orientation_quirks.c
+@@ -304,6 +304,12 @@ static const struct dmi_system_id orientation_data[] = {
+                  DMI_EXACT_MATCH(DMI_PRODUCT_VERSION, "Lenovo ideapad
+D330-10IGM"),
+                },
+                .driver_data = (void *)&lcd1200x1920_rightside_up,
++       }, {    /* Lenovo IdeaPad Duet 3 10IGL5 */
++               .matches = {
++                 DMI_EXACT_MATCH(DMI_SYS_VENDOR, "LENOVO"),
++                 DMI_EXACT_MATCH(DMI_PRODUCT_VERSION, "IdeaPad Duet 3 10IGL5"),
++               },
++               .driver_data = (void *)&lcd1200x1920_rightside_up,
+        }, {    /* Lenovo Ideapad D330-10IGL (HD) */
+                .matches = {
+                  DMI_EXACT_MATCH(DMI_SYS_VENDOR, "LENOVO"),
