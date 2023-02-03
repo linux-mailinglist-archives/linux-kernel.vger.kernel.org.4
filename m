@@ -2,164 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06F75689735
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 11:47:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A51D689526
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 11:18:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232716AbjBCKqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 05:46:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41544 "EHLO
+        id S232774AbjBCKR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 05:17:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232000AbjBCKqT (ORCPT
+        with ESMTP id S233311AbjBCKRo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 05:46:19 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4984A4FCFC;
-        Fri,  3 Feb 2023 02:46:18 -0800 (PST)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31399Crh004649;
-        Fri, 3 Feb 2023 10:19:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=OgCD+eDmUwSr0tq+6IKW/wdRsh3zCLJKVgwLN+2BJ8Q=;
- b=pObvpSZ5Ml6vPRXfko2W1AGqSFXAPa3xSqsY85rX1kogXeLHIa9Lpu2fQtF/tBJenlye
- S+sq0QYpm8sXSHXH0RRqdPvdULH9cPbNEETQ/1iJ09seNP4y+SpIjJZ6TJGldSEu65Dn
- 539ttG+fblpcWCMeDiWm+AnRqqjIs9pynxvyWoj6vPIxOzI+vMGfe7VeWgbtf+NxNTs7
- YTm1R60pNR+fm8HlZ1IGU585RQKv77c+ep+SuY8cgunOdI+E/BoWzmaBMzEmbXm76ubs
- L2UTp3dsnWYQUS48wrFfjoPd7ySEE+38sENp+Kpsub+8vQdi8/PT6yJYOk4lgXtEp/zB 2A== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ngns2h7t0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Feb 2023 10:19:02 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 313AJ2n6015179
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 3 Feb 2023 10:19:02 GMT
-Received: from hu-mojha-hyd.qualcomm.com (10.80.80.8) by
- nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Fri, 3 Feb 2023 02:18:59 -0800
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Mukesh Ojha" <quic_mojha@quicinc.com>
-Subject: [PATCH v2] firmware: qcom_scm: modify qcom_scm_set_download_mode()
-Date:   Fri, 3 Feb 2023 15:47:15 +0530
-Message-ID: <1675419435-30726-1-git-send-email-quic_mojha@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Fri, 3 Feb 2023 05:17:44 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F57A07E5
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 02:17:19 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id h16so4157301wrz.12
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 02:17:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=g/WNjPQ18JRVRhyOrTsC5R8S4qdzTnKfuVYcyxolytU=;
+        b=Xq2KYOfaW9x9GMrGHICotdHA+FksZKs3pQpRnwtOakPyg+wS67mMubbfAy8SL8pY+w
+         IH9i/xAxGjFcjfniH1CvgTQ16VlvoFH8blqO9maFhRFysHVs4f52Jfe3BjH/IengRzy9
+         q6i5/YQVF0ySyqw1lpZMVRuFzkxoin/ie+JEd98QOt0pSzBYUxmVGqy7UpK0+7HebgXC
+         bUvUwWK8Fjt1Yp79pcizNnj6rZdssJWSoAvwyJ8LPrnMLgfm4DFrc57nbLabE3ktLsRc
+         XaqJSjRgiQLn79HXVmAYKB4MJtvf5V1Xd335w84krCvIdWNOlbD8DfHj/7CEyWdIqCEm
+         4Tpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=g/WNjPQ18JRVRhyOrTsC5R8S4qdzTnKfuVYcyxolytU=;
+        b=mQN4ABlS2wIt/ocMcvjyFANW2MNa9wXIdGD80T8LspfKSrHA+YiIntRzclSVxibRcy
+         X5yFnLXamKX+tP7RH8FcZCEXd/V86y/dpGq799whdnm3FGpiV+Gvzw+qmHJiCzJXy3bS
+         /bWF9lr5+cAvaSnwGw25yipUWnQrAiIjOC2so+Xc6D1B2TBlMGowgQjBEK4YnBOQnhTj
+         0IMAqw8ve73Q8OJi6qex3JlGPgpnMXEjIknPIuLI815h3C4GDUzZM67V+VlLBIySa1a8
+         gdQu3uk6awxUTWLzsUh+PQ+aV7S1yvHv1qm68Ff+F3YJtR+vtYRdahjr0TXs5qh/tAOK
+         OxlQ==
+X-Gm-Message-State: AO0yUKUU7X0XwFE2M7fOfZYyUyBkscgC7Ze3lh7V1gp7RWjiuTZMRybs
+        Ihn16OkLVAVN6NZPSaTrP1vTAw==
+X-Google-Smtp-Source: AK7set8mPBxEY7bgE4SAboc3eVYbmvKHZm+if6cSAOlPEVguCHGCvPSCuS/A/oPxmUwblCrlwppX7g==
+X-Received: by 2002:a05:6000:16c4:b0:2bf:f024:de79 with SMTP id h4-20020a05600016c400b002bff024de79mr11676673wrf.37.1675419438905;
+        Fri, 03 Feb 2023 02:17:18 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id d2-20020a056000186200b002bddd75a83fsm1773632wri.8.2023.02.03.02.17.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Feb 2023 02:17:18 -0800 (PST)
+Message-ID: <2195773d-12b4-0b32-26b0-488d78844e5f@linaro.org>
+Date:   Fri, 3 Feb 2023 11:17:17 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: nnpK-Hl9mq6EX3d5Zhjq5PMxtybwU71k
-X-Proofpoint-ORIG-GUID: nnpK-Hl9mq6EX3d5Zhjq5PMxtybwU71k
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-03_06,2023-02-03_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1015
- spamscore=0 malwarescore=0 priorityscore=1501 suspectscore=0 mlxscore=0
- adultscore=0 mlxlogscore=999 impostorscore=0 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302030095
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 5/9] ASoC: dt-bindings: meson: convert axg pdm to schema
+Content-Language: en-US
+To:     Jerome Brunet <jbrunet@baylibre.com>,
+        Mark Brown <broonie@kernel.org>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org
+Cc:     linux-amlogic@lists.infradead.org,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org
+References: <20230202183653.486216-1-jbrunet@baylibre.com>
+ <20230202183653.486216-6-jbrunet@baylibre.com>
+ <512edf50-a74d-815d-1278-39fdeb1c2d35@linaro.org>
+ <1jtu03m6ia.fsf@starbuckisacylon.baylibre.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1jtu03m6ia.fsf@starbuckisacylon.baylibre.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Modify qcom_scm_set_download_mode() such that it can support
-multiple modes. There is no functional change with this change.
+On 03/02/2023 10:37, Jerome Brunet wrote:
+> 
+> On Fri 03 Feb 2023 at 09:01, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+> 
+>> On 02/02/2023 19:36, Jerome Brunet wrote:
+> 
+> [...]
+> 
+>>> +required:
+>>> +  - compatible
+>>> +  - reg
+>>> +  - "#sound-dai-cells"
+>>> +  - clocks
+>>> +  - clock-names
+>>> +
+>>> +if:
+>>
+>> Keep in allOf here (need to move ref from top to here)
+>>
+> 
+> I'm not sure I get it. As it is, it seems to have the effect I had in
+> mind while trying with dt_bindings_check.
+> 
+> What does it do when putting the conditional under the AllOf section ?
 
-Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
----
-Changes in v2:
-  - Stop changing legacy scm id for dload mode.
+It avoids any future re-indents if you need to add one more if clause.
 
- drivers/firmware/qcom_scm.c | 15 +++++++--------
- include/linux/qcom_scm.h    |  5 +++++
- 2 files changed, 12 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
-index cdbfe54..6245b97 100644
---- a/drivers/firmware/qcom_scm.c
-+++ b/drivers/firmware/qcom_scm.c
-@@ -400,7 +400,7 @@ int qcom_scm_set_remote_state(u32 state, u32 id)
- }
- EXPORT_SYMBOL(qcom_scm_set_remote_state);
- 
--static int __qcom_scm_set_dload_mode(struct device *dev, bool enable)
-+static int __qcom_scm_set_dload_mode(struct device *dev, enum qcom_download_mode mode)
- {
- 	struct qcom_scm_desc desc = {
- 		.svc = QCOM_SCM_SVC_BOOT,
-@@ -410,12 +410,12 @@ static int __qcom_scm_set_dload_mode(struct device *dev, bool enable)
- 		.owner = ARM_SMCCC_OWNER_SIP,
- 	};
- 
--	desc.args[1] = enable ? QCOM_SCM_BOOT_SET_DLOAD_MODE : 0;
-+	desc.args[1] = mode ? QCOM_SCM_BOOT_SET_DLOAD_MODE : 0;
- 
- 	return qcom_scm_call_atomic(__scm->dev, &desc, NULL);
- }
- 
--static void qcom_scm_set_download_mode(bool enable)
-+static void qcom_scm_set_download_mode(enum qcom_download_mode mode)
- {
- 	bool avail;
- 	int ret = 0;
-@@ -424,10 +424,9 @@ static void qcom_scm_set_download_mode(bool enable)
- 					     QCOM_SCM_SVC_BOOT,
- 					     QCOM_SCM_BOOT_SET_DLOAD_MODE);
- 	if (avail) {
--		ret = __qcom_scm_set_dload_mode(__scm->dev, enable);
-+		ret = __qcom_scm_set_dload_mode(__scm->dev, mode);
- 	} else if (__scm->dload_mode_addr) {
--		ret = qcom_scm_io_writel(__scm->dload_mode_addr,
--				enable ? QCOM_SCM_BOOT_SET_DLOAD_MODE : 0);
-+		ret = qcom_scm_io_writel(__scm->dload_mode_addr, mode);
- 	} else {
- 		dev_err(__scm->dev,
- 			"No available mechanism for setting download mode\n");
-@@ -1410,7 +1409,7 @@ static int qcom_scm_probe(struct platform_device *pdev)
- 	 * disabled below by a clean shutdown/reboot.
- 	 */
- 	if (download_mode)
--		qcom_scm_set_download_mode(true);
-+		qcom_scm_set_download_mode(QCOM_DOWNLOAD_FULLDUMP);
- 
- 	return 0;
- }
-@@ -1419,7 +1418,7 @@ static void qcom_scm_shutdown(struct platform_device *pdev)
- {
- 	/* Clean shutdown, disable download mode to allow normal restart */
- 	if (download_mode)
--		qcom_scm_set_download_mode(false);
-+		qcom_scm_set_download_mode(QCOM_DOWNLOAD_NODUMP);
- }
- 
- static const struct of_device_id qcom_scm_dt_match[] = {
-diff --git a/include/linux/qcom_scm.h b/include/linux/qcom_scm.h
-index f833564..f9bc84e 100644
---- a/include/linux/qcom_scm.h
-+++ b/include/linux/qcom_scm.h
-@@ -14,6 +14,11 @@
- #define QCOM_SCM_CPU_PWR_DOWN_L2_OFF	0x1
- #define QCOM_SCM_HDCP_MAX_REQ_CNT	5
- 
-+enum qcom_download_mode {
-+	QCOM_DOWNLOAD_NODUMP    = 0x00,
-+	QCOM_DOWNLOAD_FULLDUMP  = 0x10,
-+};
-+
- struct qcom_scm_hdcp_req {
- 	u32 addr;
- 	u32 val;
--- 
-2.7.4
+Best regards,
+Krzysztof
 
