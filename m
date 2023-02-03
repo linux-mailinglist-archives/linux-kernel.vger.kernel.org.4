@@ -2,100 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62CC068922A
+	by mail.lfdr.de (Postfix) with ESMTP id 17FD0689229
 	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 09:27:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231864AbjBCIYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 03:24:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35794 "EHLO
+        id S232847AbjBCI0r convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 3 Feb 2023 03:26:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232970AbjBCIYL (ORCPT
+        with ESMTP id S232435AbjBCI0W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 03:24:11 -0500
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CF4D25BA5;
-        Fri,  3 Feb 2023 00:22:24 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4P7T1l5Hx2z9v7Hy;
-        Fri,  3 Feb 2023 16:13:31 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwAXmAP_w9xjc2TtAA--.17044S2;
-        Fri, 03 Feb 2023 09:21:28 +0100 (CET)
-Message-ID: <d6c331029bb47fa7a4e574a66b28cf7c96edd5b0.camel@huaweicloud.com>
-Subject: Re: [PATCH ima-evm-utils v4] Add tests for MMAP_CHECK and
- MMAP_CHECK_REQPROT hooks
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>, dmitry.kasatkin@gmail.com,
-        jmorris@namei.org, serge@hallyn.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stefanb@linux.ibm.com,
-        viro@zeniv.linux.org.uk, pvorel@suse.cz,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Fri, 03 Feb 2023 09:21:16 +0100
-In-Reply-To: <805425ab66a004b110cf0c33423ba5a4247c5cb4.camel@linux.ibm.com>
-References: <20230202135131.2445816-1-roberto.sassu@huaweicloud.com>
-         <fbac5d34fee2c3d4bbf036c06252fd0671577558.camel@linux.ibm.com>
-         <ae83bc62a798180281b2bcf6a469e97586d2af7c.camel@huaweicloud.com>
-         <805425ab66a004b110cf0c33423ba5a4247c5cb4.camel@linux.ibm.com>
+        Fri, 3 Feb 2023 03:26:22 -0500
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F17E395D08;
+        Fri,  3 Feb 2023 00:24:59 -0800 (PST)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1pNrNI-003Nx4-Ij; Fri, 03 Feb 2023 09:24:48 +0100
+Received: from p57bd9464.dip0.t-ipconnect.de ([87.189.148.100] helo=[192.168.178.81])
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1pNrNI-0042Ei-Ac; Fri, 03 Feb 2023 09:24:48 +0100
+Message-ID: <afd056a95d21944db1dc0c9708f692dd1f7bb757.camel@physik.fu-berlin.de>
+Subject: Re: remove arch/sh
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-sh@vger.kernel.org
+Date:   Fri, 03 Feb 2023 09:24:46 +0100
+In-Reply-To: <20230203071423.GA24833@lst.de>
+References: <20230113062339.1909087-1-hch@lst.de>
+         <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
+         <20230116071306.GA15848@lst.de>
+         <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
+         <20230203071423.GA24833@lst.de>
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.3 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwAXmAP_w9xjc2TtAA--.17044S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrZw1rCw43AFWxuw4UKr1kAFb_yoWDKrbE9r
-        1j9rykCr9xGrs7Gwsxt398Jw4DKr4qvr1rKw47Xw42ywn8ZFs3Ars09rna9wn3Gr90qasx
-        CrWrXF9Yv3sF9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb78YFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x02
-        67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267
-        AKxVW8JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
-        j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
-        kEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0E
-        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
-        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0
-        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04
-        k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
-        1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1zuWJUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgARBF1jj4R-pQACs6
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 87.189.148.100
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-02-02 at 15:40 -0500, Mimi Zohar wrote:
-> On Thu, 2023-02-02 at 17:23 +0100, Roberto Sassu wrote:
-> > > > +   if (ptr == MAP_FAILED) {
-> > > > +           ret = ERR_SETUP;
-> > > > +           if (argv[2] && !strcmp(argv[2], "exec_on_writable") &&
-> > > > +               errno == EACCES)
-> > > > +                   ret = ERR_TEST;
-> > > > +
-> > > 
-> > > FYI, on an older distro kernel, the mmap fails and results in following
-> > > without any explanation.
-> > > 
-> > > Test: check_mmap (hook="MMAP_CHECK", test_mmap arg: "exec")
-> > > Unexpected exit status 1 from test_mmap
-> > > 
-> > > With some additional debugging, I'm seeing:
-> > > Failed mmap() /tmp/tmp.4gD2UjSvC4/tmp.PlzUEm09hO, err: -13 (Permission
-> > > denied)b
-> > 
-> > Uhm, ok. Which kernel is failing?
+Hello Christoph!
+
+On Fri, 2023-02-03 at 08:14 +0100, Christoph Hellwig wrote:
+> On Mon, Jan 16, 2023 at 09:52:10AM +0100, John Paul Adrian Glaubitz wrote:
+> > We have had a discussion between multiple people invested in the SuperH port and
+> > I have decided to volunteer as a co-maintainer of the port to support Rich Felker
+> > when he isn't available.
 > 
-> I'm able to reproduce the error on a next-integrity or next-integrity-
-> testing kernel, by running the tests multiple times.  The error doesn't
-> occur the first time running the test, but subsequent times.
+> So, this still isn't reflected in MAINTAINERS in linux-next.  When
+> do you plan to take over?
 
-Ops, yes. The problem was that the fowners of the measure and appraise
-rules were shared. Will not work, unless the files used in the measure
-tests are signed too.
+Since this is my very first time stepping up as a kernel maintainer, I was hoping
+to get some pointers on what to do to make this happen.
 
-Roberto
+So far, we have set up a new kernel tree and I have set up a local development and
+test environment for SH kernels using my SH7785LCR board as the target platform.
 
+Do I just need to send a patch asking to change the corresponding entry in the
+MAINTAINERS file?
+
+> What platforms will remain supported and what can we start dropping due to
+> being unused and unmaintained?
+
+This has not been sorted out yet.
+
+Adrian
+
+-- 
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
