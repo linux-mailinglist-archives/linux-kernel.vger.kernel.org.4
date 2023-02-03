@@ -2,63 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3248689F1E
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 17:25:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6841D689F1B
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 17:24:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232894AbjBCQZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 11:25:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47022 "EHLO
+        id S232502AbjBCQYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 11:24:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231629AbjBCQY7 (ORCPT
+        with ESMTP id S231629AbjBCQYU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 11:24:59 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 434DFA6B97
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 08:24:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675441446;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oW45kccjUKB0azEOuaFwFd8f5AOwrTQBVn+oOQKIx4o=;
-        b=JXi7iIOyVEcIILZXXqv2Yaf3tLKqgiF4bfMEWcY1kOkWua9KsQfed1eixTnwCbUj+fBFEV
-        Xw6qc9WfvBD0YFK5GTVrGjEBp551E1yXGZSA3QQF7/BsrMnfG9en+G8JpFxiyO9ZvyhmeX
-        1qsDygL6xXvUwUbNGpQRau74PQsWoc0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-510-M3Bi6QznOKWAvl_h0evyEQ-1; Fri, 03 Feb 2023 11:24:00 -0500
-X-MC-Unique: M3Bi6QznOKWAvl_h0evyEQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 700C387A380;
-        Fri,  3 Feb 2023 16:24:00 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.97])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 97616C15BA0;
-        Fri,  3 Feb 2023 16:23:59 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <2076817.1675434996@warthog.procyon.org.uk>
-References: <2076817.1675434996@warthog.procyon.org.uk> <72029a93-1150-1994-916f-b15ef0befd49@nvidia.com> <e8065d6a-d2f9-60aa-8541-8dfc8e9b608f@redhat.com> <000000000000b0b3c005f3a09383@google.com> <822863.1675327935@warthog.procyon.org.uk> <1265629.1675350909@warthog.procyon.org.uk>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     dhowells@redhat.com, David Hildenbrand <david@redhat.com>,
-        syzbot <syzbot+a440341a59e3b7142895@syzkaller.appspotmail.com>,
-        hch@lst.de, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] general protection fault in skb_dequeue (3)
+        Fri, 3 Feb 2023 11:24:20 -0500
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62197A145A;
+        Fri,  3 Feb 2023 08:24:19 -0800 (PST)
+Received: by mail-ot1-f53.google.com with SMTP id e12-20020a0568301e4c00b0068bc93e7e34so1499328otj.4;
+        Fri, 03 Feb 2023 08:24:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jLYnCQyeaEFRYpdwDRzWM+QNJiylMM8MiQQoWzGLB1E=;
+        b=1H7GvAVV/ZRPXsYfiZkqRiNsUzYUXORxcQBABncir4lMvKSBcCTZGjniWqU9r+HXbI
+         S6wy4XPzUZHzuTIAbtf/QPTIjP7RNRbBRJAvhnRJP3113OBnsQimSkW2A05CKI6WG4G1
+         0Xbv3JEBCtEt4oXKGptqSPWIfO64AOhSQhUmfv+qMh0sKcdc4nSig7dfcL4d1REjuGXr
+         Cjnv8yP8Y1CpS9Mb9ml2xRTWqMFCRxG29fsQ0e+YiOKj5JRkh+2HKYmP+4ZCIfd3Wn8u
+         pRTN4hezYQvMM+Q7X6touRL0Jys9dPrWhpSCGkRVThYjh2HtjULr7FeVLaTth/HLGXyI
+         F7qA==
+X-Gm-Message-State: AO0yUKV918JjcXdSwzfxA7G8xBDOwCkPtHwAdCirVsaJBGZ9t9Kiuxju
+        2C+Me4QiB8sW6LiilB8S4g==
+X-Google-Smtp-Source: AK7set9QioEE/PM5u0iYo9g/U2ZPZTBowfiB9/BrKUMguMO9j2THXRLKmTwSGAMdI7jsdBHUJKjsIA==
+X-Received: by 2002:a9d:4a4:0:b0:675:fef1:e2a6 with SMTP id 33-20020a9d04a4000000b00675fef1e2a6mr2106366otm.35.1675441458581;
+        Fri, 03 Feb 2023 08:24:18 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id l28-20020a056830335c00b00684ccbfe012sm1276802ott.27.2023.02.03.08.24.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Feb 2023 08:24:18 -0800 (PST)
+Received: (nullmailer pid 133229 invoked by uid 1000);
+        Fri, 03 Feb 2023 16:24:17 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>
+Cc:     Leo Yan <leo.yan@linaro.org>, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] perf arm-spe: Add raw decoding for SPEv1.2 previous branch address
+Date:   Fri,  3 Feb 2023 10:24:01 -0600
+Message-Id: <20230203162401.132931-1-robh@kernel.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2112098.1675441439.1@warthog.procyon.org.uk>
-Date:   Fri, 03 Feb 2023 16:23:59 +0000
-Message-ID: <2112099.1675441439@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,40 +67,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-David Howells <dhowells@redhat.com> wrote:
+Arm SPEv1.2 adds a new optional address packet type: previous branch
+target. The recorded address is the target virtual address of the most
+recently taken branch in program order.
 
-> I think I have managed to isolate the bug to the read side of sendfile() or
-> the pipe in the middle by the following:
+Add support for decoding the address packet in raw dumps.
 
-I did something similar in iov_iter_extract_pipe_pages(), allocating a
-permanent page there:
+Reviewed-by: Leo Yan <leo.yan@linaro.org>
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+v2:
+ - Use "PBT" instead of "LBR"
+---
+ tools/perf/util/arm-spe-decoder/arm-spe-pkt-decoder.c | 4 +++-
+ tools/perf/util/arm-spe-decoder/arm-spe-pkt-decoder.h | 1 +
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
-+	mutex_lock(&extract_tmp_lock);
-+	if (!extract_tmp) {
-+		pr_notice("alloc extract_tmp\n");
-+		extract_tmp = alloc_page(GFP_USER);
-+		if (extract_tmp) {
-+			SetPageDebugMark(extract_tmp);
-+			page_ref_add(extract_tmp, 200);
-+		}
-+	}
-+	mutex_unlock(&extract_tmp_lock);
-+	if (!extract_tmp)
-+		return -ENOMEM;
-
-and then subbing that for the returned page:
-
- 		chunk = min_t(size_t, left, PAGE_SIZE - offset);
- 		left -= chunk;
--		*p++ = page;
-+		//*p++ = page;
-+		*p++ = extract_tmp;
-
-That makes the oopses stop happening.  Pages are still being added to the pipe
-at one end and being removed at the other.
-
-So I'm guessing a DMA happens to the destination buffer for the DIO read after
-it has been released.
-
-David
+diff --git a/tools/perf/util/arm-spe-decoder/arm-spe-pkt-decoder.c b/tools/perf/util/arm-spe-decoder/arm-spe-pkt-decoder.c
+index 2f311189c6e8..fed4741f372e 100644
+--- a/tools/perf/util/arm-spe-decoder/arm-spe-pkt-decoder.c
++++ b/tools/perf/util/arm-spe-decoder/arm-spe-pkt-decoder.c
+@@ -422,16 +422,18 @@ static int arm_spe_pkt_desc_addr(const struct arm_spe_pkt *packet,
+ 	int ch, pat;
+ 	u64 payload = packet->payload;
+ 	int err = 0;
++	static const char *idx_name[] = {"PC", "TGT", "VA", "PA", "PBT"};
+ 
+ 	switch (idx) {
+ 	case SPE_ADDR_PKT_HDR_INDEX_INS:
+ 	case SPE_ADDR_PKT_HDR_INDEX_BRANCH:
++	case SPE_ADDR_PKT_HDR_INDEX_PREV_BRANCH:
+ 		ns = !!SPE_ADDR_PKT_GET_NS(payload);
+ 		el = SPE_ADDR_PKT_GET_EL(payload);
+ 		payload = SPE_ADDR_PKT_ADDR_GET_BYTES_0_6(payload);
+ 		arm_spe_pkt_out_string(&err, &buf, &buf_len,
+ 				"%s 0x%llx el%d ns=%d",
+-				(idx == 1) ? "TGT" : "PC", payload, el, ns);
++				idx_name[idx], payload, el, ns);
+ 		break;
+ 	case SPE_ADDR_PKT_HDR_INDEX_DATA_VIRT:
+ 		arm_spe_pkt_out_string(&err, &buf, &buf_len,
+diff --git a/tools/perf/util/arm-spe-decoder/arm-spe-pkt-decoder.h b/tools/perf/util/arm-spe-decoder/arm-spe-pkt-decoder.h
+index 9b970e7bf1e2..f75ed3a8a050 100644
+--- a/tools/perf/util/arm-spe-decoder/arm-spe-pkt-decoder.h
++++ b/tools/perf/util/arm-spe-decoder/arm-spe-pkt-decoder.h
+@@ -65,6 +65,7 @@ struct arm_spe_pkt {
+ #define SPE_ADDR_PKT_HDR_INDEX_BRANCH		0x1
+ #define SPE_ADDR_PKT_HDR_INDEX_DATA_VIRT	0x2
+ #define SPE_ADDR_PKT_HDR_INDEX_DATA_PHYS	0x3
++#define SPE_ADDR_PKT_HDR_INDEX_PREV_BRANCH	0x4
+ 
+ /* Address packet payload */
+ #define SPE_ADDR_PKT_ADDR_BYTE7_SHIFT		56
+-- 
+2.39.0
 
