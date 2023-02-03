@@ -2,63 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7DA168A4C3
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 22:37:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D3E168A4CB
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 22:37:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231511AbjBCVhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 16:37:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41384 "EHLO
+        id S233740AbjBCVhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 16:37:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231302AbjBCVhE (ORCPT
+        with ESMTP id S233571AbjBCVhN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 16:37:04 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F14DA7EF8
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 13:35:46 -0800 (PST)
+        Fri, 3 Feb 2023 16:37:13 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 057D4A8A25
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 13:35:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675460145;
+        s=mimecast20190719; t=1675460155;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=WTWZ2Ef2CfyxEGVxp7yzT3b+CQOijHFN2HB2ijuK9AA=;
-        b=DucWH364pwOChSzp+F1mZeWD5xT/f76WF+vFZo+gamXSlfPkLNPeEgp6unlezE/iuHT8Rv
-        nc1tlANAfgCbGToWL/HD19m9M5IwNYohpT8jmqUfQ1dEwTKw010PKpaR6AxqW9siy/Q0Hp
-        odhSAvdw+MiyDgDPYgHmhByfR3ESmxU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-13-dddXBdJWPGu1O0UyFFjw0w-1; Fri, 03 Feb 2023 16:35:42 -0500
-X-MC-Unique: dddXBdJWPGu1O0UyFFjw0w-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4AF533815F77;
-        Fri,  3 Feb 2023 21:35:41 +0000 (UTC)
-Received: from madcap2.tricolour.com (unknown [10.22.50.7])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 65280400F756;
-        Fri,  3 Feb 2023 21:35:39 +0000 (UTC)
-From:   Richard Guy Briggs <rgb@redhat.com>
-To:     Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org
-Cc:     Paul Moore <paul@paul-moore.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        Richard Guy Briggs <rgb@redhat.com>, Jan Kara <jack@suse.cz>,
-        Amir Goldstein <amir73il@gmail.com>
-Subject: [PATCH v7 3/3] fanotify,audit: Allow audit to use the full permission event response
-Date:   Fri,  3 Feb 2023 16:35:16 -0500
-Message-Id: <bcb6d552e517b8751ece153e516d8b073459069c.1675373475.git.rgb@redhat.com>
-In-Reply-To: <cover.1675373475.git.rgb@redhat.com>
-References: <cover.1675373475.git.rgb@redhat.com>
+        bh=5k+UxZR8AqVwDwvK/Db4g0V588SY+VI2pB0owqXny0I=;
+        b=Sy6gvVesgHw7JxfnxTUTJECI7a1/7v9QkOzDrmZ5HhXcqHmsPEI72aJiaUX2dciATLWJtD
+        nF9cGZi65knzhsQyjRiddsecXmugw6Eu+IIm6/uOZ23foFdRtIkT/34/qRK3P4ZNkPCYQH
+        0eeQf9bbrUBY6nqF04Ur91kUikd/Hys=
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
+ [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-172-N8dTAfnVOeG9iuO3yybM1g-1; Fri, 03 Feb 2023 16:35:54 -0500
+X-MC-Unique: N8dTAfnVOeG9iuO3yybM1g-1
+Received: by mail-io1-f71.google.com with SMTP id u6-20020a6be406000000b00716ceebf132so3728445iog.1
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 13:35:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5k+UxZR8AqVwDwvK/Db4g0V588SY+VI2pB0owqXny0I=;
+        b=kxPlY3BL1/7Wfsi2At1TOpYF9HxzwCKWjFVfQnnshTosUoQF8+6p1Nxa4P/DGIjkpn
+         6DnRXGJR+3UIoq4FWexla6V731/RBxV4aC84yvzVs43xRWcpSxGGgKP0C0TZKX2mBKfq
+         nbdH2hNagET/Wmq01wghVgerNWqZxY2+XNF3mLAItwkSXG+xAO0VbcxJ/mRvi3PrKBvH
+         op8ha/Pw8GPIu+kql11z8v8ikzW5aKBlxKhBtVTpv2GNJ8El8Lo45lR40voa9G91h5S0
+         lZRyU+uHa0B2l0ySCxRc5Q8RcJ8+Y4zU3jIRTfVtk5igwe8dry9AP3RwanezLx7HTMZF
+         s79Q==
+X-Gm-Message-State: AO0yUKX3n6qQZ2FHKbGbfdJhfj8gAa5+xCad9MAkPlWXarpaS7upouga
+        dLAG7wjPAGldSiKX9HzhaEazb/8Q9ergzJ06QMUgVZJ5O9CpIiA5eK6oNnQLVqMEb/tWAWYLhzf
+        9jQLEvZEwb0szLxfUVcVxCKKU
+X-Received: by 2002:a05:6e02:148c:b0:312:7bbf:94f5 with SMTP id n12-20020a056e02148c00b003127bbf94f5mr9262267ilk.3.1675460153335;
+        Fri, 03 Feb 2023 13:35:53 -0800 (PST)
+X-Google-Smtp-Source: AK7set8GiBZNAUhnppz+3LpmWjBO/5Dhk61WY57QRLNeBIn7RbRA8vBDcQoGmES9jBCpRxioDalZzw==
+X-Received: by 2002:a05:6e02:148c:b0:312:7bbf:94f5 with SMTP id n12-20020a056e02148c00b003127bbf94f5mr9262252ilk.3.1675460153111;
+        Fri, 03 Feb 2023 13:35:53 -0800 (PST)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id a16-20020a924450000000b0031264571bd8sm1103072ilm.18.2023.02.03.13.35.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Feb 2023 13:35:52 -0800 (PST)
+Date:   Fri, 3 Feb 2023 14:35:51 -0700
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Matthew Rosato <mjrosato@linux.ibm.com>
+Cc:     "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "jgg@nvidia.com" <jgg@nvidia.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "farman@linux.ibm.com" <farman@linux.ibm.com>,
+        "pmorel@linux.ibm.com" <pmorel@linux.ibm.com>,
+        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
+        "frankja@linux.ibm.com" <frankja@linux.ibm.com>,
+        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "akrowiak@linux.ibm.com" <akrowiak@linux.ibm.com>,
+        "jjherne@linux.ibm.com" <jjherne@linux.ibm.com>,
+        "pasic@linux.ibm.com" <pasic@linux.ibm.com>,
+        "zhenyuw@linux.intel.com" <zhenyuw@linux.intel.com>,
+        "Wang, Zhi A" <zhi.a.wang@intel.com>,
+        "Christopherson, , Sean" <seanjc@google.com>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "intel-gvt-dev@lists.freedesktop.org" 
+        <intel-gvt-dev@lists.freedesktop.org>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3] vfio: fix deadlock between group lock and kvm lock
+Message-ID: <20230203143551.2f349702.alex.williamson@redhat.com>
+In-Reply-To: <b5e64413-0374-edd8-9bfd-8bb613ab04f9@linux.ibm.com>
+References: <20230202162442.78216-1-mjrosato@linux.ibm.com>
+        <20230202124210.476adaf8.alex.williamson@redhat.com>
+        <BN9PR11MB527618E281BEB8E479ABB0418CD69@BN9PR11MB5276.namprd11.prod.outlook.com>
+        <20230202161307.0c6aa23e.alex.williamson@redhat.com>
+        <BN9PR11MB5276017F9CEBB4BAE58C40E88CD79@BN9PR11MB5276.namprd11.prod.outlook.com>
+        <DS0PR11MB7529050661FCE4A5AC4B17C3C3D79@DS0PR11MB7529.namprd11.prod.outlook.com>
+        <20230203064940.435e4d65.alex.williamson@redhat.com>
+        <DS0PR11MB75297154376388A3698C5CCAC3D79@DS0PR11MB7529.namprd11.prod.outlook.com>
+        <20230203081942.64fbf9f1.alex.williamson@redhat.com>
+        <ed030aa5-b3af-638e-6e26-4e3a20b98ef4@linux.ibm.com>
+        <20230203133503.4d8fb3e8.alex.williamson@redhat.com>
+        <b5e64413-0374-edd8-9bfd-8bb613ab04f9@linux.ibm.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,123 +111,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch passes the full response so that the audit function can use all
-of it. The audit function was updated to log the additional information in
-the AUDIT_FANOTIFY record.
+On Fri, 3 Feb 2023 16:19:10 -0500
+Matthew Rosato <mjrosato@linux.ibm.com> wrote:
+> > @@ -350,32 +350,25 @@ void vfio_device_get_kvm_safe(struct vfio_device *device)
+> >  
+> >  	lockdep_assert_held(&device->dev_set->lock);
+> >  
+> > -	spin_lock(&device->group->kvm_ref_lock);
+> > -	if (!device->group->kvm)
+> > -		goto unlock;
+> > -
+> >  	pfn = symbol_get(kvm_put_kvm);
+> >  	if (WARN_ON(!pfn))
+> > -		goto unlock;
+> > +		return;
+> >  
+> >  	fn = symbol_get(kvm_get_kvm_safe);
+> >  	if (WARN_ON(!fn)) {
+> >  		symbol_put(kvm_put_kvm);
+> > -		goto unlock;
+> > +		return;
+> >  	}  
+> >  >  	ret = fn(device->group->kvm);  
+> 
+> s/device->group->kvm/kvm/
 
-Currently the only type of fanotify info that is defined is an audit
-rule number, but convert it to hex encoding to future-proof the field.
-Hex encoding suggested by Paul Moore <paul@paul-moore.com>.
+Oops, yes.
 
-The {subj,obj}_trust values are {0,1,2}, corresponding to no, yes, unknown.
+> With that small change, this looks good to me too (and testing looks
+> good too).  Do you want me to send a v4 for one last round of review?
 
-Sample records:
-  type=FANOTIFY msg=audit(1600385147.372:590): resp=2 fan_type=1 fan_info=3137 subj_trust=3 obj_trust=5
-  type=FANOTIFY msg=audit(1659730979.839:284): resp=1 fan_type=0 fan_info=0 subj_trust=2 obj_trust=2
+Please do.  Thanks,
 
-Suggested-by: Steve Grubb <sgrubb@redhat.com>
-Link: https://lore.kernel.org/r/3075502.aeNJFYEL58@x2
-Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
----
- fs/notify/fanotify/fanotify.c |  3 ++-
- include/linux/audit.h         |  9 +++++----
- kernel/auditsc.c              | 18 +++++++++++++++---
- 3 files changed, 22 insertions(+), 8 deletions(-)
-
-diff --git a/fs/notify/fanotify/fanotify.c b/fs/notify/fanotify/fanotify.c
-index 24ec1d66d5a8..29bdd99b29fa 100644
---- a/fs/notify/fanotify/fanotify.c
-+++ b/fs/notify/fanotify/fanotify.c
-@@ -273,7 +273,8 @@ static int fanotify_get_response(struct fsnotify_group *group,
- 
- 	/* Check if the response should be audited */
- 	if (event->response & FAN_AUDIT)
--		audit_fanotify(event->response & ~FAN_AUDIT);
-+		audit_fanotify(event->response & ~FAN_AUDIT,
-+			       &event->audit_rule);
- 
- 	pr_debug("%s: group=%p event=%p about to return ret=%d\n", __func__,
- 		 group, event, ret);
-diff --git a/include/linux/audit.h b/include/linux/audit.h
-index d6b7d0c7ce43..31086a72e32a 100644
---- a/include/linux/audit.h
-+++ b/include/linux/audit.h
-@@ -14,6 +14,7 @@
- #include <linux/audit_arch.h>
- #include <uapi/linux/audit.h>
- #include <uapi/linux/netfilter/nf_tables.h>
-+#include <uapi/linux/fanotify.h>
- 
- #define AUDIT_INO_UNSET ((unsigned long)-1)
- #define AUDIT_DEV_UNSET ((dev_t)-1)
-@@ -416,7 +417,7 @@ extern void __audit_log_capset(const struct cred *new, const struct cred *old);
- extern void __audit_mmap_fd(int fd, int flags);
- extern void __audit_openat2_how(struct open_how *how);
- extern void __audit_log_kern_module(char *name);
--extern void __audit_fanotify(u32 response);
-+extern void __audit_fanotify(u32 response, struct fanotify_response_info_audit_rule *friar);
- extern void __audit_tk_injoffset(struct timespec64 offset);
- extern void __audit_ntp_log(const struct audit_ntp_data *ad);
- extern void __audit_log_nfcfg(const char *name, u8 af, unsigned int nentries,
-@@ -523,10 +524,10 @@ static inline void audit_log_kern_module(char *name)
- 		__audit_log_kern_module(name);
- }
- 
--static inline void audit_fanotify(u32 response)
-+static inline void audit_fanotify(u32 response, struct fanotify_response_info_audit_rule *friar)
- {
- 	if (!audit_dummy_context())
--		__audit_fanotify(response);
-+		__audit_fanotify(response, friar);
- }
- 
- static inline void audit_tk_injoffset(struct timespec64 offset)
-@@ -679,7 +680,7 @@ static inline void audit_log_kern_module(char *name)
- {
- }
- 
--static inline void audit_fanotify(u32 response)
-+static inline void audit_fanotify(u32 response, struct fanotify_response_info_audit_rule *friar)
- { }
- 
- static inline void audit_tk_injoffset(struct timespec64 offset)
-diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-index d1fb821de104..5a5994659b44 100644
---- a/kernel/auditsc.c
-+++ b/kernel/auditsc.c
-@@ -64,6 +64,7 @@
- #include <uapi/linux/limits.h>
- #include <uapi/linux/netfilter/nf_tables.h>
- #include <uapi/linux/openat2.h> // struct open_how
-+#include <uapi/linux/fanotify.h>
- 
- #include "audit.h"
- 
-@@ -2877,10 +2878,21 @@ void __audit_log_kern_module(char *name)
- 	context->type = AUDIT_KERN_MODULE;
- }
- 
--void __audit_fanotify(u32 response)
-+void __audit_fanotify(u32 response, struct fanotify_response_info_audit_rule *friar)
- {
--	audit_log(audit_context(), GFP_KERNEL,
--		AUDIT_FANOTIFY,	"resp=%u", response);
-+	/* {subj,obj}_trust values are {0,1,2}: no,yes,unknown */
-+	switch (friar->hdr.type) {
-+	case FAN_RESPONSE_INFO_NONE:
-+		audit_log(audit_context(), GFP_KERNEL, AUDIT_FANOTIFY,
-+			  "resp=%u fan_type=%u fan_info=0 subj_trust=2 obj_trust=2",
-+			  response, FAN_RESPONSE_INFO_NONE);
-+		break;
-+	case FAN_RESPONSE_INFO_AUDIT_RULE:
-+		audit_log(audit_context(), GFP_KERNEL, AUDIT_FANOTIFY,
-+			  "resp=%u fan_type=%u fan_info=%X subj_trust=%u obj_trust=%u",
-+			  response, friar->hdr.type, friar->rule_number,
-+			  friar->subj_trust, friar->obj_trust);
-+	}
- }
- 
- void __audit_tk_injoffset(struct timespec64 offset)
--- 
-2.27.0
+Alex
 
