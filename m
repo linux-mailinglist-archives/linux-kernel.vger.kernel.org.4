@@ -2,274 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F3F1688D00
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 03:14:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53E62688D04
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 03:19:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230454AbjBCCOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 21:14:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44362 "EHLO
+        id S231233AbjBCCTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 21:19:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232056AbjBCCOv (ORCPT
+        with ESMTP id S229667AbjBCCTK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 21:14:51 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A93289341;
-        Thu,  2 Feb 2023 18:14:19 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id jh15so3872321plb.8;
-        Thu, 02 Feb 2023 18:14:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TKAQRjTFaXWS77vgv6q0ZfLRZHBfHqYPvWhJ5n/8Urw=;
-        b=HStmIgqnezSrhFQAflZ152q7o549fqXxmFhj1JKRzJbReJI9NQxcE0ZcfFX8qFv06+
-         /d//M9szyKOznSHB7vCeEy5Bjtb00oCIyoSB1sM0tfLP+HCGgxsrOEnQD5x3sHDSV0Rh
-         zENMfY969UISFeTDv88iAewVZooooFsqs53LB7pV6nYSsNAeizhiMJ9fgzaS3k3zJcen
-         m1wquPLBwGwF55vtVtrIrCpUEaXGWfyYjguWdV5Ukfxy5/8U83oBT6P0EJcNZV981ieM
-         ev9y8jNJfO+VtCeb7XeTfFpLGjr+GyaxzqJtwe3Bi0Rltuo6g1/w5TXnF0dauXw5CVBE
-         I+gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TKAQRjTFaXWS77vgv6q0ZfLRZHBfHqYPvWhJ5n/8Urw=;
-        b=1V9In1KXGVabN3a9dxLQq+xV1/VysVOX1GaJ+avIbX6RLiEdz1BlUHrAgpYX7822cI
-         S+Yk3Iz2SloIQyzzTvanEfpacRjVvWOmaIiIgk3lvW4Zt22U308xqUD5s0fIAJ7OU52e
-         ZIgTC2QVwP0ydEB1UXX3sqmdfGsW+D5oxRmYnLlTRoe28oxPpEglTj+snUxG0LnEVcZw
-         IvXAwpykbgsjr/BcpGwAf6FSmtaeaLesn5tm2kVVJJzBxeNiRNuP9kNWrVLVSaQ64Bpq
-         bg6YkQmjM40EAF+IN9bzoAVw1ml2OSdaLWK1vuojf988INqv7roq/WlcUaztrpKrwgZa
-         ALOw==
-X-Gm-Message-State: AO0yUKV/yGXNXZ2WEksBTkMh15xmF1BcpdVZc/vxTF58heqdiEkjKz7B
-        W8fQfyyAG7rGirqNK6lg6IY=
-X-Google-Smtp-Source: AK7set830bqUqT4sOcIBCoelkdwbIhhp7J9OP66CNDgnAiEZgxZ9sVYgeDX7KWgXo/0v+ZjvIW4EFA==
-X-Received: by 2002:a17:90b:1bc7:b0:225:a226:9fbb with SMTP id oa7-20020a17090b1bc700b00225a2269fbbmr8462096pjb.39.1675390457708;
-        Thu, 02 Feb 2023 18:14:17 -0800 (PST)
-Received: from [192.168.43.80] (subs02-180-214-232-10.three.co.id. [180.214.232.10])
-        by smtp.gmail.com with ESMTPSA id ij14-20020a17090af80e00b0020a11217682sm534653pjb.27.2023.02.02.18.14.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 18:14:17 -0800 (PST)
-Message-ID: <cb4c5572-baff-6c0c-5aba-d2867664c682@gmail.com>
-Date:   Fri, 3 Feb 2023 09:14:11 +0700
+        Thu, 2 Feb 2023 21:19:10 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8543C6B03A;
+        Thu,  2 Feb 2023 18:19:09 -0800 (PST)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3131nnQ6019722;
+        Fri, 3 Feb 2023 02:19:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=3+2q7J7ZvpaiX4JNzYcJe2YteisoZ+lBYkt0CBWZbQQ=;
+ b=Yonu8krH3hBGn5Dakz0A1iZtk6QWq83DNd0ga7pbojiyRUUpLM6ZprR3f+k/fP/tXB7C
+ p/TaYJ5UhBZu+jNp+73YweXo3glaYhKE9KNIifLniyRBpjUCvmhLjt49iuyYAxPGbMlk
+ W03+O8ZZWEiuQkXcfcZQJJNr7DTsRqhpbT9atp57dLDoiPkkfe8Q2YXV/LsV8uTF1myd
+ vnk8AqyNWtNQkavLqUOMwJm2+5y2rEDkAj2IdRACXN4GEpHDPNH8OKJhhdYXHPP/ebEr
+ A4xkXwipIODGuq2CiA/F1FKvcD0JE7tw7yIKj1QDSWM3D+484YxctRFXx1XUz6N5B+RO vQ== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ngns30c6s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Feb 2023 02:19:03 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3132J21J005947
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 3 Feb 2023 02:19:02 GMT
+Received: from [10.239.154.244] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 2 Feb 2023
+ 18:19:00 -0800
+Message-ID: <1ffed097-af47-a179-3854-f7b238d8b6de@quicinc.com>
+Date:   Fri, 3 Feb 2023 10:18:57 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [PATCH bpf-next v2] bpf/docs: Document kfunc lifecycle /
- stability expectations
+Subject: Re: [PATCH] usb: dwc3: Clear DWC3_EVENT_PENDING when count is 0
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        =?UTF-8?B?7KCV7J6s7ZuI?= <jh0801.jung@samsung.com>
+CC:     'Felipe Balbi' <balbi@kernel.org>,
+        'Greg Kroah-Hartman' <gregkh@linuxfoundation.org>,
+        "'open list:USB XHCI DRIVER'" <linux-usb@vger.kernel.org>,
+        'open list' <linux-kernel@vger.kernel.org>,
+        'Seungchull Suh' <sc.suh@samsung.com>,
+        'Daehwan Jung' <dh10.jung@samsung.com>
+References: <20230110025310.nowjnrmo3oag76xd@synopsys.com>
+ <4ced9c3e-c7b5-e0a0-88ec-1ac383d893a2@quicinc.com>
+ <bfcfac21-3df7-7f47-576b-0717f2bab393@quicinc.com>
+ <f35f0636-5b3f-9002-77f3-a3c2c53be973@quicinc.com>
+ <20230111000021.r2bd5gnfwlbxzxd3@synopsys.com>
+ <826538ae-d27a-fc03-c8dc-94b53c8a44cf@quicinc.com>
+ <20230111022720.mcrhdrthgwlwszcv@synopsys.com>
+ <c76d426c-c65b-1334-627a-1a6c615ddd93@quicinc.com>
+ <20230201185742.lc26zheeuhvfuxet@synopsys.com>
+ <4723be6d-a9c5-17f4-f8d4-6ab0e81d866e@quicinc.com>
+ <20230202200650.cqntlk7m2krsafgd@synopsys.com>
 Content-Language: en-US
-To:     David Vernet <void@manifault.com>, bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@meta.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, toke@redhat.com, brouer@redhat.com,
-        corbet@lwn.net, linux-doc@vger.kernel.org
-References: <20230202223557.744110-1-void@manifault.com>
- <20230202223557.744110-2-void@manifault.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20230202223557.744110-2-void@manifault.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+From:   Linyu Yuan <quic_linyyuan@quicinc.com>
+In-Reply-To: <20230202200650.cqntlk7m2krsafgd@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: yGu7zhB39Zi1-6wzNWluPcOPN2Q7dUiN
+X-Proofpoint-GUID: yGu7zhB39Zi1-6wzNWluPcOPN2Q7dUiN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-02_16,2023-02-02_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 clxscore=1015 priorityscore=1501 malwarescore=0
+ bulkscore=0 mlxscore=0 mlxlogscore=396 adultscore=0 phishscore=0
+ spamscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302030019
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/3/23 05:35, David Vernet wrote:
-> diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
-> index 0bd07b39c2a4..4135f3111b67 100644
-> --- a/Documentation/bpf/kfuncs.rst
-> +++ b/Documentation/bpf/kfuncs.rst
-> @@ -13,7 +13,7 @@ BPF Kernel Functions or more commonly known as kfuncs are functions in the Linux
->  kernel which are exposed for use by BPF programs. Unlike normal BPF helpers,
->  kfuncs do not have a stable interface and can change from one kernel release to
->  another. Hence, BPF programs need to be updated in response to changes in the
-> -kernel.
-> +kernel. See :ref:`BPF_kfunc_lifecycle_expectations` for more information.
->  
->  2. Defining a kfunc
->  ===================
-> @@ -238,6 +238,32 @@ single argument which must be a trusted argument or a MEM_RCU pointer.
->  The argument may have reference count of 0 and the kfunc must take this
->  into consideration.
->  
-> +.. _KF_deprecated_flag:
-> +
-> +2.4.9 KF_DEPRECATED flag
-> +------------------------
-> +
-> +The KF_DEPRECATED flag is used for kfuncs which are expected to be changed or
-> +removed in a subsequent kernel release. Deprecated kfuncs may be removed at any
-> +time, though if possible (and when applicable), developers are encouraged to
-> +provide users with a deprecation window to ease the burden of migrating off of
-> +the kfunc.
-> +
-> +A kfunc that is marked with KF_DEPRECATED should also have any relevant
-> +information captured in its kernel doc. Such information typically includes the
-> +kfunc's expected remaining lifespan, a recommendation for new functionality
-> +that can replace it if any is available, and possibly a rationale for why it is
-> +being removed.
-> +
-> +Note that while on some occasions, a KF_DEPRECATED kfunc may continue to be
-> +supported and have its KF_DEPRECATED flag removed, it is likely to be far more
-> +difficult to remove a KF_DEPRECATED flag after it's been added than it is to
-> +prevent it from being added in the first place. As described in
-> +:ref:`BPF_kfunc_lifecycle_expectations`, users that rely on specific kfuncs are
-> +highly encouraged to make their use-cases known as early as possible, and
-> +participate in upstream discussions regarding whether to keep, change,
-> +deprecate, or remove those kfuncs if and when such discussions occur.
-> +
->  2.5 Registering the kfuncs
->  --------------------------
->  
-> @@ -304,14 +330,116 @@ In order to accommodate such requirements, the verifier will enforce strict
->  PTR_TO_BTF_ID type matching if two types have the exact same name, with one
->  being suffixed with ``___init``.
->  
-> -3. Core kfuncs
-> +.. _BPF_kfunc_lifecycle_expectations:
-> +
-> +3. kfunc lifecycle expectations
-> +===============================
-> +
-> +kfuncs provide a kernel <-> kernel API, and thus are not bound by any of the
-> +strict stability restrictions associated with kernel <-> user UAPIs. Instead,
-> +they're modeled more similarly to EXPORT_SYMBOL_GPL, and can therefore be
-> +modified or removed by a maintainer of the subsystem they're defined in when
-> +it's deemed necessary.
-> +
-> +Like any other change to the kernel, maintainers will not change or remove a
-> +kfunc without having a reasonable justification.  Whether or not they'll choose
-> +to change a kfunc will ultimately depend on a variety of factors, such as how
-> +widely used the kfunc is, how long the kfunc has been in the kernel, whether an
-> +alternative kfunc exists, what the norm is in terms of stability for the
-> +subsystem in question, and of course what the technical cost is of continuing
-> +to support the kfunc.
-> +
-> +There are several implications of this:
-> +
-> +a) kfuncs that are widely used or have been in the kernel for a long time will
-> +   be more difficult to justify being changed or removed by a maintainer. Said
-> +   in a different way, kfuncs that are known to have a lot of users and provide
-> +   significant value provide stronger incentives for maintainers to invest the
-> +   time and complexity in supporting them. It is therefore important for
-> +   developers that are using kfuncs in their BPF programs to communicate and
-> +   explain how and why those kfuncs are being used, and to participate in
-> +   discussions regarding those kfuncs when they occur upstream.
-> +
-> +b) Because many BPF programs are not upstreamed as part of the kernel tree, it
-> +   is often not possible to change them in-place when a kfunc changes, as it is
-> +   for e.g. an upstreamed driver being updated in place when an
-> +   EXPORT_SYMBOL_GPL symbol is changed. Distributions that bundle BPF programs
-> +   that use kfuncs must therefore ensure that those BPF programs are linking
-> +   against the kfuncs that are supported by the kernel version being used for
-> +   any given release. Additionally, BPF developers are encouraged to upstream
-> +   their BPF programs so they can enjoy the same benefits as upstreamed
-> +   modules, and avoid code churn.
-> +
-> +   On the other hand, while the hope is that it will become the norm to
-> +   upstream BPF programs, the reality is that most BPF programs are still
-> +   out-of-tree. This means that users with out-of-tree BPF programs that use
-> +   kfuncs should be considered relevant to discussions and decisions around
-> +   modifying and removing kfuncs, despite that not being the norm for
-> +   out-of-tree kernel modules. The BPF community will take an active role in
-> +   participating in upstream discussions when necessary to ensure that the
-> +   perspectives of such users are taken into account.
-> +
-> +c) A kfunc will never have any hard stability guarantees. BPF APIs cannot and
-> +   will not ever hard-block a change in the kernel purely for stability
-> +   reasons. In other words, kfuncs have the same stability guarantees as any
-> +   other kernel API, such as those provided by EXPORT_SYMBOL_GPL, though with
-> +   perhaps less burden than EXPORT_SYMBOL_GPL changes thanks to BPF CO-RE.
-> +
-> +   That being said, kfuncs are features that are meant to solve problems and
-> +   provide value to users. The decision of whether to change or remove a kfunc
-> +   is a multivariate technical decision that is made on a case-by-case basis,
-> +   and which is informed by data points such as those mentioned above. It is
-> +   expected that a kfunc being removed or changed with no warning will not be a
-> +   common occurrence or take place without sound justification, but it is a
-> +   possibility that must be accepted if one is to use kfuncs.
-> +
-> +3.1 kfunc deprecation
-> +---------------------
-> +
-> +As described above, while sometimes a maintainer may find that a kfunc must be
-> +changed or removed immediately to accommodate some changes in their subsystem,
-> +other kfuncs may be able to accommodate a longer and more measured deprecation
-> +process. For example, if a new kfunc comes along which provides superior
-> +functionality to an existing kfunc, the existing kfunc may be deprecated for
-> +some period of time to allow users to migrate their BPF programs to use the new
-> +one. Or, if a kfunc has no known users, a decision may be made to remove the
-> +kfunc (without providing an alternative API) after some deprecation period
-> +period so as to provide users with a window to notify the kfunc maintainer if
-> +it turns out that the kfunc is actually being used.
-> +
-> +kfuncs being deprecated (rather than changed or removed with no warning) is
-> +expected to be the common case, and as described in :ref:`KF_deprecated_flag`,
-> +the kfunc framework provides the KF_DEPRECATED flag to kfunc developers to
-> +signal to users that a kfunc has been deprecated. Once a kfunc has been marked
-> +with KF_DEPRECATED, the following procedure is followed for removal:
-> +
-> +1. Any relevant information for deprecated kfuncs is documented in the kfunc's
-> +   kernel docs. This documentation will typically include the kfunc's expected
-> +   remaining lifespan,  a recommendation for new functionality that can replace
-> +   the usage of the deprecated function (or an explanation as to why no such
-> +   replacement exists), etc.
-> +
-> +2. The deprecated kfunc is kept in the kernel for some period of time after it
-> +   was first marked as deprecated. This time period will be chosen on a
-> +   case-by-case basis, and will typically depend on how widespread the use of
-> +   the kfunc is, how long it has been in the kernel, and how hard it is to move
-> +   to alternatives. This deprecation time period is "best effort", and as
-> +   described :ref:`above<BPF_kfunc_lifecycle_expectations>`, circumstances may
-> +   sometimes dictate that the kfunc be removed before the full intended
-> +   deprecation period has elapsed.
-> +
-> +3. After the deprecation period, or sometimes earlier if necessary, the kfunc
-> +   will be removed. At this point, BPF programs calling the kfunc will be
-> +   rejected by the verifier.
-> +
-> +4. Core kfuncs
->  ==============
->  
->  The BPF subsystem provides a number of "core" kfuncs that are potentially
->  applicable to a wide variety of different possible use cases and programs.
->  Those kfuncs are documented here.
->  
-> -3.1 struct task_struct * kfuncs
-> +4.1 struct task_struct * kfuncs
->  -------------------------------
->  
->  There are a number of kfuncs that allow ``struct task_struct *`` objects to be
-> @@ -387,7 +515,7 @@ Here is an example of it being used:
->  		return 0;
->  	}
->  
-> -3.2 struct cgroup * kfuncs
-> +4.2 struct cgroup * kfuncs
->  --------------------------
->  
->  ``struct cgroup *`` objects also have acquire and release functions:
-> @@ -502,7 +630,7 @@ the verifier. bpf_cgroup_ancestor() can be used as follows:
->  		return 0;
->  	}
->  
-> -3.3 struct cpumask * kfuncs
-> +4.3 struct cpumask * kfuncs
->  ---------------------------
->  
->  BPF provides a set of kfuncs that can be used to query, allocate, mutate, and
 
-LGTM, thanks!
+On 2/3/2023 4:06 AM, Thinh Nguyen wrote:
+> On Thu, Feb 02, 2023, Linyu Yuan wrote:
+>> On 2/2/2023 2:57 AM, Thinh Nguyen wrote:
+>>> On Tue, Jan 31, 2023, Linyu Yuan wrote:
+>>>> hi Thinh,
+>>>>
+>>>>
+>>>> regarding your suggestion, assume it is not PCIe type,  still have one
+>>>> question,
+>>>>
+>>>>
+>>>> -       if (evt->flags & DWC3_EVENT_PENDING)
+>>>> +       if (evt->flags & DWC3_EVENT_PENDING) {
+>>>> +               if (!evt->count) {
+>>>> +                       u32 reg = dwc3_readl(dwc->regs, DWC3_GEVNTSIZ(0));
+>>>> +
+>>>> +                       if (!(reg & DWC3_GEVNTSIZ_INTMASK))
+>>>> +                               evt->flags &= ~DWC3_EVENT_PENDING;
+>>>>
+>>>> do we need to return IRQ_WAKE_THREAD  ?
+>>> No, if evt->count is 0, but GEVNTCOUNT is > 0, the controller will
+>>> generate interrupt. The evt->count will be updated and the events will
+>>> be handled on the next interrupt.
+>>
+>> when will next interrupt happen ?
+> Immediately after. You can test this by just return IRQ_HANDLED and not
+> clear the GEVNTCOUNT to see its behavior.
 
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
--- 
-An old man doll... just what I always wanted! - Clara
+if it immediately, it will be good.
 
+
+정재훈  could you update a new patch which Thinh suggest.
+
+maybe we didn't find the root cause of irq strom, but the change have no side effect.
+
+
+>
+>> as when enter here, i guess GEVENTCOUNT is already > 0, but we didn't read
+>> it.
+> GEVNTCOUNT is always updating as new events are generated. We only clear
+> however many events we process, but that doesn't stop it from
+> incrementing.
+
+
+just consider if there is a case that next GEVNETCOUNT increase which 
+happen long time later,
+
+maybe think too much.
+
+
+>
+> BR,
+> Thinh
+>
+>>
+>>>> +               }
+>>>>                   return IRQ_HANDLED;
+>>>>
+>>>> as here return IRQ HANDLED, how can we make sure a new IRQ will be handled
+>>>> after previous IRQ thread clean PENDING flag ?
+>>> If evt->count > 0, that means the bottom half is still running. So,
+>>> leave it be. If evt->count == 0, then the cached events are processed,
+>>> we're safe to clear the PENDING flag. New interrupt will be generated if
+>>> GEVNTCOUNT is > 0.
+>>>
+>>>> +       }
+>>>>
+>>>>
+>>>> also for non-PCIe controller, consider IRQ mask register working correctly,
+>>>>
+>>>> consider a case IRQ happen before IRQ thread exit,  here just return
+>>>> IRQ_HANDLED.
+>>>>
+>>>> once IRQ thread exit, it will clean PENDING flag, so next IRQ event will run
+>>>> normally.
+>>>>
+>>>> if 정재훈 saw PENDING flag is not cleared, does it mean IRQ thread have no
+>>>> chance to exit ?
+>>> The PENDING flag should be cleared eventually when the bottom half
+>>> completes. I don't expect the interrupt storm to block the IRQ thread
+>>> forever, but I can't guarantee the device behavor. 정재훈 can confirm.
+>>> This change should resolve the interrupt storm.
+>>>
+>>> BR,
+>>> Thinh
