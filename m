@@ -2,144 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 633A7688E0A
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 04:33:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76A05688E0D
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 04:36:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232358AbjBCDdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 22:33:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52076 "EHLO
+        id S231755AbjBCDg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 22:36:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232476AbjBCDdD (ORCPT
+        with ESMTP id S229575AbjBCDgX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 22:33:03 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E02F88CFE;
-        Thu,  2 Feb 2023 19:32:45 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id r8so4026085pls.2;
-        Thu, 02 Feb 2023 19:32:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0sO/I/hapLPdlFrgOgCj3YUdlJCdmaojJPiwxcYZTHw=;
-        b=om+qrGa0QJU9y5GLrQUi3293WCGq/RV7RWKkzs79vM+mF7LstskZi0DFKWjKCBORxr
-         aBJEW9FuMIiDdHr5ZnqHmLf6NkF7r1HtPVK0R864e+0IHHuRwIoLk6B+JAT6xmxQyJhv
-         Co4Lg4l+n0M0OUjfzvq7trn9tBaObHoumwibEediLWIVQ1s/VFxl8/0B3DQWSFBVNBr9
-         ciaQetM0eZiV5sl7iG+GIhQf+tVNztTKo4MmHF2t9vHT1lfnOcgfvKduymsal7Rkja0E
-         yFOLUIUutIa+nZJl9ZgenNa6qZhVYxXPFiWRk1FEnowU3Cxt+Uj/RSSao/fSDjX4UqYD
-         cZng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=0sO/I/hapLPdlFrgOgCj3YUdlJCdmaojJPiwxcYZTHw=;
-        b=c7X+PRxfx7kkvpAGHfCDKzA9HZOef0lZo+1x9swsmjHjZXKTjegAukUKKlhTDfIj2/
-         toagZblU2IPAa9t0yCZuFrYUEmgmt/FCUO6zkV1SJn/LU1IGLUED+A7VeL9lP8s52olI
-         AOJbxuN92Azl48us/MZLWwzoWpzmpN5GUmVeyEoedIozXpalzRz2GElrDlKlQrGEOhLk
-         qsND25eMH/+wgcZ/ENQ98J04SYY9p2WsYuIImtBznBvt/6cs1qAwNqys0YppUFIMp7FP
-         T6U1/vjhUItKN3/Scjo75FZfKoZYaMFIR5cGSHe0HxTT9Oh3+iPjDSBq3cydap+6D3GM
-         jmQQ==
-X-Gm-Message-State: AO0yUKX9/mZeiqhJ6ur7LC0evE42hiyQua7/50r/9wdx9IgjkW7UV+AF
-        swydrH0e6UBeB+kSetEe8O8=
-X-Google-Smtp-Source: AK7set86YHchxl3IgwYooZpALzvQegpf3ZJ4iw88C5pZynpIjltH+qCY/RkEFP1v+LvdhM9Z0GhMrw==
-X-Received: by 2002:a17:902:f105:b0:196:2cc1:5082 with SMTP id e5-20020a170902f10500b001962cc15082mr2469626plb.67.1675395165002;
-        Thu, 02 Feb 2023 19:32:45 -0800 (PST)
-Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:1a:efea::75b])
-        by smtp.gmail.com with ESMTPSA id p7-20020a1709026b8700b001948107490csm433838plk.19.2023.02.02.19.32.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 19:32:44 -0800 (PST)
-Message-ID: <afb70dc4-8f7a-32d0-35b5-92b35902a7dc@gmail.com>
-Date:   Fri, 3 Feb 2023 11:32:33 +0800
+        Thu, 2 Feb 2023 22:36:23 -0500
+Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38DFA1EBD7
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 19:36:16 -0800 (PST)
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 3133NSqX042892;
+        Fri, 3 Feb 2023 11:23:28 +0800 (GMT-8)
+        (envelope-from neal_liu@aspeedtech.com)
+Received: from localhost.localdomain (192.168.10.10) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 3 Feb
+ 2023 11:35:17 +0800
+From:   Neal Liu <neal_liu@aspeedtech.com>
+To:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
+        Neal Liu <neal_liu@aspeedtech.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
+        <linux-crypto@vger.kernel.org>
+Subject: [RESENT PATCH v3 -next] crypto: aspeed: fix type warnings
+Date:   Fri, 3 Feb 2023 11:35:12 +0800
+Message-ID: <20230203033512.980497-1-neal_liu@aspeedtech.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [RFC PATCH V3 03/16] x86/hyperv: Set Virtual Trust Level in vmbus
- init message
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "jgross@suse.com" <jgross@suse.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "kirill@shutemov.name" <kirill@shutemov.name>,
-        "jiangshan.ljs@antgroup.com" <jiangshan.ljs@antgroup.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "ashish.kalra@amd.com" <ashish.kalra@amd.com>,
-        "srutherford@google.com" <srutherford@google.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "anshuman.khandual@arm.com" <anshuman.khandual@arm.com>,
-        "pawan.kumar.gupta@linux.intel.com" 
-        <pawan.kumar.gupta@linux.intel.com>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "daniel.sneddon@linux.intel.com" <daniel.sneddon@linux.intel.com>,
-        "alexander.shishkin@linux.intel.com" 
-        <alexander.shishkin@linux.intel.com>,
-        "sandipan.das@amd.com" <sandipan.das@amd.com>,
-        "ray.huang@amd.com" <ray.huang@amd.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "michael.roth@amd.com" <michael.roth@amd.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "venu.busireddy@oracle.com" <venu.busireddy@oracle.com>,
-        "sterritt@google.com" <sterritt@google.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "samitolvanen@google.com" <samitolvanen@google.com>,
-        "fenghua.yu@intel.com" <fenghua.yu@intel.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-References: <20230122024607.788454-1-ltykernel@gmail.com>
- <20230122024607.788454-4-ltykernel@gmail.com>
- <BYAPR21MB16885D6652BEEA882D96C97CD7D09@BYAPR21MB1688.namprd21.prod.outlook.com>
-From:   Tianyu Lan <ltykernel@gmail.com>
-In-Reply-To: <BYAPR21MB16885D6652BEEA882D96C97CD7D09@BYAPR21MB1688.namprd21.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [192.168.10.10]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 3133NSqX042892
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/1/2023 1:55 AM, Michael Kelley (LINUX) wrote:
->> index db2202d985bd..6dcbb21aac2b 100644
->> --- a/arch/x86/include/asm/hyperv-tlfs.h
->> +++ b/arch/x86/include/asm/hyperv-tlfs.h
->> @@ -36,6 +36,10 @@
->>   #define HYPERV_CPUID_MIN			0x40000005
->>   #define HYPERV_CPUID_MAX			0x4000ffff
->>
->> +/* Support for HVCALL_GET_VP_REGISTERS hvcall */
-> The above comment isn't really right, in that these definitions
-> aren't for the hypercall.  They are for the specific synthetic register.
-> 
->> +#define	HV_X64_REGISTER_VSM_VP_STATUS	0x000D0003
->> +#define HV_X64_VTL_MASK			GENMASK(3, 0)
-> Hyper-V synthetic registers have two different numbering schemes.
-> For registers that have synthetic MSR equivalents, there's a full list
-> starting with HV_X64_MSR_GUEST_OS_ID, which defines the MSR
-> address.  But these registers also have register numbers that are
-> not the same as the MSR address.  These register numbers
-> aren't defined anywhere in x86 Linux code because we don't access
-> them using the register number.   (The register numbers*are*
-> defined in ARM64 code since ARM64 doesn't have MSRs.)  But this
-> register is an exception on x86.  There's no MSR equivalent so we
-> must use a hypercall to fetch the value.
-> 
-> I'd suggest starting a separate list after the definition of
-> HV_X64_MSR_REFERENCE_TSC and make clear in a comment
-> about the list that this is a list of register numbers, not MSR addresses.
-> 
+This patch fixes following warnings:
 
-Agree. Will update in the next version.
+1. sparse: incorrect type in assignment (different base types)
+Fix: change to __le32 type.
+2. sparse: cast removes address space '__iomem' of expression
+Fix: use readb to avoid dereferencing the memory.
+
+Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
+---
+Change since v2: remove unnecessary cast.
+Change since v1: keep iomem marker to remain its purpose.
+
+ drivers/crypto/aspeed/aspeed-acry.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/crypto/aspeed/aspeed-acry.c b/drivers/crypto/aspeed/aspeed-acry.c
+index 164c524015f0..1f77ebd73489 100644
+--- a/drivers/crypto/aspeed/aspeed-acry.c
++++ b/drivers/crypto/aspeed/aspeed-acry.c
+@@ -252,7 +252,7 @@ static int aspeed_acry_rsa_ctx_copy(struct aspeed_acry_dev *acry_dev, void *buf,
+ 				    enum aspeed_rsa_key_mode mode)
+ {
+ 	const u8 *src = xbuf;
+-	u32 *dw_buf = (u32 *)buf;
++	__le32 *dw_buf = buf;
+ 	int nbits, ndw;
+ 	int i, j, idx;
+ 	u32 data = 0;
+@@ -302,7 +302,7 @@ static int aspeed_acry_rsa_ctx_copy(struct aspeed_acry_dev *acry_dev, void *buf,
+ static int aspeed_acry_rsa_transfer(struct aspeed_acry_dev *acry_dev)
+ {
+ 	struct akcipher_request *req = acry_dev->req;
+-	u8 *sram_buffer = (u8 *)acry_dev->acry_sram;
++	u8 __iomem *sram_buffer = acry_dev->acry_sram;
+ 	struct scatterlist *out_sg = req->dst;
+ 	static u8 dram_buffer[ASPEED_ACRY_SRAM_MAX_LEN];
+ 	int leading_zero = 1;
+@@ -321,11 +321,11 @@ static int aspeed_acry_rsa_transfer(struct aspeed_acry_dev *acry_dev)
+ 
+ 	for (j = ASPEED_ACRY_SRAM_MAX_LEN - 1; j >= 0; j--) {
+ 		data_idx = acry_dev->data_byte_mapping[j];
+-		if (sram_buffer[data_idx] == 0 && leading_zero) {
++		if (readb(sram_buffer + data_idx) == 0 && leading_zero) {
+ 			result_nbytes--;
+ 		} else {
+ 			leading_zero = 0;
+-			dram_buffer[i] = sram_buffer[data_idx];
++			dram_buffer[i] = readb(sram_buffer + data_idx);
+ 			i++;
+ 		}
+ 	}
+-- 
+2.25.1
+
