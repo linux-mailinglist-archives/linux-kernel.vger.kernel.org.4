@@ -2,153 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D8FB68A108
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 18:58:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A338968A10D
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 18:59:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232815AbjBCR6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 12:58:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37538 "EHLO
+        id S231989AbjBCR7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 12:59:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232491AbjBCR6W (ORCPT
+        with ESMTP id S232701AbjBCR7P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 12:58:22 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57CFFB75C
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 09:58:16 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id hn2-20020a05600ca38200b003dc5cb96d46so6551068wmb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 09:58:16 -0800 (PST)
+        Fri, 3 Feb 2023 12:59:15 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB68AC21B
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 09:59:12 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id d14so5351400wrr.9
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 09:59:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lN+M6aiUbCqF46CC1crDFxdVf7hLTQ+IRNqaZ978vd8=;
-        b=S1EjWXdz//eVBIiu80y0i58Nwfp/vPB6JlRYf2vOiL5xiefMP2zINH+qTlJJbRKItY
-         WPrNVD0VpVMglADIzRh8Ojmkhb+O/yZ6DvaCEfVRF7ZEnrTYtwIF13YFx5XNMFgIj8rE
-         uWSA5IlhAOYI0mTPHGzK+xv/oXOiRT/JZGYpW3WMtyFcdn+ofmFkqIFIURJEvwE7FM7Q
-         2TMKBxnxWIbBXDhy/h1s540I8b9ylHqaLRjlafMhockTDHZP+qIiT44NeP9mnh4zsA0s
-         Xclq547eR3BpKU4H5GOz04EFZ1KWSUjYUabfKn1PAQqCB0mIirpl0MmXm/DFU5UC11ms
-         1l5A==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GAXndW8cnBV3+ngs0K02NLGwczyzotwAPD8N8ShiwYk=;
+        b=PWLPACbQ/nV+Qzotx45Bi6IXcdXtrj+EUb+UtwhJ56Od/Z8LMacFOyHwodvU05vtlZ
+         SSUgUkrW0cAlFBAE8V4RAqv6JIrJnb7NQVipdNgMeN9Dj78JeSbW2nP3uiTSif15ooUs
+         +zIIpxXbE8VCVLs2r+Ou3mFf6M06ZvA2neVUUKwYzp+Y0wQgCgYGU0e2qhgmBag+ORX7
+         2N8jGa5gwq7EAiSPcG7doVI9ZOM1x0iJSzp7jdtzvEp+s4Aad2YOoCbOE2NkBPIJS2Ix
+         1Eg/R3FrTP8SpoxGR6jA+FayvDBct913m3j6QJBUXAiB58bQ0QvfqDJf3RvNkN+MsYLf
+         D6gQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lN+M6aiUbCqF46CC1crDFxdVf7hLTQ+IRNqaZ978vd8=;
-        b=ecDBbR2CGGkqBYJiBuFbM4xdU9llmDVaZx4j6WcZ938bblnikSN9DQoyv5F50usKRY
-         uhGkQbHxSSoMVfrP+OfX55xZfF13DchvY1Gltom7XvfLxtyRgGE4oN2JxHhNcY5dl69c
-         MxOq7irXvLWPpn0fnwEMTUZjJthe7fMuQXnt6GMfk5kglKB73xgz7XLrN1PD6bNgu2G1
-         OtNu0QpnOLhw2qKk0616eqaExpnw8cx8zh6saKcgfAgijjJxdqcVaR/yID3A+OHZroUV
-         iAJqmxtaVebhghKNR0LGvbLeXm3m1LuuvvsDnKQqcylm9i9GCMzNspCn/WbLd/2EMiMs
-         c7Og==
-X-Gm-Message-State: AO0yUKVjzcHe0D7dfzhmHgBQB7OJi7fXV6CqUPmhP9CFV5fBju+5s5iV
-        SDkCEyRkPLEBdgifeOiulAQRhw==
-X-Google-Smtp-Source: AK7set/XQawmCDWrVyjPwzNZBBNVKsO+g4KUQAE8B9uS3eeB81KjPN+ttS8KXCXrBfkXJpYejKU66Q==
-X-Received: by 2002:a05:600c:510e:b0:3dc:59e9:9285 with SMTP id o14-20020a05600c510e00b003dc59e99285mr11539024wms.18.1675447094889;
-        Fri, 03 Feb 2023 09:58:14 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id p2-20020a05600c358200b003dc4ecfc4d7sm3609686wmq.29.2023.02.03.09.58.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Feb 2023 09:58:14 -0800 (PST)
-Message-ID: <d72f2c93-934c-67fe-0afd-96bc52b12a9f@linaro.org>
-Date:   Fri, 3 Feb 2023 18:58:12 +0100
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GAXndW8cnBV3+ngs0K02NLGwczyzotwAPD8N8ShiwYk=;
+        b=MziZq9nI61wuxNsIMWlDMpse+284Tv66DH3dFBVd8g1wjNG/woYm7nfCNnuRQPJNU/
+         oeJ+DIkUSjF/DxZNt1vGhRAcXNynSHZyu78n47GuXaZ+mKHstn+31+u1x0nCJpS8KxNh
+         eeIt/wR+VbrKK+dt4PQGKKHU9N81DID5mDFQorije9QMrmECBLwf+qIChl2xeXmz3rMD
+         JmEL9XYBYgiDLj+IB3GG5YwiQOpSepBAenMdMhYWFWAHsqG2PmdbMLZPkx96kAOCeQIe
+         g2AvN/vwgxBznnI0hru2vQMFztXw2S3ZA6TxAybVp6VNih/NQcixGQlH8xfGmdXSefx7
+         TBGA==
+X-Gm-Message-State: AO0yUKXfQ7uUAP7s1Y6jMVi+0rpaDtZCBlkTIOaTHTZhA2lJyxWrLaVp
+        MjChdwnipnsNrwkIGj4EYo7uEg==
+X-Google-Smtp-Source: AK7set8ijXCv3HYsShNElZlKs0hYepcRyZAUe7b95uq7Zb3BQnwNsE7WskLXcPjZnTB3tOJK7iIFNA==
+X-Received: by 2002:adf:fb03:0:b0:2be:57a6:8161 with SMTP id c3-20020adffb03000000b002be57a68161mr8387433wrr.46.1675447150846;
+        Fri, 03 Feb 2023 09:59:10 -0800 (PST)
+Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.gmail.com with ESMTPSA id s14-20020adfa28e000000b002c3be49ef94sm2599012wra.52.2023.02.03.09.59.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Feb 2023 09:59:10 -0800 (PST)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     daniel.lezcano@linaro.org, rjw@rjwysocki.net
+Cc:     linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        Sebastian Reichel <sre@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Kees Cook <keescook@chromium.org>,
+        "Lee, Chun-Yi" <joeyli.kernel@gmail.com>,
+        Chuansheng Liu <chuansheng.liu@intel.com>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] thermal: Hunt zero trip points thermal zones usage
+Date:   Fri,  3 Feb 2023 18:58:31 +0100
+Message-Id: <20230203175832.3406504-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 6/9] ASoC: dt-bindings: meson: convert axg fifo to schema
-Content-Language: en-US
-To:     Jerome Brunet <jbrunet@baylibre.com>,
-        Mark Brown <broonie@kernel.org>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org
-Cc:     linux-amlogic@lists.infradead.org,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org
-References: <20230202183653.486216-1-jbrunet@baylibre.com>
- <20230202183653.486216-7-jbrunet@baylibre.com>
- <6e6ed493-4748-46ca-7a26-fe9cf6e2377a@linaro.org>
- <1jmt5un9u4.fsf@starbuckisacylon.baylibre.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1jmt5un9u4.fsf@starbuckisacylon.baylibre.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/02/2023 14:27, Jerome Brunet wrote:
-> 
+Some drivers are declaring a thermal zone without any thermal trip
+points.
 
->>> +  resets:
->>> +    items:
->>> +      - description: Memory ARB line
->>> +      - description: Dedicated device reset line
->>
->> This won't work without minItems and you should see errors on your DTS
->> or in dt_binding_check
->>
-> 
-> The example provided here worked but there is indeed a warning with the
-> axg-frddr variant.
-> 
-> I'm adding a 2nd example so it does not happen again.
+On the other side, we are introducing the function
+thermal_zone_device_register_with_trips() which provides an array of
+generic thermal trip points. When all the drivers will be converted to
+the generic trip points, keeping two functions will be useless.
 
-If the difference is only in one property, no need. If the difference is
-in more properties - then could be. We do not keep examples for every
-trivial change, because the assumption is that submitter tests DTS as well.
+Most of the drivers are now using
+thermal_zone_device_register_with_trips() with the generic trip
+points. As soon as the remaining drivers are merged, the
+thermal_zone_device_register_with_trips() will be renamed to
+thermal_zone_device_register().
 
-> 
->>> +
->>> +  reset-names: true
->>
->> minItems
->> maxItems
-> 
-> Adding this causes troubles with the reset-names definitions in the 'if'
-> clause. If I put min: 1, max: 2 and min: 2 in the 'then' clause I get:
-> 
->> Documentation/devicetree/bindings/sound/amlogic,axg-fifo.yaml: allOf:1:then:properties:reset-names: 'oneOf' conditional failed, one must be fixed:
->>        [{'const': 'arb'}, {'const': 'rst'}] is too long
->>        [{'const': 'arb'}, {'const': 'rst'}] is too short
->>        False schema does not allow 2
->>        1 was expected
->>        hint: "minItems" is only needed if less than the "items" list length
->>        from schema $id: http://devicetree.org/meta-schemas/items.yaml#
+Obviously this renaming can only happen if there are no more user of
+the thermal_zone_device_register() function.
 
-Probably because rest of binding does not match. One way is like this:
+This change uses thermal_zone_device_register_with_trips() with a NULL
+parameter for the trip point array instead of
+thermal_zone_device_register().
 
-https://elixir.bootlin.com/linux/v5.19-rc6/source/Documentation/devicetree/bindings/clock/samsung,exynos7-clock.yaml#L57
+No functional change intended.
 
-> 
-> The older devices just have the 'arb' reset.
-> Newer devices have a 2nd reset line (called rst here)
-> 
-> If I just restrict the min and max, it would be valid for the older
-> devices to have 'rst' only - but it is not valid.
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+---
+ drivers/power/supply/power_supply_core.c                | 2 +-
+ drivers/thermal/armada_thermal.c                        | 4 ++--
+ drivers/thermal/dove_thermal.c                          | 4 ++--
+ drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 6 +++---
+ drivers/thermal/kirkwood_thermal.c                      | 4 ++--
+ drivers/thermal/spear_thermal.c                         | 5 +++--
+ 6 files changed, 13 insertions(+), 12 deletions(-)
 
-How? Why would you define for old devices "rst" as one name if this is
-not correct?
-
-> 
-> With just 'true', it works as expected (throw errors if an incorrect
-> name or number of names is passed). Min and Max comes from the items list.
-
-Because the rest is not in recommended way. Once you implement it in
-recommended way, there will be no such...
-
-> 
-> Any suggestions ?
-
-Implement rest of comments.
-
-
-Best regards,
-Krzysztof
+diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
+index 7c790c41e2fe..208a849a71d9 100644
+--- a/drivers/power/supply/power_supply_core.c
++++ b/drivers/power/supply/power_supply_core.c
+@@ -1166,7 +1166,7 @@ static int psy_register_thermal(struct power_supply *psy)
+ 
+ 	/* Register battery zone device psy reports temperature */
+ 	if (psy_has_property(psy->desc, POWER_SUPPLY_PROP_TEMP)) {
+-		psy->tzd = thermal_zone_device_register(psy->desc->name,
++		psy->tzd = thermal_zone_device_register_with_trips(psy->desc->name, NULL,
+ 				0, 0, psy, &psy_tzd_ops, NULL, 0, 0);
+ 		if (IS_ERR(psy->tzd))
+ 			return PTR_ERR(psy->tzd);
+diff --git a/drivers/thermal/armada_thermal.c b/drivers/thermal/armada_thermal.c
+index 99e86484a55c..83a4080bffc7 100644
+--- a/drivers/thermal/armada_thermal.c
++++ b/drivers/thermal/armada_thermal.c
+@@ -856,8 +856,8 @@ static int armada_thermal_probe(struct platform_device *pdev)
+ 		/* Wait the sensors to be valid */
+ 		armada_wait_sensor_validity(priv);
+ 
+-		tz = thermal_zone_device_register(priv->zone_name, 0, 0, priv,
+-						  &legacy_ops, NULL, 0, 0);
++		tz = thermal_zone_device_register_with_trips(priv->zone_name, NULL, 0, 0, priv,
++							     &legacy_ops, NULL, 0, 0);
+ 		if (IS_ERR(tz)) {
+ 			dev_err(&pdev->dev,
+ 				"Failed to register thermal zone device\n");
+diff --git a/drivers/thermal/dove_thermal.c b/drivers/thermal/dove_thermal.c
+index 056622a58d00..fce15af5a7f6 100644
+--- a/drivers/thermal/dove_thermal.c
++++ b/drivers/thermal/dove_thermal.c
+@@ -142,8 +142,8 @@ static int dove_thermal_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 
+-	thermal = thermal_zone_device_register("dove_thermal", 0, 0,
+-					       priv, &ops, NULL, 0, 0);
++	thermal = thermal_zone_device_register_with_trips("dove_thermal", NULL, 0, 0,
++							  priv, &ops, NULL, 0, 0);
+ 	if (IS_ERR(thermal)) {
+ 		dev_err(&pdev->dev,
+ 			"Failed to register thermal zone device\n");
+diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+index d0295123cc3e..dac60b6a281c 100644
+--- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
++++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+@@ -609,9 +609,9 @@ static int int3400_thermal_probe(struct platform_device *pdev)
+ 
+ 	evaluate_odvp(priv);
+ 
+-	priv->thermal = thermal_zone_device_register("INT3400 Thermal", 0, 0,
+-						priv, &int3400_thermal_ops,
+-						&int3400_thermal_params, 0, 0);
++	priv->thermal = thermal_zone_device_register_with_trips("INT3400 Thermal", NULL, 0, 0,
++								priv, &int3400_thermal_ops,
++								&int3400_thermal_params, 0, 0);
+ 	if (IS_ERR(priv->thermal)) {
+ 		result = PTR_ERR(priv->thermal);
+ 		goto free_art_trt;
+diff --git a/drivers/thermal/kirkwood_thermal.c b/drivers/thermal/kirkwood_thermal.c
+index bec7ec20e79d..4506b7dfb474 100644
+--- a/drivers/thermal/kirkwood_thermal.c
++++ b/drivers/thermal/kirkwood_thermal.c
+@@ -74,8 +74,8 @@ static int kirkwood_thermal_probe(struct platform_device *pdev)
+ 	if (IS_ERR(priv->sensor))
+ 		return PTR_ERR(priv->sensor);
+ 
+-	thermal = thermal_zone_device_register("kirkwood_thermal", 0, 0,
+-					       priv, &ops, NULL, 0, 0);
++	thermal = thermal_zone_device_register_with_trips("kirkwood_thermal", NULL, 0, 0,
++							  priv, &ops, NULL, 0, 0);
+ 	if (IS_ERR(thermal)) {
+ 		dev_err(&pdev->dev,
+ 			"Failed to register thermal zone device\n");
+diff --git a/drivers/thermal/spear_thermal.c b/drivers/thermal/spear_thermal.c
+index 6a722b10d738..0d20bc9c5c0b 100644
+--- a/drivers/thermal/spear_thermal.c
++++ b/drivers/thermal/spear_thermal.c
+@@ -122,8 +122,9 @@ static int spear_thermal_probe(struct platform_device *pdev)
+ 	stdev->flags = val;
+ 	writel_relaxed(stdev->flags, stdev->thermal_base);
+ 
+-	spear_thermal = thermal_zone_device_register("spear_thermal", 0, 0,
+-				stdev, &ops, NULL, 0, 0);
++	spear_thermal = thermal_zone_device_register_with_trips("spear_thermal",
++								NULL, 0, 0,
++								stdev, &ops, NULL, 0, 0);
+ 	if (IS_ERR(spear_thermal)) {
+ 		dev_err(&pdev->dev, "thermal zone device is NULL\n");
+ 		ret = PTR_ERR(spear_thermal);
+-- 
+2.34.1
 
