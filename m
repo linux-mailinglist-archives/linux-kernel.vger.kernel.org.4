@@ -2,188 +2,390 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4872B68A395
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 21:34:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A362268A39C
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 21:36:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232372AbjBCUeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 15:34:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36014 "EHLO
+        id S232526AbjBCUgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 15:36:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232119AbjBCUeQ (ORCPT
+        with ESMTP id S230042AbjBCUf6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 15:34:16 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D7C8F27B
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 12:34:14 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id k16so4756983wms.2
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 12:34:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BVXxUwhcHF2tonhrlazZYSJHdPH8Rmy7YehT5ics9zY=;
-        b=wi0mMR6NDBX5fD2fDRhfs5BVdC+wkwQtMvHe5rTAcBT6ljgw36vUfZSHSeBzkowkLQ
-         Q1x+2x6O70LzqPwWMtOfXMdsA2QXp27maoV/x2NnXvqD90KEDswk3kM2SHQsP8ZZuWk2
-         6cXo4mJY9SBr0skJByuhhFAEhHMZE3iqT5rxZDPABxorNm/OG6pIvWLZk7PS2PEx2ygi
-         GYyQlIg6F1Taj6rCntpWt3DG7ZRWWbOeSw/qij/MML3rqa99MhUkTOp8VRFEXF0qPT6N
-         eUIirAf3XYgeD4Bzq5g9NGs3ZdYlwPBaeF4ISg3qdkg8fjR5Qv7lt8gwGHf9lNPqWnzn
-         jWjg==
+        Fri, 3 Feb 2023 15:35:58 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B123A8F276
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 12:35:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675456509;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JitJ+EzQFI4tRE7oSO6h0RzqVsLIaAm1WlJEalphUB8=;
+        b=S1Q5yyKVTTNdT6bSVpA/F1d/ScPvckgw98v15HALxmo+7QjdQPHQJBWF4d7bBtHKkPFJok
+        EaIUeYAMv/AneqRgSthPLGhEr2mAEuhf1A75iK7/PF+ur7sBfPBXzhjRdzzuASO1xC0VVN
+        x8IIcUHL/wemqx5xVhYGO+v9/2SFxIw=
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
+ [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-214-eRDcCzFOOiO_BVne8XHKrg-1; Fri, 03 Feb 2023 15:35:08 -0500
+X-MC-Unique: eRDcCzFOOiO_BVne8XHKrg-1
+Received: by mail-il1-f200.google.com with SMTP id y5-20020a056e021be500b00313a9c609adso629309ilv.8
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 12:35:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BVXxUwhcHF2tonhrlazZYSJHdPH8Rmy7YehT5ics9zY=;
-        b=2i8N09d7kBMsLmYxjLxCqJFuM9MLRjFsCkzUFIMNxksOxpo2WzYQqDQN4DhbOJ1snA
-         2OiOaAvblXO6AUTLcq6cqpHQjeuu8Tjs0N6XEkkMjft8eV6V6/WVenBpKkTs86x01Tr7
-         9oe93VFcnH5fbGWvJkiAbsCNSHz+IEyVC1tzL3ZFALBPnGCwNOdnXBeDraaA9Fmrcrgs
-         f17k8r42ExpC/xyer1xj3MTiKoC0O2DeN3WVRYsrl1nVMVmgLYB8Nx0jkz4N/5xg7s8H
-         WMeBod97sn/Zp49BPMekH6rs7vmSF+WZilxVS9V2TC4EnuJ4Hhf02AGQxErDo6tqYId0
-         YE3A==
-X-Gm-Message-State: AO0yUKWU+68v/BAE2bCRbq+E0zG0OC1s4QpATN/B1KyjCt00Fjkd3MIb
-        7qIgH5vAZzmA4pbLKeSvO4IeoQ==
-X-Google-Smtp-Source: AK7set8EU1dHwiTiqWQ8QaG4TBnIAM1EfbgbcUUxi5KPtJSrEOQ/1SxBHYKq8jpAte0EBDbzZ5ijiA==
-X-Received: by 2002:a05:600c:3845:b0:3da:1bb0:4d78 with SMTP id s5-20020a05600c384500b003da1bb04d78mr10791488wmr.14.1675456452477;
-        Fri, 03 Feb 2023 12:34:12 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id hg15-20020a05600c538f00b003df7b40f99fsm6632746wmb.11.2023.02.03.12.34.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Feb 2023 12:34:11 -0800 (PST)
-Message-ID: <dc0c3fa9-a6d4-e1c1-7cc8-13b206e3b31f@linaro.org>
-Date:   Fri, 3 Feb 2023 21:34:09 +0100
+        h=content-transfer-encoding:mime-version:organization:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JitJ+EzQFI4tRE7oSO6h0RzqVsLIaAm1WlJEalphUB8=;
+        b=KrSCnpGQGGUwbYjXFCbTOsQfynjTlpXc5FUx4wDLomH4JgyPlGnAZMWGYbCEYswoS1
+         6VDSDaSteOIUK17defWkqvQdGEd0obsdliipm6ezWw+rKPOW8POUlE49flF3+wOGzn2g
+         urPOzM5/rDCPurXUyOz06guaKGGMKrGw/sByHtZvLsJ1C3zt6u5M9ZtFcquQj5J2OvA4
+         dFkeLvAZZ/fh8Xxk12F6Urno7CiJ1TcrQNapMHK/aEQSpFPYByQ+odSowMXkV4ISpdfP
+         XkNdFEtRYF6h3ZurJr2ZZiuYGdPKpK9U2pFFyutgp20KCffHO22FOlbaXsU3b4wyNsNd
+         7n8g==
+X-Gm-Message-State: AO0yUKUI1B6/6TdvNF/DxTXcb3Yn6C9Uj6KOG2LImbLrGA+xD3rhOUv+
+        bTYibbATt4wwzdN4On9epZhpGZ2xRMbtwhAQEv/Q+UgXCD0bw+IekdiGH1LQNyRH4Wzx32nxnib
+        BRMNQwixTK5S3e76QWDDmqoqH
+X-Received: by 2002:a05:6e02:2194:b0:310:be24:260a with SMTP id j20-20020a056e02219400b00310be24260amr9908885ila.30.1675456507684;
+        Fri, 03 Feb 2023 12:35:07 -0800 (PST)
+X-Google-Smtp-Source: AK7set9GIBfAjhIj5v0BQS/LjNDFZ4r0AnKB0rNTkxdvIO9fwIpXafr9OOmCRq/tq2BYChRorlbGeA==
+X-Received: by 2002:a05:6e02:2194:b0:310:be24:260a with SMTP id j20-20020a056e02219400b00310be24260amr9908859ila.30.1675456507248;
+        Fri, 03 Feb 2023 12:35:07 -0800 (PST)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id d71-20020a0285cd000000b003b02df3521dsm1128406jai.93.2023.02.03.12.35.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Feb 2023 12:35:06 -0800 (PST)
+Date:   Fri, 3 Feb 2023 13:35:03 -0700
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Matthew Rosato <mjrosato@linux.ibm.com>
+Cc:     "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "jgg@nvidia.com" <jgg@nvidia.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "farman@linux.ibm.com" <farman@linux.ibm.com>,
+        "pmorel@linux.ibm.com" <pmorel@linux.ibm.com>,
+        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
+        "frankja@linux.ibm.com" <frankja@linux.ibm.com>,
+        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "akrowiak@linux.ibm.com" <akrowiak@linux.ibm.com>,
+        "jjherne@linux.ibm.com" <jjherne@linux.ibm.com>,
+        "pasic@linux.ibm.com" <pasic@linux.ibm.com>,
+        "zhenyuw@linux.intel.com" <zhenyuw@linux.intel.com>,
+        "Wang, Zhi A" <zhi.a.wang@intel.com>,
+        "Christopherson, , Sean" <seanjc@google.com>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "intel-gvt-dev@lists.freedesktop.org" 
+        <intel-gvt-dev@lists.freedesktop.org>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3] vfio: fix deadlock between group lock and kvm lock
+Message-ID: <20230203133503.4d8fb3e8.alex.williamson@redhat.com>
+In-Reply-To: <ed030aa5-b3af-638e-6e26-4e3a20b98ef4@linux.ibm.com>
+References: <20230202162442.78216-1-mjrosato@linux.ibm.com>
+        <20230202124210.476adaf8.alex.williamson@redhat.com>
+        <BN9PR11MB527618E281BEB8E479ABB0418CD69@BN9PR11MB5276.namprd11.prod.outlook.com>
+        <20230202161307.0c6aa23e.alex.williamson@redhat.com>
+        <BN9PR11MB5276017F9CEBB4BAE58C40E88CD79@BN9PR11MB5276.namprd11.prod.outlook.com>
+        <DS0PR11MB7529050661FCE4A5AC4B17C3C3D79@DS0PR11MB7529.namprd11.prod.outlook.com>
+        <20230203064940.435e4d65.alex.williamson@redhat.com>
+        <DS0PR11MB75297154376388A3698C5CCAC3D79@DS0PR11MB7529.namprd11.prod.outlook.com>
+        <20230203081942.64fbf9f1.alex.williamson@redhat.com>
+        <ed030aa5-b3af-638e-6e26-4e3a20b98ef4@linux.ibm.com>
+Organization: Red Hat
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 5/9] ARM: dts: exynos: move exynos-bus nodes out of soc in
- Exynos4412
-Content-Language: en-US
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Kukjin Kim <kgene@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     replicant@osuosl.org, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        =?UTF-8?Q?Martin_J=c3=bccker?= <martin.juecker@gmail.com>,
-        Henrik Grimler <henrik@grimler.se>,
-        Chanwoo Choi <cw00.choi@samsung.com>
-References: <20230125094513.155063-1-krzysztof.kozlowski@linaro.org>
- <20230125094513.155063-5-krzysztof.kozlowski@linaro.org>
- <CGME20230129104220eucas1p15b70f73be86fa5600cfe170d22869836@eucas1p1.samsung.com>
- <29841f64-360b-1426-e1fd-dd4c64ee5455@linaro.org>
- <b3f31e71-fa1a-e0c0-fdfa-f65674ccc5cd@samsung.com>
- <d54792c5-2842-e5b9-26b8-1f52471211a9@linaro.org>
- <111f7364-0d7b-b4c5-721f-69c00d4619e2@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <111f7364-0d7b-b4c5-721f-69c00d4619e2@samsung.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/02/2023 12:51, Marek Szyprowski wrote:
-> On 03.02.2023 12:46, Krzysztof Kozlowski wrote:
->> On 03/02/2023 12:45, Marek Szyprowski wrote:
->>> On 29.01.2023 11:42, Krzysztof Kozlowski wrote:
->>>> On 25/01/2023 10:45, Krzysztof Kozlowski wrote:
->>>>> The soc node is supposed to have only device nodes with MMIO addresses,
->>>>> as reported by dtc W=1:
->>>>>
->>>>>     exynos4412.dtsi:407.20-413.5:
->>>>>       Warning (simple_bus_reg): /soc/bus-acp: missing or empty reg/ranges property
->>>>>
->>>>> and dtbs_check:
->>>>>
->>>>>     exynos4412-i9300.dtb: soc: bus-acp:
->>>>>       {'compatible': ['samsung,exynos-bus'], 'clocks': [[7, 456]], 'clock-names': ['bus'], 'operating-points-v2': [[132]], 'status': ['okay'], 'devfreq': [[117]]} should not be valid under {'type': 'object'}
->>>>>
->>>>> Move the bus nodes and their OPP tables out of SoC to fix this.
->>>>> Re-order them alphabetically while moving and put some of the OPP tables
->>>>> in device nodes (if they are not shared).
->>>>>
->>>> Applied.
->>> I don't have a good news. It looks that this change is responsible for
->>> breaking boards that were rock-stable so far, like Odroid U3. I didn't
->>> manage to analyze what exactly causes the issue, but it looks that the
->>> exynos-bus devfreq driver somehow depends on the order of the nodes:
->>>
->>> (before)
->>>
->>> # dmesg | grep exynos-bus
->>> [    6.415266] exynos-bus: new bus device registered: soc:bus-dmc
->>> (100000 KHz ~ 400000 KHz)
->>> [    6.422717] exynos-bus: new bus device registered: soc:bus-acp
->>> (100000 KHz ~ 267000 KHz)
->>> [    6.454323] exynos-bus: new bus device registered: soc:bus-c2c
->>> (100000 KHz ~ 400000 KHz)
->>> [    6.489944] exynos-bus: new bus device registered: soc:bus-leftbus
->>> (100000 KHz ~ 200000 KHz)
->>> [    6.493990] exynos-bus: new bus device registered: soc:bus-rightbus
->>> (100000 KHz ~ 200000 KHz)
->>> [    6.494612] exynos-bus: new bus device registered: soc:bus-display
->>> (160000 KHz ~ 200000 KHz)
->>> [    6.494932] exynos-bus: new bus device registered: soc:bus-fsys
->>> (100000 KHz ~ 134000 KHz)
->>> [    6.495246] exynos-bus: new bus device registered: soc:bus-peri (
->>> 50000 KHz ~ 100000 KHz)
->>> [    6.495577] exynos-bus: new bus device registered: soc:bus-mfc
->>> (100000 KHz ~ 200000 KHz)
->>>
->>> (after)
->>>
->>> # dmesg | grep exynos-bus
->>>
->>> [    6.082032] exynos-bus: new bus device registered: bus-dmc (100000
->>> KHz ~ 400000 KHz)
->>> [    6.122726] exynos-bus: new bus device registered: bus-leftbus
->>> (100000 KHz ~ 200000 KHz)
->>> [    6.146705] exynos-bus: new bus device registered: bus-mfc (100000
->>> KHz ~ 200000 KHz)
->>> [    6.181632] exynos-bus: new bus device registered: bus-peri ( 50000
->>> KHz ~ 100000 KHz)
->>> [    6.204770] exynos-bus: new bus device registered: bus-rightbus
->>> (100000 KHz ~ 200000 KHz)
->>> [    6.211087] exynos-bus: new bus device registered: bus-acp (100000
->>> KHz ~ 267000 KHz)
->>> [    6.216936] exynos-bus: new bus device registered: bus-c2c (100000
->>> KHz ~ 400000 KHz)
->>> [    6.225748] exynos-bus: new bus device registered: bus-display
->>> (160000 KHz ~ 200000 KHz)
->>> [    6.242978] exynos-bus: new bus device registered: bus-fsys (100000
->>> KHz ~ 134000 KHz)
->>>
->>> This is definitely a driver bug, but so far it worked fine, so this is a
->>> regression that need to be addressed somehow...
->>
->> Thanks for checking, but what is exactly the bug? The devices registered
->> - just with different name.
-> 
-> The bug is that the board fails to boot from time to time, freezing 
-> after registering PPMU counters...
+On Fri, 3 Feb 2023 12:29:01 -0500
+Matthew Rosato <mjrosato@linux.ibm.com> wrote:
 
-My U3 with and without this patch, reports several warnings:
-iommu_group_do_set_platform_dma()
-exynos_iommu_domain_free()
-clk_core_enable()
+> On 2/3/23 10:19 AM, Alex Williamson wrote:
+> > On Fri, 3 Feb 2023 14:54:44 +0000
+> > "Liu, Yi L" <yi.l.liu@intel.com> wrote:
+> >  =20
+> >>> From: Alex Williamson <alex.williamson@redhat.com>
+> >>> Sent: Friday, February 3, 2023 9:50 PM
+> >>>
+> >>> On Fri, 3 Feb 2023 13:32:09 +0000
+> >>> "Liu, Yi L" <yi.l.liu@intel.com> wrote:
+> >>>    =20
+> >>>>> From: Tian, Kevin <kevin.tian@intel.com>
+> >>>>> Sent: Friday, February 3, 2023 10:00 AM
+> >>>>>   =20
+> >>>>>> From: Alex Williamson <alex.williamson@redhat.com>
+> >>>>>> Sent: Friday, February 3, 2023 7:13 AM
+> >>>>>>
+> >>>>>> On Thu, 2 Feb 2023 23:04:10 +0000
+> >>>>>> "Tian, Kevin" <kevin.tian@intel.com> wrote:
+> >>>>>>   =20
+> >>>>>>>> From: Alex Williamson <alex.williamson@redhat.com>
+> >>>>>>>> Sent: Friday, February 3, 2023 3:42 AM
+> >>>>>>>>
+> >>>>>>>>
+> >>>>>>>> LGTM.  I'm not sure moving the functions to vfio_main really buy=
+s   =20
+> >>> us   =20
+> >>>>>>>> anything since we're making so much use of group fields.  The cd=
+ev
+> >>>>>>>> approach will necessarily be different, so the bulk of the get c=
+ode   =20
+> >>> will   =20
+> >>>>>>>> likely need to move back to group.c anyway.
+> >>>>>>>>   =20
+> >>>>>>>
+> >>>>>>> well my last comment was based on Matthew's v2 where the get   =20
+> >>> code   =20
+> >>>>>>> gets a kvm passed in instead of implicitly retrieving group ref_l=
+ock
+> >>>>>>> internally. In that case the get/put helpers only contain device =
+logic
+> >>>>>>> thus fit in vfio_main.c.
+> >>>>>>>
+> >>>>>>> with v3 then they have to be in group.c since we don't want to use
+> >>>>>>> group fields in vfio_main.c.
+> >>>>>>>
+> >>>>>>> but I still think v2 of the helpers is slightly better. The only =
+difference
+> >>>>>>> between cdev and group when handling this race is using different
+> >>>>>>> ref_lock. the symbol get/put part is exactly same. So even if we
+> >>>>>>> merge v3 like this, very likely Yi has to change it back to v2 st=
+yle
+> >>>>>>> to share the get/put helpers while just leaving the ref_lock part
+> >>>>>>> handled differently between the two path.   =20
+> >>>>>>
+> >>>>>> I'm not really a fan of the asymmetry of the v2 version where the =
+get
+> >>>>>> helper needs to be called under the new kvm_ref_lock, but the put
+> >>>>>> helper does not.  Having the get helper handle that makes the call=
+er
+> >>>>>> much cleaner.  Thanks,
+> >>>>>>   =20
+> >>>>>
+> >>>>> What about passing the lock pointer into the helper? it's still sli=
+ghtly
+> >>>>> asymmetry as the put helper doesn't carry the lock pointer but it
+> >>>>> could also be interpreted as if the pointer has been saved in the g=
+et
+> >>>>> then if it needs to be referenced by the put there is no need to pa=
+ss
+> >>>>> it in again.   =20
+> >>>>
+> >>>> For cdev, I may modify vfio_device_get_kvm_safe() to accept
+> >>>> struct kvm and let its caller hold a kvm_ref_lock (field within
+> >>>> struct vfio_device_file). Meanwhile, the group path holds
+> >>>> the group->kvm_ref_lock before invoking vfio_device_get_kvm_safe().
+> >>>> vfio_device_get_kvm_safe() just includes the symbol get/put and
+> >>>> the device->kvm and put_kvm set.   =20
+> >>>
+> >>> Sounds a lot like v2 :-\    =20
+> >>
+> >> Yes, like v2. =F0=9F=98=8A
+> >> =20
+> >>> I'd look more towards group and cdev specific
+> >>> helpers that handle the locking so that the callers aren't exposed to
+> >>> the asymmetry of get vs put, and reduce a new
+> >>> _vfio_device_get_kvm_safe() in common code that only does the symbol
+> >>> work.  Thanks,   =20
+> >>
+> >> If so, looks like Matthew needs a v4. I'm waiting for the final version
+> >> of this patch and sending a new cdev series based on it. wish to see
+> >> it soon ^_^. =20
+> >=20
+> > cdev support is a future feature, why does it become a requirement for
+> > a fix to the current base?  The refactoring could also happen in the
+> > cdev series.  Thanks,
+> >=20
+> > Alex
+> >  =20
+>=20
+> FWIW, that would bloat the fix by a bit and it's already a decent-sized f=
+ix...  I took a quick stab and such a v4 would end up with a total of 120 i=
+nsertions(+), 15 deletions(-).  See below for a diff of what I tried on top=
+ of v3. The idea would be to move the serialization and setting/clearing of=
+ device->kvm into group/cdev and use device->kvm as the value within vfio_d=
+evice_get_kvm_safe for getting the kvm ref.  Wrappers in group/cdev would t=
+hen be responsible for backing that device->kvm setting out on ref failure.
+> Each side (group/cdev) can wrap their own serialization / load device->kv=
+m from the appropriate location / handle the failed get / clear device->kvm=
+ when done (since get doesn't set it, put shouldn't clear it).
+>=20
+> If Alex wants, I can wrap something like this into a v4 -- Or, if we don'=
+t want to include this kind of infrastructure in the fix, then Yi please fe=
+el free to use it as a starting point for what you need in cdev.
+>=20
+> Thanks,
+> Matt
+>=20
+> diff --git a/drivers/vfio/group.c b/drivers/vfio/group.c
+> index 7fed4233ca23..261af23975ae 100644
+> --- a/drivers/vfio/group.c
+> +++ b/drivers/vfio/group.c
+> @@ -154,6 +154,31 @@ static int vfio_group_ioctl_set_container(struct vfi=
+o_group *group,
+>  	return ret;
+>  }
+> =20
+> +static void vfio_device_group_get_kvm(struct vfio_device *device)
+> +{
+> +	lockdep_assert_held(&device->dev_set->lock);
+> +
+> +	spin_lock(&device->group->kvm_ref_lock);
+> +
+> +	if (!device->group->kvm)
+> +		goto unlock;
+> +
+> +	device->kvm =3D device->group->kvm;
+> +	if (!vfio_device_get_kvm_safe(device))
 
-and finally:
-rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+I'd probably go back to making this:
 
-and keeps stalling.
+void _vfio_device_get_kvm_safe(struct vfio_device *device, struct kvm *kvm);
 
-At least on next-20230203. Except all these (which anyway make board
-unbootable) look fine around PMU and exynos-bus.
+so the vfio_main function would handle setting and clearing
+device->kvm.  That way we could also move the lockdep into the
+vfio_main functions.  Once we do that, there's no reason to have a
+group vs cdev put function and we end up with only a wrapper on the get
+function, which should really never be used directly, so we prefix it
+with an underscore.
 
-Best regards,
-Krzysztof
+At that point (see incremental diff below), it's about a wash.  Current v3:
+
+ drivers/vfio/group.c     |   32 +++++++++++++----
+ drivers/vfio/vfio.h      |   14 +++++++
+ drivers/vfio/vfio_main.c |   70 +++++++++++++++++++++++++++++++++++----
+ include/linux/vfio.h     |    2 -
+ 4 files changed, 103 insertions(+), 15 deletions(-)
+
+Folding in below:
+
+ drivers/vfio/group.c     |   44 ++++++++++++++++++++++-----
+ drivers/vfio/vfio.h      |   15 +++++++++
+ drivers/vfio/vfio_main.c |   63 ++++++++++++++++++++++++++++++++++-----
+ include/linux/vfio.h     |    2 -
+ 4 files changed, 109 insertions(+), 15 deletions(-)
+
+Unfortunately it seems I've talked myself into the answer that we
+should maybe just pre-enable cdev by not adding a group reference in
+vfio_main.  Thanks,
+
+Alex
+
+diff --git a/drivers/vfio/group.c b/drivers/vfio/group.c
+index 7fed4233ca23..98621ac082f0 100644
+--- a/drivers/vfio/group.c
++++ b/drivers/vfio/group.c
+@@ -154,6 +154,18 @@ static int vfio_group_ioctl_set_container(struct vfio_=
+group *group,
+ 	return ret;
+ }
+=20
++static void vfio_device_group_get_kvm_safe(struct vfio_device *device)
++{
++	spin_lock(&device->group->kvm_ref_lock);
++	if (!device->group->kvm)
++		goto unlock;
++
++	_vfio_device_get_kvm_safe(device, device->group->kvm);
++
++unlock:
++	spin_unlock(&device->group->kvm_ref_lock);
++}
++
+ static int vfio_device_group_open(struct vfio_device *device)
+ {
+ 	int ret;
+@@ -173,7 +185,7 @@ static int vfio_device_group_open(struct vfio_device *d=
+evice)
+ 	 * the pointer in the device for use by drivers.
+ 	 */
+ 	if (device->open_count =3D=3D 0)
+-		vfio_device_get_kvm_safe(device);
++		vfio_device_group_get_kvm_safe(device);
+=20
+ 	ret =3D vfio_device_open(device, device->group->iommufd, device->kvm);
+=20
+diff --git a/drivers/vfio/vfio.h b/drivers/vfio/vfio.h
+index 20d715b0a3a8..24d6cd285945 100644
+--- a/drivers/vfio/vfio.h
++++ b/drivers/vfio/vfio.h
+@@ -253,10 +253,11 @@ enum { vfio_noiommu =3D false };
+ #endif
+=20
+ #ifdef CONFIG_HAVE_KVM
+-void vfio_device_get_kvm_safe(struct vfio_device *device);
++void _vfio_device_get_kvm_safe(struct vfio_device *device, struct kvm *kvm=
+);
+ void vfio_device_put_kvm(struct vfio_device *device);
+ #else
+-static inline void vfio_device_get_kvm_safe(struct vfio_device *device)
++static inline void _vfio_device_get_kvm_safe(struct vfio_device *device,
++					     struct kvm *kvm)
+ {
+ }
+=20
+diff --git a/drivers/vfio/vfio_main.c b/drivers/vfio/vfio_main.c
+index 4762550e9f42..00d4d5167d6c 100644
+--- a/drivers/vfio/vfio_main.c
++++ b/drivers/vfio/vfio_main.c
+@@ -342,7 +342,7 @@ void vfio_unregister_group_dev(struct vfio_device *devi=
+ce)
+ EXPORT_SYMBOL_GPL(vfio_unregister_group_dev);
+=20
+ #ifdef CONFIG_HAVE_KVM
+-void vfio_device_get_kvm_safe(struct vfio_device *device)
++void _vfio_device_get_kvm_safe(struct vfio_device *device, struct kvm *kvm)
+ {
+ 	void (*pfn)(struct kvm *kvm);
+ 	bool (*fn)(struct kvm *kvm);
+@@ -350,32 +350,25 @@ void vfio_device_get_kvm_safe(struct vfio_device *dev=
+ice)
+=20
+ 	lockdep_assert_held(&device->dev_set->lock);
+=20
+-	spin_lock(&device->group->kvm_ref_lock);
+-	if (!device->group->kvm)
+-		goto unlock;
+-
+ 	pfn =3D symbol_get(kvm_put_kvm);
+ 	if (WARN_ON(!pfn))
+-		goto unlock;
++		return;
+=20
+ 	fn =3D symbol_get(kvm_get_kvm_safe);
+ 	if (WARN_ON(!fn)) {
+ 		symbol_put(kvm_put_kvm);
+-		goto unlock;
++		return;
+ 	}
+=20
+ 	ret =3D fn(device->group->kvm);
+ 	symbol_put(kvm_get_kvm_safe);
+ 	if (!ret) {
+ 		symbol_put(kvm_put_kvm);
+-		goto unlock;
++		return;
+ 	}
+=20
+ 	device->put_kvm =3D pfn;
+-	device->kvm =3D device->group->kvm;
+-
+-unlock:
+-	spin_unlock(&device->group->kvm_ref_lock);
++	device->kvm =3D kvm;
+ }
+=20
+ void vfio_device_put_kvm(struct vfio_device *device)
 
