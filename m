@@ -2,121 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6826F689B0B
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 15:08:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D94D689B42
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 15:14:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233449AbjBCOEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 09:04:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49040 "EHLO
+        id S233772AbjBCOM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 09:12:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233362AbjBCODm (ORCPT
+        with ESMTP id S233065AbjBCOMb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 09:03:42 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7768A945E5;
-        Fri,  3 Feb 2023 06:01:24 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id cw4so5204319edb.13;
-        Fri, 03 Feb 2023 06:01:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DMxOcECTROuojakMPC85g2uiW2fNR65bS9sWaaYjKx0=;
-        b=pysH+jNR1RIsPECfhz0zsLyvvDuLNlBFdVheQ6FlgxyuvfxxkCQAfswneFezsGrSI5
-         7wnQygqm2eIXa0kpdRZ9kPhJQseL3JKpBfYT+3Vo/iNEtaFWQ1YnFQCrcfJWgzitmP6e
-         bSjItThW27LMjcO/GEqASjzgDBm1P5eQ1psiozIha34JfkRijIcQIYt1w48pJdOp9NuF
-         9VdRuCh0BBexkPEKGWW0WuuNX03CITLwGSQyBDWh+AyVPXtTKDq3FDS3pRLcmBUh84B/
-         5Ogglv6Hy9K3TSwwn8X/oWxY1E/4IFxDAQc0iMigUo/hI8hEFREO9KUpfPCRPGYM5nQv
-         Z3qA==
-X-Gm-Message-State: AO0yUKUfPQHbavZPD9wYDVPD4hnVNMA/B2veZ0waKyG+GNsMgb8YWBPa
-        e2bcuLTu7qpSZ6hTvw3ZcOC+cJqELD6JMRf1XDUdx78V
-X-Google-Smtp-Source: AK7set8uq7ebbsSriWJxHjrHMUC6X+0zB2DHHT/wCwhhmPTuZACsbPFqJ8NoROQqePjZsa6D2K4EbGrVsWTgDZ6U/EQ=
-X-Received: by 2002:a05:6402:40ce:b0:490:47c3:3d71 with SMTP id
- z14-20020a05640240ce00b0049047c33d71mr3247056edb.31.1675432767901; Fri, 03
- Feb 2023 05:59:27 -0800 (PST)
+        Fri, 3 Feb 2023 09:12:31 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7A631EBDB;
+        Fri,  3 Feb 2023 06:10:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=+WH7VJ9ND/1v/0aCLXgBANRi0NIzyJ1wTqtN9ZDhZj0=; b=fIup/wPpDa41mxDnPJ8ns94Rbb
+        a0fBPiiaSoivpGrzzPyRj4l7XDxbmD577qMeTbQM/3yw0assltKmE8T8YjqrqKaZY2jUdsKUCYJMd
+        hELsL527i/b2Dhgdnjs1Ibq17La59+1+USIBHspASs2TXsyt8xJJyRysKGP3c1pMEhas=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pNwc1-0040Ke-IW; Fri, 03 Feb 2023 15:00:21 +0100
+Date:   Fri, 3 Feb 2023 15:00:21 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jianhui Zhao <zhaojh329@gmail.com>,
+        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
+Subject: Re: [PATCH 1/9] net: ethernet: mtk_eth_soc: add support for MT7981
+ SoC
+Message-ID: <Y90TdTBPvQzV46H8@lunn.ch>
+References: <cover.1675407169.git.daniel@makrotopia.org>
+ <301fa3e888d686283090d58a060579d8c2a5bebb.1675407169.git.daniel@makrotopia.org>
 MIME-Version: 1.0
-References: <20230201210712.2170312-1-srinivas.pandruvada@linux.intel.com>
- <CAJZ5v0ieQocb2oe1ggDCOos4HtkmypsadMkXCwH2J5XmRUdVyQ@mail.gmail.com> <2eb7f5335241cc9ca2f31761766e8cb34cfaa42d.camel@linux.intel.com>
-In-Reply-To: <2eb7f5335241cc9ca2f31761766e8cb34cfaa42d.camel@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 3 Feb 2023 14:59:16 +0100
-Message-ID: <CAJZ5v0j=Hs9F3UQqV_qCJ+ra6y+Q+HhBrN-tRtfrE47nH_Suxg@mail.gmail.com>
-Subject: Re: [PATCH] thermal: intel_powerclamp: Return last requested state as cur_state
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
-        rui.zhang@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <301fa3e888d686283090d58a060579d8c2a5bebb.1675407169.git.daniel@makrotopia.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 2, 2023 at 11:21 PM srinivas pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> On Thu, 2023-02-02 at 17:44 +0100, Rafael J. Wysocki wrote:
-> > On Wed, Feb 1, 2023 at 10:07 PM Srinivas Pandruvada
-> > <srinivas.pandruvada@linux.intel.com> wrote:
-> > >
-> > > When the user is reading cur_state from the thermal cooling device
-> > > for
-> > > Intel powerclamp device:
-> > > - It returns the idle ratio from Package C-state counters when
-> > > there is active idle injection session.
-> > > - -1, when there is no active idle injection session.
-> > >
-> > > This information is not very useful as the package C-state counters
-> > > vary
-> > > a lot from read to read. Instead just return the last requested
-> > > cur_state.
-> > >
-> > > Signed-off-by: Srinivas Pandruvada
-> > > <srinivas.pandruvada@linux.intel.com>
-> > > ---
-> > >  drivers/thermal/intel/intel_powerclamp.c | 12 +-----------
-> > >  1 file changed, 1 insertion(+), 11 deletions(-)
-> > >
-> > > diff --git a/drivers/thermal/intel/intel_powerclamp.c
-> > > b/drivers/thermal/intel/intel_powerclamp.c
-> > > index 2f4cbfdf26a0..72a45cf2708c 100644
-> > > --- a/drivers/thermal/intel/intel_powerclamp.c
-> > > +++ b/drivers/thermal/intel/intel_powerclamp.c
-> > > @@ -590,17 +590,7 @@ static int powerclamp_get_max_state(struct
-> > > thermal_cooling_device *cdev,
-> > >  static int powerclamp_get_cur_state(struct thermal_cooling_device
-> > > *cdev,
-> > >                                  unsigned long *state)
-> > >  {
-> > > -       if (clamping) {
-> > > -               if (poll_pkg_cstate_enable)
-> > > -                       *state = pkg_cstate_ratio_cur;
-> > > -               else
-> > > -                       *state = set_target_ratio;
-> > > -       } else {
-> > > -               /* to save power, do not poll idle ratio while not
-> > > clamping */
-> > > -               *state = -1; /* indicates invalid state */
-> > > -       }
-> > > -
-> > > -       return 0;
-> > > +       return set_target_ratio;
-> >
-> > *state = set_target_ratio;
-> > return 0;
-> >
-> Sorry.
->
-> What a blunder! Sent patch from 37000 ft. Should never do that.
+On Fri, Feb 03, 2023 at 07:00:21AM +0000, Daniel Golle wrote:
+> The MediaTek MT7981 SoC comes two 1G/2.5G SGMII, just like MT7986.
+> 
+> In addition MT7981 comes with a built-in 1000Base-T PHY which can be
+> used with GMAC1.
+> 
+> As many MT7981 boards make use of swapping SGMII phase and neutral, add
+> new device-tree attribute 'mediatek,pn_swap' to support them.
 
-No worries.
+Is this new property documented in the device tree binding?
 
-I didn't realize that you were traveling.
-
-I can prepare this patch myself just fine if that helps.
+   Andrew
