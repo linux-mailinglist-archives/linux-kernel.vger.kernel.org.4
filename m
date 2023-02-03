@@ -2,71 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0064689166
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 08:59:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FC63689171
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 09:01:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232576AbjBCH7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 02:59:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39354 "EHLO
+        id S232742AbjBCH7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 02:59:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232261AbjBCH6n (ORCPT
+        with ESMTP id S232007AbjBCH7D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 02:58:43 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4259C402F6
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 23:58:42 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id jh15so4472496plb.8
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 23:58:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=i99J2pmlc+pek02YkZ8nESdE1CjXKdwjOkhiDfukAeg=;
-        b=Sh7tY9cHfXBOFOW5S5uAlPN05R/xzTnAbB0mmbqndgniiu94FxnWuAaAm9qmIUSIkN
-         qRCBTYVydLP5qCYUHgyPGxipO789g/iIFW6Owe6hqAS2uVMd5pTljfk7m0WZftpBpSFO
-         Puk5N5xZ2lhclDBA8AHsmHwR0EgQL6/pS2x+M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=i99J2pmlc+pek02YkZ8nESdE1CjXKdwjOkhiDfukAeg=;
-        b=FOF5OeGE0aaF2+CGT1miSQiBuQ7X/E8hKK562RtvyTqsFmx2qd4AydB9Awlql9/aYj
-         X9LIZ6WViK0quffG44OKCl+oYEJy6mb3OGZkLWJEwwitEoVwGnISa7L7wa1ycl2feKUj
-         G+BQt7mHHBzT92iABTyIJeTHO3SonQVZ7mDMGqTajJxCp26Y8OOsPfCczcMu3ypWEQ8D
-         wJuttFe8Rvv049/2i2be9IhrDsHHRrpZtXeMtHzv1+Nzli0B34AMO3BMuAfLcYGC1b+Q
-         /T0+4PDjSvlyfSGf7zoENwH5f565AGxDQ7D/TWziyvvSCyZ7PvJ+Dviwppd6llG2XMPr
-         60EA==
-X-Gm-Message-State: AO0yUKWUDauVKANVOJttlkwHGsbOrsDAnQHxi/GtyVkq90Qa7sZZ9R5n
-        1O/o1jytraqFFdFfjWcoLnPeOi4i9u4A0LdB6XFL
-X-Google-Smtp-Source: AK7set/LUCUS12AMHBelCxeNEkLPsGXsG7KXWdCQZPA6uBHaqE1ujJKSECijijC6oDwX24pxa4KylELSv345afb5ZkU=
-X-Received: by 2002:a17:902:ecc1:b0:193:794:ba9 with SMTP id
- a1-20020a170902ecc100b0019307940ba9mr2238861plh.22.1675411121784; Thu, 02 Feb
- 2023 23:58:41 -0800 (PST)
+        Fri, 3 Feb 2023 02:59:03 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D9186AE;
+        Thu,  2 Feb 2023 23:59:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 54444CE2F1B;
+        Fri,  3 Feb 2023 07:59:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 588CDC433D2;
+        Fri,  3 Feb 2023 07:58:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1675411139;
+        bh=/R2JWLhMawdOa6fsE3U4ILeUPr9J2AF9dkOPohAi+Yo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=x//EX1spfRB5uvMdJ9XGOwy2zIbPAvLhlaFtpwBqM3UjYcsr8iwFv8siUL9e4oqHn
+         3qHp4jNsqaKU471OxA39SAppzwonmYq8w6OHE2ysU5Mu0T4dP8i3mj+TK+EcGiRnFX
+         XmPM28uNbWH7Vp0Z+cjHicIhhg2BM7iyWrjrvqyw=
+Date:   Fri, 3 Feb 2023 08:58:57 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH stable 5.4] usb: host: xhci-plat: add wakeup entry at
+ sysfs
+Message-ID: <Y9y+wRPYzQVwb3JS@kroah.com>
+References: <20230201174404.32777-1-f.fainelli@gmail.com>
+ <20230201174404.32777-3-f.fainelli@gmail.com>
+ <Y9qsZysFUFnq7VQW@kroah.com>
+ <319ebea0-61dc-2e08-f48b-4555b8fb894a@gmail.com>
 MIME-Version: 1.0
-References: <20230203075232.274282-1-alexghiti@rivosinc.com> <20230203075232.274282-5-alexghiti@rivosinc.com>
-In-Reply-To: <20230203075232.274282-5-alexghiti@rivosinc.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Thu, 2 Feb 2023 23:58:30 -0800
-Message-ID: <CAOnJCUK==Ma=p0mLLRJBB=3qTyMOTbiDNVYSmXpJr0HCsZ8Kxw@mail.gmail.com>
-Subject: Re: [PATCH v4 4/6] riscv: Fix EFI stub usage of KASAN instrumented
- strcmp function
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Conor Dooley <conor@kernel.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-efi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <319ebea0-61dc-2e08-f48b-4555b8fb894a@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,46 +57,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 2, 2023 at 11:56 PM Alexandre Ghiti <alexghiti@rivosinc.com> wrote:
->
-> The EFI stub must not use any KASAN instrumented code as the kernel
-> proper did not initialize the thread pointer and the mapping for the
-> KASAN shadow region.
->
-> Avoid using the generic strcmp function, instead use the one in
-> drivers/firmware/efi/libstub/string.c.
->
-> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-> Acked-by: Ard Biesheuvel <ardb@kernel.org>
-> ---
->  arch/riscv/kernel/image-vars.h | 2 --
->  1 file changed, 2 deletions(-)
->
-> diff --git a/arch/riscv/kernel/image-vars.h b/arch/riscv/kernel/image-vars.h
-> index 7e2962ef73f9..15616155008c 100644
-> --- a/arch/riscv/kernel/image-vars.h
-> +++ b/arch/riscv/kernel/image-vars.h
-> @@ -23,8 +23,6 @@
->   * linked at. The routines below are all implemented in assembler in a
->   * position independent manner
->   */
-> -__efistub_strcmp               = strcmp;
-> -
->  __efistub__start               = _start;
->  __efistub__start_kernel                = _start_kernel;
->  __efistub__end                 = _end;
-> --
-> 2.37.2
->
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+On Wed, Feb 01, 2023 at 03:19:08PM -0800, Florian Fainelli wrote:
+> On 2/1/23 10:16, Greg Kroah-Hartman wrote:
+> > On Wed, Feb 01, 2023 at 09:44:04AM -0800, Florian Fainelli wrote:
+> > > From: Peter Chen <peter.chen@nxp.com>
+> > > 
+> > > commit  4bb4fc0dbfa23acab9b762949b91ffd52106fe4b upstream
+> > > 
+> > > With this change, there will be a wakeup entry at /sys/../power/wakeup,
+> > > and the user could use this entry to choose whether enable xhci wakeup
+> > > features (wake up system from suspend) or not.
+> > > 
+> > > Tested-by: Matthias Kaehlcke <mka@chromium.org>
+> > > Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+> > > Signed-off-by: Peter Chen <peter.chen@nxp.com>
+> > > Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+> > > Link: https://lore.kernel.org/r/20200918131752.16488-6-mathias.nyman@linux.intel.com
+> > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> > > ---
+> > >   drivers/usb/host/xhci-plat.c | 2 +-
+> > >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > Why is this new feature needed on these older kernels?  What does it fix
+> > that is broken?
+> 
+> It fixes the inability to make the XHCI controller a wake-up device since
+> there is no /sys/*/*xhci/power/wakeup sysfs entry to manipulate unless this
+> patch is applied.
 
+But that is a new feature, not a bugfix.
 
-Reviewed-by: Atish Patra <atishp@rivosinc.com>
+What systems need this for these older kernels that will actually update
+to them in order to pick up this change?
 
--- 
-Regards,
-Atish
+thanks,
+
+greg k-h
