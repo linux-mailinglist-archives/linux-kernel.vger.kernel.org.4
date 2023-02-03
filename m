@@ -2,110 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6597689B81
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 15:23:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AEB5689B8D
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 15:26:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232295AbjBCOXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 09:23:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42006 "EHLO
+        id S232662AbjBCO0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 09:26:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232056AbjBCOXU (ORCPT
+        with ESMTP id S232736AbjBCOZ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 09:23:20 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BB5017CD3
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 06:23:15 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id bk15so15729671ejb.9
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 06:23:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=jrpekdfBnuZdpOMig/MdY4DX2twN+6+zh9yRntM5/rg=;
-        b=ek1gBgVXY2mwhavFpt5kt9wRzQn/Jkvjf0TasZj3tdIHZT+aXjKjPFLcyjxX1BB9Xj
-         +VWhxWfIAPMjM6C8PYaIFTOa79HONL+vc/C5TyubDcazVPx/nb6unz6nhiPtC4NVKd0t
-         RPL1+yoYjMbIkxucAJlL1YRLUSqV+MizTwtnrUmI+GginMkTKJnnqwdQXBDzNUeVhni4
-         pO4gUJdH9E0L8wY2t60tyzh4yCqOIBVjrzM1KhYdJ0hU4R/SZv3MBZzLAO3eHvcTfllj
-         4qzIFB23AaHiTWT8RUcjdf6FHe9Y6QYYOai82J8+Qfxw0VYNZI3a5N0bTAWyOqyn4lcV
-         koLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jrpekdfBnuZdpOMig/MdY4DX2twN+6+zh9yRntM5/rg=;
-        b=JMcnsf8XH7Emb1YHAjqjRjNZzcTRecGCVeSUWJVDXNE5WQmfvhM2+uBbwayu5ZqCkS
-         7HjZn9C/mQMIVJ0GN5A69mLBOTLczXvcGwBk2wRHNr0nH5QkJF1IhQsWr6wA8vUa4R9o
-         Dda0wCJLLP7vyx7Dz7bqWYY+0k7bTzyC48PlIRoT73myokgUiFEts61Sb9/kq3gpvybt
-         lHWZohKSEtAMueQetESfNMQFdMQEi+E8WMCbWC2ldzVt0PKe3KrPOdfILWZWFeOpveHi
-         u9xla7mvx8rh6JBq/FBXxmyReqZ1GEm6EhrXqRhBgqVw3RVSRcqCWq27A9VoERRjfvpK
-         Hfwg==
-X-Gm-Message-State: AO0yUKXg6HkcvAGde/v5UQfAc5aSJ4Db0xcQ7pjhvKzkGH4JXJ2hgqPL
-        HLF8J0KdltWifk/+9ztzuTvkNQ==
-X-Google-Smtp-Source: AK7set/vS8Zwf2QJYKpOKaAw9XVXRWcYCx/Ya9PjzC8Xa1zWhjudq/NNa+/hUOCtjyMtVxiFZWZbQw==
-X-Received: by 2002:a17:906:135a:b0:881:d1ad:1640 with SMTP id x26-20020a170906135a00b00881d1ad1640mr10198956ejb.57.1675434194035;
-        Fri, 03 Feb 2023 06:23:14 -0800 (PST)
-Received: from localhost.localdomain (abyl20.neoplus.adsl.tpnet.pl. [83.9.31.20])
-        by smtp.gmail.com with ESMTPSA id h10-20020a1709070b0a00b0087758f5ecd1sm1415008ejl.194.2023.02.03.06.23.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 06:23:13 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: dts: qcom: sm8450-nagara: Correct firmware paths
-Date:   Fri,  3 Feb 2023 15:23:09 +0100
-Message-Id: <20230203142309.1106349-1-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.39.1
+        Fri, 3 Feb 2023 09:25:57 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74AE323304
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 06:25:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675434309;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=9N2hOTys/+lGMc2Icse9u7NTCoYhCX2MBJqWpddTKDI=;
+        b=AAdkG8IrAuQkb1JviOzELj/QI1oGtvYoTuypHi89t+lxgSsB/30wZxjh7pK6/pDgddROmf
+        UiztBOwvWOlzA0JcUgLFkcYGG9ER2tAX0CLhrcLuq8YRe9uTdOTXxY/6tG5m32GYuVwuxW
+        Llb5tWZaNWP/q6B0CmFksQFJdLWEdbs=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-44-Zt1xpZnCO8i2hEkM63CUWA-1; Fri, 03 Feb 2023 09:25:06 -0500
+X-MC-Unique: Zt1xpZnCO8i2hEkM63CUWA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EC29C802314;
+        Fri,  3 Feb 2023 14:25:05 +0000 (UTC)
+Received: from eperezma.remote.csb (unknown [10.39.194.221])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id BD6172026D37;
+        Fri,  3 Feb 2023 14:25:02 +0000 (UTC)
+From:   =?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>
+To:     mst@redhat.com
+Cc:     lulu@redhat.com, virtualization@lists.linux-foundation.org,
+        si-wei.liu@oracle.com, leiyang@redhat.com,
+        Gautam Dawar <gdawar@xilinx.com>, Eli Cohen <elic@nvidia.com>,
+        longpeng2@huawei.com, parav@nvidia.com,
+        linux-kernel@vger.kernel.org, sgarzare@redhat.com,
+        Zhu Lingshan <lingshan.zhu@intel.com>,
+        alvaro.karsz@solid-run.com, Laurent Vivier <lvivier@redhat.com>
+Subject: [PATCH v2] vdpa_sim: set last_used_idx as last_avail_idx in vdpasim_queue_ready
+Date:   Fri,  3 Feb 2023 15:25:01 +0100
+Message-Id: <20230203142501.300125-1-eperezma@redhat.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Nagara is definitely not SM8350, fix it!
+Starting from an used_idx different than 0 is needed in use cases like
+virtual machine migration.  Not doing so and letting the caller set an
+avail idx different than 0 causes destination device to try to use old
+buffers that source driver already recover and are not available
+anymore.
 
-Fixes: c53532f7825c ("arm64: dts: qcom: pdx223: correct firmware paths")
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Since vdpa_sim does not support receive inflight descriptors as a
+destination of a migration, let's set both avail_idx and used_idx the
+same at vq start.  This is how vhost-user works in a
+VHOST_SET_VRING_BASE call.
+
+Although the simple fix is to set last_used_idx at vdpasim_set_vq_state,
+it would be reset at vdpasim_queue_ready.  The last_avail_idx case is
+fixed with commit a09f493c ("vdpa_sim: not reset state in
+vdpasim_queue_ready").  Since the only option is to make it equal to
+last_avail_idx, adding the only change needed here.
+
+This was discovered and tested live migrating the vdpa_sim_net device.
+
+Fixes: 2c53d0f64c06 ("vdpasim: vDPA device simulator")
+Signed-off-by: Eugenio Pérez <eperezma@redhat.com>
 ---
- arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara.dtsi | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Cherry-picked from patch 2/2 of the series [1]. Differences are:
+* Set the value of used_idx at vdpasim_queue_ready instead of fetching
+  from the guest vring like vhost-kernel.
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara.dtsi b/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara.dtsi
-index 68d15f7651f3..d503899f3947 100644
---- a/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara.dtsi
-@@ -891,17 +891,17 @@ &pon_resin {
- };
+v2: Actually update last_used_idx only at vdpasim_queue_ready.
+
+Note that commit id present in the patch text is not in master but in
+git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git.
+
+[1] https://lkml.org/lkml/2023/1/18/1041
+---
+ drivers/vdpa/vdpa_sim/vdpa_sim.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+index 6a0a65814626..79ac585e40b9 100644
+--- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
++++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+@@ -68,6 +68,7 @@ static void vdpasim_queue_ready(struct vdpasim *vdpasim, unsigned int idx)
+ 			  (uintptr_t)vq->device_addr);
  
- &remoteproc_adsp {
--	firmware-name = "qcom/sm8350/Sony/nagara/adsp.mbn";
-+	firmware-name = "qcom/sm8450/Sony/nagara/adsp.mbn";
- 	status = "okay";
- };
- 
- &remoteproc_cdsp {
--	firmware-name = "qcom/sm8350/Sony/nagara/cdsp.mbn";
-+	firmware-name = "qcom/sm8450/Sony/nagara/cdsp.mbn";
- 	status = "okay";
- };
- 
- &remoteproc_slpi {
--	firmware-name = "qcom/sm8350/Sony/nagara/slpi.mbn";
-+	firmware-name = "qcom/sm8450/Sony/nagara/slpi.mbn";
- 	status = "okay";
- };
+ 	vq->vring.last_avail_idx = last_avail_idx;
++	vq->vring.last_used_idx = last_avail_idx;
+ 	vq->vring.notify = vdpasim_vq_notify;
+ }
  
 -- 
-2.39.1
+2.31.1
 
