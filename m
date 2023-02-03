@@ -2,134 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3E9B68A21E
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 19:41:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D73668A221
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 19:41:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233497AbjBCSlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 13:41:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34084 "EHLO
+        id S233661AbjBCSlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 13:41:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231495AbjBCSlX (ORCPT
+        with ESMTP id S233537AbjBCSlc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 13:41:23 -0500
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 721071ADDD;
-        Fri,  3 Feb 2023 10:41:21 -0800 (PST)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 8C21D1883921;
-        Fri,  3 Feb 2023 18:41:18 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 78969250007B;
-        Fri,  3 Feb 2023 18:41:18 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 5F8CC91201E4; Fri,  3 Feb 2023 18:41:18 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Fri, 3 Feb 2023 13:41:32 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC3D6A07F6;
+        Fri,  3 Feb 2023 10:41:29 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id u21so6086840edv.3;
+        Fri, 03 Feb 2023 10:41:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=EpifIZ28oYpL2rBkMbd7e7OHElr8hShCKM0vbyNTnHM=;
+        b=KKjSM7vKyvt4YrmL/ZuB8nNdK7UYWgUv5h4MaHT8jo6qaAnP+H4QTrrWr/o+7l0rmn
+         JboDpnjh2O96qOqgxIz0AQ+MoZLvnrKZy4sh7FFEw0pDobWIr2c+bxKHo/nrlGfGWorV
+         IUgBNvc6+nVRLZVcJ0ZNkHaUBuh7yPSB4awpapcdyZ4hP3e7gKtRUOq3ma7L/1B41cuP
+         XN2YprdZRtdb/LMNIwJbqLq4NSiP30d8I8qFpyyq1HuaCv8K2F2I7n7Nr2g21Rpt3SEQ
+         KwlmkgXblEoj57BIS09iv8J3dniAGmf97PV1l/ZHShYEB9A55Qk+yURD+Bfl8oV9qh1u
+         rwWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EpifIZ28oYpL2rBkMbd7e7OHElr8hShCKM0vbyNTnHM=;
+        b=EYMxfN9kFUVan/3Wn22gTRTmG5Xgk+zQ/5zOY1ImLnQPkGw0/49j3CcGgGpZUyEmsf
+         Tz3ZdCjKi1x9p3FiE9zWSizYb5pbof6HHynpYPq3BgofYxoLT9x/MLT+/dsxiRV6222/
+         ChJdoEwTBmjd5MLyCvLs2GOBGRpPAjmkHiLpdMDG17HlxE+BOXuZVJ3/R2R8YtiERjb9
+         o1pfPBPydjuwdTWlstmHzRVrOoruIVcIG4V+Dgfm1Fdpqyfvhlj1jKwqGJNPhUZuUowW
+         KLQtyRxP/AcVn6lrs8J/wat20ltZkRu1SQherxPAc1vGICBpnncNeVH7tIfG2jkn8vWE
+         rYiQ==
+X-Gm-Message-State: AO0yUKVxDxoGCsvPXNMRzsfuDgrjCcVf+ggDCB7+dOkQq/s7+D2/BOBJ
+        wsCXdesXJ/FCFYikhnVySYk=
+X-Google-Smtp-Source: AK7set8bCwzpRLUrALPYyi/Fhe7awgEG9OUUNVldhoFItRVeUqiz9kfI+zqUa1FZ8hSea3pjBnuZ7g==
+X-Received: by 2002:a05:6402:50d4:b0:4a3:43c1:8436 with SMTP id h20-20020a05640250d400b004a343c18436mr7240485edb.10.1675449688113;
+        Fri, 03 Feb 2023 10:41:28 -0800 (PST)
+Received: from skbuf ([188.26.57.116])
+        by smtp.gmail.com with ESMTPSA id g20-20020aa7c854000000b004a24b8b58cbsm1504907edt.16.2023.02.03.10.41.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Feb 2023 10:41:27 -0800 (PST)
+Date:   Fri, 3 Feb 2023 20:41:25 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Jiri Olsa <olsajiri@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>,
+        Connor OBrien <connoro@google.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] tools/resolve_btfids: Tidy host CFLAGS forcing
+Message-ID: <20230203184125.2ka4cor4pefs3337@skbuf>
+References: <20230201015015.359535-1-irogers@google.com>
+ <Y9o4H61YmbOSCDOG@krava>
+ <Y9pCY5IcYEqfNgBX@krava>
+ <CAP-5=fVHFMJvaY_UE4QdV-PW+gy1EuyiHDXqWJmHVxS9Mr3XEQ@mail.gmail.com>
+ <Y9rQnu6KPj1t8Rog@krava>
+ <Y9rXzIm3UY7lzYFt@dev-arch.thelio-3990X>
+ <Y9ufUdzOSp9y9qQA@krava>
 MIME-Version: 1.0
-Date:   Fri, 03 Feb 2023 19:41:18 +0100
-From:   netdev@kapio-technology.com
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
-        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?UTF-8?Q?Cl=C3=A9m?= =?UTF-8?Q?ent_L=C3=A9ger?= 
-        <clement.leger@bootlin.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>
-Subject: Re: [PATCH net-next 3/5] drivers: net: dsa: add fdb entry flags
- incoming to switchcore drivers
-In-Reply-To: <Y9zDApc6nDO2RzOb@corigine.com>
-References: <20230130173429.3577450-1-netdev@kapio-technology.com>
- <20230130173429.3577450-4-netdev@kapio-technology.com>
- <Y9lj7RJgyMJfjtGp@corigine.com>
- <0b021777dfc1825b6565c0d9dbd6dbef@kapio-technology.com>
- <Y9zDApc6nDO2RzOb@corigine.com>
-User-Agent: Gigahost Webmail
-Message-ID: <687a1918326d23ec901c1f53f5860592@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9ufUdzOSp9y9qQA@krava>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-02-03 09:17, Simon Horman wrote:
-> On Thu, Feb 02, 2023 at 05:45:56PM +0100, netdev@kapio-technology.com 
-> wrote:
->> On 2023-01-31 19:54, Simon Horman wrote:
->> > > --- a/drivers/net/dsa/b53/b53_common.c
->> > > +++ b/drivers/net/dsa/b53/b53_common.c
->> > > @@ -1684,11 +1684,15 @@ static int b53_arl_op(struct b53_device
->> > > *dev, int op, int port,
->> > >
->> > >  int b53_fdb_add(struct dsa_switch *ds, int port,
->> > >  		const unsigned char *addr, u16 vid,
->> > > -		struct dsa_db db)
->> > > +		u16 fdb_flags, struct dsa_db db)
->> > >  {
->> > >  	struct b53_device *priv = ds->priv;
->> > >  	int ret;
->> > >
->> > > +	/* Ignore entries with set flags */
->> > > +	if (fdb_flags)
->> > > +		return 0;
->> >
->> >
->> > 	Would returning -EOPNOTSUPP be more appropriate?
->> >
->> > ...
->> 
->> I don't think that would be so good, as the command
->> 
->> bridge fdb replace ADDR dev <DEV> master dynamic
->> 
->> is a valid command and should not generate errors. When ignored by the
->> driver, it will just install a dynamic FDB entry in the bridge, and 
->> the
->> bridge will age it.
-> 
-> Sure, I agree that it's not necessarily an error that needs
-> to propagate to the user.
-> 
-> My assumption, which I now see is likely false, is that drivers
-> could return -EOPNOTSUPP, to indicate to higher layers that the 
-> operation
-> is not supported. But the higher layers may not propagate that.
-> 
-> But it seems that is not the case here. So I think return 0 is fine
-> after all. Sorry for the noise.
+Hi,
 
-No noise at all... I think your concern is quite ligitimate. With this 
-flag there is no iproute2 changes, so not to change behaviour of old 
-commands the best is to ignore silently. But I have another flag coming 
-up that will be accomodated with a new iproute2 command, and then your 
-suggestion is more appropriate. The question will then be if the returns 
-for that flag should be -EOPNOTSUPP.
+On Thu, Feb 02, 2023 at 12:32:33PM +0100, Jiri Olsa wrote:
+> On Wed, Feb 01, 2023 at 02:21:16PM -0700, Nathan Chancellor wrote:
+> 
+> SNIP
+> 
+> > > > Should we do this and the hostprogs migration as a follow up? There
+> > > > isn't that much use of hostprogs in tools, but I like that your change
+> > > > will show HOSTCC rather than CC during compilation. If we use
+> > > > hostprogs can we just avoid the overrides altogether?
+> > > 
+> > > right, I think so.. we can now remove it for the BINARY target and
+> > > then for the rest of 'prepare' once they are converted to hostprogs..
+> > > not sure how 'hostprogs' will work for library, will need to check
+> > > 
+> > > I'll try to send the format patch with the fix below tomorrow
+> > > 
+> > > Nathan, any chance you could test it?
+> > 
+> > 
+> > Sure thing, would you happen to have a single patch file of what I
+> > should test? I am a little confused from reading the thread (unless what
+> > you want tested has not been sent yet).
+> 
+> I meant the change below, but I posted the formal patch now:
+>   https://lore.kernel.org/bpf/20230202112839.1131892-1-jolsa@kernel.org/T/#u
+
+I've been chasing the links posted by Ian, but now I can't comment on patch
+"tools/resolve_btfids: Compile resolve_btfids as host program", because
+lkml wasn't CCed, and I'm not subscribed to the bpf ML. So I'm commenting here.
+
+Can someone please apply the patch linked above? Compiling with
+CONFIG_DEBUG_INFO_BTF=y is also broken on net-next.
+
+Maintainers can add my
+
+Tested-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+
+on that patch if it helps speed up the process.
