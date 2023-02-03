@@ -2,137 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10D0168A212
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 19:36:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C05B68A213
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 19:36:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233394AbjBCSgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 13:36:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60376 "EHLO
+        id S233573AbjBCSgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 13:36:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbjBCSgN (ORCPT
+        with ESMTP id S232601AbjBCSga (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 13:36:13 -0500
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2CDC9EF6;
-        Fri,  3 Feb 2023 10:36:12 -0800 (PST)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-15fe106c7c7so7651850fac.8;
-        Fri, 03 Feb 2023 10:36:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=LlHQ1B1QTLPeQlfxsLk6odPLDyO6zb4BJDmUSvIRHT8=;
-        b=FNuw0HzzH7DYNxsB5DqqG9B0w1WiQ2dwB7ukC4gITJBqFxxsc3legZ8u/4bsBpywul
-         R2zwsSHdvGg2QFLUOZJVVhFLCxltXVw3u3+Dwz3Zlp3dBuyA9G4tlherY8If+Dd7HH/s
-         KaXVdEiXZFpIl+6ci91sIVCLspFYlMC9Ucz4Qe6fQBV317C5/Bq3XO8FjALAF2Dv0GVv
-         beGzqafEfOKS2FCNCiOcbrFWxOOwJ2B5YAKE6KvLgyeRTa0TPKUcsGVjtxHRkPrUkYjS
-         /EwvmnpBv9GvMwSTUCFu8Dx7XsF5ilu5QgpdRv3fvcjM662Pm3VZ8eBTSpA1LijOwN9G
-         vzBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LlHQ1B1QTLPeQlfxsLk6odPLDyO6zb4BJDmUSvIRHT8=;
-        b=h7qU8IHG9MgngelWoeQXgrI6QmBWFlWTfZBTbEU+GeKdRrJv53M2xb8kqOgnLSG/J0
-         KyqhQqWOfXcCrabDusMKj1hzXoKmzf8D2UzRb9JTSD8Ay9sliF3iiLjBKTwzqlhBhxY5
-         991t3J9y+bMz+vbV3CLEE5mzKpRvxT/jztnT5alHL4BBoYZGVixFEY1vUtWqNIdwvj7q
-         NeWti0IKeHgwZAcxdeLg77GMcjSSkSYMAlvW4/Bmy4v1BPq2dalnHjBLZJcsvGd/3w9O
-         brC2p6RkLDsLrzN1WRhBCd6gjJprBr87cYUhbEgYWrNkNbSJesdie1KT0Sa0haJVWycG
-         oJ3A==
-X-Gm-Message-State: AO0yUKV5sWsp22P5DFjEfo1csmoAVN5FnSqqxJuUlmhKDhJsmKgRGnAz
-        8sr22TeP7ydfwvGGAZb8p3k=
-X-Google-Smtp-Source: AK7set8lK4eYQCvIyJS8sko63vywubvSJA5p7hruViXSmz6kTBm3Cjea5Lbj1zlLS7xVzWvKGUmygQ==
-X-Received: by 2002:a05:6870:a40a:b0:15e:e1e1:be5a with SMTP id m10-20020a056870a40a00b0015ee1e1be5amr5808677oal.40.1675449371705;
-        Fri, 03 Feb 2023 10:36:11 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a4-20020a056870618400b0014fc049fc0asm1070930oah.57.2023.02.03.10.36.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Feb 2023 10:36:11 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <b86ecef8-c1ed-fd3c-ad5e-e4b3f91b0a8b@roeck-us.net>
-Date:   Fri, 3 Feb 2023 10:36:09 -0800
+        Fri, 3 Feb 2023 13:36:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22D19ADB9E;
+        Fri,  3 Feb 2023 10:36:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A698761FA7;
+        Fri,  3 Feb 2023 18:36:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4562CC433EF;
+        Fri,  3 Feb 2023 18:36:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675449384;
+        bh=ePl6R2Z+U5EHaRXvuobFDAMBenFfo2gdDC6EXMOostQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ieOio1op3VDdUsLP8MuNow5b11ORT9/xaHY6V2pBjy6+ROxIUaws1B70echyk+Btw
+         aT/D6Aa3RfvxIAyq8/Uu/5STfZc98vNfGwImVYLalD5I3/+qmfCAUAFczkl54hilVZ
+         uPY/fiVu1Nl5wuU0vKXNAEahixuv1Iy5Sy4F2kAweiTeVQoLS9qwWEMrbxurmByl52
+         cQ3gabMg2Q0umYDZqGAm9NmbwIXkWub8MlhTAP2TBug1ReW6tq0FXt42uKwBjA3aE1
+         VKwI8DIregMT0a6OWVghtr0B6ylUDpiTGlpEIeEEQGMn9LqnbAnfwWllKg6UqEcV80
+         vDG9GI8F/nxCQ==
+Date:   Fri, 3 Feb 2023 18:36:18 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH][next] ASoC: uapi: Replace zero-length arrays with
+ __DECLARE_FLEX_ARRAY() helper
+Message-ID: <Y91UIilZDWpivkWL@sirena.org.uk>
+References: <YzIzUjUuJKf0mkKg@work>
+ <fcd83e77-a3fb-9061-771a-8509ea6f5950@embeddedor.com>
+ <Y9wmnfTi/p4FuRmd@sirena.org.uk>
+ <bb43c410-bd8c-66fe-19a1-0f41442838eb@embeddedor.com>
+ <Y90ExljX2qCsowhu@sirena.org.uk>
+ <652684af-bd10-99da-1ed8-104407493428@embeddedor.com>
+ <Y90P3kik6ONZg3U4@sirena.org.uk>
+ <63dd3676.170a0220.1f1b2.3244@mx.google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 4/5] watchdog: diag288_wdt: de-duplicate diag_stat_inc()
- calls
-Content-Language: en-US
-To:     Alexander Egorenkov <egorenar@linux.ibm.com>,
-        wim@linux-watchdog.org
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hca@linux.ibm.com
-References: <20230203073958.1585738-1-egorenar@linux.ibm.com>
- <20230203073958.1585738-5-egorenar@linux.ibm.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230203073958.1585738-5-egorenar@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Ujqo4SKGI187lzYk"
+Content-Disposition: inline
+In-Reply-To: <63dd3676.170a0220.1f1b2.3244@mx.google.com>
+X-Cookie: No animals were injured.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/2/23 23:39, Alexander Egorenkov wrote:
-> Call diag_stat_inc() from __diag288() to reduce code duplication.
-> 
-> Reviewed-by: Heiko Carstens <hca@linux.ibm.com>
-> Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+--Ujqo4SKGI187lzYk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> ---
->   drivers/watchdog/diag288_wdt.c | 11 +++--------
->   1 file changed, 3 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/watchdog/diag288_wdt.c b/drivers/watchdog/diag288_wdt.c
-> index c717f47dd4c3..a29ad164b27a 100644
-> --- a/drivers/watchdog/diag288_wdt.c
-> +++ b/drivers/watchdog/diag288_wdt.c
-> @@ -78,6 +78,8 @@ static int __diag288(unsigned int func, unsigned int timeout,
->   	union register_pair r3 = { .even = action, .odd = len, };
->   	int err;
->   
-> +	diag_stat_inc(DIAG_STAT_X288);
-> +
->   	err = -EINVAL;
->   	asm volatile(
->   		"	diag	%[r1],%[r3],0x288\n"
-> @@ -100,14 +102,12 @@ static int __diag288_vm(unsigned int  func, unsigned int timeout, char *cmd)
->   	ASCEBC(cmd_buf, MAX_CMDLEN);
->   	EBC_TOUPPER(cmd_buf, MAX_CMDLEN);
->   
-> -	diag_stat_inc(DIAG_STAT_X288);
->   	return __diag288(func, timeout, virt_to_phys(cmd_buf), len);
->   }
->   
->   static int __diag288_lpar(unsigned int func, unsigned int timeout,
->   			  unsigned long action)
->   {
-> -	diag_stat_inc(DIAG_STAT_X288);
->   	return __diag288(func, timeout, action, 0);
->   }
->   
-> @@ -135,12 +135,7 @@ static int wdt_start(struct watchdog_device *dev)
->   
->   static int wdt_stop(struct watchdog_device *dev)
->   {
-> -	int ret;
-> -
-> -	diag_stat_inc(DIAG_STAT_X288);
-> -	ret = __diag288(WDT_FUNC_CANCEL, 0, 0, 0);
-> -
-> -	return ret;
-> +	return __diag288(WDT_FUNC_CANCEL, 0, 0, 0);
->   }
->   
->   static int wdt_ping(struct watchdog_device *dev)
+On Fri, Feb 03, 2023 at 04:29:41PM +0000, Kees Cook wrote:
+> On Fri, Feb 03, 2023 at 01:45:02PM +0000, Mark Brown wrote:
 
+> > Sure, feel free to send an update...
+
+> Is this accurate?
+
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 7f86d02cb427..e21a3412a546 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -19564,6 +19564,8 @@ F:	Documentation/devicetree/bindings/sound/
+>  F:	Documentation/sound/soc/
+>  F:	include/dt-bindings/sound/
+>  F:	include/sound/soc*
+> +F:	include/sound/sof/
+> +F:	include/uapi/sound/asoc.h
+>  F:	sound/soc/
+
+Might be missing stuff but those are both good additions.  Looks like
+the SOF directory also wants adding to the SOF section in MAINTAINERS.
+
+--Ujqo4SKGI187lzYk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPdVCEACgkQJNaLcl1U
+h9DNJAf/bOYTwqW5lCeVbfFOqegYJX6nmDSYygowWljR5/yeojsBy3C913YfFDa6
+5nkc+BgEfXYvBqtbSZkFbdc3KAiPOqnJAS26hlMXEWTlBdXVemgtMTNcMQWD7Fd8
+dUe55m51zv5vky5OWQlNyROBKL5a3IQbhmg33QYidg+1KPJlCyk7ETZmRUt5AI99
+W9ZM9JHoZDRAoWRF0dXHez76XFHJ2qjpEZpaOHy0BbjO2ppI4+v7/H2ysESBDMLD
+Q2y8ExyBAQMUl2TNvmPGMASMvfWK2cf9EZLT2q5QCDEML9mtAAY8AWuVy1xLfyad
+swhz49NJ4271bdmiCnsLenkwEcwzEQ==
+=cmyM
+-----END PGP SIGNATURE-----
+
+--Ujqo4SKGI187lzYk--
