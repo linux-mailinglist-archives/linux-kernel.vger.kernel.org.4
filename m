@@ -2,97 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAB7768910E
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 08:40:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78557689112
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 08:42:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230384AbjBCHkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 02:40:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55920 "EHLO
+        id S232409AbjBCHkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 02:40:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232356AbjBCHkC (ORCPT
+        with ESMTP id S232448AbjBCHke (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 02:40:02 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 154E193AF5
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 23:40:00 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id m5-20020a05600c4f4500b003db03b2559eso3161305wmq.5
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 23:40:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eDG+Tq9iDGbHsf5EgNu0sPH0oktHNFK56axN09nipps=;
-        b=yptLRVcqgMEv8JFQdUEfePL7JJZ5m6e8TTX6WXgdibOU5Xgo43x2mz1dEM1ustKfPV
-         TojcrLeEU06LWS9QaEqyVsJF9DvFP/uM5FBnYICrJmklLai385IRWMYCye7Q8e00aqko
-         5cNF/XAhVJ44XEB0TIFQm0lLj0SxLQyVPuCQRyMu/oEwnY34X+gboWZOJV0hb/Xg+tV0
-         Ozv3lTqxqQHZcGKMU/7E/dA8YKdioh1tx23nD6Ndr+nbIwXcq30e1/RxsWZ3KZXh0f/1
-         7rxeAf/947EThE7vujkmhADU7gxp3YmZDFASuX6fP54AQWqdq7oYBCIu9TWzd+GjBTDc
-         9mBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eDG+Tq9iDGbHsf5EgNu0sPH0oktHNFK56axN09nipps=;
-        b=sLWPYcDFTpFvS2xDQr6aKayYdsd1R4G4Xjod1GDPppKyYc+NDF451DMuiLjmDGXs1O
-         uRb1zkaE1tvCUPo7dF89deWi7jWLXxYqBk+wFaLOM8hSidIu5x+gpoGkX861zAz9kzkT
-         CwqBvoXGp6THtH5Vqlac7Fd1KUcu8azaPHhdY9RGOuzNx1rLz9UHi4JJpBCj7CS/TyZS
-         xPZkshD4zpS68gQ8oLdj2EY26VHcyUSc/82E8mzqJvbXvDndLMFVlGj+Xsu/RV/24f5n
-         hi5PnfFvqfPpWN7YnWaNG6CTrrIFemDJyqZ/15CWkwZNYWeqAHAragSx4oAdUjumQ4ia
-         INoA==
-X-Gm-Message-State: AO0yUKXQRc341aCpOqd/Ikea+26yYQSKwYVS4+q2IPAa92NnvPF5f3Qk
-        z7b+keYVnw6Q2uIPI5YuF3p7Tw==
-X-Google-Smtp-Source: AK7set+WVSL5lEE03IKAtRDn0G9GQ2gh7h7Cg2Buma4kwR1Id2znaqCke5/4PO5RGEDw3TtaU0/xNw==
-X-Received: by 2002:a05:600c:5389:b0:3dc:557f:6126 with SMTP id hg9-20020a05600c538900b003dc557f6126mr10773527wmb.4.1675409998149;
-        Thu, 02 Feb 2023 23:39:58 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id q14-20020a7bce8e000000b003dc49e0132asm6747405wmj.1.2023.02.02.23.39.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 23:39:57 -0800 (PST)
-Message-ID: <0012a2d8-ef4c-400d-7236-a2afbcdddf47@linaro.org>
-Date:   Fri, 3 Feb 2023 08:39:55 +0100
+        Fri, 3 Feb 2023 02:40:34 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 490B693AFB;
+        Thu,  2 Feb 2023 23:40:25 -0800 (PST)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3136lQTI030471;
+        Fri, 3 Feb 2023 07:40:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=BLULaKn6GLPcrMBfU9548ZtcKlLiJ/Gqk2e69uSWn0o=;
+ b=QmV90DHDUcUiwmSaS6UCoRWWBok1OgshuwFJtzLETCUp1PZHFXC/twAHp/ehMUk0zvr2
+ 5sSlzRqnw9ZJZiyKKX4FylnEObD+yaQh3ZxWyIhke2gQUikoMTRExW5ADurukG2ANsNy
+ dJye06MMzb43fvwjA2bfV6y+eOcwKpVdMN4kJc3kNVsS5d5+9Ow3RAWbCicSryb3tnrl
+ AGWOaixBvjX1FcmfbQtvWYwkc2GRKLyoh00c+sK08ANKztHUUBwPekQeO0Rj1BtK9jzC
+ 4omDLGu7jtYcFRF/sYiFuJYiQVfKC4JxPLrckhK+qlMpbni9vDx8UpMx3KAlhFO8cVGk kg== 
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3ngvkyj33n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Feb 2023 07:40:11 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 312DUkrD013066;
+        Fri, 3 Feb 2023 07:40:10 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3ncvugn3cy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Feb 2023 07:40:09 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3137e7w419596018
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 3 Feb 2023 07:40:07 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 441D121423;
+        Fri,  3 Feb 2023 07:40:07 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7A5D221431;
+        Fri,  3 Feb 2023 07:40:04 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Fri,  3 Feb 2023 07:40:04 +0000 (GMT)
+From:   Alexander Egorenkov <egorenar@linux.ibm.com>
+To:     wim@linux-watchdog.org, linux@roeck-us.net
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hca@linux.ibm.com
+Subject: [PATCH 3/5] watchdog: diag288_wdt: unify command buffer handling for diag288 zvm
+Date:   Fri,  3 Feb 2023 08:39:56 +0100
+Message-Id: <20230203073958.1585738-4-egorenar@linux.ibm.com>
+X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20230203073958.1585738-1-egorenar@linux.ibm.com>
+References: <20230203073958.1585738-1-egorenar@linux.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 2/9] ASoC: dt-bindings: meson: fix gx-card codec node
- regex
-Content-Language: en-US
-To:     Jerome Brunet <jbrunet@baylibre.com>,
-        Mark Brown <broonie@kernel.org>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org
-Cc:     linux-amlogic@lists.infradead.org,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org
-References: <20230202183653.486216-1-jbrunet@baylibre.com>
- <20230202183653.486216-3-jbrunet@baylibre.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230202183653.486216-3-jbrunet@baylibre.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: WWNRe_oUxcoYQIf0tgAXJ9SDaU_v6Dnc
+X-Proofpoint-ORIG-GUID: WWNRe_oUxcoYQIf0tgAXJ9SDaU_v6Dnc
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-03_04,2023-02-02_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ mlxlogscore=999 malwarescore=0 bulkscore=0 mlxscore=0 adultscore=0
+ impostorscore=0 priorityscore=1501 clxscore=1015 spamscore=0 phishscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302030069
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/02/2023 19:36, Jerome Brunet wrote:
-> 'codec' is a valid node name when there is a single codec
-> in the link. Fix the node regular expression to apply this.
-> 
-> Fixes: fd00366b8e41 ("ASoC: meson: gx: add sound card dt-binding documentation")
-> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
-> ---
+Simplify and de-duplicate code by introducing a common single command
+buffer allocated once at initialization. Moreover, simplify the interface
+of __diag288_vm() by accepting ASCII strings as the command parameter
+and converting it to the EBCDIC format within the function itself.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Heiko Carstens <hca@linux.ibm.com>
+Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+---
+ drivers/watchdog/diag288_wdt.c | 55 +++++++++++++---------------------
+ 1 file changed, 20 insertions(+), 35 deletions(-)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/watchdog/diag288_wdt.c b/drivers/watchdog/diag288_wdt.c
+index c8d516ced6d2..c717f47dd4c3 100644
+--- a/drivers/watchdog/diag288_wdt.c
++++ b/drivers/watchdog/diag288_wdt.c
+@@ -69,6 +69,8 @@ MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default = C
+ 
+ MODULE_ALIAS("vmwatchdog");
+ 
++static char *cmd_buf;
++
+ static int __diag288(unsigned int func, unsigned int timeout,
+ 		     unsigned long action, unsigned int len)
+ {
+@@ -88,11 +90,18 @@ static int __diag288(unsigned int func, unsigned int timeout,
+ 	return err;
+ }
+ 
+-static int __diag288_vm(unsigned int  func, unsigned int timeout,
+-			char *cmd, size_t len)
++static int __diag288_vm(unsigned int  func, unsigned int timeout, char *cmd)
+ {
++	ssize_t len;
++
++	len = strscpy(cmd_buf, cmd, MAX_CMDLEN);
++	if (len < 0)
++		return len;
++	ASCEBC(cmd_buf, MAX_CMDLEN);
++	EBC_TOUPPER(cmd_buf, MAX_CMDLEN);
++
+ 	diag_stat_inc(DIAG_STAT_X288);
+-	return __diag288(func, timeout, virt_to_phys(cmd), len);
++	return __diag288(func, timeout, virt_to_phys(cmd_buf), len);
+ }
+ 
+ static int __diag288_lpar(unsigned int func, unsigned int timeout,
+@@ -104,24 +113,14 @@ static int __diag288_lpar(unsigned int func, unsigned int timeout,
+ 
+ static int wdt_start(struct watchdog_device *dev)
+ {
+-	char *ebc_cmd;
+-	size_t len;
+ 	int ret;
+ 	unsigned int func;
+ 
+ 	if (MACHINE_IS_VM) {
+-		ebc_cmd = kmalloc(MAX_CMDLEN, GFP_KERNEL);
+-		if (!ebc_cmd)
+-			return -ENOMEM;
+-		len = strlcpy(ebc_cmd, wdt_cmd, MAX_CMDLEN);
+-		ASCEBC(ebc_cmd, MAX_CMDLEN);
+-		EBC_TOUPPER(ebc_cmd, MAX_CMDLEN);
+-
+ 		func = conceal_on ? (WDT_FUNC_INIT | WDT_FUNC_CONCEAL)
+ 			: WDT_FUNC_INIT;
+-		ret = __diag288_vm(func, dev->timeout, ebc_cmd, len);
++		ret = __diag288_vm(func, dev->timeout, wdt_cmd);
+ 		WARN_ON(ret != 0);
+-		kfree(ebc_cmd);
+ 	} else {
+ 		ret = __diag288_lpar(WDT_FUNC_INIT,
+ 				     dev->timeout, LPARWDT_RESTART);
+@@ -146,19 +145,10 @@ static int wdt_stop(struct watchdog_device *dev)
+ 
+ static int wdt_ping(struct watchdog_device *dev)
+ {
+-	char *ebc_cmd;
+-	size_t len;
+ 	int ret;
+ 	unsigned int func;
+ 
+ 	if (MACHINE_IS_VM) {
+-		ebc_cmd = kmalloc(MAX_CMDLEN, GFP_KERNEL);
+-		if (!ebc_cmd)
+-			return -ENOMEM;
+-		len = strlcpy(ebc_cmd, wdt_cmd, MAX_CMDLEN);
+-		ASCEBC(ebc_cmd, MAX_CMDLEN);
+-		EBC_TOUPPER(ebc_cmd, MAX_CMDLEN);
+-
+ 		/*
+ 		 * It seems to be ok to z/VM to use the init function to
+ 		 * retrigger the watchdog. On LPAR WDT_FUNC_CHANGE must
+@@ -167,9 +157,8 @@ static int wdt_ping(struct watchdog_device *dev)
+ 		func = conceal_on ? (WDT_FUNC_INIT | WDT_FUNC_CONCEAL)
+ 			: WDT_FUNC_INIT;
+ 
+-		ret = __diag288_vm(func, dev->timeout, ebc_cmd, len);
++		ret = __diag288_vm(func, dev->timeout, wdt_cmd);
+ 		WARN_ON(ret != 0);
+-		kfree(ebc_cmd);
+ 	} else {
+ 		ret = __diag288_lpar(WDT_FUNC_CHANGE, dev->timeout, 0);
+ 	}
+@@ -212,25 +201,20 @@ static struct watchdog_device wdt_dev = {
+ static int __init diag288_init(void)
+ {
+ 	int ret;
+-	char ebc_begin[] = {
+-		194, 197, 199, 201, 213
+-	};
+-	char *ebc_cmd;
+ 
+ 	watchdog_set_nowayout(&wdt_dev, nowayout_info);
+ 
+ 	if (MACHINE_IS_VM) {
+-		ebc_cmd = kmalloc(sizeof(ebc_begin), GFP_KERNEL);
+-		if (!ebc_cmd) {
++		cmd_buf = kmalloc(MAX_CMDLEN, GFP_KERNEL);
++		if (!cmd_buf) {
+ 			pr_err("The watchdog cannot be initialized\n");
+ 			return -ENOMEM;
+ 		}
+-		memcpy(ebc_cmd, ebc_begin, sizeof(ebc_begin));
+-		ret = __diag288_vm(WDT_FUNC_INIT, 15,
+-				   ebc_cmd, sizeof(ebc_begin));
+-		kfree(ebc_cmd);
++
++		ret = __diag288_vm(WDT_FUNC_INIT, MIN_INTERVAL, "BEGIN");
+ 		if (ret != 0) {
+ 			pr_err("The watchdog cannot be initialized\n");
++			kfree(cmd_buf);
+ 			return -EINVAL;
+ 		}
+ 	} else {
+@@ -251,6 +235,7 @@ static int __init diag288_init(void)
+ static void __exit diag288_exit(void)
+ {
+ 	watchdog_unregister_device(&wdt_dev);
++	kfree(cmd_buf);
+ }
+ 
+ module_init(diag288_init);
+-- 
+2.37.2
 
