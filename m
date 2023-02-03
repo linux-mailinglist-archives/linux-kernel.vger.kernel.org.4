@@ -2,78 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BD23689837
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 13:05:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEDF7689838
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 13:05:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232102AbjBCMFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 07:05:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50920 "EHLO
+        id S232300AbjBCMFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 07:05:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231240AbjBCMFA (ORCPT
+        with ESMTP id S231240AbjBCMFW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 07:05:00 -0500
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C45ED712F7
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 04:04:59 -0800 (PST)
-Received: by mail-wm1-f48.google.com with SMTP id k8-20020a05600c1c8800b003dc57ea0dfeso5874486wms.0
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 04:04:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to:subject:cc
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=SYT3sTcIk876TXaPuefnagCBbWeZUJQ7kBk1wp2K4rg=;
-        b=W/055KT+v9ds9x+6vtJuT0/sDIbq4vQ+Cid0SA5RmwtnRz7FGnvDS+5zMAqD7f8aBI
-         CEqmNSyMQgC0pzSFFL83fVjJRJ3TCSP8t8biH5kF3EI5qLOiVAwAS4bgPCnSuxxSZ+IV
-         uVkDjbn+ao1gWMrVq1YrAkIZlhEn1ptvW1p8Mj8d9wY2GDbXglFlUIea93oPvOJudWz7
-         GBPv+89T1Hi+Jku4b67lSTIoMvb2zUMVlfJeaAujWFEO2KlZAjcmM0BXyGTwwuSpxlgB
-         16AVFgPFoEmeQl+KwFjAtC1GkT4LkHL5UOlnXIS2bumEqQi75OpW5YUpN8ykGQdIWkzX
-         kK9g==
-X-Gm-Message-State: AO0yUKWdvW/mXsRuc9HHUQfYKAhVhBTtpfqxNG3gJs6E6K2jI7pLfWSA
-        QpXrN9wB22K0Cnb7/UG88jMGYU5k8xv4bbBD
-X-Google-Smtp-Source: AK7set9jwrBjLJp8wyCMNEtcXEsITGFXDxtwUBAivuS8WF+rAvwLQVO3Dsw1PjVl9QOe9ssgfT2Uxg==
-X-Received: by 2002:a05:600c:3ac7:b0:3dc:557f:6123 with SMTP id d7-20020a05600c3ac700b003dc557f6123mr9340368wms.1.1675425898201;
-        Fri, 03 Feb 2023 04:04:58 -0800 (PST)
-Received: from ?IPV6:2620:10d:c0c3:1136:1486:5f6c:3f1:4b78? ([2620:10d:c092:400::5:a43e])
-        by smtp.gmail.com with ESMTPSA id h9-20020a05600c314900b003dfeea6a85csm18113wmo.31.2023.02.03.04.04.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Feb 2023 04:04:57 -0800 (PST)
-Message-ID: <ff2ac80f-222b-4aad-8fa5-c8f5835b3564@debian.org>
-Date:   Fri, 3 Feb 2023 12:04:56 +0000
+        Fri, 3 Feb 2023 07:05:22 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6900B95D2D
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 04:05:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BBF6B61EF6
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 12:05:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76D4BC433EF;
+        Fri,  3 Feb 2023 12:05:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675425917;
+        bh=0lFtytynqLkq8kJIpsrWpdqTQgna4urzc2JF1yxsxnQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=f7LxKwIiJWDREcPzlQp1Nkr+1E8PUzD8RvgkDrmri/8BGgRxfmZZimGAEqBclIh5I
+         zbzwUvBvW7UzIhIQqprXumtriCc06ocpOHEMEQ+KyAo6s5uLjOlOhw+je87zQFS6vd
+         EmLglq/qb/MZD1/rX+U+WeRfI5BdgeG5/815jRCBAkI2zSXdPzy2gNlGjiv2eKB6ei
+         +kxZARRrrwiDwHcy+VmM9G7v1aUQp3evao/BqzVe+qQDQwN3gE2mijzgvYu2g6gKPz
+         tRSlmdT+XOD7p7PVi0wvUQNIwhr7DWTjVpeNKKleNRDPeZKABj9iLjzDd16z/YFchJ
+         UoxYycFh9AapA==
+Date:   Fri, 3 Feb 2023 12:05:11 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
+Cc:     Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        iommu@lists.linux.dev, robin.murphy@arm.com, joro@8bytes.org,
+        darren@os.amperecomputing.com, scott@os.amperecomputing.com
+Subject: Re: [PATCH] iommu/arm-smmu-v3: Enable PCI ATS in passthrough mode as
+ well
+Message-ID: <20230203120511.GA6274@willie-the-truck>
+References: <20230202124053.848792-1-gankulkarni@os.amperecomputing.com>
+ <Y9z3UG+wEBn4i3G2@myrica>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Cc:     leit@meta.com, tglx@linutronix.de, bp@alien8.de,
-        paul@paul-moore.com, x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH] cpu/bugs: Disable CPU mitigations at compilation time
-To:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-References: <20230202180858.1539234-1-leitao@debian.org>
- <20230202214442.ffqwk2can6b5ivpz@desk>
-From:   Breno Leitao <leitao@debian.org>
-In-Reply-To: <20230202214442.ffqwk2can6b5ivpz@desk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9z3UG+wEBn4i3G2@myrica>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/02/2023 21:44, Pawan Gupta wrote:
-> On Thu, Feb 02, 2023 at 10:08:58AM -0800, Breno Leitao wrote:
->> Right now it is not possible to disable CPU vulnerabilities mitigations
->> at build time. Mitigation needs to be disabled passing kernel
->> parameters, such as 'mitigations=off'.
->>
->> This patch creates an easy way to disable mitigation during compilation
+On Fri, Feb 03, 2023 at 12:00:16PM +0000, Jean-Philippe Brucker wrote:
+> On Thu, Feb 02, 2023 at 04:40:53AM -0800, Ganapatrao Kulkarni wrote:
+> > The current smmu-v3 driver does not enable PCI ATS for physical functions
+> > of ATS capable End Points when booted in smmu bypass mode
+> > (iommu.passthrough=1). This will not allow virtual functions to enable
+> > ATS(even though EP supports it) while they are attached to a VM using
+> > VFIO driver.
+> > 
+> > This patch adds changes to enable ATS support for physical functions
+> > in passthrough/bypass mode as well.
+> [...]
+> > @@ -2453,8 +2458,7 @@ static int arm_smmu_attach_dev(struct iommu_domain *domain, struct device *dev)
+> >  
+> >  	master->domain = smmu_domain;
+> >  
+> > -	if (smmu_domain->stage != ARM_SMMU_DOMAIN_BYPASS)
+> > -		master->ats_enabled = arm_smmu_ats_supported(master);
+> > +	master->ats_enabled = arm_smmu_ats_supported(master);
 > 
-> s/This patch creates/Create/
+> I should have added a comment for this. Only found the reason in an old
+> cover letter [1]:
+> 
+> "When no translation stages are enabled (0b100), ATS Translation Requests
+> (and Translated traffic, if SMMU_CR0.ATSCHK == 1) are denied as though
+> EATS == 0b00; the actual value of the EATS field is IGNORED. Such a
+> Translation Request causes F_BAD_ATS_TREQ and Translated traffic causes
+> F_TRANSL_FORBIDDEN."
+> 
+> (See 3.9.1.1 "Responses to ATS Translation Requests and Translated
+> transactions" and 5.2 "Stream Table Entry")
+> 
+> So I don't think we can enable ATS for bypass domains :/ The PF needs to
+> be in translated mode in that case.
+> 
+> I can send a patch adding the comment next cycle.
 
-Thanks for the review!
+Yes, please!
 
-I am more curious if creating a new CONFIG option would be an acceptable
-approach, and it seems so. I will send a non-RFC patch soon.
+Will
