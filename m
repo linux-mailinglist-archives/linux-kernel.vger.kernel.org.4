@@ -2,154 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE0D8688F34
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 06:58:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46ECE688F38
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 06:59:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232107AbjBCF6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 00:58:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46830 "EHLO
+        id S232113AbjBCF7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 00:59:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbjBCF6e (ORCPT
+        with ESMTP id S230233AbjBCF7F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 00:58:34 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E20036FD08;
-        Thu,  2 Feb 2023 21:58:33 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id z1so4247910plg.6;
-        Thu, 02 Feb 2023 21:58:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+AsWB2oc0/sOofgx7ES2UpPnarL2Q9v7WCxcvNNPysY=;
-        b=JV3lVC11SOYxhQ8MfBmHeONQJVoFC/Kz/hzkAWDJuFlj3bFDHkLYR8FzvxqHlVHj7U
-         d5WT5+bPDNrOZMPLvUY/RVtcJYRAiRkTeADgFNb1P0BKavdGxbeV5NPSn9btQyOldq1w
-         kE9MA2CwS0+l5lKeypsvzdZ7mYrkrKMyK3ehJRyN+KqXH9u/zT9lajC1/v/Sahu4no/X
-         9ZNdhmWbiuwqXqAPh6DHbFgTjtqXJDgUBVF33D1WN9UudbeoB16f9t4P2AtO5totj8R6
-         +622ytIiE+9r7ncXEcIn8gDpt9r+CH256B4J+kUWrpc/4VkhH2DgUQFYCQlUkdr7dMFI
-         cIgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=+AsWB2oc0/sOofgx7ES2UpPnarL2Q9v7WCxcvNNPysY=;
-        b=IwN4nn50MeJmkd9yLnZJUNCaZFgFZkne2rpnCkYBz8L7AElD7TcvQWxuIpuYRO42hB
-         smKQQXxoN5rHMO3Gm4YxF1ZL1FKj2O5kXZqtp6yf8GM+I+QvUur3FFF3/53g7Qdsw/M8
-         enmBCPEjZlpIzNAwsi90mUyDg51n0+5T+BAUxtJ7xL0Rm3KsCUEHLKvDh0pxr/GvJ/sh
-         6+eK7GNvPGluWtgkvxk/Bc6yvNwqslo4siUzKy5xZig+iGf/xKmw8HuuXUYeN/2UowF1
-         FwkNeaAwERD3LYwReE70OelyHVIQfyok/FVZSBvVQQmiW41pEKvLj23ooywdIdgl85Dt
-         J55g==
-X-Gm-Message-State: AO0yUKVi7aV0NWrBa5Qu9AWat60f/Cpvl/MONBaUDSxc9+an7gVjPH4N
-        W6ivEaK192OhAY/StyWcZOo=
-X-Google-Smtp-Source: AK7set9SMkkiyl6xHOGhtlIl7qYfq9X3sxdVKCFtIQAIUpiv3tKE1yYkqyXCgVB0EsbYa5sP9gLjkA==
-X-Received: by 2002:a17:902:d488:b0:195:f3e0:769a with SMTP id c8-20020a170902d48800b00195f3e0769amr11367976plg.69.1675403913436;
-        Thu, 02 Feb 2023 21:58:33 -0800 (PST)
-Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:1a:efea::75b])
-        by smtp.gmail.com with ESMTPSA id h3-20020a170902680300b0019601b73e33sm678577plk.30.2023.02.02.21.58.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 21:58:32 -0800 (PST)
-Message-ID: <855e4043-d337-722e-77a0-5c2be246d2b5@gmail.com>
-Date:   Fri, 3 Feb 2023 13:58:21 +0800
+        Fri, 3 Feb 2023 00:59:05 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C7358A7FB;
+        Thu,  2 Feb 2023 21:58:50 -0800 (PST)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3134g8FQ019429;
+        Fri, 3 Feb 2023 05:58:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=VlUMpGWUpsArUDVsPkw8jrkXKuTWbgln56ickuMF/Ws=;
+ b=YjS+zCTG2bUoUUn9u07f4yqM4nPEOPC9iIC+g5nNOz3e25I8Tjp5ezFIGh6uMKZGuWxW
+ 8QrStnKgdBE1igkziQ/IeuJQQrf06n6Ipdv0uwJUJtk0/LHhsOHmFRuRMREgaVScgefr
+ 8oPUhRnZSHH/tx2qLg+le4hkHx8H8jG9toICAUQ18GBNOx2Bmslie5dNdQmkz3TIevI/
+ KxSrbTiamQA/9AJFgGKzIwelCDWtLFICI457tlWsKl/ajoq28k9wYTHaWx1/Fu1Dor4x
+ X3yBmSfWbPEoSj2rTDQhXYVi8fok36fXIbvbVXBmrJlZdRn67q4Vh64d4B/zfvdCzB7Z oQ== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3ngstgjyh7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Feb 2023 05:58:36 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 312DlmiS026916;
+        Fri, 3 Feb 2023 05:58:34 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3ncvs7q132-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Feb 2023 05:58:34 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3135wUaf24576416
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 3 Feb 2023 05:58:30 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4C43720043;
+        Fri,  3 Feb 2023 05:58:30 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DB91420040;
+        Fri,  3 Feb 2023 05:58:29 +0000 (GMT)
+Received: from osiris (unknown [9.179.2.68])
+        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Fri,  3 Feb 2023 05:58:29 +0000 (GMT)
+Date:   Fri, 3 Feb 2023 06:58:28 +0100
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: Re: [GIT PULL] s390 fixes for 6.2-rc7
+Message-ID: <Y9yihJvj4fAC4KoZ@osiris>
+References: <Y9wYTnwXVwg/3Dv3@osiris>
+ <CAHk-=wg3u9fG-Oy_NV+w2H7pFUWmfyX5JXHGvxynxA9b1sNZGw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [RFC PATCH V3 08/16] x86/hyperv: Initialize cpu and memory for
- sev-snp enlightened guest
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "jgross@suse.com" <jgross@suse.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "kirill@shutemov.name" <kirill@shutemov.name>,
-        "jiangshan.ljs@antgroup.com" <jiangshan.ljs@antgroup.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "ashish.kalra@amd.com" <ashish.kalra@amd.com>,
-        "srutherford@google.com" <srutherford@google.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "anshuman.khandual@arm.com" <anshuman.khandual@arm.com>,
-        "pawan.kumar.gupta@linux.intel.com" 
-        <pawan.kumar.gupta@linux.intel.com>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "daniel.sneddon@linux.intel.com" <daniel.sneddon@linux.intel.com>,
-        "alexander.shishkin@linux.intel.com" 
-        <alexander.shishkin@linux.intel.com>,
-        "sandipan.das@amd.com" <sandipan.das@amd.com>,
-        "ray.huang@amd.com" <ray.huang@amd.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "michael.roth@amd.com" <michael.roth@amd.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "venu.busireddy@oracle.com" <venu.busireddy@oracle.com>,
-        "sterritt@google.com" <sterritt@google.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "samitolvanen@google.com" <samitolvanen@google.com>,
-        "fenghua.yu@intel.com" <fenghua.yu@intel.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-References: <20230122024607.788454-1-ltykernel@gmail.com>
- <20230122024607.788454-9-ltykernel@gmail.com>
- <BYAPR21MB168803F19A65E356758A6046D7D09@BYAPR21MB1688.namprd21.prod.outlook.com>
-From:   Tianyu Lan <ltykernel@gmail.com>
-In-Reply-To: <BYAPR21MB168803F19A65E356758A6046D7D09@BYAPR21MB1688.namprd21.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wg3u9fG-Oy_NV+w2H7pFUWmfyX5JXHGvxynxA9b1sNZGw@mail.gmail.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: u9O7LUwJ1dFpAKUxmNSC4h2WyVr2AQnn
+X-Proofpoint-GUID: u9O7LUwJ1dFpAKUxmNSC4h2WyVr2AQnn
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-03_02,2023-02-02_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 spamscore=0 clxscore=1015 mlxscore=0 bulkscore=0
+ adultscore=0 priorityscore=1501 malwarescore=0 impostorscore=0
+ phishscore=0 mlxlogscore=835 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2302030050
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/1/2023 2:20 AM, Michael Kelley (LINUX) wrote:
->> +struct memory_map_entry {
->> +	u64 starting_gpn;
->> +	u64 numpages;
->> +	u16 type;
->> +	u16 flags;
->> +	u32 reserved;
->> +};
-> Am I correct that this structure is defined by Hyper-V?  If so, it seems
-> like it should go in hyperv-tlfs.h, along with the definition of
-> EN_SEV_SNP_PROCESSOR_INFO_ADDR (which is also defined by
-> Hyper-V?)
->
-
-Yes, it's Hyper-V data structure and will move to hyperv-tlfs.h.
-
-
->> +			if (e820_end < ram_end) {
->> +				pr_info("Hyper-V: add e820 entry [mem %#018Lx-%#018Lx]\n", e820_end, ram_end - 1);
->> +				e820__range_add(e820_end, ram_end - e820_end,
->> +						E820_TYPE_RAM);
->> +				for (page = e820_end; page < ram_end; page += PAGE_SIZE)
->> +					pvalidate((unsigned long)__va(page), RMP_PG_SIZE_4K, true);
->> +			}
->> +		}
->> +	}
->> +
-> For SNP vTOM mode, most of the supporting code is placed in
-> arch/x86/hyperv/ivm.c, which is built only if CONFIG_HYPERV
-> is defined.  arch/x86/kernel/cpu/mshyperv.c is built for*any*
-> flavor of guest (i.e., CONFIG_HYPERVISOR_GUEST).  I'm thinking
-> all this code should go as a supporting function in ivm.c, to
-> avoid overloading mshyperv.c.  Take a look at how hv_vtom_init()
-> is handled in my patch set.
+On Thu, Feb 02, 2023 at 01:01:21PM -0800, Linus Torvalds wrote:
+> On Thu, Feb 2, 2023 at 12:08 PM Heiko Carstens <hca@linux.ibm.com> wrote:
+> >
+> > - With CONFIG_VMAP_STACK enabled it is not possible to load the s390
+> >   specific diag288_wdt watchdog module. Reason is that a pointer to a
+> >   string is passed to an inline assembly; this string however is located on
+> >   the stack, while the instruction within the inline assembly expects a
+> >   physicial address. Fix this by copying the string to a kmalloc'ed buffer.
 > 
-> Breaking it out as a separate supporting function might also
-> help reduce the deep indentation problem a bit. 😄
-
-Good idea. Will update in the next version.
-Thanks for your suggestion.
+> Ugh. I have pulled this, but I think that fix is disgusting.
 > 
+> I think the kmalloc/kfree should have been done inside __diag288_vm()
+> itself, where it actually does that whole "virt_to_phys()" too.
+> 
+> Now there are three callers of __diag288_vm(), and they all do that
+> ugly kmalloc game with no comment about why it's needed.
+> 
+> If __diag288_vm() just did it itself, and had a comment right next to
+> the virt_to_phys() about why, that would look a lot better, I think.
+> 
+> That said, I don't know the code, and maybe there was some reason to
+> do it this way. As mentioned, I've pulled it, I just don't
+> particularly love the patch.
+
+I really should have mentioned that this is just the minimal fix so it can
+be easily backported. We have five patches pending which will cleanup the
+whole driver, and which will also address what you complain about.
+
+Patches will be sent out later today to Wim, Guenter, and the watchdog
+mailing list, since Guenter already rightfully complained that I bypassed
+them.
