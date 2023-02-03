@@ -2,84 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8348868955A
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 11:19:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D222B68954C
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 11:18:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233380AbjBCKS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 05:18:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38234 "EHLO
+        id S233341AbjBCKRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 05:17:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233374AbjBCKSW (ORCPT
+        with ESMTP id S233043AbjBCKRi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 05:18:22 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDECA9D053
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 02:16:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675419412;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+ousZpEK5jfyQ8iRq6Lou/eQvak4AKWvj409ge5GqF4=;
-        b=iQq9ZWPgaeoZ1fPxVagJFnrW4vuOXi188J8nplsuPwA2Y7Hg4tp8UQWkHzjUKx/DyOA9kn
-        4pR3jzTfMvNK1UW5SMwQmdFVYY9k1G0EcV+Po4kAxQ49y6v6ybjpIf2E8ay+IPv/70gZRe
-        d9nOoiRSlpBRRbPf3l88yyN2tOx8FCM=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-571-k4lBzCrsOiqVtKr2v7ai-A-1; Fri, 03 Feb 2023 05:16:51 -0500
-X-MC-Unique: k4lBzCrsOiqVtKr2v7ai-A-1
-Received: by mail-ed1-f70.google.com with SMTP id n17-20020a056402061100b004a3f32cc366so3310659edv.20
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 02:16:51 -0800 (PST)
+        Fri, 3 Feb 2023 05:17:38 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BBBF93AED;
+        Fri,  3 Feb 2023 02:16:55 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id cq16-20020a17090af99000b0022c9791ac39so8340453pjb.4;
+        Fri, 03 Feb 2023 02:16:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0ZbAUGn0r6doN6zThP1Zquzlxw14avp8efmj05+Io/4=;
+        b=Ywh4mnPVN3Y4k0f4DuulkG2miIzAXD2MOag6AoE9aqI4lk2/oCohsrtf8Gr8EPviVM
+         w5YHMEJEeyxv4Kxv5i6v3b/lUpqXFNx1osYHGwcvd5Y6A4ASt/XYopzNc7ULMCnsOI6d
+         IrSWoKHqFH3ZA9JFOpulvON/sgxK8lIDCGcFdofh7TQct/4Basch9lONK7Jz9jH6b2l5
+         lG9ZdPMIFHQYLtBy4nRdrdwKqfTKG98jS03kSpv/G7uTjB62apnvK8P8uUgwZxEBoWt6
+         TcPvwy+n7no1gkpCj3JC/uJM6ahYRPgSN0IO8wEZNDBK6v4Lg/AjhsnsKmGHKgxXIauL
+         JR8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+ousZpEK5jfyQ8iRq6Lou/eQvak4AKWvj409ge5GqF4=;
-        b=Fe26uOo4JuQiS22TU3DWwJHV69au7Bmgn0P4phF7CZLVTMkuxV1pW2o6Txezxnmz2v
-         B6n+CUpytmaRs2f1E1eF1Cg5X+87YzwZL3gI5JdafVj2fTgOPPR3YdL4eCv6O4OVUoLk
-         LL1DIaoIXKuM1Z17uPz+8H1uao91HrgHA6MbwdwfByyfJCtlkUGmGSU41kbxerjqSzM5
-         Y6yAmj/6LopyQ9mIH2sqJjRvTkmXuHCzyE9q9PHuew6gM2CZe7l+u103RDJlL0rmn4Rr
-         YY6q4oSk8H3tsTs6HxtwkYLLRmy2kVpGU892fhjbWj6wpUtezyCAZW+bu3W08KdvKNDa
-         Db/A==
-X-Gm-Message-State: AO0yUKV0DYO9kYwOVyg2XRdbUB1m8nPZKkH1DRY/Ah+Gsd5BUo03oMRf
-        7jLS+PQF28az+3Dc3wn5olxr+PIrUwEEAeP2y/XE9Q14FkMLDIiabCkKAD4gmRQIn8Xhz0GwC/G
-        lIEwB88do2Y1JsNwV6Y0Z9ALp
-X-Received: by 2002:a17:907:6d17:b0:88d:ba89:1843 with SMTP id sa23-20020a1709076d1700b0088dba891843mr5270787ejc.20.1675419410281;
-        Fri, 03 Feb 2023 02:16:50 -0800 (PST)
-X-Google-Smtp-Source: AK7set/pKRk6MAe68cqpo58de4wljRgyqSUUvcGRqEx82KpgViv3orGBmWcoaFTcA1tHf3+p9hR8NQ==
-X-Received: by 2002:a17:907:6d17:b0:88d:ba89:1843 with SMTP id sa23-20020a1709076d1700b0088dba891843mr5270773ejc.20.1675419410082;
-        Fri, 03 Feb 2023 02:16:50 -0800 (PST)
-Received: from redhat.com ([2.52.156.122])
-        by smtp.gmail.com with ESMTPSA id cw20-20020a170906c79400b008787c8427c1sm1139542ejb.214.2023.02.03.02.16.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 02:16:49 -0800 (PST)
-Date:   Fri, 3 Feb 2023 05:16:45 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Shunsuke Mie <mie@igel.co.jp>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jason Wang <jasowang@redhat.com>, Frank Li <Frank.Li@nxp.com>,
-        Jon Mason <jdmason@kudzu.us>,
-        Ren Zhijie <renzhijie2@huawei.com>,
-        Takanari Hayama <taki@igel.co.jp>,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [RFC PATCH 1/4] virtio_pci: add a definition of queue flag in ISR
-Message-ID: <20230203051445-mutt-send-email-mst@kernel.org>
-References: <20230203100418.2981144-1-mie@igel.co.jp>
- <20230203100418.2981144-2-mie@igel.co.jp>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230203100418.2981144-2-mie@igel.co.jp>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=0ZbAUGn0r6doN6zThP1Zquzlxw14avp8efmj05+Io/4=;
+        b=UKRh5nSOnH5IZFXq5wKE4wJRxfxAhR9KvbcrJtOvIzAuTzb0UkpeLv9R4gDWEgr57d
+         EYg7GHHxE/mFoW4/mtnxyRZ3dHCsUxHeAPUIPwIwFGAGSR24MFC+oyvmHLjywQeUQQZw
+         nlu3cWw7vtorl5QXg3p/dNmTxYxYvciuqfiK41LdEkWDx4/gRW9f/JUMG3c4zyt2/Gfn
+         A/hp9zTCnfvI8AkPn7EOHn6OWcALSh1VHwX2eNv5IHzM0SYUu6PVYrbxlgcvI4+kqP3S
+         IrrCkf1uGN3r438thPqCZQS+PP1Jqpzhh8cFZoFPPJLu+c/m9kW3P9S2fn/dU/8oOlgP
+         WaWQ==
+X-Gm-Message-State: AO0yUKX/Oj3wgb2+KLy925JB9ZJ2HSjgNI1StGrqq3hidGUDSlZr8BHk
+        XxqafPT2d2uH74VGlRnIkYM=
+X-Google-Smtp-Source: AK7set8WbQ1iPrN5HSlN4f706F1IqNht5RVf+MEFDgPYm7h/efSiL2BKY4uYWAK+N6jAmo/6Qh0viw==
+X-Received: by 2002:a17:902:da92:b0:196:5839:b36a with SMTP id j18-20020a170902da9200b001965839b36amr11622683plx.8.1675419414829;
+        Fri, 03 Feb 2023 02:16:54 -0800 (PST)
+Received: from localhost (193-116-117-77.tpgi.com.au. [193.116.117.77])
+        by smtp.gmail.com with ESMTPSA id n19-20020a170902969300b00198e03c3ad4sm1002403plp.278.2023.02.03.02.16.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Feb 2023 02:16:54 -0800 (PST)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Fri, 03 Feb 2023 20:16:45 +1000
+Message-Id: <CQ8UM1FTPEUZ.3F2RONR3AJ5YP@bobo>
+From:   "Nicholas Piggin" <npiggin@gmail.com>
+To:     "Thomas Huth" <thuth@redhat.com>, <kvm@vger.kernel.org>,
+        "Paolo Bonzini" <pbonzini@redhat.com>,
+        "Sean Christopherson" <seanjc@google.com>
+Cc:     "Claudio Imbrenda" <imbrenda@linux.ibm.com>,
+        "Janosch Frank" <frankja@linux.ibm.com>,
+        "Suzuki K Poulose" <suzuki.poulose@arm.com>,
+        "Marc Zyngier" <maz@kernel.org>,
+        "David Hildenbrand" <david@redhat.com>,
+        <linux-kernel@vger.kernel.org>,
+        "Oliver Upton" <oliver.upton@linux.dev>,
+        "Zenghui Yu" <yuzenghui@huawei.com>,
+        "James Morse" <james.morse@arm.com>,
+        <kvm-riscv@lists.infradead.org>, <kvmarm@lists.linux.dev>,
+        "Christian Borntraeger" <borntraeger@linux.ibm.com>,
+        <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH 3/7] KVM: Move KVM_GET_NR_MMU_PAGES into the deprecation
+ section
+X-Mailer: aerc 0.13.0
+References: <20230203094230.266952-1-thuth@redhat.com>
+ <20230203094230.266952-4-thuth@redhat.com>
+In-Reply-To: <20230203094230.266952-4-thuth@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,37 +87,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 07:04:15PM +0900, Shunsuke Mie wrote:
-> Already it has beed defined a config changed flag of ISR, but not the queue
-> flag. Add a macro for it.
-> 
-> Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
-> Signed-off-by: Takanari Hayama <taki@igel.co.jp>
+On Fri Feb 3, 2023 at 7:42 PM AEST, Thomas Huth wrote:
+> The KVM_GET_NR_MMU_PAGES ioctl is quite questionable on 64-bit hosts
+> since it fails to return the full 64 bits of the value that can be
+> set with the corresponding KVM_SET_NR_MMU_PAGES call. This ioctl
+> likely has also never really been used by userspace applications
+> (at least not by QEMU and kvmtool which I checked), so it's better
+> to move it to the deprecation section in kvm.h to make it clear for
+> developers that this also should not be used in new code in the
+> future anymore.
+
+Did this get included in the series inadvertently?
+
+Thanks,
+Nick
+
+>
+> Signed-off-by: Thomas Huth <thuth@redhat.com>
 > ---
->  include/uapi/linux/virtio_pci.h | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/include/uapi/linux/virtio_pci.h b/include/uapi/linux/virtio_pci.h
-> index f703afc7ad31..fa82afd6171a 100644
-> --- a/include/uapi/linux/virtio_pci.h
-> +++ b/include/uapi/linux/virtio_pci.h
-> @@ -94,6 +94,8 @@
->  
->  #endif /* VIRTIO_PCI_NO_LEGACY */
->  
-> +/* Ths bit of the ISR which indicates a queue entry update */
-
-typo
-
-Something to add here:
-	Note: only when MSI-X is disabled
-
-
-
-> +#define VIRTIO_PCI_ISR_QUEUE		0x1
->  /* The bit of the ISR which indicates a device configuration change. */
->  #define VIRTIO_PCI_ISR_CONFIG		0x2
->  /* Vector value used to disable MSI for queue */
-> -- 
-> 2.25.1
+>  include/uapi/linux/kvm.h | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+> index 55155e262646..f55965a4cec7 100644
+> --- a/include/uapi/linux/kvm.h
+> +++ b/include/uapi/linux/kvm.h
+> @@ -83,6 +83,8 @@ struct kvm_debug_guest {
+> =20
+>  #define __KVM_DEPRECATED_VCPU_W_0x87 _IOW(KVMIO, 0x87, struct kvm_debug_=
+guest)
+> =20
+> +#define KVM_GET_NR_MMU_PAGES _IO(KVMIO, 0x45)
+> +
+>  /* *** End of deprecated interfaces *** */
+> =20
+> =20
+> @@ -1442,7 +1444,6 @@ struct kvm_vfio_spapr_tce {
+>  #define KVM_CREATE_VCPU           _IO(KVMIO,   0x41)
+>  #define KVM_GET_DIRTY_LOG         _IOW(KVMIO,  0x42, struct kvm_dirty_lo=
+g)
+>  #define KVM_SET_NR_MMU_PAGES      _IO(KVMIO,   0x44)
+> -#define KVM_GET_NR_MMU_PAGES      _IO(KVMIO,   0x45)
+>  #define KVM_SET_USER_MEMORY_REGION _IOW(KVMIO, 0x46, \
+>  					struct kvm_userspace_memory_region)
+>  #define KVM_SET_TSS_ADDR          _IO(KVMIO,   0x47)
+> --=20
+> 2.31.1
 
