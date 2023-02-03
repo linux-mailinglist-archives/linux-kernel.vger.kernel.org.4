@@ -2,105 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A536689F09
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 17:22:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5FAD689F0F
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 17:23:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232542AbjBCQWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 11:22:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45000 "EHLO
+        id S232875AbjBCQXk convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 3 Feb 2023 11:23:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232835AbjBCQWo (ORCPT
+        with ESMTP id S230317AbjBCQXi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 11:22:44 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3368CA6C24;
-        Fri,  3 Feb 2023 08:22:42 -0800 (PST)
-Received: from mercury (unknown [37.81.76.207])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C4CE86602F11;
-        Fri,  3 Feb 2023 16:22:40 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1675441360;
-        bh=8/iOl1JkoX4qzoBl5tfa+91+8Fdoznk/0+WMSVeGStI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SrCWBebtElx6IbYQfwqbuUc70cojJ8u5yErG8ybQ+bUFTnhAEh4O6SePQ02LozJBc
-         0yy7g0mEhDw2d6MQSMW48Skyl8TESqk1J7KnhGM6jWKlTIFO5wvm3JAqeVbnt0EQpt
-         LRLgxyN8+MMCUefhS/ZHisEEE/mhnMAwczg0PB3VGRSq3WdLL1847zVyd5yDy2hV0Q
-         tEW+LAiw7Q+o7ynuAzfrCigyUcsOW3AI2omULNdkRlq8kg561Lfspb51dNNaouaw1F
-         KkErLtYuC0S2PWP3j9o1uKtmEQfWSo81sxjqzy7j34/4JDyaIm8ajxLnhhSjKBOgD9
-         BXtG5oyE7qHaQ==
-Received: by mercury (Postfix, from userid 1000)
-        id 7BBA51060930; Fri,  3 Feb 2023 17:22:38 +0100 (CET)
-Date:   Fri, 3 Feb 2023 17:22:38 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     cy_huang@richtek.com
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        alina_yu@richtek.com, u0084500@gmail.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v8 0/3] Add Richtek RT9471 3A battery charger
- support
-Message-ID: <20230203162238.sbc7gemv6tqzdnka@mercury.elektranox.org>
-References: <1673590666-24618-1-git-send-email-cy_huang@richtek.com>
+        Fri, 3 Feb 2023 11:23:38 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7C520051
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 08:23:36 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-243-_ITs-rZGN66msvzu-eXIpg-1; Fri, 03 Feb 2023 16:23:33 +0000
+X-MC-Unique: _ITs-rZGN66msvzu-eXIpg-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.45; Fri, 3 Feb
+ 2023 16:23:32 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.045; Fri, 3 Feb 2023 16:23:32 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Matthew Wilcox' <willy@infradead.org>,
+        Andreas Dilger <adilger@dilger.ca>
+CC:     "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-afs@lists.infradead.org" <linux-afs@lists.infradead.org>,
+        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
+        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Hugh Dickins <hughd@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "fstests@vger.kernel.org" <fstests@vger.kernel.org>
+Subject: RE: [PATCH 0/5] Fix a minor POSIX conformance problem
+Thread-Topic: [PATCH 0/5] Fix a minor POSIX conformance problem
+Thread-Index: AQHZN9J6uHKWfdvyUUW8SEkwX3xBiK69ZXmQ
+Date:   Fri, 3 Feb 2023 16:23:32 +0000
+Message-ID: <c16be18cb68a4adbbcd73cf9be9472df@AcuMS.aculab.com>
+References: <20230202204428.3267832-1-willy@infradead.org>
+ <DCEDB8BB-8D10-4E17-9C27-AE48718CB82F@dilger.ca>
+ <Y90KTSXCKGd8Gaqc@casper.infradead.org>
+In-Reply-To: <Y90KTSXCKGd8Gaqc@casper.infradead.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lriez7o432fxn5yb"
-Content-Disposition: inline
-In-Reply-To: <1673590666-24618-1-git-send-email-cy_huang@richtek.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Matthew Wilcox
+> Sent: 03 February 2023 13:21
+> 
+> On Thu, Feb 02, 2023 at 04:08:49PM -0700, Andreas Dilger wrote:
+> > On Feb 2, 2023, at 1:44 PM, Matthew Wilcox (Oracle) <willy@infradead.org> wrote:
+> > >
+> > > POSIX requires that on ftruncate() expansion, the new bytes must read
+> > > as zeroes.  If someone's mmap()ed the file and stored past EOF, for
+> > > most filesystems the bytes in that page will be not-zero.  It's a
+> > > pretty minor violation; someone could race you and write to the file
+> > > between the ftruncate() call and you reading from it, but it's a bit
+> > > of a QOI violation.
+> >
+> > Is it possible to have mmap return SIGBUS for the writes beyond EOF?
+> 
+> Well, no.  The hardware only tells us about accesses on a per-page
+> basis.  We could SIGBUS on writes that _start_ after EOF, but this
+> test doesn't do that (it starts before EOF and extends past EOF).
+> And once the page is mapped writable, there's no page fault taken
+> for subsequent writes.
+> 
+> > On the one hand, that might indicate incorrect behavior of the application,
+> > and on the other hand, it seems possible that the application doesn't
+> > know it is writing beyond EOF and expects that data to be read back OK?
+> 
+> POSIX says:
+> 
+> "The system shall always zero-fill any partial page at the end of an
+> object. Further, the system shall never write out any modified portions
+> of the last page of an object which are beyond its end. References
+> within the address range starting at pa and continuing for len bytes to
+> whole pages following the end of an object shall result in delivery of
+> a SIGBUS signal."
+> 
+> https://pubs.opengroup.org/onlinepubs/9699919799/functions/mmap.html
 
---lriez7o432fxn5yb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+It also says (down at the bottom of the rational):
 
-Hi,
+"The mmap() function can be used to map a region of memory that is larger
+than the current size of the object. Memory access within the mapping but
+beyond the current end of the underlying objects may result in SIGBUS
+signals being sent to the process. The reason for this is that the size
+of the object can be manipulated by other processes and can change at any
+moment. The implementation should tell the application that a memory
+reference is outside the object where this can be detected; otherwise,
+written data may be lost and read data may not reflect actual data in the
+object."
 
-On Fri, Jan 13, 2023 at 02:17:43PM +0800, cy_huang@richtek.com wrote:
-> From: ChiYuan Huang <cy_huang@richtek.com>
->=20
-> This patch set is to add Richtek RT9471 charger support.
->=20
-> The RT9471/D is a highly-integrated 3A switch mode battery charge managem=
-ent
-> and system power path management device for single cell Li-Ion and Li-pol=
-ymer
-> battery. The low impedance power path optimizes switch-mode operation
-> efficiency, reduces battery charging time and extends battery life during
-> discharging phase.
+There are a lot of 'may' in that sentence.
+Note that it only says that 'data written beyond the current eof may be
+lost'.
+I think that could be taken to take precedence over the zeroing clause
+in ftruncate().
+I'd bet a lot of beer that the original SYSV implementation (on with the
+description is based) didn't zero the page buffer when ftruncate()
+increased the file size.
+Whether anything (important) actually relies on that is an interesting
+question!
 
-Thanks, queued.
+	David
 
--- Sebastian
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
---lriez7o432fxn5yb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmPdNM4ACgkQ2O7X88g7
-+ppU3g//UHXAjrO5UO2/uND/9xYdTMPt93sY2oPu1e80jedO8H/2LLzas2TpDJeQ
-Mb1FqzJoJRyVTqFBJpnA/RaQA6evZoLsp/ch2Va1jX4MqbtkIK0tIoBGtwBDnRQ8
-u/jZptJLSJ2MpHcqUNXenuCpPQs9Nr7KNaLbd+YnBbrdCxzbMod58wGtSH6yjJrL
-btVvkGkG7dO7xGkFOoFTgSpa7KtgP3rToH1sNcTPQnJ9PJJwXiXXIesm6iymYXhR
-ae4NtuWHFZKT/UPsBSOue7sVu/bKGM03mlaEy11lCUk9kDvkCamna/NmdyU07kCx
-cWfomG0Gk8D+RkXTOYi8lOsR7CgRTxsP+ef1tZBXHIGdLZ6pLbjOcdA2yxFemvGl
-ssl4XoWZp/At1+sjhErJS4uZ4GWg8sZ4xpR15+uoMfxHB4uNO2psFGDBIEhc09C8
-xyX/WdTPqtUNi7zymFdQsiREzX3Y/Cqa+QyON2lsDpcXO2TEdHX5nAdswuQJsBnN
-A7UZfqq+zra9KQo0Lz8ujCjEQvtwgJZLDLZJo4cVTdhtbfyXgLDSOmVOj5u8RT6A
-k1fJSHELuSxBlJbJxQMVRVVTO0+KuzFRDOQpLfQUjBgrY8Wb38vn8kENthCnRgiq
-dyWyvG1yYDA+nyJX8lCZ+TJcp7yK2F7PG2F6NZKEwsU83Je1FTs=
-=8trH
------END PGP SIGNATURE-----
-
---lriez7o432fxn5yb--
