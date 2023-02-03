@@ -2,72 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30E9968A359
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 21:01:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC85768A35C
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 21:03:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233682AbjBCUBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 15:01:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50596 "EHLO
+        id S232766AbjBCUD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 15:03:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233602AbjBCUBs (ORCPT
+        with ESMTP id S229785AbjBCUDy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 15:01:48 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48905A77B6
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 12:01:47 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id z9-20020a25ba49000000b007d4416e3667so5825211ybj.23
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 12:01:47 -0800 (PST)
+        Fri, 3 Feb 2023 15:03:54 -0500
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E1A9D5AD;
+        Fri,  3 Feb 2023 12:03:53 -0800 (PST)
+Received: by mail-qt1-x82a.google.com with SMTP id m12so6812829qth.4;
+        Fri, 03 Feb 2023 12:03:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Yt4n7TrebHBHw1pv+f/VYH1/nL9tMmkgabnkwlM1MoM=;
-        b=fMPtyxtz/sSfFNjjRD5ySCffBSUU6QiDEXza5AgFvN0rIoBvkIEdIDVZ+Xg52loddj
-         lmMO5IYa+Oj57RacBvop4iZOd1IaD75y1qPByi/w9bsZ/zdHZfGsGOZ9Qrte0R90aW+z
-         +XDTYLDbRZkAkDV1zjwqCtzB1z9C0pXgKRSDx0ZzdChO4+QTiY/3Zk/wxQYSWkel5ETr
-         HhybkR8UnNvraSI+P09YhdH/r5YZoE/uKJUDE20GAz/+zYnbOQxeicxIjZszOfyRTch/
-         P1OxVUgyQb9PbHSjm4Wk39pJeD8LeKD/bNiNep+wU+Kv1258edtOfpPLhloihRh697N7
-         KaoA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AX8rN/nRejIs/f3fT9vWTY+nHDhK8VwQ9KCiwj1/p/w=;
+        b=VeIQDjXwnnyeRxOt8XBfLLh6qaN9VTOVvYb/ZOXjO5hYqwqjXfGJehRmCR0sQdz780
+         BYbRWpJoKp/NgXmoy7R+5NHXRnIRvTRI5cq6iGX299SeiPQtmB6M+EORhs0qxkmX6+Ft
+         JBSFLOEQrM/e/ECu/xwKh69SvSONqrHL8iHv3bmK2c2KYHzhhh2UslrCX8PYhdYDBuRP
+         GCGfSfKBP3WoVLBGhekbbSjXWNwMPeFPg4AUl0+WczYA0UTrZac3Pkg7tmzzVanNNo1i
+         eugKJLaR/fvmi8Xs0GPLad9MbejVQH0PwzrJcRPSj7hg+40TJLVkzDhs7BF79TL+o9eJ
+         ujQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Yt4n7TrebHBHw1pv+f/VYH1/nL9tMmkgabnkwlM1MoM=;
-        b=tj9mWDNAc81vCRY6FoxQyA0KRHJNqNhYHQv8+G8ysqaFHJCTrgVZHVuuC3uz18vT5n
-         buocjgdlhLzmLfT6uFkC/O4yDDzXOFigjKgEI/AP8o9P/kEJAlcEE58ry+LhjYJVDbc6
-         CLtSxC64hfxG3gstwG0w26yr81Ae2mSRG6AxQzC2skefKNkdzbPakm8bFAsD+qa7oV/+
-         Poysw3cAeXMdCjTkajhi+qNKZ8pXKHzvT2frj4ijLL2onHvXKmWwO9I6xDRD/krm9jU2
-         Dp12NjAursGtAldDuv54OYfgT8iroqGqFCCPfWFFfPVrjc3HPBe7RNMjFhFG8vDi4NwZ
-         79qg==
-X-Gm-Message-State: AO0yUKWnipBsVCNGeUkTFOsmlsVelfM79CR6Yu/NB4dAqzpIneMHb76h
-        v2N6KLOkeUdev5w87YXpDqRabqjxq0j/edzfmLckbMCOpT/7W6Ngk/rgH4boF03jZphLNQazvdI
-        8bw7Kw2gGzol8iGnuOq/vHsvjz5XxZvg5yXtHSolm2nA3iB0dtvmqup+UtxbLFSnkmRRcpm8=
-X-Google-Smtp-Source: AK7set91fjCEo7tXASurS+5Nz5Rqfgr5fZoXytxmvNkNzTwk5ZFApResIjCRAQ5iz3s59kODUc8qWYLPEloK
-X-Received: from jstultz-noogler2.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:600])
- (user=jstultz job=sendgmr) by 2002:a05:6902:4c8:b0:87c:45a2:8656 with SMTP id
- v8-20020a05690204c800b0087c45a28656mr52620ybs.86.1675454506493; Fri, 03 Feb
- 2023 12:01:46 -0800 (PST)
-Date:   Fri,  3 Feb 2023 20:01:38 +0000
-In-Reply-To: <20230203200138.3872873-1-jstultz@google.com>
-Mime-Version: 1.0
-References: <20230203200138.3872873-1-jstultz@google.com>
-X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
-Message-ID: <20230203200138.3872873-4-jstultz@google.com>
-Subject: [PATCH v2 4/4] locktorture: With nested locks, occasionally skip main lock
-From:   John Stultz <jstultz@google.com>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     John Stultz <jstultz@google.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AX8rN/nRejIs/f3fT9vWTY+nHDhK8VwQ9KCiwj1/p/w=;
+        b=H9qlA7MjL9z6Y2kH1sdhjgOma0oVKWACNkp0lUA5UQd+b7NbXSVHxci9iu5S411gzl
+         Ng+kpl5TTvuyYjDzBuxajkjKQHKgUs9+pcfr4yIO5l7HaQvm7l0iOX9NvfwuoPEhC358
+         oA5Tbvkemj2LpPk1m/erFDhARnLH0zPP5VMnes9fPFndOKGsWu8Tas/FsoWZnJYVewo2
+         7EgoNvtV2N8cmiKPLqL1ihZj3ARJF8i9q1cqi8puP+VKp013wtPGLjaFiqvpX5I46VZo
+         HvbbOzCaNTX6BcS//T/jWSA4IxPJ0ahAwVR2cHYzDhweSz+3AI1GmSJ7G1FE/RW+Lgpj
+         Fzvg==
+X-Gm-Message-State: AO0yUKVu2zLfIdfm8JbzaT+SHbH//ofCp/uIFgGP9/CCJpB6KKm4pvKv
+        A2r7yMSgY+DxW3QsK3xyTQ8=
+X-Google-Smtp-Source: AK7set+SMCkfnKnwa2jTlPNVxI3n2/ZNzOCSyLdbf8EJ+RJnLnPObAMjeo+9lyyUwQR/ZBqby+7zmQ==
+X-Received: by 2002:a05:622a:120a:b0:3b9:bf2a:1364 with SMTP id y10-20020a05622a120a00b003b9bf2a1364mr19177520qtx.55.1675454632008;
+        Fri, 03 Feb 2023 12:03:52 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id dm40-20020a05620a1d6800b006fef61300fesm2421840qkb.16.2023.02.03.12.03.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Feb 2023 12:03:50 -0800 (PST)
+Message-ID: <3d4042de-6178-2fab-3bba-5e08b25a93d6@gmail.com>
+Date:   Fri, 3 Feb 2023 12:03:45 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 5.15 00/20] 5.15.92-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230203101007.985835823@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230203101007.985835823@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,78 +79,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If we're using nested locking to stress things, occasionally
-skip taking the main lock, so that we can get some different
-contention patterns between the writers (to hopefully get two
-disjoint blocked trees)
+On 2/3/23 02:13, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.92 release.
+> There are 20 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sun, 05 Feb 2023 10:09:58 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.92-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-This patch was inspired by earlier work by Connor O'Brien.
+On ARCH_BRCMSTB using 32-bit and 64-bit, build tested on BMIPS_GENERIC:
 
-Comments or feedback would be greatly appreciated!
-
-Cc: Davidlohr Bueso <dave@stgolabs.net>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: Josh Triplett <josh@joshtriplett.org>
-Cc: Joel Fernandes <joel@joelfernandes.org>
-Cc: Juri Lelli <juri.lelli@redhat.com>
-Cc: Valentin Schneider <vschneid@redhat.com>
-Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Signed-off-by: John Stultz <jstultz@google.com>
----
- kernel/locking/locktorture.c | 28 ++++++++++++++++++----------
- 1 file changed, 18 insertions(+), 10 deletions(-)
-
-diff --git a/kernel/locking/locktorture.c b/kernel/locking/locktorture.c
-index 5fb17a5057b5..6f56dcb8a496 100644
---- a/kernel/locking/locktorture.c
-+++ b/kernel/locking/locktorture.c
-@@ -745,6 +745,7 @@ static int lock_torture_writer(void *arg)
- 	int tid = lwsp - cxt.lwsa;
- 	DEFINE_TORTURE_RANDOM(rand);
- 	u32 lockset_mask;
-+	bool skip_main_lock;
- 
- 	VERBOSE_TOROUT_STRING("lock_torture_writer task started");
- 	set_user_nice(current, MAX_NICE);
-@@ -754,21 +755,28 @@ static int lock_torture_writer(void *arg)
- 			schedule_timeout_uninterruptible(1);
- 
- 		lockset_mask = torture_random(&rand);
-+		skip_main_lock = nlocks && !(torture_random(&rand) % 100);
-+
- 		cxt.cur_ops->task_boost(&rand);
- 		if (cxt.cur_ops->nested_lock)
- 			cxt.cur_ops->nested_lock(tid, lockset_mask);
--		cxt.cur_ops->writelock(tid);
--		if (WARN_ON_ONCE(lock_is_write_held))
--			lwsp->n_lock_fail++;
--		lock_is_write_held = true;
--		if (WARN_ON_ONCE(atomic_read(&lock_is_read_held)))
--			lwsp->n_lock_fail++; /* rare, but... */
- 
--		lwsp->n_lock_acquired++;
-+		if (!skip_main_lock) {
-+			cxt.cur_ops->writelock(tid);
-+			if (WARN_ON_ONCE(lock_is_write_held))
-+				lwsp->n_lock_fail++;
-+			lock_is_write_held = true;
-+			if (WARN_ON_ONCE(atomic_read(&lock_is_read_held)))
-+				lwsp->n_lock_fail++; /* rare, but... */
-+
-+			lwsp->n_lock_acquired++;
-+		}
- 		cxt.cur_ops->write_delay(&rand);
--		lock_is_write_held = false;
--		WRITE_ONCE(last_lock_release, jiffies);
--		cxt.cur_ops->writeunlock(tid);
-+		if (!skip_main_lock) {
-+			lock_is_write_held = false;
-+			WRITE_ONCE(last_lock_release, jiffies);
-+			cxt.cur_ops->writeunlock(tid);
-+		}
- 		if (cxt.cur_ops->nested_unlock)
- 			cxt.cur_ops->nested_unlock(tid, lockset_mask);
- 
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-2.39.1.519.gcb327c4b5f-goog
+Florian
 
