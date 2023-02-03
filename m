@@ -2,50 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C9AA688C79
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 02:24:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3ABA688C7D
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 02:27:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231661AbjBCBYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 20:24:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52012 "EHLO
+        id S230496AbjBCB1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 20:27:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231598AbjBCBYm (ORCPT
+        with ESMTP id S229602AbjBCB06 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 20:24:42 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED0B84B64;
-        Thu,  2 Feb 2023 17:24:36 -0800 (PST)
+        Thu, 2 Feb 2023 20:26:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7226E12070;
+        Thu,  2 Feb 2023 17:26:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6FBA3B810EE;
-        Fri,  3 Feb 2023 01:24:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D815C433EF;
-        Fri,  3 Feb 2023 01:24:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1D52EB828E3;
+        Fri,  3 Feb 2023 01:26:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABA63C433D2;
+        Fri,  3 Feb 2023 01:26:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675387474;
-        bh=IscsXZpj+h2AU0j+vLsryYQTUgOMPPGd5Jv1285ZrJk=;
+        s=k20201202; t=1675387614;
+        bh=BeDxNw/tbCXEvqvBC4QZZK3yzQcUhswiYl5f9/R3DnU=;
         h=Date:From:To:Cc:Subject:From;
-        b=QHKJhVUiPYk/zx3KeJ5KOmbtERStOiApOlVI2w8X9mB474wJY93F25VmERJ1N2mjC
-         IzzAx4B80n6Joo+E9878meSE+QVA3miCcbWn9baxFmZQyXEOLwtB8MCmgKcm7JOHmT
-         ZkjIuQ2cuM9hMe+6ZNZu1zAUV/jdwHi8/2ZtzJkccYEc8LHpseYYo2BcwGQxGK6SHF
-         OBxC8TwD1aQgYpLmDx07lyS9jSZJFYnvW06gYJs8AJLh9PQMxbiEoibGRwgIxFJEtn
-         UIn8n2KUQiBfNqadGk62a9bWHOV9ZeydUEA2VYnEdCBr0PKCV0fhnKHyAURdnez9xy
-         mZ/TyOnl8yEYA==
-Date:   Thu, 2 Feb 2023 19:24:50 -0600
+        b=fgjB/OX/yNDmVt8S9/mAB1WYIfH8CuP9RCrtSbH3soSX4Kuz2IJ9bbMmLxxNalu4S
+         DtdEgK36CFsj58PLna91BETx2B5TO4eJ6od4DJC2r5cxMQJ9G8DUEjjHtSSU1CpVql
+         /FfRN8XVncaUoqHOYNJss3kfPAFP8RXEXHFkNf2oRwyi0YspICLPJhFn8m97hr6fgH
+         Nb+48MtQKRxTRrU+SVb1M4GBqfClIq+UNBWj9YFpj7fQ03W0CM60Rp3/1OsmiQUuT2
+         Ar03yAWEbnWMNlnm3HgiY2Sz2HD1ImFMxOtKe1O1PZPiNVdaco9hTp0/Kr3ot4sloI
+         dWPogeww9QBXQ==
+Date:   Thu, 2 Feb 2023 19:27:10 -0600
 From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+To:     Zack Rusin <zackr@vmware.com>,
+        VMware Graphics Reviewers 
+        <linux-graphics-maintainer@vmware.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         "Gustavo A. R. Silva" <gustavoars@kernel.org>,
         linux-hardening@vger.kernel.org
-Subject: [PATCH][next] xfs: Replace one-element arrays with flexible-array
- members
-Message-ID: <Y9xiYmVLRIKdpJcC@work>
+Subject: [PATCH][next] drm/vmwgfx: Replace one-element array with
+ flexible-array member
+Message-ID: <Y9xi7nFWRV3S9gCg@work>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,91 +58,36 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 One-element arrays are deprecated, and we are replacing them with flexible
-array members instead. So, replace one-element arrays with flexible-array
-members in structures xfs_attr_leaf_name_local and
-xfs_attr_leaf_name_remote.
-
-The only binary differences reported after the changes are all like
-these:
-
-fs/xfs/libxfs/xfs_attr_leaf.o
-_@@ -435,7 +435,7 @@
-      3b8:      movzbl 0x2(%rbx),%eax
-      3bc:      rol    $0x8,%bp
-      3c0:      movzwl %bp,%ebp
--     3c3:      lea    0x2(%rax,%rbp,1),%ebx
-+     3c3:      lea    0x3(%rax,%rbp,1),%ebx
-      3c7:      call   3cc <xfs_attr_leaf_entsize+0x8c>
-                        3c8: R_X86_64_PLT32     __tsan_func_exit-0x4
-      3cc:      or     $0x3,%ebx
-_@@ -454,7 +454,7 @@
-      3ea:      movzbl 0x8(%rbx),%ebx
-      3ee:      call   3f3 <xfs_attr_leaf_entsize+0xb3>
-                        3ef: R_X86_64_PLT32     __tsan_func_exit-0x4
--     3f3:      add    $0xa,%ebx
-+     3f3:      add    $0xb,%ebx
-      3f6:      or     $0x3,%ebx
-      3f9:      add    $0x1,%ebx
-      3fc:      mov    %ebx,%eax
-
-similar changes in fs/xfs/scrub/attr.o and fs/xfs/xfs.o object files.
-
-And the reason for this is because of the round_up() macro called in
-functions xfs_attr_leaf_entsize_remote() and xfs_attr_leaf_entsize_local(),
-which is compensanting for the one-byte reduction in size (due to the
-flex-array transformation) of structures xfs_attr_leaf_name_remote and
-xfs_attr_leaf_name_local. So, sizes remain the same before and after
-changes.
+array members instead. So, replace one-element array with flexible-array
+member in struct vmw_view.
 
 This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
 routines on memcpy() and help us make progress towards globally
 enabling -fstrict-flex-arrays=3 [1].
 
+This results in no differences in binary output.
+
 Link: https://github.com/KSPP/linux/issues/79
-Link: https://github.com/KSPP/linux/issues/251
+Link: https://github.com/KSPP/linux/issues/254
 Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
 Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 ---
- fs/xfs/libxfs/xfs_da_format.h | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/gpu/drm/vmwgfx/vmwgfx_so.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/xfs/libxfs/xfs_da_format.h b/fs/xfs/libxfs/xfs_da_format.h
-index 25e2841084e1..e1e62ebb0c44 100644
---- a/fs/xfs/libxfs/xfs_da_format.h
-+++ b/fs/xfs/libxfs/xfs_da_format.h
-@@ -620,14 +620,14 @@ typedef struct xfs_attr_leaf_entry {	/* sorted on key, not name */
- typedef struct xfs_attr_leaf_name_local {
- 	__be16	valuelen;		/* number of bytes in value */
- 	__u8	namelen;		/* length of name bytes */
--	__u8	nameval[1];		/* name/value bytes */
-+	__u8	nameval[];		/* name/value bytes */
- } xfs_attr_leaf_name_local_t;
+diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_so.c b/drivers/gpu/drm/vmwgfx/vmwgfx_so.c
+index 4ea32b01efc0..0f696ccaddc6 100644
+--- a/drivers/gpu/drm/vmwgfx/vmwgfx_so.c
++++ b/drivers/gpu/drm/vmwgfx/vmwgfx_so.c
+@@ -70,7 +70,7 @@ struct vmw_view {
+ 	unsigned view_id;              /* Immutable */
+ 	u32 cmd_size;                  /* Immutable */
+ 	bool committed;                /* Protected by binding_mutex */
+-	u32 cmd[1];                    /* Immutable */
++	u32 cmd[];		       /* Immutable */
+ };
  
- typedef struct xfs_attr_leaf_name_remote {
- 	__be32	valueblk;		/* block number of value bytes */
- 	__be32	valuelen;		/* number of bytes in value */
- 	__u8	namelen;		/* length of name bytes */
--	__u8	name[1];		/* name bytes */
-+	__u8	name[];			/* name bytes */
- } xfs_attr_leaf_name_remote_t;
- 
- typedef struct xfs_attr_leafblock {
-@@ -747,13 +747,13 @@ xfs_attr3_leaf_name_local(xfs_attr_leafblock_t *leafp, int idx)
-  */
- static inline int xfs_attr_leaf_entsize_remote(int nlen)
- {
--	return round_up(sizeof(struct xfs_attr_leaf_name_remote) - 1 +
-+	return round_up(sizeof(struct xfs_attr_leaf_name_remote) +
- 			nlen, XFS_ATTR_LEAF_NAME_ALIGN);
- }
- 
- static inline int xfs_attr_leaf_entsize_local(int nlen, int vlen)
- {
--	return round_up(sizeof(struct xfs_attr_leaf_name_local) - 1 +
-+	return round_up(sizeof(struct xfs_attr_leaf_name_local) +
- 			nlen + vlen, XFS_ATTR_LEAF_NAME_ALIGN);
- }
- 
+ static int vmw_view_create(struct vmw_resource *res);
 -- 
 2.34.1
 
