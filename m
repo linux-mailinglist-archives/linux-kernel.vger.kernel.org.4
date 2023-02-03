@@ -2,231 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BDD8689E32
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 16:25:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B70CD689E0F
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 16:23:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233469AbjBCPZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 10:25:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41086 "EHLO
+        id S233086AbjBCPXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 10:23:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232127AbjBCPZg (ORCPT
+        with ESMTP id S233060AbjBCPXZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 10:25:36 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D57047082;
-        Fri,  3 Feb 2023 07:24:43 -0800 (PST)
-Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3331B890;
-        Fri,  3 Feb 2023 16:19:25 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1675437566;
-        bh=vO1iP+NF+Oi0VA4WkYdcl/j2+EiaN4yWypeyWE4iz+0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=bP4N54/N8NOyPrgESAcbg+KcHKMGWtaGa+Hn9u2XJUypS8Z6SH/EYQXaJfe1WzmBU
-         lO5gMOMbc5X4a4sQrK9eidhTf6dygr4UsGutcZwHFgkMD1EjYcyEbl1wCKI+J82LiR
-         CyLYBh36ZvcRWAeyKq4Y5/bF+NMLSBT8fReB9Tro=
-Message-ID: <0dc36f3c-22c8-7440-96a6-7d3ad96daf40@ideasonboard.com>
-Date:   Fri, 3 Feb 2023 17:19:22 +0200
+        Fri, 3 Feb 2023 10:23:25 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 076C4ADB96
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 07:20:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675437588;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3g9NXrofpUX/HnzotWG0ahi/8nrSPeNR8z5upflUFxU=;
+        b=WGKjnvzIQzjdRjWwJ6nujUB1BLCGEovHtqv9hk/+9ETg+KkKouj9ajVjfG/MGZVXl13EvY
+        E5jUEMTaKyTv+3O6dzpChC6mskEBub/eFchzpYcvmNNS4aMnSgCH4CDoXqCHxXYUK7PpgI
+        lgNE7mQ7DyRMSsxrkEvBcqexKyLdjSw=
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
+ [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-22-8b841j-xMZuJI85MS1IbnQ-1; Fri, 03 Feb 2023 10:19:47 -0500
+X-MC-Unique: 8b841j-xMZuJI85MS1IbnQ-1
+Received: by mail-il1-f199.google.com with SMTP id b4-20020a92c564000000b00313942dcd86so1569102ilj.12
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 07:19:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:organization:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3g9NXrofpUX/HnzotWG0ahi/8nrSPeNR8z5upflUFxU=;
+        b=1EBTDgEchVMtD7HLYlG61DOaa/i42vskGsOnsSuLSOHRp+YhzS8DNMZ3J76bwldTG9
+         //BsP6gn5kLahrXYCiPKgvXG5UQWv20hIRRu7wzflmtkdjN5WBmVY/A99d3dBXPQPcKe
+         cry09tzRff4cqSwH92K9KEfgEEaD0+g+cGmVzwk2TvvS2dM1+iIwc8koW4zfTha/Pik+
+         T0hEw4Z9guZjcpfnwewGqqqk7lWjb+8d1xxlpjtPo8FuFv+BOTSwzr8nBqPdY7sfS20J
+         W5vRbAzXabJEXb7k0TQNkhNm4ylbesZiXveMco7QlN+Xq3ktvi+cVzoVIVixuzEX57h5
+         s1xg==
+X-Gm-Message-State: AO0yUKVGE6rih+sYHJXNnFoCe8Lm2NTJ6QUIZ4qeopitWRt7WX9rbwfa
+        0zdmLti2cabGsA0ZzUloSIzE8t6tLtj5B79OIF4PrUidxhGtO1c0aMW7taosoHa055ywAZmobBz
+        dfzQo+pCGB4WW8KO/j9MHtK7e
+X-Received: by 2002:a05:6e02:1bee:b0:310:dff1:f55a with SMTP id y14-20020a056e021bee00b00310dff1f55amr7898166ilv.1.1675437586796;
+        Fri, 03 Feb 2023 07:19:46 -0800 (PST)
+X-Google-Smtp-Source: AK7set9xS0+fDEKN1aTi0x42bIUmxvuWn31TlGlTEr16+4yc8RCliFt2/XQVRKmY908DNmVjPFwjDA==
+X-Received: by 2002:a05:6e02:1bee:b0:310:dff1:f55a with SMTP id y14-20020a056e021bee00b00310dff1f55amr7898130ilv.1.1675437586483;
+        Fri, 03 Feb 2023 07:19:46 -0800 (PST)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id r6-20020a922a06000000b0031093e9c7fasm830954ile.85.2023.02.03.07.19.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Feb 2023 07:19:45 -0800 (PST)
+Date:   Fri, 3 Feb 2023 08:19:42 -0700
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     "Liu, Yi L" <yi.l.liu@intel.com>
+Cc:     "Tian, Kevin" <kevin.tian@intel.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "jgg@nvidia.com" <jgg@nvidia.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "farman@linux.ibm.com" <farman@linux.ibm.com>,
+        "pmorel@linux.ibm.com" <pmorel@linux.ibm.com>,
+        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
+        "frankja@linux.ibm.com" <frankja@linux.ibm.com>,
+        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "akrowiak@linux.ibm.com" <akrowiak@linux.ibm.com>,
+        "jjherne@linux.ibm.com" <jjherne@linux.ibm.com>,
+        "pasic@linux.ibm.com" <pasic@linux.ibm.com>,
+        "zhenyuw@linux.intel.com" <zhenyuw@linux.intel.com>,
+        "Wang, Zhi A" <zhi.a.wang@intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "intel-gvt-dev@lists.freedesktop.org" 
+        <intel-gvt-dev@lists.freedesktop.org>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3] vfio: fix deadlock between group lock and kvm lock
+Message-ID: <20230203081942.64fbf9f1.alex.williamson@redhat.com>
+In-Reply-To: <DS0PR11MB75297154376388A3698C5CCAC3D79@DS0PR11MB7529.namprd11.prod.outlook.com>
+References: <20230202162442.78216-1-mjrosato@linux.ibm.com>
+        <20230202124210.476adaf8.alex.williamson@redhat.com>
+        <BN9PR11MB527618E281BEB8E479ABB0418CD69@BN9PR11MB5276.namprd11.prod.outlook.com>
+        <20230202161307.0c6aa23e.alex.williamson@redhat.com>
+        <BN9PR11MB5276017F9CEBB4BAE58C40E88CD79@BN9PR11MB5276.namprd11.prod.outlook.com>
+        <DS0PR11MB7529050661FCE4A5AC4B17C3C3D79@DS0PR11MB7529.namprd11.prod.outlook.com>
+        <20230203064940.435e4d65.alex.williamson@redhat.com>
+        <DS0PR11MB75297154376388A3698C5CCAC3D79@DS0PR11MB7529.namprd11.prod.outlook.com>
+Organization: Red Hat
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v7 5/6] drm/tidss: Add IO CTRL and Power support for OLDI
- TX in am625
-Content-Language: en-US
-To:     Aradhya Bhatia <a-bhatia1@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jyri Sarha <jyri.sarha@iki.fi>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     DRI Development List <dri-devel@lists.freedesktop.org>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rahul T R <r-ravikumar@ti.com>,
-        Devarsh Thakkar <devarsht@ti.com>,
-        Jai Luthra <j-luthra@ti.com>,
-        Jayesh Choudhary <j-choudhary@ti.com>
-References: <20230125113529.13952-1-a-bhatia1@ti.com>
- <20230125113529.13952-6-a-bhatia1@ti.com>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <20230125113529.13952-6-a-bhatia1@ti.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/01/2023 13:35, Aradhya Bhatia wrote:
-> The ctrl mmr module of the AM625 is different from the AM65X SoC. Thus
-> the ctrl mmr registers that supported the OLDI TX power have become
-> different in AM625 SoC.
-> 
-> The common mode voltage of the LVDS buffers becomes random when the
-> bandgap reference is turned off. This causes uncertainity in the LVDS
-> Data and Clock signal outputs, making it behave differently under
-> different conditions and panel setups. The bandgap reference must be
-> powered on before using the OLDI IOs, to keep the common voltage trimmed
-> down to desired levels.
-> 
-> Add support to enable/disable OLDI IO signals as well as the bandgap
-> reference circuit for the LVDS signals.
-> 
-> Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
-> ---
-> 
-> Note:
-> - Dropped Tomi Valkeinen's reviewed-by tag in this patch because I did
->    not implement one of his comments which suggested to remove the
->    'oldi_supported' variable. While the oldi support is indeed based on
->    SoC variations, keeping that variable helps take into account the case
->    where an OLDI supporting SoC by-passes OLDI TXes and gives out DPI
->    video signals straight from DSS.
+On Fri, 3 Feb 2023 14:54:44 +0000
+"Liu, Yi L" <yi.l.liu@intel.com> wrote:
 
-Hmm why is that relevent for this patch? It doesn't use oldi_supported 
-or the new has_oldi.
+> > From: Alex Williamson <alex.williamson@redhat.com>
+> > Sent: Friday, February 3, 2023 9:50 PM
+> >=20
+> > On Fri, 3 Feb 2023 13:32:09 +0000
+> > "Liu, Yi L" <yi.l.liu@intel.com> wrote:
+> >  =20
+> > > > From: Tian, Kevin <kevin.tian@intel.com>
+> > > > Sent: Friday, February 3, 2023 10:00 AM
+> > > > =20
+> > > > > From: Alex Williamson <alex.williamson@redhat.com>
+> > > > > Sent: Friday, February 3, 2023 7:13 AM
+> > > > >
+> > > > > On Thu, 2 Feb 2023 23:04:10 +0000
+> > > > > "Tian, Kevin" <kevin.tian@intel.com> wrote:
+> > > > > =20
+> > > > > > > From: Alex Williamson <alex.williamson@redhat.com>
+> > > > > > > Sent: Friday, February 3, 2023 3:42 AM
+> > > > > > >
+> > > > > > >
+> > > > > > > LGTM.  I'm not sure moving the functions to vfio_main really =
+buys =20
+> > us =20
+> > > > > > > anything since we're making so much use of group fields.  The=
+ cdev
+> > > > > > > approach will necessarily be different, so the bulk of the ge=
+t code =20
+> > will =20
+> > > > > > > likely need to move back to group.c anyway.
+> > > > > > > =20
+> > > > > >
+> > > > > > well my last comment was based on Matthew's v2 where the get =20
+> > code =20
+> > > > > > gets a kvm passed in instead of implicitly retrieving group ref=
+_lock
+> > > > > > internally. In that case the get/put helpers only contain devic=
+e logic
+> > > > > > thus fit in vfio_main.c.
+> > > > > >
+> > > > > > with v3 then they have to be in group.c since we don't want to =
+use
+> > > > > > group fields in vfio_main.c.
+> > > > > >
+> > > > > > but I still think v2 of the helpers is slightly better. The onl=
+y difference
+> > > > > > between cdev and group when handling this race is using differe=
+nt
+> > > > > > ref_lock. the symbol get/put part is exactly same. So even if we
+> > > > > > merge v3 like this, very likely Yi has to change it back to v2 =
+style
+> > > > > > to share the get/put helpers while just leaving the ref_lock pa=
+rt
+> > > > > > handled differently between the two path. =20
+> > > > >
+> > > > > I'm not really a fan of the asymmetry of the v2 version where the=
+ get
+> > > > > helper needs to be called under the new kvm_ref_lock, but the put
+> > > > > helper does not.  Having the get helper handle that makes the cal=
+ler
+> > > > > much cleaner.  Thanks,
+> > > > > =20
+> > > >
+> > > > What about passing the lock pointer into the helper? it's still sli=
+ghtly
+> > > > asymmetry as the put helper doesn't carry the lock pointer but it
+> > > > could also be interpreted as if the pointer has been saved in the g=
+et
+> > > > then if it needs to be referenced by the put there is no need to pa=
+ss
+> > > > it in again. =20
+> > >
+> > > For cdev, I may modify vfio_device_get_kvm_safe() to accept
+> > > struct kvm and let its caller hold a kvm_ref_lock (field within
+> > > struct vfio_device_file). Meanwhile, the group path holds
+> > > the group->kvm_ref_lock before invoking vfio_device_get_kvm_safe().
+> > > vfio_device_get_kvm_safe() just includes the symbol get/put and
+> > > the device->kvm and put_kvm set. =20
+> >=20
+> > Sounds a lot like v2 :-\  =20
+>=20
+> Yes, like v2. =F0=9F=98=8A
+>=20
+> > I'd look more towards group and cdev specific
+> > helpers that handle the locking so that the callers aren't exposed to
+> > the asymmetry of get vs put, and reduce a new
+> > _vfio_device_get_kvm_safe() in common code that only does the symbol
+> > work.  Thanks, =20
+>=20
+> If so, looks like Matthew needs a v4. I'm waiting for the final version
+> of this patch and sending a new cdev series based on it. wish to see
+> it soon ^_^.
 
->   drivers/gpu/drm/tidss/tidss_dispc.c      | 57 +++++++++++++++++++-----
->   drivers/gpu/drm/tidss/tidss_dispc_regs.h | 40 ++++++++++++-----
->   2 files changed, 76 insertions(+), 21 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/tidss/tidss_dispc.c b/drivers/gpu/drm/tidss/tidss_dispc.c
-> index 37a73e309330..0e03557bc142 100644
-> --- a/drivers/gpu/drm/tidss/tidss_dispc.c
-> +++ b/drivers/gpu/drm/tidss/tidss_dispc.c
-> @@ -934,21 +934,56 @@ int dispc_vp_bus_check(struct dispc_device *dispc, u32 hw_videoport,
->   
->   static void dispc_oldi_tx_power(struct dispc_device *dispc, bool power)
->   {
-> -	u32 val = power ? 0 : OLDI_PWRDN_TX;
-> +	u32 val;
->   
->   	if (WARN_ON(!dispc->oldi_io_ctrl))
->   		return;
->   
-> -	regmap_update_bits(dispc->oldi_io_ctrl, OLDI_DAT0_IO_CTRL,
-> -			   OLDI_PWRDN_TX, val);
-> -	regmap_update_bits(dispc->oldi_io_ctrl, OLDI_DAT1_IO_CTRL,
-> -			   OLDI_PWRDN_TX, val);
-> -	regmap_update_bits(dispc->oldi_io_ctrl, OLDI_DAT2_IO_CTRL,
-> -			   OLDI_PWRDN_TX, val);
-> -	regmap_update_bits(dispc->oldi_io_ctrl, OLDI_DAT3_IO_CTRL,
-> -			   OLDI_PWRDN_TX, val);
-> -	regmap_update_bits(dispc->oldi_io_ctrl, OLDI_CLK_IO_CTRL,
-> -			   OLDI_PWRDN_TX, val);
-> +	if (dispc->feat->subrev == DISPC_AM65X) {
+cdev support is a future feature, why does it become a requirement for
+a fix to the current base?  The refactoring could also happen in the
+cdev series.  Thanks,
 
-Slight nitpick, but I think switch-case makes sense for the subrev. Even 
-if there are just two options here, using switch makes the structure 
-clearer.
-
-> +		val = power ? 0 : AM65X_OLDI_PWRDN_TX;
-> +
-> +		regmap_update_bits(dispc->oldi_io_ctrl, AM65X_OLDI_DAT0_IO_CTRL,
-> +				   AM65X_OLDI_PWRDN_TX, val);
-> +		regmap_update_bits(dispc->oldi_io_ctrl, AM65X_OLDI_DAT1_IO_CTRL,
-> +				   AM65X_OLDI_PWRDN_TX, val);
-> +		regmap_update_bits(dispc->oldi_io_ctrl, AM65X_OLDI_DAT2_IO_CTRL,
-> +				   AM65X_OLDI_PWRDN_TX, val);
-> +		regmap_update_bits(dispc->oldi_io_ctrl, AM65X_OLDI_DAT3_IO_CTRL,
-> +				   AM65X_OLDI_PWRDN_TX, val);
-> +		regmap_update_bits(dispc->oldi_io_ctrl, AM65X_OLDI_CLK_IO_CTRL,
-> +				   AM65X_OLDI_PWRDN_TX, val);
-> +
-> +	} else if (dispc->feat->subrev == DISPC_AM625) {
-> +		if (power) {
-> +			switch (dispc->oldi_mode) {
-> +			case OLDI_MODE_SINGLE_LINK:
-> +				/* Power down OLDI TX 1 */
-> +				val = AM625_OLDI1_PWRDN_TX;
-> +				break;
-> +
-> +			case OLDI_MODE_CLONE_SINGLE_LINK:
-> +			case OLDI_MODE_DUAL_LINK:
-> +				/* No Power down */
-> +				val = 0;
-> +				break;
-> +
-> +			default:
-> +				/* Power down both OLDI TXes and LVDS Bandgap */
-> +				val = AM625_OLDI0_PWRDN_TX | AM625_OLDI1_PWRDN_TX |
-> +				      AM625_OLDI_PWRDN_BG;
-> +				break;
-> +			}
-> +
-> +		} else {
-> +			/* Power down both OLDI TXes and LVDS Bandgap */
-> +			val = AM625_OLDI0_PWRDN_TX | AM625_OLDI1_PWRDN_TX |
-> +			      AM625_OLDI_PWRDN_BG;
-> +		}
-> +
-> +		regmap_update_bits(dispc->oldi_io_ctrl, AM625_OLDI_PD_CTRL,
-> +				   AM625_OLDI0_PWRDN_TX | AM625_OLDI1_PWRDN_TX |
-> +				   AM625_OLDI_PWRDN_BG, val);
-> +	}
->   }
->   
->   static void dispc_set_num_datalines(struct dispc_device *dispc,
-> diff --git a/drivers/gpu/drm/tidss/tidss_dispc_regs.h b/drivers/gpu/drm/tidss/tidss_dispc_regs.h
-> index 13feedfe5d6d..b2a148e96022 100644
-> --- a/drivers/gpu/drm/tidss/tidss_dispc_regs.h
-> +++ b/drivers/gpu/drm/tidss/tidss_dispc_regs.h
-> @@ -227,17 +227,37 @@ enum dispc_common_regs {
->   #define DISPC_VP_DSS_DMA_THREADSIZE_STATUS	0x174 /* J721E */
->   
->   /*
-> - * OLDI IO_CTRL register offsets. On AM654 the registers are found
-> - * from CTRL_MMR0, there the syscon regmap should map 0x14 bytes from
-> - * CTRLMMR0P1_OLDI_DAT0_IO_CTRL to CTRLMMR0P1_OLDI_CLK_IO_CTRL
-> - * register range.
-> + * OLDI IO and PD CTRL register offsets.
-> + * These registers are found in the CTRL_MMR0, where the syscon regmap should map
-> + *
-> + * 1. 0x14 bytes from CTRLMMR0P1_OLDI_DAT0_IO_CTRL to CTRLMMR0P1_OLDI_CLK_IO_CTRL
-> + * register range for the AM65X DSS, and
-> + *
-> + * 2. 0x200 bytes from OLDI0_DAT0_IO_CTRL to OLDI_LB_CTRL register range for the
-> + * AM625 DSS.
->    */
-> -#define OLDI_DAT0_IO_CTRL			0x00
-> -#define OLDI_DAT1_IO_CTRL			0x04
-> -#define OLDI_DAT2_IO_CTRL			0x08
-> -#define OLDI_DAT3_IO_CTRL			0x0C
-> -#define OLDI_CLK_IO_CTRL			0x10
->   
-> -#define OLDI_PWRDN_TX				BIT(8)
-> +/* -- For AM65X OLDI TX -- */
-> +/* Register offsets */
-> +#define AM65X_OLDI_DAT0_IO_CTRL			0x00
-> +#define AM65X_OLDI_DAT1_IO_CTRL			0x04
-> +#define AM65X_OLDI_DAT2_IO_CTRL			0x08
-> +#define AM65X_OLDI_DAT3_IO_CTRL			0x0C
-> +#define AM65X_OLDI_CLK_IO_CTRL			0x10
-> +
-> +/* Power control bits */
-> +#define AM65X_OLDI_PWRDN_TX			BIT(8)
-> +
-> +/* -- For AM625 OLDI TX -- */
-> +/* Register offsets */
-> +#define AM625_OLDI_PD_CTRL			0x100
-> +#define AM625_OLDI_LB_CTRL			0x104
-> +
-> +/* Power control bits */
-> +#define AM625_OLDI0_PWRDN_TX			BIT(0)
-> +#define AM625_OLDI1_PWRDN_TX			BIT(1)
-> +
-> +/* LVDS Bandgap reference Enable/Disable */
-> +#define AM625_OLDI_PWRDN_BG			BIT(8)
->   
->   #endif /* __TIDSS_DISPC_REGS_H */
-
-Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-
-  Tomi
+Alex
 
