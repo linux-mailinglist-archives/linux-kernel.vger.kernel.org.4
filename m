@@ -2,101 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3ED3689F06
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 17:22:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A536689F09
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 17:22:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232787AbjBCQWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 11:22:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44858 "EHLO
+        id S232542AbjBCQWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 11:22:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbjBCQWf (ORCPT
+        with ESMTP id S232835AbjBCQWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 11:22:35 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A3FA6B81;
-        Fri,  3 Feb 2023 08:22:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=9tlU3E6gFTikzNFh8ic4A7v0yzAetE1KgNmS/ZDw9/M=; b=bkUZ4atbzUjdiHVSCwLnutyONe
-        sNiRV3IwT/n86rZoj+ltc240yW0y9nwR3ypN16UIA+sX0uGDmBdA0N/uTz2xFCH0J2tDT8SOaTavO
-        Jn41mc1+Iiq6JJqSWhCB+wo35TH6ghDlCN9x7lvnZR/mtr7hQMxoA2ZSpBCDgJH4rljX8m/iCzahq
-        jqZN6sBR2AVf6kMeaH0/x7U7j3NDmppsdTvbstdRgdKPOqEP3ZnpbZKRiMo5+UKMFO27/jnboaLUZ
-        lkC87ssYd6q3Q/yapdaJx8fP2S9V60y3jiCPNf8/xSVVEFIk7T0y15tgM4KDeJOGqDuZd16QruQ+g
-        SGTwX4GQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pNypK-00ES7K-IY; Fri, 03 Feb 2023 16:22:14 +0000
-Date:   Fri, 3 Feb 2023 16:22:14 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        David Hildenbrand <david@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Peter Xu <peterx@redhat.com>, NeilBrown <neilb@suse.de>,
-        Shakeel Butt <shakeelb@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [RFC PATCH v1 1/2] mm: vmscan: refactor updating reclaimed pages
- in reclaim_state
-Message-ID: <Y900tl+kRWoZac/T@casper.infradead.org>
-References: <20230202233229.3895713-1-yosryahmed@google.com>
- <20230202233229.3895713-2-yosryahmed@google.com>
+        Fri, 3 Feb 2023 11:22:44 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3368CA6C24;
+        Fri,  3 Feb 2023 08:22:42 -0800 (PST)
+Received: from mercury (unknown [37.81.76.207])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C4CE86602F11;
+        Fri,  3 Feb 2023 16:22:40 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1675441360;
+        bh=8/iOl1JkoX4qzoBl5tfa+91+8Fdoznk/0+WMSVeGStI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SrCWBebtElx6IbYQfwqbuUc70cojJ8u5yErG8ybQ+bUFTnhAEh4O6SePQ02LozJBc
+         0yy7g0mEhDw2d6MQSMW48Skyl8TESqk1J7KnhGM6jWKlTIFO5wvm3JAqeVbnt0EQpt
+         LRLgxyN8+MMCUefhS/ZHisEEE/mhnMAwczg0PB3VGRSq3WdLL1847zVyd5yDy2hV0Q
+         tEW+LAiw7Q+o7ynuAzfrCigyUcsOW3AI2omULNdkRlq8kg561Lfspb51dNNaouaw1F
+         KkErLtYuC0S2PWP3j9o1uKtmEQfWSo81sxjqzy7j34/4JDyaIm8ajxLnhhSjKBOgD9
+         BXtG5oyE7qHaQ==
+Received: by mercury (Postfix, from userid 1000)
+        id 7BBA51060930; Fri,  3 Feb 2023 17:22:38 +0100 (CET)
+Date:   Fri, 3 Feb 2023 17:22:38 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     cy_huang@richtek.com
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        alina_yu@richtek.com, u0084500@gmail.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND v8 0/3] Add Richtek RT9471 3A battery charger
+ support
+Message-ID: <20230203162238.sbc7gemv6tqzdnka@mercury.elektranox.org>
+References: <1673590666-24618-1-git-send-email-cy_huang@richtek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="lriez7o432fxn5yb"
 Content-Disposition: inline
-In-Reply-To: <20230202233229.3895713-2-yosryahmed@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1673590666-24618-1-git-send-email-cy_huang@richtek.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 11:32:28PM +0000, Yosry Ahmed wrote:
-> diff --git a/fs/xfs/xfs_buf.c b/fs/xfs/xfs_buf.c
-> index 54c774af6e1c..060079f1e966 100644
-> --- a/fs/xfs/xfs_buf.c
-> +++ b/fs/xfs/xfs_buf.c
-> @@ -286,8 +286,7 @@ xfs_buf_free_pages(
->  		if (bp->b_pages[i])
->  			__free_page(bp->b_pages[i]);
->  	}
-> -	if (current->reclaim_state)
-> -		current->reclaim_state->reclaimed_slab += bp->b_page_count;
-> +	report_freed_pages(bp->b_page_count);
 
-XFS can be built as a module
+--lriez7o432fxn5yb
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> +++ b/mm/vmscan.c
-> @@ -204,6 +204,19 @@ static void set_task_reclaim_state(struct task_struct *task,
->  	task->reclaim_state = rs;
->  }
->  
-> +/*
-> + * reclaim_report_freed_pages: report pages freed outside of LRU-based reclaim
-> + * @pages: number of pages freed
-> + *
-> + * If the current process is undergoing a reclaim operation,
-> + * increment the number of reclaimed pages by @pages.
-> + */
-> +void report_freed_pages(unsigned long pages)
-> +{
-> +	if (current->reclaim_state)
-> +		current->reclaim_state->reclaimed += pages;
-> +}
-> +
+Hi,
 
-report_free_pages is not EXPORT_SYMBOLed
+On Fri, Jan 13, 2023 at 02:17:43PM +0800, cy_huang@richtek.com wrote:
+> From: ChiYuan Huang <cy_huang@richtek.com>
+>=20
+> This patch set is to add Richtek RT9471 charger support.
+>=20
+> The RT9471/D is a highly-integrated 3A switch mode battery charge managem=
+ent
+> and system power path management device for single cell Li-Ion and Li-pol=
+ymer
+> battery. The low impedance power path optimizes switch-mode operation
+> efficiency, reduces battery charging time and extends battery life during
+> discharging phase.
 
+Thanks, queued.
+
+-- Sebastian
+
+--lriez7o432fxn5yb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmPdNM4ACgkQ2O7X88g7
++ppU3g//UHXAjrO5UO2/uND/9xYdTMPt93sY2oPu1e80jedO8H/2LLzas2TpDJeQ
+Mb1FqzJoJRyVTqFBJpnA/RaQA6evZoLsp/ch2Va1jX4MqbtkIK0tIoBGtwBDnRQ8
+u/jZptJLSJ2MpHcqUNXenuCpPQs9Nr7KNaLbd+YnBbrdCxzbMod58wGtSH6yjJrL
+btVvkGkG7dO7xGkFOoFTgSpa7KtgP3rToH1sNcTPQnJ9PJJwXiXXIesm6iymYXhR
+ae4NtuWHFZKT/UPsBSOue7sVu/bKGM03mlaEy11lCUk9kDvkCamna/NmdyU07kCx
+cWfomG0Gk8D+RkXTOYi8lOsR7CgRTxsP+ef1tZBXHIGdLZ6pLbjOcdA2yxFemvGl
+ssl4XoWZp/At1+sjhErJS4uZ4GWg8sZ4xpR15+uoMfxHB4uNO2psFGDBIEhc09C8
+xyX/WdTPqtUNi7zymFdQsiREzX3Y/Cqa+QyON2lsDpcXO2TEdHX5nAdswuQJsBnN
+A7UZfqq+zra9KQo0Lz8ujCjEQvtwgJZLDLZJo4cVTdhtbfyXgLDSOmVOj5u8RT6A
+k1fJSHELuSxBlJbJxQMVRVVTO0+KuzFRDOQpLfQUjBgrY8Wb38vn8kENthCnRgiq
+dyWyvG1yYDA+nyJX8lCZ+TJcp7yK2F7PG2F6NZKEwsU83Je1FTs=
+=8trH
+-----END PGP SIGNATURE-----
+
+--lriez7o432fxn5yb--
