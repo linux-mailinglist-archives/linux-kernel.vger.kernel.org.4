@@ -2,118 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B056C68A63E
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 23:34:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A34668A641
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 23:35:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233379AbjBCWeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 17:34:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53772 "EHLO
+        id S232448AbjBCWfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 17:35:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232802AbjBCWeM (ORCPT
+        with ESMTP id S233093AbjBCWfJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 17:34:12 -0500
-Received: from gproxy4-pub.mail.unifiedlayer.com (gproxy4-pub.mail.unifiedlayer.com [69.89.23.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0DF71CF50
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 14:34:09 -0800 (PST)
-Received: from cmgw14.mail.unifiedlayer.com (unknown [10.0.90.129])
-        by progateway6.mail.pro1.eigbox.com (Postfix) with ESMTP id 803E8100483B7
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 22:34:09 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id O4dFpq9I4FrqCO4dFp6nz0; Fri, 03 Feb 2023 22:34:09 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=LeD5VhTi c=1 sm=1 tr=0 ts=63dd8be1
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=m04uMKEZRckA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=9uMecodHOrM1Mh/Ettcy3fDGpdPiW2Q6fXzJRqmojTM=; b=lATq6kpm/nF0NqogvFwOLxtryJ
-        8uDxhquvkv8ScvAuV6gCB1rBuweOwmTRS6C6hbZXf0PK5QfoarK0Aw5obOmMK1EvrombzxTWKq6aB
-        c5XS3gKgWWu/SSjFzJp3CKBkx2uGv0eZyCDTyRjlNXN9GhB36vvQ/8iXjBhZ2JF3X0/KtbOSMruXf
-        Cg+GG1MUJlm1bRlQv5QeSF/HNjJCszNORG88uLO/TDgzUegVgyTMRMceqx2rZVyVzsl8XsrtBQhql
-        BFogntQIPODB906eNSigIHJoeAruRXDsDSY80tvu4m0DOtvAtieV/ms2jDB2ua9ePv6XDyS7yW0lL
-        X0A7/+Mw==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:53436 helo=[10.0.1.47])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1pO4dE-003xup-KF;
-        Fri, 03 Feb 2023 15:34:08 -0700
-Subject: Re: [PATCH 6.1 00/28] 6.1.10-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230203101009.946745030@linuxfoundation.org>
-In-Reply-To: <20230203101009.946745030@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <9fc58557-e0b5-02a8-3a18-bfdeba716e95@w6rz.net>
-Date:   Fri, 3 Feb 2023 14:34:03 -0800
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Fri, 3 Feb 2023 17:35:09 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58AEE274AE
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 14:35:07 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id l4-20020a17090a850400b0023013402671so10126825pjn.5
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 14:35:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=2+qUrmoLWhGhHQ0JM3LtDsxkWWGF/Tpngyo6lTedI5Q=;
+        b=S2aplzJ/n1MkROMxkRG8h8Z13X5qxY+hzIVW3kQdcsio94dYqqnQl08+0VGYNqriQr
+         Ir4ldh4hW29MFt4yUXmYeYH9MBAZQLM8b5HJCx8p9YGYDKQ48BdUH+xflfkSE22XWIoU
+         qfWtkY4oD+UA9XNZsKBivBKR0zHQRjY8qQ590=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2+qUrmoLWhGhHQ0JM3LtDsxkWWGF/Tpngyo6lTedI5Q=;
+        b=GCR7jExkE30xMssqopgkWNssK8GbpT50sxPR2RiwfSaYXkGygXRBRYNZaGKSFSVkP+
+         kwVHJBETpBYyDP4S/zLb6g8ESuhVu8pLYgOF1Sfyn3S4S23oi1AAXBzklUVpm4uYEEys
+         UhTDjtxMpspuRMQze+JrZCOjAz3YLTVzsMJZ6GFmWz3sWG4MEosq5QZhysqx7jIRi/1R
+         tl7YdzHFsX0zK95u7zaczgs0Udl3/q0yno505kCWiRiROyiUiIrR+nqUS67vqcSofqyP
+         C335dWzoQ6QvQclDaoGn0uEuOd6qJHQhE/UQwQ+q27ESR4W0ybrdwnHdhOM7jpwWzDPv
+         OyLg==
+X-Gm-Message-State: AO0yUKXyouYah6w/GAUb8sCtfXu8M4HktfT+w9e0QzhJjCPFPErpFAhJ
+        SsiKLwcBgqPISWJ66iXDdP+Ndw==
+X-Google-Smtp-Source: AK7set+ivoTQ9g7ZsTsBrucNZ/YN7Eo6brIp6IR1b30qK2V9FeFukDCIB5g4XrUDFICA2DCmS+773A==
+X-Received: by 2002:a17:902:e34c:b0:196:3650:63e3 with SMTP id p12-20020a170902e34c00b00196365063e3mr10248303plc.1.1675463706890;
+        Fri, 03 Feb 2023 14:35:06 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id 13-20020a170902c24d00b00198e12c499dsm1829704plg.282.2023.02.03.14.35.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Feb 2023 14:35:06 -0800 (PST)
+Message-ID: <63dd8c1a.170a0220.d3456.3451@mx.google.com>
+X-Google-Original-Message-ID: <202302032233.@keescook>
+Date:   Fri, 3 Feb 2023 22:35:05 +0000
+From:   Kees Cook <keescook@chromium.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] lm85: Bounds check to_sensor_dev_attr()->index usage
+References: <20230127223744.never.113-kees@kernel.org>
+ <20230128131319.GA4173006@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1pO4dE-003xup-KF
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:53436
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 4
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230128131319.GA4173006@roeck-us.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/3/23 2:12 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.10 release.
-> There are 28 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sun, 05 Feb 2023 10:09:58 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.10-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Sat, Jan 28, 2023 at 05:13:19AM -0800, Guenter Roeck wrote:
+> On Fri, Jan 27, 2023 at 02:37:45PM -0800, Kees Cook wrote:
+> > The index into various register arrays was not bounds checked. Add
+> > checking. Seen under GCC 13:
+> > 
+> > drivers/hwmon/lm85.c: In function 'pwm_auto_pwm_minctl_store':
+> > drivers/hwmon/lm85.c:1110:26: warning: array subscript [0, 31] is outside array bounds of 'struct lm85_autofan[3]' [-Warray-bounds=]
+> >  1110 |         if (data->autofan[nr].min_off)
+> >       |             ~~~~~~~~~~~~~^~~~
+> > drivers/hwmon/lm85.c:317:29: note: while referencing 'autofan'
+> >   317 |         struct lm85_autofan autofan[3];
+> >       |                             ^~~~~~~
+> > 
+> 
+> This is a false positive. The value can never be >= 3.
+> It is derived from the last value of the following
+> SENSOR_DEVICE_ATTR_RW() entries.
+> 
+> I resist making changes like this to the code just because
+> the compiler can not determine the range of a variable.
+> It blows up code size amd makes it hard to read just to
+> make the compiler happy.
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+I think it's worth it given the index is an "int" and it'd be very easy
+for things to go wrong in the face of other memory corruption, etc. I've
+sent a v2 that I think is much more readable and non-invasive but
+provides similar robustness.
 
-Tested-by: Ron Economos <re@w6rz.net>
+-Kees
 
+-- 
+Kees Cook
