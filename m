@@ -2,140 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6FF6689027
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 08:10:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C84C689032
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 08:11:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231644AbjBCHJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 02:09:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32886 "EHLO
+        id S232084AbjBCHKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 02:10:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232290AbjBCHJq (ORCPT
+        with ESMTP id S231923AbjBCHKg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 02:09:46 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A7056A706
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 23:09:32 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id h12so3766571wrv.10
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 23:09:32 -0800 (PST)
+        Fri, 3 Feb 2023 02:10:36 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 217012E805
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 23:10:35 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id t18so3805219wro.1
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 23:10:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=91H7aAbtElqTaptJ9Vb0dyS9FKfuyA5IbH1LTzOZk1w=;
-        b=kxIW9UUpSvaia8/H81GLavJ4mQWTC9NVIF/UM8mTgquarXVcOYW223Tp1ZbgavI1u7
-         2OCqXuAkDBtFRPciI5sntZWnwYqZEjZzskVKWufTIDy7NQNMgH0pg4MV8gAHiHtY9VR3
-         0hcBk2FtFixn+Ot9diJncYJwYaKiytsJiCtQwf6CgqZ06g1fXS+SlbtLcGyRyt5gcHRA
-         hpzfB3KH3SfxhQth5axvjIiwVLi1AmSiljimg8k/I84mFBVytz1RSqGvqTLcVC6tL6D/
-         sqElxkSTdl5eV/XCsViXTGPTK5YR18lY7c5xvF3BF/eWlofQ9DuvgmoT7LYI+Gmg/j3I
-         7K+g==
+        bh=OJ8Gf80CWUYHo8pgwGSarJleRRx0Faz3RtumkT/DIPU=;
+        b=p9UHLVpI6+WjggtIxjLt00M/ofG3tympPQyaCFDbhiwRJztc0MxTLwbLMYGHmYsaU9
+         Mfh19f4QBKsPH8UJGV4lT5+RCobv1NSuQCixc8SIFxCFzq6Ok79cmnIaSRrj9J7KjptM
+         KPOfIdx//9u4EPQNrBeI1iJBcPLYWuzL90u2DdrebiEx0coFQjN5SsO/JweeUEUURvEw
+         YZddWPEtmH2YCo9s9KlkFfa/Gnc6ntNzsHvIib8cwIJauoK2Xm/07r6JIS7cMcOumf6R
+         i+dUsFfXaracnGBbNZ/P32I5ZN0B4aFwEBCxZnbEWyq2l+ZY7SIcEo6YwjKs8bu50y0j
+         WbRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=91H7aAbtElqTaptJ9Vb0dyS9FKfuyA5IbH1LTzOZk1w=;
-        b=RhNPZ2+rJtfd/OH96MFWhM5qe0AD9mK9Yr9fagBYOkC1QeFbOBjdcdLCd7QuCYX7MY
-         wPrrDFaXU++ATZO2ByTt1eQGSGRix51giKb84/qbNn5IqpDXq5NIknPuRiP9YTpL92e0
-         bh3EBMaWqKoRrXzoYIezi0Hcv27RuM2ASAprd47r/DRbGTWRZ3h0qzlHk8QtTlSGA+eH
-         7cxVuzQc58/elmIxOWWBJa1gdSDQVLI3Ik++vEej9hZELFKdZ32hOrPPdCv7zeXcQIHG
-         7+3oPcbk13I4BVKRJL+NLAj1pxZLDM+Hks0onL+Td14cmZtusUJy3LiXspWz1Qj5j9uK
-         BWnA==
-X-Gm-Message-State: AO0yUKV3mE+ilktfyrueyrxymYSQ1KO4IDV42ESXaPRfGxHaPcmmyiKZ
-        IkOQHl8NWDtoVAm6nCK8EShsVA==
-X-Google-Smtp-Source: AK7set8TwQRjsPo9v5JN/ENZh1nluMWyKJJlKIkzIlbEhiGRce7jfa72hOsMKBiovU00TszO03eK6g==
-X-Received: by 2002:a05:6000:184a:b0:2bf:d2fe:8647 with SMTP id c10-20020a056000184a00b002bfd2fe8647mr11234697wri.70.1675408170631;
-        Thu, 02 Feb 2023 23:09:30 -0800 (PST)
+        bh=OJ8Gf80CWUYHo8pgwGSarJleRRx0Faz3RtumkT/DIPU=;
+        b=qSF7fTBF90CWfIiKg9hKIl6l5Vh3wmury6IWAEWuBYeZWCG4vwNASNl65ajk02TAgb
+         LIxZ5mIfS9cEzf0qg9DkamPmG4k7619cYv+TwR79pxc+Tvo3rqQLpBh5mxi5pFXl2oMY
+         SDVSeRmTOPUQwyXknTGhZAv5PIDtG3TqjcCG6s6583k5V2irOIk11Y1yEjDYqEzBScfN
+         QcbYYZOhYB5JQIpsXUnsNzctfIKAixRzQECq5Zh3lO++GKgvMzE0/ABg+LwozZeXBVPn
+         TXL9b1q+obgpsqCnOqru5IfgGubCrsohZytaMPqNiZpd5klxD6BM8LOYXQFKtAc79D4z
+         Vh+g==
+X-Gm-Message-State: AO0yUKUD6vzZlj+gBzbODtRubKU1BvTiD4B+WG7Gzgy6lTbXnna6PGDx
+        Si9zz4x/qITPEZ1p8WfNofnpuA==
+X-Google-Smtp-Source: AK7set8kL5SMVr6eq6eIoqChBiL4VBPyvYeDcIXX4WXFY8mArGdb0FbNRvZ4ohplZEpfh0Rb1xn+HQ==
+X-Received: by 2002:adf:a202:0:b0:2bd:f5bd:5482 with SMTP id p2-20020adfa202000000b002bdf5bd5482mr7173996wra.28.1675408233673;
+        Thu, 02 Feb 2023 23:10:33 -0800 (PST)
 Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id f9-20020a5d4dc9000000b002bfb37497a8sm1245058wru.31.2023.02.02.23.09.28
+        by smtp.gmail.com with ESMTPSA id s14-20020adfa28e000000b002c3be49ef94sm1257168wra.52.2023.02.02.23.10.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 23:09:30 -0800 (PST)
-Message-ID: <870f6ec5-5378-760b-7a30-324ee2d178cf@linaro.org>
-Date:   Fri, 3 Feb 2023 08:09:27 +0100
+        Thu, 02 Feb 2023 23:10:33 -0800 (PST)
+Message-ID: <96b2dc11-c9e2-58c9-ba95-7e7ee7218d16@linaro.org>
+Date:   Fri, 3 Feb 2023 08:10:31 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH v4 6/7] riscv: dts: starfive: jh7110: Add ethernet device
- node
+Subject: Re: [RFT PATCH 05/14] arm64: dts: qcom: sc8280xp: correct TLMM
+ gpio-ranges
 Content-Language: en-US
-To:     yanhong wang <yanhong.wang@starfivetech.com>,
-        linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Brian Masney <bmasney@redhat.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>
-References: <20230118061701.30047-1-yanhong.wang@starfivetech.com>
- <20230118061701.30047-7-yanhong.wang@starfivetech.com>
- <55f020de-6058-67d2-ea68-6006186daee3@linaro.org>
- <f22614b4-80ae-8b16-b53e-e43c44722668@starfivetech.com>
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230201155105.282708-1-krzysztof.kozlowski@linaro.org>
+ <20230201155105.282708-6-krzysztof.kozlowski@linaro.org>
+ <Y9xAEoc0QXe222D0@x1> <25f5a750-b51c-7d7b-0d50-5b2f78de8512@linaro.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <f22614b4-80ae-8b16-b53e-e43c44722668@starfivetech.com>
+In-Reply-To: <25f5a750-b51c-7d7b-0d50-5b2f78de8512@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/02/2023 04:14, yanhong wang wrote:
+On 03/02/2023 00:45, Konrad Dybcio wrote:
 > 
 > 
-> On 2023/1/18 23:51, Krzysztof Kozlowski wrote:
->> On 18/01/2023 07:17, Yanhong Wang wrote:
->>> Add JH7110 ethernet device node to support gmac driver for the JH7110
->>> RISC-V SoC.
+> On 2.02.2023 23:58, Brian Masney wrote:
+>> On Wed, Feb 01, 2023 at 04:50:56PM +0100, Krzysztof Kozlowski wrote:
+>>> Correct the number of GPIOs in TLMM pin controller.
 >>>
->>> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
+>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 >>> ---
->>>  arch/riscv/boot/dts/starfive/jh7110.dtsi | 93 ++++++++++++++++++++++++
->>>  1 file changed, 93 insertions(+)
+>>>  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 2 +-
+>>>  1 file changed, 1 insertion(+), 1 deletion(-)
 >>>
->>> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
->>> index c22e8f1d2640..c6de6e3b1a25 100644
->>> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
->>> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
->>> @@ -433,5 +433,98 @@
->>>  			reg-shift = <2>;
->>>  			status = "disabled";
->>>  		};
->>> +
->>> +		stmmac_axi_setup: stmmac-axi-config {
->>
->> Why your bindings example is different?
->>
-> 
-> There are two gmacs on the StarFive VF2 board, and the two
-> gmacs use the same configuration on axi, so the 
-> stmmac_axi_setup is independent, which is different
-> from the bindings example.
-> 
-> 
->> Were the bindings tested? Ahh, no they were not... Can you send only
->> tested patches?
->>
->> Was this tested?
->>
-> Yes, the bindings have been tested on the StarFive VF2 board and work normally.
+>>> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+>>> index fa2d0d7d1367..17e8c26a9ae6 100644
+>>> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+>>> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+>>> @@ -3533,7 +3533,7 @@ tlmm: pinctrl@f100000 {
+>>>  			#gpio-cells = <2>;
+>>>  			interrupt-controller;
+>>>  			#interrupt-cells = <2>;
+>>> -			gpio-ranges = <&tlmm 0 0 230>;
+>>> +			gpio-ranges = <&tlmm 0 0 228>;
+> Won't that kill the UFS pins?
 
-Then please tell me how did you test the bindings on the board? How is
-it even possible and how the board is related to bindings? As you could
-easily see from Rob's reply they fail, so I have doubts that they were
-tested. If you still claim they were - please paste the output from
-testing command.
-
+This patchset is obsolete and replaced with v2. I alerady replied here
+that this was not good approach...
 
 Best regards,
 Krzysztof
