@@ -2,130 +2,271 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2582688FF9
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 08:01:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C79EC689008
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 08:03:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231820AbjBCHA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 02:00:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51582 "EHLO
+        id S231751AbjBCHCJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 02:02:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231486AbjBCHA4 (ORCPT
+        with ESMTP id S230343AbjBCHCH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 02:00:56 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1405F65EEA;
-        Thu,  2 Feb 2023 23:00:56 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id l4-20020a17090a850400b0023013402671so7930129pjn.5;
-        Thu, 02 Feb 2023 23:00:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RwqQ7dTzglUPvW7FiYTF4tlugby7dSi3QDvb/pRU6so=;
-        b=KU/PXxP43Wu5mush0paSvuUGEsjcE1vGXNErzChZ3H/kx0ZMJJNrQXuQ6u4QiRLsy7
-         ML2rZMtOhcZQkBncXiaUO2J9F7Ly6JumAV68HZrW3UVE7Z33ZioAamx/bOpjr7K1D9d/
-         unqRXgBsCD6ZPraqSuJuAwPj06ukSN68h7+JEgmkrn6PFGn4aU+oWXbCILmvbHrOLjor
-         mcNcUZKgckiYVxeJ4CbV1SvZGH3/o/kCu83pquVySiX3UfWe4H60LHsVjSsouxRSzBQl
-         ZCqJycr8Su856LQsAScNIJyT49+RK/wcK53gej1cFSGFxBJeOLhF0RF51fYxkcPn44M9
-         tk0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=RwqQ7dTzglUPvW7FiYTF4tlugby7dSi3QDvb/pRU6so=;
-        b=2zvL8KclBj63PaXEJad+XFvLehYBmyxe209l8WFGB762IQYwXt/vUTKuT1P2YNoZuE
-         7CZg1lijXatyUg15M9cBsFJ8/LFUV1GkZ2xudz3tyK42IGZRjbOXQ/DVUZi95T5IGwwW
-         cDxe4VL3d0VhUkaSwoYHwPUSnzMVzeWZDY/Qg1dg4OYr/ghZHUT6vsimpWBkpOjNqLct
-         7lPTvZ2JPXVpUssIm32DkRJyvrtmrt7QIkwwLYzO23IZmIU+9DpNkPrttAOld2tBn8bo
-         AC3obBEAjT/ogyBZM9hQBB5541y9NFunuiQSYL1MJiit1a24ZdPKEFauRZ3sBhP9lMvn
-         NTfQ==
-X-Gm-Message-State: AO0yUKWIcd0jJLz6+X1UQJBehliYDKQXnTxk+wOoZdZqAENSb4/NUC8s
-        5+cwMeTlRuADLNDOq6iDJGCeUk34reBoJQ==
-X-Google-Smtp-Source: AK7set/4r1Yd3ym9LGZwmJiAV/I24VPctNUSU10TEez+Qk+piovBGWFFYF1N/uuY/eX5s6HoA/1Q+g==
-X-Received: by 2002:a17:902:d1cb:b0:196:125a:e4b8 with SMTP id g11-20020a170902d1cb00b00196125ae4b8mr6366704plb.12.1675407655585;
-        Thu, 02 Feb 2023 23:00:55 -0800 (PST)
-Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:18:efec::75b])
-        by smtp.gmail.com with ESMTPSA id jh3-20020a170903328300b001966297bbbfsm807661plb.197.2023.02.02.23.00.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 23:00:55 -0800 (PST)
-Message-ID: <ce9b4a79-b877-211d-aee8-bbc02e6805b5@gmail.com>
-Date:   Fri, 3 Feb 2023 15:00:44 +0800
+        Fri, 3 Feb 2023 02:02:07 -0500
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529E28E69F;
+        Thu,  2 Feb 2023 23:02:06 -0800 (PST)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1pNq5C-0000nM-0x;
+        Fri, 03 Feb 2023 08:02:02 +0100
+Date:   Fri, 3 Feb 2023 07:00:21 +0000
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>
+Cc:     Jianhui Zhao <zhaojh329@gmail.com>,
+        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
+Subject: [PATCH 1/9] net: ethernet: mtk_eth_soc: add support for MT7981 SoC
+Message-ID: <301fa3e888d686283090d58a060579d8c2a5bebb.1675407169.git.daniel@makrotopia.org>
+References: <cover.1675407169.git.daniel@makrotopia.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [RFC PATCH V3 10/16] x86/hyperv: Add smp support for sev-snp
- guest
-To:     Tom Lendacky <thomas.lendacky@amd.com>, luto@kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        seanjc@google.com, pbonzini@redhat.com, jgross@suse.com,
-        tiala@microsoft.com, kirill@shutemov.name,
-        jiangshan.ljs@antgroup.com, peterz@infradead.org,
-        ashish.kalra@amd.com, srutherford@google.com,
-        akpm@linux-foundation.org, anshuman.khandual@arm.com,
-        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
-        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
-        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
-        michael.roth@amd.com, venu.busireddy@oracle.com,
-        sterritt@google.com, tony.luck@intel.com, samitolvanen@google.com,
-        fenghua.yu@intel.com
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
-References: <20230122024607.788454-1-ltykernel@gmail.com>
- <20230122024607.788454-11-ltykernel@gmail.com>
- <62ffd8b2-3d88-499e-ba13-1da26f664c6f@amd.com>
-From:   Tianyu Lan <ltykernel@gmail.com>
-In-Reply-To: <62ffd8b2-3d88-499e-ba13-1da26f664c6f@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1675407169.git.daniel@makrotopia.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/23/2023 11:30 PM, Tom Lendacky wrote:
-> On 1/21/23 20:46, Tianyu Lan wrote:
->> From: Tianyu Lan <tiala@microsoft.com>
->>
->> The wakeup_secondary_cpu callback was populated with wakeup_
->> cpu_via_vmgexit() which doesn't work for Hyper-V. Override it
-> 
-> An explanation as to why is doesn't work would be nice here.
+The MediaTek MT7981 SoC comes two 1G/2.5G SGMII, just like MT7986.
 
-Hi Thomas：
-	Thanks for your review. Good idea. Will update.
+In addition MT7981 comes with a built-in 1000Base-T PHY which can be
+used with GMAC1.
 
->> diff --git a/arch/x86/include/asm/svm.h b/arch/x86/include/asm/svm.h
->> index cb1ee53ad3b1..f8b321a11ee4 100644
->> --- a/arch/x86/include/asm/svm.h
->> +++ b/arch/x86/include/asm/svm.h
->> @@ -336,6 +336,53 @@ struct vmcb_save_area {
-> 
-> Please don't update the vmcb_save_area, you should be using/updating the 
-> sev_es_save_area structure for SNP.
+As many MT7981 boards make use of swapping SGMII phase and neutral, add
+new device-tree attribute 'mediatek,pn_swap' to support them.
 
-OK. Will update in the next version.
+Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+---
+ drivers/net/ethernet/mediatek/mtk_eth_path.c | 14 +++++++--
+ drivers/net/ethernet/mediatek/mtk_eth_soc.c  | 21 +++++++++++++
+ drivers/net/ethernet/mediatek/mtk_eth_soc.h  | 31 ++++++++++++++++++++
+ drivers/net/ethernet/mediatek/mtk_sgmii.c    | 10 +++++++
+ 4 files changed, 73 insertions(+), 3 deletions(-)
 
->>             u64 sev_feature_restrict_injection    : 1;
->> +            u64 sev_feature_alternate_injection    : 1;
->> +            u64 sev_feature_full_debug        : 1;
->> +            u64 sev_feature_reserved1        : 1;
->> +            u64 sev_feature_snpbtb_isolation    : 1;
->> +            u64 sev_feature_resrved2        : 56;
-> 
-> For the bits definition, use:
-> 
->              u64 sev_feature_snp            : 1,
->                  sev_feature_vtom            : 1,
->                  sev_feature_reflectvc        : 1,
->                  ...
-> 
+diff --git a/drivers/net/ethernet/mediatek/mtk_eth_path.c b/drivers/net/ethernet/mediatek/mtk_eth_path.c
+index 72648535a14d..317e447f4991 100644
+--- a/drivers/net/ethernet/mediatek/mtk_eth_path.c
++++ b/drivers/net/ethernet/mediatek/mtk_eth_path.c
+@@ -96,12 +96,20 @@ static int set_mux_gmac2_gmac0_to_gephy(struct mtk_eth *eth, int path)
+ 
+ static int set_mux_u3_gmac2_to_qphy(struct mtk_eth *eth, int path)
+ {
+-	unsigned int val = 0;
++	unsigned int val = 0, mask = 0, reg = 0;
+ 	bool updated = true;
+ 
+ 	switch (path) {
+ 	case MTK_ETH_PATH_GMAC2_SGMII:
+-		val = CO_QPHY_SEL;
++		if (MTK_HAS_CAPS(eth->soc->caps, MTK_U3_COPHY_V2)) {
++			reg = USB_PHY_SWITCH_REG;
++			val = SGMII_QPHY_SEL;
++			mask = QPHY_SEL_MASK;
++		} else {
++			reg = INFRA_MISC2;
++			val = CO_QPHY_SEL;
++			mask = val;
++		}
+ 		break;
+ 	default:
+ 		updated = false;
+@@ -109,7 +117,7 @@ static int set_mux_u3_gmac2_to_qphy(struct mtk_eth *eth, int path)
+ 	}
+ 
+ 	if (updated)
+-		regmap_update_bits(eth->infra, INFRA_MISC2, CO_QPHY_SEL, val);
++		regmap_update_bits(eth->infra, reg, mask, val);
+ 
+ 	dev_dbg(eth->dev, "path %s in %s updated = %d\n",
+ 		mtk_eth_path_name(path), __func__, updated);
+diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+index f1cb1efc94cf..a44ffff48c7b 100644
+--- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
++++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+@@ -4852,6 +4852,26 @@ static const struct mtk_soc_data mt7629_data = {
+ 	},
+ };
+ 
++static const struct mtk_soc_data mt7981_data = {
++	.reg_map = &mt7986_reg_map,
++	.ana_rgc3 = 0x128,
++	.caps = MT7981_CAPS,
++	.hw_features = MTK_HW_FEATURES,
++	.required_clks = MT7981_CLKS_BITMAP,
++	.required_pctl = false,
++	.offload_version = 2,
++	.hash_offset = 4,
++	.foe_entry_size = sizeof(struct mtk_foe_entry),
++	.txrx = {
++		.txd_size = sizeof(struct mtk_tx_dma_v2),
++		.rxd_size = sizeof(struct mtk_rx_dma_v2),
++		.rx_irq_done_mask = MTK_RX_DONE_INT_V2,
++		.rx_dma_l4_valid = RX_DMA_L4_VALID_V2,
++		.dma_max_len = MTK_TX_DMA_BUF_LEN_V2,
++		.dma_len_offset = 8,
++	},
++};
++
+ static const struct mtk_soc_data mt7986_data = {
+ 	.reg_map = &mt7986_reg_map,
+ 	.ana_rgc3 = 0x128,
+@@ -4894,6 +4914,7 @@ const struct of_device_id of_mtk_match[] = {
+ 	{ .compatible = "mediatek,mt7622-eth", .data = &mt7622_data},
+ 	{ .compatible = "mediatek,mt7623-eth", .data = &mt7623_data},
+ 	{ .compatible = "mediatek,mt7629-eth", .data = &mt7629_data},
++	{ .compatible = "mediatek,mt7981-eth", .data = &mt7981_data},
+ 	{ .compatible = "mediatek,mt7986-eth", .data = &mt7986_data},
+ 	{ .compatible = "ralink,rt5350-eth", .data = &rt5350_data},
+ 	{},
+diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.h b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
+index afc9d52e79bf..7230dcb29315 100644
+--- a/drivers/net/ethernet/mediatek/mtk_eth_soc.h
++++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
+@@ -551,11 +551,22 @@
+ #define SGMSYS_QPHY_PWR_STATE_CTRL 0xe8
+ #define	SGMII_PHYA_PWD		BIT(4)
+ 
++/* Register to QPHY wrapper control */
++#define SGMSYS_QPHY_WRAP_CTRL	0xec
++#define SGMII_PN_SWAP_MASK	GENMASK(1, 0)
++#define SGMII_PN_SWAP_TX_RX	(BIT(0) | BIT(1))
++#define MTK_SGMII_FLAG_PN_SWAP	BIT(0)
++
+ /* Infrasys subsystem config registers */
+ #define INFRA_MISC2            0x70c
+ #define CO_QPHY_SEL            BIT(0)
+ #define GEPHY_MAC_SEL          BIT(1)
+ 
++/* Top misc registers */
++#define USB_PHY_SWITCH_REG	0x218
++#define QPHY_SEL_MASK		GENMASK(1, 0)
++#define SGMII_QPHY_SEL		0x2
++
+ /* MT7628/88 specific stuff */
+ #define MT7628_PDMA_OFFSET	0x0800
+ #define MT7628_SDM_OFFSET	0x0c00
+@@ -736,6 +747,17 @@ enum mtk_clks_map {
+ 				 BIT(MTK_CLK_SGMII2_CDR_FB) | \
+ 				 BIT(MTK_CLK_SGMII_CK) | \
+ 				 BIT(MTK_CLK_ETH2PLL) | BIT(MTK_CLK_SGMIITOP))
++#define MT7981_CLKS_BITMAP	(BIT(MTK_CLK_FE) | BIT(MTK_CLK_GP2) | BIT(MTK_CLK_GP1) | \
++				 BIT(MTK_CLK_WOCPU0) | \
++				 BIT(MTK_CLK_SGMII_TX_250M) | \
++				 BIT(MTK_CLK_SGMII_RX_250M) | \
++				 BIT(MTK_CLK_SGMII_CDR_REF) | \
++				 BIT(MTK_CLK_SGMII_CDR_FB) | \
++				 BIT(MTK_CLK_SGMII2_TX_250M) | \
++				 BIT(MTK_CLK_SGMII2_RX_250M) | \
++				 BIT(MTK_CLK_SGMII2_CDR_REF) | \
++				 BIT(MTK_CLK_SGMII2_CDR_FB) | \
++				 BIT(MTK_CLK_SGMII_CK))
+ #define MT7986_CLKS_BITMAP	(BIT(MTK_CLK_FE) | BIT(MTK_CLK_GP2) | BIT(MTK_CLK_GP1) | \
+ 				 BIT(MTK_CLK_WOCPU1) | BIT(MTK_CLK_WOCPU0) | \
+ 				 BIT(MTK_CLK_SGMII_TX_250M) | \
+@@ -849,6 +871,7 @@ enum mkt_eth_capabilities {
+ 	MTK_NETSYS_V2_BIT,
+ 	MTK_SOC_MT7628_BIT,
+ 	MTK_RSTCTRL_PPE1_BIT,
++	MTK_U3_COPHY_V2_BIT,
+ 
+ 	/* MUX BITS*/
+ 	MTK_ETH_MUX_GDM1_TO_GMAC1_ESW_BIT,
+@@ -883,6 +906,7 @@ enum mkt_eth_capabilities {
+ #define MTK_NETSYS_V2		BIT(MTK_NETSYS_V2_BIT)
+ #define MTK_SOC_MT7628		BIT(MTK_SOC_MT7628_BIT)
+ #define MTK_RSTCTRL_PPE1	BIT(MTK_RSTCTRL_PPE1_BIT)
++#define MTK_U3_COPHY_V2		BIT(MTK_U3_COPHY_V2_BIT)
+ 
+ #define MTK_ETH_MUX_GDM1_TO_GMAC1_ESW		\
+ 	BIT(MTK_ETH_MUX_GDM1_TO_GMAC1_ESW_BIT)
+@@ -955,6 +979,11 @@ enum mkt_eth_capabilities {
+ 		      MTK_MUX_U3_GMAC2_TO_QPHY | \
+ 		      MTK_MUX_GMAC12_TO_GEPHY_SGMII | MTK_QDMA)
+ 
++#define MT7981_CAPS  (MTK_GMAC1_SGMII | MTK_GMAC2_SGMII | MTK_GMAC2_GEPHY | \
++		      MTK_MUX_GMAC12_TO_GEPHY_SGMII | MTK_QDMA | \
++		      MTK_MUX_U3_GMAC2_TO_QPHY | MTK_U3_COPHY_V2 | \
++		      MTK_NETSYS_V2 | MTK_RSTCTRL_PPE1)
++
+ #define MT7986_CAPS  (MTK_GMAC1_SGMII | MTK_GMAC2_SGMII | \
+ 		      MTK_MUX_GMAC12_TO_GEPHY_SGMII | MTK_QDMA | \
+ 		      MTK_NETSYS_V2 | MTK_RSTCTRL_PPE1)
+@@ -1068,12 +1097,14 @@ struct mtk_soc_data {
+  * @ana_rgc3:          The offset refers to register ANA_RGC3 related to regmap
+  * @interface:         Currently configured interface mode
+  * @pcs:               Phylink PCS structure
++ * @flags:             Flags indicating hardware properties
+  */
+ struct mtk_pcs {
+ 	struct regmap	*regmap;
+ 	u32             ana_rgc3;
+ 	phy_interface_t	interface;
+ 	struct phylink_pcs pcs;
++	u32		flags;
+ };
+ 
+ /* struct mtk_sgmii -  This is the structure holding sgmii regmap and its
+diff --git a/drivers/net/ethernet/mediatek/mtk_sgmii.c b/drivers/net/ethernet/mediatek/mtk_sgmii.c
+index bb00de1003ac..0fe403db23c9 100644
+--- a/drivers/net/ethernet/mediatek/mtk_sgmii.c
++++ b/drivers/net/ethernet/mediatek/mtk_sgmii.c
+@@ -88,6 +88,11 @@ static int mtk_pcs_config(struct phylink_pcs *pcs, unsigned int mode,
+ 		regmap_update_bits(mpcs->regmap, SGMSYS_QPHY_PWR_STATE_CTRL,
+ 				   SGMII_PHYA_PWD, SGMII_PHYA_PWD);
+ 
++		if (mpcs->flags & MTK_SGMII_FLAG_PN_SWAP)
++			regmap_update_bits(mpcs->regmap, SGMSYS_QPHY_WRAP_CTRL,
++					   SGMII_PN_SWAP_MASK,
++					   SGMII_PN_SWAP_TX_RX);
++
+ 		if (interface == PHY_INTERFACE_MODE_2500BASEX)
+ 			rgc3 = RG_PHY_SPEED_3_125G;
+ 		else
+@@ -182,6 +187,11 @@ int mtk_sgmii_init(struct mtk_sgmii *ss, struct device_node *r, u32 ana_rgc3)
+ 
+ 		ss->pcs[i].ana_rgc3 = ana_rgc3;
+ 		ss->pcs[i].regmap = syscon_node_to_regmap(np);
++
++		ss->pcs[i].flags = 0;
++		if (of_property_read_bool(np, "mediatek,pn_swap"))
++			ss->pcs[i].flags |= MTK_SGMII_FLAG_PN_SWAP;
++
+ 		of_node_put(np);
+ 		if (IS_ERR(ss->pcs[i].regmap))
+ 			return PTR_ERR(ss->pcs[i].regmap);
+-- 
+2.39.1
 
-Good suggestion. Thanks.
