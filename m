@@ -2,56 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B48868914E
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 08:55:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58D19689158
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 08:56:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231233AbjBCHy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 02:54:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37778 "EHLO
+        id S232552AbjBCH4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 02:56:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232406AbjBCHyx (ORCPT
+        with ESMTP id S232476AbjBCH4Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 02:54:53 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D9CC921B7
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 23:54:49 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id f10-20020a056e0212aa00b00310de46598eso2867896ilr.13
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 23:54:49 -0800 (PST)
+        Fri, 3 Feb 2023 02:56:16 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C70E945D5
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 23:56:06 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id u10so149121wmj.3
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 23:56:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ivm6r3tpNQowG//92mCAHfte+CaKrUHgYJvXLe7B7mU=;
+        b=lnnsXuYH5rARYqnO+up2OKbp0nSa8onZ8YllWznUSatVPuvHud4tRVRkzJSK52dQDV
+         sOV0y9bF4YJzdIE0bYRbzrGC5HaXgiD+DHhvjvJBGpA0oc4ziBS2u93k2aLTg/T1pA67
+         QvzbIzWDzOEiHI877bi93vobVQLSPl2uH0w2nMsnPWPzQDieWG4b0pzw67/vHbRPJgkd
+         1YY+Uh7M3AhvM8rOaM8GMykVaI/78XTpj61xmthqsBMnCkw9MuCBBOjCYn42rix5kcV/
+         z2v/Ctv0i/0gjuI4jCjM6CVeyfzDxS9VVWQiXmGcr2+4jMxnNCqWIrtMHvRFtYO5LpFb
+         okkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+8aDjRlQxT1MIkGir9GvF3ZnKerBquo8VWrStaKk8LM=;
-        b=s7YH9HDfGBrARxWzRI/zjc8Iie6h+J5pC+9pBTKUEXjqCs6pEdqamBbQLTPtrui8Ri
-         KR5gQTrja/qiJBk9Abq2ugmdAxXEVNEYPg4ZvW7DxEunHqUg38eyohf5uwmV9CLVeORM
-         R/2UEigwFB04oqGJnvWfBkOJ03kvxKSCvFsCpakqSoR6XeIBOYvfnBOhFOwEJpaDtwrG
-         WwnXc4Hx8IkXbQBMd3FnfugVVuW4sdcL4haK4qle9vRW8KGDw7+MuqE43AucXx2SNUTF
-         E35XmQ6sCrcx2vC1izwgw9EY9uVV2Xyjr1Wg19ANtSVXIN5ILC+qnE0JI9uhPhiRNKfc
-         gPSQ==
-X-Gm-Message-State: AO0yUKXflz0J4/5H8u6GLnpCoCaj3qAO392QOIPEClKzlXdNtNdySgTg
-        17+IOnk46wpEeKn5QVnDDelV18daoAMDky61p1otswOr5Rnm
-X-Google-Smtp-Source: AK7set8zibySAFa0C58vwdioi3oc9GBTkm7K7tqdDy4bQbKWriDF/5cSAs32f/8aD+Bu2w/WRnXbD9f+ZxLVJdN2PwW7zGMw5gXH
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ivm6r3tpNQowG//92mCAHfte+CaKrUHgYJvXLe7B7mU=;
+        b=3j4TNAQH1yZz1Ld8k2g5+u4hV2Hcli0N8I1elQYpsYhnx61PP5URxheYNEWwiomtDW
+         oosfoDvD5RnzjYbbeadjN1EKqpNO/S3agKSvHnsn8Fd/qqnGE12tjfCPJUVFEdEO6c98
+         y/7BudvSQrGTXHL+N1/iiSobdnJLXCCWn23w1bnGgXuLlS3IooLsCcQcfdcEcd/wx/yK
+         tHlptzPa7K1ArjidjzCyqFPcvXuAkWo7+4nvtpp5Q+b9XGDg3cLVqh8C1aUaUj6c5JEh
+         6MNS3ERBkDMCwj4MvWBH40sNerKiGvXm5LDvBmiQmubDDHzv1+JaFETk9NJ9L5prEPC7
+         JGXg==
+X-Gm-Message-State: AO0yUKWQsqKJ797juZnCp6IU5krg3pOxg9hcpNQLyp7YK1bq7k3UDFGk
+        oQckQBneimwgqCoPirsLXATomg==
+X-Google-Smtp-Source: AK7set9G3IWsiBZkWUgmPHC8yBWmJSGtb/Ke6q1FfPYVUm9SmHD/t3099ZkK1goE0VZd+x1QrOslrw==
+X-Received: by 2002:a05:600c:1d04:b0:3cf:85f7:bbc4 with SMTP id l4-20020a05600c1d0400b003cf85f7bbc4mr8448870wms.2.1675410964694;
+        Thu, 02 Feb 2023 23:56:04 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id k32-20020a05600c1ca000b003ddf2865aeasm7638369wms.41.2023.02.02.23.56.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Feb 2023 23:56:04 -0800 (PST)
+Message-ID: <f937ed98-a65e-e75e-24b4-0219e0403ac0@linaro.org>
+Date:   Fri, 3 Feb 2023 08:56:02 +0100
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:2788:b0:3b2:ea58:1f5a with SMTP id
- dl8-20020a056638278800b003b2ea581f5amr2203393jab.114.1675410888600; Thu, 02
- Feb 2023 23:54:48 -0800 (PST)
-Date:   Thu, 02 Feb 2023 23:54:48 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000de34bd05f3c6fe19@google.com>
-Subject: [syzbot] [ntfs3?] [btrfs?] BUG: unable to handle kernel paging
- request in clear_user_rep_good
-From:   syzbot <syzbot+401145a9a237779feb26@syzkaller.appspotmail.com>
-To:     almaz.alexandrovich@paragon-software.com, clm@fb.com,
-        djwong@kernel.org, dsterba@suse.com, hch@infradead.org,
-        josef@toxicpanda.com, linux-btrfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, ntfs3@lists.linux.dev,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v4 6/7] riscv: dts: starfive: jh7110: Add ethernet device
+ node
+Content-Language: en-US
+To:     yanhong wang <yanhong.wang@starfivetech.com>,
+        linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>
+References: <20230118061701.30047-1-yanhong.wang@starfivetech.com>
+ <20230118061701.30047-7-yanhong.wang@starfivetech.com>
+ <55f020de-6058-67d2-ea68-6006186daee3@linaro.org>
+ <f22614b4-80ae-8b16-b53e-e43c44722668@starfivetech.com>
+ <870f6ec5-5378-760b-7a30-324ee2d178cf@linaro.org>
+ <048b3ab0-7c13-b7f7-403c-f4e1d5574a10@starfivetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <048b3ab0-7c13-b7f7-403c-f4e1d5574a10@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,124 +92,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 03/02/2023 08:40, yanhong wang wrote:
+>>
+> 
+> Sorry, I didn't check all the bindings, only the modified ones, the command 
+> used is as follows: 
+> "make dt_binding_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/net/snps,dwmac.yaml"
+> "make dt_binding_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml"
 
-syzbot found the following issue on:
+That's good actually, except that you change binding used by others, so
+you affect other files.
 
-HEAD commit:    ab072681eabe Merge tag 'irq_urgent_for_v6.2_rc6' of git://..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=15933749480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=23330449ad10b66f
-dashboard link: https://syzkaller.appspot.com/bug?extid=401145a9a237779feb26
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13b3ba9e480000
+However in this DTS you will have now warnings (dtbs_check with
+simple-bus or dtbs W=1) because of using non-MMIO node in your soc-bus.
+The stmmac-axi-config probably should be moved outside of soc node. Or
+you keep two of them - one in each ethernet node.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/a43bbc272cf3/disk-ab072681.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/fec05f5bcfa7/vmlinux-ab072681.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/00b9b0dd9801/bzImage-ab072681.xz
-mounted in repro #1: https://storage.googleapis.com/syzbot-assets/f7ef8856a9ce/mount_0.gz
-mounted in repro #2: https://storage.googleapis.com/syzbot-assets/79f8035a08dd/mount_4.gz
+Best regards,
+Krzysztof
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+401145a9a237779feb26@syzkaller.appspotmail.com
-
-BUG: unable to handle page fault for address: 0000000020081000
-#PF: supervisor write access in kernel mode
-#PF: error_code(0x0002) - not-present page
-PGD 1c9cc067 P4D 1c9cc067 PUD 280e9067 PMD 2a76b067 PTE 0
-Oops: 0002 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 5441 Comm: syz-executor.1 Not tainted 6.2.0-rc5-syzkaller-00221-gab072681eabe #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
-RIP: 0010:clear_user_rep_good+0x1c/0x30 arch/x86/lib/clear_page_64.S:147
-Code: 66 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 00 f3 0f 1e fa 48 83 f9 40 72 a6 89 ca 48 c1 e9 03 74 03 f3 48 ab 83 e2 07 74 04 89 d1 <f3> aa 31 c0 c3 48 c1 e1 03 83 e2 07 48 01 d1 eb f1 0f 1f 00 f3 0f
-RSP: 0018:ffffc900056f76d8 EFLAGS: 00050202
-RAX: 0000000000000000 RBX: 0000000000081002 RCX: 0000000000000002
-RDX: 0000000000000002 RSI: ffffffff84098c49 RDI: 0000000020081000
-RBP: 0000000000081002 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000094001 R12: ffffc900056f7d70
-R13: 0000000020000000 R14: 000000007ffff000 R15: 0000000000000000
-FS:  00007fc1837f1700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020081000 CR3: 000000002b26e000 CR4: 0000000000350ef0
-Call Trace:
- <TASK>
- __clear_user arch/x86/include/asm/uaccess_64.h:103 [inline]
- clear_user arch/x86/include/asm/uaccess_64.h:124 [inline]
- iov_iter_zero+0x709/0x1290 lib/iov_iter.c:800
- iomap_dio_hole_iter fs/iomap/direct-io.c:389 [inline]
- iomap_dio_iter fs/iomap/direct-io.c:440 [inline]
- __iomap_dio_rw+0xe3d/0x1cd0 fs/iomap/direct-io.c:601
- iomap_dio_rw+0x40/0xa0 fs/iomap/direct-io.c:689
- ext4_dio_read_iter fs/ext4/file.c:94 [inline]
- ext4_file_read_iter+0x4be/0x690 fs/ext4/file.c:145
- call_read_iter include/linux/fs.h:2183 [inline]
- do_iter_readv_writev+0x2e0/0x3b0 fs/read_write.c:733
- do_iter_read+0x2f2/0x750 fs/read_write.c:796
- vfs_readv+0xe5/0x150 fs/read_write.c:916
- do_preadv+0x1b6/0x270 fs/read_write.c:1008
- __do_sys_preadv2 fs/read_write.c:1070 [inline]
- __se_sys_preadv2 fs/read_write.c:1061 [inline]
- __x64_sys_preadv2+0xef/0x150 fs/read_write.c:1061
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fc182a8c0c9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fc1837f1168 EFLAGS: 00000246 ORIG_RAX: 0000000000000147
-RAX: ffffffffffffffda RBX: 00007fc182babf80 RCX: 00007fc182a8c0c9
-RDX: 0000000000000001 RSI: 0000000020000100 RDI: 0000000000000003
-RBP: 00007fc182ae7ae9 R08: 0000000000000000 R09: 0000000000000000
-R10: 000000000007fffe R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffefd64d1ef R14: 00007fc1837f1300 R15: 0000000000022000
- </TASK>
-Modules linked in:
-CR2: 0000000020081000
----[ end trace 0000000000000000 ]---
-RIP: 0010:clear_user_rep_good+0x1c/0x30 arch/x86/lib/clear_page_64.S:147
-Code: 66 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 00 f3 0f 1e fa 48 83 f9 40 72 a6 89 ca 48 c1 e9 03 74 03 f3 48 ab 83 e2 07 74 04 89 d1 <f3> aa 31 c0 c3 48 c1 e1 03 83 e2 07 48 01 d1 eb f1 0f 1f 00 f3 0f
-RSP: 0018:ffffc900056f76d8 EFLAGS: 00050202
-RAX: 0000000000000000 RBX: 0000000000081002 RCX: 0000000000000002
-RDX: 0000000000000002 RSI: ffffffff84098c49 RDI: 0000000020081000
-RBP: 0000000000081002 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000094001 R12: ffffc900056f7d70
-R13: 0000000020000000 R14: 000000007ffff000 R15: 0000000000000000
-FS:  00007fc1837f1700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f8294a2a000 CR3: 000000002b26e000 CR4: 0000000000350ef0
-----------------
-Code disassembly (best guess):
-   0:	66 66 2e 0f 1f 84 00 	data16 nopw %cs:0x0(%rax,%rax,1)
-   7:	00 00 00 00
-   b:	0f 1f 00             	nopl   (%rax)
-   e:	f3 0f 1e fa          	endbr64
-  12:	48 83 f9 40          	cmp    $0x40,%rcx
-  16:	72 a6                	jb     0xffffffbe
-  18:	89 ca                	mov    %ecx,%edx
-  1a:	48 c1 e9 03          	shr    $0x3,%rcx
-  1e:	74 03                	je     0x23
-  20:	f3 48 ab             	rep stos %rax,%es:(%rdi)
-  23:	83 e2 07             	and    $0x7,%edx
-  26:	74 04                	je     0x2c
-  28:	89 d1                	mov    %edx,%ecx
-* 2a:	f3 aa                	rep stos %al,%es:(%rdi) <-- trapping instruction
-  2c:	31 c0                	xor    %eax,%eax
-  2e:	c3                   	retq
-  2f:	48 c1 e1 03          	shl    $0x3,%rcx
-  33:	83 e2 07             	and    $0x7,%edx
-  36:	48 01 d1             	add    %rdx,%rcx
-  39:	eb f1                	jmp    0x2c
-  3b:	0f 1f 00             	nopl   (%rax)
-  3e:	f3                   	repz
-  3f:	0f                   	.byte 0xf
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
