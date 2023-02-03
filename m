@@ -2,181 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5C80688C14
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 01:46:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1914B688C1E
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 01:50:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232507AbjBCAqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 19:46:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40502 "EHLO
+        id S232714AbjBCAuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 19:50:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230021AbjBCAqH (ORCPT
+        with ESMTP id S230021AbjBCAuC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 19:46:07 -0500
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D7F266010
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 16:46:02 -0800 (PST)
-Received: by mail-qt1-x82c.google.com with SMTP id cr22so3988698qtb.10
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 16:46:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=A3ZdY21LXjE3PyX5fpTlE0/f6/GAdOiGr62nnKIP3aI=;
-        b=XqmKvE/220WSzs0GhJ44A5LIXEmpXnCvVQd9D5uzyUIT3830BQHAqJwInbX68g1gOX
-         48ZWklm9NO4kuHW00FcLFdeIknSgSmyrbbjZgFCCS2Tw2y8QXc0iRIm7jcY7UHd/ABe7
-         SQoKqAlY8t5PtyHQkpA6HfrNiOJoTDO6RtgWc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=A3ZdY21LXjE3PyX5fpTlE0/f6/GAdOiGr62nnKIP3aI=;
-        b=NmSg3lMRPirkQuxiYkCarI/KHUK7v+eh4DcsgdKWabfeV+AhpOsLu0foYuGvOCOiDB
-         2tIKw61bcWF4267Uy37l0Hxy/4/H7EwVnd0CyUp9Xwqys/fsUa6tiG9+Uo2m5cVqGPyu
-         FemRblgOPsSw/LtX5oy/FwA6WIJJ6Fu0cW2zrDk5NwVuPlCzV7etvx/r/h7EzaIVO7yl
-         2fVvIaR50CjB7AoiJlA5F8M8wHpkHvZRKieWARV18UaHT2y12EgbIssfUIopstnNDbVd
-         BzYAOC1+ViIpTPHtULYQqDaPQTDW1ClXSpQmnUL6f2Kpn+mDeIo9v6z6vWXFpvBSq6vI
-         szbg==
-X-Gm-Message-State: AO0yUKUQCoSe3K7mnXBqGRy1AvlMmTH2BqysBVxvmzAoZ/WUEOZXjgWb
-        jrhaHk7ZUm0rHEoH2vhGomp0//ReopRdg9CPWPg=
-X-Google-Smtp-Source: AK7set8fRF66MmIyexsGEw7YjcZoVIqmbas53PZr+C7R1wTIUXcUkYioLaUXv88/cGaO36Tew6/t9Q==
-X-Received: by 2002:a05:622a:1741:b0:3b6:92ce:b4f7 with SMTP id l1-20020a05622a174100b003b692ceb4f7mr12885427qtk.37.1675385161015;
-        Thu, 02 Feb 2023 16:46:01 -0800 (PST)
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
-        by smtp.gmail.com with ESMTPSA id bi15-20020a05620a318f00b006e99290e83fsm754155qkb.107.2023.02.02.16.45.58
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 16:45:59 -0800 (PST)
-Received: by mail-yb1-f182.google.com with SMTP id d132so4521448ybb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 16:45:58 -0800 (PST)
-X-Received: by 2002:a25:9741:0:b0:804:3d1e:68af with SMTP id
- h1-20020a259741000000b008043d1e68afmr1156308ybo.258.1675385158481; Thu, 02
- Feb 2023 16:45:58 -0800 (PST)
+        Thu, 2 Feb 2023 19:50:02 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5456124C9A
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 16:50:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675385401; x=1706921401;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Gk3ml2Z5jytvLNegKp01VCVeRY2RTIDK6G9+rwIJID0=;
+  b=htTDZbKh5qf2kUZEzUq7TPAAmk0WzMFYXrvXD7PaWLZmS5ebmoUdQDRH
+   VXaWfP41q4hYQqOVg3cseVd2mVkZvupFqvtltKTu0IAzNUpDOBngot3zz
+   Wf0wiWp4u4UVnZ91G86IPAPaOfZOO93rbmrz+ayzJm0dYzghkq3yt565r
+   yh/DXwYgRXNm3W3NpwR9aQ5MucIsPRAGsvOUWixlbFblQTazpx6Xrrv5V
+   60tOol/vf3U8T067UTtNZd3riOMaCDZ9XwBuX79XY/Bk2zF+RX7pTJNhL
+   1T02NbOui4f5av5cr2ogFkIL650LGJtLKzd/hNQaZmYuDlm5KUaLgX32z
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="328634123"
+X-IronPort-AV: E=Sophos;i="5.97,269,1669104000"; 
+   d="scan'208";a="328634123"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2023 16:50:01 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="667484795"
+X-IronPort-AV: E=Sophos;i="5.97,268,1669104000"; 
+   d="scan'208";a="667484795"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 02 Feb 2023 16:49:59 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pNkH9-00071o-0b;
+        Fri, 03 Feb 2023 00:49:59 +0000
+Date:   Fri, 03 Feb 2023 08:49:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:paronl.2023.02.01a] BUILD REGRESSION
+ 05792727280c094a8dcd1aa4950a61a2d214ddb8
+Message-ID: <63dc5a2d.wIh/nekchR0RO5a8%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20230120114313.2087015-1-john@metanate.com> <CAD=FV=UPD6c+NY8Ub37N7LmrRFpcr6gKOh0Os14DaKrf3bKo2A@mail.gmail.com>
- <Y8uo7vIcQ6caH9pu@ravnborg.org> <Y8wnswk++tvr9xMe@donbot> <Y81Px74OUYt21nj4@pendragon.ideasonboard.com>
- <Y856rWmtA4tQCcZz@donbot> <Y86wO8nvFbC81b1S@pendragon.ideasonboard.com>
-In-Reply-To: <Y86wO8nvFbC81b1S@pendragon.ideasonboard.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 2 Feb 2023 16:45:45 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=UwMS86RKR9dqzOnjEhKxh=d=EJPfjcCOvWZMjVVQsmKw@mail.gmail.com>
-Message-ID: <CAD=FV=UwMS86RKR9dqzOnjEhKxh=d=EJPfjcCOvWZMjVVQsmKw@mail.gmail.com>
-Subject: Re: [PATCH] drm/bridge: panel: Set orientation on panel_bridge connector
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     John Keeping <john@metanate.com>, Sam Ravnborg <sam@ravnborg.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Robert Foss <rfoss@kernel.org>,
-        Jonas Karlman <jonas@kwiboo.se>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Stephen Boyd <swboyd@chromium.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git paronl.2023.02.01a
+branch HEAD: 05792727280c094a8dcd1aa4950a61a2d214ddb8  x86/smpboot: Serialize topology updates for secondary bringup
 
-On Mon, Jan 23, 2023 at 8:05 AM Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
->
-> Hi John,
->
-> On Mon, Jan 23, 2023 at 12:16:45PM +0000, John Keeping wrote:
-> > On Sun, Jan 22, 2023 at 05:01:27PM +0200, Laurent Pinchart wrote:
-> > > On Sat, Jan 21, 2023 at 05:58:11PM +0000, John Keeping wrote:
-> > > > On Sat, Jan 21, 2023 at 09:57:18AM +0100, Sam Ravnborg wrote:
-> > > > > On Fri, Jan 20, 2023 at 01:44:38PM -0800, Doug Anderson wrote:
-> > > > > > On Fri, Jan 20, 2023 at 3:43 AM John Keeping wrote:
-> > > > > > >
-> > > > > > > Commit 15b9ca1641f0 ("drm: Config orientation property if panel provides
-> > > > > > > it") added a helper to set the panel panel orientation early but only
-> > > > > > > connected this for drm_bridge_connector, which constructs a panel bridge
-> > > > > > > with DRM_BRIDGE_ATTACH_NO_CONNECTOR and creates the connector itself.
-> > > > > > >
-> > > > > > > When the DRM_BRIDGE_ATTACH_NO_CONNECTOR flag is not specified and the
-> > > > > > > panel_bridge creates its own connector the orientation is not set unless
-> > > > > > > the panel does it in .get_modes which is too late and leads to a warning
-> > > > > > > splat from __drm_mode_object_add() because the device is already
-> > > > > > > registered.
-> > > > > > >
-> > > > > > > Call the necessary function to set add the orientation property when the
-> > > > > > > connector is created so that it is available before the device is
-> > > > > > > registered.
-> > > > > >
-> > > > > > I have no huge objection to your patch and it looks OK to me. That
-> > > > > > being said, my understanding is that:
-> > > > > >
-> > > > > > 1. DRM_BRIDGE_ATTACH_NO_CONNECTOR is "the future" and not using the
-> > > > > > flag is "deprecated".
-> > > > >
-> > > > > Correct.
-> > > > > Could we take a look at how much is required to move the relevant driver
-> > > > > to use DRM_BRIDGE_ATTACH_NO_CONNECTOR?
-> > > > >
-> > > > > If this is too much work now we may land this simple patch, but the
-> > > > > preference is to move all drivers to the new bridge handling and thus
-> > > > > asking display drivers to create the connector.
-> > >
-> > > I fully agree with Doug and Sam here. Let's see if we can keep the yak
-> > > shaving minimal :-)
-> > >
-> > > > > What display driver are we dealing with here?
-> > > >
-> > > > This is dw-mipi-dsi-rockchip which uses the component path in
-> > > > dw-mipi-dsi (and, in fact, is the only driver using that mode of
-> > > > dw-mipi-dsi).
-> > > >
-> > > > I'm not familiar enough with DRM to say whether it's easy to convert to
-> > > > DRM_BRIDGE_ATTACH_NO_CONNECTOR - should dw-mipi-dsi-rockchip be moving
-> > > > to use dw-mipi-dsi as a bridge driver or should dw_mipi_dsi_bind() have
-> > > > a drm_bridge_attach_flags argument?  But I'm happy to test patches if it
-> > > > looks easy to convert to you :-)
-> > >
-> > > I'd go for the former (use dw_mipi_dsi_probe() and acquire the DSI
-> > > bridge with of_drm_find_bridge() instead of using the component
-> > > framework) if possible, but I don't know how intrusive that would be.
-> >
-> > I'm a bit confused about what's required since dw-mipi-dsi-rockchip
-> > already uses dw_mipi_dsi_probe(),
->
-> Indeed, my bad.
->
-> > but I think moving away from the
-> > component framework would be significant work as that's how the MIPI
-> > subdriver fits in to the overall Rockchip display driver.
->
-> It will be some work, yes. It however doesn't mean that the whole
-> Rockchip display driver needs to move away from the component framework,
-> it can be limited to the DSI encoder. It's not immediately clear to me
-> why the DSI encoder uses the component framework in the first place, and
-> if it would be difficult to move away from it.
->
-> > Any changes / modernisation to the Rockchip MIPI driver look like it
-> > will take more time than I have available to spend on this, so I'd
-> > really like to see this patch land as it's a simple fix to an existing
-> > working code path.
->
-> So who volunteers for fixing it properly ? :-)
->
-> I'll let Doug and Sam decide regarding mering this patch.
+Error/Warning reports:
 
-This thread seems to have gone silent.
+https://lore.kernel.org/oe-kbuild-all/202302021011.Db4Od62h-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202302021018.uy6CiyRh-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202302021025.R4dApIXe-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202302021052.NLAk6zgv-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202302021103.5o9vwutp-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202302021243.bku0pJhm-lkp@intel.com
 
-I'm inclined to merge this patch (removing the "Fixes" tag) since it's
-a one-line fix. While we want to encourage people to move to "the
-future", it seems like it would be better to wait until someone is
-trying to land something more intrusive than a 1-line fix before truly
-forcing the issue.
+Error/Warning: (recently discovered and may have been fixed)
 
-I'll plan to merge the patch to drm-misc-next early next week assuming
-there are no objections.
+arch/x86/kernel/head_64.S:286: undefined reference to `__per_cpu_offset'
+arch/x86/kernel/smpboot.c:1251:5: warning: no previous prototype for 'do_cpu_up' [-Wmissing-prototypes]
+arch/x86/kernel/smpboot.c:1251:5: warning: no previous prototype for function 'do_cpu_up' [-Wmissing-prototypes]
+arch/x86/kernel/smpboot.c:1361:24: error: implicit declaration of function 'idle_thread_get' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+arch/x86/kernel/smpboot.c:1361:24: warning: incompatible integer to pointer conversion passing 'int' to parameter of type 'struct task_struct *' [-Wint-conversion]
+arch/x86/kernel/smpboot.c:1361:31: error: implicit declaration of function 'idle_thread_get' [-Werror=implicit-function-declaration]
+arch/x86/kernel/smpboot.c:1361:31: warning: passing argument 2 of 'do_cpu_up' makes pointer from integer without a cast [-Wint-conversion]
+ld: arch/x86/kernel/head_64.S:298: undefined reference to `idle_threads'
 
--Doug
+Error/Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- x86_64-randconfig-a001-20230130
+|   |-- arch-x86-kernel-smpboot.c:error:implicit-declaration-of-function-idle_thread_get
+|   |-- arch-x86-kernel-smpboot.c:warning:no-previous-prototype-for-do_cpu_up
+|   `-- arch-x86-kernel-smpboot.c:warning:passing-argument-of-do_cpu_up-makes-pointer-from-integer-without-a-cast
+|-- x86_64-randconfig-a003-20230130
+|   |-- arch-x86-kernel-head_64.S:undefined-reference-to-__per_cpu_offset
+|   `-- ld:arch-x86-kernel-head_64.S:undefined-reference-to-idle_threads
+`-- x86_64-rhel-8.3-func
+    |-- arch-x86-kernel-smpboot.c:error:implicit-declaration-of-function-idle_thread_get
+    |-- arch-x86-kernel-smpboot.c:warning:no-previous-prototype-for-do_cpu_up
+    `-- arch-x86-kernel-smpboot.c:warning:passing-argument-of-do_cpu_up-makes-pointer-from-integer-without-a-cast
+clang_recent_errors
+`-- x86_64-rhel-8.3-rust
+    |-- arch-x86-kernel-smpboot.c:error:implicit-declaration-of-function-idle_thread_get-is-invalid-in-C99-Werror-Wimplicit-function-declaration
+    |-- arch-x86-kernel-smpboot.c:warning:incompatible-integer-to-pointer-conversion-passing-int-to-parameter-of-type-struct-task_struct
+    `-- arch-x86-kernel-smpboot.c:warning:no-previous-prototype-for-function-do_cpu_up
+
+elapsed time: 1528m
+
+configs tested: 66
+configs skipped: 2
+
+gcc tested configs:
+x86_64                            allnoconfig
+powerpc                           allnoconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+arc                                 defconfig
+s390                             allmodconfig
+x86_64               randconfig-a001-20230130
+i386                 randconfig-a002-20230130
+x86_64               randconfig-a003-20230130
+alpha                               defconfig
+x86_64               randconfig-a004-20230130
+i386                 randconfig-a001-20230130
+s390                                defconfig
+i386                 randconfig-a004-20230130
+x86_64               randconfig-a002-20230130
+i386                 randconfig-a003-20230130
+x86_64               randconfig-a006-20230130
+i386                 randconfig-a006-20230130
+x86_64               randconfig-a005-20230130
+i386                 randconfig-a005-20230130
+s390                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+ia64                             allmodconfig
+alpha                            allyesconfig
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+m68k                             allyesconfig
+sh                               allmodconfig
+x86_64                              defconfig
+mips                             allyesconfig
+x86_64                               rhel-8.3
+powerpc                          allmodconfig
+x86_64                           allyesconfig
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-bpf
+arc                  randconfig-r043-20230129
+arm                  randconfig-r046-20230129
+i386                                defconfig
+arm                  randconfig-r046-20230130
+arc                  randconfig-r043-20230130
+i386                             allyesconfig
+arm                                 defconfig
+
+clang tested configs:
+x86_64                          rhel-8.3-rust
+x86_64               randconfig-a014-20230130
+x86_64               randconfig-a012-20230130
+x86_64               randconfig-a013-20230130
+x86_64               randconfig-a011-20230130
+x86_64               randconfig-a015-20230130
+x86_64               randconfig-a016-20230130
+i386                 randconfig-a013-20230130
+i386                 randconfig-a012-20230130
+i386                 randconfig-a014-20230130
+i386                 randconfig-a015-20230130
+i386                 randconfig-a016-20230130
+i386                 randconfig-a011-20230130
+hexagon              randconfig-r041-20230129
+hexagon              randconfig-r045-20230130
+hexagon              randconfig-r041-20230130
+hexagon              randconfig-r045-20230129
+s390                 randconfig-r044-20230129
+riscv                randconfig-r042-20230129
+riscv                randconfig-r042-20230130
+s390                 randconfig-r044-20230130
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
