@@ -2,99 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B88AB68A17A
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 19:20:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A13A68A180
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 19:20:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233295AbjBCSUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 13:20:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50748 "EHLO
+        id S233380AbjBCSUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 13:20:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230230AbjBCSUE (ORCPT
+        with ESMTP id S230230AbjBCSUt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 13:20:04 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E2CA9D4F
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 10:19:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675448356;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=XdOFGLSYUsJ/RKKJ+NOOdsDiamKhjLHpPH6mDK28tTE=;
-        b=NtzTvAYHjdR4SCB913ZO7C/5QabgNtsPUS75VZzxCUuRNujUaLa4OzLcNxWsWbUof5ztfE
-        URMkP3mEQE+hzRtQOchk7CU0sqKrDv1qMvbAEQRvja0X7R1qs4LmsSgiBJJw3wwQdZVlPx
-        0S/sHRoHvQocaKReC3VG6RcivMQBndg=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-502-oBDmnYVFOhu8k3uWohsoqw-1; Fri, 03 Feb 2023 13:19:06 -0500
-X-MC-Unique: oBDmnYVFOhu8k3uWohsoqw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 3 Feb 2023 13:20:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7510FA8A0D;
+        Fri,  3 Feb 2023 10:20:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A01B7380610C;
-        Fri,  3 Feb 2023 18:19:05 +0000 (UTC)
-Received: from llong.com (unknown [10.22.18.35])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DC77053AA;
-        Fri,  3 Feb 2023 18:19:04 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Phil Auld <pauld@redhat.com>, Tejun Heo <tj@kernel.org>,
-        linux-kernel@vger.kernel.org, Waiman Long <longman@redhat.com>
-Subject: [PATCH] sched/core: Fix a missed update of user_cpus_ptr
-Date:   Fri,  3 Feb 2023 13:18:49 -0500
-Message-Id: <20230203181849.221943-1-longman@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 112C261FC5;
+        Fri,  3 Feb 2023 18:20:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47D0FC433D2;
+        Fri,  3 Feb 2023 18:20:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675448447;
+        bh=3D+/sZZJmLI9fYcwlfraDrdIRTAmIP2cDnIjI/PzcSM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=LKf4mIORaBua0cHD1bhn4kid4fjCZXFof1Ia/hXLrofBPF72QXlGOr9u11xm06uru
+         hMyNoPUJcW6WYd7eJuYJZrDZXpkyNlgnp5bsFYAHIhngWlWbaxCgZbSzQZCkaqefYi
+         r8874MLJveiWJBkcrpj6bvSzB9SOYC9ZFYHWVw/zRAAGWiKRarbYY5Ekm92pxQZNfR
+         gjebtgSN0bz2QvthrYPFJnEFVivVzNWg4q49aFDIsMu6/dev5VA0uAYC6M/e9UcZ7d
+         yAXgi3zL9Pa+Bc6VDkwaEbm+zoPQyIH55FeqrOb7ui/3hnAaV92a5VYraCMqti7X1S
+         8zbUcvZjilSYA==
+Date:   Fri, 3 Feb 2023 12:20:45 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Baolu Lu <baolu.lu@linux.intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Matt Fagnani <matt.fagnani@bell.net>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Vasant Hegde <vasant.hegde@amd.com>,
+        Tony Zhu <tony.zhu@intel.com>, linux-pci@vger.kernel.org,
+        iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Alex Williamson <alex.williamson@redhat.com>
+Subject: Re: [PATCH v3 1/1] PCI: Add translated request only flag for
+ pci_enable_pasid()
+Message-ID: <20230203182045.GA1972366@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9wg0Znc0tRWj4O9@nvidia.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 8f9ea86fdf99 ("sched: Always preserve the user requested
-cpumask"), a successful call to sched_setaffinity() should always save
-the user requested cpu affinity mask in a task's user_cpus_ptr. However,
-when the given cpu mask is the same as the current one, user_cpus_ptr
-is not updated. Fix this by saving the user mask in this case too.
+[+cc Alex in case you're interested in the ACS angle]
 
-Fixes: 8f9ea86fdf99 ("sched: Always preserve the user requested cpumask")
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- kernel/sched/core.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+On Thu, Feb 02, 2023 at 04:45:05PM -0400, Jason Gunthorpe wrote:
+> On Thu, Feb 02, 2023 at 02:12:49PM -0600, Bjorn Helgaas wrote:
+> > On Thu, Feb 02, 2023 at 11:08:25AM +0800, Baolu Lu wrote:
+> > > ...
+> > 
+> > > ACS is unnecessary for the devices that only use translated
+> > > memory request for PASID. All translated addresses are granted
+> > > by the Linux kernel which ensures that such addresses will never
+> > > be in a P2P address, i.e., it's not contained in any bridge
+> > > aperture, will *always* be routed toward the RC.
+> > 
+> > Re 201007ef707a ("PCI: Enable PASID only when ACS RR & UF enabled
+> > on upstream path"), does that commit actually *fix* anything?  I
+> > wonder whether we could revert it completely.
+> > 
+> > The intent of 201007ef707a is to use ACS to prevent misrouting,
+> > which would happen if a TLP contained an address that *looked*
+> > like a PCI bus address, i.e., it was inside a host bridge
+> > aperture, but was *intended* to reach an IOMMU or main memory
+> > directly.
+> 
+> Yes.
+> 
+> > 201007ef707a only affects pci_enable_pasid(), so I think we
+> > already avoid this misrouting by restricting DMA address
+> > allocation for both non-IOMMU scenarios and non-PASID IOMMU
+> > scenarios.
+> 
+> There is no restriction on DMA address allocation with PASID.
+> 
+> The typical PASID use case is to point the PASID at the CPU page
+> table and then all VA's are fair game by userspace. There is no
+> carve out like the DMA API has to protect from bus address
+> confusion.
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 30d9752e2ca5..91255f791df3 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -2951,8 +2951,11 @@ static int __set_cpus_allowed_ptr_locked(struct task_struct *p,
- 	}
- 
- 	if (!(ctx->flags & SCA_MIGRATE_ENABLE)) {
--		if (cpumask_equal(&p->cpus_mask, ctx->new_mask))
-+		if (cpumask_equal(&p->cpus_mask, ctx->new_mask)) {
-+			if (ctx->flags & SCA_USER)
-+				swap(p->user_cpus_ptr, ctx->user_mask);
- 			goto out;
-+		}
- 
- 		if (WARN_ON_ONCE(p == current &&
- 				 is_migration_disabled(p) &&
--- 
-2.31.1
+I think you're saying that for (Requester ID, PASID, Untranslated
+Address), the Untranslated Address is not restricted at all, and it
+may look like a PCI bus address.
 
+> > So what about PASID mappings, e.g., consider a mapping of
+> > (Requester ID, PASID, Untranslated Address) -> Translated Address?
+> > If either the Untranslated Address or the Translated Address looks
+> > like a PCI bus address, a Memory Request or Translation Request
+> > could be misrouted.
+> 
+> The PCI rules are a bit complicated:
+>  - A simple MemRd/Wr with a PASID will be routed according to the
+>    address. This can be mis-routed
+>  - A ATS translation request with a PASID is always routed to the host
+>    bridge
+
+From a PCIe point of view, I think these cases are equivalent because
+a PASID prefix doesn't affect routing (sec 2.2.10.4).  A Translation
+Request includes an Untranslated Address, and if that happens to look
+like a PCI bus address, I think it will be mis-routed just like a
+MemRd/Wr would be.
+
+>  - A MemRd/Wr with Translated set and no PASID is always routed to the
+>    correct destination, even if that is not the host bridge
+
+I don't think Address Type 10b ("Translated") affects routing.  A
+MemRd/Wr should be routed to a PCI peer if the Translated Address is
+inside a host bridge aperture, or to the host bridge otherwise.
+
+> > Do IOMMUs allocate (PASID, Untranslated Addresses) that look like
+> > PCI bus addresses?
+> 
+> Yes, because it is mapped to a mm_struct userspace can use any mmap
+> to access any valid address as an IOVA and thus PASID tagged
+> translation must never become confused with bus addresses.
+
+If PCI bus addresses are carved out of the Translated Address arena,
+the MemRd/Wr TLPs should be fine, but I think the Translation Requests
+that include Untranslated Addresses are still a problem.
+
+> Further, and worse, the common use model for PASID SVA is for
+> userspace to directly submit IOVA to the device for operation. If
+> userspace can submit a hostile IOVA and cause DMA to reach something
+> that is not the host bridge then system security is completely
+> wrecked.
+> 
+> So, as an API in Linux we felt it was best to only enable PASID if
+> PASID is secure and truely isolated, otherwise leave PASID off. The
+> use cases for insecure PASID seem small.
+
+The patch under discussion is intended to fix a v6.2-rc1 regression
+added by 201007ef707a ("PCI: Enable PASID only when ACS RR & UF
+enabled on upstream path").
+
+Are we on track to fix this before v6.2?  I don't have a clear
+understanding of how we know this change is safe and it only affects
+AMD GPU and not other devices below the same IOMMU.
+
+Bjorn
