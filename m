@@ -2,280 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8A70689817
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 12:49:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E760468981B
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 12:51:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232593AbjBCLsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 06:48:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42820 "EHLO
+        id S231663AbjBCLvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 06:51:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbjBCLsR (ORCPT
+        with ESMTP id S230180AbjBCLu5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 06:48:17 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 888AC26CCF;
-        Fri,  3 Feb 2023 03:48:15 -0800 (PST)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 313BCbBm002466;
-        Fri, 3 Feb 2023 11:48:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=OybEDLHYXDeOlIw1XBR+uIgd/GLWkQATLn+SkFv83es=;
- b=CUZO7fyIF+OwKX3m0wIeZL2U+i0LNIV5/jjqgcwukgPLpP3dVRx8RlkbdGsOAFwUFjGT
- jJ5or5QAsClyBeI64+kBvHaM6n7p6GMufxJLWXS6NXXMpghAPVODSjlEH0eyQdPetojx
- OFqD7p/0T1dxYVUpGcoeKqkUEqrxcqhASOVfl65DKGS7SauuaXedIToDtgfP7N04xXWH
- 31f5YWnPomMqVmmujXcN/+eXdEkNpYZIwfF9QNkdPbtGRFfKA6TTfxVP9etbIxu4sDoq
- Nwy4d8PDJqRMbd3huI+VsSf243Cz5u8ssifq8F3MNdJjzbFdSyi8c1f+Lcd4Q5F6NVs1 Eg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3ngyq9juav-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Feb 2023 11:48:14 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 313BDhFv010720;
-        Fri, 3 Feb 2023 11:48:13 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3ngyq9juac-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Feb 2023 11:48:13 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 313ABMbu027465;
-        Fri, 3 Feb 2023 11:48:12 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3ncvttyc2n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Feb 2023 11:48:11 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 313Bm8Gj47186430
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 3 Feb 2023 11:48:08 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5427220043;
-        Fri,  3 Feb 2023 11:48:08 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EE9712004E;
-        Fri,  3 Feb 2023 11:48:07 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Fri,  3 Feb 2023 11:48:07 +0000 (GMT)
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Gerd Bayer <gbayer@linux.ibm.com>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Pierre Morel <pmorel@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>
-Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: [PATCH] PCI: s390: Fix use-after-free of PCI bus resources with s390 per-function hotplug
-Date:   Fri,  3 Feb 2023 12:48:07 +0100
-Message-Id: <20230203114807.3461308-1-schnelle@linux.ibm.com>
-X-Mailer: git-send-email 2.37.2
+        Fri, 3 Feb 2023 06:50:57 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26EFC1E9DD;
+        Fri,  3 Feb 2023 03:50:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 51936CE2FC3;
+        Fri,  3 Feb 2023 11:50:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04159C433D2;
+        Fri,  3 Feb 2023 11:50:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675425051;
+        bh=PXEna3R+6kpChu3+xAiwe71pF38XzueJzaRSerG6yiA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XZvioM8ZgWnnY66Z2DxMSsyhYUl/s3h+wcmd7rfp9w0kdvLVjMdMQ1NI7jnq4kLLJ
+         c5kqwvtnYs1pqSVdIOKD9Q0Xp2Z+egXzOccUafPGmYN72SVtst66VY3ZDHQvBxFw2x
+         G9gQCtwU3YnypoqHRiaGoc5JjgpLrxN2FQe/h/URS6pPswcuQWt1knPxEO/o3i6aoP
+         xOOLpay/TmYln4bOLiNbZEYdUIPabWrvh5r3w6yZ1Hth8OLZ/mTWtpQG6ac5qkdfZB
+         Ue8yrGnisrDu6AHN8HEn4dKGsndV3xVYEcwAqIQw9OB/AQa+/9ynnSYsFEyBfPn5pm
+         zTXLzADbTPxXQ==
+Date:   Fri, 3 Feb 2023 11:50:46 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, kernel-team@android.com,
+        Zefan Li <lizefan.x@bytedance.com>, Tejun Heo <tj@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org
+Subject: Re: [PATCH 1/2] cpuset: Fix cpuset_cpus_allowed() to not filter
+ offline CPUs
+Message-ID: <20230203115045.GB5927@willie-the-truck>
+References: <20230131221719.3176-1-will@kernel.org>
+ <20230131221719.3176-2-will@kernel.org>
+ <6b068916-5e1b-a943-1aad-554964d8b746@redhat.com>
+ <Y9otWX+MGOLDKU6t@hirez.programming.kicks-ass.net>
+ <83e53632-27ed-8dde-84f4-68c6776d6da8@redhat.com>
+ <a892d340-ea99-1562-0e70-176f02f195c2@redhat.com>
+ <Y9rVVldS19oyIZ+g@hirez.programming.kicks-ass.net>
+ <773e2f22-211e-163f-64bb-15ae29ad161b@redhat.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: ZVdQ50I8QCqZBQqlRvkk9BqEvnQsnhI0
-X-Proofpoint-GUID: Ge1dHCDYvBUu2ZvFPEJP3zcnFH_zkX8X
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-03_08,2023-02-03_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
- lowpriorityscore=0 malwarescore=0 suspectscore=0 bulkscore=0
- mlxlogscore=929 priorityscore=1501 impostorscore=0 adultscore=0 mlxscore=0
- phishscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302030106
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <773e2f22-211e-163f-64bb-15ae29ad161b@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On s390 PCI functions may be hotplugged individually even when they
-belong to a multi-function device. In particular on an SR-IOV device VFs
-may be removed and later re-added.
+On Wed, Feb 01, 2023 at 10:34:00PM -0500, Waiman Long wrote:
+> On 2/1/23 16:10, Peter Zijlstra wrote:
+> > On Wed, Feb 01, 2023 at 01:46:11PM -0500, Waiman Long wrote:
+> > 
+> > > Note that using cpus_allowed directly in cgroup v2 may not be right because
+> > > cpus_allowed may have no relationship to effective_cpus at all in some
+> > > cases, e.g.
+> > > 
+> > >     root
+> > >      |
+> > >      V
+> > >      A (cpus_allowed = 1-4, effective_cpus = 1-4)
+> > >      |
+> > >      V
+> > >      B (cpus_allowed = 5-8, effective_cpus = 1-4)
+> > > 
+> > > In the case of cpuset B, passing back cpus 5-8 as the allowed_cpus is wrong.
+> > I think my patch as written does the right thing here. Since the
+> > intersection of (1-4) and (5-8) is empty it will move up the hierarchy
+> > and we'll end up with (1-4) from the cgroup side of things.
+> > 
+> > So the purpose of __cs_cpus_allowed() is to override the cpus_allowed of
+> > the root set and force it to cpu_possible_mask.
+> > 
+> > Then cs_cpus_allowed() computes the intersection of cs->cpus_allowed and
+> > all it's parents. This will, in the case of B above, result in the empty
+> > mask.
+> > 
+> > Then cpuset_cpus_allowed() has a loop that starts with
+> > task_cpu_possible_mask(), intersects that with cs_cpus_allowed() and if
+> > the intersection of that and cpu_online_mask is empty, moves up the
+> > hierarchy. Given cs_cpus_allowed(B) is the empty mask, we'll move to A.
+> > 
+> > Note that since we force the mask of root to cpu_possible_mask,
+> > cs_cpus_allowed(root) will be a no-op and if we guarantee (in arch code)
+> > that cpu_online_mask always has a non-empty intersection with
+> > task_cpu_possible_mask(), this loop is guaranteed to terminate with a
+> > viable mask.
+> 
+> I will take a closer look at that tomorrow. I will be more comfortable
+> ack'ing that if this is specific to v1 cpuset instead of applying this in
+> both v1 and v2 since it is only v1 that is problematic.
 
-In commit a50297cf8235 ("s390/pci: separate zbus creation from
-scanning") it was missed however that struct pci_bus and struct
-zpci_bus's resource list retained a reference to the PCI functions MMIO
-resources even though those resources are released and freed on
-hot-unplug. These stale resources may subsequently be claimed when the
-PCI function re-appears resulting in use-after-free.
+fwiw, the regression I'm seeing is with cgroup2. I haven't tried v1.
 
-One idea of fixing this use-after-free in s390 specific code that was
-investigated was to simply keep resources around from the moment a PCI
-function first appeared until the whole virtual PCI bus created for
-a multi-function device disappears. The problem with this however is
-that due to the requirement of artificial MMIO addreesses (address
-cookies) we will then need extra logic and tracking in struct zpci_bus
-to keep these compatible for re-use. At the same time the MMIO resources
-semantically belong to the PCI function so tying their lifecycle to the
-function seems more logical.
-
-Instead a simpler approach is to remove the resources of an individually
-hot-unplugged PCI function from the PCI bus's resource list while
-keeping the resources of other PCI functions on the PCI bus untouched.
-
-This is done by introducing pci_bus_remove_resource() to remove an
-individual resource. Similarly the resource also needs to be removed
-from the struct zpci_bus's resource list. It turns out however, that
-there is really no need to add the MMIO resources at all and instead we
-can simply use the zpci_bar_struct's resource pointer directly.
-
-Fixes: a50297cf8235 ("s390/pci: separate zbus creation from scanning")
-Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
----
- arch/s390/pci/pci.c     | 16 ++++++++++------
- arch/s390/pci/pci_bus.c | 12 +++++-------
- arch/s390/pci/pci_bus.h |  3 +--
- drivers/pci/bus.c       | 23 +++++++++++++++++++++++
- include/linux/pci.h     |  1 +
- 5 files changed, 40 insertions(+), 15 deletions(-)
-
-diff --git a/arch/s390/pci/pci.c b/arch/s390/pci/pci.c
-index ef38b1514c77..e16afacc8fd1 100644
---- a/arch/s390/pci/pci.c
-+++ b/arch/s390/pci/pci.c
-@@ -544,8 +544,7 @@ static struct resource *__alloc_res(struct zpci_dev *zdev, unsigned long start,
- 	return r;
- }
- 
--int zpci_setup_bus_resources(struct zpci_dev *zdev,
--			     struct list_head *resources)
-+int zpci_setup_bus_resources(struct zpci_dev *zdev)
- {
- 	unsigned long addr, size, flags;
- 	struct resource *res;
-@@ -581,7 +580,6 @@ int zpci_setup_bus_resources(struct zpci_dev *zdev,
- 			return -ENOMEM;
- 		}
- 		zdev->bars[i].res = res;
--		pci_add_resource(resources, res);
- 	}
- 	zdev->has_resources = 1;
- 
-@@ -590,17 +588,23 @@ int zpci_setup_bus_resources(struct zpci_dev *zdev,
- 
- static void zpci_cleanup_bus_resources(struct zpci_dev *zdev)
- {
-+	struct resource *res;
- 	int i;
- 
-+	pci_lock_rescan_remove();
- 	for (i = 0; i < PCI_STD_NUM_BARS; i++) {
--		if (!zdev->bars[i].size || !zdev->bars[i].res)
-+		res = zdev->bars[i].res;
-+		if (!res)
- 			continue;
- 
-+		release_resource(res);
-+		pci_bus_remove_resource(zdev->zbus->bus, res);
- 		zpci_free_iomap(zdev, zdev->bars[i].map_idx);
--		release_resource(zdev->bars[i].res);
--		kfree(zdev->bars[i].res);
-+		zdev->bars[i].res = NULL;
-+		kfree(res);
- 	}
- 	zdev->has_resources = 0;
-+	pci_unlock_rescan_remove();
- }
- 
- int pcibios_device_add(struct pci_dev *pdev)
-diff --git a/arch/s390/pci/pci_bus.c b/arch/s390/pci/pci_bus.c
-index 6a8da1b742ae..a99926af2b69 100644
---- a/arch/s390/pci/pci_bus.c
-+++ b/arch/s390/pci/pci_bus.c
-@@ -41,9 +41,7 @@ static int zpci_nb_devices;
-  */
- static int zpci_bus_prepare_device(struct zpci_dev *zdev)
- {
--	struct resource_entry *window, *n;
--	struct resource *res;
--	int rc;
-+	int rc, i;
- 
- 	if (!zdev_enabled(zdev)) {
- 		rc = zpci_enable_device(zdev);
-@@ -57,10 +55,10 @@ static int zpci_bus_prepare_device(struct zpci_dev *zdev)
- 	}
- 
- 	if (!zdev->has_resources) {
--		zpci_setup_bus_resources(zdev, &zdev->zbus->resources);
--		resource_list_for_each_entry_safe(window, n, &zdev->zbus->resources) {
--			res = window->res;
--			pci_bus_add_resource(zdev->zbus->bus, res, 0);
-+		zpci_setup_bus_resources(zdev);
-+		for (i = 0; i < PCI_STD_NUM_BARS; i++) {
-+			if (zdev->bars[i].res)
-+				pci_bus_add_resource(zdev->zbus->bus, zdev->bars[i].res, 0);
- 		}
- 	}
- 
-diff --git a/arch/s390/pci/pci_bus.h b/arch/s390/pci/pci_bus.h
-index e96c9860e064..af9f0ac79a1b 100644
---- a/arch/s390/pci/pci_bus.h
-+++ b/arch/s390/pci/pci_bus.h
-@@ -30,8 +30,7 @@ static inline void zpci_zdev_get(struct zpci_dev *zdev)
- 
- int zpci_alloc_domain(int domain);
- void zpci_free_domain(int domain);
--int zpci_setup_bus_resources(struct zpci_dev *zdev,
--			     struct list_head *resources);
-+int zpci_setup_bus_resources(struct zpci_dev *zdev);
- 
- static inline struct zpci_dev *zdev_from_bus(struct pci_bus *bus,
- 					     unsigned int devfn)
-diff --git a/drivers/pci/bus.c b/drivers/pci/bus.c
-index 83ae838ceb5f..f021f1d4af9f 100644
---- a/drivers/pci/bus.c
-+++ b/drivers/pci/bus.c
-@@ -76,6 +76,29 @@ struct resource *pci_bus_resource_n(const struct pci_bus *bus, int n)
- }
- EXPORT_SYMBOL_GPL(pci_bus_resource_n);
- 
-+void pci_bus_remove_resource(struct pci_bus *bus, struct resource *res)
-+{
-+	struct pci_bus_resource *bus_res, *tmp;
-+	int i;
-+
-+	for (i = 0; i < PCI_BRIDGE_RESOURCE_NUM; i++) {
-+		if (bus->resource[i] == res) {
-+			bus->resource[i] = NULL;
-+			return;
-+		}
-+	}
-+
-+	list_for_each_entry_safe(bus_res, tmp, &bus->resources, list) {
-+		if (bus_res->res == res) {
-+			list_del(&bus_res->list);
-+			kfree(bus_res);
-+			return;
-+		}
-+	}
-+	return;
-+
-+}
-+
- void pci_bus_remove_resources(struct pci_bus *bus)
- {
- 	int i;
-diff --git a/include/linux/pci.h b/include/linux/pci.h
-index adffd65e84b4..3b1974e2ec73 100644
---- a/include/linux/pci.h
-+++ b/include/linux/pci.h
-@@ -1436,6 +1436,7 @@ void pci_bus_add_resource(struct pci_bus *bus, struct resource *res,
- 			  unsigned int flags);
- struct resource *pci_bus_resource_n(const struct pci_bus *bus, int n);
- void pci_bus_remove_resources(struct pci_bus *bus);
-+void pci_bus_remove_resource(struct pci_bus *bus, struct resource *res);
- int devm_request_pci_bus_resources(struct device *dev,
- 				   struct list_head *resources);
- 
--- 
-2.37.2
-
+WIll
