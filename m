@@ -2,291 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDA52689B6C
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 15:19:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A34D689B6E
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 15:19:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232949AbjBCOTE convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 3 Feb 2023 09:19:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35944 "EHLO
+        id S232778AbjBCOTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 09:19:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232580AbjBCOS1 (ORCPT
+        with ESMTP id S232477AbjBCOSq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 09:18:27 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC40423877;
-        Fri,  3 Feb 2023 06:18:09 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id AD3AD24E287;
-        Fri,  3 Feb 2023 22:18:06 +0800 (CST)
-Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 3 Feb
- 2023 22:18:06 +0800
-Received: from ubuntu.localdomain (113.72.144.84) by EXMBX172.cuchost.com
- (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 3 Feb
- 2023 22:18:05 +0800
-From:   Hal Feng <hal.feng@starfivetech.com>
-To:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>
-CC:     Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andreas Schwab <schwab@suse.de>,
-        "Emil Renner Berthing" <emil.renner.berthing@canonical.com>,
-        Jianlong Huang <jianlong.huang@starfivetech.com>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4 4/4] pinctrl: starfive: Add StarFive JH7110 aon controller driver
-Date:   Fri, 3 Feb 2023 22:18:01 +0800
-Message-ID: <20230203141801.59083-5-hal.feng@starfivetech.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230203141801.59083-1-hal.feng@starfivetech.com>
-References: <20230203141801.59083-1-hal.feng@starfivetech.com>
+        Fri, 3 Feb 2023 09:18:46 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C7313504;
+        Fri,  3 Feb 2023 06:18:45 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id u21so5332466edv.3;
+        Fri, 03 Feb 2023 06:18:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y5QSL2KQ7I6Qbye6De1VwL36uZ19OhoWx467Nfxob8I=;
+        b=oFKxvoCUuD0kdQrD8wLZOBSp4dHJc3BesofQGhdR7hhRNemcXWTuC9jlIJMSzYBv6J
+         HWsVLvltQhLxb2O0lC8FYLFaeo7pyIwbRKuD1kaGN16r9MZtpHmd0/208Al5d8lgaehP
+         SxTSa/gXboj+rMT6TaruMb4KyVGzEsJUU3gsAsCAhLnje1V8dMb5WDjsrieanlUJ+QnE
+         fhimA7zv+xBh6GNsEu4+yeUz/94V0Uw2dAsEucDF//vkBtOWM36Y9NEwBd/KJ8cAqqYM
+         /JMO04RD4Xz56hR45fxx6t+Mv9oW6qya25MeWIEpVcCq1h+xluL4//pKeBINs1uIow2l
+         BNVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Y5QSL2KQ7I6Qbye6De1VwL36uZ19OhoWx467Nfxob8I=;
+        b=jURk4+QAe4nXzT9CtT6PpeQLXmTEVeWECLTSwv+aefKAoEBEw8fCgdTUeqhREcd+p8
+         IePRXUZTwfK5nIGcnVl+iUTLWQlctE6jdJhTTJ0UNQLoNQaF3lY94QUY2rpjK7tXiWyw
+         AwHxmwQvacCcq45T3nTjlywgl8hunY/GpdFWffOggJOMqBJ5gHvHesmQcq4sQFxTkVuL
+         MErbIF/UejcpMGGyiNzEU8yFM4ybiLefUN1P5XnPgdEfT6TFG1kuGhCgLPQKhuQxJbhV
+         gUdimmLd05xa/h877zD8Tba5NRYofCeb32w+4FWBF/UbdBn7Ab5BlwNKuPi3kKZOtGz7
+         xlSQ==
+X-Gm-Message-State: AO0yUKXSy7g/lnZpiY5hwdJ8hVAi/bxz5aJBiSNmBCD60gtlQAxKkfqM
+        YgCgRNhYf17hRXPQeMc+oUo=
+X-Google-Smtp-Source: AK7set/lqhJkKG1jhrlMZ7tsVU350vT6gguJgctsAvHm76Udi3CWQAiKtESaORNQaAbHnXKFxJ2QPQ==
+X-Received: by 2002:a05:6402:124b:b0:49b:63ea:b5d8 with SMTP id l11-20020a056402124b00b0049b63eab5d8mr10962336edw.4.1675433923587;
+        Fri, 03 Feb 2023 06:18:43 -0800 (PST)
+Received: from skbuf ([188.26.57.116])
+        by smtp.gmail.com with ESMTPSA id h23-20020a170906855700b00872a726783dsm1408158ejy.217.2023.02.03.06.18.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Feb 2023 06:18:43 -0800 (PST)
+Date:   Fri, 3 Feb 2023 16:18:40 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Jianhui Zhao <zhaojh329@gmail.com>,
+        =?utf-8?B?QmrDuHJu?= Mork <bjorn@mork.no>
+Subject: Re: [PATCH 1/9] net: ethernet: mtk_eth_soc: add support for MT7981
+ SoC
+Message-ID: <20230203141840.chljzf3opxbxyp33@skbuf>
+References: <cover.1675407169.git.daniel@makrotopia.org>
+ <cover.1675407169.git.daniel@makrotopia.org>
+ <301fa3e888d686283090d58a060579d8c2a5bebb.1675407169.git.daniel@makrotopia.org>
+ <301fa3e888d686283090d58a060579d8c2a5bebb.1675407169.git.daniel@makrotopia.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [113.72.144.84]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX172.cuchost.com
- (172.16.6.92)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <301fa3e888d686283090d58a060579d8c2a5bebb.1675407169.git.daniel@makrotopia.org>
+ <301fa3e888d686283090d58a060579d8c2a5bebb.1675407169.git.daniel@makrotopia.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jianlong Huang <jianlong.huang@starfivetech.com>
+On Fri, Feb 03, 2023 at 07:00:21AM +0000, Daniel Golle wrote:
+> The MediaTek MT7981 SoC comes two 1G/2.5G SGMII, just like MT7986.
+> 
+> In addition MT7981 comes with a built-in 1000Base-T PHY which can be
+> used with GMAC1.
+> 
+> As many MT7981 boards make use of swapping SGMII phase and neutral, add
+> new device-tree attribute 'mediatek,pn_swap' to support them.
+> 
+> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+> ---
 
-Add pinctrl driver for StarFive JH7110 SoC aon pinctrl controller.
+Phase and neutral? What is this, a power plug?
+Since SGMII uses differential signaling, I wonder if this isn't about
+the polarity of the TX lane (which pin carries the Positive signal and
+which the Negative one).
 
-Co-developed-by: Emil Renner Berthing <kernel@esmil.dk>
-Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-Signed-off-by: Jianlong Huang <jianlong.huang@starfivetech.com>
-Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
----
- drivers/pinctrl/starfive/Kconfig              |  12 ++
- drivers/pinctrl/starfive/Makefile             |   1 +
- .../starfive/pinctrl-starfive-jh7110-aon.c    | 177 ++++++++++++++++++
- 3 files changed, 190 insertions(+)
- create mode 100644 drivers/pinctrl/starfive/pinctrl-starfive-jh7110-aon.c
-
-diff --git a/drivers/pinctrl/starfive/Kconfig b/drivers/pinctrl/starfive/Kconfig
-index 453c8a0b3118..8192ac2087fc 100644
---- a/drivers/pinctrl/starfive/Kconfig
-+++ b/drivers/pinctrl/starfive/Kconfig
-@@ -37,3 +37,15 @@ config PINCTRL_STARFIVE_JH7110_SYS
- 	  This also provides an interface to the GPIO pins not used by other
- 	  peripherals supporting inputs, outputs, configuring pull-up/pull-down
- 	  and interrupts on input changes.
-+
-+config PINCTRL_STARFIVE_JH7110_AON
-+	tristate "Always-on pinctrl and GPIO driver for the StarFive JH7110 SoC"
-+	depends on SOC_STARFIVE  || COMPILE_TEST
-+	depends on OF
-+	select PINCTRL_STARFIVE_JH7110
-+	default SOC_STARFIVE
-+	help
-+	  Say yes here to support always-on pin control on the StarFive JH7110 SoC.
-+	  This also provides an interface to the GPIO pins not used by other
-+	  peripherals supporting inputs, outputs, configuring pull-up/pull-down
-+	  and interrupts on input changes.
-diff --git a/drivers/pinctrl/starfive/Makefile b/drivers/pinctrl/starfive/Makefile
-index dc2d1e392314..ee0d32d085cb 100644
---- a/drivers/pinctrl/starfive/Makefile
-+++ b/drivers/pinctrl/starfive/Makefile
-@@ -4,3 +4,4 @@ obj-$(CONFIG_PINCTRL_STARFIVE_JH7100)	+= pinctrl-starfive-jh7100.o
- 
- obj-$(CONFIG_PINCTRL_STARFIVE_JH7110)		+= pinctrl-starfive-jh7110.o
- obj-$(CONFIG_PINCTRL_STARFIVE_JH7110_SYS)	+= pinctrl-starfive-jh7110-sys.o
-+obj-$(CONFIG_PINCTRL_STARFIVE_JH7110_AON)	+= pinctrl-starfive-jh7110-aon.o
-diff --git a/drivers/pinctrl/starfive/pinctrl-starfive-jh7110-aon.c b/drivers/pinctrl/starfive/pinctrl-starfive-jh7110-aon.c
-new file mode 100644
-index 000000000000..8cf28aaed254
---- /dev/null
-+++ b/drivers/pinctrl/starfive/pinctrl-starfive-jh7110-aon.c
-@@ -0,0 +1,177 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Pinctrl / GPIO driver for StarFive JH7110 SoC aon controller
-+ *
-+ * Copyright (C) 2022 StarFive Technology Co., Ltd.
-+ */
-+
-+#include <linux/err.h>
-+#include <linux/gpio/driver.h>
-+#include <linux/init.h>
-+#include <linux/interrupt.h>
-+#include <linux/io.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/of_device.h>
-+#include <linux/of_irq.h>
-+#include <linux/of_platform.h>
-+#include <linux/pinctrl/pinconf.h>
-+#include <linux/pinctrl/pinconf-generic.h>
-+#include <linux/pinctrl/pinctrl.h>
-+#include <linux/pinctrl/pinmux.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/regmap.h>
-+#include <linux/slab.h>
-+
-+#include <dt-bindings/pinctrl/starfive,jh7110-pinctrl.h>
-+
-+#include "../core.h"
-+#include "../pinconf.h"
-+#include "../pinmux.h"
-+#include "pinctrl-starfive-jh7110.h"
-+
-+#define JH7110_AON_NGPIO		4
-+#define JH7110_AON_GC_BASE		64
-+
-+/* registers */
-+#define JH7110_AON_DOEN			0x0
-+#define JH7110_AON_DOUT			0x4
-+#define JH7110_AON_GPI			0x8
-+#define JH7110_AON_GPIOIN		0x2c
-+
-+#define JH7110_AON_GPIOEN		0xc
-+#define JH7110_AON_GPIOIS		0x10
-+#define JH7110_AON_GPIOIC		0x14
-+#define JH7110_AON_GPIOIBE		0x18
-+#define JH7110_AON_GPIOIEV		0x1c
-+#define JH7110_AON_GPIOIE		0x20
-+#define JH7110_AON_GPIORIS		0x28
-+#define JH7110_AON_GPIOMIS		0x28
-+
-+#define JH7110_AON_GPO_PDA_0_5_CFG	0x30
-+
-+static const struct pinctrl_pin_desc jh7110_aon_pins[] = {
-+	PINCTRL_PIN(PAD_TESTEN,		"TESTEN"),
-+	PINCTRL_PIN(PAD_RGPIO0,		"RGPIO0"),
-+	PINCTRL_PIN(PAD_RGPIO1,		"RGPIO1"),
-+	PINCTRL_PIN(PAD_RGPIO2,		"RGPIO2"),
-+	PINCTRL_PIN(PAD_RGPIO3,		"RGPIO3"),
-+	PINCTRL_PIN(PAD_RSTN,		"RSTN"),
-+	PINCTRL_PIN(PAD_GMAC0_MDC,	"GMAC0_MDC"),
-+	PINCTRL_PIN(PAD_GMAC0_MDIO,	"GMAC0_MDIO"),
-+	PINCTRL_PIN(PAD_GMAC0_RXD0,	"GMAC0_RXD0"),
-+	PINCTRL_PIN(PAD_GMAC0_RXD1,	"GMAC0_RXD1"),
-+	PINCTRL_PIN(PAD_GMAC0_RXD2,	"GMAC0_RXD2"),
-+	PINCTRL_PIN(PAD_GMAC0_RXD3,	"GMAC0_RXD3"),
-+	PINCTRL_PIN(PAD_GMAC0_RXDV,	"GMAC0_RXDV"),
-+	PINCTRL_PIN(PAD_GMAC0_RXC,	"GMAC0_RXC"),
-+	PINCTRL_PIN(PAD_GMAC0_TXD0,	"GMAC0_TXD0"),
-+	PINCTRL_PIN(PAD_GMAC0_TXD1,	"GMAC0_TXD1"),
-+	PINCTRL_PIN(PAD_GMAC0_TXD2,	"GMAC0_TXD2"),
-+	PINCTRL_PIN(PAD_GMAC0_TXD3,	"GMAC0_TXD3"),
-+	PINCTRL_PIN(PAD_GMAC0_TXEN,	"GMAC0_TXEN"),
-+	PINCTRL_PIN(PAD_GMAC0_TXC,	"GMAC0_TXC"),
-+};
-+
-+static int jh7110_aon_set_one_pin_mux(struct jh7110_pinctrl *sfp,
-+				      unsigned int pin,
-+				      unsigned int din, u32 dout,
-+				      u32 doen, u32 func)
-+{
-+	if (pin < sfp->gc.ngpio && func == 0)
-+		jh7110_set_gpiomux(sfp, pin, din, dout, doen);
-+
-+	return 0;
-+}
-+
-+static int jh7110_aon_get_padcfg_base(struct jh7110_pinctrl *sfp,
-+				      unsigned int pin)
-+{
-+	if (pin < PAD_GMAC0_MDC)
-+		return JH7110_AON_GPO_PDA_0_5_CFG;
-+
-+	return -1;
-+}
-+
-+static void jh7110_aon_irq_handler(struct irq_desc *desc)
-+{
-+	struct jh7110_pinctrl *sfp = jh7110_from_irq_desc(desc);
-+	struct irq_chip *chip = irq_desc_get_chip(desc);
-+	unsigned long mis;
-+	unsigned int pin;
-+
-+	chained_irq_enter(chip, desc);
-+
-+	mis = readl_relaxed(sfp->base + JH7110_AON_GPIOMIS);
-+	for_each_set_bit(pin, &mis, JH7110_AON_NGPIO)
-+		generic_handle_domain_irq(sfp->gc.irq.domain, pin);
-+
-+	chained_irq_exit(chip, desc);
-+}
-+
-+static int jh7110_aon_init_hw(struct gpio_chip *gc)
-+{
-+	struct jh7110_pinctrl *sfp = container_of(gc,
-+			struct jh7110_pinctrl, gc);
-+
-+	/* mask all GPIO interrupts */
-+	writel_relaxed(0, sfp->base + JH7110_AON_GPIOIE);
-+	/* clear edge interrupt flags */
-+	writel_relaxed(0, sfp->base + JH7110_AON_GPIOIC);
-+	writel_relaxed(0x0f, sfp->base + JH7110_AON_GPIOIC);
-+	/* enable GPIO interrupts */
-+	writel_relaxed(1, sfp->base + JH7110_AON_GPIOEN);
-+	return 0;
-+}
-+
-+static const struct jh7110_gpio_irq_reg jh7110_aon_irq_reg = {
-+	.is_reg_base	= JH7110_AON_GPIOIS,
-+	.ic_reg_base	= JH7110_AON_GPIOIC,
-+	.ibe_reg_base	= JH7110_AON_GPIOIBE,
-+	.iev_reg_base	= JH7110_AON_GPIOIEV,
-+	.ie_reg_base	= JH7110_AON_GPIOIE,
-+	.ris_reg_base	= JH7110_AON_GPIORIS,
-+	.mis_reg_base	= JH7110_AON_GPIOMIS,
-+};
-+
-+static const struct jh7110_pinctrl_soc_info jh7110_aon_pinctrl_info = {
-+	.pins		= jh7110_aon_pins,
-+	.npins		= ARRAY_SIZE(jh7110_aon_pins),
-+	.ngpios		= JH7110_AON_NGPIO,
-+	.gc_base	= JH7110_AON_GC_BASE,
-+	.dout_reg_base	= JH7110_AON_DOUT,
-+	.dout_mask	= GENMASK(3, 0),
-+	.doen_reg_base	= JH7110_AON_DOEN,
-+	.doen_mask	= GENMASK(2, 0),
-+	.gpi_reg_base	= JH7110_AON_GPI,
-+	.gpi_mask	= GENMASK(3, 0),
-+	.gpioin_reg_base	   = JH7110_AON_GPIOIN,
-+	.irq_reg		   = &jh7110_aon_irq_reg,
-+	.jh7110_set_one_pin_mux  = jh7110_aon_set_one_pin_mux,
-+	.jh7110_get_padcfg_base  = jh7110_aon_get_padcfg_base,
-+	.jh7110_gpio_irq_handler = jh7110_aon_irq_handler,
-+	.jh7110_gpio_init_hw	 = jh7110_aon_init_hw,
-+};
-+
-+static const struct of_device_id jh7110_aon_pinctrl_of_match[] = {
-+	{
-+		.compatible = "starfive,jh7110-aon-pinctrl",
-+		.data = &jh7110_aon_pinctrl_info,
-+	},
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, jh7110_aon_pinctrl_of_match);
-+
-+static struct platform_driver jh7110_aon_pinctrl_driver = {
-+	.probe = jh7110_pinctrl_probe,
-+	.driver = {
-+		.name = "starfive-jh7110-aon-pinctrl",
-+		.of_match_table = jh7110_aon_pinctrl_of_match,
-+	},
-+};
-+module_platform_driver(jh7110_aon_pinctrl_driver);
-+
-+MODULE_DESCRIPTION("Pinctrl driver for the StarFive JH7110 SoC aon controller");
-+MODULE_AUTHOR("Jianlong Huang <jianlong.huang@starfivetech.com>");
-+MODULE_LICENSE("GPL");
--- 
-2.38.1
-
+I think there is room for a more general device tree property name than
+"mediatek,pn_swap". The Designware XPCS also supports this, see
+DW_VR_MII_DIG_CTRL2_TX_POL_INV and the comments in
+nxp_sja1105_sgmii_pma_config().
