@@ -2,86 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04A596895CA
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 11:24:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D34DC6895C1
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 11:24:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232445AbjBCKTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 05:19:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39476 "EHLO
+        id S232840AbjBCKUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 05:20:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233342AbjBCKTo (ORCPT
+        with ESMTP id S232853AbjBCKUG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 05:19:44 -0500
-Received: from mail.astralinux.ru (mail.astralinux.ru [217.74.38.119])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74F4D8B7E6;
-        Fri,  3 Feb 2023 02:19:08 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.astralinux.ru (Postfix) with ESMTP id BFC5F1863E8A;
-        Fri,  3 Feb 2023 13:18:33 +0300 (MSK)
-Received: from mail.astralinux.ru ([127.0.0.1])
-        by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id hEE99ydb8xu4; Fri,  3 Feb 2023 13:18:33 +0300 (MSK)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.astralinux.ru (Postfix) with ESMTP id 7014D1863BFD;
-        Fri,  3 Feb 2023 13:18:33 +0300 (MSK)
-X-Virus-Scanned: amavisd-new at astralinux.ru
-Received: from mail.astralinux.ru ([127.0.0.1])
-        by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id sntV4lUThDfK; Fri,  3 Feb 2023 13:18:33 +0300 (MSK)
-Received: from rbta-msk-lt-106062.astralinux.ru (unknown [10.177.20.58])
-        by mail.astralinux.ru (Postfix) with ESMTPSA id 018591862F44;
-        Fri,  3 Feb 2023 13:18:32 +0300 (MSK)
-From:   Anastasia Belova <abelova@astralinux.ru>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Anastasia Belova <abelova@astralinux.ru>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org
-Subject: [PATCH] goku_udc: Add check for NULL in goku_irq
-Date:   Fri,  3 Feb 2023 13:18:28 +0300
-Message-Id: <20230203101828.14799-1-abelova@astralinux.ru>
-X-Mailer: git-send-email 2.30.2
+        Fri, 3 Feb 2023 05:20:06 -0500
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B061E9D05E;
+        Fri,  3 Feb 2023 02:19:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1675419571; x=1706955571;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=PL9NTO6s4JhDRpJmi1ZrsmWCRrO+lAGkVyxRVYDDEmo=;
+  b=ukNO9xT1ILR25efgMojssOEce1MU5FiwLlqsDWNgnM2dXJTXyNtt+yme
+   62qQnBWukUctE00HfRx/zJr3XWUSHAPBJLelIhVG06YW9rgNjWA4CHXHt
+   BWmgFc2yFwa1bAwaUrBjOxvvsOwIb0Fz+u8s3kJshHCzA/4+M9Tc69xQr
+   0=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 03 Feb 2023 02:18:40 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.45.79.139])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2023 02:18:40 -0800
+Received: from [10.216.62.140] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 3 Feb 2023
+ 02:18:36 -0800
+Message-ID: <c0642b4b-5a36-8d30-017b-5585a124211a@quicinc.com>
+Date:   Fri, 3 Feb 2023 15:48:32 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH] firmware: qcom_scm: modify qcom_scm_set_download_mode()
+Content-Language: en-US
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1674562755-5378-1-git-send-email-quic_mojha@quicinc.com>
+ <0e3b9803-2492-87ec-3ae9-00ac820c87ce@linaro.org>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <0e3b9803-2492-87ec-3ae9-00ac820c87ce@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Before dereferencing dev->driver check it for NULL.
 
-If an interrupt handler is called after assigning
-NULL to dev->driver, but before resetting dev->int_enable,
-NULL-pointer will be dereferenced.
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+On 2/2/2023 4:47 PM, Srinivas Kandagatla wrote:
+> 
+> 
+> On 24/01/2023 12:19, Mukesh Ojha wrote:
+>> -static int __qcom_scm_set_dload_mode(struct device *dev, bool enable)
+>> +static int __qcom_scm_set_dload_mode(struct device *dev, enum 
+>> qcom_download_mode mode)
+>>   {
+>>       struct qcom_scm_desc desc = {
+>>           .svc = QCOM_SCM_SVC_BOOT,
+>>           .cmd = QCOM_SCM_BOOT_SET_DLOAD_MODE,
+>>           .arginfo = QCOM_SCM_ARGS(2),
+>> -        .args[0] = QCOM_SCM_BOOT_SET_DLOAD_MODE,
+>> +        .args[0] = mode,
+> 
+> Is this a bug fix? why are we changing arg[0]?
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Anastasia Belova <abelova@astralinux.ru>
----
- drivers/usb/gadget/udc/goku_udc.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Thanks.
 
-diff --git a/drivers/usb/gadget/udc/goku_udc.c b/drivers/usb/gadget/udc/g=
-oku_udc.c
-index bdc56b24b5c9..896bba8b47f1 100644
---- a/drivers/usb/gadget/udc/goku_udc.c
-+++ b/drivers/usb/gadget/udc/goku_udc.c
-@@ -1616,8 +1616,9 @@ static irqreturn_t goku_irq(int irq, void *_dev)
- pm_next:
- 		if (stat & INT_USBRESET) {		/* hub reset done */
- 			ACK(INT_USBRESET);
--			INFO(dev, "USB reset done, gadget %s\n",
--				dev->driver->driver.name);
-+			if (dev->driver)
-+				INFO(dev, "USB reset done, gadget %s\n",
-+					dev->driver->driver.name);
- 		}
- 		// and INT_ERR on some endpoint's crc/bitstuff/... problem
- 	}
---=20
-2.30.2
+This is legacy scm call and it is deprecated.
+Let's not change this.
+I will fix this in v2.
 
+-Mukesh
+> 
+> --srini
+>>           .owner = ARM_SMCCC_OWNER_SIP,
+>>       };
+>> -    desc.args[1] = enable ? QCOM_SCM_BOOT_SET_DLOAD_MODE : 0;
+>> +    desc.args[1] = mode;
+>>       return qcom_scm_call_atomic(__scm->dev, &desc, NULL);
+>>   }
