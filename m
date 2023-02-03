@@ -2,129 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13F1D689976
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 14:08:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC3E768997D
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 14:13:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232124AbjBCNII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 08:08:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38210 "EHLO
+        id S232591AbjBCNNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 08:13:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231216AbjBCNIG (ORCPT
+        with ESMTP id S231616AbjBCNNV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 08:08:06 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F86C660;
-        Fri,  3 Feb 2023 05:08:02 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id k4so15231462eje.1;
-        Fri, 03 Feb 2023 05:08:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=F+oNqKUjSYteeXc32+a1j1XXitAiSrhnlK69sLD2wiE=;
-        b=XBlTfXiA6xY/KBhsBCXPdktvCyiHE4+WzsMBh1ofzFNiG0gYTetLQxFwVv0RkdcVE7
-         TUNApe5IKU7kXXdXrnwaPS4GESt2VxA24ApJ5R5L2yHcxK917UvP22milafts/2bsC6W
-         PnMakg3oUPR94YPtWvntQzkC2IM/f9DNrdSmH19qw/f/tF68qvYjUYPwbgUPUyQIFPqL
-         YuFTnrPCDXG+KNJVg6fpgdi9eIiw6JX75Wxzi2Bq9bsL3ONf31kO+ngSFAGbyQKNdRWn
-         kap5Ma7+kYTyhjKbZmMsWWnJ70yPJOucx6Ct8g6QUB0ccFHbTQojo3jk5GDuZXbVE1PN
-         Fjgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=F+oNqKUjSYteeXc32+a1j1XXitAiSrhnlK69sLD2wiE=;
-        b=yw8ECfn6R6wZM1BuLt5jEUuDPwxLrYRDe1t22s/NT8FBoZpPeJWrRWQU9Jl+dovVc8
-         wUgJ58UPIJJmPCmnHFHRr8khOCEErruImzSlIRr4l3kVx3TGJ6U98FjIc8k8EZRcA4+H
-         Dz5ij8u3cReFMhRxY1cKEhlmI3px7VvpPssDaIzemimwo48YKdlJ2eNaJIjQ1QSUXsZe
-         hyx+TtLMp7uIhMQxDZn9qq6hbm8RWtiTGzUVI2e2+bI2b9NtKlMurcRVX08EZiPRPQUS
-         m5T06ilCUwkF9pqhjJx44nQRmZMQFNtBTWfR80trdsRfx0kqRdNhj4NHaedAKWAiN4ZU
-         652Q==
-X-Gm-Message-State: AO0yUKW0YRPpiI+tSXpdNSqgECpgIJpzw8jpL3is0erF2Zu/bthYtn8F
-        2FFWBPcG4J3gfrcvqA9mx2W0RIjRQh8=
-X-Google-Smtp-Source: AK7set9vzcCz59807cbRnRYiNnlh560czXx/j4rsr1r0CfN6ry7Bg9+duIk7hWbLlWoSjKG9B93atg==
-X-Received: by 2002:a17:906:2012:b0:878:59b6:c194 with SMTP id 18-20020a170906201200b0087859b6c194mr11088644ejo.32.1675429680992;
-        Fri, 03 Feb 2023 05:08:00 -0800 (PST)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id gw16-20020a170906f15000b0088e5f3e1faesm1358722ejb.36.2023.02.03.05.07.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Feb 2023 05:08:00 -0800 (PST)
-Message-ID: <897b3476-d62c-dbdb-63b0-8dbf4f24ccdf@gmail.com>
-Date:   Fri, 3 Feb 2023 14:07:58 +0100
+        Fri, 3 Feb 2023 08:13:21 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE8B302AB
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 05:13:18 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id ED5CE1EC02F2;
+        Fri,  3 Feb 2023 14:13:16 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1675429997;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=64Las0simtBHZlJy4qllj8qNkBUp8L4knJbkayTgmUo=;
+        b=FbG9cm6269RvTGXj66p8cya/iqHNVSmp+bOOFClthToBMh4+e1XvCWFeOmHFCoBTcRd28e
+        odiaXb+KFGDSs5AsubS8khIkI4thFdMK9eAOZOoHyXJMs4bHBMJD55JLCtcYo/KgHVSKs4
+        0ETb0daD82DC89e+EmPmhTBQmsYVgK0=
+Date:   Fri, 3 Feb 2023 14:13:13 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, Masami Hiramatsu <mhiramat@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC] x86/alternative: Support relocations in alternatives
+Message-ID: <Y90IaYHDbCN9P0OX@zn.tnic>
+References: <Y9py2a5Xw0xbB8ou@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 4/6] soc: mediatek: pm-domains: Add ADSP power domain
- data for MT8192
-Content-Language: en-US
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Ikjoon Jang <ikjn@chromium.org>
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        angelogioacchino.delregno@collabora.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Chen-Yu Tsai <wenst@chromium.org>
-References: <20221221034407.19605-1-allen-kh.cheng@mediatek.com>
- <20221221034407.19605-5-allen-kh.cheng@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20221221034407.19605-5-allen-kh.cheng@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y9py2a5Xw0xbB8ou@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Feb 01, 2023 at 03:10:33PM +0100, Peter Zijlstra wrote:
+> (sorry for the repost, forgot lkml)
 
+Btw, you need to rediff this against tip/master. There's alt_instr.flags
+change in there which conflicts with yours.
 
-On 21/12/2022 04:44, Allen-KH Cheng wrote:
-> Add ADSP pm-domains (mtcmos) data for MT8192 SoC.
-> 
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> ---
->   drivers/soc/mediatek/mt8192-pm-domains.h | 16 ++++++++++++++++
->   1 file changed, 16 insertions(+)
-> 
-> diff --git a/drivers/soc/mediatek/mt8192-pm-domains.h b/drivers/soc/mediatek/mt8192-pm-domains.h
-> index b97b2051920f..19e58f0ca1df 100644
-> --- a/drivers/soc/mediatek/mt8192-pm-domains.h
-> +++ b/drivers/soc/mediatek/mt8192-pm-domains.h
-> @@ -287,6 +287,22 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8192[] = {
->   		.sram_pdn_bits = GENMASK(8, 8),
->   		.sram_pdn_ack_bits = GENMASK(12, 12),
->   	},
-> +	[MT8192_POWER_DOMAIN_ADSP] = {
-> +		.name = "adsp",
-> +		.sta_mask = BIT(22),
-> +		.ctl_offs = 0x0358,
-> +		.sram_pdn_bits = GENMASK(8, 8),
-> +		.sram_pdn_ack_bits = GENMASK(12, 12),
-> +		.ext_buck_iso_offs = 0x039C,
+> +static void __always_inline
+> +apply_reloc(int n, void *ptr, uintptr_t diff)
+> +{
+> +	switch (n) {
+> +	case 1: apply_reloc_n(8, ptr, diff); break;
+> +	case 2: apply_reloc_n(16, ptr, diff); break;
+> +	case 4: apply_reloc_n(32, ptr, diff); break;
+> +	default: BUG();
+> +	}
+> +}
+> +
+> +static void __init_or_module noinline
+> +apply_relocation(u8 *instr, size_t len, u8 *dest, u8 *src, size_t src_len)
 
-Can we get a define for this magic number please?
+First param is instr, third is dest.
 
-Regards,
-Matthias
+at the call site you have
 
-> +		.ext_buck_iso_mask = BIT(2),
-> +		.bp_infracfg = {
-> +			BUS_PROT_WR(MT8192_TOP_AXI_PROT_EN_2_ADSP,
-> +				    MT8192_TOP_AXI_PROT_EN_2_SET,
-> +				    MT8192_TOP_AXI_PROT_EN_2_CLR,
-> +				    MT8192_TOP_AXI_PROT_EN_2_STA1),
-> +		},
-> +		.caps = MTK_SCPD_SRAM_ISO | MTK_SCPD_EXT_BUCK_ISO,
-> +	},
->   	[MT8192_POWER_DOMAIN_CAM] = {
->   		.name = "cam",
->   		.sta_mask = BIT(23),
+apply_relocation(insn_buff, a->instrlen, instr, replacement, a->replacementlen);
+
+and instr is third param. Let's call the function params:
+
+static void __init_or_module noinline
+apply_relocation(u8 *insn_buff, size_t len, u8 *instr, u8 *repl, size_t repl_len)
+
+for less confusion pls.
+
+> +{
+> +	struct insn insn;
+> +	int i = 0;
+> +
+> +	for (;;) {
+> +		if (insn_decode_kernel(&insn, &instr[i]))
+
+I guess say a warning here so that we catch when it goes into the fields early.
+
+> +			return;
+> +
+> +		switch (insn.opcode.bytes[0]) {
+> +		case 0x0f:
+> +			if (insn.opcode.bytes[1] < 0x80 ||
+> +			    insn.opcode.bytes[1] > 0x8f)
+> +				break;
+> +
+> +			fallthrough;	/* Jcc.d32 */
+> +		case 0x70 ... 0x7f:	/* Jcc.d8 */
+> +		case JMP8_INSN_OPCODE:
+> +		case JMP32_INSN_OPCODE:
+> +		case CALL_INSN_OPCODE:
+> +			u8 *target = src + i + insn.length + insn.immediate.value;
+> +			if (target < src || target > src + src_len) {
+> +				apply_reloc(insn.immediate.nbytes,
+> +					    instr + i + insn_offset_immediate(&insn),
+> +					    src - dest);
+> +			}
+
+Uff, it took me a while to parse this. So this can be simpler. The basic
+math is:
+
+	new_offset = next_rip - target_address;
+
+where
+	next_rip = instr + insn.length;
+
+and I admit that my function was a bit clumsy but I think yours can be
+made simpler while keeping it cleaner.
+
+Also, calling this all "reloc" here is kinda confusing because this is not a
+relocation but the offset from the next RIP to the target of the
+JMP/CALL.
+
+Lemme think about it a bit more.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
