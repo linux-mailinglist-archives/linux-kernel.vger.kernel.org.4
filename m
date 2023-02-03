@@ -2,122 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31267688F03
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 06:33:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87107688ECD
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 06:08:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231956AbjBCFdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 00:33:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40262 "EHLO
+        id S231755AbjBCFH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 00:07:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbjBCFdH (ORCPT
+        with ESMTP id S231149AbjBCFHz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 00:33:07 -0500
-X-Greylist: delayed 1698 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 02 Feb 2023 21:33:04 PST
-Received: from formenos.hmeau.com (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C5934226;
-        Thu,  2 Feb 2023 21:33:03 -0800 (PST)
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1pNoFN-0071Su-1R; Fri, 03 Feb 2023 13:04:26 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 03 Feb 2023 13:04:25 +0800
-Date:   Fri, 3 Feb 2023 13:04:25 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Lionel Debieve <lionel.debieve@foss.st.com>,
-        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v3 0/6] crypto: stm32 hash - reuse for Ux500
-Message-ID: <Y9yV2fJbumrUDW5a@gondor.apana.org.au>
-References: <20221227-ux500-stm32-hash-v3-0-32ee12cd6f06@linaro.org>
+        Fri, 3 Feb 2023 00:07:55 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D236440C9
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 21:07:54 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id h24so6218583lfv.6
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 21:07:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=dSI47TN1rvpQZQfzrMXdYQdHL57hkynNgY6fDRFFlN4=;
+        b=UTcc51f+Jh6rBfVA0K8Gf8DRxVq0kI4W7jOIALB6af2YUvG0i8Tv8DCXEuSRlLa7a0
+         C1ZVWOtxx0wpExXVmqVM2JnVxIpacZva/f3Fs6zPAlV9ts+R/oNNAdEnDz3/iPt9A+6U
+         ZegmZ4KOGVfykFJfwNU+nsPW0IIJphBkZuwgKDmrxhOovy6WWkL2GX8phI/dkZt7AZpc
+         gRJ4YdSMTgNioIKg2Dqh7q8QMVZg3whkK+i/PXVHBYi42Zy6jhmIHVK0v76jJ+hgaOId
+         E5kGfJpD2Oa2kboOxRtKNz0I62p48a1Met52452dLnmiDhHzSq0XegfUVwMwZvruWgJp
+         9fgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dSI47TN1rvpQZQfzrMXdYQdHL57hkynNgY6fDRFFlN4=;
+        b=rvmNdhK15XxEeiUm9TvZOolSFkTGs3S4GhAZ+KHXrTZjGXzlW3DszGKlZdgj3iofdJ
+         4FePOZAzlPVXqAEhFPJrfIQG+YpLoZEPwkhCQd2uuSBxnffv/SQCgCcDCFFRj+vwFyFu
+         8XC85+/bxMKPpma66FDnRvsaoAVXsFKOmJUtipHt5IcsTotxxbF+0lZmXVbavjci9ikG
+         Mx8dKNIk/8sgvpF1ljKs6eJBcRUKdBYtkGCXBE9zhl17PV+zeyqdiSm7IoLz9za+DrvR
+         zK0yjAfht9KXEFQg7bYOAHi/nXeYZT6m7JRxL4aVX1L9P8pSbzKRr2buvDjMqKylIsqx
+         7BFw==
+X-Gm-Message-State: AO0yUKVlu3l6l1jXNTu3c2UL3spnyE7sNeIa6yzqjf0GkIgKzNcEFcmq
+        YmqCm2jr/iCh5w24SFt+E+95chzPHcTL7QjPJD5a/g==
+X-Google-Smtp-Source: AK7set/QQMcSjP18PtuXeZRhLR2/W2UW755nYMG0W6Md1KoY4A19NKki1v6DMYCVH/30aIkpfpN4CfdW7+5JTAkq3Ys=
+X-Received: by 2002:a05:6512:32c8:b0:4d8:5d6a:4 with SMTP id
+ f8-20020a05651232c800b004d85d6a0004mr1699418lfg.107.1675400872846; Thu, 02
+ Feb 2023 21:07:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221227-ux500-stm32-hash-v3-0-32ee12cd6f06@linaro.org>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_SOFTFAIL
-        autolearn=no autolearn_force=no version=3.4.6
+References: <0000000000009da4c705dcb87735@google.com> <0000000000007a0f9905f3bf9d9d@google.com>
+In-Reply-To: <0000000000007a0f9905f3bf9d9d@google.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Fri, 3 Feb 2023 06:07:39 +0100
+Message-ID: <CACT4Y+Y6sCOwGKKcOyv+Qtjai0AX==Rg7pnjLXbeSO-d7LDAaw@mail.gmail.com>
+Subject: Re: [syzbot] WARNING in check_map_prog_compatibility
+To:     syzbot <syzbot+e3f8d4df1e1981a97abb@syzkaller.appspotmail.com>
+Cc:     andrii.nakryiko@gmail.com, andrii@kernel.org, ast@kernel.org,
+        bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+        haoluo@google.com, hawk@kernel.org, john.fastabend@gmail.com,
+        jolsa@kernel.org, kafai@fb.com, kpsingh@kernel.org,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, martin.lau@linux.dev, memxor@gmail.com,
+        nathan@kernel.org, ndesaulniers@google.com, netdev@vger.kernel.org,
+        sdf@google.com, song@kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, trix@redhat.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 01:23:06AM +0100, Linus Walleij wrote:
-> By taking some small portions of the Ux500 HASH driver and
-> adding to the STM32 driver, it turns out we can support both
-> platforms with the more modern STM32 driver.
-> 
-> The STM32 driver is more modern and compact thanks to using
-> things like the crypto engine.
-> 
-> We add a polled mode since the Ux500 does not have any
-> interrupt. Incidentally, this could perhaps be re-used to
-> implement synchronous mode, if this is desireable.
-> 
-> To: Herbert Xu <herbert@gondor.apana.org.au>
-> To: "David S. Miller" <davem@davemloft.net>
-> To: Rob Herring <robh+dt@kernel.org>
-> To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> To: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-> To: Alexandre Torgue <alexandre.torgue@foss.st.com>
-> To: Lionel Debieve <lionel.debieve@foss.st.com>
-> Cc: linux-crypto@vger.kernel.org
-> Cc: devicetree@vger.kernel.org
-> Cc: linux-stm32@st-md-mailman.stormreply.com
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> 
-> ---
-> Changes in v3:
-> - Allocate the synchronous fallback algorithm in .cra_init()
->   and free it in .cra_exit().
-> - Pick up some review tags.
-> - Link to v2: https://lore.kernel.org/r/20221227-ux500-stm32-hash-v2-0-bc443bc44ca4@linaro.org
-> 
-> Changes in v2:
-> - Use an else-clause in the DT bindings.
-> - Fix up issues pointed out by Lionel in the driver extension.
-> - Dropped the patch converting dma_mode to a bool after
->   Lionel explained how this works.
-> - Link to v1: https://lore.kernel.org/r/20221227-ux500-stm32-hash-v1-0-b637ac4cda01@linaro.org
-> 
-> ---
-> Linus Walleij (6):
->       dt-bindings: crypto: Let STM32 define Ux500 HASH
->       crypto: stm32/hash: Simplify code
->       crypto: stm32/hash: Use existing busy poll function
->       crypto: stm32/hash: Wait for idle before final CPU xmit
->       crypto: stm32/hash: Support Ux500 hash
->       crypto: ux500/hash - delete driver
-> 
->  .../devicetree/bindings/crypto/st,stm32-hash.yaml  |   23 +-
->  drivers/crypto/Kconfig                             |   10 -
->  drivers/crypto/Makefile                            |    1 -
->  drivers/crypto/stm32/stm32-hash.c                  |  266 ++-
->  drivers/crypto/ux500/Kconfig                       |   22 -
->  drivers/crypto/ux500/Makefile                      |    7 -
->  drivers/crypto/ux500/hash/Makefile                 |   11 -
->  drivers/crypto/ux500/hash/hash_alg.h               |  398 ----
->  drivers/crypto/ux500/hash/hash_core.c              | 1966 --------------------
->  9 files changed, 249 insertions(+), 2455 deletions(-)
-> ---
-> base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
-> change-id: 20221227-ux500-stm32-hash-9ee26834292f
-> 
-> Best regards,
-> -- 
-> Linus Walleij <linus.walleij@linaro.org>
+On Fri, 3 Feb 2023 at 00:06, syzbot
+<syzbot+e3f8d4df1e1981a97abb@syzkaller.appspotmail.com> wrote:
+>
+> This bug is marked as fixed by commit:
+> bpf: Relax the requirement to use preallocated hash maps in
 
-All applied.  Thanks.
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+Let' try to fix line wrapping in the commit title:
+
+#syz fix:
+bpf: Relax the requirement to use preallocated hash maps in tracing progs.
+
+
+> But I can't find it in the tested trees[1] for more than 90 days.
+> Is it a correct commit? Please update it by replying:
+>
+> #syz fix: exact-commit-title
+>
+> Until then the bug is still considered open and new crashes with
+> the same signature are ignored.
+>
+> Kernel: Linux
+> Dashboard link: https://syzkaller.appspot.com/bug?extid=e3f8d4df1e1981a97abb
+>
+> ---
+> [1] I expect the commit to be present in:
+>
+> 1. for-kernelci branch of
+> git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
+>
+> 2. master branch of
+> git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
+>
+> 3. master branch of
+> git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
+>
+> 4. master branch of
+> git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git
+>
+> The full list of 10 trees can be found at
+> https://syzkaller.appspot.com/upstream/repos
+>
+> --
+> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/0000000000007a0f9905f3bf9d9d%40google.com.
