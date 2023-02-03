@@ -2,123 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A1F368A6EB
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 00:31:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF05468A6EE
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 00:34:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231701AbjBCXbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 18:31:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46020 "EHLO
+        id S232691AbjBCXeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 18:34:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbjBCXbA (ORCPT
+        with ESMTP id S229626AbjBCXeO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 18:31:00 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED731F4A8;
-        Fri,  3 Feb 2023 15:30:59 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id dr8so19493203ejc.12;
-        Fri, 03 Feb 2023 15:30:59 -0800 (PST)
+        Fri, 3 Feb 2023 18:34:14 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D4531633F
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 15:34:13 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id k13so6879229plg.0
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 15:34:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=awV/5XZjt2KEg87Bf/oa/VcPR36YkggADN6IG+/kHnU=;
-        b=KBaP1kJIyjx67NBfRIntmzyQWCIjJg+Fg435SSWO7zLbkMtGKZYNQQ5HokhIIA60sE
-         WffYDlu6x5ArBynez4C6FMR3UV395pTjC5Pkqduj4De98lcEnXrHF3htvXWB2Z+qOvzr
-         cHFhj9BYj0/dWCYaq4X6QoKBxaAPFUD8XbpXLsRNWzbWzWCLgVn9VolBmvji5JmwGDq4
-         Ra8a5+ItO8kvj/mxsaQfhuzwbVUw5EdFZ/TCo27SRy43M9mKCrCBXyMHmD/e9pu50bI1
-         ZDVtVTj4pLvmBjzQWVEc7Nzx2Fw0KsKHp3dTqaCKVMfsTdeHx/VsA1Q4yBfmFOmqaI8Z
-         F6ww==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6oU+/BUJEqSH1rwyi+AFr1P0CnGEURs/L67LaOUlsvI=;
+        b=MWi1HGbriGJlFR7rmopelt7eIZpVNld6It8CyxxIDjlZVJBvAIJsiQfdo0sxwXjFHK
+         NRBzgZpd9fyRXRg9WozmvwZ//jCcAp+z2BfHA0oMliaqBGjUw7rE2dCKNhrbMZpIPvTc
+         RzOQgSSAn1wa199dehrjf8zmZy/nmSut7c58g=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=awV/5XZjt2KEg87Bf/oa/VcPR36YkggADN6IG+/kHnU=;
-        b=khEBFY13fJ/7JQe++8vrq+KmbaUP9rb3BIvgl5L6qwEIsGSqtMWXjtAErBo+h7PmjQ
-         HcXshFgQp1BejI5zgLzSoyfl6yw2asLLDBlvnUPEN3TcYR6oLI1sScoZjFkArKKYoygB
-         9/YAtK93J+MwI3wF803H0W+qPqS/4lBdZIJqlynTjBG2Yd7BjHKE4Q2itbapGrLJzaGQ
-         h8l3y0rzH+Sgvx5TskBhumXRsFBnUL3YwiwfRCClvv2ZzzYa1OIyZRzCyDMw+OSXB9LD
-         UTVSf04Kz5Zp5h3uGigUXxN9RYecTlPmE3H2fSns1U0PTUsheHsMr3IrRg81GpaU82kR
-         0A3w==
-X-Gm-Message-State: AO0yUKUSJZ4ecLNajgnfwEhidJoxjHyzfVFQ+0e3fTN9pxWDgJD7I4cO
-        ZxyY1+Yh8PnYgBxAPzZ6IIg=
-X-Google-Smtp-Source: AK7set/2GkFmiMzurtR/PYCAUMldAoVJ+T91vca/Cqd+u5hBB2MhV6abELpyLq2WN0iXq1emFgShYg==
-X-Received: by 2002:a17:907:2d28:b0:88e:682e:3a9e with SMTP id gs40-20020a1709072d2800b0088e682e3a9emr13757225ejc.61.1675467058238;
-        Fri, 03 Feb 2023 15:30:58 -0800 (PST)
-Received: from skbuf ([188.26.57.116])
-        by smtp.gmail.com with ESMTPSA id m19-20020a1709061ed300b0088ed7de4821sm2024587ejj.158.2023.02.03.15.30.57
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6oU+/BUJEqSH1rwyi+AFr1P0CnGEURs/L67LaOUlsvI=;
+        b=NYa/K8MEgbS8trV7EtAoDUvQa29J25F5zcU+NBA0dC2qciMFD6PdWABC1P715hPgPA
+         0c7ygNXN8I4FISA/x9bfxG2eMrjvklwIqcznRKOOge2fmtlirbNajKoHh3CPct+ulyc0
+         9p3XXnYPT8Il0ZMFzm4EFMjETSDInvC0O44Pj2rZ8ThLXOOQGGDnudw+txHSrs95zc3E
+         YaQy+gMgmGgFYvn6IaduAwsLfYYOjQf2oP2CBiTrFTjBPi49tyNRqB8bN1/+/ipWJkFw
+         cRd42OJ4V/MLzE+0DOrnqYzZoPdzMDTWevBF7ubWXGMbqhurOTAn+f44RnMIHUJoLt1X
+         yoeQ==
+X-Gm-Message-State: AO0yUKUJhKT9xr8N34hOnZih5Nk36ryXPQE0TCqOiCqVd1tITWwumU01
+        /yQVktbxMojwoH9jUzCi88vRTg==
+X-Google-Smtp-Source: AK7set9LBswFtzsZwcR9gI92dra3cplBvHIJtb4P0+iR/Itdg7R5FNXZd6oCRgXiBpg57MuEu89ZQA==
+X-Received: by 2002:a17:902:c20c:b0:194:9b4e:1c90 with SMTP id 12-20020a170902c20c00b001949b4e1c90mr11508975pll.57.1675467252881;
+        Fri, 03 Feb 2023 15:34:12 -0800 (PST)
+Received: from ryanneph-glaptop.corp.google.com ([2620:15c:9d:200:7617:a96c:96d2:ed12])
+        by smtp.gmail.com with ESMTPSA id x21-20020a170902ea9500b001947c617c45sm2144320plb.221.2023.02.03.15.34.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 15:30:57 -0800 (PST)
-Date:   Sat, 4 Feb 2023 01:30:55 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Rakesh Sankaranarayanan <rakesh.sankaranarayanan@microchip.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        andrew@lunn.ch, f.fainelli@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        linux@armlinux.org.uk
-Subject: Re: [RFC PATCH net-next 06/11] net: dsa: microchip: lan937x: get
- cascade tag protocol
-Message-ID: <20230203233055.vdctyjmdeam4tj5p@skbuf>
-References: <20230202125930.271740-1-rakesh.sankaranarayanan@microchip.com>
- <20230202125930.271740-7-rakesh.sankaranarayanan@microchip.com>
+        Fri, 03 Feb 2023 15:34:12 -0800 (PST)
+From:   Ryan Neph <ryanneph@chromium.org>
+To:     David Airlie <airlied@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, dri-devel@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Cc:     Yiwei Zhang <zzyiwei@chromium.org>,
+        Rob Clark <robdclark@chromium.org>,
+        Ryan Neph <ryanneph@chromium.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Emil Velikov <emil.velikov@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>
+Subject: [PATCH v2] drm/virtio: exbuf->fence_fd unmodified on interrupted wait
+Date:   Fri,  3 Feb 2023 15:33:44 -0800
+Message-Id: <20230203233345.2477767-1-ryanneph@chromium.org>
+X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230202125930.271740-7-rakesh.sankaranarayanan@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 06:29:25PM +0530, Rakesh Sankaranarayanan wrote:
-> Update ksz_get_tag_protocol to return separate tag protocol if
-> switch is connected in cascade mode. Variable ds->dst->last_switch
-> will contain total number of switches registered. For cascaded
-> connection alone, this will be more than zero.
+An interrupted dma_fence_wait() becomes an -ERESTARTSYS returned
+to userspace ioctl(DRM_IOCTL_VIRTGPU_EXECBUFFER) calls, prompting to
+retry the ioctl(), but the passed exbuf->fence_fd has been reset to -1,
+making the retry attempt fail at sync_file_get_fence().
 
-Nope, last_switch does not contain the total number of switches
-registered, but the index of the last switch in this tree. DSA does not
-assume that the indices are consecutive.
+The uapi for DRM_IOCTL_VIRTGPU_EXECBUFFER is changed to retain the
+passed value for exbuf->fence_fd when returning anything besides a
+successful result from the ioctl.
 
-If you make any assumption in the driver regarding switch numbering in a
-cascade setup, it is an assumption that a device tree writer who is not
-you needs to know about. So you must document it in
-Documentation/devicetree/bindings/net/dsa/microchip,lan937x.yaml.
+Fixes: 2cd7b6f08bc4 ("drm/virtio: add in/out fence support for explicit synchronization")
+Signed-off-by: Ryan Neph <ryanneph@chromium.org>
+Reviewed-by: Rob Clark <robdclark@gmail.com>
+Reviewed-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 
-> 
-> Signed-off-by: Rakesh Sankaranarayanan <rakesh.sankaranarayanan@microchip.com>
-> ---
->  drivers/net/dsa/microchip/ksz_common.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/dsa/microchip/ksz_common.c b/drivers/net/dsa/microchip/ksz_common.c
-> index adf8391dd29f..2160a3e61a5a 100644
-> --- a/drivers/net/dsa/microchip/ksz_common.c
-> +++ b/drivers/net/dsa/microchip/ksz_common.c
-> @@ -2567,9 +2567,13 @@ static enum dsa_tag_protocol ksz_get_tag_protocol(struct dsa_switch *ds,
->  	    dev->chip_id == KSZ9567_CHIP_ID)
->  		proto = DSA_TAG_PROTO_KSZ9477;
->  
-> -	if (is_lan937x(dev))
-> +	if (is_lan937x(dev)) {
->  		proto = DSA_TAG_PROTO_LAN937X_VALUE;
->  
-> +		if (ds->dst->last_switch)
-> +			proto = DSA_TAG_PROTO_LAN937X_CASCADE_VALUE;
-> +	}
+---
 
-Also nope, see the comment on patch 1.
+Changes in v2:
+- No longer modifies exbuf->fence_fd unless DRM_IOCTL_VIRTGPU_EXECBUFFER
+  succeeds.
+- Added r-b tags (Rob/Dmitry) from v1.
 
-> +
->  	return proto;
->  }
->  
-> -- 
-> 2.34.1
-> 
+ drivers/gpu/drm/virtio/virtgpu_ioctl.c | 5 +----
+ include/uapi/drm/virtgpu_drm.h         | 1 +
+ 2 files changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/gpu/drm/virtio/virtgpu_ioctl.c b/drivers/gpu/drm/virtio/virtgpu_ioctl.c
+index 9f4a90493aea..da45215a933d 100644
+--- a/drivers/gpu/drm/virtio/virtgpu_ioctl.c
++++ b/drivers/gpu/drm/virtio/virtgpu_ioctl.c
+@@ -126,7 +126,6 @@ static int virtio_gpu_execbuffer_ioctl(struct drm_device *dev, void *data,
+ 	void __user *user_bo_handles = NULL;
+ 	struct virtio_gpu_object_array *buflist = NULL;
+ 	struct sync_file *sync_file;
+-	int in_fence_fd = exbuf->fence_fd;
+ 	int out_fence_fd = -1;
+ 	void *buf;
+ 	uint64_t fence_ctx;
+@@ -152,13 +151,11 @@ static int virtio_gpu_execbuffer_ioctl(struct drm_device *dev, void *data,
+ 		ring_idx = exbuf->ring_idx;
+ 	}
+ 
+-	exbuf->fence_fd = -1;
+-
+ 	virtio_gpu_create_context(dev, file);
+ 	if (exbuf->flags & VIRTGPU_EXECBUF_FENCE_FD_IN) {
+ 		struct dma_fence *in_fence;
+ 
+-		in_fence = sync_file_get_fence(in_fence_fd);
++		in_fence = sync_file_get_fence(exbuf->fence_fd);
+ 
+ 		if (!in_fence)
+ 			return -EINVAL;
+diff --git a/include/uapi/drm/virtgpu_drm.h b/include/uapi/drm/virtgpu_drm.h
+index 0512fde5e697..7b158fcb02b4 100644
+--- a/include/uapi/drm/virtgpu_drm.h
++++ b/include/uapi/drm/virtgpu_drm.h
+@@ -64,6 +64,7 @@ struct drm_virtgpu_map {
+ 	__u32 pad;
+ };
+ 
++/* fence_fd is modified on success if VIRTGPU_EXECBUF_FENCE_FD_OUT flag is set. */
+ struct drm_virtgpu_execbuffer {
+ 	__u32 flags;
+ 	__u32 size;
+-- 
+2.39.1.519.gcb327c4b5f-goog
+
