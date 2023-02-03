@@ -2,357 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4C73689FF6
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 18:08:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CEF568A003
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 18:10:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233004AbjBCRIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 12:08:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54206 "EHLO
+        id S233469AbjBCRKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 12:10:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232916AbjBCRIL (ORCPT
+        with ESMTP id S232054AbjBCRKW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 12:08:11 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7699D584
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 09:07:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675444043;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aTqTPW1mDhdo6UVlHMTIqNJ0ko0wBmbKrV94jadhHOI=;
-        b=Gj0HKFF3zF6JRpnsVgntsHbjvbNNZA64yv6w7bSc91FktN6Qe2bNb1aMharu9JMYzowpdO
-        w+pidjd7IScqNHzd7D+OxIbuu6/VcKgDuYetFYH6P6tKgPLGp/DdsXOQpS1jbWQqGzzXVz
-        5rKgEALCewqY30bm2x+4/LI5022t62w=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-249-iS1N0yTmPXapMryzbrFgPw-1; Fri, 03 Feb 2023 12:07:22 -0500
-X-MC-Unique: iS1N0yTmPXapMryzbrFgPw-1
-Received: by mail-qv1-f69.google.com with SMTP id p15-20020a0cf54f000000b0054fc21ff275so3041376qvm.4
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 09:07:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aTqTPW1mDhdo6UVlHMTIqNJ0ko0wBmbKrV94jadhHOI=;
-        b=64BFhvXZj+fMgg7OsoItOX7wTaCDAororhRNVCERTHwtIxaD1iZT8aq8AfdyYKjBV2
-         CxVBf8zV6CmcBfheB+BJ0rR+LPtI3hQBooYBlqRv93GeFIhg3Ktdru52OJt7WsHQI/f1
-         lRUsDzHC2ixLNISYp4SKT4ZkfXiRbrNnw1BWfrDaHWF527kbQPXnGkAAasOAPIL3CSHe
-         WpiDiTfrbAVtxuOceWe4Ui53BvU+4IkRHK78hsD5ll4xq7ugDjCQkTVKpARB6P1Em0Pe
-         GxuyhuX/fudRFPBEDy3NPYTCgSCxCNJLe0qPOLOOy6YLWxjLltrA9XTC7Zwp/bcV8+YW
-         qEJw==
-X-Gm-Message-State: AO0yUKUaI9buOWzZN21Eu3qq8k9C+WQ9NqXd3rTRvYfRYra+hKxrVOtD
-        SxivSSFFUhjzWULGBsYHiNLbeBEqD1D0KAKf3Eq/U2S0XrVFw4Gpg4Dva1bHSeA6kumbsjWuEVY
-        RmNIFYt5ZPNFe6eWFSZku5gY=
-X-Received: by 2002:a05:6214:5ed2:b0:537:6aea:124b with SMTP id mn18-20020a0562145ed200b005376aea124bmr16953969qvb.16.1675444041611;
-        Fri, 03 Feb 2023 09:07:21 -0800 (PST)
-X-Google-Smtp-Source: AK7set/E7wRxA2GC/e/iNJqZjQ9H5pct+9VhQL/zag8BiEqJiu9fmGsD+wCCGxgYgBCcSHNC96+Aaw==
-X-Received: by 2002:a05:6214:5ed2:b0:537:6aea:124b with SMTP id mn18-20020a0562145ed200b005376aea124bmr16953943qvb.16.1675444041288;
-        Fri, 03 Feb 2023 09:07:21 -0800 (PST)
-Received: from klayman.redhat.com (net-2-34-30-183.cust.vodafonedsl.it. [2.34.30.183])
-        by smtp.gmail.com with ESMTPSA id b13-20020ac801cd000000b003a6a19ee4f0sm1884287qtg.33.2023.02.03.09.07.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 09:07:21 -0800 (PST)
-From:   Marco Pagani <marpagan@redhat.com>
-To:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>
-Cc:     Marco Pagani <marpagan@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org
-Subject: [RFC PATCH 4/4] fpga: add fake FPGA bridge
-Date:   Fri,  3 Feb 2023 18:06:53 +0100
-Message-Id: <20230203170653.414990-5-marpagan@redhat.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230203170653.414990-1-marpagan@redhat.com>
-References: <20230203170653.414990-1-marpagan@redhat.com>
+        Fri, 3 Feb 2023 12:10:22 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EB721E2A8;
+        Fri,  3 Feb 2023 09:10:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EB738B82B69;
+        Fri,  3 Feb 2023 17:10:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 94F42C4339B;
+        Fri,  3 Feb 2023 17:10:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675444218;
+        bh=Lc8NBVtIgoOB6hZSbFKyiIR44HSS+0RVfc5tRCfB04A=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=B4prKb1Vsv1QGR3b+OvIV1egZOWdM1VpL9Pa6b++ig1Zvi0/Gjjvgkr7m0j8VqKlZ
+         G+n5fKgZS25nFJhF1Yw0Ntx37UcC6sT/NEtqkXvyC3egCtwxemBeupPts1PRU/JZRB
+         IyGO98dx6zpWXkUKYoEFWa5mBPTmeN50sCl+iqsWpj5HRW5m/QuNHN0dg6sJBvBLV+
+         xjpsrO7ZIgwXe0wFyr9fQY3piTxSHGEZVQ+ROPMtotmmh7DVxQ7hYfDDh60uRP645L
+         we+s3ptEEIsYvSJunsQPmQPTthU0NvggWgCxqAvEYt6Iibpfl9Z0QrUjYBaZmeMe7h
+         LTVzWvl5fyp/g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7AA17E270C5;
+        Fri,  3 Feb 2023 17:10:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH bpf-next v3] bpf/docs: Document kfunc lifecycle / stability
+ expectations
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167544421849.11975.17490109682248659493.git-patchwork-notify@kernel.org>
+Date:   Fri, 03 Feb 2023 17:10:18 +0000
+References: <20230203155727.793518-2-void@manifault.com>
+In-Reply-To: <20230203155727.793518-2-void@manifault.com>
+To:     David Vernet <void@manifault.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@meta.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        toke@redhat.com, corbet@lwn.net, linux-doc@vger.kernel.org,
+        brouer@redhat.com, bagasdotme@gmail.com, linux-api@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add fake FPGA bridge driver with support functions. The driver includes
-a counter for the number of switching cycles. This module is part of
-the KUnit test suite for the FPGA subsystem.
+Hello:
 
-Signed-off-by: Marco Pagani <marpagan@redhat.com>
----
- drivers/fpga/tests/fake-fpga-bridge.c | 214 ++++++++++++++++++++++++++
- drivers/fpga/tests/fake-fpga-bridge.h |  36 +++++
- 2 files changed, 250 insertions(+)
- create mode 100644 drivers/fpga/tests/fake-fpga-bridge.c
- create mode 100644 drivers/fpga/tests/fake-fpga-bridge.h
+This patch was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-diff --git a/drivers/fpga/tests/fake-fpga-bridge.c b/drivers/fpga/tests/fake-fpga-bridge.c
-new file mode 100644
-index 000000000000..1f3c8e4fbb6a
---- /dev/null
-+++ b/drivers/fpga/tests/fake-fpga-bridge.c
-@@ -0,0 +1,214 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Driver for fake FPGA bridge
-+ *
-+ * Copyright (C) 2023 Red Hat, Inc. All rights reserved.
-+ *
-+ * Author: Marco Pagani <marpagan@redhat.com>
-+ */
-+
-+#include <linux/types.h>
-+#include <linux/device.h>
-+#include <linux/platform_device.h>
-+#include <linux/fpga/fpga-bridge.h>
-+#include <kunit/test.h>
-+
-+#include "fake-fpga-bridge.h"
-+
-+#define FAKE_FPGA_BRIDGE_DEV_NAME	"fake_fpga_bridge"
-+
-+struct fake_bridge_priv {
-+	int id;
-+	bool enable;
-+	int cycles_count;
-+	struct kunit *test;
-+};
-+
-+struct fake_bridge_data {
-+	struct kunit *test;
-+};
-+
-+static int op_enable_show(struct fpga_bridge *bridge)
-+{
-+	struct fake_bridge_priv *priv;
-+
-+	priv = bridge->priv;
-+
-+	if (priv->test)
-+		kunit_info(priv->test, "Fake FPGA bridge %d: enable_show\n",
-+			   priv->id);
-+
-+	return priv->enable;
-+}
-+
-+static int op_enable_set(struct fpga_bridge *bridge, bool enable)
-+{
-+	struct fake_bridge_priv *priv;
-+
-+	priv = bridge->priv;
-+
-+	if (enable && !priv->enable)
-+		priv->cycles_count++;
-+
-+	priv->enable = enable;
-+
-+	if (priv->test)
-+		kunit_info(priv->test, "Fake FPGA bridge %d: enable_set: %d\n",
-+			   priv->id, enable);
-+
-+	return 0;
-+}
-+
-+static void op_remove(struct fpga_bridge *bridge)
-+{
-+}
-+
-+static const struct fpga_bridge_ops fake_fpga_bridge_ops = {
-+	.enable_show = op_enable_show,
-+	.enable_set = op_enable_set,
-+	.fpga_bridge_remove = op_remove,
-+};
-+
-+/**
-+ * fake_fpga_bridge_register - register a fake FPGA bridge
-+ * @bridge_ctx: fake FPGA bridge context data structure.
-+ * @test: KUnit test context object.
-+ *
-+ * Return: 0 if registration succeeded, an error code otherwise.
-+ */
-+int fake_fpga_bridge_register(struct fake_fpga_bridge *bridge_ctx,
-+			      struct kunit *test)
-+{
-+	struct fake_bridge_data pdata;
-+	struct fake_bridge_priv *priv;
-+	int ret;
-+
-+	pdata.test = test;
-+
-+	bridge_ctx->pdev = platform_device_alloc(FAKE_FPGA_BRIDGE_DEV_NAME,
-+						 PLATFORM_DEVID_AUTO);
-+	if (IS_ERR(bridge_ctx->pdev)) {
-+		pr_err("Fake FPGA bridge device allocation failed\n");
-+		return -ENOMEM;
-+	}
-+
-+	platform_device_add_data(bridge_ctx->pdev, &pdata, sizeof(pdata));
-+
-+	ret = platform_device_add(bridge_ctx->pdev);
-+	if (ret) {
-+		pr_err("Fake FPGA bridge device add failed\n");
-+		platform_device_put(bridge_ctx->pdev);
-+		return ret;
-+	}
-+
-+	bridge_ctx->bridge = platform_get_drvdata(bridge_ctx->pdev);
-+
-+	if (test) {
-+		priv = bridge_ctx->bridge->priv;
-+		kunit_info(test, "Fake FPGA bridge %d registered\n", priv->id);
-+	}
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(fake_fpga_bridge_register);
-+
-+/**
-+ * fake_fpga_bridge_unregister - unregister a fake FPGA bridge
-+ * @bridge_ctx: fake FPGA bridge context data structure.
-+ */
-+void fake_fpga_bridge_unregister(struct fake_fpga_bridge *bridge_ctx)
-+{
-+	struct fake_bridge_priv *priv;
-+	struct kunit *test;
-+	int id;
-+
-+	priv = bridge_ctx->bridge->priv;
-+	test = priv->test;
-+	id = priv->id;
-+
-+	if (bridge_ctx->pdev) {
-+		platform_device_unregister(bridge_ctx->pdev);
-+		if (test)
-+			kunit_info(test, "Fake FPGA bridge %d unregistered\n", id);
-+	}
-+}
-+EXPORT_SYMBOL_GPL(fake_fpga_bridge_unregister);
-+
-+/**
-+ * fake_fpga_bridge_get_state - get state of a fake FPGA bridge
-+ * @bridge_ctx: fake FPGA bridge context data structure.
-+ *
-+ * Return: 1 if the bridge is enabled, 0 if disabled.
-+ */
-+int fake_fpga_bridge_get_state(const struct fake_fpga_bridge *bridge_ctx)
-+{
-+	return bridge_ctx->bridge->br_ops->enable_show(bridge_ctx->bridge);
-+}
-+EXPORT_SYMBOL_GPL(fake_fpga_bridge_get_state);
-+
-+/**
-+ * fake_fpga_bridge_get_cycles_count - get the number of switching cycles
-+ * @bridge_ctx: fake FPGA bridge context data structure.
-+ *
-+ * Return: number of switching cycles.
-+ */
-+int fake_fpga_bridge_get_cycles_count(const struct fake_fpga_bridge *bridge_ctx)
-+{
-+	struct fake_bridge_priv *priv;
-+
-+	priv = bridge_ctx->bridge->priv;
-+
-+	return priv->cycles_count;
-+}
-+EXPORT_SYMBOL_GPL(fake_fpga_bridge_get_cycles_count);
-+
-+static int fake_fpga_bridge_probe(struct platform_device *pdev)
-+{
-+	struct device *dev;
-+	struct fpga_bridge *bridge;
-+	struct fake_bridge_data *pdata;
-+	struct fake_bridge_priv *priv;
-+	static int id_count;
-+
-+	dev = &pdev->dev;
-+	pdata = dev_get_platdata(dev);
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->id = id_count++;
-+	priv->test = pdata->test;
-+
-+	bridge = fpga_bridge_register(dev, "Fake FPGA Bridge",
-+				      &fake_fpga_bridge_ops, priv);
-+	if (IS_ERR(bridge))
-+		return PTR_ERR(bridge);
-+
-+	platform_set_drvdata(pdev, bridge);
-+
-+	return 0;
-+}
-+
-+static int fake_fpga_bridge_remove(struct platform_device *pdev)
-+{
-+	struct fpga_bridge *bridge = platform_get_drvdata(pdev);
-+
-+	fpga_bridge_unregister(bridge);
-+
-+	return 0;
-+}
-+
-+static struct platform_driver fake_fpga_bridge_drv = {
-+	.driver = {
-+		.name = FAKE_FPGA_BRIDGE_DEV_NAME
-+	},
-+	.probe = fake_fpga_bridge_probe,
-+	.remove = fake_fpga_bridge_remove,
-+};
-+
-+module_platform_driver(fake_fpga_bridge_drv);
-+
-+MODULE_AUTHOR("Marco Pagani <marpagan@redhat.com>");
-+MODULE_DESCRIPTION("Fake FPGA Bridge");
-+MODULE_LICENSE("GPL v2");
-diff --git a/drivers/fpga/tests/fake-fpga-bridge.h b/drivers/fpga/tests/fake-fpga-bridge.h
-new file mode 100644
-index 000000000000..9de62d2f993b
---- /dev/null
-+++ b/drivers/fpga/tests/fake-fpga-bridge.h
-@@ -0,0 +1,36 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Header file for fake FPGA bridge
-+ *
-+ * Copyright (C) 2023 Red Hat, Inc. All rights reserved.
-+ *
-+ * Author: Marco Pagani <marpagan@redhat.com>
-+ */
-+
-+#ifndef __FPGA_FAKE_BRIDGE_H
-+#define __FPGA_FAKE_BRIDGE_H
-+
-+#include <linux/platform_device.h>
-+#include <kunit/test.h>
-+
-+/**
-+ * struct fake_fpga_bridge - fake FPGA bridge context data structure
-+ *
-+ * @bridge: FPGA bridge.
-+ * @pdev: platform device of the FPGA bridge.
-+ */
-+struct fake_fpga_bridge {
-+	struct fpga_bridge *bridge;
-+	struct platform_device *pdev;
-+};
-+
-+int fake_fpga_bridge_register(struct fake_fpga_bridge *bridge_ctx,
-+			      struct kunit *test);
-+
-+void fake_fpga_bridge_unregister(struct fake_fpga_bridge *bridge_ctx);
-+
-+int fake_fpga_bridge_get_state(const struct fake_fpga_bridge *bridge_ctx);
-+
-+int fake_fpga_bridge_get_cycles_count(const struct fake_fpga_bridge *bridge_ctx);
-+
-+#endif /* __FPGA_FAKE_BRIDGE_H */
+On Fri,  3 Feb 2023 09:57:27 -0600 you wrote:
+> BPF kernel <-> kernel API stability has been discussed at length over
+> the last several weeks and months. Now that we've largely aligned over
+> kfuncs being the way forward, and BPF helpers being considered
+> functionally frozen, it's time to document the expectations for kfunc
+> lifecycles and stability so that everyone (BPF users, kfunc developers,
+> and maintainers) are all aligned, and have a crystal-clear understanding
+> of the expectations surrounding kfuncs.
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next,v3] bpf/docs: Document kfunc lifecycle / stability expectations
+    https://git.kernel.org/bpf/bpf-next/c/16c294a6aad8
+
+You are awesome, thank you!
 -- 
-2.39.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
