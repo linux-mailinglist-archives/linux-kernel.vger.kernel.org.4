@@ -2,79 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0F82689B34
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 15:12:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C34D0689B40
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 15:14:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233319AbjBCOMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 09:12:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54806 "EHLO
+        id S231546AbjBCOMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 09:12:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233185AbjBCOML (ORCPT
+        with ESMTP id S232757AbjBCOMU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 09:12:11 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82BC75456A;
-        Fri,  3 Feb 2023 06:10:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=th236SFm+UL+eQbk39f4IhG2ZwNDs1NzoNO0exA4MrE=; b=tUsF8rvmnFEicbxs+BRmfthFt8
-        9T1uxkqICLFJgfWWC2LFbQ93ZsmQK4n3drjzLKb/9CGXO45p69Q2zddgiBogQQsRwLJgCEGM3mxjQ
-        8yqKOtQr7Fm9lERRAlrFXueIJcyyZ/jH/GkyRUXBVmopDPIXz1aoQeH3FZ8DFM1na5gI=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pNwlF-0040Ts-CB; Fri, 03 Feb 2023 15:09:53 +0100
-Date:   Fri, 3 Feb 2023 15:09:53 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jianhui Zhao <zhaojh329@gmail.com>,
-        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
-Subject: Re: [PATCH 5/9] net: ethernet: mtk_eth_soc: fix RX data corruption
- issue
-Message-ID: <Y90VsYieanKFNqO3@lunn.ch>
-References: <cover.1675407169.git.daniel@makrotopia.org>
- <96c628df0991104d255e6d4696988686387bc2ef.1675407169.git.daniel@makrotopia.org>
+        Fri, 3 Feb 2023 09:12:20 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B422340F2
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 06:10:33 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 74E495BD6F;
+        Fri,  3 Feb 2023 14:10:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1675433432; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Q1tZaQaRF4SOg/Lz4IhDtc7UlmOkImhQ/MPCiygwEJw=;
+        b=Wm2qvPtyRCDKDY3YQ5X2tjgYy3w0zi/8p1dnlFmSPqKlYkZrEc83miETbE680jJEHEJyKS
+        LeHzyizgQNU3xCaw8pavVjrAYX5q1TG9OVaDErg1dCzCIzCMHsLb3Ib2WX2QPRmsxqItOE
+        LjGn78XD2BzTWfM+o1WE6OhVlRse+0E=
+Received: from suse.cz (pmladek.udp.ovpn2.prg.suse.de [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 4760D2C141;
+        Fri,  3 Feb 2023 14:10:32 +0000 (UTC)
+Date:   Fri, 3 Feb 2023 15:10:28 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
+        Michal Koutny <mkoutny@suse.com>, linux-kernel@vger.kernel.org
+Subject: Re: [RFC 2/5] workqueue: Warn when a new worker could not be created
+Message-ID: <Y90V1E9KP785ALMs@alley>
+References: <20230201134543.13687-1-pmladek@suse.com>
+ <20230201134543.13687-3-pmladek@suse.com>
+ <Y9xHnwG39IHN/BBu@slm.duckdns.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <96c628df0991104d255e6d4696988686387bc2ef.1675407169.git.daniel@makrotopia.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y9xHnwG39IHN/BBu@slm.duckdns.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 07:02:28AM +0000, Daniel Golle wrote:
-> Also set bit 12 when setting up MAC MCR, as MediaTek SDK did the same
-> change stating:
-> "If without this patch, kernel might receive invalid packets that are
-> corrupted by GMAC."[1]
+On Thu 2023-02-02 13:30:39, Tejun Heo wrote:
+> Hello,
+> 
+> On Wed, Feb 01, 2023 at 02:45:40PM +0100, Petr Mladek wrote:
+> > +static __printf(2, 3) __cold
+> > +void __print_create_worker_failure(long err, const char *fmt, ...)
+> > +{
+> > +	spin_lock_irq(&create_worker_failed_lock);
+> > +
+> > +	/*
+> > +	 * Report potentially repeated failures only once during a stall.
+> > +	 * Otherwise, it might be noisy. Also slow serial console drivers
+> > +	 * touch watchdogs so that more frequent messages would prevent
+> > +	 * reaching the watchdog thresh.
+> > +	 */
+> > +	if (!create_worker_failed) {
+> > +		va_list args;
+> > +
+> > +		va_start(args, fmt);
+> > +		vprintk(fmt, args);
+> > +		va_end(args);
+> > +	}
+> > +
+> > +	create_worker_failed++;
+> > +
+> > +	spin_unlock_irq(&create_worker_failed_lock);
+> > +}
+> 
+> That's pretty elaborate.
 
-Do you have any idea what this bit means? It would be nice to have a
-more meaningful description.
+Yeah, I am not super happy with it either.
 
-     Andrew
+> Why not just use printk_ratelimited()?
+
+The default printk_ratelimited() is not usable because it uses:
+
+     #define DEFAULT_RATELIMIT_INTERVAL	(5 * HZ)
+     #define DEFAULT_RATELIMIT_BURST		10
+
+It allows 10 messages per 5 seconds. It would be still too noisy.
+maybe_create_worker() tries to create a new worker every second.
+
+And more importantly, it would break both softlockup and workqueue
+watchdogs. See touch_nmi_watchdog() in serial8250_console_write().
+By other words, it would break both softlockup and workqueue watchdogs.
+
+
+A solution would be to use a custom printk_ratelimited_wq() that would
+allow printing one message per 2 * wq_watchdog_thresh.
+Something like:
+
+#define printk_ratelimited_wq(fmt, ...)					\
+({									\
+	static DEFINE_RATELIMIT_STATE(_rs, 60 * HZ, 1);			\
+									\
+	if (__ratelimit(&_rs))						\
+		printk(fmt, ##__VA_ARGS__);				\
+})
+
+I admit that it is much easier than __print_create_worker_failure().
+
+The only problem might be that wq_watchdog_thresh might be modified
+at runtime. But it can be solved by sharing the same
+struct ratelimit_state rs in all printk_ratelimited_wq() calls
+and updating it together with wq_watchdog_thresh.
+
+Would you prefer the custom printk_ratelimited_wq(), please?
+
+Best Regards,
+Petr
