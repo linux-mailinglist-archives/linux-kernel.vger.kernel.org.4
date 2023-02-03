@@ -2,188 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43A4C688CB7
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 02:44:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98301688CB3
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 02:44:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232088AbjBCBol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 20:44:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35058 "EHLO
+        id S232056AbjBCBoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 20:44:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230368AbjBCBoj (ORCPT
+        with ESMTP id S231277AbjBCBoM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 20:44:39 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B558A885F1;
-        Thu,  2 Feb 2023 17:44:32 -0800 (PST)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3131PMjO010081;
-        Fri, 3 Feb 2023 01:44:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=y/EGlQxsE1kUhAZMG5EHnn7oBAg7cZ8XuFCCE6P9M74=;
- b=hioipy7yCXyEN2l+Ymce8pQ/tFSWaKtgY0Mm+zrUTIoiJeEfNKvghUTOl1byH8BtVyIg
- xHCZBzp425J4lKWNgSb/Uv0tDZGf9mQ9idvjK8K33w9RHSTZyMMxaoVSO1UtHzRL3DUE
- 61FBsMYpO8uw8jEfKosY1wILEyq6p6tiGaYjJr6WH5/j+ZCutWZXEGJtbVr1sNH/Oqjy
- 4mB8odRt3OH2Du+adlgn0aKLtT/IL74bQOrSYMFTXJ6LyRLeyO0VEAmAWgy2J3rhHzOE
- UoqO0Iu0ilEJxKQdrmLwj+OwxQ6FbuBi4z9WI+tkWmGpgf5ykbF8QpwBOC5V5W+LvHDo 3Q== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ngns4gabg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Feb 2023 01:44:06 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3131i5mA027861
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 3 Feb 2023 01:44:05 GMT
-Received: from [10.110.106.32] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 2 Feb 2023
- 17:44:04 -0800
-Message-ID: <8c6b145c-6d38-2055-7526-7586edbea45d@quicinc.com>
-Date:   Thu, 2 Feb 2023 17:44:04 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [RFC PATCH v2 09/22] ASoC: qcom: qdsp6: Introduce USB AFE port to
- q6dsp
-Content-Language: en-US
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <lgirdwood@gmail.com>, <andersson@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
-        <Thinh.Nguyen@synopsys.com>, <broonie@kernel.org>,
-        <bgoswami@quicinc.com>, <tiwai@suse.com>, <robh+dt@kernel.org>,
-        <agross@kernel.org>
-CC:     <devicetree@vger.kernel.org>, <alsa-devel@alsa-project.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_jackp@quicinc.com>,
-        <quic_plai@quicinc.com>
-References: <20230126031424.14582-1-quic_wcheng@quicinc.com>
- <20230126031424.14582-10-quic_wcheng@quicinc.com>
- <dea77277-6971-fe27-1ae0-ed551e84b6e4@linux.intel.com>
- <5dec443d-9894-2d06-1798-c56b8f2e1e5e@quicinc.com>
- <ebf8ebed-ef79-bf18-4635-360f916877a6@linux.intel.com>
- <fa35124c-682f-8045-6733-c71f9ce8df9e@quicinc.com>
- <de03c6b1-b6d6-0045-ea60-6ae800913e95@linux.intel.com>
- <a494e063-f0a0-2a71-5b7b-cb247efa245c@quicinc.com>
-In-Reply-To: <a494e063-f0a0-2a71-5b7b-cb247efa245c@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+        Thu, 2 Feb 2023 20:44:12 -0500
+Received: from EUR02-DB5-obe.outbound.protection.outlook.com (mail-db5eur02on2043.outbound.protection.outlook.com [40.107.249.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C94D27499;
+        Thu,  2 Feb 2023 17:44:11 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TffzOZvivWB4qf6rYt7dgXUJ9BniyyEbapxEmmO5B98B6s9LNmpfw2khYXqSM8upfGSTR7IGF+LpDELPJTGPch74xeXOilfP4hqPkRCTg/eQ6tBCEf/WG677fIgO/dVZQNzbOrT6knm5NnirTUL6zabfJY9G0HZDvCo2pmvVcAURuW8YGcXQND877Wi1nMHMTihQAoqqOHSHCS4KERh48bSbBB5TreNSwWfIL/8VxUMhWFu76qCA+S3o8AT9C3838prcDUf/ebIbJn2n0g6T31gK6Ssx4fZtwGxtXNlW0myWZ2XnwIw48q/tg7lm3UM+hZ1fJfvXfxORR8QRpX/eDg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XZ2oTs0/oXv6C3J1ZEokWpdDKN6z1/mrm+AKGyUSYl0=;
+ b=JLAkHxCHVeDeKvCXNyVL/udWJJi/jwp+CwwR8unw7b51d0/bkAeaJw+TuziLCkjkzukaB+ThXsoCqoBGkGkFBzQ33Zl1BqHg+qqlxuK+UymVzaVyT09/TKjgMy04RozHd5LHIgqrSV2ZqSwuW4igAvyZlDI8Smcj5OMCVQ1Gyyjui6Kxww1LwchyM9ENAHX/tUGCc1fl3VYQUdBhuNBEr196nnx/hf6+AvjSZeNZjUp5gG7IMYQNIYZgiRSaGummxR7peI0H4BZwU5pWtUKyKJYNQA9rr0gRZUUL71I/lPyo58ITSUd/7UFPopGl7AMGD8k+u7huwhsfr8H7nDiptg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XZ2oTs0/oXv6C3J1ZEokWpdDKN6z1/mrm+AKGyUSYl0=;
+ b=S+yLUOlISEZO3tBomXqJ9buTSKHRLayxHbv6IZg9K5VDsABahXyEEEzgU5aAAq/iUz+DF35f4nGXxOF6vdaE4BjEZaqNUEEvMMU/qYB8i3uBdTmArs8pOW6PmQmLHjoA0Tf3bn/evknfVhwIQngbESxBD3ec73H2LlcCrG40Hq0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by AM9PR04MB8762.eurprd04.prod.outlook.com (2603:10a6:20b:409::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.27; Fri, 3 Feb
+ 2023 01:44:08 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::e203:47be:36e4:c0c3]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::e203:47be:36e4:c0c3%9]) with mapi id 15.20.6043.025; Fri, 3 Feb 2023
+ 01:44:08 +0000
+From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+To:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, balbi@kernel.org
+Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jun.li@nxp.com,
+        Peng Fan <peng.fan@nxp.com>
+Subject: [PATCH V2] dt-bindings: usb: snps,dwc3: support i.MX8MQ
+Date:   Fri,  3 Feb 2023 09:45:26 +0800
+Message-Id: <20230203014526.1461386-1-peng.fan@oss.nxp.com>
+X-Mailer: git-send-email 2.37.1
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: PcVo-wq9bOwB1td7G2pH7qN240NgpFjn
-X-Proofpoint-ORIG-GUID: PcVo-wq9bOwB1td7G2pH7qN240NgpFjn
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-02_16,2023-02-02_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=16 lowpriorityscore=0
- suspectscore=0 mlxscore=16 mlxlogscore=71 impostorscore=0 malwarescore=0
- adultscore=0 phishscore=0 clxscore=1015 spamscore=16 priorityscore=1501
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302030015
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR01CA0030.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:192::15) To DU0PR04MB9417.eurprd04.prod.outlook.com
+ (2603:10a6:10:358::11)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|AM9PR04MB8762:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5df8d769-0319-4ec9-a03c-08db058823b3
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: vguVhvQyxYD24Vm13cMDluvS33x6LXbyNNddFH99jADf8n6nMMgy8GxoDWmWs3r5WmrfMCncF/Jvgi4LIchStPbGsRyVBiwPpxvdyYcM2CxoccOZk2vsHYFOuwsKN5On6q+Aj+x3aIvywLlgpnYBu5VIdtM/BufwTYtRAp01njrz0V25/jqor2j2jKhPobe+XguxlUcJQSstochI8KzTCi8xf538fOtHExDB751EVdX5lcIpIg4ZnR5itxq9lhiAws9VFas6E4OWj8kSQ3PZtJZ+7MjKL33K2DmSyamfY/SByiOnsWeCYK6z9vsp5n6sTIxzEF7vC2ybyCEirw0Z5aKMzzm6UxKQi+KYKt2uuL4/xlT1JGLvYhPQYk7itwvTozbBAez/+nj6KEoSrPItmPbwzSfCtF7tHY7cUuKELtqiv6Q/AbdHfwKUBvOat/s3TSdHj/8UytPZFvBsPi2GQtmWUhxwMWYtszDaDTuClfpzXoZlwW173IeSMjq4ipNXHIN97C4Hsdbt6A8Qsi9QTNhkzPFMtlqtes+j5M2HoIR6Xsw+7GKYMU5lZSx2cCrBgY6DTVM9C8kuRGlBPerf71ucz3efbfSB8MpqVNg0Fic50CHlJDXVr0npi/rdNHhmiim7j382UBhqBIvFXqOF/IYAIbyspgaOCNMf7gFyPDX5otejJdmDY0Az+UJoUKuXUZiIm/jtsWo12r/N1wz0Hw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(346002)(136003)(366004)(39860400002)(396003)(451199018)(2906002)(86362001)(478600001)(4744005)(6506007)(6512007)(186003)(26005)(6666004)(2616005)(52116002)(8936002)(6486002)(1076003)(5660300002)(41300700001)(66556008)(38100700002)(66946007)(83380400001)(38350700002)(4326008)(316002)(8676002)(66476007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?lmnOhMpVICTpafgkgTa+sION7LC/CB4oQgkvEQE7xl8VtDSUmG9G+EzB4OxY?=
+ =?us-ascii?Q?kBHRFek+5KaThWp9XB/d5A0AVcnHMvN8CsEO8gKMEoyu+PoDuXTqrZKlvmLK?=
+ =?us-ascii?Q?744Ig+6ZzyjYLwLcJKMbP5Gk3rZN1fNHxIxQwsIfnP1G12R20dXVKh4seL1X?=
+ =?us-ascii?Q?1JHM7So53f2q/1MkkkWV+kK1eM6ShsIG6qwLr+gRtEM0v0cNgtuqG0U3Ns7Y?=
+ =?us-ascii?Q?NHqzdMKbpWXLDuiZRS9RQqNDMlhNzWosRHr1EYUFfBOODiliuvdwt20IQ0KG?=
+ =?us-ascii?Q?1urvm81H+9tRgDdSpFWvI7svXdDW750XipeAyf+33Nwu2q/G7AgnwOhtYbZS?=
+ =?us-ascii?Q?k3JADcGnApSetBsF73pOSYgsapSdX4tKCE12RWINbYeH1cL2OAiaScIvYm6S?=
+ =?us-ascii?Q?rCV9UZBy6aTxxoqC+xok3X/RBPOq78RbX9gKE0NlmWIZmK4TNEZp6f0h3Nvf?=
+ =?us-ascii?Q?1839ARhTk40PYTn3Xt7u3Vquqjm+aUnXOi9SJ3JiZCfXqBu2W86vnJMBCIYz?=
+ =?us-ascii?Q?fqSDoIsp/b8mApJSuINv9+HwO77OPuwgRrO49GDF5kgYlVqzqakMgSfqBZeh?=
+ =?us-ascii?Q?By14jteV2iGP1uj7Rzo/qh9Nl9c3VX+x4OFenC/jjKkUTXhVavVTLTuaHj2R?=
+ =?us-ascii?Q?HsN/6FM65rAIOLT7n8ll7MBnT3Z3ArpYOebtP/01opCdjzdb3e2u8PynBwtO?=
+ =?us-ascii?Q?p0KgoDbxTacWVfyHZgERi7aZWHH23DcnfnpLkni+44fT3H0I/5PU7nh7bkCq?=
+ =?us-ascii?Q?jj1lDNi0EsFjuGeKZF3HePn3ediKEbz2QAjwa7maPPCJ9KkheIMB21dPedUx?=
+ =?us-ascii?Q?APYS/KOynDXVePiqxA4ow12fsUAagX5LD6qZLGPH5IMQwJCABiNiM5ijj9FK?=
+ =?us-ascii?Q?BoQSTnEekq26hUGcwiouOUPZunCBOdy7r/CE3m6QNyUTJGQ1qPngYwMjbed+?=
+ =?us-ascii?Q?/6DEYkb5Rx2hCGvymCGl8wmVRZFxBrnhv7eA1i2faXs5QvPlyB3hCVH6bhOO?=
+ =?us-ascii?Q?hn3ciPOr6ajdKmcB40ZWPXVaQ3NpyoGD37FpDRlQm96UKEwIYgG8RKy5Zr0w?=
+ =?us-ascii?Q?aFH1kNoVFWQAQNabWTpWk0a6MonUWRbIjYM7qSMjxm5RLL+WSLhQqjxCOJf6?=
+ =?us-ascii?Q?IGYpSZWX8gMjXBp/OX1TiEM5Ry4p4sf287rbzy9l0Z6Ew1RFmbwU2rvThM1z?=
+ =?us-ascii?Q?nMzFHXowQcxuuBZN2mzorwA9xyBHT0hgj4ZrSDCdDAGgxDYy7Vz7KDMxORBp?=
+ =?us-ascii?Q?MiecTPxBWyaTaiixji5YD6umP99s9Aoet2lr632R3y2Wuw3h+VD2YzXleTsa?=
+ =?us-ascii?Q?UayDo37sFF34CxCy26wx6fpMuTtUsNWSyDuMvF/aiNz72M2g/VsQl2BIdu7R?=
+ =?us-ascii?Q?xMLwcVFlOavzSYGOQwatmZhw/mXdURlWAwl8eamj6IBLozAUnfAjNseH/BZJ?=
+ =?us-ascii?Q?bsJ4+vY+w1C32ShnlZ/sLadDNJ0tae5r/bDNZ+1y5W6szQbprx/KVTJq43a5?=
+ =?us-ascii?Q?B6YA3iE4Z2hDT6GzEgj+iOGf3F5fx5OkQ3wBXPaDE4EUY/deQjlqAJS0ufnT?=
+ =?us-ascii?Q?XtcDYmTwohpxH9h0uNzk3pTH41YawnilrxopviDb?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5df8d769-0319-4ec9-a03c-08db058823b3
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Feb 2023 01:44:08.1829
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qhv88BOA+WmYfNhrA6GKOEh+DzRvxyv0plUyqVLVsM++4P7/NlQCx6vX8abMp3RQN8nKmEyhS40Ex+99zv9t3w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8762
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Pierre,
+From: Peng Fan <peng.fan@nxp.com>
 
-On 2/2/2023 5:23 PM, Wesley Cheng wrote:
-> Hi Pierre,
-> 
-> On 1/31/2023 7:02 PM, Pierre-Louis Bossart wrote:
->>
->>
->> On 1/31/23 20:40, Wesley Cheng wrote:
->>> Hi Pierre,
->>>
->>> On 1/30/2023 3:59 PM, Pierre-Louis Bossart wrote:
->>>>
->>>>
->>>> On 1/30/23 16:54, Wesley Cheng wrote:
->>>>> Hi Pierre,
->>>>>
->>>>> On 1/26/2023 7:38 AM, Pierre-Louis Bossart wrote:
->>>>>>
->>>>>>
->>>>>> On 1/25/23 21:14, Wesley Cheng wrote:
->>>>>>> The QC ADSP is able to support USB playback endpoints, so that the
->>>>>>> main
->>>>>>> application processor can be placed into lower CPU power modes.  
->>>>>>> This
->>>>>>> adds
->>>>>>> the required AFE port configurations and port start command to
->>>>>>> start an
->>>>>>> audio session.
->>>>>>>
->>>>>>> Specifically, the QC ADSP can support all potential endpoints 
->>>>>>> that are
->>>>>>> exposed by the audio data interface.  This includes, feedback
->>>>>>> endpoints
->>>>>>> (both implicit and explicit) as well as the isochronous (data)
->>>>>>> endpoints.
->>>>>>> The size of audio samples sent per USB frame (microframe) will be
->>>>>>> adjusted
->>>>>>> based on information received on the feedback endpoint.
->>>>>>
->>>>>> I think you meant "support all potential endpoint types"
->>>>>>
->>>>>> It's likely that some USB devices have more endpoints than what 
->>>>>> the DSP
->>>>>> can handle, no?
->>>>>>
->>>>>
->>>>> True, as we discussed before, we only handle the endpoints for the 
->>>>> audio
->>>>> interface.  Other endpoints, such as HID, or control is still 
->>>>> handled by
->>>>> the main processor.
->>>>
->>>> The number of isoc/audio endpoints can be larger than 1 per direction,
->>>> it's not uncommon for a USB device to have multiple connectors on the
->>>> front side for instruments, mics, monitor speakers, you name it. Just
->>>> google 'motu' or 'rme usb' and you'll see examples of USB devices that
->>>> are very different from plain vanilla headsets.
->>>>
->>>
->>> Thanks for the reference.
->>>
->>> I tried to do some research on the RME USB audio devices, and they
->>> mentioned that they do have a "class compliant mode," which is for
->>> compatibility w/ Linux hosts.  I didn't see a vendor specific USB SND
->>> driver matching the USB VID/PID either, so I am assuming that it uses
->>> the USB SND driver as is.(and that Linux doesn't currently support their
->>> vendor specific mode)  In that case, the device should conform to the
->>> UAC2.0 spec (same statement seen on UAC3.0), which states in Section
->>> 4.9.1 Standard AS Interface Descriptor Table 4-26:
->>>
->>> "4 bNumEndpoints 1 Number Number of endpoints used by this
->>> interface (excluding endpoint 0). Must be
->>> either 0 (no data endpoint), 1 (data
->>> endpoint) or 2 (data and explicit feedback
->>> endpoint)."
->>>
->>> So each audio streaming interface should only have 1 data and
->>> potentially 1 feedback.  However, this device does expose a large number
->>> of channels (I saw up to 18 channels), which the USB backend won't be
->>> able to support.  I still need to check how ASoC behaves if I pass in a
->>> profile that the backend can't support.
+i.MX8MQ use Synopsys DesignWare USB3 Controller IP, so add the
+compatible.
 
-Getting back to passing in a format/profile that the USB BE doesn't 
-support.  It looks like ASoC doesn't actually check against the PCM HW 
-params received (for components), so the audio playback does still occur 
-even though its outside of what we support.
+Signed-off-by: Peng Fan <peng.fan@nxp.com>
+---
 
-Will need to add changes to specifically check for # of channels, 
-format, etc... before we allow the session to proceed.
+V2:
+ Rebased on linux-next, remove power-domains from v1
 
-Thanks
-Wesley Cheng
+ Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+index be36956af53b..fefd6610ab45 100644
+--- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
++++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+@@ -30,11 +30,13 @@ allOf:
+ 
+ properties:
+   compatible:
+-    contains:
+-      oneOf:
+-        - const: snps,dwc3
+-        - const: synopsys,dwc3
+-          deprecated: true
++    oneOf:
++      - items:
++          - const: fsl,imx8mq-dwc3
++          - const: snps,dwc3
++      - const: snps,dwc3
++      - const: synopsys,dwc3
++        deprecated: true
+ 
+   reg:
+     maxItems: 1
+-- 
+2.37.1
+
