@@ -2,102 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E99568985A
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 13:16:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 716C568985D
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 13:16:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232526AbjBCMQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 07:16:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58368 "EHLO
+        id S232618AbjBCMQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 07:16:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231748AbjBCMQA (ORCPT
+        with ESMTP id S231748AbjBCMQW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 07:16:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E78D265F1C;
-        Fri,  3 Feb 2023 04:15:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 3 Feb 2023 07:16:22 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1319165F1C;
+        Fri,  3 Feb 2023 04:16:15 -0800 (PST)
+Received: from mercury (unknown [37.81.13.16])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9E8DBB82A91;
-        Fri,  3 Feb 2023 12:15:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0F27C4339B;
-        Fri,  3 Feb 2023 12:15:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675426557;
-        bh=bpsBfIP+WayDaYXAnzjXQUpZIfOqiX4IwY20qL1+qWI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Yxz6PlT5gTt/Whb6nIApqlbPy+k7RfxPTie1YnbROiauEnj/VS30emdyaNF/ih4jt
-         QLyNMyB9tb8n8QqpS+FheiH5qXuO/zenEb3SycYoUktBzg1m7pgEbuH7ZfGvBZzMXk
-         /rdNp7CJoplsXraaruvH0dDrjbICiuQqbQRMRiCx8VF+gdVb7RfsfrR161tdtrVjHF
-         Gw/giAcmN0o4dHKcBrg0/CKGzNC4S4N+2+5CthXuY7yOEs0BVd0WWQZT88h9CSK7TF
-         0F5yp64pOnpbVsVLaZSzJYzxD2GxaO2ikxSbrAcxQgcdxsUx+l1lQ9TyrxHlUIQbDJ
-         SBv7ikFxdOhpg==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Raju Rangoju <Raju.Rangoju@amd.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] amd-xgbe: fix mismatched prototype
-Date:   Fri,  3 Feb 2023 13:15:36 +0100
-Message-Id: <20230203121553.2871598-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.0
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9CC256602F05;
+        Fri,  3 Feb 2023 12:16:13 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1675426573;
+        bh=2/8e0Bi6BlPo7zgoRGtDZYk0iddWrzwTH9yHoEXA9KA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JLqABhzF+OTrBrf+4SIewk47JtIP73R7C7NUuuHKAkgQ5nUyTBZf2k9X/saubaoLU
+         KVUPyIrV27G74q3xOGKXVpXVJKP4ajFeVP9be9oRX8qvHbeR65i5XCpLuUPc/x/81U
+         XiCRum62D7DAh7bAMaccl7sBsoLpQys3E7F8IpY0mfQCZqxVeP0oX65evxMLG+6u3f
+         USNamOesu7vrQH7HYm1jEtwFv0Mj54XPZzTjgyA03JlwGsnTQdpqcPuHX91nn28gIf
+         GguKFGqke2unYNyplO7IBCfclHt/SU0q4yk2FBQV4NBUlcwUIJPvKDZxKPXkiUdKfP
+         whd05nxFI0EpA==
+Received: by mercury (Postfix, from userid 1000)
+        id 953DE1060930; Fri,  3 Feb 2023 13:16:10 +0100 (CET)
+Date:   Fri, 3 Feb 2023 13:16:10 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/3] dt-bindings: reset: syscon-reboot: Add priority
+ property
+Message-ID: <20230203121610.zung35qrozvoauz6@mercury.elektranox.org>
+References: <20220820102925.29476-1-pali@kernel.org>
+ <20221226114513.4569-1-pali@kernel.org>
+ <20230122112744.vdfho4mzpgm6oucm@pali>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="6v3cydzb267bgioz"
+Content-Disposition: inline
+In-Reply-To: <20230122112744.vdfho4mzpgm6oucm@pali>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
 
-The forward declaration was introduced with a prototype that does
-not match the function definition:
+--6v3cydzb267bgioz
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-drivers/net/ethernet/amd/xgbe/xgbe-phy-v2.c:2166:13: error: conflicting types for 'xgbe_phy_perform_ratechange' due to enum/integer mismatch; have 'void(struct xgbe_prv_data *, enum xgbe_mb_cmd,  enum xgbe_mb_subcmd)' [-Werror=enum-int-mismatch]
- 2166 | static void xgbe_phy_perform_ratechange(struct xgbe_prv_data *pdata,
-      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/net/ethernet/amd/xgbe/xgbe-phy-v2.c:391:13: note: previous declaration of 'xgbe_phy_perform_ratechange' with type 'void(struct xgbe_prv_data *, unsigned int,  unsigned int)'
-  391 | static void xgbe_phy_perform_ratechange(struct xgbe_prv_data *pdata,
-      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+Hi,
 
-Ideally there should not be any forward declarations here, which
-would make it easier to show that there is no unbounded recursion.
-I tried fixing this but could not figure out how to avoid the
-recursive call.
+On Sun, Jan 22, 2023 at 12:27:44PM +0100, Pali Roh=E1r wrote:
+> On Monday 26 December 2022 12:45:11 Pali Roh=E1r wrote:
+> > This new optional priority property allows to specify custom priority l=
+evel
+> > of reset device. Prior this change priority level was hardcoded to 192 =
+and
+> > not possible to specify or change. Specifying other value is needed for
+> > some boards. Default level when not specified stays at 192 as before.
+> >=20
+> > Signed-off-by: Pali Roh=E1r <pali@kernel.org>
+>
+> Reminder: Any plan how to handle these patches?
 
-As a hotfix, address only the broken prototype to fix the build
-problem instead.
+Please don't top-post :) Sorry, I'm a bit slow with processing
+patches this cycle. Technically this was also throwing a DT
+warning reported by the bot, so I expected a new version. Anyways,
+I fixed the DT warning myself and applied patches 1-2.
 
-Fixes: 4f3b20bfbb75 ("amd-xgbe: add support for rx-adaptation")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/net/ethernet/amd/xgbe/xgbe-phy-v2.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Thanks,
 
-diff --git a/drivers/net/ethernet/amd/xgbe/xgbe-phy-v2.c b/drivers/net/ethernet/amd/xgbe/xgbe-phy-v2.c
-index 7d88caa4e623..16e7fb2c0dae 100644
---- a/drivers/net/ethernet/amd/xgbe/xgbe-phy-v2.c
-+++ b/drivers/net/ethernet/amd/xgbe/xgbe-phy-v2.c
-@@ -390,7 +390,8 @@ static DEFINE_MUTEX(xgbe_phy_comm_lock);
- static enum xgbe_an_mode xgbe_phy_an_mode(struct xgbe_prv_data *pdata);
- static void xgbe_phy_rrc(struct xgbe_prv_data *pdata);
- static void xgbe_phy_perform_ratechange(struct xgbe_prv_data *pdata,
--					unsigned int cmd, unsigned int sub_cmd);
-+					enum xgbe_mb_cmd cmd,
-+					enum xgbe_mb_subcmd sub_cmd);
- 
- static int xgbe_phy_i2c_xfer(struct xgbe_prv_data *pdata,
- 			     struct xgbe_i2c_op *i2c_op)
--- 
-2.39.0
+-- Sebastian
 
+--6v3cydzb267bgioz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmPc+wcACgkQ2O7X88g7
++pqBTQ//Sfo4YthHHkfczLf2+248kA6+HAwFPeSDbAYlSqTKO/HgnhZScAboYVR0
+9EZReLBKQArJsTr/QosEm8J0tLBn0cQMWxhYzwBl7b2nyLLVHtvuTjZSdSigW3+y
+WBd90nGP7O64NPMiHF5dZAkco4vsGehSf3ETEW5kAAQh+tK8M2W3t6sKkR8Qb0CB
+OKdyem/7HyI2YyNJ5O49UpMTUL9h0um/k0h5x6/N6x7f9cxIBdPEkybCPbhR9+m/
+RY6Q5XGaDxvYmA9qD30kUsex0pU+16ImkefnZ1Z0Dl9T4Dnv3slZIRZvJvd1flBA
+FRbWVaPrykZnIW3vEYeb+SxRQbXIU+o4TkNcLLFnAwrJoPcRPwulsH3xHI/EDVva
+6h+Q3qLmPkjC0liZEJE6QJWaSp+eOVReKn/9Y4/4T7K+8fHEusW7ca3jJ7qa90yc
+Gq0X5lOgxzXnhmz11zZzAxhxPyPRSmqe4fOMqsEE3kEfYqLm5SR0OJXSRLI5UStB
+jNIwOsPbV1/v1QMS7TJ8OkQ94lyqpyt+3w1tN0Tjv3kY5vOgXNdfxJU7tCD0MmTe
+WKCPK1QJwHIpfEjdjbsPAQX55zODum918jhklVuYKnvsJfUZPC6OoxJNfcKqJR7f
+8D/WD21618TImkTbCf6hgvtKtdLaJh5AzVOsJBshkxxvuoQG+Og=
+=eZFH
+-----END PGP SIGNATURE-----
+
+--6v3cydzb267bgioz--
