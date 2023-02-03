@@ -2,104 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3250689F9D
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 17:49:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E58E689FA2
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 17:50:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233532AbjBCQtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 11:49:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38932 "EHLO
+        id S233397AbjBCQuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 11:50:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233412AbjBCQtH (ORCPT
+        with ESMTP id S233337AbjBCQt6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 11:49:07 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DB7E721F3
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 08:49:06 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id l37-20020a05600c1d2500b003dfe46a9801so2848205wms.0
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 08:49:06 -0800 (PST)
+        Fri, 3 Feb 2023 11:49:58 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78692A87AA
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 08:49:39 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id m2so5824084plg.4
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 08:49:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sWkuOMDUDuOgvvtDY78kfL6B7zEVTcX+KXFC3I95akE=;
-        b=Z5cavXfXZVOkUEqSofJL1fpNGiqYmg9ZsTvbAJy4MaoLWX9zNCFkSs0Aa4Qq5i1UGC
-         jNKpupj+28EnIv530/Quq+7Jv+UY7J+aJarca2krR+qhJsPusEp2UzIzwC2uidgM2FDk
-         Cl3rjSAjT+sNDuoZbz+cWZIJQVxlIRlvgS4nNzwk7oVFLBxFQ4qaF6L9+ktLTu9WV/tC
-         7WDZ1Hd3Zclh5IjiDXaA/EGBZQrqmX2AKxL6sBtwUbc8BhcleL6bxm+yry62NlK8DdLs
-         A0babIip34DfAE/Bxd3Ni1pxlR6QLnZlJEE5JXyNXHk9h3HZ4hTDJeQ0P6SZwiBoJXgq
-         2PqQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZxBhOPG/5pySGuFA3AXJKh8shAfrqvPwNp+MdcGvCaQ=;
+        b=WZNFhp4rpQwO+9vVqFuSjSxPZ6uwAcZhY2spaSy/Glnr7tddG/Ds+pZJk/u61rUpMA
+         Dog6+GShxg6wkdMbc+WelJFE781uy3LkeFqQ8Zxo6dIjLkQqleZlPr+TEX+ALQjU3Yxj
+         qQaghVLr/pqr3NUr7xsFS218IYrRTHMOhGJWw1nJCRIt2isP59J1nQ1tEZJUd5C9Gq4W
+         4PvSQQlRIlGjglslZB9fgKH+NMgyS5Ks8L/CxLB40FKuPywbejNWSLotvnwjBoyVa9bS
+         Ck/lCeKljt6xHT8goZoa7gIavcAvTN7Fl/XAlP9ue3myro7v4nZyaxokr/ZVaoV9msze
+         35ZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sWkuOMDUDuOgvvtDY78kfL6B7zEVTcX+KXFC3I95akE=;
-        b=oPee33ExQVIJBJJLzses8aODUbCR+rXQn+5Lwq/Gx+gTspQHx7D5VVrULG1D6RsV4Q
-         /z0VJI6Auzj8FkRyFdegChr+vbogP52Z6yL75FNA37fzW8U6MVD3RhUHYwWgqWNkLUJP
-         thlKC1mbrXdgEcBOVy7RmqlvLuknZzkOX8DouObKGM6vzbIrO2A/Vht7DYy0zqs67Hed
-         C4/sxw477S7X9v2aQ09jGjWvcS+unyyYVfI5kGhoy1MmNqMZnJRBmc4rYXQ4xK3fwRcC
-         KlSYz9XY2+tOoStRzZTCRa3Dan0qcUwe5foA6udYHFOKnMv0EbVd8pZ9/sVUNzSZJs4G
-         UlmQ==
-X-Gm-Message-State: AO0yUKWMZX7r8Jtp3nUetqIFCmWY/1TJ41GAMl9UU/O5aKaPflW/97ss
-        yNSeUkj9hHuTzzF+VoXKjwS9MhdjmEGOzAVL
-X-Google-Smtp-Source: AK7set89ru4hCvtbqJGNreUW4FL/GSy9LNx2YC30ZaWYA6NPzlm2BQgk0OmjrQ55/wBMc8m2JApJAw==
-X-Received: by 2002:a05:600c:4f96:b0:3cf:9844:7b11 with SMTP id n22-20020a05600c4f9600b003cf98447b11mr11330029wmq.23.1675442946241;
-        Fri, 03 Feb 2023 08:49:06 -0800 (PST)
-Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id i21-20020a05600c355500b003dc4b4dea31sm3503247wmq.27.2023.02.03.08.49.04
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZxBhOPG/5pySGuFA3AXJKh8shAfrqvPwNp+MdcGvCaQ=;
+        b=fhc2Mbqx8l4tTa4tHnjOjjnci/afAsgh87cr3FQ5/rkBHx+vfuG4R7rxdJJdgll+Ef
+         AH/vz1tHAmH37KMx+8NA1iB+y1+SvnHkZinEXute03IiTINpdTXPV3riYuLbcTeNicGU
+         tcQ+JzsDI+vA6xnMFa9TgOooX7O7DP5p3ZZIr1XJ2KY3ihxOud7s1Tcqr1LouACCAKBH
+         pPcQgX5L08/BIDQi6fIzn7zpgc1yFjVMJnC6IQvpVZOcS4G/B2w1cfHgATLvFhcs1cEs
+         ladR3OZ2NDB5Nta/cT2oBDnIjKxRPim6OWrZAqO7vtq3yQlWbRLRqDw0RgwcCXiiaGo0
+         BhUg==
+X-Gm-Message-State: AO0yUKVXFxeIEZjmTuoCf8gQAGSri9w8EH3HRKLxGfNZ/C7ToYxmSeeu
+        4Rl5y2nVoJLGAV7D2vVK2a4=
+X-Google-Smtp-Source: AK7set8DxXpK2VangZwWy6FpeOmhKOqZmgxtdo0d55o8p4znij0GVVRZYJ41RQvd3X+/rIxf2jRUvg==
+X-Received: by 2002:a17:902:da8c:b0:194:6f3b:3aa1 with SMTP id j12-20020a170902da8c00b001946f3b3aa1mr6590659plx.55.1675442975476;
+        Fri, 03 Feb 2023 08:49:35 -0800 (PST)
+Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
+        by smtp.gmail.com with ESMTPSA id x13-20020a170902a38d00b0019602263feesm1822084pla.90.2023.02.03.08.49.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 08:49:05 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 5/5] arm64: dts: qcom: sc8280xp: correct LPASS GPIO gpio-ranges
-Date:   Fri,  3 Feb 2023 17:48:54 +0100
-Message-Id: <20230203164854.390080-5-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230203164854.390080-1-krzysztof.kozlowski@linaro.org>
-References: <20230203164854.390080-1-krzysztof.kozlowski@linaro.org>
+        Fri, 03 Feb 2023 08:49:34 -0800 (PST)
+From:   Rob Clark <robdclark@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        Rob Clark <robdclark@chromium.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthew Auld <matthew.auld@intel.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Niranjana Vishwanathapura <niranjana.vishwanathapura@intel.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Nirmoy Das <nirmoy.das@intel.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= 
+        <thomas.hellstrom@linux.intel.com>,
+        intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] drm/i915: Move fd_install after last use of fence
+Date:   Fri,  3 Feb 2023 08:49:20 -0800
+Message-Id: <20230203164937.4035503-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The SC8280XP LPASS pin controller has GPIOs 0-18, so correct the number
-of GPIOs in gpio-ranges.
+From: Rob Clark <robdclark@chromium.org>
 
-Fixes: c18773d162a6 ("arm64: dts: qcom: sc8280xp: add SoundWire and LPASS")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Because eb_composite_fence_create() drops the fence_array reference
+after creation of the sync_file, only the sync_file holds a ref to the
+fence.  But fd_install() makes that reference visable to userspace, so
+it must be the last thing we do with the fence.
+
+Signed-off-by: Rob Clark <robdclark@chromium.org>
 ---
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-index c8509b1b040f..59545372595f 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-@@ -2645,7 +2645,7 @@ lpass_tlmm: pinctrl@33c0000 {
- 			      <0 0x3550000 0x0 0x10000>;
- 			gpio-controller;
- 			#gpio-cells = <2>;
--			gpio-ranges = <&lpass_tlmm 0 0 18>;
-+			gpio-ranges = <&lpass_tlmm 0 0 19>;
+diff --git a/drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c b/drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c
+index f266b68cf012..0f2e056c02dd 100644
+--- a/drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c
++++ b/drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c
+@@ -3476,38 +3476,38 @@ i915_gem_do_execbuffer(struct drm_device *dev,
  
- 			clocks = <&q6prmcc LPASS_HW_MACRO_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
- 				 <&q6prmcc LPASS_HW_DCODEC_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>;
+ err_request:
+ 	eb_requests_get(&eb);
+ 	err = eb_requests_add(&eb, err);
+ 
+ 	if (eb.fences)
+ 		signal_fence_array(&eb, eb.composite_fence ?
+ 				   eb.composite_fence :
+ 				   &eb.requests[0]->fence);
+ 
++	if (unlikely(eb.gem_context->syncobj)) {
++		drm_syncobj_replace_fence(eb.gem_context->syncobj,
++					  eb.composite_fence ?
++					  eb.composite_fence :
++					  &eb.requests[0]->fence);
++	}
++
+ 	if (out_fence) {
+ 		if (err == 0) {
+ 			fd_install(out_fence_fd, out_fence->file);
+ 			args->rsvd2 &= GENMASK_ULL(31, 0); /* keep in-fence */
+ 			args->rsvd2 |= (u64)out_fence_fd << 32;
+ 			out_fence_fd = -1;
+ 		} else {
+ 			fput(out_fence->file);
+ 		}
+ 	}
+ 
+-	if (unlikely(eb.gem_context->syncobj)) {
+-		drm_syncobj_replace_fence(eb.gem_context->syncobj,
+-					  eb.composite_fence ?
+-					  eb.composite_fence :
+-					  &eb.requests[0]->fence);
+-	}
+-
+ 	if (!out_fence && eb.composite_fence)
+ 		dma_fence_put(eb.composite_fence);
+ 
+ 	eb_requests_put(&eb);
+ 
+ err_vma:
+ 	eb_release_vmas(&eb, true);
+ 	WARN_ON(err == -EDEADLK);
+ 	i915_gem_ww_ctx_fini(&eb.ww);
+ 
 -- 
-2.34.1
+2.38.1
 
