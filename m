@@ -2,143 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13AB468A0D7
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 18:51:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A564B68A037
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 18:28:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233032AbjBCRvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 12:51:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57228 "EHLO
+        id S230230AbjBCR2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 12:28:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233002AbjBCRve (ORCPT
+        with ESMTP id S232637AbjBCR2W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 12:51:34 -0500
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A3783F8;
-        Fri,  3 Feb 2023 09:51:21 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailnew.nyi.internal (Postfix) with ESMTP id C60BE582007;
-        Fri,  3 Feb 2023 12:25:35 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 03 Feb 2023 12:25:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1675445135; x=1675452335; bh=WOj1XJ/2nW
-        hhYICuUWvW/halINqVJ3cfLXpbNnnM1BY=; b=b16DgUjGr10ahekmo+ZIsgBmwH
-        NI+4WKiYPn0WRip7ki2No6/JcXSEn5Lbchwr0PX4NJN4lZDK/RDjs5Y94yJM0ggC
-        5JAdFObkE0yrMYUboTNDTueCCZ/jMUgQdLERu0cCkQyqwP2mQ/nbcj9IlEgvkNDu
-        kYscEQW5aPKbRIpuSz9VJ1Gjku5hfKhRLWalPFD8O4wjXGCtju1rGzPBqPmfh0+F
-        C+v8aQzPfNrMRqHt6Y4zRdZsvFi2gaFgnMrO4eHfnIjNvBwmaMzspYjxyu/FTHU8
-        Kect+k+Hs3CGy3Ro6Nsd8+xuC98eXMBBmkaA5enHge8egtEYjQ899wWzQXjA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1675445135; x=1675452335; bh=WOj1XJ/2nWhhYICuUWvW/halINqV
-        J3cfLXpbNnnM1BY=; b=ndNbp+CxgZoarRRJg0oDB1vu4ErnnZgQS9OnLuWKTxJ3
-        rZsTad8uHfRNwCp3NH9sjW3eSUBjBT90p6HLG+cI4sDwH5CdapVchP2gGhkYXqDl
-        7GiE90ULhcZqBEwWeTskCI3DL48asLTwbW65TIZwFlNRm+TtDxecNFlIkuy0I6W3
-        x5tof5n4OYnE5HG4V4JoORLn7VxtHBxUXzWp3dTqBWZjAzZF8qMHeowxswghIZi6
-        IBFFhovJvoh7fNI40KDbP/tFtIJLeFomNfM3wl/+Xz+Pim6Zs6EGiSC/Yha+XLPe
-        2+XVk1aLuV0zQOzcvp3wMLMAoyn8vMzYzYYr5a9KWw==
-X-ME-Sender: <xms:jUPdYw7P6JnOYeN8iVeMNrpkTwrTbP8jzfhe_AeB0wWU4AGZJ0ydzQ>
-    <xme:jUPdYx7ZBP_oam7Utuhlz8bYRrfCtkYTOiUD_Zwf4E-ytw7QNteB5TeHvFvXmASTj
-    1UsZEEUzcT1qMIF4WE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudegtddgleejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
-    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:jUPdY_e9KRM9ZbeTMsHtXXWE5CukEx6HAbnENBBhMVXHkp_an_WOjA>
-    <xmx:jUPdY1I4CUAZY-Bp5g6StetrxCGSeaG2raErr07Q6bwJAGAL3BNzjg>
-    <xmx:jUPdY0JrYtCQXVjTuwyWdhYJ8TY4Hg1WUFzvGpzaxx2LW0ah7BzuRA>
-    <xmx:j0PdYyakU9xoWDa5ryktR4FHchVeWoQd1ZNOvmSn4fM710A1pe4JuA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 78555B6044F; Fri,  3 Feb 2023 12:25:33 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-107-g82c3c54364-fm-20230131.002-g82c3c543
-Mime-Version: 1.0
-Message-Id: <24007667-1ff3-4c86-9c17-a361c3f9f072@app.fastmail.com>
-In-Reply-To: <20230202152655.494373332@infradead.org>
-References: <20230202145030.223740842@infradead.org>
- <20230202152655.494373332@infradead.org>
-Date:   Fri, 03 Feb 2023 18:25:04 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Peter Zijlstra" <peterz@infradead.org>,
-        "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc:     "Jonathan Corbet" <corbet@lwn.net>,
-        "Will Deacon" <will@kernel.org>,
-        "Boqun Feng" <boqun.feng@gmail.com>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        "Catalin Marinas" <catalin.marinas@arm.com>, dennis@kernel.org,
-        "Tejun Heo" <tj@kernel.org>, "Christoph Lameter" <cl@linux.com>,
-        "Heiko Carstens" <hca@linux.ibm.com>, gor@linux.ibm.com,
-        "Alexander Gordeev" <agordeev@linux.ibm.com>,
-        borntraeger@linux.ibm.com, "Sven Schnelle" <svens@linux.ibm.com>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, "Joerg Roedel" <joro@8bytes.org>,
-        suravee.suthikulpanit@amd.com,
-        "Robin Murphy" <robin.murphy@arm.com>, dwmw2@infradead.org,
-        "Baolu Lu" <baolu.lu@linux.intel.com>,
-        "Herbert Xu" <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Pekka Enberg" <penberg@kernel.org>,
-        "David Rientjes" <rientjes@google.com>,
-        "Joonsoo Kim" <iamjoonsoo.kim@lge.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Vlastimil Babka" <vbabka@suse.cz>,
-        "Roman Gushchin" <roman.gushchin@linux.dev>,
-        "Hyeonggon Yoo" <42.hyeyoo@gmail.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-s390@vger.kernel.org, iommu@lists.linux.dev,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-crypto@vger.kernel.org
-Subject: Re: [PATCH v2 05/10] percpu: Wire up cmpxchg128
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 3 Feb 2023 12:28:22 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB31C99D5F
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 09:28:20 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id m2so5940571plg.4
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 09:28:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ivfgvtp7uyI6tFocYx9rlHpXWHlxTiWABls8e5bmayM=;
+        b=cII6dLlsUwSoucT/nmPeQoMnw/26U3F9vvjbcZ4OHwLnNL7MbuUXkoVM614WvT3/u+
+         MqRtckfcicHKnzzU/LhfSR1OWXypKA3bQUCHE2YxkBrtxTlr9se0FHvHU9dru6RvWwkr
+         fIdN/XxhLiRVwp44QHsUjIdCONrA8NcoTzPMaRjOJ2kAIxjfnPCVJ+U8RvZcF0RH2rOZ
+         hhdDQp9ZkW4voFM+ffTUQPTSpRsFVJImXLZggCnGX9UB9qBq0KDrMpEHIHjcI4MXGrB6
+         jnwwQTSxmc6vsbxYcn8l5Y+nB0yyHq+z61YUEQRbt0gzDteCWzLUM/rJU/BjPDyPq2i3
+         27ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ivfgvtp7uyI6tFocYx9rlHpXWHlxTiWABls8e5bmayM=;
+        b=RGgLvqBozQSYg1E5/i5K8C2+z/8ejenOkeBwT7iDcv1zc4Heb7yhvf509+5WJdqyuY
+         WlnM/2DGC1fv0ymWeqM1+Hdi2ZR+S41aYKVr3pUp6GZa6uPLtS9D99IoOoNOwleLvlC7
+         ythXCg14YkuBNIeVoD4OnYAVxKDnXZRZ3dtxG1s76m2nnpHqP+97IBaKEEavDggjH1Jn
+         do/oQd7f94wzya251tFcPcv+qjUxCz82wXJ0GT3lSmipdciDQO08PiqJkksTuKzY9k5d
+         U1jvHTLOviZEizAOoC48xNu/5IrjBloSgT42qHMN+scAaFE1/Mp4nCVcCNnnCypOpeBa
+         ERQQ==
+X-Gm-Message-State: AO0yUKUQ4J6FzVkbt6R0y7WKxnjnwaEWV9Td28GUqhRCzI5GFOcfyLKe
+        EFcZQOnMN4dA8cy33Fmxq3XUA4Hx37FPhU3mQzI=
+X-Google-Smtp-Source: AK7set8pTRwRmGavRUH0Zl4ThwgbwvysCaK8vH1nc0DIWFJ9BC2u2xn5S1kIJOnjSBNVaYdUkyU+/A==
+X-Received: by 2002:a17:902:f803:b0:198:af4f:de0f with SMTP id ix3-20020a170902f80300b00198af4fde0fmr123258plb.15.1675445300118;
+        Fri, 03 Feb 2023 09:28:20 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id y2-20020a62b502000000b00581013fcbe1sm2030578pfe.159.2023.02.03.09.28.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Feb 2023 09:28:19 -0800 (PST)
+Date:   Fri, 3 Feb 2023 17:28:13 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jianfeng Gao <jianfeng.gao@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH v2] KVM: x86/pmu: Disable all vPMU features support on
+ Intel hybrid CPUs
+Message-ID: <Y91DUmMjCLzIXlp+@google.com>
+References: <20230131085031.88939-1-likexu@tencent.com>
+ <Y9k7eyfmXjqW9lYF@google.com>
+ <afe1fdd8-9f3e-c988-cd38-476a6da26d46@gmail.com>
+ <Y9v7tEXPlki7YOT4@google.com>
+ <7dc66398-aa0c-991f-3fa9-43aac8c710fd@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7dc66398-aa0c-991f-3fa9-43aac8c710fd@gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 2, 2023, at 15:50, Peter Zijlstra wrote:
-> In order to replace cmpxchg_double() with the newly minted
-> cmpxchg128() family of functions, wire it up in this_cpu_cmpxchg().
->
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+On Fri, Feb 03, 2023, Like Xu wrote:
+> On 3/2/2023 2:06 am, Sean Christopherson wrote:
+> > On Thu, Feb 02, 2023, Like Xu wrote:
+> > > On 1/2/2023 12:02 am, Sean Christopherson wrote:
+> > > The perf interface only provides host PMU capabilities and the logic for
+> > > choosing to disable (or enable) vPMU based on perf input should be left
+> > > in the KVM part so that subsequent development work can add most code
+> > > to the just KVM, which is very helpful for downstream users to upgrade
+> > > loadable KVM module rather than the entire core kernel.
+> > > 
+> > > My experience interacting with the perf subsystem has taught me that
+> > > perf change required from KVM should be made as small as possible.
+> > 
+> > I don't disagree, but I don't think that's relevant in this case.  Perf doesn't
+> > provide the necessary bits for KVM to virtualize a hybrid PMU, so unless KVM is
+> > somehow able to get away with enumerating a very stripped down vPMU, additional
+> > modifications to perf_get_x86_pmu_capability() will be required.
+> > 
+> > What I care more about though is this ugliness in perf_get_x86_pmu_capability():
+> > 
+> > 	/*
+> > 	 * KVM doesn't support the hybrid PMU yet.
+> > 	 * Return the common value in global x86_pmu,
+> > 	 * which available for all cores.
+> 
+> I would have expected w/ current code base, vpmu (excluding pebs and lbr, intel_pt)
+> to continue to work on any type of pCPU until you decide to disable them completely.
 
-I commented on this in the previous version but never got any
-reply from you:
+Didn't follow this.
 
-https://lore.kernel.org/all/1d88ba9f-5541-4b67-9cc8-a361eef36547@app.fastmail.com/
+> Moreover, the caller of perf_get_x86_pmu_capability() may be more than just KVM,
+> it may be technically ebpf helpers. The diff on comments from v1 can be applied to
+> this version (restrict KVM semantics), and it makes the status quo clearer
+> to KVM users.
 
-Unless I have misunderstood what you are doing, my concerns are
-still the same:
+In that case, eBPF is just as hosed, no?  And given that the only people that have
+touched perf_get_x86_pmu_capability() in its 11+ years of existence are all KVM
+people, I have a hard time believing there is meaningful use outside of KVM.
 
->  #define this_cpu_cmpxchg(pcp, oval, nval) \
-> -	__pcpu_size_call_return2(this_cpu_cmpxchg_, pcp, oval, nval)
-> +	__pcpu_size16_call_return2(this_cpu_cmpxchg_, pcp, oval, nval)
->  #define this_cpu_cmpxchg_double(pcp1, pcp2, oval1, oval2, nval1, 
-> nval2) \
->  	__pcpu_double_call_return_bool(this_cpu_cmpxchg_double_, pcp1, pcp2, 
-> oval1, oval2, nval1, nval2)
+> > 	 */
+> > 	cap->num_counters_gp	= x86_pmu.num_counters;
+> > 
+> > I really don't want to leave that comment lying around as it's flat out wrong in
+> > that it obviously doesn't address the other differences beyond the number of
+> > counters.  And since there are dependencies on perf, my preference is to disable
+> > PMU enumeration in perf specifically so that whoever takes on vPMU enabling is
+> > forced to consider the perf side of things, and get buy in from the perf folks.
+> 
+> The perf_get_x86_pmu_capability() obviously needs to be revamped,
+> but until real effective KVM enabling work arrives, any inconsequential intrusion
+> into perf/core code will only lead to trivial system maintenance.
 
-Having a variable-length this_cpu_cmpxchg() that turns into cmpxchg128()
-and cmpxchg64() even on CPUs where this traps (!X86_FEATURE_CX16) seems
-like a bad design to me.
+Trivial doesn't mean useless or unnecessary though.  IMO, there's value in capturing,
+in code, that perf_get_x86_pmu_capability() doesn't properly support hybrid vPMUs.
 
-I would much prefer fixed-length this_cpu_cmpxchg64()/this_cpu_cmpxchg128()
-calls that never trap but fall back to the generic version on CPUs that
-are lacking the atomics.
+That said, poking around perf, checking is_hybrid() is wrong.  This quirk suggests
+that if E-cores are disabled via BIOS, (a) X86_FEATURE_HYBRID_CPU is _supposed_ to
+be cleared, and (b) the base PMU will reflect the P-core PMU.  I.e. someone can
+enable vPMU by disabling E-cores.
 
-     Arnd
+                /*
+                 * Quirk: For some Alder Lake machine, when all E-cores are disabled in
+                 * a BIOS, the leaf 0xA will enumerate all counters of P-cores. However,
+                 * the X86_FEATURE_HYBRID_CPU is still set. The above codes will
+                 * mistakenly add extra counters for P-cores. Correct the number of
+                 * counters here.
+                 */
+                if ((pmu->num_counters > 8) || (pmu->num_counters_fixed > 4)) {
+                        pmu->num_counters = x86_pmu.num_counters;
+                        pmu->num_counters_fixed = x86_pmu.num_counters_fixed;
+                }
+
+Side topic, someone (*cough* Intel) should fix that, e.g. detect the scenario
+during boot and manually clear X86_FEATURE_HYBRID_CPU.
+
+I'm also ok explicitly disabling support in KVM, but since we need to update
+perf as well (that KVM comment needs to go), I don't see any reason not to also
+update perf_get_x86_pmu_capability().
+
+How about this?  Maybe split over two patches to separate the KVM and perf changes?
+
+diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
+index 85a63a41c471..d096b04bf80e 100644
+--- a/arch/x86/events/core.c
++++ b/arch/x86/events/core.c
+@@ -2974,17 +2974,19 @@ unsigned long perf_misc_flags(struct pt_regs *regs)
+ 
+ void perf_get_x86_pmu_capability(struct x86_pmu_capability *cap)
+ {
+-       if (!x86_pmu_initialized()) {
++       /* This API doesn't currently support enumerating hybrid PMUs. */
++       if (WARN_ON_ONCE(cpu_feature_enabled(X86_FEATURE_HYBRID_CPU)) ||
++           !x86_pmu_initialized()) {
+                memset(cap, 0, sizeof(*cap));
+                return;
+        }
+ 
++       /*
++        * Note, hybrid CPU models get tracked as having hybrid PMUs even when
++        * all E-cores are disabled via BIOS.  When E-cores are disabled, the
++        * base PMU holds the correct number of counters for P-cores.
++        */
+        cap->version            = x86_pmu.version;
+-       /*
+-        * KVM doesn't support the hybrid PMU yet.
+-        * Return the common value in global x86_pmu,
+-        * which available for all cores.
+-        */
+        cap->num_counters_gp    = x86_pmu.num_counters;
+        cap->num_counters_fixed = x86_pmu.num_counters_fixed;
+        cap->bit_width_gp       = x86_pmu.cntval_bits;
+diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
+index cdb91009701d..933165663703 100644
+--- a/arch/x86/kvm/pmu.h
++++ b/arch/x86/kvm/pmu.h
+@@ -165,15 +165,27 @@ static inline void kvm_init_pmu_capability(void)
+ {
+        bool is_intel = boot_cpu_data.x86_vendor == X86_VENDOR_INTEL;
+ 
+-       perf_get_x86_pmu_capability(&kvm_pmu_cap);
+-
+-        /*
+-         * For Intel, only support guest architectural pmu
+-         * on a host with architectural pmu.
+-         */
+-       if ((is_intel && !kvm_pmu_cap.version) || !kvm_pmu_cap.num_counters_gp)
++       /*
++        * Hybrid PMUs don't play nice with virtualization unless userspace
++        * pins vCPUs _and_ can enumerate accurate informations to the guest.
++        * Disable vPMU support for hybrid PMUs until KVM gains a way to let
++        * userspace opt into the dangers of hybrid vPMUs.
++       */
++       if (cpu_feature_enabled(X86_FEATURE_HYBRID_CPU))
+                enable_pmu = false;
+ 
++       if (enable_pmu) {
++               perf_get_x86_pmu_capability(&kvm_pmu_cap);
++
++               /*
++                * For Intel, only support guest architectural pmu
++                * on a host with architectural pmu.
++                */
++               if ((is_intel && !kvm_pmu_cap.version) ||
++                   !kvm_pmu_cap.num_counters_gp)
++                       enable_pmu = false;
++       }
++
+        if (!enable_pmu) {
+                memset(&kvm_pmu_cap, 0, sizeof(kvm_pmu_cap));
+                return;
+
