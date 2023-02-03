@@ -2,116 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DE68688C9E
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 02:36:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DCFB688CA4
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 02:40:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231917AbjBCBgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 20:36:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58408 "EHLO
+        id S231726AbjBCBkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 20:40:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231438AbjBCBgK (ORCPT
+        with ESMTP id S230217AbjBCBkb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 20:36:10 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C93E4875BF;
-        Thu,  2 Feb 2023 17:36:06 -0800 (PST)
-Received: from [192.168.87.25] (unknown [50.35.78.176])
-        by linux.microsoft.com (Postfix) with ESMTPSA id DE06D20B7102;
-        Thu,  2 Feb 2023 17:36:05 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com DE06D20B7102
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1675388166;
-        bh=uqFp07G5WGJwzKMyQ/L163FV3SqQaEfZIf2xxupW+nM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=IQ9KW2u+8LZQ4MyxGsFFXhzh8OG+Xl/CMDe7QDDUM/Xb72rDgKmKokTn6KSWLO6dS
-         o6wAkcRuXVWsDsUkOitQUXw2bCE2cnlsDSwAkTmskWFwZRoL/S5nwGlMWXnoUAFWc3
-         TnWOmz7QtyQZSYDRnBkD5r33Z1ZNqWRpiF7AGq3Y=
-Message-ID: <e2dd4a02-12cb-de5e-4b64-9d6a4a1ad316@linux.microsoft.com>
-Date:   Thu, 2 Feb 2023 17:36:05 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 -next] crypto: aspeed: fix type warnings
-To:     Neal Liu <neal_liu@aspeedtech.com>, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>
-Cc:     linux-crypto@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230202070345.191514-1-neal_liu@aspeedtech.com>
-Content-Language: en-US
-From:   Dhananjay Phadke <dphadke@linux.microsoft.com>
-In-Reply-To: <20230202070345.191514-1-neal_liu@aspeedtech.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-19.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 2 Feb 2023 20:40:31 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F5548715F
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 17:40:30 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-50660dd3263so37211077b3.19
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 17:40:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=MyChsJPTVsY2fOwG/RI8qO+kUTadsY5ao3Rn6oLubwI=;
+        b=q2Lfvwgba5mI01dB8lALvFJm9eJ5L6qh+bqk0DX7YFrZLVCPPEc4ohuNsRgVz/DWoa
+         45p4NxjS5Tc1u5rhYtkOxutMSFfev883SPN6LLMTF+pVdMycr5bePuiA4UIRHQz5bmMG
+         zRiiSUVv2IaBHwMxrZbglAbdEKlQmmqfuwY5AFdTVPB9cpJ0EZxRn/4K85quJOTCZpi5
+         HE78n6XyxSyGucpzxCPCE77mwn66EGwiwRzQEtgwgENOIvH68rrdkfdOIYL+WWSM3dAE
+         t4gePGaLe1+Ey+the2P/FX3skvPyNc0yYktf4Ltxq559JXe8PAfMYwDOsSj+u3GdckiS
+         ay/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MyChsJPTVsY2fOwG/RI8qO+kUTadsY5ao3Rn6oLubwI=;
+        b=6n0ZTwAjTnovaniXh9TjJo0oixbdlNV/XMRfMZNEKweTYljvpOuH156LwRG25EWg3i
+         VnK05pqk6mZt2nhCxHlfMWnr8pI3cS388Hi6WIGI/mEI2i7wG5+oWpa2uXu3McXZLi88
+         Qq7DjIykO/XKtIXLADm84draQ5Z7J609L11x0RsrOd8ndJupfx6mLHrUwINFYpXNDn6U
+         oSyYlgjbCESOqJz3mnlDa8nHG7o+ltUzJriXhgjdfRKPJT5ZsCBEzIslryKuDLQnJv9N
+         6cK80ZXTMX4OOIB2WJ4G1TcH7BcjAjb1PDPqO96TmsuAZN4q1P4RzlQGxxI6UudrQFRp
+         9yJw==
+X-Gm-Message-State: AO0yUKWTF0vcQztEA0IkqKpSzzx32CAKluTSDVF3UXVNWFhTlxhZ4S0k
+        ZEvGOZDw3Zj8vhgPNgKlwN/E75y/e5r5
+X-Google-Smtp-Source: AK7set+0if6+qdzHg851jcAQ62KbEMrh7klQns415GjdzZzFFKMRMIpJ8w8d4/avuCsLvwLct18dnu+GKXDH
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:3bb5:4c1f:1143:605])
+ (user=irogers job=sendgmr) by 2002:a25:d749:0:b0:833:79ab:566a with SMTP id
+ o70-20020a25d749000000b0083379ab566amr906826ybg.27.1675388429315; Thu, 02 Feb
+ 2023 17:40:29 -0800 (PST)
+Date:   Thu,  2 Feb 2023 17:40:14 -0800
+Message-Id: <20230203014014.75720-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
+Subject: [PATCH v1] perf pmu: Fix aarch64 build
+From:   Ian Rogers <irogers@google.com>
+To:     John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Rob Herring <robh@kernel.org>,
+        Kang Minchul <tegongkang@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sandipan Das <sandipan.das@amd.com>,
+        Jing Zhang <renyu.zj@linux.alibaba.com>,
+        linuxppc-dev@lists.ozlabs.org, Kajol Jain <kjain@linux.ibm.com>
+Cc:     Stephane Eranian <eranian@google.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Caleb Biggers <caleb.biggers@intel.com>,
+        Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/1/2023 11:03 PM, Neal Liu wrote:
-> This patch fixes following warnings:
-> 
-> 1. sparse: incorrect type in assignment (different base types)
-> Fix: change to __le32 type.
-> 2. sparse: cast removes address space '__iomem' of expression
-> Fix: use readb to avoid dereferencing the memory.
-> 
-> Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
-> ---
-> Change since v1: keep iomem marker to remain its purpose.
-> 
->   drivers/crypto/aspeed/aspeed-acry.c | 8 ++++----
->   1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/crypto/aspeed/aspeed-acry.c b/drivers/crypto/aspeed/aspeed-acry.c
-> index 164c524015f0..f2429e699d14 100644
-> --- a/drivers/crypto/aspeed/aspeed-acry.c
-> +++ b/drivers/crypto/aspeed/aspeed-acry.c
-> @@ -252,7 +252,7 @@ static int aspeed_acry_rsa_ctx_copy(struct aspeed_acry_dev *acry_dev, void *buf,
->   				    enum aspeed_rsa_key_mode mode)
->   {
->   	const u8 *src = xbuf;
-> -	u32 *dw_buf = (u32 *)buf;
-> +	__le32 *dw_buf = (__le32 *)buf;
+ARM64 overrides a weak function but a previous change had broken the
+build.
 
-All callers are passing acry_dev->buf_addr as buf, can just change that 
-type to __le32 * and deref here directly?
+Fixes: 8cefeb8bd336 ("perf pmu-events: Introduce pmu_metrics_table")
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/perf/arch/arm64/util/pmu.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
->   	int nbits, ndw;
->   	int i, j, idx;
->   	u32 data = 0;
-> @@ -302,7 +302,7 @@ static int aspeed_acry_rsa_ctx_copy(struct aspeed_acry_dev *acry_dev, void *buf,
->   static int aspeed_acry_rsa_transfer(struct aspeed_acry_dev *acry_dev)
->   {
->   	struct akcipher_request *req = acry_dev->req;
-> -	u8 *sram_buffer = (u8 *)acry_dev->acry_sram;
-> +	u8 __iomem *sram_buffer = (u8 __iomem *)acry_dev->acry_sram;
-
-u8 cast seems unnecessary, readb takes (void *) and using "+ data_idx"
-offset below anyway.
-
-
->   	struct scatterlist *out_sg = req->dst;
->   	static u8 dram_buffer[ASPEED_ACRY_SRAM_MAX_LEN];
->   	int leading_zero = 1;
-> @@ -321,11 +321,11 @@ static int aspeed_acry_rsa_transfer(struct aspeed_acry_dev *acry_dev)
->   
->   	for (j = ASPEED_ACRY_SRAM_MAX_LEN - 1; j >= 0; j--) {
->   		data_idx = acry_dev->data_byte_mapping[j];
-> -		if (sram_buffer[data_idx] == 0 && leading_zero) {
-> +		if (readb(sram_buffer + data_idx) == 0 && leading_zero) {
->   			result_nbytes--;
->   		} else {
->   			leading_zero = 0;
-> -			dram_buffer[i] = sram_buffer[data_idx];
-> +			dram_buffer[i] = readb(sram_buffer + data_idx);
->   			i++;
->   		}
->   	}
+diff --git a/tools/perf/arch/arm64/util/pmu.c b/tools/perf/arch/arm64/util/pmu.c
+index 2779840d8896..fa143acb4c8d 100644
+--- a/tools/perf/arch/arm64/util/pmu.c
++++ b/tools/perf/arch/arm64/util/pmu.c
+@@ -22,6 +22,8 @@ static struct perf_pmu *pmu__find_core_pmu(void)
+ 			return NULL;
+ 
+ 		return pmu;
++	}
++	return NULL;
+ }
+ 
+ const struct pmu_metrics_table *pmu_metrics_table__find(void)
+-- 
+2.39.1.519.gcb327c4b5f-goog
 
