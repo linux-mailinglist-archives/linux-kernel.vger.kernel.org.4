@@ -2,54 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D957C68A36C
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 21:12:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FEF468A36F
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 21:15:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233327AbjBCUMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 15:12:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55046 "EHLO
+        id S233356AbjBCUPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 15:15:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232760AbjBCUMw (ORCPT
+        with ESMTP id S231302AbjBCUPf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 15:12:52 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14CC0A8425;
-        Fri,  3 Feb 2023 12:12:51 -0800 (PST)
+        Fri, 3 Feb 2023 15:15:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F8891882;
+        Fri,  3 Feb 2023 12:15:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A2B1861FE5;
-        Fri,  3 Feb 2023 20:12:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2449C433EF;
-        Fri,  3 Feb 2023 20:12:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5F6B6B82BB2;
+        Fri,  3 Feb 2023 20:15:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB01AC433D2;
+        Fri,  3 Feb 2023 20:15:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675455170;
-        bh=4cYcCPYkEMmGYnotndJDbonkHWa1OTh1uLq8K0ufV2E=;
+        s=k20201202; t=1675455332;
+        bh=3wRIsEkcYgnxR1oUaUKFTnjvlPLYKjDerxB/b+desAU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IuDt1yfjPrp0UzZ5DrOE7Of/AGHeP9WkPgZcg7g/VdrTgDi0ySUyNyj01FmBvwwao
-         3ufGKChTDu8YBAfotgIuUi4e4CZ0NL9IvmQfO/4DRYiMIUcLjKj3492exZLPpX9g6n
-         sT4s6hAfzI+1IagNAj3Ddslh/DRxnNUNvVEYWNOINhe/w1l7I+tTHUSqJWdK4MDn7r
-         lS4ycYtkcaeD17quUFXktJTl46YPd+quUJcXpCub3lsJbP2Be7qGW6WI2lUzZxZlBn
-         G4l76Wu/1qu5OBKYEbZVpL3fxZqDY2CFJU3qnLDd8d2tM50muuxFXZm5fPDpyb8UHd
-         fJMzauCI5lnng==
+        b=XNrPSl5X5PzDmjlWqVQxEf/PMr/4ad/lJjFiZ6RNo5iwLeo+5hLoltqMLjhtHFFw6
+         qQQlqqvcLDoIoDCaBqkP6r9mhyYAH3LHCraBq0fiARVl8x5oRUEL3YpoAOoAR04XF4
+         hpCOTi2f+OgVUr3mHrZIl5vInJdziv28q6CYJdz/AdSq+jlUlFLQ0O0WWwUFWHYugQ
+         erEHNa7QPVdrTZHJSa72QYsUV/SvJYa3dOE7lY45VVXMOoSvKudhFEzc8SFH0oz/0x
+         anhhPBjyETEGVTuu/MXVpxJbSSBJs8F/BYYaEwtoUtLewLzX7phfFxmnaSYa5M9FOC
+         JgDZ9BCDXyt+A==
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 5161F405BE; Fri,  3 Feb 2023 17:12:47 -0300 (-03)
-Date:   Fri, 3 Feb 2023 17:12:47 -0300
+        id 35877405BE; Fri,  3 Feb 2023 17:15:29 -0300 (-03)
+Date:   Fri, 3 Feb 2023 17:15:29 -0300
 From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     jolsa@kernel.org, peterz@infradead.org, mingo@redhat.com,
-        irogers@google.com, linux-kernel@vger.kernel.org,
-        adrian.hunter@intel.com, linux-perf-users@vger.kernel.org,
-        song@kernel.org, haoluo@google.com, bpf@vger.kernel.org,
-        juri.lelli@redhat.com
-Subject: Re: [PATCH v2 0/3] perf lock contention: Improve aggr x filter
- combination
-Message-ID: <Y91qvwSIs2tc2JAk@kernel.org>
-References: <20230203021324.143540-1-namhyung@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Rob Herring <robh@kernel.org>,
+        Kang Minchul <tegongkang@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sandipan Das <sandipan.das@amd.com>,
+        Jing Zhang <renyu.zj@linux.alibaba.com>,
+        linuxppc-dev@lists.ozlabs.org, Kajol Jain <kjain@linux.ibm.com>,
+        Stephane Eranian <eranian@google.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Caleb Biggers <caleb.biggers@intel.com>
+Subject: Re: [PATCH v5 15/15] perf jevents: Run metric_test.py at compile-time
+Message-ID: <Y91rYT5eBOFUHsJK@kernel.org>
+References: <20230126233645.200509-1-irogers@google.com>
+ <20230126233645.200509-16-irogers@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230203021324.143540-1-namhyung@kernel.org>
+In-Reply-To: <20230126233645.200509-16-irogers@google.com>
 X-Url:  http://acmel.wordpress.com
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -60,69 +82,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, Feb 02, 2023 at 06:13:21PM -0800, Namhyung Kim escreveu:
-> Hello,
+Em Thu, Jan 26, 2023 at 03:36:45PM -0800, Ian Rogers escreveu:
+> Add a target that generates a log file for running metric_test.py and
+> make this a dependency on generating pmu-events.c. The log output is
+> displayed if the test fails like (the test was modified to make it
+> fail):
 > 
-> The callstack filter can be useful to debug lock issues but it has a
-> limitation that it only works with caller aggregation mode (which is the
-> default setting).  IOW it cannot filter by callstack when showing tasks
-> or lock addresses/names.
+> ```
+>   TEST    /tmp/perf/pmu-events/metric_test.log
+> F......
+> ======================================================================
+> FAIL: test_Brackets (__main__.TestMetricExpressions)
+> ----------------------------------------------------------------------
+> Traceback (most recent call last):
+>   File "tools/perf/pmu-events/metric_test.py", line 33, in test_Brackets
+>     self.assertEqual((a * b + c).ToPerfJson(), 'a * b + d')
+> AssertionError: 'a * b + c' != 'a * b + d'
+> - a * b + c
+> ?         ^
+> + a * b + d
 
-Thanks, applied.
+Added this:
 
-- Arnaldo
-
- 
-> But sometimes users want to use the filter for other aggregation mode.
-> Like "show me lock addresses/names from this caller only" or "show me
-> tasks having these callers".
-> 
-> When it's using tracepoint events from the data file, the situation is
-> good since the tracepoints have all the necessary info.  But when using
-> BPF it needs to extend the key of lock stat BPF map to have more than
-> one info like 'pid + stack_id' or 'lock_addr + stack_id'.  As callstack
-> filter works in userspace, it should save the both info.
-> 
-> With this change we can now use the -S/--callstack-filter with the
-> -t/--threads option or -l/--lock-addr option.  It's also possible to use
-> it with other filter options.
-> 
-> The following example shows the top 5 tasks that have contention
-> somewhere in the epoll handling.
-> 
->   $ sudo perf lock con -abt -S epoll -E5 -- sleep 1
->    contended   total wait     max wait     avg wait          pid   comm
-> 
->            2     58.64 us     32.38 us     29.32 us      1514752   Chrome_IOThread
->            3     29.31 us     12.65 us      9.77 us         3773   Xorg
->            1     17.45 us     17.45 us     17.45 us      1514906   Chrome_ChildIOT
->            1     15.41 us     15.41 us     15.41 us      1515382   Chrome_ChildIOT
->            1     12.52 us     12.52 us     12.52 us       293878   IPC I/O Parent
-> 
-> You get get the code at 'perf/lock-filter-v1' branch in
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
-> 
-> Thanks,
-> Namhyung
-> 
-> Namhyung Kim (3):
->   perf lock contention: Factor out lock_contention_get_name()
->   perf lock contention: Use lock_stat_find{,new}
->   perf lock contention: Support filters for different aggregation
-> 
->  tools/perf/builtin-lock.c                     |  79 ++++----
->  tools/perf/util/Build                         |   5 +-
->  tools/perf/util/bpf_lock_contention.c         | 180 +++++++++++-------
->  .../perf/util/bpf_skel/lock_contention.bpf.c  |  15 +-
->  tools/perf/util/bpf_skel/lock_data.h          |   4 +-
->  tools/perf/util/lock-contention.h             |   5 +
->  6 files changed, 178 insertions(+), 110 deletions(-)
-> 
-> -- 
-> 2.39.1.519.gcb327c4b5f-goog
-> 
-
--- 
-
-- Arnaldo
+diff --git a/tools/perf/.gitignore b/tools/perf/.gitignore
+index 05806ecfc33c12a1..f533e76fb48002b7 100644
+--- a/tools/perf/.gitignore
++++ b/tools/perf/.gitignore
+@@ -38,6 +38,7 @@ arch/*/include/generated/
+ trace/beauty/generated/
+ pmu-events/pmu-events.c
+ pmu-events/jevents
++pmu-events/metric_test.log
+ feature/
+ libapi/
+ libbpf/
+diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+index b7d9c42062300d04..bac9272682b759e9 100644
+--- a/tools/perf/Makefile.perf
++++ b/tools/perf/Makefile.perf
+@@ -1103,6 +1103,7 @@ clean:: $(LIBAPI)-clean $(LIBBPF)-clean $(LIBSUBCMD)-clean $(LIBSYMBOL)-clean $(
+ 		$(OUTPUT)util/intel-pt-decoder/inat-tables.c \
+ 		$(OUTPUT)tests/llvm-src-{base,kbuild,prologue,relocation}.c \
+ 		$(OUTPUT)pmu-events/pmu-events.c \
++		$(OUTPUT)pmu-events/metric_test.log \
+ 		$(OUTPUT)$(fadvise_advice_array) \
+ 		$(OUTPUT)$(fsconfig_arrays) \
+ 		$(OUTPUT)$(fsmount_arrays) \
