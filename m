@@ -2,145 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 498346891C7
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 09:16:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13A006891D3
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 09:18:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231302AbjBCIP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 03:15:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49668 "EHLO
+        id S231755AbjBCIR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 03:17:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231989AbjBCIPU (ORCPT
+        with ESMTP id S229790AbjBCIRZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 03:15:20 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B54365BE
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 00:14:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675412074;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RBSNvTzGGuF/AnMtphdz8gAhAXklpF3dQGWk2OV7ssc=;
-        b=QP7oYfyO15EdW4bZHYjM7C7zrf60fgZ8Of75gzjSVNOflzB1fdQx6TtCMMXBH1nJnkLTDs
-        dk+ILqggmpC6iJgo/UYNjtNL25h1pR/MGCzLpEZ8WxNXKc+il2dQruBJbtaG2pyQaDlFpV
-        jh+CbfPzY8LA2JQvaq6npMh5xEAHnVo=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-648-l3FW6DgbPKex1xa7QrdpRQ-1; Fri, 03 Feb 2023 03:14:33 -0500
-X-MC-Unique: l3FW6DgbPKex1xa7QrdpRQ-1
-Received: by mail-wm1-f70.google.com with SMTP id a20-20020a05600c349400b003dfecb98d38so165837wmq.0
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 00:14:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RBSNvTzGGuF/AnMtphdz8gAhAXklpF3dQGWk2OV7ssc=;
-        b=Mpsm3aLt4AOpG7R627QlfzEDzhwqUGuZHd693A51aVglkTekKBcrWxxj9I3QtajdV6
-         exmjnQL7jkyzs6FLkPMO7TGabgkeSEDPW9X+k5637OwWA9hQ8wlmtrZtGBPt5YyArATc
-         oYJom75suQ7qPd9AkSA36eICeRVCoCYRtna9fF7FX6br9JNAlDkC73LDcZCZdq50/ZkC
-         T911AcLzFiGU5MlyWAKk+/fc+y+oNcflo1b1+AVi9uw43K0VN+AJFWzrCZqWZymuS6U1
-         92qxXqwg1kcsb1s9+pT16hHKH/G7Yhro+Y0pRzuWn719Fkj3NLutMMcWt8Wgs/2wW7k3
-         HYWg==
-X-Gm-Message-State: AO0yUKV18sVW2MRGZL0iuUI0zck1y5ue6vQP1d6Eom5BoebaJEVOZNEB
-        n1F4su3Jx/DPA1TwSmEbSqm9ZaW0lG2JCCVgPGsTQcahEXJ1nYmQ406AWhJkELxCjdYq9H34vuw
-        SzU4N6LZ1uMaj0gLZcRj2zXmr
-X-Received: by 2002:a7b:ce11:0:b0:3dc:5302:ad9 with SMTP id m17-20020a7bce11000000b003dc53020ad9mr10452472wmc.27.1675412072421;
-        Fri, 03 Feb 2023 00:14:32 -0800 (PST)
-X-Google-Smtp-Source: AK7set9XLR1nt2yYDupc37z1u66lHeROwAvON4PoONn4AVsn75DKzjR5/jFjM4/qc6XCMKADet3/GQ==
-X-Received: by 2002:a7b:ce11:0:b0:3dc:5302:ad9 with SMTP id m17-20020a7bce11000000b003dc53020ad9mr10452458wmc.27.1675412072183;
-        Fri, 03 Feb 2023 00:14:32 -0800 (PST)
-Received: from redhat.com ([2.52.156.122])
-        by smtp.gmail.com with ESMTPSA id v9-20020a05600c470900b003dfe549da4fsm1622359wmo.18.2023.02.03.00.14.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 00:14:31 -0800 (PST)
-Date:   Fri, 3 Feb 2023 03:14:28 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Si-Wei Liu <si-wei.liu@oracle.com>
-Cc:     jasowang@redhat.com, parav@nvidia.com, elic@nvidia.com,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 6/7] vdpa/mlx5: conditionally show MTU and STATUS in
- config space
-Message-ID: <20230203030944-mutt-send-email-mst@kernel.org>
-References: <1675207345-22328-1-git-send-email-si-wei.liu@oracle.com>
- <1675207345-22328-7-git-send-email-si-wei.liu@oracle.com>
-MIME-Version: 1.0
+        Fri, 3 Feb 2023 03:17:25 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2138.outbound.protection.outlook.com [40.107.220.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56BAF30FF;
+        Fri,  3 Feb 2023 00:17:24 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fAG4zvHqLHiCLRITKN9yA+o2rimG11NcU6GjSLSBXqgCWG0WMu34uLM978I3GJNLyS20lBhh7D3dNob8ziVQ72awNSzaGH/XCWj7dJQ99c+oQcykzzI8pe3GuvEa9XBW2ss3gTlffX0IN6o+Hc0rJnPOxa6Dgu5HhIMP8S1LoCbRe0qkExv0TILtdIkBW1g7Tonqf5bLsymtpBbI3LzEqjCQv2Oz+mcJeWUp+tj3KPADLcBWDa8blUGoiyUO7jNc7a561ZO18j217alLerW9lRLaoAVwi3yAGoVlwQ6y2a2t7JdpofjvkBqDDfT7bcqu47L6ZcHKO8aM4ab2mnxCug==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mqGXl5Wv3G9fLahc+geuWHLtMDU+xGZqI0CTVLVftUI=;
+ b=KfcaBpB75cgaDDXrKOZbd8B+EHHqdaY4k+bLV62haiL9WnCbKJegxH+VUaSyxhE0tq6TuUacpbo+K3JndeGfMLDXLi6FmUToHe5vtt4pptn2Ahe/F4NCrQ/uZ4Q1ELS7oiJ6yX8nU9Lj8NIl8DYpnNAxvTADmWMRxDtkgianS6qY2T+0N7TK35P8EQdt16M1i1xr/nZGUKYfUXkLtXZSrVgMlKHolZwgK8pSax1a9gdvMs/UZxPyd9Qb1i7o7077o0wiS8We86/pjbgWWQNJ/naNu3qtCKRMgbbW/kpAfAL6pxdLh+Hcqc3PDDXM7npY4S7A1oT5DZNu9TCFhUQx1Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mqGXl5Wv3G9fLahc+geuWHLtMDU+xGZqI0CTVLVftUI=;
+ b=mJeB1OpnUjI7OWkrAwmikHMCogbxeVpoXsY8gRWSYvbvgjxD+0hWRn1do61XeJxw68FbV7JpRNB1Q34iXwisczewQ0ZnQ/bfU7j3zqOGOsJbsE6oRFXeOfHRW7kENz5T0ovFYDLzNJ8MuuHHjQJpK40EVBzRL9AThmoLe2Qzfp0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by DS7PR13MB4654.namprd13.prod.outlook.com (2603:10b6:5:3a0::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.24; Fri, 3 Feb
+ 2023 08:17:21 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb5c:910f:3730:fd65]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb5c:910f:3730:fd65%5]) with mapi id 15.20.6064.027; Fri, 3 Feb 2023
+ 08:17:21 +0000
+Date:   Fri, 3 Feb 2023 09:17:06 +0100
+From:   Simon Horman <simon.horman@corigine.com>
+To:     netdev@kapio-technology.com
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
+        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>
+Subject: Re: [PATCH net-next 3/5] drivers: net: dsa: add fdb entry flags
+ incoming to switchcore drivers
+Message-ID: <Y9zDApc6nDO2RzOb@corigine.com>
+References: <20230130173429.3577450-1-netdev@kapio-technology.com>
+ <20230130173429.3577450-4-netdev@kapio-technology.com>
+ <Y9lj7RJgyMJfjtGp@corigine.com>
+ <0b021777dfc1825b6565c0d9dbd6dbef@kapio-technology.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1675207345-22328-7-git-send-email-si-wei.liu@oracle.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <0b021777dfc1825b6565c0d9dbd6dbef@kapio-technology.com>
+X-ClientProxiedBy: AM3PR07CA0138.eurprd07.prod.outlook.com
+ (2603:10a6:207:8::24) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|DS7PR13MB4654:EE_
+X-MS-Office365-Filtering-Correlation-Id: ca453dc9-6b20-448b-cfb4-08db05bf12a4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Vs7c+kQ9oaiekn4X2Rjbic2Q0BA2JviQYKXtcbxDGGU2ieCHKPBV7k2ZJihL2DCKgLi85PDkAP1NCuFmUtHfPfitxFO8OETnZwS8H9sXs6kTyWuHNvjy5W1I/lgM2no+9KeFnqizVPgOhWSST6ZG4IA9rpbjAAEBQoHISYiO+hxqF9HA3D7t9iDM6+g0G7gA0BzXxF9f20RN6hoOLA98CI0JNEoM+kiRo+XxMTayU5+9bKII17KeQM/I8+UT5oTM3AUpqFyJ73Di+xJ9J7hrzdhpD7dQnXs0UWZcDMYw1/lRdT+w/JCKsCb14a46l4dKdPaqt0iOjNeb6rHGDcecZBTRrTFDDtmBV203W2YaCyw+qWI3SaDT3vLErag7gutG2S+7De0h+gXEbu6Gj7i7U/VHP6WaKTJnTjX0ohaHiNjjKHWr6ZvUpHne5T+6XxmOvdTDHAOASK6D1Fzm9CUqRH6JPczwt7hzmqgR92lxp5YSKRWBOLBjeI0pLgRB2YZA0NvTRKXAsHuJu86OrP1nDwxTAN1UMkCa9yfcxitKuRHt/3BG3IXT2nyZ0wFiswgI/lLeQ75uFNs+ptoNfGfOrrmWyY2d7W/8JP4ry5G6lQ/o/tAd7dz2z6L3mEUeY4B4JsPvR3R6ImJTo9GRnAvmYxSP6m0vfjMmn0UnFClk1zVBB+QOKMfh34sgEX1tLGep
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39840400004)(396003)(376002)(366004)(346002)(136003)(451199018)(6666004)(53546011)(6506007)(38100700002)(86362001)(5660300002)(6512007)(36756003)(2616005)(41300700001)(44832011)(7406005)(186003)(6486002)(7416002)(2906002)(316002)(8936002)(66946007)(4326008)(54906003)(66556008)(66476007)(478600001)(6916009)(8676002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?+N4SqAH3LoXLXhdV4Dq6/lXyOfaqsFinmCQeC7JuTZ8qnvniAorA5z6+Kk/C?=
+ =?us-ascii?Q?YG6rmVcOQTq62hX40WrdLRbkuelGT6e2VuTFupGmN+npGtVVInlr1/OHKncU?=
+ =?us-ascii?Q?6Yfru3IiCONJLU7/NuVAfOZEOKpHgB6wm6ei1uvPVDw0Zc6vFwKRzC3O48ev?=
+ =?us-ascii?Q?qzh63xHxihqkDleGM5OQzRs+UMzEPEoY7+pjMAX0WM44nlSnl7EjYPnQntN3?=
+ =?us-ascii?Q?NesFvra4RE7H8UI/acREWikkbsnzdPmLzq6mhqBbRFY7AJnv99Lpdh3NrUlX?=
+ =?us-ascii?Q?1MS3atSRuESrwBUQEbh/v4YY11ZNo0CCfTfQ7XgcmJjqRyFANEVqKdvAELJO?=
+ =?us-ascii?Q?b4hoZkT1pniTKoQjbkshmxhPnO6/6BAi8XFI4xbwENzrr2iSpUBEO5jcPmqx?=
+ =?us-ascii?Q?Sc/pAQMoDFTk/qAh+4yVEBu2Q6zcnVrfQQsymSEcSxG0rxxt5OW75Gh1gl2Y?=
+ =?us-ascii?Q?6xAs7HiCTFyNnp2rPjSkMAsSqLEbljlMj+DpBzGJnacKNZSr9JV4VMqySJ9E?=
+ =?us-ascii?Q?7LlxxgZX3Esr4qtEGn1E69iw05lByrO0u7R/EmZQ4GfF5UjWyOUuUVefCd42?=
+ =?us-ascii?Q?iRzyR3xc8QuLwPau7L0RdsyFkohn6IUWmv4tAviefoSeu93/RJcReJpBwpDt?=
+ =?us-ascii?Q?iDhgugHwiUpStJ7XB/0N7F0RZmnjheyRI2GQYTIFDOeNxV3GfS3C2HU9O/k0?=
+ =?us-ascii?Q?ROj5ZbYIevZOjh3UqwQcc20KVlU+TeSEg5w17yCiKLqslaW6yHB3nqOiznT1?=
+ =?us-ascii?Q?CoRzyaD06QbLOTgzbo4pKuDDzgzo9qajTaE18yJ05wm1k/yqRHxrXpmLxGNx?=
+ =?us-ascii?Q?arnFNTzDI4txx4n3zjzqp9+TpFXAMOTmfL2mmyoySUlrHPefl/UCSceHrXCp?=
+ =?us-ascii?Q?s+R2QVrN5J91n5+LL5LoswjJCw/Hz/0KGzzNizZ3SWsblC/as8bA8FIfdSCF?=
+ =?us-ascii?Q?/a3t6Lvh77/B0M7dVtCdfhMjkpg4fkshhFr2EBY0pH68ZdbTgOj/yGoOA0Fr?=
+ =?us-ascii?Q?s48L6KoRn/1Nz2oShORfxfu0jocuCdr1847jzr7s6y1bmMEgV/uXAaFz7P+n?=
+ =?us-ascii?Q?Zak6h6FQ6Te9CRooR0RlSvUYGW7UdzPOEsHq5IYYWIFDycqaOyTTYdBQWL3L?=
+ =?us-ascii?Q?KE0eHlRDcrBKK53GGDsFqsYrZfembYr8ip60tr8VOy8E3TN53ehhYnWXHvb5?=
+ =?us-ascii?Q?xbJQrF4E7PtKSMEvrh7dd4WwanLZW1kE8s5NhgRC/QL5ckr1IEqd0XNIVyW+?=
+ =?us-ascii?Q?4g3bo9paQvuDKCP1SzlQGNUvtii772cWf0OO/2gFcJTb9MfhSbhQKsMr9fzg?=
+ =?us-ascii?Q?nach4qr/C3JA3Pt1a0KE5DfwhFTYduy6bkw0B7Wzk3FkzUFbIcEPigZSnl9u?=
+ =?us-ascii?Q?unjHVMKkak36vam8KX4GHwfjRIZY4dkYUT7in3hResexwRfO+F8tbp3PwHYH?=
+ =?us-ascii?Q?1q/4u5Sg/aZkzQsr3+gh1YB0KhWQGV7U8V+IF6unqd/woUXiNSyDWzRum/n5?=
+ =?us-ascii?Q?bBXPJFH930YkpmYzIiYZZYXzst0kXBkUL+pZkhpf3d7L/cjwH17HStPKFQlk?=
+ =?us-ascii?Q?R0I8f0T8JInajI7S0e284Eiz9LwUIT4ktfzJpA/4OaRlmFuNFO/af+WLzXbO?=
+ =?us-ascii?Q?dx0NOQox70genbDfdm2orE4vcuDDyUCafOvps44Dy+OObabVjdBAaztJBIqu?=
+ =?us-ascii?Q?fLmeXg=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ca453dc9-6b20-448b-cfb4-08db05bf12a4
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Feb 2023 08:17:21.5083
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6jyyP0bBMILBC+GqfNMEGViAr9Y7thRwar4WZnDVYTwTJeNvb553rkcpTALvS1uLKv88K7dIxXJm/VV2NBs6aP9Ez+SWtz0R+G+d4yhGnKI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR13MB4654
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 03:22:24PM -0800, Si-Wei Liu wrote:
-> The spec says:
->     mtu only exists if VIRTIO_NET_F_MTU is set
->     status only exists if VIRTIO_NET_F_STATUS is set
+On Thu, Feb 02, 2023 at 05:45:56PM +0100, netdev@kapio-technology.com wrote:
+> On 2023-01-31 19:54, Simon Horman wrote:
+> > > --- a/drivers/net/dsa/b53/b53_common.c
+> > > +++ b/drivers/net/dsa/b53/b53_common.c
+> > > @@ -1684,11 +1684,15 @@ static int b53_arl_op(struct b53_device
+> > > *dev, int op, int port,
+> > > 
+> > >  int b53_fdb_add(struct dsa_switch *ds, int port,
+> > >  		const unsigned char *addr, u16 vid,
+> > > -		struct dsa_db db)
+> > > +		u16 fdb_flags, struct dsa_db db)
+> > >  {
+> > >  	struct b53_device *priv = ds->priv;
+> > >  	int ret;
+> > > 
+> > > +	/* Ignore entries with set flags */
+> > > +	if (fdb_flags)
+> > > +		return 0;
+> > 
+> > 
+> > 	Would returning -EOPNOTSUPP be more appropriate?
+> > 
+> > ...
 > 
-> We should only show MTU and STATUS conditionally depending on
-> the feature bits.
+> I don't think that would be so good, as the command
 > 
-> Signed-off-by: Si-Wei Liu <si-wei.liu@oracle.com>
-
-so change the subject pls. it seems to say you are showing them
-when you previously didn't, what's going on is something like:
-
-	make MTU/status access conditional on feature bits
-
-> ---
->  drivers/vdpa/mlx5/net/mlx5_vnet.c | 22 ++++++++++++++--------
->  1 file changed, 14 insertions(+), 8 deletions(-)
+> bridge fdb replace ADDR dev <DEV> master dynamic
 > 
-> diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> index 3a6dbbc6..3d49eae 100644
-> --- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> +++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> @@ -3009,6 +3009,8 @@ static int event_handler(struct notifier_block *nb, unsigned long event, void *p
->  	struct mlx5_vdpa_wq_ent *wqent;
->  
->  	if (event == MLX5_EVENT_TYPE_PORT_CHANGE) {
-> +		if (!(ndev->mvdev.actual_features & BIT_ULL(VIRTIO_NET_F_STATUS)))
-> +			return NOTIFY_DONE;
->  		switch (eqe->sub_type) {
->  		case MLX5_PORT_CHANGE_SUBTYPE_DOWN:
->  		case MLX5_PORT_CHANGE_SUBTYPE_ACTIVE:
-> @@ -3118,16 +3120,20 @@ static int mlx5_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name,
->  			goto err_alloc;
->  	}
->  
-> -	err = query_mtu(mdev, &mtu);
-> -	if (err)
-> -		goto err_alloc;
-> +	if (device_features & BIT_ULL(VIRTIO_NET_F_MTU)) {
-> +		err = query_mtu(mdev, &mtu);
-> +		if (err)
-> +			goto err_alloc;
->  
-> -	ndev->config.mtu = cpu_to_mlx5vdpa16(mvdev, mtu);
-> +		ndev->config.mtu = cpu_to_mlx5vdpa16(mvdev, mtu);
-> +	}
->  
-> -	if (get_link_state(mvdev))
-> -		ndev->config.status |= cpu_to_mlx5vdpa16(mvdev, VIRTIO_NET_S_LINK_UP);
-> -	else
-> -		ndev->config.status &= cpu_to_mlx5vdpa16(mvdev, ~VIRTIO_NET_S_LINK_UP);
-> +	if (device_features & BIT_ULL(VIRTIO_NET_F_STATUS)) {
-> +		if (get_link_state(mvdev))
-> +			ndev->config.status |= cpu_to_mlx5vdpa16(mvdev, VIRTIO_NET_S_LINK_UP);
-> +		else
-> +			ndev->config.status &= cpu_to_mlx5vdpa16(mvdev, ~VIRTIO_NET_S_LINK_UP);
-> +	}
->  
->  	if (add_config->mask & (1 << VDPA_ATTR_DEV_NET_CFG_MACADDR)) {
->  		memcpy(ndev->config.mac, add_config->net.mac, ETH_ALEN);
-> -- 
-> 1.8.3.1
+> is a valid command and should not generate errors. When ignored by the
+> driver, it will just install a dynamic FDB entry in the bridge, and the
+> bridge will age it.
 
+Sure, I agree that it's not necessarily an error that needs
+to propagate to the user.
+
+My assumption, which I now see is likely false, is that drivers
+could return -EOPNOTSUPP, to indicate to higher layers that the operation
+is not supported. But the higher layers may not propagate that.
+
+But it seems that is not the case here. So I think return 0 is fine
+after all. Sorry for the noise.
