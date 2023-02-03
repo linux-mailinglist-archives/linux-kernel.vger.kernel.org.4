@@ -2,68 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B51E168A08B
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 18:42:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E5A268A08F
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 18:43:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233106AbjBCRm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 12:42:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46848 "EHLO
+        id S233083AbjBCRnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 12:43:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231526AbjBCRm0 (ORCPT
+        with ESMTP id S231526AbjBCRnb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 12:42:26 -0500
-Received: from out-2.mta0.migadu.com (out-2.mta0.migadu.com [IPv6:2001:41d0:1004:224b::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AC2C2135
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 09:42:24 -0800 (PST)
-Date:   Fri, 3 Feb 2023 09:42:11 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1675446142;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZYvx87/bApyuUVwX/LObDHee8cS4wUlkoRlwfbD39PE=;
-        b=LGHrzaZwAx29gBlXOkLljkso6NQ92suLDFaEogkOQt1FEn3w8ek0TBLiGtVX57Q8fwq3qI
-        LZCTIUAkK3mdrLn3A5V/7RuWxv9SpZkZtBTARwGqciKa8ttsyGiY2Z+CaaY2plO61J4wrr
-        o7dBN5HJfu98Di+SvTaYhw2SUg3NLNM=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Shakeel Butt <shakeelb@google.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        Zhaoyang Huang <huangzhaoyang@gmail.com>, ke.wang@unisoc.com
-Subject: Re: [PATCH] mm: introduce entrance for root_mem_cgroup's current
-Message-ID: <Y91Hc3Iu+5VyyIwS@P9FQF9L96D.corp.robot.car>
-References: <1675312377-4782-1-git-send-email-zhaoyang.huang@unisoc.com>
- <Y9tz+0J9fw+Z+O+O@dhcp22.suse.cz>
+        Fri, 3 Feb 2023 12:43:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAC073BD88;
+        Fri,  3 Feb 2023 09:43:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6F88BB82B51;
+        Fri,  3 Feb 2023 17:43:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78B4FC433D2;
+        Fri,  3 Feb 2023 17:43:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675446208;
+        bh=e6yTEooKfk3WEQTuQrtNRVDKU8hw7pP938U9WCgGoYI=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=b8OCK5UcsdO2smKGMHZNdzHuerDz79NVoaTpz5JZ8Ksl0/uhen7V4Ekg9pqdX/LTS
+         VHI6bMj/mFTifgoFtRpbBa1r4KjXAyRFPvCaXB32SD1QLySf9Oy/ybWDIfTuG5Kzgh
+         oxUAoR4/FLG79hApQhjJRCFJlg8Itmq1cKi/W5MsOclqeH9MwbzUPZNturhF8FUnqG
+         DH503N33RC/4gAPonGsegLNHT/gOwbPF0+VUOqNEmKqZuzT0QoWlr09YRv4umND85d
+         8Z/eOIfUmm2QtDWscND0K19TWi7EGDJ1pcUHqV73jjJ3k1/7r16aIBY8Bo6iUi6PL5
+         hlEELLrElQJng==
+From:   Mark Brown <broonie@kernel.org>
+To:     tony@atomide.com, lgirdwood@gmail.com,
+        Jerome Neanne <jneanne@baylibre.com>
+Cc:     linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
+        khilman@baylibre.com, nm@ti.com, msp@baylibre.com
+In-Reply-To: <20230203140119.13029-1-jneanne@baylibre.com>
+References: <20230203140119.13029-1-jneanne@baylibre.com>
+Subject: Re: [PATCH] regulator: tps65219: use generic set_bypass()
+Message-Id: <167544620617.1020619.12568195566452835847.b4-ty@kernel.org>
+Date:   Fri, 03 Feb 2023 17:43:26 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9tz+0J9fw+Z+O+O@dhcp22.suse.cz>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.0
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 09:27:39AM +0100, Michal Hocko wrote:
-> On Thu 02-02-23 12:32:57, zhaoyang.huang wrote:
-> > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> > 
-> > Introducing memory.root_current for the memory charges on root_mem_cgroup.
+On Fri, 03 Feb 2023 15:01:19 +0100, Jerome Neanne wrote:
+> Due to wrong interpretation of the specification,
+> custom implementation was used instead of standard regmap helper.
+> LINK: https://lore.kernel.org/all/c2014039-f1e8-6976-33d6-52e2dd4e7b66@baylibre.com/
 > 
-> Charges are not currently accounted for the root memcg universally. See
-> try_charge which is used for all user space and skmem charges. I am not
-> 100% sure about objcg based accounting because there is no explicit
-> check for the root memcg but this might be hidden somewhere as well.
+> Fixes: c12ac5fc3e0a ("regulator: drivers: Add TI TPS65219 PMIC regulators support")
+> 
+> Regulator does NOT require to be off to be switched to bypass mode.
+> 
+> [...]
 
-root_mem_cgroup has no corresponding obj_cgroup: see memcg_online_kmem().
+Applied to
 
-Thanks
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+
+Thanks!
+
+[1/1] regulator: tps65219: use generic set_bypass()
+      commit: 0365df81145a4cfaae5f4da896160de512256e6d
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
