@@ -2,94 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF201689173
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 09:01:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2B1F689176
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 09:01:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232678AbjBCIAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 03:00:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40906 "EHLO
+        id S232691AbjBCIBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 03:01:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232718AbjBCH7c (ORCPT
+        with ESMTP id S232587AbjBCIAd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 02:59:32 -0500
-Received: from vulcan.natalenko.name (vulcan.natalenko.name [104.207.131.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E95E23124;
-        Thu,  2 Feb 2023 23:59:18 -0800 (PST)
-Received: from spock.localnet (unknown [83.148.33.151])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Fri, 3 Feb 2023 03:00:33 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDE691B31E;
+        Thu,  2 Feb 2023 23:59:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by vulcan.natalenko.name (Postfix) with ESMTPSA id 0315C120052F;
-        Fri,  3 Feb 2023 08:59:14 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
-        s=dkim-20170712; t=1675411155;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=khrZK9ZkbJkIdQ3hGKeEDzwdsTA9VD8W9jb6PMY8w9M=;
-        b=Q+6HZm9OCmTFAtNsLwFmH1zdMRuQRg/kQyQIIytco7yt3jj84VW8jVYi7n1rpd5124qq4t
-        eIjbBOe8AGZeOIfAX0odKtT8mIm299rqLfT6ALV3sbPIPvhhOBhIsfNZssRWq5UxG9MLkf
-        lz/C4y+Hmn1Re1k5GYCYGl+Z+PH1Sa4=
-From:   Oleksandr Natalenko <oleksandr@natalenko.name>
-To:     tj@kernel.org, axboe@kernel.dk, Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com,
-        yangerkun@huawei.com
-Subject: Re: [PATCH -next] block: Revert "block: increase BLKCG_MAX_POLS"
-Date:   Fri, 03 Feb 2023 08:59:13 +0100
-Message-ID: <2666358.mvXUDI8C0e@natalenko.name>
-In-Reply-To: <20230203081357.1385168-1-yukuai1@huaweicloud.com>
-References: <20230203081357.1385168-1-yukuai1@huaweicloud.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 69FA2B829BC;
+        Fri,  3 Feb 2023 07:59:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1B5AC433EF;
+        Fri,  3 Feb 2023 07:59:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675411191;
+        bh=GIfd5Axxji05btj1jW/bAPwo1tTtiuLMvZrf+hYfgns=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=V0MhVO4eCR3vBClDNhz/FzIL/b+9ek5Jo37I9QGM8y88ttCvUQLoHfsuLqaXiDM5T
+         hXmZUZAAyAkclxYhSvTg/hnZaATS89wcPXor1MTEAMAL0Xp8tou99ZWaTTqI/H+i5O
+         4Lz75cbmmJNafD9J/w1QI0cDdVpMMtCK8Iww1gHWHsFPSZ/PfRZGbyXop8eQd7odTc
+         AhGU/Y7R+lrQv3XgEyFN5KHmcKuzsYmSnpRogH6dU8ITzYwpNZB31P1SpNJBHPNYXv
+         b5ri8KHgyukAajThr2DzlgpgoD+fmz/jBK1Pa0gWSuSenKcv2BUDQCHN8dys49vwff
+         PukG9Gr2XFpAw==
+Date:   Fri, 3 Feb 2023 07:59:46 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Henning Schild <henning.schild@siemens.com>
+Cc:     Pavel Machek <pavel@ucw.cz>, Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] leds: simatic-ipc-leds-gpio: do not run into endless
+ EPROBE_DEFER loop
+Message-ID: <Y9y+8nOU4yt/uPD5@google.com>
+References: <20230125181711.30844-1-henning.schild@siemens.com>
+ <20230202204730.7ee24c01@md1za8fc.ad001.siemens.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230202204730.7ee24c01@md1za8fc.ad001.siemens.net>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello.
+On Thu, 02 Feb 2023, Henning Schild wrote:
 
-On p=E1tek 3. =FAnora 2023 9:13:57 CET Yu Kuai wrote:
-> From: Yu Kuai <yukuai3@huawei.com>
->=20
-> This reverts commit ec645dc96699ea6c37b6de86c84d7288ea9a4ddf.
->=20
-> This can save some memory, because after commit 0f7839955114 ("Revert
-> "block/mq-deadline: Add cgroup support""), there are total 5 policies.
->=20
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-> ---
->  include/linux/blkdev.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
-> index 41a41561b773..c6861c7fdad9 100644
-> --- a/include/linux/blkdev.h
-> +++ b/include/linux/blkdev.h
-> @@ -54,7 +54,7 @@ extern struct class block_class;
->   * Maximum number of blkcg policies allowed to be registered concurrentl=
-y.
->   * Defined here to simplify include dependency.
->   */
-> -#define BLKCG_MAX_POLS		6
-> +#define BLKCG_MAX_POLS		5
-> =20
->  #define DISK_MAX_PARTS			256
->  #define DISK_NAME_LEN			32
+> Am Wed, 25 Jan 2023 19:17:11 +0100
+> schrieb Henning Schild <henning.schild@siemens.com>:
+> 
+> > Should the driver providing our GPIOs not be available we used to
+> > return -EPORBE_DEFER out of the probe function and cause a
+> > potentially endless loop that also printed a lot to the kernel log.
+> > 
+> > ...
+> > leds-gpio leds-gpio: cannot find GPIO chip igpio-f7188x-2, deferring
+> > leds-gpio leds-gpio: Skipping unavailable LED gpio 0 (red:status-1)
+> > ...
+> > 
+> > The "leds-gpio" just ignores all entries and would never try again
+> > even if the GPIOs show up later. But our extra two GPIOs could cause
+> > that loop, in which we would even register/unregister "leds-gpio" and
+> > cause all the printing.
+> > 
+> > If any of those two extra GPIOs is not there, return with -ENODEV
+> > instead of -EPROBE_DEFER.
+> 
+> This is a really bad idea. The real fix for the future will be to
+> write individual drivers which clearly describe their dep chains.
+> 
+> This patch should not be merged.
 
-Last time I asked about reverting this change, it was suggested that we may=
- keep it [1].
+Dropped.
 
-[1] https://lore.kernel.org/linux-block/1dc051a8-4d59-8137-2406-f74026b170b=
-d@kernel.dk/
-
-=2D-=20
-Oleksandr Natalenko (post-factum)
-
-
+-- 
+Lee Jones [李琼斯]
