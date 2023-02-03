@@ -2,160 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C8FE689EC5
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 17:02:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81512689ECE
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 17:05:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232718AbjBCQCJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 11:02:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35026 "EHLO
+        id S233000AbjBCQFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 11:05:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231216AbjBCQCH (ORCPT
+        with ESMTP id S233217AbjBCQE5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 11:02:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9FE98BDDE;
-        Fri,  3 Feb 2023 08:02:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5096161F70;
-        Fri,  3 Feb 2023 16:02:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F8BDC433D2;
-        Fri,  3 Feb 2023 16:02:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675440125;
-        bh=GCFuvtqbmYjdRs4Metw9uUIQYvQiuqQ4yItdPgs0Mxo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qPw/P3a6cfeMvTHZaKVU39Pxh8PcEbL4Rv/LrNgmRR+6Y84hyTiD56U7rM6ux/b1r
-         +v1ilEKytY5CHyhoK54x56MR4LdnGkRTJd8CdM/MttzjuiaBt3S1vaGJ2uemE/KzTO
-         /fhXP/DDd0dUm+Q2N1Jf38tkDOvavuWXytnFYV9IAcQZcOsGaIUJdO+1npm/BoaAFz
-         a4V5YGL7Z8jyJzI6VhWCZX2u/urOjWohnwnxoUch6q17XtGlJ1r9QaYWkYbWK8Vubm
-         /6GMw2N6G5SEiX6Aigze+Z9KlGiSbuAysXNjnT04Q6VIQQDfXcHR837me/UpPdQEZZ
-         ONN/cF3VLgebQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id D9BC1405BE; Fri,  3 Feb 2023 13:02:02 -0300 (-03)
-Date:   Fri, 3 Feb 2023 13:02:02 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
-        Rob Herring <robh@kernel.org>,
-        Kang Minchul <tegongkang@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sandipan Das <sandipan.das@amd.com>,
-        Jing Zhang <renyu.zj@linux.alibaba.com>,
-        linuxppc-dev@lists.ozlabs.org, Kajol Jain <kjain@linux.ibm.com>,
-        Stephane Eranian <eranian@google.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Caleb Biggers <caleb.biggers@intel.com>
-Subject: Re: [PATCH v1] perf pmu: Fix aarch64 build
-Message-ID: <Y90v+jTe6z1dSFE0@kernel.org>
-References: <20230203014014.75720-1-irogers@google.com>
- <CAP-5=fX0ohsCUspm7NowDy2bmSr2cJfp=iaStK4EAdVy7zBHGA@mail.gmail.com>
- <Y90XgtX9uv26UAQa@kernel.org>
- <Y90bsM4DGL+WV8m0@kernel.org>
- <Y90b7shHtOCQL3ma@kernel.org>
- <Y90di+N7TODkFvMV@kernel.org>
- <Y90rtA95mWW5Othk@kernel.org>
+        Fri, 3 Feb 2023 11:04:57 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBFAA9E9ED
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 08:04:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675440247;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=w0k+DwIRn/nQk/hlUvm8L+KfqqsLBfRXdDbuz7IqD8k=;
+        b=JZfRAnB+e84gqER5W2DsfyzxuwhB6W4NGwHk6jG19uPi/X9TCwEfwTdnxuH3/wU4oMjlqO
+        FqtTyw6vfg1j8iKLxSekCyp7+D3/BxHQr7JAiR3d+eiyRjMzdRAzLQ3mvT6ME8I7bGVa/7
+        B9kY3tx05AQrB/936gWkp14WEysB7hQ=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-288-R38_7ecZOBaDCXloizrNDQ-1; Fri, 03 Feb 2023 11:04:05 -0500
+X-MC-Unique: R38_7ecZOBaDCXloizrNDQ-1
+Received: by mail-wm1-f71.google.com with SMTP id o5-20020a05600c4fc500b003db0b3230efso4833494wmq.9
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 08:04:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=w0k+DwIRn/nQk/hlUvm8L+KfqqsLBfRXdDbuz7IqD8k=;
+        b=ayRpSN0d1gBnyyY6THfJb1w7yBNILEQJPwD+F0dmgH8ZgfZr3US7mkmujmZp15wzrJ
+         sK3yxV7ECbkOsJMWbSM0YLNsv5jmhgQfM11ZUuJTS2xeyIYeM2VE3sKyjdcfHeTPbZZc
+         h3h/V22o7fqqnGwy3YG5NRziGibPHxB5iS6x5tv1lCOPHry8Rf0+FOcQJBEB/m7t2JKp
+         leSW3neODoZgeXDJNU0klVwk8WOOyHhfqwCgZnJyDZiuenFaPuBGwaFJ/yitRX4Z0h8s
+         LiQaxopHAnMFbcpDtUK1G+f0zCYBZCojSH3w68h8lqibpi6peN526iVCeek9Ch7FgWrz
+         enZw==
+X-Gm-Message-State: AO0yUKVQpm7Y4P3dD31Fh1GY/q9eapuvC7+TiHbZhe1dpSRBRSGVKooi
+        6pvAEcinQ0UP9OW6bzDPEibk1w17ByoT7yEvqAwBoEgzFulTaln6HG8xtC1N7c6PE+xnOWOabt1
+        Xnv/Hae6OEoK1iq6mv0CnQSaz
+X-Received: by 2002:a05:600c:3b0f:b0:3de:1d31:1048 with SMTP id m15-20020a05600c3b0f00b003de1d311048mr9487413wms.29.1675440244210;
+        Fri, 03 Feb 2023 08:04:04 -0800 (PST)
+X-Google-Smtp-Source: AK7set91uqMIdlSiPtj2q9+R9cLSAkjmdlpJcWO4fdDXR7fN296xrVvwiLeNaixurWbC3xr0qm8Eww==
+X-Received: by 2002:a05:600c:3b0f:b0:3de:1d31:1048 with SMTP id m15-20020a05600c3b0f00b003de1d311048mr9487389wms.29.1675440243933;
+        Fri, 03 Feb 2023 08:04:03 -0800 (PST)
+Received: from ?IPV6:2003:cb:c706:7900:b84d:7f2e:b638:3092? (p200300cbc7067900b84d7f2eb6383092.dip0.t-ipconnect.de. [2003:cb:c706:7900:b84d:7f2e:b638:3092])
+        by smtp.gmail.com with ESMTPSA id u2-20020a7bc042000000b003dd8feea827sm7905363wmc.4.2023.02.03.08.04.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Feb 2023 08:04:03 -0800 (PST)
+Message-ID: <59630801-42b4-22e8-0ef6-5a5b8636dfbd@redhat.com>
+Date:   Fri, 3 Feb 2023 17:04:01 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y90rtA95mWW5Othk@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [RFC v3 2/4] mm: move PG_slab flag to page_type
+To:     Matthew Wilcox <willy@infradead.org>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     Vlastimil Babka <vbabka@suse.cz>, Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
+        <naoya.horiguchi@nec.com>, Joe Perches <joe@perches.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>
+References: <20221218101901.373450-1-42.hyeyoo@gmail.com>
+ <20221218101901.373450-3-42.hyeyoo@gmail.com>
+ <15fda061-72d9-2ee9-0e9f-6f0f732a7382@suse.cz> <Y9dI88l2YJZfZ8ny@hyeyoo>
+ <Y9dRlNhh6O99tg4E@casper.infradead.org>
+Content-Language: en-US
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <Y9dRlNhh6O99tg4E@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, Feb 03, 2023 at 12:43:48PM -0300, Arnaldo Carvalho de Melo escreveu:
-> I tried bisecting, but at this cset:
+On 30.01.23 06:11, Matthew Wilcox wrote:
+> On Mon, Jan 30, 2023 at 01:34:59PM +0900, Hyeonggon Yoo wrote:
+>>> Seems like quite some changes to page_type to accomodate SLAB, which is
+>>> hopefully going away soon(TM). Could we perhaps avoid that?
+>>
+>> If it could be done with less changes, I'll try to avoid that.
 > 
-> acme@roc-rk3399-pc:~/git/perf$ git log --oneline -1
-> d22e569cd33d (HEAD) perf pmu-events: Separate the metrics from events for no jevents
-> acme@roc-rk3399-pc:~/git/perf$
+> Let me outline the idea I had for removing PG_slab:
 > 
-> I'm getting this:
-> 
->   CC      /tmp/build/perf/pmu-events/pmu-events.o
-> pmu-events/pmu-events.c:3637:32: error: no previous prototype for ‘perf_pmu__find_table’ [-Werror=missing-prototypes]
->  3637 | const struct pmu_events_table *perf_pmu__find_table(struct perf_pmu *pmu)
->       |                                ^~~~~~~~~~~~~~~~~~~~
->   CC      /tmp/build/perf/builtin-ftrace.o
->   CC      /tmp/build/perf/builtin-help.o
->   CC      /tmp/build/perf/builtin-buildid-list.o
-> cc1: all warnings being treated as errors
-> make[3]: *** [/home/acme/git/perf/tools/build/Makefile.build:97: /tmp/build/perf/pmu-events/pmu-events.o] Error 1
-> make[2]: *** [Makefile.perf:676: /tmp/build/perf/pmu-events/pmu-events-in.o] Error 2
-> make[2]: *** Waiting for unfinished jobs....
->   CC      /tmp/build/perf/builtin-buildid-cache.o
-> 
-> <SNIP>
-> 
->   CC      /tmp/build/perf/tests/attr.o
-> arch/arm64/util/pmu.c: In function ‘pmu_events_table__find’:
-> arch/arm64/util/pmu.c:35:24: error: implicit declaration of function ‘perf_pmu__find_table’; did you mean ‘perf_pmu__find_by_type’? [-Werror=implicit-function-declaration]
->    35 |                 return perf_pmu__find_table(pmu);
->       |                        ^~~~~~~~~~~~~~~~~~~~
->       |                        perf_pmu__find_by_type
-> arch/arm64/util/pmu.c:35:24: error: returning ‘int’ from a function with return type ‘const struct pmu_events_table *’ makes pointer from integer without a cast [-Werror=int-conversion]
->    35 |                 return perf_pmu__find_table(pmu);
->       |                        ^~~~~~~~~~~~~~~~~~~~~~~~~
-> cc1: all warnings being treated as errors
-> make[6]: *** [/home/acme/git/perf/tools/build/Makefile.build:97: /tmp/build/perf/arch/arm64/util/pmu.o] Error 1
-> make[5]: *** [/home/acme/git/perf/tools/build/Makefile.build:139: util] Error 2
-> make[4]: *** [/home/acme/git/perf/tools/build/Makefile.build:139: arm64] Error 2
-> make[3]: *** [/home/acme/git/perf/tools/build/Makefile.build:139: arch] Error 2
-> make[3]: *** Waiting for unfinished jobs....
->   CC      /tmp/build/perf/tests/vmlinux-kallsyms.o
-> 
-> -----
-> 
-> I'm building with:
+> Observe that PG_reserved and PG_slab are mutually exclusive.  Also,
 
-So:
-
-acme@roc-rk3399-pc:~/git/perf$ find tools/perf/ -name "*.[ch]" | xargs grep -w perf_pmu__find_table
-tools/perf/arch/arm64/util/pmu.c:		return perf_pmu__find_table(pmu);
-tools/perf/pmu-events/pmu-events.c:const struct pmu_events_table *perf_pmu__find_table(struct perf_pmu *pmu)
-acme@roc-rk3399-pc:~/git/perf$
-acme@roc-rk3399-pc:~/git/perf$ git log --oneline -1
-d22e569cd33d (HEAD) perf pmu-events: Separate the metrics from events for no jevents
-acme@roc-rk3399-pc:~/git/perf$
-
-Tring to fix...
- 
-> 
-> acme@roc-rk3399-pc:~/git/perf$ alias m
-> alias m='make -k BUILD_BPF_SKEL=1 CORESIGHT=1 O=/tmp/build/perf -C tools/perf install-bin && git status && perf test python'
-> acme@roc-rk3399-pc:~/git/perf$ rm -rf /tmp/build/$(basename $(pwd)) ; mkdir -p /tmp/build/$(basename $(pwd)) ; m
- 
-> 
-> To then go back to:
-> 
-> > pmu-events/pmu-events.c:3616:11: error: ‘struct pmu_event’ has no member named ‘metric_expr’
-> 
+I recall that there are SetPageReserved() calls on pages allocated via slab.
 
 -- 
+Thanks,
 
-- Arnaldo
+David / dhildenb
+
