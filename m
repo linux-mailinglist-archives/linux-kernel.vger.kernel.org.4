@@ -2,77 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00B1868A3D1
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 21:54:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FC9E68A3DD
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 21:57:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231261AbjBCUyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 15:54:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42584 "EHLO
+        id S232491AbjBCU5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 15:57:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjBCUym (ORCPT
+        with ESMTP id S229448AbjBCU5w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 15:54:42 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63327928F2
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 12:54:41 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id o16-20020a17090ad25000b00230759a8c06so3106836pjw.2
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 12:54:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3SzgB8BimWkWsf24WeKc7CMgI/jdN2TsinI4i82l8wc=;
-        b=L3UjjGiCf8ibTPp5/Hid2G7dnDw0495SPMM1cxR6q1dvXJjfv4yERdsoVDgct4MjRz
-         ULOsvGsNtzE8lUkX3uK6Q4mVz8sLsMiqJF2yhrv6Djjp5rr+4sRkHC1xXDUu94Wgh2MI
-         shK4tDAdJhnEOV0UnQinl5+rIEZImUyOlmeevSdlH4+z/1FK7/Pq+2Awy63E8For6RiE
-         VW7QPIYoXccxa4oa9WiP6YHIHJzpcaavjkmFcNRhPZItDlM3ho3/AJQulnjl+/jclY5m
-         V9prTGKk6420g3Oz94Ww7FVl1FEMDrjrTXrwOgSL9mMJYgd6mABtQvC+1HXcwlej6NX8
-         VvFQ==
+        Fri, 3 Feb 2023 15:57:52 -0500
+Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C104F928F2;
+        Fri,  3 Feb 2023 12:57:50 -0800 (PST)
+Received: by mail-ot1-f46.google.com with SMTP id 70-20020a9d084c000000b0068bccf754f1so1742405oty.7;
+        Fri, 03 Feb 2023 12:57:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3SzgB8BimWkWsf24WeKc7CMgI/jdN2TsinI4i82l8wc=;
-        b=4iDyxiEFM8MfWKdnmnbtBHBDz33Etx2/dE4sfKdbJOgtcYNFTZ3wswtRJYayzJtMgb
-         B0UERU90g4DZY71RfiTUd6YyaLKWElKCltDt+mkePpoAXc3AxqYv0dLaHZrvs0IKVKb0
-         Y43GellYDMH1GfLx2gMvrEuSjMnw8LPojDcEwgqWe8szSJ6tHQfr2kqd7Mwy/ORt00+N
-         uu0IVSwF/JT4FRy6qWF+vVXzoVpUqEDt4ao4b+2hUtG+urB1sEc1axgTZza6OCHaLTb6
-         TeAp7/D7gXdOxBksYkXb9y+2mZ8/vb4c8SMDIxLevY+SEg/NQbwWeSJs9dEjpuyAIbdU
-         eRYw==
-X-Gm-Message-State: AO0yUKW0YuBL6tOruqDU1EUZmNbXTkU3h3Egos2GJ9aWG25o3j2jM22a
-        yi4ua7lcU1TD6oOvofGGfOoDRw==
-X-Google-Smtp-Source: AK7set+nzNe5YGWLprg0RVfizk20dA+TEIn04ERrl+m0suik+lGDW0WGdFxGCZfgXaxe+vlEj8L+ag==
-X-Received: by 2002:a17:903:249:b0:198:af4f:de0b with SMTP id j9-20020a170903024900b00198af4fde0bmr16701plh.11.1675457680724;
-        Fri, 03 Feb 2023 12:54:40 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id p10-20020a1709026b8a00b00183c67844aesm2049637plk.22.2023.02.03.12.54.40
+        bh=DTUpcYkNxPIlJHACYCYR7pDb1Buy+e4lFP4bk5Zgp34=;
+        b=D6kjA0iDCoHbJoW0/A85Gd/DEhgeFoqvSv2XUAWEbb1o+0YfaV5M3siOzoHq6v+lem
+         V8B6SLkgyxx/W3zB640h3M9fhSuQRaR8LNQQOuiUzmt1QdoYEVcn76JrF6ewHHqp3BxN
+         Hy2T0sAe3/8AOzMRx9zYqk92gEFBgmAH0ufB0/8eI8xfuhJfuVaupJ3T1XZ1archyji/
+         Nola6qXtDnqlRQdvhMBBBSETrlm+Jd6/+GcxoM2hwr0JFnTnXCwe2grgSZIh27ikr6Um
+         mpX2POkA56H64IeN4GJVZ1uydAwgcMldwGbymiD8KpgUN+uUj18tRkFOctge3sIMEhyG
+         8cTg==
+X-Gm-Message-State: AO0yUKVPGuB7WkOnxV5ZFvTP+YeGM2mRoFmSfcEhOqt90HjqZ1lrYGhk
+        EH1ec8I1KvYGvqaHgJ3Iqw==
+X-Google-Smtp-Source: AK7set/idxy63+ygBDyPnMqtJWkCkCzx9MyU4A+nT1Br4FymPkR4Z0JILK7N/Htqiz/3btTinW8cgQ==
+X-Received: by 2002:a05:6830:1e57:b0:68b:b721:8f1c with SMTP id e23-20020a0568301e5700b0068bb7218f1cmr6718583otj.27.1675457869992;
+        Fri, 03 Feb 2023 12:57:49 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id c22-20020a9d6856000000b0068bd5af9b82sm1611458oto.43.2023.02.03.12.57.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 12:54:40 -0800 (PST)
-Date:   Fri, 3 Feb 2023 20:54:36 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Lai Jiangshan <jiangshanlai@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org
-Subject: Re: [PATCH 1/7] kvm: x86/mmu: Use KVM_MMU_ROOT_XXX for
- kvm_mmu_invalidate_gva()
-Message-ID: <Y910jLLQ+3jVQsta@google.com>
-References: <20230105095848.6061-1-jiangshanlai@gmail.com>
- <20230105095848.6061-2-jiangshanlai@gmail.com>
- <Y9sP/0B8A7fx2tkf@google.com>
- <CAJhGHyCgSzH5x9=OutgOcxCEg784woz9VouAwJ=K0xqXTF9Avw@mail.gmail.com>
+        Fri, 03 Feb 2023 12:57:49 -0800 (PST)
+Received: (nullmailer pid 873929 invoked by uid 1000);
+        Fri, 03 Feb 2023 20:57:48 -0000
+Date:   Fri, 3 Feb 2023 14:57:48 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Gatien Chevallier <gatien.chevallier@foss.st.com>
+Cc:     Oleksii_Moisieiev@epam.com, gregkh@linuxfoundation.org,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        krzysztof.kozlowski+dt@linaro.org, alexandre.torgue@foss.st.com,
+        vkoul@kernel.org, jic23@kernel.org, olivier.moysan@foss.st.com,
+        arnaud.pouliquen@foss.st.com, mchehab@kernel.org,
+        fabrice.gasnier@foss.st.com, ulf.hansson@linaro.org,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-iio@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        netdev@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v3 2/6] dt-bindings: treewide: add feature-domains
+ description in binding files
+Message-ID: <20230203205748.GA860175-robh@kernel.org>
+References: <20230127164040.1047583-1-gatien.chevallier@foss.st.com>
+ <20230127164040.1047583-3-gatien.chevallier@foss.st.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJhGHyCgSzH5x9=OutgOcxCEg784woz9VouAwJ=K0xqXTF9Avw@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+In-Reply-To: <20230127164040.1047583-3-gatien.chevallier@foss.st.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,44 +79,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023, Lai Jiangshan wrote:
-> On Thu, Feb 2, 2023 at 9:21 AM Sean Christopherson <seanjc@google.com> wrote:
+On Fri, Jan 27, 2023 at 05:40:36PM +0100, Gatien Chevallier wrote:
+> feature-domains is an optional property that allows a peripheral to
+> refer to one or more feature domain controller(s).
 > 
-> >
-> > This is logically correct, but there's potential (weird) functional change here.
-> > If this is called with an invalid root, then KVM will invalidate the GVA in all
-> > roots prior to this patch, but in no roots after this patch.
-> >
-> > I _think_ it should be impossible get here with an invalid root.  Can you try
-> > adding a prep patch to assert that the root is valid so that this patch can
-> > reasonably assert that there's no functional change?
-> >
-> >
-> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > index 508074e47bc0..fffd9b610196 100644
-> > --- a/arch/x86/kvm/x86.c
-> > +++ b/arch/x86/kvm/x86.c
-> > @@ -792,6 +792,8 @@ void kvm_inject_emulated_page_fault(struct kvm_vcpu *vcpu,
-> >         fault_mmu = fault->nested_page_fault ? vcpu->arch.mmu :
-> >                                                vcpu->arch.walk_mmu;
-> >
-> > +       WARN_ON_ONCE(!VALID_PAGE(fault_mmu->root.hpa));
-> > +
+> Description of this property is added to all peripheral binding files of
+> the peripheral under the STM32 System Bus. It allows an accurate
+> representation of the hardware, where various peripherals are connected
+> to this firewall bus. The firewall can then check the peripheral accesses
+> before allowing it to probe.
 > 
-> I've been updating the patches as per your suggestions.
+> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+> ---
 > 
-> And I suddenly realized that when fault->nested_page_fault=false
-> with nested EPT, fault_mmu->root.hpa is always unset.
+> Patch not present in V1 and V2.
 > 
-> fault_mmu->root.hpa is just meaningless when fault_mmu is not
-> vcpu->arch.mmu.
+>  Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml | 5 +++++
+>  Documentation/devicetree/bindings/dma/st,stm32-dma.yaml     | 5 +++++
+>  Documentation/devicetree/bindings/dma/st,stm32-dmamux.yaml  | 5 +++++
+>  Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml     | 5 +++++
+>  Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml | 5 +++++
+>  .../devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml     | 5 +++++
+>  Documentation/devicetree/bindings/iio/dac/st,stm32-dac.yaml | 5 +++++
+>  Documentation/devicetree/bindings/media/st,stm32-cec.yaml   | 5 +++++
+>  Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml  | 5 +++++
+>  .../bindings/memory-controllers/st,stm32-fmc2-ebi.yaml      | 5 +++++
+>  Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml | 5 +++++
+>  Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml  | 6 ++++++
+>  Documentation/devicetree/bindings/mmc/arm,pl18x.yaml        | 5 +++++
+>  Documentation/devicetree/bindings/net/stm32-dwmac.yaml      | 5 +++++
+>  .../devicetree/bindings/phy/phy-stm32-usbphyc.yaml          | 5 +++++
+>  .../devicetree/bindings/regulator/st,stm32-vrefbuf.yaml     | 5 +++++
+>  Documentation/devicetree/bindings/rng/st,stm32-rng.yaml     | 5 +++++
+>  Documentation/devicetree/bindings/serial/st,stm32-uart.yaml | 5 +++++
+>  Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml   | 5 +++++
+>  Documentation/devicetree/bindings/sound/st,stm32-sai.yaml   | 5 +++++
+>  .../devicetree/bindings/sound/st,stm32-spdifrx.yaml         | 5 +++++
+>  Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml    | 5 +++++
+>  Documentation/devicetree/bindings/spi/st,stm32-spi.yaml     | 5 +++++
+>  Documentation/devicetree/bindings/usb/dwc2.yaml             | 5 +++++
+>  24 files changed, 121 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml b/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
+> index 4ccb335e8063..cb2ad7d5fdb5 100644
+> --- a/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
+> +++ b/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
+> @@ -41,6 +41,11 @@ properties:
+>      maximum: 2
+>      default: 0
+>  
+> +  feature-domains:
+> +    $ref: /schemas/feature-controllers/feature-domain-controller.yaml#/properties/feature-domains
 
-Right, because there's no KVM-managed MMU. 
+Not how common properties work. Consumer properties should be in a 
+schema with 'select: true' (the one you are referencing) and here you 
+just need to define the entries. Like clocks, power-domains, etc.
 
-> I will add it as one of the reasons for replacing the argument
-> with KVM_MMU_ROOT_XXX.
+> +    minItems: 1
+> +    maxItems: 3
 
-And maybe call out that when using walk_mmu, the ->invlpg() implementation is
-NULL, i.e. using CURRENT root is a nop.
+Why is this variable and what is each entry?
 
-Thanks!
+I still don't like the naming. Everything is a feature and a domain... 
+
+It might be a bit easier to come up with a name with multiple users of 
+this binding presented. I'm hesistant to define any new common binding 
+with only 1 user as I've said multiple times on this binding.
+
+Rob
