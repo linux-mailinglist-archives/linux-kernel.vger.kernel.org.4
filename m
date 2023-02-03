@@ -2,74 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5959F688F88
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 07:12:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB884688F8F
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 07:14:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230384AbjBCGMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 01:12:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54762 "EHLO
+        id S231778AbjBCGOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 01:14:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbjBCGME (ORCPT
+        with ESMTP id S230020AbjBCGOj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 01:12:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB09789FAE
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 22:11:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 92745B82916
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 06:11:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4CBCC433D2;
-        Fri,  3 Feb 2023 06:11:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675404676;
-        bh=MAggVnzFKDMQ6sFkdhtLT/WSLZ0MVSVv/6OXYW3ftB4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=QJlRH8umlV+0TMBPBrCGs0UJ1hukXG5vVraOL+qqlSLAxvO3P9jW4ehrIwXKF8dT5
-         JPB62P/JXtyB4Xh+bx0ixF/EJwYYOecTbNkJ7/pkJ97AGuskaKAYX4HZ15UUHEhTmH
-         vAbdw2cUvUuBkq1GUsTi62QSNQPypOKRQkfoMs46BCzoeqYWwyfGItoEsvqBhtGzrX
-         XnHoijtn72lUlJ0NcirHRR40uRkaGr+jsGH170McSW4ZqFQX854XdTtAaPKM2HFe8I
-         ylUlXal6ItW+H2gY7OKYco/r8/VikioBB3mARdWrsykGkSKqmfu9F41IRp9VvcbV7e
-         zLnNlu16i3Wfg==
-Message-ID: <f7fba117-ff4a-2c5d-2206-fd039de19ddc@kernel.org>
-Date:   Fri, 3 Feb 2023 14:11:12 +0800
+        Fri, 3 Feb 2023 01:14:39 -0500
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7AAD13C
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 22:14:38 -0800 (PST)
+Received: by mail-il1-f200.google.com with SMTP id k13-20020a056e021a8d00b00313951035ccso726597ilv.22
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 22:14:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=q6qhhkxI0Fa2ecVa0opy5OWG8irJHSvv8/tIDhKgCEg=;
+        b=UlNW+lPWj6gTtozvtYd5qD4+X8Zr3JyaqwG0ZkIE4Qt6vRTFF+8foKXN5VgbGbLFzB
+         cKOSVloUYwCjSpCAeUQ0uznEUp7+umU907ZpI0BEUnGKf2KNaw55X/dwbwCjYnH4moWE
+         0vhRGG2ck6JaG6i5VcZ0l9W1rZ7p1LMY0e3EwYLX6hqWVEDngV0GFD1uwvdJSE8zPGtU
+         sqS3xmJbsk2PKNAUAwBo9ThuFZBqmDqTb929OSmC/Y58/loFSxo17JVdG1IG0hTVgrVV
+         KIX1EbekF7M8PF9jPCob1njALIaX/d+kbBmGNXOTD+9+dClLm+kbzFt3JHwvuQSZNuH8
+         NQNQ==
+X-Gm-Message-State: AO0yUKU5bfGkeG42VjqCl52BS2CKPdgodusX7LDWqKyWxH3WZCi918qg
+        oUnUxHplkx6ufOC0OgMykYZo0oqgJpDGV29O/y6TMAEcSs9v
+X-Google-Smtp-Source: AK7set/MqiiYgGSwQFGjuXKFYV7jvHbXG/cBEyam1SmM1Q9gjwcgZ1PqHiaAHtQAhzTkZDy6SVVeDSwkZAMHMf190iSHpY+gI+SE
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 1/2 v3] f2fs: fix wrong calculation of block age
-Content-Language: en-US
-To:     qixiaoyu1 <qxy65535@gmail.com>, Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        Ping Xiong <xiongping1@xiaomi.com>,
-        Xiaoyu Qi <qixiaoyu1@xiaomi.com>
-References: <938a8e61-4e47-1acc-938c-c90d213d2c86@kernel.org>
- <20230202082028.9013-1-qixiaoyu1@xiaomi.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20230202082028.9013-1-qixiaoyu1@xiaomi.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:c07:b0:30f:49fd:f547 with SMTP id
+ d7-20020a056e020c0700b0030f49fdf547mr1774052ile.119.1675404877951; Thu, 02
+ Feb 2023 22:14:37 -0800 (PST)
+Date:   Thu, 02 Feb 2023 22:14:37 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000009afa3c05f3c5988a@google.com>
+Subject: [syzbot] WARNING in remove_proc_entry (5)
+From:   syzbot <syzbot+04a8437497bcfb4afa95@syzkaller.appspotmail.com>
+To:     anna@kernel.org, chuck.lever@oracle.com, davem@davemloft.net,
+        edumazet@google.com, jlayton@kernel.org, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com, trond.myklebust@hammerspace.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/2/2 16:20, qixiaoyu1 wrote:
-> Currently we wrongly calculate the new block age to
-> old * LAST_AGE_WEIGHT / 100.
-> 
-> Fix it to new * (100 - LAST_AGE_WEIGHT) / 100
->                  + old * LAST_AGE_WEIGHT / 100.
-> 
-> Signed-off-by: qixiaoyu1 <qixiaoyu1@xiaomi.com>
-> Signed-off-by: xiongping1 <xiongping1@xiaomi.com>
+Hello,
 
-Reviewed-by: Chao Yu <chao@kernel.org>
+syzbot found the following issue on:
 
-Thanks,
+HEAD commit:    80bd9028feca Add linux-next specific files for 20230131
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=10a0f7ae480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=904dc2f450eaad4a
+dashboard link: https://syzkaller.appspot.com/bug?extid=04a8437497bcfb4afa95
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/924618188238/disk-80bd9028.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/7a03cf86e545/vmlinux-80bd9028.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/568e80043a41/bzImage-80bd9028.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+04a8437497bcfb4afa95@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+name 'gss_krb5_enctypes'
+WARNING: CPU: 0 PID: 6187 at fs/proc/generic.c:712 remove_proc_entry+0x38d/0x460 fs/proc/generic.c:712
+Modules linked in:
+CPU: 0 PID: 6187 Comm: syz-executor.4 Not tainted 6.2.0-rc6-next-20230131-syzkaller-09515-g80bd9028feca #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
+RIP: 0010:remove_proc_entry+0x38d/0x460 fs/proc/generic.c:712
+Code: e9 6d fe ff ff e8 63 f1 7c ff 48 c7 c7 e0 6d 98 8c e8 47 ba 0b 08 e8 52 f1 7c ff 4c 89 e6 48 c7 c7 c0 85 5e 8a e8 53 8c 44 ff <0f> 0b e9 a4 fe ff ff e8 37 f1 7c ff 48 8d bd d8 00 00 00 48 b8 00
+RSP: 0018:ffffc90015dcf8c8 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: 1ffff92002bb9f1b RCX: ffffc9000c579000
+RDX: 0000000000040000 RSI: ffffffff81692aec RDI: 0000000000000005
+RBP: 0000000000000000 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000080000000 R11: 0000000000000000 R12: ffffffff8b75c440
+R13: dffffc0000000000 R14: dffffc0000000000 R15: fffffbfff1c6d918
+FS:  00007fe943910700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f2d14a16984 CR3: 0000000029c4e000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ destroy_krb5_enctypes_proc_entry net/sunrpc/auth_gss/svcauth_gss.c:1543 [inline]
+ gss_svc_shutdown_net+0x7d/0x2b0 net/sunrpc/auth_gss/svcauth_gss.c:2120
+ ops_exit_list+0xb0/0x170 net/core/net_namespace.c:169
+ setup_net+0x9bd/0xe60 net/core/net_namespace.c:356
+ copy_net_ns+0x320/0x6b0 net/core/net_namespace.c:483
+ create_new_namespaces+0x3f6/0xb20 kernel/nsproxy.c:110
+ copy_namespaces+0x410/0x500 kernel/nsproxy.c:179
+ copy_process+0x311d/0x76b0 kernel/fork.c:2272
+ kernel_clone+0xeb/0x9a0 kernel/fork.c:2684
+ __do_sys_clone+0xba/0x100 kernel/fork.c:2825
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fe942c8c0c9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fe943910118 EFLAGS: 00000206 ORIG_RAX: 0000000000000038
+RAX: ffffffffffffffda RBX: 00007fe942dabf80 RCX: 00007fe942c8c0c9
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000071801000
+RBP: 00007fe942ce7ae9 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000206 R12: 0000000000000000
+R13: 00007ffe8ccafb1f R14: 00007fe943910300 R15: 0000000000022000
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
