@@ -2,190 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A7AC68A0FE
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 18:56:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69E7468A0F8
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 18:56:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232701AbjBCR4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 12:56:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34844 "EHLO
+        id S232916AbjBCR4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 12:56:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231511AbjBCR4n (ORCPT
+        with ESMTP id S233524AbjBCRz6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 12:56:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D5EAE859
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 09:55:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675446945;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IsT74lXaleAqNu3cG33QKLIiwscwT+dGYwdDteqTsJM=;
-        b=AK5QtDO23SpQ62SwJgRiOQr8h3QLdLV4ckNquantL3jevPPgzhyexQlJm5oz4bd9rxpx4H
-        yCy81IhtHdj05JGxgj2/yUk6lTrMIHGE7XMQQJ7mTinbhmRKPzmThLZhyEQuJbD7fbDPzy
-        SfMSdmrCoIMgATMZw+ua075h46Yyfz0=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-319-Lojh2qUDO-SUQZCyS7X_nw-1; Fri, 03 Feb 2023 12:55:39 -0500
-X-MC-Unique: Lojh2qUDO-SUQZCyS7X_nw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 3 Feb 2023 12:55:58 -0500
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DF2C3EC56;
+        Fri,  3 Feb 2023 09:55:48 -0800 (PST)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 90BDD3C0D18C;
-        Fri,  3 Feb 2023 17:55:38 +0000 (UTC)
-Received: from [10.22.18.35] (unknown [10.22.18.35])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D9F64112132C;
-        Fri,  3 Feb 2023 17:55:37 +0000 (UTC)
-Message-ID: <12eaf117-b455-1e81-50e2-e80a39d4f274@redhat.com>
-Date:   Fri, 3 Feb 2023 12:55:37 -0500
+        by ms.lwn.net (Postfix) with ESMTPSA id A32332E0;
+        Fri,  3 Feb 2023 17:55:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net A32332E0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1675446947; bh=VYi16ehBmyhfupPFd4/NkPorFNC2ZMFMOUZS5/YwQIs=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=D828BM4m95HbJCc5aytQ5d2iItwfjzbz7QhtSHVo7BJozDc5O70vpn0XURojqsc1C
+         VkrfHsELQ2EmGMVYyUeWr3UV05n2JUAp6u9Q6fi6lrOd0doSMr5Td4JBe0fZsSJynI
+         2Ct+9TFVSsOC9r/rHNCod7VhhstHlK+OWl7i0YSbpMGeKG8D4j6CUJR07q0HfFyPnV
+         AmqrrMuCPDc4TxzNJ7GE4IJJdPNQohHpYhlJDmnx048A8PLf/kVK69bIG+vgFqnq0l
+         asNimCUfdklVgBHsPsqjwPGA64RR8uOo81Q/O4YzGsoO3S29ryvatPqnOQDJp8D1sV
+         K441V68eNGgAw==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Carlos Bilbao <carlos.bilbao@amd.com>, ojeda@kernel.org,
+        jani.nikula@linux.intel.com, rdunlap@infradead.org
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        konstantin@linuxfoundation.org, bilbao@vt.edu,
+        Carlos Bilbao <carlos.bilbao@amd.com>
+Subject: Re: [PATCH v6 0/2] docs: Integrate rustdoc into Rust documentation
+In-Reply-To: <20230127165728.119507-1-carlos.bilbao@amd.com>
+References: <20230127165728.119507-1-carlos.bilbao@amd.com>
+Date:   Fri, 03 Feb 2023 10:55:46 -0700
+Message-ID: <87pmaqskf1.fsf@meer.lwn.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 2/2] cpuset: Call set_cpus_allowed_ptr() with appropriate
- mask for task
-Content-Language: en-US
-To:     Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org
-Cc:     kernel-team@android.com, Peter Zijlstra <peterz@infradead.org>,
-        Zefan Li <lizefan.x@bytedance.com>, Tejun Heo <tj@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org
-References: <20230131221719.3176-1-will@kernel.org>
- <20230131221719.3176-3-will@kernel.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20230131221719.3176-3-will@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/31/23 17:17, Will Deacon wrote:
-> set_cpus_allowed_ptr() will fail with -EINVAL if the requested
-> affinity mask is not a subset of the task_cpu_possible_mask() for the
-> task being updated. Consequently, on a heterogeneous system with cpusets
-> spanning the different CPU types, updates to the cgroup hierarchy can
-> silently fail to update task affinities when the effective affinity
-> mask for the cpuset is expanded.
->
-> For example, consider an arm64 system with 4 CPUs, where CPUs 2-3 are
-> the only cores capable of executing 32-bit tasks. Attaching a 32-bit
-> task to a cpuset containing CPUs 0-2 will correctly affine the task to
-> CPU 2. Extending the cpuset to CPUs 0-3, however, will fail to extend
-> the affinity mask of the 32-bit task because update_tasks_cpumask() will
-> pass the full 0-3 mask to set_cpus_allowed_ptr().
->
-> Extend update_tasks_cpumask() to take a temporary 'cpumask' paramater
-> and use it to mask the 'effective_cpus' mask with the possible mask for
-> each task being updated.
->
-> Fixes: 431c69fac05b ("cpuset: Honour task_cpu_possible_mask() in guarantee_online_cpus()")
-> Signed-off-by: Will Deacon <will@kernel.org>
-> ---
->
-> Note: We wondered whether it was worth calling guarantee_online_cpus()
-> if the cpumask_and() returns 0 in update_tasks_cpumask(), but given that
-> this path is only called when the effective mask changes, it didn't
-> seem appropriate. Ultimately, if you have 32-bit tasks attached to a
-> cpuset containing only 64-bit cpus, then the affinity is going to be
-> forced.
->
->   kernel/cgroup/cpuset.c | 18 +++++++++++-------
->   1 file changed, 11 insertions(+), 7 deletions(-)
->
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index 8552cc2c586a..f15fb0426707 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -1205,12 +1205,13 @@ void rebuild_sched_domains(void)
->   /**
->    * update_tasks_cpumask - Update the cpumasks of tasks in the cpuset.
->    * @cs: the cpuset in which each task's cpus_allowed mask needs to be changed
-> + * @new_cpus: the temp variable for the new effective_cpus mask
->    *
->    * Iterate through each task of @cs updating its cpus_allowed to the
->    * effective cpuset's.  As this function is called with cpuset_rwsem held,
->    * cpuset membership stays stable.
->    */
-> -static void update_tasks_cpumask(struct cpuset *cs)
-> +static void update_tasks_cpumask(struct cpuset *cs, struct cpumask *new_cpus)
->   {
->   	struct css_task_iter it;
->   	struct task_struct *task;
-> @@ -1224,7 +1225,10 @@ static void update_tasks_cpumask(struct cpuset *cs)
->   		if (top_cs && (task->flags & PF_KTHREAD) &&
->   		    kthread_is_per_cpu(task))
->   			continue;
-> -		set_cpus_allowed_ptr(task, cs->effective_cpus);
-> +
-> +		cpumask_and(new_cpus, cs->effective_cpus,
-> +			    task_cpu_possible_mask(task));
-> +		set_cpus_allowed_ptr(task, new_cpus);
->   	}
->   	css_task_iter_end(&it);
->   }
-> @@ -1509,7 +1513,7 @@ static int update_parent_subparts_cpumask(struct cpuset *cs, int cmd,
->   	spin_unlock_irq(&callback_lock);
->   
->   	if (adding || deleting)
-> -		update_tasks_cpumask(parent);
-> +		update_tasks_cpumask(parent, tmp->new_cpus);
->   
->   	/*
->   	 * Set or clear CS_SCHED_LOAD_BALANCE when partcmd_update, if necessary.
-> @@ -1661,7 +1665,7 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp,
->   		WARN_ON(!is_in_v2_mode() &&
->   			!cpumask_equal(cp->cpus_allowed, cp->effective_cpus));
->   
-> -		update_tasks_cpumask(cp);
-> +		update_tasks_cpumask(cp, tmp->new_cpus);
->   
->   		/*
->   		 * On legacy hierarchy, if the effective cpumask of any non-
-> @@ -2309,7 +2313,7 @@ static int update_prstate(struct cpuset *cs, int new_prs)
->   		}
->   	}
->   
-> -	update_tasks_cpumask(parent);
-> +	update_tasks_cpumask(parent, tmpmask.new_cpus);
->   
->   	if (parent->child_ecpus_count)
->   		update_sibling_cpumasks(parent, cs, &tmpmask);
-> @@ -3347,7 +3351,7 @@ hotplug_update_tasks_legacy(struct cpuset *cs,
->   	 * as the tasks will be migrated to an ancestor.
->   	 */
->   	if (cpus_updated && !cpumask_empty(cs->cpus_allowed))
-> -		update_tasks_cpumask(cs);
-> +		update_tasks_cpumask(cs, new_cpus);
->   	if (mems_updated && !nodes_empty(cs->mems_allowed))
->   		update_tasks_nodemask(cs);
->   
-> @@ -3384,7 +3388,7 @@ hotplug_update_tasks(struct cpuset *cs,
->   	spin_unlock_irq(&callback_lock);
->   
->   	if (cpus_updated)
-> -		update_tasks_cpumask(cs);
-> +		update_tasks_cpumask(cs, new_cpus);
->   	if (mems_updated)
->   		update_tasks_nodemask(cs);
->   }
+Carlos Bilbao <carlos.bilbao@amd.com> writes:
 
-Acked-by: Waiman Long <longman@redhat.com>
+> Include HTML output generated with rustdoc into the Linux kernel
+> documentation on Rust.
+>
+> Carlos Bilbao:
+>  docs: Move rustdoc output, cross-reference it
+>  docs: Integrate rustdoc generation into htmldocs
+>
+So I spent a fair while messing with this, really hoping to get it
+merged for 6.3, but I think it's still just too fragile.
 
-This change is good for backporting to stable releases. For the latest 
-kernel, I will prefer to centralize the masking in 
-__set_cpus_allowed_ptr() where a scratch_mask is already being used for 
-masking purpose. Let get this patch merged now, I will send a patch to 
-move off the masking afterward.
+- With a too-new version of bindgen it kills the htmldocs build
+  entirely.  If we can't build the Rust docs successfully with the
+  toolchain that the user has installed then so be it, but it shouldn't
+  wreck the docs build entirely.
 
-Cheers,
-Longman
+- It still throws the user into the "make oldconfig" process, which is
+  unexpected for a docs build.  This happens even on a system with no
+  Rust installed at all.
 
+- I dumped my Fedora toolchain and did the curl|bash ritual to set up
+  the proper versions with rustup.  It would be nice to have some better
+  documentation on how to do that ... *how* to install bindgen may not
+  be obvious to all users.  It also failed until I installed lld
+  separately.
 
+On a system with the right tool versions, and with a kernel already
+configured to build the Rust support, it worked nicely, though.
+
+I'd really like to see a solution that (1) doesn't kill the docs build
+process if the tool versions are wrong, and (2) doesn't force the
+creation of a kernel configuration.  What are our chances of getting
+there?
+
+Thanks,
+
+jon
