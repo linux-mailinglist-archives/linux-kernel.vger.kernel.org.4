@@ -2,156 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4C0168A36A
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 21:12:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D957C68A36C
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 21:12:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233096AbjBCUMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 15:12:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54518 "EHLO
+        id S233327AbjBCUMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 15:12:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbjBCUMV (ORCPT
+        with ESMTP id S232760AbjBCUMw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 15:12:21 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 964FFA8406;
-        Fri,  3 Feb 2023 12:12:19 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id w11so9354404lfu.11;
-        Fri, 03 Feb 2023 12:12:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=fMFQuyDg7tzX9gWE8PkvqDa2BwLHKqigIWrByTh8BSQ=;
-        b=LFTRXggel9ZZC0labNf019of7WFJApVT4MNwQ9heLNLFnbftDdcBTZDTR0/6cd6NKG
-         E93QlMno29mNd0kaZi3n14LXkPWwy6hN+AFUri1mrApaoOIhQZGAp/pE8aJ9Qy94nZNZ
-         md9Y7PYFbMydk/LvLlTpWix6tokVhzoeiRCoHU/ovhH6QTjipchlPX0fm9/NFTs6ZBQH
-         5WyKkamEQmsRuqVZF8F9Xq0oM2lbOH+2WqnNx2F+RsvMXvWSrhmpLvd2Yo3TNSajf53P
-         AaHSZCLrKl34IIrgAqGCRHSoqXD6SPSkgGP3W8d8Kvw/SJXs58X77LpQ5Olztr8qCnK/
-         j5OQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fMFQuyDg7tzX9gWE8PkvqDa2BwLHKqigIWrByTh8BSQ=;
-        b=Th8O+tw6w22V9i91o1wSBZKJA6GkLxcwJ7HBsp2oanPoPbi9t0YV1nAoucMmwj5qGC
-         43AoGbpCHYWVPpdJkoa5GfoVREwd+ZU7mx5i6eiYvKWWrsCJIiCahFcaJZm0szCWUyLZ
-         0E1mJlxRsiX9/XVXdIKX+5pBqFHW8CBHQgTR7L+N/kztoZSzR5whSbmW+tblYPhJILOE
-         Q10d5gSkL2KbovBlKQjtZp2Y0Qt0v/uBC53QW5uXNLJTWGy57IweCdxZLjDFZoBi1/Zx
-         k7/sqk6MTva7F5tk6Eh8eUWeGLTc5sbo63UdQGqDqIx0F2zJf9Q+NWA5Cs2Cr0a1g8ko
-         sRFg==
-X-Gm-Message-State: AO0yUKXteMp5iIzik5IrGUwGhyfPyurYq5OhW/cg6agJOcQmGh+888JE
-        WN/2oQE3W6EkwNnqxtwqbDQ9EFvbLN2NqRp7MEc=
-X-Google-Smtp-Source: AK7set980B/SyaxkQ4aequbMQN+w2UzmzAl2fl4+/i5eO8RMGJ/dkHt8aBuu4Sr9iTH2xmZ1SsP1U5uuT/L1DyJdN+w=
-X-Received: by 2002:a05:6512:3190:b0:4b5:b87a:3271 with SMTP id
- i16-20020a056512319000b004b5b87a3271mr2198518lfe.18.1675455137699; Fri, 03
- Feb 2023 12:12:17 -0800 (PST)
+        Fri, 3 Feb 2023 15:12:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14CC0A8425;
+        Fri,  3 Feb 2023 12:12:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A2B1861FE5;
+        Fri,  3 Feb 2023 20:12:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2449C433EF;
+        Fri,  3 Feb 2023 20:12:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675455170;
+        bh=4cYcCPYkEMmGYnotndJDbonkHWa1OTh1uLq8K0ufV2E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IuDt1yfjPrp0UzZ5DrOE7Of/AGHeP9WkPgZcg7g/VdrTgDi0ySUyNyj01FmBvwwao
+         3ufGKChTDu8YBAfotgIuUi4e4CZ0NL9IvmQfO/4DRYiMIUcLjKj3492exZLPpX9g6n
+         sT4s6hAfzI+1IagNAj3Ddslh/DRxnNUNvVEYWNOINhe/w1l7I+tTHUSqJWdK4MDn7r
+         lS4ycYtkcaeD17quUFXktJTl46YPd+quUJcXpCub3lsJbP2Be7qGW6WI2lUzZxZlBn
+         G4l76Wu/1qu5OBKYEbZVpL3fxZqDY2CFJU3qnLDd8d2tM50muuxFXZm5fPDpyb8UHd
+         fJMzauCI5lnng==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 5161F405BE; Fri,  3 Feb 2023 17:12:47 -0300 (-03)
+Date:   Fri, 3 Feb 2023 17:12:47 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     jolsa@kernel.org, peterz@infradead.org, mingo@redhat.com,
+        irogers@google.com, linux-kernel@vger.kernel.org,
+        adrian.hunter@intel.com, linux-perf-users@vger.kernel.org,
+        song@kernel.org, haoluo@google.com, bpf@vger.kernel.org,
+        juri.lelli@redhat.com
+Subject: Re: [PATCH v2 0/3] perf lock contention: Improve aggr x filter
+ combination
+Message-ID: <Y91qvwSIs2tc2JAk@kernel.org>
+References: <20230203021324.143540-1-namhyung@kernel.org>
 MIME-Version: 1.0
-References: <c515aae3-88e4-948c-a856-7b45dd2caed9@linaro.org> <20230201031349.56405-1-steev@kali.org>
-In-Reply-To: <20230201031349.56405-1-steev@kali.org>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Fri, 3 Feb 2023 12:12:06 -0800
-Message-ID: <CABBYNZJPZChB0eOn05oFd2mknzOmr1RJRW3LFf3jbq_jpQ1UGA@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] arm64: dts: qcom: thinkpad-x13s: Add bluetooth
-To:     Steev Klimaszewski <steev@kali.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Sven Peter <sven@svenpeter.dev>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        Mark Pearson <markpearson@lenovo.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230203021324.143540-1-namhyung@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Steev,
+Em Thu, Feb 02, 2023 at 06:13:21PM -0800, Namhyung Kim escreveu:
+> Hello,
+> 
+> The callstack filter can be useful to debug lock issues but it has a
+> limitation that it only works with caller aggregation mode (which is the
+> default setting).  IOW it cannot filter by callstack when showing tasks
+> or lock addresses/names.
 
-On Tue, Jan 31, 2023 at 7:13 PM Steev Klimaszewski <steev@kali.org> wrote:
->
-> >On 31/01/2023 05:38, Steev Klimaszewski wrote:
-> >> Signed-off-by: Steev Klimaszewski <steev@kali.org>
-> >> ---
-> >>  .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 68 +++++++++++++++++++
-> >>  1 file changed, 68 insertions(+)
-> >>
-> >> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> >> index f936b020a71d..951438ac5946 100644
-> >> --- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> >> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> >> @@ -24,6 +24,8 @@ / {
-> >>      aliases {
-> >>              i2c4 = &i2c4;
-> >>              i2c21 = &i2c21;
-> >> +            serial0 = &uart17;
-> >> +            serial1 = &uart2;
-> >>      };
-> >>
-> >>      wcd938x: audio-codec {
-> >> @@ -712,6 +714,32 @@ &qup0 {
-> >>      status = "okay";
-> >>  };
-> >>
-> >> +&uart2 {
-> >> +    status = "okay";
-> >> +
-> >> +    pinctrl-names = "default";
-> >> +    pinctrl-0 = <&uart2_state>;
-> >> +
-> >> +    bluetooth {
-> >> +            compatible = "qcom,wcn6855-bt";
-> >> +
-> >> +/*
->
-> > Why dead code should be in the kernel?
->
-> As mentioned in the cover letter, this is a bit closer to an RFC than ready to
-> go in, and I do apologize that it wasn't clear enough.  I do not have access to
-> the schematics, and based on my reading of the schema for bluetooth, these
-> entries are supposed to be required, however, like the wcn6750, I have dummy
-> data entered into the qca_soc_data_wcn6855 struct.  I know that these should be
-> there, I just do not have access to the correct information to put, if that
-> makes sense?
+Thanks, applied.
 
-Well you don't have the RFC set in the subject which is probably why
-people are reviewing it like it is supposed to be merged, that said I
-do wonder if there is to indicate these entries are to be considered
-sort of experimental so we don't end up enabling it by default?
+- Arnaldo
 
->
-> <snip>
->
-> >Does not look like you tested the DTS against bindings. Please run `make
-> >dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
-> >for instructions).
->
-> Correct I had not, but I have now, and will make the corrections test and they
-> will be included in v3.
->
-> >Best regards,
-> >Krzysztof
->
-> I appreciate the guidance for what I was doing incorrectly.
->
-> -- steev
-
-
+ 
+> But sometimes users want to use the filter for other aggregation mode.
+> Like "show me lock addresses/names from this caller only" or "show me
+> tasks having these callers".
+> 
+> When it's using tracepoint events from the data file, the situation is
+> good since the tracepoints have all the necessary info.  But when using
+> BPF it needs to extend the key of lock stat BPF map to have more than
+> one info like 'pid + stack_id' or 'lock_addr + stack_id'.  As callstack
+> filter works in userspace, it should save the both info.
+> 
+> With this change we can now use the -S/--callstack-filter with the
+> -t/--threads option or -l/--lock-addr option.  It's also possible to use
+> it with other filter options.
+> 
+> The following example shows the top 5 tasks that have contention
+> somewhere in the epoll handling.
+> 
+>   $ sudo perf lock con -abt -S epoll -E5 -- sleep 1
+>    contended   total wait     max wait     avg wait          pid   comm
+> 
+>            2     58.64 us     32.38 us     29.32 us      1514752   Chrome_IOThread
+>            3     29.31 us     12.65 us      9.77 us         3773   Xorg
+>            1     17.45 us     17.45 us     17.45 us      1514906   Chrome_ChildIOT
+>            1     15.41 us     15.41 us     15.41 us      1515382   Chrome_ChildIOT
+>            1     12.52 us     12.52 us     12.52 us       293878   IPC I/O Parent
+> 
+> You get get the code at 'perf/lock-filter-v1' branch in
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
+> 
+> Thanks,
+> Namhyung
+> 
+> Namhyung Kim (3):
+>   perf lock contention: Factor out lock_contention_get_name()
+>   perf lock contention: Use lock_stat_find{,new}
+>   perf lock contention: Support filters for different aggregation
+> 
+>  tools/perf/builtin-lock.c                     |  79 ++++----
+>  tools/perf/util/Build                         |   5 +-
+>  tools/perf/util/bpf_lock_contention.c         | 180 +++++++++++-------
+>  .../perf/util/bpf_skel/lock_contention.bpf.c  |  15 +-
+>  tools/perf/util/bpf_skel/lock_data.h          |   4 +-
+>  tools/perf/util/lock-contention.h             |   5 +
+>  6 files changed, 178 insertions(+), 110 deletions(-)
+> 
+> -- 
+> 2.39.1.519.gcb327c4b5f-goog
+> 
 
 -- 
-Luiz Augusto von Dentz
+
+- Arnaldo
