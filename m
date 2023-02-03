@@ -2,106 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F42A689E36
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 16:26:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB686689E42
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 16:27:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233533AbjBCP0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 10:26:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41430 "EHLO
+        id S233260AbjBCP1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 10:27:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232806AbjBCP0A (ORCPT
+        with ESMTP id S233137AbjBCP05 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 10:26:00 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A93C79F30;
-        Fri,  3 Feb 2023 07:25:31 -0800 (PST)
-Received: from localhost.localdomain (ip-185-104-137-32.ptr.icomera.net [185.104.137.32])
+        Fri, 3 Feb 2023 10:26:57 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8349D8F25C;
+        Fri,  3 Feb 2023 07:26:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=lu9oAwbuGqgDnRk3vRAVJgv15QaK9kCnbeHbuhe5rA0=; b=EhPD/CV7Oko1TZWYSADXXYt/PG
+        uzsAuah2fSS0d/3HtoipFVQbZThMDP1SWU4zX1HT+rMfviXg+CcgLJpkK2jf2ltOd/1roCgYA5TrN
+        KO10wtlhuAkl61snmCxBejQ6AsB04IeqEFc98wGUvmfdfnyEyQ2XJz8q/sxBgsRJkj+zLD2/CARNZ
+        spwWDcJ4A1H7P4g/XaxYH7SU3u8Sr3cjHa9KTtteLvXfXwp5QqEnV/Z7Jtm8Urs4j+0PrmZm+GQXt
+        SZIuV4kyQKQNhUAzXAuBDMn+Hr0Ua0buCV/N4teDGZsmai6FZpSKA/EH9p/0djo/hJDDRaqayQk3x
+        XcAMnqiQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pNxxI-00EPQd-LZ; Fri, 03 Feb 2023 15:26:25 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: gtucker)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 53A076602F05;
-        Fri,  3 Feb 2023 15:25:26 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1675437930;
-        bh=LJFhso2nOYttoMJgKwPgZoKqQrPyp5Qa3zt/8fIFdZQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=fqjVdAP75KxK9vv+9nwdq6WcQuwVar1CX4fbwPzZuHljWxhNP5f/6XIqdPE1qCfwc
-         z3qhbTxUKI812BAQIronE5hAXjUc7Z93VSOsKuh0/KVA93F6TVNv/gtyuezK7cHDKo
-         BXDJdLoMc1A/XDkvnh5w2P44+LHCogt2H8HIzFmAMGG6jJAVxzYkBHTLpIgkkC+uLi
-         HhFhgke3fesExQdDioyeKYvKajwRypfkcXjRSjXBVxTSbzr+9EB4wP4eJMmT9fTn36
-         RoOi1wtp9m082A5oDIeC83uGHzNIlDD+NsLUFFHe9opdybO/Nx/awcmqx2zuv+aqiJ
-         /cjeaz69H651w==
-From:   Guillaume Tucker <guillaume.tucker@collabora.com>
-To:     Guillaume Tucker <guillaume.tucker@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Gautam <gautammenghani201@gmail.com>
-Cc:     kernel@collabora.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernelci@lists.linux.dev
-Subject: [PATCH] selftests: find echo binary to use -ne options
-Date:   Fri,  3 Feb 2023 16:26:03 +0100
-Message-Id: <20230203152603.11450-1-guillaume.tucker@collabora.com>
-X-Mailer: git-send-email 2.30.2
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D85BC30012F;
+        Fri,  3 Feb 2023 16:26:23 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id AEAF42C14E63E; Fri,  3 Feb 2023 16:26:23 +0100 (CET)
+Date:   Fri, 3 Feb 2023 16:26:23 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        kernel-team@android.com, Zefan Li <lizefan.x@bytedance.com>,
+        Tejun Heo <tj@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org
+Subject: Re: [PATCH 1/2] cpuset: Fix cpuset_cpus_allowed() to not filter
+ offline CPUs
+Message-ID: <Y90nn9NVkEhcZ6nq@hirez.programming.kicks-ass.net>
+References: <20230131221719.3176-1-will@kernel.org>
+ <20230131221719.3176-2-will@kernel.org>
+ <6b068916-5e1b-a943-1aad-554964d8b746@redhat.com>
+ <Y9otWX+MGOLDKU6t@hirez.programming.kicks-ass.net>
+ <83e53632-27ed-8dde-84f4-68c6776d6da8@redhat.com>
+ <a892d340-ea99-1562-0e70-176f02f195c2@redhat.com>
+ <Y9rVVldS19oyIZ+g@hirez.programming.kicks-ass.net>
+ <773e2f22-211e-163f-64bb-15ae29ad161b@redhat.com>
+ <20230203115045.GB5927@willie-the-truck>
+ <d626998b-4cb0-dd8f-fd97-21715bf2eb0b@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d626998b-4cb0-dd8f-fd97-21715bf2eb0b@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Find the actual echo binary using $(which echo) and use it for
-formatted output with -ne.  On some systems, the default echo command
-doesn't handle the -e option and the output looks like this (arm64
-build):
+On Fri, Feb 03, 2023 at 10:13:10AM -0500, Waiman Long wrote:
 
--ne Emit Tests for alsa
+> I think I know where the problem is. It is due to the fact the cpuset
+> hotplug code doesn't update cpumasks of the tasks in the top cpuset (root)
+> at all when there is a cpu offline or online event. It is probably because
+> for some of the tasks in the top cpuset, especially the percpu kthread,
+> changing their cpumasks can be catastrophic. The hotplug code does update
+> the cpumasks of the tasks that are not in the top cpuset. This problem is
+> irrespective of whether v1 or v2 is in use.
 
--ne Emit Tests for amd-pstate
-
--ne Emit Tests for arm64
-
-This is for example the case with the KernelCI Docker images
-e.g. kernelci/gcc-10:x86-kselftest-kernelci.  With the actual echo
-binary (e.g. in /bin/echo), the output is formatted as expected (x86
-build this time):
-
-Emit Tests for alsa
-Emit Tests for amd-pstate
-Skipping non-existent dir: arm64
-
-Only the install target is using "echo -ne" so keep the $ECHO variable
-local to it.
-
-Reported-by: "kernelci.org bot" <bot@kernelci.org>
-Fixes: 3297a4df805d ("kselftests: Enable the echo command to print newlines in Makefile")
-Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
----
- tools/testing/selftests/Makefile | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 41b649452560..9619d0f3b2ff 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -234,10 +234,11 @@ ifdef INSTALL_PATH
- 	@# While building kselftest-list.text skip also non-existent TARGET dirs:
- 	@# they could be the result of a build failure and should NOT be
- 	@# included in the generated runlist.
-+	ECHO=`which echo`; \
- 	for TARGET in $(TARGETS); do \
- 		BUILD_TARGET=$$BUILD/$$TARGET;	\
--		[ ! -d $(INSTALL_PATH)/$$TARGET ] && echo "Skipping non-existent dir: $$TARGET" && continue; \
--		echo -ne "Emit Tests for $$TARGET\n"; \
-+		[ ! -d $(INSTALL_PATH)/$$TARGET ] && $$ECHO "Skipping non-existent dir: $$TARGET" && continue; \
-+		$$ECHO -ne "Emit Tests for $$TARGET\n"; \
- 		$(MAKE) -s --no-print-directory OUTPUT=$$BUILD_TARGET COLLECTION=$$TARGET \
- 			-C $$TARGET emit_tests >> $(TEST_LIST); \
- 	done;
--- 
-2.30.2
-
+I've been saying this exact thing for how many mails now?
