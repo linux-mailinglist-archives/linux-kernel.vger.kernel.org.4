@@ -2,111 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DADE26891C0
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 09:14:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE73B6891C3
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 09:14:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232148AbjBCINf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 03:13:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49444 "EHLO
+        id S232109AbjBCIO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 03:14:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbjBCINM (ORCPT
+        with ESMTP id S231764AbjBCIOC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 03:13:12 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26685953E1
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 00:12:22 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so5441187wma.1
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 00:12:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IC0G1L6NjMoqGQD1cOuly4Kpy7+rsQRjwMtomVmlm3o=;
-        b=xD72h3qJGE8pRy1Boa9QLWM3iuOgPxAFkfdvyEux2CoizMWlA590ACWFNz/K80PAZZ
-         Sw9YIc8ZAA1bUthZam/m+Eeba5+E4myAXIVrE36mqP39bF1Jtw29mQ66qEQcqv2bp4p1
-         6cKoRzu44Alj6AZi966ZhxHIRuzmQr6hAewC1bIN7jeDZt8wONW5oMbHQOv7kLq7Wu3C
-         vKcF47She/EjkhgaNzgvU1femR9xaJmeLCSiYnyS9GUb1AJZeNYGNwbtReeChHHP+li1
-         MoZjkm10tpOCl2Ou35pP15Vg/cufTOjE9R35Zt9fxU2S0cN4KfeNZivCAHPUfpfCZNOh
-         uN0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IC0G1L6NjMoqGQD1cOuly4Kpy7+rsQRjwMtomVmlm3o=;
-        b=eWEsmcM9kL2ny79pW55vwFbJGiNHWwySsE3XXHfel2EO7whaxsum1OKfFwp4Ah+j3Y
-         BGLbWe8QC3zzpxOMxw0LwNK43XRFiWeLF2kvBg1d9ejd8s1smd1IQEJi0JMVvswNlK7q
-         WmYKZBLmTJyoVYLk6pPxj+zLepQXcvU1xu2zop9r8jedAgmKEPUNxXBKo/CebIV5E5MR
-         9KbS+mH+OW5oee1tINONTw9rOMMS0H99HYBpwTNDI8ZeFIV7+Ydpq2s/6NAjpqLQ9uDy
-         lCL5FMi/ij77DlNRIVbl3pXlH5wtRLu0uJdZPfXsmYV7qVnW9U1BACaAVZ2YoG2xxkU0
-         gLzg==
-X-Gm-Message-State: AO0yUKXzACuESHSN8KAPxyabUPvOYGkH+rHU0sB0wyXDxh/s0fH20PHz
-        I5bFetMP3kTf54Dt9n/h3Fm8GQ==
-X-Google-Smtp-Source: AK7set+phGji+2ms+lZQhTPHJqeuo6ybtY3qprxpSEW2BSt4H6ct/ep5PFnZxnSNGDJ5ocOKtPFVtA==
-X-Received: by 2002:a05:600c:1e13:b0:3d9:f836:3728 with SMTP id ay19-20020a05600c1e1300b003d9f8363728mr9020715wmb.11.1675411940532;
-        Fri, 03 Feb 2023 00:12:20 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id x14-20020a1c7c0e000000b003daffc2ecdesm6983987wmc.13.2023.02.03.00.12.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Feb 2023 00:12:19 -0800 (PST)
-Message-ID: <70f6e477-86e2-5d71-49be-3c96265c82be@linaro.org>
-Date:   Fri, 3 Feb 2023 09:12:17 +0100
+        Fri, 3 Feb 2023 03:14:02 -0500
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2106B92EC7;
+        Fri,  3 Feb 2023 00:13:45 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4P7T1v6mk1z4f3mHy;
+        Fri,  3 Feb 2023 16:13:39 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP3 (Coremail) with SMTP id _Ch0CgDHcyEywtxj+U+kCg--.47152S3;
+        Fri, 03 Feb 2023 16:13:40 +0800 (CST)
+Subject: Re: [PATCH -next] block: Revert "block: increase BLKCG_MAX_POLS"
+To:     Oleksandr Natalenko <oleksandr@natalenko.name>, tj@kernel.org,
+        axboe@kernel.dk, Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, yangerkun@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20230203081357.1385168-1-yukuai1@huaweicloud.com>
+ <2666358.mvXUDI8C0e@natalenko.name>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <957f8218-ef4d-7841-0bb2-07d8de6ae28d@huaweicloud.com>
+Date:   Fri, 3 Feb 2023 16:13:38 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v5 7/8] dt-bindings: arm: at91: Add info on sam9x60
- curiosity
-Content-Language: en-US
-To:     Durai Manickam KR <durai.manickamkr@microchip.com>,
-        Hari.PrasathGE@microchip.com,
-        balamanikandan.gunasundar@microchip.com,
-        manikandan.m@microchip.com, varshini.rajendran@microchip.com,
-        dharma.b@microchip.com, nayabbasha.sayed@microchip.com,
-        balakrishnan.s@microchip.com, claudiu.beznea@microchip.com,
-        cristian.birsan@microchip.com, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, davem@davemloft.net, arnd@arndb.de,
-        olof@lixom.net, soc@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Kavyasree.Kotagiri@microchip.com, Horatiu.Vultur@microchip.com,
-        robh+dt@kernel.org, andrew@lunn.ch, michael@walle.cc,
-        jerry.ray@microchip.com
-References: <20230203034833.451461-1-durai.manickamkr@microchip.com>
- <20230203034833.451461-8-durai.manickamkr@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230203034833.451461-8-durai.manickamkr@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <2666358.mvXUDI8C0e@natalenko.name>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _Ch0CgDHcyEywtxj+U+kCg--.47152S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7Gr13tF4UCr1Utr4fWw4UJwb_yoW8JF1Dpa
+        n7CF47Cr48Krnrua4kXw1fuas7X3yvyr1ruFy3Wry3u342qrs7Ww1ktrn8KFyku392kr4j
+        gr12g34F934jvrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkE14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
+        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
+        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
+        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
+        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j
+        6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHU
+        DUUUUU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/02/2023 04:48, Durai Manickam KR wrote:
-> Adding the sam9x60 curiosity board from Microchip into the atmel AT91 board
-> description yaml file.
+Hi,
+
+ÔÚ 2023/02/03 15:59, Oleksandr Natalenko Ð´µÀ:
+> Hello.
 > 
-> Signed-off-by: Durai Manickam KR <durai.manickamkr@microchip.com>
+> On p¨¢tek 3. ¨²nora 2023 9:13:57 CET Yu Kuai wrote:
+>> From: Yu Kuai <yukuai3@huawei.com>
+>>
+>> This reverts commit ec645dc96699ea6c37b6de86c84d7288ea9a4ddf.
+>>
+>> This can save some memory, because after commit 0f7839955114 ("Revert
+>> "block/mq-deadline: Add cgroup support""), there are total 5 policies.
+>>
+>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+>> ---
+>>   include/linux/blkdev.h | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
+>> index 41a41561b773..c6861c7fdad9 100644
+>> --- a/include/linux/blkdev.h
+>> +++ b/include/linux/blkdev.h
+>> @@ -54,7 +54,7 @@ extern struct class block_class;
+>>    * Maximum number of blkcg policies allowed to be registered concurrently.
+>>    * Defined here to simplify include dependency.
+>>    */
+>> -#define BLKCG_MAX_POLS		6
+>> +#define BLKCG_MAX_POLS		5
+>>   
+>>   #define DISK_MAX_PARTS			256
+>>   #define DISK_NAME_LEN			32
+> 
+> Last time I asked about reverting this change, it was suggested that we may keep it [1].
+> 
+> [1] https://lore.kernel.org/linux-block/1dc051a8-4d59-8137-2406-f74026b170bd@kernel.dk/
+> 
 
-This is a friendly reminder during the review process.
+I see now, thanks for the reply.
 
-It looks like you received a tag and forgot to add it.
-
-If you do not know the process, here is a short explanation:
-Please add Acked-by/Reviewed-by/Tested-by tags when posting new
-versions. However, there's no need to repost patches *only* to add the
-tags. The upstream maintainer will do that for acks received on the
-version they apply.
-
-https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
-
-If a tag was not added on purpose, please state why and what changed.
-
-
-Best regards,
-Krzysztof
+Kuai
 
