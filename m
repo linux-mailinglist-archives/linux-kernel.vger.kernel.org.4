@@ -2,145 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59EB1688BB5
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 01:24:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 085DB688BB8
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 01:28:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233005AbjBCAY4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 19:24:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52702 "EHLO
+        id S232059AbjBCA2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 19:28:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232869AbjBCAYr (ORCPT
+        with ESMTP id S229915AbjBCA2E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 19:24:47 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5212381B2E
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 16:24:44 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id e10-20020a17090a630a00b0022bedd66e6dso7295899pjj.1
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 16:24:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/S7e5WEqMk16Ay2DoIKqyJpIuF5AJjNAAjV63IUL/tk=;
-        b=hQHP9qyZHVA+a+uHuTsMO8GZ8HIvjBwROyn/IiLj4UlR5kumKYQZiOaP0yjAA/1OSG
-         C3MjFbaOYsrz20pQoZpTAzls1PAfIviVRvp3Q7r8Xwja45vzqoZLvAU0isd2qEdg9C9n
-         G5MNgZKFWHjl+Qr7/mk/lTfoukCH46J1tvzyn3Y/sN3cqY1SJkbCpJ2lnecR/OO73t/I
-         cM1IibAIrbvSVCWv5TbN7WvpARB41Vlge16J+7pGQy3k6qVx0zEauexfdpR3gA42h0nI
-         ykfx23+DrjARrWRdmejWAqveHSHaMPBFdC44rz6oiK/2k2mP6PLIHKuJ4GQeSXLs69+h
-         BDuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/S7e5WEqMk16Ay2DoIKqyJpIuF5AJjNAAjV63IUL/tk=;
-        b=cqVWdz9AhzTkrjMa2EIXyYaqlikQJEc/vzwXtoEzeB0nJtWI+90r17rNdpOEwURlDQ
-         u3DtCpKg5PdUuF9vTmms6PTrOv1ij3r32piQQHOGALRvAT9TIC5DjkF+ITxuIbZ0gfpA
-         DWpN+fZEHHsU9RXK6ORJY76NxtPnT1/YhStvoLzIzRBwn022y7GnZwteSz73kcYpCP5r
-         loPAt7eCuqCWuAoruOnddAhRYN9V+bTzxHR6klZthTMb71sIQ5ZV5nQjBRA1ZNvEhM8f
-         7bDoj9TJ/khcbvmBA+dOVQXhyNP6KkxAWBh1hCBjK8mTI1r6dAAa1u4rG2q9t1CIGe+j
-         ECdw==
-X-Gm-Message-State: AO0yUKXpOIAfdCK5yRgV7BTmxu0xM6i9oVTWLcSkFsZfWIKheXuSb1T2
-        56jEkNkj87p/gtgBVKKgDlFTXw==
-X-Google-Smtp-Source: AK7set+rJWfbsNd7M3rDZo/kVRyVpyV17Qy08I1XQbG1fnSbrgJIKhyrLKBmh0Ll2t6sRL/UrW+9uw==
-X-Received: by 2002:a17:902:ec8c:b0:191:3098:8b with SMTP id x12-20020a170902ec8c00b001913098008bmr3437192plg.58.1675383883696;
-        Thu, 02 Feb 2023 16:24:43 -0800 (PST)
-Received: from localhost ([135.180.226.51])
-        by smtp.gmail.com with ESMTPSA id q13-20020a170902a3cd00b001948ae7501asm238241plb.298.2023.02.02.16.24.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 16:24:43 -0800 (PST)
-Date:   Thu, 02 Feb 2023 16:24:43 -0800 (PST)
-X-Google-Original-Date: Thu, 02 Feb 2023 16:24:14 PST (-0800)
-Subject:     Re: [PATCH v2 2/7] RISC-V: Detect AIA CSRs from ISA string
-In-Reply-To: <20230128072737.2995881-3-apatel@ventanamicro.com>
-CC:     pbonzini@redhat.com, atishp@atishpatra.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        ajones@ventanamicro.com, anup@brainfault.org, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, apatel@ventanamicro.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     apatel@ventanamicro.com
-Message-ID: <mhng-0f9bdf58-5289-4db4-8fd7-38898824c44f@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Thu, 2 Feb 2023 19:28:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1568010ABC;
+        Thu,  2 Feb 2023 16:28:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A584061D42;
+        Fri,  3 Feb 2023 00:28:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4CD9C433D2;
+        Fri,  3 Feb 2023 00:28:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675384082;
+        bh=cGjeTNl7m/kdvcI4Bnk/YBV908y66tOL9I9W34teMMk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=iN1RQbrj3PVlZpzhnzJya/8QZ/PwPc+3fsObuzsXH9/yn8BFKh8kRu1iqznd1GFdI
+         TLLb/6eQe9JrStbMcn/tSo4qzj4wT9Iln+c4T1718+9myi7yOAIE3rDGTKto0ai8TP
+         McCegGL5HQRtKeIOrPzQF2QiHg4VU/EfI3kmZKj5JIOZVjs+fIVSwV1/tL83p4/Vac
+         L9geVnOsh7LyRnsr+L9EZssekumZSGOwVaJceAeghtQiwxSJSkXy32cVi0MfOFmXBC
+         +5C5FlnK2YYxT4C3tBaHJHqGZZEUSPVoa+xmeTS+vY8+KqDN1+j1Rz3obs6Kf7hfeo
+         nlEcqRpNjtBvQ==
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     stable@vger.kernel.org
+Cc:     Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
+        Kees Cook <keescook@chromium.org>,
+        SeongJae Park <sj@kernel.org>,
+        Seth Jenkins <sethjenkins@google.com>,
+        Jann Horn <jannh@google.com>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 4.19 v2 00/15] Backport oops_limit to 4.19
+Date:   Thu,  2 Feb 2023 16:27:02 -0800
+Message-Id: <20230203002717.49198-1-ebiggers@kernel.org>
+X-Mailer: git-send-email 2.39.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 27 Jan 2023 23:27:32 PST (-0800), apatel@ventanamicro.com wrote:
-> We have two extension names for AIA ISA support: Smaia (M-mode AIA CSRs)
-> and Ssaia (S-mode AIA CSRs).
+This series backports the patchset
+"exit: Put an upper limit on how often we can oops"
+(https://lore.kernel.org/linux-mm/20221117233838.give.484-kees@kernel.org/T/#u)
+to 4.19, as recommended at
+https://googleprojectzero.blogspot.com/2023/01/exploiting-null-dereferences-in-linux.html
 
-This has pretty much the same problem that we had with the other 
-AIA-related ISA string patches, where there's that ambiguity with the 
-non-ratified chapters.  IIRC when this came up in GCC the rough idea was 
-to try and document that we're going to interpret the standard ISA 
-strings that way, but now that we're doing custom ISA extensions it 
-seems saner to just define on here that removes the ambiguity.
+Changed in v2:
+   - Fixed a build error in mm/kasan/report.c by dropping the patch "mm:
+     kasan: do not panic if both panic_on_warn and kasan_multishot set".
 
-I just sent
-<https://lore.kernel.org/r/20230203001201.14770-1-palmer@rivosinc.com/> 
-which documents that.
+Eric W. Biederman (2):
+  exit: Add and use make_task_dead.
+  objtool: Add a missing comma to avoid string concatenation
 
-> We extend the ISA string parsing to detect Smaia and Ssaia extensions.
->
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> ---
->  arch/riscv/include/asm/hwcap.h | 2 ++
->  arch/riscv/kernel/cpu.c        | 2 ++
->  arch/riscv/kernel/cpufeature.c | 2 ++
->  3 files changed, 6 insertions(+)
->
-> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
-> index 86328e3acb02..341ef30a3718 100644
-> --- a/arch/riscv/include/asm/hwcap.h
-> +++ b/arch/riscv/include/asm/hwcap.h
-> @@ -59,6 +59,8 @@ enum riscv_isa_ext_id {
->  	RISCV_ISA_EXT_ZIHINTPAUSE,
->  	RISCV_ISA_EXT_SSTC,
->  	RISCV_ISA_EXT_SVINVAL,
-> +	RISCV_ISA_EXT_SMAIA,
-> +	RISCV_ISA_EXT_SSAIA,
->  	RISCV_ISA_EXT_ID_MAX
->  };
->  static_assert(RISCV_ISA_EXT_ID_MAX <= RISCV_ISA_EXT_MAX);
-> diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
-> index 1b9a5a66e55a..a215ec929160 100644
-> --- a/arch/riscv/kernel/cpu.c
-> +++ b/arch/riscv/kernel/cpu.c
-> @@ -162,6 +162,8 @@ arch_initcall(riscv_cpuinfo_init);
->   *    extensions by an underscore.
->   */
->  static struct riscv_isa_ext_data isa_ext_arr[] = {
-> +	__RISCV_ISA_EXT_DATA(smaia, RISCV_ISA_EXT_SMAIA),
-> +	__RISCV_ISA_EXT_DATA(ssaia, RISCV_ISA_EXT_SSAIA),
+Jann Horn (1):
+  exit: Put an upper limit on how often we can oops
 
-This will conflict with that ISA string refactoring I just merged.  It 
-should be a pretty mechanical merge conflict, but if you want we can do 
-a shared tag with the first few patches and I can handle the merge 
-conflict locally.
+Kees Cook (7):
+  exit: Expose "oops_count" to sysfs
+  exit: Allow oops_limit to be disabled
+  panic: Consolidate open-coded panic_on_warn checks
+  panic: Introduce warn_limit
+  panic: Expose "warn_count" to sysfs
+  docs: Fix path paste-o for /sys/kernel/warn_count
+  exit: Use READ_ONCE() for all oops/warn limit reads
 
->  	__RISCV_ISA_EXT_DATA(sscofpmf, RISCV_ISA_EXT_SSCOFPMF),
->  	__RISCV_ISA_EXT_DATA(sstc, RISCV_ISA_EXT_SSTC),
->  	__RISCV_ISA_EXT_DATA(svinval, RISCV_ISA_EXT_SVINVAL),
-> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> index 93e45560af30..3c5b51f519d5 100644
-> --- a/arch/riscv/kernel/cpufeature.c
-> +++ b/arch/riscv/kernel/cpufeature.c
-> @@ -228,6 +228,8 @@ void __init riscv_fill_hwcap(void)
->  				SET_ISA_EXT_MAP("zihintpause", RISCV_ISA_EXT_ZIHINTPAUSE);
->  				SET_ISA_EXT_MAP("sstc", RISCV_ISA_EXT_SSTC);
->  				SET_ISA_EXT_MAP("svinval", RISCV_ISA_EXT_SVINVAL);
-> +				SET_ISA_EXT_MAP("smaia", RISCV_ISA_EXT_SMAIA);
-> +				SET_ISA_EXT_MAP("ssaia", RISCV_ISA_EXT_SSAIA);
->  			}
->  #undef SET_ISA_EXT_MAP
->  		}
+Nathan Chancellor (2):
+  hexagon: Fix function name in die()
+  h8300: Fix build errors from do_exit() to make_task_dead() transition
+
+Randy Dunlap (1):
+  ia64: make IA64_MCA_RECOVERY bool instead of tristate
+
+Tiezhu Yang (1):
+  panic: unset panic_on_warn inside panic()
+
+Xiaoming Ni (1):
+  sysctl: add a new register_sysctl_init() interface
+
+ .../ABI/testing/sysfs-kernel-oops_count       |  6 ++
+ .../ABI/testing/sysfs-kernel-warn_count       |  6 ++
+ Documentation/sysctl/kernel.txt               | 20 +++++
+ arch/alpha/kernel/traps.c                     |  6 +-
+ arch/alpha/mm/fault.c                         |  2 +-
+ arch/arm/kernel/traps.c                       |  2 +-
+ arch/arm/mm/fault.c                           |  2 +-
+ arch/arm64/kernel/traps.c                     |  2 +-
+ arch/arm64/mm/fault.c                         |  2 +-
+ arch/h8300/kernel/traps.c                     |  3 +-
+ arch/h8300/mm/fault.c                         |  2 +-
+ arch/hexagon/kernel/traps.c                   |  2 +-
+ arch/ia64/Kconfig                             |  2 +-
+ arch/ia64/kernel/mca_drv.c                    |  2 +-
+ arch/ia64/kernel/traps.c                      |  2 +-
+ arch/ia64/mm/fault.c                          |  2 +-
+ arch/m68k/kernel/traps.c                      |  2 +-
+ arch/m68k/mm/fault.c                          |  2 +-
+ arch/microblaze/kernel/exceptions.c           |  4 +-
+ arch/mips/kernel/traps.c                      |  2 +-
+ arch/nds32/kernel/traps.c                     |  8 +-
+ arch/nios2/kernel/traps.c                     |  4 +-
+ arch/openrisc/kernel/traps.c                  |  2 +-
+ arch/parisc/kernel/traps.c                    |  2 +-
+ arch/powerpc/kernel/traps.c                   |  2 +-
+ arch/riscv/kernel/traps.c                     |  2 +-
+ arch/riscv/mm/fault.c                         |  2 +-
+ arch/s390/kernel/dumpstack.c                  |  2 +-
+ arch/s390/kernel/nmi.c                        |  2 +-
+ arch/sh/kernel/traps.c                        |  2 +-
+ arch/sparc/kernel/traps_32.c                  |  4 +-
+ arch/sparc/kernel/traps_64.c                  |  4 +-
+ arch/x86/entry/entry_32.S                     |  6 +-
+ arch/x86/entry/entry_64.S                     |  6 +-
+ arch/x86/kernel/dumpstack.c                   |  4 +-
+ arch/xtensa/kernel/traps.c                    |  2 +-
+ fs/proc/proc_sysctl.c                         | 33 ++++++++
+ include/linux/kernel.h                        |  1 +
+ include/linux/sched/task.h                    |  1 +
+ include/linux/sysctl.h                        |  3 +
+ kernel/exit.c                                 | 72 ++++++++++++++++++
+ kernel/panic.c                                | 75 ++++++++++++++++---
+ kernel/sched/core.c                           |  3 +-
+ mm/kasan/report.c                             |  3 +-
+ tools/objtool/check.c                         |  3 +-
+ 45 files changed, 257 insertions(+), 64 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-kernel-oops_count
+ create mode 100644 Documentation/ABI/testing/sysfs-kernel-warn_count
+
+
+base-commit: b17faf2c4e88ac0deb894f068bda67ace57e9c0a
+-- 
+2.39.1
+
