@@ -2,78 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6600A688F7D
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 07:09:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E437688F81
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 07:10:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232218AbjBCGJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 01:09:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51330 "EHLO
+        id S231635AbjBCGKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 01:10:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231916AbjBCGJQ (ORCPT
+        with ESMTP id S231725AbjBCGKk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 01:09:16 -0500
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5946B89FBD
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 22:09:08 -0800 (PST)
-Received: by mail-oi1-x22c.google.com with SMTP id dt8so3411584oib.0
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 22:09:08 -0800 (PST)
+        Fri, 3 Feb 2023 01:10:40 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D21E18C1F8
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 22:10:09 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id u27so4225191ljo.12
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 22:10:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0IqpAkKor6fl5E4XSr9QGiievSOatqmS3OMiyiol20s=;
-        b=c/dW1USsQ0CUt1XxlU02JP1cXNkqT6NfXxGzcs1Ft4xgqUF/1Rna/0M9nhdKZd5mkt
-         N7HsIA3+rGGC5Cdm1zZ5vQooj5tZTH81jZuGoGERjJfC4tMPf3NJ40w7uTl62lyQQntg
-         Bs0PMOItWAIrkJbPBf+YULOeUymQk7QBb4x/+jNOOz/4flrpb88FVg7ELUPKjmk8QnRK
-         ZdX9eHw1JZuFP9JemJ+qYq9BrhzMLJWo8UScF73qzHlX3EQbBOQrSVeNIGvED5NctR2v
-         a0CbxKVjVeR7oy29LMdLbjKSIT7/HmkW+MC3Kgu3m8o2SNmYxNihKyEERVesmTaUokOI
-         +72g==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=VqL0SQ3sFdYoa5P5qE3J+IqmzxCHfdLil4//qOukaOY=;
+        b=Ug0du6ZsUuXTJu6b3g/CGY8kqC4yyxZB4v/TH0a89VeM3IhOpSyX55eq8qEs/jU1OC
+         lISjBlt0MuhKlmyU8/vzTW3o0VULRH0LDGyH814Tn92cJLfR6LZj1HxF7Tcmn0YNfW3+
+         s+IvXr32+m0vKdefX5RYLBPOpwCRp/xQNrA+U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0IqpAkKor6fl5E4XSr9QGiievSOatqmS3OMiyiol20s=;
-        b=RtXMuFpHBlJ7KDKsdkMUxnrXP/QVMgZykqVSpwudDtIqVyD3IPk2UdoXwgJIBvbJ1v
-         MfE/Vt4N7VlvtsiBixD2tLl7JWSsv+CQ3dHUEeFMBW8JCZZumgoBD2aSaOKiiQnsr7zM
-         Leh5NPDq7L20tcgdiXtQ9os8lmtCS95UheeDdD+B6A0fji49Sm85eEAbxbr22CcpLyWr
-         lUdRCJpji8EFBt61K55hCN0gS0L73t8P22yUnniAHjYuC1PqhkSGpDTD8rue6wohk/N8
-         nW43NgQqaIG30u0pymcW742fYVPcVeVp4ZKz9hRwOfofCU/WP9ujRABpyl1Ed5tWn1FT
-         Elpg==
-X-Gm-Message-State: AO0yUKX6hgDNvZywbK/OUomTLe27gIxRkGZEScnmESXnOdYVc4QKq7qM
-        rn2GeiA6eWtY6+tLF9M7nRXhnQ==
-X-Google-Smtp-Source: AK7set+d5MmbqVvE61qGcmqJg4T/E5+DAbkkhNzwI0o6IcbGYOKG4900HZJzQFwKKT1AmOnACZe6bA==
-X-Received: by 2002:aca:a8ca:0:b0:367:281:d2a5 with SMTP id r193-20020acaa8ca000000b003670281d2a5mr3893466oie.30.1675404547956;
-        Thu, 02 Feb 2023 22:09:07 -0800 (PST)
-Received: from localhost ([136.49.140.41])
-        by smtp.gmail.com with ESMTPSA id n13-20020a9d6f0d000000b006884c42a38asm754340otq.41.2023.02.02.22.09.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 22:09:07 -0800 (PST)
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     Tomasz Figa <tomasz.figa@gmail.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        David Virag <virag.david003@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 6/6] clk: samsung: exynos5433: Extract PM support to common ARM64 layer
-Date:   Fri,  3 Feb 2023 00:09:24 -0600
-Message-Id: <20230203060924.8257-7-semen.protsenko@linaro.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230203060924.8257-1-semen.protsenko@linaro.org>
-References: <20230203060924.8257-1-semen.protsenko@linaro.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VqL0SQ3sFdYoa5P5qE3J+IqmzxCHfdLil4//qOukaOY=;
+        b=SCoiVKN5eq+3Z4maZy7GW6247pXpaVfXHj56+CC9NTafrzXQvE2ou0Uk+rh6tj/trn
+         OBOV3/lqsDPhaUHzpNgPCsHBwFzuHIYn81golhLZNvNlL6Y8LISenM+ZZF4Y5Izs6DBz
+         otRixvgrM4sA2zsEmwGTw6dr9a2q0847wUsDTQR+71OY4hNaH7xbY14yu8EbGFRQmOcI
+         CP6+Ck0f1SNVXqqQzh5DgYFthOR0G2Dyei7GHApB1Ow882SKPH8+UBIv7GrtZNcz3DyQ
+         9CwGcOebTY8zVo3m0orWXKQTbMGG2bTK5Lb88vO0v0SLbQRdD78r0CRpRPZBeVMytVU8
+         pS8g==
+X-Gm-Message-State: AO0yUKXfbs1dvWFsfrtt+b/0rRK4ZQ3aOmCQ8GX/f4BOSl7PslNHUq4m
+        fjN91A3Ho+UQeuTpW5fzyHcItDCDKZwtXk0lJNNw2g==
+X-Google-Smtp-Source: AK7set9VpFMQa1cflzV+xHjqLU7Pbdkzpmn80Ts81v7rzpqniWrtnJHa39GjAeGUKP5DTjFoa3kLC/wUf05URmhGwtY=
+X-Received: by 2002:a2e:8781:0:b0:290:5b7c:4838 with SMTP id
+ n1-20020a2e8781000000b002905b7c4838mr1659971lji.51.1675404607785; Thu, 02 Feb
+ 2023 22:10:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+References: <20230201034137.2463113-1-stevensd@google.com> <CAHbLzkpbV2LOoTpWwSOS+UUsYJiZX4vO78jZSr6xmpAGNGoH5w@mail.gmail.com>
+ <Y9rRCN9EfqzwYnDG@x1n> <CAD=HUj4FjuLpihQLGLzUu82vr5fdFFxfnyKNhApC6L67F5iV4g@mail.gmail.com>
+ <CAHbLzko_cXrOQCsQC3g_id06Jkcg3=9dsVe+MwuzAh+iC9dDDA@mail.gmail.com> <Y9wbmuEq0QjZATE6@x1n>
+In-Reply-To: <Y9wbmuEq0QjZATE6@x1n>
+From:   David Stevens <stevensd@chromium.org>
+Date:   Fri, 3 Feb 2023 15:09:55 +0900
+Message-ID: <CAD=HUj6E8e4QFPHgADQ2Rspr6BnAa8n08WtyqZhsJ5iQ9qR1+w@mail.gmail.com>
+Subject: Re: [PATCH] mm/khugepaged: skip shmem with armed userfaultfd
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Yang Shi <shy828301@gmail.com>,
+        David Hildenbrand <david@redhat.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, Hugh Dickins <hughd@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,429 +68,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Exynos5433 clock driver implements PM support internally, which might be
-also useful for other Exynos clock drivers. Extract all PM related code
-from clk-exynos5433 to common ARM64 functions.
+> > > I don't know if it's necessary to go that far. Userfaultfd plus shmem
+> > > is inherently brittle. It's possible for userspace to bypass
+> > > userfaultfd on a shmem mapping by accessing the shmem through a
+> > > different mapping or simply by using the write syscall.
+>
+> Yes this is possible, but this is user-visible operation - no matter it was
+> a read()/write() from another process, or mmap()ed memory accesses.
+> Khugepaged merges ptes in a way that is out of control of users.  That's
+> something the user can hardly control.
+>
+> AFAICT currently file-based uffd missing mode all works in that way.  IOW
+> the user should have full control of the file/inode under the hood to make
+> sure there will be nothing surprising.  Otherwise I don't really see how
+> the missing mode can work solidly since it's page cache based.
+>
+> > > It might be sufficient to say that the kernel won't directly bypass a
+> > > VMA's userfaultfd to collapse the underlying shmem's pages. Although on
+> > > the other hand, I guess it's not great for the presence of an unused
+> > > shmem mapping lying around to cause khugepaged to have user-visible
+> > > side effects.
+>
+> Maybe it works for your use case already, for example, if in your app the
+> shmem is only and always be mapped once?  However that doesn't seem like a
+> complete solution to me.
 
-Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
----
- drivers/clk/samsung/clk-exynos-arm64.c | 170 ++++++++++++++++++++++++-
- drivers/clk/samsung/clk-exynos-arm64.h |   3 +
- drivers/clk/samsung/clk-exynos5433.c   | 157 +----------------------
- 3 files changed, 174 insertions(+), 156 deletions(-)
+We're using userfaultfd for guest memory for a VM. We do have
+sandboxed device processes. However, thinking about it a bit more,
+this approach would probably cause issues with device hotplug.
 
-diff --git a/drivers/clk/samsung/clk-exynos-arm64.c b/drivers/clk/samsung/clk-exynos-arm64.c
-index 361663223a24..4479c1c54dd2 100644
---- a/drivers/clk/samsung/clk-exynos-arm64.c
-+++ b/drivers/clk/samsung/clk-exynos-arm64.c
-@@ -10,6 +10,8 @@
-  */
- #include <linux/clk.h>
- #include <linux/of_address.h>
-+#include <linux/of_device.h>
-+#include <linux/pm_runtime.h>
- 
- #include "clk-exynos-arm64.h"
- 
-@@ -21,6 +23,19 @@
- #define GATE_OFF_START		0x2000
- #define GATE_OFF_END		0x2fff
- 
-+struct exynos_arm64_cmu_data {
-+	struct samsung_clk_reg_dump *clk_save;
-+	unsigned int nr_clk_save;
-+	const struct samsung_clk_reg_dump *clk_suspend;
-+	unsigned int nr_clk_suspend;
-+
-+	struct clk *clk;
-+	struct clk **pclks;
-+	int nr_pclks;
-+
-+	struct samsung_clk_provider *ctx;
-+};
-+
- /**
-  * exynos_arm64_init_clocks - Set clocks initial configuration
-  * @np:			CMU device tree node with "reg" property (CMU addr)
-@@ -76,10 +91,16 @@ static int __init exynos_arm64_enable_bus_clk(struct device *dev,
- 	if (!cmu->clk_name)
- 		return 0;
- 
--	if (dev)
-+	if (dev) {
-+		struct exynos_arm64_cmu_data *data;
-+
- 		parent_clk = clk_get(dev, cmu->clk_name);
--	else
-+		data = dev_get_drvdata(dev);
-+		if (data)
-+			data->clk = parent_clk;
-+	} else {
- 		parent_clk = of_clk_get_by_name(np, cmu->clk_name);
-+	}
- 
- 	if (IS_ERR(parent_clk)) {
- 		pr_err("%s: could not find bus clock %s; err = %ld\n",
-@@ -91,6 +112,46 @@ static int __init exynos_arm64_enable_bus_clk(struct device *dev,
- 	return 0;
- }
- 
-+static int __init exynos_arm64_cmu_prepare_pm(struct device *dev,
-+		const struct samsung_cmu_info *cmu)
-+{
-+	struct exynos_arm64_cmu_data *data = dev_get_drvdata(dev);
-+	int i;
-+
-+	data->clk_save = samsung_clk_alloc_reg_dump(cmu->clk_regs,
-+						    cmu->nr_clk_regs);
-+	if (!data->clk_save)
-+		return -ENOMEM;
-+
-+	data->nr_clk_save = cmu->nr_clk_regs;
-+	data->clk_suspend = cmu->suspend_regs;
-+	data->nr_clk_suspend = cmu->nr_suspend_regs;
-+	data->nr_pclks = of_clk_get_parent_count(dev->of_node);
-+	if (!data->nr_pclks)
-+		return 0;
-+
-+	data->pclks = devm_kcalloc(dev, sizeof(struct clk *), data->nr_pclks,
-+				   GFP_KERNEL);
-+	if (!data->pclks) {
-+		kfree(data->clk_save);
-+		return -ENOMEM;
-+	}
-+
-+	for (i = 0; i < data->nr_pclks; i++) {
-+		struct clk *clk = of_clk_get(dev->of_node, i);
-+
-+		if (IS_ERR(clk)) {
-+			kfree(data->clk_save);
-+			while (--i >= 0)
-+				clk_put(data->pclks[i]);
-+			return PTR_ERR(clk);
-+		}
-+		data->pclks[i] = clk;
-+	}
-+
-+	return 0;
-+}
-+
- /**
-  * exynos_arm64_register_cmu - Register specified Exynos CMU domain
-  * @dev:	Device object; may be NULL if this function is not being
-@@ -111,3 +172,108 @@ void __init exynos_arm64_register_cmu(struct device *dev,
- 	exynos_arm64_init_clocks(np, cmu->clk_regs, cmu->nr_clk_regs);
- 	samsung_cmu_register_one(np, cmu);
- }
-+
-+/**
-+ * exynos_arm64_register_cmu_pm - Register Exynos CMU domain with PM support
-+ *
-+ * @pdev:	Platform device object
-+ * @set_manual:	If true, set gate clocks to manual mode
-+ *
-+ * It's a version of exynos_arm64_register_cmu() with PM support. Should be
-+ * called from probe function of platform driver.
-+ *
-+ * Return: 0 on success, or negative error code on error.
-+ */
-+int __init exynos_arm64_register_cmu_pm(struct platform_device *pdev,
-+					bool set_manual)
-+{
-+	const struct samsung_cmu_info *cmu;
-+	struct device *dev = &pdev->dev;
-+	struct device_node *np = dev->of_node;
-+	struct exynos_arm64_cmu_data *data;
-+	void __iomem *reg_base;
-+	int ret;
-+
-+	cmu = of_device_get_match_data(dev);
-+
-+	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
-+	platform_set_drvdata(pdev, data);
-+
-+	ret = exynos_arm64_cmu_prepare_pm(dev, cmu);
-+	if (ret)
-+		return ret;
-+
-+	ret = exynos_arm64_enable_bus_clk(dev, NULL, cmu);
-+	if (ret)
-+		return ret;
-+
-+	if (set_manual)
-+		exynos_arm64_init_clocks(np, cmu->clk_regs, cmu->nr_clk_regs);
-+
-+	reg_base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(reg_base))
-+		return PTR_ERR(reg_base);
-+
-+	data->ctx = samsung_clk_init(dev, reg_base, cmu->nr_clk_ids);
-+
-+	/*
-+	 * Enable runtime PM here to allow the clock core using runtime PM
-+	 * for the registered clocks. Additionally, we increase the runtime
-+	 * PM usage count before registering the clocks, to prevent the
-+	 * clock core from runtime suspending the device.
-+	 */
-+	pm_runtime_get_noresume(dev);
-+	pm_runtime_set_active(dev);
-+	pm_runtime_enable(dev);
-+
-+	samsung_cmu_register_clocks(data->ctx, cmu);
-+	samsung_clk_of_add_provider(dev->of_node, data->ctx);
-+	pm_runtime_put_sync(dev);
-+
-+	return 0;
-+}
-+
-+int exynos_arm64_cmu_suspend(struct device *dev)
-+{
-+	struct exynos_arm64_cmu_data *data = dev_get_drvdata(dev);
-+	int i;
-+
-+	samsung_clk_save(data->ctx->reg_base, data->clk_save,
-+			 data->nr_clk_save);
-+
-+	for (i = 0; i < data->nr_pclks; i++)
-+		clk_prepare_enable(data->pclks[i]);
-+
-+	/* For suspend some registers have to be set to certain values */
-+	samsung_clk_restore(data->ctx->reg_base, data->clk_suspend,
-+			    data->nr_clk_suspend);
-+
-+	for (i = 0; i < data->nr_pclks; i++)
-+		clk_disable_unprepare(data->pclks[i]);
-+
-+	clk_disable_unprepare(data->clk);
-+
-+	return 0;
-+}
-+
-+int exynos_arm64_cmu_resume(struct device *dev)
-+{
-+	struct exynos_arm64_cmu_data *data = dev_get_drvdata(dev);
-+	int i;
-+
-+	clk_prepare_enable(data->clk);
-+
-+	for (i = 0; i < data->nr_pclks; i++)
-+		clk_prepare_enable(data->pclks[i]);
-+
-+	samsung_clk_restore(data->ctx->reg_base, data->clk_save,
-+			    data->nr_clk_save);
-+
-+	for (i = 0; i < data->nr_pclks; i++)
-+		clk_disable_unprepare(data->pclks[i]);
-+
-+	return 0;
-+}
-diff --git a/drivers/clk/samsung/clk-exynos-arm64.h b/drivers/clk/samsung/clk-exynos-arm64.h
-index 0dd174693935..969979e714bc 100644
---- a/drivers/clk/samsung/clk-exynos-arm64.h
-+++ b/drivers/clk/samsung/clk-exynos-arm64.h
-@@ -16,5 +16,8 @@
- 
- void exynos_arm64_register_cmu(struct device *dev,
- 		struct device_node *np, const struct samsung_cmu_info *cmu);
-+int exynos_arm64_register_cmu_pm(struct platform_device *pdev, bool set_manual);
-+int exynos_arm64_cmu_suspend(struct device *dev);
-+int exynos_arm64_cmu_resume(struct device *dev);
- 
- #endif /* __CLK_EXYNOS_ARM64_H */
-diff --git a/drivers/clk/samsung/clk-exynos5433.c b/drivers/clk/samsung/clk-exynos5433.c
-index eb72bf2aaee8..ed43233649ae 100644
---- a/drivers/clk/samsung/clk-exynos5433.c
-+++ b/drivers/clk/samsung/clk-exynos5433.c
-@@ -10,7 +10,6 @@
- #include <linux/clk-provider.h>
- #include <linux/of.h>
- #include <linux/of_address.h>
--#include <linux/of_device.h>
- #include <linux/platform_device.h>
- #include <linux/pm_runtime.h>
- #include <linux/slab.h>
-@@ -19,6 +18,7 @@
- 
- #include "clk.h"
- #include "clk-cpu.h"
-+#include "clk-exynos-arm64.h"
- #include "clk-pll.h"
- 
- /*
-@@ -5478,160 +5478,9 @@ static const struct samsung_cmu_info imem_cmu_info __initconst = {
- 	.clk_name		= "aclk_imem_200",
- };
- 
--struct exynos5433_cmu_data {
--	struct samsung_clk_reg_dump *clk_save;
--	unsigned int nr_clk_save;
--	const struct samsung_clk_reg_dump *clk_suspend;
--	unsigned int nr_clk_suspend;
--
--	struct clk *clk;
--	struct clk **pclks;
--	int nr_pclks;
--
--	/* must be the last entry */
--	struct samsung_clk_provider ctx;
--};
--
--static int __maybe_unused exynos5433_cmu_suspend(struct device *dev)
--{
--	struct exynos5433_cmu_data *data = dev_get_drvdata(dev);
--	int i;
--
--	samsung_clk_save(data->ctx.reg_base, data->clk_save,
--			 data->nr_clk_save);
--
--	for (i = 0; i < data->nr_pclks; i++)
--		clk_prepare_enable(data->pclks[i]);
--
--	/* for suspend some registers have to be set to certain values */
--	samsung_clk_restore(data->ctx.reg_base, data->clk_suspend,
--			    data->nr_clk_suspend);
--
--	for (i = 0; i < data->nr_pclks; i++)
--		clk_disable_unprepare(data->pclks[i]);
--
--	clk_disable_unprepare(data->clk);
--
--	return 0;
--}
--
--static int __maybe_unused exynos5433_cmu_resume(struct device *dev)
--{
--	struct exynos5433_cmu_data *data = dev_get_drvdata(dev);
--	int i;
--
--	clk_prepare_enable(data->clk);
--
--	for (i = 0; i < data->nr_pclks; i++)
--		clk_prepare_enable(data->pclks[i]);
--
--	samsung_clk_restore(data->ctx.reg_base, data->clk_save,
--			    data->nr_clk_save);
--
--	for (i = 0; i < data->nr_pclks; i++)
--		clk_disable_unprepare(data->pclks[i]);
--
--	return 0;
--}
--
- static int __init exynos5433_cmu_probe(struct platform_device *pdev)
- {
--	const struct samsung_cmu_info *info;
--	struct exynos5433_cmu_data *data;
--	struct samsung_clk_provider *ctx;
--	struct device *dev = &pdev->dev;
--	void __iomem *reg_base;
--	int i;
--
--	info = of_device_get_match_data(dev);
--
--	data = devm_kzalloc(dev,
--			    struct_size(data, ctx.clk_data.hws, info->nr_clk_ids),
--			    GFP_KERNEL);
--	if (!data)
--		return -ENOMEM;
--	ctx = &data->ctx;
--
--	reg_base = devm_platform_ioremap_resource(pdev, 0);
--	if (IS_ERR(reg_base))
--		return PTR_ERR(reg_base);
--
--	for (i = 0; i < info->nr_clk_ids; ++i)
--		ctx->clk_data.hws[i] = ERR_PTR(-ENOENT);
--
--	ctx->clk_data.num = info->nr_clk_ids;
--	ctx->reg_base = reg_base;
--	ctx->dev = dev;
--	spin_lock_init(&ctx->lock);
--
--	data->clk_save = samsung_clk_alloc_reg_dump(info->clk_regs,
--						    info->nr_clk_regs);
--	if (!data->clk_save)
--		return -ENOMEM;
--	data->nr_clk_save = info->nr_clk_regs;
--	data->clk_suspend = info->suspend_regs;
--	data->nr_clk_suspend = info->nr_suspend_regs;
--	data->nr_pclks = of_clk_get_parent_count(dev->of_node);
--
--	if (data->nr_pclks > 0) {
--		data->pclks = devm_kcalloc(dev, sizeof(struct clk *),
--					   data->nr_pclks, GFP_KERNEL);
--		if (!data->pclks) {
--			kfree(data->clk_save);
--			return -ENOMEM;
--		}
--		for (i = 0; i < data->nr_pclks; i++) {
--			struct clk *clk = of_clk_get(dev->of_node, i);
--
--			if (IS_ERR(clk)) {
--				kfree(data->clk_save);
--				while (--i >= 0)
--					clk_put(data->pclks[i]);
--				return PTR_ERR(clk);
--			}
--			data->pclks[i] = clk;
--		}
--	}
--
--	if (info->clk_name)
--		data->clk = clk_get(dev, info->clk_name);
--	clk_prepare_enable(data->clk);
--
--	platform_set_drvdata(pdev, data);
--
--	/*
--	 * Enable runtime PM here to allow the clock core using runtime PM
--	 * for the registered clocks. Additionally, we increase the runtime
--	 * PM usage count before registering the clocks, to prevent the
--	 * clock core from runtime suspending the device.
--	 */
--	pm_runtime_get_noresume(dev);
--	pm_runtime_set_active(dev);
--	pm_runtime_enable(dev);
--
--	if (info->pll_clks)
--		samsung_clk_register_pll(ctx, info->pll_clks,
--					 info->nr_pll_clks);
--	if (info->mux_clks)
--		samsung_clk_register_mux(ctx, info->mux_clks,
--					 info->nr_mux_clks);
--	if (info->div_clks)
--		samsung_clk_register_div(ctx, info->div_clks,
--					 info->nr_div_clks);
--	if (info->gate_clks)
--		samsung_clk_register_gate(ctx, info->gate_clks,
--					  info->nr_gate_clks);
--	if (info->fixed_clks)
--		samsung_clk_register_fixed_rate(ctx, info->fixed_clks,
--						info->nr_fixed_clks);
--	if (info->fixed_factor_clks)
--		samsung_clk_register_fixed_factor(ctx, info->fixed_factor_clks,
--						  info->nr_fixed_factor_clks);
--
--	samsung_clk_of_add_provider(dev->of_node, ctx);
--	pm_runtime_put_sync(dev);
--
--	return 0;
-+	return exynos_arm64_register_cmu_pm(pdev, false);
- }
- 
- static const struct of_device_id exynos5433_cmu_of_match[] = {
-@@ -5679,7 +5528,7 @@ static const struct of_device_id exynos5433_cmu_of_match[] = {
- };
- 
- static const struct dev_pm_ops exynos5433_cmu_pm_ops = {
--	SET_RUNTIME_PM_OPS(exynos5433_cmu_suspend, exynos5433_cmu_resume,
-+	SET_RUNTIME_PM_OPS(exynos_arm64_cmu_suspend, exynos_arm64_cmu_resume,
- 			   NULL)
- 	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend,
- 				     pm_runtime_force_resume)
--- 
-2.39.0
+> There's nothing that will prevent another mapping being established, and
+> right after that happens it'll stop working, because khugepaged can notice
+> that new mm/vma which doesn't register with uffd at all, and thinks it a
+> good idea to collapse the shmem page cache again.  Uffd will silently fail
+> in another case even if not immediately in your current app/reproducer.
+>
+> Again, I don't think what I propose above is anything close to good.. It'll
+> literally disable any collapsing possibility for a shmem node as long as
+> any small portion of the inode mapping address space got registered by any
+> process with uffd.  I just don't see any easier approach so far.
 
+Maybe we can make things easier by being more precise about what bug
+we're trying to fix. Strictly speaking, I don't think what we're
+concerned about is whether or not userfaultfd is registered on a
+particular VMA at a particular point in time. I think what we're
+actually concerned about is that when userspace has a page with an
+armed userfaultfd that it knows is missing, that page should not be
+filled by khugepaged. If userspace doesn't know that a userfaultfd
+armed page is missing, then even if khugepaged fills that page, as far
+as userspace is concerned, the page was filled by khugepaged before
+userfaultfd was armed.
+
+If that's a valid way to look at it, then I think the fact that
+collapse_file locks hpage provides most of the necessary locking. From
+there, we need to check whether there are any VMAs with armed
+userfaultfds that might have observed a missing page. I think that can
+be done while iterating over VMAs in retract_page_tables without
+acquiring any mmap_lock by adding some memory barriers to
+userfaultfd_set_vm_flags and userfaultfd_armed. It is possible that a
+userfaultfd gets registered on a particular VMA after we check its
+flags but before the collapse finishes. I think the only observability
+hole left would be operations on the shmem file descriptor that don't
+actually lock pages (e.g. SEEK_DATA/SEEK_HOLE), which are hopefully
+solvable with some more thought.
+
+-David
+
+> Thanks,
+>
+> --
+> Peter Xu
+>
