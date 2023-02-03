@@ -2,127 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AFEF6893D3
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 10:33:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEE366893E3
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 10:34:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232539AbjBCJd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 04:33:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51492 "EHLO
+        id S232283AbjBCJeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 04:34:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232363AbjBCJd1 (ORCPT
+        with ESMTP id S232653AbjBCJeR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 04:33:27 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7E3A928CB;
-        Fri,  3 Feb 2023 01:33:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 0FF99CE2DFC;
-        Fri,  3 Feb 2023 09:33:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12E25C433D2;
-        Fri,  3 Feb 2023 09:33:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675416799;
-        bh=n0fwVlFONJ/V7dE/eNRSkJtZEoG/e2f5ZBIYhFBcQZQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=M8ZVYhd9jpgJviu97EP/5IGt6nlATxaviuWLLI88cg8WKuu6XH19ucxIuLT5w6owj
-         3E06wcNi7wHc3LUz+z7KgpLIm2TRgSuVTynAm0wTP14DucEzVW9A4lhlYKnSkzZd0u
-         jF/LIXihWc12YU0BgIfZOPcFffD+ihFJ0CN56snc=
-Date:   Fri, 3 Feb 2023 10:33:16 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Diederik de Haas <didi.debian@cknow.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        LABBE Corentin <clabbe@baylibre.com>
-Subject: Re: crypto-rockchip patches queued for 6.1
-Message-ID: <Y9zU3KxsfMFGB/MF@kroah.com>
-References: <2236134.UumAgOJHRH@prancing-pony>
- <Y6wdZHlnUIzzreTA@kroah.com>
- <2589096.039tgBz4BG@prancing-pony>
- <Y6w/O6zY3Jfe8ZKv@kroah.com>
+        Fri, 3 Feb 2023 04:34:17 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3FC1CAF0
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 01:33:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675416807;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=eTuF1WykcCSNrFr4rtL95OxtxlYr91slBMxyY1t6p2A=;
+        b=O+eU6mLD9KXBv7UXMDyJRTtwCo8Wtqgr5Ji3ikPSYdIvoSqFVdqcUiNzVjhyqmhnVSYqOF
+        zg1+BhyRI15lIwHItg8kwX0fqNMN/3stnjwA8xuEw/4GeIzR76JopFP7+NXWLuFeXqRSUV
+        g07OUn1aKyIlZppcvSNgL1Vd2/kB8pM=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-61-1sDjX74GMvisWWySwJRZKQ-1; Fri, 03 Feb 2023 04:33:26 -0500
+X-MC-Unique: 1sDjX74GMvisWWySwJRZKQ-1
+Received: by mail-ed1-f71.google.com with SMTP id w3-20020a056402268300b00487e0d9b53fso3235801edd.10
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 01:33:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eTuF1WykcCSNrFr4rtL95OxtxlYr91slBMxyY1t6p2A=;
+        b=UjtlEbRWcaJlp1QpjvP5DwT17Hgs9+cPrhPYVj9ff26RoeQHNQFtpB3thq4IeMxj0L
+         c7N64kDc3pTc30t3LXSHSHYr/cS0Hi/GdEcKWWMs3aToPev7vWGB0g31HuYD6k2wnOAi
+         wsZbFilZBzcO1pfoEI4ovgmJkmyyxRfQPFETtZhR8alFbNT7NbRSlaF5qQlHNWHu+Ejc
+         URkgjHH7h57dmZ3r19iibbSwZhYYLx+GbgHwdAe3ZbmHN/YAz/1cloFe376SQduut2aU
+         hMtmHGPUOtPlIayIGBvHLnJ4I9puqM0cf4hL44aXReWZCdFiTcxzjF80l8mB+y4/brZV
+         Dspg==
+X-Gm-Message-State: AO0yUKWEWSLOfbktSJrnorUvyLwnsfvxo8a8IVLgp58buNC+tPeEDamy
+        HTB88XqnRM9OQd6Od8ACUDxo2t66+qt3kX9q2eD3Ftu4j5EneKcbtDja8ev3D3PAiy6TxtSr+GI
+        k+ms8+/Ha3KxJVjL1MfUkMrWF
+X-Received: by 2002:a05:6402:1bc6:b0:499:bcd7:a968 with SMTP id ch6-20020a0564021bc600b00499bcd7a968mr9213901edb.22.1675416804882;
+        Fri, 03 Feb 2023 01:33:24 -0800 (PST)
+X-Google-Smtp-Source: AK7set8d34tbWWobIW5aS5AN6AQqasOyyBEp9/nVTeqh1Y44lnrSAJMaw7sr2zjw/V/WcE79dz7tIg==
+X-Received: by 2002:a05:6402:1bc6:b0:499:bcd7:a968 with SMTP id ch6-20020a0564021bc600b00499bcd7a968mr9213886edb.22.1675416804672;
+        Fri, 03 Feb 2023 01:33:24 -0800 (PST)
+Received: from redhat.com ([2.52.156.122])
+        by smtp.gmail.com with ESMTPSA id ev26-20020a056402541a00b00494dcc5047asm849138edb.22.2023.02.03.01.33.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Feb 2023 01:33:24 -0800 (PST)
+Date:   Fri, 3 Feb 2023 04:33:21 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     elic@nvidia.com, gdawar@amd.com, tanuj.kamde@amd.com,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH V2 5/5] vdpa: mlx5: support per virtqueue dma device
+Message-ID: <20230203043307-mutt-send-email-mst@kernel.org>
+References: <20230119061525.75068-1-jasowang@redhat.com>
+ <20230119061525.75068-6-jasowang@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y6w/O6zY3Jfe8ZKv@kroah.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230119061525.75068-6-jasowang@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 28, 2022 at 02:06:03PM +0100, Greg KH wrote:
-> On Wed, Dec 28, 2022 at 12:11:40PM +0100, Diederik de Haas wrote:
-> > On Wednesday, 28 December 2022 11:41:40 CET Greg KH wrote:
-> > > > All those patches have been merged into Linus' tree for 6.2 and there's a
-> > > > hotfix planned to be submitted for 6.2 here:
-> > > > https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git/
-> > > > commit/?h=v6.2-armsoc/dtsfixes&id=53e8e1e6e9c1653095211a8edf17912f2374bb03
-> > > > 
-> > > > Wouldn't it make more sense to queue the whole patch set for 6.1?
-> > > > Or (at least) the whole crypto rockchip part as mentioned here:
-> > > > https://lore.kernel.org/all/Y5mGGrBJaDL6mnQJ@gondor.apana.org.au/
-> > > > under the "Corentin Labbe (32):" label?
-> > > 
-> > > Please provide us a list of the specific git commits and in the order in
-> > > which you wish to see them applied and we will be glad to review them.
-> > > 
-> > > Looking at random links (that are wrapped and not able to be easily
-> > > used) is not going to work well.
-> > 
-> > These are the commits from Linus' tree (in the correct order):
-> > 
-> > https://git.kernel.org/linus/299c481fa5c121f892420d97f1123a853b7f1079
-> > https://git.kernel.org/linus/8ccd9c8cd1d1618f5e073c86ffcfe15f292eefe6
-> > https://git.kernel.org/linus/c50ef1411c8cbad0c7db100c477126076b6e3348
-> > https://git.kernel.org/linus/6d11c9387865723fd779be00ae37a4588e60133d
-> > https://git.kernel.org/linus/87e356c4966444866186f68f05832fdcc0f351a3
-> > https://git.kernel.org/linus/68ef8af09a1a912a5ed2cfaa4cca7606f52cef90
-> > https://git.kernel.org/linus/816600485cb597b3ff7d6806a95a78512839f775
-> > https://git.kernel.org/linus/d6b23ccef82816050c2fd458c9dabfa0e0af09b9
-> > https://git.kernel.org/linus/bb3c7b73363c9a149b12b74c44ae94b73a8fddf8
-> > https://git.kernel.org/linus/57d67c6e8219b2a034c16d6149e30fb40fd39935
-> > https://git.kernel.org/linus/6d55c4a206d29006c733b5083ba5da8391abbdbd
-> > https://git.kernel.org/linus/48d904d428b68080abd9161148ca2ab1331124a4
-> > https://git.kernel.org/linus/a216be3964c15661579005012b1f0d7d20a1f265
-> > https://git.kernel.org/linus/6f61192549d0214f8d9d1e1d3152e450658ed1e9
-> > https://git.kernel.org/linus/3a6fd464f48ad35d8cf15d81fd92094132dc862a
-> > https://git.kernel.org/linus/e803188400d32d28ecfbef0878c289e3c7026723
-> > https://git.kernel.org/linus/37bc22159c456ad43fb852fc6ed60f4081df25df
-> > https://git.kernel.org/linus/456698746b40008eb0924eb7e9ec908330948b2d
-> > https://git.kernel.org/linus/e65e90101329de0fe304e2df057f68c5f0fa4748
-> > https://git.kernel.org/linus/a7fa0644dd0b91fab97398de7ea4672a6526261f
-> > https://git.kernel.org/linus/2e3b149578c30275db9c3501c1d9dec36d16622a
-> > https://git.kernel.org/linus/c018c7a9dd198ce965ca4d10c7b083849bc533be
-> > https://git.kernel.org/linus/ea389be9857721252367fd2cf81bc8068e060693
-> > https://git.kernel.org/linus/81aaf680e85207d6521b250b2a80ba7c91cc9cbe
-> > https://git.kernel.org/linus/d1b5749687618d969c0be6428174a18a7e94ebd2
-> > https://git.kernel.org/linus/b136468a0024ea90c1259767c732eed12ce6edba
-> > https://git.kernel.org/linus/d1152bc533c941f7e267bf53d344cee510ea2808
-> > https://git.kernel.org/linus/8c701fa6e38c43dba75282e4d919298a5cfc5b05
-> > https://git.kernel.org/linus/2d3c756adcd7a7ee15b6a55cf01b363e3f134e79
-> > https://git.kernel.org/linus/e220e6719438f7a99fe0a73e6e126481380202fa
-> > https://git.kernel.org/linus/0d31b14c9e4178a129a1aa5e491e4da1489c07de
-> > https://git.kernel.org/linus/c5a1e104c35e5134b6048f1e03960a6ac9c42935
-> > https://git.kernel.org/linus/9dcd71c863a6f6476378d076d3e9189c854d49fd
+On Thu, Jan 19, 2023 at 02:15:25PM +0800, Jason Wang wrote:
+> This patch implements per virtqueue dma device for mlx5_vdpa. This is
+> needed for virtio_vdpa to work for CVQ which is backed by vringh but
+> not DMA. We simply advertise the vDPA device itself as the DMA device
+> for CVQ then DMA API can simply use PA so the identical mapping for
+> CVQ can still be used. Otherwise the identical (1:1) mapping won't
+> work when platform IOMMU is enabled since the IOVA is allocated on
+> demand which is not necessarily the PA.
 > 
-> That's a lot, I'll look at them in a week or so after catching up with
-> the rest of the stable queue.
+> This fixes the following crash when mlx5 vDPA device is bound to
+> virtio-vdpa with platform IOMMU enabled but not in passthrough mode:
+> 
+> BUG: unable to handle page fault for address: ff2fb3063deb1002
+> #PF: supervisor read access in kernel mode
+> #PF: error_code(0x0000) - not-present page
+> PGD 1393001067 P4D 1393002067 PUD 0
+> Oops: 0000 [#1] PREEMPT SMP NOPTI
+> CPU: 55 PID: 8923 Comm: kworker/u112:3 Kdump: loaded Not tainted 6.1.0+ #7
+> Hardware name: Dell Inc. PowerEdge R750/0PJ80M, BIOS 1.5.4 12/17/2021
+> Workqueue: mlx5_vdpa_wq mlx5_cvq_kick_handler [mlx5_vdpa]
+> RIP: 0010:vringh_getdesc_iotlb+0x93/0x1d0 [vringh]
+> Code: 14 25 40 ef 01 00 83 82 c0 0a 00 00 01 48 2b 05 93 5a 1b ea 8b 4c 24 14 48 c1 f8 06 48 c1 e0 0c 48 03 05 90 5a 1b ea 48 01 c8 <0f> b7 00 83 aa c0 0a 00 00 01 65 ff 0d bc e4 41 3f 0f 84 05 01 00
+> RSP: 0018:ff46821ba664fdf8 EFLAGS: 00010282
+> RAX: ff2fb3063deb1002 RBX: 0000000000000a20 RCX: 0000000000000002
+> RDX: ff2fb318d2f94380 RSI: 0000000000000002 RDI: 0000000000000001
+> RBP: ff2fb3065e832410 R08: ff46821ba664fe00 R09: 0000000000000001
+> R10: 0000000000000000 R11: 000000000000000d R12: ff2fb3065e832488
+> R13: ff2fb3065e8324a8 R14: ff2fb3065e8324c8 R15: ff2fb3065e8324a8
+> FS:  0000000000000000(0000) GS:ff2fb3257fac0000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: ff2fb3063deb1002 CR3: 0000001392010006 CR4: 0000000000771ee0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> PKRU: 55555554
+> Call Trace:
+> <TASK>
+>   mlx5_cvq_kick_handler+0x89/0x2b0 [mlx5_vdpa]
+>   process_one_work+0x1e2/0x3b0
+>   ? rescuer_thread+0x390/0x390
+>   worker_thread+0x50/0x3a0
+>   ? rescuer_thread+0x390/0x390
+>   kthread+0xd6/0x100
+>   ? kthread_complete_and_exit+0x20/0x20
+>   ret_from_fork+0x1f/0x30
+>   </TASK>
+> 
+> Reviewed-by: Eli Cohen <elic@nvidia.com>
+> Tested-by: Eli Cohen <elic@nvidia.com>
+> Signed-off-by: Jason Wang <jasowang@redhat.com>
 
-I looked at this now, and some of the more obvious "fixes" are already
-in the 6.1.y tree (and older kernels).
+Jason how about a Fixes tag here?
 
-So this series does not apply as-is, and it seems like there is a lot of
-extra stuff in this series that is not needed (like a MAINTAINER entry?)
+> ---
+> Changes since V1:
+> - make mlx5_get_vq_dma_dev() static
+> ---
+>  drivers/vdpa/mlx5/net/mlx5_vnet.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> index 6632651b1e54..97d1ada7f4db 100644
+> --- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> +++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> @@ -2682,6 +2682,16 @@ static int mlx5_vdpa_set_map(struct vdpa_device *vdev, unsigned int asid,
+>  	return err;
+>  }
+>  
+> +static struct device *mlx5_get_vq_dma_dev(struct vdpa_device *vdev, u16 idx)
+> +{
+> +	struct mlx5_vdpa_dev *mvdev = to_mvdev(vdev);
+> +
+> +	if (is_ctrl_vq_idx(mvdev, idx))
+> +		return &vdev->dev;
+> +
+> +	return mvdev->vdev.dma_dev;
+> +}
+> +
+>  static void mlx5_vdpa_free(struct vdpa_device *vdev)
+>  {
+>  	struct mlx5_vdpa_dev *mvdev = to_mvdev(vdev);
+> @@ -2897,6 +2907,7 @@ static const struct vdpa_config_ops mlx5_vdpa_ops = {
+>  	.get_generation = mlx5_vdpa_get_generation,
+>  	.set_map = mlx5_vdpa_set_map,
+>  	.set_group_asid = mlx5_set_group_asid,
+> +	.get_vq_dma_dev = mlx5_get_vq_dma_dev,
+>  	.free = mlx5_vdpa_free,
+>  	.suspend = mlx5_vdpa_suspend,
+>  };
+> -- 
+> 2.25.1
 
-Can you provide a patch series, that has been tested and with your
-signed-off-by for whatever you feel still needs to be applied to the
-6.1.y tree to resolve any existing bugs in 6.1.y for this driver (note,
-that does NOT mean that you can add new functionality that was never
-there...)
-
-thanks,
-
-greg k-h
