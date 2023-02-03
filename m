@@ -2,89 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C96F8688EE9
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 06:22:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6E01688EED
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 06:23:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231546AbjBCFWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 00:22:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36138 "EHLO
+        id S231748AbjBCFXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 00:23:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230156AbjBCFWd (ORCPT
+        with ESMTP id S231185AbjBCFXS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 00:22:33 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 221A1783D1;
-        Thu,  2 Feb 2023 21:22:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 33B96CE2E0F;
-        Fri,  3 Feb 2023 05:22:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C52E1C433D2;
-        Fri,  3 Feb 2023 05:22:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675401747;
-        bh=KZoxTV3ZMdQ05WF88OKxzgH+nB5kz++RuLauXMPspeI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uHOYsq0276hgBEXb7f62CABL7jnNgfbiG3lztCICaMfX7f/Un6JP6kJJbs0XOpcl9
-         eXoTwrrE+2UGEebPZuiQw96Bf53L00YEAEtX8zQFWppgcicgC8iUN8ayCwXLdQeHgf
-         PX9dDUnbbIWq+VIHtzukJDqXjiOvXnIK7E0qTKag=
-Date:   Fri, 3 Feb 2023 06:22:15 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
-Subject: Re: [RFC 2/5] rust: sync: Arc: Introduces ArcInner::count()
-Message-ID: <Y9yaBybest8JBu8A@kroah.com>
-References: <20230201232244.212908-1-boqun.feng@gmail.com>
- <20230201232244.212908-3-boqun.feng@gmail.com>
- <Y9t+3u+2UcAFQc+r@hirez.programming.kicks-ass.net>
- <20230202142153.352ba479.gary@garyguo.net>
- <Y9vZu08L2WaLNJIc@kroah.com>
- <Y9vga90K0aVfGUwW@boqun-archlinux>
- <Y9viM2POUsSnbKUh@kroah.com>
- <Y9vqJ1h2nkaFRpOY@boqun-archlinux>
- <CANiq72kMZ9XQvte41Mzu4oXX=ujGRCrGDZDiYUBVD3=JTGG57g@mail.gmail.com>
+        Fri, 3 Feb 2023 00:23:18 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC353C2B0;
+        Thu,  2 Feb 2023 21:23:16 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id on9-20020a17090b1d0900b002300a96b358so3952048pjb.1;
+        Thu, 02 Feb 2023 21:23:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R9Al5IgfTAXRchBvFsd8KHoDxMsWlvFtFMC8MfqxpJs=;
+        b=CVpzx6OeNkGU3rRXC6PcXEzYF0Lmo5pQHI8yZobfDC2+War/IUoq4rplgc54ROqSnz
+         qAcBdMqdl5JH2BFeaEda3mX9cx9eQW8pZWWNU7OFtrs5pe2pePnNDivyI+C38IRJ6GTq
+         EKe54v+qakVRUEgGDlomkDb3xXHYXfO8ElaEUmB1kFYmGgDeuj2BkfEaCE4slfXwB9Xb
+         6P9KXM6mJBe8s0jIpMn0RtnuiQeoVyZ1PGKqjU3/GwCrAKC3+FYJxfeUJCXfZtphgNAU
+         mmOjv+VFkuN6q73gKUclGeQa+5vxkwdFqxm0dTUvPKuoF4j6EmrdflOeUJHJkXYUj6TI
+         6nkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=R9Al5IgfTAXRchBvFsd8KHoDxMsWlvFtFMC8MfqxpJs=;
+        b=R9C0BkKsd1+xqzQ7pcHWu111nFEcsMyPHIeCv9xT6cn1L4gt/PLtZM/2S/+kvnacWK
+         TYghYayYZA2kTaNq9yPdfZRbdU8QVDIf4Ss83BYYNDXYnDeIZAQ+j2Hkt05TvtpNd/jB
+         pxnByJAjibMm8iKXwqxw9ILloKITPEhTfSjZ7JicqyJTd+SuKUTgdGYB2877eof+ry9c
+         lMG73O4VAgO8EwTRq7RB/YpRwpzY6JpEVtDTaQPqeYKbFkd0tEu4JqUkGNXPkdTghiV9
+         naD877eOKgumUpmN2nfnCYhboQ+gXa4HiZJybNR6iNB8AzTO4aR/l6TYDLEif0B94SOW
+         ZcmQ==
+X-Gm-Message-State: AO0yUKVSm+qAKs2onyz0yEE4d2uEXohV1wLZGE7uGHdvx/vsANVWLYtc
+        xEa27r4kO7O6lKtJ3HSZn9o=
+X-Google-Smtp-Source: AK7set+zd9ZiKwFgx4hfM+/7+UOyxzIAR1hNtMF9N4dpoUga9mKgwiwr09Ho5r/ItUxOnCv7AexCNQ==
+X-Received: by 2002:a17:90b:4d12:b0:22c:9912:39e with SMTP id mw18-20020a17090b4d1200b0022c9912039emr3842185pjb.36.1675401796098;
+        Thu, 02 Feb 2023 21:23:16 -0800 (PST)
+Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:1a:efea::75b])
+        by smtp.gmail.com with ESMTPSA id r6-20020a17090a4dc600b002271b43e528sm4025076pjl.33.2023.02.02.21.23.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Feb 2023 21:23:15 -0800 (PST)
+Message-ID: <3bfbbaa1-69f8-0f33-a4dc-5a10758e603a@gmail.com>
+Date:   Fri, 3 Feb 2023 13:23:02 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANiq72kMZ9XQvte41Mzu4oXX=ujGRCrGDZDiYUBVD3=JTGG57g@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [RFC PATCH V3 07/16] drivers: hv: Decrypt percpu hvcall input arg
+ page in sev-snp enlightened guest
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "jgross@suse.com" <jgross@suse.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "kirill@shutemov.name" <kirill@shutemov.name>,
+        "jiangshan.ljs@antgroup.com" <jiangshan.ljs@antgroup.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "ashish.kalra@amd.com" <ashish.kalra@amd.com>,
+        "srutherford@google.com" <srutherford@google.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "anshuman.khandual@arm.com" <anshuman.khandual@arm.com>,
+        "pawan.kumar.gupta@linux.intel.com" 
+        <pawan.kumar.gupta@linux.intel.com>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "daniel.sneddon@linux.intel.com" <daniel.sneddon@linux.intel.com>,
+        "alexander.shishkin@linux.intel.com" 
+        <alexander.shishkin@linux.intel.com>,
+        "sandipan.das@amd.com" <sandipan.das@amd.com>,
+        "ray.huang@amd.com" <ray.huang@amd.com>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "michael.roth@amd.com" <michael.roth@amd.com>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "venu.busireddy@oracle.com" <venu.busireddy@oracle.com>,
+        "sterritt@google.com" <sterritt@google.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "samitolvanen@google.com" <samitolvanen@google.com>,
+        "fenghua.yu@intel.com" <fenghua.yu@intel.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+References: <20230122024607.788454-1-ltykernel@gmail.com>
+ <20230122024607.788454-8-ltykernel@gmail.com>
+ <BYAPR21MB16880F982D51474B0911D528D7D09@BYAPR21MB1688.namprd21.prod.outlook.com>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <BYAPR21MB16880F982D51474B0911D528D7D09@BYAPR21MB1688.namprd21.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 10:47:12PM +0100, Miguel Ojeda wrote:
-> On Thu, Feb 2, 2023 at 5:52 PM Boqun Feng <boqun.feng@gmail.com> wrote:
-> >
-> > As I said, I'm open to remove the printing of the refcount, and if you
-> > and Peter think maybe it's OK to do that after the explanation above,
+On 2/1/2023 2:02 AM, Michael Kelley (LINUX) wrote:
+>> @@ -134,6 +136,17 @@ int hv_common_cpu_init(unsigned int cpu)
+>>   	if (!(*inputarg))
+>>   		return -ENOMEM;
+>>
+>> +	if (hv_isolation_type_en_snp()) {
+>> +		ret = set_memory_decrypted((unsigned long)*inputarg, pgcount);
+> You used "pgcount" here in response to a comment on v2 of the
+> patch.  But the corresponding re-encryption in hv_common_cpu_die()
+> uses a fixed value of "1".   The two cases should be consistent.  Either
+> assert that hv_root_partition will never be true in an SNP VM, in which
+> case hard coding "1" is OK.  Or properly calculate the number of pages
+> in both cases so they are consistent.
 > 
-> Perhaps part of the confusion came from the overloaded "safe" term.
-> 
-> When Gary and Boqun used the term "safe", they meant it in the Rust
-> sense, i.e. calling the method will not allow to introduce undefined
-> behavior. While I think Peter and Greg are using the term to mean
-> something different.
 
-Yes, I mean it in a "this is not giving you the value you think you are
-getting and you can not rely on it for anything at all as it is going to
-be incorrect" meaning.
-
-Which in kernel code means "this is not something you should do".
-
-thanks,
-
-greg k-h
+Agree. We should keep the logic in both hv_common_cpu_init() and 
+hv_common_cpu_die(). Will fix it.
