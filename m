@@ -2,120 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D1A768A627
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 23:26:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C50768A62B
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 23:27:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233581AbjBCW0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 17:26:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47088 "EHLO
+        id S233618AbjBCW1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 17:27:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232593AbjBCW02 (ORCPT
+        with ESMTP id S229782AbjBCW1B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 17:26:28 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0096921AC
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 14:26:26 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id on9-20020a17090b1d0900b002300a96b358so6265603pjb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 14:26:26 -0800 (PST)
+        Fri, 3 Feb 2023 17:27:01 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B7598C1C9;
+        Fri,  3 Feb 2023 14:27:00 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id o36so4925364wms.1;
+        Fri, 03 Feb 2023 14:27:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KePV/9Oxn0f9htud4yGfd4rggKhHt9AicxQ1AYSJFwo=;
-        b=ZHWC20inawdmelGm4NlDtU399ZfvbXefioQhUrWd5Q+qfVPIQUKtvgnrrfxLg879+P
-         8il8E/HB+5LeP4sKZIt2LXRo25mlB5XBwcIJ/ODUR6/r7CvuxhhTGwvpoUjy03ve5C2g
-         MxfDWziaIi/xtAjkJktzmbMcGtXO62+2W0hSw=
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jurn9Xl39+lOyl7ynfR7764vZm+bPZub6GwDaU1WTio=;
+        b=iYjzenTqutnchFRPKwX069Lo8OCMSAnSdKZhm8TuPGub/Mba05GXm13GEKbRQgP+/D
+         gZQxqDAgqnPxtgms2QnozyCRD0AgKFsW6Eeu0TPie6OTGD29BNa6rrb8rLxMFPnlEh3Y
+         YaDk37QDaMw+TP4pM+Zx4pnANzFBahhNxXLTb4uxnwk3npOuCmzczbkLMCtWiLEKbqV0
+         /qxbig3R9W3uWHethRwpNlDzpznirjDBeXR12KKYu1o9GJWhHzODazGUZzA4Z/hoeV4E
+         UcMHRz4axOnpAu4AJ583f5G9JXE0uOVCiqkvnMU8lT9ME5ww6hnjiDwlXZWUdnFX9CSd
+         nEJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KePV/9Oxn0f9htud4yGfd4rggKhHt9AicxQ1AYSJFwo=;
-        b=YS3x4Fk7VPZkbTGM7h4GBp9lwxiWzxh/WMHA4mQwJs2EboPUw0opW37OjEe2j8q6tn
-         jwya1fk3SjiDiCR1/+Pld8n9xzxmG7T2cr+occxyoK2n2LeMqeVrGQ0LgNojJQh+Irv/
-         gaeErQ+vrVKdIaqYJFG8OfstqLeEHjFv4KOpBbM7dP36pRmTnfNx2Fi3QXmUtpbZjIYg
-         TwcTfhUD6pgDWNpRio5CMudp3/og20RKKJAxb620/orMnz+rWVxbvLA1lDWI+CDe70KT
-         sT9yx2sfDBZAtHq/3yn7kiw3hgu64q+e+mbdvmDrgeXEDUIYyvDlz8bO1GhKoZW/Fnbl
-         fTwg==
-X-Gm-Message-State: AO0yUKWjLTNxQ0CPysFil4c7QtiR1kivPzvzlwFhCby8GKGcdGWHsDQ9
-        OCm15QjF6nalde9DdK5QYYD28g==
-X-Google-Smtp-Source: AK7set9T4bFRy1d8Z5JNN3pXQdT9Rrj/0PYJ44cwkNDUGsof+Ui9Dt3kOILGULjF3EUuVAF0BrJC7w==
-X-Received: by 2002:a17:903:2285:b0:194:3dc2:5c29 with SMTP id b5-20020a170903228500b001943dc25c29mr14158082plh.38.1675463186341;
-        Fri, 03 Feb 2023 14:26:26 -0800 (PST)
-Received: from smtp.gmail.com ([2620:15c:11a:201:44f:ac27:361d:7805])
-        by smtp.gmail.com with ESMTPSA id x13-20020a170902a38d00b0019602263feesm2095071pla.90.2023.02.03.14.26.25
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jurn9Xl39+lOyl7ynfR7764vZm+bPZub6GwDaU1WTio=;
+        b=3Uo9fPlj3EZInfmGZBJTyNojemPMJOw68NqR2jlRGExwvw5yZQfzss5IeUnhG5Wryy
+         bc3Ibb8StSxu7ttXRbOzqM9kzG6PT7cPZp8ttr0mEZU1ylPPiXt6jcT4pInskkmIaULC
+         QUERC5dKPogh5vIcFGt7IkD3xTzmRzq8hnvvpT0JLVv3+yE6vOhHNb5rry2qGOFf+ZEm
+         Law61D7lA2FwoCnKo0qDHcU93hdCY86KgCnJcWJTJTquTtxPht6DSMkYie+0ibqtqbSx
+         W5EgfozT2hw7b7r7+w1wszU5qZuZLiZ6KXK2tMQHjITHA1kFSylhZCMaIbJbj0ZJG3rn
+         IyYQ==
+X-Gm-Message-State: AO0yUKXb9yXmrAS7WOwQgtbgAonmra9X9Ri/m3vtMEjw7m/jBr4zxbcd
+        6qJ6tOviHLVzePDt7jylFq4=
+X-Google-Smtp-Source: AK7set/ZNS0u1GzxheAwHXQZQ/S4Daj7aBkBSdtH4UG7XIyINkTzXTlsjMBri8WQnjjawyjOJz8GYg==
+X-Received: by 2002:a05:600c:1f10:b0:3db:742:cfe9 with SMTP id bd16-20020a05600c1f1000b003db0742cfe9mr11765807wmb.34.1675463219130;
+        Fri, 03 Feb 2023 14:26:59 -0800 (PST)
+Received: from skbuf ([188.26.57.116])
+        by smtp.gmail.com with ESMTPSA id o2-20020a05600002c200b002bde537721dsm3017536wry.20.2023.02.03.14.26.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 14:26:25 -0800 (PST)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     stable@vger.kernel.org
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH 5.15.y v3 5/5] phy: qcom-qmp-combo: fix runtime suspend
-Date:   Fri,  3 Feb 2023 14:26:16 -0800
-Message-Id: <20230203222616.2935268-6-swboyd@chromium.org>
-X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
-In-Reply-To: <20230203222616.2935268-1-swboyd@chromium.org>
-References: <20230203222616.2935268-1-swboyd@chromium.org>
+        Fri, 03 Feb 2023 14:26:58 -0800 (PST)
+Date:   Sat, 4 Feb 2023 00:26:55 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Daniel Golle <daniel@makrotopia.org>, netdev@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jianhui Zhao <zhaojh329@gmail.com>,
+        =?utf-8?B?QmrDuHJu?= Mork <bjorn@mork.no>
+Subject: Re: [PATCH 2/9] net: ethernet: mtk_eth_soc: set MDIO bus clock
+ frequency
+Message-ID: <20230203222655.gjfasxbw2je3r5pz@skbuf>
+References: <cover.1675407169.git.daniel@makrotopia.org>
+ <cover.1675407169.git.daniel@makrotopia.org>
+ <a613b66b4872b5f3f09544138d03d5326a8f6f8b.1675407169.git.daniel@makrotopia.org>
+ <a613b66b4872b5f3f09544138d03d5326a8f6f8b.1675407169.git.daniel@makrotopia.org>
+ <20230203214844.jqvhcdyuvrjf5dxg@skbuf>
+ <Y92Hc++jn6M6AIBQ@lunn.ch>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y92Hc++jn6M6AIBQ@lunn.ch>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan+linaro@kernel.org>
+On Fri, Feb 03, 2023 at 11:15:15PM +0100, Andrew Lunn wrote:
+> > Checking for valid range? There should also probably be a dt-bindings
+> > patch for this.
+> 
+> This is a common mdio property in mdio.yaml. So there should not be
+> any need for a driver specific dt-binding.
 
-commit c7b98de745cffdceefc077ad5cf9cda032ef8959 upstream.
-
-Drop the confused runtime-suspend type check which effectively broke
-runtime PM if the DP child node happens to be parsed before the USB
-child node during probe (e.g. due to order of child nodes in the
-devicetree).
-
-Instead use the new driver data USB PHY pointer to access the USB
-configuration and resources.
-
-Fixes: 52e013d0bffa ("phy: qcom-qmp: Add support for DP in USB3+DP combo phy")
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-Link: https://lore.kernel.org/r/20221114081346.5116-6-johan+linaro@kernel.org
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
-[swboyd@chromium.org: Backport to pre-split driver. Note that the
-condition is kept so that ufs and pcie don't do anything as before]
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
----
- drivers/phy/qualcomm/phy-qcom-qmp.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp.c b/drivers/phy/qualcomm/phy-qcom-qmp.c
-index b8646eaf1767..eef863108bfe 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
-@@ -4985,7 +4985,7 @@ static void qcom_qmp_phy_disable_autonomous_mode(struct qmp_phy *qphy)
- static int __maybe_unused qcom_qmp_phy_runtime_suspend(struct device *dev)
- {
- 	struct qcom_qmp *qmp = dev_get_drvdata(dev);
--	struct qmp_phy *qphy = qmp->phys[0];
-+	struct qmp_phy *qphy = qmp->usb_phy;
- 	const struct qmp_phy_cfg *cfg = qphy->cfg;
- 
- 	dev_vdbg(dev, "Suspending QMP phy, mode:%d\n", qphy->mode);
-@@ -5010,7 +5010,7 @@ static int __maybe_unused qcom_qmp_phy_runtime_suspend(struct device *dev)
- static int __maybe_unused qcom_qmp_phy_runtime_resume(struct device *dev)
- {
- 	struct qcom_qmp *qmp = dev_get_drvdata(dev);
--	struct qmp_phy *qphy = qmp->phys[0];
-+	struct qmp_phy *qphy = qmp->usb_phy;
- 	const struct qmp_phy_cfg *cfg = qphy->cfg;
- 	int ret = 0;
- 
--- 
-https://chromeos.dev
-
+I meant it would probably be informative if the dt schema for this MDIO
+controller had a "default: $val", "minimum: $val" and "maximum: $val".
