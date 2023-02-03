@@ -2,143 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38EA1689953
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 14:00:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5445689957
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 14:02:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232335AbjBCNAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 08:00:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60078 "EHLO
+        id S231889AbjBCNCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 08:02:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231665AbjBCNAv (ORCPT
+        with ESMTP id S231216AbjBCNCD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 08:00:51 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 581F513D74;
-        Fri,  3 Feb 2023 05:00:50 -0800 (PST)
-Received: from mercury (unknown [37.81.13.16])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0B2096602F0E;
-        Fri,  3 Feb 2023 13:00:49 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1675429249;
-        bh=A/jn8B8FWdXm620r8Qsxt7XexyyaId56TtoNgW3vcE0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UYY1YQWLY23yZ5b8Xp/MWeOTy4/TqV4xhqLqEc7Xof7bK2kYc6ueamWviuYywAIEb
-         BMps1KV9exycBXpRLqa+/Lc6dH/IcBAhMGaMsXJdsDuFFhkimeqIQWESjlRG/uMEAt
-         62wgIZ6Tf0UCOJ/x9+a9BBjEmBVaj2AE0Na4+QbZc6cYYm6LDs/c4wvuQQ4IZgEBcq
-         S1o+p5aXSx421nflsrXkIYfjZoxO7GcI6u7WVj7XM2CNoUW9UKyqH+BmMUrZV/IX7J
-         X7IoBoDpPchGtCtYlO9b1yZlkfOQXaw8x/mQ4wDiSdVDp5pK1JQwm2irjQMlhrNHlc
-         4v1vbd/w5us6g==
-Received: by mercury (Postfix, from userid 1000)
-        id 06D1D1060930; Fri,  3 Feb 2023 14:00:45 +0100 (CET)
-Date:   Fri, 3 Feb 2023 14:00:45 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     cgel.zte@gmail.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH] power: supply: use strscpy() is more robust and safer
-Message-ID: <20230203130045.shjvwqkopic65wox@mercury.elektranox.org>
-References: <20220919024919.211210-1-chi.minghao@zte.com.cn>
+        Fri, 3 Feb 2023 08:02:03 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2044.outbound.protection.outlook.com [40.107.244.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B5E8A267;
+        Fri,  3 Feb 2023 05:02:02 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=M+QuM9Gu3KMRROqP+Yeva3hjWFjz2/JviDoJ55HyiCGTPWgbazOQlJG3Ndg1wUd0semYtwbDs6y7PD16Knlefj0pJcHyG8huhhr+ar4c10blknA4pkFiPfyISROGu6NLKDnOsWC0u9ejg9ebSYACvt/uOOOAoq2ls4OUnX/kiOoKPuv0AVCdc3MwuCcPLIxXHILp2wgSr3qwFxJ5315TNuDgCb35+neSB3PZzu0mgYjUFY+S4aWVDtFy1l+FmMbQrgJaitzreouI9oQPdrnxnjLTy2e4qa/Q1NEzF1CH/RPqGZ5x3ExWr6uK48Uq64LuULlV+xB6CQbXLZXTISW2Vg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RPr8oacSTHDgmSeDnBMJ+ssHDS3BcSHxIfCulFks1ho=;
+ b=Mt1PsJkM5wqBnIE1JdvUy8pau/13qAQu5UJ/xP8aWQgrSqUgPHnNXIk9FQ5TdGxyMoX1FtgczWBMUhNruEKYAzAewOLItZLTt+qI0W0SfJpEfUoA9OOFEKcvuFghAiwtN1KBjVWwMVXTZZm1u7TiY8jfQrbzbjsUTeAFfR+7YaNQ+f+RcTIDU5KHqLhnaP0RSdNnOi1QQt1nRo9+2yloSxUXXcD+0jbOGDxw5ZXRFPKPq/8E3GD3OJcP6RZvQiA0KKYXIznwNPRZgeClFg3DCw2Ex2l5j3c+pyXzeGN2kJPHD5MWEaD5LwL8U5Oh/rw57gWTwu0OoYx55iPyNt26YA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RPr8oacSTHDgmSeDnBMJ+ssHDS3BcSHxIfCulFks1ho=;
+ b=bRkSOEy3QxG0USCdhSm3F3QNULNeeBhEjtsqEITcvu3YgWIOcuqnKbbS5M7RU18HLER0MB04Dlp8I5puV2dypxI1ubPaqF/GSGPvvoC4oOzu8qJU29suBtJm+Mr7jD+1FwD9fxVAZ1KMBz3NarPXRNX4YqXgX9ioa/C26aYLxbyX15DmoKVZWEWPCcW0U6R6PwbXT+iYOvywYCB1od7svDd4dfLg2sGgDkzAQqi/JV3QkwxPTV2w3sYHFq1UbbpEWAKxmPd2ZQ2FdIDlZigYEZ0e2zlIbbHTgearxsDXQZdeR4sWtjEZS0EXl908fkK1kt8e+9uJW9jqp76pioPbwA==
+Received: from MW4PR04CA0031.namprd04.prod.outlook.com (2603:10b6:303:6a::6)
+ by BY5PR12MB4068.namprd12.prod.outlook.com (2603:10b6:a03:203::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.27; Fri, 3 Feb
+ 2023 13:01:59 +0000
+Received: from CO1NAM11FT107.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:6a:cafe::7c) by MW4PR04CA0031.outlook.office365.com
+ (2603:10b6:303:6a::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.29 via Frontend
+ Transport; Fri, 3 Feb 2023 13:01:59 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ CO1NAM11FT107.mail.protection.outlook.com (10.13.175.97) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6064.28 via Frontend Transport; Fri, 3 Feb 2023 13:01:59 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 3 Feb 2023
+ 05:01:45 -0800
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail202.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 3 Feb 2023
+ 05:01:45 -0800
+Received: from BUILDSERVER-IO-L4T.nvidia.com (10.127.8.14) by mail.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server id 15.2.986.36 via Frontend
+ Transport; Fri, 3 Feb 2023 05:01:40 -0800
+From:   Krishna Yarlagadda <kyarlagadda@nvidia.com>
+To:     <robh+dt@kernel.org>, <broonie@kernel.org>, <peterhuewe@gmx.de>,
+        <jgg@ziepe.ca>, <jarkko@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <linux-spi@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <skomatineni@nvidia.com>, <ldewangan@nvidia.com>,
+        Krishna Yarlagadda <kyarlagadda@nvidia.com>
+Subject: [Patch V2 0/4]  Tegra TPM driver with hw flow control
+Date:   Fri, 3 Feb 2023 18:31:29 +0530
+Message-ID: <20230203130133.32901-1-kyarlagadda@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+X-NVConfidentiality: public
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="f2t2axxher2oxzor"
-Content-Disposition: inline
-In-Reply-To: <20220919024919.211210-1-chi.minghao@zte.com.cn>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT107:EE_|BY5PR12MB4068:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3815865c-84c7-4399-7702-08db05e6d617
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fGfInRC7mAMise8OtozHb7MsBdD5tAqOH3jJfJ9dmBrGWSmM3jJR7HHV1y/Yzrx/GNZmsuretZTcgl+puZQ4k09kh4mUF67ggIuezbCIKhBrcd2msVRvns3W250ghAUNsAWGuYGRHA+lVgfgf8ZuOcM7HDp19N2tJAQPUsxqu/jdepSbfRsvtkBAg/IQdEenk9H5ekcMkcLRmQTzzxZmYySsU+ptb4tODe3Z5rIW5GnIS7EpYPEsvA2Tg4s9rJ3jf3fzEjN0vu+JhSo5a2CWRQnEwXwgCczlfuLDxnVqK/WHbn0ih8JeLCdMiLfYSAN6A7ZmGtgnwZMYbXrSbhSPRsPdRQyQxfrfmnZOr23b6xhOEhh6Cn1YcDj3b2lTMWEgF64W1UuaZFtO3zlEzOarqop2djaoZosZGD34UBKb/l064Dbp5/8d8PlRPuzg0H8NxTx3Wu4rOnGHwlLwohro9N1cIbTk+1uaUbHw58klBHM2VyRlYzzcPDibEFEt6HMxotjzR+fIxRQefYDi2+XK9xNCzhjw00T8nvzFffZWWn+42DPj6SOv6WoVy0UmeeRh33OosJ+ngI+XjW4pYVi6iK2PDsHTJZhV6KEczOyfOWkc/f4qvMUz7tzvLo+pkC8O4EouNpK2/VYj3vcxPirQzabtIC1jpAKPdjOk6x0vMTTk6PdT4KS/uJt4tfe13O8lIwn/l3YUF5uSutnk+RQjhZH2i9nD60gBx29oXgwqX7M=
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(136003)(346002)(396003)(39860400002)(376002)(451199018)(36840700001)(46966006)(7636003)(356005)(36756003)(86362001)(6666004)(8676002)(70206006)(921005)(7696005)(70586007)(54906003)(8936002)(316002)(4326008)(82310400005)(41300700001)(5660300002)(47076005)(7416002)(478600001)(40480700001)(2906002)(82740400003)(36860700001)(26005)(426003)(107886003)(336012)(83380400001)(2616005)(186003)(1076003)(110136005)(83996005)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Feb 2023 13:01:59.3973
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3815865c-84c7-4399-7702-08db05e6d617
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT107.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4068
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Tegra234 and Tegra241 chips have QSPI controller that supports TCG
+PC Client Specific TPM Interface Specification (TIS) flow control.
+Since the controller only supports half duplex, sw wait polling
+(flow control using full duplex transfers) method implemented in
+tpm_tis_spi_main.c does not suffice.
+Added extended driver to disable sw flow control and send
+all transfers in single message. Flow control is handled by hardware.
 
---f2t2axxher2oxzor
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+V2: Fix dt schema errors.
 
-Hi,
+Krishna Yarlagadda (4):
+  dt-bindings: tpm: Add compatible for Tegra TPM
+  tpm: tegra: Support SPI tpm wait state detect
+  spi: dt-bindings: Add Tegra TPM wait polling flag
+  spi: tegra210-quad: Enable TPM wait polling
 
-On Mon, Sep 19, 2022 at 02:49:19AM +0000, cgel.zte@gmail.com wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
->=20
-> The implementation of strscpy() is more robust and safer.
->=20
-> That's now the recommended way to copy NUL terminated strings.
->=20
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-> ---
+ .../security/tpm/nvidia,tegra-tpm-spi.yaml    |  34 +++++
+ ...nvidia,tegra210-quad-peripheral-props.yaml |   6 +
+ drivers/char/tpm/Makefile                     |   1 +
+ drivers/char/tpm/tpm_tis_spi.h                |   1 +
+ drivers/char/tpm/tpm_tis_spi_main.c           |   4 +-
+ drivers/char/tpm/tpm_tis_spi_tegra.c          | 123 ++++++++++++++++++
+ drivers/spi/spi-tegra210-quad.c               |  16 +++
+ 7 files changed, 184 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/security/tpm/nvidia,tegra-tpm-spi.yaml
+ create mode 100644 drivers/char/tpm/tpm_tis_spi_tegra.c
 
-Sorry, this fell between the cracks. Applied now, thanks!
+-- 
+2.17.1
 
--- Sebastian
-
->  drivers/power/supply/max1721x_battery.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->=20
-> diff --git a/drivers/power/supply/max1721x_battery.c b/drivers/power/supp=
-ly/max1721x_battery.c
-> index 473e53cd2801..0f948db958d5 100644
-> --- a/drivers/power/supply/max1721x_battery.c
-> +++ b/drivers/power/supply/max1721x_battery.c
-> @@ -384,7 +384,7 @@ static int devm_w1_max1721x_add_device(struct w1_slav=
-e *sl)
->  	}
-> =20
->  	if (!info->ManufacturerName[0])
-> -		strncpy(info->ManufacturerName, DEF_MFG_NAME,
-> +		strscpy(info->ManufacturerName, DEF_MFG_NAME,
->  			2 * MAX1721X_REG_MFG_NUMB);
-> =20
->  	if (get_string(info, MAX1721X_REG_DEV_STR,
-> @@ -403,15 +403,15 @@ static int devm_w1_max1721x_add_device(struct w1_sl=
-ave *sl)
-> =20
->  		switch (dev_name & MAX172XX_DEV_MASK) {
->  		case MAX172X1_DEV:
-> -			strncpy(info->DeviceName, DEF_DEV_NAME_MAX17211,
-> +			strscpy(info->DeviceName, DEF_DEV_NAME_MAX17211,
->  				2 * MAX1721X_REG_DEV_NUMB);
->  			break;
->  		case MAX172X5_DEV:
-> -			strncpy(info->DeviceName, DEF_DEV_NAME_MAX17215,
-> +			strscpy(info->DeviceName, DEF_DEV_NAME_MAX17215,
->  				2 * MAX1721X_REG_DEV_NUMB);
->  			break;
->  		default:
-> -			strncpy(info->DeviceName, DEF_DEV_NAME_UNKNOWN,
-> +			strscpy(info->DeviceName, DEF_DEV_NAME_UNKNOWN,
->  				2 * MAX1721X_REG_DEV_NUMB);
->  		}
->  	}
-> --=20
-> 2.25.1
-
---f2t2axxher2oxzor
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmPdBXUACgkQ2O7X88g7
-+prhaw/9HGLScrgq/kceuN/lTUZENnhal350PLcsqUeOOTk63o7LJC2yYWf594WP
-kjEyXvXocvcAyhQPoFHKXi9uhIXWtk85av/d+TyC19gnfP+GMugVGt0N0ndn98h3
-fK7qpMqkvyCxSx3PeWYGP+rxzh8kf9M83k1r2LY0CSVizq4rFN88HIc19Y0nxytq
-Ft4E6lsjsq+ulFMkjR2nhWy/sdJDnCzlVxlWrHzIgYa4EyuaMFqcmBHuWX6WUXlx
-gJyCcwexKUVIXowL4ql4JPR6JTxsNJERtxPuLTVaEQXWh4Z0o2TFxGe0k7xrCrFP
-gnHndUnhhu3vzIWTyxB5q5nl0J1oj7+mspxbmA4SthoRwrHAZj3Fgl+t+q/AZ770
-kRN2Q2oOIHrK86d2dylimr2fsWiqyPB+A2HT1BfVrRUQDjhIYMRfjq6f4zWg2fTy
-JSr2/Wq4g2yOxzSTdb7ln+z0taCVie23ZcHXe8ECjqDO23mfO8bjZz1u+AkmbTGY
-QAAZ7O77VZx9j3OFJ6zmwQyiInutxAvcnhfcafG7Nu4mfQ0ha5inUVe8RJ9G2/vK
-y66CA3HHbsC8Kc6DeR0OhajowuNsMDDkpcZHu2cf9n/KqwfjxpHLUX3BBvPxQCOT
-YGMknFCklRjv5yMvmpbVjM/yKW2W9zn6Xsuv+8OPc+EMP2MEK0Y=
-=+h3N
------END PGP SIGNATURE-----
-
---f2t2axxher2oxzor--
