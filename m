@@ -2,88 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E551C689487
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 11:00:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35EFF6894CB
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 11:10:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233032AbjBCKA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 05:00:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50348 "EHLO
+        id S232601AbjBCKKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 05:10:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232291AbjBCKAW (ORCPT
+        with ESMTP id S232316AbjBCKKM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 05:00:22 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEBCD7B40B;
-        Fri,  3 Feb 2023 02:00:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6E0EFB82A56;
-        Fri,  3 Feb 2023 10:00:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 11B95C4339B;
-        Fri,  3 Feb 2023 10:00:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675418419;
-        bh=8AirJ5o4OGmJjbCTnCt47ANglCIZe8XazxiSiTRWwS8=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=kCAq+o9XSvJ4ehUay4CN4uDmPXPNOkCrmmF8hjglhbUmZlb6JMqR8gQCzjBo+8QxL
-         gqI9JH9fAqhachpigqsrHQEXHeWfNi+Cfm70RA4TdIvMjnCToMk6y4op7ZUA7PSyWj
-         KywZWG/9c7nvpk3r3LIsuESjm9rKSAH56B3Q2BhAZkgKruhQwKObmEc+ZtyvSXa2kJ
-         ZR0Jqs4tG/oxQAQWhLS9zzZMWsfYtYkRMgb9AlEynABRTjoL8ozCd3w27TbqCmkL6I
-         hwlcTLaUONLWE1wcuQ7HXXRBnIXAJ2KBcufpBN5P67HBLtiY3rGw49+rHgAvxc//mg
-         D/PI4yT8pT6dg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E3D1DE270CA;
-        Fri,  3 Feb 2023 10:00:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 3 Feb 2023 05:10:12 -0500
+X-Greylist: delayed 501 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 03 Feb 2023 02:10:09 PST
+Received: from out-63.mta1.migadu.com (out-63.mta1.migadu.com [95.215.58.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC208F53E
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 02:10:09 -0800 (PST)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1675418507;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=jVqxFf3JRfqjs768IBtScFknblotNYt6b9ZAM/rAAcc=;
+        b=N2IKYpf8zv/QbWkNAoZoxZILiqR1lS1XhBXWc0GvpNnwaTTbN5ZKbzV8sLrDKERbLgmKla
+        5XTX+V8wJe5h+VHPdQ93dja0oCJRSXomPii8OB5E6mtTef4/lZqOEv/zAuWl1BwR1JyIlt
+        kUU+kulKfdXKItaDyh2e8JlvVIZ3/Uk=
+From:   Yajun Deng <yajun.deng@linux.dev>
+To:     akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Yajun Deng <yajun.deng@linux.dev>
+Subject: [PATCH] mm/page_alloc: reduce fallbacks to (MIGRATE_PCPTYPES - 1)
+Date:   Fri,  3 Feb 2023 18:01:32 +0800
+Message-Id: <20230203100132.1627787-1-yajun.deng@linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] net: phylink: move phy_device_free() to correctly release
- phy device
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167541841890.29536.5155833242169895352.git-patchwork-notify@kernel.org>
-Date:   Fri, 03 Feb 2023 10:00:18 +0000
-References: <20230131100242.33514-1-clement.leger@bootlin.com>
-In-Reply-To: <20230131100242.33514-1-clement.leger@bootlin.com>
-To:     =?utf-8?b?Q2zDqW1lbnQgTMOpZ2VyIDxjbGVtZW50LmxlZ2VyQGJvb3RsaW4uY29tPg==?=@ci.codeaurora.org
-Cc:     linux@armlinux.org.uk, andrew@lunn.ch, hkallweit1@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, grant.likely@arm.com,
-        calvin.johnson@oss.nxp.com, ioana.ciornei@nxp.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+The commit 1dd214b8f21c ("mm: page_alloc: avoid merging non-fallbackable
+pageblocks with others") has removed MIGRATE_CMA and MIGRATE_ISOLATE from
+fallbacks list. so there is no need to add an element at the end of every
+type.
 
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
+Reduce fallbacks to (MIGRATE_PCPTYPES - 1).
 
-On Tue, 31 Jan 2023 11:02:42 +0100 you wrote:
-> After calling fwnode_phy_find_device(), the phy device refcount is
-> incremented. Then, when the phy device is attached to a netdev with
-> phy_attach_direct(), the refcount is also incremented but only
-> decremented in the caller if phy_attach_direct() fails. Move
-> phy_device_free() before the "if" to always release it correctly.
-> Indeed, either phy_attach_direct() failed and we don't want to keep a
-> reference to the phydev or it succeeded and a reference has been taken
-> internally.
-> 
-> [...]
+Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
+---
+ mm/page_alloc.c | 13 +++++--------
+ 1 file changed, 5 insertions(+), 8 deletions(-)
 
-Here is the summary with links:
-  - [net] net: phylink: move phy_device_free() to correctly release phy device
-    https://git.kernel.org/netdev/net/c/ce93fdb5f2ca
-
-You are awesome, thank you!
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 5ebce58026f1..21d820c42900 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -2603,10 +2603,10 @@ struct page *__rmqueue_smallest(struct zone *zone, unsigned int order,
+  *
+  * The other migratetypes do not have fallbacks.
+  */
+-static int fallbacks[MIGRATE_TYPES][3] = {
+-	[MIGRATE_UNMOVABLE]   = { MIGRATE_RECLAIMABLE, MIGRATE_MOVABLE,   MIGRATE_TYPES },
+-	[MIGRATE_MOVABLE]     = { MIGRATE_RECLAIMABLE, MIGRATE_UNMOVABLE, MIGRATE_TYPES },
+-	[MIGRATE_RECLAIMABLE] = { MIGRATE_UNMOVABLE,   MIGRATE_MOVABLE,   MIGRATE_TYPES },
++static int fallbacks[MIGRATE_TYPES][MIGRATE_PCPTYPES - 1] = {
++	[MIGRATE_UNMOVABLE]   = { MIGRATE_RECLAIMABLE, MIGRATE_MOVABLE   },
++	[MIGRATE_MOVABLE]     = { MIGRATE_RECLAIMABLE, MIGRATE_UNMOVABLE },
++	[MIGRATE_RECLAIMABLE] = { MIGRATE_UNMOVABLE,   MIGRATE_MOVABLE   },
+ };
+ 
+ #ifdef CONFIG_CMA
+@@ -2865,11 +2865,8 @@ int find_suitable_fallback(struct free_area *area, unsigned int order,
+ 		return -1;
+ 
+ 	*can_steal = false;
+-	for (i = 0;; i++) {
++	for (i = 0; i < MIGRATE_PCPTYPES - 1 ; i++) {
+ 		fallback_mt = fallbacks[migratetype][i];
+-		if (fallback_mt == MIGRATE_TYPES)
+-			break;
+-
+ 		if (free_area_empty(area, fallback_mt))
+ 			continue;
+ 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.25.1
 
