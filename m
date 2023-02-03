@@ -2,102 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20C81688BAA
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 01:20:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 887EC688BB4
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 01:24:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232526AbjBCAUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 19:20:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51546 "EHLO
+        id S232295AbjBCAYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 19:24:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbjBCAUT (ORCPT
+        with ESMTP id S230173AbjBCAYo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 19:20:19 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED23B1448A
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 16:20:17 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id mc11so10938118ejb.10
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 16:20:17 -0800 (PST)
+        Thu, 2 Feb 2023 19:24:44 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 119C381B2D
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 16:24:42 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id z1so3655252plg.6
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 16:24:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=o4SeCtxpTd27qR0RdpcpFno4SRCl6KUuB+kcMLwMuEs=;
-        b=Q+7fPWvPlZlKiRFwOebhnC/iujWBaiUECP4cOuLomaMGCsrTaSSFwu6NUnirPZ9+0r
-         udrwj8gZKy1N0/sU/gqKjEmE3i76LfJ22MYfwOCp20sV5YXorrAY1INPbtG5ZtgaWzqh
-         VMzywQfT+LzEDpBsXEmlYVkThE1KCS8Q/mJA4=
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hg6i68J4TobeoqlekmsngWftuTPTv+G6KXcOdLK3leg=;
+        b=trvbCnrSg+4Hjwt0pDcD/npkOjyXxWK0/F7hfrJwRn1wuEcAww+eNLkeb9AyGp52Zy
+         AK2x9UaBaxdID1/Xwzbx5A31+3dLIc/bCDtZhReDGRo+Go4mYXJz1Aa/aK3tzRy/0MoW
+         CvM9RrIYk+Rz7D9V7Y5lF+p4X0wf10UD9dJlbTf7Ajr8mpo7CKVnIYHI4v3InlP+6PrP
+         znWLEEvkmrn7ADHeB6QNn9FP4BZPC4ilktk6xsGuHqHr73U4OiG5ebrMHCaRVIUERzyg
+         B637XrrylYMl0ZMrcoJhs1CcQO5NYoJWJXD99fwMh/gr7CoAPj08hWNtECEMfqjdjBet
+         ItKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=o4SeCtxpTd27qR0RdpcpFno4SRCl6KUuB+kcMLwMuEs=;
-        b=IQZBUXrlZuctHS19gwI+I+ezXmGA6wgyrqS0PbcVuvtHmAsF3fM8kJ2Ffdoo5quXEH
-         NFAH0aK9X+5JLBFAlStSDfD/UxrOajzPzceklnyMLe3ea2OzMR8Fg6/JjAutAdsJ1PKh
-         9iFkpF+kIKn+RpwNiA8u/XjXfHEPNU/GbrvuFbZMsSCzrH1vwCcY+65ccm1ANNAjJ5Qa
-         88O3DEZfv1kdmLbllaFt7LJyjh5HLHewpm4+qU5IRjOouabILdy1kgfZzk/x8hHSQMAv
-         e0IYfr/7nKxPz/eyh/g82GVgEaDFSamaGLJI1sQNLcEhj+N+t5Msv5wsV9WfzkHqqwgN
-         MHmg==
-X-Gm-Message-State: AO0yUKW9yEbSQWG7x8mNSZoPbXga4YRzu3EOW9LUE9+ByBZD8DU0QWwq
-        T0KNu7WXx5h0atJdLuimoiAp4FQkghN1bKoCPHNk9Q==
-X-Google-Smtp-Source: AK7set8OJoviz3162qy91tJH8/NfeTh6YS01TZBd2v74AYVpsvXQcBpS4stIVRVMsSGdDuz40fC4Yw==
-X-Received: by 2002:a17:906:eecb:b0:7c4:f6e4:3e92 with SMTP id wu11-20020a170906eecb00b007c4f6e43e92mr74534ejb.31.1675383616211;
-        Thu, 02 Feb 2023 16:20:16 -0800 (PST)
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com. [209.85.218.51])
-        by smtp.gmail.com with ESMTPSA id uo29-20020a170907cc1d00b00871ac327db6sm517236ejc.45.2023.02.02.16.20.14
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 16:20:15 -0800 (PST)
-Received: by mail-ej1-f51.google.com with SMTP id gr7so11001981ejb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 16:20:14 -0800 (PST)
-X-Received: by 2002:a17:906:f109:b0:882:e1b7:a90b with SMTP id
- gv9-20020a170906f10900b00882e1b7a90bmr2323578ejb.187.1675383614548; Thu, 02
- Feb 2023 16:20:14 -0800 (PST)
-MIME-Version: 1.0
-References: <20230202232517.8695-1-michael.christie@oracle.com> <20230202232517.8695-5-michael.christie@oracle.com>
-In-Reply-To: <20230202232517.8695-5-michael.christie@oracle.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 2 Feb 2023 16:19:57 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjF6j264jDFcY3wgzOUA2RL2SpD2oL5BF9JqCkz3A413Q@mail.gmail.com>
-Message-ID: <CAHk-=wjF6j264jDFcY3wgzOUA2RL2SpD2oL5BF9JqCkz3A413Q@mail.gmail.com>
-Subject: Re: [PATCH v11 4/8] fork: Add USER_WORKER flag to ignore signals
-To:     Mike Christie <michael.christie@oracle.com>
-Cc:     hch@infradead.org, stefanha@redhat.com, jasowang@redhat.com,
-        mst@redhat.com, sgarzare@redhat.com,
-        virtualization@lists.linux-foundation.org, brauner@kernel.org,
-        ebiederm@xmission.com, konrad.wilk@oracle.com,
-        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hg6i68J4TobeoqlekmsngWftuTPTv+G6KXcOdLK3leg=;
+        b=UqxlQOckD6M8a4Js+mILuHViK8UywoUgf1NthrjZzRqYfom8bCG3uIHFCtOImqaTTc
+         t/QuTAvaD8SR7fiSifTtqEorGfTtbK9hP8i4BceZ3xmqnCqKHP2J6L4R/J/UUDE/3jPj
+         /nfO5LVC1TDYvvr/H4l8i/luZjvohmbIg7M7cDWGZYgtUPTiRPY5p/7ZIfAv2XWLSLbT
+         Syud3mlsBEhfboKmJrPrW0U4mhYW22yL5hI+ipvH8ob2nmACLBP0pkLZuGEWllGjTpI9
+         ZuBnKc9cGA3uup4qnslAkpEtQQKVIe3MXnpCU/NJuJ8tRZljMsp+j76B5W+XRSbHpN1H
+         6Dlg==
+X-Gm-Message-State: AO0yUKUBFZ9AXtRnUWOktZiwQYV7p641XT1N1UZ2YB/KE+37vpPqE0Zd
+        OlcrQ4JSojjYTU/UJitH/SdrfQ==
+X-Google-Smtp-Source: AK7set+pf7PQ1ZGCqlI8Er9tb5JhQwcK9KfqGIR52SYoaFZglHAdBVnRyV4EGcxl7VS97t3JzdDK3A==
+X-Received: by 2002:a17:902:f54c:b0:198:9988:5e2f with SMTP id h12-20020a170902f54c00b0019899885e2fmr9557563plf.26.1675383881285;
+        Thu, 02 Feb 2023 16:24:41 -0800 (PST)
+Received: from localhost ([135.180.226.51])
+        by smtp.gmail.com with ESMTPSA id x23-20020a1709027c1700b001946a3f4d9csm267083pll.38.2023.02.02.16.24.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Feb 2023 16:24:40 -0800 (PST)
+Date:   Thu, 02 Feb 2023 16:24:40 -0800 (PST)
+X-Google-Original-Date: Thu, 02 Feb 2023 15:42:40 PST (-0800)
+Subject:     Re: [PATCH v2 1/7] RISC-V: Add AIA related CSR defines
+In-Reply-To: <20230128072737.2995881-2-apatel@ventanamicro.com>
+CC:     pbonzini@redhat.com, atishp@atishpatra.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        ajones@ventanamicro.com, anup@brainfault.org, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, apatel@ventanamicro.com,
+        Conor Dooley <conor.dooley@microchip.com>
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     apatel@ventanamicro.com
+Message-ID: <mhng-36482541-2867-4ade-948f-a2cfc2e039e5@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 2, 2023 at 3:25 PM Mike Christie
-<michael.christie@oracle.com> wrote:
+On Fri, 27 Jan 2023 23:27:31 PST (-0800), apatel@ventanamicro.com wrote:
+> The RISC-V AIA specification improves handling per-HART local interrupts
+> in a backward compatible manner. This patch adds defines for new RISC-V
+> AIA CSRs.
 >
-> +       if (args->worker_flags & USER_WORKER_SIG_IGN)
-> +               ignore_signals(p);
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+> ---
+>  arch/riscv/include/asm/csr.h | 95 +++++++++++++++++++++++++++++++++++-
+>  1 file changed, 94 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
+> index 0e571f6483d9..3c8d68152bce 100644
+> --- a/arch/riscv/include/asm/csr.h
+> +++ b/arch/riscv/include/asm/csr.h
+> @@ -7,7 +7,7 @@
+>  #define _ASM_RISCV_CSR_H
+>
+>  #include <asm/asm.h>
+> -#include <linux/const.h>
+> +#include <linux/bits.h>
+>
+>  /* Status register flags */
+>  #define SR_SIE		_AC(0x00000002, UL) /* Supervisor Interrupt Enable */
+> @@ -73,7 +73,10 @@
+>  #define IRQ_S_EXT		9
+>  #define IRQ_VS_EXT		10
+>  #define IRQ_M_EXT		11
+> +#define IRQ_S_GEXT		12
+>  #define IRQ_PMU_OVF		13
+> +#define IRQ_LOCAL_MAX		(IRQ_PMU_OVF + 1)
+> +#define IRQ_LOCAL_MASK		GENMASK((IRQ_LOCAL_MAX - 1), 0)
+>
+>  /* Exception causes */
+>  #define EXC_INST_MISALIGNED	0
+> @@ -156,6 +159,27 @@
+>  				 (_AC(1, UL) << IRQ_S_TIMER) | \
+>  				 (_AC(1, UL) << IRQ_S_EXT))
+>
+> +/* AIA CSR bits */
+> +#define TOPI_IID_SHIFT		16
+> +#define TOPI_IID_MASK		GENMASK(11, 0)
+> +#define TOPI_IPRIO_MASK		GENMASK(7, 0)
+> +#define TOPI_IPRIO_BITS		8
+> +
+> +#define TOPEI_ID_SHIFT		16
+> +#define TOPEI_ID_MASK		GENMASK(10, 0)
+> +#define TOPEI_PRIO_MASK		GENMASK(10, 0)
+> +
+> +#define ISELECT_IPRIO0		0x30
+> +#define ISELECT_IPRIO15		0x3f
+> +#define ISELECT_MASK		GENMASK(8, 0)
+> +
+> +#define HVICTL_VTI		BIT(30)
+> +#define HVICTL_IID		GENMASK(27, 16)
+> +#define HVICTL_IID_SHIFT	16
+> +#define HVICTL_DPR		BIT(9)
+> +#define HVICTL_IPRIOM		BIT(8)
+> +#define HVICTL_IPRIO		GENMASK(7, 0)
+> +
+>  /* xENVCFG flags */
+>  #define ENVCFG_STCE			(_AC(1, ULL) << 63)
+>  #define ENVCFG_PBMTE			(_AC(1, ULL) << 62)
+> @@ -250,6 +274,18 @@
+>  #define CSR_STIMECMP		0x14D
+>  #define CSR_STIMECMPH		0x15D
+>
+> +/* Supervisor-Level Window to Indirectly Accessed Registers (AIA) */
+> +#define CSR_SISELECT		0x150
+> +#define CSR_SIREG		0x151
+> +
+> +/* Supervisor-Level Interrupts (AIA) */
+> +#define CSR_STOPEI		0x15c
+> +#define CSR_STOPI		0xdb0
+> +
+> +/* Supervisor-Level High-Half CSRs (AIA) */
+> +#define CSR_SIEH		0x114
+> +#define CSR_SIPH		0x154
+> +
+>  #define CSR_VSSTATUS		0x200
+>  #define CSR_VSIE		0x204
+>  #define CSR_VSTVEC		0x205
+> @@ -279,8 +315,32 @@
+>  #define CSR_HGATP		0x680
+>  #define CSR_HGEIP		0xe12
+>
+> +/* Virtual Interrupts and Interrupt Priorities (H-extension with AIA) */
+> +#define CSR_HVIEN		0x608
+> +#define CSR_HVICTL		0x609
+> +#define CSR_HVIPRIO1		0x646
+> +#define CSR_HVIPRIO2		0x647
+> +
+> +/* VS-Level Window to Indirectly Accessed Registers (H-extension with AIA) */
+> +#define CSR_VSISELECT		0x250
+> +#define CSR_VSIREG		0x251
+> +
+> +/* VS-Level Interrupts (H-extension with AIA) */
+> +#define CSR_VSTOPEI		0x25c
+> +#define CSR_VSTOPI		0xeb0
+> +
+> +/* Hypervisor and VS-Level High-Half CSRs (H-extension with AIA) */
+> +#define CSR_HIDELEGH		0x613
+> +#define CSR_HVIENH		0x618
+> +#define CSR_HVIPH		0x655
+> +#define CSR_HVIPRIO1H		0x656
+> +#define CSR_HVIPRIO2H		0x657
+> +#define CSR_VSIEH		0x214
+> +#define CSR_VSIPH		0x254
+> +
+>  #define CSR_MSTATUS		0x300
+>  #define CSR_MISA		0x301
+> +#define CSR_MIDELEG		0x303
+>  #define CSR_MIE			0x304
+>  #define CSR_MTVEC		0x305
+>  #define CSR_MENVCFG		0x30a
+> @@ -297,6 +357,25 @@
+>  #define CSR_MIMPID		0xf13
+>  #define CSR_MHARTID		0xf14
+>
+> +/* Machine-Level Window to Indirectly Accessed Registers (AIA) */
+> +#define CSR_MISELECT		0x350
+> +#define CSR_MIREG		0x351
+> +
+> +/* Machine-Level Interrupts (AIA) */
+> +#define CSR_MTOPEI		0x35c
+> +#define CSR_MTOPI		0xfb0
+> +
+> +/* Virtual Interrupts for Supervisor Level (AIA) */
+> +#define CSR_MVIEN		0x308
+> +#define CSR_MVIP		0x309
+> +
+> +/* Machine-Level High-Half CSRs (AIA) */
+> +#define CSR_MIDELEGH		0x313
+> +#define CSR_MIEH		0x314
+> +#define CSR_MVIENH		0x318
+> +#define CSR_MVIPH		0x319
+> +#define CSR_MIPH		0x354
+> +
+>  #ifdef CONFIG_RISCV_M_MODE
+>  # define CSR_STATUS	CSR_MSTATUS
+>  # define CSR_IE		CSR_MIE
+> @@ -307,6 +386,13 @@
+>  # define CSR_TVAL	CSR_MTVAL
+>  # define CSR_IP		CSR_MIP
+>
+> +# define CSR_IEH		CSR_MIEH
+> +# define CSR_ISELECT	CSR_MISELECT
+> +# define CSR_IREG	CSR_MIREG
+> +# define CSR_IPH		CSR_MIPH
+> +# define CSR_TOPEI	CSR_MTOPEI
+> +# define CSR_TOPI	CSR_MTOPI
+> +
+>  # define SR_IE		SR_MIE
+>  # define SR_PIE		SR_MPIE
+>  # define SR_PP		SR_MPP
+> @@ -324,6 +410,13 @@
+>  # define CSR_TVAL	CSR_STVAL
+>  # define CSR_IP		CSR_SIP
+>
+> +# define CSR_IEH		CSR_SIEH
+> +# define CSR_ISELECT	CSR_SISELECT
+> +# define CSR_IREG	CSR_SIREG
+> +# define CSR_IPH		CSR_SIPH
+> +# define CSR_TOPEI	CSR_STOPEI
+> +# define CSR_TOPI	CSR_STOPI
+> +
+>  # define SR_IE		SR_SIE
+>  # define SR_PIE		SR_SPIE
+>  # define SR_PP		SR_SPP
 
-Same comment as for the other case.
-
-There are real reasons to avoid bitfields:
-
- - you can't pass addresses to them around
-
- - it's easier to read or assign multiple fields in one go
-
- - they are horrible for ABI issues due to the exact bit ordering and
-padding being very subtle
-
-but none of those issues are relevant here, where it's a kernel-internal ABI.
-
-All these use-cases seem to actually be testing one bit at a time, and
-the "assignments" are structure initializers for which named bitfields
-are actually perfect and just make the initializer more legible.
-
-            Linus
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
