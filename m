@@ -2,87 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF95A68A2ED
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 20:25:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D677E68A2E8
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 20:25:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232989AbjBCTZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 14:25:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59840 "EHLO
+        id S233076AbjBCTZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 14:25:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232916AbjBCTZr (ORCPT
+        with ESMTP id S233008AbjBCTZK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 14:25:47 -0500
-X-Greylist: delayed 1519 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 03 Feb 2023 11:25:26 PST
-Received: from out-77.mta1.migadu.com (out-77.mta1.migadu.com [95.215.58.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 998709AFEB
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 11:25:25 -0800 (PST)
-Date:   Fri, 3 Feb 2023 11:25:16 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1675452324;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xemEPS75g6CyaGYVTuNx4T5APXnPBUE9kBl1lVKlrTM=;
-        b=ah/EreyLTKURus8ZQYbvdkwIeyZn+6VcKKQqlNdRE+EKzIxTpJdYzfdCWnCx8dIjocnERr
-        FabQHAoVFjL7/nCF4j6JwNDZ3IxOsSqSwgKBVNOg8H1r2A4U/yDR8aWkgHFDw5EsvHH5ad
-        z01tV+bx4YqgPBnEsnYYSL0KSmKrlEo=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Marcelo Tosatti <mtosatti@redhat.com>,
-        Leonardo =?iso-8859-1?Q?Br=E1s?= <leobras@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Frederic Weisbecker <fweisbecker@suse.de>
-Subject: Re: [PATCH v2 0/5] Introduce memcg_stock_pcp remote draining
-Message-ID: <Y91fnF5uEcSA0/99@P9FQF9L96D.corp.robot.car>
-References: <Y9DpbVF+JR/G+5Or@dhcp22.suse.cz>
- <9e61ab53e1419a144f774b95230b789244895424.camel@redhat.com>
- <Y9FzSBw10MGXm2TK@tpad>
- <Y9G36AiqPPFDlax3@P9FQF9L96D.corp.robot.car>
- <Y9Iurktut9B9T+Tl@dhcp22.suse.cz>
- <Y9MI42NSLooyVZNu@P9FQF9L96D.corp.robot.car>
- <Y9N5CI8PpsfiaY9c@dhcp22.suse.cz>
- <Y9PYe1X7dRQOcahg@dhcp22.suse.cz>
- <Y9QVWwAreTlDVdZ0@P9FQF9L96D.corp.robot.car>
- <Y90mZQhW89HtYfT9@dhcp22.suse.cz>
+        Fri, 3 Feb 2023 14:25:10 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7A3E99D58;
+        Fri,  3 Feb 2023 11:25:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AB92AB82BA4;
+        Fri,  3 Feb 2023 19:25:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB02EC433EF;
+        Fri,  3 Feb 2023 19:24:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675452299;
+        bh=4MPBHegzmk49iNqcfU40g+kZ1YnrD76IoXK34U+qWbc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=W/AOXMCX6uD/lVAQFvpWtVQCzWy8W31YSuBIKd0tETUWHftcBIE8whvu5zvVbivgg
+         cowMQuDtmrjBS8DgiFuDqOFj82QwPk3HOCnkjaAYiKkUxdK/xnhSJlEIz6rd90/PGT
+         Fp9kaeYI9V7CUTefKZrhxSsohJhaMHYQ6Z09dNEGoD1pXltPNVnbFeKGIey9bi2ppT
+         wGS2YXobypUK2UOTPE1bnKQII8SppKM/JFylhPlf1B68SV3piJpJk6nXb+z0xaCMTm
+         u6eHipAk1tTODyfAJCMJHhHrsAZ98hGtLdzwnri8ud/OzqrWuANrAnUFxWm07GEiHE
+         n08eM41YGQZoQ==
+Date:   Fri, 3 Feb 2023 11:27:18 -0800
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Elliot Berman <quic_eberman@quicinc.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: Add include/linux/qcom* to ARM/QUALCOMM
+Message-ID: <20230203192718.eyuvmi7kniwulv63@ripper>
+References: <20230203183115.2836316-1-quic_eberman@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y90mZQhW89HtYfT9@dhcp22.suse.cz>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230203183115.2836316-1-quic_eberman@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 04:21:09PM +0100, Michal Hocko wrote:
-> OK, so this is a speculative patch. cpu_is_isolated doesn't exist yet. I
-> have talked to Frederic off-list and he is working on an implementation.
-> I will be offline next whole week (will be back Feb 13th) so I am
-> sending this early but this patch cannot be merged without his one of
-> course.
+On Fri, Feb 03, 2023 at 10:31:14AM -0800, Elliot Berman wrote:
+> ARM/QUALCOMM support currently includes include/linux/*/qcom* but is
+> missing a few Qualcomm headers directly in include/linux/.
 > 
-> I have tried to summarize the reasoning behind both approach should we
-> ever need to revisit this approach. For now I strongly believe a simpler
-> solution should be preferred.
+> This effectively adds following headers directly under ARM/QUALCOMM.
+>  - include/linux/qcom-geni-se.h
+>  - include/linux/qcom_scm.h
 > 
-> Roman, I have added your ack as you indicated but if you disagree with
-> the reasoning please let me know.
 
-Great, thank you for preparing it up! Really nice summary.
-My ack definitely applies.
+Seems odd to have these lone files here...
 
-If you want, feel free to add a
-"Suggested-by: Roman Gushchin <roman.gushchin@linux.dev>"
-tag to blame me later :)
+Would you be willing to push these two files into
+include/linux/firmware/qcom/ and include/linux/soc/qcom/ instead?
 
-Thank you!
+Regards,
+Bjorn
+
+> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+> ---
+>  MAINTAINERS | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index f2c3d471fe8f..752cddd73bf8 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -2724,6 +2724,7 @@ F:	drivers/spi/spi-qup.c
+>  F:	drivers/tty/serial/msm_serial.c
+>  F:	drivers/usb/dwc3/dwc3-qcom.c
+>  F:	include/dt-bindings/*/qcom*
+> +F:	include/linux/qcom*
+>  F:	include/linux/*/qcom*
+>  F:	include/linux/soc/qcom/
+>  
+> 
+> base-commit: 3866989ec2c319341e2cf69ec6116269b634a271
+> -- 
+> 2.39.1
+> 
