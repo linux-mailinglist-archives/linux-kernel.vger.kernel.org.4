@@ -2,275 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 274B668A0B3
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 18:45:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 349AD68A0B6
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 18:46:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233556AbjBCRpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 12:45:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48824 "EHLO
+        id S232353AbjBCRqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 12:46:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233372AbjBCRpE (ORCPT
+        with ESMTP id S230042AbjBCRqj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 12:45:04 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A8FA6C3B
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 09:44:45 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id h16so5304441wrz.12
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 09:44:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=m+5C4ydL02isaLKa3zc+GpYQSiiz854VPklETAp2HFU=;
-        b=sG6xh8xQNejGSuKPUa4k/fJ86szxWvQ9HoNdYvHpioZo5m0dRyM6sTVyyY94whVgv6
-         N1+sA9Tq1IoCDxCfHehebc2xGyzlY92iQjYq5zxyydxWelux8OI737w5gSXoNGhnDdYC
-         1cADmm/gMMohMtZgar4AjsoCdYPEy2nkhEMn3x+/dSO3h7U9aNWqUCAqz+tyUEwSos5f
-         OrcBootA7nuW5iqyPB8A0QRDmILWpt5cdql5Dzoi73rt8zP+5aJoYAgxPizkps4OdYzc
-         Xr+JSJ9BLolzO0xmo7UAN5qTnU6GFt91wI9B9b5k0gsxWx7KDGIyzaOi8p5Ifz5qI6Or
-         0TAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=m+5C4ydL02isaLKa3zc+GpYQSiiz854VPklETAp2HFU=;
-        b=T7Q8qsFfJPNPODOqQqJGp965/en4HXsLBtgV4jx3yz+mah9eU1BRUGYcvZaIznqgY6
-         nlXWN9wzGgKOa1wmjIYeFX5yMUgtmIJUcGafnjWWkJuO6y0Ym+IUnDI9wvQPe5870m7Y
-         GjD7ilVh4xL34KLjb4IppdNuYNYmsxBBnig+vCjd2DbtL603mjeobbjubX1o/v6yQBM7
-         U8KIb3idFQ9eFOFYPY2XSCOEA3iMkMlKvAyV7sMfiAMjrioZMWjkigZbArT+Ip8mauKX
-         VJlS2RwM7EU1xy0jHw0rzl0awcD1tBCN505j2MBii2kqztG8pp09JYT1I8Wwejk4rI6n
-         GzDg==
-X-Gm-Message-State: AO0yUKWqURz0eGjRZ6Ud8jekrBwqnRfwqSIJ2VlrsAvBA/aJs7Bjzy7N
-        vqYI/HbfOTPCFKnqHDfrmFKTQg==
-X-Google-Smtp-Source: AK7set+/g5vP8p/e6zxCIdQYGAwSA5RSAGBsWkgRow0IIEBh34ietmzBe0bcXc1sCSEXq+DEpAgONw==
-X-Received: by 2002:a5d:660f:0:b0:2bf:95cc:744c with SMTP id n15-20020a5d660f000000b002bf95cc744cmr10179895wru.0.1675446285470;
-        Fri, 03 Feb 2023 09:44:45 -0800 (PST)
-Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id z1-20020a5d4c81000000b002bdd8f12effsm2443528wrs.30.2023.02.03.09.44.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 09:44:45 -0800 (PST)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     rjw@rjwysocki.net
-Cc:     daniel.lezcano@linaro.org, linux-acpi@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, Len Brown <lenb@kernel.org>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2 11/11] thermal/acpi: Use the thermal framework ACPI API
-Date:   Fri,  3 Feb 2023 18:44:29 +0100
-Message-Id: <20230203174429.3375691-12-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230203174429.3375691-1-daniel.lezcano@linaro.org>
-References: <20230203174429.3375691-1-daniel.lezcano@linaro.org>
+        Fri, 3 Feb 2023 12:46:39 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2087.outbound.protection.outlook.com [40.107.220.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2153EAD31E;
+        Fri,  3 Feb 2023 09:46:08 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NtLksh7vOQgGtf31ivqC4ND0/kyfEO180ZAJ7TTnBxsblzyrvEmuU+oHk2/vrUCJsR371OK5KsLH3jyeYpsV/4iA0vd1kyI5oPsl4S0UOd5SU5SAwKmUNC5rH1ko0zanTrsjxVMI24EMpLwz/GFXZ6jp9AIq3VUeQt1wSEk1q7ILa+Ac8Pa21QwQSgBiDALyZ3jFXh3lqnx9JXMmxLZ8uJYyyrcpW/rdfifusIbHwB21R/JcRDfxXUJsiNsh9QHbkJXww0bWUSowLTQZaFvtL+ExazlKlIRkJByhUwm8ZgUHr1kmq7JERpnTV964AGpJSiDClyfxWGsD0u0zimThKA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SJrmhelMPnRxfMmki0FTvcMqf5qShXOb++SMdIPRJpo=;
+ b=HgOsiAfPSCsDFSdnrG0kkEwsQimeYIL91TKmuRZ9PRO7+o9kos/zL0j03JIr5rKFFLjh7p85HAA6sfWgbBCSX8EpBt6FWGWwf7yRrWVKLYq9HrrrS9YzqUH/2iKiJs9+R5Z0MzHZDRBK53gGYxyrpzIaImn1y+n19ALenju1l/nG07OyiWinXmeGsGvSipKsYsWIvp1t8FgGNvNzDRwLGrD3RadamolQYyzPU5EMJysbMMt9IJRSdvtVgSdTfjp62/k0/xa7QR0ROsZF4PoQGLYXz111yAeazH6WGwHIABnhEWUmJ4qfyCjJBbX0nJ5medzwrH1OJp3aZi+NCOH92g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.233) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SJrmhelMPnRxfMmki0FTvcMqf5qShXOb++SMdIPRJpo=;
+ b=GbixTQZeaKpcl/jLwtAdC+RCTrc6Y5TXpaqYoADbY/mZ8U6WKxn8anj/1NMoDfqWpVSB+Ab+VqhlqlvHCdUvT8N9PML3QVCHyc05pechKORp8modsBiFBdnclM2eyZOpEvZauXoaRCbm/yyXOCMq6jqlPjUpo7zDpO8nI9XSho8DQDWjLVJyw6EY7nCAell60mYnIRqTZDppUTferuh51YPAlUu8yZswdqjPtqVTuXWwGpT86nIoS8AoYTpG0JPGuATGv2vo7PoLOvzC0Ivr7RQY/ex0ccvOLVJzMY8MkIGo1GrWNIj99mYRspep6lNsPzYs6a9xzPhfYqn459AQ7w==
+Received: from DM6PR02CA0080.namprd02.prod.outlook.com (2603:10b6:5:1f4::21)
+ by DM4PR12MB7672.namprd12.prod.outlook.com (2603:10b6:8:103::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.38; Fri, 3 Feb
+ 2023 17:45:21 +0000
+Received: from DM6NAM11FT096.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:1f4:cafe::6e) by DM6PR02CA0080.outlook.office365.com
+ (2603:10b6:5:1f4::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.31 via Frontend
+ Transport; Fri, 3 Feb 2023 17:45:21 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.233) by
+ DM6NAM11FT096.mail.protection.outlook.com (10.13.173.145) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6064.31 via Frontend Transport; Fri, 3 Feb 2023 17:45:21 +0000
+Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
+ (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 3 Feb 2023
+ 09:45:16 -0800
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Fri, 3 Feb 2023 09:45:16 -0800
+Received: from Asurada-Nvidia (10.127.8.13) by mail.nvidia.com
+ (10.126.190.180) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36 via Frontend
+ Transport; Fri, 3 Feb 2023 09:45:15 -0800
+Date:   Fri, 3 Feb 2023 09:45:14 -0800
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+CC:     "jgg@nvidia.com" <jgg@nvidia.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>
+Subject: Re: [PATCH v1 2/8] iommu: Introduce a new
+ iommu_group_replace_domain() API
+Message-ID: <Y91IKoDq2xrWp1Jq@Asurada-Nvidia>
+References: <cover.1675320212.git.nicolinc@nvidia.com>
+ <a98e622f41d76b64f5a7d0c758d8bda5e8043013.1675320212.git.nicolinc@nvidia.com>
+ <BN9PR11MB5276BB497D32073A1F4CBE238CD79@BN9PR11MB5276.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <BN9PR11MB5276BB497D32073A1F4CBE238CD79@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT096:EE_|DM4PR12MB7672:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9a95ce12-519b-4573-a524-08db060e6bf2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: LFqLcrtn/q/LYiialWHKyTmNAMubvONzE3I+vnoIG1X+J1WyC5xXijXy+z7tmlcmlebmMRqGC8oVL9UZGzxmMeKuWZA5vcK7lAhA+O8f+/pOnjjg0/sYSvYeuiO4je3eO1KQNjrgGX46UcvlhIFsLA4Q27o/xT01Yh5eo/r+6abBGqUdfm68E6IgNLTuIYUTYkpGdhZTI/UNkJ0jxlryDmp7cf/8M5epbyugODVDC55FV9VAt7CEt9ClaFEGj6MK2nuECT4Ma/6eX7kmMD8O8db2hG9QtTuGkVZ9bSEwjJPhgCzsR/KXXrYjcJtSbH7sD/aIoYzw7tia/gE9a/EvYftNXAQpL2PFSPTK8h+bf5WUIqEMXy8Iz+uf0WL0ibkJcZRrPhIaXlHIjAN7bXH3+5gCwxD3VBJlHbSetzxh9V8EsiPWl6VjPMnoW3fm1IiSZ9AJNkJh8RxkKg4nykY1CKyR9t8wxDIk0L9yk51bbTEb67XXbWxMh7oZYG7jvRVsn73yc5+UkQI92jd41yHdNSXJt4XtOxySJEbb9zp19RkB3VY8nvwP3NIRQvG962yf9VRcIZKu3ayMbsbbcZyxqnYI0+I2Ixn1IxSqADCaYLMfy4tZvQL/goQAh9aXdjvGiLUngsKNmbnjXUnemVFRz4Cunu94bqnrb2EJQJKYBgi34NU7Sy5vy3Xov18gtULYLm4/otBwNvUBEGtNljxndA==
+X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(376002)(346002)(396003)(136003)(39860400002)(451199018)(46966006)(36840700001)(40470700004)(86362001)(41300700001)(55016003)(83380400001)(426003)(336012)(47076005)(82310400005)(40480700001)(36860700001)(7636003)(356005)(82740400003)(316002)(54906003)(478600001)(4326008)(40460700003)(6916009)(70206006)(70586007)(9686003)(186003)(8676002)(26005)(33716001)(2906002)(4744005)(8936002)(5660300002)(7416002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Feb 2023 17:45:21.2023
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9a95ce12-519b-4573-a524-08db060e6bf2
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT096.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB7672
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Lezcano <daniel.lezcano@kernel.org>
+On Fri, Feb 03, 2023 at 08:26:44AM +0000, Tian, Kevin wrote:
 
-The thermal framework has a set of functions to fill the trip
-points. Those functions are already used by the int340x and the quark
-Intel's platform.
+> > +/**
+> > + * iommu_group_replace_domain - replace the domain that a group is
+> > attached to
+> > + * @new_domain: new IOMMU domain to replace with
+> > + * @group: IOMMU group that will be attached to the new domain
+> > + *
+> > + * This API allows the group to switch domains without being forced to go to
+> > + * the blocking domain in-between.
+> > + *
+> > + * If the attached domain is a core domain (e.g. a default_domain), it will act
+> > + * just like the iommu_attach_group().
+> 
+> I think you meant "the currently-attached domain", which implies a
+> 'detached' state as you replied to Baolu.
 
-Reuse these functions in order to consolidate the generic trip points
-usage across the thermal ACPI user.
+Hmm, I don't see an implication, since we only have either
+"the attached domain" or "a new domain" in the context?
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@kernel.org>
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/acpi/thermal.c | 85 +++++++++++++++++++-----------------------
- 1 file changed, 38 insertions(+), 47 deletions(-)
+With that being said, I can add "currently" in v2:
+ * If the currently attached domain is a core domain (e.g. a default_domain),
+ * it will act just like the iommu_attach_group().
 
-diff --git a/drivers/acpi/thermal.c b/drivers/acpi/thermal.c
-index f89236cd4fcd..5e4d93c67b75 100644
---- a/drivers/acpi/thermal.c
-+++ b/drivers/acpi/thermal.c
-@@ -259,8 +259,11 @@ static struct thermal_trip *acpi_thermal_trips_alloc_critical(struct acpi_therma
- 							      struct thermal_trip *trips,
- 							      int *num_trips)
- {
--	acpi_status status = AE_OK;
--	unsigned long long temp;
-+	struct thermal_trip trip = {
-+		.type = THERMAL_TRIP_CRITICAL,
-+	};
-+
-+	int ret;
- 
- 	/*
- 	 * Module parameters disable the critical trip point
-@@ -268,14 +271,12 @@ static struct thermal_trip *acpi_thermal_trips_alloc_critical(struct acpi_therma
- 	if (crt < 0)
- 		goto out;
- 
--	status = acpi_evaluate_integer(tz->device->handle, "_CRT", NULL, &temp);
--	if (ACPI_FAILURE(status)) {
--		acpi_handle_debug(tz->device->handle, "No critical threshold\n");
-+	ret = thermal_acpi_critical_trip_temp(tz->device->handle, &trip.temperature);
-+	if (ret)
- 		goto out;
--	}
--
--	if (temp <= 2732) {
--		pr_info(FW_BUG "Invalid critical threshold (%llu)\n", temp);
-+	
-+	if (trip.temperature <= 0) {
-+		pr_info(FW_BUG "Invalid critical threshold (%d)\n", trip.temperature);
- 		goto out;
- 	}
- 
-@@ -283,10 +284,7 @@ static struct thermal_trip *acpi_thermal_trips_alloc_critical(struct acpi_therma
- 	if (!trips)
- 		goto out;
- 
--	memset(&trips[*num_trips], 0, sizeof(*trips));
--
--	trips[*num_trips].temperature = deci_kelvin_to_millicelsius(temp);
--	trips[*num_trips].type = THERMAL_TRIP_CRITICAL;
-+	trips[*num_trips] = trip; /* structure copy */
- 
- 	if (crt > 0)
- 		acpi_thermal_trips_override(&trips[*num_trips], crt * MILLI);
-@@ -300,23 +298,21 @@ static struct thermal_trip *acpi_thermal_trips_alloc_hot(struct acpi_thermal *tz
- 							 struct thermal_trip *trips,
- 							 int *num_trips)
- {
--	acpi_status status;
--	unsigned long long temp;
-+	struct thermal_trip trip = {
-+		.type = THERMAL_TRIP_HOT,
-+	};
- 
--	status = acpi_evaluate_integer(tz->device->handle, "_HOT", NULL, &temp);
--	if (ACPI_FAILURE(status)) {
--		acpi_handle_debug(tz->device->handle, "No hot threshold\n");
-+	int ret;
-+
-+	ret = thermal_acpi_hot_trip_temp(tz->device->handle, &trip.temperature);
-+	if (ret)
- 		goto out;
--	}
- 
- 	trips = krealloc(trips, sizeof(*trips) * (*num_trips + 1), GFP_KERNEL);
- 	if (!trips)
- 		goto out;
- 
--	memset(&trips[*num_trips], 0, sizeof(*trips));
--
--	trips[*num_trips].temperature = deci_kelvin_to_millicelsius(temp);
--	trips[*num_trips].type = THERMAL_TRIP_HOT;
-+	trips[*num_trips] = trip; /* structure copy */
- 	
- 	(*num_trips)++;
- out:
-@@ -327,9 +323,12 @@ static struct thermal_trip *acpi_thermal_trips_alloc_passive(struct acpi_thermal
- 							     struct thermal_trip *trips,
- 							     int *num_trips)
- {
--	struct acpi_handle_list devices;
- 	acpi_status status;
--	unsigned long long temp;
-+	struct acpi_handle_list devices;
-+	struct thermal_trip trip = {
-+		.type = THERMAL_TRIP_PASSIVE
-+	};
-+	int ret;
- 
- 	/*
- 	 * Module parameters disable all passive trip points
-@@ -337,26 +336,21 @@ static struct thermal_trip *acpi_thermal_trips_alloc_passive(struct acpi_thermal
- 	if (psv < 0)
- 		goto out;
- 	
--	status = acpi_evaluate_integer(tz->device->handle, "_PSV", NULL, &temp);
--	if (ACPI_FAILURE(status)) {
--		acpi_handle_debug(tz->device->handle, "No passive threshold\n");
-+	ret = thermal_acpi_passive_trip_temp(tz->device->handle, &trip.temperature);
-+	if (ret)
- 		goto out;
--	}
--
-+	
- 	status = acpi_evaluate_reference(tz->device->handle, "_PSL", NULL, &devices);
- 	if (ACPI_FAILURE(status)) {
- 		acpi_handle_debug(tz->device->handle, "No passive device associated\n");
- 		goto out;
- 	}
--	
-+
- 	trips = krealloc(trips, sizeof(*trips) * (*num_trips + 1), GFP_KERNEL);
- 	if (!trips)
- 		goto out;
- 
--	memset(&trips[*num_trips], 0, sizeof(*trips));
--
--	trips[*num_trips].temperature = deci_kelvin_to_millicelsius(temp);
--	trips[*num_trips].type = THERMAL_TRIP_PASSIVE;
-+	trips[*num_trips] = trip; /* structure copy */	
- 	
- 	(*num_trips)++;
- out:
-@@ -367,10 +361,9 @@ static struct thermal_trip *acpi_thermal_trips_alloc_active(struct acpi_thermal
- 							    struct thermal_trip *trips,
- 							    int *num_trips)
- {
--	struct acpi_handle_list devices;
- 	acpi_status status;
--	unsigned long long temp;
--	int i;
-+	struct acpi_handle_list devices;
-+	int i, ret;
- 
- 	/*
- 	 * Module parameters disable all active trip points
-@@ -379,12 +372,13 @@ static struct thermal_trip *acpi_thermal_trips_alloc_active(struct acpi_thermal
- 		return trips;
- 
- 	for (i = 0; i < ACPI_THERMAL_MAX_ACTIVE; i++) {
-+		struct thermal_trip trip = {
-+			.type = THERMAL_TRIP_ACTIVE,
-+		};
- 		char name[5];
- 
--		sprintf(name, "_AC%d", i);
--
--		status = acpi_evaluate_integer(tz->device->handle, name, NULL, &temp);
--		if (ACPI_FAILURE(status))
-+		ret = thermal_acpi_active_trip_temp(tz->device->handle, i , &trip.temperature);
-+		if (ret)
- 			break;
- 
- 		sprintf(name, "_AL%d", i);
-@@ -394,16 +388,13 @@ static struct thermal_trip *acpi_thermal_trips_alloc_active(struct acpi_thermal
- 			acpi_handle_info(tz->device->handle, "No _AL%d defined for _AC%d\n", i, i);
- 			break;
- 		}
--
-+		
- 		trips = krealloc(trips, sizeof(*trips) * (*num_trips + 1), GFP_KERNEL);
- 		if (!trips)
- 			break;
- 
--		memset(&trips[*num_trips], 0, sizeof(*trips));
-+		trips[*num_trips] = trip; /* structure copy */	
- 
--		trips[*num_trips].temperature = deci_kelvin_to_millicelsius(temp);
--		trips[*num_trips].type = THERMAL_TRIP_ACTIVE;
--	
- 		(*num_trips)++;
- 	}
- 
--- 
-2.34.1
-
+Thanks
+Nic
