@@ -2,93 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 529EC68A02F
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 18:20:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FCBD68A032
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 18:24:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233744AbjBCRU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 12:20:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34168 "EHLO
+        id S233186AbjBCRYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 12:24:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232448AbjBCRUz (ORCPT
+        with ESMTP id S231511AbjBCRYt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 12:20:55 -0500
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E29D18B17;
-        Fri,  3 Feb 2023 09:20:54 -0800 (PST)
-Received: by mail-ot1-x331.google.com with SMTP id k91-20020a9d19e4000000b0068bca1294aaso1550530otk.8;
-        Fri, 03 Feb 2023 09:20:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uBFW9j1K4ay/fyk8RRmaUzvcSTxtx0DjoFk98LpIzlE=;
-        b=XzM5UMtU8zsLoV581At1cESCgD8+GnpzJIp0HACv5i81ScqYJts1PlErkyE7gqq2u8
-         J0NmRUAVlw5TwxEbdG3JD5Vaz1ZLGUn542R79WI3IrTkeLYxNWUxMDxP7xJiFPRs404J
-         a9fXZw8GDYe7/ARsERbsujmQmJ62+Sjt85oJFyOkd5bGEo7sCAQNK8PrfcIMv1XTNy8r
-         EmXzjtGwjV2eIXiIjk2WQG7KyHsvblM3XP91hG8f8wHvnc7ta1zhzusI7Eq3uXztko6V
-         Mb9pRcKIdrKx0TefqEX7qvYp/JUWPYPhZRr1VfgPnFqgumTSRWjkoVKWhD3Gqmzg/dhq
-         wkdw==
+        Fri, 3 Feb 2023 12:24:49 -0500
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 963AE25E38;
+        Fri,  3 Feb 2023 09:24:48 -0800 (PST)
+Received: by mail-oi1-f175.google.com with SMTP id r9so4698389oig.12;
+        Fri, 03 Feb 2023 09:24:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uBFW9j1K4ay/fyk8RRmaUzvcSTxtx0DjoFk98LpIzlE=;
-        b=xqBHj40oucqIr/cBWif9qFjVOfAVJtTpUQEsYjn5cVY3A9HzI9MvVl2FUTn2/VEe/9
-         xkRiEbkARiGE5CNQezF9yFZ2EAnqO4hToaRkXmWR4CbpWHvJhdnIJCWMY5RZP/2o60oE
-         VOUqxcUmOL7+YL6Xi3OucbAZtt5cdAqbIh0LOI5AuFrODLoj3FAUmbPBQmUMVQw0AsIM
-         q1KEEW2gEZlGGVHCxgPUWdnq+fiQ83EksnSy5hDXsN44N4yGLaC0vBUM2sfjKsecoo8C
-         CRGHLlvFaY9aOUdC2uYowg44ophYH8Q4221xHd2wGvxl1/SIqw8f2kTbCGTmhnXBXzwu
-         jcHw==
-X-Gm-Message-State: AO0yUKVxL+qV+jg/e5Ei8168oammebBKZQHaF/x48qZTIRj1fKB1PKJ3
-        p40FgKU10KVaXMBJENtRkuk=
-X-Google-Smtp-Source: AK7set9AidXA4NehQTMKgjQrvwNVW3BN71g3Gde98+Im1ser4mqZiya9kyMtAVXwq04zVvTkZDAD/A==
-X-Received: by 2002:a05:6830:26f0:b0:688:4670:e964 with SMTP id m48-20020a05683026f000b006884670e964mr5870691otu.27.1675444853908;
-        Fri, 03 Feb 2023 09:20:53 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k5-20020a9d7dc5000000b0068bcb44e7f5sm1297480otn.68.2023.02.03.09.20.53
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FN82DGNXcvlnZ81poKIJxG9Xk/mwZRUCAdIqtBC+Iks=;
+        b=hRDEP48h+9MCGueSX8xCW8UM56FAiZgBXNm0zBPeRUKx5F/lgArfUDR4l1gKa1sCcp
+         evmKXTfHZu6fA/c5X8F+v7GCxz4D+JBylnA/zkAtI0lXe6lPKcjVqpVmfv/xeLVQFxnJ
+         W7yq/OKsSgBHfvPKQvaxkMGzrDGlIrXwKqxr2tRypjrSIgE/s5Zh5kglzBWZCKZQkBdH
+         i5TbOw9wvLr0JRmmzNgQdqQYOCXP8OiP+i5/ZCatkeIthImr7BFvKiKkBfCIB+x6s/p+
+         VXVbzGUep1XYreIRVEzRh0zce5BPZPkksXdjyjH6guPshMESfyMt8gNU77KlRk/L3cgG
+         jFHw==
+X-Gm-Message-State: AO0yUKWFDfH8hWTfc8zz8unF698aEwU3OpwGVIuWB3ssYaV+kpcf9Wxg
+        YqeP8hIw2ch+bqX5eq0gsDRIXWehxw==
+X-Google-Smtp-Source: AK7set/Gz34X3w9DjduLqsxc/DN/1TvZhNcPxI4RCjP+HRyku00Rm9Jzpri+oSjh4YNRMI3rMFi1CA==
+X-Received: by 2002:a54:4792:0:b0:364:862d:29c5 with SMTP id o18-20020a544792000000b00364862d29c5mr5123147oic.26.1675445086466;
+        Fri, 03 Feb 2023 09:24:46 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id w1-20020a056808090100b0037887ca2150sm1015853oih.22.2023.02.03.09.24.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 09:20:53 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 3 Feb 2023 09:20:52 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 4.19 00/79] 4.19.272-rc2 review
-Message-ID: <20230203172052.GC1500930@roeck-us.net>
-References: <20230203170324.096985239@linuxfoundation.org>
+        Fri, 03 Feb 2023 09:24:46 -0800 (PST)
+Received: (nullmailer pid 477258 invoked by uid 1000);
+        Fri, 03 Feb 2023 17:24:45 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Frank Rowand <frowand.list@gmail.com>
+Cc:     Kees Cook <keescook@chromium.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] scripts/dtc: Update to upstream version v1.6.1-66-gabbd523bae6e
+Date:   Fri,  3 Feb 2023 11:24:29 -0600
+Message-Id: <20230203172430.474431-1-robh@kernel.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230203170324.096985239@linuxfoundation.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 06:04:53PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.19.272 release.
-> There are 79 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sun, 05 Feb 2023 17:03:03 +0000.
-> Anything received after that time might be too late.
-> 
+This adds the following commits from upstream:
 
-Ah, I was too late. The ia64 problem reported against the 5.4.y
-release candidate is seen in here and against v4.14.y as well.
+abbd523bae6e pylibfdt: Work-around SWIG limitations with flexible arrays
+a41509bea3e7 libfdt: Replace deprecated 0-length arrays with proper flexible arrays
+2cd89f862cdb dtc: Warning rather than error on possible truncation of cell values
 
-Guenter
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ scripts/dtc/dtc-parser.y  | 11 ++++++++---
+ scripts/dtc/libfdt/fdt.h  |  4 ++--
+ scripts/dtc/version_gen.h |  2 +-
+ 3 files changed, 11 insertions(+), 6 deletions(-)
+
+diff --git a/scripts/dtc/dtc-parser.y b/scripts/dtc/dtc-parser.y
+index 46457d4bc0aa..bff1337ec266 100644
+--- a/scripts/dtc/dtc-parser.y
++++ b/scripts/dtc/dtc-parser.y
+@@ -404,9 +404,14 @@ arrayprefix:
+ 				 * within the mask to one (i.e. | in the
+ 				 * mask), all bits are one.
+ 				 */
+-				if (($2 > mask) && (($2 | mask) != -1ULL))
+-					ERROR(&@2, "Value out of range for"
+-					      " %d-bit array element", $1.bits);
++				if (($2 > mask) && (($2 | mask) != -1ULL)) {
++					char *loc = srcpos_string(&@2);
++					fprintf(stderr,
++						"WARNING: %s: Value 0x%016" PRIx64
++						" truncated to 0x%0*" PRIx64 "\n",
++						loc, $2, $1.bits / 4, ($2 & mask));
++					free(loc);
++				}
+ 			}
+ 
+ 			$$.data = data_append_integer($1.data, $2, $1.bits);
+diff --git a/scripts/dtc/libfdt/fdt.h b/scripts/dtc/libfdt/fdt.h
+index f2e68807f277..0c91aa7f67b5 100644
+--- a/scripts/dtc/libfdt/fdt.h
++++ b/scripts/dtc/libfdt/fdt.h
+@@ -35,14 +35,14 @@ struct fdt_reserve_entry {
+ 
+ struct fdt_node_header {
+ 	fdt32_t tag;
+-	char name[0];
++	char name[];
+ };
+ 
+ struct fdt_property {
+ 	fdt32_t tag;
+ 	fdt32_t len;
+ 	fdt32_t nameoff;
+-	char data[0];
++	char data[];
+ };
+ 
+ #endif /* !__ASSEMBLY */
+diff --git a/scripts/dtc/version_gen.h b/scripts/dtc/version_gen.h
+index 0f303087b043..99614ec1a289 100644
+--- a/scripts/dtc/version_gen.h
++++ b/scripts/dtc/version_gen.h
+@@ -1 +1 @@
+-#define DTC_VERSION "DTC 1.6.1-g55778a03"
++#define DTC_VERSION "DTC 1.6.1-gabbd523b"
+-- 
+2.39.0
+
