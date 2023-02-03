@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EED026894BA
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 11:05:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC1C66894BD
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 11:05:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233152AbjBCKFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 05:05:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55374 "EHLO
+        id S233142AbjBCKFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 05:05:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233150AbjBCKEw (ORCPT
+        with ESMTP id S233160AbjBCKEx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 05:04:52 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA837AB8
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 02:04:35 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id q9so3294718pgq.5
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 02:04:35 -0800 (PST)
+        Fri, 3 Feb 2023 05:04:53 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CD4EC66C
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 02:04:38 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id g9so3169419pfk.13
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 02:04:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=igel-co-jp.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kvkPNyoI21L1O1ZXqnPivyYsybrN0iSYwKMSsS9iBxY=;
-        b=TqjFeV9NPabsrfxavmrb7rr4cepsXNVmar2XDnjWglQ4DpUZOEWO0vbof2f6/PWByH
-         TWPQ6ZPNP6HE8OHwVXgsN4cLeRU45MuHFl7+sXcxz/goXguLdPUp5EaQdczVZii0TnRU
-         56+g060uaBaRC/sQePmL3oY2BIg34qhXBIIWyRDe2ZJzg3OPQbZuMcuHyZJUj2ri7cf0
-         yuNBhzZootgd4cpgTrxv8MnVNn8cRif/DT/a2lN1/C7YIzMTvlQpeAyQHnRCn1WWpJru
-         oR0UGu6lSvrN2WUAygdOHInk27VqgNpQPc+kJQyzjoYfNXIN4ID5G5JP2aK3zvTaHo0A
-         1yeA==
+        bh=mjcd+Oav0UBf7mF+MYUjzAhzd7Tic9squ8cey9gaJ5E=;
+        b=ThLyZEMs5MpZFZwPqY0NLPfCasQMJUPGmqHeF2lg8Zxyk9eydG5QL1/19biFSQMuNh
+         cwJaViWMh/eInwndgugBtyEb2HXciI6TDZoSOZsLdlhnbkAigQe68tzq196AyyQnvwtQ
+         ERabOd6Ot5Z3u8MqoFkVg2eksuQbknF+NYybq3A+ZGXHmbC0t2RwZdFjmmPuQqH9BBdn
+         4t2SoDke11SXIjKJMtbY/J7nnOQpfyDboE8NHeORDNdfvm//dO7iUxbWGVle5wfjdWmm
+         lV9DsvV4xCcksTJoLkrhEt9y+gisJQGs/Tf/tTXl4TsYa1YBkYegOm292cpEZfTkY4vK
+         uHuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kvkPNyoI21L1O1ZXqnPivyYsybrN0iSYwKMSsS9iBxY=;
-        b=qHqCX1XutwcNs5Ohp7h9zJ+A7z/tVBq/fmOgIIoC/tQ9WmvrlRxFU3z0APxAYMriN8
-         g1z/NFRLHGgl4ZQ8JJ/Yg1c57kLO1RMQ/FVQBUwtPGj8ieG5x0WgiU3V2qiyoTL2b2LD
-         95JJkur8ZuymJrHKC2aZU2+SvEEOgrbBUlFgBUA3NdMLwdIXvcDwKespvLLSYuJOISwU
-         vayPZf/U6/sDsDPXAF7dhMNhOjsfqnxMqahrwoXQsmMVw2bdvrQAoSM1QGIdfpwIPT1o
-         flQ/h1Z+8BIpES4AcIEd9/wL5H3QgZFRPK7Rc9ByU1FIPCO5juuZJEij4nNe6hYAkBx7
-         2NKg==
-X-Gm-Message-State: AO0yUKXHZAmmn3pjKXaASjss2NZiBTfYYfd+qYZnfDWUpIMeWdys/FT3
-        AAg+i3hR9PPVArAqlAp+/03KLA==
-X-Google-Smtp-Source: AK7set+mf9v1p9GMNQBqGbUdP6b8/Tyam+p9edVCarZOEBqKLwxUJFvaDV8vt4ESUw73/JkS5RjeOw==
-X-Received: by 2002:a05:6a00:23d6:b0:593:d111:a071 with SMTP id g22-20020a056a0023d600b00593d111a071mr10889148pfc.9.1675418674729;
-        Fri, 03 Feb 2023 02:04:34 -0800 (PST)
+        bh=mjcd+Oav0UBf7mF+MYUjzAhzd7Tic9squ8cey9gaJ5E=;
+        b=2i7xguJtW83Q/EvtP+u7FbiMSKh3YNW3uusJRLipSlw4IvEZPuXllMC1SPd3IiNzN1
+         PBkhqqEwa0B7aqhZQRJeWynyOD4PAWf3H6ltYt9QpIFkwgNfa/0c+pjAd3cHd5WoE6o7
+         kJFZtzyZuqoZyr8WrA9BZYailsovfXF8Wn5tLzuZtroQXYRP0QeasAIq/2IqRHoIw/F0
+         /LEWXCngoaI+LTDcQEh/amGhkhm3sgK/BEjnjMfA5OlIu5GzJaoDNx+3e1T5Dz54R+L6
+         cmyyD041RpuS+E9DNCW02hIzmM1pjijHWAgpvl4O3NH4ACmdve0bCk4vwLP5+n53nGhV
+         ePSA==
+X-Gm-Message-State: AO0yUKV323Q384HwDBvBDtSS+K75CVmABh+EIVdXv47nvoQ7XYKsY/Bd
+        Ra0G7jfwQQU3sZnm1RC5dD6nBg==
+X-Google-Smtp-Source: AK7set/Kj4wCo73JmugdcJhI0++p/hgbNoSnL0M6LUdA+Sx2OQD9zznOb3QIA6X99aX3bEGaycb6qA==
+X-Received: by 2002:aa7:88c8:0:b0:594:1769:e9a0 with SMTP id k8-20020aa788c8000000b005941769e9a0mr12315216pff.17.1675418678084;
+        Fri, 03 Feb 2023 02:04:38 -0800 (PST)
 Received: from tyrell.hq.igel.co.jp (napt.igel.co.jp. [219.106.231.132])
-        by smtp.gmail.com with ESMTPSA id d3-20020aa797a3000000b0058d8f23af26sm1278885pfq.157.2023.02.03.02.04.31
+        by smtp.gmail.com with ESMTPSA id d3-20020aa797a3000000b0058d8f23af26sm1278885pfq.157.2023.02.03.02.04.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 02:04:34 -0800 (PST)
+        Fri, 03 Feb 2023 02:04:37 -0800 (PST)
 From:   Shunsuke Mie <mie@igel.co.jp>
 To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
 Cc:     =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
@@ -64,9 +64,9 @@ Cc:     =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
         Takanari Hayama <taki@igel.co.jp>,
         linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
         virtualization@lists.linux-foundation.org
-Subject: [RFC PATCH 2/4] virtio_ring: remove const from vring getter
-Date:   Fri,  3 Feb 2023 19:04:16 +0900
-Message-Id: <20230203100418.2981144-3-mie@igel.co.jp>
+Subject: [RFC PATCH 3/4] PCI: endpoint: Introduce virtio library for EP functions
+Date:   Fri,  3 Feb 2023 19:04:17 +0900
+Message-Id: <20230203100418.2981144-4-mie@igel.co.jp>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230203100418.2981144-1-mie@igel.co.jp>
 References: <20230203100418.2981144-1-mie@igel.co.jp>
@@ -81,43 +81,201 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are some method to manage the virto ring in Linux kernel. e.g. vhost
-and vringh. Remove const from the getter in order to control vring with
-other APIs, such as vringh.
+Add a new library to access a virtio ring located on PCIe host memory. The
+library generates struct pci_epf_vringh that is introduced in this patch.
+The struct has a vringh member, so vringh APIs can be used to access the
+virtio ring.
 
 Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
 Signed-off-by: Takanari Hayama <taki@igel.co.jp>
 ---
- drivers/virtio/virtio_ring.c | 2 +-
- include/linux/virtio.h       | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/pci/endpoint/Kconfig          |   7 ++
+ drivers/pci/endpoint/Makefile         |   1 +
+ drivers/pci/endpoint/pci-epf-virtio.c | 113 ++++++++++++++++++++++++++
+ include/linux/pci-epf-virtio.h        |  25 ++++++
+ 4 files changed, 146 insertions(+)
+ create mode 100644 drivers/pci/endpoint/pci-epf-virtio.c
+ create mode 100644 include/linux/pci-epf-virtio.h
 
-diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-index 2e7689bb933b..aa0c455d402b 100644
---- a/drivers/virtio/virtio_ring.c
-+++ b/drivers/virtio/virtio_ring.c
-@@ -2857,7 +2857,7 @@ dma_addr_t virtqueue_get_used_addr(struct virtqueue *_vq)
- EXPORT_SYMBOL_GPL(virtqueue_get_used_addr);
+diff --git a/drivers/pci/endpoint/Kconfig b/drivers/pci/endpoint/Kconfig
+index 17bbdc9bbde0..07276dcc43c8 100644
+--- a/drivers/pci/endpoint/Kconfig
++++ b/drivers/pci/endpoint/Kconfig
+@@ -28,6 +28,13 @@ config PCI_ENDPOINT_CONFIGFS
+ 	   configure the endpoint function and used to bind the
+ 	   function with a endpoint controller.
  
- /* Only available for split ring */
--const struct vring *virtqueue_get_vring(struct virtqueue *vq)
-+struct vring *virtqueue_get_vring(struct virtqueue *vq)
- {
- 	return &to_vvq(vq)->split.vring;
- }
-diff --git a/include/linux/virtio.h b/include/linux/virtio.h
-index dcab9c7e8784..83530b7bc2e9 100644
---- a/include/linux/virtio.h
-+++ b/include/linux/virtio.h
-@@ -88,7 +88,7 @@ unsigned int virtqueue_get_vring_size(struct virtqueue *vq);
++config PCI_ENDPOINT_VIRTIO
++	tristate
++	depends on PCI_ENDPOINT
++	select VHOST_IOMEM
++	help
++	  TODO update this comment
++
+ source "drivers/pci/endpoint/functions/Kconfig"
  
- bool virtqueue_is_broken(struct virtqueue *vq);
+ endmenu
+diff --git a/drivers/pci/endpoint/Makefile b/drivers/pci/endpoint/Makefile
+index 95b2fe47e3b0..95712f0a13d1 100644
+--- a/drivers/pci/endpoint/Makefile
++++ b/drivers/pci/endpoint/Makefile
+@@ -4,5 +4,6 @@
+ #
  
--const struct vring *virtqueue_get_vring(struct virtqueue *vq);
-+struct vring *virtqueue_get_vring(struct virtqueue *vq);
- dma_addr_t virtqueue_get_desc_addr(struct virtqueue *vq);
- dma_addr_t virtqueue_get_avail_addr(struct virtqueue *vq);
- dma_addr_t virtqueue_get_used_addr(struct virtqueue *vq);
+ obj-$(CONFIG_PCI_ENDPOINT_CONFIGFS)	+= pci-ep-cfs.o
++obj-$(CONFIG_PCI_ENDPOINT_VIRTIO)	+= pci-epf-virtio.o
+ obj-$(CONFIG_PCI_ENDPOINT)		+= pci-epc-core.o pci-epf-core.o\
+ 					   pci-epc-mem.o functions/
+diff --git a/drivers/pci/endpoint/pci-epf-virtio.c b/drivers/pci/endpoint/pci-epf-virtio.c
+new file mode 100644
+index 000000000000..7134ca407a03
+--- /dev/null
++++ b/drivers/pci/endpoint/pci-epf-virtio.c
+@@ -0,0 +1,113 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Virtio library for PCI Endpoint function
++ */
++#include <linux/kernel.h>
++#include <linux/pci-epf-virtio.h>
++#include <linux/pci-epc.h>
++#include <linux/virtio_pci.h>
++
++static void __iomem *epf_virtio_map_vq(struct pci_epf *epf, u32 pfn,
++				       size_t size, phys_addr_t *vq_phys)
++{
++	int err;
++	phys_addr_t vq_addr;
++	size_t vq_size;
++	void __iomem *vq_virt;
++
++	vq_addr = (phys_addr_t)pfn << VIRTIO_PCI_QUEUE_ADDR_SHIFT;
++
++	vq_size = vring_size(size, VIRTIO_PCI_VRING_ALIGN) + 100;
++
++	vq_virt = pci_epc_mem_alloc_addr(epf->epc, vq_phys, vq_size);
++	if (!vq_virt) {
++		pr_err("Failed to allocate epc memory\n");
++		return ERR_PTR(-ENOMEM);
++	}
++
++	err = pci_epc_map_addr(epf->epc, epf->func_no, epf->vfunc_no, *vq_phys,
++			       vq_addr, vq_size);
++	if (err) {
++		pr_err("Failed to map virtuqueue to local");
++		goto err_free;
++	}
++
++	return vq_virt;
++
++err_free:
++	pci_epc_mem_free_addr(epf->epc, *vq_phys, vq_virt, vq_size);
++
++	return ERR_PTR(err);
++}
++
++static void epf_virtio_unmap_vq(struct pci_epf *epf, void __iomem *vq_virt,
++				phys_addr_t vq_phys, size_t size)
++{
++	pci_epc_unmap_addr(epf->epc, epf->func_no, epf->vfunc_no, vq_phys);
++	pci_epc_mem_free_addr(epf->epc, vq_phys, vq_virt,
++			      vring_size(size, VIRTIO_PCI_VRING_ALIGN));
++}
++
++/**
++ * pci_epf_virtio_alloc_vringh() - allocate epf vringh from @pfn
++ * @epf: the EPF device that communicates to host virtio dirver
++ * @features: the virtio features of device
++ * @pfn: page frame number of virtqueue located on host memory. It is
++ *		passed during virtqueue negotiation.
++ * @size: a length of virtqueue
++ */
++struct pci_epf_vringh *pci_epf_virtio_alloc_vringh(struct pci_epf *epf,
++						   u64 features, u32 pfn,
++						   size_t size)
++{
++	int err;
++	struct vring vring;
++	struct pci_epf_vringh *evrh;
++
++	evrh = kmalloc(sizeof(*evrh), GFP_KERNEL);
++	if (!evrh) {
++		err = -ENOMEM;
++		goto err_unmap_vq;
++	}
++
++	evrh->size = size;
++
++	evrh->virt = epf_virtio_map_vq(epf, pfn, size, &evrh->phys);
++	if (IS_ERR(evrh->virt))
++		return evrh->virt;
++
++	vring_init(&vring, size, evrh->virt, VIRTIO_PCI_VRING_ALIGN);
++
++	err = vringh_init_iomem(&evrh->vrh, features, size, false, GFP_KERNEL,
++				vring.desc, vring.avail, vring.used);
++	if (err)
++		goto err_free_epf_vq;
++
++	return evrh;
++
++err_free_epf_vq:
++	kfree(evrh);
++
++err_unmap_vq:
++	epf_virtio_unmap_vq(epf, evrh->virt, evrh->phys, evrh->size);
++
++	return ERR_PTR(err);
++}
++EXPORT_SYMBOL_GPL(pci_epf_virtio_alloc_vringh);
++
++/**
++ * pci_epf_virtio_free_vringh() - release allocated epf vring
++ * @epf: the EPF device that communicates to host virtio dirver
++ * @evrh: epf vringh to free
++ */
++void pci_epf_virtio_free_vringh(struct pci_epf *epf,
++				struct pci_epf_vringh *evrh)
++{
++	epf_virtio_unmap_vq(epf, evrh->virt, evrh->phys, evrh->size);
++	kfree(evrh);
++}
++EXPORT_SYMBOL_GPL(pci_epf_virtio_free_vringh);
++
++MODULE_DESCRIPTION("PCI EP Virtio Library");
++MODULE_AUTHOR("Shunsuke Mie <mie@igel.co.jp>");
++MODULE_LICENSE("GPL");
+diff --git a/include/linux/pci-epf-virtio.h b/include/linux/pci-epf-virtio.h
+new file mode 100644
+index 000000000000..ae09087919a9
+--- /dev/null
++++ b/include/linux/pci-epf-virtio.h
+@@ -0,0 +1,25 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * PCI Endpoint Function (EPF) for virtio definitions
++ */
++#ifndef __LINUX_PCI_EPF_VIRTIO_H
++#define __LINUX_PCI_EPF_VIRTIO_H
++
++#include <linux/types.h>
++#include <linux/vringh.h>
++#include <linux/pci-epf.h>
++
++struct pci_epf_vringh {
++	struct vringh vrh;
++	void __iomem *virt;
++	phys_addr_t phys;
++	size_t size;
++};
++
++struct pci_epf_vringh *pci_epf_virtio_alloc_vringh(struct pci_epf *epf,
++						   u64 features, u32 pfn,
++						   size_t size);
++void pci_epf_virtio_free_vringh(struct pci_epf *epf,
++				struct pci_epf_vringh *evrh);
++
++#endif // __LINUX_PCI_EPF_VIRTIO_H
 -- 
 2.25.1
 
