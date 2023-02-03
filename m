@@ -2,96 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0962A68999D
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 14:21:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D46086899A4
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 14:23:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230317AbjBCNV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 08:21:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42286 "EHLO
+        id S232254AbjBCNXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 08:23:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231989AbjBCNVY (ORCPT
+        with ESMTP id S229785AbjBCNW7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 08:21:24 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A356893AE2;
-        Fri,  3 Feb 2023 05:21:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=2HifOJA9xEveZM8S1gjqMUhg2gHpRif7oy7buFyjGZM=; b=tyPVIsUVRpIoIoazplnubKmX1v
-        VwBTgmYii/7IPUTEh3FWs/+3N1G7cKSAAwVe5uNCqYKeI5R5ip0/9MzqHlwdJQb1C/1gHW0SVBgZD
-        TTNWZnJdMQQ+nx9ncuzJ4NH67LYSnA5bg+XBwru4I25XIPz8EY3tDHScxiFgW3OBr5d+97Or/4Pe8
-        vW784qBalVKSP+hbLlpcQpt3/rC47rVDm3QvjeTJ8u2q9haDI7oHiRDw05qhuodbvBiKedIqGpPAd
-        IvuCLnuK7HNTfy/Txxb8YdoJ6dHlD/16YEZ1SYt+fl7Ryd0Ix8Jzhp8YXQfvgVjMyBHZI43i0mIGF
-        bWT8hCpg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pNw0D-00EKdy-V5; Fri, 03 Feb 2023 13:21:18 +0000
-Date:   Fri, 3 Feb 2023 13:21:17 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Andreas Dilger <adilger@dilger.ca>
-Cc:     linux-fsdevel@vger.kernel.org, linux-afs@lists.infradead.org,
-        linux-btrfs@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-mm@kvack.org, Hugh Dickins <hughd@google.com>,
-        linux-kernel@vger.kernel.org, fstests@vger.kernel.org
-Subject: Re: [PATCH 0/5] Fix a minor POSIX conformance problem
-Message-ID: <Y90KTSXCKGd8Gaqc@casper.infradead.org>
-References: <20230202204428.3267832-1-willy@infradead.org>
- <DCEDB8BB-8D10-4E17-9C27-AE48718CB82F@dilger.ca>
+        Fri, 3 Feb 2023 08:22:59 -0500
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B088D8B7FC;
+        Fri,  3 Feb 2023 05:22:54 -0800 (PST)
+Received: from localhost.localdomain (unknown [91.193.176.190])
+        by mail.ispras.ru (Postfix) with ESMTPSA id 584D140755C7;
+        Fri,  3 Feb 2023 13:22:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 584D140755C7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
+        s=default; t=1675430572;
+        bh=/mqhUR6IYx88WP+hi34PVWHFd7gTVLUoKCSdY6SQTq8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=dYNR8/UxoBVusxbvHEZSi4mOvOFpfigueLHO/82MWEBGbuXWT6Va/MzJIDpSxOTgg
+         MyPSWLb/zX8WLYZgg3xgJatTGCDl4NsxYcQqp8GD7dw+NXVBNskm4rE9IueYevM7W8
+         gZaktnxTPFsLh5XG5o+DgibjSsnMMmMXv35RQg14=
+From:   Anton Gusev <aagusev@ispras.ru>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Anton Gusev <aagusev@ispras.ru>,
+        Jonathan Richardson <jonathan.richardson@broadcom.com>,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lvc-project@linuxtesting.org
+Subject: [PATCH] efi: fix potential NULL deref in efi_mem_reserve_persistent
+Date:   Fri,  3 Feb 2023 16:22:13 +0300
+Message-Id: <20230203132213.11758-1-aagusev@ispras.ru>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DCEDB8BB-8D10-4E17-9C27-AE48718CB82F@dilger.ca>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 04:08:49PM -0700, Andreas Dilger wrote:
-> On Feb 2, 2023, at 1:44 PM, Matthew Wilcox (Oracle) <willy@infradead.org> wrote:
-> > 
-> > POSIX requires that on ftruncate() expansion, the new bytes must read
-> > as zeroes.  If someone's mmap()ed the file and stored past EOF, for
-> > most filesystems the bytes in that page will be not-zero.  It's a
-> > pretty minor violation; someone could race you and write to the file
-> > between the ftruncate() call and you reading from it, but it's a bit
-> > of a QOI violation.
-> 
-> Is it possible to have mmap return SIGBUS for the writes beyond EOF?
+When iterating on a linked list, a result of memremap is dereferenced
+without checking it for NULL.
 
-Well, no.  The hardware only tells us about accesses on a per-page
-basis.  We could SIGBUS on writes that _start_ after EOF, but this
-test doesn't do that (it starts before EOF and extends past EOF).
-And once the page is mapped writable, there's no page fault taken
-for subsequent writes.
+This patch adds a check that falls back on allocating a new page in
+case memremap doesn't succeed.
 
-> On the one hand, that might indicate incorrect behavior of the application,
-> and on the other hand, it seems possible that the application doesn't
-> know it is writing beyond EOF and expects that data to be read back OK?
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-POSIX says:
+Fixes: 18df7577adae ("efi/memreserve: deal with memreserve entries in unmapped memory")
+Signed-off-by: Anton Gusev <aagusev@ispras.ru>
+---
+ drivers/firmware/efi/efi.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-"The system shall always zero-fill any partial page at the end of an
-object. Further, the system shall never write out any modified portions
-of the last page of an object which are beyond its end. References
-within the address range starting at pa and continuing for len bytes to
-whole pages following the end of an object shall result in delivery of
-a SIGBUS signal."
-
-https://pubs.opengroup.org/onlinepubs/9699919799/functions/mmap.html
-
-So the application can't expect to read back anything it's written
-(and if you look at page writeback, we currently zero beyond EOF at
-writeback time).
-
-> IMHO, this seems better to stop the root of the problem (mmap() allowing
-> bad writes), rather than trying to fix it after the fact.
-
-That would be nice, but we're rather stuck with the hardware that exists.
-IIUC Cray-1 had byte-granularity range registers, but page-granularity
-is what we have.
+diff --git a/drivers/firmware/efi/efi.c b/drivers/firmware/efi/efi.c
+index a2b0cbc8741c..48d30c806d94 100644
+--- a/drivers/firmware/efi/efi.c
++++ b/drivers/firmware/efi/efi.c
+@@ -1007,6 +1007,8 @@ int __ref efi_mem_reserve_persistent(phys_addr_t addr, u64 size)
+ 	/* first try to find a slot in an existing linked list entry */
+ 	for (prsv = efi_memreserve_root->next; prsv; ) {
+ 		rsv = memremap(prsv, sizeof(*rsv), MEMREMAP_WB);
++		if (!rsv)
++			break;
+ 		index = atomic_fetch_add_unless(&rsv->count, 1, rsv->size);
+ 		if (index < rsv->size) {
+ 			rsv->entry[index].base = addr;
+-- 
+2.39.1
 
