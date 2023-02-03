@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA8BD6894AB
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 11:03:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 453F56894A7
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 11:03:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232198AbjBCKDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 05:03:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52242 "EHLO
+        id S233050AbjBCKC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 05:02:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233048AbjBCKCw (ORCPT
+        with ESMTP id S232883AbjBCKCv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 05:02:52 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4F293AF0;
-        Fri,  3 Feb 2023 02:02:48 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id ay1so3182855pfb.7;
-        Fri, 03 Feb 2023 02:02:48 -0800 (PST)
+        Fri, 3 Feb 2023 05:02:51 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1AD99AFF2;
+        Fri,  3 Feb 2023 02:02:46 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id k13so4772940plg.0;
+        Fri, 03 Feb 2023 02:02:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=qZM2kRnUMq/5JxUqAj92h8CE9Ys20GpS+bcD8sHbxGY=;
-        b=MoBwsiFh+PQwRc+ml6iuRDqdl5/NFddPFYIwdi7shrfKdxQojJlglETNVcoxcFbeq7
-         UQJl43hvF2JW+oxHrqZ+PYm/8YFRae3V0NrPaa5mTWI15gXYGncVGae9cCjpG4CRqMiA
-         9Pj/x71a+1UhhPgRzHSlzVh6c2OeFmzl6woB/kPM1ATos4UIxHPHaPyDOJtH8wzgGaPO
-         DkOEa4bmsfqANA9W0VKMMobCnKbwjAegUkH6avPb67JGriW6ySxlSlYNDw8esdDqQ5tq
-         zt+gRScqxTBmdYI7AEl0bwX4sIa2Wv8t0T5OYVEzI8GAeVcWMrOHsv8qoHjy703uRwYJ
-         T6rg==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1qkWGtLYvayKN703HCl0JMt6iGHIHxr57/oh7Oq4+1w=;
+        b=CjqBewy3gcGmReNeU0w+GPmiJvC0WCkFKlywd0p2UyqeTnW6NEGQYBP5lUGWg0C7Cz
+         SGnXepk9eVCAtVJviTMMSywzQNHUfau2lwG+7PwF3XO8kE8Hn3jkWYDwqpsT4aLuO7c3
+         FfCLw+O4V06Wkg0e1UY50V8GOZe3It2BGlyhjxPq0cU8T4dHLw/5bDSiZ5Bu/oIxv/PD
+         uITon58JWxVCIaptAAb19fcP5URnmDf7ON5MpqBa0cQgoKpf9FqToSDC+PQjCuJzlTkj
+         VICtolL+GqtltJq5/nQGjjnjG0crJWIxRa9tKit009UUOlfwA2C+3EiP31+1kwoPeAjZ
+         CmAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qZM2kRnUMq/5JxUqAj92h8CE9Ys20GpS+bcD8sHbxGY=;
-        b=yWpB9vR5kwExjTmrJujLyl8oQ9owArNYiFDrnATnlYitXOO+D7Q/HV0ozAHnRw4FuO
-         vjPfBIL0U1R/Wkm87YIoZdS2MH6VFpb/7CLoMSFShRUeNH1lltALWpuatIpP6NG8NRbr
-         jYUFL+kwiQbZRsqFjGZEuMrzagEVRdp7qCDj6LUZ4H31Cksa011H/7SHMqm6ZPnBn2Jt
-         aC4BVJvSeGJScTulQ2+d38Ce1U7aL3Byq4lUFuZ7HfXbTm5FJ2Zt1zCTIbx5aD7DWoNe
-         p0rOFJ6uI0TOl6ickmeI2cFMcrXbHfh76a6sTvo72rlUcn3uBfwd5wJopG1md8j7aJG6
-         cmmA==
-X-Gm-Message-State: AO0yUKXt8sNxrldSSuWMFXLgBGIP6Ydv/vdcUzXS0xJTLlfSWSU9hj8O
-        c8xvIScXhQZoCDnx/AL2Skg=
-X-Google-Smtp-Source: AK7set90g3y3uA58nDdc57a7ikxwpTnV8UfDIaEQROixtGcb1zi0SwtESdeyB1ms4FZFJ3dF2+AdIg==
-X-Received: by 2002:a05:6a00:1d85:b0:593:a3f1:7c04 with SMTP id z5-20020a056a001d8500b00593a3f17c04mr8761934pfw.8.1675418567508;
-        Fri, 03 Feb 2023 02:02:47 -0800 (PST)
-Received: from debian.me (subs10b-223-255-225-232.three.co.id. [223.255.225.232])
-        by smtp.gmail.com with ESMTPSA id h2-20020a056a00230200b005898fcb7c1bsm1322187pfh.177.2023.02.03.02.02.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1qkWGtLYvayKN703HCl0JMt6iGHIHxr57/oh7Oq4+1w=;
+        b=LWcblHXvFP9a8ov6uNKkwBgp41ch782QWQTmcD2p0mEOO/SQIFbevh3j3rnijF9Z1R
+         72ZmybqyZlaqoRwB+PoOoSEs912Wq6mgKfAq+XGC6PE7LYQThqSGNjytpL5AxYdd8Bv2
+         N2tQV1I39iMfHKd4m3xa2XR3V9Kbc1SSKTEY25q6g78fdaFyoLNtAZ5EeMvlWTAZdoNF
+         lgFbP+g9i+1DaA8q5gyW6tVpcBcis7AaPj+EUImov9PodqClJWjMo7YJe2BYb6KiepiM
+         fcukABj3Q7n4FYyzHGBhR5LGw4rWsWFCfuEurIGp0ZPMNtjK7Va/nzwio4TnFuHDhU/W
+         SZ3w==
+X-Gm-Message-State: AO0yUKVZqcl0O0o1HLfvGvpQnrnNQ42Bdbd4K37QSw1yTKf0aa2WrqsI
+        LvWvOTeL/+gXEWlp7RoEbAo=
+X-Google-Smtp-Source: AK7set+TY8YewT7QpLDSyIye4tTcIX+xyOgTtQnxf8cYJX2y7CHy2FUZyUr8czgco+Qgz8WleDPpNA==
+X-Received: by 2002:a17:903:1cb:b0:196:cea:487a with SMTP id e11-20020a17090301cb00b001960cea487amr12244038plh.53.1675418566245;
         Fri, 03 Feb 2023 02:02:46 -0800 (PST)
+Received: from debian.me (subs09b-223-255-225-232.three.co.id. [223.255.225.232])
+        by smtp.gmail.com with ESMTPSA id t1-20020a1709027fc100b00192a96f4916sm1169971plb.259.2023.02.03.02.02.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Feb 2023 02:02:45 -0800 (PST)
 Received: by debian.me (Postfix, from userid 1000)
-        id 01B981055BB; Fri,  3 Feb 2023 17:02:41 +0700 (WIB)
+        id 943FF1054A4; Fri,  3 Feb 2023 17:02:41 +0700 (WIB)
 From:   Bagas Sanjaya <bagasdotme@gmail.com>
 To:     Intel Graphics Development List <intel-gfx@lists.freedesktop.org>,
         DRI Development List <dri-devel@lists.freedesktop.org>,
@@ -77,13 +78,16 @@ Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Linus Walleij <linus.walleij@linaro.org>,
         Hans de Goede <hdegoede@redhat.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: [PATCH 0/3] htmldocs fixes for next-20230203
-Date:   Fri,  3 Feb 2023 17:02:12 +0700
-Message-Id: <20230203100215.31852-1-bagasdotme@gmail.com>
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: [PATCH 1/3] drm/i915/doc: Escape wildcard in method names
+Date:   Fri,  3 Feb 2023 17:02:13 +0700
+Message-Id: <20230203100215.31852-2-bagasdotme@gmail.com>
 X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230203100215.31852-1-bagasdotme@gmail.com>
+References: <20230203100215.31852-1-bagasdotme@gmail.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=683; i=bagasdotme@gmail.com; h=from:subject; bh=nAqFypAiZuomaGsgK+qGsO/TWXGkM+TOboIWhpu6fPE=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDMl3bs/Zx6DeNWPyHO/4uWqzTIRO5L1fe3PivJY695cfLve9 2OpQ2lHKwiDGxSArpsgyKZGv6fQuI5EL7WsdYeawMoEMYeDiFICJ9C1h+B84Z3HYYaODyTlujAbnnS eXeDVt2p+5bN2Vxf9OeC6IOjyBkWHPo5c2AmbLPigoTbEp/KQVInNX7vySwz7vK2fMMn66dg8fAA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2692; i=bagasdotme@gmail.com; h=from:subject; bh=N5hMks1GtbHQ4KjQuMm3ct/vgc6qjkdSsj8Qt7muNd4=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDMl3bi/T9n/L4m1z50o+N2Nmf+60zI1M4f2PbZftbaz7oLF+ 2tpfHaUsDGJcDLJiiiyTEvmaTu8yErnQvtYRZg4rE8gQBi5OAZhIQikjw61trnfPyZYL61RXMb20TP gY4WYdNO+K6wbJ/FN3m5MSUhkZOo+fdbl9OT5dW8fxxV3D+ynKQXq/qjx2zDt34XHYj4eq3AA=
 X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -96,22 +100,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Here are small htmldocs fixes for htmldocs warnings that are recently
-reported for next-20230203. Each patch can be applied separately by
-respective maintainers.
+Stephen Rothwell reported htmldocs warnings:
 
-Bagas Sanjaya (3):
-  drm/i915/doc: Escape wildcard in method names
-  drm/scheduler: Fix elapsed_ns kernel-doc error
-  media: v4l2-core: Describe privacy_led field of v4l2_subdev
+Documentation/gpu/i915:64: drivers/gpu/drm/i915/gt/intel_workarounds.c:32: WARNING: Inline emphasis start-string without end-string.
+Documentation/gpu/i915:64: drivers/gpu/drm/i915/gt/intel_workarounds.c:57: WARNING: Inline emphasis start-string without end-string.
+Documentation/gpu/i915:64: drivers/gpu/drm/i915/gt/intel_workarounds.c:66: WARNING: Inline emphasis start-string without end-string.
 
+Escape wildcards in *_ctx_workarounds_init(), *_gt_workarounds_init(), and
+*_whitelist_build() to fix above warnings.
+
+Link: https://lore.kernel.org/linux-next/20230203134622.0b6315b9@canb.auug.org.au/
+Fixes: 0c3064cf33fbfa ("drm/i915/doc: Document where to implement register workarounds")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+---
  drivers/gpu/drm/i915/gt/intel_workarounds.c | 6 +++---
- include/drm/gpu_scheduler.h                 | 2 +-
- include/media/v4l2-subdev.h                 | 1 +
- 3 files changed, 5 insertions(+), 4 deletions(-)
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-
-base-commit: 4fafd96910add124586b549ad005dcd179de8a18
+diff --git a/drivers/gpu/drm/i915/gt/intel_workarounds.c b/drivers/gpu/drm/i915/gt/intel_workarounds.c
+index 3111df350f5722..a00ec692d980c0 100644
+--- a/drivers/gpu/drm/i915/gt/intel_workarounds.c
++++ b/drivers/gpu/drm/i915/gt/intel_workarounds.c
+@@ -30,7 +30,7 @@
+  *   creation to have a "primed golden context", i.e. a context image that
+  *   already contains the changes needed to all the registers.
+  *
+- *   Context workarounds should be implemented in the *_ctx_workarounds_init()
++ *   Context workarounds should be implemented in the \*_ctx_workarounds_init()
+  *   variants respective to the targeted platforms.
+  *
+  * - Engine workarounds: the list of these WAs is applied whenever the specific
+@@ -55,7 +55,7 @@
+  * - GT workarounds: the list of these WAs is applied whenever these registers
+  *   revert to their default values: on GPU reset, suspend/resume [1]_, etc.
+  *
+- *   GT workarounds should be implemented in the *_gt_workarounds_init()
++ *   GT workarounds should be implemented in the \*_gt_workarounds_init()
+  *   variants respective to the targeted platforms.
+  *
+  * - Register whitelist: some workarounds need to be implemented in userspace,
+@@ -64,7 +64,7 @@
+  *   this is just a special case of a MMIO workaround (as we write the list of
+  *   these to/be-whitelisted registers to some special HW registers).
+  *
+- *   Register whitelisting should be done in the *_whitelist_build() variants
++ *   Register whitelisting should be done in the \*_whitelist_build() variants
+  *   respective to the targeted platforms.
+  *
+  * - Workaround batchbuffers: buffers that get executed automatically by the
 -- 
 An old man doll... just what I always wanted! - Clara
 
