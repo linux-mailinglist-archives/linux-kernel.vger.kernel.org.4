@@ -2,177 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA2046896C9
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 11:36:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7AE26896F0
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 11:36:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232258AbjBCKf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 05:35:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33898 "EHLO
+        id S231616AbjBCKfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 05:35:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232461AbjBCKf4 (ORCPT
+        with ESMTP id S232842AbjBCKfd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 05:35:56 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1E62CA08
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 02:35:52 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id gr7so14103991ejb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 02:35:52 -0800 (PST)
+        Fri, 3 Feb 2023 05:35:33 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B51E048
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 02:35:32 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id j32-20020a05600c1c2000b003dc4fd6e61dso5674399wms.5
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 02:35:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=OiFGc1hvU9VhxKMXFyUNXO2Gwzj0bxXzL9q4pdCqr5Y=;
-        b=sazEFmGQ/yPDRcukt/2jabKqWss56+SM/dMS6noQWcmnCZuPntbr1osUd1DdPVtnp/
-         PUJiddL9N4f8YKpiRH3pi/8nZnr9i0IHsD5cZ36XNJqkTA4q1YMstM6mFwGBk43z4Dkb
-         pFDCQwed3o2L7ggIBc1u07Iqmrzbx8U7gZK2fWAQb9yn1QJt7s96BkNAMUgqba3Gzw+Q
-         fC1koJ4PIAAPo28xfY8oX8O/8YGOBcWd67HvGqci/Y59xxcvZBRPYtP3eFvm6b4xb/E1
-         FQgS1rma99kUn93ZXoKraHM2Ec0pbgcRxgo4we4XgCPP6T/4/TGF4fK2vV8YRFHlvSB4
-         xGkQ==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8nK1fKLOt07t42zA/NX2wGsyiI7WBcYF7AOE3hneo4g=;
+        b=lGlrN2dLHCqbVaz9YwNXyYBxz/D4lgr1w3rTIjvH6mHtVSex/oYRqVJZSvja++c7dX
+         xV7x/9Jc6K4Kf2xqpfN+ic1eERM9X/cvt+VW6AmxHUN3Hqwec7sIAhgdWQWZzJN1Hhr3
+         tN0RenMHGUwpg+Q3tyWOeQZjZP+z6Yi6TsDUfiZLjaOdSk87MK/BheMPucGXmc8Hpn0z
+         My3v5YVkw3WFc4Rfmx3FQSCzuU9KqW427NArdeYqNIbRD3qp9fBE3rpkjbgn7hRlf0fl
+         Mwt7JC9YMg9/Ca3s8zVtCPscyNEkz8t4F0cgEioLLX4v/bZgqrKtkyNOaHlnWNo3pI91
+         dhBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OiFGc1hvU9VhxKMXFyUNXO2Gwzj0bxXzL9q4pdCqr5Y=;
-        b=pXAPur/kwxlTJzlXFN5bQEHd6YG/HJLUAokup973n9fHZrNoRRrfbQPYx3hClXBVjm
-         mLpBNDyEkTQqwL6qvUWzoSY1Hd7vqEG/+LP3iE4lnsKhYLoOL7ZTdsp6A+zHD/MKEhRa
-         Jh5WdcDNLEOxpCjGW4OD4L4tXwQEPdZQUfJr1QQedOVS0tIIZKhmHmdAoMJgpRF8SB6n
-         imZEwudCEp4xOCTaDP78k7yrO8VO0INg+47gDkqWdyHDRa9O1g44dUdlgRsirbhQDawf
-         3dVaj6bTp88KSpcFMf3QPux0mFrMI5dTXoP5Kb/4Ocy50tvoDkHRAkEzpqwXrG6A6zZe
-         K9iQ==
-X-Gm-Message-State: AO0yUKUBIAYoHQ3XiGdr+SndjhHo5KP5wf4uSKkSjBQr4YVpm+1XjuxH
-        Skmi6zUxb77tER5CHi19NEI+GqQudxMbnja+wnvnWYO8YOxgrMuZnv4=
-X-Google-Smtp-Source: AK7set+HyDtAPr7xlvnHLTiVM3CyrgRd1MsKwlB5flwTkTAH2vWTXjkIbfN7erg4r2gqmRDekX4I6TLcEM6jA/K6Hyg=
-X-Received: by 2002:a17:906:1803:b0:7c0:f45e:22ff with SMTP id
- v3-20020a170906180300b007c0f45e22ffmr3313742eje.104.1675420551371; Fri, 03
- Feb 2023 02:35:51 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8nK1fKLOt07t42zA/NX2wGsyiI7WBcYF7AOE3hneo4g=;
+        b=Cl2Jfqfc0gOCfaKApS9OS5tE8uxhp8g2o+JmVzsduedU/y7jPi3gW7AJwSrBPRZ2d4
+         yVeQeP3a6+0VM8B94BQMH4r+Hy5eVhh1Caox/13wMejas/Vfrfic4LObuuc6Bij9USYu
+         X4TkrEanh4gmQd71cHX+8xS2qZRpE4VHqNweMe5yDdKd5xoGugQMIBOOhyvEVwdERsHn
+         /hZZo/0GsNqeaq3BiDIxofEC/qaxLAWNfCAY8iBAQbp5DflboO7+Vtx7rn48rUJRyhEf
+         ooR7lMmP84x1ur2tGkWvI8xDq+Sl7J2qTIJI/lljoLzlsopAHheasa/sN7drFwcqXOdI
+         VCVw==
+X-Gm-Message-State: AO0yUKUagMwLT4HE5Ts+uyELBzhrtuYkOBz4AqpRTzXoWUkuV1iwzS8C
+        LPRtlQWVh7rGIzzafz0nRmv5uw==
+X-Google-Smtp-Source: AK7set9RC8S35h+qhPzKZvtF5wjsR0eplkWa2WNr9zYS986q703SswD03oXnA4dKIZPQBnvNp8f3og==
+X-Received: by 2002:a05:600c:cc3:b0:3dc:42d2:aeee with SMTP id fk3-20020a05600c0cc300b003dc42d2aeeemr9366732wmb.25.1675420530617;
+        Fri, 03 Feb 2023 02:35:30 -0800 (PST)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id x33-20020a05600c18a100b003dd7edcc960sm2112414wmp.45.2023.02.03.02.35.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Feb 2023 02:35:30 -0800 (PST)
+Date:   Fri, 3 Feb 2023 12:35:28 +0200
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v7 09/12] dt-bindings: PCI: qcom: Add SM8550 compatible
+Message-ID: <Y9zjcKkknDQWEvjH@linaro.org>
+References: <20230203081807.2248625-1-abel.vesa@linaro.org>
+ <20230203081807.2248625-10-abel.vesa@linaro.org>
+ <Y9zb2X4w0WfIto9n@hovoldconsulting.com>
 MIME-Version: 1.0
-References: <20230124131717.128660-5-bchihi@baylibre.com> <20230131153816.21709-1-bchihi@baylibre.com>
- <ab1e4822-d5f4-79f6-ea38-47e2342ebe49@linaro.org> <CAGuA+oqLiCxb1g7pwf+RwUTWHV37pXdAWUXHV51TnUy1-xUOXQ@mail.gmail.com>
- <68466850-ddb0-119a-ea82-636ec2c5368e@gmail.com>
-In-Reply-To: <68466850-ddb0-119a-ea82-636ec2c5368e@gmail.com>
-From:   Balsam CHIHI <bchihi@baylibre.com>
-Date:   Fri, 3 Feb 2023 11:35:15 +0100
-Message-ID: <CAGuA+oq1jZvDUK01rX-jJH7-5waWA4JnytoBmCeD7+SbndPgrw@mail.gmail.com>
-Subject: Re: [PATCH v12] thermal: drivers: mediatek: Add the Low Voltage
- Thermal Sensor driver
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
-        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        rdunlap@infradead.org, ye.xingchen@zte.com.cn,
-        p.zabel@pengutronix.de, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        khilman@baylibre.com, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9zb2X4w0WfIto9n@hovoldconsulting.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Matthias,
+On 23-02-03 11:03:05, Johan Hovold wrote:
+> On Fri, Feb 03, 2023 at 10:18:04AM +0200, Abel Vesa wrote:
+> > Add the SM8550 platform to the binding.
+> > 
+> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > ---
+> > 
+> > This patchset relies on the following patchset:
+> > https://lore.kernel.org/all/20230117224148.1914627-1-abel.vesa@linaro.org/
+> > 
+> > The v6 of this patch is:
+> > https://lore.kernel.org/all/20230202123902.3831491-10-abel.vesa@linaro.org/
+> > 
+> > Changes since v6:
+> >  * none
+> > 
+> > Changes since v5:
+> >  * added Krzysztof's R-b tag
+> > 
+> > Changes since v4:
+> >  * dropped _serdes infix from ln_shrd table name and from every ln_shrd
+> >    variable name
+> >  * added hyphen between "no CSR" in both places
+> >  * dropped has_ln_shrd_serdes_tbl
+> >  * reordered qmp_pcie_offsets_v6_20 by struct members
+> >  * added rollback for no-CSR reset in qmp_pcie_init fail path
+> >  * moved ln_shrd offset calculation after port_b
+> >  * dropped the minItems for interconnects
+> >  * made iommu related properties global
+> >  * renamed noc_aggr_4 back to noc_aggr
+> > 
+> > Changes since v3:
+> >  * renamed noc_aggr to noc_aggr_4, as found in the driver
+> > 
+> > Changes since v2:
+> >  * dropped the pipe from clock-names
+> >  * removed the pcie instance number from aggre clock-names comment
+> >  * renamed aggre clock-names to noc_aggr
+> >  * dropped the _pcie infix from cnoc_pcie_sf_axi
+> >  * renamed pcie_1_link_down_reset to simply link_down
+> >  * added enable-gpios back, since pcie1 node will use it
+> > 
+> > Changes since v1:
+> >  * Switched to single compatible for both PCIes (qcom,pcie-sm8550)
+> >  * dropped enable-gpios property
+> >  * dropped interconnects related properties, the power-domains
+> >  * properties
+> >    and resets related properties the sm8550 specific allOf:if:then
+> >  * dropped pipe_mux, phy_pipe and ref clocks from the sm8550 specific
+> >    allOf:if:then clock-names array and decreased the minItems and
+> >    maxItems for clocks property accordingly
+> >  * added "minItems: 1" to interconnects, since sm8550 pcie uses just one,
+> >    same for interconnect-names
+>  
+> > +  enable-gpios:
+> > +    description: GPIO controlled connection to ENABLE# signal
+> > +    maxItems: 1
+> 
+> What is this gpio used for? Describing it as "ENABLE#" looks wrong as
+> AFAIK it's not part of the PCIe interface.
 
-On Wed, Feb 1, 2023 at 5:59 PM Matthias Brugger <matthias.bgg@gmail.com> wrote:
->
->
->
-> On 01/02/2023 17:46, Balsam CHIHI wrote:
-> > Hi Krzysztof,
-> >
-> > Thank you very much for the review!
-> >
-> > On Wed, Feb 1, 2023 at 8:55 AM Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
-> >>
-> >> On 31/01/2023 16:38, bchihi@baylibre.com wrote:
-> >>> From: Balsam CHIHI <bchihi@baylibre.com>
-> >>>
->
-> [...]
->
-> >>> +
-> >>> +static irqreturn_t lvts_ctrl_irq_handler(struct lvts_ctrl *lvts_ctrl)
-> >>> +{
-> >>> +     irqreturn_t iret = IRQ_NONE;
-> >>> +     u32 value, masks[] = {
-> >>
-> >> Don't mix different types in one declaration. u32 and a pointer are
-> >> quite different types.
-> >
-> > I'm not sure to understand.
-> > LVTS_INT_SENSORx are not pointers but register values.
-> >
->
-> u32 mask[] is a pointer to a array of u32 values of undefined length.
->
+Oups, that should've been dropped here as well, as I did in the dts/dtsi
+patches.
 
-I will change this to :
-u32 value;
-u32 masks[] = {
-
-> [...]
->
-> >>> +static int __init lvts_golden_temp_init(struct device *dev, u32 *value)
-> >>
-> >> You did not test it, right? Build with section mismatch analysis...
-> >
-> > I'm not sure to fully understand this comment.
-> > Would you explain, please?
-> >
->
-> AFAIU:
->
-> lvts_golden_temp_init() and lvts_ctrl_init() are called from a function that is
-> not in __init section:
-> lvts_domain_init()
->
-> So if you free up the first to functions after init but not the callers, things
-> can explote.
->
-
-__init will be removed for all functions.
-
-> [...]
->
-> >>> +
-> >>> +static int lvts_probe(struct platform_device *pdev)
-> >>> +{
-> >>> +     struct lvts_data *lvts_data;
-> >>> +     struct lvts_domain *lvts_td;
-> >>> +     struct device *dev = &pdev->dev;
-> >>> +     struct resource *res;
-> >>> +     int irq, ret;
-> >>> +
-> >>> +     lvts_td = devm_kzalloc(dev, sizeof(*lvts_td), GFP_KERNEL);
-> >>> +     if (!lvts_td)
-> >>> +             return -ENOMEM;
-> >>> +
-> >>> +     lvts_data = (struct lvts_data *)of_device_get_match_data(dev);
-> >>
-> >> Why do you need case?
-> >
-> > Would you explain, please?
-> >
->
-> Typo by Krysztof, he meant the cast.
-> lvts_data = of_device_get_match_data(dev);
-> should be good enough.
->
-
-OK,
-It will be like you suggested.
-
-> Regards,
-> Matthias
-
-Thank you for the review!
-
-Best regards,
-Balsam
+> 
+> There's also no driver support being adding for this gpio as part of
+> this series and you don't use it for either controller on the MTP.
+> 
+> Are you relying on firmware to enable this one currently perhaps?
+> 
+> > +
+> >    perst-gpios:
+> >      description: GPIO controlled connection to PERST# signal
+> >      maxItems: 1
+> 
+> Johan
