@@ -2,78 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBD0D68A0EA
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 18:54:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C849768A0EC
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 18:54:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233426AbjBCRyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 12:54:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60514 "EHLO
+        id S233680AbjBCRyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 12:54:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232778AbjBCRyH (ORCPT
+        with ESMTP id S233184AbjBCRyJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 12:54:07 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 045E339CD5
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 09:54:06 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id r27so1538514wrr.1
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 09:54:05 -0800 (PST)
+        Fri, 3 Feb 2023 12:54:09 -0500
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BB9248639
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 09:54:08 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id 144so4232373pfv.11
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 09:54:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=64/VDuUQiW+Vf3xea9SdqjgxeztAbXQzDh6Wov0b1Zo=;
-        b=MiESMRJeHTeosOgc+Zit64s/0KsfzCYox3nX5HMgTerJ3Vj2/PxImwLUOXO63HifSb
-         hY3i9w0/7z8R6dgpA4+G7ra2D/4T4R78aOAEX/uO0O9sPEZqswM1GQsn9jdSA+vE2RXq
-         Re+XeIT491Pu8UBDPZszcyWJLScsV2l69Q7Hta+LEWvBODzDgT6M4obDhmUmzoK4cHp4
-         hCbkorq1HjQGsO+CmZgZPWrv91+Q0qXQx9Uq99XYoaBpsk0OSiRe5DuOrLTrARIbX/Rw
-         3I7fkc9QTVWdKznZz3utw7nPd+CMewiTKbBBUMcrD0PmrVFJtviCGdEKWZTt4IgL3bAu
-         OhOA==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=LLnqCYAl80KX/AnP1MJvwNbR1JOT9Aa+XpKrlSinwlU=;
+        b=gFMT+46x88hehfxt5nx2SHbG2j17btymqYVEISu7Bm/njCyE3UWdBByqE0ygnOpqbq
+         RyXlYuL4F5rbEaCNn+aV31qhLuDPXngVVgCbE1BKV6mZgSIgQh9L8CMbZwo8khDT5YyX
+         x/M7eOzHzP5TXUSTLQ1ZMWBgXCRirXQmAIqoQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=64/VDuUQiW+Vf3xea9SdqjgxeztAbXQzDh6Wov0b1Zo=;
-        b=JGxjauxFeLrSBmUDIyVAlaG7izu8JlxDiXLJ1ZOqVANoRmHFhk0S+0rHPs+AgXBYeT
-         5Zak8mORtwAf1sY/1SyeDC+fy/zvChLGGC6rvh2EtBzzm9X0qtvyMUHzhiZQL3q6WWKr
-         GKrc0q22I5Zc7lUTa489D7f76FFXu1GwbTC0IdOERCEiDchBtBDO7iU2BycrKw7MYucR
-         ZvgaSba+yOIqMV3Q/f+aWgl4cCVNeXP09LnvOzA9ZK9RMyLFKt3z7lLUghEisuNNHKyM
-         zDNkV+xSOZJP8aKr6FdU6SlIPPCbTHDyajVI22KKGs7BoMSH+aHoc9VVM7q4voNCI9j7
-         5Z5Q==
-X-Gm-Message-State: AO0yUKVs1JrQ3Hh0JLCsK82LAK+NlrzkP1OVeXJG5y5ucgONR7Obso8b
-        c5SHh+su0HowLWsV3flTmIjm9w==
-X-Google-Smtp-Source: AK7set8C1hagDBeGxpuByAoF/bYki9T5Zrg5yh+v7Y7uNnn+YhIqnqw3/BynIyQMxVUgLdzFTAdj5A==
-X-Received: by 2002:a5d:5c09:0:b0:2be:5c4a:de6b with SMTP id cc9-20020a5d5c09000000b002be5c4ade6bmr10102366wrb.3.1675446844584;
-        Fri, 03 Feb 2023 09:54:04 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id f17-20020a5d4dd1000000b002bfad438811sm2480187wru.74.2023.02.03.09.54.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Feb 2023 09:54:04 -0800 (PST)
-Message-ID: <3b81bd45-766b-fe26-d9ec-2097e1fe5a0b@linaro.org>
-Date:   Fri, 3 Feb 2023 18:54:02 +0100
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LLnqCYAl80KX/AnP1MJvwNbR1JOT9Aa+XpKrlSinwlU=;
+        b=DX9X2Uxjceuc+mFucBkE9WKZkJYcJwMMxIzgDunhJpXoKsd6udbCd6WsoKUi9kaEKM
+         3ELngau9jhvNG+mGCLnas8fGzRIzl8UOLUTl2WXJlPZOmY9G1iCyzHNWLaQrm2b+Hl7H
+         HuT/cUxlAM4kqpMHdCYVKq28RwAEoBg7WIBOdX6fr8Sm1Il2nGL7gNaZYBkUl5alP2P4
+         18k+p9GG+QoAyo1ovP9geJkkyUkrI9ldqIBQCP+Pd1XO/RSBZEIsucmkhdedgHl5C3U6
+         No+e2kZGCf/Ko69BLY8YHeNdPVIVb8RWj8gQWr40NTQXmyPQseMvm1nDS9iBT3y8VGBO
+         54yA==
+X-Gm-Message-State: AO0yUKXa3IWsWBYWEXHAUIFkH8pp2i5AktubO5vNm0MHoc6fuitbgZ47
+        P3P3H3nS9gJ3iB71pCRyjo1wWw==
+X-Google-Smtp-Source: AK7set9g3wK6cBF7u1oZ+DgClsdvFB5iS6W2QtUSeUf14md3Qq7pBO/9xIF/z0HeTuuWMIvw3W6qcQ==
+X-Received: by 2002:a05:6a00:22cc:b0:58d:f20b:5f2e with SMTP id f12-20020a056a0022cc00b0058df20b5f2emr14077223pfj.1.1675446847523;
+        Fri, 03 Feb 2023 09:54:07 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id p21-20020a056a000a1500b00593d7db7f29sm2068958pfh.216.2023.02.03.09.54.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Feb 2023 09:54:07 -0800 (PST)
+Message-ID: <63dd4a3f.050a0220.fd05.3c7a@mx.google.com>
+X-Google-Original-Message-ID: <202302031754.@keescook>
+Date:   Fri, 3 Feb 2023 17:54:06 +0000
+From:   Kees Cook <keescook@chromium.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     Zack Rusin <zackr@vmware.com>,
+        VMware Graphics Reviewers 
+        <linux-graphics-maintainer@vmware.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH][next] drm/vmwgfx: Replace one-element array with
+ flexible-array member
+References: <Y9xi7nFWRV3S9gCg@work>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v4 1/2] dt-bindings: leds-lp55xx: add ti,charge-pump-mode
-Content-Language: en-US
-To:     Maarten Zanders <maarten.zanders@mind.be>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>
-Cc:     linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230202101032.26737-1-maarten.zanders@mind.be>
- <20230202101032.26737-2-maarten.zanders@mind.be>
- <28cf0c1f-ee5f-79e4-609a-2cdd24db9f1c@linaro.org>
- <1452beba-19b0-7417-716e-a255c6aaa739@mind.be>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1452beba-19b0-7417-716e-a255c6aaa739@mind.be>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9xi7nFWRV3S9gCg@work>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,22 +75,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/02/2023 16:38, Maarten Zanders wrote:
+On Thu, Feb 02, 2023 at 07:27:10PM -0600, Gustavo A. R. Silva wrote:
+> One-element arrays are deprecated, and we are replacing them with flexible
+> array members instead. So, replace one-element array with flexible-array
+> member in struct vmw_view.
 > 
-> On 2/2/23 21:13, Krzysztof Kozlowski wrote:
->> + ti,charge-pump-mode:
->>> +    description:
->>> +      Set the operating mode of the internal charge pump as defined in
->>> +      <dt-bindings/leds/leds-lp55xx.h>. Defaults to auto.
->>> +    $ref: /schemas/types.yaml#/definitions/uint8
->> This should be then uint32
+> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+> routines on memcpy() and help us make progress towards globally
+> enabling -fstrict-flex-arrays=3 [1].
 > 
-> Why is that? I specifically chose uint8 because other settings for LED 
-> are also uint8. The implementation is also uint8. I surely hope we'll 
-> never get to >256 modes for a charge pump.
+> This results in no differences in binary output.
+> 
+> Link: https://github.com/KSPP/linux/issues/79
+> Link: https://github.com/KSPP/linux/issues/254
+> Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-Because all IDs are unsigned int.
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-Best regards,
-Krzysztof
-
+-- 
+Kees Cook
