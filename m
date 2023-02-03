@@ -2,92 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 059B9688C9C
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 02:35:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DF10688CA9
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 02:41:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231904AbjBCBfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 20:35:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57880 "EHLO
+        id S230217AbjBCBlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 20:41:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231438AbjBCBff (ORCPT
+        with ESMTP id S231903AbjBCBlj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 20:35:35 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C39841A0;
-        Thu,  2 Feb 2023 17:35:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675388134; x=1706924134;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=71piuBCEe2+vVRwtacCxx8j39fJadVo2ugu2BE7Iu/4=;
-  b=UvpZVXcVPellXE/DBbyOa8H/FEkvigWvHkr6CAR449zS2MnS2/x/5nUa
-   k26BkvFvQtG5JxGEuYmGA1FRTRW9XzIoSFZcMm5UWgFKQisLll2K7z0xn
-   idLmzESMSStjIhlN1A7ylePg8rTmvdLn36gsXj5Z8MLO/hf9mNmiF+wEI
-   iU31ZT7PxL0TX6iWOq/Jw1qaZ8BZBEaa4zE2EsYKQHywrYl9pgusA0vRw
-   g+d4jnb2udm2UU+AFE37vw9jKSogYf4XMpqC8SMqqvf7VrUccEmRgC9ER
-   tyaxWQkq2InYW/TjvYGBUgpcCyNg9iAbDPuC/HfQiEX4/HUAaINdP+zaw
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="414836810"
-X-IronPort-AV: E=Sophos;i="5.97,269,1669104000"; 
-   d="scan'208";a="414836810"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2023 17:35:17 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="697900501"
-X-IronPort-AV: E=Sophos;i="5.97,269,1669104000"; 
-   d="scan'208";a="697900501"
-Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.129])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2023 17:35:15 -0800
-From:   Zqiang <qiang1.zhang@intel.com>
-To:     paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        joel@joelfernandes.org
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] rcutorture: Create nocb tasks only for CONFIG_RCU_NOCB_CPU=y kernels
-Date:   Fri,  3 Feb 2023 09:40:21 +0800
-Message-Id: <20230203014021.3408798-1-qiang1.zhang@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 2 Feb 2023 20:41:39 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C8D87594
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 17:41:36 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id y1so3403485wru.2
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 17:41:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rothOJAx61IhY6WBzLgJ0pLvV1L69tGtBH8EM756NO8=;
+        b=JGGtJ43mQQSjD5iDplV0TKr5vkx/VXre07uHn16ZwJoqK0iPdnRFzazXeDBOc7drVf
+         iA0hyjJJhKMHtfH3J1Dlkupz5f3mvNhyF4tWWBBqrdkFifGWfW9vpiP1LYtm1tANuk5x
+         CDkTWs5aoqcOApygErzXmNuu4KVA8GufFtqBRQC7GQDvOiJnodRDgjgOpWpiY69JlNvB
+         hDUGM9TfhF2P6C/nUPpC3ICMfxp6eOUe40TgBJKFqZfK5ZUtLJYNCc+2Ua8JNjpE5nZD
+         DOTe6XGkYm+xIa2VVRfMFDypR9RQhzOvDmr5R+sFK2m6siyVBbM+pn0sDza4ltIdKkYe
+         /KRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rothOJAx61IhY6WBzLgJ0pLvV1L69tGtBH8EM756NO8=;
+        b=jihXtveia3plIEQjF6wRdl0vhyr/armD1OSVHlJt9d2UBVi13V+TZwvz74YBHl8si0
+         kf6EAVgy4SvIRynQYLKyI+HyXr8LYtVTy6U1eKD09sLaCUT4CUEJpK3zdgkGhQDm+KLV
+         K3JiPFQzXx1GnXaine9y6d0pzYFwK4+zb1Y3AKqwiR6oa6G84dnosQC46vc9xRREzoGI
+         M8+FuoRXIz/+w/HImSj4gSoTEnxEiTnauoF9VCtXcRqjVfGvtqch0HDOCDsjGPsKfrdf
+         N2lK3tOIKGN4yy3IBeekH0MJ//4VeTxF8ntfgRuBN/qUET/Fxfc4U1JCKCZFtgxunKX0
+         LYzw==
+X-Gm-Message-State: AO0yUKXr6PxAs3AOPulYQe0YvTGvcFc/Qj+5t3vwtEf6wGpIqQAN4hN9
+        bqlgvO2vL9Dv24W7QN9cxQHUUEcVI6ruyXi/ana9EA==
+X-Google-Smtp-Source: AK7set9KcFxcgBgOvFlB4117j0vmSRXNYNO65A30gArABQfkcUEfrN38aSMQU2A/k5B0ndvaCL9HCt0EhVPjdSUZ6Oc=
+X-Received: by 2002:adf:e351:0:b0:2bf:eba5:b652 with SMTP id
+ n17-20020adfe351000000b002bfeba5b652mr196573wrj.19.1675388494864; Thu, 02 Feb
+ 2023 17:41:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230203014014.75720-1-irogers@google.com>
+In-Reply-To: <20230203014014.75720-1-irogers@google.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Thu, 2 Feb 2023 17:41:22 -0800
+Message-ID: <CAP-5=fX0ohsCUspm7NowDy2bmSr2cJfp=iaStK4EAdVy7zBHGA@mail.gmail.com>
+Subject: Re: [PATCH v1] perf pmu: Fix aarch64 build
+To:     John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Rob Herring <robh@kernel.org>,
+        Kang Minchul <tegongkang@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sandipan Das <sandipan.das@amd.com>,
+        Jing Zhang <renyu.zj@linux.alibaba.com>,
+        linuxppc-dev@lists.ozlabs.org, Kajol Jain <kjain@linux.ibm.com>
+Cc:     Stephane Eranian <eranian@google.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Caleb Biggers <caleb.biggers@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When setting nocbs_nthreads to start rcutorture test with a non-zero value,
-the nocb tasks will be created and invoke rcu_nocb_cpu_offload/deoffload()
-to toggle CPU's callback-offload state, but for CONFIG_RCU_NOCB_CPU=n
-kernel, the rcu_nocb_cpu_offload/deoffload() is a no-op and this is also
-meaningless for torture_type is non-rcu.
+On Thu, Feb 2, 2023 at 5:40 PM Ian Rogers <irogers@google.com> wrote:
+>
+> ARM64 overrides a weak function but a previous change had broken the
+> build.
+>
+> Fixes: 8cefeb8bd336 ("perf pmu-events: Introduce pmu_metrics_table")
 
-This commit therefore add member can_nocbs_toggle to rcu_torture_ops
-structure to avoid unnecessary nocb tasks creation.
+As 8cefeb8bd336 ("perf pmu-events: Introduce pmu_metrics_table") is
+only on tmp.perf/core then it may be best to just squash this fix into
+that.
 
-Signed-off-by: Zqiang <qiang1.zhang@intel.com>
----
- kernel/rcu/rcutorture.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+Thanks,
+Ian
 
-diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
-index 297da28ce92d..d01127e0e8cd 100644
---- a/kernel/rcu/rcutorture.c
-+++ b/kernel/rcu/rcutorture.c
-@@ -3708,6 +3708,12 @@ rcu_torture_init(void)
- 		pr_alert("rcu-torture: ->fqs NULL and non-zero fqs_duration, fqs disabled.\n");
- 		fqs_duration = 0;
- 	}
-+	if (nocbs_nthreads != 0 && (cur_ops != &rcu_ops ||
-+					!IS_ENABLED(CONFIG_RCU_NOCB_CPU))) {
-+		pr_alert("rcu-torture types: %s and CONFIG_RCU_NOCB_CPU=%d, nocb toggle disabled.\n",
-+				cur_ops->name, IS_ENABLED(CONFIG_RCU_NOCB_CPU));
-+		nocbs_nthreads = 0;
-+	}
- 	if (cur_ops->init)
- 		cur_ops->init();
- 
--- 
-2.25.1
-
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/arch/arm64/util/pmu.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/tools/perf/arch/arm64/util/pmu.c b/tools/perf/arch/arm64/util/pmu.c
+> index 2779840d8896..fa143acb4c8d 100644
+> --- a/tools/perf/arch/arm64/util/pmu.c
+> +++ b/tools/perf/arch/arm64/util/pmu.c
+> @@ -22,6 +22,8 @@ static struct perf_pmu *pmu__find_core_pmu(void)
+>                         return NULL;
+>
+>                 return pmu;
+> +       }
+> +       return NULL;
+>  }
+>
+>  const struct pmu_metrics_table *pmu_metrics_table__find(void)
+> --
+> 2.39.1.519.gcb327c4b5f-goog
+>
