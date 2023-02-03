@@ -2,84 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E081C689DFD
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 16:21:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8330A689DE9
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 16:17:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234058AbjBCPRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 10:17:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57326 "EHLO
+        id S234063AbjBCPRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 10:17:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234678AbjBCPPe (ORCPT
+        with ESMTP id S234959AbjBCPQE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 10:15:34 -0500
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12AE7A42A1
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 07:13:21 -0800 (PST)
-Received: by mail-qt1-x834.google.com with SMTP id z5so5724246qtn.8
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 07:13:21 -0800 (PST)
+        Fri, 3 Feb 2023 10:16:04 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9633FAF0DE
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 07:13:54 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id ml19so16344834ejb.0
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 07:13:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=SEpJ1jUZDdfyJlrWRH0MUqtupux6/xnXEoAuep6fT1o=;
-        b=b36P5TVkE3Cj7mZuiHbApRHd6kcCvPcBfrmQSSGSVfVs5HEMoPasHoWqrYreaVOwOX
-         ZVAFeeRHvBaa7OHwMP5xHSjlyGK8CoaDmd+KvIig8gLREeDEE6fNVDs39T1McQQgFdNb
-         Vn0J3OlUGzhpn/HFD5hWVOkUCoJsuYsKNQy77+tS5NUMzpC/tuSEi97vuea1Sjw7eXkX
-         1STe7Y546U350eEX1nXeGvN6bRx18vcfYoZcNLdGoG08b+erzSvnb1JVo9KVwp6zVRI1
-         UXsyJ04l0JZITVZ9OLOswFN4hbhHgBMlg+MlPP+CXmygSFNe6k3YdwnaG38kkF5jlMS5
-         2NLA==
+        d=diag.uniroma1.it; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z4gNT9v9wvK0aEmB6F4uZINVDMJ/+G9kVEywmGPNk78=;
+        b=u+tyikGVZq2dblixZ2OhrzsVymoJs/te6CTw7RNRqAdzWtkJG5/Je1YW8qeEqApCjX
+         PK/+0MmLQ2WndKKWCjLgm63zSClRKoWgPJm3cG/SZXbqDIs5a0KBbMrYWNNuPiPiKGYZ
+         36ngwMnB5QLWM/kM/mY/9r2CFTn5YZA1FvUr4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SEpJ1jUZDdfyJlrWRH0MUqtupux6/xnXEoAuep6fT1o=;
-        b=HZgsTp8MiOQzdWvkDCWfTyINT+ubB0gvM+/a3poWDkpfGDDbWuAlyhIjXmUxKEz/4v
-         sHKS0scrJ+fSEoDaOs1ydbU4TBaD5EdU7jHoCpWD5NLCoUISTlO6uT3O+o4EJr0owV7J
-         BjDftAw5NVuoAQ2VwMHegIRmJn7+l6GSLsxEp4RBLVJRrm0bR7d5NR1iwjTnShwB4LBv
-         4fFMzx4AMNELhiUGeX0IMKAJMRQvheQuPkoUVwjpYkZHGTQxKMREF7TUyXesJM9naZLS
-         OZATz7JWdyORVhYo/+eiSB3TksZ5coh4dyjPY9lADcLyT/6QVbn0d7tKc4GojxAnUiT+
-         aj+w==
-X-Gm-Message-State: AO0yUKWiZiZm44QIKDSNtsTpF1DJChSV3m9jJ0tPJ/5qcMR08G7asf39
-        bAy6DiumwLigDHxpO3q3SuHiJA==
-X-Google-Smtp-Source: AK7set8kNeAz7t/GuiRI6DhuRD2fUDJlutbL3SVyVrLBMQ65pNOpE0jdTO5KHgFdNUUYMH4MXYkjFg==
-X-Received: by 2002:a05:622a:1909:b0:3b6:2b38:e075 with SMTP id w9-20020a05622a190900b003b62b38e075mr18218491qtc.9.1675437101114;
-        Fri, 03 Feb 2023 07:11:41 -0800 (PST)
-Received: from localhost (2603-7000-0c01-2716-8f57-5681-ccd3-4a2e.res6.spectrum.com. [2603:7000:c01:2716:8f57:5681:ccd3:4a2e])
-        by smtp.gmail.com with ESMTPSA id m11-20020ac8444b000000b003b2957fb45bsm1754141qtn.8.2023.02.03.07.11.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 07:11:40 -0800 (PST)
-Date:   Fri, 3 Feb 2023 10:11:39 -0500
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Dave Chinner <david@fromorbit.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        David Hildenbrand <david@redhat.com>,
-        Peter Xu <peterx@redhat.com>, NeilBrown <neilb@suse.de>,
-        Shakeel Butt <shakeelb@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [RFC PATCH v1 0/2] Ignore non-LRU-based reclaim in memcg reclaim
-Message-ID: <Y90kK5jnxBbE9tV4@cmpxchg.org>
-References: <20230202233229.3895713-1-yosryahmed@google.com>
- <20230203000057.GS360264@dread.disaster.area>
- <CAJD7tkazLFO8sc1Ly7+2_SGTxDq2XuPnvxxTnpQyXQELmq+m4A@mail.gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Z4gNT9v9wvK0aEmB6F4uZINVDMJ/+G9kVEywmGPNk78=;
+        b=5SIsrdQ0/9vbVjausz+RKRsCWaYHXkHrQot3k6LGlow1lzwXaLCGWLTwbZg9mobpK8
+         dTomI0IztD8QrK6XReQXTxbtkCSmb5dzoT1XkVQ+VGT2m/XSIJINJB+MVQWibULNhREt
+         R20GknEdnCjlOPtJCJ07ZMfMikjSQG7QwryUd456CasXVp7Sxph8y8mqPNQ1/Id3OKdN
+         C5LC3tAbMzm3TKToJwxtVuPYNWKrdHBNhVniiStP/B+Kr0hVpfaygwqQEe20b7SRJ8Hu
+         U0oPuZhg0cVr6HGitisK/CMykYhGqticBIRuxm9+suzIcf1z7BO6ZOWfnNUqwSPjNdyS
+         VfVA==
+X-Gm-Message-State: AO0yUKXfgm9JrmBGMBwsBJWLVNN4xzpaoWCFv6uyBiLNIb2GafWMMEqf
+        0naN7jEl8SAqhkqKf4gkWl33XOcShMUJNoHzT1K1VA==
+X-Google-Smtp-Source: AK7set+fIGyYrGAWc7/8wl0F7re+lFqHUPpfLdgqWaULgZZeM1ejQ/y9ibnxaGFY2MYwUzuLqtu60JTV6Pbsw5yRB/0=
+X-Received: by 2002:a17:906:1ba9:b0:888:3594:6d58 with SMTP id
+ r9-20020a1709061ba900b0088835946d58mr3419959ejg.55.1675437131386; Fri, 03 Feb
+ 2023 07:12:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJD7tkazLFO8sc1Ly7+2_SGTxDq2XuPnvxxTnpQyXQELmq+m4A@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+References: <20230131-tuntap-sk-uid-v2-0-29ec15592813@diag.uniroma1.it>
+ <20230131-tuntap-sk-uid-v2-1-29ec15592813@diag.uniroma1.it> <CANn89i+QMipmfOywjAX2jqZGs80zorE6yKFOsi9rXQbToZLbhQ@mail.gmail.com>
+In-Reply-To: <CANn89i+QMipmfOywjAX2jqZGs80zorE6yKFOsi9rXQbToZLbhQ@mail.gmail.com>
+From:   Pietro Borrello <borrello@diag.uniroma1.it>
+Date:   Fri, 3 Feb 2023 16:12:00 +0100
+Message-ID: <CAEih1qXHkgHzqk1yXd=iX9fiMCkJW95eoytc1t5-VRMPhfTRNg@mail.gmail.com>
+Subject: Re: [PATCH net-next v2 1/2] tun: tun_chr_open(): correctly initialize
+ socket uid
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Lorenzo Colitti <lorenzo@google.com>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,91 +71,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 04:17:18PM -0800, Yosry Ahmed wrote:
-> On Thu, Feb 2, 2023 at 4:01 PM Dave Chinner <david@fromorbit.com> wrote:
-> > > Patch 1 is just refactoring updating reclaim_state into a helper
-> > > function, and renames reclaimed_slab to just reclaimed, with a comment
-> > > describing its true purpose.
-> > >
-> > > Patch 2 ignores pages reclaimed outside of LRU reclaim in memcg reclaim.
-> > >
-> > > The original draft was a little bit different. It also kept track of
-> > > uncharged objcg pages, and reported them only in memcg reclaim and only
-> > > if the uncharged memcg is in the subtree of the memcg under reclaim.
-> > > This was an attempt to make reporting of memcg reclaim even more
-> > > accurate, but was dropped due to questionable complexity vs benefit
-> > > tradeoff. It can be revived if there is interest.
-> > >
-> > > Yosry Ahmed (2):
-> > >   mm: vmscan: refactor updating reclaimed pages in reclaim_state
-> > >   mm: vmscan: ignore non-LRU-based reclaim in memcg reclaim
-> > >
-> > >  fs/inode.c           |  3 +--
-> >
-> > Inodes and inode mapping pages are directly charged to the memcg
-> > that allocated them and the shrinker is correctly marked as
-> > SHRINKER_MEMCG_AWARE. Freeing the pages attached to the inode will
-> > account them correctly to the related memcg, regardless of which
-> > memcg is triggering the reclaim.  Hence I'm not sure that skipping
-> > the accounting of the reclaimed memory is even correct in this case;
-> 
-> Please note that we are not skipping any accounting here. The pages
-> are still uncharged from the memcgs they are charged to (the allocator
-> memcgs as you pointed out). We just do not report them in the return
-> value of try_to_free_mem_cgroup_pages(), to avoid over-reporting.
+On Fri, 3 Feb 2023 at 15:58, Eric Dumazet <edumazet@google.com> wrote:
+>
+> This seems very fragile...
+> "struct inode" could be made bigger, and __randomize_layout could move i_uid
+> at the end of it.
+>
+> KASAN could then detect an out-of-bound access in sock_init_data()
+>
+> I would rather add a wrapper like this [1], then change tun/tap to use
+> sock_init_data_uid()
+>
 
-I was wondering the same thing as Dave, reading through this. But
-you're right, we'll catch the accounting during uncharge. Can you
-please add a comment on the !cgroup_reclaim() explaining this?
+I agree this is a much cleaner solution.
+I'll wait the usual 24h for further comments, and send a patch like this in v3.
 
-There is one wrinkle with this, though. We have the following
-(simplified) sequence during charging:
-
-	nr_reclaimed = try_to_free_mem_cgroup_pages(mem_over_limit, nr_pages,
-						    gfp_mask, reclaim_options);
-
-	if (mem_cgroup_margin(mem_over_limit) >= nr_pages)
-		goto retry;
-
-	/*
-	 * Even though the limit is exceeded at this point, reclaim
-	 * may have been able to free some pages.  Retry the charge
-	 * before killing the task.
-	 *
-	 * Only for regular pages, though: huge pages are rather
-	 * unlikely to succeed so close to the limit, and we fall back
-	 * to regular pages anyway in case of failure.
-	 */
-	if (nr_reclaimed && nr_pages <= (1 << PAGE_ALLOC_COSTLY_ORDER))
-		goto retry;
-
-So in the unlikely scenario where the first call doesn't make the
-necessary headroom, and the shrinkers are the only thing that made
-forward progress, we would OOM prematurely.
-
-Not that an OOM would seem that far away in that scenario, anyway. But I
-remember long discussions with DavidR on probabilistic OOM regressions ;)
-
-> > I think the code should still be accounting for all pages that
-> > belong to the memcg being scanned that are reclaimed, not ignoring
-> > them altogether...
-> 
-> 100% agree. Ideally I would want to:
-> - For pruned inodes: report all freed pages for global reclaim, and
-> only report pages charged to the memcg under reclaim for memcg
-> reclaim.
-
-This only happens on highmem systems at this point, as elsewhere
-populated inodes aren't on the shrinker LRUs anymore. We'd probably be
-ok with a comment noting the inaccuracy in the proactive reclaim stats
-for the time being, until somebody actually cares about that combination.
-
-> - For slab: report all freed pages for global reclaim, and only report
-> uncharged objcg pages from the memcg under reclaim for memcg reclaim.
-> 
-> The only problem is that I thought people would think this is too much
-> complexity and not worth it. If people agree this should be the
-> approach to follow, I can prepare patches for this. I originally
-> implemented this for slab pages, but held off on sending it.
-
-I'd be curious to see the code!
+Best regards,
+Pietro
