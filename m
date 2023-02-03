@@ -2,81 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 334E8689FC3
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 17:56:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B475689FC6
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 17:56:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233571AbjBCQ4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 11:56:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46038 "EHLO
+        id S233642AbjBCQ4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 11:56:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232601AbjBCQ4a (ORCPT
+        with ESMTP id S233628AbjBCQ4p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 11:56:30 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6149D65ECF
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 08:56:21 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id n13so4338325wmr.4
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 08:56:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RMq+cvkWvF/UyzkbPjmrpsXN3fJwSAqaVKuerACOW48=;
-        b=VIHlZoavFky86n+pjOnc6s8Bq2hhYfhmtq3eD6KH8MPQ6QBjrQ9WctPpMcO4+DWXuh
-         RUt3EFdfmp3xzbflCdH3Hb8tAmMAzZ1oXWSdDIjWQhFOHZW0HM+TXpbmO4ap2E0dUUbX
-         suaOLOSpkONs36ga7weJJh0UlmRqCOS1HoUSwJOYa6OyX9MXTcTA9TYV7CO0Jbblm8DT
-         9bOag6GDyxlDZi7SqgaEEHRNeoRi5aGImimcq5lHBty8khEMSf3IsWJycwJQMk5oCazx
-         8k7WjokcpBLGk1rLatCrwN7BALRvP/gwAPaxFkwk2355PWRD0qcrbnLNT6cmmPyeObjm
-         zM1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RMq+cvkWvF/UyzkbPjmrpsXN3fJwSAqaVKuerACOW48=;
-        b=6TigFJLRRqZQX1ohXvv0DpzJ7nAhumQ1fxtOkdqsmz/bIc10PJkd816b4O//lXD7yZ
-         5UHj4EwxYbOYlaVByBbmHY940p5b0IGD/QPyGoUHKoVFksOSgQNG5MOgk6cyqvZK4t4U
-         c/SxIGlebTYkWUXLs+ZInBnJTlR5ECEO6Ig30z1YFj0hhA/Bz/Yhw/hqxsl3vJfpBr48
-         x+W7mgfp7aC9Ljfrf5xdhJxwacEy9KlEeaULAYxqF9wIarFc+ZPFO76+3Mcz15b+fxuw
-         TnqBNPS+eRnTkliWSNRjZEU9V0Jd1+iRSKLw0YrD+IOAj3QSk26M2w6LR+vsx8zCFE4g
-         BTeA==
-X-Gm-Message-State: AO0yUKUoN/Q26Af80T/wepVwlYiLNVbxKs7ucFV8ZDFrT0TwT+tjPDoN
-        m2Y+YXYOYuxGoTSZtQvDq9OPjA==
-X-Google-Smtp-Source: AK7set9NjJxn74aZueYcfentd77BomFUbSMlvUzVg0sncnweknpQHZlamRhQeOfZrjq9rSw+s3P+MQ==
-X-Received: by 2002:a05:600c:491c:b0:3dd:1b02:23b7 with SMTP id f28-20020a05600c491c00b003dd1b0223b7mr9727024wmp.10.1675443379954;
-        Fri, 03 Feb 2023 08:56:19 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id q10-20020a05600c330a00b003dc3f195abesm3125534wmp.39.2023.02.03.08.56.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Feb 2023 08:56:19 -0800 (PST)
-Message-ID: <5e57cf49-6348-7878-0e01-51e5e1359fa8@linaro.org>
-Date:   Fri, 3 Feb 2023 17:56:17 +0100
+        Fri, 3 Feb 2023 11:56:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16716A8A09;
+        Fri,  3 Feb 2023 08:56:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 99BE0B82B5F;
+        Fri,  3 Feb 2023 16:56:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D92F2C4339C;
+        Fri,  3 Feb 2023 16:56:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675443392;
+        bh=h7/viEQOihIqILr+s/nTh73JPYHxsBqSaGRcETP5tcc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WfZv1S4za0O8S3xKBAkzhmkDpjjZ5oMqlrzwy1eL1z0Jm58kGxDHxDlxOhtb1hnXR
+         hCTWoVCsZtuRXqIGYrcEG/YZn1c6u+7K9wxU1h4DsqhD0Bxf7clbr94+M5BnLM4l38
+         fD8c3ajfVnCwOqWCi7qlkAP1Vwe5/cfogMlFwkdQKmmoaekXC2n+PgLCp7f2wFzhqI
+         WOmwdh0YG4lOxcEQlhhKDW45HxHbtLnetEj29k/r4ezpHUErFZMfjP57XRUXkVQjCC
+         jaNlj/nIqFmsjWXpNXckrtCZQilOvm8SYQIqqnG2tVkaEUNtLp0TLxBgqmyLbfuV0+
+         jR7bn63bl+pWQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 99CD8405BE; Fri,  3 Feb 2023 13:56:28 -0300 (-03)
+Date:   Fri, 3 Feb 2023 13:56:28 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Rob Herring <robh@kernel.org>,
+        Kang Minchul <tegongkang@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sandipan Das <sandipan.das@amd.com>,
+        Jing Zhang <renyu.zj@linux.alibaba.com>,
+        linuxppc-dev@lists.ozlabs.org, Kajol Jain <kjain@linux.ibm.com>,
+        Stephane Eranian <eranian@google.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Caleb Biggers <caleb.biggers@intel.com>
+Subject: Re: [PATCH v1] perf pmu: Fix aarch64 build
+Message-ID: <Y908vNzJp7cVM8gN@kernel.org>
+References: <20230203014014.75720-1-irogers@google.com>
+ <CAP-5=fX0ohsCUspm7NowDy2bmSr2cJfp=iaStK4EAdVy7zBHGA@mail.gmail.com>
+ <Y90XgtX9uv26UAQa@kernel.org>
+ <Y90bsM4DGL+WV8m0@kernel.org>
+ <Y90b7shHtOCQL3ma@kernel.org>
+ <Y90di+N7TODkFvMV@kernel.org>
+ <Y90rtA95mWW5Othk@kernel.org>
+ <Y90v+jTe6z1dSFE0@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 4.19 00/80] 4.19.272-rc1 review
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230203101015.263854890@linuxfoundation.org>
- <CA+G9fYvd8D3LfxPg2afZXKFC3WNHrhyE7c3fFLViaG4WhJeHVg@mail.gmail.com>
- <5ed630fd-8bd7-4b80-9fa8-a3dab2eb0447@linaro.org>
- <4e5a447b-1796-513c-135a-f9e9c870d88a@roeck-us.net>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <4e5a447b-1796-513c-135a-f9e9c870d88a@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y90v+jTe6z1dSFE0@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,71 +89,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/02/2023 16:51, Guenter Roeck wrote:
-> On 2/3/23 04:28, Krzysztof Kozlowski wrote:
->> On 03/02/2023 12:04, Naresh Kamboju wrote:
->>> On Fri, 3 Feb 2023 at 15:48, Greg Kroah-Hartman
->>> <gregkh@linuxfoundation.org> wrote:
->>>>
->>>> This is the start of the stable review cycle for the 4.19.272 release.
->>>> There are 80 patches in this series, all will be posted as a response
->>>> to this one.  If anyone has any issues with these being applied, please
->>>> let me know.
->>>>
->>>> Responses should be made by Sun, 05 Feb 2023 10:09:58 +0000.
->>>> Anything received after that time might be too late.
->>>>
->>>> The whole patch series can be found in one patch at:
->>>>          https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.272-rc1.gz
->>>> or in the git tree and branch at:
->>>>          git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
->>>> and the diffstat can be found below.
->>>>
->>>> thanks,
->>>>
->>>> greg k-h
->>>>
->>>
->>> Following patch caused build error on arm,
->>>
->>>> Gaosheng Cui <cuigaosheng1@huawei.com>
->>>>      memory: mvebu-devbus: Fix missing clk_disable_unprepare in mvebu_devbus_probe()
->>>
->>> drivers/memory/mvebu-devbus.c: In function 'mvebu_devbus_probe':
->>> drivers/memory/mvebu-devbus.c:297:8: error: implicit declaration of
->>> function 'devm_clk_get_enabled'
->>> [-Werror=implicit-function-declaration]
->>>    297 |  clk = devm_clk_get_enabled(&pdev->dev, NULL);
->>>        |        ^~~~~~~~~~~~~~~~~~~~
->>
->> Already reported:
->> https://lore.kernel.org/all/202302020048.ZsmUJDHo-lkp@intel.com/
->>
+Em Fri, Feb 03, 2023 at 01:02:02PM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Fri, Feb 03, 2023 at 12:43:48PM -0300, Arnaldo Carvalho de Melo escreveu:
+> > I tried bisecting, but at this cset:
+> > 
+> > acme@roc-rk3399-pc:~/git/perf$ git log --oneline -1
+> > d22e569cd33d (HEAD) perf pmu-events: Separate the metrics from events for no jevents
+> > acme@roc-rk3399-pc:~/git/perf$
+> > 
+> > I'm getting this:
+> > 
+> >   CC      /tmp/build/perf/pmu-events/pmu-events.o
+> > pmu-events/pmu-events.c:3637:32: error: no previous prototype for ‘perf_pmu__find_table’ [-Werror=missing-prototypes]
+> >  3637 | const struct pmu_events_table *perf_pmu__find_table(struct perf_pmu *pmu)
+> >       |                                ^~~~~~~~~~~~~~~~~~~~
+> >   CC      /tmp/build/perf/builtin-ftrace.o
+> >   CC      /tmp/build/perf/builtin-help.o
+> >   CC      /tmp/build/perf/builtin-buildid-list.o
+> > cc1: all warnings being treated as errors
+> > make[3]: *** [/home/acme/git/perf/tools/build/Makefile.build:97: /tmp/build/perf/pmu-events/pmu-events.o] Error 1
+> > make[2]: *** [Makefile.perf:676: /tmp/build/perf/pmu-events/pmu-events-in.o] Error 2
+> > make[2]: *** Waiting for unfinished jobs....
+> >   CC      /tmp/build/perf/builtin-buildid-cache.o
+> > 
+> > <SNIP>
+> > 
+> >   CC      /tmp/build/perf/tests/attr.o
+> > arch/arm64/util/pmu.c: In function ‘pmu_events_table__find’:
+> > arch/arm64/util/pmu.c:35:24: error: implicit declaration of function ‘perf_pmu__find_table’; did you mean ‘perf_pmu__find_by_type’? [-Werror=implicit-function-declaration]
+> >    35 |                 return perf_pmu__find_table(pmu);
+> >       |                        ^~~~~~~~~~~~~~~~~~~~
+> >       |                        perf_pmu__find_by_type
+> > arch/arm64/util/pmu.c:35:24: error: returning ‘int’ from a function with return type ‘const struct pmu_events_table *’ makes pointer from integer without a cast [-Werror=int-conversion]
+> >    35 |                 return perf_pmu__find_table(pmu);
+> >       |                        ^~~~~~~~~~~~~~~~~~~~~~~~~
+> > cc1: all warnings being treated as errors
+> > make[6]: *** [/home/acme/git/perf/tools/build/Makefile.build:97: /tmp/build/perf/arch/arm64/util/pmu.o] Error 1
+> > make[5]: *** [/home/acme/git/perf/tools/build/Makefile.build:139: util] Error 2
+> > make[4]: *** [/home/acme/git/perf/tools/build/Makefile.build:139: arm64] Error 2
+> > make[3]: *** [/home/acme/git/perf/tools/build/Makefile.build:139: arch] Error 2
+> > make[3]: *** Waiting for unfinished jobs....
+> >   CC      /tmp/build/perf/tests/vmlinux-kallsyms.o
+> > 
+> > -----
+> > 
+> > I'm building with:
 > 
-> I don't usually check if release candidate reports have been reported already.
-> If I know about it, I may add a reference to the report, but typically I still
-> report it.
+> So:
 > 
-> Personally I find it discouraging to get those "already reported" e-mails.
-> To me it sounds like "hey, you didn't do your job properly". It should not matter
-> if a problem was already reported or not, and I find it valuable if it is
-> reported multiple times because it gives an indication of the level of test
-> coverage. I would find it better if people would use something like "Also
-> reported:" instead. But then maybe I am just oversensitive, who knows.
+> acme@roc-rk3399-pc:~/git/perf$ find tools/perf/ -name "*.[ch]" | xargs grep -w perf_pmu__find_table
+> tools/perf/arch/arm64/util/pmu.c:		return perf_pmu__find_table(pmu);
+> tools/perf/pmu-events/pmu-events.c:const struct pmu_events_table *perf_pmu__find_table(struct perf_pmu *pmu)
+> acme@roc-rk3399-pc:~/git/perf$
+> acme@roc-rk3399-pc:~/git/perf$ git log --oneline -1
+> d22e569cd33d (HEAD) perf pmu-events: Separate the metrics from events for no jevents
+> acme@roc-rk3399-pc:~/git/perf$
 > 
-> Anyway, yes, I noticed this problem as well (and probably overlooked it
-> in my previous report to Greg - sorry for that).
-> 
+> Tring to fix...
 
-Let me rephrase it then:
+tools/perf/pmu-events/pmu-events.c was a leftover from a previous build,
+strange as I build using O=, not to clutter the source dir, so perhaps
+handling that is missing, I'll check.
 
-This topic is already discussed here:
-https://lore.kernel.org/all/202302020048.ZsmUJDHo-lkp@intel.com/
+Fixed aarch64 specific one with:
 
-I proposed to drop both broken backports - mvebu-devbus and
-atmel-sdramc, because they require new features in common clock
-framework API.
+diff --git a/tools/perf/arch/arm64/util/pmu.c b/tools/perf/arch/arm64/util/pmu.c
+index 801bf52e2ea6..b4eaf00ec5a8 100644
+--- a/tools/perf/arch/arm64/util/pmu.c
++++ b/tools/perf/arch/arm64/util/pmu.c
+@@ -32,7 +32,7 @@ const struct pmu_events_table *pmu_events_table__find(void)
+ 	struct perf_pmu *pmu = pmu__find_core_pmu();
+ 
+ 	if (pmu)
+-		return perf_pmu__find_table(pmu);
++		return perf_pmu__find_events_table(pmu);
+ 
+ 	return NULL;
+ }
 
-Best regards,
-Krzysztof
 
+---
+
+Continuing...
