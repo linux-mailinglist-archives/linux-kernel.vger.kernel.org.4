@@ -2,72 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F327368924E
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 09:31:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92F48689256
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 09:33:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232204AbjBCIau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 03:30:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39638 "EHLO
+        id S231889AbjBCIcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 03:32:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230144AbjBCIar (ORCPT
+        with ESMTP id S230144AbjBCIcG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 03:30:47 -0500
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 380503D0B7;
-        Fri,  3 Feb 2023 00:30:44 -0800 (PST)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 494A367373; Fri,  3 Feb 2023 09:30:38 +0100 (CET)
-Date:   Fri, 3 Feb 2023 09:30:37 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-Subject: Re: remove arch/sh
-Message-ID: <20230203083037.GA30738@lst.de>
-References: <20230113062339.1909087-1-hch@lst.de> <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de> <20230116071306.GA15848@lst.de> <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de> <20230203071423.GA24833@lst.de> <afd056a95d21944db1dc0c9708f692dd1f7bb757.camel@physik.fu-berlin.de>
+        Fri, 3 Feb 2023 03:32:06 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CDAB38B51
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 00:32:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 42C3BB829C6
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 08:32:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04AABC433EF;
+        Fri,  3 Feb 2023 08:32:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675413122;
+        bh=RAtN3EJDQ7w/03dr+GaC1INaxMzuX9epOdzJ3OdelEo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=D9ymYxzvOxRruVkLlhZ85G+eBR+LXzdfB8BLISeUZ//q/LNEoaJs7maN8nhdOvtJC
+         ADEmAJVJL3m/82uypWwEtJijSLczgXO+RLemZspfUCTfT8ThX+adDhZvxst/L8NCZ7
+         RiDosYU2NDa0hS54zK9N6+4k9h+Oy8Ff3ZCrlp6nWA+X4SA0qqABjY0NnosvG89dB7
+         Ey14mUf6BUxrfSMupOpDF/dDHCCI23b7wDey20LkDtoYD0e4G/uGjhyUbCfREipqMH
+         zTcpjOcVWePbTYDiIM9OOCqxT9dbf+TH2i5cnpgyP3bRel34zMz3ycix92zFoiTA50
+         o0WEyGDqVTBZQ==
+Message-ID: <3589331b-a3ec-87e1-790d-387439672ea5@kernel.org>
+Date:   Fri, 3 Feb 2023 16:31:58 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <afd056a95d21944db1dc0c9708f692dd1f7bb757.camel@physik.fu-berlin.de>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 2/2 v3] f2fs: add sysfs nodes to set last_age_weight
+Content-Language: en-US
+To:     qixiaoyu1 <qxy65535@gmail.com>, Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        Ping Xiong <xiongping1@xiaomi.com>,
+        Xiaoyu Qi <qixiaoyu1@xiaomi.com>
+References: <938a8e61-4e47-1acc-938c-c90d213d2c86@kernel.org>
+ <20230202082028.9013-1-qixiaoyu1@xiaomi.com>
+ <20230202082028.9013-2-qixiaoyu1@xiaomi.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20230202082028.9013-2-qixiaoyu1@xiaomi.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 09:24:46AM +0100, John Paul Adrian Glaubitz wrote:
-> Since this is my very first time stepping up as a kernel maintainer, I was hoping
-> to get some pointers on what to do to make this happen.
+On 2023/2/2 16:20, qixiaoyu1 wrote:
+> Signed-off-by: qixiaoyu1 <qixiaoyu1@xiaomi.com>
+> Signed-off-by: xiongping1 <xiongping1@xiaomi.com>
+> ---
+>   Documentation/ABI/testing/sysfs-fs-f2fs |  5 +++++
+>   fs/f2fs/extent_cache.c                  | 15 +++++++++------
+>   fs/f2fs/f2fs.h                          |  1 +
+>   fs/f2fs/sysfs.c                         | 11 +++++++++++
+>   4 files changed, 26 insertions(+), 6 deletions(-)
 > 
-> So far, we have set up a new kernel tree and I have set up a local development and
-> test environment for SH kernels using my SH7785LCR board as the target platform.
-> 
-> Do I just need to send a patch asking to change the corresponding entry in the
-> MAINTAINERS file?
+> diff --git a/Documentation/ABI/testing/sysfs-fs-f2fs b/Documentation/ABI/testing/sysfs-fs-f2fs
+> index 9e3756625a81..11af7dbb6bc9 100644
+> --- a/Documentation/ABI/testing/sysfs-fs-f2fs
+> +++ b/Documentation/ABI/testing/sysfs-fs-f2fs
+> @@ -669,3 +669,8 @@ Contact:	"Ping Xiong" <xiongping1@xiaomi.com>
+>   Description:	When DATA SEPARATION is on, it controls the age threshold to indicate
+>   		the data blocks as warm. By default it was initialized as 2621440 blocks
+>   		(equals to 10GB).
+> +
+> +What:           /sys/fs/f2fs/<disk>/last_age_weight
+> +Date:           January 2023
+> +Contact:        "Ping Xiong" <xiongping1@xiaomi.com>
+> +Description:    When DATA SEPARATION is on, it controls the weight of last data block age.
+> diff --git a/fs/f2fs/extent_cache.c b/fs/f2fs/extent_cache.c
+> index d9f12f404beb..ce99882ba81c 100644
+> --- a/fs/f2fs/extent_cache.c
+> +++ b/fs/f2fs/extent_cache.c
+> @@ -871,19 +871,21 @@ void f2fs_update_read_extent_tree_range_compressed(struct inode *inode,
+>   }
+>   #endif
+>   
+> -static unsigned long long __calculate_block_age(unsigned long long new,
+> +static unsigned long long __calculate_block_age(struct f2fs_sb_info *sbi,
+> +						unsigned long long new,
+>   						unsigned long long old)
+>   {
+>   	unsigned int rem_old, rem_new;
+>   	unsigned long long res;
+> +	unsigned int weight = sbi->last_age_weight;
+>   
+> -	res = div_u64_rem(new, 100, &rem_new) * (100 - LAST_AGE_WEIGHT)
+> -		+ div_u64_rem(old, 100, &rem_old) * LAST_AGE_WEIGHT;
+> +	res = div_u64_rem(new, 100, &rem_new) * (100 - weight)
+> +		+ div_u64_rem(old, 100, &rem_old) * weight;
+>   
+>   	if (rem_new)
+> -		res += rem_new * (100 - LAST_AGE_WEIGHT) / 100;
+> +		res += rem_new * (100 - weight) / 100;
+>   	if (rem_old)
+> -		res += rem_old * LAST_AGE_WEIGHT / 100;
+> +		res += rem_old * weight / 100;
+>   
+>   	return res;
+>   }
+> @@ -917,7 +919,7 @@ static int __get_new_block_age(struct inode *inode, struct extent_info *ei,
+>   			cur_age = ULLONG_MAX - tei.last_blocks + cur_blocks;
+>   
+>   		if (tei.age)
+> -			ei->age = __calculate_block_age(cur_age, tei.age);
+> +			ei->age = __calculate_block_age(sbi, cur_age, tei.age);
+>   		else
+>   			ei->age = cur_age;
+>   		ei->last_blocks = cur_blocks;
+> @@ -1233,6 +1235,7 @@ void f2fs_init_extent_cache_info(struct f2fs_sb_info *sbi)
+>   	atomic64_set(&sbi->allocated_data_blocks, 0);
+>   	sbi->hot_data_age_threshold = DEF_HOT_DATA_AGE_THRESHOLD;
+>   	sbi->warm_data_age_threshold = DEF_WARM_DATA_AGE_THRESHOLD;
+> +	sbi->last_age_weight = LAST_AGE_WEIGHT;
+>   }
+>   
+>   int __init f2fs_create_extent_cache(void)
+> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+> index e8953c3dc81a..c3609cbc28c7 100644
+> --- a/fs/f2fs/f2fs.h
+> +++ b/fs/f2fs/f2fs.h
+> @@ -1679,6 +1679,7 @@ struct f2fs_sb_info {
+>   	/* The threshold used for hot and warm data seperation*/
+>   	unsigned int hot_data_age_threshold;
+>   	unsigned int warm_data_age_threshold;
+> +	unsigned int last_age_weight;
+>   
+>   	/* basic filesystem units */
+>   	unsigned int log_sectors_per_block;	/* log2 sectors per block */
+> diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
+> index 83a366f3ee80..a70cf674d8e7 100644
+> --- a/fs/f2fs/sysfs.c
+> +++ b/fs/f2fs/sysfs.c
+> @@ -686,6 +686,15 @@ static ssize_t __sbi_store(struct f2fs_attr *a,
+>   		return count;
+>   	}
+>   
+> +	if (!strcmp(a->attr.name, "last_age_weight")) {
+> +		if (t <= 0 || t >= 100)
 
-I'm not sure a there is a document, but:
+Could 0 or 100 be a valid value?
 
- - add the MAINTAINERS change to your tree
- - ask Stephen to get your tree included in linux-next
+Thanks,
 
-then eventually send a pull request to Linus with all of that.  Make
-sure it's been in linux-next for a while.
+> +			return -EINVAL;
+> +		if (t == *ui)
+> +			return count;
+> +		*ui = (unsigned int)t;
+> +		return count;
+> +	}
+> +
+>   	*ui = (unsigned int)t;
+>   
+>   	return count;
+> @@ -944,6 +953,7 @@ F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, revoked_atomic_block, revoked_atomic_block)
+>   /* For block age extent cache */
+>   F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, hot_data_age_threshold, hot_data_age_threshold);
+>   F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, warm_data_age_threshold, warm_data_age_threshold);
+> +F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, last_age_weight, last_age_weight);
+>   
+>   #define ATTR_LIST(name) (&f2fs_attr_##name.attr)
+>   static struct attribute *f2fs_attrs[] = {
+> @@ -1042,6 +1052,7 @@ static struct attribute *f2fs_attrs[] = {
+>   	ATTR_LIST(revoked_atomic_block),
+>   	ATTR_LIST(hot_data_age_threshold),
+>   	ATTR_LIST(warm_data_age_threshold),
+> +	ATTR_LIST(last_age_weight),
+>   	NULL,
+>   };
+>   ATTRIBUTE_GROUPS(f2fs);
