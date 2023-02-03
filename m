@@ -2,205 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7A3968A1C8
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 19:22:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84E4A68A1E6
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 19:23:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233557AbjBCSWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 13:22:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53110 "EHLO
+        id S233606AbjBCSXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 13:23:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233533AbjBCSWP (ORCPT
+        with ESMTP id S233295AbjBCSXe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 13:22:15 -0500
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2040.outbound.protection.outlook.com [40.107.20.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 138C4AD31A
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 10:22:11 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nPDz7tcAaSAVNokYL7P8HL76IkEcIZHzBV510+FqzaDpwJfjqTFB5tY8ySgQ++LDvy8Ixe++hK5ghhM7pdiG50Ab2OqVi+WsnyIwTqvH10XROvDV3sXQKOUwbPXIUdxycS3hq/ky5IQry9tk8dmTqJY72HR5dsFEDPe9AbAUUCVpythXje3SxNkPwttoadO7QCuVw+/5AA29+IBHhNfdpXmSSS6VEZW442TolZjYLVgdbMZd9xP8sFHMxDFs5YFm76hAYdHdoMHBEulUoC25PtJkH/QM0f2010Q2Dk6UavEsNAiOv5nTlW5Im65aXtbX3xhRcAISB18belyskTHndw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GhktJ5vup+pLgCvyY7owXYSJYsWJX3LnxQ0WuL9pbrk=;
- b=lOdIlaNazvErwtqK5N088t2oiLUfvT7Ph6PISRfchWJjAXiZ1ae2ntIf7V7Lv0KEpTlIWJNZWRwpvgq8AXRywf/1nXJ1NDbcISObUKev5ZSJvFpJzT3KhVKaYMbs3p40YIBCmfaKLYc2DZ66xDlEdpRHSOH04X5e0XP277OUkNDe9suYQxhVxuFpFOXq/nxFAwonzhDUNgubXzUi3YXM5DUHWyuTOoxI4u9SyxxOqfiluc1lJsbu4d9b2gUU28fL/09YzUp1RAnfhf1ApswEletf0X6zynpvp+MLrTVVap7gBsTWLuZe5bVkAaP88lDdrr4MMVKLKdsBtJfnmselxw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GhktJ5vup+pLgCvyY7owXYSJYsWJX3LnxQ0WuL9pbrk=;
- b=iMeMfMQb6tVEjd6C7kpEoK/MPEnhHfURfXiaecuA9B0JiIvi9iBESdrQaHZdT63+EEaGeVH+J+iRlYgaN8FHeoy/k7uJlfrHKH8KXy1G9k9qm9csovaK6+9H3l8w7YKmGo6+Z4QWGXxuhBq5xptPQbHXo3+ut4c/5bMguyaeJ/0tVH5GGufoE1gH3I+WPX3pBlXbJzdWI31YMdQbfXakV84wE+6PrxeM3zrKuZdbbGYwjSrjUoXaX0smJUD+yi/sV7DAZcip0wzuqz9NmjuN8MmAoOXUEaUgNpFb7U31z7ejv+slj6AuXktFmgK1Wy0Jjq0KSJqmPH6dQgp6S94TBA==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PR0P264MB2983.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1d6::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.28; Fri, 3 Feb
- 2023 18:22:08 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::2cfb:d4c:1932:b097]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::2cfb:d4c:1932:b097%6]) with mapi id 15.20.6064.031; Fri, 3 Feb 2023
- 18:22:08 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     =?utf-8?B?UGFsaSBSb2jDoXI=?= <pali@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-CC:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "npiggin@gmail.com" <npiggin@gmail.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "anders.roxell@linaro.org" <anders.roxell@linaro.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        "nathan@kernel.org" <nathan@kernel.org>,
-        Linux Kernel Functional Testing <lkft@linaro.org>,
-        "qiongsiwu@gmail.com" <qiongsiwu@gmail.com>,
-        "nemanja.i.ibm@gmail.com" <nemanja.i.ibm@gmail.com>
-Subject: Re: [PATCH 1/2] powerpc/64: Set default CPU in Kconfig
-Thread-Topic: [PATCH 1/2] powerpc/64: Set default CPU in Kconfig
-Thread-Index: AQHZMJAoHnrP29o+IEWPR5CDVAsvZa66AHKAgAAClgCAAGFkgIADLMUAgAAGiAA=
-Date:   Fri, 3 Feb 2023 18:22:08 +0000
-Message-ID: <a0805df4-ebc3-0478-b9dd-0bd1f9d23b82@csgroup.eu>
-References: <76c11197b058193dcb8e8b26adffba09cfbdab11.1674632329.git.christophe.leroy@csgroup.eu>
- <20230201113155.18113-1-naresh.kamboju@linaro.org>
- <04b55866-aa17-f500-855a-7d4fb4bbaacf@csgroup.eu>
- <CAKwvOdnc_ggT_2FQQwq71PiDE_D1xxXXnB5iSWvvoa3pu7kMdQ@mail.gmail.com>
- <20230203175846.oczctwfr2jq7usze@pali>
-In-Reply-To: <20230203175846.oczctwfr2jq7usze@pali>
-Accept-Language: fr-FR, en-US
-Content-Language: fr-FR
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MRZP264MB2988:EE_|PR0P264MB2983:EE_
-x-ms-office365-filtering-correlation-id: 27baa751-f833-4b75-5907-08db06138f5d
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: BqGwJj9D1xeKBXYqk1SrFl07CIBPdR2OA0Axt8DoYMGJvPYb6I2C0MMyfUXyDqggc9zka6Pckp4G9bY+ZVVGHTNm4K5KWPBIGDGMUPzmjK1i6AjQFHO+RI6ONxLLfji+lbmJT7eSRY3D/neJFphYyd3IBR75neMiwrw/9vFhhrxcw6nNGBQ9JHB447x+AXRXdH/fWhVLGzLcSXm3U+e1kVNNMmcg6SMDZ53oA29XIytcIwxiipDLwl5yzad21xpNIGWBxZBoJPOhKrqCIItZlsuYPTWOsfWFkOL0eo7G6TOBtzUItI/iP26tl/NP+KG8ImGPyor7cZ+RVJUOJ+x04g5CXgxscIjGgj55vR5bHC7wFRnaGfctj5XLcetJAzDu6eXacKoTDmyozWJ/taUbb8wGzmPkzFPP3MCUCtsAk4NCkdDSBxzIjzFnUHP8Ht4XlZQVK4kNeh39rS/c/Eef8ShhEL5+EP33Xfz3e4LCrEUj8XfeSqkLl3sKNTutRaI2s/0EXZzFQb7P+9+vBZ4Zvh9c3XRWT8RghCyqOLgAzqctTYV5ytUshlTPy3kHbGpKDUiw2IblqFAmXcdzVGswzLqy13gkzFiJO9KE/SCR4yUrkwwaCP4jh+DCJGX/cZ5ZsVIWc7TOHrRdQ5GJhUT/aWaQ+Svf0Seou2pn55pBLXFZObiAmQlBTlfnvx3kLF/rqEwKBSEZa7X/bP2rseD9bNlr0ryMFgWrOWNjojvalCNxtdx6U2imkvBLJcBhRcoUuFoo2Yy3gAKgom1fj2iWl6+5oXo2n9sQdgmRMYllXb8=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(136003)(396003)(39850400004)(376002)(366004)(451199018)(2906002)(5660300002)(44832011)(7416002)(38070700005)(31696002)(2616005)(86362001)(122000001)(38100700002)(71200400001)(53546011)(83380400001)(6506007)(186003)(6512007)(26005)(6486002)(966005)(36756003)(478600001)(76116006)(66946007)(66556008)(66476007)(316002)(41300700001)(31686004)(64756008)(66446008)(91956017)(40140700001)(110136005)(4326008)(54906003)(8676002)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?QVoxemFiMDltU2Q4cG1JT0YzNkZ1eERNbGRGOWVMRWptNUFHQmc0SEtKOUlW?=
- =?utf-8?B?OG5Zclk3SGVaanBGR01IM3A5dE01aU5tdCtvcllyRGU1OUxQYTBPZ2FLc3Ny?=
- =?utf-8?B?OVcrVEhhU1g1N3dGam5LbFBLdFJzdWMyZGJ1TEZvdXR2ZXQ3ckgzVDFmSzdV?=
- =?utf-8?B?U3F1K1RYd2VtTzFBWm1jRHBlbjlQN0t1ckFMVmpNQnhMbWRrbW1naGFTUWVI?=
- =?utf-8?B?NkZ1TWNocnJtQnlPa0xySG52QlZIYkhTZ0VHT2ZnT013OHREd0d2RlovQlIv?=
- =?utf-8?B?UUpvRWJsSEVNZlBSQ3p5aVA5RDltb2FRTFZFemFDTlJRRFo4cXhaZHdOMjhP?=
- =?utf-8?B?Z2pEUWpaZzdDVjA2WnZnN0VhNHJGOTd3ekZLWVVTbzB3djJTK3ZtTm8yN2dR?=
- =?utf-8?B?QkVFZUxqOTVaSFBwZTRBVGVUWjhSRXJZNTR1bzZNc1R1eDBreXRZTjdTb3ls?=
- =?utf-8?B?M2dRVXh4bklJSHB6YWdpVG45ZGRWb2RKV2lmeWlnNCs0ajNjd1pMRzRuem9D?=
- =?utf-8?B?M1VTQWpWY0gyTmtZVVAwZHljZ0tUcDh4Y25JekpaREF1T3dOT3J3cEFiRkVL?=
- =?utf-8?B?MUx5QTB2N3g4aXJsL2s2VjBENjNpRzFUYm9PellVTS8wa1hVOEpqeDVRQVNM?=
- =?utf-8?B?Ymk5MVU4YkNBY3UvMnFMbmdPS3NXeG5pSG81N2NtREExY1JNUGtQbWxwSHhY?=
- =?utf-8?B?NmpEV041OFdNeDdUQzZpdFJzZ1ZhdXlSaVFGVGU1eHJrWkdLVzFKOHBuYVBw?=
- =?utf-8?B?VGV3bStkMksreDZYR2xFbnd2VE52WnVtb1ZuOVRwaTFtNjdWOVJpVDN6ZFAv?=
- =?utf-8?B?ZjFuSGxUZndUc1RxMkk4UGw3WTJMaTkxaTMraFlBSTFXRS9mVXg3bzNuWnlp?=
- =?utf-8?B?b1VmdndzcVJ1Z2s3eWdSbFhQT2JhV0ZkOGcvK242OFdiL05FQjF3Uk56NVZR?=
- =?utf-8?B?MHJVZmRPK2xRdDZXNFlSYzNMc2FaTnVOWVN0VWxBQlViOGVZaGk3NlliZSt0?=
- =?utf-8?B?WkM2S3hLQnpRRmFCUXlQYW1Xc0JvN3EyYUE0Njd4YWE2Vk91RHZIT2VzOTcx?=
- =?utf-8?B?d0RZNU01NkZlYXY4aXdrL2VlSTFIZmhKZGZhaERBeXMzejVvV3F2d0VGa2l3?=
- =?utf-8?B?M052c3I3SXljZnJ6SVNtaW9Zc1REeXoyd21nR0hHaXFFQzQ1S2FXbWs3SGZP?=
- =?utf-8?B?ZWtGZDZuWG5MSi9EVkhQUExxczFFQy9ETFMzUVRkemw1YTlkdWpWM0ZMV2lk?=
- =?utf-8?B?ekJLd1dCa1hDN05yVUV4STViV0w5WmtvRWEvN043Y3FEVTgwOW5DdHo2cGpH?=
- =?utf-8?B?M3hVS2JWZWhXdGtnSG1IUnZYSFkraHczaityVlJZZFk1S0ZSKzc1VFgyNWlk?=
- =?utf-8?B?djRCU0dvZ294WFFvQnRMY2xhN3lYZHdoKzB4QXhCR1crM3JyVFluRi9GSWZV?=
- =?utf-8?B?Mk9pSHV4cHpabXcyRkdCSmpFaEV1dnJUdzY3SGZoTzlTU01COG1CbFdEeWhC?=
- =?utf-8?B?QnpTcXowQytJUDNDTEQwc2pWaTBrVUJETVltdFo0emtiaktkWGhNTU1PTS9z?=
- =?utf-8?B?WUdqek5ZeHZxdjF5TWR1aE5Vczgzc1RJNUwzT21ZaCtubzJ2OEt6RDFXTnlO?=
- =?utf-8?B?bFdrVEV3eHhvRmRmWTltVnVYWWhULzFwMHdqc0V3b0xrdXVUbWlIcmF0c2w0?=
- =?utf-8?B?WjNzSFBEcWlZc1J3Vyt1SUtuWER5c0tQdjdSajlWTnh3Y0RUNlVZaG41M2xl?=
- =?utf-8?B?Ri82d0Rxb3RISnpHSFRYVmc4RkIrWUVrbC9FVnV3bFYyejU5TlA0MG9rOE5y?=
- =?utf-8?B?cTZrd01TY3hJOTQwM1N5OVFmb1BTb00waVpuVVBUSi9pcktlQUlpMmFLT1Rw?=
- =?utf-8?B?V1V6WUxUdnIzSFB6Y1JCR1JTbWpOVXpjQjRIb0RTdEFYMDY3TWp4ZG1qYUlw?=
- =?utf-8?B?b0c0SVRnQ1JzVnZYbzZFNytjR3JSY3NjcTNRcGFWalc1bENUYnkrZmxNUTRs?=
- =?utf-8?B?blJ3a0lYZnNNenJZMzBwYVhCYmJIVkl6WmhBbnJiRXlMV1ZvaTJVN3dLT1hi?=
- =?utf-8?B?bnI0aXJpS0ZPQzBhQU5icVNyK0pHRDRNMXhPKzV0WnlwUUtCZVg5S2ROMSs0?=
- =?utf-8?B?bXp4OUtoSGVBcE40NGVad3VkWDdRTW1Wbmh0cFBtb0IwdEZUU3BFbHFwUG44?=
- =?utf-8?B?d3c9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <42640977A5CAE5439F621C2A8CE25B43@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Fri, 3 Feb 2023 13:23:34 -0500
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440738BDCF;
+        Fri,  3 Feb 2023 10:23:33 -0800 (PST)
+Received: by mail-ot1-x32f.google.com with SMTP id e21-20020a9d5615000000b006884e5dce99so1609028oti.5;
+        Fri, 03 Feb 2023 10:23:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=S7X7WqOczCUyCBj08/fIIsSdgQKTDjj5sD2KRRUZOsI=;
+        b=VcmGKQ98YzAB+J9sBG60vTFulSIYCltoNE6sIU1I8ucAX2NlxULAawwaJ172PaQnna
+         caUaFUkYkepFiP62ybsRFhVQsQSBjiQcvwyUZPMtfMgJjD+ixWyBE0M7lbHlRrawI2D1
+         w91DZSI/nQx4Vpn8bK11UEdfCcoC8t5+mIy3/0oxl38AdD1cYiOXVIgVHTuOS/Qiba57
+         N21Es8nk8Kwz2ITSeEkc4HU3ivB26arZR7srJPqWY8AcBXfyrGlf8MLzvuibUvTO47Wi
+         QnB0Ua3pXsOWn7gexU3eOwhsC+QN1gBLQzD/doBpq3lGDtRRKVbTjedoipC0DsVg+Fvw
+         pOBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=S7X7WqOczCUyCBj08/fIIsSdgQKTDjj5sD2KRRUZOsI=;
+        b=K+99t+8gsNQRwMBIsywjEOci20R5HQtz9eBmaHnQmK0kXfqSHcNvVsR8EMdEbUF/fF
+         ABk+jyOrl2AY7Z0IXXmlQQopyrt7ShyumLju9qtQkdztgOaEc7ErMhfUBBH+UoYOcjLb
+         YJu6pKXoobkL5bcmD44nr6+GP6+0ufst+Ey8rw39LLYjv1Y8u5uweGUFlpQjSpPvqLpP
+         dlz7c1ZqnAk/CefnW4voIS8a/JJUd+htUYaHD0GkFDRzdbk+MDzhgmmRbdlhcvEDyrX0
+         4JaUTmLDOp3MjQvfwNy3pmAcbSzpTOlt7NIJXpaubnM3/CghjwlYxDd4zWFfvP3zTAfd
+         IUww==
+X-Gm-Message-State: AO0yUKX5mvbT6gwjL/upATY21RPYs+8J6cz0pgikv9lsR/nteUwSm+Oj
+        Nb6jrtWaLZM5gg7s84vPLI0=
+X-Google-Smtp-Source: AK7set930D87whC9k09OD4tmfsqQpmJXKWylcoQ0KG/aRGH4gJ2g6vtWy52ltNd/F5RLF21mDxT2ig==
+X-Received: by 2002:a05:6830:2b1f:b0:68b:c04d:79ca with SMTP id l31-20020a0568302b1f00b0068bc04d79camr7921044otv.33.1675448612610;
+        Fri, 03 Feb 2023 10:23:32 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id z7-20020a9d65c7000000b0068bb3a9e2b9sm1365472oth.77.2023.02.03.10.23.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Feb 2023 10:23:32 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <df2ee423-5913-fd3c-c0e1-6c494d941bfe@roeck-us.net>
+Date:   Fri, 3 Feb 2023 10:23:30 -0800
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 27baa751-f833-4b75-5907-08db06138f5d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Feb 2023 18:22:08.1993
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 385abTx8HtLbClgec6bW1z0rXAqSGTsRl4YHuKOuyqfDv4EWsyz4j4aP7NV4zD4WJoWLJhv/eYm1/l5vbatW9pxJicu9aNpQaPnfVrS7IYg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB2983
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 2/5] watchdog: diag288_wdt: remove power management
+Content-Language: en-US
+To:     Alexander Egorenkov <egorenar@linux.ibm.com>,
+        wim@linux-watchdog.org
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hca@linux.ibm.com
+References: <20230203073958.1585738-1-egorenar@linux.ibm.com>
+ <20230203073958.1585738-3-egorenar@linux.ibm.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230203073958.1585738-3-egorenar@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        TVD_SUBJ_WIPE_DEBT autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDAzLzAyLzIwMjMgw6AgMTg6NTgsIFBhbGkgUm9ow6FyIGEgw6ljcml0wqA6DQo+IE9u
-IFdlZG5lc2RheSAwMSBGZWJydWFyeSAyMDIzIDA5OjI5OjQ1IE5pY2sgRGVzYXVsbmllcnMgd3Jv
-dGU6DQo+PiBPbiBXZWQsIEZlYiAxLCAyMDIzIGF0IDM6NDEgQU0gQ2hyaXN0b3BoZSBMZXJveQ0K
-Pj4gPGNocmlzdG9waGUubGVyb3lAY3Nncm91cC5ldT4gd3JvdGU6DQo+Pj4NCj4+Pg0KPj4+DQo+
-Pj4gTGUgMDEvMDIvMjAyMyDDoCAxMjozMSwgTmFyZXNoIEthbWJvanUgYSDDqWNyaXQgOg0KPj4+
-PiBGb2xsb3dpbmcgYnVpbGQgcmVncmVzc2lvbiBzdGFydGVkIGZyb20gbmV4dC0yMDIzMDEzMS4N
-Cj4+Pj4NCj4+Pj4gUmVncmVzc2lvbnMgZm91bmQgb24gcG93ZXJwYzoNCj4+Pj4NCj4+Pj4gICAg
-IGJ1aWxkL2NsYW5nLW5pZ2h0bHktdHFtOHh4X2RlZmNvbmZpZw0KPj4+PiAgICAgYnVpbGQvY2xh
-bmctbmlnaHRseS1wcGM2NGVfZGVmY29uZmlnDQo+Pj4+DQo+Pj4+DQo+Pj4+IG1ha2UgLS1zaWxl
-bnQgLS1rZWVwLWdvaW5nIC0tam9icz04IE89L2hvbWUvdHV4YnVpbGQvLmNhY2hlL3R1eG1ha2Uv
-YnVpbGRzLzEvYnVpbGQgQVJDSD1wb3dlcnBjIENST1NTX0NPTVBJTEU9cG93ZXJwYzY0bGUtbGlu
-dXgtZ251LSBIT1NUQ0M9Y2xhbmcgQ0M9Y2xhbmcgTExWTT0xIExMVk1fSUFTPTAgdHFtOHh4X2Rl
-ZmNvbmZpZw0KPj4+PiBtYWtlIC0tc2lsZW50IC0ta2VlcC1nb2luZyAtLWpvYnM9OCBPPS9ob21l
-L3R1eGJ1aWxkLy5jYWNoZS90dXhtYWtlL2J1aWxkcy8xL2J1aWxkIEFSQ0g9cG93ZXJwYyBDUk9T
-U19DT01QSUxFPXBvd2VycGM2NGxlLWxpbnV4LWdudS0gSE9TVENDPWNsYW5nIENDPWNsYW5nIExM
-Vk09MSBMTFZNX0lBUz0wDQo+Pj4+DQo+Pj4+IGVycm9yOiB1bmtub3duIHRhcmdldCBDUFUgJzg2
-MCcNCj4+Pj4gbm90ZTogdmFsaWQgdGFyZ2V0IENQVSB2YWx1ZXMgYXJlOiBnZW5lcmljLCA0NDAs
-IDQ1MCwgNjAxLCA2MDIsIDYwMywgNjAzZSwgNjAzZXYsIDYwNCwgNjA0ZSwgNjIwLCA2MzAsIGcz
-LCA3NDAwLCBnNCwgNzQ1MCwgZzQrLCA3NTAsIDg1NDgsIDk3MCwgZzUsIGEyLCBlNTAwLCBlNTAw
-bWMsIGU1NTAwLCBwb3dlcjMsIHB3cjMsIHBvd2VyNCwgcHdyNCwgcG93ZXI1LCBwd3I1LCBwb3dl
-cjV4LCBwd3I1eCwgcG93ZXI2LCBwd3I2LCBwb3dlcjZ4LCBwd3I2eCwgcG93ZXI3LCBwd3I3LCBw
-b3dlcjgsIHB3cjgsIHBvd2VyOSwgcHdyOSwgcG93ZXIxMCwgcHdyMTAsIHBvd2VycGMsIHBwYywg
-cHBjMzIsIHBvd2VycGM2NCwgcHBjNjQsIHBvd2VycGM2NGxlLCBwcGM2NGxlLCBmdXR1cmUNCj4+
-Pj4gbWFrZVsyXTogKioqIFsvYnVpbGRzL2xpbnV4L3NjcmlwdHMvTWFrZWZpbGUuYnVpbGQ6MTE0
-OiBzY3JpcHRzL21vZC9kZXZpY2V0YWJsZS1vZmZzZXRzLnNdIEVycm9yIDENCj4+Pj4gZXJyb3I6
-IHVua25vd24gdGFyZ2V0IENQVSAnODYwJw0KPj4+PiBub3RlOiB2YWxpZCB0YXJnZXQgQ1BVIHZh
-bHVlcyBhcmU6IGdlbmVyaWMsIDQ0MCwgNDUwLCA2MDEsIDYwMiwgNjAzLCA2MDNlLCA2MDNldiwg
-NjA0LCA2MDRlLCA2MjAsIDYzMCwgZzMsIDc0MDAsIGc0LCA3NDUwLCBnNCssIDc1MCwgODU0OCwg
-OTcwLCBnNSwgYTIsIGU1MDAsIGU1MDBtYywgZTU1MDAsIHBvd2VyMywgcHdyMywgcG93ZXI0LCBw
-d3I0LCBwb3dlcjUsIHB3cjUsIHBvd2VyNXgsIHB3cjV4LCBwb3dlcjYsIHB3cjYsIHBvd2VyNngs
-IHB3cjZ4LCBwb3dlcjcsIHB3cjcsIHBvd2VyOCwgcHdyOCwgcG93ZXI5LCBwd3I5LCBwb3dlcjEw
-LCBwd3IxMCwgcG93ZXJwYywgcHBjLCBwcGMzMiwgcG93ZXJwYzY0LCBwcGM2NCwgcG93ZXJwYzY0
-bGUsIHBwYzY0bGUsIGZ1dHVyZQ0KPj4+PiBtYWtlWzJdOiAqKiogWy9idWlsZHMvbGludXgvc2Ny
-aXB0cy9NYWtlZmlsZS5idWlsZDoyNTI6IHNjcmlwdHMvbW9kL2VtcHR5Lm9dIEVycm9yIDENCj4+
-Pg0KPj4+DQo+Pj4gT24gR0NDLCB0aGUgcG9zc2libGUgdmFsdWVzIGFyZToNCj4+Pg0KPj4+IHBw
-Yy1saW51eC1nY2M6IG5vdGUgOiB2YWxpZCBhcmd1bWVudHMgdG8g4oCYLW1jcHU94oCZIGFyZTog
-NDAxIDQwMyA0MDUgNDA1ZnANCj4+PiA0NDAgNDQwZnAgNDY0IDQ2NGZwIDQ3NiA0NzZmcCA1MDUg
-NjAxIDYwMiA2MDMgNjAzZSA2MDQgNjA0ZSA2MjAgNjMwIDc0MA0KPj4+IDc0MDAgNzQ1MCA3NTAg
-ODAxIDgyMSA4MjMgODU0MCA4NTQ4IDg2MCA5NzAgRzMgRzQgRzUgYTIgY2VsbCBlMzAwYzINCj4+
-PiBlMzAwYzMgZTUwMG1jIGU1MDBtYzY0IGU1NTAwIGU2NTAwIGVjNjAzZSBuYXRpdmUgcG93ZXIz
-IHBvd2VyNCBwb3dlcjUNCj4+PiBwb3dlcjUrIHBvd2VyNiBwb3dlcjZ4IHBvd2VyNyBwb3dlcjgg
-cG93ZXJwYyBwb3dlcnBjNjQgcG93ZXJwYzY0bGUgcnM2NA0KPj4+IHRpdGFuDQo+Pj4NCj4+PiBI
-b3cgZG8geW91IHRlbGwgQ0xBTkcgdGhhdCB5b3UgYXJlIGJ1aWxkaW5nIGZvciBwb3dlcnBjIDh4
-eCA/DQo+IA0KPiBNYXliZSBsbHZtIGRvZXMgbm90IGhhdmUgc3VwcG9ydCBmb3IgdGhpcyBvbGQg
-Q1BVIGNvcmUgYXQgYWxsPyBCZWNhdXNlDQo+IGZyb20gJ25vdGU6IHZhbGlkIHRhcmdldCBDUFUg
-dmFsdWVzIGFyZTonIG1lc3NhZ2UgaXQgbG9va3MgbGlrZSB0aGF0Lg0KDQpCeSB0aGUgd2F5IEkg
-c3VibWl0dGVkIGEgcGF0Y2ggdG8gb3B0IG91dCBvZiBDTEFORyB1bnRpbCB3ZSBjbGFyaWZ5IHRo
-ZSANCnNpdHVhdGlvbiwgc2VlIA0KaHR0cHM6Ly9wYXRjaHdvcmsub3psYWJzLm9yZy9wcm9qZWN0
-L2xpbnV4cHBjLWRldi9wYXRjaC9lNjI4OTJlMzJjMTRhN2E1NzM4YzU5N2UzOWUwMDgyY2IwYWJm
-MjFjLjE2NzUzMzU2NTkuZ2l0LmNocmlzdG9waGUubGVyb3lAY3Nncm91cC5ldS8NCg0KQ2hyaXN0
-b3BoZQ0KDQo+IA0KPj4gKyBOZW1hbmphaSwgUWlvbmdzaSwNCj4+DQo+Pg0KPj4+DQo+Pj4+DQo+
-Pj4+DQo+Pj4+IFJlcG9ydGVkLWJ5OiBMaW51eCBLZXJuZWwgRnVuY3Rpb25hbCBUZXN0aW5nIDxs
-a2Z0QGxpbmFyby5vcmc+DQo+Pj4+DQo+Pj4+IGh0dHBzOi8vcWEtcmVwb3J0cy5saW5hcm8ub3Jn
-L2xrZnQvbGludXgtbmV4dC1tYXN0ZXIvYnVpbGQvbmV4dC0yMDIzMDIwMS90ZXN0cnVuLzE0NDc5
-Mzg0L3N1aXRlL2J1aWxkL3Rlc3QvY2xhbmctbmlnaHRseS10cW04eHhfZGVmY29uZmlnL2hpc3Rv
-cnkvDQo+Pj4+DQo+Pj4+IFRoZSBiaXNlY3Rpb24gcG9pbnRlZCB0byB0aGlzIGNvbW1pdCwNCj4+
-Pj4gICAgIDQ1ZjcwOTFhYWMzNSAoInBvd2VycGMvNjQ6IFNldCBkZWZhdWx0IENQVSBpbiBLY29u
-ZmlnIikNCj4+Pj4NCj4+Pj4gLS0NCj4+Pj4gTGluYXJvIExLRlQNCj4+Pj4gaHR0cHM6Ly9sa2Z0
-LmxpbmFyby5vcmcNCj4+DQo+Pg0KPj4NCj4+IC0tIA0KPj4gVGhhbmtzLA0KPj4gfk5pY2sgRGVz
-YXVsbmllcnMNCg==
+On 2/2/23 23:39, Alexander Egorenkov wrote:
+> Remove power management because s390 no longer supports hibernation since
+> commit 394216275c7d ("s390: remove broken hibernate / power management
+> support").
+> 
+> Reviewed-by: Heiko Carstens <hca@linux.ibm.com>
+> Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+> ---
+>   drivers/watchdog/diag288_wdt.c | 65 ++--------------------------------
+>   1 file changed, 2 insertions(+), 63 deletions(-)
+> 
+> diff --git a/drivers/watchdog/diag288_wdt.c b/drivers/watchdog/diag288_wdt.c
+> index 07ebbb709af4..c8d516ced6d2 100644
+> --- a/drivers/watchdog/diag288_wdt.c
+> +++ b/drivers/watchdog/diag288_wdt.c
+> @@ -27,7 +27,6 @@
+>   #include <linux/moduleparam.h>
+>   #include <linux/slab.h>
+>   #include <linux/watchdog.h>
+> -#include <linux/suspend.h>
+>   #include <asm/ebcdic.h>
+>   #include <asm/diag.h>
+>   #include <linux/io.h>
+> @@ -103,10 +102,6 @@ static int __diag288_lpar(unsigned int func, unsigned int timeout,
+>   	return __diag288(func, timeout, action, 0);
+>   }
+>   
+> -static unsigned long wdt_status;
+> -
+> -#define DIAG_WDOG_BUSY	0
+> -
+>   static int wdt_start(struct watchdog_device *dev)
+>   {
+>   	char *ebc_cmd;
+> @@ -114,15 +109,10 @@ static int wdt_start(struct watchdog_device *dev)
+>   	int ret;
+>   	unsigned int func;
+>   
+> -	if (test_and_set_bit(DIAG_WDOG_BUSY, &wdt_status))
+> -		return -EBUSY;
+> -
+>   	if (MACHINE_IS_VM) {
+>   		ebc_cmd = kmalloc(MAX_CMDLEN, GFP_KERNEL);
+> -		if (!ebc_cmd) {
+> -			clear_bit(DIAG_WDOG_BUSY, &wdt_status);
+> +		if (!ebc_cmd)
+>   			return -ENOMEM;
+> -		}
+>   		len = strlcpy(ebc_cmd, wdt_cmd, MAX_CMDLEN);
+>   		ASCEBC(ebc_cmd, MAX_CMDLEN);
+>   		EBC_TOUPPER(ebc_cmd, MAX_CMDLEN);
+> @@ -139,7 +129,6 @@ static int wdt_start(struct watchdog_device *dev)
+>   
+>   	if (ret) {
+>   		pr_err("The watchdog cannot be activated\n");
+> -		clear_bit(DIAG_WDOG_BUSY, &wdt_status);
+>   		return ret;
+>   	}
+>   	return 0;
+> @@ -152,8 +141,6 @@ static int wdt_stop(struct watchdog_device *dev)
+>   	diag_stat_inc(DIAG_STAT_X288);
+>   	ret = __diag288(WDT_FUNC_CANCEL, 0, 0, 0);
+>   
+> -	clear_bit(DIAG_WDOG_BUSY, &wdt_status);
+> -
+>   	return ret;
+>   }
+>   
+> @@ -222,45 +209,6 @@ static struct watchdog_device wdt_dev = {
+>   	.max_timeout = MAX_INTERVAL,
+>   };
+>   
+> -/*
+> - * It makes no sense to go into suspend while the watchdog is running.
+> - * Depending on the memory size, the watchdog might trigger, while we
+> - * are still saving the memory.
+> - */
+> -static int wdt_suspend(void)
+> -{
+> -	if (test_and_set_bit(DIAG_WDOG_BUSY, &wdt_status)) {
+> -		pr_err("Linux cannot be suspended while the watchdog is in use\n");
+> -		return notifier_from_errno(-EBUSY);
+> -	}
+> -	return NOTIFY_DONE;
+> -}
+> -
+> -static int wdt_resume(void)
+> -{
+> -	clear_bit(DIAG_WDOG_BUSY, &wdt_status);
+> -	return NOTIFY_DONE;
+> -}
+> -
+> -static int wdt_power_event(struct notifier_block *this, unsigned long event,
+> -			   void *ptr)
+> -{
+> -	switch (event) {
+> -	case PM_POST_HIBERNATION:
+> -	case PM_POST_SUSPEND:
+> -		return wdt_resume();
+> -	case PM_HIBERNATION_PREPARE:
+> -	case PM_SUSPEND_PREPARE:
+> -		return wdt_suspend();
+> -	default:
+> -		return NOTIFY_DONE;
+> -	}
+> -}
+> -
+> -static struct notifier_block wdt_power_notifier = {
+> -	.notifier_call = wdt_power_event,
+> -};
+> -
+>   static int __init diag288_init(void)
+>   {
+>   	int ret;
+> @@ -297,21 +245,12 @@ static int __init diag288_init(void)
+>   		return -EINVAL;
+>   	}
+>   
+> -	ret = register_pm_notifier(&wdt_power_notifier);
+> -	if (ret)
+> -		return ret;
+> -
+> -	ret = watchdog_register_device(&wdt_dev);
+> -	if (ret)
+> -		unregister_pm_notifier(&wdt_power_notifier);
+> -
+> -	return ret;
+> +	return watchdog_register_device(&wdt_dev);
+>   }
+>   
+>   static void __exit diag288_exit(void)
+>   {
+>   	watchdog_unregister_device(&wdt_dev);
+> -	unregister_pm_notifier(&wdt_power_notifier);
+>   }
+>   
+>   module_init(diag288_init);
+
