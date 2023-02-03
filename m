@@ -2,111 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBF4D688D0E
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 03:28:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D88E688D1B
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 03:33:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231819AbjBCC2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 21:28:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48224 "EHLO
+        id S231542AbjBCCdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 21:33:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbjBCC2M (ORCPT
+        with ESMTP id S229575AbjBCCdP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 21:28:12 -0500
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 64E8C36471;
-        Thu,  2 Feb 2023 18:28:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Ezq48
-        SMfSzSfU6vEdNHKpwfR4sSbk6riVgvGC0cf2ec=; b=Nj4sq7h/LlJ/oGmvFBB3q
-        w/DVWM+HekdCCSnK5XqEeDd/aBUVYLMuxtFF7dH7kp2q1lxVkZOGROsNX41dxDp2
-        eEyDfFIIHZtgA6PMH0ZHI5ZhV87j2PWht2Fm/SiildhQG2wI4itM8B+Vpn1W8FyB
-        UcBiizNP2Tw+KKB1H8Rrp4=
-Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
-        by zwqz-smtp-mta-g2-0 (Coremail) with SMTP id _____wDn5Kwwcdxj1juOCg--.53946S2;
-        Fri, 03 Feb 2023 10:28:00 +0800 (CST)
-From:   Zheng Wang <zyytlz.wz@163.com>
-To:     colyli@suse.de
-Cc:     stable@vger.kernel.org, hackerzheng666@gmail.com,
-        kent.overstreet@gmail.com, linux-bcache@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alex000young@gmail.com,
-        Zheng Wang <zyytlz.wz@163.com>
-Subject: [PATCH] bcache: Remove some unnecessary NULL point check for the return value of __bch_btree_node_alloc-related pointer
-Date:   Fri,  3 Feb 2023 10:27:59 +0800
-Message-Id: <20230203022759.576832-1-zyytlz.wz@163.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 2 Feb 2023 21:33:15 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1016C1F4A3;
+        Thu,  2 Feb 2023 18:33:12 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P7KSy3YQ9z4xP9;
+        Fri,  3 Feb 2023 13:33:06 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1675391586;
+        bh=0d4/aEilgXUqCbcBQslhSsYyGVYHLsagJzjvXC+oH/M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=L/BgImaGy8COTEl8cGbc9FskqOm3LNE0RFi1YLJZJacCQef1K9WbtmylyxrzceaR9
+         dXYVICpAimvkH8Bwt9s1PRjmLQCZSb26rQYds2uI4LFaLeu2kX8pfTb9d/lrBfB+4d
+         pm3E7releT0zox4krMyEzyLxJtZOdLn28zZd7KwAu8jcquAKP4j7GoLfe5uRpEgsFL
+         JXcvJcnTaDgNLr8RsNXh2RSGTJng0aqaywAy09UAO0z19GMCduX9/I6mQD9sjb0Svf
+         EsCCMX0jPxkqRiCAfSSJqqKE7MgPdZEpygotVhAhVmMoCIW8VV1wyL3Ao6jMKqb4XW
+         8Yj261YD8L4eA==
+Date:   Fri, 3 Feb 2023 13:33:03 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Michael S. Tsirkin" <mst@redhat.com>,
+        David Miller <davem@davemloft.net>
+Cc:     Networking <netdev@vger.kernel.org>,
+        Laurent Vivier <lvivier@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patches in the vhost tree
+Message-ID: <20230203133303.5cf19f41@canb.auug.org.au>
+In-Reply-To: <20230203132629.30cf161c@canb.auug.org.au>
+References: <20230203132629.30cf161c@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wDn5Kwwcdxj1juOCg--.53946S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Ww4UGry5ArWfXrW5Gr15Arb_yoW8Zw1UpF
-        W29ry3A34kWr4UCr98C3W0vFyrZw12vFWUGr93u3WfZr9rZr1rCFWj9ryUZrWUurWxWF42
-        vr40yw1UXr4UtF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziI385UUUUU=
-X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiXBILU1Xl5gKj0gAAsz
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/dNwk3utDlF9WMRTzWwsknp7";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Due to the previously fix of __bch_btree_node_alloc, the return value will
-never be a NULL pointer. So IS_ERR is enough to handle the failure
- situation. Fix it by replacing IS_ERR_OR_NULL check to IS_ERR check.
+--Sig_/dNwk3utDlF9WMRTzWwsknp7
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Fixes: cafe56359144 ("bcache: A block layer cache")
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
----
- drivers/md/bcache/btree.c | 6 +++---
- drivers/md/bcache/super.c | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Hi all,
 
-diff --git a/drivers/md/bcache/btree.c b/drivers/md/bcache/btree.c
-index 147c493a989a..417cd7c436c4 100644
---- a/drivers/md/bcache/btree.c
-+++ b/drivers/md/bcache/btree.c
-@@ -1138,7 +1138,7 @@ static struct btree *btree_node_alloc_replacement(struct btree *b,
- {
- 	struct btree *n = bch_btree_node_alloc(b->c, op, b->level, b->parent);
- 
--	if (!IS_ERR_OR_NULL(n)) {
-+	if (!IS_ERR(n)) {
- 		mutex_lock(&n->write_lock);
- 		bch_btree_sort_into(&b->keys, &n->keys, &b->c->sort);
- 		bkey_copy_key(&n->key, &b->key);
-@@ -1352,7 +1352,7 @@ static int btree_gc_coalesce(struct btree *b, struct btree_op *op,
- 
- 	for (i = 0; i < nodes; i++) {
- 		new_nodes[i] = btree_node_alloc_replacement(r[i].b, NULL);
--		if (IS_ERR_OR_NULL(new_nodes[i]))
-+		if (IS_ERR(new_nodes[i]))
- 			goto out_nocoalesce;
- 	}
- 
-@@ -1669,7 +1669,7 @@ static int bch_btree_gc_root(struct btree *b, struct btree_op *op,
- 	if (should_rewrite) {
- 		n = btree_node_alloc_replacement(b, NULL);
- 
--		if (!IS_ERR_OR_NULL(n)) {
-+		if (!IS_ERR(n)) {
- 			bch_btree_node_write_sync(n);
- 
- 			bch_btree_set_root(n);
-diff --git a/drivers/md/bcache/super.c b/drivers/md/bcache/super.c
-index ba3909bb6bea..92de714fe75e 100644
---- a/drivers/md/bcache/super.c
-+++ b/drivers/md/bcache/super.c
-@@ -2088,7 +2088,7 @@ static int run_cache_set(struct cache_set *c)
- 
- 		err = "cannot allocate new btree root";
- 		c->root = __bch_btree_node_alloc(c, NULL, 0, true, NULL);
--		if (IS_ERR_OR_NULL(c->root))
-+		if (IS_ERR(c->root))
- 			goto err;
- 
- 		mutex_lock(&c->root->write_lock);
--- 
-2.25.1
+On Fri, 3 Feb 2023 13:26:29 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>=20
+> The following commits are also in Linus Torvalds' tree as different
+                                    ^^^^^^^^^^^^^^^
+Actually not in Linus' tree, just the net-next tree (semi-automation
+sometimes fails :-)).
 
+> commits (but the same patches):
+>=20
+>   022659ee3363 ("virtio_net: notify MAC address change on device initiali=
+zation")
+>   d0aa1f8e8d63 ("virtio_net: disable VIRTIO_NET_F_STANDBY if VIRTIO_NET_F=
+_MAC is not set")
+>=20
+> These are commits
+>=20
+>   9f62d221a4b0 ("virtio_net: notify MAC address change on device initiali=
+zation")
+>   7c06458c102e ("virtio_net: disable VIRTIO_NET_F_STANDBY if VIRTIO_NET_F=
+_MAC is not set")
+>=20
+> in the net-next tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/dNwk3utDlF9WMRTzWwsknp7
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPccl8ACgkQAVBC80lX
+0Gy8vggAn0ZmROJMK6ri6+d4xnjtqdOpgq1wps7KXuPMEfYvcUlu4tTLZqctkz2W
+Lgnrcm2NBYzXIB6yy1gZgRGMLDhyP0AqpC3PCFW8u88RpRdEOuQIGqkDQ5GsMmKJ
+u8DQQIN2ShhJR9wKHz/frgyh9NN0UJBfPjEpGQHW5QVHFomAMMHvwIIrLl+FN/O4
+t3NRLq5nDlCm1xwk/cP08cwzloGHyn5mNGcDU/HDX1oAix2AvUXH+FRkUGC1Oayq
+Id7bF9UPsic51aqyOag/yhKZV1J5gfOpSKo5uGl+Ec+jWz1ViuoHqU47LceQ1nU1
+lWKLCiFptFCgwcBYdeGW9mSez0/n0Q==
+=NedD
+-----END PGP SIGNATURE-----
+
+--Sig_/dNwk3utDlF9WMRTzWwsknp7--
