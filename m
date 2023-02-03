@@ -2,99 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 581B668945E
+	by mail.lfdr.de (Postfix) with ESMTP id 0D87C68945D
 	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 10:51:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232978AbjBCJtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 04:49:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42994 "EHLO
+        id S232973AbjBCJuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 04:50:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232056AbjBCJtl (ORCPT
+        with ESMTP id S233221AbjBCJuR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 04:49:41 -0500
-Received: from out30-110.freemail.mail.aliyun.com (out30-110.freemail.mail.aliyun.com [115.124.30.110])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D8CE79C90;
-        Fri,  3 Feb 2023 01:49:39 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=18;SR=0;TI=SMTPD_---0VaoUwBD_1675417773;
-Received: from 30.221.129.149(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VaoUwBD_1675417773)
-          by smtp.aliyun-inc.com;
-          Fri, 03 Feb 2023 17:49:35 +0800
-Message-ID: <160b9e99-bff6-e37c-5f16-00157766535e@linux.alibaba.com>
-Date:   Fri, 3 Feb 2023 17:49:33 +0800
+        Fri, 3 Feb 2023 04:50:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2D532CC7F;
+        Fri,  3 Feb 2023 01:50:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7DAB0B82A28;
+        Fri,  3 Feb 2023 09:50:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24351C433EF;
+        Fri,  3 Feb 2023 09:50:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675417814;
+        bh=T/9LxE7WE8hNMmPu7X+WMeI+t2/HXTaNVNYlFa2pJSg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OGGnspMNgxmcjE2WsurdbifSi99UposcFBub8O8/rdgBeXjCbI81B6rmOb/oXjbty
+         6NtbZRgMk19wigVNXUrITCNbWKE86AmMosTcHnbRynNvvIIOt8pnTuwN4jA1omfemj
+         5Oilpis8mpcZQAr7UdVaxu99LMMgIikf4SXZWRmhwN5qvleNfEszRBQsmazsFNKbQ8
+         8KrRvbfvO1jYk2Fq22BgfIIvzOftfn8IGSZebAiF4JQurOIQSv8fLHLjDacwsJg+nD
+         2ZAx+LJKTWPwqHZQDqV6fHTN7/fq7r/MxGCaB7dSZPFWLf4Z0EdVJp0tRJ2fjzBxGk
+         3mET6IY9qEGAQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pNsiO-0000ur-IV; Fri, 03 Feb 2023 10:50:40 +0100
+Date:   Fri, 3 Feb 2023 10:50:40 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v7 11/12] arm64: dts: qcom: sm8550: Add PCIe PHYs and
+ controllers nodes
+Message-ID: <Y9zY8L2OhRacl8Qf@hovoldconsulting.com>
+References: <20230203081807.2248625-1-abel.vesa@linaro.org>
+ <20230203081807.2248625-12-abel.vesa@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: make alloc_anon_inode more useful
-Content-Language: en-US
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Daniel Vetter <daniel@ffwll.ch>, Nadav Amit <namit@vmware.com>,
-        "VMware, Inc." <pv-drivers@vmware.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Nitin Gupta <ngupta@vflare.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        Al Viro <viro@zeniv.linux.org.uk>
-References: <20210309155348.974875-1-hch@lst.de>
-From:   Jingbo Xu <jefflexu@linux.alibaba.com>
-In-Reply-To: <20210309155348.974875-1-hch@lst.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230203081807.2248625-12-abel.vesa@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-Sorry for digging...
-
-This patch series seems useful for fs developers.  I'm not sure its
-current status and why it doesn't get merged.
-
-
-On 3/9/21 11:53 PM, Christoph Hellwig wrote:
-> Hi all,
+On Fri, Feb 03, 2023 at 10:18:06AM +0200, Abel Vesa wrote:
+> Add PCIe controllers and PHY nodes.
 > 
-> this series first renames the existing alloc_anon_inode to
-> alloc_anon_inode_sb to clearly mark it as requiring a superblock.
-> 
-> It then adds a new alloc_anon_inode that works on the anon_inode
-> file system super block, thus removing tons of boilerplate code.
-> 
-> The few remainig callers of alloc_anon_inode_sb all use alloc_file_pseudo
-> later, but might also be ripe for some cleanup.
-> 
-> Diffstat:
->  arch/powerpc/platforms/pseries/cmm.c |   27 +-------------
->  drivers/dma-buf/dma-buf.c            |    2 -
->  drivers/gpu/drm/drm_drv.c            |   64 +----------------------------------
->  drivers/misc/cxl/api.c               |    2 -
->  drivers/misc/vmw_balloon.c           |   24 +------------
->  drivers/scsi/cxlflash/ocxl_hw.c      |    2 -
->  drivers/virtio/virtio_balloon.c      |   30 +---------------
->  fs/aio.c                             |    2 -
->  fs/anon_inodes.c                     |   15 +++++++-
->  fs/libfs.c                           |    2 -
->  include/linux/anon_inodes.h          |    1 
->  include/linux/fs.h                   |    2 -
->  kernel/resource.c                    |   30 ++--------------
->  mm/z3fold.c                          |   38 +-------------------
->  mm/zsmalloc.c                        |   48 +-------------------------
->  15 files changed, 39 insertions(+), 250 deletions(-)
-> 
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 
--- 
-Thanks,
-Jingbo
+Looks good to me know:
+
+Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
