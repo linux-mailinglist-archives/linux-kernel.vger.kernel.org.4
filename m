@@ -2,215 +2,374 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBEA1689742
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 11:49:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CB18689751
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 11:52:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232917AbjBCKtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 05:49:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43242 "EHLO
+        id S232712AbjBCKwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 05:52:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231835AbjBCKtQ (ORCPT
+        with ESMTP id S229785AbjBCKwd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 05:49:16 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 055BDFF3D;
-        Fri,  3 Feb 2023 02:49:14 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Fri, 3 Feb 2023 05:52:33 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C1D13525;
+        Fri,  3 Feb 2023 02:52:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id A41A26602DD9;
-        Fri,  3 Feb 2023 10:49:12 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1675421353;
-        bh=OEAlKXvNZbN7zCP3R26EWPKYcVOYNKvfqjU+fbC8Rxk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Ex4Gihtt0x0Mr8GaRT/cRrDvvvv79EE8h/QBWXa7GxQfagDXi19/r260L7hcuAhM1
-         0Ub1fZhz0NjX/m6nxxoCV0CK67ZRDTaMbcUMDRM3KkmEzd515O3Hu8l+lY5HZfPJkz
-         OlEXt5PYDIt1Ud12NTg2PChrFPsZmQpKZLWwltPZHRVSml8S0MuoEuIiFrzVp539pF
-         5lJWOHEHjHsOavqRYXRVLm6Py/3SFi5wAMvEPHuV33dxxTa8WcQt9uSymA6zQpF6cO
-         jB/+defNk0H4pRN3VDZ9tadpp8CiGjz3pWCs6rxrMOfFNl3VWZxMfzLOl8JmVz97Mg
-         GuHZW44JsBqtA==
-Message-ID: <76f33f1f-53ab-65a9-f6e8-23db4ca0e0b5@collabora.com>
-Date:   Fri, 3 Feb 2023 11:49:09 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v5 12/19] clk: mediatek: Add MT8188 vdosys0 clock support
-To:     Chen-Yu Tsai <wenst@chromium.org>,
-        "Garmin.Chang" <Garmin.Chang@mediatek.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
+        by ams.source.kernel.org (Postfix) with ESMTPS id 98C36B82911;
+        Fri,  3 Feb 2023 10:52:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A4E5C4339B;
+        Fri,  3 Feb 2023 10:52:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675421549;
+        bh=D0uCjMQ/oq2nRSMvQaIOlBUWWuZtFQ5a5L8lZOnG4sw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CYJaiDbYQgYNgIJ1krsSI0ZrM5NFSmwuk0+WR2OE+ui8WdlLuep3m+rwOFhJTyk8I
+         Dv4/fptsJMbkjWi1jQlmoz/d9DB2TtnB33DHY5cdAU+PBpGTVEiYtqFbJyGrmW+nuL
+         an7SWtWNysPCoetNZTotzi03EpHOdh4ev3VZKud7Xc4ZXQqOKoY91ww+/1cFfCUPnd
+         JjB5iLevhGm2TUOM5TIC0pQk43RnEXbbT4ec38aKBoGtzJshwaLnOZOXVWnL+Q57nn
+         wwAwZTgzrMT2U/TZiI15U2MDu8oKLuBUB0Qr69OKqD7suZGGQAt3vbH6lsDPvY1MIP
+         2g1/lf6OV6dXA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pNtgd-0001No-Sw; Fri, 03 Feb 2023 11:52:55 +0100
+Date:   Fri, 3 Feb 2023 11:52:55 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-clk@vger.kernel.org, netdev@vger.kernel.org
-References: <20230119124848.26364-1-Garmin.Chang@mediatek.com>
- <20230119124848.26364-13-Garmin.Chang@mediatek.com>
- <CAGXv+5Fysy4iCvHEXWtf5oXCHkaKezPqcrGd8QzhnaTrYdyecA@mail.gmail.com>
-Content-Language: en-US
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <CAGXv+5Fysy4iCvHEXWtf5oXCHkaKezPqcrGd8QzhnaTrYdyecA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 6/8] phy: qcom-qmp-combo: Add support for SM8550
+Message-ID: <Y9znh4ydK37V/Eyo@hovoldconsulting.com>
+References: <20230202132511.3983095-1-abel.vesa@linaro.org>
+ <20230202132511.3983095-7-abel.vesa@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230202132511.3983095-7-abel.vesa@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 03/02/23 08:19, Chen-Yu Tsai ha scritto:
-> On Thu, Jan 19, 2023 at 8:54 PM Garmin.Chang <Garmin.Chang@mediatek.com> wrote:
->>
->> Add MT8188 vdosys0 clock controller which provides clock gate
->> control in video system. This is integrated with mtk-mmsys
->> driver which will populate device by platform_device_register_data
->> to start vdosys clock driver.
->>
->> Signed-off-by: Garmin.Chang <Garmin.Chang@mediatek.com>
->> ---
->>   drivers/clk/mediatek/Makefile          |   3 +-
->>   drivers/clk/mediatek/clk-mt8188-vdo0.c | 134 +++++++++++++++++++++++++
->>   2 files changed, 136 insertions(+), 1 deletion(-)
->>   create mode 100644 drivers/clk/mediatek/clk-mt8188-vdo0.c
->>
->> diff --git a/drivers/clk/mediatek/Makefile b/drivers/clk/mediatek/Makefile
->> index 7d09e9fc6538..df78c0777fef 100644
->> --- a/drivers/clk/mediatek/Makefile
->> +++ b/drivers/clk/mediatek/Makefile
->> @@ -86,7 +86,8 @@ obj-$(CONFIG_COMMON_CLK_MT8186) += clk-mt8186-mcu.o clk-mt8186-topckgen.o clk-mt
->>   obj-$(CONFIG_COMMON_CLK_MT8188) += clk-mt8188-apmixedsys.o clk-mt8188-topckgen.o \
->>                                     clk-mt8188-peri_ao.o clk-mt8188-infra_ao.o \
->>                                     clk-mt8188-cam.o clk-mt8188-ccu.o clk-mt8188-img.o \
->> -                                  clk-mt8188-ipe.o clk-mt8188-mfg.o clk-mt8188-vdec.o
->> +                                  clk-mt8188-ipe.o clk-mt8188-mfg.o clk-mt8188-vdec.o \
->> +                                  clk-mt8188-vdo0.o
->>   obj-$(CONFIG_COMMON_CLK_MT8192) += clk-mt8192.o
->>   obj-$(CONFIG_COMMON_CLK_MT8192_AUDSYS) += clk-mt8192-aud.o
->>   obj-$(CONFIG_COMMON_CLK_MT8192_CAMSYS) += clk-mt8192-cam.o
->> diff --git a/drivers/clk/mediatek/clk-mt8188-vdo0.c b/drivers/clk/mediatek/clk-mt8188-vdo0.c
->> new file mode 100644
->> index 000000000000..30dd64374ace
->> --- /dev/null
->> +++ b/drivers/clk/mediatek/clk-mt8188-vdo0.c
->> @@ -0,0 +1,134 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +//
->> +// Copyright (c) 2022 MediaTek Inc.
->> +// Author: Garmin Chang <garmin.chang@mediatek.com>
->> +
->> +#include <linux/clk-provider.h>
->> +#include <linux/platform_device.h>
->> +#include <dt-bindings/clock/mediatek,mt8188-clk.h>
->> +
->> +#include "clk-gate.h"
->> +#include "clk-mtk.h"
->> +
->> +static const struct mtk_gate_regs vdo0_0_cg_regs = {
->> +       .set_ofs = 0x104,
->> +       .clr_ofs = 0x108,
->> +       .sta_ofs = 0x100,
->> +};
->> +
->> +static const struct mtk_gate_regs vdo0_1_cg_regs = {
->> +       .set_ofs = 0x114,
->> +       .clr_ofs = 0x118,
->> +       .sta_ofs = 0x110,
->> +};
->> +
->> +static const struct mtk_gate_regs vdo0_2_cg_regs = {
->> +       .set_ofs = 0x124,
->> +       .clr_ofs = 0x128,
->> +       .sta_ofs = 0x120,
->> +};
->> +
->> +#define GATE_VDO0_0(_id, _name, _parent, _shift)                       \
->> +       GATE_MTK(_id, _name, _parent, &vdo0_0_cg_regs, _shift, &mtk_clk_gate_ops_setclr)
->> +
->> +#define GATE_VDO0_1(_id, _name, _parent, _shift)                       \
->> +       GATE_MTK(_id, _name, _parent, &vdo0_1_cg_regs, _shift, &mtk_clk_gate_ops_setclr)
->> +
->> +#define GATE_VDO0_2(_id, _name, _parent, _shift)                       \
->> +       GATE_MTK(_id, _name, _parent, &vdo0_2_cg_regs, _shift, &mtk_clk_gate_ops_setclr)
->> +
->> +#define GATE_VDO0_2_FLAGS(_id, _name, _parent, _shift, _flags)         \
->> +       GATE_MTK_FLAGS(_id, _name, _parent, &vdo0_2_cg_regs, _shift,    \
->> +       &mtk_clk_gate_ops_setclr, _flags)
->> +
->> +static const struct mtk_gate vdo0_clks[] = {
->> +       /* VDO0_0 */
->> +       GATE_VDO0_0(CLK_VDO0_DISP_OVL0, "vdo0_disp_ovl0", "top_vpp", 0),
->> +       GATE_VDO0_0(CLK_VDO0_FAKE_ENG0, "vdo0_fake_eng0", "top_vpp", 2),
->> +       GATE_VDO0_0(CLK_VDO0_DISP_CCORR0, "vdo0_disp_ccorr0", "top_vpp", 4),
->> +       GATE_VDO0_0(CLK_VDO0_DISP_MUTEX0, "vdo0_disp_mutex0", "top_vpp", 6),
->> +       GATE_VDO0_0(CLK_VDO0_DISP_GAMMA0, "vdo0_disp_gamma0", "top_vpp", 8),
->> +       GATE_VDO0_0(CLK_VDO0_DISP_DITHER0, "vdo0_disp_dither0", "top_vpp", 10),
->> +       GATE_VDO0_0(CLK_VDO0_DISP_WDMA0, "vdo0_disp_wdma0", "top_vpp", 17),
->> +       GATE_VDO0_0(CLK_VDO0_DISP_RDMA0, "vdo0_disp_rdma0", "top_vpp", 19),
->> +       GATE_VDO0_0(CLK_VDO0_DSI0, "vdo0_dsi0", "top_vpp", 21),
->> +       GATE_VDO0_0(CLK_VDO0_DSI1, "vdo0_dsi1", "top_vpp", 22),
->> +       GATE_VDO0_0(CLK_VDO0_DSC_WRAP0, "vdo0_dsc_wrap0", "top_vpp", 23),
->> +       GATE_VDO0_0(CLK_VDO0_VPP_MERGE0, "vdo0_vpp_merge0", "top_vpp", 24),
->> +       GATE_VDO0_0(CLK_VDO0_DP_INTF0, "vdo0_dp_intf0", "top_vpp", 25),
->> +       GATE_VDO0_0(CLK_VDO0_DISP_AAL0, "vdo0_disp_aal0", "top_vpp", 26),
->> +       GATE_VDO0_0(CLK_VDO0_INLINEROT0, "vdo0_inlinerot0", "top_vpp", 27),
->> +       GATE_VDO0_0(CLK_VDO0_APB_BUS, "vdo0_apb_bus", "top_vpp", 28),
->> +       GATE_VDO0_0(CLK_VDO0_DISP_COLOR0, "vdo0_disp_color0", "top_vpp", 29),
->> +       GATE_VDO0_0(CLK_VDO0_MDP_WROT0, "vdo0_mdp_wrot0", "top_vpp", 30),
->> +       GATE_VDO0_0(CLK_VDO0_DISP_RSZ0, "vdo0_disp_rsz0", "top_vpp", 31),
->> +       /* VDO0_1 */
->> +       GATE_VDO0_1(CLK_VDO0_DISP_POSTMASK0, "vdo0_disp_postmask0", "top_vpp", 0),
->> +       GATE_VDO0_1(CLK_VDO0_FAKE_ENG1, "vdo0_fake_eng1", "top_vpp", 1),
->> +       GATE_VDO0_1(CLK_VDO0_DL_ASYNC2, "vdo0_dl_async2", "top_vpp", 5),
->> +       GATE_VDO0_1(CLK_VDO0_DL_RELAY3, "vdo0_dl_relay3", "top_vpp", 6),
->> +       GATE_VDO0_1(CLK_VDO0_DL_RELAY4, "vdo0_dl_relay4", "top_vpp", 7),
->> +       GATE_VDO0_1(CLK_VDO0_SMI_GALS, "vdo0_smi_gals", "top_vpp", 10),
->> +       GATE_VDO0_1(CLK_VDO0_SMI_COMMON, "vdo0_smi_common", "top_vpp", 11),
->> +       GATE_VDO0_1(CLK_VDO0_SMI_EMI, "vdo0_smi_emi", "top_vpp", 12),
->> +       GATE_VDO0_1(CLK_VDO0_SMI_IOMMU, "vdo0_smi_iommu", "top_vpp", 13),
->> +       GATE_VDO0_1(CLK_VDO0_SMI_LARB, "vdo0_smi_larb", "top_vpp", 14),
->> +       GATE_VDO0_1(CLK_VDO0_SMI_RSI, "vdo0_smi_rsi", "top_vpp", 15),
->> +       /* VDO0_2 */
->> +       GATE_VDO0_2(CLK_VDO0_DSI0_DSI, "vdo0_dsi0_dsi", "top_dsi_occ", 0),
->> +       GATE_VDO0_2(CLK_VDO0_DSI1_DSI, "vdo0_dsi1_dsi", "top_dsi_occ", 8),
->> +       GATE_VDO0_2_FLAGS(CLK_VDO0_DP_INTF0_DP_INTF, "vdo0_dp_intf0_dp_intf",
->> +               "top_edp", 16, CLK_SET_RATE_PARENT),
->> +};
->> +
->> +static int clk_mt8188_vdo0_probe(struct platform_device *pdev)
->> +{
->> +       struct device *dev = &pdev->dev;
->> +       struct device_node *node = dev->parent->of_node;
->> +       struct clk_hw_onecell_data *clk_data;
->> +       int r;
->> +
->> +       clk_data = mtk_alloc_clk_data(CLK_VDO0_NR_CLK);
->> +       if (!clk_data)
->> +               return -ENOMEM;
->> +
->> +       r = mtk_clk_register_gates(node, vdo0_clks, ARRAY_SIZE(vdo0_clks), clk_data);
+On Thu, Feb 02, 2023 at 03:25:09PM +0200, Abel Vesa wrote:
+> Add SM8550 specific register layout and table configs.
 > 
-> This API was changed. Please rebase onto the latest -next and update.
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> ---
 > 
-> Angelo (CC-ed) also mentioned a new simple probe variant for non-DT
-> clock drivers is being developed. He didn't mention a timeline though.
+> The v3 version of this patch was here:
+> https://lore.kernel.org/all/20230126131415.1453741-7-abel.vesa@linaro.org/
+> 
+> Changes since v3:
+>  * switched dp_tx and dp_tx2 to off->dp_tx0 and off->dp_tx1, like Neil
+>    suggested
+> 
+> Changes since v2:
+>  * none
+> 
+> Changes since v1:
+>  * switched from qmp-usb to qmp-combo as it will support DP also
+>  * changed all hex offset values to lowercase, like Vinod suggested
+> 
+>  drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 409 +++++++++++++++++++++-
+>  1 file changed, 404 insertions(+), 5 deletions(-)
 
-I've already tested the new simple probe variant for non-DT clock drivers and
-it works fine on MT8173, MT8192 and MT8195.
+>  struct qmp_combo_offsets {
+> @@ -808,6 +1039,8 @@ struct qmp_combo_offsets {
+>  	u16 usb3_pcs;
+>  	u16 usb3_pcs_usb;
+>  	u16 dp_serdes;
+> +	u16 dp_tx0;
+> +	u16 dp_tx1;
 
-Timeline - I should be able to push the part 2 series next week, which will include
-more conversion to simple probe and almost all clock drivers changed to allow
-building as modules.
+As I mentioned off-list last week, this should be rebased on Luca's
+patch adding support for SM6350:
 
-Cheers,
-Angelo
+	https://lore.kernel.org/lkml/20230120-sm6350-usbphy-v4-2-4d700a90ba16@fairphone.com/
 
+>  	u16 dp_dp_phy;
+>  };
+>  
+> @@ -927,6 +1160,9 @@ static int qmp_v4_calibrate_dp_phy(struct qmp_combo *qmp);
+>  
+>  static int qmp_v5_configure_dp_phy(struct qmp_combo *qmp);
+>  
+> +static void qmp_v6_dp_aux_init(struct qmp_combo *qmp);
+> +static int qmp_v6_configure_dp_phy(struct qmp_combo *qmp);
+> +
+>  static inline void qphy_setbits(void __iomem *base, u32 offset, u32 val)
+>  {
+>  	u32 reg;
+> @@ -985,9 +1221,27 @@ static const struct qmp_combo_offsets qmp_combo_offsets_v5 = {
+>  	.usb3_pcs	= 0x1400,
+>  	.usb3_pcs_usb	= 0x1700,
+>  	.dp_serdes	= 0x2000,
+> +	.dp_tx0		= 0x2200,
+> +	.dp_tx1		= 0x2600,
+
+This would break sc8280xp and does not in anyway belong in this patch.
+
+You can't just randomly change register offsets for an old SoC when
+adding support for a new one.
+
+>  	.dp_dp_phy	= 0x2200,
+>  };
+>  
+> +static const struct qmp_combo_offsets qmp_combo_offsets_v6 = {
+> +	.com		= 0x0000,
+> +	.txa		= 0x1200,
+> +	.rxa		= 0x1400,
+> +	.txb		= 0x1600,
+> +	.rxb		= 0x1800,
+> +	.usb3_serdes	= 0x1000,
+> +	.usb3_pcs_misc	= 0x1a00,
+> +	.usb3_pcs	= 0x1c00,
+> +	.usb3_pcs_usb	= 0x1f00,
+> +	.dp_serdes	= 0x2000,
+> +	.dp_tx0		= 0x2200,
+> +	.dp_tx1		= 0x2600,
+> +	.dp_dp_phy	= 0x2a00,
+> +};
+> +
+>  static const struct qmp_phy_cfg sc7180_usb3dpphy_cfg = {
+>  	.serdes_tbl		= qmp_v3_usb3_serdes_tbl,
+>  	.serdes_tbl_num		= ARRAY_SIZE(qmp_v3_usb3_serdes_tbl),
+> @@ -1219,6 +1473,54 @@ static const struct qmp_phy_cfg sm8250_usb3dpphy_cfg = {
+>  	.has_pwrdn_delay	= true,
+>  };
+>  
+> +static const struct qmp_phy_cfg sm8550_usb3dpphy_cfg = {
+> +	.offsets		= &qmp_combo_offsets_v6,
+> +
+> +	.serdes_tbl		= sm8550_usb3_serdes_tbl,
+> +	.serdes_tbl_num		= ARRAY_SIZE(sm8550_usb3_serdes_tbl),
+> +	.tx_tbl			= sm8550_usb3_tx_tbl,
+> +	.tx_tbl_num		= ARRAY_SIZE(sm8550_usb3_tx_tbl),
+> +	.rx_tbl			= sm8550_usb3_rx_tbl,
+> +	.rx_tbl_num		= ARRAY_SIZE(sm8550_usb3_rx_tbl),
+> +	.pcs_tbl		= sm8550_usb3_pcs_tbl,
+> +	.pcs_tbl_num		= ARRAY_SIZE(sm8550_usb3_pcs_tbl),
+> +	.pcs_usb_tbl		= sm8550_usb3_pcs_usb_tbl,
+> +	.pcs_usb_tbl_num	= ARRAY_SIZE(sm8550_usb3_pcs_usb_tbl),
+> +
+> +	.dp_serdes_tbl		= qmp_v6_dp_serdes_tbl,
+> +	.dp_serdes_tbl_num	= ARRAY_SIZE(qmp_v6_dp_serdes_tbl),
+> +	.dp_tx_tbl		= qmp_v6_dp_tx_tbl,
+> +	.dp_tx_tbl_num		= ARRAY_SIZE(qmp_v6_dp_tx_tbl),
+> +
+> +	.serdes_tbl_rbr		= qmp_v6_dp_serdes_tbl_rbr,
+> +	.serdes_tbl_rbr_num	= ARRAY_SIZE(qmp_v6_dp_serdes_tbl_rbr),
+> +	.serdes_tbl_hbr		= qmp_v6_dp_serdes_tbl_hbr,
+> +	.serdes_tbl_hbr_num	= ARRAY_SIZE(qmp_v6_dp_serdes_tbl_hbr),
+> +	.serdes_tbl_hbr2	= qmp_v6_dp_serdes_tbl_hbr2,
+> +	.serdes_tbl_hbr2_num	= ARRAY_SIZE(qmp_v6_dp_serdes_tbl_hbr2),
+> +	.serdes_tbl_hbr3	= qmp_v6_dp_serdes_tbl_hbr3,
+> +	.serdes_tbl_hbr3_num	= ARRAY_SIZE(qmp_v6_dp_serdes_tbl_hbr3),
+> +
+> +	.swing_hbr_rbr		= &qmp_dp_v5_voltage_swing_hbr_rbr,
+> +	.pre_emphasis_hbr_rbr	= &qmp_dp_v6_pre_emphasis_hbr_rbr,
+> +	.swing_hbr3_hbr2	= &qmp_dp_v5_voltage_swing_hbr3_hbr2,
+> +	.pre_emphasis_hbr3_hbr2 = &qmp_dp_v5_pre_emphasis_hbr3_hbr2,
+> +
+> +	.dp_aux_init		= qmp_v6_dp_aux_init,
+> +	.configure_dp_tx	= qmp_v4_configure_dp_tx,
+> +	.configure_dp_phy	= qmp_v6_configure_dp_phy,
+> +	.calibrate_dp_phy	= qmp_v4_calibrate_dp_phy,
+> +
+> +	.regs			= qmp_v4_usb3phy_regs_layout,
+> +	.clk_list		= qmp_v4_phy_clk_l,
+> +	.num_clks		= ARRAY_SIZE(qmp_v4_phy_clk_l),
+> +	.reset_list		= msm8996_usb3phy_reset_l,
+> +	.num_resets		= ARRAY_SIZE(msm8996_usb3phy_reset_l),
+> +	.vreg_list		= qmp_phy_vreg_l,
+> +	.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
+
+> +	.pcs_usb_offset		= 0x300,
+
+This field is not used with the new bindings and should be removed.
+
+> +};
+> +
+>  static void qmp_combo_configure_lane(void __iomem *base,
+>  					const struct qmp_phy_init_tbl tbl[],
+>  					int num,
+> @@ -1529,6 +1831,33 @@ static void qmp_v4_dp_aux_init(struct qmp_combo *qmp)
+>  	       qmp->dp_dp_phy + QSERDES_V4_DP_PHY_AUX_INTERRUPT_MASK);
+>  }
+>  
+> +static void qmp_v6_dp_aux_init(struct qmp_combo *qmp)
+> +{
+> +	writel(DP_PHY_PD_CTL_PWRDN | DP_PHY_PD_CTL_PSR_PWRDN | DP_PHY_PD_CTL_AUX_PWRDN |
+> +	       DP_PHY_PD_CTL_PLL_PWRDN | DP_PHY_PD_CTL_DP_CLAMP_EN,
+> +	       qmp->dp_dp_phy + QSERDES_DP_PHY_PD_CTL);
+> +
+> +	/* Turn on BIAS current for PHY/PLL */
+> +	writel(0x17, qmp->dp_serdes + QSERDES_V6_COM_PLL_BIAS_EN_CLK_BUFLR_EN);
+> +
+> +	writel(0x00, qmp->dp_dp_phy + QSERDES_DP_PHY_AUX_CFG0);
+> +	writel(0x13, qmp->dp_dp_phy + QSERDES_DP_PHY_AUX_CFG1);
+> +	writel(0xa4, qmp->dp_dp_phy + QSERDES_DP_PHY_AUX_CFG2);
+> +	writel(0x00, qmp->dp_dp_phy + QSERDES_DP_PHY_AUX_CFG3);
+> +	writel(0x0a, qmp->dp_dp_phy + QSERDES_DP_PHY_AUX_CFG4);
+> +	writel(0x26, qmp->dp_dp_phy + QSERDES_DP_PHY_AUX_CFG5);
+> +	writel(0x0a, qmp->dp_dp_phy + QSERDES_DP_PHY_AUX_CFG6);
+> +	writel(0x03, qmp->dp_dp_phy + QSERDES_DP_PHY_AUX_CFG7);
+> +	writel(0xb7, qmp->dp_dp_phy + QSERDES_DP_PHY_AUX_CFG8);
+> +	writel(0x03, qmp->dp_dp_phy + QSERDES_DP_PHY_AUX_CFG9);
+> +	qmp->dp_aux_cfg = 0;
+> +
+> +	writel(PHY_AUX_STOP_ERR_MASK | PHY_AUX_DEC_ERR_MASK |
+> +	       PHY_AUX_SYNC_ERR_MASK | PHY_AUX_ALIGN_ERR_MASK |
+> +	       PHY_AUX_REQ_ERR_MASK,
+> +	       qmp->dp_dp_phy + QSERDES_V4_DP_PHY_AUX_INTERRUPT_MASK);
+> +}
+> +
+>  static void qmp_v4_configure_dp_tx(struct qmp_combo *qmp)
+>  {
+>  	/* Program default values before writing proper values */
+> @@ -1542,7 +1871,10 @@ static void qmp_v4_configure_dp_tx(struct qmp_combo *qmp)
+>  			QSERDES_V4_TX_TX_EMP_POST1_LVL);
+>  }
+>  
+> -static int qmp_v45_configure_dp_phy(struct qmp_combo *qmp)
+> +static int qmp_v456_configure_dp_phy(struct qmp_combo *qmp,
+> +				     unsigned int com_resetm_ctrl_reg,
+> +				     unsigned int com_c_ready_status_reg,
+> +				     unsigned int dp_phy_status_reg)
+>  {
+>  	const struct phy_configure_opts_dp *dp_opts = &qmp->dp_opts;
+>  	u32 phy_vco_div, status;
+
+Looks like something is missing here as you're not using the new
+parameters anywhere?
+
+> @@ -1639,7 +1971,9 @@ static int qmp_v4_configure_dp_phy(struct qmp_combo *qmp)
+>  	u32 status;
+>  	int ret;
+>  
+> -	ret = qmp_v45_configure_dp_phy(qmp);
+> +	ret = qmp_v456_configure_dp_phy(qmp, QSERDES_V4_COM_RESETSM_CNTRL,
+> +					QSERDES_V4_COM_C_READY_STATUS,
+> +					QSERDES_V4_DP_PHY_STATUS);
+>  	if (ret < 0)
+>  		return ret;
+>  
+> @@ -1701,7 +2035,9 @@ static int qmp_v5_configure_dp_phy(struct qmp_combo *qmp)
+>  	u32 status;
+>  	int ret;
+>  
+> -	ret = qmp_v45_configure_dp_phy(qmp);
+> +	ret = qmp_v456_configure_dp_phy(qmp, QSERDES_V4_COM_RESETSM_CNTRL,
+> +					QSERDES_V4_COM_C_READY_STATUS,
+> +					QSERDES_V4_DP_PHY_STATUS);
+>  	if (ret < 0)
+>  		return ret;
+>  
+> @@ -1750,6 +2086,65 @@ static int qmp_v5_configure_dp_phy(struct qmp_combo *qmp)
+>  	return 0;
+>  }
+>  
+> +static int qmp_v6_configure_dp_phy(struct qmp_combo *qmp)
+> +{
+> +	const struct phy_configure_opts_dp *dp_opts = &qmp->dp_opts;
+> +	u32 bias0_en, drvr0_en, bias1_en, drvr1_en;
+> +	bool reverse = false;
+> +	u32 status;
+> +	int ret;
+> +
+> +	ret = qmp_v456_configure_dp_phy(qmp, QSERDES_V6_COM_RESETSM_CNTRL,
+> +					QSERDES_V6_COM_C_READY_STATUS,
+> +					QSERDES_V6_DP_PHY_STATUS);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	if (dp_opts->lanes == 1) {
+> +		bias0_en = reverse ? 0x3e : 0x1a;
+> +		drvr0_en = reverse ? 0x13 : 0x10;
+> +		bias1_en = reverse ? 0x15 : 0x3e;
+> +		drvr1_en = reverse ? 0x10 : 0x13;
+> +	} else if (dp_opts->lanes == 2) {
+> +		bias0_en = reverse ? 0x3f : 0x15;
+> +		drvr0_en = 0x10;
+> +		bias1_en = reverse ? 0x15 : 0x3f;
+> +		drvr1_en = 0x10;
+> +	} else {
+> +		bias0_en = 0x3f;
+> +		bias1_en = 0x3f;
+> +		drvr0_en = 0x10;
+> +		drvr1_en = 0x10;
+> +	}
+> +
+> +	writel(drvr0_en, qmp->dp_tx + QSERDES_V4_TX_HIGHZ_DRVR_EN);
+> +	writel(bias0_en, qmp->dp_tx + QSERDES_V4_TX_TRANSCEIVER_BIAS_EN);
+> +	writel(drvr1_en, qmp->dp_tx2 + QSERDES_V4_TX_HIGHZ_DRVR_EN);
+> +	writel(bias1_en, qmp->dp_tx2 + QSERDES_V4_TX_TRANSCEIVER_BIAS_EN);
+> +
+> +	writel(0x18, qmp->dp_dp_phy + QSERDES_DP_PHY_CFG);
+> +	udelay(2000);
+> +	writel(0x19, qmp->dp_dp_phy + QSERDES_DP_PHY_CFG);
+> +
+> +	if (readl_poll_timeout(qmp->dp_dp_phy + QSERDES_V6_DP_PHY_STATUS,
+> +			       status,
+> +			       ((status & BIT(1)) > 0),
+> +			       500,
+> +			       10000))
+> +		return -ETIMEDOUT;
+> +
+> +	writel(0x0a, qmp->dp_tx + QSERDES_V4_TX_TX_POL_INV);
+> +	writel(0x0a, qmp->dp_tx2 + QSERDES_V4_TX_TX_POL_INV);
+> +
+> +	writel(0x27, qmp->dp_tx + QSERDES_V4_TX_TX_DRV_LVL);
+> +	writel(0x27, qmp->dp_tx2 + QSERDES_V4_TX_TX_DRV_LVL);
+> +
+> +	writel(0x20, qmp->dp_tx + QSERDES_V4_TX_TX_EMP_POST1_LVL);
+> +	writel(0x20, qmp->dp_tx2 + QSERDES_V4_TX_TX_EMP_POST1_LVL);
+> +
+> +	return 0;
+> +}
+> +
+>  /*
+>   * We need to calibrate the aux setting here as many times
+>   * as the caller tries
+> @@ -2640,8 +3035,8 @@ static int qmp_combo_parse_dt(struct qmp_combo *qmp)
+>  	qmp->pcs_usb = base + offs->usb3_pcs_usb;
+>  
+>  	qmp->dp_serdes = base + offs->dp_serdes;
+> -	qmp->dp_tx = base + offs->txa;
+> -	qmp->dp_tx2 = base + offs->txb;
+> +	qmp->dp_tx = base + offs->dp_tx0;
+> +	qmp->dp_tx2 = base + offs->dp_tx1;
+
+Again, this breaks sc8280xp. Rebasing on Luca's patch and dropping the
+offsets you're adding to the v5 offsets should avoid that.
+
+>  	qmp->dp_dp_phy = base + offs->dp_dp_phy;
+>  
+>  	qmp->pipe_clk = devm_clk_get(dev, "usb3_pipe");
+> @@ -2792,6 +3187,10 @@ static const struct of_device_id qmp_combo_of_match_table[] = {
+>  		.compatible = "qcom,sm8250-qmp-usb3-dp-phy",
+>  		.data = &sm8250_usb3dpphy_cfg,
+>  	},
+> +	{
+> +		.compatible = "qcom,sm8550-qmp-usb3-dp-phy",
+> +		.data = &sm8550_usb3dpphy_cfg,
+> +	},
+>  	{ }
+>  };
+>  MODULE_DEVICE_TABLE(of, qmp_combo_of_match_table);
+
+Johan
