@@ -2,113 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5127689391
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 10:24:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 634D368939C
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 10:27:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230317AbjBCJYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 04:24:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41694 "EHLO
+        id S231665AbjBCJ05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 04:26:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231401AbjBCJXw (ORCPT
+        with ESMTP id S232222AbjBCJ0z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 04:23:52 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEEF13D09E;
-        Fri,  3 Feb 2023 01:23:50 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 07B6A24E2A1;
-        Fri,  3 Feb 2023 17:23:48 +0800 (CST)
-Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 3 Feb
- 2023 17:23:48 +0800
-Received: from [192.168.120.55] (171.223.208.138) by EXMBX168.cuchost.com
- (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 3 Feb
- 2023 17:23:47 +0800
-Message-ID: <afe28108-9b85-982c-90ee-8cd58c9b6fb2@starfivetech.com>
-Date:   Fri, 3 Feb 2023 17:23:47 +0800
+        Fri, 3 Feb 2023 04:26:55 -0500
+Received: from dilbert.mork.no (dilbert.mork.no [IPv6:2a01:4f9:c010:a439::d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 739246E89;
+        Fri,  3 Feb 2023 01:26:50 -0800 (PST)
+Received: from canardo.dyn.mork.no ([IPv6:2a01:799:c9a:3200:0:0:0:1])
+        (authenticated bits=0)
+        by dilbert.mork.no (8.15.2/8.15.2) with ESMTPSA id 3139PiLf773660
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+        Fri, 3 Feb 2023 09:25:45 GMT
+Received: from miraculix.mork.no ([IPv6:2a01:799:c9a:3202:549f:9f7a:c9d8:875b])
+        (authenticated bits=0)
+        by canardo.dyn.mork.no (8.15.2/8.15.2) with ESMTPSA id 3139PcbS1534444
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+        Fri, 3 Feb 2023 10:25:38 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1675416339; bh=VBtFXiOaxjapiMDewgSuvRBSynlE/nLpzbKpUvxzZ4U=;
+        h=From:To:Cc:Subject:References:Date:Message-ID:From;
+        b=T+WP/6kLczsZbbKv+POC7djUJLTqQWawcXIjaJh0dxew66z6DdtXzOluohHttOPfm
+         cCcq4mR9tptxsD34OuqlIDjWHIdBy1a4MMAuBsIsL0x0laZebqITfRFj/voICcHRUH
+         SIk67RuPLR+/9DRaqtUqQgkkx9xfdS6ESIzGlyJQ=
+Received: (nullmailer pid 337756 invoked by uid 1000);
+        Fri, 03 Feb 2023 09:25:38 -0000
+From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Jianhui Zhao <zhaojh329@gmail.com>
+Subject: Re: [PATCH 8/9] net: ethernet: mtk_eth_soc: switch to external PCS
+ driver
+Organization: m
+References: <cover.1675407169.git.daniel@makrotopia.org>
+        <3bac780184867e111c3a1567d8b55658abd931da.1675407169.git.daniel@makrotopia.org>
+Date:   Fri, 03 Feb 2023 10:25:38 +0100
+In-Reply-To: <3bac780184867e111c3a1567d8b55658abd931da.1675407169.git.daniel@makrotopia.org>
+        (Daniel Golle's message of "Fri, 3 Feb 2023 07:06:10 +0000")
+Message-ID: <87357nt819.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v3 3/3] riscv: dts: starfive: Add mmc node
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-mmc@vger.kernel.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jaehoon Chung <jh80.chung@samsung.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230203081913.81968-1-william.qiu@starfivetech.com>
- <20230203081913.81968-4-william.qiu@starfivetech.com>
- <3c5bda9f-08b9-f2ba-6951-9fc614d4debc@linaro.org>
-Content-Language: en-US
-From:   William Qiu <william.qiu@starfivetech.com>
-In-Reply-To: <3c5bda9f-08b9-f2ba-6951-9fc614d4debc@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX168.cuchost.com
- (172.16.6.78)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Virus-Scanned: clamav-milter 0.103.7 at canardo
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Daniel Golle <daniel@makrotopia.org> writes:
+
+> -		ss->pcs[i].ana_rgc3 =3D ana_rgc3;
+> -		ss->pcs[i].regmap =3D syscon_node_to_regmap(np);
+> -
+> -		ss->pcs[i].flags =3D 0;
+> +		flags =3D 0;
+>  		if (of_property_read_bool(np, "pn_swap"))
+> -			ss->pcs[i].flags |=3D MTK_SGMII_FLAG_PN_SWAP;
+> +			flags |=3D MTK_SGMII_FLAG_PN_SWAP;
+>=20=20
+
+patch 1 added "mediatek,pn_swap" so this doesn't apply.  We've all done
+last minute cleanups - never a good idea :-)
 
 
-On 2023/2/3 17:02, Krzysztof Kozlowski wrote:
-> On 03/02/2023 09:19, William Qiu wrote:
->> This adds the mmc node for the StarFive JH7110 SoC.
-> 
-> Do not use "This xxx". Use imperative mode.
-> https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
-> 
->> Set mmco node to emmc and set mmc1 node to sd.
->> 
->> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
-> 
-> 
->> +
->>  &gmac0_rmii_refin {
->>  	clock-frequency = <50000000>;
->>  };
->> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
->> index 64d260ea1f29..ae1a664e7af5 100644
->> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
->> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
->> @@ -370,6 +370,11 @@ syscrg: clock-controller@13020000 {
->>  			#reset-cells = <1>;
->>  		};
->>  
->> +		sysreg: syscon@13030000 {
->> +			compatible = "starfive,sysreg", "syscon";
-> 
-> No:
-> 1. Undocumented.
-> 2. A bit too generic. You should have here SoC specific compatible as
-> well (either as second or third compatible, if all your SoCs share
-> register layout).
-> 
-
-Hi Krzysztof,
-
-As for the compatible, I will change it to "starfive,jh7110-sysreg"
-in next version,but for undocumented, I don't get it, can you
-clarify that.
-Thank you anyway.
-
-Best regards,
-William Qiu
->> +			reg = <0x0 0x13030000 0x0 0x1000>;
->> +		};
->> +
-> 
-> Best regards,
-> Krzysztof
-> 
+Bj=C3=B8rn
