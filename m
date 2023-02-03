@@ -2,185 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A409F689FD2
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 17:58:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BE34689FD8
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 18:02:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232113AbjBCQ6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 11:58:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46286 "EHLO
+        id S232930AbjBCRCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 12:02:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232519AbjBCQ6f (ORCPT
+        with ESMTP id S232100AbjBCRCT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 11:58:35 -0500
-Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2080.outbound.protection.outlook.com [40.107.105.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0642128854;
-        Fri,  3 Feb 2023 08:58:14 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Hz1pRmGH3rwCJ+eZZ7aBSV8nBGl3yPT0KTlqkdXSViMFu9IXgTxRTJL4ugkmaojm15ymlxVR+GomObewBZKkBez0zEgqjSP+vOySxoaqUkD8Rh4WiMZeOQMJfY4ZHU4+TPiBhFVHPkWDV9og7Vl82rsG85fLEFKNDyJHu2E0/brOKTrj99NO4sKCYkb1pXZLjVpujM0Sy6WQeii/pFz8/8f5hBp+a2Ih8ULMkq6r292ipMFjO/Fl/P42PIksBxN2UJV2OC3M3Uikj8MT95ZkPIcpD9e7MqTCkm/cnBA71/wV0rGeGXAbeTL9TLiOOHiPIQEfrqfE8VVoSnKHX4fVKg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=83hpU2DG8fquT5zEL2YXiztRr9qLFgPJCQ8pHZ+ieEo=;
- b=YHv8ktyykYtCljPRDcZrp20V3D9wMMvekso0AHFzSb8VPGZBuiDtErPVy4BJyoKWZcyw2ISXCpgMUXcshrnPGfCvKCFKXKz/F1c/WvVNwpzvABOR3Rqi5uklgl7/3njVV9Cgn1bISdp3/XVr6rRsJjbWZ9umz/tTFkZsVZtJd+YF3H7erliYvOR5gzB+hoOQXWJos4GYm3No0ihk/FXtTaIO1VJaZZkFKmnbEtlwDDwMWCyW2OqwBmPmLmXemsFDQO/rd+fCtWq38JXibnQktTkl6lwb0EDk2qmbfCVlPIXYiBZiOnxO96qm8eRx39b4uuF2btu10R4fKJ2LnOPQIw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
- dkim=pass header.d=siemens.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=83hpU2DG8fquT5zEL2YXiztRr9qLFgPJCQ8pHZ+ieEo=;
- b=GYv3j7yyrI+/mj1D65F8G423lWQ2GK8pdQ4zQwmuxrDS5XSNU1A0TAZUcEeRLrU23V8zqoS3TdooueqYjRWeOwT79YS6fHxJ+iOQbPcVNDzdJvZFEW1yhZX6+/hNKo94i2IrLU80ABihs7CwrcB1iJ+dv1xppAGIsoOJV1svxX3HdbbZP27QQBsEt5pEwLe/981anhVA2swZvgYiTSA7bwvr3mHyy5ArB39MKXl0yqcl2kXfGBkkk6hzFFcQQFzQrDeX4yw7YlvzVFoYc69Zn3ZHni1ymVfNqrZ1Bvh9Eh56WsVL8KBqeAkLwoST50V3upw6nTHu2Ncxt17K2c8svw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=siemens.com;
-Received: from PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:269::8)
- by DB5PR10MB7776.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:4a7::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.27; Fri, 3 Feb
- 2023 16:58:11 +0000
-Received: from PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::ee44:171b:4c40:d42c]) by PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::ee44:171b:4c40:d42c%4]) with mapi id 15.20.6064.028; Fri, 3 Feb 2023
- 16:58:11 +0000
-Date:   Fri, 3 Feb 2023 17:58:04 +0100
-From:   Henning Schild <henning.schild@siemens.com>
-To:     Lee Jones <lee@kernel.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Pavel Machek <pavel@ucw.cz>, linux-leds@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: Re: [PATCH v4] leds: simatic-ipc-leds-gpio: make sure we have the
- GPIO providing driver
-Message-ID: <20230203175804.2560dd21@md1za8fc.ad001.siemens.net>
-In-Reply-To: <Y9y+yOa1gxy3h+rG@google.com>
-References: <20221007153323.1326-1-henning.schild@siemens.com>
-        <Y8mv8PzL1UsP9gNh@google.com>
-        <20230202205704.12a5fbff@md1za8fc.ad001.siemens.net>
-        <Y9y+yOa1gxy3h+rG@google.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.35; x86_64-pc-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH0PR03CA0381.namprd03.prod.outlook.com
- (2603:10b6:610:119::16) To PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:102:269::8)
+        Fri, 3 Feb 2023 12:02:19 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4CED2100;
+        Fri,  3 Feb 2023 09:02:17 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2AFDE1474;
+        Fri,  3 Feb 2023 09:02:59 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.90.37])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1443B3F71E;
+        Fri,  3 Feb 2023 09:02:10 -0800 (PST)
+Date:   Fri, 3 Feb 2023 17:02:08 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     torvalds@linux-foundation.org, corbet@lwn.net, will@kernel.org,
+        boqun.feng@gmail.com, catalin.marinas@arm.com, dennis@kernel.org,
+        tj@kernel.org, cl@linux.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, joro@8bytes.org, suravee.suthikulpanit@amd.com,
+        robin.murphy@arm.com, dwmw2@infradead.org,
+        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
+        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
+        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
+        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-s390@vger.kernel.org,
+        iommu@lists.linux.dev, linux-arch@vger.kernel.org,
+        linux-crypto@vger.kernel.org
+Subject: Re: [PATCH v2 05/10] percpu: Wire up cmpxchg128
+Message-ID: <Y90+EINA9QRb+IlK@FVFF77S0Q05N>
+References: <20230202145030.223740842@infradead.org>
+ <20230202152655.494373332@infradead.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PA4PR10MB5780:EE_|DB5PR10MB7776:EE_
-X-MS-Office365-Filtering-Correlation-Id: bd4e5cce-75b3-4938-bd3d-08db0607d522
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: z3gf9YS2QFldcfD3+ul02BPMruMEYGlBsMD600EN6B12LAfeM4LNcrL4q47pOcpFFHwFiVWz/LKkwL2npu+dbm0YjnsatPf9tsvZ4qk+9kaaFmf+9ic5kGhJRZAfQ9xQBvGTRLG9po3CRNtowiLoqXJts99RsqonXY+hqF4A/e8cEkNznNCkW1wdi5OLZU6ZuTqcPoVHQpiAW2GIPvQYENrtwnOo5Oe9fDMbJzRj4MbCoKf2PxNA6lwiLE42cqYJvfjHrmuNW+y9b2896Gj/hQSzMcfih5uzG9GNIzjlRwLLZEGs9pSKTc7JiDfmfv3q+viV6YWLxWWEG3EzP8CiacQR2x1SKlPSVwMX4ihRtxTJplOz4bjFmQUR61Cd/dE9b9IgKHq4f+y97MLtxw1u1LMuVcYmfHtuPWX9vefplsScGMST5vp+9DkrmE0bZjheoc2Sr65lfQFVGR7K/vN9tUpmVOR8xGS+WmoUajMpm0SJjPio49JX4PfBJc9fKmDsAje3RwbpuRquu0m41lGFROWP0S1JE1sG96gUn8Gh+rdBgo4xk/MqeGtmcw9Li6+WWCAwiiZG7AR5lqqq2GVyGdQ9Hq4yWE/ZS+EjJZuRRSwaCECint+jgtDg24vKi/PzE3Lz9Q9OyqtDpOMxnvMHZg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(346002)(366004)(376002)(136003)(396003)(451199018)(2906002)(44832011)(86362001)(5660300002)(8936002)(82960400001)(66946007)(41300700001)(8676002)(66476007)(6916009)(38100700002)(66556008)(4326008)(478600001)(6486002)(54906003)(316002)(26005)(9686003)(6512007)(83380400001)(6666004)(186003)(1076003)(6506007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?qYHGCVBuohsXQ/KluWnPMretvkvD9ywz14RZfEl7lS/SM/+s360ZafQ0my25?=
- =?us-ascii?Q?s2wvHWCr/9QNsx6NvsbiP+TVodfbSXl7kQzIucwW5b4mZgrPtMCFvA00Yrjt?=
- =?us-ascii?Q?3JB1PKO5pO4FC3pww7lsrK3LsbK0hmNphKvTThXZ78hBFGPGzu0/AFL+OzlH?=
- =?us-ascii?Q?SlglFuzZd0tidQ5KdGrbHOHotC3ajmZRIelS/ZuUJVf71UjJEysOxfGBoeIo?=
- =?us-ascii?Q?uCCZk0m3WCBeLID5GgzMpjOU5Tc3/fI27XMe3t46Wv/48YvASQ5oIHYZgS1j?=
- =?us-ascii?Q?sOt0W6nM1LqxV4QRXMGchNH9PKcOfgCARq4mrlhWJztJwOk8zpUzSUWFz18g?=
- =?us-ascii?Q?5DYQlu9SCDekPohAr5lGPJDU9kzwDyaQgM20c6G3/uj0lASzUOzZEz67n8jI?=
- =?us-ascii?Q?g9eI3AA9ac6orZBNNDXCcK98pqOdFuEjr9cZJkTupgrBN1LewUlEMV2E96ae?=
- =?us-ascii?Q?DvQsPbr2l9MYDkLEvykWYhUIPd8hBrsoyLSpefkdHUyHnwd+O577DHSTq353?=
- =?us-ascii?Q?O9v8GK8t3+wWTokHPY9UWzxcGLVPKntMeCAAqttzpOkweFVbYC7AurgnZOjD?=
- =?us-ascii?Q?k2rW4jGYycFkPdrvNiPKFC2XuJRifBqNxKcgpcV3H4RoOp02GOvh28KH3HP4?=
- =?us-ascii?Q?zoc6QYA5+salBb8/vbsNYLvpD9akmhfXWlJpPoSQ3sIzbeirDOnro33wrjcc?=
- =?us-ascii?Q?mTnu53hNP8HhEdMsrWqkQe6jqARCZ91076uHPueh4FfMQtbUTZZWHkgivKXr?=
- =?us-ascii?Q?ZjfIIBbQXGy1U+sGXa0DfKb3n1MFC9yhXqhTKyFSWOYDCPiHDenQELcmZOEZ?=
- =?us-ascii?Q?rvgkNgA3p/zOqSGFU+sFiAr82+37fSR7ZJy8IHw5HxzDQbW6PWYW0B5my4rx?=
- =?us-ascii?Q?S0xZ5EWGAvHEWLZ1WApZ+pfrtoNxGKOPSY5cxcnpNUik36FBqVbsrt98ynWu?=
- =?us-ascii?Q?zDElTXA6KZtDZWwp2i5A20fCOUd2pj7eIq0qg9+D4F65xwZ4+ZMsBUrkjneI?=
- =?us-ascii?Q?ynW2q8UHXz1XuZOW8pLuAtDxQGMv9bExI36/1y4FDoUSrbSDmbvGqfj5JRjN?=
- =?us-ascii?Q?QGfNHFQ7j6m5zTwcztnXWqFHbyYjnBTCl1I0ypf4QL4OdEtnTi/3nI790c77?=
- =?us-ascii?Q?yTWgKLtMQRc10om/Y3CeayjcaZxbQnWDFB8hfOm3RqVoKUoZf7pvu2c29nUw?=
- =?us-ascii?Q?aCoPPiAR3XBZAinUer39bWjKwyGODX+U0XEWC9KNi5Xb6M7U7IISzOl+viSX?=
- =?us-ascii?Q?lyeUCHO/g5lx3kxmQde4f/EV2sjo8a99P2WfIyH5uwwg2jA7/SP8dUgLRRyz?=
- =?us-ascii?Q?uNGRClPOEajc8O8GeQNdVQudvun8YuAFfRP0mb7nkS543SnYZfyeWzw57kKj?=
- =?us-ascii?Q?QqFppzppOAhGv5OeuxkO8XvzgQib1BxuGQW/T5sg8KVD6n6TZ0Lrsrwfwhbl?=
- =?us-ascii?Q?Qhu+Cs84OnfJMsSRsoR22IBzcOcxs1ueHchuLtfcuCzMVRdNtBdP4/Wfi0Q3?=
- =?us-ascii?Q?23RGlB8DoRBns+eaI/iHIOHRrSXvdezhq8Vzl1Q9rltthypHui3e5ySq1gMO?=
- =?us-ascii?Q?iUJFO+gGkfIktbu+kYIjL1FksDnJnHqK0dS9glgGGao6jhol5BpA07Mi469S?=
- =?us-ascii?Q?yw=3D=3D?=
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bd4e5cce-75b3-4938-bd3d-08db0607d522
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Feb 2023 16:58:11.6230
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JqLojECr2pcBSh5WonCQBfk4WIL8D15Mz1Y6S1QcgaklruocGwHS9oa+mCiua4WHy0upbxdaOGkJxThRqCBuAOr5cICP+ZaNfk2jSsU9tI8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB5PR10MB7776
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230202152655.494373332@infradead.org>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Fri, 3 Feb 2023 07:59:04 +0000
-schrieb Lee Jones <lee@kernel.org>:
-
-> On Thu, 02 Feb 2023, Henning Schild wrote:
+On Thu, Feb 02, 2023 at 03:50:35PM +0100, Peter Zijlstra wrote:
+> In order to replace cmpxchg_double() with the newly minted
+> cmpxchg128() family of functions, wire it up in this_cpu_cmpxchg().
 > 
-> > Am Thu, 19 Jan 2023 21:02:40 +0000
-> > schrieb Lee Jones <lee@kernel.org>:
-> >   
-> > > On Fri, 07 Oct 2022, Henning Schild wrote:
-> > >   
-> > > > If we register a "leds-gpio" platform device for GPIO pins that
-> > > > do not exist we get a -EPROBE_DEFER and the probe will be tried
-> > > > again later. If there is no driver to provide that pin we will
-> > > > poll forever and also create a lot of log messages.
-> > > > 
-> > > > So check if that GPIO driver is configured, if so it will come
-> > > > up eventually. If not, we exit our probe function early and do
-> > > > not even bother registering the "leds-gpio". This method was
-> > > > chosen over "Kconfig depends" since this way we can add support
-> > > > for more devices and GPIO backends more easily without
-> > > > "depends":ing on all GPIO backends.
-> > > > 
-> > > > Fixes: a6c80bec3c93 ("leds: simatic-ipc-leds-gpio: Add GPIO
-> > > > version of Siemens driver") Reviewed-by: Andy Shevchenko
-> > > > <andy.shevchenko@gmail.com> Signed-off-by: Henning Schild
-> > > > <henning.schild@siemens.com> ---
-> > > >  drivers/leds/simple/simatic-ipc-leds-gpio.c | 2 ++
-> > > >  1 file changed, 2 insertions(+)    
-> > > 
-> > > FYI: I'm going to try my best not to take another one like this.  
-> > 
-> > You will not have to. I now understood how to improve on that as i
-> > am adding more variants needing more gpio controller drivers.
-> >   
-> > > Please try to improve the whole situation for you next submission.
-> > > 
-> > > Applied, thanks.  
-> > 
-> > I hope this is still in the branches for a merge. It should be
-> > applied. It does fix a problem but using a wrong pattern, but a
-> > pattern that is already in use.  
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> ---
+>  arch/arm64/include/asm/percpu.h |   21 +++++++++++++++
+>  arch/s390/include/asm/percpu.h  |   17 ++++++++++++
+>  arch/x86/include/asm/percpu.h   |   56 ++++++++++++++++++++++++++++++++++++++++
+>  include/asm-generic/percpu.h    |    8 +++++
+>  include/linux/percpu-defs.h     |   20 ++++++++++++--
+>  5 files changed, 120 insertions(+), 2 deletions(-)
+
+For arm64:
+
+Acked-by: Mark Rutland <mark.rutland@arm.com>
+
+Mark.
+
 > 
-> What makes you think it's not applied?
-
-Because i had that other one potentially replacing it so it was maybe
-called off. Good to know it was not stopped.
-
-Henning
-
+> --- a/arch/arm64/include/asm/percpu.h
+> +++ b/arch/arm64/include/asm/percpu.h
+> @@ -140,6 +140,10 @@ PERCPU_RET_OP(add, add, ldadd)
+>   * re-enabling preemption for preemptible kernels, but doing that in a way
+>   * which builds inside a module would mean messing directly with the preempt
+>   * count. If you do this, peterz and tglx will hunt you down.
+> + *
+> + * Not to mention it'll break the actual preemption model for missing a
+> + * preemption point when TIF_NEED_RESCHED gets set while preemption is
+> + * disabled.
+>   */
+>  #define this_cpu_cmpxchg_double_8(ptr1, ptr2, o1, o2, n1, n2)		\
+>  ({									\
+> @@ -240,6 +244,23 @@ PERCPU_RET_OP(add, add, ldadd)
+>  #define this_cpu_cmpxchg_8(pcp, o, n)	\
+>  	_pcp_protect_return(cmpxchg_relaxed, pcp, o, n)
 >  
-> > So this will fix 6.1 and above in the short term.
-> > 
-> > In the long term i will restructure to individual drivers which
-> > have a clear dependency chain in Kconfig. I will use inheritance to
-> > arrive at minimal code duplication and will use Kconfig switch
-> > default inheritance to ease configuration.
-> > 
-> > Such restructuring patches will have to be written first, but they
-> > will come. Either stand-alone or together with the next machine.  
+> +#define this_cpu_cmpxchg_16(pcp, o, n)					\
+> +({									\
+> +	typedef typeof(pcp) pcp_op_T__;					\
+> +	union {								\
+> +		pcp_op_T__ pot;						\
+> +		u128 val;						\
+> +	} old__, new__, ret__;						\
+> +	pcp_op_T__ *ptr__;						\
+> +	old__.pot = o;							\
+> +	new__.pot = n;							\
+> +	preempt_disable_notrace();					\
+> +	ptr__ = raw_cpu_ptr(&(pcp));					\
+> +	ret__.val = cmpxchg128_local((void *)ptr__, old__.val, new__.val); \
+> +	preempt_enable_notrace();					\
+> +	ret__.pot;							\
+> +})
+> +
+>  #ifdef __KVM_NVHE_HYPERVISOR__
+>  extern unsigned long __hyp_per_cpu_offset(unsigned int cpu);
+>  #define __per_cpu_offset
+> --- a/arch/s390/include/asm/percpu.h
+> +++ b/arch/s390/include/asm/percpu.h
+> @@ -148,6 +148,23 @@
+>  #define this_cpu_cmpxchg_4(pcp, oval, nval) arch_this_cpu_cmpxchg(pcp, oval, nval)
+>  #define this_cpu_cmpxchg_8(pcp, oval, nval) arch_this_cpu_cmpxchg(pcp, oval, nval)
+>  
+> +#define this_cpu_cmpxchg_16(pcp, oval, nval)				\
+> +({									\
+> +	typedef typeof(pcp) pcp_op_T__;					\
+> +	union {								\
+> +		pcp_op_T__ pot;						\
+> +		u128 val;						\
+> +	} old__, new__, ret__;						\
+> +	pcp_op_T__ *ptr__;						\
+> +	old__.pot = oval;						\
+> +	new__.pot = nval;						\
+> +	preempt_disable_notrace();					\
+> +	ptr__ = raw_cpu_ptr(&(pcp));					\
+> +	ret__.val = cmpxchg128((void *)ptr__, old__.val, new__.val);	\
+> +	preempt_enable_notrace();					\
+> +	ret__.pot;							\
+> +})
+> +
+>  #define arch_this_cpu_xchg(pcp, nval)					\
+>  ({									\
+>  	typeof(pcp) *ptr__;						\
+> --- a/arch/x86/include/asm/percpu.h
+> +++ b/arch/x86/include/asm/percpu.h
+> @@ -210,6 +210,62 @@ do {									\
+>  	(typeof(_var))(unsigned long) pco_old__;			\
+>  })
+>  
+> +#if defined(CONFIG_X86_32) && defined(CONFIG_X86_CMPXCHG64)
+> +#define percpu_cmpxchg64_op(size, qual, _var, _oval, _nval)		\
+> +({									\
+> +	union {								\
+> +		typeof(_var) var;					\
+> +		struct {						\
+> +			u32 low, high;					\
+> +		};							\
+> +	} old__, new__;							\
+> +									\
+> +	old__.var = _oval;						\
+> +	new__.var = _nval;						\
+> +									\
+> +	asm qual ("cmpxchg8b " __percpu_arg([var])			\
+> +		  : [var] "+m" (_var),					\
+> +		    "+a" (old__.low),					\
+> +		    "+d" (old__.high)					\
+> +		  : "b" (new__.low),					\
+> +		    "c" (new__.high)					\
+> +		  : "memory");						\
+> +									\
+> +	old__.var;							\
+> +})
+> +
+> +#define raw_cpu_cmpxchg_8(pcp, oval, nval)	percpu_cmpxchg64_op(8,         , pcp, oval, nval)
+> +#define this_cpu_cmpxchg_8(pcp, oval, nval)	percpu_cmpxchg64_op(8, volatile, pcp, oval, nval)
+> +#endif
+> +
+> +#ifdef CONFIG_X86_64
+> +#define percpu_cmpxchg128_op(size, qual, _var, _oval, _nval)		\
+> +({									\
+> +	union {								\
+> +		typeof(_var) var;					\
+> +		struct {						\
+> +			u64 low, high;					\
+> +		};							\
+> +	} old__, new__;							\
+> +									\
+> +	old__.var = _oval;						\
+> +	new__.var = _nval;						\
+> +									\
+> +	asm qual ("cmpxchg16b " __percpu_arg([var])			\
+> +		  : [var] "+m" (_var),					\
+> +		    "+a" (old__.low),					\
+> +		    "+d" (old__.high)					\
+> +		  : "b" (new__.low),					\
+> +		    "c" (new__.high)					\
+> +		  : "memory");						\
+> +									\
+> +	old__.var;							\
+> +})
+> +
+> +#define raw_cpu_cmpxchg_16(pcp, oval, nval)	percpu_cmpxchg128_op(16,         , pcp, oval, nval)
+> +#define this_cpu_cmpxchg_16(pcp, oval, nval)	percpu_cmpxchg128_op(16, volatile, pcp, oval, nval)
+> +#endif
+> +
+>  /*
+>   * this_cpu_read() makes gcc load the percpu variable every time it is
+>   * accessed while this_cpu_read_stable() allows the value to be cached.
+> --- a/include/asm-generic/percpu.h
+> +++ b/include/asm-generic/percpu.h
+> @@ -298,6 +298,10 @@ do {									\
+>  #define raw_cpu_cmpxchg_8(pcp, oval, nval) \
+>  	raw_cpu_generic_cmpxchg(pcp, oval, nval)
+>  #endif
+> +#ifndef raw_cpu_cmpxchg_16
+> +#define raw_cpu_cmpxchg_16(pcp, oval, nval) \
+> +	raw_cpu_generic_cmpxchg(pcp, oval, nval)
+> +#endif
+>  
+>  #ifndef raw_cpu_cmpxchg_double_1
+>  #define raw_cpu_cmpxchg_double_1(pcp1, pcp2, oval1, oval2, nval1, nval2) \
+> @@ -423,6 +427,10 @@ do {									\
+>  #define this_cpu_cmpxchg_8(pcp, oval, nval) \
+>  	this_cpu_generic_cmpxchg(pcp, oval, nval)
+>  #endif
+> +#ifndef this_cpu_cmpxchg_16
+> +#define this_cpu_cmpxchg_16(pcp, oval, nval) \
+> +	this_cpu_generic_cmpxchg(pcp, oval, nval)
+> +#endif
+>  
+>  #ifndef this_cpu_cmpxchg_double_1
+>  #define this_cpu_cmpxchg_double_1(pcp1, pcp2, oval1, oval2, nval1, nval2) \
+> --- a/include/linux/percpu-defs.h
+> +++ b/include/linux/percpu-defs.h
+> @@ -343,6 +343,22 @@ static inline void __this_cpu_preempt_ch
+>  	pscr2_ret__;							\
+>  })
+>  
+> +#define __pcpu_size16_call_return2(stem, variable, ...)			\
+> +({									\
+> +	typeof(variable) pscr2_ret__;					\
+> +	__verify_pcpu_ptr(&(variable));					\
+> +	switch(sizeof(variable)) {					\
+> +	case 1: pscr2_ret__ = stem##1(variable, __VA_ARGS__); break;	\
+> +	case 2: pscr2_ret__ = stem##2(variable, __VA_ARGS__); break;	\
+> +	case 4: pscr2_ret__ = stem##4(variable, __VA_ARGS__); break;	\
+> +	case 8: pscr2_ret__ = stem##8(variable, __VA_ARGS__); break;	\
+> +	case 16: pscr2_ret__ = stem##16(variable, __VA_ARGS__); break;	\
+> +	default:							\
+> +		__bad_size_call_parameter(); break;			\
+> +	}								\
+> +	pscr2_ret__;							\
+> +})
+> +
+>  /*
+>   * Special handling for cmpxchg_double.  cmpxchg_double is passed two
+>   * percpu variables.  The first has to be aligned to a double word
+> @@ -425,7 +441,7 @@ do {									\
+>  #define raw_cpu_add_return(pcp, val)	__pcpu_size_call_return2(raw_cpu_add_return_, pcp, val)
+>  #define raw_cpu_xchg(pcp, nval)		__pcpu_size_call_return2(raw_cpu_xchg_, pcp, nval)
+>  #define raw_cpu_cmpxchg(pcp, oval, nval) \
+> -	__pcpu_size_call_return2(raw_cpu_cmpxchg_, pcp, oval, nval)
+> +	__pcpu_size16_call_return2(raw_cpu_cmpxchg_, pcp, oval, nval)
+>  #define raw_cpu_cmpxchg_double(pcp1, pcp2, oval1, oval2, nval1, nval2) \
+>  	__pcpu_double_call_return_bool(raw_cpu_cmpxchg_double_, pcp1, pcp2, oval1, oval2, nval1, nval2)
+>  
+> @@ -512,7 +528,7 @@ do {									\
+>  #define this_cpu_add_return(pcp, val)	__pcpu_size_call_return2(this_cpu_add_return_, pcp, val)
+>  #define this_cpu_xchg(pcp, nval)	__pcpu_size_call_return2(this_cpu_xchg_, pcp, nval)
+>  #define this_cpu_cmpxchg(pcp, oval, nval) \
+> -	__pcpu_size_call_return2(this_cpu_cmpxchg_, pcp, oval, nval)
+> +	__pcpu_size16_call_return2(this_cpu_cmpxchg_, pcp, oval, nval)
+>  #define this_cpu_cmpxchg_double(pcp1, pcp2, oval1, oval2, nval1, nval2) \
+>  	__pcpu_double_call_return_bool(this_cpu_cmpxchg_double_, pcp1, pcp2, oval1, oval2, nval1, nval2)
+>  
 > 
-> That's fine.  Whatever suits.
 > 
-
