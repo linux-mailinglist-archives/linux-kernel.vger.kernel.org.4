@@ -2,156 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2741E68A465
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 22:15:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9566E68A460
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 22:13:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232519AbjBCVPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 16:15:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58638 "EHLO
+        id S233473AbjBCVNU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 16:13:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233703AbjBCVO7 (ORCPT
+        with ESMTP id S233338AbjBCVNS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 16:14:59 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 266D138EAA;
-        Fri,  3 Feb 2023 13:14:57 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id r27so1954325wrr.1;
-        Fri, 03 Feb 2023 13:14:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=v8UifT5o8QIL+1ZOw+vxMKGXi/nfDw7qQB6T6ClS8Ic=;
-        b=pd4JdGeGvQ+bwoWBkvvdDb0hhyE/Bxhta6bcG3jxt0dWu7ZCdJQHLjZUYh/neaf8kv
-         E2vN7hCsLGKW2de3K6muUrxk3KJCGwOsziVlBtiWxe9afhV1sVgLOZTGjzEZ986sCAQE
-         fKtMsX5U/ln9C0+q5QNHGuB2n94r0ojW3gCL6ueoVBlSVA0i1kk9DA76BLAopPpz5a+r
-         +w+xc49sVxrSI6XphvcS8f9anBNzfLSR2DfW9+hI22SIZJYNLUdgyFra+/+vBm50At92
-         l5Es6QjHbL5/d/8HlTu0B/cTjn6/Uqmc6dzhzy8HEN0z3ioILJcKrb0mAt/0BQo+hytZ
-         2vtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=v8UifT5o8QIL+1ZOw+vxMKGXi/nfDw7qQB6T6ClS8Ic=;
-        b=WEaLGFT7pd1u48TvwOFgqRIGmXN2klYQFPU8BmKVoHbMs77vwkqcY4ot7Ughleqjru
-         FJPjBZZIzLVLjPJDrroluXH4InXRRegKcLRW1RM6UkQ/pJbsLyrQjd1b8f9Jn8PhayM6
-         U2vTbP22iJDkvofn2ZYEWwKowwifTpkLZHMa7MjTh+w74/23H9QncNRZhJCYh464PPo0
-         AurgA6rkV3h4VoNhT+FyRi455wW530NDeMXhz9+7PZrEq8it2Eyou8Yc7vaXWUf/KvZE
-         uJN69i8UnGk75ray5rdFqUAFhzRD/bDAV7cSlMLrTV81UFC9dP+ao5T1GkQdVjw27ell
-         TlnQ==
-X-Gm-Message-State: AO0yUKWwj86BRKmJ50y5p/UZ8x4HAwwcc3J03cENqj+tfx3TzM3FBoMN
-        y0AAq8lGjdaxF+s7fh1BTKU=
-X-Google-Smtp-Source: AK7set+hBed4Vs81Op6a8Moc0ZYf2TGrkIyuIwn9zkILCDF+4akhZ0fn2PUit7H3sH6BdDxxPfJo6w==
-X-Received: by 2002:a05:6000:1f0f:b0:2bf:bbd1:1db3 with SMTP id bv15-20020a0560001f0f00b002bfbbd11db3mr10247467wrb.44.1675458895502;
-        Fri, 03 Feb 2023 13:14:55 -0800 (PST)
-Received: from skbuf ([188.26.57.116])
-        by smtp.gmail.com with ESMTPSA id w7-20020adff9c7000000b002be546f947asm2835380wrr.61.2023.02.03.13.14.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 13:14:55 -0800 (PST)
-Date:   Fri, 3 Feb 2023 23:14:51 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Ido Schimmel <idosch@idosch.org>
-Cc:     netdev@kapio-technology.com, davem@davemloft.net, kuba@kernel.org,
-        netdev@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
-        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>
-Subject: Re: [PATCH net-next 0/5] ATU and FDB synchronization on locked ports
-Message-ID: <20230203211451.3rhg2kg6tjmmhfmp@skbuf>
-References: <20230130173429.3577450-1-netdev@kapio-technology.com>
- <Y9lrIWMnWLqGreZL@shredder>
- <e2535b002be9044958ab0003d8bd6966@kapio-technology.com>
- <Y9vaIOefIf/gI0BR@shredder>
- <3cecf4425b0e6f38646e25e40fd8f0fd@kapio-technology.com>
- <Y9vmfoaFxPdKvgxt@shredder>
+        Fri, 3 Feb 2023 16:13:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC5A23102;
+        Fri,  3 Feb 2023 13:13:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CE1F61FFE;
+        Fri,  3 Feb 2023 21:13:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FF6FC433EF;
+        Fri,  3 Feb 2023 21:13:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675458793;
+        bh=wD0cJN6Tm9r37/mmwTEEUQeaVE8GiEKNj6SEKB73dsE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=EY+fVLWnaeDX7JS6BXG8MQc+rBangmmzIqOceTarYT/W/7zZjm7uBXDGW+L98dhho
+         uFVTGGh40HkHEPfEIWOEKs8cHDi3f/6dEWvZkFE3slwDFpzgpL5auxv9UcfgqdeyS6
+         si4OgEyBX6QRW/EeU4FE+f5My+EWQPqbUn4IgwabiXQWhqcCyLci24zPsL7FROYs+z
+         sXRIxstAoTcWSJSr309UYfthU9aHF0MnGRr/ityW2ajTXVZTUYQ5lY+8H+Z97flPDp
+         GF5sLGN8WbzP37Q1aU4K7Oe22MNvBlBFac1P6wDAj/oox+S6sSzmZAZLrqm7Jx5fR3
+         F3Drb0WKZzyzA==
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     krzysztof.kozlowski@linaro.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>, agross@kernel.org,
+        linux-arm-msm@vger.kernel.org
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        marijn.suijten@somainline.org, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: dts: qcom: sm8450-nagara: Correct firmware paths
+Date:   Fri,  3 Feb 2023 13:15:32 -0800
+Message-Id: <167545892334.3290628.10998398232052602739.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230203142309.1106349-1-konrad.dybcio@linaro.org>
+References: <20230203142309.1106349-1-konrad.dybcio@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9vmfoaFxPdKvgxt@shredder>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 06:36:14PM +0200, Ido Schimmel wrote:
-> On Thu, Feb 02, 2023 at 05:19:07PM +0100, netdev@kapio-technology.com wrote:
-> > On 2023-02-02 16:43, Ido Schimmel wrote:
-> > > On Thu, Feb 02, 2023 at 08:37:08AM +0100, netdev@kapio-technology.com wrote:
-> > > > On 2023-01-31 20:25, Ido Schimmel wrote:
-> > > > >
-> > > > > Will try to review tomorrow, but it looks like this set is missing
-> > > > > selftests. What about extending bridge_locked_port.sh?
-> > > > 
-> > > > I knew you would take this up. :-)
-> > > > But I am not sure that it's so easy to have selftests here as it is timing
-> > > > based and it would take the 5+ minutes just waiting to test in the stadard
-> > > > case, and there is opnly support for mv88e6xxx driver with this
-> > > > patch set.
-> > > 
-> > > The ageing time is configurable: See commit 081197591769 ("selftests:
-> > > net: bridge: Parameterize ageing timeout"). Please add test cases in the
-> > > next version.
-> > 
-> > When I was looking at configuring the ageing time last time, my finding was
-> > that the ageing time could not be set very low as there was some part in the
-> > DSA layer etc, and confusion wrt units. I think the minimum secured was like
-> > around 2 min. (not validated), which is not that much of an improvement for
-> > fast testing. If you know what would be a good low timeout to set, I would
-> > like to know.
+On Fri, 3 Feb 2023 15:23:09 +0100, Konrad Dybcio wrote:
+> Nagara is definitely not SM8350, fix it!
 > 
-> My point is that the ageing time is parametrized via 'LOW_AGEING_TIME'
-> in forwarding.config so just use '$LOW_AGEING_TIME' in the selftest and
-> set it as high as it needs to be for mv88e6xxx in your own
-> forwarding.config.
+> 
 
-FWIW, we have a forwarding.config file in tools/testing/selftests/drivers/net/dsa/.
-So you could cd to that folder, edit the file with your variable, and run the symlinked
-script from there.
+Applied, thanks!
 
-> as there was some part in the DSA layer etc
+[1/1] arm64: dts: qcom: sm8450-nagara: Correct firmware paths
+      commit: e27f38e6255306527e32af85592d805f3360ff94
 
-	if (ds->ageing_time_min && ageing_time < ds->ageing_time_min)
-		return -ERANGE;
-
-High tech, advanced software.....
-
-You could print the ds->ageing_time_min variable. For mv88e6xxx, my 6390
-and 6190 report 3750. I have to admit the ageing time units are confusing,
-but Tobias Waldekranz kindly explained in one of those commit messages
-that Ido linked to that these represent "centiseconds" (or 37.5 seconds).
-And I think we discussed the units with you before. And in general, it's
-not hard to find the answer if you search for it, I know I could find it.
-
-Please stop trying to find silly excuses to always go through the path
-of minimal resistance.
+Best regards,
+-- 
+Bjorn Andersson <andersson@kernel.org>
