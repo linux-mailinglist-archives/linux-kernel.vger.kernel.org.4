@@ -2,173 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B40C5688D7B
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 03:55:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B71D688D81
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 03:55:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232168AbjBCCzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 21:55:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32784 "EHLO
+        id S232135AbjBCCza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 21:55:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232142AbjBCCzF (ORCPT
+        with ESMTP id S231614AbjBCCz1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 21:55:05 -0500
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E743BDBB;
-        Thu,  2 Feb 2023 18:55:02 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QTYrU7C+XwMr9da9LpnriCyVTsipIcG6pkkxHqlp55RCSyvjlL5MEiuU2qK9YLMEzc5b2h+31Ziv5iMmg4Ve84GhAwvh0SOJOOLlzSzlZiWdw6RZDBhHBu+WsfeREKvdjQsM63ho1tBqpVQmhe0bs8JsTcDVhXx8g4/0fTimuJqNKUkLmUEgy9rI7XXvALRX+pgWqE4yZCWCaQaV1aZ0edMPkuu1Mh0+kypzOmZERvahgdNQTyW3N8WqPHVRRufuDj0ELDdfaw1CpjBHGoNbOtWImr50fJIVbmDwfRnBlu62hbxbzl0dND6zGlLnghG1EfdDvI2XWI+O/T1NytWbrg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Q0ieNo/1mwhjviWYiHdn6kxjBt1AbsKW14+NLo2+BQU=;
- b=NnMpWdEouvgdnhY9kZfjU6bdITYdQu7mBgSCB4IN15dm5xq5OzWUfhOfovpl5z4JeRCIQ3KhYqHgiC2b1P7ttyqpeb6bqU9H/XdRIDQ2OmskctzooB170sPApth8ff3jjinP+CHHv3lj1MPZp4/+xwfHl+tRcFsxbaC02ymzGYGOl/A7F9VS9JaqYXtsqfBVvPnUIDrb4iwaf6mbxkmyNiCCGfE7VvLwWtCvyElyw2Xj3sfU7dqou7PweJHKGK3W5M6FdD5Q+fvxmeHcuLWB5gmLuHsXiQOl8m4xo+rvU9TmfmjAvHhDUrRPB9116xQHg+lY9RgyLfth3fKYHLdoCQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Q0ieNo/1mwhjviWYiHdn6kxjBt1AbsKW14+NLo2+BQU=;
- b=YFEkYeONQLJAZ94rGIVE0wFXs3EVp2BTlJ7RkOVzfZ9Fd3WrlHOiGrOZuv3inGwcMoyM9WRfvsLUFy57FIgYNT85M0s1hvsFqh17LHGStQgoYrvUUqFljXqdFWlLB4DALIJKb5jQUnP8kqolL/Xa7AojFND1aPMBM0ebmoyiwxAtsbRGDeY5M5pu91o3kdMFWFmEwK6xymFT2Sadg4IpuAPaTBmQJ6dtU8xc0X7Hk78ERlbgXvsYC9vmyn9idAhZqwdLHT9yxWv+iASYLT5wrmlmFMFGjcGfn3GUMkmRygkIHzq9s+KyJ4EfyWvKrtvaFllRFGRpVf3kim+UdG4LLw==
-Received: from MW4PR04CA0378.namprd04.prod.outlook.com (2603:10b6:303:81::23)
- by BL1PR12MB5240.namprd12.prod.outlook.com (2603:10b6:208:319::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.25; Fri, 3 Feb
- 2023 02:55:01 +0000
-Received: from CO1NAM11FT112.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:81:cafe::86) by MW4PR04CA0378.outlook.office365.com
- (2603:10b6:303:81::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.28 via Frontend
- Transport; Fri, 3 Feb 2023 02:55:00 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- CO1NAM11FT112.mail.protection.outlook.com (10.13.174.213) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6064.28 via Frontend Transport; Fri, 3 Feb 2023 02:55:00 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 2 Feb 2023
- 18:54:55 -0800
-Received: from [10.110.48.28] (10.126.230.37) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 2 Feb 2023
- 18:54:54 -0800
-Message-ID: <72029a93-1150-1994-916f-b15ef0befd49@nvidia.com>
-Date:   Thu, 2 Feb 2023 18:54:54 -0800
+        Thu, 2 Feb 2023 21:55:27 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51C8640BCC
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 18:55:25 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id ud5so11754698ejc.4
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 18:55:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+8fV2+ZPkANwP3GYe/Ty74BkbitDSVqkcbED+KFF8RI=;
+        b=SuOYKs/V4dup+nwSgj1aKqbo/id0uNiEV+J1Dq4sj0MocvwJ7rRoeGdjo+W51dDxrC
+         Mql3M3KmxEDh+nF+JnqGkAYHaM6Fo7W6TUnad9uX31PoVpjbdtbc5fIo0ohNY0O9e4hC
+         RnH4xyMDVujxrjQL/B3GYkw5+8HuETsjuCKXzkbcW/wuKmMDEp04F3Z4nI1Vd9PIh7bI
+         MorDwIOvCN8hbyUZrf6MOXXhv0T8LP7FYpLDS5e6+Mdc65nGz7dZNOcv4c6aOup4wz5O
+         ctm/3v+UIsdZ96lFldhyhRb+nbv/1YtxrTUonb9s8V3/wT09uFUjpI8kcT+JbV3UP311
+         xNPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+8fV2+ZPkANwP3GYe/Ty74BkbitDSVqkcbED+KFF8RI=;
+        b=aVkZpv/lGHRi0Z+RjZeYBLNLd+jlyyMaO2SQK5GUV/FcUFFmvn8u+mueqRYBx7oDTw
+         WrODfbe7JbYFZ/41cY/5w6LeEJNqZSLYxzTQtXfyeogbSHXV0vXTQcC8XDO4YY71TKcF
+         crd7RDz0wdM9TWjzqcFTzdAUkC4UPYUwrmviV032qlVKLF2CQZgjJ13xYJQSLcI0MI9X
+         JFCCGI4OJpVI1RrxDU8fT7PEMFpEfPX9kAp/Rlln5ZSaPT7gvyh8t/gCLhvCiLCXZX8S
+         2YePzsp8kZ9+gQv+K/u4wV+eD+CNNN7efHhPfwkN3eAIuyonWpYJj4ITaFNwyyphL6LN
+         o8ig==
+X-Gm-Message-State: AO0yUKW7xdHHh8BIBQPr4dv9safgVjlDvy6AH67e+EynFyv6+1LXXLjb
+        75+sKTtrZuTtESEJXfNa/4wskg==
+X-Google-Smtp-Source: AK7set+zJtS9I4La2y0p/l/DLAEW/qAm+KmlcWUJ6l6jjpa9fxDitxVITWoaaIQYBQGwVlnWftYw/w==
+X-Received: by 2002:a17:906:c089:b0:88f:895f:1ba4 with SMTP id f9-20020a170906c08900b0088f895f1ba4mr3226041ejz.57.1675392923840;
+        Thu, 02 Feb 2023 18:55:23 -0800 (PST)
+Received: from [192.168.1.101] (abyl20.neoplus.adsl.tpnet.pl. [83.9.31.20])
+        by smtp.gmail.com with ESMTPSA id gw16-20020a170906f15000b0088e5f3e1faesm675364ejb.36.2023.02.02.18.55.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Feb 2023 18:55:23 -0800 (PST)
+Message-ID: <26f87cbe-58f8-e74a-3dd3-2f27cb092791@linaro.org>
+Date:   Fri, 3 Feb 2023 03:55:21 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [syzbot] general protection fault in skb_dequeue (3)
+ Thunderbird/102.7.0
+Subject: Re: [PATCH 10/23] interconnect: qcom: rpmh: fix registration race
 Content-Language: en-US
-To:     David Howells <dhowells@redhat.com>,
-        David Hildenbrand <david@redhat.com>
-CC:     syzbot <syzbot+a440341a59e3b7142895@syzkaller.appspotmail.com>,
-        <davem@davemloft.net>, <edumazet@google.com>, <hch@lst.de>,
-        <johannes@sipsolutions.net>, <kuba@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-wireless@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <pabeni@redhat.com>,
-        <syzkaller-bugs@googlegroups.com>
-References: <e8065d6a-d2f9-60aa-8541-8dfc8e9b608f@redhat.com>
- <000000000000b0b3c005f3a09383@google.com>
- <822863.1675327935@warthog.procyon.org.uk>
- <1265629.1675350909@warthog.procyon.org.uk>
-From:   John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <1265629.1675350909@warthog.procyon.org.uk>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+References: <20230201101559.15529-1-johan+linaro@kernel.org>
+ <20230201101559.15529-11-johan+linaro@kernel.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230201101559.15529-11-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.230.37]
-X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT112:EE_|BL1PR12MB5240:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4ffb76bb-9b07-495b-716c-08db05920a9e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gu4+6wG+4zP4phNe6aVBTqUUZWKFV+olLLx66wHBwd6SYtFqB66vu8rwpa7uPhaVAbX/rH7OTbi44v0fGGH3LLkVO9ShYJiQjm3WRhDe+oBdJ3iO/MwwWWhlmMvzkQy6/zyVxH+2btd/OuReHUJWxl6k3r+wAKN+LQV876Oin6S1rjvXQsmlfkoffdEcZjsFoSoReSXsdxrpkxNP5N1GOI16KQ60rsFvCawrn3wip1upg5Q+3CG308lTAUnsXRqw5QjE53stSpKK7ig9fWaq96jqjJz9z3ibsReBzT3ikmKV0U7wc5lmR7IShG8PB4qtcoqHjUtOYOnrVYTF9napxfy6SvuBx0Xy13hOoTinwBMb8Ns+b4/Mk+ynD6C2fGWwB8Nw12eRcV/qiHjJ90i+iE/WZQQ56Y94uO/e1A6IMQLRJJD3lDXgp5JsK+OggTedgVxzZWEpNq01PNs3t9S6Q1D4mC/TqeUOHJ/psBStpbKeGRNvKz4JXYVRUdaTTA+4uSNXRhXT2R4v62bQrK8Dnhkhz7vCcK37N5kUb6RnY5N44fdEYKbsN4u/dWEZ+nTFtgIGPkaS9EEG8ftZY5hLexEjP3cQ30vVA7IDEDDCzcMiAL61WC+dMfr6+piCSWVsuGOczVUnf9jK0c+2fTm4qX1TaNvGrpXeMYYLidHvRlAiZERrg81+TK9X/c1ZK1ckC0v+Cbo8/iCJgCP5kq9W2H0OyfOwUOeJe+d+TAa74GM=
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(376002)(39860400002)(136003)(396003)(346002)(451199018)(46966006)(40470700004)(36840700001)(8676002)(4326008)(478600001)(36860700001)(70206006)(70586007)(31696002)(47076005)(86362001)(40460700003)(356005)(7636003)(82740400003)(426003)(40480700001)(82310400005)(316002)(54906003)(186003)(16526019)(336012)(110136005)(2616005)(16576012)(36756003)(83380400001)(53546011)(26005)(2906002)(31686004)(5660300002)(41300700001)(7416002)(8936002)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Feb 2023 02:55:00.3014
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4ffb76bb-9b07-495b-716c-08db05920a9e
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT112.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5240
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/2/23 07:15, David Howells wrote:
-> David Hildenbrand <david@redhat.com> wrote:
+
+
+On 1.02.2023 11:15, Johan Hovold wrote:
+> The current interconnect provider registration interface is inherently
+> racy as nodes are not added until the after adding the provider. This
+> can specifically cause racing DT lookups to fail.
 > 
->> At first, I wondered if that's related to shared anonymous pages getting
->> pinned R/O that would trigger COW-unsharing ... but I don't even see where we
->> are supposed to use FOLL_PIN vs. FOLL_GET here? IOW, we're not even supposed
->> to access user space memory (neither FOLL_GET nor FOLL_PIN) but still end up
->> with a change in behavior.
+> Switch to using the new API where the provider is not registered until
+> after it has been fully initialised.
 > 
-> I'm not sure that using FOLL_PIN is part of the problem here.
+> Fixes: 976daac4a1c5 ("interconnect: qcom: Consolidate interconnect RPMh support")
+> Cc: stable@vger.kernel.org      # 5.7
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-I agree. It's really not.
-
+Konrad
+>  drivers/interconnect/qcom/icc-rpmh.c | 25 +++++++++++++++----------
+>  1 file changed, 15 insertions(+), 10 deletions(-)
 > 
-> sendfile() is creating a transient buffer attached to a pipe, doing a DIO read
-> into it (which uses iov_iter_extract_pages() to populate a bio) and then feeds
-> the pages from the pipe one at a time using a BVEC-type iterator to a buffered
-> write.
-> 
-> Note that iov_iter_extract_pages() does not pin/get pages when accessing a
-> BVEC, KVEC, XARRAY or PIPE iterator.  However, in this case, this should not
-> matter as the pipe is holding refs on the pages in the buffer.
-> 
-> I have found that the issue goes away if I add an extra get_page() into
-> iov_iter_extract_pipe_pages() and don't release it (the page is then leaked).
-> 
-> This makes me think that the problem might be due to the pages getting
-> recycled from the pipe before DIO has finished writing to them - but that
-> shouldn't be the case as the splice has to be synchronous - we can't mark data
-> in the pipe as 'produced' until we've finished reading it.
-
-
-So I thought about this for a while, and one really big glaring point
-that stands out for me is: before this commit, we had this:
-
-iov_iter_get_pages()
-   __iov_iter_get_pages_alloc()
-     pipe_get_pages()
-       get_page()
-
-But now, based on the claim from various folks that "pipe cases don't
-require a get_page()", we have boldly--too boldy, I believe-- moved
-directly into case that doesn't do a get_page():
-
-iov_iter_extract_pipe_pages()
-   ...(nothing)
-
-And your testing backs this up: adding the get_page() back hides the
-failure.
-
-So that's as far as I've got, but I am really suspecting that this is
-where the root cause is: pipe references are not as locked down as we
-think they are. At least in this case.
-
-thanks,
--- 
-John Hubbard
-NVIDIA
+> diff --git a/drivers/interconnect/qcom/icc-rpmh.c b/drivers/interconnect/qcom/icc-rpmh.c
+> index 5168bbf3d92f..fdb5e58e408b 100644
+> --- a/drivers/interconnect/qcom/icc-rpmh.c
+> +++ b/drivers/interconnect/qcom/icc-rpmh.c
+> @@ -192,9 +192,10 @@ int qcom_icc_rpmh_probe(struct platform_device *pdev)
+>  	provider->pre_aggregate = qcom_icc_pre_aggregate;
+>  	provider->aggregate = qcom_icc_aggregate;
+>  	provider->xlate_extended = qcom_icc_xlate_extended;
+> -	INIT_LIST_HEAD(&provider->nodes);
+>  	provider->data = data;
+>  
+> +	icc_provider_init(provider);
+> +
+>  	qp->dev = dev;
+>  	qp->bcms = desc->bcms;
+>  	qp->num_bcms = desc->num_bcms;
+> @@ -203,10 +204,6 @@ int qcom_icc_rpmh_probe(struct platform_device *pdev)
+>  	if (IS_ERR(qp->voter))
+>  		return PTR_ERR(qp->voter);
+>  
+> -	ret = icc_provider_add(provider);
+> -	if (ret)
+> -		return ret;
+> -
+>  	for (i = 0; i < qp->num_bcms; i++)
+>  		qcom_icc_bcm_init(qp->bcms[i], dev);
+>  
+> @@ -218,7 +215,7 @@ int qcom_icc_rpmh_probe(struct platform_device *pdev)
+>  		node = icc_node_create(qn->id);
+>  		if (IS_ERR(node)) {
+>  			ret = PTR_ERR(node);
+> -			goto err;
+> +			goto err_remove_nodes;
+>  		}
+>  
+>  		node->name = qn->name;
+> @@ -232,19 +229,27 @@ int qcom_icc_rpmh_probe(struct platform_device *pdev)
+>  	}
+>  
+>  	data->num_nodes = num_nodes;
+> +
+> +	ret = icc_provider_register(provider);
+> +	if (ret)
+> +		goto err_remove_nodes;
+> +
+>  	platform_set_drvdata(pdev, qp);
+>  
+>  	/* Populate child NoC devices if any */
+>  	if (of_get_child_count(dev->of_node) > 0) {
+>  		ret = of_platform_populate(dev->of_node, NULL, NULL, dev);
+>  		if (ret)
+> -			goto err;
+> +			goto err_deregister_provider;
+>  	}
+>  
+>  	return 0;
+> -err:
+> +
+> +err_deregister_provider:
+> +	icc_provider_deregister(provider);
+> +err_remove_nodes:
+>  	icc_nodes_remove(provider);
+> -	icc_provider_del(provider);
+> +
+>  	return ret;
+>  }
+>  EXPORT_SYMBOL_GPL(qcom_icc_rpmh_probe);
+> @@ -253,8 +258,8 @@ int qcom_icc_rpmh_remove(struct platform_device *pdev)
+>  {
+>  	struct qcom_icc_provider *qp = platform_get_drvdata(pdev);
+>  
+> +	icc_provider_deregister(&qp->provider);
+>  	icc_nodes_remove(&qp->provider);
+> -	icc_provider_del(&qp->provider);
+>  
+>  	return 0;
+>  }
