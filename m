@@ -2,200 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D75868A217
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 19:37:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3E9B68A21E
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 19:41:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233606AbjBCShO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 13:37:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32950 "EHLO
+        id S233497AbjBCSlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 13:41:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232987AbjBCShM (ORCPT
+        with ESMTP id S231495AbjBCSlX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 13:37:12 -0500
-Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719779F9FA;
-        Fri,  3 Feb 2023 10:37:11 -0800 (PST)
-Received: by mail-oo1-xc2d.google.com with SMTP id b10-20020a4a9fca000000b004e6f734c6b4so575953oom.9;
-        Fri, 03 Feb 2023 10:37:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=mP4yB9LFFa1Pp5QA3D/tSditesL/r2SNblVIlGMaCVg=;
-        b=RecCHPYS+3hkE16dc0YBJZxw7YbHa3qx0zv7aiHUlzw74xEPNkbfPspRNU8wcccqUC
-         rbgyQ/oBtoKIez6xqUPAe9jLhOE6imjP8oMTVD4Su6c1sbUmQLL6jCl2ft4A+5a9usDy
-         HwRifTLo+VgDI/I5gV+/dUnoKh3krf3efre2pSLCD9XkIT8C74gYGl2ADGcgWMxqBuxa
-         G02GGnohx10suTO+N/MLhcTOa0fL9mgOdSRGj5sZ4yrM9BFKuxhg95brASkkY8EuTbEd
-         ZFch2fGKZZqwJCOVSrzF3G337fckYbMCZ1jjZ32abE//7laC1B9aoYwRXLcgLdURy/xx
-         HUdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mP4yB9LFFa1Pp5QA3D/tSditesL/r2SNblVIlGMaCVg=;
-        b=jJC1ajPDymCWzGIBedl2Z1Ljqq0fpUbJqhkhoZyPg+0mG2ZQ3FYBWYGpwhKlfFu4TK
-         TdtIkCBd3WBqQZgN1etjmh847hkcIdU6aYJ90MNrJkMnzC+FlkN36d1uhFWSzWB3ekF7
-         cNPuJLL/SE0z6w5TXXINSJoG20tu1Uwn9XVXStwT2k95reSJwLOIfYxYJqrpUA7eCBO0
-         +OrELeXbpleCt4CCZMSu9nJU8O/0HHnT1pqOePibcf5Gvp6C9ficIJbWiBmBUpFplCi0
-         qiCfNlBqXrpTj+WF+6yeEKAvoaZaLtrED6F2egudZXlDg4MurVAgLd8OHCiqEmnLgipi
-         40zg==
-X-Gm-Message-State: AO0yUKWuP1G1DN7n1TYtShKY5eUOqUc395oY+d3z89ADV8G3LYbN/aIS
-        rphie/UmiFwJ2LA6IiCttWebWQtLdTU=
-X-Google-Smtp-Source: AK7set8Zk9gq+khze/M1wx/kYaToNswQiMpxKBYHy2DS0KSkevhFTmiGoV5G+Z5s5bkDA6sRQnZzpA==
-X-Received: by 2002:a4a:dfc7:0:b0:519:b605:9d78 with SMTP id p7-20020a4adfc7000000b00519b6059d78mr5517065ood.7.1675449430769;
-        Fri, 03 Feb 2023 10:37:10 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i10-20020a4adf0a000000b00516d4eac864sm1245679oou.29.2023.02.03.10.37.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Feb 2023 10:37:10 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <ef9e6cfb-7b08-d649-feb0-0a56b81770e7@roeck-us.net>
-Date:   Fri, 3 Feb 2023 10:37:08 -0800
+        Fri, 3 Feb 2023 13:41:23 -0500
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 721071ADDD;
+        Fri,  3 Feb 2023 10:41:21 -0800 (PST)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 8C21D1883921;
+        Fri,  3 Feb 2023 18:41:18 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 78969250007B;
+        Fri,  3 Feb 2023 18:41:18 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 5F8CC91201E4; Fri,  3 Feb 2023 18:41:18 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 5/5] watchdog: diag288_wdt: unify lpar and zvm diag288
- helpers
-Content-Language: en-US
-To:     Alexander Egorenkov <egorenar@linux.ibm.com>,
-        wim@linux-watchdog.org
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hca@linux.ibm.com
-References: <20230203073958.1585738-1-egorenar@linux.ibm.com>
- <20230203073958.1585738-6-egorenar@linux.ibm.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230203073958.1585738-6-egorenar@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Date:   Fri, 03 Feb 2023 19:41:18 +0100
+From:   netdev@kapio-technology.com
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
+        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?UTF-8?Q?Cl=C3=A9m?= =?UTF-8?Q?ent_L=C3=A9ger?= 
+        <clement.leger@bootlin.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>
+Subject: Re: [PATCH net-next 3/5] drivers: net: dsa: add fdb entry flags
+ incoming to switchcore drivers
+In-Reply-To: <Y9zDApc6nDO2RzOb@corigine.com>
+References: <20230130173429.3577450-1-netdev@kapio-technology.com>
+ <20230130173429.3577450-4-netdev@kapio-technology.com>
+ <Y9lj7RJgyMJfjtGp@corigine.com>
+ <0b021777dfc1825b6565c0d9dbd6dbef@kapio-technology.com>
+ <Y9zDApc6nDO2RzOb@corigine.com>
+User-Agent: Gigahost Webmail
+Message-ID: <687a1918326d23ec901c1f53f5860592@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/2/23 23:39, Alexander Egorenkov wrote:
-> Change naming of the internal diag288 helper functions
-> to improve overall readability and reduce confusion:
-> * Rename __diag288() to diag288().
-> * Get rid of the misnamed helper __diag288_lpar() that was used not only
->    on LPARs but also zVM and KVM systems.
-> * Rename __diag288_vm() to diag288_str().
+On 2023-02-03 09:17, Simon Horman wrote:
+> On Thu, Feb 02, 2023 at 05:45:56PM +0100, netdev@kapio-technology.com 
+> wrote:
+>> On 2023-01-31 19:54, Simon Horman wrote:
+>> > > --- a/drivers/net/dsa/b53/b53_common.c
+>> > > +++ b/drivers/net/dsa/b53/b53_common.c
+>> > > @@ -1684,11 +1684,15 @@ static int b53_arl_op(struct b53_device
+>> > > *dev, int op, int port,
+>> > >
+>> > >  int b53_fdb_add(struct dsa_switch *ds, int port,
+>> > >  		const unsigned char *addr, u16 vid,
+>> > > -		struct dsa_db db)
+>> > > +		u16 fdb_flags, struct dsa_db db)
+>> > >  {
+>> > >  	struct b53_device *priv = ds->priv;
+>> > >  	int ret;
+>> > >
+>> > > +	/* Ignore entries with set flags */
+>> > > +	if (fdb_flags)
+>> > > +		return 0;
+>> >
+>> >
+>> > 	Would returning -EOPNOTSUPP be more appropriate?
+>> >
+>> > ...
+>> 
+>> I don't think that would be so good, as the command
+>> 
+>> bridge fdb replace ADDR dev <DEV> master dynamic
+>> 
+>> is a valid command and should not generate errors. When ignored by the
+>> driver, it will just install a dynamic FDB entry in the bridge, and 
+>> the
+>> bridge will age it.
 > 
-> Reviewed-by: Heiko Carstens <hca@linux.ibm.com>
-> Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
-
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
-> ---
->   drivers/watchdog/diag288_wdt.c | 32 +++++++++++++-------------------
->   1 file changed, 13 insertions(+), 19 deletions(-)
+> Sure, I agree that it's not necessarily an error that needs
+> to propagate to the user.
 > 
-> diff --git a/drivers/watchdog/diag288_wdt.c b/drivers/watchdog/diag288_wdt.c
-> index a29ad164b27a..4631d0a3866a 100644
-> --- a/drivers/watchdog/diag288_wdt.c
-> +++ b/drivers/watchdog/diag288_wdt.c
-> @@ -71,8 +71,8 @@ MODULE_ALIAS("vmwatchdog");
->   
->   static char *cmd_buf;
->   
-> -static int __diag288(unsigned int func, unsigned int timeout,
-> -		     unsigned long action, unsigned int len)
-> +static int diag288(unsigned int func, unsigned int timeout,
-> +		   unsigned long action, unsigned int len)
->   {
->   	union register_pair r1 = { .even = func, .odd = timeout, };
->   	union register_pair r3 = { .even = action, .odd = len, };
-> @@ -92,7 +92,7 @@ static int __diag288(unsigned int func, unsigned int timeout,
->   	return err;
->   }
->   
-> -static int __diag288_vm(unsigned int  func, unsigned int timeout, char *cmd)
-> +static int diag288_str(unsigned int func, unsigned int timeout, char *cmd)
->   {
->   	ssize_t len;
->   
-> @@ -102,13 +102,7 @@ static int __diag288_vm(unsigned int  func, unsigned int timeout, char *cmd)
->   	ASCEBC(cmd_buf, MAX_CMDLEN);
->   	EBC_TOUPPER(cmd_buf, MAX_CMDLEN);
->   
-> -	return __diag288(func, timeout, virt_to_phys(cmd_buf), len);
-> -}
-> -
-> -static int __diag288_lpar(unsigned int func, unsigned int timeout,
-> -			  unsigned long action)
-> -{
-> -	return __diag288(func, timeout, action, 0);
-> +	return diag288(func, timeout, virt_to_phys(cmd_buf), len);
->   }
->   
->   static int wdt_start(struct watchdog_device *dev)
-> @@ -119,11 +113,10 @@ static int wdt_start(struct watchdog_device *dev)
->   	if (MACHINE_IS_VM) {
->   		func = conceal_on ? (WDT_FUNC_INIT | WDT_FUNC_CONCEAL)
->   			: WDT_FUNC_INIT;
-> -		ret = __diag288_vm(func, dev->timeout, wdt_cmd);
-> +		ret = diag288_str(func, dev->timeout, wdt_cmd);
->   		WARN_ON(ret != 0);
->   	} else {
-> -		ret = __diag288_lpar(WDT_FUNC_INIT,
-> -				     dev->timeout, LPARWDT_RESTART);
-> +		ret = diag288(WDT_FUNC_INIT, dev->timeout, LPARWDT_RESTART, 0);
->   	}
->   
->   	if (ret) {
-> @@ -135,7 +128,7 @@ static int wdt_start(struct watchdog_device *dev)
->   
->   static int wdt_stop(struct watchdog_device *dev)
->   {
-> -	return __diag288(WDT_FUNC_CANCEL, 0, 0, 0);
-> +	return diag288(WDT_FUNC_CANCEL, 0, 0, 0);
->   }
->   
->   static int wdt_ping(struct watchdog_device *dev)
-> @@ -152,10 +145,10 @@ static int wdt_ping(struct watchdog_device *dev)
->   		func = conceal_on ? (WDT_FUNC_INIT | WDT_FUNC_CONCEAL)
->   			: WDT_FUNC_INIT;
->   
-> -		ret = __diag288_vm(func, dev->timeout, wdt_cmd);
-> +		ret = diag288_str(func, dev->timeout, wdt_cmd);
->   		WARN_ON(ret != 0);
->   	} else {
-> -		ret = __diag288_lpar(WDT_FUNC_CHANGE, dev->timeout, 0);
-> +		ret = diag288(WDT_FUNC_CHANGE, dev->timeout, 0, 0);
->   	}
->   
->   	if (ret)
-> @@ -206,20 +199,21 @@ static int __init diag288_init(void)
->   			return -ENOMEM;
->   		}
->   
-> -		ret = __diag288_vm(WDT_FUNC_INIT, MIN_INTERVAL, "BEGIN");
-> +		ret = diag288_str(WDT_FUNC_INIT, MIN_INTERVAL, "BEGIN");
->   		if (ret != 0) {
->   			pr_err("The watchdog cannot be initialized\n");
->   			kfree(cmd_buf);
->   			return -EINVAL;
->   		}
->   	} else {
-> -		if (__diag288_lpar(WDT_FUNC_INIT, 30, LPARWDT_RESTART)) {
-> +		if (diag288(WDT_FUNC_INIT, WDT_DEFAULT_TIMEOUT,
-> +			    LPARWDT_RESTART, 0)) {
->   			pr_err("The watchdog cannot be initialized\n");
->   			return -EINVAL;
->   		}
->   	}
->   
-> -	if (__diag288_lpar(WDT_FUNC_CANCEL, 0, 0)) {
-> +	if (diag288(WDT_FUNC_CANCEL, 0, 0, 0)) {
->   		pr_err("The watchdog cannot be deactivated\n");
->   		return -EINVAL;
->   	}
+> My assumption, which I now see is likely false, is that drivers
+> could return -EOPNOTSUPP, to indicate to higher layers that the 
+> operation
+> is not supported. But the higher layers may not propagate that.
+> 
+> But it seems that is not the case here. So I think return 0 is fine
+> after all. Sorry for the noise.
 
+No noise at all... I think your concern is quite ligitimate. With this 
+flag there is no iproute2 changes, so not to change behaviour of old 
+commands the best is to ignore silently. But I have another flag coming 
+up that will be accomodated with a new iproute2 command, and then your 
+suggestion is more appropriate. The question will then be if the returns 
+for that flag should be -EOPNOTSUPP.
