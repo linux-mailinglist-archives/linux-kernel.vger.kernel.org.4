@@ -2,56 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F21A68A356
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 21:01:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 603E268A357
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 21:01:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233437AbjBCUBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 15:01:46 -0500
+        id S233606AbjBCUBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 15:01:48 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbjBCUBn (ORCPT
+        with ESMTP id S233385AbjBCUBo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 15:01:43 -0500
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D2DA6C07
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 12:01:42 -0800 (PST)
-Received: by mail-pf1-x449.google.com with SMTP id z7-20020aa79587000000b00593f19705d5so3207440pfj.10
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 12:01:42 -0800 (PST)
+        Fri, 3 Feb 2023 15:01:44 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D08C8A6C07
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 12:01:43 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id h4-20020a17090aa88400b0022c8dfc9db4so2878946pjq.2
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 12:01:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=JqXBZCshocKpxm4gEZMlbqbtIQK38/N6xcknjdoOafE=;
-        b=KPkJ1C/qL+FzGJYKo7gZ9K8p9Rgy19fakC/0EXy5pbZ9pd7P+QiTu0iD0dhI9UbSJE
-         ug9LrnGhUIFtdtwIQyckSPbuQQe3jbw9Oy21pU+za+tjCpzjDq73hVOchBdcN8PCAmAl
-         0NnMek0tb/OU0RvhfHWeFcOJFawcLGLO6fO5Rfq87athdWEN4bAChRYsL/ETwxqRQGyd
-         IE7CYS156co+zXWT9O+hzT1mhN2LlMFYOVuwTia/t5apG1VfKGhqHH7RPEs3uhotz9ry
-         x1RHZAI3i6wb4BpMmyDiepFohU0aMUssXeL10kjpkWU9e2cXoF49WhvcmpysMm1/+eK+
-         kR1A==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=SS9njUMJOmQ8htY8Ip0UFz+DAaIXbVEtUJNiEBJ9FB0=;
+        b=Nl/hIjpeflwlcE1OUDo5VXhIMnYa6u/CpDe5qKpM2CVsBi1quwv/ehJSNvcbnG0kZ8
+         B0LJ6KVotUDFFkJ0iryEulNtLCCWy6vUkcLdoQvEGnpxiTKlUVg0ff+hJ532Jh3oP/nE
+         uietnXlvtWom6jlLHduXukJP29lJVtWo0hNiyRUkiHGFPZmuT8kCCzKe92nY85BorkkO
+         qO98V4oIUk9XE5lWAsSDFOtmC9iUCyHh9sS8PFHN0hbnkQ3CkUulSo31y1SjjxKt5RIa
+         5ZNnpO4WfEYvd+VtdSke2CGVycW8xjxcUNJo2ERuY9/QnColbgCCioOb3kK1yAkssmuQ
+         d4cA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JqXBZCshocKpxm4gEZMlbqbtIQK38/N6xcknjdoOafE=;
-        b=4fl4VMtzNvkDShE82fMYsgtH7hnp/7katEPTc+cVqft8htTMEYbnrPEYda289l8fVp
-         UvdhgO62OpWtLmOU+k9Lxiy3GU3MzQt4MVf9rAE2Tbw9nym4JJkRWeyx3pZQm1NDgyfP
-         AnHjKHP2ITrv4NCEYXe6sFgDoPYzKHYCdUSHyiyrYUA3mUCgXdFwprSdWTZqrC/AHBbQ
-         y4FmkoOIQBlvSeyQKevGSrGOa3D3xEcMhaWWoAM7mWlD3Ib7K/uqfSt8k9y9T83satfJ
-         opXNOpWxBmT2G49yrWu15cbfNOrpIsi56YlDYeg7z/r/AUlCTd52ST41g8OZbNzPPg9q
-         BIIQ==
-X-Gm-Message-State: AO0yUKUUWmh+ewpumVop5yAkx/tD06xzKvIdR37GMjsxeccEpVjZ3UEO
-        hX3yCFemvAWO1sES89SRrS9r79x3oSZKohrF25nNF4sJUa3r2q3MxnBxWJhbNj9VYKi2ooHgbXh
-        s56RWxHgHAp6+1O1QsNeC8kw1qQ8sRG6AcoH4bp6FwIOXJYIP7naweau1kcrNP64AfjQdat0=
-X-Google-Smtp-Source: AK7set8JPnZxVFCHbB1AGGUevN9knwDSex9toGJJvf4HG1+oZw8YNgPoQrhwBtORgREelhgPERfgo3LM8er1
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SS9njUMJOmQ8htY8Ip0UFz+DAaIXbVEtUJNiEBJ9FB0=;
+        b=RleH55MikkbBOIfLGHgooa1w+0JV+/p9Cx+5Ef4xi0G5GLO7XW/6mWCfWYa/jvwofL
+         X4wuh36By5cyKxbWm9HA4VoH4J2gzLoFAiA2m20IGyYeqpA+RWekNf8xvCLS92ProAkZ
+         d4xe3u0IjYpQoadOGIyus1yr1ce+yJGMyeUMdCSneBVs+cPW2ZPn2aidAbO8M96DECQE
+         uZf4ubzDp9kyCv3VVVJC8Zq57Q4KqIIKWL47H+IkPAf/H0MxQNFoeJTlR+kCvTgG/DlP
+         z1pT9uvouBD1LEph3SXmJiOE0lBPizPkxl+V9/+mSAWCX22QTsljQWuiWfQconwzVmE6
+         mLwQ==
+X-Gm-Message-State: AO0yUKUdsfJTbWOQaUBa5mZK/j1rOtjuJvJUK3288Tc1LdKKTLt7m1L7
+        8uTqYWCf241Hc0Zrrae6vv+NgfP1LVoOpivWvILoyaRttNVU7uKcuuR9WKbw0eGprpeNez2q5/b
+        aVUv0WSxo6dpXbNw5VywHKVWfrdbxfoqgpf35VJRX6Aj8hDdGa7dUIPdRdIZmI0/GZgSA82I=
+X-Google-Smtp-Source: AK7set+c8Tqz3SGJ/9TXFGCKH1pXn5gttje78PZTQalYsvuJqFQoKKFvRQxZqsCrwTC/R59KpJTHP6gr94Rj
 X-Received: from jstultz-noogler2.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:600])
- (user=jstultz job=sendgmr) by 2002:a17:902:8649:b0:194:706a:ad18 with SMTP id
- y9-20020a170902864900b00194706aad18mr2662260plt.18.1675454501477; Fri, 03 Feb
- 2023 12:01:41 -0800 (PST)
-Date:   Fri,  3 Feb 2023 20:01:35 +0000
+ (user=jstultz job=sendgmr) by 2002:a05:6a00:4208:b0:58e:2111:9c42 with SMTP
+ id cd8-20020a056a00420800b0058e21119c42mr2692517pfb.22.1675454503197; Fri, 03
+ Feb 2023 12:01:43 -0800 (PST)
+Date:   Fri,  3 Feb 2023 20:01:36 +0000
+In-Reply-To: <20230203200138.3872873-1-jstultz@google.com>
 Mime-Version: 1.0
+References: <20230203200138.3872873-1-jstultz@google.com>
 X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
-Message-ID: <20230203200138.3872873-1-jstultz@google.com>
-Subject: [PATCH v2 1/4] locktorture: Add nested_[un]lock() hooks and nlocks parameter
+Message-ID: <20230203200138.3872873-2-jstultz@google.com>
+Subject: [PATCH v2 2/4] locktorture: Add nested locking to mutex torture tests
 From:   John Stultz <jstultz@google.com>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     John Stultz <jstultz@google.com>,
@@ -73,18 +75,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order ot extend locktorture to support lock nesting, add
-nested_lock() and nested_unlock() hooks to the torture ops.
-
-These take a 32bit lockset mask which is generated at random,
-so some number of locks will be taken before the main lock is
-taken and released afterwards.
-
-Additionally, add nlocks module parameter to allow specifying
-the number of nested locks to be used.
-
-This has been helpful to uncover issues in the proxy-exec
-series development.
+This patch adds randomized nested locking to the mutex torture
+tests, as well as new LOCK08 config files for testing mutexes
+with nested locking
 
 This was inspired by locktorture extensions originally implemented
 by Connor O'Brien, for stress testing the proxy-execution series:
@@ -101,91 +94,103 @@ Cc: Valentin Schneider <vschneid@redhat.com>
 Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
 Signed-off-by: John Stultz <jstultz@google.com>
 ---
- kernel/locking/locktorture.c | 23 +++++++++++++++++++----
- 1 file changed, 19 insertions(+), 4 deletions(-)
+v2:
+* Add LOCK08 config file suggested by Paul McKenney
+---
+ kernel/locking/locktorture.c                  | 35 +++++++++++++++++++
+ .../selftests/rcutorture/configs/lock/CFLIST  |  1 +
+ .../selftests/rcutorture/configs/lock/LOCK08  |  6 ++++
+ .../rcutorture/configs/lock/LOCK08.boot       |  1 +
+ 4 files changed, 43 insertions(+)
+ create mode 100644 tools/testing/selftests/rcutorture/configs/lock/LOCK08
+ create mode 100644 tools/testing/selftests/rcutorture/configs/lock/LOCK08.boot
 
 diff --git a/kernel/locking/locktorture.c b/kernel/locking/locktorture.c
-index 9c2fb613a55d..f4fbd3194654 100644
+index f4fbd3194654..27d92ce36836 100644
 --- a/kernel/locking/locktorture.c
 +++ b/kernel/locking/locktorture.c
-@@ -48,6 +48,9 @@ torture_param(int, stat_interval, 60,
- torture_param(int, stutter, 5, "Number of jiffies to run/halt test, 0=disable");
- torture_param(int, verbose, 1,
- 	     "Enable verbose debugging printk()s");
-+torture_param(int, nlocks, 0, "Number of nested locks");
-+/* Going much higher trips "BUG: MAX_LOCKDEP_CHAIN_HLOCKS too low!" errors */
-+#define MAX_LOCKS 8
+@@ -332,6 +332,28 @@ static struct lock_torture_ops rw_lock_irq_ops = {
+ };
  
- static char *torture_type = "spin_lock";
- module_param(torture_type, charp, 0444);
-@@ -76,10 +79,12 @@ static void lock_torture_cleanup(void);
- struct lock_torture_ops {
- 	void (*init)(void);
- 	void (*exit)(void);
-+	int (*nested_lock)(int tid, u32 lockset);
- 	int (*writelock)(int tid);
- 	void (*write_delay)(struct torture_random_state *trsp);
- 	void (*task_boost)(struct torture_random_state *trsp);
- 	void (*writeunlock)(int tid);
-+	void (*nested_unlock)(int tid, u32 lockset);
- 	int (*readlock)(int tid);
- 	void (*read_delay)(struct torture_random_state *trsp);
- 	void (*readunlock)(int tid);
-@@ -669,6 +674,7 @@ static int lock_torture_writer(void *arg)
- 	struct lock_stress_stats *lwsp = arg;
- 	int tid = lwsp - cxt.lwsa;
- 	DEFINE_TORTURE_RANDOM(rand);
-+	u32 lockset_mask;
+ static DEFINE_MUTEX(torture_mutex);
++static struct mutex torture_nested_mutexes[MAX_LOCKS];
++static struct lock_class_key nested_mutex_keys[MAX_LOCKS];
++
++static void torture_mutex_init(void)
++{
++	int i;
++
++	for (i = 0; i < MAX_LOCKS; i++)
++		__mutex_init(&torture_nested_mutexes[i], __func__,
++			     &nested_mutex_keys[i]);
++}
++
++static int torture_mutex_nested_lock(int tid __maybe_unused,
++				     u32 lockset)
++{
++	int i;
++
++	for (i = 0; i < nlocks; i++)
++		if (lockset & (1 << i))
++			mutex_lock(&torture_nested_mutexes[i]);
++	return 0;
++}
  
- 	VERBOSE_TOROUT_STRING("lock_torture_writer task started");
- 	set_user_nice(current, MAX_NICE);
-@@ -677,7 +683,10 @@ static int lock_torture_writer(void *arg)
- 		if ((torture_random(&rand) & 0xfffff) == 0)
- 			schedule_timeout_uninterruptible(1);
- 
-+		lockset_mask = torture_random(&rand);
- 		cxt.cur_ops->task_boost(&rand);
-+		if (cxt.cur_ops->nested_lock)
-+			cxt.cur_ops->nested_lock(tid, lockset_mask);
- 		cxt.cur_ops->writelock(tid);
- 		if (WARN_ON_ONCE(lock_is_write_held))
- 			lwsp->n_lock_fail++;
-@@ -690,6 +699,8 @@ static int lock_torture_writer(void *arg)
- 		lock_is_write_held = false;
- 		WRITE_ONCE(last_lock_release, jiffies);
- 		cxt.cur_ops->writeunlock(tid);
-+		if (cxt.cur_ops->nested_unlock)
-+			cxt.cur_ops->nested_unlock(tid, lockset_mask);
- 
- 		stutter_wait("lock_torture_writer");
- 	} while (!torture_must_stop());
-@@ -830,11 +841,11 @@ lock_torture_print_module_parms(struct lock_torture_ops *cur_ops,
- 				const char *tag)
- {
- 	pr_alert("%s" TORTURE_FLAG
--		 "--- %s%s: nwriters_stress=%d nreaders_stress=%d stat_interval=%d verbose=%d shuffle_interval=%d stutter=%d shutdown_secs=%d onoff_interval=%d onoff_holdoff=%d\n",
-+		 "--- %s%s: nwriters_stress=%d nreaders_stress=%d nlocks=%d stat_interval=%d verbose=%d shuffle_interval=%d stutter=%d shutdown_secs=%d onoff_interval=%d onoff_holdoff=%d\n",
- 		 torture_type, tag, cxt.debug_lock ? " [debug]": "",
--		 cxt.nrealwriters_stress, cxt.nrealreaders_stress, stat_interval,
--		 verbose, shuffle_interval, stutter, shutdown_secs,
--		 onoff_interval, onoff_holdoff);
-+		 cxt.nrealwriters_stress, cxt.nrealreaders_stress, nlocks,
-+		 stat_interval, verbose, shuffle_interval, stutter,
-+		 shutdown_secs, onoff_interval, onoff_holdoff);
+ static int torture_mutex_lock(int tid __maybe_unused)
+ __acquires(torture_mutex)
+@@ -360,11 +382,24 @@ __releases(torture_mutex)
+ 	mutex_unlock(&torture_mutex);
  }
  
- static void lock_torture_cleanup(void)
-@@ -1053,6 +1064,10 @@ static int __init lock_torture_init(void)
- 		}
- 	}
- 
-+	/* cap nlocks to MAX_LOCKS */
-+	if (nlocks > MAX_LOCKS)
-+		nlocks = MAX_LOCKS;
++static void torture_mutex_nested_unlock(int tid __maybe_unused,
++					u32 lockset)
++{
++	int i;
 +
- 	if (cxt.cur_ops->readlock) {
- 		reader_tasks = kcalloc(cxt.nrealreaders_stress,
- 				       sizeof(reader_tasks[0]),
++	for (i = nlocks - 1; i >= 0; i--)
++		if (lockset & (1 << i))
++			mutex_unlock(&torture_nested_mutexes[i]);
++}
++
+ static struct lock_torture_ops mutex_lock_ops = {
++	.init		= torture_mutex_init,
++	.nested_lock	= torture_mutex_nested_lock,
+ 	.writelock	= torture_mutex_lock,
+ 	.write_delay	= torture_mutex_delay,
+ 	.task_boost     = torture_boost_dummy,
+ 	.writeunlock	= torture_mutex_unlock,
++	.nested_unlock	= torture_mutex_nested_unlock,
+ 	.readlock       = NULL,
+ 	.read_delay     = NULL,
+ 	.readunlock     = NULL,
+diff --git a/tools/testing/selftests/rcutorture/configs/lock/CFLIST b/tools/testing/selftests/rcutorture/configs/lock/CFLIST
+index 41bae5824339..a48bba0d35a6 100644
+--- a/tools/testing/selftests/rcutorture/configs/lock/CFLIST
++++ b/tools/testing/selftests/rcutorture/configs/lock/CFLIST
+@@ -5,3 +5,4 @@ LOCK04
+ LOCK05
+ LOCK06
+ LOCK07
++LOCK08
+diff --git a/tools/testing/selftests/rcutorture/configs/lock/LOCK08 b/tools/testing/selftests/rcutorture/configs/lock/LOCK08
+new file mode 100644
+index 000000000000..1d1da1477fc3
+--- /dev/null
++++ b/tools/testing/selftests/rcutorture/configs/lock/LOCK08
+@@ -0,0 +1,6 @@
++CONFIG_SMP=y
++CONFIG_NR_CPUS=4
++CONFIG_HOTPLUG_CPU=y
++CONFIG_PREEMPT_NONE=n
++CONFIG_PREEMPT_VOLUNTARY=n
++CONFIG_PREEMPT=y
+diff --git a/tools/testing/selftests/rcutorture/configs/lock/LOCK08.boot b/tools/testing/selftests/rcutorture/configs/lock/LOCK08.boot
+new file mode 100644
+index 000000000000..e59a369b470e
+--- /dev/null
++++ b/tools/testing/selftests/rcutorture/configs/lock/LOCK08.boot
+@@ -0,0 +1 @@
++locktorture.torture_type=mutex_lock locktorture.nlocks=8
 -- 
 2.39.1.519.gcb327c4b5f-goog
 
