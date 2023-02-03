@@ -2,59 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96F14689301
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 10:03:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCEF5689305
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 10:03:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232507AbjBCJBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 04:01:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56938 "EHLO
+        id S232461AbjBCJCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 04:02:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232602AbjBCJBJ (ORCPT
+        with ESMTP id S231602AbjBCJCA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 04:01:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB5C9928F0
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 01:00:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A51661E06
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 09:00:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84513C433EF
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 09:00:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675414856;
-        bh=avk4N2a89jQv7e0ooxsBmJAbAtZiCU8GOuT9TlvNP9Q=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=LxI6bgSuPltAUHn4UtV6KhJ9k0YNJsdljB9npoPsfhr3OOC+EasUlFlj+BDO5lAoT
-         xTXGXr0tbi1PKoOFwAGrbY0vwBACEPFBH8Qva1jUcFwpbnX4TbOxDhAC4ti3mptu7v
-         J9Ld9mHsJvplngw8fG5q1tG5suB9YcYKDLHHwFhpRmaNPYhkeU4Z2qzQ4efY5wz+Fw
-         7uEafK5YVM+Z0tzJhHOWakKoJ5hcv24/Pn45UwmQcKdJmwwghGLIHKUYdI5RegGnkU
-         90Lhyh2xoRL30Y5yAxVLTYQdkvMnn96pbclLmnHbM2P/H/oaeNk2/oZL8V67A5hOts
-         VtIv52mopIwVg==
-Received: by mail-ej1-f45.google.com with SMTP id dr8so13380350ejc.12
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 01:00:56 -0800 (PST)
-X-Gm-Message-State: AO0yUKVvYj1dJwVV0AZOr1Cuw8S7s2oTYxpMmxjeYtY+5xXrNDrU4Sg5
-        9Hvkt27OxVG5pFstz6gd9RZjpYoocnnk41jwkXM=
-X-Google-Smtp-Source: AK7set/3SdmQ07a0yiJMR3tYJFTZFyl0onlRD+uq6uk/P6Yi21hRYnQHvA6LoTkjDL4DZQd57bsStT7iSHGoM65vbbw=
-X-Received: by 2002:a17:907:6087:b0:889:7bef:3a9d with SMTP id
- ht7-20020a170907608700b008897bef3a9dmr3060315ejc.150.1675414854779; Fri, 03
- Feb 2023 01:00:54 -0800 (PST)
+        Fri, 3 Feb 2023 04:02:00 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0474391199;
+        Fri,  3 Feb 2023 01:01:56 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 7654524E201;
+        Fri,  3 Feb 2023 17:01:54 +0800 (CST)
+Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 3 Feb
+ 2023 17:01:54 +0800
+Received: from [192.168.120.49] (171.223.208.138) by EXMBX073.cuchost.com
+ (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 3 Feb
+ 2023 17:01:53 +0800
+Message-ID: <a385e270-c217-4a29-1539-701450b32062@starfivetech.com>
+Date:   Fri, 3 Feb 2023 17:01:52 +0800
 MIME-Version: 1.0
-References: <1675414264-28241-1-git-send-email-yangtiezhu@loongson.cn>
-In-Reply-To: <1675414264-28241-1-git-send-email-yangtiezhu@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Fri, 3 Feb 2023 17:00:44 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4tMC+y9enyvWj9hu0ngin6ND4DPKbcFybVzU=A-7tLSA@mail.gmail.com>
-Message-ID: <CAAhV-H4tMC+y9enyvWj9hu0ngin6ND4DPKbcFybVzU=A-7tLSA@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: Add kprobe on ftrace support
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     WANG Xuerui <kernel@xen0n.name>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v4 6/7] riscv: dts: starfive: jh7110: Add ethernet device
+ node
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <linux-riscv@lists.infradead.org>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>
+References: <20230118061701.30047-1-yanhong.wang@starfivetech.com>
+ <20230118061701.30047-7-yanhong.wang@starfivetech.com>
+ <55f020de-6058-67d2-ea68-6006186daee3@linaro.org>
+ <f22614b4-80ae-8b16-b53e-e43c44722668@starfivetech.com>
+ <870f6ec5-5378-760b-7a30-324ee2d178cf@linaro.org>
+ <048b3ab0-7c13-b7f7-403c-f4e1d5574a10@starfivetech.com>
+ <f937ed98-a65e-e75e-24b4-0219e0403ac0@linaro.org>
+From:   yanhong wang <yanhong.wang@starfivetech.com>
+In-Reply-To: <f937ed98-a65e-e75e-24b4-0219e0403ac0@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [171.223.208.138]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX073.cuchost.com
+ (172.16.6.83)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,139 +71,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Tiezhu,
 
-On Fri, Feb 3, 2023 at 4:51 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
->
-> Add kprobe_ftrace_handler() and arch_prepare_kprobe_ftrace() to support
-> kprobe on ftrace, the code is similar with x86 and riscv.
->
-> Here is a simple example:
->
->   # echo 'p:myprobe kernel_clone' > /sys/kernel/debug/tracing/kprobe_events
->   # echo 'r:myretprobe kernel_clone $retval' >> /sys/kernel/debug/tracing/kprobe_events
->   # echo 1 > /sys/kernel/debug/tracing/events/kprobes/myprobe/enable
->   # echo 1 > /sys/kernel/debug/tracing/events/kprobes/myretprobe/enable
->   # echo 1 > /sys/kernel/debug/tracing/tracing_on
->   # cat /sys/kernel/debug/tracing/trace
->   # tracer: nop
->   #
->   # entries-in-buffer/entries-written: 2/2   #P:4
->   #
->   #                                _-----=> irqs-off/BH-disabled
->   #                               / _----=> need-resched
->   #                              | / _---=> hardirq/softirq
->   #                              || / _--=> preempt-depth
->   #                              ||| / _-=> migrate-disable
->   #                              |||| /     delay
->   #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
->   #              | |         |   |||||     |         |
->               bash-488     [002] .....  2041.190681: myprobe: (kernel_clone+0x0/0x40c)
->               bash-488     [002] .....  2041.190788: myretprobe: (__do_sys_clone+0x84/0xb8 <- kernel_clone) arg1=0x200
->
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> ---
->  arch/loongarch/Kconfig             |  1 +
->  arch/loongarch/kernel/ftrace_dyn.c | 65 ++++++++++++++++++++++++++++++++++++++
->  2 files changed, 66 insertions(+)
->
-> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> index 134a2f8..22a3e77 100644
-> --- a/arch/loongarch/Kconfig
-> +++ b/arch/loongarch/Kconfig
-> @@ -104,6 +104,7 @@ config LOONGARCH
->         select HAVE_IRQ_EXIT_ON_IRQ_STACK
->         select HAVE_IRQ_TIME_ACCOUNTING
->         select HAVE_KPROBES
-> +       select HAVE_KPROBES_ON_FTRACE
->         select HAVE_KRETPROBES
->         select HAVE_MOD_ARCH_SPECIFIC
->         select HAVE_NMI
-> diff --git a/arch/loongarch/kernel/ftrace_dyn.c b/arch/loongarch/kernel/ftrace_dyn.c
-> index 0f07591..7b074c2 100644
-> --- a/arch/loongarch/kernel/ftrace_dyn.c
-> +++ b/arch/loongarch/kernel/ftrace_dyn.c
-> @@ -6,6 +6,7 @@
->   */
->
->  #include <linux/ftrace.h>
-> +#include <linux/kprobes.h>
->  #include <linux/uaccess.h>
->
->  #include <asm/inst.h>
-> @@ -271,3 +272,67 @@ int ftrace_disable_ftrace_graph_caller(void)
->  }
->  #endif /* CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS */
->  #endif /* CONFIG_FUNCTION_GRAPH_TRACER */
-> +
-> +#ifdef CONFIG_KPROBES_ON_FTRACE
-> +/* Ftrace callback handler for kprobes -- called under preepmt disabled */
-> +void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
-> +                          struct ftrace_ops *ops, struct ftrace_regs *fregs)
-> +{
-> +       struct kprobe *p;
-> +       struct pt_regs *regs;
-> +       struct kprobe_ctlblk *kcb;
-> +       int bit;
-> +
-> +       bit = ftrace_test_recursion_trylock(ip, parent_ip);
-> +       if (bit < 0)
-> +               return;
-> +
-In the old version I see preempt_disable_notrace() here and
-preempt_enable_notrace() at the end. And I prefer to add this one to
-the kprobes series rather than a separate patch.
 
-Huacai
-> +       p = get_kprobe((kprobe_opcode_t *)ip);
-> +       if (unlikely(!p) || kprobe_disabled(p))
-> +               goto out;
-> +
-> +       regs = ftrace_get_regs(fregs);
-> +       if (!regs)
-> +               goto out;
-> +
-> +       kcb = get_kprobe_ctlblk();
-> +       if (kprobe_running()) {
-> +               kprobes_inc_nmissed_count(p);
-> +       } else {
-> +               unsigned long orig_ip = instruction_pointer(regs);
-> +
-> +               instruction_pointer_set(regs, ip);
-> +
-> +               __this_cpu_write(current_kprobe, p);
-> +               kcb->kprobe_status = KPROBE_HIT_ACTIVE;
-> +               if (!p->pre_handler || !p->pre_handler(p, regs)) {
-> +                       /*
-> +                        * Emulate singlestep (and also recover regs->csr_era)
-> +                        * as if there is a nop
-> +                        */
-> +                       instruction_pointer_set(regs,
-> +                               (unsigned long)p->addr + MCOUNT_INSN_SIZE);
-> +                       if (unlikely(p->post_handler)) {
-> +                               kcb->kprobe_status = KPROBE_HIT_SSDONE;
-> +                               p->post_handler(p, regs, 0);
-> +                       }
-> +                       instruction_pointer_set(regs, orig_ip);
-> +               }
-> +
-> +               /*
-> +                * If pre_handler returns !0, it changes regs->csr_era. We have to
-> +                * skip emulating post_handler.
-> +                */
-> +               __this_cpu_write(current_kprobe, NULL);
-> +       }
-> +out:
-> +       ftrace_test_recursion_unlock(bit);
-> +}
-> +NOKPROBE_SYMBOL(kprobe_ftrace_handler);
-> +
-> +int arch_prepare_kprobe_ftrace(struct kprobe *p)
-> +{
-> +       p->ainsn.insn = NULL;
-> +       return 0;
-> +}
-> +#endif /* CONFIG_KPROBES_ON_FTRACE */
-> --
-> 2.1.0
->
+On 2023/2/3 15:56, Krzysztof Kozlowski wrote:
+> On 03/02/2023 08:40, yanhong wang wrote:
+>>>
+>> 
+>> Sorry, I didn't check all the bindings, only the modified ones, the command 
+>> used is as follows: 
+>> "make dt_binding_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/net/snps,dwmac.yaml"
+>> "make dt_binding_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml"
+> 
+> That's good actually, except that you change binding used by others, so
+> you affect other files.
+> 
+> However in this DTS you will have now warnings (dtbs_check with
+> simple-bus or dtbs W=1) because of using non-MMIO node in your soc-bus.
+> The stmmac-axi-config probably should be moved outside of soc node. Or
+> you keep two of them - one in each ethernet node.
+> 
+
+Thanks. The stmmac-axi-config probably will be moved outside of soc node in the next version.
+
+> Best regards,
+> Krzysztof
+> 
