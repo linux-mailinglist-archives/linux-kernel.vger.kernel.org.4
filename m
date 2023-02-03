@@ -2,141 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65B1C688DF3
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 04:28:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CD32688DF6
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 04:30:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230317AbjBCD2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 22:28:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50090 "EHLO
+        id S231732AbjBCDaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 22:30:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231766AbjBCD2E (ORCPT
+        with ESMTP id S229804AbjBCDaA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 22:28:04 -0500
-Received: from m12.mail.163.com (m12.mail.163.com [123.126.96.234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CDDA9677A0;
-        Thu,  2 Feb 2023 19:27:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=NcEgx
-        6AbcT9pJumUCsgIg3kMZkUia2+9w4tAhaARoIg=; b=GlwDnFkYTTBJJN897BHnU
-        kgu/Uc3YE1iLmrzCyWLbnygIr1HutPkJysuwXS3/TtUXBeqPG6inoSlWahxhHxyU
-        OGvzqVYYkMcsLJzt8ONSl/RakmjIS0groekwMIoWm3DOsetW51XYGm6HfZQmDp21
-        R8bfaQlT321XAb1Aikhov8=
-Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
-        by smtp18 (Coremail) with SMTP id JNxpCgAHMZQ2f9xj+gyqCg--.54348S2;
-        Fri, 03 Feb 2023 11:27:50 +0800 (CST)
-From:   Zheng Wang <zyytlz.wz@163.com>
-To:     colyli@suse.de
-Cc:     stable@vger.kernel.org, hackerzheng666@gmail.com,
-        kent.overstreet@gmail.com, linux-bcache@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alex000young@gmail.com,
-        Zheng Wang <zyytlz.wz@163.com>
-Subject: [PATCH v2] bcache: Remove some unnecessary NULL point check for the  return value of __bch_btree_node_alloc-related pointer
-Date:   Fri,  3 Feb 2023 11:27:50 +0800
-Message-Id: <20230203032750.578589-1-zyytlz.wz@163.com>
+        Thu, 2 Feb 2023 22:30:00 -0500
+Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6AADBFC
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 19:29:52 -0800 (PST)
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 3133Hk0S042445;
+        Fri, 3 Feb 2023 11:17:46 +0800 (GMT-8)
+        (envelope-from neal_liu@aspeedtech.com)
+Received: from localhost.localdomain (192.168.10.10) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 3 Feb
+ 2023 11:29:35 +0800
+From:   Neal Liu <neal_liu@aspeedtech.com>
+To:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
+        Neal Liu <neal_liu@aspeedtech.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
+        <linux-crypto@vger.kernel.org>
+Subject: [PATCH v3] crypto: aspeed: fix type warnings
+Date:   Fri, 3 Feb 2023 11:29:32 +0800
+Message-ID: <20230203032932.971586-1-neal_liu@aspeedtech.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: JNxpCgAHMZQ2f9xj+gyqCg--.54348S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxZw13CFykur45uFW3tw1rXrb_yoW5AFW3pr
-        W29r9Iyr97Xr4UCr9Yg3WvvFyfXw12vFWUGr93u3WxZry7AFyrCay0934jvrWUuFWxWF4U
-        Zr40yw1UXr4UtF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziaiiDUUUUU=
-X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiQhcLU1aEEPEVVwAAs8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [192.168.10.10]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 3133Hk0S042445
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Due to the previously fix of __bch_btree_node_alloc, the return value will
-never be a NULL pointer. So IS_ERR is enough to handle the failure
- situation. Fix it by replacing IS_ERR_OR_NULL check to IS_ERR check.
+This patch fixes following warnings:
 
-Fixes: cafe56359144 ("bcache: A block layer cache")
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
----
-v2:
-- Replace more checks
----
- drivers/md/bcache/btree.c | 10 +++++-----
- drivers/md/bcache/super.c |  4 ++--
- 2 files changed, 7 insertions(+), 7 deletions(-)
+1. sparse: incorrect type in assignment (different base types)
+Fix: change to __le32 type.
+2. sparse: cast removes address space '__iomem' of expression
+Fix: use readb to avoid dereferencing the memory.
 
-diff --git a/drivers/md/bcache/btree.c b/drivers/md/bcache/btree.c
-index 147c493a989a..7c21e54468bf 100644
---- a/drivers/md/bcache/btree.c
-+++ b/drivers/md/bcache/btree.c
-@@ -1138,7 +1138,7 @@ static struct btree *btree_node_alloc_replacement(struct btree *b,
+Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
+---
+Change since v2: remove unnecessary cast.
+Change since v1: keep iomem marker to remain its purpose.
+
+ drivers/crypto/aspeed/aspeed-acry.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/crypto/aspeed/aspeed-acry.c b/drivers/crypto/aspeed/aspeed-acry.c
+index 164c524015f0..f2429e699d14 100644
+--- a/drivers/crypto/aspeed/aspeed-acry.c
++++ b/drivers/crypto/aspeed/aspeed-acry.c
+@@ -252,7 +252,7 @@ static int aspeed_acry_rsa_ctx_copy(struct aspeed_acry_dev *acry_dev, void *buf,
+ 				    enum aspeed_rsa_key_mode mode)
  {
- 	struct btree *n = bch_btree_node_alloc(b->c, op, b->level, b->parent);
+ 	const u8 *src = xbuf;
+-	u32 *dw_buf = (u32 *)buf;
++	__le32 *dw_buf = (__le32 *)buf;
+ 	int nbits, ndw;
+ 	int i, j, idx;
+ 	u32 data = 0;
+@@ -302,7 +302,7 @@ static int aspeed_acry_rsa_ctx_copy(struct aspeed_acry_dev *acry_dev, void *buf,
+ static int aspeed_acry_rsa_transfer(struct aspeed_acry_dev *acry_dev)
+ {
+ 	struct akcipher_request *req = acry_dev->req;
+-	u8 *sram_buffer = (u8 *)acry_dev->acry_sram;
++	u8 __iomem *sram_buffer = (u8 __iomem *)acry_dev->acry_sram;
+ 	struct scatterlist *out_sg = req->dst;
+ 	static u8 dram_buffer[ASPEED_ACRY_SRAM_MAX_LEN];
+ 	int leading_zero = 1;
+@@ -321,11 +321,11 @@ static int aspeed_acry_rsa_transfer(struct aspeed_acry_dev *acry_dev)
  
--	if (!IS_ERR_OR_NULL(n)) {
-+	if (!IS_ERR(n)) {
- 		mutex_lock(&n->write_lock);
- 		bch_btree_sort_into(&b->keys, &n->keys, &b->c->sort);
- 		bkey_copy_key(&n->key, &b->key);
-@@ -1340,7 +1340,7 @@ static int btree_gc_coalesce(struct btree *b, struct btree_op *op,
- 	memset(new_nodes, 0, sizeof(new_nodes));
- 	closure_init_stack(&cl);
- 
--	while (nodes < GC_MERGE_NODES && !IS_ERR_OR_NULL(r[nodes].b))
-+	while (nodes < GC_MERGE_NODES && !IS_ERR(r[nodes].b))
- 		keys += r[nodes++].keys;
- 
- 	blocks = btree_default_blocks(b->c) * 2 / 3;
-@@ -1352,7 +1352,7 @@ static int btree_gc_coalesce(struct btree *b, struct btree_op *op,
- 
- 	for (i = 0; i < nodes; i++) {
- 		new_nodes[i] = btree_node_alloc_replacement(r[i].b, NULL);
--		if (IS_ERR_OR_NULL(new_nodes[i]))
-+		if (IS_ERR(new_nodes[i]))
- 			goto out_nocoalesce;
- 	}
- 
-@@ -1487,7 +1487,7 @@ static int btree_gc_coalesce(struct btree *b, struct btree_op *op,
- 	bch_keylist_free(&keylist);
- 
- 	for (i = 0; i < nodes; i++)
--		if (!IS_ERR_OR_NULL(new_nodes[i])) {
-+		if (!IS_ERR(new_nodes[i])) {
- 			btree_node_free(new_nodes[i]);
- 			rw_unlock(true, new_nodes[i]);
+ 	for (j = ASPEED_ACRY_SRAM_MAX_LEN - 1; j >= 0; j--) {
+ 		data_idx = acry_dev->data_byte_mapping[j];
+-		if (sram_buffer[data_idx] == 0 && leading_zero) {
++		if (readb(sram_buffer + data_idx) == 0 && leading_zero) {
+ 			result_nbytes--;
+ 		} else {
+ 			leading_zero = 0;
+-			dram_buffer[i] = sram_buffer[data_idx];
++			dram_buffer[i] = readb(sram_buffer + data_idx);
+ 			i++;
  		}
-@@ -1669,7 +1669,7 @@ static int bch_btree_gc_root(struct btree *b, struct btree_op *op,
- 	if (should_rewrite) {
- 		n = btree_node_alloc_replacement(b, NULL);
- 
--		if (!IS_ERR_OR_NULL(n)) {
-+		if (!IS_ERR(n)) {
- 			bch_btree_node_write_sync(n);
- 
- 			bch_btree_set_root(n);
-diff --git a/drivers/md/bcache/super.c b/drivers/md/bcache/super.c
-index ba3909bb6bea..7660962e7b8b 100644
---- a/drivers/md/bcache/super.c
-+++ b/drivers/md/bcache/super.c
-@@ -1724,7 +1724,7 @@ static void cache_set_flush(struct closure *cl)
- 	if (!IS_ERR_OR_NULL(c->gc_thread))
- 		kthread_stop(c->gc_thread);
- 
--	if (!IS_ERR_OR_NULL(c->root))
-+	if (!IS_ERR(c->root))
- 		list_add(&c->root->list, &c->btree_cache);
- 
- 	/*
-@@ -2088,7 +2088,7 @@ static int run_cache_set(struct cache_set *c)
- 
- 		err = "cannot allocate new btree root";
- 		c->root = __bch_btree_node_alloc(c, NULL, 0, true, NULL);
--		if (IS_ERR_OR_NULL(c->root))
-+		if (IS_ERR(c->root))
- 			goto err;
- 
- 		mutex_lock(&c->root->write_lock);
+ 	}
 -- 
 2.25.1
 
