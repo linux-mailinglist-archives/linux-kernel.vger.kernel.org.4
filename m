@@ -2,87 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 275B2689283
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 09:43:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B6116892D5
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 09:55:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231883AbjBCInM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 03:43:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46982 "EHLO
+        id S232490AbjBCIxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 03:53:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231302AbjBCInK (ORCPT
+        with ESMTP id S231827AbjBCIx3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 03:43:10 -0500
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.215])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1F5EC126E6
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 00:43:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=2/Kzq
-        scKzGfSW5bIOswCBQ7pZPgpX1NYp6RGAiZBDks=; b=j3Hfi+TFwZ1Vomk6cshx8
-        i50+Jcq9XTnwEZP7eB2CbcSeOHxVGkYfpbNt8uLhlr8RTP9PTCk73OyDKGy55DBN
-        6+RJZWrQE5EifU7seUaDPHL1WQnhvs+wxUpuiSnDoAYc/FEocoRsf7fkMCJ6Zh+p
-        Q3a2psgcMI8yzOIlcc/dC0=
-Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
-        by zwqz-smtp-mta-g2-3 (Coremail) with SMTP id _____wCHiLIXydxjUofKCg--.60360S2;
-        Fri, 03 Feb 2023 16:43:03 +0800 (CST)
-From:   Zheng Wang <zyytlz.wz@163.com>
-To:     tianjia.zhang@linux.alibaba.com
-Cc:     linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
-        alex000young@gmail.com, Zheng Wang <zyytlz.wz@163.com>
-Subject: [PATCH] lib/mpi: Fix poential NULL pointer dereference in mpi_fdiv_q
-Date:   Fri,  3 Feb 2023 16:43:02 +0800
-Message-Id: <20230203084302.589017-1-zyytlz.wz@163.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 3 Feb 2023 03:53:29 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E39052FCE2;
+        Fri,  3 Feb 2023 00:53:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675414407; x=1706950407;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=i+nB9deLrKt42Lj4h2Ozf3dM6yQz6iX8nZHKknJIu1g=;
+  b=Td5Zu/p/2RBg7lKcn8spfxTw0hPaqZ0hCKee5G69grR4EeFV5/WnnI3S
+   XCBdkkXIydbYChbCB7PgRHSAMrVjxx+gUi9eyhLu+vsnPQTi+Yytcv+lk
+   sxRvN3ROpzap0zI6hyrwMHBswMp8ZtOg7a9yVWeN2Mk22XZG4anAhF1De
+   8XRUpi/1mdh+MhWxWXYmUchGianWTSQgHoUv9EliHIF2ujmzn1OswoaWS
+   yCNmYvY05EnHmzjF3lYrljQpM3SFPg/6h58TY2D0gpfVZ4p35jztmNfTy
+   jt7i4lsBQX2t5Jzbo3xyo0hpgt2L+w4sxMWEO5H9hGha2XlLcNHt0GzbB
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="327337319"
+X-IronPort-AV: E=Sophos;i="5.97,269,1669104000"; 
+   d="scan'208";a="327337319"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2023 00:53:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="994447929"
+X-IronPort-AV: E=Sophos;i="5.97,269,1669104000"; 
+   d="scan'208";a="994447929"
+Received: from allen-box.sh.intel.com ([10.239.159.48])
+  by fmsmga005.fm.intel.com with ESMTP; 03 Feb 2023 00:53:12 -0800
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+To:     iommu@lists.linux.dev, dmaengine@vger.kernel.org
+Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>, linux-kernel@vger.kernel.org,
+        Lu Baolu <baolu.lu@linux.intel.com>
+Subject: [PATCH 1/2] dmaengine: idxd: Add enable/disable device IOPF feature
+Date:   Fri,  3 Feb 2023 16:44:55 +0800
+Message-Id: <20230203084456.469641-1-baolu.lu@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wCHiLIXydxjUofKCg--.60360S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrKrW5Zw1DZry8ur15Gr4xtFb_yoWkurbEkF
-        yIqr1UAr1Uur109w15CF40gr4DA3Z8ur42kF42gw12grWDWFZ3WFWqg393tFZrCF4ak3yU
-        Cr1rZrW5Xw42vjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRtl1kDUUUUU==
-X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiXBgLU1Xl5gbdbgAAs-
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-in lib/mpi, there is multiple function that not check the return
-value of mpi_alloc. One case is mpi_fdiv_q, if tmp == NULL,
-tmp->nlimbs in mpi_fdiv_qr will cause NULL pointer dereference.
-As the code is too much, here I only fix one of them. Other
-function like mpi_barrett_init mpi_copy mpi_alloc_like mpi_set
-mpi_set_ui mpi_alloc_set_ui has the same problem.
+The iommu subsystem requires IOMMU_DEV_FEAT_IOPF must be enabled before
+and disabled after IOMMU_DEV_FEAT_SVA, if device's I/O page faults rely
+on the IOMMU. Add explicit IOMMU_DEV_FEAT_IOPF enabling/disabling in this
+driver.
 
-Please let me know if there is a better way to fix the
-problem.
+At present, missing IOPF enabling/disabling doesn't cause any real issue,
+because the IOMMU driver places the IOPF enabling/disabling in the path
+of SVA feature handling. But this may change.
 
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger.
-
-Fixes: a8ea8bdd9df9 ("lib/mpi: Extend the MPI library")
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 ---
- lib/mpi/mpi-div.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/dma/idxd/init.c | 31 +++++++++++++++++++++++++------
+ 1 file changed, 25 insertions(+), 6 deletions(-)
 
-diff --git a/lib/mpi/mpi-div.c b/lib/mpi/mpi-div.c
-index 45beab8b9e9e..e8642265d7d4 100644
---- a/lib/mpi/mpi-div.c
-+++ b/lib/mpi/mpi-div.c
-@@ -43,7 +43,8 @@ void mpi_fdiv_r(MPI rem, MPI dividend, MPI divisor)
- void mpi_fdiv_q(MPI quot, MPI dividend, MPI divisor)
- {
- 	MPI tmp = mpi_alloc(mpi_get_nlimbs(quot));
--	mpi_fdiv_qr(quot, tmp, dividend, divisor);
-+	if (tmp)
-+		mpi_fdiv_qr(quot, tmp, dividend, divisor);
- 	mpi_free(tmp);
+diff --git a/drivers/dma/idxd/init.c b/drivers/dma/idxd/init.c
+index 529ea09c9094..d5a709a842a8 100644
+--- a/drivers/dma/idxd/init.c
++++ b/drivers/dma/idxd/init.c
+@@ -511,6 +511,27 @@ static void idxd_disable_system_pasid(struct idxd_device *idxd)
+ 	idxd->sva = NULL;
  }
  
++static int idxd_enable_sva(struct pci_dev *pdev)
++{
++	int ret;
++
++	ret = iommu_dev_enable_feature(&pdev->dev, IOMMU_DEV_FEAT_IOPF);
++	if (ret)
++		return ret;
++
++	ret = iommu_dev_enable_feature(&pdev->dev, IOMMU_DEV_FEAT_SVA);
++	if (ret)
++		iommu_dev_disable_feature(&pdev->dev, IOMMU_DEV_FEAT_IOPF);
++
++	return ret;
++}
++
++static void idxd_disable_sva(struct pci_dev *pdev)
++{
++	iommu_dev_disable_feature(&pdev->dev, IOMMU_DEV_FEAT_SVA);
++	iommu_dev_disable_feature(&pdev->dev, IOMMU_DEV_FEAT_IOPF);
++}
++
+ static int idxd_probe(struct idxd_device *idxd)
+ {
+ 	struct pci_dev *pdev = idxd->pdev;
+@@ -525,7 +546,7 @@ static int idxd_probe(struct idxd_device *idxd)
+ 	dev_dbg(dev, "IDXD reset complete\n");
+ 
+ 	if (IS_ENABLED(CONFIG_INTEL_IDXD_SVM) && sva) {
+-		if (iommu_dev_enable_feature(dev, IOMMU_DEV_FEAT_SVA)) {
++		if (idxd_enable_sva(pdev)) {
+ 			dev_warn(dev, "Unable to turn on user SVA feature.\n");
+ 		} else {
+ 			set_bit(IDXD_FLAG_USER_PASID_ENABLED, &idxd->flags);
+@@ -573,21 +594,19 @@ static int idxd_probe(struct idxd_device *idxd)
+ 	if (device_pasid_enabled(idxd))
+ 		idxd_disable_system_pasid(idxd);
+ 	if (device_user_pasid_enabled(idxd))
+-		iommu_dev_disable_feature(dev, IOMMU_DEV_FEAT_SVA);
++		idxd_disable_sva(pdev);
+ 	return rc;
+ }
+ 
+ static void idxd_cleanup(struct idxd_device *idxd)
+ {
+-	struct device *dev = &idxd->pdev->dev;
+-
+ 	perfmon_pmu_remove(idxd);
+ 	idxd_cleanup_interrupts(idxd);
+ 	idxd_cleanup_internals(idxd);
+ 	if (device_pasid_enabled(idxd))
+ 		idxd_disable_system_pasid(idxd);
+ 	if (device_user_pasid_enabled(idxd))
+-		iommu_dev_disable_feature(dev, IOMMU_DEV_FEAT_SVA);
++		idxd_disable_sva(idxd->pdev);
+ }
+ 
+ static int idxd_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+@@ -705,7 +724,7 @@ static void idxd_remove(struct pci_dev *pdev)
+ 	pci_free_irq_vectors(pdev);
+ 	pci_iounmap(pdev, idxd->reg_base);
+ 	if (device_user_pasid_enabled(idxd))
+-		iommu_dev_disable_feature(&pdev->dev, IOMMU_DEV_FEAT_SVA);
++		idxd_disable_sva(pdev);
+ 	pci_disable_device(pdev);
+ 	destroy_workqueue(idxd->wq);
+ 	perfmon_pmu_remove(idxd);
 -- 
-2.25.1
+2.34.1
 
