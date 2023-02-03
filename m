@@ -2,157 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0D7B689739
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 11:48:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DC82689749
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 11:49:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232766AbjBCKsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 05:48:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42392 "EHLO
+        id S232340AbjBCKtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 05:49:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231614AbjBCKsH (ORCPT
+        with ESMTP id S232916AbjBCKtS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 05:48:07 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A9E61286C;
-        Fri,  3 Feb 2023 02:48:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1675421284; x=1706957284;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=YjPoPK+G6SRFgGkI643+YWgxAEs6YRis/ZnYBCdFd3s=;
-  b=cWwDOXNwNF4pYt7g3UBsixYW6Mx5krt5DE+7i318/hj0yepYMKye5k+Z
-   C7c22RxClQHq+UJmp7DdyudOX99eKqSB1pWyiOJ4gHbwtRWHg3ulwW7Pr
-   WL52jYhP+FZmg3PrfGQCaETlo9iv2gRVN2yXF6CX7Hf4RRtZ37fhQdnjr
-   NdZbwqylT4Lomd+UrC9n8/E6ekEmSjTYF9BsqpXvOlQh3az+teRaeGGM9
-   cuiGtKgi/PMJPJLoz4gKxsMq1xAZhtoFAfU3m4B+9/SkAHRrK83u+Kyew
-   tHxu7cV/EDYS4rM9BxEV5eqlRlovJ+fwF7sb7qmcTDzBX1CgiLNuu2Y0N
-   g==;
-X-IronPort-AV: E=Sophos;i="5.97,270,1669100400"; 
-   d="scan'208";a="199203751"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 03 Feb 2023 03:48:04 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 3 Feb 2023 03:48:04 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Fri, 3 Feb 2023 03:48:04 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AoFIKL3YMrUBB3AF65frDuIZHtnO1gp9dKfVT0pLh9Jovn8ZUhbgXo78p3uoqzkmyIx3Gm6pa9JYMFvcxSONIzz1rtkYgG7T+e0k08VI01Whlpg1jCAgV+DR0+KoGWHa4g7WtnYQdNXxsadjMU02LeFU9Cj8eqTx1XG+HG4ilx6pTaVRLKg8xQDhRgxXaICmkQwSwE/0TejnGjxRq3ZSr/ptJJB+4EKgsa30HRk7qVwyT2w0g9BY51ehqXZrRdzABKvEITHA0k1geQyxm+Ve3ruZfFRQoZaGNUiT36X6iGNVfkcaZg0MY98XbvZZ+tO9G73K40uOf540Moprk63weQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YjPoPK+G6SRFgGkI643+YWgxAEs6YRis/ZnYBCdFd3s=;
- b=JbhXNDkc/7aNbhk14vFFUDLhUKYVU6O87e03KEr9p+ii/F87Q5eoIofotfiRwkqYLLf+neqXTMM9HnNNwyyW+8DnkGdkjACurMtWvBZgqLylvQem5oB1pIHHwkmfnfakDzHHKOxy2ga8J8tuj8pLfd04rmFXdex04teJPiYpJRB8pz13JZx1n+LAsKe3Ker3Pqy7qKKVh2sfEBb0BVKME4pUKxEkS3xXCbXFjwqBoOqowdbT1z2L2EXECT4TcXtbTtKNmZfinAwNRNbk9BFR8e/eH9HHtYvPFx7qlSwckHIw+pGh0fzrnygDAv51waAX2uW67q/ObkRmQ9BHNFbLJw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+        Fri, 3 Feb 2023 05:49:18 -0500
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F4525B9B;
+        Fri,  3 Feb 2023 02:49:16 -0800 (PST)
+Received: by mail-qt1-x82f.google.com with SMTP id w3so4950680qts.7;
+        Fri, 03 Feb 2023 02:49:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YjPoPK+G6SRFgGkI643+YWgxAEs6YRis/ZnYBCdFd3s=;
- b=d87YbbADxUq2bAL7Gzr3SbUQIH5QnoZQSDLHnSpv2SKvPH3IT+hUt1/suvUoXkuafgU9qLL3Km+ijwioNghLz8yDwv4fk0Sah9aV+C/DZn7D3+6Fd1cRGTFS8KSMTwDdjT9PW1yPQB1vPBMvwSiw/a6kLdOU4e1uTubiYItdAbA=
-Received: from MN0PR11MB6088.namprd11.prod.outlook.com (2603:10b6:208:3cc::9)
- by PH7PR11MB7596.namprd11.prod.outlook.com (2603:10b6:510:27e::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.27; Fri, 3 Feb
- 2023 10:48:02 +0000
-Received: from MN0PR11MB6088.namprd11.prod.outlook.com
- ([fe80::8ac6:8219:4489:7891]) by MN0PR11MB6088.namprd11.prod.outlook.com
- ([fe80::8ac6:8219:4489:7891%4]) with mapi id 15.20.6064.031; Fri, 3 Feb 2023
- 10:48:02 +0000
-From:   <Rakesh.Sankaranarayanan@microchip.com>
-To:     <andrew@lunn.ch>
-CC:     <olteanv@gmail.com>, <davem@davemloft.net>,
-        <linux@armlinux.org.uk>, <Woojung.Huh@microchip.com>,
-        <linux-kernel@vger.kernel.org>, <pabeni@redhat.com>,
-        <kuba@kernel.org>, <edumazet@google.com>, <netdev@vger.kernel.org>,
-        <UNGLinuxDriver@microchip.com>, <f.fainelli@gmail.com>
-Subject: Re: [RFC PATCH net-next 07/11] net: dsa: microchip: lan937x: update
- switch register
-Thread-Topic: [RFC PATCH net-next 07/11] net: dsa: microchip: lan937x: update
- switch register
-Thread-Index: AQHZNwYi/F78bUjhjUCh9IOmatoFU667y1YAgAFA54A=
-Date:   Fri, 3 Feb 2023 10:48:02 +0000
-Message-ID: <2d6f98b01fdce3247b8f93f0467e7f1cdb6e080e.camel@microchip.com>
-References: <20230202125930.271740-1-rakesh.sankaranarayanan@microchip.com>
-         <20230202125930.271740-8-rakesh.sankaranarayanan@microchip.com>
-         <Y9vZdMQgqhaGIcdf@lunn.ch>
-In-Reply-To: <Y9vZdMQgqhaGIcdf@lunn.ch>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MN0PR11MB6088:EE_|PH7PR11MB7596:EE_
-x-ms-office365-filtering-correlation-id: 968869f3-8786-4d45-bbfc-08db05d41fac
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: hakZ+OWbGWEKB9cbCl7TgPRTNbaiiAXZ2mS3lPcss84NDwTQhNnMaVUeq9OE5A6idSthmMHdM6tniiN4CdYPRBT4uGO1fpXKAln2VqkTAEAzMPefMM42XiPUN2X8UaAc+rQ3ENtbXrV3Ekv8OytH4OZ8UPpD8ubChWvXGrQyo/cRGWiX1OhE5uvwJZbDS/yiFENxAwP4JMmh6i4ZaeOXV6nP5BBbvpxnJIuflPlVMAk09ZDhZPTe+Etv3oy0L4krSwjEdljUiTCzi1y06hptGxrXp8Jw+BQUAfKYVBZqVHqcruvVX/iGYAaaNYxkAqnnRLELok5kTbsvIZJcVzuww3H4BVn4qe+k+Vh03WUQUsNBGqKYedOmR8ctPXmzeS3gdg2Xlf2xcSM0VDOEmO4+x07h+9INZwm/l7wmog1k79iUBzvNH6i3CCPf+WANx1wI1AgFHzAJmQ3PdF4iKLaSVsKdjiUHxqjWQVWfOf71+m2L+RSgMpguKbSM/EfHOP+21GL9uXHvDYfvNbS9ef+lpQnAbG68KyeCLVEFGb35+ll7UBiVFINqSIROopdOq8O5lk2Ntzx158v3/Tei30MAEiLemLxSN0pxp2iuova36rVUiiq/k1RRDZTN3co9dO7xflUxdy+sbx9BbK7Xxp7yUAu3lin6FTD2hsr9vS6AyNSYtuAv9QMhUIRILZBcL2fP0NtzAOps8OiUNBLv4qjuTQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6088.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(396003)(39860400002)(376002)(366004)(346002)(136003)(451199018)(38070700005)(2616005)(83380400001)(122000001)(38100700002)(76116006)(8676002)(66946007)(91956017)(6916009)(66476007)(8936002)(64756008)(66556008)(41300700001)(7416002)(5660300002)(15650500001)(86362001)(2906002)(66446008)(4326008)(71200400001)(478600001)(6486002)(6506007)(54906003)(316002)(186003)(26005)(36756003)(6512007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Um5PZk5zTDN2NENFWlNGZ2lUOVFQd2Eydjk3YzRqMGp0K01iVzNkSUFoYndq?=
- =?utf-8?B?bFlYaHowdTlCdnRrbU9JZExCeUpsRnhDL1B4NzBwdkRzQTdkU29ZcllReG1W?=
- =?utf-8?B?ME5zOWNkNGJRUzFJempJd2dpaEk4UWpVVTJMK0NyZENBZjFEQ3I3cEowTzJr?=
- =?utf-8?B?SHRzL3dsdXRaL3FtV2tSd3NRd0QxamQ0QktzeUpuNGNyeHV3UzV6NW05UFc3?=
- =?utf-8?B?VUhJWngrMVc0SFgyOGtSUXVrcWxhb3hubGxLaHpuRWpVU3BFTDFZS0JtQnFZ?=
- =?utf-8?B?NjBjM1dzTmJPbG1jTEtVeXpheGJTU2Y0bUY1RXk3bG1BYjZDNHFOMXROUkxu?=
- =?utf-8?B?RTRWdEZrc2NvM3M1MkJieHQ2QkZKN3RPVjJJa3JBakw0ZEtCTHlGUEpPK0ZO?=
- =?utf-8?B?c2ZxMm9zTFNOVEUyNWc2cmRtdDByaVJ0UFpFSC93ZG9yRTgyUTBFeklnUlV2?=
- =?utf-8?B?Z1FxNWNEUklySnpHRU93MGxmWWxQQjZFQjZxdjNNallCcElhS1o0YmlqRHpH?=
- =?utf-8?B?UDBpRTErMmJ3UXJ6ZlEvNlZBR3Fyb252V0tEU3N4azRSWWoyZmJReXRtd2pz?=
- =?utf-8?B?TWJTNmh2ekh6KzN0OFA1ZS9jUGtIT0xVNGpzWTlROWo2U3RPR3dzamw1M29p?=
- =?utf-8?B?SUc5K25aSzZQekw5dDltNGVsQjUyRXk3QnVML3Z1SXRob1hsRDE5aHh0b0pz?=
- =?utf-8?B?NE1QQWR1c0NwejBya0E1QThtVDZjMEY1NmNUWWJTZFYrc2xxVjQ1aU9SdTVI?=
- =?utf-8?B?OVlZdnZldmNkMjdBVlRrVWsyc2FDU3JxQjdwSHNDNmhYUFhRSzhKYktuR2Vk?=
- =?utf-8?B?ajlSVHEyNjZEVEZtMXorSFVObnU3eFZTaWxFZWhXTDg1c0xCMkJJNlJFOFU0?=
- =?utf-8?B?aFNGb3dUbDh6UWR3ZTRpbmljbmJpRmwxVHBBRjdNNEE0TlU2RkhBTVQzL3I1?=
- =?utf-8?B?bXI5STl4Q2hVTGJDMElJYjVUK3g1b0s2NFZUa0ZEVm14ZmowenFzemJNK2I5?=
- =?utf-8?B?QTh2MG85b2YraGorVmZqSkJTcjhMdkkzZXhGN1lRVHNIbmVLUWlBc0diUXYz?=
- =?utf-8?B?emZjc0QrNVkzOFFFV3lMZmJVMkYrYnphUTBnMElPNnVOVUxYZnc1WEMyRkdR?=
- =?utf-8?B?eEs5Z2J6R0xSQWZrb0xwZDV0QTJRMld1UWRDMFBUSkxIbmNrRzdCRVp1ZStx?=
- =?utf-8?B?QytzeUJvdjJhblBVSnZIUmo0QnE0eUhIUlRzTFNwc1k2VjBpZGpyZTN0VEVw?=
- =?utf-8?B?UmErRVQvYUUrazVBT2hqYzhJOHlOL3hWb2c0WlpGUENSYXFFWFpyNWdtUVpS?=
- =?utf-8?B?M28zQTBpWG5EbU1xT002N3FCNEF3NEo3cmJLRE80Q0hWc1JBSWJZSkVqa0pI?=
- =?utf-8?B?QkJNTmNGTjFFaEZhaEVTSU01WkovRUN3UDZSVytEYmE3bzRqbUxzZ0xlVjBs?=
- =?utf-8?B?dEppdGNQdkk5M0w4RFJkZlpuT3RxODQyM0VQb25nNUNZUlpIL0RFemE0OXZw?=
- =?utf-8?B?MTFFN2tWazJrYk90OCtOelhzZFYzUWFNclhyZ3JCZ3pOdHV6TWIyVzJxRytG?=
- =?utf-8?B?a29VTWVlVy9kRkp1UnJveGIxV21iOVp4ZHJkREJld2JBOGxxMDFtN3BndGNx?=
- =?utf-8?B?UnJJTHFhbWpIc1JrQnpITVc1ai9rSXpzRmtHdTB2dUNBWnEzVWRRemk1bmNw?=
- =?utf-8?B?R2Z2WHU0akFDTmUyRDNjZW5aajlDQzk5V09TWWlPTjIwZFJqQUFlNHdTbjZK?=
- =?utf-8?B?dTZ5d1R6NEZMQ1hKakZ5T3NXVmdqMWxuM3FhSlV1LzFPVlRsVVErUlRpWmly?=
- =?utf-8?B?ejJFaHVDZjA3T04yRFQzSWVNNFhKUCtkUUVjRUVvZmRMNkhGcDl4amNJTGJK?=
- =?utf-8?B?VGJ2NlB1MXdkYTA5ajlGYzBqVzRPL0IxdXY1WWlzQ0wyV3UvVEVMaGY0NWJM?=
- =?utf-8?B?R1J2VHR5MEQ0VHFpYzhsSE5vQnF1L3ZSWWR3WEVxMEx0MEphYkxPMC9iMTRk?=
- =?utf-8?B?N3VoSmw3bjJoeTM1L0k1M0J2NWkvNFZiSnFQWnpXWG50dmlxeHM1K2krRWE1?=
- =?utf-8?B?VlFRUWhRdW1kOWxOTWpLR29KYnR0LzhEOEFqS2ZKS3BmR1BPZHovUjFFQVZm?=
- =?utf-8?B?S0Nkd1N3c3U2UUJYN2trd2ZwQ3ZZMEJSNFhOdk9xRzFkRGo4clZ5RjI5L1dQ?=
- =?utf-8?Q?cL/uU/hIuIZ5G54975NIJSLIJZVpEObJR+IHd/dywPxJ?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <D45479985936C347984BA9556CFDD020@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        d=gmail.com; s=20210112;
+        h=mime-version:user-agent:references:message-id:date:in-reply-to
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3Y9z3O6hmPxvllUAJi6Cw55P9OWFlb2tAz45HxVwagE=;
+        b=fVNudbaLCEDqNsSQgujvFXGKtDFcmgLdfjpbWErWJ4wmANyd9b/xwVHluLxwOL+cYs
+         0egiJTAkfVS4L55x4tl5QR4+DVJgCrj+EduGhnSPbg7FhmamVjV9YiZVTB+rpEsmsyUM
+         Tu1Cqu99ZMhyg8JiXv6+4qn2rhhVpcj9vZB0fRKil8byoFMoszSGOAi6XXLKDsWIJaxC
+         GXj/GgXw+i+osqaYwvrx5Mevx60vyUBHS32RsFRKsIzoaBboQ3tuIiejxevAQR355Wbh
+         Nj+gqya7w6npJvZI0lHFGDrXS1usHSVELafhvq3/4FLyp3OYnEoRo8G2BKjAfa7jlBjc
+         Dokw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:references:message-id:date:in-reply-to
+         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3Y9z3O6hmPxvllUAJi6Cw55P9OWFlb2tAz45HxVwagE=;
+        b=2xet5q/GZeBAEwgrAxQX4zkti/7MK60FbH0I1dWE1QT+R66nKrOxmBVUJ831Zliwkr
+         OYIqUMTJOhqlWOopMvQCIPGoPpKbxGESSpi0R5PdeIV1rx89p8WN0hbZM2m29x/ez3R6
+         5nSPf8Sw9Bi8qq2flSdjQTCKc/oqiqLuBEl38ggV0a4uXMoKJmTKTJ+JLijDtc+zCQb7
+         cCFJa0GjqoZ7f7sT6kvNFXloKMncgz1a9wWYmfzUPApA7fylKDT/YZdiwAHjGJR/PFNR
+         VxGpR+jY5fL1+Ba5gSct0h0/G+/IDqccR1Vvyi5UAO/JL3+nkfJbw8APc1U+dkYTXZBH
+         6lcQ==
+X-Gm-Message-State: AO0yUKW3OnoZ7GXME21dl/utMCFppSI2XD7Mcp4xb8mbq48QFoPOdtdx
+        NWFeo7663MVhv+rxP/ZJUA4KXY1xOl4eUA==
+X-Google-Smtp-Source: AK7set9h6PBoDuEdKSRkdIn8h2LCX4GITLthCWvvZUKJyC16Bm3bJK8TqDsRVtqJQgPGQvttxkViCA==
+X-Received: by 2002:ac8:5c08:0:b0:3b8:2ea9:a09c with SMTP id i8-20020ac85c08000000b003b82ea9a09cmr17816066qti.1.1675421354717;
+        Fri, 03 Feb 2023 02:49:14 -0800 (PST)
+Received: from imac ([88.97.103.74])
+        by smtp.gmail.com with ESMTPSA id w15-20020a05620a444f00b007296805f607sm1654477qkp.17.2023.02.03.02.49.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Feb 2023 02:49:13 -0800 (PST)
+From:   Donald Hunter <donald.hunter@gmail.com>
+To:     David Vernet <void@manifault.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@meta.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        toke@redhat.com, brouer@redhat.com, corbet@lwn.net,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2] bpf/docs: Document kfunc lifecycle /
+ stability expectations
+In-Reply-To: <20230202223557.744110-2-void@manifault.com> (David Vernet's
+        message of "Thu, 2 Feb 2023 16:35:57 -0600")
+Date:   Fri, 03 Feb 2023 10:48:35 +0000
+Message-ID: <m2sffnvxbw.fsf@gmail.com>
+References: <20230202223557.744110-1-void@manifault.com>
+        <20230202223557.744110-2-void@manifault.com>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6088.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 968869f3-8786-4d45-bbfc-08db05d41fac
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Feb 2023 10:48:02.5208
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: oW+jNa4XQMJ0tmGiWWhvkBuVRPsg7JrYIT8gXpb+o1oi13YVErLU1lQwkwHcHiRGLnWseKQ7qiWg9EmitKxdA9DSSlOD7SM/KEGvs8RHNOLHJB/bKnnV/KzcXoCElbIL
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB7596
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -160,31 +79,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgQW5kcmV3LA0KDQpUaGFua3MgZm9yIHRoZSBjb21tZW50LCBJIHdpbGwgY2hhbmdlIGFuZCB0
-ZXN0IHRoZSBjb2RlIGFzIHlvdQ0KZXhwbGFpbmVkIGFuZCB1cGRhdGUgdGhlIHBhdGNoIGluIG5l
-eHQgcmV2aXNpb24uDQoNClRoYW5rcywNClJha2VzaCBTLg0KDQpPbiBUaHUsIDIwMjMtMDItMDIg
-YXQgMTY6NDAgKzAxMDAsIEFuZHJldyBMdW5uIHdyb3RlOg0KPiBFWFRFUk5BTCBFTUFJTDogRG8g
-bm90IGNsaWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNobWVudHMgdW5sZXNzIHlvdQ0KPiBrbm93IHRo
-ZSBjb250ZW50IGlzIHNhZmUNCj4gDQo+IE9uIFRodSwgRmViIDAyLCAyMDIzIGF0IDA2OjI5OjI2
-UE0gKzA1MzAsIFJha2VzaCBTYW5rYXJhbmFyYXlhbmFuDQo+IHdyb3RlOg0KPiA+IFNlY29uZCBz
-d2l0Y2ggaW4gY2FzY2FkZWQgY29ubmVjdGlvbiBkb2Vzbid0IGhhdmUgcG9ydCB3aXRoIG1hY2IN
-Cj4gPiBpbnRlcmZhY2UuIGRzYV9zd2l0Y2hfcmVnaXN0ZXIgcmV0dXJucyBlcnJvciBpZiBtYWNi
-IGludGVyZmFjZSBpcw0KPiA+IG5vdCB1cC4gRHVlIHRvIHRoaXMgcmVhc29uLCBzZWNvbmQgc3dp
-dGNoIGluIGNhc2NhZGVkIGNvbm5lY3Rpb24NCj4gPiB3aWxsDQo+ID4gbm90IHJlcG9ydCBlcnJv
-ciBkdXJpbmcgZHNhX3N3aXRjaF9yZWdpc3RlciBhbmQgbWliIHRocmVhZCB3b3JrDQo+ID4gd2ls
-bCBiZQ0KPiA+IGludm9rZWQgZXZlbiBpZiBhY3R1YWwgc3dpdGNoIHJlZ2lzdGVyIGlzIG5vdCBk
-b25lLiBUaGlzIHdpbGwgbGVhZA0KPiA+IHRvDQo+ID4ga2VybmVsIHdhcm5pbmcgYW5kIGl0IGNh
-biBiZSBhdm9pZGVkIGJ5IGNoZWNraW5nIGRldmljZSB0cmVlIHNldHVwDQo+ID4gc3RhdHVzLiBU
-aGlzIHdpbGwgcmV0dXJuIHRydWUgb25seSBhZnRlciBhY3R1YWwgc3dpdGNoIHJlZ2lzdGVyIGlz
-DQo+ID4gZG9uZS4NCj4gDQo+IFdoYXQgaSB0aGluayB5b3UgbmVlZCB0byBkbyBpcyBtb3ZlIHRo
-ZSBjb2RlIGludG8ga3N6X3NldHVwKCkuDQo+IA0KPiBXaXRoIGEgRCBpbiBEU0Egc2V0dXAsIGRz
-YV9zd2l0Y2hfcmVnaXN0ZXIoKSBhZGRzIHRoZSBzd2l0Y2ggdG8gdGhlDQo+IGxpc3Qgb2Ygc3dp
-dGNoZXMsIGFuZCB0aGVuIGEgY2hlY2sgaXMgcGVyZm9ybWVkIHRvIHNlZSBpZiBhbGwNCj4gc3dp
-dGNoZXMNCj4gaW4gdGhlIGNsdXN0ZXIgaGF2ZSBiZWVuIHJlZ2lzdGVyZWQuIElmIG5vdCwgaXQg
-anVzdCByZXR1cm5zLiBJZiBhbGwNCj4gc3dpdGNoZXMgaGF2ZSBiZWVuIHJlZ2lzdGVyZWQsIGl0
-IHRoZW4gaXRlcmF0ZXMgb3ZlciBhbGwgdGhlIHN3aXRjaGVzDQo+IGNhbiBjYWxscyBkc2Ffc3dp
-dGNoX29wcy5zZXR1cCgpLg0KPiANCj4gQnkgbW92aW5nIHRoZSBzdGFydCBvZiB0aGUgTUlCIGNv
-dW50ZXIgaW50byBzZXR1cCgpLCBpdCB3aWxsIG9ubHkgYmUNCj4gc3RhcnRlZCBvbmNlIGFsbCB0
-aGUgc3dpdGNoZXMgYXJlIHByZXNlbnQsIGFuZCBpdCBtZWFucyB5b3UgZG9uJ3QNCj4gbmVlZA0K
-PiB0byBsb29rIGF0IERTQSBjb3JlIGludGVybmFsIHN0YXRlLg0KPiANCj4gwqDCoMKgwqDCoMKg
-wqAgQW5kcmV3DQoNCg==
+David Vernet <void@manifault.com> writes:
+
+> +3. kfunc lifecycle expectations
+> +===============================
+> +
+> +kfuncs provide a kernel <-> kernel API, and thus are not bound by any of the
+> +strict stability restrictions associated with kernel <-> user UAPIs. Instead,
+> +they're modeled more similarly to EXPORT_SYMBOL_GPL, and can therefore be
+> +modified or removed by a maintainer of the subsystem they're defined in when
+> +it's deemed necessary.
+> +
+> +Like any other change to the kernel, maintainers will not change or remove a
+> +kfunc without having a reasonable justification.  Whether or not they'll choose
+> +to change a kfunc will ultimately depend on a variety of factors, such as how
+> +widely used the kfunc is, how long the kfunc has been in the kernel, whether an
+> +alternative kfunc exists, what the norm is in terms of stability for the
+> +subsystem in question, and of course what the technical cost is of continuing
+> +to support the kfunc.
+> +
+> +There are several implications of this:
+> +
+> +a) kfuncs that are widely used or have been in the kernel for a long time will
+> +   be more difficult to justify being changed or removed by a maintainer. Said
+> +   in a different way, kfuncs that are known to have a lot of users and provide
+> +   significant value provide stronger incentives for maintainers to invest the
+> +   time and complexity in supporting them. It is therefore important for
+> +   developers that are using kfuncs in their BPF programs to communicate and
+> +   explain how and why those kfuncs are being used, and to participate in
+> +   discussions regarding those kfuncs when they occur upstream.
+> +
+> +b) Because many BPF programs are not upstreamed as part of the kernel tree, it
+> +   is often not possible to change them in-place when a kfunc changes, as it is
+> +   for e.g. an upstreamed driver being updated in place when an
+> +   EXPORT_SYMBOL_GPL symbol is changed. Distributions that bundle BPF programs
+> +   that use kfuncs must therefore ensure that those BPF programs are linking
+> +   against the kfuncs that are supported by the kernel version being used for
+> +   any given release. Additionally, BPF developers are encouraged to upstream
+> +   their BPF programs so they can enjoy the same benefits as upstreamed
+> +   modules, and avoid code churn.
+
+It seems unrealistic to wish for BPF programs to be upstreamed, for
+several reasons. A key benefit of BPF programs is that they are
+decoupled from the kernel lifecycle and packaging. BPF programs are
+often more tightly coupled with the application they are part of and
+need to be maintained alongside those applications. There does not seem
+to be any desire, process or incentive to maintain BPF programs in tree.
+
+> +   On the other hand, while the hope is that it will become the norm to
+> +   upstream BPF programs, the reality is that most BPF programs are still
+> +   out-of-tree. This means that users with out-of-tree BPF programs that use
+> +   kfuncs should be considered relevant to discussions and decisions around
+> +   modifying and removing kfuncs, despite that not being the norm for
+> +   out-of-tree kernel modules. The BPF community will take an active role in
+> +   participating in upstream discussions when necessary to ensure that the
+> +   perspectives of such users are taken into account.
+> +
+> +c) A kfunc will never have any hard stability guarantees. BPF APIs cannot and
+> +   will not ever hard-block a change in the kernel purely for stability
+> +   reasons. In other words, kfuncs have the same stability guarantees as any
+> +   other kernel API, such as those provided by EXPORT_SYMBOL_GPL, though with
+> +   perhaps less burden than EXPORT_SYMBOL_GPL changes thanks to BPF CO-RE.
+> +
+> +   That being said, kfuncs are features that are meant to solve problems and
+> +   provide value to users. The decision of whether to change or remove a kfunc
+> +   is a multivariate technical decision that is made on a case-by-case basis,
+> +   and which is informed by data points such as those mentioned above. It is
+> +   expected that a kfunc being removed or changed with no warning will not be a
+> +   common occurrence or take place without sound justification, but it is a
+> +   possibility that must be accepted if one is to use kfuncs.
+> +
+> +3.1 kfunc deprecation
+> +---------------------
+> +
+> +As described above, while sometimes a maintainer may find that a kfunc must be
+> +changed or removed immediately to accommodate some changes in their subsystem,
+> +other kfuncs may be able to accommodate a longer and more measured deprecation
+
+How about replacing 'other kfuncs may' with 'usually kfuncs will' to
+re-emphasise that this would be the more common scenario.
+
+> +process. For example, if a new kfunc comes along which provides superior
+> +functionality to an existing kfunc, the existing kfunc may be deprecated for
+> +some period of time to allow users to migrate their BPF programs to use the new
+> +one. Or, if a kfunc has no known users, a decision may be made to remove the
+> +kfunc (without providing an alternative API) after some deprecation period
+> +period so as to provide users with a window to notify the kfunc maintainer if
+
+Duplicate 'period'.
+
+> +it turns out that the kfunc is actually being used.
+> +
+> +kfuncs being deprecated (rather than changed or removed with no warning) is
+> +expected to be the common case, and as described in :ref:`KF_deprecated_flag`,
+> +the kfunc framework provides the KF_DEPRECATED flag to kfunc developers to
+> +signal to users that a kfunc has been deprecated. Once a kfunc has been marked
+> +with KF_DEPRECATED, the following procedure is followed for removal:
+> +
+> +1. Any relevant information for deprecated kfuncs is documented in the kfunc's
+> +   kernel docs. This documentation will typically include the kfunc's expected
+> +   remaining lifespan,  a recommendation for new functionality that can replace
+> +   the usage of the deprecated function (or an explanation as to why no such
+> +   replacement exists), etc.
+> +
+> +2. The deprecated kfunc is kept in the kernel for some period of time after it
+> +   was first marked as deprecated. This time period will be chosen on a
+> +   case-by-case basis, and will typically depend on how widespread the use of
+> +   the kfunc is, how long it has been in the kernel, and how hard it is to move
+> +   to alternatives. This deprecation time period is "best effort", and as
+> +   described :ref:`above<BPF_kfunc_lifecycle_expectations>`, circumstances may
+> +   sometimes dictate that the kfunc be removed before the full intended
+> +   deprecation period has elapsed.
+> +
+> +3. After the deprecation period, or sometimes earlier if necessary, the kfunc
+> +   will be removed. At this point, BPF programs calling the kfunc will be
+> +   rejected by the verifier.
+> +
