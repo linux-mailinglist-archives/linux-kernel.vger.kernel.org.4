@@ -2,125 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D88A688E1E
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 04:43:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BFF7688E23
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 04:47:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231245AbjBCDnl convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 2 Feb 2023 22:43:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57076 "EHLO
+        id S231761AbjBCDr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 22:47:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbjBCDnj (ORCPT
+        with ESMTP id S229469AbjBCDr0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 22:43:39 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78D5D721FF
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 19:43:37 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 5505A24E13F;
-        Fri,  3 Feb 2023 11:43:36 +0800 (CST)
-Received: from EXMBX065.cuchost.com (172.16.6.65) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 3 Feb
- 2023 11:43:36 +0800
-Received: from EXMBX066.cuchost.com (172.16.7.66) by EXMBX065.cuchost.com
- (172.16.6.65) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 3 Feb
- 2023 11:43:35 +0800
-Received: from EXMBX066.cuchost.com ([fe80::5947:9245:907e:339f]) by
- EXMBX066.cuchost.com ([fe80::5947:9245:907e:339f%17]) with mapi id
- 15.00.1497.044; Fri, 3 Feb 2023 11:43:35 +0800
-From:   JeeHeng Sia <jeeheng.sia@starfivetech.com>
-To:     Conor Dooley <conor@kernel.org>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>
-CC:     "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Leyfoon Tan <leyfoon.tan@starfivetech.com>,
-        Mason Huo <mason.huo@starfivetech.com>
-Subject: RE: [PATCH v3 4/4] RISC-V: Add arch functions to support
- hibernation/suspend-to-disk
-Thread-Topic: [PATCH v3 4/4] RISC-V: Add arch functions to support
- hibernation/suspend-to-disk
-Thread-Index: AQHZMi9ZN0+4F1UUIkevO0NjoPA20663GzgAgAWChyA=
-Date:   Fri, 3 Feb 2023 03:43:35 +0000
-Message-ID: <debdfe40909c4b4787868b11730170c9@EXMBX066.cuchost.com>
-References: <20230127091051.1465278-1-jeeheng.sia@starfivetech.com>
- <20230127091051.1465278-5-jeeheng.sia@starfivetech.com>
- <Y9hTGo6dfgeusW4B@spud>
-In-Reply-To: <Y9hTGo6dfgeusW4B@spud>
-Accept-Language: en-US, zh-CN
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [60.50.196.81]
-x-yovoleruleagent: yovoleflag
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Thu, 2 Feb 2023 22:47:26 -0500
+Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14EB7721C5
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 19:47:24 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R631e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0Van-GYb_1675396041;
+Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0Van-GYb_1675396041)
+          by smtp.aliyun-inc.com;
+          Fri, 03 Feb 2023 11:47:21 +0800
+From:   Jingbo Xu <jefflexu@linux.alibaba.com>
+To:     xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        zhujia.zj@bytedance.com, houtao1@huawei.com
+Cc:     huyue2@coolpad.com, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] erofs: cleanup for fscache mode
+Date:   Fri,  3 Feb 2023 11:47:18 +0800
+Message-Id: <20230203034720.24619-1-jefflexu@linux.alibaba.com>
+X-Mailer: git-send-email 2.19.1.6.gb485710b
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+These are misc cleanup for fscache mode, while patch 2 is dependent on
+the page cache sharing codebase [1].
 
+[1] https://lore.kernel.org/all/20230203030143.73105-1-jefflexu@linux.alibaba.com/
 
-> -----Original Message-----
-> From: Conor Dooley <conor@kernel.org>
-> Sent: Tuesday, 31 January, 2023 7:31 AM
-> To: JeeHeng Sia <jeeheng.sia@starfivetech.com>; Alexandre Ghiti <alexghiti@rivosinc.com>
-> Cc: paul.walmsley@sifive.com; palmer@dabbelt.com; aou@eecs.berkeley.edu; linux-riscv@lists.infradead.org; linux-
-> kernel@vger.kernel.org; Leyfoon Tan <leyfoon.tan@starfivetech.com>; Mason Huo <mason.huo@starfivetech.com>
-> Subject: Re: [PATCH v3 4/4] RISC-V: Add arch functions to support hibernation/suspend-to-disk
-> 
-> +CC Alex
-> 
-> Alex, could you take a look at the page table bits here when you get a
-> chance please?
-> 
-> > + * @a0 - destination
-> > + * @a1 - source
-> > + */
-> > +	.macro	copy_page a0, a1
-> > +		lui	a2, 0x1
-> > +		add	a2, a2, a0
-> > +.1 :
-> > +		REG_L	t0, 0(a1)
-> > +		REG_L	t1, SZREG(a1)
-> > +
-> > +		REG_S	t0, 0(a0)
-> > +		REG_S	t1, SZREG(a0)
-> > +
-> > +		addi	a0, a0, 2 * SZREG
-> > +		addi	a1, a1, 2 * SZREG
-> > +		bne	a2, a0, .1
-> 
-> allmodconfig, clang 15.0.4:
-> 
-> <instantiation>:3:1: error: unexpected token at start of statement
-> .1 :
-> ^
-> /stuff/linux/arch/riscv/kernel/hibernate-asm.S:83:2: note: while in macro instantiation
->  copy_page a0, a1
->  ^
-> <instantiation>:12:15: error: unknown operand
->   bne a2, a0, .1
->               ^
-> /stuff/linux/arch/riscv/kernel/hibernate-asm.S:83:2: note: while in macro instantiation
->  copy_page a0, a1
->  ^
-> make[5]: *** [/stuff/linux/scripts/Makefile.build:384: arch/riscv/kernel/hibernate-asm.o] Error 1
-Hi Conor, I couldn't reproduce the above error, could you share the build command please?
-> 
-> > +	.endm
-> > +
-> >  #endif	/* __ASM_ASSEMBLER_H */
- 
-> Thanks,
-> Conor.
+Jingbo Xu (2):
+  erofs: simplify instantiation of pseudo mount in fscache mode
+  erofs: simplify the name collision checking in share domain mode
+
+ fs/erofs/fscache.c  | 84 ++++++++++++++++++++-------------------------
+ fs/erofs/internal.h | 15 ++++----
+ fs/erofs/super.c    | 37 +++++---------------
+ 3 files changed, 53 insertions(+), 83 deletions(-)
+
+-- 
+2.19.1.6.gb485710b
 
