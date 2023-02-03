@@ -2,209 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A338968A10D
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 18:59:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 517D768A10A
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 18:58:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231989AbjBCR7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 12:59:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38338 "EHLO
+        id S232916AbjBCR64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 12:58:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232701AbjBCR7P (ORCPT
+        with ESMTP id S232127AbjBCR6x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 12:59:15 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB68AC21B
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 09:59:12 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id d14so5351400wrr.9
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 09:59:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=GAXndW8cnBV3+ngs0K02NLGwczyzotwAPD8N8ShiwYk=;
-        b=PWLPACbQ/nV+Qzotx45Bi6IXcdXtrj+EUb+UtwhJ56Od/Z8LMacFOyHwodvU05vtlZ
-         SSUgUkrW0cAlFBAE8V4RAqv6JIrJnb7NQVipdNgMeN9Dj78JeSbW2nP3uiTSif15ooUs
-         +zIIpxXbE8VCVLs2r+Ou3mFf6M06ZvA2neVUUKwYzp+Y0wQgCgYGU0e2qhgmBag+ORX7
-         2N8jGa5gwq7EAiSPcG7doVI9ZOM1x0iJSzp7jdtzvEp+s4Aad2YOoCbOE2NkBPIJS2Ix
-         1Eg/R3FrTP8SpoxGR6jA+FayvDBct913m3j6QJBUXAiB58bQ0QvfqDJf3RvNkN+MsYLf
-         D6gQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GAXndW8cnBV3+ngs0K02NLGwczyzotwAPD8N8ShiwYk=;
-        b=MziZq9nI61wuxNsIMWlDMpse+284Tv66DH3dFBVd8g1wjNG/woYm7nfCNnuRQPJNU/
-         oeJ+DIkUSjF/DxZNt1vGhRAcXNynSHZyu78n47GuXaZ+mKHstn+31+u1x0nCJpS8KxNh
-         eeIt/wR+VbrKK+dt4PQGKKHU9N81DID5mDFQorije9QMrmECBLwf+qIChl2xeXmz3rMD
-         JmEL9XYBYgiDLj+IB3GG5YwiQOpSepBAenMdMhYWFWAHsqG2PmdbMLZPkx96kAOCeQIe
-         g2AvN/vwgxBznnI0hru2vQMFztXw2S3ZA6TxAybVp6VNih/NQcixGQlH8xfGmdXSefx7
-         TBGA==
-X-Gm-Message-State: AO0yUKXfQ7uUAP7s1Y6jMVi+0rpaDtZCBlkTIOaTHTZhA2lJyxWrLaVp
-        MjChdwnipnsNrwkIGj4EYo7uEg==
-X-Google-Smtp-Source: AK7set8ijXCv3HYsShNElZlKs0hYepcRyZAUe7b95uq7Zb3BQnwNsE7WskLXcPjZnTB3tOJK7iIFNA==
-X-Received: by 2002:adf:fb03:0:b0:2be:57a6:8161 with SMTP id c3-20020adffb03000000b002be57a68161mr8387433wrr.46.1675447150846;
-        Fri, 03 Feb 2023 09:59:10 -0800 (PST)
-Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id s14-20020adfa28e000000b002c3be49ef94sm2599012wra.52.2023.02.03.09.59.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 09:59:10 -0800 (PST)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     daniel.lezcano@linaro.org, rjw@rjwysocki.net
-Cc:     linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        Sebastian Reichel <sre@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Kees Cook <keescook@chromium.org>,
-        "Lee, Chun-Yi" <joeyli.kernel@gmail.com>,
-        Chuansheng Liu <chuansheng.liu@intel.com>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] thermal: Hunt zero trip points thermal zones usage
-Date:   Fri,  3 Feb 2023 18:58:31 +0100
-Message-Id: <20230203175832.3406504-1-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Fri, 3 Feb 2023 12:58:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F75D903E
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 09:58:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D8027B82B65
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 17:58:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B326C433D2;
+        Fri,  3 Feb 2023 17:58:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675447129;
+        bh=h0FX8njn5v6dhV2AUGOJNYLtMQEKPbwS8wqqRVOBFXY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YccVIaj7oaIBJXC0g+3yS+sil13YXsVVAYIp9f2Bd0HIyWQHX8pkeeGpE5yqISmpQ
+         NWyJWS3MfXIHCRUP7hmOBWXl4yGXJ1XQ3tbtpljGE90J7SeLIH0T+A9gnLj8Dvy7ID
+         QeOIrs1upGpfj1NDWWvM+SAJdlsTtMmSNb4rEdnVKy9aPjTEvGKwZFOk5zQfpzJcLP
+         uCZ2RaQ522dlqarGF87ZXl0KEpxyJusSK3SG9DZRRUGCk7Ce/tU6sWdahxYzt+/oAq
+         z983AnRaVXjiOhOF8Zn2cWO+x/IX6Hum3xScZdy8wtSLqtmb/VsG62YKforEDlbKt5
+         k91fom1q1q9ew==
+Received: by pali.im (Postfix)
+        id 4F160723; Fri,  3 Feb 2023 18:58:46 +0100 (CET)
+Date:   Fri, 3 Feb 2023 18:58:46 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "npiggin@gmail.com" <npiggin@gmail.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "anders.roxell@linaro.org" <anders.roxell@linaro.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        "nathan@kernel.org" <nathan@kernel.org>,
+        Linux Kernel Functional Testing <lkft@linaro.org>,
+        qiongsiwu@gmail.com, nemanja.i.ibm@gmail.com
+Subject: Re: [PATCH 1/2] powerpc/64: Set default CPU in Kconfig
+Message-ID: <20230203175846.oczctwfr2jq7usze@pali>
+References: <76c11197b058193dcb8e8b26adffba09cfbdab11.1674632329.git.christophe.leroy@csgroup.eu>
+ <20230201113155.18113-1-naresh.kamboju@linaro.org>
+ <04b55866-aa17-f500-855a-7d4fb4bbaacf@csgroup.eu>
+ <CAKwvOdnc_ggT_2FQQwq71PiDE_D1xxXXnB5iSWvvoa3pu7kMdQ@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+In-Reply-To: <CAKwvOdnc_ggT_2FQQwq71PiDE_D1xxXXnB5iSWvvoa3pu7kMdQ@mail.gmail.com>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some drivers are declaring a thermal zone without any thermal trip
-points.
+On Wednesday 01 February 2023 09:29:45 Nick Desaulniers wrote:
+> On Wed, Feb 1, 2023 at 3:41 AM Christophe Leroy
+> <christophe.leroy@csgroup.eu> wrote:
+> >
+> >
+> >
+> > Le 01/02/2023 à 12:31, Naresh Kamboju a écrit :
+> > > Following build regression started from next-20230131.
+> > >
+> > > Regressions found on powerpc:
+> > >
+> > >    build/clang-nightly-tqm8xx_defconfig
+> > >    build/clang-nightly-ppc64e_defconfig
+> > >
+> > >
+> > > make --silent --keep-going --jobs=8 O=/home/tuxbuild/.cache/tuxmake/builds/1/build ARCH=powerpc CROSS_COMPILE=powerpc64le-linux-gnu- HOSTCC=clang CC=clang LLVM=1 LLVM_IAS=0 tqm8xx_defconfig
+> > > make --silent --keep-going --jobs=8 O=/home/tuxbuild/.cache/tuxmake/builds/1/build ARCH=powerpc CROSS_COMPILE=powerpc64le-linux-gnu- HOSTCC=clang CC=clang LLVM=1 LLVM_IAS=0
+> > >
+> > > error: unknown target CPU '860'
+> > > note: valid target CPU values are: generic, 440, 450, 601, 602, 603, 603e, 603ev, 604, 604e, 620, 630, g3, 7400, g4, 7450, g4+, 750, 8548, 970, g5, a2, e500, e500mc, e5500, power3, pwr3, power4, pwr4, power5, pwr5, power5x, pwr5x, power6, pwr6, power6x, pwr6x, power7, pwr7, power8, pwr8, power9, pwr9, power10, pwr10, powerpc, ppc, ppc32, powerpc64, ppc64, powerpc64le, ppc64le, future
+> > > make[2]: *** [/builds/linux/scripts/Makefile.build:114: scripts/mod/devicetable-offsets.s] Error 1
+> > > error: unknown target CPU '860'
+> > > note: valid target CPU values are: generic, 440, 450, 601, 602, 603, 603e, 603ev, 604, 604e, 620, 630, g3, 7400, g4, 7450, g4+, 750, 8548, 970, g5, a2, e500, e500mc, e5500, power3, pwr3, power4, pwr4, power5, pwr5, power5x, pwr5x, power6, pwr6, power6x, pwr6x, power7, pwr7, power8, pwr8, power9, pwr9, power10, pwr10, powerpc, ppc, ppc32, powerpc64, ppc64, powerpc64le, ppc64le, future
+> > > make[2]: *** [/builds/linux/scripts/Makefile.build:252: scripts/mod/empty.o] Error 1
+> >
+> >
+> > On GCC, the possible values are:
+> >
+> > ppc-linux-gcc: note : valid arguments to ‘-mcpu=’ are: 401 403 405 405fp
+> > 440 440fp 464 464fp 476 476fp 505 601 602 603 603e 604 604e 620 630 740
+> > 7400 7450 750 801 821 823 8540 8548 860 970 G3 G4 G5 a2 cell e300c2
+> > e300c3 e500mc e500mc64 e5500 e6500 ec603e native power3 power4 power5
+> > power5+ power6 power6x power7 power8 powerpc powerpc64 powerpc64le rs64
+> > titan
+> >
+> > How do you tell CLANG that you are building for powerpc 8xx ?
 
-On the other side, we are introducing the function
-thermal_zone_device_register_with_trips() which provides an array of
-generic thermal trip points. When all the drivers will be converted to
-the generic trip points, keeping two functions will be useless.
+Maybe llvm does not have support for this old CPU core at all? Because
+from 'note: valid target CPU values are:' message it looks like that.
 
-Most of the drivers are now using
-thermal_zone_device_register_with_trips() with the generic trip
-points. As soon as the remaining drivers are merged, the
-thermal_zone_device_register_with_trips() will be renamed to
-thermal_zone_device_register().
-
-Obviously this renaming can only happen if there are no more user of
-the thermal_zone_device_register() function.
-
-This change uses thermal_zone_device_register_with_trips() with a NULL
-parameter for the trip point array instead of
-thermal_zone_device_register().
-
-No functional change intended.
-
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/power/supply/power_supply_core.c                | 2 +-
- drivers/thermal/armada_thermal.c                        | 4 ++--
- drivers/thermal/dove_thermal.c                          | 4 ++--
- drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 6 +++---
- drivers/thermal/kirkwood_thermal.c                      | 4 ++--
- drivers/thermal/spear_thermal.c                         | 5 +++--
- 6 files changed, 13 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
-index 7c790c41e2fe..208a849a71d9 100644
---- a/drivers/power/supply/power_supply_core.c
-+++ b/drivers/power/supply/power_supply_core.c
-@@ -1166,7 +1166,7 @@ static int psy_register_thermal(struct power_supply *psy)
- 
- 	/* Register battery zone device psy reports temperature */
- 	if (psy_has_property(psy->desc, POWER_SUPPLY_PROP_TEMP)) {
--		psy->tzd = thermal_zone_device_register(psy->desc->name,
-+		psy->tzd = thermal_zone_device_register_with_trips(psy->desc->name, NULL,
- 				0, 0, psy, &psy_tzd_ops, NULL, 0, 0);
- 		if (IS_ERR(psy->tzd))
- 			return PTR_ERR(psy->tzd);
-diff --git a/drivers/thermal/armada_thermal.c b/drivers/thermal/armada_thermal.c
-index 99e86484a55c..83a4080bffc7 100644
---- a/drivers/thermal/armada_thermal.c
-+++ b/drivers/thermal/armada_thermal.c
-@@ -856,8 +856,8 @@ static int armada_thermal_probe(struct platform_device *pdev)
- 		/* Wait the sensors to be valid */
- 		armada_wait_sensor_validity(priv);
- 
--		tz = thermal_zone_device_register(priv->zone_name, 0, 0, priv,
--						  &legacy_ops, NULL, 0, 0);
-+		tz = thermal_zone_device_register_with_trips(priv->zone_name, NULL, 0, 0, priv,
-+							     &legacy_ops, NULL, 0, 0);
- 		if (IS_ERR(tz)) {
- 			dev_err(&pdev->dev,
- 				"Failed to register thermal zone device\n");
-diff --git a/drivers/thermal/dove_thermal.c b/drivers/thermal/dove_thermal.c
-index 056622a58d00..fce15af5a7f6 100644
---- a/drivers/thermal/dove_thermal.c
-+++ b/drivers/thermal/dove_thermal.c
-@@ -142,8 +142,8 @@ static int dove_thermal_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
--	thermal = thermal_zone_device_register("dove_thermal", 0, 0,
--					       priv, &ops, NULL, 0, 0);
-+	thermal = thermal_zone_device_register_with_trips("dove_thermal", NULL, 0, 0,
-+							  priv, &ops, NULL, 0, 0);
- 	if (IS_ERR(thermal)) {
- 		dev_err(&pdev->dev,
- 			"Failed to register thermal zone device\n");
-diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-index d0295123cc3e..dac60b6a281c 100644
---- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-@@ -609,9 +609,9 @@ static int int3400_thermal_probe(struct platform_device *pdev)
- 
- 	evaluate_odvp(priv);
- 
--	priv->thermal = thermal_zone_device_register("INT3400 Thermal", 0, 0,
--						priv, &int3400_thermal_ops,
--						&int3400_thermal_params, 0, 0);
-+	priv->thermal = thermal_zone_device_register_with_trips("INT3400 Thermal", NULL, 0, 0,
-+								priv, &int3400_thermal_ops,
-+								&int3400_thermal_params, 0, 0);
- 	if (IS_ERR(priv->thermal)) {
- 		result = PTR_ERR(priv->thermal);
- 		goto free_art_trt;
-diff --git a/drivers/thermal/kirkwood_thermal.c b/drivers/thermal/kirkwood_thermal.c
-index bec7ec20e79d..4506b7dfb474 100644
---- a/drivers/thermal/kirkwood_thermal.c
-+++ b/drivers/thermal/kirkwood_thermal.c
-@@ -74,8 +74,8 @@ static int kirkwood_thermal_probe(struct platform_device *pdev)
- 	if (IS_ERR(priv->sensor))
- 		return PTR_ERR(priv->sensor);
- 
--	thermal = thermal_zone_device_register("kirkwood_thermal", 0, 0,
--					       priv, &ops, NULL, 0, 0);
-+	thermal = thermal_zone_device_register_with_trips("kirkwood_thermal", NULL, 0, 0,
-+							  priv, &ops, NULL, 0, 0);
- 	if (IS_ERR(thermal)) {
- 		dev_err(&pdev->dev,
- 			"Failed to register thermal zone device\n");
-diff --git a/drivers/thermal/spear_thermal.c b/drivers/thermal/spear_thermal.c
-index 6a722b10d738..0d20bc9c5c0b 100644
---- a/drivers/thermal/spear_thermal.c
-+++ b/drivers/thermal/spear_thermal.c
-@@ -122,8 +122,9 @@ static int spear_thermal_probe(struct platform_device *pdev)
- 	stdev->flags = val;
- 	writel_relaxed(stdev->flags, stdev->thermal_base);
- 
--	spear_thermal = thermal_zone_device_register("spear_thermal", 0, 0,
--				stdev, &ops, NULL, 0, 0);
-+	spear_thermal = thermal_zone_device_register_with_trips("spear_thermal",
-+								NULL, 0, 0,
-+								stdev, &ops, NULL, 0, 0);
- 	if (IS_ERR(spear_thermal)) {
- 		dev_err(&pdev->dev, "thermal zone device is NULL\n");
- 		ret = PTR_ERR(spear_thermal);
--- 
-2.34.1
-
+> + Nemanjai, Qiongsi,
+> 
+> 
+> >
+> > >
+> > >
+> > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > >
+> > > https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230201/testrun/14479384/suite/build/test/clang-nightly-tqm8xx_defconfig/history/
+> > >
+> > > The bisection pointed to this commit,
+> > >    45f7091aac35 ("powerpc/64: Set default CPU in Kconfig")
+> > >
+> > > --
+> > > Linaro LKFT
+> > > https://lkft.linaro.org
+> 
+> 
+> 
+> -- 
+> Thanks,
+> ~Nick Desaulniers
