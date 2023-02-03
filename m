@@ -2,144 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0966E689DEC
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 16:17:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E081C689DFD
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 16:21:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232989AbjBCPRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 10:17:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56140 "EHLO
+        id S234058AbjBCPRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 10:17:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235220AbjBCPQa (ORCPT
+        with ESMTP id S234678AbjBCPPe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 10:16:30 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEBDD46168;
-        Fri,  3 Feb 2023 07:14:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1675437278; x=1706973278;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=b4vBTbmzxUT19QoY3y9Ftpa1SC5B9to40xdYtchCZas=;
-  b=a6o8T7VqHCoL8mO2I9RkgLwPOuKpvmEh56ujGHc5XXRDR+0FyN5QtDhf
-   dkqBPehU6Y4GlOxl7YwqtFwshtKZ3uLQz+D8lyemycPuIkH0Hpa48cFoq
-   s5nmdGJKuoBioR8VfrD9zJsIXW6KCkZB5QYLdVisrqCuckeTuRcvw9gMl
-   G0uBWMeaLp2IOzJubKguTxq9pxpURCE9wmPflyacpv0+F1ysWQfNq+jed
-   gWtAV6y3aRw5N3ADPKJZ8EmZWsrSJyFRqWtV8ayfZTbHch3CrdbVkIano
-   PY0feX6KOzaP1jIZKGdC8SlXzro5PpEn5hHapimEGz+Bck58eSSqs8aYJ
-   w==;
-X-IronPort-AV: E=Sophos;i="5.97,270,1669100400"; 
-   d="scan'208";a="199233833"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 03 Feb 2023 08:11:00 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 3 Feb 2023 08:11:00 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.16 via Frontend
- Transport; Fri, 3 Feb 2023 08:10:59 -0700
-Date:   Fri, 3 Feb 2023 16:10:59 +0100
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <andrew@lunn.ch>, <linux@armlinux.org.uk>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <michael@walle.cc>
-Subject: Re: [PATCH net-next v2] net: micrel: Add support for lan8841 PHY
-Message-ID: <20230203151059.k5aa6zihibgsedcw@soft-dev3-1>
-References: <20230203122542.436305-1-horatiu.vultur@microchip.com>
- <0f81d14d-50cb-b807-b103-8fa066d0769c@gmail.com>
+        Fri, 3 Feb 2023 10:15:34 -0500
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12AE7A42A1
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 07:13:21 -0800 (PST)
+Received: by mail-qt1-x834.google.com with SMTP id z5so5724246qtn.8
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 07:13:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=SEpJ1jUZDdfyJlrWRH0MUqtupux6/xnXEoAuep6fT1o=;
+        b=b36P5TVkE3Cj7mZuiHbApRHd6kcCvPcBfrmQSSGSVfVs5HEMoPasHoWqrYreaVOwOX
+         ZVAFeeRHvBaa7OHwMP5xHSjlyGK8CoaDmd+KvIig8gLREeDEE6fNVDs39T1McQQgFdNb
+         Vn0J3OlUGzhpn/HFD5hWVOkUCoJsuYsKNQy77+tS5NUMzpC/tuSEi97vuea1Sjw7eXkX
+         1STe7Y546U350eEX1nXeGvN6bRx18vcfYoZcNLdGoG08b+erzSvnb1JVo9KVwp6zVRI1
+         UXsyJ04l0JZITVZ9OLOswFN4hbhHgBMlg+MlPP+CXmygSFNe6k3YdwnaG38kkF5jlMS5
+         2NLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SEpJ1jUZDdfyJlrWRH0MUqtupux6/xnXEoAuep6fT1o=;
+        b=HZgsTp8MiOQzdWvkDCWfTyINT+ubB0gvM+/a3poWDkpfGDDbWuAlyhIjXmUxKEz/4v
+         sHKS0scrJ+fSEoDaOs1ydbU4TBaD5EdU7jHoCpWD5NLCoUISTlO6uT3O+o4EJr0owV7J
+         BjDftAw5NVuoAQ2VwMHegIRmJn7+l6GSLsxEp4RBLVJRrm0bR7d5NR1iwjTnShwB4LBv
+         4fFMzx4AMNELhiUGeX0IMKAJMRQvheQuPkoUVwjpYkZHGTQxKMREF7TUyXesJM9naZLS
+         OZATz7JWdyORVhYo/+eiSB3TksZ5coh4dyjPY9lADcLyT/6QVbn0d7tKc4GojxAnUiT+
+         aj+w==
+X-Gm-Message-State: AO0yUKWiZiZm44QIKDSNtsTpF1DJChSV3m9jJ0tPJ/5qcMR08G7asf39
+        bAy6DiumwLigDHxpO3q3SuHiJA==
+X-Google-Smtp-Source: AK7set8kNeAz7t/GuiRI6DhuRD2fUDJlutbL3SVyVrLBMQ65pNOpE0jdTO5KHgFdNUUYMH4MXYkjFg==
+X-Received: by 2002:a05:622a:1909:b0:3b6:2b38:e075 with SMTP id w9-20020a05622a190900b003b62b38e075mr18218491qtc.9.1675437101114;
+        Fri, 03 Feb 2023 07:11:41 -0800 (PST)
+Received: from localhost (2603-7000-0c01-2716-8f57-5681-ccd3-4a2e.res6.spectrum.com. [2603:7000:c01:2716:8f57:5681:ccd3:4a2e])
+        by smtp.gmail.com with ESMTPSA id m11-20020ac8444b000000b003b2957fb45bsm1754141qtn.8.2023.02.03.07.11.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Feb 2023 07:11:40 -0800 (PST)
+Date:   Fri, 3 Feb 2023 10:11:39 -0500
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Dave Chinner <david@fromorbit.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        David Hildenbrand <david@redhat.com>,
+        Peter Xu <peterx@redhat.com>, NeilBrown <neilb@suse.de>,
+        Shakeel Butt <shakeelb@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [RFC PATCH v1 0/2] Ignore non-LRU-based reclaim in memcg reclaim
+Message-ID: <Y90kK5jnxBbE9tV4@cmpxchg.org>
+References: <20230202233229.3895713-1-yosryahmed@google.com>
+ <20230203000057.GS360264@dread.disaster.area>
+ <CAJD7tkazLFO8sc1Ly7+2_SGTxDq2XuPnvxxTnpQyXQELmq+m4A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0f81d14d-50cb-b807-b103-8fa066d0769c@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAJD7tkazLFO8sc1Ly7+2_SGTxDq2XuPnvxxTnpQyXQELmq+m4A@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 02/03/2023 14:55, Heiner Kallweit wrote:
-
-Hi Heiner,
-
+On Thu, Feb 02, 2023 at 04:17:18PM -0800, Yosry Ahmed wrote:
+> On Thu, Feb 2, 2023 at 4:01 PM Dave Chinner <david@fromorbit.com> wrote:
+> > > Patch 1 is just refactoring updating reclaim_state into a helper
+> > > function, and renames reclaimed_slab to just reclaimed, with a comment
+> > > describing its true purpose.
+> > >
+> > > Patch 2 ignores pages reclaimed outside of LRU reclaim in memcg reclaim.
+> > >
+> > > The original draft was a little bit different. It also kept track of
+> > > uncharged objcg pages, and reported them only in memcg reclaim and only
+> > > if the uncharged memcg is in the subtree of the memcg under reclaim.
+> > > This was an attempt to make reporting of memcg reclaim even more
+> > > accurate, but was dropped due to questionable complexity vs benefit
+> > > tradeoff. It can be revived if there is interest.
+> > >
+> > > Yosry Ahmed (2):
+> > >   mm: vmscan: refactor updating reclaimed pages in reclaim_state
+> > >   mm: vmscan: ignore non-LRU-based reclaim in memcg reclaim
+> > >
+> > >  fs/inode.c           |  3 +--
+> >
+> > Inodes and inode mapping pages are directly charged to the memcg
+> > that allocated them and the shrinker is correctly marked as
+> > SHRINKER_MEMCG_AWARE. Freeing the pages attached to the inode will
+> > account them correctly to the related memcg, regardless of which
+> > memcg is triggering the reclaim.  Hence I'm not sure that skipping
+> > the accounting of the reclaimed memory is even correct in this case;
 > 
-> On 03.02.2023 13:25, Horatiu Vultur wrote:
+> Please note that we are not skipping any accounting here. The pages
+> are still uncharged from the memcgs they are charged to (the allocator
+> memcgs as you pointed out). We just do not report them in the return
+> value of try_to_free_mem_cgroup_pages(), to avoid over-reporting.
 
-...
+I was wondering the same thing as Dave, reading through this. But
+you're right, we'll catch the accounting during uncharge. Can you
+please add a comment on the !cgroup_reclaim() explaining this?
 
-> > +
-> > +#define LAN8841_OUTPUT_CTRL                  25
-> > +#define LAN8841_OUTPUT_CTRL_INT_BUFFER               BIT(14)
-> > +#define LAN8841_CTRL                         31
-> > +#define LAN8841_CTRL_INTR_POLARITY           BIT(14)
-> > +static int lan8841_config_intr(struct phy_device *phydev)
-> > +{
-> > +     struct irq_data *irq_data;
-> > +     int temp = 0;
-> > +
-> > +     irq_data = irq_get_irq_data(phydev->irq);
-> > +     if (!irq_data)
-> > +             return 0;
-> > +
-> > +     if (irqd_get_trigger_type(irq_data) & IRQ_TYPE_LEVEL_HIGH) {
-> > +             /* Change polarity of the interrupt */
+There is one wrinkle with this, though. We have the following
+(simplified) sequence during charging:
+
+	nr_reclaimed = try_to_free_mem_cgroup_pages(mem_over_limit, nr_pages,
+						    gfp_mask, reclaim_options);
+
+	if (mem_cgroup_margin(mem_over_limit) >= nr_pages)
+		goto retry;
+
+	/*
+	 * Even though the limit is exceeded at this point, reclaim
+	 * may have been able to free some pages.  Retry the charge
+	 * before killing the task.
+	 *
+	 * Only for regular pages, though: huge pages are rather
+	 * unlikely to succeed so close to the limit, and we fall back
+	 * to regular pages anyway in case of failure.
+	 */
+	if (nr_reclaimed && nr_pages <= (1 << PAGE_ALLOC_COSTLY_ORDER))
+		goto retry;
+
+So in the unlikely scenario where the first call doesn't make the
+necessary headroom, and the shrinkers are the only thing that made
+forward progress, we would OOM prematurely.
+
+Not that an OOM would seem that far away in that scenario, anyway. But I
+remember long discussions with DavidR on probabilistic OOM regressions ;)
+
+> > I think the code should still be accounting for all pages that
+> > belong to the memcg being scanned that are reclaimed, not ignoring
+> > them altogether...
 > 
-> Why this a little bit esoteric logic? Can't you set the interrupt
-> to level-low in the chip (like most other ones), and then define
-> the polarity the usual way e.g. in DT?
+> 100% agree. Ideally I would want to:
+> - For pruned inodes: report all freed pages for global reclaim, and
+> only report pages charged to the memcg under reclaim for memcg
+> reclaim.
 
-To set the interrupt to level-low it needs to be set to open-drain and
-in that case I can't use the polarity register, because doesn't have any
-effect on the interrupt. So I can't set the interrupt to level low and
-then use the polarity to select if it is high or low.
-That is the reason why I have these checks.
+This only happens on highmem systems at this point, as elsewhere
+populated inodes aren't on the shrinker LRUs anymore. We'd probably be
+ok with a comment noting the inaccuracy in the proactive reclaim stats
+for the time being, until somebody actually cares about that combination.
 
+> - For slab: report all freed pages for global reclaim, and only report
+> uncharged objcg pages from the memcg under reclaim for memcg reclaim.
 > 
-> > +             phy_modify(phydev, LAN8841_OUTPUT_CTRL,
-> > +                        LAN8841_OUTPUT_CTRL_INT_BUFFER,
-> > +                        LAN8841_OUTPUT_CTRL_INT_BUFFER);
-> > +             phy_modify(phydev, LAN8841_CTRL,
-> > +                        LAN8841_CTRL_INTR_POLARITY,
-> > +                        LAN8841_CTRL_INTR_POLARITY);
-> > +     } else {
-> > +             /* It is enough to set INT buffer to open-drain because then
-> > +              * the interrupt will be active low.
-> > +              */
-> > +             phy_modify(phydev, LAN8841_OUTPUT_CTRL,
-> > +                        LAN8841_OUTPUT_CTRL_INT_BUFFER, 0);
-> > +     }
-> > +
-> > +     /* enable / disable interrupts */
-> > +     if (phydev->interrupts == PHY_INTERRUPT_ENABLED)
-> > +             temp = LAN8814_INT_LINK;
-> > +
-> > +     return phy_write(phydev, LAN8814_INTC, temp);
-> > +}
-> > +
-> > +static irqreturn_t lan8841_handle_interrupt(struct phy_device *phydev)
-> > +{
-> > +     int irq_status;
-> > +
-> > +     irq_status = phy_read(phydev, LAN8814_INTS);
-> > +     if (irq_status < 0) {
-> > +             phy_error(phydev);
-> > +             return IRQ_NONE;
-> > +     }
-> > +
-> > +     if (irq_status & LAN8814_INT_LINK) {
-> > +             phy_trigger_machine(phydev);
-> > +             return IRQ_HANDLED;
-> > +     }
-> > +
-> > +     return IRQ_NONE;
-> > +}
-> > +
+> The only problem is that I thought people would think this is too much
+> complexity and not worth it. If people agree this should be the
+> approach to follow, I can prepare patches for this. I originally
+> implemented this for slab pages, but held off on sending it.
 
--- 
-/Horatiu
+I'd be curious to see the code!
