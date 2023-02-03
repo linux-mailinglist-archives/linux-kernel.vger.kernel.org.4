@@ -2,105 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1CD668A226
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 19:42:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29FDB68A227
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 19:43:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233647AbjBCSmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 13:42:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35328 "EHLO
+        id S232806AbjBCSnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 13:43:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233260AbjBCSmO (ORCPT
+        with ESMTP id S229785AbjBCSnY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 13:42:14 -0500
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80817A58E2;
-        Fri,  3 Feb 2023 10:41:59 -0800 (PST)
-Received: by mail-qt1-x830.google.com with SMTP id h24so6589287qtr.0;
-        Fri, 03 Feb 2023 10:41:59 -0800 (PST)
+        Fri, 3 Feb 2023 13:43:24 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A501F482
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 10:43:22 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id qw12so17891526ejc.2
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 10:43:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Cug0hlfDT36Dqw7jW/V5xSD4WJgWtg61okF6HbuI67I=;
-        b=QVlAEAfi41Sh2E24X+wje0kCV9S5nVzwiYF1UyN0oKYqyI6kYUqZNp7PCls/pjdSpz
-         IRbBLpHRcYcsk9yfCVwxUPBv1wgLjtQC/vivo7i2gwVFfx30NGR+QsyLdjft7yN7jDKi
-         1iaOyC5ncB/B628hz5iW5J0EZiAHtaKxtC32NOEFoUduGVk5byBUDsXIguB9cnXoXIQr
-         2QJKVgxu8Svx4yLSyHLos5Q+10klGsUhQsmOK+CBBvhg5ohhVPL9OwU7gUwg4CENI5Nm
-         5Cny0E1BoXgl5BVxESR3az6Zdh2H4Zl/qXWOh8bOz5UJHqX+pYQJ/F7xWEkURKUT7lWa
-         8d6Q==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=WYHLXhuxGYBGKT2EIEEZuysVzO3RUeMxA6JroMGLpQ0=;
+        b=no2l+QBUZFFs88G/oFYENQ49X9coNvMXEA87fMc2yboJGjWAVDgzu/Ut9nqW/TxTEs
+         1DMWhU/HOMrtdXFkp5xe6P7lY7KeDQ13zWE4bOuRwrMSAdDjbK4jqD8gq4Ajk2KkVAlO
+         RjQWpFaK4WMpkZgFx8sYSb/wAu3CXB1Ts4czroSfgccPlOKUYnqil/niCDvzOjkt9gcx
+         LWRxnqYji+qS50k41d/l9JLupQYMUIbE43OtWu4NSEuBOgNkNMLAMZQj7avbsT9RHLsR
+         zKoPLKrSnSFKh+gIBhxm1y9jfh1Ux6l0V50abYKboIMmQEUZPLVcC281U5ApRQYl5zid
+         7ybw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Cug0hlfDT36Dqw7jW/V5xSD4WJgWtg61okF6HbuI67I=;
-        b=f9X4IyNKQfX0wS1QVoyghIH2hd8MxKdVu+OBG9j4ggmiWGA1GMQBSOGnKyC3h9boII
-         JGnT0qfHlFPsOprKaJ1iqerK0jGp34jubZhwfbTSFMIlimaEwHZTCos0EB0dQF7bGczC
-         kBrpQo8p65m7nIfHE6WBWp4xflFcJGCNQ5HEiz4fq2RW5rJ6KiI5u6cfSKb+SonG64Pv
-         9UMpv8e/P1+jpPcM2ON8EIG6TDubrfocMdaW+xXQycZRyuIwi1kj9qmTbl0efMqw/hEL
-         GNZLnU7RaiEeQfeu5YtKJV2mcU8x7G3WFzjAKwZ032PZM548n/NQpJK9iiTsljnIp8CS
-         x1aQ==
-X-Gm-Message-State: AO0yUKWBk3Jgh6dhDIRpc/Jf+6k7Xm/L7eVXoNmtrDRPTmhb/qVfQZ9N
-        TYqZcSx8yDUtYVzVVZGfpnslt1RN9qhHnw==
-X-Google-Smtp-Source: AK7set+yKBp9Lzl4KayhlSB33ocRyQjHvACLYd6X6UX7mV/n2SUrn2vJNFEpDouXWZPthOGFenA/cA==
-X-Received: by 2002:ac8:5c48:0:b0:3b9:a965:7af2 with SMTP id j8-20020ac85c48000000b003b9a9657af2mr21237410qtj.45.1675449718550;
-        Fri, 03 Feb 2023 10:41:58 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id bk19-20020a05620a1a1300b006f9f3c0c63csm2352729qkb.32.2023.02.03.10.41.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Feb 2023 10:41:57 -0800 (PST)
-Message-ID: <ca5b519c-c349-297c-1780-53275e0c8579@gmail.com>
-Date:   Fri, 3 Feb 2023 10:41:53 -0800
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WYHLXhuxGYBGKT2EIEEZuysVzO3RUeMxA6JroMGLpQ0=;
+        b=PlQALX3w5h4eXTMajXxqYtiMZY18CBZ57QBgacZ0Up9s6LcvwYtadrv5zROxjNy7yB
+         3hIkq77duTf8FbYveyel9TbZDW2bMyXaMlwogi+xm7JIU6+sSx4UU+D3bG2HOYeoTxtW
+         8o1vGty9tdqaQfhjtw1AZZQMjRXI/R2fH+WyNapa1gOvJ5bdVBLWunCJstoUkHGFoaRd
+         jx32Q7MO/9YLY6tNzIPvHqrC8O7xSUKxI8FW0qwRlUQEYeU4iFLMNzJxBk0jHnrn2NvE
+         BI55vS6HKFmuH51GI0hECOHRMqiL8KVnVMaQkHY0F+7/yp7jYjh0pq7qfa+ulgiDteIT
+         5DGg==
+X-Gm-Message-State: AO0yUKWSSEsOHSmZYdzK7ttn7pWPBZIOtG3PVsheADWCpn0Y3sUG2rU5
+        VB3rOsTzSepwnvQSVDZ3rtWDXcI72BSDqln2JRoLRg==
+X-Google-Smtp-Source: AK7set/Js5fkpiAlA1jZ2GqAUGZ8/7XK+oZjw7kzCdSdI+EadWnNZFqAzFQtPvaQ5ThAQF5F1GYRC65B1AvQS+aNCYI=
+X-Received: by 2002:a17:906:e09:b0:871:7a08:9d6e with SMTP id
+ l9-20020a1709060e0900b008717a089d6emr3805890eji.234.1675449801327; Fri, 03
+ Feb 2023 10:43:21 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 5.4 000/134] 5.4.231-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230203101023.832083974@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230203101023.832083974@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230130094157.1082712-1-etienne.carriere@linaro.org>
+ <20230130094157.1082712-2-etienne.carriere@linaro.org> <Y90b6kxAtbookjty@pluto>
+ <20230203170448.v5iduw2rhpxc47f3@bogus>
+In-Reply-To: <20230203170448.v5iduw2rhpxc47f3@bogus>
+From:   Etienne Carriere <etienne.carriere@linaro.org>
+Date:   Fri, 3 Feb 2023 19:43:10 +0100
+Message-ID: <CAN5uoS9=Hu+q+9Poei3OAiF2hOD3JtN5Ny4ejUrW2j18TZKSug@mail.gmail.com>
+Subject: Re: [PATCH 2/2] firmware: arm_scmi: optee: use optee system invocation
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Cristian Marussi <cristian.marussi@arm.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Sumit Garg <sumit.garg@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/3/23 02:11, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.231 release.
-> There are 134 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sun, 05 Feb 2023 10:09:58 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.231-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+Hello Sudeep,
 
-On ARCH_BRCMSTB using 32-bit and 64-bit, build tested on BMIPS_GENERIC:
+On Fri, 3 Feb 2023 at 18:04, Sudeep Holla <sudeep.holla@arm.com> wrote:
+>
+> On Fri, Feb 03, 2023 at 02:36:26PM +0000, Cristian Marussi wrote:
+> > On Mon, Jan 30, 2023 at 10:41:57AM +0100, Etienne Carriere wrote:
+> > > Changes SCMI optee transport to enable sys_service capability of
+> > > its tee context to leverage provisioned system resources in OP-TEE
+> > > preventing possible deadlock.
+> > >
+> > > Such deadlock could happen when many Linux clients invoke OP-TEE are
+> > > are all suspended waiting for an OP-TEE RPC request access an SCMI
+> > > resource through the SCMI OP-TEE PTA service.
+> > >
+> > > Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+> > > ---
+> > >  drivers/firmware/arm_scmi/optee.c | 3 +++
+> > >  1 file changed, 3 insertions(+)
+> > >
+> > > diff --git a/drivers/firmware/arm_scmi/optee.c b/drivers/firmware/arm_scmi/optee.c
+> > > index 2a7aeab40e54..91840345e946 100644
+> > > --- a/drivers/firmware/arm_scmi/optee.c
+> > > +++ b/drivers/firmware/arm_scmi/optee.c
+> > > @@ -559,6 +559,9 @@ static int scmi_optee_service_probe(struct device *dev)
+> > >     if (IS_ERR(tee_ctx))
+> > >             return -ENODEV;
+> > >
+> > > +   /* SCMI agent can used TEE system service resources */
+> > > +   tee_ctx->sys_service = true;
+> > > +
+> > >     agent = devm_kzalloc(dev, sizeof(*agent), GFP_KERNEL);
+> > >     if (!agent) {
+> > >             ret = -ENOMEM;
+> >
+> > LGTM.
+> >
+> > I suppose you'll sync-up with Sudeep for how to queue this whole series.
+> >
+>
+> I thought I had responded to this but not. Anyways since TEE changes are
+> significant than SCMI, you can route it via TEE tree. In that case,
+>
+> Acked-by: Sudeep Holla <sudeep.holla@arm.com>
+>
+> Let me know if that was not your plan.
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+That's fine. Thanks. I'll ask Jens to apply it next to the optee commit.
 
+Regards,
+Etienne
+
+>
+> --
+> Regards,
+> Sudeep
