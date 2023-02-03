@@ -2,105 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AB4868A302
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 20:30:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E254C68A307
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 20:31:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232842AbjBCTaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 14:30:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35704 "EHLO
+        id S229853AbjBCTbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 14:31:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233411AbjBCTaS (ORCPT
+        with ESMTP id S233255AbjBCTbA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 14:30:18 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B943AE874
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 11:29:50 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id 78so4320141pgb.8
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 11:29:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tiYi+e4XxzwKkfP+625dtrtkvulooPOi47ioYJQguSQ=;
-        b=i/JRIVMT3L4jruziwlgZDQtp06KELiW8cZNmsbjMUruOqn71+VzaGfSxBA4StTmITx
-         Fb2BfoT87oR0lDxcUCk6r6rI7Ia84077mx93cIJLjsEBk3zCGt9DLyBkVMqqc0l/Tt/8
-         UDxlVDay9bIBM70gfYGw27+H8XD9qhMtucw/VeOZmyIh5BYpkTc3vszfv6fJVEQVn5ZW
-         paVxacSdLjc9na8kNe/tDR9vi4GmXsgYiFKr/KdD55ohgSAq8x9X0kWFlSWxlo9pkbP+
-         Xgz8BxKZsG9TGFGiA7h5qIFC2k2+mznpftuGCGI3qbIL0IBUYZ8fzmZJcdLtYXWUXBD3
-         nR4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tiYi+e4XxzwKkfP+625dtrtkvulooPOi47ioYJQguSQ=;
-        b=15IKUhnQSMFbBFxgSqNrVcSDoJqCdc+hreC1IiF0fsbm6DiUhdwFi9p704YeTvDihH
-         Qma67C7joWh8R/AEoucitKwMj3pAycUoTnuqEfv/9OrPNfw1gJO8Kl9hYXDHJJ2mB0W9
-         nQBC62EaNwRYtJlDmI+Fr2rMab0jDZKywhlCKHQcaYKcSYDvR0vyeLsVthZLYBTRRFjb
-         6EX1P8I/DmWV/bF0yAbWeU6cRKzMGUr72opEGAwXc0bLqCZB2A7Mb37PJ4r0YtsKDHVe
-         y07uqp0la06crglSGMiqtcFzXaHvunswytn9bC3nImp2R+jVeiH3L7xSts5U0c8hhO13
-         r9kg==
-X-Gm-Message-State: AO0yUKW5I9kPcitWROwR9rhceK7H1iu6EjOrL/ucClQ+mFtwt7ZuaqU0
-        xCIBJv28BTknWw/NLdo+MCQ=
-X-Google-Smtp-Source: AK7set8wqbBXGXmYNvElKqE7GNexJlRkkEW4WX+K/l+hIY1ZVU3gL+ESTrqEoLlJrTzAwRAvcg22Bw==
-X-Received: by 2002:a05:6a00:15cb:b0:590:7735:5384 with SMTP id o11-20020a056a0015cb00b0059077355384mr13128751pfu.23.1675452588804;
-        Fri, 03 Feb 2023 11:29:48 -0800 (PST)
-Received: from localhost ([2620:10d:c090:400::5:35e])
-        by smtp.gmail.com with ESMTPSA id g4-20020a056a00078400b00593e84f2d08sm2199400pfu.52.2023.02.03.11.29.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 11:29:48 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Fri, 3 Feb 2023 09:29:46 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
-        Michal Koutny <mkoutny@suse.com>, linux-kernel@vger.kernel.org
-Subject: Re: [RFC 2/5] workqueue: Warn when a new worker could not be created
-Message-ID: <Y91gqnkZM67x76WC@slm.duckdns.org>
-References: <20230201134543.13687-1-pmladek@suse.com>
- <20230201134543.13687-3-pmladek@suse.com>
- <Y9xHnwG39IHN/BBu@slm.duckdns.org>
- <Y90V1E9KP785ALMs@alley>
+        Fri, 3 Feb 2023 14:31:00 -0500
+Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45FD31C7D4
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 11:30:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1675452635; bh=bkktwzcTrVERotqO7zXpzdBHdLDyij1klnN7HWoIRu0=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
+         Content-Type;
+        b=ClxlJqIOzwlIRAUnCY67NIR/vPpRQkPIyBlu3fSnwYsSORbcB8Ex1Mtdx8fUybM73
+         fyCk31gT44NQCkcOukeY3W0yMnJ407D+w+14BMTfJYmxs/XEZCZpeQLyydOpY5oive
+         B4f+m4nbnskTPERLknxJHAC3mLgbK58g6Cxe8V7I=
+Received: by b-4.in.mailobj.net [192.168.90.14] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Fri,  3 Feb 2023 20:30:35 +0100 (CET)
+X-EA-Auth: LCVZG3qeAH/AKO5KQB9nnONmJiWgMjCPXypOWNIGmFbWyTfyMJMpBn+0scKaJ0et5iR3gOQyGEt2Mud03HTaMyL0S0UPAtI1
+Date:   Sat, 4 Feb 2023 01:00:27 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
+        Deepak R Varma <drv@mailo.com>
+Subject: [PATCH] drm/i915/gt: Avoid redundant pointer validity check
+Message-ID: <Y91g081OauhQNxMe@ubun2204.myguest.virtualbox.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y90V1E9KP785ALMs@alley>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 03:10:28PM +0100, Petr Mladek wrote:
-> A solution would be to use a custom printk_ratelimited_wq() that would
-> allow printing one message per 2 * wq_watchdog_thresh.
-> Something like:
-> 
-> #define printk_ratelimited_wq(fmt, ...)					\
-> ({									\
-> 	static DEFINE_RATELIMIT_STATE(_rs, 60 * HZ, 1);			\
-> 									\
-> 	if (__ratelimit(&_rs))						\
-> 		printk(fmt, ##__VA_ARGS__);				\
-> })
-> 
-> I admit that it is much easier than __print_create_worker_failure().
-> 
-> The only problem might be that wq_watchdog_thresh might be modified
-> at runtime. But it can be solved by sharing the same
-> struct ratelimit_state rs in all printk_ratelimited_wq() calls
-> and updating it together with wq_watchdog_thresh.
-> 
-> Would you prefer the custom printk_ratelimited_wq(), please?
+The macro definition of gen6_for_all_pdes() expands to a for loop such
+that it breaks when the page table is null. Hence there is no need to
+again test validity of the page table entry pointers in the pde list.
+This change is identified using itnull.cocci semantic patch.
 
-Yeah, I think so.
+Signed-off-by: Deepak R Varma <drv@mailo.com>
+---
+Please note: Proposed change is compile tested only.
 
-Thanks.
+ drivers/gpu/drm/i915/gt/gen6_ppgtt.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
+diff --git a/drivers/gpu/drm/i915/gt/gen6_ppgtt.c b/drivers/gpu/drm/i915/gt/gen6_ppgtt.c
+index 5aaacc53fa4c..787b9e6d9f59 100644
+--- a/drivers/gpu/drm/i915/gt/gen6_ppgtt.c
++++ b/drivers/gpu/drm/i915/gt/gen6_ppgtt.c
+@@ -258,8 +258,7 @@ static void gen6_ppgtt_free_pd(struct gen6_ppgtt *ppgtt)
+ 	u32 pde;
+ 
+ 	gen6_for_all_pdes(pt, pd, pde)
+-		if (pt)
+-			free_pt(&ppgtt->base.vm, pt);
++		free_pt(&ppgtt->base.vm, pt);
+ }
+ 
+ static void gen6_ppgtt_cleanup(struct i915_address_space *vm)
+@@ -304,7 +303,7 @@ static void pd_vma_unbind(struct i915_address_space *vm,
+ 
+ 	/* Free all no longer used page tables */
+ 	gen6_for_all_pdes(pt, ppgtt->base.pd, pde) {
+-		if (!pt || atomic_read(&pt->used))
++		if (atomic_read(&pt->used))
+ 			continue;
+ 
+ 		free_pt(&ppgtt->base.vm, pt);
 -- 
-tejun
+2.34.1
+
+
+
