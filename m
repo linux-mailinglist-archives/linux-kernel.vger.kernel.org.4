@@ -2,88 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 428FB689416
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 10:41:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47582689419
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 10:41:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233044AbjBCJkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 04:40:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60432 "EHLO
+        id S232931AbjBCJla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 04:41:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232867AbjBCJkm (ORCPT
+        with ESMTP id S233106AbjBCJlI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 04:40:42 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7404125BB5;
-        Fri,  3 Feb 2023 01:40:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Fri, 3 Feb 2023 04:41:08 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB712BED3
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 01:40:52 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id CB6782101F;
+        Fri,  3 Feb 2023 09:40:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1675417250; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=emxkErsltdCzCNUd9KJ+7BQ1tmdnuyElCYTzzwlW30M=;
+        b=MZop+qBCoWPn9+83Z2htCExJ9Sc3dS5iaeYDocrP7oH42C7ZlmcbVheZusDnReCnTJz0Ot
+        PxgzCji53XLCVZ795GzTv8CCul5rkVkDRT8LdZtYVjxCkBEFhq1ZplUi1WjJNyKYfxJV3T
+        ZnHe2JC28kD6pkZj7EekGjVG8tr05CQ=
+Received: from suse.cz (unknown [10.100.208.146])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EF33761E53;
-        Fri,  3 Feb 2023 09:40:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 21BBDC433EF;
-        Fri,  3 Feb 2023 09:40:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675417221;
-        bh=neCkk228oMwxeg8nbr7zQ6d1aWhdjIHRs5WNALS+Nlo=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=UiQcxCPL7Pm5LiQyVCSKL0VdA+T83c6w5yVMEEdd+nN3ziq1Cr326u1qsYB1Vczkv
-         /6L2dSI5cb6qaA5IkmlGG4GOS9Ms46m4jQYHuj+WhZPPa88DfljyHbEHdPtgmfLAd1
-         rjKaZ3m3/GEtDSRYEywK3QriU8oEhNunF3M5iSLR56xP46UZROy33d3LhO9UEgls3X
-         xw4nN3LWuetF1/qCkYmyZcmICLgMXvn8hBgbStgh+bVattuOKkIVprqgqJX0r2sios
-         aOFDat+5jFr2boXuQtn8SRcch9IGl1a7wpHX4bx06cgeBWTSDiJySK5bOBubFYdkuH
-         7JTspykPdrlYw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 01DECE270CB;
-        Fri,  3 Feb 2023 09:40:21 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by relay2.suse.de (Postfix) with ESMTPS id 5AFCE2C141;
+        Fri,  3 Feb 2023 09:40:50 +0000 (UTC)
+Date:   Fri, 3 Feb 2023 10:40:49 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, Chris Down <chris@chrisdown.name>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        John Ogness <john.ogness@linutronix.de>
+Subject: Re: [PATCH] kernel/printk/index.c: fix memory leak with using
+ debugfs_lookup()
+Message-ID: <Y9zWoUQtj4pNHA2L@alley>
+References: <20230202151411.2308576-1-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] net: lan966x: Add VCAP debugFS support
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167541722100.18212.15632360857861253388.git-patchwork-notify@kernel.org>
-Date:   Fri, 03 Feb 2023 09:40:21 +0000
-References: <20230202145337.234086-1-horatiu.vultur@microchip.com>
-In-Reply-To: <20230202145337.234086-1-horatiu.vultur@microchip.com>
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, UNGLinuxDriver@microchip.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230202151411.2308576-1-gregkh@linuxfoundation.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Thu, 2 Feb 2023 15:53:37 +0100 you wrote:
-> Enable debugfs for vcap for lan966x. This will allow to print all the
-> entries in the VCAP and also the port information regarding which keys
-> are configured.
+On Thu 2023-02-02 16:14:11, Greg Kroah-Hartman wrote:
+> When calling debugfs_lookup() the result must have dput() called on it,
+> otherwise the memory will leak over time.  To make things simpler, just
+> call debugfs_lookup_and_remove() instead which handles all of the logic
+> at once.
 > 
-> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-> ---
->  .../net/ethernet/microchip/lan966x/Makefile   |  2 +
->  .../ethernet/microchip/lan966x/lan966x_main.c |  4 +
->  .../ethernet/microchip/lan966x/lan966x_main.h | 26 +++++
->  .../microchip/lan966x/lan966x_vcap_debugfs.c  | 94 +++++++++++++++++++
->  .../microchip/lan966x/lan966x_vcap_impl.c     | 26 ++---
->  5 files changed, 136 insertions(+), 16 deletions(-)
->  create mode 100644 drivers/net/ethernet/microchip/lan966x/lan966x_vcap_debugfs.c
+> Cc: Chris Down <chris@chrisdown.name>
+> Cc: Petr Mladek <pmladek@suse.com>
+> Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: John Ogness <john.ogness@linutronix.de>
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-Here is the summary with links:
-  - [net-next] net: lan966x: Add VCAP debugFS support
-    https://git.kernel.org/netdev/net-next/c/942814840127
+Reviewed-by: Petr Mladek <pmladek@suse.com>
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Best Regards,
+Petr
 
