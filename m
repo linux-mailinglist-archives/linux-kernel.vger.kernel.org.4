@@ -2,124 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 868516893C6
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 10:31:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34F156893C2
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 10:31:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232733AbjBCJbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 04:31:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48810 "EHLO
+        id S232481AbjBCJbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 04:31:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232254AbjBCJbK (ORCPT
+        with ESMTP id S230456AbjBCJbH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 04:31:10 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D1D520D26
+        Fri, 3 Feb 2023 04:31:07 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D5911F92C
         for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 01:31:01 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-517f8be4b00so45795017b3.3
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 01:31:01 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id r27so253191wrr.1
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 01:31:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=sRTbWykUitHgvhIuijlROFHq2rLMmEeBT0jym/fZRho=;
-        b=ZxWqHCLVjngGEk4ipClqZnRBMhXs5pSp6EiXtCoAYhRe2gcqC2BVj53CiBoI039z8x
-         eU7DUl5OyCx6/wcW7k0VZA8iV3j3OcEBzrHOhIZQyXiRuqib7fGkhKrCjUzCHFoMOs16
-         +yWvyt+MXChCX+qNjXpNBuJy6m0hOQmvvEVb0zBnDwD2OlV3lTM7aI8lCJS/KeURGuSr
-         M3z0oA81BT5p2MGj4XGc2hnjal4j0I4xLfdDM6ybou9L2AOCN7pUZMnKlLIYDnkCN1To
-         BtHJojOUK7tZw9t2g3IgkHUZUgvdWQ/pAPsTcm6q1BwooCkviCjPqE/Ge89CRtch43zU
-         TWWA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RsIvhlNhsuqxFf9ZP6UUldQV5rhEIuniVcY9EEdflHQ=;
+        b=dS9U7K4hx5+UHNLv0nbXOEx175H0lar03m9RgJtrk67LYO8KhBbp6DLmDIht4HFRou
+         i+HddtcrDo1LT2wjnJ8Az4t1RBPKk3f18ghM+k1jPJ5BHJ4Wlz56SufdXNRd/mSbDX3I
+         WQrwRs67You+4kPoYchd4zUH59vbnYAjqBqoir45C+7D3cPpbNy+eEyH4s3URfxc5soX
+         p3NlVS7Bnj40hO02bZzwvlc6DFF3vyywR/blHFdfKQxOdO4UrrUunYD8ozM2PB7mmyaZ
+         tRQNH8hLYWc0M9r0VNcwmxF3q5D6CmmQRSALwuWVnidB1wEuvtQGQcvgBK38a67OR2C/
+         pACA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sRTbWykUitHgvhIuijlROFHq2rLMmEeBT0jym/fZRho=;
-        b=IOsfdx9yuswnx5qz7V6hDMAfJK8vUMdEP//ZVPIcpQ4xnKPU8JffoB+STV/MzSsSMt
-         zI3rVj74y+0JLBXwoDIK14eaQ4wFzrwE96rYHh2e3ouh9oSCunB8iG/EZ13cQ5RqY+x2
-         qQ8NiBCaoxsQrcrVXXjY4L2DvM5SJw25AwhXXYbEhQjMrZkrt68ckgWioNz/JIcVcWRG
-         mWsAR9/TJlEDq1MbUX8yDHTP38xMxZBjght8WGu2+HuFctvenToaRrmyo0lbLVEQfQpN
-         wvFQxeSgZhiS1R3Tuq/SKCnZd8ge9T/WmgFC5mAl2q2CynKd+/KZ16/zEveLqTWXqOEw
-         ZKDQ==
-X-Gm-Message-State: AO0yUKX3eBpwt7BJWOlJzkyWg04Y8BHCXoEOzTUJQ215rLVIyhha0dhg
-        9b6hC56ml42RJdiicxJnODDITj5+KprG
-X-Google-Smtp-Source: AK7set93uK0vjiKvgKPCxErhx5wSC107Pw7JjXaebDJDuLrkzVIe9hoW7AcJu1HsNKq+FLpnrjagECO5pnxG
-X-Received: from apusaka-p920.tpe.corp.google.com ([2401:fa00:1:17:dc12:2976:77a:8cb7])
- (user=apusaka job=sendgmr) by 2002:a25:d215:0:b0:863:a092:156d with SMTP id
- j21-20020a25d215000000b00863a092156dmr249062ybg.23.1675416660756; Fri, 03 Feb
- 2023 01:31:00 -0800 (PST)
-Date:   Fri,  3 Feb 2023 17:30:55 +0800
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
-Message-ID: <20230203173024.1.Ieb6662276f3bd3d79e9134ab04523d584c300c45@changeid>
-Subject: [PATCH] Bluetooth: Free potentially unfreed SCO connection
-From:   Archie Pusaka <apusaka@google.com>
-To:     linux-bluetooth <linux-bluetooth@vger.kernel.org>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Marcel Holtmann <marcel@holtmann.org>
-Cc:     CrosBT Upstreaming <chromeos-bluetooth-upstreaming@chromium.org>,
-        Archie Pusaka <apusaka@chromium.org>,
-        Ying Hsu <yinghsu@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RsIvhlNhsuqxFf9ZP6UUldQV5rhEIuniVcY9EEdflHQ=;
+        b=jDjDwEuPtGsfXvqFNAgGQzMN2XygQ1XCoJaBnXsx5fLWdJJc9JTZWmFrjImCWE6TcG
+         Pea8AYY8OlAL6PmVdQRUuVpoVyByAFw4Mp4MNL7aYb+aapZD4J1R8YaRDIdLFG9rCxVL
+         VZtG4g9mZzQRvLHqsQon7gLNf3yjlX+36fnHOH/oIj9k+Fzm1v1io86exVXQELOzv1hw
+         tibAJFVDOEj9kEV/e7Fghv+UuHXAjJywTbRfmiT2nf/WXA6vrEAO9etFz0BqW0n1N0z4
+         A4jaNjjj0FPRCpww7N3NUZ+msHq9dOhqWjQxcsRmSVWtayR1eonT7sDHaGGg2gwXf8ne
+         LWgg==
+X-Gm-Message-State: AO0yUKUx5q5rJq/lbY8YVi7R18oUrYwdxi3EzJMDRjXXBkhyhiRhcdfD
+        xJ2GaS0L10RLTRMogGPFwoF+sg==
+X-Google-Smtp-Source: AK7set9mhThVU4ZMUNjEG8Lt9BDIM9Z02zk0GC4q6tDH4m3bgoRblmm6ZN9SDVH1XSK5Yz/djY/Wfw==
+X-Received: by 2002:adf:f705:0:b0:2bf:bb0a:e486 with SMTP id r5-20020adff705000000b002bfbb0ae486mr8457821wrp.30.1675416659339;
+        Fri, 03 Feb 2023 01:30:59 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id n3-20020a5d6b83000000b002366553eca7sm1508672wrx.83.2023.02.03.01.30.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Feb 2023 01:30:58 -0800 (PST)
+Message-ID: <ab9a4a7f-a8fa-fa29-95e9-941096359de1@linaro.org>
+Date:   Fri, 3 Feb 2023 10:30:55 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v3 3/3] riscv: dts: starfive: Add mmc node
+Content-Language: en-US
+To:     William Qiu <william.qiu@starfivetech.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-mmc@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jaehoon Chung <jh80.chung@samsung.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-kernel@vger.kernel.org
+References: <20230203081913.81968-1-william.qiu@starfivetech.com>
+ <20230203081913.81968-4-william.qiu@starfivetech.com>
+ <3c5bda9f-08b9-f2ba-6951-9fc614d4debc@linaro.org>
+ <afe28108-9b85-982c-90ee-8cd58c9b6fb2@starfivetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <afe28108-9b85-982c-90ee-8cd58c9b6fb2@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Archie Pusaka <apusaka@chromium.org>
+On 03/02/2023 10:23, William Qiu wrote:
+> 
+> 
+> On 2023/2/3 17:02, Krzysztof Kozlowski wrote:
+>> On 03/02/2023 09:19, William Qiu wrote:
+>>> This adds the mmc node for the StarFive JH7110 SoC.
+>>
+>> Do not use "This xxx". Use imperative mode.
+>> https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
+>>
+>>> Set mmco node to emmc and set mmc1 node to sd.
+>>>
+>>> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
+>>
+>>
+>>> +
+>>>  &gmac0_rmii_refin {
+>>>  	clock-frequency = <50000000>;
+>>>  };
+>>> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>>> index 64d260ea1f29..ae1a664e7af5 100644
+>>> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>>> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>>> @@ -370,6 +370,11 @@ syscrg: clock-controller@13020000 {
+>>>  			#reset-cells = <1>;
+>>>  		};
+>>>  
+>>> +		sysreg: syscon@13030000 {
+>>> +			compatible = "starfive,sysreg", "syscon";
+>>
+>> No:
+>> 1. Undocumented.
+>> 2. A bit too generic. You should have here SoC specific compatible as
+>> well (either as second or third compatible, if all your SoCs share
+>> register layout).
+>>
+> 
+> Hi Krzysztof,
+> 
+> As for the compatible, I will change it to "starfive,jh7110-sysreg"
+> in next version,but for undocumented, I don't get it, can you
+> clarify that.
+> Thank you anyway.
 
-It is possible to initiate a SCO connection while deleting the
-corresponding ACL connection, e.g. in below scenario:
+You need bindings for it. I don't see it in linux-next, cover letter
+dependencies nor here.
 
-(1) < hci setup sync connect command
-(2) > hci disconn complete event (for the acl connection)
-(3) > hci command complete event (for(1), failure)
-
-When it happens, hci_cs_setup_sync_conn won't be able to obtain the
-reference to the SCO connection, so it will be stuck and potentially
-hinder subsequent connections to the same device.
-
-This patch prevents that by also deleting the SCO connection if it is
-still not established when the corresponding ACL connection is deleted.
-
-Signed-off-by: Archie Pusaka <apusaka@chromium.org>
-Reviewed-by: Ying Hsu <yinghsu@chromium.org>
-
----
-
- net/bluetooth/hci_conn.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
-
-diff --git a/net/bluetooth/hci_conn.c b/net/bluetooth/hci_conn.c
-index 61a34801e61e..838f51c272a6 100644
---- a/net/bluetooth/hci_conn.c
-+++ b/net/bluetooth/hci_conn.c
-@@ -1061,8 +1061,15 @@ int hci_conn_del(struct hci_conn *conn)
- 
- 	if (conn->type == ACL_LINK) {
- 		struct hci_conn *sco = conn->link;
--		if (sco)
-+		if (sco) {
- 			sco->link = NULL;
-+			/* Due to race, SCO connection might be not established
-+			 * yet at this point. Delete it now, otherwise it is
-+			 * possible for it to be stuck and can't be deleted.
-+			 */
-+			if (sco->handle == HCI_CONN_HANDLE_UNSET)
-+				hci_conn_del(sco);
-+		}
- 
- 		/* Unacked frames */
- 		hdev->acl_cnt += conn->sent;
--- 
-2.39.1.519.gcb327c4b5f-goog
+Best regards,
+Krzysztof
 
