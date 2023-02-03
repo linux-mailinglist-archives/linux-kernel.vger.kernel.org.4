@@ -2,89 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8330A689DE9
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 16:17:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 678FF689DEA
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 16:17:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234063AbjBCPRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 10:17:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56160 "EHLO
+        id S234091AbjBCPRR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 10:17:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234959AbjBCPQE (ORCPT
+        with ESMTP id S234929AbjBCPQC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 10:16:04 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9633FAF0DE
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 07:13:54 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id ml19so16344834ejb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 07:13:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=diag.uniroma1.it; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z4gNT9v9wvK0aEmB6F4uZINVDMJ/+G9kVEywmGPNk78=;
-        b=u+tyikGVZq2dblixZ2OhrzsVymoJs/te6CTw7RNRqAdzWtkJG5/Je1YW8qeEqApCjX
-         PK/+0MmLQ2WndKKWCjLgm63zSClRKoWgPJm3cG/SZXbqDIs5a0KBbMrYWNNuPiPiKGYZ
-         36ngwMnB5QLWM/kM/mY/9r2CFTn5YZA1FvUr4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Z4gNT9v9wvK0aEmB6F4uZINVDMJ/+G9kVEywmGPNk78=;
-        b=5SIsrdQ0/9vbVjausz+RKRsCWaYHXkHrQot3k6LGlow1lzwXaLCGWLTwbZg9mobpK8
-         dTomI0IztD8QrK6XReQXTxbtkCSmb5dzoT1XkVQ+VGT2m/XSIJINJB+MVQWibULNhREt
-         R20GknEdnCjlOPtJCJ07ZMfMikjSQG7QwryUd456CasXVp7Sxph8y8mqPNQ1/Id3OKdN
-         C5LC3tAbMzm3TKToJwxtVuPYNWKrdHBNhVniiStP/B+Kr0hVpfaygwqQEe20b7SRJ8Hu
-         U0oPuZhg0cVr6HGitisK/CMykYhGqticBIRuxm9+suzIcf1z7BO6ZOWfnNUqwSPjNdyS
-         VfVA==
-X-Gm-Message-State: AO0yUKXfgm9JrmBGMBwsBJWLVNN4xzpaoWCFv6uyBiLNIb2GafWMMEqf
-        0naN7jEl8SAqhkqKf4gkWl33XOcShMUJNoHzT1K1VA==
-X-Google-Smtp-Source: AK7set+fIGyYrGAWc7/8wl0F7re+lFqHUPpfLdgqWaULgZZeM1ejQ/y9ibnxaGFY2MYwUzuLqtu60JTV6Pbsw5yRB/0=
-X-Received: by 2002:a17:906:1ba9:b0:888:3594:6d58 with SMTP id
- r9-20020a1709061ba900b0088835946d58mr3419959ejg.55.1675437131386; Fri, 03 Feb
- 2023 07:12:11 -0800 (PST)
+        Fri, 3 Feb 2023 10:16:02 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53DEE2597D
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 07:13:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=/XkJiKlEWWoxLdEEsPBWBw4sqM/MAfZZl4oCuwfXEPc=; b=MSuXBYtjj9seQyEcKOTiaBkUhD
+        E5BVRMGjurMC6MMx0SdyUM0gAc7giXPCZBimXAd8ZvN4N78FcUvpPkoWce0giYUMK2KpOsltR1NRD
+        6Cs3tiCRXrRQyPP4WZFkJ4YFPaqzkDub8jJxeTmgFGwPsth6BBy6gP/ITl+B/EsYA8nyyIgcN7sZi
+        GWM24ZtHh0qRXPFpmx72qloPrwrMTUm/eoc3PoJorfjnweblawAFKYf/Evxf3MEDF1CXbKPX9KXtK
+        xqkK8twfis9nEdoekWlX0SmLGQ8TartZGKoiNqw7rPNcksA4INFnQuG6MBC995n3rVjhqwCMvdPUp
+        YT2n8Sow==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pNxjT-00EOqj-IH; Fri, 03 Feb 2023 15:12:08 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 09EB3300129;
+        Fri,  3 Feb 2023 16:12:07 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id E1BD72C14E62F; Fri,  3 Feb 2023 16:12:06 +0100 (CET)
+Date:   Fri, 3 Feb 2023 16:12:06 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     x86@kernel.org, Masami Hiramatsu <mhiramat@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC] x86/alternative: Support relocations in alternatives
+Message-ID: <Y90kRtZA0d8nsRRj@hirez.programming.kicks-ass.net>
+References: <Y9py2a5Xw0xbB8ou@hirez.programming.kicks-ass.net>
+ <Y90IaYHDbCN9P0OX@zn.tnic>
+ <Y90ilxBFMAQZ/dRg@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-References: <20230131-tuntap-sk-uid-v2-0-29ec15592813@diag.uniroma1.it>
- <20230131-tuntap-sk-uid-v2-1-29ec15592813@diag.uniroma1.it> <CANn89i+QMipmfOywjAX2jqZGs80zorE6yKFOsi9rXQbToZLbhQ@mail.gmail.com>
-In-Reply-To: <CANn89i+QMipmfOywjAX2jqZGs80zorE6yKFOsi9rXQbToZLbhQ@mail.gmail.com>
-From:   Pietro Borrello <borrello@diag.uniroma1.it>
-Date:   Fri, 3 Feb 2023 16:12:00 +0100
-Message-ID: <CAEih1qXHkgHzqk1yXd=iX9fiMCkJW95eoytc1t5-VRMPhfTRNg@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 1/2] tun: tun_chr_open(): correctly initialize
- socket uid
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lorenzo Colitti <lorenzo@google.com>,
-        Stephen Hemminger <stephen@networkplumber.org>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y90ilxBFMAQZ/dRg@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 3 Feb 2023 at 15:58, Eric Dumazet <edumazet@google.com> wrote:
->
-> This seems very fragile...
-> "struct inode" could be made bigger, and __randomize_layout could move i_uid
-> at the end of it.
->
-> KASAN could then detect an out-of-bound access in sock_init_data()
->
-> I would rather add a wrapper like this [1], then change tun/tap to use
-> sock_init_data_uid()
->
+On Fri, Feb 03, 2023 at 04:04:55PM +0100, Peter Zijlstra wrote:
 
-I agree this is a much cleaner solution.
-I'll wait the usual 24h for further comments, and send a patch like this in v3.
+> > > +		switch (insn.opcode.bytes[0]) {
+> > > +		case 0x0f:
+> > > +			if (insn.opcode.bytes[1] < 0x80 ||
+> > > +			    insn.opcode.bytes[1] > 0x8f)
+> > > +				break;
+> > > +
+> > > +			fallthrough;	/* Jcc.d32 */
+> > > +		case 0x70 ... 0x7f:	/* Jcc.d8 */
+> > > +		case JMP8_INSN_OPCODE:
+> > > +		case JMP32_INSN_OPCODE:
+> > > +		case CALL_INSN_OPCODE:
+> > > +			u8 *target = src + i + insn.length + insn.immediate.value;
+> > > +			if (target < src || target > src + src_len) {
+> > > +				apply_reloc(insn.immediate.nbytes,
+> > > +					    instr + i + insn_offset_immediate(&insn),
+> > > +					    src - dest);
+> > > +			}
+> > 
+> > Uff, it took me a while to parse this. So this can be simpler. The basic
+> > math is:
+> > 
+> > 	new_offset = next_rip - target_address;
+> > 
+> > where
+> > 	next_rip = instr + insn.length;
+> > 
+> > and I admit that my function was a bit clumsy but I think yours can be
+> > made simpler while keeping it cleaner.
+> 
+> I'm not sure what you're saying here... so let me walk through the whole
+> thing (specifically the immediate case, since that's what you quote). So
+> what we need is:
+> 
+> 	src_imm = target - src_next_ip			(1)
+> 
+> what we want is:
+> 
+> 	dst_imm = target - dst_next_ip			(2)
+> 
+> so what we do is rework (1) as an expression for target like:
+> 
+> 	target = src_imm + src_next_ip			(1a)
+> 
+> and substitute in (2) to get:
+> 
+> 	dst_imm = (src_imm + src_next_ip) - dst_next_ip	(3)
+> 
+> Now, since the instruction stream is 'identical' at src and dest
+> we can state that:
+> 
+> 	src_next_ip = src + ip_offset
+> 	dst_next_ip = dst + ip_offset			(4)
+> 
+> Substitute (4) in (3) and observe ip_offset being cancelled out to
+> obtain:
+> 
+> 	dst_imm = src_imm + (src + ip_offset) - (dst + ip_offset)
+> 	        = src_imm + src - dst + ip_offset - ip_offset
+> 	        = src_imm + src - dst			(5)
+> 
+> The very thing I did.
+> 
+> IOW, we can correct the displacement without caring about which actual
+> instruction in the stream we're correcting since the relative offset is
+> given by 'src - dst'. IOW, we don't give a crap about insn.length in
+> this case ;-)
 
-Best regards,
-Pietro
+Specifically, in the above case ip_offset would be given by:
+
+	ip_offset = i + insn.length
+
+where i is the offset in the buffer to the current instruction and
+insn.length is well, the length of the current instruction ;-)
