@@ -2,172 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B475689FC6
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 17:56:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5495689FCE
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 17:57:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233642AbjBCQ4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 11:56:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46718 "EHLO
+        id S233702AbjBCQ53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 11:57:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233628AbjBCQ4p (ORCPT
+        with ESMTP id S233701AbjBCQ5J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 11:56:45 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16716A8A09;
-        Fri,  3 Feb 2023 08:56:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 99BE0B82B5F;
-        Fri,  3 Feb 2023 16:56:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D92F2C4339C;
-        Fri,  3 Feb 2023 16:56:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675443392;
-        bh=h7/viEQOihIqILr+s/nTh73JPYHxsBqSaGRcETP5tcc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WfZv1S4za0O8S3xKBAkzhmkDpjjZ5oMqlrzwy1eL1z0Jm58kGxDHxDlxOhtb1hnXR
-         hCTWoVCsZtuRXqIGYrcEG/YZn1c6u+7K9wxU1h4DsqhD0Bxf7clbr94+M5BnLM4l38
-         fD8c3ajfVnCwOqWCi7qlkAP1Vwe5/cfogMlFwkdQKmmoaekXC2n+PgLCp7f2wFzhqI
-         WOmwdh0YG4lOxcEQlhhKDW45HxHbtLnetEj29k/r4ezpHUErFZMfjP57XRUXkVQjCC
-         jaNlj/nIqFmsjWXpNXckrtCZQilOvm8SYQIqqnG2tVkaEUNtLp0TLxBgqmyLbfuV0+
-         jR7bn63bl+pWQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 99CD8405BE; Fri,  3 Feb 2023 13:56:28 -0300 (-03)
-Date:   Fri, 3 Feb 2023 13:56:28 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
-        Rob Herring <robh@kernel.org>,
-        Kang Minchul <tegongkang@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sandipan Das <sandipan.das@amd.com>,
-        Jing Zhang <renyu.zj@linux.alibaba.com>,
-        linuxppc-dev@lists.ozlabs.org, Kajol Jain <kjain@linux.ibm.com>,
-        Stephane Eranian <eranian@google.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Caleb Biggers <caleb.biggers@intel.com>
-Subject: Re: [PATCH v1] perf pmu: Fix aarch64 build
-Message-ID: <Y908vNzJp7cVM8gN@kernel.org>
-References: <20230203014014.75720-1-irogers@google.com>
- <CAP-5=fX0ohsCUspm7NowDy2bmSr2cJfp=iaStK4EAdVy7zBHGA@mail.gmail.com>
- <Y90XgtX9uv26UAQa@kernel.org>
- <Y90bsM4DGL+WV8m0@kernel.org>
- <Y90b7shHtOCQL3ma@kernel.org>
- <Y90di+N7TODkFvMV@kernel.org>
- <Y90rtA95mWW5Othk@kernel.org>
- <Y90v+jTe6z1dSFE0@kernel.org>
+        Fri, 3 Feb 2023 11:57:09 -0500
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99719AA272
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 08:56:53 -0800 (PST)
+Received: by mail-il1-x12d.google.com with SMTP id l15so2311413ilj.5
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 08:56:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=r6dU/MLK19R27v5TumqJxeFfIoPB7aII2OkV9V6qrvA=;
+        b=HiWjdHnBDoeXnKH6lL2kguYnHVGDxzJXoSOcg8NeZz4ZdmP3SHj9YySZKNujyeUDQp
+         KXiEfpUuaX+bxRCty364k+H9dFIUpgmPL3kOOXnuDkCQVWHqdEAQN+SGfj4JEv/CTnog
+         coSWTS/11nF87rzoMpJNsjOhdTV+opofoKF04=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=r6dU/MLK19R27v5TumqJxeFfIoPB7aII2OkV9V6qrvA=;
+        b=GaM+0khYdtNZ9Nkm2+C11M0829Q459C2yUR2mdz9FiylLmU+erGJtOKGVzTuEUMRej
+         nRBzOK49grxlUHmrHxWuLfXPjIDFIvQ++kB6ShXZN7GTlr85SCiDo8lKGrfCziu3lz86
+         Kkp4b8LKCyRiki8IQjPLCx3cyp16/SXIECWlgeRrNZtS7RSwYxgBScFi3SNEDXt933+B
+         tICAImQQpGWoEd3AkcDolmbQP3uPX97kJrZMs8iSsE4Hz2HqmkfaG1WmfJQqRCHzJxwp
+         7EKgKAf6DWnlXbQn3N/Iq27IN8GCM5u9/xWqsBiK7FeU/ubGnGsQUdH/PN9gsFbt0ckE
+         kjgQ==
+X-Gm-Message-State: AO0yUKVvE4bCly+QBDX057TEdZZvZz+olteEV6TkDHY6sHjTMTbcKKvn
+        TXNEOFQdOFBhRAqljNAgjNIdWQ==
+X-Google-Smtp-Source: AK7set/Jrl89jWi4wJJZHkXYIVCz+HKbR2LJVPcbUot7rENhrH80xbnluC31AjAunmEtL9Xj0QUe/g==
+X-Received: by 2002:a92:ce06:0:b0:310:8c56:d7de with SMTP id b6-20020a92ce06000000b003108c56d7demr5886170ilo.0.1675443412851;
+        Fri, 03 Feb 2023 08:56:52 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id 18-20020a056e0211b200b0030bfd384821sm884381ilj.81.2023.02.03.08.56.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Feb 2023 08:56:52 -0800 (PST)
+Message-ID: <de935b11-f5b7-9217-b73c-aef32c19c3c7@linuxfoundation.org>
+Date:   Fri, 3 Feb 2023 09:56:51 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y90v+jTe6z1dSFE0@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] selftests/ftrace: Fix bash specific "==" operator
+Content-Language: en-US
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc:     Shuah Khan <shuah@kernel.org>, Yipeng Zou <zouyipeng@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <167434397083.3069767.14730152459198287532.stgit@devnote3>
+ <20230124191637.0b2b8785@gandalf.local.home>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20230124191637.0b2b8785@gandalf.local.home>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, Feb 03, 2023 at 01:02:02PM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Fri, Feb 03, 2023 at 12:43:48PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > I tried bisecting, but at this cset:
-> > 
-> > acme@roc-rk3399-pc:~/git/perf$ git log --oneline -1
-> > d22e569cd33d (HEAD) perf pmu-events: Separate the metrics from events for no jevents
-> > acme@roc-rk3399-pc:~/git/perf$
-> > 
-> > I'm getting this:
-> > 
-> >   CC      /tmp/build/perf/pmu-events/pmu-events.o
-> > pmu-events/pmu-events.c:3637:32: error: no previous prototype for ‘perf_pmu__find_table’ [-Werror=missing-prototypes]
-> >  3637 | const struct pmu_events_table *perf_pmu__find_table(struct perf_pmu *pmu)
-> >       |                                ^~~~~~~~~~~~~~~~~~~~
-> >   CC      /tmp/build/perf/builtin-ftrace.o
-> >   CC      /tmp/build/perf/builtin-help.o
-> >   CC      /tmp/build/perf/builtin-buildid-list.o
-> > cc1: all warnings being treated as errors
-> > make[3]: *** [/home/acme/git/perf/tools/build/Makefile.build:97: /tmp/build/perf/pmu-events/pmu-events.o] Error 1
-> > make[2]: *** [Makefile.perf:676: /tmp/build/perf/pmu-events/pmu-events-in.o] Error 2
-> > make[2]: *** Waiting for unfinished jobs....
-> >   CC      /tmp/build/perf/builtin-buildid-cache.o
-> > 
-> > <SNIP>
-> > 
-> >   CC      /tmp/build/perf/tests/attr.o
-> > arch/arm64/util/pmu.c: In function ‘pmu_events_table__find’:
-> > arch/arm64/util/pmu.c:35:24: error: implicit declaration of function ‘perf_pmu__find_table’; did you mean ‘perf_pmu__find_by_type’? [-Werror=implicit-function-declaration]
-> >    35 |                 return perf_pmu__find_table(pmu);
-> >       |                        ^~~~~~~~~~~~~~~~~~~~
-> >       |                        perf_pmu__find_by_type
-> > arch/arm64/util/pmu.c:35:24: error: returning ‘int’ from a function with return type ‘const struct pmu_events_table *’ makes pointer from integer without a cast [-Werror=int-conversion]
-> >    35 |                 return perf_pmu__find_table(pmu);
-> >       |                        ^~~~~~~~~~~~~~~~~~~~~~~~~
-> > cc1: all warnings being treated as errors
-> > make[6]: *** [/home/acme/git/perf/tools/build/Makefile.build:97: /tmp/build/perf/arch/arm64/util/pmu.o] Error 1
-> > make[5]: *** [/home/acme/git/perf/tools/build/Makefile.build:139: util] Error 2
-> > make[4]: *** [/home/acme/git/perf/tools/build/Makefile.build:139: arm64] Error 2
-> > make[3]: *** [/home/acme/git/perf/tools/build/Makefile.build:139: arch] Error 2
-> > make[3]: *** Waiting for unfinished jobs....
-> >   CC      /tmp/build/perf/tests/vmlinux-kallsyms.o
-> > 
-> > -----
-> > 
-> > I'm building with:
+On 1/24/23 17:16, Steven Rostedt wrote:
+> On Sun, 22 Jan 2023 08:32:50 +0900
+> "Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
 > 
-> So:
+>> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+>>
+>> Since commit a1d6cd88c897 ("selftests/ftrace: event_triggers: wait
+>> longer for test_event_enable") introduced bash specific "=="
+>> comparation operator, that test will fail when we run it on a
+>> posix-shell. `checkbashisms` warned it as below.
+>>
+>> possible bashism in ftrace/func_event_triggers.tc line 45 (should be 'b = a'):
+>>          if [ "$e" == $val ]; then
+>>
+>> This replaces it with "=".
+>>
+>> Fixes: a1d6cd88c897 ("selftests/ftrace: event_triggers: wait longer for test_event_enable")
+>> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 > 
-> acme@roc-rk3399-pc:~/git/perf$ find tools/perf/ -name "*.[ch]" | xargs grep -w perf_pmu__find_table
-> tools/perf/arch/arm64/util/pmu.c:		return perf_pmu__find_table(pmu);
-> tools/perf/pmu-events/pmu-events.c:const struct pmu_events_table *perf_pmu__find_table(struct perf_pmu *pmu)
-> acme@roc-rk3399-pc:~/git/perf$
-> acme@roc-rk3399-pc:~/git/perf$ git log --oneline -1
-> d22e569cd33d (HEAD) perf pmu-events: Separate the metrics from events for no jevents
-> acme@roc-rk3399-pc:~/git/perf$
+> Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 > 
-> Tring to fix...
+> Shuah,
+> 
+> Care to pull this through your tree?
+> 
 
-tools/perf/pmu-events/pmu-events.c was a leftover from a previous build,
-strange as I build using O=, not to clutter the source dir, so perhaps
-handling that is missing, I'll check.
+Yes. Will appear shortly in linux-kselftest next.
 
-Fixed aarch64 specific one with:
+thanks,
+-- Shuah
 
-diff --git a/tools/perf/arch/arm64/util/pmu.c b/tools/perf/arch/arm64/util/pmu.c
-index 801bf52e2ea6..b4eaf00ec5a8 100644
---- a/tools/perf/arch/arm64/util/pmu.c
-+++ b/tools/perf/arch/arm64/util/pmu.c
-@@ -32,7 +32,7 @@ const struct pmu_events_table *pmu_events_table__find(void)
- 	struct perf_pmu *pmu = pmu__find_core_pmu();
- 
- 	if (pmu)
--		return perf_pmu__find_table(pmu);
-+		return perf_pmu__find_events_table(pmu);
- 
- 	return NULL;
- }
-
-
----
-
-Continuing...
