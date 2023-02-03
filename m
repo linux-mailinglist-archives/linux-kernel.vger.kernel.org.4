@@ -2,194 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AE7068942D
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 10:45:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B4DA689437
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 10:46:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233106AbjBCJoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 04:44:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35850 "EHLO
+        id S231160AbjBCJpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 04:45:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232335AbjBCJnx (ORCPT
+        with ESMTP id S233120AbjBCJox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 04:43:53 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FBD01449A
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 01:43:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675417384;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8JdKarrXqihAE4TdBrVs4mhITdD+RzszOBRVozg9cDY=;
-        b=M2h01co9kihbcQBWFKLs7DXGechtZy6siCgP6s03vxarmFjGsNZgUhEtJVwvMtAYrgbQjq
-        wuQM5cw1cv8kQMXoFWgFqPHZ1M5lsnuwoNWdzdTZErEc8mXSoqrdeGLaz/8Ww/hgamC/Ew
-        B1r49G1U6Uj8+JTF6/kL9iqv3Worz2k=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-626-_xIqrw8WOy64q5Vf3PcZrQ-1; Fri, 03 Feb 2023 04:43:02 -0500
-X-MC-Unique: _xIqrw8WOy64q5Vf3PcZrQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E91633C0D18D;
-        Fri,  3 Feb 2023 09:43:01 +0000 (UTC)
-Received: from thuth.com (unknown [10.39.192.204])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DB53C410B1AD;
-        Fri,  3 Feb 2023 09:42:58 +0000 (UTC)
-From:   Thomas Huth <thuth@redhat.com>
-To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH 7/7] KVM: Change return type of kvm_arch_vm_ioctl() to "int"
-Date:   Fri,  3 Feb 2023 10:42:30 +0100
-Message-Id: <20230203094230.266952-8-thuth@redhat.com>
-In-Reply-To: <20230203094230.266952-1-thuth@redhat.com>
-References: <20230203094230.266952-1-thuth@redhat.com>
+        Fri, 3 Feb 2023 04:44:53 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 562A59AFDE;
+        Fri,  3 Feb 2023 01:44:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675417476; x=1706953476;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=/tdpS1Qw1gaKBHKKO9C6ohbaeZRzAMBlN/mzMNnDRL4=;
+  b=jinbuvO4WpmCmygFTEZocpFN9P9c3hw3mcNHB6lCeS/JTm1fCxZm7zIr
+   DUHBhyHCK9T21HB4C/IpZOsB3C6JmB+abssY5+5SoUi9YCU6RoxJP+7ho
+   SeDxssAIvk2uPnKy1KigQXXWil19pXqdruadWeeBz047i9ivrVyoP4YlF
+   qtJo8hJVr0tkwlp/1+30VUZ1ZWLrdMNDdZdqyOD+VZS7x86hKeuBFZirK
+   eeedPwgiAr+Aa/XmNdcItD1kX6mD+aeuCYt66gnLuHnYQNWtM6q4BaIPA
+   5elNu8mq09+4VL1kTKn/HQF6aKMmrk6k0U+/G0GqvsvLziCRB58PjcCtB
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="326401556"
+X-IronPort-AV: E=Sophos;i="5.97,270,1669104000"; 
+   d="scan'208";a="326401556"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2023 01:44:14 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="643210452"
+X-IronPort-AV: E=Sophos;i="5.97,270,1669104000"; 
+   d="scan'208";a="643210452"
+Received: from cciobanu-mobl.ger.corp.intel.com (HELO localhost) ([10.252.35.96])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2023 01:44:11 -0800
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Thorsten Leemhuis <linux@leemhuis.info>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linux regressions mailing list <regressions@lists.linux.dev>
+Subject: Re: [PATCH v1] docs: describe how to quickly build Linux
+In-Reply-To: <ee3a168f-66e3-14a3-3890-90dc5c8153d1@leemhuis.info>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <fabdb45fa44db2531f0dbe5e88545c49dfb87040.1675252073.git.linux@leemhuis.info>
+ <1f217c94-b90f-359a-2142-0d3ae5d84fc6@leemhuis.info>
+ <20230202150856.lchr76nqih3vdul6@nitro.local>
+ <ee3a168f-66e3-14a3-3890-90dc5c8153d1@leemhuis.info>
+Date:   Fri, 03 Feb 2023 11:44:08 +0200
+Message-ID: <877cwz13tj.fsf@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All kvm_arch_vm_ioctl() implementations now only deal with "int"
-types as return values, so we can change the return type of these
-functions to use "int" instead of "long".
+On Thu, 02 Feb 2023, Thorsten Leemhuis <linux@leemhuis.info> wrote:
+> On 02.02.23 16:08, Konstantin Ryabitsev wrote:
+>> On Thu, Feb 02, 2023 at 12:15:36PM +0100, Linux kernel regression tracking (Thorsten Leemhuis) wrote:
+>>> Then I tried creating a shallow clone like this:
+>>>
+>>> git clone
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>>> --depth 1 -b v6.1
+>>> git remote set-branches --add origin master
+>>> git fetch --all --shallow-exclude=v6.1
+>>> git remote add -t linux-6.1.y linux-stable
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+>>> git fetch --all --shallow-exclude=v6.1
+>>>
+>>> This took only roundabout 2 minutes and downloads & stores ~512 MByte
+>>> data (without checkout).
+>> 
+>> Can we also include the option of just downloading the tarball, if it's a
+>> released version? That's the fastest and most lightweight option 100% of the
+>> time. :)
+>
+> Don't worry, that was in there and will stay in there:
+>
+> +   If you plan to only build one particular kernel version, download
+> its source
+> +   archive from https://kernel.org; afterwards extract its content to
+> '~/linux/'
+> +   and change into the directory created during extraction.
 
-Signed-off-by: Thomas Huth <thuth@redhat.com>
----
- arch/arm64/kvm/arm.c       | 3 +--
- arch/mips/kvm/mips.c       | 4 ++--
- arch/powerpc/kvm/powerpc.c | 5 ++---
- arch/riscv/kvm/vm.c        | 3 +--
- arch/s390/kvm/kvm-s390.c   | 3 +--
- arch/x86/kvm/x86.c         | 3 +--
- include/linux/kvm_host.h   | 3 +--
- 7 files changed, 9 insertions(+), 15 deletions(-)
+The trouble is, if this is for someone who needs to try kernels for
+debugging, a typical idea is to ask them to revert something or apply a
+patch. All the guides for that will be 'git revert' and 'git am'. Bisect
+is right up there on the list too. And then they'll first grab a tarball
+and fail, then do a shallow copy and fail, and then finally get a full
+one... :p
 
-diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-index 9c5573bc4614..e791ad6137b8 100644
---- a/arch/arm64/kvm/arm.c
-+++ b/arch/arm64/kvm/arm.c
-@@ -1449,8 +1449,7 @@ static int kvm_vm_ioctl_set_device_addr(struct kvm *kvm,
- 	}
- }
- 
--long kvm_arch_vm_ioctl(struct file *filp,
--		       unsigned int ioctl, unsigned long arg)
-+int kvm_arch_vm_ioctl(struct file *filp, unsigned int ioctl, unsigned long arg)
- {
- 	struct kvm *kvm = filp->private_data;
- 	void __user *argp = (void __user *)arg;
-diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
-index a25e0b73ee70..84cadaa2c2d3 100644
---- a/arch/mips/kvm/mips.c
-+++ b/arch/mips/kvm/mips.c
-@@ -1003,9 +1003,9 @@ void kvm_arch_flush_remote_tlbs_memslot(struct kvm *kvm,
- 	kvm_flush_remote_tlbs(kvm);
- }
- 
--long kvm_arch_vm_ioctl(struct file *filp, unsigned int ioctl, unsigned long arg)
-+int kvm_arch_vm_ioctl(struct file *filp, unsigned int ioctl, unsigned long arg)
- {
--	long r;
-+	int r;
- 
- 	switch (ioctl) {
- 	default:
-diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
-index 04494a4fb37a..6f6ba55c224f 100644
---- a/arch/powerpc/kvm/powerpc.c
-+++ b/arch/powerpc/kvm/powerpc.c
-@@ -2386,12 +2386,11 @@ static int kvmppc_get_cpu_char(struct kvm_ppc_cpu_char *cp)
- }
- #endif
- 
--long kvm_arch_vm_ioctl(struct file *filp,
--                       unsigned int ioctl, unsigned long arg)
-+int kvm_arch_vm_ioctl(struct file *filp, unsigned int ioctl, unsigned long arg)
- {
- 	struct kvm *kvm __maybe_unused = filp->private_data;
- 	void __user *argp = (void __user *)arg;
--	long r;
-+	int r;
- 
- 	switch (ioctl) {
- 	case KVM_PPC_GET_PVINFO: {
-diff --git a/arch/riscv/kvm/vm.c b/arch/riscv/kvm/vm.c
-index 65a964d7e70d..c13130ab459a 100644
---- a/arch/riscv/kvm/vm.c
-+++ b/arch/riscv/kvm/vm.c
-@@ -87,8 +87,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
- 	return r;
- }
- 
--long kvm_arch_vm_ioctl(struct file *filp,
--		       unsigned int ioctl, unsigned long arg)
-+int kvm_arch_vm_ioctl(struct file *filp, unsigned int ioctl, unsigned long arg)
- {
- 	return -EINVAL;
- }
-diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-index 8ad1972b8a73..86ca49814983 100644
---- a/arch/s390/kvm/kvm-s390.c
-+++ b/arch/s390/kvm/kvm-s390.c
-@@ -2850,8 +2850,7 @@ static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op *mop)
- 	return r;
- }
- 
--long kvm_arch_vm_ioctl(struct file *filp,
--		       unsigned int ioctl, unsigned long arg)
-+int kvm_arch_vm_ioctl(struct file *filp, unsigned int ioctl, unsigned long arg)
- {
- 	struct kvm *kvm = filp->private_data;
- 	void __user *argp = (void __user *)arg;
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index caa2541833dd..c03363efc774 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -6653,8 +6653,7 @@ static int kvm_vm_ioctl_set_clock(struct kvm *kvm, void __user *argp)
- 	return 0;
- }
- 
--long kvm_arch_vm_ioctl(struct file *filp,
--		       unsigned int ioctl, unsigned long arg)
-+int kvm_arch_vm_ioctl(struct file *filp, unsigned int ioctl, unsigned long arg)
- {
- 	struct kvm *kvm = filp->private_data;
- 	void __user *argp = (void __user *)arg;
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index 4f26b244f6d0..ed2f1f02976b 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -1398,8 +1398,7 @@ int kvm_vm_ioctl_irq_line(struct kvm *kvm, struct kvm_irq_level *irq_level,
- 			bool line_status);
- int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
- 			    struct kvm_enable_cap *cap);
--long kvm_arch_vm_ioctl(struct file *filp,
--		       unsigned int ioctl, unsigned long arg);
-+int kvm_arch_vm_ioctl(struct file *filp, unsigned int ioctl, unsigned long arg);
- long kvm_arch_vm_compat_ioctl(struct file *filp, unsigned int ioctl,
- 			      unsigned long arg);
- 
+BR,
+Jani.
+
+
+>>> Not totally sure, but the shallow clone somehow feels more appropriate
+>>> for the use case (reminder, there is a "quickly" in the document title),
+>>> even if such a clone is less flexible (e.g. users have to manually add
+>>> stable branches they are interested it; and they need to be careful when
+>>> using git fetch).
+>>>
+>>> That's why I now strongly consider using the shallow clone method by
+>>> default in v2 of this text. Or does that also create a lot of load on
+>>> the servers? Or are there other strong reason why using a shallow clone
+>>> might be a bad idea for this use case?
+>> 
+>> As I mentioned elsewhere, this is only a problem when it's done in batch mode
+>> by CI systems. A full clone uses pregenerated pack files and is very cheap,
+>> because it's effectively a sendfile operation. A shallow clone requires
+>> generating a brand new pack, compressing it, and then keeping it around in
+>> memory for the duration of the clone process. Not a big deal when a few humans
+>> here and there do it, but when 50 CI nodes do it all at once, it effectively
+>> becomes a DDoS. :)
+>
+> Thx again for your insights, much appreciated.
+>
+> Ciao, Thorsten
+
 -- 
-2.31.1
-
+Jani Nikula, Intel Open Source Graphics Center
