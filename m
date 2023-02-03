@@ -2,98 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55895688D0B
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 03:26:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBF4D688D0E
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 03:28:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230317AbjBCC0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 21:26:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47050 "EHLO
+        id S231819AbjBCC2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 21:28:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbjBCC0f (ORCPT
+        with ESMTP id S229881AbjBCC2M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 21:26:35 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DACC24741C;
-        Thu,  2 Feb 2023 18:26:33 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P7KKM2fklz4xwt;
-        Fri,  3 Feb 2023 13:26:31 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1675391192;
-        bh=icFT2EItQus7Dylw4jsLrPA9aj+5ZNs9mfl7Cxb1gFw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=UB9II4ceqUYoMjxRxAyBdZvOepHvUcWQz9tgkdH8dP2A2xjo60G9VUODCOpLcUNUW
-         r8RKy6cR2pAqgzAaCRWebeZLStJqPm3yVxPnx7u40wYH4puuGsBjaWOZHe++dQp3Vx
-         4XOTcoQABVQVP2KETRFhwawH7XM62H7vzCVT86yCcRbyUQ2fIhDEjs9KCjf+cgGUnM
-         dKv0UC4hpgGm0efDhkKsMR1uqdl137tpJU4tBFlkds1ol3In9ah0ERqV1RLzvy6ipC
-         pmE5VJD56+bDPuoZc6cxTmlmoEZYk0rYJeof1Kxzm8kuivFNk8bo2cqRUsEDwFrG+c
-         q45yvPD01bcJg==
-Date:   Fri, 3 Feb 2023 13:26:29 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Michael S. Tsirkin" <mst@redhat.com>,
-        David Miller <davem@davemloft.net>
-Cc:     Networking <netdev@vger.kernel.org>,
-        Laurent Vivier <lvivier@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patches in the vhost tree
-Message-ID: <20230203132629.30cf161c@canb.auug.org.au>
+        Thu, 2 Feb 2023 21:28:12 -0500
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 64E8C36471;
+        Thu,  2 Feb 2023 18:28:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Ezq48
+        SMfSzSfU6vEdNHKpwfR4sSbk6riVgvGC0cf2ec=; b=Nj4sq7h/LlJ/oGmvFBB3q
+        w/DVWM+HekdCCSnK5XqEeDd/aBUVYLMuxtFF7dH7kp2q1lxVkZOGROsNX41dxDp2
+        eEyDfFIIHZtgA6PMH0ZHI5ZhV87j2PWht2Fm/SiildhQG2wI4itM8B+Vpn1W8FyB
+        UcBiizNP2Tw+KKB1H8Rrp4=
+Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
+        by zwqz-smtp-mta-g2-0 (Coremail) with SMTP id _____wDn5Kwwcdxj1juOCg--.53946S2;
+        Fri, 03 Feb 2023 10:28:00 +0800 (CST)
+From:   Zheng Wang <zyytlz.wz@163.com>
+To:     colyli@suse.de
+Cc:     stable@vger.kernel.org, hackerzheng666@gmail.com,
+        kent.overstreet@gmail.com, linux-bcache@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alex000young@gmail.com,
+        Zheng Wang <zyytlz.wz@163.com>
+Subject: [PATCH] bcache: Remove some unnecessary NULL point check for the return value of __bch_btree_node_alloc-related pointer
+Date:   Fri,  3 Feb 2023 10:27:59 +0800
+Message-Id: <20230203022759.576832-1-zyytlz.wz@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/783BGTTSd4b33Fmu8PmSwz2";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _____wDn5Kwwcdxj1juOCg--.53946S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Ww4UGry5ArWfXrW5Gr15Arb_yoW8Zw1UpF
+        W29ry3A34kWr4UCr98C3W0vFyrZw12vFWUGr93u3WfZr9rZr1rCFWj9ryUZrWUurWxWF42
+        vr40yw1UXr4UtF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziI385UUUUU=
+X-Originating-IP: [111.206.145.21]
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiXBILU1Xl5gKj0gAAsz
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/783BGTTSd4b33Fmu8PmSwz2
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Due to the previously fix of __bch_btree_node_alloc, the return value will
+never be a NULL pointer. So IS_ERR is enough to handle the failure
+ situation. Fix it by replacing IS_ERR_OR_NULL check to IS_ERR check.
 
-Hi all,
+Fixes: cafe56359144 ("bcache: A block layer cache")
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+---
+ drivers/md/bcache/btree.c | 6 +++---
+ drivers/md/bcache/super.c | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-The following commits are also in Linus Torvalds' tree as different
-commits (but the same patches):
+diff --git a/drivers/md/bcache/btree.c b/drivers/md/bcache/btree.c
+index 147c493a989a..417cd7c436c4 100644
+--- a/drivers/md/bcache/btree.c
++++ b/drivers/md/bcache/btree.c
+@@ -1138,7 +1138,7 @@ static struct btree *btree_node_alloc_replacement(struct btree *b,
+ {
+ 	struct btree *n = bch_btree_node_alloc(b->c, op, b->level, b->parent);
+ 
+-	if (!IS_ERR_OR_NULL(n)) {
++	if (!IS_ERR(n)) {
+ 		mutex_lock(&n->write_lock);
+ 		bch_btree_sort_into(&b->keys, &n->keys, &b->c->sort);
+ 		bkey_copy_key(&n->key, &b->key);
+@@ -1352,7 +1352,7 @@ static int btree_gc_coalesce(struct btree *b, struct btree_op *op,
+ 
+ 	for (i = 0; i < nodes; i++) {
+ 		new_nodes[i] = btree_node_alloc_replacement(r[i].b, NULL);
+-		if (IS_ERR_OR_NULL(new_nodes[i]))
++		if (IS_ERR(new_nodes[i]))
+ 			goto out_nocoalesce;
+ 	}
+ 
+@@ -1669,7 +1669,7 @@ static int bch_btree_gc_root(struct btree *b, struct btree_op *op,
+ 	if (should_rewrite) {
+ 		n = btree_node_alloc_replacement(b, NULL);
+ 
+-		if (!IS_ERR_OR_NULL(n)) {
++		if (!IS_ERR(n)) {
+ 			bch_btree_node_write_sync(n);
+ 
+ 			bch_btree_set_root(n);
+diff --git a/drivers/md/bcache/super.c b/drivers/md/bcache/super.c
+index ba3909bb6bea..92de714fe75e 100644
+--- a/drivers/md/bcache/super.c
++++ b/drivers/md/bcache/super.c
+@@ -2088,7 +2088,7 @@ static int run_cache_set(struct cache_set *c)
+ 
+ 		err = "cannot allocate new btree root";
+ 		c->root = __bch_btree_node_alloc(c, NULL, 0, true, NULL);
+-		if (IS_ERR_OR_NULL(c->root))
++		if (IS_ERR(c->root))
+ 			goto err;
+ 
+ 		mutex_lock(&c->root->write_lock);
+-- 
+2.25.1
 
-  022659ee3363 ("virtio_net: notify MAC address change on device initializa=
-tion")
-  d0aa1f8e8d63 ("virtio_net: disable VIRTIO_NET_F_STANDBY if VIRTIO_NET_F_M=
-AC is not set")
-
-These are commits
-
-  9f62d221a4b0 ("virtio_net: notify MAC address change on device initializa=
-tion")
-  7c06458c102e ("virtio_net: disable VIRTIO_NET_F_STANDBY if VIRTIO_NET_F_M=
-AC is not set")
-
-in the net-next tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/783BGTTSd4b33Fmu8PmSwz2
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPccNUACgkQAVBC80lX
-0Gz/Hgf/WXdBDXn1v7M9nnVxsbZJQplfFlitevFal2El09K8fIw5MAMJHaSieDgS
-R0TDuPIurmjQMMpBur3M/OqI6kxbxM3LNlvGNEPbMlbPvu2EWpU4HIO7zF3lRqVZ
-oxc++Br0NAbZD0/9DvJNVDrRmQAfTBO+GRVskRuuBfe5Q9CAgQH0JzF/Sg5dPawZ
-WaHi3AQq3slTwPXkvEQbqWUFthvkjBBQ894xR2Z8kd6FVHzkOymeG2dDhW5S1Dvi
-Jsb492jxAcJKnhoUHkyCK0U7vYOMqkQ8xrbKYB9ILSH1K6FVKp1PUm4N2wrD3XRO
-txwtd9E41W/av2jp3FVwTfIm/hXH0w==
-=FKvM
------END PGP SIGNATURE-----
-
---Sig_/783BGTTSd4b33Fmu8PmSwz2--
