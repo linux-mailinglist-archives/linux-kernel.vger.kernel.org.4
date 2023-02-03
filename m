@@ -2,162 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 636596898CF
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 13:32:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF7C76898CA
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 13:32:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233059AbjBCMce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 07:32:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42576 "EHLO
+        id S233005AbjBCMcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 07:32:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233071AbjBCMc2 (ORCPT
+        with ESMTP id S232893AbjBCMcK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 07:32:28 -0500
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F5D18B7DB
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 04:32:23 -0800 (PST)
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20230203123221euoutp028056bb4c234d7b94fff36060b0f597f5~AUHjqnhLx1893218932euoutp026
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 12:32:21 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20230203123221euoutp028056bb4c234d7b94fff36060b0f597f5~AUHjqnhLx1893218932euoutp026
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1675427541;
-        bh=jrd78e2TSBcwd4YObsmVJSB5ylRxUh73JYv+kU3KIVg=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=AJP59wkhJ0y9ma4BKw1SYIlRI9PS673ij7y31RloO6akktsWOa4K/3hC8d3pwND2e
-         83jt0i+AAlccmSsKLj+VlDe/IZA1sytWV2qUemDzkZFrmP0OoU7n9T9huKjvI9keje
-         r/ZIHSCuSYKFcEl5BExGz7WxjXwFlGKpcYlHYxxE=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20230203123221eucas1p233ed4ab39a0acf63bb6a471e38de7a70~AUHjbvlJ51305413054eucas1p2W;
-        Fri,  3 Feb 2023 12:32:21 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id 97.40.01471.5DEFCD36; Fri,  3
-        Feb 2023 12:32:21 +0000 (GMT)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20230203123220eucas1p2f9686f08bcb22cf1e21aefd25070282a~AUHi_nHlI2615426154eucas1p2S;
-        Fri,  3 Feb 2023 12:32:20 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20230203123220eusmtrp23b7a9130a65b6690117982824b71c813~AUHi_BKC10250002500eusmtrp2O;
-        Fri,  3 Feb 2023 12:32:20 +0000 (GMT)
-X-AuditID: cbfec7f2-2b1ff700000105bf-57-63dcfed515f9
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id E9.33.02722.4DEFCD36; Fri,  3
-        Feb 2023 12:32:20 +0000 (GMT)
-Received: from localhost (unknown [106.120.51.111]) by eusmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20230203123220eusmtip10d1c9be36668380ec1be20775266c3e2~AUHizcWRb1911019110eusmtip1T;
-        Fri,  3 Feb 2023 12:32:20 +0000 (GMT)
-From:   =?UTF-8?q?=C5=81ukasz=20Stelmach?= <l.stelmach@samsung.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        =?UTF-8?q?=C5=81ukasz=20Stelmach?= <l.stelmach@samsung.com>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] merge_config.sh: do not report some differencess between
- input and output
-Date:   Fri,  3 Feb 2023 13:31:40 +0100
-Message-Id: <20230203123140.2227880-1-l.stelmach@samsung.com>
-X-Mailer: git-send-email 2.30.2
+        Fri, 3 Feb 2023 07:32:10 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2056.outbound.protection.outlook.com [40.107.244.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 793B879F3A;
+        Fri,  3 Feb 2023 04:31:56 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=assyKpz/W84+CyVobCxgGMCHieTpuNyg5ei/IT89T0eTT2nUbAWeJgGUz7aS1YqBMi9TNLTEFTyhvQn3y7LHnfwD8kh1AzDJ0OXWXBIN8RehN0L10MomUxR0P1cilngFpQkoqZ9qPibMdCdkEmL84YaWVD7MdJ8Yp4VwiytRMDrc51ms+pJVJk0rzoFIzV6DlxIk1AffhTdUdVY1WmENPnmkbsUS7G8rwT88XDPzsCwojrEJeYTBRWlifXTFxyW8o2ruIVC925ecVKxiG7PtXQTPqwZLo4m5AyDBAh6dmn5EbI/65R3iiUP0pmGIyNy2LcxiYBdahA8Xr3fOnmib/Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=z7T6Bs32OA8nGCSjbcOrXDzcKkR/MGfrPClu0ZEDBAk=;
+ b=O7YNYvoGYr1YYLiNHHs52NYpkLZPB5MjuyL3tv6jXT6jDMpja14racDXQ13LepkNFAtthYRjDbXzE8mZfxSMlypvy4ow8thX6xv9d2MVxkyRlvXI0J1XGaB5AYFL+PbTMhX7GWvGnGf0wcUJmHzKaeEFjVtEMx11drQzZYyLqllrruyVWchYjahsUFwNyffwapcgDD1eIHfiFZn8r4LeecT2WkU1M2nwl5KN5oehdTo4DPM7IVwW0AtieMjahcVNV9S+8OnrIHH+YraphV+DfOon1YHva+VdABFDrHRlPnBi1a40Yevy4y+aJUZm5y4IxiaKzoLKWiz806VHa6hNUA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=z7T6Bs32OA8nGCSjbcOrXDzcKkR/MGfrPClu0ZEDBAk=;
+ b=tBd9go4KlRePZA8AXyMjShmpwgQZ4ljTbjmq7up875VWcKR9AYozPPUFXlmjyD/fLyhhxaoi/mHI9X+KZgKuPU1ZTKREAzdclS1BE/mS/tIUdM38fGWysE0xW96kL4haY218e/2XcemlDId9QSoTE4psciE+iALlz2jYpEN8HWsRMnrwpQ02XghjmsinGw+DVGasVZvjUNhI+4TXew9VJPci9vwhIoEaoCVRayaJKp3cjk3WWI0sH8b2Q6GPlr5Qv8Xt9tED+7wM2/nGqgjuJYSLajF3yuzPMa5hy/ugXfiufrS6RUqJN66Y8575cq26/enOKLLMXNhOFkME34/vAQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by BL1PR12MB5253.namprd12.prod.outlook.com (2603:10b6:208:30b::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.28; Fri, 3 Feb
+ 2023 12:31:54 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee%4]) with mapi id 15.20.6064.031; Fri, 3 Feb 2023
+ 12:31:54 +0000
+Date:   Fri, 3 Feb 2023 08:31:52 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     Nicolin Chen <nicolinc@nvidia.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>
+Subject: Re: [PATCH v1 5/8] iommufd: Add replace support in
+ iommufd_access_set_ioas()
+Message-ID: <Y9z+uAbYtgk30no+@nvidia.com>
+References: <cover.1675320212.git.nicolinc@nvidia.com>
+ <bfe5aed6d354ef547979f0b256c8a3f9bd5b223b.1675320212.git.nicolinc@nvidia.com>
+ <BN9PR11MB5276D06D3F9AA6202E20F8E68CD79@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BN9PR11MB5276D06D3F9AA6202E20F8E68CD79@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-ClientProxiedBy: BL1P221CA0010.NAMP221.PROD.OUTLOOK.COM
+ (2603:10b6:208:2c5::14) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-Organization: Samsung R&D Institute Poland
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1466;
-        i=l.stelmach@samsung.com; h=from:subject;
-        bh=wonFUdzmaAET0/ORzWMrO5UfaSRF0d8PF1Z0JaBmN3w=;
-        b=owEBbQGS/pANAwAIAbCuHpyYpYAQAcsmYgBj3P6cnRq6mmDach9RedYQYRNcHmge7XlDGtUTY
-        kDQBuUgiqiJATMEAAEIAB0WIQRem7KqOr2QYRWv1RCwrh6cmKWAEAUCY9z+nAAKCRCwrh6cmKWA
-        ED0VB/9vBRDNjeXEwg7siBxqqhDl7a5TQfwMYNdCyekDLxaUf9aaZtu5xXlNy9STHV6rNn1odU2
-        MT98tdlsqXHjsqgrJSjCglbIjRc2ks3jgX05XaEgYWi/lSffYT4GkFidpOIWx+84zz/GdYq3uVN
-        DtzwbqUyMxf6DLrbuX5sTkvwOTmA+LekAggOUMydyodyDfnMOYaNWD1ahu6Vv7cQ04kHV5h1mWs
-        IJM7KEImPHZSSiuTvmhh34W8YA6wtfXcqO/YAxorESDQ9dI0EbcRQ1oeihTs+3BO24nGigjNOnZ
-        9eQpZ6+/FEQiRNfYiQ+D62UMDdBQEoybKIWH3kxYClxj3oRz
-X-Developer-Key: i=l.stelmach@samsung.com; a=openpgp;
-        fpr=A2B9843766B15A4D32BCBF0DEC1B3A02E80CD5C8
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpkleLIzCtJLcpLzFFi42LZduznOd2r/+4kG9yaI2px89AKRos/u3Yw
-        WVzeNYfNYu2Ru+wWDx/cYHVg9di0qpPNo2/LKkaPz5vkApijuGxSUnMyy1KL9O0SuDJ+rv7P
-        WLCHu2LvzRvsDYxLObsYOTkkBEwkFvZ9ZOpi5OIQEljBKPHn7Qko5wujxNvDT1khnM+MEje2
-        bGSHaVlx5A4bRGI5o8T2VSuhWl4wSsyZMpcZpIpNwFGif+kJVhBbREBL4s7SDrBRzAJrGCUu
-        919nAkkIC8RIrPlwgRHEZhFQlTh88j+YzStgK7Fv/Q9miHXyEm3Xp0PFBSVOznzCAmLzAw1d
-        03SdBWSohMBsVon+m5egGlIkHl5uBWtgBmpu3jqbGaLoCIdEy6TjUE+4SDRePAJlC0u8Or4F
-        ypaR+L9zPhNEQzujRNOVhawQzgRGic8dTUwQVdYSd879AgYBB9AKTYn1u/Qhwo4SNw4uZAQJ
-        SwjwSdx4KwhxBJ/EpG3TmSHCvBIdbUIQ1SoS6/r3sExgVJ6F5LdZSM6ehTB/ASPzKkbx1NLi
-        3PTUYsO81HK94sTc4tK8dL3k/NxNjMBUcvrf8U87GOe++qh3iJGJg/EQowQHs5II7/LTd5KF
-        eFMSK6tSi/Lji0pzUosPMUpzsCiJ82rbnkwWEkhPLEnNTk0tSC2CyTJxcEo1MOlEH1ZlTVW6
-        Unn5XgHr0s8frAN+nt2269//bW9OFq5QqV6w51bg8QqPvJ3a3q9+z7WN+xxZWrDm9z7e9q7K
-        niqvM5Ii4aJ6kXKXLL3TpaSDo84b/TmnuNRlz7yIT/5ff3FN7+OZfzCUgTHg6hS+g3dZeXgl
-        i5a9Ej+zV219yGzdhIy5S/gNHm9ann5YoUHqNP93wQedfMkT/FRefvvWJK8ddLbmoNvJYwUv
-        72+5zRhQyzn3WMTJJ8bv/nPx9MR6v1i55bi0z4NeW42lDguS/wmnz7xVUHm5e/21qXxu89zl
-        b7vVTxVXScqedNIjqFxtx++HsdFp/O//H8i6Uf33wOKLHQ/1OZ/PMU2eYPh8T60SS3FGoqEW
-        c1FxIgCunI27lAMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupnkeLIzCtJLcpLzFFi42I5/e/4Xd0r/+4kG5y4Y2Rx89AKRos/u3Yw
-        WVzeNYfNYu2Ru+wWDx/cYHVg9di0qpPNo2/LKkaPz5vkApij9GyK8ktLUhUy8otLbJWiDS2M
-        9AwtLfSMTCz1DI3NY62MTJX07WxSUnMyy1KL9O0S9DJ+rv7PWLCHu2LvzRvsDYxLObsYOTkk
-        BEwkVhy5w9bFyMUhJLCUUeLhhKVADgdQQkpi5dx0iBphiT/XuqBqnjFKrHrcyQySYBNwlOhf
-        eoIVxBYR0JK4s7SDFaSIWWAdo8TcqT/ZQRLCAlES5z70MoHYLAKqEodP/mcEsXkFbCX2rf/B
-        DLFBXqLt+nSouKDEyZlPWECOYBZQl1g/TwgkzA80f03TdRaQ+RICnawS644fh+pNkjiwfh1Y
-        LzPQnOats5knMArNQjJqFsKoWUiqFjAyr2IUSS0tzk3PLTbUK07MLS7NS9dLzs/dxAiMmW3H
-        fm7ewTjv1Ue9Q4xMHIyHGCU4mJVEeJefvpMsxJuSWFmVWpQfX1Sak1p8iNEU6LWJzFKiyfnA
-        qM0riTc0MzA1NDGzNDC1NDNWEuf1LOhIFBJITyxJzU5NLUgtgulj4uCUamA6GKGkWdV0dEn8
-        I0nOvQFvP006l/EqXiPu7EajH/3Tvz6KP7D6mvuBPQVCpr55Bz5N+ij1fOGMra+n/Ctpj//q
-        veYGT8LBPa63Jplslw+3n7JRVvmL0bf+pUenOv5e8GG5gMK0cA6nzy+5GX/838uR89fqqL/X
-        tqZLO3fwaz+eM/PmxAifZR5RjU/3B8Usnp/ydJXk8dKuz7/fPXeo3b1uGeePWw2bZ3C08Ouc
-        rTu4dP7DlsXWS5cI7vO6MP/91poH243cmNINJ9j/uy9UcFx+8vJc/es7jf3LTTbOv1Z7Ssl8
-        zlqtoywRnNkXtBtEuidEMHBm1n2d3nDDJWqdF2dI/o3YeWKfeSc5zT37pe066zQlluKMREMt
-        5qLiRAAuZH3aIgMAAA==
-X-CMS-MailID: 20230203123220eucas1p2f9686f08bcb22cf1e21aefd25070282a
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20230203123220eucas1p2f9686f08bcb22cf1e21aefd25070282a
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20230203123220eucas1p2f9686f08bcb22cf1e21aefd25070282a
-References: <CGME20230203123220eucas1p2f9686f08bcb22cf1e21aefd25070282a@eucas1p2.samsung.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|BL1PR12MB5253:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6457b70d-f310-45ad-bfaa-08db05e2a1f5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: HfG+/K0/WYBDTmLZTuZnWTRiDdL2aWsFTY1KREMDvdiUHN2+74tr2c2uKy0tRfGkt7zQc+PSC7Go0Q2W6fVJmn4dNmcAWOjqwEkYVYYDwNtW6ugWzy5SfAbDFSgFbnPv3C8JERO+mjchKOtA8CU7As2dltGASnTEHDpJ0bat6YQaPhYCSFEaFYXSxThMfKC3s1+oRfqyPjh/0cDuMb9Y9QNnNyqg+j/eeqy1zhNWcFJy1AIZSxUWtt1fLxQrFjQ/++0L2q/B0z2f/+ed7RWidNjIpuYHCXGu2jLsUP911h5QgHjnpVR+Ym4prPgiGrhYlOMYPgh50XWwx3kxaSB+JJtI0FyCMHsqg6IiKU5al6gLhX0dgPrsia9Sy4YIIAmv9Roe04GmmKJPphJ869/8+QUmiCegR6+JOFDr4q3dsEbpGF6wodLoz4lxdgYr6lLcgrAwgP8i6Yxl6JBjABTUpYMP8gdOx3byMJzPDkIf9ePWAYk9ySUJfXUjxXABq72EGo3JuWgXq8TXUKB4HUYOEHDGAYnenJ7r9XkJTmsXARX9XD3O65ykrWS6IXe7NJfrSQFu2NysY2jNwfBwZ5Vi0nkXDodJMd1qTO7lN14L9FTHtyOhazJ9UVZXjvkXF5cekceNxTi/oQCV6jjSml87Xw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(39860400002)(376002)(346002)(136003)(396003)(451199018)(2906002)(66946007)(4326008)(5660300002)(478600001)(36756003)(6486002)(7416002)(6506007)(6512007)(2616005)(26005)(186003)(83380400001)(8936002)(66556008)(86362001)(41300700001)(66476007)(38100700002)(8676002)(6916009)(316002)(54906003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zkF6uAXrPF+8obsAq6uhSeZL1lo5SylV+tLpQly88ytA1ImNp0dPzs2B0UTD?=
+ =?us-ascii?Q?epjFD/zY4T0lQ8YDUrHukJBNl1RcteD9HeuXm/2R3RiV4kD+lQqsYOMERV9D?=
+ =?us-ascii?Q?Q9S6CIbmKpVBvemEb/lChoxLaAwYMAaBf7b1vLO87l+kv/dotDOnj0elLeAp?=
+ =?us-ascii?Q?MLpbknpGCzjgnob8d/zUnnpmkUJjApaW/I9I64E5hyEwGENxnMCo2L5BTmj5?=
+ =?us-ascii?Q?VXeXeXMhGhn0KsACQf9aOFo8iRaAMmqaqiFVinEO60TrMvmZj1ttXOyttJp8?=
+ =?us-ascii?Q?IfhOYkiHXWYUN+eC1L32+BIQUPdgQdrfIMdXyfpROCo9pm7Z9t1ZQMbMqRUD?=
+ =?us-ascii?Q?ppPShw5db/yfz1NOhhQgxwd8mmSVguTCDDee4Uz1A/ZcYIhZC0ZrNeNOyPYV?=
+ =?us-ascii?Q?L04u9TK3AqnSQXXVhWUef8pu26f6olii9vUYSJCvzfycIXifhEWdvQUMYjT5?=
+ =?us-ascii?Q?1S72tkYUWATim2OWSRrEkKPGQLPb0BTZmuBDMVTCvQ8Q+2FZm3gOXGhAfZob?=
+ =?us-ascii?Q?dAJ+mNtxiMbuF9iHnjUEIwZDpBiMOuDkAxC/xlGBblK0Rih/9ScCaZJdO4xF?=
+ =?us-ascii?Q?HfMkZtwoEeJKrRBdpNlNDpRBVZejC0uvyq8EOGYEkIj+Cuet+aZ4BF5x0RxP?=
+ =?us-ascii?Q?I+yfBm35ySMu7ThFnAR+1+HNt+2MWS6+pSJAQrBU2JqI9ChgtvcFQ5bY1fek?=
+ =?us-ascii?Q?X/IlyVmGV1ssh36j54SXGP0UY1hJm5XpPsl4A7riEUHTxi+qZsuQhCbn5+VF?=
+ =?us-ascii?Q?9jH7XEDxFiVHBwaJGa+ivliTRz95jHt7LJ9dca5atRJtlXHQFozgnsKNA8rJ?=
+ =?us-ascii?Q?0CKe+9umWLMgU9dl3YY0tgIg0UJ+LYu7HZKrg4lTcHt+0KSM7+2tiIjal1Hh?=
+ =?us-ascii?Q?Sh93I3VV5AmnkxNAm3L3O/vL+wNMsWFoLUczR60OZCAXq2VlkV42iEfF/Bb+?=
+ =?us-ascii?Q?gIZPDiAOsMXvx4ffisrZXIn/bkejtU8K+fW3Gt9umpN2CexPmnnlUIDyqZJD?=
+ =?us-ascii?Q?/EpxCRgoAmjeB7iGdusl6XcirBW9VMDr21X+XFhj4ufO+9vXIEyIamlFgsIo?=
+ =?us-ascii?Q?ORR+DPPif0YnBNznu7HU+5mq8hOSiX5DliFWKMXQEr2tpz3IyfxqVkpfOI/s?=
+ =?us-ascii?Q?HNLMCIJnjZqFqvWSRR9k/Ma543rzI33EckeZSc93UvWEsBUKPRI35ZAAV286?=
+ =?us-ascii?Q?6Z3bo8tM9ldev1MjTKtoFJmmVo8TrcrYs8mfFWSqEBfoMNybEowjFoM/pWbN?=
+ =?us-ascii?Q?ww+P4tCqYSfpNEhOy5IXEPw55i0LYOX5gROXRGNFOZvUsT5IazbwFQBSmOds?=
+ =?us-ascii?Q?SsHxtjpqfgXJ/U3CUd+iee+vcRyb+ACgGqj2ElkLcHHmpXkq1kcM4n3Qau4p?=
+ =?us-ascii?Q?EVf+HReRWIuRCCFF50L+8JmZjeACsZHCQrXUvdkTlThdaRLewEyzo34lBtos?=
+ =?us-ascii?Q?ajWzQVYtzX4XCmaED7vWXjbqZC+850mD7Mg1TMlwwjEh8hbSEmRB7GQooi+q?=
+ =?us-ascii?Q?pgV6QtGaufabYySOGCqMGS2PD1Cb3WMRmUVFBxC6Tv/Ux1RtUDTHQxw7lvBz?=
+ =?us-ascii?Q?AwG/SRmBQv1UdcGtihlqjT7XL6aPQA7REDkAb3aB?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6457b70d-f310-45ad-bfaa-08db05e2a1f5
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Feb 2023 12:31:54.2760
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5y9YQfGzb3+5hb63vCLeg24EBaYitSCQaJpMx2tMx36fcX8Hc6FtvTI1/i3q5lFl
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5253
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If an input config file contains CONFIG_FOO=n the output one
-will contain a line '# CONFIG_FOO is not set'. merge_config.sh
-should not report it as difference because the end result of
-CONFIG_FOO being disabled is achieved.
+On Fri, Feb 03, 2023 at 10:10:45AM +0000, Tian, Kevin wrote:
+> > From: Nicolin Chen <nicolinc@nvidia.com>
+> > Sent: Thursday, February 2, 2023 3:05 PM
+> > 
+> > Support an access->ioas replacement in iommufd_access_set_ioas(), which
+> > sets the access->ioas to NULL provisionally so that any further incoming
+> > iommufd_access_pin_pages() callback can be blocked.
+> > 
+> > Then, call access->ops->unmap() to clean up the entire iopt. To allow an
+> > iommufd_access_unpin_pages() callback to happen via this unmap() call,
+> > add an ioas_unpin pointer so the unpin routine won't be affected by the
+> > "access->ioas = NULL" trick above.
+> > 
+> > Also, a vdev without an ops->dma_unmap implementation cannot replace its
+> > access->ioas pointer. So add an iommufd_access_ioas_is_attached() helper
+> > to sanity that.
+> > 
+> 
+> Presumably a driver which doesn't implement ops->dma_unmap shouldn't
+> be allowed to do pin/unpin. But it could use vfio_dma_rw() to access an
+> iova range. In the latter case I don't see why replace cannot work.
+> 
+> Probably what's required here is to deny !ops->dma_unmap in
+> vfio_pin/unpin_pages then making here replace always allowed?
 
-Inexistence of CONFIG_FOO (because of unment dependencies) in case
-CONFIG_FOO=n is requested, should also be ignored.
+That makes sense
 
-Signed-off-by: Łukasz Stelmach <l.stelmach@samsung.com>
----
- scripts/kconfig/merge_config.sh | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
-
-diff --git a/scripts/kconfig/merge_config.sh b/scripts/kconfig/merge_config.sh
-index e5b46980c22a..c6fd6722f1a4 100755
---- a/scripts/kconfig/merge_config.sh
-+++ b/scripts/kconfig/merge_config.sh
-@@ -196,9 +196,13 @@ for CFG in $(sed -n -e "$SED_CONFIG_EXP1" -e "$SED_CONFIG_EXP2" $TMP_FILE); do
- 	REQUESTED_VAL=$(grep -w -e "$CFG" $TMP_FILE)
- 	ACTUAL_VAL=$(grep -w -e "$CFG" "$KCONFIG_CONFIG" || true)
- 	if [ "x$REQUESTED_VAL" != "x$ACTUAL_VAL" ] ; then
--		echo "Value requested for $CFG not in final .config"
--		echo "Requested value:  $REQUESTED_VAL"
--		echo "Actual value:     $ACTUAL_VAL"
--		echo ""
-+		if [ "x$REQUESTED_VAL" != "x$CFG=n" -o \
-+		     \( "x$ACTUAL_VAL" != "x"  -a \
-+			"x$ACTUAL_VAL" != "x# $CFG is not set" \) ]; then
-+			echo "Value requested for $CFG not in final .config"
-+			echo "Requested value:  $REQUESTED_VAL"
-+			echo "Actual value:     $ACTUAL_VAL"
-+			echo ""
-+		fi
- 	fi
- done
--- 
-2.30.2
-
+Jason
