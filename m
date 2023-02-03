@@ -2,109 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC453689192
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 09:07:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C07068919A
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 09:08:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232103AbjBCIGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 03:06:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45936 "EHLO
+        id S232562AbjBCIHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 03:07:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232760AbjBCIFu (ORCPT
+        with ESMTP id S232176AbjBCIHT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 03:05:50 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84C1795D2C
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 00:04:12 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id s67so3122874pgs.3
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 00:04:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=W7HGUCnUWkPRHR5V5XRcjLIGICmpSMabqz1JQFqqS94=;
-        b=JBBEC6y4/nuMSIaIZgkJV5xOCCCZNW1vt9C2vNxqEJIucI00kPNjVd5Daefpk7DzOv
-         x2VG2RpPPkvIlff95IA3onxoVqlKlbC8ZOtvVypSHcJ7/bTr+JYtDF9M65nFXwgsGDcs
-         XCap0AA+foJ3Mfr+CiQtJ/IgHRhYeoYPmVkBQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=W7HGUCnUWkPRHR5V5XRcjLIGICmpSMabqz1JQFqqS94=;
-        b=iLFueJT/4CTilYFqzajxC5NukhmmYEbFuRb7c/w9r+0/Ho64hYj1aGRRe6zl4JSTgD
-         XNyx8X/wwKXZvvchu0EfpFHi9DNBA5S9GUV2m5tn0eqzyJqGFanZ1TMM38O+C+8wsHeF
-         zkt7KMeL3Lx0+0kQ43baR+ticPx5N1b9SYL8jyzvP/VLQ3lm2g5UgWwcCc5LBj6gUu9m
-         cZb8lK7kdLrUuGHfEU5+ao0grY+TlSlEe+RJB8sZ479WYqG6GlzIFtBMaScM34zmeBDG
-         msYNKhGxx8p6lF49HVTtvY4cWcVEKlV7Io5bwjd88uxlAg/zGFoC4dVVsh2Y4dmpIXmg
-         jK3A==
-X-Gm-Message-State: AO0yUKVMX7B/uPIe78O3jDQMgW6DzrCuwki/fpI5r33DxuB0Yj7xNsEk
-        Wu6dePd/6/lnqvGwlXHlcM5nne3oBl/lU33CdVJW
-X-Google-Smtp-Source: AK7set+xhG1pRqTN1k6V9hR0hMBl60+BvgwGrS8ytdStZKITVce/S9xwAQz2khlmGuFIkG5V0Peh3QOqNcKe4ShjZuA=
-X-Received: by 2002:a62:e30c:0:b0:592:8390:8b97 with SMTP id
- g12-20020a62e30c000000b0059283908b97mr1853972pfh.15.1675411452011; Fri, 03
- Feb 2023 00:04:12 -0800 (PST)
+        Fri, 3 Feb 2023 03:07:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 130CF1F5FF;
+        Fri,  3 Feb 2023 00:05:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 99EA061E12;
+        Fri,  3 Feb 2023 08:05:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1F36C433D2;
+        Fri,  3 Feb 2023 08:05:33 +0000 (UTC)
+Message-ID: <3a59ffba-a7fe-97b0-af76-7194f7b3896a@xs4all.nl>
+Date:   Fri, 3 Feb 2023 09:05:31 +0100
 MIME-Version: 1.0
-References: <20230201231250.3806412-1-atishp@rivosinc.com> <20230201231250.3806412-8-atishp@rivosinc.com>
- <Y9ufoeZ/4obZDJz6@wendy>
-In-Reply-To: <Y9ufoeZ/4obZDJz6@wendy>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Fri, 3 Feb 2023 00:04:00 -0800
-Message-ID: <CAOnJCUKVXGXsFBUE753-HOr_CtN-5Nsq+yBQj1eT13WyU2r54g@mail.gmail.com>
-Subject: Re: [PATCH v4 07/14] RISC-V: KVM: Add skeleton support for perf
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Atish Patra <atishp@rivosinc.com>, linux-kernel@vger.kernel.org,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Anup Patel <anup@brainfault.org>,
-        Eric Lin <eric.lin@sifive.com>, Guo Ren <guoren@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Will Deacon <will@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: Regression: v4l/bttv vbi vs iommu
+Content-Language: en-US
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     "Dr. David Alan Gilbert" <dave@treblig.org>, iommu@lists.linux.dev,
+        mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <Y9qSwkLxeMpffZK/@gallifrey>
+ <d363902d-e465-8411-0c1e-58411b3a19b0@xs4all.nl>
+ <20230203063500.GA23520@lst.de>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <20230203063500.GA23520@lst.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 2, 2023 at 3:34 AM Conor Dooley <conor.dooley@microchip.com> wrote:
->
-> On Wed, Feb 01, 2023 at 03:12:43PM -0800, Atish Patra wrote:
-> > This patch only adds barebone structure of perf implementation. Most of
-> > the function returns zero at this point and will be implemented
-> > fully in the future.
-> >
-> > Signed-off-by: Atish Patra <atishp@rivosinc.com>
-> > +/* Per virtual pmu counter data */
-> > +struct kvm_pmc {
-> > +     u8 idx;
-> > +     struct perf_event *perf_event;
-> > +     uint64_t counter_val;
->
-> CI also complained that here, and elsewhere, you used uint64_t rather
-> than u64. Am I missing a reason for not using the regular types?
->
+On 03/02/2023 07:35, Christoph Hellwig wrote:
+> On Wed, Feb 01, 2023 at 09:48:46PM +0100, Hans Verkuil wrote:
+>> In fact, the plan is to replace the old and deprecated videobuf framework by the vb2
+>> framework in the bttv driver in the next 2-3 months or so. That will also automatically
+>> solve this problem.
+> 
+> It would be great to expedite removal of the old videbuf code given
+> how many problems it has.
 
-Nope. It was a simple oversight. I will fix it.
-Do you have a link to the CI report so that I can address them all in v5 ?
+We're working on it. A lot of old drivers in drivers/staging/media/deprecated will
+be removed in 6.3, and that leaves the cx18, bttv and saa7146 drivers that still use
+vb1.
 
-> Thanks,
-> Conor.
->
-> > +     union sbi_pmu_ctr_info cinfo;
-> > +     /* Event monitoring status */
-> > +     bool started;
+This week I posted patches converting cx18 to vb2 and someone else will work on the
+bttv conversion. We thought we could remove saa7146 as well, but it turns out that
+that is still very much in use (somewhat unexpectedly), so I plan to convert that
+one this month (I hope).
 
+I aim for removing vb1 in kernel 6.4 or 6.5.
 
-
--- 
 Regards,
-Atish
+
+	Hans
