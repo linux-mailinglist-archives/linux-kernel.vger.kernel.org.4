@@ -2,65 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F12F26898E0
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 13:35:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7EEA689826
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 12:55:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233080AbjBCMfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 07:35:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45796 "EHLO
+        id S232230AbjBCLzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 06:55:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233050AbjBCMfL (ORCPT
+        with ESMTP id S229782AbjBCLzb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 07:35:11 -0500
-X-Greylist: delayed 2487 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 03 Feb 2023 04:34:55 PST
-Received: from wp126.webpack.hosteurope.de (wp126.webpack.hosteurope.de [80.237.132.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F8062279D;
-        Fri,  3 Feb 2023 04:34:54 -0800 (PST)
-Received: from p5098d998.dip0.t-ipconnect.de ([80.152.217.152] helo=hermes.fivetechno.de); authenticated
-        by wp126.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        id 1pNudA-0000Ie-1R; Fri, 03 Feb 2023 12:53:24 +0100
-X-Virus-Scanned: by amavisd-new 2.12.2 using newest ClamAV at
-        linuxbbg.five-lan.de
-Received: from [192.168.34.144] (p5098d998.dip0.t-ipconnect.de [80.152.217.152])
-        (authenticated bits=0)
-        by hermes.fivetechno.de (8.15.2/8.16.1/SUSE Linux 0.8) with ESMTPSA id 313BrLdN012523
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Fri, 3 Feb 2023 12:53:22 +0100
-Message-ID: <f66f01d0-372a-1c22-3005-9c5bc65d8fa5@fivetechno.de>
-Date:   Fri, 3 Feb 2023 12:53:21 +0100
+        Fri, 3 Feb 2023 06:55:31 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB06172F
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 03:55:29 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id lu11so14703609ejb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 03:55:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=vuRNtaf4lF0Dji+GN/Ms+B6a5GJlCy52N3jxnAqPqXY=;
+        b=SiQ4zLhMbTlR71APuahIZVPq9bL1gZhzOMQGIkCpLwvVlcyxojNa3KH0N2JFEhu7X1
+         rQcbe+5Ep7e98qpsM55riw+QRzCB96W1bYZrticiJlDcVFRLC/8ES7DSoc6I2HDoKZNq
+         GwGSKYfW6V55xXQ4tz6FerK+OUpAtlmAxucYsjjl9fe0w1ENSbc1kP3WiyUjcTI28dDW
+         WDci738FYJ4KaD2XJARh+DnqIHg8WF0l/X0iBrTr2pE4zdRRvBsnjamqbMhQzLLtTmUd
+         sYlPHeSaR50mzXiNjyO7hckT3oN7CcbMscUDhXfxuv+VwraJEru7MboAY+gihOR8ojxK
+         aphg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vuRNtaf4lF0Dji+GN/Ms+B6a5GJlCy52N3jxnAqPqXY=;
+        b=0Jm/qkUXquKsCi2UAXplSMRW6R75ZtNPsh4/Mtf9iakF8uqWXHFY6UgXt6aUwp+AIG
+         q9Ej4daanI0wHpqQwsgBxjWXxhCzZngMnPyh60pqVdU6dHculh/p5M6b48EK3FgmIW0C
+         kYVKqaw3BqB1qRsPYtMqH0sgbUud746Z5WqBoJwuLS0ZrDeQtmzeaoewGVVZt1DGaFCa
+         wHtq63T4nzhdJI/iIKElw8ioIsuhnGW3CC9qBHb2F6FDR1IOHMlKItvgkS914paWQdbg
+         1tuDyupITnt/pCPzaA1mTey8KpZcbYIRjqQ1X9b700uoQPcDM84TGyqOHSAbNhdDYN2E
+         22XQ==
+X-Gm-Message-State: AO0yUKX46+jkxv4oCMDjw2ne/yVCYJ4teaBGrVqa9ObLfNPV2a7fxIL/
+        mqShU1LTeQCg9pST3sYwUEV8EA==
+X-Google-Smtp-Source: AK7set9YJkwsjiZHmM0GEaZdUIOmX/TKqx6cfDV13309k1cv8/q6a/Wf5+xodqMtqHad8qz6wcX8HA==
+X-Received: by 2002:a17:906:c0d2:b0:86d:67b0:6292 with SMTP id bn18-20020a170906c0d200b0086d67b06292mr10217769ejb.73.1675425327990;
+        Fri, 03 Feb 2023 03:55:27 -0800 (PST)
+Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
+        by smtp.gmail.com with ESMTPSA id qx18-20020a170906fcd200b0087b3d555d2esm1280778ejb.33.2023.02.03.03.55.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Feb 2023 03:55:27 -0800 (PST)
+Date:   Fri, 3 Feb 2023 12:55:26 +0100
+From:   Jiri Pirko <jiri@resnulli.us>
+To:     =?utf-8?B?6Zm2IOe8mA==?= <taoyuan_eddy@hotmail.com>
+Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Pravin B Shelar <pshelar@ovn.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "dev@openvswitch.org" <dev@openvswitch.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: =?utf-8?B?5Zue5aSNOiBbUEFUQw==?= =?utf-8?Q?H?= net-next v5 1/1]
+ net:openvswitch:reduce cpu_used_mask memory
+Message-ID: <Y9z2Lk+VvAHgu/4r@nanopsycho>
+References: <OS3P286MB22955AB6FF67B67778343FEDF5D79@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
+ <Y9zNMqVIlW0l3kpF@nanopsycho>
+ <OS3P286MB2295466ADE3312A2B9C02C51F5D79@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 5/9] ARM: dts: exynos: move exynos-bus nodes out of soc in
- Exynos4412
-Content-Language: de-DE
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Kukjin Kim <kgene@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     replicant@osuosl.org, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        =?UTF-8?Q?Martin_J=c3=bccker?= <martin.juecker@gmail.com>,
-        Henrik Grimler <henrik@grimler.se>,
-        Chanwoo Choi <cw00.choi@samsung.com>
-References: <20230125094513.155063-1-krzysztof.kozlowski@linaro.org>
- <20230125094513.155063-5-krzysztof.kozlowski@linaro.org>
- <CGME20230129104220eucas1p15b70f73be86fa5600cfe170d22869836@eucas1p1.samsung.com>
- <29841f64-360b-1426-e1fd-dd4c64ee5455@linaro.org>
- <b3f31e71-fa1a-e0c0-fdfa-f65674ccc5cd@samsung.com>
-From:   Markus Reichl <m.reichl@fivetechno.de>
-Organization: five technologies GmbH
-In-Reply-To: <b3f31e71-fa1a-e0c0-fdfa-f65674ccc5cd@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;m.reichl@fivetechno.de;1675427695;5089a882;
-X-HE-SMSGID: 1pNudA-0000Ie-1R
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <OS3P286MB2295466ADE3312A2B9C02C51F5D79@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,90 +81,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marek,
 
-Am 03.02.23 um 12:45 schrieb Marek Szyprowski:
-> Hi Krzysztof,
-> 
-> On 29.01.2023 11:42, Krzysztof Kozlowski wrote:
->> On 25/01/2023 10:45, Krzysztof Kozlowski wrote:
->>> The soc node is supposed to have only device nodes with MMIO addresses,
->>> as reported by dtc W=1:
->>>
->>>    exynos4412.dtsi:407.20-413.5:
->>>      Warning (simple_bus_reg): /soc/bus-acp: missing or empty reg/ranges property
->>>
->>> and dtbs_check:
->>>
->>>    exynos4412-i9300.dtb: soc: bus-acp:
->>>      {'compatible': ['samsung,exynos-bus'], 'clocks': [[7, 456]], 'clock-names': ['bus'], 'operating-points-v2': [[132]], 'status': ['okay'], 'devfreq': [[117]]} should not be valid under {'type': 'object'}
->>>
->>> Move the bus nodes and their OPP tables out of SoC to fix this.
->>> Re-order them alphabetically while moving and put some of the OPP tables
->>> in device nodes (if they are not shared).
->>>
->> Applied.
-> 
-> I don't have a good news. It looks that this change is responsible for
-> breaking boards that were rock-stable so far, like Odroid U3. I didn't
-> manage to analyze what exactly causes the issue, but it looks that the
-> exynos-bus devfreq driver somehow depends on the order of the nodes:
-> 
-> (before)
-> 
-> # dmesg | grep exynos-bus
-> [    6.415266] exynos-bus: new bus device registered: soc:bus-dmc
-> (100000 KHz ~ 400000 KHz)
-> [    6.422717] exynos-bus: new bus device registered: soc:bus-acp
-> (100000 KHz ~ 267000 KHz)
-> [    6.454323] exynos-bus: new bus device registered: soc:bus-c2c
-> (100000 KHz ~ 400000 KHz)
-> [    6.489944] exynos-bus: new bus device registered: soc:bus-leftbus
-> (100000 KHz ~ 200000 KHz)
-> [    6.493990] exynos-bus: new bus device registered: soc:bus-rightbus
-> (100000 KHz ~ 200000 KHz)
-> [    6.494612] exynos-bus: new bus device registered: soc:bus-display
-> (160000 KHz ~ 200000 KHz)
-> [    6.494932] exynos-bus: new bus device registered: soc:bus-fsys
-> (100000 KHz ~ 134000 KHz)
-> [    6.495246] exynos-bus: new bus device registered: soc:bus-peri (
-> 50000 KHz ~ 100000 KHz)
-> [    6.495577] exynos-bus: new bus device registered: soc:bus-mfc
-> (100000 KHz ~ 200000 KHz)
-> 
-> (after)
-> 
-> # dmesg | grep exynos-bus
-> 
-> [    6.082032] exynos-bus: new bus device registered: bus-dmc (100000
-> KHz ~ 400000 KHz)
-> [    6.122726] exynos-bus: new bus device registered: bus-leftbus
-> (100000 KHz ~ 200000 KHz)
-> [    6.146705] exynos-bus: new bus device registered: bus-mfc (100000
-> KHz ~ 200000 KHz)
-> [    6.181632] exynos-bus: new bus device registered: bus-peri ( 50000
-> KHz ~ 100000 KHz)
-> [    6.204770] exynos-bus: new bus device registered: bus-rightbus
-> (100000 KHz ~ 200000 KHz)
-> [    6.211087] exynos-bus: new bus device registered: bus-acp (100000
-> KHz ~ 267000 KHz)
-> [    6.216936] exynos-bus: new bus device registered: bus-c2c (100000
-> KHz ~ 400000 KHz)
-> [    6.225748] exynos-bus: new bus device registered: bus-display
-> (160000 KHz ~ 200000 KHz)
-> [    6.242978] exynos-bus: new bus device registered: bus-fsys (100000
-> KHz ~ 134000 KHz)
-> 
-> This is definitely a driver bug, but so far it worked fine, so this is a
-> regression that need to be addressed somehow...
-> 
-> Best regards
+Fri, Feb 03, 2023 at 10:03:28AM CET, taoyuan_eddy@hotmail.com wrote:
+>sorry, Jiri, my bad, will hold on before the next submission/hope it is the final one
 
-the exynos-bus devfreq driver is not so solid on exynos-4412-boards.
-On my 24/7 odroid-x2 I need
-echo performance > /sys/class/devfreq/soc:bus-leftbus/governor
-to avoid random hangs.
+Don't top-post please. So what is the change comparing to v4?
 
-Gruß,
--- 
-Markus Reichl
+
+>
+>eddy
+>________________________________
+>发件人: Jiri Pirko <jiri@resnulli.us>
+>发送时间: 2023年2月3日 9:00
+>收件人: Eddy Tao <taoyuan_eddy@hotmail.com>
+>抄送: netdev@vger.kernel.org <netdev@vger.kernel.org>; Pravin B Shelar <pshelar@ovn.org>; David S. Miller <davem@davemloft.net>; Eric Dumazet <edumazet@google.com>; Jakub Kicinski <kuba@kernel.org>; Paolo Abeni <pabeni@redhat.com>; dev@openvswitch.org <dev@openvswitch.org>; linux-kernel@vger.kernel.org <linux-kernel@vger.kernel.org>
+>主题: Re: [PATCH net-next v5 1/1] net:openvswitch:reduce cpu_used_mask memory
+>
+>Fri, Feb 03, 2023 at 09:52:56AM CET, taoyuan_eddy@hotmail.com wrote:
+>>Use actual CPU number instead of hardcoded value to decide the size
+>>of 'cpu_used_mask' in 'struct sw_flow'. Below is the reason.
+>>
+>>'struct cpumask cpu_used_mask' is embedded in struct sw_flow.
+>>Its size is hardcoded to CONFIG_NR_CPUS bits, which can be
+>>8192 by default, it costs memory and slows down ovs_flow_alloc
+>>
+>>To address this, redefine cpu_used_mask to pointer
+>>append cpumask_size() bytes after 'stat' to hold cpumask
+>>
+>>cpumask APIs like cpumask_next and cpumask_set_cpu never access
+>>bits beyond cpu count, cpumask_size() bytes of memory is enough
+>>
+>>Signed-off-by: Eddy Tao <taoyuan_eddy@hotmail.com>
+>
+>Eddy, could you please slow down a bit? Why did you send v5 right
+>after v4? Could you please always put a changelog to the patch
+>submitted to contain info about changes in between the
+>submitted version?
+>
+>Thanks!
+>
