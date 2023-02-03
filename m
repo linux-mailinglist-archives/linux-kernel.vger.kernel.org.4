@@ -2,127 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7022C68910D
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 08:40:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22C14689111
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 08:42:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232353AbjBCHjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 02:39:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55632 "EHLO
+        id S232504AbjBCHkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 02:40:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232071AbjBCHjq (ORCPT
+        with ESMTP id S232461AbjBCHke (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 02:39:46 -0500
-Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A7592C3B
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 23:39:45 -0800 (PST)
-Received: by mail-vk1-xa34.google.com with SMTP id bs10so2168619vkb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 23:39:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=QZxWzb3yPLqGq6Yxix+GBrYa0mk3uS9zwEb67e98TQU=;
-        b=R4yRal95vWUSAG5KfiUpIrJGkBDc00tzIhKtqbo7P14e8g2G8sHhMSE82H+DYlj7Q0
-         FrnlFEZg+mALfvwZqyjJ1drf5a8d6yniYZHxohmPNuqeWNFtzexnnw1MuDiiv2XqRq+6
-         506uXFAmLvFaopBcq4cjLseIGAwL0yXsz0HVE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QZxWzb3yPLqGq6Yxix+GBrYa0mk3uS9zwEb67e98TQU=;
-        b=V6Y6DrbMz9BBvNaoEK1RhTx85VQ9WOUSW4b37aeEoEXQn+6+Oo4V6IWbTkjB61bHRH
-         UaYQG4o/wo2S1+hudGDYZP0LuWsHvLFnagYBRqGJgzpDXhw+wRZ44hk8mTek4e9YFX8y
-         4boDm9woz3ItnYfHcoLNTK/yhbG/+JFTZydJAokwP88JFNhe5g+vJmfNiUmliV72m8LH
-         EhKoyeMz1/1SlCVMRCyKtMc/dajgx3alp5zM1Uotz/Qq+4uGSaHEiU95GpRYWPCei/0z
-         7ObQHW9wjg2H+wD2XmaKF+PgPHavPJfgdeWqH3C2cjTrzbvZKUXfA8nZBW3KiUlDkg8m
-         +Dtg==
-X-Gm-Message-State: AO0yUKXO5zrjDkrfHIw0+B4N/reoa87vAp+ZJ14z3ydCBDOoj3xh+8rZ
-        B/qYvKEQqrbEwDFyRvBgv6eH9iPaUFMlLbXOm3mSIw==
-X-Google-Smtp-Source: AK7set+GgxBgT+BjAC93C+XgjP/ecVL4fdQCV19du01DsL5X7oKE27t5MzZ9k5TCaAt7gX05+mhLAXIYkjyFGXvWHuE=
-X-Received: by 2002:ac5:c744:0:b0:3ea:94ea:110b with SMTP id
- b4-20020ac5c744000000b003ea94ea110bmr1316090vkn.22.1675409984392; Thu, 02 Feb
- 2023 23:39:44 -0800 (PST)
+        Fri, 3 Feb 2023 02:40:34 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48DC993AF8;
+        Thu,  2 Feb 2023 23:40:24 -0800 (PST)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3136umpC031865;
+        Fri, 3 Feb 2023 07:40:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=W6h8V1zpwEkskGTzcjkxhlNXpeHXV5iR8z5FgwPs6tU=;
+ b=p8u3qR6o0hyPg7WaUWGP1BoCAUevGI7BJddoH3FIBjOdRSOhT6zcnBJNljmLFbjGDGfm
+ Ty5EqIIlqkNFiussAYx9xv/UzUh+UPZKV2F1kpNGe9TU6xQGEO7xGaCUM2dCSKmaox7i
+ LRntASX9V+540ftns7f5Xbyo9KEbiUSKWFWOwp2uQjOCYmNh0FQS83ycqlbPFY05dXHN
+ 6LpbIZVBtfc8yfaFUPqXw0cGmkb8i5l1Uym/Rtby/R2NcNNNCN/5q6neMOaeVZFXiMAE
+ My4sGeR2Ea6ABjhIZAdbbIdolxaKZNt1O7Jvcw5IT6qbKsoZUGH4snsPdUcncXrHcrbV oQ== 
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3ngwetgxrx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Feb 2023 07:40:11 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3136T6e2031351;
+        Fri, 3 Feb 2023 07:40:09 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3ncvv6d2sm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Feb 2023 07:40:09 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3137e7j019464480
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 3 Feb 2023 07:40:07 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 21A1C21436;
+        Fri,  3 Feb 2023 07:40:07 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1434D21429;
+        Fri,  3 Feb 2023 07:40:04 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Fri,  3 Feb 2023 07:40:04 +0000 (GMT)
+From:   Alexander Egorenkov <egorenar@linux.ibm.com>
+To:     wim@linux-watchdog.org, linux@roeck-us.net
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hca@linux.ibm.com
+Subject: [PATCH 0/5] diag288 watchdog fixes and improvements
+Date:   Fri,  3 Feb 2023 08:39:53 +0100
+Message-Id: <20230203073958.1585738-1-egorenar@linux.ibm.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-References: <20230119124848.26364-1-Garmin.Chang@mediatek.com> <20230119124848.26364-20-Garmin.Chang@mediatek.com>
-In-Reply-To: <20230119124848.26364-20-Garmin.Chang@mediatek.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Fri, 3 Feb 2023 15:39:33 +0800
-Message-ID: <CAGXv+5EW8DXXp+D_M1AU7ohrrbmU8e7eMwo5LpZb9FHWi7ELAw@mail.gmail.com>
-Subject: Re: [PATCH v5 19/19] clk: mediatek: Add MT8188 adsp clock support
-To:     "Garmin.Chang" <Garmin.Chang@mediatek.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-clk@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: wfd7VBVoRvCwMQlJrM23Jr73FfP6x7FC
+X-Proofpoint-ORIG-GUID: wfd7VBVoRvCwMQlJrM23Jr73FfP6x7FC
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-03_04,2023-02-02_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ priorityscore=1501 bulkscore=0 mlxlogscore=836 phishscore=0 clxscore=1011
+ impostorscore=0 suspectscore=0 spamscore=0 malwarescore=0 mlxscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302030069
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 9:02 PM Garmin.Chang <Garmin.Chang@mediatek.com> wrote:
->
-> Add MT8188 adsp clock controller which provides clock gate
-> control for Audio DSP.
->
-> Signed-off-by: Garmin.Chang <Garmin.Chang@mediatek.com>
-> ---
->  drivers/clk/mediatek/Makefile                 |  2 +-
->  .../clk/mediatek/clk-mt8188-adsp_audio26m.c   | 45 +++++++++++++++++++
->  2 files changed, 46 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/clk/mediatek/clk-mt8188-adsp_audio26m.c
->
-> diff --git a/drivers/clk/mediatek/Makefile b/drivers/clk/mediatek/Makefile
-> index 8befaedfdd3d..b56ae9bee1d8 100644
-> --- a/drivers/clk/mediatek/Makefile
-> +++ b/drivers/clk/mediatek/Makefile
-> @@ -89,7 +89,7 @@ obj-$(CONFIG_COMMON_CLK_MT8188) += clk-mt8188-apmixedsys.o clk-mt8188-topckgen.o
->                                    clk-mt8188-ipe.o clk-mt8188-mfg.o clk-mt8188-vdec.o \
->                                    clk-mt8188-vdo0.o clk-mt8188-vdo1.o clk-mt8188-venc.o \
->                                    clk-mt8188-vpp0.o clk-mt8188-vpp1.o clk-mt8188-wpe.o \
-> -                                  clk-mt8188-imp_iic_wrap.o
-> +                                  clk-mt8188-imp_iic_wrap.o clk-mt8188-adsp_audio26m.o
->  obj-$(CONFIG_COMMON_CLK_MT8192) += clk-mt8192.o
->  obj-$(CONFIG_COMMON_CLK_MT8192_AUDSYS) += clk-mt8192-aud.o
->  obj-$(CONFIG_COMMON_CLK_MT8192_CAMSYS) += clk-mt8192-cam.o
-> diff --git a/drivers/clk/mediatek/clk-mt8188-adsp_audio26m.c b/drivers/clk/mediatek/clk-mt8188-adsp_audio26m.c
-> new file mode 100644
-> index 000000000000..f91381a1316c
-> --- /dev/null
-> +++ b/drivers/clk/mediatek/clk-mt8188-adsp_audio26m.c
-> @@ -0,0 +1,45 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +//
-> +// Copyright (c) 2022 MediaTek Inc.
-> +// Author: Garmin Chang <garmin.chang@mediatek.com>
-> +
-> +#include <linux/clk-provider.h>
-> +#include <linux/platform_device.h>
-> +#include <dt-bindings/clock/mediatek,mt8188-clk.h>
-> +
-> +#include "clk-gate.h"
-> +#include "clk-mtk.h"
-> +
-> +static const struct mtk_gate_regs adsp_audio26m_cg_regs = {
-> +       .set_ofs = 0x80,
-> +       .clr_ofs = 0x80,
-> +       .sta_ofs = 0x80,
-> +};
-> +
-> +#define GATE_ADSP_FLAGS(_id, _name, _parent, _shift)           \
-> +       GATE_MTK_FLAGS(_id, _name, _parent, &adsp_audio26m_cg_regs, _shift,             \
-> +               &mtk_clk_gate_ops_no_setclr, CLK_IGNORE_UNUSED)
+Minor code refactoring to improve readability of the driver,
+reduce code duplication and remove dead code.
 
-Why CLK_IGNORE_UNUSED?
+Alexander Egorenkov (5):
+  watchdog: diag288_wdt: get rid of register asm
+  watchdog: diag288_wdt: remove power management
+  watchdog: diag288_wdt: unify command buffer handling for diag288 zvm
+  watchdog: diag288_wdt: de-duplicate diag_stat_inc() calls
+  watchdog: diag288_wdt: unify lpar and zvm diag288 helpers
+
+ drivers/watchdog/diag288_wdt.c | 162 ++++++++-------------------------
+ 1 file changed, 37 insertions(+), 125 deletions(-)
+
+-- 
+2.37.2
+
