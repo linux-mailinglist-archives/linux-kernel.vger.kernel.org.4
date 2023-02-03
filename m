@@ -2,102 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98CC7689237
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 09:27:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62CC068922A
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 09:27:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233077AbjBCIXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 03:23:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56332 "EHLO
+        id S231864AbjBCIYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 03:24:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232877AbjBCIXG (ORCPT
+        with ESMTP id S232970AbjBCIYL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 03:23:06 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6389B701;
-        Fri,  3 Feb 2023 00:21:43 -0800 (PST)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3135HX2b017013;
-        Fri, 3 Feb 2023 08:20:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=vGCDi8mazy8C2ArRV8P4USNLAvgRgQFuyX5QpQr8bXI=;
- b=JD7lBvVRfUiWpb7ra75gvs1SS70jJvuY17QPkdPaoCY5hA5ywIc9Vz/XpmADZWJG5ikf
- 1cmjisa80G2Rd6aIJABY/F+CiF5L+TSmb+h/XBtiLuxwl3kpWb+0BnPCIiKdJOcc+Dke
- t4+fuoRRGiAQpwbnxGF15qlH5BqpYLD4/44BYVeW5Jc5Cs1lhZl92u+R8k2cVviND4WF
- IYp6bTbCCKcRH+ueS+PZwUJcSYiEboKCBkfSOv6v7vkKOQb/T5t5mYkxr9Y08ZMz3qRR
- FHBPXTG4zJmMOHrGaRRQMhdzjoTmqyNBSZ28pw80zWmYvz2i+zVnBesyW2t71c9uV26U 0w== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ngahqtme9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Feb 2023 08:20:42 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3138Kfnh013369
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 3 Feb 2023 08:20:41 GMT
-Received: from [10.216.62.140] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 3 Feb 2023
- 00:20:37 -0800
-Message-ID: <d2af0b0c-718a-a625-3630-05631d0e310c@quicinc.com>
-Date:   Fri, 3 Feb 2023 13:50:34 +0530
+        Fri, 3 Feb 2023 03:24:11 -0500
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CF4D25BA5;
+        Fri,  3 Feb 2023 00:22:24 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4P7T1l5Hx2z9v7Hy;
+        Fri,  3 Feb 2023 16:13:31 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwAXmAP_w9xjc2TtAA--.17044S2;
+        Fri, 03 Feb 2023 09:21:28 +0100 (CET)
+Message-ID: <d6c331029bb47fa7a4e574a66b28cf7c96edd5b0.camel@huaweicloud.com>
+Subject: Re: [PATCH ima-evm-utils v4] Add tests for MMAP_CHECK and
+ MMAP_CHECK_REQPROT hooks
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>, dmitry.kasatkin@gmail.com,
+        jmorris@namei.org, serge@hallyn.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stefanb@linux.ibm.com,
+        viro@zeniv.linux.org.uk, pvorel@suse.cz,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Fri, 03 Feb 2023 09:21:16 +0100
+In-Reply-To: <805425ab66a004b110cf0c33423ba5a4247c5cb4.camel@linux.ibm.com>
+References: <20230202135131.2445816-1-roberto.sassu@huaweicloud.com>
+         <fbac5d34fee2c3d4bbf036c06252fd0671577558.camel@linux.ibm.com>
+         <ae83bc62a798180281b2bcf6a469e97586d2af7c.camel@huaweicloud.com>
+         <805425ab66a004b110cf0c33423ba5a4247c5cb4.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH v5 1/2] dt-bindings: ramoops: Add support to get the
- region dynamically
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-CC:     <linux-hardening@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <keescook@chromium.org>, <tony.luck@intel.com>,
-        <gpiccoli@igalia.com>, <krzysztof.kozlowski+dt@linaro.org>,
-        <corbet@lwn.net>
-References: <1675330081-15029-1-git-send-email-quic_mojha@quicinc.com>
- <20230202235916.GA2931100-robh@kernel.org>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <20230202235916.GA2931100-robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: m_x_UGIBt3jvA9wc_qwpE2Y9If-Y-5vC
-X-Proofpoint-GUID: m_x_UGIBt3jvA9wc_qwpE2Y9If-Y-5vC
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-03_04,2023-02-02_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxscore=0
- impostorscore=0 phishscore=0 bulkscore=0 priorityscore=1501
- mlxlogscore=747 malwarescore=0 adultscore=0 suspectscore=0
- lowpriorityscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2302030076
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: LxC2BwAXmAP_w9xjc2TtAA--.17044S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrZw1rCw43AFWxuw4UKr1kAFb_yoWDKrbE9r
+        1j9rykCr9xGrs7Gwsxt398Jw4DKr4qvr1rKw47Xw42ywn8ZFs3Ars09rna9wn3Gr90qasx
+        CrWrXF9Yv3sF9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb78YFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x02
+        67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267
+        AKxVW8JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
+        j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
+        kEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0E
+        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
+        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0
+        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04
+        k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
+        1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1zuWJUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgARBF1jj4R-pQACs6
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2/3/2023 5:29 AM, Rob Herring wrote:
-> On Thu, Feb 02, 2023 at 02:58:00PM +0530, Mukesh Ojha wrote:
->> The reserved memory region for ramoops is assumed to be at a
->> fixed and known location when read from the devicetree. This
->> is not desirable in an environment where it is preferred the
->> region to be dynamically allocated at runtime, as opposed to
->> being fixed at compile time.
->>
->> So, update the ramoops binding by using some reserve memory
->> property to allocate the ramoops region dynamically.
+On Thu, 2023-02-02 at 15:40 -0500, Mimi Zohar wrote:
+> On Thu, 2023-02-02 at 17:23 +0100, Roberto Sassu wrote:
+> > > > +   if (ptr == MAP_FAILED) {
+> > > > +           ret = ERR_SETUP;
+> > > > +           if (argv[2] && !strcmp(argv[2], "exec_on_writable") &&
+> > > > +               errno == EACCES)
+> > > > +                   ret = ERR_TEST;
+> > > > +
+> > > 
+> > > FYI, on an older distro kernel, the mmap fails and results in following
+> > > without any explanation.
+> > > 
+> > > Test: check_mmap (hook="MMAP_CHECK", test_mmap arg: "exec")
+> > > Unexpected exit status 1 from test_mmap
+> > > 
+> > > With some additional debugging, I'm seeing:
+> > > Failed mmap() /tmp/tmp.4gD2UjSvC4/tmp.PlzUEm09hO, err: -13 (Permission
+> > > denied)b
+> > 
+> > Uhm, ok. Which kernel is failing?
 > 
-> Sorry, but I still don't think this belongs in DT as I commented on v4
-Do you mean, we should not even document this here ? or are you against 
-the size property mentioned in this patch.
+> I'm able to reproduce the error on a next-integrity or next-integrity-
+> testing kernel, by running the tests multiple times.  The error doesn't
+> occur the first time running the test, but subsequent times.
 
--Mukesh
+Ops, yes. The problem was that the fowners of the measure and appraise
+rules were shared. Will not work, unless the files used in the measure
+tests are signed too.
+
+Roberto
+
