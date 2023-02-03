@@ -2,120 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAF4F6898F8
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 13:41:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 580766898FE
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 13:46:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232327AbjBCMlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 07:41:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49734 "EHLO
+        id S232394AbjBCMq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 07:46:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbjBCMlV (ORCPT
+        with ESMTP id S229785AbjBCMq0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 07:41:21 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED75F9AFE5;
-        Fri,  3 Feb 2023 04:41:19 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id j25so999608wrc.4;
-        Fri, 03 Feb 2023 04:41:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=wUsSYIJ5Tz555F5M3p6Mkzprl0XwwXoQ6mbWmaeqKQ4=;
-        b=lqg4jWZOLPMDuJUevwiU3PKXstpBRIxEztaJwC+/yyTe29SI53b7xwTHpHzacE/H3w
-         3GynsjnonNpm+qayq+h7WeEz8mPjMgGEVohgiDrEL2lWfGy7a5n+3TBQapLN0SXP5FVt
-         a4FmdJ7s06Aj0LJJ3W+7V92jU8r6vyWHTVebYnuuXu/nYtMl34/i4xyeTfwyForqoRl4
-         WLyAMFpVx/vsvKW+UN1rmHeUNGIzI2KeHdniOjybE6zZtD5ti305Vc1YH5brRfKVIdSs
-         EB0Ngzpr3hC2u97MsHsP1faEPZ+aCrWpj8E+GPn7Tfh709DSzySLLU5sUNku2s3cp4Y/
-         bRng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wUsSYIJ5Tz555F5M3p6Mkzprl0XwwXoQ6mbWmaeqKQ4=;
-        b=GuyGvAGsCCbiWbq7TaQKw9d8+HRk1bUUbC4cpd4Bg1tUfBxvwDNticnHBgS7zMC9Ad
-         42NR3myaRHKI4sMR1a6rNbceNw7yudL41vXEmA3xtAsaVqWkVp26RclJiXScY2BOPsi5
-         SRRNd362//7yIsNh9AnxERgbaXYi1eCi27IaRvnglFcqt905GstJIYubxlLR8T9IzN8j
-         T/ttB366tNEE+XhPZ0OKuxuCW6ArZOyNuOBT5DxhCQMWgxq/OEkitDEF5SOIkUnnYYZk
-         7kxGE/1vgOpkgAT1+sj+K44x3CQnveGygfjGeq35r3nXBd10X8IbQ7VUHt8JqAFq1pbf
-         gySA==
-X-Gm-Message-State: AO0yUKWGatGa7wmQnLR1x/sSMJxtAu0UOe8smzv8nmb1zY4EX03qzfSS
-        pP29B/T9EZ9IifhfdQtWI68=
-X-Google-Smtp-Source: AK7set/u6ucZ4Xt1/4vhI8xwGCRElt/NfY8y9mqBkVFA5PRChrvrq8xGZRUL81CyHImK8iM11KON6Q==
-X-Received: by 2002:a5d:5958:0:b0:2bf:cfc0:ac71 with SMTP id e24-20020a5d5958000000b002bfcfc0ac71mr7975159wri.53.1675428078335;
-        Fri, 03 Feb 2023 04:41:18 -0800 (PST)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id c12-20020adffb4c000000b002b6bcc0b64dsm1913495wrs.4.2023.02.03.04.41.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 04:41:17 -0800 (PST)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Fri, 3 Feb 2023 13:41:15 +0100
-To:     Ian Rogers <irogers@google.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        Connor OBrien <connoro@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] tools/resolve_btfids: Tidy HOST_OVERRIDES
-Message-ID: <Y90A67/wRUXMMsHt@krava>
-References: <20230202224253.40283-1-irogers@google.com>
+        Fri, 3 Feb 2023 07:46:26 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E6FF9AFEA;
+        Fri,  3 Feb 2023 04:46:26 -0800 (PST)
+Received: from mercury (unknown [37.81.13.16])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C1AAB6602F0F;
+        Fri,  3 Feb 2023 12:46:24 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1675428384;
+        bh=eSr8KydWD2KO8r7TtN+Y+lpNdNVAYRGafaRB2qGXUTU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hkYYj+rFFgufgBiKAos8KdwI0MBVQmOCvulW0MQbnQ7azZzSoBzvzeCTcI7foLcHZ
+         Iar22OQOWp3hZh241dgbYQRbpxwtqPdXmDP6ozRPgclv9FWa8+yaRYoQ0XOqJ6CaLR
+         cIKanNrHRlbLvclE9cgOn/Ed2nzJEbnwWXIFSMkFE8RvXgBrzGgwlPoI0noHO6zDbk
+         0gZoAly9b4L+EZQrG7HvM89q44ubC5P8HiFgeSuTTueFu6p/e7VFaucO2/lnDuN8qe
+         kpODFfYBVFSqm2TGIVR52k++yglsrZ2ZD4XLPcAtwcqjSQGEwZ1gwFKOG3inzbzKK1
+         6b5bEumTPk4mA==
+Received: by mercury (Postfix, from userid 1000)
+        id 083561060930; Fri,  3 Feb 2023 13:46:22 +0100 (CET)
+Date:   Fri, 3 Feb 2023 13:46:22 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     yang.yang29@zte.com.cn
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xu.panda@zte.com.cn
+Subject: Re: [PATCH linux-next] power: supply: test-power: use strscpy() to
+ instead of? strncpy()
+Message-ID: <20230203124622.fgvo2udbrto3grwv@mercury.elektranox.org>
+References: <202212231042356202397@zte.com.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zk4n2uiiwvyoynwj"
 Content-Disposition: inline
-In-Reply-To: <20230202224253.40283-1-irogers@google.com>
+In-Reply-To: <202212231042356202397@zte.com.cn>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 02:42:53PM -0800, Ian Rogers wrote:
-> Don't set EXTRA_CFLAGS to HOSTCFLAGS, ensure CROSS_COMPILE isn't
-> passed through.
-> 
-> This patch is based on top of:
-> https://lore.kernel.org/bpf/20230202112839.1131892-1-jolsa@kernel.org/
-> 
-> Signed-off-by: Ian Rogers <irogers@google.com>
 
-Acked-by: Jiri Olsa <jolsa@kernel.org>
+--zk4n2uiiwvyoynwj
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-jirka
+Hi,
 
+On Fri, Dec 23, 2022 at 10:42:35AM +0800, yang.yang29@zte.com.cn wrote:
+> From: Xu Panda <xu.panda@zte.com.cn>
+>=20
+> The implementation of strscpy() is more robust and safer.
+> That's now the recommended way to copy NUL-terminated strings.
+>=20
+> Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
+> Signed-off-by: Yang Yang <yang.yang29@zte.com>
 > ---
->  tools/bpf/resolve_btfids/Makefile | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-> index abdd68ac08f4..2abdd85b4a08 100644
-> --- a/tools/bpf/resolve_btfids/Makefile
-> +++ b/tools/bpf/resolve_btfids/Makefile
-> @@ -17,9 +17,9 @@ else
->    MAKEFLAGS=--no-print-directory
->  endif
->  
-> -# always use the host compiler
-> +# Overrides for the prepare step libraries.
->  HOST_OVERRIDES := AR="$(HOSTAR)" CC="$(HOSTCC)" LD="$(HOSTLD)" ARCH="$(HOSTARCH)" \
-> -		  EXTRA_CFLAGS="$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)"
-> +		  CROSS_COMPILE=""
->  
->  RM      ?= rm
->  HOSTCC  ?= gcc
-> -- 
-> 2.39.1.519.gcb327c4b5f-goog
-> 
+
+Thanks, queued.
+
+-- Sebastian
+
+>  drivers/power/supply/test_power.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/test_power.c b/drivers/power/supply/tes=
+t_power.c
+> index 5f510ddc946d..0d0a77584c5d 100644
+> --- a/drivers/power/supply/test_power.c
+> +++ b/drivers/power/supply/test_power.c
+> @@ -306,8 +306,7 @@ static int map_get_value(struct battery_property_map =
+*map, const char *key,
+>  	char buf[MAX_KEYLENGTH];
+>  	int cr;
+>=20
+> -	strncpy(buf, key, MAX_KEYLENGTH);
+> -	buf[MAX_KEYLENGTH-1] =3D '\0';
+> +	strscpy(buf, key, MAX_KEYLENGTH);
+>=20
+>  	cr =3D strnlen(buf, MAX_KEYLENGTH) - 1;
+>  	if (cr < 0)
+> --=20
+> 2.15.2
+
+--zk4n2uiiwvyoynwj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmPdAh0ACgkQ2O7X88g7
++pq2xhAApLxSAyVBQTFenESoqlz0STQImWJtHJbcuSNHe9u2X3mii4USzEkToPxY
+cTUHwwdrsMsGAxioVXhvjaXf/wNLc0yxVW8qYzxwPJes9BgyCfatVNJBpRwoCBos
+n72VYGJ+F4wirBp4zHGs1MxFOJ4jRKiDnyYVzNi1NlHKkVIX2Z+jxuuEsHWnw5zf
+7aS7bGwJhvYW4KXbWRoaHYu9ZgOxPJkdCko4sYSjs2BIIhpeZtgCAGAZGgFbZOeV
+R8+NlRuHfe6HuVTbXAmBnuzAmEW5JCm1W3HE1equOsWK37mAlgd00KkyRv3G4+7H
+yNlT56rGPDiPJf3MdwNAyMR6KYK0Z8NNbdqnWs1J/lDQMKv+kUFwZ7lUrMrwdYDo
+TPZC7tg4KyFpkh2TF+xXwA++mtcm1dV/gDmfPf2W5mT4g9Pvie6DoDf981xa/tM7
+AmtJXiQtLptriXJjuzVFa8c34O1tgr8J30AylBJXtVZcZzLTLq9/dOea+K7un3y3
+tWoAS4H0zObO4GDqfU6fYCgFltQ2RQ0k4vNaBuVtA43DTFjg2frrT0LfEItRhxPr
+7AF9xz17thDm+Fxdx0C7ABS8xKJFaMrjYMu+8fbQnE/OPDn7N3ZrulG9sAZg+f6T
+aYXyz60p5QlRtSDgeAyAqRuL056yuHBCTYnjH2ieLXPWc9Hf2ZE=
+=1m5F
+-----END PGP SIGNATURE-----
+
+--zk4n2uiiwvyoynwj--
