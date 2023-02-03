@@ -2,134 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7621968A633
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 23:29:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C09B68A638
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 23:31:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232802AbjBCW3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 17:29:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50520 "EHLO
+        id S232957AbjBCWbX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 17:31:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231286AbjBCW3A (ORCPT
+        with ESMTP id S232387AbjBCWbV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 17:29:00 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5CF31EBF8
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 14:28:27 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id g13so1925900ple.10
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 14:28:27 -0800 (PST)
+        Fri, 3 Feb 2023 17:31:21 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 778C2184
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 14:31:19 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id lu11so19330473ejb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 14:31:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gMyHt710tobXZzqB4RVOXm/lfSphZfIQDyw8A1rvqM8=;
-        b=KJQTCWhAd7IPsSxTwSEdEe5ccYd6PTpm9gQe4BkQOs0WlNmdWxAQxrM8F0aHiu25In
-         0386XN/L0AG/jmBhyONVoBbYBvi5VNUa6YG27G3cZnsLDOCeubj2Fjew82Ab9wI5dFm9
-         1JfI/nmp3tNTYA0zPEKeDUbvR5uVXlIKAwp+w=
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=dWWZZt8Kd4jgexM3P2TiZQc8VKtIMzPQG+XBMGoXd3A=;
+        b=KAaaQyjPGwK5bqIhRr/0vsX0mK/cllOocnrd3InMcbq4UNsMPH1EAzHpj8k0DULfrU
+         LYeN9IuTZZ9KunpCXqpNhekp1fgZqmzx0V/QSjn6LccSZhKmUuVjz9zwJ2g8gLLyGGy3
+         tcYLvcuNXZZEpSvrQBRUDtmDAGF0958HA1yJotBPrUuJZqSA/tlwjPNwgO5fSfAiPM9P
+         wlfJbx5VPi7Hdgerg+cet3bseBQsyi2WNDLbb5zCzh/xjuGdpAeAWS+IKsqvoEB6WsCK
+         nTaOW9nT3V3BCJekQVJL8dHPe1q4Jo2TTriZYQB+IHe0PdZFa1oQ4p4N3UkM0IV8yHik
+         oXAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=gMyHt710tobXZzqB4RVOXm/lfSphZfIQDyw8A1rvqM8=;
-        b=1LhunAFV5fVeNWznLyQlUVifml4PhYy/ZAlPF6hY0TkOr2by3FugV/AC9jQLYWEc3M
-         q7dWjAgYLfDIoWe5R9rRQQ6Js7D2R9roYpmJ/JVqYUTjUOSUhSY/+zhEDzUyN5ndfEvF
-         SIOculFrXF9DRngo9jUVyGrOTdxZa4tqe37NxaLkXTpdCtxX+v+eGrpv6OBTF+pFS18d
-         pkj6AsCHUdleL5imm48EX94145wF1axqpg7ff3/8fWGwo/5aq68k8R1S7lve7mBB5vM1
-         VEELNfk9g9zs608ccs8EDIDy1rg3Mop4ettVpOPXATtYMvicea7rkcVdtSFzSD++ZqmY
-         jehQ==
-X-Gm-Message-State: AO0yUKW4DL2PVS29PhczUoI6TWFkuT3xsVwsH+8cFAzvQITgzflADuGf
-        qEoRK8q+KyqJRq26uRuV08UuvFnCO6OUKAB5
-X-Google-Smtp-Source: AK7set//yln2V1DGJdDa8X2Q3rBGRrmvfMdT9UHoD5EABS+sltirE42ArLrbAQz68gi6qCTk07lZkQ==
-X-Received: by 2002:a17:903:30d2:b0:195:efa7:d54e with SMTP id s18-20020a17090330d200b00195efa7d54emr4510904plc.12.1675463303088;
-        Fri, 03 Feb 2023 14:28:23 -0800 (PST)
-Received: from smtp.gmail.com ([2620:15c:11a:201:44f:ac27:361d:7805])
-        by smtp.gmail.com with ESMTPSA id u65-20020a627944000000b0058da56167b7sm2333853pfc.127.2023.02.03.14.28.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 14:28:22 -0800 (PST)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     stable@vger.kernel.org
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH 6.1.y] phy: qcom-qmp-combo: fix runtime suspend
-Date:   Fri,  3 Feb 2023 14:28:20 -0800
-Message-Id: <20230203222820.2958983-1-swboyd@chromium.org>
-X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
+        bh=dWWZZt8Kd4jgexM3P2TiZQc8VKtIMzPQG+XBMGoXd3A=;
+        b=fqRqHfVsh3dEuh6rsimzoNlZrqg6n1Zj9IdDaJKrPNk3Yy8haoEIt/YM3JKfLrsucG
+         UgI1tFws2megHBwqD20Auc67twTPCmCk58HWrZW0EnHBMkge4VZ3opMnHMYSh/EX611R
+         pg3ddgJOh6lJQrKKuEb8VihMjFOfs7MK7LJqi1Gs+Tk9XiFMHrtS2i6l72rJrypmPdlx
+         +Z5iAi8V+JAIte5eW3ikx7copksRQy0QM8gT6T90fNc+Hi35MzuaUEItBcUIKTK7omcK
+         0VOI2J62wrACQbc3AI6GjYhHAysF9X3X7AKDz9YNaL+h2ytoW1B9BPuRlTBysMIBaMJv
+         p0OA==
+X-Gm-Message-State: AO0yUKUiEiPJmTjDanSJmsBiyMe2ZjVwPcaiSaqDQtXOJKE8MrFhvG9G
+        3A04fdbjWvr62VF7R06couvIIAE08R9w71EI/8DXqw==
+X-Google-Smtp-Source: AK7set/ngCUt3CFIMK1ZEA00e8oy4dFzGJAM1H1PmSx4A9FBTa8WDKIPnYAqeI3LGjP/KCfjZut7Hqka4SW9V2e2hvU=
+X-Received: by 2002:a17:906:c319:b0:878:7bc7:958a with SMTP id
+ s25-20020a170906c31900b008787bc7958amr3493108ejz.220.1675463477828; Fri, 03
+ Feb 2023 14:31:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230202233229.3895713-1-yosryahmed@google.com>
+ <20230202233229.3895713-2-yosryahmed@google.com> <Y900tl+kRWoZac/T@casper.infradead.org>
+In-Reply-To: <Y900tl+kRWoZac/T@casper.infradead.org>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Fri, 3 Feb 2023 14:30:41 -0800
+Message-ID: <CAJD7tkb9qTZRFUDGaBQM+nz2-HDpAJJ8SSB+rxgctBfC3K9mHw@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 1/2] mm: vmscan: refactor updating reclaimed pages
+ in reclaim_state
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        David Hildenbrand <david@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Peter Xu <peterx@redhat.com>, NeilBrown <neilb@suse.de>,
+        Shakeel Butt <shakeelb@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan+linaro@kernel.org>
+On Fri, Feb 3, 2023 at 8:22 AM Matthew Wilcox <willy@infradead.org> wrote:
+>
+> On Thu, Feb 02, 2023 at 11:32:28PM +0000, Yosry Ahmed wrote:
+> > diff --git a/fs/xfs/xfs_buf.c b/fs/xfs/xfs_buf.c
+> > index 54c774af6e1c..060079f1e966 100644
+> > --- a/fs/xfs/xfs_buf.c
+> > +++ b/fs/xfs/xfs_buf.c
+> > @@ -286,8 +286,7 @@ xfs_buf_free_pages(
+> >               if (bp->b_pages[i])
+> >                       __free_page(bp->b_pages[i]);
+> >       }
+> > -     if (current->reclaim_state)
+> > -             current->reclaim_state->reclaimed_slab += bp->b_page_count;
+> > +     report_freed_pages(bp->b_page_count);
+>
+> XFS can be built as a module
 
-commit c7b98de745cffdceefc077ad5cf9cda032ef8959 upstream.
+I didn't know that, thanks for pointing it out!
 
-Drop the confused runtime-suspend type check which effectively broke
-runtime PM if the DP child node happens to be parsed before the USB
-child node during probe (e.g. due to order of child nodes in the
-devicetree).
+>
+> > +++ b/mm/vmscan.c
+> > @@ -204,6 +204,19 @@ static void set_task_reclaim_state(struct task_struct *task,
+> >       task->reclaim_state = rs;
+> >  }
+> >
+> > +/*
+> > + * reclaim_report_freed_pages: report pages freed outside of LRU-based reclaim
+> > + * @pages: number of pages freed
+> > + *
+> > + * If the current process is undergoing a reclaim operation,
+> > + * increment the number of reclaimed pages by @pages.
+> > + */
+> > +void report_freed_pages(unsigned long pages)
+> > +{
+> > +     if (current->reclaim_state)
+> > +             current->reclaim_state->reclaimed += pages;
+> > +}
+> > +
+>
+> report_free_pages is not EXPORT_SYMBOLed
 
-Instead use the new driver data USB PHY pointer to access the USB
-configuration and resources.
-
-Fixes: 52e013d0bffa ("phy: qcom-qmp: Add support for DP in USB3+DP combo phy")
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-Link: https://lore.kernel.org/r/20221114081346.5116-6-johan+linaro@kernel.org
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
----
- drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 12 ++----------
- 1 file changed, 2 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-index adcda7762acf..816829105135 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-@@ -2296,15 +2296,11 @@ static void qmp_combo_disable_autonomous_mode(struct qmp_phy *qphy)
- static int __maybe_unused qmp_combo_runtime_suspend(struct device *dev)
- {
- 	struct qcom_qmp *qmp = dev_get_drvdata(dev);
--	struct qmp_phy *qphy = qmp->phys[0];
-+	struct qmp_phy *qphy = qmp->usb_phy;
- 	const struct qmp_phy_cfg *cfg = qphy->cfg;
- 
- 	dev_vdbg(dev, "Suspending QMP phy, mode:%d\n", qphy->mode);
- 
--	/* Supported only for USB3 PHY and luckily USB3 is the first phy */
--	if (cfg->type != PHY_TYPE_USB3)
--		return 0;
--
- 	if (!qmp->init_count) {
- 		dev_vdbg(dev, "PHY not initialized, bailing out\n");
- 		return 0;
-@@ -2321,16 +2317,12 @@ static int __maybe_unused qmp_combo_runtime_suspend(struct device *dev)
- static int __maybe_unused qmp_combo_runtime_resume(struct device *dev)
- {
- 	struct qcom_qmp *qmp = dev_get_drvdata(dev);
--	struct qmp_phy *qphy = qmp->phys[0];
-+	struct qmp_phy *qphy = qmp->usb_phy;
- 	const struct qmp_phy_cfg *cfg = qphy->cfg;
- 	int ret = 0;
- 
- 	dev_vdbg(dev, "Resuming QMP phy, mode:%d\n", qphy->mode);
- 
--	/* Supported only for USB3 PHY and luckily USB3 is the first phy */
--	if (cfg->type != PHY_TYPE_USB3)
--		return 0;
--
- 	if (!qmp->init_count) {
- 		dev_vdbg(dev, "PHY not initialized, bailing out\n");
- 		return 0;
-
-base-commit: 68a95455c153f8adc513e5b688f4b348daa7c1b1
--- 
-https://chromeos.dev
-
+Will do that for the next version, thanks!
