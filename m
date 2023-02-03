@@ -2,155 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF7C76898CA
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 13:32:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C08506898D6
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 13:32:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233005AbjBCMcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 07:32:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42146 "EHLO
+        id S233032AbjBCMcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 07:32:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232893AbjBCMcK (ORCPT
+        with ESMTP id S232701AbjBCMcM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 07:32:10 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2056.outbound.protection.outlook.com [40.107.244.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 793B879F3A;
-        Fri,  3 Feb 2023 04:31:56 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=assyKpz/W84+CyVobCxgGMCHieTpuNyg5ei/IT89T0eTT2nUbAWeJgGUz7aS1YqBMi9TNLTEFTyhvQn3y7LHnfwD8kh1AzDJ0OXWXBIN8RehN0L10MomUxR0P1cilngFpQkoqZ9qPibMdCdkEmL84YaWVD7MdJ8Yp4VwiytRMDrc51ms+pJVJk0rzoFIzV6DlxIk1AffhTdUdVY1WmENPnmkbsUS7G8rwT88XDPzsCwojrEJeYTBRWlifXTFxyW8o2ruIVC925ecVKxiG7PtXQTPqwZLo4m5AyDBAh6dmn5EbI/65R3iiUP0pmGIyNy2LcxiYBdahA8Xr3fOnmib/Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=z7T6Bs32OA8nGCSjbcOrXDzcKkR/MGfrPClu0ZEDBAk=;
- b=O7YNYvoGYr1YYLiNHHs52NYpkLZPB5MjuyL3tv6jXT6jDMpja14racDXQ13LepkNFAtthYRjDbXzE8mZfxSMlypvy4ow8thX6xv9d2MVxkyRlvXI0J1XGaB5AYFL+PbTMhX7GWvGnGf0wcUJmHzKaeEFjVtEMx11drQzZYyLqllrruyVWchYjahsUFwNyffwapcgDD1eIHfiFZn8r4LeecT2WkU1M2nwl5KN5oehdTo4DPM7IVwW0AtieMjahcVNV9S+8OnrIHH+YraphV+DfOon1YHva+VdABFDrHRlPnBi1a40Yevy4y+aJUZm5y4IxiaKzoLKWiz806VHa6hNUA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=z7T6Bs32OA8nGCSjbcOrXDzcKkR/MGfrPClu0ZEDBAk=;
- b=tBd9go4KlRePZA8AXyMjShmpwgQZ4ljTbjmq7up875VWcKR9AYozPPUFXlmjyD/fLyhhxaoi/mHI9X+KZgKuPU1ZTKREAzdclS1BE/mS/tIUdM38fGWysE0xW96kL4haY218e/2XcemlDId9QSoTE4psciE+iALlz2jYpEN8HWsRMnrwpQ02XghjmsinGw+DVGasVZvjUNhI+4TXew9VJPci9vwhIoEaoCVRayaJKp3cjk3WWI0sH8b2Q6GPlr5Qv8Xt9tED+7wM2/nGqgjuJYSLajF3yuzPMa5hy/ugXfiufrS6RUqJN66Y8575cq26/enOKLLMXNhOFkME34/vAQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by BL1PR12MB5253.namprd12.prod.outlook.com (2603:10b6:208:30b::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.28; Fri, 3 Feb
- 2023 12:31:54 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::3cb3:2fce:5c8f:82ee]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::3cb3:2fce:5c8f:82ee%4]) with mapi id 15.20.6064.031; Fri, 3 Feb 2023
- 12:31:54 +0000
-Date:   Fri, 3 Feb 2023 08:31:52 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-Cc:     Nicolin Chen <nicolinc@nvidia.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>
-Subject: Re: [PATCH v1 5/8] iommufd: Add replace support in
- iommufd_access_set_ioas()
-Message-ID: <Y9z+uAbYtgk30no+@nvidia.com>
-References: <cover.1675320212.git.nicolinc@nvidia.com>
- <bfe5aed6d354ef547979f0b256c8a3f9bd5b223b.1675320212.git.nicolinc@nvidia.com>
- <BN9PR11MB5276D06D3F9AA6202E20F8E68CD79@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BN9PR11MB5276D06D3F9AA6202E20F8E68CD79@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-ClientProxiedBy: BL1P221CA0010.NAMP221.PROD.OUTLOOK.COM
- (2603:10b6:208:2c5::14) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Fri, 3 Feb 2023 07:32:12 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E3C888F19
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 04:32:02 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id x7so5071982edr.0
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 04:32:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8ON3Sl99UT8ureqEDmbSEHsRNx7R9SA+QtKFoE+i2Oo=;
+        b=lBVk3W/UyO+p9pLq07rPsBt3xO3mjw0/Q6FYYGvYul/Bl75Etx/NWDZziXRICISYS+
+         OTpgs7RnubJ7HlWJC0ura+8mz9FMYhyJtqNMzTCWO2JnyWqdi1MN2f7Z1V894VlNIO9j
+         p6xP5SK4SW/m915LCK+EHPwQmRVusS2IFDT0IeXhMnZtNgCAnMw8tmhPWIEyYIdUv45K
+         MfEhOVerky/dQnDV5WkSyqaYpPz0oIOOZe/tvR90qdmUjlkcpH0RC+oQ0RS7bj+hAfwi
+         09UGK7Kxldpb7n2Vkg8yK53NSa//2Amlqbdrp1X7BKt+6m7Qh9UtlZluuXWXIdj2S1eR
+         xJQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8ON3Sl99UT8ureqEDmbSEHsRNx7R9SA+QtKFoE+i2Oo=;
+        b=fl5b8/QjdZ5RWLWXRW4HLSQ4F28LNNATCVXClOdFHrEc1nqH6+g2Lsgm/378owrcty
+         HwRKCrEKxN6ugb+OAoSXSbw29FD6uZ44tAwqbEhF3bLiB6k9RlaxCbzpCpCdNhQCCpEy
+         b6t+4l1xbah/7ZmVVzpr7B8pabwKsIVUbdbnqzkrryL8Z+luyATlDi7pBT3hGwe9UDWd
+         WzupB/Ez8Xerwr0O+baETgDRuErfuQO0iiQszQT1knMvZthPAzdmnK+q2n2D4WaWoyk3
+         9RIS/UA1IWvm/BpJZSbCZSG3pAdVCAcYpv1vO8MWoSH9dWnoFVFUDCxrT1qZLeSZED+4
+         jBlA==
+X-Gm-Message-State: AO0yUKVr9FpdcHk6njGL9aoQ8B1La5SKW8RwNfYEMM/xcUX8GkTTSYMP
+        yOrKb7Zk18miXH/WBlJj1bNimQ==
+X-Google-Smtp-Source: AK7set+mvfj95zLeSWmU5e5UDpt5MMre8u+osBvx7sTSxXMPwrd90oXq/vv0Ttley1PZsEGT2E4jxg==
+X-Received: by 2002:a05:6402:298c:b0:4a8:452:55a4 with SMTP id eq12-20020a056402298c00b004a8045255a4mr5214933edb.17.1675427520772;
+        Fri, 03 Feb 2023 04:32:00 -0800 (PST)
+Received: from [10.7.1.2] ([82.180.148.111])
+        by smtp.gmail.com with ESMTPSA id r17-20020a05640251d100b0046c7c3755a7sm1068634edd.17.2023.02.03.04.31.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Feb 2023 04:32:00 -0800 (PST)
+Message-ID: <f3ccd7ad-0bbb-be39-c989-765552e2c6af@linaro.org>
+Date:   Fri, 3 Feb 2023 13:31:57 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|BL1PR12MB5253:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6457b70d-f310-45ad-bfaa-08db05e2a1f5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: HfG+/K0/WYBDTmLZTuZnWTRiDdL2aWsFTY1KREMDvdiUHN2+74tr2c2uKy0tRfGkt7zQc+PSC7Go0Q2W6fVJmn4dNmcAWOjqwEkYVYYDwNtW6ugWzy5SfAbDFSgFbnPv3C8JERO+mjchKOtA8CU7As2dltGASnTEHDpJ0bat6YQaPhYCSFEaFYXSxThMfKC3s1+oRfqyPjh/0cDuMb9Y9QNnNyqg+j/eeqy1zhNWcFJy1AIZSxUWtt1fLxQrFjQ/++0L2q/B0z2f/+ed7RWidNjIpuYHCXGu2jLsUP911h5QgHjnpVR+Ym4prPgiGrhYlOMYPgh50XWwx3kxaSB+JJtI0FyCMHsqg6IiKU5al6gLhX0dgPrsia9Sy4YIIAmv9Roe04GmmKJPphJ869/8+QUmiCegR6+JOFDr4q3dsEbpGF6wodLoz4lxdgYr6lLcgrAwgP8i6Yxl6JBjABTUpYMP8gdOx3byMJzPDkIf9ePWAYk9ySUJfXUjxXABq72EGo3JuWgXq8TXUKB4HUYOEHDGAYnenJ7r9XkJTmsXARX9XD3O65ykrWS6IXe7NJfrSQFu2NysY2jNwfBwZ5Vi0nkXDodJMd1qTO7lN14L9FTHtyOhazJ9UVZXjvkXF5cekceNxTi/oQCV6jjSml87Xw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(39860400002)(376002)(346002)(136003)(396003)(451199018)(2906002)(66946007)(4326008)(5660300002)(478600001)(36756003)(6486002)(7416002)(6506007)(6512007)(2616005)(26005)(186003)(83380400001)(8936002)(66556008)(86362001)(41300700001)(66476007)(38100700002)(8676002)(6916009)(316002)(54906003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zkF6uAXrPF+8obsAq6uhSeZL1lo5SylV+tLpQly88ytA1ImNp0dPzs2B0UTD?=
- =?us-ascii?Q?epjFD/zY4T0lQ8YDUrHukJBNl1RcteD9HeuXm/2R3RiV4kD+lQqsYOMERV9D?=
- =?us-ascii?Q?Q9S6CIbmKpVBvemEb/lChoxLaAwYMAaBf7b1vLO87l+kv/dotDOnj0elLeAp?=
- =?us-ascii?Q?MLpbknpGCzjgnob8d/zUnnpmkUJjApaW/I9I64E5hyEwGENxnMCo2L5BTmj5?=
- =?us-ascii?Q?VXeXeXMhGhn0KsACQf9aOFo8iRaAMmqaqiFVinEO60TrMvmZj1ttXOyttJp8?=
- =?us-ascii?Q?IfhOYkiHXWYUN+eC1L32+BIQUPdgQdrfIMdXyfpROCo9pm7Z9t1ZQMbMqRUD?=
- =?us-ascii?Q?ppPShw5db/yfz1NOhhQgxwd8mmSVguTCDDee4Uz1A/ZcYIhZC0ZrNeNOyPYV?=
- =?us-ascii?Q?L04u9TK3AqnSQXXVhWUef8pu26f6olii9vUYSJCvzfycIXifhEWdvQUMYjT5?=
- =?us-ascii?Q?1S72tkYUWATim2OWSRrEkKPGQLPb0BTZmuBDMVTCvQ8Q+2FZm3gOXGhAfZob?=
- =?us-ascii?Q?dAJ+mNtxiMbuF9iHnjUEIwZDpBiMOuDkAxC/xlGBblK0Rih/9ScCaZJdO4xF?=
- =?us-ascii?Q?HfMkZtwoEeJKrRBdpNlNDpRBVZejC0uvyq8EOGYEkIj+Cuet+aZ4BF5x0RxP?=
- =?us-ascii?Q?I+yfBm35ySMu7ThFnAR+1+HNt+2MWS6+pSJAQrBU2JqI9ChgtvcFQ5bY1fek?=
- =?us-ascii?Q?X/IlyVmGV1ssh36j54SXGP0UY1hJm5XpPsl4A7riEUHTxi+qZsuQhCbn5+VF?=
- =?us-ascii?Q?9jH7XEDxFiVHBwaJGa+ivliTRz95jHt7LJ9dca5atRJtlXHQFozgnsKNA8rJ?=
- =?us-ascii?Q?0CKe+9umWLMgU9dl3YY0tgIg0UJ+LYu7HZKrg4lTcHt+0KSM7+2tiIjal1Hh?=
- =?us-ascii?Q?Sh93I3VV5AmnkxNAm3L3O/vL+wNMsWFoLUczR60OZCAXq2VlkV42iEfF/Bb+?=
- =?us-ascii?Q?gIZPDiAOsMXvx4ffisrZXIn/bkejtU8K+fW3Gt9umpN2CexPmnnlUIDyqZJD?=
- =?us-ascii?Q?/EpxCRgoAmjeB7iGdusl6XcirBW9VMDr21X+XFhj4ufO+9vXIEyIamlFgsIo?=
- =?us-ascii?Q?ORR+DPPif0YnBNznu7HU+5mq8hOSiX5DliFWKMXQEr2tpz3IyfxqVkpfOI/s?=
- =?us-ascii?Q?HNLMCIJnjZqFqvWSRR9k/Ma543rzI33EckeZSc93UvWEsBUKPRI35ZAAV286?=
- =?us-ascii?Q?6Z3bo8tM9ldev1MjTKtoFJmmVo8TrcrYs8mfFWSqEBfoMNybEowjFoM/pWbN?=
- =?us-ascii?Q?ww+P4tCqYSfpNEhOy5IXEPw55i0LYOX5gROXRGNFOZvUsT5IazbwFQBSmOds?=
- =?us-ascii?Q?SsHxtjpqfgXJ/U3CUd+iee+vcRyb+ACgGqj2ElkLcHHmpXkq1kcM4n3Qau4p?=
- =?us-ascii?Q?EVf+HReRWIuRCCFF50L+8JmZjeACsZHCQrXUvdkTlThdaRLewEyzo34lBtos?=
- =?us-ascii?Q?ajWzQVYtzX4XCmaED7vWXjbqZC+850mD7Mg1TMlwwjEh8hbSEmRB7GQooi+q?=
- =?us-ascii?Q?pgV6QtGaufabYySOGCqMGS2PD1Cb3WMRmUVFBxC6Tv/Ux1RtUDTHQxw7lvBz?=
- =?us-ascii?Q?AwG/SRmBQv1UdcGtihlqjT7XL6aPQA7REDkAb3aB?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6457b70d-f310-45ad-bfaa-08db05e2a1f5
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Feb 2023 12:31:54.2760
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5y9YQfGzb3+5hb63vCLeg24EBaYitSCQaJpMx2tMx36fcX8Hc6FtvTI1/i3q5lFl
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5253
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [EXT] Re: [PATCH v2 1/1] tee: new ioctl to a register tee_shm
+ from a dmabuf file descriptor
+To:     Etienne Carriere <etienne.carriere@linaro.org>,
+        Olivier Masse <olivier.masse@nxp.com>
+Cc:     "sumit.garg@linaro.org" <sumit.garg@linaro.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "fredgc@google.com" <fredgc@google.com>,
+        "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
+        "afd@ti.com" <afd@ti.com>,
+        "op-tee@lists.trustedfirmware.org" <op-tee@lists.trustedfirmware.org>,
+        "jens.wiklander@linaro.org" <jens.wiklander@linaro.org>,
+        "joakim.bech@linaro.org" <joakim.bech@linaro.org>,
+        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
+        Cyrille Fleury <cyrille.fleury@nxp.com>,
+        Peter Griffin <peter.griffin@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        =?UTF-8?Q?Cl=c3=a9ment_Faure?= <clement.faure@nxp.com>,
+        "christian.koenig@amd.com" <christian.koenig@amd.com>
+References: <20220812143055.12938-1-olivier.masse@nxp.com>
+ <20220812143055.12938-2-olivier.masse@nxp.com>
+ <30534fadb8172088eddef46ae71d87c167cbf32e.camel@nxp.com>
+ <CAFA6WYOMCswgHHxsgc9Hgi7rmTPaZDqce=BixvYoFTfL0bTFDQ@mail.gmail.com>
+ <PA4PR04MB75204E8D2B959893A04D55F388D69@PA4PR04MB7520.eurprd04.prod.outlook.com>
+ <CAFA6WYPGT8xZnB1idcxcHT1bvM=0kwFssBQbn063-qg=czM-ZQ@mail.gmail.com>
+ <CAN5uoS8XgvAKVwKHx-uOe3hAa4Jrd5FJt6xNOG5s-simkRND9w@mail.gmail.com>
+ <c86d1a46af6e076038b3f0c2dd68213ff1e8b254.camel@nxp.com>
+ <CAN5uoS-A8EovbnxvcXqiYHcy95d-PTYUZvnNr3=kf84AGkG8Kw@mail.gmail.com>
+Content-Language: en-US
+From:   Jerome Forissier <jerome.forissier@linaro.org>
+In-Reply-To: <CAN5uoS-A8EovbnxvcXqiYHcy95d-PTYUZvnNr3=kf84AGkG8Kw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 10:10:45AM +0000, Tian, Kevin wrote:
-> > From: Nicolin Chen <nicolinc@nvidia.com>
-> > Sent: Thursday, February 2, 2023 3:05 PM
-> > 
-> > Support an access->ioas replacement in iommufd_access_set_ioas(), which
-> > sets the access->ioas to NULL provisionally so that any further incoming
-> > iommufd_access_pin_pages() callback can be blocked.
-> > 
-> > Then, call access->ops->unmap() to clean up the entire iopt. To allow an
-> > iommufd_access_unpin_pages() callback to happen via this unmap() call,
-> > add an ioas_unpin pointer so the unpin routine won't be affected by the
-> > "access->ioas = NULL" trick above.
-> > 
-> > Also, a vdev without an ops->dma_unmap implementation cannot replace its
-> > access->ioas pointer. So add an iommufd_access_ioas_is_attached() helper
-> > to sanity that.
-> > 
-> 
-> Presumably a driver which doesn't implement ops->dma_unmap shouldn't
-> be allowed to do pin/unpin. But it could use vfio_dma_rw() to access an
-> iova range. In the latter case I don't see why replace cannot work.
-> 
-> Probably what's required here is to deny !ops->dma_unmap in
-> vfio_pin/unpin_pages then making here replace always allowed?
 
-That makes sense
 
-Jason
+On 2/3/23 12:37, Etienne Carriere wrote:
+> Hell all,
+> 
+> +jerome f.
+> 
+> On Fri, 3 Feb 2023 at 12:01, Olivier Masse <olivier.masse@nxp.com> wrote:
+>>
+>> On jeu., 2023-02-02 at 10:58 +0100, Etienne Carriere wrote:
+>>> Caution: EXT Email
+>>>
+>>> On Thu, 2 Feb 2023 at 09:35, Sumit Garg <sumit.garg@linaro.org>
+>>> wrote:
+>>>> Hi Cyrille,
+>>>>
+>>>> Please don't top post as it makes it harder to follow-up.
+>>>>
+>>>> On Thu, 2 Feb 2023 at 13:26, Cyrille Fleury <cyrille.fleury@nxp.com
+>>>>> wrote:
+>>>>> Hi Sumit, all
+>>>>>
+>>>>> Upstream OP-TEE should support registering a dmabuf since a
+>>>>> while, given how widely dmabuf is used in Linux for passing
+>>>>> buffers around between devices.
+>>>>>
+>>>>> Purpose of the new register_tee_shm ioctl is to allow OPTEE to
+>>>>> use memory allocated from the exiting linux dma buffer. We don't
+>>>>> need to have secure dma-heap up streamed.
+>>>>>
+>>>>> You mentioned secure dma-buffer, but secure dma-buffer is a dma-
+>>>>> buffer, so the work to be done for secure or "regular" dma
+>>>>> buffers by the register_tee_shm ioctl is 100% the same.
+>>>>>
+>>>>> The scope of this ioctl is limited to what existing upstream dma-
+>>>>> buffers are:
+>>>>>         -> sharing buffers for hardware (DMA) access across
+>>>>> multiple device drivers and subsystems, and for synchronizing
+>>>>> asynchronous hardware access.
+>>>>>        -> It means continuous memory only.
+>>>>>
+>>>>> So if we reduce the scope of register tee_shm to exiting dma-
+>>>>> buffer area, the current patch does the job.
+>>>>
+>>>> Do you have a corresponding real world use-case supported by
+>>>> upstream
+>>>> OP-TEE? AFAIK, the Secure Data Path (SDP) use-case is the one
+>>>> supported in OP-TEE upstream but without secure dmabuf heap [1]
+>>>> available, the new ioctl can't be exercised.
+>>>>
+>>>> [1] https://github.com/OP-TEE/optee_test/blob/master/host/xtest/sdp_basic.h#L15
+>>>
+>>> OP-TEE has some SDP test taht can exercice SDP: 'xtest
+>>> regression_1014'.
+>>> https://github.com/OP-TEE/optee_test/blob/3.20.0/host/xtest/regression_1000.c#L1256
+>>>
+>>> The test relies on old staged ION + local secure dmabuf heaps no more
+>>> maintained, so this test is currently not functional.
+>>> If we upgrade the test to mainline dmabuf alloc means, and apply the
+>>> change discussed here, we should be able to regularly test SDP in
+>>> OP-TEE project CI.
+>>> The part to update is the userland allocation of the dmabuf:
+>>> https://github.com/OP-TEE/optee_test/blob/3.20.0/host/xtest/sdp_basic.c#L91
+>>>
+>>>
+>>
+>> the test was already updated to support secure dma heap with Kernel
+>> version 5.11 and higher. the userland allocation could be find here:
+>> https://github.com/OP-TEE/optee_test/blob/3.20.0/host/xtest/sdp_basic.c#L153
+>>
+> 
+> Oh, right. So fine, optee_test is ready for the new flavor of secure
+> buffer fd's.
+> 
+> 
+>> This upgrade need a Linux dma-buf patch:
+>> https://lore.kernel.org/all/20220805154139.2qkqxwklufjpsfdx@000377403353/T/
+> 
+> @Jens, @Jerome, do we want to pick the 2 necessary Linux patches in
+> our Linux kernel fork (github.com/linaro-swg/linux.git) to exercise
+> SDP in our CI and be ready if dma-buf secure heaps (ref right above)
+> is accepted and merged in mainline kernel?.
+
+How would that help? I mean, when the kernel patches are merged and if
+things break we can make the necessary adjustments in the optee_test app
+or whatever, but in the meantime I don't see much point. I suppose the
+people who are actively developing the patches do make sure it works with
+OP-TEE ;-)
+
+Regards,
+-- 
+Jerome
