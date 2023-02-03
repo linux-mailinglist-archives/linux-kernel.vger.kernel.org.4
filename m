@@ -2,128 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EED2D688B90
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 01:12:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBF6F688B96
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 01:14:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233488AbjBCAMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 19:12:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48016 "EHLO
+        id S233306AbjBCAOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 19:14:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233392AbjBCAMT (ORCPT
+        with ESMTP id S232869AbjBCAOg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 19:12:19 -0500
-Received: from EUR02-DB5-obe.outbound.protection.outlook.com (mail-db5eur02on2085.outbound.protection.outlook.com [40.107.249.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1015C29158;
-        Thu,  2 Feb 2023 16:12:18 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bkepByXD72g8o3TLMkzXf9wBJbGejSlu41MzwmxcJ2aDsnsQIRvRGlOheLIGA1lMywldLgKYOgTqawCz9ExmPVQzH9r652xKbbnG04ZwMdSLl5rdcnfNJgoTvYpHa+yKP29PoH60zvkIOBCUktXjZqy8vBVqjZ5B5YFCsz/PSqyG2zh8faCBZJoUFGv/fX4GVsEQn4hBfIAGiHg92WQVmXtX1rgL/qOwmyhs0xC5iLaHgpzAtV5J8M6vHvfMwM8aWlZ5INaHiWD+qUnRdg+JVfMNrzEBCaA/gf+ljOWxCVPZKEw2Jgr3wl5JqQsrxBlVLQZlHPsjt7+pvTJ7Mk2V6Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eLmfRKmwBwAf+cxy8SMheREm78cCmGmQQpqHsg3ZAZU=;
- b=bNXIizEp7JUlN8eGoZZ5eIYdc11WSXuLrYVRgV3IanPDe8tlMTv0OGgUGToou9J3/S28J7YvNKXLSWDV8drLtLvndJjWvXl65nsjyiWJkKaD45vJ4Unkla1r8MKE2yvg6g0DO9n5y2l7HaKyB6wdTzZ52/Ou6Jeuv4G1Wwp57nrHF15kqff+zxNNrzzdAZRMjbw49TKXLKk2/03AsxJRu2V4KE6Nj3QucmcfwJjx3l6AW91W6ADflB/kyb79oT3pLyok+aah/WMgF3ZRC3FC+ezOEbTUhh/qCyW5zspja8HpzSphiuzDsGrEKmTAZ954ske69jrK72K9CbSW7+c5ww==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eLmfRKmwBwAf+cxy8SMheREm78cCmGmQQpqHsg3ZAZU=;
- b=jIshPU/DQ6wxikguP+iFY8rtrJlr85T+UbxKX+vCgerbIPsvcaDXolUAsJQV0XnIHh99BhdjcU7ojdaqfrqLE7VYP7N+HUd7MEfIFEB1k1GyRVbozYrFyPL32FuqXMAByPQN76L+P08VxGnI277Acgz2zPJx/tToZn4l0oqDmFE=
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by VE1PR04MB7424.eurprd04.prod.outlook.com (2603:10a6:800:1a7::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.27; Fri, 3 Feb
- 2023 00:12:15 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::e203:47be:36e4:c0c3]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::e203:47be:36e4:c0c3%9]) with mapi id 15.20.6043.025; Fri, 3 Feb 2023
- 00:12:15 +0000
-From:   Peng Fan <peng.fan@nxp.com>
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-CC:     "andersson@kernel.org" <andersson@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "arnaud.pouliquen@foss.st.com" <arnaud.pouliquen@foss.st.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Iuliana Prodan <iuliana.prodan@nxp.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>
-Subject: RE: [PATCH V2 6/6] remoteproc: imx_rproc: set address of .interrupts
- section as bootaddr
-Thread-Topic: [PATCH V2 6/6] remoteproc: imx_rproc: set address of .interrupts
- section as bootaddr
-Thread-Index: AQHZMjDLa30Jfx3KJki7iAzCkmrKAq68QKuAgAAhn6A=
-Date:   Fri, 3 Feb 2023 00:12:15 +0000
-Message-ID: <DU0PR04MB94178BB971E5107E907C743B88D79@DU0PR04MB9417.eurprd04.prod.outlook.com>
-References: <20230127092246.1470865-1-peng.fan@oss.nxp.com>
- <20230127092246.1470865-7-peng.fan@oss.nxp.com>
- <20230202220557.GD1147631@p14s>
-In-Reply-To: <20230202220557.GD1147631@p14s>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DU0PR04MB9417:EE_|VE1PR04MB7424:EE_
-x-ms-office365-filtering-correlation-id: 1670733f-a315-4ffc-f800-08db057b4e31
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: TKLh0CyCapRYSxmiWbuoTc8MuTtTa1Y6kauqCVTRtcjNn4QCek8165HaIvdYL11FId4qUOQI7SZgyedfW5OkDu+9XMMfH2Qg6rFH2qzaSOWvI0OkzBRhfhS8mBM7W5N9V6lBuczzevQKQPzTk9drn4JkQhRk1z6kzpAo7O8qeYZQdC+ZDmzzQROCjWtLx880aCI6OZrIigN0zItTmmgi3WAqBeVzK1aPMFvUyhqOHn7idXBOmfMnGtWMMH+SQ9iej2hjZAxaWDHS6co+QBTJNNIfDm8E50wYIJ//AYP7PP4JfZeb5/a1ECZPsazRLJ76CDHVzdWbKN+/ZxfyNtStW28YYaICOSbRX6g4CVWTll+dQUITVgcxusRjNogmOTUmsjJwKS/Q2py3FWxxRpNAp80lraMiE+KjL+/IAcOmhGJIZB0Pu2r3qzoJjIx5Ei1UgBbdJw9SRBSTU5pmUo6IM3LIY8NCnm1dsbqTwCmKmfUYctHr/Dj+YyU5g6uCFo5J10E7hRkQA1z0cqvDw6AG82r0/ysnu48ENkCA4gAuDKIdtpjKf2fBtJtcClTadLKiiYze2yYffvYwpufDYa4SKJ4mbwZUg5lf3FhvNOuqitgzwAMLX/ZdY2oPCYMKx3ptT/7ZnzeSfubFdekY5t2v6hNpPPmDu/SLbLwz9Ww11YXt3v8ESkVv4S6SnZurSDa4b94Yqfzh05egY3iJUzL5Sf8xxBTRqCT1qr4p7jkMOgM=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(136003)(346002)(39860400002)(396003)(366004)(451199018)(38100700002)(86362001)(54906003)(5660300002)(7416002)(316002)(110136005)(83380400001)(38070700005)(122000001)(33656002)(55016003)(52536014)(9686003)(7696005)(186003)(26005)(2906002)(71200400001)(478600001)(44832011)(76116006)(66476007)(66946007)(66446008)(4326008)(66556008)(8676002)(64756008)(6506007)(8936002)(41300700001)(142923001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?F5+Mxw9ViJYnQAg7Z/t6WFQdD3OiMNEDkWEETsshhN7OAnTrRVyN1I0W2y35?=
- =?us-ascii?Q?fFppinVavuCQquooI3KsJOYyamtJt8N+vshRAdsNH1EiFCrG9y6NjTrF6XcD?=
- =?us-ascii?Q?rm204j3g3Os9h1qc9/JH1Dj9FUg/TJh6cwj7SuSNGWkM5XA0RBVUrFmPSDHA?=
- =?us-ascii?Q?IHTrxxkVUWPabFRKiGp08WfTDIsn2i+Mz1uLG4kG4tW69Rpo8fdhgRFj0y6m?=
- =?us-ascii?Q?4PuhUjJ2dEqrCPMLCJlGYvSYC8dsaGic+lYR3AdnzY+wmd5QxVInu/p+0as2?=
- =?us-ascii?Q?DWwxpupZmE6b+rFPtQPPHR41vlWQr4XYRdDADAwOHYsUb+r2u4YggbqQfsZg?=
- =?us-ascii?Q?25CBuI0QmUVl0rXeoL3GtemLgYRO9yKOd3RIpvN0s+gXmXwVWklYPu87G/9q?=
- =?us-ascii?Q?4jNklDp0Y2sEOR0WNUqDnPyWZTXQRZzPiOxU14MOrBcHpAsyrwAHxpPKhdBM?=
- =?us-ascii?Q?Pd8IaoXKqtUfN6vV9I5qQ/RkNxx/oUyem4r5Gnfump68KI1k9H8I/IP+7V/j?=
- =?us-ascii?Q?DTUQtE00QaflUQXgLDRgzae7fhJDtrj5DPJzqgt4oJymop3ttYBSv8Skm5Bd?=
- =?us-ascii?Q?1pp3QaxLY3jPgstPZwcUEwalnRNpS3rKZSpata0ZG/hSZVxKSypc+nqokUox?=
- =?us-ascii?Q?p5/k7n22JerSQdD4tLtT1e8oSMf3zhlXkIDLp1XTqnr8jjeQ7ZJ+2zBy+mC6?=
- =?us-ascii?Q?mGX5HI/x3fJ/ujioqISU7I9Oy6p8dB6KReqyLg/VibduFEQZBeLyEWb+SRyB?=
- =?us-ascii?Q?Lsg5MlKg39pt5jSZJTRf5a7IMicOdT/qplcOvJtyyn+imk3bqUiRUmquBt+H?=
- =?us-ascii?Q?AXGjsyZQ832FHdzy+BdQMjma9Tnn/hk6DAFvDimkBiIYpJHr0WtMWm6b4QYT?=
- =?us-ascii?Q?yp1ZHLiWONQavoAQAG2PhKFYf1peHQzmBy4D4YhGNX2dzd3baT4zs7QWdbsr?=
- =?us-ascii?Q?JtygfAYET+jvWqIghIpMjqgteZwJnRplKTkEXp9WppI5C+4cq4qSat2au1it?=
- =?us-ascii?Q?PLwUS6dSp5OPSKThIuPbaO24t0KdOroQsy1A4j/b6hR8Nul2JIHZwRuDD1Rh?=
- =?us-ascii?Q?nQjO12+kYViDDJX2pV64nfJvuS9+Rv0ALEQY6eUVN+hvtGQZ+ZoC091f0p6u?=
- =?us-ascii?Q?GhXJEV1bsgBAPte4Rtx4Ec/J9b3LKTEQ/OPQIrClW8eSNaKzgO33MChE2uFK?=
- =?us-ascii?Q?H6IH1pqMdmbu2lIUdGSEEbrzJgkeienvsAuABgyy853bT92IkU4a+o+XswUY?=
- =?us-ascii?Q?sEe9swDg8Fm8dHSBvUuoN7UNUnsot5hzAHmyXiKAwiJzYxM8dsITVxtK2OjL?=
- =?us-ascii?Q?AImPWg09EiPmNtuXHTpKq4Nh/WljbQRQHju2wWDszbnLzCOyX8d8dipbK+Dj?=
- =?us-ascii?Q?rZkKHHDaxPAQSTOacpz2F5HGE6EBdmcjN2YCszV6xHFXGiHbNLKbo50kfdEa?=
- =?us-ascii?Q?9+tgJ8Uur1ULx35oY1L1e0hcgZAbpZkpv9kDChvmQNW/hwAToQ3IacHIKNLR?=
- =?us-ascii?Q?xu0/8PT8vIOeotixW1AUuDQGgoqzfKySdtHK7oXowfJ7ejit8EIHLJTmLnmC?=
- =?us-ascii?Q?zSBWENBe+IzHN1mW/yQ=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 2 Feb 2023 19:14:36 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E9862B08E
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 16:14:35 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id m2so10935158ejb.8
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 16:14:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=zaQNMCliREGWsw5ki7EtaX9v0ELmXISaiv3DWIK5tsM=;
+        b=DNx+UcYaPWB2GGHKmyI05nUP2WYo9nCEWB9i9rv59hvwdIew6+8E9ozFSDnwkqiR/0
+         Bc5nu3ZshSHO9QfHyblOyJTTpZXUJwvxo9yU57+Y+2n/dX7I04FlrcVUmHVDqPivx+sn
+         ex8/Ybm+pudw+c7E2XO7oyziEhp2m6tWVP3gw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zaQNMCliREGWsw5ki7EtaX9v0ELmXISaiv3DWIK5tsM=;
+        b=37te++t8COKsi/pf7hEY/v8wd88e8n7rT9mP/armjDh6cWn+WhZiqg3IVqB9/1g7Ht
+         STqhbyvtBzMdyU7Ao8fG1folp+0ZWhIJ47N/agn3Yw7NJ6TOdFv7Rg+HMC3xt+oVU5L6
+         pRmWLKhKDW0w5HblA3TQ6kMwVyY2xgNGfXAqZ7075YAP8jrUZVap83A4Ufh/T3hmei36
+         P+lXMu4k2kfE2sPqC4Fhe7WbJwcQmaDZRB9ur4jw8wuJGqSFUoqCUquk+uQz6/dPLDFJ
+         B3kaSPryoYokCD+9MZRA85nz3QXjKOOq+OJaSiTDuemjK5UDQ806Cx2a+QAJo9+KWf94
+         bnjQ==
+X-Gm-Message-State: AO0yUKXBOEP3T/YFTrqdgfHuENaGyz9vpm7QkPxp70K0Mc6NNfqwh5yo
+        6X8gDH+J1koyemUF1SM+YouSv4ZmOiHXaSDvjezTWw==
+X-Google-Smtp-Source: AK7set+72qWxzvszIJcUfCpb+KIxZzP6ebCdFGHkO1LHPb4QUuS90chcyJS3Z7g/jONo1wOXdPVX8w==
+X-Received: by 2002:a17:906:184a:b0:88d:777a:9ca6 with SMTP id w10-20020a170906184a00b0088d777a9ca6mr7589196eje.18.1675383273790;
+        Thu, 02 Feb 2023 16:14:33 -0800 (PST)
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com. [209.85.208.44])
+        by smtp.gmail.com with ESMTPSA id ox4-20020a170907100400b008874c903ec5sm513119ejb.43.2023.02.02.16.14.31
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Feb 2023 16:14:32 -0800 (PST)
+Received: by mail-ed1-f44.google.com with SMTP id m8so3707073edd.10
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 16:14:31 -0800 (PST)
+X-Received: by 2002:a50:d715:0:b0:4a2:649a:72eb with SMTP id
+ t21-20020a50d715000000b004a2649a72ebmr2549747edi.70.1675383271716; Thu, 02
+ Feb 2023 16:14:31 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1670733f-a315-4ffc-f800-08db057b4e31
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Feb 2023 00:12:15.3446
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: K6PyeqKSK50aGAC/czcd7f/VR6rtVoyb2/pBKAUjbhrmCpfmsspgQ28N0U5uQs6z0Sadx9NjRjUPn9759AmL/w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB7424
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <20230202232517.8695-1-michael.christie@oracle.com> <20230202232517.8695-2-michael.christie@oracle.com>
+In-Reply-To: <20230202232517.8695-2-michael.christie@oracle.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 2 Feb 2023 16:14:15 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wjTzdQr7xNm53ZUJT0jxaxSYLkf8XT2S1CoxnyFgVafKg@mail.gmail.com>
+Message-ID: <CAHk-=wjTzdQr7xNm53ZUJT0jxaxSYLkf8XT2S1CoxnyFgVafKg@mail.gmail.com>
+Subject: Re: [PATCH v11 1/8] fork: Make IO worker options flag based
+To:     Mike Christie <michael.christie@oracle.com>
+Cc:     hch@infradead.org, stefanha@redhat.com, jasowang@redhat.com,
+        mst@redhat.com, sgarzare@redhat.com,
+        virtualization@lists.linux-foundation.org, brauner@kernel.org,
+        ebiederm@xmission.com, konrad.wilk@oracle.com,
+        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -131,91 +77,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Subject: Re: [PATCH V2 6/6] remoteproc: imx_rproc: set address
-> of .interrupts section as bootaddr
->=20
-> On Fri, Jan 27, 2023 at 05:22:46PM +0800, Peng Fan (OSS) wrote:
-> > From: Peng Fan <peng.fan@nxp.com>
-> >
-> > i.MX93 M33 has ROM, it needs the ".interrupts" section address to
-> > start
-> > M33 firmware. In current design, the Arm Trusted Firmware(ATF) use
-> > TCML start address when the 2nd arg is 0 when SMC call. So When the
-> > M33 firmware is built with TCML address, it works well.
-> >
-> > However when M33 firmware is built to run in DDR, we need pass the
-> > ".interrupts" address as 2nd arg to ATF to start M33 firmwrae.
-> >
-> > Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> > ---
-> >  drivers/remoteproc/imx_rproc.c | 10 +++++++++-
-> >  1 file changed, 9 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/remoteproc/imx_rproc.c
-> > b/drivers/remoteproc/imx_rproc.c index f5ee0c9bb09d..59cca5ac3045
-> > 100644
-> > --- a/drivers/remoteproc/imx_rproc.c
-> > +++ b/drivers/remoteproc/imx_rproc.c
-> > @@ -374,7 +374,8 @@ static int imx_rproc_start(struct rproc *rproc)
-> >  					 dcfg->src_start);
-> >  		break;
-> >  	case IMX_RPROC_SMC:
-> > -		arm_smccc_smc(IMX_SIP_RPROC, IMX_SIP_RPROC_START, 0,
-> 0, 0, 0, 0, 0, &res);
-> > +		arm_smccc_smc(IMX_SIP_RPROC, IMX_SIP_RPROC_START,
-> rproc->bootaddr,
-> > +			      0, 0, 0, 0, 0, &res);
-> >  		ret =3D res.a0;
-> >  		break;
-> >  	case IMX_RPROC_SCU_API:
-> > @@ -664,6 +665,13 @@ static u64 imx_rproc_get_boot_addr(struct rproc
-> *rproc, const struct firmware *f
-> >  		 */
-> >  		writel(*(u32 *)(elf_data + offset), va);
-> >  		writel(*(u32 *)(elf_data + offset + 4), va + 4);
-> > +	} else if (priv->dcfg->devtype =3D=3D IMX_RPROC_IMX93) {
-> > +		/* i.MX93 Cortex-M33 has ROM, it only needs the section
-> address */
-> > +		shdr =3D rproc_elf_find_shdr(rproc, fw, ".interrupts");
-> > +		if (!shdr)
-> > +			return bootaddr;
->=20
-> This contradicts what you wrote in the cover letter of the patchset about=
- an
-> ".interrupts" section always being present.
+On Thu, Feb 2, 2023 at 3:25 PM Mike Christie
+<michael.christie@oracle.com> wrote:
+>
+>  struct kernel_clone_args {
+>         u64 flags;
+> +       u32 worker_flags;
+>         int __user *pidfd;
+>         int __user *child_tid;
+>         int __user *parent_tid;
 
-Yes, from the initial beginning for supporting Cortex-M firmware, the secti=
-on
-is there. I just think whether people build their own firmware, not has
-this section, and just put firmware in TCM, there is no need to explicitly =
-set
-word 0 and 4 again. This maybe a fake assumption, I could refine this piece
-code.
+Minor nit: please put this next to "exit_signal".
 
->=20
-> There is enough in this patchset to make me look for a second opinion.  A=
-s
-> such I am CC'ing Iuliana and Daniel.  Please respin this, adding both of =
-them
-> to the recipient list.  I will do another revision only when they have pr=
-ovided
-> an RB tag.
+As it is, you've put a new 32-bit field in between two 64-bit fields
+and are generating extra pointless padding.
 
-They not work on other areas, not same as me. Anyway I could ask them to
-help review.=20
+We have that padding by "exit_signal" already, so let's just use it.
 
-Thanks,
-Peng.
+Also, I like moving those flags to a "flags" field, but can we please
+make it consistent? We have that "args->kthread" field too, which is
+100% analogous to args->io_thread.
 
->=20
-> Thanks,
-> Mathieu
->=20
-> > +
-> > +		return elf_shdr_get_sh_addr(class, shdr);
-> >  	}
-> >
-> >  	return bootaddr;
-> > --
-> > 2.37.1
-> >
+So don't make a bit field for io_thread, and then not do the same for kthread.
+
+Finally, why isn't this all just a bitfield - every single case would
+seem to prefer something like
+
+     if (args->user_worker) ..
+
+instead of
+
+    if (args->worker_flags & USER_WORKER)
+
+which would seem to make everything simpler still?
+
+            Linus
