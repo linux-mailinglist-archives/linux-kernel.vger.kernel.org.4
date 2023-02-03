@@ -2,62 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5FAD689F0F
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 17:23:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3248689F1E
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 17:25:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232875AbjBCQXk convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 3 Feb 2023 11:23:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46402 "EHLO
+        id S232894AbjBCQZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 11:25:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230317AbjBCQXi (ORCPT
+        with ESMTP id S231629AbjBCQY7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 11:23:38 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7C520051
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 08:23:36 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-243-_ITs-rZGN66msvzu-eXIpg-1; Fri, 03 Feb 2023 16:23:33 +0000
-X-MC-Unique: _ITs-rZGN66msvzu-eXIpg-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.45; Fri, 3 Feb
- 2023 16:23:32 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.045; Fri, 3 Feb 2023 16:23:32 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Matthew Wilcox' <willy@infradead.org>,
-        Andreas Dilger <adilger@dilger.ca>
-CC:     "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-afs@lists.infradead.org" <linux-afs@lists.infradead.org>,
-        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
-        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Hugh Dickins <hughd@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "fstests@vger.kernel.org" <fstests@vger.kernel.org>
-Subject: RE: [PATCH 0/5] Fix a minor POSIX conformance problem
-Thread-Topic: [PATCH 0/5] Fix a minor POSIX conformance problem
-Thread-Index: AQHZN9J6uHKWfdvyUUW8SEkwX3xBiK69ZXmQ
-Date:   Fri, 3 Feb 2023 16:23:32 +0000
-Message-ID: <c16be18cb68a4adbbcd73cf9be9472df@AcuMS.aculab.com>
-References: <20230202204428.3267832-1-willy@infradead.org>
- <DCEDB8BB-8D10-4E17-9C27-AE48718CB82F@dilger.ca>
- <Y90KTSXCKGd8Gaqc@casper.infradead.org>
-In-Reply-To: <Y90KTSXCKGd8Gaqc@casper.infradead.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 3 Feb 2023 11:24:59 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 434DFA6B97
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 08:24:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675441446;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=oW45kccjUKB0azEOuaFwFd8f5AOwrTQBVn+oOQKIx4o=;
+        b=JXi7iIOyVEcIILZXXqv2Yaf3tLKqgiF4bfMEWcY1kOkWua9KsQfed1eixTnwCbUj+fBFEV
+        Xw6qc9WfvBD0YFK5GTVrGjEBp551E1yXGZSA3QQF7/BsrMnfG9en+G8JpFxiyO9ZvyhmeX
+        1qsDygL6xXvUwUbNGpQRau74PQsWoc0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-510-M3Bi6QznOKWAvl_h0evyEQ-1; Fri, 03 Feb 2023 11:24:00 -0500
+X-MC-Unique: M3Bi6QznOKWAvl_h0evyEQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 700C387A380;
+        Fri,  3 Feb 2023 16:24:00 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.97])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 97616C15BA0;
+        Fri,  3 Feb 2023 16:23:59 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <2076817.1675434996@warthog.procyon.org.uk>
+References: <2076817.1675434996@warthog.procyon.org.uk> <72029a93-1150-1994-916f-b15ef0befd49@nvidia.com> <e8065d6a-d2f9-60aa-8541-8dfc8e9b608f@redhat.com> <000000000000b0b3c005f3a09383@google.com> <822863.1675327935@warthog.procyon.org.uk> <1265629.1675350909@warthog.procyon.org.uk>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     dhowells@redhat.com, David Hildenbrand <david@redhat.com>,
+        syzbot <syzbot+a440341a59e3b7142895@syzkaller.appspotmail.com>,
+        hch@lst.de, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] general protection fault in skb_dequeue (3)
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2112098.1675441439.1@warthog.procyon.org.uk>
+Date:   Fri, 03 Feb 2023 16:23:59 +0000
+Message-ID: <2112099.1675441439@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,68 +66,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matthew Wilcox
-> Sent: 03 February 2023 13:21
-> 
-> On Thu, Feb 02, 2023 at 04:08:49PM -0700, Andreas Dilger wrote:
-> > On Feb 2, 2023, at 1:44 PM, Matthew Wilcox (Oracle) <willy@infradead.org> wrote:
-> > >
-> > > POSIX requires that on ftruncate() expansion, the new bytes must read
-> > > as zeroes.  If someone's mmap()ed the file and stored past EOF, for
-> > > most filesystems the bytes in that page will be not-zero.  It's a
-> > > pretty minor violation; someone could race you and write to the file
-> > > between the ftruncate() call and you reading from it, but it's a bit
-> > > of a QOI violation.
-> >
-> > Is it possible to have mmap return SIGBUS for the writes beyond EOF?
-> 
-> Well, no.  The hardware only tells us about accesses on a per-page
-> basis.  We could SIGBUS on writes that _start_ after EOF, but this
-> test doesn't do that (it starts before EOF and extends past EOF).
-> And once the page is mapped writable, there's no page fault taken
-> for subsequent writes.
-> 
-> > On the one hand, that might indicate incorrect behavior of the application,
-> > and on the other hand, it seems possible that the application doesn't
-> > know it is writing beyond EOF and expects that data to be read back OK?
-> 
-> POSIX says:
-> 
-> "The system shall always zero-fill any partial page at the end of an
-> object. Further, the system shall never write out any modified portions
-> of the last page of an object which are beyond its end. References
-> within the address range starting at pa and continuing for len bytes to
-> whole pages following the end of an object shall result in delivery of
-> a SIGBUS signal."
-> 
-> https://pubs.opengroup.org/onlinepubs/9699919799/functions/mmap.html
+David Howells <dhowells@redhat.com> wrote:
 
-It also says (down at the bottom of the rational):
+> I think I have managed to isolate the bug to the read side of sendfile() or
+> the pipe in the middle by the following:
 
-"The mmap() function can be used to map a region of memory that is larger
-than the current size of the object. Memory access within the mapping but
-beyond the current end of the underlying objects may result in SIGBUS
-signals being sent to the process. The reason for this is that the size
-of the object can be manipulated by other processes and can change at any
-moment. The implementation should tell the application that a memory
-reference is outside the object where this can be detected; otherwise,
-written data may be lost and read data may not reflect actual data in the
-object."
+I did something similar in iov_iter_extract_pipe_pages(), allocating a
+permanent page there:
 
-There are a lot of 'may' in that sentence.
-Note that it only says that 'data written beyond the current eof may be
-lost'.
-I think that could be taken to take precedence over the zeroing clause
-in ftruncate().
-I'd bet a lot of beer that the original SYSV implementation (on with the
-description is based) didn't zero the page buffer when ftruncate()
-increased the file size.
-Whether anything (important) actually relies on that is an interesting
-question!
++	mutex_lock(&extract_tmp_lock);
++	if (!extract_tmp) {
++		pr_notice("alloc extract_tmp\n");
++		extract_tmp = alloc_page(GFP_USER);
++		if (extract_tmp) {
++			SetPageDebugMark(extract_tmp);
++			page_ref_add(extract_tmp, 200);
++		}
++	}
++	mutex_unlock(&extract_tmp_lock);
++	if (!extract_tmp)
++		return -ENOMEM;
 
-	David
+and then subbing that for the returned page:
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+ 		chunk = min_t(size_t, left, PAGE_SIZE - offset);
+ 		left -= chunk;
+-		*p++ = page;
++		//*p++ = page;
++		*p++ = extract_tmp;
+
+That makes the oopses stop happening.  Pages are still being added to the pipe
+at one end and being removed at the other.
+
+So I'm guessing a DMA happens to the destination buffer for the DIO read after
+it has been released.
+
+David
 
