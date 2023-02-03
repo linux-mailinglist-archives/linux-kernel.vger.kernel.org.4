@@ -2,75 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EA0168A632
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 23:28:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7621968A633
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 23:29:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233746AbjBCW2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 17:28:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49322 "EHLO
+        id S232802AbjBCW3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 17:29:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233784AbjBCW2D (ORCPT
+        with ESMTP id S231286AbjBCW3A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 17:28:03 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A845AA7032
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 14:27:56 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id n13so6700284plf.11
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 14:27:56 -0800 (PST)
+        Fri, 3 Feb 2023 17:29:00 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5CF31EBF8
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 14:28:27 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id g13so1925900ple.10
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 14:28:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y6a3uofuaRWFnhRwy6DM9u/s4KpjQkLkP1c4r8F5Dp4=;
-        b=R6y8ck6vSR8fETfTkYUNju+wtcVgRBo/ruWEdX6JWnI8ZRPxnnfY3JbshQ+RIwnaiz
-         rStwY5umhUwvhdp+8e4JSZZ/osBRzISBqqTkD0VFvrUUMoNZEYWoLdqB8K3n0AEqhzHZ
-         oeZ/AYIehkUbkKyS3wTps5SXt3RZUs9VzaNgk=
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gMyHt710tobXZzqB4RVOXm/lfSphZfIQDyw8A1rvqM8=;
+        b=KJQTCWhAd7IPsSxTwSEdEe5ccYd6PTpm9gQe4BkQOs0WlNmdWxAQxrM8F0aHiu25In
+         0386XN/L0AG/jmBhyONVoBbYBvi5VNUa6YG27G3cZnsLDOCeubj2Fjew82Ab9wI5dFm9
+         1JfI/nmp3tNTYA0zPEKeDUbvR5uVXlIKAwp+w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Y6a3uofuaRWFnhRwy6DM9u/s4KpjQkLkP1c4r8F5Dp4=;
-        b=RiMp/pmWg33Ym3tETG3xbyBuYSgucBnzKqM7HEyUd4iFaxhf+iySqNUBNHiOEQnmKg
-         fHZy5eTO4M4doVv3h0QpNvttW7tPNB7bdfl1ZP/7jZvLO5AjE7dyRMAfVi93j0B6dlXE
-         w7YI9gbwzgR8+rHG575o6Np72ZsqYB0QH4t5Yfid6SNfYuy5lAez18oUf9588ubu+bq9
-         yxegeixDVFSiHb/tWeoiiiKWRFoZq8ddBJ+vj+0VsuXYgmn3fiDSTLFGrCxIxRnfn5ZQ
-         myc4XpXp8RT+aCcOFkKMXgwa4aC2Tw4od1HPf7+Rrx6fcFtkt3LbRhTZe9bzPlydib5Q
-         Jhwg==
-X-Gm-Message-State: AO0yUKWAN7xloJXH0KlCC9yYmSYCoTYiScXd+OYjJvYH52Ql5tpDcWFO
-        +gBGYT1Sf6T7gF+5lt4Vny5siw==
-X-Google-Smtp-Source: AK7set/xjUWMWjOPi5xQ4TcdBEuC7tcdaRzvNmLij3yX1CJXryvQq6Imzuuem+hbuqzyRkgFD3rlbQ==
-X-Received: by 2002:a17:90b:3511:b0:22c:1422:e3fb with SMTP id ls17-20020a17090b351100b0022c1422e3fbmr12594858pjb.5.1675463275879;
-        Fri, 03 Feb 2023 14:27:55 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id j5-20020a17090a3e0500b0022c03785e9dsm5347197pjc.18.2023.02.03.14.27.55
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gMyHt710tobXZzqB4RVOXm/lfSphZfIQDyw8A1rvqM8=;
+        b=1LhunAFV5fVeNWznLyQlUVifml4PhYy/ZAlPF6hY0TkOr2by3FugV/AC9jQLYWEc3M
+         q7dWjAgYLfDIoWe5R9rRQQ6Js7D2R9roYpmJ/JVqYUTjUOSUhSY/+zhEDzUyN5ndfEvF
+         SIOculFrXF9DRngo9jUVyGrOTdxZa4tqe37NxaLkXTpdCtxX+v+eGrpv6OBTF+pFS18d
+         pkj6AsCHUdleL5imm48EX94145wF1axqpg7ff3/8fWGwo/5aq68k8R1S7lve7mBB5vM1
+         VEELNfk9g9zs608ccs8EDIDy1rg3Mop4ettVpOPXATtYMvicea7rkcVdtSFzSD++ZqmY
+         jehQ==
+X-Gm-Message-State: AO0yUKW4DL2PVS29PhczUoI6TWFkuT3xsVwsH+8cFAzvQITgzflADuGf
+        qEoRK8q+KyqJRq26uRuV08UuvFnCO6OUKAB5
+X-Google-Smtp-Source: AK7set//yln2V1DGJdDa8X2Q3rBGRrmvfMdT9UHoD5EABS+sltirE42ArLrbAQz68gi6qCTk07lZkQ==
+X-Received: by 2002:a17:903:30d2:b0:195:efa7:d54e with SMTP id s18-20020a17090330d200b00195efa7d54emr4510904plc.12.1675463303088;
+        Fri, 03 Feb 2023 14:28:23 -0800 (PST)
+Received: from smtp.gmail.com ([2620:15c:11a:201:44f:ac27:361d:7805])
+        by smtp.gmail.com with ESMTPSA id u65-20020a627944000000b0058da56167b7sm2333853pfc.127.2023.02.03.14.28.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 14:27:55 -0800 (PST)
-Message-ID: <63dd8a6b.170a0220.f5c98.9e65@mx.google.com>
-X-Google-Original-Message-ID: <202302032223.@keescook>
-Date:   Fri, 3 Feb 2023 22:27:54 +0000
-From:   Kees Cook <keescook@chromium.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Aleksa Sarai <cyphar@cyphar.com>,
-        Christian Brauner <christian@brauner.io>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Alexander Potapenko <glider@google.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] uaccess: Add minimum bounds check on kernel buffer size
-References: <20230203193523.never.667-kees@kernel.org>
- <6c728dfc-d777-4beb-b463-649704c81a5e@app.fastmail.com>
+        Fri, 03 Feb 2023 14:28:22 -0800 (PST)
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     stable@vger.kernel.org
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>
+Subject: [PATCH 6.1.y] phy: qcom-qmp-combo: fix runtime suspend
+Date:   Fri,  3 Feb 2023 14:28:20 -0800
+Message-Id: <20230203222820.2958983-1-swboyd@chromium.org>
+X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6c728dfc-d777-4beb-b463-649704c81a5e@app.fastmail.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -80,80 +67,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 10:23:13PM +0100, Arnd Bergmann wrote:
-> On Fri, Feb 3, 2023, at 20:35, Kees Cook wrote:
-> > While there is logic about the difference between ksize and usize,
-> > copy_struct_from_user() didn't check the size of the destination buffer
-> > (when it was known) against ksize. Add this check so there is an upper
-> > bounds check on the possible memset() call, otherwise lower bounds
-> > checks made by callers will trigger bounds warnings under -Warray-bounds.
-> > Seen under GCC 13:
-> >
-> > In function 'copy_struct_from_user',
-> >     inlined from 'iommufd_fops_ioctl' at
-> > ../drivers/iommu/iommufd/main.c:333:8:
-> > ../include/linux/fortify-string.h:59:33: warning: '__builtin_memset' 
-> > offset [57, 4294967294] is out of the bounds [0, 56] of object 'buf' 
-> > with type 'union ucmd_buffer' [-Warray-bounds=]
-> >    59 | #define __underlying_memset     __builtin_memset
-> >       |                                 ^
-> > ../include/linux/fortify-string.h:453:9: note: in expansion of macro 
-> > '__underlying_memset'
-> >   453 |         __underlying_memset(p, c, __fortify_size); \
-> >       |         ^~~~~~~~~~~~~~~~~~~
-> > ../include/linux/fortify-string.h:461:25: note: in expansion of macro 
-> > '__fortify_memset_chk'
-> >   461 | #define memset(p, c, s) __fortify_memset_chk(p, c, s, \
-> >       |                         ^~~~~~~~~~~~~~~~~~~~
-> > ../include/linux/uaccess.h:334:17: note: in expansion of macro 'memset'
-> >   334 |                 memset(dst + size, 0, rest);
-> >       |                 ^~~~~~
-> > ../drivers/iommu/iommufd/main.c: In function 'iommufd_fops_ioctl':
-> > ../drivers/iommu/iommufd/main.c:311:27: note: 'buf' declared here
-> >   311 |         union ucmd_buffer buf;
-> >       |                           ^~~
-> >
-> 
-> Hi Kees,
-> 
-> I started building with gcc-13.0.1 myself but ran into a lot of
-> other -Warray-bounds warnings in randconfig builds, so I ended up
-> turning it off once more with CONFIG_CC_NO_ARRAY_BOUNDS in order
-> to keep building without warnings.
+From: Johan Hovold <johan+linaro@kernel.org>
 
-Understood. AFAIK, all the open bugs I (and you) filed with GCC 13 have
-been fixed related to -Warray-bounds. The most recent was the misbehavior
-between CONFIG_UBSAN_SHIFT and -Warray-bounds. (Though the shift checking
-still exposes some warnings since it introduces an implicit bounds check
-on the shift variable, but they're not _wrong_ any more.)
+commit c7b98de745cffdceefc077ad5cf9cda032ef8959 upstream.
 
-> Is there anything else I need to do to get to the point of
-> just addressing actual issues instead of false positives?
-> Do you already have a patch series for fixing the others?
+Drop the confused runtime-suspend type check which effectively broke
+runtime PM if the DP child node happens to be parsed before the USB
+child node during probe (e.g. due to order of child nodes in the
+devicetree).
 
-I've been working through the list that I see when building with
--Warray-bounds and -fstrict-flex-arrays=3. Some are real bugs, as usual.
+Instead use the new driver data USB PHY pointer to access the USB
+configuration and resources.
 
-> > diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
-> > index afb18f198843..ab9728138ad6 100644
-> > --- a/include/linux/uaccess.h
-> > +++ b/include/linux/uaccess.h
-> > @@ -329,6 +329,10 @@ copy_struct_from_user(void *dst, size_t ksize, 
-> > const void __user *src,
-> >  	size_t size = min(ksize, usize);
-> >  	size_t rest = max(ksize, usize) - size;
-> > 
-> > +	/* Double check if ksize is larger than a known object size. */
-> > +	if (WARN_ON_ONCE(ksize > __builtin_object_size(dst, 1)))
-> > +		return -E2BIG;
-> > +
-> 
-> WARN_ON_ONCE() may be a little expensive since that adds two
-> comparisons and a static variable to each copy, but it's probably
-> fine. 
+Fixes: 52e013d0bffa ("phy: qcom-qmp: Add support for DP in USB3+DP combo phy")
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Link: https://lore.kernel.org/r/20221114081346.5116-6-johan+linaro@kernel.org
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+---
+ drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 12 ++----------
+ 1 file changed, 2 insertions(+), 10 deletions(-)
 
-Yeah. IMO, copy_struct_from_user() is not fast path and having better
-bounds checking when coming from userspace is well worth it.
+diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+index adcda7762acf..816829105135 100644
+--- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
++++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+@@ -2296,15 +2296,11 @@ static void qmp_combo_disable_autonomous_mode(struct qmp_phy *qphy)
+ static int __maybe_unused qmp_combo_runtime_suspend(struct device *dev)
+ {
+ 	struct qcom_qmp *qmp = dev_get_drvdata(dev);
+-	struct qmp_phy *qphy = qmp->phys[0];
++	struct qmp_phy *qphy = qmp->usb_phy;
+ 	const struct qmp_phy_cfg *cfg = qphy->cfg;
+ 
+ 	dev_vdbg(dev, "Suspending QMP phy, mode:%d\n", qphy->mode);
+ 
+-	/* Supported only for USB3 PHY and luckily USB3 is the first phy */
+-	if (cfg->type != PHY_TYPE_USB3)
+-		return 0;
+-
+ 	if (!qmp->init_count) {
+ 		dev_vdbg(dev, "PHY not initialized, bailing out\n");
+ 		return 0;
+@@ -2321,16 +2317,12 @@ static int __maybe_unused qmp_combo_runtime_suspend(struct device *dev)
+ static int __maybe_unused qmp_combo_runtime_resume(struct device *dev)
+ {
+ 	struct qcom_qmp *qmp = dev_get_drvdata(dev);
+-	struct qmp_phy *qphy = qmp->phys[0];
++	struct qmp_phy *qphy = qmp->usb_phy;
+ 	const struct qmp_phy_cfg *cfg = qphy->cfg;
+ 	int ret = 0;
+ 
+ 	dev_vdbg(dev, "Resuming QMP phy, mode:%d\n", qphy->mode);
+ 
+-	/* Supported only for USB3 PHY and luckily USB3 is the first phy */
+-	if (cfg->type != PHY_TYPE_USB3)
+-		return 0;
+-
+ 	if (!qmp->init_count) {
+ 		dev_vdbg(dev, "PHY not initialized, bailing out\n");
+ 		return 0;
 
+base-commit: 68a95455c153f8adc513e5b688f4b348daa7c1b1
 -- 
-Kees Cook
+https://chromeos.dev
+
