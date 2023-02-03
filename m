@@ -2,102 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F31C68977D
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 12:09:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 474FA689786
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 12:14:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232228AbjBCLJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 06:09:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52884 "EHLO
+        id S232372AbjBCLOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 06:14:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231277AbjBCLJP (ORCPT
+        with ESMTP id S230180AbjBCLOg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 06:09:15 -0500
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 651C976407;
-        Fri,  3 Feb 2023 03:09:14 -0800 (PST)
-Received: (Authenticated sender: didi.debian@cknow.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 7BFF7FF807;
-        Fri,  3 Feb 2023 11:09:11 +0000 (UTC)
-From:   Diederik de Haas <didi.debian@cknow.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        LABBE Corentin <clabbe@baylibre.com>
-Subject: Re: crypto-rockchip patches queued for 6.1
-Date:   Fri, 03 Feb 2023 12:09:02 +0100
-Message-ID: <2005805.CtlZUxCmk0@prancing-pony>
-Organization: Connecting Knowledge
-In-Reply-To: <Y9zU3KxsfMFGB/MF@kroah.com>
-References: <2236134.UumAgOJHRH@prancing-pony> <Y6w/O6zY3Jfe8ZKv@kroah.com>
- <Y9zU3KxsfMFGB/MF@kroah.com>
+        Fri, 3 Feb 2023 06:14:36 -0500
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 634FE79639;
+        Fri,  3 Feb 2023 03:14:35 -0800 (PST)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPA id B67FD1C000F;
+        Fri,  3 Feb 2023 11:14:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1675422873;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=HAMONlr9R1WXauSk/Wj92zOzmiMIj87cwyrNJBK5Ezk=;
+        b=A3ZfWhkCsAD4ulDqxrzeWbibM3BdocWhNXDIyJM9oR5wq7EKn1P7f/+wwuvj9xwv+O66PA
+        2zcQydBGBDSbJMU//fm+piM5NsXyWq8mJbQRjixdQxDlRSxKnqoTXtlxvxLJ+ouiGRGPCe
+        eZmkKF2O2K1phXQnRtNZkRyrPGfdAS1Nv0JIw8ONeOZWkTqbuAVdcHfUpwY2n+ItSubbhu
+        tpFZxGIvtVSOkIcK6DWkjuVw93Z/yp+NX790IGNELwf1rdNO68aPJ2MYhh9+3Z8kgymtFQ
+        DTDzv1u3dRafXpCqZqh2Jijr6CoUvTkBFQyLFrmuyfLo8nxtC5Rb01E+JT7icg==
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Herve Codina <herve.codina@bootlin.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: [PATCH 0/3] Add the Renesas X9250 potentiometers ASoC support
+Date:   Fri,  3 Feb 2023 12:14:19 +0100
+Message-Id: <20230203111422.142479-1-herve.codina@bootlin.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart40039366.mi4ZS9bVxY";
- micalg="pgp-sha256"; protocol="application/pgp-signature"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---nextPart40039366.mi4ZS9bVxY
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"; protected-headers="v1"
-From: Diederik de Haas <didi.debian@cknow.org>
-To: Greg KH <gregkh@linuxfoundation.org>
-Subject: Re: crypto-rockchip patches queued for 6.1
-Date: Fri, 03 Feb 2023 12:09:02 +0100
-Message-ID: <2005805.CtlZUxCmk0@prancing-pony>
-Organization: Connecting Knowledge
-In-Reply-To: <Y9zU3KxsfMFGB/MF@kroah.com>
-MIME-Version: 1.0
+Hi,
 
-On Friday, 3 February 2023 10:33:16 CET Greg KH wrote:
-> > That's a lot, I'll look at them in a week or so after catching up with
-> > the rest of the stable queue.
-> 
-> I looked at this now, and some of the more obvious "fixes" are already
-> in the 6.1.y tree (and older kernels).
-> 
-> So this series does not apply as-is, and it seems like there is a lot of
-> extra stuff in this series that is not needed (like a MAINTAINER entry?)
-> 
-> Can you provide a patch series, that has been tested and with your
-> signed-off-by for whatever you feel still needs to be applied to the
-> 6.1.y tree to resolve any existing bugs in 6.1.y for this driver (note,
-> that does NOT mean that you can add new functionality that was never
-> there...)
+The Renesas X9250 is a quad digitally controlled potentiometers.
 
-I don't feel confident (enough) that I could 'pull that off', especially since 
-it would effectively be a new patch set, which would likely not get the same 
-level of review/testing as the original one got.
-It would also (effectively) add new functionality as the crypto engine (at 
-least on rk3328 and rk3399) did not work previously as among others they don't 
-have the crypto node in the dts files.
+In the audio path, it can be present on amplifiers designs and it can
+be used in ALSA as an auxiliary audio device to control these amplifiers.
 
-So I think it's better that the (new) patch set does not get applied to the 
-6.1 Stable release (series).
+Best regards,
+Herve Codina
 
-The reason I raised my initial question was because I did test (and provided 
-my Tested-By to) the patch set as a whole, not any single patch in isolation.
+Herve Codina (3):
+  dt-bindings: sound: Add the Renesas X9250 potentiometers
+  ASoC: codecs: Add support for the Renesas X9250 potentiometers
+  MAINTAINERS: add the Renesas X9250 ASoC entry
 
-Regards,
-  Diederik
---nextPart40039366.mi4ZS9bVxY
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
+ .../bindings/sound/renesas,x9250.yaml         |  60 ++++
+ MAINTAINERS                                   |   7 +
+ sound/soc/codecs/Kconfig                      |  11 +
+ sound/soc/codecs/Makefile                     |   2 +
+ sound/soc/codecs/x9250.c                      | 276 ++++++++++++++++++
+ 5 files changed, 356 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/sound/renesas,x9250.yaml
+ create mode 100644 sound/soc/codecs/x9250.c
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQT1sUPBYsyGmi4usy/XblvOeH7bbgUCY9zrTgAKCRDXblvOeH7b
-bncxAP4oJgfnuw/ign9I9D1JxgSRM2pvpEzxccLdivshWEoBCwEA2sqR6qvC3OfZ
-IeFdNPY985xqqFc5KULPIbnG5OW6wgI=
-=8vE/
------END PGP SIGNATURE-----
-
---nextPart40039366.mi4ZS9bVxY--
-
-
+-- 
+2.39.0
 
