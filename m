@@ -2,131 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62B9B689EE7
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 17:07:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05B7A689EE8
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 17:07:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233006AbjBCQHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 11:07:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38754 "EHLO
+        id S232875AbjBCQHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 11:07:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231168AbjBCQHl (ORCPT
+        with ESMTP id S232913AbjBCQHm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 11:07:41 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 461549E9ED;
-        Fri,  3 Feb 2023 08:07:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B2E8B61F7F;
-        Fri,  3 Feb 2023 16:07:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C04FC433D2;
-        Fri,  3 Feb 2023 16:07:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675440459;
-        bh=zKmjPVFEtNDSBXoOI9UXflM0Sd030QsBid++FCTj9a8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=KCZFCV0l0H/S8DfZ12ZyuwUPpalMdOIG4AQnLd51yD76Q1ONGjslziezKEteefy5J
-         baLG7VSVB92tcZvq3dvulixb2uBE3HK1OKHEOeA9MeGq70fY/dhGdTQ4LI1PCeHtka
-         +qslJuriyAOi7B6Yxx0fDk9Ae27ItNvamV5bKoAIea26TgXdNFyhchbA0smWIgi0nE
-         Ac23dx2EQNy67fPe+LBz6KinbcJo38qORfKMPBvyFN1wFKKwd5biXzgVtTIbQ8pAag
-         ic03GSWR/aC8m3zE0g4cKFlAUlxjmnybkVfCtYPJPCpPK2S4V/aVy3hJmhBXEPFJZF
-         rAOUVt1zzqzoA==
-Received: by mail-vs1-f50.google.com with SMTP id j7so5813111vsl.11;
+        Fri, 3 Feb 2023 11:07:42 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A9489F9C9
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 08:07:40 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id mc11so16589047ejb.10
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 08:07:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Mv4Tw1a7+WNqMwMi9Hb0edTB8YtKReMwtw4zFtjDKg4=;
+        b=Yi+DtZuGbq9lNYTtwtUMgdX4orJXwFHGCuZOGAggaZ6AMB9WVXAlZGRXWZ1ea+o33k
+         3WO7IUmfAi0ndihbkUrgb2nwKe03OIw7uqO7Yzhccea3hh9apwGUf2yhUfDjD+hDMWpd
+         4XqT7KiqlOiBfabZARxQ5dVT+DdakSaXhBbb2FrRJ9EX74iUHg9cKSnZLI+iUEHXDudX
+         W4jYra2EiCV0BJpx05yrVFhh+cdO40eGpvKDEf7iyrEVnVsLaZ6mQMhJ/rlriDmn5XJ0
+         +Qs534qGEODd6SFYaOs18BsHuMrhoVczZuQcJ1BGCunhgw+6lj7IiRb7k2eg5xSqbC+x
+         ba/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Mv4Tw1a7+WNqMwMi9Hb0edTB8YtKReMwtw4zFtjDKg4=;
+        b=K1c9yVK2nD/4qQi4Izr8HyekboxyyiGtO81KWLnhVuGrFk64Pq3SXn+rp26ezFTJ8K
+         oa1DG25hcALUeAWs82jP5nCtuQqLxsAbl1z/yKRzCKT0OeveGIKg2VZG7zyGMgMEgqvo
+         v0fTI1fNiTITUW7QcqR4Z6Vo3I+JByRwEV9EgwA5CutnF43XKotw0fJ7/W9oo4RWn92X
+         1y5jBlBqQvdUjw+u0soIav+UxhOhP12+zQh+yu6M5WSvtC0FpFqE/hgq/mt5vwvDHrNU
+         Tdbjjx6G4SAKxQZyswmOsZeeOfN1ItEoqnRe/ZCcKOuE7ATrd/fiu3rzuUZG0fFMu0ZC
+         cR4Q==
+X-Gm-Message-State: AO0yUKV4Ayw0TSUwWPrRdZpDUw1ddEkT0+51CGIbXIuzd1anOmSmH4ti
+        E/9VWgo6BoLMmwoGpGXyCJH97raKQyKBUC4kUD/qSw==
+X-Google-Smtp-Source: AK7set82A9Kb0hwNrj1M0to5qoC8vv2uCV2EiO8NNND3SgDSYSico/58trjpGYHNR6i0MUj3s2K1vQ==
+X-Received: by 2002:a17:906:8da:b0:87b:db53:3829 with SMTP id o26-20020a17090608da00b0087bdb533829mr10690486eje.46.1675440459116;
         Fri, 03 Feb 2023 08:07:39 -0800 (PST)
-X-Gm-Message-State: AO0yUKW9lxaabhNRQh93JhZCR9UcWxeV9tUvdFKhBunsksPsQ89D9qc/
-        X37aYO56CaAhdcTp0yQSRwDAa9J2G69m6xPx1A==
-X-Google-Smtp-Source: AK7set+p/4oE02Qtrd3KwUPO2TJMoCv7VYc0zIaV/SZKSXWLDPZxq/rLmvpgU5zF2KcbzmAfoLSdEu2R7mH3ELmM7nc=
-X-Received: by 2002:a67:eb03:0:b0:3ea:c8c:48a5 with SMTP id
- a3-20020a67eb03000000b003ea0c8c48a5mr1730235vso.53.1675440457975; Fri, 03 Feb
- 2023 08:07:37 -0800 (PST)
+Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
+        by smtp.gmail.com with ESMTPSA id x26-20020a1709064bda00b00886c1a02d20sm1560622ejv.47.2023.02.03.08.07.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Feb 2023 08:07:38 -0800 (PST)
+Date:   Fri, 3 Feb 2023 17:07:32 +0100
+From:   Jiri Pirko <jiri@resnulli.us>
+To:     =?utf-8?B?6Zm2IOe8mA==?= <taoyuan_eddy@hotmail.com>
+Cc:     Eelco Chaudron <echaudro@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Pravin B Shelar <pshelar@ovn.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "dev@openvswitch.org" <dev@openvswitch.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: =?utf-8?B?5Zue5aSNOiBbUEFUQw==?= =?utf-8?Q?H?= net-next v7 1/1]
+ net:openvswitch:reduce cpu_used_mask memory
+Message-ID: <Y90xRInJeyuNA6RT@nanopsycho>
+References: <20230203095118.276261-1-taoyuan_eddy@hotmail.com>
+ <OS3P286MB2295DC976A51C0087F6FE16BF5D79@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
+ <ECDAB6E2-EBFE-435C-B5E5-0E27BABA822F@redhat.com>
+ <OS3P286MB22950F0D26C1496D1773B172F5D79@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-References: <20230111032830.20447-1-jian.yang@mediatek.com> <20230111032830.20447-3-jian.yang@mediatek.com>
-In-Reply-To: <20230111032830.20447-3-jian.yang@mediatek.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Fri, 3 Feb 2023 10:07:26 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+eAQ-M9a+9g7Kk3GC9WjE_4mZXXrsdm4PucOJ4p2QYVQ@mail.gmail.com>
-Message-ID: <CAL_Jsq+eAQ-M9a+9g7Kk3GC9WjE_4mZXXrsdm4PucOJ4p2QYVQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] dt-bindings: PCI: mediatek-gen3: Add support for
- controlling power and reset
-To:     Jian Yang <jian.yang@mediatek.com>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        chuanjia.liu@mediatek.com, jieyy.yang@mediatek.com,
-        qizhong.cheng@mediatek.com, rex-bc.chen@mediatek.com,
-        david-yh.chiu@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <OS3P286MB22950F0D26C1496D1773B172F5D79@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 9:28 PM Jian Yang <jian.yang@mediatek.com> wrote:
->
-> From: "jian.yang" <jian.yang@mediatek.com>
->
-> Add new properties to support control power supplies and reset pin of
-> a downstream component.
->
-> Signed-off-by: jian.yang <jian.yang@mediatek.com>
-> ---
->  .../bindings/pci/mediatek-pcie-gen3.yaml      | 23 +++++++++++++++++++
->  1 file changed, 23 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml b/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml
-> index 7e8c7a2a5f9b..46149cc63989 100644
-> --- a/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml
-> +++ b/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml
-> @@ -84,6 +84,29 @@ properties:
->      items:
->        enum: [ phy, mac ]
->
-> +  pcie1v8-supply:
-> +    description:
-> +      The regulator phandle that provides 1.8V power to downstream component.
-> +
-> +  pcie3v3-supply:
-> +    description:
-> +      The regulator phandle that provides 3.3V power to downstream component.
-> +
-> +  pcie12v-supply:
-> +    description:
-> +      The regulator phandle that provides 12V power to downstream component.
+Fri, Feb 03, 2023 at 04:50:31PM CET, taoyuan_eddy@hotmail.com wrote:
+>Change between V7 and V6:
+>move initialization of cpu_used_mask up to follow stats_last_writer
 
-While in some bindings we've allowed these in the host bridge node,
-that is a mistake. These should be in the root port node. You probably
-don't have one in DT, so add one.
+Okay, please stop sending stuff and begin to read.
 
-> +
-> +  dsc-reset-gpios:
-> +    description:
-> +      The reset GPIO of a downstream component.
-> +    maxItems: 1
-> +
-> +  dsc-reset-msleep:
 
-Doesn't the PCI spec define this time? We're talking about PERST#, right?
-
-> +    description:
-> +      The delay time between assertion and de-assertion of a downstream
-> +      component's reset GPIO.
-> +    maxItems: 1
-> +
->    clocks:
->      minItems: 4
->      maxItems: 6
-> --
-> 2.18.0
 >
+>thanks
+>eddy
