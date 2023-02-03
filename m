@@ -2,106 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EA35689168
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 08:59:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0064689166
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 08:59:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231593AbjBCH7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 02:59:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40536 "EHLO
+        id S232576AbjBCH7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 02:59:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232564AbjBCH6g (ORCPT
+        with ESMTP id S232261AbjBCH6n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 02:58:36 -0500
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0029F32528;
-        Thu,  2 Feb 2023 23:58:34 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 5E0D03200917;
-        Fri,  3 Feb 2023 02:58:31 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Fri, 03 Feb 2023 02:58:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1675411110; x=1675497510; bh=LhbWN0bu2m
-        cFcY1A7Fmu3Enc1lagz2yeOOXyJiDDA6c=; b=l5pRfZunRw+kh9WhZZ35TBmgnJ
-        N9yrZdvHgmVKeGrjCKCcP6UDZUP6aZ6Y0X+l+Ji44t0pUUVo4NWj6AcCUkfQmIx+
-        eG+VrGzhGQnsrOWt0KVRw2/jhQ06FwBsxE7U+inFpL8FgTdbE4ZL8Tt12+cgOfhY
-        LH47Cm2+xq8j8WaXMXNa1020WrdIQkQEFETex+ZDQrUgBzSJLMBzNc42naQdLrW0
-        ryAprn8QQCaA41k5vknyMUArQX5ZayCCVwi/Mkx188oYpQ+U+xAByzzspHxOtgOM
-        rJTbWuhBqXH8RNBZDzTD6PuCnriyg584KXxPPEGgXe2sZebQw8f3tNfzAqHQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1675411110; x=1675497510; bh=LhbWN0bu2mcFcY1A7Fmu3Enc1lag
-        z2yeOOXyJiDDA6c=; b=NuknU8S4AZlE4O/FBMmo3oJtGTIe6aT5dDOzVIkU+6kt
-        46NQ3svLkaX2tcx75RhLWudNiXjWIbSSUVUKSMQwEu2OU7dpcu8DDFJqjzOJnlW6
-        eHkKCf0ArHK+Y1jEJL+LmYEDcMAzcYUMz1M2jOY2dPIaQ6sCLLSPF+HpUw8rEhGd
-        Bd6kq+g8X9tMPF4g9aI9Uy47MQXRpslkV4tmUTsroD4pHjjvFrV/0mV5xNJn/bRC
-        +TOu35ry3JdWEV0g45L8FRLvta8mb/pOTMMkWIyK32F4P1nSiXGLYugkkShE7Nor
-        iFRP4nYTI87TiqVoua2W443+C/+Qxh0ymbHAyiU0iA==
-X-ME-Sender: <xms:pr7cYxgiuGY_Exn4kAp8IvI7yjXGJ15O0wAdToixcGkQfgW-eypEhA>
-    <xme:pr7cY2AwHrGJH-LHBzL4kiQilBoeXZEdA90zLDz6U6Ht8EPlIvKILLg99Hv97PAAy
-    EI1bTkXLamSLw>
-X-ME-Received: <xmr:pr7cYxExMVnxxf11B97JzF_BdVzOhVrCrYkwwqyUAl88OHu9090RvxHsXczrOZO7bX77floiBFegs2Bqs1DmWN43rlUN-0PhdoM16g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudefledgudduvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enogfuuhhsphgvtghtffhomhgrihhnucdlgeelmdenucfjughrpeffhffvvefukfhfgggt
-    uggjsehttdertddttddvnecuhfhrohhmpefirhgvghcumffjuceoghhrvghgsehkrhhorg
-    hhrdgtohhmqeenucggtffrrghtthgvrhhnpeehvdevkefghedvveegffefgfefffekvdff
-    geeihefghfejhfdutdfhhfejleejieenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpd
-    gslhhoghhsphhothdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhep
-    mhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
-X-ME-Proxy: <xmx:pr7cY2SWlmpYkmUq_zfUkjxLxDUh8QscxK3lOClVkiJPkz7-DXl_RA>
-    <xmx:pr7cY-ykr0WtWDUKah0MlChQ157MMxx57xk4hYrXPZh2XUqieu73kQ>
-    <xmx:pr7cY87ca6zPvjoKCxFXBi9oJWXXRp5fVAW_v3OGSOBPba5ixyLt1w>
-    <xmx:pr7cY_qIoxnaUiPd25ZiITXIVycAoGZD3ILXMxAwnm3ZarLPgY6okQ>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 3 Feb 2023 02:58:29 -0500 (EST)
-Date:   Fri, 3 Feb 2023 08:57:55 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     stable@vger.kernel.org,
-        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
-        Kees Cook <keescook@chromium.org>,
-        SeongJae Park <sj@kernel.org>,
-        Seth Jenkins <sethjenkins@google.com>,
-        Jann Horn <jannh@google.com>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4.14 v2 00/15] Backport oops_limit to 4.14
-Message-ID: <Y9y+g66x++h4kEXy@kroah.com>
-References: <20230203003354.85691-1-ebiggers@kernel.org>
+        Fri, 3 Feb 2023 02:58:43 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4259C402F6
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 23:58:42 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id jh15so4472496plb.8
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 23:58:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=atishpatra.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=i99J2pmlc+pek02YkZ8nESdE1CjXKdwjOkhiDfukAeg=;
+        b=Sh7tY9cHfXBOFOW5S5uAlPN05R/xzTnAbB0mmbqndgniiu94FxnWuAaAm9qmIUSIkN
+         qRCBTYVydLP5qCYUHgyPGxipO789g/iIFW6Owe6hqAS2uVMd5pTljfk7m0WZftpBpSFO
+         Puk5N5xZ2lhclDBA8AHsmHwR0EgQL6/pS2x+M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=i99J2pmlc+pek02YkZ8nESdE1CjXKdwjOkhiDfukAeg=;
+        b=FOF5OeGE0aaF2+CGT1miSQiBuQ7X/E8hKK562RtvyTqsFmx2qd4AydB9Awlql9/aYj
+         X9LIZ6WViK0quffG44OKCl+oYEJy6mb3OGZkLWJEwwitEoVwGnISa7L7wa1ycl2feKUj
+         G+BQt7mHHBzT92iABTyIJeTHO3SonQVZ7mDMGqTajJxCp26Y8OOsPfCczcMu3ypWEQ8D
+         wJuttFe8Rvv049/2i2be9IhrDsHHRrpZtXeMtHzv1+Nzli0B34AMO3BMuAfLcYGC1b+Q
+         /T0+4PDjSvlyfSGf7zoENwH5f565AGxDQ7D/TWziyvvSCyZ7PvJ+Dviwppd6llG2XMPr
+         60EA==
+X-Gm-Message-State: AO0yUKWUDauVKANVOJttlkwHGsbOrsDAnQHxi/GtyVkq90Qa7sZZ9R5n
+        1O/o1jytraqFFdFfjWcoLnPeOi4i9u4A0LdB6XFL
+X-Google-Smtp-Source: AK7set/LUCUS12AMHBelCxeNEkLPsGXsG7KXWdCQZPA6uBHaqE1ujJKSECijijC6oDwX24pxa4KylELSv345afb5ZkU=
+X-Received: by 2002:a17:902:ecc1:b0:193:794:ba9 with SMTP id
+ a1-20020a170902ecc100b0019307940ba9mr2238861plh.22.1675411121784; Thu, 02 Feb
+ 2023 23:58:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230203003354.85691-1-ebiggers@kernel.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230203075232.274282-1-alexghiti@rivosinc.com> <20230203075232.274282-5-alexghiti@rivosinc.com>
+In-Reply-To: <20230203075232.274282-5-alexghiti@rivosinc.com>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Thu, 2 Feb 2023 23:58:30 -0800
+Message-ID: <CAOnJCUK==Ma=p0mLLRJBB=3qTyMOTbiDNVYSmXpJr0HCsZ8Kxw@mail.gmail.com>
+Subject: Re: [PATCH v4 4/6] riscv: Fix EFI stub usage of KASAN instrumented
+ strcmp function
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Conor Dooley <conor@kernel.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-efi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 04:33:39PM -0800, Eric Biggers wrote:
-> This series backports the patchset
-> "exit: Put an upper limit on how often we can oops"
-> (https://lore.kernel.org/linux-mm/20221117233838.give.484-kees@kernel.org/T/#u)
-> to 4.14, as recommended at
-> https://googleprojectzero.blogspot.com/2023/01/exploiting-null-dereferences-in-linux.html
-> 
-> Changed in v2:
->    - Fixed a build error in mm/kasan/report.c by dropping the patch "mm:
->      kasan: do not panic if both panic_on_warn and kasan_multishot set".
+On Thu, Feb 2, 2023 at 11:56 PM Alexandre Ghiti <alexghiti@rivosinc.com> wrote:
+>
+> The EFI stub must not use any KASAN instrumented code as the kernel
+> proper did not initialize the thread pointer and the mapping for the
+> KASAN shadow region.
+>
+> Avoid using the generic strcmp function, instead use the one in
+> drivers/firmware/efi/libstub/string.c.
+>
+> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> Acked-by: Ard Biesheuvel <ardb@kernel.org>
+> ---
+>  arch/riscv/kernel/image-vars.h | 2 --
+>  1 file changed, 2 deletions(-)
+>
+> diff --git a/arch/riscv/kernel/image-vars.h b/arch/riscv/kernel/image-vars.h
+> index 7e2962ef73f9..15616155008c 100644
+> --- a/arch/riscv/kernel/image-vars.h
+> +++ b/arch/riscv/kernel/image-vars.h
+> @@ -23,8 +23,6 @@
+>   * linked at. The routines below are all implemented in assembler in a
+>   * position independent manner
+>   */
+> -__efistub_strcmp               = strcmp;
+> -
+>  __efistub__start               = _start;
+>  __efistub__start_kernel                = _start_kernel;
+>  __efistub__end                 = _end;
+> --
+> 2.37.2
+>
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
 
-Both v2 series now queued up, let's see if they build...
 
-thanks,
+Reviewed-by: Atish Patra <atishp@rivosinc.com>
 
-greg k-h
+-- 
+Regards,
+Atish
