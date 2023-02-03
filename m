@@ -2,145 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6886688BF0
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 01:36:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A952F688C05
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 01:40:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231903AbjBCAgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 19:36:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60830 "EHLO
+        id S232305AbjBCAj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 19:39:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230456AbjBCAff (ORCPT
+        with ESMTP id S233401AbjBCAjh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 19:35:35 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C4B63853;
-        Thu,  2 Feb 2023 16:35:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6E45DB828DE;
-        Fri,  3 Feb 2023 00:35:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CBC8C433A0;
-        Fri,  3 Feb 2023 00:35:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675384531;
-        bh=PezzPrlLFd7Q51QZ1OXqNb3IL9FpXtGge3PpuUfRJNk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AskTXGKNv4dDpus75Gb2sLGod2vudwgWs9UATxJTrwaz2NNXSiWF6tyhgQb2oUbNW
-         a7al28Dx54wm8VqkXNTQqJ2uiMyqkbGofocd2dYH6S73PswXqgWomTdalJjH6EoagJ
-         VeNUuF1FqHtjBAxad+Jotfz4jF/7YGcnNqIoPGZxxppEqFSJNHav7z+JoDQd+Z7QZx
-         d+bzSDGLQzonYZH9Tb/KWiykeDn+03clGC9V2PHis3XB9v9D6jKsLH655baH6opWRn
-         aySDUQIMJKhv+7xYh5pUIZqo471nBaNMfzV1b5/9HQH839iyb/t1t9uifJv0k0zaVi
-         eJdz0fIN9wU/Q==
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     stable@vger.kernel.org
-Cc:     Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
-        Kees Cook <keescook@chromium.org>,
-        SeongJae Park <sj@kernel.org>,
-        Seth Jenkins <sethjenkins@google.com>,
-        Jann Horn <jannh@google.com>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, Petr Mladek <pmladek@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Marco Elver <elver@google.com>,
-        tangmeng <tangmeng@uniontech.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH 4.14 v2 15/15] exit: Use READ_ONCE() for all oops/warn limit reads
-Date:   Thu,  2 Feb 2023 16:33:54 -0800
-Message-Id: <20230203003354.85691-16-ebiggers@kernel.org>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230203003354.85691-1-ebiggers@kernel.org>
-References: <20230203003354.85691-1-ebiggers@kernel.org>
+        Thu, 2 Feb 2023 19:39:37 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F191A1423B;
+        Thu,  2 Feb 2023 16:39:23 -0800 (PST)
+Date:   Fri, 03 Feb 2023 00:39:20 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1675384761;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2UdHPobREA1OAJD9vo+OWOWGgv3mCV9UwYQX2CtLC9M=;
+        b=QPt/lvBAUAQ/jq8686FO+v3koeEV49op2bbqphUuOSWeUa/ve5aqchDUY/U2Ao4FHMxltg
+        5P86M9JvkbMzpTOb4jj5G8sYvfE5ZK5Zbi3zmqprCGOAVGE35Dqa7j9VOldb2xzV657Bnu
+        /71aOdZZ7VKEv+jGm0YaKwhj15jFbAal97UDV/Wn/2EV+UdUprFYIYOAOl+fW/cjDvTR5+
+        clrbbvkff3TEW7/nZL5O2WvBf1J53JMT3KzFlstYwM/dq9xnqDhg612a0qysnLzNbcxdwG
+        1MygfsHy2SAq+0VUZuV5uUXMKPq8Em3yn0+6p1YJIED1/RT7eI1XBwkm4KlF9Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1675384761;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2UdHPobREA1OAJD9vo+OWOWGgv3mCV9UwYQX2CtLC9M=;
+        b=by1IKmjHXmrYGjgaN2sy7KkHTe6dvr2h6Mt+W5ZftUpzlcIwFdpRNzOsk03N/n19XSR+fX
+        yhjw2N/E9l84p7BQ==
+From:   "tip-bot2 for Kirill A. Shutemov" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/tdx] x86/tdx: Do not corrupt frame-pointer in __tdx_hypercall()
+Cc:     kernel test robot <lkp@intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <202301290255.buUBs99R-lkp@intel.com>
+References: <202301290255.buUBs99R-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <167538476065.4906.7314136322537199231.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kees Cook <keescook@chromium.org>
+The following commit has been merged into the x86/tdx branch of tip:
 
-commit 7535b832c6399b5ebfc5b53af5c51dd915ee2538 upstream.
+Commit-ID:     1e70c680375aa33cca97bff0bca68c0f82f5023c
+Gitweb:        https://git.kernel.org/tip/1e70c680375aa33cca97bff0bca68c0f82f5023c
+Author:        Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+AuthorDate:    Mon, 30 Jan 2023 16:53:54 +03:00
+Committer:     Dave Hansen <dave.hansen@linux.intel.com>
+CommitterDate: Thu, 02 Feb 2023 16:31:25 -08:00
 
-Use a temporary variable to take full advantage of READ_ONCE() behavior.
-Without this, the report (and even the test) might be out of sync with
-the initial test.
+x86/tdx: Do not corrupt frame-pointer in __tdx_hypercall()
 
-Reported-by: Peter Zijlstra <peterz@infradead.org>
-Link: https://lore.kernel.org/lkml/Y5x7GXeluFmZ8E0E@hirez.programming.kicks-ass.net
-Fixes: 9fc9e278a5c0 ("panic: Introduce warn_limit")
-Fixes: d4ccd54d28d3 ("exit: Put an upper limit on how often we can oops")
-Cc: "Eric W. Biederman" <ebiederm@xmission.com>
-Cc: Jann Horn <jannh@google.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Petr Mladek <pmladek@suse.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Marco Elver <elver@google.com>
-Cc: tangmeng <tangmeng@uniontech.com>
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: Tiezhu Yang <yangtiezhu@loongson.cn>
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Eric Biggers <ebiggers@google.com>
+If compiled with CONFIG_FRAME_POINTER=y, objtool is not happy that
+__tdx_hypercall() messes up RBP:
+
+  objtool: __tdx_hypercall+0x7f: return with modified stack frame
+
+Rework the function to store TDX_HCALL_ flags on stack instead of RBP.
+
+[ dhansen: minor changelog tweaks ]
+
+Fixes: c30c4b2555ba ("x86/tdx: Refactor __tdx_hypercall() to allow pass down more arguments")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Link: https://lore.kernel.org/all/202301290255.buUBs99R-lkp@intel.com
+Link: https://lore.kernel.org/all/20230130135354.27674-1-kirill.shutemov%40linux.intel.com
 ---
- kernel/exit.c  | 6 ++++--
- kernel/panic.c | 7 +++++--
- 2 files changed, 9 insertions(+), 4 deletions(-)
+ arch/x86/coco/tdx/tdcall.S | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/kernel/exit.c b/kernel/exit.c
-index 73103e008a627..c0ff4461643d0 100644
---- a/kernel/exit.c
-+++ b/kernel/exit.c
-@@ -973,6 +973,7 @@ void __noreturn make_task_dead(int signr)
- 	 * Take the task off the cpu after something catastrophic has
- 	 * happened.
+diff --git a/arch/x86/coco/tdx/tdcall.S b/arch/x86/coco/tdx/tdcall.S
+index 5da06d1..2bd436a 100644
+--- a/arch/x86/coco/tdx/tdcall.S
++++ b/arch/x86/coco/tdx/tdcall.S
+@@ -131,11 +131,10 @@ SYM_FUNC_START(__tdx_hypercall)
+ 	push %r13
+ 	push %r12
+ 	push %rbx
+-	push %rbp
+ 
+ 	/* Free RDI and RSI to be used as TDVMCALL arguments */
+ 	movq %rdi, %rax
+-	movq %rsi, %rbp
++	push %rsi
+ 
+ 	/* Copy hypercall registers from arg struct: */
+ 	movq TDX_HYPERCALL_r8(%rax),  %r8
+@@ -168,7 +167,7 @@ SYM_FUNC_START(__tdx_hypercall)
+ 	 * HLT operation indefinitely. Since this is the not the desired
+ 	 * result, conditionally call STI before TDCALL.
  	 */
-+	unsigned int limit;
+-	testq $TDX_HCALL_ISSUE_STI, %rbp
++	testq $TDX_HCALL_ISSUE_STI, 8(%rsp)
+ 	jz .Lskip_sti
+ 	sti
+ .Lskip_sti:
+@@ -188,7 +187,7 @@ SYM_FUNC_START(__tdx_hypercall)
+ 	pop %rax
  
- 	/*
- 	 * Every time the system oopses, if the oops happens while a reference
-@@ -984,8 +985,9 @@ void __noreturn make_task_dead(int signr)
- 	 * To make sure this can't happen, place an upper bound on how often the
- 	 * kernel may oops without panic().
- 	 */
--	if (atomic_inc_return(&oops_count) >= READ_ONCE(oops_limit) && oops_limit)
--		panic("Oopsed too often (kernel.oops_limit is %d)", oops_limit);
-+	limit = READ_ONCE(oops_limit);
-+	if (atomic_inc_return(&oops_count) >= limit && limit)
-+		panic("Oopsed too often (kernel.oops_limit is %d)", limit);
+ 	/* Copy hypercall result registers to arg struct if needed */
+-	testq $TDX_HCALL_HAS_OUTPUT, %rbp
++	testq $TDX_HCALL_HAS_OUTPUT, (%rsp)
+ 	jz .Lout
  
- 	do_exit(signr);
- }
-diff --git a/kernel/panic.c b/kernel/panic.c
-index 8f7bf0a8cef1a..165fd747cebd0 100644
---- a/kernel/panic.c
-+++ b/kernel/panic.c
-@@ -165,12 +165,15 @@ EXPORT_SYMBOL(nmi_panic);
+ 	movq %r8,  TDX_HYPERCALL_r8(%rax)
+@@ -218,11 +217,12 @@ SYM_FUNC_START(__tdx_hypercall)
+ 	xor %r10d, %r10d
+ 	xor %r11d, %r11d
+ 	xor %rdi,  %rdi
+-	xor %rsi,  %rsi
+ 	xor %rdx,  %rdx
  
- void check_panic_on_warn(const char *origin)
- {
-+	unsigned int limit;
++	/* Remove TDX_HCALL_* flags from the stack */
++	pop %rsi
 +
- 	if (panic_on_warn)
- 		panic("%s: panic_on_warn set ...\n", origin);
- 
--	if (atomic_inc_return(&warn_count) >= READ_ONCE(warn_limit) && warn_limit)
-+	limit = READ_ONCE(warn_limit);
-+	if (atomic_inc_return(&warn_count) >= limit && limit)
- 		panic("%s: system warned too often (kernel.warn_limit is %d)",
--		      origin, warn_limit);
-+		      origin, limit);
- }
- 
- /**
--- 
-2.39.1
-
+ 	/* Restore callee-saved GPRs as mandated by the x86_64 ABI */
+-	pop %rbp
+ 	pop %rbx
+ 	pop %r12
+ 	pop %r13
