@@ -2,164 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17E8768A62C
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 23:27:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C16AD68A620
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 23:26:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233710AbjBCW1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 17:27:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46902 "EHLO
+        id S233379AbjBCW0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 17:26:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbjBCW1I (ORCPT
+        with ESMTP id S233185AbjBCW0W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 17:27:08 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C68D08F271
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 14:26:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675463177;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rzqXvls55Lb3EZo0y3v4L8uFMO50qdSpk/N4RhFvVdI=;
-        b=eGgwo4MQ1ErnthcSa8tDiN5JOh98X/gWvJRCvDq3CGAYWZJtCpZ5MgODwejn0pobFyKR7r
-        eUvFftHECJBREDdPohccTsK98/CyMgmRHKYoWB1OsU+8+kcKQL3PjiFwwuQ95LceF1lKYJ
-        cIn/r0AdMSwYZEjEWaBTdXktQTYrBzY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-533-y3oABivaM5WGaZRhMWCcNg-1; Fri, 03 Feb 2023 17:26:14 -0500
-X-MC-Unique: y3oABivaM5WGaZRhMWCcNg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B95D329AA39C;
-        Fri,  3 Feb 2023 22:26:13 +0000 (UTC)
-Received: from [10.22.8.92] (unknown [10.22.8.92])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 12D4C2166B34;
-        Fri,  3 Feb 2023 22:26:13 +0000 (UTC)
-Message-ID: <1f7fc2a9-259c-8f97-2f0c-a315c0266138@redhat.com>
-Date:   Fri, 3 Feb 2023 17:26:12 -0500
+        Fri, 3 Feb 2023 17:26:22 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5623B8C1C9
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 14:26:21 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id n20-20020a17090aab9400b00229ca6a4636so10170384pjq.0
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 14:26:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PobSF2/MDkJrX0shmq4Y9cOMyGXHMWsuX8BGemf4VBw=;
+        b=d9t0hT6GiqnRHp4PDpDtSjes5ppgJHVckiZj+66c3rI8mTBGp1eIr5V7jtncsLYobk
+         ccIW5PqZL9jddlPKCVmZmjbI3ZuOkihTKOcN6KyekmzflS71kwrA/rfCAuyBMAQJY864
+         iNMs7b1jGM70GCQlgSYZ8X2GdiGnr8cDww7gE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PobSF2/MDkJrX0shmq4Y9cOMyGXHMWsuX8BGemf4VBw=;
+        b=jq2hiyXRFqIA6UA8GVbJPmYq7Kk+n1+Z77lLG4Lo1jIEJsfOXnmz4iSbpIP+nC8bzu
+         SAPTkeemk4AYlBIYcQSxUiRoEIJp67zl+EGEoItjpMpWnQF+MLLaUHlEkeIi7B7FiHED
+         ZUXuPhU2bVRKXRwvwFGvjzXYanRPBkH9CJVM77NTOGxFNqeRf70q0zvHw6HGesj/7ID3
+         gC8Fkq7RgJwPGFo8ryvcJqr6yh11v12USRTyepR8fqMfdGuYb16aojcSyxxodlLoYDOi
+         jwnPlepOcGDKJ4/wMaxl9ibToYBlISlJY3yl5KzGUsIPnUS0xDFILVj9Meb3Br6kBAps
+         l3aQ==
+X-Gm-Message-State: AO0yUKXzsB7mRldzZIBmmS86xJ4L+WFCIWHlSV9Wq+FiyGnCfHHw2XYc
+        FaQgSVQlxdMORQBLHO9Cfm+x6w==
+X-Google-Smtp-Source: AK7set+RkDPC8r53YF5/SDwMLYOuXoF2Kt+2qGSlJTPwKp4XmX/yFLUkxvUaOxom+XYX0c1+8XrZfg==
+X-Received: by 2002:a17:902:f0c4:b0:198:e5f7:8cf4 with SMTP id v4-20020a170902f0c400b00198e5f78cf4mr1886550pla.53.1675463180852;
+        Fri, 03 Feb 2023 14:26:20 -0800 (PST)
+Received: from smtp.gmail.com ([2620:15c:11a:201:44f:ac27:361d:7805])
+        by smtp.gmail.com with ESMTPSA id x13-20020a170902a38d00b0019602263feesm2095071pla.90.2023.02.03.14.26.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Feb 2023 14:26:20 -0800 (PST)
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     stable@vger.kernel.org
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>
+Subject: [PATCH 5.15.y v3 1/5] phy: qcom-qmp-combo: disable runtime PM on unbind
+Date:   Fri,  3 Feb 2023 14:26:12 -0800
+Message-Id: <20230203222616.2935268-2-swboyd@chromium.org>
+X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
+In-Reply-To: <20230203222616.2935268-1-swboyd@chromium.org>
+References: <20230203222616.2935268-1-swboyd@chromium.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] cgroup/cpuset: Don't filter offline CPUs in
- cpuset_cpus_allowed() for top cpuset tasks
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        kernel-team@android.com
-References: <20230203164040.213437-1-longman@redhat.com>
- <Y9116OLfP6GoZ0ez@slm.duckdns.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <Y9116OLfP6GoZ0ez@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/3/23 16:00, Tejun Heo wrote:
-> On Fri, Feb 03, 2023 at 11:40:40AM -0500, Waiman Long wrote:
->> Since commit 8f9ea86fdf99 ("sched: Always preserve the user
->> requested cpumask"), relax_compatible_cpus_allowed_ptr() is calling
->> __sched_setaffinity() unconditionally. This helps to expose a bug in
->> the current cpuset hotplug code where the cpumasks of the tasks in
->> the top cpuset are not updated at all when some CPUs become online or
->> offline. It is likely caused by the fact that some of the tasks in the
->> top cpuset, like percpu kthreads, cannot have their cpu affinity changed.
->>
->> One way to reproduce this as suggested by Peter is:
->>   - boot machine
->>   - offline all CPUs except one
->>   - taskset -p ffffffff $$
->>   - online all CPUs
->>
->> Fix this by allowing cpuset_cpus_allowed() to return a wider mask that
->> includes offline CPUs for those tasks that are in the top cpuset. For
->> tasks not in the top cpuset, the old rule applies and only online CPUs
->> will be returned in the mask since hotplug events will update their
->> cpumasks accordingly.
->>
->> Fixes: 8f9ea86fdf99 ("sched: Always preserve the user requested cpumask")
->> Reported-by: Will Deacon <will@kernel.org>
->> Originally-from: Peter Zijlstra (Intel) <peterz@infradead.org>
->> Signed-off-by: Waiman Long <longman@redhat.com>
-> So, this is the replacement for the first patch[1] Will posted, right?
+From: Johan Hovold <johan+linaro@kernel.org>
 
-Yes, if Will and Peter has no objection. I think it is less risky and 
-handle the partition case better.
+commit 4382d518d1887e62234560ea08a0203d11d28cc1 upstream.
 
-With v1, Will's patch should get similar result as the existing 
-guarantee_online_cpus() function since we can infer offline cpus from 
-cpus_allowed. With v2, it does include offline cpus correctly, I 
-believe, as long as no partition is enabled. However, the hotplug code 
-is able to update the cpumasks when a CPU is onlined. So the presence of 
-offline CPUs is nice to have, but not essential.
+Make sure to disable runtime PM also on driver unbind.
 
->
->>   void cpuset_cpus_allowed(struct task_struct *tsk, struct cpumask *pmask)
->>   {
->>   	unsigned long flags;
->> +	struct cpuset *cs;
->>   
->>   	spin_lock_irqsave(&callback_lock, flags);
->> -	guarantee_online_cpus(tsk, pmask);
->> +	rcu_read_lock();
->> +
->> +	cs = task_cs(tsk);
->> +	if (cs != &top_cpuset)
->> +		guarantee_online_cpus(tsk, pmask);
->> +	/*
->> +	 * TODO: Tasks in the top cpuset won't get update to their cpumasks
->> +	 * when a hotplug online/offline event happens. So we include all
->> +	 * offline cpus in the allowed cpu list.
->> +	 */
->> +	if ((cs == &top_cpuset) || cpumask_empty(pmask)) {
->> +		const struct cpumask *possible_mask = task_cpu_possible_mask(tsk);
->> +
->> +		/*
->> +		 * We first exclude cpus allocated to partitions. If there is no
->> +		 * allowable online cpu left, we fall back to all possible cpus.
->> +		 */
->> +		cpumask_andnot(pmask, possible_mask, top_cpuset.subparts_cpus);
-> and the differences are that
->
-> * It's only applied to the root cgroup.
->
-> * Cpus taken up by partitions are excluded.
->
-> Is my understanding correct?
-Yes, that is correct.
->
->> +		if (!cpumask_intersects(pmask, cpu_online_mask))
->> +			cpumask_copy(pmask, possible_mask);
->> +	}
->> +
->> +	rcu_read_unlock();
->>   	spin_unlock_irqrestore(&callback_lock, flags);
-> So, I suppose you're suggesting applying this patch instead of the one Will
-> Deacon posted[1] and we need Will's second patch[2] on top, right?
-Right. Let hear if Will and Peter agree with this plan. I have tested 
-this patch and it passed Peter's reproducer test correctly. During 
-testing, I uncovered another bug in the cpu affinity code which results 
-in a separate scheduler patch to fix it.
->
-> [1] http://lkml.kernel.org/r/20230131221719.3176-3-will@kernel.org
-> [2] http://lkml.kernel.org/r/20230131221719.3176-3-will@kernel.org
->
-> Thanks.
-Cheers,
-Longman
+Fixes: ac0d239936bd ("phy: qcom-qmp: Add support for runtime PM").
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Link: https://lore.kernel.org/r/20220907110728.19092-2-johan+linaro@kernel.org
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+---
+ drivers/phy/qualcomm/phy-qcom-qmp.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/phy/qualcomm/phy-qcom-qmp.c b/drivers/phy/qualcomm/phy-qcom-qmp.c
+index a9687e040960..7b7557c35af6 100644
+--- a/drivers/phy/qualcomm/phy-qcom-qmp.c
++++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
+@@ -5740,7 +5740,9 @@ static int qcom_qmp_phy_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
+ 
+ 	pm_runtime_set_active(dev);
+-	pm_runtime_enable(dev);
++	ret = devm_pm_runtime_enable(dev);
++	if (ret)
++		return ret;
+ 	/*
+ 	 * Prevent runtime pm from being ON by default. Users can enable
+ 	 * it using power/control in sysfs.
+@@ -5790,13 +5792,10 @@ static int qcom_qmp_phy_probe(struct platform_device *pdev)
+ 	phy_provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
+ 	if (!IS_ERR(phy_provider))
+ 		dev_info(dev, "Registered Qcom-QMP phy\n");
+-	else
+-		pm_runtime_disable(dev);
+ 
+ 	return PTR_ERR_OR_ZERO(phy_provider);
+ 
+ err_node_put:
+-	pm_runtime_disable(dev);
+ 	of_node_put(child);
+ 	return ret;
+ }
+-- 
+https://chromeos.dev
 
