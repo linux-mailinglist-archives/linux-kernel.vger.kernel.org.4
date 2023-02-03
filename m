@@ -2,161 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B19C768A151
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 19:11:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCBD968A15B
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 19:13:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233385AbjBCSLS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 13:11:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43958 "EHLO
+        id S233143AbjBCSNE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 13:13:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233362AbjBCSKu (ORCPT
+        with ESMTP id S231755AbjBCSND (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 13:10:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A239A000C;
-        Fri,  3 Feb 2023 10:10:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D468CB82B8C;
-        Fri,  3 Feb 2023 18:10:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09296C4339E;
-        Fri,  3 Feb 2023 18:10:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675447846;
-        bh=w/FG3AXAap9ceYVu917SBT3duaXKVW4HG3rOkgoBdDw=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=QpYe3D/i5Zov21BDFFnRY2RwkEt9jXyrpo8qLm4JhboTeuJ+yQhruo2IgwmKkjzx7
-         vBNRs86JB1AN+ll/bmkzmGu03arFh/uLspIAv5a5dz5HHdtUbnop7HelzU15QGmmIg
-         thabeLYyhw5BvbInQ+3Z86/3eDll6LDDcetllQGocdHvwjM9aLtc03hLl+QCp9q9Oj
-         OGMGAKLUPdJ7JXHyK5V6jzyqrvwdi1Zkabh/SSplx7jhV+kwStbqn8ibrFBdkwxyqB
-         p8IiJCiGLpPDMQzv0o9RA3kIqVysDppnBlxwEqnJJqZ4pGuhrz+sCunfvDKO+TTDEp
-         1cI+iAKtEDOlw==
-Message-ID: <860cb5d7dfea29b4beaee57dd152137837696cb9.camel@kernel.org>
-Subject: Re: [PATCH] NFSD: fix deny mode logic in nfs4_upgrade_open
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Chuck Lever III <chuck.lever@oracle.com>
-Cc:     Dai Ngo <dai.ngo@oracle.com>, Pumpkin <cc85nod@gmail.com>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Date:   Fri, 03 Feb 2023 13:10:44 -0500
-In-Reply-To: <CE064BB1-510B-4268-A92E-8DAC680AAA22@oracle.com>
-References: <20230202073611.13106-1-cc85nod@gmail.com>
-         <CBAFB3E5-5737-47A7-8234-3A771E908C4F@oracle.com>
-         <7b7edc8bacb863915d00673f9e03d38798341a69.camel@kernel.org>
-         <CE064BB1-510B-4268-A92E-8DAC680AAA22@oracle.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+        Fri, 3 Feb 2023 13:13:03 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0474211E;
+        Fri,  3 Feb 2023 10:12:59 -0800 (PST)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 313HKuGj015312;
+        Fri, 3 Feb 2023 18:12:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=fqQpv3FLRrrFIU3VTK6WAjqSO36QpMpTsucAWSbwDcM=;
+ b=lNFM6t6KtSv/xt0oulbkPshGMGSq/v5mSkUSakTFv6ci49mj+FCr31wELyubSR64fhJX
+ AOX60bmS/Xa4Tj/GjQXNRidBKV/u0NDi8q1WhMXXQoUbplKC7h1XvwleCuHDlgOyW6wq
+ +Wg9poFNXV02FHbl8UDJ5ifQ3MSGO7QpMEvDIO9oVbjFxRPejjSSb8kpGIBXxFFbgxQq
+ gbq4+8eDB9/FlWjXTGCRhKZ2poQtOPKGETF8a2ajJK/Afk31vfTGvbqjSnJpuRz5VpJv
+ mwoxT8dcJ/TNAQR5DqHJcHhpgnZo/CZ+fd2loQ/F/cGyhHieyqoIwB4yiuSLwwTnOVhh yg== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ngw4p9f1x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Feb 2023 18:12:52 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 313ICpk9012727
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 3 Feb 2023 18:12:51 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Fri, 3 Feb 2023 10:12:50 -0800
+From:   Bjorn Andersson <quic_bjorande@quicinc.com>
+To:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>
+CC:     Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        "Daniel Vetter" <daniel@ffwll.ch>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+Subject: [RFC] drm/msm/adreno: Balance pm_runtime enable
+Date:   Fri, 3 Feb 2023 10:12:45 -0800
+Message-ID: <20230203181245.3523937-1-quic_bjorande@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 0OTKZfOuRO0MlWtDZk3Pums6klRY0Mz1
+X-Proofpoint-ORIG-GUID: 0OTKZfOuRO0MlWtDZk3Pums6klRY0Mz1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-03_17,2023-02-03_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 impostorscore=0 spamscore=0 suspectscore=0 adultscore=0
+ clxscore=1011 lowpriorityscore=0 mlxscore=0 phishscore=0 bulkscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302030166
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-02-03 at 14:50 +0000, Chuck Lever III wrote:
->=20
-> > On Feb 2, 2023, at 4:22 PM, Jeff Layton <jlayton@kernel.org> wrote:
-> >=20
-> > On Thu, 2023-02-02 at 19:41 +0000, Chuck Lever III wrote:
-> > >=20
-> > > > On Feb 2, 2023, at 2:36 AM, Pumpkin <cc85nod@gmail.com> wrote:
-> > > >=20
-> > > > If the upgrading deny mode is invalid or conflicts with other clien=
-t, we
-> > > > should try to resolve it, but the if-condition makes those error ha=
-ndling
-> > > > cannot be executed.
-> > > >=20
-> > > > Signed-off-by: Pumpkin <cc85nod@gmail.com>
-> > > > ---
-> > > > fs/nfsd/nfs4state.c | 2 +-
-> > > > 1 file changed, 1 insertion(+), 1 deletion(-)
-> > > >=20
-> > > > diff --git a/fs/nfsd/nfs4state.c b/fs/nfsd/nfs4state.c
-> > > > index 4ef529379..ebdfaf0f9 100644
-> > > > --- a/fs/nfsd/nfs4state.c
-> > > > +++ b/fs/nfsd/nfs4state.c
-> > > > @@ -5298,7 +5298,7 @@ nfs4_upgrade_open(struct svc_rqst *rqstp, str=
-uct nfs4_file *fp,
-> > > > 	/* test and set deny mode */
-> > > > 	spin_lock(&fp->fi_lock);
-> > > > 	status =3D nfs4_file_check_deny(fp, open->op_share_deny);
-> > > > -	if (status =3D=3D nfs_ok) {
-> > > > +	if (status !=3D nfs_ok) {
-> > > > 		if (status !=3D nfserr_share_denied) {
-> > >=20
-> > > if status =3D=3D nfs_ok then status will definitely not equal
-> > > share_denied. So this check is a bit nonsensical as it stands.
-> > >=20
-> > > Usually I prefer "switch (status)" in situations like this
-> > > because that avoids this kind of issue and I find it easier
-> > > to read quickly.
-> > >=20
-> > > Jeff, you are the original author of this function, and
-> > > Dai, your commit is the last one to touch this area. Can
-> > > you guys have a look? The one-liner looks correct, but I
-> > > might be missing something.
-> > >=20
-> >=20
-> > Yeah, that code is clearly broken and it looks like it was done in
-> > 3d69427151806 (NFSD: add support for share reservation conflict to
-> > courteous server).
-> >=20
-> > I don't believe that one-liner is correct though. If the result is
-> > nfs_ok, then we want to set the deny mode here and that won't happen.
-> >=20
-> > Something like this maybe? (completely untested):
-> >=20
-> > ---------------8<-------------------
-> >=20
-> > diff --git a/fs/nfsd/nfs4state.c b/fs/nfsd/nfs4state.c
-> > index c39e43742dd6..af22dfdc6fcc 100644
-> > --- a/fs/nfsd/nfs4state.c
-> > +++ b/fs/nfsd/nfs4state.c
-> > @@ -5282,16 +5282,17 @@ nfs4_upgrade_open(struct svc_rqst *rqstp, struc=
-t nfs4_file *fp,
-> >        /* test and set deny mode */
-> >        spin_lock(&fp->fi_lock);
-> >        status =3D nfs4_file_check_deny(fp, open->op_share_deny);
-> > -       if (status =3D=3D nfs_ok) {
-> > -               if (status !=3D nfserr_share_denied) {
-> > -                       set_deny(open->op_share_deny, stp);
-> > -                       fp->fi_share_deny |=3D
-> > -                               (open->op_share_deny & NFS4_SHARE_DENY_=
-BOTH);
-> > -               } else {
-> > -                       if (nfs4_resolve_deny_conflicts_locked(fp, fals=
-e,
-> > -                                       stp, open->op_share_deny, false=
-))
-> > -                               status =3D nfserr_jukebox;
-> > -               }
-> > +       switch (status) {
-> > +       case nfs_ok:
-> > +               set_deny(open->op_share_deny, stp);
-> > +               fp->fi_share_deny |=3D
-> > +                       (open->op_share_deny & NFS4_SHARE_DENY_BOTH);
-> > +               break;
-> > +       case nfserr_share_denied:
-> > +               if (nfs4_resolve_deny_conflicts_locked(fp, false,
-> > +                               stp, open->op_share_deny, false))
-> > +                       status =3D nfserr_jukebox;
-> > +               break;
-> >        }
-> >        spin_unlock(&fp->fi_lock);
->=20
-> Would pynfs have a case or two that could test this?
->=20
-> Can you post an official version of this patch with Reported-by
-> and Fixes tags?
->=20
->=20
+When any of the components in the mdss hierarchy fails to bind,
+previously bound components are being unbound again.
 
-Sure, but I may not have time to test it out for a bit though.
---=20
-Jeff Layton <jlayton@kernel.org>
+One such case happens when the DP controller fails to find its bridge or
+panel, where adreno_unbind() will be invoked without adreno_load_gpu()
+being called to invoke pm_runtime_enable().
+
+The result is that once everything is bound the pm_runtime_get_sync()
+call find the power-domain to have a positive disable_depth, fails
+with -EACCESS and prevents the GPU device to be powered up.
+
+Move the pm_runtime_enable() to adreno_bind(), in order to balance it
+with any calls to adreno_unbind().
+
+Fixes: 4b18299b3365 ("drm/msm/adreno: Defer enabling runpm until hw_init()")
+Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+---
+ drivers/gpu/drm/msm/adreno/adreno_device.c | 11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu/drm/msm/adreno/adreno_device.c
+index 36f062c7582f..ca38b837dedb 100644
+--- a/drivers/gpu/drm/msm/adreno/adreno_device.c
++++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
+@@ -432,15 +432,6 @@ struct msm_gpu *adreno_load_gpu(struct drm_device *dev)
+ 	if (ret)
+ 		return NULL;
+ 
+-	/*
+-	 * Now that we have firmware loaded, and are ready to begin
+-	 * booting the gpu, go ahead and enable runpm:
+-	 */
+-	pm_runtime_enable(&pdev->dev);
+-
+-	/* Make sure pm runtime is active and reset any previous errors */
+-	pm_runtime_set_active(&pdev->dev);
+-
+ 	ret = pm_runtime_get_sync(&pdev->dev);
+ 	if (ret < 0) {
+ 		pm_runtime_put_sync(&pdev->dev);
+@@ -548,6 +539,8 @@ static int adreno_bind(struct device *dev, struct device *master, void *data)
+ 		return PTR_ERR(gpu);
+ 	}
+ 
++	pm_runtime_enable(dev);
++
+ 	return 0;
+ }
+ 
+-- 
+2.25.1
+
