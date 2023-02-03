@@ -2,170 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7167689A26
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 14:51:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81711689A28
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 14:51:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231819AbjBCNum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 08:50:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59224 "EHLO
+        id S232882AbjBCNuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 08:50:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231775AbjBCNuj (ORCPT
+        with ESMTP id S232000AbjBCNuv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 08:50:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E43F8B7CA
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 05:49:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675432192;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DMeV+PbsytnfwB8y571EgKoPuO8SIcRtHzLsbHY4Ecg=;
-        b=eBhNoa41pFYCx48sz/XhxBpYFQAjv9jQ9APNba+WXqbsEulF1StBjSH+XBJqSJndNI8aDr
-        49ocgRcsVWs7svyxHib1h2F6OzI8Layh0qUidn8hOT/84bfU4aFqUjHVUk1oOQoluuVetI
-        /Uy2MeM3Po5BSc+bk7gcBtRSh8H2Mjo=
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
- [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-594-DNpJZTTkPlqj38d4DDUSbQ-1; Fri, 03 Feb 2023 08:49:43 -0500
-X-MC-Unique: DNpJZTTkPlqj38d4DDUSbQ-1
-Received: by mail-il1-f199.google.com with SMTP id b16-20020a92ce10000000b003125834f6a5so3297703ilo.3
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 05:49:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:organization:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DMeV+PbsytnfwB8y571EgKoPuO8SIcRtHzLsbHY4Ecg=;
-        b=yypY5W7xiNEaU8/eODtMlJTJDGGP8vsi2KXA2iZO3RzcoZLmnMiUuChYH1TVL4rx+I
-         MYeJf9sSD32b9HBH9yhsKe5G//TSb78an0J03xcqjZw4mIny8RlcrO4J0OBcjLg686e0
-         aGDWBSM1te9rX8xbEGCVwF/VbM5mpkn0acZDUFXM++GJQi2wyIMe8g/HVD3UwVpw5NBN
-         mvP8eRrYu/ok8E4xu88Tvt4LP3PMePI9MtAj0TRWq4oxV3F5dWfG2qqdPyDXQ37ojlG5
-         FMDvXTFrC5RMEJPAyM9e5FghMTBfj+GcPMgLLoyfVxpc1gjVy6Gsc0WB+V0fXWwCobU8
-         ng6w==
-X-Gm-Message-State: AO0yUKVmKJ0/baprRM7kx7c0WfpHHCbiDLlGHJFAMCA9G4uEBwRL1RPF
-        3b1STXk9h1oAxmGoBZ/1Os/6Fjt23voOSD8XqMW84IEYYCU4XDX50iTsTPVI1RriIz0jqA/ni6l
-        xvUDlJWqoBskFeSyIdavD4QjQ
-X-Received: by 2002:a05:6e02:b29:b0:312:75a8:befd with SMTP id e9-20020a056e020b2900b0031275a8befdmr7401944ilu.31.1675432183116;
-        Fri, 03 Feb 2023 05:49:43 -0800 (PST)
-X-Google-Smtp-Source: AK7set+DXLFqJ2WVCxfMNKF0qA9WvYBQ4q7md2UoZyoOfbxX57I1uo2kCZVCiLHw1lEdIjP9+dyEFw==
-X-Received: by 2002:a05:6e02:b29:b0:312:75a8:befd with SMTP id e9-20020a056e020b2900b0031275a8befdmr7401929ilu.31.1675432182869;
-        Fri, 03 Feb 2023 05:49:42 -0800 (PST)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id h22-20020a022b16000000b003a958069dbfsm853822jaa.8.2023.02.03.05.49.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 05:49:42 -0800 (PST)
-Date:   Fri, 3 Feb 2023 06:49:40 -0700
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     "Liu, Yi L" <yi.l.liu@intel.com>
-Cc:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "farman@linux.ibm.com" <farman@linux.ibm.com>,
-        "pmorel@linux.ibm.com" <pmorel@linux.ibm.com>,
-        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
-        "frankja@linux.ibm.com" <frankja@linux.ibm.com>,
-        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "akrowiak@linux.ibm.com" <akrowiak@linux.ibm.com>,
-        "jjherne@linux.ibm.com" <jjherne@linux.ibm.com>,
-        "pasic@linux.ibm.com" <pasic@linux.ibm.com>,
-        "zhenyuw@linux.intel.com" <zhenyuw@linux.intel.com>,
-        "Wang, Zhi A" <zhi.a.wang@intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "intel-gvt-dev@lists.freedesktop.org" 
-        <intel-gvt-dev@lists.freedesktop.org>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3] vfio: fix deadlock between group lock and kvm lock
-Message-ID: <20230203064940.435e4d65.alex.williamson@redhat.com>
-In-Reply-To: <DS0PR11MB7529050661FCE4A5AC4B17C3C3D79@DS0PR11MB7529.namprd11.prod.outlook.com>
-References: <20230202162442.78216-1-mjrosato@linux.ibm.com>
-        <20230202124210.476adaf8.alex.williamson@redhat.com>
-        <BN9PR11MB527618E281BEB8E479ABB0418CD69@BN9PR11MB5276.namprd11.prod.outlook.com>
-        <20230202161307.0c6aa23e.alex.williamson@redhat.com>
-        <BN9PR11MB5276017F9CEBB4BAE58C40E88CD79@BN9PR11MB5276.namprd11.prod.outlook.com>
-        <DS0PR11MB7529050661FCE4A5AC4B17C3C3D79@DS0PR11MB7529.namprd11.prod.outlook.com>
-Organization: Red Hat
+        Fri, 3 Feb 2023 08:50:51 -0500
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C15E9A82C;
+        Fri,  3 Feb 2023 05:50:37 -0800 (PST)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3139pYul027545;
+        Fri, 3 Feb 2023 14:50:05 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=quyuHnd52UYk2m8I58kZLilahHwXYAvRNaQN+/UHriA=;
+ b=2MNrCRIIgLAG9Tu1cxSDCxD8Jprxjh+PrgHaGeYOGVtvxunRgBx3wtuUDn9aiblplZIN
+ TRUlyO8StlXCSmPixiJ2doLww2jZMrmeP7H+kl0H0phlAKQDYnueKNac5LD7hyh0sBFj
+ WzfSKksF7/s2JN329RT97asyy/ZS/xDRKPciUrc/IjOm0TFmMQ13wbbzZjNwi6SfZ6WN
+ bGg+DH10DFkdhYbfL0X783WXsKlIYa6Ldm4Ky9nNcncwQpln0ZhMa4dm1+jnujZX5HW0
+ ZvK/omGsLXW57AMlgGkw8Hyr11SsbDeAT4aHsHO4w5NPHKcd309fZpFEHY6dlZV7+r6Q qA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3nfny5f85v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Feb 2023 14:50:05 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0504610002A;
+        Fri,  3 Feb 2023 14:50:03 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id F2F36218615;
+        Fri,  3 Feb 2023 14:50:02 +0100 (CET)
+Received: from [10.252.18.17] (10.252.18.17) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Fri, 3 Feb
+ 2023 14:50:02 +0100
+Message-ID: <527eaa1f-f663-8a92-00b5-b0329240b922@foss.st.com>
+Date:   Fri, 3 Feb 2023 14:50:00 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2] ARM: dts: stihxxx-b2120: fix polarity of reset line of
+ tsin0 port
+Content-Language: en-US
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alain Volmat <avolmat@me.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <YzcSqZdpNbdINp4Q@google.com> <Y9wGO0Q//TIKwTTE@google.com>
+From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
+In-Reply-To: <Y9wGO0Q//TIKwTTE@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.252.18.17]
+X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-03_13,2023-02-03_01,2022-06-22_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 3 Feb 2023 13:32:09 +0000
-"Liu, Yi L" <yi.l.liu@intel.com> wrote:
 
-> > From: Tian, Kevin <kevin.tian@intel.com>
-> > Sent: Friday, February 3, 2023 10:00 AM
-> >   
-> > > From: Alex Williamson <alex.williamson@redhat.com>
-> > > Sent: Friday, February 3, 2023 7:13 AM
-> > >
-> > > On Thu, 2 Feb 2023 23:04:10 +0000
-> > > "Tian, Kevin" <kevin.tian@intel.com> wrote:
-> > >  
-> > > > > From: Alex Williamson <alex.williamson@redhat.com>
-> > > > > Sent: Friday, February 3, 2023 3:42 AM
-> > > > >
-> > > > >
-> > > > > LGTM.  I'm not sure moving the functions to vfio_main really buys us
-> > > > > anything since we're making so much use of group fields.  The cdev
-> > > > > approach will necessarily be different, so the bulk of the get code will
-> > > > > likely need to move back to group.c anyway.
-> > > > >  
-> > > >
-> > > > well my last comment was based on Matthew's v2 where the get code
-> > > > gets a kvm passed in instead of implicitly retrieving group ref_lock
-> > > > internally. In that case the get/put helpers only contain device logic
-> > > > thus fit in vfio_main.c.
-> > > >
-> > > > with v3 then they have to be in group.c since we don't want to use
-> > > > group fields in vfio_main.c.
-> > > >
-> > > > but I still think v2 of the helpers is slightly better. The only difference
-> > > > between cdev and group when handling this race is using different
-> > > > ref_lock. the symbol get/put part is exactly same. So even if we
-> > > > merge v3 like this, very likely Yi has to change it back to v2 style
-> > > > to share the get/put helpers while just leaving the ref_lock part
-> > > > handled differently between the two path.  
-> > >
-> > > I'm not really a fan of the asymmetry of the v2 version where the get
-> > > helper needs to be called under the new kvm_ref_lock, but the put
-> > > helper does not.  Having the get helper handle that makes the caller
-> > > much cleaner.  Thanks,
-> > >  
-> > 
-> > What about passing the lock pointer into the helper? it's still slightly
-> > asymmetry as the put helper doesn't carry the lock pointer but it
-> > could also be interpreted as if the pointer has been saved in the get
-> > then if it needs to be referenced by the put there is no need to pass
-> > it in again.  
+
+On 2/2/23 19:51, Dmitry Torokhov wrote:
+> On Fri, Sep 30, 2022 at 09:00:41AM -0700, Dmitry Torokhov wrote:
+>> According to c8sectpfe driver code we first drive reset line low and
+>> then high to reset the port, therefore the reset line is supposed to
+>> be annotated as "active low". This will be important when we convert
+>> the driver to gpiod API.
+>>
+>> Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
+>> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+>> ---
 > 
-> For cdev, I may modify vfio_device_get_kvm_safe() to accept
-> struct kvm and let its caller hold a kvm_ref_lock (field within
-> struct vfio_device_file). Meanwhile, the group path holds
-> the group->kvm_ref_lock before invoking vfio_device_get_kvm_safe().
-> vfio_device_get_kvm_safe() just includes the symbol get/put and
-> the device->kvm and put_kvm set.
+> Gentle ping on this one...
 
-Sounds a lot like v2 :-\  I'd look more towards group and cdev specific
-helpers that handle the locking so that the callers aren't exposed to
-the asymmetry of get vs put, and reduce a new
-_vfio_device_get_kvm_safe() in common code that only does the symbol
-work.  Thanks,
+Hi Dmitry
 
-Alex
+Sorry for the delay, i will push a STi pull request including your patch.
 
+Patrice
+
+> 
+>>
+>> v2: fixed typo in the subject, added Patrice's reviewed-by
+>>
+>>  arch/arm/boot/dts/stihxxx-b2120.dtsi | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/arch/arm/boot/dts/stihxxx-b2120.dtsi b/arch/arm/boot/dts/stihxxx-b2120.dtsi
+>> index 2aa94605d3d4..d52a7aaa1074 100644
+>> --- a/arch/arm/boot/dts/stihxxx-b2120.dtsi
+>> +++ b/arch/arm/boot/dts/stihxxx-b2120.dtsi
+>> @@ -178,7 +178,7 @@ tsin0: port {
+>>  				tsin-num = <0>;
+>>  				serial-not-parallel;
+>>  				i2c-bus = <&ssc2>;
+>> -				reset-gpios = <&pio15 4 GPIO_ACTIVE_HIGH>;
+>> +				reset-gpios = <&pio15 4 GPIO_ACTIVE_LOW>;
+>>  				dvb-card = <STV0367_TDA18212_NIMA_1>;
+>>  			};
+>>  		};
+>> -- 
+>> 2.38.0.rc1.362.ged0d419d3c-goog
+>>
+>>
+>> -- 
+>> Dmitry
+> 
