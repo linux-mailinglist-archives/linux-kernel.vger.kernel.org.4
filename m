@@ -2,78 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05B7A689EE8
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 17:07:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65D63689EEB
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 17:08:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232875AbjBCQHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 11:07:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38764 "EHLO
+        id S232913AbjBCQI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 11:08:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232913AbjBCQHm (ORCPT
+        with ESMTP id S233217AbjBCQIP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 11:07:42 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A9489F9C9
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 08:07:40 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id mc11so16589047ejb.10
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 08:07:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Mv4Tw1a7+WNqMwMi9Hb0edTB8YtKReMwtw4zFtjDKg4=;
-        b=Yi+DtZuGbq9lNYTtwtUMgdX4orJXwFHGCuZOGAggaZ6AMB9WVXAlZGRXWZ1ea+o33k
-         3WO7IUmfAi0ndihbkUrgb2nwKe03OIw7uqO7Yzhccea3hh9apwGUf2yhUfDjD+hDMWpd
-         4XqT7KiqlOiBfabZARxQ5dVT+DdakSaXhBbb2FrRJ9EX74iUHg9cKSnZLI+iUEHXDudX
-         W4jYra2EiCV0BJpx05yrVFhh+cdO40eGpvKDEf7iyrEVnVsLaZ6mQMhJ/rlriDmn5XJ0
-         +Qs534qGEODd6SFYaOs18BsHuMrhoVczZuQcJ1BGCunhgw+6lj7IiRb7k2eg5xSqbC+x
-         ba/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Mv4Tw1a7+WNqMwMi9Hb0edTB8YtKReMwtw4zFtjDKg4=;
-        b=K1c9yVK2nD/4qQi4Izr8HyekboxyyiGtO81KWLnhVuGrFk64Pq3SXn+rp26ezFTJ8K
-         oa1DG25hcALUeAWs82jP5nCtuQqLxsAbl1z/yKRzCKT0OeveGIKg2VZG7zyGMgMEgqvo
-         v0fTI1fNiTITUW7QcqR4Z6Vo3I+JByRwEV9EgwA5CutnF43XKotw0fJ7/W9oo4RWn92X
-         1y5jBlBqQvdUjw+u0soIav+UxhOhP12+zQh+yu6M5WSvtC0FpFqE/hgq/mt5vwvDHrNU
-         Tdbjjx6G4SAKxQZyswmOsZeeOfN1ItEoqnRe/ZCcKOuE7ATrd/fiu3rzuUZG0fFMu0ZC
-         cR4Q==
-X-Gm-Message-State: AO0yUKV4Ayw0TSUwWPrRdZpDUw1ddEkT0+51CGIbXIuzd1anOmSmH4ti
-        E/9VWgo6BoLMmwoGpGXyCJH97raKQyKBUC4kUD/qSw==
-X-Google-Smtp-Source: AK7set82A9Kb0hwNrj1M0to5qoC8vv2uCV2EiO8NNND3SgDSYSico/58trjpGYHNR6i0MUj3s2K1vQ==
-X-Received: by 2002:a17:906:8da:b0:87b:db53:3829 with SMTP id o26-20020a17090608da00b0087bdb533829mr10690486eje.46.1675440459116;
-        Fri, 03 Feb 2023 08:07:39 -0800 (PST)
-Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
-        by smtp.gmail.com with ESMTPSA id x26-20020a1709064bda00b00886c1a02d20sm1560622ejv.47.2023.02.03.08.07.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 08:07:38 -0800 (PST)
-Date:   Fri, 3 Feb 2023 17:07:32 +0100
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     =?utf-8?B?6Zm2IOe8mA==?= <taoyuan_eddy@hotmail.com>
-Cc:     Eelco Chaudron <echaudro@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Pravin B Shelar <pshelar@ovn.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "dev@openvswitch.org" <dev@openvswitch.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: =?utf-8?B?5Zue5aSNOiBbUEFUQw==?= =?utf-8?Q?H?= net-next v7 1/1]
- net:openvswitch:reduce cpu_used_mask memory
-Message-ID: <Y90xRInJeyuNA6RT@nanopsycho>
-References: <20230203095118.276261-1-taoyuan_eddy@hotmail.com>
- <OS3P286MB2295DC976A51C0087F6FE16BF5D79@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
- <ECDAB6E2-EBFE-435C-B5E5-0E27BABA822F@redhat.com>
- <OS3P286MB22950F0D26C1496D1773B172F5D79@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
+        Fri, 3 Feb 2023 11:08:15 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2491ABD8;
+        Fri,  3 Feb 2023 08:08:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675440485; x=1706976485;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=a5pY8S97NNM5t+sjx8sWM1oQ0kSMBPYUOseHtuULdbs=;
+  b=HamwTHuO6/3Xhtz6qeGlAorOJV2wNLBeMOX6Vq7lzhgDX14qgIFHxnie
+   XE378vTbcaR+O1DqoflTm4tWUq4pgm60zxkvIOlw3K7LzbOOF4cQxizsd
+   KKoCIzy6wbzCLsPw9X40K9UdrhUa6NXNjEypRe3TS24UiliVwITC1Lb9A
+   lmsjRa8V3CB9VXmFXVyfXSkZDoyO+DsZ9J7MzHpr13XugERRyCfaLzN2h
+   f9tlp5l6K3qom/mQuhw4XUhRZQQJn4bmfoA1Re3brcKFf01tZFG4E2LcO
+   er3cDbjqjensmgTMy006wuZMKFm2X5FNXMpPuQiyZtSkpr+ABWNql/K3V
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="327419198"
+X-IronPort-AV: E=Sophos;i="5.97,270,1669104000"; 
+   d="scan'208";a="327419198"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2023 08:08:04 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="698124991"
+X-IronPort-AV: E=Sophos;i="5.97,270,1669104000"; 
+   d="scan'208";a="698124991"
+Received: from djiang5-mobl3.amr.corp.intel.com (HELO [10.212.119.40]) ([10.212.119.40])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2023 08:08:03 -0800
+Message-ID: <f4f377dc-143d-ea93-436f-334390e4c120@intel.com>
+Date:   Fri, 3 Feb 2023 09:08:02 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <OS3P286MB22950F0D26C1496D1773B172F5D79@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.6.0
+Subject: Re: [PATCH 1/2] dmaengine: idxd: Add enable/disable device IOPF
+ feature
+Content-Language: en-US
+To:     Lu Baolu <baolu.lu@linux.intel.com>, iommu@lists.linux.dev,
+        dmaengine@vger.kernel.org
+Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Vinod Koul <vkoul@kernel.org>, linux-kernel@vger.kernel.org
+References: <20230203084456.469641-1-baolu.lu@linux.intel.com>
+From:   Dave Jiang <dave.jiang@intel.com>
+In-Reply-To: <20230203084456.469641-1-baolu.lu@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,13 +68,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fri, Feb 03, 2023 at 04:50:31PM CET, taoyuan_eddy@hotmail.com wrote:
->Change between V7 and V6:
->move initialization of cpu_used_mask up to follow stats_last_writer
-
-Okay, please stop sending stuff and begin to read.
 
 
->
->thanks
->eddy
+On 2/3/23 1:44 AM, Lu Baolu wrote:
+> The iommu subsystem requires IOMMU_DEV_FEAT_IOPF must be enabled before
+> and disabled after IOMMU_DEV_FEAT_SVA, if device's I/O page faults rely
+> on the IOMMU. Add explicit IOMMU_DEV_FEAT_IOPF enabling/disabling in this
+> driver.
+> 
+> At present, missing IOPF enabling/disabling doesn't cause any real issue,
+> because the IOMMU driver places the IOPF enabling/disabling in the path
+> of SVA feature handling. But this may change.
+> 
+> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+
+Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+
+> ---
+>   drivers/dma/idxd/init.c | 31 +++++++++++++++++++++++++------
+>   1 file changed, 25 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/dma/idxd/init.c b/drivers/dma/idxd/init.c
+> index 529ea09c9094..d5a709a842a8 100644
+> --- a/drivers/dma/idxd/init.c
+> +++ b/drivers/dma/idxd/init.c
+> @@ -511,6 +511,27 @@ static void idxd_disable_system_pasid(struct idxd_device *idxd)
+>   	idxd->sva = NULL;
+>   }
+>   
+> +static int idxd_enable_sva(struct pci_dev *pdev)
+> +{
+> +	int ret;
+> +
+> +	ret = iommu_dev_enable_feature(&pdev->dev, IOMMU_DEV_FEAT_IOPF);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = iommu_dev_enable_feature(&pdev->dev, IOMMU_DEV_FEAT_SVA);
+> +	if (ret)
+> +		iommu_dev_disable_feature(&pdev->dev, IOMMU_DEV_FEAT_IOPF);
+> +
+> +	return ret;
+> +}
+> +
+> +static void idxd_disable_sva(struct pci_dev *pdev)
+> +{
+> +	iommu_dev_disable_feature(&pdev->dev, IOMMU_DEV_FEAT_SVA);
+> +	iommu_dev_disable_feature(&pdev->dev, IOMMU_DEV_FEAT_IOPF);
+> +}
+> +
+>   static int idxd_probe(struct idxd_device *idxd)
+>   {
+>   	struct pci_dev *pdev = idxd->pdev;
+> @@ -525,7 +546,7 @@ static int idxd_probe(struct idxd_device *idxd)
+>   	dev_dbg(dev, "IDXD reset complete\n");
+>   
+>   	if (IS_ENABLED(CONFIG_INTEL_IDXD_SVM) && sva) {
+> -		if (iommu_dev_enable_feature(dev, IOMMU_DEV_FEAT_SVA)) {
+> +		if (idxd_enable_sva(pdev)) {
+>   			dev_warn(dev, "Unable to turn on user SVA feature.\n");
+>   		} else {
+>   			set_bit(IDXD_FLAG_USER_PASID_ENABLED, &idxd->flags);
+> @@ -573,21 +594,19 @@ static int idxd_probe(struct idxd_device *idxd)
+>   	if (device_pasid_enabled(idxd))
+>   		idxd_disable_system_pasid(idxd);
+>   	if (device_user_pasid_enabled(idxd))
+> -		iommu_dev_disable_feature(dev, IOMMU_DEV_FEAT_SVA);
+> +		idxd_disable_sva(pdev);
+>   	return rc;
+>   }
+>   
+>   static void idxd_cleanup(struct idxd_device *idxd)
+>   {
+> -	struct device *dev = &idxd->pdev->dev;
+> -
+>   	perfmon_pmu_remove(idxd);
+>   	idxd_cleanup_interrupts(idxd);
+>   	idxd_cleanup_internals(idxd);
+>   	if (device_pasid_enabled(idxd))
+>   		idxd_disable_system_pasid(idxd);
+>   	if (device_user_pasid_enabled(idxd))
+> -		iommu_dev_disable_feature(dev, IOMMU_DEV_FEAT_SVA);
+> +		idxd_disable_sva(idxd->pdev);
+>   }
+>   
+>   static int idxd_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+> @@ -705,7 +724,7 @@ static void idxd_remove(struct pci_dev *pdev)
+>   	pci_free_irq_vectors(pdev);
+>   	pci_iounmap(pdev, idxd->reg_base);
+>   	if (device_user_pasid_enabled(idxd))
+> -		iommu_dev_disable_feature(&pdev->dev, IOMMU_DEV_FEAT_SVA);
+> +		idxd_disable_sva(pdev);
+>   	pci_disable_device(pdev);
+>   	destroy_workqueue(idxd->wq);
+>   	perfmon_pmu_remove(idxd);
