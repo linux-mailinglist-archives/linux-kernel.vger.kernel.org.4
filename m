@@ -2,141 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D294689BE8
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 15:34:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A9BD689BF0
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 15:35:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233657AbjBCOep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 09:34:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50984 "EHLO
+        id S233070AbjBCOfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 09:35:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232815AbjBCOek (ORCPT
+        with ESMTP id S232618AbjBCOfg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 09:34:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D934893E0
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 06:33:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675434831;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QVQjsvvXC5vAa55XgbnpLQZ7ycccPtxDGUTVFYgFp7U=;
-        b=YkMFWPGdOtwCaWTz3sSvnVhVAlrfBii+eUr9heNgK0zcWZ5uFBEjdbf5rSCms0FYPl7Lr/
-        bO0fnCEfCIHkDejKwepgZcmt3RpDroIX3KxaJm84hRwwiwlG15yQ5klR/qCKr4tHLiKOFb
-        huKGEOL7l9phcOkJbxz9I9IKwPCKr+Q=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-637-c_jw4O5IPCqf1PDBRF898Q-1; Fri, 03 Feb 2023 09:33:49 -0500
-X-MC-Unique: c_jw4O5IPCqf1PDBRF898Q-1
-Received: by mail-wm1-f71.google.com with SMTP id x10-20020a05600c21ca00b003dc5584b516so4694415wmj.7
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 06:33:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QVQjsvvXC5vAa55XgbnpLQZ7ycccPtxDGUTVFYgFp7U=;
-        b=qNP77e47cZHl3s+y36ChH18UlEuvnFSQLjAhZkndFrZyMXHyts8OqeHq4A5gZhwVY/
-         bhAbd6J4bK49vQsqdRAjuP2pjdR2hy0B7an3imwUr68ZXZNmiM59k2LKQndhGOR1hvi9
-         WPTBQh5lhrXxuaJJ77aA/SyjNxoxmH+tTplfutTRpj+UaE9fzIKLEqm29adRTGKhHS2j
-         R8pfYrOwiJySEWuKsBRQ6s2LspDxYU8VsxxTDZVnozUM3T5nvZNdarPwr7WyYbSIlbeF
-         7Nm5QS5fO+Lo/6/tU5wnKl95MDa2+kginahx90IMSngIv9yrCkmNPBkEu+cdKndyFM02
-         H+xQ==
-X-Gm-Message-State: AO0yUKUfaDAlzTT4sXOAGYQSo3TOjRw6+5SkrRn9EPcBQJNb9q5RaFzP
-        4j0seu66SCa0JnNpbO+/DTFul1nmoac6GRDhgjFc4uMZPApqQHQehGNH3ADMHm2/0ISWuilEtSP
-        guyKEa9wmbDzkV2c16w4h2ajO
-X-Received: by 2002:a05:600c:3514:b0:3df:ead3:c6fc with SMTP id h20-20020a05600c351400b003dfead3c6fcmr1739784wmq.17.1675434828386;
-        Fri, 03 Feb 2023 06:33:48 -0800 (PST)
-X-Google-Smtp-Source: AK7set+nCaLsRgMPjXxFJ2S9nOzpB4vodjtO+Yac8mpKGPJpDWQMNBTnVH2IJfyVyYdKVED3TZv5Cg==
-X-Received: by 2002:a05:600c:3514:b0:3df:ead3:c6fc with SMTP id h20-20020a05600c351400b003dfead3c6fcmr1739731wmq.17.1675434828065;
-        Fri, 03 Feb 2023 06:33:48 -0800 (PST)
-Received: from [192.168.3.108] (p5b0c6376.dip0.t-ipconnect.de. [91.12.99.118])
-        by smtp.gmail.com with ESMTPSA id o35-20020a05600c512300b003cffd3c3d6csm3239260wms.12.2023.02.03.06.33.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Feb 2023 06:33:47 -0800 (PST)
-Message-ID: <de9cb029-b36e-efe9-9d0e-46a382e889b5@redhat.com>
-Date:   Fri, 3 Feb 2023 15:33:45 +0100
+        Fri, 3 Feb 2023 09:35:36 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF7721C59D;
+        Fri,  3 Feb 2023 06:35:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A522BB829BD;
+        Fri,  3 Feb 2023 14:35:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7A10C433EF;
+        Fri,  3 Feb 2023 14:35:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675434932;
+        bh=591cCBZ+PsEVXsKpjn0NOJi6MWraP0qqr2cYXmxSpYw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oA+IlZSUQ7ppuaUpOeX6yVRxJgsyonYX3RIlBZvC+MfnI2SvZlx1eCvmp9jCio614
+         YDRIHOtwbhxGJX1Eztr3rfn8/1BwT5F5DoYSNRFbGGTAgokcqrmQ2vCieA6QeVaMw1
+         81vSyt7YwUtEVPA9rv5ldkS6GnSsbHAU49WJE4Yh0r9LUN5jU5SdLITjc2XpF10YJU
+         3i78nR0H4oHA1uE7CNT/wTE6MVNSIM9tEaJ+xq+TrPnRUhDw1um+pz/a2fqaus2N0r
+         ArvI+Hu//fVzBIN6yrBWOfM5nVsxKUxFhVof59fPfacLmr9HLQemIfKtrsNsxWFmQ8
+         2YPAJKViqtDKg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 09108405BE; Fri,  3 Feb 2023 11:35:29 -0300 (-03)
+Date:   Fri, 3 Feb 2023 11:35:28 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Rob Herring <robh@kernel.org>,
+        Kang Minchul <tegongkang@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sandipan Das <sandipan.das@amd.com>,
+        Jing Zhang <renyu.zj@linux.alibaba.com>,
+        linuxppc-dev@lists.ozlabs.org, Kajol Jain <kjain@linux.ibm.com>,
+        Stephane Eranian <eranian@google.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Caleb Biggers <caleb.biggers@intel.com>
+Subject: Re: [PATCH v1] perf pmu: Fix aarch64 build
+Message-ID: <Y90bsM4DGL+WV8m0@kernel.org>
+References: <20230203014014.75720-1-irogers@google.com>
+ <CAP-5=fX0ohsCUspm7NowDy2bmSr2cJfp=iaStK4EAdVy7zBHGA@mail.gmail.com>
+ <Y90XgtX9uv26UAQa@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v2 4/4] mm, arch: add generic implementation of
- pfn_valid() for FLATMEM
-Content-Language: en-US
-To:     Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Brian Cain <bcain@quicinc.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Matt Turner <mattst88@gmail.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Simek <monstr@monstr.eu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rich Felker <dalias@libc.org>,
-        Richard Weinberger <richard@nod.at>,
-        Russell King <linux@armlinux.org.uk>,
-        Stafford Horne <shorne@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Vineet Gupta <vgupta@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-mm@kvack.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
-        x86@kernel.org, Huacai Chen <chenhuacai@loongson.cn>
-References: <20230129124235.209895-1-rppt@kernel.org>
- <20230129124235.209895-5-rppt@kernel.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230129124235.209895-5-rppt@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y90XgtX9uv26UAQa@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29.01.23 13:42, Mike Rapoport wrote:
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+Em Fri, Feb 03, 2023 at 11:17:38AM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Thu, Feb 02, 2023 at 05:41:22PM -0800, Ian Rogers escreveu:
+> > On Thu, Feb 2, 2023 at 5:40 PM Ian Rogers <irogers@google.com> wrote:
+> > >
+> > > ARM64 overrides a weak function but a previous change had broken the
+> > > build.
+> > >
+> > > Fixes: 8cefeb8bd336 ("perf pmu-events: Introduce pmu_metrics_table")
+> > 
+> > As 8cefeb8bd336 ("perf pmu-events: Introduce pmu_metrics_table") is
+> > only on tmp.perf/core then it may be best to just squash this fix into
+> > that.
 > 
-> Every architecture that supports FLATMEM memory model defines its own
-> version of pfn_valid() that essentially compares a pfn to max_mapnr.
-> 
-> Use mips/powerpc version implemented as static inline as a generic
-> implementation of pfn_valid() and drop its per-architecture definitions.
-> 
-> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> Acked-by: Arnd Bergmann <arnd@arndb.de>
-> Acked-by: Guo Ren <guoren@kernel.org>		# csky
-> Acked-by: Huacai Chen <chenhuacai@loongson.cn>	# LoongArch
-> Acked-by: Stafford Horne <shorne@gmail.com>	# OpenRISC
-> ---
+> Yeah, that was my intention, I'll fold it there to keep bisection,
+> thanks for fixing it so fast, I'll double check on my rk3399 board and
+> on again on the cross-build container.
 
-LGTM with the fixup
+Nope, that is not what I reported yesterday, trying to build it on the
+rk3399 board:
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+acme@roc-rk3399-pc:~/git/perf$ cat /etc/os-release
+PRETTY_NAME="Ubuntu 22.04.1 LTS"
+NAME="Ubuntu"
+VERSION_ID="22.04"
+VERSION="22.04.1 LTS (Jammy Jellyfish)"
+VERSION_CODENAME=jammy
+ID=ubuntu
+ID_LIKE=debian
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+UBUNTU_CODENAME=jammy
+acme@roc-rk3399-pc:~/git/perf$
 
--- 
-Thanks,
-
-David / dhildenb
+ CC      /tmp/build/perf/arch/arm64/util/pmu.o
+  CC      /tmp/build/perf/bench/epoll-wait.o
+arch/arm64/util/pmu.c: In function ‘pmu__find_core_pmu’:
+arch/arm64/util/pmu.c:27:33: error: declaration of ‘pmu_metrics_table__find’ shadows a global declaration [-Werror=shadow]
+   27 | const struct pmu_metrics_table *pmu_metrics_table__find(void)
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~
+In file included from arch/arm64/util/pmu.c:5:
+arch/arm64/util/../../../util/pmu.h:234:33: note: shadowed declaration is here
+  234 | const struct pmu_metrics_table *pmu_metrics_table__find(void);
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~
+arch/arm64/util/pmu.c: In function ‘pmu_metrics_table__find’:
+arch/arm64/util/pmu.c:29:26: error: declaration of ‘pmu’ shadows a previous local [-Werror=shadow]
+   29 |         struct perf_pmu *pmu = pmu__find_core_pmu();
+      |                          ^~~
+arch/arm64/util/pmu.c:11:26: note: shadowed declaration is here
+   11 |         struct perf_pmu *pmu = NULL;
+      |                          ^~~
+arch/arm64/util/pmu.c: In function ‘pmu__find_core_pmu’:
+arch/arm64/util/pmu.c:27:1: error: ISO C90 forbids mixed declarations and code [-Werror=declaration-after-statement]
+   27 | const struct pmu_metrics_table *pmu_metrics_table__find(void)
+      | ^~~~~
+arch/arm64/util/pmu.c:37:32: error: declaration of ‘pmu_events_table__find’ shadows a global declaration [-Werror=shadow]
+   37 | const struct pmu_events_table *pmu_events_table__find(void)
+      |                                ^~~~~~~~~~~~~~~~~~~~~~
+In file included from arch/arm64/util/pmu.c:5:
+arch/arm64/util/../../../util/pmu.h:233:32: note: shadowed declaration is here
+  233 | const struct pmu_events_table *pmu_events_table__find(void);
+      |                                ^~~~~~~~~~~~~~~~~~~~~~
+arch/arm64/util/pmu.c: In function ‘pmu_events_table__find’:
+arch/arm64/util/pmu.c:39:26: error: declaration of ‘pmu’ shadows a previous local [-Werror=shadow]
+   39 |         struct perf_pmu *pmu = pmu__find_core_pmu();
+      |                          ^~~
+arch/arm64/util/pmu.c:11:26: note: shadowed declaration is here
+   11 |         struct perf_pmu *pmu = NULL;
+      |                          ^~~
+arch/arm64/util/pmu.c: In function ‘pmu__find_core_pmu’:
+arch/arm64/util/pmu.c:47:8: error: declaration of ‘perf_pmu__cpu_slots_per_cycle’ shadows a global declaration [-Werror=shadow]
+   47 | double perf_pmu__cpu_slots_per_cycle(void)
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from arch/arm64/util/pmu.c:5:
+arch/arm64/util/../../../util/pmu.h:255:8: note: shadowed declaration is here
+  255 | double perf_pmu__cpu_slots_per_cycle(void);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+arch/arm64/util/pmu.c: In function ‘perf_pmu__cpu_slots_per_cycle’:
+arch/arm64/util/pmu.c:51:26: error: declaration of ‘pmu’ shadows a previous local [-Werror=shadow]
+   51 |         struct perf_pmu *pmu = pmu__find_core_pmu();
+      |                          ^~~
+arch/arm64/util/pmu.c:11:26: note: shadowed declaration is here
+   11 |         struct perf_pmu *pmu = NULL;
+      |                          ^~~
+arch/arm64/util/pmu.c: In function ‘pmu__find_core_pmu’:
+arch/arm64/util/pmu.c:64:1: error: expected declaration or statement at end of input
+   64 | }
+      | ^
+At top level:
+arch/arm64/util/pmu.c:47:8: error: ‘perf_pmu__cpu_slots_per_cycle’ defined but not used [-Werror=unused-function]
+   47 | double perf_pmu__cpu_slots_per_cycle(void)
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+arch/arm64/util/pmu.c:37:32: error: ‘pmu_events_table__find’ defined but not used [-Werror=unused-function]
+   37 | const struct pmu_events_table *pmu_events_table__find(void)
+      |                                ^~~~~~~~~~~~~~~~~~~~~~
+arch/arm64/util/pmu.c:27:33: error: ‘pmu_metrics_table__find’ defined but not used [-Werror=unused-function]
+   27 | const struct pmu_metrics_table *pmu_metrics_table__find(void)
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+make[6]: *** [/home/acme/git/perf/tools/build/Makefile.build:98: /tmp/build/perf/arch/arm64/util/pmu.o] Error 1
+make[5]: *** [/home/acme/git/perf/tools/build/Makefile.build:140: util] Error 2
+make[4]: *** [/home/acme/git/perf/tools/build/Makefile.build:140: arm64] Error 2
+make[3]: *** [/home/acme/git/perf/tools/build/Makefile.build:140: arch] Error 2
+make[3]: *** Waiting for unfinished jobs....
 
