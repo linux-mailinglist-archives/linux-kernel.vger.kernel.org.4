@@ -2,127 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25EA76894CE
+	by mail.lfdr.de (Postfix) with ESMTP id C82946894D0
 	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 11:11:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233060AbjBCKKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 05:10:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59760 "EHLO
+        id S233130AbjBCKLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 05:11:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232316AbjBCKKc (ORCPT
+        with ESMTP id S233089AbjBCKLJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 05:10:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61AAB3B657
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 02:10:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ECE4D61E6E
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 10:10:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8797BC4339B;
-        Fri,  3 Feb 2023 10:10:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675419030;
-        bh=MkeyM1pf1E87Sjf13zOYblh7VwWTB+aRBJGK3IdoD3Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gndm3jVVo6DNVeMZo4teOouitAnfSFlZmnYL2Im5CK+9ePSIY00o1b8g8NsQDEIsj
-         t9xMolt/Ouwk0y+9/P50LbuhoPhXfk2G72w3EVVKqnxSoK8XAlNhLIUNxGP7NVyKyg
-         wzRS4T0WeGaF7TibtoxbjrAQMt9sW+OawzCvPvyxzA4mZz9DV7TaXfKwCDUiGJf2mY
-         CS4h216toTLaE7ySHED2AiI8PNNpYr1ebJtmNenGJjfb7nBQpxsrBF1VkbxtpYI02L
-         thRQ36MFL0H9wZQyyngy4tEB+Ws8M4lMbLbX1ShZ9L09LuOKGwynuY9+c3vh4roLrR
-         QgMFd/LKzUSMg==
-Date:   Fri, 3 Feb 2023 10:10:24 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Muchun Song <muchun.song@linux.dev>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH V2] arm64/mm: Intercept pfn changes in set_pte_at()
-Message-ID: <20230203101023.GA5597@willie-the-truck>
-References: <20230109052816.405335-1-anshuman.khandual@arm.com>
- <e924c1aa-5f04-fd7f-52d4-7cf22c476016@arm.com>
- <20230126133321.GB29148@willie-the-truck>
- <d454c9a2-5300-b600-a2ae-21d82d338470@arm.com>
- <20230131154950.GB2646@willie-the-truck>
- <Y9pZALdn3pKiJUeQ@arm.com>
- <A8DF7D56-C145-4B49-A034-022917B87C89@linux.dev>
- <Y9uUO9AadE+8ik/0@arm.com>
- <F10F1618-7153-41C7-A475-522D833C41D4@linux.dev>
+        Fri, 3 Feb 2023 05:11:09 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2142D8F276;
+        Fri,  3 Feb 2023 02:11:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675419065; x=1706955065;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=NZc3sWmhNqqgvudBA2vvMYvYonmLMsniiYv5wfZrczs=;
+  b=KM1VUwWvABaa1TpK7hTi9PRqXe+amVyz6sY6VIcwE+c5m55mw5KpME+i
+   j8fgto9jzcTj6Rx7p7MP/gbOiu0SFtIWlBZo5uUN4ljbpoMC7ZBj5JP/b
+   vsTg4nTgHp2P4W4rVi7LYL5/7Y0S5vxTckyxy0CT/CRSbYiej8TVzNf0g
+   ObDfIwy4CbcdTeh6ow90McCBy05zpaap6Eih6NyaEe0H+zm3WBsrqMFY3
+   MuerkkDZHN6bzMFJT6Sd5DVO9+GUQMP2YS1UbGoh8wNN3VD0WQ8QWx7ML
+   BEbl4I57rh6SUjv8E33ahomEUb29bMkKOJ772jUnPeBuPxdKQu0fM/neJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="309046123"
+X-IronPort-AV: E=Sophos;i="5.97,270,1669104000"; 
+   d="scan'208";a="309046123"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2023 02:11:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="754426966"
+X-IronPort-AV: E=Sophos;i="5.97,270,1669104000"; 
+   d="scan'208";a="754426966"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by FMSMGA003.fm.intel.com with ESMTP; 03 Feb 2023 02:10:49 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Fri, 3 Feb 2023 02:10:48 -0800
+Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Fri, 3 Feb 2023 02:10:48 -0800
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Fri, 3 Feb 2023 02:10:48 -0800
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.107)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Fri, 3 Feb 2023 02:10:47 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=J9TM4OVQQE2ncdFMYWk5Tg2CXEA7Y3Td7504CEe5jQkFjGzbQPfJnp+ATHbnh791rIEGy1t/A2jKLLMb4l8E3o9J4o3Ef5uVrDroIDYya+lgFQLbwRcqRM6vGGjuw8k6LY1tklgsVAYkdk6DoqoaTS8yV1Pa9oy5u++mru8SAtmPioDW4lfoS0F/b7hWjMpdDkCBjoj1e52x+E7bfNEHigxijcMQ3JVmrXOp3Op8PXBiNOjekx78Tdn7lEPR/AYCdnd4r9oZ/1hX57Z2fG9MKCFOoysBzmLPsOceG5ieJKRY7F6bnlEy1NoN0AvzXPgjjLTIiFDZhcPjYn+xaTYcTQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NZc3sWmhNqqgvudBA2vvMYvYonmLMsniiYv5wfZrczs=;
+ b=Wg6DSxi1B4yXxC1DkUvaTzn+2SwkEvi+x9t6bFDxOnymW7KVEnzXVXuphSObPYGVBGbkPpCdG8fvlgtQymfGj3/chRBCkfsHhP2hfEwXbQhAHGZe0Kaxt99i1x3sE38Y9ASH7qkwOJVqUrHJRQl4Yqk7dYwFNLEiCfUGR4KOZFdtu/R59LT0qQ3EuDut+KmlmMTFxUms02dIFfBrWz8yNlqvzaEVK7AJzP0l5fvD5QsCJLYFerLKQdMhn8v301Qc04glR1LI8bHdTvFYD1kE4llz6Fm6EpQS3sbT8wguhKVq4qnnEtVbVGWX0VTNFoloxuSYGz36CMqhy5yCNxCJKA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by PH7PR11MB5818.namprd11.prod.outlook.com (2603:10b6:510:132::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.38; Fri, 3 Feb
+ 2023 10:10:45 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::6a8d:b95:e1b5:d79d]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::6a8d:b95:e1b5:d79d%8]) with mapi id 15.20.6064.027; Fri, 3 Feb 2023
+ 10:10:45 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     Nicolin Chen <nicolinc@nvidia.com>,
+        "jgg@nvidia.com" <jgg@nvidia.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "shuah@kernel.org" <shuah@kernel.org>
+CC:     "Liu, Yi L" <yi.l.liu@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>
+Subject: RE: [PATCH v1 5/8] iommufd: Add replace support in
+ iommufd_access_set_ioas()
+Thread-Topic: [PATCH v1 5/8] iommufd: Add replace support in
+ iommufd_access_set_ioas()
+Thread-Index: AQHZNtTKuwaQ8HB+HUStrJAG1SXPAK68/SpQ
+Date:   Fri, 3 Feb 2023 10:10:45 +0000
+Message-ID: <BN9PR11MB5276D06D3F9AA6202E20F8E68CD79@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <cover.1675320212.git.nicolinc@nvidia.com>
+ <bfe5aed6d354ef547979f0b256c8a3f9bd5b223b.1675320212.git.nicolinc@nvidia.com>
+In-Reply-To: <bfe5aed6d354ef547979f0b256c8a3f9bd5b223b.1675320212.git.nicolinc@nvidia.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|PH7PR11MB5818:EE_
+x-ms-office365-filtering-correlation-id: 1e708b8d-916c-47cf-42ac-08db05ceea4f
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: QRuNdbMA5/S+UAjRD5fCyMy14us5klagS/cxncFBXgaJALtFl6vRSQXQAOkYDFyg9XoJCHkMW2JhFfoEomZTf5e4yPISkTJaD596FWTEKTjpYX0pGHFbIWXnXE008LY/8MWhtXCF5MQWRDfF2Vzsw3y22u+1cnaY+YP/oxjP0iYj8DD/bMvzUgpdHF8hNbmFCtwPuODLcZ+HKEhjYZrnMkfMPCAxz9BPg6KvHIzfjBl/W0E6gX/PiRslHHmP0HCbwlrrFJBY+o130vnGHig5HmIO2NkK7QaNy2ijrZd0wj4WWaK5JBDqi/JSjgYg/b/CR0fCd6yBfPtLAyRbKicUyp3DNgdxXCNlp9tOa4e2mpPYeVpMI5odQUa+QF+OYlWdvlRZ7wAM2cA5PpEgk5Q76a8Xc9tp2JmHdnhn0SfRLCN5ZgUvpC+5FWcjw0/yVA0ugI3h85gM/Zxa3Y1UNHSfa19AV+v1DhldBML9jczO8x+Uq+mVC2wcASvUOBoWd3svWTpRHXfXAOfhoXGq5VsL6vZ3n6VPdJgQYPmDRfwFQ4YxyPCTf3VcZwQb9Z3UwDRrHo8XSR9AF2AGar+bJvm8eMOGe8eA4vQRc3V2ucchZufNycSCmfVFZXDaH+WcLSmRBv9V7uRd+ePDBqDOR8zUM0rcis9SyJcClkCmKx1sahI93HdrsjH4tfROQrqNGSKx
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(376002)(346002)(136003)(396003)(366004)(39860400002)(451199018)(4326008)(478600001)(8676002)(38100700002)(38070700005)(66476007)(66556008)(41300700001)(66446008)(76116006)(66946007)(64756008)(83380400001)(82960400001)(54906003)(110136005)(316002)(26005)(9686003)(55016003)(5660300002)(33656002)(186003)(6506007)(122000001)(7416002)(71200400001)(52536014)(86362001)(7696005)(8936002)(2906002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?nbZedtSnWl5M9e7oYMdpTJVbEx0q1LhpBYOKGDWBPYtFbkHOyeAFVHhK5Omp?=
+ =?us-ascii?Q?Rq9ioRtxGrZoumj4RmE1+ugdEpVp6qKfcy5e51fssvYozjYF+V3pS062XGVZ?=
+ =?us-ascii?Q?6cZX1f4T5bgNwGNxzpNurYW/wRuCrHle7ORO2HIUBH/dVqHAN93C3JiFaO8+?=
+ =?us-ascii?Q?p4Cb6fRuC++0H1J8Qli7HEtr4nOee6qxcwRbUK3zTIIwo9Lw4faME9DKXQi7?=
+ =?us-ascii?Q?8+oQtxFWuFJ/50g1gNgcXoBuuuiuNcEBNeryk2BomMc8dn4zHj3tYMCIX+5u?=
+ =?us-ascii?Q?SvePT9zMq/BkPENOECoG9Hx5VeSONEygYqBwGJFSF13qleaikGUNJ/ndc3UP?=
+ =?us-ascii?Q?rfOdCkGmWlZ+fYCEFojR6MW8GKRQiumz6ct+yYqVGjGxhQ2ylLmFwE7rD1Ig?=
+ =?us-ascii?Q?mI0tluIfKRgFzn2l3cJaHFxEuNF3s/A160cacv69P9id+IMqk/+ioxPY1ovR?=
+ =?us-ascii?Q?nz+6bKCVotD9B53aIrOoIbXSLX8+DHHHPH+3FK7khU++ffGp+pNWBxN1E8qK?=
+ =?us-ascii?Q?vlDfQYDhOOEb+yMrFr5Qd8C7HP/odiR9CoU0K9kMD6Zn3WCiwYdQ5AqSvqye?=
+ =?us-ascii?Q?VHzgJSbVA/4FYPilZuT3729MWOcvbNXiz+wtmjT7nyn4qkmNsk/0kbjQcIKo?=
+ =?us-ascii?Q?2543Xz/yZHAR1nHjrEVn7Kvfa7osSXs1Nuu2DeFVYeS5o3WHsPUOalADvV4g?=
+ =?us-ascii?Q?F8+kTLD1p2hWtZPYII5O/L1G2hqyu/zVtTCcmuWfRlaSjaWjYJ6CfcK+mw5g?=
+ =?us-ascii?Q?9wZxWm9FAZ1ZaJLHtZg5bHLzq/qMBhZICkBelei8YJM9Ry1O1X7ju0IupQJ2?=
+ =?us-ascii?Q?VjUuD3oEY5109vl3i9/SkcOPnE4GmGR8wegLncXEEGPqEbIfg6rWYlBiONO6?=
+ =?us-ascii?Q?LwBn+npfrRZXNlqnvmuapRnmvJW2+dri9GcTy+Bh+M6mzVXkpspPwPjYV+Sm?=
+ =?us-ascii?Q?XeoyLB3sZU1pddEGPG8HOskcqGf2XrIwFmxmG97FEBoMtiL+tRE9NLTCX4Wv?=
+ =?us-ascii?Q?MH80tH872tFOh1K8+HEpXiPjPn8JM4rJsb6sAmoKuLH2sIKingWrXeJPAK6Y?=
+ =?us-ascii?Q?eMQZCctWzouXjNidr4y4adP8MEZTPGhjS4jYZoe1/AWKMQ2DTTtM4js8hTLz?=
+ =?us-ascii?Q?OjUxiA7BdZNlRO0ShpD4uJqfvS6PeJ7IClrhykSSI9wR9/363qV+GpL03CCV?=
+ =?us-ascii?Q?l6lfsXGrs3FKyj0+urdFeaBZu1aD1TWRe7FmiOIh9NvYzD9PYP7n7jn4ilxi?=
+ =?us-ascii?Q?1n5zoN05SZZAg8IENDo2C0AVMDiR2krp/gxrAap8m6qnSWmJjEFFeWboFi3+?=
+ =?us-ascii?Q?7+AbcqS/s+ZyF6xsy4zf+61SBELyasCD/VvVism9xDOiOqUB01pG+Mo8dk6o?=
+ =?us-ascii?Q?s9vihCvyblN1EPY70tqMHPKgITtSxAzKOgA+C7tWSnWmaUWjlizlQdPHSqUg?=
+ =?us-ascii?Q?KVEhm9DjSwN47YXRoZLxwNDg+FM/oHT4pk1Unb6gP3RSTD3CqazeHRnNsdrc?=
+ =?us-ascii?Q?wKDbN6uN1AVGaA8v2x+ROGPPYaAyqoIXeUKP84VEzjTCiJ0GhpVdEpiM8YwJ?=
+ =?us-ascii?Q?Dd16HNXlwJPY5v0mHF0Lexf5oluLHC4huhwbd99I?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <F10F1618-7153-41C7-A475-522D833C41D4@linux.dev>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1e708b8d-916c-47cf-42ac-08db05ceea4f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Feb 2023 10:10:45.4897
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: PAVqiDjozjlSIzKIJypbT0wLJ/JCbBMJPFERiesn/i4gO1D5mEUnhG/Jw7t9Vxalo+D8AZyVz5GdRRpD4mZPzA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB5818
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 10:40:18AM +0800, Muchun Song wrote:
-> 
-> 
-> > On Feb 2, 2023, at 18:45, Catalin Marinas <catalin.marinas@arm.com> wrote:
-> > 
-> > On Thu, Feb 02, 2023 at 05:51:39PM +0800, Muchun Song wrote:
-> >>> On Feb 1, 2023, at 20:20, Catalin Marinas <catalin.marinas@arm.com> wrote:
-> >>>> Bah, sorry! Catalin reckons it may have been him talking about the vmemmap.
-> >>> 
-> >>> Indeed. The discussion with Anshuman started from this thread:
-> >>> 
-> >>> https://lore.kernel.org/all/20221025014215.3466904-1-mawupeng1@huawei.com/
-> >>> 
-> >>> We already trip over the existing checks even without Anshuman's patch,
-> >>> though only by chance. We are not setting the software PTE_DIRTY on the
-> >>> new pte (we don't bother with this bit for kernel mappings).
-> >>> 
-> >>> Given that the vmemmap ptes are still live when such change happens and
-> >>> no-one came with a solution to the break-before-make problem, I propose
-> >>> we revert the arm64 part of commit 47010c040dec ("mm: hugetlb_vmemmap:
-> >>> cleanup CONFIG_HUGETLB_PAGE_FREE_VMEMMAP*"). We just need this hunk:
-> >>> 
-> >>> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> >>> index 27b2592698b0..5263454a5794 100644
-> >>> --- a/arch/arm64/Kconfig
-> >>> +++ b/arch/arm64/Kconfig
-> >>> @@ -100,7 +100,6 @@ config ARM64
-> >>> select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
-> >>> select ARCH_WANT_FRAME_POINTERS
-> >>> select ARCH_WANT_HUGE_PMD_SHARE if ARM64_4K_PAGES || (ARM64_16K_PAGES && !ARM64_VA_BITS_36)
-> >>> - select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
-> >> 
-> >> Maybe it is a little overkill for HVO as it can significantly minimize the
-> >> overhead of vmemmap on ARM64 servers for some workloads (like qemu, DPDK).
-> >> So I don't think disabling it is a good approach. Indeed, HVO broke BBM,
-> >> but the waring does not affect anything since the tail vmemmap pages are
-> >> supposed to be read-only. So, I suggest skipping warnings if it is the
-> >> vmemmap address in set_pte_at(). What do you think of?
-> > 
-> > IIUC, vmemmap_remap_pte() not only makes the pte read-only but also
-> > changes the output address. Architecturally, this needs a BBM sequence.
-> > We can avoid going through an invalid pte if we first make the pte
-> > read-only, TLBI but keeping the same pfn, followed by a change of the
-> > pfn while keeping the pte readonly. This also assumes that the content
-> > of the page pointed at by the pte is the same at both old and new pfn.
-> 
-> Right. I think using BBM is to avoid possibly creating multiple TLB entries
-> for the same address for a extremely short period. But accessing either the
-> old page or the new page is fine in this case. Is it acceptable for this
-> special case without using BBM?
+> From: Nicolin Chen <nicolinc@nvidia.com>
+> Sent: Thursday, February 2, 2023 3:05 PM
+>=20
+> Support an access->ioas replacement in iommufd_access_set_ioas(), which
+> sets the access->ioas to NULL provisionally so that any further incoming
+> iommufd_access_pin_pages() callback can be blocked.
+>=20
+> Then, call access->ops->unmap() to clean up the entire iopt. To allow an
+> iommufd_access_unpin_pages() callback to happen via this unmap() call,
+> add an ioas_unpin pointer so the unpin routine won't be affected by the
+> "access->ioas =3D NULL" trick above.
+>=20
+> Also, a vdev without an ops->dma_unmap implementation cannot replace its
+> access->ioas pointer. So add an iommufd_access_ioas_is_attached() helper
+> to sanity that.
+>=20
 
-Sadly, the architecture allows the CPU to conjure up a mapping based on a
-combination of the old and the new descriptor (a process known as
-"amalgamation") so we _really_ need the BBM sequence.
+Presumably a driver which doesn't implement ops->dma_unmap shouldn't
+be allowed to do pin/unpin. But it could use vfio_dma_rw() to access an
+iova range. In the latter case I don't see why replace cannot work.
 
-I'm in favour of disabling the optimisation now and bringing it back once
-we've got this fixed.
-
-Will
+Probably what's required here is to deny !ops->dma_unmap in
+vfio_pin/unpin_pages then making here replace always allowed?
