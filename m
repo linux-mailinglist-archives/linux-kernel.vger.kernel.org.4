@@ -2,144 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 078CF688B50
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 01:02:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62636688B54
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 01:03:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233375AbjBCACk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 19:02:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40572 "EHLO
+        id S233403AbjBCADy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 19:03:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233160AbjBCAC1 (ORCPT
+        with ESMTP id S232704AbjBCADx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 19:02:27 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCC6A83275
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 16:02:26 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id bx22so531176pjb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 16:02:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=v/uoZPK/zWO0yibS8CdCNbFUWtgKpQlxSjVcWvpZrkc=;
-        b=Nu8867/F4vDAB9fNuH6rMWSRYVKaUfSWT7KA3ap7k5g623WXFwtXGy5XWgnXj9MVup
-         qHN/p3SbK0kn5xI7zocwHsFxgZdMZ6ZccPIZ03bCNv9C4/GUYhEe6vVQK8yifNI1P9UD
-         UDHR6pTZUh4ExAFbkqj0Y+ln4pfa8RTMBPRhs=
+        Thu, 2 Feb 2023 19:03:53 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3B837A98
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 16:03:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675382579;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jyfxrc/7ZPKLF/u6Ruw0WD2VULIfdrJX3Yw+Mo2r3IQ=;
+        b=erIFwdSTjQ504glmn+LHJ97CFB7gE5cIJrj42rns6LWHss4RyQyIXsL1j3IIAaw2s9EnDA
+        Lpv+GYIwB8DQAEJ7jaNrwevA0piL0xtHAALutpfz7QUkBIziVM4bf+rgP+i67IJTrqTBFt
+        /zoKx7Dzfgg4nu0LOUF2zcN1+9/ekfg=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-301-m6EK9ZvgM1KoWpkTuUaXBg-1; Thu, 02 Feb 2023 19:02:58 -0500
+X-MC-Unique: m6EK9ZvgM1KoWpkTuUaXBg-1
+Received: by mail-ej1-f72.google.com with SMTP id he34-20020a1709073da200b00887ced84328so2619751ejc.10
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 16:02:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=v/uoZPK/zWO0yibS8CdCNbFUWtgKpQlxSjVcWvpZrkc=;
-        b=ncCDqkm1i5r2+zR1cbGa/FzNCDWwyDTWBUzdZl6x/1JY5qctRogvMXiN35LadafUTi
-         JuIHS3QbihysYbW0HvDDzfPkNrhM3Lg3FJsOInyral18nbgBqPpI6PWmM3o5Qak/15RS
-         a4SUQQbTtpd91zel17bwyuvTfLv1Z/Np6M0mpKjWAUy9iqxQ3vgS0IbD/pWzRT9mw+jf
-         Jq0IXBe5XOxS38XHIAZCpxY9N/tD4b2gxkl/zA6ZzV6bO6Z5q5p+WEEZojh+iDJYJMU9
-         G9JmxRU0HuIb7qMukZ6cjiL2LFzUyMAhN8ZrPjM+OpTki8IjHoS4AX70U/rx2IBnyyu2
-         NetQ==
-X-Gm-Message-State: AO0yUKV7Otnw0GMAg2GcTik6AHLpGiRcAm63zwtiCJ8GrYFhQ5cXDpo2
-        pQZHaqlE1qY1dJroWg9r+3FIXw==
-X-Google-Smtp-Source: AK7set/kzdkl0NIss0rGuyaBJv2SZPrgJMbP54clf2ry9p5GePxKjRGFVo07vZpBPElS/WlbO8mQhg==
-X-Received: by 2002:a17:90b:4d84:b0:22b:e7a8:d4d0 with SMTP id oj4-20020a17090b4d8400b0022be7a8d4d0mr8470470pjb.25.1675382546272;
-        Thu, 02 Feb 2023 16:02:26 -0800 (PST)
-Received: from kuabhs-cdev.c.googlers.com.com (252.157.168.34.bc.googleusercontent.com. [34.168.157.252])
-        by smtp.gmail.com with ESMTPSA id u11-20020a17090ae00b00b00227223c58ecsm414601pjy.42.2023.02.02.16.02.25
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jyfxrc/7ZPKLF/u6Ruw0WD2VULIfdrJX3Yw+Mo2r3IQ=;
+        b=j/W950nlxMRGvvLZD9WGsRxFPsHNJpF5xrk9TjLvNVSxJG35J7DmjN+KK8k2/ndM45
+         FOm6RwKjTCsKOMmN0AUS1MVR23dudK5Vm5ve1GLGd+yrWFSZVzcfeleYUVs9GzI6dsP+
+         9pCH0pxqFXM24fKztiwAAcogDZYQzPz6+5EmESoq2ydjeKEsqncR59wxh2NbYfooKJbg
+         Xjv6jjNTGfLpxGBDe5zF+ZXOASQo0pHqiXrRJWSr74Sb+xaWjs2XcKF4cWYGISRnF50s
+         lTEeMlAIBlCJLqIN3VYgJEK+hTg4uDkxStkatWVZnbOzgbQwx7Q/EfXzrEafeWLQs2Sj
+         eC/w==
+X-Gm-Message-State: AO0yUKVUBbVVArgbFw/vF7hLLyGTLaR6zXRGFdIv5F3Atkq14OfC2J37
+        81RzNzznixB+aDgctdaJSLCmYt6/plHaasH0yVtq6zrNbneLWBIel4NFR8a9+HUrpfgb5xgeW+8
+        /ckRadlrNw2dPXGYDCHU6NJr0
+X-Received: by 2002:a17:906:c5b:b0:883:be32:cd33 with SMTP id t27-20020a1709060c5b00b00883be32cd33mr8973438ejf.35.1675382577130;
+        Thu, 02 Feb 2023 16:02:57 -0800 (PST)
+X-Google-Smtp-Source: AK7set838NtnsCYnhKppwOgz3AzxWNHBsWqmLSxldhZI0SEnURw3TDrqImN+olXPAlZ6WWiP8gmGgg==
+X-Received: by 2002:a17:906:c5b:b0:883:be32:cd33 with SMTP id t27-20020a1709060c5b00b00883be32cd33mr8973402ejf.35.1675382576789;
+        Thu, 02 Feb 2023 16:02:56 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id ox4-20020a170907100400b008874c903ec5sm501498ejb.43.2023.02.02.16.02.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 16:02:25 -0800 (PST)
-From:   Abhishek Kumar <kuabhs@chromium.org>
-To:     kvalo@kernel.org
-Cc:     kuabhs@chromium.org, davem@davemloft.net,
-        ath10k@lists.infradead.org, quic_mpubbise@quicinc.com,
-        netdev@vger.kernel.org, kuba@kernel.org,
-        linux-wireless@vger.kernel.org, pabeni@redhat.com,
-        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>
-Subject: [PATCH v2] ath10k: snoc: enable threaded napi on WCN3990
-Date:   Fri,  3 Feb 2023 00:01:40 +0000
-Message-Id: <20230203000116.v2.1.I5bb9c164a2d2025655dee810b983e01ecd81c14e@changeid>
-X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
+        Thu, 02 Feb 2023 16:02:56 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id EDBED972DBC; Fri,  3 Feb 2023 01:02:54 +0100 (CET)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     David Vernet <void@manifault.com>, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@meta.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Kernel Team <kernel-team@meta.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH bpf-next 2/3] bpf: Add KF_DEPRECATED kfunc flag
+In-Reply-To: <CAADnVQJeaU=F9uym9RctfODHbeV-TTK8DiQFTFm_R=N+qF6gYA@mail.gmail.com>
+References: <20230202163056.658641-1-void@manifault.com>
+ <20230202163056.658641-3-void@manifault.com>
+ <CAADnVQJjmnEpXWL8-SAPt5zYXnFYeF8-wXXpA9shOhqUXNPw=g@mail.gmail.com>
+ <Y9wq1Fy8sgpGB+pe@maniforge>
+ <1ea9adb3-851c-0c04-1655-07d9f3b7f3b0@iogearbox.net>
+ <CAADnVQJeaU=F9uym9RctfODHbeV-TTK8DiQFTFm_R=N+qF6gYA@mail.gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Fri, 03 Feb 2023 01:02:54 +0100
+Message-ID: <87ilgjehu9.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-NAPI poll can be done in threaded context along with soft irq
-context. Threaded context can be scheduled efficiently, thus
-creating less of bottleneck during Rx processing. This patch is
-to enable threaded NAPI on ath10k driver.
+Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
 
-Based on testing, it was observed that on WCN3990, the CPU0 reaches
-100% utilization when napi runs in softirq context. At the same
-time the other CPUs are at low consumption percentage. This
-does not allow device to reach its maximum throughput potential.
-After enabling threaded napi, CPU load is balanced across all CPUs
-and following improvments were observed:
-- UDP_RX increase by ~22-25%
-- TCP_RX increase by ~15%
+> On Thu, Feb 2, 2023 at 3:11 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>>
+>> On 2/2/23 10:27 PM, David Vernet wrote:
+>> > On Thu, Feb 02, 2023 at 01:21:19PM -0800, Alexei Starovoitov wrote:
+>> >> On Thu, Feb 2, 2023 at 8:31 AM David Vernet <void@manifault.com> wrote:
+>> >>>
+>> >>> Now that we have our kfunc lifecycle expectations clearly documented,
+>> >>> and that KF_DEPRECATED is documented as an optional method for kfunc
+>> >>> developers and maintainers to provide a deprecation story to BPF users,
+>> >>> we need to actually implement the flag.
+>> >>>
+>> >>> This patch adds KF_DEPRECATED, and updates the verifier to issue a
+>> >>> verifier log message if a deprecated kfunc is called. Currently, a BPF
+>> >>> program either has to fail to verify, or be loaded with log level 2 in
+>> >>> order to see the message. We could eventually enhance this to always
+>> >>> be logged regardless of log level or verification status, or we could
+>> >>> instead emit a warning to dmesg. This seems like the least controversial
+>> >>> option for now.
+>> >>>
+>> >>> A subsequent patch will add a selftest that verifies this behavior.
+>> >>>
+>> >>> Signed-off-by: David Vernet <void@manifault.com>
+>> >>> ---
+>> >>>   include/linux/btf.h   | 1 +
+>> >>>   kernel/bpf/verifier.c | 8 ++++++++
+>> >>>   2 files changed, 9 insertions(+)
+>> >>>
+>> >>> diff --git a/include/linux/btf.h b/include/linux/btf.h
+>> >>> index 49e0fe6d8274..a0ea788ee9b0 100644
+>> >>> --- a/include/linux/btf.h
+>> >>> +++ b/include/linux/btf.h
+>> >>> @@ -71,6 +71,7 @@
+>> >>>   #define KF_SLEEPABLE    (1 << 5) /* kfunc may sleep */
+>> >>>   #define KF_DESTRUCTIVE  (1 << 6) /* kfunc performs destructive actions */
+>> >>>   #define KF_RCU          (1 << 7) /* kfunc only takes rcu pointer arguments */
+>> >>> +#define KF_DEPRECATED   (1 << 8) /* kfunc is slated to be removed or deprecated */
+>> >>>
+>> >>>   /*
+>> >>>    * Tag marking a kernel function as a kfunc. This is meant to minimize the
+>> >>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> >>> index 4cc0e70ee71e..22adcf24f9e1 100644
+>> >>> --- a/kernel/bpf/verifier.c
+>> >>> +++ b/kernel/bpf/verifier.c
+>> >>> @@ -8511,6 +8511,11 @@ static bool is_kfunc_rcu(struct bpf_kfunc_call_arg_meta *meta)
+>> >>>          return meta->kfunc_flags & KF_RCU;
+>> >>>   }
+>> >>>
+>> >>> +static bool is_kfunc_deprecated(const struct bpf_kfunc_call_arg_meta *meta)
+>> >>> +{
+>> >>> +       return meta->kfunc_flags & KF_DEPRECATED;
+>> >>> +}
+>> >>> +
+>> >>>   static bool is_kfunc_arg_kptr_get(struct bpf_kfunc_call_arg_meta *meta, int arg)
+>> >>>   {
+>> >>>          return arg == 0 && (meta->kfunc_flags & KF_KPTR_GET);
+>> >>> @@ -9646,6 +9651,9 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+>> >>>                          mark_btf_func_reg_size(env, regno, t->size);
+>> >>>          }
+>> >>>
+>> >>> +       if (is_kfunc_deprecated(&meta))
+>> >>> +               verbose(env, "calling deprecated kfunc %s\n", func_name);
+>> >>> +
+>> >>
+>> >> Since prog will successfully load, no one will notice this message.
+>> >>
+>> >> I think we can skip patches 2 and 3 for now.
+>>
+>> +1, the KF_DEPRECATED could probably for the time being just mentioned
+>> in doc.
+>>
+>> > I can leave them out of the v2 version of the patch set, but the reason
+>> > I included them here is because I thought it would be odd to document
+>> > KF_DEPRECATED without actually upstreaming it. Agreed that it is
+>> > essentially 0 signal in its current form. Hopefully it could be expanded
+>> > soon to be louder and more noticeable by not relying on the env log,
+>> > which is wiped if the verifier passes, but that's separate from whether
+>> > KF_DEPRECATED in general is the API that we want to provide kfunc
+>> > developers (in which case at least 2 and 3 would add that in a
+>> > non-controversial form).
+>>
+>> This ideally needs some form of prog load flag which would error upon
+>> use of kfuncs with deprecation tag, such that tools probing kernel for
+>> feature availability can notice.
+>
+> Interesting idea.
+> By default we can reject loading progs that try to use KF_DEPRECATED,
+> but still allow it with explicit load flag.
 
-Here are some of the additional raw data with and without threaded napi:
-==================================================
-udp_rx(Without threaded NAPI)
-435.98+-5.16 : Channel 44
-439.06+-0.66 : Channel 157
+If we reject by default then adding the deprecation flag would break
+applications just as much as just removing the kfunc, which would kinda
+defeat the purpose of having the flag in the first place, wouldn't it? :)
 
-udp_rx(With threaded NAPI)
-509.73+-41.03 : Channel 44
-549.97+-7.62 : Channel 157
-===================================================
-udp_tx(Without threaded NAPI)
-461.31+-0.69  : Channel 44
-461.46+-0.78 : Channel 157
-
-udp_tx(With threaded NAPI)
-459.20+-0.77 : Channel 44
-459.78+-1.08 : Channel 157
-===================================================
-tcp_rx(Without threaded NAPI)
-472.63+-2.35 : Channel 44
-469.29+-6.31 : Channel 157
-
-tcp_rx(With threaded NAPI)
-498.49+-2.44 : Channel 44
-541.14+-40.65 : Channel 157
-===================================================
-tcp_tx(Without threaded NAPI)
-317.34+-2.37 : Channel 44
-317.01+-2.56 : Channel 157
-
-tcp_tx(With threaded NAPI)
-371.34+-2.36 : Channel 44
-376.95+-9.40 : Channel 157
-===================================================
-
-Tested-on: WCN3990 hw1.0 SNOC WLAN.HL.3.2.2-00696-QCAHLSWMTPL-1
-Signed-off-by: Abhishek Kumar <kuabhs@chromium.org>
----
-
-Changes in v2:
-- Removed the hw param checks to add dev_set_threaded() to snoc.c
-- Added some more test data in the commit message.
-
- drivers/net/wireless/ath/ath10k/snoc.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/net/wireless/ath/ath10k/snoc.c b/drivers/net/wireless/ath/ath10k/snoc.c
-index cfcb759a87de..0f6d2f67ff6b 100644
---- a/drivers/net/wireless/ath/ath10k/snoc.c
-+++ b/drivers/net/wireless/ath/ath10k/snoc.c
-@@ -927,6 +927,7 @@ static int ath10k_snoc_hif_start(struct ath10k *ar)
- 
- 	bitmap_clear(ar_snoc->pending_ce_irqs, 0, CE_COUNT_MAX);
- 
-+	dev_set_threaded(&ar->napi_dev, true);
- 	ath10k_core_napi_enable(ar);
- 	ath10k_snoc_irq_enable(ar);
- 	ath10k_snoc_rx_post(ar);
--- 
-2.39.1.519.gcb327c4b5f-goog
+-Toke
 
