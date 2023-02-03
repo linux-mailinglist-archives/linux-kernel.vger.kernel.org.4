@@ -2,96 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C08506898D6
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 13:32:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55EAF6898CC
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 13:32:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233032AbjBCMcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 07:32:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42148 "EHLO
+        id S233009AbjBCMcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 07:32:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232701AbjBCMcM (ORCPT
+        with ESMTP id S232974AbjBCMcL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 07:32:12 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E3C888F19
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 04:32:02 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id x7so5071982edr.0
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 04:32:02 -0800 (PST)
+        Fri, 3 Feb 2023 07:32:11 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928F4790A0;
+        Fri,  3 Feb 2023 04:32:01 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id q8so3744765wmo.5;
+        Fri, 03 Feb 2023 04:32:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8ON3Sl99UT8ureqEDmbSEHsRNx7R9SA+QtKFoE+i2Oo=;
-        b=lBVk3W/UyO+p9pLq07rPsBt3xO3mjw0/Q6FYYGvYul/Bl75Etx/NWDZziXRICISYS+
-         OTpgs7RnubJ7HlWJC0ura+8mz9FMYhyJtqNMzTCWO2JnyWqdi1MN2f7Z1V894VlNIO9j
-         p6xP5SK4SW/m915LCK+EHPwQmRVusS2IFDT0IeXhMnZtNgCAnMw8tmhPWIEyYIdUv45K
-         MfEhOVerky/dQnDV5WkSyqaYpPz0oIOOZe/tvR90qdmUjlkcpH0RC+oQ0RS7bj+hAfwi
-         09UGK7Kxldpb7n2Vkg8yK53NSa//2Amlqbdrp1X7BKt+6m7Qh9UtlZluuXWXIdj2S1eR
-         xJQA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=106DLk6bZyCq11G/mD3QPJluvr1GcQ3YNch4g3Clnjw=;
+        b=i90tmNa9o0n9VBAWdZ1KbtZb/g1IcmIyqM8xmsKtzD1HNRsGD5wIPZ3C3NxX4rViqm
+         s3vt84M8aOk6VaiXNn4sWYbXHYrlII7J5notVOtSrk+QeOysJvaRNkOG3ke0yU8rfIJ2
+         /iwTE/QnAmGm7/D4Vd7xPR7ZyPI0ewTWrVspcTlLjxoLO67YOzPHOEqRvcwTFiaUCKre
+         JeNfBQ5gfXSQa8RsalNNDzS8aTNxAEafzcdopF/yrUqjU/JnnFwL8qcn8u4jmZfmTRVj
+         0N6TMQYg0/Q2m039NVzR3rFL6BmLPe9vG0V6XVzJZBZ8jPTl1RdBrQBju8D8OiBqZx4H
+         ch8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8ON3Sl99UT8ureqEDmbSEHsRNx7R9SA+QtKFoE+i2Oo=;
-        b=fl5b8/QjdZ5RWLWXRW4HLSQ4F28LNNATCVXClOdFHrEc1nqH6+g2Lsgm/378owrcty
-         HwRKCrEKxN6ugb+OAoSXSbw29FD6uZ44tAwqbEhF3bLiB6k9RlaxCbzpCpCdNhQCCpEy
-         b6t+4l1xbah/7ZmVVzpr7B8pabwKsIVUbdbnqzkrryL8Z+luyATlDi7pBT3hGwe9UDWd
-         WzupB/Ez8Xerwr0O+baETgDRuErfuQO0iiQszQT1knMvZthPAzdmnK+q2n2D4WaWoyk3
-         9RIS/UA1IWvm/BpJZSbCZSG3pAdVCAcYpv1vO8MWoSH9dWnoFVFUDCxrT1qZLeSZED+4
-         jBlA==
-X-Gm-Message-State: AO0yUKVr9FpdcHk6njGL9aoQ8B1La5SKW8RwNfYEMM/xcUX8GkTTSYMP
-        yOrKb7Zk18miXH/WBlJj1bNimQ==
-X-Google-Smtp-Source: AK7set+mvfj95zLeSWmU5e5UDpt5MMre8u+osBvx7sTSxXMPwrd90oXq/vv0Ttley1PZsEGT2E4jxg==
-X-Received: by 2002:a05:6402:298c:b0:4a8:452:55a4 with SMTP id eq12-20020a056402298c00b004a8045255a4mr5214933edb.17.1675427520772;
-        Fri, 03 Feb 2023 04:32:00 -0800 (PST)
-Received: from [10.7.1.2] ([82.180.148.111])
-        by smtp.gmail.com with ESMTPSA id r17-20020a05640251d100b0046c7c3755a7sm1068634edd.17.2023.02.03.04.31.59
+        bh=106DLk6bZyCq11G/mD3QPJluvr1GcQ3YNch4g3Clnjw=;
+        b=yfKu/zLvH8RZhWIJik1HbsNBNTu2SGmLqA3MfVXfrfLYrbsgX+B/50Cazr5fq9mtgT
+         efv0lQrbag2wCiUdUosU+AEszYw3fpTkP7kVINtNDy27bSi9vaUqJjombSRQqp8FKTNy
+         Ti+fNHYRlrKPRoUd/JuFH8HSFFaB5xQQsOSa2sC0yaumA4xza6Nzc2mpVegr0T/b9uSf
+         R2Oh3QWB6tpB//WkJzE+xL50fim6ZlwuYXuNbJQFDovChyOK7CDO6CyBZnVcleWRYU51
+         QAKc7k0spN+XamY1N8+4Hm6oRC2xLYQ3BIx1yaC68rt///sw6IL2u9whmYjra2yKAvNk
+         2Ibw==
+X-Gm-Message-State: AO0yUKWPLZAaTi410fblzT1Z+qd5ArnJ1xIEfx+Wvu7UB5wWNFszj+yz
+        ASkaIGFKTQGFPSibYPWPliY=
+X-Google-Smtp-Source: AK7set9wa2iiUfPOUvXcnBTYs1JEd2ZXgXz3h1qqyDLUfW/ByycRccWOwcbIwsfVZvw8GVK4p2dAPw==
+X-Received: by 2002:a05:600c:1d83:b0:3cf:68d3:3047 with SMTP id p3-20020a05600c1d8300b003cf68d33047mr9120804wms.41.1675427519986;
+        Fri, 03 Feb 2023 04:31:59 -0800 (PST)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id t6-20020a05600c450600b003dc433bb5e1sm2879537wmo.9.2023.02.03.04.31.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Feb 2023 04:32:00 -0800 (PST)
-Message-ID: <f3ccd7ad-0bbb-be39-c989-765552e2c6af@linaro.org>
-Date:   Fri, 3 Feb 2023 13:31:57 +0100
+        Fri, 03 Feb 2023 04:31:59 -0800 (PST)
+Message-ID: <6f6f1be3-358d-d062-31e1-c307dca56907@gmail.com>
+Date:   Fri, 3 Feb 2023 13:31:58 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [EXT] Re: [PATCH v2 1/1] tee: new ioctl to a register tee_shm
- from a dmabuf file descriptor
-To:     Etienne Carriere <etienne.carriere@linaro.org>,
-        Olivier Masse <olivier.masse@nxp.com>
-Cc:     "sumit.garg@linaro.org" <sumit.garg@linaro.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "fredgc@google.com" <fredgc@google.com>,
-        "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
-        "afd@ti.com" <afd@ti.com>,
-        "op-tee@lists.trustedfirmware.org" <op-tee@lists.trustedfirmware.org>,
-        "jens.wiklander@linaro.org" <jens.wiklander@linaro.org>,
-        "joakim.bech@linaro.org" <joakim.bech@linaro.org>,
-        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
-        Cyrille Fleury <cyrille.fleury@nxp.com>,
-        Peter Griffin <peter.griffin@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        =?UTF-8?Q?Cl=c3=a9ment_Faure?= <clement.faure@nxp.com>,
-        "christian.koenig@amd.com" <christian.koenig@amd.com>
-References: <20220812143055.12938-1-olivier.masse@nxp.com>
- <20220812143055.12938-2-olivier.masse@nxp.com>
- <30534fadb8172088eddef46ae71d87c167cbf32e.camel@nxp.com>
- <CAFA6WYOMCswgHHxsgc9Hgi7rmTPaZDqce=BixvYoFTfL0bTFDQ@mail.gmail.com>
- <PA4PR04MB75204E8D2B959893A04D55F388D69@PA4PR04MB7520.eurprd04.prod.outlook.com>
- <CAFA6WYPGT8xZnB1idcxcHT1bvM=0kwFssBQbn063-qg=czM-ZQ@mail.gmail.com>
- <CAN5uoS8XgvAKVwKHx-uOe3hAa4Jrd5FJt6xNOG5s-simkRND9w@mail.gmail.com>
- <c86d1a46af6e076038b3f0c2dd68213ff1e8b254.camel@nxp.com>
- <CAN5uoS-A8EovbnxvcXqiYHcy95d-PTYUZvnNr3=kf84AGkG8Kw@mail.gmail.com>
+ Thunderbird/102.6.1
 Content-Language: en-US
-From:   Jerome Forissier <jerome.forissier@linaro.org>
-In-Reply-To: <CAN5uoS-A8EovbnxvcXqiYHcy95d-PTYUZvnNr3=kf84AGkG8Kw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Markus Schneider-Pargmann <msp@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Fabien Parent <parent.f@gmail.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Fabien Parent <fparent@baylibre.com>
+References: <20230105170735.1637416-1-msp@baylibre.com>
+ <20230105170735.1637416-2-msp@baylibre.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+Subject: Re: [PATCH 1/8] dt-bindings: power: Add MT8365 power domains
+In-Reply-To: <20230105170735.1637416-2-msp@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -100,93 +85,95 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2/3/23 12:37, Etienne Carriere wrote:
-> Hell all,
+On 05/01/2023 18:07, Markus Schneider-Pargmann wrote:
+> From: Fabien Parent <fparent@baylibre.com>
 > 
-> +jerome f.
+> Add power domains dt-bindings for MT8365.
 > 
-> On Fri, 3 Feb 2023 at 12:01, Olivier Masse <olivier.masse@nxp.com> wrote:
->>
->> On jeu., 2023-02-02 at 10:58 +0100, Etienne Carriere wrote:
->>> Caution: EXT Email
->>>
->>> On Thu, 2 Feb 2023 at 09:35, Sumit Garg <sumit.garg@linaro.org>
->>> wrote:
->>>> Hi Cyrille,
->>>>
->>>> Please don't top post as it makes it harder to follow-up.
->>>>
->>>> On Thu, 2 Feb 2023 at 13:26, Cyrille Fleury <cyrille.fleury@nxp.com
->>>>> wrote:
->>>>> Hi Sumit, all
->>>>>
->>>>> Upstream OP-TEE should support registering a dmabuf since a
->>>>> while, given how widely dmabuf is used in Linux for passing
->>>>> buffers around between devices.
->>>>>
->>>>> Purpose of the new register_tee_shm ioctl is to allow OPTEE to
->>>>> use memory allocated from the exiting linux dma buffer. We don't
->>>>> need to have secure dma-heap up streamed.
->>>>>
->>>>> You mentioned secure dma-buffer, but secure dma-buffer is a dma-
->>>>> buffer, so the work to be done for secure or "regular" dma
->>>>> buffers by the register_tee_shm ioctl is 100% the same.
->>>>>
->>>>> The scope of this ioctl is limited to what existing upstream dma-
->>>>> buffers are:
->>>>>         -> sharing buffers for hardware (DMA) access across
->>>>> multiple device drivers and subsystems, and for synchronizing
->>>>> asynchronous hardware access.
->>>>>        -> It means continuous memory only.
->>>>>
->>>>> So if we reduce the scope of register tee_shm to exiting dma-
->>>>> buffer area, the current patch does the job.
->>>>
->>>> Do you have a corresponding real world use-case supported by
->>>> upstream
->>>> OP-TEE? AFAIK, the Secure Data Path (SDP) use-case is the one
->>>> supported in OP-TEE upstream but without secure dmabuf heap [1]
->>>> available, the new ioctl can't be exercised.
->>>>
->>>> [1] https://github.com/OP-TEE/optee_test/blob/master/host/xtest/sdp_basic.h#L15
->>>
->>> OP-TEE has some SDP test taht can exercice SDP: 'xtest
->>> regression_1014'.
->>> https://github.com/OP-TEE/optee_test/blob/3.20.0/host/xtest/regression_1000.c#L1256
->>>
->>> The test relies on old staged ION + local secure dmabuf heaps no more
->>> maintained, so this test is currently not functional.
->>> If we upgrade the test to mainline dmabuf alloc means, and apply the
->>> change discussed here, we should be able to regularly test SDP in
->>> OP-TEE project CI.
->>> The part to update is the userland allocation of the dmabuf:
->>> https://github.com/OP-TEE/optee_test/blob/3.20.0/host/xtest/sdp_basic.c#L91
->>>
->>>
->>
->> the test was already updated to support secure dma heap with Kernel
->> version 5.11 and higher. the userland allocation could be find here:
->> https://github.com/OP-TEE/optee_test/blob/3.20.0/host/xtest/sdp_basic.c#L153
->>
+> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> ---
 > 
-> Oh, right. So fine, optee_test is ready for the new flavor of secure
-> buffer fd's.
+> Notes:
+>      Changes in v4:
+>      - Add infracfg_nao as it is used by mt8365
+>      
+>      Changes in v3:
+>      - Renamed mt8365-power.h to mediatek,mt8365-power.h
+>      
+>      Changes in v2:
+>      - Made include/dt-bindings/power/mt8365-power.h dual-license.
 > 
+>   .../power/mediatek,power-controller.yaml      |  6 ++++++
+>   .../dt-bindings/power/mediatek,mt8365-power.h | 19 +++++++++++++++++++
+>   2 files changed, 25 insertions(+)
+>   create mode 100644 include/dt-bindings/power/mediatek,mt8365-power.h
 > 
->> This upgrade need a Linux dma-buf patch:
->> https://lore.kernel.org/all/20220805154139.2qkqxwklufjpsfdx@000377403353/T/
-> 
-> @Jens, @Jerome, do we want to pick the 2 necessary Linux patches in
-> our Linux kernel fork (github.com/linaro-swg/linux.git) to exercise
-> SDP in our CI and be ready if dma-buf secure heaps (ref right above)
-> is accepted and merged in mainline kernel?.
+> diff --git a/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml b/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
+> index 605ec7ab5f63..a496c43cfa16 100644
+> --- a/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
+> +++ b/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
+> @@ -30,6 +30,7 @@ properties:
+>         - mediatek,mt8186-power-controller
+>         - mediatek,mt8192-power-controller
+>         - mediatek,mt8195-power-controller
+> +      - mediatek,mt8365-power-controller
+>   
+>     '#power-domain-cells':
+>       const: 1
+> @@ -86,6 +87,7 @@ $defs:
+>                 "include/dt-bindings/power/mt8183-power.h" - for MT8183 type power domain.
+>                 "include/dt-bindings/power/mt8192-power.h" - for MT8192 type power domain.
+>                 "include/dt-bindings/power/mt8195-power.h" - for MT8195 type power domain.
+> +              "include/dt-bindings/power/mediatek,mt8365-power.h" - for MT8365 type power domain.
+>           maxItems: 1
+>   
+>         clocks:
+> @@ -113,6 +115,10 @@ $defs:
+>           $ref: /schemas/types.yaml#/definitions/phandle
+>           description: phandle to the device containing the INFRACFG register range.
+>   
+> +      mediatek,infracfg-nao:
+> +        $ref: /schemas/types.yaml#/definitions/phandle
+> +        description: phandle to the device containing the INFRACFG-NAO register range.
+> +
 
-How would that help? I mean, when the kernel patches are merged and if
-things break we can make the necessary adjustments in the optee_test app
-or whatever, but in the meantime I don't see much point. I suppose the
-people who are actively developing the patches do make sure it works with
-OP-TEE ;-)
+
+Hm, so we have mediatek,mt8365-infracfg defined in mt8365-sys-clock. Also the 
+description talks about infracfg_ao. You now introduce INFRACFG-NAO. Is that 
+just another system clock block, or is this covered with the 
+mediatek,mt8365-infracfg binding?
+
+We would need to clean that up.
 
 Regards,
--- 
-Jerome
+Matthias
+
+>         mediatek,smi:
+>           $ref: /schemas/types.yaml#/definitions/phandle
+>           description: phandle to the device containing the SMI register range.
+> diff --git a/include/dt-bindings/power/mediatek,mt8365-power.h b/include/dt-bindings/power/mediatek,mt8365-power.h
+> new file mode 100644
+> index 000000000000..e6cfd0ec7871
+> --- /dev/null
+> +++ b/include/dt-bindings/power/mediatek,mt8365-power.h
+> @@ -0,0 +1,19 @@
+> +/* SPDX-License-Identifier: (GPL-2.0 OR MIT) */
+> +/*
+> + * Copyright (c) 2022 MediaTek Inc.
+> + */
+> +
+> +#ifndef _DT_BINDINGS_POWER_MT8365_POWER_H
+> +#define _DT_BINDINGS_POWER_MT8365_POWER_H
+> +
+> +#define MT8365_POWER_DOMAIN_MM		0
+> +#define MT8365_POWER_DOMAIN_CONN	1
+> +#define MT8365_POWER_DOMAIN_MFG		2
+> +#define MT8365_POWER_DOMAIN_AUDIO	3
+> +#define MT8365_POWER_DOMAIN_CAM		4
+> +#define MT8365_POWER_DOMAIN_DSP		5
+> +#define MT8365_POWER_DOMAIN_VDEC	6
+> +#define MT8365_POWER_DOMAIN_VENC	7
+> +#define MT8365_POWER_DOMAIN_APU		8
+> +
+> +#endif /* _DT_BINDINGS_POWER_MT8365_POWER_H */
