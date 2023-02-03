@@ -2,118 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3721E689856
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 13:12:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E99568985A
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 13:16:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231748AbjBCMMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 07:12:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57324 "EHLO
+        id S232526AbjBCMQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 07:16:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232300AbjBCMM1 (ORCPT
+        with ESMTP id S231748AbjBCMQA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 07:12:27 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A93FE28D26
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 04:12:17 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 526014B3;
-        Fri,  3 Feb 2023 04:12:59 -0800 (PST)
-Received: from [10.57.90.124] (unknown [10.57.90.124])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 146A93F8D6;
-        Fri,  3 Feb 2023 04:12:14 -0800 (PST)
-Message-ID: <0f605a38-5ec9-9979-d904-c73bd7fe69a1@arm.com>
-Date:   Fri, 3 Feb 2023 12:12:09 +0000
+        Fri, 3 Feb 2023 07:16:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E78D265F1C;
+        Fri,  3 Feb 2023 04:15:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9E8DBB82A91;
+        Fri,  3 Feb 2023 12:15:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0F27C4339B;
+        Fri,  3 Feb 2023 12:15:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675426557;
+        bh=bpsBfIP+WayDaYXAnzjXQUpZIfOqiX4IwY20qL1+qWI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Yxz6PlT5gTt/Whb6nIApqlbPy+k7RfxPTie1YnbROiauEnj/VS30emdyaNF/ih4jt
+         QLyNMyB9tb8n8QqpS+FheiH5qXuO/zenEb3SycYoUktBzg1m7pgEbuH7ZfGvBZzMXk
+         /rdNp7CJoplsXraaruvH0dDrjbICiuQqbQRMRiCx8VF+gdVb7RfsfrR161tdtrVjHF
+         Gw/giAcmN0o4dHKcBrg0/CKGzNC4S4N+2+5CthXuY7yOEs0BVd0WWQZT88h9CSK7TF
+         0F5yp64pOnpbVsVLaZSzJYzxD2GxaO2ikxSbrAcxQgcdxsUx+l1lQ9TyrxHlUIQbDJ
+         SBv7ikFxdOhpg==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Raju Rangoju <Raju.Rangoju@amd.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] amd-xgbe: fix mismatched prototype
+Date:   Fri,  3 Feb 2023 13:15:36 +0100
+Message-Id: <20230203121553.2871598-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] iommu/arm-smmu-v3: Enable PCI ATS in passthrough mode as
- well
-Content-Language: en-GB
-To:     Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        iommu@lists.linux.dev, will@kernel.org, joro@8bytes.org
-Cc:     jean-philippe@linaro.org, darren@os.amperecomputing.com,
-        scott@os.amperecomputing.com
-References: <20230202124053.848792-1-gankulkarni@os.amperecomputing.com>
- <0833e426-d03d-b856-3cb3-8fe97adbb8c1@arm.com>
- <ddbea706-52dc-1505-988a-acc390add3bf@os.amperecomputing.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <ddbea706-52dc-1505-988a-acc390add3bf@os.amperecomputing.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-02-03 10:44, Ganapatrao Kulkarni wrote:
-> 
-> 
-> On 02-02-2023 06:52 pm, Robin Murphy wrote:
->> On 2023-02-02 12:40, Ganapatrao Kulkarni wrote:
->>> The current smmu-v3 driver does not enable PCI ATS for physical 
->>> functions
->>> of ATS capable End Points when booted in smmu bypass mode
->>> (iommu.passthrough=1). This will not allow virtual functions to enable
->>> ATS(even though EP supports it) while they are attached to a VM using
->>> VFIO driver.
->>>
->>> This patch adds changes to enable ATS support for physical functions
->>> in passthrough/bypass mode as well.
->>>
->>> Also, adding check to avoid disabling of ATS if it is not enabled,
->>> to avoid unnecessary call-traces.
->>>
->>> Signed-off-by: Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
->>> ---
->>>   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 10 +++++++---
->>>   1 file changed, 7 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c 
->>> b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
->>> index 6d5df91c5c46..5a605cb5ccef 100644
->>> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
->>> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
->>> @@ -2313,11 +2313,16 @@ static void arm_smmu_enable_ats(struct 
->>> arm_smmu_master *master)
->>>   static void arm_smmu_disable_ats(struct arm_smmu_master *master)
->>>   {
->>>       struct arm_smmu_domain *smmu_domain = master->domain;
->>> +    struct pci_dev *pdev;
->>>       if (!master->ats_enabled)
->>>           return;
->>> -    pci_disable_ats(to_pci_dev(master->dev));
->>> +    pdev = to_pci_dev(master->dev);
->>> +
->>> +    if (pdev->ats_enabled)
->>
->> If the master->ats_enabled check above passes when ATS isn't actually 
->> enabled, surely that's a bug?
-> 
-> IIUC, It means ATS feature is supported (just check for existence of ATS 
-> extended capability and smmu capability) and not necessarily enabled.
-> Function pci_enable_ats(called by arm_smmu_enable_ats) enables the ATS 
-> by setting bit 15 of ATS Control Register (Offset 06h).
-> If pci_enable_ats is not successful, it will not set dev->ats_enabled 
-> flag. So calling pci_disable_ats later results in call-trace, if 
-> dev->ats_enabled is not set.
+From: Arnd Bergmann <arnd@arndb.de>
 
-And like I say, that appears to be a bug, or at least something 
-deserving of improvement. If we *know* that enabling ATS failed, leaving 
-it hanging in some half-enabled state seems wrong. I know the PCI spec 
-says that functions must accept ATS invalidate requests even when ATS is 
-disabled, but that still doesn't make it a great idea for the driver to 
-spend time and effort sending them when it should know they are 
-unnecessarily (especially given the infamous 90-second maximum timeout).
+The forward declaration was introduced with a prototype that does
+not match the function definition:
 
-> Function arm_smmu_enable_ats already prints error message if ATS enable 
-> is failed.
+drivers/net/ethernet/amd/xgbe/xgbe-phy-v2.c:2166:13: error: conflicting types for 'xgbe_phy_perform_ratechange' due to enum/integer mismatch; have 'void(struct xgbe_prv_data *, enum xgbe_mb_cmd,  enum xgbe_mb_subcmd)' [-Werror=enum-int-mismatch]
+ 2166 | static void xgbe_phy_perform_ratechange(struct xgbe_prv_data *pdata,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/net/ethernet/amd/xgbe/xgbe-phy-v2.c:391:13: note: previous declaration of 'xgbe_phy_perform_ratechange' with type 'void(struct xgbe_prv_data *, unsigned int,  unsigned int)'
+  391 | static void xgbe_phy_perform_ratechange(struct xgbe_prv_data *pdata,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Printing a message hardly constitutes robust error handling...
+Ideally there should not be any forward declarations here, which
+would make it easier to show that there is no unbounded recursion.
+I tried fixing this but could not figure out how to avoid the
+recursive call.
 
-Thanks,
-Robin.
+As a hotfix, address only the broken prototype to fix the build
+problem instead.
+
+Fixes: 4f3b20bfbb75 ("amd-xgbe: add support for rx-adaptation")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/net/ethernet/amd/xgbe/xgbe-phy-v2.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/ethernet/amd/xgbe/xgbe-phy-v2.c b/drivers/net/ethernet/amd/xgbe/xgbe-phy-v2.c
+index 7d88caa4e623..16e7fb2c0dae 100644
+--- a/drivers/net/ethernet/amd/xgbe/xgbe-phy-v2.c
++++ b/drivers/net/ethernet/amd/xgbe/xgbe-phy-v2.c
+@@ -390,7 +390,8 @@ static DEFINE_MUTEX(xgbe_phy_comm_lock);
+ static enum xgbe_an_mode xgbe_phy_an_mode(struct xgbe_prv_data *pdata);
+ static void xgbe_phy_rrc(struct xgbe_prv_data *pdata);
+ static void xgbe_phy_perform_ratechange(struct xgbe_prv_data *pdata,
+-					unsigned int cmd, unsigned int sub_cmd);
++					enum xgbe_mb_cmd cmd,
++					enum xgbe_mb_subcmd sub_cmd);
+ 
+ static int xgbe_phy_i2c_xfer(struct xgbe_prv_data *pdata,
+ 			     struct xgbe_i2c_op *i2c_op)
+-- 
+2.39.0
+
