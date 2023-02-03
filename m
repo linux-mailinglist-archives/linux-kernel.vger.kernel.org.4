@@ -2,159 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96B8E68A266
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 20:00:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFF5968A26E
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 20:03:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232918AbjBCTAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 14:00:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46802 "EHLO
+        id S233006AbjBCTDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 14:03:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231894AbjBCTAe (ORCPT
+        with ESMTP id S231894AbjBCTDF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 14:00:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E81DDA87A8;
-        Fri,  3 Feb 2023 11:00:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 95228B82B9B;
-        Fri,  3 Feb 2023 19:00:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C30F7C433EF;
-        Fri,  3 Feb 2023 19:00:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675450829;
-        bh=/szj5rpJgfyzWSqhwuczohVv2+5Gg7eKrWSsmIaCwi0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fcyjhx0aWL6j1pJnwn/Dy5bONzBmai36RvvZnjMQd1mWr43Ap7j567QSH6pAA25tF
-         Rt/eNpu34YErwTOzDgvN9xPyDl8VyQOgyUZjCFIikLXsHDlOA9sV8G3ayqiV/pkPxk
-         y9S6f3/TzrZnBnnRIG8ibKZbztb85t+IIMQURAAfy44xAnF2IwymJmsSqv5kFidAGl
-         Mgkw2YAsw9Czlo8qMQLZq9KuqhahV24/mCMkYJXNIuCT73TxNp3+owXKwO7nl9XhGS
-         T2UutA47baTV+chU66IIoFp9KNzDYAqlzTJRLHSj4kWHh+HDjjlr5dt5ntrRKkmK8j
-         JLWOh9hbODswg==
-Date:   Fri, 3 Feb 2023 11:02:48 -0800
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Mukesh Ojha <quic_mojha@quicinc.com>
-Cc:     agross@kernel.org, konrad.dybcio@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] firmware: qcom_scm: modify
- qcom_scm_set_download_mode()
-Message-ID: <20230203190248.ywmb54gmdd4blv46@ripper>
-References: <1675419435-30726-1-git-send-email-quic_mojha@quicinc.com>
+        Fri, 3 Feb 2023 14:03:05 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75C22D51;
+        Fri,  3 Feb 2023 11:03:00 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id gr7so17976508ejb.5;
+        Fri, 03 Feb 2023 11:03:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=29jIzExya+RWfAW2Qbt80/MjJ8msw/RiyH3xynOp0go=;
+        b=oMo2cuU46YEgGPpTn9tuc/nAV/JSYX82IVQ6fcR+rdup7Ro+7QIAvMc7u6RiSGRj8k
+         lp9nfSG/RpNEUhNlVlr3aHuBI3aSguVow4NcnE/ewGe34lBGVWV/kqNWsJOy1OnK0t3L
+         NZOTslwltVza66DDVjiccIrt9Mj1iqvf0MvFj5aktxMyYaVyCUNmLfbTYpETGvQoZZLl
+         Zlo8M52dFVI2lLPRKKBBQ/2yVXzejK05Re6uVMSp9ZwTa2kwn4pNA69mS2AJNWjKeppQ
+         bpYZT5kzF3xGiYl5fSPXLPZdkqxZ5TeagP+owJI5o0IjNhddaRbAOFg5AEXmSVoieJpR
+         VfXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=29jIzExya+RWfAW2Qbt80/MjJ8msw/RiyH3xynOp0go=;
+        b=mADOZsRQVImyvq8ySKXVTPvwyibvORlcQ6h8KCBRibTN4pOBTfRfWoSYTw2kM6Ax7I
+         Ez4GOs6SltM0qrtZnK2GqwnvDs4hid91/YOWvGq24za//AgI9cQNACWpoYHQGbXdFadQ
+         FrF+MhKMgZhV+lvYzzZUKIatFKsvQSt9TOdjyTMTssi9G5W9gxrHJW/qlT8v0HeM4eCQ
+         VUVYRXIebwmRjNKDv4d7i0VUR9J6yAej+hi/VWqYse6tAqbD+PIx9SeLP4f1LC7awV8i
+         R08eoGRcmtr4AWIANOvm71oHhyuNZqYvJW3zMHjrc49zfs0Dvgk7cakixRq8aMXDaz8G
+         5Sww==
+X-Gm-Message-State: AO0yUKWFhahNCgA4W5pYwL1T4q31WIPMn2yZdOjvEtUeesiz6ugXLgwt
+        ZjzwadSrhwH5uYwGSZmV6WYflrLKSjk=
+X-Google-Smtp-Source: AK7set86/Odr/8QqbXvAfvz/JdLTn2GEOFrSEDN8hur+e37l2t1Wm16nqqBVtmjhNt40O7gBxDbSww==
+X-Received: by 2002:a17:907:d68c:b0:88f:8ae1:8bca with SMTP id wf12-20020a170907d68c00b0088f8ae18bcamr6189194ejc.62.1675450979058;
+        Fri, 03 Feb 2023 11:02:59 -0800 (PST)
+Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id f17-20020a170906049100b00871f66bf354sm1710990eja.204.2023.02.03.11.02.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Feb 2023 11:02:57 -0800 (PST)
+Message-ID: <87f5097d-1cd0-e09f-e759-8592a9165ea6@gmail.com>
+Date:   Fri, 3 Feb 2023 20:02:54 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1675419435-30726-1-git-send-email-quic_mojha@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v6 01/17] dt-bindings: display: rockchip: convert
+ rockchip-lvds.txt to YAML
+To:     Rob Herring <robh@kernel.org>
+Cc:     heiko@sntech.de, hjc@rock-chips.com,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        airlied@gmail.com, daniel@ffwll.ch, andrzej.hajda@intel.com,
+        neil.armstrong@linaro.org, robert.foss@linaro.org,
+        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
+        jernej.skrabec@gmail.com, philippe.cornu@foss.st.com,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-usb@vger.kernel.org,
+        linus.walleij@linaro.org, inki.dae@samsung.com,
+        sw0312.kim@samsung.com, kyungmin.park@samsung.com,
+        alim.akhtar@samsung.com, linux-samsung-soc@vger.kernel.org
+References: <67771143-fd83-383d-41b2-68e8707134e8@gmail.com>
+ <20230203182119.GA615242-robh@kernel.org>
+Content-Language: en-US
+From:   Johan Jonker <jbx6244@gmail.com>
+In-Reply-To: <20230203182119.GA615242-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 03:47:15PM +0530, Mukesh Ojha wrote:
-> Modify qcom_scm_set_download_mode() such that it can support
-> multiple modes. There is no functional change with this change.
+
+
+On 2/3/23 19:21, Rob Herring wrote:
+> On Thu, Dec 22, 2022 at 03:22:14PM +0100, Johan Jonker wrote:
+>> Convert rockchip-lvds.txt to YAML.
+>>
+>> Changed:
+>>   Add power-domains property.
+>>   Requirements between PX30 and RK3288
+>>
+>> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+>> Reviewed-by: Rob Herring <robh@kernel.org>
+>> ---
+>>
+>> Changed V3:
+>>   Filename matching compatible style
+>>   Drop "Regulator phandle for "
+>>   Specify properties and requirements per SoC
+>>   Sort order and restyle
+>>
+>> Changed V2:
+>>   Fix title
+>> ---
+>>  .../display/rockchip/rockchip,lvds.yaml       | 170 ++++++++++++++++++
+>>  .../display/rockchip/rockchip-lvds.txt        |  92 ----------
+>>  2 files changed, 170 insertions(+), 92 deletions(-)
+>>  create mode 100644 Documentation/devicetree/bindings/display/rockchip/rockchip,lvds.yaml
+>>  delete mode 100644 Documentation/devicetree/bindings/display/rockchip/rockchip-lvds.txt
 > 
 
-As Dmitry said, you argue for added flexibility, but doesn't provide a
-user of that flexibility. I will drop this patch from the queue for now.
+> What's the plan for these patches? Don't see them in linux-next still. 
+> Do you want me to take patches 1-8?
 
-Please include this together with the patch(es) that benefit from such
-flexibility.
+Hi,
 
-> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
-> ---
-> Changes in v2:
->   - Stop changing legacy scm id for dload mode.
+The display patches normally go through the DRM git.
+Patch 2 must merge with grf.yaml.
+Heiko has merged now 3 PHY related patches to grf.yaml first.
+
+[PATCH v6 02/17] dt-bindings: soc: rockchip: grf: add rockchip,lvds.yaml
+
+See current
+https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git/log/?h=for-next&qt=grep&q=jonker
+
+Not sure what Heiko's plans are.
+Patch 2 replaces  only a description text and some accolades removal, so not "too" important.
+
+I urgent then you could merge without conflict:
+1, 3-8
+
+Patch 2 requires some adjusted now depending on the grf.yaml current next state.
+
+Johan
+
+
+
+
+
+
+
 > 
->  drivers/firmware/qcom_scm.c | 15 +++++++--------
->  include/linux/qcom_scm.h    |  5 +++++
->  2 files changed, 12 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
-> index cdbfe54..6245b97 100644
-> --- a/drivers/firmware/qcom_scm.c
-> +++ b/drivers/firmware/qcom_scm.c
-> @@ -400,7 +400,7 @@ int qcom_scm_set_remote_state(u32 state, u32 id)
->  }
->  EXPORT_SYMBOL(qcom_scm_set_remote_state);
->  
-> -static int __qcom_scm_set_dload_mode(struct device *dev, bool enable)
-> +static int __qcom_scm_set_dload_mode(struct device *dev, enum qcom_download_mode mode)
->  {
->  	struct qcom_scm_desc desc = {
->  		.svc = QCOM_SCM_SVC_BOOT,
-> @@ -410,12 +410,12 @@ static int __qcom_scm_set_dload_mode(struct device *dev, bool enable)
->  		.owner = ARM_SMCCC_OWNER_SIP,
->  	};
->  
-> -	desc.args[1] = enable ? QCOM_SCM_BOOT_SET_DLOAD_MODE : 0;
-> +	desc.args[1] = mode ? QCOM_SCM_BOOT_SET_DLOAD_MODE : 0;
->  
->  	return qcom_scm_call_atomic(__scm->dev, &desc, NULL);
->  }
->  
-> -static void qcom_scm_set_download_mode(bool enable)
-> +static void qcom_scm_set_download_mode(enum qcom_download_mode mode)
->  {
->  	bool avail;
->  	int ret = 0;
-> @@ -424,10 +424,9 @@ static void qcom_scm_set_download_mode(bool enable)
->  					     QCOM_SCM_SVC_BOOT,
->  					     QCOM_SCM_BOOT_SET_DLOAD_MODE);
->  	if (avail) {
-> -		ret = __qcom_scm_set_dload_mode(__scm->dev, enable);
-> +		ret = __qcom_scm_set_dload_mode(__scm->dev, mode);
->  	} else if (__scm->dload_mode_addr) {
-> -		ret = qcom_scm_io_writel(__scm->dload_mode_addr,
-> -				enable ? QCOM_SCM_BOOT_SET_DLOAD_MODE : 0);
-> +		ret = qcom_scm_io_writel(__scm->dload_mode_addr, mode);
->  	} else {
->  		dev_err(__scm->dev,
->  			"No available mechanism for setting download mode\n");
-> @@ -1410,7 +1409,7 @@ static int qcom_scm_probe(struct platform_device *pdev)
->  	 * disabled below by a clean shutdown/reboot.
->  	 */
->  	if (download_mode)
-> -		qcom_scm_set_download_mode(true);
-> +		qcom_scm_set_download_mode(QCOM_DOWNLOAD_FULLDUMP);
->  
->  	return 0;
->  }
-> @@ -1419,7 +1418,7 @@ static void qcom_scm_shutdown(struct platform_device *pdev)
->  {
->  	/* Clean shutdown, disable download mode to allow normal restart */
->  	if (download_mode)
-
-PS. Wouldn't it make sense, if !download_mode to set NODUMP?
-
-Regards,
-Bjorn
-
-> -		qcom_scm_set_download_mode(false);
-> +		qcom_scm_set_download_mode(QCOM_DOWNLOAD_NODUMP);
->  }
->  
->  static const struct of_device_id qcom_scm_dt_match[] = {
-> diff --git a/include/linux/qcom_scm.h b/include/linux/qcom_scm.h
-> index f833564..f9bc84e 100644
-> --- a/include/linux/qcom_scm.h
-> +++ b/include/linux/qcom_scm.h
-> @@ -14,6 +14,11 @@
->  #define QCOM_SCM_CPU_PWR_DOWN_L2_OFF	0x1
->  #define QCOM_SCM_HDCP_MAX_REQ_CNT	5
->  
-> +enum qcom_download_mode {
-> +	QCOM_DOWNLOAD_NODUMP    = 0x00,
-> +	QCOM_DOWNLOAD_FULLDUMP  = 0x10,
-> +};
-> +
->  struct qcom_scm_hdcp_req {
->  	u32 addr;
->  	u32 val;
-> -- 
-> 2.7.4
-> 
+> Rob
