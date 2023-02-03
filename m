@@ -2,70 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEC0868A6CB
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 00:10:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64C7A68A6CE
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 00:11:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232835AbjBCXKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 18:10:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36876 "EHLO
+        id S233034AbjBCXLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 18:11:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232618AbjBCXKL (ORCPT
+        with ESMTP id S232056AbjBCXLM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 18:10:11 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938068C437;
-        Fri,  3 Feb 2023 15:10:10 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id p26so19369502ejx.13;
-        Fri, 03 Feb 2023 15:10:10 -0800 (PST)
+        Fri, 3 Feb 2023 18:11:12 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C5C7BE73;
+        Fri,  3 Feb 2023 15:11:10 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id k4so19530233eje.1;
+        Fri, 03 Feb 2023 15:11:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9OouKbLDWQqmop907BS575/R2sD898lnwgblJacByKU=;
-        b=Cq5cVPtLFv8y3hChlGCN5UvG9u9BOEYIL4X7DV9WVuNL/UI5u+qrBanjHrEIObyS3Z
-         85FIRfm2lRHagAEdPeb/AXeVM0vRzRs/ATUmSr7o5BQd+XK3WRP59HlGtaWeWGj37L9p
-         +9FYCD5NiKsYs4T3UtsX+OteFCiWIjxlmSV8xYc8/tIVgxn/SBCqpLcWoDyc4sK4TAQM
-         Su/YHnkQvE8cf4geN0PP4Yoo6CHplrIlKvaEfvk7NJuEiM157RTB6gr4H5YOlV6yME+q
-         IYVIRXYkAYAkgNVeqVlnkD8ho3hVhX4DWVIiJM5WiD6coTYFrWhPuCdP+4sjXX0/Z2ke
-         IlYQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=S4kT4lUgvezB9PVw7db1Dvk1buBeLiCC8+GU/OROilk=;
+        b=a70hqnijk1JW+BcyT5BmUGve0dzrG+/RmhwfUBqZnw0RxWEe1FpGeD9/pLE2GKwybo
+         ypgHQXXZHUfq4x4W58bnfPU/l2Z1YEDOWA8lC1qihyo7QWHAo15dKD/UcBFW4/n6SRAR
+         Xob2r54DMgRLxQEKeXNgiPZ1tNHArv/OPkwAu1O5YJefeb9AxeL8ow51RNJc8ATM3AKN
+         0z+tF9yDFkx6uSHHPhaMNxoscjF/FwhNGw3FaVaEb1XEOHk8j1ornAppfGjBPU2ceUP8
+         +iWt2UURkb5Cov50jPsgME6KWihBlfxjcSoPDJB369lEEelgfdE+64SKHalA6i0o6pv5
+         1/Aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9OouKbLDWQqmop907BS575/R2sD898lnwgblJacByKU=;
-        b=5YEv75pst+inOLWfMfRKHRQYFLCbLSyFAml5rHHpC2W1rqPFZJXxk8RIj9susHtsIo
-         Zt0fFTCvwbMsZkUUdGKmmQJHCH9urzz/F8N3C4X3Ue0T2fS2eQNaBp7vCJjz9NFK259a
-         LJFwfYL2+cKYT+tF4d2DKh5zbU9wCecVT5QZeCVEnKTAIGql8qa2LSIr299ZLLFzdQgp
-         3FnoKNeTheADfvI7DskRP6TOKhTZYPtBQ7jWx2LmGMiqI1MxGomPoscC2D1Y6tbjRkHe
-         uD7yV9u/Dw7m3IRsjwVKwOcicS7d6UI3lAHBj76Jw/J/E/Zk16lLhTlv3qAkXeLQEu50
-         wmjg==
-X-Gm-Message-State: AO0yUKVnPU81EQmdRZ1ry5DOsfIzPZfhPHHXbuaXQ7ufQ8uYLFBXEOmp
-        iM5CF+g+7qwDaFlcdsld3k8=
-X-Google-Smtp-Source: AK7set9u5GWpKEvmzN8Dl4fLrIQu2117Lcl0nFCE/ka978phWcBRpMIVUNgcheEsiYjiOrPwzkQrFA==
-X-Received: by 2002:a17:907:9917:b0:88d:6de1:96bf with SMTP id ka23-20020a170907991700b0088d6de196bfmr13144697ejc.12.1675465808932;
-        Fri, 03 Feb 2023 15:10:08 -0800 (PST)
-Received: from skbuf ([188.26.57.116])
-        by smtp.gmail.com with ESMTPSA id v9-20020a1709064e8900b0088e7fe75736sm2020606eju.1.2023.02.03.15.10.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 15:10:08 -0800 (PST)
-Date:   Sat, 4 Feb 2023 01:10:06 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Rakesh Sankaranarayanan <rakesh.sankaranarayanan@microchip.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        andrew@lunn.ch, f.fainelli@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        linux@armlinux.org.uk
-Subject: Re: [RFC PATCH net-next 01/11] net: dsa: microchip: lan937x: add
- cascade tailtag
-Message-ID: <20230203231006.jcaib7me6xbos6vl@skbuf>
-References: <20230202125930.271740-1-rakesh.sankaranarayanan@microchip.com>
- <20230202125930.271740-2-rakesh.sankaranarayanan@microchip.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=S4kT4lUgvezB9PVw7db1Dvk1buBeLiCC8+GU/OROilk=;
+        b=yelRN6a2HXQd6uwuE7t++SMdQsaahlAxjf2kuVd0dcqNNb2ySfPaowXfjuvKkjSuH5
+         QE6dKAmUbFJwAwkBVH5zusswVTDrWLwXJOG83ewBtUOOfhUrl7Pn0YdS9QVdb5KXXKD3
+         T3u6L7nGDhWB2o7gOAGH7/pXBk7JoEk77yzVHZ82OIODaFXa/kAjSlu72nzMKTaiX6HI
+         GQr7AhNai3hoa5jN58QosCuOvDR5XOD899v0EVlviYEWQgf76OHpgUH+d/uJnZraHu2/
+         2U2RII2l2SShu2MSFir5NE8F+3NPF8h7GwvDtoVVQbOnrjL9GQWWB4a49K8JvwNDAJ5H
+         W9mQ==
+X-Gm-Message-State: AO0yUKXZRXlhz4lSRDQrNMCooMY4XBsUSZ5iup5xgPTkuNQDp8m5yOzW
+        Eozz5qfYov99qRmMa0fjJ0hZnp2ZLk9VNkhzKg4=
+X-Google-Smtp-Source: AK7set/oe2Xl6fQyM1SDHpSLzd6OFhgado9BSZqsGTsaWjZmZWneEWHlWtsW6WKvP3YjD+GbwQqu4VQahfZMbcYiPd0=
+X-Received: by 2002:a17:906:3957:b0:870:5fc6:210c with SMTP id
+ g23-20020a170906395700b008705fc6210cmr3313204eje.257.1675465868661; Fri, 03
+ Feb 2023 15:11:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230202125930.271740-2-rakesh.sankaranarayanan@microchip.com>
+References: <20230130131003.668888-1-arnd@kernel.org> <Y9f7/q3aS5nlY7nJ@smile.fi.intel.com>
+ <14e7d2ba-1a24-42a1-b19e-842e0fd8286e@app.fastmail.com>
+In-Reply-To: <14e7d2ba-1a24-42a1-b19e-842e0fd8286e@app.fastmail.com>
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Date:   Fri, 3 Feb 2023 15:10:55 -0800
+Message-ID: <CAKdAkRRA7XATxHBALDf8Pd2SWQX_OPAYgCQmtJi5H1so_EJ7VA@mail.gmail.com>
+Subject: Re: [PATCH] media: c8sectpfe: convert to gpio descriptors
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Hugues Fruchet <hugues.fruchet@st.com>,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -76,131 +74,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 06:29:20PM +0530, Rakesh Sankaranarayanan wrote:
-> cascade tailtag contains 3 bytes of information, it includes
-> additional bytes for accomodating port number in second switch.
-> Destination port bitmap on first switch is at bit position 7:0 and
-> of second switch is at bit position 15:8, add new tailtag xmit and
-> rcv functions for cascade with proper formatting. Add new tag protocol
-> for cascading and link with new xmit and rcv functions.
-> 
-> Signed-off-by: Rakesh Sankaranarayanan <rakesh.sankaranarayanan@microchip.com>
-> ---
->  include/net/dsa.h |  2 ++
->  net/dsa/tag_ksz.c | 80 ++++++++++++++++++++++++++++++++++++++++++++---
->  2 files changed, 77 insertions(+), 5 deletions(-)
-> 
-> diff --git a/include/net/dsa.h b/include/net/dsa.h
-> index a15f17a38eca..55651ad29193 100644
-> --- a/include/net/dsa.h
-> +++ b/include/net/dsa.h
-> @@ -390,6 +399,7 @@ MODULE_ALIAS_DSA_TAG_DRIVER(DSA_TAG_PROTO_KSZ9893, KSZ9893_NAME);
->   *	  (eg, 0x00=port1, 0x02=port3, 0x07=port8)
->   */
->  #define LAN937X_EGRESS_TAG_LEN		2
-> +#define LAN937X_CASCADE_TAG_LEN		3
->  
->  #define LAN937X_TAIL_TAG_BLOCKING_OVERRIDE	BIT(11)
->  #define LAN937X_TAIL_TAG_LOOKUP			BIT(12)
-> @@ -442,11 +452,71 @@ static const struct dsa_device_ops lan937x_netdev_ops = {
->  DSA_TAG_DRIVER(lan937x_netdev_ops);
->  MODULE_ALIAS_DSA_TAG_DRIVER(DSA_TAG_PROTO_LAN937X, LAN937X_NAME);
->  
-> +/* For xmit, 3/7 bytes are added before FCS.
-> + * ---------------------------------------------------------------------------
-> + * DA(6bytes)|SA(6bytes)|....|Data(nbytes)|ts(4bytes)|tag0(1byte)|tag1(1byte)|
-> + * tag2(1byte)|FCS(4bytes)
-> + * ---------------------------------------------------------------------------
-> + * ts   : time stamp (Present only if PTP is enabled in the Hardware)
-> + * tag0 : represents tag override, lookup and valid
-> + * tag1 : each bit represents destination port map through switch 2
-> + *	  (eg, 0x01=port1, 0x02=port2, 0x80=port8)
-> + * tag2 : each bit represents destination port map through switch 1
-> + *	  (eg, 0x01=port1, 0x02=port2, 0x80=port8)
-> + *
-> + * For rcv, 1/5 bytes is added before FCS.
+On Mon, Jan 30, 2023 at 10:19 AM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Mon, Jan 30, 2023, at 18:18, Andy Shevchenko wrote:
+> > On Mon, Jan 30, 2023 at 02:09:47PM +0100, Arnd Bergmann wrote:
+>
+> >> +            ret = PTR_ERR_OR_ZERO(tsin->rst_gpio);
+> >>              if (ret && ret != -EBUSY) {
+> >> -                    dev_err(dev, "Can't request tsin%d reset gpio\n"
+> >> -                            , fei->channel_data[index]->tsin_id);
+> >> +                    dev_err_probe(dev, ret,
+> >> +                                  "reset gpio for tsin%d not valid\n",
+> >> +                                  tsin->tsin_id);
+> >>                      goto err_node_put;
+> >>              }
+> >>
+> >>              if (!ret) {
+> >
+> > Can be
+> >
+> >       if (IS_ERR() && PTR_ERR() != -EBUSY) {
+> >               ret = dev_err_probe(dev, PTR_ERR(), ...);
+> >               ...
+> >       }
+> >
+> >       if (!IS_ERR())
+> >
+> > (Up to you)
+>
+> I prefer the version that only has one PTR_ERR(), but
+> either way is fine with me.
+>
+> > But -EBUSY check seems strange to me. What was the motivation behind?
+> > (As far as I can read the code the possibility to get this if and only
+> >  if we have requested GPIO too early at initcall level. Would it be
+> >  ever a possibility to get it in real life?)
+>
+> I noticed this part as being odd as well, no idea why the
+> code is like this. I just left the logic unchanged here.
 
-Plural is only used for more than 5 bytes?
-"5 bytes is added" vs "7 bytes are added"
+It could be they were trying to account for the possibility of the
+reset line being shared between several blocks, and so the first one
+to initialize would grab it and reset all chips, and the followers
+would be skipping the reset logic.
 
-> + * ---------------------------------------------------------------------------
-> + * DA(6bytes)|SA(6bytes)|....|Data(nbytes)|ts(4bytes)|tag0(1byte)|FCS(4bytes)
-> + * ---------------------------------------------------------------------------
-> + * ts   : time stamp (Present only if bit 7 of tag0 is set)
-> + * tag0 : zero-based value represents port
-> + *	  (eg, 0x00=port1, 0x02=port3, 0x07=port8)
-> + */
-> +static struct sk_buff *lan937x_cascade_xmit(struct sk_buff *skb,
-> +					    struct net_device *dev)
-> +{
-> +	struct dsa_port *dp = dsa_slave_to_port(dev);
-> +	const struct ethhdr *hdr = eth_hdr(skb);
-> +	__be32 *tag;
-> +	u32 val;
-> +
-> +	if (skb->ip_summed == CHECKSUM_PARTIAL && skb_checksum_help(skb))
-> +		return NULL;
-> +
-> +	tag = skb_put(skb, LAN937X_CASCADE_TAG_LEN);
-> +
-> +	val |= BIT((dp->index + (8 * dp->ds->index)));
-
-This only works because cascade port is port 0, right?
-
-> +
-> +	if (is_link_local_ether_addr(hdr->h_dest))
-> +		val |= (LAN937X_TAIL_TAG_BLOCKING_OVERRIDE << 8);
-> +
-> +	val |= (LAN937X_TAIL_TAG_VALID << 8);
-> +
-> +	put_unaligned_be24(val, tag);
-> +
-> +	return skb;
-> +}
-> +
-> +static const struct dsa_device_ops lan937x_cascade_netdev_ops = {
-> +	.name   = LAN937X_CASCADE_NAME,
-> +	.proto  = DSA_TAG_PROTO_LAN937X_CASCADE,
-> +	.xmit   = lan937x_cascade_xmit,
-> +	.rcv    = ksz9477_rcv,
-> +	.connect = ksz_connect,
-> +	.disconnect = ksz_disconnect,
-> +	.needed_tailroom = LAN937X_CASCADE_TAG_LEN,
-> +};
-
-Nope, no new lan937x_cascade tagging protocol.
-
-If you read Documentation/networking/dsa/dsa.rst, it says:
-
-| From the perspective of the network stack, all switches within the same DSA
-| switch tree use the same tagging protocol.
-
-Unless you are prepared to remove this assumption from the DSA framework,
-you need to fold the cascade tag handling into the regular lan937x
-tagging protocol (and declare the larger needed_tailroom to cover the
-tail tag case).
-
-You can look at dp->ds->index when figuring out the length of the tail
-tag that should be inserted.
-
-There's a lot of consolidation that could (and should) be done first
-between lan937x_xmit() and ksz9477_xmit(), prior to adding the support
-for cascade tagging.
-
-> +
-> +DSA_TAG_DRIVER(lan937x_cascade_netdev_ops);
-> +MODULE_ALIAS_DSA_TAG_DRIVER(DSA_TAG_PROTO_LAN937x_CASCADE,
-> +			    LAN937X_CASCADE_NAME);
-> +
->  static struct dsa_tag_driver *dsa_tag_driver_array[] = {
->  	&DSA_TAG_DRIVER_NAME(ksz8795_netdev_ops),
->  	&DSA_TAG_DRIVER_NAME(ksz9477_netdev_ops),
->  	&DSA_TAG_DRIVER_NAME(ksz9893_netdev_ops),
->  	&DSA_TAG_DRIVER_NAME(lan937x_netdev_ops),
-> +	&DSA_TAG_DRIVER_NAME(lan937x_cascade_netdev_ops),
->  };
->  
->  module_dsa_tag_drivers(dsa_tag_driver_array);
-> -- 
-> 2.34.1
-> 
+-- 
+Dmitry
