@@ -2,88 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2313568A607
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 23:19:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 561CA68A610
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 23:22:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232957AbjBCWTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 17:19:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43468 "EHLO
+        id S233034AbjBCWWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 17:22:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233150AbjBCWTV (ORCPT
+        with ESMTP id S231320AbjBCWWi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 17:19:21 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74CED15554;
-        Fri,  3 Feb 2023 14:19:20 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id k8-20020a05600c1c8800b003dc57ea0dfeso7011016wms.0;
-        Fri, 03 Feb 2023 14:19:20 -0800 (PST)
+        Fri, 3 Feb 2023 17:22:38 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A82E2D6D;
+        Fri,  3 Feb 2023 14:22:37 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id j1so537065pjd.0;
+        Fri, 03 Feb 2023 14:22:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gZSj7NkMSla+GkyCGF3UqN19IfprqFMOCBTdRtc6Qng=;
-        b=fGo45Gg3GJfhVsnqXzTT5/hvGSWrGt74oj+smXLIngwC5m5OMcubaqXfnMtWQQl6Cb
-         B/XphNjWWIQ08bz9/Y2EuF9carLUvovnUdZHW8JN2gbfqohcz1fu+EECxDZfZzMXw0/I
-         5cM1UwJXH19bzovsSP2P0/AaBp0YnyOwp4Brhwr/VNIbLWhCjWH55Hbjs6CHgmSL1Anv
-         E5Js7/GotJJ/sIiaERCcPb4x/maWgsNjqqTxoO/KkPixhU0lH0ywSQQs1JQZhn2JlIAA
-         MN05tNo30BFNog/4F3V4V1IzDugRVsJVVsYe/xsrE8KFWgT1H//l+Jd6HOhhx+tPp2wl
-         tr7w==
+        bh=QBbJD/4vFduSZffKUZSYe3pTJViIry24OYhRieFlxp0=;
+        b=Zoc3Y/XK8r/GgfenTCFOjuEO65km7MXVTeIaYy7yLPfsCWZEXwvySB/VG/kBMFlUlZ
+         K2hOYczq2ywOBA32GTsXJLaLeyjlVnALjD0ykYrjkyXt6sh4gjxUJMl1Bb3qypAsApoF
+         yAoyqtdbn3LbnOzT0YzQy2erAjHWXmTgxHOmL9jLRm4XolA9OUykdLGqDJfa4L/VTIir
+         WtuuNeMSmqqRvprUCCTXeoxpqN5phLd/hZsa8oMP34xC6PtHkT8SIf4VicT/N9ZEJluG
+         TfmSb2IAuHgmlThfcx9djGEyuBLZp6eQ3RBQE8IJCPboeUtaVLmCAP7aPRfkPTUacosQ
+         mbIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gZSj7NkMSla+GkyCGF3UqN19IfprqFMOCBTdRtc6Qng=;
-        b=SQGyDowLLrzxfblUK3mLWsLjkmfLGlqh40Kgyt7niZWkyBwyprYwRUllS4+cX4x0VP
-         uvMQyhqWdH/bkrjDdjF/g5nXXvRyfUJ+yHjItlEPsRDBEo4Ihgslx0HVMZTQXuRnqNGi
-         J1eqFKueg3HbsrJVJZ8yl33Ls3Yq71bazpipTlNIyAqt+XhbqiwklfMyphzIGooUSahD
-         9xWVo/g/pvcTMoN5s4CiR1aFVZbjlLKC2b+Im2/ml7WnKvNr6mzKdDJtqTLKarH9oh3v
-         eknH6jF4zOnRmGZV/ntm2ETrGy0wDXwe6Sh/nyS7wZY1JJNAbtcI4u37flm33RdwBW5e
-         GLSA==
-X-Gm-Message-State: AO0yUKUaUePKpDSg2rpm+rKGac+jSCpY3v+H6MKPpRrJnzDiwJovLyyA
-        /ugwlf3Ka7+Ow9ymg9Jk78k=
-X-Google-Smtp-Source: AK7set8BQK81yNRXXBNQtdT+Ovom+nfIfvLxSS3qd30v6e2UwtfU8OZSjopvJ1LJUnNGgo+ogaqN1Q==
-X-Received: by 2002:a05:600c:3795:b0:3c6:e61e:ae71 with SMTP id o21-20020a05600c379500b003c6e61eae71mr12233725wmr.1.1675462758859;
-        Fri, 03 Feb 2023 14:19:18 -0800 (PST)
-Received: from skbuf ([188.26.57.116])
-        by smtp.gmail.com with ESMTPSA id t10-20020a5d690a000000b002bbedd60a9asm2935905wru.77.2023.02.03.14.19.17
+        bh=QBbJD/4vFduSZffKUZSYe3pTJViIry24OYhRieFlxp0=;
+        b=4aY3vuzhpx+UF0NlB/pN4d4y76VdrTQcuhyqWuUkyauby7khFzDVZK4XrshmvuZdVp
+         +NuodXbON/yeBCvVgBXwx1CCYbb9oV5B3ThjADvtjsstU+s4uzWVpp0mAE4uYp4IdmwN
+         XAUbyVvKEvk0mZQKvKO2embf0Imx+rhbgw3PFgKYA+WwLu+/jq+pXwwEpQaTmKebiQSo
+         fIDmn5JXXwvLNBqrQqhZaArsy+VrCRKhjZjFWH8uEFcCWBdpZToAZ2+AzPaUKsQ3hjzM
+         eul8L7pf+/SKvb7+E5DX8R+7Mo9tHfzPsOSnqKwBt+fgGLItJg5NUJUEl255XszF9yAp
+         oNlw==
+X-Gm-Message-State: AO0yUKUOITP4dZixrHzfmXiFtIyIChdrPokDjPifA/lIRI9jbztRbv7H
+        0INc/fHoycWs5uDu6aevydE=
+X-Google-Smtp-Source: AK7set9hpK37OYHtDPMVQiPbQlIE/jv6D/rNDkWvFxZP81KZ4b75o3xKmcGCfI7ovs9R4GVj695MgQ==
+X-Received: by 2002:a05:6a20:3ca2:b0:bd:14f4:7add with SMTP id b34-20020a056a203ca200b000bd14f47addmr15408642pzj.46.1675462956649;
+        Fri, 03 Feb 2023 14:22:36 -0800 (PST)
+Received: from google.com ([2620:15c:9d:2:6e90:bb76:2b36:4df2])
+        by smtp.gmail.com with ESMTPSA id t23-20020a639557000000b004ecd14297f2sm1975898pgn.10.2023.02.03.14.22.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 14:19:18 -0800 (PST)
-Date:   Sat, 4 Feb 2023 00:19:15 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Jianhui Zhao <zhaojh329@gmail.com>,
-        =?utf-8?B?QmrDuHJu?= Mork <bjorn@mork.no>
-Subject: Re: [PATCH 9/9] net: dsa: mt7530: use external PCS driver
-Message-ID: <20230203221915.tvg4rrjv5cnkshuf@skbuf>
-References: <cover.1675407169.git.daniel@makrotopia.org>
- <cover.1675407169.git.daniel@makrotopia.org>
- <677a5e37aab97a4f992d35c41329733c5f3082fb.1675407169.git.daniel@makrotopia.org>
- <677a5e37aab97a4f992d35c41329733c5f3082fb.1675407169.git.daniel@makrotopia.org>
+        Fri, 03 Feb 2023 14:22:35 -0800 (PST)
+Date:   Fri, 3 Feb 2023 14:22:32 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 2/3] dt-bindings: rtc: moxart: use proper names for gpio
+ properties
+Message-ID: <Y92JKFwF5vS1byx2@google.com>
+References: <20230201054815.4112632-1-dmitry.torokhov@gmail.com>
+ <20230201054815.4112632-2-dmitry.torokhov@gmail.com>
+ <31e979dd-f4e9-081e-1bf2-e44dffc4e70f@linaro.org>
+ <Y9qQHj70SN/3fZCc@google.com>
+ <20230201175504.GA4075318-robh@kernel.org>
+ <Y9q3T17r5G2PD9Gk@google.com>
+ <20230202232734.GA2889187-robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <677a5e37aab97a4f992d35c41329733c5f3082fb.1675407169.git.daniel@makrotopia.org>
- <677a5e37aab97a4f992d35c41329733c5f3082fb.1675407169.git.daniel@makrotopia.org>
+In-Reply-To: <20230202232734.GA2889187-robh@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -94,110 +82,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 07:06:53AM +0000, Daniel Golle wrote:
-> @@ -2728,11 +2612,14 @@ mt753x_phylink_mac_select_pcs(struct dsa_switch *ds, int port,
->  
->  	switch (interface) {
->  	case PHY_INTERFACE_MODE_TRGMII:
-> +		return &priv->pcs[port].pcs;
->  	case PHY_INTERFACE_MODE_SGMII:
->  	case PHY_INTERFACE_MODE_1000BASEX:
->  	case PHY_INTERFACE_MODE_2500BASEX:
-> -		return &priv->pcs[port].pcs;
-> +		if (!mt753x_is_mac_port(port))
-> +			return ERR_PTR(-EINVAL);
+On Thu, Feb 02, 2023 at 05:27:34PM -0600, Rob Herring wrote:
+> On Wed, Feb 01, 2023 at 11:02:39AM -0800, Dmitry Torokhov wrote:
+> > On Wed, Feb 01, 2023 at 11:55:04AM -0600, Rob Herring wrote:
+> > > On Wed, Feb 01, 2023 at 08:15:26AM -0800, Dmitry Torokhov wrote:
+> > > > On Wed, Feb 01, 2023 at 08:38:48AM +0100, Krzysztof Kozlowski wrote:
+> > > > > On 01/02/2023 06:48, Dmitry Torokhov wrote:
+> > > > > > MOXA ART RTC driver has been switched to gpiod API and is now using
+> > > > > > properly named properties for its gpios (with gpiolib implementing a
+> > > > > > quirk to recognize legacy names). Change binding document to use
+> > > > > > proper names as well.
+> > > > > > 
+> > > > > > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> > > > > > ---
+> > > > > >  .../devicetree/bindings/rtc/moxa,moxart-rtc.txt      | 12 ++++++------
+> > > > > >  1 file changed, 6 insertions(+), 6 deletions(-)
+> > > > > > 
+> > > > > > diff --git a/Documentation/devicetree/bindings/rtc/moxa,moxart-rtc.txt b/Documentation/devicetree/bindings/rtc/moxa,moxart-rtc.txt
+> > > > > > index c9d3ac1477fe..1374df7bf9d6 100644
+> > > > > > --- a/Documentation/devicetree/bindings/rtc/moxa,moxart-rtc.txt
+> > > > > > +++ b/Documentation/devicetree/bindings/rtc/moxa,moxart-rtc.txt
+> > > > > > @@ -3,15 +3,15 @@ MOXA ART real-time clock
+> > > > > >  Required properties:
+> > > > > >  
+> > > > > >  - compatible : Should be "moxa,moxart-rtc"
+> > > > > > -- gpio-rtc-sclk : RTC sclk gpio, with zero flags
+> > > > > > -- gpio-rtc-data : RTC data gpio, with zero flags
+> > > > > > -- gpio-rtc-reset : RTC reset gpio, with zero flags
+> > > > > > +- rtc-sclk-gpios : RTC sclk gpio, with zero flags
+> > > > > > +- rtc-data-gpios : RTC data gpio, with zero flags
+> > > > > > +- rtc-reset-gpios : RTC reset gpio, with zero flags
+> > > > > 
+> > > > > Your driver breaks the ABI, doesn't it? If not, how are the old
+> > > > > properties parsed?
+> > > > 
+> > > > It does not. As I mentioned in the driver code patch, commit
+> > > > eaf1a29665cd ("gpiolib: of: add a quirk for legacy names in MOXA ART
+> > > > RTC") makes sure gpiolib falls back to trying old variants if it can't
+> > > > locate properly formatted names.
+> > > 
+> > > A dtb with the new names and a kernel without the gpiod conversion would 
+> > > be broken. Up to the platform whether they care really.
+> > 
+> > Seriously? And I guess devices with DTS do not work with kernels v2.0 so
+> > we should never have introduced it...
+> 
+> They would be fine because they would ignore the dtb. ;)
+> 
+> > I understand wanting backward compatibility, but asking for both
+> > backward and forward is a bit too much IMO.
+> 
+> Like I said, up to the platform to decide. I'm just defining what's an 
+> ABI break or not.
+> 
+> If the dtb ships with firmware, do you want new firmware with a newer 
+> dtb to break your OS? We can sometimes mitigate that with stable kernel 
+> updates. There are obvious cases that don't work such as adding 
+> providers such as clocks (instead of dummy fixed clocks) or pinctrl, 
+> where old kernels will never have the driver (but doesn't know that).
 
-What is the reason for returning ERR_PTR(-EINVAL) to mac_select_pcs()?
+When vendors ship firmware they target particular set of software that
+runs on it, so they would not mindlessly jump to the very latest version
+of binding. Doing that would be similar to a vendor that originally
+shipped a system with Windows 7 out of sudden changing its firmware to
+use latest and greatest mechanisms defined in ACPI 6.5 and removing
+older ones.
 
->  
-> +		return priv->sgmii_pcs[port - 5];
+Thanks.
 
-How about putting the pcs pointer in struct mt7530_port?
-
->  	default:
->  		return NULL;
->  	}
-> @@ -3088,8 +2934,6 @@ mt753x_setup(struct dsa_switch *ds)
->  		priv->pcs[i].pcs.ops = priv->info->pcs_ops;
->  		priv->pcs[i].priv = priv;
->  		priv->pcs[i].port = i;
-> -		if (mt753x_is_mac_port(i))
-> -			priv->pcs[i].pcs.poll = 1;
->  	}
->  
->  	ret = priv->info->sw_setup(ds);
-> @@ -3104,6 +2948,15 @@ mt753x_setup(struct dsa_switch *ds)
->  	if (ret && priv->irq)
->  		mt7530_free_irq_common(priv);
-
-You need to patch the previous code to "return ret".
-
->  
-> +	if (priv->id == ID_MT7531)
-
-if the code block below is multi-line (which it is), put braces here too
-
-or can return early if priv->id != ID_MT7531, and this reduces the
-indentation by one level.
-
-> +		for (i = 0; i < 2; ++i) {
-
-could also iterate over all ports and ignore those which have
-!mt753x_is_mac_port(port)
-
-> +			regmap = devm_regmap_init(ds->dev,
-> +						  &mt7531_regmap_bus, priv,
-> +						  &mt7531_pcs_config[i]);
-
-can fail
-
-> +			priv->sgmii_pcs[i] = mtk_pcs_create(ds->dev, regmap,
-> +							    0x128, 0);
-
-can fail
-
-Don't forget to do error teardown which isn't leaky
-
-0x128 comes from the old definition of MT7531_PHYA_CTRL_SIGNAL3(port),
-so please keep a macro of some sorts to denote the offset of ana_rgc3
-for MT7531, rather than just this obscure magic number.
-
-> +		}
-> +
->  	return ret;
->  }
->  
-> @@ -3199,7 +3052,7 @@ static const struct mt753x_info mt753x_table[] = {
->  	},
->  	[ID_MT7531] = {
->  		.id = ID_MT7531,
-> -		.pcs_ops = &mt7531_pcs_ops,
-> +		.pcs_ops = &mt7530_pcs_ops,
->  		.sw_setup = mt7531_setup,
->  		.phy_read_c22 = mt7531_ind_c22_phy_read,
->  		.phy_write_c22 = mt7531_ind_c22_phy_write,
-> @@ -3309,7 +3162,7 @@ static void
->  mt7530_remove(struct mdio_device *mdiodev)
->  {
->  	struct mt7530_priv *priv = dev_get_drvdata(&mdiodev->dev);
-> -	int ret = 0;
-> +	int ret = 0, i;
->  
->  	if (!priv)
->  		return;
-> @@ -3328,6 +3181,11 @@ mt7530_remove(struct mdio_device *mdiodev)
->  		mt7530_free_irq(priv);
->  
->  	dsa_unregister_switch(priv->ds);
-> +
-> +	for (i = 0; i < 2; ++i)
-
-There is no ++i in this driver and there are 11 i++, so please be
-consistent with what exists.
-
-> +		if (priv->sgmii_pcs[i])
-> +			mtk_pcs_destroy(priv->sgmii_pcs[i]);
-> +
->  	mutex_destroy(&priv->reg_mutex);
->  }
->  
+-- 
+Dmitry
