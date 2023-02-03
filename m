@@ -2,72 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F40868996F
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 14:06:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13F1D689976
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 14:08:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232102AbjBCNFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 08:05:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36012 "EHLO
+        id S232124AbjBCNII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 08:08:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232524AbjBCNFw (ORCPT
+        with ESMTP id S231216AbjBCNIG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 08:05:52 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15A62CFD8;
-        Fri,  3 Feb 2023 05:05:50 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id s13so1931531pgc.10;
-        Fri, 03 Feb 2023 05:05:50 -0800 (PST)
+        Fri, 3 Feb 2023 08:08:06 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F86C660;
+        Fri,  3 Feb 2023 05:08:02 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id k4so15231462eje.1;
+        Fri, 03 Feb 2023 05:08:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5w+nYoWjzuliDhSGVPTUj9Z+BoFlBQYJcan2JoWEXcs=;
-        b=ZQz2LnvEUQNIE/f4fkfZTvHfkfiIs34elkVJyvVX8ZDfvMdQ3Fnh3lT6rxu4F3PTfM
-         uF1JhQ6IvLHnb0AKTzBZV48Y0I1BihfaFSEjJo2jI1+1iZyAuFsTQ7/fsKndNzAFsKxr
-         VdvhSVyw02H1BhHw+nwxJUUJoi02ROA2CkItfGU79/M+U49xOWif7GvJG/y6ksPygxXA
-         TeEVUaONJzU/fF9d89pmamWP+8kYJcDlYoq9iFwlOZTd1hrE1TtpzJM4CBTUUbTHe2HS
-         AeegXgMyYExLa9u7rQmjJZOQdMtwpR1XCzkdoIhbcwF/ysvP7Tzg9d7N+YwxejdtGJsI
-         IgkA==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=F+oNqKUjSYteeXc32+a1j1XXitAiSrhnlK69sLD2wiE=;
+        b=XBlTfXiA6xY/KBhsBCXPdktvCyiHE4+WzsMBh1ofzFNiG0gYTetLQxFwVv0RkdcVE7
+         TUNApe5IKU7kXXdXrnwaPS4GESt2VxA24ApJ5R5L2yHcxK917UvP22milafts/2bsC6W
+         PnMakg3oUPR94YPtWvntQzkC2IM/f9DNrdSmH19qw/f/tF68qvYjUYPwbgUPUyQIFPqL
+         YuFTnrPCDXG+KNJVg6fpgdi9eIiw6JX75Wxzi2Bq9bsL3ONf31kO+ngSFAGbyQKNdRWn
+         kap5Ma7+kYTyhjKbZmMsWWnJ70yPJOucx6Ct8g6QUB0ccFHbTQojo3jk5GDuZXbVE1PN
+         Fjgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5w+nYoWjzuliDhSGVPTUj9Z+BoFlBQYJcan2JoWEXcs=;
-        b=Jb7SE+5QjFss76rGVQr6Iokav+PhB0eV4gSl2i9npHijzSnY/VeIEvkByqB2bvoN7U
-         u9CkoKwIlChRJn5QIEy8EtR9YldgxfpGHPqV737x0GCAA3Hj+kgjLZvjhg4IFKOyVzS9
-         uV91/NjQ+v3lDqx7fvC79HpaFEOqtpuArSe7S0NHqwE+OucRAK0e2w3M+q78fsG5XMXu
-         /rbw6MLw/AnALlwqtGq5lYVuDlGtKEnFTR76z7RhdX3syTMuokQAlC6R5JKKtueLvTpC
-         t8H0ca5YvGv0YAIQDgGRt+sQfC+NzLJr9Jtq0k1Jb1jxkNfuB7cHzcmn4/3//4EVdOaw
-         oylQ==
-X-Gm-Message-State: AO0yUKXiEheIs6eIt86hvLyh1th2u8w5VAX/zIwlIkfms2s10oxyK2Gq
-        dgmAwONDVzzraZM+1gXph3fDBkUGvWG8+ANXg+U=
-X-Google-Smtp-Source: AK7set89BQi2I5AisOwWpSQfAQCmcr7aHQAQBKKe7iYnnEkfq1/zW6ewBeZrLVGafe9/Co/j5nhFpQT1U0tdNPkPOGg=
-X-Received: by 2002:a05:6a00:10c1:b0:593:aa4e:e956 with SMTP id
- d1-20020a056a0010c100b00593aa4ee956mr2309848pfu.21.1675429550181; Fri, 03 Feb
- 2023 05:05:50 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=F+oNqKUjSYteeXc32+a1j1XXitAiSrhnlK69sLD2wiE=;
+        b=yw8ECfn6R6wZM1BuLt5jEUuDPwxLrYRDe1t22s/NT8FBoZpPeJWrRWQU9Jl+dovVc8
+         wUgJ58UPIJJmPCmnHFHRr8khOCEErruImzSlIRr4l3kVx3TGJ6U98FjIc8k8EZRcA4+H
+         Dz5ij8u3cReFMhRxY1cKEhlmI3px7VvpPssDaIzemimwo48YKdlJ2eNaJIjQ1QSUXsZe
+         hyx+TtLMp7uIhMQxDZn9qq6hbm8RWtiTGzUVI2e2+bI2b9NtKlMurcRVX08EZiPRPQUS
+         m5T06ilCUwkF9pqhjJx44nQRmZMQFNtBTWfR80trdsRfx0kqRdNhj4NHaedAKWAiN4ZU
+         652Q==
+X-Gm-Message-State: AO0yUKW0YRPpiI+tSXpdNSqgECpgIJpzw8jpL3is0erF2Zu/bthYtn8F
+        2FFWBPcG4J3gfrcvqA9mx2W0RIjRQh8=
+X-Google-Smtp-Source: AK7set9vzcCz59807cbRnRYiNnlh560czXx/j4rsr1r0CfN6ry7Bg9+duIk7hWbLlWoSjKG9B93atg==
+X-Received: by 2002:a17:906:2012:b0:878:59b6:c194 with SMTP id 18-20020a170906201200b0087859b6c194mr11088644ejo.32.1675429680992;
+        Fri, 03 Feb 2023 05:08:00 -0800 (PST)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id gw16-20020a170906f15000b0088e5f3e1faesm1358722ejb.36.2023.02.03.05.07.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Feb 2023 05:08:00 -0800 (PST)
+Message-ID: <897b3476-d62c-dbdb-63b0-8dbf4f24ccdf@gmail.com>
+Date:   Fri, 3 Feb 2023 14:07:58 +0100
 MIME-Version: 1.0
-References: <20230202024417.4477-1-dqfext@gmail.com> <ec42f238-8fc7-2ea4-c1a7-e4c3c4b8f512@redhat.com>
-In-Reply-To: <ec42f238-8fc7-2ea4-c1a7-e4c3c4b8f512@redhat.com>
-From:   DENG Qingfang <dqfext@gmail.com>
-Date:   Fri, 3 Feb 2023 21:05:41 +0800
-Message-ID: <CALW65ja+P+E0fjEsZfm1XWb_dn_snuRoFA5i_i+_1K9j0+wi7Q@mail.gmail.com>
-Subject: Re: [PATCH net] net: page_pool: use in_softirq() instead
-To:     Jesper Dangaard Brouer <jbrouer@redhat.com>
-Cc:     Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        brouer@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 4/6] soc: mediatek: pm-domains: Add ADSP power domain
+ data for MT8192
+Content-Language: en-US
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ikjoon Jang <ikjn@chromium.org>
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        angelogioacchino.delregno@collabora.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Chen-Yu Tsai <wenst@chromium.org>
+References: <20221221034407.19605-1-allen-kh.cheng@mediatek.com>
+ <20221221034407.19605-5-allen-kh.cheng@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20221221034407.19605-5-allen-kh.cheng@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,31 +85,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jesper,
 
-On Fri, Feb 3, 2023 at 7:15 PM Jesper Dangaard Brouer
-<jbrouer@redhat.com> wrote:
-> How can I enable threaded NAPI on my system?
 
-dev_set_threaded(napi_dev, true);
+On 21/12/2022 04:44, Allen-KH Cheng wrote:
+> Add ADSP pm-domains (mtcmos) data for MT8192 SoC.
+> 
+> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> ---
+>   drivers/soc/mediatek/mt8192-pm-domains.h | 16 ++++++++++++++++
+>   1 file changed, 16 insertions(+)
+> 
+> diff --git a/drivers/soc/mediatek/mt8192-pm-domains.h b/drivers/soc/mediatek/mt8192-pm-domains.h
+> index b97b2051920f..19e58f0ca1df 100644
+> --- a/drivers/soc/mediatek/mt8192-pm-domains.h
+> +++ b/drivers/soc/mediatek/mt8192-pm-domains.h
+> @@ -287,6 +287,22 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8192[] = {
+>   		.sram_pdn_bits = GENMASK(8, 8),
+>   		.sram_pdn_ack_bits = GENMASK(12, 12),
+>   	},
+> +	[MT8192_POWER_DOMAIN_ADSP] = {
+> +		.name = "adsp",
+> +		.sta_mask = BIT(22),
+> +		.ctl_offs = 0x0358,
+> +		.sram_pdn_bits = GENMASK(8, 8),
+> +		.sram_pdn_ack_bits = GENMASK(12, 12),
+> +		.ext_buck_iso_offs = 0x039C,
 
-You can also enable it at runtime by writing 1 to
-/sys/class/net/<devname>/threaded, but it only works if the driver
-does _not_ use a dummy netdev for NAPI poll.
+Can we get a define for this magic number please?
 
-> I think other cases (above) are likely safe, but I worry a little about
-> this case, as the page_pool_recycle_in_cache() rely on RX-NAPI protection.
-> Meaning it is only the CPU that handles RX-NAPI for this RX-queue that
-> is allowed to access this lockless array.
+Regards,
+Matthias
 
-The major changes to the threaded NAPI is that instead of scheduling a
-NET_RX softirq, it wakes up a kthread which then does the polling,
-allowing it to be scheduled to another CPU. The driver's poll function
-is called with BH disabled so it's still considered BH context.
-
-> We do have the 'allow_direct' boolean, and if every driver/user uses
-> this correctly, then this should be safe.  Changing this makes it
-> possible for drivers to use page_pool API incorrectly and this leads to
-> hard-to-debug errors.
-
-"incorrectly", like, calling it outside RX-NAPI?
+> +		.ext_buck_iso_mask = BIT(2),
+> +		.bp_infracfg = {
+> +			BUS_PROT_WR(MT8192_TOP_AXI_PROT_EN_2_ADSP,
+> +				    MT8192_TOP_AXI_PROT_EN_2_SET,
+> +				    MT8192_TOP_AXI_PROT_EN_2_CLR,
+> +				    MT8192_TOP_AXI_PROT_EN_2_STA1),
+> +		},
+> +		.caps = MTK_SCPD_SRAM_ISO | MTK_SCPD_EXT_BUCK_ISO,
+> +	},
+>   	[MT8192_POWER_DOMAIN_CAM] = {
+>   		.name = "cam",
+>   		.sta_mask = BIT(23),
