@@ -2,170 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 845606890CA
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 08:26:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DC636890D8
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 08:28:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232071AbjBCH0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 02:26:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47048 "EHLO
+        id S232107AbjBCH10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 02:27:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229914AbjBCH0F (ORCPT
+        with ESMTP id S229914AbjBCH1Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 02:26:05 -0500
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E4B692EC4
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 23:25:52 -0800 (PST)
-Received: by mail-vs1-xe30.google.com with SMTP id p10so4482291vsu.5
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 23:25:52 -0800 (PST)
+        Fri, 3 Feb 2023 02:27:24 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D76428B7E8;
+        Thu,  2 Feb 2023 23:27:23 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id v23so4445188plo.1;
+        Thu, 02 Feb 2023 23:27:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qnqohepmJa02iQzv6KIF3XV1XpzLx8j7mEp5PrY56aY=;
-        b=d1V4RalDykH+eYJ0ijdqMHKhTm9Br6Qy67RGt94My2LbwUpT2hKbh9NhJs/Q5WPKtJ
-         p7B+9FPOZCJ5XgjJLmA0FyAi+1C1Q17gy0NMsJiDwj7HtLjowv1Ob7zPD+IicxWjAlSb
-         BFuT/bx88qD9AGgcoGRekuLM3lnweBUz5C1x0=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=edbX+4MC5b+srO3yHczbdBgc/tPpYqJoWHt3T7lC7SQ=;
+        b=HODstuc15O4Z0/BygJiX8SkZj/gjCfhMLuhWURz3K3rxDS9NSpxIsbeMFDmDRlkO4M
+         hCA1vFikS/q/wG85vjfTDuu0ORRobX3/dUT9YNV3W6y1fLjq+AhjnSj98CFbh1ukLrO9
+         WmxO9SqjL60RJpawsuQ/S143ohX8EHmjtf8MyerGuf661DLLntV8/okXyYQGYATmbqek
+         lejYMupeIh03gTm+fAmVhTvrlIrJp+CUylRVbBqE2dnZXDpB38yOzlWIaRgQaXXNXxEB
+         7YanMNO0NHfMFNV6+KN+rsynWieyj//2RjeLFh9HQZxrqlWIZ6Hpr0cVBG3u8wsZEBkn
+         0Z/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qnqohepmJa02iQzv6KIF3XV1XpzLx8j7mEp5PrY56aY=;
-        b=3RQT4UeqJq5hosGAjN8SMdwclpXUsGCqAwoEoYtAzQGca6LpVyDiMRjQA2FQ/6zFn3
-         FTTKwOA9dvwUz0ZzTPwRjPUpYJr4BJ9OShySpCl8qyWNHf/emFc4fsBgh18bjmeLNp4g
-         V/WYn+jdhjL6SA9G27BRhG7kI0grWPHW4dVSwQpst/7asXC47kXwZ8ba6z9rS+wwcN3z
-         2/GAhlGuexQbIwdD73QG3NXBYBB7SDw7uM/BdOiNTMKtM+/MSxXivsm61dTIvdmDVyHi
-         RUCcfc1WPSqTlhz6G8u2quX+boYtE4m0u/asWhwTYLGEWfyasrFD3yXzN3DS78a9SJPc
-         fVwA==
-X-Gm-Message-State: AO0yUKXCr7oigdN6KmvuxYP7hSfu7bkK3/1qZp1g82tyDoPmSNYpbe2L
-        LVpe2Z97IWrfr6iBNKRD+R0rjtdrNM175pQEyTtDTg==
-X-Google-Smtp-Source: AK7set/QhhNfvDnI8ndzCui1EaYl9KSQkOZVYXLyNV4ahcE56o+jXFfQpW+COvR08tXJVdwmEFSkso5rv+20ss21tG4=
-X-Received: by 2002:a05:6102:23f2:b0:3ed:89c7:4bd2 with SMTP id
- p18-20020a05610223f200b003ed89c74bd2mr1674741vsc.26.1675409151465; Thu, 02
- Feb 2023 23:25:51 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=edbX+4MC5b+srO3yHczbdBgc/tPpYqJoWHt3T7lC7SQ=;
+        b=EZnE+PSEZLKTADq/bnPKxckyehjgUczt/zHIjKjoEy5EwfQXpPkR8zI4qhybor5p5b
+         0upMB8ksaPm41XW2ENuvGzVT1Ov9S5+jlNxg1xgRuWxcACCmj2WdH+FWGN9oC/htf8O/
+         F2j/Yb9VHcSRECg4XakBZf2XZgK/l9RMSJ2FjwxmQnLObG2/KuGVO4VUrlwDrOwQpkgS
+         Cn9V4EhiAxGV8AI+0jDj3uWKE5fSrwrdQN8Uu+wDrgvkwUCFs62E9QNOzAW+FUKw5256
+         Y3GUvYzfIFisAdEJh8h3o8M5lq/2r7SzqJQj+GRbgKw2alyMl2tloZpYrowJ3Lc1+4Gs
+         fHQQ==
+X-Gm-Message-State: AO0yUKVBPbtoqqyH1Nk4MSkK953AUhDyKxJxmVXBXpV53JLmqRy2XPet
+        G1xcVPr/KzacshB/ZnbNRek=
+X-Google-Smtp-Source: AK7set+JpyrjPDWAG8FnISsyg+KVKKeXx4q66CNamTLJ/nmBURaNsWGgQaBsYZmyUs6gfsmYobxPjw==
+X-Received: by 2002:a17:902:d0d3:b0:194:a1f6:65ae with SMTP id n19-20020a170902d0d300b00194a1f665aemr7156793pln.12.1675409243410;
+        Thu, 02 Feb 2023 23:27:23 -0800 (PST)
+Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:18:efec::75b])
+        by smtp.gmail.com with ESMTPSA id v24-20020a17090331d800b00198e40d95d1sm360350ple.47.2023.02.02.23.27.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Feb 2023 23:27:22 -0800 (PST)
+Message-ID: <7dbc845a-0ada-f97a-ba50-a6b2c31ee9c0@gmail.com>
+Date:   Fri, 3 Feb 2023 15:27:11 +0800
 MIME-Version: 1.0
-References: <20230119124848.26364-1-Garmin.Chang@mediatek.com> <20230119124848.26364-15-Garmin.Chang@mediatek.com>
-In-Reply-To: <20230119124848.26364-15-Garmin.Chang@mediatek.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Fri, 3 Feb 2023 15:25:40 +0800
-Message-ID: <CAGXv+5ECLKewj1_sU9WzJA9Z8pRyKBo6fxBLrogoBH76Y5f32w@mail.gmail.com>
-Subject: Re: [PATCH v5 14/19] clk: mediatek: Add MT8188 vencsys clock support
-To:     "Garmin.Chang" <Garmin.Chang@mediatek.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-clk@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [RFC PATCH V3 12/16] x86/sev: Add a #HV exception handler
+To:     "Gupta, Pankaj" <pankaj.gupta@amd.com>, luto@kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        seanjc@google.com, pbonzini@redhat.com, jgross@suse.com,
+        tiala@microsoft.com, kirill@shutemov.name,
+        jiangshan.ljs@antgroup.com, peterz@infradead.org,
+        ashish.kalra@amd.com, srutherford@google.com,
+        akpm@linux-foundation.org, anshuman.khandual@arm.com,
+        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
+        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
+        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
+        michael.roth@amd.com, thomas.lendacky@amd.com,
+        venu.busireddy@oracle.com, sterritt@google.com,
+        tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
+References: <20230122024607.788454-1-ltykernel@gmail.com>
+ <20230122024607.788454-13-ltykernel@gmail.com>
+ <0098b974-7ceb-664a-aa53-afac8cc26d47@amd.com>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <0098b974-7ceb-664a-aa53-afac8cc26d47@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 8:55 PM Garmin.Chang <Garmin.Chang@mediatek.com> wrote:
->
-> Add MT8188 vencsys clock controllers which provide clock gate
-> control for video encoder.
->
-> Signed-off-by: Garmin.Chang <Garmin.Chang@mediatek.com>
-> ---
->  drivers/clk/mediatek/Makefile          |  2 +-
->  drivers/clk/mediatek/clk-mt8188-venc.c | 52 ++++++++++++++++++++++++++
->  2 files changed, 53 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/clk/mediatek/clk-mt8188-venc.c
->
-> diff --git a/drivers/clk/mediatek/Makefile b/drivers/clk/mediatek/Makefile
-> index c654f4288e09..22a3840160fc 100644
-> --- a/drivers/clk/mediatek/Makefile
-> +++ b/drivers/clk/mediatek/Makefile
-> @@ -87,7 +87,7 @@ obj-$(CONFIG_COMMON_CLK_MT8188) += clk-mt8188-apmixedsys.o clk-mt8188-topckgen.o
->                                    clk-mt8188-peri_ao.o clk-mt8188-infra_ao.o \
->                                    clk-mt8188-cam.o clk-mt8188-ccu.o clk-mt8188-img.o \
->                                    clk-mt8188-ipe.o clk-mt8188-mfg.o clk-mt8188-vdec.o \
-> -                                  clk-mt8188-vdo0.o clk-mt8188-vdo1.o
-> +                                  clk-mt8188-vdo0.o clk-mt8188-vdo1.o clk-mt8188-venc.o
->  obj-$(CONFIG_COMMON_CLK_MT8192) += clk-mt8192.o
->  obj-$(CONFIG_COMMON_CLK_MT8192_AUDSYS) += clk-mt8192-aud.o
->  obj-$(CONFIG_COMMON_CLK_MT8192_CAMSYS) += clk-mt8192-cam.o
-> diff --git a/drivers/clk/mediatek/clk-mt8188-venc.c b/drivers/clk/mediatek/clk-mt8188-venc.c
-> new file mode 100644
-> index 000000000000..375ef99e2349
-> --- /dev/null
-> +++ b/drivers/clk/mediatek/clk-mt8188-venc.c
-> @@ -0,0 +1,52 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +//
-> +// Copyright (c) 2022 MediaTek Inc.
-> +// Author: Garmin Chang <garmin.chang@mediatek.com>
-> +
-> +#include <linux/clk-provider.h>
-> +#include <linux/platform_device.h>
-> +#include <dt-bindings/clock/mediatek,mt8188-clk.h>
-> +
-> +#include "clk-gate.h"
-> +#include "clk-mtk.h"
-> +
-> +static const struct mtk_gate_regs ven1_cg_regs = {
+On 1/23/2023 3:33 PM, Gupta, Pankaj wrote:
+> 
+>> + */
+>> +.macro idtentry_hv vector asmsym cfunc
+>> +SYM_CODE_START(\asmsym)
+>> +    UNWIND_HINT_IRET_REGS
+>> +    ASM_CLAC
+> 
+> Did you get a chance to review the new instructions
+> added at the start similar to idtentry_vc and comments
+> added assuggested here?
+> 
+> https://lore.kernel.org/lkml/16e50239-39b2-4fb4-5110-18f13ba197fe@amd.com/
 
-Like the vdecsys patch, please change "ven" to "venc" to be consistent
-with usages elsewhere.
-
-> +       .set_ofs = 0x4,
-> +       .clr_ofs = 0x8,
-> +       .sta_ofs = 0x0,
-> +};
-> +
-> +#define GATE_VEN1(_id, _name, _parent, _shift)                 \
-> +       GATE_MTK(_id, _name, _parent, &ven1_cg_regs, _shift, &mtk_clk_gate_ops_setclr_inv)
-> +
-> +static const struct mtk_gate ven1_clks[] = {
-> +       GATE_VEN1(CLK_VEN1_CKE0_LARB, "ven1_cke0_larb", "top_venc", 0),
-> +       GATE_VEN1(CLK_VEN1_CKE1_VENC, "ven1_cke1_venc", "top_venc", 4),
-> +       GATE_VEN1(CLK_VEN1_CKE2_JPGENC, "ven1_cke2_jpgenc", "top_venc", 8),
-> +       GATE_VEN1(CLK_VEN1_CKE3_JPGDEC, "ven1_cke3_jpgdec", "top_venc", 12),
-> +       GATE_VEN1(CLK_VEN1_CKE4_JPGDEC_C1, "ven1_cke4_jpgdec_c1", "top_venc", 16),
-> +       GATE_VEN1(CLK_VEN1_CKE5_GALS, "ven1_cke5_gals", "top_venc", 28),
-> +       GATE_VEN1(CLK_VEN1_CKE6_GALS_SRAM, "ven1_cke6_gals_sram", "top_venc", 31),
-
-Is ckeN in both the macro name and clock name necessary? We don't really
-care about the index.
-
-ChenYu
-
-> +};
-> +
-> +static const struct mtk_clk_desc ven1_desc = {
-> +       .clks = ven1_clks,
-> +       .num_clks = ARRAY_SIZE(ven1_clks),
-> +};
-> +
-> +static const struct of_device_id of_match_clk_mt8188_ven1[] = {
-> +       { .compatible = "mediatek,mt8188-vencsys", .data = &ven1_desc },
-> +       { /* sentinel */ }
-> +};
-> +
-> +static struct platform_driver clk_mt8188_ven1_drv = {
-> +       .probe = mtk_clk_simple_probe,
-> +       .remove = mtk_clk_simple_remove,
-> +       .driver = {
-> +               .name = "clk-mt8188-ven1",
-> +               .of_match_table = of_match_clk_mt8188_ven1,
-> +       },
-> +};
-> +
-> +builtin_platform_driver(clk_mt8188_ven1_drv);
-> +MODULE_LICENSE("GPL");
-> --
-> 2.18.0
->
->
+Hi Pankaj:
+	Thanks for your reminder. Yes, CLD should be add after ASM_CLAC. Will 
+fix it.
