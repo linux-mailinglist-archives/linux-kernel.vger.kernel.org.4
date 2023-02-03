@@ -2,63 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39C7F689267
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 09:37:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0161668926A
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 09:37:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231864AbjBCIhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 03:37:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42874 "EHLO
+        id S232157AbjBCIh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 03:37:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230020AbjBCIhD (ORCPT
+        with ESMTP id S231903AbjBCIhY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 03:37:03 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E43A14B8B2
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 00:36:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675413376;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4SgfxfX+R40emIUXjC0IKRTnZn8Kx7fI1FhxMp6y+tk=;
-        b=Q7JDJpdG/3r7bwguhrXrKooTJizuh0gUty06fGVe0B1xauRjdVoD+Y8YyU/5/MPvzK39hB
-        IyGe/N+5onyi6iKrP3fSdes1PSh3Jhldn+9R32jqiEK8D2pb46KOpJyHvBeoUgCW3yRCPf
-        u/48YT9Fw6ZJQ36iSAxq/eonqR1T72c=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-241-UC8RY2tXMU2MA0Ie6u6v0g-1; Fri, 03 Feb 2023 03:36:12 -0500
-X-MC-Unique: UC8RY2tXMU2MA0Ie6u6v0g-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5B68D101A55E;
-        Fri,  3 Feb 2023 08:36:12 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.97])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7C25A492C14;
-        Fri,  3 Feb 2023 08:36:11 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <72029a93-1150-1994-916f-b15ef0befd49@nvidia.com>
-References: <72029a93-1150-1994-916f-b15ef0befd49@nvidia.com> <e8065d6a-d2f9-60aa-8541-8dfc8e9b608f@redhat.com> <000000000000b0b3c005f3a09383@google.com> <822863.1675327935@warthog.procyon.org.uk> <1265629.1675350909@warthog.procyon.org.uk>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     dhowells@redhat.com, David Hildenbrand <david@redhat.com>,
-        syzbot <syzbot+a440341a59e3b7142895@syzkaller.appspotmail.com>,
-        hch@lst.de, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] general protection fault in skb_dequeue (3)
+        Fri, 3 Feb 2023 03:37:24 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A9047ED9;
+        Fri,  3 Feb 2023 00:37:18 -0800 (PST)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3138Uisk017670;
+        Fri, 3 Feb 2023 08:37:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=A0hof6re8u8bm6k4Ym83IwjdZ/iNuiNk73vuae2ePIM=;
+ b=pNPn+10ziFT3bMd1IFQpcbV9UxiH5d9ARGz6Wg6dtiYQBtQUj/WE+wWcUNAO8j7RlMPP
+ 784ABAgQw9Fe8OUcgexRPpFJ/vVvKmAG8DIdEuAcj7TnGpiK/SVu5sDRxUvzMEz1a6WR
+ 33yZZQrCQctNqdrSBsVyRrdfpAbS9uOKYy3pHbSZAEnChqaVJYhua7q6V5AQk21X7wkg
+ q3WqgaVdSRj7oN7R3/wgpDBoVho9LUE49K29m24IT89iHthXXyjoyYbBTIzlKDaba90X
+ qfeoWXoolpaMsCZNCLX+dhO9HAiH3bxH5QosniqyXeUOgFKHLUK/FT/B5YZC6dnivFAa AA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ngxtu84v9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Feb 2023 08:37:07 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3138b7F2009292;
+        Fri, 3 Feb 2023 08:37:07 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ngxtu84un-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Feb 2023 08:37:06 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 312MGEGr005441;
+        Fri, 3 Feb 2023 08:37:04 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3ncvshd48m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Feb 2023 08:37:04 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3138b2RL25887184
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 3 Feb 2023 08:37:02 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0C29620043;
+        Fri,  3 Feb 2023 08:37:02 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0DCF820040;
+        Fri,  3 Feb 2023 08:37:00 +0000 (GMT)
+Received: from li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com (unknown [9.43.50.106])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Fri,  3 Feb 2023 08:36:59 +0000 (GMT)
+Date:   Fri, 3 Feb 2023 14:06:56 +0530
+From:   Ojaswin Mujoo <ojaswin@linux.ibm.com>
+To:     Jan Kara <jack@suse.cz>
+Cc:     linux-ext4@vger.kernel.org, "Theodore Ts'o" <tytso@mit.edu>,
+        Ritesh Harjani <riteshh@linux.ibm.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rookxu <brookxu.cn@gmail.com>,
+        Ritesh Harjani <ritesh.list@gmail.com>
+Subject: Re: [PATCH v3 7/8] ext4: Use rbtrees to manage PAs instead of inode
+ i_prealloc_list
+Message-ID: <Y9zHkMx7w4Io0TTv@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
+References: <20230116080216.249195-1-ojaswin@linux.ibm.com>
+ <20230116080216.249195-8-ojaswin@linux.ibm.com>
+ <20230116122334.k2hlom22o2hlek3m@quack3>
+ <Y8Z413XTPMr//bln@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
+ <20230117110335.7dtlq4catefgjrm3@quack3>
+ <Y8jizbGg6l2WxJPF@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
+ <20230127144312.3m3hmcufcvxxp6f4@quack3>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1723029.1675413370.1@warthog.procyon.org.uk>
-Date:   Fri, 03 Feb 2023 08:36:10 +0000
-Message-ID: <1723030.1675413370@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230127144312.3m3hmcufcvxxp6f4@quack3>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: S1Ys9Hr3qTx5WgoEprq5s_riUOj4rJUW
+X-Proofpoint-GUID: GeekTf8ko8WYwxXtYxFuzeCYJPuYle4H
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-03_04,2023-02-02_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
+ phishscore=0 suspectscore=0 bulkscore=0 adultscore=0 malwarescore=0
+ mlxscore=0 mlxlogscore=813 priorityscore=1501 lowpriorityscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302030079
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,12 +99,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Interestingly, the problem also goes away if the ftruncate is removed from the
-test program.
+On Fri, Jan 27, 2023 at 03:43:12PM +0100, Jan Kara wrote:
+> 
+> Well, I think cond_resched() + goto retry would be OK here. We could also
+> cycle the corresponding group lock which would wait for
+> ext4_mb_discard_group_preallocations() to finish but that is going to burn
+> the CPU even more than the cond_resched() + retry as we'll be just spinning
+> on the spinlock. Sleeping is IMHO not warranted as the whole
+> ext4_mb_discard_group_preallocations() is running under a spinlock anyway
+> so it should better be a very short sleep.
+> 
+> Or actually I have one more possible solution: What the adjusting function
+> is doing that it looks up PA before and after ac->ac_o_ex.fe_logical and
+> trims start & end to not overlap these PAs. So we could just lookup these
+> two PAs (ignoring the deleted state) and then just iterate from these with
+> rb_prev() & rb_next() until we find not-deleted ones. What do you think? 
 
-Are pages ever spliced from the pipe directly into the pagecache on both xfs
-and ext4?  I'm not sure whether that could happen as the test seeks 2048 bytes
-in before doing the sendfile().
+Hey Jan, 
 
-David
+Just thought I'd update you, I'm trying this solution out, and it looks
+good but I'm hitting a few bugs in the implementation. Will update here
+once I have it working correctly.
 
+Regards,
+Ojaswin
