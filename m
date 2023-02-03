@@ -2,106 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A362268A39C
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 21:36:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85F1B68A399
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 21:35:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232526AbjBCUgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 15:36:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36548 "EHLO
+        id S232470AbjBCUfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 15:35:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230042AbjBCUf6 (ORCPT
+        with ESMTP id S230042AbjBCUfN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 15:35:58 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B123A8F276
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 12:35:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675456509;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JitJ+EzQFI4tRE7oSO6h0RzqVsLIaAm1WlJEalphUB8=;
-        b=S1Q5yyKVTTNdT6bSVpA/F1d/ScPvckgw98v15HALxmo+7QjdQPHQJBWF4d7bBtHKkPFJok
-        EaIUeYAMv/AneqRgSthPLGhEr2mAEuhf1A75iK7/PF+ur7sBfPBXzhjRdzzuASO1xC0VVN
-        x8IIcUHL/wemqx5xVhYGO+v9/2SFxIw=
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
- [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-214-eRDcCzFOOiO_BVne8XHKrg-1; Fri, 03 Feb 2023 15:35:08 -0500
-X-MC-Unique: eRDcCzFOOiO_BVne8XHKrg-1
-Received: by mail-il1-f200.google.com with SMTP id y5-20020a056e021be500b00313a9c609adso629309ilv.8
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 12:35:08 -0800 (PST)
+        Fri, 3 Feb 2023 15:35:13 -0500
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9540D8F536;
+        Fri,  3 Feb 2023 12:35:11 -0800 (PST)
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-142b72a728fso8018295fac.9;
+        Fri, 03 Feb 2023 12:35:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:organization:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JitJ+EzQFI4tRE7oSO6h0RzqVsLIaAm1WlJEalphUB8=;
-        b=KrSCnpGQGGUwbYjXFCbTOsQfynjTlpXc5FUx4wDLomH4JgyPlGnAZMWGYbCEYswoS1
-         6VDSDaSteOIUK17defWkqvQdGEd0obsdliipm6ezWw+rKPOW8POUlE49flF3+wOGzn2g
-         urPOzM5/rDCPurXUyOz06guaKGGMKrGw/sByHtZvLsJ1C3zt6u5M9ZtFcquQj5J2OvA4
-         dFkeLvAZZ/fh8Xxk12F6Urno7CiJ1TcrQNapMHK/aEQSpFPYByQ+odSowMXkV4ISpdfP
-         XkNdFEtRYF6h3ZurJr2ZZiuYGdPKpK9U2pFFyutgp20KCffHO22FOlbaXsU3b4wyNsNd
-         7n8g==
-X-Gm-Message-State: AO0yUKUI1B6/6TdvNF/DxTXcb3Yn6C9Uj6KOG2LImbLrGA+xD3rhOUv+
-        bTYibbATt4wwzdN4On9epZhpGZ2xRMbtwhAQEv/Q+UgXCD0bw+IekdiGH1LQNyRH4Wzx32nxnib
-        BRMNQwixTK5S3e76QWDDmqoqH
-X-Received: by 2002:a05:6e02:2194:b0:310:be24:260a with SMTP id j20-20020a056e02219400b00310be24260amr9908885ila.30.1675456507684;
-        Fri, 03 Feb 2023 12:35:07 -0800 (PST)
-X-Google-Smtp-Source: AK7set9GIBfAjhIj5v0BQS/LjNDFZ4r0AnKB0rNTkxdvIO9fwIpXafr9OOmCRq/tq2BYChRorlbGeA==
-X-Received: by 2002:a05:6e02:2194:b0:310:be24:260a with SMTP id j20-20020a056e02219400b00310be24260amr9908859ila.30.1675456507248;
-        Fri, 03 Feb 2023 12:35:07 -0800 (PST)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id d71-20020a0285cd000000b003b02df3521dsm1128406jai.93.2023.02.03.12.35.06
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=s9ERBz4ssqzLzKfbT0hTgsoHU4vAavbohSqKdl8iOO8=;
+        b=XVkZIdTlJTX44BwQXo5td+8aQPwNNqs8eVT04j9olUiWXcHg1buZBCboi+LO8pDb2p
+         ezTlU7Eaai2WwZGdC7hnDiRTs51ab4ikthjuB2ryk0/gPjBOw21szhJ4yOEjeRnvE5tl
+         ubzdphcyCJwbhP4RTPhiIGRyWbnn6pA5IgqnlGWd9c+TEPi/8qJKNZ/JhEz7pEQkZFlr
+         pDKXpFL3rLeADKp0wF2e95l9AFWMR0Bh8bdw0plqXnLKfumB9iA36tIj6/7y7tQOwEtZ
+         oKeDaz3vRvFe3eEkTHuL61g1eOg4Y+y9BDBxBDkJhDXQeiq6UDQ5L4oapOloBJo0J/OI
+         1UtQ==
+X-Gm-Message-State: AO0yUKWyzlNMZiRhIFxRjP2Fu93s4iiXfIqTcUf3holRyXJFEcAZhyIT
+        ogW0RSYvnYBZJTY8pI62gA==
+X-Google-Smtp-Source: AK7set9oqxoeYrd3aWmIQC9WtHQxxY9KfVyuW6tXP+N3qYxM5BuyCw8u/DRFl64vlrHDIX4b8mA9wg==
+X-Received: by 2002:a05:6871:411:b0:163:cd07:a5a5 with SMTP id d17-20020a056871041100b00163cd07a5a5mr6163877oag.56.1675456510702;
+        Fri, 03 Feb 2023 12:35:10 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id g1-20020a056870a24100b0014fe4867dc7sm1173616oai.56.2023.02.03.12.35.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 12:35:06 -0800 (PST)
-Date:   Fri, 3 Feb 2023 13:35:03 -0700
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Matthew Rosato <mjrosato@linux.ibm.com>
-Cc:     "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "farman@linux.ibm.com" <farman@linux.ibm.com>,
-        "pmorel@linux.ibm.com" <pmorel@linux.ibm.com>,
-        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
-        "frankja@linux.ibm.com" <frankja@linux.ibm.com>,
-        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "akrowiak@linux.ibm.com" <akrowiak@linux.ibm.com>,
-        "jjherne@linux.ibm.com" <jjherne@linux.ibm.com>,
-        "pasic@linux.ibm.com" <pasic@linux.ibm.com>,
-        "zhenyuw@linux.intel.com" <zhenyuw@linux.intel.com>,
-        "Wang, Zhi A" <zhi.a.wang@intel.com>,
-        "Christopherson, , Sean" <seanjc@google.com>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "intel-gvt-dev@lists.freedesktop.org" 
-        <intel-gvt-dev@lists.freedesktop.org>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3] vfio: fix deadlock between group lock and kvm lock
-Message-ID: <20230203133503.4d8fb3e8.alex.williamson@redhat.com>
-In-Reply-To: <ed030aa5-b3af-638e-6e26-4e3a20b98ef4@linux.ibm.com>
-References: <20230202162442.78216-1-mjrosato@linux.ibm.com>
-        <20230202124210.476adaf8.alex.williamson@redhat.com>
-        <BN9PR11MB527618E281BEB8E479ABB0418CD69@BN9PR11MB5276.namprd11.prod.outlook.com>
-        <20230202161307.0c6aa23e.alex.williamson@redhat.com>
-        <BN9PR11MB5276017F9CEBB4BAE58C40E88CD79@BN9PR11MB5276.namprd11.prod.outlook.com>
-        <DS0PR11MB7529050661FCE4A5AC4B17C3C3D79@DS0PR11MB7529.namprd11.prod.outlook.com>
-        <20230203064940.435e4d65.alex.williamson@redhat.com>
-        <DS0PR11MB75297154376388A3698C5CCAC3D79@DS0PR11MB7529.namprd11.prod.outlook.com>
-        <20230203081942.64fbf9f1.alex.williamson@redhat.com>
-        <ed030aa5-b3af-638e-6e26-4e3a20b98ef4@linux.ibm.com>
-Organization: Red Hat
+        Fri, 03 Feb 2023 12:35:10 -0800 (PST)
+Received: (nullmailer pid 843783 invoked by uid 1000);
+        Fri, 03 Feb 2023 20:35:08 -0000
+Date:   Fri, 3 Feb 2023 14:35:08 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Martin =?utf-8?B?WmHFpW92acSN?= <m.zatovic1@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        gregkh@linuxfoundation.org, martin.petersen@oracle.com,
+        beanhuo@micron.com, arnd@arndb.de, avri.altman@wdc.com,
+        iwona.winiarska@intel.com, fmdefrancesco@gmail.com,
+        dipenp@nvidia.com, ogabbay@kernel.org, bvanassche@acm.org,
+        mathieu.poirier@linaro.org, yangyicong@hisilicon.com,
+        dan.j.williams@intel.com, devicetree@vger.kernel.org,
+        linus.walleij@linaro.org
+Subject: Re: [PATCHv2 1/4] dt-bindings: wiegand: add Wiegand controller
+ common properties
+Message-ID: <20230203203508.GA841469-robh@kernel.org>
+References: <20230202143305.21789-1-m.zatovic1@gmail.com>
+ <20230202143305.21789-2-m.zatovic1@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230202143305.21789-2-m.zatovic1@gmail.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -109,283 +72,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 3 Feb 2023 12:29:01 -0500
-Matthew Rosato <mjrosato@linux.ibm.com> wrote:
-
-> On 2/3/23 10:19 AM, Alex Williamson wrote:
-> > On Fri, 3 Feb 2023 14:54:44 +0000
-> > "Liu, Yi L" <yi.l.liu@intel.com> wrote:
-> >  =20
-> >>> From: Alex Williamson <alex.williamson@redhat.com>
-> >>> Sent: Friday, February 3, 2023 9:50 PM
-> >>>
-> >>> On Fri, 3 Feb 2023 13:32:09 +0000
-> >>> "Liu, Yi L" <yi.l.liu@intel.com> wrote:
-> >>>    =20
-> >>>>> From: Tian, Kevin <kevin.tian@intel.com>
-> >>>>> Sent: Friday, February 3, 2023 10:00 AM
-> >>>>>   =20
-> >>>>>> From: Alex Williamson <alex.williamson@redhat.com>
-> >>>>>> Sent: Friday, February 3, 2023 7:13 AM
-> >>>>>>
-> >>>>>> On Thu, 2 Feb 2023 23:04:10 +0000
-> >>>>>> "Tian, Kevin" <kevin.tian@intel.com> wrote:
-> >>>>>>   =20
-> >>>>>>>> From: Alex Williamson <alex.williamson@redhat.com>
-> >>>>>>>> Sent: Friday, February 3, 2023 3:42 AM
-> >>>>>>>>
-> >>>>>>>>
-> >>>>>>>> LGTM.  I'm not sure moving the functions to vfio_main really buy=
-s   =20
-> >>> us   =20
-> >>>>>>>> anything since we're making so much use of group fields.  The cd=
-ev
-> >>>>>>>> approach will necessarily be different, so the bulk of the get c=
-ode   =20
-> >>> will   =20
-> >>>>>>>> likely need to move back to group.c anyway.
-> >>>>>>>>   =20
-> >>>>>>>
-> >>>>>>> well my last comment was based on Matthew's v2 where the get   =20
-> >>> code   =20
-> >>>>>>> gets a kvm passed in instead of implicitly retrieving group ref_l=
-ock
-> >>>>>>> internally. In that case the get/put helpers only contain device =
-logic
-> >>>>>>> thus fit in vfio_main.c.
-> >>>>>>>
-> >>>>>>> with v3 then they have to be in group.c since we don't want to use
-> >>>>>>> group fields in vfio_main.c.
-> >>>>>>>
-> >>>>>>> but I still think v2 of the helpers is slightly better. The only =
-difference
-> >>>>>>> between cdev and group when handling this race is using different
-> >>>>>>> ref_lock. the symbol get/put part is exactly same. So even if we
-> >>>>>>> merge v3 like this, very likely Yi has to change it back to v2 st=
-yle
-> >>>>>>> to share the get/put helpers while just leaving the ref_lock part
-> >>>>>>> handled differently between the two path.   =20
-> >>>>>>
-> >>>>>> I'm not really a fan of the asymmetry of the v2 version where the =
-get
-> >>>>>> helper needs to be called under the new kvm_ref_lock, but the put
-> >>>>>> helper does not.  Having the get helper handle that makes the call=
-er
-> >>>>>> much cleaner.  Thanks,
-> >>>>>>   =20
-> >>>>>
-> >>>>> What about passing the lock pointer into the helper? it's still sli=
-ghtly
-> >>>>> asymmetry as the put helper doesn't carry the lock pointer but it
-> >>>>> could also be interpreted as if the pointer has been saved in the g=
-et
-> >>>>> then if it needs to be referenced by the put there is no need to pa=
-ss
-> >>>>> it in again.   =20
-> >>>>
-> >>>> For cdev, I may modify vfio_device_get_kvm_safe() to accept
-> >>>> struct kvm and let its caller hold a kvm_ref_lock (field within
-> >>>> struct vfio_device_file). Meanwhile, the group path holds
-> >>>> the group->kvm_ref_lock before invoking vfio_device_get_kvm_safe().
-> >>>> vfio_device_get_kvm_safe() just includes the symbol get/put and
-> >>>> the device->kvm and put_kvm set.   =20
-> >>>
-> >>> Sounds a lot like v2 :-\    =20
-> >>
-> >> Yes, like v2. =F0=9F=98=8A
-> >> =20
-> >>> I'd look more towards group and cdev specific
-> >>> helpers that handle the locking so that the callers aren't exposed to
-> >>> the asymmetry of get vs put, and reduce a new
-> >>> _vfio_device_get_kvm_safe() in common code that only does the symbol
-> >>> work.  Thanks,   =20
-> >>
-> >> If so, looks like Matthew needs a v4. I'm waiting for the final version
-> >> of this patch and sending a new cdev series based on it. wish to see
-> >> it soon ^_^. =20
-> >=20
-> > cdev support is a future feature, why does it become a requirement for
-> > a fix to the current base?  The refactoring could also happen in the
-> > cdev series.  Thanks,
-> >=20
-> > Alex
-> >  =20
->=20
-> FWIW, that would bloat the fix by a bit and it's already a decent-sized f=
-ix...  I took a quick stab and such a v4 would end up with a total of 120 i=
-nsertions(+), 15 deletions(-).  See below for a diff of what I tried on top=
- of v3. The idea would be to move the serialization and setting/clearing of=
- device->kvm into group/cdev and use device->kvm as the value within vfio_d=
-evice_get_kvm_safe for getting the kvm ref.  Wrappers in group/cdev would t=
-hen be responsible for backing that device->kvm setting out on ref failure.
-> Each side (group/cdev) can wrap their own serialization / load device->kv=
-m from the appropriate location / handle the failed get / clear device->kvm=
- when done (since get doesn't set it, put shouldn't clear it).
->=20
-> If Alex wants, I can wrap something like this into a v4 -- Or, if we don'=
-t want to include this kind of infrastructure in the fix, then Yi please fe=
-el free to use it as a starting point for what you need in cdev.
->=20
-> Thanks,
-> Matt
->=20
-> diff --git a/drivers/vfio/group.c b/drivers/vfio/group.c
-> index 7fed4233ca23..261af23975ae 100644
-> --- a/drivers/vfio/group.c
-> +++ b/drivers/vfio/group.c
-> @@ -154,6 +154,31 @@ static int vfio_group_ioctl_set_container(struct vfi=
-o_group *group,
->  	return ret;
->  }
-> =20
-> +static void vfio_device_group_get_kvm(struct vfio_device *device)
-> +{
-> +	lockdep_assert_held(&device->dev_set->lock);
+On Thu, Feb 02, 2023 at 03:33:02PM +0100, Martin Zaťovič wrote:
+> Weigand bus is defined by a Wiegand controller node. This node
+> can contain one or more device nodes for devices attached to
+> the controller(it is advised to only connect one device as Wiegand
+> is a point-to-point bus).
+> 
+> Wiegand controller needs to specify several attributes such as
+> the pulse length in order to function properly. These attributes
+> are documented here.
+> 
+> Signed-off-by: Martin Zaťovič <m.zatovic1@gmail.com>
+> ---
+>  .../bindings/wiegand/wiegand-controller.yaml  | 50 +++++++++++++++++++
+>  MAINTAINERS                                   |  5 ++
+>  2 files changed, 55 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/wiegand/wiegand-controller.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/wiegand/wiegand-controller.yaml b/Documentation/devicetree/bindings/wiegand/wiegand-controller.yaml
+> new file mode 100644
+> index 000000000000..fed90e01e56f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/wiegand/wiegand-controller.yaml
+> @@ -0,0 +1,50 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/wiegand/wiegand-controller.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +	spin_lock(&device->group->kvm_ref_lock);
+> +title: Wiegand Generic Controller Common Properties
 > +
-> +	if (!device->group->kvm)
-> +		goto unlock;
+> +maintainers:
+> +  - Martin Zaťovič <martin.zatovic@tbs-biometrics.com>
 > +
-> +	device->kvm =3D device->group->kvm;
-> +	if (!vfio_device_get_kvm_safe(device))
+> +description:
+> +  Wiegand busses can be described with a node for the Wiegand controller device
+> +  and a set of child nodes for each SPI slave on the bus.
+> +
+> +properties:
+> +  $nodename:
+> +    pattern: "^wiegand(@.*|-[0-9a-f])?$"
+> +
+> +  pulse-len-us:
+> +    description: |
+> +      Length of the low pulse in microseconds.
+> +
+> +  interval-len-us:
+> +    description: |
+> +      Length of a whole bit (both the pulse and the high phase) in microseconds.
+> +
+> +  frame-gap-us:
+> +    description: |
+> +      Length of the last bit of a frame (both the pulse and the high phase) in
+> +      microseconds.
+> +
+> +required:
+> +  - compatible
+> +  - pulse-len-us
+> +  - interval-len-us
+> +  - frame-gap-us
+> +
+> +additionalProperties: true
+> +
+> +examples:
+> +  - |
+> +    wiegand@f00 {
+> +        compatible = "wiegand-foo";
 
-I'd probably go back to making this:
+You've got a real example in the bitbanged schema, just drop the fake 
+one here. You can put about anything in here because it is not getting 
+validated.
 
-void _vfio_device_get_kvm_safe(struct vfio_device *device, struct kvm *kvm);
-
-so the vfio_main function would handle setting and clearing
-device->kvm.  That way we could also move the lockdep into the
-vfio_main functions.  Once we do that, there's no reason to have a
-group vs cdev put function and we end up with only a wrapper on the get
-function, which should really never be used directly, so we prefix it
-with an underscore.
-
-At that point (see incremental diff below), it's about a wash.  Current v3:
-
- drivers/vfio/group.c     |   32 +++++++++++++----
- drivers/vfio/vfio.h      |   14 +++++++
- drivers/vfio/vfio_main.c |   70 +++++++++++++++++++++++++++++++++++----
- include/linux/vfio.h     |    2 -
- 4 files changed, 103 insertions(+), 15 deletions(-)
-
-Folding in below:
-
- drivers/vfio/group.c     |   44 ++++++++++++++++++++++-----
- drivers/vfio/vfio.h      |   15 +++++++++
- drivers/vfio/vfio_main.c |   63 ++++++++++++++++++++++++++++++++++-----
- include/linux/vfio.h     |    2 -
- 4 files changed, 109 insertions(+), 15 deletions(-)
-
-Unfortunately it seems I've talked myself into the answer that we
-should maybe just pre-enable cdev by not adding a group reference in
-vfio_main.  Thanks,
-
-Alex
-
-diff --git a/drivers/vfio/group.c b/drivers/vfio/group.c
-index 7fed4233ca23..98621ac082f0 100644
---- a/drivers/vfio/group.c
-+++ b/drivers/vfio/group.c
-@@ -154,6 +154,18 @@ static int vfio_group_ioctl_set_container(struct vfio_=
-group *group,
- 	return ret;
- }
-=20
-+static void vfio_device_group_get_kvm_safe(struct vfio_device *device)
-+{
-+	spin_lock(&device->group->kvm_ref_lock);
-+	if (!device->group->kvm)
-+		goto unlock;
-+
-+	_vfio_device_get_kvm_safe(device, device->group->kvm);
-+
-+unlock:
-+	spin_unlock(&device->group->kvm_ref_lock);
-+}
-+
- static int vfio_device_group_open(struct vfio_device *device)
- {
- 	int ret;
-@@ -173,7 +185,7 @@ static int vfio_device_group_open(struct vfio_device *d=
-evice)
- 	 * the pointer in the device for use by drivers.
- 	 */
- 	if (device->open_count =3D=3D 0)
--		vfio_device_get_kvm_safe(device);
-+		vfio_device_group_get_kvm_safe(device);
-=20
- 	ret =3D vfio_device_open(device, device->group->iommufd, device->kvm);
-=20
-diff --git a/drivers/vfio/vfio.h b/drivers/vfio/vfio.h
-index 20d715b0a3a8..24d6cd285945 100644
---- a/drivers/vfio/vfio.h
-+++ b/drivers/vfio/vfio.h
-@@ -253,10 +253,11 @@ enum { vfio_noiommu =3D false };
- #endif
-=20
- #ifdef CONFIG_HAVE_KVM
--void vfio_device_get_kvm_safe(struct vfio_device *device);
-+void _vfio_device_get_kvm_safe(struct vfio_device *device, struct kvm *kvm=
-);
- void vfio_device_put_kvm(struct vfio_device *device);
- #else
--static inline void vfio_device_get_kvm_safe(struct vfio_device *device)
-+static inline void _vfio_device_get_kvm_safe(struct vfio_device *device,
-+					     struct kvm *kvm)
- {
- }
-=20
-diff --git a/drivers/vfio/vfio_main.c b/drivers/vfio/vfio_main.c
-index 4762550e9f42..00d4d5167d6c 100644
---- a/drivers/vfio/vfio_main.c
-+++ b/drivers/vfio/vfio_main.c
-@@ -342,7 +342,7 @@ void vfio_unregister_group_dev(struct vfio_device *devi=
-ce)
- EXPORT_SYMBOL_GPL(vfio_unregister_group_dev);
-=20
- #ifdef CONFIG_HAVE_KVM
--void vfio_device_get_kvm_safe(struct vfio_device *device)
-+void _vfio_device_get_kvm_safe(struct vfio_device *device, struct kvm *kvm)
- {
- 	void (*pfn)(struct kvm *kvm);
- 	bool (*fn)(struct kvm *kvm);
-@@ -350,32 +350,25 @@ void vfio_device_get_kvm_safe(struct vfio_device *dev=
-ice)
-=20
- 	lockdep_assert_held(&device->dev_set->lock);
-=20
--	spin_lock(&device->group->kvm_ref_lock);
--	if (!device->group->kvm)
--		goto unlock;
--
- 	pfn =3D symbol_get(kvm_put_kvm);
- 	if (WARN_ON(!pfn))
--		goto unlock;
-+		return;
-=20
- 	fn =3D symbol_get(kvm_get_kvm_safe);
- 	if (WARN_ON(!fn)) {
- 		symbol_put(kvm_put_kvm);
--		goto unlock;
-+		return;
- 	}
-=20
- 	ret =3D fn(device->group->kvm);
- 	symbol_put(kvm_get_kvm_safe);
- 	if (!ret) {
- 		symbol_put(kvm_put_kvm);
--		goto unlock;
-+		return;
- 	}
-=20
- 	device->put_kvm =3D pfn;
--	device->kvm =3D device->group->kvm;
--
--unlock:
--	spin_unlock(&device->group->kvm_ref_lock);
-+	device->kvm =3D kvm;
- }
-=20
- void vfio_device_put_kvm(struct vfio_device *device)
-
+> +        pulse-len-us = <50>;
+> +        interval-len-us = <2000>;
+> +        frame-gap-us = <2000>;
+> +
+> +        /* devices */
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 7f86d02cb427..db9624d93af0 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -22428,6 +22428,11 @@ L:	linux-input@vger.kernel.org
+>  S:	Maintained
+>  F:	drivers/hid/hid-wiimote*
+>  
+> +WIEGAND BUS DRIVER
+> +M:	Martin Zaťovič <m.zatovic1@gmail.com>
+> +S:	Maintained
+> +F:	Documentation/devicetree/bindings/wiegand/wiegand-controller.yaml
+> +
+>  WILOCITY WIL6210 WIRELESS DRIVER
+>  L:	linux-wireless@vger.kernel.org
+>  S:	Orphan
+> -- 
+> 2.39.1
+> 
