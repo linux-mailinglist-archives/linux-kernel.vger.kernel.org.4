@@ -2,109 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99249689F3B
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 17:28:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7E5F689F43
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 17:30:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232502AbjBCQ16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 11:27:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51148 "EHLO
+        id S233094AbjBCQ3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 11:29:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233070AbjBCQ14 (ORCPT
+        with ESMTP id S232338AbjBCQ3p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 11:27:56 -0500
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3066A6BA8;
-        Fri,  3 Feb 2023 08:27:46 -0800 (PST)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 21D0E188387C;
-        Fri,  3 Feb 2023 16:27:44 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 0594C250007B;
-        Fri,  3 Feb 2023 16:27:44 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id EA3F591201E4; Fri,  3 Feb 2023 16:27:43 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Fri, 3 Feb 2023 11:29:45 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FFA3A7ED7;
+        Fri,  3 Feb 2023 08:29:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=aKb0TcrT5HcwknHd0UpHTjJTmEsJjOCtGhiYiz34rX4=; b=F5eJctUgZhs3Fw+CRoaIZxwLr5
+        QLrqqcy2wvllXqLy302hai+Ai+zxqMtdQx9W1Y6Tg0bhXD9arU5mgpKe+m44Lv82ov2FoiuUbAJA/
+        dpQ1p9lIfH8mpwUIT4GDlkGxJpgJic3E+5q0zA67mFwusHbShYPeBbitkBNAcMDBZaKtttUuTTkuI
+        5vwv1oZBMEEPZRd8nTxIyMCh5ELDr6k0hrsIwc0xaBR07opZesopKjVl+vut4xXKESSa5GzOgD1gt
+        zifZLK3DMeyTLJwcNy1mg/3OVy6MIFZH5F7gKd50xvr3ldC4GrFIS0u7k+igKDP+YvGKkVYeryWiw
+        Ws461cTw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pNywV-00ESXM-OO; Fri, 03 Feb 2023 16:29:39 +0000
+Date:   Fri, 3 Feb 2023 16:29:39 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Andreas Dilger <adilger@dilger.ca>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-afs@lists.infradead.org" <linux-afs@lists.infradead.org>,
+        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
+        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Hugh Dickins <hughd@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "fstests@vger.kernel.org" <fstests@vger.kernel.org>
+Subject: Re: [PATCH 0/5] Fix a minor POSIX conformance problem
+Message-ID: <Y902c9MRvXghKJMy@casper.infradead.org>
+References: <20230202204428.3267832-1-willy@infradead.org>
+ <DCEDB8BB-8D10-4E17-9C27-AE48718CB82F@dilger.ca>
+ <Y90KTSXCKGd8Gaqc@casper.infradead.org>
+ <c16be18cb68a4adbbcd73cf9be9472df@AcuMS.aculab.com>
 MIME-Version: 1.0
-Date:   Fri, 03 Feb 2023 17:27:43 +0100
-From:   netdev@kapio-technology.com
-To:     Ido Schimmel <idosch@idosch.org>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
-        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?UTF-8?Q?Cl=C3=A9m?= =?UTF-8?Q?ent_L=C3=A9ger?= 
-        <clement.leger@bootlin.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>
-Subject: Re: [PATCH net-next 1/5] net: bridge: add dynamic flag to switchdev
- notifier
-In-Reply-To: <Y90y9u+4PxWk4b9E@shredder>
-References: <20230130173429.3577450-1-netdev@kapio-technology.com>
- <20230130173429.3577450-2-netdev@kapio-technology.com>
- <Y9qrAup9Xt/ZDEG0@shredder>
- <f27dd18d9d0b7ff8b693af8a58ea8616@kapio-technology.com>
- <Y9vgz4x/O+dIp+0/@shredder>
- <766efaf94fcb6362c5ceb176ad7955f1@kapio-technology.com>
- <Y90y9u+4PxWk4b9E@shredder>
-User-Agent: Gigahost Webmail
-Message-ID: <4188a35c3c260d8ea2b5f8b2ac0ae6b2@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c16be18cb68a4adbbcd73cf9be9472df@AcuMS.aculab.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-02-03 17:14, Ido Schimmel wrote:
+On Fri, Feb 03, 2023 at 04:23:32PM +0000, David Laight wrote:
+> From: Matthew Wilcox
+> > "The system shall always zero-fill any partial page at the end of an
+> > object. Further, the system shall never write out any modified portions
+> > of the last page of an object which are beyond its end. References
+> > within the address range starting at pa and continuing for len bytes to
+> > whole pages following the end of an object shall result in delivery of
+> > a SIGBUS signal."
+> > 
+> > https://pubs.opengroup.org/onlinepubs/9699919799/functions/mmap.html
 > 
-> OK, so can't this hunk:
+> It also says (down at the bottom of the rational):
 > 
-> ```
-> 	if (fdb_info->is_dyn)
-> 		fdb_flags |= DSA_FDB_FLAG_DYNAMIC;
-> ```
+> "The mmap() function can be used to map a region of memory that is larger
+> than the current size of the object. Memory access within the mapping but
+> beyond the current end of the underlying objects may result in SIGBUS
+> signals being sent to the process. The reason for this is that the size
+> of the object can be manipulated by other processes and can change at any
+> moment. The implementation should tell the application that a memory
+> reference is outside the object where this can be detected; otherwise,
+> written data may be lost and read data may not reflect actual data in the
+> object."
 > 
-> Become:
-> 
-> ```
-> 	if (fdb_info->is_dyn && !fdb_info->added_by_user)
-> 		fdb_flags |= DSA_FDB_FLAG_DYNAMIC;
-> ```
-> 
-> ?
-> 
-> Then there is no need to fold 'added_by_user' into 'is_dyn' in the
-> bridge driver. I *think* this is the change Vladimir asked you to do.
+> There are a lot of 'may' in that sentence.
+> Note that it only says that 'data written beyond the current eof may be
+> lost'.
+> I think that could be taken to take precedence over the zeroing clause
+> in ftruncate().
 
-I suppose you mean?:
-  	if (fdb_info->is_dyn && fdb_info->added_by_user)
-  		fdb_flags |= DSA_FDB_FLAG_DYNAMIC;
+How can the _rationale_ (explicitly labelled as informative) for one
+function take precedence over the requirements for another function?
+This is nonsense.
 
+> I'd bet a lot of beer that the original SYSV implementation (on with the
+> description is based) didn't zero the page buffer when ftruncate()
+> increased the file size.
+> Whether anything (important) actually relies on that is an interesting
+> question!
+> 
+> 	David
+> 
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)
+> 
