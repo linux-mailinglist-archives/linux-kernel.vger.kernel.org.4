@@ -2,153 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16749688F3D
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 06:59:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF7E8688F83
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 07:11:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232123AbjBCF74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 00:59:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48032 "EHLO
+        id S229905AbjBCGLe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 01:11:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbjBCF7y (ORCPT
+        with ESMTP id S231864AbjBCGLa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 00:59:54 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0F36FD2F;
-        Thu,  2 Feb 2023 21:59:53 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id n2so2841571pfo.3;
-        Thu, 02 Feb 2023 21:59:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=X/vaU3Sg2F/eUBMFHqD3MA69l323THpXmYdZXpW+Tyk=;
-        b=m8n5hoXlyHjMqOXX1qgb5q983jJP18mBmPdP6gB7cWEJMS3br2zlc2DR8+yTwyg7qK
-         uRpGqXxg7HBCtxQwtCgBjKVA2jHzrEnc6NBoEYHNVyPlyn3+CUCES+Lz3j5jtGynKZAS
-         D10Ex57b7zwlH3uj5JoBTxE4FH/j9yEoXw3WjH3YgR7HdyMNAtILXv5BMKI+tp51HP6N
-         vhY0VAisUD4urEmLws5WDnXB6Y7PRkEWtzgPp1TJd+rZb0y5anPZ4fWKfs+FcIvfNs/G
-         TYbA2R63Ys1QyISsTqquq9rUlnFxrVu/u6MRMip15XpnkM5Bc/7djCAcvktpub0xSjLo
-         r4xA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=X/vaU3Sg2F/eUBMFHqD3MA69l323THpXmYdZXpW+Tyk=;
-        b=NHLesr2itburp431celVe0MqqcvXCqn+ciV7zIxa+eM57l55H/pjIjpgKsQ0kF/CyP
-         mUkEWBvNSHwBMlJuTXj9Nz+oqAMgckivWnGHkKsnYJsfvxEvSB+eFL0CExwJkLbWP8A/
-         zg0ZlGeMkHwzGMELtEkuTpal0pNRRivkPhbRVShFrHevScQt3dxKhO8Mzve4p87cPXV6
-         hZKBCyyE2yw1Rhonsd0GAxWjRuY/9qYKxR3q5upeSLBwjIpH36UMoys76PCAqPFJO59Y
-         BkZsJBTVuJI6JGVdnmUY+KPYlKvYTogqwchazpAZxubSUMN8xV48hdYXy1z5zF2WDfKW
-         rxfQ==
-X-Gm-Message-State: AO0yUKVdBvuNVddcepl3X3aQMa8SS9Ydj86LkZE7wUmJK1/GCyslNqbi
-        1+iLQHtaBiIwbEpQ8SWtVts=
-X-Google-Smtp-Source: AK7set8XA/jh/lRsEGpF/TDEBH461DhyoZ5x5KVCFTY8Mf/8x03MhHFR+Xr1Yxucg2FRE0EOvq3pLQ==
-X-Received: by 2002:a05:6a00:26f2:b0:593:c7d4:22b0 with SMTP id p50-20020a056a0026f200b00593c7d422b0mr6907787pfw.2.1675403992420;
-        Thu, 02 Feb 2023 21:59:52 -0800 (PST)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id a33-20020a056a001d2100b005941ff79428sm733317pfx.90.2023.02.02.21.59.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 21:59:51 -0800 (PST)
-Message-ID: <79bab707-6592-0c45-d21f-c3014362bb82@gmail.com>
-Date:   Fri, 3 Feb 2023 13:59:40 +0800
+        Fri, 3 Feb 2023 01:11:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A18248C435
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 22:10:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C2DF661DA0
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 06:10:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFF83C433D2;
+        Fri,  3 Feb 2023 06:10:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1675404616;
+        bh=DfM5R8PFBfidhrgBV7CLT4RjZOvtqTcBUrcNTslRTB8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LTVEqCt+GngMTlFjiHOoYVuppCDjPCOY6/O2lWk81G1hAapPYx2HEygIn+y2/FEXl
+         HJOjgKKWKadOeDX+zAtPzkW3lm5grZoaiwQ/bxFPHGoxL0s1QxYmRIG5uzYPJ1x6w/
+         ccC+ih37HJnxMsUKqxwDkKTf7NCjMzhG5BL3hO6o=
+Date:   Fri, 3 Feb 2023 07:04:37 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH] kernel/irq/irqdomain.c: fix memory leak with using
+ debugfs_lookup()
+Message-ID: <Y9yj9R1ZzD6GIhdf@kroah.com>
+References: <20230202151554.2310273-1-gregkh@linuxfoundation.org>
+ <868rhg109t.wl-maz@kernel.org>
+ <Y9vqJhCj5w/+b6SV@kroah.com>
+ <867cx00zvx.wl-maz@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH] KVM: x86/pmu: Disallow legacy LBRs if architectural LBRs
- are available
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yang Weijiang <weijiang.yang@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-References: <20230128001427.2548858-1-seanjc@google.com>
- <f106a06e-ae6f-2c79-df87-721817aacc02@gmail.com>
- <Y9wK/LkBYusOv1DO@google.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-In-Reply-To: <Y9wK/LkBYusOv1DO@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <867cx00zvx.wl-maz@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/2/2023 3:11 am, Sean Christopherson wrote:
-> On Tue, Jan 31, 2023, Like Xu wrote:
->> On 28/1/2023 8:14 am, Sean Christopherson wrote:
->>> Disallow enabling LBR support if the CPU supports architectural LBRs.
->>> Traditional LBR support is absent on CPU models that have architectural
->>> LBRs, and KVM doesn't yet support arch LBRs, i.e. KVM will pass through
->>> non-existent MSRs if userspace enables LBRs for the guest.
->>
->> True, we have call_trace due to MSR_ARCH_LBR_FROM_0 (0x1500) for example.
->>
->>>
->>> Cc: stable@vger.kernel.org
->>> Cc: Yang Weijiang <weijiang.yang@intel.com>
->>> Cc: Like Xu <like.xu.linux@gmail.com>
->>
->> Tested-by: Like Xu <likexu@tencent.com>
->>
->>> Reported-by: Paolo Bonzini <pbonzini@redhat.com>
->>
->> Fixes: 145dfad998ea ("KVM: VMX: Advertise PMU LBRs if and only if perf
->> supports LBRs")
+On Thu, Feb 02, 2023 at 04:56:50PM +0000, Marc Zyngier wrote:
+> On Thu, 02 Feb 2023 16:51:50 +0000,
+> Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> > 
+> > On Thu, Feb 02, 2023 at 04:48:30PM +0000, Marc Zyngier wrote:
+> > > On Thu, 02 Feb 2023 15:15:54 +0000,
+> > > Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> > > > 
+> > > > When calling debugfs_lookup() the result must have dput() called on it,
+> > > > otherwise the memory will leak over time.  To make things simpler, just
+> > > > call debugfs_lookup_and_remove() instead which handles all of the logic
+> > > > at once.
+> > > > 
+> > > > Cc: Marc Zyngier <maz@kernel.org>
+> > > > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > > > Cc: linux-kernel@vger.kernel.org
+> > > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > > ---
+> > > >  kernel/irq/irqdomain.c | 2 +-
+> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > 
+> > > > diff --git a/kernel/irq/irqdomain.c b/kernel/irq/irqdomain.c
+> > > > index 8fe1da9614ee..e2096b51c004 100644
+> > > > --- a/kernel/irq/irqdomain.c
+> > > > +++ b/kernel/irq/irqdomain.c
+> > > > @@ -1915,7 +1915,7 @@ static void debugfs_add_domain_dir(struct irq_domain *d)
+> > > >  
+> > > >  static void debugfs_remove_domain_dir(struct irq_domain *d)
+> > > >  {
+> > > > -	debugfs_remove(debugfs_lookup(d->name, domain_dir));
+> > > > +	debugfs_lookup_and_remove(d->name, domain_dir);
+> > > >  }
+> > > >  
+> > > >  void __init irq_domain_debugfs_init(struct dentry *root)
+> > > 
+> > > Reviewed-by: Marc Zyngier <maz@kernel.org>
+> > > 
+> > > Maybe add a Cc stable to get this in 6.1?
+> > 
+> > Sure, I can, but how often are irq domains removed from the system under
+> > a normal operation?
 > 
-> If we want a fixes, I'd argue this is more appropriate:
-> 
->    Fixes: be635e34c284 ("KVM: vmx/pmu: Expose LBR_FMT in the MSR_IA32_PERF_CAPABILITIES")
-> 
-> Though I'd prefer not to blame KVM, there's not much we could have done in KVM
-> to know that Intel would effectively break backwards compatibility.
+> As many time as you want if you're doing virtualisation and have the
+> right sort of HW (anything GICv4.x, for example, which will create
+> per-VM irqdomains).
 
-Personally, I assume the bigger role of the Fix tag is to help the stable tree's
-bots make it easier to back port patches automatically, and there will be less
-sense of blame for the developers. In pmu scope, if a feature is not "architecture",
-I'm not surprised that a new arrival will break compatibility, and sometimes
-kernel developers need to plan ahead.
+Ok, I'll queue this up now and get it to Linus for 6.2-final.
 
-> 
->>> Signed-off-by: Sean Christopherson <seanjc@google.com>
->>> ---
->>>
->>> Am I missing something that would prevent this scenario?
->>>
->>>    arch/x86/kvm/vmx/vmx.c | 8 +++++---
->>>    1 file changed, 5 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
->>> index 8f0f67c75f35..77ee6b4a5ec4 100644
->>> --- a/arch/x86/kvm/vmx/vmx.c
->>> +++ b/arch/x86/kvm/vmx/vmx.c
->>> @@ -7761,9 +7761,11 @@ static u64 vmx_get_perf_capabilities(void)
->>>    	if (boot_cpu_has(X86_FEATURE_PDCM))
->>>    		rdmsrl(MSR_IA32_PERF_CAPABILITIES, host_perf_cap);
->>> -	x86_perf_get_lbr(&lbr);
->>> -	if (lbr.nr)
->>> -		perf_cap |= host_perf_cap & PMU_CAP_LBR_FMT;
->>> +	if (!cpu_feature_enabled(X86_FEATURE_ARCH_LBR)) {
->>
->> To avoid changing this again in the Arch lbr enabling part, how about:
->>
->> 	x86_perf_get_lbr(&lbr);
->> 	if (lbr.nr && cpu_feature_enabled(X86_FEATURE_ARCH_LBR) ==
->> 	    kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR))
->> 		perf_cap |= host_perf_cap & PMU_CAP_LBR_FMT;
->>
->> ?
-> 
-> I'd rather force arch LBR enabling to explicitly update this code.  And I'd prefer
-> that KVM explicitly clear PMU_CAP_LBR_FMT when KVM can't use arch LBRs for whatever
-> reason, both for documentation purposes and to avoid ordering dependencies between
-> consuming vmx_get_perf_capabilities() and updating kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR).
+thanks,
 
-Indeed, we have too many assumptions about the order of function calls in the 
-kernel world.
-"Avoid ordering dependencies" looks good to me. Thanks.
+greg k-h
