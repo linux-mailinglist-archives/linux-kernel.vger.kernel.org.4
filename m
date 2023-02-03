@@ -2,80 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B318689114
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 08:42:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD0AB68911C
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 08:42:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232542AbjBCHkz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 02:40:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56728 "EHLO
+        id S232394AbjBCHkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 02:40:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232392AbjBCHke (ORCPT
+        with ESMTP id S230496AbjBCHkV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 02:40:34 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291AF93E08;
-        Thu,  2 Feb 2023 23:40:25 -0800 (PST)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31370nHu015928;
-        Fri, 3 Feb 2023 07:40:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=tIvJlJrYU4Flf0lu2LlXiqfJqpjr0G6K3AKhGGPmAVs=;
- b=n92bHkMC6MzB/nXIOfHWT1pcrEjXAwJyQ8KJiD9DbNUCKSnd4z9gkQ9zQJHWB99Wmjcp
- F350SJJ1FTq7WZyPuzPhoucgZtpVY+kjG60Xd9tIzky/93bBewLWlGVjQVnJYPhPJh6z
- PNNCh0xqgmuDq34TtJKJYq35VhzgjAXi0vMGOslaHqU3IwdHCMMk7u6yYp/YUNMy9ok5
- Z7uOBLUwSSm3duDySAyq0NFNMMiSoefttNB5iWeHDXJVP+fzb9PdXz4X3TwQiMEBQmS/
- yPsA5hZ4aS8m3UyJ1566DfXSckxCOq2p1R5+46zoozb8t73CaWtxsUyk4GLlFXHjPLhF 8Q== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ngwgeguh5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Feb 2023 07:40:12 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3136xHho014735;
-        Fri, 3 Feb 2023 07:40:10 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3ncvtty3vf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Feb 2023 07:40:09 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3137e7Qj22282850
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 3 Feb 2023 07:40:07 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2136821426;
-        Fri,  3 Feb 2023 07:40:07 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B75F621435;
-        Fri,  3 Feb 2023 07:40:04 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Fri,  3 Feb 2023 07:40:04 +0000 (GMT)
-From:   Alexander Egorenkov <egorenar@linux.ibm.com>
-To:     wim@linux-watchdog.org, linux@roeck-us.net
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hca@linux.ibm.com
-Subject: [PATCH 5/5] watchdog: diag288_wdt: unify lpar and zvm diag288 helpers
-Date:   Fri,  3 Feb 2023 08:39:58 +0100
-Message-Id: <20230203073958.1585738-6-egorenar@linux.ibm.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230203073958.1585738-1-egorenar@linux.ibm.com>
-References: <20230203073958.1585738-1-egorenar@linux.ibm.com>
+        Fri, 3 Feb 2023 02:40:21 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1A392C26;
+        Thu,  2 Feb 2023 23:40:14 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 2DE5824E1D4;
+        Fri,  3 Feb 2023 15:40:12 +0800 (CST)
+Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 3 Feb
+ 2023 15:40:12 +0800
+Received: from [192.168.120.49] (171.223.208.138) by EXMBX073.cuchost.com
+ (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 3 Feb
+ 2023 15:40:10 +0800
+Message-ID: <048b3ab0-7c13-b7f7-403c-f4e1d5574a10@starfivetech.com>
+Date:   Fri, 3 Feb 2023 15:40:09 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Lff_S4qLoP8GXhEN0LtVG907S7o0xdIU
-X-Proofpoint-GUID: Lff_S4qLoP8GXhEN0LtVG907S7o0xdIU
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-03_04,2023-02-02_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=990 phishscore=0
- spamscore=0 lowpriorityscore=0 impostorscore=0 mlxscore=0 malwarescore=0
- priorityscore=1501 adultscore=0 bulkscore=0 clxscore=1015 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302030069
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v4 6/7] riscv: dts: starfive: jh7110: Add ethernet device
+ node
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <linux-riscv@lists.infradead.org>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>
+References: <20230118061701.30047-1-yanhong.wang@starfivetech.com>
+ <20230118061701.30047-7-yanhong.wang@starfivetech.com>
+ <55f020de-6058-67d2-ea68-6006186daee3@linaro.org>
+ <f22614b4-80ae-8b16-b53e-e43c44722668@starfivetech.com>
+ <870f6ec5-5378-760b-7a30-324ee2d178cf@linaro.org>
+From:   yanhong wang <yanhong.wang@starfivetech.com>
+In-Reply-To: <870f6ec5-5378-760b-7a30-324ee2d178cf@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [171.223.208.138]
+X-ClientProxiedBy: EXCAS061.cuchost.com (172.16.6.21) To EXMBX073.cuchost.com
+ (172.16.6.83)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,119 +70,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Change naming of the internal diag288 helper functions
-to improve overall readability and reduce confusion:
-* Rename __diag288() to diag288().
-* Get rid of the misnamed helper __diag288_lpar() that was used not only
-  on LPARs but also zVM and KVM systems.
-* Rename __diag288_vm() to diag288_str().
 
-Reviewed-by: Heiko Carstens <hca@linux.ibm.com>
-Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
----
- drivers/watchdog/diag288_wdt.c | 32 +++++++++++++-------------------
- 1 file changed, 13 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/watchdog/diag288_wdt.c b/drivers/watchdog/diag288_wdt.c
-index a29ad164b27a..4631d0a3866a 100644
---- a/drivers/watchdog/diag288_wdt.c
-+++ b/drivers/watchdog/diag288_wdt.c
-@@ -71,8 +71,8 @@ MODULE_ALIAS("vmwatchdog");
- 
- static char *cmd_buf;
- 
--static int __diag288(unsigned int func, unsigned int timeout,
--		     unsigned long action, unsigned int len)
-+static int diag288(unsigned int func, unsigned int timeout,
-+		   unsigned long action, unsigned int len)
- {
- 	union register_pair r1 = { .even = func, .odd = timeout, };
- 	union register_pair r3 = { .even = action, .odd = len, };
-@@ -92,7 +92,7 @@ static int __diag288(unsigned int func, unsigned int timeout,
- 	return err;
- }
- 
--static int __diag288_vm(unsigned int  func, unsigned int timeout, char *cmd)
-+static int diag288_str(unsigned int func, unsigned int timeout, char *cmd)
- {
- 	ssize_t len;
- 
-@@ -102,13 +102,7 @@ static int __diag288_vm(unsigned int  func, unsigned int timeout, char *cmd)
- 	ASCEBC(cmd_buf, MAX_CMDLEN);
- 	EBC_TOUPPER(cmd_buf, MAX_CMDLEN);
- 
--	return __diag288(func, timeout, virt_to_phys(cmd_buf), len);
--}
--
--static int __diag288_lpar(unsigned int func, unsigned int timeout,
--			  unsigned long action)
--{
--	return __diag288(func, timeout, action, 0);
-+	return diag288(func, timeout, virt_to_phys(cmd_buf), len);
- }
- 
- static int wdt_start(struct watchdog_device *dev)
-@@ -119,11 +113,10 @@ static int wdt_start(struct watchdog_device *dev)
- 	if (MACHINE_IS_VM) {
- 		func = conceal_on ? (WDT_FUNC_INIT | WDT_FUNC_CONCEAL)
- 			: WDT_FUNC_INIT;
--		ret = __diag288_vm(func, dev->timeout, wdt_cmd);
-+		ret = diag288_str(func, dev->timeout, wdt_cmd);
- 		WARN_ON(ret != 0);
- 	} else {
--		ret = __diag288_lpar(WDT_FUNC_INIT,
--				     dev->timeout, LPARWDT_RESTART);
-+		ret = diag288(WDT_FUNC_INIT, dev->timeout, LPARWDT_RESTART, 0);
- 	}
- 
- 	if (ret) {
-@@ -135,7 +128,7 @@ static int wdt_start(struct watchdog_device *dev)
- 
- static int wdt_stop(struct watchdog_device *dev)
- {
--	return __diag288(WDT_FUNC_CANCEL, 0, 0, 0);
-+	return diag288(WDT_FUNC_CANCEL, 0, 0, 0);
- }
- 
- static int wdt_ping(struct watchdog_device *dev)
-@@ -152,10 +145,10 @@ static int wdt_ping(struct watchdog_device *dev)
- 		func = conceal_on ? (WDT_FUNC_INIT | WDT_FUNC_CONCEAL)
- 			: WDT_FUNC_INIT;
- 
--		ret = __diag288_vm(func, dev->timeout, wdt_cmd);
-+		ret = diag288_str(func, dev->timeout, wdt_cmd);
- 		WARN_ON(ret != 0);
- 	} else {
--		ret = __diag288_lpar(WDT_FUNC_CHANGE, dev->timeout, 0);
-+		ret = diag288(WDT_FUNC_CHANGE, dev->timeout, 0, 0);
- 	}
- 
- 	if (ret)
-@@ -206,20 +199,21 @@ static int __init diag288_init(void)
- 			return -ENOMEM;
- 		}
- 
--		ret = __diag288_vm(WDT_FUNC_INIT, MIN_INTERVAL, "BEGIN");
-+		ret = diag288_str(WDT_FUNC_INIT, MIN_INTERVAL, "BEGIN");
- 		if (ret != 0) {
- 			pr_err("The watchdog cannot be initialized\n");
- 			kfree(cmd_buf);
- 			return -EINVAL;
- 		}
- 	} else {
--		if (__diag288_lpar(WDT_FUNC_INIT, 30, LPARWDT_RESTART)) {
-+		if (diag288(WDT_FUNC_INIT, WDT_DEFAULT_TIMEOUT,
-+			    LPARWDT_RESTART, 0)) {
- 			pr_err("The watchdog cannot be initialized\n");
- 			return -EINVAL;
- 		}
- 	}
- 
--	if (__diag288_lpar(WDT_FUNC_CANCEL, 0, 0)) {
-+	if (diag288(WDT_FUNC_CANCEL, 0, 0, 0)) {
- 		pr_err("The watchdog cannot be deactivated\n");
- 		return -EINVAL;
- 	}
--- 
-2.37.2
+On 2023/2/3 15:09, Krzysztof Kozlowski wrote:
+> On 03/02/2023 04:14, yanhong wang wrote:
+>> 
+>> 
+>> On 2023/1/18 23:51, Krzysztof Kozlowski wrote:
+>>> On 18/01/2023 07:17, Yanhong Wang wrote:
+>>>> Add JH7110 ethernet device node to support gmac driver for the JH7110
+>>>> RISC-V SoC.
+>>>>
+>>>> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
+>>>> ---
+>>>>  arch/riscv/boot/dts/starfive/jh7110.dtsi | 93 ++++++++++++++++++++++++
+>>>>  1 file changed, 93 insertions(+)
+>>>>
+>>>> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>>>> index c22e8f1d2640..c6de6e3b1a25 100644
+>>>> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>>>> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>>>> @@ -433,5 +433,98 @@
+>>>>  			reg-shift = <2>;
+>>>>  			status = "disabled";
+>>>>  		};
+>>>> +
+>>>> +		stmmac_axi_setup: stmmac-axi-config {
+>>>
+>>> Why your bindings example is different?
+>>>
+>> 
+>> There are two gmacs on the StarFive VF2 board, and the two
+>> gmacs use the same configuration on axi, so the 
+>> stmmac_axi_setup is independent, which is different
+>> from the bindings example.
+>> 
+>> 
+>>> Were the bindings tested? Ahh, no they were not... Can you send only
+>>> tested patches?
+>>>
+>>> Was this tested?
+>>>
+>> Yes, the bindings have been tested on the StarFive VF2 board and work normally.
+> 
+> Then please tell me how did you test the bindings on the board? How is
+> it even possible and how the board is related to bindings? As you could
+> easily see from Rob's reply they fail, so I have doubts that they were
+> tested. If you still claim they were - please paste the output from
+> testing command.
+> 
 
+Sorry, I didn't check all the bindings, only the modified ones, the command 
+used is as follows: 
+"make dt_binding_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/net/snps,dwmac.yaml"
+"make dt_binding_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml"
+
+> 
+> Best regards,
+> Krzysztof
+> 
