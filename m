@@ -2,65 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65D63689EEB
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 17:08:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA42A689EF1
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 17:14:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232913AbjBCQI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 11:08:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39924 "EHLO
+        id S232502AbjBCQOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 11:14:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233217AbjBCQIP (ORCPT
+        with ESMTP id S232568AbjBCQO2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 11:08:15 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2491ABD8;
-        Fri,  3 Feb 2023 08:08:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675440485; x=1706976485;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=a5pY8S97NNM5t+sjx8sWM1oQ0kSMBPYUOseHtuULdbs=;
-  b=HamwTHuO6/3Xhtz6qeGlAorOJV2wNLBeMOX6Vq7lzhgDX14qgIFHxnie
-   XE378vTbcaR+O1DqoflTm4tWUq4pgm60zxkvIOlw3K7LzbOOF4cQxizsd
-   KKoCIzy6wbzCLsPw9X40K9UdrhUa6NXNjEypRe3TS24UiliVwITC1Lb9A
-   lmsjRa8V3CB9VXmFXVyfXSkZDoyO+DsZ9J7MzHpr13XugERRyCfaLzN2h
-   f9tlp5l6K3qom/mQuhw4XUhRZQQJn4bmfoA1Re3brcKFf01tZFG4E2LcO
-   er3cDbjqjensmgTMy006wuZMKFm2X5FNXMpPuQiyZtSkpr+ABWNql/K3V
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="327419198"
-X-IronPort-AV: E=Sophos;i="5.97,270,1669104000"; 
-   d="scan'208";a="327419198"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2023 08:08:04 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="698124991"
-X-IronPort-AV: E=Sophos;i="5.97,270,1669104000"; 
-   d="scan'208";a="698124991"
-Received: from djiang5-mobl3.amr.corp.intel.com (HELO [10.212.119.40]) ([10.212.119.40])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2023 08:08:03 -0800
-Message-ID: <f4f377dc-143d-ea93-436f-334390e4c120@intel.com>
-Date:   Fri, 3 Feb 2023 09:08:02 -0700
+        Fri, 3 Feb 2023 11:14:28 -0500
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 255984CE51
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 08:14:27 -0800 (PST)
+Received: by mail-io1-xd36.google.com with SMTP id y7so2133484iob.6
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 08:14:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EyKMqZX7EE7CxL21C7eba2cmOth7ee6mb5Yq4MzF8EQ=;
+        b=O0fiGrDkqFuagqtLcM00ppg/NwUz2NykghxgRpnRlM+72hB9A6kWSU95FHfAwp7hZ/
+         kVJqqFXi36WbxRXOIi1zt9DI8WUaxP8cqa/YVSuEuRxzNf2YoeVsAJ8drRrFsSPXBKX8
+         lcHV0o3wA5ASltbWk7g32sXfey23BdXKJHiVs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EyKMqZX7EE7CxL21C7eba2cmOth7ee6mb5Yq4MzF8EQ=;
+        b=S99gOETK9B52Oop8frjD6d1ixZW9/Fpv/WzYXmWrJtfNaE7dhRd+9HOMIaqvrUS7Or
+         QMvusIsasU0lEFa3J+lccomoBtQ9vdqTlkqWd2wW+EBiFjwaFLB5a+3u23cuorWahBq8
+         CumdeDVQ4hWqniG8B+QO1vRCeFcAkIEvG9KJ4geitQ5Zb0ubArjLeK8uM7W7LCvniEuz
+         L1LSiQGdEzrJ0Gde1nDW3BkSlvP9gxZWKX29NJai10FOxgFPVzIjAqqnYyi3Xy0dl6/8
+         SR0vHeBUUG+G0IUmpO2FXdu/manxSxrFd5u0jwFl3nlmC61630u383il4ZsI+DKbQ0xi
+         K60g==
+X-Gm-Message-State: AO0yUKVc5bLoXeWEaVTsHZoCWFM+mlf7L1CB8pLQovxHumSQXrtX2RK3
+        MoQzO6733IjvI0acUNG3pDKwyA==
+X-Google-Smtp-Source: AK7set8En1FVro1LkzK1YKxgCYbm0TuleNIbznxZe/VBuboTlZTCf9NJyy2f5f0x59Dy4/Sg6t7dKA==
+X-Received: by 2002:a05:6602:2acd:b0:6cc:8b29:9a73 with SMTP id m13-20020a0566022acd00b006cc8b299a73mr7346654iov.1.1675440866359;
+        Fri, 03 Feb 2023 08:14:26 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id l10-20020a6bd10a000000b0071db3975335sm835239iob.12.2023.02.03.08.14.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Feb 2023 08:14:25 -0800 (PST)
+Message-ID: <5aae3491-3d17-2880-90c9-864d45d7c455@linuxfoundation.org>
+Date:   Fri, 3 Feb 2023 09:14:24 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.6.0
-Subject: Re: [PATCH 1/2] dmaengine: idxd: Add enable/disable device IOPF
- feature
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] selftests: add missing ')' in lib.mk
 Content-Language: en-US
-To:     Lu Baolu <baolu.lu@linux.intel.com>, iommu@lists.linux.dev,
-        dmaengine@vger.kernel.org
-Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Vinod Koul <vkoul@kernel.org>, linux-kernel@vger.kernel.org
-References: <20230203084456.469641-1-baolu.lu@linux.intel.com>
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20230203084456.469641-1-baolu.lu@linux.intel.com>
+To:     Guillaume Tucker <guillaume.tucker@collabora.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Mark Brown <broonie@kernel.org>,
+        kernel@collabora.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <7de08f7f11551d6b8195c3e5d801db2fae3f49a9.1660048017.git.guillaume.tucker@collabora.com>
+ <YvKM/J5xO8gKto+p@dev-arch.thelio-3990X>
+ <6a7db0df-4f91-293a-35a9-2af77fa36dff@collabora.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <6a7db0df-4f91-293a-35a9-2af77fa36dff@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,97 +79,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2/3/23 1:44 AM, Lu Baolu wrote:
-> The iommu subsystem requires IOMMU_DEV_FEAT_IOPF must be enabled before
-> and disabled after IOMMU_DEV_FEAT_SVA, if device's I/O page faults rely
-> on the IOMMU. Add explicit IOMMU_DEV_FEAT_IOPF enabling/disabling in this
-> driver.
+On 2/3/23 08:40, Guillaume Tucker wrote:
+> On 09/08/2022 18:36, Nathan Chancellor wrote:
+>> On Tue, Aug 09, 2022 at 03:20:46PM +0200, Guillaume Tucker wrote:
+>>> Add missing closing ')' in lib.mk in a call to $error().  This only
+>>> affects LLVM / Clang builds.
+>>>
+>>> Fixes: 795285ef2425 ("selftests: Fix clang cross compilation")
+>>> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
+>>
+>> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 > 
-> At present, missing IOPF enabling/disabling doesn't cause any real issue,
-> because the IOMMU driver places the IOPF enabling/disabling in the path
-> of SVA feature handling. But this may change.
+> Ha, I see Mark just came up with the same fix many months later :)
+> Shame this wasn't applied back then, for some reason...
 > 
-> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+It might have gotten lost in my Inbox (looking at the dates - must have
+been while I was away on vacation). Sorry about that.
 
-> ---
->   drivers/dma/idxd/init.c | 31 +++++++++++++++++++++++++------
->   1 file changed, 25 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/dma/idxd/init.c b/drivers/dma/idxd/init.c
-> index 529ea09c9094..d5a709a842a8 100644
-> --- a/drivers/dma/idxd/init.c
-> +++ b/drivers/dma/idxd/init.c
-> @@ -511,6 +511,27 @@ static void idxd_disable_system_pasid(struct idxd_device *idxd)
->   	idxd->sva = NULL;
->   }
->   
-> +static int idxd_enable_sva(struct pci_dev *pdev)
-> +{
-> +	int ret;
-> +
-> +	ret = iommu_dev_enable_feature(&pdev->dev, IOMMU_DEV_FEAT_IOPF);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = iommu_dev_enable_feature(&pdev->dev, IOMMU_DEV_FEAT_SVA);
-> +	if (ret)
-> +		iommu_dev_disable_feature(&pdev->dev, IOMMU_DEV_FEAT_IOPF);
-> +
-> +	return ret;
-> +}
-> +
-> +static void idxd_disable_sva(struct pci_dev *pdev)
-> +{
-> +	iommu_dev_disable_feature(&pdev->dev, IOMMU_DEV_FEAT_SVA);
-> +	iommu_dev_disable_feature(&pdev->dev, IOMMU_DEV_FEAT_IOPF);
-> +}
-> +
->   static int idxd_probe(struct idxd_device *idxd)
->   {
->   	struct pci_dev *pdev = idxd->pdev;
-> @@ -525,7 +546,7 @@ static int idxd_probe(struct idxd_device *idxd)
->   	dev_dbg(dev, "IDXD reset complete\n");
->   
->   	if (IS_ENABLED(CONFIG_INTEL_IDXD_SVM) && sva) {
-> -		if (iommu_dev_enable_feature(dev, IOMMU_DEV_FEAT_SVA)) {
-> +		if (idxd_enable_sva(pdev)) {
->   			dev_warn(dev, "Unable to turn on user SVA feature.\n");
->   		} else {
->   			set_bit(IDXD_FLAG_USER_PASID_ENABLED, &idxd->flags);
-> @@ -573,21 +594,19 @@ static int idxd_probe(struct idxd_device *idxd)
->   	if (device_pasid_enabled(idxd))
->   		idxd_disable_system_pasid(idxd);
->   	if (device_user_pasid_enabled(idxd))
-> -		iommu_dev_disable_feature(dev, IOMMU_DEV_FEAT_SVA);
-> +		idxd_disable_sva(pdev);
->   	return rc;
->   }
->   
->   static void idxd_cleanup(struct idxd_device *idxd)
->   {
-> -	struct device *dev = &idxd->pdev->dev;
-> -
->   	perfmon_pmu_remove(idxd);
->   	idxd_cleanup_interrupts(idxd);
->   	idxd_cleanup_internals(idxd);
->   	if (device_pasid_enabled(idxd))
->   		idxd_disable_system_pasid(idxd);
->   	if (device_user_pasid_enabled(idxd))
-> -		iommu_dev_disable_feature(dev, IOMMU_DEV_FEAT_SVA);
-> +		idxd_disable_sva(idxd->pdev);
->   }
->   
->   static int idxd_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
-> @@ -705,7 +724,7 @@ static void idxd_remove(struct pci_dev *pdev)
->   	pci_free_irq_vectors(pdev);
->   	pci_iounmap(pdev, idxd->reg_base);
->   	if (device_user_pasid_enabled(idxd))
-> -		iommu_dev_disable_feature(&pdev->dev, IOMMU_DEV_FEAT_SVA);
-> +		idxd_disable_sva(pdev);
->   	pci_disable_device(pdev);
->   	destroy_workqueue(idxd->wq);
->   	perfmon_pmu_remove(idxd);
+It is fixed now.
+
+thanks,
+-- Shuah
+
