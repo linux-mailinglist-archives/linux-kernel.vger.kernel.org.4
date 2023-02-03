@@ -2,110 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A84C68A6D6
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 00:18:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D864968A6DC
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 00:24:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232806AbjBCXSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 18:18:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40038 "EHLO
+        id S232755AbjBCXYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 18:24:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232119AbjBCXSW (ORCPT
+        with ESMTP id S232445AbjBCXYU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 18:18:22 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2705E92C0C;
-        Fri,  3 Feb 2023 15:18:20 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id v10so6587008edi.8;
-        Fri, 03 Feb 2023 15:18:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=x6/eiO29wfcStIlFa8Jf+yXo1tshpio0szyZTd2TTXk=;
-        b=KOEDc/Zf7DxtpqtluxvBoUy0DFgRfFqOdkurXIwVDQEgEjdNovoX3qiO+Glz/qoVSe
-         uwQSf5nowjD3rCkV6gAknZaRp3f35ydfEMmwV5zLnWQF667CHmHLGhP6FLv+bteg6SbW
-         E98Wr+9gtFTxN1gm5d+5nZySYa46r6/9SxkNxtYFTHeM52k25TRlqNcqGcbWGGV5TNNk
-         m6k3yF0r6ngdISl0P1oxtcmnN5B4++Dnt0aPTYTpaQYPubDsc5/yGv/ZOoFxsx7zohTq
-         fi0vryhiZ6xyIZurBkxrbbwVzNghkbotcWDD4AF/VTXQQb42N+DsB7hev7RFV+NhQeib
-         OB/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=x6/eiO29wfcStIlFa8Jf+yXo1tshpio0szyZTd2TTXk=;
-        b=Z5oVBj05MzOmHXSs44+Gl2CJDi0oa7M23tTQtlY2haqMg1RSVSFNsAMSGo05ozbdvI
-         ilb+sD7vUuXkcPV+jrcP/GWMOwtF/kgc9DTSt3h2HuF6sOkNeLbqaa1D0QTyQajOsGZa
-         eNj+uAHKnMfuE+3F/CMUdKO0SQHX1J7OyKA8QUtKurlSlvTE5WPQDChw+9XI8BhFzxMO
-         ntb0vLqCi3fF1oXBNOTEXk4jEO7IXk2ER0jCWb2zQKYt/xzVWvJCAk30BjCpMcxdyky7
-         DVs7YjFurPU6mMF/k2/PNK7ddASvld+23wcmHyUbfw5VmXIdFFhyCUj/HBV5S55sL5mI
-         eCgg==
-X-Gm-Message-State: AO0yUKWDj1TjS0tN3tI5RV/rIx9ETtAu9UNz7gU4NuQrzGIdR4IR4M5y
-        U6iLxd2YClWRobKoAoBPo4I=
-X-Google-Smtp-Source: AK7set+U9t6LELz4QHb3KMtQCOp/x66OPpF2cr9dq/26itJt/TJukzSatqsf+3Fv4r5u2wwaPEmLFQ==
-X-Received: by 2002:aa7:d402:0:b0:4a1:7a78:13f with SMTP id z2-20020aa7d402000000b004a17a78013fmr12575031edq.27.1675466298547;
-        Fri, 03 Feb 2023 15:18:18 -0800 (PST)
-Received: from skbuf ([188.26.57.116])
-        by smtp.gmail.com with ESMTPSA id x10-20020a1709060a4a00b00880dbd4b6d4sm2003999ejf.136.2023.02.03.15.18.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 15:18:18 -0800 (PST)
-Date:   Sat, 4 Feb 2023 01:18:15 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Rakesh Sankaranarayanan <rakesh.sankaranarayanan@microchip.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        andrew@lunn.ch, f.fainelli@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        linux@armlinux.org.uk
-Subject: Re: [RFC PATCH net-next 02/11] net: dsa: microchip: lan937x: update
- SMI index
-Message-ID: <20230203231815.mue2aeynxuwqpuzr@skbuf>
-References: <20230202125930.271740-1-rakesh.sankaranarayanan@microchip.com>
- <20230202125930.271740-3-rakesh.sankaranarayanan@microchip.com>
+        Fri, 3 Feb 2023 18:24:20 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A355A07ED;
+        Fri,  3 Feb 2023 15:24:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 222D2B82C3E;
+        Fri,  3 Feb 2023 23:24:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFECEC433D2;
+        Fri,  3 Feb 2023 23:24:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675466656;
+        bh=DPCD11U3iraVLwoI0ZmoNtXTwzpTxLUsmQXJIlJGVSE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=iYsRI9WEJSXvQrf3WdnsJctWyoYSHpJ9XXhS6XfxCe9MFaOWmzH9nklIEiPNAFzk8
+         pgm2UXKuqznGQ9qmSaKceq8HGb2NVkuTjU9EHO047NuRFGkIkK7AlwYph4NuaW6CQu
+         Yfv4Tt5Kmfs5Ph+phIQd92418JDtLA37TmbbZntv5WKDNeGCmoA3lLPfpheDROYOBy
+         lex84MWnpMjkDQaUxDAy4Gg9ssjU4vP/ZmUrpgKdpkwdhD6w39f63rijUzdbVrr8Su
+         QF5e33ZTIhClNBvjwku0s/7M1KOLWbStucstrSvrrl6/K6UOTQnzktd7t6vVSWSsLw
+         Wg9XHpLFpy0LA==
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Michal Hocko <mhocko@suse.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Leonardo <leobras@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>, cgroups@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: [PATCH 0/2] sched/isolation: Prep work for pcp cache draining isolation
+Date:   Sat,  4 Feb 2023 00:24:07 +0100
+Message-Id: <20230203232409.163847-1-frederic@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230202125930.271740-3-rakesh.sankaranarayanan@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 06:29:21PM +0530, Rakesh Sankaranarayanan wrote:
-> Current DSA driver register mdio interface for a port in the
-> format of SMI-switch_index:port_number, switch_index is derived
-> using variable ds->index. For a single switch ds->index will be
-> always zero, and for cascaded switch, ds->index should be one.
-> But it is found that ds->index is getting updated only after
-> mdio_register stage. Update mdio_register to use variable directly
-> from device tree using "dsa,member" identifier.
-> 
-> Signed-off-by: Rakesh Sankaranarayanan <rakesh.sankaranarayanan@microchip.com>
-> ---
+For reference: https://lore.kernel.org/lkml/20230125073502.743446-1-leobras@redhat.com/
+And the latest proposal: https://lore.kernel.org/lkml/Y90mZQhW89HtYfT9@dhcp22.suse.cz/
 
-Impossible, check again.
+Pcp cache draining isolation needs a function that abstracts checking
+if a CPU is isolated through isolcpus= or nohz_full=. Take advantage
+of that to do some cleanups.
 
-The call path is:
+Frederic Weisbecker (2):
+  sched/isolation: Merge individual nohz_full features into a common
+    housekeeping flag
+  sched/isolation: Add cpu_is_isolated() API
 
-ksz_switch_register()
--> dsa_register_switch()
-   -> dsa_switch_probe()
-      -> dsa_switch_parse_of()
-         -> dsa_switch_parse_member_of()
-            -> sets ds->index
-      -> dsa_tree_setup()
-         -> dsa_tree_setup_switches()
-            -> dsa_switch_setup()
-               -> ksz_setup()
-                  -> ksz_mdio_register()
-                     -> you claim ds->index isn't set
+ arch/x86/kvm/x86.c              |  2 +-
+ drivers/char/random.c           |  2 +-
+ drivers/pci/pci-driver.c        |  2 +-
+ include/linux/sched/isolation.h | 13 +++++++------
+ include/net/ip_vs.h             |  4 ++--
+ kernel/cpu.c                    |  4 ++--
+ kernel/kthread.c                |  4 ++--
+ kernel/rcu/tasks.h              |  2 +-
+ kernel/rcu/tree_plugin.h        |  6 +++---
+ kernel/sched/core.c             | 12 ++++++------
+ kernel/sched/fair.c             |  6 +++---
+ kernel/sched/isolation.c        | 22 ++++++----------------
+ kernel/watchdog.c               |  2 +-
+ kernel/workqueue.c              |  2 +-
+ net/core/net-sysfs.c            |  2 +-
+ net/netfilter/ipvs/ip_vs_ctl.c  |  2 +-
+ 16 files changed, 39 insertions(+), 48 deletions(-)
 
-You don't even need to be an expert on the code path, you can grep for
-"ds->index = ", put a dump_stack() where it's set and one where you need
-it, and compare in the stack trace which functions are common and where
-they diverge.
+-- 
+2.34.1
+
