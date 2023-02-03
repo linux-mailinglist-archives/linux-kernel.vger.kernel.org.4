@@ -2,127 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 806D768A6F6
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 00:37:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 065C468A6F8
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 00:38:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232885AbjBCXhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 18:37:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47780 "EHLO
+        id S232931AbjBCXiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 18:38:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbjBCXhX (ORCPT
+        with ESMTP id S232127AbjBCXix (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 18:37:23 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A301F71BFB;
-        Fri,  3 Feb 2023 15:37:21 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id mc11so19537981ejb.10;
-        Fri, 03 Feb 2023 15:37:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GfdEQsWft1yQ3mAyWOQZMQC1cO9oHeHtoaPzwv9bnzU=;
-        b=meRM8LkqoRXF49sHjr3w0qWZtqFtO+pUO3TsbTjmMUS8+pIecdIo0FAgJ70qCpkkQ0
-         Rp8HcO80LPchSAFjAFoZ3j5m6RCX1D9Q6jMRuNvOOTJ+Cp3/vidp7MOFhuggfGWsbIy9
-         JzbnQegkCsMD5qGGz0t4l3rI3nwqXpN58a5L9GA0RQnBWbF9zAhT7qxXWjpzYNXzt2r/
-         EOReEK7mwi9HDDnC6K92Uc9Cylk9w9QhFa1ajnDzliYl29gCjNQcI+OigeZF3tBqQR/f
-         u786PaohAfSB+1Gw7twysZvnTPwI6Ajgd2HkxDZaizaYq+wXX6B12fNoYkRmkUc9Qul1
-         oVDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GfdEQsWft1yQ3mAyWOQZMQC1cO9oHeHtoaPzwv9bnzU=;
-        b=UCzxwJLnCXulLE0itAVFWdzBgjAP4FwfzGkeePrCJF/E/eskkUHiF6HC4Z+BQjjo7L
-         2+XcPjUp82YFXDp1RHrEg9M9ey9PHt0dBN0RlHicpO2WgHI/PtC99m+412NRnjlRH8sY
-         //7YYpYgVCh707PVFIdlSH+ROyhzolCAcqVhOeaN4hHfzU6MVjQrJiBeKFvoeg3e0TAn
-         0e6r3ghIcYQYup7nZPV+eto6mbqWaFELmrEKt+0bfswQDCs0lNmfC27rONLmY+J2j3f4
-         8Q4EGp18Mi3ttu1ulFTUBDgVUHaEu/U+EkBiSQJLAQXi66ldeRaSMah826jUomKr62gW
-         cbVQ==
-X-Gm-Message-State: AO0yUKXwklmS6uBwMZwEQZ9IDQPuNRJ48KjbveD7jMiQs9tgC04avHJl
-        E22GC5ABXnFZEHSbazSpZgk=
-X-Google-Smtp-Source: AK7set+QGhCuaAyqx0U5ASfUPsrdgtBLl30l/fBPG2eqLlR3aDlU+JSb/wvV6YkK2r0ctYPQob/B0w==
-X-Received: by 2002:a17:906:3192:b0:889:58bd:88a3 with SMTP id 18-20020a170906319200b0088958bd88a3mr11628748ejy.68.1675467439684;
-        Fri, 03 Feb 2023 15:37:19 -0800 (PST)
-Received: from skbuf ([188.26.57.116])
-        by smtp.gmail.com with ESMTPSA id o15-20020a170906600f00b00857c2c29553sm2014609ejj.197.2023.02.03.15.37.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 15:37:19 -0800 (PST)
-Date:   Sat, 4 Feb 2023 01:37:17 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Rakesh Sankaranarayanan <rakesh.sankaranarayanan@microchip.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        f.fainelli@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, woojung.huh@microchip.com,
-        UNGLinuxDriver@microchip.com, linux@armlinux.org.uk
-Subject: Re: [RFC PATCH net-next 07/11] net: dsa: microchip: lan937x: update
- switch register
-Message-ID: <20230203233717.m3s6xm4fynqmkx7h@skbuf>
-References: <20230202125930.271740-1-rakesh.sankaranarayanan@microchip.com>
- <20230202125930.271740-8-rakesh.sankaranarayanan@microchip.com>
- <Y9vZdMQgqhaGIcdf@lunn.ch>
+        Fri, 3 Feb 2023 18:38:53 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 077081BAED
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 15:38:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F04962041
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 23:38:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C803AC433EF;
+        Fri,  3 Feb 2023 23:38:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675467530;
+        bh=3xq4cMFYfLRdyj8Ht5xCK5O2qFvkrXyiGtCmpQ8cKTY=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=YzIZB5hxxk2lewlaQL4xZAxCs1Beq+MzgDtuIUJ7BsVCJz/N0WLEmAA5WGRyS6+R1
+         FZ1cOZNtQMl+UzrSjcJFwgaJe8LtbPtl6Ox/CiwNrJJpSWpkgMBNYgiLEsYw+uh8A6
+         LyQoZduplRbtVWKG2AHR1X3015m6hYiWHs2cAQ5FPndh7bGR61Ew66ene0w6guilkU
+         q7zCsUZ1fxTZd59MM5eakQVnGPP3Ree1ivLhTt3R9eY3+gx2He6PfuEcBI/6wldlw+
+         VzxUJ2zdUnaifzMnqLTXZue6BptDkM3wOmCodczJ0Oyu/gBVSLMjUkeg7bR9sIjur5
+         sp4sTrUGLOMLA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 6FFB25C1931; Fri,  3 Feb 2023 15:38:50 -0800 (PST)
+Date:   Fri, 3 Feb 2023 15:38:50 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     John Stultz <jstultz@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>
+Subject: Re: [PATCH v2 1/4] locktorture: Add nested_[un]lock() hooks and
+ nlocks parameter
+Message-ID: <20230203233850.GP2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230203200138.3872873-1-jstultz@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y9vZdMQgqhaGIcdf@lunn.ch>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230203200138.3872873-1-jstultz@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 04:40:36PM +0100, Andrew Lunn wrote:
-> On Thu, Feb 02, 2023 at 06:29:26PM +0530, Rakesh Sankaranarayanan wrote:
-> > Second switch in cascaded connection doesn't have port with macb
-> > interface. dsa_switch_register returns error if macb interface is
-> > not up. Due to this reason, second switch in cascaded connection will
-> > not report error during dsa_switch_register and mib thread work will be
-> > invoked even if actual switch register is not done. This will lead to
-> > kernel warning and it can be avoided by checking device tree setup
-> > status. This will return true only after actual switch register is done.
+On Fri, Feb 03, 2023 at 08:01:35PM +0000, John Stultz wrote:
+> In order ot extend locktorture to support lock nesting, add
+> nested_lock() and nested_unlock() hooks to the torture ops.
 > 
-> What i think you need to do is move the code into ksz_setup().
+> These take a 32bit lockset mask which is generated at random,
+> so some number of locks will be taken before the main lock is
+> taken and released afterwards.
 > 
-> With a D in DSA setup, dsa_switch_register() adds the switch to the
-> list of switches, and then a check is performed to see if all switches
-> in the cluster have been registered. If not, it just returns. If all
-> switches have been registered, it then iterates over all the switches
-> can calls dsa_switch_ops.setup().
+> Additionally, add nlocks module parameter to allow specifying
+> the number of nested locks to be used.
 > 
-> By moving the start of the MIB counter into setup(), it will only be
-> started once all the switches are present, and it means you don't need
-> to look at DSA core internal state.
+> This has been helpful to uncover issues in the proxy-exec
+> series development.
+> 
+> This was inspired by locktorture extensions originally implemented
+> by Connor O'Brien, for stress testing the proxy-execution series:
+>   https://lore.kernel.org/lkml/20221003214501.2050087-12-connoro@google.com/
+> 
+> Comments or feedback would be greatly appreciated!
 
-+1
+I have applied this series in place of the previous one, and thank you
+for the added scripting updates!
 
-Also there's a bug in its own right in ksz_mib_read_work(), here:
+							Thanx, Paul
 
-			if (!netif_carrier_ok(dp->slave))
-				mib->cnt_ptr = dev->info->reg_mib_cnt;
-
-The code accesses dp->slave, so naturally it kicks the bucket for
-cascade ports.
-
-It doesn't crash with CPU ports because dp->slave is in a union with
-dp->master, which is also a struct net_device * with its own carrier:
-
-struct dsa_port {
-	/* A CPU port is physically connected to a master device.
-	 * A user port exposed to userspace has a slave device.
-	 */
-	union {
-		struct net_device *master;
-		struct net_device *slave;
-	};
-
-This needs to be fixed, since accessing the DSA master through a
-dp->slave pointer is dangerous and unintended.
-
-Easiest thing to do would be to only check link state if (dsa_port_is_user(dp)).
-For other ports always read all MIB counters.
+> Cc: Davidlohr Bueso <dave@stgolabs.net>
+> Cc: "Paul E. McKenney" <paulmck@kernel.org>
+> Cc: Josh Triplett <josh@joshtriplett.org>
+> Cc: Joel Fernandes <joel@joelfernandes.org>
+> Cc: Juri Lelli <juri.lelli@redhat.com>
+> Cc: Valentin Schneider <vschneid@redhat.com>
+> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> Signed-off-by: John Stultz <jstultz@google.com>
+> ---
+>  kernel/locking/locktorture.c | 23 +++++++++++++++++++----
+>  1 file changed, 19 insertions(+), 4 deletions(-)
+> 
+> diff --git a/kernel/locking/locktorture.c b/kernel/locking/locktorture.c
+> index 9c2fb613a55d..f4fbd3194654 100644
+> --- a/kernel/locking/locktorture.c
+> +++ b/kernel/locking/locktorture.c
+> @@ -48,6 +48,9 @@ torture_param(int, stat_interval, 60,
+>  torture_param(int, stutter, 5, "Number of jiffies to run/halt test, 0=disable");
+>  torture_param(int, verbose, 1,
+>  	     "Enable verbose debugging printk()s");
+> +torture_param(int, nlocks, 0, "Number of nested locks");
+> +/* Going much higher trips "BUG: MAX_LOCKDEP_CHAIN_HLOCKS too low!" errors */
+> +#define MAX_LOCKS 8
+>  
+>  static char *torture_type = "spin_lock";
+>  module_param(torture_type, charp, 0444);
+> @@ -76,10 +79,12 @@ static void lock_torture_cleanup(void);
+>  struct lock_torture_ops {
+>  	void (*init)(void);
+>  	void (*exit)(void);
+> +	int (*nested_lock)(int tid, u32 lockset);
+>  	int (*writelock)(int tid);
+>  	void (*write_delay)(struct torture_random_state *trsp);
+>  	void (*task_boost)(struct torture_random_state *trsp);
+>  	void (*writeunlock)(int tid);
+> +	void (*nested_unlock)(int tid, u32 lockset);
+>  	int (*readlock)(int tid);
+>  	void (*read_delay)(struct torture_random_state *trsp);
+>  	void (*readunlock)(int tid);
+> @@ -669,6 +674,7 @@ static int lock_torture_writer(void *arg)
+>  	struct lock_stress_stats *lwsp = arg;
+>  	int tid = lwsp - cxt.lwsa;
+>  	DEFINE_TORTURE_RANDOM(rand);
+> +	u32 lockset_mask;
+>  
+>  	VERBOSE_TOROUT_STRING("lock_torture_writer task started");
+>  	set_user_nice(current, MAX_NICE);
+> @@ -677,7 +683,10 @@ static int lock_torture_writer(void *arg)
+>  		if ((torture_random(&rand) & 0xfffff) == 0)
+>  			schedule_timeout_uninterruptible(1);
+>  
+> +		lockset_mask = torture_random(&rand);
+>  		cxt.cur_ops->task_boost(&rand);
+> +		if (cxt.cur_ops->nested_lock)
+> +			cxt.cur_ops->nested_lock(tid, lockset_mask);
+>  		cxt.cur_ops->writelock(tid);
+>  		if (WARN_ON_ONCE(lock_is_write_held))
+>  			lwsp->n_lock_fail++;
+> @@ -690,6 +699,8 @@ static int lock_torture_writer(void *arg)
+>  		lock_is_write_held = false;
+>  		WRITE_ONCE(last_lock_release, jiffies);
+>  		cxt.cur_ops->writeunlock(tid);
+> +		if (cxt.cur_ops->nested_unlock)
+> +			cxt.cur_ops->nested_unlock(tid, lockset_mask);
+>  
+>  		stutter_wait("lock_torture_writer");
+>  	} while (!torture_must_stop());
+> @@ -830,11 +841,11 @@ lock_torture_print_module_parms(struct lock_torture_ops *cur_ops,
+>  				const char *tag)
+>  {
+>  	pr_alert("%s" TORTURE_FLAG
+> -		 "--- %s%s: nwriters_stress=%d nreaders_stress=%d stat_interval=%d verbose=%d shuffle_interval=%d stutter=%d shutdown_secs=%d onoff_interval=%d onoff_holdoff=%d\n",
+> +		 "--- %s%s: nwriters_stress=%d nreaders_stress=%d nlocks=%d stat_interval=%d verbose=%d shuffle_interval=%d stutter=%d shutdown_secs=%d onoff_interval=%d onoff_holdoff=%d\n",
+>  		 torture_type, tag, cxt.debug_lock ? " [debug]": "",
+> -		 cxt.nrealwriters_stress, cxt.nrealreaders_stress, stat_interval,
+> -		 verbose, shuffle_interval, stutter, shutdown_secs,
+> -		 onoff_interval, onoff_holdoff);
+> +		 cxt.nrealwriters_stress, cxt.nrealreaders_stress, nlocks,
+> +		 stat_interval, verbose, shuffle_interval, stutter,
+> +		 shutdown_secs, onoff_interval, onoff_holdoff);
+>  }
+>  
+>  static void lock_torture_cleanup(void)
+> @@ -1053,6 +1064,10 @@ static int __init lock_torture_init(void)
+>  		}
+>  	}
+>  
+> +	/* cap nlocks to MAX_LOCKS */
+> +	if (nlocks > MAX_LOCKS)
+> +		nlocks = MAX_LOCKS;
+> +
+>  	if (cxt.cur_ops->readlock) {
+>  		reader_tasks = kcalloc(cxt.nrealreaders_stress,
+>  				       sizeof(reader_tasks[0]),
+> -- 
+> 2.39.1.519.gcb327c4b5f-goog
+> 
