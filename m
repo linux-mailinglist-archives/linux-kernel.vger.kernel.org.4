@@ -2,131 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1A1568A234
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 19:47:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84EEC68A241
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 19:49:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232198AbjBCSrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 13:47:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38864 "EHLO
+        id S232392AbjBCSt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 13:49:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230309AbjBCSrP (ORCPT
+        with ESMTP id S229610AbjBCStX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 13:47:15 -0500
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65CEF9D5A4
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 10:47:14 -0800 (PST)
-Received: by mail-oi1-x22c.google.com with SMTP id j21so4937936oie.4
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 10:47:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zGzgsd+21G+envIJlNRx5y9NhgSp6TVSN947NkGcDoU=;
-        b=Zys9UuFgbs5lFCJjTVpbZ+9mU4XMeIXJD7J5i83+FTKbduuV0z5gbKI1zNXth8J3Ig
-         9OieKh0UeUbYpR5fMMo5857ITLXDQXoVnJGjwWLKt3y+ItiYbqbS8l9E3R1ZZ6v1s4BQ
-         ff/KEvQ+xLtaLLYsCi8/34e7BsT10RePYvzGRomTwI5yjyAUsAUezEHnJ+XLddyIms9Z
-         BAmwL+/JH3b2TWPdbrH+va8sPyLbW+cqPvYcYJL95tBw9uG8CgKGyacrhAhsfE+bwX2/
-         gEMLV3IJBRGGF0nUFXYeLqlLANHgxkRlYZdsme13OQ41K8c96zJfLuv3/KTWidCPPlgo
-         dGdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zGzgsd+21G+envIJlNRx5y9NhgSp6TVSN947NkGcDoU=;
-        b=wFOHzR7K2y20jan4t2QG9sC3Qs0EECJQKK2LKWArhBqC/VknYvMi9VTmMFVMrzkdrR
-         U22Nhpqfeibo8xtcJa6WrqFmsIwD0HAD3LJXreV2on+oZUL+U1ZxwLZLi8EFK3Ld607N
-         jHffROjATJ4aS66xYM9Ps8lsnvXzdgI3UdqrwHv6C7OVuXhHasL1qoH3Yrqon3VSsDHz
-         OJFHfILYMn+8BDy4qU+KjJC6hFf36PpRNV0HlojFsrdUHpeTDdAPkjw5dRfOoLlhMWaK
-         s4v7/1AxxqUBnBP4NzQk/riKuEsKXCK8/+rbEhGoeOLqWukDWd+NkOS9GffVRBCSQH3v
-         k+MQ==
-X-Gm-Message-State: AO0yUKWUeg3auMYOgoL4bCDt0+Ur1xvmZer6XqY+JPzzUozjIUiCZ7xR
-        QLi71BIu/Swlp5w28ZzdDjZMzxYJ1EHjefkTba2OHA==
-X-Google-Smtp-Source: AK7set9mhGy7e3QXRzMk/FLsY/CqOQwSMhuyH7EcoU1Eacrih382m5f/4VfIzl0Tkj2qGxwjD2UR1m6mCmdTNn9aDYg=
-X-Received: by 2002:a05:6808:2c6:b0:367:eed:a770 with SMTP id
- a6-20020a05680802c600b003670eeda770mr525327oid.282.1675450033511; Fri, 03 Feb
- 2023 10:47:13 -0800 (PST)
+        Fri, 3 Feb 2023 13:49:23 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2082.outbound.protection.outlook.com [40.107.237.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E2AA8A00;
+        Fri,  3 Feb 2023 10:49:21 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BEJZHm5da+nPxgO/iaX45xqDwLsTgzNHa0lrzDGOOSc0vDIj/4M3kAsKSyR0hIQu3tE9zTSK//jL+lgQ5sshPx2TlYZaKr75rolqSsbMLpnIOlL1r+w3zQ3cfp96cL0kURmO7wqdscACJ83Q5W0Rezm5r/lM5/XO9sgpzAudgowZ+YsfzhSDtVm5+yNCJiu8jScjao+bAa5X1XT90NmMRuWn56MJEtyZ7WjI+9dZmMtQ8OSdjnpIEOlVS2QANOrVt5ynsZrXAJKxLZMCfRQF41zxN58ae4sRtndO2m1htsTP8nmYZa+/WN+nTxdhZF3FLz5V7Zl5YcVS6PH4t2+h6g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fYdAV5Yqq6NftIFQ9k0l4idvNLK+xmAmd/McYzZ6yP0=;
+ b=DaFbBcy/utLBVptJAnu5oBBjNK+P1Y2ZdgTmPADAjld3mtNAFUKgisrlgQUfIzS0iuMrPQ/WFGpKZXI7t9o0w4WWzHVVqXQE5967DlQYVfKXFaMTR/Jb+HUyxNDErbbWDHGUneJKS7n1+9W3KZ0QaEJ+zsmWSGLTAqHz+wS7/dw03XcMf7nhbO2joyZ49Uc8CkBrdkHdpCVrx6aXzM/BIy/F3w/Hu6nTRvXH3l4NyplR0ysHUAJB0dkwjT5pWouBT6Ca8qg1nARDGoUNffiR5jVcxOGFp9UFKslZIGZaOi1jz8OnOO161EmZXuvQWDViFjDjc3xlOnRmOU0EmUPSAA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=linaro.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fYdAV5Yqq6NftIFQ9k0l4idvNLK+xmAmd/McYzZ6yP0=;
+ b=rLtuDdbme1uOd0+YL/j6YuUu9UVu7g6zJ/7otz2jCPaFc0Nvwn56G3kkCnktRg58oT5zlqHZMRbqjKA1G1wunOGDgOsQbkR1LzudRJ5JUSpiilMelJOCvhwjTeQqAE8l1aLdP0+SrCO9MZhWBu8vArqlRTpQ5a61qLBBI0Yr3OSo05iloQa4T6heTCrQh7z8eS3M5UN3oaYnBDbHAOkyUjRzGRfu+Cfo2ZXuNCgeq4bCx0Am73jZam4G0od4IF7ljdNGkF1Vsb/s0TnsC4lOaJ8MyrVkQNARyEtIOtVK5JaZi5znACgS6I9EMVjCk3PC1M0VwTCtt11Zh2cCuHoTIA==
+Received: from MW4PR04CA0169.namprd04.prod.outlook.com (2603:10b6:303:85::24)
+ by PH7PR12MB7211.namprd12.prod.outlook.com (2603:10b6:510:206::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.36; Fri, 3 Feb
+ 2023 18:49:19 +0000
+Received: from CO1NAM11FT067.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:85:cafe::c6) by MW4PR04CA0169.outlook.office365.com
+ (2603:10b6:303:85::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.31 via Frontend
+ Transport; Fri, 3 Feb 2023 18:49:19 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ CO1NAM11FT067.mail.protection.outlook.com (10.13.174.212) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6064.31 via Frontend Transport; Fri, 3 Feb 2023 18:49:19 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 3 Feb 2023
+ 10:49:11 -0800
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 3 Feb 2023
+ 10:49:11 -0800
+Received: from vdi.nvidia.com (10.127.8.14) by mail.nvidia.com (10.129.68.7)
+ with Microsoft SMTP Server id 15.2.986.36 via Frontend Transport; Fri, 3 Feb
+ 2023 10:49:10 -0800
+From:   David Thompson <davthompson@nvidia.com>
+To:     <linus.walleij@linaro.org>, <brgl@bgdev.pl>
+CC:     <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <limings@nvidia.com>, David Thompson <davthompson@nvidia.com>
+Subject: [PATCH v1 v/1] gpio: mlxbf: enable GPIO interface and ACPI event for host-gpio[7]
+Date:   Fri, 3 Feb 2023 13:49:07 -0500
+Message-ID: <20230203184907.18786-1-davthompson@nvidia.com>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-References: <20230201012032.2874481-1-xii@google.com> <Y9zZDcIua63WOdG7@hirez.programming.kicks-ass.net>
-In-Reply-To: <Y9zZDcIua63WOdG7@hirez.programming.kicks-ass.net>
-From:   Xi Wang <xii@google.com>
-Date:   Fri, 3 Feb 2023 10:47:01 -0800
-Message-ID: <CAOBoifgz0pRCBUqo7+X2BKgSuHmQLB6X0LZ9D2eYvboO5yzybg@mail.gmail.com>
-Subject: Re: [PATCH] sched: Consider capacity for certain load balancing decisions
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Ben Segall <bsegall@google.com>, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT067:EE_|PH7PR12MB7211:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8f473249-a019-4882-bd45-08db06175b7b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: HWZaRWq6vo4lDWtYwF5/NRUHtItzF2m+O9g81Eeynaaxsau3O2hKtiWmKF2VCzOoFw/QkH/qV7gT1YJ4limruOU3RMgVkmS73fKf8nDupQZVws32F63QwPTHPbnjt29uU+BbrByjftX6+CaJGO0RTpV5DIkL6UrTbdZEk3GweKmnQpmy6N8Z2fEoDJz3JgDH23eI7K5z95Fd9ypx6uOQHtX2jj4OCSsR55KJN5oXzdtXzKd1bEfN2eBg2gWt8TxF20qTNfYnwT1Cb86wofH6oTKSZ2J/DVnbNYh5aZxDrd9Yf03AN31XW7PBfdkTRoyIZtBbgsFZaDDZaEEA9Do/QotyOHnwGoiysfjRFvn6g1P+hCZvb1hSXHnEuIOuXTnYFfa0PqJN3gqlyEw8UtQ0E+AbpaAzhAu5XYEVLBXQc1mb6kvs+vlg2EPFBg5RdjaaTjMXoB0LhgcqOS+A3t+xAI8Kvpm4+kVHVxzgIaoikmYF00KzrnR7w6abqKy19NYqd+U5V9njxPhCpPXnCUyUxLx4Sjs4stlrD4G2XdiKRNru52g3sSqdJ/TUUt00i+nq79nignm3EXpkoG3/kXHQlhqjtUjH3JndvZKp4NIBLtkCbE+s1XXEMokOp4zPmDblio9xNThyvm1df8ZuolLB/fLeSFKLg3ka/pLyGRhfmuBzmTU01xJRpfJ2uaJ18URTHciu8w2wbkBpL1DHc10Juw==
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(376002)(396003)(136003)(346002)(451199018)(36840700001)(46966006)(40470700004)(7636003)(356005)(86362001)(82740400003)(5660300002)(36756003)(4326008)(54906003)(70206006)(316002)(36860700001)(70586007)(8676002)(8936002)(40460700003)(2906002)(40480700001)(41300700001)(7696005)(2616005)(336012)(82310400005)(478600001)(47076005)(426003)(83380400001)(1076003)(26005)(6666004)(107886003)(186003)(110136005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Feb 2023 18:49:19.0345
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8f473249-a019-4882-bd45-08db06175b7b
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT067.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7211
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 3, 2023 at 1:51 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Tue, Jan 31, 2023 at 05:20:32PM -0800, Xi Wang wrote:
-> > After load balancing was split into different scenarios, CPU capacity
-> > is ignored for the "migrate_task" case, which means a thread can stay
-> > on a softirq heavy cpu for an extended amount of time.
-> >
-> > By comparing nr_running/capacity instead of just nr_running we can add
-> > CPU capacity back into "migrate_task" decisions. This benefits
-> > workloads running on machines with heavy network traffic. The change
-> > is unlikely to cause serious problems for other workloads but maybe
-> > some corner cases still need to be considered.
-> >
-> > Signed-off-by: Xi Wang <xii@google.com>
-> > ---
-> >  kernel/sched/fair.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > index 0f8736991427..aad14bc04544 100644
-> > --- a/kernel/sched/fair.c
-> > +++ b/kernel/sched/fair.c
-> > @@ -10368,8 +10368,9 @@ static struct rq *find_busiest_queue(struct lb_env *env,
-> >                       break;
-> >
-> >               case migrate_task:
-> > -                     if (busiest_nr < nr_running) {
-> > +                     if (busiest_nr * capacity < nr_running * busiest_capacity) {
-> >                               busiest_nr = nr_running;
-> > +                             busiest_capacity = capacity;
-> >                               busiest = rq;
-> >                       }
-> >                       break;
->
-> I don't think this is correct. The migrate_task case is work-conserving,
-> and your change can severely break that I think.
->
+This commit adds ACPI handling for host-gpio[7] to trigger
+the power-button event.
 
-I think you meant this kind of scenario:
-cpu 0: idle
-cpu 1: 2 tasks
-cpu 2: 1 task but only has 30% of capacity
-Pulling from cpu 2 is good for the task but lowers the overall cpu
-throughput.
+Signed-off-by: David Thompson <davthompson@nvidia.com>
+Reviewed-by: Liming Sun <limings@nvidia.com>
+---
+ drivers/gpio/gpio-mlxbf.c | 65 +++++++++++++++++++++++++++++++++------
+ 1 file changed, 55 insertions(+), 10 deletions(-)
 
-The problem we have is:
-cpu 0: idle
-cpu 1: 1 task
-cpu 2: 1 task but only has 60% of capacity due to net softirq
-The task on cpu 2 stays there and runs slower. (This can also be
-considered non work-conserving if we account softirq like a task.)
+diff --git a/drivers/gpio/gpio-mlxbf.c b/drivers/gpio/gpio-mlxbf.c
+index 1fa9973f55b9..a8b6117c7593 100644
+--- a/drivers/gpio/gpio-mlxbf.c
++++ b/drivers/gpio/gpio-mlxbf.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ 
+ #include <linux/acpi.h>
++#include <linux/bitfield.h>
+ #include <linux/bitops.h>
+ #include <linux/device.h>
+ #include <linux/gpio/driver.h>
+@@ -12,19 +13,30 @@
+ #include <linux/resource.h>
+ #include <linux/types.h>
+ 
++#include "gpiolib-acpi.h"
++
+ /* Number of pins on BlueField */
+ #define MLXBF_GPIO_NR 54
+ 
+ /* Pad Electrical Controls. */
+-#define MLXBF_GPIO_PAD_CONTROL_FIRST_WORD 0x0700
+-#define MLXBF_GPIO_PAD_CONTROL_1_FIRST_WORD 0x0708
+-#define MLXBF_GPIO_PAD_CONTROL_2_FIRST_WORD 0x0710
+-#define MLXBF_GPIO_PAD_CONTROL_3_FIRST_WORD 0x0718
++#define MLXBF_GPIO_PAD_CONTROL_FIRST_WORD	0x0700
++#define MLXBF_GPIO_PAD_CONTROL_1_FIRST_WORD	0x0708
++#define MLXBF_GPIO_PAD_CONTROL_2_FIRST_WORD	0x0710
++#define MLXBF_GPIO_PAD_CONTROL_3_FIRST_WORD	0x0718
++
++#define MLXBF_GPIO_PIN_DIR_I                    0x1040
++#define MLXBF_GPIO_PIN_DIR_O                    0x1048
++#define MLXBF_GPIO_PIN_STATE                    0x1000
++#define MLXBF_GPIO_SCRATCHPAD                   0x20
++#define MLXBF_GPIO_INT_SETUP                    0x0040
++#define MLXBF_GPIO_INT_SETUP_GBL_ENA_MASK       0x1
++
++/* GPIO pin 7 is reserved for power good indication on BlueField. */
++#define MLXBF_GPIO_POWER_GOOD_PIN		7
+ 
+-#define MLXBF_GPIO_PIN_DIR_I 0x1040
+-#define MLXBF_GPIO_PIN_DIR_O 0x1048
+-#define MLXBF_GPIO_PIN_STATE 0x1000
+-#define MLXBF_GPIO_SCRATCHPAD 0x20
++/* GPIO pins enabled for interrupt */
++#define MLXBF_GPIO_INT_ENA_DEASSERT             0x3008
++#define MLXBF_GPIO_INT_DEASSERT_ENA_BITS	BIT(MLXBF_GPIO_POWER_GOOD_PIN)
+ 
+ #ifdef CONFIG_PM
+ struct mlxbf_gpio_context_save_regs {
+@@ -42,17 +54,39 @@ struct mlxbf_gpio_state {
+ 	/* Memory Address */
+ 	void __iomem *base;
+ 
++	int hwirq;
++
+ #ifdef CONFIG_PM
+ 	struct mlxbf_gpio_context_save_regs csave_regs;
+ #endif
+ };
+ 
++static int mlxbf_gpio_to_irq(struct gpio_chip *chip, u32 gpio)
++{
++	struct mlxbf_gpio_state *gs = gpiochip_get_data(chip);
++
++	return gs->hwirq;
++}
++
++static void mlxbf_gpio_cfg_irq(struct mlxbf_gpio_state *gs)
++{
++	u64 intr_cfg;
++
++	intr_cfg = readq(gs->base + MLXBF_GPIO_INT_SETUP);
++	intr_cfg |= MLXBF_GPIO_INT_SETUP_GBL_ENA_MASK;
++	writeq(intr_cfg, gs->base + MLXBF_GPIO_INT_SETUP);
++
++	intr_cfg = readq(gs->base + MLXBF_GPIO_INT_ENA_DEASSERT);
++	intr_cfg |= MLXBF_GPIO_INT_DEASSERT_ENA_BITS;
++	writeq(intr_cfg, gs->base + MLXBF_GPIO_INT_ENA_DEASSERT);
++}
++
+ static int mlxbf_gpio_probe(struct platform_device *pdev)
+ {
+-	struct mlxbf_gpio_state *gs;
+ 	struct device *dev = &pdev->dev;
++	struct mlxbf_gpio_state *gs;
+ 	struct gpio_chip *gc;
+-	int ret;
++	int ret, irq;
+ 
+ 	gs = devm_kzalloc(&pdev->dev, sizeof(*gs), GFP_KERNEL);
+ 	if (!gs)
+@@ -63,6 +97,7 @@ static int mlxbf_gpio_probe(struct platform_device *pdev)
+ 		return PTR_ERR(gs->base);
+ 
+ 	gc = &gs->gc;
++
+ 	ret = bgpio_init(gc, dev, 8,
+ 			 gs->base + MLXBF_GPIO_PIN_STATE,
+ 			 NULL,
+@@ -73,8 +108,16 @@ static int mlxbf_gpio_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return -ENODEV;
+ 
++	irq = platform_get_irq(pdev, 0);
++	if (irq < 0)
++		return irq;
++
+ 	gc->owner = THIS_MODULE;
+ 	gc->ngpio = MLXBF_GPIO_NR;
++	gs->hwirq = irq;
++	gc->to_irq = mlxbf_gpio_to_irq;
++
++	mlxbf_gpio_cfg_irq(gs);
+ 
+ 	ret = devm_gpiochip_add_data(dev, &gs->gc, gs);
+ 	if (ret) {
+@@ -83,7 +126,9 @@ static int mlxbf_gpio_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	platform_set_drvdata(pdev, gs);
++	acpi_gpiochip_request_interrupts(gc);
+ 	dev_info(&pdev->dev, "registered Mellanox BlueField GPIO");
++
+ 	return 0;
+ }
+ 
+-- 
+2.30.1
 
-Maybe the logic can be merged like this: Use capacity but pick from
-nr_running > 1 cpus first, then nr_running == 1 cpus if not found.
