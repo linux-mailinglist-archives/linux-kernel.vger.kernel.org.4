@@ -2,136 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97F34688FF8
+	by mail.lfdr.de (Postfix) with ESMTP id E2582688FF9
 	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 08:01:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230140AbjBCHAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 02:00:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51280 "EHLO
+        id S231820AbjBCHA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 02:00:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230108AbjBCHAW (ORCPT
+        with ESMTP id S231486AbjBCHA4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 02:00:22 -0500
-Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 026B76DFE3
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 23:00:18 -0800 (PST)
-Received: by mail-vs1-xe33.google.com with SMTP id k6so4449263vsk.1
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 23:00:17 -0800 (PST)
+        Fri, 3 Feb 2023 02:00:56 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1405F65EEA;
+        Thu,  2 Feb 2023 23:00:56 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id l4-20020a17090a850400b0023013402671so7930129pjn.5;
+        Thu, 02 Feb 2023 23:00:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=DbzT1FQNEmaS1Fq7BXjYIIpb2bUbkeqUBQhvRAmSRec=;
-        b=whqTS9KQ2Wx0JsJ5jPsmKM+AcLdS/Ub9HHrPlTlWifEnh6KZ32CmAy5QWJIMD4cTEV
-         jo2sk8IFKxARWQZWiv0oFzrA/KSjNVSIRWRKDTplJP6saYDN/5F/AYhE/Dt8j+MZImZy
-         DO4lWxdQpox/qdCKLYsC6PbkHo9+jftXkGCoNADF4gSD3HhhPQ8GJdY/Z+mJhYZxVn6c
-         6g6eFRA8L8zRzWlVWZMvHlOLqrgm7HqTwb+SBrODYteEyZIXhmPCDXVyR+QdXWZkyEbF
-         jIUSyQY2qqCgN5Ws89G8H4Y+UV7Xk9KO96f3/1CFXrWXTbGr64efj1yo74rn7IQ3j3ml
-         6hHw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RwqQ7dTzglUPvW7FiYTF4tlugby7dSi3QDvb/pRU6so=;
+        b=KU/PXxP43Wu5mush0paSvuUGEsjcE1vGXNErzChZ3H/kx0ZMJJNrQXuQ6u4QiRLsy7
+         ML2rZMtOhcZQkBncXiaUO2J9F7Ly6JumAV68HZrW3UVE7Z33ZioAamx/bOpjr7K1D9d/
+         unqRXgBsCD6ZPraqSuJuAwPj06ukSN68h7+JEgmkrn6PFGn4aU+oWXbCILmvbHrOLjor
+         mcNcUZKgckiYVxeJ4CbV1SvZGH3/o/kCu83pquVySiX3UfWe4H60LHsVjSsouxRSzBQl
+         ZCqJycr8Su856LQsAScNIJyT49+RK/wcK53gej1cFSGFxBJeOLhF0RF51fYxkcPn44M9
+         tk0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DbzT1FQNEmaS1Fq7BXjYIIpb2bUbkeqUBQhvRAmSRec=;
-        b=QqmqaULwB8vnKTZvIxMMzZilW5vc3R6qDph0koXS564hfl16YqbPVA+bAxnSRzbh0o
-         VAf7n0HVVTnFXcEweZMiZz0RZpsr0jlHvLEf5Mw2Z51MdD8whRkRmoT8jfrJBTpOIrSd
-         JcsfjMrVT07xpG4jx/XjGg2oFygKlEeGY7pxtqnAt9xf9GgdlaUCfDCVLTbD+9+xC94K
-         1uhJveqhmwc4cRFZd+yCWrbTrPuzKi7Zy61GNW3QOTKkwIEoSgFxUcpbmrxzvHmQNQ2v
-         HiH5KlwJl0rCxlmVhSSf5Mwc2/5DdqipdSF1O+ymU4EA7zPurQztxp3EQut7KLikse/G
-         ARRA==
-X-Gm-Message-State: AO0yUKUbUjN4Ba6FcZUInRHcJ1IA307FbXyjmeoBeCoqJ4aatSrMFobE
-        xL1kDcU3bIbjnT2W9hU3FWWHZB5DelAhvwo1UGCnOQ==
-X-Google-Smtp-Source: AK7set8sK6QtEx/EgR0ZDaA9xoQHrr2H7fiqNNEAhOBy0YYaXP+Xe/mRMgXpV2MsalMb5tGxstdPCWShv1CnuEJq++M=
-X-Received: by 2002:a05:6102:204d:b0:3f1:53d4:9e87 with SMTP id
- q13-20020a056102204d00b003f153d49e87mr1316305vsr.34.1675407616935; Thu, 02
- Feb 2023 23:00:16 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=RwqQ7dTzglUPvW7FiYTF4tlugby7dSi3QDvb/pRU6so=;
+        b=2zvL8KclBj63PaXEJad+XFvLehYBmyxe209l8WFGB762IQYwXt/vUTKuT1P2YNoZuE
+         7CZg1lijXatyUg15M9cBsFJ8/LFUV1GkZ2xudz3tyK42IGZRjbOXQ/DVUZi95T5IGwwW
+         cDxe4VL3d0VhUkaSwoYHwPUSnzMVzeWZDY/Qg1dg4OYr/ghZHUT6vsimpWBkpOjNqLct
+         7lPTvZ2JPXVpUssIm32DkRJyvrtmrt7QIkwwLYzO23IZmIU+9DpNkPrttAOld2tBn8bo
+         AC3obBEAjT/ogyBZM9hQBB5541y9NFunuiQSYL1MJiit1a24ZdPKEFauRZ3sBhP9lMvn
+         NTfQ==
+X-Gm-Message-State: AO0yUKWIcd0jJLz6+X1UQJBehliYDKQXnTxk+wOoZdZqAENSb4/NUC8s
+        5+cwMeTlRuADLNDOq6iDJGCeUk34reBoJQ==
+X-Google-Smtp-Source: AK7set/4r1Yd3ym9LGZwmJiAV/I24VPctNUSU10TEez+Qk+piovBGWFFYF1N/uuY/eX5s6HoA/1Q+g==
+X-Received: by 2002:a17:902:d1cb:b0:196:125a:e4b8 with SMTP id g11-20020a170902d1cb00b00196125ae4b8mr6366704plb.12.1675407655585;
+        Thu, 02 Feb 2023 23:00:55 -0800 (PST)
+Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:18:efec::75b])
+        by smtp.gmail.com with ESMTPSA id jh3-20020a170903328300b001966297bbbfsm807661plb.197.2023.02.02.23.00.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Feb 2023 23:00:55 -0800 (PST)
+Message-ID: <ce9b4a79-b877-211d-aee8-bbc02e6805b5@gmail.com>
+Date:   Fri, 3 Feb 2023 15:00:44 +0800
 MIME-Version: 1.0
-References: <CA+G9fYuei_Tr-vN9GS7SfFyU1y9hNysnf=PB7kT0=yv4MiPgVg@mail.gmail.com>
- <Y9B4/pR5t2o51coY@monkey> <CA+G9fYtt_FR54zwStiTguiyS0QDHe-x5+2Py9_hvxKAbYHM_fg@mail.gmail.com>
- <CADYN=9+=p0cYu63feXfZVXZTGruJP_i5dA3AuP0G6Fh_rfQO0g@mail.gmail.com> <Y9wxD0ngdo832Az5@monkey>
-In-Reply-To: <Y9wxD0ngdo832Az5@monkey>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 3 Feb 2023 12:30:06 +0530
-Message-ID: <CA+G9fYs92bgdfYGj7uudnnnUA7hm82sggpWmSjwdKA9qjZvW7A@mail.gmail.com>
-Subject: Re: selftests: memfd: run_hugetlbfs_test.sh - invalid opcode: 0000
- [#1] PREEMPT SMP
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     Anders Roxell <anders.roxell@linaro.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-stable <stable@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Jeff Xu <jeffxu@google.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Pranith Kumar <bobby.prani@gmail.com>,
-        David Herrmann <dh.herrmann@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [RFC PATCH V3 10/16] x86/hyperv: Add smp support for sev-snp
+ guest
+To:     Tom Lendacky <thomas.lendacky@amd.com>, luto@kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        seanjc@google.com, pbonzini@redhat.com, jgross@suse.com,
+        tiala@microsoft.com, kirill@shutemov.name,
+        jiangshan.ljs@antgroup.com, peterz@infradead.org,
+        ashish.kalra@amd.com, srutherford@google.com,
+        akpm@linux-foundation.org, anshuman.khandual@arm.com,
+        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
+        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
+        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
+        michael.roth@amd.com, venu.busireddy@oracle.com,
+        sterritt@google.com, tony.luck@intel.com, samitolvanen@google.com,
+        fenghua.yu@intel.com
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
+References: <20230122024607.788454-1-ltykernel@gmail.com>
+ <20230122024607.788454-11-ltykernel@gmail.com>
+ <62ffd8b2-3d88-499e-ba13-1da26f664c6f@amd.com>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <62ffd8b2-3d88-499e-ba13-1da26f664c6f@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 3 Feb 2023 at 03:24, Mike Kravetz <mike.kravetz@oracle.com> wrote:
->
-> On 02/02/23 16:29, Anders Roxell wrote:
-> > On Thu, 2 Feb 2023 at 15:54, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-> > >
-> > > Hi Mike,
-> > >
-> > > On Wed, 25 Jan 2023 at 06:04, Mike Kravetz <mike.kravetz@oracle.com> wrote:
-> > > >
-> > > > On 01/05/23 15:14, Naresh Kamboju wrote:
-> > > > > While running selftests: memfd: run_hugetlbfs_test.sh on qemu_i386 and i386 the
-> > > > > following invalid opcode was noticed on stable-rc 6.1 and  6.0.
-> > > > >
-> > > > > This is always reproducible on stable-rc 6.1 and  6.0 with qemu_i386 and i386.
-> > > > > Build, config and test log details provided in the below links [1].
-> > > >
-> > > > Hello Naresh,
-> > > >
-> > > > I have tried to create this issue a few times without success.  Since I
-> > > > do not have i386 HW, I am using qemu_i386.  If I use the supplied config,
-> > > > my kernel does not boot.  I then try to modify config options which I
-> > > > think are not relevant.  By the time I get to a config that will boot, I
-> > > > can not recreate the issue. :(
-> > > >
-> > > > Just curious if you have any suggestions?  Or, Wondering if anyone else has
-> > > > suggestions on how to proceed?
-> > >
-> > > Please install tuxmake and run attached script to reproduce reported issues,
-> > > $ pip3 install tuxmake
-> >
-> > oops, a typo, should be 'tuxrun' not 'tuxmake'.
-> >
-> > https://tuxrun.org/
-> >
-> > Cheers,
-> > Anders
-> >
-> > > $ ./memfd-crash-test-qemu-i386.sh
-> > >
-> > > This script downloads kernel Image and rootfs and runs run_hugetlbfs_test.sh.
-> > > If you have any questions please get back to me.
-> > > For your reference I have attached logs.txt
->
-> Sorry, I am still a bit confused.
->
-> Was the intention to attach the script 'memfd-crash-test-qemu-i386.sh'?
+On 1/23/2023 11:30 PM, Tom Lendacky wrote:
+> On 1/21/23 20:46, Tianyu Lan wrote:
+>> From: Tianyu Lan <tiala@microsoft.com>
+>>
+>> The wakeup_secondary_cpu callback was populated with wakeup_
+>> cpu_via_vmgexit() which doesn't work for Hyper-V. Override it
+> 
+> An explanation as to why is doesn't work would be nice here.
 
-Might be due to the emailer not allowing scripts files upload / download.
+Hi Thomas：
+	Thanks for your review. Good idea. Will update.
 
-> The only attachment I have seen is 'logs.txt' which is the output of the run.
+>> diff --git a/arch/x86/include/asm/svm.h b/arch/x86/include/asm/svm.h
+>> index cb1ee53ad3b1..f8b321a11ee4 100644
+>> --- a/arch/x86/include/asm/svm.h
+>> +++ b/arch/x86/include/asm/svm.h
+>> @@ -336,6 +336,53 @@ struct vmcb_save_area {
+> 
+> Please don't update the vmcb_save_area, you should be using/updating the 
+> sev_es_save_area structure for SNP.
 
-I have sent you a private email with a reproducer script.
+OK. Will update in the next version.
 
-> --
-> Mike Kravetz
+>>             u64 sev_feature_restrict_injection    : 1;
+>> +            u64 sev_feature_alternate_injection    : 1;
+>> +            u64 sev_feature_full_debug        : 1;
+>> +            u64 sev_feature_reserved1        : 1;
+>> +            u64 sev_feature_snpbtb_isolation    : 1;
+>> +            u64 sev_feature_resrved2        : 56;
+> 
+> For the bits definition, use:
+> 
+>              u64 sev_feature_snp            : 1,
+>                  sev_feature_vtom            : 1,
+>                  sev_feature_reflectvc        : 1,
+>                  ...
+> 
+
+Good suggestion. Thanks.
