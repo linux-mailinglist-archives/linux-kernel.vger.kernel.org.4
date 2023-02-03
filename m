@@ -2,193 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62636688B54
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 01:03:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34FB8688B58
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 01:04:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233403AbjBCADy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 19:03:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41862 "EHLO
+        id S233408AbjBCAEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 19:04:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232704AbjBCADx (ORCPT
+        with ESMTP id S232704AbjBCAEF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 19:03:53 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3B837A98
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 16:03:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675382579;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jyfxrc/7ZPKLF/u6Ruw0WD2VULIfdrJX3Yw+Mo2r3IQ=;
-        b=erIFwdSTjQ504glmn+LHJ97CFB7gE5cIJrj42rns6LWHss4RyQyIXsL1j3IIAaw2s9EnDA
-        Lpv+GYIwB8DQAEJ7jaNrwevA0piL0xtHAALutpfz7QUkBIziVM4bf+rgP+i67IJTrqTBFt
-        /zoKx7Dzfgg4nu0LOUF2zcN1+9/ekfg=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-301-m6EK9ZvgM1KoWpkTuUaXBg-1; Thu, 02 Feb 2023 19:02:58 -0500
-X-MC-Unique: m6EK9ZvgM1KoWpkTuUaXBg-1
-Received: by mail-ej1-f72.google.com with SMTP id he34-20020a1709073da200b00887ced84328so2619751ejc.10
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 16:02:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jyfxrc/7ZPKLF/u6Ruw0WD2VULIfdrJX3Yw+Mo2r3IQ=;
-        b=j/W950nlxMRGvvLZD9WGsRxFPsHNJpF5xrk9TjLvNVSxJG35J7DmjN+KK8k2/ndM45
-         FOm6RwKjTCsKOMmN0AUS1MVR23dudK5Vm5ve1GLGd+yrWFSZVzcfeleYUVs9GzI6dsP+
-         9pCH0pxqFXM24fKztiwAAcogDZYQzPz6+5EmESoq2ydjeKEsqncR59wxh2NbYfooKJbg
-         Xjv6jjNTGfLpxGBDe5zF+ZXOASQo0pHqiXrRJWSr74Sb+xaWjs2XcKF4cWYGISRnF50s
-         lTEeMlAIBlCJLqIN3VYgJEK+hTg4uDkxStkatWVZnbOzgbQwx7Q/EfXzrEafeWLQs2Sj
-         eC/w==
-X-Gm-Message-State: AO0yUKVUBbVVArgbFw/vF7hLLyGTLaR6zXRGFdIv5F3Atkq14OfC2J37
-        81RzNzznixB+aDgctdaJSLCmYt6/plHaasH0yVtq6zrNbneLWBIel4NFR8a9+HUrpfgb5xgeW+8
-        /ckRadlrNw2dPXGYDCHU6NJr0
-X-Received: by 2002:a17:906:c5b:b0:883:be32:cd33 with SMTP id t27-20020a1709060c5b00b00883be32cd33mr8973438ejf.35.1675382577130;
-        Thu, 02 Feb 2023 16:02:57 -0800 (PST)
-X-Google-Smtp-Source: AK7set838NtnsCYnhKppwOgz3AzxWNHBsWqmLSxldhZI0SEnURw3TDrqImN+olXPAlZ6WWiP8gmGgg==
-X-Received: by 2002:a17:906:c5b:b0:883:be32:cd33 with SMTP id t27-20020a1709060c5b00b00883be32cd33mr8973402ejf.35.1675382576789;
-        Thu, 02 Feb 2023 16:02:56 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id ox4-20020a170907100400b008874c903ec5sm501498ejb.43.2023.02.02.16.02.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 16:02:56 -0800 (PST)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id EDBED972DBC; Fri,  3 Feb 2023 01:02:54 +0100 (CET)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     David Vernet <void@manifault.com>, bpf <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@meta.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Kernel Team <kernel-team@meta.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH bpf-next 2/3] bpf: Add KF_DEPRECATED kfunc flag
-In-Reply-To: <CAADnVQJeaU=F9uym9RctfODHbeV-TTK8DiQFTFm_R=N+qF6gYA@mail.gmail.com>
-References: <20230202163056.658641-1-void@manifault.com>
- <20230202163056.658641-3-void@manifault.com>
- <CAADnVQJjmnEpXWL8-SAPt5zYXnFYeF8-wXXpA9shOhqUXNPw=g@mail.gmail.com>
- <Y9wq1Fy8sgpGB+pe@maniforge>
- <1ea9adb3-851c-0c04-1655-07d9f3b7f3b0@iogearbox.net>
- <CAADnVQJeaU=F9uym9RctfODHbeV-TTK8DiQFTFm_R=N+qF6gYA@mail.gmail.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Fri, 03 Feb 2023 01:02:54 +0100
-Message-ID: <87ilgjehu9.fsf@toke.dk>
+        Thu, 2 Feb 2023 19:04:05 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF9F7274B8;
+        Thu,  2 Feb 2023 16:04:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8E384B828B4;
+        Fri,  3 Feb 2023 00:04:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BBA5C433D2;
+        Fri,  3 Feb 2023 00:04:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675382641;
+        bh=v41qSYIy/grCOThf3ACyEpdoLoURRh6v9d1NSGGMMAI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=eOZV/fDct4rRtv9bQaMW4umgD+AOvIpMblCUEP85r43uPDDQKv144K/8aZ+5V28py
+         63pKSOBjr+BK0oi8qZpVIqHK7risLLO0QTLzwIj/ctRYW0Ca4ujcbUMD9GZJ3jaq7Y
+         TGs+tbkFUxMAdRNlXFiEhXU7k10q0SlkWOVCwA2yAAHBY7FwHoXR6HzSoTjsmIXAVS
+         t/zTSTRVr4doDYjPbbfYg7HCgKGPfFfGlQmyvaYhQbK0yHJQSLrCWum1sRs/o2XgpP
+         UHh5AZRBCDJfEkRcUdegaMvuXDM3ALjmdtXZH7NngWDTzn1NUOpFJ0r2LuTHq9y/px
+         BLoALDeujwiXA==
+Received: by mail-vs1-f45.google.com with SMTP id y8so3763874vsq.0;
+        Thu, 02 Feb 2023 16:04:01 -0800 (PST)
+X-Gm-Message-State: AO0yUKWBDaJLZzJoowTdl1+IMXR77LsS6YwogltEh7t4fnWZf1xa5CwF
+        W6FfDbvU/lxiCY49LXwc+2IocOjPS/sImHGibw==
+X-Google-Smtp-Source: AK7set/24UNuKAbNg26YwkAYHwGWM1WDU4yUDp715QSlA/l1JUIHc1XW1R/V5PFCprjAZo402uMoCPx62hFjf+H6MV8=
+X-Received: by 2002:a05:6102:338a:b0:3f3:5ce0:85ab with SMTP id
+ i10-20020a056102338a00b003f35ce085abmr1615861vsh.26.1675382640194; Thu, 02
+ Feb 2023 16:04:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230202104452.299048-1-krzysztof.kozlowski@linaro.org>
+ <20230202104452.299048-3-krzysztof.kozlowski@linaro.org> <20230203000130.GA2934311-robh@kernel.org>
+In-Reply-To: <20230203000130.GA2934311-robh@kernel.org>
+From:   Rob Herring <robh@kernel.org>
+Date:   Thu, 2 Feb 2023 18:03:48 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKnsDJVD-PJNg39=Awdw2XNeUV5b3VgZt3zKCsHzp74bw@mail.gmail.com>
+Message-ID: <CAL_JsqKnsDJVD-PJNg39=Awdw2XNeUV5b3VgZt3zKCsHzp74bw@mail.gmail.com>
+Subject: Re: [PATCH v2 02/10] dt-bindings: pinctrl: qcom,msm8909: correct GPIO
+ name pattern and example
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Vinod Koul <vkoul@kernel.org>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        Luca Weiss <luca@z3ntu.xyz>, Iskren Chernev <me@iskren.info>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
-
-> On Thu, Feb 2, 2023 at 3:11 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
->>
->> On 2/2/23 10:27 PM, David Vernet wrote:
->> > On Thu, Feb 02, 2023 at 01:21:19PM -0800, Alexei Starovoitov wrote:
->> >> On Thu, Feb 2, 2023 at 8:31 AM David Vernet <void@manifault.com> wrote:
->> >>>
->> >>> Now that we have our kfunc lifecycle expectations clearly documented,
->> >>> and that KF_DEPRECATED is documented as an optional method for kfunc
->> >>> developers and maintainers to provide a deprecation story to BPF users,
->> >>> we need to actually implement the flag.
->> >>>
->> >>> This patch adds KF_DEPRECATED, and updates the verifier to issue a
->> >>> verifier log message if a deprecated kfunc is called. Currently, a BPF
->> >>> program either has to fail to verify, or be loaded with log level 2 in
->> >>> order to see the message. We could eventually enhance this to always
->> >>> be logged regardless of log level or verification status, or we could
->> >>> instead emit a warning to dmesg. This seems like the least controversial
->> >>> option for now.
->> >>>
->> >>> A subsequent patch will add a selftest that verifies this behavior.
->> >>>
->> >>> Signed-off-by: David Vernet <void@manifault.com>
->> >>> ---
->> >>>   include/linux/btf.h   | 1 +
->> >>>   kernel/bpf/verifier.c | 8 ++++++++
->> >>>   2 files changed, 9 insertions(+)
->> >>>
->> >>> diff --git a/include/linux/btf.h b/include/linux/btf.h
->> >>> index 49e0fe6d8274..a0ea788ee9b0 100644
->> >>> --- a/include/linux/btf.h
->> >>> +++ b/include/linux/btf.h
->> >>> @@ -71,6 +71,7 @@
->> >>>   #define KF_SLEEPABLE    (1 << 5) /* kfunc may sleep */
->> >>>   #define KF_DESTRUCTIVE  (1 << 6) /* kfunc performs destructive actions */
->> >>>   #define KF_RCU          (1 << 7) /* kfunc only takes rcu pointer arguments */
->> >>> +#define KF_DEPRECATED   (1 << 8) /* kfunc is slated to be removed or deprecated */
->> >>>
->> >>>   /*
->> >>>    * Tag marking a kernel function as a kfunc. This is meant to minimize the
->> >>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> >>> index 4cc0e70ee71e..22adcf24f9e1 100644
->> >>> --- a/kernel/bpf/verifier.c
->> >>> +++ b/kernel/bpf/verifier.c
->> >>> @@ -8511,6 +8511,11 @@ static bool is_kfunc_rcu(struct bpf_kfunc_call_arg_meta *meta)
->> >>>          return meta->kfunc_flags & KF_RCU;
->> >>>   }
->> >>>
->> >>> +static bool is_kfunc_deprecated(const struct bpf_kfunc_call_arg_meta *meta)
->> >>> +{
->> >>> +       return meta->kfunc_flags & KF_DEPRECATED;
->> >>> +}
->> >>> +
->> >>>   static bool is_kfunc_arg_kptr_get(struct bpf_kfunc_call_arg_meta *meta, int arg)
->> >>>   {
->> >>>          return arg == 0 && (meta->kfunc_flags & KF_KPTR_GET);
->> >>> @@ -9646,6 +9651,9 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
->> >>>                          mark_btf_func_reg_size(env, regno, t->size);
->> >>>          }
->> >>>
->> >>> +       if (is_kfunc_deprecated(&meta))
->> >>> +               verbose(env, "calling deprecated kfunc %s\n", func_name);
->> >>> +
->> >>
->> >> Since prog will successfully load, no one will notice this message.
->> >>
->> >> I think we can skip patches 2 and 3 for now.
->>
->> +1, the KF_DEPRECATED could probably for the time being just mentioned
->> in doc.
->>
->> > I can leave them out of the v2 version of the patch set, but the reason
->> > I included them here is because I thought it would be odd to document
->> > KF_DEPRECATED without actually upstreaming it. Agreed that it is
->> > essentially 0 signal in its current form. Hopefully it could be expanded
->> > soon to be louder and more noticeable by not relying on the env log,
->> > which is wiped if the verifier passes, but that's separate from whether
->> > KF_DEPRECATED in general is the API that we want to provide kfunc
->> > developers (in which case at least 2 and 3 would add that in a
->> > non-controversial form).
->>
->> This ideally needs some form of prog load flag which would error upon
->> use of kfuncs with deprecation tag, such that tools probing kernel for
->> feature availability can notice.
+On Thu, Feb 2, 2023 at 6:01 PM Rob Herring <robh@kernel.org> wrote:
 >
-> Interesting idea.
-> By default we can reject loading progs that try to use KF_DEPRECATED,
-> but still allow it with explicit load flag.
+> On Thu, Feb 02, 2023 at 11:44:44AM +0100, Krzysztof Kozlowski wrote:
+> > The MSM8909 TLMM pin controller has GPIOs 0-112, so narrow the pattern
+> > and gpio-ranges in the example.
+> >
+> > Fixes: c249ec7ba1b1 ("dt-bindings: pinctrl: Add DT schema for qcom,msm8909-tlmm")
+> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > Reviewed-by: Stephan Gerhold <stephan@gerhold.net>
+> > ---
+> >  .../devicetree/bindings/pinctrl/qcom,msm8909-tlmm.yaml        | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,msm8909-tlmm.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,msm8909-tlmm.yaml
+> > index 449e6e34be61..85082adc1811 100644
+> > --- a/Documentation/devicetree/bindings/pinctrl/qcom,msm8909-tlmm.yaml
+> > +++ b/Documentation/devicetree/bindings/pinctrl/qcom,msm8909-tlmm.yaml
+> > @@ -63,7 +63,7 @@ $defs:
+> >            subnode.
+> >          items:
+> >            oneOf:
+> > -            - pattern: "^gpio([0-9]|[1-9][0-9]|10[0-9]|11[0-7])$"
+> > +            - pattern: "^gpio([0-9]|[1-9][0-9]|10[0-9]|11[0-2])$"
+> >              - enum: [ sdc1_clk, sdc1_cmd, sdc1_data, sdc2_clk, sdc2_cmd,
+> >                        sdc2_data, qdsd_clk, qdsd_cmd, qdsd_data0, qdsd_data1,
+> >                        qdsd_data2, qdsd_data3 ]
+> > @@ -127,7 +127,7 @@ examples:
+> >          interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
+> >          gpio-controller;
+> >          #gpio-cells = <2>;
+> > -        gpio-ranges = <&tlmm 0 0 117>;
+> > +        gpio-ranges = <&tlmm 0 0 113>;
+>
+> I thought 112 was the max?
 
-If we reject by default then adding the deprecation flag would break
-applications just as much as just removing the kfunc, which would kinda
-defeat the purpose of having the flag in the first place, wouldn't it? :)
+That's the count, duh.
 
--Toke
-
+Acked-by: Rob Herring <robh@kernel.org>
