@@ -2,52 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3064B688FD0
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 07:48:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D272A688FCC
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 07:48:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232633AbjBCGrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 01:47:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39906 "EHLO
+        id S231216AbjBCGrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 01:47:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232628AbjBCGqf (ORCPT
+        with ESMTP id S232520AbjBCGqj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 01:46:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CFDF911B2;
-        Thu,  2 Feb 2023 22:44:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2036561DB8;
-        Fri,  3 Feb 2023 06:44:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6065C433EF;
-        Fri,  3 Feb 2023 06:44:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675406697;
-        bh=2pGlnT6XlzVCoevMd8v4vmCtZoD6Rwmp0FtTTto9gCk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kHT1242WEaBssun+/SgQ8xHgj0KQMRn7F7cG+FHgnk8cKszqEtxH9Jb9WpGtNnnql
-         ZczWQ4NFLzLnseSPjkf+8O9h+nRyPs9eef1gH44U+Y0Xl7CheaXiU/01agdMuFbdhb
-         O1nQUDifl/9LYrV5P65cJTLh/UfgxY7znDn+4RdY=
-Date:   Fri, 3 Feb 2023 07:44:54 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] HV: hv_balloon: fix memory leak with using
- debugfs_lookup()
-Message-ID: <Y9ytZo23CTV6AsCS@kroah.com>
-References: <20230202140918.2289522-1-gregkh@linuxfoundation.org>
- <BYAPR21MB168826E0AF83D40DE0C704F9D7D79@BYAPR21MB1688.namprd21.prod.outlook.com>
+        Fri, 3 Feb 2023 01:46:39 -0500
+Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9F698C415
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 22:45:39 -0800 (PST)
+Received: by mail-vk1-xa34.google.com with SMTP id q76so2114135vkb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 22:45:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=DXxrQE0DVwanxphrseUxAjJiqhp6uGNf7pcWwsgpWEg=;
+        b=nWROuR0pj1Pl1TSRysKSwzECG02ERncxdz5Du78MZoQovrXI7EnpmAXBHYV5IJbpU4
+         NMvgfqCm5s1STqR13XA1OTJIeUbSOpfB4XZ06Pv9JsGb8y1l23NZr2iCmtEjTorgnC+Z
+         2JY5IQuTGFbBtjM9mVNKXtzsroj8K8xFseTYM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DXxrQE0DVwanxphrseUxAjJiqhp6uGNf7pcWwsgpWEg=;
+        b=dLY42XUq2mJsNghYccEYCupoIHXs/ObtYgCEI5eN/ANPb2Kbm/y1ULRqitu/lMXIWK
+         xQgshKBfsCCpw03Mp0A+kXJA0+OK44D0rO6T6UiO9MA92SV9nYGPSldto3J+MzmODPjO
+         vzUCjDfON2Tfz09ogZf/lp6CvmzzoXZ7RPF4g1AnyCMcxJhSnMnmkkrPVI05xfbGT1cJ
+         6o5N5dRAw01eOwYr6acbwEd8eNH8SEXDKK7/nEAqUe1aHvX7FCl3L7Ud1i7ZkOvTuWv7
+         fykaNCL/+q45e4JsMptuQLNqeBTfbQHde4Ni7mrrqUxHr0pGPDa8O20wVBKmusztdT10
+         W19A==
+X-Gm-Message-State: AO0yUKUMoMBjOyz5KZYVhfDDCj8DX7JABflpHKjOm1/FCprTC5KOLP6R
+        XAnnf/dZMJ1zpSVC/kAlh86sSF1wKBikqR1MMYKfyA==
+X-Google-Smtp-Source: AK7set9N7s5GDlQRAmXm5uyJjoUg5jz6AF6KZ8lCLWBstusXFXE/r5U/501lgDv8HqpdHYNuecgcaP+dbJ30rnvNNUU=
+X-Received: by 2002:a05:6122:131:b0:3e8:8f:f3a7 with SMTP id
+ a17-20020a056122013100b003e8008ff3a7mr1316397vko.30.1675406738947; Thu, 02
+ Feb 2023 22:45:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BYAPR21MB168826E0AF83D40DE0C704F9D7D79@BYAPR21MB1688.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20230119124848.26364-1-Garmin.Chang@mediatek.com> <20230119124848.26364-5-Garmin.Chang@mediatek.com>
+In-Reply-To: <20230119124848.26364-5-Garmin.Chang@mediatek.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Fri, 3 Feb 2023 14:45:28 +0800
+Message-ID: <CAGXv+5GBG2Ehkth8atwueajdkdEGzb3UK5w8H4G98uRVd7U+Vw@mail.gmail.com>
+Subject: Re: [PATCH v5 04/19] clk: mediatek: Add MT8188 peripheral clock support
+To:     "Garmin.Chang" <Garmin.Chang@mediatek.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-clk@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,28 +71,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 03:56:06AM +0000, Michael Kelley (LINUX) wrote:
-> From: Greg Kroah-Hartman <gregkh@linuxfoundation.org> Sent: Thursday, February 2, 2023 6:09 AM
-> 
-> > 
-> > When calling debugfs_lookup() the result must have dput() called on it,
-> > otherwise the memory will leak over time.  To make things simpler, just
-> > call debugfs_lookup_and_remove() instead which handles all of the logic
-> > at once.
-> > 
-> > Cc: "K. Y. Srinivasan" <kys@microsoft.com>
-> > Cc: Haiyang Zhang <haiyangz@microsoft.com>
-> > Cc: Wei Liu <wei.liu@kernel.org>
-> > Cc: Dexuan Cui <decui@microsoft.com>
-> > Cc: linux-hyperv@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> 
-> Add a Fixes: tag?  This hv_balloon debugfs code was added in v6.0,
-> And I see that debugfs_lookup_and_remove() was also added in v6.0.
-> 
-> Fixes: d180e0a1be6c ("Drivers: hv: Create debugfs file with hyper-v balloon usage information")
+On Thu, Jan 19, 2023 at 8:51 PM Garmin.Chang <Garmin.Chang@mediatek.com> wrote:
+>
+> Add MT8188 peripheral clock controller which provides clock
+> gate control for ethernet/flashif/pcie/ssusb.
+>
+> Signed-off-by: Garmin.Chang <Garmin.Chang@mediatek.com>
 
-Will do, thanks.
-
-greg k-h
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
