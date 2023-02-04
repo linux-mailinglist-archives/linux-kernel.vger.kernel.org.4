@@ -2,85 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 987D268A80F
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 05:00:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70AE868A811
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 05:05:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233006AbjBDEAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 23:00:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54664 "EHLO
+        id S230042AbjBDEFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 23:05:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232929AbjBDEAZ (ORCPT
+        with ESMTP id S232929AbjBDEFQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 23:00:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12D008F25E;
-        Fri,  3 Feb 2023 20:00:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 73138B82CDE;
-        Sat,  4 Feb 2023 04:00:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 15347C433A0;
-        Sat,  4 Feb 2023 04:00:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675483222;
-        bh=gyBg154DmWTXDHE6sWZ6ckQ5Zi7QUIMbaB7EYfuuyAw=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=LDJ1z+g91HpwfQtROJctnK7gvWhFOU6sMxY7bJyJdwTdldSbpNAjOsE0jjNDD8dCv
-         Zx7Dq1Dcqj/kPSgDxnvhboKUJ0rzhIorV6zKbiZAMprHLqA5bysGGH1p0AKCUyHqYI
-         /UrzSxgVinjgT0p0FwfLY8sTXdx2LD+B0ap5y9wi2S9xZBX2qrK05vUKgLaGX6A6jL
-         g79Ew4XSSGECW7/JTxIYFULb//z/yQvBttX92slVo2/6k/jPgO+oRVLolYEW9DwyUt
-         1jPdXkQ+SiEhxQGXMW7C3DNNrHSQif1BTuLZsfjzEHNKuSkeLIO7vjOhca6GNiNE4p
-         dFE0BbYJ/iltA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DAD54E4448D;
-        Sat,  4 Feb 2023 04:00:21 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: macb: Perform zynqmp dynamic configuration only for
- SGMII interface
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167548322188.10981.1509367704209969692.git-patchwork-notify@kernel.org>
-Date:   Sat, 04 Feb 2023 04:00:21 +0000
-References: <1675340779-27499-1-git-send-email-radhey.shyam.pandey@amd.com>
-In-Reply-To: <1675340779-27499-1-git-send-email-radhey.shyam.pandey@amd.com>
-To:     Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-Cc:     nicolas.ferre@microchip.com, claudiu.beznea@microchip.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, andrew@lunn.ch, git@amd.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 3 Feb 2023 23:05:16 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A841F93E3F
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 20:05:11 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id o131-20020a25d789000000b00859dddecf8eso6661027ybg.17
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 20:05:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=r5EFoFMVQYP17Xk0sb+cncV8M1YLnWiOANhXlugOkSU=;
+        b=BBJOOR76NkBgdtCg6usaleW4LsFx6vglyGlX8SyNwQPRg+rzfzIPIATi+uRucr4Sxy
+         o+6DJtjTZypV5HMQ78NBcz2zeCuaxNChyT+F+GSsiJG4BQmGKFf+fjUA8jaOwF/ZUDJD
+         wcDEKtRWNdWVI9bqhGTh6bOw/vR8Jul4cs1/sW5+pWWLe8o5bpDX6j06USstu0q1jQrj
+         tJs3EZxdipuWXbgYhLTjRmhFwbLUZnt0TXHThqgaSUc2tP7YCJRVQgYxWbunC/aJ6Ohi
+         QnpckY3xyGph3OKbe1AyuUv6nwtP1Pe19k9rcObeRTlBj3HGNuDejatA6ZqBntUVYfSO
+         lt1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=r5EFoFMVQYP17Xk0sb+cncV8M1YLnWiOANhXlugOkSU=;
+        b=ev957AQk2fU/mGnj3adpHlKiYTPLu9DmZd5S1+Z20GIuNk/TkfvKzgcqDE0bNq5gEr
+         3N3MqVdlOqNY2glPk8N5XM+J5EV86/vTjfDj/GQnyQ2CTXotBwb5X3s93TlH/9LHOLyH
+         k0iotz0GEdnyd8/sj8FaO8Pg04a4m95hqazmA03IrUw0uSylFkVlGih0Y0N9JxJbjY1Z
+         6T9wG4RZ7AYjK4P6QH/Czy8arXQLQAxT0fbhmZsGDsoEveH3HPYMAoJKhnAWiGqv4k/4
+         WNZS3fLpT88I7tXN3uceV1D//0gPrpSakjIqQJ4iMUkNfapjFGkIwvHbRgKahcSWpbZ4
+         Frxg==
+X-Gm-Message-State: AO0yUKVgB/aa0kg1lQ4g+rXzFeHqp1vZcrdi9TgGOYbQYNjjaq8cdnwX
+        2Y1Gl4j3iG+um2f6UrJLDPsf2Q1FJYgkZg==
+X-Google-Smtp-Source: AK7set9nTil8ICmyhj+V3pe2+QNKgnsFyALqgFyookFeO+kG8LStHKMMPIjFn+V1LpwsXEaqDePIqmvS3FUTZg==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a0d:ef87:0:b0:524:3607:6034 with SMTP id
+ y129-20020a0def87000000b0052436076034mr7ywe.7.1675483510477; Fri, 03 Feb 2023
+ 20:05:10 -0800 (PST)
+Date:   Sat,  4 Feb 2023 12:04:53 +0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
+Message-ID: <20230204040452.3699111-1-davidgow@google.com>
+Subject: [PATCH] kunit: Add printf attribute to fail_current_test_impl
+From:   David Gow <davidgow@google.com>
+To:     Brendan Higgins <brendan.higgins@linux.dev>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Rae Moar <rmoar@google.com>
+Cc:     David Gow <davidgow@google.com>, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Add the gnu_printf (__printf()) attribute to the
+kunit_fail_current_test() implementation in
+__kunit_fail_current_test_impl(). While it's not actually useful here,
+as this function is never called directly, it nevertheless was
+triggering -Wsuggest-attribute=format warnings, so we should add it to
+reduce the noise.
 
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+Fixes: cc3ed2fe5c93 ("kunit: Add "hooks" to call into KUnit when it's built as a module")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: David Gow <davidgow@google.com>
+---
+ lib/kunit/hooks-impl.h | 4 +++-
+ lib/kunit/test.c       | 2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-On Thu, 2 Feb 2023 17:56:19 +0530 you wrote:
-> In zynqmp platforms where firmware supports dynamic SGMII configuration
-> but has other non-SGMII ethernet devices, it fails them with no packets
-> received at the RX interface.
-> 
-> To fix this behaviour perform SGMII dynamic configuration only
-> for the SGMII phy interface.
-> 
-> [...]
-
-Here is the summary with links:
-  - net: macb: Perform zynqmp dynamic configuration only for SGMII interface
-    https://git.kernel.org/netdev/net/c/c9011b028e95
-
-You are awesome, thank you!
+diff --git a/lib/kunit/hooks-impl.h b/lib/kunit/hooks-impl.h
+index ec745a39832c..4e71b2d0143b 100644
+--- a/lib/kunit/hooks-impl.h
++++ b/lib/kunit/hooks-impl.h
+@@ -15,7 +15,9 @@
+ #include <kunit/test-bug.h>
+ 
+ /* List of declarations. */
+-void __kunit_fail_current_test_impl(const char *file, int line, const char *fmt, ...);
++void __printf(3, 4) __kunit_fail_current_test_impl(const char *file,
++						   int line,
++						   const char *fmt, ...);
+ void *__kunit_get_static_stub_address_impl(struct kunit *test, void *real_fn_addr);
+ 
+ /* Code to set all of the function pointers. */
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index 51cae59d8aae..c9e15bb60058 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -24,7 +24,7 @@
+ /*
+  * Hook to fail the current test and print an error message to the log.
+  */
+-void __kunit_fail_current_test_impl(const char *file, int line, const char *fmt, ...)
++void __printf(3, 4) __kunit_fail_current_test_impl(const char *file, int line, const char *fmt, ...)
+ {
+ 	va_list args;
+ 	int len;
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.39.1.519.gcb327c4b5f-goog
 
