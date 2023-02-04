@@ -2,431 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C52C68AC15
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 20:21:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8459E68AC1B
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 20:34:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233683AbjBDTVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 14:21:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38018 "EHLO
+        id S232338AbjBDTeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 14:34:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233009AbjBDTVN (ORCPT
+        with ESMTP id S229746AbjBDTd6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 14:21:13 -0500
-Received: from ryne.moe (ryne.moe [157.90.134.234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3ACC02BEC8;
-        Sat,  4 Feb 2023 11:21:11 -0800 (PST)
-Received: from localhost.localdomain (unknown [170.55.83.2])
-        by ryne.moe (Postfix) with ESMTPSA id 7BCE81900DDC;
-        Sat,  4 Feb 2023 19:21:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=redstrate.com;
-        s=default; t=1675538470;
-        bh=hjmODvm3DHh9Nfizhq3ggVMFejW33OjDdGr6i3lMPiQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=IBwTk9WriRJ+0mmjqO0UicdMM2hOGt9lIT6pUj0rc9BGCfdzDV4wDfhrQGmSPenxB
-         fsiqicijgGVZIfKhmhC6+vd303+gxyp8zf87isEMT8dGFvsOQrkzyB6WRDuW7YAag1
-         sJO3lwYZa7hoRrcvey/4ZkzjEm1oaEiXkvphX3c8=
-From:   Joshua Goins <josh@redstrate.com>
-To:     linux-input@vger.kernel.org
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-kernel@vger.kernel.org, Joshua Goins <josh@redstrate.com>,
-        kernel test robot <lkp@intel.com>,
-        Dan Carpenter <error27@gmail.com>,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-Subject: [PATCH v3 2/2] HID: uclogic: Add support for XP-PEN Artist 22R Pro
-Date:   Sat,  4 Feb 2023 14:20:51 -0500
-Message-Id: <20230204192051.1287369-3-josh@redstrate.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230204192051.1287369-1-josh@redstrate.com>
-References: <20230204192051.1287369-1-josh@redstrate.com>
+        Sat, 4 Feb 2023 14:33:58 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCD2C2B090;
+        Sat,  4 Feb 2023 11:33:53 -0800 (PST)
+Received: from lhrpeml500006.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4P8Mzq6hCkz67K2n;
+        Sun,  5 Feb 2023 03:29:59 +0800 (CST)
+Received: from P_UKIT01-A7bmah.china.huawei.com (10.195.244.18) by
+ lhrpeml500006.china.huawei.com (7.191.161.198) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Sat, 4 Feb 2023 19:33:50 +0000
+From:   <shiju.jose@huawei.com>
+To:     <mchehab@kernel.org>, <linux-edac@vger.kernel.org>
+CC:     <rostedt@goodmis.org>, <mhiramat@kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-trace-kernel@vger.kernel.org>, <tanxiaofei@huawei.com>,
+        <jonathan.cameron@huawei.com>, <linuxarm@huawei.com>,
+        <shiju.jose@huawei.com>
+Subject: [RFC PATCH V2 1/1] rasdaemon: Fix poll() on per_cpu trace_pipe_raw blocks indefinitely
+Date:   Sat, 4 Feb 2023 19:33:45 +0000
+Message-ID: <20230204193345.842-1-shiju.jose@huawei.com>
+X-Mailer: git-send-email 2.26.0.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.195.244.18]
+X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
+ lhrpeml500006.china.huawei.com (7.191.161.198)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adds support for the XP-PEN Artist 22R Pro, including stylus, tablet frame
-and pen pressure.
+From: Shiju Jose <shiju.jose@huawei.com>
 
-The tablet has 20 buttons, but need to be remapped in order since the
-device reports invalid keycodes. Existing tablet functionality should
-not be inhibited, as BTN0-8 is still used.
+The error events are not received in the rasdaemon since kernel 6.1-rc6.
+This issue is firstly detected and reported, when testing the CXL error
+events in the rasdaemon.
 
-New initialization functions are added since the device differs slightly
-from other UGEE v2 devices.
+Debugging showed, poll() on trace_pipe_raw in the ras-events.c do not
+return and this issue is seen after the commit
+42fb0a1e84ff525ebe560e2baf9451ab69127e2b ("tracing/ring-buffer: Have
+polling block on watermark").
 
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <error27@gmail.com>
-Reported-by: José Expósito <jose.exposito89@gmail.com>
-Signed-off-by: Joshua Goins <josh@redstrate.com>
+This also verified using a test application for poll()
+and select() on trace_pipe_raw.
+
+There is also a bug reported on this issue,
+https://lore.kernel.org/all/31eb3b12-3350-90a4-a0d9-d1494db7cf74@oracle.com/
+
+This issue occurs for the per_cpu case, which calls the
+ring_buffer_poll_wait(), in kernel/trace/ring_buffer.c, with the
+buffer_percent > 0 and then wait until the percentage of pages are
+available.The default value set for the buffer_percent is 50 in the
+kernel/trace/trace.c. However poll() does not return even met the percentage
+of pages condition.
+
+As a fix, rasdaemon set buffer_percent as 0 through the
+/sys/kernel/debug/tracing/instances/rasdaemon/buffer_percent, then the
+task will wake up as soon as data is added to any of the specific cpu
+buffer and poll() on per_cpu/cpuX/trace_pipe_raw does not block
+indefinitely.
+
+Dependency on the kernel RFC patch
+tracing: Fix poll() and select() do not work on per_cpu trace_pipe and trace_pipe_raw
+
+Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
+
+Changes:
+RFC V1 -> RFC V2
+1. Rename the patch header subject.
+2. Changes for the backward compatability to the old kernels.
 ---
- drivers/hid/hid-ids.h            |   1 +
- drivers/hid/hid-uclogic-core.c   |  66 +++++++++++++++-
- drivers/hid/hid-uclogic-params.c | 132 +++++++++++++++++++++++++++++++
- drivers/hid/hid-uclogic-params.h |   5 ++
- drivers/hid/hid-uclogic-rdesc.c  |  44 +++++++++++
- drivers/hid/hid-uclogic-rdesc.h  |   4 +
- 6 files changed, 248 insertions(+), 4 deletions(-)
+ ras-events.c | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
-index 0f8c11842a3a..ac8b06fed870 100644
---- a/drivers/hid/hid-ids.h
-+++ b/drivers/hid/hid-ids.h
-@@ -1298,6 +1298,7 @@
- #define USB_DEVICE_ID_UGEE_XPPEN_TABLET_DECO_L	0x0935
- #define USB_DEVICE_ID_UGEE_XPPEN_TABLET_DECO_PRO_S	0x0909
- #define USB_DEVICE_ID_UGEE_XPPEN_TABLET_STAR06	0x0078
-+#define USB_DEVICE_ID_UGEE_XPPEN_TABLET_22R_PRO	0x091b
- #define USB_DEVICE_ID_UGEE_TABLET_G5		0x0074
- #define USB_DEVICE_ID_UGEE_TABLET_EX07S		0x0071
- #define USB_DEVICE_ID_UGEE_TABLET_RAINBOW_CV720	0x0055
-diff --git a/drivers/hid/hid-uclogic-core.c b/drivers/hid/hid-uclogic-core.c
-index cfbbc39807a6..75d1fea0764c 100644
---- a/drivers/hid/hid-uclogic-core.c
-+++ b/drivers/hid/hid-uclogic-core.c
-@@ -81,6 +81,30 @@ static __u8 *uclogic_report_fixup(struct hid_device *hdev, __u8 *rdesc,
- 	return rdesc;
- }
+diff --git a/ras-events.c b/ras-events.c
+index 3691311..e505a0e 100644
+--- a/ras-events.c
++++ b/ras-events.c
+@@ -383,6 +383,8 @@ static int read_ras_event_all_cpus(struct pthread_data *pdata,
+ 	int warnonce[n_cpus];
+ 	char pipe_raw[PATH_MAX];
+ 	int legacy_kernel = 0;
++	int fd;
++	char buf[10];
+ #if 0
+ 	int need_sleep = 0;
+ #endif
+@@ -402,6 +404,26 @@ static int read_ras_event_all_cpus(struct pthread_data *pdata,
+ 		return -ENOMEM;
+ 	}
  
-+/* Buttons considered valid tablet pad inputs. */
-+static const unsigned int uclogic_extra_input_mapping[] = {
-+	BTN_0,
-+	BTN_1,
-+	BTN_2,
-+	BTN_3,
-+	BTN_4,
-+	BTN_5,
-+	BTN_6,
-+	BTN_7,
-+	BTN_8,
-+	BTN_RIGHT,
-+	BTN_MIDDLE,
-+	BTN_SIDE,
-+	BTN_EXTRA,
-+	BTN_FORWARD,
-+	BTN_BACK,
-+	BTN_B,
-+	BTN_A,
-+	BTN_BASE,
-+	BTN_BASE2,
-+	BTN_X
-+};
-+
- static int uclogic_input_mapping(struct hid_device *hdev,
- 				 struct hid_input *hi,
- 				 struct hid_field *field,
-@@ -91,9 +115,27 @@ static int uclogic_input_mapping(struct hid_device *hdev,
- 	struct uclogic_drvdata *drvdata = hid_get_drvdata(hdev);
- 	struct uclogic_params *params = &drvdata->params;
- 
--	/* Discard invalid pen usages */
--	if (params->pen.usage_invalid && (field->application == HID_DG_PEN))
--		return -1;
-+	if (field->application == HID_GD_KEYPAD) {
-+		/*
-+		 * Remap input buttons to sensible ones that are not invalid.
-+		 * This only affects previous behavior for devices with more than ten or so buttons.
++	/* Fix for poll() on the per_cpu trace_pipe and trace_pipe_raw blocks
++	 * indefinitely with the default buffer_percent in the kernel trace system,
++	 * which is introduced by the following change in the kernel.
++	 * https://lore.kernel.org/all/20221020231427.41be3f26@gandalf.local.home/T/#u.
++	 * Set buffer_percent to 0 so that poll() will return immediately
++	 * when the trace data is available in the ras per_cpu trace pipe_raw
++	 */
++	fd = open_trace(pdata[0].ras, "buffer_percent", O_WRONLY);
++	if (fd >= 0) {
++		/* For the backward compatabilty to the old kernel, do not return
++		 * if fail to set the buffer_percent.
 +		 */
-+		const int key = (usage->hid & HID_USAGE) - 1;
++		snprintf(buf, sizeof(buf), "0");
++		size = write(fd, buf, strlen(buf));
++		if (size <= 0)
++			log(TERM, LOG_WARNING, "can't write to buffer_percent\n");
++		close(fd);
++	} else
++		log(TERM, LOG_WARNING, "Can't open buffer_percent\n");
 +
-+		if (key < ARRAY_SIZE(uclogic_extra_input_mapping)) {
-+			hid_map_usage(hi,
-+				      usage,
-+				      bit,
-+				      max,
-+				      EV_KEY,
-+				      uclogic_extra_input_mapping[key]);
-+			return 1;
-+		}
-+	} else if (field->application == HID_DG_PEN) {
-+		/* Discard invalid pen usages */
-+		if (params->pen.usage_invalid)
-+			return -1;
-+	}
+ 	for (i = 0; i < (n_cpus + 1); i++)
+ 		fds[i].fd = -1;
  
- 	/* Let hid-core decide what to do */
- 	return 0;
-@@ -403,8 +445,22 @@ static int uclogic_raw_event_frame(
- 
- 	/* If need to, and can, transform the bitmap dial reports */
- 	if (frame->bitmap_dial_byte > 0 && frame->bitmap_dial_byte < size) {
--		if (data[frame->bitmap_dial_byte] == 2)
-+		switch (data[frame->bitmap_dial_byte]) {
-+		case 2:
- 			data[frame->bitmap_dial_byte] = -1;
-+			break;
-+
-+		/* Everything below here is for tablets that shove multiple dials into 1 byte */
-+		case 16:
-+			data[frame->bitmap_dial_byte] = 0;
-+			data[frame->bitmap_second_dial_destination_byte] = 1;
-+			break;
-+
-+		case 32:
-+			data[frame->bitmap_dial_byte] = 0;
-+			data[frame->bitmap_second_dial_destination_byte] = -1;
-+			break;
-+		}
- 	}
- 
- 	return 0;
-@@ -533,6 +589,8 @@ static const struct hid_device_id uclogic_devices[] = {
- 				USB_DEVICE_ID_UGEE_XPPEN_TABLET_DECO_PRO_S) },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_UGEE,
- 				USB_DEVICE_ID_UGEE_XPPEN_TABLET_STAR06) },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_UGEE,
-+				USB_DEVICE_ID_UGEE_XPPEN_TABLET_22R_PRO) },
- 	{ }
- };
- MODULE_DEVICE_TABLE(hid, uclogic_devices);
-diff --git a/drivers/hid/hid-uclogic-params.c b/drivers/hid/hid-uclogic-params.c
-index d68cb99a03de..0f94715bb627 100644
---- a/drivers/hid/hid-uclogic-params.c
-+++ b/drivers/hid/hid-uclogic-params.c
-@@ -103,6 +103,8 @@ static void uclogic_params_frame_hid_dbg(
- 		frame->touch_flip_at);
- 	hid_dbg(hdev, "\t\t.bitmap_dial_byte = %u\n",
- 		frame->bitmap_dial_byte);
-+	hid_dbg(hdev, "\t\t.bitmap_second_dial_destination_byte = %u\n",
-+			frame->bitmap_second_dial_destination_byte);
- }
- 
- /**
-@@ -1417,6 +1419,126 @@ static int uclogic_params_ugee_v2_init(struct uclogic_params *params,
- 	return rc;
- }
- 
-+/*
-+ * uclogic_params_init_ugee_xppen_pro_22r() - Initializes a UGEE XP-Pen Pro 22R tablet device.
-+ *
-+ * @hdev:	The HID device of the tablet interface to initialize and get
-+ *		parameters from. Cannot be NULL.
-+ * @params:	Parameters to fill in (to be cleaned with
-+ *		uclogic_params_cleanup()). Not modified in case of error.
-+ *		Cannot be NULL.
-+ *
-+ * Returns:
-+ *	Zero, if successful. A negative errno code on error.
-+ */
-+static int uclogic_params_init_ugee_xppen_pro_22r(struct uclogic_params *params,
-+						  struct hid_device *hdev,
-+						  const u8 rdesc_frame_arr[],
-+						  const size_t rdesc_frame_size)
-+{
-+	int rc = 0;
-+	struct usb_interface *iface;
-+	__u8 bInterfaceNumber;
-+	const int str_desc_len = 12;
-+	u8 *str_desc = NULL;
-+	__u8 *rdesc_pen = NULL;
-+	s32 desc_params[UCLOGIC_RDESC_PH_ID_NUM];
-+	enum uclogic_params_frame_type frame_type;
-+	/* The resulting parameters (noop) */
-+	struct uclogic_params p = {0, };
-+
-+	if (!hdev || !params) {
-+		rc = -EINVAL;
-+		goto cleanup;
-+	}
-+
-+	iface = to_usb_interface(hdev->dev.parent);
-+	bInterfaceNumber = iface->cur_altsetting->desc.bInterfaceNumber;
-+
-+	/* Ignore non-pen interfaces */
-+	if (bInterfaceNumber != 2) {
-+		uclogic_params_init_invalid(&p);
-+		goto output;
-+	}
-+
-+	/*
-+	 * Initialize the interface by sending magic data.
-+	 * This magic data is the same as other UGEE v2 tablets.
-+	 */
-+	rc = uclogic_probe_interface(hdev,
-+				     uclogic_ugee_v2_probe_arr,
-+				     uclogic_ugee_v2_probe_size,
-+				     uclogic_ugee_v2_probe_endpoint);
-+	if (rc) {
-+		uclogic_params_init_invalid(&p);
-+		goto output;
-+	}
-+
-+	/**
-+	 * Read the string descriptor containing pen and frame parameters.
-+	 * These are slightly different than typical UGEE v2 devices.
-+	 */
-+	rc = uclogic_params_get_str_desc(&str_desc, hdev, 100, str_desc_len);
-+	if (rc != str_desc_len) {
-+		hid_err(hdev, "failed retrieving pen and frame parameters: %d\n", rc);
-+		uclogic_params_init_invalid(&p);
-+		goto output;
-+	}
-+
-+	rc = uclogic_params_parse_ugee_v2_desc(str_desc, str_desc_len,
-+					       desc_params,
-+					       ARRAY_SIZE(desc_params),
-+					       &frame_type);
-+	if (rc)
-+		goto cleanup;
-+
-+	// str_desc doesn't report the correct amount of buttons, so manually fix it
-+	desc_params[UCLOGIC_RDESC_FRAME_PH_ID_UM] = 20;
-+
-+	kfree(str_desc);
-+	str_desc = NULL;
-+
-+	/* Initialize the pen interface */
-+	rdesc_pen = uclogic_rdesc_template_apply(
-+				uclogic_rdesc_ugee_v2_pen_template_arr,
-+				uclogic_rdesc_ugee_v2_pen_template_size,
-+				desc_params, ARRAY_SIZE(desc_params));
-+	if (!rdesc_pen) {
-+		rc = -ENOMEM;
-+		goto cleanup;
-+	}
-+
-+	p.pen.desc_ptr = rdesc_pen;
-+	p.pen.desc_size = uclogic_rdesc_ugee_v2_pen_template_size;
-+	p.pen.id = 0x02;
-+	p.pen.subreport_list[0].value = 0xf0;
-+	p.pen.subreport_list[0].id = UCLOGIC_RDESC_V1_FRAME_ID;
-+
-+	/* Initialize the frame interface */
-+	rc = uclogic_params_frame_init_with_desc(
-+		&p.frame_list[0],
-+		rdesc_frame_arr,
-+		rdesc_frame_size,
-+		UCLOGIC_RDESC_V1_FRAME_ID);
-+	if (rc < 0) {
-+		hid_err(hdev, "initializing frame params failed: %d\n", rc);
-+		goto output;
-+	}
-+
-+	p.frame_list[0].bitmap_dial_byte = 7;
-+	p.frame_list[0].bitmap_second_dial_destination_byte = 8;
-+
-+output:
-+	/* Output parameters */
-+	memcpy(params, &p, sizeof(*params));
-+	memset(&p, 0, sizeof(p));
-+	rc = 0;
-+cleanup:
-+	kfree(str_desc);
-+	uclogic_params_cleanup(&p);
-+	return rc;
-+}
-+
- /**
-  * uclogic_params_init() - initialize a tablet interface and discover its
-  * parameters.
-@@ -1729,6 +1851,16 @@ int uclogic_params_init(struct uclogic_params *params,
- 			uclogic_params_init_invalid(&p);
- 		}
- 
-+		break;
-+	case VID_PID(USB_VENDOR_ID_UGEE,
-+			USB_DEVICE_ID_UGEE_XPPEN_TABLET_22R_PRO):
-+		rc = uclogic_params_init_ugee_xppen_pro_22r(&p,
-+			hdev,
-+			uclogic_rdesc_xppen_artist_22r_pro_frame_arr,
-+			uclogic_rdesc_xppen_artist_22r_pro_frame_size);
-+		if (rc != 0)
-+			goto cleanup;
-+
- 		break;
- 	}
- 
-diff --git a/drivers/hid/hid-uclogic-params.h b/drivers/hid/hid-uclogic-params.h
-index a97477c02ff8..6621a75a4b1a 100644
---- a/drivers/hid/hid-uclogic-params.h
-+++ b/drivers/hid/hid-uclogic-params.h
-@@ -171,6 +171,11 @@ struct uclogic_params_frame {
- 	 * counterclockwise, as opposed to the normal 1 and -1.
- 	 */
- 	unsigned int bitmap_dial_byte;
-+	/*
-+	 * Destination offset for the second bitmap dial byte, if the tablet
-+	 * supports a second dial at all.
-+	 */
-+	unsigned int bitmap_second_dial_destination_byte;
- };
- 
- /*
-diff --git a/drivers/hid/hid-uclogic-rdesc.c b/drivers/hid/hid-uclogic-rdesc.c
-index b6dfdf6356a6..86293ae8c995 100644
---- a/drivers/hid/hid-uclogic-rdesc.c
-+++ b/drivers/hid/hid-uclogic-rdesc.c
-@@ -1191,6 +1191,50 @@ const __u8 uclogic_rdesc_xppen_deco01_frame_arr[] = {
- const size_t uclogic_rdesc_xppen_deco01_frame_size =
- 			sizeof(uclogic_rdesc_xppen_deco01_frame_arr);
- 
-+/* Fixed report descriptor for XP-Pen Arist 22R Pro frame */
-+const __u8 uclogic_rdesc_xppen_artist_22r_pro_frame_arr[] = {
-+	0x05, 0x01,         /*  Usage Page (Desktop),                       */
-+	0x09, 0x07,         /*  Usage (Keypad),                             */
-+	0xA1, 0x01,         /*  Collection (Application),                   */
-+	0x85, UCLOGIC_RDESC_V1_FRAME_ID,
-+	/*      Report ID (Virtual report),             */
-+	0x05, 0x0D,         /*     Usage Page (Digitizer),                  */
-+	0x09, 0x39,         /*      Usage (Tablet Function Keys),           */
-+	0xA0,               /*      Collection (Physical),                  */
-+	0x14,               /*          Logical Minimum (0),                */
-+	0x25, 0x01,         /*          Logical Maximum (1),                */
-+	0x75, 0x01,         /*          Report Size (1),                    */
-+	0x95, 0x08,         /*          Report Count (8),                   */
-+	0x81, 0x01,         /*          Input (Constant),                   */
-+	0x05, 0x09,         /*          Usage Page (Button),                */
-+	0x19, 0x01,         /*          Usage Minimum (01h),                */
-+	0x29, 0x14,         /*          Usage Maximum (14h),                */
-+	0x95, 0x14,         /*          Report Count (20),                  */
-+	0x81, 0x02,         /*          Input (Variable),                   */
-+	0x95, 0x14,         /*          Report Count (20),                  */
-+	0x81, 0x01,         /*          Input (Constant),                   */
-+	0x05, 0x01,         /*          Usage Page (Desktop),               */
-+	0x09, 0x38,         /*          Usage (Wheel),                      */
-+	0x75, 0x08,         /*          Report Size (8),                    */
-+	0x95, 0x01,         /*          Report Count (1),                   */
-+	0x15, 0xFF,         /*          Logical Minimum (-1),               */
-+	0x25, 0x08,         /*          Logical Maximum (8),                */
-+	0x81, 0x06,         /*          Input (Variable, Relative),         */
-+	0x05, 0x0C,         /*          Usage Page (Consumer Devices),      */
-+	0x0A, 0x38, 0x02,   /*          Usage (AC PAN),                     */
-+	0x95, 0x01,         /*          Report Count (1),                   */
-+	0x81, 0x06,         /*          Input (Variable, Relative),         */
-+	0x26, 0xFF, 0x00,   /*          Logical Maximum (255),              */
-+	0x75, 0x08,         /*          Report Size (8),                    */
-+	0x95, 0x01,         /*          Report Count (1),                   */
-+	0x81, 0x02,         /*          Input (Variable),                   */
-+	0xC0,               /*      End Collection                          */
-+	0xC0,               /*  End Collection                              */
-+};
-+
-+const size_t uclogic_rdesc_xppen_artist_22r_pro_frame_size =
-+				sizeof(uclogic_rdesc_xppen_artist_22r_pro_frame_arr);
-+
- /**
-  * uclogic_rdesc_template_apply() - apply report descriptor parameters to a
-  * report descriptor template, creating a report descriptor. Copies the
-diff --git a/drivers/hid/hid-uclogic-rdesc.h b/drivers/hid/hid-uclogic-rdesc.h
-index 906d068f50a9..c3cb2c75dda5 100644
---- a/drivers/hid/hid-uclogic-rdesc.h
-+++ b/drivers/hid/hid-uclogic-rdesc.h
-@@ -210,4 +210,8 @@ extern const size_t uclogic_rdesc_ugee_g5_frame_size;
- /* Least-significant bit of Ugee G5 frame rotary encoder state */
- #define UCLOGIC_RDESC_UGEE_G5_FRAME_RE_LSB 38
- 
-+/* Fixed report descriptor for XP-Pen Arist 22R Pro frame */
-+extern const __u8 uclogic_rdesc_xppen_artist_22r_pro_frame_arr[];
-+extern const size_t uclogic_rdesc_xppen_artist_22r_pro_frame_size;
-+
- #endif /* _HID_UCLOGIC_RDESC_H */
 -- 
-2.39.1
+2.25.1
 
