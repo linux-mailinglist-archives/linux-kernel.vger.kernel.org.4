@@ -2,141 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18AAD68AA03
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 14:28:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E99268AA06
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 14:30:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233632AbjBDN2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 08:28:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37276 "EHLO
+        id S233580AbjBDNaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 08:30:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231348AbjBDN2c (ORCPT
+        with ESMTP id S229448AbjBDNaw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 08:28:32 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2128.outbound.protection.outlook.com [40.107.92.128])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE24C7;
-        Sat,  4 Feb 2023 05:28:30 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YfVrVyeT9swDGDmW0eU/YrJPhZEYNWznPz0MPVqxgbh/HefdLSsupsSp2PF64FpvKBV6ByDVF5LGVvMZ6cb6sq1vgo2GT7fb8z1CRybMBJ6sj1Ts4sN735KdUlX5DuqpetWyyyohL+y/vn3uxAaLVzKQOHJt/w1kaUSbVxK2BR/LrGXTC67rS5f8E6VEk5wunkMVQ4fR5Exxd/uVgiBNXzcBrK+Qq//Fvt90+zafdGcPBX3OEjVUf1LZhMe2t7AOipL4/CGcuvc7/YM0B+pcz/Tuihu55QnKTadzvqH4WGCU4pRV1Fa4/vX/Ry5e/Hpyi1rW3F0+mf0WyYPulBOJag==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oqWBOggluHBbzDgs3j1m9YVPnMJVuKpnZNQP5kOgxRA=;
- b=iUckkpgUwWva2cRAi8qVlr6MPiMdmCX53MrwW3bDSn1py+l1Cda4fT0cM1bHI1Sh3ht5RtvVdddG00kZUbV9Hs6B/j3OB3JVZf0sEobdNqhLiR0LOKdlSjWkxgMacxW7y2MFVwxv+ZjoanHI7GLxtAMNbFinnB81TXgPH0qu+0x2aIynohqG1uYky0VSavknk75IkdVA9N9hBTfow9n7D+LpMuEgRqORfXkqxkm35lsigwkCPWpAdYKtH+f5fPm5bJGhTxC4GH7GyhIW+5h08GKnpX0gXpGPFyfUvU73ld4L7S1Yu6qjEqDrFyqM3thb5UhXxdHm39r8oIzb+7Pgsg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Sat, 4 Feb 2023 08:30:52 -0500
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6181B2690
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 05:30:51 -0800 (PST)
+Received: by mail-pg1-x544.google.com with SMTP id 141so5469003pgc.0
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Feb 2023 05:30:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oqWBOggluHBbzDgs3j1m9YVPnMJVuKpnZNQP5kOgxRA=;
- b=eYd54mfpa1b0+KrDkqkQxlpTHxqm89scIAp6h6LuRnEqNf2/0adkjBi4Y1GUQGKvUtKfHM0jevbaKJftCPzI4g0uR9yx2RU3hB2ca0YkPOQkydyARZQbogz1tyrQeWXjSNoQf50WTmpbuUhm2cpkdWuxC+gJsYwl09HhLLfPcmU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by DM6PR13MB3675.namprd13.prod.outlook.com (2603:10b6:5:1::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6064.24; Sat, 4 Feb 2023 13:28:28 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb5c:910f:3730:fd65]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb5c:910f:3730:fd65%6]) with mapi id 15.20.6064.032; Sat, 4 Feb 2023
- 13:28:28 +0000
-Date:   Sat, 4 Feb 2023 14:28:21 +0100
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Eddy Tao <taoyuan_eddy@hotmail.com>
-Cc:     netdev@vger.kernel.org, Pravin B Shelar <pshelar@ovn.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, dev@openvswitch.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v7 1/1] net:openvswitch:reduce cpu_used_mask
- memory
-Message-ID: <Y95ddddYhqkR7b1o@corigine.com>
-References: <OS3P286MB22957550350801F37FB56DFFF5D79@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <OS3P286MB22957550350801F37FB56DFFF5D79@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
-X-ClientProxiedBy: AM4PR0501CA0049.eurprd05.prod.outlook.com
- (2603:10a6:200:68::17) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FVkdJLwyfwU33wlGnUCxAKm5k44RcZQqior6oaFvcuE=;
+        b=XfyrlbJL6GXcFIz5XpUaWJNvkmTsRb5QUwHie4CTObeVqXW0WSWgZA6m9Iq9DOT3a2
+         Hw+fBePPOzPq/MrBuP3xBx7m9EbozC6e05a0ai8ItCuv0nrMXj2PYMxbenIv3Taz/vAv
+         AqGCtNwKNQHzA5ZI2zvjz+/QxoDgqYACbLgoc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FVkdJLwyfwU33wlGnUCxAKm5k44RcZQqior6oaFvcuE=;
+        b=vaeY3DWeVkLZKki+1nX6Zu4hStrOcgMveJqQ5nmvVwAb2DhzR7bzweGYwS5JdShzCR
+         YkDS5FvI/FZiKoSeOkOB3/kG4gJRc3jJzh3nBNflD0itB74CFxch2hPlyoWL6y2UHWkP
+         GaXmAaHeSjXpYPUZG6VMMl0Kh+oiBPVyaygLSSF+FQWFFUazrZ1qTscTqMEbw2ULeMNN
+         8h24S8AwuYygpb7+dt5m0vfWUifiXNqBCZoxVrGxkzzTCBxmuBC1Kt+cV8ji1JUSAi5H
+         4g0gpvxMR5/2nxqqYIyXImNJ6GGhdDUHkcvmTv0D2nvnsjrZgq1Pa23vxEE5OcbuUJRc
+         EfCQ==
+X-Gm-Message-State: AO0yUKUoGDMVS93DYwOEBgY9mlSYeptkUgX46J+WkBsnFjrB9NeCl2kg
+        DbED8szHzjMC85s1JMB7aIivaw==
+X-Google-Smtp-Source: AK7set+9iHtCCYOSfEMYujSJDtSXZN/ujD2frcnZL18RY+S+5asJRhXbTQnQ3sqA2Na2InRuHuRE0Q==
+X-Received: by 2002:a62:3286:0:b0:59c:8937:435e with SMTP id y128-20020a623286000000b0059c8937435emr784064pfy.28.1675517450787;
+        Sat, 04 Feb 2023 05:30:50 -0800 (PST)
+Received: from treapking.tpe.corp.google.com ([2401:fa00:1:10:c1ad:2bdc:7b5a:72e3])
+        by smtp.gmail.com with ESMTPSA id 144-20020a621596000000b00593ce7ebbaasm3655639pfv.184.2023.02.04.05.30.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Feb 2023 05:30:50 -0800 (PST)
+From:   Pin-yen Lin <treapking@chromium.org>
+To:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>
+Cc:     linux-kernel@vger.kernel.org,
+        =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
+        <nfraprado@collabora.com>, Hsin-Yi Wang <hsinyi@chromium.org>,
+        devicetree@vger.kernel.org, Pin-yen Lin <treapking@chromium.org>,
+        Allen Chen <allen.chen@ite.com.tw>,
+        Lyude Paul <lyude@redhat.com>, linux-acpi@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, Marek Vasut <marex@denx.de>,
+        Xin Ji <xji@analogixsemi.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        chrome-platform@lists.linux.dev,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Imre Deak <imre.deak@intel.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        Thierry Reding <treding@nvidia.com>
+Subject: [PATCH v11 0/9] Register Type-C mode-switch in DP bridge endpoints
+Date:   Sat,  4 Feb 2023 21:30:31 +0800
+Message-Id: <20230204133040.1236799-1-treapking@chromium.org>
+X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|DM6PR13MB3675:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8100967a-c728-43f6-7bd3-08db06b3b32c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: lH+6d7JCBHz64rECB4YGb/2gkhIPvQc3G6zgl94Ibas+HoyV5zJAEWvhTfCfbxOmPk4qMNwbmZ9NqTjT0nnx2yhkHawbyg/YZfLJsjCfqgrmzMlHSkBMrZZIPLmMJrJD0/4bA0LoMsBKHU8986nseVwYzaut2yPmmvmEVmsWfqJcfsRYwPeFdhqi2QKqiuaqoMn0gUyhGQBvF0iUry7t9yLSiguNU5xbvoOopnyZZoJ6rH9pU2d7LNWolbWayM2EJd4gfmx/XkuX6IpMLAFqwnT19lCVwvb/7UIfztuCbglxLh3uAN/j1Wk7dMdlfcP3BxIFEHPojAjrn/BGARJg3hAA7WRPjfuL+tDJj0oi2afDZQNCvuG2o9EG/Aeco4YqAQMbaJxW2wX64YKxAjwd+uHqfDyeikMl2oHFkyvebcXskDvQJQIymhhjf8uxggZbuNzQWixJ/RgYgAb1PrEelGSSqBjX8J/y4qcxf5w4aJpHjSada9wdURhaWG3pbVrx5Cona7VGmTmQQvosfzbHkY3LRJgmhyYNCd4CU8jwPmnGMuMbn0xcrbCK11RwvYl80tv3ypj6/0j0ro5nePSAT17r/+DG+uMb0lZNsKBkvoHp4viSSoqTN8DrbkJMY4NbHjaRwR+/Vg8LPpCOfunlIA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(366004)(346002)(39840400004)(396003)(376002)(451199018)(83380400001)(45080400002)(86362001)(36756003)(6512007)(6486002)(2616005)(38100700002)(478600001)(186003)(41300700001)(6506007)(54906003)(4744005)(316002)(6666004)(44832011)(4326008)(66946007)(2906002)(8936002)(66556008)(5660300002)(8676002)(6916009)(66476007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?sr4wasDoIBGdJTemOAM5rYjl+QnrNIp+poitxGAGK44S0ZuhLUoecs7bLncU?=
- =?us-ascii?Q?wTYZzexk4Vbn2+qt25f+LrNvI+6JrryfrBQSjTIFiHYAu23HUTdIuUZHn2by?=
- =?us-ascii?Q?MLkfITZbyGemF1YHjZTZUdOEMPYpO5i4DQVzG+i0fCNVOKYekNbHTVXY0jVR?=
- =?us-ascii?Q?GVfBYAlDj/x2NPT3NVmonC5rZfzFNDzzy32EBcYIczDBnHeE2TlUa72ZylqH?=
- =?us-ascii?Q?+ets6LxeZTJ3dRkBW8VCQTNMGe31suV9IEbjEPnYAP9MH7H9rKI4qndf9ej1?=
- =?us-ascii?Q?LQpPu5Z5YSzQwthDmPRfmXOxfVZp+Cns9FVqnvX5jgIR5/j+4YhS+2w7drzU?=
- =?us-ascii?Q?NGPvjaVD+D70j4qU8A+eryTNZZiVoHrYYji3WXeMVH6GpGE/uIwxj/lmu1oJ?=
- =?us-ascii?Q?suJqV280sy6cF3C91Bt/SHXU6COjoKPanTbHOVJoQqgW4v0fSuggQQReuQiJ?=
- =?us-ascii?Q?Q8Ayjz1lwk+cq052EIETk+QaYvWCc/wkSbnEywIEPNhWd6H7Y5xGcil8F4wX?=
- =?us-ascii?Q?EEU8+ks7GchAzpENEIYejqqKBI6z7YzRxOgwCNlQn82CfoVDExo0/lN5uFux?=
- =?us-ascii?Q?dZkaDCsDjGy9afh+VmhQ15WeMwXUUh8O0ZI9R0R9Yayf7mDprQHc5i3cqbvp?=
- =?us-ascii?Q?5zG1ZbSG5DbhYQfIcYYfm9PpRZbmGzwVQrXmPFxEuMWxu4FCM/Qj4zjRkHre?=
- =?us-ascii?Q?hkzBtWSdhfuXtdZIT97v2Rq3O+rE5n4Sw/2p3H2rYCgTOXeAeRcEDpK8oRfz?=
- =?us-ascii?Q?LMBWRwUp7xjImRjBDQGeTB2KX7O5MzH7GciH4+l5t573DKgUfOH1svUWn53i?=
- =?us-ascii?Q?rX/aUrQ3TKmfMtqe2IP8X+871CO4xmvYlVRhS6GOCB4ETSH+RrGoHj1SEcS8?=
- =?us-ascii?Q?CN4rATt8Fd6DV9GJUVVvkz/j9ZPMav/94t7Peo1kK2quPVIGQjpdRgJRVNQ0?=
- =?us-ascii?Q?W29hPjDkfTh+f1TBbvCKlixrwhg+4A17cmpOnHOdR4cFUoNdpOPSh1gBtFi0?=
- =?us-ascii?Q?Tk1XUKKv02cFfI8B8UxcieZ2KxF8N7UOzQMXAJSG+11W00/PyeBtOgINVdoK?=
- =?us-ascii?Q?qceWddxbG7LI3b8/5XrzyPKNtmwyJPILhNR2k2B9PSj7zXRoHuMFQXNAys40?=
- =?us-ascii?Q?exCQhSmWvobh4ZPwdXvljb1vjNlVtyWaE9exon8KA9vVTidxFls36kZNoJOi?=
- =?us-ascii?Q?QRoU9vYs3Gv29BYDEGyQw9qt74G1nWBqQaVhhIvx0om/hRtj2RXI2g9Hi4br?=
- =?us-ascii?Q?RpRkv+zAsZi1U43ZG0euMp1J82C6n3BhNwKYttm6mACx4V2AQNDpvmLFUJYV?=
- =?us-ascii?Q?rOw3uvUiv8DDDCKyOC0fuY5L7wsq+4BmbguhmKAvdCnPJOKPJmNiGu7zdqZv?=
- =?us-ascii?Q?ckyVbcEgaaTZnI8H5lUL5+g6cuyEgj1Ga2jq2HWivzfG5RuJAr6mMRg/saPO?=
- =?us-ascii?Q?p+7VvB+IOtzTe+jZY7yEIGcW9m/ZhK9oXNu9t/m7WQso06DSB5APAYf6N5Wb?=
- =?us-ascii?Q?TRpoEXdgM/bkxw+CfLiURiiO4mT4gBN/M0hhSun6keKr3FwZptEGoIxnxaAd?=
- =?us-ascii?Q?tytdRC88utDSZiM762YBn2QqERY3UNRHpB/vKPXBlT/j9mltrTpNOJ06E+1o?=
- =?us-ascii?Q?Tk0nNCaMmK0eqwex/AG3gCX1aoSskVUkfz/OiCOQmrcEClqlPqBgm+zqs90r?=
- =?us-ascii?Q?KHZwww=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8100967a-c728-43f6-7bd3-08db06b3b32c
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Feb 2023 13:28:27.9725
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rN+zno3FSEoB4oxa/ikIrOIzSrSySxCkbD5YmGjDWpwwEG7qQBZiRVK0i4JX6JdwlI2bd37Q69RnUAeXQYCUDzKsCYMMpAZjxxyBdNh6b4g=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR13MB3675
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 11:42:45PM +0800, Eddy Tao wrote:
-> Use actual CPU number instead of hardcoded value to decide the size
-> of 'cpu_used_mask' in 'struct sw_flow'. Below is the reason.
-> 
-> 'struct cpumask cpu_used_mask' is embedded in struct sw_flow.
-> Its size is hardcoded to CONFIG_NR_CPUS bits, which can be
-> 8192 by default, it costs memory and slows down ovs_flow_alloc
-> 
-> To address this:
->  Redefine cpu_used_mask to pointer.
->  Append cpumask_size() bytes after 'stat' to hold cpumask.
->  Initialization cpu_used_mask right after stats_last_writer.
-> 
-> APIs like cpumask_next and cpumask_set_cpu never access bits
-> beyond cpu count, cpumask_size() bytes of memory is enough
-> 
-> Signed-off-by: Eddy Tao <taoyuan_eddy@hotmail.com>
 
-nit: I think the correct prefix for the patch subject is 'openvswitch:'
-     And there should be a space after the prefix.
+This series introduces bindings for anx7625/it6505 to register Type-C
+mode-switch in their output endpoints, and use data-lanes property to
+describe the pin connections.
 
-[PATCH net-next v8 1/1] openvswitch: reduce cpu_used_mask
+This series is not directly related to the built-in mux in anx7625,
+which automatically switches between the two orientations of a single
+Type-C connector. This series adds support of registering mode switches
+for two downstream devices, while we use orientation switches for two
+orientations of the Type-C connector.
+
+The first two patch modifies fwnode_graph_devcon_matches and
+cros_typec_init_ports to enable the registration of the switches.
+
+Patch 4~6 introduce the bindings for anx7625 and the corresponding driver
+modifications.
+
+Patch 7~9 add similar bindings and driver changes for it6505.
+
+v10: https://lore.kernel.org/all/20230112042104.4107253-1-treapking@chromium.org/
+v9: https://lore.kernel.org/all/20230109084101.265664-1-treapking@chromium.org/
+v8: https://lore.kernel.org/all/20230107102231.23682-1-treapking@chromium.org/
+v7: https://lore.kernel.org/all/20230105132457.4125372-1-treapking@chromium.org/
+v6: https://lore.kernel.org/all/20221124102056.393220-1-treapking@chromium.org/
+v5: https://lore.kernel.org/linux-usb/20220622173605.1168416-1-pmalani@chromium.org/
+
+Changes in v11:
+- Added missing fwnode_handle_put in drivers/base/property.c
+- Collected Acked-by tag
+- Use fwnode helpers instead of DT
+- Moved the helpers to a new file
+- Use "reg" instead of "data-lanes" to determine the port number
+- Updated the description of the endpoints in the bindings
+- Referenced video-interfaces.yaml instead for the endpoints binding
+- Removed duplicated definitions from inherited schema
+- Moved the "data-lanes" parsing logics to bridge drivers
+- Removed Kconfig dependencies for the bridge drivers
+- Updated the usage of the private bridge driver data
+- Added a clarification on the anx7625 built-in mux in the cover letter
+
+Changes in v10:
+- Collected Reviewed-by and Tested-by tags
+- Replaced "void *" with "typec_mux_set_fn_t" for mux_set callbacks
+- Print out the node name when errors on parsing DT
+- Use dev_dbg instead of dev_warn when no Type-C switch nodes available
+- Made the return path of drm_dp_register_mode_switch clearer
+- Added a TODO for implementing orientation switch for anx7625
+- Updated the commit message for the absence of orientation switch
+- Fixed typo in the commit message
+
+Changes in v9:
+- Collected Reviewed-by tag
+- Fixed subject prefix again
+- Changed the naming of the example node for it6505
+
+Changes in v8:
+- Fixed the build issue when CONFIG_TYPEC=m
+- Fixed some style issues
+- Fixed the subject prefixes for the bindings patch
+- Fixed the bindings for data-lanes properties
+
+Changes in v7:
+- Fix the long comment lines
+- Extracted the common codes to a helper function
+- Fixed style issues in anx7625 driver
+- Removed DT property validation in anx7625 driver.
+- Fixed style issues in it6505 driver
+- Removed the redundant sleep in it6505 driver
+- Removed DT property validation in it6505 driver
+- Rebased to drm-misc-next
+- Fixed indentations in bindings patches
+- Added a new patch to fix indentations in Kconfig
+
+Changes in v6:
+- Changed it6505_typec_mux_set callback function to accommodate with
+  the latest drm-misc patches
+- Changed the driver implementation to accommodate with the new binding
+- Dropped typec-switch binding and use endpoints and data-lanes properties
+  to describe the pin connections
+- Added new patches (patch 1,2,4) to fix probing issues
+- Changed the bindings of it6505/anx7625 and modified the drivers
+  accordingly
+- Merged it6505/anx7625 driver changes into a single patch
+
+Pin-yen Lin (7):
+  drm/display: Add Type-C switch helpers
+  dt-bindings: display: bridge: anx7625: Add mode-switch support
+  drm/bridge: anx7625: Check for Type-C during panel registration
+  drm/bridge: anx7625: Register Type C mode switches
+  dt-bindings: display: bridge: it6505: Add mode-switch support
+  drm/bridge: it6505: Fix Kconfig indentation
+  drm/bridge: it6505: Register Type C mode switches
+
+Prashant Malani (2):
+  device property: Add remote endpoint to devcon matcher
+  platform/chrome: cros_ec_typec: Purge blocking switch devlinks
+
+ .../display/bridge/analogix,anx7625.yaml      |  94 ++++++++-
+ .../bindings/display/bridge/ite,it6505.yaml   | 101 ++++++++--
+ drivers/base/property.c                       |  16 ++
+ drivers/gpu/drm/bridge/Kconfig                |  20 +-
+ drivers/gpu/drm/bridge/analogix/anx7625.c     | 162 +++++++++++++++-
+ drivers/gpu/drm/bridge/analogix/anx7625.h     |  20 ++
+ drivers/gpu/drm/bridge/ite-it6505.c           | 179 +++++++++++++++++-
+ drivers/gpu/drm/display/Makefile              |   1 +
+ drivers/gpu/drm/display/drm_dp_typec_helper.c | 114 +++++++++++
+ drivers/platform/chrome/cros_ec_typec.c       |  10 +
+ include/drm/display/drm_dp_helper.h           |  31 +++
+ 11 files changed, 717 insertions(+), 31 deletions(-)
+ create mode 100644 drivers/gpu/drm/display/drm_dp_typec_helper.c
+
+-- 
+2.39.1.519.gcb327c4b5f-goog
+
