@@ -2,127 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9515868AA3F
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 14:36:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B51DF68AA39
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 14:35:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233762AbjBDNgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 08:36:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44456 "EHLO
+        id S233736AbjBDNf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 08:35:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233714AbjBDNge (ORCPT
+        with ESMTP id S233713AbjBDNfx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 08:36:34 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8612D76BA;
-        Sat,  4 Feb 2023 05:36:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1675517780; bh=r9QvehqIqzBr2NvH2mKbEppLZtReJvoWQN1vRm1gV/Q=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=C4LFgo2hYF9MBip8dv3Z4pXK7YgF54jGwLuhZxYU0N1X4gDCvK8UQJ1zEDxnf3Q2k
-         j7AQBpWSsVLCUtINgPlxxnTodZD0YgCWtLbRGLo2oSvVhlSCfPptlPjVJkR7Iw41m4
-         QBy9au/rvJxnqmFMRPDxVVju4fG5Dvo6RdjuStlw5WMf0o6hfZPFjmjvrvQMPiavqC
-         lB9QzC4aVPj4CFoHvy/IPSnDIwM/wPRJF7jEmC4i2taUAmzTdlTvmbC8QVhe4DFcF6
-         OC83H/PElMdpArqQGBOvY3tZKX8XErvgcQxxA++x6hLdrWjOYReJnpI52hLGhuI+Zu
-         wEzG4lfFKzfZQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([92.116.151.109]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MhlGq-1okp9w0C5g-00drOq; Sat, 04
- Feb 2023 14:36:20 +0100
-Message-ID: <fc19ceb2-5d64-2e33-b79c-9273925776b7@gmx.de>
-Date:   Sat, 4 Feb 2023 14:36:19 +0100
+        Sat, 4 Feb 2023 08:35:53 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8359F1A5;
+        Sat,  4 Feb 2023 05:35:52 -0800 (PST)
+Received: from [151.216.142.144] (unknown [151.216.142.144])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: gtucker)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2503266029A5;
+        Sat,  4 Feb 2023 13:35:51 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1675517751;
+        bh=aazq/Vh7j/hkkupZJNXPInbf51BnuvyG/TWDf8xxa60=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=J8dDdOCno3fqx7hJxu5iKusckWXFbwz7wcV47HKXG2KxwSXk6X6FrDIzl+EktCBKs
+         gbogHAZPx4eQeoPHDkb6JO8UVw7OAM2zH7WydtwP16L1GpSQ9P8pWpsqn3E/grVbKC
+         2mscPF8P4QufvPRZ4uG22BnEXejckbh+Mr4YUE7eL24AkKVd7nnPAGYgvyXI9hXCWM
+         tiMQYr6NEuKWDzDoXnU+bC3E4OIxSN2IxJq+hHl5NycwikF8LolLEJoxrOB/OrAn9F
+         0Hzywro6+UyBDP8allsO1a7m1ZDhfGrR0v02w00a6Hcmn4OaNMDTCG3OY3hwmhHWSL
+         liViOuU6UELKg==
+Message-ID: <51e62348-9e8e-2769-6372-f217f894a917@collabora.com>
+Date:   Sat, 4 Feb 2023 14:36:39 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
-Subject: Re: [PATCH] Revert "fbdev: Remove conflicting devices on PCI bus"
+Subject: Re: [PATCH] selftests: find echo binary to use -ne options
 Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        dri-devel@lists.freedesktop.org
-Cc:     Zeno Davatz <zdavatz@gmail.com>, linux-fbdev@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Lukas Wunner <lukas@wunner.de>
-References: <20230203230909.2058637-1-helgaas@kernel.org>
- <20230204085018.GA31758@wunner.de>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <20230204085018.GA31758@wunner.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:SgrWqkQ8IDCyK2Qh2jkdq0vcX6AYL07HOOVWEcgXEuTGv+jy5Ih
- n3dflAMIwY0Ge1CGZ+7Dwm3MgZMauwKjEs2HGsZIugCroBpkdnYQvOwMoE56Plzb56k2NzT
- nPddkZVWxQYeo2JLEohxAjlVdbbKKpHYxpCMAz8LtSDGySOjx3x2oOO+I8QQibyBBDOurHr
- Eoid7jtfgmgy/oW83h4BQ==
-UI-OutboundReport: notjunk:1;M01:P0:ucLHiqoogJg=;OVtUjenNU/yt7e/hrrfbLWvCEBu
- V9Izx2uK5B0Ebpgydg3LGlJ5G542IzTTzy6CX31FuCqXaq3M718YvlrPEOLJQYhN9pXvuREn8
- KdS6liv+1qaHBrKT6DDqtFyCHkYr0/bv+bnFW4lEeRnPZBOcQ1lqYRJb3DYA09ZTOaqAyhsQ/
- coFCOZpl2LcM4puLMschZPiOTlAuQU1CJZoBRM5eh2KHhU4wQ0dGeF0DSjdsniXDN6p0LpZQU
- gvuU0Ad7bwICep7Pq1Co22t5WERHlb5jIXsx9Gkaly+P9s1r/WYvmLuP1cVb9/YeX7RDrdD0P
- cbqIbTwWEBc0mIyu3Rl1HrPNbpw9K3gMF1n7mIIY0+M/k0UhzmNq9CRvmfDHG32ODp/EdSVsb
- 6Min7IPrglxxhhOVwm/xrz8Ad1+tDGKtzb551TQWLfHurZd7LN6FAzcJf501HobAH+fWbryEa
- NXeA2ZNp62LzHBJEBAG4/TbYD1aFxGIKaQlfQYoTGk3F27zyeAtJkyLzB4RfBA0ler2m+aD5+
- jduB4Lcf5UPhSnb4zI0emrAs+LgA57siMhPpermNGtDs56DW1p0x7pmFdpLhP7SJGjQVWD7Rt
- +dwP7YgKYFLzFGmx2g652ILhzWIqrLLFsoI6isKiY69dG9989PWhpFvYPfFgpR1ZJSAroPrP8
- aYEEYc/TF9lYmf+AQcJ7bst8vURH6B1QkuzDG+C1kTDoinDj8l3j0RAANAjUjAvNPXVFbUoAr
- 8NIBI073CRLxNf2yGNLx5pm3bWf7thxJJpafj/Srrc2PLdtkm4qUmEVV3IsURe09a4s6Y5D9r
- X5jm4J1CiGG0TtD6EiKT+1DYZViTAeeR9Do0MHQ3BNlxMsH7iRvrInUe4VKHDfO2AGsDSlHtz
- kC1MBdHE+LSJdJTCEa+U0mUw8h61fdjXnAeHC0bOdc0+CNSKFRCghN0UW46THeEPnHX7Kg8Va
- xPV3+hVD0pCZj+TEnSOt7qAq8Ag=
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     David Laight <David.Laight@ACULAB.COM>,
+        Shuah Khan <shuah@kernel.org>,
+        Gautam <gautammenghani201@gmail.com>
+Cc:     "kernel@collabora.com" <kernel@collabora.com>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernelci@lists.linux.dev" <kernelci@lists.linux.dev>
+References: <20230203152603.11450-1-guillaume.tucker@collabora.com>
+ <90ace4f466ee4f79bf2dd94c5830e57a@AcuMS.aculab.com>
+From:   Guillaume Tucker <guillaume.tucker@collabora.com>
+In-Reply-To: <90ace4f466ee4f79bf2dd94c5830e57a@AcuMS.aculab.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/4/23 09:50, Lukas Wunner wrote:
-> On Fri, Feb 03, 2023 at 05:09:09PM -0600, Bjorn Helgaas wrote:
->> From: Bjorn Helgaas <bhelgaas@google.com>
+On 04/02/2023 14:04, David Laight wrote:
+> From: Guillaume Tucker
+>> Sent: 03 February 2023 15:26
 >>
->> This reverts commit 145eed48de278007f646b908fd70ac59d24ed81a.
+>> Find the actual echo binary using $(which echo) and use it for
+>> formatted output with -ne.  On some systems, the default echo command
+>> doesn't handle the -e option and the output looks like this (arm64
+>> build):
 >>
->> Zeno Davatz reported that 145eed48de27 ("fbdev: Remove conflicting devi=
-ces
->> on PCI bus") caused a console hang.  The machine was actually still usa=
-ble
->> via ssh, etc., but there was no activity on the console.
+>> -ne Emit Tests for alsa
 >>
->> Reverting 145eed48de27 for the nvidiafb on that system fixed the proble=
-m.
+>> -ne Emit Tests for amd-pstate
 >>
->> Revert 145eed48de27 ("fbdev: Remove conflicting devices on PCI bus") si=
-nce
->> we don't know what caused the problem.
->>
->> Fixes: https://bugzilla.kernel.org/show_bug.cgi?id=3D216859
->
-> Shouldn't that rather be:
->
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D216859
-> Fixes: 145eed48de27 ("fbdev: Remove conflicting devices on PCI bus")
-> Cc: stable@vger.kernel.org # v6.1+
->
-> ?
+>> -ne Emit Tests for arm64
+> 
+> Nack.
+> There is no reason to suppose that /bin/echo is any different from
+> the version of echo builtin to the shell that make uses.
+> 
+> Not only that 'which' is a horrid shell script that is trying to
+> emulate csh builtin.
+> The bourne shell equivalent is 'type' and the posix one 'command'.
+> 
+> In any case the portable way to fix this is to use printf.
+> This is a well defined program and is bultin to all modern shells.
 
-The original patch is related to drm, and came in through the drm-misc
-tree, so please drm folks, take such revert through the drm-misc
-tree (if the patch is ok) as well.
+Ah great, thanks for the review.  Will send a v2 with printf.
 
-Thanks,
-Helge
+Guillaume
 
-
->> Reported-by: Zeno Davatz <zdavatz@gmail.com>
->> Tested-by: Zeno Davatz <zdavatz@gmail.com>
->> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
->> Cc: Helge Deller <deller@gmx.de>
->> Cc: Thomas Zimmermann <tzimmermann@suse.de>
->> Cc: Javier Martinez Canillas <javierm@redhat.com>
->> Cc: linux-fbdev@vger.kernel.org
->> Cc: dri-devel@lists.freedesktop.org
->> Cc: linux-kernel@vger.kernel.org
+>> This is for example the case with the KernelCI Docker images
+>> e.g. kernelci/gcc-10:x86-kselftest-kernelci.  With the actual echo
+>> binary (e.g. in /bin/echo), the output is formatted as expected (x86
+>> build this time):
+>>
+>> Emit Tests for alsa
+>> Emit Tests for amd-pstate
+>> Skipping non-existent dir: arm64
+>>
+>> Only the install target is using "echo -ne" so keep the $ECHO variable
+>> local to it.
+>>
+>> Reported-by: "kernelci.org bot" <bot@kernelci.org>
+>> Fixes: 3297a4df805d ("kselftests: Enable the echo command to print newlines in Makefile")
+>> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
 >> ---
+>>  tools/testing/selftests/Makefile | 5 +++--
+>>  1 file changed, 3 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+>> index 41b649452560..9619d0f3b2ff 100644
+>> --- a/tools/testing/selftests/Makefile
+>> +++ b/tools/testing/selftests/Makefile
+>> @@ -234,10 +234,11 @@ ifdef INSTALL_PATH
+>>  	@# While building kselftest-list.text skip also non-existent TARGET dirs:
+>>  	@# they could be the result of a build failure and should NOT be
+>>  	@# included in the generated runlist.
+>> +	ECHO=`which echo`; \
+>>  	for TARGET in $(TARGETS); do \
+>>  		BUILD_TARGET=$$BUILD/$$TARGET;	\
+>> -		[ ! -d $(INSTALL_PATH)/$$TARGET ] && echo "Skipping non-existent dir: $$TARGET" &&
+>> continue; \
+>> -		echo -ne "Emit Tests for $$TARGET\n"; \
+>> +		[ ! -d $(INSTALL_PATH)/$$TARGET ] && $$ECHO "Skipping non-existent dir: $$TARGET" &&
+>> continue; \
+>> +		$$ECHO -ne "Emit Tests for $$TARGET\n"; \
+>>  		$(MAKE) -s --no-print-directory OUTPUT=$$BUILD_TARGET COLLECTION=$$TARGET \
+>>  			-C $$TARGET emit_tests >> $(TEST_LIST); \
+>>  	done;
+>> --
+>> 2.30.2
+> 
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)
+> 
+> 
 
