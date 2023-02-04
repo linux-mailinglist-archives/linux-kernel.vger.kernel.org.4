@@ -2,101 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D0B868AD63
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 00:17:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D1CC68AD6C
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 00:30:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231821AbjBDXRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 18:17:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33252 "EHLO
+        id S231866AbjBDXa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 18:30:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjBDXRI (ORCPT
+        with ESMTP id S229578AbjBDXa1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 18:17:08 -0500
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89DBC19F16;
-        Sat,  4 Feb 2023 15:17:07 -0800 (PST)
-Received: by mail-pj1-f52.google.com with SMTP id t12-20020a17090aae0c00b00229f4cff534so10498042pjq.1;
-        Sat, 04 Feb 2023 15:17:07 -0800 (PST)
+        Sat, 4 Feb 2023 18:30:27 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 990D7C148;
+        Sat,  4 Feb 2023 15:30:26 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id lu11so24891023ejb.3;
+        Sat, 04 Feb 2023 15:30:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=48zrL7dDekd40DOwd/bnDnGHKiZSAz1cWiLL1H5HRVk=;
+        b=Toim7KqVELHZdsy6UfwGn1snV4wW+zIFBpdU1NpsrUYcRQ5YfI7pOodl2fCPrlhJr8
+         H2jwij7U03WnAPaeXhS7sahjW1TGz/9QjRFqxgt4XhKkh44SIOCzGCrloIH40ka/VF7S
+         rhar49JPz26lEtSnFEIMHccOYbdr31CnSrX65zkOeg/wjACZa+lgSg9UzmdQwbtcyxje
+         cXxBOjz/nP6Jsd9b0J+TpqDWohky5HlN3WMC6q03dJWzmBF3K4ZvzMvHv34NM9v3BJdw
+         CsYDnBvLHxKDNlQEvLlfe4Z4RAvvoh1GOtpsRT9ZZLKzmK6RPv/fLbZguJu1n26oj1uJ
+         wVEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YCjib6YGp7oCe4br7XrH4tA0fTB0xh2BzncxrSSXIus=;
-        b=Tq8L01qXQl2Y0sLgGBw49V2beSkReHvJSIj/L/TWWpLNLcOvtK7iuDRCUOxogCKyW9
-         +EqFz7TOPpzgW2smELjgWqKNxGUVVMr1Ms8EMUoM7ytCyAFDaMxc4BlPBkv/kCOjKg96
-         m1sG4jswYR6xB9no3xGptckzLF8IQUYZtxOebSxM8MM2HUugi0x5UEVxutLJQ4juZ1TC
-         9WQt2jUmaMYzRmPVN3uSeszK2kS/TApkZQlu1N1g3CRbI3W+yN3kQl90nQ9lixigRHCu
-         NXRcHP/FE6avumoEfd00IIyedDpWoLsokTTm5mFg2goBJwCc/OAWz/UfQBcQrM0Yd397
-         Ec7Q==
-X-Gm-Message-State: AO0yUKXloNLx7LmxBlF1UUWpBNapVkhLt6gdTh02FvC37S/6/itRouoW
-        Q1s3esbP4+yXb0rNQ1x7obc=
-X-Google-Smtp-Source: AK7set+1FvYxFJNsmodSe7ia7v6qf3RFt43H8C2JcL56/7ekAK7EZyR0rrWQUao+vJHlsv+vm3gn3g==
-X-Received: by 2002:a05:6a20:3a96:b0:bf:ae32:5ea8 with SMTP id d22-20020a056a203a9600b000bfae325ea8mr9372685pzh.11.1675552626837;
-        Sat, 04 Feb 2023 15:17:06 -0800 (PST)
-Received: from [192.168.3.219] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id u12-20020a17090a1d4c00b0022c90b7e3efsm6963281pju.50.2023.02.04.15.17.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 04 Feb 2023 15:17:05 -0800 (PST)
-Message-ID: <3ad1c3b3-f54d-4b0e-2441-ab348d099f3f@acm.org>
-Date:   Sat, 4 Feb 2023 15:17:04 -0800
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=48zrL7dDekd40DOwd/bnDnGHKiZSAz1cWiLL1H5HRVk=;
+        b=akmwQgvarMd8Rw5TGouJRgHcnri1C42DbEyWkXgX4wOmgtDwTzjbVIZZ5oqShtyW2J
+         uTDxtM4p2DZ5asIEmxU7C5jLaSZt0dcrNfflPpMk5r0TPpQR1yPPYUleiL6SyVg6FRBx
+         z+ZO4QPJN+SwymzIZPj5RhGEEwykTe6VF3NOI3IS/R1M72+jsoDh/Jp1lUqOLci7+Zt0
+         WKAaEdLWbv01lJ6bpl8HAFEYK0HTkSVo6aTTlido3Gm4idSa8pZkoJelwOgvwmf2UyO2
+         0UQzj+MlVnbC07UbBPFiYILpeWi/Msy51T/RQwUuz+sLavZB6Cjgg7g8Lmsa3Y72KB4I
+         T1oQ==
+X-Gm-Message-State: AO0yUKWc6WiqqLX1nV9L0lxAxZxO5t6stJWMUMo6ktUYT8hqvgc5iQDe
+        XTQeimuAvy/Ip/BuhS8PJxEYzXVETUQ=
+X-Google-Smtp-Source: AK7set8TPW9qzjxVs8EfQtcw+B2AqS66LrxaaAxIrqe7rGr0/fqwTbrfZOwPLLHyFeimrVxjmz3IYw==
+X-Received: by 2002:a17:906:cc8f:b0:889:d998:1576 with SMTP id oq15-20020a170906cc8f00b00889d9981576mr14880064ejb.66.1675553424888;
+        Sat, 04 Feb 2023 15:30:24 -0800 (PST)
+Received: from localhost.localdomain (dynamic-2a01-0c22-7777-cc00-f22f-74ff-fe21-0725.c22.pool.telefonica.de. [2a01:c22:7777:cc00:f22f:74ff:fe21:725])
+        by smtp.googlemail.com with ESMTPSA id v5-20020a1709061dc500b0084d4e9a13cbsm3386658ejh.221.2023.02.04.15.30.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Feb 2023 15:30:24 -0800 (PST)
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+To:     linux-wireless@vger.kernel.org
+Cc:     tony0620emma@gmail.com, kvalo@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Neo Jou <neojou@gmail.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>, pkshih@realtek.com,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: [PATCH v2 0/4] rtw88: four small code-cleanups and refactorings
+Date:   Sun,  5 Feb 2023 00:29:57 +0100
+Message-Id: <20230204233001.1511643-1-martin.blumenstingl@googlemail.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] trace/blktrace: fix memory leak with using
- debugfs_lookup()
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-trace-kernel@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>, Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230202141956.2299521-1-gregkh@linuxfoundation.org>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20230202141956.2299521-1-gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/2/23 06:19, Greg Kroah-Hartman wrote:
-> When calling debugfs_lookup() the result must have dput() called on it,
-> otherwise the memory will leak over time.  To make things simpler, just
-> call debugfs_lookup_and_remove() instead which handles all of the logic
-> at once.
-> 
-> Cc: Jens Axboe <axboe@kernel.dk>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Masami Hiramatsu <mhiramat@kernel.org>
-> Cc: linux-block@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-trace-kernel@vger.kernel.org
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
->   kernel/trace/blktrace.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/trace/blktrace.c b/kernel/trace/blktrace.c
-> index 918a7d12df8f..5743be559415 100644
-> --- a/kernel/trace/blktrace.c
-> +++ b/kernel/trace/blktrace.c
-> @@ -320,8 +320,8 @@ static void blk_trace_free(struct request_queue *q, struct blk_trace *bt)
->   	 * under 'q->debugfs_dir', thus lookup and remove them.
->   	 */
->   	if (!bt->dir) {
-> -		debugfs_remove(debugfs_lookup("dropped", q->debugfs_dir));
-> -		debugfs_remove(debugfs_lookup("msg", q->debugfs_dir));
-> +		debugfs_lookup_and_remove("dropped", q->debugfs_dir);
-> +		debugfs_lookup_and_remove("msg", q->debugfs_dir);
->   	} else {
->   		debugfs_remove(bt->dir);
->   	}
+Hello,
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+this series consists of four small patches which clean up and refactor
+existing code in preparation for SDIO support. Functionality is
+supposed to stay the same with these changes.
+
+The goal of the first two patches is to make it easier to understand
+the allowed values in the queue by using enum rtw_tx_queue_type instead
+of u8.
+
+The third patch in this series moves the rtw_tx_queue_type code out of
+pci.c so it can be re-used by SDIO (and also USB) HCIs.
+
+The last patch is another small cleanup to improve readability of the
+code by using (already existing) macros instead of magic BIT(n).
+
+
+Changes since v1 at [0]:
+- add "wifi" to the subject of all patches
+- add Ping-Ke's Acked-by to patches 2 and 4 (thank you!)
+- add const keyword in patch 1
+- add array bounds checking in patch 3
+- remove references to another series from the cover letter as it's
+  not needed as a precondition / dependency anymore
+
+
+[0] https://lore.kernel.org/netdev/20220114234825.110502-1-martin.blumenstingl@googlemail.com/
+
+
+Martin Blumenstingl (4):
+  wifi: rtw88: pci: Use enum type for rtw_hw_queue_mapping() and
+    ac_to_hwq
+  wifi: rtw88: pci: Change queue datatype to enum rtw_tx_queue_type
+  wifi: rtw88: Move enum rtw_tx_queue_type mapping code to tx.{c,h}
+  wifi: rtw88: mac: Use existing macros in rtw_pwr_seq_parser()
+
+ drivers/net/wireless/realtek/rtw88/mac.c |  4 +-
+ drivers/net/wireless/realtek/rtw88/pci.c | 50 ++++++------------------
+ drivers/net/wireless/realtek/rtw88/tx.c  | 41 +++++++++++++++++++
+ drivers/net/wireless/realtek/rtw88/tx.h  |  3 ++
+ 4 files changed, 57 insertions(+), 41 deletions(-)
+
+-- 
+2.39.1
+
