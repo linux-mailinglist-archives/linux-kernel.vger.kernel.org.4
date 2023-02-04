@@ -2,194 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D3B268ABD5
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 19:32:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9855E68ABD8
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 19:32:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231409AbjBDSca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 13:32:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47450 "EHLO
+        id S232645AbjBDScz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 13:32:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjBDSc2 (ORCPT
+        with ESMTP id S229796AbjBDScx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 13:32:28 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2074.outbound.protection.outlook.com [40.107.93.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8CFB2CC67
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 10:32:25 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EH+k7mRu326z4bIGT0qJ19zJGAuC13mleLNXXpHmU2PSxUx2axltoIq2FQ1gohqkdgxzJf2Dytv2xu10YM9nPa+QG50QAxZa7wxi4b4pq0x4Z8Ws3RkqCnvvQIR13YIrZCkw52GJM3xM1qa0A0w7NQHH2z7FDRXtaYelGggu499B36/UA9WZM4ZrLCC2UteSS+2TdO7PUDS+FJjbXOsbeO+tWbcJxJ8A/rRHmzdiXKaKofrVbTnK2aPSfyH+7dAwTwaVUV/v+1Vbm2wo/FN1RMbG4JurqYNAr1OBZT9FUmWWv+BrLa/pH8MYr0V3ckVJTtTHIBczyRySMczAL04YXA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CvS8ySgARsfYos5ZWQkhA6TQwYLasFOuKWdXnmOGR+Q=;
- b=b0FJtQsavpNcCOygRJO9LLtqMmrOYqZ7NL0QilLCXMeXykOIc/5P9U8XLFfCgMJWiJszjBP9LdGlMtDXJ1y7bR5VvyYJhvJwrm7pbCQweauESGgWpIIupjCaMPZirAsKp85emyfO5ebPVVQO2qnyiAuj9DefbF2+HnVh3448vuwxKWQdd/Jl5jWKitMh9z6O1iB3rXiaQXob99Vc8TG/MCYu8e9hOScSRdJdfrxheI1kvymBGdJw2s4T8MiBKTqaA7CU09IBT55ftR04L0EKGed/ygek+I+ZXYMp8qgFPFEd0XXJ8NNSurw8u255cVUxmxk8Y+xO3K852YM2obICKg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CvS8ySgARsfYos5ZWQkhA6TQwYLasFOuKWdXnmOGR+Q=;
- b=zn/tgIgzbePyi/iszKPqtdbA5mJNj98977aVSBMXWobkgZrH0QsQFbr9rdEm2efMGlbddk5mcwJDL2EgUQ4hXOifEcD1k7O5amT9vtAMxvbOBRvOk/sIc4WnHKi0naWZSHF8q5TioXhg4J+DvV+z9u9vtrvt9F/BIYmiuZTntvA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN2PR12MB3008.namprd12.prod.outlook.com (2603:10b6:208:c8::17)
- by PH7PR12MB6809.namprd12.prod.outlook.com (2603:10b6:510:1af::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.32; Sat, 4 Feb
- 2023 18:32:20 +0000
-Received: from MN2PR12MB3008.namprd12.prod.outlook.com
- ([fe80::f9e8:ee48:6cf9:afdc]) by MN2PR12MB3008.namprd12.prod.outlook.com
- ([fe80::f9e8:ee48:6cf9:afdc%7]) with mapi id 15.20.6043.022; Sat, 4 Feb 2023
- 18:32:19 +0000
-Message-ID: <45360170-f132-3204-1e99-ed78c73641c4@amd.com>
-Date:   Sun, 5 Feb 2023 00:02:07 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH V2 3/3] sched/numa: Reset the accessing PID information
- periodically
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Ingo Molnar <mingo@redhat.com>, Mel Gorman <mgorman@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>, rppt@kernel.org,
-        Bharata B Rao <bharata@amd.com>,
-        Disha Talreja <dishaa.talreja@amd.com>
-References: <cover.1675159422.git.raghavendra.kt@amd.com>
- <b0f273113fedffb02f9b1358c88813ff355a81d6.1675159422.git.raghavendra.kt@amd.com>
- <Y9zxkGf50bqkucum@hirez.programming.kicks-ass.net>
-From:   Raghavendra K T <raghavendra.kt@amd.com>
-In-Reply-To: <Y9zxkGf50bqkucum@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN2PR01CA0159.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:26::14) To MN2PR12MB3008.namprd12.prod.outlook.com
- (2603:10b6:208:c8::17)
+        Sat, 4 Feb 2023 13:32:53 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D899830B10
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 10:32:47 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id cl23-20020a17090af69700b0022c745bfdc3so7757170pjb.3
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Feb 2023 10:32:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hWXqY6vkS6h8Vyi+cCa2wgxLlkbcE67+3y3A1NRgkP0=;
+        b=LExrl+KFcVf2/FYhWCQdYF32QGdh5UXA4AmcX728sSl4odYnnjrrZq16jx3MvQzFcv
+         dQ1H3oGKuIHaSgHT0VSFNVp+YJPAZdUO3p+/taza+s0XIXj0/FP1/7id8OINHB/DuB7T
+         W7YTVEPmQomTURqo0D25gEVKpsdipmXEZZJqw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hWXqY6vkS6h8Vyi+cCa2wgxLlkbcE67+3y3A1NRgkP0=;
+        b=soBlpyZ9HMNChK5HPNI9ybggdgpJavfUkoCygWNJHlzx6Y/oauVJm7YdjQYzltroS7
+         HkcRVHsZ1Sb18ZI12YoAZJhSflLbMWqf/gHWVXNNsL18/BpMnAkj8ABuTX8Q+B2Z6Okb
+         WM9JES4LQpvU0eoCBM9KkiAvkTj8Nwt121FZspHCVSSwvG9NvppB002D466h/oPQ83KW
+         f+/q1x1XH0I8sA91OYEze6jv7HSnYyCbDQRv42+x8gOaPYXfrbnOX3CHhTisWWsysQGJ
+         1AFtAxQ1tnC6Zm0xmL2oN6yxZlOQb4zsckjw3VZ/hKNNuhRrxQ/bRkXz6nL1mYY0aknX
+         mXdA==
+X-Gm-Message-State: AO0yUKX11gf/vZ0819oGl19Wj5o+cvxpzT3Wg769IlxEhdNkPHRhlCZi
+        l8DaIppfHfCGRhzmqug7/shDfA==
+X-Google-Smtp-Source: AK7set8ndlru/LQXkvkAKjSEdQnGbFpts6hOxMVbgJ2BfEljDsnEQJjCuV1dzvs6hCZvsRjEvrk7gQ==
+X-Received: by 2002:a17:902:e0cd:b0:194:457d:6dca with SMTP id e13-20020a170902e0cd00b00194457d6dcamr11858096pla.44.1675535567229;
+        Sat, 04 Feb 2023 10:32:47 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id g21-20020a170902869500b00194a297cb8esm2109672plo.191.2023.02.04.10.32.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Feb 2023 10:32:46 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Alexei Starovoitov <ast@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Haowen Bai <baihaowen@meizu.com>, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH] bpf: Replace bpf_lpm_trie_key 0-length array with flexible array
+Date:   Sat,  4 Feb 2023 10:32:44 -0800
+Message-Id: <20230204183241.never.481-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN2PR12MB3008:EE_|PH7PR12MB6809:EE_
-X-MS-Office365-Filtering-Correlation-Id: 61b2ab35-04af-4cd7-1d20-08db06de260b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qN+NlYELJmQfLgLgjGaDDJ4eU+VMcuMI/RS2mRC6XpHGaBvgtUqnkZm43SFc55i8gf1Bgco3w7Z2TwnCRIuhc/unUBZZtG6ahFmIY+8NqYzyw4aCR+9OV94cpezQ4ypTfHCjEC5WTqWBIFbPqcd5480LWSBiJUYSccI5T2Y1dNeLB7Rj41PsxZABLpN/BcqmdLC5QhDWX0BQVBzBA3yktYR+iIPAmkg4EsbZ7zkLQbAFMrd9FeS4CqUL6t9Dw2sxTR7DT6oWpFKbuhJKKRb3F1i1dgkDXtUjJthHEghqEhMeVh0rSQSrVGqO0M8S/dArDazFggP0ib82j8W5DAQj/JIpT2PfVZbMv0KG2hbsjCl2vH96PTe1KuNOJaN1Osdq80M8lUlYLywgkMNkckho4WUwcrGOWkAe2xBjVYkj3auVTqbMDR9H/6cqLbEWX4mn7AKEyBLjPFU3QI0yTQ2I8vE1rc7Md4/aXF4wFmR2+CAxpR/qVLxwLp/Oq2ztN/L5KM3sY25a9RLqQApCgUwIxQRsuSOzA5hL479WLPqoD7qz1TK7g9gByfYt1aG5/UFiDaQwytM+5hAXzFn2k2U/OXjpPENL6543k3pcck8LwuEJ6Jav1kYYtfv6eZGxRptLukV0k1JGwDNfHREttODyqdsSIHF/4gFDAOEJkLA246V77K7IB67ob3DZjzdZR+B96ILrL5L2dvZfi5HriuKKhLzjTHzeaQrMVyM7HSp4Bj4=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3008.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(346002)(136003)(396003)(366004)(376002)(451199018)(31686004)(66946007)(54906003)(316002)(66556008)(41300700001)(8676002)(4326008)(66476007)(6916009)(5660300002)(8936002)(31696002)(38100700002)(36756003)(6506007)(6512007)(26005)(53546011)(6666004)(186003)(2906002)(478600001)(6486002)(2616005)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?anZ6SFRNZFlST01TYzNra0dLajhJbnJ6aitPdkY5bTNJcGRxVmM4MmFaMEN5?=
- =?utf-8?B?Qmd2NFc5UnNqM0w4S3lVcFN4MnNhK1M3Z3gvdkswNkIrTUYzMlhvSURNOEFl?=
- =?utf-8?B?ZHJzdDFPaldiTTEzK3VCL3hScW1GZTM5UFMydGt0Y0RkT0lsVHgrSTZrZnhG?=
- =?utf-8?B?aTVqWitwQVdtZUo2TzdvU3U4dUZLR0diTGFBNUM0RzU0QzFwTXc0NU04d0ow?=
- =?utf-8?B?RGhVYVNQZGxpWDNDdmo4Z3VCaTNIdEE3enJiVjVtVlFCTmJRb1d4M1FKV1NE?=
- =?utf-8?B?RHlJVzE1dWFqUWNNeGdYbklwR2tqb3ByUkh5VWJMY3Y4TUM3ZUJHbStVMGlZ?=
- =?utf-8?B?NDZxcEhHRFlrY0pRK2RySFZ2NjhzbGZFZDVtNDhzSUxrTEVyR2RFZzFwbWZG?=
- =?utf-8?B?Nk4wMzdBTkI4SysrNXk1ZjNSMWJKcFpLcndJTUhQYU9RdXlqZW4yRm5PWkN3?=
- =?utf-8?B?NVNXMnM1N2ZvcmJaV2RsdjFoNEU5QVNGY3p6WTFyVWhzUy9talkzMnV4TTR3?=
- =?utf-8?B?NlZqU3lFUUpPUkxOb2VWa1dVb3BmSmJqTjVBNTh6ZDI0UEprNzlBZTZ1cW9L?=
- =?utf-8?B?bm1kWmdtdG9TclkyNCs2OUpZZ3N3RGZtRkJRWk04QjF6SFR0eUdHNUtEWWNx?=
- =?utf-8?B?dGZ3YU5SQ0tLWEJTaEZPNFd2ZUIvZWg2ayt2R1NnTnNyMGs2Vk5KWU1IRHlt?=
- =?utf-8?B?QkdYRStJZnRESXZOZDZBc1ZGWmRXbEgwRzlCSXZWVTJjbjRSTDcyaXZJcENQ?=
- =?utf-8?B?NkxKcXdmT3hNdXBMV25OZG1rYnNBWHM1RVpXUE41WWNGbW40UjBDeU9HMkRB?=
- =?utf-8?B?ZHMxcnZGWjdVdkdkU0huaTB3bTcrQkFIbXFzelZKOTFlVkdiWXdUdWdudG02?=
- =?utf-8?B?KzlLZ1RzM0lGYm1HdXY3RzVEb1RtWitBZ1FnZ044S1pzQ2Q3TlZQRTQ0Zk5n?=
- =?utf-8?B?UGpKMVphdEdCK2JuczRKMGdKS0w5YWtpMkZYTG1NbnBtNDIvVEJVZTlPWjF1?=
- =?utf-8?B?aTBnd2RBdDlmUnVzZVRHUHJuKy9OUlUrbUowVVdveE4wTHZlZmtROG5Lb3ht?=
- =?utf-8?B?ZHdKckwyaHMxMWFPRWZyN2xWMWRTeVBRZ0ExWnVtMWtyYjNsVmQ0NEtzUEMw?=
- =?utf-8?B?dHByWUtidUhPc2kxME02dGduU0xxN2pHWmtyRVdmbGpKN0gzTVVrWnZUa25O?=
- =?utf-8?B?V3dUWmVPeG9yZmRSdjRQczNRbytpZGNtRGdRMDRqV3JFZzJVR3Z5Q2hqRkhO?=
- =?utf-8?B?VU1zdnNkNjlhMEpwbk1oUmZkVVJCWmtxT3BOVmx2ald6d0ZiSDVaeDdSUitQ?=
- =?utf-8?B?ajhnNG9DU3MwOHFuN0JHNXdZRnJtQ1Izdk9wbXdNSHU4V3dvSjFSNWhIOWFD?=
- =?utf-8?B?ZG1Xc3NrSi9FZHVVbTRldUNha1c0ak5nVUltbDhoQWN2b2Y0dWYzR0x6b2Z1?=
- =?utf-8?B?SDkxUVQxQ2UrbDAwajBSSll3alZiLzNCbTB6NDQ0RkIzeWUzbVY0L2xtR1Nw?=
- =?utf-8?B?OEdEYVpkQWhIMzRQWkR2ODFHQndOUEFILzMrbjRYZHFuVUtoMEczbi92eXVt?=
- =?utf-8?B?TzdVWWNYY1RlQjh2OSsyRlhHM0NDdzFOT3ozZVVJNlVBZEhPMk11dTVkaGRw?=
- =?utf-8?B?WG9hN0FrRGowUkxTQWVrVHUyMDY2WjJ2MFdRNmJha2dPQTE1RHJsNDhTTENj?=
- =?utf-8?B?OXhEN3JWTUczdXVUNnBrTkxxVzBnWUpRVFJra1dOcW9vbDBsTUdSemp6WXdH?=
- =?utf-8?B?R2pzQ0FPdi80L0NYZXpjby9WSGxVdHhxbSs2TnVjLzJ4NUdoUGY0WnB0SnRF?=
- =?utf-8?B?RlBpSlc0QTV6dkY5T2JvTHVsNDBQeDVvbVpQcUxWcnJaZWpLRitLZUg5WDJs?=
- =?utf-8?B?WWtZTENHM1FYVmFXMGFsYis1RjdlRXcxbWhVa3NoU2VJeWZ6ZmJjM2dvTUVo?=
- =?utf-8?B?ZngyYkNDSXFraXduZ1R0TVpTVjlyUkVER3dvc01GMWpRdFBza25CWVovVGN2?=
- =?utf-8?B?QXVseU9VT1Bpdm10bTR5WXlNRUlqZlJhZ3dSZGVnNmxVV1RjdWt4aG9RSFl0?=
- =?utf-8?B?WTRhc3dva2xBcHJNZ2tJdVRxd0lGdmlFS2JnWTEzVW1Yd05xbWtORTd3emxB?=
- =?utf-8?Q?olmNkRa3JJ5IujluAn1t5FI0a?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 61b2ab35-04af-4cd7-1d20-08db06de260b
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3008.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Feb 2023 18:32:19.7419
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: lof5ZMV/Ud2MiY0WCQ56W4jP9NBljj4RLHt7xqPQAJ01uiJyx8vGH9cPSnzR8Yp4Rt19y7WWt5/F3bDERcl/RQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6809
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3245; h=from:subject:message-id; bh=8UjW+Zy+1y3cIspI89jzw8FmWvL6uos84uq4mMimB0Q=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBj3qTM1ht5vMIp0wFAnwtKlrGMR52OBqU2d1wGvknh p4xzmaKJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY96kzAAKCRCJcvTf3G3AJvgYD/ 4gbPMJvXXbsBmYsUpuJKym76FsMyPeVmqDsr9eazRsJPrXYT/Cjf+wXXotjT1IukgBmNxSVbq3FsyI jnPq041qMY/zMM3NYurX38M6lIf9VeD7IPwUlsQrDpMOf3RYYrOA/WOCuFbfqW8FvgyQCGRAtW95Jb lW1DpWFeXkiMxxqtJhD7QS04V8887YQ0DkXwbM/t8JVaKudE9LMgVvTxcimzGPC1eBClzkIlw+5L2/ 2Tz50uOg1PRSd6F9LP0m56P3WtX2+0OMRTFg03CMcNcpHYOSQRpkRac8CZG2qRwtiHxVnj0ekeMAj2 c5+8xwXst7vWDPbVucMDYmX5s2JdpD3Qq+M8OWMFzLuHwgLWYevblaB4pF/35yTCbEnT00bS7rEDtI 8fNBCG558+bobc540bAFf4N8wEPwO+GvG2OsBpZWEBQpGoNaAOJywnklLtZgbDyVWuHsGTabmFLqK9 7Osq6wT3O4Z6+vMUvmIJOJnrvi2hPumoSbm0ihHeKhi1HLCVFQs7xgtRVWOOiTtIZTFmVL+Fm79Q+4 tfEMfE6U827t/hEy7qdSFawVFyO8QibSjlvSTDM2/mTRtW5CEHE9plbSRbEcIPVYftHWqn9tBzLWBO aPMvVw8tolEP/BXWNuXMvFT7TAgaVWSiLkd7jpuUNQAdCP85KusshqzXrVsQ==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/3/2023 5:05 PM, Peter Zijlstra wrote:
-> On Wed, Feb 01, 2023 at 01:32:22PM +0530, Raghavendra K T wrote:
-> 
->> 2) Maintain duplicate list of accessing PIDs to keep track of history of access. and switch/reset. use OR operation during iteration
->>
->>   Two lists of PIDs maintained. At regular interval old list is reset and we make current list as old list
->> At any point of time tracking of PIDs accessing VMA is determined by ORing list1 and list2
->>
->> accessing_pids_list1 <-  current list
->> accessing_pids_list2 <-  old list
-> 
-> ( I'm not sure why you think this part of the email doesn't need to be
->    nicely wrapped at 76 chars.. )
-> 
+Replace deprecated 0-length array in struct bpf_lpm_trie_key with
+flexible array. Found with GCC 13:
 
-Sorry.. copy pasted from my "idea" notes then word wrap fooled me..
+../kernel/bpf/lpm_trie.c:207:51: warning: array subscript i is outside array bounds of 'const __u8[0]' {aka 'const unsigned char[]'} [-Warray-bounds=]
+  207 |                                        *(__be16 *)&key->data[i]);
+      |                                                   ^~~~~~~~~~~~~
+../include/uapi/linux/swab.h:102:54: note: in definition of macro '__swab16'
+  102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+      |                                                      ^
+../include/linux/byteorder/generic.h:97:21: note: in expansion of macro '__be16_to_cpu'
+   97 | #define be16_to_cpu __be16_to_cpu
+      |                     ^~~~~~~~~~~~~
+../kernel/bpf/lpm_trie.c:206:28: note: in expansion of macro 'be16_to_cpu'
+  206 |                 u16 diff = be16_to_cpu(*(__be16 *)&node->data[i]
+^
+      |                            ^~~~~~~~~~~
+In file included from ../include/linux/bpf.h:7:
+../include/uapi/linux/bpf.h:82:17: note: while referencing 'data'
+   82 |         __u8    data[0];        /* Arbitrary size */
+      |                 ^~~~
 
-> This seems simple enough to me and can be trivially extended to N if
-> needed.
->  > The typical implementation would looks something like:
-> 
-> 	unsigned long pids[N];
-> 	unsigned int pid_idx;
-> 
-> set:
-> 	unsigned long *pids = numab->pids + pid_idx;
-> 	if (!__test_bit(bit, pids))
-> 		__set_bit(bit, pids);
-> 
-> test:
-> 	unsigned long pids = 0;
-> 	for (int i = 0; i < N; i++)
-> 		pids |= numab->pids[i];
-> 	return __test_bit(bit, &pids);
-> 
-> rotate:
-> 	idx = READ_ONCE(numab->pid_idx);
-> 	WRITE_ONCE(numab->pid_idx, (idx + 1) % N);
-> 	numab->pids[idx] = 0;
-> 
-> Note the actual rotate can be simplified to ^1 for N:=2.
+This includes fixing the selftest which was incorrectly using a
+variable length struct as a header, identified earlier[1]. Avoid this
+by just explicitly including the prefixlen member instead of struct
+bpf_lpm_trie_key.
 
-Thanks good idea. This will be very helpful when we want to
-differentiate accessing PIDs in more granular way. Perhaps we can go
-with N=2 and stick to below simplification of your code above?
+[1] https://lore.kernel.org/all/202206281009.4332AA33@keescook/
 
-something like:
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Song Liu <song@kernel.org>
+Cc: Yonghong Song <yhs@fb.com>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: KP Singh <kpsingh@kernel.org>
+Cc: Stanislav Fomichev <sdf@google.com>
+Cc: Hao Luo <haoluo@google.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Mykola Lysenko <mykolal@fb.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Haowen Bai <baihaowen@meizu.com>
+Cc: bpf@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ include/uapi/linux/bpf.h                         | 2 +-
+ tools/testing/selftests/bpf/progs/map_ptr_kern.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-unsigned long pids[2]
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index ba0f0cfb5e42..5930bc5c7e2c 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -79,7 +79,7 @@ struct bpf_insn {
+ /* Key of an a BPF_MAP_TYPE_LPM_TRIE entry */
+ struct bpf_lpm_trie_key {
+ 	__u32	prefixlen;	/* up to 32 for AF_INET, 128 for AF_INET6 */
+-	__u8	data[0];	/* Arbitrary size */
++	__u8	data[];		/* Arbitrary size */
+ };
+ 
+ struct bpf_cgroup_storage_key {
+diff --git a/tools/testing/selftests/bpf/progs/map_ptr_kern.c b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
+index db388f593d0a..543012deb349 100644
+--- a/tools/testing/selftests/bpf/progs/map_ptr_kern.c
++++ b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
+@@ -311,7 +311,7 @@ struct lpm_trie {
+ } __attribute__((preserve_access_index));
+ 
+ struct lpm_key {
+-	struct bpf_lpm_trie_key trie_key;
++	__u32 prefixlen;
+ 	__u32 data;
+ };
+ 
+-- 
+2.34.1
 
-// Assume pids[1] has latest detail always
-set:
-if (!__test_bit(bit, pids[1])
-	__set_bit(bit, pids[1])
-
-test:
-unsigned long pids = pids[0] | pids[1];
-return __test_bit(bit, &pids);
-
-rotate:
-pids[0] = pids[1];
-pids[1] = 0;
