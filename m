@@ -2,140 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D55868A773
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 02:11:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DE6268A77D
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 02:12:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232822AbjBDBLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 20:11:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43708 "EHLO
+        id S233127AbjBDBMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 20:12:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbjBDBLi (ORCPT
+        with ESMTP id S232932AbjBDBMv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 20:11:38 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4E6D54567;
-        Fri,  3 Feb 2023 17:11:37 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id gr7so19976490ejb.5;
-        Fri, 03 Feb 2023 17:11:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qqfZVRPG0odmwop2SRWZxGUPdrvoaTxo4/skd7wde9A=;
-        b=pPqK+3Dw8pmeSk05ycX+JFGuXEM/oqEn4OmA7PYVwmfYu48LyQIlJNOlCB7TCsDilQ
-         OqrBOuGEdJnxNwukwMmjHZMeF7t/+cKQwgeg/Bxl4d7ya3YLuMrfaBczlMu2XCF5f7uZ
-         n0AYpOWzLL4m7/A4ChKlGAOkfYV9ja2I6/wx8s74I9zlMrYez1nSBXwwZuUXOZECMYEE
-         v77FxLbrj6yT5o6fYHKDaEigVgkQ4dr+1M5f5FQThsrSYCB+WpLcQmr+fgousLl1fdqR
-         ci67Xxyj46/+Qep+TY6TBgVPz3uQW7MxbR10M5T3eN/GNH8Sp02CUSiuG3fj6RokwKT+
-         g6VQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qqfZVRPG0odmwop2SRWZxGUPdrvoaTxo4/skd7wde9A=;
-        b=xxEXhYNYr6FNO+sqchodNEBXI861Ov012h2ZDDdV03UUOnuTJD6Aw6pXqKtnNbcU79
-         yCOo1hxbTBtcGjZ5l/ak4bWTqoDPu4r6llMb4fIcv+tvyZxpoHS1bTM8cwWhpMVTKB16
-         qAK0qjI3m0Twas/PY19dko9nndOd2hzK/AFS8vIlWxqQ/dwAZmCkdAFr/sgweyBs49L2
-         NtFRsfgP/0V9XuGsO9V09qtT+Y0lh3dGQRusye8g8q65GwPKXoyPeuzgQ+5dTbrfdy7i
-         kWdh4St8HToBpwkH+hcCIbpEWw5K6rd/4Wkh7lBFxpqh0TZ9MQSTRUiFCq5LJB84cpJC
-         KvLA==
-X-Gm-Message-State: AO0yUKWrFCDYg7ZtMoDqjOp3I32dqYFEzh2yVaBykySYeMJJiAE7khlW
-        ZDOT4eJzDibbtnfwjAoz0XA=
-X-Google-Smtp-Source: AK7set8DV5gzvCghxDgyOTP/UCdf5kMGdnwpjZM5SIdQlNyoDe2oUw3IUtWY3CYCdKwcPFNeBYxusg==
-X-Received: by 2002:a17:906:49c9:b0:884:c6d8:e291 with SMTP id w9-20020a17090649c900b00884c6d8e291mr12572217ejv.57.1675473096088;
-        Fri, 03 Feb 2023 17:11:36 -0800 (PST)
-Received: from skbuf ([188.26.57.116])
-        by smtp.gmail.com with ESMTPSA id kg11-20020a17090776eb00b0088519b92074sm2093986ejc.128.2023.02.03.17.11.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 17:11:35 -0800 (PST)
-Date:   Sat, 4 Feb 2023 03:11:33 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Wei Fang <wei.fang@nxp.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Arun.Ramadoss@microchip.com, intel-wired-lan@lists.osuosl.org
-Subject: Re: [PATCH net-next v4 05/23] net: phy: add
- genphy_c45_ethtool_get/set_eee() support
-Message-ID: <20230204011133.5mgam2ik7znsrqxu@skbuf>
-References: <20230201145845.2312060-1-o.rempel@pengutronix.de>
- <20230201145845.2312060-1-o.rempel@pengutronix.de>
- <20230201145845.2312060-6-o.rempel@pengutronix.de>
- <20230201145845.2312060-6-o.rempel@pengutronix.de>
+        Fri, 3 Feb 2023 20:12:51 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E614D677B4;
+        Fri,  3 Feb 2023 17:12:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C2A262045;
+        Sat,  4 Feb 2023 01:12:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0C7FC433B3;
+        Sat,  4 Feb 2023 01:12:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675473165;
+        bh=0asfVCpuy+ETCtLElPtYddrgJX0d+emBWsKYbAvgUSg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=NjHUnR2SMV6z1nYlDsx18pdaYVqRNoWc0qy+JZKYvWy9A2/aNWDT/Zcc1VuN3LpBk
+         BHO7a+UWkrCbr7tIMsbiJcW08mJQrutSae8sjzbY2yTquduGD1S75JptE2V94CuHZ9
+         dttGDlygN+PlAgKrEnBbh02BTSkPcbJjD/mmZ2OjVdwp+2zUSzzJYuLie36CRMRH2m
+         BCNEg1yW8DiqcrRuXnMz7q97kPUCf/igZlztYEFMXkxu4lTgwVsHT2Y4vPB+fv2I45
+         treDdxLfVm4Xo9kIGz/U0PB3fSsQxF7GAvG09BPdoaWSqVqEDw/Bl5+LonXCOZV8EM
+         8X69FQT7ZO2hA==
+Received: by mail-ej1-f43.google.com with SMTP id me3so19972308ejb.7;
+        Fri, 03 Feb 2023 17:12:45 -0800 (PST)
+X-Gm-Message-State: AO0yUKW/dqF4r+NlFvJf02FENnxf+zlqZzdHCjmvztJVP+OClSd11Lby
+        BJbZuQsXDCT/4yBXfGaM8t9kttWTlIRK73BtbzA=
+X-Google-Smtp-Source: AK7set8d2wN/FrByoELlHyIqk75D2M0EbNicNZv8b+fs1zPJUylkd4dAYoofH/2BIYKRkzzgrVhuEwXH3PfZW7NSuUo=
+X-Received: by 2002:a17:906:8419:b0:884:c19c:7c6 with SMTP id
+ n25-20020a170906841900b00884c19c07c6mr3300870ejx.120.1675473163646; Fri, 03
+ Feb 2023 17:12:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230201145845.2312060-6-o.rempel@pengutronix.de>
- <20230201145845.2312060-6-o.rempel@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <cover.1675461757.git.jpoimboe@kernel.org> <f860f3a1c1a53c437a99abc53e8f1a798aef6881.1675461757.git.jpoimboe@kernel.org>
+In-Reply-To: <f860f3a1c1a53c437a99abc53e8f1a798aef6881.1675461757.git.jpoimboe@kernel.org>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Sat, 4 Feb 2023 09:12:31 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSKe3ve4_rsOYpmSBOyUSU5rpLHyijn9i2-i+WfLqxzYw@mail.gmail.com>
+Message-ID: <CAJF2gTSKe3ve4_rsOYpmSBOyUSU5rpLHyijn9i2-i+WfLqxzYw@mail.gmail.com>
+Subject: Re: [PATCH 05/22] csky/cpu: Make sure arch_cpu_idle_dead() doesn't return
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, jgross@suse.com,
+        richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
+        mattst88@gmail.com, linux-alpha@vger.kernel.org,
+        linux@armlinux.org.uk, linux-arm-kernel@lists.infradead.org,
+        catalin.marinas@arm.com, will@kernel.org,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        chenhuacai@kernel.org, kernel@xen0n.name,
+        loongarch@lists.linux.dev, f.fainelli@gmail.com,
+        bcm-kernel-feedback-list@broadcom.com, tsbogend@alpha.franken.de,
+        linux-mips@vger.kernel.org, jiaxun.yang@flygoat.com,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        linuxppc-dev@lists.ozlabs.org, ysato@users.sourceforge.jp,
+        dalias@libc.org, linux-sh@vger.kernel.org, davem@davemloft.net,
+        sparclinux@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        linux-xtensa@linux-xtensa.org, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        paulmck@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 01, 2023 at 03:58:27PM +0100, Oleksij Rempel wrote:
-> Add replacement for phy_ethtool_get/set_eee() functions.
-> 
-> - it is able to support only limited amount of link modes. We have more
->   EEE link modes...
-> 
-> By refactoring this code I address most of this point except of the last
-> one. Adding additional EEE link modes will need more work.
-
-> +/**
-> + * genphy_c45_ethtool_get_eee - get EEE supported and status
-> + * @phydev: target phy_device struct
-> + * @data: ethtool_eee data
-> + *
-> + * Description: it reports the Supported/Advertisement/LP Advertisement
-> + * capabilities.
-> + */
-> +int genphy_c45_ethtool_get_eee(struct phy_device *phydev,
-> +			       struct ethtool_eee *data)
-> +{
-> +	__ETHTOOL_DECLARE_LINK_MODE_MASK(adv) = {};
-> +	__ETHTOOL_DECLARE_LINK_MODE_MASK(lp) = {};
-> +	bool overflow = false, is_enabled;
-> +	int ret;
+On Sat, Feb 4, 2023 at 6:05 AM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
+>
+> arch_cpu_idle_dead() doesn't return.  Make that more explicit with a
+> BUG().
+>
+> BUG() is preferable to unreachable() because BUG() is a more explicit
+> failure mode and avoids undefined behavior like falling off the edge of
+> the function into whatever code happens to be next.
+>
+> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+> ---
+>  arch/csky/kernel/smp.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/arch/csky/kernel/smp.c b/arch/csky/kernel/smp.c
+> index b45d1073307f..0ec20efaf5fd 100644
+> --- a/arch/csky/kernel/smp.c
+> +++ b/arch/csky/kernel/smp.c
+> @@ -317,5 +317,7 @@ void arch_cpu_idle_dead(void)
+>                 "jmpi   csky_start_secondary"
+>                 :
+>                 : "r" (secondary_stack));
 > +
-> +	ret = genphy_c45_eee_is_active(phydev, adv, lp, &is_enabled);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	data->eee_enabled = is_enabled;
-> +	data->eee_active = ret;
-> +
-> +	if (!ethtool_convert_link_mode_to_legacy_u32(&data->supported,
-> +						     phydev->supported_eee))
-> +		overflow = true;
-> +	if (!ethtool_convert_link_mode_to_legacy_u32(&data->advertised, adv))
-> +		overflow = true;
-> +	if (!ethtool_convert_link_mode_to_legacy_u32(&data->lp_advertised, lp))
-> +		overflow = true;
+> +       BUG();
+Why not:
+diff --git a/kernel/sched/idle.c b/kernel/sched/idle.c
+index f26ab2675f7d..1d3bf903add2 100644
+--- a/kernel/sched/idle.c
++++ b/kernel/sched/idle.c
+@@ -285,6 +285,7 @@ static void do_idle(void)
+                        tick_nohz_idle_stop_tick();
+                        cpuhp_report_idle_dead();
+                        arch_cpu_idle_dead();
++                       BUG();
+                }
 
-ah, ok, so since struct ethtool_eee stores the link modes in the old u32
-format, link modes equal to ETHTOOL_LINK_MODE_25000baseKR_Full_BIT or
-higher would truncate. Makes sense.
+                arch_cpu_idle_enter();
 
-> +
-> +	if (overflow)
-> +		phydev_warn(phydev, "Not all supported or advertised EEE link modes was passed to the user space\n");
+>  }
+>  #endif
+> --
+> 2.39.0
+>
 
-were passed
 
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL(genphy_c45_ethtool_get_eee);
+-- 
+Best Regards
+ Guo Ren
