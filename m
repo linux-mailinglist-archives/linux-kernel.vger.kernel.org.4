@@ -2,65 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED1D568AC91
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 22:22:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38C0568AC93
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 22:24:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233098AbjBDVWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 16:22:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36310 "EHLO
+        id S233117AbjBDVYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 16:24:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbjBDVWG (ORCPT
+        with ESMTP id S230357AbjBDVYL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 16:22:06 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E40523651
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 13:22:05 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id ba1so3317843wrb.5
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Feb 2023 13:22:05 -0800 (PST)
+        Sat, 4 Feb 2023 16:24:11 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9907113DF1
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 13:24:09 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id j32-20020a05600c1c2000b003dc4fd6e61dso8295980wms.5
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Feb 2023 13:24:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HZ1lZAl4qLcb5xp1Yt6FT/tNVNDJTFKeCgoWYkODGB4=;
-        b=f7xwzCC01RxW7hoNdcvo/YvGVMhYaGHnT5BBv/d+9sODBFwBtDv8jWumdD3z+p0NI3
-         u61C0xQ/HMbT/xCyEcXqNzIS02ZfG/I7SnyeneJz648wa9JA0Q8u4A+mJbzp+KXwFVfL
-         4TfpNQzRfT6mkuhKIiX+scnQNS2tIR0/wx4z4AewRTxJTyKDa4uL//ddkT//kP9h3Fic
-         qh0eKtzNp7RudLR2HJdmitiG4Aqj9OaD5HhaMzGtRlh3zAxm22pHUPCxvuKvKOxoGvRS
-         k+GRe5UTtP8lsP9An9AJxZOZ+0ngkqwZDOM3QlHmZQeKgMcitGWnqaSMVd1WmoQ2Xt78
-         q9cg==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PARsC8y1fPOLUn5xm+fwUpwavqaXYaKZQCUnLUBx/AY=;
+        b=ROSh4d0FpqJs8EZAFBENi9nSEZsbr7+OYgUVCkyfoz70uvDwzo3wKCvO8P3dzrhkgg
+         +MrRaxu4KnvTg1c/Lc9uA5/0kcOjZd7jES4QK6IRQkvTdQwSCEIWR3Y4HsxOLGUVQ/8y
+         AymaF5hX5TUlHN4eiB3z1/aUP6/RA2P7o5VFGy1NZMGOc83eYY5podlRfX1R3copJfWf
+         WfeO/jWPsJp2kqEvZPbLAwORIqf7YTB7DvhRngEMxZPJwA3tDk2EFIQtb+/YOGlH0SWB
+         IzApacoZLLrLAHO/e1YfAhuYWGGhtKLjM/4Orb+TLWvt3jyQNX07qnkyvdmNXeB2h3re
+         vD4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HZ1lZAl4qLcb5xp1Yt6FT/tNVNDJTFKeCgoWYkODGB4=;
-        b=KY451EV4+DFLI2pb5VjepeR6QXfOWeWSj+m5boV6HEd4ao4jeFGk90ydkuIzoFk+S9
-         zcA157kjYpoFZkLWD9MwNIPT9x4Z30CHeOYBeLR8GOHNOEIRGbJFVP4zZYEsBTG7T5Cb
-         UBvlIfk+vwyGkxaSt5pzZWdB7dacTBv4NxPzK2motIgCiAHTmO1sSWyQGDSbCoBa8Mks
-         Irto2312aTOutXx24hG5zGKOQSzCcdHvCiEWx2AEaV3Vw3V7FtGeGp5/4xyFEcJxMUkw
-         vOpoGXWIZ6z4cawjOfV4xDajvAMH/5wPNcDu5PxZYMFKI+9x0pB/YiemLGFNPaGlGgLb
-         RF4Q==
-X-Gm-Message-State: AO0yUKWFysq1arJrZd5TZsJDf1qUs7IUIHsyLknqN3ygqzW/GJtCJYI0
-        f0YjfUnqBf76cYMGNlkcZckVuVqWLaT6/jsnDG8Ivg==
-X-Google-Smtp-Source: AK7set93qsPYgehuRreGpbLXPBdG4QFg4jLXmrUW4H8EAbTwGhjrvdrnTTs4XtUATKQIekE1f3pu+7umRXCfwqSRhvk=
-X-Received: by 2002:adf:ea01:0:b0:2c3:db66:5cc4 with SMTP id
- q1-20020adfea01000000b002c3db665cc4mr71594wrm.608.1675545723524; Sat, 04 Feb
- 2023 13:22:03 -0800 (PST)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PARsC8y1fPOLUn5xm+fwUpwavqaXYaKZQCUnLUBx/AY=;
+        b=X0DMegcCJJYl7wGI/J+ItQWb6XTAWS4tIFtrUNmMmkrqNYRS9pJkzRJPTF+YOgVjWV
+         0yqviEH9RX6+3YP8j1f5F3tnYklJzq94DY/44MEUPx3sP8ShU+aMJPQzg2mWce+OW7+E
+         9U2G8iRAlE5SRE6RKoGq1xdIqoTnhlluvQMXZc9VMH14+2MWN9R80iB/IO6c4nVLFmOt
+         g/g71XQoc9sxL26KP6m+hGzohoFtFA5IXJ4zZJQR2JA9tac7CTQmjMGhz+12R5Ajv6r4
+         KLJJTSKrj4Uf1OtX5OVVwIzXvzRlaDdYW4CVeHN49Ao3RaLx0dm2wwlc922Nybh+rtd1
+         99VQ==
+X-Gm-Message-State: AO0yUKU6UuQNCWvRyyPF6AiYGNyLx0aQz7FrLcbogT67SRlChmz5J3k1
+        kypfyUAdiejsly9KvTeKQhFWJv7kDycJO0fqGQ5uXA==
+X-Google-Smtp-Source: AK7set8E/kwj+RPaRP0zrGj8rKXKAErZLLzjxXZGU2xDbLWNgjsyjgtnzFH2ioXJ1Fj05s2DC8Kfc/P/mIAw/Owkaq0=
+X-Received: by 2002:a05:600c:1e0a:b0:3dc:599b:795e with SMTP id
+ ay10-20020a05600c1e0a00b003dc599b795emr663412wmb.203.1675545847849; Sat, 04
+ Feb 2023 13:24:07 -0800 (PST)
 MIME-Version: 1.0
-References: <20230126190606.40739-4-irogers@google.com> <167526879495.4906.2898311831401901292.tip-bot2@tip-bot2>
- <Y9qbGHDBFtGoqnKK@FVFF77S0Q05N> <20230201173637.cyu6yzudwsuzl2vj@treble>
- <20230203182540.7linqqtr3tlrbfe7@skbuf> <20230204170502.qjc3dpmf2owa3w7v@treble>
-In-Reply-To: <20230204170502.qjc3dpmf2owa3w7v@treble>
+References: <20230203014014.75720-1-irogers@google.com> <CAP-5=fX0ohsCUspm7NowDy2bmSr2cJfp=iaStK4EAdVy7zBHGA@mail.gmail.com>
+ <Y90XgtX9uv26UAQa@kernel.org> <Y90bsM4DGL+WV8m0@kernel.org>
+ <Y90b7shHtOCQL3ma@kernel.org> <Y90di+N7TODkFvMV@kernel.org>
+ <Y90rtA95mWW5Othk@kernel.org> <Y90v+jTe6z1dSFE0@kernel.org> <Y908vNzJp7cVM8gN@kernel.org>
+In-Reply-To: <Y908vNzJp7cVM8gN@kernel.org>
 From:   Ian Rogers <irogers@google.com>
-Date:   Sat, 4 Feb 2023 13:21:49 -0800
-Message-ID: <CAP-5=fXmwOb5ae-tejhhhsC8FF+ajivVjBhEjSyFb0z=uWPwow@mail.gmail.com>
-Subject: Re: [tip: objtool/core] objtool: Fix HOSTCC flag usage
-To:     Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Olsa <jolsa@kernel.org>
-Cc:     Vladimir Oltean <olteanv@gmail.com>,
+Date:   Sat, 4 Feb 2023 13:23:53 -0800
+Message-ID: <CAP-5=fVfNVSTqSp4qzqAHcCXqwOHXaq1eMuyf2y67vvsrwwO6g@mail.gmail.com>
+Subject: Re: [PATCH v1] perf pmu: Fix aarch64 build
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
         Mark Rutland <mark.rutland@arm.com>,
-        linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org,
-        x86@kernel.org, netdev@vger.kernel.org
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Rob Herring <robh@kernel.org>,
+        Kang Minchul <tegongkang@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sandipan Das <sandipan.das@amd.com>,
+        Jing Zhang <renyu.zj@linux.alibaba.com>,
+        linuxppc-dev@lists.ozlabs.org, Kajol Jain <kjain@linux.ibm.com>,
+        Stephane Eranian <eranian@google.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Caleb Biggers <caleb.biggers@intel.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -72,109 +98,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 4, 2023 at 9:05 AM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
+On Fri, Feb 3, 2023 at 8:56 AM Arnaldo Carvalho de Melo <acme@kernel.org> w=
+rote:
 >
-> On Fri, Feb 03, 2023 at 08:25:40PM +0200, Vladimir Oltean wrote:
-> > On Wed, Feb 01, 2023 at 09:36:37AM -0800, Josh Poimboeuf wrote:
-> > > On Wed, Feb 01, 2023 at 05:02:16PM +0000, Mark Rutland wrote:
-> > > > Hi,
-> > > >
-> > > > I just spotted this breaks cross-compiling; details below.
+> Em Fri, Feb 03, 2023 at 01:02:02PM -0300, Arnaldo Carvalho de Melo escrev=
+eu:
+> > Em Fri, Feb 03, 2023 at 12:43:48PM -0300, Arnaldo Carvalho de Melo escr=
+eveu:
+> > > I tried bisecting, but at this cset:
 > > >
-> > > Thanks, we'll fix it up with
+> > > acme@roc-rk3399-pc:~/git/perf$ git log --oneline -1
+> > > d22e569cd33d (HEAD) perf pmu-events: Separate the metrics from events=
+ for no jevents
+> > > acme@roc-rk3399-pc:~/git/perf$
 > > >
-> > > diff --git a/tools/objtool/Makefile b/tools/objtool/Makefile
-> > > index 29a8cd7449bf..83b100c1e7f6 100644
-> > > --- a/tools/objtool/Makefile
-> > > +++ b/tools/objtool/Makefile
-> > > @@ -36,7 +36,7 @@ OBJTOOL_CFLAGS := -Werror $(WARNINGS) $(KBUILD_HOSTCFLAGS) -g $(INCLUDES) $(LIBE
-> > >  OBJTOOL_LDFLAGS := $(LIBELF_LIBS) $(LIBSUBCMD) $(KBUILD_HOSTLDFLAGS)
+> > > I'm getting this:
 > > >
-> > >  # Allow old libelf to be used:
-> > > -elfshdr := $(shell echo '$(pound)include <libelf.h>' | $(CC) $(CFLAGS) -x c -E - | grep elf_getshdr)
-> > > +elfshdr := $(shell echo '$(pound)include <libelf.h>' | $(HOSTCC) $(OBJTOOL_CFLAGS) -x c -E - | grep elf_getshdr)
-> > >  OBJTOOL_CFLAGS += $(if $(elfshdr),,-DLIBELF_USE_DEPRECATED)
+> > >   CC      /tmp/build/perf/pmu-events/pmu-events.o
+> > > pmu-events/pmu-events.c:3637:32: error: no previous prototype for =E2=
+=80=98perf_pmu__find_table=E2=80=99 [-Werror=3Dmissing-prototypes]
+> > >  3637 | const struct pmu_events_table *perf_pmu__find_table(struct pe=
+rf_pmu *pmu)
+> > >       |                                ^~~~~~~~~~~~~~~~~~~~
+> > >   CC      /tmp/build/perf/builtin-ftrace.o
+> > >   CC      /tmp/build/perf/builtin-help.o
+> > >   CC      /tmp/build/perf/builtin-buildid-list.o
+> > > cc1: all warnings being treated as errors
+> > > make[3]: *** [/home/acme/git/perf/tools/build/Makefile.build:97: /tmp=
+/build/perf/pmu-events/pmu-events.o] Error 1
+> > > make[2]: *** [Makefile.perf:676: /tmp/build/perf/pmu-events/pmu-event=
+s-in.o] Error 2
+> > > make[2]: *** Waiting for unfinished jobs....
+> > >   CC      /tmp/build/perf/builtin-buildid-cache.o
 > > >
-> > >  # Always want host compilation.
+> > > <SNIP>
+> > >
+> > >   CC      /tmp/build/perf/tests/attr.o
+> > > arch/arm64/util/pmu.c: In function =E2=80=98pmu_events_table__find=E2=
+=80=99:
+> > > arch/arm64/util/pmu.c:35:24: error: implicit declaration of function =
+=E2=80=98perf_pmu__find_table=E2=80=99; did you mean =E2=80=98perf_pmu__fin=
+d_by_type=E2=80=99? [-Werror=3Dimplicit-function-declaration]
+> > >    35 |                 return perf_pmu__find_table(pmu);
+> > >       |                        ^~~~~~~~~~~~~~~~~~~~
+> > >       |                        perf_pmu__find_by_type
+> > > arch/arm64/util/pmu.c:35:24: error: returning =E2=80=98int=E2=80=99 f=
+rom a function with return type =E2=80=98const struct pmu_events_table *=E2=
+=80=99 makes pointer from integer without a cast [-Werror=3Dint-conversion]
+> > >    35 |                 return perf_pmu__find_table(pmu);
+> > >       |                        ^~~~~~~~~~~~~~~~~~~~~~~~~
+> > > cc1: all warnings being treated as errors
+> > > make[6]: *** [/home/acme/git/perf/tools/build/Makefile.build:97: /tmp=
+/build/perf/arch/arm64/util/pmu.o] Error 1
+> > > make[5]: *** [/home/acme/git/perf/tools/build/Makefile.build:139: uti=
+l] Error 2
+> > > make[4]: *** [/home/acme/git/perf/tools/build/Makefile.build:139: arm=
+64] Error 2
+> > > make[3]: *** [/home/acme/git/perf/tools/build/Makefile.build:139: arc=
+h] Error 2
+> > > make[3]: *** Waiting for unfinished jobs....
+> > >   CC      /tmp/build/perf/tests/vmlinux-kallsyms.o
+> > >
+> > > -----
+> > >
+> > > I'm building with:
 > >
-> > Profiting off of the occasion to point out that cross-compiling with
-> > CONFIG_DEBUG_INFO_BTF=y is also broken (it builds the resolve_btfids
-> > tool):
+> > So:
+> >
+> > acme@roc-rk3399-pc:~/git/perf$ find tools/perf/ -name "*.[ch]" | xargs =
+grep -w perf_pmu__find_table
+> > tools/perf/arch/arm64/util/pmu.c:             return perf_pmu__find_tab=
+le(pmu);
+> > tools/perf/pmu-events/pmu-events.c:const struct pmu_events_table *perf_=
+pmu__find_table(struct perf_pmu *pmu)
+> > acme@roc-rk3399-pc:~/git/perf$
+> > acme@roc-rk3399-pc:~/git/perf$ git log --oneline -1
+> > d22e569cd33d (HEAD) perf pmu-events: Separate the metrics from events f=
+or no jevents
+> > acme@roc-rk3399-pc:~/git/perf$
+> >
+> > Tring to fix...
 >
-> The above patch was for objtool, though I'm guessing you were bitten by
-> a similar patch for bpf:
+> tools/perf/pmu-events/pmu-events.c was a leftover from a previous build,
+> strange as I build using O=3D, not to clutter the source dir, so perhaps
+> handling that is missing, I'll check.
 >
->   13e07691a16f ("tools/resolve_btfids: Alter how HOSTCC is forced")
+> Fixed aarch64 specific one with:
 >
-> It looks like it might have a similar problem we had for objtool.  Does
-> this fix it?
+> diff --git a/tools/perf/arch/arm64/util/pmu.c b/tools/perf/arch/arm64/uti=
+l/pmu.c
+> index 801bf52e2ea6..b4eaf00ec5a8 100644
+> --- a/tools/perf/arch/arm64/util/pmu.c
+> +++ b/tools/perf/arch/arm64/util/pmu.c
+> @@ -32,7 +32,7 @@ const struct pmu_events_table *pmu_events_table__find(v=
+oid)
+>         struct perf_pmu *pmu =3D pmu__find_core_pmu();
+>
+>         if (pmu)
+> -               return perf_pmu__find_table(pmu);
+> +               return perf_pmu__find_events_table(pmu);
+>
+>         return NULL;
+>  }
+>
+>
+> ---
+>
+> Continuing...
 
-Jiri Olsa has been exploring switching to using hostprogs (we need a
-hostlibs notion), his patch is:
-https://lore.kernel.org/bpf/20230202112839.1131892-1-jolsa@kernel.org/
-With this thread giving context:
-https://lore.kernel.org/lkml/20230201015015.359535-1-irogers@google.com/
-If we have hostprogs and hostlibs then objtool should move to this
-approach as changing CC leads to broken CFLAGS and the like.
+Thanks! Sorry for missing this one. Ideally we'd have less code under
+arch/ . The previous error messages made me think you may need to
+build clean.
 
-Thanks,
 Ian
-
-> diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-> index daed388aa5d7..fff84cd914cd 100644
-> --- a/tools/bpf/resolve_btfids/Makefile
-> +++ b/tools/bpf/resolve_btfids/Makefile
-> @@ -18,8 +18,8 @@ else
->  endif
->
->  # always use the host compiler
-> -HOST_OVERRIDES := AR="$(HOSTAR)" CC="$(HOSTCC)" LD="$(HOSTLD)" ARCH="$(HOSTARCH)" \
-> -                 EXTRA_CFLAGS="$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)"
-> +HOST_OVERRIDES := AR="$(HOSTAR)" CC="$(HOSTCC)" LD="$(HOSTLD)" ARCH="$(HOSTARCH)"
-> +BTF_CFLAGS     := $(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)
->
->  RM      ?= rm
->  CROSS_COMPILE =
-> @@ -53,23 +53,25 @@ $(OUTPUT) $(OUTPUT)/libsubcmd $(LIBBPF_OUT):
->
->  $(SUBCMDOBJ): fixdep FORCE | $(OUTPUT)/libsubcmd
->         $(Q)$(MAKE) -C $(SUBCMD_SRC) OUTPUT=$(SUBCMD_OUT) \
-> -                   DESTDIR=$(SUBCMD_DESTDIR) $(HOST_OVERRIDES) prefix= subdir= \
-> +                   $(HOST_OVERRIDES) EXTRA_CFLAGS="$(BTF_CFLAGS)" \
-> +                   DESTDIR=$(LIBBPF_DESTDIR) prefix= subdir= \
->                     $(abspath $@) install_headers
->
->  $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OUT)
->         $(Q)$(MAKE) $(submake_extras) -C $(LIBBPF_SRC) OUTPUT=$(LIBBPF_OUT)    \
-> -                   DESTDIR=$(LIBBPF_DESTDIR) $(HOST_OVERRIDES) prefix= subdir= \
-> +                   $(HOST_OVERRIDES) EXTRA_CFLAGS="$(BTF_CFLAGS)" \
-> +                   DESTDIR=$(LIBBPF_DESTDIR) prefix= subdir= \
->                     $(abspath $@) install_headers
->
->  LIBELF_FLAGS := $(shell $(HOSTPKG_CONFIG) libelf --cflags 2>/dev/null)
->  LIBELF_LIBS  := $(shell $(HOSTPKG_CONFIG) libelf --libs 2>/dev/null || echo -lelf)
->
-> -CFLAGS += -g \
-> -          -I$(srctree)/tools/include \
-> -          -I$(srctree)/tools/include/uapi \
-> -          -I$(LIBBPF_INCLUDE) \
-> -          -I$(SUBCMD_INCLUDE) \
-> -          $(LIBELF_FLAGS)
-> +BTF_CFLAGS += -g \
-> +              -I$(srctree)/tools/include \
-> +              -I$(srctree)/tools/include/uapi \
-> +              -I$(LIBBPF_INCLUDE) \
-> +              -I$(SUBCMD_INCLUDE) \
-> +              $(LIBELF_FLAGS)
->
->  LIBS = $(LIBELF_LIBS) -lz
->
-> @@ -77,7 +79,7 @@ export srctree OUTPUT CFLAGS Q
->  include $(srctree)/tools/build/Makefile.include
->
->  $(BINARY_IN): fixdep FORCE prepare | $(OUTPUT)
-> -       $(Q)$(MAKE) $(build)=resolve_btfids $(HOST_OVERRIDES)
-> +       $(Q)$(MAKE) $(build)=resolve_btfids $(HOST_OVERRIDES) CFLAGS="$(BTF_CFLAGS)"
->
->  $(BINARY): $(BPFOBJ) $(SUBCMDOBJ) $(BINARY_IN)
->         $(call msg,LINK,$@)
