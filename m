@@ -2,98 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0361068A91E
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 10:02:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD7E668A91F
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 10:03:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233126AbjBDJCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 04:02:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57790 "EHLO
+        id S231375AbjBDJDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 04:03:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbjBDJCU (ORCPT
+        with ESMTP id S229449AbjBDJDl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 04:02:20 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D354F2B61E
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 01:02:19 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id z1so5278002pfg.12
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Feb 2023 01:02:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=W1MUjWfAsKwN3SdnMzVwXHWiAm+jPxdesCaacv1mxbY=;
-        b=H0fu3e3yXWoEJSJOWKagnNj1laxY4kiR3BBqxlbctCO6GnyleNi1gsym7rLDR7cEeA
-         Lz5MQKyoZGXSGOAqnnTFFJTFF6/I8sCWJ0/Egb00yGgNVdK4yBpu9hoGK0dgzOnNh2LG
-         QPsbCB5o1g6L2UeZ7T3gBhJiitGgw28XvXiJMfTdlpYU4DyyDiobBGl6W97f4aXg4yJA
-         CUjp46FmSuIpOu5oWOvJYcCqbi9IkG7hcTsuZqGzH0VPXR4njXiaPcSDuc9g28ClQd6Z
-         XZMupdssc40hgSEI7OiAFYvZA/ITgw2dHZzLpys9g2YVURw1VbH+DHQBNwfz8ufYXVg/
-         UBjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=W1MUjWfAsKwN3SdnMzVwXHWiAm+jPxdesCaacv1mxbY=;
-        b=eWqNnlPZo1Q9tOpTw6Egy/MIQVTiNTJ0xdOT5jGjT1upUaXkpUst0LEDseN7D1kR8m
-         GnI5EXb/EpP844G9bfIVscrNvYt5EKipwMbW+RPwB2OYOIsNQiTJLwLGz2pkIq+HU4pE
-         9RuyHoMnteRj3La3W92yzMAi7X0x0R5qnGOKbaUwZ33aCd25Ee/eC1a9zFxU1mBNZqnt
-         0Pfik4WKm1kx3wWf+ccZT1n8w6RH4lLENebY2PdOpSaxEHnDITfK4P0NA76TW80FxxwN
-         +oRhGLtQmxJZaxa3OJf5ULhFBu+joyExHEgE9d2U3hZBckKWo1PFZI4dt0Y60Hr1o37K
-         Im4Q==
-X-Gm-Message-State: AO0yUKX0SYJj+wTYD4Mr1F3hkGvrLnmtoaC4e2Ey+psZzLnU130ucEoT
-        w6T0BXWCX1p7rszREqvIDHY=
-X-Google-Smtp-Source: AK7set/skOX98Z4uE3JOO+OqzHWRzt1gQKHweBsjZeLUdPhpC9yVLMwq8nZSbWbmM861qnaR0pHPZg==
-X-Received: by 2002:a05:6a00:1ad2:b0:582:a212:d92c with SMTP id f18-20020a056a001ad200b00582a212d92cmr15149674pfv.10.1675501339228;
-        Sat, 04 Feb 2023 01:02:19 -0800 (PST)
-Received: from localhost.localdomain (34.116.241.35.bc.googleusercontent.com. [35.241.116.34])
-        by smtp.gmail.com with ESMTPSA id y41-20020a056a00182900b00593a612515dsm3221846pfa.167.2023.02.04.01.02.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Feb 2023 01:02:17 -0800 (PST)
-From:   Jeff Xie <xiehuan09@gmail.com>
-To:     jan.kiszka@siemens.com, kbingham@kernel.org
-Cc:     linux-kernel@vger.kernel.org, Jeff Xie <xiehuan09@gmail.com>
-Subject: [PATCH] scripts/gdb: fix 'lx-current' for x86
-Date:   Sat,  4 Feb 2023 17:01:39 +0800
-Message-Id: <20230204090139.1789264-1-xiehuan09@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Sat, 4 Feb 2023 04:03:41 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6977229E02
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 01:03:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675501420; x=1707037420;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=HgDuakfv3ZA9HGRn4tut7Md/Jwkb35uPuJfaMab9L20=;
+  b=SgsIdImg/Oh87G8/kzE1rx8I62Vjqs60qOzlV55nr9Ld5aHhMhUT7aVc
+   aDtNowSfU4b9wcM8n1h2XXxGrIMNZ5Ldu7/Mu1LmB9yUS37RuOiwgcKzk
+   Fqt0bXYaa6eiOGx1EpjQT2EOQfyIuEL5NMqfC3LB/xVUUFB2zlzWD57c9
+   6zSviuAqcdns22V1kQhrH0Kyr6y4XdqI6GZqUU5UvtbSxZUR1APtRSJl9
+   4X/+KOVnELvqXzdozLBSQNXsmYZ7qWUxgNIj8oEzPfin51tokYjHbYIRc
+   b6tkROqYIOF2gxUSZvYkN5SuzM94797GSxLnmXbLizT1jt7rQbWghCbRz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="330220742"
+X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
+   d="scan'208";a="330220742"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2023 01:03:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="839862147"
+X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
+   d="scan'208";a="839862147"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 04 Feb 2023 01:03:38 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pOESP-0001BM-2q;
+        Sat, 04 Feb 2023 09:03:37 +0000
+Date:   Sat, 04 Feb 2023 17:02:38 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:clocksource.2023.02.02a] BUILD SUCCESS
+ 2ff7dacc88b0c7592650e8f62d9e4c13cdc31ea5
+Message-ID: <63de1f2e.lbaZgGHZTc0fOi7W%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When printing the name of the current process, it will report an error:
-(gdb) p $lx_current().comm
-Python Exception <class 'gdb.error'> No symbol "current_task" in current context.: 
-Error occurred in Python: No symbol "current_task" in current context.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git clocksource.2023.02.02a
+branch HEAD: 2ff7dacc88b0c7592650e8f62d9e4c13cdc31ea5  clocksource: Enable TSC watchdog checking of HPET and PMTMR only when requested
 
-Because the commit <e57ef2ed97c1> ("x86: Put hot per CPU variables into a struct") 
-changed it.
+elapsed time: 1875m
 
-Signed-off-by: Jeff Xie <xiehuan09@gmail.com>
----
- scripts/gdb/linux/cpus.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+configs tested: 65
+configs skipped: 2
 
-diff --git a/scripts/gdb/linux/cpus.py b/scripts/gdb/linux/cpus.py
-index 15fc4626d236..9ee99f9fae8d 100644
---- a/scripts/gdb/linux/cpus.py
-+++ b/scripts/gdb/linux/cpus.py
-@@ -163,7 +163,7 @@ def get_current_task(cpu):
-     task_ptr_type = task_type.get_type().pointer()
- 
-     if utils.is_target_arch("x86"):
--         var_ptr = gdb.parse_and_eval("&current_task")
-+         var_ptr = gdb.parse_and_eval("&pcpu_hot.current_task")
-          return per_cpu(var_ptr, cpu).dereference()
-     elif utils.is_target_arch("aarch64"):
-          current_task_addr = gdb.parse_and_eval("$SP_EL0")
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+x86_64                            allnoconfig
+alpha                            allyesconfig
+arc                              allyesconfig
+m68k                             allyesconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+arc                                 defconfig
+alpha                               defconfig
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+ia64                             allmodconfig
+sh                               allmodconfig
+s390                             allmodconfig
+x86_64                        randconfig-a006
+s390                                defconfig
+s390                             allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+arc                  randconfig-r043-20230203
+arm                  randconfig-r046-20230203
+x86_64                          rhel-8.3-func
+i386                          randconfig-a001
+i386                          randconfig-a003
+x86_64                           rhel-8.3-syz
+x86_64                           rhel-8.3-bpf
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+i386                          randconfig-a005
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                        randconfig-a015
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+i386                                defconfig
+m68k                             allmodconfig
+i386                             allyesconfig
+powerpc                     stx_gp3_defconfig
+xtensa                  cadence_csp_defconfig
+powerpc                      mgcoge_defconfig
+sh                            migor_defconfig
+x86_64                    rhel-8.3-kselftests
+arm                                 defconfig
+
+clang tested configs:
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+hexagon              randconfig-r045-20230203
+hexagon              randconfig-r041-20230203
+riscv                randconfig-r042-20230203
+s390                 randconfig-r044-20230203
+x86_64                          rhel-8.3-rust
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+x86_64                        randconfig-k001
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
