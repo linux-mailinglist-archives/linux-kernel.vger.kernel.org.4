@@ -2,103 +2,287 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BFA468A82D
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 05:29:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5449568A849
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 05:56:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232416AbjBDE3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 23:29:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34498 "EHLO
+        id S233185AbjBDE4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 23:56:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232463AbjBDE3l (ORCPT
+        with ESMTP id S232463AbjBDE4H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 23:29:41 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A7824940C;
-        Fri,  3 Feb 2023 20:29:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675484980; x=1707020980;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=H3qJvq+FzGAE9XTRUCeAHJMizsLeIwMpWifCW4lw7W4=;
-  b=j09chemjD7BoNzpLU5CqjspeAKl+0MhjRYgLNy+QO3acSukR2QXFMmjf
-   zrCip6CYktbJyztiCrL5XuFgHYlXRzj6mo1L/kdbvl/cRJYs8z5JjWNFa
-   KTozxY+CinGYmUFOLsHdFNQvYpEDsdyanLNj/giQk8fI725oHuIlCqrwu
-   4pjhjKpQWuE1ky8FlHSsdG1m2mxfWlEGE1mBV4T73KYN9bB6tIScW/T/W
-   sk9ItMrHRtlQC0Lybn2auzDR925F/+DJcZv4MH9WFAO8JFowQ595Lu095
-   efvVCzAPk7/7+N10N+i+mu/5Ikt+F8wYWIPjIiaViQ14auswY1+42HtGb
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="391310591"
-X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
-   d="scan'208";a="391310591"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2023 20:29:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="734577007"
-X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
-   d="scan'208";a="734577007"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by fmsmga004.fm.intel.com with ESMTP; 03 Feb 2023 20:29:28 -0800
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        daniel.lezcano@linaro.org, rui.zhang@intel.com,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH v2] thermal: intel_powerclamp: Return last requested state as cur_state
-Date:   Fri,  3 Feb 2023 20:29:02 -0800
-Message-Id: <20230204042902.2555347-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.39.1
+        Fri, 3 Feb 2023 23:56:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF69D21950
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 20:55:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675486518;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FQ4uha3PJgX8OHjyXh+WN0eX5F0h2aTsXeAPONLwqFE=;
+        b=Qwwrciel4Myya44xi8+pG8GzPuuk6ygMK7sHLlwE6Ru3wN38VnI/8FD0kdoGt+PA36Af4P
+        DQ9nJqB0FRt8vO0812SMPDeKmWDsPpdWqtlRxO060jXDGQGRVq/J0ZdXFoAo2XVxztNILC
+        YGyD0RYtbdXcBMPmgvqnaE0lpvfYOd0=
+Received: from mail-oa1-f69.google.com (mail-oa1-f69.google.com
+ [209.85.160.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-654-AB_7RpxwOumUasc7pUfRwg-1; Fri, 03 Feb 2023 23:55:17 -0500
+X-MC-Unique: AB_7RpxwOumUasc7pUfRwg-1
+Received: by mail-oa1-f69.google.com with SMTP id 586e51a60fabf-163aaf19aecso3628179fac.15
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 20:55:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FQ4uha3PJgX8OHjyXh+WN0eX5F0h2aTsXeAPONLwqFE=;
+        b=s9KM6gU+wYwQiiIcy6//bHppPH6kSSoqelt8qpJiGAFLzi1k31BXaxBrTr73hTpcbk
+         gO9xdpwSGOoQxNWsqrOKXaeneuYV5t8eI6Ds1u9tZYtCYV6uF3G48QhTAwIivUuAu6XE
+         ASHQVktw3J/NpWQs562hy+B9TmKYnjQ6mTi8XmvrVSnbmQCc2PY1lDeVobKckIMcOaVD
+         vvVixB1kbKzN9hQeJNk5fu6Sgo0bMNZuf38SVGqY4NpmD5KcjGS6TFhziaB0vYFK5jdd
+         Kdh6HBpYIl480R4/lQDhNX/I9lHBr2x08eA9cCrGY1escAa5Q/dDMEpNJn0mUBOJi1wM
+         qSNg==
+X-Gm-Message-State: AO0yUKUjYe7ax0UpUvJMvTug/nXv3RHkb/4LbzhhjIC3bLLzNdZffT/O
+        6Z2suM4roGYTXpjVjHH8rWH/EaVAgLf44MQFIY2oAE8d8/53YiMvtFe5NGRuD0a0PUeRkmsC0r9
+        RpGP43xAVK1RwdoyY/D/rNbLS
+X-Received: by 2002:a05:6808:4084:b0:36e:a91d:b7ed with SMTP id db4-20020a056808408400b0036ea91db7edmr5197301oib.9.1675486516688;
+        Fri, 03 Feb 2023 20:55:16 -0800 (PST)
+X-Google-Smtp-Source: AK7set8dIZaX4QNjaxFTxht/y8nO4ZEqyQ+5DOY49AHbU+2VqduudxsJntRFaN2pQ/J1EAmmtdjcSA==
+X-Received: by 2002:a05:6808:4084:b0:36e:a91d:b7ed with SMTP id db4-20020a056808408400b0036ea91db7edmr5197296oib.9.1675486516360;
+        Fri, 03 Feb 2023 20:55:16 -0800 (PST)
+Received: from ?IPv6:2804:1b3:a800:9aa9:fdcb:7dec:9680:8417? ([2804:1b3:a800:9aa9:fdcb:7dec:9680:8417])
+        by smtp.gmail.com with ESMTPSA id bg12-20020a056808178c00b0035c21f1a570sm1578624oib.6.2023.02.03.20.55.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Feb 2023 20:55:15 -0800 (PST)
+Message-ID: <28e08669302ad1e7a41bdf8b9988de6a352b5fe1.camel@redhat.com>
+Subject: Re: [PATCH v2 0/5] Introduce memcg_stock_pcp remote draining
+From:   Leonardo =?ISO-8859-1?Q?Br=E1s?= <leobras@redhat.com>
+To:     Michal Hocko <mhocko@suse.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Date:   Sat, 04 Feb 2023 01:55:10 -0300
+In-Reply-To: <Y9pd7AxAILUSHrpe@dhcp22.suse.cz>
+References: <20230125073502.743446-1-leobras@redhat.com>
+         <Y9DpbVF+JR/G+5Or@dhcp22.suse.cz>
+         <9e61ab53e1419a144f774b95230b789244895424.camel@redhat.com>
+         <Y9FzSBw10MGXm2TK@tpad> <Y9IvoDJbLbFcitTc@dhcp22.suse.cz>
+         <Y9LDAZmApLeffrT8@tpad> <Y9LQ615H13RmG7wL@dhcp22.suse.cz>
+         <0122005439ffb7895efda7a1a67992cbe41392fe.camel@redhat.com>
+         <Y9j9BnMwfm4TJks7@tpad> <Y9pd7AxAILUSHrpe@dhcp22.suse.cz>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the user is reading cur_state from the thermal cooling device for
-Intel powerclamp device:
-- It returns the idle ratio from Package C-state counters when
-there is active idle injection session.
-- -1, when there is no active idle injection session.
+Michal, Roman,
 
-This information is not very useful as the package C-state counters vary
-a lot from read to read. Instead just return the last requested cur_state.
+I understand you have far more experience in this codebase than myself, so
+please help me understand what am I missing in my argument for the spinlock
+approach.=C2=A0
 
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
----
-v2:
-Fixed setting of *state
+I honestly want to improve, and your help is really appreciated.
 
- drivers/thermal/intel/intel_powerclamp.c | 12 +-----------
- 1 file changed, 1 insertion(+), 11 deletions(-)
+On Wed, 2023-02-01 at 13:41 +0100, Michal Hocko wrote:
+> On Tue 31-01-23 08:35:34, Marcelo Tosatti wrote:
+> [...]
+> > So it would be good to point out a specific problematic=20
+> > testcase/scenario with using the spinlock in this particular case?
+>=20
+> Please think about it some more. The sole purpose of the pcp charge
+> caching is to avoid atomics because the normal fast path (i.e. no limit
+> hit) is a page counter which is an atomic counter. If you go with a spin
+> lock for the pcp cache you are just losing some of the advantage of the
+> caching. Sure that would be a smaller atomics use than a deeper memcg
+> hierarchy but still.
 
-diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
-index 5f54c88b1977..0282503ecaaf 100644
---- a/drivers/thermal/intel/intel_powerclamp.c
-+++ b/drivers/thermal/intel/intel_powerclamp.c
-@@ -539,17 +539,7 @@ static int powerclamp_get_cur_state(struct thermal_cooling_device *cdev,
- 				 unsigned long *state)
- {
- 	mutex_lock(&powerclamp_lock);
--
--	if (powerclamp_data.clamping) {
--		if (poll_pkg_cstate_enable)
--			*state = pkg_cstate_ratio_cur;
--		else
--			*state = powerclamp_data.target_ratio;
--	} else {
--		/* to save power, do not poll idle ratio while not clamping */
--		*state = -1; /* indicates invalid state */
--	}
--
-+	*state = powerclamp_data.target_ratio;
- 	mutex_unlock(&powerclamp_lock);
- 
- 	return 0;
--- 
-2.17.1
+I could read the code that calls consume_stock(), and noticed that you are
+probably referencing the atomic operations on memcg->memory->usage (and oth=
+ers)
+used in page_counter_try_charge(). It is a single atomic variable per memcg=
+ that
+is potentially accessed by every cpu. Is that correct?
+
+I understand the cost of an atomic operation such as this is high because o=
+f the
+inherent high cost of bouncing the variable's cacheline between those cpus.
+
+The difference between 'usage' atomic variable and the spinlock we are prop=
+osing
+is the scope of the variable: spinlock is defined on a per-cpu structure,=
+=C2=A0and
+most of the accesses will come from the local cpu.=C2=A0
+
+According to=C2=A0Intel=C2=AE 64 and IA-32 Architectures Software Developer=
+=E2=80=99s Manual, at
+Vol. 3A page 9-5:
+
+###
+9.1.4 Effects of a LOCK Operation on Internal Processor Caches
+[...]
+For the P6 and more recent processor families, if the area of memory being
+locked during a LOCK operation is cached in the processor that is performin=
+g the
+LOCK operation as write-back memory and is completely contained in a cache =
+line,
+the processor may not assert the LOCK# signal on the bus. Instead, it will
+modify the memory location internally and allow it=E2=80=99s cache coherenc=
+y mechanism
+to ensure that the operation is carried out atomically. This operation is c=
+alled
+=E2=80=9Ccache locking.=E2=80=9D The cache coherency mechanism automaticall=
+y prevents two or
+more processors that have cached the same area of memory from simultaneousl=
+y
+modifying data in that area.
+###
+
+So locking on a percpu spinlock which is cached in the current cpu (happens=
+ most
+of time) is as cheap as modifying the local cacheline. Since the cachelines=
+ are
+already modified in the local cpu functions, so the write to memory is batc=
+hed.
+
+For reference, this is the pahole output for memcg_stock_pcp after my patch=
+. The
+spinlock fits in the same cacheline as the changed variables.
+
+struct memcg_stock_pcp {
+	spinlock_t                 stock_lock;           /*     0     4 */
+	unsigned int               nr_pages;             /*     4     4 */
+	struct mem_cgroup *        cached;               /*     8     8 */
+	struct obj_cgroup *        cached_objcg;         /*    16     8 */
+	struct pglist_data *       cached_pgdat;         /*    24     8 */
+	unsigned int               nr_bytes;             /*    32     4 */
+	int                        nr_slab_reclaimable_b; /*    36     4 */
+	int                        nr_slab_unreclaimable_b; /*    40     4 */
+
+	/* size: 48, cachelines: 1, members: 8 */
+	/* padding: 4 */
+	/* last cacheline: 48 bytes */
+};
+
+The only accesses that will come from a remote cpu, and thus cause the cach=
+eline
+to bounce and the lock to be more expensive, are the ones from
+drain_all_stock(). OTOH, on upstream, those accesses already modify the rem=
+ote
+cacheline with an atomic variable (memcg_stock_pcp.flags), so we are only
+dealing with potential contention costs.
+
+>=20
+> Not to mention a potential contention which is hard to predict and it
+> will depend on the specific runtime very much. So not something that
+> would be easy to test for other than artificial testcases. Full cpu
+> pcp draining is not a very common operation and one could argue that
+> the problem will be limited=C2=A0
+>=20
+
+Yes, but we are exchanging an "always schedule_work_on()", which is a kind =
+of
+contention, for a "sometimes we hit spinlock contention".
+
+For the spinlock proposal, on the local cpu side, the *worst case* contenti=
+on
+is:
+1 - wait the spin_unlock() for a complete <percpu cache drain process>,
+2 - wait a cache hit for local per-cpu cacheline=C2=A0
+
+What is current implemented (schedule_work_on() approach), for the local
+cpu=C2=A0side there is *always* this contention:
+1 - wait for a context switch,
+2 - wait a cache hit from it's local per-cpu cacheline,
+3 - wait a complete <percpu cache drain process>,=C2=A0
+4 - then for a new context switch to the current thread.
+
+So moving from schedule_work_on() to spinlocks will save 2 context switches=
+ per
+cpu every time drain_all_stock() is called.
+
+On the remote cpu side, my tests point that doing the remote draining is fa=
+ster
+than scheduling a local draining, so it's also a gain.
+
+Also, IIUC the possible contention in the spinlock approach happens only on
+page-faulting and syscalls, versus the schedule_work_on() approach that can
+interrupt user workload at any time.=C2=A0
+
+In fact, not interrupting the user workload in isolated cpus is just a bonu=
+s of
+using spinlocks.
+
+> but so far I haven't really heard any strong
+> arguments against the proposal to avoid scheduling the work on isolated
+> cpus which is a much more simpler solution and achieves the same
+> effect.
+
+I understand the 'not scheduling work on isolated cpus' appeal: it's a much
+simpler change, and will only affect cases with isolated cpus, so it is saf=
+er
+than changing the whole locking structure.=C2=A0
+
+I am not against it. I already have a patch implementing it for testing, an=
+d I
+could gladly send it if you see fit.
+
+But if nothing else, it introduces another specific case, and now it have t=
+o
+deal differently with local cpu, remote cpus, and isolated cpus.
+
+With spinlocks, there is a much simpler solution:
+- All cpus are dealt with the same way, which is faster in the local cpu (a=
+s=C2=A0
+  in upstream implementation).
+- We don't have to avoid draining on isolated cpus.
+- We get rid of the "work_struct", and scheduling costs
+- We get rid of "flag", as we don't need to take care of multi-scheduling l=
+ocal=C2=A0
+  draining.
+- When drain_all_stock() returns, all stock have already been drained, so=
+=C2=A0
+  retrying=C2=A0consume_stock() may have immediate results on pre-OOM cases=
+.
+
+On Wed, 2023-02-01 at 13:52 +0100, Michal Hocko wrote:
+[...]
+> Let me be clear here. Unless there are some real concerns about not
+> flushing remotely on isolated cpus then the spin lock approach is just
+> much less preferable. So I would much rather focus on the trivial patch
+> and investigates whether there are no new corner cases to be created by
+> that.
+
+I understand 'not scheduling work on isolated cpus' approach should work wi=
+th
+low impact on current behavior, and I also understand that as Maintainers y=
+ou
+have to consider many more factors than a regular developer like me, and al=
+so
+that the spinlock approach is a big change on how pcp memcg caches work.=
+=20
+
+On that topic, if there is any comparison test you find important running, =
+or
+any topic you think could be better discussed, please let me know.
+
+Thank you for reviewing,
+Leo
+
 
