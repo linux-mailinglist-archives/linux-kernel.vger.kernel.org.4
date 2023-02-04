@@ -2,110 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D76968A9BF
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 13:15:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC2F268A9C3
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 13:21:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232340AbjBDMPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 07:15:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44042 "EHLO
+        id S232340AbjBDMVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 07:21:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229877AbjBDMPG (ORCPT
+        with ESMTP id S229877AbjBDMVt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 07:15:06 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E962613DD3;
-        Sat,  4 Feb 2023 04:15:04 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id mf7so22173709ejc.6;
-        Sat, 04 Feb 2023 04:15:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:message-id:subject:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=DcLZda2GIW9FF0wLQg8CZVOr2LxDbAuDjShayw2MbDs=;
-        b=XUSif1Fp5FlrgbeYWO8T4vmfWe++TAT9Td+cvqsfyqMtthQx0Xoj5FeEkUIEnE/6j5
-         Dk9QrMWsjSQR22ef2Q777/XZZ8xfQBUFLxt77eXVR3+ArQbzv+CfjHliDIohcb+FhA+X
-         cyrGVEGMcGMb4Vn3r48iBxp2ZN9SkRuPQhfP5YedlgnG+GbYR9mfPkecROK1yA2QtTmf
-         0ygi2Q6ptXh7H9hHj/zFGhrndz3RSvcwByLxkHHNdASlDu/x0BNaUQBVD0vHSJLO5ruU
-         SDb0x3ZTeDskoiV2uyEFxubWaoVRvEni4TfFOKeqsyIl/2pdcI9Bh0XdPYpj+xNKA492
-         mpbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:message-id:subject:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DcLZda2GIW9FF0wLQg8CZVOr2LxDbAuDjShayw2MbDs=;
-        b=v1DNpUdnSiboHLOkLw2X2yjG78YdZ1g606CJ7T5atgSHzHIhaT7A5J7BlAYcpcCE6+
-         RU5U5WmwoV7AunavzvlVxgtHTFQa72rQfihpzYWTZZHDORX51ZbesWK3ZrOwsrHOITDb
-         vfeTIrvkd4HmuaWtswU/EgC0A1+xwGbmPaeYNncZnCZ67DwN5jFtL3pCjtaNgD0gJO5S
-         ehiXrFyJHJRmJsTW1nUGJzVhI9+2+B47DLZwSkDByj6PDUHVvtxMULEdI5wI14RlYdYa
-         a8oX9dGuXw7sOR5bXGmLeo2OumdtNA8nJGRKMK8aDUXKQ0fRBj21kUkQUmsnjPwQ8Jra
-         H77w==
-X-Gm-Message-State: AO0yUKX3uF8TjtCtf8hCX6m8dWvm7I2ZP3bQKBThkhwZGwc012CTMP5d
-        yxTEjjdZUjYVnAB1uLHdUm/J/eXp668=
-X-Google-Smtp-Source: AK7set+ROpQ9L9O2JG0p0RoOuhi61USNBoaXtEKd1Qx8CuJ6L6SlhQTol1M3dhr6th4/Cnid2s5A1A==
-X-Received: by 2002:a17:907:7b99:b0:88d:ba89:1846 with SMTP id ne25-20020a1709077b9900b0088dba891846mr10375569ejc.23.1675512903081;
-        Sat, 04 Feb 2023 04:15:03 -0800 (PST)
-Received: from jo-einhundert ([2a02:908:13d6:2180:e7f7:5368:343b:83fd])
-        by smtp.gmail.com with ESMTPSA id c21-20020a056402101500b004a2440f0150sm2402992edu.97.2023.02.04.04.15.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Feb 2023 04:15:02 -0800 (PST)
-Date:   Sat, 4 Feb 2023 13:15:01 +0100
-From:   =?iso-8859-1?Q?J=F3_=C1gila?= Bitsch <jgilab@gmail.com>
-To:     Greg KH <greg@kroah.com>, Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        linux-usb@vger.kernel.org
-Subject: [PATCH v2] usb: gadget: add doc to struct usb_composite_dev
-Message-ID: <Y95MRZZz3yC5lETB@jo-einhundert>
+        Sat, 4 Feb 2023 07:21:49 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123712695;
+        Sat,  4 Feb 2023 04:21:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675513308; x=1707049308;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=J6/WHPwLYf2NNiKUv4H1tve+SuwKBjAJdENF3a4dPDI=;
+  b=IiE52I0WFznCUtfr1seTwMHU9AsBym0iAb4LFJEHy4Nthrs0TxqHDc0A
+   cJFkGIMw0/MA0LbU+ac51JtmBYk3iK4lyJDI9i3PnDgQouWs1SwXL7VvY
+   Xpt/ErxB0vYDemzXg78EzJaOQXEZZebl7fFvuStm+o9HX0V75RpZwYNNm
+   WiYF94rL0HNa8NQ4xm8z7+61SMca2aWLyNyWxsIoo/QeUjEOomlrNwYpg
+   sgHdWSBg5UqbMNEHZREWKz5nazyXEnhTo0kj/LM0ewqPKvj/vXvAfZDve
+   ys1jLgryl4/nzK02z65QcB6HQDcTqHKZmeddfB5+/x40xbI9sxDJ2Ltyl
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="330230550"
+X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
+   d="scan'208";a="330230550"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2023 04:21:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="839890077"
+X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
+   d="scan'208";a="839890077"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 04 Feb 2023 04:21:44 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pOHY7-0001Ic-1C;
+        Sat, 04 Feb 2023 12:21:43 +0000
+Date:   Sat, 4 Feb 2023 20:21:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        marijn.suijten@somainline.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 04/10] clk: qcom: branch: Clean up branch enable
+ registers
+Message-ID: <202302042015.l7uhyaz9-lkp@intel.com>
+References: <20230201183626.351211-5-konrad.dybcio@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y9kAryJ6Y2lQyKZK@kroah.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230201183626.351211-5-konrad.dybcio@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Added documentation to new struct members for WebUSB:
-* bcd_webusb_version
-* b_webusb_vendor_code
-* landing_page
-* use_webusb
-to avoid warnings in the build of htmldocs
+Hi Konrad,
 
-Fixes: 93c473948c58 ("usb: gadget: add WebUSB landing page support")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Jó Ágila Bitsch <jgilab@gmail.com>
----
-V0 -> V1: added Reported-By and Fixes Tags
-V1 -> V2: fixed Reported-by tag (capitalization of "-by" was wrong)
-          also post to linux-usb
+I love your patch! Yet something to improve:
 
- include/linux/usb/composite.h | 4 ++++
- 1 file changed, 4 insertions(+)
+[auto build test ERROR on clk/clk-next]
+[also build test ERROR on linus/master v6.2-rc6]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/include/linux/usb/composite.h b/include/linux/usb/composite.h
-index 91d22c3ed458..7ef8cea67f50 100644
---- a/include/linux/usb/composite.h
-+++ b/include/linux/usb/composite.h
-@@ -432,6 +432,10 @@ static inline struct usb_composite_driver *to_cdriver(
-  * @qw_sign: qwSignature part of the OS string
-  * @b_vendor_code: bMS_VendorCode part of the OS string
-  * @use_os_string: false by default, interested gadgets set it
-+ * @bcd_webusb_version: 0x0100 by default, WebUSB specification version
-+ * @b_webusb_vendor_code: 0x0 by default, vendor code for WebUSB
-+ * @landing_page: empty by default, landing page to announce in WebUSB
-+ * @use_webusb:: false by default, interested gadgets set it
-  * @os_desc_config: the configuration to be used with OS descriptors
-  * @setup_pending: true when setup request is queued but not completed
-  * @os_desc_pending: true when os_desc request is queued but not completed
+url:    https://github.com/intel-lab-lkp/linux/commits/Konrad-Dybcio/clk-qcom-branch-Add-helper-functions-for-setting-SLEEP-WAKE-bits/20230202-033712
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
+patch link:    https://lore.kernel.org/r/20230201183626.351211-5-konrad.dybcio%40linaro.org
+patch subject: [PATCH v5 04/10] clk: qcom: branch: Clean up branch enable registers
+config: arm-randconfig-r013-20230204 (https://download.01.org/0day-ci/archive/20230204/202302042015.l7uhyaz9-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/07999d2b9b99df1dc626354c217da075c5c565cb
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Konrad-Dybcio/clk-qcom-branch-Add-helper-functions-for-setting-SLEEP-WAKE-bits/20230202-033712
+        git checkout 07999d2b9b99df1dc626354c217da075c5c565cb
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/clk/qcom/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/clk/qcom/clk-branch.c:14:
+   drivers/clk/qcom/clk-branch.h:74:7: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                              FIELD_PREP(CBCR_WAKEUP, val));
+                              ^
+   drivers/clk/qcom/clk-branch.h:80:7: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                              FIELD_PREP(CBCR_SLEEP, val));
+                              ^
+>> drivers/clk/qcom/clk-branch.c:55:4: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                           FIELD_GET(CBCR_NOC_FSM_STATUS, val) == FSM_STATUS_ON;
+                           ^
+   3 errors generated.
+
+
+vim +/FIELD_GET +55 drivers/clk/qcom/clk-branch.c
+
+    41	
+    42	static bool clk_branch2_check_halt(const struct clk_branch *br, bool enabling)
+    43	{
+    44		u32 val;
+    45		u32 mask;
+    46	
+    47		mask = CBCR_NOC_FSM_STATUS;
+    48		mask |= CBCR_CLK_OFF;
+    49	
+    50		regmap_read(br->clkr.regmap, br->halt_reg, &val);
+    51	
+    52		if (enabling) {
+    53			val &= mask;
+    54			return (val & CBCR_CLK_OFF) == 0 ||
+  > 55				FIELD_GET(CBCR_NOC_FSM_STATUS, val) == FSM_STATUS_ON;
+    56		} else {
+    57			return val & CBCR_CLK_OFF;
+    58		}
+    59	}
+    60	
+
 -- 
-2.37.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
