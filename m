@@ -2,130 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F9C868A8E7
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 08:59:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B38D668A8EB
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 09:13:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233085AbjBDH7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 02:59:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46230 "EHLO
+        id S233112AbjBDIM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 03:12:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229877AbjBDH7S (ORCPT
+        with ESMTP id S229448AbjBDIM4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 02:59:18 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDFBF241CA;
-        Fri,  3 Feb 2023 23:59:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 3F9F8CE312B;
-        Sat,  4 Feb 2023 07:59:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7189C433EF;
-        Sat,  4 Feb 2023 07:59:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675497553;
-        bh=IBrKqhtT8Y2lqgiK4dQAA7Vm1qgG5EJ/NNEtzjci9dw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Pm1hxoiXSqLiRcdKZYboLO9Dv5T1h33nDdl/ylGUW7pNRZNiqyB0ZHqdCUXZWDdWW
-         +uKf4IXAjpLqGtUGlwdEhD8/LFMY+HQQ1+UnDH9owlTNhwaPSYTUf09IsJV+vLHF9/
-         8IiGv8BFkMp6tazRA4+yBbVorMWSdhE6ox0xVhe8=
-Date:   Sat, 4 Feb 2023 08:59:09 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>, stable@vger.kernel.org,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 5.4 000/134] 5.4.231-rc1 review
-Message-ID: <Y94QTVUg2H68XnQ2@kroah.com>
-References: <20230203101023.832083974@linuxfoundation.org>
- <20230203155619.GA3176223@roeck-us.net>
- <Y906Hz3UWYxoxYdD@kroah.com>
- <20230203171826.GA1500930@roeck-us.net>
- <Y91YWzopMMGF1Lgh@sol.localdomain>
- <Y91bjnIuQRvVqpO7@sol.localdomain>
- <705ab151-da1e-30e1-c232-c9860717267d@roeck-us.net>
- <Y91lXYN7zF8d/fek@sol.localdomain>
-MIME-Version: 1.0
+        Sat, 4 Feb 2023 03:12:56 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2129.outbound.protection.outlook.com [40.107.244.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F9429E1E;
+        Sat,  4 Feb 2023 00:12:55 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Z7JHm50+PJInVaXtc1ZqcGgqtg/iJ23/DApynaDTNeeXfqmmYa8G1bmQlwh93EC17g0M2DR7vSFFMQ0p5FuRcA/iMOdNVmRmpLl66YY6+1ENts5/NWfeXQ7U4+ONV3k2wAQyAHhdVqmD38yDYPrQrC/K3UB/4lJHeTQMloQg5tbXPUqwhNUre750yIyeUp8K6eDuFJXLXUF9ViIwABFSxy4oKXX0LJNaNRFWHwx6tEYaC72tiO34BPc9r51GsB+N+9B+My8nvzqMTwZNXOsDyDoLzYFlm9d530wNkuUgDqSja2n44eekD5vhUI0zD9a2TZTuNvRfKCZtsaOY10xhhA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bDwJZz2RfClW5Xxb06EIOhVzOZhHDzlBqC/0o5hd5VE=;
+ b=QYGo9KA1pxuH7sAG1HVMIWccMWVZkGFFnSdkZazRzJ3x3fNTPPgFFkQph92N5ibGjnXZcXhpQ8ovRSZ78IqgRhq+HlMzdZU7iSF22jL2mD3FoHqEE41noUEklGfXjWmKHynANXUd3gOFaDjXBnTykA+j416c9p9LRpmUzYYjS9x82OtDTJLre7tPSwgK9haJ/U4Ts3JstAhAXA9D2orxuBeovRanZcktwAIaXmYwU5YK+QWk3sidREHIF3zcydDBXWNFnmZ/9GgMdMLyQqPs2FwxGi9iT0wmOMsL5SklhMoE/s0orHbXS+8HhRAUcZjfLQn5nI7VXeY8ufC/LHPIYA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bDwJZz2RfClW5Xxb06EIOhVzOZhHDzlBqC/0o5hd5VE=;
+ b=R1k9FAAMkDjOiA5HPXtp0+mH7wyZZRXn7FH3iW8AYKVVNFzmBSMvU7un/UIZPc04nbvZkLOl9zhL/RC83/YG/mIedLsCKkK7Lg7v6Mh/6qaNL5JGpEtHk84pe2e9B16GvqIIWCplU6j9ixpA4YZQXujVhT40btrmTTAvu/kKw3o=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by SJ0PR13MB5271.namprd13.prod.outlook.com (2603:10b6:a03:3d5::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.32; Sat, 4 Feb
+ 2023 08:12:53 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb5c:910f:3730:fd65]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb5c:910f:3730:fd65%6]) with mapi id 15.20.6064.032; Sat, 4 Feb 2023
+ 08:12:53 +0000
+Date:   Sat, 4 Feb 2023 09:12:41 +0100
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     netdev@kapio-technology.com, davem@davemloft.net, kuba@kernel.org,
+        netdev@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
+        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>
+Subject: Re: [PATCH net-next 5/5] net: dsa: mv88e6xxx: implementation of
+ dynamic ATU entries
+Message-ID: <Y94TebdRQRHMMj/c@corigine.com>
+References: <20230130173429.3577450-1-netdev@kapio-technology.com>
+ <20230130173429.3577450-6-netdev@kapio-technology.com>
+ <Y9lkXlyXg1d1D0j3@corigine.com>
+ <9b12275969a204739ccfab972d90f20f@kapio-technology.com>
+ <Y9zDxlwSn1EfCTba@corigine.com>
+ <20230203204422.4wrhyathxfhj6hdt@skbuf>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y91lXYN7zF8d/fek@sol.localdomain>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230203204422.4wrhyathxfhj6hdt@skbuf>
+X-ClientProxiedBy: AM4PR0902CA0020.eurprd09.prod.outlook.com
+ (2603:10a6:200:9b::30) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SJ0PR13MB5271:EE_
+X-MS-Office365-Filtering-Correlation-Id: dbdda9c2-b629-4e50-638d-08db06879d43
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: sUDbrU0Dniu0C1kDJk8YFH1horHEybrgRj8kY80XJnTmzVqtSW04+3TyuBKXs40dlbcHapKX3Rj/efs/ACGKPZWGl/RH/ZPvcNFt62Iovs/S5qhdIMlbz0kIw3AfvZugwSOrncNY0Z/s3bQ+QQl6kFq/WA+j3yd+7EWbNU5uBceq4ckhohFwER96Geg42XmbEKQ8rmBDQXm7QBBob7RkXcf8vqUW91A8UGHQPnO6MpiIyc/uT4ondZT/Aa0mBMcMrljKkeaxiocgk2IcUNePfSTxXmz9rXGrsyroL7RXrm0nOlEwrOmKfK8pXRjPCt+Rivk7Fezj+ekq6eBFUlwvMU0/15ZyVlkU7GsACSsJIPcxD80VkfZvKJ6Ead3rpkLOui19AxAVSC4dce/UeD0S4GX0JrqL6XtklPYfOCJTVHhkjeyGSZVvJ/cKGPgJrrAi43ZrLCVbeZ5n3k5VUJKia8WMbub7Gs2gGTHCq/3QFgkgzv8Bt6egMXM4qJxFBVH9eYK/YHVHQgUaTKSS91zZvfIBWfnUkS+MbScoNllU+Q6cscwgx4Sb5DSDIqECQy1Txwh6gKjl2qGGT5avXFKYO13tHnKDinVeyxMcTaIBGLTFtYHrC79TceMKxbAyD/CGHaWwqdLVKjZTUVkcu9oFFFrRFEEh3Ucs28YrduahGbw8Lyy8RpKayJxlyo97YC4R
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(39840400004)(346002)(376002)(366004)(451199018)(36756003)(186003)(4326008)(6512007)(44832011)(2616005)(7416002)(7406005)(8676002)(5660300002)(6486002)(41300700001)(478600001)(86362001)(2906002)(8936002)(6916009)(66556008)(66476007)(66946007)(6506007)(54906003)(316002)(6666004)(38100700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Is9bzGHqAdMsoPk7yWMFONBEQIqH1Pm/c0NWGyoUBlFiqH6DpubsHpoUYVnA?=
+ =?us-ascii?Q?Mhy1ewJt7xdlo1uNXHAmRkHaxtFhLAPp8Sadlt/3QOh8Ie44zq13dqIwyixe?=
+ =?us-ascii?Q?o+LiNMNEYv7cBwoEunr7+MQcZVMY+Wupl3gNYxTjzy/UdtjCsuG999Sw8kG0?=
+ =?us-ascii?Q?fwxjFVOUOIczywPX57ubaN2S6ydKlmEF/OvWZNg2rZQUvJuPrPaH1ZnE/wPd?=
+ =?us-ascii?Q?sPEfcw3lThKa+JfHdr9UAmY4sdoqcWkmLc3EfVdakjBK/RSgwdxLEqrJCHrg?=
+ =?us-ascii?Q?6agEWAbsu80EcB2tw2lON0g6E0OWJpAjm1jGdtIj+sFPfGY9zOH2n+3sqyid?=
+ =?us-ascii?Q?ELqVeJE77s8Qu1ronm+kq22iIO6jBffG0O8b8zeKXQtW+oTpU9UTzVxuT3Is?=
+ =?us-ascii?Q?PK6bu5Nuk0xgUOdvYX/iU3It6Beop1xoZwmDbzEGv4iAn7MILBmtcDLaAI/Z?=
+ =?us-ascii?Q?M+9DzA/mXnKBNntIoV9kqlWfbHUGRKwcY50hVK4EJrrwLjKc8TnYDX8y4s6X?=
+ =?us-ascii?Q?PNklZfLHzAYZabadqrgX9oF0VUzpW1yVSLUqN83ieAZu2C97NOUH2uNuQ/xb?=
+ =?us-ascii?Q?kEuaPTZcibAtLyCszIDhWFbeoxw1oqvpfRxc0PiX0si0kNX1b+NOdc+gyD/X?=
+ =?us-ascii?Q?LGzSgSoVT9HsLBqGinMKzt0dj6/9TckulLEqoLZd4REu8U/dbL24xkgx/5wV?=
+ =?us-ascii?Q?UblMghb0al7VTvjXanYUSX/QjDm5PGkED87Of3ziUmELkmLar8k0nv3se7uO?=
+ =?us-ascii?Q?wA3ZhalGbU0ktjZzqwGH+yutqxKuu9Do68Onw/HPXvSf2UoYlkFC3h9K9tQH?=
+ =?us-ascii?Q?zguC5ANd1Mnk8dj33rYjUF/e/hnWnTcwZk6lSL0mh43O4zRxHzWuHKx8GKpO?=
+ =?us-ascii?Q?qErMXJ3bmjvwz84JhcpneHWuJsqAZbErSAxMGNlxIH43mrvaCP6sipVbNspf?=
+ =?us-ascii?Q?CvavueFvCIYoNL/OUkwqEZdmqi/J//nIjNOQkRowqAm1WDwCp4TKolHKqOQR?=
+ =?us-ascii?Q?FGWc7cu+xf/YcV7XA53MqHp+qGGC+iGJmO8WT9IBUIAfTan1WCVxccmM/ZUm?=
+ =?us-ascii?Q?BpkVeUGQhJ0jAnrIp+uYM+V6yVOEwP3NwpI84M0jfq7gu/k/fby8TB/yXaXW?=
+ =?us-ascii?Q?UbYwJ1bTYBN+Px+H6Z1E/9pMxtmhyDMJFHQ8h3g02OHr3JMi88elPTUKgit4?=
+ =?us-ascii?Q?AceoCYWyTg37U0fUchDwyq2PcXjMk51/zaUKqIjAkDDDqROUId8JRQ0VNf+j?=
+ =?us-ascii?Q?dW4v92IPzDrQ1GhRuIbBjfQLnwRMSV3V0R773bDo5ncM0m2Dqp4CBN/AufuA?=
+ =?us-ascii?Q?vU7KsCplpG78xsfdmpB80TClYH4F2Li1Jy6CkVd9CjauX9NNQuDMLv/2ztqb?=
+ =?us-ascii?Q?JAhVrws315NhFhirV96iKWMROvL1lCw4v75MMWFPD5JxTNhzLgwE8KUCImu5?=
+ =?us-ascii?Q?SncSkY6ioCfer6p0xpzrS8jtwrwTeSERyk13OIMvWpTSoQR0LC9wpKsjM5Pg?=
+ =?us-ascii?Q?7OlpF/7pKvZoskyFnW41Lz5YOlZoilkO+Dw6dymB5iXkpBqNrIi1FBS76rIA?=
+ =?us-ascii?Q?NHBRxGsBibpENjD2xWUL2uTL9fVzrS0AseT9Z1XH3RqoqCZc+GT3nhDLdOLf?=
+ =?us-ascii?Q?V3LyDvDydNavPFmieIEaZBTmXsiDb6x8TwygOfIEOv1I9hsAeYJ4aP0g7WL+?=
+ =?us-ascii?Q?tfTpOQ=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dbdda9c2-b629-4e50-638d-08db06879d43
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Feb 2023 08:12:53.4191
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: CJn8nFzQjRiB/yVK790cY6qeNOzJpCc24j26J2wwGm6gangEd0us+m6qE+vkPmgxKPb0MhI04yl5tijxmxfQwChmDGa2cZPnoUtBQUyJ+No=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR13MB5271
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 11:49:49AM -0800, Eric Biggers wrote:
-> On Fri, Feb 03, 2023 at 11:28:46AM -0800, Guenter Roeck wrote:
-> > On 2/3/23 11:07, Eric Biggers wrote:
-> > > On Fri, Feb 03, 2023 at 10:54:21AM -0800, Eric Biggers wrote:
-> > > > On Fri, Feb 03, 2023 at 09:18:26AM -0800, Guenter Roeck wrote:
-> > > > > On Fri, Feb 03, 2023 at 05:45:19PM +0100, Greg Kroah-Hartman wrote:
-> > > > > > On Fri, Feb 03, 2023 at 07:56:19AM -0800, Guenter Roeck wrote:
-> > > > > > > On Fri, Feb 03, 2023 at 11:11:45AM +0100, Greg Kroah-Hartman wrote:
-> > > > > > > > This is the start of the stable review cycle for the 5.4.231 release.
-> > > > > > > > There are 134 patches in this series, all will be posted as a response
-> > > > > > > > to this one.  If anyone has any issues with these being applied, please
-> > > > > > > > let me know.
-> > > > > > > > 
-> > > > > > > > Responses should be made by Sun, 05 Feb 2023 10:09:58 +0000.
-> > > > > > > > Anything received after that time might be too late.
-> > > > > > > > 
-> > > > > > > 
-> > > > > > > Building ia64:defconfig ... failed
-> > > > > > > --------------
-> > > > > > > Error log:
-> > > > > > > <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-> > > > > > > arch/ia64/kernel/mca_drv.c: In function 'mca_handler_bh':
-> > > > > > > arch/ia64/kernel/mca_drv.c:179:9: error: implicit declaration of function 'make_task_dead'
-> > > > > > > 
-> > > > > > > Caused by "exit: Add and use make_task_dead.". Did that really have to be backported ?
-> > > > > > 
-> > > > > > Yup, it does!
-> > > > > > 
-> > > > > > Eric, any help with this?
-> > > > > > 
-> > > > > 
-> > > > > Adding "#include <linux/sched/task.h>" to the affected file would probably
-> > > > > be the easy fix. I did a quick check, and it works.
-> > > > > 
-> > > > > Note that the same problem is seen in v4.14.y and v4.19.y. Later
-> > > > > kernels don't have the problem.
-> > > > > 
-> > > > 
-> > > > This problem arises because <linux/mm.h> transitively includes
-> > > > <linux/sched/task.h> in 5.10 and later, but not in 5.4 and earlier.
-> > > > 
-> > > > Greg, any preference for how to handle this situation?
-> > > > 
-> > > > Just add '#include <linux/sched/task.h>' to the affected .c file (and hope there
-> > > > are no more affected .c files in the other arch directories) and call it a day?
-> > > > 
-> > > > Or should we backport the transitive inclusion (i.e., the #include added by
-> > > > commit 80fbaf1c3f29)?  Or move the declaration of make_task_dead() into
-> > > > <linux/kernel.h> so that it's next to do_exit()?
+On Fri, Feb 03, 2023 at 10:44:22PM +0200, Vladimir Oltean wrote:
+> On Fri, Feb 03, 2023 at 09:20:22AM +0100, Simon Horman wrote:
+> > > else if (someflag)
+> > >         dosomething();
 > > > 
-> > > One question: do *all* the arches actually get built as part of the testing for
-> > > each stable release?  If so, we can just add the #include to the .c files that
-> > > need it.  If not, then it would be safer to take one of the other approaches.
-> > > 
+> > > For now only one flag will actually be set and they are mutually exclusive,
+> > > as they will not make sense together with the potential flags I know, but
+> > > that can change at some time of course.
 > > 
-> > Yes, I do build all architectures for each stable release.
-> > 
-> > FWIW, I only noticed that one build failure due to this problem.
+> > Yes, I see that is workable. I do feel that checking for other flags would
+> > be a bit more robust. But as you say, there are none. So whichever
+> > approach you prefer is fine by me.
 > 
-> Okay, great.  In that case, Greg or Sasha, can you fold the needed #include into
-> arch/ia64/kernel/mca_drv.c in exit-add-and-use-make_task_dead.patch on 4.14,
-> 4.19, and 5.4?  Or should I just send the whole series again for each?
+> The model we have for unsupported bits in the SWITCHDEV_ATTR_ID_PORT_PRE_BRIDGE_FLAGS
+> and SWITCHDEV_ATTR_ID_PORT_BRIDGE_FLAGS handlers is essentially this:
+> 
+> 	if (flags & ~(supported_flag_mask))
+> 		return -EOPNOTSUPP;
+> 
+> 	if (flags & supported_flag_1)
+> 		...
+> 
+> 	if (flags & supported_flag_2)
+> 		...
+> 
+> I suppose applying this model here would address Simon's extensibility concern.
 
-I'll fold it in later today when I get a chance, no need to resubmit the
-whole thing, thanks!
-
-greg k-h
+Yes, that is the model I had in mind.
