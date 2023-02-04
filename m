@@ -2,158 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9855E68ABD8
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 19:32:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CDC768ABD9
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 19:34:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232645AbjBDScz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 13:32:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47792 "EHLO
+        id S232416AbjBDSeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 13:34:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbjBDScx (ORCPT
+        with ESMTP id S229448AbjBDSd7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 13:32:53 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D899830B10
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 10:32:47 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id cl23-20020a17090af69700b0022c745bfdc3so7757170pjb.3
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Feb 2023 10:32:47 -0800 (PST)
+        Sat, 4 Feb 2023 13:33:59 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA84F74A
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 10:33:58 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id bd15so5844694pfb.8
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Feb 2023 10:33:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hWXqY6vkS6h8Vyi+cCa2wgxLlkbcE67+3y3A1NRgkP0=;
-        b=LExrl+KFcVf2/FYhWCQdYF32QGdh5UXA4AmcX728sSl4odYnnjrrZq16jx3MvQzFcv
-         dQ1H3oGKuIHaSgHT0VSFNVp+YJPAZdUO3p+/taza+s0XIXj0/FP1/7id8OINHB/DuB7T
-         W7YTVEPmQomTURqo0D25gEVKpsdipmXEZZJqw=
+        bh=tjMR7K3b5Kxbe/ecjD43xajTi+1Ciwse0JLkSMzManQ=;
+        b=gP51lVE2s5bzt77ug4Jirt2sJ9KLq+2knjVg1vT6QkeQIv2jntI19xpKL/A3y5RIw4
+         d1kDPxMQ5SJQihGsgSYiK74m9k41HQubx6Dzs3JIuQxjFGSzzx1Z1SK3npORpmHhViG9
+         /hERkahCWqjLzZl7c6EgyDR9uQsfzpRCWAG2E=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=hWXqY6vkS6h8Vyi+cCa2wgxLlkbcE67+3y3A1NRgkP0=;
-        b=soBlpyZ9HMNChK5HPNI9ybggdgpJavfUkoCygWNJHlzx6Y/oauVJm7YdjQYzltroS7
-         HkcRVHsZ1Sb18ZI12YoAZJhSflLbMWqf/gHWVXNNsL18/BpMnAkj8ABuTX8Q+B2Z6Okb
-         WM9JES4LQpvU0eoCBM9KkiAvkTj8Nwt121FZspHCVSSwvG9NvppB002D466h/oPQ83KW
-         f+/q1x1XH0I8sA91OYEze6jv7HSnYyCbDQRv42+x8gOaPYXfrbnOX3CHhTisWWsysQGJ
-         1AFtAxQ1tnC6Zm0xmL2oN6yxZlOQb4zsckjw3VZ/hKNNuhRrxQ/bRkXz6nL1mYY0aknX
-         mXdA==
-X-Gm-Message-State: AO0yUKX11gf/vZ0819oGl19Wj5o+cvxpzT3Wg769IlxEhdNkPHRhlCZi
-        l8DaIppfHfCGRhzmqug7/shDfA==
-X-Google-Smtp-Source: AK7set8ndlru/LQXkvkAKjSEdQnGbFpts6hOxMVbgJ2BfEljDsnEQJjCuV1dzvs6hCZvsRjEvrk7gQ==
-X-Received: by 2002:a17:902:e0cd:b0:194:457d:6dca with SMTP id e13-20020a170902e0cd00b00194457d6dcamr11858096pla.44.1675535567229;
-        Sat, 04 Feb 2023 10:32:47 -0800 (PST)
+        bh=tjMR7K3b5Kxbe/ecjD43xajTi+1Ciwse0JLkSMzManQ=;
+        b=g5WSch2g0CxK2IIcALXTJyWg7vtJYQ2scl/V5LcV8691nwvba9IKXeZvdnqmoBzs3N
+         obIYDXXM3Ghb3XnEVg7ksq/Q3Akc7qBdteK4tMG2dQ/lp5K2KuqQo/ga4G/P/URAQuah
+         OiEH27jszmaZ6ix28CKBMWhBusEwk80lrCShiiKiDEbWtWqmczlYneGINU3SiKUiu4Ez
+         CbbAlHX+O5BiW+ZOH7ifnBXJBxot6N9CldAaECGswK5HMN7AXbbXJ+dOnXgfwkB1myEP
+         eNarRtCBy7o/y1+Khe8sH9R5Ad0qUrwJFNNUjn2bt6wLnJqLKsn7hKBBHleOc6d8aP21
+         g1Nw==
+X-Gm-Message-State: AO0yUKW4Gb4Yx1h9S8jQhdh8g/GhFB6MjsYMSI3W8D6sa1dIHL4Da42b
+        Ex3NvY+9qzoDEncgYCzp/P/DWg==
+X-Google-Smtp-Source: AK7set8Qy5ag0uw+C9t6p3KRMHFijC6yFjKLeaQsLbXKQJmtOfAue0KNa9fzYbjtw8f2q/9qK3HYDA==
+X-Received: by 2002:a05:6a00:148c:b0:581:a8dc:8f95 with SMTP id v12-20020a056a00148c00b00581a8dc8f95mr17393606pfu.12.1675535637924;
+        Sat, 04 Feb 2023 10:33:57 -0800 (PST)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id g21-20020a170902869500b00194a297cb8esm2109672plo.191.2023.02.04.10.32.46
+        by smtp.gmail.com with ESMTPSA id y2-20020a62b502000000b00581013fcbe1sm3989425pfe.159.2023.02.04.10.33.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Feb 2023 10:32:46 -0800 (PST)
+        Sat, 04 Feb 2023 10:33:57 -0800 (PST)
 From:   Kees Cook <keescook@chromium.org>
-To:     Alexei Starovoitov <ast@kernel.org>
+To:     Dave Kleikamp <shaggy@kernel.org>
 Cc:     Kees Cook <keescook@chromium.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Haowen Bai <baihaowen@meizu.com>, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH] bpf: Replace bpf_lpm_trie_key 0-length array with flexible array
-Date:   Sat,  4 Feb 2023 10:32:44 -0800
-Message-Id: <20230204183241.never.481-kees@kernel.org>
+        Christian Brauner <brauner@kernel.org>,
+        Dave Chinner <dchinner@redhat.com>,
+        jfs-discussion@lists.sourceforge.net,
+        "Dr. David Alan Gilbert" <linux@treblig.org>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] jfs: Use unsigned variable for length calculations
+Date:   Sat,  4 Feb 2023 10:33:56 -0800
+Message-Id: <20230204183355.never.877-kees@kernel.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3245; h=from:subject:message-id; bh=8UjW+Zy+1y3cIspI89jzw8FmWvL6uos84uq4mMimB0Q=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBj3qTM1ht5vMIp0wFAnwtKlrGMR52OBqU2d1wGvknh p4xzmaKJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY96kzAAKCRCJcvTf3G3AJvgYD/ 4gbPMJvXXbsBmYsUpuJKym76FsMyPeVmqDsr9eazRsJPrXYT/Cjf+wXXotjT1IukgBmNxSVbq3FsyI jnPq041qMY/zMM3NYurX38M6lIf9VeD7IPwUlsQrDpMOf3RYYrOA/WOCuFbfqW8FvgyQCGRAtW95Jb lW1DpWFeXkiMxxqtJhD7QS04V8887YQ0DkXwbM/t8JVaKudE9LMgVvTxcimzGPC1eBClzkIlw+5L2/ 2Tz50uOg1PRSd6F9LP0m56P3WtX2+0OMRTFg03CMcNcpHYOSQRpkRac8CZG2qRwtiHxVnj0ekeMAj2 c5+8xwXst7vWDPbVucMDYmX5s2JdpD3Qq+M8OWMFzLuHwgLWYevblaB4pF/35yTCbEnT00bS7rEDtI 8fNBCG558+bobc540bAFf4N8wEPwO+GvG2OsBpZWEBQpGoNaAOJywnklLtZgbDyVWuHsGTabmFLqK9 7Osq6wT3O4Z6+vMUvmIJOJnrvi2hPumoSbm0ihHeKhi1HLCVFQs7xgtRVWOOiTtIZTFmVL+Fm79Q+4 tfEMfE6U827t/hEy7qdSFawVFyO8QibSjlvSTDM2/mTRtW5CEHE9plbSRbEcIPVYftHWqn9tBzLWBO aPMvVw8tolEP/BXWNuXMvFT7TAgaVWSiLkd7jpuUNQAdCP85KusshqzXrVsQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2035; h=from:subject:message-id; bh=qy5amV+9oAJHi2pDUUi24oStp3zhT4GjDgSO9ZjwQdU=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBj3qUUOW+2sqiSqcPAuwBFQkx8VdagSv/Qd2WPhMrE HjNLesWJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY96lFAAKCRCJcvTf3G3AJixHEA CovqX7WYT0FI5nLrmHV0oGrrFq8qD+SHE4oPNnWJnePRPVv/EbJwv5fMT8jgaWtxELd9wpHutI+U4q pDF0T4YA+mYNfJGubGMqbQ80tScS7U0SmJbwO1cTrNnM0qmMnzL1GNU0XYkIDRKUxXWtNIC2N/xnlx UyHOmSe7SflhrX9QiE7tFa7iE6G64K8hNmLzfy+nwoXuL5jbXfCPD3jgoOHt2+hmMlnwqI1GUfc9ek r/SH0QpT+OQB3QmhF7RCfZp57oIRdACC6cLp/nEhCU5QzCXJ/ghcyyUWHgehooi26dwgqDTVYQjM79 XpWmmVwn5lo3vtLnmPT85KAngV5qL0MxXS2TCC3vHuN0475+AteeBQcNbHztiRORt6JU+Vjt3YNosw XDM4MozD/ai55b+39+hCsQMsIqt+CW6FGL0zrHnSk7URkJpKv3c8gPylElAEyw/p1k3aKmOPx0+31z SKA1wOozEqSdOVyuEX3NARcM5caw7hxLSDVDGLOfjG5w35jaGYTMgFr2GE+12kEhq5zFaJilus6kxB mesYgiQfbApr15ZqLtUor3hqhopQYNHRWMqSa74rWCRX9gzP5sDAPooAEUz83XCv6ezOCf2X1bXWpg u7J34GxPPVu6l6Pm0rdKep5B5koJSctyA6Vva2PSbpZ533x09x5wb7UmPk8g==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace deprecated 0-length array in struct bpf_lpm_trie_key with
-flexible array. Found with GCC 13:
+To avoid confusing the compiler about possible negative sizes, switch
+"ssize" which can never be negative from int to u32.  Seen with GCC 13:
 
-../kernel/bpf/lpm_trie.c:207:51: warning: array subscript i is outside array bounds of 'const __u8[0]' {aka 'const unsigned char[]'} [-Warray-bounds=]
-  207 |                                        *(__be16 *)&key->data[i]);
-      |                                                   ^~~~~~~~~~~~~
-../include/uapi/linux/swab.h:102:54: note: in definition of macro '__swab16'
-  102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-      |                                                      ^
-../include/linux/byteorder/generic.h:97:21: note: in expansion of macro '__be16_to_cpu'
-   97 | #define be16_to_cpu __be16_to_cpu
-      |                     ^~~~~~~~~~~~~
-../kernel/bpf/lpm_trie.c:206:28: note: in expansion of macro 'be16_to_cpu'
-  206 |                 u16 diff = be16_to_cpu(*(__be16 *)&node->data[i]
-^
-      |                            ^~~~~~~~~~~
-In file included from ../include/linux/bpf.h:7:
-../include/uapi/linux/bpf.h:82:17: note: while referencing 'data'
-   82 |         __u8    data[0];        /* Arbitrary size */
-      |                 ^~~~
+../fs/jfs/namei.c: In function 'jfs_symlink': ../include/linux/fortify-string.h:57:33: warning: '__builtin_memcpy' pointer overflow between offset 0 and size [-2147483648, -1]
+[-Warray-bounds=]
+   57 | #define __underlying_memcpy     __builtin_memcpy
+      |                                 ^
+...
+../fs/jfs/namei.c:950:17: note: in expansion of macro 'memcpy'
+  950 |                 memcpy(ip->i_link, name, ssize);
+      |                 ^~~~~~
 
-This includes fixing the selftest which was incorrectly using a
-variable length struct as a header, identified earlier[1]. Avoid this
-by just explicitly including the prefixlen member instead of struct
-bpf_lpm_trie_key.
-
-[1] https://lore.kernel.org/all/202206281009.4332AA33@keescook/
-
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Andrii Nakryiko <andrii@kernel.org>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Song Liu <song@kernel.org>
-Cc: Yonghong Song <yhs@fb.com>
-Cc: John Fastabend <john.fastabend@gmail.com>
-Cc: KP Singh <kpsingh@kernel.org>
-Cc: Stanislav Fomichev <sdf@google.com>
-Cc: Hao Luo <haoluo@google.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Mykola Lysenko <mykolal@fb.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Haowen Bai <baihaowen@meizu.com>
-Cc: bpf@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
+Cc: Dave Kleikamp <shaggy@kernel.org>
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: Dave Chinner <dchinner@redhat.com>
+Cc: jfs-discussion@lists.sourceforge.net
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- include/uapi/linux/bpf.h                         | 2 +-
- tools/testing/selftests/bpf/progs/map_ptr_kern.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ fs/jfs/namei.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index ba0f0cfb5e42..5930bc5c7e2c 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -79,7 +79,7 @@ struct bpf_insn {
- /* Key of an a BPF_MAP_TYPE_LPM_TRIE entry */
- struct bpf_lpm_trie_key {
- 	__u32	prefixlen;	/* up to 32 for AF_INET, 128 for AF_INET6 */
--	__u8	data[0];	/* Arbitrary size */
-+	__u8	data[];		/* Arbitrary size */
- };
+diff --git a/fs/jfs/namei.c b/fs/jfs/namei.c
+index b29d68b5eec5..494b9f4043cf 100644
+--- a/fs/jfs/namei.c
++++ b/fs/jfs/namei.c
+@@ -876,7 +876,7 @@ static int jfs_symlink(struct mnt_idmap *idmap, struct inode *dip,
+ 	tid_t tid;
+ 	ino_t ino = 0;
+ 	struct component_name dname;
+-	int ssize;		/* source pathname size */
++	u32 ssize;		/* source pathname size */
+ 	struct btstack btstack;
+ 	struct inode *ip = d_inode(dentry);
+ 	s64 xlen = 0;
+@@ -957,7 +957,7 @@ static int jfs_symlink(struct mnt_idmap *idmap, struct inode *dip,
+ 		if (ssize > sizeof (JFS_IP(ip)->i_inline))
+ 			JFS_IP(ip)->mode2 &= ~INLINEEA;
  
- struct bpf_cgroup_storage_key {
-diff --git a/tools/testing/selftests/bpf/progs/map_ptr_kern.c b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-index db388f593d0a..543012deb349 100644
---- a/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-+++ b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-@@ -311,7 +311,7 @@ struct lpm_trie {
- } __attribute__((preserve_access_index));
+-		jfs_info("jfs_symlink: fast symlink added  ssize:%d name:%s ",
++		jfs_info("jfs_symlink: fast symlink added  ssize:%u name:%s ",
+ 			 ssize, name);
+ 	}
+ 	/*
+@@ -987,7 +987,7 @@ static int jfs_symlink(struct mnt_idmap *idmap, struct inode *dip,
+ 		ip->i_size = ssize - 1;
+ 		while (ssize) {
+ 			/* This is kind of silly since PATH_MAX == 4K */
+-			int copy_size = min(ssize, PSIZE);
++			u32 copy_size = min_t(u32, ssize, PSIZE);
  
- struct lpm_key {
--	struct bpf_lpm_trie_key trie_key;
-+	__u32 prefixlen;
- 	__u32 data;
- };
+ 			mp = get_metapage(ip, xaddr, PSIZE, 1);
  
 -- 
 2.34.1
