@@ -2,162 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3477A68AABB
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 15:58:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D9DC68AABF
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 15:59:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232340AbjBDO6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 09:58:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50756 "EHLO
+        id S233171AbjBDO7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 09:59:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232999AbjBDO6r (ORCPT
+        with ESMTP id S231654AbjBDO7L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 09:58:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08389305C1;
-        Sat,  4 Feb 2023 06:58:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sat, 4 Feb 2023 09:59:11 -0500
+Received: from mail1.bemta34.messagelabs.com (mail1.bemta34.messagelabs.com [195.245.231.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3442235244;
+        Sat,  4 Feb 2023 06:59:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
+        s=170520fj; t=1675522742; i=@fujitsu.com;
+        bh=Y6556VUSt0g6C9g9VUOGSPdcCC4oR7BzWPz7nW90/xI=;
+        h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type;
+        b=vuB9Dkq/CcCu6kUL9IGhoRjSHTuDyqt/LgQw4M3XYGQeXGNDdQTHT5rvZF+9aCLQG
+         O8Agu3z8w6ml0kJNoKNzepUVnlqbwYWPqMeskN7XoFmZb93wDlnZUGxhphfwWVRqvH
+         cnQu6wK9ZRbWtZcQAgVaz9bIMy8MnvrHTUj/4/i/8cD+JJPuRYWEVgSibh/BHO84mq
+         CItCZIj09wI7ejzDVYsgTuUkJTgQYKjU6Cs+peVOSXrm3XMTEv9UArs+NCBz/fpYSk
+         IOEJ9uyLPAhNYKyPXFkaJE4jfnxlGsrk8y8dvh2VeGI7myquRMBhAUsXyjXXgpa6hv
+         kf9K4jxeKseuA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmphleJIrShJLcpLzFFi42Kxs+HYrLup6F6
+  ywdfpfBbTp15gtNhy7B6jxeUnfBanJyxistj9+iabxZ69J1ksLu+aw2Zxb81/Votdf3awW6z8
+  8YfVgcvj1CIJj80rtDwW73nJ5LFpVSebx6ZPk9g9Xmyeyejx8ektFo/Pm+QCOKJYM/OS8isSW
+  DNmv33CWrCIs2Jr00rWBsZd7F2MXBxCAhsZJdrblrNCOEuYJO7Om8TcxcgJ5OxllGiaVAFisw
+  noSFxY8BesSERgEqPEsRs3wYqYBcol9m+8wQZiCwsESBzfe4UFxGYRUJHoaPrM1MXIwcEr4CI
+  xf68USFhCQEFiysP3YK28AoISJ2c+YYEYIyFx8MULZpByCQEliZnd8RDllRKtH36xQNhqElfP
+  bWKewMg/C0n3LCTdCxiZVjGaFqcWlaUW6RrrJRVlpmeU5CZm5uglVukm6qWW6panFpfoGukll
+  hfrpRYX6xVX5ibnpOjlpZZsYgRGSEqxmvAOxi+9f/UOMUpyMCmJ8vb7300W4kvKT6nMSCzOiC
+  8qzUktPsQow8GhJMF7veBespBgUWp6akVaZg4wWmHSEhw8SiK8v0HSvMUFibnFmekQqVOMuhx
+  rGw7sZRZiycvPS5US520tBCoSACnKKM2DGwFLHJcYZaWEeRkZGBiEeApSi3IzS1DlXzGKczAq
+  CfPeAlnFk5lXArfpFdARTEBHdBvcBTmiJBEhJdXAlOvF0z2nYL5DxTfNReqf6yM4Zqw8qjqrp
+  qtfPPnoU2nztu53e19cTk2bdDRt/Qahjpsz+bxzLz6PrPjEfJFxma1qiUPPV79G/9O/NbjXMi
+  z//kz48fL9edWmuQfatKQ3iDAo7WhRbXqx1ou3mffJy2UP1n468/zi7VbzOKNPzz47JF3dciX
+  I7/vB/Fky4rmRIgEKkmt3/Vu8us/g9EeztKJXD+XdRM9kOWz6mKlSm67cv1DXxtIyz3XNNuMk
+  r0LDjPU/Ix45PduTUHbY/yCXe6xOXvAmm849Sc6Zhzg2Lmgy36/FVXDz2Fzx20WLLTcrP29p5
+  7yuefzFefXE4guSDCtjXm/wCLNY8+bFO48wJZbijERDLeai4kQAxJmK9JcDAAA=
+X-Env-Sender: ruansy.fnst@fujitsu.com
+X-Msg-Ref: server-15.tower-548.messagelabs.com!1675522738!73849!1
+X-Originating-IP: [62.60.8.179]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.102.2; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 28624 invoked from network); 4 Feb 2023 14:58:58 -0000
+Received: from unknown (HELO n03ukasimr04.n03.fujitsu.local) (62.60.8.179)
+  by server-15.tower-548.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 4 Feb 2023 14:58:58 -0000
+Received: from n03ukasimr04.n03.fujitsu.local (localhost [127.0.0.1])
+        by n03ukasimr04.n03.fujitsu.local (Postfix) with ESMTP id DB0FD150;
+        Sat,  4 Feb 2023 14:58:57 +0000 (GMT)
+Received: from R01UKEXCASM223.r01.fujitsu.local (R01UKEXCASM223 [10.182.185.121])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B3175B80B1C;
-        Sat,  4 Feb 2023 14:58:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 005BBC433EF;
-        Sat,  4 Feb 2023 14:58:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675522722;
-        bh=obz7uiuDh/DOauLK8CVXZabOXHGwjUrwwwSUO1B6MDA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RFjR1B66nj3HovHeeYFiJBHDZRuSTdbHxTYOHSI46bssLs7cNWC3/zi7amhz+eLMT
-         hTF/a/luloul3jV6qc5350JotSn3tjb4zorwj70LgCECK8HQjp0TGQLvWCGTsHxPVL
-         JiUMMgVmEINax67BU6KFLOJlIqwy5kzOEVrv9oFFZMxmNqoXvZSvIwUAOJBQOD+npS
-         v4nil5KmMqYWMstCd+gWpgxhwgEfZp9ahtBGhBYdL8dz201eoRQ2zllIXWuO8m1S4o
-         Gk0tqa4hT18kA/YXWUeKSIeIp1HL6x05Kanb5/8IqEC+E38GrGUVRvd/3M+Mrc9nfH
-         VICSpBwWtgqqA==
-Date:   Sat, 4 Feb 2023 20:28:34 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>, swboyd@chromium.org,
-        mka@chromium.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: qcom-hw: Fix cpufreq_driver->get() for non-LMH
- systems
-Message-ID: <20230204145834.GA45501@thinkpad>
-References: <20230202140005.1.I4b30aaa027c73372ec4068cc0f0dc665af8b938d@changeid>
+        by n03ukasimr04.n03.fujitsu.local (Postfix) with ESMTPS id CEB6E7B;
+        Sat,  4 Feb 2023 14:58:57 +0000 (GMT)
+Received: from localhost.localdomain (10.167.225.141) by
+ R01UKEXCASM223.r01.fujitsu.local (10.182.185.121) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.42; Sat, 4 Feb 2023 14:58:53 +0000
+From:   Shiyang Ruan <ruansy.fnst@fujitsu.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-xfs@vger.kernel.org>,
+        <nvdimm@lists.linux.dev>, <linux-mm@kvack.org>,
+        <linux-fsdevel@vger.kernel.org>
+CC:     <djwong@kernel.org>, <dan.j.williams@intel.com>,
+        <david@fromorbit.com>, <hch@infradead.org>, <jane.chu@oracle.com>
+Subject: [RESEND PATCH v9 0/3] mm, pmem, xfs: Introduce MF_MEM_REMOVE for unbind
+Date:   Sat, 4 Feb 2023 14:58:35 +0000
+Message-ID: <1675522718-88-1-git-send-email-ruansy.fnst@fujitsu.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230202140005.1.I4b30aaa027c73372ec4068cc0f0dc665af8b938d@changeid>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.167.225.141]
+X-ClientProxiedBy: G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) To
+ R01UKEXCASM223.r01.fujitsu.local (10.182.185.121)
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 02:00:23PM -0800, Douglas Anderson wrote:
-> On a sc7180-based Chromebook, when I go to
-> /sys/devices/system/cpu/cpu0/cpufreq I can see:
-> 
->   cpuinfo_cur_freq:2995200
->   cpuinfo_max_freq:1804800
->   scaling_available_frequencies:300000 576000 ... 1708800 1804800
->   scaling_cur_freq:1804800
->   scaling_max_freq:1804800
-> 
-> As you can see the `cpuinfo_cur_freq` is bogus. It turns out that this
-> bogus info started showing up as of commit 205f5e984d30 ("cpufreq:
-> qcom-hw: Fix the frequency returned by cpufreq_driver->get()"). That
-> commit seems to assume that everyone is on the LMH bandwagon, but
-> sc7180 isn't.
-> 
+Changes since v9:
+  1. Rebase on 6.2-rc6
 
-Ah, missed that part.
+Changes since v8:
+  1. P2: rename drop_pagecache_sb() to super_drop_pagecache().
+  2. P2: let super_drop_pagecache() accept invalidate method.
+  3. P3: invalidate all dax mappings by invalidate_inode_pages2().
+  4. P3: shutdown the filesystem when it is to be removed.
+  5. Rebase on 6.0-rc6 + Darrick's patch[1] + Dan's patch[2].
 
-> Let's go back to the old code in the case where LMH isn't used.
-> 
+[1]: https://lore.kernel.org/linux-xfs/Yv5wIa2crHioYeRr@magnolia/
+[2]: https://lore.kernel.org/linux-xfs/166153426798.2758201.15108211981034512993.stgit@dwillia2-xfh.jf.intel.com/
 
-Thanks for fixing!
+Shiyang Ruan (3):
+  xfs: fix the calculation of length and end
+  fs: move drop_pagecache_sb() for others to use
+  mm, pmem, xfs: Introduce MF_MEM_REMOVE for unbind
 
-> Fixes: 205f5e984d30 ("cpufreq: qcom-hw: Fix the frequency returned by cpufreq_driver->get()")
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-
-Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
-
-Thanks,
-Mani
-
-> ---
-> 
->  drivers/cpufreq/qcom-cpufreq-hw.c | 24 +++++++++++++-----------
->  1 file changed, 13 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-> index 9505a812d6a1..957cf6bb8c05 100644
-> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
-> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-> @@ -143,40 +143,42 @@ static unsigned long qcom_lmh_get_throttle_freq(struct qcom_cpufreq_data *data)
->  	return lval * xo_rate;
->  }
->  
-> -/* Get the current frequency of the CPU (after throttling) */
-> -static unsigned int qcom_cpufreq_hw_get(unsigned int cpu)
-> +/* Get the frequency requested by the cpufreq core for the CPU */
-> +static unsigned int qcom_cpufreq_get_freq(unsigned int cpu)
->  {
->  	struct qcom_cpufreq_data *data;
-> +	const struct qcom_cpufreq_soc_data *soc_data;
->  	struct cpufreq_policy *policy;
-> +	unsigned int index;
->  
->  	policy = cpufreq_cpu_get_raw(cpu);
->  	if (!policy)
->  		return 0;
->  
->  	data = policy->driver_data;
-> +	soc_data = qcom_cpufreq.soc_data;
->  
-> -	return qcom_lmh_get_throttle_freq(data) / HZ_PER_KHZ;
-> +	index = readl_relaxed(data->base + soc_data->reg_perf_state);
-> +	index = min(index, LUT_MAX_ENTRIES - 1);
-> +
-> +	return policy->freq_table[index].frequency;
->  }
->  
-> -/* Get the frequency requested by the cpufreq core for the CPU */
-> -static unsigned int qcom_cpufreq_get_freq(unsigned int cpu)
-> +static unsigned int qcom_cpufreq_hw_get(unsigned int cpu)
->  {
->  	struct qcom_cpufreq_data *data;
-> -	const struct qcom_cpufreq_soc_data *soc_data;
->  	struct cpufreq_policy *policy;
-> -	unsigned int index;
->  
->  	policy = cpufreq_cpu_get_raw(cpu);
->  	if (!policy)
->  		return 0;
->  
->  	data = policy->driver_data;
-> -	soc_data = qcom_cpufreq.soc_data;
->  
-> -	index = readl_relaxed(data->base + soc_data->reg_perf_state);
-> -	index = min(index, LUT_MAX_ENTRIES - 1);
-> +	if (data->throttle_irq >= 0)
-> +		return qcom_lmh_get_throttle_freq(data) / HZ_PER_KHZ;
->  
-> -	return policy->freq_table[index].frequency;
-> +	return qcom_cpufreq_get_freq(cpu);
->  }
->  
->  static unsigned int qcom_cpufreq_hw_fast_switch(struct cpufreq_policy *policy,
-> -- 
-> 2.39.1.519.gcb327c4b5f-goog
-> 
+ drivers/dax/super.c         |  3 ++-
+ fs/drop_caches.c            | 35 ++----------------------------
+ fs/super.c                  | 43 +++++++++++++++++++++++++++++++++++++
+ fs/xfs/xfs_notify_failure.c | 36 ++++++++++++++++++++++++++-----
+ include/linux/fs.h          |  1 +
+ include/linux/mm.h          |  1 +
+ include/linux/pagemap.h     |  1 +
+ mm/truncate.c               | 20 +++++++++++++++--
+ 8 files changed, 99 insertions(+), 41 deletions(-)
 
 -- 
-மணிவண்ணன் சதாசிவம்
+2.39.1
+
