@@ -2,75 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2058A68AD51
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 00:02:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD35C68AD53
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 00:06:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232334AbjBDXC3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 18:02:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57318 "EHLO
+        id S230128AbjBDXGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 18:06:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232223AbjBDXC1 (ORCPT
+        with ESMTP id S229687AbjBDXF7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 18:02:27 -0500
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ABBD27489;
-        Sat,  4 Feb 2023 15:02:26 -0800 (PST)
-Received: by mail-oi1-x229.google.com with SMTP id p185so7102529oif.2;
-        Sat, 04 Feb 2023 15:02:26 -0800 (PST)
+        Sat, 4 Feb 2023 18:05:59 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D046C22029;
+        Sat,  4 Feb 2023 15:05:58 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id v13so8346909eda.11;
+        Sat, 04 Feb 2023 15:05:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=betPigtvs2CftGKC3oH75tPcRVvUo4f0Uyn1lOaWnOg=;
-        b=IlXLvQMVn4AOTbU5ovzM2/MAoGF9P+HeEM0OaM6RVFTyfE6FyPEDHGe/ved1peaqp3
-         rGsgTl//BsrqnZ2Yvcx1+ci5VAt4M8KQ1jqsiylLVDoHnTd3rJit9PA3PZAUk8/zm/6H
-         4F9LSUVo0EG39x7d0aGKIrw1uEc5Ki8bIaPNrRApTvV8H92y34eRkgE6eKT9TN6N5k+Y
-         aA7aa+0fyTzJVkZmFQzoJ9wBpZNnYudBFYDT0ltusb5ck9m/Q5/geX2BQ6y19t9qD2vf
-         ia6h2eh7/yR/IQFjy8IU+N1upKJ++bio41hdRfa0jbQ+0cY2BgKUOYCFvN1/SLUZ2V0Z
-         0nVQ==
+        d=googlemail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=SsffKkQbD1Qv01ydUNK4favIJJi7ReNERIe710JhOLc=;
+        b=QX1kKPY2S9den3sFFq9zBF6oaoNhXwtsiXVec6pyWYmj5eaQemIMz1mM+QULn39HDz
+         dYBNcKmZIKouYOSXeXneMDWL8gaAoIIV+VOMaKVmvq8YO+SRxuLpj5I2OliK4gd8rMsz
+         zKgzAPPtIqnyTpLmWZiGNQNDFPuCvJMRMN9m8t3U0mACWmDd66k3QV6PldYWHfWjhVpG
+         d2NiJ2UGwHnHLoYNJ/nHQuiuHQb9Mj1cIuMBuIZj5rro9C89naZqXZPVJ/9uNmhsQYKY
+         IParG5s9MhY67K+abbJILJN4d2HL8Zsv+4b74cX9aFtvzdrc0QAt8JF5l9byhuchfaMg
+         5L+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=betPigtvs2CftGKC3oH75tPcRVvUo4f0Uyn1lOaWnOg=;
-        b=UxZD2puBhRhXKxzKl2s7emVIuRfcCEmzURLRQ+nevVwK9uLF9Sl1L3jYHOIONAojHu
-         m8UtuimuLGknY35UuXE7nUkzxOBScSS/9/i0Y+23abk4IYBW4o+QusIt8utc6nSIFoYv
-         HP2Igorq+UjCcbg4O5pZ/9QyWSgGspj0wsxIUzFBBq3V5bf9VU6oKoc6T372F1IUC2+E
-         458khl5mOPuwMMFGRGx1hhI36ZGFsgFqOlmK1A1tvKvwgKoqQ21+dDlxn4ZYI43TYEZY
-         kumYJkwv6/LIHHGHvAS0CklnbbDXZVd8MfQoNr3pUixxQu7GbZXnjN1tMQdWBtzC7lof
-         kzbQ==
-X-Gm-Message-State: AO0yUKXIosdumaKuKplgrwoAMeNehW1NCFPKw3IGMqNrR1sPflRfAOoH
-        4Jj/ne8+sg4JIidQZceXGjo=
-X-Google-Smtp-Source: AK7set9sJwaprCWNM5uLONHt7RZHVazqUTZRb0cVnYDOGb0lwv01QycBB0A63d3vN7vbeR6LwtQfmQ==
-X-Received: by 2002:a05:6808:f86:b0:378:9c80:7da0 with SMTP id o6-20020a0568080f8600b003789c807da0mr5439038oiw.19.1675551745569;
-        Sat, 04 Feb 2023 15:02:25 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s26-20020a056808209a00b0035aa617156bsm2281829oiw.17.2023.02.04.15.02.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Feb 2023 15:02:25 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 4 Feb 2023 15:02:24 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 5.4 000/134] 5.4.231-rc2 review
-Message-ID: <20230204230224.GC114073@roeck-us.net>
-References: <20230204143608.813973353@linuxfoundation.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SsffKkQbD1Qv01ydUNK4favIJJi7ReNERIe710JhOLc=;
+        b=bVwgxmhRvnFB1oo03J11SkhdYwyKCSH7YmDreK9T01tsU5EPovEK8hg9qhTlNRVkdL
+         mIBUeMKXfuu88maQ8HBEAg32a97vVcRFaVMSBZUC25wrbVE2WEKniHp6l1qtTYeKb9v/
+         X23rShVnDUhVYRBL1U2pe9GAPmNG1d8B71wXySQCSpv01lZsWNrbS1a+O7DV4039jAAT
+         ckZEh1aOG1uOiN/tKhDwP9uFIPftNXYsXDgFQ6KVl53TAaTz0TJWy0/OR+05joFJqfrc
+         nujldMBkglVIw+0AjR3cs/1vXus7fq60khscbrllmwCkqtRydmFe0tKbF1Qgymlxrs+5
+         +Gww==
+X-Gm-Message-State: AO0yUKVx1qM+u8hNc55kthPSXA2FZCN2YcunMLNDGLhQ3aV6ONftXUSG
+        /gTY69/LDZkiyI08PnblsW4PK7qab9iwoVHRaSU=
+X-Google-Smtp-Source: AK7set8QzdCT6rdHSN26GRk6gqcqpBSqwKuLjmP897qShiN/tHqfvEeG/Nr2ga8bMvWh7H7Y/+Kp68maCVfvhkCUaRE=
+X-Received: by 2002:a05:6402:1110:b0:48e:b978:cf63 with SMTP id
+ u16-20020a056402111000b0048eb978cf63mr3883209edv.57.1675551957173; Sat, 04
+ Feb 2023 15:05:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230204143608.813973353@linuxfoundation.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <20230202141520.40003-1-avromanov@sberdevices.ru>
+In-Reply-To: <20230202141520.40003-1-avromanov@sberdevices.ru>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Sun, 5 Feb 2023 00:05:46 +0100
+Message-ID: <CAFBinCC7=QR3Dd_N8VN-L7CpFWETTTehNo6j54f9Y53w8emwUQ@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] arm64: dts: meson-a1: add gpio_intc node
+To:     Alexey Romanov <avromanov@sberdevices.ru>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        neil.armstrong@linaro.org, khilman@baylibre.com,
+        jbrunet@baylibre.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@sberdevices.ru
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,21 +71,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 04, 2023 at 03:42:39PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.231 release.
-> There are 134 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Mon, 06 Feb 2023 14:35:41 +0000.
-> Anything received after that time might be too late.
-> 
+Hi Alexey,
 
-Build results:
-	total: 159 pass: 159 fail: 0
-Qemu test results:
-	total: 450 pass: 450 fail: 0
+On Thu, Feb 2, 2023 at 3:15 PM Alexey Romanov <avromanov@sberdevices.ru> wrote:
+>
+> Add gpio interrupt controller node.
+>
+> Signed-off-by: Alexey Romanov <avromanov@sberdevices.ru>
+I have no way to verify the register offset or interrupt numbers.
+Overall it looks good though, so:
+Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-Guenter
+Best regards,
+Martin
