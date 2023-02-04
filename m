@@ -2,89 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C770868A9F7
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 14:19:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D62DF68A9FA
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 14:21:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233534AbjBDNTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 08:19:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33346 "EHLO
+        id S233568AbjBDNVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 08:21:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233466AbjBDNTk (ORCPT
+        with ESMTP id S233034AbjBDNVO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 08:19:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F9932E808;
-        Sat,  4 Feb 2023 05:19:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sat, 4 Feb 2023 08:21:14 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97C292E814;
+        Sat,  4 Feb 2023 05:21:10 -0800 (PST)
+Received: from [151.216.142.144] (unknown [151.216.142.144])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE6B660B40;
-        Sat,  4 Feb 2023 13:19:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6E5AC433D2;
-        Sat,  4 Feb 2023 13:19:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675516778;
-        bh=kTH6dxHxYcZYenOQQ3u8iRjJX6qruICKizskH77l8wk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ASUHn1J+d1Ef2+Uk4YkHgncIfkNZGQoLri/0cNeQhFEcvvFi0pfZ/ZWrxQIN5kvI/
-         iEh3tXF64CxQKxt4NJ77gBgW/Zf1dNBMNtJaywHqbR538zMomOeeMqmTPoEx7kNopy
-         j/HgcYQ5UjTFDGpK6TztEE3uOyl/7KRnkYrEMawiDTh7VUX3LzjMrFZfMCFerbygcB
-         q5Owc7zzi1j1igh558zma6uc8MXqebkPolc4UsnWqg8Ww3BHQibOYzxB211CX0TTLN
-         XySTxIxhDMTVaYJAiLGqeO/HF97h7ApIRln2tqww64UKKnooKt1soPrZ76K74gPftR
-         46O+37LulDdQQ==
-Date:   Sat, 4 Feb 2023 13:19:17 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Wolfram Sang <wsa@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] Immutable branch between MFD, Extcon and I2C due for the
- v6.3 merge window
-Message-ID: <Y95bVYc0dXOkJoGd@google.com>
-References: <20230126153823.22146-1-hdegoede@redhat.com>
+        (Authenticated sender: gtucker)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id B5A0966029A5;
+        Sat,  4 Feb 2023 13:21:08 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1675516869;
+        bh=YBYs+Vt0MYtSPHbZNBXHf50wjrg2a1Ig8HzAhqon1og=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=QSbmWKXW4fFmgeOkN0y8T3aJfISWWMyyxyGpcJynyHCW1wTRew9QuP1zatGPML1UR
+         lnqiqNEEKcN4L+JLKiXZVFMeuTq6YoBp+CTRSIMRzx68FyLHxjPaH4+6p2PUFl/XW7
+         uDwKeO31sDjFI98MuRaE9j27iccN95/R9iD/eOdS5S9VVMODpKOxyTbFz7+F3br484
+         8C9NH17K7oxHlkW25aOdxGwaTrSDKw12s6Ac7zv6fb9Kyq6bzPpW6c7qG/GEAehEhi
+         dhbmEH+WuMwL/220iXON/rAfZofacuxhIAIbFtoeYHGJaoOL9TT8QLx8REpsqz2j2R
+         rXyMqrJWfoYRQ==
+Message-ID: <dae9314b-c99a-bb95-b0ed-f6a8c861d78d@collabora.com>
+Date:   Sat, 4 Feb 2023 14:19:48 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230126153823.22146-1-hdegoede@redhat.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] selftests: fix LLVM build for i386 and x86_64
+Content-Language: en-US
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Mark Brown <broonie@kernel.org>,
+        kernel@collabora.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+References: <20220809142231.2419274-1-guillaume.tucker@collabora.com>
+ <YvKOV1L73Mv/Dc6P@dev-arch.thelio-3990X>
+From:   Guillaume Tucker <guillaume.tucker@collabora.com>
+In-Reply-To: <YvKOV1L73Mv/Dc6P@dev-arch.thelio-3990X>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enjoy!
+Hi Shuah, Nathan,
 
-The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
+On 09/08/2022 18:41, Nathan Chancellor wrote:
+> On Tue, Aug 09, 2022 at 04:22:31PM +0200, Guillaume Tucker wrote:
+>> Add missing cases for the i386 and x86_64 architectures when
+>> determining the LLVM target for building kselftest.
+>>
+>> Fixes: 795285ef2425 ("selftests: Fix clang cross compilation")
+>> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
+> 
+> Right, I think this is the correct thing to do for the selftests. For
+> the main kernel build, we use CLANG_TARGETS_FLAGS_x86 because ARCH=i386
+> and ARCH=x86_64 are covered by SUBARCH=x86, which is what we switch on,
+> rather than ARCH. I do see a couple of references to SUBARCH in the
+> tools directory but I am not sure if that is usable for this part so:
+> 
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
+Thanks for the review.
 
-are available in the Git repository at:
+Could you please apply this patch?  It looks like it was
+forgotten like the one with the missing trailing ')' I sent
+around that time (now fixed with Mark's patch).
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git tags/ib-mfd-extcon-i2c-v6.3
+Alternatively, please let me know if anything else needs to be
+done for it.
 
-for you to fetch changes up to 783422d00d7d8f7725dc781fcd3cfcaae13595e5:
+Thanks,
+Guillaume
 
-  extcon: intel-cht-wc: Add support for Lenovo Yoga Tab 3 Pro YT3-X90F (2023-02-04 13:05:42 +0000)
+>> ---
+>>  tools/testing/selftests/lib.mk | 2 ++
+>>  1 file changed, 2 insertions(+)
+>>
+>> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+>> index b1c62914366b..cc4c443d5b14 100644
+>> --- a/tools/testing/selftests/lib.mk
+>> +++ b/tools/testing/selftests/lib.mk
+>> @@ -10,12 +10,14 @@ endif
+>>  CLANG_TARGET_FLAGS_arm          := arm-linux-gnueabi
+>>  CLANG_TARGET_FLAGS_arm64        := aarch64-linux-gnu
+>>  CLANG_TARGET_FLAGS_hexagon      := hexagon-linux-musl
+>> +CLANG_TARGET_FLAGS_i386         := i386-linux-gnu
+>>  CLANG_TARGET_FLAGS_m68k         := m68k-linux-gnu
+>>  CLANG_TARGET_FLAGS_mips         := mipsel-linux-gnu
+>>  CLANG_TARGET_FLAGS_powerpc      := powerpc64le-linux-gnu
+>>  CLANG_TARGET_FLAGS_riscv        := riscv64-linux-gnu
+>>  CLANG_TARGET_FLAGS_s390         := s390x-linux-gnu
+>>  CLANG_TARGET_FLAGS_x86          := x86_64-linux-gnu
+>> +CLANG_TARGET_FLAGS_x86_64       := x86_64-linux-gnu
+>>  CLANG_TARGET_FLAGS              := $(CLANG_TARGET_FLAGS_$(ARCH))
+>>  
+>>  ifeq ($(CROSS_COMPILE),)
+>> -- 
+>> 2.30.2
+>>
 
-----------------------------------------------------------------
-Immutable branch between MFD, Extcon and I2C due for the v6.3 merge window
-
-----------------------------------------------------------------
-Hans de Goede (3):
-      mfd: intel_soc_pmic_chtwc: Add Lenovo Yoga Tab 3 X90F to intel_cht_wc_models
-      i2c: cht-wc: Add charger-chip info for the Lenovo Yoga Tab 3 YT3-X90F
-      extcon: intel-cht-wc: Add support for Lenovo Yoga Tab 3 Pro YT3-X90F
-
- drivers/extcon/extcon-intel-cht-wc.c |  1 +
- drivers/i2c/busses/i2c-cht-wc.c      | 46 ++++++++++++++++++++++++++++++++++++
- drivers/mfd/intel_soc_pmic_chtwc.c   |  8 +++++++
- include/linux/mfd/intel_soc_pmic.h   |  1 +
- 4 files changed, 56 insertions(+)
-
--- 
-Lee Jones [李琼斯]
