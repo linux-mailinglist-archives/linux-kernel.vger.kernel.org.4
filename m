@@ -2,178 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37A7E68A8D8
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 08:45:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECB9B68A8DA
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 08:47:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233170AbjBDHpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 02:45:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41648 "EHLO
+        id S232885AbjBDHry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 02:47:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232885AbjBDHpL (ORCPT
+        with ESMTP id S231160AbjBDHrx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 02:45:11 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67CBE38020;
-        Fri,  3 Feb 2023 23:45:10 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id a2so6129419wrd.6;
-        Fri, 03 Feb 2023 23:45:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/GrWfKS7SerZY/lGE1D1hxrXTkhfUTJa7ypO3DIe71A=;
-        b=hFw6noisZaNwEWUCwFX4Tz6tGU+TctnskOSD/jYBoQCjW1JeehQG87M0FZU7VXyUZP
-         j2T6Vsal7AA+G55Zi/hwugtiKz0Ki01fx9ccr6rZ649qlgPHNqg5dhXNG0CnOiMXQ1FX
-         kfoOEYlOS8D/GlHI89XLB8a5LYrirtNgUjcyDm1m62pkP73lVnkc5hateVWgVui5JKrx
-         MEbOD3qmJG6Kf/carSAlUQx8J/uons2hd2yJBeCG3Ovk8rA/O6s8xFydrSPyOIQRitzP
-         g+06VqfOxICR9tpUNVbcM4Fp3yteT674BCGhCnUcQ2Ns2GENR0S3FDbaXXa7PEoSzFOn
-         XrYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/GrWfKS7SerZY/lGE1D1hxrXTkhfUTJa7ypO3DIe71A=;
-        b=mVr+vVEJm4xRs3xAu9bE39BIbdWc6AntTyeOAnA8I4wNpfCuI9kQp0fo5qZyXbgybC
-         LxTd7aofs+ealej4MJD+kdMPH0kFRpCpVeOO/qPBX6Q0L88sp3e9kNPXspthJ4Prmfs7
-         KPTaSf4mWSjxGc1nD+SC366GGVxc2xJKRwieIKifvfvphy7TxEnYx2pfBeTZJl39KWIw
-         9ExHODloXJcvh78H+dG0IHH23tiSY4GQJP5j0U2642P52Fg/WKorgeXSQa4TJ6cD6Dqh
-         8ji3FHRkP9l34QPqgWslXdExsSsNh7boN51+Jo6tPzLsHcXYNLb/la5eHR3CvFSeCpFH
-         oKhw==
-X-Gm-Message-State: AO0yUKWcvo2jIILoRhrRLwwAyda0T4agGdnPb09VIGdi+N0rtyHYB8ae
-        KEKrP5+PaZKWqlW2KfG1HO0=
-X-Google-Smtp-Source: AK7set8tBEaOtFnrLPN482KjR1YLZ/EHtnaLctHVhouIhDa9lHWHBnvbeDK4TjTgW3+vpQ3qVWl9SQ==
-X-Received: by 2002:a5d:5643:0:b0:2c0:227d:ca48 with SMTP id j3-20020a5d5643000000b002c0227dca48mr10022457wrw.63.1675496710007;
-        Fri, 03 Feb 2023 23:45:10 -0800 (PST)
-Received: from toolbox.. ([87.200.95.144])
-        by smtp.gmail.com with ESMTPSA id f2-20020a5d50c2000000b00267bcb1bbe5sm3735814wrt.56.2023.02.03.23.45.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 23:45:09 -0800 (PST)
-From:   Christian Hewitt <christianshewitt@gmail.com>
-To:     Sean Young <sean@mess.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     Christian Hewitt <christianshewitt@gmail.com>
-Subject: [PATCH v2 2/2] media: rc: add Beelink Mini MXIII keymap
-Date:   Sat,  4 Feb 2023 07:45:01 +0000
-Message-Id: <20230204074501.3421910-3-christianshewitt@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230204074501.3421910-1-christianshewitt@gmail.com>
-References: <20230204074501.3421910-1-christianshewitt@gmail.com>
+        Sat, 4 Feb 2023 02:47:53 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F1D838020;
+        Fri,  3 Feb 2023 23:47:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=Cbez7xsfY4MkNROF6v40RsR64/eF53uzf9QET049CiU=; b=h2yKIPZKALZ/Fa5lajMCu+tN32
+        yrIEABdRQ+BpLahqh1URk5TrSGccOqf/LC+aiKFFUYrPUkth4lNha0V/UrZSYn8Snl/q5m1Og2BPb
+        cPEfgryi3ILOTADo7de6ZFMv1wetvEJ2mpzca2URZlt/eYcXZY3xlYbGDqpwNiZDIaShWoMA7XrbA
+        M0z2c7qANyyyY93e2XUuFxItlwwsmp9c0A8sv5+R7mFXTkizr91GKFilIUPzImy8pi4zChh1q6QQZ
+        2OPyzkbzrBYLOLaSdWRVvZYcjFWWm0JK5NcdEKrOcqFuNWoGC3jG/NMm3M/3iyD2RUbGhEuIMBAHp
+        dXbUbMGQ==;
+Received: from [2601:1c2:d00:6a60::9526]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pODH1-004fK3-SZ; Sat, 04 Feb 2023 07:47:47 +0000
+Message-ID: <46dafb64-81d2-c084-97c5-8d01e8b9785b@infradead.org>
+Date:   Fri, 3 Feb 2023 23:47:45 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] soc: sunxi: select CONFIG_PM
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        sparclinux <sparclinux@vger.kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <20230130130453.379749-1-arnd@kernel.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230130130453.379749-1-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a keymap for the simple IR (NEC) remote used with the Beelink
-Mini MXIII Android STB device.
+Hi--
 
-Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
----
- drivers/media/rc/keymaps/Makefile           |  1 +
- drivers/media/rc/keymaps/rc-beelink-mxiii.c | 57 +++++++++++++++++++++
- include/media/rc-map.h                      |  1 +
- 3 files changed, 59 insertions(+)
- create mode 100644 drivers/media/rc/keymaps/rc-beelink-mxiii.c
+On 1/30/23 05:04, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> Selecting CONFIG_PM_GENERIC_DOMAINS without CONFIG_PM leads to a
+> build failure:
+> 
+> WARNING: unmet direct dependencies detected for PM_GENERIC_DOMAINS
+>   Depends on [n]: PM [=n]
+>   Selected by [y]:
+>   - SUN20I_PPU [=y] && (ARCH_SUNXI [=n] || COMPILE_TEST [=y])
+> 
+> drivers/base/power/domain_governor.c: In function 'default_suspend_ok':
+> drivers/base/power/domain_governor.c:85:24: error: 'struct dev_pm_info' has no member named 'ignore_children'
+>    85 |         if (!dev->power.ignore_children)
+>       |                        ^
+> drivers/base/power/domain.c: In function 'genpd_queue_power_off_work':
+> drivers/base/power/domain.c:657:20: error: 'pm_wq' undeclared (first use in this function)
+>   657 |         queue_work(pm_wq, &genpd->power_off_work);
+>       |                    ^~~~~
+> 
+> Unfortunately platforms are inconsistent between using 'select PM'
+> and 'depends on PM' here. CONFIG_PM is a user-visible symbol, so
+> in principle we should be using 'depends on', but on the other hand
+> using 'select' here is more common among drivers/soc. Go with the
+> majority for now, as this has a smaller risk of introducing circular
+> dependencies. We may need to clean this up for consistency later.
+> 
+> Fixes: 0e30ca5ab0a8 ("soc: sunxi: Add Allwinner D1 PPU driver")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-diff --git a/drivers/media/rc/keymaps/Makefile b/drivers/media/rc/keymaps/Makefile
-index 6931c89fca99..f19558fdab0c 100644
---- a/drivers/media/rc/keymaps/Makefile
-+++ b/drivers/media/rc/keymaps/Makefile
-@@ -22,6 +22,7 @@ obj-$(CONFIG_RC_MAP) += \
- 			rc-avertv-303.o \
- 			rc-azurewave-ad-tu700.o \
- 			rc-beelink-gs1.o \
-+			rc-beelink-mxiii.o \
- 			rc-behold-columbus.o \
- 			rc-behold.o \
- 			rc-budget-ci-old.o \
-diff --git a/drivers/media/rc/keymaps/rc-beelink-mxiii.c b/drivers/media/rc/keymaps/rc-beelink-mxiii.c
-new file mode 100644
-index 000000000000..01180cd92205
---- /dev/null
-+++ b/drivers/media/rc/keymaps/rc-beelink-mxiii.c
-@@ -0,0 +1,57 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Copyright (C) 2019 Christian Hewitt <christianshewitt@gmail.com>
-+ *
-+ */
-+
-+#include <media/rc-map.h>
-+#include <linux/module.h>
-+
-+/*
-+ * Keytable for the Beelink Mini MXIII remote control
-+ *
-+ */
-+
-+static struct rc_map_table beelink_mxiii[] = {
-+	{ 0xb2dc, KEY_POWER },
-+
-+	{ 0xb288, KEY_MUTE },
-+	{ 0xb282, KEY_HOME },
-+
-+	{ 0xb2ca, KEY_UP },
-+	{ 0xb299, KEY_LEFT },
-+	{ 0xb2ce, KEY_OK },
-+	{ 0xb2c1, KEY_RIGHT },
-+	{ 0xb2d2, KEY_DOWN },
-+
-+	{ 0xb2c5, KEY_MENU },
-+	{ 0xb29a, KEY_BACK },
-+
-+	{ 0xb281, KEY_VOLUMEDOWN },
-+	{ 0xb280, KEY_VOLUMEUP },
-+};
-+
-+static struct rc_map_list beelink_mxiii_map = {
-+	.map = {
-+		.scan     = beelink_mxiii,
-+		.size     = ARRAY_SIZE(beelink_mxiii),
-+		.rc_proto = RC_PROTO_NEC,
-+		.name     = RC_MAP_BEELINK_MXIII,
-+	}
-+};
-+
-+static int __init init_rc_map_beelink_mxiii(void)
-+{
-+	return rc_map_register(&beelink_mxiii_map);
-+}
-+
-+static void __exit exit_rc_map_beelink_mxiii(void)
-+{
-+	rc_map_unregister(&beelink_mxiii_map);
-+}
-+
-+module_init(init_rc_map_beelink_mxiii)
-+module_exit(exit_rc_map_beelink_mxiii)
-+
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("Christian Hewitt <christianshewitt@gmail.com");
-diff --git a/include/media/rc-map.h b/include/media/rc-map.h
-index 94ee968d4722..4676545ffd8f 100644
---- a/include/media/rc-map.h
-+++ b/include/media/rc-map.h
-@@ -225,6 +225,7 @@ struct rc_map *rc_map_get(const char *name);
- #define RC_MAP_AVERTV_303                "rc-avertv-303"
- #define RC_MAP_AZUREWAVE_AD_TU700        "rc-azurewave-ad-tu700"
- #define RC_MAP_BEELINK_GS1               "rc-beelink-gs1"
-+#define RC_MAP_BEELINK_MXIII             "rc-beelink-mxiii"
- #define RC_MAP_BEHOLD                    "rc-behold"
- #define RC_MAP_BEHOLD_COLUMBUS           "rc-behold-columbus"
- #define RC_MAP_BUDGET_CI_OLD             "rc-budget-ci-old"
+With this patch (in linux-next-20230203), building on sparc32 with
+COMPILE_TEST=y and ARCH_SUNXI not set:
+
+WARNING: unmet direct dependencies detected for PM
+  Depends on [n]: SPARC64 [=n]
+  Selected by [y]:
+  - SUN20I_PPU [=y] && (ARCH_SUNXI || COMPILE_TEST [=y])
+
+WARNING: unmet direct dependencies detected for PM
+  Depends on [n]: SPARC64 [=n]
+  Selected by [y]:
+  - SUN20I_PPU [=y] && (ARCH_SUNXI || COMPILE_TEST [=y])
+
+WARNING: unmet direct dependencies detected for PM_GENERIC_DOMAINS
+  Depends on [n]: SPARC64 [=n] && PM [=y]
+  Selected by [y]:
+  - QCOM_GDSC [=y] && COMMON_CLK [=y] && PM [=y]
+  - SUN20I_PPU [=y] && (ARCH_SUNXI || COMPILE_TEST [=y])
+  - MESON_GX_PM_DOMAINS [=y] && (ARCH_MESON || COMPILE_TEST [=y]) && PM [=y] && OF [=y]
+  - BCM2835_POWER [=y] && (ARCH_BCM2835 || COMPILE_TEST [=y] && OF [=y]) && PM [=y]
+  - BCM_PMB [=y] && (ARCH_BCMBCA || COMPILE_TEST [=y] && OF [=y]) && PM [=y]
+  - ROCKCHIP_PM_DOMAINS [=y] && (ARCH_ROCKCHIP || COMPILE_TEST [=y]) && PM [=y]
+  Selected by [m]:
+  - ARM_SCPI_POWER_DOMAIN [=m] && (ARM_SCPI_PROTOCOL [=m] || COMPILE_TEST [=y] && OF [=y]) && PM [=y]
+  - MESON_EE_PM_DOMAINS [=m] && (ARCH_MESON || COMPILE_TEST [=y]) && PM [=y] && OF [=y]
+  - QCOM_AOSS_QMP [=m] && (ARCH_QCOM || COMPILE_TEST [=y]) && MAILBOX [=y] && COMMON_CLK [=y] && PM [=y]
+
+WARNING: unmet direct dependencies detected for PM_GENERIC_DOMAINS_OF
+  Depends on [n]: SPARC64 [=n] && PM_GENERIC_DOMAINS [=y] && OF [=y]
+  Selected by [y]:
+  - MESON_GX_PM_DOMAINS [=y] && (ARCH_MESON || COMPILE_TEST [=y]) && PM [=y] && OF [=y]
+  Selected by [m]:
+  - MESON_EE_PM_DOMAINS [=m] && (ARCH_MESON || COMPILE_TEST [=y]) && PM [=y] && OF [=y]
+
+Apparently sparc32 does not support PM (arch/sparc/Kconfig):
+
+if SPARC64
+source "kernel/power/Kconfig"
+endif
+
+so I think that SUN20I_PPU should also depend on !SPARC32.
+Does that make sense?
+
+Thanks.
+
+> ---
+>  drivers/soc/sunxi/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/soc/sunxi/Kconfig b/drivers/soc/sunxi/Kconfig
+> index 29e9ba2d520d..02d0b338feb3 100644
+> --- a/drivers/soc/sunxi/Kconfig
+> +++ b/drivers/soc/sunxi/Kconfig
+> @@ -23,6 +23,7 @@ config SUNXI_SRAM
+>  config SUN20I_PPU
+>  	bool "Allwinner D1 PPU power domain driver"
+>  	depends on ARCH_SUNXI || COMPILE_TEST
+> +	select PM
+>  	select PM_GENERIC_DOMAINS
+>  	help
+>  	  Say y to enable the PPU power domain driver. This saves power
+
 -- 
-2.34.1
-
+~Randy
