@@ -2,164 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A737B68A799
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 02:46:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A62AF68A7A2
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 02:49:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233019AbjBDBqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 20:46:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52394 "EHLO
+        id S233172AbjBDBs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 20:48:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233297AbjBDBqK (ORCPT
+        with ESMTP id S233319AbjBDBsm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 20:46:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DD8BA9D5F
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 17:46:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EDD7EB82C1C
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 01:46:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D175C433EF;
-        Sat,  4 Feb 2023 01:46:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1675475161;
-        bh=H/i6B4QCS1pFRvxe1XgeIybEfQ/L4+Kf60VEnVS8tmY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=1oN/7nLVldsnrQpC9YZxwmNErwjbLUG9DWnrTudXeEqJGK4UBu+8UvWq8MyrHjj74
-         Ty3HyyfXRj9Eih4rxLptMt9uVRgdGZSSP3x0P/vUY4P/EuSzNCCil1rxDzg+D4HR44
-         aHdJiTEvFS1bJH1DtJgK4R84UU0rsNHs1jWNVHvQ=
-Date:   Fri, 3 Feb 2023 17:46:00 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     <naoya.horiguchi@nec.com>, <linux-mm@kvack.org>,
-        <linmiaohe@huawei.com>, <tony.luck@intel.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4] mm: hwposion: support recovery from
- ksm_might_need_to_copy()
-Message-Id: <20230203174600.fd5a60663ae1d98cb44ea5e3@linux-foundation.org>
-In-Reply-To: <20230201074433.96641-1-wangkefeng.wang@huawei.com>
-References: <20230201074433.96641-1-wangkefeng.wang@huawei.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 3 Feb 2023 20:48:42 -0500
+Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AEF91E5D7;
+        Fri,  3 Feb 2023 17:48:39 -0800 (PST)
+Received: by mail-oo1-xc2c.google.com with SMTP id t24-20020a4a8258000000b005170b789faaso678611oog.5;
+        Fri, 03 Feb 2023 17:48:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9W/qk0n/CPhDpra9Z2blMDuqhiMKXk82qamoSsWubKk=;
+        b=H1Snbxx+lr32UlIiWM9csNOvM9VWm4O3vDUNTNdzKVOLys1M27TF2f9LYlkcjELfZ+
+         6ZBN8pTqyWAaD/d3TyRZjNe4cILDlFimkGT97L26o+X8RJdm+ZaYbpL1Pc9iqfMj4VC5
+         b1wAe5oLd7DGBnTsEokLG3EpGElZiNpIRGp3/BaJLoYijMXfUKFRxTXderNM5FJC9ccE
+         5i0xm5QFPuxs0ZEQlqWWYqEABt+97Cj3CIc/z6GbS3PSPJPna/6LGhNuWYZHCyzzYsBa
+         l1PdfXp2Dw6t3JsLXx6eHiZSsMdYGIV8eT2TMvux0HIuNA/PdOMAL0ssXIUrSain8yw/
+         V+eA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9W/qk0n/CPhDpra9Z2blMDuqhiMKXk82qamoSsWubKk=;
+        b=e00/rLptqetcdSesGN5TW9hjgti3HN06IQrQ4FM2Myx2xC6lxg0dYLEawNNoOLNbBn
+         r2WeHDmnfCHDPbzw+CrV6HgxZYTpxWMUNddBWob3J7sAo97y/LscwOWJwNjc1ImZtdaq
+         B5cT+hw4Ip4mRcLATryRWXU8wvpjXrYLd8+I4VaRsQ0hs1toC6duvr1dHGj1zSqGSw/S
+         h7JkDlb8nZI38Ix8aPyH7dOsKNSUAnZoLYxPt0i4qGTYkXBx3qov0sJzATxvPgY47KXW
+         uI4n4lR/986lFGO8EDR+D9gdr5ij/aIfvsIPAgUbqdwn1AjYHIbaNmgyu+O0U11aOodn
+         qY0Q==
+X-Gm-Message-State: AO0yUKWTE8fXB4CgVQ6rEx5JcY0dvmcv9TLZbwj839Q7RW7C0ygz/lSp
+        xkq5TCzusvsGIxxR5oSMz2rw9F4kfuM=
+X-Google-Smtp-Source: AK7set8gqlr7FWMhAyZFBDLub7uhKpdVOKB3YOGmesWRAaxUOH/qmAHmIyXi47Rjig9AVbhN0iHQvg==
+X-Received: by 2002:a4a:3346:0:b0:4fa:325e:ebb0 with SMTP id q67-20020a4a3346000000b004fa325eebb0mr6994130ooq.5.1675475318462;
+        Fri, 03 Feb 2023 17:48:38 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id l12-20020a4ac60c000000b00517587f8817sm1604408ooq.19.2023.02.03.17.48.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Feb 2023 17:48:37 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 3 Feb 2023 17:48:36 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 4.14 00/62] 4.14.305-rc1 review
+Message-ID: <20230204014836.GA3089769@roeck-us.net>
+References: <20230203101012.959398849@linuxfoundation.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230203101012.959398849@linuxfoundation.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 1 Feb 2023 15:44:33 +0800 Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
-
-> When the kernel copy a page from ksm_might_need_to_copy(), but runs
-> into an uncorrectable error, it will crash since poisoned page is
-> consumed by kernel, this is similar to the issue recently fixed by
-> Copy-on-write poison recovery.
+On Fri, Feb 03, 2023 at 11:11:56AM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.14.305 release.
+> There are 62 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> When an error is detected during the page copy, return VM_FAULT_HWPOISON
-> in do_swap_page(), and install a hwpoison entry in unuse_pte() when
-> swapoff, which help us to avoid system crash. Note, memory failure on
-> a KSM page will be skipped, but still call memory_failure_queue() to
-> be consistent with general memory failure process, and we could support
-> KSM page recovery in the feature.
+> Responses should be made by Sun, 05 Feb 2023 10:09:58 +0000.
+> Anything received after that time might be too late.
 > 
 
-Some review input would be helpful.
+Build results:
+	total: 168 pass: 167 fail: 1
+Failed builds:
+	ia64:defconfig
+Qemu test results:
+	total: 425 pass: 425 fail: 0
 
-Are we able to identify a Fixes: target for this?
+ia64 build error as reported separately.
 
-I assume that a -stable backport is desirable?
-
-Thanks.
-
-> --- a/mm/ksm.c
-> +++ b/mm/ksm.c
-> @@ -2629,8 +2629,11 @@ struct page *ksm_might_need_to_copy(struct page *page,
->  		new_page = NULL;
->  	}
->  	if (new_page) {
-> -		copy_user_highpage(new_page, page, address, vma);
-> -
-> +		if (copy_mc_user_highpage(new_page, page, address, vma)) {
-> +			put_page(new_page);
-> +			memory_failure_queue(page_to_pfn(page), 0);
-> +			return ERR_PTR(-EHWPOISON);
-> +		}
->  		SetPageDirty(new_page);
->  		__SetPageUptodate(new_page);
->  		__SetPageLocked(new_page);
-> diff --git a/mm/memory.c b/mm/memory.c
-> index aad226daf41b..5b2c137dfb2a 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -3840,6 +3840,9 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
->  		if (unlikely(!page)) {
->  			ret = VM_FAULT_OOM;
->  			goto out_page;
-> +		} else if (unlikely(PTR_ERR(page) == -EHWPOISON)) {
-> +			ret = VM_FAULT_HWPOISON;
-> +			goto out_page;
->  		}
->  		folio = page_folio(page);
->  
-> diff --git a/mm/swapfile.c b/mm/swapfile.c
-> index 908a529bca12..3ef2468d7130 100644
-> --- a/mm/swapfile.c
-> +++ b/mm/swapfile.c
-> @@ -1763,12 +1763,15 @@ static int unuse_pte(struct vm_area_struct *vma, pmd_t *pmd,
->  	struct page *swapcache;
->  	spinlock_t *ptl;
->  	pte_t *pte, new_pte;
-> +	bool hwposioned = false;
->  	int ret = 1;
->  
->  	swapcache = page;
->  	page = ksm_might_need_to_copy(page, vma, addr);
->  	if (unlikely(!page))
->  		return -ENOMEM;
-> +	else if (unlikely(PTR_ERR(page) == -EHWPOISON))
-> +		hwposioned = true;
->  
->  	pte = pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
->  	if (unlikely(!pte_same_as_swp(*pte, swp_entry_to_pte(entry)))) {
-> @@ -1776,15 +1779,19 @@ static int unuse_pte(struct vm_area_struct *vma, pmd_t *pmd,
->  		goto out;
->  	}
->  
-> -	if (unlikely(!PageUptodate(page))) {
-> -		pte_t pteval;
-> +	if (unlikely(hwposioned || !PageUptodate(page))) {
-> +		swp_entry_t swp_entry;
->  
->  		dec_mm_counter(vma->vm_mm, MM_SWAPENTS);
-> -		pteval = swp_entry_to_pte(make_swapin_error_entry());
-> -		set_pte_at(vma->vm_mm, addr, pte, pteval);
-> -		swap_free(entry);
-> +		if (hwposioned) {
-> +			swp_entry = make_hwpoison_entry(swapcache);
-> +			page = swapcache;
-> +		} else {
-> +			swp_entry = make_swapin_error_entry();
-> +		}
-> +		new_pte = swp_entry_to_pte(swp_entry);
->  		ret = 0;
-> -		goto out;
-> +		goto setpte;
->  	}
->  
->  	/* See do_swap_page() */
-> @@ -1816,6 +1823,7 @@ static int unuse_pte(struct vm_area_struct *vma, pmd_t *pmd,
->  		new_pte = pte_mksoft_dirty(new_pte);
->  	if (pte_swp_uffd_wp(*pte))
->  		new_pte = pte_mkuffd_wp(new_pte);
-> +setpte:
->  	set_pte_at(vma->vm_mm, addr, pte, new_pte);
->  	swap_free(entry);
->  out:
-> -- 
-> 2.35.3
-> 
+Guenter
