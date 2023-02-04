@@ -2,108 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0722368AAB5
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 15:57:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45DDE68AAB8
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 15:58:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232778AbjBDO5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 09:57:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49642 "EHLO
+        id S233355AbjBDO6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 09:58:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjBDO5D (ORCPT
+        with ESMTP id S233294AbjBDO6P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 09:57:03 -0500
-Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 295191EBF8;
-        Sat,  4 Feb 2023 06:57:02 -0800 (PST)
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4P8Fwn69HKz9sbk;
-        Sat,  4 Feb 2023 15:56:57 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-        t=1675522617;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tkq61IaaphmcCMy0jeb65pNFPN5hEwtKvlzCHHr65SY=;
-        b=ruCLNv4uxzOg+gYnZ7UzWq7RiWqSDJ0QW9FrjBvl5nFIn2EOs21ywIcAwYkQ0sLzcXs32A
-        bm+duLT69SGjMfynzUu3dVffG7JQNkssaZdn3poOBLVMELOmCQ5oi61PijbP026JQuoKYf
-        tNKMLme+W7F1B0xugy08/Vn/U6xfeT3mTlxwrmW9fbZMxzMBP2rxKLFz4UYr1KY9xXPHOQ
-        pA54WmUSGh07PxKMcVmcObPmBgycvapcUvwI1W2NHb2EdYF8JlnlYWjCkZyu2uaS2DCnVA
-        h83rvIkQuNyM0RtotiIfMfraBTIeoJ33gg8cupnjrPVc5R3+S+BvTO1OjvLSOA==
-From:   Alexander Lobakin <alobakin@mailbox.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-        t=1675522615;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tkq61IaaphmcCMy0jeb65pNFPN5hEwtKvlzCHHr65SY=;
-        b=ld9b3hQqb4aXsilESfxm1s3sG6h9RTAz0Z9f9GD6FQp2qw57/XuWtfZnfTTGYOT5e8aHWQ
-        5BiOSz5avatdO8aCg+EanfxIvueWdUB0n0dE5VI20Jphl+YI3GySMha8LCa9g8qxreQzXK
-        rTot9G4vCMtmZwRzelH1qbySUtc8ntNIPWocVJ+xpgKwpIbSOwoQY3xqyEjRMZMQVnKmAd
-        dMdoDaFe/JJclmqVTI8pJ6JvuyRsTBhHYbICfYU0OjwDcIQj4bt4XT+uoOYvh3oF2X2jmt
-        5I1bNB23mGN4moVDvd7yBwa1CuYZIhJG4Tg/I+vKbg0+6vcLsFcSE7qHZQ7RXQ==
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Alexander Lobakin <alobakin@mailbox.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: Remove CONFIG_MIPS check in Makefile
-Date:   Sat,  4 Feb 2023 15:56:41 +0100
-Message-Id: <20230204145641.66417-1-alobakin@mailbox.org>
-In-Reply-To: <1675328702-8328-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1675328702-8328-1-git-send-email-yangtiezhu@loongson.cn>
+        Sat, 4 Feb 2023 09:58:15 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id F14E0212B9
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 06:58:13 -0800 (PST)
+Received: (qmail 597198 invoked by uid 1000); 4 Feb 2023 09:58:12 -0500
+Date:   Sat, 4 Feb 2023 09:58:12 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        kernel-team@meta.com, mingo@kernel.org, parri.andrea@gmail.com,
+        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
+        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+        luc.maranget@inria.fr, akiyks@gmail.com
+Subject: Re: Current LKMM patch disposition
+Message-ID: <Y95yhJgNq8lMXPdF@rowland.harvard.edu>
+References: <20230204004843.GA2677518@paulmck-ThinkPad-P17-Gen-1>
+ <Y920w4QRLtC6kd+x@rowland.harvard.edu>
+ <20230204014941.GS2948950@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-MBO-RS-META: tpypxy5rexgmtbkqmk8b5b618i9quz5c
-X-MBO-RS-ID: 28265f7d666235e2d41
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230204014941.GS2948950@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-Date: Thu,  2 Feb 2023 17:05:02 +0800
-
-> CONFIG_MIPS is set as y by default in Kconfig, no need to check
-> it in Makefile.
+On Fri, Feb 03, 2023 at 05:49:41PM -0800, Paul E. McKenney wrote:
+> On Fri, Feb 03, 2023 at 08:28:35PM -0500, Alan Stern wrote:
+> > On Fri, Feb 03, 2023 at 04:48:43PM -0800, Paul E. McKenney wrote:
+> > > Hello!
+> > > 
+> > > Here is what I currently have for LKMM patches:
+> > > 
+> > > 289e1c89217d4 ("locking/memory-barriers.txt: Improve documentation for writel() example")
+> > > ebd50e2947de9 ("tools: memory-model: Add rmw-sequences to the LKMM")
+> > > aae0c8a50d6d3 ("Documentation: Fixed a typo in atomic_t.txt")
+> > > 9ba7d3b3b826e ("tools: memory-model: Make plain accesses carry dependencies")
+> > > 
+> > > 	Queued for the upcoming (v6.3) merge window.
+> > > 
+> > > c7637e2a8a27 ("tools/memory-model: Update some warning labels")
+> > > 7862199d4df2 ("tools/memory-model: Unify UNLOCK+LOCK pairings to po-unlock-lock-")
+> > > 
+> > > 	Are ready for the next (v6.4) merge window.  If there is some
+> > > 	reason that they should instead go into v6.3, please let us
+> > > 	all know.
+> > > 
+> > > a6cd5214b5ba ("tools/memory-model: Document LKMM test procedure")
+> > > 
+> > > 	This goes onto the lkmm-dev pile because it is documenting how
+> > > 	to use those scripts.
+> > > 
+> > > https://lore.kernel.org/lkml/Y9GPVnK6lQbY6vCK@rowland.harvard.edu/
+> > > https://lore.kernel.org/lkml/20230126134604.2160-3-jonas.oberhauser@huaweicloud.com
+> > > https://lore.kernel.org/lkml/20230203201913.2555494-1-joel@joelfernandes.org/
+> > > 5d871b280e7f ("tools/memory-model: Add smp_mb__after_srcu_read_unlock()")
+> > > 
+> > > 	These need review and perhaps further adjustment.
+> > > 
+> > > So, am I missing any?  Are there any that need to be redirected?
+> > 
+> > The "Provide exact semantics for SRCU" patch should have:
+> > 
+> > 	Portions suggested by Boqun Feng and Jonas Oberhauser.
+> > 
+> > added at the end, together with your Reported-by: tag.  With that, I 
+> > think it can be queued for 6.4.
 > 
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> ---
->  arch/mips/Makefile | 2 --
->  1 file changed, 2 deletions(-)
+> Thank you!  Does the patch shown below work for you?
 > 
-> diff --git a/arch/mips/Makefile b/arch/mips/Makefile
-> index 490dea0..6ed41c8b 100644
-> --- a/arch/mips/Makefile
-> +++ b/arch/mips/Makefile
-> @@ -316,11 +316,9 @@ KBUILD_CFLAGS += -fno-asynchronous-unwind-tables
->  
->  KBUILD_LDFLAGS		+= -m $(ld-emul)
->  
-> -ifdef CONFIG_MIPS
->  CHECKFLAGS += $(shell $(CC) $(KBUILD_CFLAGS) -dM -E -x c /dev/null | \
->  	grep -E -vw '__GNUC_(MINOR_|PATCHLEVEL_)?_' | \
->  	sed -e "s/^\#define /-D'/" -e "s/ /'='/" -e "s/$$/'/" -e 's/\$$/&&/g')
-> -endif
+> (I have tentatively queued this, but can easily adjust or replace it.)
 
-When you run `make clean/mrproper/distclean`, .config is not read. Thus,
-this block may actually provoke errors when cleaning, that's why it's
-guarded.
-At least it was like that a couple years ago, can't say for sure if
-these guards are needed, but better recheck.
+It looks fine.
 
->  
->  OBJCOPYFLAGS		+= --remove-section=.reginfo
->  
-> -- 
-> 2.1.0
-
-Thanks,
-Olek
+Alan
