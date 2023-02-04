@@ -2,221 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F47E68ACE9
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 23:32:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74F3668ACEB
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 23:37:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232476AbjBDWcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 17:32:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51974 "EHLO
+        id S230357AbjBDWhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 17:37:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231386AbjBDWcu (ORCPT
+        with ESMTP id S229687AbjBDWhI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 17:32:50 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 262392387C
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 14:32:43 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id bx22so5446499pjb.3
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Feb 2023 14:32:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=TCubKHsyMQJF8LMl1XgSOrfeBF7lBTY/RGmJLycWlaU=;
-        b=G2+vuASwFpuwWTpilhz1IvtVsiUT9WhCHPg3bHDt/5F+ZoUeYQwXI0GHaH/YaKtytT
-         o1acMo5Mlm9cllOyD5PirVkDAsyvv3CP6uyWR+LaTPS1ROgZi0SnUgG8oPPxwGDdvf2H
-         Luf92Ex8l5lVs6qa9X7drp1/LtoiKUv6uQViswIbJn67mpOnBEQ7U8Nir6vHJjl4A/oJ
-         +5ukHAB+inYG8Le10OO2jEj7EmNeHwW7lkjz8nuxXrYC+JIa5v+c8qtK+v9w+HDq7apx
-         KU2y4mG6YSECFfteheftSjttr13wzYo3LIzXiFwWhQHZEs641AvyDiOb9vOPwrpjxbKw
-         BE5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TCubKHsyMQJF8LMl1XgSOrfeBF7lBTY/RGmJLycWlaU=;
-        b=uDU2UzFwoyETGV9zI0rVNn2i3NNEVj8wxSNmO0zXDVPzXndQ0ucmN6zDXNiD4orOYQ
-         kCH5lCZNCWULeOYqeqwlVngkWjMgkQrTqb7L084wwFT0n1n0kObm77p5IGS7aoN+25tJ
-         l6SZEmuHNv9l4fiG8XzWFOZoP0I1T65lboLj71Bt59ko8Jkax86cmMS+5NZGTFgM0sWa
-         r8iuMw2+yYwNMjLyGC2oNKtzuw0i9pFUBUotn0l4wnatpdZImF/VpNTrvmMLzaLOmoL2
-         vwdcqOLuVduZpDuGMQKGnRERVsVX5bmDRfhq+XHB+WfKVhNTxYyGOoEHQaBWFs3/XVb+
-         b8aw==
-X-Gm-Message-State: AO0yUKWwae84R+ak/DHtrnfDtVKeNOwkYvBPiuZ+lyjsKi1+KCMyeYuU
-        qHWgV9Bl0i1tKyRGWHiME+OpWCUaOdImDJw2+hk6rg==
-X-Google-Smtp-Source: AK7set+WTHxq5oO63yGH1Y9Xnzv5N1lAd2jXSDL3AuczoyplN2Tu7uL6IRfi3QFZwCS/cMVnCxbzD3B8jbvtM9uZpe8=
-X-Received: by 2002:a17:90a:656:b0:226:cff8:6472 with SMTP id
- q22-20020a17090a065600b00226cff86472mr2232226pje.73.1675549962139; Sat, 04
- Feb 2023 14:32:42 -0800 (PST)
+        Sat, 4 Feb 2023 17:37:08 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 793A876AB;
+        Sat,  4 Feb 2023 14:37:07 -0800 (PST)
+From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
+        s=mail; t=1675550225;
+        bh=0XwHzWlQO9utV3c23HfF5d3lVc1tHK1hks1/3/+GhYo=;
+        h=From:Date:Subject:To:Cc:From;
+        b=STejYmVfI53D9/kq/WcaYju5UGgGXs1jDerfpfCF40EI9t084D2ECHECqGa7scSIC
+         dGTa7tZ8MzOAygjvy3V57NHU5fQtDAIeWQZtrGHp/8maox9qGPsgINhU4zcvi2lhwr
+         8VTiK6sk75/FYJ0AyKgUk3uEUWcFC4a+hpFCFGk4=
+Date:   Sat, 04 Feb 2023 22:36:58 +0000
+Subject: [PATCH] driver core: make kobj_type structures constant
 MIME-Version: 1.0
-References: <20230127001141.407071-1-saravanak@google.com> <20230127001141.407071-5-saravanak@google.com>
- <20230130143153.67dsxn4lugfetfwb@bogus> <Y9fe2arI8afeURWn@smile.fi.intel.com>
- <CAGETcx9aPp+JU-hO+fGyGps6jaoKoFzZd2zzy5YZBKoU8G=OhA@mail.gmail.com> <20230131101337.376mnrvhltbsychd@bogus>
-In-Reply-To: <20230131101337.376mnrvhltbsychd@bogus>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Sat, 4 Feb 2023 14:32:05 -0800
-Message-ID: <CAGETcx9Jc1YAV49+gJWo0gFh1rxJ3nwBCw_CKYhAREBwvq5Kcw@mail.gmail.com>
-Subject: Re: [PATCH v2 04/11] gpiolib: Clear the gpio_device's fwnode
- initialized flag before adding
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20230204-kobj_type-driver-core-v1-1-b9f809419f2c@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIAAne3mMC/x2N0QrCMAwAf2Xk2UCt1Qd/RUSaNnPR0Y50DmXs3
+ xd8vIPjVmiswg2u3QrKizSpxeB46CANsTwZJRuDd/7kvAv4rvR6zL+JMassrJiqMl4oEOfgfDw
+ TWEuxMZLGkgary2ccTU7KvXz/s9t923Y4idgTfAAAAA==
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Len Brown <lenb@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Daniel Scally <djrscally@gmail.com>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Linux Kernel Functional Testing <lkft@linaro.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Abel Vesa <abel.vesa@linaro.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        John Stultz <jstultz@google.com>,
-        Doug Anderson <dianders@chromium.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Maxim Kiselev <bigunclemax@gmail.com>,
-        Maxim Kochetkov <fido_max@inbox.ru>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Luca Weiss <luca.weiss@fairphone.com>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Jean-Philippe Brucker <jpb@kernel.org>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1675550218; l=3049;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=0XwHzWlQO9utV3c23HfF5d3lVc1tHK1hks1/3/+GhYo=;
+ b=xFPR+hJqKZFs5DaJ7n/jPy5Kdyj0cLcKjN2d72v7FvIeoM5SMD0gRQe1mKcUus5/vflKq/N+N
+ m6BwWG7M+3KCJJa/Cha9fxeEq8EP3KAi18o18k2u6r5+2Z3u57x1EK7
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 2:13 AM Sudeep Holla <sudeep.holla@arm.com> wrote:
->
-> On Mon, Jan 30, 2023 at 08:01:17PM -0800, Saravana Kannan wrote:
-> > On Mon, Jan 30, 2023 at 7:14 AM Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> wrote:
-> > >
-> > > On Mon, Jan 30, 2023 at 02:31:53PM +0000, Sudeep Holla wrote:
-> > > > On Thu, Jan 26, 2023 at 04:11:31PM -0800, Saravana Kannan wrote:
-> > > > > Registering an irqdomain sets the flag for the fwnode. But having the
-> > > > > flag set when a device is added is interpreted by fw_devlink to mean the
-> > > > > device has already been initialized and will never probe. This prevents
-> > > > > fw_devlink from creating device links with the gpio_device as a
-> > > > > supplier. So, clear the flag before adding the device.
-> > >
-> > > ...
-> > >
-> > > > > +   /*
-> > > > > +    * If fwnode doesn't belong to another device, it's safe to clear its
-> > > > > +    * initialized flag.
-> > > > > +    */
-> > > > > +   if (!gdev->dev.fwnode->dev)
-> > > > > +           fwnode_dev_initialized(gdev->dev.fwnode, false);
-> > > >
-> > > > This is the one causing the kernel crash during the boot on FVP which
-> > > > Naresh has reported. Just reverted this and was able to boot, confirming
-> > > > the issue with this patch.
-> > >
-> > > I'm wondering if
-> > >
-> > >         if (!dev_fwnode(&gdev->dev)->dev)
-> > >                 fwnode_dev_initialized(&dev_fwnode(gdev->dev), false);
-> > >
-> > > works.
-> >
-> > No, that won't help. The problem was that with arm32, we have gpio
-> > devices created without any of_node or fwnode. So I can't assume
-> > fwnode will always be present.
-> >
->
-> Correct, and this one is not even arm32. But it is just reusing a driver
-> that needs to be supported even on arm32.
->
-> Not sure on how to proceed. As a simple way to check, I added a NULL check
-> for fwnode building on top of Andy's suggestion[1]. That works.
->
-> Also the driver in question on arm64 FVP model is drivers/mfd/vexpress-sysreg.c
-> mfd_add_device() in drivers/mfd/mfd-core.c allows addition of devices without
-> of_node/fwnode. I am sure returning error like[2] will break many platforms
-> but I just wanted to confirm the root cause and [2] fixes the boot without
-> NULL check for fwnode in gpiochip_setup_dev().
->
-> Hope this helps.
+Since commit ee6d3dd4ed48 ("driver core: make kobj_type constant.")
+the driver core allows the usage of const struct kobj_type.
 
-Thanks for debugging it for me Sudeep. Incorporated into my v3.
+Take advantage of this to constify the structure definitions to prevent
+modification at runtime.
 
--Saravana
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+ drivers/base/bus.c    | 4 ++--
+ drivers/base/class.c  | 2 +-
+ drivers/base/core.c   | 4 ++--
+ drivers/base/swnode.c | 2 +-
+ 4 files changed, 6 insertions(+), 6 deletions(-)
 
->
-> --
-> Regards,
-> Sudeep
->
-> [1]
->
-> -->8
-> diff --git i/drivers/gpio/gpiolib.c w/drivers/gpio/gpiolib.c
-> index b23140c6485f..e162f13aa2c9 100644
-> --- i/drivers/gpio/gpiolib.c
-> +++ w/drivers/gpio/gpiolib.c
-> @@ -577,13 +577,15 @@ static void gpiodevice_release(struct device *dev)
->  static int gpiochip_setup_dev(struct gpio_device *gdev)
->  {
->         int ret;
-> +       struct fwnode_handle *fwnode = dev_fwnode(&gdev->dev);
->
->         /*
->          * If fwnode doesn't belong to another device, it's safe to clear its
->          * initialized flag.
->          */
-> -       if (!gdev->dev.fwnode->dev)
-> -               fwnode_dev_initialized(gdev->dev.fwnode, false);
-> +       if (fwnode && !fwnode->dev)
-> +               fwnode_dev_initialized(fwnode, false);
-> +
->         ret = gcdev_register(gdev, gpio_devt);
->         if (ret)
->                 return ret;
->
-> [2]
->
-> -->8
->
-> diff --git i/drivers/mfd/mfd-core.c w/drivers/mfd/mfd-core.c
-> index 16d1861e9682..3b2c4b0e9a2a 100644
-> --- i/drivers/mfd/mfd-core.c
-> +++ w/drivers/mfd/mfd-core.c
-> @@ -231,9 +231,11 @@ static int mfd_add_device(struct device *parent, int id,
->                         }
->                 }
->
-> -               if (!pdev->dev.of_node)
-> +               if (!pdev->dev.of_node) {
->                         pr_warn("%s: Failed to locate of_node [id: %d]\n",
->                                 cell->name, platform_id);
-> +                       goto fail_alias;
-> +               }
->         }
->
->         mfd_acpi_add_device(cell, pdev);
->
+diff --git a/drivers/base/bus.c b/drivers/base/bus.c
+index 4ec6dbab73be..f9c05f4c7d1f 100644
+--- a/drivers/base/bus.c
++++ b/drivers/base/bus.c
+@@ -91,7 +91,7 @@ static void driver_release(struct kobject *kobj)
+ 	kfree(drv_priv);
+ }
+ 
+-static struct kobj_type driver_ktype = {
++static const struct kobj_type driver_ktype = {
+ 	.sysfs_ops	= &driver_sysfs_ops,
+ 	.release	= driver_release,
+ };
+@@ -158,7 +158,7 @@ static void bus_release(struct kobject *kobj)
+ 	bus->p = NULL;
+ }
+ 
+-static struct kobj_type bus_ktype = {
++static const struct kobj_type bus_ktype = {
+ 	.sysfs_ops	= &bus_sysfs_ops,
+ 	.release	= bus_release,
+ };
+diff --git a/drivers/base/class.c b/drivers/base/class.c
+index 86ec554cfe60..3a0e8cf8970c 100644
+--- a/drivers/base/class.c
++++ b/drivers/base/class.c
+@@ -75,7 +75,7 @@ static const struct sysfs_ops class_sysfs_ops = {
+ 	.store	   = class_attr_store,
+ };
+ 
+-static struct kobj_type class_ktype = {
++static const struct kobj_type class_ktype = {
+ 	.sysfs_ops	= &class_sysfs_ops,
+ 	.release	= class_release,
+ 	.child_ns_type	= class_child_ns_type,
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index a3e14143ec0c..dd17852f1c03 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -2354,7 +2354,7 @@ static void device_get_ownership(const struct kobject *kobj, kuid_t *uid, kgid_t
+ 		dev->class->get_ownership(dev, uid, gid);
+ }
+ 
+-static struct kobj_type device_ktype = {
++static const struct kobj_type device_ktype = {
+ 	.release	= device_release,
+ 	.sysfs_ops	= &dev_sysfs_ops,
+ 	.namespace	= device_namespace,
+@@ -2992,7 +2992,7 @@ struct kobj_ns_type_operations *class_dir_child_ns_type(const struct kobject *ko
+ 	return dir->class->ns_type;
+ }
+ 
+-static struct kobj_type class_dir_ktype = {
++static const struct kobj_type class_dir_ktype = {
+ 	.release	= class_dir_release,
+ 	.sysfs_ops	= &kobj_sysfs_ops,
+ 	.child_ns_type	= class_dir_child_ns_type
+diff --git a/drivers/base/swnode.c b/drivers/base/swnode.c
+index 0a482212c7e8..81fb6d492c15 100644
+--- a/drivers/base/swnode.c
++++ b/drivers/base/swnode.c
+@@ -760,7 +760,7 @@ static void software_node_release(struct kobject *kobj)
+ 	kfree(swnode);
+ }
+ 
+-static struct kobj_type software_node_type = {
++static const struct kobj_type software_node_type = {
+ 	.release = software_node_release,
+ 	.sysfs_ops = &kobj_sysfs_ops,
+ };
+
+---
+base-commit: 95078069c1e70d1b3b141132d18d0c563acedd0c
+change-id: 20230204-kobj_type-driver-core-6b4bed402a5b
+
+Best regards,
+-- 
+Thomas Weißschuh <linux@weissschuh.net>
+
