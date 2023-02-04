@@ -2,95 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BFAA68AA76
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 15:01:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32BE268AA78
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 15:02:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233784AbjBDOB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 09:01:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58282 "EHLO
+        id S233803AbjBDOCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 09:02:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232566AbjBDOB0 (ORCPT
+        with ESMTP id S233830AbjBDOCO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 09:01:26 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBAE56A75;
-        Sat,  4 Feb 2023 06:01:25 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id s8so3341504pgg.11;
-        Sat, 04 Feb 2023 06:01:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y1rk0vjjTSrdPO9DtPn9g2ifZW3sZZpADISnEZxtoFQ=;
-        b=jSNYiH1k3WXK3P8rvhqh75aPiI+G/XoDlzs2AuXJrYfEwQXE+tS8k4UN2ax4ekAZqh
-         Q4aWaHFDBL//kjeNufun9nzJzTNH4IQrRmLQpPElo19rFGQs2QVR6005J6JN1xucILa/
-         JnrhFS22b0jinEdL+ASDkddGShx9C4WG504JT5m+e4gLdI+Dc1fhqS+BH8GWdyNXjetZ
-         a3eHnntrN/HXDWeljb0evjS9D9lfw2vBGIrur+YmtTJ0HoFtod5UTpsKYyTu5OAakcRJ
-         j6li6Sed8222GnutqZFVuSaetBAl1AHovWzMPf7PeVVqlcm7UveHpahAufEm7hLC3w+1
-         bsXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Y1rk0vjjTSrdPO9DtPn9g2ifZW3sZZpADISnEZxtoFQ=;
-        b=rlOYLWocdSLuh3Yserwr4EnIzqnW44oXEeDsbmfXKZyqRqcS/MxSKGHEJ2vzUt6JFz
-         Reh4UIF5xgUGI2agpNUEg6hgzLmNt/3Szhub0uorgiSqd1sncWKwWwDzm8wKn9qPv52i
-         gZGIIbuQGoY8n5FbaHDZlp+R9EJHLO+vrUbKTT/ZVoNLBB2Pc1xkf989ArJ9Fy5jBoqM
-         sSirQ4eSgQsQjTlt5gyuTeKIvU9h7Nw1ONr+e4k6wldV+atn9Fai5w56vA+0+kIbzehD
-         1Bo8eytI8iCgfeyJehSG8tkzXp6mB8myGkiFwBIrcPkxYW/xFL9Cpr/xNgb9t1N96953
-         MmoQ==
-X-Gm-Message-State: AO0yUKVcBUZjs5ceWC1RpIVGgNlZxs6Lo1ejLDWY3yP+GTjDy/EdwtDf
-        Y1LZt5vKVsZFDtQi+23WlR+o4eg0UOwUZ4ZvB7E=
-X-Google-Smtp-Source: AK7set82eHo9UmIAzit/YcrVkFeX6c9BbfWh8dIFzTX3vz8Q6BcGg+UJThK/RWpw9HAP8EUb13Cyf4dOB5NWR/TX3l8=
-X-Received: by 2002:a63:cc0f:0:b0:4cf:122f:2102 with SMTP id
- x15-20020a63cc0f000000b004cf122f2102mr2164398pgf.98.1675519285223; Sat, 04
- Feb 2023 06:01:25 -0800 (PST)
+        Sat, 4 Feb 2023 09:02:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A102128B;
+        Sat,  4 Feb 2023 06:02:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1ED7260C59;
+        Sat,  4 Feb 2023 14:02:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6317FC433EF;
+        Sat,  4 Feb 2023 14:01:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675519332;
+        bh=4tevTq0ZK3e0nDQwHERVCexCjZDk0MAnrNVo/rkAtsQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=joVtuQRYAVX0+8t9Tme5RiGcFra0dHmP91Fsusdtx8tAA3gVYL331+8inIDQe1R7K
+         g2oLr9taLiS+4od38oVeknqkd5+54Xk1nkd1RrfIre/74PbzP0WJXLIGk4nEy134Vs
+         89MKJMZaXJLqGzIcsmCXEcBQoK9wDUIeO0mHajMIJ+Sis5pA9+m+D4tiORXp41lmKn
+         HWnhw6Lnd7LuQaMWtmHrWMWNmNOneEEByt5BOX6bSJT/rictUO6IkR4NAozVaWFQiW
+         7i7t4c074Ct/i+ySIrDIwFSXgdKMRZBqInQ9ds+5YYqN0ebKjqIPh0YByC6fMy3So1
+         +GVt8Lm/LTb+w==
+Date:   Sat, 4 Feb 2023 14:01:46 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+Subject: Re: [PATCHv6 05/11] mfd: rk808: split into core and i2c
+Message-ID: <Y95lSpUaOnbSAOIC@google.com>
+References: <20230127181244.160887-1-sebastian.reichel@collabora.com>
+ <20230127181244.160887-6-sebastian.reichel@collabora.com>
+ <Y95jJYlqDayiaMP1@google.com>
 MIME-Version: 1.0
-References: <20230204134651.22569-1-namcaov@gmail.com> <Y95jtuMbcDiPRw/F@kroah.com>
-In-Reply-To: <Y95jtuMbcDiPRw/F@kroah.com>
-From:   Nam Cao <namcaov@gmail.com>
-Date:   Sat, 4 Feb 2023 15:01:14 +0100
-Message-ID: <CA+sZ8B9Wrr4yj3c6fiqFhKvZuYifV87EXBQ1pY_Km-p=3oE4ug@mail.gmail.com>
-Subject: Re: [PATCH] USB: serial: whiteheat: use stack instead of heap memory
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y95jJYlqDayiaMP1@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 4, 2023 at 2:55 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Sat, Feb 04, 2023 at 02:46:51PM +0100, Nam Cao wrote:
-> > Some buffers in whiteheat_attach() are small and only used locally. Move
-> > them to the stack to avoid complications with heap memory.
-> >
-> > Compile-tested only.
->
-> And that's the problem, you can't just compile test these things, the
-> code will blow up if you make these changes :(
->
-> All USB transfers need to come from memory that can be safely DMAed.
-> Stack memory is not that type of memory, you HAVE to allocate it
-> dynamically from the heap in order to have this guarantee.
->
-> So no, this patch is not acceptable, sorry.  You will see this pattern
-> in all USB drivers, all data must be dynamically allocated, even for 2
-> byte commands.
->
-> So yes, there was a reason we added this "complexity" to the driver, it
-> is required :)
+On Sat, 04 Feb 2023, Lee Jones wrote:
 
-Thanks for "the lecture", and sorry for the broken patch.
+> On Fri, 27 Jan 2023, Sebastian Reichel wrote:
+> 
+> > Split rk808 into a core and an i2c part in preperation for
+> > SPI support.
+> > 
+> > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> > ---
+> >  drivers/clk/Kconfig                   |   2 +-
+> >  drivers/input/misc/Kconfig            |   2 +-
+> >  drivers/mfd/Kconfig                   |   7 +-
+> >  drivers/mfd/Makefile                  |   3 +-
+> >  drivers/mfd/{rk808.c => rk8xx-core.c} | 209 +++++---------------------
+> >  drivers/mfd/rk8xx-i2c.c               | 200 ++++++++++++++++++++++++
+> >  drivers/pinctrl/Kconfig               |   2 +-
+> >  drivers/power/supply/Kconfig          |   2 +-
+> >  drivers/regulator/Kconfig             |   2 +-
+> >  drivers/rtc/Kconfig                   |   2 +-
+> >  include/linux/mfd/rk808.h             |   6 +
+> >  sound/soc/codecs/Kconfig              |   2 +-
+> >  12 files changed, 256 insertions(+), 183 deletions(-)
+> >  rename drivers/mfd/{rk808.c => rk8xx-core.c} (76%)
+> >  create mode 100644 drivers/mfd/rk8xx-i2c.c
+> 
+> Looks like you completely ignored (no response / no action) my review of
+> v4.  This submission is therefore not getting one!  All comments can be
+> superimposed from v4.
 
-Best regards,
-Nam
+s/v4/v5/
+
+-- 
+Lee Jones [李琼斯]
