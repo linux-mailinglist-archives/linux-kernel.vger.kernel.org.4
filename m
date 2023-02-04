@@ -2,74 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 127BA68A75A
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 01:55:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3E7468A75C
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 01:55:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232795AbjBDAzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 19:55:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38916 "EHLO
+        id S232932AbjBDAzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 19:55:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231511AbjBDAzo (ORCPT
+        with ESMTP id S232924AbjBDAzu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 19:55:44 -0500
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9BBF728D5
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 16:55:43 -0800 (PST)
-Received: by mail-il1-x129.google.com with SMTP id w13so2788642ilv.3
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 16:55:43 -0800 (PST)
+        Fri, 3 Feb 2023 19:55:50 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A2CA8412;
+        Fri,  3 Feb 2023 16:55:49 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id g9so4907266pfo.5;
+        Fri, 03 Feb 2023 16:55:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0pGOmD8iOI8HzwsY4SW9Fn2GAWMZfMvtWAKvd+ESNNg=;
-        b=UBeG1iP/p20mEMf6AW4qQrHb3dgSXelmFPpyEWBBc22fYrnLuWN9tSk7FUQw965Iqt
-         JWlm2CQXAxspSwPaAFxT6EL193tw3FefP+qLX5Kn/9UVCdSGXSxkVVfBqOAYj9Sa/+qC
-         tiouERz/4hWM2dbWLO/Ucu7JU2/DtaZVE0VjI=
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tBc9PufF8yq8ecca1vaKiSKt5NvyuWhFBAD5g9wxTs4=;
+        b=oROydJaZs8C+A2H0sxl0UplPKkfv4lIJFC9ZjmAFyTVvBXA+Zh/LOm0U8Q7tZDJboY
+         5EwrPnhtlSbFN/6xm+MTV1kEt4RzuiLeYxOEKB5oaebbIm9NNEqIGMUdq9qVm2+HMcig
+         2U4EKvGmp1prAqalJifKWr+YMdKMNHZgd5Lnc9Q5G6g7dw51oox5VKQGXshBoHJalTCf
+         8/UTcFE0m898qF3CcTTzlb7DERjRQTQau2UfE8KuznQ6uv9p9CC2YHGKgsx2XnJFz/2K
+         doHbuoTdV+qMVPx1hRucrvx7Zyo9+ENCrfbBpGgVxFFM700BqNyCq38SOeAJh7BVDlCI
+         8sbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0pGOmD8iOI8HzwsY4SW9Fn2GAWMZfMvtWAKvd+ESNNg=;
-        b=p+DYK7rP1TUxAG6Cft0iLTGhGB/E1Ydaf4CWbRO7+1azR/aGGkJVXXMJyNe4l1JuTI
-         Ioyq8mJzLXWFCQH9FG04KZ0+ZRhGDsk0BEAH327MAW7dLWCJLppiAn42zC6Y5OXNdlT0
-         JSHuFQ/vUn1BJafkoPeGHoQSOMAtB2G+IHCqPfrF+ciTKl7ggMgwpZx4BN1Apkhorhcx
-         O8i8YHivyjEg6jBqwwR2t24Ja3vipYm/Zg+EwNSZov1RkGCYxfS9tJhPk73i+Zt5cJti
-         RYtkv3cXc1IrTuhHxIIEvbbdMtWS2V7wSqInQwuYSrYUH+o1b9yYbPJ08023YudmdOnu
-         LOqg==
-X-Gm-Message-State: AO0yUKUXF9g5YN0E2xZCuWFOIXfz9Bbt5W4Ean+/ItMDo/FthelQeNzv
-        +cAcGpgpH9I8wAYdwxrgFKcOYQ==
-X-Google-Smtp-Source: AK7set/Hf/NYzhVNqxYJuB4Wqt3JA9vNvTCYKWTCwV4HUaPrzsbOxWMVVaUsfJnZHx5AlsR/jSdTvQ==
-X-Received: by 2002:a05:6e02:110f:b0:30e:f89b:6652 with SMTP id u15-20020a056e02110f00b0030ef89b6652mr5836124ilk.0.1675472143182;
-        Fri, 03 Feb 2023 16:55:43 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id y12-20020a056e021bec00b0030f46602063sm1243053ilv.2.2023.02.03.16.55.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Feb 2023 16:55:42 -0800 (PST)
-Message-ID: <2cde807a-7661-6311-ed96-7b510f286319@linuxfoundation.org>
-Date:   Fri, 3 Feb 2023 17:55:41 -0700
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tBc9PufF8yq8ecca1vaKiSKt5NvyuWhFBAD5g9wxTs4=;
+        b=BWBTCQ5rC6nu29Dg/81FXVMLgG6NdsF2YvSRx7J+mF8J0mR7PXtBvXHqU8ATXYxbf9
+         cCsQ1NPT1sINwG2Tf0Zu/jSxcX5w5BVqsF4fDAt/lhHPE6DNsS43sFhWoUzKJSupIhXv
+         4sBcs1UtpyKyeAZluWzlwZfQPa39NtQYALpCl1wsxZJplLAz6LaPdlfBfCANY8x7wqXc
+         Brr/nFuyem9ERj3GUDtJ59CqScpkf9BDLAlMasbr+2ucu2fcuthJWrM0Kl4IZVmWayOV
+         p64aQbB3E6dT/A3IwvvphvVISxxpqgX3CYy4sndRsn1iAdHZfTpKmEHJ0oELcUHQYgE5
+         mkQw==
+X-Gm-Message-State: AO0yUKUtG9Sj+hN//X6XJUNU3C5REvn+UXV6k5pyO3GF3Zm5SyZAQ7hI
+        f2gX76hgSYRpqsdRDoqLJEITDHuOPus=
+X-Google-Smtp-Source: AK7set8P8LeW9nlAt+mi0Vby+KQeB3+RvrcSxSiaRkAN7ElaNBtrKWorMeETB9RSFMmKIv8Zh6HorQ==
+X-Received: by 2002:a05:6a00:882:b0:593:908c:240 with SMTP id q2-20020a056a00088200b00593908c0240mr15989207pfj.14.1675472148465;
+        Fri, 03 Feb 2023 16:55:48 -0800 (PST)
+Received: from google.com ([2620:15c:9d:2:5a16:81a3:86ec:ceb2])
+        by smtp.gmail.com with ESMTPSA id 194-20020a6219cb000000b0058bc37f3d13sm2451808pfz.43.2023.02.03.16.55.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Feb 2023 16:55:47 -0800 (PST)
+Date:   Fri, 3 Feb 2023 16:55:44 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Rayyan Ansari <rayyan@ansari.sh>
+Cc:     linux-input@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Input: synaptics-rmi4: Fix SPI device ID
+Message-ID: <Y92tEG1UBrOJnS93@google.com>
+References: <20221219133717.1638496-1-rayyan@ansari.sh>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 5.10 0/9] 5.10.167-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230203101006.422534094@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230203101006.422534094@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221219133717.1638496-1-rayyan@ansari.sh>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,30 +71,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/3/23 03:13, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.167 release.
-> There are 9 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Mon, Dec 19, 2022 at 01:37:15PM +0000, Rayyan Ansari wrote:
+> Currently, the ID being set to "rmi4_spi" causes this warning:
+> "SPI driver rmi4_spi has no spi_device_id for syna,rmi4-spi"
 > 
-> Responses should be made by Sun, 05 Feb 2023 10:09:58 +0000.
-> Anything received after that time might be too late.
+> Change the ID to rmi4-spi to stop this warning.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.167-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+> Signed-off-by: Rayyan Ansari <rayyan@ansari.sh>
 
-Compiled and booted on my test system. No dmesg regressions.
+Applied, thank you.
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
-
-thanks,
--- Shuah
-
+-- 
+Dmitry
