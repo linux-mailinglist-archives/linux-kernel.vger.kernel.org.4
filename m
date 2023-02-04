@@ -2,138 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D22268A80B
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 04:59:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 987D268A80F
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 05:00:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232775AbjBDD72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 22:59:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54254 "EHLO
+        id S233006AbjBDEAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 23:00:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230353AbjBDD70 (ORCPT
+        with ESMTP id S232929AbjBDEAZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 22:59:26 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37A818F25C
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 19:59:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675483165; x=1707019165;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=M7bqmkIs21cLkXXirK6Jdi3PTzToH3nt3+xZiksdo4w=;
-  b=bkjvC2RNxJ/2pvs9aN+RQ/DnDJFOohPhAtFZ+nVZ/yOPxHhNAaBfKJU5
-   Gs+HI/BhidLxrhjSHuUfQIcjpILmWSPV2dkmhquoFnEhWa6Z4e2Xb29Bw
-   8ujQOfiCjUNnuSH0i9vZCdU7GbYH3h83R2yLKIzVt6x5ydAPeiuCPquCv
-   enlLwoExwhi8pP23ZN4+yFTaXK6W97l6SlbdYmVBmHuAp3YM7XpS156sd
-   Vie2R6kw83nPt68koBLFdRYnPgAeVtQaZJQdWyxheL3KLFq/vBMQ9wj01
-   VIF9gi6bxR5Cp0silIFVYq6YdZfw4fZs3tdoqgpeexFmwPeHqEHCvP/2R
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="331043632"
-X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
-   d="scan'208";a="331043632"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2023 19:59:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="789897836"
-X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
-   d="scan'208";a="789897836"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 03 Feb 2023 19:58:35 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pO9h8-00011G-0K;
-        Sat, 04 Feb 2023 03:58:30 +0000
-Date:   Sat, 04 Feb 2023 11:58:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:rcu/next] BUILD SUCCESS
- 3c597738435cba984b3e3459d87bd5dec4d84e83
-Message-ID: <63ddd7d1.zn4Hre7CDfX1J2GF%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Fri, 3 Feb 2023 23:00:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12D008F25E;
+        Fri,  3 Feb 2023 20:00:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 73138B82CDE;
+        Sat,  4 Feb 2023 04:00:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 15347C433A0;
+        Sat,  4 Feb 2023 04:00:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675483222;
+        bh=gyBg154DmWTXDHE6sWZ6ckQ5Zi7QUIMbaB7EYfuuyAw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=LDJ1z+g91HpwfQtROJctnK7gvWhFOU6sMxY7bJyJdwTdldSbpNAjOsE0jjNDD8dCv
+         Zx7Dq1Dcqj/kPSgDxnvhboKUJ0rzhIorV6zKbiZAMprHLqA5bysGGH1p0AKCUyHqYI
+         /UrzSxgVinjgT0p0FwfLY8sTXdx2LD+B0ap5y9wi2S9xZBX2qrK05vUKgLaGX6A6jL
+         g79Ew4XSSGECW7/JTxIYFULb//z/yQvBttX92slVo2/6k/jPgO+oRVLolYEW9DwyUt
+         1jPdXkQ+SiEhxQGXMW7C3DNNrHSQif1BTuLZsfjzEHNKuSkeLIO7vjOhca6GNiNE4p
+         dFE0BbYJ/iltA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DAD54E4448D;
+        Sat,  4 Feb 2023 04:00:21 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net: macb: Perform zynqmp dynamic configuration only for
+ SGMII interface
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167548322188.10981.1509367704209969692.git-patchwork-notify@kernel.org>
+Date:   Sat, 04 Feb 2023 04:00:21 +0000
+References: <1675340779-27499-1-git-send-email-radhey.shyam.pandey@amd.com>
+In-Reply-To: <1675340779-27499-1-git-send-email-radhey.shyam.pandey@amd.com>
+To:     Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+Cc:     nicolas.ferre@microchip.com, claudiu.beznea@microchip.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, andrew@lunn.ch, git@amd.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
-branch HEAD: 3c597738435cba984b3e3459d87bd5dec4d84e83  doc: Update whatisRCU.rst
+Hello:
 
-elapsed time: 747m
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-configs tested: 56
-configs skipped: 2
+On Thu, 2 Feb 2023 17:56:19 +0530 you wrote:
+> In zynqmp platforms where firmware supports dynamic SGMII configuration
+> but has other non-SGMII ethernet devices, it fails them with no packets
+> received at the RX interface.
+> 
+> To fix this behaviour perform SGMII dynamic configuration only
+> for the SGMII phy interface.
+> 
+> [...]
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Here is the summary with links:
+  - net: macb: Perform zynqmp dynamic configuration only for SGMII interface
+    https://git.kernel.org/netdev/net/c/c9011b028e95
 
-gcc tested configs:
-x86_64                            allnoconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-powerpc                           allnoconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-alpha                            allyesconfig
-arc                              allyesconfig
-sh                               allmodconfig
-x86_64                           rhel-8.3-bpf
-x86_64                           rhel-8.3-syz
-mips                             allyesconfig
-x86_64                         rhel-8.3-kunit
-powerpc                          allmodconfig
-x86_64                           rhel-8.3-kvm
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-ia64                             allmodconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                          rhel-8.3-func
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-arc                                 defconfig
-s390                             allmodconfig
-alpha                               defconfig
-s390                                defconfig
-s390                             allyesconfig
-i386                                defconfig
-riscv                randconfig-r042-20230204
-s390                 randconfig-r044-20230204
-arc                  randconfig-r043-20230204
-powerpc                     taishan_defconfig
-sparc                       sparc64_defconfig
-sh                           sh2007_defconfig
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-i386                             allyesconfig
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-
-clang tested configs:
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-x86_64                          rhel-8.3-rust
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-
+You are awesome, thank you!
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
