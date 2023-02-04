@@ -2,275 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BE34689FD8
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 18:02:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6895F689FC2
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 17:56:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232930AbjBCRCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 12:02:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50282 "EHLO
+        id S233469AbjBCQ4b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 11:56:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232100AbjBCRCT (ORCPT
+        with ESMTP id S232479AbjBCQ43 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 12:02:19 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4CED2100;
-        Fri,  3 Feb 2023 09:02:17 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2AFDE1474;
-        Fri,  3 Feb 2023 09:02:59 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.90.37])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1443B3F71E;
-        Fri,  3 Feb 2023 09:02:10 -0800 (PST)
-Date:   Fri, 3 Feb 2023 17:02:08 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     torvalds@linux-foundation.org, corbet@lwn.net, will@kernel.org,
-        boqun.feng@gmail.com, catalin.marinas@arm.com, dennis@kernel.org,
-        tj@kernel.org, cl@linux.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, joro@8bytes.org, suravee.suthikulpanit@amd.com,
-        robin.murphy@arm.com, dwmw2@infradead.org,
-        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
-        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
-        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
-        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-s390@vger.kernel.org,
-        iommu@lists.linux.dev, linux-arch@vger.kernel.org,
-        linux-crypto@vger.kernel.org
-Subject: Re: [PATCH v2 05/10] percpu: Wire up cmpxchg128
-Message-ID: <Y90+EINA9QRb+IlK@FVFF77S0Q05N>
-References: <20230202145030.223740842@infradead.org>
- <20230202152655.494373332@infradead.org>
+        Fri, 3 Feb 2023 11:56:29 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC064FADE;
+        Fri,  3 Feb 2023 08:56:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1675443379; x=1706979379;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=xWwEliwH3/2TbdcPq4FPWGC/tiCdnGbtpLGpXFn3YDc=;
+  b=E9CGWVVE3nXW51I9GvJnFqU6NZLAX+r2aiICUw859C1PoDt+Pf3Q4ftK
+   3Ow6p/KMbsX6NpVJLJ3fu1wMeHYl2OulPwDoGmwWfjLm6CtpC1KwNzrFE
+   6hEZgVFAC5WdgIiDJYNCzGJwP+e2ZxNMS9/pho9zFMGiXn5zKwFb3fv/4
+   tnVeae7Q5w7KggNSKcrHYvwMGJlWVOeIRjcCuinX/XD9qhIcRIQLQCssd
+   AZxyoLsYyWaHNauIWPm+0OK6+lJCRPsKkDx1FycuGMqqpvftJAUGK9uNx
+   ANLymy4R7tw1Yz85uKnERcfXnJO+0MDMw89CZdxH8i3evlWvMNRGRue92
+   g==;
+X-IronPort-AV: E=Sophos;i="5.97,271,1669100400"; 
+   d="scan'208";a="198833319"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 03 Feb 2023 09:56:18 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Fri, 3 Feb 2023 09:56:18 -0700
+Received: from CHE-LT-UNGSOFTWARE.microchip.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2507.16 via Frontend Transport; Fri, 3 Feb 2023 09:56:12 -0700
+From:   Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <linux-serial@vger.kernel.org>, <gregkh@linuxfoundation.org>,
+        <jirislaby@kernel.org>, <ilpo.jarvinen@linux.intel.com>,
+        <macro@orcam.me.uk>, <andriy.shevchenko@linux.intel.com>,
+        <lukas@wunner.de>, <cang1@live.co.uk>,
+        <matthew.gerlach@linux.intel.com>, <deller@gmx.de>,
+        <phil.edworthy@renesas.com>, <geert+renesas@glider.be>,
+        <marpagan@redhat.com>, <u.kleine-koenig@pengutronix.de>,
+        <etremblay@distech-controls.com>, <wander@redhat.com>
+Subject: [PATCH v11 tty-next 0/4] serial: 8250_pci1xxxx: Add driver for the pci1xxxx's quad-uart function
+Date:   Sat, 4 Feb 2023 11:01:34 +0530
+Message-ID: <20230204053138.2520105-1-kumaravel.thiagarajan@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230202152655.494373332@infradead.org>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 03:50:35PM +0100, Peter Zijlstra wrote:
-> In order to replace cmpxchg_double() with the newly minted
-> cmpxchg128() family of functions, wire it up in this_cpu_cmpxchg().
-> 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->  arch/arm64/include/asm/percpu.h |   21 +++++++++++++++
->  arch/s390/include/asm/percpu.h  |   17 ++++++++++++
->  arch/x86/include/asm/percpu.h   |   56 ++++++++++++++++++++++++++++++++++++++++
->  include/asm-generic/percpu.h    |    8 +++++
->  include/linux/percpu-defs.h     |   20 ++++++++++++--
->  5 files changed, 120 insertions(+), 2 deletions(-)
+pci1xxxx is a PCIe switch with a multi-function endpoint on one of its
+downstream ports. Quad-uart is one of the functions in the multi-function
+endpoint. This patch adds device driver for the quad-uart function and
+enumerates between 1 to 4 instances of uarts based on the PCIe subsystem
+device ID.
 
-For arm64:
+The changes from v1->v2->v3->v4->v5->v6->v7->v8->v9->v10->v11 are mentioned
+in each patch in the patchset.
 
-Acked-by: Mark Rutland <mark.rutland@arm.com>
+Thanks to Andy Shevchenko, Ilpo Jarvinen, Chritophe JAILLET, Geert
+Uytterhoeven, Greg KH, Jiri Slaby for their review comments.
 
-Mark.
+Kumaravel Thiagarajan (4):
+  serial: 8250_pci: Add serial8250_pci_setup_port definition in
+    8250_pcilib.c
+  serial: 8250_pci1xxxx: Add driver for quad-uart support
+  serial: 8250_pci1xxxx: Add RS485 support to quad-uart driver
+  serial: 8250_pci1xxxx: Add power management functions to quad-uart
+    driver
 
-> 
-> --- a/arch/arm64/include/asm/percpu.h
-> +++ b/arch/arm64/include/asm/percpu.h
-> @@ -140,6 +140,10 @@ PERCPU_RET_OP(add, add, ldadd)
->   * re-enabling preemption for preemptible kernels, but doing that in a way
->   * which builds inside a module would mean messing directly with the preempt
->   * count. If you do this, peterz and tglx will hunt you down.
-> + *
-> + * Not to mention it'll break the actual preemption model for missing a
-> + * preemption point when TIF_NEED_RESCHED gets set while preemption is
-> + * disabled.
->   */
->  #define this_cpu_cmpxchg_double_8(ptr1, ptr2, o1, o2, n1, n2)		\
->  ({									\
-> @@ -240,6 +244,23 @@ PERCPU_RET_OP(add, add, ldadd)
->  #define this_cpu_cmpxchg_8(pcp, o, n)	\
->  	_pcp_protect_return(cmpxchg_relaxed, pcp, o, n)
->  
-> +#define this_cpu_cmpxchg_16(pcp, o, n)					\
-> +({									\
-> +	typedef typeof(pcp) pcp_op_T__;					\
-> +	union {								\
-> +		pcp_op_T__ pot;						\
-> +		u128 val;						\
-> +	} old__, new__, ret__;						\
-> +	pcp_op_T__ *ptr__;						\
-> +	old__.pot = o;							\
-> +	new__.pot = n;							\
-> +	preempt_disable_notrace();					\
-> +	ptr__ = raw_cpu_ptr(&(pcp));					\
-> +	ret__.val = cmpxchg128_local((void *)ptr__, old__.val, new__.val); \
-> +	preempt_enable_notrace();					\
-> +	ret__.pot;							\
-> +})
-> +
->  #ifdef __KVM_NVHE_HYPERVISOR__
->  extern unsigned long __hyp_per_cpu_offset(unsigned int cpu);
->  #define __per_cpu_offset
-> --- a/arch/s390/include/asm/percpu.h
-> +++ b/arch/s390/include/asm/percpu.h
-> @@ -148,6 +148,23 @@
->  #define this_cpu_cmpxchg_4(pcp, oval, nval) arch_this_cpu_cmpxchg(pcp, oval, nval)
->  #define this_cpu_cmpxchg_8(pcp, oval, nval) arch_this_cpu_cmpxchg(pcp, oval, nval)
->  
-> +#define this_cpu_cmpxchg_16(pcp, oval, nval)				\
-> +({									\
-> +	typedef typeof(pcp) pcp_op_T__;					\
-> +	union {								\
-> +		pcp_op_T__ pot;						\
-> +		u128 val;						\
-> +	} old__, new__, ret__;						\
-> +	pcp_op_T__ *ptr__;						\
-> +	old__.pot = oval;						\
-> +	new__.pot = nval;						\
-> +	preempt_disable_notrace();					\
-> +	ptr__ = raw_cpu_ptr(&(pcp));					\
-> +	ret__.val = cmpxchg128((void *)ptr__, old__.val, new__.val);	\
-> +	preempt_enable_notrace();					\
-> +	ret__.pot;							\
-> +})
-> +
->  #define arch_this_cpu_xchg(pcp, nval)					\
->  ({									\
->  	typeof(pcp) *ptr__;						\
-> --- a/arch/x86/include/asm/percpu.h
-> +++ b/arch/x86/include/asm/percpu.h
-> @@ -210,6 +210,62 @@ do {									\
->  	(typeof(_var))(unsigned long) pco_old__;			\
->  })
->  
-> +#if defined(CONFIG_X86_32) && defined(CONFIG_X86_CMPXCHG64)
-> +#define percpu_cmpxchg64_op(size, qual, _var, _oval, _nval)		\
-> +({									\
-> +	union {								\
-> +		typeof(_var) var;					\
-> +		struct {						\
-> +			u32 low, high;					\
-> +		};							\
-> +	} old__, new__;							\
-> +									\
-> +	old__.var = _oval;						\
-> +	new__.var = _nval;						\
-> +									\
-> +	asm qual ("cmpxchg8b " __percpu_arg([var])			\
-> +		  : [var] "+m" (_var),					\
-> +		    "+a" (old__.low),					\
-> +		    "+d" (old__.high)					\
-> +		  : "b" (new__.low),					\
-> +		    "c" (new__.high)					\
-> +		  : "memory");						\
-> +									\
-> +	old__.var;							\
-> +})
-> +
-> +#define raw_cpu_cmpxchg_8(pcp, oval, nval)	percpu_cmpxchg64_op(8,         , pcp, oval, nval)
-> +#define this_cpu_cmpxchg_8(pcp, oval, nval)	percpu_cmpxchg64_op(8, volatile, pcp, oval, nval)
-> +#endif
-> +
-> +#ifdef CONFIG_X86_64
-> +#define percpu_cmpxchg128_op(size, qual, _var, _oval, _nval)		\
-> +({									\
-> +	union {								\
-> +		typeof(_var) var;					\
-> +		struct {						\
-> +			u64 low, high;					\
-> +		};							\
-> +	} old__, new__;							\
-> +									\
-> +	old__.var = _oval;						\
-> +	new__.var = _nval;						\
-> +									\
-> +	asm qual ("cmpxchg16b " __percpu_arg([var])			\
-> +		  : [var] "+m" (_var),					\
-> +		    "+a" (old__.low),					\
-> +		    "+d" (old__.high)					\
-> +		  : "b" (new__.low),					\
-> +		    "c" (new__.high)					\
-> +		  : "memory");						\
-> +									\
-> +	old__.var;							\
-> +})
-> +
-> +#define raw_cpu_cmpxchg_16(pcp, oval, nval)	percpu_cmpxchg128_op(16,         , pcp, oval, nval)
-> +#define this_cpu_cmpxchg_16(pcp, oval, nval)	percpu_cmpxchg128_op(16, volatile, pcp, oval, nval)
-> +#endif
-> +
->  /*
->   * this_cpu_read() makes gcc load the percpu variable every time it is
->   * accessed while this_cpu_read_stable() allows the value to be cached.
-> --- a/include/asm-generic/percpu.h
-> +++ b/include/asm-generic/percpu.h
-> @@ -298,6 +298,10 @@ do {									\
->  #define raw_cpu_cmpxchg_8(pcp, oval, nval) \
->  	raw_cpu_generic_cmpxchg(pcp, oval, nval)
->  #endif
-> +#ifndef raw_cpu_cmpxchg_16
-> +#define raw_cpu_cmpxchg_16(pcp, oval, nval) \
-> +	raw_cpu_generic_cmpxchg(pcp, oval, nval)
-> +#endif
->  
->  #ifndef raw_cpu_cmpxchg_double_1
->  #define raw_cpu_cmpxchg_double_1(pcp1, pcp2, oval1, oval2, nval1, nval2) \
-> @@ -423,6 +427,10 @@ do {									\
->  #define this_cpu_cmpxchg_8(pcp, oval, nval) \
->  	this_cpu_generic_cmpxchg(pcp, oval, nval)
->  #endif
-> +#ifndef this_cpu_cmpxchg_16
-> +#define this_cpu_cmpxchg_16(pcp, oval, nval) \
-> +	this_cpu_generic_cmpxchg(pcp, oval, nval)
-> +#endif
->  
->  #ifndef this_cpu_cmpxchg_double_1
->  #define this_cpu_cmpxchg_double_1(pcp1, pcp2, oval1, oval2, nval1, nval2) \
-> --- a/include/linux/percpu-defs.h
-> +++ b/include/linux/percpu-defs.h
-> @@ -343,6 +343,22 @@ static inline void __this_cpu_preempt_ch
->  	pscr2_ret__;							\
->  })
->  
-> +#define __pcpu_size16_call_return2(stem, variable, ...)			\
-> +({									\
-> +	typeof(variable) pscr2_ret__;					\
-> +	__verify_pcpu_ptr(&(variable));					\
-> +	switch(sizeof(variable)) {					\
-> +	case 1: pscr2_ret__ = stem##1(variable, __VA_ARGS__); break;	\
-> +	case 2: pscr2_ret__ = stem##2(variable, __VA_ARGS__); break;	\
-> +	case 4: pscr2_ret__ = stem##4(variable, __VA_ARGS__); break;	\
-> +	case 8: pscr2_ret__ = stem##8(variable, __VA_ARGS__); break;	\
-> +	case 16: pscr2_ret__ = stem##16(variable, __VA_ARGS__); break;	\
-> +	default:							\
-> +		__bad_size_call_parameter(); break;			\
-> +	}								\
-> +	pscr2_ret__;							\
-> +})
-> +
->  /*
->   * Special handling for cmpxchg_double.  cmpxchg_double is passed two
->   * percpu variables.  The first has to be aligned to a double word
-> @@ -425,7 +441,7 @@ do {									\
->  #define raw_cpu_add_return(pcp, val)	__pcpu_size_call_return2(raw_cpu_add_return_, pcp, val)
->  #define raw_cpu_xchg(pcp, nval)		__pcpu_size_call_return2(raw_cpu_xchg_, pcp, nval)
->  #define raw_cpu_cmpxchg(pcp, oval, nval) \
-> -	__pcpu_size_call_return2(raw_cpu_cmpxchg_, pcp, oval, nval)
-> +	__pcpu_size16_call_return2(raw_cpu_cmpxchg_, pcp, oval, nval)
->  #define raw_cpu_cmpxchg_double(pcp1, pcp2, oval1, oval2, nval1, nval2) \
->  	__pcpu_double_call_return_bool(raw_cpu_cmpxchg_double_, pcp1, pcp2, oval1, oval2, nval1, nval2)
->  
-> @@ -512,7 +528,7 @@ do {									\
->  #define this_cpu_add_return(pcp, val)	__pcpu_size_call_return2(this_cpu_add_return_, pcp, val)
->  #define this_cpu_xchg(pcp, nval)	__pcpu_size_call_return2(this_cpu_xchg_, pcp, nval)
->  #define this_cpu_cmpxchg(pcp, oval, nval) \
-> -	__pcpu_size_call_return2(this_cpu_cmpxchg_, pcp, oval, nval)
-> +	__pcpu_size16_call_return2(this_cpu_cmpxchg_, pcp, oval, nval)
->  #define this_cpu_cmpxchg_double(pcp1, pcp2, oval1, oval2, nval1, nval2) \
->  	__pcpu_double_call_return_bool(this_cpu_cmpxchg_double_, pcp1, pcp2, oval1, oval2, nval1, nval2)
->  
-> 
-> 
+ MAINTAINERS                             |   7 +
+ drivers/tty/serial/8250/8250_pci.c      |  25 +-
+ drivers/tty/serial/8250/8250_pci1xxxx.c | 494 ++++++++++++++++++++++++
+ drivers/tty/serial/8250/8250_pcilib.c   |  39 ++
+ drivers/tty/serial/8250/8250_pcilib.h   |  15 +
+ drivers/tty/serial/8250/8250_port.c     |   8 +
+ drivers/tty/serial/8250/Kconfig         |  15 +
+ drivers/tty/serial/8250/Makefile        |   2 +
+ include/uapi/linux/serial_core.h        |   3 +
+ 9 files changed, 586 insertions(+), 22 deletions(-)
+ create mode 100644 drivers/tty/serial/8250/8250_pci1xxxx.c
+ create mode 100644 drivers/tty/serial/8250/8250_pcilib.c
+ create mode 100644 drivers/tty/serial/8250/8250_pcilib.h
+
+-- 
+2.25.1
+
