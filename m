@@ -2,148 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E53068AD7D
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 00:42:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9627068AD80
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 00:46:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbjBDXmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 18:42:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39844 "EHLO
+        id S230395AbjBDXqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 18:46:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjBDXmQ (ORCPT
+        with ESMTP id S230175AbjBDXqL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 18:42:16 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE64D21952;
-        Sat,  4 Feb 2023 15:42:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=a1uYd+o29Q7pkVIXovCbwFOCc6DFqpbczL55lI14mQ8=; b=0C68ALlUcoU31fLWmirm6nTXNK
-        eziccq64O+XT9NJ+tsVGYDy1ava4KWiVfMFvAe/zKBo3Em/RJBTEuJu3OoIiyFk6BPfo2Ysq92ybF
-        jQdxkSVHcRgnlizGQXQKoS4nwe9AmKI26hf9pAAZXUDfXqAWZsSy2T5iG1FMsz8w21D7kPxZuOT9q
-        BHu9Vn5WsnkfFq0oL+1yd1FEdaDyWjO7VSKW10fs4JfikKHMycBi+lf8lhQwFDVVbWsMSdMvpUnY5
-        pEhOPeDayTUo96PZ5HU539I69BZ58Cm5o3CbyIDYsMR7fm3tBpmiomlhH0w73lRnw66h4CqFGcP86
-        e5VKabtw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:36428)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pOSAV-0006xA-2u; Sat, 04 Feb 2023 23:42:02 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pOSAL-0008Hp-W5; Sat, 04 Feb 2023 23:41:54 +0000
-Date:   Sat, 4 Feb 2023 23:41:53 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     Vladimir Oltean <olteanv@gmail.com>, netdev@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Jianhui Zhao <zhaojh329@gmail.com>,
-        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
-Subject: Re: [PATCH 9/9] net: dsa: mt7530: use external PCS driver
-Message-ID: <Y97tQaMgU/aqEdN5@shell.armlinux.org.uk>
-References: <cover.1675407169.git.daniel@makrotopia.org>
- <cover.1675407169.git.daniel@makrotopia.org>
- <677a5e37aab97a4f992d35c41329733c5f3082fb.1675407169.git.daniel@makrotopia.org>
- <677a5e37aab97a4f992d35c41329733c5f3082fb.1675407169.git.daniel@makrotopia.org>
- <20230203221915.tvg4rrjv5cnkshuf@skbuf>
- <Y95zaIJbCj3QIdqC@makrotopia.org>
+        Sat, 4 Feb 2023 18:46:11 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3CAE22A14
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 15:46:08 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id c10-20020a17090a1d0a00b0022e63a94799so12077237pjd.2
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Feb 2023 15:46:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=heitbaum.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=J+jdujSeP2mHDJ6PO03JdJUpF+OgLYCSJ56+6Fm8Qok=;
+        b=Re0S/6cz86wse3Z6m6Kr8TIJj+1Sem2PjHzeLMsKOMQCzmlYLU17M7hHPLJbBu3jF6
+         kB/QmjUN6Jm6qvE5Yeev9198dB7WAvb1emSnNRe3rIaRrvnwC0B/cqSkvm8kW269jPY3
+         Abp6J+ZTyRAs1BumfTZ6gozCv7NFq5VSZYZ4A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=J+jdujSeP2mHDJ6PO03JdJUpF+OgLYCSJ56+6Fm8Qok=;
+        b=K9rdz0H6VHLHNl0At9brMyMtzvGAtt99Wv6PfyIxKVVeLIeyBCQuL4sCxAbn89O6k7
+         k3LHmgJPa1Bhbyloi6DhOgJq6emkyAnHmFurIlCBPuE7paqUXuI1LHeF8FDC+g0d8Cpd
+         PGbOhtBmMsA1SEnWr5bHVTIHOF8exidgxKT6ekUTmZAeOCw1kaLLq6N0/w8zG/8NUxx9
+         P1Hg1JM66nQJs3nyCOLwuJJ5dHjDqSXPzUnZWh301TBXbp9vqrg758gl6mXg8PuX0chT
+         LQIxx7K/taKrdpoUVnLL/OJwoYQbwumtJfT6C5uxMj0/lA4SLTULuGhVoTdelEF3xXJS
+         u6ZQ==
+X-Gm-Message-State: AO0yUKVcYuiLhyQWxMxBkseBlaUsQeSHpp9V14HSm46B3WAxMEFqBe0H
+        DgcjglZlj+SNfct5XjBt9p4V2w==
+X-Google-Smtp-Source: AK7set+1fSsPfdowmjfG5BTcGzkvXsTp7vgzLwkQGJOOmbmGBC6LN99rGP5Kj75XNJzrdKefS1bXmw==
+X-Received: by 2002:a17:90b:3b8b:b0:226:3f8:5b78 with SMTP id pc11-20020a17090b3b8b00b0022603f85b78mr15636263pjb.13.1675554368018;
+        Sat, 04 Feb 2023 15:46:08 -0800 (PST)
+Received: from 8da818ad58c5 (124-148-239-102.tpgi.com.au. [124.148.239.102])
+        by smtp.gmail.com with ESMTPSA id f3-20020a17090a8e8300b0022c08b63564sm3795121pjo.52.2023.02.04.15.46.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Feb 2023 15:46:06 -0800 (PST)
+Date:   Sat, 4 Feb 2023 23:45:58 +0000
+From:   Rudi Heitbaum <rudi@heitbaum.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.1 00/28] 6.1.10-rc1 review
+Message-ID: <20230204234558.GA3214795@8da818ad58c5>
+References: <20230203101009.946745030@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y95zaIJbCj3QIdqC@makrotopia.org>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+In-Reply-To: <20230203101009.946745030@linuxfoundation.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
-
-I haven't reviewed the patches yet, and probably won't for a while.
-(I'm recovering from Covid).
-
-On Sat, Feb 04, 2023 at 03:02:00PM +0000, Daniel Golle wrote:
-> Hi Vladimir,
+On Fri, Feb 03, 2023 at 11:12:48AM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.10 release.
+> There are 28 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> thank you for the review!
-> 
-> On Sat, Feb 04, 2023 at 12:19:15AM +0200, Vladimir Oltean wrote:
-> > On Fri, Feb 03, 2023 at 07:06:53AM +0000, Daniel Golle wrote:
-> > > @@ -2728,11 +2612,14 @@ mt753x_phylink_mac_select_pcs(struct dsa_switch *ds, int port,
-> > >  
-> > >  	switch (interface) {
-> > >  	case PHY_INTERFACE_MODE_TRGMII:
-> > > +		return &priv->pcs[port].pcs;
-> > >  	case PHY_INTERFACE_MODE_SGMII:
-> > >  	case PHY_INTERFACE_MODE_1000BASEX:
-> > >  	case PHY_INTERFACE_MODE_2500BASEX:
-> > > -		return &priv->pcs[port].pcs;
-> > > +		if (!mt753x_is_mac_port(port))
-> > > +			return ERR_PTR(-EINVAL);
-> > 
-> > What is the reason for returning ERR_PTR(-EINVAL) to mac_select_pcs()?
-> 
-> The SerDes PCS units are only available for port 5 and 6. The code
-> should make sure that the corresponding interface modes are only used
-> on these two ports, so a BUG_ON(!mt753x_is_mac_port(port)) would also
-> do the trick, I guess. However, as dsa_port_phylink_mac_select_pcs may
-> also return ERR_PTR(-EOPNOTSUPP), returning ERR_PTR(-EINVAL) felt like
-> the right thing to do in that case.
-> Are you suggesting to use BUG_ON() instead or rather return
-> ERR_PTR(-EOPNOTSUPP)?
+> Responses should be made by Sun, 05 Feb 2023 10:09:58 +0000.
+> Anything received after that time might be too late.
 
-Returning ERR_PTR(-EOPNOTSUPP) from mac_select_pcs() must not be done
-conditionally - it means that "this instance does not support the
-mac_select_pcs() interface" and phylink will never call it again.
+Hi Greg,
 
-It was implemented to provide DSA a way to tell phylink that the DSA
-driver doesn't implement this interface - phylink originally checked
-whether mac_ops->mac_select_pcs was NULL, but with DSA's layering,
-such a check can only be made by a runtime call.
+6.1.10-rc1 tested.
 
-Returning NULL means "there is no PCS for this interface mode", and
-returning any other error code essentially signifies that the
-interface mode is not supported (even e.g. GMII or INTERNAL)...
-which really *should* be handled by setting supported_interfaces
-correctly in the first place.
+Run tested on:
+- Allwinner H6 (Tanix TX6)
+- Intel Alder Lake x86_64 (nuc12 i7-1260P)
 
-I would much prefer drivers to just return NULL if they have no PCS,
-even for ports where it's not possible, or not implement the
-interface over returning some kind of error code.
+In addition - build tested for:
+- Allwinner A64
+- Allwinner H3
+- Allwinner H5
+- NXP iMX6
+- NXP iMX8
+- Qualcomm Dragonboard
+- Rockchip RK3288
+- Rockchip RK3328
+- Rockchip RK3399pro
+- Samsung Exynos
 
-The only time I would expect mac_select_pcs() to return an error is
-where it needed to do something in order to evaluate whether to
-return a PCS or not, and it encountered an error while trying to
-evaluate that or some truely bizarre situation. E.g. a failed
-memory allocation, or "we know that a PCS is required for this but
-we're missing it". Something of that ilk.
-
-Anyway, more rest needed.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
+--
+Rudi
