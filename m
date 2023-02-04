@@ -2,69 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C59568A8CF
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 08:45:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18B5A68A8D2
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 08:45:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230222AbjBDHkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 02:40:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40858 "EHLO
+        id S233085AbjBDHpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 02:45:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjBDHkr (ORCPT
+        with ESMTP id S229449AbjBDHpJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 02:40:47 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73DC688F2A
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 23:40:46 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id ay1so5220956pfb.7
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 23:40:46 -0800 (PST)
+        Sat, 4 Feb 2023 02:45:09 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC4017167;
+        Fri,  3 Feb 2023 23:45:08 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id a2so6129354wrd.6;
+        Fri, 03 Feb 2023 23:45:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YzBD3RjkEQVXJjAd0KjuXJvflPQdSU1uG45LcQ+axyA=;
-        b=RENpDL0ormsJ7IFq6XOd33iTswafvREQmPa21GqLxJNFQC37/1N13rjNCBT7deojSy
-         ZbkMTw3VYSxFIlnCvRVDCRqmvYxg68C0rMnCqqvSMY6tKd0gjbSZLrOxlV0npZSCLx4G
-         Ki8QZYdm9dQAdoN3atlUHhLhnr9NXrxlPPdlLj5A76ECh2Mr4FA1cTf9wJTvyS6xrLEe
-         OBL10SqFxg2t7+yDgsVwcb7YaNiCcWxJLYmVFL2bJNVYsFdXd4Ri8/Ob6i9Rp4qjPrq5
-         8JDx1Q7ItLHT4lznnpPdXR9/ymGt/jRDwtfMQ0dgUmkmMsJAOPvZMMhavafPvIC2MIOD
-         3zOA==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vi23fWS6AbqcC/EHm6LEeuRMdq+4C0t28dniBnsKSyw=;
+        b=O+KhABVpghMPPtrq2guyS0hz4odNOKgTzu/oVSamAh00RRleZRSkGBbMR8qnVHABPh
+         vUEP41OLdSVCNTauPunl6XFExN7dUCDuhMdE3Mi6GrQOB//+aVqpXAw3tVF7IGu23Wh5
+         HEpLJV+kfdybfUHtYDh6+r+UKCt0wZ7jRhAthqpLiu2dITx7QdiIHumb7iPLIXT7+8Ur
+         dYIpcxlhsyhwk9cD5FEJ41Cs68yRV/x0B/f31c56AjOvqh2mVBG7Ya0znc9QDdQWpP9x
+         gdCNoxiJSB6r6iByCbRpFNjhYRh7DEHeCW6BJCcTaTj65c05p0iIWzqs6hoa/uOJKN6L
+         +YPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YzBD3RjkEQVXJjAd0KjuXJvflPQdSU1uG45LcQ+axyA=;
-        b=2AOtYe3IG/ruQ2r2qH8K8Dqlo/81H7HE3hHd65itNFXZMOo25OgjOf7QHiDrw6vN8G
-         hZYMBdDKrkiSQdAgHdY0yndN80k4+Mu7199cqnTHskYzA3rSA4I2+tVUoRzC9tfYFV4M
-         EW9WH8DNb0nAGsM6Yz2GWlpbdcpXaLHMh8ahbmDtxEQfziIZDiY7uMDgAFqX87R5zH6y
-         ndU5zZyhkZ46ehJHaVKSresG/VnNKREvUwowv9+nxiU9b6fwdKsxsKScSZUeI8tlcV1B
-         qZ5v6MSrzq9x68Kccvt1tKK4g8riKTofBod8SneX3qRe/bmtwznVUTBl2niEO03v4JMN
-         txDw==
-X-Gm-Message-State: AO0yUKVl5RUJmY5uMTanr1tMeQnpXBR5E3N07vGduMJASdKn/TRm4ut0
-        jDLYN+qqTYDTny2L8f84Cqg=
-X-Google-Smtp-Source: AK7set8f0i9EA2P3Rw+dA8chIk/luv7g0KrwFPb+ge3eiVKIkln864swiKltUWk2WX1RAHyR31htCA==
-X-Received: by 2002:a05:6a00:1493:b0:593:92b5:d99f with SMTP id v19-20020a056a00149300b0059392b5d99fmr15602140pfu.32.1675496445847;
-        Fri, 03 Feb 2023 23:40:45 -0800 (PST)
-Received: from debian.me (subs28-116-206-12-54.three.co.id. [116.206.12.54])
-        by smtp.gmail.com with ESMTPSA id h1-20020a056a00170100b00593c1c5bd0esm3047340pfc.164.2023.02.03.23.40.44
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vi23fWS6AbqcC/EHm6LEeuRMdq+4C0t28dniBnsKSyw=;
+        b=IsnhXtJ00WtkH0v7n70/NXHiDKhouGuQgSUBtzpPvyKi3tvd9O2y5QRccgUgEXkVMo
+         KaStZSWv7LGG2tNLY0NZvvBuFhm4e+p29Xklxdo6IxaGbw9nzn4rp7WcyEvsDRx73eMu
+         lwvz1xPYG9CRjxGvRJpcQi3c/WPiZo7xtRyJAvbHv2mGwPvjR9cVvp67si0aEyKmV1X/
+         1pFz6PozO7V9jSLtI/arsavtr45rvNvyajT286jZDov5vxzoBjcGk14k6SyA20kz/BgB
+         3j7dsWX5cLLEhX6tn4wpoiQugWMJNhKyBF3QCoY8LoxR4V574d5jJu354OzGOccPaVsG
+         tGzA==
+X-Gm-Message-State: AO0yUKXR6cmnLDtTmg07KpcR9XYikYb6InPYZh5QsROeuuBakKW0AkFj
+        DM9+4R8i+8NijnTDr6hNPJw=
+X-Google-Smtp-Source: AK7set+p5IYw4urrrNtzVH7M1FRDr9IFZf/VnXa0Kw4ejbTUTLwR8Ie8/Wq6AL1hY9oo3VORPd7BQQ==
+X-Received: by 2002:adf:de8f:0:b0:2c3:db5b:7280 with SMTP id w15-20020adfde8f000000b002c3db5b7280mr2205110wrl.56.1675496706068;
+        Fri, 03 Feb 2023 23:45:06 -0800 (PST)
+Received: from toolbox.. ([87.200.95.144])
+        by smtp.gmail.com with ESMTPSA id f2-20020a5d50c2000000b00267bcb1bbe5sm3735814wrt.56.2023.02.03.23.45.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 23:40:45 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id 245E310544C; Sat,  4 Feb 2023 14:40:41 +0700 (WIB)
-Date:   Sat, 4 Feb 2023 14:40:41 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Guru Mehar Rachaputi <gurumeharrachaputi@gmail.com>,
-        Forest Bond <forest@alittletooquiet.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: Regarding checkpatch camelcase issues
-Message-ID: <Y94L+WNGGfvrg6Mg@debian.me>
-References: <Y93eQqaYdL146Z65@combine-ThinkPad-S1-Yoga>
+        Fri, 03 Feb 2023 23:45:05 -0800 (PST)
+From:   Christian Hewitt <christianshewitt@gmail.com>
+To:     Sean Young <sean@mess.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     Christian Hewitt <christianshewitt@gmail.com>
+Subject: [PATCH v2 0/2] media: rc: add keymap and bindings for Beelink Mini MXIII remote
+Date:   Sat,  4 Feb 2023 07:44:59 +0000
+Message-Id: <20230204074501.3421910-1-christianshewitt@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ivj1S5qjuJSsAg1Z"
-Content-Disposition: inline
-In-Reply-To: <Y93eQqaYdL146Z65@combine-ThinkPad-S1-Yoga>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -75,58 +73,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series adds bindings and keymap for the Beelink Mini MXIII Android
+STB device. This is a very simple remote with a real MUTE button (not a
+mouse button remapped).
 
---ivj1S5qjuJSsAg1Z
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Changes since v1:
+- Split bindings and keymap into separate patches
 
-On Sat, Feb 04, 2023 at 05:25:38AM +0100, Guru Mehar Rachaputi wrote:
-> Thanks for your support.
->=20
-> I wanted to confirm if each checkpatch encounter for camelcase issue shou=
-ld
-> be fixed in a new patch?
->=20
-> For example: If the issue is with same variable, then multiple
-> modifications can be made in one patch.
->=20
->   -> above example is OK
->=20
->=20
-> For example: If the issue is with multiple variables, then multiple
-> modifications can be made in one patch.
->=20
->   -> above example is NOT OK / NG
->=20
->=20
-> Please confirm me if my understanding is correct?
->=20
+Christian Hewitt (2):
+  dt-bindings: media: rc: add rc-beelink-mxiii
+  media: rc: add Beelink Mini MXIII keymap
 
-I guess you have generated a patch series, then check it through
-checkpatch.
+ .../devicetree/bindings/media/rc.yaml         |  1 +
+ drivers/media/rc/keymaps/Makefile             |  1 +
+ drivers/media/rc/keymaps/rc-beelink-mxiii.c   | 57 +++++++++++++++++++
+ include/media/rc-map.h                        |  1 +
+ 4 files changed, 60 insertions(+)
+ create mode 100644 drivers/media/rc/keymaps/rc-beelink-mxiii.c
 
-Indeed, if checkpatch complains at a particular patch, you need to do
-interactive rebase. Make sure that rebase todo list contains "edit"
-lines on commit you want to fix up. After that, fix these complaints.
+-- 
+2.34.1
 
-When you're done, regenerate the patch series and make sure that there
-are no checkpatch complains on it.
-
-Thanks.
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---ivj1S5qjuJSsAg1Z
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY94L8wAKCRD2uYlJVVFO
-o7jzAP95k4n/aGC4fwMnL9mTEDmSh8/gjE0F7vHOUPzIevrIlQEA7sQ+Q5aaZuxp
-dmk2UwL1HJVw+rJcqhwTcl41yGmDYQs=
-=pqbf
------END PGP SIGNATURE-----
-
---ivj1S5qjuJSsAg1Z--
