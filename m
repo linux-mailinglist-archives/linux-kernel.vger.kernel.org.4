@@ -2,74 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 397D368A9AD
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 12:43:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 797C868A9AF
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 12:44:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232417AbjBDLnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 06:43:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39358 "EHLO
+        id S232679AbjBDLoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 06:44:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjBDLnO (ORCPT
+        with ESMTP id S229448AbjBDLoQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 06:43:14 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E07551BAE6;
-        Sat,  4 Feb 2023 03:43:12 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id j25so3149128wrc.4;
-        Sat, 04 Feb 2023 03:43:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:to:from:subject:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V+Sm+kfqwSUzJQ4KP+9G1CP7oj6Tf3jeZZjkaMN7C8Q=;
-        b=EFUfpmET3n1ARMc8G+XCFXqCc7F91j4cgyg39ectegBHfFbs6vCwpqNlqrFWSdUmTg
-         dnJf8zYg31SiBhcvz0IzpvUOTFHJyvY62oLveQh9YlspZob0lJ8RU+jNNCJJ3uk53gty
-         sl6wk9Uq/po9liQYoqxTVqF28+bPvHO/KwsnVLFR4AIZKHlyG36pJkknY0YeA5crv8JR
-         QV3qoI8183af8I+chEPIvr/Dp/nPHSGNsCNshIJxo9DJidtOUv3Xi/OCc94epRoZViBu
-         fPcfQ4e8wTK3McgN1W909DQylJdI4O6XJsIgisKKLFCisAIdcv3veHUauNJOjVYO0us8
-         u7Qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:to:from:subject:message-id:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=V+Sm+kfqwSUzJQ4KP+9G1CP7oj6Tf3jeZZjkaMN7C8Q=;
-        b=JKWrHEZxa6JZ2A3lKjCIG/5bUak+5EuDJ04/nvq18NGEDGGtfe5jVemtofoCtEltTg
-         5NXIVyJobIBYpKs1VRClk5okNm8P9p20oiQ/M1gkwG/RMQE2MHj2U72Y+/x4zxBo8GGA
-         8TzsGZvYaLKv17GCnZiHvY0K+myNSS7amGHPzSuexRYUyFtKL6VTs99WWPXwhSYga2Vt
-         oVJ4k6aXgXbgak+KDV/y7RCA36LBi5jGcxZwUXgOW4dfuCdnbrzSbI4T+qpzdiPDRbd3
-         1GArAKnXOVyz7kVB5AquS6qIgXIF/HZfRwhUQLq8dQF+ZcIYaUM0cx0ZLv7fimCQPeTP
-         dI0Q==
-X-Gm-Message-State: AO0yUKXLpClYupV9Zu9iBK/MAJpaelnJ+TTNpmAPPR+pL75KfhtlNRO9
-        7BDgCq/BdgeqbwaUsrIBPH0=
-X-Google-Smtp-Source: AK7set+bg4XgkhaqdxGx6athTsrEitT1MA1GLJh+U8v84gSdV36l2Hj+rjOMzsjIDZVeG4yCa6GCvg==
-X-Received: by 2002:a5d:514d:0:b0:2bf:d1a1:ff5d with SMTP id u13-20020a5d514d000000b002bfd1a1ff5dmr10648918wrt.32.1675510991279;
-        Sat, 04 Feb 2023 03:43:11 -0800 (PST)
-Received: from ?IPv6:2a02:ab88:368f:2080:d12e:7ef:c89a:f600? ([2a02:ab88:368f:2080:d12e:7ef:c89a:f600])
-        by smtp.gmail.com with ESMTPSA id y10-20020a05600015ca00b002bfd137ecddsm4373342wry.11.2023.02.04.03.43.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Feb 2023 03:43:10 -0800 (PST)
-Message-ID: <398401ce6a1e37b42f895b86fa2ed90c2676e15a.camel@gmail.com>
-Subject: Re: [PATCH 1/2] arm64: dts: exynos: drop mshc aliases
-From:   David Virag <virag.david003@gmail.com>
-To:     Henrik Grimler <henrik@grimler.se>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, alim.akhtar@samsung.com,
-        m.szyprowski@samsung.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-Date:   Sat, 04 Feb 2023 12:43:09 +0100
-In-Reply-To: <20230203204000.14410-2-henrik@grimler.se>
-References: <20230203204000.14410-1-henrik@grimler.se>
-         <20230203204000.14410-2-henrik@grimler.se>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 
+        Sat, 4 Feb 2023 06:44:16 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 140671C58A;
+        Sat,  4 Feb 2023 03:44:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
+        s=s31663417; t=1675511027;
+        bh=1SAICf6ftRetupzn8o/MGmN59atV8iff6TAq9xs42qA=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=laZ/DjlRB0U/ZrcehEN3Bpym2vxEypIJGu30kXtSWkAk4KQ/oujAICrcjT4NtRazu
+         xaizTXVBL0l3Rsh3Lgn4DTRVzWZdq/IJ1oxwM48pb60gnSzLEpD6d7PGG9hYN5oEP8
+         CXJjB7h1PvmYKDDPBYgy+rNQY4cDNG2hxF4j2dhyeAt9SKdc90UldwWIHZDCYhLGA+
+         PWUmaR/JrTUO/2OU81L9coCIQRqCpDqmUikCAbFZZWlVAioR7sZYAA0F9n6S1uav1W
+         tUXk5/TEDV/YoVKnO9CgdALg4pQW7czDKRotC2GwLjPOS037VNEm8wI7v9XbCjR9Z6
+         H4dhtdssh4wOg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [157.180.225.92] ([157.180.225.92]) by web-mail.gmx.net
+ (3c-app-gmx-bs72.server.lan [172.19.170.208]) (via HTTP); Sat, 4 Feb 2023
+ 12:43:47 +0100
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Message-ID: <trinity-a01f321e-0973-417e-9a25-9350f63ece37-1675511027203@3c-app-gmx-bs72>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     =?UTF-8?Q?Ar=C4=B1n=C3=A7_=C3=9CNAL?= <arinc.unal@arinc9.com>
+Cc:     arinc9.unal@gmail.com, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        erkin.bozoglu@xeront.com, Sean Wang <sean.wang@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>
+Subject: Aw: Re: [PATCH v2 4/5] arm: dts: mt7623: mux phy0 on Bananapi
+ BPI-R2
+Content-Type: text/plain; charset=UTF-8
+Date:   Sat, 4 Feb 2023 12:43:47 +0100
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <trinity-ec3920c5-a96a-4edf-9ff1-4bf07e7b4d07-1675506452617@3c-app-gmx-bs72>
+References: <20230201185656.17164-1-arinc.unal@arinc9.com>
+ <20230201185656.17164-5-arinc.unal@arinc9.com>
+ <AC473057-266B-4403-9270-8007E0EC257C@public-files.de>
+ <75d3758a-5502-03a4-b3a2-990f9339705b@arinc9.com>
+ <trinity-ec3920c5-a96a-4edf-9ff1-4bf07e7b4d07-1675506452617@3c-app-gmx-bs72>
+Content-Transfer-Encoding: quoted-printable
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:je28Vgya+fG0CeQ41N1guRNJnqTPYl7eWFL8WJPyOsVsB42t2SnaSgzP1w8TqLX9oKuvS
+ tWUtwSNaJa0LSWszzbXCdeEz/fmV9fQlzEOKLSLIuE7gmXGknRnNU2WxMEnWAFBXKiy5IBRuqgEx
+ +eGRMUq/z3x7Va2fuG1RJy+aZAUkywlLBaRc/EHoZfQLFsaZwU+luAMynYkeQyTmu/Uz4MaqGUbM
+ wXpWA+5qGgAGnH/llGT9PWi7L5XJx4wvFyRzFE7lVfAf0KPzpWi4Bbs4ujfG+sdn23A0iB1kXXaR
+ HU=
+UI-OutboundReport: notjunk:1;M01:P0:OQ1pkurxuh0=;+Q3GeHXPMZieXEajDBzteEgp7gp
+ CI7M7d2DIPtovKnJNTiQtRw/gBbyiww0i7qINYBXezFiBFozr6UjIWTqM0/SZibGNKR/lpnqA
+ 03JRLxUoCf9FI+1BmWEy3fRokQ+96vj/c4X/9dmH843eS4RVruWeHN43FsvkBsEDgokhd+DyJ
+ lOlx+Yzvwi9IUuijn057ey4qFZ1JyCKj6fMdL+4OEMpkUdNQZt+dcl/Ih0NY2mweYC4cyjBSe
+ xsLffTV2Tm+ZnZnycCluGhJYXY5837LG4Ec6LjeUxY15DGJSnSKMM1fVCdQNp51QTcaaWI4CH
+ HomtwREo99e62BWbcg4UtdGJrMWCff6SxSPgjblcdbgw/FxpMu60ytegm6vrobh49K9gq+CQI
+ 3LkHeHWA3ZgItcmImS1BD18E1+jS2NzytUk0kWblVyYZoRvS2zQ8OL6EiOehnInCOzXTSXiTc
+ i5alPylFSWj8w4ND296/7pkSe2LXHWpz+s2+OpuKFmALeKiTYLPsV6JrHWr94PBBHFZcZDxSb
+ ea9MbeZp0sgTBGR7bp1gbpNrzffqGnLLAYj7IhFXsZnXNj5dW5S5qr4kPgK0yw/tT7t3lWmXf
+ DSCtrYBjVKUodhLyk+utmWbHuxxehROLMF3TC/ktMzwowWqBrgBmSIg+xXycLys6a1YMX+vS0
+ IE3SMZvMyH6IcgBamLBAMcoUh1dQTKdbPY2KfFIDjLZvoaZd/mafQaNAJ6DEidG+fQk9iyfER
+ RJPprW0uNigWPsTBZdIXWZirFoq1F2V8jvJubvLAWttD/l2LcGCrucpWi/ExUf4/2yst26POK
+ TwPxyxmJK7pEOR4h6IB4RGBo7lGZrxV8kYpN2/NzYmRk0=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,70 +83,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-02-03 at 21:39 +0100, Henrik Grimler wrote:
-> They are no longer needed after commit a13e8ef6008d ("mmc: dw_mmc:
-> exynos: use common_caps").
+> Gesendet: Samstag, 04=2E Februar 2023 um 11:27 Uhr
+> Von: "Frank Wunderlich" <frank-w@public-files=2Ede>
+> An: "Ar=C4=B1n=C3=A7 =C3=9CNAL" <arinc=2Eunal@arinc9=2Ecom>
+> Cc: arinc9=2Eunal@gmail=2Ecom, "Rob Herring" <robh+dt@kernel=2Eorg>, "Kr=
+zysztof Kozlowski" <krzysztof=2Ekozlowski+dt@linaro=2Eorg>, "Matthias Brugg=
+er" <matthias=2Ebgg@gmail=2Ecom>, devicetree@vger=2Ekernel=2Eorg, linux-arm=
+-kernel@lists=2Einfradead=2Eorg, linux-mediatek@lists=2Einfradead=2Eorg, li=
+nux-kernel@vger=2Ekernel=2Eorg, erkin=2Ebozoglu@xeront=2Ecom, "Sean Wang" <=
+sean=2Ewang@mediatek=2Ecom>, "DENG Qingfang" <dqfext@gmail=2Ecom>
+> Betreff: Aw: Re: [PATCH v2 4/5] arm: dts: mt7623: mux phy0 on Bananapi B=
+PI-R2
+>
+> Hi aranc,
 >=20
-> Signed-off-by: Henrik Grimler <henrik@grimler.se>
-> ---
-> =C2=A0arch/arm64/boot/dts/exynos/exynos5433-tm2-common.dtsi | 2 --
-> =C2=A0arch/arm64/boot/dts/exynos/exynos7-espresso.dts=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 | 2 --
-> =C2=A02 files changed, 4 deletions(-)
+> have tested this series, basicly it works, but i get only ~620 Mbits/sec=
+ (much more i will need on wan) in tx-mode of r2, rx-mode (iperf3 -c IP -R =
+on r2) gets full 939 Mbits/sec=2E Both no retransmitts=2E
 >=20
-> diff --git a/arch/arm64/boot/dts/exynos/exynos5433-tm2-common.dtsi
-> b/arch/arm64/boot/dts/exynos/exynos5433-tm2-common.dtsi
-> index f54f30633417..c895b70b3cec 100644
-> --- a/arch/arm64/boot/dts/exynos/exynos5433-tm2-common.dtsi
-> +++ b/arch/arm64/boot/dts/exynos/exynos5433-tm2-common.dtsi
-> @@ -40,8 +40,6 @@ aliases {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0spi2 =3D &spi_2;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0spi3 =3D &spi_3;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0spi4 =3D &spi_4;
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0mshc0 =3D &mshc_0;
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0mshc2 =3D &mshc_2;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0};
-> =C2=A0
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0chosen {
-> diff --git a/arch/arm64/boot/dts/exynos/exynos7-espresso.dts
-> b/arch/arm64/boot/dts/exynos/exynos7-espresso.dts
-> index f3f4a6ab4b49..686f0923a4a7 100644
-> --- a/arch/arm64/boot/dts/exynos/exynos7-espresso.dts
-> +++ b/arch/arm64/boot/dts/exynos/exynos7-espresso.dts
-> @@ -18,8 +18,6 @@ / {
-> =C2=A0
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0aliases {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0serial0 =3D &serial_2;
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0mshc0 =3D &mmc_0;
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0mshc2 =3D &mmc_2;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0};
-> =C2=A0
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0chosen {
+> tried with my laptop which gets 940Mbit/sec in tx mode too=2E=2E=2Eother=
+ end is a R2 with 5=2E15 connected to lan0 (and eth1+aux enabled, dmesg cle=
+an so far=2E=2E=2Efor the "kernel log flooded"-comment)=2E
+>=20
+> maybe gmac1 needs to be tweaked a bit (clock-settings)?
+>=20
+> can you confirm this with your board?
 
-In dw_mmc-exynos.c, there's a caps array specified like this:
+tested the vlan_aware way with 5=2E15=2E80 and got better result
 
-/* Common capabilities of Exynos4/Exynos5 SoC */
-static unsigned long exynos_dwmmc_caps[4] =3D {
-	MMC_CAP_1_8V_DDR | MMC_CAP_8_BIT_DATA,
-	0,
-	0,
-	0,
-};
+ip link add br0 type bridge vlan_filtering 1
+ip l set aux master br0
+ip l set wan master br0
+bridge vlan add vid 99 dev wan
+bridge vlan add vid 99 dev aux
+bridge vlan
+ip l s eth1 up
+ip l s wan up
+ip a a 192=2E168=2E0=2E11/24 dev eth1
+ip l s br0 up
+ip l s aux up
 
-As I understand these capabilities are added to the mmc controllers
-based on mshc alias id. Shouldn't these capabilities be moved to
-device-tree before removing these aliases? This also applies to the
-32bit arm patch. If I understand correctly, removing these aliases
-without adding the capabilities to dt removes the capability
-"MMC_CAP_1_8V_DDR" and "MMC_CAP_8_BIT_DATA" from mshc_0/mmc_0.
+i see traffic on eth1 increasing and iperf3 shows in both directions ~940M=
+bit/s, no strange mesages in dmesg while testing=2E=2E=2Ewhere do you see t=
+hese?
 
-Best regards,
-David
+tested vlan-way with 6=2E2 and felix' Patches to more comparable with your=
+ test=2E=2E=2Eand got same result (~625Mbit/s in tx and 940Mbit/s in rx-mod=
+e=3D-R on r2)=2E=2E=2Eso it seems anything between 5=2E15 and 6=2E2 reduced=
+ gmac1 tx bandwidth=2E
+
+to summarize:
+
+i get same result with your patches and my old vlan_bridge way with same c=
+odebase=2E=2E=2Ehow do i see your problem with the vlan-bridge-way? Do you =
+test with bpi-r2 or only any other board and change r2 to have same DT?
+
+regards Frank
