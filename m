@@ -2,114 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E56E68A807
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 04:54:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F04668A80A
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 04:55:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232778AbjBDDyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 22:54:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52882 "EHLO
+        id S232893AbjBDDzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 22:55:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbjBDDyf (ORCPT
+        with ESMTP id S231247AbjBDDzD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 22:54:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1CF789FBE
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 19:53:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675482830;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=buEB2MhYiHkTXl+iJ+h97A75R8p42T/127lL4Ay8x+c=;
-        b=OP+x+lOY5d3FIuiZJPga2Tu/C9dsuy1eP6pqGNiarpmSoQwAhadwuVWDW0GY2DUvPV+LKe
-        1qOav+B7fjNUGlHRajoJCm8feJmHHZbR/Eiuz1MvGY6z9sfC41rol4aY3OuLU1T5tD/Nc6
-        +uRTXA9eXzgF6venSmAVckZAVMveXgQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-94-nr6ADI9gO0uj9McKK4iG3g-1; Fri, 03 Feb 2023 22:53:48 -0500
-X-MC-Unique: nr6ADI9gO0uj9McKK4iG3g-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 3 Feb 2023 22:55:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DEAE8A7F8;
+        Fri,  3 Feb 2023 19:55:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CAA54800050;
-        Sat,  4 Feb 2023 03:53:47 +0000 (UTC)
-Received: from [10.22.8.92] (unknown [10.22.8.92])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 67A8C18EC6;
-        Sat,  4 Feb 2023 03:53:46 +0000 (UTC)
-Message-ID: <0f388863-9498-e61e-e2dc-965654544489@redhat.com>
-Date:   Fri, 3 Feb 2023 22:53:46 -0500
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D04A562025;
+        Sat,  4 Feb 2023 03:55:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD55FC433D2;
+        Sat,  4 Feb 2023 03:55:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675482901;
+        bh=6PlJAfsPsnyJrye+5W4hS0mOiL7cK7fe+sQ9dsb/ga0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=lb8KQ2eiXPy3w9hHRaamslL1XQiqWoZxVGz0BklvfeOc1cPRkLX2m8B+yDSgQoXZm
+         lRB80vyMLl71mbKybU8dxZFjQwwyYTrBbcaja1jUC3brOScXadwTkZLq2egn5akZgT
+         L0J6xrJVlQT2fYTpgusI9sO3JbAwvgcgLpJaLXucHnjMqSa9hyBftaaXK1zwGdx+18
+         lfcZhImjOOMKSN33Lp4dDACIjE8HwgHBiJhd+21FxZvPCgNWMCL26s1bEq9CIJcJ0H
+         401D1huIJzjzKzhOLGqd9/vo6NuUz55wylL9YmO1FIkaNHnBCvzrX5FrOOXbBgLNZW
+         YcxiZXWHNTDrQ==
+Date:   Fri, 3 Feb 2023 19:54:59 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     Colin Foster <colin.foster@in-advantage.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        UNGLinuxDriver@microchip.com,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>
+Subject: Re: [PATCH v1 net-next] net: mscc: ocelot: un-export unused regmap
+ symbols
+Message-ID: <20230203195459.6576e80a@kernel.org>
+In-Reply-To: <20230204013439.4vfag2kbrwpwvnpr@skbuf>
+References: <20230204001211.1764672-1-colin.foster@in-advantage.com>
+        <20230204013439.4vfag2kbrwpwvnpr@skbuf>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 2/2] sched/isolation: Add cpu_is_isolated() API
-Content-Language: en-US
-To:     Frederic Weisbecker <frederic@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
-        Michal Hocko <mhocko@suse.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Leonardo <leobras@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>, cgroups@vger.kernel.org,
-        linux-mm@kvack.org
-References: <20230203232409.163847-1-frederic@kernel.org>
- <20230203232409.163847-3-frederic@kernel.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20230203232409.163847-3-frederic@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/3/23 18:24, Frederic Weisbecker wrote:
-> Provide this new API to check if a CPU has been isolated either through
-> isolcpus= or nohz_full= kernel parameter.
->
-> It aims at avoiding kernel load deemed to be safely spared on CPUs
-> running sensitive workload that can't bear any disturbance, such as
-> pcp cache draining.
->
-> Suggested-by: Michal Hocko <mhocko@suse.com>
-> Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
-> ---
->   include/linux/sched/isolation.h | 6 ++++++
->   1 file changed, 6 insertions(+)
->
-> diff --git a/include/linux/sched/isolation.h b/include/linux/sched/isolation.h
-> index b645cc81fe01..088672f08469 100644
-> --- a/include/linux/sched/isolation.h
-> +++ b/include/linux/sched/isolation.h
-> @@ -53,4 +53,10 @@ static inline bool housekeeping_cpu(int cpu, enum hk_type type)
->   	return true;
->   }
->   
-> +static inline bool cpu_is_isolated(int cpu)
-> +{
-> +	return !housekeeping_test_cpu(cpu, HK_TYPE_DOMAIN) ||
-> +		 !housekeeping_test_cpu(cpu, HK_TYPE_KERNEL_NOISE);
-> +}
-> +
->   #endif /* _LINUX_SCHED_ISOLATION_H */
+On Sat, 4 Feb 2023 03:34:39 +0200 Vladimir Oltean wrote:
+> These can be unexported too:
+> 
+> extern const struct vcap_field vsc7514_vcap_es0_keys[];
+> extern const struct vcap_field vsc7514_vcap_es0_actions[];
+> extern const struct vcap_field vsc7514_vcap_is1_keys[];
+> extern const struct vcap_field vsc7514_vcap_is1_actions[];
+> extern const struct vcap_field vsc7514_vcap_is2_keys[];
+> extern const struct vcap_field vsc7514_vcap_is2_actions[];
+> 
+> I guess we make exceptions for the 24 hour reposting rule when the patch
+> has been reviewed?
 
-CPUs in an isolated cpuset partition is similar to HK_TYPE_DOMAIN CPUs 
-as load balancing is disabled. I can add an API to access the cpumask 
-and add to this API. However, that list is dynamic as it can be changed 
-at run time. Will that be a problem? Or should that be used separately?
-
-Cheers,
-Longman
-
+FWIW I think that it's perfectly fine to skip the wait whenever
+reviewer explicitly asks for a quick repost. The only person who's
+judgment we don't trust is the author (including me not trusting
+myself when I post my own patches).
