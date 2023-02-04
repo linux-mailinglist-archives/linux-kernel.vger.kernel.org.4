@@ -2,136 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8459E68AC1B
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 20:34:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF04568AC1D
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 20:34:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232338AbjBDTeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 14:34:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40998 "EHLO
+        id S231165AbjBDTeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 14:34:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbjBDTd6 (ORCPT
+        with ESMTP id S232127AbjBDTeI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 14:33:58 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCD2C2B090;
-        Sat,  4 Feb 2023 11:33:53 -0800 (PST)
-Received: from lhrpeml500006.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4P8Mzq6hCkz67K2n;
-        Sun,  5 Feb 2023 03:29:59 +0800 (CST)
-Received: from P_UKIT01-A7bmah.china.huawei.com (10.195.244.18) by
- lhrpeml500006.china.huawei.com (7.191.161.198) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Sat, 4 Feb 2023 19:33:50 +0000
-From:   <shiju.jose@huawei.com>
-To:     <mchehab@kernel.org>, <linux-edac@vger.kernel.org>
-CC:     <rostedt@goodmis.org>, <mhiramat@kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>, <tanxiaofei@huawei.com>,
-        <jonathan.cameron@huawei.com>, <linuxarm@huawei.com>,
-        <shiju.jose@huawei.com>
-Subject: [RFC PATCH V2 1/1] rasdaemon: Fix poll() on per_cpu trace_pipe_raw blocks indefinitely
-Date:   Sat, 4 Feb 2023 19:33:45 +0000
-Message-ID: <20230204193345.842-1-shiju.jose@huawei.com>
-X-Mailer: git-send-email 2.26.0.windows.1
+        Sat, 4 Feb 2023 14:34:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A4A72D14E;
+        Sat,  4 Feb 2023 11:34:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9851DB80B67;
+        Sat,  4 Feb 2023 19:34:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2C72C433EF;
+        Sat,  4 Feb 2023 19:34:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675539244;
+        bh=AdY6TYSZFKpSo66Jq2l8vunuavfLcbgyFlV81LOhabE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eOkUCQ6L8YYU3obvMeeYyGAUmMG12eWvnO7f7CHgMPqzSRJDgYdVRITc4TlAqTRoK
+         lceCd/fqN/fceBmxa1BWyDRPO8a+yyeq2+br1sw79ujdlM0oLv8XMTo1oorZuhv07t
+         fJcXerGYEnwNwNnEs+Sfr9/tCHF3GcEEuu8/hRoncS2mIy8yfEudst3b5YXxrC9JQF
+         4i80X/f8IQeptHt1BEg0dlwuR9r8FDlkCtSaRVP9T6OWOqQ62ycFhYNHqpM4/9gXlF
+         nl+XQtgXexpUh9W7IcJIlXrHcE29ho3AKrgdOjPZM6xi3SrkiO07d3g8Ciwj7ZiuWT
+         d6vtUZZLtyGRQ==
+Date:   Sat, 4 Feb 2023 11:34:02 -0800
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Nicolai Stange <nstange@suse.de>,
+        Marcos Paulo de Souza <mpdesouza@suse.com>,
+        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+        jpoimboe@redhat.com, joe.lawrence@redhat.com
+Subject: Re: [PATCH v2 4/4] livepatch/shadow: Add garbage collection of
+ shadow variables
+Message-ID: <20230204193402.rrbzeotpgdpieuaj@treble>
+References: <20221026194122.11761-1-mpdesouza@suse.com>
+ <20221026194122.11761-5-mpdesouza@suse.com>
+ <20221104010327.wa256pos75dczt4x@treble>
+ <Y2TooogxxLTIkBcj@alley>
+ <878rkhyhhv.fsf@linux.fritz.box>
+ <Y24cGpeO8UHeiKGl@alley>
+ <20221113185138.oob2o3sevbgud5vs@treble>
+ <Y8a4ZQ0sm5AOnY7R@alley>
+ <20230125232248.inewq5tlpwfk3rny@treble>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.195.244.18]
-X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
- lhrpeml500006.china.huawei.com (7.191.161.198)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230125232248.inewq5tlpwfk3rny@treble>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shiju Jose <shiju.jose@huawei.com>
+On Wed, Jan 25, 2023 at 03:22:48PM -0800, Josh Poimboeuf wrote:
+> On Tue, Jan 17, 2023 at 04:01:57PM +0100, Petr Mladek wrote:
+> > > >From my experience, there are basically two relevant usage patterns of
+> > > shadow variables.
+> > > 1.) To hand over global state from one sublivepatch to its pendant in
+> > >     the to-be-applied livepatch module. Example: a new global mutex or
+> > >     alike.
+> > > 2.) The "regular" intended usage, attaching shadow variables to real
+> > >     (data) objects.
+> > > 
+> > > To manage lifetime for 1.), we usually implement some refcount scheme,
+> > > managed from the livepatches' module_init()/_exit(): the next livepatch
+> > > would subscribe to the shared state before the previous one got a chance
+> > > to release it. This works in practice, but the code related to it is
+> > > tedious to write and quite verbose.
+> > > 
+> > > The second usage pattern is much more difficult to implement correctly
+> > > in light of possible livepatch downgrades to a subset of
+> > > sublivepatches. Usually a sublivepatch making use of a shadow variable
+> > > attached to real objects would livepatch the associated object's
+> > > destruction code to free up the associated shadow, if any. If the next
+> > > livepatch to be applied happened to not contain this sublivepatch in
+> > > question as well, the destruction code would effectively become
+> > > unpatched, and any existing shadows leaked. Depending on the object type
+> > > in question, this memory leakage might or might not be an actual
+> > > problem, but it isn't nice either way.
+> > > 
+> > > Often, there's a more subtle issue with the latter usecase though: the
+> > > shadow continues to exist, but becomes unmaintained once the transitions
+> > > has started. If said sublivepatch happens to become reactivated later
+> > > on, it would potentially find stale shadows, and these could even get
+> > > wrongly associated with a completely different object which happened to
+> > > get allocated at the same memory address. Depending on the shadow type,
+> > > this might or might not be Ok. New per-object locks or a "TLB flush
+> > > needed" boolean would probably be Ok, but some kind of refcount would
+> > > certainly not. There's not much which could be done from the pre-unpatch
+> > > callbacks, because these aren't getting invoked for atomic-replace
+> > > downgrades.
+> > 
+> > IMHO, this is the reason why we should make it per-object.
+> > 
+> > If the shadow variable was used by a livepatched module and we remove
+> > this module then the shadow variables would get unmaintained. It would
+> > results in the problem described in this paragraph.
+> 
+> Yes, that makes sense.  Ok, I'm convinced.
 
-The error events are not received in the rasdaemon since kernel 6.1-rc6.
-This issue is firstly detected and reported, when testing the CXL error
-events in the rasdaemon.
+I've been thinking about this some more, and this justification for
+making it per-object no longer makes sense to me.
 
-Debugging showed, poll() on trace_pipe_raw in the ras-events.c do not
-return and this issue is seen after the commit
-42fb0a1e84ff525ebe560e2baf9451ab69127e2b ("tracing/ring-buffer: Have
-polling block on watermark").
+A shadow variable should follow the lifetime of its associated data
+object, so the only way it would leak from an unloaded patched module
+would be if there's a bug either in the patched module or in the
+livepatch itself, right?
 
-This also verified using a test application for poll()
-and select() on trace_pipe_raw.
+Or did I misunderstand your point?
 
-There is also a bug reported on this issue,
-https://lore.kernel.org/all/31eb3b12-3350-90a4-a0d9-d1494db7cf74@oracle.com/
-
-This issue occurs for the per_cpu case, which calls the
-ring_buffer_poll_wait(), in kernel/trace/ring_buffer.c, with the
-buffer_percent > 0 and then wait until the percentage of pages are
-available.The default value set for the buffer_percent is 50 in the
-kernel/trace/trace.c. However poll() does not return even met the percentage
-of pages condition.
-
-As a fix, rasdaemon set buffer_percent as 0 through the
-/sys/kernel/debug/tracing/instances/rasdaemon/buffer_percent, then the
-task will wake up as soon as data is added to any of the specific cpu
-buffer and poll() on per_cpu/cpuX/trace_pipe_raw does not block
-indefinitely.
-
-Dependency on the kernel RFC patch
-tracing: Fix poll() and select() do not work on per_cpu trace_pipe and trace_pipe_raw
-
-Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
-
-Changes:
-RFC V1 -> RFC V2
-1. Rename the patch header subject.
-2. Changes for the backward compatability to the old kernels.
----
- ras-events.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
-
-diff --git a/ras-events.c b/ras-events.c
-index 3691311..e505a0e 100644
---- a/ras-events.c
-+++ b/ras-events.c
-@@ -383,6 +383,8 @@ static int read_ras_event_all_cpus(struct pthread_data *pdata,
- 	int warnonce[n_cpus];
- 	char pipe_raw[PATH_MAX];
- 	int legacy_kernel = 0;
-+	int fd;
-+	char buf[10];
- #if 0
- 	int need_sleep = 0;
- #endif
-@@ -402,6 +404,26 @@ static int read_ras_event_all_cpus(struct pthread_data *pdata,
- 		return -ENOMEM;
- 	}
- 
-+	/* Fix for poll() on the per_cpu trace_pipe and trace_pipe_raw blocks
-+	 * indefinitely with the default buffer_percent in the kernel trace system,
-+	 * which is introduced by the following change in the kernel.
-+	 * https://lore.kernel.org/all/20221020231427.41be3f26@gandalf.local.home/T/#u.
-+	 * Set buffer_percent to 0 so that poll() will return immediately
-+	 * when the trace data is available in the ras per_cpu trace pipe_raw
-+	 */
-+	fd = open_trace(pdata[0].ras, "buffer_percent", O_WRONLY);
-+	if (fd >= 0) {
-+		/* For the backward compatabilty to the old kernel, do not return
-+		 * if fail to set the buffer_percent.
-+		 */
-+		snprintf(buf, sizeof(buf), "0");
-+		size = write(fd, buf, strlen(buf));
-+		if (size <= 0)
-+			log(TERM, LOG_WARNING, "can't write to buffer_percent\n");
-+		close(fd);
-+	} else
-+		log(TERM, LOG_WARNING, "Can't open buffer_percent\n");
-+
- 	for (i = 0; i < (n_cpus + 1); i++)
- 		fds[i].fd = -1;
- 
 -- 
-2.25.1
-
+Josh
