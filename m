@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0D2D68A7E1
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 03:42:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6DDF68A7E3
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 03:42:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233009AbjBDCmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 21:42:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40008 "EHLO
+        id S232895AbjBDCmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 21:42:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232778AbjBDCmC (ORCPT
+        with ESMTP id S232842AbjBDCmD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 21:42:02 -0500
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33EF187589
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 18:42:00 -0800 (PST)
-Received: by mail-pg1-x549.google.com with SMTP id e11-20020a63d94b000000b0048988ed9a6cso3295827pgj.1
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 18:42:00 -0800 (PST)
+        Fri, 3 Feb 2023 21:42:03 -0500
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C20C5885F0
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 18:42:01 -0800 (PST)
+Received: by mail-pl1-x64a.google.com with SMTP id u6-20020a170903124600b00188cd4769bcso3341887plh.0
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 18:42:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=pB7Fj8xY1uSHJsiQm4Pm2uZ/Aa385C0KYqD7SIgKcpg=;
-        b=NHmtIfrzkhlT/78P9VteGspa7tbL1hh3FiFlNL1xxu5caXoA7JX8zQEw2FMoBVmW83
-         c6OnBsJi4nemU1YkAZWfTkmZcqQQx3BhRxvdnOrwC5PsfG5I5zFe15s8HGqVpAJYSkGI
-         J6LuqJM6L3dwWgLNVo6NQPLtAoiqQDz3d6RT4y44ZODvIUH8No4T5M/PC8rsRjTH65qJ
-         66eHzLXXUPBdd8mNT7HDf3pQsfvL9zpvu8ZL7cPdZYoeHXcPPJ51pETWS6kaasFLvrlU
-         PkXH9yfjdg2WItPfzmfcqxTpOwizRaQdTMZvsLbNNgKYbqOBT07jBGiTil59/BqvXXul
-         1qVQ==
+        bh=JzV72uoeNq80UM7OKhdHXgB95u2p87EaKt4gs2oZB3E=;
+        b=pvhvYDNt9wdjXspGnvwhRXUXTLK8KIxBl7aNw7cQh0RPhczlS8PQZJtMpNTDkWgjil
+         12DyywF3+EpqZrXSOW9pNuG4YAUKQUpo9JqQ4N1nMgLy4w5Nj++c+w0w82hA7Qjxduc4
+         t0sD1kLvxu+tn5HCdppz3V352NlqDMYqLPVtIe9KlnDElXwkSuo+lEM85fEsIZLBB3Iz
+         N9Guxpzcy0V5uQSIjuv7oyYBEXeJzVf2z+5sFGJpiF1VU+1x6WmbHORXglobDgHPePpl
+         urk+P+FsMLyU1dsjFgKv3KYLosAubHQAuL1Vogwu6HbfIXROUsLwQqSkMehknI1zqdJX
+         wdxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=pB7Fj8xY1uSHJsiQm4Pm2uZ/Aa385C0KYqD7SIgKcpg=;
-        b=UbCIlt5n/cwQHvX1wIakACcuQIzm66+Z6fLmJWL3tM5+OB0Z2FtiCsVMO0kwN//lO8
-         fiGB9poULs5cIWlyINWqoUUUaxFEYIkGxdOwBLzZtBJMuk7YaEBJYCHKgNV89cKR89tV
-         L1rnoGsfGodZij+5bt8FHusGAuUZGq27TqfkOp/vnovvOUxaks10K0R/MBhudDibYCYO
-         GcohlBdAcL6vXM7s5Ry7WVahooOoLGODIAbTK1nejF5l3zpOnG1/sDqg35uYu4vNEcNM
-         gWcf17G2To3Kjz0OYKKaq5jNDN0Y4be2BMDUDE400gGLR4zlA2fqMX1Zvgervi1AlApN
-         qxYw==
-X-Gm-Message-State: AO0yUKWbFKGCXp5c4RhoKCRREpGfNibmf0lhRfs8JQsQ9ek2tgBxTmE6
-        QpFQ3mYF1zouvD/6Gu8I6mlH7zHuwtY=
-X-Google-Smtp-Source: AK7set9oYxak5z/XT+6RDO/U1NBSVI5IDLIRktwAavWACikG8YcoVik0L58scmf5L7TbgKk/h4moCJ9F5H4=
+        bh=JzV72uoeNq80UM7OKhdHXgB95u2p87EaKt4gs2oZB3E=;
+        b=Kz2Li8WbUvnfg1BRQt6EIirBPzxYMvPPem1ynrKUoKwqx582xYb1E7DWg8Vdls/Stn
+         SeoBS29FZpcrFfhXBOKQnxGRaexQERKxnB9xQ9fSrx+6Mg5yO7Nz/Ey2WfiKFiCpx9Ld
+         JMUM40A+Xt/hfNZ7rilsGOyc4LlINQQp/WWeBqoTbDls6sRvFDrKlslU6PKYTi5+7cZ6
+         ckUvWTor6htyYBPEoCoYkeJKg6/BJiXAIKU33/CDKZm7bvFjxwjNllxRfhwo4c++A6UQ
+         Yc999A9sqDvvglHFYW11XQkDCEg524IpSDbqmQknWKc9AGaIMMwBj56eJJSRhhGe5rBz
+         g5/A==
+X-Gm-Message-State: AO0yUKX52YQn1XP9a50cwQ230PvPQmllx3gx3Z71uHeoCezzdAQrw5MS
+        5PWwZMmyMK/sy1qGrMa3qtEKM3iOEHk=
+X-Google-Smtp-Source: AK7set9Z+PeZsosodDGYy/PLiy6QchHZuuXIvtkT/7erfdlE5ZvTw+15S3T3xWHkiv0F5L7nC3pgZmkiq6g=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:903:1c4:b0:196:3b96:6a10 with SMTP id
- e4-20020a17090301c400b001963b966a10mr2893786plh.23.1675478519666; Fri, 03 Feb
- 2023 18:41:59 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a17:902:a583:b0:196:5cd3:d88a with SMTP id
+ az3-20020a170902a58300b001965cd3d88amr2992679plb.12.1675478521156; Fri, 03
+ Feb 2023 18:42:01 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Sat,  4 Feb 2023 02:41:50 +0000
+Date:   Sat,  4 Feb 2023 02:41:51 +0000
 In-Reply-To: <20230204024151.1373296-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20230204024151.1373296-1-seanjc@google.com>
 X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
-Message-ID: <20230204024151.1373296-4-seanjc@google.com>
-Subject: [PATCH v2 3/4] KVM: selftests: Use enum for test numbers in xen_shinfo_test
+Message-ID: <20230204024151.1373296-5-seanjc@google.com>
+Subject: [PATCH v2 4/4] KVM: selftests: Add EVTCHNOP_send slow path test to xen_shinfo_test
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -73,464 +73,79 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: David Woodhouse <dwmw@amazon.co.uk>
 
-The xen_shinfo_test started off with very few iterations, and the numbers
-we used in GUEST_SYNC() were precisely mapped to the RUNSTATE_xxx values
-anyway to start with.
+When kvm_xen_evtchn_send() takes the slow path because the shinfo GPC
+needs to be revalidated, it used to violate the SRCU vs. kvm->lock
+locking rules and potentially cause a deadlock.
 
-It has since grown quite a few more tests, and it's kind of awful to be
-handling them all as bare numbers. Especially when I want to add a new
-test in the middle. Define an enum for the test stages, and use it both
-in the guest code and the host switch statement.
+Now that lockdep is learning to catch such things, make sure that code
+path is exercised by the selftest.
 
-No functional change, if I can count to 24.
-
+Link: https://lore.kernel.org/all/20230113124606.10221-2-dwmw2@infradead.org
 Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- .../selftests/kvm/x86_64/xen_shinfo_test.c    | 133 +++++++++++-------
- 1 file changed, 82 insertions(+), 51 deletions(-)
+ .../selftests/kvm/x86_64/xen_shinfo_test.c    | 27 +++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
 diff --git a/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c b/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c
-index 1380947af1fe..0459126365c9 100644
+index 0459126365c9..f8baef107a1b 100644
 --- a/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c
 +++ b/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c
-@@ -44,6 +44,36 @@
- #define EVTCHN_TEST2 66
- #define EVTCHN_TIMER 13
+@@ -29,6 +29,9 @@
+ #define DUMMY_REGION_GPA	(SHINFO_REGION_GPA + (3 * PAGE_SIZE))
+ #define DUMMY_REGION_SLOT	11
  
-+enum {
-+	TEST_INJECT_VECTOR = 0,
-+	TEST_RUNSTATE_runnable,
-+	TEST_RUNSTATE_blocked,
-+	TEST_RUNSTATE_offline,
-+	TEST_RUNSTATE_ADJUST,
-+	TEST_RUNSTATE_DATA,
-+	TEST_STEAL_TIME,
-+	TEST_EVTCHN_MASKED,
-+	TEST_EVTCHN_UNMASKED,
-+	TEST_EVTCHN_SLOWPATH,
-+	TEST_EVTCHN_SEND_IOCTL,
-+	TEST_EVTCHN_HCALL,
-+	TEST_EVTCHN_HCALL_EVENTFD,
-+	TEST_TIMER_SETUP,
-+	TEST_TIMER_WAIT,
-+	TEST_TIMER_RESTORE,
-+	TEST_POLL_READY,
-+	TEST_POLL_TIMEOUT,
-+	TEST_POLL_MASKED,
-+	TEST_POLL_WAKE,
-+	TEST_TIMER_PAST,
-+	TEST_LOCKING_SEND_RACE,
-+	TEST_LOCKING_POLL_RACE,
-+	TEST_LOCKING_POLL_TIMEOUT,
-+	TEST_DONE,
++#define DUMMY_REGION_GPA_2	(SHINFO_REGION_GPA + (4 * PAGE_SIZE))
++#define DUMMY_REGION_SLOT_2	12
 +
-+	TEST_GUEST_SAW_IRQ,
-+};
+ #define SHINFO_ADDR	(SHINFO_REGION_GPA)
+ #define VCPU_INFO_ADDR	(SHINFO_REGION_GPA + 0x40)
+ #define PVTIME_ADDR	(SHINFO_REGION_GPA + PAGE_SIZE)
+@@ -57,6 +60,7 @@ enum {
+ 	TEST_EVTCHN_SLOWPATH,
+ 	TEST_EVTCHN_SEND_IOCTL,
+ 	TEST_EVTCHN_HCALL,
++	TEST_EVTCHN_HCALL_SLOWPATH,
+ 	TEST_EVTCHN_HCALL_EVENTFD,
+ 	TEST_TIMER_SETUP,
+ 	TEST_TIMER_WAIT,
+@@ -263,6 +267,16 @@ static void guest_code(void)
+ 
+ 	guest_wait_for_irq();
+ 
++	GUEST_SYNC(TEST_EVTCHN_HCALL_SLOWPATH);
 +
- #define XEN_HYPERCALL_MSR	0x40000000
- 
- #define MIN_STEAL_TIME		50000
-@@ -147,7 +177,7 @@ static void evtchn_handler(struct ex_regs *regs)
- 	vi->evtchn_pending_sel = 0;
- 	guest_saw_irq = true;
- 
--	GUEST_SYNC(0x20);
-+	GUEST_SYNC(TEST_GUEST_SAW_IRQ);
- }
- 
- static void guest_wait_for_irq(void)
-@@ -168,41 +198,41 @@ static void guest_code(void)
- 	);
- 
- 	/* Trigger an interrupt injection */
--	GUEST_SYNC(0);
-+	GUEST_SYNC(TEST_INJECT_VECTOR);
- 
- 	guest_wait_for_irq();
- 
- 	/* Test having the host set runstates manually */
--	GUEST_SYNC(RUNSTATE_runnable);
-+	GUEST_SYNC(TEST_RUNSTATE_runnable);
- 	GUEST_ASSERT(rs->time[RUNSTATE_runnable] != 0);
- 	GUEST_ASSERT(rs->state == 0);
- 
--	GUEST_SYNC(RUNSTATE_blocked);
-+	GUEST_SYNC(TEST_RUNSTATE_blocked);
- 	GUEST_ASSERT(rs->time[RUNSTATE_blocked] != 0);
- 	GUEST_ASSERT(rs->state == 0);
- 
--	GUEST_SYNC(RUNSTATE_offline);
-+	GUEST_SYNC(TEST_RUNSTATE_offline);
- 	GUEST_ASSERT(rs->time[RUNSTATE_offline] != 0);
- 	GUEST_ASSERT(rs->state == 0);
- 
- 	/* Test runstate time adjust */
--	GUEST_SYNC(4);
-+	GUEST_SYNC(TEST_RUNSTATE_ADJUST);
- 	GUEST_ASSERT(rs->time[RUNSTATE_blocked] == 0x5a);
- 	GUEST_ASSERT(rs->time[RUNSTATE_offline] == 0x6b6b);
- 
- 	/* Test runstate time set */
--	GUEST_SYNC(5);
-+	GUEST_SYNC(TEST_RUNSTATE_DATA);
- 	GUEST_ASSERT(rs->state_entry_time >= 0x8000);
- 	GUEST_ASSERT(rs->time[RUNSTATE_runnable] == 0);
- 	GUEST_ASSERT(rs->time[RUNSTATE_blocked] == 0x6b6b);
- 	GUEST_ASSERT(rs->time[RUNSTATE_offline] == 0x5a);
- 
- 	/* sched_yield() should result in some 'runnable' time */
--	GUEST_SYNC(6);
-+	GUEST_SYNC(TEST_STEAL_TIME);
- 	GUEST_ASSERT(rs->time[RUNSTATE_runnable] >= MIN_STEAL_TIME);
- 
- 	/* Attempt to deliver a *masked* interrupt */
--	GUEST_SYNC(7);
-+	GUEST_SYNC(TEST_EVTCHN_MASKED);
- 
- 	/* Wait until we see the bit set */
- 	struct shared_info *si = (void *)SHINFO_VADDR;
-@@ -210,21 +240,21 @@ static void guest_code(void)
- 		__asm__ __volatile__ ("rep nop" : : : "memory");
- 
- 	/* Now deliver an *unmasked* interrupt */
--	GUEST_SYNC(8);
-+	GUEST_SYNC(TEST_EVTCHN_UNMASKED);
- 
- 	guest_wait_for_irq();
- 
- 	/* Change memslots and deliver an interrupt */
--	GUEST_SYNC(9);
-+	GUEST_SYNC(TEST_EVTCHN_SLOWPATH);
- 
- 	guest_wait_for_irq();
- 
- 	/* Deliver event channel with KVM_XEN_HVM_EVTCHN_SEND */
--	GUEST_SYNC(10);
-+	GUEST_SYNC(TEST_EVTCHN_SEND_IOCTL);
- 
- 	guest_wait_for_irq();
- 
--	GUEST_SYNC(11);
-+	GUEST_SYNC(TEST_EVTCHN_HCALL);
- 
- 	/* Our turn. Deliver event channel (to ourselves) with
- 	 * EVTCHNOP_send hypercall. */
-@@ -233,7 +263,7 @@ static void guest_code(void)
- 
- 	guest_wait_for_irq();
- 
--	GUEST_SYNC(12);
-+	GUEST_SYNC(TEST_EVTCHN_HCALL_EVENTFD);
++	/*
++	 * Same again, but this time the host has messed with memslots so it
++	 * should take the slow path in kvm_xen_set_evtchn().
++	 */
++	xen_hypercall(__HYPERVISOR_event_channel_op, EVTCHNOP_send, &s);
++
++	guest_wait_for_irq();
++
+ 	GUEST_SYNC(TEST_EVTCHN_HCALL_EVENTFD);
  
  	/* Deliver "outbound" event channel to an eventfd which
- 	 * happens to be one of our own irqfds. */
-@@ -242,23 +272,23 @@ static void guest_code(void)
- 
- 	guest_wait_for_irq();
- 
--	GUEST_SYNC(13);
-+	GUEST_SYNC(TEST_TIMER_SETUP);
- 
- 	/* Set a timer 100ms in the future. */
- 	xen_hypercall(__HYPERVISOR_set_timer_op,
- 		      rs->state_entry_time + 100000000, NULL);
- 
--	GUEST_SYNC(14);
-+	GUEST_SYNC(TEST_TIMER_WAIT);
- 
- 	/* Now wait for the timer */
- 	guest_wait_for_irq();
- 
--	GUEST_SYNC(15);
-+	GUEST_SYNC(TEST_TIMER_RESTORE);
- 
- 	/* The host has 'restored' the timer. Just wait for it. */
- 	guest_wait_for_irq();
- 
--	GUEST_SYNC(16);
-+	GUEST_SYNC(TEST_POLL_READY);
- 
- 	/* Poll for an event channel port which is already set */
- 	u32 ports[1] = { EVTCHN_TIMER };
-@@ -270,19 +300,19 @@ static void guest_code(void)
- 
- 	xen_hypercall(__HYPERVISOR_sched_op, SCHEDOP_poll, &p);
- 
--	GUEST_SYNC(17);
-+	GUEST_SYNC(TEST_POLL_TIMEOUT);
- 
- 	/* Poll for an unset port and wait for the timeout. */
- 	p.timeout = 100000000;
- 	xen_hypercall(__HYPERVISOR_sched_op, SCHEDOP_poll, &p);
- 
--	GUEST_SYNC(18);
-+	GUEST_SYNC(TEST_POLL_MASKED);
- 
- 	/* A timer will wake the masked port we're waiting on, while we poll */
- 	p.timeout = 0;
- 	xen_hypercall(__HYPERVISOR_sched_op, SCHEDOP_poll, &p);
- 
--	GUEST_SYNC(19);
-+	GUEST_SYNC(TEST_POLL_WAKE);
- 
- 	/* A timer wake an *unmasked* port which should wake us with an
- 	 * actual interrupt, while we're polling on a different port. */
-@@ -292,17 +322,17 @@ static void guest_code(void)
- 
- 	guest_wait_for_irq();
- 
--	GUEST_SYNC(20);
-+	GUEST_SYNC(TEST_TIMER_PAST);
- 
- 	/* Timer should have fired already */
- 	guest_wait_for_irq();
- 
--	GUEST_SYNC(21);
-+	GUEST_SYNC(TEST_LOCKING_SEND_RACE);
- 	/* Racing host ioctls */
- 
- 	guest_wait_for_irq();
- 
--	GUEST_SYNC(22);
-+	GUEST_SYNC(TEST_LOCKING_POLL_RACE);
- 	/* Racing vmcall against host ioctl */
- 
- 	ports[0] = 0;
-@@ -330,12 +360,12 @@ static void guest_code(void)
- 	 * expiring while the event channel was invalid.
- 	 */
- 	if (!guest_saw_irq) {
--		GUEST_SYNC(23);
-+		GUEST_SYNC(TEST_LOCKING_POLL_TIMEOUT);
- 		goto wait_for_timer;
- 	}
- 	guest_saw_irq = false;
- 
--	GUEST_SYNC(24);
-+	GUEST_SYNC(TEST_DONE);
- }
- 
- static int cmp_timespec(struct timespec *a, struct timespec *b)
-@@ -604,25 +634,26 @@ int main(int argc, char *argv[])
- 					    "runstate times don't add up");
- 
- 			switch (uc.args[1]) {
--			case 0:
-+			case TEST_INJECT_VECTOR:
- 				if (verbose)
- 					printf("Delivering evtchn upcall\n");
- 				evtchn_irq_expected = true;
- 				vinfo->evtchn_upcall_pending = 1;
- 				break;
- 
--			case RUNSTATE_runnable...RUNSTATE_offline:
-+			case TEST_RUNSTATE_runnable...TEST_RUNSTATE_offline:
- 				TEST_ASSERT(!evtchn_irq_expected, "Event channel IRQ not seen");
- 				if (!do_runstate_tests)
- 					goto done;
- 				if (verbose)
- 					printf("Testing runstate %s\n", runstate_names[uc.args[1]]);
- 				rst.type = KVM_XEN_VCPU_ATTR_TYPE_RUNSTATE_CURRENT;
--				rst.u.runstate.state = uc.args[1];
-+				rst.u.runstate.state = uc.args[1] + RUNSTATE_runnable -
-+					TEST_RUNSTATE_runnable;
- 				vcpu_ioctl(vcpu, KVM_XEN_VCPU_SET_ATTR, &rst);
- 				break;
- 
--			case 4:
-+			case TEST_RUNSTATE_ADJUST:
- 				if (verbose)
- 					printf("Testing RUNSTATE_ADJUST\n");
- 				rst.type = KVM_XEN_VCPU_ATTR_TYPE_RUNSTATE_ADJUST;
-@@ -637,7 +668,7 @@ int main(int argc, char *argv[])
- 				vcpu_ioctl(vcpu, KVM_XEN_VCPU_SET_ATTR, &rst);
- 				break;
- 
--			case 5:
-+			case TEST_RUNSTATE_DATA:
- 				if (verbose)
- 					printf("Testing RUNSTATE_DATA\n");
- 				rst.type = KVM_XEN_VCPU_ATTR_TYPE_RUNSTATE_DATA;
-@@ -649,7 +680,7 @@ int main(int argc, char *argv[])
- 				vcpu_ioctl(vcpu, KVM_XEN_VCPU_SET_ATTR, &rst);
- 				break;
- 
--			case 6:
-+			case TEST_STEAL_TIME:
- 				if (verbose)
- 					printf("Testing steal time\n");
- 				/* Yield until scheduler delay exceeds target */
-@@ -659,7 +690,7 @@ int main(int argc, char *argv[])
- 				} while (get_run_delay() < rundelay);
- 				break;
- 
--			case 7:
-+			case TEST_EVTCHN_MASKED:
- 				if (!do_eventfd_tests)
- 					goto done;
- 				if (verbose)
-@@ -669,7 +700,7 @@ int main(int argc, char *argv[])
+@@ -755,6 +769,19 @@ int main(int argc, char *argv[])
  				alarm(1);
  				break;
  
--			case 8:
-+			case TEST_EVTCHN_UNMASKED:
- 				if (verbose)
- 					printf("Testing unmasked event channel\n");
- 				/* Unmask that, but deliver the other one */
-@@ -680,7 +711,7 @@ int main(int argc, char *argv[])
- 				alarm(1);
- 				break;
- 
--			case 9:
-+			case TEST_EVTCHN_SLOWPATH:
++			case TEST_EVTCHN_HCALL_SLOWPATH:
++				TEST_ASSERT(!evtchn_irq_expected,
++					    "Expected event channel IRQ but it didn't happen");
++				shinfo->evtchn_pending[0] = 0;
++
++				if (verbose)
++					printf("Testing guest EVTCHNOP_send direct to evtchn after memslot change\n");
++				vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS,
++							    DUMMY_REGION_GPA_2, DUMMY_REGION_SLOT_2, 1, 0);
++				evtchn_irq_expected = true;
++				alarm(1);
++				break;
++
+ 			case TEST_EVTCHN_HCALL_EVENTFD:
  				TEST_ASSERT(!evtchn_irq_expected,
  					    "Expected event channel IRQ but it didn't happen");
- 				shinfo->evtchn_pending[1] = 0;
-@@ -693,7 +724,7 @@ int main(int argc, char *argv[])
- 				alarm(1);
- 				break;
- 
--			case 10:
-+			case TEST_EVTCHN_SEND_IOCTL:
- 				TEST_ASSERT(!evtchn_irq_expected,
- 					    "Expected event channel IRQ but it didn't happen");
- 				if (!do_evtchn_tests)
-@@ -713,7 +744,7 @@ int main(int argc, char *argv[])
- 				alarm(1);
- 				break;
- 
--			case 11:
-+			case TEST_EVTCHN_HCALL:
- 				TEST_ASSERT(!evtchn_irq_expected,
- 					    "Expected event channel IRQ but it didn't happen");
- 				shinfo->evtchn_pending[1] = 0;
-@@ -724,7 +755,7 @@ int main(int argc, char *argv[])
- 				alarm(1);
- 				break;
- 
--			case 12:
-+			case TEST_EVTCHN_HCALL_EVENTFD:
- 				TEST_ASSERT(!evtchn_irq_expected,
- 					    "Expected event channel IRQ but it didn't happen");
- 				shinfo->evtchn_pending[0] = 0;
-@@ -735,7 +766,7 @@ int main(int argc, char *argv[])
- 				alarm(1);
- 				break;
- 
--			case 13:
-+			case TEST_TIMER_SETUP:
- 				TEST_ASSERT(!evtchn_irq_expected,
- 					    "Expected event channel IRQ but it didn't happen");
- 				shinfo->evtchn_pending[1] = 0;
-@@ -744,7 +775,7 @@ int main(int argc, char *argv[])
- 					printf("Testing guest oneshot timer\n");
- 				break;
- 
--			case 14:
-+			case TEST_TIMER_WAIT:
- 				memset(&tmr, 0, sizeof(tmr));
- 				tmr.type = KVM_XEN_VCPU_ATTR_TYPE_TIMER;
- 				vcpu_ioctl(vcpu, KVM_XEN_VCPU_GET_ATTR, &tmr);
-@@ -758,7 +789,7 @@ int main(int argc, char *argv[])
- 				alarm(1);
- 				break;
- 
--			case 15:
-+			case TEST_TIMER_RESTORE:
- 				TEST_ASSERT(!evtchn_irq_expected,
- 					    "Expected event channel IRQ but it didn't happen");
- 				shinfo->evtchn_pending[0] = 0;
-@@ -772,7 +803,7 @@ int main(int argc, char *argv[])
- 				alarm(1);
- 				break;
- 
--			case 16:
-+			case TEST_POLL_READY:
- 				TEST_ASSERT(!evtchn_irq_expected,
- 					    "Expected event channel IRQ but it didn't happen");
- 
-@@ -782,14 +813,14 @@ int main(int argc, char *argv[])
- 				alarm(1);
- 				break;
- 
--			case 17:
-+			case TEST_POLL_TIMEOUT:
- 				if (verbose)
- 					printf("Testing SCHEDOP_poll timeout\n");
- 				shinfo->evtchn_pending[0] = 0;
- 				alarm(1);
- 				break;
- 
--			case 18:
-+			case TEST_POLL_MASKED:
- 				if (verbose)
- 					printf("Testing SCHEDOP_poll wake on masked event\n");
- 
-@@ -798,7 +829,7 @@ int main(int argc, char *argv[])
- 				alarm(1);
- 				break;
- 
--			case 19:
-+			case TEST_POLL_WAKE:
- 				shinfo->evtchn_pending[0] = shinfo->evtchn_mask[0] = 0;
- 				if (verbose)
- 					printf("Testing SCHEDOP_poll wake on unmasked event\n");
-@@ -815,7 +846,7 @@ int main(int argc, char *argv[])
- 				alarm(1);
- 				break;
- 
--			case 20:
-+			case TEST_TIMER_PAST:
- 				TEST_ASSERT(!evtchn_irq_expected,
- 					    "Expected event channel IRQ but it didn't happen");
- 				/* Read timer and check it is no longer pending */
-@@ -832,7 +863,7 @@ int main(int argc, char *argv[])
- 				alarm(1);
- 				break;
- 
--			case 21:
-+			case TEST_LOCKING_SEND_RACE:
- 				TEST_ASSERT(!evtchn_irq_expected,
- 					    "Expected event channel IRQ but it didn't happen");
- 				alarm(0);
-@@ -854,7 +885,7 @@ int main(int argc, char *argv[])
- 					__vm_ioctl(vm, KVM_XEN_HVM_EVTCHN_SEND, &uxe);
- 				break;
- 
--			case 22:
-+			case TEST_LOCKING_POLL_RACE:
- 				TEST_ASSERT(!evtchn_irq_expected,
- 					    "Expected event channel IRQ but it didn't happen");
- 
-@@ -869,7 +900,7 @@ int main(int argc, char *argv[])
- 				vcpu_ioctl(vcpu, KVM_XEN_VCPU_SET_ATTR, &tmr);
- 				break;
- 
--			case 23:
-+			case TEST_LOCKING_POLL_TIMEOUT:
- 				/*
- 				 * Optional and possibly repeated sync point.
- 				 * Injecting the timer IRQ may fail if the
-@@ -891,7 +922,7 @@ int main(int argc, char *argv[])
- 							 SHINFO_RACE_TIMEOUT * 1000000000ULL;
- 				vcpu_ioctl(vcpu, KVM_XEN_VCPU_SET_ATTR, &tmr);
- 				break;
--			case 24:
-+			case TEST_DONE:
- 				TEST_ASSERT(!evtchn_irq_expected,
- 					    "Expected event channel IRQ but it didn't happen");
- 
-@@ -902,7 +933,7 @@ int main(int argc, char *argv[])
- 				TEST_ASSERT(ret == 0, "pthread_join() failed: %s", strerror(ret));
- 				goto done;
- 
--			case 0x20:
-+			case TEST_GUEST_SAW_IRQ:
- 				TEST_ASSERT(evtchn_irq_expected, "Unexpected event channel IRQ");
- 				evtchn_irq_expected = false;
- 				break;
 -- 
 2.39.1.519.gcb327c4b5f-goog
 
