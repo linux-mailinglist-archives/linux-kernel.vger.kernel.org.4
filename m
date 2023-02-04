@@ -2,152 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12AAB689C77
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 16:00:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D5A36899EE
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Feb 2023 14:41:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232222AbjBCPAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 10:00:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42178 "EHLO
+        id S232655AbjBCNlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 08:41:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233083AbjBCPAV (ORCPT
+        with ESMTP id S231478AbjBCNlX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 10:00:21 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D4EA07D4;
-        Fri,  3 Feb 2023 07:00:19 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id p26so15964764ejx.13;
-        Fri, 03 Feb 2023 07:00:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3Hs+VSiLtw/0ycdRLnref8xrRHiTeKna2LFz/+6QKUM=;
-        b=SsFWjrzkDBkMP+/hywWuJ2cMsYTnLdbgvmIoBD+PNXOVxNALzCD443cghDI+XabBee
-         qXmdXSgVUd6uubZXh1LdhkT0tHgc1HHS2icDerWEvhlOx3DPNfE+MFET3vntSeI4SpCP
-         Wh6Nihwct+YW2YazN94lMwrX/GuLktOGcf6BuZ+US/n2avNwHpZmJG4leg2s+qI3y8I1
-         crFQiI4cs8iA6c9wjEpaWqoOlx9f0LX/4XjXOJrNSPiXxakCm+KzIft9ilruKEdJwdpI
-         UelLAS+un3wbNUvYF4W5CNXLi6trXiIXIR4H1cHV8jxPHAM5bGUR52wWTeIXtLvppR5B
-         IQWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3Hs+VSiLtw/0ycdRLnref8xrRHiTeKna2LFz/+6QKUM=;
-        b=uJa6N8xMAYDBW3IeNTKRcz8BdWVgzBXu41ELrhu6YqbwaFEhpX+gLuIgX1rk/aR7Vn
-         Q/xXIqHRxRUwtgcEIO0HdhCV1M1q5oaor1A6krLJrHLkLN/6TCPPOjHA7w/hBcT8yJFp
-         LG354Wi55OdTdjOoT01fgtmQj8opniWjmI+l5HBUJpWOBOM46DpjKWhBzGI09XzM+NNd
-         EwawW1hiqtAmvdJfX49EZHrDGJfwOvQgHOxrMlFSaOgKnyarJbfHSr/YeNH/jeXrFkr9
-         v3WJ19g5azBVT435YbVbflGiCJX8StlmmFwvcSog6AunIog8o5s+kcxZiYuhGY3xqgX4
-         u1bA==
-X-Gm-Message-State: AO0yUKXGvOC8ef846qnxK3fvwW+LhoaU65O/s43EkYiwdE1jW9UKju4u
-        MY6s3AsmP2sDuDBWtp0x2Tc=
-X-Google-Smtp-Source: AK7set9j91UKcYEbur5rEMc26mRxeJGocDFMSWfjHwCaDkxjCaw5J1ct9ODqrAKzioMF3HcmNiA/Zg==
-X-Received: by 2002:a17:906:e118:b0:878:7662:7c8e with SMTP id gj24-20020a170906e11800b0087876627c8emr10841306ejb.55.1675436417906;
-        Fri, 03 Feb 2023 07:00:17 -0800 (PST)
-Received: from skbuf ([188.26.57.116])
-        by smtp.gmail.com with ESMTPSA id g6-20020a1709061c8600b007c14ae38a80sm1450453ejh.122.2023.02.03.07.00.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 07:00:17 -0800 (PST)
-Date:   Fri, 3 Feb 2023 17:00:14 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Daniel Golle <daniel@makrotopia.org>, netdev@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jianhui Zhao <zhaojh329@gmail.com>,
-        =?utf-8?B?QmrDuHJu?= Mork <bjorn@mork.no>
-Subject: Re: [PATCH 7/9] net: pcs: add driver for MediaTek SGMII PCS
-Message-ID: <20230203150014.ugkasp4rq5arqs6s@skbuf>
-References: <cover.1675407169.git.daniel@makrotopia.org>
- <30f3ff512a2082ba4cf58bf6098f2ed776051976.1675407169.git.daniel@makrotopia.org>
- <Y90Wxb8iuCRo06yr@lunn.ch>
+        Fri, 3 Feb 2023 08:41:23 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C0412F15;
+        Fri,  3 Feb 2023 05:41:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675431680; x=1706967680;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=3eYI3e/ZTu5G0g9in3jd2vyV9lR37cDnjIp0K+JxVrs=;
+  b=hWyOFRHGSMoY0tkq8klcsGFLGDQM9wgmFuZ3/WwGaC5CbqPPCRlvMSNH
+   S/McXtEEf2QFGnmytJyI0HRQO81ooOSO9rUKgOA3yh9bLwRLg7G8Zbp7y
+   G8Pxlk07cfd+ZxEaNtj/25BOEhyVfID7kq/y4LfDNQ0UySJnjgNMwjVnV
+   YDVUkc2tsJFCU1bU5+B1d2z6pnexYzKvxr2bPJVOnAqARsorzyG8MgVGp
+   eY04X0Uyu5TZfsLyxkRKuyV9Mm80jEN32OEk0wjXyKmcFEnkyYKltSJZJ
+   1XnZTlIwdUDKdlPnD2HEeexfx2TNQzKOonMdZvBGWDrcADnewmMzkumhr
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="312403648"
+X-IronPort-AV: E=Sophos;i="5.97,270,1669104000"; 
+   d="scan'208";a="312403648"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2023 05:41:20 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="698071403"
+X-IronPort-AV: E=Sophos;i="5.97,270,1669104000"; 
+   d="scan'208";a="698071403"
+Received: from unknown (HELO rajath-NUC10i7FNH..) ([10.223.165.88])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2023 05:41:17 -0800
+From:   Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+To:     irenic.rajneesh@gmail.com, david.e.box@intel.com,
+        hdegoede@redhat.com, markgross@kernel.org
+Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rajat.khandelwal@intel.com,
+        Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+Subject: [PATCH v3] platform/x86/intel/pmc: core: Add support to show LTR-ignored components
+Date:   Sat,  4 Feb 2023 19:13:27 +0530
+Message-Id: <20230204134327.412086-1-rajat.khandelwal@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y90Wxb8iuCRo06yr@lunn.ch>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_24_48,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 03:14:29PM +0100, Andrew Lunn wrote:
-> > index 6e7e6c346a3e..cf65646656e9 100644
-> > --- a/drivers/net/pcs/Kconfig
-> > +++ b/drivers/net/pcs/Kconfig
-> > @@ -18,6 +18,12 @@ config PCS_LYNX
-> >  	  This module provides helpers to phylink for managing the Lynx PCS
-> >  	  which is part of the Layerscape and QorIQ Ethernet SERDES.
-> >  
-> > +config PCS_MTK
-> > +	tristate
-> > +	help
-> > +	  This module provides helpers to phylink for managing the LynxI PCS
-> > +	  which is part of MediaTek's SoC and Ethernet switch ICs.
-> 
-> You should probably have a more specific name, for when MTK produces a
-> new PCS which is completely different.
-> 
-> Also, how similar is this LynxI PCS to the Lynx PCS?
+Currently, 'ltr_ignore' sysfs attribute, when read, returns nothing, even
+if there are components whose LTR values have been ignored.
 
-Probably not very similar. Here's the Mediatek 32-bit memory map,
-translated by me to a 16-bit MDIO memory map:
+This patch adds the feature to print out such components, if they exist.
 
-/* SGMII subsystem config registers */
-/* BMCR (low 16) BMSR (high 16) */
-#define SGMSYS_PCS_CONTROL_1		0x0		// BMCR at MDIO addr 0x0, BMSR at 0x1, aka standard
+Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+---
 
-#define SGMSYS_PCS_DEVICE_ID		0x4		// PHYSID1 at 0x2, PHYSID2 at 0x3, aka standard
+v3: Incorporated a mutex lock for accessing 'ltr_ignore_list'
 
-#define SGMSYS_PCS_ADVERTISE		0x8		// MII_ADV at 0x4, MII_LPA at 0x5
+v2: kmalloc -> devm_kmalloc
 
-#define SGMSYS_PCS_SCRATCH		0x14		// MDIO address 0xa
+ drivers/platform/x86/intel/pmc/core.c | 56 +++++++++++++++++++++------
+ drivers/platform/x86/intel/pmc/core.h |  2 +-
+ 2 files changed, 45 insertions(+), 13 deletions(-)
 
-/* Register to programmable link timer, the unit in 2 * 8ns */
-#define SGMSYS_PCS_LINK_TIMER		0x18		// MDIO address 0xc
+diff --git a/drivers/platform/x86/intel/pmc/core.c b/drivers/platform/x86/intel/pmc/core.c
+index 3a15d32d7644..31d649d8ce12 100644
+--- a/drivers/platform/x86/intel/pmc/core.c
++++ b/drivers/platform/x86/intel/pmc/core.c
+@@ -53,6 +53,17 @@ const struct pmc_bit_map msr_map[] = {
+ 	{}
+ };
+ 
++/* Mutual exclusion to access the list of LTR-ignored components */
++static DEFINE_MUTEX(ltr_entry_mutex);
++
++struct ltr_entry {
++	u32 comp_index;
++	const char *comp_name;
++	struct list_head node;
++};
++
++static LIST_HEAD(ltr_ignore_list);
++
+ static inline u32 pmc_core_reg_read(struct pmc_dev *pmcdev, int reg_offset)
+ {
+ 	return readl(pmcdev->regbase + reg_offset);
+@@ -435,27 +446,18 @@ static int pmc_core_pll_show(struct seq_file *s, void *unused)
+ }
+ DEFINE_SHOW_ATTRIBUTE(pmc_core_pll);
+ 
+-int pmc_core_send_ltr_ignore(struct pmc_dev *pmcdev, u32 value)
++void pmc_core_send_ltr_ignore(struct pmc_dev *pmcdev, u32 value)
+ {
+ 	const struct pmc_reg_map *map = pmcdev->map;
+ 	u32 reg;
+-	int err = 0;
+ 
+ 	mutex_lock(&pmcdev->lock);
+ 
+-	if (value > map->ltr_ignore_max) {
+-		err = -EINVAL;
+-		goto out_unlock;
+-	}
+-
+ 	reg = pmc_core_reg_read(pmcdev, map->ltr_ignore_offset);
+ 	reg |= BIT(value);
+ 	pmc_core_reg_write(pmcdev, map->ltr_ignore_offset, reg);
+ 
+-out_unlock:
+ 	mutex_unlock(&pmcdev->lock);
+-
+-	return err;
+ }
+ 
+ static ssize_t pmc_core_ltr_ignore_write(struct file *file,
+@@ -464,6 +466,8 @@ static ssize_t pmc_core_ltr_ignore_write(struct file *file,
+ {
+ 	struct seq_file *s = file->private_data;
+ 	struct pmc_dev *pmcdev = s->private;
++	const struct pmc_reg_map *map = pmcdev->map;
++	struct ltr_entry *entry;
+ 	u32 buf_size, value;
+ 	int err;
+ 
+@@ -473,13 +477,41 @@ static ssize_t pmc_core_ltr_ignore_write(struct file *file,
+ 	if (err)
+ 		return err;
+ 
+-	err = pmc_core_send_ltr_ignore(pmcdev, value);
++	if (value > map->ltr_ignore_max)
++		return -EINVAL;
++
++	mutex_lock(&ltr_entry_mutex);
++
++	list_for_each_entry(entry, &ltr_ignore_list, node) {
++		if (entry->comp_index == value)
++			return -EEXIST;
++	}
++
++	entry = devm_kmalloc(&pmcdev->pdev->dev, sizeof(*entry), GFP_KERNEL);
++	if (!entry)
++		return -ENOMEM;
++
++	entry->comp_name = map->ltr_show_sts[value].name;
++	entry->comp_index = value;
++	list_add_tail(&entry->node, &ltr_ignore_list);
+ 
+-	return err == 0 ? count : err;
++	mutex_unlock(&ltr_entry_mutex);
++
++	pmc_core_send_ltr_ignore(pmcdev, value);
++
++	return count;
+ }
+ 
+ static int pmc_core_ltr_ignore_show(struct seq_file *s, void *unused)
+ {
++	struct ltr_entry *entry;
++
++	mutex_lock(&ltr_entry_mutex);
++	list_for_each_entry(entry, &ltr_ignore_list, node) {
++		seq_printf(s, "%s\n", entry->comp_name);
++	}
++	mutex_unlock(&ltr_entry_mutex);
++
+ 	return 0;
+ }
+ 
+diff --git a/drivers/platform/x86/intel/pmc/core.h b/drivers/platform/x86/intel/pmc/core.h
+index 810204d758ab..da35b0fcbe6e 100644
+--- a/drivers/platform/x86/intel/pmc/core.h
++++ b/drivers/platform/x86/intel/pmc/core.h
+@@ -396,7 +396,7 @@ extern const struct pmc_reg_map adl_reg_map;
+ extern const struct pmc_reg_map mtl_reg_map;
+ 
+ extern void pmc_core_get_tgl_lpm_reqs(struct platform_device *pdev);
+-extern int pmc_core_send_ltr_ignore(struct pmc_dev *pmcdev, u32 value);
++extern void pmc_core_send_ltr_ignore(struct pmc_dev *pmcdev, u32 value);
+ 
+ void spt_core_init(struct pmc_dev *pmcdev);
+ void cnp_core_init(struct pmc_dev *pmcdev);
+-- 
+2.34.1
 
-/* Register to control remote fault */
-#define SGMSYS_SGMII_MODE		0x20		// MDIO address 0x10
-
-/* Register to reset SGMII design */
-#define SGMII_RESERVED_0		0x34		// MDIO address 0x1a
-
-/* Register to set SGMII speed, ANA RG_ Control Signals III */
-#define SGMSYS_ANA_RG_CS3		0x2028		// not sure how to access this through C22, OTOH not used?
-
-/* Register to power up QPHY */
-#define SGMSYS_QPHY_PWR_STATE_CTRL	0xe8		// again, not sure how to access through C22
-
-
-Compared to these definitions for Lynx, the rest being standard regs:
-
-#define LINK_TIMER_LO			0x12
-#define LINK_TIMER_HI			0x13
-#define IF_MODE				0x14
-
-So the standard bits appear to be common, the vendor extensions different.
-When I say common, I only take into consideration the memory map, not
-the differences in handling. For example, what Lynx handles as a single
-call to phylink_mii_c22_pcs_get_state(), the Mediatek PCS handles as a
-call to mtk_pcs_get_state().
