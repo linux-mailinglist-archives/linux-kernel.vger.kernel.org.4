@@ -2,324 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEF4668A73B
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 01:26:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0D5E68A750
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 01:48:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232871AbjBDA0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 19:26:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32788 "EHLO
+        id S232529AbjBDAsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 19:48:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231240AbjBDA0S (ORCPT
+        with ESMTP id S232149AbjBDAsp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 19:26:18 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BA8E8E6B1
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 16:26:16 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-4bdeb1bbeafso65582697b3.4
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 16:26:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YIcPLTJXUSQxI1A4pL/V2b6Q9BN8Fk+8wa9H/4PEokU=;
-        b=L4dWu2NPGiRQ+SxmAlADu6aP3M7eG10ImnR/uquy95c6/xZZCMA34VDM4B333FzvXx
-         k9cMuO1PorgGUIezeCHT54jEKU4p7Dt/nyhirWyrfg1w7E7v/5x8CIo066rPv29UGAdG
-         nzMFp4BVBWweKZo5kzd35nHPDWgNQ3Jd7U2JFkfBROmXELttWjCVzQ8+sG9WxcC7gvMR
-         y0RBDyDwx8VoSvuZONbJWLByGHLKOmy6JF0NNo+bc2VNPB6+mY0+E4hhxCFhwWsiwZFR
-         JF6n3TnpFNEn8ibOMsXICGlpuk9jCDKh/DkDkAbVVUfXjx8Dk7qpNsDlMKoALWaFn3r1
-         3Z4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YIcPLTJXUSQxI1A4pL/V2b6Q9BN8Fk+8wa9H/4PEokU=;
-        b=5CbN8GyQmXQSPvfYslvVbGDIeOEqCd8KpWrtUk4F+d+9aEQle3859ng0+DXPuJbuxz
-         TMGv5kAN48KelvyLDNDwlUr5adjRwvS+z4zyswDPzLWizGqi12FjxD9o1YiQcuKXfCmG
-         zL2N2qt7qfPH2Kwxu+n+QvgsgM/9TOrwaT47jJoRr45id2wKWBJUyoj/rwMwWne1wczc
-         XGHOAWYKJla63Bs4172RoTr2M2mxdbmkuzn/qSPkti4zl4ZmwXH0u4x+ojZPtTqBvqzZ
-         0B+ebB9bgYihbWtY+ccAiYCpoTpRNidbTaDXd/3wKI0WoAUVlbkMaPb7UMDmCGcplF8d
-         qRww==
-X-Gm-Message-State: AO0yUKWIPa3hpVql9wMEmZNy9uzA19j/AZMn8VUFv2yjOjFppwqPOHgY
-        1vLag3cle6iobCMZ9fB5I7qi2n1ENJ2nmA==
-X-Google-Smtp-Source: AK7set/2OtzJesiIW5C91Xyq9qdtlKp4fyRJ5d2agaAL0ngPKBXru2DD13PJ848goucY0XFPcqpa0shTmX5DYQ==
-X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:262e])
- (user=shakeelb job=sendgmr) by 2002:a81:aa4c:0:b0:506:5e35:e3bc with SMTP id
- z12-20020a81aa4c000000b005065e35e3bcmr1640502ywk.139.1675470375588; Fri, 03
- Feb 2023 16:26:15 -0800 (PST)
-Date:   Sat, 4 Feb 2023 00:26:13 +0000
-In-Reply-To: <CAJD7tkZ7H-fGa3x3kbbdKgvzDDRZrGGZ6oazTA-7aNUQ7X1Pmg@mail.gmail.com>
-Mime-Version: 1.0
-References: <20230202233229.3895713-1-yosryahmed@google.com>
- <20230203000057.GS360264@dread.disaster.area> <CAJD7tkazLFO8sc1Ly7+2_SGTxDq2XuPnvxxTnpQyXQELmq+m4A@mail.gmail.com>
- <Y90kK5jnxBbE9tV4@cmpxchg.org> <CAJD7tkZ7H-fGa3x3kbbdKgvzDDRZrGGZ6oazTA-7aNUQ7X1Pmg@mail.gmail.com>
-Message-ID: <20230204002613.f3ao52cpqf6wwxar@google.com>
-Subject: Re: [RFC PATCH v1 0/2] Ignore non-LRU-based reclaim in memcg reclaim
-From:   Shakeel Butt <shakeelb@google.com>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Dave Chinner <david@fromorbit.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        David Hildenbrand <david@redhat.com>,
-        Peter Xu <peterx@redhat.com>, NeilBrown <neilb@suse.de>,
-        Michal Hocko <mhocko@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-mm@kvack.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 3 Feb 2023 19:48:45 -0500
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4767A6C10
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 16:48:43 -0800 (PST)
+Received: from fsav113.sakura.ne.jp (fsav113.sakura.ne.jp [27.133.134.240])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 3140meC5031612;
+        Sat, 4 Feb 2023 09:48:40 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav113.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav113.sakura.ne.jp);
+ Sat, 04 Feb 2023 09:48:40 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav113.sakura.ne.jp)
+Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 3140mdlv031609
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Sat, 4 Feb 2023 09:48:40 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <caa13441-5f95-b7d6-dd5d-1cf49e709714@I-love.SAKURA.ne.jp>
+Date:   Sat, 4 Feb 2023 09:48:39 +0900
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [syzbot] WARNING: locking bug in umh_complete
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-kernel@vger.kernel.org, mcgrof@kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        syzkaller-bugs@googlegroups.com,
+        syzbot <syzbot+6cd18e123583550cf469@syzkaller.appspotmail.com>,
+        Hillf Danton <hdanton@sina.com>
+References: <20230127014137.4906-1-hdanton@sina.com>
+ <9d9b9652-c1ac-58e9-2eab-9256c17b1da2@I-love.SAKURA.ne.jp>
+ <7d1021f1-c88e-5a03-3b92-087f9be37491@I-love.SAKURA.ne.jp>
+ <Y9z76ZLe4On96xIN@hirez.programming.kicks-ass.net>
+ <Y9z+SerR8mlZYo16@hirez.programming.kicks-ass.net>
+ <6c47dbcf-2a17-6bb2-719b-841d851c603b@I-love.SAKURA.ne.jp>
+ <Y90ar35uKQoUrLEK@hirez.programming.kicks-ass.net>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <Y90ar35uKQoUrLEK@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 07:28:49AM -0800, Yosry Ahmed wrote:
-> On Fri, Feb 3, 2023 at 7:11 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
-> >
-> > On Thu, Feb 02, 2023 at 04:17:18PM -0800, Yosry Ahmed wrote:
-> > > On Thu, Feb 2, 2023 at 4:01 PM Dave Chinner <david@fromorbit.com> wrote:
-> > > > > Patch 1 is just refactoring updating reclaim_state into a helper
-> > > > > function, and renames reclaimed_slab to just reclaimed, with a comment
-> > > > > describing its true purpose.
-> > > > >
-> > > > > Patch 2 ignores pages reclaimed outside of LRU reclaim in memcg reclaim.
-> > > > >
-> > > > > The original draft was a little bit different. It also kept track of
-> > > > > uncharged objcg pages, and reported them only in memcg reclaim and only
-> > > > > if the uncharged memcg is in the subtree of the memcg under reclaim.
-> > > > > This was an attempt to make reporting of memcg reclaim even more
-> > > > > accurate, but was dropped due to questionable complexity vs benefit
-> > > > > tradeoff. It can be revived if there is interest.
-> > > > >
-> > > > > Yosry Ahmed (2):
-> > > > >   mm: vmscan: refactor updating reclaimed pages in reclaim_state
-> > > > >   mm: vmscan: ignore non-LRU-based reclaim in memcg reclaim
-> > > > >
-> > > > >  fs/inode.c           |  3 +--
-> > > >
-> > > > Inodes and inode mapping pages are directly charged to the memcg
-> > > > that allocated them and the shrinker is correctly marked as
-> > > > SHRINKER_MEMCG_AWARE. Freeing the pages attached to the inode will
-> > > > account them correctly to the related memcg, regardless of which
-> > > > memcg is triggering the reclaim.  Hence I'm not sure that skipping
-> > > > the accounting of the reclaimed memory is even correct in this case;
-> > >
-> > > Please note that we are not skipping any accounting here. The pages
-> > > are still uncharged from the memcgs they are charged to (the allocator
-> > > memcgs as you pointed out). We just do not report them in the return
-> > > value of try_to_free_mem_cgroup_pages(), to avoid over-reporting.
-> >
-> > I was wondering the same thing as Dave, reading through this. But
-> > you're right, we'll catch the accounting during uncharge. Can you
-> > please add a comment on the !cgroup_reclaim() explaining this?
+On 2023/02/03 23:31, Peter Zijlstra wrote:
+> Yes, I meant something like so.
 > 
-> Sure! If we settle on this implementation I will send another version
-> with a comment and fix the build problem in patch 2.
 > 
-> >
-> > There is one wrinkle with this, though. We have the following
-> > (simplified) sequence during charging:
-> >
-> >         nr_reclaimed = try_to_free_mem_cgroup_pages(mem_over_limit, nr_pages,
-> >                                                     gfp_mask, reclaim_options);
-> >
-> >         if (mem_cgroup_margin(mem_over_limit) >= nr_pages)
-> >                 goto retry;
-> >
-> >         /*
-> >          * Even though the limit is exceeded at this point, reclaim
-> >          * may have been able to free some pages.  Retry the charge
-> >          * before killing the task.
-> >          *
-> >          * Only for regular pages, though: huge pages are rather
-> >          * unlikely to succeed so close to the limit, and we fall back
-> >          * to regular pages anyway in case of failure.
-> >          */
-> >         if (nr_reclaimed && nr_pages <= (1 << PAGE_ALLOC_COSTLY_ORDER))
-> >                 goto retry;
-> >
-> > So in the unlikely scenario where the first call doesn't make the
-> > necessary headroom, and the shrinkers are the only thing that made
-> > forward progress, we would OOM prematurely.
-> >
-> > Not that an OOM would seem that far away in that scenario, anyway. But I
-> > remember long discussions with DavidR on probabilistic OOM regressions ;)
-> >
-> 
-> Above the if (nr_reclaimed...) check we have:
-> 
-> if (gfp_mask & __GFP_NORETRY)
->     goto nomem;
-> 
-> , and below it we have:
-> 
-> if (nr_retries--)
->     goto retry;
-> 
-> So IIUC we only prematurely OOM if we either have __GFP_NORETRY and
-> cannot reclaim any LRU pages in the first try, or if the scenario
-> where only shrinkers were successful to reclaim happens in the last
-> retry. Right?
-> 
+> diff --git a/kernel/umh.c b/kernel/umh.c
+> index 850631518665..0e69e1e4b6fe 100644
+> --- a/kernel/umh.c
+> +++ b/kernel/umh.c
+> @@ -438,21 +438,24 @@ int call_usermodehelper_exec(struct subprocess_info *sub_info, int wait)
+>  	if (wait == UMH_NO_WAIT)	/* task has freed sub_info */
+>  		goto unlock;
+>  
+> -	if (wait & UMH_KILLABLE)
+> -		state |= TASK_KILLABLE;
+> -
+> -	if (wait & UMH_FREEZABLE)
+> +	if (wait & UMH_FREEZABLE) {
+>  		state |= TASK_FREEZABLE;
+>  
+> -	retval = wait_for_completion_state(&done, state);
+> -	if (!retval)
+> -		goto wait_done;
+> -
+>  	if (wait & UMH_KILLABLE) {
+> +		retval = wait_for_completion_state(&done, state | TASK_KILLABLE);
+> +		if (!retval)
+> +			goto wait_done;
+> +
+>  		/* umh_complete() will see NULL and free sub_info */
+>  		if (xchg(&sub_info->complete, NULL))
+>  			goto unlock;
+> +
+> +		/*
+> +		 * fallthrough; in case of -ERESTARTSYS now do uninterruptible
+> +		 * wait_for_completion().
+> +		 */
+>  	}
+> +	wait_for_completion_state(&done, state);
+>  
+>  wait_done:
+>  	retval = sub_info->retval;
 
-We don't call oom-killer for __GFP_NORETRY. Also note that the retry
-(from nr_retries) after the reclaim includes page_counter_try_charge().
-So, even if try_to_free_mem_cgroup_pages() have returned 0 after
-reclaiming the slab memory of the memcg, the page_counter_try_charge()
-should succeed if the reclaimed slab objects have created enough margin.
+Please fold below diff, provided that wait_for_completion_state(TASK_FREEZABLE)
+does not return when the current thread was frozen. (If
+wait_for_completion_state(TASK_FREEZABLE) returns when the current thread was
+frozen, we will fail to execute the
 
-> > > > I think the code should still be accounting for all pages that
-> > > > belong to the memcg being scanned that are reclaimed, not ignoring
-> > > > them altogether...
-> > >
-> > > 100% agree. Ideally I would want to:
-> > > - For pruned inodes: report all freed pages for global reclaim, and
-> > > only report pages charged to the memcg under reclaim for memcg
-> > > reclaim.
-> >
-> > This only happens on highmem systems at this point, as elsewhere
-> > populated inodes aren't on the shrinker LRUs anymore. We'd probably be
-> > ok with a comment noting the inaccuracy in the proactive reclaim stats
-> > for the time being, until somebody actually cares about that combination.
-> 
-> Interesting, I did not realize this. I guess in this case we may get
-> away with just ignoring non-LRU reclaimed pages in memcg reclaim
-> completely, or go an extra bit and report uncharged objcg pages in
-> memcg reclaim. See below.
-> 
-> >
-> > > - For slab: report all freed pages for global reclaim, and only report
-> > > uncharged objcg pages from the memcg under reclaim for memcg reclaim.
-> > >
-> > > The only problem is that I thought people would think this is too much
-> > > complexity and not worth it. If people agree this should be the
-> > > approach to follow, I can prepare patches for this. I originally
-> > > implemented this for slab pages, but held off on sending it.
-> >
-> > I'd be curious to see the code!
-> 
-> I think it is small enough to paste here. Basically instead of just
-> ignoring reclaim_state->reclaimed completely in patch 2, I counted
-> uncharged objcg pages only in memcg reclaim instead of freed slab
-> pages, and ignored pruned inode pages in memcg reclaim. So I guess we
-> can go with either:
-> - Just ignore freed slab pages and pages from pruned inodes in memcg
-> reclaim (current RFC).
-> - Ignore pruned inodes in memcg reclaim (as you explain above), and
-> use the following diff instead of patch 2 for slab.
-> - Use the following diff for slab AND properly report freed pages from
-> pruned inodes if they are relevant to the memcg under reclaim.
-> 
-> Let me know what you think is best.
-> 
+  retval = sub_info->retval;
 
-I would prefer the currect RFC instead of the other two options. Those
-options are slowing down (and adding complexity) to the uncharge code
-path for the accuracy which no one really need or should care about.
+line in order to get the exit code after the current thread is thawed...)
 
-> diff --git a/include/linux/swap.h b/include/linux/swap.h
-> index bc1d8b326453..37f799901dfb 100644
-> --- a/include/linux/swap.h
-> +++ b/include/linux/swap.h
-> @@ -162,6 +162,7 @@ struct reclaim_state {
->  };
-> 
->  void report_freed_pages(unsigned long pages);
-> +bool report_uncharged_pages(unsigned long pages, struct mem_cgroup *memcg);
-> 
->  #ifdef __KERNEL__
-> 
-> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-> index ab457f0394ab..a886ace70648 100644
-> --- a/mm/memcontrol.c
-> +++ b/mm/memcontrol.c
-> @@ -3080,6 +3080,13 @@ static void obj_cgroup_uncharge_pages(struct
-> obj_cgroup *objcg,
->         memcg_account_kmem(memcg, -nr_pages);
->         refill_stock(memcg, nr_pages);
-> 
-> +       /*
-> +        * If undergoing memcg reclaim, report uncharged pages and drain local
-> +        * stock to update the memcg usage.
-> +        */
-> +       if (report_uncharged_pages(nr_pages, memcg))
-> +               drain_local_stock(NULL);
-> +
->         css_put(&memcg->css);
->  }
-> 
-> diff --git a/mm/vmscan.c b/mm/vmscan.c
-> index 207998b16e5f..d4eced2b884b 100644
-> --- a/mm/vmscan.c
-> +++ b/mm/vmscan.c
-> @@ -204,17 +204,54 @@ static void set_task_reclaim_state(struct
-> task_struct *task,
->         task->reclaim_state = rs;
->  }
-> 
-> +static bool cgroup_reclaim(struct scan_control *sc);
-> +
->  /*
->   * reclaim_report_freed_pages: report pages freed outside of LRU-based reclaim
->   * @pages: number of pages freed
->   *
-> - * If the current process is undergoing a reclaim operation,
-> + * If the current process is undergoing a non-cgroup reclaim operation,
->   * increment the number of reclaimed pages by @pages.
->   */
->  void report_freed_pages(unsigned long pages)
->  {
-> -       if (current->reclaim_state)
-> -               current->reclaim_state->reclaimed += pages;
-> +       struct reclaim_state *rs = current->reclaim_state;
-> +       struct scan_control *sc;
-> +
-> +       if (!rs)
-> +               return;
-> +
-> +       sc = container_of(rs, struct scan_control, reclaim_state);
-> +       if (!cgroup_reclaim(sc))
-> +               rs->reclaimed += pages;
-> +}
-> +
-> +/*
-> + * report_uncharged_pages: report pages uncharged outside of LRU-based reclaim
-> + * @pages: number of pages uncharged
-> + * @memcg: memcg pages were uncharged from
-> + *
-> + * If the current process is undergoing a cgroup reclaim operation, increment
-> + * the number of reclaimed pages by @pages, if the memcg under
-> reclaim is @memcg
-> + * or an ancestor of it.
-> + *
-> + * Returns true if an update was made.
-> + */
-> +bool report_uncharged_pages(unsigned long pages, struct mem_cgroup *memcg)
-> +{
-> +       struct reclaim_state *rs = current->reclaim_state;
-> +       struct scan_control *sc;
-> +
-> +       if (!rs)
-> +               return false;
-> +
-> +       sc = container_of(rs, struct scan_control, reclaim_state);
-> +       if (cgroup_reclaim(sc) &&
-> +           mem_cgroup_is_descendant(memcg, sc->target_mem_cgroup)) {
-> +               rs->reclaimed += pages;
-> +               return true;
-> +       }
-> +       return false;
->  }
-> 
->  LIST_HEAD(shrinker_list);
+diff --git a/kernel/umh.c b/kernel/umh.c
+index 0e69e1e4b6fe..a776920ec051 100644
+--- a/kernel/umh.c
++++ b/kernel/umh.c
+@@ -431,35 +431,38 @@ int call_usermodehelper_exec(struct subprocess_info *sub_info, int wait)
+ 	 * This makes it possible to use umh_complete to free
+ 	 * the data structure in case of UMH_NO_WAIT.
+ 	 */
+ 	sub_info->complete = (wait == UMH_NO_WAIT) ? NULL : &done;
+ 	sub_info->wait = wait;
+ 
+ 	queue_work(system_unbound_wq, &sub_info->work);
+ 	if (wait == UMH_NO_WAIT)	/* task has freed sub_info */
+ 		goto unlock;
+ 
+-	if (wait & UMH_FREEZABLE) {
++	if (wait & UMH_FREEZABLE)
+ 		state |= TASK_FREEZABLE;
+ 
+ 	if (wait & UMH_KILLABLE) {
+ 		retval = wait_for_completion_state(&done, state | TASK_KILLABLE);
+ 		if (!retval)
+ 			goto wait_done;
+ 
+ 		/* umh_complete() will see NULL and free sub_info */
+ 		if (xchg(&sub_info->complete, NULL))
+ 			goto unlock;
+ 
+ 		/*
+ 		 * fallthrough; in case of -ERESTARTSYS now do uninterruptible
+-		 * wait_for_completion().
++		 * wait_for_completion_state(). Since umh_complete() shall call
++		 * complete() in a moment if xchg() above returned NULL, this
++		 * uninterruptible wait_for_completion_state() will not block
++		 * SIGKILL'ed process for so long.
+ 		 */
+ 	}
+ 	wait_for_completion_state(&done, state);
+ 
+ wait_done:
+ 	retval = sub_info->retval;
+ out:
+ 	call_usermodehelper_freeinfo(sub_info);
+ unlock:
+ 	helper_unlock();
+
