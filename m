@@ -2,94 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CE8068AA5B
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 14:53:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B75068AA68
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 14:54:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233606AbjBDNxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 08:53:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52694 "EHLO
+        id S233784AbjBDNyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 08:54:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232288AbjBDNxD (ORCPT
+        with ESMTP id S233846AbjBDNx4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 08:53:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C0516AF7;
-        Sat,  4 Feb 2023 05:53:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 33FCEB80AC0;
-        Sat,  4 Feb 2023 13:53:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6D70C433EF;
-        Sat,  4 Feb 2023 13:52:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675518779;
-        bh=SBmLBfbPwmxMq1JunLKNGqJ1Bg0KuqBM2RCdrwTq2f0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=k1siZoUCWHvsI1gm4KBlpR5GVlfW0Lv/noX57QpCfnPyIVioS8qF3mvjMxZ13UDh3
-         IDTs66nEqbYrUbXDISefcBayDN+LKWn131pcTJ38A2d3hk/yc83kLLL61OgDvPjEdp
-         rQcJ0qv8nqYQJuEj8UW4rXBX5ezx/nxd2i5//MFVB6q0nP5bbqCfmuYwcOV6JHKZck
-         NHg66tGHP8n0Z4WQfMEzBrWRewrcbVIbtFc9Kq34wrCTVeSOSt8lY4dHfuSjOGPkyG
-         BRf78chuuAsNNsnZO9KY5VEdV6ijQ4cmJ9nFg+LE2IediO9ie0cv0MVZqhNLOlfn/A
-         bGn6XczXC6q8A==
-Date:   Sat, 4 Feb 2023 13:52:37 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com
-Subject: Re: [PATCHv6 05/11] mfd: rk808: split into core and i2c
-Message-ID: <Y95jJYlqDayiaMP1@google.com>
-References: <20230127181244.160887-1-sebastian.reichel@collabora.com>
- <20230127181244.160887-6-sebastian.reichel@collabora.com>
+        Sat, 4 Feb 2023 08:53:56 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9FEF37B79;
+        Sat,  4 Feb 2023 05:53:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675518828; x=1707054828;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BwigBs1aMqtVp4Q9wvZ4hwv9KfZie/IcsgUZDHHV4Xk=;
+  b=lRf8FL58rW0s9bVnW9XiKSqS1dGMNg47iQWa1rhfVlUXP1bhQvkMyU3M
+   bFCPKoHTTAMjfOSMm9wO0vnbdy5Ba0XSThq+zVmPZPCoWjeMeV8aD+dGL
+   sRh+CH6sNhq9a4lwhJeRWUhRIJRdjIYGHofXN+4Mu4zTjRbDeF6WfcW3i
+   WtP0tU1ZVXqdoVD2Mm9z35x4wAixbvVzG23ujK7DSXkGX6OUZ1r1A6dK0
+   cm+EqOQmrXmndAnYifRaR0V8jiUzU5XvZ0lmPbqqdWVSaw2GpdcomP3HN
+   fMlf53bSgBTSDqr3kCjvoZO4lbwMAiKBixYYf2gIxZyU2KJ4wXp3XamCv
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="309279246"
+X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
+   d="scan'208";a="309279246"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2023 05:53:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="643564021"
+X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
+   d="scan'208";a="643564021"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 04 Feb 2023 05:53:45 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pOIzB-0001L8-00;
+        Sat, 04 Feb 2023 13:53:45 +0000
+Date:   Sat, 4 Feb 2023 21:52:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ben Gardon <bgardon@google.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Ben Gardon <bgardon@google.com>
+Subject: Re: [PATCH 11/21] KVM: x86/MMU: Cleanup shrinker interface with
+ Shadow MMU
+Message-ID: <202302042127.gbKNDVaL-lkp@intel.com>
+References: <20230202182809.1929122-12-bgardon@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230127181244.160887-6-sebastian.reichel@collabora.com>
+In-Reply-To: <20230202182809.1929122-12-bgardon@google.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 27 Jan 2023, Sebastian Reichel wrote:
+Hi Ben,
 
-> Split rk808 into a core and an i2c part in preperation for
-> SPI support.
-> 
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> ---
->  drivers/clk/Kconfig                   |   2 +-
->  drivers/input/misc/Kconfig            |   2 +-
->  drivers/mfd/Kconfig                   |   7 +-
->  drivers/mfd/Makefile                  |   3 +-
->  drivers/mfd/{rk808.c => rk8xx-core.c} | 209 +++++---------------------
->  drivers/mfd/rk8xx-i2c.c               | 200 ++++++++++++++++++++++++
->  drivers/pinctrl/Kconfig               |   2 +-
->  drivers/power/supply/Kconfig          |   2 +-
->  drivers/regulator/Kconfig             |   2 +-
->  drivers/rtc/Kconfig                   |   2 +-
->  include/linux/mfd/rk808.h             |   6 +
->  sound/soc/codecs/Kconfig              |   2 +-
->  12 files changed, 256 insertions(+), 183 deletions(-)
->  rename drivers/mfd/{rk808.c => rk8xx-core.c} (76%)
->  create mode 100644 drivers/mfd/rk8xx-i2c.c
+Thank you for the patch! Perhaps something to improve:
 
-Looks like you completely ignored (no response / no action) my review of
-v4.  This submission is therefore not getting one!  All comments can be
-superimposed from v4.
+[auto build test WARNING on 7cb79f433e75b05d1635aefaa851cfcd1cb7dc4f]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ben-Gardon/KVM-x86-mmu-Rename-slot-rmap-walkers-to-add-clarity-and-clean-up-code/20230203-023259
+base:   7cb79f433e75b05d1635aefaa851cfcd1cb7dc4f
+patch link:    https://lore.kernel.org/r/20230202182809.1929122-12-bgardon%40google.com
+patch subject: [PATCH 11/21] KVM: x86/MMU: Cleanup shrinker interface with Shadow MMU
+config: x86_64-randconfig-a002 (https://download.01.org/0day-ci/archive/20230204/202302042127.gbKNDVaL-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/c1170de906dfe1ee64da0066e7c28d35e716ed18
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Ben-Gardon/KVM-x86-mmu-Rename-slot-rmap-walkers-to-add-clarity-and-clean-up-code/20230203-023259
+        git checkout c1170de906dfe1ee64da0066e7c28d35e716ed18
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kvm/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> arch/x86/kvm/mmu/mmu.c:3148:15: warning: no previous prototype for 'mmu_shrink_scan' [-Wmissing-prototypes]
+    3148 | unsigned long mmu_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
+         |               ^~~~~~~~~~~~~~~
+
+
+vim +/mmu_shrink_scan +3148 arch/x86/kvm/mmu/mmu.c
+
+  3147	
+> 3148	unsigned long mmu_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
+  3149	{
+  3150		struct kvm *kvm;
+  3151		int nr_to_scan = sc->nr_to_scan;
+  3152		unsigned long freed = 0;
+  3153	
+  3154		mutex_lock(&kvm_lock);
+  3155	
+  3156		list_for_each_entry(kvm, &vm_list, vm_list) {
+  3157			/*
+  3158			 * Never scan more than sc->nr_to_scan VM instances.
+  3159			 * Will not hit this condition practically since we do not try
+  3160			 * to shrink more than one VM and it is very unlikely to see
+  3161			 * !n_used_mmu_pages so many times.
+  3162			 */
+  3163			if (!nr_to_scan--)
+  3164				break;
+  3165	
+  3166			/*
+  3167			 * n_used_mmu_pages is accessed without holding kvm->mmu_lock
+  3168			 * here. We may skip a VM instance errorneosly, but we do not
+  3169			 * want to shrink a VM that only started to populate its MMU
+  3170			 * anyway.
+  3171			 */
+  3172			if (!kvm->arch.n_used_mmu_pages &&
+  3173			    !kvm_shadow_mmu_has_zapped_obsolete_pages(kvm))
+  3174				continue;
+  3175	
+  3176			freed = kvm_shadow_mmu_shrink_scan(kvm, sc->nr_to_scan);
+  3177	
+  3178			/*
+  3179			 * unfair on small ones
+  3180			 * per-vm shrinkers cry out
+  3181			 * sadness comes quickly
+  3182			 */
+  3183			list_move_tail(&kvm->vm_list, &vm_list);
+  3184			break;
+  3185		}
+  3186	
+  3187		mutex_unlock(&kvm_lock);
+  3188		return freed;
+  3189	}
+  3190	
 
 -- 
-Lee Jones [李琼斯]
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
