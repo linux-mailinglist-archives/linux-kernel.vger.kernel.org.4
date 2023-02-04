@@ -2,105 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15F1968ABC5
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 18:55:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70BE068ABC8
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 19:11:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233106AbjBDRzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 12:55:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40064 "EHLO
+        id S233171AbjBDSLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 13:11:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231165AbjBDRzr (ORCPT
+        with ESMTP id S230358AbjBDSLo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 12:55:47 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3298620D39;
-        Sat,  4 Feb 2023 09:55:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AE1A560010;
-        Sat,  4 Feb 2023 17:55:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11E0CC433EF;
-        Sat,  4 Feb 2023 17:55:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675533346;
-        bh=DvnyUFTfuLYFClio4Yz27xdgvScxNsoLoiw/RTpcbck=;
-        h=From:Date:Subject:To:Cc:From;
-        b=neF4OnettAXoktdO9nyyPWMQM/zaGW+4ia7hYR1bPaiCn+qgOPxqMYufNzw7Q24oq
-         lAADL/tvbqAONqvHFOimqF7liXgHvxD9JKtaQS5aM8L6Au5O1QG8Fg/K0/+3+a7fEZ
-         XHt2lUdJyFVtvu60YAASkKgaKgunVdpMiRlj8EPYR359DyYLtmch2B37XhIuGiFC9L
-         14+c9GjvckTmI2v3+cTAfH+QMOjmq9u4acjPCQqFAOCtT/BlcbeFyeLvtwOerpJx0N
-         GpDVMmA9vj09ELfw+1diZN7ezzE4+nRwcJJR8/7jv1k/XZ0fhexvOmSXCQip3YHKpf
-         CBO4djoZ1DQuw==
-Received: by mail-oi1-f182.google.com with SMTP id bx13so6723677oib.13;
-        Sat, 04 Feb 2023 09:55:46 -0800 (PST)
-X-Gm-Message-State: AO0yUKXcAS24qRIVwA0k+og1vLy2URcyxOGvYGSHJLNhTs/2QHkiR9SS
-        ee27qbxHl07vKQvMlstb24mzEcJhQxmWy0euQPU=
-X-Google-Smtp-Source: AK7set8A380NaprCfWQjGbR9j8EjoFu0XoP8sGD5Yiar4utMyVgVOJxLCuFsgx1wTgEN03bjvs2HR7RyMEAsDwvkGTs=
-X-Received: by 2002:a05:6808:16a3:b0:377:f944:a8b7 with SMTP id
- bb35-20020a05680816a300b00377f944a8b7mr481383oib.194.1675533345328; Sat, 04
- Feb 2023 09:55:45 -0800 (PST)
+        Sat, 4 Feb 2023 13:11:44 -0500
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB9BC2E833
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 10:11:42 -0800 (PST)
+Received: by mail-io1-f71.google.com with SMTP id d73-20020a6bb44c000000b0072805fbd06aso4920038iof.17
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Feb 2023 10:11:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rQGSWS0NeeOjDjctwAW1Mbr92dfn1bVGuk+o1S9F3bw=;
+        b=284EvMH0RDrnDo+Fvi2kdRxZVBcMMy/v8LwyUQgWgxk13InAMbdDbRUBpwYd4cv2f2
+         cwLkPgKvj/cWgW8QC1F6jHOT2z7/MG3wtxdEJ7HXCypA1jFwVXXwhek3VDjYssNWibVg
+         49hJufzgNpG1V7fNb2o5kYFh2fp7SXKjQUUeQ8d/tbNQhrA5uMuL7AMDNfNFd4FWdIg2
+         dImGnr8nmCFCGiQcOb+4Q7TkXq6TdkLjSlJetKnUjGOX6Yc6o6gA4i0e4pf6Fk4oxlt/
+         vxrhl0R+D90D62EWgndrtBldpIJgKf5ob8HYKLzH17N9671HUzr90/K6Mz/RsDPV3v/B
+         HFDQ==
+X-Gm-Message-State: AO0yUKX40Faj4j4toZe72Q63ZmpNBE86tW7XZfzXwBzh+uMaUTQTUpbz
+        1qspcLS304I3ZfomXHeZGcQ5srVra0vrhjonK9NDisCWlcPo
+X-Google-Smtp-Source: AK7set+EEG4UivBKOEMCy8RMUEPYof6boZ8VOw+bsOXkB0jD8sFMFdxZka63rCPAoKxhKKFQuD8JwKwf4SiV5Gc68kMT70jz4pJp
 MIME-Version: 1.0
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 5 Feb 2023 02:55:09 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARNwyei5pGmwR+iSLH733jAsaHet9h1dfWHF2x+Uhb=ag@mail.gmail.com>
-Message-ID: <CAK7LNARNwyei5pGmwR+iSLH733jAsaHet9h1dfWHF2x+Uhb=ag@mail.gmail.com>
-Subject: [GIT PULL] Kbuild fixes for v6.2-rc7
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+X-Received: by 2002:a92:ac0c:0:b0:312:5d71:af94 with SMTP id
+ r12-20020a92ac0c000000b003125d71af94mr2990545ilh.78.1675534302238; Sat, 04
+ Feb 2023 10:11:42 -0800 (PST)
+Date:   Sat, 04 Feb 2023 10:11:42 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e4e20e05f3e3ba70@google.com>
+Subject: [syzbot] WARNING in kernfs_get (4)
+From:   syzbot <syzbot+9be7b6c4b696be5d83ef@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tj@kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Linus,
+Hello,
 
-Please pull some Kbuild fixes.
+syzbot found the following issue on:
 
-Thank you.
+HEAD commit:    80bd9028feca Add linux-next specific files for 20230131
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=155ac609480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=904dc2f450eaad4a
+dashboard link: https://syzkaller.appspot.com/bug?extid=9be7b6c4b696be5d83ef
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=151a6d79480000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/924618188238/disk-80bd9028.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/7a03cf86e545/vmlinux-80bd9028.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/568e80043a41/bzImage-80bd9028.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+9be7b6c4b696be5d83ef@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 5108 at fs/kernfs/dir.c:522 kernfs_get.part.0+0x69/0x80 fs/kernfs/dir.c:522
+Modules linked in:
+CPU: 0 PID: 5108 Comm: syz-executor.3 Not tainted 6.2.0-rc6-next-20230131-syzkaller-09515-g80bd9028feca #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
+RIP: 0010:kernfs_get.part.0+0x69/0x80 fs/kernfs/dir.c:522
+Code: 31 ff 89 ee e8 e8 65 7a ff 85 ed 74 18 e8 8f 69 7a ff be 04 00 00 00 48 89 df e8 a2 74 c9 ff f0 ff 03 5b 5d c3 e8 77 69 7a ff <0f> 0b eb df 48 89 df e8 eb 6d c9 ff eb c6 66 0f 1f 84 00 00 00 00
+RSP: 0018:ffffc900040bef10 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: ffff888077931000 RCX: 0000000000000000
+RDX: ffff888021c91d40 RSI: ffffffff820a4ca9 RDI: 0000000000000005
+RBP: 0000000000000000 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: ffff8880779310e8
+R13: ffff88802b4c6028 R14: ffff8880222f2b50 R15: 0000000000000000
+FS:  00005555572ee400(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f167a621718 CR3: 00000000730ad000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ kernfs_get fs/kernfs/dir.c:521 [inline]
+ kernfs_new_node fs/kernfs/dir.c:676 [inline]
+ kernfs_create_dir_ns+0xc4/0x230 fs/kernfs/dir.c:1029
+ sysfs_create_dir_ns+0x12b/0x290 fs/sysfs/dir.c:59
+ create_dir lib/kobject.c:63 [inline]
+ kobject_add_internal+0x2c9/0x9c0 lib/kobject.c:231
+ kobject_add_varg lib/kobject.c:366 [inline]
+ kobject_init_and_add+0x101/0x170 lib/kobject.c:449
+ rx_queue_add_kobject net/core/net-sysfs.c:1063 [inline]
+ net_rx_queue_update_kobjects+0x25f/0x510 net/core/net-sysfs.c:1114
+ register_queue_kobjects net/core/net-sysfs.c:1774 [inline]
+ netdev_register_kobject+0x279/0x400 net/core/net-sysfs.c:2019
+ register_netdevice+0xd77/0x1640 net/core/dev.c:10048
+ cfg80211_register_netdevice+0x157/0x330 net/wireless/core.c:1397
+ ieee80211_if_add+0x1096/0x1970 net/mac80211/iface.c:2198
+ ieee80211_register_hw+0x37db/0x40d0 net/mac80211/main.c:1403
+ mac80211_hwsim_new_radio+0x25c5/0x4920 drivers/net/wireless/mac80211_hwsim.c:4583
+ hwsim_new_radio_nl+0xa09/0x10f0 drivers/net/wireless/mac80211_hwsim.c:5176
+ genl_family_rcv_msg_doit.isra.0+0x1e6/0x2d0 net/netlink/genetlink.c:968
+ genl_family_rcv_msg net/netlink/genetlink.c:1048 [inline]
+ genl_rcv_msg+0x4ff/0x7e0 net/netlink/genetlink.c:1065
+ netlink_rcv_skb+0x165/0x440 net/netlink/af_netlink.c:2574
+ genl_rcv+0x28/0x40 net/netlink/genetlink.c:1076
+ netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
+ netlink_unicast+0x547/0x7f0 net/netlink/af_netlink.c:1365
+ netlink_sendmsg+0x925/0xe30 net/netlink/af_netlink.c:1942
+ sock_sendmsg_nosec net/socket.c:722 [inline]
+ sock_sendmsg+0xde/0x190 net/socket.c:745
+ __sys_sendto+0x23a/0x340 net/socket.c:2142
+ __do_sys_sendto net/socket.c:2154 [inline]
+ __se_sys_sendto net/socket.c:2150 [inline]
+ __x64_sys_sendto+0xe1/0x1b0 net/socket.c:2150
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f859403e0fc
+Code: fa fa ff ff 44 8b 4c 24 2c 4c 8b 44 24 20 89 c5 44 8b 54 24 28 48 8b 54 24 18 b8 2c 00 00 00 48 8b 74 24 10 8b 7c 24 08 0f 05 <48> 3d 00 f0 ff ff 77 34 89 ef 48 89 44 24 08 e8 20 fb ff ff 48 8b
+RSP: 002b:00007ffea124f050 EFLAGS: 00000293 ORIG_RAX: 000000000000002c
+RAX: ffffffffffffffda RBX: 00007f8594cd4620 RCX: 00007f859403e0fc
+RDX: 0000000000000024 RSI: 00007f8594cd4670 RDI: 0000000000000003
+RBP: 0000000000000000 R08: 00007ffea124f0a4 R09: 000000000000000c
+R10: 0000000000000000 R11: 0000000000000293 R12: 0000000000000000
+R13: 00007f8594cd4670 R14: 0000000000000003 R15: 0000000000000000
+ </TASK>
 
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-
-
-The following changes since commit 2241ab53cbb5cdb08a6b2d4688feb13971058f65:
-
-  Linux 6.2-rc5 (2023-01-21 16:27:01 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
-tags/kbuild-fixes-v6.2-4
-
-for you to fetch changes up to 22e46f6480e83bcf49b6d5e6b66c81872c97a902:
-
-  kbuild: modinst: Fix build error when CONFIG_MODULE_SIG_KEY is a
-PKCS#11 URI (2023-01-31 17:53:01 +0900)
-
-----------------------------------------------------------------
-Kbuild fixes for v6.2 (4th)
-
- - Fix two bugs (for building and for signing) when CONFIG_MODULE_SIG_KEY
-   contains PKCS#11 URI.
-
-----------------------------------------------------------------
-Jan Luebbe (2):
-      certs: Fix build error when PKCS#11 URI contains semicolon
-      kbuild: modinst: Fix build error when CONFIG_MODULE_SIG_KEY is a
-PKCS#11 URI
-
- certs/Makefile           | 4 ++--
- scripts/Makefile.modinst | 6 +++++-
- 2 files changed, 7 insertions(+), 3 deletions(-)
-
-
-
--- 
-Best Regards
-Masahiro Yamada
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
