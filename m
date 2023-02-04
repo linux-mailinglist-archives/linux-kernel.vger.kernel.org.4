@@ -2,131 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4CB068A9A9
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 12:30:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 397D368A9AD
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 12:43:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233294AbjBDLat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 06:30:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37348 "EHLO
+        id S232417AbjBDLnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 06:43:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjBDLar (ORCPT
+        with ESMTP id S229448AbjBDLnO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 06:30:47 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1DF833476;
-        Sat,  4 Feb 2023 03:30:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675510245; x=1707046245;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pxG2PMYD9PrmXuRk6KzR4zbAxmr0VBPiSuKznRqqPvY=;
-  b=IEnr+/bKiL2b4Izs+tEN0xmBc21Z7WRWRwBszuZzKoKAmw6nhU8WPLMN
-   mXaVEfqW8eqHEYFxqEMTdYOdae5eWLRp1c77f16iJpDVkPTpyNZMtrLGr
-   4g+XjoFTjN27GxRbjT7u3aohCy77eJAseY+ZCtZvfM3vlgD8C0ZNPsZnz
-   LpDJioaJ3XhQdM92W9rutJYKxdEqzJzSyyZskpJnbml+go4+bIAp6YPV8
-   8eX9/erfpX1enOPrNAhq5rZS8XiTjZPITQaU3IjYYC8SlWDHPHyA2TFIA
-   DiVFoVtV8KzNwjbxa1qhw1NpkGN4u03nLcilmCKwSVCzF/3axuMpLfzb1
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="356282934"
-X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
-   d="scan'208";a="356282934"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2023 03:30:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="667926453"
-X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
-   d="scan'208";a="667926453"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 04 Feb 2023 03:30:42 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pOGkj-0001Gi-2u;
-        Sat, 04 Feb 2023 11:30:41 +0000
-Date:   Sat, 4 Feb 2023 19:30:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        marijn.suijten@somainline.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 02/10] clk: qcom: branch: Add helper functions for
- setting SLEEP/WAKE bits
-Message-ID: <202302041929.36wT4EUe-lkp@intel.com>
-References: <20230201183626.351211-3-konrad.dybcio@linaro.org>
+        Sat, 4 Feb 2023 06:43:14 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E07551BAE6;
+        Sat,  4 Feb 2023 03:43:12 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id j25so3149128wrc.4;
+        Sat, 04 Feb 2023 03:43:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:to:from:subject:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V+Sm+kfqwSUzJQ4KP+9G1CP7oj6Tf3jeZZjkaMN7C8Q=;
+        b=EFUfpmET3n1ARMc8G+XCFXqCc7F91j4cgyg39ectegBHfFbs6vCwpqNlqrFWSdUmTg
+         dnJf8zYg31SiBhcvz0IzpvUOTFHJyvY62oLveQh9YlspZob0lJ8RU+jNNCJJ3uk53gty
+         sl6wk9Uq/po9liQYoqxTVqF28+bPvHO/KwsnVLFR4AIZKHlyG36pJkknY0YeA5crv8JR
+         QV3qoI8183af8I+chEPIvr/Dp/nPHSGNsCNshIJxo9DJidtOUv3Xi/OCc94epRoZViBu
+         fPcfQ4e8wTK3McgN1W909DQylJdI4O6XJsIgisKKLFCisAIdcv3veHUauNJOjVYO0us8
+         u7Qw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:to:from:subject:message-id:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=V+Sm+kfqwSUzJQ4KP+9G1CP7oj6Tf3jeZZjkaMN7C8Q=;
+        b=JKWrHEZxa6JZ2A3lKjCIG/5bUak+5EuDJ04/nvq18NGEDGGtfe5jVemtofoCtEltTg
+         5NXIVyJobIBYpKs1VRClk5okNm8P9p20oiQ/M1gkwG/RMQE2MHj2U72Y+/x4zxBo8GGA
+         8TzsGZvYaLKv17GCnZiHvY0K+myNSS7amGHPzSuexRYUyFtKL6VTs99WWPXwhSYga2Vt
+         oVJ4k6aXgXbgak+KDV/y7RCA36LBi5jGcxZwUXgOW4dfuCdnbrzSbI4T+qpzdiPDRbd3
+         1GArAKnXOVyz7kVB5AquS6qIgXIF/HZfRwhUQLq8dQF+ZcIYaUM0cx0ZLv7fimCQPeTP
+         dI0Q==
+X-Gm-Message-State: AO0yUKXLpClYupV9Zu9iBK/MAJpaelnJ+TTNpmAPPR+pL75KfhtlNRO9
+        7BDgCq/BdgeqbwaUsrIBPH0=
+X-Google-Smtp-Source: AK7set+bg4XgkhaqdxGx6athTsrEitT1MA1GLJh+U8v84gSdV36l2Hj+rjOMzsjIDZVeG4yCa6GCvg==
+X-Received: by 2002:a5d:514d:0:b0:2bf:d1a1:ff5d with SMTP id u13-20020a5d514d000000b002bfd1a1ff5dmr10648918wrt.32.1675510991279;
+        Sat, 04 Feb 2023 03:43:11 -0800 (PST)
+Received: from ?IPv6:2a02:ab88:368f:2080:d12e:7ef:c89a:f600? ([2a02:ab88:368f:2080:d12e:7ef:c89a:f600])
+        by smtp.gmail.com with ESMTPSA id y10-20020a05600015ca00b002bfd137ecddsm4373342wry.11.2023.02.04.03.43.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Feb 2023 03:43:10 -0800 (PST)
+Message-ID: <398401ce6a1e37b42f895b86fa2ed90c2676e15a.camel@gmail.com>
+Subject: Re: [PATCH 1/2] arm64: dts: exynos: drop mshc aliases
+From:   David Virag <virag.david003@gmail.com>
+To:     Henrik Grimler <henrik@grimler.se>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, alim.akhtar@samsung.com,
+        m.szyprowski@samsung.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+Date:   Sat, 04 Feb 2023 12:43:09 +0100
+In-Reply-To: <20230203204000.14410-2-henrik@grimler.se>
+References: <20230203204000.14410-1-henrik@grimler.se>
+         <20230203204000.14410-2-henrik@grimler.se>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230201183626.351211-3-konrad.dybcio@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Konrad,
+On Fri, 2023-02-03 at 21:39 +0100, Henrik Grimler wrote:
+> They are no longer needed after commit a13e8ef6008d ("mmc: dw_mmc:
+> exynos: use common_caps").
+>=20
+> Signed-off-by: Henrik Grimler <henrik@grimler.se>
+> ---
+> =C2=A0arch/arm64/boot/dts/exynos/exynos5433-tm2-common.dtsi | 2 --
+> =C2=A0arch/arm64/boot/dts/exynos/exynos7-espresso.dts=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 | 2 --
+> =C2=A02 files changed, 4 deletions(-)
+>=20
+> diff --git a/arch/arm64/boot/dts/exynos/exynos5433-tm2-common.dtsi
+> b/arch/arm64/boot/dts/exynos/exynos5433-tm2-common.dtsi
+> index f54f30633417..c895b70b3cec 100644
+> --- a/arch/arm64/boot/dts/exynos/exynos5433-tm2-common.dtsi
+> +++ b/arch/arm64/boot/dts/exynos/exynos5433-tm2-common.dtsi
+> @@ -40,8 +40,6 @@ aliases {
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0spi2 =3D &spi_2;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0spi3 =3D &spi_3;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0spi4 =3D &spi_4;
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0mshc0 =3D &mshc_0;
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0mshc2 =3D &mshc_2;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0};
+> =C2=A0
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0chosen {
+> diff --git a/arch/arm64/boot/dts/exynos/exynos7-espresso.dts
+> b/arch/arm64/boot/dts/exynos/exynos7-espresso.dts
+> index f3f4a6ab4b49..686f0923a4a7 100644
+> --- a/arch/arm64/boot/dts/exynos/exynos7-espresso.dts
+> +++ b/arch/arm64/boot/dts/exynos/exynos7-espresso.dts
+> @@ -18,8 +18,6 @@ / {
+> =C2=A0
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0aliases {
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0serial0 =3D &serial_2;
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0mshc0 =3D &mmc_0;
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0mshc2 =3D &mmc_2;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0};
+> =C2=A0
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0chosen {
 
-I love your patch! Yet something to improve:
+In dw_mmc-exynos.c, there's a caps array specified like this:
 
-[auto build test ERROR on clk/clk-next]
-[also build test ERROR on linus/master v6.2-rc6]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+/* Common capabilities of Exynos4/Exynos5 SoC */
+static unsigned long exynos_dwmmc_caps[4] =3D {
+	MMC_CAP_1_8V_DDR | MMC_CAP_8_BIT_DATA,
+	0,
+	0,
+	0,
+};
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Konrad-Dybcio/clk-qcom-branch-Add-helper-functions-for-setting-SLEEP-WAKE-bits/20230202-033712
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
-patch link:    https://lore.kernel.org/r/20230201183626.351211-3-konrad.dybcio%40linaro.org
-patch subject: [PATCH v5 02/10] clk: qcom: branch: Add helper functions for setting SLEEP/WAKE bits
-config: arm-randconfig-r013-20230204 (https://download.01.org/0day-ci/archive/20230204/202302041929.36wT4EUe-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/abd8a21fce6fafe4998281709f574b94b6c87031
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Konrad-Dybcio/clk-qcom-branch-Add-helper-functions-for-setting-SLEEP-WAKE-bits/20230202-033712
-        git checkout abd8a21fce6fafe4998281709f574b94b6c87031
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/clk/
+As I understand these capabilities are added to the mmc controllers
+based on mshc alias id. Shouldn't these capabilities be moved to
+device-tree before removing these aliases? This also applies to the
+32bit arm patch. If I understand correctly, removing these aliases
+without adding the capabilities to dt removes the capability
+"MMC_CAP_1_8V_DDR" and "MMC_CAP_8_BIT_DATA" from mshc_0/mmc_0.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/clk/qcom/gcc-apq8084.c:24:
->> drivers/clk/qcom/clk-branch.h:71:7: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                              FIELD_PREP(CBCR_WAKEUP, val));
-                              ^
-   drivers/clk/qcom/clk-branch.h:77:7: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                              FIELD_PREP(CBCR_SLEEP, val));
-                              ^
-   2 errors generated.
-
-
-vim +/FIELD_PREP +71 drivers/clk/qcom/clk-branch.h
-
-    67	
-    68	static inline void qcom_branch_set_wakeup(struct regmap *regmap, struct clk_branch clk, u32 val)
-    69	{
-    70		regmap_update_bits(regmap, clk.halt_reg, CBCR_WAKEUP,
-  > 71				   FIELD_PREP(CBCR_WAKEUP, val));
-    72	}
-    73	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Best regards,
+David
