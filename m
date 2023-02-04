@@ -2,56 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B885A68A7DC
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 03:42:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1924768A7DD
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 03:42:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232480AbjBDCl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 21:41:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39902 "EHLO
+        id S232470AbjBDCmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 21:42:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbjBDClz (ORCPT
+        with ESMTP id S232479AbjBDCl5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 21:41:55 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D2784F88
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 18:41:55 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-517f8be4b00so68082747b3.3
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 18:41:55 -0800 (PST)
+        Fri, 3 Feb 2023 21:41:57 -0500
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F1A84B7B
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 18:41:56 -0800 (PST)
+Received: by mail-pf1-x44a.google.com with SMTP id f15-20020a62380f000000b0058db55a8d7aso3591137pfa.21
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 18:41:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JaGD77z6glMAqdeMPmzRcweXd3jq1lm/S+vUg4niZQc=;
-        b=UUk/GaXrUQS33YnwFDGA8QeyE5UvG61YlpFcQBrMve3bTjG8xd5WLboKcHFeneo43v
-         CrQy6mtTB/dLbCCObdwdObC6bXy2R9RrLkCCaaUyMkWLnxMnBJ9yuCX3ib2sDQ/drw+h
-         I4NoeasDNtTeA10XEx2OM6PDK2mqF9VrWb/Vn//xVv6/VPC56DxHebhRaABqWyIXKiAD
-         9NcAX22n+jQm/nfQkFFA3sANTFtdSxJ9IsfccMp3DJYShoAX00F9x9hWj7FH6XWh1zVL
-         xSbenv/O0d70/O4Et+2Bq5fzZ9w/GsVAe7coJhD6H1q06NjBF9Pt95iSed7O2Y48HxMk
-         UeZw==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
+        bh=Eyl2Gk2q9T1eV7DI0p9mlIb5badihX418MuNkpKYmVo=;
+        b=X+PPV3u2X+lZn6gVhql6yyg3YYD18L1CfE5YmtH30dolLF/MohybzVOpvnJB6DhBP2
+         2wMUXINioM9SxHAybahNJuG4Sd8GIXZ43LUikBMqVcX2a2rJN/jgSGfvS9gTDmiCR1wU
+         GWEc3RJMJnIoJ9+MJ06dhIYPfLk5mGwXF9fLq39fXHuX7tVu3wQ4SazrLSoDMHrBxfr6
+         7sRZgbr7NgWbT/fqMnSMKzSxDvf380XFuSnqku8bkXMfHmihwzPh00nMLwa3RPOeu2+8
+         ig8wNpMUagGEKSE+ZDeZl3Sp6NIvtwEvQrRWif03v8jpgCYao39junVVVs+1toqRnOzg
+         Ivvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JaGD77z6glMAqdeMPmzRcweXd3jq1lm/S+vUg4niZQc=;
-        b=tpkmZE6uPVb5F6kci4EoMqPXYReHaJukp2g8Oyt+tRy08Wq3ierPctMOske1kAaW8V
-         t4AWpa0oL4QJkTfQQ2WiOI26Q+0PVqAYA0KpY/vwby+wbC2Kgnt7IB2HUGCOrBELNDyY
-         4AxHKVBNJcv1KhKDAw+yyUqzOPvNbiTvFfFMaCUYs5FeDUN68gLgX7P3LXxQF88REJNI
-         d9+4qYFHw8f8hGugotc0oRiLYFZaBfN53K+JI3BhXN/JqbmSb4Nx6m3p/4l5WXSEaVvu
-         e5eDNXkvAUrgrTC/lHilejyIpQfEUZpVsJKREjxe9rFU5rxWBshwUQOs31iYgwm5yAu7
-         +JhQ==
-X-Gm-Message-State: AO0yUKXqHKHUPyPOVclwTHRaAKkYU1Qb3UOBPi92Bs14PyksLx8iIR+Z
-        TpZZ4pLSoQ5PRq7wBAzEvDiJSH5lbeo=
-X-Google-Smtp-Source: AK7set/DquwsjecH3NSCJtOiptGpwbB9+Xfbpj6ZYipn33L9V+uQ39TMDaIRWr8Gy2XwXd7OuGya6KPKPi4=
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Eyl2Gk2q9T1eV7DI0p9mlIb5badihX418MuNkpKYmVo=;
+        b=RlulIcymDIPrazO8L0BXSvawDn/xzBbW3MND/NILQVzeunu5SlptN3AwGQahtw2d5p
+         RFrq1tKa7YPFfB1V2DoL74CQF0/HSZpdj9GW+xggIOBxxMoUf2OBCV7NzHaekj+kNakx
+         RkBExDRHivfgxwlVg8TSitijg+jDMusEjmYmlHYKXCV15CoC8uzbQHGaPHJOBzXSiXu0
+         MMkAgv+PEgudQsVumFKj/hp/wf7ONIwjR5lxqyw0r/xCspBZNncIyYcmhhaIm4bkkXCp
+         CXjPJhwWA8K7jAnrwUQLOYejFzJe455C9WF3aqp++hVFcQ+zjp5uJOmFc1hT8l7TC1b5
+         xh8A==
+X-Gm-Message-State: AO0yUKVEqU/KPHhfJUxtDLZv08IW6g9Axl37MVMaRByvawuuLPZMCGBI
+        FqwsltRjanIhiy1tbsP5YnyKeNtbjvI=
+X-Google-Smtp-Source: AK7set90nfjdbCTcrhj0tNGUc1jPfWUpaqVgb4EofrmYsOkqTBbxA9PgM7T1eMjDyE5iVxtC2ozEI8uUHm8=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:8910:0:b0:874:5ecb:3cae with SMTP id
- e16-20020a258910000000b008745ecb3caemr302913ybl.319.1675478514247; Fri, 03
- Feb 2023 18:41:54 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a17:90a:9285:b0:22b:b89b:b9da with SMTP id
+ n5-20020a17090a928500b0022bb89bb9damr1922344pjo.41.1675478516072; Fri, 03 Feb
+ 2023 18:41:56 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Sat,  4 Feb 2023 02:41:47 +0000
+Date:   Sat,  4 Feb 2023 02:41:48 +0000
+In-Reply-To: <20230204024151.1373296-1-seanjc@google.com>
 Mime-Version: 1.0
+References: <20230204024151.1373296-1-seanjc@google.com>
 X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
-Message-ID: <20230204024151.1373296-1-seanjc@google.com>
-Subject: [PATCH v2 0/4] KVM: selftests: xen_shinfo cleanups and slowpath test
+Message-ID: <20230204024151.1373296-2-seanjc@google.com>
+Subject: [PATCH v2 1/4] KVM: selftests: Move the guts of kvm_hypercall() to a
+ separate macro
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -68,27 +72,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-David's new testcase to validate the slow path for EVTCHNOP_send, on top
-of cleanups to reduce the amount of copy+paste in the test.
+Extract the guts of kvm_hypercall() to a macro so that Xen hypercalls,
+which have a different register ABI, can reuse the VMCALL vs. VMMCALL
+logic.
 
-Applies on top of `kvm-x86 selftests`.
+No functional change intended.
 
-David Woodhouse (2):
-  KVM: selftests: Use enum for test numbers in xen_shinfo_test
-  KVM: selftests: Add EVTCHNOP_send slow path test to xen_shinfo_test
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ .../selftests/kvm/lib/x86_64/processor.c      | 29 +++++++++++--------
+ 1 file changed, 17 insertions(+), 12 deletions(-)
 
-Sean Christopherson (2):
-  KVM: selftests: Move the guts of kvm_hypercall() to a separate macro
-  KVM: selftests: Add helpers to make Xen-style VMCALL/VMMCALL
-    hypercalls
-
- .../selftests/kvm/include/x86_64/processor.h  |   2 +
- .../selftests/kvm/lib/x86_64/processor.c      |  37 ++-
- .../selftests/kvm/x86_64/xen_shinfo_test.c    | 221 +++++++++---------
- 3 files changed, 145 insertions(+), 115 deletions(-)
-
-
-base-commit: 531f33c5a6edf259da4960de694293e458262d14
+diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+index ae1e573d94ce..ff901cb47ffc 100644
+--- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
++++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+@@ -1139,21 +1139,26 @@ const struct kvm_cpuid_entry2 *get_cpuid_entry(const struct kvm_cpuid2 *cpuid,
+ 	return NULL;
+ }
+ 
++#define X86_HYPERCALL(inputs...)					\
++({									\
++	uint64_t r;							\
++									\
++	asm volatile("test %[use_vmmcall], %[use_vmmcall]\n\t"		\
++		     "jnz 1f\n\t"					\
++		     "vmcall\n\t"					\
++		     "jmp 2f\n\t"					\
++		     "1: vmmcall\n\t"					\
++		     "2:"						\
++		     : "=a"(r)						\
++		     : [use_vmmcall] "r" (host_cpu_is_amd), inputs);	\
++									\
++	r;								\
++})
++
+ uint64_t kvm_hypercall(uint64_t nr, uint64_t a0, uint64_t a1, uint64_t a2,
+ 		       uint64_t a3)
+ {
+-	uint64_t r;
+-
+-	asm volatile("test %[use_vmmcall], %[use_vmmcall]\n\t"
+-		     "jnz 1f\n\t"
+-		     "vmcall\n\t"
+-		     "jmp 2f\n\t"
+-		     "1: vmmcall\n\t"
+-		     "2:"
+-		     : "=a"(r)
+-		     : "a"(nr), "b"(a0), "c"(a1), "d"(a2), "S"(a3),
+-		       [use_vmmcall] "r" (host_cpu_is_amd));
+-	return r;
++	return X86_HYPERCALL("a"(nr), "b"(a0), "c"(a1), "d"(a2), "S"(a3));
+ }
+ 
+ const struct kvm_cpuid2 *kvm_get_supported_hv_cpuid(void)
 -- 
 2.39.1.519.gcb327c4b5f-goog
 
