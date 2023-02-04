@@ -2,68 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86AA968AAE9
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 16:19:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B61A468AAED
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 16:27:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233632AbjBDPS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 10:18:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58054 "EHLO
+        id S233482AbjBDP1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 10:27:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230314AbjBDPSz (ORCPT
+        with ESMTP id S230314AbjBDP1x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 10:18:55 -0500
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53AC41B565
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 07:18:54 -0800 (PST)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-51ba4b1b9feso104767047b3.11
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Feb 2023 07:18:54 -0800 (PST)
+        Sat, 4 Feb 2023 10:27:53 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B9F27995;
+        Sat,  4 Feb 2023 07:27:53 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id n20-20020a17090aab9400b00229ca6a4636so11466756pjq.0;
+        Sat, 04 Feb 2023 07:27:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HFJLgoi+tS77UonQPI72Lq3VMERqDs0LwQVfHpTSaC8=;
-        b=Lc+ah9tSl3kTEScnQchIGDUxTYTo4GPkvSl19Db4TghEqMWIlo8y1Oc5wV0RWJ1esH
-         7LKKxv8/fOQQRCynq7ticKpVXaEHBylviBEA/gf2A0BWDLqKQVnQL8KUKe6SCTXrrXGT
-         JGcQ4FNd1BXLPdaNoay7txZyzIzuNUZF7d0vU69gIFego2hCgaFjhLJKFb9NKMxq7ana
-         1s9444A8KybxrJrIcPDGJRYZAZbLlC8jGVcAEQvZknH0TM4S351fBBknu0HmTfDZQDas
-         pWh4Q+yD+sJNG93/vZUBR5Nzp/cO4w2CkSEEYi1jHP4K+sHteu4gwXZCY2bhVpKe6Yxe
-         PzFw==
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aSnA6bDbqE/+mRrNJmYL9pV4GL9ctAZAtrQ35/GNxsQ=;
+        b=TEfhFYBxxRdqUSNaV3xJfSLAiyiPqzzeXbP+zukePNt1/YoaZYN6nMPoq4sKPITcDo
+         RixVgeipigZbhi8DcN6mRu17/HFoonx+wcobgM+ipcU8TFn3ZKVxr3/lqNbYDP5gFzCI
+         6FrsPYZwSQicjwd8HPZj29hq5CALa/MqApkl21BLmALAMatx/iuihqv/L6MWOeYvFk20
+         RrZ2LuFY58zIV4xpxh426WQPi2mjdWWpKw9q/PTBzXC4/uIcWRimg62KkS9ZFSzNVx66
+         LEvGe4dZsCGzmz+HpUpZBPpqCC1qyY7kgUO9aB93DLxEmNpKtGbpc9IlnLH6/mcYXvps
+         e2gA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HFJLgoi+tS77UonQPI72Lq3VMERqDs0LwQVfHpTSaC8=;
-        b=gIygLsLub5E5MBXuQRX5jjbOiEala2/DiOTDxVlk1/0B66vPiCGrrvTX8wbwRqSw9H
-         CrutXVtQrwp47E6B0E00OMEhz95Eyg1uxHZHxKffK005Xa6GrmACDC9po4J7eGP4aDF5
-         /5R7hydWSucOSxrvfBXqfm5CXCq23t+EpoHYruoWIohANa8Kcnynq5KfbWfgwY3RkgLO
-         7F2qmJ28uADLuPA8lTaOcLIwhNx2bknUlZFd5TOTACSTl/KaiNZ5Y47c/QcyHKYrJ4va
-         Mr3tRkCHShE81qeIwP/20NJTLoJEX27dAPYt06HwIm6S0eYb+8Mx6K6+DFwWnz9V+k9B
-         x8cw==
-X-Gm-Message-State: AO0yUKXp0L9sA/0WcKWuPfyTLkDQIYoqfrsXqs3+R8WG0KoRfD3Gl44u
-        +CdNcbwKPVfPy19uGrFTBaZDrjfKJ/NqnXjsL2tdkHoRV3pvMtGB
-X-Google-Smtp-Source: AK7set9qkgZO+i3Vd2wQ0pqNOWhEnbhwhmYyBDVJ8lFw9SHjcAlhjlrxzO95LmyOPjLY7vWf1guULHUMWbxl1XBy1+8=
-X-Received: by 2002:a81:8394:0:b0:526:5d5c:aa34 with SMTP id
- t142-20020a818394000000b005265d5caa34mr509202ywf.157.1675523933336; Sat, 04
- Feb 2023 07:18:53 -0800 (PST)
+        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aSnA6bDbqE/+mRrNJmYL9pV4GL9ctAZAtrQ35/GNxsQ=;
+        b=i2XyM+WFmoMjxDQSzCl4b3DlUgmtVMAa68lhW2PwxXzerA1nsHVF2caEvpLu36Xl8t
+         QBRGCCDb8JYeanzZrL2ysr9x1GXTGXNy06ndO34SUASFdw+phA3+HOywapHSL+9E2JJq
+         LfZFf5TA8xRHs1s/NUvynnfDgh9yidslM4ioFWAxIBrN0l5JZGrfLjISnehPxxFGJNch
+         pIlKeXkuBHZxxBATcrTlGQsVmSS+OI2FgYY0YtR9n1H6TzdmtfLOJBlKIc/N/gG4eLd9
+         bOqVKYOV6J6B8xer3VocSsJwl7IqsXhsj68SkHtjnzfkHdRCMd89HBUpljDVh672qvQk
+         2jVQ==
+X-Gm-Message-State: AO0yUKWy6uWc/z0KbPbMPzdiOso1KHIDG3q4q+00k55QLpkLlFOqMy1F
+        ymhmcA4nSIHilyf+t0hcascuDLWQXFilzQ==
+X-Google-Smtp-Source: AK7set/lFfEkTd24oR3fCKAk+S7m/aNAm2k/1yBgnhHIkoe27djbmXyC30C5Y8cADptEeLdfjtyayA==
+X-Received: by 2002:a17:903:1d2:b0:189:81a2:d616 with SMTP id e18-20020a17090301d200b0018981a2d616mr17394318plh.16.1675524472559;
+        Sat, 04 Feb 2023 07:27:52 -0800 (PST)
+Received: from kazuki-mac ([2400:4051:ea3:5910::19a])
+        by smtp.gmail.com with ESMTPSA id je22-20020a170903265600b001892af9472esm1606305plb.261.2023.02.04.07.27.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Feb 2023 07:27:52 -0800 (PST)
+From:   Kazuki <kazukih0205@gmail.com>
+X-Google-Original-From: Kazuki <kazuki@kazuki-mac>
+Date:   Sun, 5 Feb 2023 00:27:47 +0900
+To:     linux-pm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
+Subject: s2idle breaks on machines without cpuidle support
+Message-ID: <20230204152747.drte4uitljzngdt6@kazuki-mac>
 MIME-Version: 1.0
-References: <20230204135652.336495-1-guillaume.tucker@collabora.com>
-In-Reply-To: <20230204135652.336495-1-guillaume.tucker@collabora.com>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Sat, 4 Feb 2023 07:18:42 -0800
-Message-ID: <CABXOdTfMwx7OW_oNkkJ_rKT+EqohTa-xg4kfsHFx-Ep4uug6Qw@mail.gmail.com>
-Subject: Re: [PATCH v2] selftests: use printf instead of echo -ne
-To:     Guillaume Tucker <guillaume.tucker@collabora.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Gautam <gautammenghani201@gmail.com>,
-        David Laight <David.Laight@aculab.com>, kernel@collabora.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernelci@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,60 +75,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 4, 2023 at 5:56 AM Guillaume Tucker
-<guillaume.tucker@collabora.com> wrote:
->
-> On some systems, the default echo command doesn't handle the -e option
-> and the output looks like this (arm64 build):
->
-> -ne Emit Tests for alsa
->
-> -ne Emit Tests for amd-pstate
->
-> -ne Emit Tests for arm64
->
-> This is for example the case with the KernelCI Docker images
-> e.g. kernelci/gcc-10:x86-kselftest-kernelci.  To avoid this issue, use
-> printf which handles escape characters as a standard feature and is
-> more widespread among modern shells.
->
-> The output is now formatted as expected (x86 build this time):
->
-> Emit Tests for alsa
-> Emit Tests for amd-pstate
-> Skipping non-existent dir: arm64
->
-> Reported-by: "kernelci.org bot" <bot@kernelci.org>
-> Suggested-by: David Laight <David.Laight@ACULAB.COM>
-> Fixes: 3297a4df805d ("kselftests: Enable the echo command to print newlines in Makefile")
-> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
 
-Reviewed-by: Guenter Roeck <groeck@chromium.org>
+Hi everyone,
 
-> ---
->
-> Notes:
->     v2: use printf insead of $(which echo)
->
->  tools/testing/selftests/Makefile | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-> index 41b649452560..06578963f4f1 100644
-> --- a/tools/testing/selftests/Makefile
-> +++ b/tools/testing/selftests/Makefile
-> @@ -236,8 +236,8 @@ ifdef INSTALL_PATH
->         @# included in the generated runlist.
->         for TARGET in $(TARGETS); do \
->                 BUILD_TARGET=$$BUILD/$$TARGET;  \
-> -               [ ! -d $(INSTALL_PATH)/$$TARGET ] && echo "Skipping non-existent dir: $$TARGET" && continue; \
-> -               echo -ne "Emit Tests for $$TARGET\n"; \
-> +               [ ! -d $(INSTALL_PATH)/$$TARGET ] && printf "Skipping non-existent dir: $$TARGET\n" && continue; \
-> +               printf "Emit Tests for $$TARGET\n"; \
->                 $(MAKE) -s --no-print-directory OUTPUT=$$BUILD_TARGET COLLECTION=$$TARGET \
->                         -C $$TARGET emit_tests >> $(TEST_LIST); \
->         done;
-> --
-> 2.30.2
->
->
+s2idle is blocked on machines without proper cpuidle support here
+in kernel/sched/idle.c:
+
+> if (cpuidle_not_available(drv, dev)) {
+> 	tick_nohz_idle_stop_tick();
+
+> 	default_idle_call();
+> 	goto exit_idle;
+> }
+
+> /*
+>  * Suspend-to-idle ("s2idle") is a system state in which all user space
+>  * has been frozen, all I/O devices have been suspended and the only
+
+However, there are 2 problems with this approach:
+
+1. The suspend framework does not expect this, and continues to suspend the
+machine, which causes machines without proper cpuidle support to break when
+suspending
+2. Suspend actually works on ARM64 machines even without proper
+cpuidle (PSCI cpuidle) since they support wfi, so the assumption here is wrong
+on such machines
+
+I'm not exactly sure how to figure this out, and my attempts have all led to an
+unbootable kernel, so I've cc'ed the relevant people and hopefully we can find a
+solution to this problem.
+
+Thanks,
+Kazuki
