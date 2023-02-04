@@ -2,194 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB71D68A949
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 11:00:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4100468A94B
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 11:01:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233341AbjBDJ74 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 4 Feb 2023 04:59:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42190 "EHLO
+        id S231171AbjBDKBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 05:01:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231320AbjBDJ7y (ORCPT
+        with ESMTP id S230187AbjBDKBj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 04:59:54 -0500
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E5A45FF5;
-        Sat,  4 Feb 2023 01:59:52 -0800 (PST)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1pOFKl-001fLh-AR; Sat, 04 Feb 2023 10:59:47 +0100
-Received: from p57bd9464.dip0.t-ipconnect.de ([87.189.148.100] helo=suse-laptop.fritz.box)
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1pOFKl-003iH2-3B; Sat, 04 Feb 2023 10:59:47 +0100
-Message-ID: <767bf105a806994f8d125cadce3f8182c942e18c.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH] sh: remove sh5/sh64 last fragments
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Arnd Bergmann <arnd@arndb.de>, Rich Felker <dalias@libc.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-sh@vger.kernel.org
-Date:   Sat, 04 Feb 2023 10:59:46 +0100
-In-Reply-To: <20230204002508.18800-1-rdunlap@infradead.org>
-References: <20230204002508.18800-1-rdunlap@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.3 
+        Sat, 4 Feb 2023 05:01:39 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 408955FF5;
+        Sat,  4 Feb 2023 02:01:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=1CILfoEi2sLKOY/pCvvQ82YwMOdadBhYba5yUkzOQF4=; b=ZJpSGJ2Gm7UKIQyW7E+HUvnADc
+        Y0cBs4LCGAakZUibVz2HRJJXcHWFFbZqobqrG9ZvNbMxE/mp40jOFj72+zfb2mCIzezK2tdFCvjcr
+        KifjCmqGtgCm7yhZrJTy7ICh16810d7c3BVP1v34SUi718dAz3QPVzuoDD/dGCpOtClfuveM4Ebe8
+        MERsMl7a04e5L2cBJN8jPgcnfOImMseg6e9d+aEfpl4ovLwChRxraRssx/KP0hdEvBUyhblK2qtwv
+        eayZoOGpY9u7koRpkx5HLi7+cudW+1FAXiZd/wqklwz08N58MF5gykplMguJR4OoWJt56fDAJxWw6
+        0+TntN9Q==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pOFMJ-00F5N8-0U; Sat, 04 Feb 2023 10:01:24 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AF85D30068D;
+        Sat,  4 Feb 2023 11:01:22 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 98BEF2C7FDC52; Sat,  4 Feb 2023 11:01:22 +0100 (CET)
+Date:   Sat, 4 Feb 2023 11:01:22 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH] cgroup/cpuset: Don't filter offline CPUs in
+ cpuset_cpus_allowed() for top cpuset tasks
+Message-ID: <Y94s8mzrE9VyUJLa@hirez.programming.kicks-ass.net>
+References: <20230203164040.213437-1-longman@redhat.com>
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.189.148.100
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230203164040.213437-1-longman@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-02-03 at 16:25 -0800, Randy Dunlap wrote:
-> A previous patch removed most of the sh5 (sh64) support from the
-> kernel tree. Now remove the last stragglers.
+On Fri, Feb 03, 2023 at 11:40:40AM -0500, Waiman Long wrote:
+> Since commit 8f9ea86fdf99 ("sched: Always preserve the user
+> requested cpumask"), relax_compatible_cpus_allowed_ptr() is calling
+> __sched_setaffinity() unconditionally. This helps to expose a bug in
+> the current cpuset hotplug code where the cpumasks of the tasks in
+> the top cpuset are not updated at all when some CPUs become online or
+> offline. It is likely caused by the fact that some of the tasks in the
+> top cpuset, like percpu kthreads, cannot have their cpu affinity changed.
 > 
-> Fixes: 37744feebc08 ("sh: remove sh5 support")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Geert Uytterhoeven <geert+renesas@glider.be>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Rich Felker <dalias@libc.org>
-> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-> Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-> Cc: linux-sh@vger.kernel.org
+> One way to reproduce this as suggested by Peter is:
+>  - boot machine
+>  - offline all CPUs except one
+>  - taskset -p ffffffff $$
+>  - online all CPUs
+> 
+> Fix this by allowing cpuset_cpus_allowed() to return a wider mask that
+> includes offline CPUs for those tasks that are in the top cpuset. For
+> tasks not in the top cpuset, the old rule applies and only online CPUs
+> will be returned in the mask since hotplug events will update their
+> cpumasks accordingly.
+
+So you get the task_cpu_possible_mask() interaction vs cpusets horribly
+wrong here, but given the very sorry state of task_cpu_possible_mask()
+correctness of cpuset as a whole that might just not matter at this
+point.
+
+I do very much hate how you add exceptions on exceptions instead of
+looking to do something right :-(
+
+Fixing that parition case in my patch is 1 extra line and then I think
+it fundamentally does the right thing and can serve as a basis for
+fixing cpuset as a whole.
+
+> Fixes: 8f9ea86fdf99 ("sched: Always preserve the user requested cpumask")
+> Reported-by: Will Deacon <will@kernel.org>
+> Originally-from: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Signed-off-by: Waiman Long <longman@redhat.com>
 > ---
->  Documentation/kbuild/kbuild.rst                           |    1 -
->  Documentation/scheduler/sched-arch.rst                    |    2 --
->  Documentation/translations/zh_CN/scheduler/sched-arch.rst |    2 --
->  scripts/checkstack.pl                                     |    7 -------
->  tools/perf/arch/common.c                                  |    2 --
->  tools/scripts/Makefile.arch                               |    5 -----
->  tools/testing/selftests/mm/Makefile                       |    2 +-
->  tools/testing/selftests/mm/run_vmtests.sh                 |    2 +-
->  8 files changed, 2 insertions(+), 21 deletions(-)
+>  kernel/cgroup/cpuset.c | 27 +++++++++++++++++++++++++--
+>  1 file changed, 25 insertions(+), 2 deletions(-)
 > 
-> diff -- a/Documentation/kbuild/kbuild.rst b/Documentation/kbuild/kbuild.rst
-> --- a/Documentation/kbuild/kbuild.rst
-> +++ b/Documentation/kbuild/kbuild.rst
-> @@ -160,7 +160,6 @@ directory name found in the arch/ direct
->  But some architectures such as x86 and sparc have aliases.
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index 207bafdb05e8..11554e5845f7 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -3707,15 +3707,38 @@ void __init cpuset_init_smp(void)
+>   * Description: Returns the cpumask_var_t cpus_allowed of the cpuset
+>   * attached to the specified @tsk.  Guaranteed to return some non-empty
+>   * subset of cpu_online_mask, even if this means going outside the
+> - * tasks cpuset.
+> + * tasks cpuset, except when the task is in the top cpuset.
+>   **/
 >  
->  - x86: i386 for 32 bit, x86_64 for 64 bit
-> -- sh: sh for 32 bit, sh64 for 64 bit
->  - sparc: sparc32 for 32 bit, sparc64 for 64 bit
+>  void cpuset_cpus_allowed(struct task_struct *tsk, struct cpumask *pmask)
+>  {
+>  	unsigned long flags;
+> +	struct cpuset *cs;
 >  
->  CROSS_COMPILE
-> diff -- a/Documentation/scheduler/sched-arch.rst b/Documentation/scheduler/sched-arch.rst
-> --- a/Documentation/scheduler/sched-arch.rst
-> +++ b/Documentation/scheduler/sched-arch.rst
-> @@ -70,7 +70,5 @@ Possible arch problems I found (and eith
->  
->  ia64 - is safe_halt call racy vs interrupts? (does it sleep?) (See #4a)
->  
-> -sh64 - Is sleeping racy vs interrupts? (See #4a)
-> -
->  sparc - IRQs on at this point(?), change local_irq_save to _disable.
->        - TODO: needs secondary CPUs to disable preempt (See #1)
-> diff -- a/Documentation/translations/zh_CN/scheduler/sched-arch.rst b/Documentation/translations/zh_CN/scheduler/sched-arch.rst
-> --- a/Documentation/translations/zh_CN/scheduler/sched-arch.rst
-> +++ b/Documentation/translations/zh_CN/scheduler/sched-arch.rst
-> @@ -70,7 +70,5 @@ 我发现的可能的arch问题（并试
->  
->  ia64 - safe_halt的调用与中断相比，是否很荒谬？ (它睡眠了吗) (参考 #4a)
->  
-> -sh64 - 睡眠与中断相比，是否很荒谬？ (参考 #4a)
-> -
->  sparc - 在这一点上，IRQ是开着的（？），把local_irq_save改为_disable。
->        - 待办事项: 需要第二个CPU来禁用抢占 (参考 #1)
-> diff -- a/scripts/checkstack.pl b/scripts/checkstack.pl
-> --- a/scripts/checkstack.pl
-> +++ b/scripts/checkstack.pl
-> @@ -10,7 +10,6 @@
->  #	Mips port by Juan Quintela <quintela@mandrakesoft.com>
->  #	IA64 port via Andreas Dilger
->  #	Arm port by Holger Schurig
-> -#	sh64 port by Paul Mundt
->  #	Random bits by Matt Mackall <mpm@selenic.com>
->  #	M68k port by Geert Uytterhoeven and Andreas Schwab
->  #	AArch64, PARISC ports by Kyle McMartin
-> @@ -100,12 +99,6 @@ my (@stack, $re, $dre, $sub, $x, $xs, $f
->  		#  100092:	 e3 f0 ff c8 ff 71	 lay	 %r15,-56(%r15)
->  		$re = qr/.*(?:lay|ag?hi).*\%r15,-(([0-9]{2}|[3-9])[0-9]{2})
->  		      (?:\(\%r15\))?$/ox;
-> -	} elsif ($arch =~ /^sh64$/) {
-> -		#XXX: we only check for the immediate case presently,
-> -		#     though we will want to check for the movi/sub
-> -		#     pair for larger users. -- PFM.
-> -		#a00048e0:       d4fc40f0        addi.l  r15,-240,r15
-> -		$re = qr/.*addi\.l.*r15,-(([0-9]{2}|[3-9])[0-9]{2}),r15/o;
->  	} elsif ($arch eq 'sparc' || $arch eq 'sparc64') {
->  		# f0019d10:       9d e3 bf 90     save  %sp, -112, %sp
->  		$re = qr/.*save.*%sp, -(([0-9]{2}|[3-9])[0-9]{2}), %sp/o;
-> diff -- a/tools/perf/arch/common.c b/tools/perf/arch/common.c
-> --- a/tools/perf/arch/common.c
-> +++ b/tools/perf/arch/common.c
-> @@ -51,9 +51,7 @@ const char *const s390_triplets[] = {
->  
->  const char *const sh_triplets[] = {
->  	"sh-unknown-linux-gnu-",
-> -	"sh64-unknown-linux-gnu-",
->  	"sh-linux-gnu-",
-> -	"sh64-linux-gnu-",
->  	NULL
->  };
->  
-> diff -- a/tools/scripts/Makefile.arch b/tools/scripts/Makefile.arch
-> --- a/tools/scripts/Makefile.arch
-> +++ b/tools/scripts/Makefile.arch
-> @@ -29,11 +29,6 @@ ifeq ($(ARCH),sparc64)
->         SRCARCH := sparc
->  endif
->  
-> -# Additional ARCH settings for sh
-> -ifeq ($(ARCH),sh64)
-> -       SRCARCH := sh
-> -endif
-> -
->  LP64 := $(shell echo __LP64__ | ${CC} ${CFLAGS} -E -x c - | tail -n 1)
->  ifeq ($(LP64), 1)
->    IS_64_BIT := 1
-> diff -- a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-> --- a/tools/testing/selftests/mm/Makefile
-> +++ b/tools/testing/selftests/mm/Makefile
-> @@ -90,7 +90,7 @@ endif
->  
->  endif
->  
-> -ifneq (,$(filter $(MACHINE),arm64 ia64 mips64 parisc64 ppc64 riscv64 s390x sh64 sparc64 x86_64))
-> +ifneq (,$(filter $(MACHINE),arm64 ia64 mips64 parisc64 ppc64 riscv64 s390x sparc64 x86_64))
->  TEST_GEN_FILES += va_128TBswitch
->  TEST_GEN_FILES += virtual_address_range
->  TEST_GEN_FILES += write_to_hugetlbfs
-> diff -- a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-> --- a/tools/testing/selftests/mm/run_vmtests.sh
-> +++ b/tools/testing/selftests/mm/run_vmtests.sh
-> @@ -132,7 +132,7 @@ else
->  fi
->  
->  # filter 64bit architectures
-> -ARCH64STR="arm64 ia64 mips64 parisc64 ppc64 ppc64le riscv64 s390x sh64 sparc64 x86_64"
-> +ARCH64STR="arm64 ia64 mips64 parisc64 ppc64 ppc64le riscv64 s390x sparc64 x86_64"
->  if [ -z "$ARCH" ]; then
->  	ARCH=$(uname -m 2>/dev/null | sed -e 's/aarch64.*/arm64/')
->  fi
+>  	spin_lock_irqsave(&callback_lock, flags);
+> -	guarantee_online_cpus(tsk, pmask);
+> +	rcu_read_lock();
+> +
+> +	cs = task_cs(tsk);
+> +	if (cs != &top_cpuset)
+> +		guarantee_online_cpus(tsk, pmask);
+> +	/*
+> +	 * TODO: Tasks in the top cpuset won't get update to their cpumasks
+> +	 * when a hotplug online/offline event happens. So we include all
+> +	 * offline cpus in the allowed cpu list.
+> +	 */
 
-Acked-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+I don't like TODO there, I really don't think CPUSET should update root
+tasks, that means yet another fundamental difference between
+CPUSET={y,n}.
 
--- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+> +	if ((cs == &top_cpuset) || cpumask_empty(pmask)) {
+> +		const struct cpumask *possible_mask = task_cpu_possible_mask(tsk);
+> +
+> +		/*
+> +		 * We first exclude cpus allocated to partitions. If there is no
+> +		 * allowable online cpu left, we fall back to all possible cpus.
+> +		 */
+> +		cpumask_andnot(pmask, possible_mask, top_cpuset.subparts_cpus);
+> +		if (!cpumask_intersects(pmask, cpu_online_mask))
+> +			cpumask_copy(pmask, possible_mask);
+> +	}
+> +
+> +	rcu_read_unlock();
+>  	spin_unlock_irqrestore(&callback_lock, flags);
+>  }
+
+I really detest this patch, but if you insist it might just do :-/
