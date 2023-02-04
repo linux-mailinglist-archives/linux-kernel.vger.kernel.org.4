@@ -2,119 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 899C768A97F
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 11:37:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98DFB68A983
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 11:38:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232519AbjBDKhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 05:37:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54982 "EHLO
+        id S232760AbjBDKiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 05:38:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjBDKhF (ORCPT
+        with ESMTP id S230139AbjBDKiG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 05:37:05 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C135928869;
-        Sat,  4 Feb 2023 02:36:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=sBVk4y8jI2P1MdjQADO2i5z2S1Y3e8OF8T5i6YaW5/s=; b=ZM0DdM2Rzq+Q8iGa8KVah+nR3U
-        ZlmIlYPU71shYc60APr0n98pmiA6Urlnc7GE543r1mS2t/EFtQDoSGfPRply+hI+NILtEqMtHaYPi
-        AES8YK/07g1WXZQuXNMs4goEcmx7otMwxOhMz64Or7GZnvzXxN9BeoChlm6fQTZJOagGMDq6orDdo
-        0VJUqvKdWYbkONExbY2a1ZrWu8iDZUM/yqaKXLnVWqQYKRJGL8XBFVtUfstneJm5rLOmMWDFQyuzD
-        LE8zFkiMae8j97fE+UBlPS/R0scF61voClAExpmvWV3+c5oBTgE6dyEDZ8khDYGC/uwSWy8C/3BmA
-        +47zhm0g==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pOFuW-00F6RS-Kl; Sat, 04 Feb 2023 10:36:45 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 84D3B30068D;
-        Sat,  4 Feb 2023 11:36:43 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 6125F20AF917C; Sat,  4 Feb 2023 11:36:43 +0100 (CET)
-Date:   Sat, 4 Feb 2023 11:36:43 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvmarm@lists.linux.dev, linux-perf-users@vger.kernel.org,
-        James Clark <james.clark@arm.com>
-Subject: Re: [PATCH v4 7/8] perf: Add perf_event_attr::config3
-Message-ID: <Y941O6eVNfpS3F5b@hirez.programming.kicks-ass.net>
-References: <20220825-arm-spe-v8-7-v4-0-327f860daf28@kernel.org>
- <20220825-arm-spe-v8-7-v4-7-327f860daf28@kernel.org>
+        Sat, 4 Feb 2023 05:38:06 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E5584EC5;
+        Sat,  4 Feb 2023 02:38:04 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4AA7A1EC06C0;
+        Sat,  4 Feb 2023 11:38:03 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1675507083;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=5JyAU/JLXXFTtWRREUsOU6epWY/XYVNcnOAGJNFiKwQ=;
+        b=KfT0Mprsz3GxEPCAHwdg1TWJdHhDGdprVbR1LinIpkwcnWj7jDEX1DKTHH+u78Piqgl1Hx
+        amVRkuP4FWCjAxkPyivEHudk+yPMYUX/52dgOi4wIoog5yCgYHAU80iTBlhSGQ7LLjjQlA
+        wL++YKYAZeBiZt7LZf4JQ7+tBM7fhtY=
+Date:   Sat, 4 Feb 2023 11:37:58 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "mtk.manpages@gmail.com" <mtk.manpages@gmail.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>
+Subject: Re: [PATCH v5 07/39] x86: Add user control-protection fault handler
+Message-ID: <Y941hjKMMUA+KB0p@zn.tnic>
+References: <20230119212317.8324-1-rick.p.edgecombe@intel.com>
+ <20230119212317.8324-8-rick.p.edgecombe@intel.com>
+ <Y91b2x8pSFtmB+w6@zn.tnic>
+ <393a03d063dee5831af93ca67636df75a76481c3.camel@intel.com>
+ <Y91kFGVFe6QlHKmi@zn.tnic>
+ <828f1b3154227c06ac1787961016464a4c116cc2.camel@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220825-arm-spe-v8-7-v4-7-327f860daf28@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <828f1b3154227c06ac1787961016464a4c116cc2.camel@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 09, 2023 at 01:26:23PM -0600, Rob Herring wrote:
-> Arm SPEv1.2 adds another 64-bits of event filtering control. As the
-> existing perf_event_attr::configN fields are all used up for SPE PMU, an
-> additional field is needed. Add a new 'config3' field.
-> 
-> Tested-by: James Clark <james.clark@arm.com>
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-> There's still an unresolved discussion about validating 'config3' with
-> the options laid out here[1].
-> 
-> v4:
->  - Rebase on v6.2-rc1
-> v3:
->  - No change
-> v2:
->  - Drop tools/ side update
-> 
-> [1] https://lore.kernel.org/all/Y49ttrv6W5k3ZNYw@FVFF77S0Q05N.cambridge.arm.com/
-> ---
->  include/uapi/linux/perf_event.h | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
-> index ccb7f5dad59b..37675437b768 100644
-> --- a/include/uapi/linux/perf_event.h
-> +++ b/include/uapi/linux/perf_event.h
-> @@ -374,6 +374,7 @@ enum perf_event_read_format {
->  #define PERF_ATTR_SIZE_VER5	112	/* add: aux_watermark */
->  #define PERF_ATTR_SIZE_VER6	120	/* add: aux_sample_size */
->  #define PERF_ATTR_SIZE_VER7	128	/* add: sig_data */
-> +#define PERF_ATTR_SIZE_VER8	136	/* add: config3 */
->  
->  /*
->   * Hardware event_id to monitor via a performance monitoring event:
-> @@ -515,6 +516,8 @@ struct perf_event_attr {
->  	 * truncated accordingly on 32 bit architectures.
->  	 */
->  	__u64	sig_data;
-> +
-> +	__u64	config3; /* extension of config2 */
->  };
+On Fri, Feb 03, 2023 at 11:01:42PM +0000, Edgecombe, Rick P wrote:
+> Since this path is only for exceptions coming from userspace, I think
+> it should be valid either way. It can't be during a task switch.
+> I can swap the lines if it looks odd, but unless I'm wrong about the
+> 'current' validity I think it's negligibly better as is because it is
+> preemptible for as long as possible.
 
-Yeah, that was bound to happen I suppose..
+Nah, all good. I was confused here. Sorry for the noise.
 
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
