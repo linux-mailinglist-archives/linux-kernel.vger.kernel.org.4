@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2AD468A815
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 05:07:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E75268A816
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 05:07:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233126AbjBDEHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 23:07:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56404 "EHLO
+        id S232489AbjBDEHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 23:07:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233025AbjBDEGx (ORCPT
+        with ESMTP id S233034AbjBDEGy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 23:06:53 -0500
+        Fri, 3 Feb 2023 23:06:54 -0500
 Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 886E1945F6
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 20:06:50 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0440D93E3F
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 20:06:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675483610; x=1707019610;
+  t=1675483613; x=1707019613;
   h=from:date:subject:mime-version:content-transfer-encoding:
    message-id:references:in-reply-to:to:cc;
-  bh=JQRhs8fV+wugaMbuU/xsYw9mo1fl9vkSLqCGXzy9tz8=;
-  b=Kba6PoV/VGGmY/+Hli75SQWZkwzpheJr7ktIit3+KFvEVUqxxeOYdIsJ
-   GsrXN+p8bK72qldZ0cUa6d2N0md1TJxyTU1bM5V7uh07kGycEaxc5KqDw
-   JwaZxjMlK9rSC119BrIIqrZkscSnkT4nCx/ReRw+KrVDaTvkMIDOzVvmD
-   3ifH3anQbbYjF1SS9BLrAQZ9jviYM0GW+92u2b9jdPJB/sFoU066zIhcz
-   oZ9HuVv2DgOiqNw3rtlNcBkDYNxMd1gUroz0NlbgyXnMFkFsRAXIyunSI
-   V5HzX82m4tmWNpQj0isUb35XPe3RI7QhX4W8OPpNzKAbeZg9UmaB8wyVh
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="391309384"
+  bh=Gn7LOPh68jC6rQtBAdzLGiAHS3AXRc2KQzYf1z3imZ8=;
+  b=X3FfTmHWBRDVLCV4bSpXufeKBUz85bdW35WbIdU7grhq3LmIbh0bZACb
+   3sXYUYpwPdq3TfYApb32wcu8JzeyOLexGrP8OG2gTbRJlvPOhs82ObSkS
+   dYj0e7TJssNHUf/W4+RQ8SqkGcyvL/pPa1R8qfCVCPwtOUmge4Mk+DE6I
+   Vz8pCvw0wTo3299B0aMneAZREGpBUKB29bl22ADOnPTXYL6Sexz4gBbMo
+   gptzVjeT9a9/jxXH95V0v3bMtvobyANnJSt1estD/zWN/MzK0ZeWV19JX
+   DwirbfZsF9XXejQQF08s24T+DGwyNq0HCxcTwUiyXl5IwXMafNlUEuQmr
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="391309393"
 X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
-   d="scan'208";a="391309384"
+   d="scan'208";a="391309393"
 Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2023 20:06:49 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="734573743"
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2023 20:06:51 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="734573746"
 X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
-   d="scan'208";a="734573743"
+   d="scan'208";a="734573746"
 Received: from iweiny-mobl.amr.corp.intel.com (HELO localhost) ([10.209.125.166])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2023 20:06:48 -0800
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2023 20:06:50 -0800
 From:   Ira Weiny <ira.weiny@intel.com>
-Date:   Fri, 03 Feb 2023 20:06:34 -0800
-Subject: [PATCH v2 3/4] tee: Remove call to get_kernel_pages()
+Date:   Fri, 03 Feb 2023 20:06:35 -0800
+Subject: [PATCH v2 4/4] mm: Remove get_kernel_pages()
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230203-get_kernel_pages-v2-3-f1dc4af273f1@intel.com>
+Message-Id: <20230203-get_kernel_pages-v2-4-f1dc4af273f1@intel.com>
 References: <20230203-get_kernel_pages-v2-0-f1dc4af273f1@intel.com>
 In-Reply-To: <20230203-get_kernel_pages-v2-0-f1dc4af273f1@intel.com>
 To:     Sumit Garg <sumit.garg@linaro.org>,
@@ -55,13 +55,13 @@ Cc:     Al Viro <viro@zeniv.linux.org.uk>, Christoph Hellwig <hch@lst.de>,
         "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
         Ira Weiny <ira.weiny@intel.com>,
         John Hubbard <jhubbard@nvidia.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
+        Mel Gorman <mgorman@suse.de>
 X-Mailer: b4 0.12-dev-cc11a
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1675483603; l=2426;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1675483603; l=2399;
  i=ira.weiny@intel.com; s=20221211; h=from:subject:message-id;
- bh=JQRhs8fV+wugaMbuU/xsYw9mo1fl9vkSLqCGXzy9tz8=;
- b=AaCtTJ4OiWZ81WHjyg8HuDS5/qjKjXFczxneo+wuWXA1er0d3AbqF8WmVH8OPaOMT7MFHfqplc4h
- 8SdcI7hmA9jv/b3bsJlcrP/twziO9uzdZVNnfM9Qbjeiy1zfFBMX
+ bh=Gn7LOPh68jC6rQtBAdzLGiAHS3AXRc2KQzYf1z3imZ8=;
+ b=dtMl0p52IOZ2AWrZlNxQC0o566NNoARG+88pUiatsr9mZ3kAamW4p30F2cWrtR7TWfG/NlmQ5P46
+ nLpzu72hCrXm4hl+axUIWouYPD1240kahyv/zdlOeYxdAtDG2vnq
 X-Developer-Key: i=ira.weiny@intel.com; a=ed25519;
  pk=noldbkG+Wp1qXRrrkfY1QJpDf7QsOEthbOT7vm0PqsE=
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -73,90 +73,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The kernel pages used by shm_get_kernel_pages() are allocated using
-GFP_KERNEL through the following call stack:
+The only caller to get_kernel_pages() [shm_get_kernel_pages()] has been
+updated to not need it.
 
-trusted_instantiate()
-	trusted_payload_alloc() -> GFP_KERNEL
-	<trusted key op>
-		tee_shm_register_kernel_buf()
-			register_shm_helper()
-				shm_get_kernel_pages()
+Remove get_kernel_pages().
 
-Where <trusted key op> is one of:
-
-	trusted_key_unseal()
-	trusted_key_get_random()
-	trusted_key_seal()
-
-Because the pages can't be from highmem get_kernel_pages() boils down to
-a get_page() call.
-
-Remove the get_kernel_pages() call and open code the get_page().
-
-In case a highmem page does slip through warn on once for a kmap'ed
-address.
-
-Cc: Jens Wiklander <jens.wiklander@linaro.org>
+Cc: Mel Gorman <mgorman@suse.de>
 Cc: Al Viro <viro@zeniv.linux.org.uk>
 Cc: "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
 Cc: Christoph Hellwig <hch@lst.de>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Acked-by: John Hubbard <jhubbard@nvidia.com>
 Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-
 ---
-Changes from v1:
-	Al/Christoph: Remove kiov altogether
----
- drivers/tee/tee_shm.c | 21 ++++++++-------------
- 1 file changed, 8 insertions(+), 13 deletions(-)
+ include/linux/mm.h |  2 --
+ mm/swap.c          | 30 ------------------------------
+ 2 files changed, 32 deletions(-)
 
-diff --git a/drivers/tee/tee_shm.c b/drivers/tee/tee_shm.c
-index 527a6eabc03e..b1c6231defad 100644
---- a/drivers/tee/tee_shm.c
-+++ b/drivers/tee/tee_shm.c
-@@ -11,6 +11,7 @@
- #include <linux/tee_drv.h>
- #include <linux/uaccess.h>
- #include <linux/uio.h>
-+#include <linux/highmem.h>
- #include "tee_private.h"
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 8f857163ac89..2041e6d4fa27 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -2095,8 +2095,6 @@ int __account_locked_vm(struct mm_struct *mm, unsigned long pages, bool inc,
+ 			struct task_struct *task, bool bypass_rlim);
  
- static void shm_put_kernel_pages(struct page **pages, size_t page_count)
-@@ -24,26 +25,20 @@ static void shm_put_kernel_pages(struct page **pages, size_t page_count)
- static int shm_get_kernel_pages(unsigned long start, size_t page_count,
- 				struct page **pages)
- {
--	struct kvec *kiov;
-+	struct page *page;
- 	size_t n;
--	int rc;
+ struct kvec;
+-int get_kernel_pages(const struct kvec *iov, int nr_pages, int write,
+-			struct page **pages);
+ struct page *get_dump_page(unsigned long addr);
  
--	if (WARN_ON_ONCE(is_vmalloc_addr((void *)start)))
-+	if (WARN_ON_ONCE(is_vmalloc_addr((void *)start) ||
-+			 is_kmap_addr((void *)start)))
- 		return -EINVAL;
- 
--	kiov = kcalloc(page_count, sizeof(*kiov), GFP_KERNEL);
--	if (!kiov)
--		return -ENOMEM;
--
-+	page = virt_to_page(start);
- 	for (n = 0; n < page_count; n++) {
--		kiov[n].iov_base = (void *)(start + n * PAGE_SIZE);
--		kiov[n].iov_len = PAGE_SIZE;
-+		pages[n] = page + n;
-+		get_page(pages[n]);
- 	}
- 
--	rc = get_kernel_pages(kiov, page_count, 0, pages);
--	kfree(kiov);
--
--	return rc;
-+	return page_count;
+ bool folio_mark_dirty(struct folio *folio);
+diff --git a/mm/swap.c b/mm/swap.c
+index 70e2063ef43a..4c03ecab698e 100644
+--- a/mm/swap.c
++++ b/mm/swap.c
+@@ -158,36 +158,6 @@ void put_pages_list(struct list_head *pages)
  }
+ EXPORT_SYMBOL(put_pages_list);
  
- static void release_registered_pages(struct tee_shm *shm)
+-/*
+- * get_kernel_pages() - pin kernel pages in memory
+- * @kiov:	An array of struct kvec structures
+- * @nr_segs:	number of segments to pin
+- * @write:	pinning for read/write, currently ignored
+- * @pages:	array that receives pointers to the pages pinned.
+- *		Should be at least nr_segs long.
+- *
+- * Returns number of pages pinned. This may be fewer than the number requested.
+- * If nr_segs is 0 or negative, returns 0.  If no pages were pinned, returns 0.
+- * Each page returned must be released with a put_page() call when it is
+- * finished with.
+- */
+-int get_kernel_pages(const struct kvec *kiov, int nr_segs, int write,
+-		struct page **pages)
+-{
+-	int seg;
+-
+-	for (seg = 0; seg < nr_segs; seg++) {
+-		if (WARN_ON(kiov[seg].iov_len != PAGE_SIZE))
+-			return seg;
+-
+-		pages[seg] = kmap_to_page(kiov[seg].iov_base);
+-		get_page(pages[seg]);
+-	}
+-
+-	return seg;
+-}
+-EXPORT_SYMBOL_GPL(get_kernel_pages);
+-
+ typedef void (*move_fn_t)(struct lruvec *lruvec, struct folio *folio);
+ 
+ static void lru_add_fn(struct lruvec *lruvec, struct folio *folio)
 
 -- 
 2.39.1
