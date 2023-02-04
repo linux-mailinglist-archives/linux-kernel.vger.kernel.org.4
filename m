@@ -2,149 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E0C268A968
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 11:17:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12E9868A96C
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 11:17:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232736AbjBDKRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 05:17:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48596 "EHLO
+        id S233571AbjBDKRb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 05:17:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232228AbjBDKRD (ORCPT
+        with ESMTP id S232975AbjBDKRY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 05:17:03 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A432828D06
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 02:17:02 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id p26so21614941ejx.13
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Feb 2023 02:17:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vvcz/YyCGtXoD5oGFLtUkYy0diaSuTeqxFRDCLmhIXc=;
-        b=pXvfIB0Cbl+zg+3jyWscDCAcdybMl4jllRa1XNHVpVaICIe036QuFut6fX/my11LzX
-         A29v2nBimcRhtWLjUq5fw79RqgtyHABYKzKmE0KalCMHnN5c1CjMnJgx+F2lxucQ8UTf
-         KqKS8AndMwq3wphzn4/3QFajNcqwIFp4enopvQ0SLJv60TaOj+U1Ov1iVIjsXOQXI0zP
-         4ZveSSV3Ts4PrpZypEWqHRuIiCYwWD/MRROHOG3gRAzVXWdRuhnU8t3WmelmBiF5zA3z
-         Vs1ZgMrlT+89J5lHR13FyOLzn6F0Ch9vkZILAqUXZQS7vvHx3mZZ69nBErzW7x7PJLzJ
-         j2fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vvcz/YyCGtXoD5oGFLtUkYy0diaSuTeqxFRDCLmhIXc=;
-        b=6Ch3IK7GVsedvfUrC67aavFvEwT6UujYtD6j0MfGJA6tBjQJTOq2T55QUDgUe14D1F
-         pBV3svdM47pWqcnJnyV3esLV6kmPwuYVOYZ8RnERwVpk8fCJQgYRwQ8jWXest+DFa57/
-         ZgHs8OsnLKD+ggC19ism4wShaSz1GDPL4Wfl+24hsuFBhKaaJMHFV8F0sygJ0eAcpYvL
-         xbmkI576fV6ndJ58RRSRBN6a8XQIYXTz/u/moyDGWWPu5kEISdv4ZnHoEVVGrLWeAPa0
-         P6R357Zornrrn2guWemS1N61ZoQkcr1GK6/nKs7ffQSdkPzdjzg14dAxw83rVSazmTCS
-         /5pw==
-X-Gm-Message-State: AO0yUKWLGVRh26KtT6RiCyQSOSNdPxW4Aw29OnMoGIQbdtekpVh81t0t
-        Bshfl+W/ZEGtGqmpbQ0cuoOvq4iHhpeqdg==
-X-Google-Smtp-Source: AK7set+rsaWMwiBAhfM47aGYDWg49bocoSDLXaiAy4k7sANOvYkoIuM7c25hQ31xllHhBe/bSPS2Rw==
-X-Received: by 2002:a17:907:1308:b0:88a:bb13:7329 with SMTP id vj8-20020a170907130800b0088abb137329mr12274825ejb.53.1675505821296;
-        Sat, 04 Feb 2023 02:17:01 -0800 (PST)
-Received: from localhost.localdomain (ip5f5abbf9.dynamic.kabel-deutschland.de. [95.90.187.249])
-        by smtp.gmail.com with ESMTPSA id m19-20020a1709061ed300b0088ed7de4821sm2632378ejj.158.2023.02.04.02.17.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Feb 2023 02:17:01 -0800 (PST)
-From:   Michael Straube <straube.linux@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH 2/2] staging: r8188eu: correct error logic of _rtw_init_recv_priv()
-Date:   Sat,  4 Feb 2023 11:16:54 +0100
-Message-Id: <20230204101654.10232-3-straube.linux@gmail.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230204101654.10232-1-straube.linux@gmail.com>
-References: <20230204101654.10232-1-straube.linux@gmail.com>
+        Sat, 4 Feb 2023 05:17:24 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57E996D07F;
+        Sat,  4 Feb 2023 02:17:14 -0800 (PST)
+Date:   Sat, 04 Feb 2023 10:17:11 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1675505832;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=awbb/MDCUAceNOA9d0sBAdfLnnI1GG/4y/eewIgt/3I=;
+        b=fALohyiyT+DmU56ggOn0WGaptOWDt9hm0fYI1T9dlLRg5E7WktIlxHZMLn7DE78vTmi90c
+        zActyJwyQRHsFjX4X34tmlxAeNKdhrpBnyTNMR2Wz+lswl2aXwT+k+AySqgySV3Sg4gxca
+        1In8QEtFonWEuE1txLJVZe1vgFWXOp1ul4GY+wApV+kAiGE5Iv9MAtFTE56p6pSbL9GRuC
+        nB591b+52CUdbCY3pkOw+CPD0HyXO2vfabiOsWU7xUAApTnpC/gGYXEd+TdheP5QeW0TG8
+        dXvW/r6H+JltKzyCEkVhso+FfLw1BWWd56TMMDr8Fy+pYmLKrI0Yfemu8vUG6Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1675505832;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=awbb/MDCUAceNOA9d0sBAdfLnnI1GG/4y/eewIgt/3I=;
+        b=Rf351rwRPaIlUp2qqV+FW2kCP5PFkKlMu66ZkfbiaktqUOVK8F1f+l4SSAmCv9pI2aF3JN
+        +E2jKKE7UtUMg8CA==
+From:   tip-bot2 for Thomas =?utf-8?q?Wei=C3=9Fschuh?= 
+        <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: objtool/core] objtool: Optimize layout of struct symbol
+Cc:     linux@weissschuh.net, Josh Poimboeuf <jpoimboe@kernel.org>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20221216-objtool-memory-v2-6-17968f85a464@weissschuh.net>
+References: <20221216-objtool-memory-v2-6-17968f85a464@weissschuh.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <167550583149.4906.16009814897021717355.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the function _rtw_init_recv_priv() away from returning _FAIL
-and _SUCCESS, which uses inverted error logic. Return 0 for success
-and negative values for failure instead.
+The following commit has been merged into the objtool/core branch of tip:
 
-Signed-off-by: Michael Straube <straube.linux@gmail.com>
+Commit-ID:     21a899f9fc78be6b289ee4627bccadf560930eb5
+Gitweb:        https://git.kernel.org/tip/21a899f9fc78be6b289ee4627bccadf5609=
+30eb5
+Author:        Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
+AuthorDate:    Tue, 27 Dec 2022 16:01:02=20
+Committer:     Josh Poimboeuf <jpoimboe@kernel.org>
+CommitterDate: Wed, 01 Feb 2023 09:15:24 -08:00
+
+objtool: Optimize layout of struct symbol
+
+Reduce the size of struct symbol on x86_64 from 208 to 200 bytes.
+This structure is allocated a lot and never freed.
+
+This reduces maximum memory usage while processing vmlinux.o from
+2919716 KB to 2917988 KB (-0.5%) on my notebooks "localmodconfig".
+
+Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
+Link: https://lore.kernel.org/r/20221216-objtool-memory-v2-6-17968f85a464@wei=
+ssschuh.net
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- drivers/staging/r8188eu/core/rtw_recv.c   | 17 +++++------------
- drivers/staging/r8188eu/os_dep/os_intfs.c |  2 +-
- 2 files changed, 6 insertions(+), 13 deletions(-)
+ tools/objtool/include/objtool/elf.h | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
-index 70d43c10e53d..4c823bbcc22b 100644
---- a/drivers/staging/r8188eu/core/rtw_recv.c
-+++ b/drivers/staging/r8188eu/core/rtw_recv.c
-@@ -99,10 +99,8 @@ static int rtl8188eu_init_recv_priv(struct adapter *padapter)
- int _rtw_init_recv_priv(struct recv_priv *precvpriv, struct adapter *padapter)
- {
- 	int i;
--
- 	struct recv_frame *precvframe;
--
--	int	res = _SUCCESS;
-+	int err = 0;
- 
- 	spin_lock_init(&precvpriv->lock);
- 
-@@ -115,11 +113,8 @@ int _rtw_init_recv_priv(struct recv_priv *precvpriv, struct adapter *padapter)
- 	precvpriv->free_recvframe_cnt = NR_RECVFRAME;
- 
- 	precvpriv->pallocated_frame_buf = vzalloc(NR_RECVFRAME * sizeof(struct recv_frame) + RXFRAME_ALIGN_SZ);
--
--	if (!precvpriv->pallocated_frame_buf) {
--		res = _FAIL;
--		goto exit;
--	}
-+	if (!precvpriv->pallocated_frame_buf)
-+		return -ENOMEM;
- 
- 	precvpriv->precv_frame_buf = (u8 *)ALIGN((size_t)(precvpriv->pallocated_frame_buf), RXFRAME_ALIGN_SZ);
- 
-@@ -139,16 +134,14 @@ int _rtw_init_recv_priv(struct recv_priv *precvpriv, struct adapter *padapter)
- 	}
- 	precvpriv->rx_pending_cnt = 1;
- 
--	if (rtl8188eu_init_recv_priv(padapter))
--		res = _FAIL;
-+	err = rtl8188eu_init_recv_priv(padapter);
- 
- 	timer_setup(&precvpriv->signal_stat_timer, rtw_signal_stat_timer_hdl, 0);
- 	precvpriv->signal_stat_sampling_interval = 1000; /* ms */
- 
- 	rtw_set_signal_stat_timer(precvpriv);
--exit:
- 
--	return res;
-+	return err;
- }
- 
- static void rtl8188eu_free_recv_priv(struct adapter *padapter)
-diff --git a/drivers/staging/r8188eu/os_dep/os_intfs.c b/drivers/staging/r8188eu/os_dep/os_intfs.c
-index cfc24420e70c..4130e8fe2952 100644
---- a/drivers/staging/r8188eu/os_dep/os_intfs.c
-+++ b/drivers/staging/r8188eu/os_dep/os_intfs.c
-@@ -482,7 +482,7 @@ u8 rtw_init_drv_sw(struct adapter *padapter)
- 		goto free_mlme_ext;
- 	}
- 
--	if (_rtw_init_recv_priv(&padapter->recvpriv, padapter) == _FAIL) {
-+	if (_rtw_init_recv_priv(&padapter->recvpriv, padapter)) {
- 		dev_err(dvobj_to_dev(padapter->dvobj), "_rtw_init_recv_priv failed\n");
- 		goto free_xmit_priv;
- 	}
--- 
-2.39.1
-
+diff --git a/tools/objtool/include/objtool/elf.h b/tools/objtool/include/objt=
+ool/elf.h
+index 1c90f0a..ad0024d 100644
+--- a/tools/objtool/include/objtool/elf.h
++++ b/tools/objtool/include/objtool/elf.h
+@@ -50,12 +50,11 @@ struct symbol {
+ 	GElf_Sym sym;
+ 	struct section *sec;
+ 	char *name;
+-	unsigned int idx;
+-	unsigned char bind, type;
++	unsigned int idx, len;
+ 	unsigned long offset;
+-	unsigned int len;
+ 	unsigned long __subtree_last;
+ 	struct symbol *pfunc, *cfunc, *alias;
++	unsigned char bind, type;
+ 	u8 uaccess_safe      : 1;
+ 	u8 static_call_tramp : 1;
+ 	u8 retpoline_thunk   : 1;
