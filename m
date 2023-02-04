@@ -2,112 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCD7C68AC05
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 20:06:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD24C68AC08
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 20:11:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233576AbjBDTGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 14:06:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34562 "EHLO
+        id S233612AbjBDTLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 14:11:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233556AbjBDTG2 (ORCPT
+        with ESMTP id S229796AbjBDTLB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 14:06:28 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4CA526860
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 11:06:26 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id e10-20020a17090a630a00b0022bedd66e6dso11747657pjj.1
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Feb 2023 11:06:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=QoMgaRBwpftZsFSUA/NaYhrGZMjYhcRy+dE+lN/6O1E=;
-        b=Z4ADyFnc6fwzORH5e6z1NSAJ1n7Z6ZcIr94Kg/BqcBBkg4VqN5ztstkQB1nwZwQzL3
-         /J0Zy6a8aS2eqJIjiSwguDn064p5fEtP4siewK92viBFPBWgIch+9JPpDgqDQCCDIufP
-         bhxwZyAFguAcg97Bg8W0snjsSEWSW0EuF2k08=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QoMgaRBwpftZsFSUA/NaYhrGZMjYhcRy+dE+lN/6O1E=;
-        b=yU8AOit97Vhn4zFHEfJN8hHGKgKh56Lq4+JqWF5pdeR9/iCOwO27CNrZHog+TE1THr
-         COkDVhXGXezMNlsP/n/Oe7gaQCr0PiR7kPmAhVyL/odUZWgCW1hovLOap4SIonlLGGBp
-         b1l0oQHylWCkN6b1JJj0cJze0Sx7Wisr4X+EJjxlVC0ATqk5by+a7240TZSAmJiVbssS
-         oB9tHZ+DdVd0M+S/Pj/juPICoj4MsmgxXL+1uN3hjfbGPFj7hH/cmPnqhWRhf5QJG0gm
-         XnPtD+p312WUHxCLqIFLIxwhl3Be/sp1iBZgfgCM9gFaLolqnFUuCGPonJKu+5dTk0mN
-         5J+w==
-X-Gm-Message-State: AO0yUKVBWNnmPHuffs8aqpF1pgK28s4KegziQSP9K2lwr1e0ibSVMkS2
-        yitUcwwjITxjrYmasCxRe7aVjw==
-X-Google-Smtp-Source: AK7set9ig47OFDDy/8XwlY0OJoIGhW13i8inuO00m8K8SWHbrufKyM3+iZqYP60Vh/6VoQcT+qCXJg==
-X-Received: by 2002:a17:902:c792:b0:198:fe02:1f94 with SMTP id w18-20020a170902c79200b00198fe021f94mr898432pla.51.1675537586367;
-        Sat, 04 Feb 2023 11:06:26 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id t3-20020a170902d20300b00194c1281ca9sm3769380ply.166.2023.02.04.11.06.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Feb 2023 11:06:25 -0800 (PST)
-Message-ID: <63deacb1.170a0220.f078.6779@mx.google.com>
-X-Google-Original-Message-ID: <202302041105.@keescook>
-Date:   Sat, 4 Feb 2023 11:06:25 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] randstruct: temporarily disable clang support
-References: <20230203194201.92015-1-ebiggers@kernel.org>
+        Sat, 4 Feb 2023 14:11:01 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B910F27D70;
+        Sat,  4 Feb 2023 11:10:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675537858; x=1707073858;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=peFlvY2byFwd8qcwJsPU//FQzIbgC+db/U2+rXUvjcQ=;
+  b=IQ5TqnOrr5YLqpfSaBiw4GWmCZCov+YjknK+UIvya0DBxTsumZYTOU3k
+   crgXBn26xcmUcFA4Q2x9aVzocfyXiHt+56svMZgpjis+QdbjIsGr3ukE2
+   kHIWjhxIL3ggAN8I5zKc9WwFWiHdKLIzsenIPhrhl/ZM/Y8vcRWyx82mE
+   1U4/3mdcGnuYbBJzOdiLKdiFnq8fB6LLDKAULxgpMNRQUFpedxdeebexY
+   OTpb4CZj+4N35UfBFC6NLTOr8EYW7mGNlJCvpFScd5e4WioJhF7/m6fqv
+   dwTS6sHsn82IybYhVoURfPNpuhX1V7GgbiyKxLw079GdcNd3k9rxVek0f
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="312635178"
+X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
+   d="scan'208";a="312635178"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2023 11:10:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="666078855"
+X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
+   d="scan'208";a="666078855"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 04 Feb 2023 11:10:54 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pONw6-0001Ua-02;
+        Sat, 04 Feb 2023 19:10:54 +0000
+Date:   Sun, 5 Feb 2023 03:10:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ben Gardon <bgardon@google.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Ben Gardon <bgardon@google.com>
+Subject: Re: [PATCH 11/21] KVM: x86/MMU: Cleanup shrinker interface with
+ Shadow MMU
+Message-ID: <202302050303.kLjMucYK-lkp@intel.com>
+References: <20230202182809.1929122-12-bgardon@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230203194201.92015-1-ebiggers@kernel.org>
+In-Reply-To: <20230202182809.1929122-12-bgardon@google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 11:42:01AM -0800, Eric Biggers wrote:
-> From: Eric Biggers <ebiggers@google.com>
-> 
-> Randstruct with clang is currently unsafe to use in any clang release
-> that supports it, due to a clang bug that is causing miscompilations:
-> "-frandomize-layout-seed inconsistently randomizes all-function-pointers
-> structs" (https://github.com/llvm/llvm-project/issues/60349).  Disable
-> it temporarily until the bug is fixed and the fix is released in a clang
-> version that can be checked for.
-> 
-> Fixes: 035f7f87b729 ("randstruct: Enable Clang support")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Eric Biggers <ebiggers@google.com>
-> ---
->  security/Kconfig.hardening | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/security/Kconfig.hardening b/security/Kconfig.hardening
-> index 53baa95cb644..aad16187148c 100644
-> --- a/security/Kconfig.hardening
-> +++ b/security/Kconfig.hardening
-> @@ -280,7 +280,8 @@ config ZERO_CALL_USED_REGS
->  endmenu
->  
->  config CC_HAS_RANDSTRUCT
-> -	def_bool $(cc-option,-frandomize-layout-seed-file=/dev/null)
-> +	# Temporarily disabled due to https://github.com/llvm/llvm-project/issues/60349
-> +	def_bool n
->  
->  choice
->  	prompt "Randomize layout of sensitive kernel structures"
-> 
-> base-commit: 7b753a909f426f2789d9db6f357c3d59180a9354
-> -- 
-> 2.39.1
+Hi Ben,
 
-This should be fixed with greater precision -- i.e. this is nearly fixed
-in Clang now, and is likely to be backported. So I think we'll need
-versioned checks here.
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on 7cb79f433e75b05d1635aefaa851cfcd1cb7dc4f]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ben-Gardon/KVM-x86-mmu-Rename-slot-rmap-walkers-to-add-clarity-and-clean-up-code/20230203-023259
+base:   7cb79f433e75b05d1635aefaa851cfcd1cb7dc4f
+patch link:    https://lore.kernel.org/r/20230202182809.1929122-12-bgardon%40google.com
+patch subject: [PATCH 11/21] KVM: x86/MMU: Cleanup shrinker interface with Shadow MMU
+config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20230205/202302050303.kLjMucYK-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/c1170de906dfe1ee64da0066e7c28d35e716ed18
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Ben-Gardon/KVM-x86-mmu-Rename-slot-rmap-walkers-to-add-clarity-and-clean-up-code/20230203-023259
+        git checkout c1170de906dfe1ee64da0066e7c28d35e716ed18
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kvm/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> arch/x86/kvm/mmu/mmu.c:3148:15: warning: no previous prototype for function 'mmu_shrink_scan' [-Wmissing-prototypes]
+   unsigned long mmu_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
+                 ^
+   arch/x86/kvm/mmu/mmu.c:3148:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   unsigned long mmu_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/mmu_shrink_scan +3148 arch/x86/kvm/mmu/mmu.c
+
+  3147	
+> 3148	unsigned long mmu_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
+  3149	{
+  3150		struct kvm *kvm;
+  3151		int nr_to_scan = sc->nr_to_scan;
+  3152		unsigned long freed = 0;
+  3153	
+  3154		mutex_lock(&kvm_lock);
+  3155	
+  3156		list_for_each_entry(kvm, &vm_list, vm_list) {
+  3157			/*
+  3158			 * Never scan more than sc->nr_to_scan VM instances.
+  3159			 * Will not hit this condition practically since we do not try
+  3160			 * to shrink more than one VM and it is very unlikely to see
+  3161			 * !n_used_mmu_pages so many times.
+  3162			 */
+  3163			if (!nr_to_scan--)
+  3164				break;
+  3165	
+  3166			/*
+  3167			 * n_used_mmu_pages is accessed without holding kvm->mmu_lock
+  3168			 * here. We may skip a VM instance errorneosly, but we do not
+  3169			 * want to shrink a VM that only started to populate its MMU
+  3170			 * anyway.
+  3171			 */
+  3172			if (!kvm->arch.n_used_mmu_pages &&
+  3173			    !kvm_shadow_mmu_has_zapped_obsolete_pages(kvm))
+  3174				continue;
+  3175	
+  3176			freed = kvm_shadow_mmu_shrink_scan(kvm, sc->nr_to_scan);
+  3177	
+  3178			/*
+  3179			 * unfair on small ones
+  3180			 * per-vm shrinkers cry out
+  3181			 * sadness comes quickly
+  3182			 */
+  3183			list_move_tail(&kvm->vm_list, &vm_list);
+  3184			break;
+  3185		}
+  3186	
+  3187		mutex_unlock(&kvm_lock);
+  3188		return freed;
+  3189	}
+  3190	
 
 -- 
-Kees Cook
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
