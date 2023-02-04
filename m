@@ -2,60 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE3C668ABDA
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 19:34:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D322468ABDB
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 19:35:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232331AbjBDSed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 13:34:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49056 "EHLO
+        id S232908AbjBDSfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 13:35:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjBDSeb (ORCPT
+        with ESMTP id S229448AbjBDSfO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 13:34:31 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F7B29E0A
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 10:34:30 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id v6-20020a17090ad58600b00229eec90a7fso10436006pju.0
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Feb 2023 10:34:30 -0800 (PST)
+        Sat, 4 Feb 2023 13:35:14 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31B093F8
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 10:35:12 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id ay1so5846726pfb.7
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Feb 2023 10:35:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Kxicov2ebXbMqKupnBjo4AO+peB87PtI30NHkCzhsxs=;
-        b=iFZtF7mZLlg2pj/JdrijhYQz0A7XOBSQICekBwJcr0HYNdHbqBkc07FRNH7DpqTG8D
-         tq18Jcml6WHSrW99u6XfwKhTRhiyjb3T0vbRRPLchueLvaOyUo0qOwVoCmoKcHEZMsAb
-         5nFow9oentxxFIEg5f7plU2PKQukNQLl+FagA=
+        bh=Zy+wil4pznhpFSUKoZDmYz/n7Vbj4cg/Qau15VHcGRI=;
+        b=VloeAGiG3UPi5KsMTTNrtc4v/yZg8m90avTS0EOL2Mw+lmwW10QlW6n7pSfNIks2ej
+         BiPWwz4ScY0BJFVhxc3dYY5V6h2ZWwHTFYWwsWQVB+NPB5nPRirVnvDdmhiwHkjRw0WB
+         L1XliHzO9SNrHrBOx/ZTTeyxbSTaMuqLyORNg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Kxicov2ebXbMqKupnBjo4AO+peB87PtI30NHkCzhsxs=;
-        b=cb65+WRw2UAsQRkgPF0q8erMVcnvmtGqmahdC8a/QrOJvPfkOi7evdOxtetlV7Ko4q
-         bHSvYh/VFW+OnhuPxlW/HWV/zZS6PtI8N9AC17hrvdWXx6Q6jZf9mBDlpbWpSQZ79t++
-         oKHrcQ/GB5ZIKLxABwt1T+ddqGbiFXHtpyiim7Xv6rf1E8A7ctTh7VW/d53QaEYS/0/Y
-         UYpnvb2BY8SWXRwTChOipGINwq2eXJ1aTyNd9Fhb0/aQaOD5nyBRLqsAfb5Fv4VspV1b
-         asiT6Y02jVz4iArUR5a7BT7x5w6yXaIgWFXV3gB5ImuYbciV4XcUK9bwjjF2GeH3G7Hd
-         Kj2A==
-X-Gm-Message-State: AO0yUKUXiawVV5laA6DdjCuarJIzxzsweUwfMcAUoK3eCrIxk3EAb/r5
-        syH+YyDmql5lv9i3wkCJI2IqAV4ZtEQWKh0t
-X-Google-Smtp-Source: AK7set9/4ynVyg52xhq6+81+lcy1Xaq8EvmrzQue6Zastw62zQrbXd0J1eG6fLn1ssi2FS3ZD5+2tA==
-X-Received: by 2002:a05:6a21:788e:b0:be:d4fd:bb14 with SMTP id bf14-20020a056a21788e00b000bed4fdbb14mr18439003pzc.47.1675535669670;
-        Sat, 04 Feb 2023 10:34:29 -0800 (PST)
+        bh=Zy+wil4pznhpFSUKoZDmYz/n7Vbj4cg/Qau15VHcGRI=;
+        b=N2gwOJyAeujmbd/uFifOY5BXcP/iOIA/f85Mm4we+2mZu2lSvOK6OKSyZd7tx/cR+D
+         ki5T0s+2qY5f66oU7CFORbwIy+57jGVSjBEoJfoCU7abvKQ6mA6aDmK0QBQb2zriCNZy
+         n5O2AjywbvsOZxexUZmaNE7EeCELEUvI7u9eTz4hLGQ8MYvN2A2sqEntwrXZsDErk5IH
+         8natWSeuFxUaMFgnNfJi8TM/zXwJXWk8wixGNdXToYCvxXtpGeQG2JDPJuwI18Ti0lqw
+         rAajnQSGda4g8ZXakGcFlJIc1lxagdkLD5CeORwZqjbwZdD2CAllqt23GQAUC7riynVg
+         Y9Dw==
+X-Gm-Message-State: AO0yUKXStb10X0Pu/PWznrBQajpKiJ6z4LmHP054/7oV+OCENPgwn7Jl
+        +qkv0laS4yG3qd4QEnSzOc/94A==
+X-Google-Smtp-Source: AK7set+lCvtBfP1bidnuFepfgCmwDLrYIotsUrVrbmdnY4q7jjQhsA48S0pwo06HrAX/BZde/IvkTg==
+X-Received: by 2002:aa7:8e89:0:b0:593:b021:7d42 with SMTP id a9-20020aa78e89000000b00593b0217d42mr14957391pfr.6.1675535712278;
+        Sat, 04 Feb 2023 10:35:12 -0800 (PST)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id q16-20020a170902dad000b00186cf82717fsm3745146plx.165.2023.02.04.10.34.29
+        by smtp.gmail.com with ESMTPSA id z9-20020aa79589000000b0058e23ca0ca7sm4028881pfj.3.2023.02.04.10.35.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Feb 2023 10:34:29 -0800 (PST)
+        Sat, 04 Feb 2023 10:35:11 -0800 (PST)
 From:   Kees Cook <keescook@chromium.org>
-To:     Jan Kara <jack@suse.com>
-Cc:     Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH] udf: Use unsigned variables for size calculations
-Date:   Sat,  4 Feb 2023 10:34:27 -0800
-Message-Id: <20230204183427.never.856-kees@kernel.org>
+To:     Chris Mason <clm@fb.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] btrfs: sysfs: Handle NULL return values
+Date:   Sat,  4 Feb 2023 10:35:10 -0800
+Message-Id: <20230204183510.never.909-kees@kernel.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1389; h=from:subject:message-id; bh=VRwNzRTi6LcZ6ZVqSd89Li8t3x77uYWI9N+bQTnK9m0=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBj3qUz+il9jLBqmkgMzWwOvwKBbUbMdveCpGjZhX1O DUMjUDOJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY96lMwAKCRCJcvTf3G3AJqXpEA CsumXPOU2ImUnElYzWsx3h+j44zeu5chhHmc3XM5R/9QIubvYXMCGeFGUeTEhnIttFNu3GEvltwijz g86iAyka6bEttwJSL0f3aLJ0cvni8MAjOJpuzeQ2ABoWCWykeJBdmQwZYx5zRL+w/TvXgTLssGUcM4 +4etNwWaPx2jSmI9IiJhXp+9EHKZ9G1a9w9GodRhu9xSrUq2B0AZ6I8SBUXk/LY4p0CjjOOa/kcvgb F+4Mclfmd/cEEzx+GPnbO8DHstNaGjYAVsQljAs04chukqUFMghWXhGXN9+FHCQCdMtk8aHWq7Ua8M TFTQD4Heq47p9pidj9+2jVS8VXDVK66tGPMZelHQ0xmMCAsoeSOC4xPGsT1b+WUZHfmzjumWpseWHT 22cD2J22sEfja5JGsQ3Nmb8L6Qk/nZhwGPe7z32llCAllPCnXBUhgO3SuPBfEe3O3A6N7bdVQK7k/Y UC/9yqihY+WjWlmH4GqurjzryoZ/3/Q5ZXryiJcRCN50yhf9g8Sjxhr+Gm3wnf/LobOKogjaho+Gns T03AQh4zFxmM24iz1b5iLdRaQ4nap4HRD80Af1WvCZzAe4BsyJ08Yg0kSYtc7J9dx5+a7/4QXScT0G AGvDNr1M7beBshAFwD73tqJOGzd/alTHmPnS8Ibu1j/Gpo78s9QOb2E9oWWQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=10318; h=from:subject:message-id; bh=odUCWzSZYkitaDJTEriC4EG03GVKChh8VEDm/Jq7Zn4=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBj3qVeC7qm+E/t2Hvh3ItBnc6YQ7+BcvKEvEOpqcJe PCejuVWJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY96lXgAKCRCJcvTf3G3AJtnnEA CmcpR5P4RLYXAezGaITygw1GNZL5bidlDic5cX8KnnloL9gGxTLuL1yKQHJGcnjQZKONlFIVagXAAm Lssj3Oz1+2jBZxraE0gYyLeIqfGjhHuY7AaR3HRVKVlDblC3jcMBW3qAklgk0BhoCbgN3g2O+PnArV FPsw6s+aSCy1koHomXark/rwM393rbR1AC806O3TysWuX/29jRoNQN2fpf1St3smbE+FUyMIq2yw99 h8dzWIsR0MqLzGSc3ysScoEqoqicUOsJxEw95MpKdRguRpSKVKjlkdwjajCcKwRTeIuxvjAUV7gwBt EcJArub/uldnhdtW74WLRyep0+EgQf3dkUAhmayAvxjrdG6QsgLAVzKGNQszFKYMs/zNTdHI3d9RrW MEjYCs56UbyZOdoDm3CDkG9afTM3aVd+kMQVE/DhwkE0zZwJREgQRkKILtjjfLfwEIsbYd9jhC0vP0 OF1narUKvXQr6WRcMNvYAVTAM7VFkC3vbqZWzSRkLd8cxIMWeNKaCpqca9d9MhamkqClKpA0p2cB8F RHP1bxidS8hImDQiDnveouzJwwHF7syISPOoTOr5XP21bDGkRxS8YpeEmyS58Y5XsC8vYL0+uLc/P4 hrF5YTwo1Ibr0NNf04FL90xZQBwm1hwcGd6gkcSMtbxXn3xNWebKpRRIWxOw==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -67,41 +69,331 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To avoid confusing the compiler about possible negative sizes, switch
-various size variables that can never be negative from int to u32. Seen
-with GCC 13:
+Each of to_fs_info(), discard_to_fs_info(), and to_space_info() can
+return NULL values. Check for these so it's not possible to perform
+calculations against NULL pointers. Fixes many warnings seen with GCC 13
+like:
 
-../fs/udf/directory.c: In function 'udf_copy_fi':
-../include/linux/fortify-string.h:57:33: warning: '__builtin_memcpy' pointer overflow between offset 80 and size [-2147483648, -1] [-Warray-bounds=]
-   57 | #define __underlying_memcpy     __builtin_memcpy
-      |                                 ^
-...
-../fs/udf/directory.c:102:9: note: in expansion of macro 'memcpy'
-  102 |         memcpy(&iter->fi, iter->bh[0]->b_data + off, len);
-      |         ^~~~~~
+In function 'btrfs_show_u64',
+    inlined from 'btrfs_space_info_show_flags' at ../fs/btrfs/sysfs.c:827:1:
+../fs/btrfs/sysfs.c:636:13: warning: array subscript -50 is outside array bounds of 'struct kobject[36028797018963967]' [-Warray-bounds=]
+  636 |         val = *value_ptr;
+      |         ~~~~^~~~~~~~~~~~
 
-Cc: Jan Kara <jack@suse.com>
+Cc: Chris Mason <clm@fb.com>
+Cc: Josef Bacik <josef@toxicpanda.com>
+Cc: David Sterba <dsterba@suse.com>
+Cc: linux-btrfs@vger.kernel.org
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- fs/udf/directory.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ fs/btrfs/sysfs.c | 76 +++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 75 insertions(+), 1 deletion(-)
 
-diff --git a/fs/udf/directory.c b/fs/udf/directory.c
-index 2e13c4b5fb81..e0bb73d414dd 100644
---- a/fs/udf/directory.c
-+++ b/fs/udf/directory.c
-@@ -71,8 +71,9 @@ static int udf_verify_fi(struct udf_fileident_iter *iter)
- static int udf_copy_fi(struct udf_fileident_iter *iter)
+diff --git a/fs/btrfs/sysfs.c b/fs/btrfs/sysfs.c
+index 108aa3876186..01e0f439d8e6 100644
+--- a/fs/btrfs/sysfs.c
++++ b/fs/btrfs/sysfs.c
+@@ -444,6 +444,8 @@ static ssize_t btrfs_discardable_bytes_show(struct kobject *kobj,
  {
- 	struct udf_inode_info *iinfo = UDF_I(iter->dir);
--	int blksize = 1 << iter->dir->i_blkbits;
--	int err, off, len, nameoff;
-+	u32 blksize = 1 << iter->dir->i_blkbits;
-+	u32 off, len, nameoff;
-+	int err;
+ 	struct btrfs_fs_info *fs_info = discard_to_fs_info(kobj);
  
- 	/* Skip copying when we are at EOF */
- 	if (iter->pos >= iter->dir->i_size) {
++	if (!fs_info)
++		return -EINVAL;
+ 	return sysfs_emit(buf, "%lld\n",
+ 			atomic64_read(&fs_info->discard_ctl.discardable_bytes));
+ }
+@@ -455,6 +457,8 @@ static ssize_t btrfs_discardable_extents_show(struct kobject *kobj,
+ {
+ 	struct btrfs_fs_info *fs_info = discard_to_fs_info(kobj);
+ 
++	if (!fs_info)
++		return -EINVAL;
+ 	return sysfs_emit(buf, "%d\n",
+ 			atomic_read(&fs_info->discard_ctl.discardable_extents));
+ }
+@@ -466,6 +470,8 @@ static ssize_t btrfs_discard_bitmap_bytes_show(struct kobject *kobj,
+ {
+ 	struct btrfs_fs_info *fs_info = discard_to_fs_info(kobj);
+ 
++	if (!fs_info)
++		return -EINVAL;
+ 	return sysfs_emit(buf, "%llu\n",
+ 			  fs_info->discard_ctl.discard_bitmap_bytes);
+ }
+@@ -477,6 +483,8 @@ static ssize_t btrfs_discard_bytes_saved_show(struct kobject *kobj,
+ {
+ 	struct btrfs_fs_info *fs_info = discard_to_fs_info(kobj);
+ 
++	if (!fs_info)
++		return -EINVAL;
+ 	return sysfs_emit(buf, "%lld\n",
+ 		atomic64_read(&fs_info->discard_ctl.discard_bytes_saved));
+ }
+@@ -488,6 +496,8 @@ static ssize_t btrfs_discard_extent_bytes_show(struct kobject *kobj,
+ {
+ 	struct btrfs_fs_info *fs_info = discard_to_fs_info(kobj);
+ 
++	if (!fs_info)
++		return -EINVAL;
+ 	return sysfs_emit(buf, "%llu\n",
+ 			  fs_info->discard_ctl.discard_extent_bytes);
+ }
+@@ -499,6 +509,8 @@ static ssize_t btrfs_discard_iops_limit_show(struct kobject *kobj,
+ {
+ 	struct btrfs_fs_info *fs_info = discard_to_fs_info(kobj);
+ 
++	if (!fs_info)
++		return -EINVAL;
+ 	return sysfs_emit(buf, "%u\n",
+ 			  READ_ONCE(fs_info->discard_ctl.iops_limit));
+ }
+@@ -512,6 +524,8 @@ static ssize_t btrfs_discard_iops_limit_store(struct kobject *kobj,
+ 	u32 iops_limit;
+ 	int ret;
+ 
++	if (!fs_info)
++		return -EINVAL;
+ 	ret = kstrtou32(buf, 10, &iops_limit);
+ 	if (ret)
+ 		return -EINVAL;
+@@ -530,6 +544,8 @@ static ssize_t btrfs_discard_kbps_limit_show(struct kobject *kobj,
+ {
+ 	struct btrfs_fs_info *fs_info = discard_to_fs_info(kobj);
+ 
++	if (!fs_info)
++		return -EINVAL;
+ 	return sysfs_emit(buf, "%u\n",
+ 			  READ_ONCE(fs_info->discard_ctl.kbps_limit));
+ }
+@@ -543,6 +559,9 @@ static ssize_t btrfs_discard_kbps_limit_store(struct kobject *kobj,
+ 	u32 kbps_limit;
+ 	int ret;
+ 
++	if (!fs_info)
++		return -EINVAL;
++
+ 	ret = kstrtou32(buf, 10, &kbps_limit);
+ 	if (ret)
+ 		return -EINVAL;
+@@ -560,6 +579,8 @@ static ssize_t btrfs_discard_max_discard_size_show(struct kobject *kobj,
+ {
+ 	struct btrfs_fs_info *fs_info = discard_to_fs_info(kobj);
+ 
++	if (!fs_info)
++		return -EINVAL;
+ 	return sysfs_emit(buf, "%llu\n",
+ 			  READ_ONCE(fs_info->discard_ctl.max_discard_size));
+ }
+@@ -573,6 +594,8 @@ static ssize_t btrfs_discard_max_discard_size_store(struct kobject *kobj,
+ 	u64 max_discard_size;
+ 	int ret;
+ 
++	if (!fs_info)
++		return -EINVAL;
+ 	ret = kstrtou64(buf, 10, &max_discard_size);
+ 	if (ret)
+ 		return -EINVAL;
+@@ -644,6 +667,9 @@ static ssize_t global_rsv_size_show(struct kobject *kobj,
+ {
+ 	struct btrfs_fs_info *fs_info = to_fs_info(kobj->parent);
+ 	struct btrfs_block_rsv *block_rsv = &fs_info->global_block_rsv;
++
++	if (!fs_info)
++		return -EINVAL;
+ 	return btrfs_show_u64(&block_rsv->size, &block_rsv->lock, buf);
+ }
+ BTRFS_ATTR(allocation, global_rsv_size, global_rsv_size_show);
+@@ -653,6 +679,9 @@ static ssize_t global_rsv_reserved_show(struct kobject *kobj,
+ {
+ 	struct btrfs_fs_info *fs_info = to_fs_info(kobj->parent);
+ 	struct btrfs_block_rsv *block_rsv = &fs_info->global_block_rsv;
++
++	if (!fs_info)
++		return -EINVAL;
+ 	return btrfs_show_u64(&block_rsv->reserved, &block_rsv->lock, buf);
+ }
+ BTRFS_ATTR(allocation, global_rsv_reserved, global_rsv_reserved_show);
+@@ -714,6 +743,9 @@ static ssize_t btrfs_space_info_show_##field(struct kobject *kobj,	\
+ 					     char *buf)			\
+ {									\
+ 	struct btrfs_space_info *sinfo = to_space_info(kobj);		\
++									\
++	if (!sinfo)							\
++		return -EINVAL;						\
+ 	return btrfs_show_u64(&sinfo->field, &sinfo->lock, buf);	\
+ }									\
+ BTRFS_ATTR(space_info, field, btrfs_space_info_show_##field)
+@@ -723,6 +755,8 @@ static ssize_t btrfs_chunk_size_show(struct kobject *kobj,
+ {
+ 	struct btrfs_space_info *sinfo = to_space_info(kobj);
+ 
++	if (!sinfo)
++		return -EINVAL;
+ 	return sysfs_emit(buf, "%llu\n", READ_ONCE(sinfo->chunk_size));
+ }
+ 
+@@ -745,6 +779,9 @@ static ssize_t btrfs_chunk_size_store(struct kobject *kobj,
+ 	if (!capable(CAP_SYS_ADMIN))
+ 		return -EPERM;
+ 
++	if (!space_info || !fs_info)
++		return -EINVAL;
++
+ 	if (!fs_info->fs_devices)
+ 		return -EINVAL;
+ 
+@@ -795,6 +832,9 @@ static ssize_t btrfs_force_chunk_alloc_store(struct kobject *kobj,
+ 	if (!capable(CAP_SYS_ADMIN))
+ 		return -EPERM;
+ 
++	if (!space_info || !fs_info)
++		return -EINVAL;
++
+ 	if (sb_rdonly(fs_info->sb))
+ 		return -EROFS;
+ 
+@@ -842,6 +882,8 @@ static ssize_t btrfs_sinfo_bg_reclaim_threshold_show(struct kobject *kobj,
+ {
+ 	struct btrfs_space_info *space_info = to_space_info(kobj);
+ 
++	if (!space_info)
++		return -EINVAL;
+ 	return sysfs_emit(buf, "%d\n", READ_ONCE(space_info->bg_reclaim_threshold));
+ }
+ 
+@@ -853,6 +895,9 @@ static ssize_t btrfs_sinfo_bg_reclaim_threshold_store(struct kobject *kobj,
+ 	int thresh;
+ 	int ret;
+ 
++	if (!space_info)
++		return -EINVAL;
++
+ 	ret = kstrtoint(buf, 10, &thresh);
+ 	if (ret)
+ 		return ret;
+@@ -924,6 +969,9 @@ static ssize_t btrfs_label_show(struct kobject *kobj,
+ 	char *label = fs_info->super_copy->label;
+ 	ssize_t ret;
+ 
++	if (!fs_info)
++		return -EINVAL;
++
+ 	spin_lock(&fs_info->super_lock);
+ 	ret = sysfs_emit(buf, label[0] ? "%s\n" : "%s", label);
+ 	spin_unlock(&fs_info->super_lock);
+@@ -973,6 +1021,8 @@ static ssize_t btrfs_nodesize_show(struct kobject *kobj,
+ {
+ 	struct btrfs_fs_info *fs_info = to_fs_info(kobj);
+ 
++	if (!fs_info)
++		return -EINVAL;
+ 	return sysfs_emit(buf, "%u\n", fs_info->super_copy->nodesize);
+ }
+ 
+@@ -983,6 +1033,8 @@ static ssize_t btrfs_sectorsize_show(struct kobject *kobj,
+ {
+ 	struct btrfs_fs_info *fs_info = to_fs_info(kobj);
+ 
++	if (!fs_info)
++		return -EINVAL;
+ 	return sysfs_emit(buf, "%u\n", fs_info->super_copy->sectorsize);
+ }
+ 
+@@ -993,6 +1045,8 @@ static ssize_t btrfs_commit_stats_show(struct kobject *kobj,
+ {
+ 	struct btrfs_fs_info *fs_info = to_fs_info(kobj);
+ 
++	if (!fs_info)
++		return -EINVAL;
+ 	return sysfs_emit(buf,
+ 		"commits %llu\n"
+ 		"last_commit_ms %llu\n"
+@@ -1035,6 +1089,8 @@ static ssize_t btrfs_clone_alignment_show(struct kobject *kobj,
+ {
+ 	struct btrfs_fs_info *fs_info = to_fs_info(kobj);
+ 
++	if (!fs_info)
++		return -EINVAL;
+ 	return sysfs_emit(buf, "%u\n", fs_info->super_copy->sectorsize);
+ }
+ 
+@@ -1046,6 +1102,8 @@ static ssize_t quota_override_show(struct kobject *kobj,
+ 	struct btrfs_fs_info *fs_info = to_fs_info(kobj);
+ 	int quota_override;
+ 
++	if (!fs_info)
++		return -EINVAL;
+ 	quota_override = test_bit(BTRFS_FS_QUOTA_OVERRIDE, &fs_info->flags);
+ 	return sysfs_emit(buf, "%d\n", quota_override);
+ }
+@@ -1085,6 +1143,8 @@ static ssize_t btrfs_metadata_uuid_show(struct kobject *kobj,
+ {
+ 	struct btrfs_fs_info *fs_info = to_fs_info(kobj);
+ 
++	if (!fs_info)
++		return -EINVAL;
+ 	return sysfs_emit(buf, "%pU\n", fs_info->fs_devices->metadata_uuid);
+ }
+ 
+@@ -1094,8 +1154,11 @@ static ssize_t btrfs_checksum_show(struct kobject *kobj,
+ 				   struct kobj_attribute *a, char *buf)
+ {
+ 	struct btrfs_fs_info *fs_info = to_fs_info(kobj);
+-	u16 csum_type = btrfs_super_csum_type(fs_info->super_copy);
++	u16 csum_type;
+ 
++	if (!fs_info)
++		return -EINVAL;
++	csum_type = btrfs_super_csum_type(fs_info->super_copy);
+ 	return sysfs_emit(buf, "%s (%s)\n",
+ 			  btrfs_super_csum_name(csum_type),
+ 			  crypto_shash_driver_name(fs_info->csum_shash));
+@@ -1109,6 +1172,8 @@ static ssize_t btrfs_exclusive_operation_show(struct kobject *kobj,
+ 	struct btrfs_fs_info *fs_info = to_fs_info(kobj);
+ 	const char *str;
+ 
++	if (!fs_info)
++		return -EINVAL;
+ 	switch (READ_ONCE(fs_info->exclusive_operation)) {
+ 		case  BTRFS_EXCLOP_NONE:
+ 			str = "none\n";
+@@ -1147,6 +1212,8 @@ static ssize_t btrfs_generation_show(struct kobject *kobj,
+ {
+ 	struct btrfs_fs_info *fs_info = to_fs_info(kobj);
+ 
++	if (!fs_info)
++		return -EINVAL;
+ 	return sysfs_emit(buf, "%llu\n", fs_info->generation);
+ }
+ BTRFS_ATTR(, generation, btrfs_generation_show);
+@@ -1205,6 +1272,8 @@ static ssize_t btrfs_bg_reclaim_threshold_show(struct kobject *kobj,
+ {
+ 	struct btrfs_fs_info *fs_info = to_fs_info(kobj);
+ 
++	if (!fs_info)
++		return -EINVAL;
+ 	return sysfs_emit(buf, "%d\n", READ_ONCE(fs_info->bg_reclaim_threshold));
+ }
+ 
+@@ -1216,6 +1285,9 @@ static ssize_t btrfs_bg_reclaim_threshold_store(struct kobject *kobj,
+ 	int thresh;
+ 	int ret;
+ 
++	if (!fs_info)
++		return -EINVAL;
++
+ 	ret = kstrtoint(buf, 10, &thresh);
+ 	if (ret)
+ 		return ret;
+@@ -1273,6 +1345,8 @@ static inline struct btrfs_fs_devices *to_fs_devs(struct kobject *kobj)
+ 
+ static inline struct btrfs_fs_info *to_fs_info(struct kobject *kobj)
+ {
++	if (!kobj)
++		return NULL;
+ 	if (kobj->ktype != &btrfs_ktype)
+ 		return NULL;
+ 	return to_fs_devs(kobj)->fs_info;
 -- 
 2.34.1
 
