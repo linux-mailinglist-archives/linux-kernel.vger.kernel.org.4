@@ -2,148 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E75268A816
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 05:07:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB55168A81C
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 05:13:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232489AbjBDEHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 23:07:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56430 "EHLO
+        id S233098AbjBDENG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 23:13:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233034AbjBDEGy (ORCPT
+        with ESMTP id S233034AbjBDENE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 23:06:54 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0440D93E3F
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 20:06:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675483613; x=1707019613;
-  h=from:date:subject:mime-version:content-transfer-encoding:
-   message-id:references:in-reply-to:to:cc;
-  bh=Gn7LOPh68jC6rQtBAdzLGiAHS3AXRc2KQzYf1z3imZ8=;
-  b=X3FfTmHWBRDVLCV4bSpXufeKBUz85bdW35WbIdU7grhq3LmIbh0bZACb
-   3sXYUYpwPdq3TfYApb32wcu8JzeyOLexGrP8OG2gTbRJlvPOhs82ObSkS
-   dYj0e7TJssNHUf/W4+RQ8SqkGcyvL/pPa1R8qfCVCPwtOUmge4Mk+DE6I
-   Vz8pCvw0wTo3299B0aMneAZREGpBUKB29bl22ADOnPTXYL6Sexz4gBbMo
-   gptzVjeT9a9/jxXH95V0v3bMtvobyANnJSt1estD/zWN/MzK0ZeWV19JX
-   DwirbfZsF9XXejQQF08s24T+DGwyNq0HCxcTwUiyXl5IwXMafNlUEuQmr
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="391309393"
-X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
-   d="scan'208";a="391309393"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2023 20:06:51 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="734573746"
-X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
-   d="scan'208";a="734573746"
-Received: from iweiny-mobl.amr.corp.intel.com (HELO localhost) ([10.209.125.166])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2023 20:06:50 -0800
-From:   Ira Weiny <ira.weiny@intel.com>
-Date:   Fri, 03 Feb 2023 20:06:35 -0800
-Subject: [PATCH v2 4/4] mm: Remove get_kernel_pages()
+        Fri, 3 Feb 2023 23:13:04 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD8BC66D
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 20:12:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675483936;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZCd6IH1kuSRhazY3lirDDEsbjEKOXtX6NtTmDCDsrd8=;
+        b=jG/0DJVpf4/GAXcSh1YpH4j+VTOm8QpUpYc3b8rSJP/9HMveKkH2PrSFEnD4ge8+hb9rX6
+        JUEqmYLdbNjBy7/4Lw7QHzMa+2gARrK9hS1+I4lTGJ0441u9jA57Qxvj5tp/nqrIjGB3P0
+        1T35dHax8SgmZAOEmjc+2d8fURCY9bg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-196-BdN2xQFkMbO6m7WXdcsDHA-1; Fri, 03 Feb 2023 23:12:13 -0500
+X-MC-Unique: BdN2xQFkMbO6m7WXdcsDHA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BAEF9802314;
+        Sat,  4 Feb 2023 04:12:12 +0000 (UTC)
+Received: from localhost (ovpn-12-127.pek2.redhat.com [10.72.12.127])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E2D70112132C;
+        Sat,  4 Feb 2023 04:12:11 +0000 (UTC)
+Date:   Sat, 4 Feb 2023 12:12:08 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Stephen Brennan <stephen.s.brennan@oracle.com>,
+        akpm@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        akpm@linux-foundation.org, urezki@gmail.com, lstoakes@gmail.com,
+        willy@infradead.org, hch@infradead.org, error27@gmail.com
+Subject: Re: [PATCH v4 0/7] mm/vmalloc.c: allow vread() to read out
+ vm_map_ram areas
+Message-ID: <Y93bGLwIROQB3Yfs@MiWiFi-R3L-srv>
+References: <20230201091339.61761-1-bhe@redhat.com>
+ <87357o7yeh.fsf@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230203-get_kernel_pages-v2-4-f1dc4af273f1@intel.com>
-References: <20230203-get_kernel_pages-v2-0-f1dc4af273f1@intel.com>
-In-Reply-To: <20230203-get_kernel_pages-v2-0-f1dc4af273f1@intel.com>
-To:     Sumit Garg <sumit.garg@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>, Christoph Hellwig <hch@lst.de>,
-        linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
-        linux-mm@kvack.org, Jens Wiklander <jens.wiklander@linaro.org>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mel Gorman <mgorman@suse.de>
-X-Mailer: b4 0.12-dev-cc11a
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1675483603; l=2399;
- i=ira.weiny@intel.com; s=20221211; h=from:subject:message-id;
- bh=Gn7LOPh68jC6rQtBAdzLGiAHS3AXRc2KQzYf1z3imZ8=;
- b=dtMl0p52IOZ2AWrZlNxQC0o566NNoARG+88pUiatsr9mZ3kAamW4p30F2cWrtR7TWfG/NlmQ5P46
- nLpzu72hCrXm4hl+axUIWouYPD1240kahyv/zdlOeYxdAtDG2vnq
-X-Developer-Key: i=ira.weiny@intel.com; a=ed25519;
- pk=noldbkG+Wp1qXRrrkfY1QJpDf7QsOEthbOT7vm0PqsE=
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87357o7yeh.fsf@oracle.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The only caller to get_kernel_pages() [shm_get_kernel_pages()] has been
-updated to not need it.
+On 02/02/23 at 09:47am, Stephen Brennan wrote:
+......snip...
+> > Testing
+> > ***
+> > Only did the basic testing on kvm guest, and run below commands to
+> > access kcore file to do statistics:
+> >
+> > 	makedumpfile --mem-usage /proc/kcore
+> 
+> Hi Baoquan,
+> 
+> Sorry I haven't commented with testing info or review on each revision:
+> I'm not really familiar with the details necessary for review. However,
+> it looks like this is getting close to ready, so I did another test:
 
-Remove get_kernel_pages().
+That's OK, and your testing is very helpful because I don't know how to
+create vm_map_ram() area to test the patches, just did basic testing.
 
-Cc: Mel Gorman <mgorman@suse.de>
-Cc: Al Viro <viro@zeniv.linux.org.uk>
-Cc: "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Acked-by: John Hubbard <jhubbard@nvidia.com>
-Signed-off-by: Ira Weiny <ira.weiny@intel.com>
----
- include/linux/mm.h |  2 --
- mm/swap.c          | 30 ------------------------------
- 2 files changed, 32 deletions(-)
+> 
+> [opc@stepbren-ol8-1 drgn_vmalloc_test]$ sudo insmod drgn_vmalloc_test.ko
+> [opc@stepbren-ol8-1 drgn_vmalloc_test]$ sudo dmesg | tail -n 5
+> [   20.763310] missing module BTF, cannot register kfuncs
+> [   20.840200] missing module BTF, cannot register kfuncs
+> [   91.475814] drgn_vmalloc_test: loading out-of-tree module taints kernel.
+> [   91.479913] drgn_vmalloc_test: module verification failed: signature and/or required key missing - tainting kernel
+> [   91.484926] drgn_vmalloc_test: 0xffffa51ac2d00000
+> [opc@stepbren-ol8-1 drgn_vmalloc_test]$ sudo drgn
+> drgn 0.0.22 (using Python 3.6.8, elfutils 0.186, with libkdumpfile)
+> For help, type help(drgn).
+> >>> import drgn
+> >>> from drgn import NULL, Object, cast, container_of, execscript, offsetof, reinterpret, sizeof
+> >>> from drgn.helpers.common import *
+> >>> from drgn.helpers.linux import *
+> warning: could not get debugging information for:
+> drgn_vmalloc_test (could not find module in depmod)
+> >>> prog.read(0xffffa51ac2d00000, 64)
+> b'\x00\x00\x00\x00\x01\x00\x00\x00\x02\x00\x00\x00\x03\x00\x00\x00\x04\x00\x00\x00\x05\x00\x00\x00\x06\x00\x00\x00\x07\x00\x00\x00\x08\x00\x00\x00\t\x00\x00\x00\n\x00\x00\x00\x0b\x00\x00\x00\x0c\x00\x00\x00\r\x00\x00\x00\x0e\x00\x00\x00\x0f\x00\x00\x00'
+> >>>
+> 
+> So this definitely still resolves the originally reported issue. Feel
+> free to add, if you want:
+> 
+> Tested-by: Stephen Brennan <stephen.s.brennan@oracle.com>
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 8f857163ac89..2041e6d4fa27 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -2095,8 +2095,6 @@ int __account_locked_vm(struct mm_struct *mm, unsigned long pages, bool inc,
- 			struct task_struct *task, bool bypass_rlim);
- 
- struct kvec;
--int get_kernel_pages(const struct kvec *iov, int nr_pages, int write,
--			struct page **pages);
- struct page *get_dump_page(unsigned long addr);
- 
- bool folio_mark_dirty(struct folio *folio);
-diff --git a/mm/swap.c b/mm/swap.c
-index 70e2063ef43a..4c03ecab698e 100644
---- a/mm/swap.c
-+++ b/mm/swap.c
-@@ -158,36 +158,6 @@ void put_pages_list(struct list_head *pages)
- }
- EXPORT_SYMBOL(put_pages_list);
- 
--/*
-- * get_kernel_pages() - pin kernel pages in memory
-- * @kiov:	An array of struct kvec structures
-- * @nr_segs:	number of segments to pin
-- * @write:	pinning for read/write, currently ignored
-- * @pages:	array that receives pointers to the pages pinned.
-- *		Should be at least nr_segs long.
-- *
-- * Returns number of pages pinned. This may be fewer than the number requested.
-- * If nr_segs is 0 or negative, returns 0.  If no pages were pinned, returns 0.
-- * Each page returned must be released with a put_page() call when it is
-- * finished with.
-- */
--int get_kernel_pages(const struct kvec *kiov, int nr_segs, int write,
--		struct page **pages)
--{
--	int seg;
--
--	for (seg = 0; seg < nr_segs; seg++) {
--		if (WARN_ON(kiov[seg].iov_len != PAGE_SIZE))
--			return seg;
--
--		pages[seg] = kmap_to_page(kiov[seg].iov_base);
--		get_page(pages[seg]);
--	}
--
--	return seg;
--}
--EXPORT_SYMBOL_GPL(get_kernel_pages);
--
- typedef void (*move_fn_t)(struct lruvec *lruvec, struct folio *folio);
- 
- static void lru_add_fn(struct lruvec *lruvec, struct folio *folio)
+I noticed Andrew had picked this v4 into his mm tree, maybe Andrew can
+help add this Tested-by tag.
 
--- 
-2.39.1
