@@ -2,88 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE11668AA8A
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 15:21:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6E8E68AA97
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 15:34:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233953AbjBDOVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 09:21:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36128 "EHLO
+        id S233449AbjBDOee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 09:34:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjBDOVj (ORCPT
+        with ESMTP id S229516AbjBDOec (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 09:21:39 -0500
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F7B1C338;
-        Sat,  4 Feb 2023 06:21:34 -0800 (PST)
-Received: from fsav115.sakura.ne.jp (fsav115.sakura.ne.jp [27.133.134.242])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 314ELSA5007186;
-        Sat, 4 Feb 2023 23:21:28 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav115.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav115.sakura.ne.jp);
- Sat, 04 Feb 2023 23:21:28 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav115.sakura.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 314ELSp5007183
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Sat, 4 Feb 2023 23:21:28 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <a236ab6b-d38c-3974-d4cb-5e92d0877abc@I-love.SAKURA.ne.jp>
-Date:   Sat, 4 Feb 2023 23:21:27 +0900
+        Sat, 4 Feb 2023 09:34:32 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EC47301AF;
+        Sat,  4 Feb 2023 06:34:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 847A360C3E;
+        Sat,  4 Feb 2023 14:34:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 518ADC433EF;
+        Sat,  4 Feb 2023 14:34:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675521267;
+        bh=LJ4CRn6Bmk26RHcXjAQDBTuF0R0J/GXwABjS4Ad3rmM=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=sb1xBqtQluQbOFWab5ivA8tCeC+afVELQy2AUKSJwt02P2N7cxp2xJPvyAD52t9gn
+         I9c7VkhCeKbErCf7Ej+r4BcedPJ+LwDCiOAUxV15UG5okV411ENzILvbQYiGoMCrWz
+         PjZC8leRxjtvJQquLhhE9gH5IsFigb4eczwYr/3v7Ebqt7aCCdzWGb0AmPdJFUmnZZ
+         fDa73d+LT5eGVSFXM1DcXcGJaZKlbwSLjVUvDK0gF3HSPXC04SCVWIp9Kf/ZoJSQCM
+         cLGyTbbJ6rDhot6Cbu+IIaXB33eO6jqwxRBHl8BmJAEe+HmOK7A8eDfQsen8ntaYcS
+         2M9Q3YgyLDuiA==
+Date:   Sat, 04 Feb 2023 15:22:20 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     yanhong wang <yanhong.wang@starfivetech.com>
+CC:     linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>
+Subject: Re: [PATCH v4 0/7] Add Ethernet driver for StarFive JH7110 SoC
+User-Agent: K-9 Mail for Android
+In-Reply-To: <81217dc9-5673-f7eb-3114-b39de8302687@starfivetech.com>
+References: <20230118061701.30047-1-yanhong.wang@starfivetech.com> <Y8h/D7I7/2KhgM00@spud> <81217dc9-5673-f7eb-3114-b39de8302687@starfivetech.com>
+Message-ID: <958E7B1C-E0FF-416A-85AD-783682BA8B54@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: Converting dev->mutex into dev->spinlock ?
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>
-References: <28a82f50-39d5-a45f-7c7a-57a66cec0741@I-love.SAKURA.ne.jp>
- <Y95h7Vop9t5Li0HD@kroah.com>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <Y95h7Vop9t5Li0HD@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/02/04 22:47, Greg Kroah-Hartman wrote:
-> On Sat, Feb 04, 2023 at 10:32:11PM +0900, Tetsuo Handa wrote:
->> Hello.
->>
->> There is a long-standing deadlock problem in driver core code caused by
->> "struct device"->mutex being marked as "do not apply lockdep checks".
-> 
-> The marking of a lock does not cause a deadlock problem, so what do you
-> mean exactly by this?  Where is the actual deadlock?
 
-A few of examples:
 
-  https://syzkaller.appspot.com/bug?extid=2d6ac90723742279e101
-  https://syzkaller.appspot.com/bug?extid=2e39bc6569d281acbcfb
-  https://syzkaller.appspot.com/bug?extid=9ef743bba3a17c756174
+On 3 February 2023 04:02:54 GMT+01:00, yanhong wang <yanhong=2Ewang@starfi=
+vetech=2Ecom> wrote:
+>
+>
+>On 2023/1/19 7:21, Conor Dooley wrote:
+>> Hey Yanhong!
+>>=20
+>> On Wed, Jan 18, 2023 at 02:16:54PM +0800, Yanhong Wang wrote:
+>>> This series adds ethernet support for the StarFive JH7110 RISC-V SoC=
+=2E The series
+>>> includes MAC driver=2E The MAC version is dwmac-5=2E20 (from Synopsys =
+DesignWare)=2E
+>>> For more information and support, you can visit RVspace wiki[1]=2E
+>>> =09
+>>> This patchset should be applied after the patchset [2], [3], [4]=2E
+>>> [1] https://wiki=2Ervspace=2Eorg/
+>>> [2] https://lore=2Ekernel=2Eorg/all/20221118010627=2E70576-1-hal=2Efen=
+g@starfivetech=2Ecom/
+>>> [3] https://lore=2Ekernel=2Eorg/all/20221118011108=2E70715-1-hal=2Efen=
+g@starfivetech=2Ecom/
+>>> [4] https://lore=2Ekernel=2Eorg/all/20221118011714=2E70877-1-hal=2Efen=
+g@starfivetech=2Ecom/
+>>=20
+>> I've got those series applied, albeit locally, since they're not ready,
+>> but I cannot get the Ethernet to work properly on my board=2E
+>> I boot all of my dev boards w/ tftp, and the visionfive2 is no exceptio=
+n=2E
+>> The fact that I am getting to the kernel in the first place means the
+>> ethernet is working in the factory supplied U-Boot [1]=2E
+>>=20
+>> However, in Linux this ethernet port does not appear to work at all=2E
+>> The other ethernet port is functional in Linux, but not in the factory
+>> supplied U-Boot=2E
+>>=20
+>> Is this a known issue? If it's not, I'll post the logs somewhere for
+>> you=2E In case it is relevant, my board is a v1=2E2a=2E
+>>=20
+>> Thanks,
+>> Conor=2E
+>>=20
+>> 1 - U-Boot 2021=2E10 (Oct 31 2022 - 12:11:37 +0800), Build: jenkins-VF2=
+_515_Branch_SDK_Release-10
+>
+>
+>No, this is not a issue=2E=20
+>These patches need to rely on the yt8531 phy driver of motorcomm company
+>and the corresponding clock delay configuration to work normally,=20
+>and the yt8531 phy driver is being submitted=2E I have applied the
+>motorcomm patchs during my test on board v1=2E2b, so the ethernet cannot =
+work without
+>the application of the motorcomm patchs=2E=20
+>
+>For the patchs of yt8531, see [1]
+>
+>1 - https://patchwork=2Ekernel=2Eorg/project/netdevbpf/cover/202302020300=
+37=2E9075-1-Frank=2ESae@motor-comm=2Ecom/
 
-> 
->> We can make this deadlock visible by applying [1], and we can confirm that
->> there is a deadlock problem that I think needs to be addressed in core code [2].
-> 
-> Any reason why you didn't cc: us on these patches?
+Please put that info into the cover of the next round of your submission t=
+hen=2E
 
-We can't apply this "drivers/core: Remove lockdep_set_novalidate_class() usage" patch
-until we fix all lockdep warnings that happen during the boot stage; otherwise syzbot
-testing can't work which is more painful than applying this patch now.
-
-Therefore, I locally tested this patch (in order not to be applied now). And I got
-a lockdep warning on the perf_event code. I got next lockdep warning on the driver core
-code when I tried a fix for the perf_event code suggested by Peter Zijlstra. Since Peter
-confirmed that this is a problem that led to commit 1704f47b50b5 ("lockdep: Add novalidate
-class for dev->mutex conversion"), this time I'm reporting this problem to you (so that
-you can propose a fix for the driver core code).
+Thanks,
+Conor=2E
 
