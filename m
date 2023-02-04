@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 970AD68ABA9
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 18:39:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE06968ABAD
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 18:39:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233010AbjBDRjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 12:39:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34094 "EHLO
+        id S233085AbjBDRjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 12:39:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230222AbjBDRji (ORCPT
+        with ESMTP id S232576AbjBDRji (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 4 Feb 2023 12:39:38 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 944A020D39
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 09:39:35 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id k4so23581080eje.1
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Feb 2023 09:39:35 -0800 (PST)
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19706222C4
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 09:39:36 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id dr8so23454624ejc.12
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Feb 2023 09:39:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=diag.uniroma1.it; s=google;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=bY9mzamFpQVE1Oh0p5qI4v1NrbUk9zJdtBTT6eXQCgk=;
-        b=k3HYSUVTtHr07dAptmGTBb0e+UPC+fWgrWgwpZHDQ9DbuBndUhqJj4dxih3dAae6HN
-         I17XkB1pdVMkxcgk4tQ6GKNxtcOGLig7PCD7W7Uz0R/CPz4qhGvpO0FZnRSYByIFvrSn
-         BJiiqvUufHDzsU3+dhphA0at/y+4X7ZpnBU5M=
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=W/eOodguwW0STRp0sOylYiqIEzEkDsRJryvWVBj7Tj0=;
+        b=V2mUDq13aAExtvc8b5Fn1aerouoj1TDWrw6MWGWKI36CiAjmYpwPX1v5ua9F+COX/o
+         oUbGOdGAzGvOaIIv+P9KgA7fKVskKfk+Ov2VYv04DLXSpxNGYP1h4QXxOEWq5QAlIc7q
+         SUQbPV59TYD9pg8OEEDd1cM9bPQPSThnltpUo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bY9mzamFpQVE1Oh0p5qI4v1NrbUk9zJdtBTT6eXQCgk=;
-        b=ithBkHRMZlYE/KGaSZgJQFQF0EAkGXa7z7/fPNdOF5wwZQlZi22cKdisVIZeCjm62k
-         93lu3NNU6e5GNwRPqk+2WhhoVHzNtiz7W/pIKQUC6Du88ZrJ/FJn6f8wpD0J04m2JOjo
-         /qEiIKk5QXlHX5IaopvJ7cCOuaLCggaJB5ioumhR0g3XOKNwppFCY1yoLUoREgpK0Qft
-         o/icjqpRDF4KoH5yeTOZNG0xH5opFeWrTFq9aUOR5T8mCl3RDb38p0iYBm41DwcHdSrd
-         jd8PgWM3DMGLQItzV5UTi9jYjsW0G4IzbjG9/GCQUQJcri64Lhf+gcbGxmvy65u141Oo
-         kAbg==
-X-Gm-Message-State: AO0yUKW3NLdbYk4W56ErPMUgx67z3rQfoeO6pMEzTQGybnXzVUEMOsf3
-        /Wf3bR3MTkipcBh7XCdhBVxKKQ==
-X-Google-Smtp-Source: AK7set/zMm7Qp2lDZdn4F1tPZ+0o69PpXAP7IaM7LAroUeCwMx8Upuc5PbK1SClUbES8gsmkhpDd+Q==
-X-Received: by 2002:a17:907:6d9c:b0:895:58be:957 with SMTP id sb28-20020a1709076d9c00b0089558be0957mr2049997ejc.2.1675532374132;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=W/eOodguwW0STRp0sOylYiqIEzEkDsRJryvWVBj7Tj0=;
+        b=u9w3suekGrVE+fqTEDdYIgQ1LHxR2mlntQYHmAs+hc0cYZBoY9wL+9HKov177Zmozn
+         mHNblXvWkRQmxxRyU/AFFl8vrEaAGEOd4NTMfzpFwOhfNdntvXH2/KHMiB2IAtSxUsOG
+         kyNTVELX6f8TWnRJ9dA/FeBEZrrlxkS7C+ILLN02B15d0xj8K+9PZhMZaTrmEVyuE3j3
+         XaamuWwG/Jin4welEGVaqvPGxAhHsfwX+/76XLxkukB9e6xNstNtsTB58Js7bhaFzKSG
+         d+CWZxmUykAFJnItNDCBlSNnooIgBMBWwc+enMeheGPQdxuVj3xCzPKjMpg8RfwETjGg
+         HpGw==
+X-Gm-Message-State: AO0yUKVx9jv/6Grlyc87ChJKBX5/WAhas1IdkX+t4F3B83G+eTBx/ZaQ
+        /+s7/t9u8c6UOhFby7PThbcLB3W5oCHch1c0o2dPag==
+X-Google-Smtp-Source: AK7set/7vJsPrtgT1EsZ9QiuN+7qj2SltvrccgvnMIL5zDXawx96JnGrdfeOYjmqR/2dvG5S+GUGnA==
+X-Received: by 2002:a17:906:b4b:b0:878:71fe:2f12 with SMTP id v11-20020a1709060b4b00b0087871fe2f12mr15495013ejg.50.1675532374624;
         Sat, 04 Feb 2023 09:39:34 -0800 (PST)
 Received: from [192.168.17.2] (wolkje-127.labs.vu.nl. [130.37.198.127])
-        by smtp.gmail.com with ESMTPSA id ot1-20020a170906ccc100b008897858bb06sm3039321ejb.119.2023.02.04.09.39.33
+        by smtp.gmail.com with ESMTPSA id ot1-20020a170906ccc100b008897858bb06sm3039321ejb.119.2023.02.04.09.39.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Feb 2023 09:39:33 -0800 (PST)
+        Sat, 04 Feb 2023 09:39:34 -0800 (PST)
 From:   Pietro Borrello <borrello@diag.uniroma1.it>
-Subject: [PATCH net-next v3 0/3] tuntap: correctly initialize socket uid
-Date:   Sat, 04 Feb 2023 17:39:19 +0000
-Message-Id: <20230131-tuntap-sk-uid-v3-0-81188b909685@diag.uniroma1.it>
+Date:   Sat, 04 Feb 2023 17:39:20 +0000
+Subject: [PATCH net-next v3 1/3] net: add sock_init_data_uid()
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAEiY3mMC/32OQQ6CMBREr0K69pO2QKCuvIdxUeAXfgyFtIVgC
- He34FZdTl7mzWzMoyP07JpszOFCnkYbQ3ZJWNNr2yFQGzOTXGZcZALCbIOewD9hphbKCk1TcZP
- XlWSxU2uPUDttm/5oDdoHdAeYHBpaz6E7sxjA4hrYI5KefBjd63ywiJP/GFsEcNAmN8rkXJWqv
- bWku3S25MZBi5Q+wkX+lcgokQobURRKViL7Itn3/Q3f9aOaGQEAAA==
+Message-Id: <20230131-tuntap-sk-uid-v3-1-81188b909685@diag.uniroma1.it>
+References: <20230131-tuntap-sk-uid-v3-0-81188b909685@diag.uniroma1.it>
+In-Reply-To: <20230131-tuntap-sk-uid-v3-0-81188b909685@diag.uniroma1.it>
 To:     "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
@@ -68,11 +67,11 @@ Cc:     Stephen Hemminger <stephen@networkplumber.org>,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         Pietro Borrello <borrello@diag.uniroma1.it>
 X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1675532373; l=2044;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1675532373; l=2607;
  i=borrello@diag.uniroma1.it; s=20221223; h=from:subject:message-id;
- bh=FnRmRa9+KPgA7wqZzllRlKTOSZY15LPM5WAdD+0/PgA=;
- b=IYbegY9YK8f/O1dP6xQvXjKMUAz2Km8qxRSmrwhMCRlMKCC1hHdpXzvWcpQ+8FJBXKO3Xx/5jrJy
- Dx2a+os2Dj2cYyZcSFSUWCaTwxdSNzA+sFaFMRzBhlLebuq/2apb
+ bh=kN6b+mn+Xy5aGO+SctMF63Je9JkYLzu955YoGSa6qrQ=;
+ b=EuajB2ZiGsi241Dg3sGGmG4MCz4SeW5nITQRJ92iQkELJ9FbqSNvModUMQy8iEN3cCVa7bedsfH4
+ d3G9tlRhBSWpW8JAXyGi9i0oHzvgvyzaSx6eoi8j3vIPK6MCooLC
 X-Developer-Key: i=borrello@diag.uniroma1.it; a=ed25519;
  pk=4xRQbiJKehl7dFvrG33o2HpveMrwQiUPKtIlObzKmdY=
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -84,55 +83,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-sock_init_data() assumes that the `struct socket` passed in input is
-contained in a `struct socket_alloc` allocated with sock_alloc().
-However, tap_open() and tun_chr_open() pass a `struct socket` embedded
-in a `struct tap_queue` and `struct tun_file` respectively, both
-allocated with sk_alloc().
-This causes a type confusion when issuing a container_of() with
-SOCK_INODE() in sock_init_data() which results in assigning a wrong
-sk_uid to the `struct sock` in input.
+Add sock_init_data_uid() to explicitly initialize the socket uid.
+To initialise the socket uid, sock_init_data() assumes a the struct
+socket* sock is always embedded in a struct socket_alloc, used to
+access the corresponding inode uid. This may not be true.
+Examples are sockets created in tun_chr_open() and tap_open().
 
-Due to the type confusion, both sockets happen to have their uid set
-to 0, i.e. root.
-While it will be often correct, as tuntap devices require
-CAP_NET_ADMIN, it may not always be the case.
-Not sure how widespread is the impact of this, it seems the socket uid
-may be used for network filtering and routing, thus tuntap sockets may
-be incorrectly managed.
-Additionally, it seems a socket with an incorrect uid may be returned
-to the vhost driver when issuing a get_socket() on a tuntap device in
-vhost_net_set_backend().
-
-Fix the bugs by adding and using sock_init_data_uid(), which 
-explicitly takes a uid as argument.
-
+Fixes: 86741ec25462 ("net: core: Add a UID field to struct sock.")
 Signed-off-by: Pietro Borrello <borrello@diag.uniroma1.it>
 ---
-Changes in v3:
-- Fix the bug by defining and using sock_init_data_uid()
-- Link to v2: https://lore.kernel.org/r/20230131-tuntap-sk-uid-v2-0-29ec15592813@diag.uniroma1.it
-
-Changes in v2:
-- Shorten and format comments
-- Link to v1: https://lore.kernel.org/r/20230131-tuntap-sk-uid-v1-0-af4f9f40979d@diag.uniroma1.it
-
----
-Pietro Borrello (3):
-      net: add sock_init_data_uid()
-      tun: tun_chr_open(): correctly initialize socket uid
-      tap: tap_open(): correctly initialize socket uid
-
- drivers/net/tap.c  |  2 +-
- drivers/net/tun.c  |  2 +-
  include/net/sock.h |  7 ++++++-
  net/core/sock.c    | 15 ++++++++++++---
- 4 files changed, 20 insertions(+), 6 deletions(-)
----
-base-commit: 6d796c50f84ca79f1722bb131799e5a5710c4700
-change-id: 20230131-tuntap-sk-uid-78efc80f4b82
+ 2 files changed, 18 insertions(+), 4 deletions(-)
 
-Best regards,
+diff --git a/include/net/sock.h b/include/net/sock.h
+index dcd72e6285b2..937e842dc930 100644
+--- a/include/net/sock.h
++++ b/include/net/sock.h
+@@ -1956,7 +1956,12 @@ void sk_common_release(struct sock *sk);
+  *	Default socket callbacks and setup code
+  */
+ 
+-/* Initialise core socket variables */
++/* Initialise core socket variables using an explicit uid. */
++void sock_init_data_uid(struct socket *sock, struct sock *sk, kuid_t uid);
++
++/* Initialise core socket variables.
++ * Assumes struct socket *sock is embedded in a struct socket_alloc.
++ */
+ void sock_init_data(struct socket *sock, struct sock *sk);
+ 
+ /*
+diff --git a/net/core/sock.c b/net/core/sock.c
+index f954d5893e79..9f51ee851a85 100644
+--- a/net/core/sock.c
++++ b/net/core/sock.c
+@@ -3379,7 +3379,7 @@ void sk_stop_timer_sync(struct sock *sk, struct timer_list *timer)
+ }
+ EXPORT_SYMBOL(sk_stop_timer_sync);
+ 
+-void sock_init_data(struct socket *sock, struct sock *sk)
++void sock_init_data_uid(struct socket *sock, struct sock *sk, kuid_t uid)
+ {
+ 	sk_init_common(sk);
+ 	sk->sk_send_head	=	NULL;
+@@ -3399,11 +3399,10 @@ void sock_init_data(struct socket *sock, struct sock *sk)
+ 		sk->sk_type	=	sock->type;
+ 		RCU_INIT_POINTER(sk->sk_wq, &sock->wq);
+ 		sock->sk	=	sk;
+-		sk->sk_uid	=	SOCK_INODE(sock)->i_uid;
+ 	} else {
+ 		RCU_INIT_POINTER(sk->sk_wq, NULL);
+-		sk->sk_uid	=	make_kuid(sock_net(sk)->user_ns, 0);
+ 	}
++	sk->sk_uid	=	uid;
+ 
+ 	rwlock_init(&sk->sk_callback_lock);
+ 	if (sk->sk_kern_sock)
+@@ -3462,6 +3461,16 @@ void sock_init_data(struct socket *sock, struct sock *sk)
+ 	refcount_set(&sk->sk_refcnt, 1);
+ 	atomic_set(&sk->sk_drops, 0);
+ }
++EXPORT_SYMBOL(sock_init_data_uid);
++
++void sock_init_data(struct socket *sock, struct sock *sk)
++{
++	kuid_t uid = sock ?
++		SOCK_INODE(sock)->i_uid :
++		make_kuid(sock_net(sk)->user_ns, 0);
++
++	sock_init_data_uid(sock, sk, uid);
++}
+ EXPORT_SYMBOL(sock_init_data);
+ 
+ void lock_sock_nested(struct sock *sk, int subclass)
+
 -- 
-Pietro Borrello <borrello@diag.uniroma1.it>
+2.25.1
 
