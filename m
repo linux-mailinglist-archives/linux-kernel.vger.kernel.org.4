@@ -2,103 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C15268AB75
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 18:10:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A761068AB8B
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 18:12:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230222AbjBDRKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 12:10:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53546 "EHLO
+        id S232529AbjBDRMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 12:12:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbjBDRKC (ORCPT
+        with ESMTP id S232645AbjBDRMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 12:10:02 -0500
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1802831E0F;
-        Sat,  4 Feb 2023 09:09:58 -0800 (PST)
-Received: from fsav115.sakura.ne.jp (fsav115.sakura.ne.jp [27.133.134.242])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 314H9h6r037810;
-        Sun, 5 Feb 2023 02:09:43 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav115.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav115.sakura.ne.jp);
- Sun, 05 Feb 2023 02:09:43 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav115.sakura.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 314H9hMh037807
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Sun, 5 Feb 2023 02:09:43 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <917e1e3b-094f-e594-c1a2-8b97fb5195fd@I-love.SAKURA.ne.jp>
-Date:   Sun, 5 Feb 2023 02:09:40 +0900
+        Sat, 4 Feb 2023 12:12:38 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2091.outbound.protection.outlook.com [40.107.93.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CE2631E35;
+        Sat,  4 Feb 2023 09:12:36 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=J2XbbIIemIDXY1tzDQsMSsVJdSZjxB8bOZI2+9si3erFY6sET/hxiBrgfXM39X2b/R9AIwCAIN4iKCivkaxSZghT3NgrIP9vZ41f+rNL2/cocTrohwEA9ih03GKMJN1TaL4lJ/vTRude7YMxDtONPPCRveF0Es6mnjqSEvxeyrU/0yxdd0DPvQJmKkJVa/GEsQg2ug06M+qNZCwA1wvqXK9xkYWeFM5UC6qfMksYubOPf7ReUjs6gpIjlHfIQPG1btk+UbGyMupeM28bbTYMTAcCnrigSW3f9NPQpoCFzivMsTTAuUufXLrBFZbXoow4JEaLxnUxFzlJpcMRnSOD3A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=h7q1Ll0Vud3fmNaj+l8wQSaKoYmIij/z+vZI1M+Y+So=;
+ b=MOQI+Z7g9f9NYhFuuCVTChXGu6Sofr3DaJv4yAtywBSLrxDrpLZfyRAtXeyzZ31j/x1ID6lw0OG3rKWoZscPdYussddKAB3MB9ZAFRBprjDYl1K+U0msrtb9D1P7Y55mK41u1YBlaO2h51p9/TFqpJwkuG+S/j+dPltHuuiUP0O0glvEMDiYQnMve34l3t5Eu6HCoD6pNW3AwlUqRR8EH7ThAUuCwqygDRl8TRIFYysc83LMsDf5VsQsPVuZjC+zhN5sT8LqOME3RHNJ+huXi5HSddYTY8WGQnU+Im5SfR5P+xCX/T2g6leE6XIOTBYmeSEp1SdHmrPmgoec02KUYQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=h7q1Ll0Vud3fmNaj+l8wQSaKoYmIij/z+vZI1M+Y+So=;
+ b=qhQcliDL4/RNYXVo8MCDUyK25jRiNROksPk5VMSSi7lCsRt4y4vnBARbeCuNKVvJnlYkEYaSYG3MknBnLJz5oUKRZQrEShL0gaeqZcS7TDT3lFgolFOSdhi8sgUK3wUIxXf41JEcXGZyP5ka5svoX391lw/M/NHtCTFxoIPD2bo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by CH0PR13MB4604.namprd13.prod.outlook.com (2603:10b6:610:d8::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.31; Sat, 4 Feb
+ 2023 17:12:33 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb5c:910f:3730:fd65]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb5c:910f:3730:fd65%6]) with mapi id 15.20.6064.032; Sat, 4 Feb 2023
+ 17:12:32 +0000
+Date:   Sat, 4 Feb 2023 18:12:26 +0100
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH net-next] net: lan966x: Add support for TC flower filter
+ statistics
+Message-ID: <Y96R+oEaZijtdaFH@corigine.com>
+References: <20230203135349.547933-1-horatiu.vultur@microchip.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230203135349.547933-1-horatiu.vultur@microchip.com>
+X-ClientProxiedBy: AM0PR03CA0007.eurprd03.prod.outlook.com
+ (2603:10a6:208:14::20) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: Converting dev->mutex into dev->spinlock ?
-Content-Language: en-US
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Hillf Danton <hdanton@sina.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <28a82f50-39d5-a45f-7c7a-57a66cec0741@I-love.SAKURA.ne.jp>
- <Y95h7Vop9t5Li0HD@kroah.com>
- <a236ab6b-d38c-3974-d4cb-5e92d0877abc@I-love.SAKURA.ne.jp>
- <Y957GSFVAQz8v3Xo@rowland.harvard.edu>
- <cf56ebc3-187a-6ee4-26bc-2d180272b5cf@I-love.SAKURA.ne.jp>
- <Y96HiYcreb8jZIHi@rowland.harvard.edu>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <Y96HiYcreb8jZIHi@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|CH0PR13MB4604:EE_
+X-MS-Office365-Filtering-Correlation-Id: ef9c8ec3-5123-45b3-c218-08db06d300d3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: bbpkgUpHUia7ssZGPWVTGCT1uFBbyif3mn4nglND+KXjnTzUxioqARu0BnltgwgEpG/uaJsWZEjoUAKPjvwwDAkOkZBLZtpnT32lxBe9+2Aeo6iTot703kTziZyRh1KyQfVTJjHgi5pV3PrayOOybkTJ8Ktk5wBRQyz2aqowu00h//7df6weWcNBEdkq1s1GQWRAf/gry0zmB3SULtWvOySAxIRu33WR+1dt8rSwLqZmODFgh+hASxXeyh9LYPil+E3YJvQ+9igSohZ2SahI9acAuPywPykUnKXmTV/iPX2KfJBLXtib8ENC+P+SGETwy5thtIwU/ir5q+cWMm/tffrR3F3akUWlY90bYIFpc6tc/hlizmVQcuH4yilDnHwykZfb+VfAujaW2uxo+Q+4zUuBMWBe+rlBdR/sHuDIuTj8p2lf29d0rXwj/7QGUYi67m/+qo8anOPuqq3KwRtmtSyOD7IknN9q1pm86jBl+dbcLIVlgxXQvHiP4OuoN3wtNtRHJdhOIe/NZoQIXNUSs5UlyIthYmeMePxC3c3BSG1QF00efilvPiY+khrE6MECw4jJuikXKRWvuHuicYd+srqoO697RcHpoQbOknBxL1sDUDUDJBqq7+1fAM88Rk3LfG3xs3S8S0ub8UkkJL8zKMDzqxgsXKQulb6Ccq5gtflJSVIWGPB8JiK2mrx5/eoY
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(396003)(366004)(346002)(136003)(39840400004)(451199018)(2906002)(44832011)(5660300002)(8936002)(36756003)(66946007)(41300700001)(4326008)(6916009)(8676002)(66476007)(86362001)(316002)(6486002)(478600001)(6666004)(6506007)(186003)(38100700002)(6512007)(2616005)(83380400001)(66556008)(67856001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7nE/VaPSLE8L/mAHXMg/OVhvYEKGle1PxIDqgLtQBi5rfOGfK2OsCyjs9Xwq?=
+ =?us-ascii?Q?CwpITpRPVW5vonJxQApUgmY3OcTGDpBNRvJUrD4q4nP+ekGWmwhMvsEiRfsa?=
+ =?us-ascii?Q?KaqkpxNp/g2myq7kSE/6K21dV0UsD4x3FF5fXsupZGxu1k6P4MmBHLUj+GBg?=
+ =?us-ascii?Q?AePpqniAgdhSQN9xSyvrcoIHMRXl3PZNJjqy/ycNNP83zLDL/egRaIol8hmc?=
+ =?us-ascii?Q?lQluv4YjulcZlT+8/tAgEP15D8ntR2MqWSdT7SW+mMUakDEoIYdyXkReSNdm?=
+ =?us-ascii?Q?aY5KM3I5A0BaFrSXvSx7l1H/HacIc8BhGHangfYQh1sxYQPixinjlMCtH4D0?=
+ =?us-ascii?Q?L/GtsAgucn6lU7hNHnFztwjFwI/1R0K7UOzY0cAKveR7OjrqE3ADaAnPX9vM?=
+ =?us-ascii?Q?MCJmWMlW2VIA4u0BPjN9Di+EdZ+05jjqbTNz/KpdLytLeRFgQkBVEBVQS1Ht?=
+ =?us-ascii?Q?MvG7+PLMUPUvBRJ/xVbTks8tcqfyPvryGXYgz8DPaMpAgK4LrfAB828861x2?=
+ =?us-ascii?Q?b7FQy20GvJPBTPG/eKjm3qGs0IswsKznXo0dwSTIg8qSqOQJvS/B4MEWGUDr?=
+ =?us-ascii?Q?X0EpNjNGL6GQki+fkt5mlbSx4b1lG3Yj/ByIzBVEqqEra1RxKL6+BQ5N5tVk?=
+ =?us-ascii?Q?S0IWELQN043e60RIZxelGmalrc4AdQqemYRsAMftq+r07fbgUUTzvAPbzDY6?=
+ =?us-ascii?Q?alvU4AwxQveuPzdPy2yDEhZVFp0opeLhuXkw/PKPgUx1OItQhPm+jOmrR7Jc?=
+ =?us-ascii?Q?Vz/KoIOscw4K84GbAi9j4RJ/pSYdBd+cIad8Lnyfe0YGCNJvKjJuNYNw14hD?=
+ =?us-ascii?Q?EwfTtXlxU8M01nbEZ6CfhxE2wB2wEo/IQNm+Wu3dziYQbMsB7gQ2wZohelPp?=
+ =?us-ascii?Q?l3U6mcNp0D8jxChJAwfoxh5yEWSAYwkWa0P6EII7CGc+aNiXHq/EcT4DkjHO?=
+ =?us-ascii?Q?RDsriyuzEWgf+//uFSJVqV07FtiMIspjY3G767UcFVq303jkQamtbfAmvl4h?=
+ =?us-ascii?Q?28XOLvCXzSotPWiwdSAX3GZJIPxMbMOQ5n9VD8l8RahmF1HnSCUMaFNMx4Dp?=
+ =?us-ascii?Q?PFmM3FtK+pgRipk5ViK8zd8Kqn249CvQgI5eAMBWvqYGAS2dHn2FIw3uq4fU?=
+ =?us-ascii?Q?0XFJo0b4EY2FXrKo8VXMnxi5E7Axfnn0x6oKyDGKh4q/OhEUs0plO0lsD6q4?=
+ =?us-ascii?Q?LfQ/+ZEtnMpsrSflFx2BHV9Q5d50sIjhcgtLXm2mY0zo4rsFV2+QosgMGI0w?=
+ =?us-ascii?Q?zwlKL13BKief55HyGnQNvD3MFhhviscPjp4RpsCvdY+Q6F5AqI3zcAEW77ed?=
+ =?us-ascii?Q?z/g4xpotVK0cHyjS3eLj8ilhqsRfwr2hPBiHqXFbTGvHVYOqkbRYKj+jiDZF?=
+ =?us-ascii?Q?PfEHj9P+x7U7lJb0sY3nWY81MgUGkkYxQeeUD3bCFcPBmdwjPa/ber663oF8?=
+ =?us-ascii?Q?g5eKgZl/O0zjHak7RrdqOip26f/Y4lZFNDIjBxvJJazD8jx4mw3ZKJSCZqYn?=
+ =?us-ascii?Q?Wb2DEbHKUUIt3ow5TFUxCU0xbDz/sK3Ems8cNijcAsy8I7pZil/pBtdh5UKZ?=
+ =?us-ascii?Q?c79eaFARRuIy8KLotPtO25NzKX/ZiB37W28/zwU4EvPGfJuIdHS4ZSmjSf/4?=
+ =?us-ascii?Q?wtLuIgcOAqtaFVv0dVkVlrAev+PiZPxTpUqCu8e7T0Oz6+RGKX6xNdG5yMEh?=
+ =?us-ascii?Q?5gxy+w=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ef9c8ec3-5123-45b3-c218-08db06d300d3
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Feb 2023 17:12:32.7612
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: NgKeqsILhPyDgUYe1GNGy62O+V68MGm4RwpnIE+Ybvj9CaUb8YxTUdICqD0WhCCmeK/ntURKKG7Jck0aD4kvEK8zbiv4UnZvysih9WZOtho=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR13MB4604
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/02/05 1:27, Alan Stern wrote:
-> On Sun, Feb 05, 2023 at 01:12:12AM +0900, Tetsuo Handa wrote:
->> On 2023/02/05 0:34, Alan Stern wrote:
->>>> A few of examples:
->>>>
->>>>   https://syzkaller.appspot.com/bug?extid=2d6ac90723742279e101
->>>
->>> It's hard to figure out what's wrong from looking at the syzbot report.  
->>> What makes you think it is connected with dev->mutex?
->>>
->>> At first glance, it seems that the ath6kl driver is trying to flush a 
->>> workqueue while holding a lock or mutex that is needed by one of the 
->>> jobs in the workqueue.  That's obviously never going to work, no matter 
->>> what sort of lockdep validation gets used.
->>
->> That lock is exactly dev->mutex where lockdep validation is disabled.
->> If lockdep validation on dev->mutex were not disabled, we can catch
->> possibility of deadlock before khungtaskd reports real deadlock as hung.
->>
->> Lockdep validation on dev->mutex being disabled is really annoying, and
->> I want to make lockdep validation on dev->mutex enabled; that is the
->> "drivers/core: Remove lockdep_set_novalidate_class() usage" patch.
+On Fri, Feb 03, 2023 at 02:53:49PM +0100, Horatiu Vultur wrote:
+> Add flower filter packet statistics. This will just read the TCAM
+> counter of the rule, which mention how many packages were hit by this
+> rule.
+
+I am curious to know how HW stats only updating the packet count
+interacts with SW stats also incrementing other values, such as the byte
+count.
+
+> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> ---
+>  .../microchip/lan966x/lan966x_tc_flower.c     | 22 +++++++++++++++++++
+>  1 file changed, 22 insertions(+)
 > 
->> Even if it is always safe to acquire a child device's lock while holding
->> the parent's lock, disabling lockdep checks completely on device's lock is
->> not safe.
-> 
-> I understand the problem you want to solve, and I understand that it
-> can be frustrating.  However, I do not believe you will be able to
-> solve this problem.
+> diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_tc_flower.c b/drivers/net/ethernet/microchip/lan966x/lan966x_tc_flower.c
+> index 88c655d6318fa..aac3d7c87f1d5 100644
+> --- a/drivers/net/ethernet/microchip/lan966x/lan966x_tc_flower.c
+> +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_tc_flower.c
+> @@ -234,6 +234,26 @@ static int lan966x_tc_flower_del(struct lan966x_port *port,
+>  	return err;
+>  }
+>  
+> +static int lan966x_tc_flower_stats(struct lan966x_port *port,
+> +				   struct flow_cls_offload *f,
+> +				   struct vcap_admin *admin)
+> +{
+> +	struct vcap_counter count;
+> +	int err;
+> +
+> +	memset(&count, 0, sizeof(count));
 
-That is a declaration that driver developers are allowed to take it for granted
-that driver callback functions can behave as if dev->mutex is not held. 
+nit: As was pointed out to me recently it's simpler to declare
+     count as follows and skip the memset entirely.
+     No need to respin for this!
 
-Some developers test their changes with lockdep enabled, and believe that their
-changes are correct because lockdep did not complain.
-https://syzkaller.appspot.com/bug?extid=9ef743bba3a17c756174 is an example.
+     struct vcap_counter count = {};
 
-We should somehow update driver core code to make it possible to keep lockdep
-checks enabled on dev->mutex.
+> +
+> +	err = vcap_get_rule_count_by_cookie(port->lan966x->vcap_ctrl,
+> +					    &count, f->cookie);
+> +	if (err)
+> +		return err;
+> +
+> +	flow_stats_update(&f->stats, 0x0, count.value, 0, 0,
+> +			  FLOW_ACTION_HW_STATS_IMMEDIATE);
+> +
+> +	return err;
+> +}
+> +
+>  int lan966x_tc_flower(struct lan966x_port *port,
+>  		      struct flow_cls_offload *f,
+>  		      bool ingress)
+> @@ -252,6 +272,8 @@ int lan966x_tc_flower(struct lan966x_port *port,
+>  		return lan966x_tc_flower_add(port, f, admin, ingress);
+>  	case FLOW_CLS_DESTROY:
+>  		return lan966x_tc_flower_del(port, f, admin);
+> +	case FLOW_CLS_STATS:
+> +		return lan966x_tc_flower_stats(port, f, admin);
+>  	default:
+>  		return -EOPNOTSUPP;
+>  	}
+> -- 
 
+Also, not strictly related, but could you consider, as a favour to
+reviewers, fixing the driver so that the following doesn't fail:
+
+$ make drivers/net/ethernet/microchip/lan966x/lan966x_tc_flower.o
+  DESCEND objtool
+  CALL    scripts/checksyscalls.sh
+  CC      drivers/net/ethernet/microchip/lan966x/lan966x_tc_flower.o
+In file included from drivers/net/ethernet/microchip/lan966x/lan966x_tc_flower.c:3:
+drivers/net/ethernet/microchip/lan966x/lan966x_main.h:18:10: fatal error: vcap_api.h: No such file or directory
+   18 | #include <vcap_api.h>
+      |          ^~~~~~~~~~~~
+compilation terminated.
