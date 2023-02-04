@@ -2,122 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D123B68AD82
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 00:46:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80A4468AD83
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 00:49:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbjBDXqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 18:46:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41308 "EHLO
+        id S231386AbjBDXtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 18:49:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbjBDXqd (ORCPT
+        with ESMTP id S229877AbjBDXtE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 18:46:33 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE23F1F5CB
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 15:46:29 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id lu11so24941788ejb.3
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Feb 2023 15:46:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=SU4sr6Rv4JHucUmKgKWNj4LgU27LyAb+SvnHwp1wjd4=;
-        b=V5kpmwW+rSp1Sjx5X9cmrwhFbSO45xrFyDqi5LgSXI+RAC+0JJ2Sg1u180Nx+lslcE
-         br9tsNInhbPx8HjYjKWw+cYoAIAKgDGFQU3sGlSqcyCVi00OF61/f+vwTc9afcWOM08U
-         N7V/rHRH06P23VMNsJN3Ezjjf2UhH2ZMMJKwWDrqJf+o3o8DULRKOP9WYiCI69Btg1Mu
-         Mf12965sbE9rJY2PcH4JzW97OkYHH1bnvAYUQROCB5lXKwgx0BkwvgRgmL3XgA/bUiDO
-         5wqRVqHigILDdsPQi1v0Zw1vI1rqAO9M5+x2whXJjtadJv+Mt6dQRWD/NtLIGiM782Yy
-         l0Mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SU4sr6Rv4JHucUmKgKWNj4LgU27LyAb+SvnHwp1wjd4=;
-        b=odSBZUFT74TDE4KzYqtN04F9xgwuxSt5dj546Fo11OY/F8SwTLX44vUo0rpqJ0K+pM
-         VvBHxoihPSbL5Zg6olH+4ECyWAevt2IO2gMn9mPdaajTg+1OxWe2ihWCzqM2SAUTVZZh
-         8q/VeMHfr4NBbfypp2rleJioxSvHaesqvpt2HWleWpciJ3vngVqijRerkowOO1+B+ULr
-         DSMtGpjt8y6nTGBhinOp0nIjmYzlMplIb6pQCp/L78L1bgKvZAJnnkf3B57g004rh26s
-         cQAazKQiUaLsKuGfh6ZTx3GR0O93AbsN/Fej1DPZw+MVt53oL8m8k3WSKggn443Kdp8q
-         X2gQ==
-X-Gm-Message-State: AO0yUKVf+yFt786VzCJ3DT/MiCNGpDu2o+cyYfIihrwa4jeFja0XLhmF
-        0Vvsd4Ar7vpv3fxig4V1RWW23VGjKVI=
-X-Google-Smtp-Source: AK7set/mu5BHwC+20dHoMIeyFfe1BxAb06FRLKjRkUAs8EQ7fr2uhQO6lLYWg7qn8mkJBuP7S2kHCQ==
-X-Received: by 2002:a17:907:72c1:b0:871:178d:fc1e with SMTP id du1-20020a17090772c100b00871178dfc1emr18460669ejc.77.1675554388139;
-        Sat, 04 Feb 2023 15:46:28 -0800 (PST)
-Received: from combine-ThinkPad-S1-Yoga (c-8ff371d5.879159-0-69706f6e6c79.bbcust.telenor.se. [213.113.243.143])
-        by smtp.gmail.com with ESMTPSA id me17-20020a170906aed100b0083f91a32131sm3414516ejb.0.2023.02.04.15.46.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Feb 2023 15:46:27 -0800 (PST)
-Date:   Sun, 5 Feb 2023 00:46:25 +0100
-From:   Guru Mehar Rachaputi <gurumeharrachaputi@gmail.com>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Forest Bond <forest@alittletooquiet.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: Regarding checkpatch camelcase issues
-Message-ID: <Y97uUeB6OfO469SY@combine-ThinkPad-S1-Yoga>
-References: <Y93eQqaYdL146Z65@combine-ThinkPad-S1-Yoga>
- <Y94L+WNGGfvrg6Mg@debian.me>
+        Sat, 4 Feb 2023 18:49:04 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D321B2310E
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 15:49:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675554542; x=1707090542;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=fomCakFZr6XEh5AD/gqLP1smjawOXfxdfBV5VtnaH+0=;
+  b=dzek5ze6JX6c6TF/YK+HtH4Yu22fPqg3er8MKQ36qYvvr6H8/ihVs1f8
+   AukCqR7vfhrDNuPEXuHKb/1HSUwAyvzAQg4n3mPt9nfu2JMWLEhGvGBGf
+   2dgWoI7ntetgyqezgYjOEQRVXIeE4KVrEH0BB1D/p6DKLQflmVsYcPC10
+   PHsydFJMheoAXfYE1UT29RkZjhJcMak5xdMKivGdwNhJrt5D9jIiNZKcF
+   j+mN5pmHkwk7NU3ugg/P7UdsCwx/vavbzQvZhaYBaGPsMKF9PUEjKe4vp
+   moeurhnXA7Zw98MuDQNF9MsyBc1OdYNJc8veZTI5sCvueptG2NC7F31v4
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="415218464"
+X-IronPort-AV: E=Sophos;i="5.97,274,1669104000"; 
+   d="scan'208";a="415218464"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2023 15:49:01 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="911541082"
+X-IronPort-AV: E=Sophos;i="5.97,274,1669104000"; 
+   d="scan'208";a="911541082"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 04 Feb 2023 15:49:00 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pOSHD-0001a4-28;
+        Sat, 04 Feb 2023 23:48:59 +0000
+Date:   Sun, 5 Feb 2023 07:48:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Suman Anna <s-anna@ti.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: drivers/remoteproc/ti_k3_r5_remoteproc.c:711:17: sparse: sparse:
+ cast removes address space '__iomem' of expression
+Message-ID: <202302050722.HpR9D03W-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y94L+WNGGfvrg6Mg@debian.me>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 04, 2023 at 02:40:41PM +0700, Bagas Sanjaya wrote:
-> On Sat, Feb 04, 2023 at 05:25:38AM +0100, Guru Mehar Rachaputi wrote:
-> > Thanks for your support.
-> > 
-> > I wanted to confirm if each checkpatch encounter for camelcase issue should
-> > be fixed in a new patch?
-> > 
-> > For example: If the issue is with same variable, then multiple
-> > modifications can be made in one patch.
-> > 
-> >   -> above example is OK
-> > 
-> > 
-> > For example: If the issue is with multiple variables, then multiple
-> > modifications can be made in one patch.
-> > 
-> >   -> above example is NOT OK / NG
-> > 
-> > 
-> > Please confirm me if my understanding is correct?
-> > 
-> 
-> I guess you have generated a patch series, then check it through
-> checkpatch.
-> 
-> Indeed, if checkpatch complains at a particular patch, you need to do
-> interactive rebase. Make sure that rebase todo list contains "edit"
-> lines on commit you want to fix up. After that, fix these complaints.
-> 
-> When you're done, regenerate the patch series and make sure that there
-> are no checkpatch complains on it.
-> 
-> Thanks.
-> 
-> -- 
-> An old man doll... just what I always wanted! - Clara
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   95078069c1e70d1b3b141132d18d0c563acedd0c
+commit: 1168af40b1ad8cb2e78f4a70869fa4a076320e4f remoteproc: k3-r5: Add support for IPC-only mode for all R5Fs
+date:   11 months ago
+config: arm64-randconfig-s053-20230205 (https://download.01.org/0day-ci/archive/20230205/202302050722.HpR9D03W-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1168af40b1ad8cb2e78f4a70869fa4a076320e4f
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 1168af40b1ad8cb2e78f4a70869fa4a076320e4f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpio/ drivers/remoteproc/
 
-Thanks for the reply
-I guess I was not clear. When I run checkpatch on a driver there
-were so many camelcase issues in each file. So I wanted to know if I
-proceed to fix them, should I submit each change as a patch or each file
-as a patch?
-Since each file has many camelcase issue and the driver has morethan one
-such file.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+sparse warnings: (new ones prefixed by >>)
+   drivers/remoteproc/ti_k3_r5_remoteproc.c:476:28: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *p @@     got void [noderef] __iomem *cpu_addr @@
+   drivers/remoteproc/ti_k3_r5_remoteproc.c:476:28: sparse:     expected void *p
+   drivers/remoteproc/ti_k3_r5_remoteproc.c:476:28: sparse:     got void [noderef] __iomem *cpu_addr
+   drivers/remoteproc/ti_k3_r5_remoteproc.c:479:28: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *p @@     got void [noderef] __iomem *cpu_addr @@
+   drivers/remoteproc/ti_k3_r5_remoteproc.c:479:28: sparse:     expected void *p
+   drivers/remoteproc/ti_k3_r5_remoteproc.c:479:28: sparse:     got void [noderef] __iomem *cpu_addr
+>> drivers/remoteproc/ti_k3_r5_remoteproc.c:711:17: sparse: sparse: cast removes address space '__iomem' of expression
+
+vim +/__iomem +711 drivers/remoteproc/ti_k3_r5_remoteproc.c
+
+   681	
+   682	/*
+   683	 * This function implements the .get_loaded_rsc_table() callback and is used
+   684	 * to provide the resource table for the booted R5F in IPC-only mode. The K3 R5F
+   685	 * firmwares follow a design-by-contract approach and are expected to have the
+   686	 * resource table at the base of the DDR region reserved for firmware usage.
+   687	 * This provides flexibility for the remote processor to be booted by different
+   688	 * bootloaders that may or may not have the ability to publish the resource table
+   689	 * address and size through a DT property. This callback is invoked only in
+   690	 * IPC-only mode.
+   691	 */
+   692	static struct resource_table *k3_r5_get_loaded_rsc_table(struct rproc *rproc,
+   693								 size_t *rsc_table_sz)
+   694	{
+   695		struct k3_r5_rproc *kproc = rproc->priv;
+   696		struct device *dev = kproc->dev;
+   697	
+   698		if (!kproc->rmem[0].cpu_addr) {
+   699			dev_err(dev, "memory-region #1 does not exist, loaded rsc table can't be found");
+   700			return ERR_PTR(-ENOMEM);
+   701		}
+   702	
+   703		/*
+   704		 * NOTE: The resource table size is currently hard-coded to a maximum
+   705		 * of 256 bytes. The most common resource table usage for K3 firmwares
+   706		 * is to only have the vdev resource entry and an optional trace entry.
+   707		 * The exact size could be computed based on resource table address, but
+   708		 * the hard-coded value suffices to support the IPC-only mode.
+   709		 */
+   710		*rsc_table_sz = 256;
+ > 711		return (struct resource_table *)kproc->rmem[0].cpu_addr;
+   712	}
+   713	
 
 -- 
-Thanks & Regards,
-Guru
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
