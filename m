@@ -2,108 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B61A468AAED
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 16:27:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06A5468AAF0
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 16:30:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233482AbjBDP1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 10:27:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59262 "EHLO
+        id S233695AbjBDPaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 10:30:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230314AbjBDP1x (ORCPT
+        with ESMTP id S231355AbjBDPaR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 10:27:53 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B9F27995;
-        Sat,  4 Feb 2023 07:27:53 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id n20-20020a17090aab9400b00229ca6a4636so11466756pjq.0;
-        Sat, 04 Feb 2023 07:27:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aSnA6bDbqE/+mRrNJmYL9pV4GL9ctAZAtrQ35/GNxsQ=;
-        b=TEfhFYBxxRdqUSNaV3xJfSLAiyiPqzzeXbP+zukePNt1/YoaZYN6nMPoq4sKPITcDo
-         RixVgeipigZbhi8DcN6mRu17/HFoonx+wcobgM+ipcU8TFn3ZKVxr3/lqNbYDP5gFzCI
-         6FrsPYZwSQicjwd8HPZj29hq5CALa/MqApkl21BLmALAMatx/iuihqv/L6MWOeYvFk20
-         RrZ2LuFY58zIV4xpxh426WQPi2mjdWWpKw9q/PTBzXC4/uIcWRimg62KkS9ZFSzNVx66
-         LEvGe4dZsCGzmz+HpUpZBPpqCC1qyY7kgUO9aB93DLxEmNpKtGbpc9IlnLH6/mcYXvps
-         e2gA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aSnA6bDbqE/+mRrNJmYL9pV4GL9ctAZAtrQ35/GNxsQ=;
-        b=i2XyM+WFmoMjxDQSzCl4b3DlUgmtVMAa68lhW2PwxXzerA1nsHVF2caEvpLu36Xl8t
-         QBRGCCDb8JYeanzZrL2ysr9x1GXTGXNy06ndO34SUASFdw+phA3+HOywapHSL+9E2JJq
-         LfZFf5TA8xRHs1s/NUvynnfDgh9yidslM4ioFWAxIBrN0l5JZGrfLjISnehPxxFGJNch
-         pIlKeXkuBHZxxBATcrTlGQsVmSS+OI2FgYY0YtR9n1H6TzdmtfLOJBlKIc/N/gG4eLd9
-         bOqVKYOV6J6B8xer3VocSsJwl7IqsXhsj68SkHtjnzfkHdRCMd89HBUpljDVh672qvQk
-         2jVQ==
-X-Gm-Message-State: AO0yUKWy6uWc/z0KbPbMPzdiOso1KHIDG3q4q+00k55QLpkLlFOqMy1F
-        ymhmcA4nSIHilyf+t0hcascuDLWQXFilzQ==
-X-Google-Smtp-Source: AK7set/lFfEkTd24oR3fCKAk+S7m/aNAm2k/1yBgnhHIkoe27djbmXyC30C5Y8cADptEeLdfjtyayA==
-X-Received: by 2002:a17:903:1d2:b0:189:81a2:d616 with SMTP id e18-20020a17090301d200b0018981a2d616mr17394318plh.16.1675524472559;
-        Sat, 04 Feb 2023 07:27:52 -0800 (PST)
-Received: from kazuki-mac ([2400:4051:ea3:5910::19a])
-        by smtp.gmail.com with ESMTPSA id je22-20020a170903265600b001892af9472esm1606305plb.261.2023.02.04.07.27.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Feb 2023 07:27:52 -0800 (PST)
-From:   Kazuki <kazukih0205@gmail.com>
-X-Google-Original-From: Kazuki <kazuki@kazuki-mac>
-Date:   Sun, 5 Feb 2023 00:27:47 +0900
-To:     linux-pm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
-Subject: s2idle breaks on machines without cpuidle support
-Message-ID: <20230204152747.drte4uitljzngdt6@kazuki-mac>
+        Sat, 4 Feb 2023 10:30:17 -0500
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC02925E31;
+        Sat,  4 Feb 2023 07:30:16 -0800 (PST)
+Received: from fsav116.sakura.ne.jp (fsav116.sakura.ne.jp [27.133.134.243])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 314FU8ut021268;
+        Sun, 5 Feb 2023 00:30:08 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav116.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav116.sakura.ne.jp);
+ Sun, 05 Feb 2023 00:30:08 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav116.sakura.ne.jp)
+Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 314FU7oc021265
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Sun, 5 Feb 2023 00:30:08 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <e89ad942-cab6-fad1-1cc2-98885d829ea7@I-love.SAKURA.ne.jp>
+Date:   Sun, 5 Feb 2023 00:30:07 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: Converting dev->mutex into dev->spinlock ?
+Content-Language: en-US
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>
+References: <28a82f50-39d5-a45f-7c7a-57a66cec0741@I-love.SAKURA.ne.jp>
+ <Y951z0Au9MlP1GxX@rowland.harvard.edu>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <Y951z0Au9MlP1GxX@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2023/02/05 0:12, Alan Stern wrote:
+>>  it would solve many deadlocks in driver code if you can update
+> 
+> What deadlocks?  If there are so many deadlocks floating around in 
+> driver code, why haven't we heard about them before now?
 
-Hi everyone,
+Since dev->mutex is hidden from lockdep checks, nobody can see lockdep warnings.
+syzbot is reporting real deadlocks without lockdep warnings, for the fundamental
+problem you mentioned in https://lkml.kernel.org/r/Pine.LNX.4.44L0.0804171117450.18040-100000@iolanthe.rowland.org
+is remaining. I'm suggesting you that now is time to address this fundamental problem.
 
-s2idle is blocked on machines without proper cpuidle support here
-in kernel/sched/idle.c:
+>> (by e.g. replacing dev->mutex with dev->spinlock and dev->atomic_flags).
+>> But I'm not familiar enough to propose such change...
+> 
+> Such a change cannot be made.  Consider this: Driver callbacks often
+> need to sleep.  But when a thread holds a spinlock, it is not allowed to 
+> sleep.  Therefore driver callbacks must not be invoked while a spinlock 
+> is held.
 
-> if (cpuidle_not_available(drv, dev)) {
-> 	tick_nohz_idle_stop_tick();
+What I'm suggesting is "Do not call driver callbacks with dev->mutex held,
+by rewriting driver core code".
 
-> 	default_idle_call();
-> 	goto exit_idle;
-> }
-
-> /*
->  * Suspend-to-idle ("s2idle") is a system state in which all user space
->  * has been frozen, all I/O devices have been suspended and the only
-
-However, there are 2 problems with this approach:
-
-1. The suspend framework does not expect this, and continues to suspend the
-machine, which causes machines without proper cpuidle support to break when
-suspending
-2. Suspend actually works on ARM64 machines even without proper
-cpuidle (PSCI cpuidle) since they support wfi, so the assumption here is wrong
-on such machines
-
-I'm not exactly sure how to figure this out, and my attempts have all led to an
-unbootable kernel, so I've cc'ed the relevant people and hopefully we can find a
-solution to this problem.
-
-Thanks,
-Kazuki
