@@ -2,106 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D2BA68AA2A
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 14:32:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA52368AA31
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 14:33:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233800AbjBDNcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 08:32:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38716 "EHLO
+        id S233891AbjBDNd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 08:33:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233723AbjBDNcE (ORCPT
+        with ESMTP id S233807AbjBDNcw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 08:32:04 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8585338E8F;
-        Sat,  4 Feb 2023 05:31:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1675517484; bh=JmNQMhDVYE6HTRGGF7ip3u8xIrOvPY8fxYH0WA8Xc3o=;
-        h=X-UI-Sender-Class:Date:Subject:To:References:From:In-Reply-To;
-        b=Nl9idx2+J7BR8+6Ji9RTods7QTPkL8EUdZ/6zRugiYE7XbAjXI0mE46N5r5XQ65vR
-         V213nAb61LdHeuv5nMxx8JshW4Gm/BlgX9KZ/S9Xd8xjB6nIWBAxy0GQsAfby5aPnZ
-         tQYCCKbRJAtRkyJYq0jZAk46BtHN3XZZOx0gN/d7t4ygtlVeR0eC6v29b8YosiaHBe
-         L7ZscKyJDWutm++r3mTBxaBAE6jKWd1/omynFiJ1vXm8rNgZEJmQHVnnx80pgdR9es
-         5ZDDceKKkshsO2j7wNVDz20pADD66vDbnawcQuD/uJPKBNiHYSoJillLwwIg3aqtsP
-         hUHSE8xHQqiAA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([92.116.151.109]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N79u8-1oYg0u0AO4-017Sf4; Sat, 04
- Feb 2023 14:31:24 +0100
-Message-ID: <5fcd25ee-07bb-6eab-3e73-22680a0104bf@gmx.de>
-Date:   Sat, 4 Feb 2023 14:31:22 +0100
+        Sat, 4 Feb 2023 08:32:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4574037B53;
+        Sat,  4 Feb 2023 05:32:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B5E960C48;
+        Sat,  4 Feb 2023 13:32:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E65EC433EF;
+        Sat,  4 Feb 2023 13:32:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675517527;
+        bh=17CiUO1UyH6W1fq26d58HeXspJzNDH/jlO4gOkRWLxA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pAshbA9Kxu11NsZWAHcPgX4M81vjwvWvjlOsFBKTTgm6t5ytBUfXYKncFaiFCJ/LT
+         bWZAxr+ZKPHYD0ZnjwkPSJmPIMK8XE0ghH0fzzT8tsYyeiNYD9ColrdVyYgEVNcl/b
+         p1ntsspsMjXQgXdyXf3DCPgjXiyn51cNTBnp6AqS3LbnshfZW6zncbWRuKbKqa1+wD
+         BKNlgttmpN9emS2hdJoLFIEfEQBYbAi1hi/sC5MpOETAyy+BkJYYWazAI0x092zMAo
+         auzfyuhrUss5HYsLYzj2EOUotHpiuBCRY32StsXuad0ipBlnaYZGOcIgeijHfIIzf9
+         ODG5ZXlyWY61A==
+Date:   Sat, 4 Feb 2023 13:32:02 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Waiman Long <longman@redhat.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        kernel-team@android.com
+Subject: Re: [PATCH] cgroup/cpuset: Don't filter offline CPUs in
+ cpuset_cpus_allowed() for top cpuset tasks
+Message-ID: <20230204133201.GA7765@willie-the-truck>
+References: <20230203164040.213437-1-longman@redhat.com>
+ <Y9116OLfP6GoZ0ez@slm.duckdns.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCHv2] fbcon: Check font dimension limits
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Samuel Thibault <samuel.thibault@ens-lyon.org>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org,
-        Sanan Hasanov <sanan.hasanov@knights.ucf.edu>
-References: <20230129151740.x5p7jj2pbuilpzzt@begin>
- <Y9kq4ZoBs8LkEtqs@kroah.com>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <Y9kq4ZoBs8LkEtqs@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:mFA08GgcKqDGyKWP6edsJPY+2S/tECSNGrcGyR90v+m7m2pcCMB
- 73i0y88ik/5FFH0DqwYUjJBWn5/4qDUooAMFHJQcfg5EUoGiU166QbTTdZ29/qElgYJbPrJ
- wvdGyyrIM4vod0QU8YtFAbLO3XpRSNAs28BWZDgPJg7d0P6kiaWX/AZ7KJ8oaLnUbCVBf1F
- 9d89/7iD18mjri/B0QQYg==
-UI-OutboundReport: notjunk:1;M01:P0:Jep8DGUR1Jw=;v4xqMDz47w93YWvJczXEDaP8KBV
- /lWn4l7hUyuvxqm34NE9BDV/0TmjdzVWgi9J3gmXk5Rt/IkVipmo368S5CQWny2mhyjneCept
- A4zaSYSi81C5raDAk7shEseDldv8jhjDvaVNQMTHZ109PgrLwbsPsLnzPzkc0u1DYB5dF1PXt
- xYJdWQ+fzbKnHbZy0lkVVlYqcqIj9In62JXgUnC1QGc7IY8FoIJONY20RnWzMk5ytJAMLKkzz
- RJ1LEtp7GcImoo1fys+ARig69fBRbcJRCTRdMtXL/p0LnNqv0MrFyH9TPtsjMgasbIRqfQ6yN
- 4TBmskzm2ERw6CukOAJFxYu3u+ChIGureU9HND/yZjcWSL+BB+PuqCBvq1BcOQbWVU7MJtrGK
- TXZXocov5/oblUw/EudaPiiysalOE+qPcL04NPBCo/zSDLghem/wGscJjKPQTTdwwxtzLQKWt
- +8H6zD4keiwg2xAZz5QfqxXN1EE5INXRkkPraq+yq3IiMhhNs09a4NjOi8IFRPqr/Gc7PXr30
- o52S1y+G2pYFfDjwtMPYbiu70CO4QhCvOZ682DJ6RwtvF1Bldp1gmx95sslffVx9Hdnm01wF5
- XHuFl1jeXVjTyz08N0WjSyT+TaBBu8MeyVsnAw0eE82a+3BIPOZBCIAm7T/iNHzDXQZD9gjd6
- hPUf1nbrkcJp+Xh4NtSCcm0Rc5mMwOEuug0AZ4H2USLdNNP3fuLqI+4vQsnLDjn+enhDNjyUa
- ytns0zNx2JZ+eobMjB5E0IeVKKWcObdG482CwqOVB26TXwVHUYcI3GPSxPSItA3DNyNCtvv0u
- Gp9XBSVmm3UKFD4erLObca00bDc9XR1I9apLtVrau7lA7lQCBaG9S6aRDFWP/aU6/18+B2Ebo
- ThY9drGSNj+dXcBIXJt/Mh39NS46HXD4pO5j/eNNj8hKehDXfWk+GJRL3GXiDzoUD4sXKZUdE
- tXVYAvT5noZsGD41EjmSgQWKWodRMhbSQApq/PMtK/4MXkjMA/LhYrDpUvggtNwQwNNFaA==
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9116OLfP6GoZ0ez@slm.duckdns.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/31/23 15:51, Greg KH wrote:
-> On Sun, Jan 29, 2023 at 04:17:40PM +0100, Samuel Thibault wrote:
->> blit_x and blit_y are u32, so fbcon currently cannot support fonts
->> larger than 32x32.
->>
->> The 32x32 case also needs shifting an unsigned int, to properly set bit
->> 31, otherwise we get "UBSAN: shift-out-of-bounds in fbcon_set_font",
->> as reported on:
->>
->> http://lore.kernel.org/all/IA1PR07MB98308653E259A6F2CE94A4AFABCE9@IA1PR=
-07MB9830.namprd07.prod.outlook.com
->> Kernel Branch: 6.2.0-rc5-next-20230124
->> Kernel config: https://drive.google.com/file/d/1F-LszDAizEEH0ZX0HcSR06v=
-5q8FPl2Uv/view?usp=3Dsharing
->> Reproducer: https://drive.google.com/file/d/1mP1jcLBY7vWCNM60OMf-ogw-ur=
-QRjNrm/view?usp=3Dsharing
->>
->> Reported-by: Sanan Hasanov <sanan.hasanov@Knights.ucf.edu>
->> Signed-off-by: Samuel Thibault <samuel.thibault@ens-lyon.org>
->> Fixes: 2d2699d98492 ("fbcon: font setting should check limitation of dr=
-iver")
->> Cc: stable@vger.kernel.org
->
-> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+On Fri, Feb 03, 2023 at 11:00:24AM -1000, Tejun Heo wrote:
+> On Fri, Feb 03, 2023 at 11:40:40AM -0500, Waiman Long wrote:
+> > Since commit 8f9ea86fdf99 ("sched: Always preserve the user
+> > requested cpumask"), relax_compatible_cpus_allowed_ptr() is calling
+> > __sched_setaffinity() unconditionally. This helps to expose a bug in
+> > the current cpuset hotplug code where the cpumasks of the tasks in
+> > the top cpuset are not updated at all when some CPUs become online or
+> > offline. It is likely caused by the fact that some of the tasks in the
+> > top cpuset, like percpu kthreads, cannot have their cpu affinity changed.
+> > 
+> > One way to reproduce this as suggested by Peter is:
+> >  - boot machine
+> >  - offline all CPUs except one
+> >  - taskset -p ffffffff $$
+> >  - online all CPUs
+> > 
+> > Fix this by allowing cpuset_cpus_allowed() to return a wider mask that
+> > includes offline CPUs for those tasks that are in the top cpuset. For
+> > tasks not in the top cpuset, the old rule applies and only online CPUs
+> > will be returned in the mask since hotplug events will update their
+> > cpumasks accordingly.
+> > 
+> > Fixes: 8f9ea86fdf99 ("sched: Always preserve the user requested cpumask")
+> > Reported-by: Will Deacon <will@kernel.org>
+> > Originally-from: Peter Zijlstra (Intel) <peterz@infradead.org>
+> > Signed-off-by: Waiman Long <longman@redhat.com>
+> 
+> So, this is the replacement for the first patch[1] Will posted, right?
+> 
+> >  void cpuset_cpus_allowed(struct task_struct *tsk, struct cpumask *pmask)
+> >  {
+> >  	unsigned long flags;
+> > +	struct cpuset *cs;
+> >  
+> >  	spin_lock_irqsave(&callback_lock, flags);
+> > -	guarantee_online_cpus(tsk, pmask);
+> > +	rcu_read_lock();
+> > +
+> > +	cs = task_cs(tsk);
+> > +	if (cs != &top_cpuset)
+> > +		guarantee_online_cpus(tsk, pmask);
+> > +	/*
+> > +	 * TODO: Tasks in the top cpuset won't get update to their cpumasks
+> > +	 * when a hotplug online/offline event happens. So we include all
+> > +	 * offline cpus in the allowed cpu list.
+> > +	 */
+> > +	if ((cs == &top_cpuset) || cpumask_empty(pmask)) {
+> > +		const struct cpumask *possible_mask = task_cpu_possible_mask(tsk);
+> > +
+> > +		/*
+> > +		 * We first exclude cpus allocated to partitions. If there is no
+> > +		 * allowable online cpu left, we fall back to all possible cpus.
+> > +		 */
+> > +		cpumask_andnot(pmask, possible_mask, top_cpuset.subparts_cpus);
+> 
+> and the differences are that
+> 
+> * It's only applied to the root cgroup.
+> 
+> * Cpus taken up by partitions are excluded.
+> 
+> Is my understanding correct?
+> 
+> > +		if (!cpumask_intersects(pmask, cpu_online_mask))
+> > +			cpumask_copy(pmask, possible_mask);
+> > +	}
+> > +
+> > +	rcu_read_unlock();
+> >  	spin_unlock_irqrestore(&callback_lock, flags);
+> 
+> So, I suppose you're suggesting applying this patch instead of the one Will
+> Deacon posted[1] and we need Will's second patch[2] on top, right?
+> 
+> [1] http://lkml.kernel.org/r/20230131221719.3176-3-will@kernel.org
+> [2] http://lkml.kernel.org/r/20230131221719.3176-3-will@kernel.org
 
-applied to fbdev git tree.
+FWIW, although I tend to share Peter's sentiments in this thread, I took
+this (+ my second patch) for a spin and my tests are giving the same
+results when compared with Peter's patch.
 
-Thanks!
-Helge
+Tested-by: Will Deacon <will@kernel.org>
+
+Will
