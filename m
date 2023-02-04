@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6809968AA98
+	by mail.lfdr.de (Postfix) with ESMTP id B3F6768AA99
 	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 15:36:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233614AbjBDOf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 09:35:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40474 "EHLO
+        id S233333AbjBDOgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 09:36:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233860AbjBDOfm (ORCPT
+        with ESMTP id S229516AbjBDOfo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 09:35:42 -0500
+        Sat, 4 Feb 2023 09:35:44 -0500
 Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 134BF303C6
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 135B1303C8
         for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 06:35:19 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 9AF2D5C00B2;
-        Sat,  4 Feb 2023 09:35:17 -0500 (EST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id B054B5C00B9;
+        Sat,  4 Feb 2023 09:35:18 -0500 (EST)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Sat, 04 Feb 2023 09:35:17 -0500
+  by compute3.internal (MEProxy); Sat, 04 Feb 2023 09:35:18 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
-         s=fm1; t=1675521317; x=1675607717; bh=xQ+77WxDcU7LsWzVt9+SldMRg
-        mN28mhoYTDjd14rlqg=; b=c2Gy5mL8aq4qjm1aNmxy7JKWI4UbVsp0hyXDTUzTm
-        MyQaPxKUoj0InfI4ZV+ieo0UgxFbz4EMIInGLkiD1jceqbooJDtSh4dYZ0GDGXY+
-        4t8HjczBkrTWZBUwXKHaU+CxyN3nXueJ77CYA2yEE0eNABnczgl7d/tVnuMeiRmY
-        kvgphu32n30p0xoiU+AjFmzEU39NF7c9pDLcBpe8wKEqVauoN0Qib2ppPy79P/bo
-        UePQyJrIqZlYhVF8SSMyOrl0UzqsdfJjwe/iC1jpSfH1O+0pa5mBBS5eFlSMovZH
-        xIXGM7le/yKBIRxyRqH1ESvsrSKuhe3tLI1c5TCZ9/QvA==
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1675521318; x=1675607718; bh=61
+        GvcvGqifXGjlpRxQhnxPwFPnXxpQRMHUqsyFadDWM=; b=DF2eLDUVHpSGWO6758
+        +QEqahfY/Hb+CUSaiLp1DAo6xhrgmRPH5eH2e5J5zH42HAKIoHlS4hEPluoc4ent
+        r9WG1MyQsF8rbchtPqVCzKd/5aEa5HZ5BSQhoE+6op0ppF9ntlJl60Gvp4mIHQh5
+        EbafbLwQCxCj+MXcRCGEMxsYApan947xCr095jqcERXsfX9XU1cCH0zM6mgfiwgM
+        cHM+5HjN68uK0MQJ/j/47FlZcei3cFifUgua2Gl8UmCuGURYR5duTHTKYxPSSBLM
+        snqbkOhsCRUBmww0NY4hI2Vp4UQLGwzUFcQHtkZbbvdSD/4D2GnaaRjFgeei6GyS
+        tiiA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1675521317; x=1675607717; bh=xQ+77WxDcU7LsWzVt9+SldMRgmN28mhoYTD
-        jd14rlqg=; b=m1hnD1sVpWB0RRFfS/7k2abqgp8vWLdoimv5XrWE7sRHRoe3ohA
-        RlN4Q5EJnKzRkNK4aE1xw3XOby4F2g7YZxKHa6PVm79KWgYYcVUjx7l6jrLgxxob
-        JWK/MKD8RAAt0YdnT/79kl8N9f3zJB24YxjsMNKxoBtYdSXUHmyjhVDH65JM6dgr
-        rQAPUo2XgTIru2I/3fZsyoL8hZOuK8rCBennjEVBPNlEHOOloP3cWJyaGdQz1tC0
-        kyzUdeS+lRMd+YNbExAiwJqnEX38wP4aYBj+2lVw9hScS6SNNx23yOWWCRVMa3f+
-        Y8ykhSSRJe2nmIDXqT8zVVU80n+z0pNTxQg==
-X-ME-Sender: <xms:JG3eY5PD4jZOZl-KeHCkqsdChQ5JT5Mf-rZMpC70HU4WaZs8rA6cyg>
-    <xme:JG3eY79zvServTzlVn3Gu3w1nx4qsdvie4coT2sz6NbAKHY6IQ1yxM-C88fz03kOC
-    jQdxrAksWSrxKPCDQ>
-X-ME-Received: <xmr:JG3eY4Q6HG-iyYW5MB50kak0vmydb8Y7vdfYDUg6FELL02I7tzxh0hBfSmwUufZ5ktNXN2zoz1x8VJ8QFWtYJpsGDUWJZ-_z4f6Jo1YMcLIgrbsE80QE1f7aDC8ePWKNABmk9A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudegvddgieehucetufdoteggodetrfdotf
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1675521318; x=1675607718; bh=61GvcvGqifXGj
+        lpRxQhnxPwFPnXxpQRMHUqsyFadDWM=; b=OKhUJh7vsaK+Koi/YoPsoK/WYGiEh
+        q1UuzlKhDwFuC6rQePucE1S5JECuG96sC6X8mINRb2MUXsw9JPyakyTaS1o5iba8
+        YGzGdba/EOGN2TrNfBEvCmuo0vad3UCnegzoL2Hr6xPNFQ37UBL3+CyQ6NRbW7so
+        SWBhEo3ips2rku8iDlVEAn0gcnm3g2mQW90wF4NMncdXvOWHNf+Jz+IXZY8dZC7c
+        LB+F7r8OP3zBQG3Ghp1ArmnPROvsPCOIm14RSUu+lu9KKl5XeyHaPZiJNHClACRP
+        mSDQdEnrdBKEpxeStp4U+kZ0qHeJMe2S9fCG3cSCNoht+B1RYsDLsH0WQ==
+X-ME-Sender: <xms:Jm3eY5V_2TBHHNDvRfT7qnCPI8La46Rc2bi7lbG1V1k9YSzCFQ8-og>
+    <xme:Jm3eY5lMjVDf5zODoeCJ_hW3-Hiikx-QdwuU0fSLPhptB7FIJnOPz1rIqwb-Qtj1Z
+    KmkDuTL0N5ZitBy9g>
+X-ME-Received: <xmr:Jm3eY1ZrZ4ETtet912ZQhYRqxNT07U5wVFIvhaeQ7_76Z_Z3Bsgd8BCCCeOFY0JomhK7w9wnGq3cFJTWeiM1HGqLDcx9vIrxbybkQP15Po8VV51n63ino9Fren1ebnxAQhymsg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudegvddgieeiucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghl
-    ucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecuggftrf
-    grthhtvghrnhepkeehffethedtteffgfefteetjedvfeelueevudffgfeutdejvdehledv
-    vdffhfevnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsrghmuhgvlhesshhhohhllhgrnhgu
-    rdhorhhg
-X-ME-Proxy: <xmx:JG3eY1vuKlrIu7-ySLvHe64iI47-2yFmUEWoJhPWicdUaL8KbD9fTw>
-    <xmx:JG3eYxcDldiiUcymve0EzomL7Px_pfKIMCXqE0xQl_oZt4K0M62HDA>
-    <xmx:JG3eYx2XU2RxdNTabFuRjKvoIcz1SielsiZxpON0ZZHnEZaX_Po9IA>
-    <xmx:JW3eY95bFHkqAqa4MrkjYX9LhMEwS951M8OOv6-lVtJRzZhbQX907A>
+    cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufgrmhhu
+    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepudekteeuudehtdelteevgfduvddvjefhfedulefgudevgeeghefg
+    udefiedtveetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:Jm3eY8Vjo89QoWPYTsa_rOb2KKY_Pgq5vSNhHkrFdHmMmr26hZwiRQ>
+    <xmx:Jm3eYzk9FEANPS9gld05Tb_FrvPx00MrxxqouOyOA9kWwOOBQ-urUQ>
+    <xmx:Jm3eY5fjEdeLSK7I_xXKZAKcH8--5WG1d5h40T4_IzmmOg3Kg8E4Fw>
+    <xmx:Jm3eY8j_nDGYUPSWOlzjZ8gdm89SJBSew8gYJ5psaT-89drj1iXEIQ>
 Feedback-ID: i0ad843c9:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 4 Feb 2023 09:35:16 -0500 (EST)
+ 4 Feb 2023 09:35:17 -0500 (EST)
 From:   Samuel Holland <samuel@sholland.org>
 To:     Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
@@ -72,10 +72,12 @@ Cc:     Boris Brezillon <bbrezillon@kernel.org>,
         Samuel Holland <samuel@sholland.org>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-mtd@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: [PATCH v2 0/3] mtd: rawnand: sunxi: Some cleanup
-Date:   Sat,  4 Feb 2023 08:35:17 -0600
-Message-Id: <20230204143520.9682-1-samuel@sholland.org>
+Subject: [PATCH v2 1/3] mtd: rawnand: sunxi: Update OOB layout to match hardware
+Date:   Sat,  4 Feb 2023 08:35:18 -0600
+Message-Id: <20230204143520.9682-2-samuel@sholland.org>
 X-Mailer: git-send-email 2.37.4
+In-Reply-To: <20230204143520.9682-1-samuel@sholland.org>
+References: <20230204143520.9682-1-samuel@sholland.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -87,35 +89,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(Apologies for the delay in sending v2. As discussed previously[1],
-the first patch needs to be merged in the same merge window as commit
-34569d869532 from v1 of the series, even if the others don't make it.)
+When using the hardware ECC engine, the OOB data is made available in
+the NFC_REG_USER_DATA registers, as one 32-bit word per ECC step. Any
+additional bytes are only accessible through raw reads and software
+descrambling. For efficiency, and to match the vendor driver, ignore
+these extra bytes when using hardware ECC.
 
-I have an A33 tablet with MLC NAND, and I wanted to use mainline Linux
-to dump the NAND. To do that, I updated this driver's ECC ops to fully
-utilize the hardware for ECC and scrambling. This made the driver
-compatible with the existing (scrambled) on-flash bad block map, and I
-was able to read the full NAND contents.
+Note that until commit 34569d869532 ("mtd: rawnand: sunxi: Fix the size
+of the last OOB region"), this extra free area was reported with length
+zero, so this is not a functional change for any stable kernel user.
 
-This series contains some cleanup from that effort. The first patch
-ensures we can make good use of the hardware ECC/descrambler. The other
-two patches simplify some code for managing the ECC engine.
-
-[1]: https://lore.kernel.org/linux-mtd/20230102175351.64690aaf@xps-13/
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+---
 
 Changes in v2:
  - Update commit message to address backward-compatibility concerns
- - Keep `struct sunxi_nand_hw_ecc` but change the pointer to a value
- - Split ECC_CTL precomputation and structure updates to two patches
 
-Samuel Holland (3):
-  mtd: rawnand: sunxi: Update OOB layout to match hardware
-  mtd: rawnand: sunxi: Embed sunxi_nand_hw_ecc by value
-  mtd: rawnand: sunxi: Precompute the ECC_CTL register value
+ drivers/mtd/nand/raw/sunxi_nand.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
- drivers/mtd/nand/raw/sunxi_nand.c | 73 +++++++++----------------------
- 1 file changed, 20 insertions(+), 53 deletions(-)
-
+diff --git a/drivers/mtd/nand/raw/sunxi_nand.c b/drivers/mtd/nand/raw/sunxi_nand.c
+index e673ac46f2e8..3c32d31f20aa 100644
+--- a/drivers/mtd/nand/raw/sunxi_nand.c
++++ b/drivers/mtd/nand/raw/sunxi_nand.c
+@@ -1604,6 +1604,13 @@ static int sunxi_nand_ooblayout_free(struct mtd_info *mtd, int section,
+ 		return 0;
+ 	}
+ 
++	/*
++	 * The controller does not provide access to OOB bytes
++	 * past the end of the ECC data.
++	 */
++	if (section == ecc->steps && ecc->engine_type == NAND_ECC_ENGINE_TYPE_ON_HOST)
++		return -ERANGE;
++
+ 	oobregion->offset = section * (ecc->bytes + 4);
+ 
+ 	if (section < ecc->steps)
 -- 
 2.37.4
 
