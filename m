@@ -2,111 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE96468AC95
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 22:25:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99F1A68AC96
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 22:25:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233146AbjBDVZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 16:25:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37916 "EHLO
+        id S233172AbjBDVZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 16:25:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230297AbjBDVZD (ORCPT
+        with ESMTP id S233150AbjBDVZr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 16:25:03 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABD9C13DF1
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 13:24:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675545898; x=1707081898;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=SIjIwo4tqoLTzpkfNCyUc5nrfGSnl+IuJK3oWsAZ2FE=;
-  b=PQzxdylUDY/K1N5Vjxx2Jyue1I31TLyTACVuMTAkDfIfPQbRCAqfPzzY
-   /OlpSb+jYlpN+Df1NHQq/G+LoNM+4QV1KNsMeqrZs8/AjdLXzLKxL95uz
-   6viz6QLnPCnmusqbTzBwlvyAHe5SgHfZ6mPi+8woBUQQBmJwSaMd+oKoH
-   VETBKlTUCPfRoldm8u8Bm0PUAwj7xvGNM6u62eDFJo6zzM0yP+X2WfX0i
-   /8h6XxLqIMUr/HfQpslKrYmo4LcRrQpTZLFTfRLVKHshSzGOJ0y6Mx+iO
-   vATUJjpu1OITPyVuCB43ZRYY98VEToMImxMvckLEHY/JYSer1kclAaIx8
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="330282818"
-X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
-   d="scan'208";a="330282818"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2023 13:24:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="994872326"
-X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
-   d="scan'208";a="994872326"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 04 Feb 2023 13:24:57 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pOQ1o-0001XA-1S;
-        Sat, 04 Feb 2023 21:24:56 +0000
-Date:   Sun, 5 Feb 2023 05:24:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Subject: kernel/trace/rv/monitors/wip/wip.c:20:1: sparse: sparse: symbol
- 'da_mon_wip' was not declared. Should it be static?
-Message-ID: <202302050517.4xtGBe0d-lkp@intel.com>
+        Sat, 4 Feb 2023 16:25:47 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A94B413DF1
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 13:25:46 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id d14so7368150wrr.9
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Feb 2023 13:25:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=5QucXsCUGkAYvMM/m5+lQnUtugoTYxql3JyDPSNTCSc=;
+        b=gMgnnl4uis9wwGEAHmp91wWTN6meZgAsGLuzViwo3jWh+ke27ZTYyh0hM2AFm3dmsl
+         fpU/2t2R9T0+r+de/yRta7sMJaNAA+z/JUNyJp/3VGmj5nHedUDLMncJKnP7q/xSg7D3
+         GmiVdUZ+I1Li+cl2Ky6bItiKKioQ6Zi9bu/ULaVFhvBTTZOdD5LmKGQ+OQ+Goec93wIG
+         5npijm0lwYSo+Tf4foSxd4Y1YFt24OnkmqMk8pelStoDWhCh6h1kUecYwA1ZMPGcFm1S
+         Bb6hdQcRQhh0pG2mNwUP4CFgsl8BDCnMNBuDJsTRBZHVVZZ1y5WnUqs8OyK7p0jyU4Fz
+         8CEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5QucXsCUGkAYvMM/m5+lQnUtugoTYxql3JyDPSNTCSc=;
+        b=g16mJqjXIIU89NFRzmUppJ7izM8ijOl2Gn5cZUK+wFr/biuJK9AGXr0dhBQznz6DXe
+         aM5s4PYDDSfyPqDS3OE0in5AWndxAXpJZSoR3n4ApY2AazQTKWDxwzrYUfuPrRXJL35e
+         YIIEUTVbJ92RK53xWa4/o7/sWHzkUsl9QYOqN/ChyVaAvgfKp9AsHU4abaGv9okDULyT
+         25qGZ0gnBVbKOY4s9fPc91UsGNGiMYqGGJTlT/WsKvuPpwLCwaYqlklzToI2Gcl17870
+         z+7fC3KPJhJ0qzHW+ovyha9rHWYHgC61LPjmFcEePPWuM20LKU85bhUC54sGCOJaNPo7
+         7yww==
+X-Gm-Message-State: AO0yUKV6JZqobKp43o09phDnjt+u37WYguuPRDSZ5h/8pNoCUYjUwqN+
+        f56AnKPfEJ8rovru8SMQfWzC8ALtMXFN0nCwLfWj5A==
+X-Google-Smtp-Source: AK7set9CbvgLfEJ2jn5/zRiDcIDRmDUMIjRHSnXWFoR7u6wNniF5tZuwENqZy7NCTcl7ArQhLKCbViMrWUHcVJ3zCEg=
+X-Received: by 2002:a05:6000:16c4:b0:2c3:7ee6:e3ad with SMTP id
+ h4-20020a05600016c400b002c37ee6e3admr632269wrf.289.1675545944934; Sat, 04 Feb
+ 2023 13:25:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,T_SPF_TEMPERROR
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230126233645.200509-1-irogers@google.com> <20230126233645.200509-16-irogers@google.com>
+ <Y91rYT5eBOFUHsJK@kernel.org>
+In-Reply-To: <Y91rYT5eBOFUHsJK@kernel.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Sat, 4 Feb 2023 13:25:31 -0800
+Message-ID: <CAP-5=fVSVURfMiDQYL8LSnhGEQ4VSA4EcMvmW6pdfLEtJa7ZNw@mail.gmail.com>
+Subject: Re: [PATCH v5 15/15] perf jevents: Run metric_test.py at compile-time
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Rob Herring <robh@kernel.org>,
+        Kang Minchul <tegongkang@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sandipan Das <sandipan.das@amd.com>,
+        Jing Zhang <renyu.zj@linux.alibaba.com>,
+        linuxppc-dev@lists.ozlabs.org, Kajol Jain <kjain@linux.ibm.com>,
+        Stephane Eranian <eranian@google.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Caleb Biggers <caleb.biggers@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
+On Fri, Feb 3, 2023 at 12:15 PM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
+>
+> Em Thu, Jan 26, 2023 at 03:36:45PM -0800, Ian Rogers escreveu:
+> > Add a target that generates a log file for running metric_test.py and
+> > make this a dependency on generating pmu-events.c. The log output is
+> > displayed if the test fails like (the test was modified to make it
+> > fail):
+> >
+> > ```
+> >   TEST    /tmp/perf/pmu-events/metric_test.log
+> > F......
+> > ======================================================================
+> > FAIL: test_Brackets (__main__.TestMetricExpressions)
+> > ----------------------------------------------------------------------
+> > Traceback (most recent call last):
+> >   File "tools/perf/pmu-events/metric_test.py", line 33, in test_Brackets
+> >     self.assertEqual((a * b + c).ToPerfJson(), 'a * b + d')
+> > AssertionError: 'a * b + c' != 'a * b + d'
+> > - a * b + c
+> > ?         ^
+> > + a * b + d
+>
+> Added this:
+>
+> diff --git a/tools/perf/.gitignore b/tools/perf/.gitignore
+> index 05806ecfc33c12a1..f533e76fb48002b7 100644
+> --- a/tools/perf/.gitignore
+> +++ b/tools/perf/.gitignore
+> @@ -38,6 +38,7 @@ arch/*/include/generated/
+>  trace/beauty/generated/
+>  pmu-events/pmu-events.c
+>  pmu-events/jevents
+> +pmu-events/metric_test.log
+>  feature/
+>  libapi/
+>  libbpf/
+> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+> index b7d9c42062300d04..bac9272682b759e9 100644
+> --- a/tools/perf/Makefile.perf
+> +++ b/tools/perf/Makefile.perf
+> @@ -1103,6 +1103,7 @@ clean:: $(LIBAPI)-clean $(LIBBPF)-clean $(LIBSUBCMD)-clean $(LIBSYMBOL)-clean $(
+>                 $(OUTPUT)util/intel-pt-decoder/inat-tables.c \
+>                 $(OUTPUT)tests/llvm-src-{base,kbuild,prologue,relocation}.c \
+>                 $(OUTPUT)pmu-events/pmu-events.c \
+> +               $(OUTPUT)pmu-events/metric_test.log \
+>                 $(OUTPUT)$(fadvise_advice_array) \
+>                 $(OUTPUT)$(fsconfig_arrays) \
+>                 $(OUTPUT)$(fsmount_arrays) \
 
-First bad commit (maybe != root cause):
+Acked, thanks!
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   db27c22251e7c8f3a9d5bfb55c9c8c701a70bbb3
-commit: 10bde81c74863472047f31304064018c40f488ee rv/monitor: Add the wip monitor
-date:   6 months ago
-config: csky-randconfig-s052-20230205 (https://download.01.org/0day-ci/archive/20230205/202302050517.4xtGBe0d-lkp@intel.com/config)
-compiler: csky-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=10bde81c74863472047f31304064018c40f488ee
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 10bde81c74863472047f31304064018c40f488ee
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=csky olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=csky SHELL=/bin/bash kernel/trace/rv/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-sparse warnings: (new ones prefixed by >>)
-   kernel/trace/rv/monitors/wip/wip.c: note: in included file:
-   kernel/trace/rv/monitors/wip/wip.h:30:22: sparse: sparse: symbol 'automaton_wip' was not declared. Should it be static?
-
-vim +/da_mon_wip +20 kernel/trace/rv/monitors/wip/wip.c
-
-8812d21219b9c6 Daniel Bristot de Oliveira 2022-07-29  18  
-8812d21219b9c6 Daniel Bristot de Oliveira 2022-07-29 @19  struct rv_monitor rv_wip;
-8812d21219b9c6 Daniel Bristot de Oliveira 2022-07-29 @20  DECLARE_DA_MON_PER_CPU(wip, unsigned char);
-8812d21219b9c6 Daniel Bristot de Oliveira 2022-07-29  21  
-
-:::::: The code at line 20 was first introduced by commit
-:::::: 8812d21219b9c649dd25eb93915e00939944aeb7 rv/monitor: Add the wip monitor skeleton created by dot2k
-
-:::::: TO: Daniel Bristot de Oliveira <bristot@kernel.org>
-:::::: CC: Steven Rostedt (Google) <rostedt@goodmis.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Ian
