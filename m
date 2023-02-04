@@ -2,141 +2,272 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67FBA68ABEB
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 19:38:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D91668ABEE
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 19:42:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233356AbjBDSiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 13:38:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52704 "EHLO
+        id S232576AbjBDSmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 13:42:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233327AbjBDSiP (ORCPT
+        with ESMTP id S230101AbjBDSmi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 13:38:15 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43654FF19
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 10:38:07 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id bd15so5848693pfb.8
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Feb 2023 10:38:07 -0800 (PST)
+        Sat, 4 Feb 2023 13:42:38 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2054A2D49
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 10:42:36 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id l37-20020a05600c1d2500b003dfe46a9801so4597971wms.0
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Feb 2023 10:42:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=6fDEoGqTn4M8tHZIFak/NxShJ5D2bYMS4qSM2hAzrRQ=;
-        b=gPsX29u+6kriPnFNHXQ1e+Z+/I63bv2w6/ABgZH6PBBl6Ug178ObJsqjlZR+GHOxoV
-         kTylN00AhEPXcyIFFgtgfzTpNA4En+ozGHv9LMI1YOGpdhC5UM7pJ9zfvTpAL19p3byZ
-         ezE6KFvnOBLoSI7ey7Nup0YODsYocZpPomsLc=
+        d=layalina-io.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wdb620AZnZs8abG3FIgOEjaZsK8BXRLssSIT/ju2/0M=;
+        b=6JkYEFgZVNnGRW7vwrrG1unHZYikgxQ9gwvM0dAcC1RIaynhCz4Al/vRz2sm5cEFNr
+         51UcvuaUDuzGD/DnXh4dftMaZE6bXBMm50gkgEsxyba6K4fqsLrJny197X0Sz50YxoIt
+         kcmaGL1K1d3nziVaVQBYjgLrlvMmBLPh5KVaaFtubsEJf15jtid4z9xFBKWTBH4su6J5
+         l708Bsy3s1RM4ZA8cZP2LbdsElv3vEU0DShmKlCHGhhQxpMzmTrbUrX9fiH7iBWC5sYd
+         De41jwNUrXSYtKrUZjuh2hLJ4lIr9Uxt9zbvTsGTwaoLoAMnikjyHZlTFjDUGZ3MMpjr
+         p93g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6fDEoGqTn4M8tHZIFak/NxShJ5D2bYMS4qSM2hAzrRQ=;
-        b=UJd5CyWoUFDsQfr3AX3K/nNkfyBQOAsmaSTCeHELPG1R+4lFNHvM9fORw08AncUU/C
-         zyWdkUCGGOYgNXtyF9r1vMCXc6UUrnNHm7xjtM5UZr2bpMkF9VxSczLrdm3PF7+cGcIZ
-         q9PFw17bdqPwqJeVO2YytB4r6fmQ40cKHW+2Q8gG3CtRM93ejDL4sNYd/4qfQ8CTcFRy
-         RGuhrdc9sx/uUgI3G95vqP3qk8s/Mkhsu32THCDKGhZMtt6Eeo9Ky6whj9yLHAOeWdcz
-         mRqj9/yjggiTz6pkUtCsxAIwrzy/HFIVKfV+TUnSX55CCZOi4HkrZPw+49U3EqYcB+c7
-         ss6Q==
-X-Gm-Message-State: AO0yUKXJCUZp490PBGXhetCJR0nngp6TTotKm6y7yik/+64kjJi8+jI0
-        0sF41Kl4j3pt72SbgJDIM9KqCw==
-X-Google-Smtp-Source: AK7set/YwlYdPW9UR6iirzqFGCC+oasO3yFZNKKqhLyFcV6lta+B7jP4xC0KNsA8c1d9As00zaQPKA==
-X-Received: by 2002:aa7:8701:0:b0:58b:9b4e:5292 with SMTP id b1-20020aa78701000000b0058b9b4e5292mr13025644pfo.1.1675535886797;
-        Sat, 04 Feb 2023 10:38:06 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id z15-20020aa791cf000000b00590163e1762sm3979816pfa.200.2023.02.04.10.38.06
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Wdb620AZnZs8abG3FIgOEjaZsK8BXRLssSIT/ju2/0M=;
+        b=o6Igj1UI4VZ/kwiBCU16JKDh0QTBoGWEmmcU6N2uGrjX924dAJoNKJWRMnsikTCEvn
+         xNDg8R3ck+9u4uzRf5vKXEjdT+4v2WfYmzQ7IkAb8F2F/ekZgdRhItUeJr4QI8DjTRi/
+         G1xOZbv6vp/sfsHAW5/lWa4VxDQxfz08xHcQsTsq8aE6b4dCHZJegrs53OkeXCuXlYMk
+         dtZOWkaOb/KC+oXKjTk+1xq9PkeILlaM6O1SUqZN5+pS7DzU/0Zur1tAVvH/zw5ZfVQ1
+         Juofif5+6jObt2osPxp4MdGQOgR9PmyoftPecmAM0oKZ3Ok7qYdOEAcIz690bqOvjQ5t
+         IGRw==
+X-Gm-Message-State: AO0yUKW9yS8EtXAqrlARw8kCpol5j31g6KThPkDjXKyYtsjpHalYJrBq
+        wN58qmkVARU+ooaHb6G1CWNpXQ==
+X-Google-Smtp-Source: AK7set8/VzR5bwmAjEbVHAJBf/pvpnZeh3D/YvQNTDeL4+JTMgW0UOKDzazYUKLHmmkZkvj19O3Xbg==
+X-Received: by 2002:a1c:4b15:0:b0:3dd:1b6f:4f30 with SMTP id y21-20020a1c4b15000000b003dd1b6f4f30mr16785727wma.3.1675536154317;
+        Sat, 04 Feb 2023 10:42:34 -0800 (PST)
+Received: from airbuntu (host86-163-35-10.range86-163.btcentralplus.com. [86.163.35.10])
+        by smtp.gmail.com with ESMTPSA id q6-20020a05600c46c600b003dc54344764sm12329782wmo.48.2023.02.04.10.42.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Feb 2023 10:38:06 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Mirela Rabulea <mirela.rabulea@nxp.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] media: imx-jpeg: Bounds check sizeimage access
-Date:   Sat,  4 Feb 2023 10:38:05 -0800
-Message-Id: <20230204183804.never.323-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Sat, 04 Feb 2023 10:42:33 -0800 (PST)
+Date:   Sat, 4 Feb 2023 18:42:31 +0000
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     mingo@kernel.org, peterz@infradead.org, dietmar.eggemann@arm.com,
+        rafael@kernel.org, viresh.kumar@linaro.org, vschneid@redhat.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kajetan.puchalski@arm.com, lukasz.luba@arm.com, wvw@google.com,
+        xuewen.yan94@gmail.com, han.lin@mediatek.com,
+        Jonathan.JMChen@mediatek.com
+Subject: Re: [PATCH 2/2 v5] sched/fair: Remove capacity inversion detection
+Message-ID: <20230204184231.zx6oo52r5q2nvij7@airbuntu>
+References: <20230201143628.270912-1-vincent.guittot@linaro.org>
+ <20230201143628.270912-3-vincent.guittot@linaro.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2943; h=from:subject:message-id; bh=cx0RiADq3LjGuiWTOC0bT+NjFFTCm0y7hhXMpuGSqv8=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBj3qYNwcQ/e0FqMS6Rrx8FnRGnlvv6r+1Bz4HWM3lI nwqMzPmJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY96mDQAKCRCJcvTf3G3AJv3AD/ 4k1pyNCwKZi7tUqcOkxzyqcYyWpX34w9TA4RgopSZJ5MlLymvNsUczPaSyadAoIvjQs2fCrV2x3UBV OyNOyFqXUPt581nnkWgYWDUDD6CefqdHe9PVz/Kw0h9lMKC4jCbekeZujCZl9jXTFXl+1MpogBMxX3 f/VuYZwmb/lF05db6XrfbCi/YruJ6XiobUx2inB/WRJrcyP+VbmY4aFw3r6sWSLZ9y713h+UyRh9CV R8uiUMaHMPtxNZwD4hJPXScLJu7iupyNYXJzUcHrGfq2gBy2mK0Nqd3jE6AvoeDy1LZDViE44tTlAb 2nM5LxJ2mLj9V21I8aN4b+t5LRo8dSBuq5DYQ/+ANwDzS7DP6ZZN9N+kxpU4rXdE9J6Ly4UcG8Jv1j pqjvuidV8hiRP4aQu+IxWNBZRLmSkMi/lq8LDOyFAvY8x0+Q+dmoizJ27uauafkNA3f2FvhUdS6BTf TvZRjHYhxUc8kGlDDsSiKiU6W8dM+lGGlNNHajUpvMTlCphTc9fLjv/95ALIr+nQQzN42OP6vnAR/L VtkKR+CrbAx9Eg94pEb2koT+KumkLQs5lpPxaF36DR6pkZFKbyx1MA+L2AByvzIxpSNzCx1nqh0haT CnyjBc0NiEV+ZZz//IxW12G4rjmiQetmJ2YLdThPzjozsa4PY6iAAZVEy9uQ==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230201143628.270912-3-vincent.guittot@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The call of mxc_jpeg_get_plane_size() from mxc_jpeg_dec_irq() sets
-plane_no argument to 1. The compiler sees that it's possible to end up
-with an access beyond the bounds of sizeimage, if mem_planes was too
-large:
+On 02/01/23 15:36, Vincent Guittot wrote:
+> Remove the capacity inversion detection which is now handled by
+> util_fits_cpu() returning -1 when we need to continue to look for a
+> potential CPU with better performance.
+> 
+> This ends up almost reverting patches below except for some comments:
 
-        if (plane_no >= fmt->mem_planes)        // mem_planes = 2+
-                return 0;
+nit: I think this comment must be removed/reworeded though
 
-        if (fmt->mem_planes == fmt->comp_planes) // comp_planes != mem_planes
-                return q_data->sizeimage[plane_no];
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 691a2f9c4efa..c6c8e7f52935 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -4476,10 +4476,6 @@ static inline int util_fits_cpu(unsigned long util,
+         *
+         * For uclamp_max, we can tolerate a drop in performance level as the
+         * goal is to cap the task. So it's okay if it's getting less.
+-        *
+-        * In case of capacity inversion, which is not handled yet, we should
+-        * honour the inverted capacity for both uclamp_min and uclamp_max all
+-        * the time.
+         */
+        capacity_orig = capacity_orig_of(cpu);
+        capacity_orig_thermal = capacity_orig - arch_scale_thermal_pressure(cpu);
 
-        if (plane_no < fmt->mem_planes - 1)     // mem_planes = 2
-                return q_data->sizeimage[plane_no];
+> commit da07d2f9c153 ("sched/fair: Fixes for capacity inversion detection")
+> commit aa69c36f31aa ("sched/fair: Consider capacity inversion in util_fits_cpu()")
+> commit 44c7b80bffc3 ("sched/fair: Detect capacity inversion")
+> 
+> Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
 
-comp_planes == 0 or 1 is safe. comp_planes > 2 would be out of bounds.
+Apart from that, LGTM.
 
-(This isn't currently possible given the contents of mxc_formats, though.)
+Reviewed-by: Qais Yousef <qyousef@layalina.io>
 
-Silence the warning by bounds checking comp_planes for future
-robustness. Seen with GCC 13:
 
-In function 'mxc_jpeg_get_plane_size',
-    inlined from 'mxc_jpeg_dec_irq' at ../drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c:729:14:
-../drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c:641:42: warning: array subscript 2 is above array bounds of 'u32[2]' {aka 'unsigned int[2]'} [-Warray-bounds=]
-  641 |                 size += q_data->sizeimage[i];
-      |                         ~~~~~~~~~~~~~~~~~^~~
-In file included from ../drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.h:112,
-                 from ../drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c:63:
-../drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.h: In function 'mxc_jpeg_dec_irq':
-../drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.h:84:41: note: while referencing 'sizeimage'
-   84 |         u32                             sizeimage[MXC_JPEG_MAX_PLANES];
-      |                                         ^~~~~~~~~
+Thanks!
 
-Cc: Mirela Rabulea <mirela.rabulea@nxp.com>
-Cc: NXP Linux Team <linux-imx@nxp.com>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: Sascha Hauer <s.hauer@pengutronix.de>
-Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: linux-media@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c | 5 +++++
- 1 file changed, 5 insertions(+)
+--
+Qais Yousef
 
-diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-index 6cd015a35f7c..ac44bf23953a 100644
---- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-+++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-@@ -637,6 +637,11 @@ static u32 mxc_jpeg_get_plane_size(struct mxc_jpeg_q_data *q_data, u32 plane_no)
- 		return q_data->sizeimage[plane_no];
- 
- 	size = q_data->sizeimage[fmt->mem_planes - 1];
-+
-+	/* Should be impossible given mxc_formats. */
-+	if (WARN_ON_ONCE(fmt->comp_planes > ARRAY_SIZE(q_data->sizeimage)))
-+		return size;
-+
- 	for (i = fmt->mem_planes; i < fmt->comp_planes; i++)
- 		size += q_data->sizeimage[i];
- 
--- 
-2.34.1
-
+> ---
+>  kernel/sched/fair.c  | 84 +++-----------------------------------------
+>  kernel/sched/sched.h | 19 ----------
+>  2 files changed, 5 insertions(+), 98 deletions(-)
+> 
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 074742f107c0..c6c8e7f52935 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -4476,17 +4476,9 @@ static inline int util_fits_cpu(unsigned long util,
+>  	 *
+>  	 * For uclamp_max, we can tolerate a drop in performance level as the
+>  	 * goal is to cap the task. So it's okay if it's getting less.
+> -	 *
+> -	 * In case of capacity inversion we should honour the inverted capacity
+> -	 * for both uclamp_min and uclamp_max all the time.
+>  	 */
+> -	capacity_orig = cpu_in_capacity_inversion(cpu);
+> -	if (capacity_orig) {
+> -		capacity_orig_thermal = capacity_orig;
+> -	} else {
+> -		capacity_orig = capacity_orig_of(cpu);
+> -		capacity_orig_thermal = capacity_orig - arch_scale_thermal_pressure(cpu);
+> -	}
+> +	capacity_orig = capacity_orig_of(cpu);
+> +	capacity_orig_thermal = capacity_orig - arch_scale_thermal_pressure(cpu);
+>  
+>  	/*
+>  	 * We want to force a task to fit a cpu as implied by uclamp_max.
+> @@ -9027,82 +9019,16 @@ static unsigned long scale_rt_capacity(int cpu)
+>  
+>  static void update_cpu_capacity(struct sched_domain *sd, int cpu)
+>  {
+> -	unsigned long capacity_orig = arch_scale_cpu_capacity(cpu);
+>  	unsigned long capacity = scale_rt_capacity(cpu);
+>  	struct sched_group *sdg = sd->groups;
+> -	struct rq *rq = cpu_rq(cpu);
+>  
+> -	rq->cpu_capacity_orig = capacity_orig;
+> +	cpu_rq(cpu)->cpu_capacity_orig = arch_scale_cpu_capacity(cpu);
+>  
+>  	if (!capacity)
+>  		capacity = 1;
+>  
+> -	rq->cpu_capacity = capacity;
+> -
+> -	/*
+> -	 * Detect if the performance domain is in capacity inversion state.
+> -	 *
+> -	 * Capacity inversion happens when another perf domain with equal or
+> -	 * lower capacity_orig_of() ends up having higher capacity than this
+> -	 * domain after subtracting thermal pressure.
+> -	 *
+> -	 * We only take into account thermal pressure in this detection as it's
+> -	 * the only metric that actually results in *real* reduction of
+> -	 * capacity due to performance points (OPPs) being dropped/become
+> -	 * unreachable due to thermal throttling.
+> -	 *
+> -	 * We assume:
+> -	 *   * That all cpus in a perf domain have the same capacity_orig
+> -	 *     (same uArch).
+> -	 *   * Thermal pressure will impact all cpus in this perf domain
+> -	 *     equally.
+> -	 */
+> -	if (sched_energy_enabled()) {
+> -		unsigned long inv_cap = capacity_orig - thermal_load_avg(rq);
+> -		struct perf_domain *pd;
+> -
+> -		rcu_read_lock();
+> -
+> -		pd = rcu_dereference(rq->rd->pd);
+> -		rq->cpu_capacity_inverted = 0;
+> -
+> -		for (; pd; pd = pd->next) {
+> -			struct cpumask *pd_span = perf_domain_span(pd);
+> -			unsigned long pd_cap_orig, pd_cap;
+> -
+> -			/* We can't be inverted against our own pd */
+> -			if (cpumask_test_cpu(cpu_of(rq), pd_span))
+> -				continue;
+> -
+> -			cpu = cpumask_any(pd_span);
+> -			pd_cap_orig = arch_scale_cpu_capacity(cpu);
+> -
+> -			if (capacity_orig < pd_cap_orig)
+> -				continue;
+> -
+> -			/*
+> -			 * handle the case of multiple perf domains have the
+> -			 * same capacity_orig but one of them is under higher
+> -			 * thermal pressure. We record it as capacity
+> -			 * inversion.
+> -			 */
+> -			if (capacity_orig == pd_cap_orig) {
+> -				pd_cap = pd_cap_orig - thermal_load_avg(cpu_rq(cpu));
+> -
+> -				if (pd_cap > inv_cap) {
+> -					rq->cpu_capacity_inverted = inv_cap;
+> -					break;
+> -				}
+> -			} else if (pd_cap_orig > inv_cap) {
+> -				rq->cpu_capacity_inverted = inv_cap;
+> -				break;
+> -			}
+> -		}
+> -
+> -		rcu_read_unlock();
+> -	}
+> -
+> -	trace_sched_cpu_capacity_tp(rq);
+> +	cpu_rq(cpu)->cpu_capacity = capacity;
+> +	trace_sched_cpu_capacity_tp(cpu_rq(cpu));
+>  
+>  	sdg->sgc->capacity = capacity;
+>  	sdg->sgc->min_capacity = capacity;
+> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+> index 1072502976df..3e8df6d31c1e 100644
+> --- a/kernel/sched/sched.h
+> +++ b/kernel/sched/sched.h
+> @@ -1044,7 +1044,6 @@ struct rq {
+>  
+>  	unsigned long		cpu_capacity;
+>  	unsigned long		cpu_capacity_orig;
+> -	unsigned long		cpu_capacity_inverted;
+>  
+>  	struct balance_callback *balance_callback;
+>  
+> @@ -2899,24 +2898,6 @@ static inline unsigned long capacity_orig_of(int cpu)
+>  	return cpu_rq(cpu)->cpu_capacity_orig;
+>  }
+>  
+> -/*
+> - * Returns inverted capacity if the CPU is in capacity inversion state.
+> - * 0 otherwise.
+> - *
+> - * Capacity inversion detection only considers thermal impact where actual
+> - * performance points (OPPs) gets dropped.
+> - *
+> - * Capacity inversion state happens when another performance domain that has
+> - * equal or lower capacity_orig_of() becomes effectively larger than the perf
+> - * domain this CPU belongs to due to thermal pressure throttling it hard.
+> - *
+> - * See comment in update_cpu_capacity().
+> - */
+> -static inline unsigned long cpu_in_capacity_inversion(int cpu)
+> -{
+> -	return cpu_rq(cpu)->cpu_capacity_inverted;
+> -}
+> -
+>  /**
+>   * enum cpu_util_type - CPU utilization type
+>   * @FREQUENCY_UTIL:	Utilization used to select frequency
+> -- 
+> 2.34.1
+> 
