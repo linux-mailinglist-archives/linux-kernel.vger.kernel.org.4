@@ -2,102 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F045168A7FC
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 04:30:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93FB368A802
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 04:43:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232480AbjBDDa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 22:30:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47940 "EHLO
+        id S232699AbjBDDnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 22:43:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232365AbjBDDaZ (ORCPT
+        with ESMTP id S229657AbjBDDnN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 22:30:25 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E501A58287;
-        Fri,  3 Feb 2023 19:30:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 8A62ACE3083;
-        Sat,  4 Feb 2023 03:30:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8A3E5C4339C;
-        Sat,  4 Feb 2023 03:30:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675481419;
-        bh=1JRPe4xjNZWLtJ/AQQk0YD4tI9TuJJ9WFt1OnnsW5cA=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=YcqQ4R5hrgFPzMPoAOY60mV6NPTcEz5YWpZB+y1MoCDvlqg8wCYTBf1L7GgyIiYn5
-         Ajp4KzE3IhgXR0HFQDCXPUk18jqK0yJRXOcB9nDXSzWFqfbEbiUxH6xDLrwJAmM8+7
-         Gh8zj0aTIdMOkeW9hSIDn/kt87KzVJukAuRn6xZBUd9n9yw9Lxu/SkofnG3Nd/1O32
-         gXvV+FL8jIquFID3pzs2Uj4Xm582yib60JLsdP3h4U6STBt+wBFNR/ORqsd9CpLNsj
-         qO1AuBHJNVBrg80o6KOM5XjWnIBA80vDgVFY0WWFQRDW0gxyThJieZD9bqevzwqDJ/
-         Z6fHkzf87yeFw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 76894E270C4;
-        Sat,  4 Feb 2023 03:30:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 3 Feb 2023 22:43:13 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D088E1C7CC;
+        Fri,  3 Feb 2023 19:43:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675482186; x=1707018186;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=uMsa6W80lQBbzaUuhOxR/OchovtSZ5wheoHgf4HWRHM=;
+  b=B2Naam2E9jwDgErtfPuY5Jj4+1z+rK3OnTNA14wwdQmDPYNqRriF3kSc
+   tBN6i8926iJZeEsX7IokqJuZf3G1Gue8KB5NolQ6tGdZ7AdJcYEoHUDv3
+   mCqfA2durKqcHn2CrJmqvuOH847WGbGorGqvF4rplY54my2Gud9BgULNr
+   AAenP9bncCKjUqdrLmbf8oW2y2Nq5A0ka0L7HPUuSfj/PE0HCSKnmDgr/
+   JEwqa5rcwJfpZTra0+ccBrDqJOmf22U1Kke0IGTQZZI4fGIDMrn+AZ5EF
+   w+92NrF5WIIdz6rJx0GD0d0XNPTOpPPRmiEAxGhll84f80LU/dfhNdkDI
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="356258914"
+X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
+   d="scan'208";a="356258914"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2023 19:43:06 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="808552631"
+X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
+   d="scan'208";a="808552631"
+Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.249.174.222]) ([10.249.174.222])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2023 19:43:04 -0800
+Message-ID: <de4d0617-ceef-efca-69f1-a095ce91588e@linux.intel.com>
+Date:   Sat, 4 Feb 2023 11:43:01 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 0/7] devlink: Move devlink dev code to a separate
- file
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167548141948.31101.10238526649161481755.git-patchwork-notify@kernel.org>
-Date:   Sat, 04 Feb 2023 03:30:19 +0000
-References: <1675349226-284034-1-git-send-email-moshe@nvidia.com>
-In-Reply-To: <1675349226-284034-1-git-send-email-moshe@nvidia.com>
-To:     Moshe Shemesh <moshe@nvidia.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, jiri@nvidia.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Cc:     baolu.lu@linux.intel.com, David Woodhouse <dwmw2@infradead.org>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        stable@vger.kernel.org, Sukumar Ghorai <sukumar.ghorai@intel.com>
+Subject: Re: [PATCH] iommu/vt-d: Fix PASID directory pointer coherency
+Content-Language: en-US
+To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
+        Joerg Roedel <joro@8bytes.org>
+References: <20230203220714.1283383-1-jacob.jun.pan@linux.intel.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20230203220714.1283383-1-jacob.jun.pan@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On 2023/2/4 6:07, Jacob Pan wrote:
+> On platforms that do not support IOMMU Extended capability bit 0
+> Page-walk Coherency, CPU caches are not snooped when IOMMU is accessing
+> any translation structures. IOMMU access goes only directly to
+> memory. Intel IOMMU code was missing a flush for the PASID table
+> directory that resulted in the unrecoverable fault as shown below.
 
-This series was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+Thanks for the fix.
 
-On Thu, 2 Feb 2023 16:46:59 +0200 you wrote:
-> This patchset is moving code from the file leftover.c to new file dev.c.
-> About 1.3K lines are moved by this patchset covering most of the devlink
-> dev object callbacks and functionality: reload, eswitch, info, flash and
-> selftest.
+> This patch adds a clflush when activating a PASID table directory.
+> There's no need to do clflush of the PASID directory pointer when we
+> deactivate a context entry in that IOMMU hardware will not see the old
+> PASID directory pointer after we clear the context entry.
 > 
-> Moshe Shemesh (7):
->   devlink: Split out dev get and dump code
->   devlink: Move devlink dev reload code to dev
->   devlink: Move devlink dev eswitch code to dev
->   devlink: Move devlink dev info code to dev
->   devlink: Move devlink dev flash code to dev
->   devlink: Move devlink_info_req struct to be local
->   devlink: Move devlink dev selftest code to dev
+> [    0.555386] DMAR: DRHD: handling fault status reg 3
+> [    0.555805] DMAR: [DMA Read NO_PASID] Request device [00:0d.2] fault addr 0x1026a4000 [fault reason 0x51] SM: Present bit in Directory Entry is clear
+> [    0.556348] DMAR: Dump dmar1 table entries for IOVA 0x1026a4000
+> [    0.556348] DMAR: scalable mode root entry: hi 0x0000000102448001, low 0x0000000101b3e001
+> [    0.556348] DMAR: context entry: hi 0x0000000000000000, low 0x0000000101b4d401
+> [    0.556348] DMAR: pasid dir entry: 0x0000000101b4e001
+> [    0.556348] DMAR: pasid table entry[0]: 0x0000000000000109
+> [    0.556348] DMAR: pasid table entry[1]: 0x0000000000000001
+> [    0.556348] DMAR: pasid table entry[2]: 0x0000000000000000
+> [    0.556348] DMAR: pasid table entry[3]: 0x0000000000000000
+> [    0.556348] DMAR: pasid table entry[4]: 0x0000000000000000
+> [    0.556348] DMAR: pasid table entry[5]: 0x0000000000000000
+> [    0.556348] DMAR: pasid table entry[6]: 0x0000000000000000
+> [    0.556348] DMAR: pasid table entry[7]: 0x0000000000000000
+> [    0.556348] DMAR: PTE not present at level 4
 > 
-> [...]
+> Cc: <stable@vger.kernel.org>
+> Reported-by: Sukumar Ghorai <sukumar.ghorai@intel.com>
+> Signed-off-by: Ashok Raj <ashok.raj@intel.com>
+> Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
 
-Here is the summary with links:
-  - [net-next,1/7] devlink: Split out dev get and dump code
-    https://git.kernel.org/netdev/net-next/c/dbeeca81bd93
-  - [net-next,2/7] devlink: Move devlink dev reload code to dev
-    https://git.kernel.org/netdev/net-next/c/c6ed7d6ef929
-  - [net-next,3/7] devlink: Move devlink dev eswitch code to dev
-    https://git.kernel.org/netdev/net-next/c/af2f8c1f8229
-  - [net-next,4/7] devlink: Move devlink dev info code to dev
-    https://git.kernel.org/netdev/net-next/c/d60191c46ec9
-  - [net-next,5/7] devlink: Move devlink dev flash code to dev
-    https://git.kernel.org/netdev/net-next/c/a13aab66cbe0
-  - [net-next,6/7] devlink: Move devlink_info_req struct to be local
-    https://git.kernel.org/netdev/net-next/c/ec4a0ce92e0c
-  - [net-next,7/7] devlink: Move devlink dev selftest code to dev
-    https://git.kernel.org/netdev/net-next/c/7c976c7cfc70
+Add a Fixes tag so that people know how far this fix should be back
+ported.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> ---
+>   drivers/iommu/intel/iommu.c | 6 ++++++
+>   1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+> index 59df7e42fd53..b4878c7ac008 100644
+> --- a/drivers/iommu/intel/iommu.c
+> +++ b/drivers/iommu/intel/iommu.c
+> @@ -1976,6 +1976,12 @@ static int domain_context_mapping_one(struct dmar_domain *domain,
+>   		pds = context_get_sm_pds(table);
+>   		context->lo = (u64)virt_to_phys(table->table) |
+>   				context_pdts(pds);
+> +		/*
+> +		 * Scalable-mode PASID directory pointer is not snooped if the
+> +		 * coherent bit is not set.
+> +		 */
+> +		if (!ecap_coherent(iommu->ecap))
+> +			clflush_cache_range(table->table, sizeof(void *));
 
+This isn't comprehensive. The clflush should be called whenever the
+pasid directory table is allocated or updated.
 
+>   
+>   		/* Setup the RID_PASID field: */
+>   		context_set_sm_rid2pasid(context, PASID_RID2PASID);
+
+Best regards,
+baolu
