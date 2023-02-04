@@ -2,120 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E45D68A7B8
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 02:57:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F72668A7BE
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 03:04:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233133AbjBDB5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 20:57:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60632 "EHLO
+        id S232978AbjBDCEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 21:04:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232463AbjBDB5H (ORCPT
+        with ESMTP id S229694AbjBDCEC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 20:57:07 -0500
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A8175CFFF;
-        Fri,  3 Feb 2023 17:57:02 -0800 (PST)
-Received: by mail-ot1-x32c.google.com with SMTP id 70-20020a9d084c000000b0068bccf754f1so1900913oty.7;
-        Fri, 03 Feb 2023 17:57:02 -0800 (PST)
+        Fri, 3 Feb 2023 21:04:02 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3081838653;
+        Fri,  3 Feb 2023 18:04:01 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id 144so4951299pfv.11;
+        Fri, 03 Feb 2023 18:04:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TTTmY033OeRGN/EKD8JFUB8h9jNEfxU+2QET99S9mlI=;
-        b=bb5cjbuP/IY7c/Ps78H61Np25tv0ppeortD9RHwREmVHfmCEBoFO3hH6l5644CSc3J
-         kDAUhd/RJTaNjlwsaUN+K8Eht8VmTMs/e8yhHXppPqyCAsTBrog3TqjF31AZMzafVQmV
-         leCfF0OymiRUkhCqPL6rTF7bNQ0ePGuN/uQv6LX3p6rT+lgYENUeqTUn4rnxQYDn2c9L
-         xujiZo9HXkjxqEPrI+46OCJ7+VZAsTsapIpDiayit5mcrFD39Uh0LsV0c/hrOIM+5aNv
-         IjWQMarMT/G78SdIaKbmrQfA6SN49vfQ5fyF/3bs07ERb53Bz7JLHpBVcpwgVPLOjHj5
-         BBig==
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=uePF3eDJemwYV3SuvTrXUS0Nc0Z+OSgE9N4Vx3eaMM8=;
+        b=C4RiucKjZPpCAg6YAF4eBUtU6U9GxzZ+KQE285cOOmXecDTMdNZG/Z7dDCwajOZFq5
+         6fhggg0AghxpLqm5J6HrpFFeqzc3AIgHFFtTocELrOFpSlWfM16f0lFf3Tio55n/ijbT
+         CC2a+so6nwR3dmAh06sZhhTZvojCQ9NMTfNl9bznW1T3TVXH9eWfcxQIhVfiXDJkkvM7
+         fCDKnvCzQFcdw5U3BpoM8qpb1o2dUlI8gNAYXpHqH1uL8ao8OS7VX16KnoOfFzBhAm6i
+         v2nkRY8PsoD2YqDcCPFqGBDWUfq06PRO6xA2kzd59Hmh7AL1ybcUpE0Vud/fRxbzIwJg
+         OQYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TTTmY033OeRGN/EKD8JFUB8h9jNEfxU+2QET99S9mlI=;
-        b=h1VsTvmIo2mNnZHcH54IREH7f0QRU0J9NsIkbEJuL9p+wDjs7F3MMU8RGJUj0PH8mz
-         wGZQc3p92UnlNFITpuMVRCLqGaPvtZ80hOCpE7qYS0jql6tMfqgxinVQ9TOMrrFzh5eo
-         k42FFHNHaJf4GeDgTXzy+MCg30WK6XTVYjR1OHAoRwVS8uTsTAhN4YMxcoTo6iQDLiIm
-         8BeYnK5eenunjGW5kjFtOiHEvcm9MWxDpIgBPUG2QV9/a0oD11EVrETOK8clBefOjFR0
-         li9MKG4+AhBv+azQ8vfId/2pwUb+8hgXQNyIps3Ql+TxaDvOp9GAoHfLZ40KaTtPswxH
-         KE8g==
-X-Gm-Message-State: AO0yUKVeS/8nIfDmzoVEPpXImNDs268P2mpg8ObJR0TUusMJIYcuMtyQ
-        7HufbQ8Ru8WxpyHPfrYqqaksUzY+MUM=
-X-Google-Smtp-Source: AK7set/kagwYDFeLn55TK/ylCxSECoRZOrtcUxrHcJODjUAVydjW7jtWfMkRwLeo5yK393/NqwEYyA==
-X-Received: by 2002:a9d:3e06:0:b0:68d:597d:84b1 with SMTP id a6-20020a9d3e06000000b0068d597d84b1mr3502229otd.28.1675475821608;
-        Fri, 03 Feb 2023 17:57:01 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o33-20020a0568301c6100b006864c8043e0sm1807575otg.61.2023.02.03.17.57.00
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uePF3eDJemwYV3SuvTrXUS0Nc0Z+OSgE9N4Vx3eaMM8=;
+        b=bLB5qBXFUnwFkxFnW188UbZVjIPabqmrytdbCxPVistAye65Le5/cZkluHsGVFyPWZ
+         PxR8bZt7/6J6457jhkHRq7TIBlbrh5eZztjEvGKUHKvKeW3amtf4PotsblsHIiyQADe+
+         mTgrukk8K+38Zjjw7m7n93aCkdPTPx9QDvTKHnvLzUzS0XOd5R4Itmqo5EBNvW2riNKQ
+         SDnfVAp+hbliiWdq8UQWxUPmU0Eqz7sfS/o9rUk36ABKpnuXfF3GV4GMbSdwYVSWKqWw
+         /VTjeboUy0SxYodOWWnYxwYAnjVaWOyiYxp2XbRvkxCBA3qe3htTuvxqyvK9poXcz2Ug
+         xgMg==
+X-Gm-Message-State: AO0yUKXsPQGzA1H3yIRLTeMQpL9/lBdFwKc/ry6jYSJGwnb6kp+1VN74
+        8i4xktSrmu8gDf6QonhauK0=
+X-Google-Smtp-Source: AK7set8cRFAs1HA7CysvGz1jSHh+UPjUA8HI6i+unKtdWIXeai5/n/5suMpr8o/8lEDCDNck9eOImQ==
+X-Received: by 2002:aa7:915a:0:b0:593:cfbb:3446 with SMTP id 26-20020aa7915a000000b00593cfbb3446mr10195154pfi.11.1675476240673;
+        Fri, 03 Feb 2023 18:04:00 -0800 (PST)
+Received: from debian.me (subs02-180-214-232-73.three.co.id. [180.214.232.73])
+        by smtp.gmail.com with ESMTPSA id y66-20020a626445000000b005821db4fd84sm2507025pfb.131.2023.02.03.18.03.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 17:57:01 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 3 Feb 2023 17:57:00 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] lm85: Bounds check to_sensor_dev_attr()->index usage
-Message-ID: <20230204015700.GG3089769@roeck-us.net>
-References: <20230127223744.never.113-kees@kernel.org>
- <20230128131319.GA4173006@roeck-us.net>
- <63dd8c1a.170a0220.d3456.3451@mx.google.com>
+        Fri, 03 Feb 2023 18:04:00 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id 02D1B1052EA; Sat,  4 Feb 2023 09:03:56 +0700 (WIB)
+Date:   Sat, 4 Feb 2023 09:03:56 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.15 00/20] 5.15.92-rc1 review
+Message-ID: <Y929DJ7bSaFVc+/I@debian.me>
+References: <20230203101007.985835823@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="e/62PjlpUEBrbBLG"
 Content-Disposition: inline
-In-Reply-To: <63dd8c1a.170a0220.d3456.3451@mx.google.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230203101007.985835823@linuxfoundation.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 10:35:05PM +0000, Kees Cook wrote:
-> On Sat, Jan 28, 2023 at 05:13:19AM -0800, Guenter Roeck wrote:
-> > On Fri, Jan 27, 2023 at 02:37:45PM -0800, Kees Cook wrote:
-> > > The index into various register arrays was not bounds checked. Add
-> > > checking. Seen under GCC 13:
-> > > 
-> > > drivers/hwmon/lm85.c: In function 'pwm_auto_pwm_minctl_store':
-> > > drivers/hwmon/lm85.c:1110:26: warning: array subscript [0, 31] is outside array bounds of 'struct lm85_autofan[3]' [-Warray-bounds=]
-> > >  1110 |         if (data->autofan[nr].min_off)
-> > >       |             ~~~~~~~~~~~~~^~~~
-> > > drivers/hwmon/lm85.c:317:29: note: while referencing 'autofan'
-> > >   317 |         struct lm85_autofan autofan[3];
-> > >       |                             ^~~~~~~
-> > > 
-> > 
-> > This is a false positive. The value can never be >= 3.
-> > It is derived from the last value of the following
-> > SENSOR_DEVICE_ATTR_RW() entries.
-> > 
-> > I resist making changes like this to the code just because
-> > the compiler can not determine the range of a variable.
-> > It blows up code size amd makes it hard to read just to
-> > make the compiler happy.
-> 
-> I think it's worth it given the index is an "int" and it'd be very easy
-> for things to go wrong in the face of other memory corruption, etc. I've
-> sent a v2 that I think is much more readable and non-invasive but
-> provides similar robustness.
-> 
 
-That line of argument would suggest that we should perform parameter checks
-on each function entry all over the place, no matter if the range is known
-to be valid or not. Maybe that is the way things are going, but I don't
-like it at all. I have seen that kind of code before, in the telco space,
-where it typically at least doubled code size and resulted in mediocre
-performance, just because of a rule that mandated checking all parameters
-at the beginning of each function.
+--e/62PjlpUEBrbBLG
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I assume this is just one of many many patches you plan to send to add
-parameter checks to similar hwmon code ? I _really_ don't want to have
-the hwmon code cluttered with such unnecessary checks.
+On Fri, Feb 03, 2023 at 11:13:27AM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.92 release.
+> There are 20 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
 
-Guenter
+Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
+powerpc (ps3_defconfig, GCC 12.2.0).
+
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--e/62PjlpUEBrbBLG
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY929AwAKCRD2uYlJVVFO
+o0pSAP4xikCjYlehto1K/7EG/Q607otvnze80g/FIRqCPSAYwAEA804JcdwogPij
+qlQ/MNtoUy6DzGoPWMSSabw4cIbkQgA=
+=vUuP
+-----END PGP SIGNATURE-----
+
+--e/62PjlpUEBrbBLG--
