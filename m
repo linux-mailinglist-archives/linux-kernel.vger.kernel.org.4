@@ -2,150 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0515168AB05
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 16:51:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39A9968AB09
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 17:07:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233336AbjBDPvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 10:51:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38770 "EHLO
+        id S231347AbjBDQHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 11:07:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231347AbjBDPvW (ORCPT
+        with ESMTP id S229448AbjBDQG7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 10:51:22 -0500
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E80D30290;
-        Sat,  4 Feb 2023 07:51:21 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1675525862; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=mQsJipZtdQgXEqOmZ8v8pAgLCNXaekgbEJPfnORBSlu55YEfOjtCipcRU/CeU77LeRVeiFXCXbBb8ZiTHYhmsET+/3UBjl+HbvIG6vgXcY7eGXrDP47H9H4JRrDY5zW05u7XG31kR3o2F7Etfwfg/JNQOyyo6x+Isnh+OSE/S8M=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1675525862; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=9Is2bS/JDlsK/QwiHcaEE4s56YD3nWP7IFxCKBI5QJk=; 
-        b=mxxZEcvwOKoPbh2AegG2yFp2Ge53+hpycZDAeH2Ab8nNIACmvlwIPwhw5o9NH08CRop9ONiSoiJDlsnWxRXWErX8Hg+35v+YRGUh/8sxsA6a0hxjuea4RJrdqS7Pyt1K1g/WqkJYJ5b52DEPJ38piijOKerjXIbr6a9hpxuVsaE=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1675525862;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=9Is2bS/JDlsK/QwiHcaEE4s56YD3nWP7IFxCKBI5QJk=;
-        b=Wi0hFGAPunx9ZfQXgQsq7MSpgE7ResmnViNk9tEvbBHkbnG+AHyQ0S0U+151XAfy
-        kTI8ltaX2YG/KSG/E4Uxz3gccbkVUMEKJ0Qhop86C3dp5aNYXAd0mP9I8Mq0UAKt2LI
-        KfTawugtOlU/78fv8pxkIb97+hf7+/R9Qr+fod3A=
-Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
-        with SMTPS id 1675525860054747.0245916605178; Sat, 4 Feb 2023 07:51:00 -0800 (PST)
-Message-ID: <822f0d6e-ef25-2cb7-acd9-9e74a680c09a@arinc9.com>
-Date:   Sat, 4 Feb 2023 18:50:55 +0300
+        Sat, 4 Feb 2023 11:06:59 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCBCB22A0A
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 08:06:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675526817; x=1707062817;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=74jhwRipY9DqEhY/9dgCcUoI6QNGE/J2TwduXSDlwY4=;
+  b=JXX8H7ZrSqkwfHqax5FOEvbpePEYuHOCYajtBxQdQDaWXOjkk/HqOzQk
+   1Igb8J25WX2sn3fPjflGXi5jS2lADdMWLTKGUtRI9tDa1qZbR9P2LUy95
+   6Vgh0zBpDG4RSsH8BkT3U1+kGx35rOjxFBh7ljJ7XqhQFZPYoI7D+fKhV
+   UcGvvTkwYazDVykgA6HHQRiQ78KINM7wfIaW3jFmuBI9Qgqz73gb6cYSS
+   OX2nZi/eQykSzrupmeqT5woVlKuJpel6jJL3mYWOkrUOPvX/A7efW49tq
+   Nmkh4jbO75uumfuLoAY3i4uWuhYaBKBZC6ofj9hQEUDlyRDO5v5yxJguY
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="312613458"
+X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
+   d="scan'208";a="312613458"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2023 08:06:56 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="734679181"
+X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
+   d="scan'208";a="734679181"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 04 Feb 2023 08:06:49 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pOL3w-0001Po-23;
+        Sat, 04 Feb 2023 16:06:48 +0000
+Date:   Sun, 5 Feb 2023 00:06:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Miroslav Benes <mbenes@suse.cz>
+Subject: vmlinux.o: warning: objtool: vmx_vcpu_enter_exit+0x27: call to
+ context_tracking_enabled_this_cpu() leaves .noinstr.text section
+Message-ID: <202302050019.075FHixH-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: Aw: Re: Re: [PATCH v2 4/5] arm: dts: mt7623: mux phy0 on Bananapi
- BPI-R2
-Content-Language: en-US
-To:     Frank Wunderlich <frank-w@public-files.de>
-Cc:     arinc9.unal@gmail.com, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        erkin.bozoglu@xeront.com, Sean Wang <sean.wang@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-References: <20230201185656.17164-1-arinc.unal@arinc9.com>
- <20230201185656.17164-5-arinc.unal@arinc9.com>
- <AC473057-266B-4403-9270-8007E0EC257C@public-files.de>
- <75d3758a-5502-03a4-b3a2-990f9339705b@arinc9.com>
- <trinity-ec3920c5-a96a-4edf-9ff1-4bf07e7b4d07-1675506452617@3c-app-gmx-bs72>
- <trinity-a01f321e-0973-417e-9a25-9350f63ece37-1675511027203@3c-app-gmx-bs72>
- <f628db9c-cf61-e1bc-2160-0c8d1caa0fbe@arinc9.com>
- <trinity-3c3b11eb-2503-4637-b8f6-05686bd1ad88-1675516042495@3c-app-gmx-bs72>
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <trinity-3c3b11eb-2503-4637-b8f6-05686bd1ad88-1675516042495@3c-app-gmx-bs72>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4.02.2023 16:07, Frank Wunderlich wrote:
-> Hi
-> 
->> Gesendet: Samstag, 04. Februar 2023 um 13:12 Uhr
->> Von: "Arınç ÜNAL" <arinc.unal@arinc9.com>
->> An: "Frank Wunderlich" <frank-w@public-files.de>
->> Cc: arinc9.unal@gmail.com, "Rob Herring" <robh+dt@kernel.org>, "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>, "Matthias Brugger" <matthias.bgg@gmail.com>, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org, erkin.bozoglu@xeront.com, "Sean Wang" <sean.wang@mediatek.com>, "DENG Qingfang" <dqfext@gmail.com>
->> Betreff: Re: Aw: Re: [PATCH v2 4/5] arm: dts: mt7623: mux phy0 on Bananapi BPI-R2
->>
->> On 4.02.2023 14:43, Frank Wunderlich wrote:
->>>> Gesendet: Samstag, 04. Februar 2023 um 11:27 Uhr
->>>> Von: "Frank Wunderlich" <frank-w@public-files.de>
->>>> An: "Arınç ÜNAL" <arinc.unal@arinc9.com>
->>>> Cc: arinc9.unal@gmail.com, "Rob Herring" <robh+dt@kernel.org>, "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>, "Matthias Brugger" <matthias.bgg@gmail.com>, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org, erkin.bozoglu@xeront.com, "Sean Wang" <sean.wang@mediatek.com>, "DENG Qingfang" <dqfext@gmail.com>
->>>> Betreff: Aw: Re: [PATCH v2 4/5] arm: dts: mt7623: mux phy0 on Bananapi BPI-R2
->>>>
->>>> Hi aranc,
->>>>
->>>> have tested this series, basicly it works, but i get only ~620 Mbits/sec (much more i will need on wan) in tx-mode of r2, rx-mode (iperf3 -c IP -R on r2) gets full 939 Mbits/sec. Both no retransmitts.
->>>>
->>>> tried with my laptop which gets 940Mbit/sec in tx mode too...other end is a R2 with 5.15 connected to lan0 (and eth1+aux enabled, dmesg clean so far...for the "kernel log flooded"-comment).
->>>>
->>>> maybe gmac1 needs to be tweaked a bit (clock-settings)?
->>>>
->>>> can you confirm this with your board?
->>>
->>> tested the vlan_aware way with 5.15.80 and got better result
->>>
->>> ip link add br0 type bridge vlan_filtering 1
->>> ip l set aux master br0
->>> ip l set wan master br0
->>> bridge vlan add vid 99 dev wan
->>> bridge vlan add vid 99 dev aux
->>> bridge vlan
->>> ip l s eth1 up
->>> ip l s wan up
->>> ip a a 192.168.0.11/24 dev eth1
->>> ip l s br0 up
->>> ip l s aux up
->>>
->>> i see traffic on eth1 increasing and iperf3 shows in both directions ~940Mbit/s, no strange mesages in dmesg while testing...where do you see these?
->>
->> You didn't put eth1 on a bridge. I suggest you read my mails with higher
->> attention so both of our time is spent efficiently.
-> 
-> sorry if i misseed this detail, but it was not part of the instructions i got from mtk and did not found it in our mail-conversion. why do i need to add the gmac into the bridge??
+Hi Josh,
 
-I was going to say, to put the host(s) connected to the wan port on the 
-same network as other ports, but using the wan interface for that 
-instead would work. Cool, we can cross this off the list.
+FYI, the error/warning still remains.
 
-> 
-> the gmac is connected physically to mt7531 p5, and my vlan_aware bridge bridges this port (aux=p5) with wan,
-> so i see no need to add eth1 to this bridge too...traffic on wan is tagged with vlan 99 and leaving untagged
-> on aux which is arriving eth1...
-> 
->>> tested vlan-way with 6.2 and felix' Patches to more comparable with your test...and got same result (~625Mbit/s in tx and 940Mbit/s in rx-mode=-R on r2)...so it seems anything between 5.15 and 6.2 reduced gmac1 tx bandwidth.
->>
->> I don't see an incentive to investigate unless the issue is confirmed on
->> a daily netdev/net-next.git main tree.
-> 
-> have same result on net-next/main with your series, no additional patches on top except adding my build-script and defconfig.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   0136d86b78522bbd5755f8194c97a987f0586ba5
+commit: 2bc3dec7055e34c2c2e497f109da6748544c0791 objtool: Don't print parentheses in function addresses
+date:   10 months ago
+config: x86_64-randconfig-a004-20221128 (https://download.01.org/0day-ci/archive/20230205/202302050019.075FHixH-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2bc3dec7055e34c2c2e497f109da6748544c0791
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 2bc3dec7055e34c2c2e497f109da6748544c0791
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Finding the cause of reduced network performance is quite a challenging 
-task. The only person I know that gives this a serious approach is Rafał 
-Miłecki. There are scripts and things they share on the openwrt-devel 
-mailing list along with details of their investigation, usually for 
-Broadcom SoCs.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-I'm no good in this so I'm not going to do anything about it. There are 
-issues with the MediaTek ethernet and MT7530 DSA subdriver that 
-completely break communication which I want to have them addressed.
+All warnings (new ones prefixed by >>):
 
-Arınç
+   ld: warning: arch/x86/lib/retpoline.o: missing .note.GNU-stack section implies executable stack
+   ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+>> vmlinux.o: warning: objtool: vmx_vcpu_enter_exit+0x27: call to context_tracking_enabled_this_cpu() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: enter_from_user_mode+0x4e: call to on_thread_stack() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x57: call to on_thread_stack() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x4e: call to on_thread_stack() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x4e: call to on_thread_stack() leaves .noinstr.text section
+   ld: warning: vmlinux.o: requires executable stack (because the .note.GNU-stack section is executable)
+   ld: warning: .tmp_vmlinux.kallsyms1 has a LOAD segment with RWX permissions
+   ld: warning: vmlinux.o: requires executable stack (because the .note.GNU-stack section is executable)
+   ld: warning: .tmp_vmlinux.kallsyms2 has a LOAD segment with RWX permissions
+   ld: warning: vmlinux.o: requires executable stack (because the .note.GNU-stack section is executable)
+   ld: warning: vmlinux has a LOAD segment with RWX permissions
+
+
+objdump-func vmlinux.o vmx_vcpu_enter_exit:
+0000 000000000000030d <vmx_vcpu_enter_exit>:
+0000      30d:	55                   	push   %rbp
+0001      30e:	48 89 f5             	mov    %rsi,%rbp
+0004      311:	53                   	push   %rbx
+0005      312:	48 89 fb             	mov    %rdi,%rbx
+0008      315:	90                   	nop
+0009      316:	e8 00 00 00 00       	call   31b <vmx_vcpu_enter_exit+0xe>	317: R_X86_64_PLT32	trace_hardirqs_on_prepare-0x4
+000e      31b:	48 8b 7c 24 10       	mov    0x10(%rsp),%rdi
+0013      320:	e8 00 00 00 00       	call   325 <vmx_vcpu_enter_exit+0x18>	321: R_X86_64_PLT32	lockdep_hardirqs_on_prepare-0x4
+0018      325:	90                   	nop
+0019      326:	66 90                	xchg   %ax,%ax
+001b      328:	eb 0a                	jmp    334 <vmx_vcpu_enter_exit+0x27>
+001d      32a:	bf 02 00 00 00       	mov    $0x2,%edi
+0022      32f:	e8 00 00 00 00       	call   334 <vmx_vcpu_enter_exit+0x27>	330: R_X86_64_PLT32	__context_tracking_enter-0x4
+0027      334:	e8 00 00 00 00       	call   339 <vmx_vcpu_enter_exit+0x2c>	335: R_X86_64_PC32	.text+0x151972
+002c      339:	84 c0                	test   %al,%al
+002e      33b:	75 07                	jne    344 <vmx_vcpu_enter_exit+0x37>
+0030      33d:	90                   	nop
+0031      33e:	e8 00 00 00 00       	call   343 <vmx_vcpu_enter_exit+0x36>	33f: R_X86_64_PC32	.text+0x15ac9b
+0036      343:	90                   	nop
+0037      344:	48 8b 7c 24 10       	mov    0x10(%rsp),%rdi
+003c      349:	e8 00 00 00 00       	call   34e <vmx_vcpu_enter_exit+0x41>	34a: R_X86_64_PLT32	lockdep_hardirqs_on-0x4
+0041      34e:	66 90                	xchg   %ax,%ax
+0043      350:	66 90                	xchg   %ax,%ax
+0045      352:	eb 11                	jmp    365 <vmx_vcpu_enter_exit+0x58>
+0047      354:	48 89 df             	mov    %rbx,%rdi
+004a      357:	e8 3b ff ff ff       	call   297 <vmx_l1d_flush>
+004f      35c:	eb 07                	jmp    365 <vmx_vcpu_enter_exit+0x58>
+0051      35e:	0f 00 2d 00 00 00 00 	verw   0x0(%rip)        # 365 <vmx_vcpu_enter_exit+0x58>	361: R_X86_64_PC32	.rodata+0x42c1c
+0058      365:	48 8b 83 78 02 00 00 	mov    0x278(%rbx),%rax
+005f      36c:	0f 20 d2             	mov    %cr2,%rdx
+0062      36f:	48 39 d0             	cmp    %rdx,%rax
+0065      372:	74 03                	je     377 <vmx_vcpu_enter_exit+0x6a>
+0067      374:	0f 22 d0             	mov    %rax,%cr2
+006a      377:	48 8b 85 60 23 00 00 	mov    0x2360(%rbp),%rax
+0071      37e:	48 8d b3 d8 01 00 00 	lea    0x1d8(%rbx),%rsi
+0078      385:	48 89 ef             	mov    %rbp,%rdi
+007b      388:	0f b6 50 14          	movzbl 0x14(%rax),%edx
+007f      38c:	e8 00 00 00 00       	call   391 <vmx_vcpu_enter_exit+0x84>	38d: R_X86_64_PLT32	__vmx_vcpu_run-0x4
+0084      391:	88 85 d8 21 00 00    	mov    %al,0x21d8(%rbp)
+008a      397:	0f 20 d0             	mov    %cr2,%rax
+008d      39a:	48 89 83 78 02 00 00 	mov    %rax,0x278(%rbx)
+0094      3a1:	48 8b 7c 24 10       	mov    0x10(%rsp),%rdi
+0099      3a6:	e8 00 00 00 00       	call   3ab <vmx_vcpu_enter_exit+0x9e>	3a7: R_X86_64_PLT32	lockdep_hardirqs_off-0x4
+009e      3ab:	66 90                	xchg   %ax,%ax
+00a0      3ad:	eb 0a                	jmp    3b9 <vmx_vcpu_enter_exit+0xac>
+00a2      3af:	bf 02 00 00 00       	mov    $0x2,%edi
+00a7      3b4:	e8 00 00 00 00       	call   3b9 <vmx_vcpu_enter_exit+0xac>	3b5: R_X86_64_PLT32	__context_tracking_exit-0x4
+00ac      3b9:	90                   	nop
+00ad      3ba:	e8 00 00 00 00       	call   3bf <vmx_vcpu_enter_exit+0xb2>	3bb: R_X86_64_PLT32	trace_hardirqs_off_finish-0x4
+00b2      3bf:	90                   	nop
+00b3      3c0:	5b                   	pop    %rbx
+00b4      3c1:	5d                   	pop    %rbp
+00b5      3c2:	c3                   	ret
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
