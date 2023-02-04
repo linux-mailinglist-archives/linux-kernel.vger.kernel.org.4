@@ -2,137 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAD4D68A9E1
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 14:04:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C584468A9E3
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 14:04:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233294AbjBDNE3 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 4 Feb 2023 08:04:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56004 "EHLO
+        id S233372AbjBDNEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 08:04:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233171AbjBDNE1 (ORCPT
+        with ESMTP id S233309AbjBDNEs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 08:04:27 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AAA028846
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 05:04:25 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-86-3jVmZkmhN5e2cWi5sxwtfw-1; Sat, 04 Feb 2023 13:04:21 +0000
-X-MC-Unique: 3jVmZkmhN5e2cWi5sxwtfw-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.45; Sat, 4 Feb
- 2023 13:04:20 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.045; Sat, 4 Feb 2023 13:04:20 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Guillaume Tucker' <guillaume.tucker@collabora.com>,
-        Guillaume Tucker <guillaume.tucker@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Gautam <gautammenghani201@gmail.com>
-CC:     "kernel@collabora.com" <kernel@collabora.com>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernelci@lists.linux.dev" <kernelci@lists.linux.dev>
-Subject: RE: [PATCH] selftests: find echo binary to use -ne options
-Thread-Topic: [PATCH] selftests: find echo binary to use -ne options
-Thread-Index: AQHZN+PflpeLeEnGBkKgHYJRIoEYbK6+wYOg
-Date:   Sat, 4 Feb 2023 13:04:19 +0000
-Message-ID: <90ace4f466ee4f79bf2dd94c5830e57a@AcuMS.aculab.com>
-References: <20230203152603.11450-1-guillaume.tucker@collabora.com>
-In-Reply-To: <20230203152603.11450-1-guillaume.tucker@collabora.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Sat, 4 Feb 2023 08:04:48 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 481A728D08;
+        Sat,  4 Feb 2023 05:04:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D7991B80ABC;
+        Sat,  4 Feb 2023 13:04:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F6BCC4339B;
+        Sat,  4 Feb 2023 13:04:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675515879;
+        bh=of02Imc8fZGxu7qVVhjyvr+IGKmXsTV5AYYFyKG1Kyw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PHWL/3MmFxPHNLJ7K88OgKi5zhq+5g4DdoTwVbLjt83tuDHxjjD09oGukzQeM0ABQ
+         F0LR2AT+k1C7E/eNyeGljv2LPvQ9qRncqIClGGSbcHgnwINnkNfzq97tlK1nl9jtTx
+         UJgjeTzQXSPbBnhqozvvlmfvEegZiExgRpCWSICh0Iot48Yu7Lsb2CfTwojAVB9pGU
+         ckzK/+wbxSL2DSaW1RnebcnHa2JgTPQlWEldqHd3KDMmG9p7Qxab8/yj+ODmkPFmH4
+         7Iov7siQanGVUbZMCwbkInC1ueFFhrlKq59vq/O1orQYyF0JWrM5cUBmN3bATSRmZz
+         bj8894Ggbrtiw==
+Date:   Sat, 4 Feb 2023 13:04:21 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 resend 1/3] mfd: intel_soc_pmic_chtwc: Add Lenovo Yoga
+ Tab 3 X90F to intel_cht_wc_models
+Message-ID: <Y95X1VvzdRcBWbNA@google.com>
+References: <20230126153823.22146-1-hdegoede@redhat.com>
+ <20230126153823.22146-2-hdegoede@redhat.com>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230126153823.22146-2-hdegoede@redhat.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guillaume Tucker
-> Sent: 03 February 2023 15:26
-> 
-> Find the actual echo binary using $(which echo) and use it for
-> formatted output with -ne.  On some systems, the default echo command
-> doesn't handle the -e option and the output looks like this (arm64
-> build):
-> 
-> -ne Emit Tests for alsa
-> 
-> -ne Emit Tests for amd-pstate
-> 
-> -ne Emit Tests for arm64
+On Thu, 26 Jan 2023, Hans de Goede wrote:
 
-Nack.
-There is no reason to suppose that /bin/echo is any different from
-the version of echo builtin to the shell that make uses.
-
-Not only that 'which' is a horrid shell script that is trying to
-emulate csh builtin.
-The bourne shell equivalent is 'type' and the posix one 'command'.
-
-In any case the portable way to fix this is to use printf.
-This is a well defined program and is bultin to all modern shells.
-
-	David
-
-
+> The drivers for various CHT Whiskey Cove PMIC child-devices need to know
+> the model, since they have model specific behavior. The DMI match table
+> for this is shared between the child-device-drivers inside the MFD driver.
 > 
-> This is for example the case with the KernelCI Docker images
-> e.g. kernelci/gcc-10:x86-kselftest-kernelci.  With the actual echo
-> binary (e.g. in /bin/echo), the output is formatted as expected (x86
-> build this time):
+> Add the Lenovo Yoga Tab 3 X90F, which is a previously unknown tablet
+> model with a CHT Whiskey Cove PMIC, to the intel_cht_wc_models enum and
+> to the DMI match table.
 > 
-> Emit Tests for alsa
-> Emit Tests for amd-pstate
-> Skipping non-existent dir: arm64
-> 
-> Only the install target is using "echo -ne" so keep the $ECHO variable
-> local to it.
-> 
-> Reported-by: "kernelci.org bot" <bot@kernelci.org>
-> Fixes: 3297a4df805d ("kselftests: Enable the echo command to print newlines in Makefile")
-> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 > ---
->  tools/testing/selftests/Makefile | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-> index 41b649452560..9619d0f3b2ff 100644
-> --- a/tools/testing/selftests/Makefile
-> +++ b/tools/testing/selftests/Makefile
-> @@ -234,10 +234,11 @@ ifdef INSTALL_PATH
->  	@# While building kselftest-list.text skip also non-existent TARGET dirs:
->  	@# they could be the result of a build failure and should NOT be
->  	@# included in the generated runlist.
-> +	ECHO=`which echo`; \
->  	for TARGET in $(TARGETS); do \
->  		BUILD_TARGET=$$BUILD/$$TARGET;	\
-> -		[ ! -d $(INSTALL_PATH)/$$TARGET ] && echo "Skipping non-existent dir: $$TARGET" &&
-> continue; \
-> -		echo -ne "Emit Tests for $$TARGET\n"; \
-> +		[ ! -d $(INSTALL_PATH)/$$TARGET ] && $$ECHO "Skipping non-existent dir: $$TARGET" &&
-> continue; \
-> +		$$ECHO -ne "Emit Tests for $$TARGET\n"; \
->  		$(MAKE) -s --no-print-directory OUTPUT=$$BUILD_TARGET COLLECTION=$$TARGET \
->  			-C $$TARGET emit_tests >> $(TEST_LIST); \
->  	done;
-> --
-> 2.30.2
+>  drivers/mfd/intel_soc_pmic_chtwc.c | 8 ++++++++
+>  include/linux/mfd/intel_soc_pmic.h | 1 +
+>  2 files changed, 9 insertions(+)
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+Applied, thanks
 
+-- 
+Lee Jones [李琼斯]
