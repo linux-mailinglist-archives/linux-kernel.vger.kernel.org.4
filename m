@@ -2,163 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 216A668AAAB
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 15:47:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E46E68AAAD
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 15:49:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233333AbjBDOrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 09:47:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46446 "EHLO
+        id S233614AbjBDOt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 09:49:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbjBDOrP (ORCPT
+        with ESMTP id S229617AbjBDOt2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 09:47:15 -0500
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01olkn2093.outbound.protection.outlook.com [40.92.107.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C3E5FEA;
-        Sat,  4 Feb 2023 06:47:14 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AgFJ+PTopEuZbHnpI3ZJx96pN1FbKLs8/H7cixN6TZOcuQ3ddVPLEkC3+UPcgp8XiWbUriwRfxVFKGykJssDiWmUKbu8pmZ1ow62oQOdVvbLA37nyA6AVayIsHpeaQIQPE7GU8pMZf5JMWT/O+ip+tS4lWShRBFiyhsFYJPbZv9Lpvs90z1ayYXt9j3DVmMmRNNVjJFZMKfBLF5Jj9tbbiu+UAIatKjdWleR44ZSVjOY8LZTRODc3Zsi9oUANbstUPcTn5g4r2NQuY8hTVcWk5thKfNxHLvwaYe6GR5JXlj4h+VB54kCPKWiLlpTcqMVPe6aABq7lWd5guWPSCi3rQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ciONhQCgkB4YqGTj7FRNwnJKTZVQKYK6tqLQ4d7Qku8=;
- b=O3xcan4jfYrljeVmeslioQM1l9WURmyvGCtR2inzohgB1j3HKGmJRN8PfBQq40PiaC8xS0O068mnmE/7l3uBs6J9nL6C4tyKDZT90aqgevnGa3V8U71UC51aSU62vKoiroQyCOq/S/cDJ6ZTPFNC/XSS2qETtYUlb9ppJvhXrbGrCUhUGizXO2vqOWAmTmOxxEWn+c+16Gg3o4LZ5TvMnlSHt9Np5zoTs+ze/ojI4u+NuP4cxtEI0SiLjDL+M67PwIGzol7gWAur7Spa6xaAtmKScKUiAQoxHN0oK4EOzINsQZDVbqLGkTUQweoRrW2DS4WG8PiC0nA10qNMOH5Niw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ciONhQCgkB4YqGTj7FRNwnJKTZVQKYK6tqLQ4d7Qku8=;
- b=Ei+H+qMOtwOz0PW+hOjiMLErpiF1yAQVrqg9vu0l4j4Um+uOPILh3gBLK7ppYIDLz4CoSt67eWWENX35Z7Ap37Fdb4fTnsVG+IFuPN/WHLfXtbKGMgFu8fp8NLx7/auZ1ZFSjp5kPD00eWYHDNq3kSjJqAgASV1T2eDt6FuLNYyCrnM9dN1eFB6aSpOiJ0qmmoOEH2QAsgACsxARJeKtz8ySjdmr3aaSBCUXJRQUG/3eYDvJsu6c+2iIEl9uFpDLHTh+XjRUAkpTI+WYhR7nmOV+7edOIZc3dZ+I2dkjWQ+3VFoat0aT5K9JMiRxbGZ4M9uzhV7jOztBfp2FQN/l0A==
-Received: from OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:19b::11)
- by OS3P286MB2165.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:194::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.32; Sat, 4 Feb
- 2023 14:47:10 +0000
-Received: from OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM
- ([fe80::9a1d:12f5:126c:9068]) by OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM
- ([fe80::9a1d:12f5:126c:9068%3]) with mapi id 15.20.6064.031; Sat, 4 Feb 2023
- 14:47:10 +0000
-Message-ID: <OS3P286MB2295A2F3A8B58054ECD87D8CF5D49@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
-Date:   Sat, 4 Feb 2023 22:47:06 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH net-next v7 1/1] net:openvswitch:reduce cpu_used_mask
- memory
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     netdev@vger.kernel.org, Pravin B Shelar <pshelar@ovn.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, dev@openvswitch.org,
-        linux-kernel@vger.kernel.org
-References: <OS3P286MB22957550350801F37FB56DFFF5D79@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
- <Y95ddddYhqkR7b1o@corigine.com>
-Content-Language: en-US
-From:   Eddy Tao <taoyuan_eddy@hotmail.com>
-In-Reply-To: <Y95ddddYhqkR7b1o@corigine.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TMN:  [932KRS+5qeK0geHOoGglp1oEf3nm2GBc]
-X-ClientProxiedBy: SI1PR02CA0058.apcprd02.prod.outlook.com
- (2603:1096:4:1f5::9) To OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:604:19b::11)
-X-Microsoft-Original-Message-ID: <6cf03bf9-a3d8-5375-3dfb-27013c2072b9@hotmail.com>
+        Sat, 4 Feb 2023 09:49:28 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 881F511653;
+        Sat,  4 Feb 2023 06:49:26 -0800 (PST)
+Date:   Sat, 4 Feb 2023 08:49:11 -0600 (CST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
+        s=mail; t=1675522164;
+        bh=+iTHfkfAqDhl9s1HhmjZ+Y7a963hdigzz6u9+d6JjAQ=;
+        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+        b=K/uDBxsX4KOWULg4aUe5C21x7zd7bF/UNsofGRKx6jVVFVRHG2/xJDAgLcmkAa9FE
+         kN9oH40DEKixX04L86t3Tfk6gwaB5Peh6QHFbd85kW57Jmr7xz30Dkxa+lQtzmL6pe
+         1bVX8y761MOkcRmHAumBtSbGCHHu2yP5IgMAzI08=
+From:   linux@weissschuh.net
+To:     Jason Baron <jbaron@akamai.com>
+Cc:     =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+        Jim Cromie <jim.cromie@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Message-ID: <c0b009e8-0b12-4605-83fa-ceb3cb27922f@weissschuh.net>
+In-Reply-To: <04311d93-7cb4-bf0b-dfa7-162a38b42583@akamai.com>
+References: <20221223-dyndbg-filename-v1-0-cbf8543009a1@weissschuh.net> <20221223-dyndbg-filename-v1-3-cbf8543009a1@weissschuh.net> <04311d93-7cb4-bf0b-dfa7-162a38b42583@akamai.com>
+Subject: Re: [PATCH 3/3] dyndbg: add source filename to prefix
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: OS3P286MB2295:EE_|OS3P286MB2165:EE_
-X-MS-Office365-Filtering-Correlation-Id: f6bb1575-a837-4049-b73d-08db06beb225
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kv78iYxasOruSKxeTJguyLrZrQt9ftRpi5qBbQdKpO3GBuFZW3HcBJpiB3ed4LSVmCrAIZwQgXAOPFxtbSN/l2LkAzhh5IFP0E+F3XdTQcYiC3mfMt8klehs/C7ScI8RtUyUyZbqnkM8Q4wJsIKUCu7NAcYku51eCipkM5/krGAOkCClHE5gTCdoGKJ/zXBLu5xfFIHTo/1Qq6leltoD0R+x8BolywVG7XmThWvvHS1aAxc0UKPY3Wb/ATEtvlH4TccCF7gMbGq9W0IBaA1eGJCtMhCpDakdlv/ar6SPcSJNuHQWcMUUcZCLj90Z84JAPVxOZ363gyqYETr53IAlqXc2qPzjSSW+eJ9Vq2nhUH1fgCxq3qypi5kfNirh6dfJ73CdP7n7Cle8YHnbcpOAWYsW0+STcIwBq8BofI84XCuc5qekPQsK+rkatBQwhOkY5IO+Q3iywOnfIA5rEECkwQiqXsbkjcOJ4Wy714xjPX1naTjRXw5x+mr5egBs5q5ZcM7e1bwmJogjqXRHML3pv3QgC0MQajgDNxSriQygWA+O7QvmhfI8LebdpRDs3JDrLESJ1x4HMmcttrzHSEhLfT7MeOoCFGfpXrjGSQz+B1LyV4i0wO5NvKbXGE7ZsP4hvjnlsUbsAjfVSI6vMkjvDQ==
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Mmw3K01NaEdrNlBWNmd6TnJnVXRlK1RoYTVTaUVid3dQYVdvMTRTTUdaRnhU?=
- =?utf-8?B?eXk2QlpHT1R1dTZ2VFhUTUc0bFN0dTl6dXROM0MwdDhZV1BTQnR2Vm9mOXE5?=
- =?utf-8?B?bmcxTUF1aU1lOERIZ0RKcmhyMEdGK3hJTVRWUjYvUXRaOHRlQVVvcjRsalJo?=
- =?utf-8?B?WU5SSktETENqT0N5eUxodzl6Z1M3Y1FDU2N4M0JhUjhlUDRXQjRGMzBRSVBS?=
- =?utf-8?B?UktyTDc0WDNYZGN6TGY2WktKSHNXYitKTDd1WUhuNldCUVFmS1B2OG5CQlJZ?=
- =?utf-8?B?bHphQTdNd0Vkbk1xV2twWlhLK21sVmlMWXdlUi9wZDhYZ3FrNG5HbnNmdDRz?=
- =?utf-8?B?TDZzV2wzTzFqSGJidHFkSG1XSkx0RGZUczFjTVBud0dZa3dLcy9uT2pkbVBF?=
- =?utf-8?B?QXRDZ1VMdWdFL1JCamZyVmFIcElZaTFIdEFaNkNYZ0lxcEZRczUyaVpCQ2pO?=
- =?utf-8?B?dms4L2VrZUF2Nm54NHNrQVpJTHZneHhYMVNETmtQOFdkZGtubTlGMW5xRUlE?=
- =?utf-8?B?em9nMmRrZDNGNWtJcStYbkVoeDVjbWlCa1ErUkhDdGZaYUlHaFV3cEtwNmVI?=
- =?utf-8?B?TzRKSVpoRmJ6eHFhV1pQWTFPQ0NLN1FTWHRHMGl4K0hrVnltY3J4YldrKzBh?=
- =?utf-8?B?angxV1cyR21pLzZqU1lGRkYyY1JwN1p1emlYVWJkMVM1WWVWYm0zTFdUUjQv?=
- =?utf-8?B?d3E3TWovcnNrY1hlTk8rL3dRa25iRlc1RllsYWVoVWdGb3M5ZW9yTDYyeWFi?=
- =?utf-8?B?ZVhMZVZsdTZ0YW81K3czSWc3TWRwbkRkOWVYRGNiVkZjY3FtWEZGWmhaQk15?=
- =?utf-8?B?NWFvTGNBZUx3VDBqK2xVTkx5dUI3OHBRNFAxeG1ic1FsWDh0SW1Gb3lzdzcx?=
- =?utf-8?B?d3EvcWpMTnBjSVJqVlUwTUZrSytMYlJQK0RFOTVPYmpLNDhYSlBzN1JhQ3JL?=
- =?utf-8?B?dFhsYWhtTTlNc2hUS2xhd2hiQjlpUXhCSGtnWlV2dTlTb0dhZFFNOG9LUi8z?=
- =?utf-8?B?VEFtTDF3dE5tMTQzZ3pXRlZYL3c4UTZwRlZDRXJ1cjI0WHZZaHF2aGkvWjdn?=
- =?utf-8?B?NWFwYlJZR3ZickFNY1pSZFhCd0xYS0duWTNnRlZiQzY0SWFURDlGOXFUNWVS?=
- =?utf-8?B?QTVTeUxWYlVUb1RzNklWVExNR2g2UHVrbHhxYUt3NUlNaVF5bU9IRzRyeDVp?=
- =?utf-8?B?K2dvdTZiak9SYStoVTZ5b3RkeFNuMGxHTC9uWkt1UnlWTTBjaEo1WmdFSEtY?=
- =?utf-8?B?UDRHSmRacmxrMElNZkk0ZCtQZDMra2gxSHZwNDFET0d1dlJYSFlPYThQeS95?=
- =?utf-8?B?M05yNWNxRGZHRVFHdlV3QU9UOHFnbXpBbjNzbmRKMGFBaG9aNUlVTXlsdWUw?=
- =?utf-8?B?dzdoZVowblUwZ05JK0FBaHVxSzJuVEh6S2dLRGhDSUZnOEIxL25WWC83QjVy?=
- =?utf-8?B?YkVacWx0MU9NY3NweFJaMDZvbzgwVGNFMXVhYXIwRGl4V0pvRFU4MWx2VGpH?=
- =?utf-8?B?bjltbG5JcE1ObE5FTjIrUi9hRlN0amo4UWtTdlRVY2dGOGtObkxrQVkrTWo3?=
- =?utf-8?B?VzRaM0pnWHFmeCsrTFdseC94cWtvdjIrWnRHclh4Qm5NRmJjVUVYbVV3a0Yw?=
- =?utf-8?B?UEQyQ1JJZU9FV25kMjVncHJiUTNZMXdyYWNaOTR4LzZKenQrVkptS3F5UzZy?=
- =?utf-8?B?YUhSV1QrVlVtc09Gd0RhazU2RnJWZHBORVBhWnQvbXlhMUFLekk1NkF3PT0=?=
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-05f45.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: f6bb1575-a837-4049-b73d-08db06beb225
-X-MS-Exchange-CrossTenant-AuthSource: OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Feb 2023 14:47:10.8082
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS3P286MB2165
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_MUA_MOZILLA,
-        FREEMAIL_FROM,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Correlation-ID: <c0b009e8-0b12-4605-83fa-ceb3cb27922f@weissschuh.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Simon:
-
-     Thank you for the time on the review.
-
-and i looked into net folder and get various results
-
-'net:', 'net: gre:', 'net: bridge:', 'net: thunderx', 'net: sock', 'net: 
-genetlink', and there is also examples as you suggested like 'devlink:'
-
-similarly, in other folders i see similar inconsistency, mm folder is an 
-example.
-
-I turned below links and did not find item regarding to the prefix 
-definition
-
-Link: https://docs.kernel.org/process/maintainer-netdev.html
-
-Link: 
-https://docs.kernel.org/process/submitting-patches.html#submittingpatches
-
-Going through the git log in file net/openvswitch/flow.c, the 'net: 
-openvswitch: ' prefix were used in previous commits.
+Hi Jason,
 
 
-I think the fix contained 'net' keep the prefix from name collision and 
-better keeps it consistent with its neighbors in the same file
+Feb 3, 2023 10:45:49 Jason Baron <jbaron@akamai.com>:
 
-And yes, there should be a blank space after the colon, i miss it, will 
-update the revision, after we nail down the wording of the prefix.
-
-
-Thanks
-
-eddy
-
-On 2023/2/4 21:28, Simon Horman wrote:
-> nit: I think the correct prefix for the patch subject is 'openvswitch:'
->       And there should be a space after the prefix.
+> Hi Thomas,
 >
-> [PATCH net-next v8 1/1] openvswitch: reduce cpu_used_mask
+> Thanks for this series, this series is fine with me:
+> Acked-by: Jason Baron <jbaron@akamai.com>
+
+Thanks!
+
+> Your comment about making the output more relatable to the control file m=
+ade me think if we should try and make the logged output look more like the=
+ control file:
+>
+> # cat /proc/dynamic_debug/control
+> # filename:lineno [module]function flags format
+>
+> So for your example, I think that would look like:
+>
+> [=C2=A0=C2=A0 71.802212] lib/test_dynamic_debug.c:103 do_cats: test_dd: d=
+oing categories
+> [=C2=A0=C2=A0 71.802227] lib/test_dynamic_debug.c:123 do_levels: doing le=
+vels
+>
+> But even if we think it looks better, there maybe too many dependencies o=
+n the current output format...
+
+I agree on both points.
+
+An alternative could be a new flag that prints the
+full format from the control file.
+The control file even has a format header that
+tools could use to parse out the fields, making it
+extensible.
+
+Not sure it's worth it though.
+And it should be in addition to this series in my
+opinion.
+
+Thomas
+
+> Thanks,
+>
+> -Jason
+>
+> On 1/29/23 9:01 PM, Thomas Wei=C3=9Fschuh wrote:
+>> Printing the line number without the file is of limited usefulness.
+>> Knowing the filename also makes it also easier to relate the logged
+>> information to the controlfile.
+>> Example:
+>> =C2=A0=C2=A0=C2=A0=C2=A0 # modprobe test_dynamic_debug
+>> =C2=A0=C2=A0=C2=A0=C2=A0 # echo 'file test_dynamic_debug.c =3Dpfsl' > /p=
+roc/dynamic_debug/control
+>> =C2=A0=C2=A0=C2=A0=C2=A0 # echo 1 > /sys/module/test_dynamic_debug/param=
+eters/do_prints
+>> =C2=A0=C2=A0=C2=A0=C2=A0 # dmesg | tail -2
+>> =C2=A0=C2=A0=C2=A0=C2=A0 [=C2=A0=C2=A0 71.802212] do_cats:lib/test_dynam=
+ic_debug.c:103: test_dd: doing categories
+>> =C2=A0=C2=A0=C2=A0=C2=A0 [=C2=A0=C2=A0 71.802227] do_levels:lib/test_dyn=
+amic_debug.c:123: test_dd: doing levels
+>> Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
+>> ---
+>> =C2=A0 Documentation/admin-guide/dynamic-debug-howto.rst | 5 +++--
+>> =C2=A0 include/linux/dynamic_debug.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 | 4 +++-
+>> =C2=A0 lib/dynamic_debug.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 4 ++++
+>> =C2=A0 3 files changed, 10 insertions(+), 3 deletions(-)
+>> diff --git a/Documentation/admin-guide/dynamic-debug-howto.rst b/Documen=
+tation/admin-guide/dynamic-debug-howto.rst
+>> index faa22f77847a..f9fa8163fba6 100644
+>> --- a/Documentation/admin-guide/dynamic-debug-howto.rst
+>> +++ b/Documentation/admin-guide/dynamic-debug-howto.rst
+>> @@ -216,13 +216,14 @@ The flags are::
+>> =C2=A0=C2=A0=C2=A0 t=C2=A0=C2=A0=C2=A0 Include thread ID, or <intr>
+>> =C2=A0=C2=A0=C2=A0 m=C2=A0=C2=A0=C2=A0 Include module name
+>> =C2=A0=C2=A0=C2=A0 f=C2=A0=C2=A0=C2=A0 Include the function name
+>> +=C2=A0 s=C2=A0=C2=A0=C2=A0 Include the source file name
+>> =C2=A0=C2=A0=C2=A0 l=C2=A0=C2=A0=C2=A0 Include line number
+>> =C2=A0=C2=A0=C2=A0 For ``print_hex_dump_debug()`` and ``print_hex_dump_b=
+ytes()``, only
+>> =C2=A0 the ``p`` flag has meaning, other flags are ignored.
+>> =C2=A0 -Note the regexp ``^[-+=3D][flmpt_]+$`` matches a flags specifica=
+tion.
+>> -To clear all flags at once, use ``=3D_`` or ``-flmpt``.
+>> +Note the regexp ``^[-+=3D][fslmpt_]+$`` matches a flags specification.
+>> +To clear all flags at once, use ``=3D_`` or ``-fslmpt``.
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Debug messages during Boot Process
+>> diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug=
+.h
+>> index 41682278d2e8..0c77105d583c 100644
+>> --- a/include/linux/dynamic_debug.h
+>> +++ b/include/linux/dynamic_debug.h
+>> @@ -37,10 +37,12 @@ struct _ddebug {
+>> =C2=A0 #define _DPRINTK_FLAGS_INCL_FUNCNAME=C2=A0 (1<<2)
+>> =C2=A0 #define _DPRINTK_FLAGS_INCL_LINENO=C2=A0=C2=A0=C2=A0 (1<<3)
+>> =C2=A0 #define _DPRINTK_FLAGS_INCL_TID=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 (1<<4)
+>> +#define _DPRINTK_FLAGS_INCL_SOURCENAME (1<<5)
+>> =C2=A0=C2=A0=C2=A0 #define _DPRINTK_FLAGS_INCL_ANY=C2=A0=C2=A0=C2=A0=C2=
+=A0 \
+>> =C2=A0=C2=A0=C2=A0 (_DPRINTK_FLAGS_INCL_MODNAME | _DPRINTK_FLAGS_INCL_FU=
+NCNAME |\
+>> -=C2=A0=C2=A0=C2=A0 _DPRINTK_FLAGS_INCL_LINENO=C2=A0 | _DPRINTK_FLAGS_IN=
+CL_TID)
+>> +=C2=A0=C2=A0=C2=A0 _DPRINTK_FLAGS_INCL_LINENO=C2=A0 | _DPRINTK_FLAGS_IN=
+CL_TID |\
+>> +=C2=A0=C2=A0=C2=A0 _DPRINTK_FLAGS_INCL_SOURCENAME)
+>> =C2=A0=C2=A0=C2=A0 #if defined DEBUG
+>> =C2=A0 #define _DPRINTK_FLAGS_DEFAULT _DPRINTK_FLAGS_PRINT
+>> diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
+>> index e96ea427d8af..fa7418e35197 100644
+>> --- a/lib/dynamic_debug.c
+>> +++ b/lib/dynamic_debug.c
+>> @@ -92,6 +92,7 @@ static const struct { unsigned flag:8; char opt_char; =
+} opt_array[] =3D {
+>> =C2=A0=C2=A0=C2=A0 { _DPRINTK_FLAGS_PRINT, 'p' },
+>> =C2=A0=C2=A0=C2=A0 { _DPRINTK_FLAGS_INCL_MODNAME, 'm' },
+>> =C2=A0=C2=A0=C2=A0 { _DPRINTK_FLAGS_INCL_FUNCNAME, 'f' },
+>> +=C2=A0=C2=A0 { _DPRINTK_FLAGS_INCL_SOURCENAME, 's' },
+>> =C2=A0=C2=A0=C2=A0 { _DPRINTK_FLAGS_INCL_LINENO, 'l' },
+>> =C2=A0=C2=A0=C2=A0 { _DPRINTK_FLAGS_INCL_TID, 't' },
+>> =C2=A0=C2=A0=C2=A0 { _DPRINTK_FLAGS_NONE, '_' },
+>> @@ -836,6 +837,9 @@ static char *__dynamic_emit_prefix(const struct _dde=
+bug *desc, char *buf)
+>> =C2=A0=C2=A0=C2=A0 if (desc->flags & _DPRINTK_FLAGS_INCL_FUNCNAME)
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pos +=3D snprintf(buf + pos, =
+remaining(pos), "%s:",
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 desc->function);
+>> +=C2=A0=C2=A0 if (desc->flags & _DPRINTK_FLAGS_INCL_SOURCENAME)
+>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pos +=3D snprintf(buf + pos, remai=
+ning(pos), "%s:",
+>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 trim_prefix(desc->filename));
+>> =C2=A0=C2=A0=C2=A0 if (desc->flags & _DPRINTK_FLAGS_INCL_LINENO)
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pos +=3D snprintf(buf + pos, =
+remaining(pos), "%d:",
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 desc->lineno);
+>>
+
