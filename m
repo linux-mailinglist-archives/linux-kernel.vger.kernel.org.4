@@ -2,113 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A7B168A7F6
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 04:28:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7564A68A7F9
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 04:30:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231320AbjBDD2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 22:28:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47288 "EHLO
+        id S232149AbjBDDaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 22:30:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjBDD23 (ORCPT
+        with ESMTP id S229436AbjBDDaU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 22:28:29 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E8CA5CA;
-        Fri,  3 Feb 2023 19:28:28 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id l4-20020a17090a850400b0023013402671so10536508pjn.5;
-        Fri, 03 Feb 2023 19:28:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CmdIpFXX/Pnd+rThHPSIEqn/ETUzOMU9w26EKl0vXWA=;
-        b=FaQQgRbSWlX6tu/FaH7yaf8hQo2SHcLcvhh+G+lbUttH4FO+9+mHKW+PvIkqQC08P9
-         IBvcZDTimIZZfqW92uIUEk0T0jPj4xi9492J2A+wfjGK9hDOwEOGijyVYhzhaT8pZNMt
-         BbG84gUM5ZgSCCLw0+1MxOEqPC9epG+8mCU2c+v5UlcLQE7sxcFQc8OMB7tuM70aK4+R
-         ipgDLvLqjadVTODjotX6B7QaK0gsu8eB62jn+0XEOZb5/oXfOI8gN7QBHgzag7Zw6yyu
-         rnd0AKr8pHK75QBBYfOnFtg0xylFylPmU9Ku07zqGPsHb9v9HJ8bGW3MWhJitNvWGCrp
-         iQvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CmdIpFXX/Pnd+rThHPSIEqn/ETUzOMU9w26EKl0vXWA=;
-        b=UTZz1l8J9cCPUnWe6NoENpDeC3dbM37CTsFiG4ICuM/m9HWOrUuWFeZz78/xNY0CM5
-         //Klrafx5/3dUyUcqF1W41EBoorAHWVxRyBOIHh4NSBG0whou90RKg07ZhDjz/BTzbUk
-         xSn7wVHZ+YrAhWVk16g2TiAYuX0eDKuGks5WpKEpZC/xQ2gTwub3wwddo7NUbPEXqE2+
-         xu6GTjmXimD1xJ8G9JDEh8l5FaJSW93hNuOTYx/fhEfwf+BmPRMGc9IDstOnMhSKLAE/
-         riCcOzfmGfJVV2KYzU7aUQLgwJa+btF9v4rJXDBI4hmp4h1gUqJsboZBY5yJbVUKg7X7
-         DykA==
-X-Gm-Message-State: AO0yUKX4GyUE+u9Q+iAuReMfp3rcgPdY52zjtrnb47OzVM5FufP5Wq3+
-        2krH4D20IAAKCepxeVDkDKxn2fqVtXTKxA==
-X-Google-Smtp-Source: AK7set+U1kE9VIbXjv60qobe9B9PSImxBIcUvcu0G5TQsQPkLsxmHIFlCLxBJagQRby/ps5Dl2OcCw==
-X-Received: by 2002:a17:902:e0d5:b0:196:3feb:1f1e with SMTP id e21-20020a170902e0d500b001963feb1f1emr9398591pla.47.1675481308285;
-        Fri, 03 Feb 2023 19:28:28 -0800 (PST)
-Received: from debian.me (subs02-180-214-232-73.three.co.id. [180.214.232.73])
-        by smtp.gmail.com with ESMTPSA id t7-20020aa79387000000b0058d9623e7f1sm2576612pfe.73.2023.02.03.19.28.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 19:28:27 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id 54C361052EA; Sat,  4 Feb 2023 10:28:23 +0700 (WIB)
-Date:   Sat, 4 Feb 2023 10:28:22 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.1 00/28] 6.1.10-rc1 review
-Message-ID: <Y93Q1iUQbFluIJPZ@debian.me>
-References: <20230203101009.946745030@linuxfoundation.org>
+        Fri, 3 Feb 2023 22:30:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43813CA0E;
+        Fri,  3 Feb 2023 19:30:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CD2F62054;
+        Sat,  4 Feb 2023 03:30:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 01D90C4339B;
+        Sat,  4 Feb 2023 03:30:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675481418;
+        bh=o0yfzoFpD9DIW8/TWpFlHrxS3YLbeDbsVYdfnFZAHo4=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=buBMdvylEeoOlfQpWhwcdtL8xyY1jRaHwgQThu0hoLNF6V5YwjdMj7oi4NMl7q96W
+         qxO/iVatsqKdqNuT3awPSiJJHgwCMjZv86UWo8aibbfJdOpo9NBl+8plx6JMcP8OtM
+         lzysFRAefVGfrkWAERaRHVEJ/FxRaKg/lXQqAaIr0iIEKAw6RR5llXCuidd1YwscU1
+         McIlqZWktsDKiUc1xpqOaWqCiyG/1f+AZp9wILT9NGoQgzZPHM4RNvnELSsTwy4v7g
+         nShQ0JDJa1lB8Pd+pP+aXWewLZPcNm3ErMcEttXSgDB9MNpnAR3aE5/nx9etR1uRjT
+         bS+T1sW/nbGqg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D53A4E270C4;
+        Sat,  4 Feb 2023 03:30:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="eKrxPjNJTcq3O9+b"
-Content-Disposition: inline
-In-Reply-To: <20230203101009.946745030@linuxfoundation.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 0/3] some minor fixes of error checking about debugfs_rename()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167548141786.31101.12461204128706467220.git-patchwork-notify@kernel.org>
+Date:   Sat, 04 Feb 2023 03:30:17 +0000
+References: <20230202093256.32458-1-zhengqi.arch@bytedance.com>
+In-Reply-To: <20230202093256.32458-1-zhengqi.arch@bytedance.com>
+To:     Qi Zheng <zhengqi.arch@bytedance.com>
+Cc:     gregkh@linuxfoundation.org, rafael@kernel.org,
+        j.vosburgh@gmail.com, vfalico@gmail.com, andy@greyhouse.net,
+        vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        netdev@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
 
---eKrxPjNJTcq3O9+b
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This series was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-On Fri, Feb 03, 2023 at 11:12:48AM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.10 release.
-> There are 28 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
+On Thu,  2 Feb 2023 17:32:53 +0800 you wrote:
+> Since commit ff9fb72bc077 ("debugfs: return error values, not NULL") changed
+> return value of debugfs_rename() in error cases from %NULL to %ERR_PTR(-ERROR).
+> The comments and checks corresponding to debugfs_rename() should also be updated
+> and fixed.
+> 
+> Qi Zheng (3):
+>   debugfs: update comment of debugfs_rename()
+>   bonding: fix error checking in bond_debug_reregister()
+>   PM/OPP: fix error checking in opp_migrate_dentry()
+> 
+> [...]
 
-Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
-powerpc (ps3_defconfig, GCC 12.2.0).
+Here is the summary with links:
+  - [1/3] debugfs: update comment of debugfs_rename()
+    (no matching commit)
+  - [2/3] bonding: fix error checking in bond_debug_reregister()
+    https://git.kernel.org/netdev/net/c/cbe83191d40d
+  - [3/3] PM/OPP: fix error checking in opp_migrate_dentry()
+    (no matching commit)
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
---=20
-An old man doll... just what I always wanted! - Clara
 
---eKrxPjNJTcq3O9+b
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY93QzQAKCRD2uYlJVVFO
-oztAAQCdjQyW8RqqYKwJH6cAjdNb40AxsP35XFAy3/AaWulmeAD+OAwoLS5PJwwv
-WeHJEmjhaC0KoMnLb/W9Uk6AX1mSgAg=
-=0bAs
------END PGP SIGNATURE-----
-
---eKrxPjNJTcq3O9+b--
