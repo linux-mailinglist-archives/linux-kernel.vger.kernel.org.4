@@ -2,69 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9548968AA33
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 14:33:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28ED268AA3B
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 14:36:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233738AbjBDNdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 08:33:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39478 "EHLO
+        id S233606AbjBDNg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 08:36:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233786AbjBDNdR (ORCPT
+        with ESMTP id S229516AbjBDNgZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 08:33:17 -0500
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8612E3EFDF;
-        Sat,  4 Feb 2023 05:32:24 -0800 (PST)
-Received: from fsav411.sakura.ne.jp (fsav411.sakura.ne.jp [133.242.250.110])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 314DWEKn097633;
-        Sat, 4 Feb 2023 22:32:14 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav411.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav411.sakura.ne.jp);
- Sat, 04 Feb 2023 22:32:14 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav411.sakura.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 314DWDFf097627
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Sat, 4 Feb 2023 22:32:14 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <28a82f50-39d5-a45f-7c7a-57a66cec0741@I-love.SAKURA.ne.jp>
-Date:   Sat, 4 Feb 2023 22:32:11 +0900
+        Sat, 4 Feb 2023 08:36:25 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1333769D;
+        Sat,  4 Feb 2023 05:36:12 -0800 (PST)
+Received: from tincan.fosdem.net (unknown [151.216.142.144])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: gtucker)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E86C166029A5;
+        Sat,  4 Feb 2023 13:36:10 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1675517771;
+        bh=FVDft7SSZZEp5VDB0W0zJGD6iA/FVHvD+bbKj9XTAnU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=c5Bw7M7gID98YlGOv2vScUbP9iVYqnhHu7W8H+u2ehQmKszgvywyzu9cuB+EuNPRH
+         rfjpc3l0/KZjgSMWGv/a8b1qbZAs3F5CD0YgwXEgTOYAXIUnjiPDGwwrVoHblpYbLg
+         11Qsx4LUeME6T47KgvI5+A1MQpdyk0fhunUJC7AFctP2BzXqAMRMc7ODLczUBHgLVJ
+         PZS1wOBByf5tTTT9pTkchlmGATvWIBf1GPuBWyrxCEv2C33IHPbRTgxfmfeZbztRd3
+         stboAjjRtF1T2WBTPES4/aO83nHdvIH+OfqcZNEoIjsJ1d6vGISVZQsrKY9wY2moIA
+         73nHd6PJSXHCw==
+From:   Guillaume Tucker <guillaume.tucker@collabora.com>
+To:     Guillaume Tucker <guillaume.tucker@collabora.com>,
+        Shuah Khan <shuah@kernel.org>, Huang Rui <ray.huang@amd.com>,
+        Meng Li <li.meng@amd.com>, Doug Smythies <dsmythies@telus.net>
+Cc:     kernel@collabora.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernelci@lists.linux.dev
+Subject: [PATCH] selftests: amd-pstate: fix TEST_FILES
+Date:   Sat,  4 Feb 2023 14:34:54 +0100
+Message-Id: <20230204133454.260066-1-guillaume.tucker@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Subject: Converting dev->mutex into dev->spinlock ?
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello.
+Bring back the Python scripts that were initially added with
+TEST_GEN_FILES but now with TEST_FILES to avoid having them deleted
+when doing a clean.  Also fix the way the architecture is being
+determined as they should also be installed when ARCH=x86_64 is
+provided explicitly.  Then also append extra files to TEST_FILES and
+TEST_PROGS with += so they don't get discarded.
 
-There is a long-standing deadlock problem in driver core code caused by
-"struct device"->mutex being marked as "do not apply lockdep checks".
+Fixes: ba2d788aa873 ("selftests: amd-pstate: Trigger tbench benchmark and test cpus")
+Fixes: ac527cee87c9 ("selftests: amd-pstate: Don't delete source files via Makefile")
+Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
+---
+ tools/testing/selftests/amd-pstate/Makefile | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-We can make this deadlock visible by applying [1], and we can confirm that
-there is a deadlock problem that I think needs to be addressed in core code [2].
+diff --git a/tools/testing/selftests/amd-pstate/Makefile b/tools/testing/selftests/amd-pstate/Makefile
+index 5fd1424db37d..c382f579fe94 100644
+--- a/tools/testing/selftests/amd-pstate/Makefile
++++ b/tools/testing/selftests/amd-pstate/Makefile
+@@ -4,10 +4,15 @@
+ # No binaries, but make sure arg-less "make" doesn't trigger "run_tests"
+ all:
+ 
+-uname_M := $(shell uname -m 2>/dev/null || echo not)
+-ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
++ARCH ?= $(shell uname -m 2>/dev/null || echo not)
++ARCH := $(shell echo $(ARCH) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
+ 
+-TEST_PROGS := run.sh
+-TEST_FILES := basic.sh tbench.sh gitsource.sh
++ifeq (x86,$(ARCH))
++TEST_FILES += ../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py
++TEST_FILES += ../../../power/x86/intel_pstate_tracer/intel_pstate_tracer.py
++endif
++
++TEST_PROGS += run.sh
++TEST_FILES += basic.sh tbench.sh gitsource.sh
+ 
+ include ../lib.mk
+-- 
+2.30.2
 
-Also, since driver developers are taking it for granted that driver callback
-functions can behave as if dev->mutex is not held (because possibility of deadlock
-was never reported), it would solve many deadlocks in driver code if you can update
-driver core code to avoid calling driver callback functions with dev->mutex held
-(by e.g. replacing dev->mutex with dev->spinlock and dev->atomic_flags).
-But I'm not familiar enough to propose such change...
-
-[1] https://lkml.kernel.org/r/8c3fc3d1-8fed-be22-e0e7-ef1e1ea723ce@I-love.SAKURA.ne.jp
-[2] https://lkml.kernel.org/r/b7bc63c8-bb28-d21d-7c3f-97e4e79a9292@I-love.SAKURA.ne.jp
