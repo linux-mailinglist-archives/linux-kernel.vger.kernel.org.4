@@ -2,343 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 445DD68ABD1
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 19:21:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D3B268ABD5
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 19:32:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233309AbjBDSVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 13:21:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45786 "EHLO
+        id S231409AbjBDSca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 13:32:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231176AbjBDSVl (ORCPT
+        with ESMTP id S229448AbjBDSc2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 13:21:41 -0500
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2121.outbound.protection.outlook.com [40.107.102.121])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F55A3028F;
-        Sat,  4 Feb 2023 10:21:39 -0800 (PST)
+        Sat, 4 Feb 2023 13:32:28 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2074.outbound.protection.outlook.com [40.107.93.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8CFB2CC67
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 10:32:25 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Jz3gnUQgIA/Y6yl+5tvGP8RC9uIh7b2FP1O+ugYRfFfrYurXjId47NTXYt7ov6RpfiOQuLLNOBtJeWiIWFjMiuvCbXVWr8X+CUxSs+xi17Zdp7Ua7/RVP1+nqTCd3tHBDUHoMi75RAGmUGEORLWQvqIxC94rZZD2I1j58GF6Rma2p+JlKrHXW0HXQUAr64xYT5uk8Un4uP430YbQBAKnJjYV+FoROSuEgRx315op6NB/cIat4mSP+hrffhkVlfmVl617TIUNqtJgA3p4v1vPkMk9OtksJxqrnbl8lk9wcHmAfkIzkkDmvl3oadCS1iFUBUKYj4DpRjzFgnwu7Ic8Tg==
+ b=EH+k7mRu326z4bIGT0qJ19zJGAuC13mleLNXXpHmU2PSxUx2axltoIq2FQ1gohqkdgxzJf2Dytv2xu10YM9nPa+QG50QAxZa7wxi4b4pq0x4Z8Ws3RkqCnvvQIR13YIrZCkw52GJM3xM1qa0A0w7NQHH2z7FDRXtaYelGggu499B36/UA9WZM4ZrLCC2UteSS+2TdO7PUDS+FJjbXOsbeO+tWbcJxJ8A/rRHmzdiXKaKofrVbTnK2aPSfyH+7dAwTwaVUV/v+1Vbm2wo/FN1RMbG4JurqYNAr1OBZT9FUmWWv+BrLa/pH8MYr0V3ckVJTtTHIBczyRySMczAL04YXA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=V7g4CIy5giawJaV1qKsMe3aP0JronI23iBUrcNeMDKU=;
- b=bjQ9KwutypJ17g6kNXTrcLoPw4ZZWE+2K5y6dab3wdM9AHsV31JBlfqZW/aXMKhxs8+Wsdjfn3/cZ4lnBphRrMESWQcJf9Kp3+1z5mk6DIjsqO2NHLW4nS36sSOjaGfzfHtmT8T8x1qzRpPxX7/OxYC+H2F6fQaJUZEQ1n062Mjxl9pIneknbBIq/snvk5nPtJ/mRXny3PKRpM+9RttMZNgUw76yI+VHYsXYSGTp0934KQIqVfGdyjvOK1MDPOyFgumcDINHJJ+m/xqiNaxccKEzTxgKAPlDRgY6dFuxhOqPYi16D4HwSutfejgLF+twnM+/t1Cym1zmZquWT4f6hg==
+ bh=CvS8ySgARsfYos5ZWQkhA6TQwYLasFOuKWdXnmOGR+Q=;
+ b=b0FJtQsavpNcCOygRJO9LLtqMmrOYqZ7NL0QilLCXMeXykOIc/5P9U8XLFfCgMJWiJszjBP9LdGlMtDXJ1y7bR5VvyYJhvJwrm7pbCQweauESGgWpIIupjCaMPZirAsKp85emyfO5ebPVVQO2qnyiAuj9DefbF2+HnVh3448vuwxKWQdd/Jl5jWKitMh9z6O1iB3rXiaQXob99Vc8TG/MCYu8e9hOScSRdJdfrxheI1kvymBGdJw2s4T8MiBKTqaA7CU09IBT55ftR04L0EKGed/ygek+I+ZXYMp8qgFPFEd0XXJ8NNSurw8u255cVUxmxk8Y+xO3K852YM2obICKg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=in-advantage.com; dmarc=pass action=none
- header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=V7g4CIy5giawJaV1qKsMe3aP0JronI23iBUrcNeMDKU=;
- b=xMnlrT7Sx8tdU3sWYtroiAubU+5Yb1l6byVXEJKGy4Mj+uQ6o/lstSuP5AL4l/pD1r7MB8Ae3vu0XIobxQomJq7REu1UOkwEp930Y4uIrhkAg/nSkzxUfAgQRJ/FM13gI4y/UhG5+UZ76tHiRQOOHBvLNktJEVJA32kcQ4imcTU=
+ bh=CvS8ySgARsfYos5ZWQkhA6TQwYLasFOuKWdXnmOGR+Q=;
+ b=zn/tgIgzbePyi/iszKPqtdbA5mJNj98977aVSBMXWobkgZrH0QsQFbr9rdEm2efMGlbddk5mcwJDL2EgUQ4hXOifEcD1k7O5amT9vtAMxvbOBRvOk/sIc4WnHKi0naWZSHF8q5TioXhg4J+DvV+z9u9vtrvt9F/BIYmiuZTntvA=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=in-advantage.com;
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37) by BN0PR10MB5032.namprd10.prod.outlook.com
- (2603:10b6:408:122::5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.8; Sat, 4 Feb
- 2023 18:21:37 +0000
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::2015:3589:3e96:2acd]) by MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::2015:3589:3e96:2acd%5]) with mapi id 15.20.6064.019; Sat, 4 Feb 2023
- 18:21:18 +0000
-From:   Colin Foster <colin.foster@in-advantage.com>
-To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        UNGLinuxDriver@microchip.com,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-Subject: [PATCH v2 net-next] net: mscc: ocelot: un-export unused regmap symbols
-Date:   Sat,  4 Feb 2023 10:20:56 -0800
-Message-Id: <20230204182056.25502-1-colin.foster@in-advantage.com>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MW4PR03CA0336.namprd03.prod.outlook.com
- (2603:10b6:303:dc::11) To MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN2PR12MB3008.namprd12.prod.outlook.com (2603:10b6:208:c8::17)
+ by PH7PR12MB6809.namprd12.prod.outlook.com (2603:10b6:510:1af::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.32; Sat, 4 Feb
+ 2023 18:32:20 +0000
+Received: from MN2PR12MB3008.namprd12.prod.outlook.com
+ ([fe80::f9e8:ee48:6cf9:afdc]) by MN2PR12MB3008.namprd12.prod.outlook.com
+ ([fe80::f9e8:ee48:6cf9:afdc%7]) with mapi id 15.20.6043.022; Sat, 4 Feb 2023
+ 18:32:19 +0000
+Message-ID: <45360170-f132-3204-1e99-ed78c73641c4@amd.com>
+Date:   Sun, 5 Feb 2023 00:02:07 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH V2 3/3] sched/numa: Reset the accessing PID information
+ periodically
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Ingo Molnar <mingo@redhat.com>, Mel Gorman <mgorman@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>, rppt@kernel.org,
+        Bharata B Rao <bharata@amd.com>,
+        Disha Talreja <dishaa.talreja@amd.com>
+References: <cover.1675159422.git.raghavendra.kt@amd.com>
+ <b0f273113fedffb02f9b1358c88813ff355a81d6.1675159422.git.raghavendra.kt@amd.com>
+ <Y9zxkGf50bqkucum@hirez.programming.kicks-ass.net>
+From:   Raghavendra K T <raghavendra.kt@amd.com>
+In-Reply-To: <Y9zxkGf50bqkucum@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN2PR01CA0159.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:26::14) To MN2PR12MB3008.namprd12.prod.outlook.com
+ (2603:10b6:208:c8::17)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWHPR1001MB2351:EE_|BN0PR10MB5032:EE_
-X-MS-Office365-Filtering-Correlation-Id: c7966573-4c0f-4109-96e8-08db06dc9ba5
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3008:EE_|PH7PR12MB6809:EE_
+X-MS-Office365-Filtering-Correlation-Id: 61b2ab35-04af-4cd7-1d20-08db06de260b
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: D/Jp3O4ed5H/PfKRB+oPJQPBOHVqeASx2ysPM18dR4ykN6geuKySO70JIlrmpkLsEe5WoVvmEcDZjPUHT4QnEExfZehzqLZhn8Hsx604NorGFUeJ7KWjo10obV/Q/M7gkYFnH555uSiRwXvStY6VYq+biduK8cMO5qgqIb1FarcxlRKoPSd6MSl0ZWYG2+093VAy80QIhuWILOfaZ2fZbpIe/ivNKFmSu2uEjPEXK5XthuMpfQkBhN/8BS7P5HpGFboOIsbhFdepKWmRRQNzqZI/dnwlYzGdN0Fw5QEXs9XYr+/tgv6x4/K8GefUPC0qSm000dABx958tpb+BFryLb9uT0MMENRsnomrxFTWObYTx/utqCRPjiUMg8gUP7JXMM07rgjtDVlRLQckh9Qa+rcit1xg2WPKmOM0ybJJAbpU9dsi+zcDvGQP8Z44O2D8cl+dy5rqpQEgLn5KtTmX+8jPSiS2p8/yNJp5nTPLWYbavFxC22b5OKfmCaopkcixkFXZsw9P7HIomkkmt0U9tZBiyVTyY4gAgloJcqkmQg/tZYw7pLZpHo21/sFI0acQygA0+WJcADeyLU6NjipLt36xR5d9tUq/t6MrfO5AdYcpbzxlanbXwuWyDsAxPxdTFsl4Jcl67UmcrM1aKdz46XQJKw753SH8bvtHrn2hhoVReNzmyE783vpAn7n/sXUy
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(346002)(396003)(136003)(39830400003)(376002)(451199018)(6666004)(2906002)(44832011)(36756003)(6486002)(7416002)(66556008)(6512007)(186003)(5660300002)(478600001)(1076003)(26005)(2616005)(52116002)(8936002)(86362001)(66476007)(41300700001)(66946007)(316002)(8676002)(83380400001)(38100700002)(4326008)(54906003)(6506007)(38350700002);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: qN+NlYELJmQfLgLgjGaDDJ4eU+VMcuMI/RS2mRC6XpHGaBvgtUqnkZm43SFc55i8gf1Bgco3w7Z2TwnCRIuhc/unUBZZtG6ahFmIY+8NqYzyw4aCR+9OV94cpezQ4ypTfHCjEC5WTqWBIFbPqcd5480LWSBiJUYSccI5T2Y1dNeLB7Rj41PsxZABLpN/BcqmdLC5QhDWX0BQVBzBA3yktYR+iIPAmkg4EsbZ7zkLQbAFMrd9FeS4CqUL6t9Dw2sxTR7DT6oWpFKbuhJKKRb3F1i1dgkDXtUjJthHEghqEhMeVh0rSQSrVGqO0M8S/dArDazFggP0ib82j8W5DAQj/JIpT2PfVZbMv0KG2hbsjCl2vH96PTe1KuNOJaN1Osdq80M8lUlYLywgkMNkckho4WUwcrGOWkAe2xBjVYkj3auVTqbMDR9H/6cqLbEWX4mn7AKEyBLjPFU3QI0yTQ2I8vE1rc7Md4/aXF4wFmR2+CAxpR/qVLxwLp/Oq2ztN/L5KM3sY25a9RLqQApCgUwIxQRsuSOzA5hL479WLPqoD7qz1TK7g9gByfYt1aG5/UFiDaQwytM+5hAXzFn2k2U/OXjpPENL6543k3pcck8LwuEJ6Jav1kYYtfv6eZGxRptLukV0k1JGwDNfHREttODyqdsSIHF/4gFDAOEJkLA246V77K7IB67ob3DZjzdZR+B96ILrL5L2dvZfi5HriuKKhLzjTHzeaQrMVyM7HSp4Bj4=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3008.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(346002)(136003)(396003)(366004)(376002)(451199018)(31686004)(66946007)(54906003)(316002)(66556008)(41300700001)(8676002)(4326008)(66476007)(6916009)(5660300002)(8936002)(31696002)(38100700002)(36756003)(6506007)(6512007)(26005)(53546011)(6666004)(186003)(2906002)(478600001)(6486002)(2616005)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?rZz9YBDWaOjjHThYRsMOH2L6PWNYVSa1wo9qLMLFns+SwOiJnpTjV8D+dwmT?=
- =?us-ascii?Q?L/17udwImM4grsuFvNB8jNBvPQhwh0lYcMPCBppvMMwWSDR34E6KpZYWDlrp?=
- =?us-ascii?Q?ZxzQigpUBEUOBGhiQ60EKviE/9J2uJk39LnwGgEPxeg14OgemqTR2MvfOf75?=
- =?us-ascii?Q?D6Z0BI8s1BLnnAKQTcdK5Y+Wbonx7/2e7osh7vqUiNIoYN/nbm4RDC/PDcp3?=
- =?us-ascii?Q?6bWeSZOgJf3M6u2qCsclkT2FMdDiQQFJj+XMw+11B80UcDnWQsOM2HsGd45o?=
- =?us-ascii?Q?3zeLBtCVKHKrGtarJilQGqir8GtqAtCiUZZwaKCf2otRJ/RLS/N3zlcXDArx?=
- =?us-ascii?Q?/qC0Z1ntWpU9/osnFCn2+vI6yTamI4HmxsInt1R4WO4ya75dXynNCMZ7ALUy?=
- =?us-ascii?Q?nOf3qg7CFp6lTtEMsllHGIiOCUbnv5OE2r6dgkL1lD9s2F54KtoeAqq+L5Zu?=
- =?us-ascii?Q?RMxF197kOB7vAzFEx59v+XRpuLHxCW8UWgU3S8yUdb3GFbS2IHuAr1oZux7O?=
- =?us-ascii?Q?vBfN6QB5KStCnDZhlIQuXVwAQLbxY+rt061ncQ52o3lOLQOkuIdXFp7LAAPI?=
- =?us-ascii?Q?3pykOj/X4L7ljDSIKuT8tJO0C51lPDY/zfK9YkqtfkZ9Kxc8xCgtMfUX7piX?=
- =?us-ascii?Q?WAm1Gpfki/xw5S2eplykLEPvCgOShRUcqxF/+Ak7fRSqiYpdTub9nQOEJ5y/?=
- =?us-ascii?Q?xkvDA2RkhpC61rW1sVR7xTZeUy8YtvyHByNIzEnsdy8oF+lb+ZsLZQjBHT8/?=
- =?us-ascii?Q?6GFjYA2Ppvpfp+osVw9ZMRvaXsn9OhRJ2lPXVkPKwgmmbb4hGjy+8WhknbHa?=
- =?us-ascii?Q?Z+ya4Nx16kYQDSHg4qdf80RXAK3QO5o8A7hFj7Wuem68gcEzI1Svr2w8+jNb?=
- =?us-ascii?Q?XMrc23UOyFytGvfrUCal2zp6C+fV6/Q3kGVl5Xg2H8apKjh6XtzOHzvbkn9k?=
- =?us-ascii?Q?FsGjjKp1KJGoI3DV3zkZgTiWouPzZxLuXseHQc0+NphkwtEGTA8qLy03p/r4?=
- =?us-ascii?Q?/97qbT13/AsKnoQRHU1yKsnpO0SGIjfu/BhB1dkTCgoGc4aiTojOcmRUS8aD?=
- =?us-ascii?Q?T5gW7eCSzw4kMz/3f6S8hKF3z1z5FKgxMTs2aEIVxzXMyigu45fe4uQFJdIs?=
- =?us-ascii?Q?pXR58ReeVHD3auIRfk/ybvuU3WgM1aRf1Z5CrI5BQ0bE8NG8ntoiCjlFU7mY?=
- =?us-ascii?Q?8VRo2vtjHOFsj93nhbZulk/idA9WWWqpQnL6uOYYr1E1QBg1hjWWs5emmJeb?=
- =?us-ascii?Q?FBVgt3MGv0aqt29SclOYxupCgnbo4IV1h7Kdr/QZ9si5vQGuWuI1uFnMyVS9?=
- =?us-ascii?Q?7u1KkN5jRxfCl7G+7AUXDAGFViDfUIDxrFfpK87iN77XMx95eHTiQoE/+aQ4?=
- =?us-ascii?Q?F00BX6po9+buXykAHZ1jUKnUAafMiBgoDz2kO3qK8CUxIvns/57/Pip8c0bj?=
- =?us-ascii?Q?N1lrXomseDy4GTMTNppGJEkJNjCYQYnxb6ouTRWiwHh5x2jrgGh7cI164c5Y?=
- =?us-ascii?Q?KoAoJ33vq9I1r69sRNnkqRgZ8kiMeJa08Kyba9Yv1lqb7onqhYKlk6+3YAIT?=
- =?us-ascii?Q?r2vAZrnUc8gqL77R8/rVTTjeapiLXY/20fVA6hJ8FVR9gFuHJCIf+e+PeeqG?=
- =?us-ascii?Q?s+YAD6TUckj7G5wXM0FlYNw=3D?=
-X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c7966573-4c0f-4109-96e8-08db06dc9ba5
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?anZ6SFRNZFlST01TYzNra0dLajhJbnJ6aitPdkY5bTNJcGRxVmM4MmFaMEN5?=
+ =?utf-8?B?Qmd2NFc5UnNqM0w4S3lVcFN4MnNhK1M3Z3gvdkswNkIrTUYzMlhvSURNOEFl?=
+ =?utf-8?B?ZHJzdDFPaldiTTEzK3VCL3hScW1GZTM5UFMydGt0Y0RkT0lsVHgrSTZrZnhG?=
+ =?utf-8?B?aTVqWitwQVdtZUo2TzdvU3U4dUZLR0diTGFBNUM0RzU0QzFwTXc0NU04d0ow?=
+ =?utf-8?B?RGhVYVNQZGxpWDNDdmo4Z3VCaTNIdEE3enJiVjVtVlFCTmJRb1d4M1FKV1NE?=
+ =?utf-8?B?RHlJVzE1dWFqUWNNeGdYbklwR2tqb3ByUkh5VWJMY3Y4TUM3ZUJHbStVMGlZ?=
+ =?utf-8?B?NDZxcEhHRFlrY0pRK2RySFZ2NjhzbGZFZDVtNDhzSUxrTEVyR2RFZzFwbWZG?=
+ =?utf-8?B?Nk4wMzdBTkI4SysrNXk1ZjNSMWJKcFpLcndJTUhQYU9RdXlqZW4yRm5PWkN3?=
+ =?utf-8?B?NVNXMnM1N2ZvcmJaV2RsdjFoNEU5QVNGY3p6WTFyVWhzUy9talkzMnV4TTR3?=
+ =?utf-8?B?NlZqU3lFUUpPUkxOb2VWa1dVb3BmSmJqTjVBNTh6ZDI0UEprNzlBZTZ1cW9L?=
+ =?utf-8?B?bm1kWmdtdG9TclkyNCs2OUpZZ3N3RGZtRkJRWk04QjF6SFR0eUdHNUtEWWNx?=
+ =?utf-8?B?dGZ3YU5SQ0tLWEJTaEZPNFd2ZUIvZWg2ayt2R1NnTnNyMGs2Vk5KWU1IRHlt?=
+ =?utf-8?B?QkdYRStJZnRESXZOZDZBc1ZGWmRXbEgwRzlCSXZWVTJjbjRSTDcyaXZJcENQ?=
+ =?utf-8?B?NkxKcXdmT3hNdXBMV25OZG1rYnNBWHM1RVpXUE41WWNGbW40UjBDeU9HMkRB?=
+ =?utf-8?B?ZHMxcnZGWjdVdkdkU0huaTB3bTcrQkFIbXFzelZKOTFlVkdiWXdUdWdudG02?=
+ =?utf-8?B?KzlLZ1RzM0lGYm1HdXY3RzVEb1RtWitBZ1FnZ044S1pzQ2Q3TlZQRTQ0Zk5n?=
+ =?utf-8?B?UGpKMVphdEdCK2JuczRKMGdKS0w5YWtpMkZYTG1NbnBtNDIvVEJVZTlPWjF1?=
+ =?utf-8?B?aTBnd2RBdDlmUnVzZVRHUHJuKy9OUlUrbUowVVdveE4wTHZlZmtROG5Lb3ht?=
+ =?utf-8?B?ZHdKckwyaHMxMWFPRWZyN2xWMWRTeVBRZ0ExWnVtMWtyYjNsVmQ0NEtzUEMw?=
+ =?utf-8?B?dHByWUtidUhPc2kxME02dGduU0xxN2pHWmtyRVdmbGpKN0gzTVVrWnZUa25O?=
+ =?utf-8?B?V3dUWmVPeG9yZmRSdjRQczNRbytpZGNtRGdRMDRqV3JFZzJVR3Z5Q2hqRkhO?=
+ =?utf-8?B?VU1zdnNkNjlhMEpwbk1oUmZkVVJCWmtxT3BOVmx2ald6d0ZiSDVaeDdSUitQ?=
+ =?utf-8?B?ajhnNG9DU3MwOHFuN0JHNXdZRnJtQ1Izdk9wbXdNSHU4V3dvSjFSNWhIOWFD?=
+ =?utf-8?B?ZG1Xc3NrSi9FZHVVbTRldUNha1c0ak5nVUltbDhoQWN2b2Y0dWYzR0x6b2Z1?=
+ =?utf-8?B?SDkxUVQxQ2UrbDAwajBSSll3alZiLzNCbTB6NDQ0RkIzeWUzbVY0L2xtR1Nw?=
+ =?utf-8?B?OEdEYVpkQWhIMzRQWkR2ODFHQndOUEFILzMrbjRYZHFuVUtoMEczbi92eXVt?=
+ =?utf-8?B?TzdVWWNYY1RlQjh2OSsyRlhHM0NDdzFOT3ozZVVJNlVBZEhPMk11dTVkaGRw?=
+ =?utf-8?B?WG9hN0FrRGowUkxTQWVrVHUyMDY2WjJ2MFdRNmJha2dPQTE1RHJsNDhTTENj?=
+ =?utf-8?B?OXhEN3JWTUczdXVUNnBrTkxxVzBnWUpRVFJra1dOcW9vbDBsTUdSemp6WXdH?=
+ =?utf-8?B?R2pzQ0FPdi80L0NYZXpjby9WSGxVdHhxbSs2TnVjLzJ4NUdoUGY0WnB0SnRF?=
+ =?utf-8?B?RlBpSlc0QTV6dkY5T2JvTHVsNDBQeDVvbVpQcUxWcnJaZWpLRitLZUg5WDJs?=
+ =?utf-8?B?WWtZTENHM1FYVmFXMGFsYis1RjdlRXcxbWhVa3NoU2VJeWZ6ZmJjM2dvTUVo?=
+ =?utf-8?B?ZngyYkNDSXFraXduZ1R0TVpTVjlyUkVER3dvc01GMWpRdFBza25CWVovVGN2?=
+ =?utf-8?B?QXVseU9VT1Bpdm10bTR5WXlNRUlqZlJhZ3dSZGVnNmxVV1RjdWt4aG9RSFl0?=
+ =?utf-8?B?WTRhc3dva2xBcHJNZ2tJdVRxd0lGdmlFS2JnWTEzVW1Yd05xbWtORTd3emxB?=
+ =?utf-8?Q?olmNkRa3JJ5IujluAn1t5FI0a?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 61b2ab35-04af-4cd7-1d20-08db06de260b
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3008.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Feb 2023 18:21:18.2730
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Feb 2023 18:32:19.7419
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LzdfLbhfA9GXCXVaKeErz5ihYkganqbMDSSW7mzdhJ1vgS5gZ4mozGfVTgBrV55hIW9Yew/bopsIvPMvbWzk5R7toGy5HJlLwOrAMOKWW7M=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR10MB5032
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: lof5ZMV/Ud2MiY0WCQ56W4jP9NBljj4RLHt7xqPQAJ01uiJyx8vGH9cPSnzR8Yp4Rt19y7WWt5/F3bDERcl/RQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6809
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are no external users of the vsc7514_*_regmap[] symbols or
-vsc7514_vcap_* functions. They were exported in commit 32ecd22ba60b ("net:
-mscc: ocelot: split register definitions to a separate file") with the
-intention of being used, but the actual structure used in commit
-2efaca411c96 ("net: mscc: ocelot: expose vsc7514_regmap definition") ended
-up being all that was needed.
+On 2/3/2023 5:05 PM, Peter Zijlstra wrote:
+> On Wed, Feb 01, 2023 at 01:32:22PM +0530, Raghavendra K T wrote:
+> 
+>> 2) Maintain duplicate list of accessing PIDs to keep track of history of access. and switch/reset. use OR operation during iteration
+>>
+>>   Two lists of PIDs maintained. At regular interval old list is reset and we make current list as old list
+>> At any point of time tracking of PIDs accessing VMA is determined by ORing list1 and list2
+>>
+>> accessing_pids_list1 <-  current list
+>> accessing_pids_list2 <-  old list
+> 
+> ( I'm not sure why you think this part of the email doesn't need to be
+>    nicely wrapped at 76 chars.. )
+> 
 
-Bury these unnecessary symbols.
+Sorry.. copy pasted from my "idea" notes then word wrap fooled me..
 
-Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
-Suggested-by: Vladimir Oltean <vladimir.oltean@nxp.com>
----
+> This seems simple enough to me and can be trivially extended to N if
+> needed.
+>  > The typical implementation would looks something like:
+> 
+> 	unsigned long pids[N];
+> 	unsigned int pid_idx;
+> 
+> set:
+> 	unsigned long *pids = numab->pids + pid_idx;
+> 	if (!__test_bit(bit, pids))
+> 		__set_bit(bit, pids);
+> 
+> test:
+> 	unsigned long pids = 0;
+> 	for (int i = 0; i < N; i++)
+> 		pids |= numab->pids[i];
+> 	return __test_bit(bit, &pids);
+> 
+> rotate:
+> 	idx = READ_ONCE(numab->pid_idx);
+> 	WRITE_ONCE(numab->pid_idx, (idx + 1) % N);
+> 	numab->pids[idx] = 0;
+> 
+> Note the actual rotate can be simplified to ^1 for N:=2.
 
-v1 -> v2
-    * Remove additional vsc7514_vcap_* symbols - update commit message
-      accordingly
+Thanks good idea. This will be very helpful when we want to
+differentiate accessing PIDs in more granular way. Perhaps we can go
+with N=2 and stick to below simplification of your code above?
 
----
- drivers/net/ethernet/mscc/vsc7514_regs.c | 42 ++++++++----------------
- include/soc/mscc/vsc7514_regs.h          | 16 ---------
- 2 files changed, 14 insertions(+), 44 deletions(-)
+something like:
 
-diff --git a/drivers/net/ethernet/mscc/vsc7514_regs.c b/drivers/net/ethernet/mscc/vsc7514_regs.c
-index da0c0dcc8f81..ef6fd3f6be30 100644
---- a/drivers/net/ethernet/mscc/vsc7514_regs.c
-+++ b/drivers/net/ethernet/mscc/vsc7514_regs.c
-@@ -68,7 +68,7 @@ const struct reg_field vsc7514_regfields[REGFIELD_MAX] = {
- };
- EXPORT_SYMBOL(vsc7514_regfields);
+unsigned long pids[2]
 
--const u32 vsc7514_ana_regmap[] = {
-+static const u32 vsc7514_ana_regmap[] = {
- 	REG(ANA_ADVLEARN,				0x009000),
- 	REG(ANA_VLANMASK,				0x009004),
- 	REG(ANA_PORT_B_DOMAIN,				0x009008),
-@@ -148,9 +148,8 @@ const u32 vsc7514_ana_regmap[] = {
- 	REG(ANA_POL_HYST,				0x008bec),
- 	REG(ANA_POL_MISC_CFG,				0x008bf0),
- };
--EXPORT_SYMBOL(vsc7514_ana_regmap);
+// Assume pids[1] has latest detail always
+set:
+if (!__test_bit(bit, pids[1])
+	__set_bit(bit, pids[1])
 
--const u32 vsc7514_qs_regmap[] = {
-+static const u32 vsc7514_qs_regmap[] = {
- 	REG(QS_XTR_GRP_CFG,				0x000000),
- 	REG(QS_XTR_RD,					0x000008),
- 	REG(QS_XTR_FRM_PRUNING,				0x000010),
-@@ -164,9 +163,8 @@ const u32 vsc7514_qs_regmap[] = {
- 	REG(QS_INJ_ERR,					0x000040),
- 	REG(QS_INH_DBG,					0x000048),
- };
--EXPORT_SYMBOL(vsc7514_qs_regmap);
+test:
+unsigned long pids = pids[0] | pids[1];
+return __test_bit(bit, &pids);
 
--const u32 vsc7514_qsys_regmap[] = {
-+static const u32 vsc7514_qsys_regmap[] = {
- 	REG(QSYS_PORT_MODE,				0x011200),
- 	REG(QSYS_SWITCH_PORT_MODE,			0x011234),
- 	REG(QSYS_STAT_CNT_CFG,				0x011264),
-@@ -209,9 +207,8 @@ const u32 vsc7514_qsys_regmap[] = {
- 	REG(QSYS_SE_STATE,				0x00004c),
- 	REG(QSYS_HSCH_MISC_CFG,				0x011388),
- };
--EXPORT_SYMBOL(vsc7514_qsys_regmap);
-
--const u32 vsc7514_rew_regmap[] = {
-+static const u32 vsc7514_rew_regmap[] = {
- 	REG(REW_PORT_VLAN_CFG,				0x000000),
- 	REG(REW_TAG_CFG,				0x000004),
- 	REG(REW_PORT_CFG,				0x000008),
-@@ -224,9 +221,8 @@ const u32 vsc7514_rew_regmap[] = {
- 	REG(REW_STAT_CFG,				0x000890),
- 	REG(REW_PPT,					0x000680),
- };
--EXPORT_SYMBOL(vsc7514_rew_regmap);
-
--const u32 vsc7514_sys_regmap[] = {
-+static const u32 vsc7514_sys_regmap[] = {
- 	REG(SYS_COUNT_RX_OCTETS,			0x000000),
- 	REG(SYS_COUNT_RX_UNICAST,			0x000004),
- 	REG(SYS_COUNT_RX_MULTICAST,			0x000008),
-@@ -347,9 +343,8 @@ const u32 vsc7514_sys_regmap[] = {
- 	REG(SYS_PTP_NXT,				0x0006c0),
- 	REG(SYS_PTP_CFG,				0x0006c4),
- };
--EXPORT_SYMBOL(vsc7514_sys_regmap);
-
--const u32 vsc7514_vcap_regmap[] = {
-+static const u32 vsc7514_vcap_regmap[] = {
- 	/* VCAP_CORE_CFG */
- 	REG(VCAP_CORE_UPDATE_CTRL,			0x000000),
- 	REG(VCAP_CORE_MV_CFG,				0x000004),
-@@ -371,9 +366,8 @@ const u32 vsc7514_vcap_regmap[] = {
- 	REG(VCAP_CONST_CORE_CNT,			0x0003b8),
- 	REG(VCAP_CONST_IF_CNT,				0x0003bc),
- };
--EXPORT_SYMBOL(vsc7514_vcap_regmap);
-
--const u32 vsc7514_ptp_regmap[] = {
-+static const u32 vsc7514_ptp_regmap[] = {
- 	REG(PTP_PIN_CFG,				0x000000),
- 	REG(PTP_PIN_TOD_SEC_MSB,			0x000004),
- 	REG(PTP_PIN_TOD_SEC_LSB,			0x000008),
-@@ -384,9 +378,8 @@ const u32 vsc7514_ptp_regmap[] = {
- 	REG(PTP_CLK_CFG_ADJ_CFG,			0x0000a4),
- 	REG(PTP_CLK_CFG_ADJ_FREQ,			0x0000a8),
- };
--EXPORT_SYMBOL(vsc7514_ptp_regmap);
-
--const u32 vsc7514_dev_gmii_regmap[] = {
-+static const u32 vsc7514_dev_gmii_regmap[] = {
- 	REG(DEV_CLOCK_CFG,				0x0),
- 	REG(DEV_PORT_MISC,				0x4),
- 	REG(DEV_EVENTS,					0x8),
-@@ -427,7 +420,6 @@ const u32 vsc7514_dev_gmii_regmap[] = {
- 	REG(DEV_PCS_FX100_CFG,				0x94),
- 	REG(DEV_PCS_FX100_STATUS,			0x98),
- };
--EXPORT_SYMBOL(vsc7514_dev_gmii_regmap);
-
- const u32 *vsc7514_regmap[TARGET_MAX] = {
- 	[ANA] = vsc7514_ana_regmap,
-@@ -443,7 +435,7 @@ const u32 *vsc7514_regmap[TARGET_MAX] = {
- };
- EXPORT_SYMBOL(vsc7514_regmap);
-
--const struct vcap_field vsc7514_vcap_es0_keys[] = {
-+static const struct vcap_field vsc7514_vcap_es0_keys[] = {
- 	[VCAP_ES0_EGR_PORT]			= { 0,   4 },
- 	[VCAP_ES0_IGR_PORT]			= { 4,   4 },
- 	[VCAP_ES0_RSV]				= { 8,   2 },
-@@ -453,9 +445,8 @@ const struct vcap_field vsc7514_vcap_es0_keys[] = {
- 	[VCAP_ES0_DP]				= { 24,  1 },
- 	[VCAP_ES0_PCP]				= { 25,  3 },
- };
--EXPORT_SYMBOL(vsc7514_vcap_es0_keys);
-
--const struct vcap_field vsc7514_vcap_es0_actions[]   = {
-+static const struct vcap_field vsc7514_vcap_es0_actions[]   = {
- 	[VCAP_ES0_ACT_PUSH_OUTER_TAG]		= { 0,   2 },
- 	[VCAP_ES0_ACT_PUSH_INNER_TAG]		= { 2,   1 },
- 	[VCAP_ES0_ACT_TAG_A_TPID_SEL]		= { 3,   2 },
-@@ -475,9 +466,8 @@ const struct vcap_field vsc7514_vcap_es0_actions[]   = {
- 	[VCAP_ES0_ACT_RSV]			= { 49, 24 },
- 	[VCAP_ES0_ACT_HIT_STICKY]		= { 73,  1 },
- };
--EXPORT_SYMBOL(vsc7514_vcap_es0_actions);
-
--const struct vcap_field vsc7514_vcap_is1_keys[] = {
-+static const struct vcap_field vsc7514_vcap_is1_keys[] = {
- 	[VCAP_IS1_HK_TYPE]			= { 0,    1 },
- 	[VCAP_IS1_HK_LOOKUP]			= { 1,    2 },
- 	[VCAP_IS1_HK_IGR_PORT_MASK]		= { 3,   12 },
-@@ -527,9 +517,8 @@ const struct vcap_field vsc7514_vcap_is1_keys[] = {
- 	[VCAP_IS1_HK_IP4_L4_RNG]		= { 148,  8 },
- 	[VCAP_IS1_HK_IP4_IP_PAYLOAD_S1_5TUPLE]	= { 156, 32 },
- };
--EXPORT_SYMBOL(vsc7514_vcap_is1_keys);
-
--const struct vcap_field vsc7514_vcap_is1_actions[] = {
-+static const struct vcap_field vsc7514_vcap_is1_actions[] = {
- 	[VCAP_IS1_ACT_DSCP_ENA]			= { 0,   1 },
- 	[VCAP_IS1_ACT_DSCP_VAL]			= { 1,   6 },
- 	[VCAP_IS1_ACT_QOS_ENA]			= { 7,   1 },
-@@ -552,9 +541,8 @@ const struct vcap_field vsc7514_vcap_is1_actions[] = {
- 	[VCAP_IS1_ACT_CUSTOM_ACE_TYPE_ENA]	= { 74,  4 },
- 	[VCAP_IS1_ACT_HIT_STICKY]		= { 78,  1 },
- };
--EXPORT_SYMBOL(vsc7514_vcap_is1_actions);
-
--const struct vcap_field vsc7514_vcap_is2_keys[] = {
-+static const struct vcap_field vsc7514_vcap_is2_keys[] = {
- 	/* Common: 46 bits */
- 	[VCAP_IS2_TYPE]				= { 0,    4 },
- 	[VCAP_IS2_HK_FIRST]			= { 4,    1 },
-@@ -633,9 +621,8 @@ const struct vcap_field vsc7514_vcap_is2_keys[] = {
- 	[VCAP_IS2_HK_OAM_CCM_CNTS_EQ0]		= { 186,  1 },
- 	[VCAP_IS2_HK_OAM_IS_Y1731]		= { 187,  1 },
- };
--EXPORT_SYMBOL(vsc7514_vcap_is2_keys);
-
--const struct vcap_field vsc7514_vcap_is2_actions[] = {
-+static const struct vcap_field vsc7514_vcap_is2_actions[] = {
- 	[VCAP_IS2_ACT_HIT_ME_ONCE]		= { 0,   1 },
- 	[VCAP_IS2_ACT_CPU_COPY_ENA]		= { 1,   1 },
- 	[VCAP_IS2_ACT_CPU_QU_NUM]		= { 2,   3 },
-@@ -652,7 +639,6 @@ const struct vcap_field vsc7514_vcap_is2_actions[] = {
- 	[VCAP_IS2_ACT_ACL_ID]			= { 43,  6 },
- 	[VCAP_IS2_ACT_HIT_CNT]			= { 49, 32 },
- };
--EXPORT_SYMBOL(vsc7514_vcap_is2_actions);
-
- struct vcap_props vsc7514_vcap_props[] = {
- 	[VCAP_ES0] = {
-diff --git a/include/soc/mscc/vsc7514_regs.h b/include/soc/mscc/vsc7514_regs.h
-index dfb91629c8bd..ffe343a9c04b 100644
---- a/include/soc/mscc/vsc7514_regs.h
-+++ b/include/soc/mscc/vsc7514_regs.h
-@@ -14,22 +14,6 @@ extern struct vcap_props vsc7514_vcap_props[];
-
- extern const struct reg_field vsc7514_regfields[REGFIELD_MAX];
-
--extern const u32 vsc7514_ana_regmap[];
--extern const u32 vsc7514_qs_regmap[];
--extern const u32 vsc7514_qsys_regmap[];
--extern const u32 vsc7514_rew_regmap[];
--extern const u32 vsc7514_sys_regmap[];
--extern const u32 vsc7514_vcap_regmap[];
--extern const u32 vsc7514_ptp_regmap[];
--extern const u32 vsc7514_dev_gmii_regmap[];
--
- extern const u32 *vsc7514_regmap[TARGET_MAX];
-
--extern const struct vcap_field vsc7514_vcap_es0_keys[];
--extern const struct vcap_field vsc7514_vcap_es0_actions[];
--extern const struct vcap_field vsc7514_vcap_is1_keys[];
--extern const struct vcap_field vsc7514_vcap_is1_actions[];
--extern const struct vcap_field vsc7514_vcap_is2_keys[];
--extern const struct vcap_field vsc7514_vcap_is2_actions[];
--
- #endif
---
-2.25.1
-
+rotate:
+pids[0] = pids[1];
+pids[1] = 0;
