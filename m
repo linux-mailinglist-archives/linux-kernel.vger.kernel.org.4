@@ -2,177 +2,320 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B38D668A8EB
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 09:13:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F08268A8F1
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 09:20:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233112AbjBDIM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 03:12:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47664 "EHLO
+        id S233149AbjBDIUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 03:20:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjBDIM4 (ORCPT
+        with ESMTP id S233009AbjBDIT5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 03:12:56 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2129.outbound.protection.outlook.com [40.107.244.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F9429E1E;
-        Sat,  4 Feb 2023 00:12:55 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Z7JHm50+PJInVaXtc1ZqcGgqtg/iJ23/DApynaDTNeeXfqmmYa8G1bmQlwh93EC17g0M2DR7vSFFMQ0p5FuRcA/iMOdNVmRmpLl66YY6+1ENts5/NWfeXQ7U4+ONV3k2wAQyAHhdVqmD38yDYPrQrC/K3UB/4lJHeTQMloQg5tbXPUqwhNUre750yIyeUp8K6eDuFJXLXUF9ViIwABFSxy4oKXX0LJNaNRFWHwx6tEYaC72tiO34BPc9r51GsB+N+9B+My8nvzqMTwZNXOsDyDoLzYFlm9d530wNkuUgDqSja2n44eekD5vhUI0zD9a2TZTuNvRfKCZtsaOY10xhhA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bDwJZz2RfClW5Xxb06EIOhVzOZhHDzlBqC/0o5hd5VE=;
- b=QYGo9KA1pxuH7sAG1HVMIWccMWVZkGFFnSdkZazRzJ3x3fNTPPgFFkQph92N5ibGjnXZcXhpQ8ovRSZ78IqgRhq+HlMzdZU7iSF22jL2mD3FoHqEE41noUEklGfXjWmKHynANXUd3gOFaDjXBnTykA+j416c9p9LRpmUzYYjS9x82OtDTJLre7tPSwgK9haJ/U4Ts3JstAhAXA9D2orxuBeovRanZcktwAIaXmYwU5YK+QWk3sidREHIF3zcydDBXWNFnmZ/9GgMdMLyQqPs2FwxGi9iT0wmOMsL5SklhMoE/s0orHbXS+8HhRAUcZjfLQn5nI7VXeY8ufC/LHPIYA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bDwJZz2RfClW5Xxb06EIOhVzOZhHDzlBqC/0o5hd5VE=;
- b=R1k9FAAMkDjOiA5HPXtp0+mH7wyZZRXn7FH3iW8AYKVVNFzmBSMvU7un/UIZPc04nbvZkLOl9zhL/RC83/YG/mIedLsCKkK7Lg7v6Mh/6qaNL5JGpEtHk84pe2e9B16GvqIIWCplU6j9ixpA4YZQXujVhT40btrmTTAvu/kKw3o=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by SJ0PR13MB5271.namprd13.prod.outlook.com (2603:10b6:a03:3d5::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.32; Sat, 4 Feb
- 2023 08:12:53 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb5c:910f:3730:fd65]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb5c:910f:3730:fd65%6]) with mapi id 15.20.6064.032; Sat, 4 Feb 2023
- 08:12:53 +0000
-Date:   Sat, 4 Feb 2023 09:12:41 +0100
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     netdev@kapio-technology.com, davem@davemloft.net, kuba@kernel.org,
-        netdev@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
-        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>
-Subject: Re: [PATCH net-next 5/5] net: dsa: mv88e6xxx: implementation of
- dynamic ATU entries
-Message-ID: <Y94TebdRQRHMMj/c@corigine.com>
-References: <20230130173429.3577450-1-netdev@kapio-technology.com>
- <20230130173429.3577450-6-netdev@kapio-technology.com>
- <Y9lkXlyXg1d1D0j3@corigine.com>
- <9b12275969a204739ccfab972d90f20f@kapio-technology.com>
- <Y9zDxlwSn1EfCTba@corigine.com>
- <20230203204422.4wrhyathxfhj6hdt@skbuf>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230203204422.4wrhyathxfhj6hdt@skbuf>
-X-ClientProxiedBy: AM4PR0902CA0020.eurprd09.prod.outlook.com
- (2603:10a6:200:9b::30) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Sat, 4 Feb 2023 03:19:57 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A07237F18
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 00:19:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=BRiVB63AftqDByLcZWZmN27G3XGOzdZCgH3vLdtLe1c=; b=IbLIpTy0sYpKObEm1t9HpNOkaa
+        SNf/Fqio5rPxgYDKEsvZoHI+q7x+cKex5jyHVaGzWSldHz1oCk+fPTpGJAl19OzU+u17sVLwVC5v0
+        CbVpaG9fKMRxTmHaTu4tvUi9IkefdUsuhDXJvt6rMWrPGpGTLhQJyEXffFPiHzraul6y+zfWFgqFe
+        cg4zBnFUiUXc1fz62+5p01ViF7IM7+6fkdxYcZnxzhfKrXwnpuaKH55dtJqKIxlURE8WbxHy7SLmC
+        lPXmPl0wz4hTdIoe8d39LDF2kLTiG07Cd8U+3IcKgsqTWcusa5Lwr7Em34H8vUDR9HTowXzo9UQp/
+        01gsV9Hg==;
+Received: from [2601:1c2:d00:6a60::9526]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pODlm-004iCX-RO; Sat, 04 Feb 2023 08:19:34 +0000
+Message-ID: <b1079e99-c7ae-71f1-d578-80270adf44e7@infradead.org>
+Date:   Sat, 4 Feb 2023 00:19:32 -0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SJ0PR13MB5271:EE_
-X-MS-Office365-Filtering-Correlation-Id: dbdda9c2-b629-4e50-638d-08db06879d43
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sUDbrU0Dniu0C1kDJk8YFH1horHEybrgRj8kY80XJnTmzVqtSW04+3TyuBKXs40dlbcHapKX3Rj/efs/ACGKPZWGl/RH/ZPvcNFt62Iovs/S5qhdIMlbz0kIw3AfvZugwSOrncNY0Z/s3bQ+QQl6kFq/WA+j3yd+7EWbNU5uBceq4ckhohFwER96Geg42XmbEKQ8rmBDQXm7QBBob7RkXcf8vqUW91A8UGHQPnO6MpiIyc/uT4ondZT/Aa0mBMcMrljKkeaxiocgk2IcUNePfSTxXmz9rXGrsyroL7RXrm0nOlEwrOmKfK8pXRjPCt+Rivk7Fezj+ekq6eBFUlwvMU0/15ZyVlkU7GsACSsJIPcxD80VkfZvKJ6Ead3rpkLOui19AxAVSC4dce/UeD0S4GX0JrqL6XtklPYfOCJTVHhkjeyGSZVvJ/cKGPgJrrAi43ZrLCVbeZ5n3k5VUJKia8WMbub7Gs2gGTHCq/3QFgkgzv8Bt6egMXM4qJxFBVH9eYK/YHVHQgUaTKSS91zZvfIBWfnUkS+MbScoNllU+Q6cscwgx4Sb5DSDIqECQy1Txwh6gKjl2qGGT5avXFKYO13tHnKDinVeyxMcTaIBGLTFtYHrC79TceMKxbAyD/CGHaWwqdLVKjZTUVkcu9oFFFrRFEEh3Ucs28YrduahGbw8Lyy8RpKayJxlyo97YC4R
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(39840400004)(346002)(376002)(366004)(451199018)(36756003)(186003)(4326008)(6512007)(44832011)(2616005)(7416002)(7406005)(8676002)(5660300002)(6486002)(41300700001)(478600001)(86362001)(2906002)(8936002)(6916009)(66556008)(66476007)(66946007)(6506007)(54906003)(316002)(6666004)(38100700002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Is9bzGHqAdMsoPk7yWMFONBEQIqH1Pm/c0NWGyoUBlFiqH6DpubsHpoUYVnA?=
- =?us-ascii?Q?Mhy1ewJt7xdlo1uNXHAmRkHaxtFhLAPp8Sadlt/3QOh8Ie44zq13dqIwyixe?=
- =?us-ascii?Q?o+LiNMNEYv7cBwoEunr7+MQcZVMY+Wupl3gNYxTjzy/UdtjCsuG999Sw8kG0?=
- =?us-ascii?Q?fwxjFVOUOIczywPX57ubaN2S6ydKlmEF/OvWZNg2rZQUvJuPrPaH1ZnE/wPd?=
- =?us-ascii?Q?sPEfcw3lThKa+JfHdr9UAmY4sdoqcWkmLc3EfVdakjBK/RSgwdxLEqrJCHrg?=
- =?us-ascii?Q?6agEWAbsu80EcB2tw2lON0g6E0OWJpAjm1jGdtIj+sFPfGY9zOH2n+3sqyid?=
- =?us-ascii?Q?ELqVeJE77s8Qu1ronm+kq22iIO6jBffG0O8b8zeKXQtW+oTpU9UTzVxuT3Is?=
- =?us-ascii?Q?PK6bu5Nuk0xgUOdvYX/iU3It6Beop1xoZwmDbzEGv4iAn7MILBmtcDLaAI/Z?=
- =?us-ascii?Q?M+9DzA/mXnKBNntIoV9kqlWfbHUGRKwcY50hVK4EJrrwLjKc8TnYDX8y4s6X?=
- =?us-ascii?Q?PNklZfLHzAYZabadqrgX9oF0VUzpW1yVSLUqN83ieAZu2C97NOUH2uNuQ/xb?=
- =?us-ascii?Q?kEuaPTZcibAtLyCszIDhWFbeoxw1oqvpfRxc0PiX0si0kNX1b+NOdc+gyD/X?=
- =?us-ascii?Q?LGzSgSoVT9HsLBqGinMKzt0dj6/9TckulLEqoLZd4REu8U/dbL24xkgx/5wV?=
- =?us-ascii?Q?UblMghb0al7VTvjXanYUSX/QjDm5PGkED87Of3ziUmELkmLar8k0nv3se7uO?=
- =?us-ascii?Q?wA3ZhalGbU0ktjZzqwGH+yutqxKuu9Do68Onw/HPXvSf2UoYlkFC3h9K9tQH?=
- =?us-ascii?Q?zguC5ANd1Mnk8dj33rYjUF/e/hnWnTcwZk6lSL0mh43O4zRxHzWuHKx8GKpO?=
- =?us-ascii?Q?qErMXJ3bmjvwz84JhcpneHWuJsqAZbErSAxMGNlxIH43mrvaCP6sipVbNspf?=
- =?us-ascii?Q?CvavueFvCIYoNL/OUkwqEZdmqi/J//nIjNOQkRowqAm1WDwCp4TKolHKqOQR?=
- =?us-ascii?Q?FGWc7cu+xf/YcV7XA53MqHp+qGGC+iGJmO8WT9IBUIAfTan1WCVxccmM/ZUm?=
- =?us-ascii?Q?BpkVeUGQhJ0jAnrIp+uYM+V6yVOEwP3NwpI84M0jfq7gu/k/fby8TB/yXaXW?=
- =?us-ascii?Q?UbYwJ1bTYBN+Px+H6Z1E/9pMxtmhyDMJFHQ8h3g02OHr3JMi88elPTUKgit4?=
- =?us-ascii?Q?AceoCYWyTg37U0fUchDwyq2PcXjMk51/zaUKqIjAkDDDqROUId8JRQ0VNf+j?=
- =?us-ascii?Q?dW4v92IPzDrQ1GhRuIbBjfQLnwRMSV3V0R773bDo5ncM0m2Dqp4CBN/AufuA?=
- =?us-ascii?Q?vU7KsCplpG78xsfdmpB80TClYH4F2Li1Jy6CkVd9CjauX9NNQuDMLv/2ztqb?=
- =?us-ascii?Q?JAhVrws315NhFhirV96iKWMROvL1lCw4v75MMWFPD5JxTNhzLgwE8KUCImu5?=
- =?us-ascii?Q?SncSkY6ioCfer6p0xpzrS8jtwrwTeSERyk13OIMvWpTSoQR0LC9wpKsjM5Pg?=
- =?us-ascii?Q?7OlpF/7pKvZoskyFnW41Lz5YOlZoilkO+Dw6dymB5iXkpBqNrIi1FBS76rIA?=
- =?us-ascii?Q?NHBRxGsBibpENjD2xWUL2uTL9fVzrS0AseT9Z1XH3RqoqCZc+GT3nhDLdOLf?=
- =?us-ascii?Q?V3LyDvDydNavPFmieIEaZBTmXsiDb6x8TwygOfIEOv1I9hsAeYJ4aP0g7WL+?=
- =?us-ascii?Q?tfTpOQ=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dbdda9c2-b629-4e50-638d-08db06879d43
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Feb 2023 08:12:53.4191
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CJn8nFzQjRiB/yVK790cY6qeNOzJpCc24j26J2wwGm6gangEd0us+m6qE+vkPmgxKPb0MhI04yl5tijxmxfQwChmDGa2cZPnoUtBQUyJ+No=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR13MB5271
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 15/16] objtool/powerpc: Enable objtool to be built on
+ ppc
+Content-Language: en-US
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Sathvika Vasireddy <sv@linux.ibm.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Cc:     "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "aik@ozlabs.ru" <aik@ozlabs.ru>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "mbenes@suse.cz" <mbenes@suse.cz>,
+        "npiggin@gmail.com" <npiggin@gmail.com>,
+        "chenzhongjin@huawei.com" <chenzhongjin@huawei.com>,
+        "naveen.n.rao@linux.vnet.ibm.com" <naveen.n.rao@linux.vnet.ibm.com>,
+        "Elliott, Robert (Servers)" <elliott@hpe.com>
+References: <20220829055223.24767-1-sv@linux.ibm.com>
+ <20220829055223.24767-16-sv@linux.ibm.com>
+ <33924523-5437-eb9a-116a-8e249ce99bd2@csgroup.eu>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <33924523-5437-eb9a-116a-8e249ce99bd2@csgroup.eu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 10:44:22PM +0200, Vladimir Oltean wrote:
-> On Fri, Feb 03, 2023 at 09:20:22AM +0100, Simon Horman wrote:
-> > > else if (someflag)
-> > >         dosomething();
-> > > 
-> > > For now only one flag will actually be set and they are mutually exclusive,
-> > > as they will not make sense together with the potential flags I know, but
-> > > that can change at some time of course.
-> > 
-> > Yes, I see that is workable. I do feel that checking for other flags would
-> > be a bit more robust. But as you say, there are none. So whichever
-> > approach you prefer is fine by me.
-> 
-> The model we have for unsupported bits in the SWITCHDEV_ATTR_ID_PORT_PRE_BRIDGE_FLAGS
-> and SWITCHDEV_ATTR_ID_PORT_BRIDGE_FLAGS handlers is essentially this:
-> 
-> 	if (flags & ~(supported_flag_mask))
-> 		return -EOPNOTSUPP;
-> 
-> 	if (flags & supported_flag_1)
-> 		...
-> 
-> 	if (flags & supported_flag_2)
-> 		...
-> 
-> I suppose applying this model here would address Simon's extensibility concern.
+Hi--
 
-Yes, that is the model I had in mind.
+On 8/29/22 23:41, Christophe Leroy wrote:
+> 
+> 
+> Le 29/08/2022 à 07:52, Sathvika Vasireddy a écrit :
+>> This patch adds [stub] implementations for required
+>> functions, inorder to enable objtool build on powerpc.
+> 
+> Not all powerpc it seems, see below
+> 
+
+When cross-compiling PPC32 (on x86_64), I get 3600+ of these:
+
+/bin/sh: line 1: ./tools/objtool/objtool: No such file or directory
+/bin/sh: line 1: ./tools/objtool/objtool: No such file or directory
+/bin/sh: line 1: ./tools/objtool/objtool: No such file or directory
+
+Is there some way that objtool should work when cross-compiling?
+
+Thanks.
+
+>>
+>> Signed-off-by: Sathvika Vasireddy <sv@linux.ibm.com>
+>> [Christophe Leroy: powerpc: Add missing asm/asm.h for objtool]
+>> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+>> ---
+>>   arch/powerpc/Kconfig                          |  1 +
+>>   arch/powerpc/include/asm/asm.h                |  7 ++
+>>   tools/objtool/arch/powerpc/Build              |  2 +
+>>   tools/objtool/arch/powerpc/decode.c           | 74 +++++++++++++++++++
+>>   .../arch/powerpc/include/arch/cfi_regs.h      | 11 +++
+>>   tools/objtool/arch/powerpc/include/arch/elf.h |  8 ++
+>>   .../arch/powerpc/include/arch/special.h       | 21 ++++++
+>>   tools/objtool/arch/powerpc/special.c          | 19 +++++
+>>   8 files changed, 143 insertions(+)
+>>   create mode 100644 arch/powerpc/include/asm/asm.h
+>>   create mode 100644 tools/objtool/arch/powerpc/Build
+>>   create mode 100644 tools/objtool/arch/powerpc/decode.c
+>>   create mode 100644 tools/objtool/arch/powerpc/include/arch/cfi_regs.h
+>>   create mode 100644 tools/objtool/arch/powerpc/include/arch/elf.h
+>>   create mode 100644 tools/objtool/arch/powerpc/include/arch/special.h
+>>   create mode 100644 tools/objtool/arch/powerpc/special.c
+>>
+>> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+>> index 4c466acdc70d..dc05cd23c233 100644
+>> --- a/arch/powerpc/Kconfig
+>> +++ b/arch/powerpc/Kconfig
+>> @@ -237,6 +237,7 @@ config PPC
+>>   	select HAVE_MOD_ARCH_SPECIFIC
+>>   	select HAVE_NMI				if PERF_EVENTS || (PPC64 && PPC_BOOK3S)
+>>   	select HAVE_OPTPROBES
+>> +	select HAVE_OBJTOOL			if PPC32 || MPROFILE_KERNEL
+> 
+> Why restrict it to MPROFILE_KERNEL ? In your RFC it was for all PPC64.
+> 
+> Recent discussion on the list shows new problem with recordmcount, see 
+> https://lore.kernel.org/all/MW5PR84MB184250EA1CAE04497C1E7CE9AB769@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM/
+> 
+> Those ones are with ppc64 big endian, so objtool would be welcome here 
+> as well.
+> 
+>>   	select HAVE_PERF_EVENTS
+>>   	select HAVE_PERF_EVENTS_NMI		if PPC64
+>>   	select HAVE_PERF_REGS
+>> diff --git a/arch/powerpc/include/asm/asm.h b/arch/powerpc/include/asm/asm.h
+>> new file mode 100644
+>> index 000000000000..86f46b604e9a
+>> --- /dev/null
+>> +++ b/arch/powerpc/include/asm/asm.h
+>> @@ -0,0 +1,7 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +#ifndef _ASM_POWERPC_ASM_H
+>> +#define _ASM_POWERPC_ASM_H
+>> +
+>> +#define _ASM_PTR	" .long "
+>> +
+>> +#endif /* _ASM_POWERPC_ASM_H */
+>> diff --git a/tools/objtool/arch/powerpc/Build b/tools/objtool/arch/powerpc/Build
+>> new file mode 100644
+>> index 000000000000..d24d5636a5b8
+>> --- /dev/null
+>> +++ b/tools/objtool/arch/powerpc/Build
+>> @@ -0,0 +1,2 @@
+>> +objtool-y += decode.o
+>> +objtool-y += special.o
+>> diff --git a/tools/objtool/arch/powerpc/decode.c b/tools/objtool/arch/powerpc/decode.c
+>> new file mode 100644
+>> index 000000000000..8b6a14680da7
+>> --- /dev/null
+>> +++ b/tools/objtool/arch/powerpc/decode.c
+>> @@ -0,0 +1,74 @@
+>> +// SPDX-License-Identifier: GPL-2.0-or-later
+>> +
+>> +#include <stdio.h>
+>> +#include <stdlib.h>
+>> +#include <objtool/check.h>
+>> +#include <objtool/elf.h>
+>> +#include <objtool/arch.h>
+>> +#include <objtool/warn.h>
+>> +#include <objtool/builtin.h>
+>> +#include <objtool/endianness.h>
+>> +
+>> +unsigned long arch_dest_reloc_offset(int addend)
+>> +{
+>> +	return addend;
+>> +}
+>> +
+>> +bool arch_callee_saved_reg(unsigned char reg)
+>> +{
+>> +	return false;
+>> +}
+>> +
+>> +int arch_decode_hint_reg(u8 sp_reg, int *base)
+>> +{
+>> +	exit(-1);
+>> +}
+>> +
+>> +const char *arch_nop_insn(int len)
+>> +{
+>> +	exit(-1);
+>> +}
+>> +
+>> +const char *arch_ret_insn(int len)
+>> +{
+>> +	exit(-1);
+>> +}
+>> +
+>> +int arch_decode_instruction(struct objtool_file *file, const struct section *sec,
+>> +			    unsigned long offset, unsigned int maxlen,
+>> +			    unsigned int *len, enum insn_type *type,
+>> +			    unsigned long *immediate,
+>> +			    struct list_head *ops_list)
+>> +{
+>> +	u32 insn;
+>> +
+>> +	*immediate = 0;
+>> +	insn = bswap_if_needed(file->elf, *(u32 *)(sec->data->d_buf + offset));
+>> +	*len = 4;
+>> +	*type = INSN_OTHER;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +unsigned long arch_jump_destination(struct instruction *insn)
+>> +{
+>> +	return insn->offset +  insn->immediate;
+>> +}
+>> +
+>> +void arch_initial_func_cfi_state(struct cfi_init_state *state)
+>> +{
+>> +	int i;
+>> +
+>> +	for (i = 0; i < CFI_NUM_REGS; i++) {
+>> +		state->regs[i].base = CFI_UNDEFINED;
+>> +		state->regs[i].offset = 0;
+>> +	}
+>> +
+>> +	/* initial CFA (call frame address) */
+>> +	state->cfa.base = CFI_SP;
+>> +	state->cfa.offset = 0;
+>> +
+>> +	/* initial LR (return address) */
+>> +	state->regs[CFI_RA].base = CFI_CFA;
+>> +	state->regs[CFI_RA].offset = 0;
+>> +}
+>> diff --git a/tools/objtool/arch/powerpc/include/arch/cfi_regs.h b/tools/objtool/arch/powerpc/include/arch/cfi_regs.h
+>> new file mode 100644
+>> index 000000000000..59638ebeafc8
+>> --- /dev/null
+>> +++ b/tools/objtool/arch/powerpc/include/arch/cfi_regs.h
+>> @@ -0,0 +1,11 @@
+>> +/* SPDX-License-Identifier: GPL-2.0-or-later */
+>> +
+>> +#ifndef _OBJTOOL_CFI_REGS_H
+>> +#define _OBJTOOL_CFI_REGS_H
+>> +
+>> +#define CFI_BP 1
+>> +#define CFI_SP CFI_BP
+>> +#define CFI_RA 32
+>> +#define CFI_NUM_REGS 33
+>> +
+>> +#endif
+>> diff --git a/tools/objtool/arch/powerpc/include/arch/elf.h b/tools/objtool/arch/powerpc/include/arch/elf.h
+>> new file mode 100644
+>> index 000000000000..3c8ebb7d2a6b
+>> --- /dev/null
+>> +++ b/tools/objtool/arch/powerpc/include/arch/elf.h
+>> @@ -0,0 +1,8 @@
+>> +/* SPDX-License-Identifier: GPL-2.0-or-later */
+>> +
+>> +#ifndef _OBJTOOL_ARCH_ELF
+>> +#define _OBJTOOL_ARCH_ELF
+>> +
+>> +#define R_NONE R_PPC_NONE
+>> +
+>> +#endif /* _OBJTOOL_ARCH_ELF */
+>> diff --git a/tools/objtool/arch/powerpc/include/arch/special.h b/tools/objtool/arch/powerpc/include/arch/special.h
+>> new file mode 100644
+>> index 000000000000..ffef9ada7133
+>> --- /dev/null
+>> +++ b/tools/objtool/arch/powerpc/include/arch/special.h
+>> @@ -0,0 +1,21 @@
+>> +/* SPDX-License-Identifier: GPL-2.0-or-later */
+>> +#ifndef _PPC_ARCH_SPECIAL_H
+>> +#define _PPC_ARCH_SPECIAL_H
+>> +
+>> +#define EX_ENTRY_SIZE 8
+>> +#define EX_ORIG_OFFSET 0
+>> +#define EX_NEW_OFFSET 4
+>> +
+>> +#define JUMP_ENTRY_SIZE 16
+>> +#define JUMP_ORIG_OFFSET 0
+>> +#define JUMP_NEW_OFFSET 4
+>> +#define JUMP_KEY_OFFSET 8
+>> +
+>> +#define ALT_ENTRY_SIZE 12
+>> +#define ALT_ORIG_OFFSET 0
+>> +#define ALT_NEW_OFFSET 4
+>> +#define ALT_FEATURE_OFFSET 8
+>> +#define ALT_ORIG_LEN_OFFSET 10
+>> +#define ALT_NEW_LEN_OFFSET 11
+>> +
+>> +#endif /* _PPC_ARCH_SPECIAL_H */
+>> diff --git a/tools/objtool/arch/powerpc/special.c b/tools/objtool/arch/powerpc/special.c
+>> new file mode 100644
+>> index 000000000000..d33868147196
+>> --- /dev/null
+>> +++ b/tools/objtool/arch/powerpc/special.c
+>> @@ -0,0 +1,19 @@
+>> +// SPDX-License-Identifier: GPL-2.0-or-later
+>> +#include <string.h>
+>> +#include <stdlib.h>
+>> +#include <objtool/special.h>
+>> +#include <objtool/builtin.h>
+>> +
+>> +
+>> +bool arch_support_alt_relocation(struct special_alt *special_alt,
+>> +				 struct instruction *insn,
+>> +				 struct reloc *reloc)
+>> +{
+>> +	exit(-1);
+>> +}
+>> +
+>> +struct reloc *arch_find_switch_table(struct objtool_file *file,
+>> +				    struct instruction *insn)
+>> +{
+>> +	exit(-1);
+>> +}
+
+-- 
+~Randy
