@@ -2,144 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59C7868AA74
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 15:00:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BFAA68AA76
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 15:01:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233602AbjBDOAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 09:00:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57796 "EHLO
+        id S233784AbjBDOB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 09:01:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231355AbjBDN7v (ORCPT
+        with ESMTP id S232566AbjBDOB0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 08:59:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82AA56A75;
-        Sat,  4 Feb 2023 05:59:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 16B2260C58;
-        Sat,  4 Feb 2023 13:59:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4C78C433D2;
-        Sat,  4 Feb 2023 13:59:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675519189;
-        bh=Fhavk2AQ6Or0LmISVKTZDzP/lj4mydikIpRbCIbVl3Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=K43VplUf1hWGz9SKH7Vwgzg7I7Q3Shv4eEMkVhuhiMTfOrSZ0YK3bSEZF6RmUo++k
-         zGQ+uGECtprCx/AhLZIv7vxd/9c78p6+CIXWbNAktoH3a5/A0u/axvSpg0PppFY2m9
-         989HhDoREMm5mpUUSU8KkS8nhVlnnhBnxRZu2wDQ=
-Date:   Sat, 4 Feb 2023 14:59:46 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     Eric Biggers <ebiggers@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>, stable@vger.kernel.org,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 5.4 000/134] 5.4.231-rc1 review
-Message-ID: <Y95k0h8XetGmcSP1@kroah.com>
-References: <20230203101023.832083974@linuxfoundation.org>
- <20230203155619.GA3176223@roeck-us.net>
- <Y906Hz3UWYxoxYdD@kroah.com>
- <20230203171826.GA1500930@roeck-us.net>
- <Y91YWzopMMGF1Lgh@sol.localdomain>
- <Y91bjnIuQRvVqpO7@sol.localdomain>
- <705ab151-da1e-30e1-c232-c9860717267d@roeck-us.net>
- <Y91lXYN7zF8d/fek@sol.localdomain>
- <Y94QTVUg2H68XnQ2@kroah.com>
- <Y95iSDo7Qa+HoWSg@sashalap>
+        Sat, 4 Feb 2023 09:01:26 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBAE56A75;
+        Sat,  4 Feb 2023 06:01:25 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id s8so3341504pgg.11;
+        Sat, 04 Feb 2023 06:01:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y1rk0vjjTSrdPO9DtPn9g2ifZW3sZZpADISnEZxtoFQ=;
+        b=jSNYiH1k3WXK3P8rvhqh75aPiI+G/XoDlzs2AuXJrYfEwQXE+tS8k4UN2ax4ekAZqh
+         Q4aWaHFDBL//kjeNufun9nzJzTNH4IQrRmLQpPElo19rFGQs2QVR6005J6JN1xucILa/
+         JnrhFS22b0jinEdL+ASDkddGShx9C4WG504JT5m+e4gLdI+Dc1fhqS+BH8GWdyNXjetZ
+         a3eHnntrN/HXDWeljb0evjS9D9lfw2vBGIrur+YmtTJ0HoFtod5UTpsKYyTu5OAakcRJ
+         j6li6Sed8222GnutqZFVuSaetBAl1AHovWzMPf7PeVVqlcm7UveHpahAufEm7hLC3w+1
+         bsXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Y1rk0vjjTSrdPO9DtPn9g2ifZW3sZZpADISnEZxtoFQ=;
+        b=rlOYLWocdSLuh3Yserwr4EnIzqnW44oXEeDsbmfXKZyqRqcS/MxSKGHEJ2vzUt6JFz
+         Reh4UIF5xgUGI2agpNUEg6hgzLmNt/3Szhub0uorgiSqd1sncWKwWwDzm8wKn9qPv52i
+         gZGIIbuQGoY8n5FbaHDZlp+R9EJHLO+vrUbKTT/ZVoNLBB2Pc1xkf989ArJ9Fy5jBoqM
+         sSirQ4eSgQsQjTlt5gyuTeKIvU9h7Nw1ONr+e4k6wldV+atn9Fai5w56vA+0+kIbzehD
+         1Bo8eytI8iCgfeyJehSG8tkzXp6mB8myGkiFwBIrcPkxYW/xFL9Cpr/xNgb9t1N96953
+         MmoQ==
+X-Gm-Message-State: AO0yUKVcBUZjs5ceWC1RpIVGgNlZxs6Lo1ejLDWY3yP+GTjDy/EdwtDf
+        Y1LZt5vKVsZFDtQi+23WlR+o4eg0UOwUZ4ZvB7E=
+X-Google-Smtp-Source: AK7set82eHo9UmIAzit/YcrVkFeX6c9BbfWh8dIFzTX3vz8Q6BcGg+UJThK/RWpw9HAP8EUb13Cyf4dOB5NWR/TX3l8=
+X-Received: by 2002:a63:cc0f:0:b0:4cf:122f:2102 with SMTP id
+ x15-20020a63cc0f000000b004cf122f2102mr2164398pgf.98.1675519285223; Sat, 04
+ Feb 2023 06:01:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y95iSDo7Qa+HoWSg@sashalap>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230204134651.22569-1-namcaov@gmail.com> <Y95jtuMbcDiPRw/F@kroah.com>
+In-Reply-To: <Y95jtuMbcDiPRw/F@kroah.com>
+From:   Nam Cao <namcaov@gmail.com>
+Date:   Sat, 4 Feb 2023 15:01:14 +0100
+Message-ID: <CA+sZ8B9Wrr4yj3c6fiqFhKvZuYifV87EXBQ1pY_Km-p=3oE4ug@mail.gmail.com>
+Subject: Re: [PATCH] USB: serial: whiteheat: use stack instead of heap memory
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 04, 2023 at 08:48:56AM -0500, Sasha Levin wrote:
-> On Sat, Feb 04, 2023 at 08:59:09AM +0100, Greg Kroah-Hartman wrote:
-> > On Fri, Feb 03, 2023 at 11:49:49AM -0800, Eric Biggers wrote:
-> > > On Fri, Feb 03, 2023 at 11:28:46AM -0800, Guenter Roeck wrote:
-> > > > On 2/3/23 11:07, Eric Biggers wrote:
-> > > > > On Fri, Feb 03, 2023 at 10:54:21AM -0800, Eric Biggers wrote:
-> > > > > > On Fri, Feb 03, 2023 at 09:18:26AM -0800, Guenter Roeck wrote:
-> > > > > > > On Fri, Feb 03, 2023 at 05:45:19PM +0100, Greg Kroah-Hartman wrote:
-> > > > > > > > On Fri, Feb 03, 2023 at 07:56:19AM -0800, Guenter Roeck wrote:
-> > > > > > > > > On Fri, Feb 03, 2023 at 11:11:45AM +0100, Greg Kroah-Hartman wrote:
-> > > > > > > > > > This is the start of the stable review cycle for the 5.4.231 release.
-> > > > > > > > > > There are 134 patches in this series, all will be posted as a response
-> > > > > > > > > > to this one.  If anyone has any issues with these being applied, please
-> > > > > > > > > > let me know.
-> > > > > > > > > >
-> > > > > > > > > > Responses should be made by Sun, 05 Feb 2023 10:09:58 +0000.
-> > > > > > > > > > Anything received after that time might be too late.
-> > > > > > > > > >
-> > > > > > > > >
-> > > > > > > > > Building ia64:defconfig ... failed
-> > > > > > > > > --------------
-> > > > > > > > > Error log:
-> > > > > > > > > <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-> > > > > > > > > arch/ia64/kernel/mca_drv.c: In function 'mca_handler_bh':
-> > > > > > > > > arch/ia64/kernel/mca_drv.c:179:9: error: implicit declaration of function 'make_task_dead'
-> > > > > > > > >
-> > > > > > > > > Caused by "exit: Add and use make_task_dead.". Did that really have to be backported ?
-> > > > > > > >
-> > > > > > > > Yup, it does!
-> > > > > > > >
-> > > > > > > > Eric, any help with this?
-> > > > > > > >
-> > > > > > >
-> > > > > > > Adding "#include <linux/sched/task.h>" to the affected file would probably
-> > > > > > > be the easy fix. I did a quick check, and it works.
-> > > > > > >
-> > > > > > > Note that the same problem is seen in v4.14.y and v4.19.y. Later
-> > > > > > > kernels don't have the problem.
-> > > > > > >
-> > > > > >
-> > > > > > This problem arises because <linux/mm.h> transitively includes
-> > > > > > <linux/sched/task.h> in 5.10 and later, but not in 5.4 and earlier.
-> > > > > >
-> > > > > > Greg, any preference for how to handle this situation?
-> > > > > >
-> > > > > > Just add '#include <linux/sched/task.h>' to the affected .c file (and hope there
-> > > > > > are no more affected .c files in the other arch directories) and call it a day?
-> > > > > >
-> > > > > > Or should we backport the transitive inclusion (i.e., the #include added by
-> > > > > > commit 80fbaf1c3f29)?  Or move the declaration of make_task_dead() into
-> > > > > > <linux/kernel.h> so that it's next to do_exit()?
-> > > > >
-> > > > > One question: do *all* the arches actually get built as part of the testing for
-> > > > > each stable release?  If so, we can just add the #include to the .c files that
-> > > > > need it.  If not, then it would be safer to take one of the other approaches.
-> > > > >
-> > > >
-> > > > Yes, I do build all architectures for each stable release.
-> > > >
-> > > > FWIW, I only noticed that one build failure due to this problem.
-> > > 
-> > > Okay, great.  In that case, Greg or Sasha, can you fold the needed #include into
-> > > arch/ia64/kernel/mca_drv.c in exit-add-and-use-make_task_dead.patch on 4.14,
-> > > 4.19, and 5.4?  Or should I just send the whole series again for each?
-> > 
-> > I'll fold it in later today when I get a chance, no need to resubmit the
-> > whole thing, thanks!
-> 
-> Greg, I did it for the 5.4 backport. If I do it for 4.19 and 4.14 it's
-> going to add a bunch of fuzz into those, lmk if you want me to push
-> those too or whether you'll fix it up.
+On Sat, Feb 4, 2023 at 2:55 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Sat, Feb 04, 2023 at 02:46:51PM +0100, Nam Cao wrote:
+> > Some buffers in whiteheat_attach() are small and only used locally. Move
+> > them to the stack to avoid complications with heap memory.
+> >
+> > Compile-tested only.
+>
+> And that's the problem, you can't just compile test these things, the
+> code will blow up if you make these changes :(
+>
+> All USB transfers need to come from memory that can be safely DMAed.
+> Stack memory is not that type of memory, you HAVE to allocate it
+> dynamically from the heap in order to have this guarantee.
+>
+> So no, this patch is not acceptable, sorry.  You will see this pattern
+> in all USB drivers, all data must be dynamically allocated, even for 2
+> byte commands.
+>
+> So yes, there was a reason we added this "complexity" to the driver, it
+> is required :)
 
-I just fixed up those 2 trees, and I don't understand what you mean by
-"a bunch of fuzz".  Can you look at my changes to verify I got it right?
+Thanks for "the lecture", and sorry for the broken patch.
 
-thanks,
-
-greg k-h
+Best regards,
+Nam
