@@ -2,120 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFEDF68A90C
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 09:48:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC67068A90F
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 09:50:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233327AbjBDIsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 03:48:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54424 "EHLO
+        id S233074AbjBDIuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 03:50:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232842AbjBDIs3 (ORCPT
+        with ESMTP id S230101AbjBDIuX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 03:48:29 -0500
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BCA3298D4;
-        Sat,  4 Feb 2023 00:48:27 -0800 (PST)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 0664718839AA;
-        Sat,  4 Feb 2023 08:48:25 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id E1FE9250007B;
-        Sat,  4 Feb 2023 08:48:24 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id D3B8191201E4; Sat,  4 Feb 2023 08:48:24 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Sat, 4 Feb 2023 03:50:23 -0500
+Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [83.223.95.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F3E17148;
+        Sat,  4 Feb 2023 00:50:20 -0800 (PST)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
+        by bmailout1.hostsharing.net (Postfix) with ESMTPS id 0DCF1300002D0;
+        Sat,  4 Feb 2023 09:50:19 +0100 (CET)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id E72C5275D55; Sat,  4 Feb 2023 09:50:18 +0100 (CET)
+Date:   Sat, 4 Feb 2023 09:50:18 +0100
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Helge Deller <deller@gmx.de>, Zeno Davatz <zdavatz@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH] Revert "fbdev: Remove conflicting devices on PCI bus"
+Message-ID: <20230204085018.GA31758@wunner.de>
+References: <20230203230909.2058637-1-helgaas@kernel.org>
 MIME-Version: 1.0
-Date:   Sat, 04 Feb 2023 09:48:24 +0100
-From:   netdev@kapio-technology.com
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
-        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?UTF-8?Q?Cl=C3=A9ment_L=C3=A9ger?= <clement.leger@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>
-Subject: Re: [PATCH net-next 5/5] net: dsa: mv88e6xxx: implementation of
- dynamic ATU entries
-In-Reply-To: <Y94TebdRQRHMMj/c@corigine.com>
-References: <20230130173429.3577450-1-netdev@kapio-technology.com>
- <20230130173429.3577450-6-netdev@kapio-technology.com>
- <Y9lkXlyXg1d1D0j3@corigine.com>
- <9b12275969a204739ccfab972d90f20f@kapio-technology.com>
- <Y9zDxlwSn1EfCTba@corigine.com> <20230203204422.4wrhyathxfhj6hdt@skbuf>
- <Y94TebdRQRHMMj/c@corigine.com>
-User-Agent: Gigahost Webmail
-Message-ID: <4abbe32d007240b9c3aea9c8ca936fa3@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230203230909.2058637-1-helgaas@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-02-04 09:12, Simon Horman wrote:
-> On Fri, Feb 03, 2023 at 10:44:22PM +0200, Vladimir Oltean wrote:
->> On Fri, Feb 03, 2023 at 09:20:22AM +0100, Simon Horman wrote:
->> > > else if (someflag)
->> > >         dosomething();
->> > >
->> > > For now only one flag will actually be set and they are mutually exclusive,
->> > > as they will not make sense together with the potential flags I know, but
->> > > that can change at some time of course.
->> >
->> > Yes, I see that is workable. I do feel that checking for other flags would
->> > be a bit more robust. But as you say, there are none. So whichever
->> > approach you prefer is fine by me.
->> 
->> The model we have for unsupported bits in the 
->> SWITCHDEV_ATTR_ID_PORT_PRE_BRIDGE_FLAGS
->> and SWITCHDEV_ATTR_ID_PORT_BRIDGE_FLAGS handlers is essentially this:
->> 
->> 	if (flags & ~(supported_flag_mask))
->> 		return -EOPNOTSUPP;
->> 
->> 	if (flags & supported_flag_1)
->> 		...
->> 
->> 	if (flags & supported_flag_2)
->> 		...
->> 
->> I suppose applying this model here would address Simon's extensibility 
->> concern.
+On Fri, Feb 03, 2023 at 05:09:09PM -0600, Bjorn Helgaas wrote:
+> From: Bjorn Helgaas <bhelgaas@google.com>
 > 
-> Yes, that is the model I had in mind.
+> This reverts commit 145eed48de278007f646b908fd70ac59d24ed81a.
+> 
+> Zeno Davatz reported that 145eed48de27 ("fbdev: Remove conflicting devices
+> on PCI bus") caused a console hang.  The machine was actually still usable
+> via ssh, etc., but there was no activity on the console.
+> 
+> Reverting 145eed48de27 for the nvidiafb on that system fixed the problem.
+> 
+> Revert 145eed48de27 ("fbdev: Remove conflicting devices on PCI bus") since
+> we don't know what caused the problem.
+> 
+> Fixes: https://bugzilla.kernel.org/show_bug.cgi?id=216859
 
-The only thing is that we actually need to return both 0 and -EOPNOTSUPP 
-for unsupported flags. The dynamic flag requires 0 when not supported 
-(and supported) AFAICS.
-Setting a mask as 'supported' for a feature that is not really supported 
-defeats the notion of 'supported' IMHO.
+Shouldn't that rather be:
+
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=216859
+Fixes: 145eed48de27 ("fbdev: Remove conflicting devices on PCI bus")
+Cc: stable@vger.kernel.org # v6.1+
+
+?
+
+> Reported-by: Zeno Davatz <zdavatz@gmail.com>
+> Tested-by: Zeno Davatz <zdavatz@gmail.com>
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> Cc: Helge Deller <deller@gmx.de>
+> Cc: Thomas Zimmermann <tzimmermann@suse.de>
+> Cc: Javier Martinez Canillas <javierm@redhat.com>
+> Cc: linux-fbdev@vger.kernel.org
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linux-kernel@vger.kernel.org
+> ---
