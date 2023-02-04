@@ -2,105 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B52A468AA7A
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 15:03:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0421C68AA7F
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 15:10:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233925AbjBDODu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 09:03:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59824 "EHLO
+        id S233929AbjBDOKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 09:10:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233830AbjBDODo (ORCPT
+        with ESMTP id S232745AbjBDOK2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 09:03:44 -0500
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33EA92684F
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 06:03:44 -0800 (PST)
-Received: by mail-vs1-xe36.google.com with SMTP id m1so6380284vst.7
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Feb 2023 06:03:44 -0800 (PST)
+        Sat, 4 Feb 2023 09:10:28 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7017D36FC6
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 06:10:27 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id f47-20020a05600c492f00b003dc584a7b7eso7853488wmp.3
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Feb 2023 06:10:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BguGZ5Jy2ipVi1im+D1eowkfAWy2JwDuoaoZn4G7t+g=;
-        b=H12LwX7z2ceBO+UJopvDlDim3QakOVa0IA1dRWt5kkUIpoz2ss4rJ2asF1tiFC8PCp
-         9PRzoGU1D9eKSxd1wAMhyaIQulFWm5gjeRN5MDIvtXmbwx9cULzMvXjHOU0SDbNPKO9T
-         NoY70IayGo1xBjgzHw5fLFzDIZfQcZzTqnryH2Jk6DmVJD6MlLYfGs0staoyxN7lWm6t
-         pLNBuB1btFdhO9HCxOJOJVlIY819uwBxOBITTdHXZuWU2SONx2yVZsnFOilRIvRGEInE
-         0ezfw4JyK7UFhcu6kyAQE3Ufp+EvUKd+Qcv0IICopUl8m9EUw6vhW/3H1nm/n5LRWOHf
-         PkUg==
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9s6NAgqAsAyHqRtokq9Jv8AryOH+kxl/jYELgXGXAzY=;
+        b=T/SRexPCns1O7QUBs/9ErL2CeaAIrG4f04lu/Rtibpf7cwRjIElH79gWb72Z2bY0jf
+         ZwKyxeD/nyhFDQ+vxUsgz3ZaiTS5ohEflzRvYdVdYIpuP0YOvbnZDL/AmM7wGaf/05gy
+         rWdK0urERezP99X0z0oL/GOyP+MZA+mA8MyYYNe6PNhiouZHrzywN1MIrdVwkAp6d05J
+         MXGntrNcDgOHhnKE2vMJ/2cEG+RbmDUJm+T0p5g2E/7mg5lBer5uotaX7jKmi2eyydQK
+         E7oZjmUEL/k4E2pR+m+S5+dtHHhd/XACcp8qgb3PoVJhErkcLRxGjEf0F8yrWaeYt+mT
+         vrwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BguGZ5Jy2ipVi1im+D1eowkfAWy2JwDuoaoZn4G7t+g=;
-        b=iD8vG0nHP8y3r314Sffx0e0wAvNNtBcKDZOxz9O2DMZW8eCc8GAE+OZQCwM5qLhhOy
-         945klYgly/17NFb18Cu2DxA+0Rrr68axgoeZHnTDODLVWxBXF3hlrOmH8eytkEXYDAjs
-         Y/9LOr8ygDpBAR7vJEE1Rt67QGZUXelEVt+ecyzyz+XOZEYWtoTy64rRvarJ7X+WRCr9
-         rAufyleRDeG1VTekVpk/Xor6kq2BD6ZS6OcHNUJkShSf6XW+Q774MNQlCj8H2AhRnDKa
-         VOMVVQRDCdy3AvsoiYqCt/w+MxqstloaiaezngVa8oijYlBfhOp8PxJKhhxfCADUP41J
-         2phA==
-X-Gm-Message-State: AO0yUKVIXAkam4Rt8FtnHcdJGohV0GETDnRwodUUvQKY+Bx3qo5QSTe8
-        1D11s7e+7pgpO+QapXFjYAvFxbbo2u93CqCjzis=
-X-Google-Smtp-Source: AK7set/lplbgxsoDk3/D9XjhSSl4C/dmZUndLgtiRoEL77yPCyidlp4LTTX7AiSphXv5AG4uS7kEcGw2+u0sYGwMFko=
-X-Received: by 2002:a05:6102:22ca:b0:3fa:6af6:fddd with SMTP id
- a10-20020a05610222ca00b003fa6af6fdddmr1779643vsh.70.1675519423260; Sat, 04
- Feb 2023 06:03:43 -0800 (PST)
+        bh=9s6NAgqAsAyHqRtokq9Jv8AryOH+kxl/jYELgXGXAzY=;
+        b=LxLpn5jMFDcdoSaCzEf5gl3INkomSE5cg3k+GDzs8uhjZwDJBi+Kd3Ln+HxuAETHOT
+         whpnIzjM+196Dp5+20xiRRBYLgy5TZ0xe0lcwgOI0cuWkRdg0gb+s2k8rEsvgn7E/7tJ
+         Q392k/Wi9Vf6ryEdDmQH/9O01YIevIoZ0wE3Ok3aQPiZD2IGREoEJX71mzTnm0bIOgqf
+         9SQWTiNZmz++lWin681mtKkXZhn77ZvWksbR1/Fd35X4IQkUZE9KDsMxRl5zE5B5QY68
+         Ghcspf1HhV7nNIUL/raG4Aq7C7hP7PlK7HQ5KTktbDSMuclMychUuKMw7JZZjCyd59b8
+         YDUw==
+X-Gm-Message-State: AO0yUKUIPyJCYzwaYSxQyldumq/3nRTpSsyhJYA3PVlAJkA/cKfCpPC8
+        DNrROPceniJLzfgYg7nvrCY=
+X-Google-Smtp-Source: AK7set+N5x+cDjKx1IEGv1oZD6a5qD4dqZc7/THmEw2/IWEVZY1DxHpqNbMhkJR2rqL7qtrupPiA0w==
+X-Received: by 2002:a05:600c:4e0a:b0:3dc:3398:cf6e with SMTP id b10-20020a05600c4e0a00b003dc3398cf6emr12591146wmq.2.1675519825850;
+        Sat, 04 Feb 2023 06:10:25 -0800 (PST)
+Received: from [192.168.1.102] (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
+        by smtp.gmail.com with ESMTPSA id y13-20020a1c4b0d000000b003dc4aae4739sm10587795wma.27.2023.02.04.06.10.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 04 Feb 2023 06:10:25 -0800 (PST)
+Message-ID: <86e96ed1-365a-7cf7-9e7a-140db15b35e4@gmail.com>
+Date:   Sat, 4 Feb 2023 15:10:23 +0100
 MIME-Version: 1.0
-Received: by 2002:a05:612c:15a4:b0:37f:9ad6:a2dc with HTTP; Sat, 4 Feb 2023
- 06:03:42 -0800 (PST)
-Reply-To: jse756113@gmail.com
-From:   John Sevian <sb8766198@gmail.com>
-Date:   Sat, 4 Feb 2023 06:03:42 -0800
-Message-ID: <CALhHHansFke7PPaatp1qcuNW90izrVKnMfGG=TAS++JJ_Tr=fw@mail.gmail.com>
-Subject: Please can i have your attention
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 0/2] staging: r8188eu: correct error logic of two
+ functions
+To:     Michael Straube <straube.linux@gmail.com>,
+        gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20230204101654.10232-1-straube.linux@gmail.com>
+Content-Language: en-US
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <20230204101654.10232-1-straube.linux@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:e36 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [jse756113[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [sb8766198[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [sb8766198[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-My name is John Sevian,
-
-Please I'm sorry if this email is offensive, I paid and used google
-adverts to send this across for interested individuals or companies.I
-just decided to also share through emailing.I am a financial
-consultant, I have a client ,she has funds available in UK banks for
-loans and investment with low interest repayment.
-
-Please reply if you are interested.
-Regards,John.
+On 2/4/23 11:16, Michael Straube wrote:
+> This series converts two functions away from returning _SUCCESS and
+> _FAIL. Another tiny step to get rid of _FAIL / _SUCCESS someday.
+> 
+> Tested on x86_64 with Inter-Tech DMG 02.
+> 
+> Michael Straube (2):
+>    staging: r8188eu: correct error logic of rtl8188eu_init_recv_priv()
+>    staging: r8188eu: correct error logic of _rtw_init_recv_priv()
+> 
+>   drivers/staging/r8188eu/core/rtw_recv.c   | 30 +++++++++--------------
+>   drivers/staging/r8188eu/os_dep/os_intfs.c |  2 +-
+>   2 files changed, 12 insertions(+), 20 deletions(-)
+> 
+Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> # Edimax N150
