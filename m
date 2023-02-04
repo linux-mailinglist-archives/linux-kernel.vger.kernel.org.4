@@ -2,79 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E3C368AB6B
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 17:58:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 226F768AB70
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 18:05:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231953AbjBDQ6I convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 4 Feb 2023 11:58:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50878 "EHLO
+        id S231987AbjBDRFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 12:05:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231355AbjBDQ6G (ORCPT
+        with ESMTP id S229746AbjBDRFI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 11:58:06 -0500
-Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D28142D67
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 08:58:03 -0800 (PST)
-Received: from omf11.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay04.hostedemail.com (Postfix) with ESMTP id 8D1C51A03C4;
-        Sat,  4 Feb 2023 16:58:02 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf11.hostedemail.com (Postfix) with ESMTPA id 33C562002C;
-        Sat,  4 Feb 2023 16:58:00 +0000 (UTC)
-Message-ID: <3afee0493d3718f2e38b6c54dab23d38360cd5d0.camel@perches.com>
-Subject: Re: [PATCH] checkpatch.pl: Relax commit ID check to allow more than
- 12 chars
-From:   Joe Perches <joe@perches.com>
-To:     Jonathan =?ISO-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
-        linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andy Whitcroft <apw@canonical.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Sat, 04 Feb 2023 08:57:59 -0800
-In-Reply-To: <78d224a63f6c27bf700d59007b6f3c89746d728c.camel@perches.com>
-References: <20230129123431.1282427-1-j.neuschaefer@gmx.net>
-         <78d224a63f6c27bf700d59007b6f3c89746d728c.camel@perches.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Sat, 4 Feb 2023 12:05:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E03113E1;
+        Sat,  4 Feb 2023 09:05:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D58E7B80AB0;
+        Sat,  4 Feb 2023 17:05:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2683CC433D2;
+        Sat,  4 Feb 2023 17:05:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675530304;
+        bh=43GndDihT5L1+wA5X85xw22Vc8Kl4Ss63nT+xWN4MFQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bcc9VQt3m6gs+g4pyFNwgV93gGfoQ+Wtb6aYCcVxmb/Bm+7hxRUyWpzTcJhTftYme
+         uU4TyobjIjES2y07AHgL8RQqZU8sickXnH6vXV8r+Dgl74VbmD3sarTeeEnwc8XlKZ
+         ghGmU2Oh3MYFD2G/Zz83ZESWdqeqhsf+OTKvMJ7BcphI6LJnHMOeZiLWdazZ8RnROH
+         ickZQXGUqJUWC/o3P3r/RyIgMuEYkA+HSTPOAXo8Mph6QkuN58nZ3uPommhN6fElhu
+         bVpsmYyeShQKhMxziTBJuEmudOvB8EdIHeRviaSTF8LBaV5zQWNpgrN1qKLosT4efq
+         WAiZF7U63McFg==
+Date:   Sat, 4 Feb 2023 09:05:02 -0800
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org,
+        linux-tip-commits@vger.kernel.org, Ian Rogers <irogers@google.com>,
+        x86@kernel.org, netdev@vger.kernel.org
+Subject: Re: [tip: objtool/core] objtool: Fix HOSTCC flag usage
+Message-ID: <20230204170502.qjc3dpmf2owa3w7v@treble>
+References: <20230126190606.40739-4-irogers@google.com>
+ <167526879495.4906.2898311831401901292.tip-bot2@tip-bot2>
+ <Y9qbGHDBFtGoqnKK@FVFF77S0Q05N>
+ <20230201173637.cyu6yzudwsuzl2vj@treble>
+ <20230203182540.7linqqtr3tlrbfe7@skbuf>
 MIME-Version: 1.0
-X-Stat-Signature: tn5jxtttymtks9rscjht3g9z7wghnbfa
-X-Rspamd-Server: rspamout06
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Rspamd-Queue-Id: 33C562002C
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1855V0Wf5GK0uNZM3DquGABqIbYZv6TBNY=
-X-HE-Tag: 1675529880-423293
-X-HE-Meta: U2FsdGVkX19gwgiaSca2JRaEbMRHAcolcYgRwC4uciRprs9AGZ7OphjjUgbheEqH2JU7ib0Q5P1ykREu6rWsag==
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230203182540.7linqqtr3tlrbfe7@skbuf>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2023-01-29 at 09:52 -0800, Joe Perches wrote:
-> On Sun, 2023-01-29 at 13:34 +0100, Jonathan Neuschäfer wrote:
-> > By now, `git log --pretty=%h` (on my copy of linux.git) prints commit
-> > hashes with 13 digits, because of the number of objects.
+On Fri, Feb 03, 2023 at 08:25:40PM +0200, Vladimir Oltean wrote:
+> On Wed, Feb 01, 2023 at 09:36:37AM -0800, Josh Poimboeuf wrote:
+> > On Wed, Feb 01, 2023 at 05:02:16PM +0000, Mark Rutland wrote:
+> > > Hi,
+> > > 
+> > > I just spotted this breaks cross-compiling; details below.
 > > 
-> > Relax the rule in checkpatch.pl to allow a few more digits (up to 16).
+> > Thanks, we'll fix it up with
+> > 
+> > diff --git a/tools/objtool/Makefile b/tools/objtool/Makefile
+> > index 29a8cd7449bf..83b100c1e7f6 100644
+> > --- a/tools/objtool/Makefile
+> > +++ b/tools/objtool/Makefile
+> > @@ -36,7 +36,7 @@ OBJTOOL_CFLAGS := -Werror $(WARNINGS) $(KBUILD_HOSTCFLAGS) -g $(INCLUDES) $(LIBE
+> >  OBJTOOL_LDFLAGS := $(LIBELF_LIBS) $(LIBSUBCMD) $(KBUILD_HOSTLDFLAGS)
+> >  
+> >  # Allow old libelf to be used:
+> > -elfshdr := $(shell echo '$(pound)include <libelf.h>' | $(CC) $(CFLAGS) -x c -E - | grep elf_getshdr)
+> > +elfshdr := $(shell echo '$(pound)include <libelf.h>' | $(HOSTCC) $(OBJTOOL_CFLAGS) -x c -E - | grep elf_getshdr)
+> >  OBJTOOL_CFLAGS += $(if $(elfshdr),,-DLIBELF_USE_DEPRECATED)
+> >  
+> >  # Always want host compilation.
 > 
-> NAK without updating the process docs first.
+> Profiting off of the occasion to point out that cross-compiling with
+> CONFIG_DEBUG_INFO_BTF=y is also broken (it builds the resolve_btfids
+> tool):
 
-btw: it looks like 12 will still be sufficient for awhile yet
+The above patch was for objtool, though I'm guessing you were bitten by
+a similar patch for bpf:
 
-$ git count
-total 1154908
-$ git -c core.abbrev=5 log --pretty=format:%h | \
-  perl -nE 'chomp;say length' | sort | uniq -c | sort -n -k2
-    198 5
- 664613 6
- 450955 7
-  36667 8
-   2312 9
-    155 10
-      8 11
+  13e07691a16f ("tools/resolve_btfids: Alter how HOSTCC is forced")
 
+It looks like it might have a similar problem we had for objtool.  Does
+this fix it?
+
+diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
+index daed388aa5d7..fff84cd914cd 100644
+--- a/tools/bpf/resolve_btfids/Makefile
++++ b/tools/bpf/resolve_btfids/Makefile
+@@ -18,8 +18,8 @@ else
+ endif
+ 
+ # always use the host compiler
+-HOST_OVERRIDES := AR="$(HOSTAR)" CC="$(HOSTCC)" LD="$(HOSTLD)" ARCH="$(HOSTARCH)" \
+-		  EXTRA_CFLAGS="$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)"
++HOST_OVERRIDES := AR="$(HOSTAR)" CC="$(HOSTCC)" LD="$(HOSTLD)" ARCH="$(HOSTARCH)"
++BTF_CFLAGS     := $(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)
+ 
+ RM      ?= rm
+ CROSS_COMPILE =
+@@ -53,23 +53,25 @@ $(OUTPUT) $(OUTPUT)/libsubcmd $(LIBBPF_OUT):
+ 
+ $(SUBCMDOBJ): fixdep FORCE | $(OUTPUT)/libsubcmd
+ 	$(Q)$(MAKE) -C $(SUBCMD_SRC) OUTPUT=$(SUBCMD_OUT) \
+-		    DESTDIR=$(SUBCMD_DESTDIR) $(HOST_OVERRIDES) prefix= subdir= \
++		    $(HOST_OVERRIDES) EXTRA_CFLAGS="$(BTF_CFLAGS)" \
++		    DESTDIR=$(LIBBPF_DESTDIR) prefix= subdir= \
+ 		    $(abspath $@) install_headers
+ 
+ $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OUT)
+ 	$(Q)$(MAKE) $(submake_extras) -C $(LIBBPF_SRC) OUTPUT=$(LIBBPF_OUT)    \
+-		    DESTDIR=$(LIBBPF_DESTDIR) $(HOST_OVERRIDES) prefix= subdir= \
++		    $(HOST_OVERRIDES) EXTRA_CFLAGS="$(BTF_CFLAGS)" \
++		    DESTDIR=$(LIBBPF_DESTDIR) prefix= subdir= \
+ 		    $(abspath $@) install_headers
+ 
+ LIBELF_FLAGS := $(shell $(HOSTPKG_CONFIG) libelf --cflags 2>/dev/null)
+ LIBELF_LIBS  := $(shell $(HOSTPKG_CONFIG) libelf --libs 2>/dev/null || echo -lelf)
+ 
+-CFLAGS += -g \
+-          -I$(srctree)/tools/include \
+-          -I$(srctree)/tools/include/uapi \
+-          -I$(LIBBPF_INCLUDE) \
+-          -I$(SUBCMD_INCLUDE) \
+-          $(LIBELF_FLAGS)
++BTF_CFLAGS += -g \
++              -I$(srctree)/tools/include \
++              -I$(srctree)/tools/include/uapi \
++              -I$(LIBBPF_INCLUDE) \
++              -I$(SUBCMD_INCLUDE) \
++              $(LIBELF_FLAGS)
+ 
+ LIBS = $(LIBELF_LIBS) -lz
+ 
+@@ -77,7 +79,7 @@ export srctree OUTPUT CFLAGS Q
+ include $(srctree)/tools/build/Makefile.include
+ 
+ $(BINARY_IN): fixdep FORCE prepare | $(OUTPUT)
+-	$(Q)$(MAKE) $(build)=resolve_btfids $(HOST_OVERRIDES)
++	$(Q)$(MAKE) $(build)=resolve_btfids $(HOST_OVERRIDES) CFLAGS="$(BTF_CFLAGS)"
+ 
+ $(BINARY): $(BPFOBJ) $(SUBCMDOBJ) $(BINARY_IN)
+ 	$(call msg,LINK,$@)
