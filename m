@@ -2,97 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4C0968A7AE
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 02:51:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCAB768A7B0
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 02:51:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232778AbjBDBv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 20:51:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58096 "EHLO
+        id S233019AbjBDBvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 20:51:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233172AbjBDBvZ (ORCPT
+        with ESMTP id S232637AbjBDBvs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 20:51:25 -0500
-Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8F51A963;
-        Fri,  3 Feb 2023 17:51:24 -0800 (PST)
-Received: by mail-oo1-xc2d.google.com with SMTP id k15-20020a4adfaf000000b00517450f9bd7so675778ook.8;
-        Fri, 03 Feb 2023 17:51:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=e1hnwrQg/7TrlKiWRJR4hcEttZPGMMEcTVNIQ+LbzmA=;
-        b=eFIFeueLVEjLat1j3tzYef0iCRSXaYNriZQFGtlW5SMwAGBBHnmvjHGan6KeqNyyKR
-         5EnDF8KnCrdM/FVW9nHbwovNqXAXyBlbCxTnVpPM+BifQdUMcpHSE3lxDBs+LOaeiS9Q
-         lNhSisOSgGwJaU4lZSoZ5ujkMcBO0OGWSE9FHJcxiG5VKKebG0p2AyckxFdoie8dmwRx
-         2gsR/gLbG5GGzj5VhQZsdD6tQOa0ID4a4eBDSTmtgPw6ZuUxq8dVkRHIjcNS5zhpnyvn
-         qvVNtqkTXOw9WQbuedSiUSHMm75Dy4Yn7s3krr4DLIT8+EskXQDfLmwSMkQmzIncOmbe
-         b4Ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=e1hnwrQg/7TrlKiWRJR4hcEttZPGMMEcTVNIQ+LbzmA=;
-        b=wkVIsn2n0B7k5GQCTm3psOuTEx3iJmSMMVCnhXnEpJIog1DTI7l6rSMnsJU+ch1Cxi
-         2/QdjIo9tF4wgsNAe5VpZtBZhx+ryW9JWPGYLZCsMQG08GFNAcXKVO1NVu2xK0ZUrND5
-         TOnvWhh2UjfAJC+RWXoKg2OVTLGhHEz/XqEBAkbPx0m3e30z/3aNJSnbEsnf/8SgDpWz
-         f4nfNJy9r8mCgrRRNwVz1Rbf9Fw3dd0D2P5cuf6IBZ1AA2k/GRMDGDs3FsQbhRG8prS9
-         SY7qAPyS6yqPA9vUoalyviFA6ib0zZL2SFdDpxwvK6JXRAloKuBXHskfSnwpKoo0Crlh
-         ejXw==
-X-Gm-Message-State: AO0yUKUcGF6Pr1hrvkHMAsMHCoV00mAHR1cNChW/IvgGJEqTBi3ZnRPm
-        amP1J0FDFpBSdhsMiNzDW6rcjIwzB9A=
-X-Google-Smtp-Source: AK7set/p2A8FdtXyfiQ00tDpRUMXqwb2TTooDavd11tdWB5qJQv1lo7zQ55/9bEQ692IyMch8SriyA==
-X-Received: by 2002:a4a:e38c:0:b0:517:afee:a386 with SMTP id l12-20020a4ae38c000000b00517afeea386mr5626564oov.2.1675475483713;
-        Fri, 03 Feb 2023 17:51:23 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h13-20020a4aa28d000000b004fd878ef510sm1616569ool.21.2023.02.03.17.51.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 17:51:23 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 3 Feb 2023 17:51:22 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.1 00/28] 6.1.10-rc1 review
-Message-ID: <20230204015122.GF3089769@roeck-us.net>
-References: <20230203101009.946745030@linuxfoundation.org>
+        Fri, 3 Feb 2023 20:51:48 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDCD31A4B3;
+        Fri,  3 Feb 2023 17:51:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8EF1062046;
+        Sat,  4 Feb 2023 01:51:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDBA1C433D2;
+        Sat,  4 Feb 2023 01:51:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675475505;
+        bh=uUrptZclc72gGiGJfLue5ojGtcX27ISDiKf2A2O2hpk=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=JbahGlVeHshsaM4Lda6Y6mETpDI/N8R46jpWgZbqgtyplo0WmNlTCUG5pwk1mDccP
+         kovjm8rUM5+bfi7jg9F9ioM2w7APuaEooZQpYZPzggS3SxoFvXE6bJ5Xq1BqR2qs7Z
+         ZiSTjah4v2hVd1uSvZQ/ShROWsEfa27kylkOcFqWd8hPKV76z0UShGsTW+IY/XLZ0/
+         vyiLlND5pO174NvXmUFmAp8CJRWU4BbYbpLFOxeRVIxR84c4hhaL6z76VwOoxvWjSm
+         9/OWbaaqE1epQie0xvkubNuQJWjVp5s69g06adnWa5fwdsmeFY9WhgrCB6a53bH94I
+         W1OXXieqU60sw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 940D95C18FC; Fri,  3 Feb 2023 17:51:44 -0800 (PST)
+Date:   Fri, 3 Feb 2023 17:51:44 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>, linux-arch@vger.kernel.org,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH RFC] tools/memory-model: Restrict to-r to read-read
+ address dependency
+Message-ID: <20230204015144.GT2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230203201913.2555494-1-joel@joelfernandes.org>
+ <Y921EeGatjTZbWt6@rowland.harvard.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230203101009.946745030@linuxfoundation.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y921EeGatjTZbWt6@rowland.harvard.edu>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 11:12:48AM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.10 release.
-> There are 28 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Fri, Feb 03, 2023 at 08:29:53PM -0500, Alan Stern wrote:
+> On Fri, Feb 03, 2023 at 08:19:13PM +0000, Joel Fernandes (Google) wrote:
+> > During a code-reading exercise of linux-kernel.cat CAT file, I generated
+> > a graph to show the to-r relations. While likely not problematic for the
+> > model, I found it confusing that a read-write address dependency would
+> > show as a to-r edge on the graph.
+> > 
+> > This patch therefore restricts the to-r links derived from addr to only
+> > read-read address dependencies, so that read-write address dependencies don't
+> > show as to-r in the graphs. This should also prevent future users of to-r from
+> > deriving incorrect relations. Note that a read-write address dep, obviously,
+> > still ends up in the ppo relation via the to-w relation.
+> > 
+> > I verified that a read-read address dependency still shows up as a to-r
+> > link in the graph, as it did before.
+> > 
+> > For reference, the problematic graph was generated with the following
+> > command:
+> > herd7 -conf linux-kernel.cfg \
+> >    -doshow dep -doshow to-r -doshow to-w ./foo.litmus -show all -o OUT/
+> > 
+> > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > ---
+> >  tools/memory-model/linux-kernel.cat | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/tools/memory-model/linux-kernel.cat b/tools/memory-model/linux-kernel.cat
+> > index d70315fddef6..26e6f0968143 100644
+> > --- a/tools/memory-model/linux-kernel.cat
+> > +++ b/tools/memory-model/linux-kernel.cat
+> > @@ -69,7 +69,7 @@ let dep = addr | data
+> >  let rwdep = (dep | ctrl) ; [W]
+> >  let overwrite = co | fr
+> >  let to-w = rwdep | (overwrite & int) | (addr ; [Plain] ; wmb)
+> > -let to-r = addr | (dep ; [Marked] ; rfi)
+> > +let to-r = (addr ; [R]) | (dep ; [Marked] ; rfi)
+> >  let ppo = to-r | to-w | fence | (po-unlock-lock-po & int)
+> >  
+> >  (* Propagation: Ordering from release operations and strong fences. *)
+> > -- 
+> > 2.39.1.519.gcb327c4b5f-goog
 > 
-> Responses should be made by Sun, 05 Feb 2023 10:09:58 +0000.
-> Anything received after that time might be too late.
-> 
+> Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
-Build results:
-	total: 155 pass: 155 fail: 0
-Qemu test results:
-	total: 503 pass: 503 fail: 0
+Thank you both, queued for v6.4.
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
-
-Guenter
+							Thanx, Paul
