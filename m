@@ -2,46 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3293C68AA57
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 14:47:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D0B568AA59
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 14:49:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233853AbjBDNrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 08:47:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50994 "EHLO
+        id S233857AbjBDNtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 08:49:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232230AbjBDNra (ORCPT
+        with ESMTP id S232230AbjBDNtC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 08:47:30 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C17DA2385A;
-        Sat,  4 Feb 2023 05:47:29 -0800 (PST)
+        Sat, 4 Feb 2023 08:49:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E38A34037;
+        Sat,  4 Feb 2023 05:49:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E3CC60C52;
-        Sat,  4 Feb 2023 13:47:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F3B8C433D2;
-        Sat,  4 Feb 2023 13:47:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675518448;
-        bh=Y6XRGBnDwv3SnYF+rVbMbNaRJLOSMSi4NThGLC2Ldzg=;
+        by ams.source.kernel.org (Postfix) with ESMTPS id B8284B80AD4;
+        Sat,  4 Feb 2023 13:48:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10A2AC433D2;
+        Sat,  4 Feb 2023 13:48:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675518538;
+        bh=FXY1uJuhh8GYNVQnAlficUDBMLFbM987wNiwPA4b5XE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rcg0WfeyZFCbBmKU1RzDmQeO1blbobPUoHEfgpDqQncqhtOvxn49fT9Os3TyQG/hd
-         3Nu8JqjzLrPaGS3xwlOgWe1RN0Zin3/EpHWSLzwf1aO+szJZTsIplHZ0f1ekgY5Wri
-         6/YqJVClTitxt8E5bJ/1Vl+f2e8HjRFz562ee48M=
-Date:   Sat, 4 Feb 2023 14:47:25 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>
-Subject: Re: Converting dev->mutex into dev->spinlock ?
-Message-ID: <Y95h7Vop9t5Li0HD@kroah.com>
-References: <28a82f50-39d5-a45f-7c7a-57a66cec0741@I-love.SAKURA.ne.jp>
+        b=uqFdtYbJebqXhjd+dvwJCzX0rxcgwAN6cVpI5t/+Ue1Pl+DOqVhzC4dSijETr286y
+         EmqpTPnKOJgIiPxNB7BNfJCjWTHvE5zhUrCj7BnCnb23Ox9rrcNo7cNwjYNA2EKDEX
+         3AI1ybHSl/6jz4/2A7ToiFt/CdP0eHztF+oYcoJLBdwKCFlWURGAYTQTFJvENtkcS8
+         u6ewnZq6P7HtEor/rncefqLGCy+U+nSA0ztTucGGsfaWzEulIrjQiHHspjyvfGk+GG
+         KcomEUS3Xx89Xc2PFqANjpALGP2m3+/EOB6kF8zddb7AsNbHWoZnnDoiVJg32kOGxg
+         mGvce7ZA9UiRQ==
+Date:   Sat, 4 Feb 2023 08:48:56 -0500
+From:   Sasha Levin <sashal@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Eric Biggers <ebiggers@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>, stable@vger.kernel.org,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.4 000/134] 5.4.231-rc1 review
+Message-ID: <Y95iSDo7Qa+HoWSg@sashalap>
+References: <20230203101023.832083974@linuxfoundation.org>
+ <20230203155619.GA3176223@roeck-us.net>
+ <Y906Hz3UWYxoxYdD@kroah.com>
+ <20230203171826.GA1500930@roeck-us.net>
+ <Y91YWzopMMGF1Lgh@sol.localdomain>
+ <Y91bjnIuQRvVqpO7@sol.localdomain>
+ <705ab151-da1e-30e1-c232-c9860717267d@roeck-us.net>
+ <Y91lXYN7zF8d/fek@sol.localdomain>
+ <Y94QTVUg2H68XnQ2@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <28a82f50-39d5-a45f-7c7a-57a66cec0741@I-love.SAKURA.ne.jp>
+In-Reply-To: <Y94QTVUg2H68XnQ2@kroah.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -51,37 +67,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 04, 2023 at 10:32:11PM +0900, Tetsuo Handa wrote:
-> Hello.
-> 
-> There is a long-standing deadlock problem in driver core code caused by
-> "struct device"->mutex being marked as "do not apply lockdep checks".
+On Sat, Feb 04, 2023 at 08:59:09AM +0100, Greg Kroah-Hartman wrote:
+>On Fri, Feb 03, 2023 at 11:49:49AM -0800, Eric Biggers wrote:
+>> On Fri, Feb 03, 2023 at 11:28:46AM -0800, Guenter Roeck wrote:
+>> > On 2/3/23 11:07, Eric Biggers wrote:
+>> > > On Fri, Feb 03, 2023 at 10:54:21AM -0800, Eric Biggers wrote:
+>> > > > On Fri, Feb 03, 2023 at 09:18:26AM -0800, Guenter Roeck wrote:
+>> > > > > On Fri, Feb 03, 2023 at 05:45:19PM +0100, Greg Kroah-Hartman wrote:
+>> > > > > > On Fri, Feb 03, 2023 at 07:56:19AM -0800, Guenter Roeck wrote:
+>> > > > > > > On Fri, Feb 03, 2023 at 11:11:45AM +0100, Greg Kroah-Hartman wrote:
+>> > > > > > > > This is the start of the stable review cycle for the 5.4.231 release.
+>> > > > > > > > There are 134 patches in this series, all will be posted as a response
+>> > > > > > > > to this one.  If anyone has any issues with these being applied, please
+>> > > > > > > > let me know.
+>> > > > > > > >
+>> > > > > > > > Responses should be made by Sun, 05 Feb 2023 10:09:58 +0000.
+>> > > > > > > > Anything received after that time might be too late.
+>> > > > > > > >
+>> > > > > > >
+>> > > > > > > Building ia64:defconfig ... failed
+>> > > > > > > --------------
+>> > > > > > > Error log:
+>> > > > > > > <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+>> > > > > > > arch/ia64/kernel/mca_drv.c: In function 'mca_handler_bh':
+>> > > > > > > arch/ia64/kernel/mca_drv.c:179:9: error: implicit declaration of function 'make_task_dead'
+>> > > > > > >
+>> > > > > > > Caused by "exit: Add and use make_task_dead.". Did that really have to be backported ?
+>> > > > > >
+>> > > > > > Yup, it does!
+>> > > > > >
+>> > > > > > Eric, any help with this?
+>> > > > > >
+>> > > > >
+>> > > > > Adding "#include <linux/sched/task.h>" to the affected file would probably
+>> > > > > be the easy fix. I did a quick check, and it works.
+>> > > > >
+>> > > > > Note that the same problem is seen in v4.14.y and v4.19.y. Later
+>> > > > > kernels don't have the problem.
+>> > > > >
+>> > > >
+>> > > > This problem arises because <linux/mm.h> transitively includes
+>> > > > <linux/sched/task.h> in 5.10 and later, but not in 5.4 and earlier.
+>> > > >
+>> > > > Greg, any preference for how to handle this situation?
+>> > > >
+>> > > > Just add '#include <linux/sched/task.h>' to the affected .c file (and hope there
+>> > > > are no more affected .c files in the other arch directories) and call it a day?
+>> > > >
+>> > > > Or should we backport the transitive inclusion (i.e., the #include added by
+>> > > > commit 80fbaf1c3f29)?  Or move the declaration of make_task_dead() into
+>> > > > <linux/kernel.h> so that it's next to do_exit()?
+>> > >
+>> > > One question: do *all* the arches actually get built as part of the testing for
+>> > > each stable release?  If so, we can just add the #include to the .c files that
+>> > > need it.  If not, then it would be safer to take one of the other approaches.
+>> > >
+>> >
+>> > Yes, I do build all architectures for each stable release.
+>> >
+>> > FWIW, I only noticed that one build failure due to this problem.
+>>
+>> Okay, great.  In that case, Greg or Sasha, can you fold the needed #include into
+>> arch/ia64/kernel/mca_drv.c in exit-add-and-use-make_task_dead.patch on 4.14,
+>> 4.19, and 5.4?  Or should I just send the whole series again for each?
+>
+>I'll fold it in later today when I get a chance, no need to resubmit the
+>whole thing, thanks!
 
-The marking of a lock does not cause a deadlock problem, so what do you
-mean exactly by this?  Where is the actual deadlock?
+Greg, I did it for the 5.4 backport. If I do it for 4.19 and 4.14 it's
+going to add a bunch of fuzz into those, lmk if you want me to push
+those too or whether you'll fix it up.
 
-> We can make this deadlock visible by applying [1], and we can confirm that
-> there is a deadlock problem that I think needs to be addressed in core code [2].
-
-Any reason why you didn't cc: us on these patches?
-
-> Also, since driver developers are taking it for granted that driver callback
-> functions can behave as if dev->mutex is not held (because possibility of deadlock
-> was never reported), it would solve many deadlocks in driver code if you can update
-> driver core code to avoid calling driver callback functions with dev->mutex held
-> (by e.g. replacing dev->mutex with dev->spinlock and dev->atomic_flags).
-> But I'm not familiar enough to propose such change...
-
-A driver developer should never be messing with the mutex of a device,
-that's not for them to touch, that's the driver core's lock to touch,
-right?
-
-So I don't understand the real problem here.  What subsystem is having
-issues and what issues are they exactly?
-
-And using a spinlock shouldn't change any locking deadlocks that I can
-tell, so I don't understand the proposal, sorry.
-
-thanks,
-
-greg k-h
+-- 
+Thanks,
+Sasha
