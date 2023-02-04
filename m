@@ -2,103 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F8D568AA86
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 15:14:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE11668AA8A
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 15:21:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233779AbjBDOOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 09:14:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34860 "EHLO
+        id S233953AbjBDOVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 09:21:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjBDOOv (ORCPT
+        with ESMTP id S229448AbjBDOVj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 09:14:51 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF641EFE7
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 06:14:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675520049;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=b/NFYebpTt4n4gN331Zbam2UQ88UtxYfxZP2QmqljgU=;
-        b=LQFy+BdR+W4susXJYQAmB8bA0QJ2o+iMfRmZW8Y8S5I6RzRZevbAnNYbfnb8n9qG84TVqO
-        S5TpkjybPTjgYrJGXYe3PQalgbGdHC3aGOm17zxGtpsHArYouXiAPdmXW8E4WkmcYbgEGy
-        KR2cGO7VSNMzkF7c6U3EtA/0GkggwHs=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-642-ClzwWrF6NcyCxAbHLjHQIw-1; Sat, 04 Feb 2023 09:14:06 -0500
-X-MC-Unique: ClzwWrF6NcyCxAbHLjHQIw-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C446D80D0E8;
-        Sat,  4 Feb 2023 14:14:05 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A7F6F492C14;
-        Sat,  4 Feb 2023 14:14:05 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     torvalds@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: [GIT PULL] KVM fixes for Linux 6.2-rc7
-Date:   Sat,  4 Feb 2023 09:14:05 -0500
-Message-Id: <20230204141405.875815-1-pbonzini@redhat.com>
+        Sat, 4 Feb 2023 09:21:39 -0500
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F7B1C338;
+        Sat,  4 Feb 2023 06:21:34 -0800 (PST)
+Received: from fsav115.sakura.ne.jp (fsav115.sakura.ne.jp [27.133.134.242])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 314ELSA5007186;
+        Sat, 4 Feb 2023 23:21:28 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav115.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav115.sakura.ne.jp);
+ Sat, 04 Feb 2023 23:21:28 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav115.sakura.ne.jp)
+Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 314ELSp5007183
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Sat, 4 Feb 2023 23:21:28 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <a236ab6b-d38c-3974-d4cb-5e92d0877abc@I-love.SAKURA.ne.jp>
+Date:   Sat, 4 Feb 2023 23:21:27 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: Converting dev->mutex into dev->spinlock ?
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>
+References: <28a82f50-39d5-a45f-7c7a-57a66cec0741@I-love.SAKURA.ne.jp>
+ <Y95h7Vop9t5Li0HD@kroah.com>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <Y95h7Vop9t5Li0HD@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+On 2023/02/04 22:47, Greg Kroah-Hartman wrote:
+> On Sat, Feb 04, 2023 at 10:32:11PM +0900, Tetsuo Handa wrote:
+>> Hello.
+>>
+>> There is a long-standing deadlock problem in driver core code caused by
+>> "struct device"->mutex being marked as "do not apply lockdep checks".
+> 
+> The marking of a lock does not cause a deadlock problem, so what do you
+> mean exactly by this?  Where is the actual deadlock?
 
-The following changes since commit c2c46b10d52624376322b01654095a84611c7e09:
+A few of examples:
 
-  KVM: selftests: Make reclaim_period_ms input always be positive (2023-01-22 04:10:24 -0500)
+  https://syzkaller.appspot.com/bug?extid=2d6ac90723742279e101
+  https://syzkaller.appspot.com/bug?extid=2e39bc6569d281acbcfb
+  https://syzkaller.appspot.com/bug?extid=9ef743bba3a17c756174
 
-are available in the Git repository at:
+> 
+>> We can make this deadlock visible by applying [1], and we can confirm that
+>> there is a deadlock problem that I think needs to be addressed in core code [2].
+> 
+> Any reason why you didn't cc: us on these patches?
 
-  https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
+We can't apply this "drivers/core: Remove lockdep_set_novalidate_class() usage" patch
+until we fix all lockdep warnings that happen during the boot stage; otherwise syzbot
+testing can't work which is more painful than applying this patch now.
 
-for you to fetch changes up to 25b72cf7da9f0d66eef3979187ddfda98d4efcd0:
-
-  Merge tag 'kvmarm-fixes-6.2-3' of git://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm into HEAD (2023-02-04 08:57:43 -0500)
-
-----------------------------------------------------------------
-ARM64:
-
-- Yet another fix for non-CPU accesses to the memory backing
-  the VGICv3 subsystem
-
-- A set of fixes for the setlftest checking for the S1PTW
-  behaviour after the fix that went in ealier in the cycle
-
-----------------------------------------------------------------
-Gavin Shan (3):
-      KVM: arm64: Add helper vgic_write_guest_lock()
-      KVM: arm64: Allow no running vcpu on restoring vgic3 LPI pending status
-      KVM: arm64: Allow no running vcpu on saving vgic3 pending table
-
-Paolo Bonzini (1):
-      Merge tag 'kvmarm-fixes-6.2-3' of git://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm into HEAD
-
-Ricardo Koller (4):
-      KVM: selftests: aarch64: Relax userfaultfd read vs. write checks
-      KVM: selftests: aarch64: Do not default to dirty PTE pages on all S1PTWs
-      KVM: selftests: aarch64: Fix check of dirty log PT write
-      KVM: selftests: aarch64: Test read-only PT memory regions
-
- Documentation/virt/kvm/api.rst                     |  10 +-
- arch/arm64/kvm/vgic/vgic-its.c                     |  13 +-
- arch/arm64/kvm/vgic/vgic-v3.c                      |   4 +-
- arch/arm64/kvm/vgic/vgic.h                         |  14 ++
- include/kvm/arm_vgic.h                             |   2 +-
- .../selftests/kvm/aarch64/page_fault_test.c        | 187 ++++++++++++---------
- 6 files changed, 132 insertions(+), 98 deletions(-)
+Therefore, I locally tested this patch (in order not to be applied now). And I got
+a lockdep warning on the perf_event code. I got next lockdep warning on the driver core
+code when I tried a fix for the perf_event code suggested by Peter Zijlstra. Since Peter
+confirmed that this is a problem that led to commit 1704f47b50b5 ("lockdep: Add novalidate
+class for dev->mutex conversion"), this time I'm reporting this problem to you (so that
+you can propose a fix for the driver core code).
 
