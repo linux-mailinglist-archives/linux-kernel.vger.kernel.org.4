@@ -2,227 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F7BA68ABF3
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 19:44:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BED4068ABF5
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 19:44:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233223AbjBDSoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 13:44:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55028 "EHLO
+        id S233327AbjBDSov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 13:44:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230101AbjBDSoO (ORCPT
+        with ESMTP id S230101AbjBDSot (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 13:44:14 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E7C1632F;
-        Sat,  4 Feb 2023 10:44:12 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id ge21-20020a17090b0e1500b002308aac5b5eso1912393pjb.4;
-        Sat, 04 Feb 2023 10:44:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PqYt9g6AFqNm6rbEG0gvrXgdEtTQwUJ8dtb6JRDh6lM=;
-        b=HySefaM8ppVO2gTyuhnFHaomMMuXSNUflZHhoBsrJtyYOfWoVgLRnLP7/R3YiDip2U
-         A9xZdewZMKEC3qxN6uEwh/dieVOkKZ4PMGU6x+u9MU+sjlinV0g24vTr/TIZ2hxEoRbh
-         L2hYGJJSmvxUOyZ3RvpMJ5N+6PLaffdHgkNQEq3l9KKyzPBBYP+Z7gJkRTvNW5zmN+JS
-         LHhBG/sAhS9lhl/74440Nnk6HePPWMnVnWPBskAFe2CgMBDXJ4s2/UZSboUWBVbfo6y8
-         BBPxuoL5gYgsWEFRTuC9UB8PTSDYf5hP4zbPAKRwWXaffOOsm+vOalR2QmJfo6lWrMwZ
-         M59Q==
+        Sat, 4 Feb 2023 13:44:49 -0500
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 565601E2AD
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 10:44:48 -0800 (PST)
+Received: by mail-io1-f72.google.com with SMTP id q12-20020a6b8e0c000000b0071d8eef7c67so4868092iod.5
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Feb 2023 10:44:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PqYt9g6AFqNm6rbEG0gvrXgdEtTQwUJ8dtb6JRDh6lM=;
-        b=3xhzm1isouRvxUkYe7zt9+VusvAyXCRSptAmSsWkL1yeKyRUG4+55LQiQIzQJEnwrx
-         e4qeuI3lsHCc3AeW15fOZ/qaB0EnqllaJIzgC/gCAUWlNCV7y3GNdieEjqIW2lRB1QJr
-         gcv002RymssxuQ5aD7M1r4sHyvFEi8cwaIq4wgI2JgLK4CYmpFJ1cwTvYP9QaLjA2WD4
-         0UXl1FS5SIlSGr+4eo+QagnpIhO7fMI1i+ITT9GHc2LLrRG0iDB2Q13lpc6jC96Q6+dB
-         0hUT5ZVI82RW7bPiRY3kOxqBCMhTqJN5fXPddh2oWnlw9FyPmrZ6VAxtHDcy2A/PHtyj
-         X0fw==
-X-Gm-Message-State: AO0yUKW7Q2NWnFLOcBr6E0RozYoorXzARXrMzhIEtRhPo1gNf5i1wc1a
-        pyDXF6qC64ciFHnmJWJ4VUw=
-X-Google-Smtp-Source: AK7set8atgpNU869HwOIb299A6k9OhBoRhryH/T/rOucAP5gZA3UryJk5gF0qjrjutOEqyRLGtTswA==
-X-Received: by 2002:a17:903:41cf:b0:198:e8c6:859a with SMTP id u15-20020a17090341cf00b00198e8c6859amr5417858ple.0.1675536251611;
-        Sat, 04 Feb 2023 10:44:11 -0800 (PST)
-Received: from ip-172-31-38-16.us-west-2.compute.internal (ec2-52-37-71-140.us-west-2.compute.amazonaws.com. [52.37.71.140])
-        by smtp.gmail.com with ESMTPSA id g6-20020a170902868600b00192fe452e17sm3774293plo.162.2023.02.04.10.44.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Feb 2023 10:44:11 -0800 (PST)
-Date:   Sat, 4 Feb 2023 18:44:09 +0000
-From:   Alok Tiagi <aloktiagi@gmail.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        Hillf Danton <hdanton@sina.com>, netdev@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org, tycho@tycho.pizza
-Subject: Re: [RFC] net: add new socket option SO_SETNETNS
-Message-ID: <Y96neSjTtm2kRetn@ip-172-31-38-16.us-west-2.compute.internal>
-References: <Y9q8Ec1CJILZz7dj@ip-172-31-38-16.us-west-2.compute.internal>
- <20230202014810.744-1-hdanton@sina.com>
- <Y9wVNF5IBCYVz5jU@ip-172-31-38-16.us-west-2.compute.internal>
- <CANn89iLWZb-Uf_9a41ofBtVsHjBwHzbOVn+V_QrksnB9y80m6w@mail.gmail.com>
- <Y9xOQPPGDrSN0IBu@ip-172-31-38-16.us-west-2.compute.internal>
- <CANn89iL-RtzMdVuBeM_c4PPqZxk28hVwNhs9vMhwTyJwVhqS9A@mail.gmail.com>
- <Y91JduiSy6mDCQ2a@ip-172-31-38-16.us-west-2.compute.internal>
- <87tu0278kt.fsf@email.froward.int.ebiederm.org>
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YjDmyxyUOZHic8lE/M6XOn+LVM1uE2SOfT+VAvURm50=;
+        b=z/p6WqNBMgUV118uolJPJbZQP3EksaHmcfE2EjWPnccQ3hihnxgUixIRlZqkJf6uid
+         SkMWFotM44TEJH7dPKszaUdLXEWfp7o3WdmkPRTv/yzat6tMTdoUIAHIaiyY1F6RV03F
+         +U5ZRzG8i5Wibbr54N8/kNUYVjrLtRpHjPAflTqaWaTGJbBr3nQdKHrd7qlhCskou+9N
+         hmMy5fp+LEqTomWOASIeotHTnO3zHzNbbXmFGaqrsldWzdLRE2N+qOpsKopK0Ui4H/Na
+         X2FFm0QfKfEoDRhEIdPEaDpAs409UB7CcFbTFxECa/hGkrdC78znVZgzvvNr7WEoZMmu
+         iGYw==
+X-Gm-Message-State: AO0yUKU1tlh7iVCiWLGl6Q9k0UxJfpoqdCAJq2fifmQO32sMmlFi5Ukx
+        ku0Jcm9RqE7EtL+YzRxYrr31qPrbI6dd69qTiLCovhIsVXcw
+X-Google-Smtp-Source: AK7set+ctDut9VRnha6EN7M82mdSuigd92RolP49OoaMAuvYGb2SBuzWLFtbmNAO+k3nZsPLRvQMH3iGoyUqY2tEBKNKPtr3OkD4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87tu0278kt.fsf@email.froward.int.ebiederm.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:10e5:b0:3ad:c6ff:66f with SMTP id
+ g5-20020a05663810e500b003adc6ff066fmr3393954jae.11.1675536287596; Sat, 04 Feb
+ 2023 10:44:47 -0800 (PST)
+Date:   Sat, 04 Feb 2023 10:44:47 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003b04d205f3e431d1@google.com>
+Subject: [syzbot] general protection fault in __blk_rq_map_sg
+From:   syzbot <syzbot+0bbf896c8341c8e137c2@syzkaller.appspotmail.com>
+To:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 03:17:06PM -0600, Eric W. Biederman wrote:
-> Alok Tiagi <aloktiagi@gmail.com> writes:
-> 
-> > On Fri, Feb 03, 2023 at 04:09:12PM +0100, Eric Dumazet wrote:
-> >> On Fri, Feb 3, 2023 at 12:59 AM Alok Tiagi <aloktiagi@gmail.com> wrote:
-> >> >
-> >> > On Thu, Feb 02, 2023 at 09:10:23PM +0100, Eric Dumazet wrote:
-> >> > > On Thu, Feb 2, 2023 at 8:55 PM Alok Tiagi <aloktiagi@gmail.com> wrote:
-> >> > > >
-> >> > > > On Thu, Feb 02, 2023 at 09:48:10AM +0800, Hillf Danton wrote:
-> >> > > > > On Wed, 1 Feb 2023 19:22:57 +0000 aloktiagi <aloktiagi@gmail.com>
-> >> > > > > > @@ -1535,6 +1535,52 @@ int sk_setsockopt(struct sock *sk, int level, int optname,
-> >> > > > > >             WRITE_ONCE(sk->sk_txrehash, (u8)val);
-> >> > > > > >             break;
-> >> > > > > >
-> >> > > > > > +   case SO_SETNETNS:
-> >> > > > > > +   {
-> >> > > > > > +           struct net *other_ns, *my_ns;
-> >> > > > > > +
-> >> > > > > > +           if (sk->sk_family != AF_INET && sk->sk_family != AF_INET6) {
-> >> > > > > > +                   ret = -EOPNOTSUPP;
-> >> > > > > > +                   break;
-> >> > > > > > +           }
-> >> > > > > > +
-> >> > > > > > +           if (sk->sk_type != SOCK_STREAM && sk->sk_type != SOCK_DGRAM) {
-> >> > > > > > +                   ret = -EOPNOTSUPP;
-> >> > > > > > +                   break;
-> >> > > > > > +           }
-> >> > > > > > +
-> >> > > > > > +           other_ns = get_net_ns_by_fd(val);
-> >> > > > > > +           if (IS_ERR(other_ns)) {
-> >> > > > > > +                   ret = PTR_ERR(other_ns);
-> >> > > > > > +                   break;
-> >> > > > > > +           }
-> >> > > > > > +
-> >> > > > > > +           if (!ns_capable(other_ns->user_ns, CAP_NET_ADMIN)) {
-> >> > > > > > +                   ret = -EPERM;
-> >> > > > > > +                   goto out_err;
-> >> > > > > > +           }
-> >> > > > > > +
-> >> > > > > > +           /* check that the socket has never been connected or recently disconnected */
-> >> > > > > > +           if (sk->sk_state != TCP_CLOSE || sk->sk_shutdown & SHUTDOWN_MASK) {
-> >> > > > > > +                   ret = -EOPNOTSUPP;
-> >> > > > > > +                   goto out_err;
-> >> > > > > > +           }
-> >> > > > > > +
-> >> > > > > > +           /* check that the socket is not bound to an interface*/
-> >> > > > > > +           if (sk->sk_bound_dev_if != 0) {
-> >> > > > > > +                   ret = -EOPNOTSUPP;
-> >> > > > > > +                   goto out_err;
-> >> > > > > > +           }
-> >> > > > > > +
-> >> > > > > > +           my_ns = sock_net(sk);
-> >> > > > > > +           sock_net_set(sk, other_ns);
-> >> > > > > > +           put_net(my_ns);
-> >> > > > > > +           break;
-> >> > > > >
-> >> > > > >               cpu 0                           cpu 2
-> >> > > > >               ---                             ---
-> >> > > > >                                               ns = sock_net(sk);
-> >> > > > >               my_ns = sock_net(sk);
-> >> > > > >               sock_net_set(sk, other_ns);
-> >> > > > >               put_net(my_ns);
-> >> > > > >                                               ns is invalid ?
-> >> > > >
-> >> > > > That is the reason we want the socket to be in an un-connected state. That
-> >> > > > should help us avoid this situation.
-> >> > >
-> >> > > This is not enough....
-> >> > >
-> >> > > Another thread might look at sock_net(sk), for example from inet_diag
-> >> > > or tcp timers
-> >> > > (which can be fired even in un-connected state)
-> >> > >
-> >> > > Even UDP sockets can receive packets while being un-connected,
-> >> > > and they need to deref the net pointer.
-> >> > >
-> >> > > Currently there is no protection about sock_net(sk) being changed on the fly,
-> >> > > and the struct net could disappear and be freed.
-> >> > >
-> >> > > There are ~1500 uses of sock_net(sk) in the kernel, I do not think
-> >> > > you/we want to audit all
-> >> > > of them to check what could go wrong...
-> >> >
-> >> > I agree, auditing all the uses of sock_net(sk) is not a feasible option. From my
-> >> > exploration of the usage of sock_net(sk) it appeared that it might be safe to
-> >> > swap a sockets net ns if it had never been connected but I looked at only a
-> >> > subset of such uses.
-> >> >
-> >> > Introducing a ref counting logic to every access of sock_net(sk) may help get
-> >> > around this but invovles a bigger change to increment and decrement the count at
-> >> > every use of sock_net().
-> >> >
-> >> > Any suggestions if this could be achieved in another way much close to the
-> >> > socket creation time or any comments on our workaround for injecting sockets using
-> >> > seccomp addfd?
-> >> 
-> >> Maybe the existing BPF hook in inet_create() could be used ?
-> >> 
-> >> err = BPF_CGROUP_RUN_PROG_INET_SOCK(sk);
-> >> 
-> >> The BPF program might be able to switch the netns, because at this
-> >> time the new socket is not
-> >> yet visible from external threads.
-> >> 
-> >> Although it is not going to catch dual stack uses (open a V6 socket,
-> >> then use a v4mapped address at bind()/connect()/...
-> >
-> > We thought of a similar approach by intercepting the socket() call in seccomp
-> > and injecting a new file descritpor much earlier but as you said we run into the
-> > issue of handling dual stack sockets since we do not know in advance if its
-> > going to be used for a v4mapped address.
-> 
-> I would suggest adding a default ipv4 route from your ipv6 network
-> namespaces to your ipv4 network namespace, but that only works for
-> outbound traffic.  The inbound traffic problem is classically solved
-> via nat.
-> 
-> That you are not suggesting using nat has me thinking there is something
-> subtle in what you are trying to do that I am missing.
-> 
-> Perhaps your userspace can do:
-> 
-> 	previous_netns = open("/proc/self/ns/net");
-> 	setns(ipv4_netns);
-> 	socket();
-> 	setns(previous_netns);
-> 
-> 
-> As the network namespace is per thread this is atomic if you add
-> the logic to block signals around it.
-> 
-> Eric
+Hello,
 
-That is correct, we are not using nat, but we are providing a mechanism for the
-users of our container platform to move to ipv6 only while keeping egress
-connectivity to their ipv4 destinations. We are doing this transparently without
-any change in user code, but by intercept networking syscalls in a container
-manager running in a dedicated ipv4 only network namespace. Our current solution
-as described in my original commit message has limitations and we are looking
-for a way to switch a sockets namespace from the ipv6 only container network
-namespace to the dedicated ipv4 network namespace which really simplifies our
-design.
+syzbot found the following issue on:
 
-Since our userspace is the container workload we have no control over how they
-instantiate their sockets.
+HEAD commit:    80bd9028feca Add linux-next specific files for 20230131
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=17126969480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=904dc2f450eaad4a
+dashboard link: https://syzkaller.appspot.com/bug?extid=0bbf896c8341c8e137c2
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1534e75d480000
 
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/924618188238/disk-80bd9028.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/7a03cf86e545/vmlinux-80bd9028.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/568e80043a41/bzImage-80bd9028.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+0bbf896c8341c8e137c2@syzkaller.appspotmail.com
+
+general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
+CPU: 1 PID: 5252 Comm: syz-executor.2 Not tainted 6.2.0-rc6-next-20230131-syzkaller-09515-g80bd9028feca #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
+RIP: 0010:sg_assign_page include/linux/scatterlist.h:109 [inline]
+RIP: 0010:sg_set_page include/linux/scatterlist.h:139 [inline]
+RIP: 0010:__blk_bvec_map_sg block/blk-merge.c:501 [inline]
+RIP: 0010:__blk_bios_map_sg block/blk-merge.c:548 [inline]
+RIP: 0010:__blk_rq_map_sg+0x36e/0xfd0 block/blk-merge.c:575
+Code: 38 e8 36 5f 1a 00 48 89 c3 e8 9e 62 88 fd 48 8b 44 24 20 80 38 00 0f 85 fe 0b 00 00 48 8b 04 24 48 89 18 48 89 d8 48 c1 e8 03 <42> 80 3c 20 00 0f 85 f3 0b 00 00 4c 8b 74 24 30 31 ff 48 8b 2b 41
+RSP: 0018:ffffc9000428edf8 EFLAGS: 00010246
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff888019293a80 RSI: ffffffff83fc5382 RDI: 0000000000000007
+RBP: ffff888021114bb8 R08: 0000000000000007 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000000 R12: dffffc0000000000
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000a00
+FS:  00007f50df7a5700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f50df784718 CR3: 0000000077767000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ scsi_alloc_sgtables+0x236/0xf70 drivers/scsi/scsi_lib.c:1048
+ sd_setup_read_write_cmnd drivers/scsi/sd.c:1136 [inline]
+ sd_init_command+0x67a/0x32a0 drivers/scsi/sd.c:1260
+ scsi_prepare_cmd drivers/scsi/scsi_lib.c:1603 [inline]
+ scsi_queue_rq+0x1e7b/0x3a40 drivers/scsi/scsi_lib.c:1737
+ blk_mq_dispatch_rq_list+0x710/0x23f0 block/blk-mq.c:2056
+ __blk_mq_do_dispatch_sched block/blk-mq-sched.c:173 [inline]
+ blk_mq_do_dispatch_sched+0x95e/0xc20 block/blk-mq-sched.c:187
+ __blk_mq_sched_dispatch_requests+0x26d/0x3e0 block/blk-mq-sched.c:313
+ blk_mq_sched_dispatch_requests+0x10a/0x190 block/blk-mq-sched.c:339
+ __blk_mq_run_hw_queue+0x2b7/0x480 block/blk-mq.c:2174
+ __blk_mq_delay_run_hw_queue+0x5f7/0x700 block/blk-mq.c:2250
+ blk_mq_run_hw_queue+0x3b5/0x560 block/blk-mq.c:2298
+ blk_mq_sched_insert_requests+0x1d9/0xb30 block/blk-mq-sched.c:493
+ blk_mq_dispatch_plug_list block/blk-mq.c:2758 [inline]
+ blk_mq_flush_plug_list+0x39c/0xe10 block/blk-mq.c:2800
+ __blk_flush_plug block/blk-core.c:1150 [inline]
+ blk_finish_plug block/blk-core.c:1174 [inline]
+ blk_finish_plug+0xbb/0x170 block/blk-core.c:1171
+ __iomap_dio_rw+0xf85/0x1d80 fs/iomap/direct-io.c:602
+ iomap_dio_rw+0x40/0xa0 fs/iomap/direct-io.c:682
+ ext4_dio_read_iter fs/ext4/file.c:94 [inline]
+ ext4_file_read_iter+0x4be/0x690 fs/ext4/file.c:145
+ call_read_iter include/linux/fs.h:1845 [inline]
+ generic_file_splice_read+0x182/0x4b0 fs/splice.c:309
+ do_splice_to+0x1b9/0x240 fs/splice.c:793
+ splice_direct_to_actor+0x2ab/0x8a0 fs/splice.c:865
+ do_splice_direct+0x1ab/0x280 fs/splice.c:974
+ do_sendfile+0xb19/0x12c0 fs/read_write.c:1255
+ __do_sys_sendfile64 fs/read_write.c:1323 [inline]
+ __se_sys_sendfile64 fs/read_write.c:1309 [inline]
+ __x64_sys_sendfile64+0x1d0/0x210 fs/read_write.c:1309
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f50dea8c0c9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f50df7a5168 EFLAGS: 00000246 ORIG_RAX: 0000000000000028
+RAX: ffffffffffffffda RBX: 00007f50debabf80 RCX: 00007f50dea8c0c9
+RDX: 0000000000000000 RSI: 0000000000000004 RDI: 0000000000000003
+RBP: 00007f50deae7ae9 R08: 0000000000000000 R09: 0000000000000000
+R10: 000000000001ff01 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fffbb4e322f R14: 00007f50df7a5300 R15: 0000000000022000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:sg_assign_page include/linux/scatterlist.h:109 [inline]
+RIP: 0010:sg_set_page include/linux/scatterlist.h:139 [inline]
+RIP: 0010:__blk_bvec_map_sg block/blk-merge.c:501 [inline]
+RIP: 0010:__blk_bios_map_sg block/blk-merge.c:548 [inline]
+RIP: 0010:__blk_rq_map_sg+0x36e/0xfd0 block/blk-merge.c:575
+Code: 38 e8 36 5f 1a 00 48 89 c3 e8 9e 62 88 fd 48 8b 44 24 20 80 38 00 0f 85 fe 0b 00 00 48 8b 04 24 48 89 18 48 89 d8 48 c1 e8 03 <42> 80 3c 20 00 0f 85 f3 0b 00 00 4c 8b 74 24 30 31 ff 48 8b 2b 41
+RSP: 0018:ffffc9000428edf8 EFLAGS: 00010246
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff888019293a80 RSI: ffffffff83fc5382 RDI: 0000000000000007
+RBP: ffff888021114bb8 R08: 0000000000000007 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000000 R12: dffffc0000000000
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000a00
+FS:  00007f50df7a5700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffdfee5f5d8 CR3: 0000000077767000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	38 e8                	cmp    %ch,%al
+   2:	36 5f                	ss pop %rdi
+   4:	1a 00                	sbb    (%rax),%al
+   6:	48 89 c3             	mov    %rax,%rbx
+   9:	e8 9e 62 88 fd       	callq  0xfd8862ac
+   e:	48 8b 44 24 20       	mov    0x20(%rsp),%rax
+  13:	80 38 00             	cmpb   $0x0,(%rax)
+  16:	0f 85 fe 0b 00 00    	jne    0xc1a
+  1c:	48 8b 04 24          	mov    (%rsp),%rax
+  20:	48 89 18             	mov    %rbx,(%rax)
+  23:	48 89 d8             	mov    %rbx,%rax
+  26:	48 c1 e8 03          	shr    $0x3,%rax
+* 2a:	42 80 3c 20 00       	cmpb   $0x0,(%rax,%r12,1) <-- trapping instruction
+  2f:	0f 85 f3 0b 00 00    	jne    0xc28
+  35:	4c 8b 74 24 30       	mov    0x30(%rsp),%r14
+  3a:	31 ff                	xor    %edi,%edi
+  3c:	48 8b 2b             	mov    (%rbx),%rbp
+  3f:	41                   	rex.B
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
