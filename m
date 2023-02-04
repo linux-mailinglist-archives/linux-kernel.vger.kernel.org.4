@@ -2,99 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3963868A93F
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 10:40:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB89468A941
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 10:44:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232338AbjBDJkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 04:40:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39042 "EHLO
+        id S233143AbjBDJoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 04:44:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230187AbjBDJkt (ORCPT
+        with ESMTP id S230184AbjBDJoG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 04:40:49 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EAFB2E0D5;
-        Sat,  4 Feb 2023 01:40:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=NTZ9jPw8WP52KfsFuE2yWYqe1gYLvZrsudm7m6D0hLA=; b=iaOzaaQ0nfwjJY/vgdhOCngjE+
-        kGcKMzQGhg3hRO+bSa//sMUGBtSEKmJRUmsXiBfQBRr2snQtNER4Ilnu+Vb/n5rUKhTzIc8HyRwfe
-        tWPMJLs245/42xaqzBWiBH8n2ef6gP1/uu2whT71u0wugElh7cm+f1MdrOOjRJ1uTq2zObszcVHQZ
-        tBHBmqN9rhK2TEbWMhN8SVUt9gmV+lXAyoUPosHGvdm8UapZtC7ouV9XHKUFBmx6TMRdLa6iG+O5s
-        HSYCZMOP6Yt8bud4YGiia5+fBP82MKShAywaHKOtfGMyqSm6CN0ov+464F+mkB42jHNMB7ZhnyMHD
-        UD3jBAxA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pOF26-00F4h0-3A; Sat, 04 Feb 2023 09:40:30 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id DCCB9300652;
-        Sat,  4 Feb 2023 10:40:28 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id B2D5B2C7EB2D0; Sat,  4 Feb 2023 10:40:28 +0100 (CET)
-Date:   Sat, 4 Feb 2023 10:40:28 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH v2 2/2] cgroup/cpuset: Don't update tasks' cpumasks for
- cpu offline events
-Message-ID: <Y94oDD/8PDGqNLTH@hirez.programming.kicks-ass.net>
-References: <20230202143200.128753-1-longman@redhat.com>
- <20230202143200.128753-3-longman@redhat.com>
+        Sat, 4 Feb 2023 04:44:06 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7BF533444
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 01:44:05 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id v23so7590998plo.1
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Feb 2023 01:44:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Jlr7ucZANS1HTD7tqpm1obhZEXx5pvk7Aus1wPx5RkM=;
+        b=KsSp0F/iOCaeLRq2Btztcc61UCfwZXJnTOo43Oa0aFqzEtZBiTJUzaE0VGcxTV4u6B
+         FVN0bbr/HeC3RlS4iiyi35NxLkUJVVZH5KDn77wNHqgV0ZD2/RS8mlch1qf79h6JVYbC
+         +mT1I65LgeN9CdUS6ZiZ2j0fVmjAefTdm9gMQ2ZWef7cjsUECJRUyrKL6Echt0Kmzx9r
+         dPlPJTF0bCiXC8pajtyI0CwY7ZJuKyT1bR/DKq54ObZ3Itc20T+9yY9qDgVBeno1CW8b
+         lglA/WbHuI7NrGsn7BRLBgXtFEnIaTCTWkPaiTB6Kq0IiELEBdoZQ/AC8hlW1mlbe9gL
+         OWCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Jlr7ucZANS1HTD7tqpm1obhZEXx5pvk7Aus1wPx5RkM=;
+        b=Lexyz0jxo0L3mFlZSdBvNhXObWDhNQrFKwo/OKzCEWvUEKV9o9RVhaE5LFz1cW+MOn
+         OwXDGlEYixyefQCrrmhMRBzVL84W8fs2Jt+MhKIohlnaBT6H2GIlEkbri6/xPzM7fIXt
+         BBDbCdcZS/ONORSZb+3qZ4loVvUQzjBUlvwx5fPcz4y3NgCReEercXBowTjOi9L9cAE7
+         /jB+LwM8bEhw9tfgGuNJqJzTlQugQRLFJj0x/oX50H7aRHVeMV3JBLUkIlSQVRtBsgjB
+         cMULx655YmMsvriU9KmQcZKmnJZC6GNCEFyfompz/121XxXkWcf2cqu44QRYeSYP+g0K
+         CHjA==
+X-Gm-Message-State: AO0yUKV0mxPUu0xzjCebOc0HgLp+7W1pf0ECyVRK5+hBl+201pu4C4VI
+        5ENsyHrAtQcJ3FXPHBeuSpyhR9vX8RCqgjtG
+X-Google-Smtp-Source: AK7set+TLsj8/ei+1yPKzdLl4Lv/5CzSjD1nV609VJpiJHLZft4vH0BJSeU8b/RXQx4a8w4ZLsKtug==
+X-Received: by 2002:a17:90b:38c2:b0:22c:15a4:62a0 with SMTP id nn2-20020a17090b38c200b0022c15a462a0mr13531877pjb.37.1675503845168;
+        Sat, 04 Feb 2023 01:44:05 -0800 (PST)
+Received: from mi-HP-ProDesk-680-G4-MT.mioffice.cn ([43.224.245.237])
+        by smtp.gmail.com with ESMTPSA id ie12-20020a17090b400c00b0020b21019086sm10710252pjb.3.2023.02.04.01.44.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Feb 2023 01:44:04 -0800 (PST)
+From:   qixiaoyu1 <qxy65535@gmail.com>
+X-Google-Original-From: qixiaoyu1 <qixiaoyu1@xiaomi.com>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>
+Cc:     Ping Xiong <xiongping1@xiaomi.com>,
+        Xiaoyu Qi <qixiaoyu1@xiaomi.com>, linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Subject: [PATCH 2/2 v4] f2fs: add sysfs nodes to set last_age_weight
+Date:   Sat,  4 Feb 2023 17:43:45 +0800
+Message-Id: <20230204094345.591407-1-qixiaoyu1@xiaomi.com>
+X-Mailer: git-send-email 2.39.0
+In-Reply-To: <3589331b-a3ec-87e1-790d-387439672ea5@kernel.org>
+References: <3589331b-a3ec-87e1-790d-387439672ea5@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230202143200.128753-3-longman@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 09:32:00AM -0500, Waiman Long wrote:
-> It is a known issue that when a task is in a non-root v1 cpuset, a cpu
-> offline event will cause that cpu to be lost from the task's cpumask
-> permanently as the cpuset's cpus_allowed mask won't get back that cpu
-> when it becomes online again. A possible workaround for this type of
-> cpu offline/online sequence is to leave the offline cpu in the task's
-> cpumask and do the update only if new cpus are added. It also has the
-> benefit of reducing the overhead of a cpu offline event.
-> 
-> Note that the scheduler is able to ignore the offline cpus and so
-> leaving offline cpus in the cpumask won't do any harm.
-> 
-> Now with v2, only the cpu online events will cause a call to
-> hotplug_update_tasks() to update the tasks' cpumasks. For tasks
-> in a non-root v1 cpuset, the situation is a bit different. The cpu
-> offline event will not cause change to a task's cpumask. Neither does a
-> subsequent cpu online event because "cpuset.cpus" had that offline cpu
-> removed and its subsequent onlining won't be registered as a change
-> to the cpuset. An exception is when all the cpus in the original
-> "cpuset.cpus" have gone offline once. In that case, "cpuset.cpus" will
-> become empty which will force task migration to its parent. A task's
-> cpumask will also be changed if set_cpus_allowed_ptr() is somehow called
-> for whatever reason.
-> 
-> Of course, this patch can cause a discrepancy between v1's "cpuset.cpus"
-> and and its tasks' cpumasks. Howver, it can also largely work around
-> the offline cpu losing problem with v1 cpuset.
+Signed-off-by: qixiaoyu1 <qixiaoyu1@xiaomi.com>
+Signed-off-by: xiongping1 <xiongping1@xiaomi.com>
+---
+change log v3 -> v4:
+  - allow 0 and 100 to a valid value
 
-I don't thikn you can simply not update on offline, even if
-effective_cpus doesn't go empty, because the intersection between
-task_cpu_possible_mask() and effective_cpus might have gone empty.
+ Documentation/ABI/testing/sysfs-fs-f2fs |  5 +++++
+ fs/f2fs/extent_cache.c                  | 15 +++++++++------
+ fs/f2fs/f2fs.h                          |  1 +
+ fs/f2fs/sysfs.c                         | 11 +++++++++++
+ 4 files changed, 26 insertions(+), 6 deletions(-)
 
-Very fundamentally, the introduction of task_cpu_possible_mask() means
-that you now *HAVE* to always consider affinity settings per-task, you
-cannot group them anymore.
-
+diff --git a/Documentation/ABI/testing/sysfs-fs-f2fs b/Documentation/ABI/testing/sysfs-fs-f2fs
+index 9e3756625a81..11af7dbb6bc9 100644
+--- a/Documentation/ABI/testing/sysfs-fs-f2fs
++++ b/Documentation/ABI/testing/sysfs-fs-f2fs
+@@ -669,3 +669,8 @@ Contact:	"Ping Xiong" <xiongping1@xiaomi.com>
+ Description:	When DATA SEPARATION is on, it controls the age threshold to indicate
+ 		the data blocks as warm. By default it was initialized as 2621440 blocks
+ 		(equals to 10GB).
++
++What:           /sys/fs/f2fs/<disk>/last_age_weight
++Date:           January 2023
++Contact:        "Ping Xiong" <xiongping1@xiaomi.com>
++Description:    When DATA SEPARATION is on, it controls the weight of last data block age.
+diff --git a/fs/f2fs/extent_cache.c b/fs/f2fs/extent_cache.c
+index d9f12f404beb..ce99882ba81c 100644
+--- a/fs/f2fs/extent_cache.c
++++ b/fs/f2fs/extent_cache.c
+@@ -871,19 +871,21 @@ void f2fs_update_read_extent_tree_range_compressed(struct inode *inode,
+ }
+ #endif
+ 
+-static unsigned long long __calculate_block_age(unsigned long long new,
++static unsigned long long __calculate_block_age(struct f2fs_sb_info *sbi,
++						unsigned long long new,
+ 						unsigned long long old)
+ {
+ 	unsigned int rem_old, rem_new;
+ 	unsigned long long res;
++	unsigned int weight = sbi->last_age_weight;
+ 
+-	res = div_u64_rem(new, 100, &rem_new) * (100 - LAST_AGE_WEIGHT)
+-		+ div_u64_rem(old, 100, &rem_old) * LAST_AGE_WEIGHT;
++	res = div_u64_rem(new, 100, &rem_new) * (100 - weight)
++		+ div_u64_rem(old, 100, &rem_old) * weight;
+ 
+ 	if (rem_new)
+-		res += rem_new * (100 - LAST_AGE_WEIGHT) / 100;
++		res += rem_new * (100 - weight) / 100;
+ 	if (rem_old)
+-		res += rem_old * LAST_AGE_WEIGHT / 100;
++		res += rem_old * weight / 100;
+ 
+ 	return res;
+ }
+@@ -917,7 +919,7 @@ static int __get_new_block_age(struct inode *inode, struct extent_info *ei,
+ 			cur_age = ULLONG_MAX - tei.last_blocks + cur_blocks;
+ 
+ 		if (tei.age)
+-			ei->age = __calculate_block_age(cur_age, tei.age);
++			ei->age = __calculate_block_age(sbi, cur_age, tei.age);
+ 		else
+ 			ei->age = cur_age;
+ 		ei->last_blocks = cur_blocks;
+@@ -1233,6 +1235,7 @@ void f2fs_init_extent_cache_info(struct f2fs_sb_info *sbi)
+ 	atomic64_set(&sbi->allocated_data_blocks, 0);
+ 	sbi->hot_data_age_threshold = DEF_HOT_DATA_AGE_THRESHOLD;
+ 	sbi->warm_data_age_threshold = DEF_WARM_DATA_AGE_THRESHOLD;
++	sbi->last_age_weight = LAST_AGE_WEIGHT;
+ }
+ 
+ int __init f2fs_create_extent_cache(void)
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index e8953c3dc81a..c3609cbc28c7 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -1679,6 +1679,7 @@ struct f2fs_sb_info {
+ 	/* The threshold used for hot and warm data seperation*/
+ 	unsigned int hot_data_age_threshold;
+ 	unsigned int warm_data_age_threshold;
++	unsigned int last_age_weight;
+ 
+ 	/* basic filesystem units */
+ 	unsigned int log_sectors_per_block;	/* log2 sectors per block */
+diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
+index 83a366f3ee80..cd2fb52d1f3c 100644
+--- a/fs/f2fs/sysfs.c
++++ b/fs/f2fs/sysfs.c
+@@ -686,6 +686,15 @@ static ssize_t __sbi_store(struct f2fs_attr *a,
+ 		return count;
+ 	}
+ 
++	if (!strcmp(a->attr.name, "last_age_weight")) {
++		if (t < 0 || t > 100)
++			return -EINVAL;
++		if (t == *ui)
++			return count;
++		*ui = (unsigned int)t;
++		return count;
++	}
++
+ 	*ui = (unsigned int)t;
+ 
+ 	return count;
+@@ -944,6 +953,7 @@ F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, revoked_atomic_block, revoked_atomic_block)
+ /* For block age extent cache */
+ F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, hot_data_age_threshold, hot_data_age_threshold);
+ F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, warm_data_age_threshold, warm_data_age_threshold);
++F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, last_age_weight, last_age_weight);
+ 
+ #define ATTR_LIST(name) (&f2fs_attr_##name.attr)
+ static struct attribute *f2fs_attrs[] = {
+@@ -1042,6 +1052,7 @@ static struct attribute *f2fs_attrs[] = {
+ 	ATTR_LIST(revoked_atomic_block),
+ 	ATTR_LIST(hot_data_age_threshold),
+ 	ATTR_LIST(warm_data_age_threshold),
++	ATTR_LIST(last_age_weight),
+ 	NULL,
+ };
+ ATTRIBUTE_GROUPS(f2fs);
+-- 
+2.39.0
 
