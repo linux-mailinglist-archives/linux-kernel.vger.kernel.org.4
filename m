@@ -2,212 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38C0568AC93
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 22:24:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE96468AC95
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 22:25:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233117AbjBDVYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 16:24:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37448 "EHLO
+        id S233146AbjBDVZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 16:25:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230357AbjBDVYL (ORCPT
+        with ESMTP id S230297AbjBDVZD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 16:24:11 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9907113DF1
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 13:24:09 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id j32-20020a05600c1c2000b003dc4fd6e61dso8295980wms.5
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Feb 2023 13:24:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PARsC8y1fPOLUn5xm+fwUpwavqaXYaKZQCUnLUBx/AY=;
-        b=ROSh4d0FpqJs8EZAFBENi9nSEZsbr7+OYgUVCkyfoz70uvDwzo3wKCvO8P3dzrhkgg
-         +MrRaxu4KnvTg1c/Lc9uA5/0kcOjZd7jES4QK6IRQkvTdQwSCEIWR3Y4HsxOLGUVQ/8y
-         AymaF5hX5TUlHN4eiB3z1/aUP6/RA2P7o5VFGy1NZMGOc83eYY5podlRfX1R3copJfWf
-         WfeO/jWPsJp2kqEvZPbLAwORIqf7YTB7DvhRngEMxZPJwA3tDk2EFIQtb+/YOGlH0SWB
-         IzApacoZLLrLAHO/e1YfAhuYWGGhtKLjM/4Orb+TLWvt3jyQNX07qnkyvdmNXeB2h3re
-         vD4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PARsC8y1fPOLUn5xm+fwUpwavqaXYaKZQCUnLUBx/AY=;
-        b=X0DMegcCJJYl7wGI/J+ItQWb6XTAWS4tIFtrUNmMmkrqNYRS9pJkzRJPTF+YOgVjWV
-         0yqviEH9RX6+3YP8j1f5F3tnYklJzq94DY/44MEUPx3sP8ShU+aMJPQzg2mWce+OW7+E
-         9U2G8iRAlE5SRE6RKoGq1xdIqoTnhlluvQMXZc9VMH14+2MWN9R80iB/IO6c4nVLFmOt
-         g/g71XQoc9sxL26KP6m+hGzohoFtFA5IXJ4zZJQR2JA9tac7CTQmjMGhz+12R5Ajv6r4
-         KLJJTSKrj4Uf1OtX5OVVwIzXvzRlaDdYW4CVeHN49Ao3RaLx0dm2wwlc922Nybh+rtd1
-         99VQ==
-X-Gm-Message-State: AO0yUKU6UuQNCWvRyyPF6AiYGNyLx0aQz7FrLcbogT67SRlChmz5J3k1
-        kypfyUAdiejsly9KvTeKQhFWJv7kDycJO0fqGQ5uXA==
-X-Google-Smtp-Source: AK7set8E/kwj+RPaRP0zrGj8rKXKAErZLLzjxXZGU2xDbLWNgjsyjgtnzFH2ioXJ1Fj05s2DC8Kfc/P/mIAw/Owkaq0=
-X-Received: by 2002:a05:600c:1e0a:b0:3dc:599b:795e with SMTP id
- ay10-20020a05600c1e0a00b003dc599b795emr663412wmb.203.1675545847849; Sat, 04
- Feb 2023 13:24:07 -0800 (PST)
+        Sat, 4 Feb 2023 16:25:03 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABD9C13DF1
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 13:24:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675545898; x=1707081898;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=SIjIwo4tqoLTzpkfNCyUc5nrfGSnl+IuJK3oWsAZ2FE=;
+  b=PQzxdylUDY/K1N5Vjxx2Jyue1I31TLyTACVuMTAkDfIfPQbRCAqfPzzY
+   /OlpSb+jYlpN+Df1NHQq/G+LoNM+4QV1KNsMeqrZs8/AjdLXzLKxL95uz
+   6viz6QLnPCnmusqbTzBwlvyAHe5SgHfZ6mPi+8woBUQQBmJwSaMd+oKoH
+   VETBKlTUCPfRoldm8u8Bm0PUAwj7xvGNM6u62eDFJo6zzM0yP+X2WfX0i
+   /8h6XxLqIMUr/HfQpslKrYmo4LcRrQpTZLFTfRLVKHshSzGOJ0y6Mx+iO
+   vATUJjpu1OITPyVuCB43ZRYY98VEToMImxMvckLEHY/JYSer1kclAaIx8
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="330282818"
+X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
+   d="scan'208";a="330282818"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2023 13:24:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="994872326"
+X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
+   d="scan'208";a="994872326"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 04 Feb 2023 13:24:57 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pOQ1o-0001XA-1S;
+        Sat, 04 Feb 2023 21:24:56 +0000
+Date:   Sun, 5 Feb 2023 05:24:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: kernel/trace/rv/monitors/wip/wip.c:20:1: sparse: sparse: symbol
+ 'da_mon_wip' was not declared. Should it be static?
+Message-ID: <202302050517.4xtGBe0d-lkp@intel.com>
 MIME-Version: 1.0
-References: <20230203014014.75720-1-irogers@google.com> <CAP-5=fX0ohsCUspm7NowDy2bmSr2cJfp=iaStK4EAdVy7zBHGA@mail.gmail.com>
- <Y90XgtX9uv26UAQa@kernel.org> <Y90bsM4DGL+WV8m0@kernel.org>
- <Y90b7shHtOCQL3ma@kernel.org> <Y90di+N7TODkFvMV@kernel.org>
- <Y90rtA95mWW5Othk@kernel.org> <Y90v+jTe6z1dSFE0@kernel.org> <Y908vNzJp7cVM8gN@kernel.org>
-In-Reply-To: <Y908vNzJp7cVM8gN@kernel.org>
-From:   Ian Rogers <irogers@google.com>
-Date:   Sat, 4 Feb 2023 13:23:53 -0800
-Message-ID: <CAP-5=fVfNVSTqSp4qzqAHcCXqwOHXaq1eMuyf2y67vvsrwwO6g@mail.gmail.com>
-Subject: Re: [PATCH v1] perf pmu: Fix aarch64 build
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
-        Rob Herring <robh@kernel.org>,
-        Kang Minchul <tegongkang@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sandipan Das <sandipan.das@amd.com>,
-        Jing Zhang <renyu.zj@linux.alibaba.com>,
-        linuxppc-dev@lists.ozlabs.org, Kajol Jain <kjain@linux.ibm.com>,
-        Stephane Eranian <eranian@google.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Caleb Biggers <caleb.biggers@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,T_SPF_TEMPERROR
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 3, 2023 at 8:56 AM Arnaldo Carvalho de Melo <acme@kernel.org> w=
-rote:
->
-> Em Fri, Feb 03, 2023 at 01:02:02PM -0300, Arnaldo Carvalho de Melo escrev=
-eu:
-> > Em Fri, Feb 03, 2023 at 12:43:48PM -0300, Arnaldo Carvalho de Melo escr=
-eveu:
-> > > I tried bisecting, but at this cset:
-> > >
-> > > acme@roc-rk3399-pc:~/git/perf$ git log --oneline -1
-> > > d22e569cd33d (HEAD) perf pmu-events: Separate the metrics from events=
- for no jevents
-> > > acme@roc-rk3399-pc:~/git/perf$
-> > >
-> > > I'm getting this:
-> > >
-> > >   CC      /tmp/build/perf/pmu-events/pmu-events.o
-> > > pmu-events/pmu-events.c:3637:32: error: no previous prototype for =E2=
-=80=98perf_pmu__find_table=E2=80=99 [-Werror=3Dmissing-prototypes]
-> > >  3637 | const struct pmu_events_table *perf_pmu__find_table(struct pe=
-rf_pmu *pmu)
-> > >       |                                ^~~~~~~~~~~~~~~~~~~~
-> > >   CC      /tmp/build/perf/builtin-ftrace.o
-> > >   CC      /tmp/build/perf/builtin-help.o
-> > >   CC      /tmp/build/perf/builtin-buildid-list.o
-> > > cc1: all warnings being treated as errors
-> > > make[3]: *** [/home/acme/git/perf/tools/build/Makefile.build:97: /tmp=
-/build/perf/pmu-events/pmu-events.o] Error 1
-> > > make[2]: *** [Makefile.perf:676: /tmp/build/perf/pmu-events/pmu-event=
-s-in.o] Error 2
-> > > make[2]: *** Waiting for unfinished jobs....
-> > >   CC      /tmp/build/perf/builtin-buildid-cache.o
-> > >
-> > > <SNIP>
-> > >
-> > >   CC      /tmp/build/perf/tests/attr.o
-> > > arch/arm64/util/pmu.c: In function =E2=80=98pmu_events_table__find=E2=
-=80=99:
-> > > arch/arm64/util/pmu.c:35:24: error: implicit declaration of function =
-=E2=80=98perf_pmu__find_table=E2=80=99; did you mean =E2=80=98perf_pmu__fin=
-d_by_type=E2=80=99? [-Werror=3Dimplicit-function-declaration]
-> > >    35 |                 return perf_pmu__find_table(pmu);
-> > >       |                        ^~~~~~~~~~~~~~~~~~~~
-> > >       |                        perf_pmu__find_by_type
-> > > arch/arm64/util/pmu.c:35:24: error: returning =E2=80=98int=E2=80=99 f=
-rom a function with return type =E2=80=98const struct pmu_events_table *=E2=
-=80=99 makes pointer from integer without a cast [-Werror=3Dint-conversion]
-> > >    35 |                 return perf_pmu__find_table(pmu);
-> > >       |                        ^~~~~~~~~~~~~~~~~~~~~~~~~
-> > > cc1: all warnings being treated as errors
-> > > make[6]: *** [/home/acme/git/perf/tools/build/Makefile.build:97: /tmp=
-/build/perf/arch/arm64/util/pmu.o] Error 1
-> > > make[5]: *** [/home/acme/git/perf/tools/build/Makefile.build:139: uti=
-l] Error 2
-> > > make[4]: *** [/home/acme/git/perf/tools/build/Makefile.build:139: arm=
-64] Error 2
-> > > make[3]: *** [/home/acme/git/perf/tools/build/Makefile.build:139: arc=
-h] Error 2
-> > > make[3]: *** Waiting for unfinished jobs....
-> > >   CC      /tmp/build/perf/tests/vmlinux-kallsyms.o
-> > >
-> > > -----
-> > >
-> > > I'm building with:
-> >
-> > So:
-> >
-> > acme@roc-rk3399-pc:~/git/perf$ find tools/perf/ -name "*.[ch]" | xargs =
-grep -w perf_pmu__find_table
-> > tools/perf/arch/arm64/util/pmu.c:             return perf_pmu__find_tab=
-le(pmu);
-> > tools/perf/pmu-events/pmu-events.c:const struct pmu_events_table *perf_=
-pmu__find_table(struct perf_pmu *pmu)
-> > acme@roc-rk3399-pc:~/git/perf$
-> > acme@roc-rk3399-pc:~/git/perf$ git log --oneline -1
-> > d22e569cd33d (HEAD) perf pmu-events: Separate the metrics from events f=
-or no jevents
-> > acme@roc-rk3399-pc:~/git/perf$
-> >
-> > Tring to fix...
->
-> tools/perf/pmu-events/pmu-events.c was a leftover from a previous build,
-> strange as I build using O=3D, not to clutter the source dir, so perhaps
-> handling that is missing, I'll check.
->
-> Fixed aarch64 specific one with:
->
-> diff --git a/tools/perf/arch/arm64/util/pmu.c b/tools/perf/arch/arm64/uti=
-l/pmu.c
-> index 801bf52e2ea6..b4eaf00ec5a8 100644
-> --- a/tools/perf/arch/arm64/util/pmu.c
-> +++ b/tools/perf/arch/arm64/util/pmu.c
-> @@ -32,7 +32,7 @@ const struct pmu_events_table *pmu_events_table__find(v=
-oid)
->         struct perf_pmu *pmu =3D pmu__find_core_pmu();
->
->         if (pmu)
-> -               return perf_pmu__find_table(pmu);
-> +               return perf_pmu__find_events_table(pmu);
->
->         return NULL;
->  }
->
->
-> ---
->
-> Continuing...
+Hi Stephen,
 
-Thanks! Sorry for missing this one. Ideally we'd have less code under
-arch/ . The previous error messages made me think you may need to
-build clean.
+First bad commit (maybe != root cause):
 
-Ian
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   db27c22251e7c8f3a9d5bfb55c9c8c701a70bbb3
+commit: 10bde81c74863472047f31304064018c40f488ee rv/monitor: Add the wip monitor
+date:   6 months ago
+config: csky-randconfig-s052-20230205 (https://download.01.org/0day-ci/archive/20230205/202302050517.4xtGBe0d-lkp@intel.com/config)
+compiler: csky-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=10bde81c74863472047f31304064018c40f488ee
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 10bde81c74863472047f31304064018c40f488ee
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=csky olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=csky SHELL=/bin/bash kernel/trace/rv/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+sparse warnings: (new ones prefixed by >>)
+   kernel/trace/rv/monitors/wip/wip.c: note: in included file:
+   kernel/trace/rv/monitors/wip/wip.h:30:22: sparse: sparse: symbol 'automaton_wip' was not declared. Should it be static?
+
+vim +/da_mon_wip +20 kernel/trace/rv/monitors/wip/wip.c
+
+8812d21219b9c6 Daniel Bristot de Oliveira 2022-07-29  18  
+8812d21219b9c6 Daniel Bristot de Oliveira 2022-07-29 @19  struct rv_monitor rv_wip;
+8812d21219b9c6 Daniel Bristot de Oliveira 2022-07-29 @20  DECLARE_DA_MON_PER_CPU(wip, unsigned char);
+8812d21219b9c6 Daniel Bristot de Oliveira 2022-07-29  21  
+
+:::::: The code at line 20 was first introduced by commit
+:::::: 8812d21219b9c649dd25eb93915e00939944aeb7 rv/monitor: Add the wip monitor skeleton created by dot2k
+
+:::::: TO: Daniel Bristot de Oliveira <bristot@kernel.org>
+:::::: CC: Steven Rostedt (Google) <rostedt@goodmis.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
