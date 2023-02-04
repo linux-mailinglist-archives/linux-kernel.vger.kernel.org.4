@@ -2,117 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3E2868ACD3
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 23:16:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03D3D68ACDB
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 23:24:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231827AbjBDWQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 17:16:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47878 "EHLO
+        id S232127AbjBDWYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 17:24:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230403AbjBDWQB (ORCPT
+        with ESMTP id S229448AbjBDWYP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 17:16:01 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 285E71554E
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 14:16:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675548960; x=1707084960;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Plgk4imI89DJIyFiyoJPXHa0tezSnh1RMpc0Bzd5PV0=;
-  b=YyifnuEU4I9jOyfPrhriycp+NdOayy63/AbiVyGS3EMmAu22Vyb0ZsQc
-   Yq/F3sIr1uk320la2mCQ+GZ+tKxMYg8hcXWBe31XH4QfxFc8OEYpiuMMO
-   z4lhf3Ovh9faH9kdi52y8MJGVMbBglunoOq9R7A2mzcexKJTZQTz/KJXi
-   dmnq/KDWaIQx+nobFjIAUs68C+RIt/fAZyo9AKkoYCraRMY39TvneHnCZ
-   EhLGhq9vu5hc73fPbeYN8Wg5GZ8OCVtH5sP74CJeV4Vu5yOA3pUJuL/Wo
-   qqN/34XII4pEPBKZEfRTBqCdQ5Xc+c1nu+d1KRZSsJmqH+Gsb3mMm10c9
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="330287350"
-X-IronPort-AV: E=Sophos;i="5.97,274,1669104000"; 
-   d="scan'208";a="330287350"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2023 14:15:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="668029649"
-X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
-   d="scan'208";a="668029649"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 04 Feb 2023 14:15:58 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pOQpB-0001YO-2F;
-        Sat, 04 Feb 2023 22:15:57 +0000
-Date:   Sun, 5 Feb 2023 06:15:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Stafford Horne <shorne@gmail.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: drivers/video/fbdev/sstfb.c:337:23: sparse: sparse: incorrect type
- in argument 1 (different address spaces)
-Message-ID: <202302050615.2F4POBYV-lkp@intel.com>
+        Sat, 4 Feb 2023 17:24:15 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D12F61EFE6;
+        Sat,  4 Feb 2023 14:24:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 81C8FB80B69;
+        Sat,  4 Feb 2023 22:24:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20B8BC433D2;
+        Sat,  4 Feb 2023 22:24:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675549452;
+        bh=Sm2d8k9RPZVo8JdWBw80YfFCn+If9x6+NZFYNIfLeM0=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=IBOjNPdhP2dyX5fKdIBLJitAyqa9AMQHi4g+eDC5O5mfcxedWxOgS0ijLx1RRSQAI
+         Fn6pR5/w4P30wbvdNAPjCLtdxly0DuETY0TIW4yWQsMYmfQTX0H8LWcYWgxtl/mpht
+         LOawar/1wpaRVG8WaKOgfi6aWvdKKEEyymxCjV7V2Kj8uPHDLGAtqyW1mq+JArsjDe
+         QidmaKMN9XBNS6IfYtrvPhAHIAuQixf8S75nrbEW9wojaHzrmpbdnHR/LuQ4dlNttD
+         5UeJKXDG7b4yQRSDTsiUqUx3fRI0M9cvNE4WJegu73kLv9X3MYSFivEUKEiEWlc25J
+         LMHlV2jBzHFpw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id A699C5C06AB; Sat,  4 Feb 2023 14:24:11 -0800 (PST)
+Date:   Sat, 4 Feb 2023 14:24:11 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        kernel-team@meta.com, mingo@kernel.org, parri.andrea@gmail.com,
+        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
+        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+        luc.maranget@inria.fr, akiyks@gmail.com
+Subject: Re: Current LKMM patch disposition
+Message-ID: <20230204222411.GC2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230204004843.GA2677518@paulmck-ThinkPad-P17-Gen-1>
+ <Y920w4QRLtC6kd+x@rowland.harvard.edu>
+ <20230204014941.GS2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y95yhJgNq8lMXPdF@rowland.harvard.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <Y95yhJgNq8lMXPdF@rowland.harvard.edu>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stafford,
+On Sat, Feb 04, 2023 at 09:58:12AM -0500, Alan Stern wrote:
+> On Fri, Feb 03, 2023 at 05:49:41PM -0800, Paul E. McKenney wrote:
+> > On Fri, Feb 03, 2023 at 08:28:35PM -0500, Alan Stern wrote:
+> > > On Fri, Feb 03, 2023 at 04:48:43PM -0800, Paul E. McKenney wrote:
+> > > > Hello!
+> > > > 
+> > > > Here is what I currently have for LKMM patches:
+> > > > 
+> > > > 289e1c89217d4 ("locking/memory-barriers.txt: Improve documentation for writel() example")
+> > > > ebd50e2947de9 ("tools: memory-model: Add rmw-sequences to the LKMM")
+> > > > aae0c8a50d6d3 ("Documentation: Fixed a typo in atomic_t.txt")
+> > > > 9ba7d3b3b826e ("tools: memory-model: Make plain accesses carry dependencies")
+> > > > 
+> > > > 	Queued for the upcoming (v6.3) merge window.
+> > > > 
+> > > > c7637e2a8a27 ("tools/memory-model: Update some warning labels")
+> > > > 7862199d4df2 ("tools/memory-model: Unify UNLOCK+LOCK pairings to po-unlock-lock-")
+> > > > 
+> > > > 	Are ready for the next (v6.4) merge window.  If there is some
+> > > > 	reason that they should instead go into v6.3, please let us
+> > > > 	all know.
+> > > > 
+> > > > a6cd5214b5ba ("tools/memory-model: Document LKMM test procedure")
+> > > > 
+> > > > 	This goes onto the lkmm-dev pile because it is documenting how
+> > > > 	to use those scripts.
+> > > > 
+> > > > https://lore.kernel.org/lkml/Y9GPVnK6lQbY6vCK@rowland.harvard.edu/
+> > > > https://lore.kernel.org/lkml/20230126134604.2160-3-jonas.oberhauser@huaweicloud.com
+> > > > https://lore.kernel.org/lkml/20230203201913.2555494-1-joel@joelfernandes.org/
+> > > > 5d871b280e7f ("tools/memory-model: Add smp_mb__after_srcu_read_unlock()")
+> > > > 
+> > > > 	These need review and perhaps further adjustment.
+> > > > 
+> > > > So, am I missing any?  Are there any that need to be redirected?
+> > > 
+> > > The "Provide exact semantics for SRCU" patch should have:
+> > > 
+> > > 	Portions suggested by Boqun Feng and Jonas Oberhauser.
+> > > 
+> > > added at the end, together with your Reported-by: tag.  With that, I 
+> > > think it can be queued for 6.4.
+> > 
+> > Thank you!  Does the patch shown below work for you?
+> > 
+> > (I have tentatively queued this, but can easily adjust or replace it.)
+> 
+> It looks fine.
 
-First bad commit (maybe != root cause):
+Very good, thank you for looking it over!  I pushed it out on branch
+stern.2023.02.04a.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   db27c22251e7c8f3a9d5bfb55c9c8c701a70bbb3
-commit: ded2ee36313c941f1a12b6f85cde295b575264ae openrisc: Add pci bus support
-date:   6 months ago
-config: openrisc-randconfig-s032-20230205 (https://download.01.org/0day-ci/archive/20230205/202302050615.2F4POBYV-lkp@intel.com/config)
-compiler: or1k-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ded2ee36313c941f1a12b6f85cde295b575264ae
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout ded2ee36313c941f1a12b6f85cde295b575264ae
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=openrisc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=openrisc SHELL=/bin/bash drivers/video/fbdev/
+Would anyone like to ack/review/whatever this one?
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-sparse warnings: (new ones prefixed by >>)
->> drivers/video/fbdev/sstfb.c:337:23: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *s @@     got char [noderef] __iomem *screen_base @@
-   drivers/video/fbdev/sstfb.c:337:23: sparse:     expected void *s
-   drivers/video/fbdev/sstfb.c:337:23: sparse:     got char [noderef] __iomem *screen_base
-
-vim +337 drivers/video/fbdev/sstfb.c
-
-^1da177e4c3f41 drivers/video/sstfb.c Linus Torvalds 2005-04-16  330  
-^1da177e4c3f41 drivers/video/sstfb.c Linus Torvalds 2005-04-16  331  /*
-^1da177e4c3f41 drivers/video/sstfb.c Linus Torvalds 2005-04-16  332   * clear lfb screen
-^1da177e4c3f41 drivers/video/sstfb.c Linus Torvalds 2005-04-16  333   */
-^1da177e4c3f41 drivers/video/sstfb.c Linus Torvalds 2005-04-16  334  static void sstfb_clear_screen(struct fb_info *info)
-^1da177e4c3f41 drivers/video/sstfb.c Linus Torvalds 2005-04-16  335  {
-^1da177e4c3f41 drivers/video/sstfb.c Linus Torvalds 2005-04-16  336  	/* clear screen */
-^1da177e4c3f41 drivers/video/sstfb.c Linus Torvalds 2005-04-16 @337  	fb_memset(info->screen_base, 0, info->fix.smem_len);
-^1da177e4c3f41 drivers/video/sstfb.c Linus Torvalds 2005-04-16  338  }
-^1da177e4c3f41 drivers/video/sstfb.c Linus Torvalds 2005-04-16  339  
-
-:::::: The code at line 337 was first introduced by commit
-:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
-
-:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
-:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+							Thanx, Paul
