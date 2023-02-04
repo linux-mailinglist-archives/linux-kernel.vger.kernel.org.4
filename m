@@ -2,85 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC67068A90F
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 09:50:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BED7568A918
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 09:55:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233074AbjBDIuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 03:50:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55304 "EHLO
+        id S232601AbjBDIzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 03:55:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230101AbjBDIuX (ORCPT
+        with ESMTP id S230101AbjBDIzm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 03:50:23 -0500
-Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [83.223.95.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F3E17148;
-        Sat,  4 Feb 2023 00:50:20 -0800 (PST)
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
-        by bmailout1.hostsharing.net (Postfix) with ESMTPS id 0DCF1300002D0;
-        Sat,  4 Feb 2023 09:50:19 +0100 (CET)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id E72C5275D55; Sat,  4 Feb 2023 09:50:18 +0100 (CET)
-Date:   Sat, 4 Feb 2023 09:50:18 +0100
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Helge Deller <deller@gmx.de>, Zeno Davatz <zdavatz@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH] Revert "fbdev: Remove conflicting devices on PCI bus"
-Message-ID: <20230204085018.GA31758@wunner.de>
-References: <20230203230909.2058637-1-helgaas@kernel.org>
+        Sat, 4 Feb 2023 03:55:42 -0500
+Received: from qproxy6-pub.mail.unifiedlayer.com (qproxy6-pub.mail.unifiedlayer.com [69.89.23.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B13993755D
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 00:55:41 -0800 (PST)
+Received: from alt-proxy28.mail.unifiedlayer.com (unknown [74.220.216.123])
+        by qproxy6.mail.unifiedlayer.com (Postfix) with ESMTP id 318218029A8D
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 08:55:41 +0000 (UTC)
+Received: from cmgw11.mail.unifiedlayer.com (unknown [10.0.90.126])
+        by progateway1.mail.pro1.eigbox.com (Postfix) with ESMTP id B1A611003FD83
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 08:55:40 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id OEKipoy4ITEMVOEKipReFl; Sat, 04 Feb 2023 08:55:40 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=OpmKdwzt c=1 sm=1 tr=0 ts=63de1d8c
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=m04uMKEZRckA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=gYy1Q2bXS39MClsk3KgCHi5jX7KhWTU2o29KMyE2kvg=; b=iUd9gTOpQYs6mCJ+YAqAbCLdeI
+        bFl94R2Xy2mVnOLFy3MXL9/iGUPURP8xbmUO4waI0T03CSrMP4vefIvMTbHR0hsEQALuSY53pt4k8
+        vmcfz4mTcaqV4NDd0tRDsce3ePdWH44HL3p1HEl2HwA7oz8tpNt3Yk3zlu5ha518bWjLsUm62Uw93
+        8f+WfTaFE8BwJkUmC4CSk+lzg2MRDKYyNAYBN2wqZqOV1gjD2CihYxXhZRUUY2vSb6NMR9QardlRe
+        fnL7NpQyylu35MfGegZrePJ8yYcZZWX4wPq4W/Oqg2CMD3HhA3Q+P8Ya6O27w0ZrkbzhM49R5t3RI
+        PArbwhzg==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:53464 helo=[10.0.1.47])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1pOEKh-003UY0-Lw;
+        Sat, 04 Feb 2023 01:55:39 -0700
+Subject: Re: [PATCH 5.15 00/20] 5.15.92-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230203101007.985835823@linuxfoundation.org>
+In-Reply-To: <20230203101007.985835823@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <de146bc5-50b8-f347-31cf-70b5e93a4541@w6rz.net>
+Date:   Sat, 4 Feb 2023 00:55:36 -0800
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230203230909.2058637-1-helgaas@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1pOEKh-003UY0-Lw
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:53464
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 4
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 05:09:09PM -0600, Bjorn Helgaas wrote:
-> From: Bjorn Helgaas <bhelgaas@google.com>
-> 
-> This reverts commit 145eed48de278007f646b908fd70ac59d24ed81a.
-> 
-> Zeno Davatz reported that 145eed48de27 ("fbdev: Remove conflicting devices
-> on PCI bus") caused a console hang.  The machine was actually still usable
-> via ssh, etc., but there was no activity on the console.
-> 
-> Reverting 145eed48de27 for the nvidiafb on that system fixed the problem.
-> 
-> Revert 145eed48de27 ("fbdev: Remove conflicting devices on PCI bus") since
-> we don't know what caused the problem.
-> 
-> Fixes: https://bugzilla.kernel.org/show_bug.cgi?id=216859
+On 2/3/23 2:13 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.92 release.
+> There are 20 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sun, 05 Feb 2023 10:09:58 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.92-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Shouldn't that rather be:
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216859
-Fixes: 145eed48de27 ("fbdev: Remove conflicting devices on PCI bus")
-Cc: stable@vger.kernel.org # v6.1+
+Tested-by: Ron Economos <re@w6rz.net>
 
-?
-
-> Reported-by: Zeno Davatz <zdavatz@gmail.com>
-> Tested-by: Zeno Davatz <zdavatz@gmail.com>
-> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-> Cc: Helge Deller <deller@gmx.de>
-> Cc: Thomas Zimmermann <tzimmermann@suse.de>
-> Cc: Javier Martinez Canillas <javierm@redhat.com>
-> Cc: linux-fbdev@vger.kernel.org
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: linux-kernel@vger.kernel.org
-> ---
