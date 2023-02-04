@@ -2,105 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43BCD68AA6F
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 14:56:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59C7868AA74
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 15:00:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233911AbjBDN45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 08:56:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56386 "EHLO
+        id S233602AbjBDOAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 09:00:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233690AbjBDN4v (ORCPT
+        with ESMTP id S231355AbjBDN7v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 08:56:51 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C05938673;
-        Sat,  4 Feb 2023 05:56:10 -0800 (PST)
-Received: from tincan.fosdem.net (unknown [IPv6:2001:67c:1810:f055:f11a:faf6:a821:9f0a])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Sat, 4 Feb 2023 08:59:51 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82AA56A75;
+        Sat,  4 Feb 2023 05:59:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: gtucker)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id CD3786602BD5;
-        Sat,  4 Feb 2023 13:56:06 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1675518967;
-        bh=kSpeY1jQ+KHNtRVxlbyNW0dIhE+UqvA8UpG4A72vwC4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=UT1hholwJV55eMI6vvLJpuCryw/51RcCoCFuRLtL7pih9Hs2N3PUkHBxV480KgwTa
-         7SG9svy3XWc7SPRbRAlSfCfxNP1D6TXUlGEv56j+A4DmJ5r1rsoEwOXtuc7mos1nrA
-         tmEuIO1Ve4QDgVP0xQfgoEU/V7VXiJZFr18cCwYDWRAOoWhrlW5KLWE/jaOAnlPpgF
-         69QNcR1eTzTYP1EvaM1967A0YFCKnC/kVmeYWpgwBQUtVnADaVlnlv5A2BCg0PUozj
-         7MMfESP1VJtFYpXNVC6NgASS06IJ9NBbc1ptpTsTSzF3FaWgjdD5Xbj0G4p04t1H0u
-         s4aaYhsnGrfNw==
-From:   Guillaume Tucker <guillaume.tucker@collabora.com>
-To:     Shuah Khan <shuah@kernel.org>,
-        Gautam <gautammenghani201@gmail.com>,
-        David Laight <David.Laight@ACULAB.COM>
-Cc:     Guillaume Tucker <guillaume.tucker@collabora.com>,
-        kernel@collabora.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernelci@lists.linux.dev
-Subject: [PATCH v2] selftests: use printf instead of echo -ne
-Date:   Sat,  4 Feb 2023 14:56:52 +0100
-Message-Id: <20230204135652.336495-1-guillaume.tucker@collabora.com>
-X-Mailer: git-send-email 2.30.2
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 16B2260C58;
+        Sat,  4 Feb 2023 13:59:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4C78C433D2;
+        Sat,  4 Feb 2023 13:59:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1675519189;
+        bh=Fhavk2AQ6Or0LmISVKTZDzP/lj4mydikIpRbCIbVl3Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=K43VplUf1hWGz9SKH7Vwgzg7I7Q3Shv4eEMkVhuhiMTfOrSZ0YK3bSEZF6RmUo++k
+         zGQ+uGECtprCx/AhLZIv7vxd/9c78p6+CIXWbNAktoH3a5/A0u/axvSpg0PppFY2m9
+         989HhDoREMm5mpUUSU8KkS8nhVlnnhBnxRZu2wDQ=
+Date:   Sat, 4 Feb 2023 14:59:46 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     Eric Biggers <ebiggers@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>, stable@vger.kernel.org,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.4 000/134] 5.4.231-rc1 review
+Message-ID: <Y95k0h8XetGmcSP1@kroah.com>
+References: <20230203101023.832083974@linuxfoundation.org>
+ <20230203155619.GA3176223@roeck-us.net>
+ <Y906Hz3UWYxoxYdD@kroah.com>
+ <20230203171826.GA1500930@roeck-us.net>
+ <Y91YWzopMMGF1Lgh@sol.localdomain>
+ <Y91bjnIuQRvVqpO7@sol.localdomain>
+ <705ab151-da1e-30e1-c232-c9860717267d@roeck-us.net>
+ <Y91lXYN7zF8d/fek@sol.localdomain>
+ <Y94QTVUg2H68XnQ2@kroah.com>
+ <Y95iSDo7Qa+HoWSg@sashalap>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y95iSDo7Qa+HoWSg@sashalap>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On some systems, the default echo command doesn't handle the -e option
-and the output looks like this (arm64 build):
+On Sat, Feb 04, 2023 at 08:48:56AM -0500, Sasha Levin wrote:
+> On Sat, Feb 04, 2023 at 08:59:09AM +0100, Greg Kroah-Hartman wrote:
+> > On Fri, Feb 03, 2023 at 11:49:49AM -0800, Eric Biggers wrote:
+> > > On Fri, Feb 03, 2023 at 11:28:46AM -0800, Guenter Roeck wrote:
+> > > > On 2/3/23 11:07, Eric Biggers wrote:
+> > > > > On Fri, Feb 03, 2023 at 10:54:21AM -0800, Eric Biggers wrote:
+> > > > > > On Fri, Feb 03, 2023 at 09:18:26AM -0800, Guenter Roeck wrote:
+> > > > > > > On Fri, Feb 03, 2023 at 05:45:19PM +0100, Greg Kroah-Hartman wrote:
+> > > > > > > > On Fri, Feb 03, 2023 at 07:56:19AM -0800, Guenter Roeck wrote:
+> > > > > > > > > On Fri, Feb 03, 2023 at 11:11:45AM +0100, Greg Kroah-Hartman wrote:
+> > > > > > > > > > This is the start of the stable review cycle for the 5.4.231 release.
+> > > > > > > > > > There are 134 patches in this series, all will be posted as a response
+> > > > > > > > > > to this one.  If anyone has any issues with these being applied, please
+> > > > > > > > > > let me know.
+> > > > > > > > > >
+> > > > > > > > > > Responses should be made by Sun, 05 Feb 2023 10:09:58 +0000.
+> > > > > > > > > > Anything received after that time might be too late.
+> > > > > > > > > >
+> > > > > > > > >
+> > > > > > > > > Building ia64:defconfig ... failed
+> > > > > > > > > --------------
+> > > > > > > > > Error log:
+> > > > > > > > > <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+> > > > > > > > > arch/ia64/kernel/mca_drv.c: In function 'mca_handler_bh':
+> > > > > > > > > arch/ia64/kernel/mca_drv.c:179:9: error: implicit declaration of function 'make_task_dead'
+> > > > > > > > >
+> > > > > > > > > Caused by "exit: Add and use make_task_dead.". Did that really have to be backported ?
+> > > > > > > >
+> > > > > > > > Yup, it does!
+> > > > > > > >
+> > > > > > > > Eric, any help with this?
+> > > > > > > >
+> > > > > > >
+> > > > > > > Adding "#include <linux/sched/task.h>" to the affected file would probably
+> > > > > > > be the easy fix. I did a quick check, and it works.
+> > > > > > >
+> > > > > > > Note that the same problem is seen in v4.14.y and v4.19.y. Later
+> > > > > > > kernels don't have the problem.
+> > > > > > >
+> > > > > >
+> > > > > > This problem arises because <linux/mm.h> transitively includes
+> > > > > > <linux/sched/task.h> in 5.10 and later, but not in 5.4 and earlier.
+> > > > > >
+> > > > > > Greg, any preference for how to handle this situation?
+> > > > > >
+> > > > > > Just add '#include <linux/sched/task.h>' to the affected .c file (and hope there
+> > > > > > are no more affected .c files in the other arch directories) and call it a day?
+> > > > > >
+> > > > > > Or should we backport the transitive inclusion (i.e., the #include added by
+> > > > > > commit 80fbaf1c3f29)?  Or move the declaration of make_task_dead() into
+> > > > > > <linux/kernel.h> so that it's next to do_exit()?
+> > > > >
+> > > > > One question: do *all* the arches actually get built as part of the testing for
+> > > > > each stable release?  If so, we can just add the #include to the .c files that
+> > > > > need it.  If not, then it would be safer to take one of the other approaches.
+> > > > >
+> > > >
+> > > > Yes, I do build all architectures for each stable release.
+> > > >
+> > > > FWIW, I only noticed that one build failure due to this problem.
+> > > 
+> > > Okay, great.  In that case, Greg or Sasha, can you fold the needed #include into
+> > > arch/ia64/kernel/mca_drv.c in exit-add-and-use-make_task_dead.patch on 4.14,
+> > > 4.19, and 5.4?  Or should I just send the whole series again for each?
+> > 
+> > I'll fold it in later today when I get a chance, no need to resubmit the
+> > whole thing, thanks!
+> 
+> Greg, I did it for the 5.4 backport. If I do it for 4.19 and 4.14 it's
+> going to add a bunch of fuzz into those, lmk if you want me to push
+> those too or whether you'll fix it up.
 
--ne Emit Tests for alsa
+I just fixed up those 2 trees, and I don't understand what you mean by
+"a bunch of fuzz".  Can you look at my changes to verify I got it right?
 
--ne Emit Tests for amd-pstate
+thanks,
 
--ne Emit Tests for arm64
-
-This is for example the case with the KernelCI Docker images
-e.g. kernelci/gcc-10:x86-kselftest-kernelci.  To avoid this issue, use
-printf which handles escape characters as a standard feature and is
-more widespread among modern shells.
-
-The output is now formatted as expected (x86 build this time):
-
-Emit Tests for alsa
-Emit Tests for amd-pstate
-Skipping non-existent dir: arm64
-
-Reported-by: "kernelci.org bot" <bot@kernelci.org>
-Suggested-by: David Laight <David.Laight@ACULAB.COM>
-Fixes: 3297a4df805d ("kselftests: Enable the echo command to print newlines in Makefile")
-Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
----
-
-Notes:
-    v2: use printf insead of $(which echo)
-
- tools/testing/selftests/Makefile | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 41b649452560..06578963f4f1 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -236,8 +236,8 @@ ifdef INSTALL_PATH
- 	@# included in the generated runlist.
- 	for TARGET in $(TARGETS); do \
- 		BUILD_TARGET=$$BUILD/$$TARGET;	\
--		[ ! -d $(INSTALL_PATH)/$$TARGET ] && echo "Skipping non-existent dir: $$TARGET" && continue; \
--		echo -ne "Emit Tests for $$TARGET\n"; \
-+		[ ! -d $(INSTALL_PATH)/$$TARGET ] && printf "Skipping non-existent dir: $$TARGET\n" && continue; \
-+		printf "Emit Tests for $$TARGET\n"; \
- 		$(MAKE) -s --no-print-directory OUTPUT=$$BUILD_TARGET COLLECTION=$$TARGET \
- 			-C $$TARGET emit_tests >> $(TEST_LIST); \
- 	done;
--- 
-2.30.2
-
+greg k-h
