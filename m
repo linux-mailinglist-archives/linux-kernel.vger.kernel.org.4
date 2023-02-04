@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7942268AA9A
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 15:36:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE06068AA9B
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 15:36:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233645AbjBDOgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 09:36:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40496 "EHLO
+        id S233711AbjBDOgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 09:36:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233866AbjBDOfo (ORCPT
+        with ESMTP id S230379AbjBDOft (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 09:35:44 -0500
+        Sat, 4 Feb 2023 09:35:49 -0500
 Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E46303D4
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 06:35:20 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id C3EDA5C012A;
-        Sat,  4 Feb 2023 09:35:19 -0500 (EST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B5A303DA
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 06:35:21 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 381CD5C00BC;
+        Sat,  4 Feb 2023 09:35:21 -0500 (EST)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Sat, 04 Feb 2023 09:35:19 -0500
+  by compute2.internal (MEProxy); Sat, 04 Feb 2023 09:35:21 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1675521319; x=1675607719; bh=z8
-        +r2WBFXUDnilpI4tJA/upCWvhtMve9E2bc0bx/InM=; b=BzP7c34VyWpM+TWZLt
-        kWCITqpGjiDjHHl9cvQk+awGK4TbfJY3CJUMtNTU7vFA/qqEQJisyHd0mlSgI8Se
-        M4X4YRgUlck5wtn63OdIE6uv4APVG5Ky5N7iS8NuncAd8zpGkvv2Xc+KAm3mgtK9
-        wJaTSVNwPfwbSk8V0qJoNT8GMn9ZtgRvR7yN/MDb0RAij03j2msCBRNXSMTG1jxT
-        qvUSzW3wL5YWkng35n+r1y6fpDOCkuPzqgiRq6mgV9459/aldVHspxQ8nqKSncfY
-        iD6w51/18Frmmz0hVQPiWSakdBPG755WMxk4a5I69umHJx2e0lg8y9U5427GAo1J
-        LgAA==
+        :subject:subject:to:to; s=fm1; t=1675521321; x=1675607721; bh=E9
+        RXjzAMWwCZjLz8gcyf65T0pEMdRjhGQmaREoREwGo=; b=rpmeq7B6G98Sb0ovmV
+        /51tGFKPb17uOp6IcbhUo+2F5xZ4hdJnQiwP7EaBFneyEPUQ5qS9GwD08XSBDaWp
+        Sn+I5GMkIZ+EjqN6E290wZOKxDMjMmuFa0J07kMWTB5+3GyGvCJfEYetWjgYHkZj
+        hhR4Wnqseb3xlfjJE4hKbUCa1C6fUjDWF83mtt93Q4lpdgmCg1vHo5B8OmTbzvzF
+        UtABhwXsMMPJzI9+2BCsd5oAo6sdwTwgcsNYsi90YbE/SbF1sarfiqK3eJf3DLPF
+        aPuewV5VVyHMUI7KxxBREawzWmIPsoTXDyBK/GaHd1PanSV6xdei9LgsGd0mXn+d
+        zvgQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1675521319; x=1675607719; bh=z8+r2WBFXUDni
-        lpI4tJA/upCWvhtMve9E2bc0bx/InM=; b=eVxxNR24iCwEyy7vPhoQR0TBUeS44
-        BYZp4hTfsQ6EWpQBdKtPyYtfLiIaH+XGAbpP5guCcHb3HLIo1P+XgSR474GVjIbt
-        /meB13cH89phgFXQMJKcztjvYofH6hLPeAiiulwGUHgqnIMhD88XfzOlFZDCvIJk
-        VsbRkXhUGuveTBfuP0+/OJeHWMbgYoYpTihZNkCZTykwJaKf7RhAAKmsIlvdHz7O
-        GNwMR+vegwMSi2qZx4qGnxrA5URsYlIwK1Wb1W90zSSM/JhZ1J3+5tcT3aGNhwCa
-        HCL3oQ42EYN2vThwclHLm3Nrr4kWpm3Snd0npHVEbiBIuLMfDv3lgr9WQ==
-X-ME-Sender: <xms:J23eY90XcnnlFNClXUu-xmu30ApA-kny4v2MfnyrCXOVCmoAufTpYQ>
-    <xme:J23eY0HTtiR0YfpjpovzgwmbLLh_jAW3w-z5IOAg09hKAkSA9bRJh9C9n_Jsnb9MB
-    4gYA3QsZXAIfwMMQQ>
-X-ME-Received: <xmr:J23eY96w8PhW31NyHEh6v2PRVl1hfqeLUVc2HREuOdP-b0Qtlq1QRTtEOc6NOqmlq0Er0fk6jE3Pmo4_PusfH_0re1NmP0NF6LXwphjq2s0KBPF8DwTivDeNJZCR_IMVUwhg9Q>
+        :x-sasl-enc; s=fm3; t=1675521321; x=1675607721; bh=E9RXjzAMWwCZj
+        Lz8gcyf65T0pEMdRjhGQmaREoREwGo=; b=VRCiq62Lo2m8Z18aKjFbeQsaUsS/w
+        AWOcRclqnRcPJ5bKWl1EJ21KaBPkfl7yCa+aoREGyF09sXkvOnLicVyHmbuKnyjb
+        8txpfy9eKGIDSamuiloSNHj28yK1vGZvvyOFpBuZE8tklJUCd2j0wCB4FKk3AfKR
+        HUx6T0hail2uIZa6yhyC2nwyfRdQwBu9FydoE5vMYia0dwX4KYIsqd3okNmAdMCd
+        lGmI4eG0hrQjBKUubkkeNKfaJgmN1Oz6cgiFi0B4yqhF10mzRw4st807MXJ4OjPe
+        Bnhdc7JcunttrRw6uMYH/jQIVmxNQrvgtQgCOaLuC5qlfiVxT0wFXET6g==
+X-ME-Sender: <xms:KG3eY9SGkCmUtWP_DBs8gRxRz_iyFU8rCyFX3GugG3e9E4Xup7HnNg>
+    <xme:KG3eY2z8EfdS46OCCe6JzLa2_okHnu8BFW07KIoEtyyDHs3oBWm_BiV5awwWoUtkD
+    x8wM5kKNm3viS9G-Q>
+X-ME-Received: <xmr:KG3eYy3aYa43biFYV9-recLE3ZuYbUKG48_fieqfwhoL61HGm5W0AeG0w5m5UWym_pR3YiGBUP-tkBrokY09wZTAmqAFTHc0N-ok3i_d3J4VuLdRRzJFTIHNCobZOOHtc10LjQ>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudegvddgieeiucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
@@ -55,13 +55,13 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudegvddgieeiucetufdoteggod
     ftrfgrthhtvghrnhepudekteeuudehtdelteevgfduvddvjefhfedulefgudevgeeghefg
     udefiedtveetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
     homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:J23eY60u7hKt78efhnca3LhZkES-v_ylttMKdNmQPtvfppPpRc93hw>
-    <xmx:J23eYwESGVfirjcDoHCrg9NNwNXtbILIUhArv84Mqqub01_D98FZQg>
-    <xmx:J23eY78srJNOb7GK1k9GYYLv47xqBLlukHqamj7yXoAs-iPZMNBGLg>
-    <xmx:J23eY7BUUM5iFiS5w82KeAqBX0LB-LTMSq5QwWRb2ldljtdQawrBvw>
+X-ME-Proxy: <xmx:KG3eY1C_DZYTIBV6ZHdgFZJPEuO4kCHTj3icNqVc3uTzvjye1C6JXg>
+    <xmx:KG3eY2gZwDd0VxMgSHtspBYTiUoD8r3q0v5bZlhRN_zoYE9z1Xd9Lw>
+    <xmx:KG3eY5rdZHCl1mxTjrmqH2-5LFoVignlQKX28mQKxrFFP7oRvzbBeQ>
+    <xmx:KW3eYxNUUQJ3KFanUBXy0aXqttX2F9TrG8w8nU9ijyqCO59JvV1BpQ>
 Feedback-ID: i0ad843c9:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 4 Feb 2023 09:35:19 -0500 (EST)
+ 4 Feb 2023 09:35:20 -0500 (EST)
 From:   Samuel Holland <samuel@sholland.org>
 To:     Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
@@ -72,9 +72,9 @@ Cc:     Boris Brezillon <bbrezillon@kernel.org>,
         Samuel Holland <samuel@sholland.org>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-mtd@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: [PATCH v2 2/3] mtd: rawnand: sunxi: Embed sunxi_nand_hw_ecc by value
-Date:   Sat,  4 Feb 2023 08:35:19 -0600
-Message-Id: <20230204143520.9682-3-samuel@sholland.org>
+Subject: [PATCH v2 3/3] mtd: rawnand: sunxi: Precompute the ECC_CTL register value
+Date:   Sat,  4 Feb 2023 08:35:20 -0600
+Message-Id: <20230204143520.9682-4-samuel@sholland.org>
 X-Mailer: git-send-email 2.37.4
 In-Reply-To: <20230204143520.9682-1-samuel@sholland.org>
 References: <20230204143520.9682-1-samuel@sholland.org>
@@ -89,135 +89,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The sunxi_nand_hw_ecc object is not shared, and it has the same lifetime
-as the sunxi_nand_chip which points to it, so we can embed it in the
-outer structure instead of using a pointer. This removes an unnecessary
-memory allocation and simplifies the error handling code.
+The value computed by this function never changes for a given chip.
+Compute the whole register value once up front, instead of every time
+the ECC engine is enabled.
 
 Signed-off-by: Samuel Holland <samuel@sholland.org>
 ---
 
 Changes in v2:
- - Keep `struct sunxi_nand_hw_ecc` but change the pointer to a value
- - New patch for v2
+ - Split ECC_CTL precomputation and structure updates to two patches
 
- drivers/mtd/nand/raw/sunxi_nand.c | 45 +++++--------------------------
- 1 file changed, 6 insertions(+), 39 deletions(-)
+ drivers/mtd/nand/raw/sunxi_nand.c | 27 ++++++++++-----------------
+ 1 file changed, 10 insertions(+), 17 deletions(-)
 
 diff --git a/drivers/mtd/nand/raw/sunxi_nand.c b/drivers/mtd/nand/raw/sunxi_nand.c
-index 3c32d31f20aa..a0d0cb17c150 100644
+index a0d0cb17c150..13e3e0198d15 100644
 --- a/drivers/mtd/nand/raw/sunxi_nand.c
 +++ b/drivers/mtd/nand/raw/sunxi_nand.c
-@@ -193,7 +193,7 @@ struct sunxi_nand_hw_ecc {
- struct sunxi_nand_chip {
- 	struct list_head node;
- 	struct nand_chip nand;
--	struct sunxi_nand_hw_ecc *ecc;
-+	struct sunxi_nand_hw_ecc ecc;
- 	unsigned long clk_rate;
- 	u32 timing_cfg;
- 	u32 timing_ctl;
-@@ -694,7 +694,7 @@ static void sunxi_nfc_hw_ecc_enable(struct nand_chip *nand)
- 	ecc_ctl = readl(nfc->regs + NFC_REG_ECC_CTL);
- 	ecc_ctl &= ~(NFC_ECC_MODE_MSK | NFC_ECC_PIPELINE |
- 		     NFC_ECC_BLOCK_SIZE_MSK);
--	ecc_ctl |= NFC_ECC_EN | NFC_ECC_MODE(sunxi_nand->ecc->mode) |
-+	ecc_ctl |= NFC_ECC_EN | NFC_ECC_MODE(sunxi_nand->ecc.mode) |
- 		   NFC_ECC_EXCEPTION | NFC_ECC_PIPELINE;
- 
- 	if (nand->ecc.size == 512)
-@@ -1626,11 +1626,6 @@ static const struct mtd_ooblayout_ops sunxi_nand_ooblayout_ops = {
- 	.free = sunxi_nand_ooblayout_free,
+@@ -172,10 +172,10 @@ struct sunxi_nand_chip_sel {
+ /**
+  * struct sunxi_nand_hw_ecc - stores information related to HW ECC support
+  *
+- * @mode: the sunxi ECC mode field deduced from ECC requirements
++ * @ecc_ctl: ECC_CTL register value for this NAND chip
+  */
+ struct sunxi_nand_hw_ecc {
+-	int mode;
++	u32 ecc_ctl;
  };
  
--static void sunxi_nand_hw_ecc_ctrl_cleanup(struct sunxi_nand_chip *sunxi_nand)
--{
--	kfree(sunxi_nand->ecc);
--}
+ /**
+@@ -689,26 +689,15 @@ static void sunxi_nfc_hw_ecc_enable(struct nand_chip *nand)
+ {
+ 	struct sunxi_nand_chip *sunxi_nand = to_sunxi_nand(nand);
+ 	struct sunxi_nfc *nfc = to_sunxi_nfc(nand->controller);
+-	u32 ecc_ctl;
 -
- static int sunxi_nand_hw_ecc_ctrl_init(struct nand_chip *nand,
- 				       struct nand_ecc_ctrl *ecc,
- 				       struct device_node *np)
-@@ -1641,7 +1636,6 @@ static int sunxi_nand_hw_ecc_ctrl_init(struct nand_chip *nand,
- 	struct mtd_info *mtd = nand_to_mtd(nand);
- 	struct nand_device *nanddev = mtd_to_nanddev(mtd);
- 	int nsectors;
--	int ret;
- 	int i;
- 
- 	if (nanddev->ecc.user_conf.flags & NAND_ECC_MAXIMIZE_STRENGTH) {
-@@ -1676,10 +1670,6 @@ static int sunxi_nand_hw_ecc_ctrl_init(struct nand_chip *nand,
- 	if (ecc->size != 512 && ecc->size != 1024)
- 		return -EINVAL;
- 
--	sunxi_nand->ecc = kzalloc(sizeof(*sunxi_nand->ecc), GFP_KERNEL);
--	if (!sunxi_nand->ecc)
--		return -ENOMEM;
+-	ecc_ctl = readl(nfc->regs + NFC_REG_ECC_CTL);
+-	ecc_ctl &= ~(NFC_ECC_MODE_MSK | NFC_ECC_PIPELINE |
+-		     NFC_ECC_BLOCK_SIZE_MSK);
+-	ecc_ctl |= NFC_ECC_EN | NFC_ECC_MODE(sunxi_nand->ecc.mode) |
+-		   NFC_ECC_EXCEPTION | NFC_ECC_PIPELINE;
 -
- 	/* Prefer 1k ECC chunk over 512 ones */
- 	if (ecc->size == 512 && mtd->writesize > 512) {
- 		ecc->size = 1024;
-@@ -1700,11 +1690,10 @@ static int sunxi_nand_hw_ecc_ctrl_init(struct nand_chip *nand,
+-	if (nand->ecc.size == 512)
+-		ecc_ctl |= NFC_ECC_BLOCK_512;
  
- 	if (i >= ARRAY_SIZE(strengths)) {
- 		dev_err(nfc->dev, "unsupported strength\n");
--		ret = -ENOTSUPP;
--		goto err;
-+		return -ENOTSUPP;
+-	writel(ecc_ctl, nfc->regs + NFC_REG_ECC_CTL);
++	writel(sunxi_nand->ecc.ecc_ctl, nfc->regs + NFC_REG_ECC_CTL);
+ }
+ 
+ static void sunxi_nfc_hw_ecc_disable(struct nand_chip *nand)
+ {
+ 	struct sunxi_nfc *nfc = to_sunxi_nfc(nand->controller);
+ 
+-	writel(readl(nfc->regs + NFC_REG_ECC_CTL) & ~NFC_ECC_EN,
+-	       nfc->regs + NFC_REG_ECC_CTL);
++	writel(0, nfc->regs + NFC_REG_ECC_CTL);
+ }
+ 
+ static inline void sunxi_nfc_user_data_to_buf(u32 user_data, u8 *buf)
+@@ -1693,8 +1682,6 @@ static int sunxi_nand_hw_ecc_ctrl_init(struct nand_chip *nand,
+ 		return -ENOTSUPP;
  	}
  
--	sunxi_nand->ecc->mode = i;
-+	sunxi_nand->ecc.mode = i;
- 
+-	sunxi_nand->ecc.mode = i;
+-
  	/* HW ECC always request ECC bytes for 1024 bytes blocks */
  	ecc->bytes = DIV_ROUND_UP(ecc->strength * fls(8 * 1024), 8);
-@@ -1714,10 +1703,8 @@ static int sunxi_nand_hw_ecc_ctrl_init(struct nand_chip *nand,
  
- 	nsectors = mtd->writesize / ecc->size;
- 
--	if (mtd->oobsize < ((ecc->bytes + 4) * nsectors)) {
--		ret = -EINVAL;
--		goto err;
--	}
-+	if (mtd->oobsize < ((ecc->bytes + 4) * nsectors))
-+		return -EINVAL;
- 
- 	ecc->read_oob = sunxi_nfc_hw_ecc_read_oob;
- 	ecc->write_oob = sunxi_nfc_hw_ecc_write_oob;
-@@ -1740,25 +1727,6 @@ static int sunxi_nand_hw_ecc_ctrl_init(struct nand_chip *nand,
+@@ -1726,6 +1713,12 @@ static int sunxi_nand_hw_ecc_ctrl_init(struct nand_chip *nand,
+ 	ecc->read_oob_raw = nand_read_oob_std;
  	ecc->write_oob_raw = nand_write_oob_std;
  
++	sunxi_nand->ecc.ecc_ctl = NFC_ECC_MODE(i) | NFC_ECC_EXCEPTION |
++				  NFC_ECC_PIPELINE | NFC_ECC_EN;
++
++	if (ecc->size == 512)
++		sunxi_nand->ecc.ecc_ctl |= NFC_ECC_BLOCK_512;
++
  	return 0;
--
--err:
--	kfree(sunxi_nand->ecc);
--
--	return ret;
--}
--
--static void sunxi_nand_ecc_cleanup(struct sunxi_nand_chip *sunxi_nand)
--{
--	struct nand_ecc_ctrl *ecc = &sunxi_nand->nand.ecc;
--
--	switch (ecc->engine_type) {
--	case NAND_ECC_ENGINE_TYPE_ON_HOST:
--		sunxi_nand_hw_ecc_ctrl_cleanup(sunxi_nand);
--		break;
--	case NAND_ECC_ENGINE_TYPE_NONE:
--	default:
--		break;
--	}
  }
  
- static int sunxi_nand_attach_chip(struct nand_chip *nand)
-@@ -1971,7 +1939,6 @@ static void sunxi_nand_chips_cleanup(struct sunxi_nfc *nfc)
- 		ret = mtd_device_unregister(nand_to_mtd(chip));
- 		WARN_ON(ret);
- 		nand_cleanup(chip);
--		sunxi_nand_ecc_cleanup(sunxi_nand);
- 		list_del(&sunxi_nand->node);
- 	}
- }
 -- 
 2.37.4
 
