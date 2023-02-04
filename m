@@ -2,119 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E26A468A793
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 02:35:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CB2968A797
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 02:46:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233106AbjBDBe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Feb 2023 20:34:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50106 "EHLO
+        id S232670AbjBDBqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Feb 2023 20:46:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231165AbjBDBez (ORCPT
+        with ESMTP id S231171AbjBDBp5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Feb 2023 20:34:55 -0500
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2065.outbound.protection.outlook.com [40.107.104.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B391F8C1DF;
-        Fri,  3 Feb 2023 17:34:48 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CT5OCE0UVdQ7lvynuywn8xKjp3pwBtmxK5bdLzYpWFabHhEhb+SKz3OGrN5g76m77uFEshAdHtSZ9AcTnth2lym7vCg9v6x+zU/wK6FJQ0VJhVlD8zpqheVp16YDrGiy3ow7BfROdZ+YdagLpqEzrjF3nYRA2oqSwEVUbhpclBUkh5o3wScq7ChkXaQEXtoomIewRIA2qYLggslg4LJFFk9nDuS+Hwbi2ntW8YjdizRYGGjaKD/zwatmsQA5E4NWnOwI5oGdukmFJxYsBZEloQYy0E8g125pyKwyBsUt2dLU36f+wfMhgOumYawI2xtmBfgpdmFApIkFYr0SPYoZYQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bwZzeUbvg2JtKRwzeE8h3BHlz/ASoo1ktXIm9MAqgyY=;
- b=BisaToqV+WaxOzxBiqRvDDuaAca8VzVirGdBOuXoPsWl4oDaGxBt7uU+nx1oZvQcNCKcEm1PilpDE6NxAI0R24LSzXc1clwwe+y6ZkeB9Q0PRGvZt6bz9Wbx32yTrCVqiI/9G583a3QpQUm4l5k9gcSK0E/N4085ubia3opQGGosETisxwPDxEFCD8hmgM7Re34W+4k7g89J8PE45lF4c3H5XxDVL8lQVC6uMbCXv7f9UumIcN5XF4Mm+GEJ2QNOoINbVbtWkPs4VrbXrvIEWeXAlARpdzKmsFOjnkf6gRQ7QiM1r2iI5DZ6e2IQpz5wqiD8P9dgPXJinzElWTDZ7A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bwZzeUbvg2JtKRwzeE8h3BHlz/ASoo1ktXIm9MAqgyY=;
- b=bfSHdPntQHgfVSb4is3hog36IRqUEL52lgL2Rq9gpms0ySA0TaQv8CDeCYC4BnAMBb+fpdlTWkOifG+XE13QRQCdeDOxR/hwBwW3xyTMhxiTqcVerWQnnfLKvi86ct1TFtexv94tp2C6DxYLrknXuuxYSQ6MzJgPyJD62MEaLJw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by DB9PR04MB8121.eurprd04.prod.outlook.com (2603:10a6:10:24b::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.31; Sat, 4 Feb
- 2023 01:34:43 +0000
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::3cfb:3ae7:1686:a68b]) by VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::3cfb:3ae7:1686:a68b%7]) with mapi id 15.20.6064.031; Sat, 4 Feb 2023
- 01:34:43 +0000
-Date:   Sat, 4 Feb 2023 03:34:39 +0200
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     Colin Foster <colin.foster@in-advantage.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        UNGLinuxDriver@microchip.com,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>
-Subject: Re: [PATCH v1 net-next] net: mscc: ocelot: un-export unused regmap
- symbols
-Message-ID: <20230204013439.4vfag2kbrwpwvnpr@skbuf>
-References: <20230204001211.1764672-1-colin.foster@in-advantage.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230204001211.1764672-1-colin.foster@in-advantage.com>
-X-ClientProxiedBy: FR2P281CA0104.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:9c::11) To VI1PR04MB5136.eurprd04.prod.outlook.com
- (2603:10a6:803:55::19)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR04MB5136:EE_|DB9PR04MB8121:EE_
-X-MS-Office365-Filtering-Correlation-Id: 454e1d72-9a00-41a4-60ca-08db064ffd4f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: GUkRhH02REbwn0I4CxXMjh9SnouXigflw7qPKdcFGmc8quZwkozm4ubdFkZ6dNPfFcpqI8PS56WxMjFYtFTBAlxKzPV91uBPUqjTGVdsXmspqAe6m2JjaBEcU/p4MHeB6r20dP+wxukM+M9yZPD7MWrDiKKA8XSQQOopCMGEqNiQi+uBy0g51dC78SdBrumisBppEHuYK4kUUnyf4dhhNKCqzNxcbSCbL0DDloY3rLONy1Gt4xKFx6QhQyDUlBVrLertT5XHTLi0uZioA+t0rE4Q2gJTAaNd3+tKGg5qHrUMKaiATOmEniPFuc7zcySSwrSTB9Hwjmp9X4HSwyiF1p9Jwp2t6NcRFoxnoFJ5jebWSmTlXNB8rIfIghce//atMpPweFAYHjvp4rWE8druY1wp/jquVvwg8Bs0OBAFu19GOLvdy7rKc3Ti5VoLxuygLmq9drGCUhkqNUG9deM5YuwUSZ4NVjRrApjlonXf+OxhMR78B+f87La45GrlQ/RxS3aojMcnD3QlnViAfk1PWqNnj30rWuaVKCpAYgeJIPDLEeW7Kmjfy+KSX0whLtE/b6uVy4mgemD6mhqj8H7C4xQNwcP3JRi1Y+rFd3hShOVxOxUzjVhNaGABbCud9r5zNftlrFtb2VrpgRHzTDhN/g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(4636009)(39860400002)(366004)(396003)(376002)(346002)(136003)(451199018)(33716001)(86362001)(38100700002)(6486002)(316002)(6666004)(2906002)(478600001)(8936002)(5660300002)(44832011)(41300700001)(7416002)(4326008)(6916009)(66556008)(8676002)(66946007)(66476007)(1076003)(9686003)(26005)(6512007)(186003)(6506007)(54906003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?kdX4IaQhBoBA9iGexaWisKbkLu6+zRCTwhXYW+wFeIo2hw1IoxL7CNDOj03j?=
- =?us-ascii?Q?MZJP1Dw3/hD7b+olcnM8pPES8CL5xG5rksQZqvvtQ1W2EGMElAGgE4FuiW18?=
- =?us-ascii?Q?oWswxiOSKmhnZgbjUkgK0hstz0HFTGL3rZjtOHz1OEqtYBWd8b7OLbm2lRk4?=
- =?us-ascii?Q?lM5I1o+ZIMgdrqlF7bKsqwv1R0WeRavFbOi3yPqeTGD0Q52i+WOSSNN1aOe4?=
- =?us-ascii?Q?jMcDRVI5WMU0JZ/iB8V49GgKg9c4MzwFozeOVWoKBTche/ZgYqs/BbvUpa1O?=
- =?us-ascii?Q?W1qR4q6PrXy6uM4z2kA+d3K2hPY4aWdLVVoB6HxKqmp5fKI28j5qdqZxZdaY?=
- =?us-ascii?Q?jzVwrZeXS+VI5kJmCskcKH/Jb1SeJaPURxOX1RgeD9ZRQrrfevxtdaRdCq9i?=
- =?us-ascii?Q?eBANTKSkJG7EPNEsIrM7wlv9HLryo5zDih0ulofcHBw7IlFwL8p7f5CNt9je?=
- =?us-ascii?Q?dyheIs9dZt3ojJnXSH0p3p7BR5zHcpYxPTedy7mRM29LeJF1sKHYdNrZgBuH?=
- =?us-ascii?Q?mZut0QiHp2yPk3FaRHK71jjBBjtBB6VHyLzgYgFLRQPxJexPyIBVmjDG+QyS?=
- =?us-ascii?Q?Z4r8roYS6MdyG8l7Kqbf4lEqU9xnq9tkuCdYlgsV2PtgYVamF2p9CrYc26Tl?=
- =?us-ascii?Q?TFIXNwisPDIa8a2Faado82qZw1kVkG12x01Hz7V48ZyYDVRclEe+GjbDqptX?=
- =?us-ascii?Q?kjH96WKEpG4MsEg67yTxBSReC0D6xLunKv4dkX1Afc+3X+Ga3mTgSGV/yw7U?=
- =?us-ascii?Q?Rm18vryLhVwxbE7SlB+9RPgqRDc930mwIAsEahdag6q9JRVmyBJan4ljE5cR?=
- =?us-ascii?Q?52Xinva+k7zMLZmSe5/Ms52KtV7AQtTdiZjNs5BhYfAA5rvNvphftBRotC7l?=
- =?us-ascii?Q?VTw15yyRYNXZWfCMM+dYUHkzENwHV7gEI/46T//fgf6AL1qgOkx2OUvjsuV/?=
- =?us-ascii?Q?Wf3GkoSjBEhFzNX7BvNp/wg1AZnoXb00O5jZk/VgafX7tiVpeg3tqLS3oSl8?=
- =?us-ascii?Q?9BHuBK0MCIwcEZYRF6PB1XuKU4fbCLsgyEJMDUJHwcIddNTO2EssBR2e6rn6?=
- =?us-ascii?Q?1cYjv4XIj2u1gvM3AsCPRfjbYKfxxVgv5j8I520JZPknMsowBpGjITSI8Af3?=
- =?us-ascii?Q?RQE3U9jIffiCSWSIYRgMWz+Gr2phTRrE80NjmqaEZAAnkyuptQr2Ct0f5qB5?=
- =?us-ascii?Q?rHmXDP9flEugUxbS7skNa5q4vY4klGYobkMWXVz2nW/VgAd/muBAp4SzqFkd?=
- =?us-ascii?Q?RuV+3AZHLvvKFzCbTctJnbExVBdam75WL1e2RnK84uz8YP/wluvh60wAdZ1n?=
- =?us-ascii?Q?tLFqtZ2Bh86doDVuh3gmq/0fk9a1qtA0MTbD+SH2W7MDRdrp81L9y3oiM0WJ?=
- =?us-ascii?Q?VkHqEnfHTbcRhrGgpgPEr9DZGe6okrFwZQ5Yu7/7YU9XzgGrNQzLsEUORSe/?=
- =?us-ascii?Q?PnLx01vKzSTMtWgg7KuvGc4iASFHFo+5Xk9+xQASeO9mobSI811xddFkBexw?=
- =?us-ascii?Q?DOFMy6d9EIw0Ccu/v8SH5rUeuqgo80F+9Tkl2qw3yu9bbS5vliEpetA1AtqU?=
- =?us-ascii?Q?rGeqTDBHwR/z1+4IbPNVsqS673Bd3RE9bUThHzQwaaL2Gg8X9lkRi5rMVzWF?=
- =?us-ascii?Q?Ag=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 454e1d72-9a00-41a4-60ca-08db064ffd4f
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Feb 2023 01:34:42.9765
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 13u3wfndRuPgv0AjyEja+yJbWBrEk+TCoCCbi/KIwKlrloeYj4wvkDxsFAHNzqqrbIkhIIrHaL9PbWrC9RGD2w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB8121
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Fri, 3 Feb 2023 20:45:57 -0500
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E9BA07E3
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Feb 2023 17:45:55 -0800 (PST)
+Received: by mail-pf1-x44a.google.com with SMTP id z7-20020aa79587000000b00593f19705d5so3516424pfj.10
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Feb 2023 17:45:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=CjIJEhAYbMSv6XJ6YPRSrYusHoPT/o7sKHbXDwqrZAg=;
+        b=QecYNx8Ora54T0SLOnSkFDljXnyyMtJNe3ass//2WlUOCd5RflFrtCU9Q575bcu2LT
+         Qaq0JzEv9jMiY6uyoNi2VZrLAoomU6ZmSMsN3cR8M2MqZIYktpZ/VDgL4aLEJJ8KF8Wm
+         bHTQF0ThYIIR48wEc5y3Fqp2X3DothPzD3xLLKaagSfnuSR7MlYO3XacK9+UxxqI0Ysa
+         rjNY34G6CcMp54S3yrXX6eJDU1uSzpYPpbVIWkul2zPoVRCCDwAwSjJTkbxIJGrEwUJf
+         v0En1igEE9Xi3/JwJpmWLLJ+smT/gwaX7JCTTz2vaYBx4zBMIQcHByzwsfSdnquXgaZR
+         mxCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CjIJEhAYbMSv6XJ6YPRSrYusHoPT/o7sKHbXDwqrZAg=;
+        b=bBpJNIzcROhBAviURBykMCSDoP0D1a+invn8JaNNHve4xDKAo399KhYnRScAkYOZ6R
+         EBOnqLnqysccbM2rL9CdJx85n54vdhUOwTcCbE6ADrlQBBo9FZi0JWsI7PLgld/dbSk+
+         7c45/I4Mcv2KXNeiNclRkM5NxDqMovhfcqcmpFs8K8zA9fmHf+PhzhL0QlJZXR+oAtox
+         4EJu8/yEkqmSfeUATJDgap+F0NSPIU/frFYGPUz0rW/uT8drXEh2usrXe1QcLxtt0nKe
+         HEhkn+Hr1fBs9n4VmMKggTtJeEmwpE1N2IqR0DoC5FsXGXrMoO3dp+yWzFIPoxSvuaAf
+         FbVw==
+X-Gm-Message-State: AO0yUKVX0Z0VekMWVfJThX3Zp5IgepuKB6acrzf874y6vrUCe02o52OB
+        8xT6jSz/rkooHpl9U9JNvnioWEfUODpM
+X-Google-Smtp-Source: AK7set9xkoWukRUDEh7W2nt6n3Zt+7FBDZYp16LPMhz90fIkU20kwi0NZXZTmudtL8RhYT07MPMazJc6jFZb
+X-Received: from vipin.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:479f])
+ (user=vipinsh job=sendgmr) by 2002:a17:902:c94c:b0:196:77f2:559d with SMTP id
+ i12-20020a170902c94c00b0019677f2559dmr2884957pla.18.1675475154953; Fri, 03
+ Feb 2023 17:45:54 -0800 (PST)
+Date:   Fri,  3 Feb 2023 17:45:43 -0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
+Message-ID: <20230204014547.583711-1-vipinsh@google.com>
+Subject: [Patch v2 0/4] Common KVM exit reason test assertions and exit reason sync
+From:   Vipin Sharma <vipinsh@google.com>
+To:     seanjc@google.com, pbonzini@redhat.com, maz@kernel.org,
+        james.morse@arm.com, suzuki.poulose@arm.com,
+        oliver.upton@linux.dev, yuzenghui@huawei.com,
+        borntraeger@linux.ibm.com, frankja@linux.ibm.com,
+        imbrenda@linux.ibm.com, david@redhat.com
+Cc:     dmatlack@google.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Vipin Sharma <vipinsh@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -122,27 +70,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 04:12:11PM -0800, Colin Foster wrote:
-> There are no external users of the vsc7514_*_regmap[] symbols. They were
-> exported in commit 32ecd22ba60b ("net: mscc: ocelot: split register
-> definitions to a separate file") with the intention of being used, but the
-> actual structure used in commit 2efaca411c96 ("net: mscc: ocelot: expose
-> vsc7514_regmap definition") ended up being all that was needed.
-> 
-> Bury these unnecessary symbols.
-> 
-> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
-> Suggested-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-> ---
+Hi,
 
-These can be unexported too:
+This patch seris is extracted from
+https://lore.kernel.org/lkml/20221212183720.4062037-1-vipinsh@google.com/
+series.
 
-extern const struct vcap_field vsc7514_vcap_es0_keys[];
-extern const struct vcap_field vsc7514_vcap_es0_actions[];
-extern const struct vcap_field vsc7514_vcap_is1_keys[];
-extern const struct vcap_field vsc7514_vcap_is1_actions[];
-extern const struct vcap_field vsc7514_vcap_is2_keys[];
-extern const struct vcap_field vsc7514_vcap_is2_actions[];
+Specifically, patch 12 is taken out from there and now expanded in to
+this series.
 
-I guess we make exceptions for the 24 hour reposting rule when the patch
-has been reviewed?
+This patch series contains following changes:
+
+Patch 1 & 2:
+  Make a macro to clean up all KVM exit reason test assertion.
+
+  There are few places where explicit run->exit_reason are used but they
+  cannot be replaced with current macro.
+
+  I used following command KVM selftests directory and changed each
+  occurrence:
+    grep "run->exit_reason" -nir ./
+
+Patch 3:
+  This is from Sean Christopherson. Adding a macro to generate KVM
+  exit strings.
+
+Patch 4:
+  Sync KVM_EXIT_* reasons to sefltests. Many reasons are not present in
+  selftest code.
+
+v2:
+- Improve test assert message.
+- Add macro to generate KVM_EXIT_* reason strings.
+- Update selftests KVM_EXIT_ reasons to latest version.
+
+v1: https://lore.kernel.org/lkml/20221212183720.4062037-13-vipinsh@google.com/
+
+Sean Christopherson (1):
+  KVM: selftests: Add macro to generate KVM exit reason strings
+
+Vipin Sharma (3):
+  KVM: selftests: Make vCPU exit reason test assertion common
+  KVM: selftests: Print expected and actual exit reason in KVM exit
+    reason assert
+  KVM: selftests: Sync KVM exit reasons in selftests
+
+ .../testing/selftests/kvm/aarch64/psci_test.c |  4 +-
+ .../testing/selftests/kvm/include/test_util.h |  9 +++
+ tools/testing/selftests/kvm/lib/kvm_util.c    | 66 ++++++++++++-------
+ .../kvm/lib/s390x/diag318_test_handler.c      |  3 +-
+ .../selftests/kvm/s390x/sync_regs_test.c      | 15 +----
+ .../selftests/kvm/set_memory_region_test.c    |  6 +-
+ tools/testing/selftests/kvm/x86_64/amx_test.c |  8 +--
+ .../kvm/x86_64/cr4_cpuid_sync_test.c          |  8 +--
+ .../testing/selftests/kvm/x86_64/debug_regs.c |  2 +-
+ .../selftests/kvm/x86_64/flds_emulation.h     |  5 +-
+ .../selftests/kvm/x86_64/hyperv_clock.c       |  7 +-
+ .../selftests/kvm/x86_64/hyperv_evmcs.c       |  8 +--
+ .../selftests/kvm/x86_64/hyperv_features.c    | 14 +---
+ .../testing/selftests/kvm/x86_64/hyperv_ipi.c |  6 +-
+ .../selftests/kvm/x86_64/hyperv_svm_test.c    |  7 +-
+ .../selftests/kvm/x86_64/hyperv_tlb_flush.c   | 14 +---
+ .../selftests/kvm/x86_64/kvm_clock_test.c     |  5 +-
+ .../selftests/kvm/x86_64/kvm_pv_test.c        |  5 +-
+ .../selftests/kvm/x86_64/monitor_mwait_test.c |  9 +--
+ .../kvm/x86_64/nested_exceptions_test.c       |  5 +-
+ .../selftests/kvm/x86_64/platform_info_test.c | 14 +---
+ .../kvm/x86_64/pmu_event_filter_test.c        |  6 +-
+ tools/testing/selftests/kvm/x86_64/smm_test.c |  9 +--
+ .../testing/selftests/kvm/x86_64/state_test.c |  8 +--
+ .../selftests/kvm/x86_64/svm_int_ctl_test.c   |  8 +--
+ .../kvm/x86_64/svm_nested_shutdown_test.c     |  7 +-
+ .../kvm/x86_64/svm_nested_soft_inject_test.c  |  6 +-
+ .../selftests/kvm/x86_64/svm_vmcall_test.c    |  6 +-
+ .../selftests/kvm/x86_64/sync_regs_test.c     | 25 ++-----
+ .../kvm/x86_64/triple_fault_event_test.c      |  9 +--
+ .../selftests/kvm/x86_64/tsc_scaling_sync.c   |  6 +-
+ .../kvm/x86_64/ucna_injection_test.c          | 22 ++-----
+ .../selftests/kvm/x86_64/userspace_io_test.c  |  6 +-
+ .../kvm/x86_64/userspace_msr_exit_test.c      | 22 ++-----
+ .../kvm/x86_64/vmx_apic_access_test.c         | 11 +---
+ .../kvm/x86_64/vmx_close_while_nested_test.c  |  5 +-
+ .../selftests/kvm/x86_64/vmx_dirty_log_test.c |  7 +-
+ .../vmx_exception_with_invalid_guest_state.c  |  4 +-
+ .../x86_64/vmx_invalid_nested_guest_state.c   |  4 +-
+ .../kvm/x86_64/vmx_nested_tsc_scaling_test.c  |  6 +-
+ .../kvm/x86_64/vmx_preemption_timer_test.c    |  8 +--
+ .../kvm/x86_64/vmx_tsc_adjust_test.c          |  6 +-
+ .../selftests/kvm/x86_64/xapic_ipi_test.c     |  6 +-
+ .../selftests/kvm/x86_64/xen_shinfo_test.c    |  7 +-
+ .../selftests/kvm/x86_64/xen_vmcall_test.c    |  5 +-
+ 45 files changed, 111 insertions(+), 318 deletions(-)
+
+-- 
+2.39.1.519.gcb327c4b5f-goog
+
