@@ -2,86 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD35C68AD53
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 00:06:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A989D68AD54
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 00:07:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbjBDXGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 18:06:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58568 "EHLO
+        id S230283AbjBDXHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 18:07:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbjBDXF7 (ORCPT
+        with ESMTP id S229560AbjBDXHB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 18:05:59 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D046C22029;
-        Sat,  4 Feb 2023 15:05:58 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id v13so8346909eda.11;
-        Sat, 04 Feb 2023 15:05:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=SsffKkQbD1Qv01ydUNK4favIJJi7ReNERIe710JhOLc=;
-        b=QX1kKPY2S9den3sFFq9zBF6oaoNhXwtsiXVec6pyWYmj5eaQemIMz1mM+QULn39HDz
-         dYBNcKmZIKouYOSXeXneMDWL8gaAoIIV+VOMaKVmvq8YO+SRxuLpj5I2OliK4gd8rMsz
-         zKgzAPPtIqnyTpLmWZiGNQNDFPuCvJMRMN9m8t3U0mACWmDd66k3QV6PldYWHfWjhVpG
-         d2NiJ2UGwHnHLoYNJ/nHQuiuHQb9Mj1cIuMBuIZj5rro9C89naZqXZPVJ/9uNmhsQYKY
-         IParG5s9MhY67K+abbJILJN4d2HL8Zsv+4b74cX9aFtvzdrc0QAt8JF5l9byhuchfaMg
-         5L+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SsffKkQbD1Qv01ydUNK4favIJJi7ReNERIe710JhOLc=;
-        b=bVwgxmhRvnFB1oo03J11SkhdYwyKCSH7YmDreK9T01tsU5EPovEK8hg9qhTlNRVkdL
-         mIBUeMKXfuu88maQ8HBEAg32a97vVcRFaVMSBZUC25wrbVE2WEKniHp6l1qtTYeKb9v/
-         X23rShVnDUhVYRBL1U2pe9GAPmNG1d8B71wXySQCSpv01lZsWNrbS1a+O7DV4039jAAT
-         ckZEh1aOG1uOiN/tKhDwP9uFIPftNXYsXDgFQ6KVl53TAaTz0TJWy0/OR+05joFJqfrc
-         nujldMBkglVIw+0AjR3cs/1vXus7fq60khscbrllmwCkqtRydmFe0tKbF1Qgymlxrs+5
-         +Gww==
-X-Gm-Message-State: AO0yUKVx1qM+u8hNc55kthPSXA2FZCN2YcunMLNDGLhQ3aV6ONftXUSG
-        /gTY69/LDZkiyI08PnblsW4PK7qab9iwoVHRaSU=
-X-Google-Smtp-Source: AK7set8QzdCT6rdHSN26GRk6gqcqpBSqwKuLjmP897qShiN/tHqfvEeG/Nr2ga8bMvWh7H7Y/+Kp68maCVfvhkCUaRE=
-X-Received: by 2002:a05:6402:1110:b0:48e:b978:cf63 with SMTP id
- u16-20020a056402111000b0048eb978cf63mr3883209edv.57.1675551957173; Sat, 04
- Feb 2023 15:05:57 -0800 (PST)
+        Sat, 4 Feb 2023 18:07:01 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0AD52202F
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 15:07:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675552020; x=1707088020;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=V+OBaKGVX/ZxuLQl6ec+WH3yedGl8skQ6Km5EfEF44A=;
+  b=hC7X7IFHkvAMDuwpEBgbBn0dS5J98WZD21iwMS8khaNMLDDe2TxdYIGg
+   UrN2Fu17Yi9zSMzJ7Ex17ro1wdA3U5u1ASMiiK1QeT2Ns8cUHnDOb80v0
+   JkfoR2g6JkFLn9SNSAXFf/850cYDAthSz/NQ0QQTLbTXwZ1vY23Z23Xoi
+   6beB00xq6Cku83c1g2XRz+MH9OW8F0A2XdRP6LqV2YMKK8Kx37aTZUvMV
+   +CYeHeHDIeJhj0VXIS0hN9BVDx6rcV07fMdN9gN7b2uSWfEwhVOARoFy9
+   DS32lCHb/fZD3yUPSwfTf48WX3dlsySLcJr/RRevezN/d9+IJnlfWPd2i
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="326690402"
+X-IronPort-AV: E=Sophos;i="5.97,274,1669104000"; 
+   d="scan'208";a="326690402"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2023 15:07:00 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="729645004"
+X-IronPort-AV: E=Sophos;i="5.97,274,1669104000"; 
+   d="scan'208";a="729645004"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 04 Feb 2023 15:06:59 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pORcY-0001ZY-2Z;
+        Sat, 04 Feb 2023 23:06:58 +0000
+Date:   Sun, 5 Feb 2023 07:06:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Max Filippov <jcmvbkbc@gmail.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: xtensa-linux-ld: section .start VMA
+ [00000000d1000000,00000000d1000007] overlaps section .image VMA
+ [00000000d0003000,00000000d15af34b]
+Message-ID: <202302050705.X4TzpbYB-lkp@intel.com>
 MIME-Version: 1.0
-References: <20230202141520.40003-1-avromanov@sberdevices.ru>
-In-Reply-To: <20230202141520.40003-1-avromanov@sberdevices.ru>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Sun, 5 Feb 2023 00:05:46 +0100
-Message-ID: <CAFBinCC7=QR3Dd_N8VN-L7CpFWETTTehNo6j54f9Y53w8emwUQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] arm64: dts: meson-a1: add gpio_intc node
-To:     Alexey Romanov <avromanov@sberdevices.ru>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        neil.armstrong@linaro.org, khilman@baylibre.com,
-        jbrunet@baylibre.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@sberdevices.ru
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alexey,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   0136d86b78522bbd5755f8194c97a987f0586ba5
+commit: c633544a6154146a210cf158157a1ae7c55473b6 xtensa: add support for KASAN
+date:   5 years ago
+config: xtensa-randconfig-r012-20230202 (https://download.01.org/0day-ci/archive/20230205/202302050705.X4TzpbYB-lkp@intel.com/config)
+compiler: xtensa-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c633544a6154146a210cf158157a1ae7c55473b6
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout c633544a6154146a210cf158157a1ae7c55473b6
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=xtensa olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=xtensa SHELL=/bin/bash
 
-On Thu, Feb 2, 2023 at 3:15 PM Alexey Romanov <avromanov@sberdevices.ru> wrote:
->
-> Add gpio interrupt controller node.
->
-> Signed-off-by: Alexey Romanov <avromanov@sberdevices.ru>
-I have no way to verify the register offset or interrupt numbers.
-Overall it looks good though, so:
-Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
+All errors (new ones prefixed by >>):
 
-Best regards,
-Martin
+>> xtensa-linux-ld: section .start VMA [00000000d1000000,00000000d1000007] overlaps section .image VMA [00000000d0003000,00000000d15af34b]
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
