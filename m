@@ -2,236 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42DBC68A903
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 09:44:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFEDF68A90C
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 09:48:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233222AbjBDIoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 03:44:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53434 "EHLO
+        id S233327AbjBDIsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 03:48:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232696AbjBDIn7 (ORCPT
+        with ESMTP id S232842AbjBDIs3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 03:43:59 -0500
-Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B336BBCB
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 00:43:57 -0800 (PST)
-Received: by mail-vk1-xa2e.google.com with SMTP id i38so3764081vkd.0
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Feb 2023 00:43:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WfIQcOwb3dWkgDSw0lSfmPr25dlvhIlu3sOQI1zR7+M=;
-        b=FwH1Yb0Ea+3DoopFhDZ0j+nFkXhjf6hSxRphzYN4NLRQk0YzVEvG+mOtBYYgUA+zjS
-         HIPFqMeGXQAILnJA4e0+ncED3VHYSArH+5VYUV7eWWkiqY7OQ24OanmXS2yWDjY+k+gn
-         YjLhgiFOTO4GBPkFAyl7WJ+yMLG5zhj22jHWZjcegAzuQTss0aZ/2dsegGAitkBZfpXl
-         fI+LvtoR+8QA7ZQnkMzyDpkEcw3GSusfy65YiTP7+6ANuBKV51WjY7vTXyajbeW1OTkg
-         AllD3xM5LuDeYYKP0S1r4pW6DrYCs9vNm5ScLxZwoR1WfnCnlGiYM+tEfcUBp22PfzPg
-         lIkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WfIQcOwb3dWkgDSw0lSfmPr25dlvhIlu3sOQI1zR7+M=;
-        b=Wq8oHPjTlI3WPSp8GCXHy1zx7Ck0i1V8aDKtZBNyxGidHwT7AV1ls9+29iY0csqoNU
-         3iu3EujS8Vq6y0U3+H3WG2jxe0lbRLjnGOuE7CCgjmaBCu7JpbUz67pM38kat3vmZWjW
-         PlLhYUgnaUwC/TRe86hxzu/K28OOd7hPO3wwbcY0qp0RcZeF1pyNaoPMLmeWF5NwZaKR
-         YSyh805xO5ykuWtlCD72qMNXDTrD9NzFctIXqhbkDRDcKTyLy3hPOH3lTXHwsfNmIcbD
-         y+s6WnifkHg4n8D37+akHJ/UXN16OYDA4hNmO2IsHuKZBCdbtXfiO/f2OaDs0i39Djri
-         HtZQ==
-X-Gm-Message-State: AO0yUKW8cLmMLafkLnBEVAg3WnEqLUxt8E3R92uDCDrAphnPNs9qG5fQ
-        aJruGLBVI/82uH1U5PUmZKUU8OOfTZy1IYARdcaAWA==
-X-Google-Smtp-Source: AK7set+XZ+Wvinf1/vcUxNLeNk8uoKnfBNpM4AzHxlnDAMb2hfU/rPeLYY1CsEk7+vk9ebKozxGCcAEwWIiWl3oMT48=
-X-Received: by 2002:a05:6122:b43:b0:3ea:4be1:4a72 with SMTP id
- 3-20020a0561220b4300b003ea4be14a72mr1900084vko.20.1675500235601; Sat, 04 Feb
- 2023 00:43:55 -0800 (PST)
+        Sat, 4 Feb 2023 03:48:29 -0500
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BCA3298D4;
+        Sat,  4 Feb 2023 00:48:27 -0800 (PST)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 0664718839AA;
+        Sat,  4 Feb 2023 08:48:25 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id E1FE9250007B;
+        Sat,  4 Feb 2023 08:48:24 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id D3B8191201E4; Sat,  4 Feb 2023 08:48:24 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-References: <20230203101006.422534094@linuxfoundation.org>
-In-Reply-To: <20230203101006.422534094@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Sat, 4 Feb 2023 14:13:44 +0530
-Message-ID: <CA+G9fYscBgwZ5MxeTyo8XQfKkuPV1xJ+24E0gq1DgEyMzas44w@mail.gmail.com>
-Subject: Re: [PATCH 5.10 0/9] 5.10.167-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Date:   Sat, 04 Feb 2023 09:48:24 +0100
+From:   netdev@kapio-technology.com
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
+        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?UTF-8?Q?Cl=C3=A9ment_L=C3=A9ger?= <clement.leger@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>
+Subject: Re: [PATCH net-next 5/5] net: dsa: mv88e6xxx: implementation of
+ dynamic ATU entries
+In-Reply-To: <Y94TebdRQRHMMj/c@corigine.com>
+References: <20230130173429.3577450-1-netdev@kapio-technology.com>
+ <20230130173429.3577450-6-netdev@kapio-technology.com>
+ <Y9lkXlyXg1d1D0j3@corigine.com>
+ <9b12275969a204739ccfab972d90f20f@kapio-technology.com>
+ <Y9zDxlwSn1EfCTba@corigine.com> <20230203204422.4wrhyathxfhj6hdt@skbuf>
+ <Y94TebdRQRHMMj/c@corigine.com>
+User-Agent: Gigahost Webmail
+Message-ID: <4abbe32d007240b9c3aea9c8ca936fa3@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 3 Feb 2023 at 15:53, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.10.167 release.
-> There are 9 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sun, 05 Feb 2023 10:09:58 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.10.167-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.10.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On 2023-02-04 09:12, Simon Horman wrote:
+> On Fri, Feb 03, 2023 at 10:44:22PM +0200, Vladimir Oltean wrote:
+>> On Fri, Feb 03, 2023 at 09:20:22AM +0100, Simon Horman wrote:
+>> > > else if (someflag)
+>> > >         dosomething();
+>> > >
+>> > > For now only one flag will actually be set and they are mutually exclusive,
+>> > > as they will not make sense together with the potential flags I know, but
+>> > > that can change at some time of course.
+>> >
+>> > Yes, I see that is workable. I do feel that checking for other flags would
+>> > be a bit more robust. But as you say, there are none. So whichever
+>> > approach you prefer is fine by me.
+>> 
+>> The model we have for unsupported bits in the 
+>> SWITCHDEV_ATTR_ID_PORT_PRE_BRIDGE_FLAGS
+>> and SWITCHDEV_ATTR_ID_PORT_BRIDGE_FLAGS handlers is essentially this:
+>> 
+>> 	if (flags & ~(supported_flag_mask))
+>> 		return -EOPNOTSUPP;
+>> 
+>> 	if (flags & supported_flag_1)
+>> 		...
+>> 
+>> 	if (flags & supported_flag_2)
+>> 		...
+>> 
+>> I suppose applying this model here would address Simon's extensibility 
+>> concern.
+> 
+> Yes, that is the model I had in mind.
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 5.10.167-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.10.y
-* git commit: 6278b8c9832e3a5adb841ca9e2cfebadb522f304
-* git describe: v5.10.166-10-g6278b8c9832e
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
-.166-10-g6278b8c9832e
-
-## Test Regressions (compared to v5.10.165-144-g930bc29c79c4)
-
-## Metric Regressions (compared to v5.10.165-144-g930bc29c79c4)
-
-## Test Fixes (compared to v5.10.165-144-g930bc29c79c4)
-
-## Metric Fixes (compared to v5.10.165-144-g930bc29c79c4)
-
-## Test result summary
-total: 155976, pass: 129575, fail: 3537, skip: 22567, xfail: 297
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 149 total, 148 passed, 1 failed
-* arm64: 49 total, 46 passed, 3 failed
-* i386: 39 total, 37 passed, 2 failed
-* mips: 31 total, 29 passed, 2 failed
-* parisc: 8 total, 8 passed, 0 failed
-* powerpc: 32 total, 25 passed, 7 failed
-* riscv: 16 total, 14 passed, 2 failed
-* s390: 16 total, 16 passed, 0 failed
-* sh: 14 total, 12 passed, 2 failed
-* sparc: 8 total, 8 passed, 0 failed
-* x86_64: 42 total, 40 passed, 2 failed
-
-## Test suites summary
-* boot
-* fwts
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+The only thing is that we actually need to return both 0 and -EOPNOTSUPP 
+for unsupported flags. The dynamic flag requires 0 when not supported 
+(and supported) AFAICS.
+Setting a mask as 'supported' for a feature that is not really supported 
+defeats the notion of 'supported' IMHO.
