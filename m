@@ -2,124 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF04568AC1D
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 20:34:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E750E68AC21
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Feb 2023 20:43:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231165AbjBDTeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 14:34:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41188 "EHLO
+        id S232340AbjBDTnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 14:43:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232127AbjBDTeI (ORCPT
+        with ESMTP id S232127AbjBDTnt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 14:34:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A4A72D14E;
-        Sat,  4 Feb 2023 11:34:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9851DB80B67;
-        Sat,  4 Feb 2023 19:34:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2C72C433EF;
-        Sat,  4 Feb 2023 19:34:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675539244;
-        bh=AdY6TYSZFKpSo66Jq2l8vunuavfLcbgyFlV81LOhabE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eOkUCQ6L8YYU3obvMeeYyGAUmMG12eWvnO7f7CHgMPqzSRJDgYdVRITc4TlAqTRoK
-         lceCd/fqN/fceBmxa1BWyDRPO8a+yyeq2+br1sw79ujdlM0oLv8XMTo1oorZuhv07t
-         fJcXerGYEnwNwNnEs+Sfr9/tCHF3GcEEuu8/hRoncS2mIy8yfEudst3b5YXxrC9JQF
-         4i80X/f8IQeptHt1BEg0dlwuR9r8FDlkCtSaRVP9T6OWOqQ62ycFhYNHqpM4/9gXlF
-         nl+XQtgXexpUh9W7IcJIlXrHcE29ho3AKrgdOjPZM6xi3SrkiO07d3g8Ciwj7ZiuWT
-         d6vtUZZLtyGRQ==
-Date:   Sat, 4 Feb 2023 11:34:02 -0800
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Nicolai Stange <nstange@suse.de>,
-        Marcos Paulo de Souza <mpdesouza@suse.com>,
-        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
-        jpoimboe@redhat.com, joe.lawrence@redhat.com
-Subject: Re: [PATCH v2 4/4] livepatch/shadow: Add garbage collection of
- shadow variables
-Message-ID: <20230204193402.rrbzeotpgdpieuaj@treble>
-References: <20221026194122.11761-1-mpdesouza@suse.com>
- <20221026194122.11761-5-mpdesouza@suse.com>
- <20221104010327.wa256pos75dczt4x@treble>
- <Y2TooogxxLTIkBcj@alley>
- <878rkhyhhv.fsf@linux.fritz.box>
- <Y24cGpeO8UHeiKGl@alley>
- <20221113185138.oob2o3sevbgud5vs@treble>
- <Y8a4ZQ0sm5AOnY7R@alley>
- <20230125232248.inewq5tlpwfk3rny@treble>
+        Sat, 4 Feb 2023 14:43:49 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 948B11D91A
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 11:43:48 -0800 (PST)
+Received: (qmail 603745 invoked by uid 1000); 4 Feb 2023 14:43:47 -0500
+Date:   Sat, 4 Feb 2023 14:43:47 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] USB: ene_usb6250: Allocate enough memory for full object
+Message-ID: <Y961c1/JIkDUqMbC@rowland.harvard.edu>
+References: <20230204183546.never.849-kees@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230125232248.inewq5tlpwfk3rny@treble>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230204183546.never.849-kees@kernel.org>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 03:22:48PM -0800, Josh Poimboeuf wrote:
-> On Tue, Jan 17, 2023 at 04:01:57PM +0100, Petr Mladek wrote:
-> > > >From my experience, there are basically two relevant usage patterns of
-> > > shadow variables.
-> > > 1.) To hand over global state from one sublivepatch to its pendant in
-> > >     the to-be-applied livepatch module. Example: a new global mutex or
-> > >     alike.
-> > > 2.) The "regular" intended usage, attaching shadow variables to real
-> > >     (data) objects.
-> > > 
-> > > To manage lifetime for 1.), we usually implement some refcount scheme,
-> > > managed from the livepatches' module_init()/_exit(): the next livepatch
-> > > would subscribe to the shared state before the previous one got a chance
-> > > to release it. This works in practice, but the code related to it is
-> > > tedious to write and quite verbose.
-> > > 
-> > > The second usage pattern is much more difficult to implement correctly
-> > > in light of possible livepatch downgrades to a subset of
-> > > sublivepatches. Usually a sublivepatch making use of a shadow variable
-> > > attached to real objects would livepatch the associated object's
-> > > destruction code to free up the associated shadow, if any. If the next
-> > > livepatch to be applied happened to not contain this sublivepatch in
-> > > question as well, the destruction code would effectively become
-> > > unpatched, and any existing shadows leaked. Depending on the object type
-> > > in question, this memory leakage might or might not be an actual
-> > > problem, but it isn't nice either way.
-> > > 
-> > > Often, there's a more subtle issue with the latter usecase though: the
-> > > shadow continues to exist, but becomes unmaintained once the transitions
-> > > has started. If said sublivepatch happens to become reactivated later
-> > > on, it would potentially find stale shadows, and these could even get
-> > > wrongly associated with a completely different object which happened to
-> > > get allocated at the same memory address. Depending on the shadow type,
-> > > this might or might not be Ok. New per-object locks or a "TLB flush
-> > > needed" boolean would probably be Ok, but some kind of refcount would
-> > > certainly not. There's not much which could be done from the pre-unpatch
-> > > callbacks, because these aren't getting invoked for atomic-replace
-> > > downgrades.
-> > 
-> > IMHO, this is the reason why we should make it per-object.
-> > 
-> > If the shadow variable was used by a livepatched module and we remove
-> > this module then the shadow variables would get unmaintained. It would
-> > results in the problem described in this paragraph.
+On Sat, Feb 04, 2023 at 10:35:46AM -0800, Kees Cook wrote:
+> The allocation of PageBuffer is 512 bytes in size, but the dereferencing
+> of struct ms_bootblock_idi (also size 512) happens at a calculated offset
+> within the allocation, which means the object could potentially extend
+> beyond the end of the allocation. Avoid this case by just allocating
+> enough space to catch any accesses beyond the end. Seen with GCC 13:
+
+In principle, it would be better to add a runtime check for overflow.  
+Doing it this way means that the code could read an invalid value.
+
+In fact, I get the impression that this code tries to load a data 
+structure which might straddle a page boundary by reading in just the 
+first page.  Either that, or else EntryOffset is always a multiple of 
+512 so the error cannot arise.
+
+In any event, it's doubtful that there are very many devices of this 
+sort still in use, so it probably doesn't matter.
+
+Alan Stern
+
 > 
-> Yes, that makes sense.  Ok, I'm convinced.
-
-I've been thinking about this some more, and this justification for
-making it per-object no longer makes sense to me.
-
-A shadow variable should follow the lifetime of its associated data
-object, so the only way it would leak from an unloaded patched module
-would be if there's a bug either in the patched module or in the
-livepatch itself, right?
-
-Or did I misunderstand your point?
-
--- 
-Josh
+> ../drivers/usb/storage/ene_ub6250.c: In function 'ms_lib_process_bootblock':
+> ../drivers/usb/storage/ene_ub6250.c:1050:44: warning: array subscript 'struct ms_bootblock_idi[0]' is partly outside array bounds of 'unsigned char[512]' [-Warray-bounds=]
+>  1050 |                         if (le16_to_cpu(idi->wIDIgeneralConfiguration) != MS_IDI_GENERAL_CONF)
+>       |                                            ^~
+> ../include/uapi/linux/byteorder/little_endian.h:37:51: note: in definition of macro '__le16_to_cpu'
+>    37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+>       |                                                   ^
+> ../drivers/usb/storage/ene_ub6250.c:1050:29: note: in expansion of macro 'le16_to_cpu'
+>  1050 |                         if (le16_to_cpu(idi->wIDIgeneralConfiguration) != MS_IDI_GENERAL_CONF)
+>       |                             ^~~~~~~~~~~
+> In file included from ../drivers/usb/storage/ene_ub6250.c:5:
+> In function 'kmalloc',
+>     inlined from 'ms_lib_process_bootblock' at ../drivers/usb/storage/ene_ub6250.c:942:15:
+> ../include/linux/slab.h:580:24: note: at offset [256, 512] into object of size 512 allocated by 'kmalloc_trace'
+>   580 |                 return kmalloc_trace(
+>       |                        ^~~~~~~~~~~~~~
+>   581 |                                 kmalloc_caches[kmalloc_type(flags)][index],
+>       |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   582 |                                 flags, size);
+>       |                                 ~~~~~~~~~~~~
+> 
+> Cc: Alan Stern <stern@rowland.harvard.edu>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: linux-usb@vger.kernel.org
+> Cc: usb-storage@lists.one-eyed-alien.net
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  drivers/usb/storage/ene_ub6250.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/storage/ene_ub6250.c b/drivers/usb/storage/ene_ub6250.c
+> index 6012603f3630..97c66c0d91f4 100644
+> --- a/drivers/usb/storage/ene_ub6250.c
+> +++ b/drivers/usb/storage/ene_ub6250.c
+> @@ -939,7 +939,7 @@ static int ms_lib_process_bootblock(struct us_data *us, u16 PhyBlock, u8 *PageDa
+>  	struct ms_lib_type_extdat ExtraData;
+>  	struct ene_ub6250_info *info = (struct ene_ub6250_info *) us->extra;
+>  
+> -	PageBuffer = kmalloc(MS_BYTES_PER_PAGE, GFP_KERNEL);
+> +	PageBuffer = kzalloc(MS_BYTES_PER_PAGE * 2, GFP_KERNEL);
+>  	if (PageBuffer == NULL)
+>  		return (u32)-1;
+>  
+> -- 
+> 2.34.1
+> 
