@@ -2,156 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3177D68AFC8
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 13:52:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B887868AFCA
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 13:55:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbjBEMwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 07:52:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56116 "EHLO
+        id S229582AbjBEMzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 07:55:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjBEMwI (ORCPT
+        with ESMTP id S229379AbjBEMzG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 07:52:08 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B54E65A9
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 04:52:07 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Sun, 5 Feb 2023 07:55:06 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BA8A1F90B;
+        Sun,  5 Feb 2023 04:55:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: linasend@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 09FF9423B9;
-        Sun,  5 Feb 2023 12:52:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1675601525;
-        bh=q0LNgqsfGLVJB6RizLXffwvd+oFT2Fg0IE4QerrJfd0=;
-        h=From:To:Cc:Subject:Date;
-        b=Xt+nlv7YZI4F8qZkOLOserjbvP/Ase1HK8RipD68mIthYaXCMAxz7k/GADvHZb97d
-         B9WafGbp6VQaZJKHeX2iyuWMoli/QAWFzvq2TR5lmUPf/JSD8sLJTF5PFb24VbFcBl
-         tKcqJwdpiOYgsBIErlgFnF3mTswqmzQ4ZxYdN9jN0vkW8bHRq7PU1/H5e82mFpyrrs
-         NM1qKf207KL9Pml9f44U+wnlulDshDVQyjBpJe6k0Jom7hKA0TLIYc7UQBgS//eF0P
-         32iFI9OqXft7piz1QRkz4JB6kfcpcpHizh1Qdy9RGnZ46V7J3hf+eKZG8XfLWCbjNG
-         XmXeTjql3ZVbA==
-From:   Asahi Lina <lina@asahilina.net>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Rob Herring <robh@kernel.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        dri-devel@lists.freedesktop.org, asahi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Asahi Lina <lina@asahilina.net>
-Subject: [PATCH] drm/shmem-helper: Fix locking for drm_gem_shmem_get_pages_sgt()
-Date:   Sun,  5 Feb 2023 21:51:24 +0900
-Message-Id: <20230205125124.2260-1-lina@asahilina.net>
-X-Mailer: git-send-email 2.35.1
+        by ams.source.kernel.org (Postfix) with ESMTPS id BCCA5B80AEC;
+        Sun,  5 Feb 2023 12:55:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E30FC433D2;
+        Sun,  5 Feb 2023 12:55:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1675601702;
+        bh=x/qDsEHlWJK+SjGX4aEIfZBQAJmIhwYl+Yiwf3fMysE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=lssMWPTq9vAlmqT9VnicpcZ1B+4eMc89IfIk29psRrPkA9nJUCLVg/OW3K4/cQR0C
+         F2Op+E8ujw8auzImX2EXIplqzh+5c1qjGrZGavhYUuRVWPbZMoyG+AHa0+rUEnEtEN
+         HFONKGt4l7oOIs9q7LOsDDaSVQKC8etZ/ErBICZk=
+Date:   Sun, 5 Feb 2023 13:54:59 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB driver fixes for 6.2-rc7
+Message-ID: <Y9+nI9o/v/RjiWne@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Other functions touching shmem->sgt take the pages lock, so do that here
-too. drm_gem_shmem_get_pages() & co take the same lock, so move to the
-_locked() variants to avoid recursive locking.
+The following changes since commit 2241ab53cbb5cdb08a6b2d4688feb13971058f65:
 
-Discovered while auditing locking to write the Rust abstractions.
+  Linux 6.2-rc5 (2023-01-21 16:27:01 -0800)
 
-Fixes: 2194a63a818d ("drm: Add library for shmem backed GEM objects")
-Fixes: 4fa3d66f132b ("drm/shmem: Do dma_unmap_sg before purging pages")
-Signed-off-by: Asahi Lina <lina@asahilina.net>
----
- drivers/gpu/drm/drm_gem_shmem_helper.c | 54 ++++++++++++++++----------
- 1 file changed, 34 insertions(+), 20 deletions(-)
+are available in the Git repository at:
 
-diff --git a/drivers/gpu/drm/drm_gem_shmem_helper.c b/drivers/gpu/drm/drm_gem_shmem_helper.c
-index b602cd72a120..2c559b310cad 100644
---- a/drivers/gpu/drm/drm_gem_shmem_helper.c
-+++ b/drivers/gpu/drm/drm_gem_shmem_helper.c
-@@ -681,23 +681,7 @@ struct sg_table *drm_gem_shmem_get_sg_table(struct drm_gem_shmem_object *shmem)
- }
- EXPORT_SYMBOL_GPL(drm_gem_shmem_get_sg_table);
- 
--/**
-- * drm_gem_shmem_get_pages_sgt - Pin pages, dma map them, and return a
-- *				 scatter/gather table for a shmem GEM object.
-- * @shmem: shmem GEM object
-- *
-- * This function returns a scatter/gather table suitable for driver usage. If
-- * the sg table doesn't exist, the pages are pinned, dma-mapped, and a sg
-- * table created.
-- *
-- * This is the main function for drivers to get at backing storage, and it hides
-- * and difference between dma-buf imported and natively allocated objects.
-- * drm_gem_shmem_get_sg_table() should not be directly called by drivers.
-- *
-- * Returns:
-- * A pointer to the scatter/gather table of pinned pages or errno on failure.
-- */
--struct sg_table *drm_gem_shmem_get_pages_sgt(struct drm_gem_shmem_object *shmem)
-+static struct sg_table *drm_gem_shmem_get_pages_sgt_locked(struct drm_gem_shmem_object *shmem)
- {
- 	struct drm_gem_object *obj = &shmem->base;
- 	int ret;
-@@ -708,7 +692,7 @@ struct sg_table *drm_gem_shmem_get_pages_sgt(struct drm_gem_shmem_object *shmem)
- 
- 	WARN_ON(obj->import_attach);
- 
--	ret = drm_gem_shmem_get_pages(shmem);
-+	ret = drm_gem_shmem_get_pages_locked(shmem);
- 	if (ret)
- 		return ERR_PTR(ret);
- 
-@@ -730,10 +714,40 @@ struct sg_table *drm_gem_shmem_get_pages_sgt(struct drm_gem_shmem_object *shmem)
- 	sg_free_table(sgt);
- 	kfree(sgt);
- err_put_pages:
--	drm_gem_shmem_put_pages(shmem);
-+	drm_gem_shmem_put_pages_locked(shmem);
- 	return ERR_PTR(ret);
- }
--EXPORT_SYMBOL_GPL(drm_gem_shmem_get_pages_sgt);
-+
-+/**
-+ * drm_gem_shmem_get_pages_sgt - Pin pages, dma map them, and return a
-+ *				 scatter/gather table for a shmem GEM object.
-+ * @shmem: shmem GEM object
-+ *
-+ * This function returns a scatter/gather table suitable for driver usage. If
-+ * the sg table doesn't exist, the pages are pinned, dma-mapped, and a sg
-+ * table created.
-+ *
-+ * This is the main function for drivers to get at backing storage, and it hides
-+ * and difference between dma-buf imported and natively allocated objects.
-+ * drm_gem_shmem_get_sg_table() should not be directly called by drivers.
-+ *
-+ * Returns:
-+ * A pointer to the scatter/gather table of pinned pages or errno on failure.
-+ */
-+struct sg_table *drm_gem_shmem_get_pages_sgt(struct drm_gem_shmem_object *shmem)
-+{
-+	int ret;
-+	struct sg_table *sgt;
-+
-+	ret = mutex_lock_interruptible(&shmem->pages_lock);
-+	if (ret)
-+		return ERR_PTR(ret);
-+	sgt = drm_gem_shmem_get_pages_sgt_locked(shmem);
-+	mutex_unlock(&shmem->pages_lock);
-+
-+	return sgt;
-+}
-+EXPORT_SYMBOL(drm_gem_shmem_get_pages_sgt);
- 
- /**
-  * drm_gem_shmem_prime_import_sg_table - Produce a shmem GEM object from
--- 
-2.35.1
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.2-rc7
 
+for you to fetch changes up to f82060da749c611ed427523b6d1605d87338aac1:
+
+  usb: typec: ucsi: Don't attempt to resume the ports before they exist (2023-02-02 11:27:28 +0100)
+
+----------------------------------------------------------------
+USB fixes for 6.2-rc7
+
+Here are some small USB fixes for 6.2-rc7 that resolve some reported
+problems.  These include:
+  - gadget driver fixes
+  - dwc3 driver fix
+  - typec driver fix
+  - MAINTAINERS file update.
+
+All of these have been in linux-next with no reported problems.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Aaro Koskinen (1):
+      usb: gadget: udc: do not clear gadget driver.bus
+
+Daniel Scally (1):
+      MAINTAINERS: Add myself as UVC Gadget Maintainer
+
+Heikki Krogerus (1):
+      usb: typec: ucsi: Don't attempt to resume the ports before they exist
+
+Neil Armstrong (1):
+      usb: dwc3: qcom: enable vbus override when in OTG dr-mode
+
+Pratham Pratap (1):
+      usb: gadget: f_uac2: Fix incorrect increment of bNumEndpoints
+
+Udipto Goswami (1):
+      usb: gadget: f_fs: Fix unbalanced spinlock in __ffs_ep0_queue_wait
+
+ MAINTAINERS                            | 1 +
+ drivers/usb/dwc3/dwc3-qcom.c           | 2 +-
+ drivers/usb/fotg210/fotg210-udc.c      | 1 -
+ drivers/usb/gadget/function/f_fs.c     | 4 +++-
+ drivers/usb/gadget/function/f_uac2.c   | 1 +
+ drivers/usb/gadget/udc/bcm63xx_udc.c   | 1 -
+ drivers/usb/gadget/udc/fsl_qe_udc.c    | 1 -
+ drivers/usb/gadget/udc/fsl_udc_core.c  | 1 -
+ drivers/usb/gadget/udc/fusb300_udc.c   | 1 -
+ drivers/usb/gadget/udc/goku_udc.c      | 1 -
+ drivers/usb/gadget/udc/gr_udc.c        | 1 -
+ drivers/usb/gadget/udc/m66592-udc.c    | 1 -
+ drivers/usb/gadget/udc/max3420_udc.c   | 1 -
+ drivers/usb/gadget/udc/mv_u3d_core.c   | 1 -
+ drivers/usb/gadget/udc/mv_udc_core.c   | 1 -
+ drivers/usb/gadget/udc/net2272.c       | 1 -
+ drivers/usb/gadget/udc/net2280.c       | 1 -
+ drivers/usb/gadget/udc/omap_udc.c      | 1 -
+ drivers/usb/gadget/udc/pch_udc.c       | 1 -
+ drivers/usb/gadget/udc/snps_udc_core.c | 1 -
+ drivers/usb/typec/ucsi/ucsi.c          | 9 ++++++++-
+ 21 files changed, 14 insertions(+), 19 deletions(-)
