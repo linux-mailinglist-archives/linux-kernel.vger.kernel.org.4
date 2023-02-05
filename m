@@ -2,136 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39E9668ADC2
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 02:06:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BB9A68ADCA
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 02:15:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230139AbjBEBGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 20:06:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54512 "EHLO
+        id S230180AbjBEBP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 20:15:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjBEBGi (ORCPT
+        with ESMTP id S229453AbjBEBPZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 20:06:38 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32C8723D9C;
-        Sat,  4 Feb 2023 17:06:37 -0800 (PST)
-Received: from mercury (93.85-246-81.adsl-static.isp.belgacom.be [81.246.85.93])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9362A6601E92;
-        Sun,  5 Feb 2023 01:06:35 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1675559195;
-        bh=0/+HCuANW0/ZP4TBdMMnN50TbFZPDp2Asr7+laT78yY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MSe3V+tR42TT+00/V1Xo1KvyrrX0F3dC3OJmGTJru38u1aE3dHin4/aV9FezgC6lB
-         59cS0rC+cJwmogj23t+RFr69o0d9IVziz1mBh0S4VthRTcFmYrX6uVfJmflLbvxyha
-         Cuu64LyJzgylRJPUaKc1ZZPZ4ykDCWlMkBvG7oEPFvE6idR5f21zx6TiXQhlU9AW/R
-         +3UWzR5mxiBdahGCGQdQDcwIyImJHFEh9MV3guxY/ckA3DvxlbFcMGW8mTTTQ9OWV7
-         AjjwciOVO1gGTjJrHseV8WjSVOT6BuJhvOKw/L1XwsfbfJRtJ8xhzmR+UmStKH7vcU
-         8gDmQ1frPt+uQ==
-Received: by mercury (Postfix, from userid 1000)
-        id 87EB710609C9; Sun,  5 Feb 2023 02:06:32 +0100 (CET)
-Date:   Sun, 5 Feb 2023 02:06:32 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Lee Jones <lee@kernel.org>
-Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com
-Subject: Re: [PATCHv6 05/11] mfd: rk808: split into core and i2c
-Message-ID: <20230205010632.wt5m3a7w7k62w6se@mercury.elektranox.org>
-References: <20230127181244.160887-1-sebastian.reichel@collabora.com>
- <20230127181244.160887-6-sebastian.reichel@collabora.com>
- <Y95jJYlqDayiaMP1@google.com>
- <Y95lSpUaOnbSAOIC@google.com>
+        Sat, 4 Feb 2023 20:15:25 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C2C25957
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 17:15:23 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id bx22so5634915pjb.3
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Feb 2023 17:15:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=svaTyE5mZPQK0qWqzG6qY2crbRN9D/vpOsNYpHocwpY=;
+        b=gsng0y6b+AGD/5yODn6xEf/wZoWYJOD5Gf5dOoVUAUuw55w6QXEjMvlLuSKejiLNML
+         cDkd4YZmw/GNpKLKyn1PaOw9u5LLTGzAGmMTf/BNMKND+y/XP9U9N8mAUoxLzEl4s6nm
+         yLeSJuZIKNxYd8De0i8D9OezYUrui5RqAh6ronWtLh9lp23xkvMW2aCgJZ1a6icMjY8M
+         QdG+rFJX9bkCGuWL5oDpeHHoPDWAEnxHMSHOmdA/ei4t6ccUkmR/2EFerPMk46RGp6nw
+         uX4c0SpR9Qs3gdd3eJTkmhjLQrGe6Qvibwnki9k5Y1xW+eo0tmMog1Z285RcFXu1E9Wc
+         wWeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=svaTyE5mZPQK0qWqzG6qY2crbRN9D/vpOsNYpHocwpY=;
+        b=NuYITf9CS2UdUd9TpqmkC5MpoCpeqNVKt6hTcmVDToGzlf/3NJPezrjCVq8YZ1eMqP
+         Wb7ERfNeEr9ZEqBWbcWiBnIZSI1gjRnkr8DkzfZz6omGYSDXRouPbB5i0IyZ4D94Ctls
+         5d8MK4sgrIY3LFpcGFsugvNcwOqBP+6pKcQ7K3KhX4eyP23FYnfZBfZULzP58qf7YD83
+         oLa3v1kUedV2TWWEcjUnvCOYhWndryM6LMN2WoHHlo7hbgFOxU6ueBEROPm7t7FnaH3g
+         iTYxI2bmmya4CAdNDsqf9WfYIIOMlByhwXH/Es2slaMMVS2WmXeOxaksro4wBneOmQTN
+         riiA==
+X-Gm-Message-State: AO0yUKVuzLXebxYx/V+TowCLbH3U7aoaZtjdQKiI/nfCi2dynFWFNX4x
+        36nLLSB6rUnzKrrhfLiPMDO4Vrrajvsc8K/o
+X-Google-Smtp-Source: AK7set8vbTdSCopsmxeeMPsAjktXPQFukNImkghNnkBCx+7kgE6y+NH6yD/PIl8Wzl4UIAePqxNbSQ==
+X-Received: by 2002:a17:90a:1a49:b0:230:8956:79f6 with SMTP id 9-20020a17090a1a4900b00230895679f6mr4741945pjl.38.1675559722699;
+        Sat, 04 Feb 2023 17:15:22 -0800 (PST)
+Received: from atishp.ba.rivosinc.com ([66.220.2.162])
+        by smtp.gmail.com with ESMTPSA id c7-20020a17090a020700b0023080c4c3bcsm2721917pjc.31.2023.02.04.17.15.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Feb 2023 17:15:22 -0800 (PST)
+From:   Atish Patra <atishp@rivosinc.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Atish Patra <atishp@rivosinc.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Guo Ren <guoren@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
+        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Will Deacon <will@kernel.org>
+Subject: [PATCH v5 00/14] KVM perf support 
+Date:   Sat,  4 Feb 2023 17:15:01 -0800
+Message-Id: <20230205011515.1284674-1-atishp@rivosinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qwl6y6rrtwcef27f"
-Content-Disposition: inline
-In-Reply-To: <Y95lSpUaOnbSAOIC@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series extends perf support for KVM. The KVM implementation relies
+on the SBI PMU extension and trap n emulation of hpmcounter CSRs.
+The KVM implementation exposes the virtual counters to the guest and internally
+manage the counters using kernel perf counters. 
 
---qwl6y6rrtwcef27f
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This series doesn't support the counter overflow as the Sscofpmf extension
+doesn't allow trap & emulation mechanism of scountovf CSR yet. The required
+changes to allow that are being under discussions. Supporting overflow interrupt
+also requires AIA interrupt filtering support.
 
-Hi Lee,
+1. PATCH 1-5 are generic KVM/PMU driver improvements.
+2. PATCH 9 disables hpmcounter for now. It will be enabled to maintain ABI
+requirement once the ONE reg interface is settled. 
 
-On Sat, Feb 04, 2023 at 02:01:46PM +0000, Lee Jones wrote:
-> On Sat, 04 Feb 2023, Lee Jones wrote:
-> > On Fri, 27 Jan 2023, Sebastian Reichel wrote:
-> > > Split rk808 into a core and an i2c part in preperation for
-> > > SPI support.
-> > >=20
-> > > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> > > ---
-> > >  drivers/clk/Kconfig                   |   2 +-
-> > >  drivers/input/misc/Kconfig            |   2 +-
-> > >  drivers/mfd/Kconfig                   |   7 +-
-> > >  drivers/mfd/Makefile                  |   3 +-
-> > >  drivers/mfd/{rk808.c =3D> rk8xx-core.c} | 209 +++++-----------------=
-----
-> > >  drivers/mfd/rk8xx-i2c.c               | 200 ++++++++++++++++++++++++
-> > >  drivers/pinctrl/Kconfig               |   2 +-
-> > >  drivers/power/supply/Kconfig          |   2 +-
-> > >  drivers/regulator/Kconfig             |   2 +-
-> > >  drivers/rtc/Kconfig                   |   2 +-
-> > >  include/linux/mfd/rk808.h             |   6 +
-> > >  sound/soc/codecs/Kconfig              |   2 +-
-> > >  12 files changed, 256 insertions(+), 183 deletions(-)
-> > >  rename drivers/mfd/{rk808.c =3D> rk8xx-core.c} (76%)
-> > >  create mode 100644 drivers/mfd/rk8xx-i2c.c
-> >=20
-> > Looks like you completely ignored (no response / no action) my review of
-> > v4.  This submission is therefore not getting one!  All comments can be
-> > superimposed from v4.
->=20
-> s/v4/v5/
+perf stat works in kvm guests with this series. 
 
-not sure what you are talking about. I dropped the PM wrappers and
-added a new patch moving the driver to use OF match. There were no
-other comments as far as I can tell. Did I miss a second mail with
-more comments?
+Here is example of running perf stat in a guest running in KVM.
 
--- Sebastian
+===========================================================================
+/ # /host/apps/perf stat -e instructions -e cycles -e r8000000000000005 \
+> -e r8000000000000006 -e r8000000000000007 -e r8000000000000008 \
+> -e r800000000000000a perf bench sched messaging -g 10 -l 10
 
---qwl6y6rrtwcef27f
-Content-Type: application/pgp-signature; name="signature.asc"
+# Running 'sched/messaging' benchmark:
+# 20 sender and receiver processes per group
+# 10 groups == 400 processes run
 
------BEGIN PGP SIGNATURE-----
+     Total time: 7.769 [sec]
+                 
+ Performance counter stats for 'perf bench sched messaging -g 10 -l 10':
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmPfAQsACgkQ2O7X88g7
-+prcPQ//eszrU24MFC5Y+5iGOaGdQNIx5ftzeIJNJBwYVllRJ12qns5IJavJb3bO
-j2KePqz80vwBzjQjtaFrid3dDUp+5Kip6spWCbu1mD0zPCj9xNUmWdFn78oZJRvN
-U9VYMRqeGBEmh4F/2dXaDd1KpZ+Yv042fCi0er5X2LMi0OE2RtlaE62l4XTKTCB7
-Kzzj/5Hv0DicX/Ecoq2ys7OcCWy7wG9hilyGYABZCWtAICoGCVMtLA8DwO+YNcDL
-wg0RRRJGkUrIZ91MIFDSxsYiElqil5tNaEhqBg+XfEzjEZeZEJR/Bw59rTNvBvIn
-DqkpT0C6e1kxn5aoaExjwMPmxRx9spq71V8EAQ71ZL9HIQNmQPXiyhmXMJUVuW1p
-gHctZpXTwQpvqoy18NtoQ/6ZWTuNwUHqhn3z16SND0x5Uekp95zuN3YJvBrn4YIf
-niEwpVUWnCUmrMAxxp9Cue5TaRpLPHk9WzWxaX5cIykOKrS0eN2NBINipTTEItZs
-/2mntr82tvbsBQwQCYSWsmf0X7/4oA4IfF06M/xXKwsbQNlA6vBgKpffA1kxgKPR
-8jHLlDUKVFB+RNvCiHRMkE4WBUlpliZqyRq1te8TS9Knhbz0Jj0fnbpn+G8Hu+wg
-TswdQcjKJjAOHrJ3n7w+yHMUH9T3rooo+cTbf3HxO4Qn7Wrqp2o=
-=x1Im
------END PGP SIGNATURE-----
+       73556259604      cycles
+       73387266056      instructions              #    1.00  insn per cycle
+                 0      dTLB-store-misses
+                 0      iTLB-load-misses
+                 0      r8000000000000005
+              2595      r8000000000000006
+              2272      r8000000000000007
+                10      r8000000000000008
+                 0      r800000000000000a
 
---qwl6y6rrtwcef27f--
+      12.173720400 seconds time elapsed
+
+       1.002716000 seconds user
+      21.931047000 seconds sys
+
+
+Note: The SBI_PMU_FW_SET_TIMER (eventid : r8000000000000005) is zero
+as kvm guest supports sstc now. 
+
+This series can be found here as well.
+https://github.com/atishp04/linux/tree/kvm_perf_v5
+
+TODO:
+1. Add sscofpmf support.
+2. Add One reg interface for the following operations:
+	1. Enable/Disable PMU (should it at VM level rather than vcpu ?)
+	2. Number of hpmcounter and width of the counters
+	3. Init PMU
+	4. Allow guest user to access cycle & instret without trapping
+3. Move counter mask to a bitmask instead of unsigned long so that it can work
+   for RV32 systems where number of total counters are more than 32.
+   This will also accomodate future systems which may define maximum counters
+   to be more than 64. 
+
+Changes from v4->v5:
+1. Few checkpatch --strict error fixes.
+2. Some other minor nit comment addressed.
+3. Fixed an issue around counter indexing.
+
+Changes from v3->v4:
+1. Addressed all the comments on v3.
+2. Modified the vcpu_pmu_init to void return type.
+3. Redirect illegal instruction trap to guest for invalid hpmcounter access
+   instead of exiting to the userpsace.
+4. Got rid of unecessary error messages.
+
+Changes v2->v3:
+1. Changed the exported functions to GPL only export.
+2. Addressed all the nit comments on v2.
+3. Split non-kvm related changes into separate patches.
+4. Reorgainze the PATCH 11 and 10 based on Drew's suggestions.
+
+Changes from v1->v2:
+1. Addressed comments from Andrew.
+2. Removed kvpmu sanity check.
+3. Added a kvm pmu init flag and the sanity check to probe function.
+4. Improved the linux vs sbi error code handling.
+ 
+
+Atish Patra (14):
+perf: RISC-V: Define helper functions expose hpm counter width and
+count
+perf: RISC-V: Improve privilege mode filtering for perf
+RISC-V: Improve SBI PMU extension related definitions
+RISC-V: KVM: Define a probe function for SBI extension data structures
+RISC-V: KVM: Return correct code for hsm stop function
+RISC-V: KVM: Modify SBI extension handler to return SBI error code
+RISC-V: KVM: Add skeleton support for perf
+RISC-V: KVM: Add SBI PMU extension support
+RISC-V: KVM: Make PMU functionality depend on Sscofpmf
+RISC-V: KVM: Disable all hpmcounter access for VS/VU mode
+RISC-V: KVM: Implement trap & emulate for hpmcounters
+RISC-V: KVM: Implement perf support without sampling
+RISC-V: KVM: Support firmware events
+RISC-V: KVM: Increment firmware pmu events
+
+arch/riscv/include/asm/kvm_host.h     |   4 +
+arch/riscv/include/asm/kvm_vcpu_pmu.h | 111 +++++
+arch/riscv/include/asm/kvm_vcpu_sbi.h |  13 +-
+arch/riscv/include/asm/sbi.h          |   7 +-
+arch/riscv/kvm/Makefile               |   1 +
+arch/riscv/kvm/main.c                 |   3 +-
+arch/riscv/kvm/tlb.c                  |   4 +
+arch/riscv/kvm/vcpu.c                 |   7 +
+arch/riscv/kvm/vcpu_insn.c            |   4 +-
+arch/riscv/kvm/vcpu_pmu.c             | 627 ++++++++++++++++++++++++++
+arch/riscv/kvm/vcpu_sbi.c             |  72 ++-
+arch/riscv/kvm/vcpu_sbi_base.c        |  27 +-
+arch/riscv/kvm/vcpu_sbi_hsm.c         |  28 +-
+arch/riscv/kvm/vcpu_sbi_pmu.c         |  87 ++++
+arch/riscv/kvm/vcpu_sbi_replace.c     |  50 +-
+arch/riscv/kvm/vcpu_sbi_v01.c         |  17 +-
+drivers/perf/riscv_pmu_sbi.c          |  64 ++-
+include/linux/perf/riscv_pmu.h        |   5 +
+18 files changed, 1021 insertions(+), 110 deletions(-)
+create mode 100644 arch/riscv/include/asm/kvm_vcpu_pmu.h
+create mode 100644 arch/riscv/kvm/vcpu_pmu.c
+create mode 100644 arch/riscv/kvm/vcpu_sbi_pmu.c
+
+--
+2.25.1
+
