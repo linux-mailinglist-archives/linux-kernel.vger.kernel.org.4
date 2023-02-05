@@ -2,98 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EBE068AEEA
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 09:55:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E08A68AEEB
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 09:56:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229539AbjBEIz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 03:55:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42354 "EHLO
+        id S229542AbjBEI4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 03:56:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjBEIzO (ORCPT
+        with ESMTP id S229503AbjBEI4T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 03:55:14 -0500
-Received: from mailrelay6-1.pub.mailoutpod2-cph3.one.com (mailrelay6-1.pub.mailoutpod2-cph3.one.com [IPv6:2a02:2350:5:405::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC4F723308
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 00:55:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa2;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=048w4mMGx18wsnXMKlj9cLwJ8F73CyxBdkjcWuROSEo=;
-        b=0+ratF2/X1QIflCTtfzRzlNip+Pv4C5PFD7RpCc64W8o2cGJLLktwWRJQpVjcpXCGkSIyAUEQd2qC
-         A4JByyMsZkARH44l0QvnYrSoUgY8pKOq3B9ksAGD4Pka7KSg19G9lFL9euVXiyJvCvjuU6sMK5HLzw
-         Lk0l62cUXtkKCNV7DJSk2Sa5xe1wk2z4Z9tRWMcV9tmfjAyTAfdg+RaksVosiYQz6hjchf7bJSD/EE
-         sAnlQzB4PwsLP2JspC5t+ex8aQ2uqvND2PT3I0I6xK6QqeBxhpPr0UIMXwWRiP85oBTy11wvFeOUpT
-         v9jxDbVDuOWduqccsUl0CwXJBJP9HCQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed2;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=048w4mMGx18wsnXMKlj9cLwJ8F73CyxBdkjcWuROSEo=;
-        b=wL3tIP90z6C+hrkREz1fP5ZAXPEoL6H/y421bkUE3yXdtUlSk6epSrLZNQ/WEDZaUeh9KrPHSclv5
-         yMUfrOJDg==
-X-HalOne-ID: c7fbbd74-a532-11ed-a1af-cde5ad41a1dd
-Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
-        by mailrelay6 (Halon) with ESMTPSA
-        id c7fbbd74-a532-11ed-a1af-cde5ad41a1dd;
-        Sun, 05 Feb 2023 08:55:06 +0000 (UTC)
-Date:   Sun, 5 Feb 2023 09:55:05 +0100
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH] sparc: allow sparc32 alias for archhelp
-Message-ID: <Y99u6Z6InryAkRCn@ravnborg.org>
-References: <20230205012915.11330-1-rdunlap@infradead.org>
+        Sun, 5 Feb 2023 03:56:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D67B01A948
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 00:56:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 669BF60B60
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 08:56:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8814C433D2;
+        Sun,  5 Feb 2023 08:56:15 +0000 (UTC)
+Date:   Sun, 5 Feb 2023 03:56:12 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
+        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: kernel/trace/rv/monitors/wip/wip.c:20:1: sparse: sparse: symbol
+ 'da_mon_wip' was not declared. Should it be static?
+Message-ID: <20230205035612.55406e42@rorschach.local.home>
+In-Reply-To: <202302050517.4xtGBe0d-lkp@intel.com>
+References: <202302050517.4xtGBe0d-lkp@intel.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230205012915.11330-1-rdunlap@infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 04, 2023 at 05:29:15PM -0800, Randy Dunlap wrote:
-> Currently, entering
-> $ make ARCH=sparc32 help
-> prints the archhelp text for sparc64.
-> 
-> Since "sparc32" is documented (Documentation/kbuild/kbuild.rst)
-> to be a recognized alias for 32-bit sparc, also support that
-> string in sparc's archhelp by allowing either ARCH=sparc or
-> ARCH=sparc32 for sparc32 archhelp.
-> 
-> Fixes: 5e53879008b9 ("sparc,sparc64: unify Makefile")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Sam Ravnborg <sam@ravnborg.org>
-Acked-by: Sam Ravnborg <sam@ravnborg.org>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: sparclinux@vger.kernel.org
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-I hope Andrew picks this up.
+On Sun, 5 Feb 2023 05:24:24 +0800
+kernel test robot <lkp@intel.com> wrote:
 
-	Sam
+> Hi Stephen,
 
-> ---
->  arch/sparc/Makefile |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Who's "Stephen"?
+
 > 
-> diff -- a/arch/sparc/Makefile b/arch/sparc/Makefile
-> --- a/arch/sparc/Makefile
-> +++ b/arch/sparc/Makefile
-> @@ -83,7 +83,7 @@ vdso_install:
->  KBUILD_IMAGE := $(boot)/zImage
->  
->  # Don't use tabs in echo arguments.
-> -ifeq ($(ARCH),sparc)
-> +ifeq ($(ARCH),$(filter $(ARCH),sparc sparc32))
->  define archhelp
->    echo  '* image        - kernel image ($(boot)/image)'
->    echo  '* zImage       - stripped kernel image ($(boot)/zImage)'
+> First bad commit (maybe != root cause):
+> 
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   db27c22251e7c8f3a9d5bfb55c9c8c701a70bbb3
+> commit: 10bde81c74863472047f31304064018c40f488ee rv/monitor: Add the wip monitor
+> date:   6 months ago
+> config: csky-randconfig-s052-20230205 (https://download.01.org/0day-ci/archive/20230205/202302050517.4xtGBe0d-lkp@intel.com/config)
+> compiler: csky-linux-gcc (GCC) 12.1.0
+> reproduce:
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # apt-get install sparse
+>         # sparse version: v0.6.4-39-gce1a6720-dirty
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=10bde81c74863472047f31304064018c40f488ee
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout 10bde81c74863472047f31304064018c40f488ee
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=csky olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=csky SHELL=/bin/bash kernel/trace/rv/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> 
+> sparse warnings: (new ones prefixed by >>)
+>    kernel/trace/rv/monitors/wip/wip.c: note: in included file:
+>    kernel/trace/rv/monitors/wip/wip.h:30:22: sparse: sparse: symbol 'automaton_wip' was not declared. Should it be static?
+> 
+
+Line 30 in kernel/trace/rv/monitors/wip/wip.h is:
+
+static const struct automaton_wip automaton_wip
+
+Isn't it already static??
+
+-- Steve
+
+> vim +/da_mon_wip +20 kernel/trace/rv/monitors/wip/wip.c
+> 
+> 8812d21219b9c6 Daniel Bristot de Oliveira 2022-07-29  18  
+> 8812d21219b9c6 Daniel Bristot de Oliveira 2022-07-29 @19  struct rv_monitor rv_wip;
+> 8812d21219b9c6 Daniel Bristot de Oliveira 2022-07-29 @20  DECLARE_DA_MON_PER_CPU(wip, unsigned char);
+> 8812d21219b9c6 Daniel Bristot de Oliveira 2022-07-29  21  
+> 
+> :::::: The code at line 20 was first introduced by commit
+> :::::: 8812d21219b9c649dd25eb93915e00939944aeb7 rv/monitor: Add the wip monitor skeleton created by dot2k
+> 
+> :::::: TO: Daniel Bristot de Oliveira <bristot@kernel.org>
+> :::::: CC: Steven Rostedt (Google) <rostedt@goodmis.org>
+> 
+
