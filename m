@@ -2,79 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8202D68B14C
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 20:09:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C73CF68B15C
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 20:26:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229515AbjBETJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 14:09:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57084 "EHLO
+        id S229564AbjBET0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 14:26:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjBETJe (ORCPT
+        with ESMTP id S229510AbjBET0K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 14:09:34 -0500
-Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E740A11179
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 11:09:32 -0800 (PST)
+        Sun, 5 Feb 2023 14:26:10 -0500
+Received: from bird.elm.relay.mailchannels.net (bird.elm.relay.mailchannels.net [23.83.212.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A9DD18AB4
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 11:26:05 -0800 (PST)
 X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
 Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id D344E880E95;
-        Sun,  5 Feb 2023 19:01:49 +0000 (UTC)
+        by relay.mailchannels.net (Postfix) with ESMTP id 54E3592196E;
+        Sun,  5 Feb 2023 19:26:05 +0000 (UTC)
 Received: from pdx1-sub0-mail-a283.dreamhost.com (unknown [127.0.0.6])
         (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 47386880DB1;
-        Sun,  5 Feb 2023 19:01:49 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1675623709; a=rsa-sha256;
+        by relay.mailchannels.net (Postfix) with ESMTPA id C648C921831;
+        Sun,  5 Feb 2023 19:26:04 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1675625164; a=rsa-sha256;
         cv=none;
-        b=xFE+a+cSpiqadBttNhFcAXafvwEOfeD5SAjBLpGy+t7ifNsB4VbDOX47grYLJxAQII0FTm
-        yqboB8JocT16P5rWTEXiPiqZrqE+ukc5SjWSkWW/mqQ5Kw7HBEPKPno+wqWFbFJJz5JCib
-        kU/fOKV5xQ93Rf/Na66f/gewIPCn33XbylmWOdnVN074g1JzKlhEgD9+j482oNcDFHdWp7
-        dT3GILyLSibT/8RA8TfAHvdULv57P1rekgnWcUVW1dEdxzhqw/ZlOcaveK3WovGo2EeiPv
-        MQUmKIDQF/e3rT6Y5/hfm1h7glP7bQ4G4VIZuKMYGJK8BHi7IiyZ5Sm5HgOnLw==
+        b=6xMKZqYGAV/liOC/zy9ZI2RXETTs/lscRcTvyigeaarlwoDeLzHb+v6oMmxCw7xWaN6zUO
+        1wCuvLAMzdJmwVfJHfB4i9tUwnaZUvvAuoyGobI4GL5AxCMI8emg0C4k10cxL8quEnO0Zs
+        U5DbIVvBatv+Exz/1gPoKa+O4cjm4+1CkEPoy1tf0cR56EzXbHUpoqvHeSJh/K4cXeo2Qn
+        xzvoUjwiNGfrkmVpJcdRZw7xmdqtxC80NW2lfBEH/SPxcFhisBsgtjNkkh2uIcQcuhhhkt
+        dZ69GRhGHfbph2FlIIVgODZnTiwwckRCGEQ1qOnO6Un27v5poCZMuBzMrwpIRw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mailchannels.net;
-        s=arc-2022; t=1675623709;
+        s=arc-2022; t=1675625164;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=fOWa55a8RqXbEI+vUv5QZmR1uE0lJQWdOr8I37TZN+g=;
-        b=aNhlYTL+CsSHA88jXtXZX2cOq+UyxGtSLBsixhXNFDDI7okYHoz9WdY2Px6Ah+fnCDg96A
-        U6lWcz9zEjAfBFDK+KOcNz3rIFA//IgJBSweJ3cGP9DdZaEJKyaoNAj1e7NqZ9FsHxW+Io
-        5KYxNZo04Y6GUYo/xwTj3LPo1ZgSqbjh+E4SqQ4LUWc9J+gtQHIymqTQ209VRbHqf98whN
-        p9A9horJBXIc5023gEMTX6gkXsIGodcrFCsjXIEjqOHgmCDK63kf4Owv1OcR2wfvcLIltS
-        t28mJMvfHc39EdRuH7guPVCdy1VFzGUjk81GbYhTCIok1vMJZRPIDYeue2VEpQ==
+        bh=dt4qLnZ5x+MQwdb8A7tE77a+9Wo8DsXWDSS1uDwjWw0=;
+        b=chQgAcen02MdTuZQnf2JcLCIBKXIDlScCpBicVx69G0pfm9BWv2QMCFSHmZlhraUYmK11N
+        KksUYRLVRjeYt8KMHuD5GTDmlF5I/W97Wj6RnTdg4bjpxLYwtbozTUyxu66OioA6kFuufH
+        XriO/mKxZksmZBypnkj21pzf7Deq2ZL3RE7FO6hEzUW3Hxh7Mi2jgwvn61YO+a/pFLP9LI
+        gT1mWgG0QS5tnvGIYbVukj/icAc3KLGeXWJgJSoTFhiNxT0CIjfcatv6A4o3yeBZiZ7Z6e
+        q/CgfmTaEzpraeVz6CUo5tXRzuEpF6c9kRwq5aY+yUaXbvc6KHfUYBhV4+bPBw==
 ARC-Authentication-Results: i=1;
-        rspamd-544f66f495-7cmhb;
+        rspamd-5fb8f68d88-vqvfk;
         auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
 X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
 X-MC-Relay: Neutral
 X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
 X-MailChannels-Auth-Id: dreamhost
-X-Snatch-Daffy: 6918221b0c03e2e1_1675623709596_3659634626
-X-MC-Loop-Signature: 1675623709596:2929326835
-X-MC-Ingress-Time: 1675623709596
+X-Suffer-Name: 3588f48715c365eb_1675625165117_431330380
+X-MC-Loop-Signature: 1675625165117:2441208404
+X-MC-Ingress-Time: 1675625165117
 Received: from pdx1-sub0-mail-a283.dreamhost.com (pop.dreamhost.com
  [64.90.62.162])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.120.227.134 (trex/6.7.1);
-        Sun, 05 Feb 2023 19:01:49 +0000
+        by 100.123.200.117 (trex/6.7.1);
+        Sun, 05 Feb 2023 19:26:05 +0000
 Received: from offworld (unknown [104.36.25.251])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a283.dreamhost.com (Postfix) with ESMTPSA id 4P8zJr1g2pz8p;
-        Sun,  5 Feb 2023 11:01:48 -0800 (PST)
+        by pdx1-sub0-mail-a283.dreamhost.com (Postfix) with ESMTPSA id 4P8zrq6tGNz8p;
+        Sun,  5 Feb 2023 11:26:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1675623709;
-        bh=fOWa55a8RqXbEI+vUv5QZmR1uE0lJQWdOr8I37TZN+g=;
+        s=dreamhost; t=1675625164;
+        bh=dt4qLnZ5x+MQwdb8A7tE77a+9Wo8DsXWDSS1uDwjWw0=;
         h=Date:From:To:Cc:Subject:Content-Type;
-        b=UEMrhrPf3/zNVic0Dk0GahdJNneHdOyAhWAZAqBEt7iXIOKfEAtPXuRb2efYKC7Bf
-         C9y6YngZwUJSadV4vJztWlSJhjL0np3jo3ggAxACU2JJcbwnXaXs9Bzs8ohTfOnCtG
-         YYK2k7aPxpj1wOX3w8GjQLvcCVqYu1w+IXueCT3f4EYTjVELK8tS5FxNkdy7mzkUf4
-         juka35a70gO97QPgxhhU/tvdhdHoYhPYC7kJYIB+BCnX33z3JUb8HTTOUy9bbZU5vh
-         6z3zgq+tXHKzXFaUt3S0Hg+E+ZW/ZDo0ePvBgkdePZZU8WAB0v0Go9ddna4im+dcNn
-         QzHlbCl30pg+g==
-Date:   Sun, 5 Feb 2023 10:34:24 -0800
+        b=a6RKL6O39rFl+RrW3M3VXFUiD75nTbUoQY0UzFOv8ZuZ4MgCF9e23w2nN3TKiUhRQ
+         HqP7iWmyicMZNO1rqXa3036fdnHyU8Y0DGScNJUn2A6ZhUPtBM6/LNNAi6TlrrJ4Ah
+         x7V3rpxeUY9PPxUGBMT2UUcWLsoBUrWoPbVB3KmURDukjXcta5rO85JFrPF5fmgnXR
+         s06wWO1WIehiqRB75gxgOtiKou7DU40oCAU7fkgMXdHnSlnraKO2Qi1OGbN2SIgW0d
+         Lb39u/Y4GcPu5ULEtahH8TvSwqw/gK1r/pwU+48B1jVKbPIEy7E+g/5BD1gQLGlhuB
+         iV1CuDhsRC+vQ==
+Date:   Sun, 5 Feb 2023 10:58:40 -0800
 From:   Davidlohr Bueso <dave@stgolabs.net>
 To:     John Stultz <jstultz@google.com>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
@@ -84,14 +84,15 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Juri Lelli <juri.lelli@redhat.com>,
         Valentin Schneider <vschneid@redhat.com>,
         Dietmar Eggemann <dietmar.eggemann@arm.com>
-Subject: Re: [PATCH v2 1/4] locktorture: Add nested_[un]lock() hooks and
- nlocks parameter
-Message-ID: <20230205183424.xwt54mlyixxgkhl6@offworld>
+Subject: Re: [PATCH v2 3/4] locktorture: Add nested locking to rtmutex
+ torture tests
+Message-ID: <20230205185840.uwk4vgvwfuakooso@offworld>
 References: <20230203200138.3872873-1-jstultz@google.com>
+ <20230203200138.3872873-3-jstultz@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20230203200138.3872873-1-jstultz@google.com>
+In-Reply-To: <20230203200138.3872873-3-jstultz@google.com>
 User-Agent: NeoMutt/20220429
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -105,20 +106,9 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Fri, 03 Feb 2023, John Stultz wrote:
 
->In order ot extend locktorture to support lock nesting, add
-	  ^ to
-
->nested_lock() and nested_unlock() hooks to the torture ops.
->
->These take a 32bit lockset mask which is generated at random,
->so some number of locks will be taken before the main lock is
->taken and released afterwards.
->
->Additionally, add nlocks module parameter to allow specifying
->the number of nested locks to be used.
->
->This has been helpful to uncover issues in the proxy-exec
->series development.
+>This patch adds randomized nested locking to the rtmutex torture
+>tests. Additionally it adds LOCK09 config files for testing
+>rtmutexes with nested locking.
 >
 >This was inspired by locktorture extensions originally implemented
 >by Connor O'Brien, for stress testing the proxy-execution series:
@@ -126,7 +116,7 @@ On Fri, 03 Feb 2023, John Stultz wrote:
 >
 >Comments or feedback would be greatly appreciated!
 
-Both of the above statements should be in a cover letter patch.
+Same comments for all the patches in the series.
 
 >
 >Cc: Davidlohr Bueso <dave@stgolabs.net>
@@ -139,22 +129,3 @@ Both of the above statements should be in a cover letter patch.
 >Signed-off-by: John Stultz <jstultz@google.com>
 
 Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
-
-With some small nits below.
-
->---
-> kernel/locking/locktorture.c | 23 +++++++++++++++++++----
-> 1 file changed, 19 insertions(+), 4 deletions(-)
->
->diff --git a/kernel/locking/locktorture.c b/kernel/locking/locktorture.c
->index 9c2fb613a55d..f4fbd3194654 100644
->--- a/kernel/locking/locktorture.c
->+++ b/kernel/locking/locktorture.c
->@@ -48,6 +48,9 @@ torture_param(int, stat_interval, 60,
-> torture_param(int, stutter, 5, "Number of jiffies to run/halt test, 0=disable");
-> torture_param(int, verbose, 1,
->	     "Enable verbose debugging printk()s");
->+torture_param(int, nlocks, 0, "Number of nested locks");
-
-Maybe rename the parameter to 'nested_locks'? It would also be good to
-inform the 8 limit. "Number of nested locks (max = 8)".
