@@ -2,137 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6490368B1AD
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 21:42:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE0A168B1B1
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 21:53:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229571AbjBEUmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 15:42:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53152 "EHLO
+        id S229537AbjBEUxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 15:53:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjBEUmG (ORCPT
+        with ESMTP id S229379AbjBEUxq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 15:42:06 -0500
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73B5118B35;
-        Sun,  5 Feb 2023 12:42:05 -0800 (PST)
-Received: by mail-qt1-x82e.google.com with SMTP id f10so10936475qtv.1;
-        Sun, 05 Feb 2023 12:42:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=baJmWUdmXVxM+m9C4fBDKrI1jWXWeqNSvEzKDmMn6/M=;
-        b=SSMkxH8xCWttzweeETBFl/UCMnZpy5mKzOFrOqGq8bC0gR0ny3UpATXov8Y5mTan4Q
-         9p+Yafup31xdVV6I7G52LPaIj7ByN8WiHl79X8ZymX9R8MtIl9euWb0rtmM7gGXegFJw
-         KLsfeJusNmHPIunW5AKlIPpUwpeVMBjDqV0D+A9EGKazJ7F9ERSdr3+dZFnUCirZ4Lge
-         PhZZjAtlyNZu+ErqbODBMlpqu69NuOPuyBV4V+PtXZXIaDBWd4bkpM3VNMZKat0PuaH9
-         Ajp/pwWPwLrLwHstHT7H7b3bvGbidkcwksQRvI2xvLoqYSVq0HAhGphgt6pcnehRVyJ3
-         6Hvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=baJmWUdmXVxM+m9C4fBDKrI1jWXWeqNSvEzKDmMn6/M=;
-        b=2RTZlsi9/XVEzdWKtVC0NJ8HPJwvgLk4UJ3s7PWqZcvy3LWLLpYk4I649djXXIaY7I
-         WSOegboHxwTg10JDo7ZJRvyyaNmlHSnzX2NopkAI+ZG+g1SqpB2DHmT7ptcBpjNEl13J
-         x+gXD+bi78rXxyXVLZEkxOqEmB1kUL0GyujqX5Qk+6pdCdiKW0JkQJjsATpQlMST2H2n
-         cBqZPxFc6gNkHIf4LNYg/MFNlr8GzSLUdEXIy9AgF2j3VqmNUQp6WkE2/VWhB5vPytXM
-         Ey838Lx1DVEy1v0rOV20RfENZAgtQbAhzZRGJ3nN9WZmPJMb+nT7ebepWT9AMpx2dE4+
-         wABA==
-X-Gm-Message-State: AO0yUKVbfD+Mq/DAKbdvC4LuuXMTGjk0rxNNVIl7oLtQmqeKmzis7vXW
-        cEzGH9lehdoc28DpYzWio80=
-X-Google-Smtp-Source: AK7set/UDuxsSLYZ5O17sdxwiyzq0qjEQT1oXqV2fBG7niXHLPSfrcFUIkUFMq13ygxznuWHKSrqUQ==
-X-Received: by 2002:ac8:7f8e:0:b0:3a9:81f0:d8e9 with SMTP id z14-20020ac87f8e000000b003a981f0d8e9mr31582595qtj.68.1675629724567;
-        Sun, 05 Feb 2023 12:42:04 -0800 (PST)
-Received: from localhost ([2600:1700:65a0:ab60:a80b:31f2:24c8:7c9a])
-        by smtp.gmail.com with ESMTPSA id i9-20020ac813c9000000b003b86d3ca969sm5815755qtj.51.2023.02.05.12.42.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Feb 2023 12:42:04 -0800 (PST)
-Date:   Sun, 5 Feb 2023 12:42:03 -0800
-From:   Cong Wang <xiyou.wangcong@gmail.com>
-To:     David Vernet <void@manifault.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@meta.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        toke@redhat.com, corbet@lwn.net, linux-doc@vger.kernel.org,
-        brouer@redhat.com, bagasdotme@gmail.com, linux-api@vger.kernel.org
-Subject: Re: [PATCH bpf-next v3] bpf/docs: Document kfunc lifecycle /
- stability expectations
-Message-ID: <Y+AUm8cikB6m978j@pop-os.localdomain>
-References: <20230203155727.793518-1-void@manifault.com>
- <20230203155727.793518-2-void@manifault.com>
+        Sun, 5 Feb 2023 15:53:46 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8037A1A4A0;
+        Sun,  5 Feb 2023 12:53:44 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P91nv19zMz4xP9;
+        Mon,  6 Feb 2023 07:53:39 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1675630419;
+        bh=WNtafT6Eqdqn9I8Tn/3HQdhCkFl2ZAcSZMuhO2qyoiQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=XpUN6KPsb96bUfMdw2Rd4V19mkexIW/isN+KNg8jYQPmfvKeQxuo/53zTraA0dDA5
+         DVE04L1+ju8p0EoKfqTYgf1N4dB5Jg86fYjFmqgSCUe4vU+oKQW6uQ3W5MSGXOJ/0w
+         c2hOxvR9e40ja4EoMVV3uFGZyyS/OZ5ncjKn2oH3X3Ipu6Yd+ClzfdITXIHL6rt0Tt
+         IBAg/jiSIOVv7w4vlWHrjZf5ojmH3iVOl25HMjG4jEa7gAJC9SE+eCXryqLJUJEQ6e
+         H0sEuDwJY9tdGzGM16bI+RBrmfbukdqAb7rf5uzhNvRw4bMu737ZFQAY9BQB4Qy/YJ
+         aTh5H7neimWjw==
+Date:   Mon, 6 Feb 2023 07:53:37 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?UTF-8?B?V2ls?= =?UTF-8?B?Y3p5xYRza2k=?= 
+        <kw@linux.com>, Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-next@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: Update PCI git tree location for linux-next
+Message-ID: <20230206075337.43b3e4da@canb.auug.org.au>
+In-Reply-To: <20230203222705.GA2054108@bhelgaas>
+References: <20230203222705.GA2054108@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230203155727.793518-2-void@manifault.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/W36l+Qb0OaNZY+dF3rhgxuG";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 09:57:27AM -0600, David Vernet wrote:
-> BPF kernel <-> kernel API stability has been discussed at length over
-> the last several weeks and months. Now that we've largely aligned over
-> kfuncs being the way forward, and BPF helpers being considered
-> functionally frozen, it's time to document the expectations for kfunc
-> lifecycles and stability so that everyone (BPF users, kfunc developers,
-> and maintainers) are all aligned, and have a crystal-clear understanding
-> of the expectations surrounding kfuncs.
-> 
-> To do that, this patch adds that documentation to the main kfuncs
-> documentation page via a new 'kfunc lifecycle expectations' section. The
-> patch describes how decisions are made in the kernel regarding whether
-> to include, keep, deprecate, or change / remove a kfunc. As described
-> very overtly in the patch itself, but likely worth highlighting here:
-> 
-> "kfunc stability" does not mean, nor ever will mean, "BPF APIs may block
-> development elsewhere in the kernel".
-> 
-> Rather, the intention and expectation is for kfuncs to be treated like
-> EXPORT_SYMBOL_GPL symbols in the kernel. The goal is for kfuncs to be a
-> safe and valuable option for maintainers and kfunc developers to extend
-> the kernel, without tying anyone's hands, or imposing any kind of
-> restrictions on maintainers in the same way that UAPI changes do.
+--Sig_/W36l+Qb0OaNZY+dF3rhgxuG
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I think they are still different, kernel modules are still considered as
-a part of kernel development, while eBPF code is not that supposed to be
-kernel development, at least much further. Treating them alike is
-misleading, IMHO.
+Hi Bjorn,
 
-> 
-> In addition to the 'kfunc lifecycle expectations' section, this patch
-> also adds documentation for a new KF_DEPRECATED kfunc flag which kfunc
-> authors or maintainers can choose to add to kfuncs if and when they
-> decide to deprecate them. Note that as described in the patch itself, a
-> kfunc need not be deprecated before being changed or removed -- this
-> flag is simply provided as an available deprecation mechanism for those
-> that want to provide a deprecation story / timeline to their users.
-> When necessary, kfuncs may be changed or removed to accommodate changes
-> elsewhere in the kernel without any deprecation at all.
+On Fri, 3 Feb 2023 16:27:05 -0600 Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> Hi Stephen,
+>=20
+> Can you please replace this PCI tree:
+>=20
+>   git://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git
+>=20
+> with this new shared one:
+>=20
+>   git://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git
+>=20
+> The branch names intended for linux-next ("for-linus" and "next") are
+> staying the same.
 
-This fundamentally contradicts with Compile-Once-Run-Everywhere
-https://facebookmicrosites.github.io/bpf/blog/2020/02/19/bpf-portability-and-co-re.html
-Could you add some clarification for this too? Especically how we could
-respect CO-RE meanwhile deprecating kfuncs?
+All done.  Do you want any contacts for this tree added to my list?
+--=20
+Cheers,
+Stephen Rothwell
 
-BTW, not related to compatibility, but still kfuncs related confusion,
-it also contradicts with Documentation/bpf/bpf_design_QA.rst:
+--Sig_/W36l+Qb0OaNZY+dF3rhgxuG
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-"
-Q: Can BPF functionality such as new program or map types, new
-helpers, etc be added out of kernel module code?
+-----BEGIN PGP SIGNATURE-----
 
-A: NO.
-"
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPgF1IACgkQAVBC80lX
+0GxIrAf/ZpmyvpuESO+/u2qbLOHRdV+56ZRGRSuUBJXNRdKKhLHlyVACx2e2yxwP
+WPpAZhroiCx9jS24dPVxrRUVPmFllUnkYQG09P3blC3DhGL1P2mYgFDodc5OAVwf
+HTDuORPalrfjlMUXdWgvR8OZk5UEEWOI0DSb1Wtatj+I8NG+yvJodgLtmXOWBPCD
+NxKEPxrue3s1TnLrtlHmS8UBK2+MMPaPI526XWnD0X3B7XU9cFzIQfaIBpMhfwFQ
+/dTrm7j51leLC8xs1XPs277zxZACln794V4cRfBgRhXOeDT6j2/Ir5aCY5fJ/BxP
+QLjHhGtln+g+0cOlMNI7pKc7tzEWNw==
+=a6kj
+-----END PGP SIGNATURE-----
 
-The conntrack kfuncs like bpf_skb_ct_alloc() reside in a kernel module.
-
-Thanks!
+--Sig_/W36l+Qb0OaNZY+dF3rhgxuG--
