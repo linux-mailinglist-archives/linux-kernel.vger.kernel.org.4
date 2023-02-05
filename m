@@ -2,124 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64D1468AE14
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 03:51:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EC8068AE16
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 03:59:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbjBECuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 21:50:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49162 "EHLO
+        id S229620AbjBEC7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 21:59:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjBECuo (ORCPT
+        with ESMTP id S229379AbjBEC7J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 21:50:44 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7D9A25973;
-        Sat,  4 Feb 2023 18:50:42 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id C9EF441A42;
-        Sun,  5 Feb 2023 02:50:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1675565439; bh=2ClkKO5YNiZp4jOGVc6vmj27cmf3cHHLtZ4CbL6it0g=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=ABM15R128i7ev4jOh6iTzH0hoO74qkwwiwgoYAoo1FxUqBDj/qvEOEF0FEgSjogMi
-         3ff+/FqfTJ+5YSL1O8pJE7/epuo9fMPvZeT/6MLDc4c1LybEMHa03JBAvIcxyhArv1
-         41xI9KeaZhtkZhZLQQL6+rVhyjpiq0dJ0OcsN2GzF20C7Y+QZYiW8ZVNpnYbqiJPoe
-         qMqHQXNldjagB+G92Mfu8tsnI1UM7b1V8YYKtr5KpeoC5+tEle5biNFcCUKWcKMVqI
-         5Kk8pkjbWys16CRfpbtAxdEgvRYZPhaXV1c5Pft5jUp+viEf8BSX2oaJt8St4XVECS
-         kZqIJOXNzmmfg==
-Message-ID: <28ed8713-4243-7c67-b792-92d0dde82256@marcan.st>
-Date:   Sun, 5 Feb 2023 11:50:30 +0900
+        Sat, 4 Feb 2023 21:59:09 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C35BE4481;
+        Sat,  4 Feb 2023 18:59:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675565948; x=1707101948;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=GNH7lo4Wy4WNGKH6hRPPh/3G04IHu+IylJ90o+/5rmA=;
+  b=RXoWafzPcU0UR6cA6s+SXZCFzEvGJqUxfs3OaLx7Qk8NbEEpPE5bPp3F
+   m/ZS6M4OOpbva2oAJD/VFT+SlB4waXtZivRTvMm4gNCWXlSyURNq/vq4Q
+   TFDYVWPC9URCw0fA19R4vSb5mR4FcWbj6ZQODtLzI3f9KHnS6AsiEoyxU
+   g2yZRKsl3/NvZifDpm8zeYtS7YaN7P0L9lQ6zj0G5B+GzQhJdwYvjaLMO
+   7zK0yqZxq874jGOr+jYIAh2IeLKuFT1vjb5v6UgViIoYPmEk+tgKZJwoZ
+   LRptAtB3DvcPsFWQNYMPXuNPnjxxqs0laFjes8ewivBmtxbHlBKpghmBf
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="326705485"
+X-IronPort-AV: E=Sophos;i="5.97,274,1669104000"; 
+   d="scan'208";a="326705485"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2023 18:59:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="666142165"
+X-IronPort-AV: E=Sophos;i="5.97,274,1669104000"; 
+   d="scan'208";a="666142165"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by orsmga002.jf.intel.com with ESMTP; 04 Feb 2023 18:59:08 -0800
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        daniel.lezcano@linaro.org, rui.zhang@intel.com,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH v2 0/2] intel_powerclamp: New module parameter
+Date:   Sat,  4 Feb 2023 18:59:00 -0800
+Message-Id: <20230205025902.2899734-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 1/5] brcmfmac: Drop all the RAW device IDs
-Content-Language: en-US
-To:     Arend Van Spriel <arend.vanspriel@broadcom.com>,
-        Jonas Gorski <jonas.gorski@gmail.com>,
-        "'Hector Martin' via BRCM80211-DEV-LIST,PDL" 
-        <brcm80211-dev-list.pdl@broadcom.com>
-Cc:     Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexander Prutskov <alep@cypress.com>,
-        Chi-Hsien Lin <chi-hsien.lin@cypress.com>,
-        Wright Feng <wright.feng@cypress.com>,
-        Ian Lin <ian.lin@infineon.com>,
-        Soontak Lee <soontak.lee@cypress.com>,
-        Joseph chuang <jiac@cypress.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Aditya Garg <gargaditya08@live.com>, asahi@lists.linux.dev,
-        linux-wireless@vger.kernel.org, SHA-cyfmac-dev-list@infineon.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Hauke Mehrtens <hauke@hauke-m.de>
-References: <20230131112840.14017-1-marcan@marcan.st>
- <20230131112840.14017-2-marcan@marcan.st>
- <CAOiHx=mYxFx0kr5s=4X_qywZBpPqCbrNjLnTXfigPOnqZSxjag@mail.gmail.com>
- <4fb4af22-d115-de62-3bda-c1ae02e097ee@marcan.st>
- <1861323f100.279b.9b12b7fc0a3841636cfb5e919b41b954@broadcom.com>
-From:   Hector Martin <marcan@marcan.st>
-In-Reply-To: <1861323f100.279b.9b12b7fc0a3841636cfb5e919b41b954@broadcom.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/02/2023 02.19, Arend Van Spriel wrote:
-> On February 2, 2023 6:25:28 AM "'Hector Martin' via BRCM80211-DEV-LIST,PDL" 
-> <brcm80211-dev-list.pdl@broadcom.com> wrote:
-> 
->> On 31/01/2023 23.17, Jonas Gorski wrote:
->>> On Tue, 31 Jan 2023 at 12:36, Hector Martin <marcan@marcan.st> wrote:
->>>>
->>>> These device IDs are only supposed to be visible internally, in devices
->>>> without a proper OTP. They should never be seen in devices in the wild,
->>>> so drop them to avoid confusion.
->>>
->>> I think these can still show up in embedded platforms where the
->>> OTP/SPROM is provided on-flash.
->>>
->>> E.g. https://forum.archive.openwrt.org/viewtopic.php?id=55367&p=4
->>> shows this bootlog on an BCM4709A0 router with two BCM43602 wifis:
->>>
->>> [    3.237132] pci 0000:01:00.0: [14e4:aa52] type 00 class 0x028000
->>> [    3.237174] pci 0000:01:00.0: reg 0x10: [mem 0x00000000-0x00007fff 64bit]
->>> [    3.237199] pci 0000:01:00.0: reg 0x18: [mem 0x00000000-0x003fffff 64bit]
->>> [    3.237302] pci 0000:01:00.0: supports D1 D2
->>> ...
->>> [    3.782384] pci 0001:03:00.0: [14e4:aa52] type 00 class 0x028000
->>> [    3.782440] pci 0001:03:00.0: reg 0x10: [mem 0x00000000-0x00007fff 64bit]
->>> [    3.782474] pci 0001:03:00.0: reg 0x18: [mem 0x00000000-0x003fffff 64bit]
->>> [    3.782649] pci 0001:03:00.0: supports D1 D2
->>>
->>> 0xaa52 == 43602 (BRCM_PCIE_43602_RAW_DEVICE_ID)
->>>
->>> Rafał can probably provide more info there.
->>>
->>> Regards
->>> Jonas
->>
->> Arend, any comments on these platforms?
-> 
-> Huh? I already replied to that couple of days ago or did I only imagine 
-> doing that.
+Split from the series for powerclamp user of powercap idle-inject.
 
-I don't see any replies from you on the lists (or my inbox) to Jonas' email.
+v2
+- Build warnings reported by Rui
+- Moved the powerclamp documentation to admin guide folder
+- Commit log updated as suggested by Rafael and other code suggestion
 
-- Hector
+Srinivas Pandruvada (2):
+  Documentation:admin-guide: Move intel_powerclamp documentation
+  thermal/drivers/intel_powerclamp: Add two module parameters
+
+ Documentation/admin-guide/index.rst           |   1 +
+ .../thermal/intel_powerclamp.rst              |  22 +++
+ Documentation/driver-api/thermal/index.rst    |   1 -
+ MAINTAINERS                                   |   1 +
+ drivers/thermal/intel/intel_powerclamp.c      | 177 +++++++++++++++---
+ 5 files changed, 180 insertions(+), 22 deletions(-)
+ rename Documentation/{driver-api => admin-guide}/thermal/intel_powerclamp.rst (93%)
+
+-- 
+2.39.1
+
