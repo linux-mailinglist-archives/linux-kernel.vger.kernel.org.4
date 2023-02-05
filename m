@@ -2,53 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02B6968B05C
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 15:48:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2214F68B062
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 15:52:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbjBEOsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 09:48:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60522 "EHLO
+        id S229689AbjBEOwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 09:52:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjBEOsR (ORCPT
+        with ESMTP id S229511AbjBEOwv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 09:48:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 826F11ADF0;
-        Sun,  5 Feb 2023 06:48:16 -0800 (PST)
+        Sun, 5 Feb 2023 09:52:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB6A4EEC;
+        Sun,  5 Feb 2023 06:52:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0AE556066C;
-        Sun,  5 Feb 2023 14:48:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFDEBC433EF;
-        Sun,  5 Feb 2023 14:48:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7CC50B80B51;
+        Sun,  5 Feb 2023 14:52:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E44A7C4339B;
+        Sun,  5 Feb 2023 14:52:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675608495;
-        bh=vQYR06IWX0d3i4oNFRcT+gjh4a36LQcL6uYULnjA2fI=;
+        s=k20201202; t=1675608767;
+        bh=PhFwMfKmlT94SSccqVeyCs3OQPNSHIjJtZZRpjAbREQ=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=eGuz5qqjkNtEoh0YTfOmkZmpl5IC4HWhFymjmx8oSqpyF4HHwvLwHtik2CdAhURsN
-         QhsrD1XC42MLfiuZYc+XvrANULaV9Kp1k3Kqv3OJ8AdDV/VCqdcYkQEcgAfs0/t/n4
-         o2YRQlTNDlOz9Vt7EQor44drgH3VpULPxSw6bTfp8d8Ng1QPlKJZLzDTavNyd4bWni
-         qz08HaxxZ0tU8dyhd5gz90S/OrgKJIf3SbUJdNlN8am1lzQjSPD8KUe6pw9cE027tO
-         3RUC/cHVOnQFzvH1+S1RY8eeF+aKeNAmH3RLeAurjQRX1LAVVZmEbEOkvyb/Z1flF7
-         3KdD99OBW3UpQ==
-Date:   Sun, 5 Feb 2023 15:02:17 +0000
+        b=S40unBvphTT2CS0N2ts1IOXCPst1Yf5PmuVdcKhHTOK1G1IyuxryPWJcG3zaAM8Pq
+         Tt7/eWfFn+1hZNeG+E39s7moRRV458dapG3pNBfTkTugtbAKHVcdVXrxIbEw6XsCnH
+         kfaZl9WMiCjGrwgtS4zfSQSw12U6ttXeY8eAo/bujgGzzQhWhzOo0+uuKQu1iRBV4M
+         IWPYcyE1o4w6NsIZU3SKl04RQmPAYE+t63r8XY9bBFMLzSnqC8kv8et52G+lkP9KWE
+         NppbwgUJH1EZ7MiPZLmSiwylRU96u4jYroKLwTiqGldcXayGbVQdbQd2U6fX9Co2Iv
+         ilVIiTCcMk25Q==
+Date:   Sun, 5 Feb 2023 15:06:45 +0000
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     "Miclaus, Antoniu" <Antoniu.Miclaus@analog.com>
-Cc:     "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] drivers: iio: dac: ad5592r: add gpio_chip names
-Message-ID: <20230205150217.2c21fc18@jic23-huawei>
-In-Reply-To: <CY4PR03MB33992B4DBEF40A9F960001289BD19@CY4PR03MB3399.namprd03.prod.outlook.com>
-References: <20221117090130.51702-1-antoniu.miclaus@analog.com>
-        <20221123204832.3e514378@jic23-huawei>
-        <CY4PR03MB33992B4DBEF40A9F960001289BD19@CY4PR03MB3399.namprd03.prod.outlook.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        iio@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] dt-bindings: thermal: qcom-spmi-adc-tm5: Use
+ generic ADC node name
+Message-ID: <20230205150645.549ff062@jic23-huawei>
+In-Reply-To: <20230203212501.GA908601-robh@kernel.org>
+References: <20230201204447.542385-1-marijn.suijten@somainline.org>
+        <20230201204447.542385-3-marijn.suijten@somainline.org>
+        <20230203212501.GA908601-robh@kernel.org>
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,115 +75,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 1 Feb 2023 13:11:30 +0000
-"Miclaus, Antoniu" <Antoniu.Miclaus@analog.com> wrote:
+On Fri, 3 Feb 2023 15:25:01 -0600
+Rob Herring <robh@kernel.org> wrote:
 
-> --
-> Antoniu Micl=C4=83u=C5=9F
->=20
-> > -----Original Message-----
-> > From: Jonathan Cameron <jic23@kernel.org>
-> > Sent: Wednesday, November 23, 2022 10:49 PM
-> > To: Miclaus, Antoniu <Antoniu.Miclaus@analog.com>
-> > Cc: linux-iio@vger.kernel.org; linux-kernel@vger.kernel.org
-> > Subject: Re: [PATCH] drivers: iio: dac: ad5592r: add gpio_chip names
-> >=20
-> > [External]
-> >=20
-> > On Thu, 17 Nov 2022 11:01:30 +0200
-> > Antoniu Miclaus <antoniu.miclaus@analog.com> wrote:
-> >  =20
-> > > Add array of explicit gpio names for the `gpiochip` structure of
-> > > ad5592r, mainly for debug purposes. =20
-> > Can you give an example of when this is more useful than the offset?
-> > (which I'm assuming is also available when debugging?)
-> >=20
-> > Jonathan
-> >  =20
-> Hello Jonathan,
->=20
-> I guess this patch is not mandatory. It is a gpio_chip structure member t=
-hat was left unpopulated.
-> Also, I think it is nice to see explicitly the gpios under cat /sys/kerne=
-l/debug/gpio alongside the others.
-> This is the current output when trying to debug on a rpi (without the pat=
-ch applied):
->=20
-> analog@analog:~ $ sudo cat /sys/kernel/debug/gpio
-> gpiochip0: GPIOs 0-57, parent: platform/fe200000.gpio, pinctrl-bcm2711:
->  gpio-0   (ID_SDA              )
->  gpio-1   (ID_SCL              )
->  gpio-2   (SDA1                )
->  gpio-3   (SCL1                )
->  gpio-4   (GPIO_GCLK           )
->  gpio-5   (GPIO5               )
->  gpio-6   (GPIO6               )
-> ....
-> gpiochip2: GPIOs 496-503, parent: spi/spi0.0, spi0.0, can sleep:
->=20
-> gpiochip1: GPIOs 504-511, parent: platform/soc:firmware:gpio, raspberrypi=
--exp-gpio, can sleep:
->  gpio-504 (BT_ON               )
->  gpio-505 (WL_ON               )
->  gpio-506 (PWR_LED_OFF         |led1                ) out lo ACTIVE LOW
->  gpio-507 (GLOBAL_RESET        )
->  gpio-508 (VDD_SD_IO_SEL       |vdd-sd-io           ) out hi
->  gpio-509 (CAM_GPIO            |power_ctrl          ) out lo
->  gpio-510 (SD_PWR_ON           |sd_vcc_reg          ) out hi
->  gpio-511 (SD_OC_N             )
->=20
-> The gpiochip2, corresponding to ad5592r has no explicit gpios, due to the=
- fact that the
-> gpio names were assigned.
+> On Wed, Feb 01, 2023 at 09:44:46PM +0100, Marijn Suijten wrote:
+> > Update the example to reflect a future requirement for the generic
+> > adc-chan node name on ADC channel nodes, while conveying the board name
+> > of the channel in a label instead.  
+> 
+> I don't think we've defined 'adc-chan' as THE generic name. Looks like 
+> we have:
+> 
+> adc-chan
+> adc-channel
+> channel
+> 
+> 'channel' is the most common (except for QCom).
+Good spot.
 
-Thanks for the info.
+We also have that defined as the channel name in 
+bindings/iio/adc.yaml
 
-Applied to the togreg branch of iio.git and pushed out as testing for 0-day
-to poke at it an see if we missed anything.
+Now this particular binding doesn't use anything from that
+generic binding (other than trivial use of reg) but better to be
+consistent with it than not!
 
-We are a bit tight timing wise, so this might end up in next cycle.
+Thanks,
 
 Jonathan
 
->=20
-> Regards,
-> > >
-> > > Since the gpios are configurable via the dts, generic names are
-> > > used.
-> > >
-> > > Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
-> > > ---
-> > >  drivers/iio/dac/ad5592r-base.c | 5 +++++
-> > >  1 file changed, 5 insertions(+)
-> > >
-> > > diff --git a/drivers/iio/dac/ad5592r-base.c b/drivers/iio/dac/ad5592r=
--base.c
-> > > index 7a9b5fc1e579..076bc9ecfb49 100644
-> > > --- a/drivers/iio/dac/ad5592r-base.c
-> > > +++ b/drivers/iio/dac/ad5592r-base.c
-> > > @@ -124,6 +124,10 @@ static int ad5592r_gpio_request(struct gpio_chip=
- =20
-> > *chip, unsigned offset) =20
-> > >  	return 0;
-> > >  }
-> > >
-> > > +static const char * const ad5592r_gpio_names[] =3D {
-> > > +	"GPIO0", "GPIO1", "GPIO2", "GPIO3", "GPIO4", "GPIO5", "GPIO6", =20
-> > "GPIO7", =20
-> > > +};
-> > > +
-> > >  static int ad5592r_gpio_init(struct ad5592r_state *st)
-> > >  {
-> > >  	if (!st->gpio_map)
-> > > @@ -140,6 +144,7 @@ static int ad5592r_gpio_init(struct ad5592r_state=
- =20
-> > *st) =20
-> > >  	st->gpiochip.set =3D ad5592r_gpio_set;
-> > >  	st->gpiochip.request =3D ad5592r_gpio_request;
-> > >  	st->gpiochip.owner =3D THIS_MODULE;
-> > > +	st->gpiochip.names =3D ad5592r_gpio_names;
-> > >
-> > >  	mutex_init(&st->gpio_lock);
-> > > =20
->=20
+
+> 
+> Rob
 
