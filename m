@@ -2,41 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B31668B0EB
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 17:19:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAD9D68B0E8
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 17:19:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229612AbjBEQTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 11:19:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54982 "EHLO
+        id S229579AbjBEQTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 11:19:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbjBEQTp (ORCPT
+        with ESMTP id S229528AbjBEQTp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 5 Feb 2023 11:19:45 -0500
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CEF5386A8;
-        Sun,  5 Feb 2023 08:19:44 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E520D6EA3;
+        Sun,  5 Feb 2023 08:19:43 -0800 (PST)
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1pOhjy-0000RS-01; Sun, 05 Feb 2023 17:19:42 +0100
+        id 1pOhjy-0000RS-02; Sun, 05 Feb 2023 17:19:42 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 2C46FC265A; Sun,  5 Feb 2023 17:02:50 +0100 (CET)
-Date:   Sun, 5 Feb 2023 17:02:50 +0100
+        id E13A4C265A; Sun,  5 Feb 2023 17:03:01 +0100 (CET)
+Date:   Sun, 5 Feb 2023 17:03:01 +0100
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Rob Herring <robh+dt@kernel.org>,
+To:     Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>
+Cc:     linux-mips@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?utf-8?B?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>,
-        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2] MIPS: DTS: CI20: fix otg power gpio
-Message-ID: <20230205160250.GB4459@alpha.franken.de>
-References: <8bcf9311284b4cab8be36922d6027813bfdf2bae.1675018624.git.hns@goldelico.com>
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: dts: lantiq: Remove bogus interrupt-parent; line
+Message-ID: <20230205160301.GC4459@alpha.franken.de>
+References: <20230129152059.1535947-1-j.neuschaefer@gmx.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <8bcf9311284b4cab8be36922d6027813bfdf2bae.1675018624.git.hns@goldelico.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230129152059.1535947-1-j.neuschaefer@gmx.net>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -46,34 +43,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 29, 2023 at 07:57:04PM +0100, H. Nikolaus Schaller wrote:
-> According to schematics it is PF15 and not PF14 (MIC_SW_EN).
-> Seems as if it was hidden and not noticed during testing since
-> there is no sound DT node.
+On Sun, Jan 29, 2023 at 04:20:58PM +0100, Jonathan Neuschäfer wrote:
+> Specifying interrupt-parent without a value (in other words, as a bool)
+> doesn't really mean anything. Remove one such property in the Lantiq
+> Danube DT, at /sram@1f000000/eiu@101000.
 > 
-> Fixes: 158c774d3c64 ("MIPS: Ingenic: Add missing nodes for Ingenic SoCs and boards.")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
-> Acked-by: Paul Cercueil <paul@crapouillou.net>
+> Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
 > ---
->  arch/mips/boot/dts/ingenic/ci20.dts | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  arch/mips/boot/dts/lantiq/danube.dtsi | 1 -
+>  1 file changed, 1 deletion(-)
 > 
-> diff --git a/arch/mips/boot/dts/ingenic/ci20.dts b/arch/mips/boot/dts/ingenic/ci20.dts
-> index 9819abb2465dd..a276488c0f752 100644
-> --- a/arch/mips/boot/dts/ingenic/ci20.dts
-> +++ b/arch/mips/boot/dts/ingenic/ci20.dts
-> @@ -115,7 +115,7 @@ otg_power: fixedregulator@2 {
->  		regulator-min-microvolt = <5000000>;
->  		regulator-max-microvolt = <5000000>;
->  
-> -		gpio = <&gpf 14 GPIO_ACTIVE_LOW>;
-> +		gpio = <&gpf 15 GPIO_ACTIVE_LOW>;
->  		enable-active-high;
->  	};
->  };
-> -- 
-> 2.38.1
+> diff --git a/arch/mips/boot/dts/lantiq/danube.dtsi b/arch/mips/boot/dts/lantiq/danube.dtsi
+> index 510be63c8bdf1..7a7ba66aa5349 100644
+> --- a/arch/mips/boot/dts/lantiq/danube.dtsi
+> +++ b/arch/mips/boot/dts/lantiq/danube.dtsi
+> @@ -40,7 +40,6 @@ sram@1f000000 {
+>  		eiu0: eiu@101000 {
+>  			#interrupt-cells = <1>;
+>  			interrupt-controller;
+> -			interrupt-parent;
+>  			compatible = "lantiq,eiu-xway";
+>  			reg = <0x101000 0x1000>;
+>  		};
+> --
+> 2.39.0
 
 applied to mips-next.
 
