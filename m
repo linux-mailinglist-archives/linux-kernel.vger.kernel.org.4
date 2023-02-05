@@ -2,235 +2,337 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05DC468B245
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 23:51:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BD5B68B29D
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 00:03:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbjBEWv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 17:51:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53470 "EHLO
+        id S229571AbjBEXDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 18:03:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjBEWvY (ORCPT
+        with ESMTP id S229478AbjBEXDj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 17:51:24 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41A612073
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 14:51:22 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id v6-20020a17090ad58600b00229eec90a7fso12140580pju.0
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Feb 2023 14:51:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vltg+qyRmAFaMaG1YchFrPG4SzAtjrxtGAl46s29iGE=;
-        b=2lu9XXytkUFss4F8vVDKku/NHoYmaR8HEdh8+mFz/F1i0SlCO8/jEvT2PfTGyEuNVH
-         PpTrkyhLM8bf4wyA56sqsq6tjcC1BdL/7mgr5oLDOYkpkBznDuWEX7oKG7UqzpDGD8NR
-         +VXFMflxzlmj2NVstw8JiLzRFlT/8s6JhZv1ca2yFMsIpMYmsXWhk0JUS54BmmPTsFmp
-         ozq8iTmCAWlqgUUpbiftPnPByzVUfOsAhmK7U323VHbZ7dlEAScJdRdUff+dcvQTGgoz
-         vvSrSDiInmxKEMhfVkYvPlyS/ekO9xx6U5AEKf4b3PH4HR0qS+oszRNE59+eWzXwa+hh
-         qhzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vltg+qyRmAFaMaG1YchFrPG4SzAtjrxtGAl46s29iGE=;
-        b=SdKDIfSv60t7nJrAmxDGj0tB9oTxGltQ33vM3sHDCE3YGoBjAOQnHM6+js67rw9N7s
-         6znGJQXiKTb4Me2/opYy8pJW1mYtdXOg1XcjE3GsHzgs6y8C79i+HZAJrUgBWsjb7uJu
-         IxYIBjditmZuX9EcTMI8WdEuRz9OwbsNR3GYR9yPzOuVDY0iO4VfkSyoS6ijme1vhUZZ
-         7ylGN6FYsdWtjkWUyJhXetW4kzgDhkc93a/64Uan6vMdcioGuqAfHl5Dh8+3tHFQ3zbc
-         Kg52aShUGr1V8PDbe5f/kEReMd7qXrb0HjWkdK7V+fsr/+rLBw/xZIK5c4K3Pdv84MZO
-         ginw==
-X-Gm-Message-State: AO0yUKWgtXREEZE5SMWCZBPKZPnQ2uMI3Ow6l4oOSd/t7fqMxYnReX5n
-        aTliKnGx3A805WVnOYn0JQ0psQ==
-X-Google-Smtp-Source: AK7set/qcpnluPAIWPikeSKh5pK6k7uQI1o6H6RJ6yA9QiyEMvQFcfELyfKM/3hzZoy1mb+66n6EEA==
-X-Received: by 2002:a05:6a20:3952:b0:bc:d288:a67b with SMTP id r18-20020a056a20395200b000bcd288a67bmr23662478pzg.43.1675637482097;
-        Sun, 05 Feb 2023 14:51:22 -0800 (PST)
-Received: from dread.disaster.area (pa49-181-4-128.pa.nsw.optusnet.com.au. [49.181.4.128])
-        by smtp.gmail.com with ESMTPSA id a33-20020a056a001d2100b005941ff79428sm5700363pfx.90.2023.02.05.14.51.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Feb 2023 14:51:21 -0800 (PST)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1pOnqx-00Bp4s-1S; Mon, 06 Feb 2023 09:51:19 +1100
-Date:   Mon, 6 Feb 2023 09:51:19 +1100
-From:   Dave Chinner <david@fromorbit.com>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     "Darrick J. Wong" <djwong@kernel.org>, linux-xfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] xfs: Replace one-element arrays with
- flexible-array members
-Message-ID: <20230205225119.GU360264@dread.disaster.area>
-References: <Y9xiYmVLRIKdpJcC@work>
+        Sun, 5 Feb 2023 18:03:39 -0500
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4073418A80;
+        Sun,  5 Feb 2023 15:03:38 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1675638179; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=lZ6RStGWNbP1A8HMybEMUVAzILax6vFhXjqhPv4yKQ+BhgNeyqMK5sTo8ISMcOoSOcBumOZ2x1p0IlfX3YwNgsneByci/tik6xRErBw24FLlHyE+hpuJg1N20LPvGhSdnxrLLrir8QnFngLsGo2pg3/s+/y7KAl+7S3Q/rzhUeE=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1675638179; h=Content-Type:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=68NS1YlPpM42+EBpQf17SzHZTbppSQAj0XgQambrR3Q=; 
+        b=I0hRwE1yfBTm/EwrZ6OjNdIX1bODkNlrlFaY5CBCD+KQMIeFoKcOVEbVFXQJhoQIk6anZE/wC25SrEaO02EIwl4NoGelWD0F1auC6DBLduB7fEHOmwhP0zxOdYYAYynMZZOX2hi/MgN9JzWYJlJ5A9jI4WAXzYcRgyvUH8h7lqo=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1675638179;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Content-Type:Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Message-Id:Reply-To;
+        bh=68NS1YlPpM42+EBpQf17SzHZTbppSQAj0XgQambrR3Q=;
+        b=ipvQwFkmLg0W9twb5dy41zqewnR5MjFyCE5ZEA2fUdGdZKY2SCbjhM1T4X9PrLVS
+        KUMA5/0ggt4nJSWLztPkVGfLPzz0kgiY7zAvKOR2GMrko54uV0QhVcJfjUk1dYnBIP4
+        vfwyihR1sDeHPQQdARimSO4OV6FHfmOlkJmQTd7U=
+Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
+        with SMTPS id 1675638177868577.5668866462042; Sun, 5 Feb 2023 15:02:57 -0800 (PST)
+Content-Type: multipart/mixed; boundary="------------Vs4EkqfRxzNxXZw5NJqZgAOR"
+Message-ID: <b055e42f-ff0f-d05a-d462-961694b035c1@arinc9.com>
+Date:   Mon, 6 Feb 2023 02:02:48 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9xiYmVLRIKdpJcC@work>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH net] net: dsa: mt7530: don't change PVC_EG_TAG when CPU
+ port becomes VLAN-aware
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Frank Wunderlich <frank-w@public-files.de>,
+        erkin.bozoglu@xeront.com, richard@routerhints.com
+References: <20230205140713.1609281-1-vladimir.oltean@nxp.com>
+ <3649b6f9-a028-8eaf-ac89-c4d0fce412da@arinc9.com>
+ <20230205203906.i3jci4pxd6mw74in@skbuf>
+Content-Language: en-US
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <20230205203906.i3jci4pxd6mw74in@skbuf>
+X-Zoho-Virus-Status: 1
+X-ZohoMailClient: External
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 07:24:50PM -0600, Gustavo A. R. Silva wrote:
-> One-element arrays are deprecated, and we are replacing them with flexible
-> array members instead. So, replace one-element arrays with flexible-array
-> members in structures xfs_attr_leaf_name_local and
-> xfs_attr_leaf_name_remote.
+This is a multi-part message in MIME format.
+--------------Vs4EkqfRxzNxXZw5NJqZgAOR
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+
+Hey Vladimir,
+
+On 5.02.2023 23:39, Vladimir Oltean wrote:
+> Hi Arınç,
 > 
-> The only binary differences reported after the changes are all like
-> these:
+> On Sun, Feb 05, 2023 at 10:25:27PM +0300, Arınç ÜNAL wrote:
+>> Unrelated to this, as in it existed before this patch, port@0 hasn't been
+>> working at all on my MT7621AT Unielec U7621-06 board and MT7623NI Bananapi
+>> BPI-R2.
+>>
+>> Packets are sent out from master eth1 fine, the computer receives them.
+>> Frames are received on eth1 but nothing shows on the DSA slave interface of
+>> port@0. Sounds like malformed frames are received on eth1.
 > 
-> fs/xfs/libxfs/xfs_attr_leaf.o
-> _@@ -435,7 +435,7 @@
->       3b8:      movzbl 0x2(%rbx),%eax
->       3bc:      rol    $0x8,%bp
->       3c0:      movzwl %bp,%ebp
-> -     3c3:      lea    0x2(%rax,%rbp,1),%ebx
-> +     3c3:      lea    0x3(%rax,%rbp,1),%ebx
->       3c7:      call   3cc <xfs_attr_leaf_entsize+0x8c>
->                         3c8: R_X86_64_PLT32     __tsan_func_exit-0x4
->       3cc:      or     $0x3,%ebx
-> _@@ -454,7 +454,7 @@
->       3ea:      movzbl 0x8(%rbx),%ebx
->       3ee:      call   3f3 <xfs_attr_leaf_entsize+0xb3>
->                         3ef: R_X86_64_PLT32     __tsan_func_exit-0x4
-> -     3f3:      add    $0xa,%ebx
-> +     3f3:      add    $0xb,%ebx
->       3f6:      or     $0x3,%ebx
->       3f9:      add    $0x1,%ebx
->       3fc:      mov    %ebx,%eax
-> 
-> similar changes in fs/xfs/scrub/attr.o and fs/xfs/xfs.o object files.
+> I need to ask, how do the packets look like on the RX path of the DSA
+> master, as seen by tcpdump -i eth1 -e -n -Q in -XX? If they aren't
+> received, can you post consecutive outputs from ethtool -S eth1 | grep -v ': 0',
+> to see what (error) counter increments?
 
-That seems like a red flag to me - an off-by-one change in the
-compiled code that calculates of the on-disk size of a structure as
-a result of an in-memory structure change just smells like a bug.
+I appreciate your effort on this. I've put it in the attachments to 
+avoid column limit on the Thunderbird mail client. Ping runs on the 
+device. Packet capture on the other side is attached.
 
-How did you test this change?
+Arınç
+--------------Vs4EkqfRxzNxXZw5NJqZgAOR
+Content-Type: text/plain; charset=UTF-8; name="tcpdump-ethtool-output.txt"
+Content-Disposition: attachment; filename="tcpdump-ethtool-output.txt"
+Content-Transfer-Encoding: base64
 
-> And the reason for this is because of the round_up() macro called in
-> functions xfs_attr_leaf_entsize_remote() and xfs_attr_leaf_entsize_local(),
-> which is compensanting for the one-byte reduction in size (due to the
-> flex-array transformation) of structures xfs_attr_leaf_name_remote and
-> xfs_attr_leaf_name_local. So, sizes remain the same before and after
-> changes.
+IyB0Y3BkdW1wIC1pIGV0aDEKdGNwZHVtcDogdmVyYm9zZSBvdXRwdXQgc3VwcHJlc3NlZCwg
+dXNlIC12W3ZdLi4uIGZvciBmdWxsIHByb3RvY29sIGRlY29kZQpsaXN0ZW5pbmcgb24gZXRo
+MSwgbGluay10eXBlIE5VTEwgKEJTRCBsb29wYmFjayksIHNuYXBzaG90IGxlbmd0aCAyNjIx
+NDQgYnl0ZXMKMDM6NTA6MjMuNzEyMDMyIEFGIFVua25vd24gKDQyOTQ5NjcyOTUpLCBsZW5n
+dGggNDY6IAoJMHgwMDAwOiAgZmZmZiA5MjkyIDZhNDcgMWFjMCAwMDAxIDAwMDAgMDgwNiAw
+MDAxICAuLi4uakcuLi4uLi4uLi4uCgkweDAwMTA6ICAwODAwIDA2MDQgMDAwMSA5MjkyIDZh
+NDcgMWFjMCBjMGE4IDAyMDEgIC4uLi4uLi4uakcuLi4uLi4KCTB4MDAyMDogIDAwMDAgMDAw
+MCAwMDAwIGMwYTggMDIwMiAgICAgICAgICAgICAgICAgLi4uLi4uLi4uLgowMzo1MDoyMy43
+MTIyNDYgQUYgVW5rbm93biAoMjQ1OTA2ODk5OSksIGxlbmd0aCA2MDogCgkweDAwMDA6ICAx
+YWMwIGUwZDUgNWVhNCBlZGNjIDA4MDYgMDAwMSAwODAwIDA2MDQgIC4uLi5eLi4uLi4uLi4u
+Li4KCTB4MDAxMDogIDAwMDIgZTBkNSA1ZWE0IGVkY2MgYzBhOCAwMjAyIDkyOTIgNmE0NyAg
+Li4uLl4uLi4uLi4uLi5qRwoJMHgwMDIwOiAgMWFjMCBjMGE4IDAyMDEgMDAwMCAwMDAwIDAw
+MDAgMDAwMCAwMDAwICAuLi4uLi4uLi4uLi4uLi4uCgkweDAwMzA6ICAwMDAwIDAwMDAgMDAw
+MCAwMDAwICAgICAgICAgICAgICAgICAgICAgIC4uLi4uLi4uCjAzOjUwOjI0Ljc1MjAyNCBB
+RiBVbmtub3duICg0Mjk0OTY3Mjk1KSwgbGVuZ3RoIDQ2OiAKCTB4MDAwMDogIGZmZmYgOTI5
+MiA2YTQ3IDFhYzAgMDAwMSAwMDAwIDA4MDYgMDAwMSAgLi4uLmpHLi4uLi4uLi4uLgoJMHgw
+MDEwOiAgMDgwMCAwNjA0IDAwMDEgOTI5MiA2YTQ3IDFhYzAgYzBhOCAwMjAxICAuLi4uLi4u
+LmpHLi4uLi4uCgkweDAwMjA6ICAwMDAwIDAwMDAgMDAwMCBjMGE4IDAyMDIgICAgICAgICAg
+ICAgICAgIC4uLi4uLi4uLi4KMDM6NTA6MjQuNzUyMjQyIEFGIFVua25vd24gKDI0NTkwNjg5
+OTkpLCBsZW5ndGggNjA6IAoJMHgwMDAwOiAgMWFjMCBlMGQ1IDVlYTQgZWRjYyAwODA2IDAw
+MDEgMDgwMCAwNjA0ICAuLi4uXi4uLi4uLi4uLi4uCgkweDAwMTA6ICAwMDAyIGUwZDUgNWVh
+NCBlZGNjIGMwYTggMDIwMiA5MjkyIDZhNDcgIC4uLi5eLi4uLi4uLi4uakcKCTB4MDAyMDog
+IDFhYzAgYzBhOCAwMjAxIDAwMDAgMDAwMCAwMDAwIDAwMDAgMDAwMCAgLi4uLi4uLi4uLi4u
+Li4uLgoJMHgwMDMwOiAgMDAwMCAwMDAwIDAwMDAgMDAwMCAgICAgICAgICAgICAgICAgICAg
+ICAuLi4uLi4uLgowMzo1MDoyNi42NDM5MzEgQUYgVW5rbm93biAoNDI5NDk2NzI5NSksIGxl
+bmd0aCA0NjogCgkweDAwMDA6ICBmZmZmIDkyOTIgNmE0NyAxYWMwIDAwMDEgMDAwMCAwODA2
+IDAwMDEgIC4uLi5qRy4uLi4uLi4uLi4KCTB4MDAxMDogIDA4MDAgMDYwNCAwMDAxIDkyOTIg
+NmE0NyAxYWMwIGMwYTggMDIwMSAgLi4uLi4uLi5qRy4uLi4uLgoJMHgwMDIwOiAgMDAwMCAw
+MDAwIDAwMDAgYzBhOCAwMjAyICAgICAgICAgICAgICAgICAuLi4uLi4uLi4uCjAzOjUwOjI2
+LjY0NDE0NCBBRiBVbmtub3duICgyNDU5MDY4OTk5KSwgbGVuZ3RoIDYwOiAKCTB4MDAwMDog
+IDFhYzAgZTBkNSA1ZWE0IGVkY2MgMDgwNiAwMDAxIDA4MDAgMDYwNCAgLi4uLl4uLi4uLi4u
+Li4uLgoJMHgwMDEwOiAgMDAwMiBlMGQ1IDVlYTQgZWRjYyBjMGE4IDAyMDIgOTI5MiA2YTQ3
+ICAuLi4uXi4uLi4uLi4uLmpHCgkweDAwMjA6ICAxYWMwIGMwYTggMDIwMSAwMDAwIDAwMDAg
+MDAwMCAwMDAwIDAwMDAgIC4uLi4uLi4uLi4uLi4uLi4KCTB4MDAzMDogIDAwMDAgMDAwMCAw
+MDAwIDAwMDAgICAgICAgICAgICAgICAgICAgICAgLi4uLi4uLi4KMDM6NTA6MjcuNzEyMDMz
+IEFGIFVua25vd24gKDQyOTQ5NjcyOTUpLCBsZW5ndGggNDY6IAoJMHgwMDAwOiAgZmZmZiA5
+MjkyIDZhNDcgMWFjMCAwMDAxIDAwMDAgMDgwNiAwMDAxICAuLi4uakcuLi4uLi4uLi4uCgkw
+eDAwMTA6ICAwODAwIDA2MDQgMDAwMSA5MjkyIDZhNDcgMWFjMCBjMGE4IDAyMDEgIC4uLi4u
+Li4uakcuLi4uLi4KCTB4MDAyMDogIDAwMDAgMDAwMCAwMDAwIGMwYTggMDIwMiAgICAgICAg
+ICAgICAgICAgLi4uLi4uLi4uLgowMzo1MDoyNy43MTIyNDEgQUYgVW5rbm93biAoMjQ1OTA2
+ODk5OSksIGxlbmd0aCA2MDogCgkweDAwMDA6ICAxYWMwIGUwZDUgNWVhNCBlZGNjIDA4MDYg
+MDAwMSAwODAwIDA2MDQgIC4uLi5eLi4uLi4uLi4uLi4KCTB4MDAxMDogIDAwMDIgZTBkNSA1
+ZWE0IGVkY2MgYzBhOCAwMjAyIDkyOTIgNmE0NyAgLi4uLl4uLi4uLi4uLi5qRwoJMHgwMDIw
+OiAgMWFjMCBjMGE4IDAyMDEgMDAwMCAwMDAwIDAwMDAgMDAwMCAwMDAwICAuLi4uLi4uLi4u
+Li4uLi4uCgkweDAwMzA6ICAwMDAwIDAwMDAgMDAwMCAwMDAwICAgICAgICAgICAgICAgICAg
+ICAgIC4uLi4uLi4uCl5DCjggcGFja2V0cyBjYXB0dXJlZAo4IHBhY2tldHMgcmVjZWl2ZWQg
+YnkgZmlsdGVyCjAgcGFja2V0cyBkcm9wcGVkIGJ5IGtlcm5lbAojIHRjcGR1bXAgLWkgZXRo
+MSAtZSAtbiAtUSBpbiAtWFgKdGNwZHVtcDogdmVyYm9zZSBvdXRwdXQgc3VwcHJlc3NlZCwg
+dXNlIC12W3ZdLi4uIGZvciBmdWxsIHByb3RvY29sIGRlY29kZQpsaXN0ZW5pbmcgb24gZXRo
+MSwgbGluay10eXBlIE5VTEwgKEJTRCBsb29wYmFjayksIHNuYXBzaG90IGxlbmd0aCAyNjIx
+NDQgYnl0ZXMKMDM6NTA6MzguNjQ1NTY4IEFGIFVua25vd24gKDI0NTkwNjg5OTkpLCBsZW5n
+dGggNjA6IAoJMHgwMDAwOiAgOTI5MiA2YTQ3IDFhYzAgZTBkNSA1ZWE0IGVkY2MgMDgwNiAw
+MDAxICAuLmpHLi4uLl4uLi4uLi4uCgkweDAwMTA6ICAwODAwIDA2MDQgMDAwMiBlMGQ1IDVl
+YTQgZWRjYyBjMGE4IDAyMDIgIC4uLi4uLi4uXi4uLi4uLi4KCTB4MDAyMDogIDkyOTIgNmE0
+NyAxYWMwIGMwYTggMDIwMSAwMDAwIDAwMDAgMDAwMCAgLi5qRy4uLi4uLi4uLi4uLgoJMHgw
+MDMwOiAgMDAwMCAwMDAwIDAwMDAgMDAwMCAwMDAwIDAwMDAgICAgICAgICAgICAuLi4uLi4u
+Li4uLi4KMDM6NTA6MzkuNzEyMjQ4IEFGIFVua25vd24gKDI0NTkwNjg5OTkpLCBsZW5ndGgg
+NjA6IAoJMHgwMDAwOiAgOTI5MiA2YTQ3IDFhYzAgZTBkNSA1ZWE0IGVkY2MgMDgwNiAwMDAx
+ICAuLmpHLi4uLl4uLi4uLi4uCgkweDAwMTA6ICAwODAwIDA2MDQgMDAwMiBlMGQ1IDVlYTQg
+ZWRjYyBjMGE4IDAyMDIgIC4uLi4uLi4uXi4uLi4uLi4KCTB4MDAyMDogIDkyOTIgNmE0NyAx
+YWMwIGMwYTggMDIwMSAwMDAwIDAwMDAgMDAwMCAgLi5qRy4uLi4uLi4uLi4uLgoJMHgwMDMw
+OiAgMDAwMCAwMDAwIDAwMDAgMDAwMCAwMDAwIDAwMDAgICAgICAgICAgICAuLi4uLi4uLi4u
+Li4KMDM6NTA6NDAuNzUyMjIxIEFGIFVua25vd24gKDI0NTkwNjg5OTkpLCBsZW5ndGggNjA6
+IAoJMHgwMDAwOiAgOTI5MiA2YTQ3IDFhYzAgZTBkNSA1ZWE0IGVkY2MgMDgwNiAwMDAxICAu
+LmpHLi4uLl4uLi4uLi4uCgkweDAwMTA6ICAwODAwIDA2MDQgMDAwMiBlMGQ1IDVlYTQgZWRj
+YyBjMGE4IDAyMDIgIC4uLi4uLi4uXi4uLi4uLi4KCTB4MDAyMDogIDkyOTIgNmE0NyAxYWMw
+IGMwYTggMDIwMSAwMDAwIDAwMDAgMDAwMCAgLi5qRy4uLi4uLi4uLi4uLgoJMHgwMDMwOiAg
+MDAwMCAwMDAwIDAwMDAgMDAwMCAwMDAwIDAwMDAgICAgICAgICAgICAuLi4uLi4uLi4uLi4K
+MDM6NTA6NDIuNjQ2MTIzIEFGIFVua25vd24gKDI0NTkwNjg5OTkpLCBsZW5ndGggNjA6IAoJ
+MHgwMDAwOiAgOTI5MiA2YTQ3IDFhYzAgZTBkNSA1ZWE0IGVkY2MgMDgwNiAwMDAxICAuLmpH
+Li4uLl4uLi4uLi4uCgkweDAwMTA6ICAwODAwIDA2MDQgMDAwMiBlMGQ1IDVlYTQgZWRjYyBj
+MGE4IDAyMDIgIC4uLi4uLi4uXi4uLi4uLi4KCTB4MDAyMDogIDkyOTIgNmE0NyAxYWMwIGMw
+YTggMDIwMSAwMDAwIDAwMDAgMDAwMCAgLi5qRy4uLi4uLi4uLi4uLgoJMHgwMDMwOiAgMDAw
+MCAwMDAwIDAwMDAgMDAwMCAwMDAwIDAwMDAgICAgICAgICAgICAuLi4uLi4uLi4uLi4KMDM6
+NTA6NDMuNzEyMjIyIEFGIFVua25vd24gKDI0NTkwNjg5OTkpLCBsZW5ndGggNjA6IAoJMHgw
+MDAwOiAgOTI5MiA2YTQ3IDFhYzAgZTBkNSA1ZWE0IGVkY2MgMDgwNiAwMDAxICAuLmpHLi4u
+Ll4uLi4uLi4uCgkweDAwMTA6ICAwODAwIDA2MDQgMDAwMiBlMGQ1IDVlYTQgZWRjYyBjMGE4
+IDAyMDIgIC4uLi4uLi4uXi4uLi4uLi4KCTB4MDAyMDogIDkyOTIgNmE0NyAxYWMwIGMwYTgg
+MDIwMSAwMDAwIDAwMDAgMDAwMCAgLi5qRy4uLi4uLi4uLi4uLgoJMHgwMDMwOiAgMDAwMCAw
+MDAwIDAwMDAgMDAwMCAwMDAwIDAwMDAgICAgICAgICAgICAuLi4uLi4uLi4uLi4KMDM6NTA6
+NDQuNzUyMjE5IEFGIFVua25vd24gKDI0NTkwNjg5OTkpLCBsZW5ndGggNjA6IAoJMHgwMDAw
+OiAgOTI5MiA2YTQ3IDFhYzAgZTBkNSA1ZWE0IGVkY2MgMDgwNiAwMDAxICAuLmpHLi4uLl4u
+Li4uLi4uCgkweDAwMTA6ICAwODAwIDA2MDQgMDAwMiBlMGQ1IDVlYTQgZWRjYyBjMGE4IDAy
+MDIgIC4uLi4uLi4uXi4uLi4uLi4KCTB4MDAyMDogIDkyOTIgNmE0NyAxYWMwIGMwYTggMDIw
+MSAwMDAwIDAwMDAgMDAwMCAgLi5qRy4uLi4uLi4uLi4uLgoJMHgwMDMwOiAgMDAwMCAwMDAw
+IDAwMDAgMDAwMCAwMDAwIDAwMDAgICAgICAgICAgICAuLi4uLi4uLi4uLi4KMDM6NTA6NDYu
+NjQ2NjQzIEFGIFVua25vd24gKDI0NTkwNjg5OTkpLCBsZW5ndGggNjA6IAoJMHgwMDAwOiAg
+OTI5MiA2YTQ3IDFhYzAgZTBkNSA1ZWE0IGVkY2MgMDgwNiAwMDAxICAuLmpHLi4uLl4uLi4u
+Li4uCgkweDAwMTA6ICAwODAwIDA2MDQgMDAwMiBlMGQ1IDVlYTQgZWRjYyBjMGE4IDAyMDIg
+IC4uLi4uLi4uXi4uLi4uLi4KCTB4MDAyMDogIDkyOTIgNmE0NyAxYWMwIGMwYTggMDIwMSAw
+MDAwIDAwMDAgMDAwMCAgLi5qRy4uLi4uLi4uLi4uLgoJMHgwMDMwOiAgMDAwMCAwMDAwIDAw
+MDAgMDAwMCAwMDAwIDAwMDAgICAgICAgICAgICAuLi4uLi4uLi4uLi4KMDM6NTA6NDcuNzEy
+MjQxIEFGIFVua25vd24gKDI0NTkwNjg5OTkpLCBsZW5ndGggNjA6IAoJMHgwMDAwOiAgOTI5
+MiA2YTQ3IDFhYzAgZTBkNSA1ZWE0IGVkY2MgMDgwNiAwMDAxICAuLmpHLi4uLl4uLi4uLi4u
+CgkweDAwMTA6ICAwODAwIDA2MDQgMDAwMiBlMGQ1IDVlYTQgZWRjYyBjMGE4IDAyMDIgIC4u
+Li4uLi4uXi4uLi4uLi4KCTB4MDAyMDogIDkyOTIgNmE0NyAxYWMwIGMwYTggMDIwMSAwMDAw
+IDAwMDAgMDAwMCAgLi5qRy4uLi4uLi4uLi4uLgoJMHgwMDMwOiAgMDAwMCAwMDAwIDAwMDAg
+MDAwMCAwMDAwIDAwMDAgICAgICAgICAgICAuLi4uLi4uLi4uLi4KMDM6NTA6NDguNzUyMjIw
+IEFGIFVua25vd24gKDI0NTkwNjg5OTkpLCBsZW5ndGggNjA6IAoJMHgwMDAwOiAgOTI5MiA2
+YTQ3IDFhYzAgZTBkNSA1ZWE0IGVkY2MgMDgwNiAwMDAxICAuLmpHLi4uLl4uLi4uLi4uCgkw
+eDAwMTA6ICAwODAwIDA2MDQgMDAwMiBlMGQ1IDVlYTQgZWRjYyBjMGE4IDAyMDIgIC4uLi4u
+Li4uXi4uLi4uLi4KCTB4MDAyMDogIDkyOTIgNmE0NyAxYWMwIGMwYTggMDIwMSAwMDAwIDAw
+MDAgMDAwMCAgLi5qRy4uLi4uLi4uLi4uLgoJMHgwMDMwOiAgMDAwMCAwMDAwIDAwMDAgMDAw
+MCAwMDAwIDAwMDAgICAgICAgICAgICAuLi4uLi4uLi4uLi4KMDM6NTA6NTAuNjQ3MTQxIEFG
+IFVua25vd24gKDI0NTkwNjg5OTkpLCBsZW5ndGggNjA6IAoJMHgwMDAwOiAgOTI5MiA2YTQ3
+IDFhYzAgZTBkNSA1ZWE0IGVkY2MgMDgwNiAwMDAxICAuLmpHLi4uLl4uLi4uLi4uCgkweDAw
+MTA6ICAwODAwIDA2MDQgMDAwMiBlMGQ1IDVlYTQgZWRjYyBjMGE4IDAyMDIgIC4uLi4uLi4u
+Xi4uLi4uLi4KCTB4MDAyMDogIDkyOTIgNmE0NyAxYWMwIGMwYTggMDIwMSAwMDAwIDAwMDAg
+MDAwMCAgLi5qRy4uLi4uLi4uLi4uLgoJMHgwMDMwOiAgMDAwMCAwMDAwIDAwMDAgMDAwMCAw
+MDAwIDAwMDAgICAgICAgICAgICAuLi4uLi4uLi4uLi4KXkMKMTAgcGFja2V0cyBjYXB0dXJl
+ZAoyMCBwYWNrZXRzIHJlY2VpdmVkIGJ5IGZpbHRlcgowIHBhY2tldHMgZHJvcHBlZCBieSBr
+ZXJuZWwKIyBldGh0b29sIC1TIGV0aDEgfCBncmVwIC12ICc6IDAnCk5JQyBzdGF0aXN0aWNz
+OgogICAgIHR4X2J5dGVzOiA2MjcyCiAgICAgdHhfcGFja2V0czogODEKICAgICByeF9ieXRl
+czogOTA4OQogICAgIHJ4X3BhY2tldHM6IDEzNgogICAgIHAwNV9UeFVuaWNhc3Q6IDUyCiAg
+ICAgcDA1X1R4TXVsdGljYXN0OiAzCiAgICAgcDA1X1R4QnJvYWRjYXN0OiA4MQogICAgIHAw
+NV9UeFBrdFN6NjVUbzEyNzogMTM2CiAgICAgcDA1X1R4Qnl0ZXM6IDk2MzMKICAgICBwMDVf
+UnhGaWx0ZXJpbmc6IDExCiAgICAgcDA1X1J4VW5pY2FzdDogMTEKICAgICBwMDVfUnhNdWx0
+aWNhc3Q6IDI2CiAgICAgcDA1X1J4QnJvYWRjYXN0OiA0NAogICAgIHAwNV9SeFBrdFN6NjQ6
+IDQ3CiAgICAgcDA1X1J4UGt0U3o2NVRvMTI3OiAzNAogICAgIHAwNV9SeEJ5dGVzOiA2Mjcy
+CiMgZXRodG9vbCAtUyBldGgxIHwgZ3JlcCAtdiAnOiAwJwpOSUMgc3RhdGlzdGljczoKICAg
+ICB0eF9ieXRlczogNjc4NAogICAgIHR4X3BhY2tldHM6IDg5CiAgICAgcnhfYnl0ZXM6IDk2
+MDEKICAgICByeF9wYWNrZXRzOiAxNDQKICAgICBwMDVfVHhVbmljYXN0OiA2MAogICAgIHAw
+NV9UeE11bHRpY2FzdDogMwogICAgIHAwNV9UeEJyb2FkY2FzdDogODEKICAgICBwMDVfVHhQ
+a3RTejY1VG8xMjc6IDE0NAogICAgIHAwNV9UeEJ5dGVzOiAxMDE3NwogICAgIHAwNV9SeEZp
+bHRlcmluZzogMTEKICAgICBwMDVfUnhVbmljYXN0OiAxMQogICAgIHAwNV9SeE11bHRpY2Fz
+dDogMjYKICAgICBwMDVfUnhCcm9hZGNhc3Q6IDUyCiAgICAgcDA1X1J4UGt0U3o2NDogNTUK
+ICAgICBwMDVfUnhQa3RTejY1VG8xMjc6IDM0CiAgICAgcDA1X1J4Qnl0ZXM6IDY3ODQKIyBl
+dGh0b29sIC1TIGV0aDEgfCBncmVwIC12ICc6IDAnCk5JQyBzdGF0aXN0aWNzOgogICAgIHR4
+X2J5dGVzOiA3NDI0CiAgICAgdHhfcGFja2V0czogOTkKICAgICByeF9ieXRlczogMTAyNDEK
+ICAgICByeF9wYWNrZXRzOiAxNTQKICAgICBwMDVfVHhVbmljYXN0OiA3MAogICAgIHAwNV9U
+eE11bHRpY2FzdDogMwogICAgIHAwNV9UeEJyb2FkY2FzdDogODEKICAgICBwMDVfVHhQa3RT
+ejY1VG8xMjc6IDE1NAogICAgIHAwNV9UeEJ5dGVzOiAxMDg1NwogICAgIHAwNV9SeEZpbHRl
+cmluZzogMTEKICAgICBwMDVfUnhVbmljYXN0OiAxMQogICAgIHAwNV9SeE11bHRpY2FzdDog
+MjYKICAgICBwMDVfUnhCcm9hZGNhc3Q6IDYyCiAgICAgcDA1X1J4UGt0U3o2NDogNjUKICAg
+ICBwMDVfUnhQa3RTejY1VG8xMjc6IDM0CiAgICAgcDA1X1J4Qnl0ZXM6IDc0MjQKCg==
+--------------Vs4EkqfRxzNxXZw5NJqZgAOR
+Content-Type: application/x-pcapng; name="arp-frames.pcapng"
+Content-Disposition: attachment; filename="arp-frames.pcapng"
+Content-Transfer-Encoding: base64
 
-I'm not sure that is true. Before this change:
+Cg0NCrgAAABNPCsaAQAAAP//////////AgA2AEludGVsKFIpIENvcmUoVE0pIGk3LTg3MDBL
+IENQVSBAIDMuNzBHSHogKHdpdGggU1NFNC4yKQAAAwAXAExpbnV4IDUuMTkuMC0yOS1nZW5l
+cmljAAQAOgBEdW1wY2FwIChXaXJlc2hhcmspIDMuNi43IChHaXQgdjMuNi43IHBhY2thZ2Vk
+IGFzIDMuNi43LTEpAAAAAAAAuAAAAAEAAABIAAAAAQAAAAAABAACAAYAZW5wOXMwAAAJAAEA
+CQAAAAwAFwBMaW51eCA1LjE5LjAtMjktZ2VuZXJpYwAAAAAASAAAAAYAAABMAAAAAAAAALsP
+QRdqNknzKgAAACoAAACSkmpHGsDg1V6k7cwIBgABCAAGBAAC4NVepO3MwKgCApKSakcawMCo
+AgEAAEwAAAAGAAAAXAAAAAAAAAC8D0EX4sTIZDwAAAA8AAAA////////kpJqRxrACAYAAQgA
+BgQAAZKSakcawMCoAgEAAAAAAADAqAICAAAAAAAAAAAAAAAAAAAQByNDXAAAAAYAAABMAAAA
+AAAAALwPQRdw4MhkKgAAACoAAACSkmpHGsDg1V6k7cwIBgABCAAGBAAC4NVepO3MwKgCApKS
+akcawMCoAgEAAEwAAAAGAAAAXAAAAAAAAAC8D0EX0Jy1ozwAAAA8AAAA////////kpJqRxrA
+CAYAAQgABgQAAZKSakcawMCoAgEAAAAAAADAqAICAAAAAAAAAAAAAAAAAAAQByNDXAAAAAYA
+AABMAAAAAAAAALwPQReavLWjKgAAACoAAACSkmpHGsDg1V6k7cwIBgABCAAGBAAC4NVepO3M
+wKgCApKSakcawMCoAgEAAEwAAAAGAAAAXAAAAAAAAAC8D0EXvV204TwAAAA8AAAA////////
+kpJqRxrACAYAAQgABgQAAZKSakcawMCoAgEAAAAAAADAqAICAAAAAAAAAAAAAAAAAAAQByND
+XAAAAAYAAABMAAAAAAAAALwPQRfod7ThKgAAACoAAACSkmpHGsDg1V6k7cwIBgABCAAGBAAC
+4NVepO3MwKgCApKSakcawMCoAgEAAEwAAAAGAAAAXAAAAAAAAAC9D0EXQn05UzwAAAA8AAAA
+////////kpJqRxrACAYAAQgABgQAAZKSakcawMCoAgEAAAAAAADAqAICAAAAAAAAAAAAAAAA
+AAAQByNDXAAAAAYAAABMAAAAAAAAAL0PQRdClzlTKgAAACoAAACSkmpHGsDg1V6k7cwIBgAB
+CAAGBAAC4NVepO3MwKgCApKSakcawMCoAgEAAEwAAAAGAAAAXAAAAAAAAAC9D0EXBKcgkjwA
+AAA8AAAA////////kpJqRxrACAYAAQgABgQAAZKSakcawMCoAgEAAAAAAADAqAICAAAAAAAA
+AAAAAAAAAAAQByNDXAAAAAYAAABMAAAAAAAAAL0PQRelAiGSKgAAACoAAACSkmpHGsDg1V6k
+7cwIBgABCAAGBAAC4NVepO3MwKgCApKSakcawMCoAgEAAEwAAAAGAAAAXAAAAAAAAAC9D0EX
+j54f0DwAAAA8AAAA////////kpJqRxrACAYAAQgABgQAAZKSakcawMCoAgEAAAAAAADAqAIC
+AAAAAAAAAAAAAAAAAAAQByNDXAAAAAYAAABMAAAAAAAAAL0PQRdIux/QKgAAACoAAACSkmpH
+GsDg1V6k7cwIBgABCAAGBAAC4NVepO3MwKgCApKSakcawMCoAgEAAEwAAAAGAAAAXAAAAAAA
+AAC+D0EX2bOqQTwAAAA8AAAA////////kpJqRxrACAYAAQgABgQAAZKSakcawMCoAgEAAAAA
+AADAqAICAAAAAAAAAAAAAAAAAAAQByNDXAAAAAYAAABMAAAAAAAAAL4PQReaz6pBKgAAACoA
+AACSkmpHGsDg1V6k7cwIBgABCAAGBAAC4NVepO3MwKgCApKSakcawMCoAgEAAEwAAAAGAAAA
+XAAAAAAAAAC+D0EXGaeNgDwAAAA8AAAA////////kpJqRxrACAYAAQgABgQAAZKSakcawMCo
+AgEAAAAAAADAqAICAAAAAAAAAAAAAAAAAAAQByNDXAAAAAYAAABMAAAAAAAAAL4PQRcCxI2A
+KgAAACoAAACSkmpHGsDg1V6k7cwIBgABCAAGBAAC4NVepO3MwKgCApKSakcawMCoAgEAAEwA
+AAAGAAAAXAAAAAAAAAC+D0EXO5yKvjwAAAA8AAAA////////kpJqRxrACAYAAQgABgQAAZKS
+akcawMCoAgEAAAAAAADAqAICAAAAAAAAAAAAAAAAAAAQByNDXAAAAAYAAABMAAAAAAAAAL4P
+QReKuoq+KgAAACoAAACSkmpHGsDg1V6k7cwIBgABCAAGBAAC4NVepO3MwKgCApKSakcawMCo
+AgEAAEwAAAAGAAAAXAAAAAAAAAC/D0EXVGIbMDwAAAA8AAAA////////kpJqRxrACAYAAQgA
+BgQAAZKSakcawMCoAgEAAAAAAADAqAICAAAAAAAAAAAAAAAAAAAQByNDXAAAAAYAAABMAAAA
+AAAAAL8PQRfQfRswKgAAACoAAACSkmpHGsDg1V6k7cwIBgABCAAGBAAC4NVepO3MwKgCApKS
+akcawMCoAgEAAEwAAAAGAAAAXAAAAAAAAAC/D0EXTO34bjwAAAA8AAAA////////kpJqRxrA
+CAYAAQgABgQAAZKSakcawMCoAgEAAAAAAADAqAICAAAAAAAAAAAAAAAAAAAQByNDXAAAAAYA
+AABMAAAAAAAAAL8PQRdUCvluKgAAACoAAACSkmpHGsDg1V6k7cwIBgABCAAGBAAC4NVepO3M
+wKgCApKSakcawMCoAgEAAEwAAAAGAAAAXAAAAAAAAAC/D0EXxCX2rDwAAAA8AAAA////////
+kpJqRxrACAYAAQgABgQAAZKSakcawMCoAgEAAAAAAADAqAICAAAAAAAAAAAAAAAAAAAQByND
+XAAAAAYAAABMAAAAAAAAAL8PQRcdQvasKgAAACoAAACSkmpHGsDg1V6k7cwIBgABCAAGBAAC
+4NVepO3MwKgCApKSakcawMCoAgEAAEwAAAAGAAAAXAAAAAAAAADAD0EXE+2LHjwAAAA8AAAA
+////////kpJqRxrACAYAAQgABgQAAZKSakcawMCoAgEAAAAAAADAqAICAAAAAAAAAAAAAAAA
+AAAQByNDXAAAAAYAAABMAAAAAAAAAMAPQRf/CYweKgAAACoAAACSkmpHGsDg1V6k7cwIBgAB
+CAAGBAAC4NVepO3MwKgCApKSakcawMCoAgEAAEwAAAAGAAAAXAAAAAAAAADAD0EXASdiXTwA
+AAA8AAAA////////kpJqRxrACAYAAQgABgQAAZKSakcawMCoAgEAAAAAAADAqAICAAAAAAAA
+AAAAAAAAAAAQByNDXAAAAAYAAABMAAAAAAAAAMAPQRceTWJdKgAAACoAAACSkmpHGsDg1V6k
+7cwIBgABCAAGBAAC4NVepO3MwKgCApKSakcawMCoAgEAAEwAAAAGAAAAXAAAAAAAAADAD0EX
+H2hhmzwAAAA8AAAA////////kpJqRxrACAYAAQgABgQAAZKSakcawMCoAgEAAAAAAADAqAIC
+AAAAAAAAAAAAAAAAAAAQByNDXAAAAAYAAABMAAAAAAAAAMAPQRePg2GbKgAAACoAAACSkmpH
+GsDg1V6k7cwIBgABCAAGBAAC4NVepO3MwKgCApKSakcawMCoAgEAAEwAAAAGAAAAXAAAAAAA
+AADBD0EXy838DDwAAAA8AAAA////////kpJqRxrACAYAAQgABgQAAZKSakcawMCoAgEAAAAA
+AADAqAICAAAAAAAAAAAAAAAAAAAQByNDXAAAAAYAAABMAAAAAAAAAMEPQRfg6vwMKgAAACoA
+AACSkmpHGsDg1V6k7cwIBgABCAAGBAAC4NVepO3MwKgCApKSakcawMCoAgEAAEwAAAAGAAAA
+XAAAAAAAAADBD0EX7HHPSzwAAAA8AAAA////////kpJqRxrACAYAAQgABgQAAZKSakcawMCo
+AgEAAAAAAADAqAICAAAAAAAAAAAAAAAAAAAQByNDXAAAAAYAAABMAAAAAAAAAMEPQRctjc9L
+KgAAACoAAACSkmpHGsDg1V6k7cwIBgABCAAGBAAC4NVepO3MwKgCApKSakcawMCoAgEAAEwA
+AAAGAAAAXAAAAAAAAADBD0EXZmzMiTwAAAA8AAAA////////kpJqRxrACAYAAQgABgQAAZKS
+akcawMCoAgEAAAAAAADAqAICAAAAAAAAAAAAAAAAAAAQByNDXAAAAAYAAABMAAAAAAAAAMEP
+QRfRisyJKgAAACoAAACSkmpHGsDg1V6k7cwIBgABCAAGBAAC4NVepO3MwKgCApKSakcawMCo
+AgEAAEwAAAAGAAAAXAAAAAAAAADBD0EXOrht+zwAAAA8AAAA////////kpJqRxrACAYAAQgA
+BgQAAZKSakcawMCoAgEAAAAAAADAqAICAAAAAAAAAAAAAAAAAAAQByNDXAAAAAYAAABMAAAA
+AAAAAMEPQRdm0237KgAAACoAAACSkmpHGsDg1V6k7cwIBgABCAAGBAAC4NVepO3MwKgCApKS
+akcawMCoAgEAAEwAAAAGAAAAXAAAAAAAAADCD0EXpbU6OjwAAAA8AAAA////////kpJqRxrA
+CAYAAQgABgQAAZKSakcawMCoAgEAAAAAAADAqAICAAAAAAAAAAAAAAAAAAAQByNDXAAAAAYA
+AABMAAAAAAAAAMIPQRf10To6KgAAACoAAACSkmpHGsDg1V6k7cwIBgABCAAGBAAC4NVepO3M
+wKgCApKSakcawMCoAgEAAEwAAAAGAAAAXAAAAAAAAADCD0EXCKs3eDwAAAA8AAAA////////
+kpJqRxrACAYAAQgABgQAAZKSakcawMCoAgEAAAAAAADAqAICAAAAAAAAAAAAAAAAAAAQByND
+XAAAAAYAAABMAAAAAAAAAMIPQRfiyDd4KgAAACoAAACSkmpHGsDg1V6k7cwIBgABCAAGBAAC
+4NVepO3MwKgCApKSakcawMCoAgEAAEwAAAAGAAAAXAAAAAAAAADCD0EX9aDe6TwAAAA8AAAA
+////////kpJqRxrACAYAAQgABgQAAZKSakcawMCoAgEAAAAAAADAqAICAAAAAAAAAAAAAAAA
+AAAQByNDXAAAAAYAAABMAAAAAAAAAMIPQRf2vN7pKgAAACoAAACSkmpHGsDg1V6k7cwIBgAB
+CAAGBAAC4NVepO3MwKgCApKSakcawMCoAgEAAEwAAAAGAAAAXAAAAAAAAADDD0EXoM2lKDwA
+AAA8AAAA////////kpJqRxrACAYAAQgABgQAAZKSakcawMCoAgEAAAAAAADAqAICAAAAAAAA
+AAAAAAAAAAAQByNDXAAAAAYAAABMAAAAAAAAAMMPQRea66UoKgAAACoAAACSkmpHGsDg1V6k
+7cwIBgABCAAGBAAC4NVepO3MwKgCApKSakcawMCoAgEAAEwAAAAGAAAAXAAAAAAAAADDD0EX
+WdiiZjwAAAA8AAAA////////kpJqRxrACAYAAQgABgQAAZKSakcawMCoAgEAAAAAAADAqAIC
+AAAAAAAAAAAAAAAAAAAQByNDXAAAAAYAAABMAAAAAAAAAMMPQRe596JmKgAAACoAAACSkmpH
+GsDg1V6k7cwIBgABCAAGBAAC4NVepO3MwKgCApKSakcawMCoAgEAAEwAAAAFAAAAbAAAAAAA
+AAD78wUAZHoB2AEAHABDb3VudGVycyBwcm92aWRlZCBieSBkdW1wY2FwAgAIAPvzBQCmuUbK
+AwAIAPvzBQDNeQHYBAAIADUBAAAAAAAABQAIAAAAAAAAAAAAAAAAAGwAAAA=
 
-sizeof(xfs_attr_leaf_name_local_t) = 4
-sizeof(xfs_attr_leaf_name_remote_t) = 12
-
-After this change:
-
-sizeof(xfs_attr_leaf_name_local_t) = 4
-sizeof(xfs_attr_leaf_name_remote_t) = 12
-
-i.e. no change because the structures aren't defined as packed
-structures.  Hence the compiler pads them to out to 4 byte alignment
-naturally regardless of the flex array definition. pahole on x86-64
-also confirms that the (padded) size of the structure is not
-changed.
-
-However, the on-disk structure it is being used to decode is packed,
-and we're only using pointer arithmetic to pull the location of the
-name/value pairs out of the buffer to copy them - it's the structure
-size calculations that actually define the size of the structures
-for a given name length, not the sizeof() value or the flex array
-definitions...
-
-> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
-> routines on memcpy() and help us make progress towards globally
-> enabling -fstrict-flex-arrays=3 [1].
-> 
-> Link: https://github.com/KSPP/linux/issues/79
-> Link: https://github.com/KSPP/linux/issues/251
-> Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> ---
->  fs/xfs/libxfs/xfs_da_format.h | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/fs/xfs/libxfs/xfs_da_format.h b/fs/xfs/libxfs/xfs_da_format.h
-> index 25e2841084e1..e1e62ebb0c44 100644
-> --- a/fs/xfs/libxfs/xfs_da_format.h
-> +++ b/fs/xfs/libxfs/xfs_da_format.h
-> @@ -620,14 +620,14 @@ typedef struct xfs_attr_leaf_entry {	/* sorted on key, not name */
->  typedef struct xfs_attr_leaf_name_local {
->  	__be16	valuelen;		/* number of bytes in value */
->  	__u8	namelen;		/* length of name bytes */
-> -	__u8	nameval[1];		/* name/value bytes */
-> +	__u8	nameval[];		/* name/value bytes */
->  } xfs_attr_leaf_name_local_t;
->  
->  typedef struct xfs_attr_leaf_name_remote {
->  	__be32	valueblk;		/* block number of value bytes */
->  	__be32	valuelen;		/* number of bytes in value */
->  	__u8	namelen;		/* length of name bytes */
-> -	__u8	name[1];		/* name bytes */
-> +	__u8	name[];			/* name bytes */
->  } xfs_attr_leaf_name_remote_t;
->  
->  typedef struct xfs_attr_leafblock {
-> @@ -747,13 +747,13 @@ xfs_attr3_leaf_name_local(xfs_attr_leafblock_t *leafp, int idx)
->   */
->  static inline int xfs_attr_leaf_entsize_remote(int nlen)
->  {
-> -	return round_up(sizeof(struct xfs_attr_leaf_name_remote) - 1 +
-> +	return round_up(sizeof(struct xfs_attr_leaf_name_remote) +
->  			nlen, XFS_ATTR_LEAF_NAME_ALIGN);
->  }
-
-To be honest, the actual padding and alignment calculations are
-kinda whacky because that's the way they were defined back in 1995.
-And, well, once set in the on-disk format, it can't easily be
-changed. FYI, here's the original definition from 1995:
-
-#define XFS_ATTR_LEAF_ENTSIZE_REMOTE(nlen)	/* space for remote struct */ \
-	(((sizeof(xfs_attr_leaf_name_remote_t)-1 + (nlen)) +3)&~0x3)
-
-So apart using round_up and defines instead of magic numbers, the
-current calculation is unchanged from the original definition.
-
-AFAICT, the modification you are proposing above breaks this because the
-sizeof(xfs_attr_leaf_name_remote) result has not changed with the
-change of the structure definition.
-
-e.g. if namelen = 17, before we had:
-
-	size	= round_up(12 - 1 + 17, 4)
-		= round_up(28, 4)
-		= 28
-
-Which is correct because the on-disk format is packed:
-
-        0   4   89  12      20   26 28
-	+---+---++--+-------+-----+-+-----....
-                  |---------------| 17 bytes of name. 
-		                  |-| 2 bytes of padding
-				    |-----.... Next attr record.
-
-We end up with 2 bytes of padded between the end of the name and the
-start of the next attribute record in the block.
-
-But after this patch, now we calculate the size as:
-
-	size	= round_up(12 + 17, 4)
-		= round_up(29, 4)
-		= 32
-
-Which is a different result, and would result in incorrect parsing
-of the attribute records in the buffer. Hence I don't think it is
-valid to be changing the entsize calculations like this if sizeof()
-is not changing results.
-
-Which comes back to my original question: how did you test this?
-
-Cheers,
-
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+--------------Vs4EkqfRxzNxXZw5NJqZgAOR--
