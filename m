@@ -2,67 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43A2D68B0FD
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 17:38:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA7F368B104
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 17:46:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbjBEQiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 11:38:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60570 "EHLO
+        id S229524AbjBEQqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 11:46:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbjBEQiL (ORCPT
+        with ESMTP id S229475AbjBEQqM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 11:38:11 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81DF413D50;
-        Sun,  5 Feb 2023 08:38:06 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id ba1so4372397wrb.5;
-        Sun, 05 Feb 2023 08:38:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cBS8lQUszEWIyGd6gPYkFsOUKg2VkgciQ57XWIO2J8E=;
-        b=I8DRSWVUk/f1dBE0yr4oIeL9bgoDOSOwPaDEu7lepjK11nMbo6hA418QZX49F1wXFD
-         vJsqD3JO81C2KxCHAH6hoY10fjW9t0q5ja9x6LI9HSfCPJSYJji2beTGBul1+HhcBMI4
-         zSU+igY3lY5afMrZm7OzSJjzImga+bqgLBY2wPvoe32yz0fbVZDviGojgyyYCxYSkF2j
-         OysD2B5eytZZ2Q0A2PO/6TNNYQlnA+qShZQKOyJayOcvv24yyQZ4ZN3/HIEg18G1oM+K
-         MGjYBgi1lOErJQZfMHDGzA2c+hV+rYNybf828jw3Gn3Fw/U+XFC5WmoIFvuizMrON2fW
-         kr3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cBS8lQUszEWIyGd6gPYkFsOUKg2VkgciQ57XWIO2J8E=;
-        b=5BRZQwL/Pw6rc+QrwYfpbU0J4dj5PnZxK/lLyFF86XAUJjiCDygsP4ZTCNG9iZ5suw
-         6IaIwhcQ8ig4wPyr70H+m9xP0vpqeLmIItFhyOWaPU/g0Q+Enysxdz80IBq56McvkPN2
-         my6GNYgaHRjGG1wEOag501vXV7Gaa3R94O6o4Je87xU8Walqwv8mVXYlYyWtCoMpq1CU
-         NJ0TFcer85JEIlBrSaBQfQCVp0QcFgLW/a8b3+NPntdibVLqU21YwBypnDATVoNy0HoY
-         lBoYuGnjEf4uKFqucY9GXQuOBgDfh345it2YpYypVnCScWANFCzo/H8bYiUPVVqqS0/8
-         aS8w==
-X-Gm-Message-State: AO0yUKWjmg94V+ewWc1hSiNGDogdDCXeghtfwn1dYumo+SgZIQ/3V1UV
-        s6aa2bzyBuF9uK8yIDdfeA4QYIEjlx/7Ivh8Osw=
-X-Google-Smtp-Source: AK7set8Thtz9rQI4xrmg28H6KUW+kz/AJjlna344wYct7keepOQaeTmRV6+F1Eybr7fLhrTaR2ZGDEwFSPEJHiMNJp0=
-X-Received: by 2002:a05:6000:18a:b0:2bf:b294:52f8 with SMTP id
- p10-20020a056000018a00b002bfb29452f8mr358051wrx.269.1675615084719; Sun, 05
- Feb 2023 08:38:04 -0800 (PST)
+        Sun, 5 Feb 2023 11:46:12 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 51C5D13D50
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 08:46:06 -0800 (PST)
+Received: (qmail 627686 invoked by uid 1000); 5 Feb 2023 11:46:06 -0500
+Date:   Sun, 5 Feb 2023 11:46:06 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Hillf Danton <hdanton@sina.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: Converting dev->mutex into dev->spinlock ?
+Message-ID: <Y9/dTp/hQ5btWTEH@rowland.harvard.edu>
+References: <28a82f50-39d5-a45f-7c7a-57a66cec0741@I-love.SAKURA.ne.jp>
+ <Y95h7Vop9t5Li0HD@kroah.com>
+ <a236ab6b-d38c-3974-d4cb-5e92d0877abc@I-love.SAKURA.ne.jp>
+ <Y957GSFVAQz8v3Xo@rowland.harvard.edu>
+ <cf56ebc3-187a-6ee4-26bc-2d180272b5cf@I-love.SAKURA.ne.jp>
+ <Y96HiYcreb8jZIHi@rowland.harvard.edu>
+ <917e1e3b-094f-e594-c1a2-8b97fb5195fd@I-love.SAKURA.ne.jp>
+ <Y965qEg0Re2QoQ7Q@rowland.harvard.edu>
+ <c7fb01a9-3e12-77ed-5c4c-db7deb64dc73@I-love.SAKURA.ne.jp>
 MIME-Version: 1.0
-References: <20221218232217.1713283-1-evanhensbergen@icloud.com>
- <20230124023834.106339-1-ericvh@kernel.org> <2302787.WOG5zRkYfl@silver>
-In-Reply-To: <2302787.WOG5zRkYfl@silver>
-From:   Eric Van Hensbergen <ericvh@gmail.com>
-Date:   Sun, 5 Feb 2023 10:37:53 -0600
-Message-ID: <CAFkjPT=nxuG5rSuJ1seFV9eWvWNkyzw2f45yWqyEQV3+M91MPg@mail.gmail.com>
-Subject: Re: [PATCH v3 00/11] Performance fixes for 9p filesystem
-To:     Christian Schoenebeck <linux_oss@crudebyte.com>
-Cc:     v9fs-developer@lists.sourceforge.net, asmadeus@codewreck.org,
-        rminnich@gmail.com, lucho@ionkov.net,
-        Eric Van Hensbergen <ericvh@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c7fb01a9-3e12-77ed-5c4c-db7deb64dc73@I-love.SAKURA.ne.jp>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,46 +49,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 2, 2023 at 5:27 AM Christian Schoenebeck
-<linux_oss@crudebyte.com> wrote:
->
-> Looks like this needs more work.
->
-> I only had a glimpse on your patches yet, but made some tests by doing
-> compilations on guest on top of a 9p root fs [1], msize=500k. Under that
-> scenario:
->
-> * loose: this is suprisingly the only mode where I can see some performance
-> increase, over "loose" on master it compiled ~5% faster, but I also got some
-> misbehaviours on guest.
->
+On Sun, Feb 05, 2023 at 10:31:56AM +0900, Tetsuo Handa wrote:
+> On 2023/02/05 5:01, Alan Stern wrote:
+> > On Sun, Feb 05, 2023 at 02:09:40AM +0900, Tetsuo Handa wrote:
+> >> That is a declaration that driver developers are allowed to take it for granted
+> >> that driver callback functions can behave as if dev->mutex is not held. 
+> > 
+> > No it isn't.  It is a declaration that driver developers must be extra 
+> > careful because lockdep is unable to detect locking errors involving 
+> > dev->mutex.
+> 
+> Driver developers are not always familiar with locks used by driver core,
+> like your
+> 
+>   It's hard to figure out what's wrong from looking at the syzbot report.
+>   What makes you think it is connected with dev->mutex?
 
-I was so focused on the bugs that I forgot to respond to the
-performance concerns -- just to be clear, readahead and writeback
-aren't meant to be more performant than loose, they are meant to have
-stronger guarantees of consistency with the server file system.  Loose
-is inclusive of readahead and writeback, and it keeps the caches
-around for longer, and it does some dir caching as well -- so its
-always going to win, but it does so with risk of being more
-inconsistent with the server file system and should only be done when
-the guest/client has exclusive access or the filesystem itself is
-read-only.  I've a design for a "tight" cache, which will also not be
-as performant as loose but will add consistent dir-caching on top of
-readahead and writeback -- once we've properly vetted that it should
-likely be the default cache option and any fscache should be built on
-top of it.  I was also thinking of augmenting "tight" and "loose" with
-a "temporal" cache that works more like NFS and bounds consistency to
-a particular time quanta.  Loose was always a bit of a "hack" for some
-particular use cases and has always been a bit problematic in my mind.
+You didn't answer this question.
 
-So, to make sure we are on the same page, was your performance
-uplifts/penalties versus cache=none or versus legacy cache=loose?  The
-10x perf improvement in the patch series was in streaming reads over
-cache=none.  I'll add the cache=loose datapoints to my performance
-notebook (on github) for the future as points of reference, but I'd
-always expect cache=loose to be the upper bound (although I have seen
-some things in the code to do with directory reads/etc. that could be
-improved there and should benefit from some of the changes I have
-planned once I get to the dir caching).
+>   At first glance, it seems that the ath6kl driver is trying to flush a
+>   workqueue while holding a lock or mutex that is needed by one of the
+>   jobs in the workqueue.  That's obviously never going to work, no matter
+>   what sort of lockdep validation gets used.
+> 
+> comment indicates that you did not notice that dev->mutex was connected to
+> this problem which involved ath6kl driver code and ath9k driver code and
+> driver core code.
 
-          -eric
+Of course I didn't.  There isn't enough information in the syzbot log 
+for someone to recognize the connection if they aren't already familiar 
+with the code in question.
+
+> Core developers can't assume that driver developers are extra careful, as
+> well as driver developers can't assume that core developers are familiar
+> with locks used by individual drivers. We need to fill the gap.
+
+Agreed.
+
+> >> Some developers test their changes with lockdep enabled, and believe that their
+> >> changes are correct because lockdep did not complain.
+> >> https://syzkaller.appspot.com/bug?extid=9ef743bba3a17c756174 is an example.
+> > 
+> > How do you know developers are making this mistake?  That example 
+> > doesn't show anything of the sort; the commit which introduced the bug 
+> > says nothing about lockdep.
+> 
+> The commit which introduced the bug cannot say something about lockdep, for
+> lockdep validation is disabled and nobody noticed the possibility of deadlock
+> until syzbot reports it as hung. Since the possibility of deadlock cannot be
+> noticed until syzbot reports it as hung,
+
+That isn't true at all.  There are lots of occasions when people realize 
+that a deadlock might occur without seeing a report from lockdep or 
+syzbot.  You just aren't aware of these occasions because the developer 
+then fixes the code before submitting it.  But if you search through the 
+mailing list archives, I'm sure you'll find plenty of examples where 
+somebody criticizes a proposed patch on the grounds that it can cause a 
+deadlock.
+
+>  I assume that there are many similar
+> deadlocks in the kernel that involves dev->mutex. How do you teach developers
+> that they are making this mistake, without keeping lockdep validation enabled?
+
+There probably are many similar deadlocks in the kernel.  There probably 
+also are deadlocks (not involving dev->mutex) which lockdep could catch, 
+but hasn't because the right combination of conditions hasn't occurred.
+
+You teach developers about this the same way you teach them about 
+anything else: Publishing information, talking to people, and putting 
+comments in the kernel source code.
+
+> By keeping lockdep validation disabled, you are declaring that driver developers
+> need not to worry about dev->mutex rather than declaring that driver developers
+> need to worry about dev->mutex.
+
+That is a very peculiar thing to say.  How do you think people managed 
+to deal with deadlocks in the kernel before lockdep was developed?  Do 
+you think they said: "My testing didn't reveal any deadlocks, so the 
+code must be perfect"?
+
+Of course they didn't.  And now people simply need to realize that 
+lockdep isn't perfect either.
+
+And by the way, by disabling lockdep validation I am declaraing that 
+enabling it would cause an overwhelming number of false positives, 
+rendering lockdep useless (as you found out when you tried).  Not that 
+driver developers don't have to worry about dev->mutex.
+
+Alan Stern
