@@ -2,211 +2,271 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BDE668B11F
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 18:38:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4A4968B121
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 18:47:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229520AbjBERi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 12:38:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41554 "EHLO
+        id S229481AbjBERq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 12:46:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjBERi1 (ORCPT
+        with ESMTP id S229437AbjBERq5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 12:38:27 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50914420E;
-        Sun,  5 Feb 2023 09:38:26 -0800 (PST)
-Received: from [46.183.103.17] (helo=[172.18.99.178]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pOiy6-0001nS-HZ; Sun, 05 Feb 2023 18:38:22 +0100
-Message-ID: <1c04756b-574b-210d-9580-a4de2aa16a20@leemhuis.info>
-Date:   Sun, 5 Feb 2023 18:38:16 +0100
+        Sun, 5 Feb 2023 12:46:57 -0500
+Received: from mx.flying-snail.de (mx.flying-snail.de [IPv6:2a06:1c40:3::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF3718B10;
+        Sun,  5 Feb 2023 09:46:53 -0800 (PST)
+Received: from [2a02:908:1b0:8800:2ff:ffff:fe11:2236] (helo=mondbasis.internal.flying-snail.de)
+        by mx.flying-snail.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <pelzi@flying-snail.de>)
+        id 1pOj6D-001lfB-K2; Sun, 05 Feb 2023 18:46:45 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=feldner-bv.de; s=s1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
+        From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=iZBGeO9WCqRwOlETkxHySJfwXaLhexLr0iCCz/TmwEY=; b=l3SY45xY/2vihZB3L4+x4jldK4
+        jNCrWi94i3lof4fQyYhUzTdQQbhkl9SJAgbnJp7Aw395eVJqnbEi6rdXSPJBM/ySeJJkaI37DB9IQ
+        oLXuaEjFYCHk2hIe8JXUIg79E8xq22TNer3kVvrHzDjG8fjpoJGLT1QXqNs73bQNMOTVHjf8MG1Zi
+        8nIrtTt/iLrbaEfycqXh0XBPb2rSFt+PtS1vhvRK0vmrbggINJRoSQgjvWc7eYO5aYUlqoROpH14Y
+        9s2MjlhnTXrR8F3VRQwUTH8G6bd1Uo2SR4l3ihNxgZ2/NUzPG9GEQzExPNX4/+vbzbS07GMHt+N7W
+        JgUVPj8w==;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=flying-snail.de; s=s1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To
+        :From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=iZBGeO9WCqRwOlETkxHySJfwXaLhexLr0iCCz/TmwEY=; b=cpARrJhB34nZcCqbeF/eoxcKYA
+        +lirKHpeeCNvRpNFwIKXCyOA0xzF8DBsMpVymLfLFhYli8xHEnoiKb96cwawcTjd4ACff4iDLp+a8
+        CJN4X2uXS95eIbFCNn3NRsvmyUMKyENX09ipR4LQdf8GDm/sbPO7wOHM7mJZVEXz/pr8nXxxlG0KB
+        jfiuIcaYVh8wZlMcOTDGfDr0gN1EetEaNnflDpTww/wWWhVNK7iBRj3gDmIwSLtYtOJu/Dvlfp7ID
+        KRK8dVckL8ohjLc6PK/TOnzvJuup9WyQlhgJicoNmCqB7Ll3TEgqnQegAurqnDtX/k4VuG1kst7dx
+        Qd8Dabcw==;
+Received: from [2a02:908:1b0:8800:1554:6239:a4eb:816f]
+        by mondbasis.internal.flying-snail.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <pelzi@flying-snail.de>)
+        id 1pOj69-000cIi-QL; Sun, 05 Feb 2023 18:46:44 +0100
+Message-ID: <3648e749-76de-01d3-f598-cb73de70d58a@feldner-bv.de>
+Date:   Sun, 5 Feb 2023 18:46:41 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [regression] Bug 216989 - since 6.1 systems with AMD Ryzen
- stutter when fTPM is enabled
-From:   "Linux kernel regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-To:     Dominik Brodowski <linux@dominikbrodowski.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     linux-integrity@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux kernel regressions list <regressions@lists.linux.dev>,
-        reach622@mailcuk.com, 1138267643@qq.com,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>,
-          Linux regressions mailing list 
-          <regressions@lists.linux.dev>
-References: <3a196414-68d8-29c9-24cc-2b8cb4c9d358@leemhuis.info>
-Content-Language: en-US, de-DE
-In-Reply-To: <3a196414-68d8-29c9-24cc-2b8cb4c9d358@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH 1/2] iio: dht11: forked a driver version that polls
+ sensor's signal from GPIO
+To:     Harald Geyer <harald@ccbib.org>
+Cc:     jic23@kernel.org, lars@metafoo.de, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <Y9groXq2oI6lqFea@debian-qemu.internal.flying-snail.de>
+ <ee14f0c8bfbae887d21f827baece8b6e@ccbib.org>
+ <d03ec6a7-62c0-0a82-a0f0-d2030ed5723d@feldner-bv.de>
+ <9219a1dd4371a106f9eda9c90ef96066f9ff6446.camel@ccbib.org>
+From:   pelzi@flying-snail.de
+In-Reply-To: <9219a1dd4371a106f9eda9c90ef96066f9ff6446.camel@ccbib.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1675618706;f47b7259;
-X-HE-SMSGID: 1pOiy6-0001nS-HZ
-X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[ccing Dominik (who authored the culprit) and Herbert (who merged it)]
+As it turned out, on my Allwinner H3 based BananaPi M2 Zero, it is
+required to explicitly set a low IRQ debounce filter time, as there is
+a default debounce filter active that appears to filter something
+around 150µs. This causes IRQs from DTH11/22 devices to be filtered
+out, evenly over the transmission time.
 
-On 02.02.23 11:28, Linux kernel regression tracking (Thorsten Leemhuis)
-wrote:
-> 
-> I noticed a regression report in bugzilla.kernel.org. As many (most?)
-> kernel developer don't keep an eye on it, I decided to forward it by
-> mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=216989 :
+Reading the datasheet carefully it seems to be documented that a
+32kHz clock, scaled by 1, is the default base of an interrupt
+debounce filter – taking a simple notice "Default Value 0x00000000"
+very verbatim. Depending on the algorithm, this 32µs clock as basis
+seems plausible to destroy the expected signal and anyway, so it does.
 
-Turns out according to a bisection from one of the reporters that
-b006c439d58d ("hwrng: core - start hwrng kthread also for untrusted
-sources") (merged for 6.1) apparently makes this hardware issue occur
-quicker/more frequently a lot quicker on any board that didn't get the
-firmware update yet. So it could be argued that from the point of the
-kernel it *might* be considered a regression.
+The device tree overlay quoted below makes the IRQ based driver (in
+my falling-edge-only flavour) work like a charm. Tests of reliability,
+system load, comparison to the original driver are still ongoing.
 
-For details see the ticket.
+Are there any useful next steps arising from this observation? Perhaps
+at least some Documentation? I'm even concerned about the default
+setting being used by
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
+arch/arm/boot/dts/sun8i-h2-plus-bananapi-m2-zero.dts
 
-#regzbot introduced: b006c439d58d
+As far as I understand, this setting applies to the full IRQ bank,
+appearently including GPIOs usable for UARTs including the separate
+UART used for debugging (CON3).
 
->>  reach622@mailcuk.com 2023-02-02 02:49:48 UTC
+OTOH, applying the dt overlay below relaxes a filter and could make
+bounces show up in applications that do not currently experience
+bouncing artefacts.
+
+Obviously, a polling version of the driver is not required in this case,
+I vote to rejecting it.
+
+Cheers
+
+Andreas
+
+
+// Definitions for dht11 module
+/*
+Adapted from dht11.dts for Raspberrypi, by Keith Hall
+Adapted by pelzi.
+*/
+/dts-v1/;
+/plugin/;
+
+/ {
+
+         fragment@0 {
+                 target-path = "/";
+                 __overlay__ {
+
+                         temperature_humidity: dht11@6 {
+                                 compatible = "dht22", "dht11";
+                                 pinctrl-names = "default";
+                                 pinctrl-0 = <&dht11_pins>;
+                                 gpios = <&pio 0 6 0>; /* PA6 (PIN 7), 
+active high */
+                                 status = "okay";
+                         };
+
+                 };
+         };
+
+         fragment@1 {
+                 target = <&pio>;
+                 __overlay__ {
+                         input-debounce = <5 0>; /* 5µs debounce on IRQ 
+bank 0, default on bank 1 */
+                         dht11_pins: dht11_pins {
+                                 pins = "PA6";
+                                 function = "gpio_in";
+                                 /*bias-pull-up; not required for 3-pin 
+version of sensor */
+                         };
+                 };
+         };
+
+         __overrides__ {
+                 gpiopin =       <&dht11_pins>,"pins:0",
+<&temperature_humidity>,"gpios:8";
+         };
+};
+
+Am 02.02.23 um 21:53 schrieb Harald Geyer:
+> Am Mittwoch, dem 01.02.2023 um 13:51 +0100 schrieb
+> pelzi@flying-snail.de:
+>> I understand that the first priority is in finding out if there is
+>> actually a proper
+>> use case for a polling implementation at all. Only then, it might be
+>> worth to extend
+>> the existing dht11 module by an polling alternative.
 >>
->> Linux kernel >=6.1 exhibits a stuttering issue that occurs once every few hours. See https://www.reddit.com/r/archlinux/comments/zvgev0/audio_stuttering_issues_with_kernel_611/ https://www.reddit.com/r/linux_gaming/comments/zzqaf7/having_intermittent_stutters_with_a_ryzen_cpu/ https://bbs.archlinux.org/viewtopic.php?id=282333 for detailed information.
+>> Am 31.01.23 um 11:18 schrieb harald@ccbib.org:
+>>> On 2023-01-30 21:42, Andreas Feldner wrote:
+>>>> On a BananaPi M2 Zero, the existing, IRQ based dht11 driver is
+>>>> not
+>>>> working,
+>>>> but missing most IRQs.
+>>> That's quite surprising as the driver works well on many similar
+>>> systems
+>>> based on Allwinner SoCs. I suspect the problem is with your setup.
+>>> Maybe
+>>> some other (polling?) driver is slowing everything down.
+>> Can you give me a hint how to look for signs of such a situation?
+> The obvious things to try:
+>
+> Enabling debug output for the dht11 driver, to look into which
+> interrupts are actually missing: Is it a "block" of interrupts?
+> Are they randomly distributed? Are they somewhat equally spaced?
+> This should give some hints about the nature of the problem.
+>
+> Try to reproduce the problem on a minimal system:
+> Unload as many modules as possible.
+> Maybe just use a system on a ram disk.
+> As little user space programms running as possbile.
+> You might find OpenWRT helpful.
+>
+> Try other kernel versions. (Unlikely, but it might be some
+> completely unrelated regression.)
+>
+> Implement debugging output in your polling driver to investigate,
+> why *that* performs so bad. It probably is the same issue.
+>
+> If this doesn't lead anywhere, then it is a tough problem, so
+> let's for now assume, you find something.
+>
+>
+>> BTW I took some pride in building the board's system image from
+>> reproduceable sources: Debian kernel package
+>> linux-image-5.10.0-20-armmp-lpae, and the device tree from ﻿﻿﻿﻿
 >>
->> The stutter lasts for 1-2 seconds and causes the framerate of the display to decrease dramatically and causes bursts in audio output.
+>> arch/arm/boot/dts/sun8i-h2-plus-bananapi-m2-zero.dts
 >>
->> Additional info:
+>> So the setup should be reproducible, unlike other approaches
+>> advertised
+>> in the BananaPi forum...
 >>
->> * linux 6.1.0 or later
+>> What I did is
 >>
->> Steps to reproduce:
+>> - check /proc/interrupts. The highest volume interrupts there are two
+>> instances of sunxi-mmc, one generating about 50 interrupts per
+>> second,
+>> the other about 25. Those (and most) interrupts are GICv2, but the
+>> GPIO
+>> releated are sunxi-pio-{level,edge}
 >>
->> * Use Linux kernel >=6.1
+>> - check dmesg: literally no messages apart from dht11_poll itself
 >>
->> * Use AMD Ryzen CPU with fTPM enabled
+>> - check top: sugov:0 is reported to eat 10% of one cpu, but I
+>> understand
+>> that's expected and an artifact anyway. Changing the scaling governor
+>> to
+>> "performance" eliminates this, but does not help in making the irq
+>> driven dht11 work.
 >>
->> * Wait for a few hours
+>> - check vmstat: ir is between 50 and 200 apart from short spikes,
+>> those
+>> probably related to a certain cron job
 >>
->> [reply] [−] Comment 1 Bell 2023-02-02 03:33:24 UTC
+>> - check sysstat cpu, mem, threads, mutex: each of the 4 cores has a
+>> low
+>> performance (a factor of 15 lower than a Raspberrypi 3), but
+>> constant,
+>> low stddev, etc. No surprises running e.g. 8 threads instead of 4.
 >>
->> Hey, Let me add some extra information to help.
->> 1. this issue can happen in 6.2-rc6 without loading third-party kernel modules. (NVIDIA or Virtualbox and so)
->> 2. some guy on the Desktop/Laptop who can disable ftpm and did eliminate the problem.
->> 3. this problem can happen in newer AMD processors from the 4000 series to the 6000 series.
->> 4. this problem isn't caused by the dedicated graphics card I guess, here are some combinations that stuttering can happen:
->> AMD(built-in GPU) + NVIDIA  Laptop
->> AMD(No built-in GPU) + AMD(dedicated) Desktop
->> AMD(built-in GPU) + AMD(dedicated) Laptop/Desktop
->> AMD + AMD(Built-in GPU only) Laptop
->> all suffer from this.
+>> So, apart from the fact that it is missing about 3/4 of the IRQs the
+>> dht11 driver should get, I have no indication that something might be
+>> wrong with the board or its setup. Where else should I look?
+> There are many possible issues, that are difficult to investigate
+> directly. E.g. cache poisoning, some code disabling interrupts just
+> a bit to long etc. Thus the use of minimal systems.
+>
+>>>> Following the hints in Harald Geyer's comments I
+>>>> tried to implement a version of the driver that is polling the
+>>>> GPIO
+>>>> sensor in a busy loop, not using IRQ altogether.
+>>> IIRC one readout takes about 80 milliseconds. That's a very long
+>>> time for
+>>> a busy loop. I doubt this is acceptable for inclusion in the
+>>> kernel. Of
+>>> course also Jonathan's comments apply.
+>> Seems to be a bit less, just in case that matters. Given the timing
+>> chart I'd expect
 >>
->> Hope this can help :)
-> 
-> See the ticket for more details.
-> 
-> I briefly looked into the links and found this:
-> https://www.amd.com/en/support/kb/faq/pa-410
-> 
+>> on average: 200µs + 40 * 100µs = 4,2ms
 >>
->> Intermittent System Stutter Experienced with fTPM Enabled on Windows® 10
->> and 11
->> Article Number
->> PA-410
+>> worst case (device trying to send all one-bits): 200µs + 40 * 120µs =
+>> 5,0ms
 >>
->> This documentation provides information on improving intermittent
->> performance stutter(s) on select PCs running Windows® 10 and 11 with
->> Firmware Trusted Platform Module (“fTPM”) enabled.
->>
->>
->>
->> Issue Description
->>
->> AMD has determined that select AMD Ryzen™ system configurations may
->> intermittently perform extended fTPM-related memory transactions in SPI
->> flash memory (“SPIROM”) located on the motherboard, which can lead to
->> temporary pauses in system interactivity or responsiveness until the
->> transaction is concluded.
->>
->>
->>
->> Update and Workaround
->>
->>     Update: Affected PCs will require a motherboard system BIOS (sBIOS)
->> update containing enhanced modules for fTPM interaction with SPIROM. AMD
->> expects that flashable customer sBIOS files to be available starting in
->> early May, 2022. Exact BIOS availability timing for a specific
->> motherboard depends on the testing and integration schedule of your
->> manufacturer. Flashable updates for motherboards will be based on AMD
->> AGESA 1207 (or newer).
->>
->>     Workaround: As an immediate solution, affected customers dependent
->> on fTPM functionality for Trusted Platform Module support may instead
->> use a hardware TPM (“dTPM”) device for trusted computing. Platform dTPM
->> modules utilize onboard non-volatile memory (NVRAM) that supersedes the
->> TPM/SPIROM interaction described in this article.
->>
->>         COMPATIBILITY: Please check with your system or motherboard
->> manufacturer to ensure that your platform supports add-in dTPM modules
->> before attempting or implementing this workaround.
->>
->>         WARNING: If switching an active system from fTPM to dTPM, it is
->> critical that you disable TPM-backed encryption systems (e.g. BitLocker
->> Drive Encryption) and/or back up vital system data prior to switching
->> TPM devices. You must have full administrative access to the system, or
->> explicit support from your IT administrator if the system is managed.
->> For more information on transferring ownership to a new TPM device,
->> please visit this Microsoft webpage.
->>
-> 
-> So it's a firmware problem, but apparently one that Linux only triggers
-> since 6.1.
-> 
-> Jason, could the hwrng changes have anything to do with this?
-> 
-> A bisection really would be helpful, but I guess that is not easy as the
-> problem apparently only shows up after some time...
-> 
-> 
-> Anyway:
-> 
-> [TLDR for the rest of this mail: I'm adding this report to the list of
-> tracked Linux kernel regressions; the text you find below is based on a
-> few templates paragraphs you might have encountered already in similar
-> form.]
-> 
-> BTW, let me use this mail to also add the report to the list of tracked
-> regressions to ensure it's doesn't fall through the cracks:
-> 
-> #regzbot introduced: v6.0..v6.1
-> https://bugzilla.kernel.org/show_bug.cgi?id=216989
-> #regzbot title: tpm: systems with AMD Ryzen stutter when fTPM is enabled
-> #regzbot ignore-activity
-> 
-> This isn't a regression? This issue or a fix for it are already
-> discussed somewhere else? It was fixed already? You want to clarify when
-> the regression started to happen? Or point out I got the title or
-> something else totally wrong? Then just reply and tell me -- ideally
-> while also telling regzbot about it, as explained by the page listed in
-> the footer of this mail.
-> 
-> Developers: When fixing the issue, remember to add 'Link:' tags pointing
-> to the report (e.g. the buzgzilla ticket and maybe this mail as well, if
-> this thread sees some discussion). See page linked in footer for details.
-> 
-> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-> --
-> Everything you wanna know about Linux kernel regression tracking:
-> https://linux-regtracking.leemhuis.info/about/#tldr
-> If I did something stupid, please tell me, as explained on that page.
+> Ack.
+>
+> Good luck,
+> Harald
+>
+>
