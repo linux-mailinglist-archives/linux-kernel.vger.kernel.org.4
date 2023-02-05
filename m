@@ -2,78 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E90C668B008
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 14:43:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39C2468B00C
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 14:49:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbjBENnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 08:43:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43448 "EHLO
+        id S229710AbjBENtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 08:49:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbjBENnQ (ORCPT
+        with ESMTP id S229553AbjBENtY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 08:43:16 -0500
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D8ADEB74;
-        Sun,  5 Feb 2023 05:43:12 -0800 (PST)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 315Dglip122849;
-        Sun, 5 Feb 2023 07:42:47 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1675604567;
-        bh=MkHzUmtMPTF1Yf4Z+KezMeDcA1WtKP/Nj3KNz8vscHE=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=Uarx+agDlb16P+H345RLYwoAntqhU9RdsDFl9AXvklfCzyIhQrNVqNiuOV/q/kDG5
-         ORJq3q+HC8hETdxLQLIZMprXHL29U55Pr4RD7FNMW1NyoPrR3PLH1sVB2+jjEyQXxv
-         mqdJVtGKsPMBjPbdjfVbET5llhYEjGjcS/WmeAFw=
-Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 315DglbK012101
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sun, 5 Feb 2023 07:42:47 -0600
-Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Sun, 5
- Feb 2023 07:42:47 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Sun, 5 Feb 2023 07:42:47 -0600
-Received: from [10.250.235.106] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 315DgfUJ057632;
-        Sun, 5 Feb 2023 07:42:42 -0600
-Message-ID: <bd67f304-76c0-b098-8c41-5380f2996be8@ti.com>
-Date:   Sun, 5 Feb 2023 19:12:41 +0530
+        Sun, 5 Feb 2023 08:49:24 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD1A51B32A;
+        Sun,  5 Feb 2023 05:49:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
+        s=s31663417; t=1675604935;
+        bh=sh2QK16ajiIUZ6sLRB8xaX+Lgaf861SAzsVejT9xz+I=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=KcJMHlzX3R8SjCCXgm78d8voqX09aSkxNgCFlBRxKfmGXRfxTt6oqz6PvQH1brKEj
+         VuhhutKNzPdJjeCW9pTSaVOrht3k+9J1XE04nQIVZvMuEjT/KAh0akJGMh1zpqd/CE
+         qAHCtvTTI3/6U2FqDtooxfncGcj3blA3GRd/BHUjrYdPClw4BEPF+Kh5xmES9pglEH
+         x3JlF+Rz05AWuucUsazS/kBYtiMKriIBQUHAEvNIdf6w7Yy3+o/OGG55CertQPgJcE
+         VeaD8ugb3/klDqtxQ/CTbZfoI9NHduiItb5oYJyxO3hOpvrr9HIrEfwmuEH9Ctpra9
+         q7MupmA2FfsXA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [80.245.77.40] ([80.245.77.40]) by web-mail.gmx.net
+ (3c-app-gmx-bs34.server.lan [172.19.170.86]) (via HTTP); Sun, 5 Feb 2023
+ 14:48:55 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v7 4/6] drm/tidss: Add support to configure OLDI mode for
- am625-dss
-Content-Language: en-US
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jyri Sarha <jyri.sarha@iki.fi>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-CC:     DRI Development List <dri-devel@lists.freedesktop.org>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rahul T R <r-ravikumar@ti.com>,
-        Devarsh Thakkar <devarsht@ti.com>,
-        Jai Luthra <j-luthra@ti.com>,
-        Jayesh Choudhary <j-choudhary@ti.com>
-References: <20230125113529.13952-1-a-bhatia1@ti.com>
- <20230125113529.13952-5-a-bhatia1@ti.com>
- <d852f997-aa40-390d-bca1-ec9bb330049d@ideasonboard.com>
-From:   Aradhya Bhatia <a-bhatia1@ti.com>
-In-Reply-To: <d852f997-aa40-390d-bca1-ec9bb330049d@ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Message-ID: <trinity-757008e9-a0a8-4d44-8b0a-53efa718218e-1675604935206@3c-app-gmx-bs34>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Frank Wunderlich <frank-w@public-files.de>
+Cc:     Vladimir Oltean <olteanv@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>
+Subject: Aw: Re: [BUG] vlan-aware bridge breaks vlan on another port on same
+ gmac
+Content-Type: text/plain; charset=UTF-8
+Date:   Sun, 5 Feb 2023 14:48:55 +0100
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <trinity-4103b9e0-48e7-4de5-8757-21670a613f64-1675182218246@3c-app-gmx-bs58>
+References: <trinity-e6294d28-636c-4c40-bb8b-b523521b00be-1674233135062@3c-app-gmx-bs36>
+ <20230120172132.rfo3kf4fmkxtw4cl@skbuf>
+ <trinity-b0df6ff8-cceb-4aa5-a26f-41bc04dc289c-1674303103108@3c-app-gmx-bap60>
+ <20230121122223.3kfcwxqtqm3b6po5@skbuf>
+ <trinity-7c2af652-d3f8-4086-ba12-85cd18cd6a1a-1674304362789@3c-app-gmx-bap60>
+ <20230121133549.vibz2infg5jwupdc@skbuf>
+ <trinity-cbf3ad23-15c0-4c77-828b-94c76c1785a1-1674310370120@3c-app-gmx-bap60>
+ <20230130125813.asx5qtm6ttuwdobo@skbuf>
+ <trinity-4103b9e0-48e7-4de5-8757-21670a613f64-1675182218246@3c-app-gmx-bs58>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:i9+kEGc2y10RVtdALC/xZZssnriEBF6wVa+EtPjQIreNdNdozAPjre4Xv+Ec7Iyk7ydSx
+ wxl7Q8JSNDBNXILO9vqadmACZNnwgzIt8UoMyVWTLz3bYBz8PtLs57OugiHtepfUV4EwIZq/WDYA
+ HXetFjsruxTwVtoSJrbAibh0CekUBZRrHdbgAkVirBzfvAdqZI0vL15HJyTSTneHgjckptYp06bP
+ f96vJZoUCv9hGVHvIT+22rRwRAaE8nFsFmxfGqa23LdrK51k5pobqA+LZY5IZ0DmgvhrgPTs0vlS
+ ks=
+UI-OutboundReport: notjunk:1;M01:P0:efn2t2RjW/A=;ZWZ6kchknbt+Py7TnVTAMZ607vh
+ kR7/lYhMaGoCBQzdkVYm2Zw3s9McyQHXPnhN5Q+OttbWm+YlIB7lZ/ytiBC94NFZBnpv3illw
+ i/QWjbhNdfsImSovXPubG+7IFlKi/MBhbmWnutj1/5vH2CbgoZ2ZZ4xlLuQY0+1jR67Mh/Hzi
+ iTEaACrd0Xw4FdB0Kl90qypnFI5fjoTXay1pp8WSSeWLCq1aRxXiVHfYeR4ARZCYxjIPogdWO
+ vh7V3anz86QmUr6fx9eqwhF3ko/tusPtbw7irj7Rqae9lcJygHjmoLLS8NIx0B1DF4IZ3HX5f
+ g2mz+QiXpl3QC1ZiWY25FK3MIiauA7jojUI19eHIDF+hakQ7UpHQKPWJlq7s8Rx0SRbpS4bpz
+ +Qw0bt4sK8LqKfcceEecZ9TtwPOfo6gwXMU8DQkLvDgBHh6IFuX0ljxB4VkQwD/4I+albLA5h
+ ONcYWYvT8P11+djj0DN0UerbXsl1Bte1qTHDVuT90B1QP2hLWSO2zcFnGaJD4dudwKTAFowrq
+ xnaskuX27zdF5eUoAasUzMdcn0aLAq/hWdLCQVdvV6F8B2BMYcjRxSYBCmtdNDq8fGP1YcVxM
+ 48NchBkBBD5RqSUqu6wMCGQVCsWUuGc9fd5ylPeHESD748Ek3hQ0J347BFbEn0aU++cnoG8r4
+ 8gNny3Jq2QsxU9b+FHHBvd4/0voH/rabz8D874AFW7yZ92o3FPIgP8k3k2JDSeHkCZG7iwoUS
+ OPYprVEcsIn5XAIB12sDUagrAIbgr3vPGaEnZAlguF1fKQgtPiAAvAvMszchnEb9WiWKeCF9p
+ FmHOjmG3+Kv+gH0V7V76F+pgGjYfx8yoFcRA04pqnQV+M=
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,481 +92,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tomi,
+Hi,
 
-On 03-Feb-23 20:42, Tomi Valkeinen wrote:
-> On 25/01/2023 13:35, Aradhya Bhatia wrote:
->> The newer version of DSS (AM625-DSS) has 2 OLDI TXes at its disposal.
->> These can be configured to support the following modes:
->>
->> 1. OLDI_SINGLE_LINK_SINGLE_MODE
->> Single Output over OLDI 0.
->> +------+        +---------+      +-------+
->> |      |        |         |      |       |
->> | CRTC +------->+ ENCODER +----->| PANEL |
->> |      |        |         |      |       |
->> +------+        +---------+      +-------+
->>
->> 2. OLDI_SINGLE_LINK_CLONE_MODE
->> Duplicate Output over OLDI 0 and 1.
->> +------+        +---------+      +-------+
->> |      |        |         |      |       |
->> | CRTC +---+--->| ENCODER +----->| PANEL |
->> |      |   |    |         |      |       |
->> +------+   |    +---------+      +-------+
->>             |
->>             |    +---------+      +-------+
->>             |    |         |      |       |
->>             +--->| ENCODER +----->| PANEL |
->>                  |         |      |       |
->>                  +---------+      +-------+
->>
->> 3. OLDI_DUAL_LINK_MODE
->> Combined Output over OLDI 0 and 1.
->> +------+        +---------+      +-------+
->> |      |        |         +----->|       |
->> | CRTC +------->+ ENCODER |      | PANEL |
->> |      |        |         +----->|       |
->> +------+        +---------+      +-------+
->>
->> Following the above pathways for different modes, 2 encoder/panel-bridge
->> pipes get created for clone mode, and 1 pipe in cases of single link and
->> dual link mode.
->>
->> Add support for confguring the OLDI modes using OF and LVDS DRM helper
->> functions.
->>
->> Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
->> ---
->>   drivers/gpu/drm/tidss/tidss_dispc.c   |  24 ++-
->>   drivers/gpu/drm/tidss/tidss_dispc.h   |  12 ++
->>   drivers/gpu/drm/tidss/tidss_drv.h     |   3 +
->>   drivers/gpu/drm/tidss/tidss_encoder.c |   4 +-
->>   drivers/gpu/drm/tidss/tidss_encoder.h |   3 +-
->>   drivers/gpu/drm/tidss/tidss_kms.c     | 221 ++++++++++++++++++++++++--
->>   6 files changed, 245 insertions(+), 22 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/tidss/tidss_dispc.c b/drivers/gpu/drm/tidss/tidss_dispc.c
->> index b55ccbcaa67f..37a73e309330 100644
->> --- a/drivers/gpu/drm/tidss/tidss_dispc.c
->> +++ b/drivers/gpu/drm/tidss/tidss_dispc.c
->> @@ -88,6 +88,8 @@ const struct dispc_features dispc_k2g_feats = {
->>         .subrev = DISPC_K2G,
->>   +    .has_oldi = false,
->> +
->>       .common = "common",
->>         .common_regs = tidss_k2g_common_regs,
->> @@ -166,6 +168,8 @@ const struct dispc_features dispc_am625_feats = {
->>         .subrev = DISPC_AM625,
->>   +    .has_oldi = true,
->> +
->>       .common = "common",
->>       .common_regs = tidss_am65x_common_regs,
->>   @@ -218,6 +222,8 @@ const struct dispc_features dispc_am65x_feats = {
->>         .subrev = DISPC_AM65X,
->>   +    .has_oldi = true,
->> +
->>       .common = "common",
->>       .common_regs = tidss_am65x_common_regs,
->>   @@ -309,6 +315,8 @@ const struct dispc_features dispc_j721e_feats = {
->>         .subrev = DISPC_J721E,
->>   +    .has_oldi = false,
->> +
->>       .common = "common_m",
->>       .common_regs = tidss_j721e_common_regs,
->>   @@ -361,6 +369,8 @@ struct dispc_device {
->>         struct dss_vp_data vp_data[TIDSS_MAX_VPS];
->>   +    enum dispc_oldi_modes oldi_mode;
->> +
->>       u32 *fourccs;
->>       u32 num_fourccs;
->>   @@ -1963,6 +1973,12 @@ const u32 *dispc_plane_formats(struct dispc_device *dispc, unsigned int *len)
->>       return dispc->fourccs;
->>   }
->>   +void dispc_set_oldi_mode(struct dispc_device *dispc,
->> +             enum dispc_oldi_modes oldi_mode)
->> +{
->> +    dispc->oldi_mode = oldi_mode;
->> +}
->> +
->>   static s32 pixinc(int pixels, u8 ps)
->>   {
->>       if (pixels == 1)
->> @@ -2647,7 +2663,7 @@ int dispc_runtime_resume(struct dispc_device *dispc)
->>           REG_GET(dispc, DSS_SYSSTATUS, 2, 2),
->>           REG_GET(dispc, DSS_SYSSTATUS, 3, 3));
->>   -    if (dispc->feat->subrev == DISPC_AM65X)
->> +    if (dispc->feat->has_oldi)
->>           dev_dbg(dispc->dev, "OLDI RESETDONE %d,%d,%d\n",
->>               REG_GET(dispc, DSS_SYSSTATUS, 5, 5),
->>               REG_GET(dispc, DSS_SYSSTATUS, 6, 6),
->> @@ -2688,7 +2704,7 @@ static int dispc_iomap_resource(struct platform_device *pdev, const char *name,
->>       return 0;
->>   }
->>   -static int dispc_init_am65x_oldi_io_ctrl(struct device *dev,
->> +static int dispc_init_am6xx_oldi_io_ctrl(struct device *dev,
->>                        struct dispc_device *dispc)
->>   {
->>       dispc->oldi_io_ctrl =
->> @@ -2827,8 +2843,8 @@ int dispc_init(struct tidss_device *tidss)
->>           dispc->vp_data[i].gamma_table = gamma_table;
->>       }
->>   -    if (feat->subrev == DISPC_AM65X) {
->> -        r = dispc_init_am65x_oldi_io_ctrl(dev, dispc);
->> +    if (feat->has_oldi) {
->> +        r = dispc_init_am6xx_oldi_io_ctrl(dev, dispc);
->>           if (r)
->>               return r;
->>       }
->> diff --git a/drivers/gpu/drm/tidss/tidss_dispc.h b/drivers/gpu/drm/tidss/tidss_dispc.h
->> index 971f2856f015..880bc7de68b3 100644
->> --- a/drivers/gpu/drm/tidss/tidss_dispc.h
->> +++ b/drivers/gpu/drm/tidss/tidss_dispc.h
->> @@ -64,6 +64,15 @@ enum dispc_dss_subrevision {
->>       DISPC_J721E,
->>   };
->>   +enum dispc_oldi_modes {
->> +    OLDI_MODE_SINGLE_LINK,        /* Single output over OLDI 0. */
->> +    OLDI_MODE_CLONE_SINGLE_LINK,    /* Cloned output over OLDI 0 and 1. */
->> +    OLDI_MODE_DUAL_LINK,        /* Combined output over OLDI 0 and 1. */
->> +    OLDI_MODE_OFF,            /* OLDI TXes not connected in OF. */
->> +    OLDI_MODE_UNSUPPORTED,        /* Unsupported OLDI configuration in OF. */
->> +    OLDI_MODE_UNAVAILABLE,        /* OLDI TXes not available in SoC. */
->> +};
->> +
->>   struct dispc_features {
->>       int min_pclk_khz;
->>       int max_pclk_khz[DISPC_PORT_MAX_BUS_TYPE];
->> @@ -72,6 +81,8 @@ struct dispc_features {
->>         enum dispc_dss_subrevision subrev;
->>   +    bool has_oldi;
->> +
->>       const char *common;
->>       const u16 *common_regs;
->>       u32 num_vps;
->> @@ -131,6 +142,7 @@ int dispc_plane_setup(struct dispc_device *dispc, u32 hw_plane,
->>                 u32 hw_videoport);
->>   int dispc_plane_enable(struct dispc_device *dispc, u32 hw_plane, bool enable);
->>   const u32 *dispc_plane_formats(struct dispc_device *dispc, unsigned int *len);
->> +void dispc_set_oldi_mode(struct dispc_device *dispc, enum dispc_oldi_modes oldi_mode);
->>     int dispc_init(struct tidss_device *tidss);
->>   void dispc_remove(struct tidss_device *tidss);
->> diff --git a/drivers/gpu/drm/tidss/tidss_drv.h b/drivers/gpu/drm/tidss/tidss_drv.h
->> index 0ce7ee5ccd5b..58892f065c16 100644
->> --- a/drivers/gpu/drm/tidss/tidss_drv.h
->> +++ b/drivers/gpu/drm/tidss/tidss_drv.h
->> @@ -13,6 +13,9 @@
->>   #define TIDSS_MAX_PLANES 4
->>   #define TIDSS_MAX_OUTPUT_PORTS 4
->>   +/* For AM625-DSS with 2 OLDI TXes */
->> +#define TIDSS_MAX_BRIDGES_PER_PIPE    2
->> +
->>   typedef u32 dispc_irq_t;
->>     struct tidss_device {
->> diff --git a/drivers/gpu/drm/tidss/tidss_encoder.c b/drivers/gpu/drm/tidss/tidss_encoder.c
->> index 0d4865e9c03d..bd2a7358d7b0 100644
->> --- a/drivers/gpu/drm/tidss/tidss_encoder.c
->> +++ b/drivers/gpu/drm/tidss/tidss_encoder.c
->> @@ -70,7 +70,8 @@ static const struct drm_encoder_funcs encoder_funcs = {
->>   };
->>     struct drm_encoder *tidss_encoder_create(struct tidss_device *tidss,
->> -                     u32 encoder_type, u32 possible_crtcs)
->> +                     u32 encoder_type, u32 possible_crtcs,
->> +                     u32 possible_clones)
->>   {
->>       struct drm_encoder *enc;
->>       int ret;
->> @@ -80,6 +81,7 @@ struct drm_encoder *tidss_encoder_create(struct tidss_device *tidss,
->>           return ERR_PTR(-ENOMEM);
->>         enc->possible_crtcs = possible_crtcs;
->> +    enc->possible_clones = possible_clones;
->>         ret = drm_encoder_init(&tidss->ddev, enc, &encoder_funcs,
->>                      encoder_type, NULL);
->> diff --git a/drivers/gpu/drm/tidss/tidss_encoder.h b/drivers/gpu/drm/tidss/tidss_encoder.h
->> index ace877c0e0fd..01c62ba3ef16 100644
->> --- a/drivers/gpu/drm/tidss/tidss_encoder.h
->> +++ b/drivers/gpu/drm/tidss/tidss_encoder.h
->> @@ -12,6 +12,7 @@
->>   struct tidss_device;
->>     struct drm_encoder *tidss_encoder_create(struct tidss_device *tidss,
->> -                     u32 encoder_type, u32 possible_crtcs);
->> +                     u32 encoder_type, u32 possible_crtcs,
->> +                     u32 possible_clones);
->>     #endif
->> diff --git a/drivers/gpu/drm/tidss/tidss_kms.c b/drivers/gpu/drm/tidss/tidss_kms.c
->> index d449131935d2..8322ee6310bf 100644
->> --- a/drivers/gpu/drm/tidss/tidss_kms.c
->> +++ b/drivers/gpu/drm/tidss/tidss_kms.c
->> @@ -13,6 +13,7 @@
->>   #include <drm/drm_of.h>
->>   #include <drm/drm_panel.h>
->>   #include <drm/drm_vblank.h>
->> +#include <linux/of.h>
->>     #include "tidss_crtc.h"
->>   #include "tidss_dispc.h"
->> @@ -104,26 +105,129 @@ static const struct drm_mode_config_funcs mode_config_funcs = {
->>       .atomic_commit = drm_atomic_helper_commit,
->>   };
->>   +static enum dispc_oldi_modes tidss_get_oldi_mode(struct tidss_device *tidss)
->> +{
->> +    int pixel_order;
->> +    enum dispc_oldi_modes oldi_mode;
->> +    struct device_node *oldi0_port, *oldi1_port;
->> +
->> +    /*
->> +     * For am625-dss, the OLDI ports are expected at port reg = 0 and 2,
->> +     * and for am65x-dss, the OLDI port is expected only at port reg = 0.
->> +     */
->> +    const u32 portnum_oldi0 = 0, portnum_oldi1 = 2;
->> +
->> +    oldi0_port = of_graph_get_port_by_id(tidss->dev->of_node, portnum_oldi0);
->> +    oldi1_port = of_graph_get_port_by_id(tidss->dev->of_node, portnum_oldi1);
->> +
->> +    if (!(oldi0_port || oldi1_port)) {
->> +        /* Keep OLDI TXes OFF if neither OLDI port is present. */
->> +        oldi_mode = OLDI_MODE_OFF;
->> +    } else if (oldi0_port && !oldi1_port) {
->> +        /*
->> +         * OLDI0 port found, but not OLDI1 port. Setting single
->> +         * link output mode.
->> +         */
->> +        oldi_mode = OLDI_MODE_SINGLE_LINK;
->> +    } else if (!oldi0_port && oldi1_port) {
->> +        /*
->> +         * The 2nd OLDI TX cannot be operated alone. This use case is
->> +         * not supported in the HW. Since the pins for OLDIs 0 and 1 are
->> +         * separate, one could theoretically set a clone mode over OLDIs
->> +         * 0 and 1 and just simply not use the OLDI 0. This is a hacky
->> +         * way to enable only OLDI TX 1 and hence is not officially
->> +         * supported.
->> +         */
->> +        dev_warn(tidss->dev,
->> +             "Single Mode over OLDI 1 is not supported in HW.\n");
->> +        oldi_mode = OLDI_MODE_UNSUPPORTED;
->> +    } else {
->> +        /*
->> +         * OLDI Ports found for both the OLDI TXes. The DSS is to be
->> +         * configured in either Dual Link or Clone Mode.
->> +         */
->> +        pixel_order = drm_of_lvds_get_dual_link_pixel_order(oldi0_port,
->> +                                    oldi1_port);
->> +        switch (pixel_order) {
->> +        case -EINVAL:
->> +            /*
->> +             * The dual link properties were not found in at least
->> +             * one of the sink nodes. Since 2 OLDI ports are present
->> +             * in the DT, it can be safely assumed that the required
->> +             * configuration is Clone Mode.
->> +             */
->> +            oldi_mode = OLDI_MODE_CLONE_SINGLE_LINK;
->> +            break;
->> +
->> +        case DRM_LVDS_DUAL_LINK_EVEN_ODD_PIXELS:
->> +            /*
->> +             * Note that the OLDI TX 0 transmits the odd set of
->> +             * pixels while the OLDI TX 1 transmits the even set.
->> +             * This is a fixed configuration in the HW and an cannot
->> +             * be change via SW.
->> +             */
->> +            dev_warn(tidss->dev,
->> +                 "EVEN-ODD Dual-Link Mode is not supported in HW.\n");
->> +            oldi_mode = OLDI_MODE_UNSUPPORTED;
->> +            break;
->> +
->> +        case DRM_LVDS_DUAL_LINK_ODD_EVEN_PIXELS:
->> +            oldi_mode = OLDI_MODE_DUAL_LINK;
->> +            break;
->> +
->> +        default:
->> +            oldi_mode = OLDI_MODE_UNSUPPORTED;
->> +            break;
->> +        }
->> +    }
->> +
->> +    of_node_put(oldi0_port);
->> +    of_node_put(oldi1_port);
->> +
->> +    return oldi_mode;
->> +}
->> +
->>   static int tidss_dispc_modeset_init(struct tidss_device *tidss)
->>   {
->>       struct device *dev = tidss->dev;
->>       unsigned int fourccs_len;
->>       const u32 *fourccs = dispc_plane_formats(tidss->dispc, &fourccs_len);
->> -    unsigned int i;
->> +    unsigned int i, j;
->>         struct pipe {
->>           u32 hw_videoport;
->> -        struct drm_bridge *bridge;
->> +        struct drm_bridge *bridge[TIDSS_MAX_BRIDGES_PER_PIPE];
->>           u32 enc_type;
->> +        u32 num_bridges;
->>       };
->>         const struct dispc_features *feat = tidss->feat;
->>       u32 output_ports = feat->num_output_ports;
->>       u32 max_planes = feat->num_planes;
->>   -    struct pipe pipes[TIDSS_MAX_VPS];
->> +    struct pipe pipes[TIDSS_MAX_VPS] = {0};
->> +
->>       u32 num_pipes = 0;
->>       u32 crtc_mask;
->> +    enum dispc_oldi_modes oldi_mode = OLDI_MODE_UNAVAILABLE;
->> +    u32 num_oldi = 0;
->> +    u32 num_encoders = 0;
->> +    u32 oldi_pipe_index = 0;
->> +
->> +    if (feat->has_oldi) {
->> +        oldi_mode = tidss_get_oldi_mode(tidss);
->> +
->> +        if ((oldi_mode == OLDI_MODE_DUAL_LINK ||
->> +             oldi_mode == OLDI_MODE_CLONE_SINGLE_LINK) &&
->> +            feat->subrev == DISPC_AM65X) {
->> +            dev_warn(tidss->dev,
->> +                 "am65x-dss does not support this OLDI mode.\n");
->> +
->> +            oldi_mode = OLDI_MODE_UNSUPPORTED;
->> +        }
-> 
-> Shouldn't OLDI_MODE_UNSUPPORTED be handled as an error? It means the DT
-> is faulty, doesn't it? Maybe it could even be renamed to
-> OLDI_MODE_ERROR. Or tidss_get_oldi_mode() could return a negative error
-> code.
-> 
+sorry for the delay, i'm very busy recently :(
 
-The idea was to let the framework continue configuring the 2nd videoport
-for DPI, even if the OLDI DT is wrong. But I have come across more
-examples recently where that is not the case. DT error for one pipe has
-resulted in returning of an error code.
+noticed that i missed 2 commands ("bridge vlan add vid ..." below) when te=
+sting the vlan-aware bridge...now both ports are working with vlan-tagging=
+...the one inside (lan0) the bridge (lanbr0) and the one outside (wan).
 
-Will make the change.
+BRIDGE=3Dlanbr0
+netif=3Dlan0
+vid=3D500
+#ip link add name ${BRIDGE} type bridge
+ip link add name ${BRIDGE} type bridge vlan_filtering 1 vlan_default_pvid =
+1
+ip link set ${BRIDGE} up
+ip link set $netif master ${BRIDGE}
+ip link set $netif up
+bridge vlan add vid $vid dev ${BRIDGE} self
+bridge vlan add vid $vid dev $netif
 
->> +
->> +        dispc_set_oldi_mode(tidss->dispc, oldi_mode);
->> +    }
-> 
-> Would it be better to move the above dispc_set_oldi_mode() to be outside
-> the if block? Then oldi mode would be set to OLDI_MODE_UNAVAILABLE on
-> SoCs that don't have OLDI.
+#extract vlan from bridge to own netdev
+ip link add link ${BRIDGE} name vlan$vid type vlan id $vid
+ip a a 192.168.110.5/24 dev vlan$vid
+ip link set vlan$vid up
 
-Ahh, yes! Will make the change.
+btw can i see somehow if a bridge is vlan-aware (the flag itself)..."bridg=
+e vlan" command also lists non-vlan-aware bridges with vlan-id "1 pvid egr=
+ess untagged"
 
-> 
-> tidss_get_oldi_mode and dispc_set_oldi_mode sound like opposites, but
-> they're totally different things. Maybe tidss_get_oldi_mode should
-> rather be something about parsing oldi dt properties or such.
+so vladimir your last patch works well, thx for it. you can add my tested-=
+by when upstreaming
 
-Okay! Is 'tidss_parse_oldi_properties' acceptable? This is just
-something I came up with now. I can think of more if this is not good.
-
-> 
->>       /* first find all the connected panels & bridges */
->>   @@ -179,10 +283,87 @@ static int tidss_dispc_modeset_init(struct tidss_device *tidss)
->>               }
->>           }
->>   -        pipes[num_pipes].hw_videoport = i;
->> -        pipes[num_pipes].bridge = bridge;
->> -        pipes[num_pipes].enc_type = enc_type;
->> -        num_pipes++;
->> +        if (feat->output_port_bus_type[i] == DISPC_PORT_OLDI) {
->> +            switch (oldi_mode) {
->> +            case OLDI_MODE_UNSUPPORTED:
->> +            case OLDI_MODE_OFF:
->> +                /*
->> +                 * Either the OLDI ports are not connected in
->> +                 * OF, or their configuration mode is not
->> +                 * supported.
->> +                 * In both the cases, the OLDI sink ports shall
->> +                 * not be logically connected to DSS ports.
->> +                 *
->> +                 * However, since other dss ports might still
->> +                 * be in use (eg, for DPI), the driver shall
->> +                 * continue to find the next connected sink in
->> +                 * OF.
->> +                 */
->> +                dev_dbg(dev, "OLDI disconnected on port %d\n", i);
->> +                continue;
->> +
->> +            case OLDI_MODE_DUAL_LINK:
->> +                /*
->> +                 * The 2nd OLDI port of a dual-link sink does
->> +                 * not require a separate bridge entity.
->> +                 */
->> +                if (num_oldi) {
-> 
-> I think if (num_oldi > 0) makes it more readable.
-
-Alright!
-
-> 
->> +                    drm_panel_bridge_remove(bridge);
->> +                    continue;
->> +                }
->> +
->> +                fallthrough;
->> +
->> +            case OLDI_MODE_CLONE_SINGLE_LINK:
->> +            case OLDI_MODE_SINGLE_LINK:
->> +                /*
->> +                 * Setting up pipe parameters when 1st OLDI
->> +                 * port is detected.
->> +                 */
->> +                if (!num_oldi) {
-> 
-> And here if (num_oldi == 0).
-Okay!
-
-> 
->> +                    pipes[num_pipes].hw_videoport = i;
->> +                    pipes[num_pipes].enc_type = enc_type;
->> +
->> +                    /*
->> +                     * Saving the pipe index in case its
->> +                     * required for 2nd OLDI Port.
->> +                     */
->> +                    oldi_pipe_index = num_pipes;
->> +
->> +                    /*
->> +                     * Incrememnt num_pipe when 1st oldi
->> +                     * port is discovered. For the 2nd OLDI
->> +                     * port, num_pipe need not be
->> +                     * incremented because the 2nd
->> +                     * Encoder-to-Bridge connection will
->> +                     * still be the part of the first OLDI
->> +                     * Port pipe.
->> +                     */
->> +                    num_pipes++;
->> +                }
->> +
->> +                /*
->> +                 * Bridge is required to be added only if the
->> +                 * detected port is the first OLDI port (of any
->> +                 * mode) or a subsequent port in Clone Mode.
->> +                 */
-> 
-> If I understand right, you're saying that bridge is not required to be
-> added for the second port for dual link? It maybe be clearer to state
-> that. But if so, isn't this still always adding the bridge here, for all
-> modes? Or what is the comment referring to?
-> 
-
-Well, yes. I am saying that the bridge should be added only when either
-one of the following 2 DT cases are detected.
-
-i.  First oldi DT (of any mode, including clone) OR
-ii. Second oldi DT only under clone mode
-
-Bridge is not required for the 2nd DT connection of Dual Link mode.
-I will make the comment clearer.
-
-If the loop is parsing the port under dual link mode, this part of the
-code will not be reached because of the "continue" clause above under
-the OLDI_MODE_DUAL_LINK case. Moreover, there won't be a 2nd port to
-parse if the mode is single link.
-
-That said, I can provide an if condition which ensures that, that code
-is only run when above conditions are met.
+regards Frank
 
 
-Regards
-Aradhya
+> Gesendet: Dienstag, 31. Januar 2023 um 17:23 Uhr
+> Von: "Frank Wunderlich" <frank-w@public-files.de>
+> An: "Vladimir Oltean" <olteanv@gmail.com>
+> Cc: "Andrew Lunn" <andrew@lunn.ch>, "Florian Fainelli" <f.fainelli@gmail=
+.com>, "David S. Miller" <davem@davemloft.net>, "Eric Dumazet" <edumazet@g=
+oogle.com>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redh=
+at.com>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, "Landen Cha=
+o" <Landen.Chao@mediatek.com>, "Sean Wang" <sean.wang@mediatek.com>, "DENG=
+ Qingfang" <dqfext@gmail.com>, "Matthias Brugger" <matthias.bgg@gmail.com>=
+, "Daniel Golle" <daniel@makrotopia.org>
+> Betreff: Aw: Re: [BUG] vlan-aware bridge breaks vlan on another port on =
+same gmac
+>
+> Hi Vladimir,
+>
+>
+> > Gesendet: Montag, 30. Januar 2023 um 13:58 Uhr
+> > Von: "Vladimir Oltean" <olteanv@gmail.com>
+> > Hi Frank,
+> > Sorry for the delay and thanks again for testing.
+> >
+> > I simply didn't have time to sit down with the hardware documentation
+> > and (re)understand the concepts governing this switch.
+>
+> no problem, same here...not have every day time to dive into it :)
+>
+> > I now have the patch below which should have everything working. Would
+> > you mind testing it?
+>
+> thanks for your Patch, but unfortunately it looks like does not change b=
+ehaviour (have reverted all prevously applied patches,
+> only have felix series in).
+>
+> i can ping over software-vlan on wan-port (and see tagged packets on oth=
+er side), till the point i setup the vlan-aware bridge over lan-ports. pin=
+g works some time (imho till arp-cache is cleared) and i see untagged pack=
+ets leaving wan-port (seen on other end) which should be tagged (wan.110).
+>
+> and before anything ask: yes, i have set different mac to wan-port (and =
+its vlan-interfaces) and lanbr0
+>
+> 15: lanbr0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue s=
+tate DOWN group default qlen 1000
+>     link/ether 96:3f:c5:84:65:f0 brd ff:ff:ff:ff:ff:ff
+> 17: wan.140@wan: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueu=
+e state UP group default qlen 1000
+>     link/ether 02:11:02:03:01:40 brd ff:ff:ff:ff:ff:ff
+>     inet 192.168.140.1/24 brd 192.168.140.255 scope global wan.140
+>        valid_lft forever preferred_lft forever
+>     inet6 fe80::11:2ff:fe03:140/64 scope link
+>        valid_lft forever preferred_lft forever
+> 18: wan.110@wan: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueu=
+e state UP group default qlen 1000
+>     link/ether 02:11:02:03:01:10 brd ff:ff:ff:ff:ff:ff
+>     inet 192.168.110.1/24 brd 192.168.110.255 scope global wan.110
+>        valid_lft forever preferred_lft forever
+>     inet6 fe80::11:2ff:fe03:110/64 scope link
+>        valid_lft forever preferred_lft forever
+>
+> have not yet defined any vlans in the bridge...only set vlan_awareness..=
+.maybe i need to add the wan-vlan
+> to the lan bridge too to pass filtering?
+>
+> i'm unsure if tcpdump on the host interface should see vlan-traffic too =
+(but do not show the vlan itself)...
+> in working state i see icmp in both tcpdump modes (pinging the full time=
+ without the bridge enabled only
+> changed tcpdump on the other side):
+>
+> # tcpdump -nni lanbr0 | grep '\.110\.'
+>
+> 17:13:36.071047 IP 192.168.110.1 > 192.168.110.3: ICMP echo request, id =
+1617, seq 47, length 64
+> 17:13:36.071290 IP 192.168.110.3 > 192.168.110.1: ICMP echo reply, id 16=
+17, seq 47, length 64
+>
+> and
+>
+> tcpdump -nni lanbr0 -e vlan | grep '\.110\.'
+>
+> 17:16:35.032417 02:11:02:03:01:10 > 08:02:00:00:00:10, ethertype 802.1Q =
+(0x8100), length 102: vlan 110, p 0, ethertype IPv4, 192.168.110.1 > 192.1=
+68.110.3: ICMP echo request, id 1617, seq 219, length 64
+> 17:16:35.032609 08:02:00:00:00:10 > 02:11:02:03:01:10, ethertype 802.1Q =
+(0x8100), length 102: vlan 110, p 0, ethertype IPv4, 192.168.110.3 > 192.1=
+68.110.1: ICMP echo reply, id 1617, seq 219, length 64
+>
+> after the vlan_aware bridge goes up i see packets in the non-vlan-mode
+>
+> if needed here is my current codebase:
+> https://github.com/frank-w/BPI-Router-Linux/commits/6.2-rc
+>
+> regards Frank
