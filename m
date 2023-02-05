@@ -2,20 +2,20 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73A4968AF8C
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 12:30:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8AC368AF8B
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 12:30:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229580AbjBELaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 06:30:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39028 "EHLO
+        id S229653AbjBELaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 06:30:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbjBELaA (ORCPT
+        with ESMTP id S229604AbjBEL37 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 06:30:00 -0500
+        Sun, 5 Feb 2023 06:29:59 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 311A465B1
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E071A49D
         for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 03:29:58 -0800 (PST)
-Date:   Sun, 05 Feb 2023 11:29:53 -0000
+Date:   Sun, 05 Feb 2023 11:29:54 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1675596594;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=fqpnL/aOlXK8Sq7p0d/QNBEV+TTbDlmRM2nfv5WeT80=;
-        b=MuJIwxLAh4p8QXMc9tsgvAaW1PYiHZp7VYsUZzKJGIxngRyp2SoPUMZlAf91H4bW+Mc++e
-        +I4k3eVlkrqVj0X+4hijzrpOeznusQa2HrvZSueT6WVcxiAMioBDbfTZZr9W34KWb9MPPp
-        WbjGoDTiE7SnEBwm2a9dEIISSDUZswg3VWJjK7wndkp976+j7CUMIKI3QyLLJw0239o7pK
-        YjtIl25idQidcDUUuGknn33d5Cw7MElQYxgTvF3ayUMVuvrEQmRNWfEvlaSbZlJnjN/xln
-        1t9SxZdAk/BotmGn2JJFAsozJvUduiiHpcXkvPLuH2jZi7h9b76dU7CWDGqD7Q==
+        bh=1BJ78ZEelCzpc4Lc9YVZG0Euqu42pu8LhXEZqrUB7Ns=;
+        b=Rasqx7Sxp3/GIb1lYBsexPs3s9q4eme/Q2h+BWhkTfXhq1qy4dGfEANF7Yf9454F0QJNrI
+        AfyozrZOoHmKuXBmTUMjpUj9mZs/xJQEjvTma3G85RjyY53wgvg2H1NJ1Kp0hzSh/w37Kt
+        wTfby3DbrLH2xP5m3GssWurE/aKLMOUDPPeoYbnIEhREEFk0UnXYpQjDVlHroed6MM1Mjs
+        UNNOseo2h9NltFTJJW34qX1dO8afeNzHyIGulZ/HjyXFhtJa0NRBmXjiOI7z6JEE6ZQIKB
+        9JbEZsSIYu5YtqOYeetxUtP6j2I47+wzhjCQ3hmkS0K7FCsLdnCDxFEDy8VHXg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1675596594;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,21 +36,22 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=fqpnL/aOlXK8Sq7p0d/QNBEV+TTbDlmRM2nfv5WeT80=;
-        b=kn2/TIkurk0DS1UiEm1my243NobN9evGQ/P9xePyokybtm3RZducJeMX/R4trN8yY6joqA
-        Nts/BA5/Db4n/PCA==
-From:   "irqchip-bot for Marc Zyngier" <tip-bot2@linutronix.de>
+        bh=1BJ78ZEelCzpc4Lc9YVZG0Euqu42pu8LhXEZqrUB7Ns=;
+        b=7HAsYgZrRw/0t35liYSeE18iINgjk+OckppEGy17a3A/sL5fEqf+pEjO+4w6yszcMId4vF
+        OJMA7/qLUndrA6Bg==
+From:   "irqchip-bot for Anup Patel" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] irqchip/apple-aic: Move over to core ipi-mux
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Hector Martin <marcan@marcan.st>, tglx@linutronix.de
-In-Reply-To: <20230103141221.772261-10-apatel@ventanamicro.com>
-References: <20230103141221.772261-10-apatel@ventanamicro.com>
+Subject: [irqchip: irq/irqchip-next] genirq: Add mechanism to multiplex a
+ single HW IPI
+Cc:     Anup Patel <apatel@ventanamicro.com>,
+        Hector Martin <marcan@marcan.st>,
+        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
+In-Reply-To: <20230103141221.772261-4-apatel@ventanamicro.com>
+References: <20230103141221.772261-4-apatel@ventanamicro.com>
 MIME-Version: 1.0
-Message-ID: <167559659394.4906.2628096463274673932.tip-bot2@tip-bot2>
+Message-ID: <167559659451.4906.16474383879130890178.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,250 +67,290 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Commit-ID:     c19f897194288ec286bb52001b9ee9551876a614
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/c19f897194288ec286bb52001b9ee9551876a614
-Author:        Marc Zyngier <maz@kernel.org>
-AuthorDate:    Tue, 03 Jan 2023 19:42:21 +05:30
+Commit-ID:     835a486cd9f55790dee9f6b67ce0057d49f15da5
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/835a486cd9f55790dee9f6b67ce0057d49f15da5
+Author:        Anup Patel <apatel@ventanamicro.com>
+AuthorDate:    Tue, 03 Jan 2023 19:42:15 +05:30
 Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Sun, 05 Feb 2023 10:58:18 
+CommitterDate: Sun, 05 Feb 2023 10:57:55 
 
-irqchip/apple-aic: Move over to core ipi-mux
+genirq: Add mechanism to multiplex a single HW IPI
 
-Now that the complexity of the AIC IPI mux has been copied into
-the core code for the benefit of the riscv architecture,
-shrink the AIC driver by the same amount by using that infrastructure.
+All RISC-V platforms have a single HW IPI provided by the INTC local
+interrupt controller. The HW method to trigger INTC IPI can be through
+external irqchip (e.g. RISC-V AIA), through platform specific device
+(e.g. SiFive CLINT timer), or through firmware (e.g. SBI IPI call).
 
-Signed-off-by: Marc Zyngier <maz@kernel.org>
+To support multiple IPIs on RISC-V, add a generic IPI multiplexing
+mechanism which help us create multiple virtual IPIs using a single
+HW IPI. This generic IPI multiplexing is inspired by the Apple AIC
+irqchip driver and it is shared by various RISC-V irqchip drivers.
+
 Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-Acked-by: Hector Martin <marcan@marcan.st>
-Link: https://lore.kernel.org/r/20230103141221.772261-10-apatel@ventanamicro.com
+Reviewed-by: Hector Martin <marcan@marcan.st>
+Tested-by: Hector Martin <marcan@marcan.st>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20230103141221.772261-4-apatel@ventanamicro.com
 ---
- drivers/irqchip/Kconfig         |   1 +-
- drivers/irqchip/irq-apple-aic.c | 161 +------------------------------
- 2 files changed, 9 insertions(+), 153 deletions(-)
+ include/linux/irq.h  |   3 +-
+ kernel/irq/Kconfig   |   5 +-
+ kernel/irq/Makefile  |   1 +-
+ kernel/irq/ipi-mux.c | 207 ++++++++++++++++++++++++++++++++++++++++++-
+ 4 files changed, 216 insertions(+)
+ create mode 100644 kernel/irq/ipi-mux.c
 
-diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-index caa952c..cbf5047 100644
---- a/drivers/irqchip/Kconfig
-+++ b/drivers/irqchip/Kconfig
-@@ -658,6 +658,7 @@ config APPLE_AIC
- 	bool "Apple Interrupt Controller (AIC)"
- 	depends on ARM64
- 	depends on ARCH_APPLE || COMPILE_TEST
-+	select GENERIC_IRQ_IPI_MUX
- 	help
- 	  Support for the Apple Interrupt Controller found on Apple Silicon SoCs,
- 	  such as the M1.
-diff --git a/drivers/irqchip/irq-apple-aic.c b/drivers/irqchip/irq-apple-aic.c
-index ae3437f..eabb3b9 100644
---- a/drivers/irqchip/irq-apple-aic.c
-+++ b/drivers/irqchip/irq-apple-aic.c
-@@ -292,7 +292,6 @@ struct aic_irq_chip {
- 	void __iomem *base;
- 	void __iomem *event;
- 	struct irq_domain *hw_domain;
--	struct irq_domain *ipi_domain;
- 	struct {
- 		cpumask_t aff;
- 	} *fiq_aff[AIC_NR_FIQ];
-@@ -307,9 +306,6 @@ struct aic_irq_chip {
+diff --git a/include/linux/irq.h b/include/linux/irq.h
+index c3eb896..b1b28af 100644
+--- a/include/linux/irq.h
++++ b/include/linux/irq.h
+@@ -1266,6 +1266,9 @@ int __ipi_send_mask(struct irq_desc *desc, const struct cpumask *dest);
+ int ipi_send_single(unsigned int virq, unsigned int cpu);
+ int ipi_send_mask(unsigned int virq, const struct cpumask *dest);
  
- static DEFINE_PER_CPU(uint32_t, aic_fiq_unmasked);
++void ipi_mux_process(void);
++int ipi_mux_create(unsigned int nr_ipi, void (*mux_send)(unsigned int cpu));
++
+ #ifdef CONFIG_GENERIC_IRQ_MULTI_HANDLER
+ /*
+  * Registers a generic IRQ handling function as the top-level IRQ handler in
+diff --git a/kernel/irq/Kconfig b/kernel/irq/Kconfig
+index b64c44a..2531f34 100644
+--- a/kernel/irq/Kconfig
++++ b/kernel/irq/Kconfig
+@@ -86,6 +86,11 @@ config GENERIC_IRQ_IPI
+ 	depends on SMP
+ 	select IRQ_DOMAIN_HIERARCHY
  
--static DEFINE_PER_CPU(atomic_t, aic_vipi_flag);
--static DEFINE_PER_CPU(atomic_t, aic_vipi_enable);
--
- static struct aic_irq_chip *aic_irqc;
- 
- static void aic_handle_ipi(struct pt_regs *regs);
-@@ -751,98 +747,8 @@ static void aic_ipi_send_fast(int cpu)
- 	isb();
- }
- 
--static void aic_ipi_mask(struct irq_data *d)
--{
--	u32 irq_bit = BIT(irqd_to_hwirq(d));
--
--	/* No specific ordering requirements needed here. */
--	atomic_andnot(irq_bit, this_cpu_ptr(&aic_vipi_enable));
--}
--
--static void aic_ipi_unmask(struct irq_data *d)
--{
--	struct aic_irq_chip *ic = irq_data_get_irq_chip_data(d);
--	u32 irq_bit = BIT(irqd_to_hwirq(d));
--
--	atomic_or(irq_bit, this_cpu_ptr(&aic_vipi_enable));
--
--	/*
--	 * The atomic_or() above must complete before the atomic_read()
--	 * below to avoid racing aic_ipi_send_mask().
--	 */
--	smp_mb__after_atomic();
--
--	/*
--	 * If a pending vIPI was unmasked, raise a HW IPI to ourselves.
--	 * No barriers needed here since this is a self-IPI.
--	 */
--	if (atomic_read(this_cpu_ptr(&aic_vipi_flag)) & irq_bit) {
--		if (static_branch_likely(&use_fast_ipi))
--			aic_ipi_send_fast(smp_processor_id());
--		else
--			aic_ic_write(ic, AIC_IPI_SEND, AIC_IPI_SEND_CPU(smp_processor_id()));
--	}
--}
--
--static void aic_ipi_send_mask(struct irq_data *d, const struct cpumask *mask)
--{
--	struct aic_irq_chip *ic = irq_data_get_irq_chip_data(d);
--	u32 irq_bit = BIT(irqd_to_hwirq(d));
--	u32 send = 0;
--	int cpu;
--	unsigned long pending;
--
--	for_each_cpu(cpu, mask) {
--		/*
--		 * This sequence is the mirror of the one in aic_ipi_unmask();
--		 * see the comment there. Additionally, release semantics
--		 * ensure that the vIPI flag set is ordered after any shared
--		 * memory accesses that precede it. This therefore also pairs
--		 * with the atomic_fetch_andnot in aic_handle_ipi().
--		 */
--		pending = atomic_fetch_or_release(irq_bit, per_cpu_ptr(&aic_vipi_flag, cpu));
--
--		/*
--		 * The atomic_fetch_or_release() above must complete before the
--		 * atomic_read() below to avoid racing aic_ipi_unmask().
--		 */
--		smp_mb__after_atomic();
--
--		if (!(pending & irq_bit) &&
--		    (atomic_read(per_cpu_ptr(&aic_vipi_enable, cpu)) & irq_bit)) {
--			if (static_branch_likely(&use_fast_ipi))
--				aic_ipi_send_fast(cpu);
--			else
--				send |= AIC_IPI_SEND_CPU(cpu);
--		}
--	}
--
--	/*
--	 * The flag writes must complete before the physical IPI is issued
--	 * to another CPU. This is implied by the control dependency on
--	 * the result of atomic_read_acquire() above, which is itself
--	 * already ordered after the vIPI flag write.
--	 */
--	if (send)
--		aic_ic_write(ic, AIC_IPI_SEND, send);
--}
--
--static struct irq_chip ipi_chip = {
--	.name = "AIC-IPI",
--	.irq_mask = aic_ipi_mask,
--	.irq_unmask = aic_ipi_unmask,
--	.ipi_send_mask = aic_ipi_send_mask,
--};
--
--/*
-- * IPI IRQ domain
-- */
--
- static void aic_handle_ipi(struct pt_regs *regs)
- {
--	int i;
--	unsigned long enabled, firing;
--
- 	/*
- 	 * Ack the IPI. We need to order this after the AIC event read, but
- 	 * that is enforced by normal MMIO ordering guarantees.
-@@ -857,27 +763,7 @@ static void aic_handle_ipi(struct pt_regs *regs)
- 		aic_ic_write(aic_irqc, AIC_IPI_ACK, AIC_IPI_OTHER);
- 	}
- 
--	/*
--	 * The mask read does not need to be ordered. Only we can change
--	 * our own mask anyway, so no races are possible here, as long as
--	 * we are properly in the interrupt handler (which is covered by
--	 * the barrier that is part of the top-level AIC handler's readl()).
--	 */
--	enabled = atomic_read(this_cpu_ptr(&aic_vipi_enable));
--
--	/*
--	 * Clear the IPIs we are about to handle. This pairs with the
--	 * atomic_fetch_or_release() in aic_ipi_send_mask(), and needs to be
--	 * ordered after the aic_ic_write() above (to avoid dropping vIPIs) and
--	 * before IPI handling code (to avoid races handling vIPIs before they
--	 * are signaled). The former is taken care of by the release semantics
--	 * of the write portion, while the latter is taken care of by the
--	 * acquire semantics of the read portion.
--	 */
--	firing = atomic_fetch_andnot(enabled, this_cpu_ptr(&aic_vipi_flag)) & enabled;
--
--	for_each_set_bit(i, &firing, AIC_NR_SWIPI)
--		generic_handle_domain_irq(aic_irqc->ipi_domain, i);
-+	ipi_mux_process();
- 
- 	/*
- 	 * No ordering needed here; at worst this just changes the timing of
-@@ -887,55 +773,24 @@ static void aic_handle_ipi(struct pt_regs *regs)
- 		aic_ic_write(aic_irqc, AIC_IPI_MASK_CLR, AIC_IPI_OTHER);
- }
- 
--static int aic_ipi_alloc(struct irq_domain *d, unsigned int virq,
--			 unsigned int nr_irqs, void *args)
-+static void aic_ipi_send_single(unsigned int cpu)
- {
--	int i;
--
--	for (i = 0; i < nr_irqs; i++) {
--		irq_set_percpu_devid(virq + i);
--		irq_domain_set_info(d, virq + i, i, &ipi_chip, d->host_data,
--				    handle_percpu_devid_irq, NULL, NULL);
--	}
--
--	return 0;
--}
--
--static void aic_ipi_free(struct irq_domain *d, unsigned int virq, unsigned int nr_irqs)
--{
--	/* Not freeing IPIs */
-+	if (static_branch_likely(&use_fast_ipi))
-+		aic_ipi_send_fast(cpu);
-+	else
-+		aic_ic_write(aic_irqc, AIC_IPI_SEND, AIC_IPI_SEND_CPU(cpu));
- }
- 
--static const struct irq_domain_ops aic_ipi_domain_ops = {
--	.alloc = aic_ipi_alloc,
--	.free = aic_ipi_free,
--};
--
- static int __init aic_init_smp(struct aic_irq_chip *irqc, struct device_node *node)
- {
--	struct irq_domain *ipi_domain;
- 	int base_ipi;
- 
--	ipi_domain = irq_domain_create_linear(irqc->hw_domain->fwnode, AIC_NR_SWIPI,
--					      &aic_ipi_domain_ops, irqc);
--	if (WARN_ON(!ipi_domain))
--		return -ENODEV;
--
--	ipi_domain->flags |= IRQ_DOMAIN_FLAG_IPI_SINGLE;
--	irq_domain_update_bus_token(ipi_domain, DOMAIN_BUS_IPI);
--
--	base_ipi = __irq_domain_alloc_irqs(ipi_domain, -1, AIC_NR_SWIPI,
--					   NUMA_NO_NODE, NULL, false, NULL);
--
--	if (WARN_ON(!base_ipi)) {
--		irq_domain_remove(ipi_domain);
-+	base_ipi = ipi_mux_create(AIC_NR_SWIPI, aic_ipi_send_single);
-+	if (WARN_ON(base_ipi <= 0))
- 		return -ENODEV;
--	}
- 
- 	set_smp_ipi_range(base_ipi, AIC_NR_SWIPI);
- 
--	irqc->ipi_domain = ipi_domain;
--
- 	return 0;
- }
- 
++# Generic IRQ IPI Mux support
++config GENERIC_IRQ_IPI_MUX
++	bool
++	depends on SMP
++
+ # Generic MSI hierarchical interrupt domain support
+ config GENERIC_MSI_IRQ
+ 	bool
+diff --git a/kernel/irq/Makefile b/kernel/irq/Makefile
+index b4f5371..f19d308 100644
+--- a/kernel/irq/Makefile
++++ b/kernel/irq/Makefile
+@@ -15,6 +15,7 @@ obj-$(CONFIG_GENERIC_IRQ_MIGRATION) += cpuhotplug.o
+ obj-$(CONFIG_PM_SLEEP) += pm.o
+ obj-$(CONFIG_GENERIC_MSI_IRQ) += msi.o
+ obj-$(CONFIG_GENERIC_IRQ_IPI) += ipi.o
++obj-$(CONFIG_GENERIC_IRQ_IPI_MUX) += ipi-mux.o
+ obj-$(CONFIG_SMP) += affinity.o
+ obj-$(CONFIG_GENERIC_IRQ_DEBUGFS) += debugfs.o
+ obj-$(CONFIG_GENERIC_IRQ_MATRIX_ALLOCATOR) += matrix.o
+diff --git a/kernel/irq/ipi-mux.c b/kernel/irq/ipi-mux.c
+new file mode 100644
+index 0000000..3a403c3
+--- /dev/null
++++ b/kernel/irq/ipi-mux.c
+@@ -0,0 +1,207 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Multiplex several virtual IPIs over a single HW IPI.
++ *
++ * Copyright The Asahi Linux Contributors
++ * Copyright (c) 2022 Ventana Micro Systems Inc.
++ */
++
++#define pr_fmt(fmt) "ipi-mux: " fmt
++#include <linux/cpu.h>
++#include <linux/init.h>
++#include <linux/irq.h>
++#include <linux/irqchip.h>
++#include <linux/irqchip/chained_irq.h>
++#include <linux/irqdomain.h>
++#include <linux/jump_label.h>
++#include <linux/percpu.h>
++#include <linux/smp.h>
++
++struct ipi_mux_cpu {
++	atomic_t			enable;
++	atomic_t			bits;
++};
++
++static struct ipi_mux_cpu __percpu *ipi_mux_pcpu;
++static struct irq_domain *ipi_mux_domain;
++static void (*ipi_mux_send)(unsigned int cpu);
++
++static void ipi_mux_mask(struct irq_data *d)
++{
++	struct ipi_mux_cpu *icpu = this_cpu_ptr(ipi_mux_pcpu);
++
++	atomic_andnot(BIT(irqd_to_hwirq(d)), &icpu->enable);
++}
++
++static void ipi_mux_unmask(struct irq_data *d)
++{
++	struct ipi_mux_cpu *icpu = this_cpu_ptr(ipi_mux_pcpu);
++	u32 ibit = BIT(irqd_to_hwirq(d));
++
++	atomic_or(ibit, &icpu->enable);
++
++	/*
++	 * The atomic_or() above must complete before the atomic_read()
++	 * below to avoid racing ipi_mux_send_mask().
++	 */
++	smp_mb__after_atomic();
++
++	/* If a pending IPI was unmasked, raise a parent IPI immediately. */
++	if (atomic_read(&icpu->bits) & ibit)
++		ipi_mux_send(smp_processor_id());
++}
++
++static void ipi_mux_send_mask(struct irq_data *d, const struct cpumask *mask)
++{
++	struct ipi_mux_cpu *icpu = this_cpu_ptr(ipi_mux_pcpu);
++	u32 ibit = BIT(irqd_to_hwirq(d));
++	unsigned long pending;
++	int cpu;
++
++	for_each_cpu(cpu, mask) {
++		icpu = per_cpu_ptr(ipi_mux_pcpu, cpu);
++
++		/*
++		 * This sequence is the mirror of the one in ipi_mux_unmask();
++		 * see the comment there. Additionally, release semantics
++		 * ensure that the vIPI flag set is ordered after any shared
++		 * memory accesses that precede it. This therefore also pairs
++		 * with the atomic_fetch_andnot in ipi_mux_process().
++		 */
++		pending = atomic_fetch_or_release(ibit, &icpu->bits);
++
++		/*
++		 * The atomic_fetch_or_release() above must complete
++		 * before the atomic_read() below to avoid racing with
++		 * ipi_mux_unmask().
++		 */
++		smp_mb__after_atomic();
++
++		/*
++		 * The flag writes must complete before the physical IPI is
++		 * issued to another CPU. This is implied by the control
++		 * dependency on the result of atomic_read() below, which is
++		 * itself already ordered after the vIPI flag write.
++		 */
++		if (!(pending & ibit) && (atomic_read(&icpu->enable) & ibit))
++			ipi_mux_send(cpu);
++	}
++}
++
++static const struct irq_chip ipi_mux_chip = {
++	.name		= "IPI Mux",
++	.irq_mask	= ipi_mux_mask,
++	.irq_unmask	= ipi_mux_unmask,
++	.ipi_send_mask	= ipi_mux_send_mask,
++};
++
++static int ipi_mux_domain_alloc(struct irq_domain *d, unsigned int virq,
++				unsigned int nr_irqs, void *arg)
++{
++	int i;
++
++	for (i = 0; i < nr_irqs; i++) {
++		irq_set_percpu_devid(virq + i);
++		irq_domain_set_info(d, virq + i, i, &ipi_mux_chip, NULL,
++				    handle_percpu_devid_irq, NULL, NULL);
++	}
++
++	return 0;
++}
++
++static const struct irq_domain_ops ipi_mux_domain_ops = {
++	.alloc		= ipi_mux_domain_alloc,
++	.free		= irq_domain_free_irqs_top,
++};
++
++/**
++ * ipi_mux_process - Process multiplexed virtual IPIs
++ */
++void ipi_mux_process(void)
++{
++	struct ipi_mux_cpu *icpu = this_cpu_ptr(ipi_mux_pcpu);
++	irq_hw_number_t hwirq;
++	unsigned long ipis;
++	unsigned int en;
++
++	/*
++	 * Reading enable mask does not need to be ordered as long as
++	 * this function is called from interrupt handler because only
++	 * the CPU itself can change it's own enable mask.
++	 */
++	en = atomic_read(&icpu->enable);
++
++	/*
++	 * Clear the IPIs we are about to handle. This pairs with the
++	 * atomic_fetch_or_release() in ipi_mux_send_mask().
++	 */
++	ipis = atomic_fetch_andnot(en, &icpu->bits) & en;
++
++	for_each_set_bit(hwirq, &ipis, BITS_PER_TYPE(int))
++		generic_handle_domain_irq(ipi_mux_domain, hwirq);
++}
++
++/**
++ * ipi_mux_create - Create virtual IPIs multiplexed on top of a single
++ * parent IPI.
++ * @nr_ipi:		number of virtual IPIs to create. This should
++ *			be <= BITS_PER_TYPE(int)
++ * @mux_send:		callback to trigger parent IPI for a particular CPU
++ *
++ * Returns first virq of the newly created virtual IPIs upon success
++ * or <=0 upon failure
++ */
++int ipi_mux_create(unsigned int nr_ipi, void (*mux_send)(unsigned int cpu))
++{
++	struct fwnode_handle *fwnode;
++	struct irq_domain *domain;
++	int rc;
++
++	if (ipi_mux_domain)
++		return -EEXIST;
++
++	if (BITS_PER_TYPE(int) < nr_ipi || !mux_send)
++		return -EINVAL;
++
++	ipi_mux_pcpu = alloc_percpu(typeof(*ipi_mux_pcpu));
++	if (!ipi_mux_pcpu)
++		return -ENOMEM;
++
++	fwnode = irq_domain_alloc_named_fwnode("IPI-Mux");
++	if (!fwnode) {
++		pr_err("unable to create IPI Mux fwnode\n");
++		rc = -ENOMEM;
++		goto fail_free_cpu;
++	}
++
++	domain = irq_domain_create_linear(fwnode, nr_ipi,
++					  &ipi_mux_domain_ops, NULL);
++	if (!domain) {
++		pr_err("unable to add IPI Mux domain\n");
++		rc = -ENOMEM;
++		goto fail_free_fwnode;
++	}
++
++	domain->flags |= IRQ_DOMAIN_FLAG_IPI_SINGLE;
++	irq_domain_update_bus_token(domain, DOMAIN_BUS_IPI);
++
++	rc = __irq_domain_alloc_irqs(domain, -1, nr_ipi,
++				     NUMA_NO_NODE, NULL, false, NULL);
++	if (rc <= 0) {
++		pr_err("unable to alloc IRQs from IPI Mux domain\n");
++		goto fail_free_domain;
++	}
++
++	ipi_mux_domain = domain;
++	ipi_mux_send = mux_send;
++
++	return rc;
++
++fail_free_domain:
++	irq_domain_remove(domain);
++fail_free_fwnode:
++	irq_domain_free_fwnode(fwnode);
++fail_free_cpu:
++	free_percpu(ipi_mux_pcpu);
++	return rc;
++}
