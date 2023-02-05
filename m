@@ -2,169 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF60F68B036
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 15:10:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8522D68B03B
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 15:12:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229476AbjBEOKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 09:10:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51774 "EHLO
+        id S229476AbjBEOMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 09:12:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjBEOKe (ORCPT
+        with ESMTP id S229457AbjBEOMv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 09:10:34 -0500
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAAB91F920
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 06:10:31 -0800 (PST)
-Received: by mail-qt1-x82b.google.com with SMTP id g8so10277151qtq.13
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Feb 2023 06:10:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZKsSW9ZG5fFUmNf5T3NRxiYqTsIJdtp7qpj0pS2GhFo=;
-        b=dLh+VQMbBIyiU/DMry7xrtj8On3fwaG8ih2S8RCKlZThibDfHUn4U5LfDLBzHekdKQ
-         lUU7YTpn1oHoYNXafeIf2Vl3mUEulf5QaDE42vOHlfiIhLu/0DRfU9Bp9yFhHVX4zUEB
-         cxYbPREAP1JhbArUe4MlX/dr5MnYrVEeo1G5g=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZKsSW9ZG5fFUmNf5T3NRxiYqTsIJdtp7qpj0pS2GhFo=;
-        b=NcoXEXRcg3mAU06vZljVtyMwl8rcXd/HQYaHDICqy+TrYgrV4+UV8PUeXpnR5n7s3A
-         0DX9fxDCLW7q1kxYhAe+wbD8lsCH0y5x15ovYRQwLMqBdGhLdvG65rYIwi06fKP+/pUA
-         cetvCJ+Gi4X0CKngtzaaDYPmg1EcR6Nxvtc/uFvyhouSvwvOB+HhNszJCLsqpjD2n2l7
-         lV2DzidBQO5w14hRMkEaPfGrjbQctV+KYG2BL2sBXyrmMwvU0hrrTSM/tGz59Ir/OYJM
-         ajZQPQTfnIu34wEZHR56Dj1q25chTIPUf2ek+H7HQGUE90gYs2PVH9AJ3RkRN4mPiShz
-         jDMg==
-X-Gm-Message-State: AO0yUKXKd819aQ0W3YI5sDPSrk2i9zkYkWxURUV3IF2RXMtAOnGfRQT3
-        qihc4JLTgs1ILDNFOGgNK8L8qA==
-X-Google-Smtp-Source: AK7set+KGtTqrROhHpXhHntLnNqEQuTZZihoLrqI35niiPfztaoQM1WQ7kN1kzu+JN3rQY4Qw8tWgA==
-X-Received: by 2002:ac8:5c55:0:b0:3b6:359f:39e5 with SMTP id j21-20020ac85c55000000b003b6359f39e5mr34367311qtj.49.1675606230829;
-        Sun, 05 Feb 2023 06:10:30 -0800 (PST)
-Received: from localhost (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
-        by smtp.gmail.com with ESMTPSA id d2-20020a05620a204200b0071f0d0aaef7sm5564101qka.80.2023.02.05.06.10.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Feb 2023 06:10:30 -0800 (PST)
-Date:   Sun, 5 Feb 2023 14:10:29 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        kernel-team@meta.com, mingo@kernel.org, parri.andrea@gmail.com,
-        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
-        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-        luc.maranget@inria.fr, akiyks@gmail.com
-Subject: Re: Current LKMM patch disposition
-Message-ID: <Y9+41ctA54pjm/KG@google.com>
-References: <20230204004843.GA2677518@paulmck-ThinkPad-P17-Gen-1>
- <Y920w4QRLtC6kd+x@rowland.harvard.edu>
- <20230204014941.GS2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y95yhJgNq8lMXPdF@rowland.harvard.edu>
- <20230204222411.GC2948950@paulmck-ThinkPad-P17-Gen-1>
+        Sun, 5 Feb 2023 09:12:51 -0500
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C20E026A6;
+        Sun,  5 Feb 2023 06:12:47 -0800 (PST)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1pOfks-00077L-Ly; Sun, 05 Feb 2023 15:12:30 +0100
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Rob Herring <robh@kernel.org>, Johan Jonker <jbx6244@gmail.com>
+Cc:     hjc@rock-chips.com, krzysztof.kozlowski+dt@linaro.org,
+        gregkh@linuxfoundation.org, airlied@gmail.com, daniel@ffwll.ch,
+        andrzej.hajda@intel.com, neil.armstrong@linaro.org,
+        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
+        jonas@kwiboo.se, jernej.skrabec@gmail.com,
+        philippe.cornu@foss.st.com, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-usb@vger.kernel.org,
+        linus.walleij@linaro.org, inki.dae@samsung.com,
+        sw0312.kim@samsung.com, kyungmin.park@samsung.com,
+        alim.akhtar@samsung.com, linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH v6 01/17] dt-bindings: display: rockchip: convert
+ rockchip-lvds.txt to YAML
+Date:   Sun, 05 Feb 2023 15:12:29 +0100
+Message-ID: <5647788.DvuYhMxLoT@diego>
+In-Reply-To: <87f5097d-1cd0-e09f-e759-8592a9165ea6@gmail.com>
+References: <67771143-fd83-383d-41b2-68e8707134e8@gmail.com>
+ <20230203182119.GA615242-robh@kernel.org>
+ <87f5097d-1cd0-e09f-e759-8592a9165ea6@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230204222411.GC2948950@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 04, 2023 at 02:24:11PM -0800, Paul E. McKenney wrote:
-> On Sat, Feb 04, 2023 at 09:58:12AM -0500, Alan Stern wrote:
-> > On Fri, Feb 03, 2023 at 05:49:41PM -0800, Paul E. McKenney wrote:
-> > > On Fri, Feb 03, 2023 at 08:28:35PM -0500, Alan Stern wrote:
-> > > > On Fri, Feb 03, 2023 at 04:48:43PM -0800, Paul E. McKenney wrote:
-> > > > > Hello!
-> > > > > 
-> > > > > Here is what I currently have for LKMM patches:
-> > > > > 
-> > > > > 289e1c89217d4 ("locking/memory-barriers.txt: Improve documentation for writel() example")
-> > > > > ebd50e2947de9 ("tools: memory-model: Add rmw-sequences to the LKMM")
-> > > > > aae0c8a50d6d3 ("Documentation: Fixed a typo in atomic_t.txt")
-> > > > > 9ba7d3b3b826e ("tools: memory-model: Make plain accesses carry dependencies")
-> > > > > 
-> > > > > 	Queued for the upcoming (v6.3) merge window.
-> > > > > 
-> > > > > c7637e2a8a27 ("tools/memory-model: Update some warning labels")
-> > > > > 7862199d4df2 ("tools/memory-model: Unify UNLOCK+LOCK pairings to po-unlock-lock-")
-> > > > > 
-> > > > > 	Are ready for the next (v6.4) merge window.  If there is some
-> > > > > 	reason that they should instead go into v6.3, please let us
-> > > > > 	all know.
-> > > > > 
-> > > > > a6cd5214b5ba ("tools/memory-model: Document LKMM test procedure")
-> > > > > 
-> > > > > 	This goes onto the lkmm-dev pile because it is documenting how
-> > > > > 	to use those scripts.
-> > > > > 
-> > > > > https://lore.kernel.org/lkml/Y9GPVnK6lQbY6vCK@rowland.harvard.edu/
-> > > > > https://lore.kernel.org/lkml/20230126134604.2160-3-jonas.oberhauser@huaweicloud.com
-> > > > > https://lore.kernel.org/lkml/20230203201913.2555494-1-joel@joelfernandes.org/
-> > > > > 5d871b280e7f ("tools/memory-model: Add smp_mb__after_srcu_read_unlock()")
-> > > > > 
-> > > > > 	These need review and perhaps further adjustment.
-> > > > > 
-> > > > > So, am I missing any?  Are there any that need to be redirected?
-> > > > 
-> > > > The "Provide exact semantics for SRCU" patch should have:
-> > > > 
-> > > > 	Portions suggested by Boqun Feng and Jonas Oberhauser.
-> > > > 
-> > > > added at the end, together with your Reported-by: tag.  With that, I 
-> > > > think it can be queued for 6.4.
-> > > 
-> > > Thank you!  Does the patch shown below work for you?
-> > > 
-> > > (I have tentatively queued this, but can easily adjust or replace it.)
+Hi,
+
+Am Freitag, 3. Februar 2023, 20:02:54 CET schrieb Johan Jonker:
+> 
+> On 2/3/23 19:21, Rob Herring wrote:
+> > On Thu, Dec 22, 2022 at 03:22:14PM +0100, Johan Jonker wrote:
+> >> Convert rockchip-lvds.txt to YAML.
+> >>
+> >> Changed:
+> >>   Add power-domains property.
+> >>   Requirements between PX30 and RK3288
+> >>
+> >> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+> >> Reviewed-by: Rob Herring <robh@kernel.org>
+> >> ---
+> >>
+> >> Changed V3:
+> >>   Filename matching compatible style
+> >>   Drop "Regulator phandle for "
+> >>   Specify properties and requirements per SoC
+> >>   Sort order and restyle
+> >>
+> >> Changed V2:
+> >>   Fix title
+> >> ---
+> >>  .../display/rockchip/rockchip,lvds.yaml       | 170 ++++++++++++++++++
+> >>  .../display/rockchip/rockchip-lvds.txt        |  92 ----------
+> >>  2 files changed, 170 insertions(+), 92 deletions(-)
+> >>  create mode 100644 Documentation/devicetree/bindings/display/rockchip/rockchip,lvds.yaml
+> >>  delete mode 100644 Documentation/devicetree/bindings/display/rockchip/rockchip-lvds.txt
 > > 
-> > It looks fine.
 > 
-> Very good, thank you for looking it over!  I pushed it out on branch
-> stern.2023.02.04a.
+> > What's the plan for these patches? Don't see them in linux-next still. 
+> > Do you want me to take patches 1-8?
 > 
-> Would anyone like to ack/review/whatever this one?
+> Hi,
+> 
+> The display patches normally go through the DRM git.
+> Patch 2 must merge with grf.yaml.
+> Heiko has merged now 3 PHY related patches to grf.yaml first.
+> 
+> [PATCH v6 02/17] dt-bindings: soc: rockchip: grf: add rockchip,lvds.yaml
+> 
+> See current
+> https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git/log/?h=for-next&qt=grep&q=jonker
+> 
+> Not sure what Heiko's plans are.
+> Patch 2 replaces  only a description text and some accolades removal, so not "too" important.
+> 
+> I urgent then you could merge without conflict:
+> 1, 3-8
 
-Would it be possible to add comments, something like the following? Apologies
-if it is missing some ideas. I will try to improve it later.
+So I've applied patches 1-7 to the drm-tree now.
 
-thanks!
+For the GRF-patch, I've dropped the quotes changes, as they are somewhat
+unrelated to the lvds inclusion and so prevented any conflicts when applying
+the rest to the DRM tree.
 
- - Joel
+@Rob, if you could pick the fusb302 patch (number8), that would be great
 
----8<-----------------------
+Thanks
+Heiko
 
-diff --git a/tools/memory-model/linux-kernel.bell b/tools/memory-model/linux-kernel.bell
-index ce068700939c..0a16177339bc 100644
---- a/tools/memory-model/linux-kernel.bell
-+++ b/tools/memory-model/linux-kernel.bell
-@@ -57,7 +57,23 @@ let rcu-rscs = let rec
- flag ~empty Rcu-lock \ domain(rcu-rscs) as unmatched-rcu-lock
- flag ~empty Rcu-unlock \ range(rcu-rscs) as unmatched-rcu-unlock
- 
-+(***************************************************************)
- (* Compute matching pairs of nested Srcu-lock and Srcu-unlock *)
-+(***************************************************************)
-+(*
-+ * carry-srcu-data: To handle the case of the SRCU critical section split
-+ * across CPUs, where the idx is used to communicate the SRCU index across CPUs
-+ * (say CPU0 and CPU1), data is between the R[srcu-lock] to W[once][idx] on
-+ * CPU0, which is sequenced with the ->rf is between the W[once][idx] and the
-+ * R[once][idx] on CPU1.  The carry-srcu-data is made to exclude Srcu-unlock
-+ * events to prevent capturing accesses across back-to-back SRCU read-side
-+ * critical sections.
-+ *
-+ * srcu-rscs: Putting everything together, the carry-srcu-data is sequenced with
-+ * a data relation, which is the data dependency between R[once][idx] on CPU1
-+ * and the srcu-unlock store, and loc ensures the relation is unique for a
-+ * specific lock.
-+ *)
- let carry-srcu-data = (data ; [~ Srcu-unlock] ; rf)*
- let srcu-rscs = ([Srcu-lock] ; carry-srcu-data ; data ; [Srcu-unlock]) & loc
- 
+
