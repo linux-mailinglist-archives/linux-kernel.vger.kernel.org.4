@@ -2,74 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C97068AF47
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 11:10:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BE5568AF4B
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 11:11:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229520AbjBEKKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 05:10:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53602 "EHLO
+        id S229528AbjBEKLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 05:11:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjBEKKV (ORCPT
+        with ESMTP id S229488AbjBEKLm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 05:10:21 -0500
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DDBB1BAD1
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 02:10:20 -0800 (PST)
-Received: by mail-il1-f199.google.com with SMTP id j7-20020a056e02014700b00310d217f518so6139943ilr.2
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Feb 2023 02:10:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=M4+ikb5mvFAOATRtrZy/TmgzrLqQGI0z2J6tXsCw82c=;
-        b=s91PfyRPTJ5J93NbbCjn7NjqcHSzbneO+tN8LBmBuSwRRwHlE07pPnnSP11igFUVCw
-         NxNykDhQewr0zsGIDK+Kaz1lQHVW7ttn5PI0544lidY5gVMASUbrMtV5lTfPHaOXGfzf
-         gnI+ZSJG3dJ8YQ8lHRiuAUJTf92P+9FDyh+B1dzKOBp/WlE02bbFR1cIn3PVsiOeONW8
-         6QqYxJMTWJIrxSW6WMrljv1yjDJsskrVX3pQobHX9RpQUWPr+NaKUzIM62YjopytG3OT
-         pE+b2YSp4MqFPSiNCtHZduo3NCwg1hkF1vMwAHxQXfvAQsGyzeQVLRYW/N/YS0AeNn1l
-         zqVQ==
-X-Gm-Message-State: AO0yUKWYE2iZ79kr52hQd12PvA0Sq2LtauQt9R7iVbMvcZpQnUppaybX
-        ZsUv3QxeOGBUYOp7mnLymyLc5MHa5G5XIlhW22Ym/Pr49+iZ
-X-Google-Smtp-Source: AK7set/qeu8kgXnVaRw+s+mNEMfx1nlVWdrlZfgVUrxzhv+imDXoIO5CAGN2nZlfPyhAnr0CKvH9VGTJNPoBcTXtzxpEbiMAK961
+        Sun, 5 Feb 2023 05:11:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 733ED1BAD1;
+        Sun,  5 Feb 2023 02:11:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 162F3B80B22;
+        Sun,  5 Feb 2023 10:11:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D571CC433D2;
+        Sun,  5 Feb 2023 10:11:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675591897;
+        bh=BZ28gvdiTkc7YTOSLd75uiAxygPFFmTcSTP6m1bNxqs=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=DpiNPO/yo5p53P1JPencToMQjHKsTJ2kFzL2hGhgxgp4fJZZUUwNe31e8lY4Cf0KJ
+         WIbEcuqmFc+Qryf6VCwPtT4IToJOjRWgHQCx4eQkQtuHcZE/m+IAPcsDEiCw2mJjOb
+         uCrT1ZnjIoROaZeCjSd95FBq3qTnj1Pztve7TFs6Y0kAAgf+sQOelHQL+Q2g2um7U+
+         Mu0CP3FGNzIipUTlUjANWW/qtuFTRzHL+EotFiWyOgaNsZ596no76pD0KdV8lJ1BPN
+         ciMLUQAg3JYhyLsO3dVUbBvVd47kq0vnVA3d5pK3QOSj2iAyCL5BXHTqgAUa9Y5JQi
+         g53qXWVGkCdog==
+Date:   Sun, 05 Feb 2023 11:11:32 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Andrew Lunn <andrew@lunn.ch>
+CC:     yanhong wang <yanhong.wang@starfivetech.com>,
+        linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>
+Subject: Re: [PATCH v4 0/7] Add Ethernet driver for StarFive JH7110 SoC
+User-Agent: K-9 Mail for Android
+In-Reply-To: <Y96S/MMzC92cOkbX@lunn.ch>
+References: <20230118061701.30047-1-yanhong.wang@starfivetech.com> <Y8h/D7I7/2KhgM00@spud> <81217dc9-5673-f7eb-3114-b39de8302687@starfivetech.com> <958E7B1C-E0FF-416A-85AD-783682BA8B54@kernel.org> <Y96S/MMzC92cOkbX@lunn.ch>
+Message-ID: <4C150A01-7FB3-4609-8B8E-6F6023CC22AF@kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a92:7414:0:b0:313:bfa3:84f5 with SMTP id
- p20-20020a927414000000b00313bfa384f5mr187359ilc.122.1675591819686; Sun, 05
- Feb 2023 02:10:19 -0800 (PST)
-Date:   Sun, 05 Feb 2023 02:10:19 -0800
-In-Reply-To: <20230205093941.1451-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000033799605f3f11ffb@google.com>
-Subject: Re: [syzbot] WARNING in kernfs_get (4)
-From:   syzbot <syzbot+9be7b6c4b696be5d83ef@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-INFO: rcu detected stall in corrupted
-
-rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P5555 } 2647 jiffies s: 2837 root: 0x0/T
-rcu: blocking rcu_node structures (internal RCU debug):
 
 
-Tested on:
+On 4 February 2023 18:16:44 GMT+01:00, Andrew Lunn <andrew@lunn=2Ech> wrot=
+e:
+>> >For the patchs of yt8531, see [1]
+>> >
+>> >1 - https://patchwork=2Ekernel=2Eorg/project/netdevbpf/cover/202302020=
+30037=2E9075-1-Frank=2ESae@motor-comm=2Ecom/
+>>=20
+>> Please put that info into the cover of the next round of your submissio=
+n then=2E
+>
+>These patches just got merged, so it is less of an issue now=2E Just
+>make sure you are testing with net-next=2E
 
-commit:         837c07cf Merge tag 'powerpc-6.2-4' of git://git.kernel..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=113f785d480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=723d250bd16cf869
-dashboard link: https://syzkaller.appspot.com/bug?extid=9be7b6c4b696be5d83ef
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1369cb27480000
+Oh, cool=2E Water under the bridge so=2E
+Sorry for the noise!
 
+>You might need an updated DT blob, the binding for the PHY had a few
+>changes between the initial version to what actually got merged=2E
+
+Cool, thanks,
+Conor=2E
