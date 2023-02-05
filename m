@@ -2,58 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C246068B195
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 21:36:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3552F68B197
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 21:36:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbjBEUgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 15:36:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50012 "EHLO
+        id S229605AbjBEUgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 15:36:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbjBEUgW (ORCPT
+        with ESMTP id S229504AbjBEUg3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 15:36:22 -0500
+        Sun, 5 Feb 2023 15:36:29 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C859C18152;
-        Sun,  5 Feb 2023 12:36:21 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D01DA1B578
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 12:36:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7C410B80B90;
-        Sun,  5 Feb 2023 20:36:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 302CEC433D2;
-        Sun,  5 Feb 2023 20:36:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 87FBAB80B90
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 20:36:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3A94BC433EF;
+        Sun,  5 Feb 2023 20:36:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675629379;
-        bh=RZ0uaiSEsTTUg5fxqP4r3pZY+VrH0bjbEHxU3kOCjEM=;
+        s=k20201202; t=1675629386;
+        bh=+ObriJlg4Q3TEfYv2frySvAzipy6038r4RX3ifEzGSM=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=GWFfIg6xlrV/YptLiB/gYg7EaJF93sv2Z5Bz8p33W9La1UGFvqU2L1bi6HZTyvG3m
-         n22jzueJdNqCkfp48pT19TwYbOBSFM6rzi1lckgJVzbgOUum+Nw2b0u8mO4vkWcIiz
-         m5CuGX9wd74k9nE+zjFx7ccir6vCDZcEXs16M3vPO1at0u59GcTMX7MzhiXoV/91W4
-         3LFV/TPAZUNlvyBSlVQ2ZFAD89uM/ozAAjH3BCgvpHyYA9nxGxyKWiho4t/S7wno25
-         7r2iPDxzGxVBR4hQP2QPG2T9OJUt0QRGG0XHb9b67ji3lBHJsUwhZvCs4P9VxxBPCb
-         jX0mbPTBj/Wmg==
+        b=psqNUbbbn8QoyPq4Kz1U1QXoKKduLFYPjYEkSapmZwN6ewIofSPFpuenrHTQkS12e
+         h97/vvj+OYAwWs5SJYNms8aD28U+Lk6UVBiUcoDulmkjyWENqk0OxqGYIlxeGBSM8g
+         LSwvBBsDs4qDI34yTSpOqMw0XsBItMDm5L8FYQk4X/cKX1v65QncJ1ibyMBEh4T/Dq
+         lIIO82M9SGfhhkI0HvMdQ+XYNroaN2643HvCt8jnNWwcOh6pay8u3aKvTzzY1KVvaG
+         UAqF61aeBp5UJNIMkQ8V/lWIe5Yh+QCO1v/oSTOugTW0/xAz7OCxu2Ga+h2Mb4cX0F
+         W8xAxD00YSv0w==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1F315C4314C;
-        Sun,  5 Feb 2023 20:36:19 +0000 (UTC)
-Subject: Re: [GIT PULL] TTY/Serial driver fixes for 6.2-rc7
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2921AE21ED0;
+        Sun,  5 Feb 2023 20:36:26 +0000 (UTC)
+Subject: Re: [GIT PULL] Char/Misc driver fixes for 6.2-rc7
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <Y9+Yv1CQKNP0Bwqq@kroah.com>
-References: <Y9+Yv1CQKNP0Bwqq@kroah.com>
-X-PR-Tracked-List-Id: <linux-serial.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Y9+Yv1CQKNP0Bwqq@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tags/tty-6.2-rc7
-X-PR-Tracked-Commit-Id: 226fae124b2dac217ea5436060d623ff3385bc34
+In-Reply-To: <Y9+Yq7H4bnlWW+k3@kroah.com>
+References: <Y9+Yq7H4bnlWW+k3@kroah.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <Y9+Yq7H4bnlWW+k3@kroah.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git tags/char-misc-6.2-rc7
+X-PR-Tracked-Commit-Id: d83d7ed260283560700d4034a80baad46620481b
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: dc0ce181af6d1989192b973eae5f916cb6ce47f0
-Message-Id: <167562937911.30640.598800892367481298.pr-tracker-bot@kernel.org>
-Date:   Sun, 05 Feb 2023 20:36:19 +0000
+X-PR-Merge-Commit-Id: d3feaff4d9492aa05b94167e170858da81159654
+Message-Id: <167562938616.30640.12735904562437383180.pr-tracker-bot@kernel.org>
+Date:   Sun, 05 Feb 2023 20:36:26 +0000
 To:     Greg KH <gregkh@linuxfoundation.org>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Jiri Slaby <jslaby@suse.cz>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
         Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -63,12 +61,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sun, 5 Feb 2023 12:53:35 +0100:
+The pull request you sent on Sun, 5 Feb 2023 12:53:15 +0100:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tags/tty-6.2-rc7
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git tags/char-misc-6.2-rc7
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/dc0ce181af6d1989192b973eae5f916cb6ce47f0
+https://git.kernel.org/torvalds/c/d3feaff4d9492aa05b94167e170858da81159654
 
 Thank you!
 
