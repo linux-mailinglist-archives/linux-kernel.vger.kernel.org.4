@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 911D468B0A8
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 16:49:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D52168B0AD
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 16:49:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229811AbjBEPtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 10:49:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43880 "EHLO
+        id S229852AbjBEPtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 10:49:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbjBEPtF (ORCPT
+        with ESMTP id S229803AbjBEPtK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 10:49:05 -0500
+        Sun, 5 Feb 2023 10:49:10 -0500
 Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DA5441A969
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 07:49:04 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5366C1A4BE
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 07:49:09 -0800 (PST)
 Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 2C0899200B4; Sun,  5 Feb 2023 16:49:04 +0100 (CET)
+        id 755979200BC; Sun,  5 Feb 2023 16:49:08 +0100 (CET)
 Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 2908F9200B3;
-        Sun,  5 Feb 2023 15:49:04 +0000 (GMT)
-Date:   Sun, 5 Feb 2023 15:49:04 +0000 (GMT)
+        by angie.orcam.me.uk (Postfix) with ESMTP id 716119200BB;
+        Sun,  5 Feb 2023 15:49:08 +0000 (GMT)
+Date:   Sun, 5 Feb 2023 15:49:08 +0000 (GMT)
 From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
 To:     Bjorn Helgaas <bhelgaas@google.com>,
         Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
@@ -43,10 +43,9 @@ cc:     Alex Williamson <alex.williamson@redhat.com>,
         linux-pci@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v6 2/7] PCI: Execute `quirk_enable_clear_retrain_link'
- earlier
+Subject: [PATCH v6 3/7] PCI: Initialize `link_active_reporting' earlier
 In-Reply-To: <alpine.DEB.2.21.2302022022230.45310@angie.orcam.me.uk>
-Message-ID: <alpine.DEB.2.21.2302051431470.33812@angie.orcam.me.uk>
+Message-ID: <alpine.DEB.2.21.2302051435210.33812@angie.orcam.me.uk>
 References: <alpine.DEB.2.21.2302022022230.45310@angie.orcam.me.uk>
 User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
@@ -59,33 +58,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make `quirk_enable_clear_retrain_link' `pci_fixup_early' so that any later 
-fixups can rely on `clear_retrain_link' to have been already initialised.
+Determine whether Data Link Layer Link Active Reporting is available 
+ahead of calling any fixups so that the cached value can be used there 
+and later on.
 
 Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
 ---
-No change from v5.
-
-New change in v5.
+New change in v6.
 ---
- drivers/pci/quirks.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/pci/probe.c |    6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-linux-pcie-clear-retrain-link-early.diff
-Index: linux-macro/drivers/pci/quirks.c
+linux-pcie-link-active-reporting-early.diff
+Index: linux-macro/drivers/pci/probe.c
 ===================================================================
---- linux-macro.orig/drivers/pci/quirks.c
-+++ linux-macro/drivers/pci/quirks.c
-@@ -2407,9 +2407,9 @@ static void quirk_enable_clear_retrain_l
- 	dev->clear_retrain_link = 1;
- 	pci_info(dev, "Enable PCIe Retrain Link quirk\n");
- }
--DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_PERICOM, 0xe110, quirk_enable_clear_retrain_link);
--DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_PERICOM, 0xe111, quirk_enable_clear_retrain_link);
--DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_PERICOM, 0xe130, quirk_enable_clear_retrain_link);
-+DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_PERICOM, 0xe110, quirk_enable_clear_retrain_link);
-+DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_PERICOM, 0xe111, quirk_enable_clear_retrain_link);
-+DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_PERICOM, 0xe130, quirk_enable_clear_retrain_link);
+--- linux-macro.orig/drivers/pci/probe.c
++++ linux-macro/drivers/pci/probe.c
+@@ -819,7 +819,6 @@ static void pci_set_bus_speed(struct pci
  
- static void fixup_rev1_53c810(struct pci_dev *dev)
- {
+ 		pcie_capability_read_dword(bridge, PCI_EXP_LNKCAP, &linkcap);
+ 		bus->max_bus_speed = pcie_link_speed[linkcap & PCI_EXP_LNKCAP_SLS];
+-		bridge->link_active_reporting = !!(linkcap & PCI_EXP_LNKCAP_DLLLARC);
+ 
+ 		pcie_capability_read_word(bridge, PCI_EXP_LNKSTA, &linksta);
+ 		pcie_update_link_speed(bus, linksta);
+@@ -1828,6 +1827,7 @@ int pci_setup_device(struct pci_dev *dev
+ 	int pos = 0;
+ 	struct pci_bus_region region;
+ 	struct resource *res;
++	u32 linkcap;
+ 
+ 	hdr_type = pci_hdr_type(dev);
+ 
+@@ -1873,6 +1873,10 @@ int pci_setup_device(struct pci_dev *dev
+ 	/* "Unknown power state" */
+ 	dev->current_state = PCI_UNKNOWN;
+ 
++	/* Set it early to make it available to fixups, etc.  */
++	pcie_capability_read_dword(dev, PCI_EXP_LNKCAP, &linkcap);
++	dev->link_active_reporting = !!(linkcap & PCI_EXP_LNKCAP_DLLLARC);
++
+ 	/* Early fixups, before probing the BARs */
+ 	pci_fixup_device(pci_fixup_early, dev);
+ 
