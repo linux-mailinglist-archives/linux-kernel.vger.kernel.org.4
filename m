@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D56C68B12E
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 19:13:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 442A268B133
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 19:21:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229607AbjBESNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 13:13:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48706 "EHLO
+        id S229522AbjBESVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 13:21:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbjBESNX (ORCPT
+        with ESMTP id S229481AbjBESVT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 13:13:23 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BEFD17CE1
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 10:13:22 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id p26so28281343ejx.13
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Feb 2023 10:13:22 -0800 (PST)
+        Sun, 5 Feb 2023 13:21:19 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F081199DC
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 10:21:18 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id dr8so28334808ejc.12
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Feb 2023 10:21:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MADvd4KXk+Pnv+BnuUONBLxS8C2Yx/vqJbKEF2lRq+I=;
-        b=M+cWHvWkpsU8P1Dpa6MInG0nswK3denIMCrzJ4taB2EHkck0MFw71A8T2Evn/SqEjs
-         VDTjTo1HOKz6HnYk8UEkBQdVDaErUF7ecz1M8gsqPZ5PgdotNDwdoUX2d/hBgDXn8ty+
-         J1rZGJEePTeFteNJbouBt0tQt3fyDpDVl+MkvfXXZhOfg1a0JUMaZbP4xeYo57lR4pfU
-         PoGmuglPHWrT+2IKL1+1rMcZeKW9WstJlXah9UXKeCFV7yQreH52i7tqOeiL0Sn6lTzm
-         ordkl1H8uJMLqepzPKDpkD7VyXUDviMu8RnOoY2dZ05NVhJyDHKcTv5+1XjI9Vjm6bUi
-         vy+A==
+        bh=i63w/pV88DLO03mXliw8xYbIqTY9OqCF6qi2JifxJgg=;
+        b=UjBHK6w6zZRkUaf8Bv6/PD0Vnx7BBG2ON4xhzbvdzpD8iRGNOI50WVi4jEANcWQmqP
+         xozQq3qXk0Hr46jh9fiG1+g+u4CkfsoyUmM2gHWVr5we9KptIByDd0yj2OIK1bT+juuo
+         qpfGG4rOUwkJFVryU5cDCo+Jje/+EgBFo9sdG0uWt4sSbllrv330LM0/S4C8H7S7sdS6
+         YMB46GJwMOYJ4eyNu08K7NlskuvwfyDzjEtLE3rBpGhXxU59MIHL9Om6CeJf1PfFetqC
+         F29jf0KrNFh2h+lP5rr4QkvS/NQ2mbIAJEmwbWfEYUT12/se++/QJPJV7MQwowzRS6JV
+         cH8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=MADvd4KXk+Pnv+BnuUONBLxS8C2Yx/vqJbKEF2lRq+I=;
-        b=rgws9TBLGGgB7qzbAtxIo0PWcn7ZBHVfEgo3tmh2e2c1XnfO29ldVjl2ddeqMusqIm
-         jNypU2IV4RV3J7tElth0jcx7fVSugJCVFpZBbuWwwSHZZokybkyrOWmryRPqfiAsVxeM
-         ft+Ee1IO/KvMDvjG1Lm8O/AV8uPS7lh9bDnEB51Y0yVxsEZU0jcWIXWAqDrwilTPf0CU
-         NGc1bLQ8LhzYf8E7JJdcN+8mXwNonk467GE/vYKKoN9CuEMiol8XmoIE52v4P/+399ix
-         YJEa0fyvr9igrfepLIohWl0HlvPnQT0hRSWVobqZmHDRrg2j7sO+B6dRWBbCvUi6qiiV
-         J1PA==
-X-Gm-Message-State: AO0yUKUDUMx/wd3dM2p0tcAvAwmusZVSkQqWTcjHMDrp1QJR8dOYXjvo
-        OtdBXoXKbe/keqHhKdMxBQ8=
-X-Google-Smtp-Source: AK7set/CRN2+pSypVmV/volOfAyQuzaPZtEf6TefJnBoxmJfkzTXBPRMsnG4JkjBF46b/4H+UxxqQg==
-X-Received: by 2002:a17:906:60d1:b0:886:6f92:2bd2 with SMTP id f17-20020a17090660d100b008866f922bd2mr16913839ejk.21.1675620801081;
-        Sun, 05 Feb 2023 10:13:21 -0800 (PST)
+        bh=i63w/pV88DLO03mXliw8xYbIqTY9OqCF6qi2JifxJgg=;
+        b=MDzMZN9skEPJVt+vqIFaiJ3NiZYOMO9ka/On5OedfYaYFoMjsDDEV81TUQm3X1DGng
+         kAakZYrh5JEk0KROSFeqcV6UL+t2uwrUEj9gP2/bg7Topd10zmna5/s6uhyhzoAvbZw/
+         Xmn/T2fDUu0IRvOtLYSIX1ULLxW7Yf1KRg7LritbmxJXqNQF4rWeH/E+8wS3dx2ofej5
+         hGQK+htrCZGfQTBRC8hnGzfjTRHET+U85SujY6C1Wpfj6+KECG0SBrZKvbin6JtegeBF
+         9tBgCVJWcy/mvo6NZ9LPQeGkz4f0pWvhpiwbXd2ZvEzNIPz/tFwgcGvX22rRnqYq0m6k
+         pVoA==
+X-Gm-Message-State: AO0yUKXObvjWW8MQlJsR29o2bXfy1jMLiuOTf1WQdx/EEesS5IBBW0aW
+        gnZCbFXokSetJ2KjZCR+3RORnG62/VA=
+X-Google-Smtp-Source: AK7set+CALiS3x2OAR+iXb85KCT92QwReNI/aP9r1T5bggcmlXY8f6S4gscfACoO5PG1orCsM6MoZg==
+X-Received: by 2002:a17:906:ae4f:b0:877:962f:be0a with SMTP id lf15-20020a170906ae4f00b00877962fbe0amr15272422ejb.37.1675621277114;
+        Sun, 05 Feb 2023 10:21:17 -0800 (PST)
 Received: from combine-ThinkPad-S1-Yoga (c-8ff371d5.879159-0-69706f6e6c79.bbcust.telenor.se. [213.113.243.143])
-        by smtp.gmail.com with ESMTPSA id gw1-20020a170906f14100b0087bd4e34eb8sm4335679ejb.203.2023.02.05.10.13.20
+        by smtp.gmail.com with ESMTPSA id bj11-20020a170906b04b00b0088e9bbae7ecsm4335843ejb.165.2023.02.05.10.21.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Feb 2023 10:13:20 -0800 (PST)
-Date:   Sun, 5 Feb 2023 19:13:18 +0100
+        Sun, 05 Feb 2023 10:21:16 -0800 (PST)
+Date:   Sun, 5 Feb 2023 19:21:14 +0100
 From:   Guru Mehar Rachaputi <gurumeharrachaputi@gmail.com>
-To:     Nam Cao <namcaov@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Forest Bond <forest@alittletooquiet.net>,
+To:     Nam Cao <namcaov@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Forest Bond <forest@alittletooquiet.net>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v3] staging: vt6655: Macro with braces issue change to
  inline function
-Message-ID: <Y9/xvjlxufB700Kc@combine-ThinkPad-S1-Yoga>
+Message-ID: <Y9/zml6iPvoBBVXx@combine-ThinkPad-S1-Yoga>
 References: <Y9+qMqYD2zGWRurD@combine-ThinkPad-S1-Yoga>
  <Y9+sFw0rviTAJNMf@kroah.com>
  <Y9+vkwYfQzYTbIIo@combine-ThinkPad-S1-Yoga>
@@ -107,7 +107,9 @@ On Sun, Feb 05, 2023 at 04:34:29PM +0100, Nam Cao wrote:
 > 
 > Best regards,
 > Nam
-Oh I see. Thanks for that. I changed it now.
+I made my current working branch track origin/staging-testing and
+modified the commit message and sent the patch again. I hope there won't
+be any issue.
 
 -- 
 Thanks & Regards,
