@@ -2,89 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39C2468B00C
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 14:49:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5CE868B00E
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 14:49:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229710AbjBENtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 08:49:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44564 "EHLO
+        id S229722AbjBENtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 08:49:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbjBENtY (ORCPT
+        with ESMTP id S229719AbjBENtj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 08:49:24 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD1A51B32A;
-        Sun,  5 Feb 2023 05:49:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
-        s=s31663417; t=1675604935;
-        bh=sh2QK16ajiIUZ6sLRB8xaX+Lgaf861SAzsVejT9xz+I=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=KcJMHlzX3R8SjCCXgm78d8voqX09aSkxNgCFlBRxKfmGXRfxTt6oqz6PvQH1brKEj
-         VuhhutKNzPdJjeCW9pTSaVOrht3k+9J1XE04nQIVZvMuEjT/KAh0akJGMh1zpqd/CE
-         qAHCtvTTI3/6U2FqDtooxfncGcj3blA3GRd/BHUjrYdPClw4BEPF+Kh5xmES9pglEH
-         x3JlF+Rz05AWuucUsazS/kBYtiMKriIBQUHAEvNIdf6w7Yy3+o/OGG55CertQPgJcE
-         VeaD8ugb3/klDqtxQ/CTbZfoI9NHduiItb5oYJyxO3hOpvrr9HIrEfwmuEH9Ctpra9
-         q7MupmA2FfsXA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [80.245.77.40] ([80.245.77.40]) by web-mail.gmx.net
- (3c-app-gmx-bs34.server.lan [172.19.170.86]) (via HTTP); Sun, 5 Feb 2023
- 14:48:55 +0100
+        Sun, 5 Feb 2023 08:49:39 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCE931CAD3;
+        Sun,  5 Feb 2023 05:49:36 -0800 (PST)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 315DnAik077705;
+        Sun, 5 Feb 2023 07:49:10 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1675604950;
+        bh=4K3NBMriPuHZ8NsACDGfe6RqivI8ybuDVKXRpjALZsQ=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=ocx4iKCS65DqpDf3Dvw2z9mRkiIIaG4Zo08a6uF6XoScIBc5h0440HtWGJP7wWNFe
+         K1avyD3HddLv432adYNSXy/zbtyD7PJQopaXcCmaxoau97keY5j5vJXO0JEd7tFPGr
+         Xgi1Ls6oZwaJNvW+BecjIvmvYhN+nRNPTFcM3nBo=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 315DnAoA089522
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Sun, 5 Feb 2023 07:49:10 -0600
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Sun, 5
+ Feb 2023 07:49:09 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Sun, 5 Feb 2023 07:49:09 -0600
+Received: from [10.250.235.106] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 315Dn5eU018475;
+        Sun, 5 Feb 2023 07:49:05 -0600
+Message-ID: <b1a70d18-4528-30a0-f15f-d9dda49504c1@ti.com>
+Date:   Sun, 5 Feb 2023 19:19:04 +0530
 MIME-Version: 1.0
-Message-ID: <trinity-757008e9-a0a8-4d44-8b0a-53efa718218e-1675604935206@3c-app-gmx-bs34>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Frank Wunderlich <frank-w@public-files.de>
-Cc:     Vladimir Oltean <olteanv@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>
-Subject: Aw: Re: [BUG] vlan-aware bridge breaks vlan on another port on same
- gmac
-Content-Type: text/plain; charset=UTF-8
-Date:   Sun, 5 Feb 2023 14:48:55 +0100
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <trinity-4103b9e0-48e7-4de5-8757-21670a613f64-1675182218246@3c-app-gmx-bs58>
-References: <trinity-e6294d28-636c-4c40-bb8b-b523521b00be-1674233135062@3c-app-gmx-bs36>
- <20230120172132.rfo3kf4fmkxtw4cl@skbuf>
- <trinity-b0df6ff8-cceb-4aa5-a26f-41bc04dc289c-1674303103108@3c-app-gmx-bap60>
- <20230121122223.3kfcwxqtqm3b6po5@skbuf>
- <trinity-7c2af652-d3f8-4086-ba12-85cd18cd6a1a-1674304362789@3c-app-gmx-bap60>
- <20230121133549.vibz2infg5jwupdc@skbuf>
- <trinity-cbf3ad23-15c0-4c77-828b-94c76c1785a1-1674310370120@3c-app-gmx-bap60>
- <20230130125813.asx5qtm6ttuwdobo@skbuf>
- <trinity-4103b9e0-48e7-4de5-8757-21670a613f64-1675182218246@3c-app-gmx-bs58>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:i9+kEGc2y10RVtdALC/xZZssnriEBF6wVa+EtPjQIreNdNdozAPjre4Xv+Ec7Iyk7ydSx
- wxl7Q8JSNDBNXILO9vqadmACZNnwgzIt8UoMyVWTLz3bYBz8PtLs57OugiHtepfUV4EwIZq/WDYA
- HXetFjsruxTwVtoSJrbAibh0CekUBZRrHdbgAkVirBzfvAdqZI0vL15HJyTSTneHgjckptYp06bP
- f96vJZoUCv9hGVHvIT+22rRwRAaE8nFsFmxfGqa23LdrK51k5pobqA+LZY5IZ0DmgvhrgPTs0vlS
- ks=
-UI-OutboundReport: notjunk:1;M01:P0:efn2t2RjW/A=;ZWZ6kchknbt+Py7TnVTAMZ607vh
- kR7/lYhMaGoCBQzdkVYm2Zw3s9McyQHXPnhN5Q+OttbWm+YlIB7lZ/ytiBC94NFZBnpv3illw
- i/QWjbhNdfsImSovXPubG+7IFlKi/MBhbmWnutj1/5vH2CbgoZ2ZZ4xlLuQY0+1jR67Mh/Hzi
- iTEaACrd0Xw4FdB0Kl90qypnFI5fjoTXay1pp8WSSeWLCq1aRxXiVHfYeR4ARZCYxjIPogdWO
- vh7V3anz86QmUr6fx9eqwhF3ko/tusPtbw7irj7Rqae9lcJygHjmoLLS8NIx0B1DF4IZ3HX5f
- g2mz+QiXpl3QC1ZiWY25FK3MIiauA7jojUI19eHIDF+hakQ7UpHQKPWJlq7s8Rx0SRbpS4bpz
- +Qw0bt4sK8LqKfcceEecZ9TtwPOfo6gwXMU8DQkLvDgBHh6IFuX0ljxB4VkQwD/4I+albLA5h
- ONcYWYvT8P11+djj0DN0UerbXsl1Bte1qTHDVuT90B1QP2hLWSO2zcFnGaJD4dudwKTAFowrq
- xnaskuX27zdF5eUoAasUzMdcn0aLAq/hWdLCQVdvV6F8B2BMYcjRxSYBCmtdNDq8fGP1YcVxM
- 48NchBkBBD5RqSUqu6wMCGQVCsWUuGc9fd5ylPeHESD748Ek3hQ0J347BFbEn0aU++cnoG8r4
- 8gNny3Jq2QsxU9b+FHHBvd4/0voH/rabz8D874AFW7yZ92o3FPIgP8k3k2JDSeHkCZG7iwoUS
- OPYprVEcsIn5XAIB12sDUagrAIbgr3vPGaEnZAlguF1fKQgtPiAAvAvMszchnEb9WiWKeCF9p
- FmHOjmG3+Kv+gH0V7V76F+pgGjYfx8yoFcRA04pqnQV+M=
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v7 5/6] drm/tidss: Add IO CTRL and Power support for OLDI
+ TX in am625
+Content-Language: en-US
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+CC:     DRI Development List <dri-devel@lists.freedesktop.org>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rahul T R <r-ravikumar@ti.com>,
+        Devarsh Thakkar <devarsht@ti.com>,
+        Jai Luthra <j-luthra@ti.com>,
+        Jayesh Choudhary <j-choudhary@ti.com>
+References: <20230125113529.13952-1-a-bhatia1@ti.com>
+ <20230125113529.13952-6-a-bhatia1@ti.com>
+ <0dc36f3c-22c8-7440-96a6-7d3ad96daf40@ideasonboard.com>
+From:   Aradhya Bhatia <a-bhatia1@ti.com>
+In-Reply-To: <0dc36f3c-22c8-7440-96a6-7d3ad96daf40@ideasonboard.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,131 +81,175 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-sorry for the delay, i'm very busy recently :(
-
-noticed that i missed 2 commands ("bridge vlan add vid ..." below) when te=
-sting the vlan-aware bridge...now both ports are working with vlan-tagging=
-...the one inside (lan0) the bridge (lanbr0) and the one outside (wan).
-
-BRIDGE=3Dlanbr0
-netif=3Dlan0
-vid=3D500
-#ip link add name ${BRIDGE} type bridge
-ip link add name ${BRIDGE} type bridge vlan_filtering 1 vlan_default_pvid =
-1
-ip link set ${BRIDGE} up
-ip link set $netif master ${BRIDGE}
-ip link set $netif up
-bridge vlan add vid $vid dev ${BRIDGE} self
-bridge vlan add vid $vid dev $netif
-
-#extract vlan from bridge to own netdev
-ip link add link ${BRIDGE} name vlan$vid type vlan id $vid
-ip a a 192.168.110.5/24 dev vlan$vid
-ip link set vlan$vid up
-
-btw can i see somehow if a bridge is vlan-aware (the flag itself)..."bridg=
-e vlan" command also lists non-vlan-aware bridges with vlan-id "1 pvid egr=
-ess untagged"
-
-so vladimir your last patch works well, thx for it. you can add my tested-=
-by when upstreaming
-
-regards Frank
 
 
-> Gesendet: Dienstag, 31. Januar 2023 um 17:23 Uhr
-> Von: "Frank Wunderlich" <frank-w@public-files.de>
-> An: "Vladimir Oltean" <olteanv@gmail.com>
-> Cc: "Andrew Lunn" <andrew@lunn.ch>, "Florian Fainelli" <f.fainelli@gmail=
-.com>, "David S. Miller" <davem@davemloft.net>, "Eric Dumazet" <edumazet@g=
-oogle.com>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redh=
-at.com>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, "Landen Cha=
-o" <Landen.Chao@mediatek.com>, "Sean Wang" <sean.wang@mediatek.com>, "DENG=
- Qingfang" <dqfext@gmail.com>, "Matthias Brugger" <matthias.bgg@gmail.com>=
-, "Daniel Golle" <daniel@makrotopia.org>
-> Betreff: Aw: Re: [BUG] vlan-aware bridge breaks vlan on another port on =
-same gmac
->
-> Hi Vladimir,
->
->
-> > Gesendet: Montag, 30. Januar 2023 um 13:58 Uhr
-> > Von: "Vladimir Oltean" <olteanv@gmail.com>
-> > Hi Frank,
-> > Sorry for the delay and thanks again for testing.
-> >
-> > I simply didn't have time to sit down with the hardware documentation
-> > and (re)understand the concepts governing this switch.
->
-> no problem, same here...not have every day time to dive into it :)
->
-> > I now have the patch below which should have everything working. Would
-> > you mind testing it?
->
-> thanks for your Patch, but unfortunately it looks like does not change b=
-ehaviour (have reverted all prevously applied patches,
-> only have felix series in).
->
-> i can ping over software-vlan on wan-port (and see tagged packets on oth=
-er side), till the point i setup the vlan-aware bridge over lan-ports. pin=
-g works some time (imho till arp-cache is cleared) and i see untagged pack=
-ets leaving wan-port (seen on other end) which should be tagged (wan.110).
->
-> and before anything ask: yes, i have set different mac to wan-port (and =
-its vlan-interfaces) and lanbr0
->
-> 15: lanbr0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue s=
-tate DOWN group default qlen 1000
->     link/ether 96:3f:c5:84:65:f0 brd ff:ff:ff:ff:ff:ff
-> 17: wan.140@wan: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueu=
-e state UP group default qlen 1000
->     link/ether 02:11:02:03:01:40 brd ff:ff:ff:ff:ff:ff
->     inet 192.168.140.1/24 brd 192.168.140.255 scope global wan.140
->        valid_lft forever preferred_lft forever
->     inet6 fe80::11:2ff:fe03:140/64 scope link
->        valid_lft forever preferred_lft forever
-> 18: wan.110@wan: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueu=
-e state UP group default qlen 1000
->     link/ether 02:11:02:03:01:10 brd ff:ff:ff:ff:ff:ff
->     inet 192.168.110.1/24 brd 192.168.110.255 scope global wan.110
->        valid_lft forever preferred_lft forever
->     inet6 fe80::11:2ff:fe03:110/64 scope link
->        valid_lft forever preferred_lft forever
->
-> have not yet defined any vlans in the bridge...only set vlan_awareness..=
-.maybe i need to add the wan-vlan
-> to the lan bridge too to pass filtering?
->
-> i'm unsure if tcpdump on the host interface should see vlan-traffic too =
-(but do not show the vlan itself)...
-> in working state i see icmp in both tcpdump modes (pinging the full time=
- without the bridge enabled only
-> changed tcpdump on the other side):
->
-> # tcpdump -nni lanbr0 | grep '\.110\.'
->
-> 17:13:36.071047 IP 192.168.110.1 > 192.168.110.3: ICMP echo request, id =
-1617, seq 47, length 64
-> 17:13:36.071290 IP 192.168.110.3 > 192.168.110.1: ICMP echo reply, id 16=
-17, seq 47, length 64
->
-> and
->
-> tcpdump -nni lanbr0 -e vlan | grep '\.110\.'
->
-> 17:16:35.032417 02:11:02:03:01:10 > 08:02:00:00:00:10, ethertype 802.1Q =
-(0x8100), length 102: vlan 110, p 0, ethertype IPv4, 192.168.110.1 > 192.1=
-68.110.3: ICMP echo request, id 1617, seq 219, length 64
-> 17:16:35.032609 08:02:00:00:00:10 > 02:11:02:03:01:10, ethertype 802.1Q =
-(0x8100), length 102: vlan 110, p 0, ethertype IPv4, 192.168.110.3 > 192.1=
-68.110.1: ICMP echo reply, id 1617, seq 219, length 64
->
-> after the vlan_aware bridge goes up i see packets in the non-vlan-mode
->
-> if needed here is my current codebase:
-> https://github.com/frank-w/BPI-Router-Linux/commits/6.2-rc
->
-> regards Frank
+On 03-Feb-23 20:49, Tomi Valkeinen wrote:
+> On 25/01/2023 13:35, Aradhya Bhatia wrote:
+>> The ctrl mmr module of the AM625 is different from the AM65X SoC. Thus
+>> the ctrl mmr registers that supported the OLDI TX power have become
+>> different in AM625 SoC.
+>>
+>> The common mode voltage of the LVDS buffers becomes random when the
+>> bandgap reference is turned off. This causes uncertainity in the LVDS
+>> Data and Clock signal outputs, making it behave differently under
+>> different conditions and panel setups. The bandgap reference must be
+>> powered on before using the OLDI IOs, to keep the common voltage trimmed
+>> down to desired levels.
+>>
+>> Add support to enable/disable OLDI IO signals as well as the bandgap
+>> reference circuit for the LVDS signals.
+>>
+>> Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
+>> ---
+>>
+>> Note:
+>> - Dropped Tomi Valkeinen's reviewed-by tag in this patch because I did
+>>    not implement one of his comments which suggested to remove the
+>>    'oldi_supported' variable. While the oldi support is indeed based on
+>>    SoC variations, keeping that variable helps take into account the case
+>>    where an OLDI supporting SoC by-passes OLDI TXes and gives out DPI
+>>    video signals straight from DSS.
+> 
+> Hmm why is that relevent for this patch? It doesn't use oldi_supported
+> or the new has_oldi.
+
+It doesn't. Not directly atleast. In the previous version of this patch,
+there was a mention of 'oldi_supported' and your tag was conditional to
+that variable getting removed. Instead, I renamed the variable.
+
+> 
+>>   drivers/gpu/drm/tidss/tidss_dispc.c      | 57 +++++++++++++++++++-----
+>>   drivers/gpu/drm/tidss/tidss_dispc_regs.h | 40 ++++++++++++-----
+>>   2 files changed, 76 insertions(+), 21 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/tidss/tidss_dispc.c b/drivers/gpu/drm/tidss/tidss_dispc.c
+>> index 37a73e309330..0e03557bc142 100644
+>> --- a/drivers/gpu/drm/tidss/tidss_dispc.c
+>> +++ b/drivers/gpu/drm/tidss/tidss_dispc.c
+>> @@ -934,21 +934,56 @@ int dispc_vp_bus_check(struct dispc_device *dispc, u32 hw_videoport,
+>>     static void dispc_oldi_tx_power(struct dispc_device *dispc, bool power)
+>>   {
+>> -    u32 val = power ? 0 : OLDI_PWRDN_TX;
+>> +    u32 val;
+>>         if (WARN_ON(!dispc->oldi_io_ctrl))
+>>           return;
+>>   -    regmap_update_bits(dispc->oldi_io_ctrl, OLDI_DAT0_IO_CTRL,
+>> -               OLDI_PWRDN_TX, val);
+>> -    regmap_update_bits(dispc->oldi_io_ctrl, OLDI_DAT1_IO_CTRL,
+>> -               OLDI_PWRDN_TX, val);
+>> -    regmap_update_bits(dispc->oldi_io_ctrl, OLDI_DAT2_IO_CTRL,
+>> -               OLDI_PWRDN_TX, val);
+>> -    regmap_update_bits(dispc->oldi_io_ctrl, OLDI_DAT3_IO_CTRL,
+>> -               OLDI_PWRDN_TX, val);
+>> -    regmap_update_bits(dispc->oldi_io_ctrl, OLDI_CLK_IO_CTRL,
+>> -               OLDI_PWRDN_TX, val);
+>> +    if (dispc->feat->subrev == DISPC_AM65X) {
+> 
+> Slight nitpick, but I think switch-case makes sense for the subrev. Even
+> if there are just two options here, using switch makes the structure clearer.
+
+Alright. I will make the edit.
+
+> 
+>> +        val = power ? 0 : AM65X_OLDI_PWRDN_TX;
+>> +
+>> +        regmap_update_bits(dispc->oldi_io_ctrl, AM65X_OLDI_DAT0_IO_CTRL,
+>> +                   AM65X_OLDI_PWRDN_TX, val);
+>> +        regmap_update_bits(dispc->oldi_io_ctrl, AM65X_OLDI_DAT1_IO_CTRL,
+>> +                   AM65X_OLDI_PWRDN_TX, val);
+>> +        regmap_update_bits(dispc->oldi_io_ctrl, AM65X_OLDI_DAT2_IO_CTRL,
+>> +                   AM65X_OLDI_PWRDN_TX, val);
+>> +        regmap_update_bits(dispc->oldi_io_ctrl, AM65X_OLDI_DAT3_IO_CTRL,
+>> +                   AM65X_OLDI_PWRDN_TX, val);
+>> +        regmap_update_bits(dispc->oldi_io_ctrl, AM65X_OLDI_CLK_IO_CTRL,
+>> +                   AM65X_OLDI_PWRDN_TX, val);
+>> +
+>> +    } else if (dispc->feat->subrev == DISPC_AM625) {
+>> +        if (power) {
+>> +            switch (dispc->oldi_mode) {
+>> +            case OLDI_MODE_SINGLE_LINK:
+>> +                /* Power down OLDI TX 1 */
+>> +                val = AM625_OLDI1_PWRDN_TX;
+>> +                break;
+>> +
+>> +            case OLDI_MODE_CLONE_SINGLE_LINK:
+>> +            case OLDI_MODE_DUAL_LINK:
+>> +                /* No Power down */
+>> +                val = 0;
+>> +                break;
+>> +
+>> +            default:
+>> +                /* Power down both OLDI TXes and LVDS Bandgap */
+>> +                val = AM625_OLDI0_PWRDN_TX | AM625_OLDI1_PWRDN_TX |
+>> +                      AM625_OLDI_PWRDN_BG;
+>> +                break;
+>> +            }
+>> +
+>> +        } else {
+>> +            /* Power down both OLDI TXes and LVDS Bandgap */
+>> +            val = AM625_OLDI0_PWRDN_TX | AM625_OLDI1_PWRDN_TX |
+>> +                  AM625_OLDI_PWRDN_BG;
+>> +        }
+>> +
+>> +        regmap_update_bits(dispc->oldi_io_ctrl, AM625_OLDI_PD_CTRL,
+>> +                   AM625_OLDI0_PWRDN_TX | AM625_OLDI1_PWRDN_TX |
+>> +                   AM625_OLDI_PWRDN_BG, val);
+>> +    }
+>>   }
+>>     static void dispc_set_num_datalines(struct dispc_device *dispc,
+>> diff --git a/drivers/gpu/drm/tidss/tidss_dispc_regs.h b/drivers/gpu/drm/tidss/tidss_dispc_regs.h
+>> index 13feedfe5d6d..b2a148e96022 100644
+>> --- a/drivers/gpu/drm/tidss/tidss_dispc_regs.h
+>> +++ b/drivers/gpu/drm/tidss/tidss_dispc_regs.h
+>> @@ -227,17 +227,37 @@ enum dispc_common_regs {
+>>   #define DISPC_VP_DSS_DMA_THREADSIZE_STATUS    0x174 /* J721E */
+>>     /*
+>> - * OLDI IO_CTRL register offsets. On AM654 the registers are found
+>> - * from CTRL_MMR0, there the syscon regmap should map 0x14 bytes from
+>> - * CTRLMMR0P1_OLDI_DAT0_IO_CTRL to CTRLMMR0P1_OLDI_CLK_IO_CTRL
+>> - * register range.
+>> + * OLDI IO and PD CTRL register offsets.
+>> + * These registers are found in the CTRL_MMR0, where the syscon regmap should map
+>> + *
+>> + * 1. 0x14 bytes from CTRLMMR0P1_OLDI_DAT0_IO_CTRL to CTRLMMR0P1_OLDI_CLK_IO_CTRL
+>> + * register range for the AM65X DSS, and
+>> + *
+>> + * 2. 0x200 bytes from OLDI0_DAT0_IO_CTRL to OLDI_LB_CTRL register range for the
+>> + * AM625 DSS.
+>>    */
+>> -#define OLDI_DAT0_IO_CTRL            0x00
+>> -#define OLDI_DAT1_IO_CTRL            0x04
+>> -#define OLDI_DAT2_IO_CTRL            0x08
+>> -#define OLDI_DAT3_IO_CTRL            0x0C
+>> -#define OLDI_CLK_IO_CTRL            0x10
+>>   -#define OLDI_PWRDN_TX                BIT(8)
+>> +/* -- For AM65X OLDI TX -- */
+>> +/* Register offsets */
+>> +#define AM65X_OLDI_DAT0_IO_CTRL            0x00
+>> +#define AM65X_OLDI_DAT1_IO_CTRL            0x04
+>> +#define AM65X_OLDI_DAT2_IO_CTRL            0x08
+>> +#define AM65X_OLDI_DAT3_IO_CTRL            0x0C
+>> +#define AM65X_OLDI_CLK_IO_CTRL            0x10
+>> +
+>> +/* Power control bits */
+>> +#define AM65X_OLDI_PWRDN_TX            BIT(8)
+>> +
+>> +/* -- For AM625 OLDI TX -- */
+>> +/* Register offsets */
+>> +#define AM625_OLDI_PD_CTRL            0x100
+>> +#define AM625_OLDI_LB_CTRL            0x104
+>> +
+>> +/* Power control bits */
+>> +#define AM625_OLDI0_PWRDN_TX            BIT(0)
+>> +#define AM625_OLDI1_PWRDN_TX            BIT(1)
+>> +
+>> +/* LVDS Bandgap reference Enable/Disable */
+>> +#define AM625_OLDI_PWRDN_BG            BIT(8)
+>>     #endif /* __TIDSS_DISPC_REGS_H */
+> 
+> Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+> 
+>  Tomi
+> 
+Regards
+Aradhya
