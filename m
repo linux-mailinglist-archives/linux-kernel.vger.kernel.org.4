@@ -2,116 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D092968B2C0
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 00:18:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC0F368B2D0
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 00:20:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbjBEXSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 18:18:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58460 "EHLO
+        id S229576AbjBEXUw convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 5 Feb 2023 18:20:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjBEXSk (ORCPT
+        with ESMTP id S229379AbjBEXUt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 18:18:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB9F19694
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 15:17:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675639035;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=O+iHbljQE4cWri51QLXa4Xz+3mOqMYYEFGlGW+CbZSY=;
-        b=d0u/kci3SmpyKeK+1bUK6fjGm+okJNWkRBZ9wjAgT6+IxX9HtyawhmwzebeMMVRWZbBbAA
-        ro7HQB+/wu6P0WGc1DBtxrmNq4l31jDk2BcuO/V2wmGHo4O0N/rb3NWfooaTaUuGg96lyf
-        XKY/nObhEdjEGMVQu5JE9gYM/lWSHGU=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-488-yOKTGlCyPCGhDhMcTnprHA-1; Sun, 05 Feb 2023 18:17:13 -0500
-X-MC-Unique: yOKTGlCyPCGhDhMcTnprHA-1
-Received: by mail-qk1-f200.google.com with SMTP id s7-20020a05620a0bc700b006e08208eb31so6824285qki.3
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Feb 2023 15:17:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=O+iHbljQE4cWri51QLXa4Xz+3mOqMYYEFGlGW+CbZSY=;
-        b=0izwM4dUjiIJW5BaB57NngPuugDw4ZAUf0miLTORP3uHM22CgZPVY2p1bmhcpSaKNt
-         Ms/4+VHYhiWL5rECjooinsF987QOPoB3B/AgowQW7gt/2nk+Y+4RWC6D3874VTj15Vfq
-         1MYjCX3ZlzoQkO07vyH6xRSk3FDE7LVEWprKf7aJTPBXrDRRc17SmHZ9y+ETSqHmD4E1
-         wKAXeMGrWwhdGIGjUn6ZLhoNSSfnGMn78K11OtG9WFQWV3bvh2o5nr2QBmh202ffDxLU
-         kCrh62bEzoHhmZkBxIeOK+R7nKIzhftiIHafTg4RPb4sgqCyxPQYrAv5ChfyF1gvgXiP
-         /CYQ==
-X-Gm-Message-State: AO0yUKWeKHI7a3fir+fipQkZ73SwTn+UYBGpNL2ZaHWZjkHYiIpBt2hT
-        xpScmEp7TcVRuNxMGdS+NofAPRD199fHbSsWUfdhntYedL8YntWSVoIkQeP8xXovQz12v/tcAnf
-        7+TdCSMvnkko0NZJEQnhq0Seu
-X-Received: by 2002:ac8:5a0c:0:b0:3b5:87db:f979 with SMTP id n12-20020ac85a0c000000b003b587dbf979mr36968152qta.5.1675639032210;
-        Sun, 05 Feb 2023 15:17:12 -0800 (PST)
-X-Google-Smtp-Source: AK7set8/HJ9ylfEnCGuGjHiBabf9O5KRa6hhSOUhT6sDqtmC260VVR8y98Nl2i/0VhE4BCc93ILrBA==
-X-Received: by 2002:ac8:5a0c:0:b0:3b5:87db:f979 with SMTP id n12-20020ac85a0c000000b003b587dbf979mr36968130qta.5.1675639031977;
-        Sun, 05 Feb 2023 15:17:11 -0800 (PST)
-Received: from x1n.redhat.com (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id h26-20020ac8515a000000b003b82cb8748dsm5986545qtn.96.2023.02.05.15.17.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Feb 2023 15:17:10 -0800 (PST)
-From:   Peter Xu <peterx@redhat.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     peterx@redhat.com, Andrew Morton <akpm@linux-foundation.org>,
-        linux-arm-kernel@lists.infradead.org, linux-s390@vger.kernel.org
-Subject: [PATCH 3/3] mm/s390: Define private VM_FAULT_* reasons from top bits
-Date:   Sun,  5 Feb 2023 18:17:04 -0500
-Message-Id: <20230205231704.909536-4-peterx@redhat.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20230205231704.909536-1-peterx@redhat.com>
-References: <20230205231704.909536-1-peterx@redhat.com>
+        Sun, 5 Feb 2023 18:20:49 -0500
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B48618A68;
+        Sun,  5 Feb 2023 15:20:48 -0800 (PST)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1pOoJC-003MG3-TF; Mon, 06 Feb 2023 00:20:30 +0100
+Received: from dynamic-077-183-123-111.77.183.pool.telefonica.de ([77.183.123.111] helo=[192.168.1.11])
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1pOoJC-0046Y6-LE; Mon, 06 Feb 2023 00:20:30 +0100
+Message-ID: <98d8ae20998c70988db52ba26f0a4e02ff2295a1.camel@physik.fu-berlin.de>
+Subject: Re: remove arch/sh
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-sh@vger.kernel.org
+Date:   Mon, 06 Feb 2023 00:20:29 +0100
+In-Reply-To: <20230206100856.603a0f8f@canb.auug.org.au>
+References: <20230113062339.1909087-1-hch@lst.de>
+         <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
+         <20230116071306.GA15848@lst.de>
+         <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
+         <20230203071423.GA24833@lst.de>
+         <afd056a95d21944db1dc0c9708f692dd1f7bb757.camel@physik.fu-berlin.de>
+         <20230203083037.GA30738@lst.de> <20230206100856.603a0f8f@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.3 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 77.183.123.111
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current definition already collapse with the generic definition of
-vm_fault_reason.  Move the private definitions to allocate bits from the
-top of uint so they won't collapse anymore.
+Hi Stephen!
 
-Signed-off-by: Peter Xu <peterx@redhat.com>
----
- arch/s390/mm/fault.c | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+On Mon, 2023-02-06 at 10:08 +1100, Stephen Rothwell wrote:
+> Hi,
+> 
+> On Fri, 3 Feb 2023 09:30:37 +0100 Christoph Hellwig <hch@lst.de> wrote:
+> > 
+> > On Fri, Feb 03, 2023 at 09:24:46AM +0100, John Paul Adrian Glaubitz wrote:
+> > > Since this is my very first time stepping up as a kernel maintainer, I was hoping
+> > > to get some pointers on what to do to make this happen.
+> > > 
+> > > So far, we have set up a new kernel tree and I have set up a local development and
+> > > test environment for SH kernels using my SH7785LCR board as the target platform.
+> > > 
+> > > Do I just need to send a patch asking to change the corresponding entry in the
+> > > MAINTAINERS file?  
+> > 
+> > I'm not sure a there is a document, but:
+> > 
+> >  - add the MAINTAINERS change to your tree
+> >  - ask Stephen to get your tree included in linux-next
+> 
+> And by "Stephen", Christoph means me.  When you are ready, please send
+> me a request to include your tree/branch in linux-next (usually the
+> branch is called something like "for-next" or just "next") telling me
+> the git URL, and the contacts I should send email to if there are
+> conflicts/build issues with the branch.  I will then fetch the branch
+> every time I create a new linux-next release (most work days), so all
+> you need to do is update that branch each time you are ready to publish
+> more commits.
 
-diff --git a/arch/s390/mm/fault.c b/arch/s390/mm/fault.c
-index 9649d9382e0a..cebfbd6dcbaf 100644
---- a/arch/s390/mm/fault.c
-+++ b/arch/s390/mm/fault.c
-@@ -46,11 +46,15 @@
- #define __SUBCODE_MASK 0x0600
- #define __PF_RES_FIELD 0x8000000000000000ULL
- 
--#define VM_FAULT_BADCONTEXT	((__force vm_fault_t) 0x010000)
--#define VM_FAULT_BADMAP		((__force vm_fault_t) 0x020000)
--#define VM_FAULT_BADACCESS	((__force vm_fault_t) 0x040000)
--#define VM_FAULT_SIGNAL		((__force vm_fault_t) 0x080000)
--#define VM_FAULT_PFAULT		((__force vm_fault_t) 0x100000)
-+/*
-+ * Allocate private vm_fault_reason from top.  Please make sure it won't
-+ * collide with vm_fault_reason.
-+ */
-+#define VM_FAULT_BADCONTEXT	((__force vm_fault_t) 0x80000000)
-+#define VM_FAULT_BADMAP		((__force vm_fault_t) 0x40000000)
-+#define VM_FAULT_BADACCESS	((__force vm_fault_t) 0x20000000)
-+#define VM_FAULT_SIGNAL		((__force vm_fault_t) 0x10000000)
-+#define VM_FAULT_PFAULT		((__force vm_fault_t) 0x8000000)
- 
- enum fault_type {
- 	KERNEL_FAULT,
+Thanks a lot! I will start with that tomorrow with Geert giving me some guidance.
+
+Adrian
+
 -- 
-2.37.3
-
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
