@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D3C468B0EA
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 17:19:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B31668B0EB
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 17:19:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbjBEQTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 11:19:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54978 "EHLO
+        id S229612AbjBEQTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 11:19:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjBEQTp (ORCPT
+        with ESMTP id S229519AbjBEQTp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 5 Feb 2023 11:19:45 -0500
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4C3A65A4;
-        Sun,  5 Feb 2023 08:19:43 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CEF5386A8;
+        Sun,  5 Feb 2023 08:19:44 -0800 (PST)
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1pOhjy-0000RS-00; Sun, 05 Feb 2023 17:19:42 +0100
+        id 1pOhjy-0000RS-01; Sun, 05 Feb 2023 17:19:42 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 2A8C2C2638; Sun,  5 Feb 2023 17:02:22 +0100 (CET)
-Date:   Sun, 5 Feb 2023 17:02:22 +0100
+        id 2C46FC265A; Sun,  5 Feb 2023 17:02:50 +0100 (CET)
+Date:   Sun, 5 Feb 2023 17:02:50 +0100
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     arinc9.unal@gmail.com
-Cc:     John Crispin <john@phrozen.org>,
-        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        erkin.bozoglu@xeront.com
-Subject: Re: [PATCH] mips: ralink: make SOC_MT7621 select PINCTRL_MT7621 and
- fix help section
-Message-ID: <20230205160222.GA4459@alpha.franken.de>
-References: <20230204214249.134937-1-arinc.unal@arinc9.com>
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        =?utf-8?B?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2] MIPS: DTS: CI20: fix otg power gpio
+Message-ID: <20230205160250.GB4459@alpha.franken.de>
+References: <8bcf9311284b4cab8be36922d6027813bfdf2bae.1675018624.git.hns@goldelico.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230204214249.134937-1-arinc.unal@arinc9.com>
+In-Reply-To: <8bcf9311284b4cab8be36922d6027813bfdf2bae.1675018624.git.hns@goldelico.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -46,41 +46,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 05, 2023 at 12:42:49AM +0300, arinc9.unal@gmail.com wrote:
-> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+On Sun, Jan 29, 2023 at 07:57:04PM +0100, H. Nikolaus Schaller wrote:
+> According to schematics it is PF15 and not PF14 (MIC_SW_EN).
+> Seems as if it was hidden and not noticed during testing since
+> there is no sound DT node.
 > 
-> The dt-binding of the MT7621 SoC uses the pinctrl driver. Therefore, have
-> this driver selected by default.
-> 
-> The help section for SOC_MT7621 exceeds 80 columns which is the preferred
-> limit of a single line. A tab character is 8 columns. Rearrange the text
-> accordingly.
-> 
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> Fixes: 158c774d3c64 ("MIPS: Ingenic: Add missing nodes for Ingenic SoCs and boards.")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+> Acked-by: Paul Cercueil <paul@crapouillou.net>
 > ---
->  arch/mips/ralink/Kconfig | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+>  arch/mips/boot/dts/ingenic/ci20.dts | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/arch/mips/ralink/Kconfig b/arch/mips/ralink/Kconfig
-> index f9fe15630abb..06031796c87b 100644
-> --- a/arch/mips/ralink/Kconfig
-> +++ b/arch/mips/ralink/Kconfig
-> @@ -54,10 +54,11 @@ choice
->  		select HAVE_PCI
->  		select PCI_DRIVERS_GENERIC
->  		select SOC_BUS
-> +		select PINCTRL_MT7621
+> diff --git a/arch/mips/boot/dts/ingenic/ci20.dts b/arch/mips/boot/dts/ingenic/ci20.dts
+> index 9819abb2465dd..a276488c0f752 100644
+> --- a/arch/mips/boot/dts/ingenic/ci20.dts
+> +++ b/arch/mips/boot/dts/ingenic/ci20.dts
+> @@ -115,7 +115,7 @@ otg_power: fixedregulator@2 {
+>  		regulator-min-microvolt = <5000000>;
+>  		regulator-max-microvolt = <5000000>;
 >  
->  		help
-> -		  The MT7621 system-on-a-chip includes an 880 MHz MIPS1004Kc dual-core CPU,
-> -		  a 5-port 10/100/1000 switch/PHY and one RGMII.
-> +		  The MT7621 system-on-a-chip includes an 880 MHz MIPS1004Kc
-> +		  dual-core CPU, a 5-port 10/100/1000 switch/PHY and one RGMII.
->  endchoice
->  
->  choice
+> -		gpio = <&gpf 14 GPIO_ACTIVE_LOW>;
+> +		gpio = <&gpf 15 GPIO_ACTIVE_LOW>;
+>  		enable-active-high;
+>  	};
+>  };
 > -- 
-> 2.37.2
+> 2.38.1
 
 applied to mips-next.
 
