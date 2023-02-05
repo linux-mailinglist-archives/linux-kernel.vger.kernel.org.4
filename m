@@ -2,69 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CF5C68AE05
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 03:14:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9362768AE03
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 03:13:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230283AbjBECOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 21:14:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43896 "EHLO
+        id S229865AbjBECNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 21:13:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjBECOK (ORCPT
+        with ESMTP id S229547AbjBECNc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 21:14:10 -0500
+        Sat, 4 Feb 2023 21:13:32 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 879291DB8D
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 18:13:21 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FE2022DC8
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 18:12:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675563200;
+        s=mimecast20190719; t=1675563160;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding;
-        bh=Ti8X/no/PUHL0AZuLXOo07rzpY67vV1fRdGL+Apgc10=;
-        b=hZopKaUSCLL1eXgi0Gc/wbZjXiCGgLUpgtrWbPXjzYR5lkrEBSxCdzSgaQ2tpgwUGN5U46
-        H09QxAvUgSxpPCYfRY8V9HN83dMfmzar8VMPdJr9aqcU1DuTJxZrQivta8RTJ2wuD8CPkr
-        +HqM0d9Z+eA+Bepsle/NNsHHiKsYjdM=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=TxjJOlkRD9KQJJ8RtFDJbVPO6vwF/VfUk2KQLMypAoU=;
+        b=KD/HbL8qKentFazK024FYXa5E35q4Iis3vuccryXkNuw2Yovk/HUl0qroeZ2oQ8g5T3a5W
+        6nCXtOgbtX0aor6gYFUSsQudDB1yQ8GWg58WAnn8GFfC7HGTJNEdz25AU9X4lOWU7y+pV4
+        xv55f159HGHUiVHV6UDhU9nW4wDTSC4=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-441-q0djaynDMtSO7fDeGWLWyA-1; Sat, 04 Feb 2023 21:13:19 -0500
-X-MC-Unique: q0djaynDMtSO7fDeGWLWyA-1
-Received: by mail-qk1-f198.google.com with SMTP id g6-20020ae9e106000000b00720f9e6e3e2so5869534qkm.13
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Feb 2023 18:13:19 -0800 (PST)
+ us-mta-111-m52bfbjhNYaU0bk_IDHFPw-1; Sat, 04 Feb 2023 21:12:38 -0500
+X-MC-Unique: m52bfbjhNYaU0bk_IDHFPw-1
+Received: by mail-qt1-f199.google.com with SMTP id i5-20020ac813c5000000b003b86b748aadso4653399qtj.14
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Feb 2023 18:12:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Ti8X/no/PUHL0AZuLXOo07rzpY67vV1fRdGL+Apgc10=;
-        b=lezg5yvfZcfFYnIGg3Kb3J2FB6eOP3q+lPiJ9SrMp/quFqRb2sV5LBMduzB6w6Do0w
-         7PN89mcG/aXBa5yDMym9p9HFylIr5z18LNghm0zGeSdBqI4XFVjDJDx86MhnhxmFN+Dl
-         i5vmqvbxT23UYEuDnTBEKbPWrNKEeqAE/0HJKo0Fg3f8hWc2C/qTJk5EcI6YlT/HKNTa
-         leT65eoMTHsTyepR6PVa8V9/5PgjVZSb5eGz2TbwHvuESa8kAiTsdLqJekWC2iVhWLhY
-         f9WgK1SWmnvJiHFScASXBibpYuTiZ4McwbeefPzU+Vjuum8gXKfe8LES2G49Dz8w+5bc
-         HMRA==
-X-Gm-Message-State: AO0yUKU9MngIJrFWcpq8wPIV+FWjhXjXVjiEf2xVfTAeTdGtE0EVazuL
-        GCMQ8Gx3FogNFy+AqRn6McyqfUe9odJ9zHQ4+tqMsVjQWuzvzoSSODRklmYzuzPNSgsMZ1umTp2
-        G280w7dsNHI1UUyOkaZn0yGSM
-X-Received: by 2002:a05:622a:34e:b0:3b9:bda7:bfa7 with SMTP id r14-20020a05622a034e00b003b9bda7bfa7mr28226295qtw.40.1675563199075;
-        Sat, 04 Feb 2023 18:13:19 -0800 (PST)
-X-Google-Smtp-Source: AK7set9OkA10FCcupiaY4iiAdKXtqwaxPP+EiUcMzFKXACPqRgx3hajFPOHWvBbGXnWXABs0p0KGrw==
-X-Received: by 2002:a05:622a:34e:b0:3b9:bda7:bfa7 with SMTP id r14-20020a05622a034e00b003b9bda7bfa7mr28226286qtw.40.1675563198864;
-        Sat, 04 Feb 2023 18:13:18 -0800 (PST)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id y21-20020a05622a005500b003b9bb59543fsm4590130qtw.61.2023.02.04.18.13.17
+        bh=TxjJOlkRD9KQJJ8RtFDJbVPO6vwF/VfUk2KQLMypAoU=;
+        b=6+VRH6KGG52LvC4YC+fth1gC6YBHI7Yw4l4BxlXS2i6tf+A9E10/11XEEIVyLO2d/S
+         5BBE2ngBms2IMMD0nS5BD8USce9+q6EdYFmXTl+n3Ygj2x4c6N3d8K9LxyW9dkKe28pP
+         mJCnotcMTucP1VqgYLoTuQKtJL1lFCQk0i/KxeHEvuvwvy85GG8RfxyGkyFOv7O93WTg
+         avU6c1pcBcWTNH3H40UOjImg1vTUftmsGHcf2iK8g7nG8bCA9gO3AnqALxHEfGiw/8OG
+         HvNZ2hevWDAOLOUlHs6SIzuSvOe+GHbKAvuNg5Jwrx5QGZs1UqQ6YnSyLHQ0FHGFfsT5
+         nnBw==
+X-Gm-Message-State: AO0yUKUie9al6tV3TjgQ/WVT9sbfnwxQwkYQNlxEJuIxd7mNHYJFgaVH
+        3oEOptU9mfvhJSbdrVPYnyJ14YCZmBULAqz6EFOxB3eKwc4CI6DG+0IbOUqlzGNkzPG2dXFrzjN
+        QzdFBmTWl8pZAKV5U7i6onea7
+X-Received: by 2002:ac8:7dd3:0:b0:3b9:a777:3d9a with SMTP id c19-20020ac87dd3000000b003b9a7773d9amr28666316qte.44.1675563158498;
+        Sat, 04 Feb 2023 18:12:38 -0800 (PST)
+X-Google-Smtp-Source: AK7set9g2HQ6czvVeGwBxMrcctOOmsHCimOzFUbYG6cWZmHqZ0y22vTjElFS6ahjksrz7A2cD7+6mQ==
+X-Received: by 2002:ac8:7dd3:0:b0:3b9:a777:3d9a with SMTP id c19-20020ac87dd3000000b003b9a7773d9amr28666302qte.44.1675563158283;
+        Sat, 04 Feb 2023 18:12:38 -0800 (PST)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id m15-20020ac85b0f000000b003a591194221sm4648646qtw.7.2023.02.04.18.12.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Feb 2023 18:13:18 -0800 (PST)
+        Sat, 04 Feb 2023 18:12:37 -0800 (PST)
 From:   Tom Rix <trix@redhat.com>
-To:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, liweilei@awinic.com, colin.i.king@gmail.com,
-        wangweidong.a@awinic.com, zhaolei@awinic.com
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+To:     gregkh@linuxfoundation.org, arnd@arndb.de,
+        linus.walleij@linaro.org, artur.bujdoso@gmail.com,
+        miquel.raynal@bootlin.com, colin.i.king@gmail.com,
+        biju.das.jz@bp.renesas.com, tmaimon77@gmail.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         Tom Rix <trix@redhat.com>
-Subject: [PATCH] ASoC: codecs: aw88395: initialize cur_scene_id to 0
-Date:   Sat,  4 Feb 2023 17:57:33 -0800
-Message-Id: <20230205015733.1721009-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+Subject: [PATCH] usb: host: USB_XHCI_RZV2M depends on USB_GADGET
+Date:   Sat,  4 Feb 2023 21:12:27 -0500
+Message-Id: <20230205021227.3017634-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -77,34 +78,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cppcheck reports
-sound/soc/codecs/aw88395/aw88395_lib.c:789:6: error: Uninitialized variable: cur_scene_id [uninitvar]
- if (cur_scene_id == 0) {
-     ^
+A rand config causes this link error
+ld: drivers/usb/host/xhci-rzv2m.o: in function `xhci_rzv2m_init_quirk':
+xhci-rzv2m.c:(.text+0x13): undefined reference to `rzv2m_usb3drd_reset'
 
-Passing a garbage value to aw_dev_parse_data_by_sec_type_v1() will cause a crash
-when the value is used as an array index.  This check assumes cur_scene_id is
-initialized to 0, so initialize it to 0.
+xhci_rzv2m_init_quirk build is controlled by USB_XHCI_RZV2M
+rzv2m_usb3drd_reset build is controlled by USB_RZV2M_USB3DRD
 
-Fixes: 4345865b003b ("ASoC: codecs: ACF bin parsing and check library file for aw88395")
+USE_XHCI_RZV2M does select USB_RZV2M_USB3DRD, but USB_RZV2M_USB3DRD
+depends on USB_GADGET, so now does USE_XHCI_RZV2M.
+
 Signed-off-by: Tom Rix <trix@redhat.com>
 ---
- sound/soc/codecs/aw88395/aw88395_lib.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/host/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/sound/soc/codecs/aw88395/aw88395_lib.c b/sound/soc/codecs/aw88395/aw88395_lib.c
-index 64dde972f3f0..d7c31a202adc 100644
---- a/sound/soc/codecs/aw88395/aw88395_lib.c
-+++ b/sound/soc/codecs/aw88395/aw88395_lib.c
-@@ -769,7 +769,7 @@ static int aw_dev_parse_dev_type_v1(struct aw_device *aw_dev,
- {
- 	struct aw_cfg_dde_v1 *cfg_dde =
- 		(struct aw_cfg_dde_v1 *)((char *)prof_hdr + prof_hdr->hdr_offset);
--	int cur_scene_id;
-+	int cur_scene_id = 0;
- 	unsigned int i;
- 	int ret;
- 
+diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
+index 2b80ce9587c1..2dd9e95a5b86 100644
+--- a/drivers/usb/host/Kconfig
++++ b/drivers/usb/host/Kconfig
+@@ -100,6 +100,7 @@ config USB_XHCI_RZV2M
+ 	tristate "xHCI support for Renesas RZ/V2M SoC"
+ 	depends on USB_XHCI_PLATFORM
+ 	depends on ARCH_R9A09G011 || COMPILE_TEST
++	depends on USB_GADGET
+ 	select USB_RZV2M_USB3DRD
+ 	help
+ 	  Say 'Y' to enable the support for the xHCI host controller
 -- 
-2.26.3
+2.27.0
 
