@@ -2,128 +2,560 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCB2568B005
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 14:40:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E90C668B008
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 14:43:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbjBENkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 08:40:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42400 "EHLO
+        id S229683AbjBENnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 08:43:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbjBENkW (ORCPT
+        with ESMTP id S229553AbjBENnQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 08:40:22 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2116.outbound.protection.outlook.com [40.107.93.116])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96EB71C7F8;
-        Sun,  5 Feb 2023 05:40:10 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iogd0DL5Ra5bwnAiwOH/8aAqbhVfuHLym/YIutcnDJEQlXOU43iHe3MiCbi5VGobxZlxRRis69RYPi60LiLvN+lYAE2SA99ShKW4qxF91Sfhu6mipbgSUrdTTHfSVrhTNHF6LzuEe2veiWHep5+32Pa9je7WG/maTmeYGkEkKl5Bkgqv1O8i6hCv0FZURq+xdboiOr9zXnBr8Xr0t66hdWUFYyUTCMse1W6eQpkfKuyZYexCEOVvlGo83VTUmM5eHfRN6BNSELoBRKXqOX6f+onvi95IzXQ0C6XcApFqfQfdYCfvb8A96+dRVEephjSQPd/T2NqW9zLted5JAGG9Tg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KYUZ9B6D0zGHtU2FKBpYUPB6fH02M8EBs2emmbzvkiM=;
- b=XKp/krd/DSW9Km/iAKlBwYZuEXt/hGMFR9Rz9HhILrC02TU3ZHKdGntZ96x03rSExtf5gJaBejpVTDsGPPjS5PCshmAdEiDzYs9+E9thW6lcrufHnVtuSqhTv5evqwFqnF8jRF0KKh2zvIWhrcmmzIUSORBZ48vhJZSJ/1yOsZ6ePntGQjscWF3kgy5FujS77d8mYh0Ny0C7rQLwU8+f3g3p5+ossi06GM88dfM30TNoUs4qexy36/AedDz8ljLpLYJ6/i4F9TbRQu+dSEVL6CIGOWEnUwR7IG5x1lnmp2xmkXUK4Uefc9Uz4pNrDWqyVEpMGtkmk3NigLqIM8mx7w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KYUZ9B6D0zGHtU2FKBpYUPB6fH02M8EBs2emmbzvkiM=;
- b=XPLD1ehIBwCzH3R7Ydsw2bQz3dmT7NqpCqx1CcYtHtelqrZXDuJUaTbAzN5qOKkYC4DIVMCTdw79COsTcTtq4Ecoz1E+Ul5/7d/z3xhJ1Wz89OjR/sY7xiDF/AZd29nxCmlQkhtFpp++VCMJ3t0rWYBuI3QwZizvIomvyiD0kLM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by PH7PR13MB6114.namprd13.prod.outlook.com (2603:10b6:510:2bb::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.27; Sun, 5 Feb
- 2023 13:40:09 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c%3]) with mapi id 15.20.6064.034; Sun, 5 Feb 2023
- 13:40:09 +0000
-Date:   Sun, 5 Feb 2023 14:40:02 +0100
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     linux-wireless@vger.kernel.org, tony0620emma@gmail.com,
-        kvalo@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Neo Jou <neojou@gmail.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>, pkshih@realtek.com
-Subject: Re: [PATCH v2 4/4] wifi: rtw88: mac: Use existing macros in
- rtw_pwr_seq_parser()
-Message-ID: <Y9+xsisUsPNam4DH@corigine.com>
-References: <20230204233001.1511643-1-martin.blumenstingl@googlemail.com>
- <20230204233001.1511643-5-martin.blumenstingl@googlemail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230204233001.1511643-5-martin.blumenstingl@googlemail.com>
-X-ClientProxiedBy: AM4PR0202CA0022.eurprd02.prod.outlook.com
- (2603:10a6:200:89::32) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Sun, 5 Feb 2023 08:43:16 -0500
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D8ADEB74;
+        Sun,  5 Feb 2023 05:43:12 -0800 (PST)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 315Dglip122849;
+        Sun, 5 Feb 2023 07:42:47 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1675604567;
+        bh=MkHzUmtMPTF1Yf4Z+KezMeDcA1WtKP/Nj3KNz8vscHE=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=Uarx+agDlb16P+H345RLYwoAntqhU9RdsDFl9AXvklfCzyIhQrNVqNiuOV/q/kDG5
+         ORJq3q+HC8hETdxLQLIZMprXHL29U55Pr4RD7FNMW1NyoPrR3PLH1sVB2+jjEyQXxv
+         mqdJVtGKsPMBjPbdjfVbET5llhYEjGjcS/WmeAFw=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 315DglbK012101
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Sun, 5 Feb 2023 07:42:47 -0600
+Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Sun, 5
+ Feb 2023 07:42:47 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Sun, 5 Feb 2023 07:42:47 -0600
+Received: from [10.250.235.106] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 315DgfUJ057632;
+        Sun, 5 Feb 2023 07:42:42 -0600
+Message-ID: <bd67f304-76c0-b098-8c41-5380f2996be8@ti.com>
+Date:   Sun, 5 Feb 2023 19:12:41 +0530
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH7PR13MB6114:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6bba343e-1426-4c52-600f-08db077e7f73
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: E78cwgPx4EBfWyJhIHDD67SQXe3IENuMZGEgotDjSaBLuMPcgpQYvIeIZ3LcdwZeqYDh3JFlY2bxMzEx5PWSynY8B5SoOUGaZjkcn2iAe368uy5T2TcfXYSxFf0eApOkP8qEAuGF3LnaDCxWH9tHd8L3b9zSFlpolCpKvQgR9+x0TrlY3q/W2Vwh1p/luflQ1tWGhGSOFButOk1N/24oVnbkmVeZ6SjKQ+kMsIy2LvHIqMx2JVGFMKv5EiO8bivpBQ9awqG9Ex3fq+yJv/RE4XV/Q+cGB6UYt/PhRN3TY2+/nm3k5IqTciLcFXzAxSs5dpat2cdSV9P6Ovb+4IHbsV5Bzyk6kBK/fLmw+xaSKiIfjAfaH7oNVO3RV8vtKw8bjR0qWew402/s0wmFydCr5XNY+5OKwnNlfR9hziSKHClQYr4jpbglrNRtGJuNaZ0GeQkWxgGJ9FV2xPGN8g2SEJEilag1pZaSfzkgj5II9ZgmAkYHNzoW23DcYCt6E7NkA4jYkNCTf6+En7y7FmGQzMFwIdvxh2kFVk1vT0vGuZlhigihjJjLz7uno6BHzNi07RbZlq4WItsFcypYlaMNEyJl1jmcbLBhHl4heG6h7AY17o//sUSB35Ir8ynBqfkMp3iknzYM02t62z4+sMyPJEnEcfSR0IeS4U7n7dv2ZVZpV8L3OXTIIhBghSGRYR/Tb6xA+1bAzqD4aNIxkJ2fSuSccV/bd8PcqSt9KmnlF8k=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(39830400003)(376002)(366004)(136003)(346002)(451199018)(4744005)(2616005)(38100700002)(8676002)(66946007)(6916009)(44832011)(41300700001)(8936002)(66476007)(66556008)(2906002)(86362001)(4326008)(5660300002)(6506007)(6486002)(478600001)(54906003)(186003)(6666004)(316002)(36756003)(6512007)(67856001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?gu8JW0do/FeYlll/Gv1fdFcTZclWhXBhnVumGWktfauHaNKfXXmC0XhI8m0j?=
- =?us-ascii?Q?VZCPNKqVkjGjeyX0WPkUmXLKQWKWleiGlK79qZKzEVWzhnhWSurNRh4zM+XX?=
- =?us-ascii?Q?8qfpDfbu7Ua09Qx1vCYsCE8PBzDIKMFF8gKPVtJzF2tsHTY2N+9tZ8OGjFRl?=
- =?us-ascii?Q?WUvZOqwfpT/iVrgZSRJirS0OHGXSivipwEfWl/amg1bRpD5rXQQ9swrrl6iW?=
- =?us-ascii?Q?lnCInHPsMAy2GWqYnLQ3BfUWBtuGBOrop8JB9hPz7FHVUFljk6BHp4g6RK6o?=
- =?us-ascii?Q?r2skSyzVMY1t3bBb81x/L+zsEc0DJj097ol4M4qsj/+I7vULu13YBNjGwGEa?=
- =?us-ascii?Q?7vcCACjvQR/2+KM9eRkUn+X54rioP79LEgBti1EMOKHg66L9RwN462YoJN0d?=
- =?us-ascii?Q?lusc4cdMfUX+ybjNzxYuuck8UU4P18VeirUrnONNPdhpUPZDPR5XAd9Dukyd?=
- =?us-ascii?Q?4mIca1J93xYltG+NtVG1PH4Tkto3FnSW0yEm3rJVvnixFgtC82vhUA0nwcll?=
- =?us-ascii?Q?6zX2+pJUM2fr8SKwGnM+yQ2Q6UdGFOlfL3i5HSnVyZBgDoGYk3u18AWvYDnT?=
- =?us-ascii?Q?7mWsSK/3TeHGhcLMzOpoFs9ZF0dEZ2mqFsoFpCPms9jA7WFnSAFka/bjfJiP?=
- =?us-ascii?Q?LYluXpD5OevvoZ62OCjiDCn7BlHQQ6Mc2ntxh8626hO6tGmazTEqVhslLwjy?=
- =?us-ascii?Q?mbhREUb8EoabJd9UlP1UhQFb868d7jfzA51LBHz/npRuuYInwaAvUGkVu++V?=
- =?us-ascii?Q?pq5mq+NjBRRPQPxoTVs51DcW9gJjYBAVHAAaLFQMDIRNT8NSbDp22B1QDFut?=
- =?us-ascii?Q?ufIWwG7i5WmynwD0Cf7umS1ced/QaVf3EpriVfg41F6bfPypByxC/AWIG1jY?=
- =?us-ascii?Q?klQm81B9N9z2P3FzVFpqr6mBDkmVf3uXkUd1zBuvtRb+Ma0dYL34AhuHnW9F?=
- =?us-ascii?Q?yZn04xwXF0FeJFzP0gNZfAGJuxjKz3OCwzCENwqomyrh+d86TgzaG1exusZD?=
- =?us-ascii?Q?515FhZHKnK/2R9pQJBl+tnt+jKHtM6SW2PCKW74z2X22+tAGlojjWC3PH+OG?=
- =?us-ascii?Q?aZ3xxe9bDINQAAEpQnYiyVp+JbnQJBGnnHS1SDvBe71GfI3V1JWtRo82dzjq?=
- =?us-ascii?Q?LdJ1lKYpM3/rNf9oq7Eoq1OeCMMTmwd66faKmosoNtTkBBoarJ5dhf6vpaAH?=
- =?us-ascii?Q?cdTIm9oM9YgUGirU/v0y6cQDvKwqO12a+DdhuCerkeWNoPPMVzQxa0Zeh689?=
- =?us-ascii?Q?ownwzV/18efi9xPtDSEPWhWjJxmyh4AXWLlQG2r2RVCjFzNjo4H3bPzNKZdE?=
- =?us-ascii?Q?AEPjYrWsa3RkwbBPLL/KrvACBVy8576/sp2n6udZn3mRPb690pEdPJF8KJA7?=
- =?us-ascii?Q?Xo2FxKYzy4oJllGO1/ygrbJM0u/tR9G5lVHYA65akSG8wIRsDJnEeEjPlCBi?=
- =?us-ascii?Q?W/wIl6pnIitP07jBko+wLw10UbQnjw3ZzsSnCYYiC+8SC9/4+WJ/52BRhutR?=
- =?us-ascii?Q?e9DxJZMs3FTnmuONm0IFF1X3t6W6O8otwQJCZtxp+y6DbuAk0a9hRMB1hhDN?=
- =?us-ascii?Q?csVL4jIa9uZuT7xbfOSpLuYJAsHTXtw/TQ3I/R3+7uovfgUzZstQcl5YaDR2?=
- =?us-ascii?Q?Qm61sYcx/V2rPrYEnppPH6kuE6e4SQUDxW1bHASPa7g9BM2S/4u7lOO3soqR?=
- =?us-ascii?Q?e3iTHw=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6bba343e-1426-4c52-600f-08db077e7f73
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Feb 2023 13:40:09.0629
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: yX+6R9UlYbI6BNEyofelq/uKq1mRYyc0T0/y6Hg1FVYPrvOv89qVSGKGkkGwJTwVbLSmZ0lypaLaiaPKqsfRMk8/U+TktdaFz1MqriCni3U=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR13MB6114
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v7 4/6] drm/tidss: Add support to configure OLDI mode for
+ am625-dss
+Content-Language: en-US
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+CC:     DRI Development List <dri-devel@lists.freedesktop.org>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rahul T R <r-ravikumar@ti.com>,
+        Devarsh Thakkar <devarsht@ti.com>,
+        Jai Luthra <j-luthra@ti.com>,
+        Jayesh Choudhary <j-choudhary@ti.com>
+References: <20230125113529.13952-1-a-bhatia1@ti.com>
+ <20230125113529.13952-5-a-bhatia1@ti.com>
+ <d852f997-aa40-390d-bca1-ec9bb330049d@ideasonboard.com>
+From:   Aradhya Bhatia <a-bhatia1@ti.com>
+In-Reply-To: <d852f997-aa40-390d-bca1-ec9bb330049d@ideasonboard.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 05, 2023 at 12:30:01AM +0100, Martin Blumenstingl wrote:
-> Replace the magic numbers for the intf_mask with their existing
-> RTW_PWR_INTF_PCI_MSK and RTW_PWR_INTF_USB_MSK macros to make the code
-> easier to understand.
-> 
-> Acked-by: Ping-Ke Shih <pkshih@realtek.com>
-> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Hi Tomi,
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+On 03-Feb-23 20:42, Tomi Valkeinen wrote:
+> On 25/01/2023 13:35, Aradhya Bhatia wrote:
+>> The newer version of DSS (AM625-DSS) has 2 OLDI TXes at its disposal.
+>> These can be configured to support the following modes:
+>>
+>> 1. OLDI_SINGLE_LINK_SINGLE_MODE
+>> Single Output over OLDI 0.
+>> +------+        +---------+      +-------+
+>> |      |        |         |      |       |
+>> | CRTC +------->+ ENCODER +----->| PANEL |
+>> |      |        |         |      |       |
+>> +------+        +---------+      +-------+
+>>
+>> 2. OLDI_SINGLE_LINK_CLONE_MODE
+>> Duplicate Output over OLDI 0 and 1.
+>> +------+        +---------+      +-------+
+>> |      |        |         |      |       |
+>> | CRTC +---+--->| ENCODER +----->| PANEL |
+>> |      |   |    |         |      |       |
+>> +------+   |    +---------+      +-------+
+>>             |
+>>             |    +---------+      +-------+
+>>             |    |         |      |       |
+>>             +--->| ENCODER +----->| PANEL |
+>>                  |         |      |       |
+>>                  +---------+      +-------+
+>>
+>> 3. OLDI_DUAL_LINK_MODE
+>> Combined Output over OLDI 0 and 1.
+>> +------+        +---------+      +-------+
+>> |      |        |         +----->|       |
+>> | CRTC +------->+ ENCODER |      | PANEL |
+>> |      |        |         +----->|       |
+>> +------+        +---------+      +-------+
+>>
+>> Following the above pathways for different modes, 2 encoder/panel-bridge
+>> pipes get created for clone mode, and 1 pipe in cases of single link and
+>> dual link mode.
+>>
+>> Add support for confguring the OLDI modes using OF and LVDS DRM helper
+>> functions.
+>>
+>> Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
+>> ---
+>>   drivers/gpu/drm/tidss/tidss_dispc.c   |  24 ++-
+>>   drivers/gpu/drm/tidss/tidss_dispc.h   |  12 ++
+>>   drivers/gpu/drm/tidss/tidss_drv.h     |   3 +
+>>   drivers/gpu/drm/tidss/tidss_encoder.c |   4 +-
+>>   drivers/gpu/drm/tidss/tidss_encoder.h |   3 +-
+>>   drivers/gpu/drm/tidss/tidss_kms.c     | 221 ++++++++++++++++++++++++--
+>>   6 files changed, 245 insertions(+), 22 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/tidss/tidss_dispc.c b/drivers/gpu/drm/tidss/tidss_dispc.c
+>> index b55ccbcaa67f..37a73e309330 100644
+>> --- a/drivers/gpu/drm/tidss/tidss_dispc.c
+>> +++ b/drivers/gpu/drm/tidss/tidss_dispc.c
+>> @@ -88,6 +88,8 @@ const struct dispc_features dispc_k2g_feats = {
+>>         .subrev = DISPC_K2G,
+>>   +    .has_oldi = false,
+>> +
+>>       .common = "common",
+>>         .common_regs = tidss_k2g_common_regs,
+>> @@ -166,6 +168,8 @@ const struct dispc_features dispc_am625_feats = {
+>>         .subrev = DISPC_AM625,
+>>   +    .has_oldi = true,
+>> +
+>>       .common = "common",
+>>       .common_regs = tidss_am65x_common_regs,
+>>   @@ -218,6 +222,8 @@ const struct dispc_features dispc_am65x_feats = {
+>>         .subrev = DISPC_AM65X,
+>>   +    .has_oldi = true,
+>> +
+>>       .common = "common",
+>>       .common_regs = tidss_am65x_common_regs,
+>>   @@ -309,6 +315,8 @@ const struct dispc_features dispc_j721e_feats = {
+>>         .subrev = DISPC_J721E,
+>>   +    .has_oldi = false,
+>> +
+>>       .common = "common_m",
+>>       .common_regs = tidss_j721e_common_regs,
+>>   @@ -361,6 +369,8 @@ struct dispc_device {
+>>         struct dss_vp_data vp_data[TIDSS_MAX_VPS];
+>>   +    enum dispc_oldi_modes oldi_mode;
+>> +
+>>       u32 *fourccs;
+>>       u32 num_fourccs;
+>>   @@ -1963,6 +1973,12 @@ const u32 *dispc_plane_formats(struct dispc_device *dispc, unsigned int *len)
+>>       return dispc->fourccs;
+>>   }
+>>   +void dispc_set_oldi_mode(struct dispc_device *dispc,
+>> +             enum dispc_oldi_modes oldi_mode)
+>> +{
+>> +    dispc->oldi_mode = oldi_mode;
+>> +}
+>> +
+>>   static s32 pixinc(int pixels, u8 ps)
+>>   {
+>>       if (pixels == 1)
+>> @@ -2647,7 +2663,7 @@ int dispc_runtime_resume(struct dispc_device *dispc)
+>>           REG_GET(dispc, DSS_SYSSTATUS, 2, 2),
+>>           REG_GET(dispc, DSS_SYSSTATUS, 3, 3));
+>>   -    if (dispc->feat->subrev == DISPC_AM65X)
+>> +    if (dispc->feat->has_oldi)
+>>           dev_dbg(dispc->dev, "OLDI RESETDONE %d,%d,%d\n",
+>>               REG_GET(dispc, DSS_SYSSTATUS, 5, 5),
+>>               REG_GET(dispc, DSS_SYSSTATUS, 6, 6),
+>> @@ -2688,7 +2704,7 @@ static int dispc_iomap_resource(struct platform_device *pdev, const char *name,
+>>       return 0;
+>>   }
+>>   -static int dispc_init_am65x_oldi_io_ctrl(struct device *dev,
+>> +static int dispc_init_am6xx_oldi_io_ctrl(struct device *dev,
+>>                        struct dispc_device *dispc)
+>>   {
+>>       dispc->oldi_io_ctrl =
+>> @@ -2827,8 +2843,8 @@ int dispc_init(struct tidss_device *tidss)
+>>           dispc->vp_data[i].gamma_table = gamma_table;
+>>       }
+>>   -    if (feat->subrev == DISPC_AM65X) {
+>> -        r = dispc_init_am65x_oldi_io_ctrl(dev, dispc);
+>> +    if (feat->has_oldi) {
+>> +        r = dispc_init_am6xx_oldi_io_ctrl(dev, dispc);
+>>           if (r)
+>>               return r;
+>>       }
+>> diff --git a/drivers/gpu/drm/tidss/tidss_dispc.h b/drivers/gpu/drm/tidss/tidss_dispc.h
+>> index 971f2856f015..880bc7de68b3 100644
+>> --- a/drivers/gpu/drm/tidss/tidss_dispc.h
+>> +++ b/drivers/gpu/drm/tidss/tidss_dispc.h
+>> @@ -64,6 +64,15 @@ enum dispc_dss_subrevision {
+>>       DISPC_J721E,
+>>   };
+>>   +enum dispc_oldi_modes {
+>> +    OLDI_MODE_SINGLE_LINK,        /* Single output over OLDI 0. */
+>> +    OLDI_MODE_CLONE_SINGLE_LINK,    /* Cloned output over OLDI 0 and 1. */
+>> +    OLDI_MODE_DUAL_LINK,        /* Combined output over OLDI 0 and 1. */
+>> +    OLDI_MODE_OFF,            /* OLDI TXes not connected in OF. */
+>> +    OLDI_MODE_UNSUPPORTED,        /* Unsupported OLDI configuration in OF. */
+>> +    OLDI_MODE_UNAVAILABLE,        /* OLDI TXes not available in SoC. */
+>> +};
+>> +
+>>   struct dispc_features {
+>>       int min_pclk_khz;
+>>       int max_pclk_khz[DISPC_PORT_MAX_BUS_TYPE];
+>> @@ -72,6 +81,8 @@ struct dispc_features {
+>>         enum dispc_dss_subrevision subrev;
+>>   +    bool has_oldi;
+>> +
+>>       const char *common;
+>>       const u16 *common_regs;
+>>       u32 num_vps;
+>> @@ -131,6 +142,7 @@ int dispc_plane_setup(struct dispc_device *dispc, u32 hw_plane,
+>>                 u32 hw_videoport);
+>>   int dispc_plane_enable(struct dispc_device *dispc, u32 hw_plane, bool enable);
+>>   const u32 *dispc_plane_formats(struct dispc_device *dispc, unsigned int *len);
+>> +void dispc_set_oldi_mode(struct dispc_device *dispc, enum dispc_oldi_modes oldi_mode);
+>>     int dispc_init(struct tidss_device *tidss);
+>>   void dispc_remove(struct tidss_device *tidss);
+>> diff --git a/drivers/gpu/drm/tidss/tidss_drv.h b/drivers/gpu/drm/tidss/tidss_drv.h
+>> index 0ce7ee5ccd5b..58892f065c16 100644
+>> --- a/drivers/gpu/drm/tidss/tidss_drv.h
+>> +++ b/drivers/gpu/drm/tidss/tidss_drv.h
+>> @@ -13,6 +13,9 @@
+>>   #define TIDSS_MAX_PLANES 4
+>>   #define TIDSS_MAX_OUTPUT_PORTS 4
+>>   +/* For AM625-DSS with 2 OLDI TXes */
+>> +#define TIDSS_MAX_BRIDGES_PER_PIPE    2
+>> +
+>>   typedef u32 dispc_irq_t;
+>>     struct tidss_device {
+>> diff --git a/drivers/gpu/drm/tidss/tidss_encoder.c b/drivers/gpu/drm/tidss/tidss_encoder.c
+>> index 0d4865e9c03d..bd2a7358d7b0 100644
+>> --- a/drivers/gpu/drm/tidss/tidss_encoder.c
+>> +++ b/drivers/gpu/drm/tidss/tidss_encoder.c
+>> @@ -70,7 +70,8 @@ static const struct drm_encoder_funcs encoder_funcs = {
+>>   };
+>>     struct drm_encoder *tidss_encoder_create(struct tidss_device *tidss,
+>> -                     u32 encoder_type, u32 possible_crtcs)
+>> +                     u32 encoder_type, u32 possible_crtcs,
+>> +                     u32 possible_clones)
+>>   {
+>>       struct drm_encoder *enc;
+>>       int ret;
+>> @@ -80,6 +81,7 @@ struct drm_encoder *tidss_encoder_create(struct tidss_device *tidss,
+>>           return ERR_PTR(-ENOMEM);
+>>         enc->possible_crtcs = possible_crtcs;
+>> +    enc->possible_clones = possible_clones;
+>>         ret = drm_encoder_init(&tidss->ddev, enc, &encoder_funcs,
+>>                      encoder_type, NULL);
+>> diff --git a/drivers/gpu/drm/tidss/tidss_encoder.h b/drivers/gpu/drm/tidss/tidss_encoder.h
+>> index ace877c0e0fd..01c62ba3ef16 100644
+>> --- a/drivers/gpu/drm/tidss/tidss_encoder.h
+>> +++ b/drivers/gpu/drm/tidss/tidss_encoder.h
+>> @@ -12,6 +12,7 @@
+>>   struct tidss_device;
+>>     struct drm_encoder *tidss_encoder_create(struct tidss_device *tidss,
+>> -                     u32 encoder_type, u32 possible_crtcs);
+>> +                     u32 encoder_type, u32 possible_crtcs,
+>> +                     u32 possible_clones);
+>>     #endif
+>> diff --git a/drivers/gpu/drm/tidss/tidss_kms.c b/drivers/gpu/drm/tidss/tidss_kms.c
+>> index d449131935d2..8322ee6310bf 100644
+>> --- a/drivers/gpu/drm/tidss/tidss_kms.c
+>> +++ b/drivers/gpu/drm/tidss/tidss_kms.c
+>> @@ -13,6 +13,7 @@
+>>   #include <drm/drm_of.h>
+>>   #include <drm/drm_panel.h>
+>>   #include <drm/drm_vblank.h>
+>> +#include <linux/of.h>
+>>     #include "tidss_crtc.h"
+>>   #include "tidss_dispc.h"
+>> @@ -104,26 +105,129 @@ static const struct drm_mode_config_funcs mode_config_funcs = {
+>>       .atomic_commit = drm_atomic_helper_commit,
+>>   };
+>>   +static enum dispc_oldi_modes tidss_get_oldi_mode(struct tidss_device *tidss)
+>> +{
+>> +    int pixel_order;
+>> +    enum dispc_oldi_modes oldi_mode;
+>> +    struct device_node *oldi0_port, *oldi1_port;
+>> +
+>> +    /*
+>> +     * For am625-dss, the OLDI ports are expected at port reg = 0 and 2,
+>> +     * and for am65x-dss, the OLDI port is expected only at port reg = 0.
+>> +     */
+>> +    const u32 portnum_oldi0 = 0, portnum_oldi1 = 2;
+>> +
+>> +    oldi0_port = of_graph_get_port_by_id(tidss->dev->of_node, portnum_oldi0);
+>> +    oldi1_port = of_graph_get_port_by_id(tidss->dev->of_node, portnum_oldi1);
+>> +
+>> +    if (!(oldi0_port || oldi1_port)) {
+>> +        /* Keep OLDI TXes OFF if neither OLDI port is present. */
+>> +        oldi_mode = OLDI_MODE_OFF;
+>> +    } else if (oldi0_port && !oldi1_port) {
+>> +        /*
+>> +         * OLDI0 port found, but not OLDI1 port. Setting single
+>> +         * link output mode.
+>> +         */
+>> +        oldi_mode = OLDI_MODE_SINGLE_LINK;
+>> +    } else if (!oldi0_port && oldi1_port) {
+>> +        /*
+>> +         * The 2nd OLDI TX cannot be operated alone. This use case is
+>> +         * not supported in the HW. Since the pins for OLDIs 0 and 1 are
+>> +         * separate, one could theoretically set a clone mode over OLDIs
+>> +         * 0 and 1 and just simply not use the OLDI 0. This is a hacky
+>> +         * way to enable only OLDI TX 1 and hence is not officially
+>> +         * supported.
+>> +         */
+>> +        dev_warn(tidss->dev,
+>> +             "Single Mode over OLDI 1 is not supported in HW.\n");
+>> +        oldi_mode = OLDI_MODE_UNSUPPORTED;
+>> +    } else {
+>> +        /*
+>> +         * OLDI Ports found for both the OLDI TXes. The DSS is to be
+>> +         * configured in either Dual Link or Clone Mode.
+>> +         */
+>> +        pixel_order = drm_of_lvds_get_dual_link_pixel_order(oldi0_port,
+>> +                                    oldi1_port);
+>> +        switch (pixel_order) {
+>> +        case -EINVAL:
+>> +            /*
+>> +             * The dual link properties were not found in at least
+>> +             * one of the sink nodes. Since 2 OLDI ports are present
+>> +             * in the DT, it can be safely assumed that the required
+>> +             * configuration is Clone Mode.
+>> +             */
+>> +            oldi_mode = OLDI_MODE_CLONE_SINGLE_LINK;
+>> +            break;
+>> +
+>> +        case DRM_LVDS_DUAL_LINK_EVEN_ODD_PIXELS:
+>> +            /*
+>> +             * Note that the OLDI TX 0 transmits the odd set of
+>> +             * pixels while the OLDI TX 1 transmits the even set.
+>> +             * This is a fixed configuration in the HW and an cannot
+>> +             * be change via SW.
+>> +             */
+>> +            dev_warn(tidss->dev,
+>> +                 "EVEN-ODD Dual-Link Mode is not supported in HW.\n");
+>> +            oldi_mode = OLDI_MODE_UNSUPPORTED;
+>> +            break;
+>> +
+>> +        case DRM_LVDS_DUAL_LINK_ODD_EVEN_PIXELS:
+>> +            oldi_mode = OLDI_MODE_DUAL_LINK;
+>> +            break;
+>> +
+>> +        default:
+>> +            oldi_mode = OLDI_MODE_UNSUPPORTED;
+>> +            break;
+>> +        }
+>> +    }
+>> +
+>> +    of_node_put(oldi0_port);
+>> +    of_node_put(oldi1_port);
+>> +
+>> +    return oldi_mode;
+>> +}
+>> +
+>>   static int tidss_dispc_modeset_init(struct tidss_device *tidss)
+>>   {
+>>       struct device *dev = tidss->dev;
+>>       unsigned int fourccs_len;
+>>       const u32 *fourccs = dispc_plane_formats(tidss->dispc, &fourccs_len);
+>> -    unsigned int i;
+>> +    unsigned int i, j;
+>>         struct pipe {
+>>           u32 hw_videoport;
+>> -        struct drm_bridge *bridge;
+>> +        struct drm_bridge *bridge[TIDSS_MAX_BRIDGES_PER_PIPE];
+>>           u32 enc_type;
+>> +        u32 num_bridges;
+>>       };
+>>         const struct dispc_features *feat = tidss->feat;
+>>       u32 output_ports = feat->num_output_ports;
+>>       u32 max_planes = feat->num_planes;
+>>   -    struct pipe pipes[TIDSS_MAX_VPS];
+>> +    struct pipe pipes[TIDSS_MAX_VPS] = {0};
+>> +
+>>       u32 num_pipes = 0;
+>>       u32 crtc_mask;
+>> +    enum dispc_oldi_modes oldi_mode = OLDI_MODE_UNAVAILABLE;
+>> +    u32 num_oldi = 0;
+>> +    u32 num_encoders = 0;
+>> +    u32 oldi_pipe_index = 0;
+>> +
+>> +    if (feat->has_oldi) {
+>> +        oldi_mode = tidss_get_oldi_mode(tidss);
+>> +
+>> +        if ((oldi_mode == OLDI_MODE_DUAL_LINK ||
+>> +             oldi_mode == OLDI_MODE_CLONE_SINGLE_LINK) &&
+>> +            feat->subrev == DISPC_AM65X) {
+>> +            dev_warn(tidss->dev,
+>> +                 "am65x-dss does not support this OLDI mode.\n");
+>> +
+>> +            oldi_mode = OLDI_MODE_UNSUPPORTED;
+>> +        }
+> 
+> Shouldn't OLDI_MODE_UNSUPPORTED be handled as an error? It means the DT
+> is faulty, doesn't it? Maybe it could even be renamed to
+> OLDI_MODE_ERROR. Or tidss_get_oldi_mode() could return a negative error
+> code.
+> 
+
+The idea was to let the framework continue configuring the 2nd videoport
+for DPI, even if the OLDI DT is wrong. But I have come across more
+examples recently where that is not the case. DT error for one pipe has
+resulted in returning of an error code.
+
+Will make the change.
+
+>> +
+>> +        dispc_set_oldi_mode(tidss->dispc, oldi_mode);
+>> +    }
+> 
+> Would it be better to move the above dispc_set_oldi_mode() to be outside
+> the if block? Then oldi mode would be set to OLDI_MODE_UNAVAILABLE on
+> SoCs that don't have OLDI.
+
+Ahh, yes! Will make the change.
+
+> 
+> tidss_get_oldi_mode and dispc_set_oldi_mode sound like opposites, but
+> they're totally different things. Maybe tidss_get_oldi_mode should
+> rather be something about parsing oldi dt properties or such.
+
+Okay! Is 'tidss_parse_oldi_properties' acceptable? This is just
+something I came up with now. I can think of more if this is not good.
+
+> 
+>>       /* first find all the connected panels & bridges */
+>>   @@ -179,10 +283,87 @@ static int tidss_dispc_modeset_init(struct tidss_device *tidss)
+>>               }
+>>           }
+>>   -        pipes[num_pipes].hw_videoport = i;
+>> -        pipes[num_pipes].bridge = bridge;
+>> -        pipes[num_pipes].enc_type = enc_type;
+>> -        num_pipes++;
+>> +        if (feat->output_port_bus_type[i] == DISPC_PORT_OLDI) {
+>> +            switch (oldi_mode) {
+>> +            case OLDI_MODE_UNSUPPORTED:
+>> +            case OLDI_MODE_OFF:
+>> +                /*
+>> +                 * Either the OLDI ports are not connected in
+>> +                 * OF, or their configuration mode is not
+>> +                 * supported.
+>> +                 * In both the cases, the OLDI sink ports shall
+>> +                 * not be logically connected to DSS ports.
+>> +                 *
+>> +                 * However, since other dss ports might still
+>> +                 * be in use (eg, for DPI), the driver shall
+>> +                 * continue to find the next connected sink in
+>> +                 * OF.
+>> +                 */
+>> +                dev_dbg(dev, "OLDI disconnected on port %d\n", i);
+>> +                continue;
+>> +
+>> +            case OLDI_MODE_DUAL_LINK:
+>> +                /*
+>> +                 * The 2nd OLDI port of a dual-link sink does
+>> +                 * not require a separate bridge entity.
+>> +                 */
+>> +                if (num_oldi) {
+> 
+> I think if (num_oldi > 0) makes it more readable.
+
+Alright!
+
+> 
+>> +                    drm_panel_bridge_remove(bridge);
+>> +                    continue;
+>> +                }
+>> +
+>> +                fallthrough;
+>> +
+>> +            case OLDI_MODE_CLONE_SINGLE_LINK:
+>> +            case OLDI_MODE_SINGLE_LINK:
+>> +                /*
+>> +                 * Setting up pipe parameters when 1st OLDI
+>> +                 * port is detected.
+>> +                 */
+>> +                if (!num_oldi) {
+> 
+> And here if (num_oldi == 0).
+Okay!
+
+> 
+>> +                    pipes[num_pipes].hw_videoport = i;
+>> +                    pipes[num_pipes].enc_type = enc_type;
+>> +
+>> +                    /*
+>> +                     * Saving the pipe index in case its
+>> +                     * required for 2nd OLDI Port.
+>> +                     */
+>> +                    oldi_pipe_index = num_pipes;
+>> +
+>> +                    /*
+>> +                     * Incrememnt num_pipe when 1st oldi
+>> +                     * port is discovered. For the 2nd OLDI
+>> +                     * port, num_pipe need not be
+>> +                     * incremented because the 2nd
+>> +                     * Encoder-to-Bridge connection will
+>> +                     * still be the part of the first OLDI
+>> +                     * Port pipe.
+>> +                     */
+>> +                    num_pipes++;
+>> +                }
+>> +
+>> +                /*
+>> +                 * Bridge is required to be added only if the
+>> +                 * detected port is the first OLDI port (of any
+>> +                 * mode) or a subsequent port in Clone Mode.
+>> +                 */
+> 
+> If I understand right, you're saying that bridge is not required to be
+> added for the second port for dual link? It maybe be clearer to state
+> that. But if so, isn't this still always adding the bridge here, for all
+> modes? Or what is the comment referring to?
+> 
+
+Well, yes. I am saying that the bridge should be added only when either
+one of the following 2 DT cases are detected.
+
+i.  First oldi DT (of any mode, including clone) OR
+ii. Second oldi DT only under clone mode
+
+Bridge is not required for the 2nd DT connection of Dual Link mode.
+I will make the comment clearer.
+
+If the loop is parsing the port under dual link mode, this part of the
+code will not be reached because of the "continue" clause above under
+the OLDI_MODE_DUAL_LINK case. Moreover, there won't be a 2nd port to
+parse if the mode is single link.
+
+That said, I can provide an if condition which ensures that, that code
+is only run when above conditions are met.
+
+
+Regards
+Aradhya
