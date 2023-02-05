@@ -2,128 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6B1168B186
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 21:12:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17BF568B18B
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 21:17:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229642AbjBEUMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 15:12:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45120 "EHLO
+        id S229516AbjBEUR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 15:17:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbjBEUMP (ORCPT
+        with ESMTP id S229457AbjBEUR1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 15:12:15 -0500
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4DA1CAC2;
-        Sun,  5 Feb 2023 12:12:06 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 12C005C0203;
-        Sun,  5 Feb 2023 15:12:06 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Sun, 05 Feb 2023 15:12:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=umbraculum.org;
-         h=cc:cc:content-transfer-encoding:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1675627926; x=
-        1675714326; bh=8VsSZkkMWRvOWY9tZMEtwmU5JOkYF2mh7pXIeChgG2k=; b=H
-        C8dXG0Se47RIJ5bO3VHAWnq/HJZudqoLWuZa4DtftBAnHjJ8tYiERb+VMRkHkRMT
-        ftHkKj36BpCDFaVJIq7U4QE+wQ71lje+ErsvratdtRHyh2HF/8c6twLyNlUKrYbg
-        1aUb7MmKhR6RzcMTNRUIJzYD5JpErH/h65tlhtbWvDkPc058aRjH3yv0fR7Z+uYZ
-        u3S3YH0r17dclPXWsA10NIdA9xs5WZTEUlh1nty7gjrxVIDdeQlMYULpkeWWxb+z
-        nR4Iomu4Yq/ReiRI/sC5OqnrfNKYjRcJMjyHV8zhNB45yWHsr3LzaT57B7ywrx6E
-        ia/LUJ9OI5kenyHIjUbnw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1675627926; x=1675714326; bh=8VsSZkkMWRvOW
-        Y9tZMEtwmU5JOkYF2mh7pXIeChgG2k=; b=YFlgDVbNZHteGZ2l+rJyXJF6Vev9d
-        NHdN9mfQUBoWOls0i73h/7xlmFMeWmlDUKAn5sfBsGgG8zwI4oHOuzLYWDhorNh0
-        0xBN62elFUYtPdicmkR8snyKE3jhja/jkxXHLDuXoiXPRiiJFPDZ2RMaeavIDkgT
-        jMpWALeCGG09Sk1doQr8Yc/fOFkWr5FYU3pp01OcIkSjkoKE0cNEKq85nNiFaago
-        67XOaE9kS7Dt7DR0SsBA7H/o9HMoya+XvLOjrf8pq3y7pZ+3hDwp4+LgZcezTjWZ
-        GlkiERW0scoq8ENX6upe6sTzlvZDYj5hnkCng5Hr+zpYzEhA4254ZRgdA==
-X-ME-Sender: <xms:lQ3gY1O4yC1WQpbvpzl0egyG9o6TFY021cNYDNFXTd-Pfa1BWcTkVA>
-    <xme:lQ3gY38piwIh5aJj6sl6GJYucRoAZrpkwdv9-_5kOPqpM-IY_aXXRaUKALr1TUNm-
-    010PSMitU0qsXqumtI>
-X-ME-Received: <xmr:lQ3gY0Qd_Xb2ihrLRfQRDxanUMkWcJ9wFegx_xkUo3HHa4nxCJ-jKIVJTL_Y-3NHSagiwwl3EKWHttJPbqEri931X3uGppRAP13ntw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeggedgudefgecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeflohhn
-    rghsucfuuhhhrhcuvehhrhhishhtvghnshgvnhcuoehjshgtsehumhgsrhgrtghulhhumh
-    drohhrgheqnecuggftrfgrthhtvghrnhepieevleeguedviefgfedtjeeuuddtjeekheff
-    ueffhfejieevleffffekjeffgedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
-    hmpehmrghilhhfrhhomhepjhhstgesuhhmsghrrggtuhhluhhmrdhorhhg
-X-ME-Proxy: <xmx:lQ3gYxv6o0m73p0GCEPHdEItPI3RHVYfWiSk787GqwZPQwCKG4L_Nw>
-    <xmx:lQ3gY9eDreQYWBql7hyk3AiO0s1WeTKThepOOd5L5DZEO6p5L_fbsw>
-    <xmx:lQ3gY93obr_J5lwzl4VZqeIIle3gFczpbIOTCf1dhhdoNx17RykF4A>
-    <xmx:lg3gYw-pZrPPFmNUXT95b3HQ6y1Iqt68zO9t0Wb_PPfZw348eVP29Q>
-Feedback-ID: i06314781:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 5 Feb 2023 15:12:03 -0500 (EST)
-From:   Jonas Suhr Christensen <jsc@umbraculum.org>
-To:     netdev@vger.kernel.org
-Cc:     jsc@umbraculum.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Harini Katakam <harini.katakam@amd.com>,
-        Haoyue Xu <xuhaoyue1@hisilicon.com>,
-        huangjunxian <huangjunxian6@hisilicon.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Esben Haabendal <esben@geanix.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net v2 2/2] net: ll_temac: Reset buffer on dma_map_single() errors
-Date:   Sun,  5 Feb 2023 21:11:28 +0100
-Message-Id: <20230205201130.11303-3-jsc@umbraculum.org>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230205201130.11303-1-jsc@umbraculum.org>
-References: <20230205201130.11303-1-jsc@umbraculum.org>
+        Sun, 5 Feb 2023 15:17:27 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC1C5599
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 12:17:25 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id lu11so28907283ejb.3
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Feb 2023 12:17:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=vuDqBGiso2ipHrhZ3TVaxXym8pN3xmoOWp0BE38pfVA=;
+        b=W42BN5rreyugL2nruL5TpgbVeOyHyYADshRnETRXpZ5gWTEDwZoz/ZJhrzw9p/mSU5
+         4GYap/Db9VgulivKnMUfaXM0q9OU1KpEiXQ5xlkckCsLSbJ4VbVzbPhSAelVtxyMtQhz
+         VeQ+DzCoz5BKRUNlvjpF4X2Wterev09VDMhRo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vuDqBGiso2ipHrhZ3TVaxXym8pN3xmoOWp0BE38pfVA=;
+        b=qOoCoLmh0dKgyDseihGrFFgopKzIWr17gLRz9pCoiWgSyGEktYq4T1TnfLCQvBX5kx
+         51YSUNFBIPdJR0eCeAzNHio9CsEfunQFZwNTxiNaMw2n9KrJzDdwf4/+08PSKVSacGi8
+         foaPR6JcKrKj9X7Dg7avP6QdIpbjJ2ckMbV5lKfJMazke1LprMAEZc6Uh+TDU5By2GPz
+         +fD6Za8fdahdxnIEjSZbIo/fV6QzhmgLclYw9ldzAZM11FyX4eyxve0GR19cctjv5asv
+         27Fog4MraqBYUX0/C/u0Zk6bw+UjUQ+hcgj2N1Ziwh02xOQuDP9CfK9tNGEZKnUMCAgA
+         ZfZQ==
+X-Gm-Message-State: AO0yUKXj9AL6rbimBO++2arMbjPMGYiWnE8kKpAtueZN/WJMr7L4eBq3
+        VFmhnrMAe3U3DsSyUjfqeJEcj+GRVEfHngT0hrk=
+X-Google-Smtp-Source: AK7set89hWceBNwzir/HBl3sGmuq9S6Tnzub8MEvrsobPttw8+fYjy5yYja/3Q0j4/SUMIa8qyt/SQ==
+X-Received: by 2002:a17:907:d410:b0:887:9a32:9a2 with SMTP id vi16-20020a170907d41000b008879a3209a2mr20792179ejc.0.1675628243447;
+        Sun, 05 Feb 2023 12:17:23 -0800 (PST)
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com. [209.85.218.53])
+        by smtp.gmail.com with ESMTPSA id f25-20020a170906391900b0084d4b8f5889sm4511575eje.102.2023.02.05.12.17.22
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 05 Feb 2023 12:17:22 -0800 (PST)
+Received: by mail-ej1-f53.google.com with SMTP id bk15so28834958ejb.9
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Feb 2023 12:17:22 -0800 (PST)
+X-Received: by 2002:a17:906:892:b0:87a:7098:ca09 with SMTP id
+ n18-20020a170906089200b0087a7098ca09mr4391723eje.78.1675628242466; Sun, 05
+ Feb 2023 12:17:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <Y9+Yv1CQKNP0Bwqq@kroah.com>
+In-Reply-To: <Y9+Yv1CQKNP0Bwqq@kroah.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 5 Feb 2023 12:17:05 -0800
+X-Gmail-Original-Message-ID: <CAHk-=whSQFHVzgQ+s8cbCSyE_yrd+BFuYktHe2=0h-nLXBi__Q@mail.gmail.com>
+Message-ID: <CAHk-=whSQFHVzgQ+s8cbCSyE_yrd+BFuYktHe2=0h-nLXBi__Q@mail.gmail.com>
+Subject: Re: [GIT PULL] TTY/Serial driver fixes for 6.2-rc7
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        George Kennedy <george.kennedy@oracle.com>
+Cc:     Jiri Slaby <jslaby@suse.cz>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To avoid later calls to dma_unmap_single() on address'
-that fails to be mapped, free the allocated skb and
-set the pointer of the address to NULL. Eg. when a mapping
-fails temac_dma_bd_release() will try to call dma_unmap_single()
-on that address if the structure is not reset.
+On Sun, Feb 5, 2023 at 3:53 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> George Kennedy (1):
+>       vc_screen: move load of struct vc_data pointer in vcs_read() to avoid UAF
 
-Fixes: d07c849cd2b9 ("net: ll_temac: Add more error handling of dma_map_single() calls")
+Hmm.
 
-Signed-off-by: Jonas Suhr Christensen <jsc@umbraculum.org>
----
- drivers/net/ethernet/xilinx/ll_temac_main.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+I think the "goto unlock_out" should be a "break". A partial read
+should return the partial success, not an error.
 
-diff --git a/drivers/net/ethernet/xilinx/ll_temac_main.c b/drivers/net/ethernet/xilinx/ll_temac_main.c
-index 74423adbe50d..df43f5bc3bd3 100644
---- a/drivers/net/ethernet/xilinx/ll_temac_main.c
-+++ b/drivers/net/ethernet/xilinx/ll_temac_main.c
-@@ -376,8 +376,11 @@ static int temac_dma_bd_init(struct net_device *ndev)
- 		skb_dma_addr = dma_map_single(ndev->dev.parent, skb->data,
- 					      XTE_MAX_JUMBO_FRAME_SIZE,
- 					      DMA_FROM_DEVICE);
--		if (dma_mapping_error(ndev->dev.parent, skb_dma_addr))
-+		if (dma_mapping_error(ndev->dev.parent, skb_dma_addr)) {
-+			dev_kfree_skb(lp->rx_skb[i]);
-+			lp->rx_skb[i] = NULL;
- 			goto out;
-+		}
- 		lp->rx_bd_v[i].phys = cpu_to_be32(skb_dma_addr);
- 		lp->rx_bd_v[i].len = cpu_to_be32(XTE_MAX_JUMBO_FRAME_SIZE);
- 		lp->rx_bd_v[i].app0 = cpu_to_be32(STS_CTRL_APP0_IRQONEND);
--- 
-2.39.1
+That situation didn't exist when the check was outside the loop, but does now.
 
+Now, I don't think this matters for any sane situation, but since I
+looked at this patch I thought I'd mention it.
+
+                   Linus
