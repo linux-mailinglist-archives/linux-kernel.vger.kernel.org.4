@@ -2,55 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0817668B0F1
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 17:33:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C803A68B0F5
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 17:34:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229603AbjBEQdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 11:33:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58586 "EHLO
+        id S229622AbjBEQex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 11:34:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbjBEQdU (ORCPT
+        with ESMTP id S229472AbjBEQev (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 11:33:20 -0500
+        Sun, 5 Feb 2023 11:34:51 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7CA913DFA
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 08:33:19 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7F317CF7;
+        Sun,  5 Feb 2023 08:34:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
         Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
         Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=KIcvyvw+LNiAuiat+2Ged5NHWXEzUL/DzXjZ99VJcbw=; b=OvqxQLBLftL5yVLAHQaCQJrPKT
-        jK0eJJ6MEoDzTrGyNDfWH3t+4fk2vCQMLH+K9hjN3c1bDRDxDvfDIHIJk7bp02KI4SzKsgWrSFROX
-        AYVWcSWQkjGN4GB2HYAgD9Yb9dVXH9FWwjP3yHg6XxWNCw3CuT7JtJZoIzn1nRQ9atG5Kh+KBoXY6
-        kKXpeXtvWSEau1fcGYXAVMFILV0wWGcIPbXmeKq+Z+LXs0nQEqd/Pl9FO6HtQUeCdaw9EhIIDR5KN
-        i7TSD6xU4jM3Rkqm/HCaQItJC+uj9Oi5xobx2A4/x2IYN48ZdNV1YBYjI5KVJKXr+E6Q5nfELMb1o
-        b0vfIKtQ==;
+        bh=LB294Uf35XLOlIGZgL5S9Cwdh56i6WvdNULkVbiX7AA=; b=1aKv3SlahvSTuW7BDtWUECJTxX
+        e73r7HYi6S2M7tEFzMYmSDVX2ilc7skzeda0Nuj3P0SK5bjlHjolO7Cq5ILQMwy9sOdLlBL2Xmuud
+        sW1IJFGDh2G0woyCgSFwGqArYcFKvHIo0cjL8FejMWFQmUGVyE+VS/1G79nsCFA+TSEjMVJD5z6zj
+        hQ1NndN1Eh/8lDirkW1wNZ/EBI1mRFgeoFJ7UVkBumUalkQx+JhgHcRVbn9VTle72mxHDdIEP/4xc
+        jRpqwTkRoQKWcA8ttkm2zqx1jzgQCSYoEG+0Bo+AqqXLPl/+4prpoW83XdnpIzsYBYvzniaDYhRQK
+        +kgnUisA==;
 Received: from [2601:1c2:d00:6a60::9526]
         by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pOhx3-006Z24-IA; Sun, 05 Feb 2023 16:33:13 +0000
-Message-ID: <99b808ba-a66f-784f-827e-1ceeade8b87f@infradead.org>
-Date:   Sun, 5 Feb 2023 08:33:11 -0800
+        id 1pOhyb-006Z77-QY; Sun, 05 Feb 2023 16:34:49 +0000
+Message-ID: <a809e2f8-4c11-e4b5-9bf1-a2b67077a1d1@infradead.org>
+Date:   Sun, 5 Feb 2023 08:34:49 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH] checkpatch.pl: Relax commit ID check to allow more than
- 12 chars
+Subject: Re: [PATCH] parisc: update kbuild doc. aliases for parisc64
 Content-Language: en-US
-To:     =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
-        Joe Perches <joe@perches.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>
 Cc:     linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andy Whitcroft <apw@canonical.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-References: <20230129123431.1282427-1-j.neuschaefer@gmx.net>
- <78d224a63f6c27bf700d59007b6f3c89746d728c.camel@perches.com>
- <3afee0493d3718f2e38b6c54dab23d38360cd5d0.camel@perches.com>
- <Y9+HnJ9ldBZP16zp@probook>
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org
+References: <20230205010425.11932-1-rdunlap@infradead.org>
+ <CAK7LNAQ0-i_CciUELv+G9imYL-JA1LLiqRYYbj_N0jJZ2Ro-Mw@mail.gmail.com>
 From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <Y9+HnJ9ldBZP16zp@probook>
+In-Reply-To: <CAK7LNAQ0-i_CciUELv+G9imYL-JA1LLiqRYYbj_N0jJZ2Ro-Mw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -62,42 +58,49 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2/5/23 02:40, Jonathan Neuschäfer wrote:
-> On Sat, Feb 04, 2023 at 08:57:59AM -0800, Joe Perches wrote:
->> On Sun, 2023-01-29 at 09:52 -0800, Joe Perches wrote:
->>> On Sun, 2023-01-29 at 13:34 +0100, Jonathan Neuschäfer wrote:
->>>> By now, `git log --pretty=%h` (on my copy of linux.git) prints commit
->>>> hashes with 13 digits, because of the number of objects.
->>>>
->>>> Relax the rule in checkpatch.pl to allow a few more digits (up to 16).
->>>
->>> NAK without updating the process docs first.
+On 2/5/23 05:19, Masahiro Yamada wrote:
+> On Sun, Feb 5, 2023 at 10:04 AM Randy Dunlap <rdunlap@infradead.org> wrote:
 >>
->> btw: it looks like 12 will still be sufficient for awhile yet
+>> ARCH=parisc64 is now supported for 64-bit parisc builds, so add
+>> this alias to the kbuild.rst documentation.
 >>
->> $ git count
->> total 1154908
->> $ git -c core.abbrev=5 log --pretty=format:%h | \
->>   perl -nE 'chomp;say length' | sort | uniq -c | sort -n -k2
->>     198 5
->>  664613 6
->>  450955 7
->>   36667 8
->>    2312 9
->>     155 10
->>       8 11
+>> Fixes: 3dcfb729b5f4 ("parisc: Make CONFIG_64BIT available for ARCH=parisc64 only")
+>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+>> Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+>> Cc: Helge Deller <deller@gmx.de>
+>> Cc: linux-parisc@vger.kernel.org
+>> Cc: Masahiro Yamada <masahiroy@kernel.org>
+>> Cc: linux-kbuild@vger.kernel.org
+>> Cc: Jonathan Corbet <corbet@lwn.net>
+>> Cc: linux-doc@vger.kernel.org
+>> ---
+>>  Documentation/kbuild/kbuild.rst |    1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff -- a/Documentation/kbuild/kbuild.rst b/Documentation/kbuild/kbuild.rst
+>> --- a/Documentation/kbuild/kbuild.rst
+>> +++ b/Documentation/kbuild/kbuild.rst
+>> @@ -160,6 +160,7 @@ directory name found in the arch/ direct
+>>  But some architectures such as x86 and sparc have aliases.
+>>
+>>  - x86: i386 for 32 bit, x86_64 for 64 bit
+>> +- parisc: parisc for 32 bit, parisc64 for 64 bit
 > 
-> Ok, I get similar stats on my tree (which includes linux-next and a few
-> other remotes).
 > 
-> However, git's default heuristic for %h length uses 13 digits here, so I
-> think other people might get 13 digits as well. I could force git to use
-> less digits than it naturally would, by setting core.abbrev=12 (and
-> document this idea in the documentation), but that doesn't seem nice.
-> Therefore, I still think allowing a few more digits is a good idea.
+> 
+> 
+> 'parisc' is not an alias since it matches the arch/parisc/
+> directory, is it?
 
-I have core.abbrev=12 and I still get 13 "digits" often.
-Then I just chop it off at 12 to satisfy checkpatch...
+True. I'll correct that.
+Thanks.
+
+ 
+>>  - sh: sh for 32 bit, sh64 for 64 bit
+>>  - sparc: sparc32 for 32 bit, sparc64 for 64 bit
+>>
+> 
+> 
 
 -- 
 ~Randy
