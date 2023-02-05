@@ -2,66 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E7E368AFDB
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 14:08:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0810768AFDE
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 14:09:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229521AbjBENIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 08:08:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60134 "EHLO
+        id S229609AbjBENJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 08:09:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjBENIO (ORCPT
+        with ESMTP id S229523AbjBENI7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 08:08:14 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A44531F5FF
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 05:08:06 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id l12so306337edb.0
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Feb 2023 05:08:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JDLxI4fpTDTmEI4qnM+uL8XIXglzEjq5nSIL0bjIDLo=;
-        b=ci3bWc23frclFm9mFh/FFC9McKZJpWiGMUOa1XGn9GfJUSSISMbeGeDyQYXmbOEwhH
-         ed+rXxN1EyWFqhNGB2Uce+FakwGgIKEHsEW65OeuDI77gjbfI8pMPXreVu+F5+jWk/cK
-         DouPMTi3TjFYXY/4ZAy+xxx565ypbvcG+MlyGl8nLj0WThcTA9ls1gZKStEHIrGVrmBq
-         SjSlMxGbu0Ao0CkK8BWKnrf+McX4EyweOiWW2YF2+Lke2RptfLU72xcWVrO9pBF2cOXZ
-         e4Cz1DowAM57HR2zqSPoEOzsd9VtY4k9xtYO+KY2x84AfT0+zq/BPyYD8QS3PNGwVGVV
-         PQCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JDLxI4fpTDTmEI4qnM+uL8XIXglzEjq5nSIL0bjIDLo=;
-        b=17aNXh3eph2E5VCCnJcx+X0kcxSSKNVvqFDjZu7M0h5vTh+RVEoeL0oI5XRGcQfXZz
-         7AO/QywTiY2xiF1BnuHKtF8VqvGIyQt+zDrf6kx6pd7N9eTByAvl2e1/g6jBIJj85k2A
-         MHBqSScn9TK8DfQWgAO2BcruRorB2nb8FJFEXfFXcl2HXWLU+k87ofOJhMjWlC1VHgJQ
-         mCR3rv4lYxdXQRuj/VMzdDVXwyDpe46wCoc//QRPyQASjCZJRZINpEq7aAIQ+Cq9T8+c
-         7dnbuI9AJmx3mzC9kQJAZLi35pRQn6VYWq7wcIWjg4fzVJFxdU+B+KufWmgwiC1kXlyW
-         Ad/g==
-X-Gm-Message-State: AO0yUKXfViJnIUQ5C6o2U3Gxg6RvpjtrMgo55cnGHEFA8AyjrjAih432
-        raJZQS4Jse737xS+fUaZlFeYsu6Zv4E=
-X-Google-Smtp-Source: AK7set/IJcGeqAYiBrIfoQWphmoP9Q59R+3UFGAOjal0ryJ8Jbiq5ISi436jjglfFLv6uv+3S8G9Wg==
-X-Received: by 2002:a50:9304:0:b0:4a2:7489:a70a with SMTP id m4-20020a509304000000b004a27489a70amr18098803eda.22.1675602485029;
-        Sun, 05 Feb 2023 05:08:05 -0800 (PST)
-Received: from combine-ThinkPad-S1-Yoga (c-8ff371d5.879159-0-69706f6e6c79.bbcust.telenor.se. [213.113.243.143])
-        by smtp.gmail.com with ESMTPSA id b15-20020a509f0f000000b004aaa3c872d0sm1748175edf.87.2023.02.05.05.08.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Feb 2023 05:08:04 -0800 (PST)
-Date:   Sun, 5 Feb 2023 14:08:02 +0100
-From:   Guru Mehar Rachaputi <gurumeharrachaputi@gmail.com>
-To:     Forest Bond <forest@alittletooquiet.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] staging: vt6655: Macro with braces issue change to inline
- function
-Message-ID: <Y9+qMqYD2zGWRurD@combine-ThinkPad-S1-Yoga>
+        Sun, 5 Feb 2023 08:08:59 -0500
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8C0511647;
+        Sun,  5 Feb 2023 05:08:55 -0800 (PST)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 315D8Zne110454;
+        Sun, 5 Feb 2023 07:08:35 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1675602515;
+        bh=WAUfVNWyREj2xrr0aQr/BgWXbQzVJwxLnTl2Ggv+ZgQ=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=DNywh1BZ2kf4i0sr/Uw1/6/0tevihkTikwHccMkdGOwzT9vJNoYNPyxrNXXJtAlvn
+         CYV8K7SkBUQIpJ+U2EZhpXnjClU94Efm/EPlZKeUT01tVVznxNlQN/+lZmPLfWxEST
+         TXT8laJSqlj08ZPrmupbmRZ6PViTAzSUrVszQV2k=
+Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 315D8Z1m025341
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Sun, 5 Feb 2023 07:08:35 -0600
+Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Sun, 5
+ Feb 2023 07:08:34 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Sun, 5 Feb 2023 07:08:34 -0600
+Received: from [10.250.235.106] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 315D8T4l021879;
+        Sun, 5 Feb 2023 07:08:30 -0600
+Message-ID: <94cf519a-a72f-89d8-fe2a-9fa795ede6ac@ti.com>
+Date:   Sun, 5 Feb 2023 18:38:28 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v7 1/6] drm/tidss: Remove Video Port to Output Port
+ coupling
+Content-Language: en-US
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+CC:     Nishanth Menon <nm@ti.com>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        Jayesh Choudhary <j-choudhary@ti.com>,
+        Jai Luthra <j-luthra@ti.com>, Rahul T R <r-ravikumar@ti.com>,
+        Devarsh Thakkar <devarsht@ti.com>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>,
+        DRI Development List <dri-devel@lists.freedesktop.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+References: <20230125113529.13952-1-a-bhatia1@ti.com>
+ <20230125113529.13952-2-a-bhatia1@ti.com>
+ <300c0351-6ee0-d703-bd53-bc4c0fe3af0f@ideasonboard.com>
+From:   Aradhya Bhatia <a-bhatia1@ti.com>
+In-Reply-To: <300c0351-6ee0-d703-bd53-bc4c0fe3af0f@ideasonboard.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,76 +80,322 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch is to fix checkpatch warning: "Macro argument 'iobase' may be better
-as '(iobase)' to avoid precedence issues"
+Hi Tomi,
 
----
-Changes in v3:
-	- Whitespace error from checkpatch fixed
+Thanks for the review!
 
-Changes in v2:
-	- Macros with one statement that is to call 'iowrite8' function changed
-	to inline function as reviewed by gregkh@linuxfoundation.org.
-	In relation to this, names of the callers of macro are also modified
-	to call this function.
+On 03-Feb-23 16:53, Tomi Valkeinen wrote:
+> On 25/01/2023 13:35, Aradhya Bhatia wrote:
+>> Make DSS Video Ports agnostic of output bus types.
+>>
+>> DSS controllers have had a 1-to-1 coupling between its VPs and its
+>> output ports. This no longer stands true for the new AM625 DSS. This
+>> coupling, hence, has been removed by renaming the 'vp_bus_type' to
+>> 'output_port_bus_type' because the VPs are essentially agnostic of the
+>> bus type and it is the output ports which have a bus type.
+>>
+>> The AM625 DSS has 2 VPs but requires 3 output ports to support its
+>> Dual-Link OLDI video output coming from a single VP.
+> 
+> Not a biggie, but this sentence is a bit odd here at the end. Shouldn't
+> it be after the "...stands true for the new AM625 DSS."?
 
-Signed-off-by: Guru Mehar Rachaputi <gurumeharrachaputi@gmail.com>
----
- drivers/staging/vt6655/card.c    | 3 +--
- drivers/staging/vt6655/channel.c | 2 +-
- drivers/staging/vt6655/mac.h     | 4 ++--
- 3 files changed, 4 insertions(+), 5 deletions(-)
+Yes! It should be. Will make the edit.
 
-diff --git a/drivers/staging/vt6655/card.c b/drivers/staging/vt6655/card.c
-index a6ff496b01b6..d2d122dc16d8 100644
---- a/drivers/staging/vt6655/card.c
-+++ b/drivers/staging/vt6655/card.c
-@@ -643,8 +643,7 @@ void CARDvSetRSPINF(struct vnt_private *priv, u8 bb_type)
- 				   &byRsvTime);
- 	iowrite16(MAKEWORD(byTxRate, byRsvTime), priv->port_offset + MAC_REG_RSPINF_A_72);
- 	/* Set to Page0 */
--        vt6655_mac_select_page0(priv->port_offset);
--
-+	vt6655_mac_select_page0(priv->port_offset);
- 
- 	spin_unlock_irqrestore(&priv->lock, flags);
- }
-diff --git a/drivers/staging/vt6655/channel.c b/drivers/staging/vt6655/channel.c
-index e9a44bcebe32..60b445c38424 100644
---- a/drivers/staging/vt6655/channel.c
-+++ b/drivers/staging/vt6655/channel.c
-@@ -121,7 +121,7 @@ bool set_channel(struct vnt_private *priv, struct ieee80211_channel *ch)
- 		iowrite8(priv->byCurPwr, priv->port_offset + MAC_REG_PWRCCK);
- 		RFbSetPower(priv, RATE_6M, priv->byCurrentCh);
- 		iowrite8(priv->byCurPwr, priv->port_offset + MAC_REG_PWROFDM);
--	        vt6655_mac_select_page0(priv->port_offset);
-+		vt6655_mac_select_page0(priv->port_offset);
- 
- 		spin_unlock_irqrestore(&priv->lock, flags);
- 	}
-diff --git a/drivers/staging/vt6655/mac.h b/drivers/staging/vt6655/mac.h
-index b9a7ca0fe604..ae3064303691 100644
---- a/drivers/staging/vt6655/mac.h
-+++ b/drivers/staging/vt6655/mac.h
-@@ -539,12 +539,12 @@
- 
- static inline void vt6655_mac_select_page0(void __iomem *iobase)
- {
--        iowrite8(0, iobase + MAC_REG_PAGE1SEL);
-+	iowrite8(0, iobase + MAC_REG_PAGE1SEL);
- }
- 
- static inline void  vt6655_mac_select_page1(void __iomem *iobase)
- {
--        iowrite8(1, iobase + MAC_REG_PAGE1SEL);
-+	iowrite8(1, iobase + MAC_REG_PAGE1SEL);
- }
- 
- #define MAKEWORD(lb, hb) \
--- 
-2.34.1
+> 
+>> Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
+>> ---
+>>   drivers/gpu/drm/tidss/tidss_dispc.c | 47 +++++++++++++++++------------
+>>   drivers/gpu/drm/tidss/tidss_dispc.h | 21 +++++++------
+>>   drivers/gpu/drm/tidss/tidss_drv.h   |  5 +--
+>>   drivers/gpu/drm/tidss/tidss_irq.h   |  2 +-
+>>   drivers/gpu/drm/tidss/tidss_kms.c   | 12 ++++----
+>>   5 files changed, 48 insertions(+), 39 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/tidss/tidss_dispc.c b/drivers/gpu/drm/tidss/tidss_dispc.c
+>> index 165365b515e1..c1c4faccbddc 100644
+>> --- a/drivers/gpu/drm/tidss/tidss_dispc.c
+>> +++ b/drivers/gpu/drm/tidss/tidss_dispc.c
+>> @@ -61,7 +61,7 @@ const struct dispc_features dispc_k2g_feats = {
+>>       .min_pclk_khz = 4375,
+>>         .max_pclk_khz = {
+>> -        [DISPC_VP_DPI] = 150000,
+>> +        [DISPC_PORT_DPI] = 150000,
+>>       },
+>>         /*
+>> @@ -96,7 +96,6 @@ const struct dispc_features dispc_k2g_feats = {
+>>       .vp_name = { "vp1" },
+>>       .ovr_name = { "ovr1" },
+>>       .vpclk_name =  { "vp1" },
+>> -    .vp_bus_type = { DISPC_VP_DPI },
+>>         .vp_feat = { .color = {
+>>               .has_ctm = true,
+>> @@ -109,6 +108,9 @@ const struct dispc_features dispc_k2g_feats = {
+>>       .vid_name = { "vid1" },
+>>       .vid_lite = { false },
+>>       .vid_order = { 0 },
+>> +
+>> +    .num_output_ports = 1,
+>> +    .output_port_bus_type = { DISPC_PORT_DPI },
+>>   };
+> 
+> Just thinking out loud, as these will get more complex in the future,
+> maybe we should finally group them with struct. E.g. we could define
+> struct array for vps, like (just hacky example):
+> 
+>     struct {
+>         const char *name;
+>         const char *clkname;
+>         struct tidss_vp_feat feat;
+>     } vps[TIDSS_MAX_PORTS];
+> 
+> and then use them as:
+> 
+>     .vps = {
+>         {
+>             .name = "kala",
+>             .clkname = "kissa",
+>             .feat.color.has_ctm = true,
+>         }, {
+>             .name = "kala2",
+>             .clkname = "kissa2",
+>             .feat.color.has_ctm = false,
+>         },
+>     },
+> 
+> Perhaps something to try in the future.
+>
+
+Yes, agreed! Having that structure will tidy this up.
+I will keep this under future work.
+
+>>   static const u16 tidss_am65x_common_regs[DISPC_COMMON_REG_TABLE_LEN] = {
+>> @@ -140,8 +142,8 @@ static const u16 tidss_am65x_common_regs[DISPC_COMMON_REG_TABLE_LEN] = {
+>>     const struct dispc_features dispc_am65x_feats = {
+>>       .max_pclk_khz = {
+>> -        [DISPC_VP_DPI] = 165000,
+>> -        [DISPC_VP_OLDI] = 165000,
+>> +        [DISPC_PORT_DPI] = 165000,
+>> +        [DISPC_PORT_OLDI] = 165000,
+>>       },
+>>         .scaling = {
+>> @@ -171,7 +173,6 @@ const struct dispc_features dispc_am65x_feats = {
+>>       .vp_name = { "vp1", "vp2" },
+>>       .ovr_name = { "ovr1", "ovr2" },
+>>       .vpclk_name =  { "vp1", "vp2" },
+>> -     .vp_bus_type = { DISPC_VP_OLDI, DISPC_VP_DPI },
+>>       .vp_feat = { .color = {
+>>               .has_ctm = true,
+>> @@ -185,6 +186,9 @@ const struct dispc_features dispc_am65x_feats = {
+>>       .vid_name = { "vid", "vidl1" },
+>>       .vid_lite = { false, true, },
+>>       .vid_order = { 1, 0 },
+>> +
+>> +    .num_output_ports = 2,
+>> +    .output_port_bus_type = { DISPC_PORT_OLDI, DISPC_PORT_DPI },
+>>   };
+>>     static const u16 tidss_j721e_common_regs[DISPC_COMMON_REG_TABLE_LEN] = {
+>> @@ -229,8 +233,8 @@ static const u16 tidss_j721e_common_regs[DISPC_COMMON_REG_TABLE_LEN] = {
+>>     const struct dispc_features dispc_j721e_feats = {
+>>       .max_pclk_khz = {
+>> -        [DISPC_VP_DPI] = 170000,
+>> -        [DISPC_VP_INTERNAL] = 600000,
+>> +        [DISPC_PORT_DPI] = 170000,
+>> +        [DISPC_PORT_INTERNAL] = 600000,
+>>       },
+>>         .scaling = {
+>> @@ -260,9 +264,7 @@ const struct dispc_features dispc_j721e_feats = {
+>>       .vp_name = { "vp1", "vp2", "vp3", "vp4" },
+>>       .ovr_name = { "ovr1", "ovr2", "ovr3", "ovr4" },
+>>       .vpclk_name = { "vp1", "vp2", "vp3", "vp4" },
+>> -    /* Currently hard coded VP routing (see dispc_initial_config()) */
+>> -    .vp_bus_type =    { DISPC_VP_INTERNAL, DISPC_VP_DPI,
+>> -              DISPC_VP_INTERNAL, DISPC_VP_DPI, },
+>> +
+> 
+> I think this line feed is extra.
+
+Okay! Will remove that from all SoC feat structs.
+
+> 
+>>       .vp_feat = { .color = {
+>>               .has_ctm = true,
+>>               .gamma_size = 1024,
+>> @@ -273,6 +275,11 @@ const struct dispc_features dispc_j721e_feats = {
+>>       .vid_name = { "vid1", "vidl1", "vid2", "vidl2" },
+>>       .vid_lite = { 0, 1, 0, 1, },
+>>       .vid_order = { 1, 3, 0, 2 },
+>> +
+>> +    .num_output_ports = 4,
+>> +    /* Currently hard coded VP routing (see dispc_initial_config()) */
+>> +    .output_port_bus_type =    { DISPC_PORT_INTERNAL, DISPC_PORT_DPI,
+>> +              DISPC_PORT_INTERNAL, DISPC_PORT_DPI, },
+> 
+> Indent doesn't look right (but it might be just because this is a diff).
+
+I may have missed indenting this.
+
+> 
+>>   };
+>>     static const u16 *dispc_common_regmap;
+>> @@ -287,12 +294,12 @@ struct dispc_device {
+>>      void __iomem *base_common;
+>>      void __iomem *base_vid[TIDSS_MAX_PLANES];
+>> -    void __iomem *base_ovr[TIDSS_MAX_PORTS];
+>> -    void __iomem *base_vp[TIDSS_MAX_PORTS];
+>> +    void __iomem *base_ovr[TIDSS_MAX_VPS];
+>> +    void __iomem *base_vp[TIDSS_MAX_VPS];
+>>      struct regmap *oldi_io_ctrl;
+>> -    struct clk *vp_clk[TIDSS_MAX_PORTS];
+>> +    struct clk *vp_clk[TIDSS_MAX_VPS];
+>>         const struct dispc_features *feat;
+>>   @@ -300,7 +307,7 @@ struct dispc_device {
+>>         bool is_enabled;
+>> -    struct dss_vp_data vp_data[TIDSS_MAX_PORTS];
+>> +    struct dss_vp_data vp_data[TIDSS_MAX_VPS];
+>>         u32 *fourccs;
+>>       u32 num_fourccs;
+>> @@ -851,7 +858,7 @@ int dispc_vp_bus_check(struct dispc_device *dispc, u32 hw_videoport,
+>>           return -EINVAL;
+>>       }
+>> -    if (dispc->feat->vp_bus_type[hw_videoport] != DISPC_VP_OLDI &&
+>> +    if (dispc->feat->output_port_bus_type[hw_videoport] != DISPC_PORT_OLDI &&
+> 
+> Hmm, so is the hw_videoport a vp index or an output index? Sounds like
+> the former, so it's not right, even if at the moment they're identical.
+> We need some kind of mapping between those.
+> 
+
+It is indeed a vp index. And yes, I can come up with a mapping mechanism.
+
+> If the mapping can be changed (or just defined in the DT), I think we
+> need a variable in struct dispc_device, which tells the output to which
+> a videoport is connected to. Or vice versa, I'm not sure which direction
+> we need more. If the mapping is always the same on all SoC (but I don't
+> think so), we can have it in the feats.
+> 
+
+As of now, the mapping is always same. But I would like to make is
+generalized for future. Hence, I am considering to keep the variable in
+struct dispc_device.
+
+My question though would be, how would one be able to find which kind
+of device is the port connected to, if it is connected to a bridge? For
+example, in case of panels, we have a "connector_type" variable in
+drm_panel which tells what kind of sink it is. But there is no such
+thing in drm_bridge.
+
+This is required because what if we can connect an videoport to either
+an LVDS/OLDI bridge or a DPI bridge.
+
+Also, implementing this might mean removal of the part of code which
+confirms that the panel's "connector_type" indeed expects what the VP
+can provide, unless there is a way to find out what the sink is before
+calling the drm_of_find_panel_or_bridge API.
 
 
--- 
-Thanks & Regards,
-Guru
+On the direction, the primary requirement of hw_videoport has been in
+the tidss_dispc.c file where the HW registers are getting configured.
+'hw_videoport' is a frequently passed parameter in function calls. So,
+at a first glance the former option might makes more sense for
+direction, i.e. to have a variable which tells the output to which a
+videoport is connected to.
+
+And while, there is also the tidss_kms.c file, which deals with
+initializing encoders and attaching bridges. This is where the
+output_port is required more often. But I am yet to think of a case
+where the above direction could be an issue.
+
+
+> Also, I wonder if output_port is a good name as it has "port" in it
+> (like video port), and it's a bit long-ish. Would just "output" be
+> enough? We could, of course, shorten it to OP, but that looks odd to me =).
+> 
+
+>>           fmt->is_oldi_fmt) {
+>>           dev_dbg(dispc->dev, "%s: %s is not OLDI-port\n",
+>>               __func__, dispc->feat->vp_name[hw_videoport]);
+>> @@ -955,7 +962,7 @@ void dispc_vp_prepare(struct dispc_device *dispc, u32 hw_videoport,
+>>       if (WARN_ON(!fmt))
+>>           return;
+>> -    if (dispc->feat->vp_bus_type[hw_videoport] == DISPC_VP_OLDI) {
+>> +    if (dispc->feat->output_port_bus_type[hw_videoport] == DISPC_PORT_OLDI) {
+>>           dispc_oldi_tx_power(dispc, true);
+>>             dispc_enable_oldi(dispc, hw_videoport, fmt);
+>> @@ -1014,7 +1021,7 @@ void dispc_vp_enable(struct dispc_device *dispc, u32 hw_videoport,
+>>       align = true;
+>>         /* always use DE_HIGH for OLDI */
+>> -    if (dispc->feat->vp_bus_type[hw_videoport] == DISPC_VP_OLDI)
+>> +    if (dispc->feat->output_port_bus_type[hw_videoport] == DISPC_PORT_OLDI)
+>>           ieo = false;
+>>         dispc_vp_write(dispc, hw_videoport, DISPC_VP_POL_FREQ,
+>> @@ -1040,7 +1047,7 @@ void dispc_vp_disable(struct dispc_device *dispc, u32 hw_videoport)
+>>     void dispc_vp_unprepare(struct dispc_device *dispc, u32 hw_videoport)
+>>   {
+>> -    if (dispc->feat->vp_bus_type[hw_videoport] == DISPC_VP_OLDI) {
+>> +    if (dispc->feat->output_port_bus_type[hw_videoport] == DISPC_PORT_OLDI) {
+>>           dispc_vp_write(dispc, hw_videoport, DISPC_VP_DSS_OLDI_CFG, 0);
+>>             dispc_oldi_tx_power(dispc, false);
+>> @@ -1116,10 +1123,10 @@ enum drm_mode_status dispc_vp_mode_valid(struct dispc_device *dispc,
+>>                        const struct drm_display_mode *mode)
+>>   {
+>>      u32 hsw, hfp, hbp, vsw, vfp, vbp;
+>> -    enum dispc_vp_bus_type bus_type;
+>> +    enum dispc_port_bus_type bus_type;
+>>      int max_pclk;
+>> -    bus_type = dispc->feat->vp_bus_type[hw_videoport];
+>> +    bus_type = dispc->feat->output_port_bus_type[hw_videoport];
+>>      max_pclk = dispc->feat->max_pclk_khz[bus_type];
+>> diff --git a/drivers/gpu/drm/tidss/tidss_dispc.h b/drivers/gpu/drm/tidss/tidss_dispc.h
+>> index e49432f0abf5..30fb44158347 100644
+>> --- a/drivers/gpu/drm/tidss/tidss_dispc.h
+>> +++ b/drivers/gpu/drm/tidss/tidss_dispc.h
+>> @@ -50,11 +50,11 @@ struct dispc_errata {
+>>       bool i2000; /* DSS Does Not Support YUV Pixel Data Formats */
+>>   };
+>> -enum dispc_vp_bus_type {
+>> -    DISPC_VP_DPI,        /* DPI output */
+>> -    DISPC_VP_OLDI,        /* OLDI (LVDS) output */
+>> -    DISPC_VP_INTERNAL,    /* SoC internal routing */
+>> -    DISPC_VP_MAX_BUS_TYPE,
+>> +enum dispc_port_bus_type {
+>> +    DISPC_PORT_DPI,            /* DPI output */
+>> +    DISPC_PORT_OLDI,        /* OLDI (LVDS) output */
+>> +    DISPC_PORT_INTERNAL,        /* SoC internal routing */
+>> +    DISPC_PORT_MAX_BUS_TYPE,
+> 
+> Okay, so here you have just "port", not "output_port". In the DT,
+> they're ports, so... Maybe we could use that name too, and for video
+> port always use "vp". The current "hw_videoport" could be easily
+> mistaken with "port".
+
+I see what you are saying and how somebody could confusre hw_videoport
+for a physical connection (i.e. port). I have always understoof
+hw_videoport to be a thing of the actual VP inside the SoC, but that may
+be because I have been working on this, and not just trying to
+understand the code from a high level.
+
+How about if I change the output_port to "out_port"? I am okay to keep
+"output" as the name to. I am saying this becuase I think, only keeping
+"port" might just confuse more, as you mentioned above.
+
+And then we can change "hw_videoport" to "vp_index", perhaps, or even
+keep that as it is? Becuase if we do have a VP structure in future
+like you suggested above, "vps" and "vp" would become a close overlap.
+For eg, "vps[vp]".
+
+How do these sound to you?
+
+> 
+> I don't recall why I chose to use "hw" prefix there. I think I wanted to
+> separate it from some other videoport, but... I don't know what that
+> "other" is =).
+> 
+
+Perhaps because just a "videoport" might be confused with a connector on
+the board, as in "HDMI port"? And the prefix might be a way to clarify
+that its the DSS controller's VP. =)
+
+
+Regards
+Aradhya
