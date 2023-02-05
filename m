@@ -2,153 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADC3768B19B
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 21:39:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3C7E68B1A3
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 21:41:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229532AbjBEUjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 15:39:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52014 "EHLO
+        id S229556AbjBEUla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 15:41:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjBEUjP (ORCPT
+        with ESMTP id S229494AbjBEUl2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 15:39:15 -0500
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2053.outbound.protection.outlook.com [40.107.6.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2E3918B02;
-        Sun,  5 Feb 2023 12:39:13 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=S8n26RR5nA3P+fAUrQQRPWlCzVdLms1j0U2SW60iSwyQoGnLDUJSns9GN5Iu7wpmDSuO9zYlBpabZsv1JJwyTvbu2R+oAxyvpp10yBrJJtxJQkglANlOqlDCksoWUFsB8G7f5p9HG0OrtfCosA2iIqXEcA97TYQUuHQRzDMeQO+2A3/1j12dGHcK8Sc3QVUlAhRjh/0VkY4bdfjA28fQpn/bpTW7LLzvPUSwx6en01s+iz9P/TJZTIa1Ij2gtDWxWQxlsGU5x0jhWFXpSi+mX/fIov2CvDse9dK8jg01xVq6JRKvoORle1AjsS5JRrLkpi3xizRwYV8w0gf/gg/npQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yXtrL4atjeUFa21cgmLp7XL7Bv2BXLFyDd0gYR8OsmI=;
- b=NPV/SFykyyZPhoB8fbFQS0iMihcXiofsrOCRA55OEfwwcwzhncVXFAnmbsKQSXsTjEVLh4HQF2HjJYAfelgSbr1nZRbqlbJJiqjcooLV2mMhdGRVTunjnd/xRnR1uyXPbPMeMst4QH76biYCBYPeEs71IU+MDQQNmN6z00Gj4K/H/c6XpqVUnKjjf2a/7NXPcc8fvTQi/9MqMEaKY8Af/5KSCvQ2Iz3ToarUqQl133ZpIeuM7Rm8CVM4uxh/JF9BAerHjJlCR6NzTqOSiD4zBWPG3siUqgVEB+jRQMOTFdzr1Pirv+RASIBq8oMXOpQPG7uBCtu4GYWJPh9ZioGffQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yXtrL4atjeUFa21cgmLp7XL7Bv2BXLFyDd0gYR8OsmI=;
- b=VBZhitm2gyHQVKzjVynoYm+FZv7TMhuf5orxVgARF90aHb6BwSJemyF4z+uhPdyjd3zgOC6wolkilggAXc2GcGMBpxQhvldIBmTgQTRTs4uqhsA1GauhNnX3bM3BTr8LJt4aepURIb0+QDsudrPmcoqsX+zbiWEVpW2sFq26ZAc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by AM9PR04MB8953.eurprd04.prod.outlook.com (2603:10a6:20b:408::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.34; Sun, 5 Feb
- 2023 20:39:11 +0000
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::3cfb:3ae7:1686:a68b]) by VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::3cfb:3ae7:1686:a68b%5]) with mapi id 15.20.6064.034; Sun, 5 Feb 2023
- 20:39:11 +0000
-Date:   Sun, 5 Feb 2023 22:39:06 +0200
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Frank Wunderlich <frank-w@public-files.de>,
-        erkin.bozoglu@xeront.com, richard@routerhints.com
-Subject: Re: [PATCH net] net: dsa: mt7530: don't change PVC_EG_TAG when CPU
- port becomes VLAN-aware
-Message-ID: <20230205203906.i3jci4pxd6mw74in@skbuf>
-References: <20230205140713.1609281-1-vladimir.oltean@nxp.com>
- <3649b6f9-a028-8eaf-ac89-c4d0fce412da@arinc9.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3649b6f9-a028-8eaf-ac89-c4d0fce412da@arinc9.com>
-X-ClientProxiedBy: BEXP281CA0007.DEUP281.PROD.OUTLOOK.COM (2603:10a6:b10::17)
- To VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
+        Sun, 5 Feb 2023 15:41:28 -0500
+Received: from mx.flying-snail.de (mx.flying-snail.de [IPv6:2a06:1c40:3::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D46118B30;
+        Sun,  5 Feb 2023 12:41:25 -0800 (PST)
+Received: from [2a02:908:1b0:8800:2ff:ffff:fe11:2236] (helo=mondbasis.internal.flying-snail.de)
+        by mx.flying-snail.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <pelzi@flying-snail.de>)
+        id 1pOlp7-001mf8-Of; Sun, 05 Feb 2023 21:41:17 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=feldner-bv.de; s=s1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
+        From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=whm/UpYPY/Ro6ni+3/73Hsptp6MyxuBrrlblU/0ZqZg=; b=kVBbypM1wiI+90196dXqmAXD5w
+        sEloqiGGWt3t+JsWO7K2PPhuRMEFKPyo9pXLHk8A/iAYxqIXRbETPwA6Yxi7i9da4B0lIxBnp33iK
+        /DHtOMyycQ53Evf1+sh7QhWuSTYLMujuFVXgz9zB3fV+yO59jPeOXZhX52ic6gTx3+oVQGYi2N9+e
+        8Zc87Z/3XseI9lSwejcR8ZLe8m7EP6vaddQ4eYGTBK023n746eCSV7K01fNCqIvoBUkeV/Aa5E1pF
+        lHd6XR3hoI8x8MjJcZU67Q8P498Suzt2N07ST7OKz5xJF/bG+Z57Cg5zmpTftkxFJvKnjBF/CBjzv
+        PMUpMdQQ==;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=flying-snail.de; s=s1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To
+        :From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=whm/UpYPY/Ro6ni+3/73Hsptp6MyxuBrrlblU/0ZqZg=; b=E5CD8DrgTwBwai84RQwqe8TttP
+        amGy2OUCM3+2QfTdaCCF65nR2wSkgpR1aqsIXggKoFMRzI90gbB/3EQmTWBO6+n+Q4WPJtYuZFNlz
+        eSZiSYpmB4tgep6MAGqfVjtGBe6BmxKui9hWHJ59DjzJb61AgQMfA8zHrso3jsUY+WoRJVmcA/5ha
+        z3GHYFt1O9oEfn5rGhTWLnmQjewxZsJAHHKTmrtrxetFvhfja6nOKfUDmhBm1VGUDSWUc6C68PpBS
+        r+N/yvT1PopdJPr/NvNdQ3bfbCkx1gCVoCds2ebXn3Y7VtbDKtvTrB506pKN1PgMrpIbTK6XgmoJh
+        QBWcCIqA==;
+Received: from [2a02:908:1b0:8800:1554:6239:a4eb:816f]
+        by mondbasis.internal.flying-snail.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <pelzi@flying-snail.de>)
+        id 1pOlp1-000dX8-1C; Sun, 05 Feb 2023 21:41:16 +0100
+Message-ID: <e1acd14e-400b-8896-bdc1-0b364cc52198@feldner-bv.de>
+Date:   Sun, 5 Feb 2023 21:41:10 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR04MB5136:EE_|AM9PR04MB8953:EE_
-X-MS-Office365-Filtering-Correlation-Id: c0f2945d-ee50-4e43-6dd5-08db07b9091c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: bMXk15QU0k6+wGYspg1nqatcKb4AYCcxgwCITQCwxm3DL2kWN0C/FFJ+SQOlvAcL6byaRh7XpLOF745p+dphI40aXI7a5lcDu8hvwwDEhmLfJHnLZYxwD6Zk2ykP6wrfFKe1gFdQdEdSGznUFmAkPPTiZRJnCPnPeKzulm6rmzj1OmIDkKbfzLVd7ST9XXSZUV8riXMixWQNTTLvXtShLiG4QInv5E/h6HUfGN9/a1vEmYPjJU0mpoegAMprVtLozJtH682P5aRrW16+C1sDGeUdRZJTXmcgCfnbsWYs8GdKBH5z5QoRktn3sOKN4UMPvw+QO9cMI4hiq+yDakfpnC7A3Ft4yTnk7/GxHS9p9nl11xeqokXOR6irF2Je6AnRYqC5WhCF8oBfBgT08vq69odZuFVfYkksN0FXErEA5/iCeDON6VbwH9ZrMgPbb/Ms+ceOVtb5+8UkKvIGOiCGXoWLWFRH4UEly/63U9g5CDgB/1waKcn86Lkivzbty+CxYinpZN9bb8W2CFYup4VMkeYWD5saCDXJJD+H8KsENJLUSQ/5AkeSxdQzn8RMMTHDmmRizk9yveQZAXI8wa0/qIWg9b32kV1vxdE8t9/b62ecryJLaor83AG/plQ0/ynpv61Z2J2UO+fAXH045xqmqg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(7916004)(376002)(136003)(346002)(366004)(39850400004)(396003)(451199018)(38100700002)(316002)(8676002)(6916009)(4326008)(66556008)(66946007)(66476007)(54906003)(41300700001)(8936002)(86362001)(6666004)(9686003)(6512007)(186003)(26005)(6506007)(1076003)(2906002)(33716001)(44832011)(5660300002)(4744005)(7416002)(478600001)(6486002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dmNYYm85dmpWQUxRTy9jemlUODQ4Zkp3SVhUdVJjVXorSGMwT0l3OGhhRy9y?=
- =?utf-8?B?ZW45b1ZiN2pUZlVidnRDV3NCNFh2WTBzU1pBeWhBNmlGSVJHUkZsamFhakdh?=
- =?utf-8?B?Szh0Mytsc0NJdkJDd2JZZFh2TjZza0JWbWxDczNhMEdUOHZ2dXFmQzJqOGNk?=
- =?utf-8?B?RXFNeUp3c0IvT0FTZHZST3hSQzdYSG9sa0NzT1JXRHpZMTN5TDcraCt2WVdV?=
- =?utf-8?B?MnYvZm1aV2F1MmtyMTc0WERSeS9vMlZEY1VuS3ZMUmZ1bmxxU3RMa2Q5NVkw?=
- =?utf-8?B?c1pTUFpzdS9NZkxwTUp5VmFyVWJVWlRWNGNtcjJScnZJbEJsU2RCaUZDVW1P?=
- =?utf-8?B?djU0VjRteFhrcTVHMlNESCs4Rm9pYTZDRHhQM2xzVjVjZlgrTEd2cld2WWFh?=
- =?utf-8?B?WGZMQXpzcmZrK1pvdmc3a0VSNmtVTXZRbHpYMkZGV00zRmpJdlAzVHhBaitK?=
- =?utf-8?B?NDZidzgwOEY3Q0p2Yk9mNlZUbW1RNE5HTnVuRUZuMGZRdDByTlJGaUdUUTNC?=
- =?utf-8?B?N1dQbnpmOXY4QlFmOGtwQWFzWWdGeXdNTmdIbzlva0dGdDVxcjM3aUM0L01p?=
- =?utf-8?B?Y05XRmloQVBFc214TjEwUGFlcitpV2syVlFObVc0dFNob2FMdWxzTHBzRXdy?=
- =?utf-8?B?TW85VllTdmlVTFQzUUZHNHRKOThpRUJ4a0ZYcmoxWDg5b2c1QUhEcmIxSUhs?=
- =?utf-8?B?dGNhQXN6SEhUczBtMmxRb1FpVVR6YlRDZndWZ2tLNldkQTZoMFV1VWFxTUlq?=
- =?utf-8?B?NlhCWnhuQjlERGc4Z28yMWhZWW0zNmxweDdBZVJQaENiVzJ2dmJaTkNSVDJY?=
- =?utf-8?B?NlkxeWxVZEJPTi9RUFliNjZHL0ErVWFDMEE0SDQ4ZTdTYmV3eEF0dmdjSCtn?=
- =?utf-8?B?ZmRPRHpCVGZxdXZpUGVLUlZ1eHBLRCt2enRSWXY0bkk2SzE3NmNvNWx2S2Ir?=
- =?utf-8?B?cXpVN0trRmtUMFZyS3dvZjAwWndTeXdpbExyeXg2cHk4UkRLZ2xSeEdkcm83?=
- =?utf-8?B?WUZZUXpPcEpqTmY1SGhqOEJlMGlTeHZRbkpJQkJXZzhLSnJKLzVLOGJzZFox?=
- =?utf-8?B?eFVQNTRTbjJPb3FIWDgyOHNiWlNERWErYzZoYVJ1QU90QkQ1Y29kd0NsQ1c0?=
- =?utf-8?B?dlZuYVRMMU9CMTBySHZ0RmFJbFgvMzczWldPVCtCd0V0SFc5SUp2YUJVR1ZI?=
- =?utf-8?B?OEwyZlVURnA5bnAyZEZYWVVqeWh2Q0ZLRFFtdy9vdkRxczNKTjRJTHE3Njdv?=
- =?utf-8?B?b0dNZUxsZ3d2ZEVvVEZzWHA0UEM0bnlROU16L0xXZ1lwWElLNjI1cU1tWEpU?=
- =?utf-8?B?Qjhja1pzZUZQTjJ4RlpaOE5NTTlBMDBxWExmbFpNcHgzSzlweGp2UkxPaEU2?=
- =?utf-8?B?NkVSNDMzVksxcktOaDYzbzZaaFpaaEFlMmwyUFFFSGVrTjBydEsxY0pQSENt?=
- =?utf-8?B?eE1Lc3VIOTNsN0VvQjlHeFovdUZrZ3dXL1dQWlBROWQ1M0VVRmhuTlRvV3l1?=
- =?utf-8?B?N1hvZHRLSDhJbElTZDhkbXhla3RYWGRLZU5KRVordVJTcVpsNGY3Z2pIQkwr?=
- =?utf-8?B?eC84cjdOekZkSnlDY0NCVWVzdW9oWFVWTDF0S2N0Tnh3VktoZy9oM09Ba0Uy?=
- =?utf-8?B?NFM5cXRlR05vQ0xGVysvL2xGcjQwSnZ1a3NqOHpEKzlBK2pUT1pqd3NnRzR1?=
- =?utf-8?B?ZWxCTTE1MDMweUp6b1V2YU9nY2E5T3p6ekc0NjMveGM2RjNMNzE1YkZGYWw2?=
- =?utf-8?B?QXo2VlB3RE9nSTl1N01wcWN2aHVqb2gwOUROSFhIaDFMbW9BN0taU3l0a3M1?=
- =?utf-8?B?RTRxZlZybmd5VFBlZTluQ04wY2czOWxWV1VHVG9CeFg1TzlvNHF2VTZwVkZS?=
- =?utf-8?B?Y2ZyZFp5OEQvM3oxMHlKdnRnUVVnTCtCSzZybU81Z0EydXIxODJLLzVuSzRR?=
- =?utf-8?B?ZFVXeUhNcTFnYVlSenNnUHY1cE9zQjRMZ0UvK1FoUlpDclZybWZIMkZVNURi?=
- =?utf-8?B?eFhGNHZjUVpsVjQwNXJwU21wR1JtTG5ncUZ6cmRyN3kxODVqNVFESkZ2aENL?=
- =?utf-8?B?cmxvVkxJSWd0Y3pLOTNRdVBsSkc5ajNINDZMbEZZU21YaE5may9IM0w3V29p?=
- =?utf-8?B?bHhWTWFZaTQ3VnBMN3Z3aERpblVsUlpUb2pVTitxYjhoaHJyWkgzRTFiUXMz?=
- =?utf-8?B?WEE9PQ==?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c0f2945d-ee50-4e43-6dd5-08db07b9091c
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Feb 2023 20:39:10.9071
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ufbXjgal/pyGFKdx6BQjw9IZcqKTMgqhFai2UWeiek2QUuAeg/kudD5+PLlTOg/L2gUPspQ7CBEJ38wd3s9F8w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8953
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH] iio: dht11: Read bit stream from IRQ on falling edges
+ only
+To:     harald@ccbib.org, Jonathan Cameron <jic23@kernel.org>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <Y9a0RZ+inWs44Kn8@debian-qemu.internal.flying-snail.de>
+ <20230130202216.42034309@jic23-huawei>
+ <45efc11e5b4cdba3766f19190bb65840@ccbib.org>
+From:   pelzi@flying-snail.de
+In-Reply-To: <45efc11e5b4cdba3766f19190bb65840@ccbib.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arınç,
+Following up on Harald's remark, I can provide some first comparison 
+data indeed:
 
-On Sun, Feb 05, 2023 at 10:25:27PM +0300, Arınç ÜNAL wrote:
-> Unrelated to this, as in it existed before this patch, port@0 hasn't been
-> working at all on my MT7621AT Unielec U7621-06 board and MT7623NI Bananapi
-> BPI-R2.
-> 
-> Packets are sent out from master eth1 fine, the computer receives them.
-> Frames are received on eth1 but nothing shows on the DSA slave interface of
-> port@0. Sounds like malformed frames are received on eth1.
+Am 31.01.23 um 10:44 schrieb harald@ccbib.org:
+> This seems like a really small benefit. And we would lose the
+> low state timings in debug output, which I personally find quite
+> convenient. Unless there is data, that this change actually improves
+> something for somebody, I'd reject it.
 
-I need to ask, how do the packets look like on the RX path of the DSA
-master, as seen by tcpdump -i eth1 -e -n -Q in -XX? If they aren't
-received, can you post consecutive outputs from ethtool -S eth1 | grep -v ': 0',
-to see what (error) counter increments?
+Running test script against the original kernel module (see below where 
+on):
+
+#     real [s]    user [s]  sys [s]  success fails  err per succ
+1     222,068     0,515     0,506     83     96     115,66 %
+2     223,152     0,603     0,493     86     99     115,12 %
+*3*   223,502     0,563     0,411     91     68     74,73 %
+*4*   209,626     0,431     0,189     100    15     15,00 %
+*5*   209,689     0,46      0,193     100    19     19,00 %
+*6*   220,35      0,413     0,315     100    35     35,00 %
+
+
+Running the patched module:
+
+# 	Real 	User 	Sys 	Successes 	Failures 	Error rate
+1 	223,061 	0,459 	0,258 	88 	25 	28,41 %
+2 	222,431 	0,561 	0,367 	75 	57 	76,00 %
+3 	225,675 	0,436 	0,178 	92 	19 	20,65 %
+4 	222,746 	0,444 	0,194 	98 	23 	23,47 %
+5 	222,668 	0,416 	0,205 	97 	20 	20,62 %
+*6* 	204,126 	0,34 	0,138 	100 	0 	0,00 %
+*7* 	210,495 	0,393 	0,199 	100 	16 	16,00 %
+*8* 	212,563 	0,447 	0,139 	100 	19 	19,00 %
+
+All tests run on the same board, Allwinner H3 sold as BananaPi M2 Zero,
+under kernel 6.2.0-rc5+. The devicetree overlay is setting the
+input-debounce property of &pio to 5µs, or, because of the excessive
+error rates of the original driver in this configuration, to 1µs (lines
+marked with an asterisk).
+
+The test simply tries to read temperature and humidity from the IIO/dht11
+exposed input files every 2 seconds, immediately repeating after an error.
+
+Real/User/Sys is determined by good ol' time command, successes and
+failures are counted by the test script.
+
+Two aspects strike:
+
+1) the patched version of the driver is working satisfactory even with
+5µs input-debounce filter, where the original driver shows more failed
+than successful reads in this configuration.
+
+2) The error rate is consistently lower with the patched driver
+(67,9% to 33,8% average)
+
+I believe to see similar results, i.e. a noticable improvement on the error
+rate, on my old trusted RaspberryPi 2B (without any devicetree fiddling, of
+course), however without quantitative comparison and based on some Raspbian
+patch level rather than based on kernel 6.2.0-rc5+.
+
+Of course I have only access to a handful of DHT22 devices, most probably
+from the same production batch. But I think at least I'd like to stick
+with the patched version, tbh.
+
+Hope this helps, let me know if it'd pay to work on another version of
+the patch!
+
+Best wishes
+
+Andreas
+
+
