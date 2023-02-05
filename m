@@ -2,71 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4436E68B2A9
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 00:09:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58F1568B2BD
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 00:18:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbjBEXJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 18:09:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56260 "EHLO
+        id S229656AbjBEXSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 18:18:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjBEXJH (ORCPT
+        with ESMTP id S229537AbjBEXR5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 18:09:07 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1062F17CF5;
-        Sun,  5 Feb 2023 15:09:05 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P94p10kzhz4x1f;
-        Mon,  6 Feb 2023 10:08:56 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1675638543;
-        bh=pNXUawnaU3qfDTxBKpmXsJPpQ4kMgE5LZAjUfYaVNaQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ZnYADCx5yiYMn3pkGOedm0t/sNMIjkMYLf/dBTxabGoodLOZTSPJETPuFDge/Cde4
-         aIRPsac6jVpl6zYzM5s0sf9qZ8PH7w9zSC17MHdHR3/1Prai5iUUUHvsKOEj2nhHO3
-         Cblnv6/K2AhBj4YkTU2WIyVtn11Iyu9muX3ILcAHxEldyx9xBhSO4GKxKXmaTccHeU
-         yYw5esGxcNGOWPs8dnxojmNjd9fFKZA9h2nPmfY09YsEtc/xrY2g/H5zDiLVhBoJXQ
-         OF2qL+X7Qm4pEDL2kEKjgtpjAAAz7yUq4t9yOAfwzn4aDqbJ6ZpjiHa3qtmhjT39nt
-         0JnygHWxXhFVw==
-Date:   Mon, 6 Feb 2023 10:08:55 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-Subject: Re: remove arch/sh
-Message-ID: <20230206100856.603a0f8f@canb.auug.org.au>
-In-Reply-To: <20230203083037.GA30738@lst.de>
-References: <20230113062339.1909087-1-hch@lst.de>
-        <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
-        <20230116071306.GA15848@lst.de>
-        <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
-        <20230203071423.GA24833@lst.de>
-        <afd056a95d21944db1dc0c9708f692dd1f7bb757.camel@physik.fu-berlin.de>
-        <20230203083037.GA30738@lst.de>
+        Sun, 5 Feb 2023 18:17:57 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 119291968A
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 15:17:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675639028;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=hczbFL+ar/tk/IYpzPCczVyi3teFQZrB1wxKh73TL0g=;
+        b=gLAF8qii/iuEwBLmyjF0T1Y6jdTmzsBC9JuY0dGdh0wfaJT5S3EVu2dbG1NVRhRY5s3/qE
+        N9oJQO4aR+tuSd4Tv5avZh18HY12a1KQrdBvMwzPxV/1bAT0qOGIqGET5XMhUQDeqVv7Qx
+        TiHo+i9cLl60RIy6ikPdU2GrH0/l5dA=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-528-xdLjNT1pPCu_S-B8s8B-Cg-1; Sun, 05 Feb 2023 18:17:06 -0500
+X-MC-Unique: xdLjNT1pPCu_S-B8s8B-Cg-1
+Received: by mail-qk1-f198.google.com with SMTP id u11-20020a05620a430b00b007052a66d201so6892546qko.23
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Feb 2023 15:17:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hczbFL+ar/tk/IYpzPCczVyi3teFQZrB1wxKh73TL0g=;
+        b=CHZmEcz2SHCZZM4NVRrhkAtaSzJd1sNpQsldofPcL3/7CUiIAPWl8JjCuqLsV/dJTk
+         GaHVrJl2rzK87F04wzbMueOQVIvmbLSeeec3q+S2xNaEp4lL6bIaVFxvhQ9qYl+Hkdp8
+         aDtxcbaO8TiSKXiYGg1P9yQjI5bvFLJmq0ZSgRkmIakPvg8D9dFlN9Zixna02UIPRUTt
+         TJQDSHEOLW85kgRSXGW44GRPzFV3BqxnpH8pikdHztylfDk+8x037f6mEI1106XCcdIK
+         A431Kdk8r0q4A+YS2sR5lPkmW6flwh7ZmI0D91EKu0vs1Ed27Gw1GBfNWYscYWaPvHma
+         M6Tw==
+X-Gm-Message-State: AO0yUKU1n60eQnBoNk6+uEdCfBzeAAkFcAJpanvS6i5Uaqcp/AP+oji7
+        mheKSDtR+XqPb7fF5Ty0z9ZzfpHgD75Hj3QOQct5EEFIvwfkpNVji9pI+oKTBSW6a5JEM08KSHL
+        yJFRB80KftJ5ACemooIuTdK9p
+X-Received: by 2002:a05:622a:a15:b0:3b8:695b:aad1 with SMTP id bv21-20020a05622a0a1500b003b8695baad1mr31166805qtb.1.1675639026387;
+        Sun, 05 Feb 2023 15:17:06 -0800 (PST)
+X-Google-Smtp-Source: AK7set/sbA75b0Czo2TaDI7H5+UellOBQzwBIsx8AnsLPSQNhM0IiyfwrSSGN0x0tfL39bKfeNgbnw==
+X-Received: by 2002:a05:622a:a15:b0:3b8:695b:aad1 with SMTP id bv21-20020a05622a0a1500b003b8695baad1mr31166787qtb.1.1675639026141;
+        Sun, 05 Feb 2023 15:17:06 -0800 (PST)
+Received: from x1n.redhat.com (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id h26-20020ac8515a000000b003b82cb8748dsm5986545qtn.96.2023.02.05.15.17.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Feb 2023 15:17:05 -0800 (PST)
+From:   Peter Xu <peterx@redhat.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc:     peterx@redhat.com, Andrew Morton <akpm@linux-foundation.org>,
+        linux-arm-kernel@lists.infradead.org, linux-s390@vger.kernel.org
+Subject: [PATCH 0/3] mm/arch: Fix a few collide definition on private use of VM_FAULT_*
+Date:   Sun,  5 Feb 2023 18:17:01 -0500
+Message-Id: <20230205231704.909536-1-peterx@redhat.com>
+X-Mailer: git-send-email 2.37.3
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/9=gZIOzZKIZz.T3XwOWz_99";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,60 +76,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/9=gZIOzZKIZz.T3XwOWz_99
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+I noticed a few collision usage on VM_FAULT_* definition in the page fault
+path on arm/arm64/s390 where the VM_FAULT_* can overlap with the generic
+definition of vm_fault_reason.
 
-Hi,
+The major overlapped part being VM_FAULT_HINDEX_MASK which is used only by
+the hugetlb hwpoisoning.
 
-On Fri, 3 Feb 2023 09:30:37 +0100 Christoph Hellwig <hch@lst.de> wrote:
->
-> On Fri, Feb 03, 2023 at 09:24:46AM +0100, John Paul Adrian Glaubitz wrote:
-> > Since this is my very first time stepping up as a kernel maintainer, I =
-was hoping
-> > to get some pointers on what to do to make this happen.
-> >=20
-> > So far, we have set up a new kernel tree and I have set up a local deve=
-lopment and
-> > test environment for SH kernels using my SH7785LCR board as the target =
-platform.
-> >=20
-> > Do I just need to send a patch asking to change the corresponding entry=
- in the
-> > MAINTAINERS file? =20
->=20
-> I'm not sure a there is a document, but:
->=20
->  - add the MAINTAINERS change to your tree
->  - ask Stephen to get your tree included in linux-next
+I'm not sure whether any of them can have a real impact, but that does not
+look like to be expected.  I didn't copy stable, if anyone thinks it should
+please shoot.  Nor did I test them in any form - I just changed the
+allocations from top bits and added a comment for each of them.
 
-And by "Stephen", Christoph means me.  When you are ready, please send
-me a request to include your tree/branch in linux-next (usually the
-branch is called something like "for-next" or just "next") telling me
-the git URL, and the contacts I should send email to if there are
-conflicts/build issues with the branch.  I will then fetch the branch
-every time I create a new linux-next release (most work days), so all
-you need to do is update that branch each time you are ready to publish
-more commits.
+Please have a look, thanks.
 
---=20
-Cheers,
-Stephen Rothwell
+Peter Xu (3):
+  mm/arm: Define private VM_FAULT_* reasons from top bits
+  mm/arm64: Define private VM_FAULT_* reasons from top bits
+  mm/s390: Define private VM_FAULT_* reasons from top bits
 
---Sig_/9=gZIOzZKIZz.T3XwOWz_99
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+ arch/arm/mm/fault.c   |  8 ++++++--
+ arch/arm64/mm/fault.c |  8 ++++++--
+ arch/s390/mm/fault.c  | 14 +++++++++-----
+ 3 files changed, 21 insertions(+), 9 deletions(-)
 
------BEGIN PGP SIGNATURE-----
+-- 
+2.37.3
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPgNwgACgkQAVBC80lX
-0GzQVAgAjy+Ruo0rndMBlq3LUsn3e3WM6k7+dwjW7y5KrWBUtO9yrheMEypNr12O
-byLw07yy1/H56vz7bZJN3IaFDMrx7kFxU2Rfi4K2lkrd5y7hRGFHFbyG9KACdTVo
-d4yMastrzpa4sqz6druszU7GDQnWEFS8+bdy18sKOXOIF2A4/bCfyPcwbu6WcX9U
-PWBzYOIqYThwk1BW+po7wuq+KMZW0337iVEob5zS9qRotE98YCs2zc5AjSg1XQx3
-SWMIA+zrNKOlxUJ9BUoeDAQUoe6UJjekpz9o0j9q/w1DDNKl9mXQ5q+JvpuzrtGj
-5u71j4opYj+PidkCy3HMoXj2z0tlFw==
-=TRVa
------END PGP SIGNATURE-----
-
---Sig_/9=gZIOzZKIZz.T3XwOWz_99--
