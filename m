@@ -2,126 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C491368B15F
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 20:28:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 036BD68B160
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 20:31:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229580AbjBET2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 14:28:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34864 "EHLO
+        id S229567AbjBETbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 14:31:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjBET2F (ORCPT
+        with ESMTP id S229478AbjBETbO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 14:28:05 -0500
-Received: from crane.ash.relay.mailchannels.net (crane.ash.relay.mailchannels.net [23.83.222.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FE5418B08
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 11:28:03 -0800 (PST)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 523AC3C0C94;
-        Sun,  5 Feb 2023 19:27:59 +0000 (UTC)
-Received: from pdx1-sub0-mail-a283.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id CC5E93C0D7E;
-        Sun,  5 Feb 2023 19:27:58 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1675625278; a=rsa-sha256;
-        cv=none;
-        b=3KeIOdxTWMy/hdxmXSmYA8BBkBZ/jvTXB0bo7bTd3LLfgdowyHovtXqvasIqWQ17HdOmXi
-        /0rBHb4XkZRHqCKVXBqe/GARM0NdrgkMh34S5CKXY+VQLlJU2e9wWayErElqTxuWSVvscP
-        7EVtwDqEZ2zrENjXQhp3nzKZMs00hzSkq3eQcmJjRW+FbxPHBw25mQlN52xdbGjwkWztfc
-        HOYr7fZe2YsQX4N5j3/03r/cil3kQL9ex6TQJZ0MD4s+dCibseA7Drzn8uqN7Zekkbvpmc
-        e4VbmOLnlqWZjXtVeivKaTSmMmSICjdRFFi2/oC5LgYGz7zbOzjBc7m/td/MwA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1675625278;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=zflL9vieIM7JtRZeiGsuJxg4qzxYiB31/wbf3kMtly8=;
-        b=nWJnsByWC014EZ71udeGSv9zC/3GfxX1ONFEEyqYeCH5QT/8wmmVpjN7OIhaz7xf0txca7
-        sA+N7eF29o2FPoe6+5ixFDgZA76+OnlwcGDj2NMHJs0YA1x5R0FJSZOQLJ3u4bsb1kFxvX
-        52PXpDJqR7oj4s7t5wdRdAkCGjqvF+yP7G6SQYuKsesUdZvguOJaaMgk5mlK2VEOXXsryw
-        zd+CPleGcd5XUFJImZciiAksiw6Y9C4JydT5B/Yb+ZQ6WYCCpvaM+FdHDex+kP/7B+Rcwo
-        ZtnqHtIRjEchjh26iPTKnNqCLhrzAyAcVCZ5VRWy78E07g42PkG0pAQxmBmDZA==
-ARC-Authentication-Results: i=1;
-        rspamd-5fb8f68d88-krh58;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Abiding-Cold: 4b7be9506cd5ee21_1675625279118_3906779514
-X-MC-Loop-Signature: 1675625279118:2887568665
-X-MC-Ingress-Time: 1675625279117
-Received: from pdx1-sub0-mail-a283.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.97.48.99 (trex/6.7.1);
-        Sun, 05 Feb 2023 19:27:59 +0000
-Received: from offworld (unknown [104.36.25.251])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a283.dreamhost.com (Postfix) with ESMTPSA id 4P8zv21GRgz8p;
-        Sun,  5 Feb 2023 11:27:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1675625278;
-        bh=zflL9vieIM7JtRZeiGsuJxg4qzxYiB31/wbf3kMtly8=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=LRegCZh3D4tUllSNVw3QAvgQe6MKpIfVnPuzskJh8WGT/JyLK5TKCuTtm8J6Iig8y
-         nSqKwSEgG+i72A9YxpL5nW3VHiCg33bQ1QeLDaTp4Zaz8rSSt+E/ZecFkV8NYT7epV
-         25vz3tkt5/EttuZe7+wCFbmozI9ABMrBrl6pgjmMXEnJA+QRL30PQq/QE481sqWKYO
-         DLRgr6IxaTmGlizsVIbTVGVyyEKP/S2n4QtLWKhAk27WePH7pQmWC+EZtnsyUukIgU
-         3osxJsbtLCJb8mtEZwHjXggv8IPAnqBWMsF4Bd7ffxAFnJKuwca3dcRkpR+4xMOu8q
-         VyLCG2TkwFwyg==
-Date:   Sun, 5 Feb 2023 11:00:34 -0800
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     John Stultz <jstultz@google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>
-Subject: Re: [PATCH v2 3/4] locktorture: Add nested locking to rtmutex
- torture tests
-Message-ID: <20230205190034.hlvisuduu7sdrrv4@offworld>
-References: <20230203200138.3872873-1-jstultz@google.com>
- <20230203200138.3872873-3-jstultz@google.com>
+        Sun, 5 Feb 2023 14:31:14 -0500
+X-Greylist: delayed 1800 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 05 Feb 2023 11:31:12 PST
+Received: from lgeamrelo11.lge.com (lgeamrelo13.lge.com [156.147.23.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2FF3818AB0
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 11:31:11 -0800 (PST)
+Received: from unknown (HELO lgeamrelo01.lge.com) (156.147.1.125)
+        by 156.147.23.53 with ESMTP; 6 Feb 2023 04:01:10 +0900
+X-Original-SENDERIP: 156.147.1.125
+X-Original-MAILFROM: taejoon.song@lge.com
+Received: from unknown (HELO localhost.localdomain) (10.177.244.77)
+        by 156.147.1.125 with ESMTP; 6 Feb 2023 04:01:10 +0900
+X-Original-SENDERIP: 10.177.244.77
+X-Original-MAILFROM: taejoon.song@lge.com
+From:   Taejoon Song <taejoon.song@lge.com>
+To:     sjenning@redhat.com, ddstreet@ieee.org, vitaly.wool@konsulko.com,
+        akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org, yjay.kim@lge.com,
+        Taejoon Song <taejoon.song@lge.com>
+Subject: [PATCH] mm/zswap: try to avoid worst-case scenario on same element pages
+Date:   Mon,  6 Feb 2023 04:00:36 +0900
+Message-Id: <20230205190036.1730134-1-taejoon.song@lge.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20230203200138.3872873-3-jstultz@google.com>
-User-Agent: NeoMutt/20220429
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 03 Feb 2023, John Stultz wrote:
+The worst-case scenario on finding same element pages is that almost all
+elements are same at the first glance but only last few elements are
+different.
 
->This patch adds randomized nested locking to the rtmutex torture
->tests. Additionally it adds LOCK09 config files for testing
->rtmutexes with nested locking.
->
->This was inspired by locktorture extensions originally implemented
->by Connor O'Brien, for stress testing the proxy-execution series:
->  https://lore.kernel.org/lkml/20221003214501.2050087-12-connoro@google.com/
->
->Comments or feedback would be greatly appreciated!
->
->Cc: Davidlohr Bueso <dave@stgolabs.net>
->Cc: "Paul E. McKenney" <paulmck@kernel.org>
->Cc: Josh Triplett <josh@joshtriplett.org>
->Cc: Joel Fernandes <joel@joelfernandes.org>
->Cc: Juri Lelli <juri.lelli@redhat.com>
->Cc: Valentin Schneider <vschneid@redhat.com>
->Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
->Signed-off-by: John Stultz <jstultz@google.com>
+Since the same element tends to be grouped from the beginning of the
+pages, if we check the first element with the last element before
+looping through all elements, we might have some chances to quickly
+detect non-same element pages.
 
-Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
+1. Test is done under LG webOS TV (64-bit arch)
+2. Dump the swap-out pages (~819200 pages)
+3. Analyze the pages with simple test script which counts the iteration
+   number and measures the speed at off-line
+
+Under 64-bit arch, the worst iteration count is PAGE_SIZE / 8 bytes =
+512.  The speed is based on the time to consume page_same_filled()
+function only.  The result, on average, is listed as below:
+
+                                   Num of Iter    Speed(MB/s)
+Looping-Forward (Orig)                 38            99265
+Looping-Backward                       36           102725
+Last-element-check (This Patch)        33           125072
+
+The result shows that the average iteration count decreases by 13% and
+the speed increases by 25% with this patch.  This patch does not
+increase the overall time complexity, though.
+
+I also ran simpler version which uses backward loop. Just looping
+backward also makes some improvement, but less than this patch.
+
+This patch was already applied to zram on mainline v5.6-rc1:
+https://lkml.org/lkml/2019/12/3/1422
+
+Signed-off-by: Taejoon Song <taejoon.song@lge.com>
+---
+ mm/zswap.c | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
+
+diff --git a/mm/zswap.c b/mm/zswap.c
+index f6c89049cf70..2f0ebd8bc620 100644
+--- a/mm/zswap.c
++++ b/mm/zswap.c
+@@ -1073,15 +1073,23 @@ static int zswap_writeback_entry(struct zpool *pool, unsigned long handle)
+ 
+ static int zswap_is_page_same_filled(void *ptr, unsigned long *value)
+ {
+-	unsigned int pos;
+ 	unsigned long *page;
++	unsigned long val;
++	unsigned int pos, last_pos = PAGE_SIZE / sizeof(*page) - 1;
+ 
+ 	page = (unsigned long *)ptr;
+-	for (pos = 1; pos < PAGE_SIZE / sizeof(*page); pos++) {
+-		if (page[pos] != page[0])
++	val = page[0];
++
++	if (val != page[last_pos])
++		return 0;
++
++	for (pos = 1; pos < last_pos; pos++) {
++		if (val != page[pos])
+ 			return 0;
+ 	}
+-	*value = page[0];
++
++	*value = val;
++
+ 	return 1;
+ }
+ 
+-- 
+2.34.1
+
