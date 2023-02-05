@@ -2,80 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05CA468B14B
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 20:06:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B6E568B162
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 20:35:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229503AbjBETGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 14:06:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55936 "EHLO
+        id S229592AbjBETfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 14:35:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjBETGS (ORCPT
+        with ESMTP id S229478AbjBETfT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 14:06:18 -0500
-Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69294119;
-        Sun,  5 Feb 2023 11:06:17 -0800 (PST)
-Received: by mail-vs1-xe2e.google.com with SMTP id a24so10634336vsl.2;
-        Sun, 05 Feb 2023 11:06:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=QpSUD9v6xrEhuDg2iK+8dSUsn3LgH+kx9O1AVZbxj1A=;
-        b=jokr4cW3gZVIoB+a+C6VIGJ8L8zbwSTQ0pG2v8S7ZnAbxQR7g6e88P4PpQ02N6O04l
-         XSt1KrpOHAkaku1q2wZ/neWSPqlUxd86uE24UitlFvUgIk6v7KVGXUhLTbvPTRbC5S/1
-         9Cp3OSZtOb+5NJeo6WKES12exM0hJzVSUD9UK0XZXV6/rSN3GSWdY59XYaAGdmD7RIsU
-         LJy/nWO4dg9NJ6/3qNOEMCY/7k78T5Z+rp1sxgZBfwcR+lez2c/aZHM1eVS2xEIudPut
-         7hRnHlgN+z4n8uOcLsHtQDnCL8bvPYZ9s1YdiU+/KN6fuF+76SfZA0a13CnssQ9I83tl
-         XCQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QpSUD9v6xrEhuDg2iK+8dSUsn3LgH+kx9O1AVZbxj1A=;
-        b=n56WfFxwbsaMWNv4v1PYeVIOyV+Mwl0oOs/VKMeTLMpqOTkM53b+kfkDwaoeaF93Ei
-         Szf/NcteN1jAnysFyRFAELmPaAkdVi0CjmQkpAuKMObDpJVi4EXAPiBNxySd3MMTaQTI
-         PQQFw4EyRW9vs9uUOaIiYuAiFx1TR/Ys7bTTA0Jk0OfLUnkQhPznGRxlZJ378Z4jnMxT
-         +2Ae4TQ4bZEwNCyGVrO23oS4vt0X2ZEOw/VlsKuF9PO/rcyjr0G0NH1NeDklnQYggdBJ
-         V9+rctmDHMaWpDfPYb+yqmMmyIurmp0rbKfxL7y+hx9OMZFxCf+LOwKQJSebXHxTj0YC
-         RAJg==
-X-Gm-Message-State: AO0yUKV0n+lqsBCrDZZCawjOEMKCbpbpLYbtOqoIoGHzrYR3ZtdvmSWj
-        K5ESckHsvDi+bC406y6wMLTCaqe6/wdHhZPtmLA=
-X-Google-Smtp-Source: AK7set/uleHr58CB1JCbuIBGscUdBJ3z5OdxKBl6V1Lm//YKO/CLHfkHzW0LoJ3yxs1Wov81CObQOek4MA+oryR56io=
-X-Received: by 2002:a05:6102:440d:b0:3ea:a853:97c4 with SMTP id
- df13-20020a056102440d00b003eaa85397c4mr2577840vsb.36.1675623976414; Sun, 05
- Feb 2023 11:06:16 -0800 (PST)
+        Sun, 5 Feb 2023 14:35:19 -0500
+Received: from bird.elm.relay.mailchannels.net (bird.elm.relay.mailchannels.net [23.83.212.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71AC41421B
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 11:35:18 -0800 (PST)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id D36365C1104;
+        Sun,  5 Feb 2023 19:35:17 +0000 (UTC)
+Received: from pdx1-sub0-mail-a283.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 5E6B75C0F47;
+        Sun,  5 Feb 2023 19:35:17 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1675625717; a=rsa-sha256;
+        cv=none;
+        b=pF4cmlBhZWE/LUwg+8ZEDS+z/IwMUOi+yjCmPy1NHXfFb0LVvNwjMNot6gQdXze9vR7SvI
+        Oav6xo7KL/m39sBdFprbv30wpGCWKpgMfmmhisYT2fRiAAXrNuLQgTujVk+6CuUSekB/SF
+        KQ77cqtNK0hXcK7Lzgyq0za4XAcMJjUW4A+bgFJzSwEaMvBFkUW/TIp+VrrQt+Md9iWoPO
+        VsfoLdC54RWbazQw9asfm0v0I39I/bb5cQJ1Y4/zeHEVqDfgBHOuimpgXwsXI5HyVfYPuX
+        GejXM3Y44gCO4fz3enq5vLBjklnaJIWL+r4BeehLGephhCxEJ8CWzw4gawvMmA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1675625717;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=X4a2uwJz5XDxwNGEnWjhMhs56zjD3arHOQRZXJcWO2Y=;
+        b=k8dYVQpjvKTnBj0PrmGliq34rvLp0/QNp3LbE0h+jS5aXmy9Ab73tG1fHkKQE7t802ogRN
+        K8Naofl+sLBcoqNJHYpTzUMl1xdejBKN6DCLzWf2jaIYOaHo1Y1iePqhpbQdXiWDolmLYe
+        lL7qpT1bfFOq8CKt67xGBvjdmM1K3Wa9F2yjsHOSL2GqQMaY2rGIZlxzLY8M9DOv+P5zTp
+        HcIcQa8Qm0jIxN44bss/otPBmpWzHVNllvtG9u8x/mzWoCIu9s6fhX9I3wntt1qtZhRkCW
+        ZZgYTib6l9V5pqQnciC2jkvqHODXatcjlffIW7rCY0V83nQs3n3La+BUhPuA3g==
+ARC-Authentication-Results: i=1;
+        rspamd-544f66f495-fbkxv;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Hysterical-Ski: 12da7ee27b67e44b_1675625717671_3618273070
+X-MC-Loop-Signature: 1675625717671:1946960051
+X-MC-Ingress-Time: 1675625717671
+Received: from pdx1-sub0-mail-a283.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.107.134.121 (trex/6.7.1);
+        Sun, 05 Feb 2023 19:35:17 +0000
+Received: from offworld (unknown [104.36.25.251])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a283.dreamhost.com (Postfix) with ESMTPSA id 4P903S5FMFz8p;
+        Sun,  5 Feb 2023 11:35:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1675625717;
+        bh=X4a2uwJz5XDxwNGEnWjhMhs56zjD3arHOQRZXJcWO2Y=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=ni9lnQIEK3IJo430aSAyVKMwUIhMFEMfQYZhiUQ892iHPKGJxWvrNlqYspj1TqOwv
+         AqXHizq5CEEvUAu0duf42f1mgUWxuYSo/18y8C+S/xRJ3h54A11I0RCR+LsJiW4vPZ
+         zUrlOMNyfmCAgrltBwoBeqIYMp8c29bAVupHN5sPBC2mWz+ZIY5b2wRAkfHVdTfLIz
+         kyAChOqFasoVjUO56gG7C/VJPleE4rdQoC9BXux7zYJsxNEyp9ehmSHGCItijwMcbQ
+         F7tKBZBFAXyMw2yVng3I7bVuyUTQ+b2km7xzUq8MuhBoeLCfmgBt4SQ21OOH9Qmxaq
+         scjDEytxSZkZg==
+Date:   Sun, 5 Feb 2023 11:07:53 -0800
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     John Stultz <jstultz@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>
+Subject: Re: [PATCH v2 2/4] locktorture: Add nested locking to mutex torture
+ tests
+Message-ID: <20230205190753.4sgvtxxaqcvr45ei@offworld>
+References: <20230203200138.3872873-1-jstultz@google.com>
+ <20230203200138.3872873-2-jstultz@google.com>
 MIME-Version: 1.0
-References: <cover.1674227308.git.alexl@redhat.com> <5fb32a1297821040edd8c19ce796fc0540101653.camel@redhat.com>
- <CAOQ4uxhGX9NVxwsiBMP0q21ZRot6-UA0nGPp1wGNjgmKBjjBBA@mail.gmail.com>
- <b8601c976d6e5d3eccf6ef489da9768ad72f9571.camel@redhat.com>
- <e840d413-c1a7-d047-1a63-468b42571846@linux.alibaba.com> <2ef122849d6f35712b56ffbcc95805672980e185.camel@redhat.com>
- <8ffa28f5-77f6-6bde-5645-5fb799019bca@linux.alibaba.com> <51d9d1b3-2b2a-9b58-2f7f-f3a56c9e04ac@linux.alibaba.com>
- <071074ad149b189661681aada453995741f75039.camel@redhat.com>
- <0d2ef9d6-3b0e-364d-ec2f-c61b19d638e2@linux.alibaba.com> <de57aefc-30e8-470d-bf61-a1cca6514988@linux.alibaba.com>
- <CAOQ4uxgS+-MxydqgO8+NQfOs9N881bHNbov28uJYX9XpthPPiw@mail.gmail.com>
- <9c8e76a3-a60a-90a2-f726-46db39bc6558@linux.alibaba.com> <02edb5d6-a232-eed6-0338-26f9a63cfdb6@linux.alibaba.com>
- <3d4b17795413a696b373553147935bf1560bb8c0.camel@redhat.com>
- <CAOQ4uxjNmM81mgKOBJeScnmeR9+jG_aWvDWxAx7w_dGh0XHg3Q@mail.gmail.com> <5fbca304-369d-aeb8-bc60-fdb333ca7a44@linux.alibaba.com>
-In-Reply-To: <5fbca304-369d-aeb8-bc60-fdb333ca7a44@linux.alibaba.com>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Sun, 5 Feb 2023 21:06:04 +0200
-Message-ID: <CAOQ4uximQZ_DL1atbrCg0bQ8GN8JfrEartxDSP+GB_hFvYQOhg@mail.gmail.com>
-Subject: Re: [PATCH v3 0/6] Composefs: an opportunistically sharing verified
- image filesystem
-To:     Alexander Larsson <alexl@redhat.com>
-Cc:     Miklos Szeredi <miklos@szeredi.hu>, gscrivan@redhat.com,
-        brauner@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, david@fromorbit.com,
-        viro@zeniv.linux.org.uk, Vivek Goyal <vgoyal@redhat.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Gao Xiang <hsiangkao@linux.alibaba.com>,
-        Jingbo Xu <jefflexu@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20230203200138.3872873-2-jstultz@google.com>
+User-Agent: NeoMutt/20220429
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,100 +104,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> >>> Apart from that, I still fail to get some thoughts (apart from
-> >>> unprivileged
-> >>> mounts) how EROFS + overlayfs combination fails on automative real
-> >>> workloads
-> >>> aside from "ls -lR" (readdir + stat).
-> >>>
-> >>> And eventually we still need overlayfs for most use cases to do
-> >>> writable
-> >>> stuffs, anyway, it needs some words to describe why such < 1s
-> >>> difference is
-> >>> very very important to the real workload as you already mentioned
-> >>> before.
-> >>>
-> >>> And with overlayfs lazy lookup, I think it can be close to ~100ms or
-> >>> better.
-> >>>
-> >>
-> >> If we had an overlay.fs-verity xattr, then I think there are no
-> >> individual features lacking for it to work for the automotive usecase
-> >> I'm working on. Nor for the OCI container usecase. However, the
-> >> possibility of doing something doesn't mean it is the better technical
-> >> solution.
-> >>
-> >> The container usecase is very important in real world Linux use today,
-> >> and as such it makes sense to have a technically excellent solution for
-> >> it, not just a workable solution. Obviously we all have different
-> >> viewpoints of what that is, but these are the reasons why I think a
-> >> composefs solution is better:
-> >>
-> >> * It is faster than all other approaches for the one thing it actually
-> >> needs to do (lookup and readdir performance). Other kinds of
-> >> performance (file i/o speed, etc) is up to the backing filesystem
-> >> anyway.
-> >>
-> >> Even if there are possible approaches to make overlayfs perform better
-> >> here (the "lazy lookup" idea) it will not reach the performance of
-> >> composefs, while further complicating the overlayfs codebase. (btw, did
-> >> someone ask Miklos what he thinks of that idea?)
-> >>
-> >
-> > Well, Miklos was CCed (now in TO:)
-> > I did ask him specifically about relaxing -ouserxarr,metacopy,redirect:
-> > https://lore.kernel.org/linux-unionfs/20230126082228.rweg75ztaexykejv@wittgenstein/T/#mc375df4c74c0d41aa1a2251c97509c6522487f96
-> > but no response on that yet.
-> >
-> > TBH, in the end, Miklos really is the one who is going to have the most
-> > weight on the outcome.
-> >
-> > If Miklos is interested in adding this functionality to overlayfs, you are going
-> > to have a VERY hard sell, trying to merge composefs as an independent
-> > expert filesystem. The community simply does not approve of this sort of
-> > fragmentation unless there is a very good reason to do that.
-> >
-> >> For the automotive usecase we have strict cold-boot time requirements
-> >> that make cold-cache performance very important to us. Of course, there
-> >> is no simple time requirements for the specific case of listing files
-> >> in an image, but any improvement in cold-cache performance for both the
-> >> ostree rootfs and the containers started during boot will be worth its
-> >> weight in gold trying to reach these hard KPIs.
-> >>
-> >> * It uses less memory, as we don't need the extra inodes that comes
-> >> with the overlayfs mount. (See profiling data in giuseppes mail[1]).
-> >
-> > Understood, but we will need profiling data with the optimized ovl
-> > (or with the single blob hack) to compare the relevant alternatives.
+On Fri, 03 Feb 2023, John Stultz wrote:
+
+>This patch adds randomized nested locking to the mutex torture
+>tests, as well as new LOCK08 config files for testing mutexes
+>with nested locking
 >
-> My little request again, could you help benchmark on your real workload
-> rather than "ls -lR" stuff?  If your hard KPI is really what as you
-> said, why not just benchmark the real workload now and write a detailed
-> analysis to everyone to explain it's a _must_ that we should upstream
-> a new stacked fs for this?
+>This was inspired by locktorture extensions originally implemented
+>by Connor O'Brien, for stress testing the proxy-execution series:
+>  https://lore.kernel.org/lkml/20221003214501.2050087-12-connoro@google.com/
 >
+>Comments or feedback would be greatly appreciated!
+>
+>Cc: Davidlohr Bueso <dave@stgolabs.net>
+>Cc: "Paul E. McKenney" <paulmck@kernel.org>
+>Cc: Josh Triplett <josh@joshtriplett.org>
+>Cc: Joel Fernandes <joel@joelfernandes.org>
+>Cc: Juri Lelli <juri.lelli@redhat.com>
+>Cc: Valentin Schneider <vschneid@redhat.com>
+>Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+>Signed-off-by: John Stultz <jstultz@google.com>
 
-I agree that benchmarking the actual KPI (boot time) will have
-a much stronger impact and help to build a much stronger case
-for composefs if you can prove that the boot time difference really matters.
+Just realized I sent two review tags for rtmutex, one was supposed
+to be this patch.
 
-In order to test boot time on fair grounds, I prepared for you a POC
-branch with overlayfs lazy lookup:
-https://github.com/amir73il/linux/commits/ovl-lazy-lowerdata
-
-It is very lightly tested, but should be sufficient for the benchmark.
-Note that:
-1. You need to opt-in with redirect_dir=lazyfollow,metacopy=on
-2. The lazyfollow POC only works with read-only overlay that
-    has two lower dirs (1 metadata layer and one data blobs layer)
-3. The data layer must be a local blockdev fs (i.e. not a network fs)
-4. Only absolute path redirects are lazy (e.g. "/objects/cc/3da...")
-
-These limitations could be easily lifted with a bit more work.
-If any of those limitations stand in your way for running the benchmark
-let me know and I'll see what I can do.
-
-If there is any issue with the POC branch, please let me know.
-
-Thanks,
-Amir.
+Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
