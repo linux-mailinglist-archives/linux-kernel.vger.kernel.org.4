@@ -2,400 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0810768AFDE
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 14:09:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F023B68AFE0
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 14:11:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbjBENJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 08:09:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60546 "EHLO
+        id S229615AbjBENL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 08:11:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjBENI7 (ORCPT
+        with ESMTP id S229500AbjBENLZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 08:08:59 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8C0511647;
-        Sun,  5 Feb 2023 05:08:55 -0800 (PST)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 315D8Zne110454;
-        Sun, 5 Feb 2023 07:08:35 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1675602515;
-        bh=WAUfVNWyREj2xrr0aQr/BgWXbQzVJwxLnTl2Ggv+ZgQ=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=DNywh1BZ2kf4i0sr/Uw1/6/0tevihkTikwHccMkdGOwzT9vJNoYNPyxrNXXJtAlvn
-         CYV8K7SkBUQIpJ+U2EZhpXnjClU94Efm/EPlZKeUT01tVVznxNlQN/+lZmPLfWxEST
-         TXT8laJSqlj08ZPrmupbmRZ6PViTAzSUrVszQV2k=
-Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 315D8Z1m025341
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sun, 5 Feb 2023 07:08:35 -0600
-Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Sun, 5
- Feb 2023 07:08:34 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Sun, 5 Feb 2023 07:08:34 -0600
-Received: from [10.250.235.106] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 315D8T4l021879;
-        Sun, 5 Feb 2023 07:08:30 -0600
-Message-ID: <94cf519a-a72f-89d8-fe2a-9fa795ede6ac@ti.com>
-Date:   Sun, 5 Feb 2023 18:38:28 +0530
+        Sun, 5 Feb 2023 08:11:25 -0500
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B2B11647
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 05:11:22 -0800 (PST)
+Received: by mail-io1-f70.google.com with SMTP id e16-20020a6b5010000000b00719041c51ebso5641733iob.12
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Feb 2023 05:11:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sWrwv0lMtgE87dw/JVjoClgzMFoeV1YlFC1QbuXuALU=;
+        b=iuOmRk8yx99fghu2AsaU6I1qOP4e6rnXxHlpAz/c6GVMhu7Ob70ujZM3Hmak45EoUB
+         I2WX5AJZiSM+YN9cWRvSHSLK0nsU/ORyGbs2m+ifN6Dnp9Etn3Dm+m+jtfx7gYEApZZ1
+         xvkwN+AdawTclAD+EgdsPnsjer+p4YJIVLMFrJLhApRfGbWGj+DPB+WQaBTqYuSGXyLs
+         gyejer0omYGS31hx1xZjdN0htsFDnIonj3A/KUa5otGQiHWOMD+mb38BDq2tMq5TrrJH
+         cpSv+DMZYVH4TwDuTR5hjZYiokfkiAQln+8Ii+/EF4JqENqmFjCcDpfIRF1f6bTAcraf
+         9bDg==
+X-Gm-Message-State: AO0yUKW+h2dPQ4TNGBAvsCxzicY+WbvgDZlMruar0CPKnKy26kHBi39/
+        odbt+e2niuJfK8pOPoaNKzGjwY01ryzqQVtJmfuc0vO9rZBF
+X-Google-Smtp-Source: AK7set+Bk20RwN21Ar95OOB1CdjMnytO/o9BuoIKy8eA04s+Fbmv+z/19Upf18pINCjhxSpTObzdg6IOAg/RujUFrhPgsabtR6q2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v7 1/6] drm/tidss: Remove Video Port to Output Port
- coupling
-Content-Language: en-US
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jyri Sarha <jyri.sarha@iki.fi>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-CC:     Nishanth Menon <nm@ti.com>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        Jayesh Choudhary <j-choudhary@ti.com>,
-        Jai Luthra <j-luthra@ti.com>, Rahul T R <r-ravikumar@ti.com>,
-        Devarsh Thakkar <devarsht@ti.com>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        DRI Development List <dri-devel@lists.freedesktop.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-References: <20230125113529.13952-1-a-bhatia1@ti.com>
- <20230125113529.13952-2-a-bhatia1@ti.com>
- <300c0351-6ee0-d703-bd53-bc4c0fe3af0f@ideasonboard.com>
-From:   Aradhya Bhatia <a-bhatia1@ti.com>
-In-Reply-To: <300c0351-6ee0-d703-bd53-bc4c0fe3af0f@ideasonboard.com>
+X-Received: by 2002:a05:6602:2bd0:b0:71e:38b3:c5bc with SMTP id
+ s16-20020a0566022bd000b0071e38b3c5bcmr3455159iov.52.1675602681834; Sun, 05
+ Feb 2023 05:11:21 -0800 (PST)
+Date:   Sun, 05 Feb 2023 05:11:21 -0800
+In-Reply-To: <20230205123357.1610-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a2b13d05f3f3a66c@google.com>
+Subject: Re: [syzbot] general protection fault in __blk_rq_map_sg
+From:   syzbot <syzbot+0bbf896c8341c8e137c2@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tomi,
+Hello,
 
-Thanks for the review!
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+KASAN: slab-out-of-bounds Read in sg_next
 
-On 03-Feb-23 16:53, Tomi Valkeinen wrote:
-> On 25/01/2023 13:35, Aradhya Bhatia wrote:
->> Make DSS Video Ports agnostic of output bus types.
->>
->> DSS controllers have had a 1-to-1 coupling between its VPs and its
->> output ports. This no longer stands true for the new AM625 DSS. This
->> coupling, hence, has been removed by renaming the 'vp_bus_type' to
->> 'output_port_bus_type' because the VPs are essentially agnostic of the
->> bus type and it is the output ports which have a bus type.
->>
->> The AM625 DSS has 2 VPs but requires 3 output ports to support its
->> Dual-Link OLDI video output coming from a single VP.
-> 
-> Not a biggie, but this sentence is a bit odd here at the end. Shouldn't
-> it be after the "...stands true for the new AM625 DSS."?
+==================================================================
+BUG: KASAN: slab-out-of-bounds in __sg_flags include/linux/scatterlist.h:79 [inline]
+BUG: KASAN: slab-out-of-bounds in sg_is_chain include/linux/scatterlist.h:89 [inline]
+BUG: KASAN: slab-out-of-bounds in sg_next+0xaf/0xc0 lib/scatterlist.c:29
+Read of size 8 at addr ffff88801733b380 by task syz-executor.3/5840
 
-Yes! It should be. Will make the edit.
+CPU: 1 PID: 5840 Comm: syz-executor.3 Not tainted 6.2.0-rc6-next-20230203-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
+ print_address_description.constprop.0+0x2c/0x3c0 mm/kasan/report.c:319
+ print_report mm/kasan/report.c:430 [inline]
+ kasan_report+0x11c/0x130 mm/kasan/report.c:536
+ __sg_flags include/linux/scatterlist.h:79 [inline]
+ sg_is_chain include/linux/scatterlist.h:89 [inline]
+ sg_next+0xaf/0xc0 lib/scatterlist.c:29
+ blk_next_sg block/blk-merge.c:459 [inline]
+ __blk_bvec_map_sg block/blk-merge.c:500 [inline]
+ __blk_bios_map_sg block/blk-merge.c:548 [inline]
+ __blk_rq_map_sg+0x34a/0xfd0 block/blk-merge.c:575
+ scsi_alloc_sgtables+0x23c/0xf70 drivers/scsi/scsi_lib.c:1049
+ sd_setup_read_write_cmnd drivers/scsi/sd.c:1136 [inline]
+ sd_init_command+0x67a/0x32a0 drivers/scsi/sd.c:1260
+ scsi_prepare_cmd drivers/scsi/scsi_lib.c:1604 [inline]
+ scsi_queue_rq+0x1e7b/0x3a40 drivers/scsi/scsi_lib.c:1738
+ blk_mq_dispatch_rq_list+0x710/0x23f0 block/blk-mq.c:2056
+ __blk_mq_do_dispatch_sched block/blk-mq-sched.c:173 [inline]
+ blk_mq_do_dispatch_sched+0x95e/0xc20 block/blk-mq-sched.c:187
+ __blk_mq_sched_dispatch_requests+0x26d/0x3e0 block/blk-mq-sched.c:313
+ blk_mq_sched_dispatch_requests+0x10a/0x190 block/blk-mq-sched.c:339
+ __blk_mq_run_hw_queue+0x2b7/0x480 block/blk-mq.c:2174
+ __blk_mq_delay_run_hw_queue+0x5f7/0x700 block/blk-mq.c:2250
+ blk_mq_run_hw_queue+0x3b5/0x560 block/blk-mq.c:2298
+ blk_mq_sched_insert_requests+0x1d9/0xb30 block/blk-mq-sched.c:493
+ blk_mq_dispatch_plug_list block/blk-mq.c:2758 [inline]
+ blk_mq_flush_plug_list+0x39c/0xe10 block/blk-mq.c:2800
+ __blk_flush_plug block/blk-core.c:1150 [inline]
+ blk_finish_plug block/blk-core.c:1174 [inline]
+ blk_finish_plug+0xbb/0x170 block/blk-core.c:1171
+ __iomap_dio_rw+0xf85/0x1d80 fs/iomap/direct-io.c:602
+ iomap_dio_rw+0x40/0xa0 fs/iomap/direct-io.c:682
+ ext4_dio_read_iter fs/ext4/file.c:94 [inline]
+ ext4_file_read_iter+0x4be/0x690 fs/ext4/file.c:145
+ call_read_iter include/linux/fs.h:1845 [inline]
+ generic_file_splice_read+0x182/0x4b0 fs/splice.c:309
+ do_splice_to+0x1b9/0x240 fs/splice.c:793
+ splice_direct_to_actor+0x2ab/0x8a0 fs/splice.c:865
+ do_splice_direct+0x1ab/0x280 fs/splice.c:974
+ do_sendfile+0xb19/0x12c0 fs/read_write.c:1255
+ __do_sys_sendfile64 fs/read_write.c:1323 [inline]
+ __se_sys_sendfile64 fs/read_write.c:1309 [inline]
+ __x64_sys_sendfile64+0x1d0/0x210 fs/read_write.c:1309
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f453ec8c0c9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f453f980168 EFLAGS: 00000246 ORIG_RAX: 0000000000000028
+RAX: ffffffffffffffda RBX: 00007f453edac050 RCX: 00007f453ec8c0c9
+RDX: 0000000000000000 RSI: 0000000000000006 RDI: 0000000000000005
+RBP: 00007f453ece7ae9 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000010000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffda01936ef R14: 00007f453f980300 R15: 0000000000022000
+ </TASK>
 
-> 
->> Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
->> ---
->>   drivers/gpu/drm/tidss/tidss_dispc.c | 47 +++++++++++++++++------------
->>   drivers/gpu/drm/tidss/tidss_dispc.h | 21 +++++++------
->>   drivers/gpu/drm/tidss/tidss_drv.h   |  5 +--
->>   drivers/gpu/drm/tidss/tidss_irq.h   |  2 +-
->>   drivers/gpu/drm/tidss/tidss_kms.c   | 12 ++++----
->>   5 files changed, 48 insertions(+), 39 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/tidss/tidss_dispc.c b/drivers/gpu/drm/tidss/tidss_dispc.c
->> index 165365b515e1..c1c4faccbddc 100644
->> --- a/drivers/gpu/drm/tidss/tidss_dispc.c
->> +++ b/drivers/gpu/drm/tidss/tidss_dispc.c
->> @@ -61,7 +61,7 @@ const struct dispc_features dispc_k2g_feats = {
->>       .min_pclk_khz = 4375,
->>         .max_pclk_khz = {
->> -        [DISPC_VP_DPI] = 150000,
->> +        [DISPC_PORT_DPI] = 150000,
->>       },
->>         /*
->> @@ -96,7 +96,6 @@ const struct dispc_features dispc_k2g_feats = {
->>       .vp_name = { "vp1" },
->>       .ovr_name = { "ovr1" },
->>       .vpclk_name =  { "vp1" },
->> -    .vp_bus_type = { DISPC_VP_DPI },
->>         .vp_feat = { .color = {
->>               .has_ctm = true,
->> @@ -109,6 +108,9 @@ const struct dispc_features dispc_k2g_feats = {
->>       .vid_name = { "vid1" },
->>       .vid_lite = { false },
->>       .vid_order = { 0 },
->> +
->> +    .num_output_ports = 1,
->> +    .output_port_bus_type = { DISPC_PORT_DPI },
->>   };
-> 
-> Just thinking out loud, as these will get more complex in the future,
-> maybe we should finally group them with struct. E.g. we could define
-> struct array for vps, like (just hacky example):
-> 
->     struct {
->         const char *name;
->         const char *clkname;
->         struct tidss_vp_feat feat;
->     } vps[TIDSS_MAX_PORTS];
-> 
-> and then use them as:
-> 
->     .vps = {
->         {
->             .name = "kala",
->             .clkname = "kissa",
->             .feat.color.has_ctm = true,
->         }, {
->             .name = "kala2",
->             .clkname = "kissa2",
->             .feat.color.has_ctm = false,
->         },
->     },
-> 
-> Perhaps something to try in the future.
->
+Allocated by task 5840:
+ kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
+ kasan_set_track+0x25/0x30 mm/kasan/common.c:52
+ __kasan_slab_alloc+0x7f/0x90 mm/kasan/common.c:328
+ kasan_slab_alloc include/linux/kasan.h:186 [inline]
+ slab_post_alloc_hook mm/slab.h:769 [inline]
+ slab_alloc_node mm/slub.c:3452 [inline]
+ slab_alloc mm/slub.c:3460 [inline]
+ __kmem_cache_alloc_lru mm/slub.c:3467 [inline]
+ kmem_cache_alloc+0x175/0x320 mm/slub.c:3476
+ mempool_alloc+0x158/0x360 mm/mempool.c:398
+ __sg_alloc_table+0x248/0x380 lib/scatterlist.c:318
+ sg_alloc_table_chained+0x9f/0x1f0 lib/sg_pool.c:133
+ scsi_alloc_sgtables+0x1d3/0xf70 drivers/scsi/scsi_lib.c:1041
+ sd_setup_read_write_cmnd drivers/scsi/sd.c:1136 [inline]
+ sd_init_command+0x67a/0x32a0 drivers/scsi/sd.c:1260
+ scsi_prepare_cmd drivers/scsi/scsi_lib.c:1604 [inline]
+ scsi_queue_rq+0x1e7b/0x3a40 drivers/scsi/scsi_lib.c:1738
+ blk_mq_dispatch_rq_list+0x710/0x23f0 block/blk-mq.c:2056
+ __blk_mq_do_dispatch_sched block/blk-mq-sched.c:173 [inline]
+ blk_mq_do_dispatch_sched+0x95e/0xc20 block/blk-mq-sched.c:187
+ __blk_mq_sched_dispatch_requests+0x26d/0x3e0 block/blk-mq-sched.c:313
+ blk_mq_sched_dispatch_requests+0x10a/0x190 block/blk-mq-sched.c:339
+ __blk_mq_run_hw_queue+0x2b7/0x480 block/blk-mq.c:2174
+ __blk_mq_delay_run_hw_queue+0x5f7/0x700 block/blk-mq.c:2250
+ blk_mq_run_hw_queue+0x3b5/0x560 block/blk-mq.c:2298
+ blk_mq_sched_insert_requests+0x1d9/0xb30 block/blk-mq-sched.c:493
+ blk_mq_dispatch_plug_list block/blk-mq.c:2758 [inline]
+ blk_mq_flush_plug_list+0x39c/0xe10 block/blk-mq.c:2800
+ __blk_flush_plug block/blk-core.c:1150 [inline]
+ blk_finish_plug block/blk-core.c:1174 [inline]
+ blk_finish_plug+0xbb/0x170 block/blk-core.c:1171
+ __iomap_dio_rw+0xf85/0x1d80 fs/iomap/direct-io.c:602
+ iomap_dio_rw+0x40/0xa0 fs/iomap/direct-io.c:682
+ ext4_dio_read_iter fs/ext4/file.c:94 [inline]
+ ext4_file_read_iter+0x4be/0x690 fs/ext4/file.c:145
+ call_read_iter include/linux/fs.h:1845 [inline]
+ generic_file_splice_read+0x182/0x4b0 fs/splice.c:309
+ do_splice_to+0x1b9/0x240 fs/splice.c:793
+ splice_direct_to_actor+0x2ab/0x8a0 fs/splice.c:865
+ do_splice_direct+0x1ab/0x280 fs/splice.c:974
+ do_sendfile+0xb19/0x12c0 fs/read_write.c:1255
+ __do_sys_sendfile64 fs/read_write.c:1323 [inline]
+ __se_sys_sendfile64 fs/read_write.c:1309 [inline]
+ __x64_sys_sendfile64+0x1d0/0x210 fs/read_write.c:1309
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-Yes, agreed! Having that structure will tidy this up.
-I will keep this under future work.
+The buggy address belongs to the object at ffff88801733b280
+ which belongs to the cache sgpool-8 of size 256
+The buggy address is located 0 bytes to the right of
+ allocated 256-byte region [ffff88801733b280, ffff88801733b380)
 
->>   static const u16 tidss_am65x_common_regs[DISPC_COMMON_REG_TABLE_LEN] = {
->> @@ -140,8 +142,8 @@ static const u16 tidss_am65x_common_regs[DISPC_COMMON_REG_TABLE_LEN] = {
->>     const struct dispc_features dispc_am65x_feats = {
->>       .max_pclk_khz = {
->> -        [DISPC_VP_DPI] = 165000,
->> -        [DISPC_VP_OLDI] = 165000,
->> +        [DISPC_PORT_DPI] = 165000,
->> +        [DISPC_PORT_OLDI] = 165000,
->>       },
->>         .scaling = {
->> @@ -171,7 +173,6 @@ const struct dispc_features dispc_am65x_feats = {
->>       .vp_name = { "vp1", "vp2" },
->>       .ovr_name = { "ovr1", "ovr2" },
->>       .vpclk_name =  { "vp1", "vp2" },
->> -     .vp_bus_type = { DISPC_VP_OLDI, DISPC_VP_DPI },
->>       .vp_feat = { .color = {
->>               .has_ctm = true,
->> @@ -185,6 +186,9 @@ const struct dispc_features dispc_am65x_feats = {
->>       .vid_name = { "vid", "vidl1" },
->>       .vid_lite = { false, true, },
->>       .vid_order = { 1, 0 },
->> +
->> +    .num_output_ports = 2,
->> +    .output_port_bus_type = { DISPC_PORT_OLDI, DISPC_PORT_DPI },
->>   };
->>     static const u16 tidss_j721e_common_regs[DISPC_COMMON_REG_TABLE_LEN] = {
->> @@ -229,8 +233,8 @@ static const u16 tidss_j721e_common_regs[DISPC_COMMON_REG_TABLE_LEN] = {
->>     const struct dispc_features dispc_j721e_feats = {
->>       .max_pclk_khz = {
->> -        [DISPC_VP_DPI] = 170000,
->> -        [DISPC_VP_INTERNAL] = 600000,
->> +        [DISPC_PORT_DPI] = 170000,
->> +        [DISPC_PORT_INTERNAL] = 600000,
->>       },
->>         .scaling = {
->> @@ -260,9 +264,7 @@ const struct dispc_features dispc_j721e_feats = {
->>       .vp_name = { "vp1", "vp2", "vp3", "vp4" },
->>       .ovr_name = { "ovr1", "ovr2", "ovr3", "ovr4" },
->>       .vpclk_name = { "vp1", "vp2", "vp3", "vp4" },
->> -    /* Currently hard coded VP routing (see dispc_initial_config()) */
->> -    .vp_bus_type =    { DISPC_VP_INTERNAL, DISPC_VP_DPI,
->> -              DISPC_VP_INTERNAL, DISPC_VP_DPI, },
->> +
-> 
-> I think this line feed is extra.
+The buggy address belongs to the physical page:
+page:ffffea00005ccec0 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1733b
+flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000000200 ffff88814526f500 dead000000000122 0000000000000000
+raw: 0000000000000000 00000000800c000c 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x192820(GFP_ATOMIC|__GFP_NOWARN|__GFP_NORETRY|__GFP_NOMEMALLOC|__GFP_HARDWALL), pid 5839, tgid 5837 (syz-executor.3), ts 93322224247, free_ts 93320303745
+ prep_new_page mm/page_alloc.c:2552 [inline]
+ get_page_from_freelist+0x11bb/0x2d50 mm/page_alloc.c:4328
+ __alloc_pages+0x1cb/0x5c0 mm/page_alloc.c:5594
+ alloc_pages+0x1aa/0x270 mm/mempolicy.c:2283
+ alloc_slab_page mm/slub.c:1851 [inline]
+ allocate_slab+0x28e/0x380 mm/slub.c:1998
+ new_slab mm/slub.c:2051 [inline]
+ ___slab_alloc+0xa91/0x1400 mm/slub.c:3193
+ __slab_alloc.constprop.0+0x56/0xa0 mm/slub.c:3292
+ __slab_alloc_node mm/slub.c:3345 [inline]
+ slab_alloc_node mm/slub.c:3442 [inline]
+ slab_alloc mm/slub.c:3460 [inline]
+ __kmem_cache_alloc_lru mm/slub.c:3467 [inline]
+ kmem_cache_alloc+0x30a/0x320 mm/slub.c:3476
+ mempool_alloc+0x158/0x360 mm/mempool.c:398
+ __sg_alloc_table+0x248/0x380 lib/scatterlist.c:318
+ sg_alloc_table_chained+0x9f/0x1f0 lib/sg_pool.c:133
+ scsi_alloc_sgtables+0x1d3/0xf70 drivers/scsi/scsi_lib.c:1041
+ sd_setup_read_write_cmnd drivers/scsi/sd.c:1136 [inline]
+ sd_init_command+0x67a/0x32a0 drivers/scsi/sd.c:1260
+ scsi_prepare_cmd drivers/scsi/scsi_lib.c:1604 [inline]
+ scsi_queue_rq+0x1e7b/0x3a40 drivers/scsi/scsi_lib.c:1738
+ blk_mq_dispatch_rq_list+0x710/0x23f0 block/blk-mq.c:2056
+ __blk_mq_do_dispatch_sched block/blk-mq-sched.c:173 [inline]
+ blk_mq_do_dispatch_sched+0x95e/0xc20 block/blk-mq-sched.c:187
+ __blk_mq_sched_dispatch_requests+0x26d/0x3e0 block/blk-mq-sched.c:313
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1453 [inline]
+ free_pcp_prepare+0x4d0/0x910 mm/page_alloc.c:1503
+ free_unref_page_prepare mm/page_alloc.c:3390 [inline]
+ free_unref_page+0x1d/0x490 mm/page_alloc.c:3485
+ __folio_put_small mm/swap.c:106 [inline]
+ __folio_put+0xc5/0x140 mm/swap.c:129
+ folio_put include/linux/mm.h:1304 [inline]
+ put_page include/linux/mm.h:1373 [inline]
+ generic_pipe_buf_release+0x23d/0x2b0 fs/pipe.c:210
+ pipe_buf_release include/linux/pipe_fs_i.h:183 [inline]
+ iov_iter_revert.part.0+0x402/0x730 lib/iov_iter.c:935
+ iov_iter_revert+0x4c/0x60 lib/iov_iter.c:919
+ __iomap_dio_rw+0x16cb/0x1d80 fs/iomap/direct-io.c:610
+ iomap_dio_rw+0x40/0xa0 fs/iomap/direct-io.c:682
+ ext4_dio_read_iter fs/ext4/file.c:94 [inline]
+ ext4_file_read_iter+0x4be/0x690 fs/ext4/file.c:145
+ call_read_iter include/linux/fs.h:1845 [inline]
+ generic_file_splice_read+0x182/0x4b0 fs/splice.c:309
+ do_splice_to+0x1b9/0x240 fs/splice.c:793
+ splice_direct_to_actor+0x2ab/0x8a0 fs/splice.c:865
+ do_splice_direct+0x1ab/0x280 fs/splice.c:974
+ do_sendfile+0xb19/0x12c0 fs/read_write.c:1255
+ __do_sys_sendfile64 fs/read_write.c:1323 [inline]
+ __se_sys_sendfile64 fs/read_write.c:1309 [inline]
+ __x64_sys_sendfile64+0x1d0/0x210 fs/read_write.c:1309
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
 
-Okay! Will remove that from all SoC feat structs.
-
-> 
->>       .vp_feat = { .color = {
->>               .has_ctm = true,
->>               .gamma_size = 1024,
->> @@ -273,6 +275,11 @@ const struct dispc_features dispc_j721e_feats = {
->>       .vid_name = { "vid1", "vidl1", "vid2", "vidl2" },
->>       .vid_lite = { 0, 1, 0, 1, },
->>       .vid_order = { 1, 3, 0, 2 },
->> +
->> +    .num_output_ports = 4,
->> +    /* Currently hard coded VP routing (see dispc_initial_config()) */
->> +    .output_port_bus_type =    { DISPC_PORT_INTERNAL, DISPC_PORT_DPI,
->> +              DISPC_PORT_INTERNAL, DISPC_PORT_DPI, },
-> 
-> Indent doesn't look right (but it might be just because this is a diff).
-
-I may have missed indenting this.
-
-> 
->>   };
->>     static const u16 *dispc_common_regmap;
->> @@ -287,12 +294,12 @@ struct dispc_device {
->>      void __iomem *base_common;
->>      void __iomem *base_vid[TIDSS_MAX_PLANES];
->> -    void __iomem *base_ovr[TIDSS_MAX_PORTS];
->> -    void __iomem *base_vp[TIDSS_MAX_PORTS];
->> +    void __iomem *base_ovr[TIDSS_MAX_VPS];
->> +    void __iomem *base_vp[TIDSS_MAX_VPS];
->>      struct regmap *oldi_io_ctrl;
->> -    struct clk *vp_clk[TIDSS_MAX_PORTS];
->> +    struct clk *vp_clk[TIDSS_MAX_VPS];
->>         const struct dispc_features *feat;
->>   @@ -300,7 +307,7 @@ struct dispc_device {
->>         bool is_enabled;
->> -    struct dss_vp_data vp_data[TIDSS_MAX_PORTS];
->> +    struct dss_vp_data vp_data[TIDSS_MAX_VPS];
->>         u32 *fourccs;
->>       u32 num_fourccs;
->> @@ -851,7 +858,7 @@ int dispc_vp_bus_check(struct dispc_device *dispc, u32 hw_videoport,
->>           return -EINVAL;
->>       }
->> -    if (dispc->feat->vp_bus_type[hw_videoport] != DISPC_VP_OLDI &&
->> +    if (dispc->feat->output_port_bus_type[hw_videoport] != DISPC_PORT_OLDI &&
-> 
-> Hmm, so is the hw_videoport a vp index or an output index? Sounds like
-> the former, so it's not right, even if at the moment they're identical.
-> We need some kind of mapping between those.
-> 
-
-It is indeed a vp index. And yes, I can come up with a mapping mechanism.
-
-> If the mapping can be changed (or just defined in the DT), I think we
-> need a variable in struct dispc_device, which tells the output to which
-> a videoport is connected to. Or vice versa, I'm not sure which direction
-> we need more. If the mapping is always the same on all SoC (but I don't
-> think so), we can have it in the feats.
-> 
-
-As of now, the mapping is always same. But I would like to make is
-generalized for future. Hence, I am considering to keep the variable in
-struct dispc_device.
-
-My question though would be, how would one be able to find which kind
-of device is the port connected to, if it is connected to a bridge? For
-example, in case of panels, we have a "connector_type" variable in
-drm_panel which tells what kind of sink it is. But there is no such
-thing in drm_bridge.
-
-This is required because what if we can connect an videoport to either
-an LVDS/OLDI bridge or a DPI bridge.
-
-Also, implementing this might mean removal of the part of code which
-confirms that the panel's "connector_type" indeed expects what the VP
-can provide, unless there is a way to find out what the sink is before
-calling the drm_of_find_panel_or_bridge API.
+Memory state around the buggy address:
+ ffff88801733b280: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffff88801733b300: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>ffff88801733b380: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+                   ^
+ ffff88801733b400: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff88801733b480: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+==================================================================
 
 
-On the direction, the primary requirement of hw_videoport has been in
-the tidss_dispc.c file where the HW registers are getting configured.
-'hw_videoport' is a frequently passed parameter in function calls. So,
-at a first glance the former option might makes more sense for
-direction, i.e. to have a variable which tells the output to which a
-videoport is connected to.
+Tested on:
 
-And while, there is also the tidss_kms.c file, which deals with
-initializing encoders and attaching bridges. This is where the
-output_port is required more often. But I am yet to think of a case
-where the above direction could be an issue.
+commit:         4fafd969 Add linux-next specific files for 20230203
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=166ef3ad480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=1d2fba7d42502ca4
+dashboard link: https://syzkaller.appspot.com/bug?extid=0bbf896c8341c8e137c2
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=173f904b480000
 
-
-> Also, I wonder if output_port is a good name as it has "port" in it
-> (like video port), and it's a bit long-ish. Would just "output" be
-> enough? We could, of course, shorten it to OP, but that looks odd to me =).
-> 
-
->>           fmt->is_oldi_fmt) {
->>           dev_dbg(dispc->dev, "%s: %s is not OLDI-port\n",
->>               __func__, dispc->feat->vp_name[hw_videoport]);
->> @@ -955,7 +962,7 @@ void dispc_vp_prepare(struct dispc_device *dispc, u32 hw_videoport,
->>       if (WARN_ON(!fmt))
->>           return;
->> -    if (dispc->feat->vp_bus_type[hw_videoport] == DISPC_VP_OLDI) {
->> +    if (dispc->feat->output_port_bus_type[hw_videoport] == DISPC_PORT_OLDI) {
->>           dispc_oldi_tx_power(dispc, true);
->>             dispc_enable_oldi(dispc, hw_videoport, fmt);
->> @@ -1014,7 +1021,7 @@ void dispc_vp_enable(struct dispc_device *dispc, u32 hw_videoport,
->>       align = true;
->>         /* always use DE_HIGH for OLDI */
->> -    if (dispc->feat->vp_bus_type[hw_videoport] == DISPC_VP_OLDI)
->> +    if (dispc->feat->output_port_bus_type[hw_videoport] == DISPC_PORT_OLDI)
->>           ieo = false;
->>         dispc_vp_write(dispc, hw_videoport, DISPC_VP_POL_FREQ,
->> @@ -1040,7 +1047,7 @@ void dispc_vp_disable(struct dispc_device *dispc, u32 hw_videoport)
->>     void dispc_vp_unprepare(struct dispc_device *dispc, u32 hw_videoport)
->>   {
->> -    if (dispc->feat->vp_bus_type[hw_videoport] == DISPC_VP_OLDI) {
->> +    if (dispc->feat->output_port_bus_type[hw_videoport] == DISPC_PORT_OLDI) {
->>           dispc_vp_write(dispc, hw_videoport, DISPC_VP_DSS_OLDI_CFG, 0);
->>             dispc_oldi_tx_power(dispc, false);
->> @@ -1116,10 +1123,10 @@ enum drm_mode_status dispc_vp_mode_valid(struct dispc_device *dispc,
->>                        const struct drm_display_mode *mode)
->>   {
->>      u32 hsw, hfp, hbp, vsw, vfp, vbp;
->> -    enum dispc_vp_bus_type bus_type;
->> +    enum dispc_port_bus_type bus_type;
->>      int max_pclk;
->> -    bus_type = dispc->feat->vp_bus_type[hw_videoport];
->> +    bus_type = dispc->feat->output_port_bus_type[hw_videoport];
->>      max_pclk = dispc->feat->max_pclk_khz[bus_type];
->> diff --git a/drivers/gpu/drm/tidss/tidss_dispc.h b/drivers/gpu/drm/tidss/tidss_dispc.h
->> index e49432f0abf5..30fb44158347 100644
->> --- a/drivers/gpu/drm/tidss/tidss_dispc.h
->> +++ b/drivers/gpu/drm/tidss/tidss_dispc.h
->> @@ -50,11 +50,11 @@ struct dispc_errata {
->>       bool i2000; /* DSS Does Not Support YUV Pixel Data Formats */
->>   };
->> -enum dispc_vp_bus_type {
->> -    DISPC_VP_DPI,        /* DPI output */
->> -    DISPC_VP_OLDI,        /* OLDI (LVDS) output */
->> -    DISPC_VP_INTERNAL,    /* SoC internal routing */
->> -    DISPC_VP_MAX_BUS_TYPE,
->> +enum dispc_port_bus_type {
->> +    DISPC_PORT_DPI,            /* DPI output */
->> +    DISPC_PORT_OLDI,        /* OLDI (LVDS) output */
->> +    DISPC_PORT_INTERNAL,        /* SoC internal routing */
->> +    DISPC_PORT_MAX_BUS_TYPE,
-> 
-> Okay, so here you have just "port", not "output_port". In the DT,
-> they're ports, so... Maybe we could use that name too, and for video
-> port always use "vp". The current "hw_videoport" could be easily
-> mistaken with "port".
-
-I see what you are saying and how somebody could confusre hw_videoport
-for a physical connection (i.e. port). I have always understoof
-hw_videoport to be a thing of the actual VP inside the SoC, but that may
-be because I have been working on this, and not just trying to
-understand the code from a high level.
-
-How about if I change the output_port to "out_port"? I am okay to keep
-"output" as the name to. I am saying this becuase I think, only keeping
-"port" might just confuse more, as you mentioned above.
-
-And then we can change "hw_videoport" to "vp_index", perhaps, or even
-keep that as it is? Becuase if we do have a VP structure in future
-like you suggested above, "vps" and "vp" would become a close overlap.
-For eg, "vps[vp]".
-
-How do these sound to you?
-
-> 
-> I don't recall why I chose to use "hw" prefix there. I think I wanted to
-> separate it from some other videoport, but... I don't know what that
-> "other" is =).
-> 
-
-Perhaps because just a "videoport" might be confused with a connector on
-the board, as in "HDMI port"? And the prefix might be a way to clarify
-that its the DSS controller's VP. =)
-
-
-Regards
-Aradhya
