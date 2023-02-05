@@ -2,106 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 731A568B23E
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 23:45:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2662568B241
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 23:48:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229515AbjBEWpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 17:45:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51992 "EHLO
+        id S229544AbjBEWs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 17:48:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjBEWpp (ORCPT
+        with ESMTP id S229448AbjBEWs0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 17:45:45 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3FF41A48B
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 14:45:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675637144; x=1707173144;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BlZ8PuKRi1LgunT9QR51Xqzb1RDyZnEwWV/sZQ9V2UI=;
-  b=jCOG+oJeB3rBvC+5ua6rnrHE3HRwsU2L7cRKfn1NL1pt/evRSVCvrL7f
-   JFJTtTSdMPCkp6SUKKC5Jze/5mSWLT3bHC1YDu/GPZ0RuFmV5p8MoTlh0
-   KTTFJGIIMaqOLNLBlP5CDsvrwfuexOMJyC0IXyr3Jz7yCZjqtbarLFWIH
-   o5m17CWTY1u9BMYvLAj8BoW1BVsrOodqEYWKd8RwwBqdicMc+G55jlLcO
-   o4sdfwenJmFFS9FFs1Y8GsH8KV+AC3lBf8pfwr6WplwYJf2CpY+Bg1V79
-   LOkKcrbGzphp8OfuypGYbFbABb3qgIypZlDFBFgvAgn3ZuV4/XOgXkFRB
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10612"; a="356450577"
-X-IronPort-AV: E=Sophos;i="5.97,275,1669104000"; 
-   d="scan'208";a="356450577"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2023 14:45:44 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10612"; a="698672347"
-X-IronPort-AV: E=Sophos;i="5.97,275,1669104000"; 
-   d="scan'208";a="698672347"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 05 Feb 2023 14:45:43 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pOnlR-0002GH-0m;
-        Sun, 05 Feb 2023 22:45:37 +0000
-Date:   Mon, 6 Feb 2023 06:45:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nick Terrell <terrelln@fb.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: ERROR: modpost: "__ld_r13_to_r17_ret" [lib/zstd/zstd_decompress.ko]
- undefined!
-Message-ID: <202302060657.M1Bw6XxF-lkp@intel.com>
+        Sun, 5 Feb 2023 17:48:26 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 909D41205B;
+        Sun,  5 Feb 2023 14:48:25 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P94LJ1LQHz4xP9;
+        Mon,  6 Feb 2023 09:48:24 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1675637304;
+        bh=zK2oP2Zokngjohl/ZYy8D9NhQrXVeMrmZcwD8ZFgmC4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ZamB0Lh79P5SBKfD2m0zm+H++ZugGP+J7HduTIW0Wmrk0NRm6jaC6GKXEoJ+yjbTl
+         MZ58YeKc0u0ZtYp7NHU5bHsPH1Px5BgU01rxXb+pSDP4urS5xXog/2hcdKq+8PBSxd
+         aoM6Z1yyvejIdBKv2+VGkTQE+zZaa8GafbgGGgGmk0JKM7Acv7bstHrsOfRZXNQn+f
+         1DAmyXV82PGF1ImW95SvkkshpJvmLXv/AriaADec77l6/BkqZpVHOkEcV0GOCDY5N8
+         bmnrfStFUm64nm8ZEP+ScSplDG3pGYX9WLiR7x/1jN7t1NPR6MSOyYjaN25JTYHIiS
+         StPCX8Rp//BOQ==
+Date:   Mon, 6 Feb 2023 09:48:23 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul@pwsan.com>
+Cc:     Jisheng Zhang <jszhang@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Samuel Holland <samuel@sholland.org>
+Subject: linux-next: manual merge of the risc-v tree with Linus' tree
+Message-ID: <20230206094823.48197098@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/vRO0/EEK+qHdckKv4h0e=+T";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nick,
+--Sig_/vRO0/EEK+qHdckKv4h0e=+T
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-FYI, the error/warning still remains.
+Hi all,
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   4ec5183ec48656cec489c49f989c508b68b518e3
-commit: 7416cdc9b9c10968c57b1f73be5d48b3ecdaf3c8 lib: zstd: Don't add -O3 to cflags
-date:   1 year, 3 months ago
-config: arc-buildonly-randconfig-r005-20230206 (https://download.01.org/0day-ci/archive/20230206/202302060657.M1Bw6XxF-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7416cdc9b9c10968c57b1f73be5d48b3ecdaf3c8
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 7416cdc9b9c10968c57b1f73be5d48b3ecdaf3c8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
+Today's linux-next merge of the risc-v tree got a conflict in:
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+  arch/riscv/include/asm/vdso/processor.h
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+between commit:
 
-ERROR: modpost: "__st_r13_to_r18" [lib/zstd/zstd_decompress.ko] undefined!
-ERROR: modpost: "__ld_r13_to_r22" [lib/zstd/zstd_decompress.ko] undefined!
-ERROR: modpost: "__ld_r13_to_r25_ret" [lib/zstd/zstd_decompress.ko] undefined!
-ERROR: modpost: "__ld_r13_to_r18_ret" [lib/zstd/zstd_decompress.ko] undefined!
-ERROR: modpost: "__ld_r13_to_r24_ret" [lib/zstd/zstd_decompress.ko] undefined!
-ERROR: modpost: "__st_r13_to_r23" [lib/zstd/zstd_decompress.ko] undefined!
-ERROR: modpost: "__st_r13_to_r19" [lib/zstd/zstd_decompress.ko] undefined!
-ERROR: modpost: "__st_r13_to_r21" [lib/zstd/zstd_decompress.ko] undefined!
->> ERROR: modpost: "__ld_r13_to_r17_ret" [lib/zstd/zstd_decompress.ko] undefined!
->> ERROR: modpost: "__st_r13_to_r24" [lib/zstd/zstd_decompress.ko] undefined!
-WARNING: modpost: suppressed 7 unresolved symbol warnings because there were too many)
+  0b1d60d6dd9e ("riscv: Fix build with CONFIG_CC_OPTIMIZE_FOR_SIZE=3Dy")
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+from Linus' tree and commit:
+
+  95bc69a47be2 ("riscv: cpu_relax: switch to riscv_has_extension_likely()")
+
+from the risc-v tree.
+
+I fixed it up (the former removed the line modified by the latter,
+so I just used the former) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/vRO0/EEK+qHdckKv4h0e=+T
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPgMjcACgkQAVBC80lX
+0Gxxzwf/d3Pdi8D8iFQxVl9y5jG9nP1uqMMqRnHeLnhHoposYilae/wrsDFnOXiL
+h5P+QVyMQfcxhRVNkY9MJlh6/d0a8valkxd3PmTshtfH9LURpg4jlt/bBhvfi/Dx
+nclWIrbRg0CaMv/29wW8nlRBdeapy0kcncuKw28tp8S71aANsz5StXCHUflbTOk7
+z0hFz/AbiVj2xwbAiJrL7NrNnnWsfhhv6weZnr7pkfJ2Mi+f6CJb3mL1I6/VPLtz
+MpU4UM6YnK+OZvLpESbxuERKZI0psAAKMyLjTARBqs1LmzlUI7Lp0cF4vZsuJDqv
+RgmeCoNsiutot9+RIcRJIdgqA8O8lA==
+=J/cJ
+-----END PGP SIGNATURE-----
+
+--Sig_/vRO0/EEK+qHdckKv4h0e=+T--
