@@ -2,140 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFAAC68ADE9
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 02:23:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7B7D68ADEC
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 02:24:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231472AbjBEBXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 20:23:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35736 "EHLO
+        id S232084AbjBEBYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 20:24:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231375AbjBEBXS (ORCPT
+        with ESMTP id S231748AbjBEBYB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 20:23:18 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72855DBD9
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 17:23:15 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P8WqQ1B86z4xG5;
-        Sun,  5 Feb 2023 12:23:14 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1675560194;
-        bh=+S+S6flET8zT5WTMl8b0//zYmEAC41UnRzFrIe5j+eA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Y9WMHSnJBCuOqidZGw9ThWGyzWJxP3cfWbg9WDBOe/RlKInYwdrj7VsqjEz7ZTXpH
-         vAzn+xEIrOlOXDjOdM7SM1LLfhu8HUcpDEUQii/LLwBOWcKwIFK/w3Hhhnx+u+b39C
-         VEU8TCQHt8oUdy36lAGULLNBFYWDUQuGIoyR0qwoq5pqBdb5FDItTtrUofYMum82bA
-         Hn5ceY3oHHDYpOhtGp5IeeLbVZXSdBacnC/05xjzK2hhGbUzTWzkgYUAvqjyfT7oFV
-         uK3NOyqDGBcaY/w0IySRDfjtqEyA6ecKnAGQco4h17SILjhCZkzQXRhN4J0uHUtf2w
-         GdIk50dnwYpJQ==
-From:   Michael Ellerman <mpe@ellerman.id.au>
+        Sat, 4 Feb 2023 20:24:01 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id B47A71F5CA
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 17:23:59 -0800 (PST)
+Received: (qmail 609844 invoked by uid 1000); 4 Feb 2023 20:23:58 -0500
+Date:   Sat, 4 Feb 2023 20:23:58 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        npiggin@gmail.com, sourabhjain@linux.ibm.com, sv@linux.ibm.com
-Subject: [GIT PULL] Please pull powerpc/linux.git powerpc-6.2-4 tag
-Date:   Sun, 05 Feb 2023 12:23:13 +1100
-Message-ID: <87y1pcewhq.fsf@mpe.ellerman.id.au>
+Cc:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Hillf Danton <hdanton@sina.com>
+Subject: Re: Converting dev->mutex into dev->spinlock ?
+Message-ID: <Y98FLlr7jkiFlV0k@rowland.harvard.edu>
+References: <28a82f50-39d5-a45f-7c7a-57a66cec0741@I-love.SAKURA.ne.jp>
+ <Y95h7Vop9t5Li0HD@kroah.com>
+ <a236ab6b-d38c-3974-d4cb-5e92d0877abc@I-love.SAKURA.ne.jp>
+ <Y957GSFVAQz8v3Xo@rowland.harvard.edu>
+ <cf56ebc3-187a-6ee4-26bc-2d180272b5cf@I-love.SAKURA.ne.jp>
+ <Y96HiYcreb8jZIHi@rowland.harvard.edu>
+ <917e1e3b-094f-e594-c1a2-8b97fb5195fd@I-love.SAKURA.ne.jp>
+ <Y965qEg0Re2QoQ7Q@rowland.harvard.edu>
+ <CAHk-=wjoy=hObTmyRb9ttApjndt0LfqAfv71Cz+hEGrT0cLN+A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wjoy=hObTmyRb9ttApjndt0LfqAfv71Cz+hEGrT0cLN+A@mail.gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA256
+On Sat, Feb 04, 2023 at 12:14:54PM -0800, Linus Torvalds wrote:
+> On Sat, Feb 4, 2023 at 12:01 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> >
+> > I'm sorry, but that simply is not feasible.  It doesn't matter how much
+> > you want to do it or feel it is needed; there is no reasonable way to do
+> > it.  To take just one example, what you are saying implies that when a
+> > driver is probed for a device, it would not be allowed to register a
+> > child device.  That's a ridiculous restriction.
+> 
+> Well, we've worked around that in other places by making the lockdep
+> classes for different locks of the same type be different.
+> 
+> So this *could* possibly be solved by lockdep being smarter about
+> dev->mutex than just "disable checking entirely".
+> 
+> So maybe the lock_set_novalidate_class() could be something better. It
+> _is_ kind of disgusting.
+> 
+> That said, maybe people tried to subclass the locks and failed, and
+> that "no validation" is the best that can be done.
+> 
+> But other areas *do* end up spending extra effort to separate out the
+> locks (and the different uses of the locks), and I think the
+> dev->mutex is one of the few cases that just gives up and says "no
+> validation at all".
+> 
+> The other case seems to be the md bcache code.
 
-Hi Linus,
+I suppose we could create separate lockdep classes for every bus_type 
+and device_type combination, as well as for the different sorts of 
+devices -- treat things like class devices separately from normal 
+devices, and so on.  But even then there would be trouble.
 
-Please pull some more powerpc fixes for 6.2.
+For example, consider PCI devices and PCI bridges (this sort of thing 
+happens on other buses too).  I don't know the details of how the PCI 
+subsystem works, but presumably when a bridge is probed, the driver then 
+probes all the devices on the other side of the bridge while holding the 
+bridge's lock.  Then if one of those devices is another bridge, the same 
+thing happens recursively, and so on.  How would drivers cope with that?  
+How deep will this nesting go?  I doubt that the driver core could take 
+care of these issues all by itself.
 
-It's a bit of a big batch for rc6, but just because I didn't send any fixes the last week
-or two while I was on vacation, next week should be quieter.
+I don't know if the following situation ever happens anywhere, but it 
+could: Suppose a driver wants to lock several children of some device A.  
+Providing it already holds A's lock, this is perfectly safe.  But how 
+can we tell lockdep?  Even if A belongs to a different lockdep class 
+from its children, the children would all be in the same class.
 
-cheers
+What happens when a driver wants to lock both a regular device and its 
+corresponding class device?  Some drivers might acquire the locks in one 
+order and some drivers in another.  Again it's safe, because separate 
+drivers will never try to lock the same devices, but how do you tell 
+lockdep about this?
 
-The following changes since commit f12cd06109f47c2fb4b23a45ab55404c47ef7fae:
+No doubt there are other examples of potential problems.  Somebody could 
+try to implement this kind of approach, but almost certainly it would 
+lead to tons of false positives.
 
-  powerpc/64s/hash: Make stress_hpt_timer_fn() static (2023-01-12 10:53:37 +1100)
-
-are available in the git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git tags/powerpc-6.2-4
-
-for you to fetch changes up to 1665c027afb225882a5a0b014c45e84290b826c2:
-
-  powerpc/64s: Reconnect tlb_flush() to hash__tlb_flush() (2023-02-02 13:25:47 +1100)
-
-- ------------------------------------------------------------------
-powerpc fixes for 6.2 #4
-
- - Fix a few objtool warnings since we recently enabled objtool.
-
- - Fix a deadlock with the hash MMU vs perf record.
-
- - Fix perf profiling of asynchronous interrupt handlers.
-
- - Revert the IMC PMU nest_init_lock to being a mutex.
-
- - Two commits fixing problems with the kexec_file FDT size estimation.
-
- - Two commits fixing problems with strict RWX vs kernels running at non-zero.
-
- - Reconnect tlb_flush() to hash__tlb_flush()
-
-Thanks to: Kajol Jain, Nicholas Piggin, Sachin Sant Sathvika Vasireddy, Sourabh Jain.
-
-- ------------------------------------------------------------------
-Michael Ellerman (5):
-      powerpc/imc-pmu: Revert nest_init_lock to being a mutex
-      powerpc/kexec_file: Fix division by zero in extra size estimation
-      powerpc/64s/radix: Fix crash with unaligned relocated kernel
-      powerpc/64s/radix: Fix RWX mapping with relocated kernel
-      powerpc/64s: Reconnect tlb_flush() to hash__tlb_flush()
-
-Nicholas Piggin (2):
-      powerpc/64s: Fix local irq disable when PMIs are disabled
-      powerpc/64: Fix perf profiling asynchronous interrupt handlers
-
-Sathvika Vasireddy (2):
-      powerpc/85xx: Fix unannotated intra-function call warning
-      powerpc/kvm: Fix unannotated intra-function call warning
-
-Sourabh Jain (1):
-      powerpc/kexec_file: Count hot-pluggable memory in FDT estimate
-
-
- arch/powerpc/include/asm/book3s/64/tlbflush.h |  2 +
- arch/powerpc/include/asm/hw_irq.h             | 43 ++++++++++++++------
- arch/powerpc/kernel/dbell.c                   |  2 +-
- arch/powerpc/kernel/head_85xx.S               |  3 +-
- arch/powerpc/kernel/irq.c                     |  2 +-
- arch/powerpc/kernel/time.c                    |  2 +-
- arch/powerpc/kexec/file_load_64.c             | 11 +++--
- arch/powerpc/kvm/booke.c                      |  5 +--
- arch/powerpc/mm/book3s64/radix_pgtable.c      | 24 +++++++++++
- arch/powerpc/perf/imc-pmu.c                   | 14 +++----
- 10 files changed, 77 insertions(+), 31 deletions(-)
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEJFGtCPCthwEv2Y/bUevqPMjhpYAFAmPfBM8ACgkQUevqPMjh
-pYAFDQ/8CgBQ+Cf7q1yNm35L+IjA2kLub392pXEPVFf5+81hdib8VdSdLVsngXwZ
-e7bwbId16xzLVGB3MDm8MqokCxwWcd3n8RjCMKal408c1qqcdlLHEi52MmQK2e2W
-CIfGM5HbrqlEy8y4IfHQZ5W8DdjVh+8EzlfIMYJyyLB6508o1G9BB0ToFo/VtrZH
-pB2cnXKLpthZ18l9n6t5z49rSOLukndwJif7Dloi8nTkz4NJ+uD8g1eQEQtiXPmC
-KkBc19HWvHkHYGGg6nHCT0nvUEJ6jY4RBzTTyJnRdSrZwMACwiCqHS4p1EoKuU1+
-kC7SN2VpJDSpGpxGItxPA+GgtaPuwWy/bY9ffEbRI46qpS2J/W2ChcAPhhdE1roY
-IBIPD/p3hiAJNBtK4tpsv0hoErPnOIVKgsAsgKy/4dxojElCGGXn2FqbdFfOmp4u
-Vh8vy6ploiiuQZjLB/znNyzD72jjqfyNPAaT05rLIgnAYdOnFYHm7KLoEyxL48gj
-nxsDmXen8JWuVvRMpA7magZ4MHmjJ5GOaZfjqEM5d0nFIuQErlYyztQ88QfMX7Gu
-TW92hAFe6F5d5FNbN+AG4l/qr6fHJ96ViIED1q+2zNj+Uh/JTMTHk0b/BuSM+6u+
-SNeQrlqksha1OlgGtxb5fskdly8lPVytPXgCrWjuvU8K/jaqQN8=
-=kk/e
------END PGP SIGNATURE-----
+Alan Stern
