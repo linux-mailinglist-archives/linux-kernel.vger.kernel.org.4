@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B43A68B053
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 15:42:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02B6968B05C
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 15:48:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229701AbjBEOmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 09:42:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58278 "EHLO
+        id S229596AbjBEOsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 09:48:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjBEOmo (ORCPT
+        with ESMTP id S229498AbjBEOsR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 09:42:44 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7F401C31B;
-        Sun,  5 Feb 2023 06:42:43 -0800 (PST)
+        Sun, 5 Feb 2023 09:48:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 826F11ADF0;
+        Sun,  5 Feb 2023 06:48:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7C084B80B22;
-        Sun,  5 Feb 2023 14:42:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CA1DC433EF;
-        Sun,  5 Feb 2023 14:42:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0AE556066C;
+        Sun,  5 Feb 2023 14:48:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFDEBC433EF;
+        Sun,  5 Feb 2023 14:48:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675608161;
-        bh=2uiZi1cqU77kkLB21Yd0QlrFl7mrVelei0IjV/LyO34=;
+        s=k20201202; t=1675608495;
+        bh=vQYR06IWX0d3i4oNFRcT+gjh4a36LQcL6uYULnjA2fI=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=rn8lQ8XCYMmsL1/pCbCGnAgDq1rxq628txxHan4sSMHw8TwzuSQR6J0M/Coac10lT
-         bIpCwMLCcDAfX773ce5nLtG26rmt54m5QGFHTTAQZ4x649/q9csK9AAjvYp73HpbPh
-         EzaD0q5lOEGR6UWvI6JOSS7Z6Zy/4y0dMco6YP06Up/VgUEkgFYNi0MSGQ1V+/pIN5
-         tZbGOmJ4wR1LLYoKDcrqALrQlnCl34XVL5D9M8CytqoaivL8v65WvPAf3a2SAFdZlA
-         7ZmtWZKqOsmCtWlBVTEK4GxhW70ySBJAdb2VP0eLM5WJkqzxD7gwWy6te6OnKmwHNC
-         Ym3MuPsgIKJig==
-Date:   Sun, 5 Feb 2023 14:56:42 +0000
+        b=eGuz5qqjkNtEoh0YTfOmkZmpl5IC4HWhFymjmx8oSqpyF4HHwvLwHtik2CdAhURsN
+         QhsrD1XC42MLfiuZYc+XvrANULaV9Kp1k3Kqv3OJ8AdDV/VCqdcYkQEcgAfs0/t/n4
+         o2YRQlTNDlOz9Vt7EQor44drgH3VpULPxSw6bTfp8d8Ng1QPlKJZLzDTavNyd4bWni
+         qz08HaxxZ0tU8dyhd5gz90S/OrgKJIf3SbUJdNlN8am1lzQjSPD8KUe6pw9cE027tO
+         3RUC/cHVOnQFzvH1+S1RY8eeF+aKeNAmH3RLeAurjQRX1LAVVZmEbEOkvyb/Z1flF7
+         3KdD99OBW3UpQ==
+Date:   Sun, 5 Feb 2023 15:02:17 +0000
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     Jonathan =?UTF-8?B?TmV1c2Now6RmZXI=?= <j.neuschaefer@gmx.net>
-Cc:     linux-iio@vger.kernel.org, Tomasz Duszynski <tduszyns@gmail.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iio: chemical: sps030: Reformat comment in a more
- readable way
-Message-ID: <20230205145642.3f2c3d1d@jic23-huawei>
-In-Reply-To: <20230129132020.1352368-1-j.neuschaefer@gmx.net>
-References: <20230129132020.1352368-1-j.neuschaefer@gmx.net>
+To:     "Miclaus, Antoniu" <Antoniu.Miclaus@analog.com>
+Cc:     "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] drivers: iio: dac: ad5592r: add gpio_chip names
+Message-ID: <20230205150217.2c21fc18@jic23-huawei>
+In-Reply-To: <CY4PR03MB33992B4DBEF40A9F960001289BD19@CY4PR03MB3399.namprd03.prod.outlook.com>
+References: <20221117090130.51702-1-antoniu.miclaus@analog.com>
+        <20221123204832.3e514378@jic23-huawei>
+        <CY4PR03MB33992B4DBEF40A9F960001289BD19@CY4PR03MB3399.namprd03.prod.outlook.com>
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,44 +56,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 29 Jan 2023 14:20:20 +0100
-Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net> wrote:
+On Wed, 1 Feb 2023 13:11:30 +0000
+"Miclaus, Antoniu" <Antoniu.Miclaus@analog.com> wrote:
 
-> It's easier to see the (lack of) difference between the lines when they
-> are visually aligned.
+> --
+> Antoniu Micl=C4=83u=C5=9F
 >=20
-> Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-Applied.
+> > -----Original Message-----
+> > From: Jonathan Cameron <jic23@kernel.org>
+> > Sent: Wednesday, November 23, 2022 10:49 PM
+> > To: Miclaus, Antoniu <Antoniu.Miclaus@analog.com>
+> > Cc: linux-iio@vger.kernel.org; linux-kernel@vger.kernel.org
+> > Subject: Re: [PATCH] drivers: iio: dac: ad5592r: add gpio_chip names
+> >=20
+> > [External]
+> >=20
+> > On Thu, 17 Nov 2022 11:01:30 +0200
+> > Antoniu Miclaus <antoniu.miclaus@analog.com> wrote:
+> >  =20
+> > > Add array of explicit gpio names for the `gpiochip` structure of
+> > > ad5592r, mainly for debug purposes. =20
+> > Can you give an example of when this is more useful than the offset?
+> > (which I'm assuming is also available when debugging?)
+> >=20
+> > Jonathan
+> >  =20
+> Hello Jonathan,
+>=20
+> I guess this patch is not mandatory. It is a gpio_chip structure member t=
+hat was left unpopulated.
+> Also, I think it is nice to see explicitly the gpios under cat /sys/kerne=
+l/debug/gpio alongside the others.
+> This is the current output when trying to debug on a rpi (without the pat=
+ch applied):
+>=20
+> analog@analog:~ $ sudo cat /sys/kernel/debug/gpio
+> gpiochip0: GPIOs 0-57, parent: platform/fe200000.gpio, pinctrl-bcm2711:
+>  gpio-0   (ID_SDA              )
+>  gpio-1   (ID_SCL              )
+>  gpio-2   (SDA1                )
+>  gpio-3   (SCL1                )
+>  gpio-4   (GPIO_GCLK           )
+>  gpio-5   (GPIO5               )
+>  gpio-6   (GPIO6               )
+> ....
+> gpiochip2: GPIOs 496-503, parent: spi/spi0.0, spi0.0, can sleep:
+>=20
+> gpiochip1: GPIOs 504-511, parent: platform/soc:firmware:gpio, raspberrypi=
+-exp-gpio, can sleep:
+>  gpio-504 (BT_ON               )
+>  gpio-505 (WL_ON               )
+>  gpio-506 (PWR_LED_OFF         |led1                ) out lo ACTIVE LOW
+>  gpio-507 (GLOBAL_RESET        )
+>  gpio-508 (VDD_SD_IO_SEL       |vdd-sd-io           ) out hi
+>  gpio-509 (CAM_GPIO            |power_ctrl          ) out lo
+>  gpio-510 (SD_PWR_ON           |sd_vcc_reg          ) out hi
+>  gpio-511 (SD_OC_N             )
+>=20
+> The gpiochip2, corresponding to ad5592r has no explicit gpios, due to the=
+ fact that the
+> gpio names were assigned.
 
-Thanks,
+Thanks for the info.
+
+Applied to the togreg branch of iio.git and pushed out as testing for 0-day
+to poke at it an see if we missed anything.
+
+We are a bit tight timing wise, so this might end up in next cycle.
 
 Jonathan
 
-> ---
->  drivers/iio/chemical/sps30_i2c.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
 >=20
-> diff --git a/drivers/iio/chemical/sps30_i2c.c b/drivers/iio/chemical/sps3=
-0_i2c.c
-> index 2aed483a2fdec..0cb5d9b65d625 100644
-> --- a/drivers/iio/chemical/sps30_i2c.c
-> +++ b/drivers/iio/chemical/sps30_i2c.c
-> @@ -68,10 +68,10 @@ static int sps30_i2c_command(struct sps30_state *stat=
-e, u16 cmd, void *arg, size
->  	/*
->  	 * Internally sensor stores measurements in a following manner:
->  	 *
-> -	 * PM1: upper two bytes, crc8, lower two bytes, crc8
-> +	 * PM1:   upper two bytes, crc8, lower two bytes, crc8
->  	 * PM2P5: upper two bytes, crc8, lower two bytes, crc8
-> -	 * PM4: upper two bytes, crc8, lower two bytes, crc8
-> -	 * PM10: upper two bytes, crc8, lower two bytes, crc8
-> +	 * PM4:   upper two bytes, crc8, lower two bytes, crc8
-> +	 * PM10:  upper two bytes, crc8, lower two bytes, crc8
->  	 *
->  	 * What follows next are number concentration measurements and
->  	 * typical particle size measurement which we omit.
-> --
-> 2.39.0
+> Regards,
+> > >
+> > > Since the gpios are configurable via the dts, generic names are
+> > > used.
+> > >
+> > > Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
+> > > ---
+> > >  drivers/iio/dac/ad5592r-base.c | 5 +++++
+> > >  1 file changed, 5 insertions(+)
+> > >
+> > > diff --git a/drivers/iio/dac/ad5592r-base.c b/drivers/iio/dac/ad5592r=
+-base.c
+> > > index 7a9b5fc1e579..076bc9ecfb49 100644
+> > > --- a/drivers/iio/dac/ad5592r-base.c
+> > > +++ b/drivers/iio/dac/ad5592r-base.c
+> > > @@ -124,6 +124,10 @@ static int ad5592r_gpio_request(struct gpio_chip=
+ =20
+> > *chip, unsigned offset) =20
+> > >  	return 0;
+> > >  }
+> > >
+> > > +static const char * const ad5592r_gpio_names[] =3D {
+> > > +	"GPIO0", "GPIO1", "GPIO2", "GPIO3", "GPIO4", "GPIO5", "GPIO6", =20
+> > "GPIO7", =20
+> > > +};
+> > > +
+> > >  static int ad5592r_gpio_init(struct ad5592r_state *st)
+> > >  {
+> > >  	if (!st->gpio_map)
+> > > @@ -140,6 +144,7 @@ static int ad5592r_gpio_init(struct ad5592r_state=
+ =20
+> > *st) =20
+> > >  	st->gpiochip.set =3D ad5592r_gpio_set;
+> > >  	st->gpiochip.request =3D ad5592r_gpio_request;
+> > >  	st->gpiochip.owner =3D THIS_MODULE;
+> > > +	st->gpiochip.names =3D ad5592r_gpio_names;
+> > >
+> > >  	mutex_init(&st->gpio_lock);
+> > > =20
 >=20
 
