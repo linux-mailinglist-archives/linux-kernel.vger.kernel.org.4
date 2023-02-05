@@ -2,106 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10F7868B09C
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 16:34:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9741368B09F
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 16:49:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbjBEPee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 10:34:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42242 "EHLO
+        id S229769AbjBEPtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 10:49:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjBEPed (ORCPT
+        with ESMTP id S229457AbjBEPs7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 10:34:33 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6FB9C679
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 07:34:32 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id eq11so9401275edb.6
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Feb 2023 07:34:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ShtkLTPjNrJzQ0L8SVzCHY/1C+Lm1Un3JR+RBALXC6w=;
-        b=ZYRSlffZ7dkgtXVrG3qS2GJdi/lX3qhPKeTobB5VVgCtg4Ka0a4GV/csaSwI0r/mHt
-         oF3GQDFZi8deEprWblO7oRt6xZ8vjSqa16EVHzpxGhcR7s7JVLTlJOKseJ0NjsaRRsib
-         Cyu95WUFtQUq5GcZq9YDuFgDe7aMR/q7cvE7hLYMZdaxGGUqDwVdzC/AMIuHlgrz6sXW
-         0Z+qmv94pwuK4SM3EAh7YSjYqUXKkC0j6MCPO2RUOmso4L5zQdLM9DVh14/a31rzFv0K
-         S7eHCMu3sLdV4UxvdRJ/wqMAaTRUAC03/y43nbl3P7vCdYEpuaMQO/w9+x0dx9G6zmwZ
-         /5Tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ShtkLTPjNrJzQ0L8SVzCHY/1C+Lm1Un3JR+RBALXC6w=;
-        b=N+S8e7q8AtDFNaKqFAvIXjrqtcgFfRdupNFd9oVOUzGU9nSHjM6Cu4lIsknBQTeZto
-         kJeG5WMaY52YEb/7tQ+202nHTLqycYU8Kk2j4WOCD0bhGecWc4CW+8fmJTFR9MSLJdMC
-         GUTAPnXf1RQ3k1C/FQhkj6niTZG0Iiz0DV6m6wWva1zlsQj7+I2y5N0TLIdHCc5aL2Vn
-         14aq/QPIDjQF0Tqkbxa/KFc/gN1adI3kt5tH/tamEPd5iK8eYGekajBzxZG9lPxI8QI5
-         qfl+k//QIcsrxYSevh12gVksFGs+ZOaOglV5aWciG56KGn16oJyzNPvmiH6WvpStJrWo
-         Q+wQ==
-X-Gm-Message-State: AO0yUKUrwZJK05mciL+lrKvYBozqHE8Opd6TNormAi+2zTBJhfmieKc+
-        3EDat+QLuEy0yruQi0YUIhLIhOfaW4Q=
-X-Google-Smtp-Source: AK7set8Sjcre6BymbpRvgzUlDPHHfWmar7l0fJB1FSQ/FOPgrAhR7OsE4wVC/rNTuhP+dzQ5un6uPQ==
-X-Received: by 2002:a50:f69a:0:b0:4aa:a3b5:522 with SMTP id d26-20020a50f69a000000b004aaa3b50522mr4894358edn.12.1675611270936;
-        Sun, 05 Feb 2023 07:34:30 -0800 (PST)
-Received: from nam-dell (strongswan4.tue.nl. [131.155.9.107])
-        by smtp.gmail.com with ESMTPSA id j10-20020aa7de8a000000b004a21c9facd5sm3865601edv.67.2023.02.05.07.34.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Feb 2023 07:34:30 -0800 (PST)
-Date:   Sun, 5 Feb 2023 16:34:29 +0100
-From:   Nam Cao <namcaov@gmail.com>
-To:     Guru Mehar Rachaputi <gurumeharrachaputi@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Forest Bond <forest@alittletooquiet.net>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] staging: vt6655: Macro with braces issue change to
- inline function
-Message-ID: <Y9/MhS3pJ/Es0sGa@nam-dell>
-References: <Y9+qMqYD2zGWRurD@combine-ThinkPad-S1-Yoga>
- <Y9+sFw0rviTAJNMf@kroah.com>
- <Y9+vkwYfQzYTbIIo@combine-ThinkPad-S1-Yoga>
+        Sun, 5 Feb 2023 10:48:59 -0500
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 66F7B9038
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 07:48:57 -0800 (PST)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 106B792009C; Sun,  5 Feb 2023 16:48:55 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 0478292009B;
+        Sun,  5 Feb 2023 15:48:54 +0000 (GMT)
+Date:   Sun, 5 Feb 2023 15:48:54 +0000 (GMT)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Bjorn Helgaas <bhelgaas@google.com>,
+        Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
+        Oliver O'Halloran <oohall@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+cc:     Alex Williamson <alex.williamson@redhat.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Stefan Roese <sr@denx.de>, Jim Wilson <wilson@tuliptree.org>,
+        David Abdurachmanov <david.abdurachmanov@gmail.com>,
+        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        linux-pci@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v6 0/7] pci: Work around ASMedia ASM2824 PCIe link training
+ failures
+Message-ID: <alpine.DEB.2.21.2302022022230.45310@angie.orcam.me.uk>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9+vkwYfQzYTbIIo@combine-ThinkPad-S1-Yoga>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,HDRS_LCASE,
+        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 05, 2023 at 02:30:59PM +0100, Guru Mehar Rachaputi wrote:
-> On Sun, Feb 05, 2023 at 02:16:07PM +0100, Greg Kroah-Hartman wrote:
-> > On Sun, Feb 05, 2023 at 02:08:02PM +0100, Guru Mehar Rachaputi wrote:
-> > > This patch is to fix checkpatch warning: "Macro argument 'iobase' may be better
-> > > as '(iobase)' to avoid precedence issues"
-> > > 
-> > > ---
-> > > Changes in v3:
-> > > 	- Whitespace error from checkpatch fixed
-> > > 
-> > > Changes in v2:
-> > > 	- Macros with one statement that is to call 'iowrite8' function changed
-> > > 	to inline function as reviewed by gregkh@linuxfoundation.org.
-> > > 	In relation to this, names of the callers of macro are also modified
-> > > 	to call this function.
-> > > 
-> > > Signed-off-by: Guru Mehar Rachaputi <gurumeharrachaputi@gmail.com>
-> > 
-> > Try to take this patch and apply it to a tree, and see that everything
-> > below the --- line is thrown away, including your signed-off-by: line :(
-> > 
-> Sorry, should not a patch contain signed-off-by: line?
-> I did not understand.
+Hi,
 
-Patches must include signed-off-by. However your patch has it below the
---- line, and git will throw it away. You can try "git am <your patch>"
-and see for yourself.
+ This is v6 of the change to work around a PCIe link training phenomenon 
+where a pair of devices both capable of operating at a link speed above 
+2.5GT/s seems unable to negotiate the link speed and continues training 
+indefinitely with the Link Training bit switching on and off repeatedly 
+and the data link layer never reaching the active state.
 
-Best regards,
-Nam
+ Following Bjorn's suggestion from the previous iteration:
+<https://lore.kernel.org/lkml/20221109050418.GA529724@bhelgaas/> I have 
+moved the workaround into the PCI core.  I have kept the part specific to 
+ASMedia (to lift the speed restriction after a successful retrain) within, 
+although I find it a good candidate for a standalone quirk.  It seems to 
+me we'd have to add additional classes of fixups however to move this part 
+to drivers/pci/quirks.c, which I think would be an overkill.  So I've only 
+made it explicitly guarded by CONFIG_PCI_QUIRKS; I can see there's prior 
+art with this approach.
+
+ In the course of the update I have realised that commit 6b2f1351af56 
+("PCI: Wait for device to become ready after secondary bus reset") makes 
+no sense and was about to figure out what to do here about it, but then 
+found Lukas's recent patch series addressing this issue (thanks, Lukas, 
+you made my life easier!), so I have rebased my patch set on top of 
+Lukas's:
+<https://lore.kernel.org/all/da77c92796b99ec568bd070cbe4725074a117038.1673769517.git.lukas@wunner.de/>.
+
+ This has resulted in mild ugliness in that `pcie_downstream_link_retrain' 
+may be called from `pci_bridge_wait_for_secondary_bus' twice, first time 
+via `pcie_wait_for_link_delay' and second time via `pci_dev_wait'.  This 
+second call to `pcie_downstream_link_retrain' will do nothing, because for 
+`link_active_reporting' devices `pcie_wait_for_link_delay' will have 
+ensured the link has gone up or the second call won't have been reached.
+
+ I have also decided to move the initialisation of `link_active_reporting' 
+earlier on, so as to have a single way to check for the feature.  This has 
+brought an extra patch and its 3 clean-up dependencies into the series.
+
+ This was originally observed in a configuration featuring a downstream 
+port of the ASMedia ASM2824 Gen 3 switch wired to the upstream port of the 
+Pericom PI7C9X2G304 Gen 2 switch.  However in the course of review I have 
+come to the conclusion that similarly to the earlier similar change to 
+U-Boot it is indeed expected to be safe to apply this workaround to any 
+downstream port that has failed link negotiation provided that:
+
+1. the port is capable of reporting the data link layer link active 
+   status (because unlike U-Boot we cannot busy-loop continuously polling 
+   the link training bit),
+
+and:
+
+2. we don't attempt to lift the 2.5GT/s speed restriction, imposed as the
+   basis of the workaround, for devices not explicitly known to continue 
+   working in that case.
+
+It is expected to be safe because the workaround is applied to a failed 
+link, that is one that does not (at the time this code is executed) work 
+anyway, so trying to bring it up cannot make the situation worse.
+
+ This has been verified with a SiFive HiFive unmatched board, with and 
+without CONFIG_PCI_QUIRKS enabled, booting with or without the workaround 
+activated in U-Boot, which covered both the link retraining part of the 
+quirk and the lifting of speed restriction already imposed by U-Boot.
+
+ I have also issued resets via sysfs to see how this change behaves.  For 
+the problematic link this required a hack to remove a `dev->subordinate' 
+check from `pci_parent_bus_reset', which in turn triggered the workaround 
+as expected and brought the link up (but otherwise clobbered downstream 
+devices as one would inevitably expect).
+
+ I have no way to verify these patches with power management or hot-plug 
+events, but owing to Lukas's effort they get into the same infrastructure, 
+so I expect the workaround to do its job as expected.  I note that there 
+is an extra call to `pcie_wait_for_link' from `pciehp_check_link_status', 
+but I expect it to work too.  For `link_active_reporting' devices it will 
+call `pcie_downstream_link_retrain' and for`!link_active_reporting' ones 
+we have no means to do anything anyway.
+
+ The 3 extra clean-ups were only compile-tested (with PowerPC and x86-64 
+configurations, as appropriate), because I have no suitable hardware 
+available.
+
+ Please see individual change descriptions for further details.
+
+ Let me know if this is going in the right direction.
+
+  Maciej
