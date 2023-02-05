@@ -2,93 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAD2668B084
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 16:11:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10F7868B09C
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 16:34:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbjBEPLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 10:11:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38636 "EHLO
+        id S229670AbjBEPee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 10:34:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjBEPLK (ORCPT
+        with ESMTP id S229457AbjBEPed (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 10:11:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075681E1F2;
-        Sun,  5 Feb 2023 07:11:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 95BCD6066C;
-        Sun,  5 Feb 2023 15:11:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40E43C433D2;
-        Sun,  5 Feb 2023 15:11:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675609867;
-        bh=zg3f33jEKWaqsclyMmhyvxPPRiKJwiClxq2jNy9p15Q=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=p44DreWERKL5UGyU9nDKk1vYwYhh44zXttPcvoenB0XQrc5k+mMk5uyrkudBowUEb
-         3LuWPfvGVtmlmWeKkiHpi6A5zQn8QQWWS0qnxI1ibS/JUcEkZfM9+dKBdAUUcSzObK
-         mjWFqo8I6UA4lk3FUFm7nuCoVt+kedapgLKqlL8wTxM/jcrLn0aAz46thlUyThk0uK
-         QK3+2njp9AQadymZBida8lPHJRpCtsRl+KNpQmXfFGnk50ZS8DVn05wie49ouHzoPf
-         F0fct6fY/1/dpJtN3JjgNA1ePbsoJEGteLo78BGKUynFXI+VfEud0j5yit/tGfgLcw
-         XxSkkUFTHUKew==
-Date:   Sun, 5 Feb 2023 15:25:08 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Andrew Hepp <andrew.hepp@ahepp.dev>
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] iio: temperature: Add MCP9600 thermocouple EMF
- converter driver
-Message-ID: <20230205152508.778b010a@jic23-huawei>
-In-Reply-To: <20230112190551.4d9ac5f6@jic23-huawei>
-References: <Jonathan Cameron <jic23@kernel.org>
-        <20230108234503.2803-1-andrew.hepp@ahepp.dev>
-        <20230112190551.4d9ac5f6@jic23-huawei>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
+        Sun, 5 Feb 2023 10:34:33 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6FB9C679
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 07:34:32 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id eq11so9401275edb.6
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Feb 2023 07:34:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ShtkLTPjNrJzQ0L8SVzCHY/1C+Lm1Un3JR+RBALXC6w=;
+        b=ZYRSlffZ7dkgtXVrG3qS2GJdi/lX3qhPKeTobB5VVgCtg4Ka0a4GV/csaSwI0r/mHt
+         oF3GQDFZi8deEprWblO7oRt6xZ8vjSqa16EVHzpxGhcR7s7JVLTlJOKseJ0NjsaRRsib
+         Cyu95WUFtQUq5GcZq9YDuFgDe7aMR/q7cvE7hLYMZdaxGGUqDwVdzC/AMIuHlgrz6sXW
+         0Z+qmv94pwuK4SM3EAh7YSjYqUXKkC0j6MCPO2RUOmso4L5zQdLM9DVh14/a31rzFv0K
+         S7eHCMu3sLdV4UxvdRJ/wqMAaTRUAC03/y43nbl3P7vCdYEpuaMQO/w9+x0dx9G6zmwZ
+         /5Tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ShtkLTPjNrJzQ0L8SVzCHY/1C+Lm1Un3JR+RBALXC6w=;
+        b=N+S8e7q8AtDFNaKqFAvIXjrqtcgFfRdupNFd9oVOUzGU9nSHjM6Cu4lIsknBQTeZto
+         kJeG5WMaY52YEb/7tQ+202nHTLqycYU8Kk2j4WOCD0bhGecWc4CW+8fmJTFR9MSLJdMC
+         GUTAPnXf1RQ3k1C/FQhkj6niTZG0Iiz0DV6m6wWva1zlsQj7+I2y5N0TLIdHCc5aL2Vn
+         14aq/QPIDjQF0Tqkbxa/KFc/gN1adI3kt5tH/tamEPd5iK8eYGekajBzxZG9lPxI8QI5
+         qfl+k//QIcsrxYSevh12gVksFGs+ZOaOglV5aWciG56KGn16oJyzNPvmiH6WvpStJrWo
+         Q+wQ==
+X-Gm-Message-State: AO0yUKUrwZJK05mciL+lrKvYBozqHE8Opd6TNormAi+2zTBJhfmieKc+
+        3EDat+QLuEy0yruQi0YUIhLIhOfaW4Q=
+X-Google-Smtp-Source: AK7set8Sjcre6BymbpRvgzUlDPHHfWmar7l0fJB1FSQ/FOPgrAhR7OsE4wVC/rNTuhP+dzQ5un6uPQ==
+X-Received: by 2002:a50:f69a:0:b0:4aa:a3b5:522 with SMTP id d26-20020a50f69a000000b004aaa3b50522mr4894358edn.12.1675611270936;
+        Sun, 05 Feb 2023 07:34:30 -0800 (PST)
+Received: from nam-dell (strongswan4.tue.nl. [131.155.9.107])
+        by smtp.gmail.com with ESMTPSA id j10-20020aa7de8a000000b004a21c9facd5sm3865601edv.67.2023.02.05.07.34.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Feb 2023 07:34:30 -0800 (PST)
+Date:   Sun, 5 Feb 2023 16:34:29 +0100
+From:   Nam Cao <namcaov@gmail.com>
+To:     Guru Mehar Rachaputi <gurumeharrachaputi@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Forest Bond <forest@alittletooquiet.net>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] staging: vt6655: Macro with braces issue change to
+ inline function
+Message-ID: <Y9/MhS3pJ/Es0sGa@nam-dell>
+References: <Y9+qMqYD2zGWRurD@combine-ThinkPad-S1-Yoga>
+ <Y9+sFw0rviTAJNMf@kroah.com>
+ <Y9+vkwYfQzYTbIIo@combine-ThinkPad-S1-Yoga>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9+vkwYfQzYTbIIo@combine-ThinkPad-S1-Yoga>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 12 Jan 2023 19:05:51 +0000
-Jonathan Cameron <jic23@kernel.org> wrote:
-
-> On Sun,  8 Jan 2023 15:45:04 -0800
-> Andrew Hepp <andrew.hepp@ahepp.dev> wrote:
-> 
-> > From: "Andrew Hepp" <andrew.hepp@ahepp.dev>
+On Sun, Feb 05, 2023 at 02:30:59PM +0100, Guru Mehar Rachaputi wrote:
+> On Sun, Feb 05, 2023 at 02:16:07PM +0100, Greg Kroah-Hartman wrote:
+> > On Sun, Feb 05, 2023 at 02:08:02PM +0100, Guru Mehar Rachaputi wrote:
+> > > This patch is to fix checkpatch warning: "Macro argument 'iobase' may be better
+> > > as '(iobase)' to avoid precedence issues"
+> > > 
+> > > ---
+> > > Changes in v3:
+> > > 	- Whitespace error from checkpatch fixed
+> > > 
+> > > Changes in v2:
+> > > 	- Macros with one statement that is to call 'iowrite8' function changed
+> > > 	to inline function as reviewed by gregkh@linuxfoundation.org.
+> > > 	In relation to this, names of the callers of macro are also modified
+> > > 	to call this function.
+> > > 
+> > > Signed-off-by: Guru Mehar Rachaputi <gurumeharrachaputi@gmail.com>
 > > 
-> > Add support for the MCP9600 thermocouple EMF converter.
+> > Try to take this patch and apply it to a tree, and see that everything
+> > below the --- line is thrown away, including your signed-off-by: line :(
 > > 
-> > Datasheet: https://ww1.microchip.com/downloads/en/DeviceDoc/MCP960X-Data-Sheet-20005426.pdf
-> > Signed-off-by: Andrew Hepp <andrew.hepp@ahepp.dev>  
-> 
-> Driver looks good, but now I realise we don't have a device tree binding doc.
-> 
-> Please add one for v3.
-> 
-> Note that the binding doc is describing the hardware, not what the driver
-> currently supports alone, so include the 4 (or 6?) interrupt lines (and interrupt-names
-> as any random subset of them might be provided) + VDD regulator + anything else I've
-> not noticed in my 10 second look at the datashet.
+> Sorry, should not a patch contain signed-off-by: line?
+> I did not understand.
 
-Hi Andrew,
+Patches must include signed-off-by. However your patch has it below the
+--- line, and git will throw it away. You can try "git am <your patch>"
+and see for yourself.
 
-If you aren't going to get to this sometime soon, feel free to say so and
-I might write binding docs for it if I get time.  I'd rather do that than
-lose a driver over some docs!
-
-Jonathan
-
-> 
-> Thanks,
-> 
-> Jonathan
-> 
-
+Best regards,
+Nam
