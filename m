@@ -2,143 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BD2068B21D
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 23:13:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FB7768B229
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 23:27:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbjBEWNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 17:13:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45716 "EHLO
+        id S229536AbjBEW1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 17:27:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjBEWNq (ORCPT
+        with ESMTP id S229453AbjBEW1k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 17:13:46 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3D911A97B
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 14:13:44 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so9563659wmb.2
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Feb 2023 14:13:44 -0800 (PST)
+        Sun, 5 Feb 2023 17:27:40 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 179E713D75
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 14:27:39 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id iy2so209516plb.11
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Feb 2023 14:27:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZLcR+Tb9prra+Se7ZuzrntYvfyrN/MR5XtNW3aD8zyw=;
-        b=4ft5GDnoVp+w6TaJwMkAsxpPQJs54iYqt69woNnt+VDD6uj8d0NY+XX0PxfeUJQ2KV
-         7GJTDuhhJfsYVyfKsETcCx/vXW3tp6mxf/i81QsgCIMldUuaOT+2jHcxaZnkm+H0UICy
-         Jp874j9n9em2PZP3lV3FCGSdX/u5D2J6BWDXZXvl9JWnE7uSAB/3QHHZdwwOWNt+wPfm
-         ar8XIxg2efnKf3+df0/IKqeg4K4mug9NCokBGuv52N1fi4U8klnx1sCxtP7nqELJydso
-         stUMGSuFF9ESdJFN1cT+WmzpNl9RuKzBPsohEa+iqtQOkA9UrKeh8QE2nxOxwKIEsFzV
-         efpA==
+        d=google.com; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=P9KGZEzYN7ZDj6+qcO8JuGU2wVkzt6LA3vh0FoiBL8I=;
+        b=kJTIXUn6tQKwop2HkFxGU39WF7b7ONxi6B+K0bOLoc+no4Ixuh4W8QHJ4Cm0OiDhs0
+         xvdK7RMc8+PBXjSqPjS5mvec2v0qBezwVtMG1uB0XJq6UaL195G3LOJTbfcOUKcMzRrE
+         E/aKbEIgug9RK/G5u6ZoWeFvjBXiomBzltYtWRfmEH8Xk/Imme94zuFdpMhtmqpW4J4M
+         /kTCrnUnnxxF+x8ajbgBd+YXVl4CCCx1S23eWc517KcexFdC3XiaKNNCzYgOQEqMY0nh
+         XkSzvbdjvFKaXvQOjQkUelXzB8vGD5pO3TUq745wHE5RsL68PDgSI/9UvWdo/zvsGsDQ
+         JuxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZLcR+Tb9prra+Se7ZuzrntYvfyrN/MR5XtNW3aD8zyw=;
-        b=aOuXpFxWgdn4eJ0BTlqPqIrhEJnEpc7RX7K3wqrMiHi7nZCjKF/E5vf6rLcljo8wKN
-         +rWYHZSvytsDuXN70/t9fINbqduNRE4ChfvIaMHSQZtw/C1zFzhakktmaPQmyDRzTKtz
-         rEhYtzFUNprMTQo9gM6wkRUg+/jn3ZZoEy0CGU+JowWap7IW6jGqyTePIHLr3wskDBXn
-         ajHkCSSItOwi3Wg+yh6iXpfS1x55QEpCvGJdnOcR0ciIVoR8TyJKw3iyGw9Fewjx95W2
-         EwDCO4uerxp7ToImIWRkCefecGLnhwqglV4F0RSXJykUMPHeR3ewyuG+9dGvEVdEknng
-         jD0A==
-X-Gm-Message-State: AO0yUKVX2zYVumRi2c7laohwBakz2LAgdr5WJfQnRk7AcjQ2CORrbhmX
-        UDtmK6Bzq72us5TS1044Qjau5Q==
-X-Google-Smtp-Source: AK7set9AzQNdF1lQ6lMPa+waBDd2VLHlnzjxaAqKEWNBXxg7rJbBtilA7tgGYY9tgS0YLeyWNvnDCg==
-X-Received: by 2002:a05:600c:c06:b0:3dc:5a7c:f8ad with SMTP id fm6-20020a05600c0c0600b003dc5a7cf8admr21135260wmb.21.1675635223505;
-        Sun, 05 Feb 2023 14:13:43 -0800 (PST)
-Received: from ?IPV6:2a02:6b6a:b566:0:56a5:4a1b:a896:763a? ([2a02:6b6a:b566:0:56a5:4a1b:a896:763a])
-        by smtp.gmail.com with ESMTPSA id u16-20020a05600c19d000b003dd1b00bd9asm9746157wmq.32.2023.02.05.14.13.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 Feb 2023 14:13:42 -0800 (PST)
-Message-ID: <434b4b74-54ab-68a3-4a81-9cc02ea75e39@bytedance.com>
-Date:   Sun, 5 Feb 2023 22:13:42 +0000
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=P9KGZEzYN7ZDj6+qcO8JuGU2wVkzt6LA3vh0FoiBL8I=;
+        b=qayTjwH7pYkWdpMFDbCMnMYNROFAQa5GaSkdAL933snSX1l3CabLlmAVE3s47w9oEZ
+         hQ8sFnbq1ZilOIjdzCj2Jrk/WAqBErg32qcqD51OB0uSYcNn9/2JOE9LWF+Y/4wcVTmg
+         E7DmzWsyielQGQq0SMDlzY6EF8Ve+yWPVctnHgqu1C53+hXdudHo6QgWF64k4yeLKL4z
+         ZTd1bIpgQMWnZRGaTEgOP62oLIU2UngBQPK3tEeDWTV5AE24TrcRxPyHDAYKMX/olGlP
+         +1MHTzzAuACzlaLGXC/zYWruDTR7WJm2rOfD2lxc4EP04dH4FTFs1nxPP7SbDFJIS+52
+         9jPw==
+X-Gm-Message-State: AO0yUKVpl6F4joi4ICoaGz7I9tL1c16qUJq9Uc+zQGLtAGbLZlpoLkJy
+        LY9Bzfn0xqw5F6Dc5vBCk2jGjA==
+X-Google-Smtp-Source: AK7set9Q3GIqNsOe0WtmgFYF0XaEvPUObr4qRanVRrqj4E3ykA/3NP+u6IgYx0VUnzE8Gq/5xI+Ikg==
+X-Received: by 2002:a17:902:f0d5:b0:191:4367:7fde with SMTP id v21-20020a170902f0d500b0019143677fdemr329089pla.0.1675636058414;
+        Sun, 05 Feb 2023 14:27:38 -0800 (PST)
+Received: from chino.kir.corp.google.com ([2620:15c:29:203:fa19:a2cc:781:3452])
+        by smtp.gmail.com with ESMTPSA id i11-20020a170902cf0b00b00186acb14c4asm5376025plg.67.2023.02.05.14.27.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Feb 2023 14:27:37 -0800 (PST)
+Date:   Sun, 5 Feb 2023 14:27:36 -0800 (PST)
+From:   David Rientjes <rientjes@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+cc:     linux-mm@kvack.org, Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/slub: fix memory leak with using debugfs_lookup()
+In-Reply-To: <20230202142022.2300096-1-gregkh@linuxfoundation.org>
+Message-ID: <b024023f-b1f8-aedf-676a-5ee517f524a7@google.com>
+References: <20230202142022.2300096-1-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [External] Re: [PATCH v6 07/11] x86/smpboot: Disable parallel
- boot for AMD CPUs
-Content-Language: en-US
-To:     David Woodhouse <dwmw2@infradead.org>,
-        Arjan van de Ven <arjan@linux.intel.com>,
-        Kim Phillips <kim.phillips@amd.com>, tglx@linutronix.de,
-        rja@hpe.com
-Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, x86@kernel.org, pbonzini@redhat.com,
-        paulmck@kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, rcu@vger.kernel.org, mimoja@mimoja.de,
-        hewenliang4@huawei.com, thomas.lendacky@amd.com, seanjc@google.com,
-        pmenzel@molgen.mpg.de, fam.zheng@bytedance.com,
-        punit.agrawal@bytedance.com, simon.evans@bytedance.com,
-        liangma@liangbit.com, Mario Limonciello <Mario.Limonciello@amd.com>
-References: <20230202215625.3248306-1-usama.arif@bytedance.com>
- <20230202215625.3248306-8-usama.arif@bytedance.com>
- <b3d9fbbf-e760-5d1d-9182-44c144abd1bf@amd.com>
- <d3ec562fd2e03c3aef9534f64915a14a8cb89ae1.camel@infradead.org>
- <5ba476f3-e0ac-d630-ce1d-18ab9885496f@linux.intel.com>
- <E2286684-F8AD-4708-9A3D-74C5EAE183B4@infradead.org>
-From:   Usama Arif <usama.arif@bytedance.com>
-In-Reply-To: <E2286684-F8AD-4708-9A3D-74C5EAE183B4@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 2 Feb 2023, Greg Kroah-Hartman wrote:
 
-
-On 04/02/2023 22:31, David Woodhouse wrote:
+> When calling debugfs_lookup() the result must have dput() called on it,
+> otherwise the memory will leak over time.  To make things simpler, just
+> call debugfs_lookup_and_remove() instead which handles all of the logic
+> at once.
 > 
-> 
-> On 4 February 2023 18:18:55 GMT, Arjan van de Ven <arjan@linux.intel.com> wrote:
->>>
->>> However...
->>>
->>> Even though we *can* support non-X2APIC processors, we *might* want to
->>> play it safe and not go back that far; only enabling parallel bringup
->>> on machines with X2APIC which roughly correlates with "lots of CPUs"
->>> since that's where the benefit is.
->>
->> I think that this is the right approach, at least on the initial patch series.
->> KISS principle; do all the easy-but-important cases first, get it stable and working
->> and in later series/kernels the range can be expanded.... if it matters.
-> 
-> Agreed. I'll split it to do it only with X2APIC for the initial series, and then hold the CPUID 0x1 part back for the next phase.
+> Cc: Christoph Lameter <cl@linux.com>
+> Cc: Pekka Enberg <penberg@kernel.org>
+> Cc: David Rientjes <rientjes@google.com>
+> Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Vlastimil Babka <vbabka@suse.cz>
+> Cc: Roman Gushchin <roman.gushchin@linux.dev>
+> Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+> Cc: linux-mm@kvack.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-This was an interesting find! I tested the latest branch 
-parallel-6.2-rc6 and it works well. The numbers from Russ makes the 
-patch series look so much better! :)
-
-If we do it with x2apic only and not support non-x2apic CPUID 0x1 case, 
-maybe we apply the following diff to part 1?
-
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index f53a060a899b..f6b89cf40076 100644
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -1564,7 +1564,7 @@ void __init native_smp_prepare_cpus(unsigned int 
-max_cpus)
-          * sufficient). Otherwise it's too hard. And not for SEV-ES
-          * guests because they can't use CPUID that early.
-          */
--       if (IS_ENABLED(CONFIG_X86_32) || boot_cpu_data.cpuid_level < 1 ||
-+       if (IS_ENABLED(CONFIG_X86_32) || !x2apic_mode ||
-             (x2apic_mode && boot_cpu_data.cpuid_level < 0xb) ||
-             cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT))
-                 do_parallel_bringup = false;
-
-
-
-For reusing timer calibration, calibrate_delay ends up being used in 
-start_kernel, smp_callin, debug_calc_bogomips and check_cx686_slop. I 
-think reusing timer calibration would be ok in the first 2 uses? but not 
-really sure about the other 2. cx686 seems to be quite old so not sure 
-if anyone will have it to test or will ever run 6.2 kernel on it :).  I 
-guess if unsure, better to leave out initially and try and get part1 merged?
-
-Thanks,
-Usama
+Acked-by: David Rientjes <rientjes@google.com>
