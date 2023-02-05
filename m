@@ -2,247 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 797EB68AFB9
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 13:33:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E03568AFC5
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 13:45:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229553AbjBEMdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 07:33:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53156 "EHLO
+        id S229576AbjBEMox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 07:44:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjBEMdO (ORCPT
+        with ESMTP id S229517AbjBEMow (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 07:33:14 -0500
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F26B7D82;
-        Sun,  5 Feb 2023 04:33:12 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 315CWlu4112097;
-        Sun, 5 Feb 2023 06:32:47 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1675600367;
-        bh=QnYw+4j+c0tSorkl20tTL9KSqtvcV9iclc90eBc99JU=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To;
-        b=nBndfUAEM0EQLOULmoKyEV5XFqSV7L6X11ZJa+aDwFCs6qWaXHHIJ+8HFHnE4vrry
-         S/WalWjDzsV6k14spUO5j5jHV30jPyjGnxjib7vICCaU7U+CjYsI+0J/tlNTRiFJHs
-         kiDGhDkZ8yj9J9+JrZ0DftuE8iI4EAbFJu2P/S6I=
-Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 315CWlWu010899
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sun, 5 Feb 2023 06:32:47 -0600
-Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Sun, 5
- Feb 2023 06:32:47 -0600
-Received: from DLEE101.ent.ti.com ([fe80::91ee:60bc:bfb7:851c]) by
- DLEE101.ent.ti.com ([fe80::91ee:60bc:bfb7:851c%18]) with mapi id
- 15.01.2507.016; Sun, 5 Feb 2023 06:32:47 -0600
-From:   "Ding, Shenghao" <shenghao-ding@ti.com>
-To:     Rob Herring <robh@kernel.org>, Shenghao Ding <13916275206@139.com>
-CC:     "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "Lu, Kevin" <kevin-lu@ti.com>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [EXTERNAL] Re: [PATCH v5] ASoC: dt-bindings: Add tas2781
- amplifier
-Thread-Topic: [EXTERNAL] Re: [PATCH v5] ASoC: dt-bindings: Add tas2781
- amplifier
-Thread-Index: AQHZOBqB7tvoGVc4E0OYTlg50DrTvq7AQ5CQ
-Date:   Sun, 5 Feb 2023 12:32:47 +0000
-Message-ID: <857038e20b2944e89ef433097374041d@ti.com>
-References: <20230203040115.27321-1-13916275206@139.com>
- <20230203215724.GA938713-robh@kernel.org>
-In-Reply-To: <20230203215724.GA938713-robh@kernel.org>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.250.160.107]
-x-exclaimer-md-config: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Sun, 5 Feb 2023 07:44:52 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0761E9D5;
+        Sun,  5 Feb 2023 04:44:51 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id d2so5539566pjd.5;
+        Sun, 05 Feb 2023 04:44:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UNQbvjXs76kLrTrP6/48/orXXpYZ4utP3YcercTcmdk=;
+        b=Lpx4AWSJ8kngfGosDiPF8Vgea1uNwxHRu6WcyK6iPWbYT1vuwOsAnDbShODviTp+ak
+         McODKL+2lWtpjVEpUn09Ag1GnwoN3HEb3DsRi98OemWbvkcf/fwm51RBVLpd0ge26F7g
+         WJFhJbb1R5S79+kABVOLUw7gHH11uJYJ5Bfgz3vjbW5U3vhj2YCxVHtwdagC4dNtB5xw
+         rn8oT9prtnhcrNfmIhbty19xyiccEC2uv05w/p+JHbr9iyTm67jeT1X3grWJg2lZwV1M
+         +uDZrczApAGh5ZTkWGk53XENtarR9TCzWPPhU7bK98czIia0S2eFzulZ6IF2B6gexhYF
+         ACpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UNQbvjXs76kLrTrP6/48/orXXpYZ4utP3YcercTcmdk=;
+        b=qKD12Qs3wYvmCP8xNSwp2A1VYPWZTyn0WbKZopiPnoofnB51bXJkLTLIErsGYRNbLB
+         1rWF7f/xfyNn3Xy0iuurCh77BD7TrmFltPXWQ4USBB8upkI3Uv54JbwjLhTH9mZVNf5I
+         /xlARaK7MIRiEJ1uIMGAuCuW3uERvyWTJ1w2sd3s5+iOgwfPNBh3d3PcBhzrW3DWl09J
+         WexaqGtQwbCBfTnPjgIyhkM6adQlrgN4twSK+1zlIX6gaofZcYgJ2YIx40FhgwnUlNst
+         1rvXrsU5Fs7PYnpc4kdzlyhyZZZVKpKaSnZTnkcTU4SfS/Pef07sjt573fsdit15ou3a
+         jc0w==
+X-Gm-Message-State: AO0yUKXSPFpR/rP/rdpmoF8BKm21GEUhZcJVcMPvHamKq25lFOJhPWVd
+        F8COTxCq0r5OonSY9wXXc9ruhWMYq56Btffd1ow=
+X-Google-Smtp-Source: AK7set9yNcGN3mqqmzAvPCGFoQsrkAjQUiciGz4UiGp/VX5ImbZ+Sc7PhQxRtperCrBYE3Y8HpteZ5TyRbxgF4HkVLE=
+X-Received: by 2002:a17:902:e846:b0:195:f26d:b82c with SMTP id
+ t6-20020a170902e84600b00195f26db82cmr3644645plg.15.1675601090577; Sun, 05 Feb
+ 2023 04:44:50 -0800 (PST)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230131112840.14017-1-marcan@marcan.st> <20230131112840.14017-2-marcan@marcan.st>
+ <CAOiHx=mYxFx0kr5s=4X_qywZBpPqCbrNjLnTXfigPOnqZSxjag@mail.gmail.com>
+ <4fb4af22-d115-de62-3bda-c1ae02e097ee@marcan.st> <1861323f100.279b.9b12b7fc0a3841636cfb5e919b41b954@broadcom.com>
+ <28ed8713-4243-7c67-b792-92d0dde82256@marcan.st> <186205e1c60.279b.9b12b7fc0a3841636cfb5e919b41b954@broadcom.com>
+In-Reply-To: <186205e1c60.279b.9b12b7fc0a3841636cfb5e919b41b954@broadcom.com>
+From:   Jonas Gorski <jonas.gorski@gmail.com>
+Date:   Sun, 5 Feb 2023 13:44:39 +0100
+Message-ID: <CAOiHx=m2NFo2hbS4a3j67B4iFrkM7dGKGhwLkXuwOZAR=+C63Q@mail.gmail.com>
+Subject: Re: [PATCH v2 1/5] brcmfmac: Drop all the RAW device IDs
+To:     Arend Van Spriel <arend.vanspriel@broadcom.com>
+Cc:     Hector Martin <marcan@marcan.st>,
+        "'Hector Martin' via BRCM80211-DEV-LIST,PDL" 
+        <brcm80211-dev-list.pdl@broadcom.com>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexander Prutskov <alep@cypress.com>,
+        Ian Lin <ian.lin@infineon.com>,
+        Joseph chuang <jiac@cypress.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Aditya Garg <gargaditya08@live.com>, asahi@lists.linux.dev,
+        linux-wireless@vger.kernel.org, SHA-cyfmac-dev-list@infineon.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Hauke Mehrtens <hauke@hauke-m.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob=20
-Thanks for your review comments. My answers are inline
-with prefix [DING]
+On Sun, 5 Feb 2023 at 07:58, Arend Van Spriel
+<arend.vanspriel@broadcom.com> wrote:
+>
+> - stale Cypress emails
+>
+> On February 5, 2023 3:50:41 AM Hector Martin <marcan@marcan.st> wrote:
+>
+> > On 03/02/2023 02.19, Arend Van Spriel wrote:
+> >> On February 2, 2023 6:25:28 AM "'Hector Martin' via BRCM80211-DEV-LIST=
+,PDL"
+> >> <brcm80211-dev-list.pdl@broadcom.com> wrote:
+> >>
+> >>> On 31/01/2023 23.17, Jonas Gorski wrote:
+> >>>> On Tue, 31 Jan 2023 at 12:36, Hector Martin <marcan@marcan.st> wrote=
+:
+> >>>>>
+> >>>>> These device IDs are only supposed to be visible internally, in dev=
+ices
+> >>>>> without a proper OTP. They should never be seen in devices in the w=
+ild,
+> >>>>> so drop them to avoid confusion.
+> >>>>
+> >>>> I think these can still show up in embedded platforms where the
+> >>>> OTP/SPROM is provided on-flash.
+> >>>>
+> >>>> E.g. https://forum.archive.openwrt.org/viewtopic.php?id=3D55367&p=3D=
+4
+> >>>> shows this bootlog on an BCM4709A0 router with two BCM43602 wifis:
+> >>>>
+> >>>> [    3.237132] pci 0000:01:00.0: [14e4:aa52] type 00 class 0x028000
+> >>>> [    3.237174] pci 0000:01:00.0: reg 0x10: [mem 0x00000000-0x00007ff=
+f 64bit]
+> >>>> [    3.237199] pci 0000:01:00.0: reg 0x18: [mem 0x00000000-0x003ffff=
+f 64bit]
+> >>>> [    3.237302] pci 0000:01:00.0: supports D1 D2
+> >>>> ...
+> >>>> [    3.782384] pci 0001:03:00.0: [14e4:aa52] type 00 class 0x028000
+> >>>> [    3.782440] pci 0001:03:00.0: reg 0x10: [mem 0x00000000-0x00007ff=
+f 64bit]
+> >>>> [    3.782474] pci 0001:03:00.0: reg 0x18: [mem 0x00000000-0x003ffff=
+f 64bit]
+> >>>> [    3.782649] pci 0001:03:00.0: supports D1 D2
+> >>>>
+> >>>> 0xaa52 =3D=3D 43602 (BRCM_PCIE_43602_RAW_DEVICE_ID)
+> >>>>
+> >>>> Rafa=C5=82 can probably provide more info there.
+> >>>>
+> >>>> Regards
+> >>>> Jonas
+> >>>
+> >>> Arend, any comments on these platforms?
+> >>
+> >> Huh? I already replied to that couple of days ago or did I only imagin=
+e
+> >> doing that.
+> >
+> > I don't see any replies from you on the lists (or my inbox) to Jonas' e=
+mail.
+>
+> Accidentally sent that reply to internal mailing list. So quoting myself =
+here:
+>
+> """
+> Shaking the tree helps ;-) What is meant by "OTP/SPROM is provided
+> on-flash"? I assume you mean that it is on the host side and the wifi PCI=
+e
+> device can not access it when it gets powered up. Maybe for this scenario
+> we should have a devicetree compatible to configure the device id, but th=
+at
+> does not help any current users of these platforms. Thanks for providing
+> this info.
 
------Original Message-----
-From: Rob Herring <robh@kernel.org>=20
-Sent: Saturday, February 4, 2023 5:57 AM
-To: Shenghao Ding <13916275206@139.com>
-Cc: krzysztof.kozlowski+dt@linaro.org; broonie@kernel.org; lgirdwood@gmail.=
-com; Lu, Kevin <kevin-lu@ti.com>; Ding, Shenghao <shenghao-ding@ti.com>; al=
-sa-devel@alsa-project.org; devicetree@vger.kernel.org; linux-kernel@vger.ke=
-rnel.org
-Subject: [EXTERNAL] Re: [PATCH v5] ASoC: dt-bindings: Add tas2781 amplifier
+That's what I meant, the wifi chip itself does not have any (valid)
+OTP/SPROM attached/populated, and requires the driver to setup the
+values at runtime based on the host SoC's flash contents (most likely
+NVRAM contents).
 
-On Fri, Feb 03, 2023 at 12:01:15PM +0800, Shenghao Ding wrote:
-> Create tas2781.yaml for tas2781 driver.
->=20
-> Signed-off-by: Shenghao Ding <13916275206@139.com>
->=20
-> ---
-> Changes in v5:
->  - Drop the full stop in the Subject.
->  - Drop the reset-gpios reference to gpio.txt.
->  - Add Changelog.
->  Changes to be committed:
-> 	new file:   Documentation/devicetree/bindings/sound/ti,tas2781.yaml
-> ---
->  .../devicetree/bindings/sound/ti,tas2781.yaml | 87=20
-> +++++++++++++++++++
->  1 file changed, 87 insertions(+)
->  create mode 100644=20
-> Documentation/devicetree/bindings/sound/ti,tas2781.yaml
->=20
-> diff --git a/Documentation/devicetree/bindings/sound/ti,tas2781.yaml=20
-> b/Documentation/devicetree/bindings/sound/ti,tas2781.yaml
-> new file mode 100644
-> index 000000000000..8af44792a904
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/sound/ti,tas2781.yaml
-> @@ -0,0 +1,87 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) # Copyright=20
-> +(C) 2022 - 2023 Texas Instruments Incorporated %YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/sound/ti,tas2781.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Texas Instruments TAS2781 SmartAMP
-> +
-> +maintainers:
-> +  - Shenghao Ding <shenghao-ding@ti.com>
-> +  - Kevin Lu <kevin-lu@ti.com>
-> +
-> +description: |
+This was the case in about 99% of embedded systems based on MIPS
+bcm47xx/bcm63xx, where the wifi chips then always identified
+themselves with their raw chip IDs as PCI device IDs (even leading to
+one or two ID conflicts ...).
 
-Don't need '|' unless you need line endings preserved. Wrap lines at 80 cha=
-rs.
-[DING] Accept this comment. I will remove all the "|" after "description:"
-> +  The TAS2781 is a mono, digital input Class-D audio amplifier =20
-> + optimized for efficiently driving high peak power into small =20
-> + loudspeakers. Integrated an on-chip DSP supports Texas Instruments =20
-> + Smart Amp speaker protection algorithm. The integrated speaker =20
-> + voltage and current sense provides for real time  monitoring of=20
-> + loudspeaker behavior.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - ti,tas2781
-> +
-> +  reg:
-> +    maxItems: 1
-> +    description: |
-> +      I2C address of the device can be in range from 0x38 to 0x40.
+I have to admit I don't know how much this is still an issue on
+current (ARM) systems, but at least that one BCM4709A one suggests
+this is still happening in "recent" designs. Probably because it saves
+half a cent per board or so ;-)
 
-Express as constraints instead:
-
-items:
-  minimum: 0x38
-  maximum: 0x40
-[DING] Accept this comment.
-Or was this the range of the slot addresses?
-[DING] Yes.
-> +
-> +  reset-gpios:
-> +    maxItems: 1
-> +    description: |
-> +      A GPIO line handling reset of the chip. As the line is active high=
-,
-> +      it should be marked GPIO_ACTIVE_HIGH.
-
-The description doesn't add anything. Drop.
-
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  ti,audio-slots:
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> +    minItems: 1
-> +    maxItems: 4
-> +    description: |
-> +      I2c address of the device for different audio slots,
-
-I2C
-
-> +      useless in mono case.
-> +
-> +  ti,broadcast-addr:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: |
-> +      Generic i2c address for all the tas2781 devices in
-
-I2C
-
-Be consistent.
-[DING] Accept this comment.
-> +      purpose of I2C broadcast during the multi-device
-> +      writes, useless in mono case.
-> +
-> +  '#sound-dai-cells':
-> +    const: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +   #include <dt-bindings/gpio/gpio.h>
-> +   i2c {
-> +     /* example with quad support, such as tablet or pad device */
-> +     #address-cells =3D <1>;
-> +     #size-cells =3D <0>;
-> +     quad: codec@38 {
-> +       compatible =3D "ti,tas2781";
-> +       reg =3D <0x38>;
-> +       #sound-dai-cells =3D <1>;
-> +       reset-gpios =3D < &gpio1 10 GPIO_ACTIVE_HIGH >;
-> +       interrupt-parent =3D <&gpio1>;
-> +       interrupts =3D <15>;
-> +       ti,audio-slots =3D < 0x38 /* topleft-channel */
-> +                          0x39 /* topright-channel */
-> +                          0x3a /* bottomleft-channel */
-> +                          0x3b /* bottomright-channel */
-
-Do these vary? Or the slot addresses are fixed and which slots are used var=
-ies?=20
-[DING] Yes, these will vary with different projects. In some projects there=
-'re two addresses,=20
-in some there're six addresses, in others the I2C addresses may be out of o=
-rder.=20
-> +                        >;
-> +       ti,broadcast-addr =3D <0x40>;
-
-I tend to think the I2C addresses should all be in 'reg'.
-[DING] broadcast-addr item is used in multiple tas2781s case to enable the=
-=20
-broadcast mode to download dsp fw  simultaneously. Without this item,=20
-broadcast mode will be disabled, and downloading dsp fw will be one by one.
-As you know, not all project will enable the broadcast feature, so we have =
-to=20
-add this item. As to reg item, it is only stored the primary tas2781 I2C ad=
-dr.
-> +     };
-> +   };
-> +...
-> --
-> 2.34.1
->=20
->=20
+Regards
+Jonas
