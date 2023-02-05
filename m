@@ -2,70 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17BF568B18B
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 21:17:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EEC868B18C
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 21:22:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229516AbjBEUR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 15:17:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46604 "EHLO
+        id S229524AbjBEUWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 15:22:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjBEUR1 (ORCPT
+        with ESMTP id S229457AbjBEUWD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 15:17:27 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC1C5599
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 12:17:25 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id lu11so28907283ejb.3
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Feb 2023 12:17:24 -0800 (PST)
+        Sun, 5 Feb 2023 15:22:03 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC9E113DA
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 12:22:02 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id u21so9851592edv.3
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Feb 2023 12:22:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vuDqBGiso2ipHrhZ3TVaxXym8pN3xmoOWp0BE38pfVA=;
-        b=W42BN5rreyugL2nruL5TpgbVeOyHyYADshRnETRXpZ5gWTEDwZoz/ZJhrzw9p/mSU5
-         4GYap/Db9VgulivKnMUfaXM0q9OU1KpEiXQ5xlkckCsLSbJ4VbVzbPhSAelVtxyMtQhz
-         VeQ+DzCoz5BKRUNlvjpF4X2Wterev09VDMhRo=
+        bh=c7AMfEAIeR/+FfczDgCKveqbE3jvjS9AcYcv8gEH+jg=;
+        b=AubkqDgfdmEzLss5anQ2QUuOJ23EmV0DleDD4TD4vdfeaSa4JriPsT5cPwkvHRzSAv
+         v4dQ6yasKZndh/dM+ittZFX+QZ8d1faFJdhZGC/UZICZo1l1XEG5VJx3Y5Ck2DUfWEgZ
+         DbpZxLVWAJSHD8LTivj+KOvEBNMGpvJ1NxwBc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=vuDqBGiso2ipHrhZ3TVaxXym8pN3xmoOWp0BE38pfVA=;
-        b=qOoCoLmh0dKgyDseihGrFFgopKzIWr17gLRz9pCoiWgSyGEktYq4T1TnfLCQvBX5kx
-         51YSUNFBIPdJR0eCeAzNHio9CsEfunQFZwNTxiNaMw2n9KrJzDdwf4/+08PSKVSacGi8
-         foaPR6JcKrKj9X7Dg7avP6QdIpbjJ2ckMbV5lKfJMazke1LprMAEZc6Uh+TDU5By2GPz
-         +fD6Za8fdahdxnIEjSZbIo/fV6QzhmgLclYw9ldzAZM11FyX4eyxve0GR19cctjv5asv
-         27Fog4MraqBYUX0/C/u0Zk6bw+UjUQ+hcgj2N1Ziwh02xOQuDP9CfK9tNGEZKnUMCAgA
-         ZfZQ==
-X-Gm-Message-State: AO0yUKXj9AL6rbimBO++2arMbjPMGYiWnE8kKpAtueZN/WJMr7L4eBq3
-        VFmhnrMAe3U3DsSyUjfqeJEcj+GRVEfHngT0hrk=
-X-Google-Smtp-Source: AK7set89hWceBNwzir/HBl3sGmuq9S6Tnzub8MEvrsobPttw8+fYjy5yYja/3Q0j4/SUMIa8qyt/SQ==
-X-Received: by 2002:a17:907:d410:b0:887:9a32:9a2 with SMTP id vi16-20020a170907d41000b008879a3209a2mr20792179ejc.0.1675628243447;
-        Sun, 05 Feb 2023 12:17:23 -0800 (PST)
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com. [209.85.218.53])
-        by smtp.gmail.com with ESMTPSA id f25-20020a170906391900b0084d4b8f5889sm4511575eje.102.2023.02.05.12.17.22
+        bh=c7AMfEAIeR/+FfczDgCKveqbE3jvjS9AcYcv8gEH+jg=;
+        b=gJ0Gzu2ncCB932AXAqrBeE03GdhnhEvIaCJBhkFSHjqpbrKWn7AnXiCzvzRQp7vl1J
+         E/pzlugbRT9vqrwiC9gVj31MBTN+RAl//THyWcBPMwvVclQPfY8AD7lYQJLACfwGPNKX
+         FMwEsox6Lf+Basl8ZGeWLDhSnuv7trddrw5KoCwtTdmYX2VREsrjLMUjl4g2u4ofuQhh
+         fyN9n3h4GlJEBjX8v9Qo1wZlbBApcRx8AYmnJC8UpEboPoZ9alOArk1cxrhsjtiev+TH
+         9vlWd5r5/aaclJKKG1hSaqgJu9/zp4Ph6Cjg3mKrT1i0VD61CHSMo9wnjXcCEQtvUXXK
+         WsOw==
+X-Gm-Message-State: AO0yUKUE4Xee3xTwrjiuxa7LFhci23iuscnRBQ6M4MHE8N9T/UgZNbDd
+        uIMIbG1w2jmeRmOoxAy/4oJKbSeQq9XwTobB+JY=
+X-Google-Smtp-Source: AK7set81t2kkW1uy0kvK2vLBUOGLwOswsMIKNAQLFDIO2Z/M0iFlCFlyYQ6aDFIL4aIsfmzxm/kOWQ==
+X-Received: by 2002:a50:ab4e:0:b0:4aa:a82b:9711 with SMTP id t14-20020a50ab4e000000b004aaa82b9711mr4114021edc.35.1675628520812;
+        Sun, 05 Feb 2023 12:22:00 -0800 (PST)
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com. [209.85.218.52])
+        by smtp.gmail.com with ESMTPSA id a15-20020a50ff0f000000b004a2067d6ba4sm4228632edu.52.2023.02.05.12.21.59
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 Feb 2023 12:17:22 -0800 (PST)
-Received: by mail-ej1-f53.google.com with SMTP id bk15so28834958ejb.9
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Feb 2023 12:17:22 -0800 (PST)
+        Sun, 05 Feb 2023 12:22:00 -0800 (PST)
+Received: by mail-ej1-f52.google.com with SMTP id qw12so28936144ejc.2
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Feb 2023 12:21:59 -0800 (PST)
 X-Received: by 2002:a17:906:892:b0:87a:7098:ca09 with SMTP id
- n18-20020a170906089200b0087a7098ca09mr4391723eje.78.1675628242466; Sun, 05
- Feb 2023 12:17:22 -0800 (PST)
+ n18-20020a170906089200b0087a7098ca09mr4393708eje.78.1675628519644; Sun, 05
+ Feb 2023 12:21:59 -0800 (PST)
 MIME-Version: 1.0
-References: <Y9+Yv1CQKNP0Bwqq@kroah.com>
-In-Reply-To: <Y9+Yv1CQKNP0Bwqq@kroah.com>
+References: <4fe9541e-4d4c-2b2a-f8c8-2d34a7284930@nerdbynature.de>
+ <f22551ea-0694-2838-4a3f-f60d8d93fa64@leemhuis.info> <8f132803-f496-f33a-d2ab-b47fd5af0b88@nerdbynature.de>
+ <0f441adb-f565-7a37-d9e5-3b14f6f7aea6@suse.com> <f02c49da-0377-97b9-9438-9e0ddbfbcc6d@nerdbynature.de>
+ <CAHk-=wg1yXaX+Ut4uctf7x1WrZ4WW9hjSCr1VACwZtkZT9frFw@mail.gmail.com> <Y9+tDmLAlqg37TS+@zn.tnic>
+In-Reply-To: <Y9+tDmLAlqg37TS+@zn.tnic>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 5 Feb 2023 12:17:05 -0800
-X-Gmail-Original-Message-ID: <CAHk-=whSQFHVzgQ+s8cbCSyE_yrd+BFuYktHe2=0h-nLXBi__Q@mail.gmail.com>
-Message-ID: <CAHk-=whSQFHVzgQ+s8cbCSyE_yrd+BFuYktHe2=0h-nLXBi__Q@mail.gmail.com>
-Subject: Re: [GIT PULL] TTY/Serial driver fixes for 6.2-rc7
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        George Kennedy <george.kennedy@oracle.com>
-Cc:     Jiri Slaby <jslaby@suse.cz>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
+Date:   Sun, 5 Feb 2023 12:21:42 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wgC_MEFnnzUGN4q9pmhxV+eFV1Oo=W2j1J69YhJF5EDtw@mail.gmail.com>
+Message-ID: <CAHk-=wgC_MEFnnzUGN4q9pmhxV+eFV1Oo=W2j1J69YhJF5EDtw@mail.gmail.com>
+Subject: Re: External USB disks not recognized with v6.1.8 when using Xen
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Christian Kujau <lists@nerdbynature.de>,
+        Juergen Gross <jgross@suse.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        linux-kernel@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Linux regressions mailing list <regressions@lists.linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -77,19 +80,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 5, 2023 at 3:53 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+On Sun, Feb 5, 2023 at 5:20 AM Borislav Petkov <bp@alien8.de> wrote:
 >
-> George Kennedy (1):
->       vc_screen: move load of struct vc_data pointer in vcs_read() to avoid UAF
+> @@ -53,7 +53,8 @@ static inline u8 mtrr_type_lookup(u64 addr,
+>         /*
+>          * Return no-MTRRs:
+>          */
+> -       return MTRR_TYPE_INVALID;
+> +       *uniform = 1;
+> +       return MTRR_TYPE_UNCACHABLE;
 
-Hmm.
+So this is the one I'd almost leave alone.
 
-I think the "goto unlock_out" should be a "break". A partial read
-should return the partial success, not an error.
+Because this is not a "there are no MTRR's" situation, this is a "I
+haven't enabled CONFIG_MTRR, so I don't _know_ if there are any MTRR's
+or not.
 
-That situation didn't exist when the check was outside the loop, but does now.
+And returning MTRR_TYPE_UNCACHABLE will then disable things like
+largepages etc, so this change would effectively mean that if
+CONFIG_MTRR is off, it would turn off hugepage support too.
 
-Now, I don't think this matters for any sane situation, but since I
-looked at this patch I thought I'd mention it.
+But maybe that was the only thing that cared, and we have:
 
-                   Linus
+> @@ -721,8 +721,9 @@ int pud_set_huge(pud_t *pud, phys_addr_t addr, pgprot_t prot)
+>         u8 mtrr, uniform;
+>
+>         mtrr = mtrr_type_lookup(addr, addr + PUD_SIZE, &uniform);
+> -       if ((mtrr != MTRR_TYPE_INVALID) && (!uniform) &&
+> -           (mtrr != MTRR_TYPE_WRBACK))
+> +       if (mtrr != MTRR_TYPE_UNCACHABLE &&
+> +           mtrr != MTRR_TYPE_WRBACK &&
+> +           !uniform)
+>                 return 0;
+
+Here you make up for it, but I don't actually understand why these
+checks exist at all.
+
+I *think* that what the check should do is just check for uniformity.
+
+Why would the largepage code otherwise care?
+
+Other MTRR types are explicitly fine, and I think things like the X
+server might even want to do write-combining with large pages etc.
+
+So I think the hugepage code should only do
+
+     if (!uniform)
+          return 0;
+
+or there should be some explanation for why those types are special?
+
+>> @@ -748,8 +749,9 @@ int pmd_set_huge(pmd_t *pmd, phys_addr_t addr, pgprot_t prot)
+>         u8 mtrr, uniform;
+>
+>         mtrr = mtrr_type_lookup(addr, addr + PMD_SIZE, &uniform);
+> -       if ((mtrr != MTRR_TYPE_INVALID) && (!uniform) &&
+> -           (mtrr != MTRR_TYPE_WRBACK)) {
+> +       if (mtrr != MTRR_TYPE_UNCACHABLE &&
+> +           mtrr != MTRR_TYPE_WRBACK &&
+> +           !uniform) {
+
+Same here.
+
+Again, I *think* that the reason it used to do that "check two types"
+thing is simply because "uniform" wasn't set correctly.
+
+But I don't know.
+
+                Linus
