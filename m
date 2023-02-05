@@ -2,119 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 972AC68B081
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 16:09:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 753B968B087
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 16:15:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229524AbjBEPGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 10:06:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37558 "EHLO
+        id S229710AbjBEPPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 10:15:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjBEPGI (ORCPT
+        with ESMTP id S229580AbjBEPP2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 10:06:08 -0500
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA9DC1CADE
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 07:06:05 -0800 (PST)
-Received: by mail-il1-x132.google.com with SMTP id k17so1123763ilq.12
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Feb 2023 07:06:05 -0800 (PST)
+        Sun, 5 Feb 2023 10:15:28 -0500
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 640C91ADCC;
+        Sun,  5 Feb 2023 07:15:27 -0800 (PST)
+Received: by mail-qt1-x82f.google.com with SMTP id g8so10370705qtq.13;
+        Sun, 05 Feb 2023 07:15:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=user-agent:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q29h+5pa7qc4gtg9UpocpWF+VOGMppgUk862ZKA99Fw=;
-        b=Q8paXj+i9kUYQZdNbgySo+rSKgTuuDvRZ8oyYlUNobDeshOPwsNcC5oAUQZENp0OpQ
-         MBIbMLzR90RiEy4KLZKKy1+iwyAvlDxZcS+j8Q/NcBRGn2kgOSsb1ANJx2voSJhUYtR8
-         +tegpCiM7H0L3skPO6aXPD5vVeEsmVdm86GZLoVQKdORsEoS9gSqGqC2xwsfOjArlfXa
-         G0WcXx6uKfoBRYdUao4ET39ZGdAZVYOkbcPJsbA7yKY6RxULXYSLBF+jKWl8vF0eKA1b
-         emT9JJCyhU1KPehUT24mNPt4Hqxq9t9hr2Y9NqtcQFtBxjOEdjXAFQp1j68gHw1SEgeH
-         7g2g==
+        h=in-reply-to:content-disposition:mime-version:references:reply-to
+         :message-id:subject:cc:to:from:date:sender:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2byMz+/6Sh1TLllSwNgLGo9KhlhjlVKEdxXfG0cTpSk=;
+        b=bM1UPGVlukg5IZQvBlSsUkfeimYyh6tojk94DiSb623M5M8KDgOCUzzfiNdo9pIhba
+         X0ju+lS1ikt2avaAwaZX6+ypsch9Kzgnh7v5wYacdHkVHOoTg1yMEtSGti/f+NU8dFbk
+         olYXnyOfQ2TCRT7DR+EHomTRHXEAT5tC/FxLNiP3m4YsziYxMDUikSN/0r6cIR2r5lGD
+         Tbcvzj7ZH3bxLT4Fu6s8h9fPjr3nPZim0XGZRnyTj27DZjsGkSPFSwewg0LJqdHOjkFH
+         mP4U2jfYpJYXfZdjxU/YFXiz18l4yU6w/ZF/i40JCW8QQn4PlHds8xB290MfvjBlZjOO
+         D3PQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Q29h+5pa7qc4gtg9UpocpWF+VOGMppgUk862ZKA99Fw=;
-        b=aoLVGWlhyaJbhKSiYLlVt+JzFv8XIDxETMH/OnSlDxtGmjr+oFIbk3iUagrX91bMCt
-         twKvwdZG+D9tDr8R+yFJhf5jHnOCfE8B9BEb5ANgwv2BvcV7RqMAlZW0zjLQ6Wo3PmOz
-         mOqMoJCesoM0zNOVm/TCFJJQa3clVPPtwHFzO8RfIHfXUkWoQlO9PXyCLyDpHFQX55qw
-         wP6UGnGPG5sZBtWfOPr8HRTzLvxanEbpsbKM99tjCbN1gCCUEWUlnq+/9m4f11HfEypu
-         ZoxwgdvEpkry3siTUFCvmSwVifG7UrLUjNBknmOsEnW8yIeDomFAOK10yrNliqtAo1cN
-         34Dg==
-X-Gm-Message-State: AO0yUKX0lA3tHSbHaCAvDVqNry1brJBmjzcU5/8JgoSJHpVGPBU878dl
-        aC3x2qvc0t/SA3s03IOM8uY=
-X-Google-Smtp-Source: AK7set+uhZqKYqaiCDbU8803ot5KJZixWzHyUTIMAAk6k/pqJ9UEHUzBbVA8eXhD5fKlTpyscRUnMA==
-X-Received: by 2002:a92:7512:0:b0:313:bdde:613a with SMTP id q18-20020a927512000000b00313bdde613amr1009143ilc.28.1675609564999;
-        Sun, 05 Feb 2023 07:06:04 -0800 (PST)
-Received: from haolee.io ([2600:3c04::f03c:91ff:fe02:b162])
-        by smtp.gmail.com with ESMTPSA id co12-20020a0566383e0c00b003b7d56593d6sm2666082jab.160.2023.02.05.07.06.04
+        h=in-reply-to:content-disposition:mime-version:references:reply-to
+         :message-id:subject:cc:to:from:date:sender:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=2byMz+/6Sh1TLllSwNgLGo9KhlhjlVKEdxXfG0cTpSk=;
+        b=Ej2vLog5kG2SMDD1EfzJtVjrWkGs1FBub8fmIXAk7HTNGa6z5LmMjTKqYTlEHllYc+
+         APH/q4SYZlhwCn5rymZhZ3nOs+vBOGQ0BjZUdJ4ziKHvCEb49hnBcWqacaTJnrSUxmJq
+         YjgLVWKGGjlzs9Jig02ZNjzvEHSkNQbaRZAMhzT3iEWuPpzNwrgw/P4EVphor02gsKPf
+         KyFTftQsFSF5tX4EzOb0EW2gMRusyTa9qd1vumayMRThI/+iZTiTDpNQXxr0GQZ9Ceau
+         aIN08Zq1P23OsWPV+mMjGgIZJ2obtlMJdIwkotyAlLoaEePfkPYQ3NFb2OCwxPrR1umn
+         NrGA==
+X-Gm-Message-State: AO0yUKWDFGUHkYfJZ9AxZQXzOq6pd8xLVXKf8Ahq1fCYJ4tjUiphEV/P
+        MwuAbqGBvJZlWEiC6CB5DCif5XELZI1/
+X-Google-Smtp-Source: AK7set93djiaBUljyrNcJkGIJV3koL2pnqGsfFk+j5qwUKO3nKUi/O4AiomLyV9rXpYjXRGhqrILXg==
+X-Received: by 2002:ac8:59cc:0:b0:3b9:b1ea:2d0f with SMTP id f12-20020ac859cc000000b003b9b1ea2d0fmr31019703qtf.34.1675610126405;
+        Sun, 05 Feb 2023 07:15:26 -0800 (PST)
+Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
+        by smtp.gmail.com with ESMTPSA id u25-20020ae9c019000000b0071c9eea2056sm5684592qkk.14.2023.02.05.07.15.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Feb 2023 07:06:04 -0800 (PST)
-Date:   Sun, 5 Feb 2023 15:06:02 +0000
-From:   Hao Lee <haolee.swjtu@gmail.com>
-To:     akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, haolee.swjtu@gmail.com,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] mm: eliminate function call overhead during copy_page_range()
-Message-ID: <20230205150602.GA25866@haolee.io>
+        Sun, 05 Feb 2023 07:15:25 -0800 (PST)
+Sender: Corey Minyard <tcminyard@gmail.com>
+Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:4d8a:a95f:e506:25f6])
+        by serve.minyard.net (Postfix) with ESMTPSA id 8F60C1800C0;
+        Sun,  5 Feb 2023 15:15:24 +0000 (UTC)
+Date:   Sun, 5 Feb 2023 09:15:23 -0600
+From:   Corey Minyard <minyard@acm.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Andrew Manley <andrew.manley@sealingtech.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net
+Subject: Re: [PATCH] ipmi: ipmb: Fix the MODULE_PARM_DESC associated to
+ 'retry_time_ms'
+Message-ID: <Y9/IC9oWzxo3jjrO@minyard.net>
+Reply-To: minyard@acm.org
+References: <0d8670cff2c656e99a832a249e77dc90578f67de.1675591429.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.12.1 (2019-06-15)
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+In-Reply-To: <0d8670cff2c656e99a832a249e77dc90578f67de.1675591429.git.christophe.jaillet@wanadoo.fr>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-vm_normal_page() is called so many times that its overhead is very high.
-After changing this call site to an inline function, copy_page_range()
-runs 3~5 times faster than before.
+On Sun, Feb 05, 2023 at 11:04:01AM +0100, Christophe JAILLET wrote:
+> 'This should be 'retry_time_ms' instead of 'max_retries'.
 
-Signed-off-by: Hao Lee <haolee.swjtu@gmail.com>
----
- mm/memory.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+Oops.  Applied to my next tree.
 
-diff --git a/mm/memory.c b/mm/memory.c
-index 7a04a1130ec1..2084bb7aff85 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -562,7 +562,7 @@ static void print_bad_pte(struct vm_area_struct *vma, unsigned long addr,
-  * PFNMAP mappings in order to support COWable mappings.
-  *
-  */
--struct page *vm_normal_page(struct vm_area_struct *vma, unsigned long addr,
-+static inline struct page *__vm_normal_page(struct vm_area_struct *vma, unsigned long addr,
- 			    pte_t pte)
- {
- 	unsigned long pfn = pte_pfn(pte);
-@@ -625,6 +625,12 @@ struct page *vm_normal_page(struct vm_area_struct *vma, unsigned long addr,
- 	return pfn_to_page(pfn);
- }
- 
-+struct page *vm_normal_page(struct vm_area_struct *vma, unsigned long addr,
-+			    pte_t pte)
-+{
-+	return __vm_normal_page(vma, addr, pte);
-+}
-+
- struct folio *vm_normal_folio(struct vm_area_struct *vma, unsigned long addr,
- 			    pte_t pte)
- {
-@@ -908,7 +914,7 @@ copy_present_pte(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma,
- 	struct page *page;
- 	struct folio *folio;
- 
--	page = vm_normal_page(src_vma, addr, pte);
-+	page = __vm_normal_page(src_vma, addr, pte);
- 	if (page)
- 		folio = page_folio(page);
- 	if (page && folio_test_anon(folio)) {
--- 
-2.37.3
+Thanks,
 
+-corey
+
+> 
+> Fixes: 63c4eb347164 ("ipmi:ipmb: Add initial support for IPMI over IPMB")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+>  drivers/char/ipmi/ipmi_ipmb.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/char/ipmi/ipmi_ipmb.c b/drivers/char/ipmi/ipmi_ipmb.c
+> index 7c1aee5e11b7..3f1c9f1573e7 100644
+> --- a/drivers/char/ipmi/ipmi_ipmb.c
+> +++ b/drivers/char/ipmi/ipmi_ipmb.c
+> @@ -27,7 +27,7 @@ MODULE_PARM_DESC(bmcaddr, "Address to use for BMC.");
+>  
+>  static unsigned int retry_time_ms = 250;
+>  module_param(retry_time_ms, uint, 0644);
+> -MODULE_PARM_DESC(max_retries, "Timeout time between retries, in milliseconds.");
+> +MODULE_PARM_DESC(retry_time_ms, "Timeout time between retries, in milliseconds.");
+>  
+>  static unsigned int max_retries = 1;
+>  module_param(max_retries, uint, 0644);
+> -- 
+> 2.34.1
+> 
