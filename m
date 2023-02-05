@@ -2,354 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A061468B12C
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 19:11:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D477068B12B
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 19:11:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbjBESLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 13:11:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46842 "EHLO
+        id S229575AbjBESLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 13:11:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjBESLu (ORCPT
+        with ESMTP id S229553AbjBESLp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 13:11:50 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6278618146
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 10:11:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675620709; x=1707156709;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=e5eXOdl27KCUi1a/V5eS0CiWUs6fBfGXPxKfqeyqe/E=;
-  b=gBoFKXE5fLNnng0SrzUBAqpeCayxzF2YFqY9M6MHVQ5RhfbIH7kssUPZ
-   V3rkdgrsmloNX249FmThkg4Hi14+e5Yk6FCJuKqFZkitLAPQBaawONdze
-   ry4wsMuSD3URc9DiXMyKwWX+tN/EyI/uUOfxOsUyD1y734dw+2HZSqy/O
-   UqhtuyTWvls7l1XLLyB6xUCscdRK+gOG8KLqh7exilYkpzu30yy54McQI
-   BvTlPNERW3ay9vP8N1eTKtZLdJoRAKStXvRHSoFyRDZ5P+oBX+SB7YBZK
-   iIIQ3wDiWcqsE34O7+TwigjxQ2YecJWvCt7ssSvet1jc3sLgNQBYECpOF
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10612"; a="326762227"
-X-IronPort-AV: E=Sophos;i="5.97,275,1669104000"; 
-   d="scan'208";a="326762227"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2023 10:11:48 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10612"; a="666286309"
-X-IronPort-AV: E=Sophos;i="5.97,275,1669104000"; 
-   d="scan'208";a="666286309"
-Received: from twinkler-lnx.jer.intel.com ([10.12.87.42])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2023 10:11:46 -0800
-From:   Tomas Winkler <tomas.winkler@intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Alexander Usyskin <alexander.usyskin@intel.com>,
-        Vitaly Lubart <vitaly.lubart@intel.com>,
-        linux-kernel@vger.kernel.org,
-        Tomas Winkler <tomas.winkler@intel.com>
-Subject: [char-misc-next v2 2/2] mei: gsc_proxy: add gsc proxy driver
-Date:   Sun,  5 Feb 2023 20:11:32 +0200
-Message-Id: <20230205181132.191064-3-tomas.winkler@intel.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230205181132.191064-1-tomas.winkler@intel.com>
-References: <20230205181132.191064-1-tomas.winkler@intel.com>
+        Sun, 5 Feb 2023 13:11:45 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D6F1717B
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 10:11:44 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id x9so1614394eds.12
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Feb 2023 10:11:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=T9iC9rYGO1NxkyXBlHxYR3oaUdA/dc5frr4F69pLNUE=;
+        b=PvTYHq5gP1Y0bWf6iA4IydkMPLQFBb9qu5fq7gSuVShHB+ZHGu4I3Sy/gvQJrqIaCX
+         I6zJvOkMf0L1LKBFaKcYfi1O9CPuyUSb58RwiWZal4cLysw83vHTwn6Sfe7mZ2DzI2U2
+         w0Y+PLhHhteNQPbyOjQqBNmXmlCrs7C7/zW89j+/kEyZ1wJqF9l2BJuXuSRQ0PZBzYTa
+         X/tiAoK9qDr4U7wcGcW8LnC1hQYjRTf800cRhm/9oeShAmsJEY8TvDWSrnWEAtzBjbXx
+         C8ZTLEs4p2XEv7QbHzRORE/nnJx71He7kF4TtcxoaUhOwSvMd9lMgJL84QzrwXKiw752
+         l/nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=T9iC9rYGO1NxkyXBlHxYR3oaUdA/dc5frr4F69pLNUE=;
+        b=IRSCt++WhF+0WApZZwSR+O30GUlEiRcAoV1VdbJbHLUs+7PAwt6/7+GN/QrntHgDFV
+         10+MbRdn1Q1tF8yWjGtmYn81hF9UDZws9AKBqxsvmyMvaiVmcHkxYlU9rvTmQXUwNPbK
+         fRyHO4ddX+yx9H/zaPC7Fa4yQkph5TqvCHJF3lQNc/AyVIxK0CKfSBDLVqzQvjdJfl2X
+         JifbZiFZpXRQZggz4OVF2bN7X5CkRaV7MoNvEv8CDdQs+Gwytz57I7DZYWdypFfD16bf
+         0NYCY98DXvIOkzRvZA5AKciyaqC3nkkO/4Rm2hUgLv0WGruULN4eT/hFQnQuCmtmlbhW
+         UAYw==
+X-Gm-Message-State: AO0yUKWEQviPI6DxbvJLwSzbYpFRQYc+PZfi2G9Y96o29d+vvqbwWdBf
+        vwHbwgx6nZGdaq+UCldDerE5pxYEP5M=
+X-Google-Smtp-Source: AK7set+S6JE2lqNlUyK7fG+fMPNAD3aHNYmFFjcJ34S2QDAfwiHJlFNBxRqfc13RD2/VCF7mrAi8Bg==
+X-Received: by 2002:a50:9ec7:0:b0:4aa:9f02:98f7 with SMTP id a65-20020a509ec7000000b004aa9f0298f7mr5600960edf.0.1675620703140;
+        Sun, 05 Feb 2023 10:11:43 -0800 (PST)
+Received: from combine-ThinkPad-S1-Yoga (c-8ff371d5.879159-0-69706f6e6c79.bbcust.telenor.se. [213.113.243.143])
+        by smtp.gmail.com with ESMTPSA id bl11-20020a170906c24b00b0088d0b51f056sm4332928ejb.40.2023.02.05.10.11.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Feb 2023 10:11:42 -0800 (PST)
+Date:   Sun, 5 Feb 2023 19:11:40 +0100
+From:   Guru Mehar Rachaputi <gurumeharrachaputi@gmail.com>
+To:     Forest Bond <forest@alittletooquiet.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] staging: vt6655: Macro with braces issue change to inline
+ function
+Message-ID: <Y9/xXHvOAwfqoDxn@combine-ThinkPad-S1-Yoga>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Usyskin <alexander.usyskin@intel.com>
+This patch is to fix checkpatch warning: "Macro argument 'iobase' may be better
+as '(iobase)' to avoid precedence issues" changed to inline function. In
+relation to this, names of the callers of macro are also modified to call
+this function.
 
-Add GSC proxy driver. It to allows messaging between GSC component
-on Intel on board graphics card and CSE device.
-
-Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
-Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
+Signed-off-by: Guru Mehar Rachaputi <gurumeharrachaputi@gmail.com>
 ---
+Changes in v3:
+	- Whitespace error from checkpatch fixed
 
-V2: refactor match function
-    use device information instead of driver name
-    to identify the aggregate device.
+Changes in v2:
+	- Macros with one statement that is to call 'iowrite8' function changed
+	to inline function as reviewed by gregkh@linuxfoundation.org.
+	In relation to this, names of the callers of macro are also modified
+	to call this function.
+---
+ drivers/staging/vt6655/card.c    | 3 +--
+ drivers/staging/vt6655/channel.c | 2 +-
+ drivers/staging/vt6655/mac.h     | 4 ++--
+ 3 files changed, 4 insertions(+), 5 deletions(-)
 
- drivers/misc/mei/Kconfig                   |   2 +-
- drivers/misc/mei/Makefile                  |   1 +
- drivers/misc/mei/gsc_proxy/Kconfig         |  14 ++
- drivers/misc/mei/gsc_proxy/Makefile        |   7 +
- drivers/misc/mei/gsc_proxy/mei_gsc_proxy.c | 208 +++++++++++++++++++++
- 5 files changed, 231 insertions(+), 1 deletion(-)
- create mode 100644 drivers/misc/mei/gsc_proxy/Kconfig
- create mode 100644 drivers/misc/mei/gsc_proxy/Makefile
- create mode 100644 drivers/misc/mei/gsc_proxy/mei_gsc_proxy.c
-
-diff --git a/drivers/misc/mei/Kconfig b/drivers/misc/mei/Kconfig
-index d21486d69df2..37db142de413 100644
---- a/drivers/misc/mei/Kconfig
-+++ b/drivers/misc/mei/Kconfig
-@@ -62,4 +62,4 @@ config INTEL_MEI_GSC
- 
- source "drivers/misc/mei/hdcp/Kconfig"
- source "drivers/misc/mei/pxp/Kconfig"
+diff --git a/drivers/staging/vt6655/card.c b/drivers/staging/vt6655/card.c
+index a6ff496b01b6..d2d122dc16d8 100644
+--- a/drivers/staging/vt6655/card.c
++++ b/drivers/staging/vt6655/card.c
+@@ -643,8 +643,7 @@ void CARDvSetRSPINF(struct vnt_private *priv, u8 bb_type)
+ 				   &byRsvTime);
+ 	iowrite16(MAKEWORD(byTxRate, byRsvTime), priv->port_offset + MAC_REG_RSPINF_A_72);
+ 	/* Set to Page0 */
+-        vt6655_mac_select_page0(priv->port_offset);
 -
-+source "drivers/misc/mei/gsc_proxy/Kconfig"
-diff --git a/drivers/misc/mei/Makefile b/drivers/misc/mei/Makefile
-index fb740d754900..14aee253ae48 100644
---- a/drivers/misc/mei/Makefile
-+++ b/drivers/misc/mei/Makefile
-@@ -30,3 +30,4 @@ CFLAGS_mei-trace.o = -I$(src)
++	vt6655_mac_select_page0(priv->port_offset);
  
- obj-$(CONFIG_INTEL_MEI_HDCP) += hdcp/
- obj-$(CONFIG_INTEL_MEI_PXP) += pxp/
-+obj-$(CONFIG_INTEL_MEI_GSC_PROXY) += gsc_proxy/
-diff --git a/drivers/misc/mei/gsc_proxy/Kconfig b/drivers/misc/mei/gsc_proxy/Kconfig
-new file mode 100644
-index 000000000000..fd45ce8c1df4
---- /dev/null
-+++ b/drivers/misc/mei/gsc_proxy/Kconfig
-@@ -0,0 +1,14 @@
-+# SPDX-License-Identifier: GPL-2.0
-+# Copyright (c) 2022-2023, Intel Corporation. All rights reserved.
-+#
-+config INTEL_MEI_GSC_PROXY
-+	tristate "Intel GSC Proxy services of ME Interface"
-+	select INTEL_MEI_ME
-+	depends on DRM_I915
-+	help
-+         MEI Support for GSC Proxy Services on Intel platforms.
-+
-+         MEI GSC proxy enables messaging between GSC service on
-+         Intel graphics on-board card and services on CSE (MEI)
-+         firmware residing SoC or PCH.
-+
-diff --git a/drivers/misc/mei/gsc_proxy/Makefile b/drivers/misc/mei/gsc_proxy/Makefile
-new file mode 100644
-index 000000000000..358847e9aaa9
---- /dev/null
-+++ b/drivers/misc/mei/gsc_proxy/Makefile
-@@ -0,0 +1,7 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Copyright (c) 2022-2023, Intel Corporation. All rights reserved.
-+#
-+# Makefile - GSC Proxy client driver for Intel MEI Bus Driver.
-+
-+obj-$(CONFIG_INTEL_MEI_GSC_PROXY) += mei_gsc_proxy.o
-diff --git a/drivers/misc/mei/gsc_proxy/mei_gsc_proxy.c b/drivers/misc/mei/gsc_proxy/mei_gsc_proxy.c
-new file mode 100644
-index 000000000000..953eda1a16fb
---- /dev/null
-+++ b/drivers/misc/mei/gsc_proxy/mei_gsc_proxy.c
-@@ -0,0 +1,208 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2022-2023 Intel Corporation
-+ */
-+
-+/**
-+ * DOC: MEI_GSC_PROXY Client Driver
-+ *
-+ * The mei_gsc_proxy driver acts as a translation layer between
-+ * proxy user (I915) and ME FW by proxying messages to ME FW
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/pci.h>
-+#include <linux/slab.h>
-+#include <linux/uuid.h>
-+#include <linux/mei_cl_bus.h>
-+#include <linux/component.h>
-+#include <drm/drm_connector.h>
-+#include <drm/i915_component.h>
-+#include <drm/i915_gsc_proxy_mei_interface.h>
-+
-+/**
-+ * mei_gsc_proxy_send - Sends a proxy message to ME FW.
-+ * @dev: device corresponding to the mei_cl_device
-+ * @buf: a message buffer to send
-+ * @size: size of the message
-+ * Return: bytes sent on Success, <0 on Failure
-+ */
-+static int mei_gsc_proxy_send(struct device *dev, const void *buf, size_t size)
-+{
-+	ssize_t ret;
-+
-+	if (!dev || !buf)
-+		return -EINVAL;
-+
-+	ret = mei_cldev_send(to_mei_cl_device(dev), buf, size);
-+	if (ret < 0)
-+		dev_dbg(dev, "mei_cldev_send failed. %zd\n", ret);
-+
-+	return ret;
-+}
-+
-+/**
-+ * mei_gsc_proxy_recv - Receives a proxy message from ME FW.
-+ * @dev: device corresponding to the mei_cl_device
-+ * @buf: a message buffer to contain the received message
-+ * @size: size of the buffer
-+ * Return: bytes received on Success, <0 on Failure
-+ */
-+static int mei_gsc_proxy_recv(struct device *dev, void *buf, size_t size)
-+{
-+	ssize_t ret;
-+
-+	if (!dev || !buf)
-+		return -EINVAL;
-+
-+	ret = mei_cldev_recv(to_mei_cl_device(dev), buf, size);
-+	if (ret < 0)
-+		dev_dbg(dev, "mei_cldev_recv failed. %zd\n", ret);
-+
-+	return ret;
-+}
-+
-+static const struct i915_gsc_proxy_component_ops mei_gsc_proxy_ops = {
-+	.owner = THIS_MODULE,
-+	.send = mei_gsc_proxy_send,
-+	.recv = mei_gsc_proxy_recv,
-+};
-+
-+static int mei_component_master_bind(struct device *dev)
-+{
-+	struct mei_cl_device *cldev = to_mei_cl_device(dev);
-+	struct i915_gsc_proxy_component *comp_master = mei_cldev_get_drvdata(cldev);
-+
-+	comp_master->ops = &mei_gsc_proxy_ops;
-+	comp_master->mei_dev = dev;
-+	return component_bind_all(dev, comp_master);
-+}
-+
-+static void mei_component_master_unbind(struct device *dev)
-+{
-+	struct mei_cl_device *cldev = to_mei_cl_device(dev);
-+	struct i915_gsc_proxy_component *comp_master = mei_cldev_get_drvdata(cldev);
-+
-+	component_unbind_all(dev, comp_master);
-+}
-+
-+static const struct component_master_ops mei_component_master_ops = {
-+	.bind = mei_component_master_bind,
-+	.unbind = mei_component_master_unbind,
-+};
-+
-+/**
-+ * mei_gsc_proxy_component_match - compare function for matching mei.
-+ *
-+ *    The function checks if the device is pci device and
-+ *    Intel VGA adapter, the subcomponent is SW Proxy
-+ *    and the parent of MEI PCI and the parent of VGA are the same PCH device.
-+ *
-+ * @dev: master device
-+ * @subcomponent: subcomponent to match (I915_COMPONENT_SWPROXY)
-+ * @data: compare data (mei pci parent)
-+ *
-+ * Return:
-+ * * 1 - if components match
-+ * * 0 - otherwise
-+ */
-+static int mei_gsc_proxy_component_match(struct device *dev, int subcomponent,
-+					 void *data)
-+{
-+	struct pci_dev *pdev;
-+
-+	if (!dev_is_pci(dev))
-+		return 0;
-+
-+	pdev = to_pci_dev(dev);
-+
-+	if (pdev->class != (PCI_CLASS_DISPLAY_VGA << 8) ||
-+	    pdev->vendor != PCI_VENDOR_ID_INTEL)
-+		return 0;
-+
-+	if (subcomponent != I915_COMPONENT_GSC_PROXY)
-+		return 0;
-+
-+	return component_compare_dev(dev->parent, ((struct device *)data)->parent);
-+}
-+
-+static int mei_gsc_proxy_probe(struct mei_cl_device *cldev,
-+			       const struct mei_cl_device_id *id)
-+{
-+	struct i915_gsc_proxy_component *comp_master;
-+	struct component_match *master_match = NULL;
-+	int ret;
-+
-+	ret = mei_cldev_enable(cldev);
-+	if (ret < 0) {
-+		dev_err(&cldev->dev, "mei_cldev_enable Failed. %d\n", ret);
-+		goto enable_err_exit;
-+	}
-+
-+	comp_master = kzalloc(sizeof(*comp_master), GFP_KERNEL);
-+	if (!comp_master) {
-+		ret = -ENOMEM;
-+		goto err_exit;
-+	}
-+
-+	component_match_add_typed(&cldev->dev, &master_match,
-+				  mei_gsc_proxy_component_match, cldev->dev.parent);
-+	if (IS_ERR_OR_NULL(master_match)) {
-+		ret = -ENOMEM;
-+		goto err_exit;
-+	}
-+
-+	mei_cldev_set_drvdata(cldev, comp_master);
-+	ret = component_master_add_with_match(&cldev->dev,
-+					      &mei_component_master_ops,
-+					      master_match);
-+	if (ret < 0) {
-+		dev_err(&cldev->dev, "Master comp add failed %d\n", ret);
-+		goto err_exit;
-+	}
-+
-+	return 0;
-+
-+err_exit:
-+	mei_cldev_set_drvdata(cldev, NULL);
-+	kfree(comp_master);
-+	mei_cldev_disable(cldev);
-+enable_err_exit:
-+	return ret;
-+}
-+
-+static void mei_gsc_proxy_remove(struct mei_cl_device *cldev)
-+{
-+	struct i915_gsc_proxy_component *comp_master = mei_cldev_get_drvdata(cldev);
-+	int ret;
-+
-+	component_master_del(&cldev->dev, &mei_component_master_ops);
-+	kfree(comp_master);
-+	mei_cldev_set_drvdata(cldev, NULL);
-+
-+	ret = mei_cldev_disable(cldev);
-+	if (ret)
-+		dev_warn(&cldev->dev, "mei_cldev_disable() failed %d\n", ret);
-+}
-+
-+#define MEI_UUID_GSC_PROXY UUID_LE(0xf73db04, 0x97ab, 0x4125, \
-+				   0xb8, 0x93, 0xe9, 0x4, 0xad, 0xd, 0x54, 0x64)
-+
-+static struct mei_cl_device_id mei_gsc_proxy_tbl[] = {
-+	{ .uuid = MEI_UUID_GSC_PROXY, .version = MEI_CL_VERSION_ANY },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(mei, mei_gsc_proxy_tbl);
-+
-+static struct mei_cl_driver mei_gsc_proxy_driver = {
-+	.id_table = mei_gsc_proxy_tbl,
-+	.name = KBUILD_MODNAME,
-+	.probe = mei_gsc_proxy_probe,
-+	.remove	= mei_gsc_proxy_remove,
-+};
-+
-+module_mei_cl_driver(mei_gsc_proxy_driver);
-+
-+MODULE_AUTHOR("Intel Corporation");
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("MEI GSC PROXY");
+ 	spin_unlock_irqrestore(&priv->lock, flags);
+ }
+diff --git a/drivers/staging/vt6655/channel.c b/drivers/staging/vt6655/channel.c
+index e9a44bcebe32..60b445c38424 100644
+--- a/drivers/staging/vt6655/channel.c
++++ b/drivers/staging/vt6655/channel.c
+@@ -121,7 +121,7 @@ bool set_channel(struct vnt_private *priv, struct ieee80211_channel *ch)
+ 		iowrite8(priv->byCurPwr, priv->port_offset + MAC_REG_PWRCCK);
+ 		RFbSetPower(priv, RATE_6M, priv->byCurrentCh);
+ 		iowrite8(priv->byCurPwr, priv->port_offset + MAC_REG_PWROFDM);
+-	        vt6655_mac_select_page0(priv->port_offset);
++		vt6655_mac_select_page0(priv->port_offset);
+ 
+ 		spin_unlock_irqrestore(&priv->lock, flags);
+ 	}
+diff --git a/drivers/staging/vt6655/mac.h b/drivers/staging/vt6655/mac.h
+index b9a7ca0fe604..ae3064303691 100644
+--- a/drivers/staging/vt6655/mac.h
++++ b/drivers/staging/vt6655/mac.h
+@@ -539,12 +539,12 @@
+ 
+ static inline void vt6655_mac_select_page0(void __iomem *iobase)
+ {
+-        iowrite8(0, iobase + MAC_REG_PAGE1SEL);
++	iowrite8(0, iobase + MAC_REG_PAGE1SEL);
+ }
+ 
+ static inline void  vt6655_mac_select_page1(void __iomem *iobase)
+ {
+-        iowrite8(1, iobase + MAC_REG_PAGE1SEL);
++	iowrite8(1, iobase + MAC_REG_PAGE1SEL);
+ }
+ 
+ #define MAKEWORD(lb, hb) \
 -- 
-2.39.1
+2.34.1
 
+
+-- 
+Thanks & Regards,
+Guru
