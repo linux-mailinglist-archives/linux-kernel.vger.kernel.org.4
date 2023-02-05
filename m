@@ -2,109 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9362768AE03
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 03:13:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 286B368AE09
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 03:19:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbjBECNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Feb 2023 21:13:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43454 "EHLO
+        id S230426AbjBECTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Feb 2023 21:19:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjBECNc (ORCPT
+        with ESMTP id S229547AbjBECTI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Feb 2023 21:13:32 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FE2022DC8
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 18:12:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675563160;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=TxjJOlkRD9KQJJ8RtFDJbVPO6vwF/VfUk2KQLMypAoU=;
-        b=KD/HbL8qKentFazK024FYXa5E35q4Iis3vuccryXkNuw2Yovk/HUl0qroeZ2oQ8g5T3a5W
-        6nCXtOgbtX0aor6gYFUSsQudDB1yQ8GWg58WAnn8GFfC7HGTJNEdz25AU9X4lOWU7y+pV4
-        xv55f159HGHUiVHV6UDhU9nW4wDTSC4=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-111-m52bfbjhNYaU0bk_IDHFPw-1; Sat, 04 Feb 2023 21:12:38 -0500
-X-MC-Unique: m52bfbjhNYaU0bk_IDHFPw-1
-Received: by mail-qt1-f199.google.com with SMTP id i5-20020ac813c5000000b003b86b748aadso4653399qtj.14
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Feb 2023 18:12:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TxjJOlkRD9KQJJ8RtFDJbVPO6vwF/VfUk2KQLMypAoU=;
-        b=6+VRH6KGG52LvC4YC+fth1gC6YBHI7Yw4l4BxlXS2i6tf+A9E10/11XEEIVyLO2d/S
-         5BBE2ngBms2IMMD0nS5BD8USce9+q6EdYFmXTl+n3Ygj2x4c6N3d8K9LxyW9dkKe28pP
-         mJCnotcMTucP1VqgYLoTuQKtJL1lFCQk0i/KxeHEvuvwvy85GG8RfxyGkyFOv7O93WTg
-         avU6c1pcBcWTNH3H40UOjImg1vTUftmsGHcf2iK8g7nG8bCA9gO3AnqALxHEfGiw/8OG
-         HvNZ2hevWDAOLOUlHs6SIzuSvOe+GHbKAvuNg5Jwrx5QGZs1UqQ6YnSyLHQ0FHGFfsT5
-         nnBw==
-X-Gm-Message-State: AO0yUKUie9al6tV3TjgQ/WVT9sbfnwxQwkYQNlxEJuIxd7mNHYJFgaVH
-        3oEOptU9mfvhJSbdrVPYnyJ14YCZmBULAqz6EFOxB3eKwc4CI6DG+0IbOUqlzGNkzPG2dXFrzjN
-        QzdFBmTWl8pZAKV5U7i6onea7
-X-Received: by 2002:ac8:7dd3:0:b0:3b9:a777:3d9a with SMTP id c19-20020ac87dd3000000b003b9a7773d9amr28666316qte.44.1675563158498;
-        Sat, 04 Feb 2023 18:12:38 -0800 (PST)
-X-Google-Smtp-Source: AK7set9g2HQ6czvVeGwBxMrcctOOmsHCimOzFUbYG6cWZmHqZ0y22vTjElFS6ahjksrz7A2cD7+6mQ==
-X-Received: by 2002:ac8:7dd3:0:b0:3b9:a777:3d9a with SMTP id c19-20020ac87dd3000000b003b9a7773d9amr28666302qte.44.1675563158283;
-        Sat, 04 Feb 2023 18:12:38 -0800 (PST)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id m15-20020ac85b0f000000b003a591194221sm4648646qtw.7.2023.02.04.18.12.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Feb 2023 18:12:37 -0800 (PST)
-From:   Tom Rix <trix@redhat.com>
-To:     gregkh@linuxfoundation.org, arnd@arndb.de,
-        linus.walleij@linaro.org, artur.bujdoso@gmail.com,
-        miquel.raynal@bootlin.com, colin.i.king@gmail.com,
-        biju.das.jz@bp.renesas.com, tmaimon77@gmail.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] usb: host: USB_XHCI_RZV2M depends on USB_GADGET
-Date:   Sat,  4 Feb 2023 21:12:27 -0500
-Message-Id: <20230205021227.3017634-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Sat, 4 Feb 2023 21:19:08 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13192241EC
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 18:19:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675563547; x=1707099547;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=S/4d3WwYUB5JCIhlaemGLJEJVA0fyz3n4JB2cUlzqsI=;
+  b=lEh0BLgVAtWQAProQk8Su9Db/WCJH+9mxs1Vy9f3VvBANRuduS9XCfPQ
+   hbI41RZ+G2Fz1rhBV6ehiJYmGo4giL6ryhq6dnIDSJZXHPN0i3Vq9PhuW
+   CayD1M9p67aZHlrDxJMRfHA769DzG8jgsZEbQvEkw152uqmt0NGMdoaMK
+   qg8J5ByfGxFwvxMOYF1gSwEbZ7SpJ4Cg7VwxHwq6O0urexBqIlZcZBuks
+   4Z3Mq3QQ36rrFNRgY8/gdVrKrE5i3XPGkrmtnkpWpkoVQ2hE5zvI1AfAP
+   6edxBCsAPtu9Uqa/8j7QasiwD1OW3lujFeZLbcVA9c1Q7nUYcunlpsKMc
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="317015630"
+X-IronPort-AV: E=Sophos;i="5.97,274,1669104000"; 
+   d="scan'208";a="317015630"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2023 18:19:06 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="754888440"
+X-IronPort-AV: E=Sophos;i="5.97,274,1669104000"; 
+   d="scan'208";a="754888440"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 04 Feb 2023 18:19:05 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pOUcS-0001fa-1u;
+        Sun, 05 Feb 2023 02:19:04 +0000
+Date:   Sun, 05 Feb 2023 10:18:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:dev.2023.02.03a] BUILD REGRESSION
+ c722c164d799860f1a31c82e001221df13dccede
+Message-ID: <63df11f7.YArGrbpGISJDiQF3%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A rand config causes this link error
-ld: drivers/usb/host/xhci-rzv2m.o: in function `xhci_rzv2m_init_quirk':
-xhci-rzv2m.c:(.text+0x13): undefined reference to `rzv2m_usb3drd_reset'
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2023.02.03a
+branch HEAD: c722c164d799860f1a31c82e001221df13dccede  locktorture: With nested locks, occasionally skip main lock
 
-xhci_rzv2m_init_quirk build is controlled by USB_XHCI_RZV2M
-rzv2m_usb3drd_reset build is controlled by USB_RZV2M_USB3DRD
+Error/Warning reports:
 
-USE_XHCI_RZV2M does select USB_RZV2M_USB3DRD, but USB_RZV2M_USB3DRD
-depends on USB_GADGET, so now does USE_XHCI_RZV2M.
+https://lore.kernel.org/oe-kbuild-all/202302021723.ucm8d559-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202302021724.SF7KLCrw-lkp@intel.com
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/usb/host/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+Error/Warning: (recently discovered and may have been fixed)
 
-diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
-index 2b80ce9587c1..2dd9e95a5b86 100644
---- a/drivers/usb/host/Kconfig
-+++ b/drivers/usb/host/Kconfig
-@@ -100,6 +100,7 @@ config USB_XHCI_RZV2M
- 	tristate "xHCI support for Renesas RZ/V2M SoC"
- 	depends on USB_XHCI_PLATFORM
- 	depends on ARCH_R9A09G011 || COMPILE_TEST
-+	depends on USB_GADGET
- 	select USB_RZV2M_USB3DRD
- 	help
- 	  Say 'Y' to enable the support for the xHCI host controller
+arch/loongarch/kernel/process.c:67:1: warning: 'noreturn' function does return
+arch/powerpc/kernel/smp.c:1768:1: warning: function declared 'noreturn' should not return [-Winvalid-noreturn]
+net/netfilter/ipvs/ip_vs_est.c:552:15: error: too few arguments provided to function-like macro invocation
+net/netfilter/ipvs/ip_vs_est.c:552:17: error: 'kfree_rcu' undeclared (first use in this function); did you mean 'kfree_skb'?
+net/netfilter/ipvs/ip_vs_est.c:552:29: error: macro "kfree_rcu" requires 2 arguments, but only 1 given
+net/netfilter/ipvs/ip_vs_est.c:552:3: error: use of undeclared identifier 'kfree_rcu'; did you mean 'kfree_skb'?
+
+Error/Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- loongarch-buildonly-randconfig-r002-20230204
+|   `-- arch-loongarch-kernel-process.c:warning:noreturn-function-does-return
+|-- m68k-randconfig-r002-20230205
+|   |-- net-netfilter-ipvs-ip_vs_est.c:error:kfree_rcu-undeclared-(first-use-in-this-function)
+|   `-- net-netfilter-ipvs-ip_vs_est.c:error:macro-kfree_rcu-requires-arguments-but-only-given
+`-- sparc-allyesconfig
+    |-- net-netfilter-ipvs-ip_vs_est.c:error:kfree_rcu-undeclared-(first-use-in-this-function)
+    `-- net-netfilter-ipvs-ip_vs_est.c:error:macro-kfree_rcu-requires-arguments-but-only-given
+clang_recent_errors
+|-- powerpc-randconfig-r003-20230204
+|   `-- arch-powerpc-kernel-smp.c:warning:function-declared-noreturn-should-not-return
+|-- powerpc-randconfig-r033-20230204
+|   `-- arch-powerpc-kernel-smp.c:warning:function-declared-noreturn-should-not-return
+`-- s390-randconfig-r044-20230205
+    |-- net-netfilter-ipvs-ip_vs_est.c:error:too-few-arguments-provided-to-function-like-macro-invocation
+    `-- net-netfilter-ipvs-ip_vs_est.c:error:use-of-undeclared-identifier-kfree_rcu
+
+elapsed time: 1560m
+
+configs tested: 66
+configs skipped: 2
+
+gcc tested configs:
+x86_64                            allnoconfig
+arc                                 defconfig
+s390                             allmodconfig
+alpha                               defconfig
+um                             i386_defconfig
+s390                                defconfig
+um                           x86_64_defconfig
+s390                             allyesconfig
+powerpc                           allnoconfig
+ia64                             allmodconfig
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a006
+sh                               allmodconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+m68k                             allmodconfig
+alpha                            allyesconfig
+m68k                             allyesconfig
+arc                              allyesconfig
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-bpf
+arc                  randconfig-r043-20230204
+s390                 randconfig-r044-20230204
+riscv                randconfig-r042-20230204
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                          rhel-8.3-func
+x86_64                        randconfig-a013
+i386                          randconfig-a001
+x86_64                        randconfig-a011
+i386                          randconfig-a003
+x86_64                        randconfig-a015
+i386                          randconfig-a005
+i386                                defconfig
+i386                             allyesconfig
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+arc                  randconfig-r043-20230205
+arm                  randconfig-r046-20230205
+arm                                 defconfig
+
+clang tested configs:
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+hexagon              randconfig-r041-20230204
+arm                  randconfig-r046-20230204
+hexagon              randconfig-r045-20230204
+x86_64                          rhel-8.3-rust
+x86_64                        randconfig-a014
+x86_64                        randconfig-a012
+i386                          randconfig-a002
+i386                          randconfig-a004
+x86_64                        randconfig-a016
+i386                          randconfig-a006
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+hexagon              randconfig-r045-20230205
+hexagon              randconfig-r041-20230205
+riscv                randconfig-r042-20230205
+s390                 randconfig-r044-20230205
+
 -- 
-2.27.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
