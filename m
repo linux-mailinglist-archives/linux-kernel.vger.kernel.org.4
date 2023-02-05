@@ -2,72 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C597D68AEC3
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 08:51:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFBB268AECD
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 09:06:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbjBEHuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 02:50:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59424 "EHLO
+        id S229504AbjBEIGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 03:06:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjBEHuL (ORCPT
+        with ESMTP id S229379AbjBEIGO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 02:50:11 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 650FD1EFD8
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Feb 2023 23:50:10 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so8743638wma.1
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Feb 2023 23:50:10 -0800 (PST)
+        Sun, 5 Feb 2023 03:06:14 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF2720D21
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 00:06:13 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id ee13so2229900edb.5
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Feb 2023 00:06:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RGcXZBAIMnr/TsEMbIoAFaGg+i6HpqoM4umiMvHSXsY=;
-        b=jlzmcxgR7DmdfFvEvxbNsvYPYITMzruP8BdHF3wGFq/yv/YRpMp1UhDvmP5cwexkl1
-         6nhIc8Nvjc8xSVGj3ysY1C9U4pMvBeiLauTFCkJpZRv4eplyWfpPwCKptPnnm5rzwhyV
-         CBBiFfJuDGMQOmazph6Xj9bNRnXD6Bu/TMe+NnTg9/re9PSLXIh1dLMaEFxlduEmzgSk
-         pvcMHmVj8AvAB0lvnxopAvlrTGd6YRo+Q4jlaAhPepeknID1OVGI0uBHlWJ5zH0kYhU+
-         UQ7otS6IBZyuY4CH8RN6/DBqGVGv0n4Ep5ut8CKWcHmXOvEmxGNtTId0/jbH7Wy0UreH
-         uHbg==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Cf43ZAC9d9vV87Brf749qwDNEbTSGBab1FS9DyewXkE=;
+        b=IYzxAnFf7wdql5pNk1TmzsC9UPQ7Cwt72Sz7/xF0jPG2kf2CTMAE+6qsUjmcs75YFm
+         gwYr9dCg+Fvih+BixjfsA69bk5FMag3n88eqUg/QxrcTvHs1Jt8tAtuc37Ln3pk0Wg1d
+         ZPkoP1Ft5Y9Q501jx7BOlqX9ZJjxGkGK3t2hxnG4rql05HsfbWRumyn0MFlbongnY4eF
+         gs6FtfWbF7y1MU8jOx72EQGG59RdV0oin6Tq5Esh3jMk9z6a6rit4qFE1MFpftq1XKIb
+         xO8RDtbygHZ16oLbLGgtCFUM5uzIVHq33VqfHFVGjwEZ70GQcIr8z5NInXZg2TZ9aZUw
+         pBNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RGcXZBAIMnr/TsEMbIoAFaGg+i6HpqoM4umiMvHSXsY=;
-        b=dcmiThdXnU3EqdDTANk0QYjm93moo8rAt7vKpkECQpT1RbTd5Eec8JeRnv5XkPQhvm
-         OMmmm74MtDDOTfdsnok38MeGAPIRzMd3x5GZJ8ZPN//IS4phO9rnqriuQDxXVEr+JhIx
-         F2zfBEyShZtKLoXdPDWXxqHWf6NdkUOFvTcX0nyiNGNMYnusKbYG3uu02py9HJD1A1V1
-         tUMLrtFYI0X3sTgiaO1p6tF+lQPX/UaD64oyhR58kPcncLDS2rV7QCMU4xuB/UIB+fQk
-         4sMd3SoM2t32naC3XwkkKKuoI51Vs/4RssOtORBaVkGjB4F8Himy71N04tgbht3/Y4Qy
-         S9Dg==
-X-Gm-Message-State: AO0yUKUYZh9saaFLPEDEPQyf9IoGzbu8S3Yvr4M2yPo3xgl07TvvgS8o
-        oIlksTWKKgv3i/9aL9Bj07QNMUfUPiQHLjJn
-X-Google-Smtp-Source: AK7set9i3Wg9geRPcKCToiq1uM76wLLsPDmKe6vevpzuS6JFS76d9n+X21n8090RZOqH+jRxfq+XhQ==
-X-Received: by 2002:a05:600c:4f96:b0:3cf:9844:7b11 with SMTP id n22-20020a05600c4f9600b003cf98447b11mr17285790wmq.23.1675583408810;
-        Sat, 04 Feb 2023 23:50:08 -0800 (PST)
-Received: from smtpclient.apple ([109.253.184.159])
-        by smtp.gmail.com with ESMTPSA id q10-20020a05600c330a00b003dc3f195abesm7449414wmp.39.2023.02.04.23.50.07
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 04 Feb 2023 23:50:08 -0800 (PST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.300.101.1.3\))
-Subject: Re: [PATCH] x86/kprobes: Fix 1 byte conditional jump target
-From:   Nadav Amit <nadav.amit@gmail.com>
-In-Reply-To: <20230204210807.3930-1-namit@vmware.com>
-Date:   Sun, 5 Feb 2023 09:49:56 +0200
-Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <5DFB6E19-210E-4EA8-8D71-66FF4A787942@gmail.com>
-References: <20230204210807.3930-1-namit@vmware.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-X-Mailer: Apple Mail (2.3731.300.101.1.3)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Cf43ZAC9d9vV87Brf749qwDNEbTSGBab1FS9DyewXkE=;
+        b=hzeHmI3eCCnhd7XRAAF5cCKvk6eeByABGHB+AEz3JVjLUvRVYi5YBJ6SjDDwHD5pFB
+         A0shlK0x3C2gRSc2yhtLoRDw8LhGfwV+zq03OKz/L/ZojbjU3QVBCETh+G2WzZ/G7sKz
+         ktUMyDOotBfiDdcEEneK5AgxwewH3xcReLzff0uvyU2SHq2SO2nFlRO2i1+NxIePD2IJ
+         hhsGvLu4h9BAv7nK5h4RPzMdEg0l9/+oAJ6wnSmVdpcbkRosT774idP+ve2VxzPMxujd
+         nE/VoOF3h9gYBKbXB44gjM9quP6f0OYibwjgGT66oQbR4DvTCCvjK8GnJFrSr9IdW05k
+         yTHg==
+X-Gm-Message-State: AO0yUKUnbedd7rNAggCPm0EetdumfV+FbzmRsrZgORc6JaBgfd6sAuyX
+        zs8tLjBlcP2CXaTaTGdkG+E=
+X-Google-Smtp-Source: AK7set+lpuCEhSj4zOH3rTqwYf9bgUaGTOBRuaqkByOp1hB9QuOm75UJDzH5A4fNA1RTxwUlLfXXfQ==
+X-Received: by 2002:a05:6402:2206:b0:4a2:1b97:228c with SMTP id cq6-20020a056402220600b004a21b97228cmr13979648edb.28.1675584370914;
+        Sun, 05 Feb 2023 00:06:10 -0800 (PST)
+Received: from localhost.localdomain (ip5f5abbf9.dynamic.kabel-deutschland.de. [95.90.187.249])
+        by smtp.gmail.com with ESMTPSA id q10-20020a056402518a00b00463bc1ddc76sm3441379edd.28.2023.02.05.00.06.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Feb 2023 00:06:10 -0800 (PST)
+From:   Michael Straube <straube.linux@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Michael Straube <straube.linux@gmail.com>
+Subject: [PATCH v2 0/2] staging: r8188eu: correct error logic of two functions
+Date:   Sun,  5 Feb 2023 09:05:57 +0100
+Message-Id: <20230205080559.8319-1-straube.linux@gmail.com>
+X-Mailer: git-send-email 2.39.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -78,25 +70,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series converts two functions away from returning _SUCCESS and
+_FAIL. Another tiny step to get rid of _FAIL / _SUCCESS someday.
 
+Tested on x86_64 with Inter-Tech DMG 02.
 
-> On Feb 4, 2023, at 11:08 PM, Nadav Amit <nadav.amit@gmail.com> wrote:
->=20
-> From: Nadav Amit <namit@vmware.com>
->=20
-> Commit 3bc753c06dd0 ("kbuild: treat char as always unsigned") broke
-> kprobes.  Setting a probe-point on 1 byte conditional jump can cause =
-the
-> kernel to crash, as the branch target is not sign extended.
->=20
-> Fix by using s8 instead of char and use immediate.value instead of
-> immediate.bytes for consistency.
+v2:
+Removed the initialization of the variable err in _rtw_init_recv_priv()
+since it's not needed.
 
-I guess I forgot to put a =E2=80=9CFixes=E2=80=9D tag, since it is still =
-not a real
-regression. (The bug was introduced in 6.2).
+Michael Straube (2):
+  staging: r8188eu: correct error logic of rtl8188eu_init_recv_priv()
+  staging: r8188eu: correct error logic of _rtw_init_recv_priv()
 
-Still, this fix should not fall between the cracks=E2=80=A6 Please let =
-me know
-whether v2 is needed with a =E2=80=9Cfixes=E2=80=9D tag.
+ drivers/staging/r8188eu/core/rtw_recv.c   | 30 +++++++++--------------
+ drivers/staging/r8188eu/os_dep/os_intfs.c |  2 +-
+ 2 files changed, 12 insertions(+), 20 deletions(-)
+
+-- 
+2.39.1
 
