@@ -2,277 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98C2A68B11A
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 18:30:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F30868B11D
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 18:37:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229503AbjBERaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 12:30:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39598 "EHLO
+        id S229502AbjBERha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 12:37:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjBER37 (ORCPT
+        with ESMTP id S229379AbjBERh2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 12:29:59 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A8CB1CF40
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 09:29:58 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id z1so9944340plg.6
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Feb 2023 09:29:58 -0800 (PST)
+        Sun, 5 Feb 2023 12:37:28 -0500
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12E0193FE;
+        Sun,  5 Feb 2023 09:37:25 -0800 (PST)
+Received: by mail-ot1-x32e.google.com with SMTP id d21-20020a056830005500b0068bd2e0b25bso2681024otp.1;
+        Sun, 05 Feb 2023 09:37:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=fNnzz5KT3mzaOc1TqS1v/TnHm4rcviiItj9G5wod/+w=;
-        b=oB5aBM77EfonHlarLC/GDCZJY/LUxQQN8fwQ3VwA9rRQY7ldsoVo49z0mXNcz0Hmx/
-         5NqvdUKHsv/+UXc79mENTO55I+fC1mRkcoD6w6xa56G/9A41J2AInA8K0/5Ym4sCGvfB
-         VScDltIim7Ag6ixlg+MhTsaIRsuZ2mMLH7Bq+6exFDBY+3rRbZwNIdrC4Yh1ECsryaVQ
-         Zrwpu2vxyUZ1p3R12/wM53nZ3NDb4DoV0jKLo3wJ9IkonTYbTuEi0IVTLPLAO4hMRBtX
-         5gWMu4vwM04z5mttMtxubxL0tfSVoqyo9XcF+pynxskGRaD5YU1xXzwg1QWt0R7JB9Zy
-         fY9Q==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=KzQczVVwdRA/Z7vPglNFmtc/zQXF/DwmrsXVAsLwTdg=;
+        b=avJOayGlLjRxU+jq/ig5PQKFbwQcxqMRd8Ye4uah8mBDRxVB572NXSwgYYfW3VEh7l
+         9C758+cF3deGOsoKohyE5SVhVqdhu7Vjxdo8r404fOE9cxiw0940D5fKv13abqgkRLfW
+         CW64WH9mRF7D2MZClevv/S5FWWMQMQVodLnxflqiLY+5aJNk7vKAo70f0FljfRQz+Wt1
+         3ROw4ZSgOUdOTN9zIgR5N1B/yi6TVZYMQdTPW+Z37p6OeFqZONgQoqhvtLg6LNNagdLq
+         4dGdyRf2ZBEwP+u3qOFqspAfYxJF4BHT7kF1923vNkwXxi+LeaS4qNMZ8m25LBFWR6Nx
+         NB2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=fNnzz5KT3mzaOc1TqS1v/TnHm4rcviiItj9G5wod/+w=;
-        b=W2g0AAq/RF5W4wTuGvii5FKnN270kBqW3Uh11to779WdiLtw1qyf5579L4Me4ZeyhN
-         YQ0CB3mSe2X1XZFtL/KKKFeIrgUiQhea6klyyy2J/5XmGmyQsSCbDHhM70I2fRFJ1sD4
-         vZlCQMMIzs/pT2KEIm0AD/nmSrG9CRqLMmZcz+3oygvva/ISFW3H94bkr5y2tI/hejyc
-         mvtqlkEp5BkqATtIe8VIQAt8OIURf2SDHy9YSqAA4L1WnH7CV7kvR96cZastlK6+dd6D
-         JcPjh3cT7UKZ1O0V+SBnjiLGHFeZPhGFPvvqLOxf89pVzXfBS695Pn/idhHcqDemSGuC
-         qHaw==
-X-Gm-Message-State: AO0yUKWZAP9QefxRKHbUxgNlp61NcpmVnUIxGHE3Z0t5Dd7+gPuVfVT7
-        SdqG7SjVf1E3N229rpDNBcqzBywa1Q4WX6Nb3RScAg==
-X-Google-Smtp-Source: AK7set/b+jqgwbY14K1WAA7Xdziz3kuF/ITwmfTlHbot/dKQWLTNtCAi/DxAAUs1rvpiJwtgl+7T2rSRotdkmBbziQU=
-X-Received: by 2002:a17:90a:3844:b0:230:7ea2:1a04 with SMTP id
- l4-20020a17090a384400b002307ea21a04mr1392972pjf.112.1675618197267; Sun, 05
- Feb 2023 09:29:57 -0800 (PST)
+        bh=KzQczVVwdRA/Z7vPglNFmtc/zQXF/DwmrsXVAsLwTdg=;
+        b=gbPprRv90XNMHF9PRhHH4tQIM1yfdSgkUNykIBfJkFnmGP1/WNdEH6Mg1LzcwXw5JS
+         PKxMfQh01E9KxiUA0kovBQsz7bB/VifE19vqFvsbsmZYYx4aVY99evZQzgigKwtmn5m8
+         zaQqNCz0U3CDtQttxXqkqcEIGoDmti/620knpMceJdFsAOvVLaFKgXAMkjsy2OJ+Tkkm
+         y2fgozHoPS4c1nkJ8aUoCtzhnjJ9EBzH0aru7Q0jNkw/mFbSloq89F0NI2YTy+q4Bueq
+         5oIcGlfG5hbOQqAyoELQTD/l3ZomFWcMoFj6uRNsH1mvkVsLkcbd+/3XOdYGtRiTQduO
+         cKhg==
+X-Gm-Message-State: AO0yUKW6NIhVo3NLI8cxgQF4ieCib+3uEMqRdcRNu7nwo1+W9XIonqfG
+        LSY7mifNHKakzF6LuhTHo3w=
+X-Google-Smtp-Source: AK7set/PMbNUNqAeQfSvfNitlbsFwkiO1hktS3+JuSXne4TE0U++RBummdiQURisHcIWvvnesUV9zw==
+X-Received: by 2002:a9d:6243:0:b0:68b:c67c:5d0b with SMTP id i3-20020a9d6243000000b0068bc67c5d0bmr8130416otk.10.1675618645178;
+        Sun, 05 Feb 2023 09:37:25 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x39-20020a056830246700b0068bb7bd2668sm3722805otr.73.2023.02.05.09.37.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 05 Feb 2023 09:37:24 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <b3829a0f-ff83-651e-f78d-794565b023ec@roeck-us.net>
+Date:   Sun, 5 Feb 2023 09:37:22 -0800
 MIME-Version: 1.0
-References: <20230201143628.270912-1-vincent.guittot@linaro.org>
- <20230201143628.270912-3-vincent.guittot@linaro.org> <20230204184231.zx6oo52r5q2nvij7@airbuntu>
-In-Reply-To: <20230204184231.zx6oo52r5q2nvij7@airbuntu>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Sun, 5 Feb 2023 18:29:46 +0100
-Message-ID: <CAKfTPtAGRY8duSnvafntYJ20H1JGPeuhyLCvVRk0MEUsoTY_Tg@mail.gmail.com>
-Subject: Re: [PATCH 2/2 v5] sched/fair: Remove capacity inversion detection
-To:     Qais Yousef <qyousef@layalina.io>
-Cc:     mingo@kernel.org, peterz@infradead.org, dietmar.eggemann@arm.com,
-        rafael@kernel.org, viresh.kumar@linaro.org, vschneid@redhat.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kajetan.puchalski@arm.com, lukasz.luba@arm.com, wvw@google.com,
-        xuewen.yan94@gmail.com, han.lin@mediatek.com,
-        Jonathan.JMChen@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] lm85: Bounds check to_sensor_dev_attr()->index usage
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <20230127223744.never.113-kees@kernel.org>
+ <20230128131319.GA4173006@roeck-us.net>
+ <63dd8c1a.170a0220.d3456.3451@mx.google.com>
+ <20230204015700.GG3089769@roeck-us.net>
+ <63deaa0b.050a0220.bf1e1.6c26@mx.google.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <63deaa0b.050a0220.bf1e1.6c26@mx.google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 4 Feb 2023 at 19:42, Qais Yousef <qyousef@layalina.io> wrote:
->
-> On 02/01/23 15:36, Vincent Guittot wrote:
-> > Remove the capacity inversion detection which is now handled by
-> > util_fits_cpu() returning -1 when we need to continue to look for a
-> > potential CPU with better performance.
-> >
-> > This ends up almost reverting patches below except for some comments:
->
-> nit: I think this comment must be removed/reworeded though
+On 2/4/23 10:55, Kees Cook wrote:
+> On Fri, Feb 03, 2023 at 05:57:00PM -0800, Guenter Roeck wrote:
+>> That line of argument would suggest that we should perform parameter checks
+>> on each function entry all over the place, no matter if the range is known
+>> to be valid or not. Maybe that is the way things are going, but I don't
+>> like it at all. I have seen that kind of code before, in the telco space,
+>> where it typically at least doubled code size and resulted in mediocre
+>> performance, just because of a rule that mandated checking all parameters
+>> at the beginning of each function.
+> 
+> Well, I doubt I'll be able to change your opinion of telco code, but I
+> do think robustness is not an unreasonable default state for software,
+> and that GCC and Clang do a pretty good job with optimization, etc.
+> 
+>> I assume this is just one of many many patches you plan to send to add
+>> parameter checks to similar hwmon code ? I _really_ don't want to have
+>> the hwmon code cluttered with such unnecessary checks.
+> 
+> I was trying to provide complete coverage inspired by the specific
+> complaint GCC had, but this would also silence the warning:
+> 
+> diff --git a/drivers/hwmon/lm85.c b/drivers/hwmon/lm85.c
+> index 8d33c2484755..87d2455e721f 100644
+> --- a/drivers/hwmon/lm85.c
+> +++ b/drivers/hwmon/lm85.c
+> @@ -1106,6 +1106,7 @@ static ssize_t pwm_auto_pwm_minctl_store(struct device *dev,
+>   	mutex_lock(&data->update_lock);
+>   	data->autofan[nr].min_off = val;
+>   	tmp = lm85_read_value(client, LM85_REG_AFAN_SPIKE1);
+> +	nr = clamp_t(int, nr, 0, ARRAY_SIZE(data->autofan) - 1);
+>   	tmp &= ~(0x20 << nr);
+>   	if (data->autofan[nr].min_off)
+>   		tmp |= 0x20 << nr;
+> 
+> What's happening is GCC see that "nr" is used as a shift argument, so it
+> believes (not unreasonably) that this otherwise unknown value could be
+> up to 32. Here we can give it the bounded range ahead of time, keeping
+> it happy.
+> 
+I'll accept that if you also add a note clarifying that this is to silence
+a gcc/clang warning.
 
-This comment has already been removed. That's why I said almost revert
-except for some comments in the commit message
+Guenter
 
->
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 691a2f9c4efa..c6c8e7f52935 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -4476,10 +4476,6 @@ static inline int util_fits_cpu(unsigned long util,
->          *
->          * For uclamp_max, we can tolerate a drop in performance level as the
->          * goal is to cap the task. So it's okay if it's getting less.
-> -        *
-> -        * In case of capacity inversion, which is not handled yet, we should
-> -        * honour the inverted capacity for both uclamp_min and uclamp_max all
-> -        * the time.
->          */
->         capacity_orig = capacity_orig_of(cpu);
->         capacity_orig_thermal = capacity_orig - arch_scale_thermal_pressure(cpu);
->
-> > commit da07d2f9c153 ("sched/fair: Fixes for capacity inversion detection")
-> > commit aa69c36f31aa ("sched/fair: Consider capacity inversion in util_fits_cpu()")
-> > commit 44c7b80bffc3 ("sched/fair: Detect capacity inversion")
-> >
-> > Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
->
-> Apart from that, LGTM.
->
-> Reviewed-by: Qais Yousef <qyousef@layalina.io>
-
-Thanks
-
->
->
-> Thanks!
->
-> --
-> Qais Yousef
->
-> > ---
-> >  kernel/sched/fair.c  | 84 +++-----------------------------------------
-> >  kernel/sched/sched.h | 19 ----------
-> >  2 files changed, 5 insertions(+), 98 deletions(-)
-> >
-> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > index 074742f107c0..c6c8e7f52935 100644
-> > --- a/kernel/sched/fair.c
-> > +++ b/kernel/sched/fair.c
-> > @@ -4476,17 +4476,9 @@ static inline int util_fits_cpu(unsigned long util,
-> >        *
-> >        * For uclamp_max, we can tolerate a drop in performance level as the
-> >        * goal is to cap the task. So it's okay if it's getting less.
-> > -      *
-> > -      * In case of capacity inversion we should honour the inverted capacity
-> > -      * for both uclamp_min and uclamp_max all the time.
-> >        */
-> > -     capacity_orig = cpu_in_capacity_inversion(cpu);
-> > -     if (capacity_orig) {
-> > -             capacity_orig_thermal = capacity_orig;
-> > -     } else {
-> > -             capacity_orig = capacity_orig_of(cpu);
-> > -             capacity_orig_thermal = capacity_orig - arch_scale_thermal_pressure(cpu);
-> > -     }
-> > +     capacity_orig = capacity_orig_of(cpu);
-> > +     capacity_orig_thermal = capacity_orig - arch_scale_thermal_pressure(cpu);
-> >
-> >       /*
-> >        * We want to force a task to fit a cpu as implied by uclamp_max.
-> > @@ -9027,82 +9019,16 @@ static unsigned long scale_rt_capacity(int cpu)
-> >
-> >  static void update_cpu_capacity(struct sched_domain *sd, int cpu)
-> >  {
-> > -     unsigned long capacity_orig = arch_scale_cpu_capacity(cpu);
-> >       unsigned long capacity = scale_rt_capacity(cpu);
-> >       struct sched_group *sdg = sd->groups;
-> > -     struct rq *rq = cpu_rq(cpu);
-> >
-> > -     rq->cpu_capacity_orig = capacity_orig;
-> > +     cpu_rq(cpu)->cpu_capacity_orig = arch_scale_cpu_capacity(cpu);
-> >
-> >       if (!capacity)
-> >               capacity = 1;
-> >
-> > -     rq->cpu_capacity = capacity;
-> > -
-> > -     /*
-> > -      * Detect if the performance domain is in capacity inversion state.
-> > -      *
-> > -      * Capacity inversion happens when another perf domain with equal or
-> > -      * lower capacity_orig_of() ends up having higher capacity than this
-> > -      * domain after subtracting thermal pressure.
-> > -      *
-> > -      * We only take into account thermal pressure in this detection as it's
-> > -      * the only metric that actually results in *real* reduction of
-> > -      * capacity due to performance points (OPPs) being dropped/become
-> > -      * unreachable due to thermal throttling.
-> > -      *
-> > -      * We assume:
-> > -      *   * That all cpus in a perf domain have the same capacity_orig
-> > -      *     (same uArch).
-> > -      *   * Thermal pressure will impact all cpus in this perf domain
-> > -      *     equally.
-> > -      */
-> > -     if (sched_energy_enabled()) {
-> > -             unsigned long inv_cap = capacity_orig - thermal_load_avg(rq);
-> > -             struct perf_domain *pd;
-> > -
-> > -             rcu_read_lock();
-> > -
-> > -             pd = rcu_dereference(rq->rd->pd);
-> > -             rq->cpu_capacity_inverted = 0;
-> > -
-> > -             for (; pd; pd = pd->next) {
-> > -                     struct cpumask *pd_span = perf_domain_span(pd);
-> > -                     unsigned long pd_cap_orig, pd_cap;
-> > -
-> > -                     /* We can't be inverted against our own pd */
-> > -                     if (cpumask_test_cpu(cpu_of(rq), pd_span))
-> > -                             continue;
-> > -
-> > -                     cpu = cpumask_any(pd_span);
-> > -                     pd_cap_orig = arch_scale_cpu_capacity(cpu);
-> > -
-> > -                     if (capacity_orig < pd_cap_orig)
-> > -                             continue;
-> > -
-> > -                     /*
-> > -                      * handle the case of multiple perf domains have the
-> > -                      * same capacity_orig but one of them is under higher
-> > -                      * thermal pressure. We record it as capacity
-> > -                      * inversion.
-> > -                      */
-> > -                     if (capacity_orig == pd_cap_orig) {
-> > -                             pd_cap = pd_cap_orig - thermal_load_avg(cpu_rq(cpu));
-> > -
-> > -                             if (pd_cap > inv_cap) {
-> > -                                     rq->cpu_capacity_inverted = inv_cap;
-> > -                                     break;
-> > -                             }
-> > -                     } else if (pd_cap_orig > inv_cap) {
-> > -                             rq->cpu_capacity_inverted = inv_cap;
-> > -                             break;
-> > -                     }
-> > -             }
-> > -
-> > -             rcu_read_unlock();
-> > -     }
-> > -
-> > -     trace_sched_cpu_capacity_tp(rq);
-> > +     cpu_rq(cpu)->cpu_capacity = capacity;
-> > +     trace_sched_cpu_capacity_tp(cpu_rq(cpu));
-> >
-> >       sdg->sgc->capacity = capacity;
-> >       sdg->sgc->min_capacity = capacity;
-> > diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> > index 1072502976df..3e8df6d31c1e 100644
-> > --- a/kernel/sched/sched.h
-> > +++ b/kernel/sched/sched.h
-> > @@ -1044,7 +1044,6 @@ struct rq {
-> >
-> >       unsigned long           cpu_capacity;
-> >       unsigned long           cpu_capacity_orig;
-> > -     unsigned long           cpu_capacity_inverted;
-> >
-> >       struct balance_callback *balance_callback;
-> >
-> > @@ -2899,24 +2898,6 @@ static inline unsigned long capacity_orig_of(int cpu)
-> >       return cpu_rq(cpu)->cpu_capacity_orig;
-> >  }
-> >
-> > -/*
-> > - * Returns inverted capacity if the CPU is in capacity inversion state.
-> > - * 0 otherwise.
-> > - *
-> > - * Capacity inversion detection only considers thermal impact where actual
-> > - * performance points (OPPs) gets dropped.
-> > - *
-> > - * Capacity inversion state happens when another performance domain that has
-> > - * equal or lower capacity_orig_of() becomes effectively larger than the perf
-> > - * domain this CPU belongs to due to thermal pressure throttling it hard.
-> > - *
-> > - * See comment in update_cpu_capacity().
-> > - */
-> > -static inline unsigned long cpu_in_capacity_inversion(int cpu)
-> > -{
-> > -     return cpu_rq(cpu)->cpu_capacity_inverted;
-> > -}
-> > -
-> >  /**
-> >   * enum cpu_util_type - CPU utilization type
-> >   * @FREQUENCY_UTIL:  Utilization used to select frequency
-> > --
-> > 2.34.1
-> >
