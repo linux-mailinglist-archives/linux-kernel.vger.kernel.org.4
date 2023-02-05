@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5EC968B0B4
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 16:49:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFC4468B0B8
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Feb 2023 16:50:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbjBEPtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 10:49:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44936 "EHLO
+        id S229829AbjBEPuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 10:50:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbjBEPth (ORCPT
+        with ESMTP id S229841AbjBEPtu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 10:49:37 -0500
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 347A71ADDB
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 07:49:17 -0800 (PST)
+        Sun, 5 Feb 2023 10:49:50 -0500
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0C7511ADE9;
+        Sun,  5 Feb 2023 07:49:23 -0800 (PST)
 Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 6D2B29200C4; Sun,  5 Feb 2023 16:49:16 +0100 (CET)
+        id 60B849200CC; Sun,  5 Feb 2023 16:49:21 +0100 (CET)
 Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 6A1A89200C3;
-        Sun,  5 Feb 2023 15:49:16 +0000 (GMT)
-Date:   Sun, 5 Feb 2023 15:49:16 +0000 (GMT)
+        by angie.orcam.me.uk (Postfix) with ESMTP id 5A74C9200CB;
+        Sun,  5 Feb 2023 15:49:21 +0000 (GMT)
+Date:   Sun, 5 Feb 2023 15:49:21 +0000 (GMT)
 From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
 To:     Bjorn Helgaas <bhelgaas@google.com>,
         Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
@@ -43,9 +43,9 @@ cc:     Alex Williamson <alex.williamson@redhat.com>,
         linux-pci@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v6 5/7] net/mlx5: Rely on `link_active_reporting'
+Subject: [PATCH v6 6/7] PCI: pciehp: Rely on `link_active_reporting'
 In-Reply-To: <alpine.DEB.2.21.2302022022230.45310@angie.orcam.me.uk>
-Message-ID: <alpine.DEB.2.21.2302051450280.33812@angie.orcam.me.uk>
+Message-ID: <alpine.DEB.2.21.2302051459210.33812@angie.orcam.me.uk>
 References: <alpine.DEB.2.21.2302022022230.45310@angie.orcam.me.uk>
 User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
@@ -63,38 +63,44 @@ Active Reporting is available rather than re-retrieving the capability.
 
 Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
 ---
-NB this has been compile-tested only with PPC64LE and x86-64 
+NB this has been compile-tested only with PPC64LE and x86-64
 configurations.
 
 New change in v6.
 ---
- drivers/net/ethernet/mellanox/mlx5/core/fw_reset.c |    8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ drivers/pci/hotplug/pciehp_hpc.c |    7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-linux-pcie-link-active-reporting-mlx5.diff
-Index: linux-macro/drivers/net/ethernet/mellanox/mlx5/core/fw_reset.c
+linux-pcie-link-active-reporting-hpc.diff
+Index: linux-macro/drivers/pci/hotplug/pciehp_hpc.c
 ===================================================================
---- linux-macro.orig/drivers/net/ethernet/mellanox/mlx5/core/fw_reset.c
-+++ linux-macro/drivers/net/ethernet/mellanox/mlx5/core/fw_reset.c
-@@ -294,7 +294,6 @@ static int mlx5_pci_link_toggle(struct m
- 	unsigned long timeout;
- 	struct pci_dev *sdev;
- 	int cap, err;
--	u32 reg32;
+--- linux-macro.orig/drivers/pci/hotplug/pciehp_hpc.c
++++ linux-macro/drivers/pci/hotplug/pciehp_hpc.c
+@@ -984,7 +984,7 @@ static inline int pcie_hotplug_depth(str
+ struct controller *pcie_init(struct pcie_device *dev)
+ {
+ 	struct controller *ctrl;
+-	u32 slot_cap, slot_cap2, link_cap;
++	u32 slot_cap, slot_cap2;
+ 	u8 poweron;
+ 	struct pci_dev *pdev = dev->port;
+ 	struct pci_bus *subordinate = pdev->subordinate;
+@@ -1030,9 +1030,6 @@ struct controller *pcie_init(struct pcie
+ 	if (dmi_first_match(inband_presence_disabled_dmi_table))
+ 		ctrl->inband_presence_disabled = 1;
  
- 	/* Check that all functions under the pci bridge are PFs of
- 	 * this device otherwise fail this function.
-@@ -333,11 +332,8 @@ static int mlx5_pci_link_toggle(struct m
- 		return err;
+-	/* Check if Data Link Layer Link Active Reporting is implemented */
+-	pcie_capability_read_dword(pdev, PCI_EXP_LNKCAP, &link_cap);
+-
+ 	/* Clear all remaining event bits in Slot Status register. */
+ 	pcie_capability_write_word(pdev, PCI_EXP_SLTSTA,
+ 		PCI_EXP_SLTSTA_ABP | PCI_EXP_SLTSTA_PFD |
+@@ -1051,7 +1048,7 @@ struct controller *pcie_init(struct pcie
+ 		FLAG(slot_cap, PCI_EXP_SLTCAP_EIP),
+ 		FLAG(slot_cap, PCI_EXP_SLTCAP_NCCS),
+ 		FLAG(slot_cap2, PCI_EXP_SLTCAP2_IBPD),
+-		FLAG(link_cap, PCI_EXP_LNKCAP_DLLLARC),
++		FLAG(pdev->link_active_reporting, true),
+ 		pdev->broken_cmd_compl ? " (with Cmd Compl erratum)" : "");
  
- 	/* Check link */
--	err = pci_read_config_dword(bridge, cap + PCI_EXP_LNKCAP, &reg32);
--	if (err)
--		return err;
--	if (!(reg32 & PCI_EXP_LNKCAP_DLLLARC)) {
--		mlx5_core_warn(dev, "No PCI link reporting capability (0x%08x)\n", reg32);
-+	if (!bridge->link_active_reporting) {
-+		mlx5_core_warn(dev, "No PCI link reporting capability\n");
- 		msleep(1000);
- 		goto restore;
- 	}
+ 	/*
