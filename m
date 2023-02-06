@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 886BD68BA1E
+	by mail.lfdr.de (Postfix) with ESMTP id DEE2368BA1F
 	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 11:29:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230495AbjBFK2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 05:28:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53328 "EHLO
+        id S230503AbjBFK2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 05:28:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230415AbjBFK20 (ORCPT
+        with ESMTP id S230430AbjBFK2a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 05:28:26 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8AC21EBC8
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 02:28:24 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id j29-20020a05600c1c1d00b003dc52fed235so8371184wms.1
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 02:28:24 -0800 (PST)
+        Mon, 6 Feb 2023 05:28:30 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED41619693
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 02:28:25 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id l21-20020a05600c1d1500b003dfe462b7e4so4458694wms.0
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 02:28:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Y+cl5Ym56wJ7OQnEfR1Yodsc3crTZ07l528z+P6rSd8=;
-        b=rYAmi04ikihq2pYTYtal+Kbg/qcy9Xlw1eH5vh8/eoAQqryD3KK82Rqdcvb5XbfqEF
-         TUJ8i5DPNRoKCym4B9NeR8i1vkLlYC4Bl506EyJDhyGJBNE7SjChymjYlN5Xc+treSh1
-         nncFp4RbeihZ4Idxf2RzQ/NwRM0CWRAwYwKWasbF08SuW0Ya4/WuQ6r2fBjURHDZo1nC
-         M3wCa1Xk8SJjjWA7CN2DFBmZmofwaXZ9o7VJ19rRdpxEdro3Bz2idQajuDHntgtCIMIp
-         Ivz0DJFInnUDz5vQHoIueDWo/kJA5dVhtZC0ABYKEXzdBDTl82StvyHG19hn4eH9tU3W
-         2BQA==
+        bh=bZk++rAGilP0se2vyyYc9G9oc9KF7qnie14AIpwjJ4k=;
+        b=rca3RaQWSAWTwMrwC2qwAd1ACrtzv5VYts1LFzO6PW0TfzH1ExJydgnSjVsH1f8kc6
+         Pzgd9cpUisQE3NaO43FmPYKayhnkGOAoIdtiA1r0B5d3z9LF49zs81yvBOfVMkQQlE5w
+         ob7E2l9EZG7eUqJIMB2nu3uK46Y7kCfkIMkV+sLolDsFrkZ7mW927zfRFSs3oZ8HmInP
+         3dwpJyH/yPNRVNaEnkL6y4+hP2s4ZcpM9j7iTCIBf12l4WzVOkJESYexMtWmrZVKCQWx
+         iaAvINTpvQ0PsRji2qL1RSqJttIque7ByOyuMrsj1eJXS5Aq9dgIqOXEo0aXVT1P4sJJ
+         CqPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Y+cl5Ym56wJ7OQnEfR1Yodsc3crTZ07l528z+P6rSd8=;
-        b=TvxYASKSBfdrSd5GM4pIlagx0U1UoHZ6R78qPDCuNLG4iCu14bS8yoIFnsmO99XOjc
-         +PACt0LRuWBFSZCskYnrTSl7TpypWlZPlDUjwnNhH+80PyXaoKprtmU76qkMqaEsBQZF
-         pGq+PLS84QcEOsSn1QO+s7ChJeI41jvr60yxkcpcjXFaw7DpdmRyWx0Y3RBGTHzVO2cp
-         zMNuRbC8CALibldhLkkO8trC7iRQ3Cxlvaj7XBAiPU1/V15roRGzPIulmERnJnLMVum3
-         jrwSqbtKEwucck8zKW87avzJG+VbRFtXL+zVXZaL59yCWrMdBd4EaGXl34svUs0zp2lc
-         T72Q==
-X-Gm-Message-State: AO0yUKU0oAtj8n2Z/sKqh1lKI+fSU/r08jFpWNJfwtoXk8Retu1TBYlb
-        N3Lh6EUWr7eB7ds1fCZt3qNQyw==
-X-Google-Smtp-Source: AK7set8bLyJf74k+8GqZ03t23nXD0FvX3cHMWeKf0axU0qbupjbLJmX6hCJXm1xQ3pecDouqeUHcCQ==
-X-Received: by 2002:a05:600c:3110:b0:3df:ee64:4814 with SMTP id g16-20020a05600c311000b003dfee644814mr9845095wmo.20.1675679303345;
-        Mon, 06 Feb 2023 02:28:23 -0800 (PST)
+        bh=bZk++rAGilP0se2vyyYc9G9oc9KF7qnie14AIpwjJ4k=;
+        b=HdloXrPOLQOrw/JYlX8FhBRj4YWR0Fxfl4EgK7uROQ23KagmyXQ4xWnExanzD//Usb
+         0DCJrguj1py9+QnN1Dn29vqD099n7aQS0HqXHfu39tXKpSZ5FIDZCv0l+pEAoxJVTlIP
+         AYmJiOxnTIntCRvjUxA2wqE0EKJxdULQw73xZEVQHd4qMvclnA7xuFg3zTPAyX99aKAN
+         KRRWnOQGTRajBJYzDd7Vg4rsBsBFwMPjYFYsOquVOFtzY3bIr01tT7nUjSIJPVqvDr7B
+         riTj+6IY68bZDmXAWq6dv42cHE4v9ml3nyMLX4WwvT8dPVNdecUNQn+KthhDoCYs9QnA
+         I7ZQ==
+X-Gm-Message-State: AO0yUKUy2FmWeGWSU2ptqY3bjYGhW/5kRcjyBDao+6hkNIHf9n5wpzcT
+        nIaZVW/A2AQbCoKE/hmDcR0/2A==
+X-Google-Smtp-Source: AK7set/+0nRXyQIkGG+egaD6kOLzc7tJZdUrpo+U6pQedIztLn7Ur5vx6OLszjzgRdu6G8d0Dvzzlg==
+X-Received: by 2002:a7b:c388:0:b0:3db:2e6e:7826 with SMTP id s8-20020a7bc388000000b003db2e6e7826mr304431wmj.5.1675679304587;
+        Mon, 06 Feb 2023 02:28:24 -0800 (PST)
 Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id g10-20020a05600c310a00b003de77597f16sm11002446wmo.21.2023.02.06.02.28.22
+        by smtp.gmail.com with ESMTPSA id g10-20020a05600c310a00b003de77597f16sm11002446wmo.21.2023.02.06.02.28.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Feb 2023 02:28:22 -0800 (PST)
+        Mon, 06 Feb 2023 02:28:24 -0800 (PST)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org, Michael Walle <michael@walle.cc>,
-        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh@kernel.org>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [RESEND PATCH 08/37] net: add helper eth_addr_add()
-Date:   Mon,  6 Feb 2023 10:27:30 +0000
-Message-Id: <20230206102759.669838-9-srinivas.kandagatla@linaro.org>
+Subject: [RESEND PATCH 09/37] of: base: add of_parse_phandle_with_optional_args()
+Date:   Mon,  6 Feb 2023 10:27:31 +0000
+Message-Id: <20230206102759.669838-10-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230206102759.669838-1-srinivas.kandagatla@linaro.org>
 References: <20230206102759.669838-1-srinivas.kandagatla@linaro.org>
@@ -74,42 +74,59 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Michael Walle <michael@walle.cc>
 
-Add a helper to add an offset to a ethernet address. This comes in handy
-if you have a base ethernet address for multiple interfaces.
+Add a new variant of the of_parse_phandle_with_args() which treats the
+cells name as optional. If it's missing, it is assumed that the phandle
+has no arguments.
+
+Up until now, a nvmem node didn't have any arguments, so all the device
+trees haven't any '#*-cells' property. But there is a need for an
+additional argument for the phandle, for which we need a '#*-cells'
+property. Therefore, we need to support nvmem nodes with and without
+this property.
 
 Signed-off-by: Michael Walle <michael@walle.cc>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Acked-by: Jakub Kicinski <kuba@kernel.org>
+Reviewed-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- include/linux/etherdevice.h | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ include/linux/of.h | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-diff --git a/include/linux/etherdevice.h b/include/linux/etherdevice.h
-index a541f0c4f146..224645f17c33 100644
---- a/include/linux/etherdevice.h
-+++ b/include/linux/etherdevice.h
-@@ -507,6 +507,20 @@ static inline void eth_addr_inc(u8 *addr)
- 	u64_to_ether_addr(u, addr);
+diff --git a/include/linux/of.h b/include/linux/of.h
+index 8b9f94386dc3..98c252d2d851 100644
+--- a/include/linux/of.h
++++ b/include/linux/of.h
+@@ -1008,6 +1008,31 @@ static inline int of_parse_phandle_with_fixed_args(const struct device_node *np,
+ 					    index, out_args);
  }
  
 +/**
-+ * eth_addr_add() - Add (or subtract) an offset to/from the given MAC address.
++ * of_parse_phandle_with_optional_args() - Find a node pointed by phandle in a list
++ * @np:		pointer to a device tree node containing a list
++ * @list_name:	property name that contains a list
++ * @cells_name:	property name that specifies phandles' arguments count
++ * @index:	index of a phandle to parse out
++ * @out_args:	optional pointer to output arguments structure (will be filled)
 + *
-+ * @offset: Offset to add.
-+ * @addr: Pointer to a six-byte array containing Ethernet address to increment.
++ * Same as of_parse_phandle_with_args() except that if the cells_name property
++ * is not found, cell_count of 0 is assumed.
++ *
++ * This is used to useful, if you have a phandle which didn't have arguments
++ * before and thus doesn't have a '#*-cells' property but is now migrated to
++ * having arguments while retaining backwards compatibility.
 + */
-+static inline void eth_addr_add(u8 *addr, long offset)
++static inline int of_parse_phandle_with_optional_args(const struct device_node *np,
++						      const char *list_name,
++						      const char *cells_name,
++						      int index,
++						      struct of_phandle_args *out_args)
 +{
-+	u64 u = ether_addr_to_u64(addr);
-+
-+	u += offset;
-+	u64_to_ether_addr(u, addr);
++	return __of_parse_phandle_with_args(np, list_name, cells_name,
++					    0, index, out_args);
 +}
 +
  /**
-  * is_etherdev_addr - Tell if given Ethernet address belongs to the device.
-  * @dev: Pointer to a device structure
+  * of_property_count_u8_elems - Count the number of u8 elements in a property
+  *
 -- 
 2.25.1
 
