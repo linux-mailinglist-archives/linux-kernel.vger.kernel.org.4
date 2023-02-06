@@ -2,147 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F61768B619
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 08:13:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8308868B64E
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 08:22:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbjBFHNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 02:13:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34668 "EHLO
+        id S229578AbjBFHWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 02:22:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbjBFHNJ (ORCPT
+        with ESMTP id S229448AbjBFHW3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 02:13:09 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670DC12875;
-        Sun,  5 Feb 2023 23:13:07 -0800 (PST)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3165vlDF003536;
-        Mon, 6 Feb 2023 07:12:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=DmFiP85FP/vxcQ0rmFb24P05jX+s/4Cj7aPv9HsHrH0=;
- b=bbz58a6WMyExPkRLrXvGY+byeVObWLL4+xXm9dEhxQre9CyYbHd+AL8kveR9pNBypvyY
- rZt4LuQ0lpfaZfYDSqOVHZjioCgM1UfBOiyyMnNqXFyM8kag4nvM1VOIzFWlqbIwN+RT
- /CpoK4kU2uu82XtDYq6fOuPMk/l+owv2+xmYzO+p9WXgQR2peUVlH3AssgycokfWS7jh
- +oFaVTb5g/CEHCDztzRwGL83JGdjzMzGWkUwTqI37jb2n7k+X9Rg78BhZt0nXZhcHI/f
- AluWMAAOpkhdksch135YAFQGTrN/jpfeDUnCJXKcavDvS3KzLC3M/3IItVoJv1pufm1y Sg== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nhghv2uhk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Feb 2023 07:12:45 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3167CiMZ006914
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 6 Feb 2023 07:12:44 GMT
-Received: from kathirav-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Sun, 5 Feb 2023 23:12:36 -0800
-From:   Kathiravan T <quic_kathirav@quicinc.com>
-To:     <krzysztof.kozlowski@linaro.org>, <agross@kernel.org>,
-        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <linus.walleij@linaro.org>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <shawnguo@kernel.org>, <arnd@arndb.de>,
-        <dmitry.baryshkov@linaro.org>, <marcel.ziswiler@toradex.com>,
-        <nfraprado@collabora.com>, <robimarko@gmail.com>,
-        <quic_gurus@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <quic_varada@quicinc.com>, <quic_srichara@quicinc.com>,
-        Kathiravan T <quic_kathirav@quicinc.com>
-Subject: [PATCH V3 0/9] Add minimal boot support for IPQ5332
-Date:   Mon, 6 Feb 2023 12:42:08 +0530
-Message-ID: <20230206071217.29313-1-quic_kathirav@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 6 Feb 2023 02:22:29 -0500
+Received: from smtp-out0.aaront.org (smtp-out0.aaront.org [IPv6:2600:1f14:3bf:e504::15:1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 355A41ABEE
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 23:22:28 -0800 (PST)
+Received: by smtp-out0.aaront.org (Postfix) with ESMTP id 4P9HXF6qyvzMp;
+        Mon,  6 Feb 2023 07:12:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aaront.org; h=
+    from:to:cc:subject:date:message-id:mime-version
+    :content-transfer-encoding; s=elwxqanhxhag6erl; bh=7eklGvzQeRbVq
+    GTFubE4B/V1RUz7+h7698FCisfN/as=; b=XbO3MM0/+ALEFVxpBhbm8oJOuFFiF
+    5L4LLHHpEjqrzFnzFpfDW+Ht2cmV63Ya44IF+Rdz0Q+h/LeAAqdlR2h59PgHJu2v
+    KCsOgSBnjwcx7uyE+2ak0tN5BUZQTlNZoNx9JulvYFRCx0yR0ERafFsaIXI5ZXV8
+    mBZMuwunOaZ0AEAgRGkum80d0qauDlOYx5RS19tgMjjs4FZWH272b/GIxxCMcyG9
+    46GaAH/cgqrKRafZnohS2koMgQ95xQjZ+qc1ek9EpzjNEIh435pLyoD6Y2yRSBR3
+    OXG8Du42i4yWbfe7fhxRIKMeBLq37EeOqRUWeg7RVyjt3+ncr0DQOg1oA==
+From:   Aaron Thompson <dev@aaront.org>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Aaron Thompson <dev@aaront.org>
+Subject: [PATCH 0/1] Fix memblock_free_late() deferred init bug, redux
+Date:   Mon,  6 Feb 2023 07:12:09 +0000
+Message-Id: <20230206071211.3157-1-dev@aaront.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: xExxf9W8ishTxxW-UyPeNRgMXrY_liy7
-X-Proofpoint-ORIG-GUID: xExxf9W8ishTxxW-UyPeNRgMXrY_liy7
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-06_03,2023-02-03_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1015
- bulkscore=0 impostorscore=0 spamscore=0 suspectscore=0 malwarescore=0
- mlxlogscore=526 lowpriorityscore=0 mlxscore=0 priorityscore=1501
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302060061
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The IPQ5332 is Qualcomm's 802.11ax SoC for Routers, Gateways and
-Access Points.
+Hi Mike,
 
-This series adds minimal board boot support for ipq5332-mi01.2 board.
+Unfortunately my attempted bugfix 115d9d77bb0f ("mm: Always release pages to the
+buddy allocator in memblock_free_late()") is itself buggy. It's true that all
+reserved pages are initialized by the time memblock_free_late() is called, but
+if the pages being freed are in the deferred init range, __free_one_page() might
+access nearby uninitialized pages when trying to coalesce buddies, in which case
+badness ensues :(
 
-Also, this series depends on the below patch
-https://lore.kernel.org/linux-arm-msm/20230120082631.22053-1-quic_kathirav@quicinc.com/
+deferred_init_maxorder() handles this by initializing a max-order-sized block of
+pages before freeing any of them. We could change memblock_free_late() to do
+that, but it seems to me that having memblock_free_late() get involved in
+initializing and freeing free pages would be a bit messy. I think it will be
+simpler to free the reserved pages later, as part of deferred init or after.
 
-Changes in V3:
-	- Detailed change log is present in respective patches
-	- V2 can be found at
-	  https://lore.kernel.org/linux-arm-msm/20230130114702.20606-1-quic_kathirav@quicinc.com/
+I can see a few ways to accomplish that:
 
-Changes in V2:
-	- Rebased on linux-next/master
-	- Dropped the 'dt-bindings: mmc: sdhci-msm: add IPQ5332 compatible',
-	  since it is already part of linux-next/master
-	- Added a new patch 'clk: qcom: ipq5332: mark GPLL4 as critical temporarily'
-	- Detailed change log is present in respective patches
-	- V1 can be found at
-	  https://lore.kernel.org/linux-arm-msm/20230125104520.89684-1-quic_kathirav@quicinc.com/
+1. Have memblock_free_late() remove the range from memblock.reserved. Deferred
+   init will then handle that range as just another free range, so the pages
+   will be initialized and freed by deferred_init_maxorder().
 
+   This is the simplest fix, but the problem is that the pages will be
+   initialized twice, first by memmap_init_reserved_pages() and again by
+   deferred_init_maxorder(). It looks risky to me to blindly zero out an
+   already-initialized page struct, but if we could say for certain that the
+   page structs for memblock-reserved ranges aren't actually used, at least
+   until after deferred init is done, then this could work. I don't know the
+   usage of page structs well enough to say.
 
-Kathiravan T (9):
-  dt-bindings: pinctrl: qcom: add IPQ5332 pinctrl
-  pinctrl: qcom: Introduce IPQ5332 TLMM driver
-  clk: qcom: Add STROMER PLUS PLL type for IPQ5332
-  dt-bindings: clock: Add Qualcomm IPQ5332 GCC
-  clk: qcom: add Global Clock controller (GCC) driver for IPQ5332 SoC
-  dt-bindings: qcom: add ipq5332 boards
-  dt-bindings: firmware: qcom,scm: document IPQ5332 SCM
-  arm64: dts: qcom: add IPQ5332 SoC and MI01.2 board support
-  arm64: defconfig: Enable IPQ5332 SoC base configs
+2. Take 1 and fix the double-init problem. In addition to removing the range
+   from memblock.reserved, also set a flag on the range in memblock.memory that
+   indicates the pages for that range have already been initialized.
+   deferred_init_maxorder() would skip initializing pages for ranges with the
+   flag set, but it would still free them.
 
- .../devicetree/bindings/arm/qcom.yaml         |    7 +
- .../bindings/clock/qcom,ipq5332-gcc.yaml      |   61 +
- .../bindings/firmware/qcom,scm.yaml           |    1 +
- .../bindings/pinctrl/qcom,ipq5332-tlmm.yaml   |  134 +
- arch/arm64/boot/dts/qcom/Makefile             |    1 +
- arch/arm64/boot/dts/qcom/ipq5332-mi01.2.dts   |   75 +
- arch/arm64/boot/dts/qcom/ipq5332.dtsi         |  268 ++
- arch/arm64/configs/defconfig                  |    2 +
- drivers/clk/qcom/Kconfig                      |    8 +
- drivers/clk/qcom/Makefile                     |    1 +
- drivers/clk/qcom/clk-alpha-pll.c              |   11 +
- drivers/clk/qcom/clk-alpha-pll.h              |    1 +
- drivers/clk/qcom/gcc-ipq5332.c                | 3850 +++++++++++++++++
- drivers/pinctrl/qcom/Kconfig                  |   10 +
- drivers/pinctrl/qcom/Makefile                 |    1 +
- drivers/pinctrl/qcom/pinctrl-ipq5332.c        |  861 ++++
- include/dt-bindings/clock/qcom,ipq5332-gcc.h  |  356 ++
- 17 files changed, 5648 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/clock/qcom,ipq5332-gcc.yaml
- create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,ipq5332-tlmm.yaml
- create mode 100644 arch/arm64/boot/dts/qcom/ipq5332-mi01.2.dts
- create mode 100644 arch/arm64/boot/dts/qcom/ipq5332.dtsi
- create mode 100644 drivers/clk/qcom/gcc-ipq5332.c
- create mode 100644 drivers/pinctrl/qcom/pinctrl-ipq5332.c
- create mode 100644 include/dt-bindings/clock/qcom,ipq5332-gcc.h
+   This seems like a bit of a conceptual stretch of the memblock region flags
+   since this is not a property of the memory itself but rather of the page
+   structs corresponding to that memory. But it gets the job done.
+
+3. Defer the freeing of reserved pages until after deferred init is completely
+   done. Have memblock_free_late() set a flag on the range in memblock.reserved,
+   and have memblock_discard() call __free_pages_core() on those ranges.
+
+   I think this would be a reasonable use of flags on reserved regions. They are
+   not currently used.
+
+The included patch implements option 1 because it is the simplest, but it should
+not be used if the double-init of the page structs is unsafe. In my testing I
+verified that the count, mapcount, and lru list head of all pages are at their
+defaults when memblock_free_late() is called by efi_free_boot_services(), but
+that's obviously not conclusive. I have draft versions of 2 and 3 that I can
+finish up quickly if either of those are preferable.
+
+Please let me know what you think, and sorry for introducing this bug.
+
+Thanks,
+Aaron
+
+Aaron Thompson (1):
+  mm: Defer freeing reserved pages in memblock_free_late()
+
+ mm/internal.h                     |  2 ++
+ mm/memblock.c                     | 36 ++++++++++++++++++++-----------
+ mm/page_alloc.c                   | 17 +++++++++++++++
+ tools/testing/memblock/internal.h |  7 +++---
+ 4 files changed, 47 insertions(+), 15 deletions(-)
 
 -- 
-2.17.1
+2.30.2
 
