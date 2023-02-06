@@ -2,203 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24BC468C8CE
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 22:30:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA1BC68C8D0
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 22:32:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbjBFVaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 16:30:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48048 "EHLO
+        id S229830AbjBFVcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 16:32:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbjBFVax (ORCPT
+        with ESMTP id S229792AbjBFVcW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 16:30:53 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB48F10E6;
-        Mon,  6 Feb 2023 13:30:52 -0800 (PST)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 316L60SI002709;
-        Mon, 6 Feb 2023 21:30:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=zbR5LulAkMDAwasH7HVAV3wgUEtOGkuSRw4Nc4x62YI=;
- b=U7SjhRJYz8CwVbM+Xari4paPf0x+K8tf2HQmofDjj6yK8FgStyhkIRj+aLXm3uQL16NQ
- IhtvdS3WM6bAvk/IfjjNOkQ2fcKiqEKbRnHcJRFwfdmg0t2qVuj27TDRLtJHQveovxqz
- 1Aue84D4wC1YW9Wg8qprUmNnkp5q6hfgKhY9DnmZMKIjyEy7jCRFMBnpMJ6N9IAEbgo9
- avDhY1PsMou/JeafaWTfxNIjOtj1A4qyMCFq6jNbT+CliGcRpQt2ayMatwucPAuuCRXC
- zeLEmmDW8xccOQmr+RztXgtKduhA1qdYK50GuSvfEgn9eYYH/rv71UVVOfu2hvq6nKTG aA== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nhey74rxt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Feb 2023 21:30:33 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 316LUVHl025673
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 6 Feb 2023 21:30:31 GMT
-Received: from [10.134.67.48] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 6 Feb 2023
- 13:30:31 -0800
-Message-ID: <7d73182d-9662-196a-2831-6ab50fb08040@quicinc.com>
-Date:   Mon, 6 Feb 2023 13:30:30 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v9 22/27] virt: gunyah: Add resource tickets
-Content-Language: en-US
-To:     Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>
-CC:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Alex Elder <elder@linaro.org>,
-        Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Mon, 6 Feb 2023 16:32:22 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C47325244
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 13:32:21 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id r8so13624420pls.2
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 13:32:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=dYd4vw6qa2q3HVSke3k4dJg7B9fv6oKQRTR063eTLyw=;
+        b=hhJ+wkCFnD+azG3S7INqkkLNfX14eFFCoW5YHsgdOj35ZK6CZNSK1T3Mb0p3q7QvWf
+         JVXK03Z3k68a4nIQI6T0xcR4/AXrm3gHT2qH7rBYRnqy/nHJGyIT7F69bXOjMNh+x9RF
+         GRt4ov/yjCibJ3uLuLpkb1TQr6ek4N7Mf+bgo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dYd4vw6qa2q3HVSke3k4dJg7B9fv6oKQRTR063eTLyw=;
+        b=5ow7xeu3cZQAc1qXFkYTbupgPAbZ57PdjY1hEZttFhbzfqqE3eywHTguqWbnUXvsRJ
+         iTv7v+BeD4ZVzWjC6NBQ6IwzDMu6ypmX8xsL8xhmY31PCkhpEtvas1o1xkg8ZMrUkpFX
+         KgWMdpXIu31t8FmyYyWjFW2sQSvLJcZKG6lT90tiM9LZwgXwDmY4U+9JwZrTfkCbbq8j
+         3uZDqRra1nADpbNQBMjY3LQW3TpmBIHEKrIMk1PzoO2SPEG34MjQ1XRgETxUbzguv1fw
+         Eo5ffkZ28529FuNgxcdAFPP/4eUZwIIMIyRv0x0kCGbd/l1CJEzTt1I/qGD/KCGPML6/
+         zW8A==
+X-Gm-Message-State: AO0yUKW2CuJRjNeV6BBoSeceqtuTtTAP7HbWS9/CYrIUsGWm4eKnAEn/
+        UAMhuZ8O8T9iuDVphf32s4nakg==
+X-Google-Smtp-Source: AK7set+16Qy8Kuyq7Pi7eKziEtbtp+kKoyIjtGO7Y1tNxSLjjR96/4kzFu2ZPCBxcW3hcRCsOLoj/w==
+X-Received: by 2002:a17:90b:4c0c:b0:230:a3ef:b334 with SMTP id na12-20020a17090b4c0c00b00230a3efb334mr1420106pjb.0.1675719141284;
+        Mon, 06 Feb 2023 13:32:21 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id i64-20020a639d43000000b0044ed37dbca8sm6591357pgd.2.2023.02.06.13.32.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Feb 2023 13:32:20 -0800 (PST)
+Message-ID: <63e171e4.630a0220.b52f4.b63f@mx.google.com>
+X-Google-Original-Message-ID: <202302061331.@keescook>
+Date:   Mon, 6 Feb 2023 13:32:19 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Aleksa Sarai <cyphar@cyphar.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Dinh Nguyen <dinguyen@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20230120224627.4053418-1-quic_eberman@quicinc.com>
- <20230120224627.4053418-23-quic_eberman@quicinc.com>
- <20230206095010.GF332@quicinc.com>
-From:   Elliot Berman <quic_eberman@quicinc.com>
-In-Reply-To: <20230206095010.GF332@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: vxeY4GnvZkx7rE5pfUFshOJZXft8JnD5
-X-Proofpoint-GUID: vxeY4GnvZkx7rE5pfUFshOJZXft8JnD5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-06_07,2023-02-06_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
- mlxlogscore=999 priorityscore=1501 adultscore=0 suspectscore=0 mlxscore=0
- malwarescore=0 spamscore=0 lowpriorityscore=0 impostorscore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302060186
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Potapenko <glider@google.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] uaccess: Add minimum bounds check on kernel buffer size
+References: <20230203193523.never.667-kees@kernel.org>
+ <6c728dfc-d777-4beb-b463-649704c81a5e@app.fastmail.com>
+ <CAMuHMdXXSwYYoUMskhcgjF9SVjraZC-UsBT3sN+xkcUAYmJj4Q@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdXXSwYYoUMskhcgjF9SVjraZC-UsBT3sN+xkcUAYmJj4Q@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2/6/2023 1:50 AM, Srivatsa Vaddagiri wrote:
-> * Elliot Berman <quic_eberman@quicinc.com> [2023-01-20 14:46:21]:
+On Mon, Feb 06, 2023 at 09:03:19PM +0100, Geert Uytterhoeven wrote:
+> Hi Arnd,
 > 
->> +int ghvm_add_resource_ticket(struct gunyah_vm *ghvm, struct gunyah_vm_resource_ticket *ticket)
->> +{
->> +	struct gunyah_vm_resource_ticket *iter;
->> +	struct gunyah_resource *ghrsc;
->> +	int ret = 0;
->> +
->> +	mutex_lock(&ghvm->resources_lock);
->> +	list_for_each_entry(iter, &ghvm->resource_tickets, list) {
->> +		if (iter->resource_type == ticket->resource_type && iter->label == ticket->label) {
->> +			ret = -EEXIST;
->> +			goto out;
->> +		}
->> +	}
->> +
->> +	if (!try_module_get(ticket->owner)) {
->> +		ret = -ENODEV;
->> +		goto out;
->> +	}
->> +
->> +	list_add(&ticket->list, &ghvm->resource_tickets);
->> +	INIT_LIST_HEAD(&ticket->resources);
->> +
->> +	list_for_each_entry(ghrsc, &ghvm->resources, list) {
->> +		if (ghrsc->type == ticket->resource_type && ghrsc->rm_label == ticket->label) {
->> +			if (!ticket->populate(ticket, ghrsc))
->> +				list_move(&ghrsc->list, &ticket->resources);
+> On Fri, Feb 3, 2023 at 10:23 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> > On Fri, Feb 3, 2023, at 20:35, Kees Cook wrote:
+> > > --- a/include/linux/uaccess.h
+> > > +++ b/include/linux/uaccess.h
+> > > @@ -329,6 +329,10 @@ copy_struct_from_user(void *dst, size_t ksize,
+> > > const void __user *src,
+> > >       size_t size = min(ksize, usize);
+> > >       size_t rest = max(ksize, usize) - size;
+> > >
+> > > +     /* Double check if ksize is larger than a known object size. */
+> > > +     if (WARN_ON_ONCE(ksize > __builtin_object_size(dst, 1)))
+> > > +             return -E2BIG;
+> > > +
+> >
+> > WARN_ON_ONCE() may be a little expensive since that adds two
+> > comparisons and a static variable to each copy, but it's probably
+> > fine.
 > 
-> Do we need the search to continue in case of a hit? 'gh_vm_add_resource' seems to
-> break loop on first occurrence.
+> When seeing this, I was a bit worried about the size increase.
+> Hence I gave it a try on atari_defconfig and ran bloat-o-meter.
+> Surprisingly, there was no size increase at all, as all checks
+> were optimized away.
 > 
-> Also do we have examples of more than one 'gunyah_resource' being associated
-> with same 'gunyah_vm_resource_ticket'?  Both vcpu and irqfd tickets seem to deal
-> with just one resource?
-> 
+> Hence perhaps this can become a compile-time check?
 
-I'll mention this in the commit text as well.
+Normally it should optimize away, yes.
 
-Resources are created by Gunyah as configured in the VM's devicetree 
-configuration. Gunyah doesn't process the label and that makes it 
-possible for userspace to create multiple resources with the same label. 
-The kernel needs to be prepared for that to happen. IMO, this isn't a 
-framework issue, so I've chosen the policy to be "many-to-one": resource 
-tickets can bind to many resources and resources are bound to only one 
-ticket. If the resource ticket handler isn't designed to accept multiple 
-resources, they can skip/ignore any further populate callbacks.
-
->>   static int gh_vm_start(struct gunyah_vm *ghvm)
->>   {
->>   	struct gunyah_vm_memory_mapping *mapping;
->>   	u64 dtb_offset;
->>   	u32 mem_handle;
->> -	int ret;
->> +	struct gunyah_resource *ghrsc;
->> +	struct gh_rm_hyp_resources *resources;
->> +	int ret, i;
->>   
->>   	down_write(&ghvm->status_lock);
->>   	if (ghvm->vm_status != GH_RM_VM_STATUS_NO_STATE) {
->> @@ -241,6 +314,22 @@ static int gh_vm_start(struct gunyah_vm *ghvm)
->>   		goto err;
->>   	}
->>   
->> +	ret = gh_rm_get_hyp_resources(ghvm->rm, ghvm->vmid, &resources);
->> +	if (ret) {
->> +		pr_warn("Failed to get hypervisor resources for VM: %d\n", ret);
->> +		goto err;
->> +	}
->> +
->> +	for (i = 0; i < le32_to_cpu(resources->n_entries); i++) {
-> 
-> minor nit: not sure if we can rely on compiler to optimize this, but it would
-> be better if we run le32_to_cpu once and use the result in loop.
-> 
-
-Done.
-
->> +		ghrsc = gh_rm_alloc_resource(ghvm->rm, &resources->entries[i]);
->> +		if (!ghrsc) {
->> +			ret = -ENOMEM;
->> +			goto err;
->> +		}
->> +
->> +		gh_vm_add_resource(ghvm, ghrsc);
-> 
-> Shouldn't we have gh_vm_add_resource()->  ticket->populate() return a result and
-> in case of failure we should bail out from this loop?
-> 
-
-I'm hesitant to treat the resource ticket rejecting the resource as a 
-bail condition.
-
-Userspace is able to detect when functions didn't get set up and I 
-wanted to avoid adding further complexity to kernel drivers.
-
->> +	}
->> +
->>   	ret = gh_rm_vm_start(ghvm->rm, ghvm->vmid);
->>   	if (ret) {
->>   		pr_warn("Failed to start VM: %d\n", ret);
+-- 
+Kees Cook
