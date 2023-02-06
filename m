@@ -2,118 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 251A668BFC8
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 15:15:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9292968BFD5
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 15:16:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230190AbjBFOPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 09:15:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55996 "EHLO
+        id S231209AbjBFOQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 09:16:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231383AbjBFOOk (ORCPT
+        with ESMTP id S229577AbjBFOQH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 09:14:40 -0500
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E0C2941B
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 06:14:14 -0800 (PST)
-Received: by mail-qt1-x836.google.com with SMTP id f10so12869489qtv.1
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 06:14:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QSDx7lR4lbIKush7SukTE/OhPs2fEUoC37d6gBX19uU=;
-        b=ERC064jLHsU/zmzw8RoyeU8P0SzprwSyrytyxl8CwLx+EClBHm9jC4OIs6DvpVHiKT
-         bCVzy3h1qM4tXtLnhXZep+n3YNCG1lFKmdcMhA2cD/gh/QUjtXepRZpyCVeQgGre1X2X
-         KnrtRxVQcz4oQRyjwKS6GLKe56g3hydKvlM6r5Ri8d3XJGWpNUnajCefgwTI4WqNL4cU
-         sru/1dQ7034KdBpTgZtly4j1p8UzyMfQFsQwIt9qdgyJXub8KYNnDl4XCuVQMqnl8C7N
-         nPj0QdiOoP5w7Mhs1gNph2awEUtYHg+xob1ow+eIUvy+fwqgdX0BK68LA16ae23n1gqu
-         GhmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QSDx7lR4lbIKush7SukTE/OhPs2fEUoC37d6gBX19uU=;
-        b=QlKgNcBwOmRWEnyqeue/BjB17nzMVVLzgw5Uzwkh6isPlTBzPkA4U6FQGfvxvABB9H
-         ULvBAsHsklQ82F3EzPz3A5jQ7a7voacY7YhtC984PbF7650aouF/MlUXOw9S4l7wFqGI
-         Z6XqhvvJik4+K3f28doL7/dHtBYzemGTNMvEyPnreruyKPJyfdIoNdqnTq5gRBwFB+fJ
-         4ShMhVf+I9+Z9lxjGhv5NWqELJLJb/TsVxTLGdqz9qgfG4hQGophx6aZ+QtskvGk/XLP
-         uIoCbyyyoWcLUOuBotQLXafHXvbZntyOGp24IVq8z0H5jSY9kX/6H1fUZYtR/ScsOR0d
-         rR8Q==
-X-Gm-Message-State: AO0yUKUKGUjC1IDkJ3Rm+/ufJbCrsuXxSI0JqdD0T0OlbnFcBWH/8W7o
-        IFQTuw3408UHROUvdJpMAVzVLw==
-X-Google-Smtp-Source: AK7set/JWkzW8hDZXUKQoVbyq7UY837wooVRU+m9/HcISd93PIQ91tjIFTNU42WVbQ6ZqGK+UUiStg==
-X-Received: by 2002:ac8:574f:0:b0:3b9:bd28:bb6c with SMTP id 15-20020ac8574f000000b003b9bd28bb6cmr31965755qtx.36.1675692849691;
-        Mon, 06 Feb 2023 06:14:09 -0800 (PST)
-Received: from [172.22.22.4] ([98.61.227.136])
-        by smtp.googlemail.com with ESMTPSA id d136-20020a37688e000000b006fa4ac86bfbsm7475775qkc.55.2023.02.06.06.14.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Feb 2023 06:14:09 -0800 (PST)
-Message-ID: <78e7d084-4e76-c9f1-c627-b1256772ef9d@linaro.org>
-Date:   Mon, 6 Feb 2023 08:14:07 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v9 09/27] gunyah: rsc_mgr: Add resource manager RPC core
-Content-Language: en-US
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Elliot Berman <quic_eberman@quicinc.com>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Murali Nalajala <quic_mnalajal@quicinc.com>
-Cc:     Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Mon, 6 Feb 2023 09:16:07 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95AE521A1A;
+        Mon,  6 Feb 2023 06:15:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=Uwm//uEvfmmKxmoWhqyZTBRjYJjdixdhrA7x2SH7ohw=; b=0+7QLZWW47PHov4bvCcj7Lf26c
+        mTtvafXGbP+ERtJRTwpwHOnITOkkhUpcFXpT6mD+gCleRH1k02T3ZnYrZKqQGLx5sTSNhB02RNYpN
+        ymjYsrtqT31c7YtIdwfJ/NwsU9SdGfWQJhgi+bD2JR+Pz/Trv2JRwRDeu9q9aQVLAghs=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pP2HB-004D8x-R5; Mon, 06 Feb 2023 15:15:21 +0100
+Date:   Mon, 6 Feb 2023 15:15:21 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     MD Danish Anwar <danishanwar@ti.com>
+Cc:     "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230120224627.4053418-1-quic_eberman@quicinc.com>
- <20230120224627.4053418-10-quic_eberman@quicinc.com>
- <94d6f57b-de3b-1135-5a30-d1cb156581cb@linaro.org>
-From:   Alex Elder <elder@linaro.org>
-In-Reply-To: <94d6f57b-de3b-1135-5a30-d1cb156581cb@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Rob Herring <robh+dt@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>, nm@ti.com,
+        ssantosh@kernel.org, srk@ti.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v4 2/2] net: ti: icssg-prueth: Add ICSSG ethernet driver
+Message-ID: <Y+ELeSQX+GWS5N2p@lunn.ch>
+References: <20230206060708.3574472-1-danishanwar@ti.com>
+ <20230206060708.3574472-3-danishanwar@ti.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230206060708.3574472-3-danishanwar@ti.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/2/23 5:53 AM, Srinivas Kandagatla wrote:
->>
->> +struct gh_rm_rpc_hdr {
->> +    u8 api;
->> +    u8 type;
->> +    __le16 seq;
->> +    __le32 msg_id;
->> +} __packed;
->> +
-> #define GH_RM_RPC_HDR_SZ    sizeof(struct gh_rm_rpc_hdr)
-> 
-> You could use this in most of the places where sizeof is being called.
+> +enum mii_mode {
+> +	MII_MODE_MII = 0,
+> +	MII_MODE_RGMII,
+> +	MII_MODE_SGMII
 
-I'll repeat my point here.  I see no value in hiding
-the size of the structure behind a defined symbol.
+There is no mention of SGMII anywhere else. And in a couple of places,
+the code makes the assumption that if it is not RGMII it is MII.
 
-Use sizeof(*pointer) (if possible) or sizeof(struct foo) in
-the code; it makes it very clear that it's not something
-other than a simple object/structure size.
+Does the hardware really support SGMII?
 
-					-Alex
+> +static int prueth_config_rgmiidelay(struct prueth *prueth,
+> +				    struct device_node *eth_np,
+> +				    phy_interface_t phy_if)
+> +{
+
+...
+
+> +	if (phy_if == PHY_INTERFACE_MODE_RGMII_ID ||
+> +	    phy_if == PHY_INTERFACE_MODE_RGMII_TXID)
+> +		rgmii_tx_id |= ICSSG_CTRL_RGMII_ID_MODE;
+> +
+> +	regmap_update_bits(ctrl_mmr, icssgctrl_reg, ICSSG_CTRL_RGMII_ID_MODE, rgmii_tx_id);
+
+Here you are adding the TX delay if the phy-mode indicates it should
+be added.
+
+> +static int prueth_netdev_init(struct prueth *prueth,
+> +			      struct device_node *eth_node)
+> +{
+
+> +	ret = of_get_phy_mode(eth_node, &emac->phy_if);
+> +	if (ret) {
+> +		dev_err(prueth->dev, "could not get phy-mode property\n");
+> +		goto free;
+> +	}
+
+> +	ret = prueth_config_rgmiidelay(prueth, eth_node, emac->phy_if);
+> +	if (ret)
+> +		goto free;
+> +
+
+Reading it from DT and calling the delay function.
+
+> +static int prueth_probe(struct platform_device *pdev)
+> +{
+
+
+> +	/* register the network devices */
+> +	if (eth0_node) {
+> +		ret = register_netdev(prueth->emac[PRUETH_MAC0]->ndev);
+> +		if (ret) {
+> +			dev_err(dev, "can't register netdev for port MII0");
+> +			goto netdev_exit;
+> +		}
+> +
+> +		prueth->registered_netdevs[PRUETH_MAC0] = prueth->emac[PRUETH_MAC0]->ndev;
+> +
+> +		emac_phy_connect(prueth->emac[PRUETH_MAC0]);
+
+And this is connecting the MAC and the PHY, where emac_phy_connect()
+passes emac->phy_if to phylib.
+
+What i don't see anywhere is you changing emac->phy_if to indicate the
+MAC has inserted the TX delay, and so the PHY should not.
+
+    Andrew
+
