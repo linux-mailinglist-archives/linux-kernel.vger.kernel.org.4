@@ -2,88 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E94968BD26
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 13:44:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEC0268BD2B
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 13:45:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230082AbjBFMoc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 07:44:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34516 "EHLO
+        id S229990AbjBFMpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 07:45:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229994AbjBFMoa (ORCPT
+        with ESMTP id S229557AbjBFMpD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 07:44:30 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2239111678
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 04:43:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675687422;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1IHVxmWjNnduzHP2qi7NwKetR9nNEQC70H4NCC5BCaQ=;
-        b=NtAIDPP9l3Bl9R5BhWzbhBz6GWmrxUKuWGHVM1TqQlbqwOKBZZAxoeLlb3JvrsLw+6xTSV
-        9fxgduLJXxv9eFMl4BuMTDPPLg4JGV+IuCaC49tx86FcUi+B5JzyTdrAntrxWJDC7OQbNS
-        NDykPVGEhKab2kmnSmgfUwVgAJab/3A=
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
- [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-647-TcsjKOjWO1qRwE4TfFDTNw-1; Mon, 06 Feb 2023 07:43:41 -0500
-X-MC-Unique: TcsjKOjWO1qRwE4TfFDTNw-1
-Received: by mail-io1-f69.google.com with SMTP id y22-20020a5d94d6000000b007076e06ba3dso6869362ior.20
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 04:43:41 -0800 (PST)
+        Mon, 6 Feb 2023 07:45:03 -0500
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A87CE5FD1;
+        Mon,  6 Feb 2023 04:45:02 -0800 (PST)
+Received: by mail-pj1-x1042.google.com with SMTP id e10-20020a17090a630a00b0022bedd66e6dso15047632pjj.1;
+        Mon, 06 Feb 2023 04:45:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gM1T1LiTjFLuiGBuHxUovgMZMlzmJ0u3GsfkKmTxj0M=;
+        b=LEYtyfsEYNtKsHvFXQmMWDZ3DL1IGzocBn1YvmZHApBcNR9De+PKIGV+8WVH8YXL1W
+         0chffXrUj6aZhNixcKCPqqf0v5pVQxw1QsxWTIwbABujMZCkzEqeH2QEwl3TEN7N4G/S
+         0GnEZ9FytnMSdgw78CgRjBC2FLIpbtv3XACWjog8CWrL7b5Y72BzooQWiyjf2B4JKatu
+         OTYisgAA/UgfjhXpT2bpvSOnh47YBTpytt9p+i/IVua/JqYwISXZ/ZJ83R3VO3T8IEH0
+         hR0HcDM9tQDmL2hZvVVDL0DEpgJbP0nV5dHatlO35aBmn7EoG1Tqr9p4JyOgC272RUey
+         mQfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1IHVxmWjNnduzHP2qi7NwKetR9nNEQC70H4NCC5BCaQ=;
-        b=PY/AiWC1YZSd4/DWVq52ohP94EOScF8BwitROklsthuVBLsGx74+Yh+ToARvajvyPb
-         fUv2w68mJ169RMyheeI6iJJnwCAhASE/sHF3JYA1l78GzmWL7s/URusUQ2ve2Euy3j4U
-         i988yeDro0CqxL8lzIeO5DgOKHrPmk+DzTX7fuMyLZVOkrFOlE20cBfPPnV2p+i+UvS4
-         qheO84RN3GbZLv3btL95yjqBR2yy37KFnZqsL+/2BKcWSTPJFIGgwlgc3apDmWGTAMmx
-         Hu1hHmOPVdsmT6v4Wg/cTEXptCXVjI+o0LHWSb4yfF6B8k+7XRR+43J5QFFT6uHg2dvT
-         gWJw==
-X-Gm-Message-State: AO0yUKXrqHrtP7zdnVXDHB0Ttns7OZIoSerSXWLs2g5GVMlpeReMrvqL
-        A5kKUFJcqOrJqRBhc9T7exHNPJxeTbb8vispld5O220gcOpynw/AIRNm8l2pkiWCpzcDTVHZYwX
-        6NlRDfUBN9qyctLhtoMwzwws4vR8PfT3GNbQWAx2t
-X-Received: by 2002:a05:6e02:14c8:b0:30f:554b:4ddb with SMTP id o8-20020a056e0214c800b0030f554b4ddbmr4383447ilk.100.1675687420495;
-        Mon, 06 Feb 2023 04:43:40 -0800 (PST)
-X-Google-Smtp-Source: AK7set/nQIngXja5dGh9Z3xPw/bYwX+LC6d7AfvOrvh+/bi6l43yJX3V8P4PaugEejDYPF3mMvV149bwIOe8eT6C/xQ=
-X-Received: by 2002:a05:6e02:14c8:b0:30f:554b:4ddb with SMTP id
- o8-20020a056e0214c800b0030f554b4ddbmr4383433ilk.100.1675687420126; Mon, 06
- Feb 2023 04:43:40 -0800 (PST)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gM1T1LiTjFLuiGBuHxUovgMZMlzmJ0u3GsfkKmTxj0M=;
+        b=qoIVtZjF/4qD36I56nMDjAP1HBJlPagS1StnfQlJRsSiX+JuN9M2+xh6EW108DAZcS
+         CK8BymtjQYFajDYXT4yh2sJgAEGyMqVS5qKw57qy+rxL02ZQMLFGsjAoTr69rmGwqWuC
+         XbGdgz1E8z1pLgh0pf7iJLG/UywV9n5eQVPw+AACxh22/zFwiL+0lakVfY93JQzTOvqd
+         GX6G/MqKaznfuAp2D9VRlMP2JMtWqw9IZknDw82LIbLyat/nJBgMzSYb8au4QHDUPzbV
+         fb9n2XsCr4jLZN2kI8wcqt3dYERV2Z9tiFHUs0J4UjDmYrLPX5IL5sSA9DYNiPp4KvCm
+         LdmQ==
+X-Gm-Message-State: AO0yUKULxAWpP0u4eoALfDQNFn6Db0ouKfrRfQ1/9YfkC9S/UGl6auD6
+        BqyFaYQYwSdgqNbUk2XtOiLrHj5Gx43zWDAs+RY=
+X-Google-Smtp-Source: AK7set/U1nmg01crHXqmJueQELsf06ewfSOKn9103EC3Etsc9ROFlDdAWo5G3bi5fo0k8DJH+xKJs8TV08WXvwAs3KU=
+X-Received: by 2002:a17:90a:74c4:b0:22b:f34a:1f52 with SMTP id
+ p4-20020a17090a74c400b0022bf34a1f52mr2922483pjl.76.1675687502165; Mon, 06 Feb
+ 2023 04:45:02 -0800 (PST)
 MIME-Version: 1.0
-References: <cover.1674227308.git.alexl@redhat.com> <CAOQ4uxgGc33_QVBXMbQTnmbpHio4amv=W7ax2vQ1UMet0k_KoA@mail.gmail.com>
- <1ea88c8d1e666b85342374ed7c0ddf7d661e0ee1.camel@redhat.com>
- <CAOQ4uxinsBB-LpGh4h44m6Afv0VT5yWRveDG7sNvE2uJyEGOkg@mail.gmail.com>
- <5fb32a1297821040edd8c19ce796fc0540101653.camel@redhat.com>
- <CAOQ4uxhGX9NVxwsiBMP0q21ZRot6-UA0nGPp1wGNjgmKBjjBBA@mail.gmail.com>
- <b8601c976d6e5d3eccf6ef489da9768ad72f9571.camel@redhat.com>
- <e840d413-c1a7-d047-1a63-468b42571846@linux.alibaba.com> <2ef122849d6f35712b56ffbcc95805672980e185.camel@redhat.com>
- <8ffa28f5-77f6-6bde-5645-5fb799019bca@linux.alibaba.com> <51d9d1b3-2b2a-9b58-2f7f-f3a56c9e04ac@linux.alibaba.com>
- <071074ad149b189661681aada453995741f75039.camel@redhat.com>
- <0d2ef9d6-3b0e-364d-ec2f-c61b19d638e2@linux.alibaba.com> <de57aefc-30e8-470d-bf61-a1cca6514988@linux.alibaba.com>
- <CAOQ4uxgS+-MxydqgO8+NQfOs9N881bHNbov28uJYX9XpthPPiw@mail.gmail.com>
- <9c8e76a3-a60a-90a2-f726-46db39bc6558@linux.alibaba.com> <02edb5d6-a232-eed6-0338-26f9a63cfdb6@linux.alibaba.com>
- <3d4b17795413a696b373553147935bf1560bb8c0.camel@redhat.com> <CAOQ4uxjNmM81mgKOBJeScnmeR9+jG_aWvDWxAx7w_dGh0XHg3Q@mail.gmail.com>
-In-Reply-To: <CAOQ4uxjNmM81mgKOBJeScnmeR9+jG_aWvDWxAx7w_dGh0XHg3Q@mail.gmail.com>
-From:   Alexander Larsson <alexl@redhat.com>
-Date:   Mon, 6 Feb 2023 13:43:28 +0100
-Message-ID: <CAL7ro1Hc4npP9DQjzuWXJYPTi9H=arLstAJvsBgVKzd8Cx8_tg@mail.gmail.com>
-Subject: Re: [PATCH v3 0/6] Composefs: an opportunistically sharing verified
- image filesystem
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     Miklos Szeredi <miklos@szeredi.hu>,
-        Gao Xiang <hsiangkao@linux.alibaba.com>,
-        Jingbo Xu <jefflexu@linux.alibaba.com>, gscrivan@redhat.com,
-        brauner@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, david@fromorbit.com,
-        viro@zeniv.linux.org.uk, Vivek Goyal <vgoyal@redhat.com>,
-        Josef Bacik <josef@toxicpanda.com>
+References: <20221222072603.1175248-1-korantwork@gmail.com>
+ <3d1834d9-7905-1225-741a-f298dd5b8a8e@linux.dev> <Y6TSgGdCTvkwPiVg@kbusch-mbp.dhcp.thefacebook.com>
+ <CAEm4hYUWf+Fx3FV7vNTc8+O9NSb0iQp75MTC6gra6XapXK=cxw@mail.gmail.com>
+ <d14ac29d-027a-08a7-c5c8-848a6920d4a2@linux.dev> <CAEm4hYXncuvL-Gk1aEZExrvkbx=N1aiOQNeNjFdB4443EbKNBA@mail.gmail.com>
+ <f05ee82a-4532-b12b-490f-904b946ff7b0@linux.dev> <CAEm4hYXk1RuKEw41VukH2iGTo_9GmZjUfrESWK5vFtpFA_O_4A@mail.gmail.com>
+In-Reply-To: <CAEm4hYXk1RuKEw41VukH2iGTo_9GmZjUfrESWK5vFtpFA_O_4A@mail.gmail.com>
+From:   Xinghui Li <korantwork@gmail.com>
+Date:   Mon, 6 Feb 2023 20:45:57 +0800
+Message-ID: <CAEm4hYWeZFrYxSvAcBJ8iw=t507vZMqfBwiQXFSJd2Hcyfw7fA@mail.gmail.com>
+Subject: Re: [PATCH] PCI: vmd: Do not disable MSI-X remapping in VMD 28C0 controller
+To:     Jonathan Derrick <jonathan.derrick@linux.dev>
+Cc:     Keith Busch <kbusch@kernel.org>, nirmal.patel@linux.intel.com,
+        lpieralisi@kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xinghui Li <korantli@tencent.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,240 +74,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 3, 2023 at 1:47 PM Amir Goldstein <amir73il@gmail.com> wrote:
->
-> > > > > Engineering-wise, merging composefs features into EROFS
-> > > > > would be the simplest option and FWIW, my personal preference.
-> > > > >
-> > > > > However, you need to be aware that this will bring into EROFS
-> > > > > vfs considerations, such as  s_stack_depth nesting (which AFAICS
-> > > > > is not see incremented composefs?). It's not the end of the
-> > > > > world, but this
-> > > > > is no longer plain fs over block game. There's a whole new class
-> > > > > of bugs
-> > > > > (that syzbot is very eager to explore) so you need to ask
-> > > > > yourself whether
-> > > > > this is a direction you want to lead EROFS towards.
-> > > >
-> > > > I'd like to make a seperated Kconfig for this.  I consider this
-> > > > just because
-> > > > currently composefs is much similar to EROFS but it doesn't have
-> > > > some ability
-> > > > to keep real regular file (even some README, VERSION or Changelog
-> > > > in these
-> > > > images) in its (composefs-called) manifest files. Even its on-disk
-> > > > super block
-> > > > doesn't have a UUID now [1] and some boot sector for booting or
-> > > > some potential
-> > > > hybird formats such as tar + EROFS, cpio + EROFS.
-> > > >
-> > > > I'm not sure if those potential new on-disk features is unneeded
-> > > > even for
-> > > > future composefs.  But if composefs laterly supports such on-disk
-> > > > features,
-> > > > that makes composefs closer to EROFS even more.  I don't see
-> > > > disadvantage to
-> > > > make these actual on-disk compatible (like ext2 and ext4).
-> > > >
-> > > > The only difference now is manifest file itself I/O interface --
-> > > > bio vs file.
-> > > > but EROFS can be distributed to raw block devices as well,
-> > > > composefs can't.
-> > > >
-> > > > Also, I'd like to seperate core-EROFS from advanced features (or
-> > > > people who
-> > > > are interested to work on this are always welcome) and composefs-
-> > > > like model,
-> > > > if people don't tend to use any EROFS advanced features, it could
-> > > > be disabled
-> > > > from compiling explicitly.
-> > >
-> > > Apart from that, I still fail to get some thoughts (apart from
-> > > unprivileged
-> > > mounts) how EROFS + overlayfs combination fails on automative real
-> > > workloads
-> > > aside from "ls -lR" (readdir + stat).
-> > >
-> > > And eventually we still need overlayfs for most use cases to do
-> > > writable
-> > > stuffs, anyway, it needs some words to describe why such < 1s
-> > > difference is
-> > > very very important to the real workload as you already mentioned
-> > > before.
-> > >
-> > > And with overlayfs lazy lookup, I think it can be close to ~100ms or
-> > > better.
-> > >
-> >
-> > If we had an overlay.fs-verity xattr, then I think there are no
-> > individual features lacking for it to work for the automotive usecase
-> > I'm working on. Nor for the OCI container usecase. However, the
-> > possibility of doing something doesn't mean it is the better technical
-> > solution.
-> >
-> > The container usecase is very important in real world Linux use today,
-> > and as such it makes sense to have a technically excellent solution for
-> > it, not just a workable solution. Obviously we all have different
-> > viewpoints of what that is, but these are the reasons why I think a
-> > composefs solution is better:
-> >
-> > * It is faster than all other approaches for the one thing it actually
-> > needs to do (lookup and readdir performance). Other kinds of
-> > performance (file i/o speed, etc) is up to the backing filesystem
-> > anyway.
-> >
-> > Even if there are possible approaches to make overlayfs perform better
-> > here (the "lazy lookup" idea) it will not reach the performance of
-> > composefs, while further complicating the overlayfs codebase. (btw, did
-> > someone ask Miklos what he thinks of that idea?)
-> >
->
-> Well, Miklos was CCed (now in TO:)
-> I did ask him specifically about relaxing -ouserxarr,metacopy,redirect:
-> https://lore.kernel.org/linux-unionfs/20230126082228.rweg75ztaexykejv@wittgenstein/T/#mc375df4c74c0d41aa1a2251c97509c6522487f96
-> but no response on that yet.
->
-> TBH, in the end, Miklos really is the one who is going to have the most
-> weight on the outcome.
->
-> If Miklos is interested in adding this functionality to overlayfs, you are going
-> to have a VERY hard sell, trying to merge composefs as an independent
-> expert filesystem. The community simply does not approve of this sort of
-> fragmentation unless there is a very good reason to do that.
+Friendly ping~
 
-Yeah, if overlayfs get close to similar performance it does make more
-sense to use that. Lets see what miklos says.
-
-> > For the automotive usecase we have strict cold-boot time requirements
-> > that make cold-cache performance very important to us. Of course, there
-> > is no simple time requirements for the specific case of listing files
-> > in an image, but any improvement in cold-cache performance for both the
-> > ostree rootfs and the containers started during boot will be worth its
-> > weight in gold trying to reach these hard KPIs.
+Xinghui Li <korantwork@gmail.com> =E4=BA=8E2023=E5=B9=B41=E6=9C=8810=E6=97=
+=A5=E5=91=A8=E4=BA=8C 20:28=E5=86=99=E9=81=93=EF=BC=9A
+>
+> Jonathan Derrick <jonathan.derrick@linux.dev> =E4=BA=8E2023=E5=B9=B41=E6=
+=9C=8810=E6=97=A5=E5=91=A8=E4=BA=8C 05:00=E5=86=99=E9=81=93=EF=BC=9A
 > >
-> > * It uses less memory, as we don't need the extra inodes that comes
-> > with the overlayfs mount. (See profiling data in giuseppes mail[1]).
->
-> Understood, but we will need profiling data with the optimized ovl
-> (or with the single blob hack) to compare the relevant alternatives.
->
+> > As the bypass mode seems to affect performance greatly depending on the=
+ specific configuration,
+> > it may make sense to use a moduleparam to control it
 > >
-> > The use of loopback vs directly reading the image file from page cache
-> > also have effects on memory use. Normally we have both the loopback
-> > file in page cache, plus the block cache for the loopback device. We
-> > could use loopback with O_DIRECT, but then we don't use the page cache
-> > for the image file, which I think could have performance implications.
-> >
+> We found that each pcie port can mount four drives. If we only test 2
+> or 1 dirve of one pcie port,
+> the performance of the drive performance will be normal. Also, we
+> observed the interruptions in different modes.
+> bypass:
+> .....
+> 2022-12-28-11-39-14: 1224       181665   IR-PCI-MSI 201850948-edge      n=
+vme0q68
+> 2022-12-28-11-39-14: 1179       180115   IR-PCI-MSI 201850945-edge      n=
+vme0q65
+> 2022-12-28-11-39-14:  RES        26743   Rescheduling interrupts
+> 2022-12-28-11-39-17: irqtop - IRQ : 3029, TOTAL : 2100315228, CPU :
+> 192, ACTIVE CPU : 192
+> disable:
+> ......
+> 2022-12-28-12-05-56: 1714       169797   IR-PCI-MSI 14155850-edge      nv=
+me1q74
+> 2022-12-28-12-05-56: 1701       168753   IR-PCI-MSI 14155849-edge      nv=
+me1q73
+> 2022-12-28-12-05-56:  LOC       163697   Local timer interrupts
+> 2022-12-28-12-05-56:  TLB         5465   TLB shootdowns
+> 2022-12-28-12-06-00: irqtop - IRQ : 3029, TOTAL : 2179022106, CPU :
+> 192, ACTIVE CPU : 192
+> remapping:
+> 022-12-28-11-25-38:  283       325568   IR-PCI-MSI 24651790-edge      vmd=
+3
+> 2022-12-28-11-25-38:  140       267899   IR-PCI-MSI 13117447-edge      vm=
+d1
+> 2022-12-28-11-25-38:  183       265978   IR-PCI-MSI 13117490-edge      vm=
+d1
+> ......
+> 2022-12-28-11-25-42: irqtop - IRQ : 2109, TOTAL : 2377172002, CPU :
+> 192, ACTIVE CPU : 192
 >
-> I am not sure this is correct. The loop blockdev page cache can be used,
-> for reading metadata, can it not?
-> But that argument is true for EROFS and for almost every other fs
-> that could be mounted with -oloop.
-> If the loopdev overhead is a problem and O_DIRECT is not a good enough
-> solution, then you should work on a generic solution that all fs could use.
+> From the result it is not difficult to find, in remapping mode the
+> interruptions come from vmd.
+> While in other modes, interrupts come from nvme devices. Besides, we
+> found the port mounting
+> 4 dirves total interruptions is much fewer than the port mounting 2 or 1 =
+drive.
+> NVME 8 and 9 mount in one port, other port mount 4 dirves.
 >
-> > * The userspace API complexity of the combined overlayfs approach is
-> > much greater than for composefs, with more moving pieces. For
-> > composefs, all you need is a single mount syscall for set up. For the
-> > overlay approach you would need to first create a loopback device, then
-> > create a dm-verity device-mapper device from it, then mount the
-> > readonly fs, then mount the overlayfs.
->
-> Userspace API complexity has never been and will never be a reason
-> for making changes in the kernel, let alone add a new filesystem driver.
-> Userspace API complexity can be hidden behind a userspace expert library.
-> You can even create a mount.composefs helper that users can use
-> mount -t composefs that sets up erofs+overlayfs behind the scenes.
-
-I don't really care that it's more work for userspace to set it up,
-that can clearly always be hidden behind some abstraction.
-
-However, all this complexity is part of the reason why the combination
-use more memory and perform less well. It also gets in the way when
-using the code in more complex, stacked ways. For example, you need
-have /dev/loop and /dev/mapper/control available to be able to
-loopback mount a dm-verify using erofs image. This means it is not by
-default doable in typical sandbox/containers environments without
-adding access to additional global (potentially quite unsafe, in the
-case of dev-mapper) devices.
-
-Again, not a showstopper, but also not great.
-
-I guess we could use fs-verity for loopback mounted files though,
-which drops the dependency on dev-mapper. This makes it quite a lot
-better, but loopback is still a global non-namespaced resource. At
-some point loopfs was proposed to make namespaced loopback possible,
-but that seems to have gotten nowhere unfortunately.
-
-> Similarly, mkfs.composefs can be an alias to mkfs.erofs with a specific
-> set of preset options, much like mkfs.ext* family.
->
-> > All this complexity has a cost
-> > in terms of setup/teardown performance, userspace complexity and
-> > overall memory use.
-> >
->
-> This claim needs to be quantified *after* the proposed improvements
-> (or equivalent hack) to existing subsystems.
->
-> > Are any of these a hard blocker for the feature? Not really, but I
-> > would find it sad to use an (imho) worse solution.
-> >
->
-> I respect your emotion and it is not uncommon for people to want
-> to see their creation merged as is, but from personal experience,
-> it is often a much better option for you, to have your code merge into
-> an existing subsystem. I think if you knew all the advantages, you
-> would have fought for this option yourself ;)
-
-I'm gonna do some more experimenting with the erofs+overlayfs approach
-to get a better idea for the complete solution.
-
-One problem I ran into is that erofs seems to only support mounting
-filesystem images that are created with the native page size. This
-means I can't mount a erofs image created on a 4k page-size machine on
-an arm64 mac with 64k pages. That doesn't seem great. Maybe this
-limitation can be lifted from the erofs code though.
-
-> > The other mentioned approach is to extend EROFS with composefs
-> > features.  For this to be interesting to me it would have to include:
-> >
-> >  * Direct reading of the image from page cache (not via loopback)
-> >  * Ability to verify fs-verity digest of that image file
-> >  * Support for stacked content files in a set of specified basedirs
-> >    (not using fscache).
-> >  * Verification of expected fs-verity digest for these basedir files
-> >
-> > Anything less than this and I think the overlayfs+erofs approach is a
-> > better choice.
-> >
-> > However, this is essentially just proposing we re-implement all the
-> > composefs code with a different name. And then we get a filesystem
-> > supporting *both* stacking and traditional block device use, which
-> > seems a bit weird to me. It will certainly make the erofs code more
-> > complex having to support all these combinations. Also, given the harsh
-> > arguments and accusations towards me on the list I don't feel very
-> > optimistic about how well such a cooperation would work.
-> >
->
-> I understand why you write that  and I am sorry that you feel this way.
-> This is a good opportunity to urge you and Giuseppe again to request
-> an invite to LSFMM [1] and propose composefs vs. erofs+ovl as a TOPIC.
->
-> Meeting the developers in person is often the best way to understand each
-> other in situations just like this one where the email discussions fail to
-> remain on a purely technical level and our emotions get involved.
-> It is just too hard to express emotions accurately in emails and people are
-> so very often misunderstood when that happens.
->
-> I guarantee you that it is much more pleasant to argue with people over email
-> after you have met them in person ;)
-
-I'll try to see if this works in my schedule. But, yeah, in-person
-discussions would probably speed things up.
-
--- 
-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- Alexander Larsson                                Red Hat, Inc
-       alexl@redhat.com         alexander.larsson@gmail.com
-
+> 2022-12-28-11-39-14: 2582       494635   IR-PCI-MSI 470810698-edge      n=
+vme9q74
+> 2022-12-28-11-39-14: 2579       489972   IR-PCI-MSI 470810697-edge      n=
+vme9q73
+> 2022-12-28-11-39-14: 2573       480024   IR-PCI-MSI 470810695-edge      n=
+vme9q71
+> 2022-12-28-11-39-14: 2544       312967   IR-PCI-MSI 470286401-edge      n=
+vme8q65
+> 2022-12-28-11-39-14: 2556       312229   IR-PCI-MSI 470286405-edge      n=
+vme8q69
+> 2022-12-28-11-39-14: 2547       310013   IR-PCI-MSI 470286402-edge      n=
+vme8q66
+> 2022-12-28-11-39-14: 2550       308993   IR-PCI-MSI 470286403-edge      n=
+vme8q67
+> 2022-12-28-11-39-14: 2559       308794   IR-PCI-MSI 470286406-edge      n=
+vme8q70
+> ......
+> 2022-12-28-11-39-14: 1296       185773   IR-PCI-MSI 202375243-edge      n=
+vme1q75
+> 2022-12-28-11-39-14: 1209       185646   IR-PCI-MSI 201850947-edge      n=
+vme0q67
+> 2022-12-28-11-39-14: 1831       184151   IR-PCI-MSI 203423828-edge      n=
+vme3q84
+> 2022-12-28-11-39-14: 1254       182313   IR-PCI-MSI 201850950-edge      n=
+vme0q70
+> 2022-12-28-11-39-14: 1224       181665   IR-PCI-MSI 201850948-edge      n=
+vme0q68
+> 2022-12-28-11-39-14: 1179       180115   IR-PCI-MSI 201850945-edge      n=
+vme0q65
+> > I'd vote for it being in VMD mode (non-bypass) by default.
+> I speculate that the vmd controller equalizes the interrupt load and
+> acts like a buffer,
+> which improves the performance of nvme. I am not sure about my
+> analysis. So, I'd like
+> to discuss it with the community.
