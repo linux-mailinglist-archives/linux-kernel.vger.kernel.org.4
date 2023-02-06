@@ -2,91 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DCAA68B331
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 01:21:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6A4168B336
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 01:21:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229508AbjBFAVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 19:21:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46094 "EHLO
+        id S229519AbjBFAV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 19:21:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjBFAVG (ORCPT
+        with ESMTP id S229651AbjBFAVy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 19:21:06 -0500
-Received: from omta35.uswest2.a.cloudfilter.net (omta35.uswest2.a.cloudfilter.net [35.89.44.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB00411E
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 16:21:03 -0800 (PST)
-Received: from eig-obgw-6009a.ext.cloudfilter.net ([10.0.30.184])
-        by cmsmtp with ESMTP
-        id Onu7pFhMnE9lPOpFnpWcAJ; Mon, 06 Feb 2023 00:21:03 +0000
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with ESMTP
-        id OpFmpFwx5aJ3DOpFmpzAFd; Mon, 06 Feb 2023 00:21:02 +0000
-X-Authority-Analysis: v=2.4 cv=RqfWkQqK c=1 sm=1 tr=0 ts=63e047ee
- a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=wTog8WU66it3cfrESHnF4A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10 a=m04uMKEZRckA:10
- a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8 a=mDV3o1hIAAAA:8 a=VwQbUJbxAAAA:8
- a=3VMw-uIDAAAA:8 a=2V8y8DYtvpxLzc8z7PkA:9 a=QEXdDO2ut3YA:10 a=3IOs8h2EC4YA:10
- a=_FVE-zBwftR9WsbkzFJk:22 a=AjGcO6oz07-iQ99wixmX:22 a=l4yDiZqTIPtlLW9rkt-Q:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=LoJqPL0J9HyvZgjS2eI/n1Okuq4m2LvX7JltIBhvybU=; b=Hcn/dREneTNq87d5GwkQMiCb/J
-        t3P8cuxt+jWK+UBldA5w2BSGw9q1y+9dkYvVv9bibYi8A93E7mOzPOwnf5D2Wu3d+PAcvddcV/YV1
-        DZGgFJtvGbMGnC58Hecg1VZe+BVvFzC2BQmbynIUGV2IikJiKvgKbCKyTf9rU4caMd6/zxYDZhfzi
-        plIatiAc11oLF4e4WxQqIFbgtF2fDu0dFUDu1KAqE2son2Q+BWFaKiRRMqu/mtcuq/xkd2LfmWNcG
-        WQ1oa/3F2ktJ3SRSIdXfGtumYHlgFRZgxKm6hqkzvx6/zEVR/EGpd5ycYxUxFx21l2KoJsnN0Pgrm
-        1KtvqWgQ==;
-Received: from 187-162-31-110.static.axtel.net ([187.162.31.110]:50220 helo=[192.168.15.7])
-        by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1pOpFl-002yY7-KS;
-        Sun, 05 Feb 2023 18:21:01 -0600
-Message-ID: <edd631aa-9f12-fe45-e381-f75c384861e9@embeddedor.com>
-Date:   Sun, 5 Feb 2023 18:21:09 -0600
+        Sun, 5 Feb 2023 19:21:54 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A33F4D520;
+        Sun,  5 Feb 2023 16:21:51 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id j32-20020a05600c1c2000b003dc4fd6e61dso9662651wms.5;
+        Sun, 05 Feb 2023 16:21:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qjr0azLLWyc/F0jSQSgAIjFGJ1vXgdojjuJl2+0tgn0=;
+        b=d8UAhliMdxOqlFoOosQojJDV0O1El13F2gL/9AjRWUTExZqYSWwovsD+7qG7poT98Q
+         XfLBr8ITA/kweSVh0RNn7tSg6uKavnXW3dh5qaJ9ta8ZUuaf4cgqN1vXRoZV+CfAdzHj
+         V2ZBUq/auS/P6/r3Zuo4qq7Fan2YQm4fwCZ/odxXrQA1ax2iv2HaP1dMBzWcgl2O1zOU
+         irWW/AaM9s8l1GNizHRE4OTMwRp3TZufLFtoGbbxTT9t+1jg2hbAbCNc7guuzwrFbJPC
+         kY+ZjZ3ZkIS7sgQ3OjOv8x0fJLUhLfniAniHpBV7PBVGoSvvrNPnmh7Ha8n15Usp1J6Z
+         0sww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qjr0azLLWyc/F0jSQSgAIjFGJ1vXgdojjuJl2+0tgn0=;
+        b=0zSmBCPwULioXmkGKesn0TEGmQaraBzDqS36jzmGNTv7o1wLb6fZAiMVtpPq5pFzEt
+         VewYZhV1UzdvqvKQLidfZ2HdGCKHkPBQhlB5zlQVvvWJzG8Og+cULwj/VRN2xwUTnm1b
+         vsGSEv1x/SaQndwC46h/mBjq7Y6ITHbagep1Gxgi/uO478YhIJEuR6V0nKcFOu5zLhQV
+         SmRSqmxkz0uPSI5xPEjvAhJcBzX9QVT0PXmEvdVvHkYS5X5Q3kooSImNLWNMkuQ/o8ch
+         /Y3eaBSCtyX6gpOargCLvvNRpjaCpEy5n7U4UEZz6tVBDWgnP1PX54K0IasSzKiZTenF
+         /zdQ==
+X-Gm-Message-State: AO0yUKUP1Ql1UJvd9bnSygqeewU75x/Xo7FQSbVOz8PJls0svsflDZAO
+        JY3oIcjrPrVXzaOnIJDFa9c=
+X-Google-Smtp-Source: AK7set+sVpzNPUz3DlSlHFkPUJSeord1K/h7NAmogPFOmbl6j5Bc863cYVN2f1UQgTgxbbTeKNXmlA==
+X-Received: by 2002:a05:600c:a51:b0:3df:f9e6:2c5c with SMTP id c17-20020a05600c0a5100b003dff9e62c5cmr3463935wmq.38.1675642909983;
+        Sun, 05 Feb 2023 16:21:49 -0800 (PST)
+Received: from prasmi.home ([2a00:23c8:2501:c701:ad64:1263:d26a:39ae])
+        by smtp.gmail.com with ESMTPSA id m40-20020a05600c3b2800b003dcc82ce53fsm9935504wms.38.2023.02.05.16.21.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Feb 2023 16:21:49 -0800 (PST)
+From:   Prabhakar <prabhakar.csengg@gmail.com>
+X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>
+Cc:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH] arm64: dts: renesas: Drop specifying the GIC_CPU_MASK_SIMPLE() for GICv3 systems
+Date:   Mon,  6 Feb 2023 00:21:36 +0000
+Message-Id: <20230206002136.29401-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH][next] xfs: Replace one-element arrays with flexible-array
- members
-Content-Language: en-US
-To:     Dave Chinner <david@fromorbit.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     "Darrick J. Wong" <djwong@kernel.org>, linux-xfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        Kees Cook <keescook@chromium.org>
-References: <Y9xiYmVLRIKdpJcC@work>
- <20230205225119.GU360264@dread.disaster.area>
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <20230205225119.GU360264@dread.disaster.area>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 187.162.31.110
-X-Source-L: No
-X-Exim-ID: 1pOpFl-002yY7-KS
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 187-162-31-110.static.axtel.net ([192.168.15.7]) [187.162.31.110]:50220
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 3
-X-Org:  HG=hgshared;ORG=hostgator;
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfCso9OK6SsF9LN/Rw4rbfGuX7Hn29G9tYXxnonUPiEQfaehumHaLULd6+gUR8FrY38uMpiJ5FnELh4IMuaAktknclTa+Q09Gjhp+nqN5yPZulVnxcAvT
- SbEHZUtAJvAruLJwOPwAXGPlb6OnXKHH5BlapS7MyQP++pz96Khx8l+auCoG016AJc2YtlILeGOtxBcY2YElBrZGjgCJCEvHj6vBNyxRMjiAty6y4tNXmwrC
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,220 +77,199 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
+The GICv3 interrupts binding does not have a cpumask. The CPU mask only
+applies to pre-GICv3. So just drop using them from GICv3 systems.
 
-On 2/5/23 16:51, Dave Chinner wrote:
-> On Thu, Feb 02, 2023 at 07:24:50PM -0600, Gustavo A. R. Silva wrote:
->> One-element arrays are deprecated, and we are replacing them with flexible
->> array members instead. So, replace one-element arrays with flexible-array
->> members in structures xfs_attr_leaf_name_local and
->> xfs_attr_leaf_name_remote.
->>
->> The only binary differences reported after the changes are all like
->> these:
->>
->> fs/xfs/libxfs/xfs_attr_leaf.o
->> _@@ -435,7 +435,7 @@
->>        3b8:      movzbl 0x2(%rbx),%eax
->>        3bc:      rol    $0x8,%bp
->>        3c0:      movzwl %bp,%ebp
->> -     3c3:      lea    0x2(%rax,%rbp,1),%ebx
->> +     3c3:      lea    0x3(%rax,%rbp,1),%ebx
->>        3c7:      call   3cc <xfs_attr_leaf_entsize+0x8c>
->>                          3c8: R_X86_64_PLT32     __tsan_func_exit-0x4
->>        3cc:      or     $0x3,%ebx
->> _@@ -454,7 +454,7 @@
->>        3ea:      movzbl 0x8(%rbx),%ebx
->>        3ee:      call   3f3 <xfs_attr_leaf_entsize+0xb3>
->>                          3ef: R_X86_64_PLT32     __tsan_func_exit-0x4
->> -     3f3:      add    $0xa,%ebx
->> +     3f3:      add    $0xb,%ebx
->>        3f6:      or     $0x3,%ebx
->>        3f9:      add    $0x1,%ebx
->>        3fc:      mov    %ebx,%eax
->>
->> similar changes in fs/xfs/scrub/attr.o and fs/xfs/xfs.o object files.
-> 
-> That seems like a red flag to me - an off-by-one change in the
-> compiled code that calculates of the on-disk size of a structure as
-> a result of an in-memory structure change just smells like a bug.
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+Note, this patch applies on top of [0]
 
-Ughh..
+[0] https://patchwork.kernel.org/project/linux-renesas-soc/cover/20230131223529.11905-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+---
+ arch/arm64/boot/dts/renesas/r8a779a0.dtsi    | 11 +++++------
+ arch/arm64/boot/dts/renesas/r8a779f0.dtsi    | 11 +++++------
+ arch/arm64/boot/dts/renesas/r8a779g0.dtsi    | 11 +++++------
+ arch/arm64/boot/dts/renesas/r9a07g043u.dtsi  |  8 ++++----
+ arch/arm64/boot/dts/renesas/r9a07g044.dtsi   |  8 ++++----
+ arch/arm64/boot/dts/renesas/r9a07g044c1.dtsi |  7 -------
+ arch/arm64/boot/dts/renesas/r9a07g044l1.dtsi |  7 -------
+ arch/arm64/boot/dts/renesas/r9a07g054l1.dtsi |  7 -------
+ 8 files changed, 23 insertions(+), 47 deletions(-)
 
-You're right. I somehow got confused between the moment I first
-build-tested this in my build machine and after a final last-minute
-review I did on the machine from which I ultimately send the patches
-out.
+diff --git a/arch/arm64/boot/dts/renesas/r8a779a0.dtsi b/arch/arm64/boot/dts/renesas/r8a779a0.dtsi
+index 41fbb9998cf8..f04792baef80 100644
+--- a/arch/arm64/boot/dts/renesas/r8a779a0.dtsi
++++ b/arch/arm64/boot/dts/renesas/r8a779a0.dtsi
+@@ -2209,8 +2209,7 @@ gic: interrupt-controller@f1000000 {
+ 			interrupt-controller;
+ 			reg = <0x0 0xf1000000 0 0x20000>,
+ 			      <0x0 0xf1060000 0 0x110000>;
+-			interrupts = <GIC_PPI 9
+-				      (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_HIGH)>;
++			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
+ 		};
+ 
+ 		fcpvd0: fcp@fea10000 {
+@@ -2857,9 +2856,9 @@ sensor5_crit: sensor5-crit {
+ 
+ 	timer {
+ 		compatible = "arm,armv8-timer";
+-		interrupts-extended = <&gic GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>,
+-				      <&gic GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>,
+-				      <&gic GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>,
+-				      <&gic GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>;
++		interrupts-extended = <&gic GIC_PPI 13 IRQ_TYPE_LEVEL_LOW>,
++				      <&gic GIC_PPI 14 IRQ_TYPE_LEVEL_LOW>,
++				      <&gic GIC_PPI 11 IRQ_TYPE_LEVEL_LOW>,
++				      <&gic GIC_PPI 10 IRQ_TYPE_LEVEL_LOW>;
+ 	};
+ };
+diff --git a/arch/arm64/boot/dts/renesas/r8a779f0.dtsi b/arch/arm64/boot/dts/renesas/r8a779f0.dtsi
+index f20b612b2b9a..52b09e347e13 100644
+--- a/arch/arm64/boot/dts/renesas/r8a779f0.dtsi
++++ b/arch/arm64/boot/dts/renesas/r8a779f0.dtsi
+@@ -1108,8 +1108,7 @@ gic: interrupt-controller@f1000000 {
+ 			interrupt-controller;
+ 			reg = <0x0 0xf1000000 0 0x20000>,
+ 			      <0x0 0xf1060000 0 0x110000>;
+-			interrupts = <GIC_PPI 9
+-				      (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_HIGH)>;
++			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
+ 		};
+ 
+ 		prr: chipid@fff00044 {
+@@ -1164,10 +1163,10 @@ sensor3_crit: sensor3-crit {
+ 
+ 	timer {
+ 		compatible = "arm,armv8-timer";
+-		interrupts-extended = <&gic GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
+-				      <&gic GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
+-				      <&gic GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
+-				      <&gic GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>;
++		interrupts-extended = <&gic GIC_PPI 13 IRQ_TYPE_LEVEL_LOW>,
++				      <&gic GIC_PPI 14 IRQ_TYPE_LEVEL_LOW>,
++				      <&gic GIC_PPI 11 IRQ_TYPE_LEVEL_LOW>,
++				      <&gic GIC_PPI 10 IRQ_TYPE_LEVEL_LOW>;
+ 	};
+ 
+ 	ufs30_clk: ufs30-clk {
+diff --git a/arch/arm64/boot/dts/renesas/r8a779g0.dtsi b/arch/arm64/boot/dts/renesas/r8a779g0.dtsi
+index 7a87a5dc1b6a..e84153b18f39 100644
+--- a/arch/arm64/boot/dts/renesas/r8a779g0.dtsi
++++ b/arch/arm64/boot/dts/renesas/r8a779g0.dtsi
+@@ -1205,8 +1205,7 @@ gic: interrupt-controller@f1000000 {
+ 			interrupt-controller;
+ 			reg = <0x0 0xf1000000 0 0x20000>,
+ 			      <0x0 0xf1060000 0 0x110000>;
+-			interrupts = <GIC_PPI 9
+-				      (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_HIGH)>;
++			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
+ 		};
+ 
+ 		fcpvd0: fcp@fea10000 {
+@@ -1347,9 +1346,9 @@ prr: chipid@fff00044 {
+ 
+ 	timer {
+ 		compatible = "arm,armv8-timer";
+-		interrupts-extended = <&gic GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+-				      <&gic GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+-				      <&gic GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+-				      <&gic GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
++		interrupts-extended = <&gic GIC_PPI 13 IRQ_TYPE_LEVEL_LOW>,
++				      <&gic GIC_PPI 14 IRQ_TYPE_LEVEL_LOW>,
++				      <&gic GIC_PPI 11 IRQ_TYPE_LEVEL_LOW>,
++				      <&gic GIC_PPI 10 IRQ_TYPE_LEVEL_LOW>;
+ 	};
+ };
+diff --git a/arch/arm64/boot/dts/renesas/r9a07g043u.dtsi b/arch/arm64/boot/dts/renesas/r9a07g043u.dtsi
+index 1c9d3193e4ff..2ab231572d95 100644
+--- a/arch/arm64/boot/dts/renesas/r9a07g043u.dtsi
++++ b/arch/arm64/boot/dts/renesas/r9a07g043u.dtsi
+@@ -47,10 +47,10 @@ psci {
+ 
+ 	timer {
+ 		compatible = "arm,armv8-timer";
+-		interrupts-extended = <&gic GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>,
+-				      <&gic GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>,
+-				      <&gic GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>,
+-				      <&gic GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>;
++		interrupts-extended = <&gic GIC_PPI 13 IRQ_TYPE_LEVEL_LOW>,
++				      <&gic GIC_PPI 14 IRQ_TYPE_LEVEL_LOW>,
++				      <&gic GIC_PPI 11 IRQ_TYPE_LEVEL_LOW>,
++				      <&gic GIC_PPI 10 IRQ_TYPE_LEVEL_LOW>;
+ 	};
+ };
+ 
+diff --git a/arch/arm64/boot/dts/renesas/r9a07g044.dtsi b/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
+index 2c848aad7aea..ed7f330e4a2a 100644
+--- a/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
++++ b/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
+@@ -1070,9 +1070,9 @@ target: trip-point {
+ 
+ 	timer {
+ 		compatible = "arm,armv8-timer";
+-		interrupts-extended = <&gic GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>,
+-				      <&gic GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>,
+-				      <&gic GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>,
+-				      <&gic GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>;
++		interrupts-extended = <&gic GIC_PPI 13 IRQ_TYPE_LEVEL_LOW>,
++				      <&gic GIC_PPI 14 IRQ_TYPE_LEVEL_LOW>,
++				      <&gic GIC_PPI 11 IRQ_TYPE_LEVEL_LOW>,
++				      <&gic GIC_PPI 10 IRQ_TYPE_LEVEL_LOW>;
+ 	};
+ };
+diff --git a/arch/arm64/boot/dts/renesas/r9a07g044c1.dtsi b/arch/arm64/boot/dts/renesas/r9a07g044c1.dtsi
+index 1d57df706939..56a979e82c4f 100644
+--- a/arch/arm64/boot/dts/renesas/r9a07g044c1.dtsi
++++ b/arch/arm64/boot/dts/renesas/r9a07g044c1.dtsi
+@@ -15,13 +15,6 @@ cpus {
+ 		/delete-node/ cpu-map;
+ 		/delete-node/ cpu@100;
+ 	};
+-
+-	timer {
+-		interrupts-extended = <&gic GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>,
+-				      <&gic GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>,
+-				      <&gic GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>,
+-				      <&gic GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>;
+-	};
+ };
+ 
+ &soc {
+diff --git a/arch/arm64/boot/dts/renesas/r9a07g044l1.dtsi b/arch/arm64/boot/dts/renesas/r9a07g044l1.dtsi
+index 9d89d4590358..9cf27ca9f1d2 100644
+--- a/arch/arm64/boot/dts/renesas/r9a07g044l1.dtsi
++++ b/arch/arm64/boot/dts/renesas/r9a07g044l1.dtsi
+@@ -15,11 +15,4 @@ cpus {
+ 		/delete-node/ cpu-map;
+ 		/delete-node/ cpu@100;
+ 	};
+-
+-	timer {
+-		interrupts-extended = <&gic GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>,
+-				      <&gic GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>,
+-				      <&gic GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>,
+-				      <&gic GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>;
+-	};
+ };
+diff --git a/arch/arm64/boot/dts/renesas/r9a07g054l1.dtsi b/arch/arm64/boot/dts/renesas/r9a07g054l1.dtsi
+index c448cc6634c1..d85a6ac0f024 100644
+--- a/arch/arm64/boot/dts/renesas/r9a07g054l1.dtsi
++++ b/arch/arm64/boot/dts/renesas/r9a07g054l1.dtsi
+@@ -15,11 +15,4 @@ cpus {
+ 		/delete-node/ cpu-map;
+ 		/delete-node/ cpu@100;
+ 	};
+-
+-	timer {
+-		interrupts-extended = <&gic GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>,
+-				      <&gic GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>,
+-				      <&gic GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>,
+-				      <&gic GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>;
+-	};
+ };
+-- 
+2.25.1
 
-More comments below...
-
-> 
-> How did you test this change?
-> 
->> And the reason for this is because of the round_up() macro called in
->> functions xfs_attr_leaf_entsize_remote() and xfs_attr_leaf_entsize_local(),
->> which is compensanting for the one-byte reduction in size (due to the
->> flex-array transformation) of structures xfs_attr_leaf_name_remote and
->> xfs_attr_leaf_name_local. So, sizes remain the same before and after
->> changes.
-> 
-> I'm not sure that is true. Before this change:
-
-Yeah; this in fact was a final last-minute review I did before sending out
-the patch, and it was when I noticed the round_up() macro was doing something
-quite idiomatic when it comes to calculating the sizes of structures containing
-one-element arrays. People usually subtract the sizeof(type-of-one-element)
-from the sizeof(struct-with-one-element-array) when they perform other
-calculations. And in this case as the sizeof(type-of-one-element) is one byte,
-at the moment I thought that subtraction was because of that, and then when I
-build-tested that final change, I totally forgot about the padding (I had
-actually noticed it when I modified the structure definitions :/) and now I
-see I got all confused.
-
-> 
-> sizeof(xfs_attr_leaf_name_local_t) = 4
-> sizeof(xfs_attr_leaf_name_remote_t) = 12
-> 
-> After this change:
-> 
-> sizeof(xfs_attr_leaf_name_local_t) = 4
-> sizeof(xfs_attr_leaf_name_remote_t) = 12
-
-Yes; in fact I noticed that. :/
-
-> 
-> i.e. no change because the structures aren't defined as packed
-> structures.  Hence the compiler pads them to out to 4 byte alignment
-> naturally regardless of the flex array definition. pahole on x86-64
-> also confirms that the (padded) size of the structure is not
-> changed.
-
-Yep; I actually was going to include the pahole output for both structures
-in the changelog text, but I decided not to do it at the last minute as
-I didn't see it necessary because, as you pointed out, the sizes before
-and after the flex-array transformations are the same.
-
-> 
-> However, the on-disk structure it is being used to decode is packed,
-> and we're only using pointer arithmetic to pull the location of the
-> name/value pairs out of the buffer to copy them - it's the structure
-> size calculations that actually define the size of the structures
-> for a given name length, not the sizeof() value or the flex array
-> definitions...
-> 
->> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
->> routines on memcpy() and help us make progress towards globally
->> enabling -fstrict-flex-arrays=3 [1].
->>
->> Link: https://github.com/KSPP/linux/issues/79
->> Link: https://github.com/KSPP/linux/issues/251
->> Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
->> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
->> ---
->>   fs/xfs/libxfs/xfs_da_format.h | 8 ++++----
->>   1 file changed, 4 insertions(+), 4 deletions(-)
->>
->> diff --git a/fs/xfs/libxfs/xfs_da_format.h b/fs/xfs/libxfs/xfs_da_format.h
->> index 25e2841084e1..e1e62ebb0c44 100644
->> --- a/fs/xfs/libxfs/xfs_da_format.h
->> +++ b/fs/xfs/libxfs/xfs_da_format.h
->> @@ -620,14 +620,14 @@ typedef struct xfs_attr_leaf_entry {	/* sorted on key, not name */
->>   typedef struct xfs_attr_leaf_name_local {
->>   	__be16	valuelen;		/* number of bytes in value */
->>   	__u8	namelen;		/* length of name bytes */
->> -	__u8	nameval[1];		/* name/value bytes */
->> +	__u8	nameval[];		/* name/value bytes */
->>   } xfs_attr_leaf_name_local_t;
->>   
->>   typedef struct xfs_attr_leaf_name_remote {
->>   	__be32	valueblk;		/* block number of value bytes */
->>   	__be32	valuelen;		/* number of bytes in value */
->>   	__u8	namelen;		/* length of name bytes */
->> -	__u8	name[1];		/* name bytes */
->> +	__u8	name[];			/* name bytes */
->>   } xfs_attr_leaf_name_remote_t;
->>   
->>   typedef struct xfs_attr_leafblock {
->> @@ -747,13 +747,13 @@ xfs_attr3_leaf_name_local(xfs_attr_leafblock_t *leafp, int idx)
->>    */
->>   static inline int xfs_attr_leaf_entsize_remote(int nlen)
->>   {
->> -	return round_up(sizeof(struct xfs_attr_leaf_name_remote) - 1 +
->> +	return round_up(sizeof(struct xfs_attr_leaf_name_remote) +
->>   			nlen, XFS_ATTR_LEAF_NAME_ALIGN);
->>   }
-> 
-> To be honest, the actual padding and alignment calculations are
-> kinda whacky because that's the way they were defined back in 1995.
-> And, well, once set in the on-disk format, it can't easily be
-> changed. FYI, here's the original definition from 1995:
-> 
-> #define XFS_ATTR_LEAF_ENTSIZE_REMOTE(nlen)	/* space for remote struct */ \
-> 	(((sizeof(xfs_attr_leaf_name_remote_t)-1 + (nlen)) +3)&~0x3)
-> 
-> So apart using round_up and defines instead of magic numbers, the
-> current calculation is unchanged from the original definition.
-> 
-> AFAICT, the modification you are proposing above breaks this because the
-> sizeof(xfs_attr_leaf_name_remote) result has not changed with the
-> change of the structure definition.
-> 
-> e.g. if namelen = 17, before we had:
-> 
-> 	size	= round_up(12 - 1 + 17, 4)
-> 		= round_up(28, 4)
-> 		= 28
-> 
-> Which is correct because the on-disk format is packed:
-> 
->          0   4   89  12      20   26 28
-> 	+---+---++--+-------+-----+-+-----....
->                    |---------------| 17 bytes of name.
-> 		                  |-| 2 bytes of padding
-> 				    |-----.... Next attr record.
-> 
-> We end up with 2 bytes of padded between the end of the name and the
-> start of the next attribute record in the block.
-> 
-> But after this patch, now we calculate the size as:
-> 
-> 	size	= round_up(12 + 17, 4)
-> 		= round_up(29, 4)
-> 		= 32
-> 
-> Which is a different result, and would result in incorrect parsing
-> of the attribute records in the buffer. Hence I don't think it is
-> valid to be changing the entsize calculations like this if sizeof()
-> is not changing results.
-
-Yep; you're right.
-
-> 
-> Which comes back to my original question: how did you test this?
-
-I compared the generated object files in fs/xfs/, fs/xfs/scrub/ and
-fs/xfs/libxfs/ before and after the changes with something like
-these[1]:
-
-ARGS=--disassemble --demangle --reloc --no-show-raw-insn --section=.text
-for i in $(cd $OUT/xfs/before && echo *.o); do  echo $i; diff -u <(objdump $ARGS $OUT/xfs/before/$i | sed "0,/^Disassembly/d") <(objdump $ARGS $OUT/xfs/after/$i 
-| sed "0,/^Disassembly/d"); done
-
-where of course the generated object files before the changes are
-located in OUT/xfs/before/ and the ones after changes in $OUT/xfs/after/
-
-I just double-checked and, indeed, the changes I mentioned in the
-changelog text only show up when I modify the entsize functions.
-
-So, because of the padding, the flex-array transformations don't
-actually affect the sizes of the involved structures. So, it seems
-that change is enough and is the correct one.
-
-I really appreciate your comments and feedback, Dave. And I'm sorry
-for the confusion.
-
-Thank you!
---
-Gustavo
-
-[1] https://outflux.net/blog/archives/2022/06/24/finding-binary-differences/
