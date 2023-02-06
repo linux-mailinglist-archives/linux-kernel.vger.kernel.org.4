@@ -2,92 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9900B68BC18
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 12:54:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34A6868BB68
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 12:25:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229827AbjBFLyI convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 6 Feb 2023 06:54:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33900 "EHLO
+        id S229981AbjBFLY4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 06:24:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbjBFLyG (ORCPT
+        with ESMTP id S229875AbjBFLYx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 06:54:06 -0500
-Received: from mail.pgj.campeche.gob.mx (unknown [187.157.28.107])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B88A12F29
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 03:54:03 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.pgj.campeche.gob.mx (Postfix) with ESMTP id 959C41BC48DA;
-        Mon,  6 Feb 2023 05:51:51 -0600 (CST)
-Received: from mail.pgj.campeche.gob.mx ([127.0.0.1])
-        by localhost (mail.pgj.campeche.gob.mx [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id gfHLfiGvswLa; Mon,  6 Feb 2023 05:51:45 -0600 (CST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.pgj.campeche.gob.mx (Postfix) with ESMTP id 0D4551BC48DB;
-        Mon,  6 Feb 2023 05:35:52 -0600 (CST)
-X-Virus-Scanned: amavisd-new at pgj.campeche.gob.mx
-Received: from mail.pgj.campeche.gob.mx ([127.0.0.1])
-        by localhost (mail.pgj.campeche.gob.mx [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 7PctX4WRmOHf; Mon,  6 Feb 2023 05:35:50 -0600 (CST)
-Received: from [23.146.243.45] (_gateway [172.24.1.254])
-        by mail.pgj.campeche.gob.mx (Postfix) with ESMTPSA id BD9211BC44A9;
-        Mon,  6 Feb 2023 05:23:50 -0600 (CST)
-Content-Type: text/plain; charset="iso-8859-1"
+        Mon, 6 Feb 2023 06:24:53 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA56272A4;
+        Mon,  6 Feb 2023 03:24:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=6p5UcUVJMB6FcC7LDxPnes2LOQaJUS8z6IEOS3X783s=; b=Ea7S5G84aDpNMvL/Suxi9XIvmP
+        C3d8gqapGDHgOfKkaP3NfNlfpuswBdZ+/65aPGo8Ipfi4ygRk8xZ7E1lb+BYSVGzxaS2sN48Bj+uV
+        7EcpbhbKtu3+Vy6v0rx38wmRy2zhh9BHTpbWgMb6B1VUojynlRhGLZwyBBeJ97ZTbSyUL+nN/9cdA
+        g3KAlOkdL6bK9I8Ru0c8Xd4so95LlWcA9jGTKHdvLf99ddC9qSvsG4IxnKgYDCF/ShOfXC3/ZQNuz
+        +ltBvaSkLaaFq/cirv5PAA/Jvc9EmJp6O0MLa9hEeS1tkPMdnYzaGXwcTfJ4KZOOty5sepN3i9T7J
+        b/03MOXw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pOzbS-00Gi9E-Dh; Mon, 06 Feb 2023 11:24:06 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C110E30013F;
+        Mon,  6 Feb 2023 12:24:00 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 8C4252CFF4E16; Mon,  6 Feb 2023 12:24:00 +0100 (CET)
+Date:   Mon, 6 Feb 2023 12:24:00 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>, dennis@kernel.org,
+        Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
+        Heiko Carstens <hca@linux.ibm.com>, gor@linux.ibm.com,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        borntraeger@linux.ibm.com, Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Joerg Roedel <joro@8bytes.org>,
+        suravee.suthikulpanit@amd.com, Robin Murphy <robin.murphy@arm.com>,
+        dwmw2@infradead.org, Baolu Lu <baolu.lu@linux.intel.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-s390@vger.kernel.org, iommu@lists.linux.dev,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-crypto@vger.kernel.org
+Subject: Re: [PATCH v2 05/10] percpu: Wire up cmpxchg128
+Message-ID: <Y+DjULnIxcPU/rtp@hirez.programming.kicks-ass.net>
+References: <20230202145030.223740842@infradead.org>
+ <20230202152655.494373332@infradead.org>
+ <24007667-1ff3-4c86-9c17-a361c3f9f072@app.fastmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Se requiere respuesta urgente.
-To:     Recipients <jnaaluitz@pgj.campeche.gob.mx>
-From:   "zimbra@" <jnaaluitz@pgj.campeche.gob.mx>
-Date:   Mon, 06 Feb 2023 03:23:41 -0800
-Reply-To: webmasterzimbra1@gmail.com
-Message-Id: <20230206112350.BD9211BC44A9@mail.pgj.campeche.gob.mx>
-X-Spam-Status: Yes, score=5.4 required=5.0 tests=BAYES_50,
-        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,FROM_MISSP_REPLYTO,
-        KHOP_HELO_FCRDNS,MAY_BE_FORGED,RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,
-        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [webmasterzimbra1[at]gmail.com]
-        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
-        *      https://senderscore.org/blocklistlookup/
-        *      [187.157.28.107 listed in bl.score.senderscore.com]
-        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
-        *      [187.157.28.107 listed in wl.mailspike.net]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 SPF_NONE SPF: sender does not publish an SPF Record
-        *  1.0 RDNS_DYNAMIC Delivered to internal network by host with
-        *      dynamic-looking rDNS
-        *  0.0 FROM_MISSP_REPLYTO From misspaced, has Reply-To
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-        *  0.0 MAY_BE_FORGED Relay IP's reverse DNS does not resolve to IP
-        *  0.0 KHOP_HELO_FCRDNS Relay HELO differs from its IP's reverse DNS
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <24007667-1ff3-4c86-9c17-a361c3f9f072@app.fastmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Su cuenta no ha pasado por el proceso de verificación / actualización. Los titulares de cuentas deben actualizar sus cuentas dentro de los 5 días hábiles posteriores a la recepción de este aviso. El incumplimiento de este aviso dentro de la fecha límite puede no ser capaz de enviar o recibir todos los mensajes y el propietario correrá el riesgo de perder su cuenta.
+On Fri, Feb 03, 2023 at 06:25:04PM +0100, Arnd Bergmann wrote:
+> On Thu, Feb 2, 2023, at 15:50, Peter Zijlstra wrote:
+> > In order to replace cmpxchg_double() with the newly minted
+> > cmpxchg128() family of functions, wire it up in this_cpu_cmpxchg().
+> >
+> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> 
+> I commented on this in the previous version but never got any
+> reply from you:
+> 
+> https://lore.kernel.org/all/1d88ba9f-5541-4b67-9cc8-a361eef36547@app.fastmail.com/
 
-Confirme los detalles de la cuenta a continuación.
-_____________________________________
-1. Nombre y apellido:
-2. Correo electrónico completo en:
-3. Nombre de usuario:
-4. Contraseña:
-5. Vuelva a escribir la contraseña:
-_____________________________________
- 
-NOTA !!! Si no actualiza su cuenta, su cuenta se eliminará automáticamente de nuestro sistema.
- 
-Nos disculpamos por cualquier inconveniente causado.
- 
-Sinceramente
-Atención al cliente
-Equipo de soporte técnico de Zimbra.
- 
-Copyright © 2005-2023 Synacor, Inc. Todos los derechos reservados
+Sorry, seem to have missed that :/
+
+> Unless I have misunderstood what you are doing, my concerns are
+> still the same:
+> 
+> >  #define this_cpu_cmpxchg(pcp, oval, nval) \
+> > -	__pcpu_size_call_return2(this_cpu_cmpxchg_, pcp, oval, nval)
+> > +	__pcpu_size16_call_return2(this_cpu_cmpxchg_, pcp, oval, nval)
+> >  #define this_cpu_cmpxchg_double(pcp1, pcp2, oval1, oval2, nval1, 
+> > nval2) \
+> >  	__pcpu_double_call_return_bool(this_cpu_cmpxchg_double_, pcp1, pcp2, 
+> > oval1, oval2, nval1, nval2)
+> 
+> Having a variable-length this_cpu_cmpxchg() that turns into cmpxchg128()
+> and cmpxchg64() even on CPUs where this traps (!X86_FEATURE_CX16) seems
+> like a bad design to me.
+> 
+> I would much prefer fixed-length this_cpu_cmpxchg64()/this_cpu_cmpxchg128()
+> calls that never trap but fall back to the generic version on CPUs that
+> are lacking the atomics.
+
+You're thinking acidental usage etc..? Lemme see what I can do.
