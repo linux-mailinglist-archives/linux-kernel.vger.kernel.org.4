@@ -2,97 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC6C068C153
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 16:29:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABF4368C1B7
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 16:36:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230150AbjBFP3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 10:29:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60068 "EHLO
+        id S231597AbjBFPgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 10:36:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229964AbjBFP3e (ORCPT
+        with ESMTP id S231588AbjBFPfu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 10:29:34 -0500
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48B3110267
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 07:29:33 -0800 (PST)
-Received: by mail-il1-x133.google.com with SMTP id l7so4839102ilf.0
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 07:29:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lwFXeEE6OM+Eba5UlMJGqS1S5aU4oc1qRdddqki3enQ=;
-        b=iV7stC/flzjebT0ar0vLBLMrRS1Zgfa4EWmzBHUBq2mPfhFfiy+qFMOXKaYBXaQQGk
-         fnvpe85ijbA+XlWQ94UEI91LIJSirAEiQC26cj+atSqFnE+QYnQMMcNeGrLRqxpvDdHm
-         cKXp4vB0mO9XeLLGwQUUZI3wbYEmaAULlVkLC9CsE5KkerWDgA26PhyGRIEL+ziV9klS
-         ZTfXcOrK3NZsSTZLNj0UKWysqi5sQITOs//iVA4UDTrnHQxJv4D61/PAqTL+n/SAEbTK
-         vTM7/bdyZpB8JbOAtwXYFZJf7rKJzqFufWbhQVhQXWcz2GzCGUsQMnEh2g1LeDK5qqvq
-         LSmA==
+        Mon, 6 Feb 2023 10:35:50 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AFBA2E0D7
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 07:32:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675697496;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ViNvh2IavPltRwIS2u0eTkOgWpB6sQmqMz+8YaqMvr0=;
+        b=S5KomHRGBXhvjRwtJCjKqgeRyCY/0AMA/IEpTpQfyE20MtBaJubH+6q4ImN0okHtBzjnl6
+        aTe8YAwhK2VOHDOqUM8QT1TVFMbKkKIQSUSLDvhUGjKuMss2yvhQmoZugLUgVVriGA5Thu
+        JecjUekTJWroKaGw70AhQYMQw7tF0dU=
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
+ [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-557-U0N1-WNOPO233MrcuMYppg-1; Mon, 06 Feb 2023 10:31:34 -0500
+X-MC-Unique: U0N1-WNOPO233MrcuMYppg-1
+Received: by mail-io1-f71.google.com with SMTP id k4-20020a6b7e44000000b0071e11cafea7so7169044ioq.15
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 07:31:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lwFXeEE6OM+Eba5UlMJGqS1S5aU4oc1qRdddqki3enQ=;
-        b=6CCTGr56f8WQbEjrqttLQoRBvVFfbaDIjCOKEM/S1tWIMcu2GdvGpXnChuZfAZXtdU
-         WWQuvn6uVZulGB3ymP3x0cP57xBTHwg50IEXj/TCZjnEoE4cLHoPZH6FrVYoTLjuD//i
-         fKDcmTGYPFGfTL9wqN8Xg/1EieQe8RcvwY16LqaJNDr39VGdUTwTBZZCm7jBOkSZ0SXz
-         YGyfYY7ofU7X6qzO7UOlX1dO9eMvTad4dqwQ+YaiQig9nuzUMVJY+t187EaAFZdX34My
-         hWC9Ndv2bSH4S/BhYNhXNupOyb72CLiRdLh4KTgU0SDpmig2+YmyS9Tu9h1B0X2INMsa
-         lFbw==
-X-Gm-Message-State: AO0yUKW4a2J18+cxsByNt1yEVq+EmJoX5yJGTRI94nNWwgwrdo3By8NM
-        eurnRFrE/8ao2XDLSdPS24uQCA==
-X-Google-Smtp-Source: AK7set9Cjsl1WoBaQgY9HwcHawN0VOjEz2rxxQK8fWTRHIWybXhIiVYh55Tn13UNgbPNi4BUWsceWw==
-X-Received: by 2002:a92:c266:0:b0:313:c42c:d34 with SMTP id h6-20020a92c266000000b00313c42c0d34mr3044228ild.3.1675697372596;
-        Mon, 06 Feb 2023 07:29:32 -0800 (PST)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id r11-20020a056e0219cb00b00313b9c65950sm1884967ill.30.2023.02.06.07.29.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Feb 2023 07:29:32 -0800 (PST)
-Message-ID: <52d41a7e-1407-e74f-9206-6dd583b7b6b5@kernel.dk>
-Date:   Mon, 6 Feb 2023 08:29:30 -0700
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ViNvh2IavPltRwIS2u0eTkOgWpB6sQmqMz+8YaqMvr0=;
+        b=OssmVxumYLZbVdiTmMOsWSNx6x8CGe8/E/V+Wac3HlX7+9KO2Z65TdPRbFPqKZrHjN
+         YfnIdg6RGNO+WeMOZ+axFpxXRBFcN2FCDnvxmwJr9KmieNcs+JWfH4QDUYrD0ltgsdMd
+         LgTEO87eQLnqXgROpej5MNnXyLSyvahIi2+0RTH3ZW2/QGGmxuD1OFVi0K3q4DrT4rm5
+         ujzFGKtBe8uT6lnPPXHIP+suFQBKcnbT076HOhEpZsXDuh+DnDZX7odxGIYQt3uvLoNe
+         C/qu3hrYda3J253KBU4XPPlQvIK7Af5S7udjg6TlahFcNdBO+7TI+WcxXQ5h7otYuDCj
+         ZWWQ==
+X-Gm-Message-State: AO0yUKWLnkK17QXs0F7UKvv1O+M6oNyCSo3ewYsbuu63oU3TVjZr2fL/
+        rlLN2nMwr3RyJSXzek3kEod2QRlhgpCV7nFQ5QVJLGUg6Pxrgz3D8movwDKyx/gAwRFRI9qRMk3
+        vunbrL8tDUGod2Vttn3y+b48I6TFK8eiH9uYQM2WZ
+X-Received: by 2002:a92:2003:0:b0:30f:37f5:8520 with SMTP id j3-20020a922003000000b0030f37f58520mr4264639ile.63.1675697493948;
+        Mon, 06 Feb 2023 07:31:33 -0800 (PST)
+X-Google-Smtp-Source: AK7set8hCwd+me3+fYn1guoCKfdAzafeoQiTQpA+TBWgprx+HN0/zGbagcHaITaEMm2xP2+TKjAWyE38obGRBKZ4NwA=
+X-Received: by 2002:a92:2003:0:b0:30f:37f5:8520 with SMTP id
+ j3-20020a922003000000b0030f37f58520mr4264630ile.63.1675697493785; Mon, 06 Feb
+ 2023 07:31:33 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 09/19] io_uring: convert to use vm_account
-Content-Language: en-US
-To:     Alistair Popple <apopple@nvidia.com>, linux-mm@kvack.org,
-        cgroups@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, jgg@nvidia.com, jhubbard@nvidia.com,
-        tjmercier@google.com, hannes@cmpxchg.org, surenb@google.com,
-        mkoutny@suse.com, daniel@ffwll.ch,
-        "Daniel P . Berrange" <berrange@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        io-uring@vger.kernel.org
-References: <cover.c238416f0e82377b449846dbb2459ae9d7030c8e.1675669136.git-series.apopple@nvidia.com>
- <44e6ead48bc53789191b22b0e140aeb82459e75f.1675669136.git-series.apopple@nvidia.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <44e6ead48bc53789191b22b0e140aeb82459e75f.1675669136.git-series.apopple@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1674227308.git.alexl@redhat.com> <CAOQ4uxhGX9NVxwsiBMP0q21ZRot6-UA0nGPp1wGNjgmKBjjBBA@mail.gmail.com>
+ <b8601c976d6e5d3eccf6ef489da9768ad72f9571.camel@redhat.com>
+ <e840d413-c1a7-d047-1a63-468b42571846@linux.alibaba.com> <2ef122849d6f35712b56ffbcc95805672980e185.camel@redhat.com>
+ <8ffa28f5-77f6-6bde-5645-5fb799019bca@linux.alibaba.com> <51d9d1b3-2b2a-9b58-2f7f-f3a56c9e04ac@linux.alibaba.com>
+ <071074ad149b189661681aada453995741f75039.camel@redhat.com>
+ <0d2ef9d6-3b0e-364d-ec2f-c61b19d638e2@linux.alibaba.com> <de57aefc-30e8-470d-bf61-a1cca6514988@linux.alibaba.com>
+ <CAOQ4uxgS+-MxydqgO8+NQfOs9N881bHNbov28uJYX9XpthPPiw@mail.gmail.com>
+ <9c8e76a3-a60a-90a2-f726-46db39bc6558@linux.alibaba.com> <02edb5d6-a232-eed6-0338-26f9a63cfdb6@linux.alibaba.com>
+ <3d4b17795413a696b373553147935bf1560bb8c0.camel@redhat.com>
+ <CAOQ4uxjNmM81mgKOBJeScnmeR9+jG_aWvDWxAx7w_dGh0XHg3Q@mail.gmail.com>
+ <CAL7ro1Hc4npP9DQjzuWXJYPTi9H=arLstAJvsBgVKzd8Cx8_tg@mail.gmail.com> <678002cf-f847-d5c3-a79b-5bebd3c1e518@linux.alibaba.com>
+In-Reply-To: <678002cf-f847-d5c3-a79b-5bebd3c1e518@linux.alibaba.com>
+From:   Alexander Larsson <alexl@redhat.com>
+Date:   Mon, 6 Feb 2023 16:31:22 +0100
+Message-ID: <CAL7ro1G59CGj99YKJYAP=8W+sejE+q=XqXtYjmiXXP9=xVcjwA@mail.gmail.com>
+Subject: Re: [PATCH v3 0/6] Composefs: an opportunistically sharing verified
+ image filesystem
+To:     Gao Xiang <hsiangkao@linux.alibaba.com>
+Cc:     Amir Goldstein <amir73il@gmail.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Jingbo Xu <jefflexu@linux.alibaba.com>, gscrivan@redhat.com,
+        brauner@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, david@fromorbit.com,
+        viro@zeniv.linux.org.uk, Vivek Goyal <vgoyal@redhat.com>,
+        Josef Bacik <josef@toxicpanda.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/6/23 12:47 AM, Alistair Popple wrote:
-> Convert io_uring to use vm_account instead of directly charging pages
-> against the user/mm. Rather than charge pages to both user->locked_vm
-> and mm->pinned_vm this will only charge pages to user->locked_vm.
+On Mon, Feb 6, 2023 at 2:27 PM Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
+> On 2023/2/6 20:43, Alexander Larsson wrote:
+> >
+> > One problem I ran into is that erofs seems to only support mounting
+> > filesystem images that are created with the native page size. This
+> > means I can't mount a erofs image created on a 4k page-size machine on
+> > an arm64 mac with 64k pages. That doesn't seem great. Maybe this
+> > limitation can be lifted from the erofs code though.
+>
+> Honestly, EROFS 64k support has been in our roadmap for a quite long
+> time, and it has been almost done for the uncompressed part apart from
+> replacing EROFS_BLKSIZ to erofs_blksiz(sb).
 
-Not sure how we're supposed to review this, when you just send us 9/19
-and vm_account_release() is supposedly an earlier patch in this series.
+Good, as long as it is on the roadmap.
 
-Either CC the whole series, or at least the cover letter, core parts,
-and the per-subsystem parts.
+> Currently it's not urgent just because our Cloud environment always use
+> 4k PAGE_SIZE, but it seems Android will consider 16k pagesize as well, so
+> yes, we will support !4k page size for the uncompressed part in the near
+> future.  But it seems that arm64 RHEL 9 switched back to 4k page size?
+
+Honestly I'm not following it all that closely, but I think Fedora was
+at least talking about 64k pages.
 
 -- 
-Jens Axboe
-
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+ Alexander Larsson                                Red Hat, Inc
+       alexl@redhat.com         alexander.larsson@gmail.com
 
