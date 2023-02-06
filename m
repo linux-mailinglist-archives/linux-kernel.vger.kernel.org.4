@@ -2,93 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3456568C658
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 20:00:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D753268C65C
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 20:02:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229873AbjBFTAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 14:00:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35896 "EHLO
+        id S229884AbjBFTCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 14:02:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230234AbjBFTAb (ORCPT
+        with ESMTP id S229483AbjBFTCB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 14:00:31 -0500
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD5D422005
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 11:00:29 -0800 (PST)
-Received: by mail-ed1-f44.google.com with SMTP id m8so12665632edd.10
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 11:00:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uLWxQl0qTtmQEp5+OeXCEZYEFKKOPxU/HC0IrH2S2y8=;
-        b=iJRdBUWvi52zSp5Yno1OoCN6+R1BrD38qLULFz7QZViHk6zdVud+y0wV0iTGpWNGcF
-         oE7YOL+CfqjKBp0oNA5k8rKFFOXTefTdlMfC/8IGBHLGQAjvY1xc9wbAhB17fnYBwjDa
-         CIUzZMJn8dWyv3Ynekp0ye2OhDwCtKvwtauRa9O59CsYOe3KWFKq6o++7xz++KS/4zfn
-         2ihv5Aggz6zYqa9Zl0WeWX9tCfuiaeFGkkIl8o/VTg+zCn6R1AOcVZ3YT9QSB0PzCRSo
-         ssZKclkJosFyjWxT7yfPiz4lDxJecc9X1HN2MeIMO+vQ9BlDXloOAujbbiFPIyRfeHqj
-         1SdQ==
-X-Gm-Message-State: AO0yUKUSHxIid2eCxCg954a0MF6t1uQSkX9UK7XkNeCEU5KaA+Le8nR9
-        awzFFSVW/yNO5Zg2QrU3KyXP174ZFc0V/t+D
-X-Google-Smtp-Source: AK7set9tvE47tkeBRyyzCWiDdjjfpkWRtpTy/dVdsX2XcPLuuM0JHcWKtBQg1m7WPn4yihL/YyeDfQ==
-X-Received: by 2002:a50:9516:0:b0:45c:835b:ac64 with SMTP id u22-20020a509516000000b0045c835bac64mr654482eda.31.1675710028368;
-        Mon, 06 Feb 2023 11:00:28 -0800 (PST)
-Received: from [192.168.3.157] ([81.56.10.57])
-        by smtp.gmail.com with ESMTPSA id q22-20020a50aa96000000b004aab66483ddsm1157931edc.70.2023.02.06.11.00.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Feb 2023 11:00:27 -0800 (PST)
-Message-ID: <f8edc17d-5f15-b157-e9a7-a240db4713aa@kde.org>
-Date:   Mon, 6 Feb 2023 20:00:25 +0100
+        Mon, 6 Feb 2023 14:02:01 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB92822005
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 11:01:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=oaeAqB8bAOsBTw4haHM9OiDiD9bOnihJ7tlzKd8np0k=; b=qu2dKo+WuYPM/VeCSrvfqsGk2G
+        L7iUFottcUkJkEPlds5LQxVic7gyxsaqcBdQX8io+a9cylFcsAawCeqTv8HnffTZK0yS76Fqnha47
+        Myh9E6FxPxlbBMotZmRoy2Z10URkmSQ67riBYuHogySAOCusWfUlnZhB4gbb0IhPk1CTJq1OknU7B
+        XVJ1XZWx1Dg54+DwgKi12VV8oRE/LybiuH8ZL/DV+/MmwzkHxFCs6ovzNIYOw7bFi2tMxNINdjzXc
+        eCfPysCANlkkRVcCmplgpYPRweIAhCF+VtiFRUiXj4gLSRV3UeqET4KSoVcFbh3xGfg4zAQjYBCl9
+        IY29578g==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pP6kF-00H0bj-Pw; Mon, 06 Feb 2023 19:01:39 +0000
+Date:   Mon, 6 Feb 2023 19:01:39 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     David Stevens <stevensd@chromium.org>
+Cc:     linux-mm@kvack.org, Peter Xu <peterx@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Yang Shi <shy828301@gmail.com>,
+        David Hildenbrand <david@redhat.com>,
+        Hugh Dickins <hughd@google.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] mm/khugepaged: skip shmem with userfaultfd
+Message-ID: <Y+FOk+ty7OKmkwLL@casper.infradead.org>
+References: <20230206112856.1802547-1-stevensd@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] ALSA: hda/realtek: Enable mute/micmute LEDs on HP
- Elitebook, 645 G9
-Content-Language: en-US
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     tiwai@suse.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-References: <4055cb48-e228-8a13-524d-afbb7aaafebe@kde.org>
- <875ycfkzml.wl-tiwai@suse.de>
-From:   Elvis Angelaccio <elvis.angelaccio@kde.org>
-Organization: KDE
-In-Reply-To: <875ycfkzml.wl-tiwai@suse.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230206112856.1802547-1-stevensd@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks!
+On Mon, Feb 06, 2023 at 08:28:56PM +0900, David Stevens wrote:
+> This change first makes sure that the intermediate page cache state
+> during collapse is not visible by moving when gaps are filled to after
+> the page cache lock is acquired for the final time. This is necessary
+> because the synchronization provided by locking hpage is insufficient
+> for functions which operate on the page cache without actually locking
+> individual pages to examine their content (e.g. shmem_mfill_atomic_pte).
 
-Cheers,
-Elvis
+I've been a little scared of touching khugepaged because, well, look at
+that function.  But if we are going to touch it, how about this patch
+first?  It does _part_ of what you need by not filling in the holes,
+but obviously not the part that looks at uffd.  
 
-On 06/02/23 08:43, Takashi Iwai wrote:
-> On Sun, 05 Feb 2023 19:56:18 +0100,
-> Elvis Angelaccio wrote:
->>
->> The HP Elitebook 645 G9 laptop (with motherboard model 89D2) uses the
->> ALC236 codec and requires the alc236_fixup_hp_mute_led_micmute_vref
->> fixup in order to enable mute/micmute LEDs.
->>
->> Note: the alc236_fixup_hp_gpio_led fixup, which is used by the Elitebook
->> 640 G9, does not work with the 645 G9.
->>
->> Signed-off-by: Elvis Angelaccio <elvis.angelaccio@kde.org>
-> 
-> Thanks, applied.
-> 
-> But the table is sorted in SSID, so I rearranged the entry at
-> applying.
-> 
-> 
-> Takashi
+It leaves the old pages in-place and frozen.  I think this should be
+safe, but I haven't booted it (not entirely sure what test I'd run
+to prove that it's not broken)
+
+diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+index eb38bd1b1b2f..cfd33dff7253 100644
+--- a/mm/khugepaged.c
++++ b/mm/khugepaged.c
+@@ -1845,15 +1845,14 @@ static int retract_page_tables(struct address_space *mapping, pgoff_t pgoff,
+  *  - allocate and lock a new huge page;
+  *  - scan page cache replacing old pages with the new one
+  *    + swap/gup in pages if necessary;
+- *    + fill in gaps;
++ *    + freeze the old pages
+  *    + keep old pages around in case rollback is required;
+  *  - if replacing succeeds:
+  *    + copy data over;
+  *    + free old pages;
+  *    + unlock huge page;
+  *  - if replacing failed;
+- *    + put all pages back and unfreeze them;
+- *    + restore gaps in the page cache;
++ *    + unfreeze old pages;
+  *    + unlock and free huge page;
+  */
+ static int collapse_file(struct mm_struct *mm, unsigned long addr,
+@@ -1930,7 +1929,6 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
+ 					result = SCAN_FAIL;
+ 					goto xa_locked;
+ 				}
+-				xas_store(&xas, hpage);
+ 				nr_none++;
+ 				continue;
+ 			}
+@@ -2081,8 +2079,6 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
+ 		 */
+ 		list_add_tail(&page->lru, &pagelist);
+ 
+-		/* Finally, replace with the new page. */
+-		xas_store(&xas, hpage);
+ 		continue;
+ out_unlock:
+ 		unlock_page(page);
+@@ -2195,32 +2191,17 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
+ 			shmem_uncharge(mapping->host, nr_none);
+ 		}
+ 
+-		xas_set(&xas, start);
+-		xas_for_each(&xas, page, end - 1) {
++		list_for_each_entry_safe(page, tmp, &pagelist, lru) {
++			list_del(&page->lru);
+ 			page = list_first_entry_or_null(&pagelist,
+ 					struct page, lru);
+-			if (!page || xas.xa_index < page->index) {
+-				if (!nr_none)
+-					break;
+-				nr_none--;
+-				/* Put holes back where they were */
+-				xas_store(&xas, NULL);
+-				continue;
+-			}
+-
+-			VM_BUG_ON_PAGE(page->index != xas.xa_index, page);
+ 
+ 			/* Unfreeze the page. */
+ 			list_del(&page->lru);
+ 			page_ref_unfreeze(page, 2);
+-			xas_store(&xas, page);
+-			xas_pause(&xas);
+-			xas_unlock_irq(&xas);
+ 			unlock_page(page);
+ 			putback_lru_page(page);
+-			xas_lock_irq(&xas);
+ 		}
+-		VM_BUG_ON(nr_none);
+ 		/*
+ 		 * Undo the updates of filemap_nr_thps_inc for non-SHMEM file only.
+ 		 * This undo is not needed unless failure is due to SCAN_COPY_MC.
