@@ -2,298 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49B6468BB7B
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 12:28:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF3D768BB7E
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 12:28:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbjBFL14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 06:27:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43592 "EHLO
+        id S230008AbjBFL2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 06:28:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230054AbjBFL1u (ORCPT
+        with ESMTP id S229912AbjBFL2N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 06:27:50 -0500
-Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89503C643;
-        Mon,  6 Feb 2023 03:27:44 -0800 (PST)
-Received: from mta-01.yadro.com (localhost.localdomain [127.0.0.1])
-        by mta-01.yadro.com (Proxmox) with ESMTP id 72925341DA6;
-        Mon,  6 Feb 2023 14:27:42 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yadro.com; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :from:from:in-reply-to:message-id:mime-version:references
-        :reply-to:subject:subject:to:to; s=mta-01; bh=BeO7USyN2i08XzGSFB
-        uEgqnyOPsIll67svfaIGEnjpE=; b=Q/VkDlbesPls3BKSwkapXHClHL4mz0zQj7
-        2fGqe/BB03R98PYHygUchV6IV7g3ZctXBE7ggqTZY0vskaIIZ+VYHzQ7PLAhJ6++
-        9uSHJ2CFeiuVgKRWRZJ6NjfJ2Uo3qXtJZ62FS3gKZOKEG9enLSoFxFok0qiw82BX
-        gMVKFrhik=
-Received: from T-EXCH-08.corp.yadro.com (unknown [172.17.10.14])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mta-01.yadro.com (Proxmox) with ESMTPS id 6637F341A69;
-        Mon,  6 Feb 2023 14:27:42 +0300 (MSK)
-Received: from [10.199.16.60] (10.199.16.60) by T-EXCH-08.corp.yadro.com
- (172.17.11.58) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1118.9; Mon, 6 Feb 2023
- 14:27:41 +0300
-Message-ID: <66b01fd7-7466-5d76-c384-0758ceadee8e@yadro.com>
-Date:   Mon, 6 Feb 2023 14:27:41 +0300
+        Mon, 6 Feb 2023 06:28:13 -0500
+Received: from out203-205-221-239.mail.qq.com (out203-205-221-239.mail.qq.com [203.205.221.239])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540F518162;
+        Mon,  6 Feb 2023 03:28:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1675682882;
+        bh=m8lE4c/d0lvFPxY+CJ5u1aKGsJRsL83fBiMpukDEoQs=;
+        h=From:To:Cc:Subject:Date;
+        b=OeTA8scCOayel03cSxS8hrqzqH+OpxuHnq17tUPvBZn//gadZkNdp/cpyxuDPPF8m
+         tk/lzsndZCZFA7nGk6Yn1im85cvXBzy2rncNG+lUeGu01lTDFio8emQtMw40ImYPsQ
+         SLx6Ys6xecGD/kd6tSct3nxOMyLvgMCBnSPd1LyE=
+Received: from localhost.localdomain ([39.156.73.13])
+        by newxmesmtplogicsvrszc1-0.qq.com (NewEsmtp) with SMTP
+        id 6FAA900C; Mon, 06 Feb 2023 19:27:58 +0800
+X-QQ-mid: xmsmtpt1675682878t3f71k036
+Message-ID: <tencent_9E0636426959DE97692A50AF79A3D9888B08@qq.com>
+X-QQ-XMAILINFO: MOZWoti2yOjRjo6wOkCbZUP9njBujRx4QFk19T5afRKTAYFz+sO/9SegPTNRLO
+         vCg9XniA80NDoMpF6yV0bJEZTmBg70O/oppDr768J5tdnPyujlfxI4nrFW2j8CmkZleFLjql7cNo
+         I1m/lPug4nCUUbMSZ0WuOBeaAE3+38//PVR5ZYrCnTbo0NDfLBTGzlWOrs2vcCPPcU+8K639s59P
+         qrNLDsyVef95fo0wiv+vWTs6ycc5zCw2Vx5GYH8i0DAa6/eCE8ldRi6Z8Y6zLaOFXwVRtasIhuJO
+         JzENlwDseFpvJQypCqt8Z7JyigKqriKJiOXAXcNsiNfm8T77QvbagirHYHP4MTZi5TtqSDOh8JwD
+         agH2R0RUx5aaNj5mkLqvpNkfo+IGyPPF4msL6YgvogRiIrXe29ZA3uruuOHlihjghDIwJc/qZ7bG
+         ToHK4FQzcGxRe1SvDM9bsi9g/dABhBb8+wyftOWwJnS50wwXgJnRafd6MKgecitv4k67ahv2bAGi
+         EZlH3t4zPGkZd8jBuhoZj51cnWboSWaHWjLHP76Zlj7i4+4YsFBTkwAxTWAXQVVCpAvIe/CTAPx9
+         qAr6wp3muKQAsso3LB0F7Sra18bOmLzKJ3G8fVig8gus32Uc3Z76sWETWsAns0vr3anCMzPu1Cq/
+         5LW0ol30Wfof82qJVLvM4sgxgyMfgFsqBB2RtrKiBBMfVzcZcs1HiND/dAra0b/nAlyZBsXLAD5j
+         cLtGotImv0G1Qg4ewtCLf30Z/xNr/yU1zmkI48Yg/43DmQtR+JUYNuL7+nMzMav1cp+Vp+chJ0MI
+         aKuPRc0e0m9oh68KTRFusHqniUj/6tEDKj9kYwWEhsWYI25oLSFrMwsHU1DqRH1o6SjdaG5MGMLF
+         iPGBZpLT+rBKP3ntQ7x6BI3kNutr0CxRxr77hBN/TNkgiv6kuESAWOHR9EYI5n0fcscoWc6j3LMs
+         xYYDLkLNW4I5Oymv8TEgiu+BMsjAoBPAkoHQHamiKKm7wiJmL37A==
+From:   Rong Tao <rtoax@foxmail.com>
+To:     ast@kernel.org
+Cc:     Rong Tao <rongtao@cestc.cn>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and
+        Tools)), linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH bpf-next] samples: bpf: Add macro SYSCALL() for aarch64
+Date:   Mon,  6 Feb 2023 19:27:57 +0800
+X-OQ-MSGID: <20230206112757.18550-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v6 0/2] PCI: dwc: Add support for 64-bit MSI target
- addresses
-Content-Language: en-US
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Robin Murphy <robin.murphy@arm.com>, <kernel-team@android.com>,
-        Vidya Sagar <vidyas@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, <linux@yadro.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Will McVicker <willmcvicker@google.com>
-References: <20220825235404.4132818-1-willmcvicker@google.com>
- <decae9e4-3446-2384-4fc5-4982b747ac03@yadro.com>
- <c014b074-6d7f-773b-533a-c0500e239ab8@arm.com>
- <46ba97c9-85ff-eb47-0d05-79dc3960d7b4@yadro.com>
- <20230203221216.c2s6ahm52ug5jtqv@mobilestation>
-From:   Evgenii Shatokhin <e.shatokhin@yadro.com>
-In-Reply-To: <20230203221216.c2s6ahm52ug5jtqv@mobilestation>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.199.16.60]
-X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
- T-EXCH-08.corp.yadro.com (172.17.11.58)
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sergey,
+From: Rong Tao <rongtao@cestc.cn>
 
-First of all, thank you for the detailed explanation. It is clearer now 
-what is going on and why it is that way.
+kernel arm64/kernel/sys.c macro __SYSCALL() adds a prefix __arm64_, we
+should support it for aarch64. The following is the output of the bpftrace
+script:
 
-On 04.02.2023 01:12, Serge Semin wrote:
-> Hi Evgenii
-> 
-> On Wed, Feb 01, 2023 at 04:54:55PM +0300, Evgenii Shatokhin wrote:
->> On 31.01.2023 15:42, Robin Murphy wrote:
->>>
->>> On 2023-01-31 12:29, Evgenii Shatokhin wrote:
->>>> Hi,
->>>>
->>>> On 26.08.2022 02:54, Will McVicker wrote:
->>>>> Hi All,
->>>>>
->>>>> I've update patch 2/2 to address Robin's suggestions. This includes:
->>>>>
->>>>>    * Dropping the while-loop for retrying with a 64-bit mask in favor of
->>>>>      retrying within the error if-statement.
->>>>>    * Using an int for the DMA mask instead of a bool and ternary
->>>>> operation.
->>>>>
->>>>> Thanks again for the reviews and sorry for the extra revision today!
->>>>> Hopefully this is the last one :) If not, I'd be fine to submit
->>>>> patch 1/2
->>>>> without 2/2 to avoid resending patch 1/2 for future revisions of patch
->>>>> 2/2
->>>>> (unless I don't need to do that anyway).
->>>>
->>>> The first patch of the series made it into the mainline kernel, but, it
->>>> seems, the second one ("PCI: dwc: Add support for 64-bit MSI target
->>>> address") did not. As of 6.2-rc6, it is still missing.
->>>>
->>>> Was it intentionally dropped because of some issues or, perhaps, just by
->>>> accident? If it was by accident, could you please queue it for inclusion
->>>> into mainline again?
->>>
->>> Yes, it was dropped due to the PCI_MSI_FLAGS_64BIT usage apparently
->>> being incorrect, and some other open debate (which all happened on the
->>> v5 thread):
->>>
->>> https://lore.kernel.org/linux-pci/YzVTmy9MWh+AjshC@lpieralisi/
->>
-> 
->> I see. If I understand it correctly, the problem was that
->> PCI_MSI_FLAGS_64BIT flag did not guarantee that 64-bit mask could be used
->> for that particular allocation. Right?
->>
-> 
-> William was trying to utilize for only software cause. Setting
-> PCI_MSI_FLAGS_64BIT didn't actually change the hardware behavior.
-> He could have as well provided just a driver private capability
-> flag. (see below for a more detailed problem description)
-> 
->>>
->>> The DMA mask issues have now been sorted out,
->>
->> I suppose, you mean https://lore.kernel.org/all/20230113171409.30470-26-Sergey.Semin@baikalelectronics.ru/?
-> 
-> Well, the way the DMA-mask issue has been solved was a bit of the
-> hacky. I wouldn't call it a fully proper solution. The problem with
-> pointlessly allocating physical memory for the iMSI-RX engine (it
-> doesn't perform any DMA) and artificially restricting the coherent-DMA
-> mask is still there. The patch in the subject was a compromise in
-> order to at least permit unrestricted streaming DMAs but limiting the
-> coherent DMAs for the MSI setup to work properly for all peripheral
-> devices.
-> 
->>
->> It still breaks our particular case when the SoC has no 32-bit-addressable
->> RAM. We'd set DMA masks to DMA_BIT_MASK(36) in the platform-specific driver
->> before calling dw_pcie_host_init(). However, dw_pcie_msi_host_init() resets
->> it to 32-bit, tries dmam_alloc_coherent() and fails.
-> 
-> Yeah. That's another problem with the implemented approach. But are
-> your sure the driver had worked even before this patch? AFAICS the
-> driver allocated the MSI-targeted page from DMA32 zone before this
-> modification. So the allocation must have failed on your platform too.
+    $ sudo bpftrace -l | grep sys_write
+    ...
+    kprobe:__arm64_sys_write
+    kprobe:__arm64_sys_writev
+    ...
 
-You are right. I did not notice earlier that the kernel based on 
-6.0-stable we used before did actually contain our SoC-specific 
-workaround for this. Without that custom patch, initialization of PCIe 
-host does not work. So, yes, the problem was present earlier too.
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
+---
+ samples/bpf/trace_common.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> 
->>
->> With 36-bit masks, the kernel seems to play well with the devices in our
->> case.
->>
->> I saw your comment in https://lore.kernel.org/linux-pci/4dc31a63-00b1-f379-c5ac-7dc9425937f4@arm.com/
->> that drivers should always explicitly set their masks.
->>
-> 
->> Is it a really bad idea to check the current coherent mask's bits in
->> dw_pcie_msi_host_init() and if it is more than 32 - just issue a warning
->> rather than reset it to 32-bit unconditionally? That would help in our case.
->> Or, perhaps, there is a better workaround.
-> 
-> The problem isn't in the value the mask is set to. The problem is
-> two-leveled, but is mainly connected with the PCIe device detected on
-> the PCIe bus. There are some of them which can't send MSI TLPs to the
-> 64-bit addresses. Since we can't predict whether such devices exist on
-> the bus beforehand the LLDD probe is performed together with the
-> MSI-engine initialization, the solution was to just restrict the MSIs
-> base address to be allocated within the lowest 4GB. Moreover as I said
-> above the iMSI-RX engine doesn't actually cause any DMA thus there is
-> no need in any memory allocation. Instead reserving some PCIe-bus
-> space/DWORD for MSIs would be enough. Alas the PCIe-subsystem doesn't
-> provide a way to do so. That's why we have what you see in the driver:
-> DMA mask restriction and coherent DMA memory allocation.
-
-So, if I understand you correctly, what is needed here is a small area 
-of PCIe address space accessible to any of the connected PCIe devices. 
-As the kernel does not know in advance, which restrictions the devices 
-have, it tries to allocate 32-bit-addressable memory, suitable for DMA. 
-This way, it would be OK for any attached PCIe device. Right?
-
-> 
-> If only we had a way to auto-detected the PCIe-bus space with no
-> physical memory behind it and take out a DWORD from it to initialize
-> the iMSI-RX engine we could have immediately got rid from the mask
-> setting operation and the memory allocation. It would have solved your
-> problem too.
-
-Yes, it would solve our issue too. I do not know, however, if a generic 
-solution is possible here, but I am no expert in PCIe.
-
-For now, we are probably better off with SoC-specific patches, when we 
-know which PCIe devices can possibly be used and what their restrictions 
-are.
-
-> 
-> -Serge(y)
-> 
->>
->> Looking forward to your comments.
-> 
-> 
-> 
->>
->>
->>> so you, or Will, or anyone
->>> else interested should be free to rework this on top of linux-next
->>> (although at this point, more realistically on top of 6.3-rc1 in a few
->>> weeks).
->>>
->>> Thanks,
->>> Robin.
->>>
->>>> Support for 64-bit MSI target addresses is needed for some of our SoCs.
->>>> I ran into a situation when there was no available RAM in ZONE_DMA32
->>>> during initialization of PCIe host. Hence, dmam_alloc_coherent() failed
->>>> in dw_pcie_msi_host_init() and initialization failed with -ENOMEM:
->>>>
->>>> [    0.374834] dw-pcie 4000000.pcie0: host bridge /soc/pcie0@4000000
->>>> ranges:
->>>> [    0.375813] dw-pcie 4000000.pcie0:      MEM
->>>> 0x0041000000..0x004fffffff -> 0x0041000000
->>>> [    0.376171] dw-pcie 4000000.pcie0:   IB MEM
->>>> 0x0400000000..0x07ffffffff -> 0x0400000000
->>>> [    0.377914] dw-pcie 4000000.pcie0: Failed to alloc and map MSI data
->>>> [    0.378191] dw-pcie 4000000.pcie0: Failed to initialize host
->>>> [    0.378255] dw-pcie: probe of 4000000.pcie0 failed with error -12
->>>>
->>>> Mainline kernel 6.2-rc6 was used in that test.
->>>>
->>>> The hardware supports 64-bit target addresses, so the patch "PCI: dwc:
->>>> Add support for 64-bit MSI target address" should help with this
->>>> particular failure.
->>>>
->>>>
->>>>>
->>>>> Thanks,
->>>>> Will
->>>>>
->>>>> Will McVicker (2):
->>>>>     PCI: dwc: Drop dependency on ZONE_DMA32
->>>>>
->>>>> v6:
->>>>>    * Retrying DMA allocation with 64-bit mask within the error
->>>>> if-statement.
->>>>>    * Use an int for the DMA mask instead of a bool and ternary operation.
->>>>>
->>>>> v5:
->>>>>    * Updated patch 2/2 to first try with a 32-bit DMA mask. On failure,
->>>>>      retry with a 64-bit mask if supported.
->>>>>
->>>>> v4:
->>>>>    * Updated commit descriptions.
->>>>>    * Renamed msi_64b -> msi_64bit.
->>>>>    * Dropped msi_64bit ternary use.
->>>>>    * Dropped export of dw_pcie_msi_capabilities.
->>>>>
->>>>> v3:
->>>>>     * Switched to a managed DMA allocation.
->>>>>     * Simplified the DMA allocation cleanup.
->>>>>     * Dropped msi_page from struct dw_pcie_rp.
->>>>>     * Allocating a u64 instead of a full page.
->>>>>
->>>>> v2:
->>>>>     * Fixed build error caught by kernel test robot
->>>>>     * Fixed error handling reported by Isaac Manjarres
->>>>>    PCI: dwc: Add support for 64-bit MSI target address
->>>>>
->>>>>    .../pci/controller/dwc/pcie-designware-host.c | 43 +++++++++----------
->>>>>    drivers/pci/controller/dwc/pcie-designware.c  |  8 ++++
->>>>>    drivers/pci/controller/dwc/pcie-designware.h  |  2 +-
->>>>>    3 files changed, 30 insertions(+), 23 deletions(-)
->>>>>
->>>>>
->>>>> base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
->>>>
->>>> Thank you in advance.
-
-Regards,
-Evgenii
-
+diff --git a/samples/bpf/trace_common.h b/samples/bpf/trace_common.h
+index 8cb5400aed1f..fafc699af0a3 100644
+--- a/samples/bpf/trace_common.h
++++ b/samples/bpf/trace_common.h
+@@ -6,6 +6,8 @@
+ #define SYSCALL(SYS) "__x64_" __stringify(SYS)
+ #elif defined(__s390x__)
+ #define SYSCALL(SYS) "__s390x_" __stringify(SYS)
++#elif defined(__aarch64__)
++#define SYSCALL(SYS) "__arm64_" __stringify(SYS)
+ #else
+ #define SYSCALL(SYS)  __stringify(SYS)
+ #endif
+-- 
+2.39.1
 
