@@ -2,148 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B35AC68C470
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 18:19:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FBA668C471
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 18:20:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230140AbjBFRTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 12:19:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52352 "EHLO
+        id S230191AbjBFRT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 12:19:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbjBFRTl (ORCPT
+        with ESMTP id S229811AbjBFRTt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 12:19:41 -0500
-Received: from out-234.mta0.migadu.com (out-234.mta0.migadu.com [91.218.175.234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E6CC1CF7A
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 09:19:40 -0800 (PST)
-Date:   Mon, 6 Feb 2023 17:19:25 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1675703978;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HQYDCy4xAq7++DqBp2PrFrzWfoeLMTv7/t3BwVc+5/M=;
-        b=J9ErNIUpPqZIZXdMg30fbXll1h9T0Tvc0m6YwSEjZKdUoEOooQgqWauEEwTKgz5T3W0FTk
-        rki4AZWQsgRfhqb68OZxWvRzYjB94NkQRpb2vk7/ewhW1i4abF/GN+8YazanH4qC5F0Wee
-        Dwv1drNtXNr6gUzp6+ranIztAkcY0no=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Oliver Upton <oliver.upton@linux.dev>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     James Morse <james.morse@arm.com>, linux-pm@vger.kernel.org,
-        loongarch@lists.linux.dev, kvmarm@lists.linux.dev,
-        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        x86@kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Borislav Petkov <bp@alien8.de>, H Peter Anvin <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Len Brown <lenb@kernel.org>,
-        Rafael Wysocki <rafael@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: Re: [RFC PATCH 29/32] KVM: arm64: Pass hypercalls to userspace
-Message-ID: <Y+E2nVnadj1emNs5@google.com>
-References: <20230203135043.409192-1-james.morse@arm.com>
- <20230203135043.409192-30-james.morse@arm.com>
- <865ycg1kv2.wl-maz@kernel.org>
+        Mon, 6 Feb 2023 12:19:49 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C25B129411
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 09:19:47 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id cf42so18694849lfb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 09:19:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=X8DYLLe9GRN/tqZPTDwiVkFGsCxKSy6LXftek5tXzGQ=;
+        b=VU0+CaXHVO2K7ShJ98vTMhg2nM5DWNGNDtZ1Q7wL9SBlA2JO2N5lOm6xMn4ccyp9t2
+         5qtKZDCxRhEfz1Mkl2rqZD4uQda4aZNaxPmpuQDmKU4m6Igz0453QxKlP52i4O2AUI3h
+         NiFbxJVb6uEXfl6zRb4nCQDVAGkeUGZrAWbyQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=X8DYLLe9GRN/tqZPTDwiVkFGsCxKSy6LXftek5tXzGQ=;
+        b=s4QVIIoI4Pp4VFROkEQrYxMWnZM1Zxutxr1JSvQyyIIasAyLx4WQ/hPuNHaX0NJfpw
+         csKqZeC53dCaj1IRhppaxdkNFLdqbwPln8QobsYSnuvMTm6KPSmpNSSYQkmXbMrBULRE
+         8z+fHhcdjrndbc4sn+V86BChDDY24JiEb3E7Op0WNTVpl3D5QJpy31WW/ULSKSsnRjdL
+         w7SqnDbZdwr/zow1Mtr9P2FJeMLX2Jkj5IVZaap/y8IVRiZmai0gykfUnGfIuQpwfuxs
+         1ktedr4gKn1jD/bLuyBLdHWxx3FM+WOQ9/zYG7vzdBGMCGT/taqoB+tfXid3Xn3KL8M1
+         B5SA==
+X-Gm-Message-State: AO0yUKWEIuRl+Ph7MBNxOX+/bOWbQOtVnsXqvglWhV+TaxlujINN6+i6
+        /DsR5WTbRsmdU4R022+r7mO/Tw5p89ABIQk6bgdqQg==
+X-Google-Smtp-Source: AK7set+0XGVNSUsoZMSzdyMhZk1MudMyLm/D01kbQJrtDpJbIAl7AB2s51FB6iEEQdQd/rqXrCJ5uWAj7WZOjQpIRUc=
+X-Received: by 2002:ac2:4295:0:b0:4d2:47be:11fe with SMTP id
+ m21-20020ac24295000000b004d247be11femr3073919lfh.196.1675703986066; Mon, 06
+ Feb 2023 09:19:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <865ycg1kv2.wl-maz@kernel.org>
-X-Migadu-Flow: FLOW_OUT
+References: <20230204022051.2737724-1-joel@joelfernandes.org> <PH0PR11MB58800C6FD1C0DDF8EC67DB5DDADA9@PH0PR11MB5880.namprd11.prod.outlook.com>
+In-Reply-To: <PH0PR11MB58800C6FD1C0DDF8EC67DB5DDADA9@PH0PR11MB5880.namprd11.prod.outlook.com>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Mon, 6 Feb 2023 12:19:34 -0500
+Message-ID: <CAEXW_YRwe781s1faLQcRBvL5pBWv9WmRuhcP=PmqHUJcm9Rphg@mail.gmail.com>
+Subject: Re: [PATCH] rcu/tree: Improve comments in rcu_report_qs_rdp()
+To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Boqun Feng <boqun.feng@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 05, 2023 at 10:12:49AM +0000, Marc Zyngier wrote:
-> On Fri, 03 Feb 2023 13:50:40 +0000,
-> James Morse <james.morse@arm.com> wrote:
-> > 
-> > From: Jean-Philippe Brucker <jean-philippe@linaro.org>
-> > 
-> > When capability KVM_CAP_ARM_HVC_TO_USER is available, userspace can
-> > request to handle all hypercalls that aren't handled by KVM. With the
-> > help of another capability, this will allow userspace to handle PSCI
-> > calls.
-> > 
-> > Suggested-by: James Morse <james.morse@arm.com>
-> > Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
-> > Signed-off-by: James Morse <james.morse@arm.com>
-> > 
-> > ---
-> > 
-> 
-> On top of Oliver's ask not to make this a blanket "steal everything",
-> but instead to have an actual request for ranges of forwarded
-> hypercalls:
-> 
-> > Notes on this implementation:
-> > 
-> > * A similar mechanism was proposed for SDEI some time ago [1]. This RFC
-> >   generalizes the idea to all hypercalls, since that was suggested on
-> >   the list [2, 3].
-> > 
-> > * We're reusing kvm_run.hypercall. I copied x0-x5 into
-> >   kvm_run.hypercall.args[] to help userspace but I'm tempted to remove
-> >   this, because:
-> >   - Most user handlers will need to write results back into the
-> >     registers (x0-x3 for SMCCC), so if we keep this shortcut we should
-> >     go all the way and read them back on return to kernel.
-> >   - QEMU doesn't care about this shortcut, it pulls all vcpu regs before
-> >     handling the call.
-> >   - SMCCC uses x0-x16 for parameters.
-> >   x0 does contain the SMCCC function ID and may be useful for fast
-> >   dispatch, we could keep that plus the immediate number.
-> > 
-> > * Add a flag in the kvm_run.hypercall telling whether this is HVC or
-> >   SMC?  Can be added later in those bottom longmode and pad fields.
-> 
-> We definitely need this. A nested hypervisor can (and does) use SMCs
-> as the conduit. The question is whether they represent two distinct
-> namespaces or not. I *think* we can unify them, but someone should
-> check and maybe get clarification from the owners of the SMCCC spec.
-> 
+On Sun, Feb 5, 2023 at 10:09 PM Zhang, Qiang1 <qiang1.zhang@intel.com> wrote:
+>
+>
+> >Recent discussion triggered due to a patch linked below, from Qiang,
+> >shed light on the need to accelerate from QS reporting paths.
 > >
-> > * On top of this we could share with userspace which HVC ranges are
-> >   available and which ones are handled by KVM. That can actually be added
-> >   independently, through a vCPU/VM device attribute which doesn't consume
-> >   a new ioctl:
-> >   - userspace issues HAS_ATTR ioctl on the vcpu fd to query whether this
-> >     feature is available.
-> >   - userspace queries the number N of HVC ranges using one GET_ATTR.
-> >   - userspace passes an array of N ranges using another GET_ATTR. The
-> >     array is filled and returned by KVM.
-> 
-> As mentioned above, I think this interface should go both ways.
-> Userspace should request the forwarding of a certain range of
-> hypercalls via a similar SET_ATTR interface.
-> 
-> Another question is how we migrate VMs that have these forwarding
-> requirements. Do we expect the VMM to replay the forwarding as part of
-> the setting up on the other side? Or do we save/restore this via a
-> firmware pseudo-register?
+> >Update the comments to capture this piece of knowledge.
+> >
+> >Link: https://lore.kernel.org/all/20230118073014.2020743-1-qiang1.zhang@intel.com/
+> >Cc: Qiang Zhang <Qiang1.zhang@intel.com>
+> >Cc: Frederic Weisbecker <frederic@kernel.org>
+> >Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> >
+> >---
+> > kernel/rcu/tree.c | 13 ++++++++++++-
+> > 1 file changed, 12 insertions(+), 1 deletion(-)
+> >
+> >diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> >index 93eb03f8ed99..713eb6ca6902 100644
+> >--- a/kernel/rcu/tree.c
+> >+++ b/kernel/rcu/tree.c
+> >@@ -1983,7 +1983,12 @@ rcu_report_qs_rdp(struct rcu_data *rdp)
+> >       } else {
+> >               /*
+> >                * This GP can't end until cpu checks in, so all of our
+> >-               * callbacks can be processed during the next GP.
+> >+               * callbacks can be processed during the next GP. Do
+> >+               * the acceleration from here otherwise there may be extra
+> >+               * grace period delays, as any accelerations from rcu_core()
+>
+>
+> Does the extra grace period delays means that if not accelerate callback,
+> the grace period will take more time to end ? or refers to a delay in the
+> start time of a new grace period?
 
-Personally I'd prefer we left that job to userspace.
+Yes, so IMO it is like this if we don't accelerate:
+1. Start GP 1
+2. CPU1 queues callback C1 (not accelerated yet)
+3. CPU1 reports QS for GP1 (not accelerating anything).
+4. GP1 ends
+5. CPU1's note_gp_changes() is called, accelerate happens, now the CB
+will execute after GP3 (or alternately, rcu_core() on CPU1 does
+accelerate).
+6. GP2 ends.
+7. GP3 starts.
+8. GP3 ends.
+9. CB is invoked
 
-We could also implement GET_ATTR, in case userspace has forgotten what
-it wrote to the hypercall filter. The firmware pseudo-registers are
-handy for moving KVM state back and forth 'for free', but I don't think
-we need to bend over backwards to migrate state userspace is directly
-responsible for.
+Instead, what we will get the following thanks to the acceleration here is:
+1. Start GP 1
+2. CPU1 queues callback C1 (not accelerated yet)
+3. CPU1 reports QS for GP1 and acceleration happens as done by the
+code this patch adds comments for.
+4. GP1 ends
+5. CPU1's note_gp_changes() is called
+6. GP2 ends.
+7. CB is invoked
 
--- 
+Does that make sense or is there a subtlety I missed?
+
 Thanks,
-Oliver
+
+ - Joel
+
+
+>
+> Thanks
+> Zqiang
+>
+> >+               * or note_gp_changes() may happen only after the GP after the
+> >+               * current one has already started. Further, rcu_core()
+> >+               * only accelerates if RCU is idle (no GP in progress).
+> >                *
+> >                * NOCB kthreads have their own way to deal with that...
+> >                */
+> >@@ -1993,6 +1998,12 @@ rcu_report_qs_rdp(struct rcu_data *rdp)
+> >                       /*
+> >                        * ...but NOCB kthreads may miss or delay callbacks acceleration
+> >                        * if in the middle of a (de-)offloading process.
+> >+                       *
+> >+                       * Such missed acceleration may cause the callbacks to
+> >+                       * be stranded until RCU is fully de-offloaded, as
+> >+                       * acceleration from rcu_core() and note_gp_changes()
+> >+                       * cannot happen for fully/partially offloaded mode due
+> >+                       * to ordering dependency between rnp lock and nocb_lock.
+> >                        */
+> >                       needacc = true;
+> >               }
+> >--
+> >2.39.1.519.gcb327c4b5f-goog
+> >
