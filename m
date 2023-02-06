@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00F6368B4E2
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 05:34:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73C2E68B4E5
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 05:34:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbjBFEeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 23:34:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57486 "EHLO
+        id S229519AbjBFEeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 23:34:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229654AbjBFEdy (ORCPT
+        with ESMTP id S229648AbjBFEeA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 23:33:54 -0500
-Received: from kozue.soulik.info (kozue.soulik.info [IPv6:2001:19f0:7000:8404:5054:ff:fe75:428f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A7671A491;
-        Sun,  5 Feb 2023 20:33:45 -0800 (PST)
+        Sun, 5 Feb 2023 23:34:00 -0500
+Received: from kozue.soulik.info (kozue.soulik.info [108.61.200.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CA241A49F
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 20:33:49 -0800 (PST)
 Received: from misaki.sumomo.pri (unknown [192.168.0.134])
-        by kozue.soulik.info (Postfix) with ESMTPA id 54CE8101CCC;
-        Mon,  6 Feb 2023 13:33:40 +0900 (JST)
+        by kozue.soulik.info (Postfix) with ESMTPA id A1082101CD1;
+        Mon,  6 Feb 2023 13:33:43 +0900 (JST)
 From:   ayaka <ayaka@soulik.info>
 To:     linux-media@vger.kernel.org
 Cc:     randy.li@synaptics.com, Brian.Starkey@arm.com,
@@ -28,9 +28,9 @@ Cc:     randy.li@synaptics.com, Brian.Starkey@arm.com,
         narmstrong@baylibre.com, nicolas@ndufresne.ca, sakari.ailus@iki.fi,
         stanimir.varbanov@linaro.org, tfiga@chromium.org,
         Helen Koike <helen.koike@collabora.com>
-Subject: [PATCH v7 2/9] media: vivid: Convert to v4l2_ext_pix_format
-Date:   Mon,  6 Feb 2023 12:33:01 +0800
-Message-Id: <20230206043308.28365-3-ayaka@soulik.info>
+Subject: [PATCH v7 3/9] media: v4l2: Add extended buffer (de)queue operations for video types
+Date:   Mon,  6 Feb 2023 12:33:02 +0800
+Message-Id: <20230206043308.28365-4-ayaka@soulik.info>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230206043308.28365-1-ayaka@soulik.info>
 References: <20230206043308.28365-1-ayaka@soulik.info>
@@ -46,903 +46,426 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Helen Koike <helen.koike@collabora.com>
 
-Simplify Multi/Single planer API handling by converting to v4l2_ext_pix_format.
+Those extended buffer ops have several purpose:
+1/ Fix y2038 issues by converting the timestamp into an u64 counting
+   the number of ns elapsed since 1970
+2/ Unify single/multiplanar handling
+3/ Add a new start offset field to each v4l2 plane buffer info struct
+   to support the case where a single buffer object is storing all
+   planes data, each one being placed at a different offset
 
-Duplicate v4l2_ioctl_ops for touch devices. This is done to force the
-framework to use the ext hooks when the classic Api is used from
-userspace in Vid devices, and to keep touch devices with classic hook.
+New hooks are created in v4l2_ioctl_ops so that drivers can start using
+these new objects.
 
+Note that the timecode field is gone, since there doesn't seem to be
+in-kernel users. We can be added back in the reserved area if needed or
+use the Request API to collect more metadata information from the
+frame.
+
+Signed-off-by: Hans Verkuil <hans.verkuil@cisco.com>
 Signed-off-by: Boris Brezillon <boris.brezillon@collabora.com>
 Signed-off-by: Helen Koike <helen.koike@collabora.com>
 ---
 Changes in v7:
-- Force the userspace using the new APIs to operate non-touch drivers.
-- Refresh the patch
+Just refresh this.
 
 Changes in v6:
-- Update with new format and buffer structs
-- duplicate v4l2_ioctl_ops for touch devices.
+This patch was completely refactored, and based on previous version from
+Hans and Boris.
+- Refactor conversions v4l2_buffer <-> v4l2_ext_buffer for (d)qbuf
+- I removed EXT_CREATE_BUFS since it is basically only usefull to MMAP.
+  If this is going towards DMA-fd centric, then we can use the current
+  REQUESTBUF to switch to it, and we can think a better way to support
+  MMAP later if there are usecases.
+  I also moved memory field from v4l2_ext_plane to v4l2_ext_buffer,
+  since it is very unlikely to mix memory types, and REQUESTBUF can
+  switch the whole buffer object to a given type.
+- I removed EXT_QUERYBUF, since it is only useful to MMAP, for the
+  same reason above.
+- I removed EXT_PREPARE_BUF, since it is basically just an optimization,
+  we can add it later (my intention is to simplify this patchset).
+- These ioctls are only valid for video types (and not for overlay,
+  vbi, touch, meta, etc).
+- Refactor struct v4l2_ext_buffer and struct v4l2_ext_planes as
+  discussed with Tomasz:
+	- add bytesused back
+	- remove lenght field
+	- move memory field from planes to buffer object
+- Fix order in documentation of struct v4l2_ext_buffer (Tomasz)
+- Fix flags documentation of struct v4l2_ext_buffer, don't say when flags are ignored (Tomasz)
+- v4l_print_ext_buffer(): print request_fd and offset/userptr (Tomasz)
+
+Changes in v5:
+- migrate memory from v4l2_ext_buffer to v4l2_ext_plane
+- return mem_offset to struct v4l2_ext_plane
+- change sizes and reorder fields to avoid holes in the struct and make
+  it the same for 32 and 64 bits
 
 Changes in v4:
-- Update with new format and buffer structs
+- Use v4l2_ext_pix_format directly in the ioctl, drop v4l2_ext_format,
+making V4L2_BUF_TYPE_VIDEO_[OUTPUT,CAPTURE] the only valid types.
+- Drop VIDIOC_EXT_EXPBUF, since the only difference from VIDIOC_EXPBUF
+was that with VIDIOC_EXT_EXPBUF we could export multiple planes at once.
+I think we can add this later, so I removed it from this RFC to simplify it.
+- Remove num_planes field from struct v4l2_ext_buffer
+- Add flags field to struct v4l2_ext_create_buffers
+- Reformulate struct v4l2_ext_plane
+- Fix some bugs caught by v4l2-compliance
 - Rebased on top of media/master (post 5.8-rc1)
 
 Changes in v3:
 - Rebased on top of media/master (post 5.4-rc1)
 
 Changes in v2:
-- New patch
----
----
- drivers/media/test-drivers/vivid/vivid-core.c | 104 ++-------
- .../media/test-drivers/vivid/vivid-vid-cap.c  | 202 ++++++------------
- .../media/test-drivers/vivid/vivid-vid-cap.h  |  15 +-
- .../media/test-drivers/vivid/vivid-vid-out.c  | 197 ++++++-----------
- .../media/test-drivers/vivid/vivid-vid-out.h  |  15 +-
- 5 files changed, 169 insertions(+), 364 deletions(-)
+- Add reserved space to v4l2_ext_buffer so that new fields can be added
+  later on
 
-diff --git a/drivers/media/test-drivers/vivid/vivid-core.c b/drivers/media/test-drivers/vivid/vivid-core.c
-index f28440e6c9f8..d4ed55aef1bb 100644
---- a/drivers/media/test-drivers/vivid/vivid-core.c
-+++ b/drivers/media/test-drivers/vivid/vivid-core.c
-@@ -508,76 +508,6 @@ static int vivid_s_input(struct file *file, void *priv, unsigned int i)
- 	return vidioc_s_input(file, priv, i);
+Signed-off-by: Helen Koike <helen.koike@collabora.com>
+---
+ drivers/media/v4l2-core/v4l2-dev.c   |   4 +
+ drivers/media/v4l2-core/v4l2-ioctl.c | 184 +++++++++++++++++++++++++++
+ include/media/v4l2-ioctl.h           |   8 ++
+ include/uapi/linux/videodev2.h       |  55 ++++++++
+ 4 files changed, 251 insertions(+)
+
+diff --git a/drivers/media/v4l2-core/v4l2-dev.c b/drivers/media/v4l2-core/v4l2-dev.c
+index cfe90bfd47f1..f7a8e0146659 100644
+--- a/drivers/media/v4l2-core/v4l2-dev.c
++++ b/drivers/media/v4l2-core/v4l2-dev.c
+@@ -662,6 +662,10 @@ static void determine_valid_ioctls(struct video_device *vdev)
+ 			__set_bit(_IOC_NR(VIDIOC_S_CROP), valid_ioctls);
+ 		SET_VALID_IOCTL(ops, VIDIOC_G_SELECTION, vidioc_g_selection);
+ 		SET_VALID_IOCTL(ops, VIDIOC_S_SELECTION, vidioc_s_selection);
++		SET_VALID_IOCTL(ops, VIDIOC_EXT_QBUF, vidioc_ext_qbuf);
++		SET_VALID_IOCTL(ops, VIDIOC_EXT_QBUF, vidioc_qbuf);
++		SET_VALID_IOCTL(ops, VIDIOC_EXT_DQBUF, vidioc_ext_dqbuf);
++		SET_VALID_IOCTL(ops, VIDIOC_EXT_DQBUF, vidioc_dqbuf);
+ 	}
+ 	if (is_meta && is_rx) {
+ 		/* metadata capture specific ioctls */
+diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+index 52b77a968bb3..d6e860cb15bf 100644
+--- a/drivers/media/v4l2-core/v4l2-ioctl.c
++++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+@@ -502,6 +502,24 @@ static void v4l_print_buffer(const void *arg, bool write_only)
+ 			tc->type, tc->flags, tc->frames, *(__u32 *)tc->userbits);
  }
  
--static int vivid_enum_fmt_cap(struct file *file, void  *priv,
--			      struct v4l2_fmtdesc *f)
--{
--	struct video_device *vdev = video_devdata(file);
--
--	if (vdev->vfl_type == VFL_TYPE_TOUCH)
--		return vivid_enum_fmt_tch(file, priv, f);
--	return vivid_enum_fmt_vid(file, priv, f);
--}
--
--static int vivid_g_fmt_cap(struct file *file, void *priv,
--			   struct v4l2_format *f)
--{
--	struct video_device *vdev = video_devdata(file);
--
--	if (vdev->vfl_type == VFL_TYPE_TOUCH)
--		return vivid_g_fmt_tch(file, priv, f);
--	return vidioc_g_fmt_vid_cap(file, priv, f);
--}
--
--static int vivid_try_fmt_cap(struct file *file, void *priv,
--			     struct v4l2_format *f)
--{
--	struct video_device *vdev = video_devdata(file);
--
--	if (vdev->vfl_type == VFL_TYPE_TOUCH)
--		return vivid_g_fmt_tch(file, priv, f);
--	return vidioc_try_fmt_vid_cap(file, priv, f);
--}
--
--static int vivid_s_fmt_cap(struct file *file, void *priv,
--			   struct v4l2_format *f)
--{
--	struct video_device *vdev = video_devdata(file);
--
--	if (vdev->vfl_type == VFL_TYPE_TOUCH)
--		return vivid_g_fmt_tch(file, priv, f);
--	return vidioc_s_fmt_vid_cap(file, priv, f);
--}
--
--static int vivid_g_fmt_cap_mplane(struct file *file, void *priv,
--				  struct v4l2_format *f)
--{
--	struct video_device *vdev = video_devdata(file);
--
--	if (vdev->vfl_type == VFL_TYPE_TOUCH)
--		return vivid_g_fmt_tch_mplane(file, priv, f);
--	return vidioc_g_fmt_vid_cap_mplane(file, priv, f);
--}
--
--static int vivid_try_fmt_cap_mplane(struct file *file, void *priv,
--				    struct v4l2_format *f)
--{
--	struct video_device *vdev = video_devdata(file);
--
--	if (vdev->vfl_type == VFL_TYPE_TOUCH)
--		return vivid_g_fmt_tch_mplane(file, priv, f);
--	return vidioc_try_fmt_vid_cap_mplane(file, priv, f);
--}
--
--static int vivid_s_fmt_cap_mplane(struct file *file, void *priv,
--				  struct v4l2_format *f)
--{
--	struct video_device *vdev = video_devdata(file);
--
--	if (vdev->vfl_type == VFL_TYPE_TOUCH)
--		return vivid_g_fmt_tch_mplane(file, priv, f);
--	return vidioc_s_fmt_vid_cap_mplane(file, priv, f);
--}
--
- static bool vivid_is_in_use(bool valid, struct video_device *vdev)
- {
- 	unsigned long flags;
-@@ -730,21 +660,25 @@ static int vidioc_create_bufs(struct file *file, void *priv,
- static const struct v4l2_ioctl_ops vivid_ioctl_ops = {
- 	.vidioc_querycap		= vidioc_querycap,
- 
--	.vidioc_enum_fmt_vid_cap	= vivid_enum_fmt_cap,
--	.vidioc_g_fmt_vid_cap		= vivid_g_fmt_cap,
--	.vidioc_try_fmt_vid_cap		= vivid_try_fmt_cap,
--	.vidioc_s_fmt_vid_cap		= vivid_s_fmt_cap,
--	.vidioc_g_fmt_vid_cap_mplane	= vivid_g_fmt_cap_mplane,
--	.vidioc_try_fmt_vid_cap_mplane	= vivid_try_fmt_cap_mplane,
--	.vidioc_s_fmt_vid_cap_mplane	= vivid_s_fmt_cap_mplane,
--
--	.vidioc_enum_fmt_vid_out	= vivid_enum_fmt_vid,
--	.vidioc_g_fmt_vid_out		= vidioc_g_fmt_vid_out,
--	.vidioc_try_fmt_vid_out		= vidioc_try_fmt_vid_out,
--	.vidioc_s_fmt_vid_out		= vidioc_s_fmt_vid_out,
--	.vidioc_g_fmt_vid_out_mplane	= vidioc_g_fmt_vid_out_mplane,
--	.vidioc_try_fmt_vid_out_mplane	= vidioc_try_fmt_vid_out_mplane,
--	.vidioc_s_fmt_vid_out_mplane	= vidioc_s_fmt_vid_out_mplane,
-+	/* touch device would still use old ioctl() */
-+	.vidioc_enum_fmt_vid_cap = vivid_enum_fmt_tch,
-+	.vidioc_g_fmt_vid_cap = vivid_g_fmt_tch,
-+	.vidioc_try_fmt_vid_cap = vivid_g_fmt_tch,
-+	.vidioc_s_fmt_vid_cap = vivid_g_fmt_tch,
-+	.vidioc_g_fmt_vid_cap_mplane = vivid_g_fmt_tch_mplane,
-+	.vidioc_try_fmt_vid_cap_mplane = vivid_g_fmt_tch_mplane,
-+	.vidioc_s_fmt_vid_cap_mplane = vivid_g_fmt_tch_mplane,
++static void v4l_print_ext_buffer(const void *arg, bool write_only)
++{
++	const struct v4l2_ext_buffer *e = arg;
++	unsigned int i;
 +
-+	/* force the userspace using new ioctl() */
-+	.vidioc_enum_fmt_vid_cap = vivid_enum_fmt_vid,
-+	.vidioc_g_ext_pix_fmt_vid_cap = vivid_g_fmt_vid_cap,
-+	.vidioc_try_ext_pix_fmt_vid_cap = vivid_try_fmt_vid_cap,
-+	.vidioc_s_ext_pix_fmt_vid_cap = vivid_s_fmt_vid_cap,
++	pr_cont("%lld index=%d, type=%s, request_fd=%d, flags=0x%08llx, field=%s, sequence=%d, memory=%s\n",
++		e->timestamp, e->index, prt_names(e->type, v4l2_type_names),
++		e->request_fd, e->flags, prt_names(e->field, v4l2_field_names),
++		e->sequence, prt_names(e->memory, v4l2_memory_names));
 +
-+	.vidioc_enum_fmt_vid_out = vivid_enum_fmt_vid,
-+	.vidioc_g_ext_pix_fmt_vid_out = vivid_g_fmt_vid_out,
-+	.vidioc_try_ext_pix_fmt_vid_out = vivid_try_fmt_vid_out,
-+	.vidioc_s_ext_pix_fmt_vid_out = vivid_s_fmt_vid_out,
- 
- 	.vidioc_g_selection		= vidioc_g_selection,
- 	.vidioc_s_selection		= vidioc_s_selection,
-diff --git a/drivers/media/test-drivers/vivid/vivid-vid-cap.c b/drivers/media/test-drivers/vivid/vivid-vid-cap.c
-index c0999581c599..3e3a94a2e3d6 100644
---- a/drivers/media/test-drivers/vivid/vivid-vid-cap.c
-+++ b/drivers/media/test-drivers/vivid/vivid-vid-cap.c
-@@ -14,6 +14,7 @@
- #include <media/v4l2-common.h>
- #include <media/v4l2-event.h>
- #include <media/v4l2-dv-timings.h>
-+#include <media/v4l2-ioctl.h>
- #include <media/v4l2-rect.h>
- 
- #include "vivid-core.h"
-@@ -539,61 +540,59 @@ static unsigned vivid_quantization_cap(struct vivid_dev *dev)
- }
- 
- int vivid_g_fmt_vid_cap(struct file *file, void *priv,
--					struct v4l2_format *f)
-+			struct v4l2_ext_pix_format *f)
- {
- 	struct vivid_dev *dev = video_drvdata(file);
--	struct v4l2_pix_format_mplane *mp = &f->fmt.pix_mp;
- 	unsigned p;
- 
--	mp->width        = dev->fmt_cap_rect.width;
--	mp->height       = dev->fmt_cap_rect.height;
--	mp->field        = dev->field_cap;
--	mp->pixelformat  = dev->fmt_cap->fourcc;
--	mp->colorspace   = vivid_colorspace_cap(dev);
--	mp->xfer_func    = vivid_xfer_func_cap(dev);
-+	f->width = dev->fmt_cap_rect.width;
-+	f->height = dev->fmt_cap_rect.height;
-+	f->field = dev->field_cap;
-+	f->pixelformat = dev->fmt_cap->fourcc;
-+	f->colorspace = vivid_colorspace_cap(dev);
-+	f->xfer_func = vivid_xfer_func_cap(dev);
- 	if (dev->fmt_cap->color_enc == TGP_COLOR_ENC_HSV)
--		mp->hsv_enc    = vivid_hsv_enc_cap(dev);
-+		f->hsv_enc = vivid_hsv_enc_cap(dev);
- 	else
--		mp->ycbcr_enc    = vivid_ycbcr_enc_cap(dev);
--	mp->quantization = vivid_quantization_cap(dev);
--	mp->num_planes = dev->fmt_cap->buffers;
--	for (p = 0; p < mp->num_planes; p++) {
--		mp->plane_fmt[p].bytesperline = tpg_g_bytesperline(&dev->tpg, p);
--		mp->plane_fmt[p].sizeimage =
--			(tpg_g_line_width(&dev->tpg, p) * mp->height) /
-+		f->ycbcr_enc    = vivid_ycbcr_enc_cap(dev);
-+	f->quantization = vivid_quantization_cap(dev);
-+	memset(f->plane_fmt, 0, sizeof(f->plane_fmt));
-+	for (p = 0; p < dev->fmt_cap->buffers; p++) {
-+		f->plane_fmt[p].bytesperline = tpg_g_bytesperline(&dev->tpg, p);
-+		f->plane_fmt[p].sizeimage =
-+			(tpg_g_line_width(&dev->tpg, p) * f->height) /
- 			dev->fmt_cap->vdownsampling[p] +
- 			dev->fmt_cap->data_offset[p];
- 	}
++	for (i = 0; i < VIDEO_MAX_PLANES && e->planes[i].m.userptr; i++) {
++		const struct v4l2_ext_plane *plane = &e->planes[i];
 +
- 	return 0;
- }
- 
- int vivid_try_fmt_vid_cap(struct file *file, void *priv,
--			struct v4l2_format *f)
-+			  struct v4l2_ext_pix_format *f)
- {
--	struct v4l2_pix_format_mplane *mp = &f->fmt.pix_mp;
--	struct v4l2_plane_pix_format *pfmt = mp->plane_fmt;
- 	struct vivid_dev *dev = video_drvdata(file);
-+	struct v4l2_plane_pix_format *pfmt = f->plane_fmt;
- 	const struct vivid_fmt *fmt;
- 	unsigned bytesperline, max_bpl;
- 	unsigned factor = 1;
- 	unsigned w, h;
- 	unsigned p;
--	bool user_set_csc = !!(mp->flags & V4L2_PIX_FMT_FLAG_SET_CSC);
- 
--	fmt = vivid_get_format(dev, mp->pixelformat);
-+	fmt = vivid_get_format(dev, f->pixelformat);
- 	if (!fmt) {
- 		dprintk(dev, 1, "Fourcc format (0x%08x) unknown.\n",
--			mp->pixelformat);
--		mp->pixelformat = V4L2_PIX_FMT_YUYV;
--		fmt = vivid_get_format(dev, mp->pixelformat);
-+			f->pixelformat);
-+		f->pixelformat = V4L2_PIX_FMT_YUYV;
-+		fmt = vivid_get_format(dev, f->pixelformat);
- 	}
- 
--	mp->field = vivid_field_cap(dev, mp->field);
-+	f->field = vivid_field_cap(dev, f->field);
- 	if (vivid_is_webcam(dev)) {
- 		const struct v4l2_frmsize_discrete *sz =
- 			v4l2_find_nearest_size(webcam_sizes,
- 					       VIVID_WEBCAM_SIZES, width,
--					       height, mp->width, mp->height);
-+					       height, f->width, f->height);
- 
- 		w = sz->width;
- 		h = sz->height;
-@@ -604,14 +603,14 @@ int vivid_try_fmt_vid_cap(struct file *file, void *priv,
- 		w = dev->src_rect.width;
- 		h = dev->src_rect.height;
- 	}
--	if (V4L2_FIELD_HAS_T_OR_B(mp->field))
-+	if (V4L2_FIELD_HAS_T_OR_B(f->field))
- 		factor = 2;
- 	if (vivid_is_webcam(dev) ||
- 	    (!dev->has_scaler_cap && !dev->has_crop_cap && !dev->has_compose_cap)) {
--		mp->width = w;
--		mp->height = h / factor;
-+		f->width = w;
-+		f->height = h / factor;
- 	} else {
--		struct v4l2_rect r = { 0, 0, mp->width, mp->height * factor };
-+		struct v4l2_rect r = { 0, 0, f->width, f->height * factor };
- 
- 		v4l2_rect_set_min_size(&r, &vivid_min_rect);
- 		v4l2_rect_set_max_size(&r, &vivid_max_rect);
-@@ -624,16 +623,15 @@ int vivid_try_fmt_vid_cap(struct file *file, void *priv,
- 		} else if (!dev->has_scaler_cap && !dev->has_crop_cap) {
- 			v4l2_rect_set_min_size(&r, &dev->src_rect);
- 		}
--		mp->width = r.width;
--		mp->height = r.height / factor;
-+		f->width = r.width;
-+		f->height = r.height / factor;
- 	}
- 
- 	/* This driver supports custom bytesperline values */
- 
--	mp->num_planes = fmt->buffers;
- 	for (p = 0; p < fmt->buffers; p++) {
- 		/* Calculate the minimum supported bytesperline value */
--		bytesperline = (mp->width * fmt->bit_depth[p]) >> 3;
-+		bytesperline = (f->width * fmt->bit_depth[p]) >> 3;
- 		/* Calculate the maximum supported bytesperline value */
- 		max_bpl = (MAX_ZOOM * MAX_WIDTH * fmt->bit_depth[p]) >> 3;
- 
-@@ -642,48 +640,49 @@ int vivid_try_fmt_vid_cap(struct file *file, void *priv,
- 		if (pfmt[p].bytesperline < bytesperline)
- 			pfmt[p].bytesperline = bytesperline;
- 
--		pfmt[p].sizeimage = (pfmt[p].bytesperline * mp->height) /
-+		pfmt[p].sizeimage = (pfmt[p].bytesperline * f->height) /
- 				fmt->vdownsampling[p] + fmt->data_offset[p];
--
--		memset(pfmt[p].reserved, 0, sizeof(pfmt[p].reserved));
- 	}
++		pr_cont("plane %d: bytesused=%d, offset=0x%08x, userptr=0x%llx\n",
++			i, plane->bytesused, plane->offset, plane->m.userptr);
++	}
++}
 +
-+	if (p < VIDEO_MAX_PLANES)
-+		pfmt[p].sizeimage = 0;
+ static void v4l_print_exportbuffer(const void *arg, bool write_only)
+ {
+ 	const struct v4l2_exportbuffer *p = arg;
+@@ -2456,6 +2474,130 @@ static int v4l_qbuf(const struct v4l2_ioctl_ops *ops,
+ 	return ret ? ret : ops->vidioc_qbuf(file, fh, p);
+ }
+ 
++static bool v4l2_ext_buffer_is_single_membuf(const struct v4l2_ext_buffer *eb)
++{
++	unsigned int i;
 +
- 	for (p = fmt->buffers; p < fmt->planes; p++)
--		pfmt[0].sizeimage += (pfmt[0].bytesperline * mp->height *
-+		pfmt[0].sizeimage += (pfmt[0].bytesperline * f->height *
- 			(fmt->bit_depth[p] / fmt->vdownsampling[p])) /
- 			(fmt->bit_depth[0] / fmt->vdownsampling[0]);
- 
--	if (!user_set_csc || !v4l2_is_colorspace_valid(mp->colorspace))
--		mp->colorspace = vivid_colorspace_cap(dev);
-+	if (!v4l2_is_colorspace_valid(f->colorspace))
-+		f->colorspace = vivid_colorspace_cap(dev);
- 
--	if (!user_set_csc || !v4l2_is_xfer_func_valid(mp->xfer_func))
--		mp->xfer_func = vivid_xfer_func_cap(dev);
-+	if (!v4l2_is_xfer_func_valid(f->xfer_func))
-+		f->xfer_func = vivid_xfer_func_cap(dev);
- 
- 	if (fmt->color_enc == TGP_COLOR_ENC_HSV) {
--		if (!user_set_csc || !v4l2_is_hsv_enc_valid(mp->hsv_enc))
--			mp->hsv_enc = vivid_hsv_enc_cap(dev);
-+		if (!v4l2_is_hsv_enc_valid(f->hsv_enc))
-+			f->hsv_enc = vivid_hsv_enc_cap(dev);
- 	} else if (fmt->color_enc == TGP_COLOR_ENC_YCBCR) {
--		if (!user_set_csc || !v4l2_is_ycbcr_enc_valid(mp->ycbcr_enc))
--			mp->ycbcr_enc = vivid_ycbcr_enc_cap(dev);
-+		if (!v4l2_is_ycbcr_enc_valid(f->ycbcr_enc))
-+			f->ycbcr_enc = vivid_ycbcr_enc_cap(dev);
- 	} else {
--		mp->ycbcr_enc = vivid_ycbcr_enc_cap(dev);
-+		f->ycbcr_enc = vivid_ycbcr_enc_cap(dev);
- 	}
- 
- 	if (fmt->color_enc == TGP_COLOR_ENC_YCBCR ||
- 	    fmt->color_enc == TGP_COLOR_ENC_RGB) {
--		if (!user_set_csc || !v4l2_is_quant_valid(mp->quantization))
--			mp->quantization = vivid_quantization_cap(dev);
-+		if (!v4l2_is_quant_valid(f->quantization))
-+			f->quantization = vivid_quantization_cap(dev);
- 	} else {
--		mp->quantization = vivid_quantization_cap(dev);
-+		f->quantization = vivid_quantization_cap(dev);
- 	}
- 
--	memset(mp->reserved, 0, sizeof(mp->reserved));
-+	memset(f->reserved, 0, sizeof(f->reserved));
- 	return 0;
++	for (i = 1; i < VIDEO_MAX_PLANES && eb->planes[i].m.userptr; i++)
++		if (eb->planes[i].m.userptr != eb->planes[i - 1].m.userptr)
++			return false;
++	return true;
++}
++
++static int v4l2_fill_buffer_from_ext_buffer(const struct v4l2_ioctl_ops *ops,
++					    struct file *file, void *fh,
++					    const struct v4l2_ext_buffer *eb,
++					    struct v4l2_buffer *b,
++					    struct v4l2_plane *bplanes)
++{
++	const struct v4l2_ext_plane *eplanes = (struct v4l2_ext_plane *)&eb->planes;
++	struct video_device *vfd = video_devdata(file);
++	bool is_mplane = V4L2_IS_CAP_MULTIPLANAR(vfd);
++	unsigned int i;
++	u64 nsecs;
++	int ret;
++
++	b->index = eb->index;
++	if (is_mplane) {
++		b->m.planes = bplanes;
++		b->length = VIDEO_MAX_PLANES;
++		if (eb->type == V4L2_BUF_TYPE_VIDEO_CAPTURE)
++			b->type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
++		else if (eb->type == V4L2_BUF_TYPE_VIDEO_OUTPUT)
++			b->type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
++	} else {
++		b->type = eb->type;
++	}
++
++	/* Fill the rest of the v4l2_buffer */
++	ret = v4l_querybuf(ops, file, fh, b);
++	if (ret)
++		return ret;
++
++	/* Fill other fields from v4l2_ext_buffer */
++	b->flags = eb->flags;
++	b->field = eb->field;
++	b->timestamp.tv_sec = div64_u64_rem(eb->timestamp, NSEC_PER_SEC, &nsecs);
++	b->timestamp.tv_usec = (u32)nsecs / NSEC_PER_USEC;
++	b->sequence = eb->sequence;
++
++	if (!is_mplane) {
++		for (i = 0; i < VIDEO_MAX_PLANES; i++) {
++			b->bytesused += eplanes[i].bytesused;
++			WARN_ON(eplanes[i].offset);
++		}
++
++		/* MMAP info was filled by querybuf */
++		if (b->memory == V4L2_MEMORY_MMAP)
++			return 0 ;
++
++		/*
++		 * TODO: get the length of the buffer, for now, just
++		 * set to max to avoid errors in checks.
++		 */
++		b->length = U32_MAX;
++		b->m.userptr = eplanes[0].m.userptr;
++		return 0;
++	}
++
++	bplanes[0].bytesused = eplanes[0].bytesused + eplanes[0].offset;
++	bplanes[0].data_offset = eplanes[0].offset;
++	if (v4l2_ext_buffer_is_single_membuf(eb))
++		for (i = 1; i < VIDEO_MAX_PLANES && eplanes[i].bytesused; i++) {
++			bplanes[0].bytesused += eplanes[i].bytesused;
++			WARN_ON(eplanes[i].offset);
++		}
++	else
++		for (i = 1; i < VIDEO_MAX_PLANES && eplanes[i].bytesused; i++) {
++			bplanes[i].bytesused = eplanes[i].bytesused +
++					       eplanes[i].offset;
++			bplanes[i].data_offset = eplanes[i].offset;
++		}
++
++	/* MMAP info was filled by querybuf */
++	if (b->memory == V4L2_MEMORY_MMAP)
++		return 0;
++
++	for (i = 0; i < VIDEO_MAX_PLANES && eplanes[i].m.userptr; i++) {
++		bplanes[i].m.userptr = eplanes[i].m.userptr;
++		/*
++		 * TODO: get the length of the buffer, for now, just
++		 * set to max to avoid errors in checks.
++		 */
++		bplanes[i].length = U32_MAX;
++	}
++	return 0;
++}
++
++static int v4l_ext_qbuf(const struct v4l2_ioctl_ops *ops,
++			struct file *file, void *fh, void *arg)
++{
++	struct v4l2_plane planes[VIDEO_MAX_PLANES] = {0};
++	struct v4l2_ext_buffer *eb = arg;
++	struct v4l2_buffer b = {0};
++
++	int ret = check_fmt(file, eb->type);
++
++	if (!ret)
++		return ret;
++
++	if (ops->vidioc_ext_qbuf)
++		return ops->vidioc_ext_qbuf(file, fh, eb);
++
++	/* Fill other fields from v4l2_ext_buffer */
++	ret = v4l2_fill_buffer_from_ext_buffer(ops, file, fh, eb, &b, planes);
++	if (ret)
++		return ret;
++
++	ret = v4l_qbuf(ops, file, fh, &b);
++	if (ret)
++		return ret;
++
++	/* TODO: check if we need to fill other fields */
++	eb->flags = b.flags;
++	return 0;
++}
++
+ static int v4l_dqbuf(const struct v4l2_ioctl_ops *ops,
+ 				struct file *file, void *fh, void *arg)
+ {
+@@ -2465,6 +2607,46 @@ static int v4l_dqbuf(const struct v4l2_ioctl_ops *ops,
+ 	return ret ? ret : ops->vidioc_dqbuf(file, fh, p);
  }
  
- int vivid_s_fmt_vid_cap(struct file *file, void *priv,
--					struct v4l2_format *f)
-+			struct v4l2_ext_pix_format *f)
++static int v4l_ext_dqbuf(const struct v4l2_ioctl_ops *ops,
++			 struct file *file, void *fh, void *arg)
++{
++	struct v4l2_plane planes[VIDEO_MAX_PLANES] = {0};
++	struct v4l2_ext_buffer *eb = arg;
++	struct v4l2_buffer b = {0};
++	unsigned int i;
++
++	int ret = check_fmt(file, eb->type);
++
++	if (!ret)
++		return ret;
++
++	if (ops->vidioc_ext_qbuf)
++		return ops->vidioc_ext_qbuf(file, fh, eb);
++
++	/* Fill other fields from v4l2_ext_buffer */
++	ret = v4l2_fill_buffer_from_ext_buffer(ops, file, fh, eb, &b, planes);
++	if (ret)
++		return ret;
++
++	ret = v4l_qbuf(ops, file, fh, &b);
++	if (ret)
++		return ret;
++
++	/* TODO: check if we need to fill other fields */
++	eb->flags = b.flags;
++
++	/*
++	 * Set buffer pointers to zero. Usecase: DMA-fd might have being
++	 * alread closed, so just request userspace to fill it again in queue
++	 * time.
++	 */
++	for (i = 0; i < VIDEO_MAX_PLANES && eb->planes[i].m.userptr; i++) {
++		eb->planes[i].m.userptr = 0;
++	}
++
++	return 0;
++}
++
+ static int v4l_create_bufs(const struct v4l2_ioctl_ops *ops,
+ 				struct file *file, void *fh, void *arg)
  {
--	struct v4l2_pix_format_mplane *mp = &f->fmt.pix_mp;
- 	struct vivid_dev *dev = video_drvdata(file);
- 	struct v4l2_rect *crop = &dev->crop_cap;
- 	struct v4l2_rect *compose = &dev->compose_cap;
-@@ -701,20 +700,21 @@ int vivid_s_fmt_vid_cap(struct file *file, void *priv,
- 		return -EBUSY;
- 	}
+@@ -3249,6 +3431,8 @@ static const struct v4l2_ioctl_info v4l2_ioctls[] = {
+ 	IOCTL_INFO(VIDIOC_G_EXT_PIX_FMT, v4l_g_ext_pix_fmt, v4l_print_ext_pix_format, 0),
+ 	IOCTL_INFO(VIDIOC_S_EXT_PIX_FMT, v4l_s_ext_pix_fmt, v4l_print_ext_pix_format, INFO_FL_PRIO),
+ 	IOCTL_INFO(VIDIOC_TRY_EXT_PIX_FMT, v4l_try_ext_pix_fmt, v4l_print_ext_pix_format, 0),
++	IOCTL_INFO(VIDIOC_EXT_QBUF, v4l_ext_qbuf, v4l_print_ext_buffer, INFO_FL_QUEUE),
++	IOCTL_INFO(VIDIOC_EXT_DQBUF, v4l_ext_dqbuf, v4l_print_ext_buffer, INFO_FL_QUEUE),
+ };
+ #define V4L2_IOCTLS ARRAY_SIZE(v4l2_ioctls)
  
--	if (dev->overlay_cap_owner && dev->fb_cap.fmt.pixelformat != mp->pixelformat) {
-+	if (dev->overlay_cap_owner &&
-+	    dev->fb_cap.fmt.pixelformat != f->pixelformat) {
- 		dprintk(dev, 1, "overlay is active, can't change pixelformat\n");
- 		return -EBUSY;
- 	}
+diff --git a/include/media/v4l2-ioctl.h b/include/media/v4l2-ioctl.h
+index c44708dc9355..1d0ed36e5e67 100644
+--- a/include/media/v4l2-ioctl.h
++++ b/include/media/v4l2-ioctl.h
+@@ -171,10 +171,14 @@ struct v4l2_fh;
+  *	:ref:`VIDIOC_QUERYBUF <vidioc_querybuf>` ioctl
+  * @vidioc_qbuf: pointer to the function that implements
+  *	:ref:`VIDIOC_QBUF <vidioc_qbuf>` ioctl
++ * @vidioc_ext_qbuf: pointer to the function that implements
++ *	:ref:`VIDIOC_EXT_QBUF <vidioc_ext_qbuf>` ioctl
+  * @vidioc_expbuf: pointer to the function that implements
+  *	:ref:`VIDIOC_EXPBUF <vidioc_expbuf>` ioctl
+  * @vidioc_dqbuf: pointer to the function that implements
+  *	:ref:`VIDIOC_DQBUF <vidioc_qbuf>` ioctl
++ * @vidioc_ext_dqbuf: pointer to the function that implements
++ *	:ref:`VIDIOC_EXT_DQBUF <vidioc_ext_qbuf>` ioctl
+  * @vidioc_create_bufs: pointer to the function that implements
+  *	:ref:`VIDIOC_CREATE_BUFS <vidioc_create_bufs>` ioctl
+  * @vidioc_prepare_buf: pointer to the function that implements
+@@ -441,10 +445,14 @@ struct v4l2_ioctl_ops {
+ 			       struct v4l2_buffer *b);
+ 	int (*vidioc_qbuf)(struct file *file, void *fh,
+ 			   struct v4l2_buffer *b);
++	int (*vidioc_ext_qbuf)(struct file *file, void *fh,
++			       struct v4l2_ext_buffer *b);
+ 	int (*vidioc_expbuf)(struct file *file, void *fh,
+ 			     struct v4l2_exportbuffer *e);
+ 	int (*vidioc_dqbuf)(struct file *file, void *fh,
+ 			    struct v4l2_buffer *b);
++	int (*vidioc_ext_dqbuf)(struct file *file, void *fh,
++				struct v4l2_ext_buffer *b);
  
--	dev->fmt_cap = vivid_get_format(dev, mp->pixelformat);
--	if (V4L2_FIELD_HAS_T_OR_B(mp->field))
-+	dev->fmt_cap = vivid_get_format(dev, f->pixelformat);
-+	if (V4L2_FIELD_HAS_T_OR_B(f->field))
- 		factor = 2;
+ 	int (*vidioc_create_bufs)(struct file *file, void *fh,
+ 				  struct v4l2_create_buffers *b);
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index 74a8dd7f7637..690bd24b17a6 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -1120,6 +1120,59 @@ struct v4l2_buffer {
+ 	};
+ };
  
- 	/* Note: the webcam input doesn't support scaling, cropping or composing */
++/**
++ * struct v4l2_ext_plane - extended plane buffer info
++ * @offset:		offset in the memory buffer where the plane starts.
++ * @bytesused:		number of bytes occupied by data in the plane (payload).
++ * @mmap_offset:	If V4L2_MEMORY_MMAP is used, then it can be a "cookie"
++ *			that should be passed to mmap() called on the video node.
++ * @userptr:		when memory is V4L2_MEMORY_USERPTR, a userspace pointer pointing
++ *			to this plane.
++ * @dmabuf_fd:		when memory is V4L2_MEMORY_DMABUF, a userspace file descriptor
++ *			associated with this plane.
++ * @reserved:		extra space reserved for future fields, must be set to 0.
++ */
++struct v4l2_ext_plane {
++	__u32 offset;
++	__u32 bytesused;
++	union {
++		__u32 mmap_offset;
++		__u64 userptr;
++		__s32 dmabuf_fd;
++	} m;
++	__u32 reserved[6];
++};
++
++/**
++ * struct v4l2_ext_buffer - extended video buffer info
++ * @index:	id number of the buffer
++ * @type:	V4L2_BUF_TYPE_VIDEO_CAPTURE or V4L2_BUF_TYPE_VIDEO_OUTPUT
++ * @field:	enum v4l2_field; field order of the image in the buffer
++ * @sequence:	sequence count of this frame
++ * @flags:	buffer informational flags
++ * @timestamp:	frame timestamp
++ * @memory:	enum v4l2_memory; the method, in which the actual video
++ *		data is passed
++ * @request_fd:	fd of the request that this buffer should use
++ * @planes:	per-plane buffer information
++ * @reserved:	extra space reserved for future fields, must be set to 0
++ *
++ * Contains data exchanged by application and driver using one of the Streaming
++ * I/O methods.
++ */
++struct v4l2_ext_buffer {
++	__u32 index;
++	__u32 type;
++	__u32 field;
++	__u32 sequence;
++	__u64 flags;
++	__u64 timestamp;
++	__u32 memory;
++	__s32 request_fd;
++	struct v4l2_ext_plane planes[VIDEO_MAX_PLANES];
++	__u32 reserved[10];
++};
++
+ #ifndef __KERNEL__
+ /**
+  * v4l2_timeval_to_ns - Convert timeval to nanoseconds
+@@ -2733,6 +2786,8 @@ struct v4l2_create_buffers {
+ #define VIDIOC_G_EXT_PIX_FMT	_IOWR('V', 104, struct v4l2_ext_pix_format)
+ #define VIDIOC_S_EXT_PIX_FMT	_IOWR('V', 105, struct v4l2_ext_pix_format)
+ #define VIDIOC_TRY_EXT_PIX_FMT	_IOWR('V', 106, struct v4l2_ext_pix_format)
++#define VIDIOC_EXT_QBUF		_IOWR('V', 107, struct v4l2_ext_buffer)
++#define VIDIOC_EXT_DQBUF	_IOWR('V', 118, struct v4l2_ext_buffer)
  
- 	if (!vivid_is_webcam(dev) &&
- 	    (dev->has_scaler_cap || dev->has_crop_cap || dev->has_compose_cap)) {
--		struct v4l2_rect r = { 0, 0, mp->width, mp->height };
-+		struct v4l2_rect r = { 0, 0, f->width, f->height };
- 
- 		if (dev->has_scaler_cap) {
- 			if (dev->has_compose_cap)
-@@ -775,107 +775,47 @@ int vivid_s_fmt_vid_cap(struct file *file, void *priv,
- 	} else if (vivid_is_webcam(dev)) {
- 		/* Guaranteed to be a match */
- 		for (i = 0; i < ARRAY_SIZE(webcam_sizes); i++)
--			if (webcam_sizes[i].width == mp->width &&
--					webcam_sizes[i].height == mp->height)
-+			if (webcam_sizes[i].width == f->width &&
-+			    webcam_sizes[i].height == f->height)
- 				break;
- 		dev->webcam_size_idx = i;
- 		if (dev->webcam_ival_idx >= 2 * (VIVID_WEBCAM_SIZES - i))
- 			dev->webcam_ival_idx = 2 * (VIVID_WEBCAM_SIZES - i) - 1;
- 		vivid_update_format_cap(dev, false);
- 	} else {
--		struct v4l2_rect r = { 0, 0, mp->width, mp->height };
-+		struct v4l2_rect r = { 0, 0, f->width, f->height };
- 
- 		v4l2_rect_set_size_to(compose, &r);
- 		r.height *= factor;
- 		v4l2_rect_set_size_to(crop, &r);
- 	}
- 
--	dev->fmt_cap_rect.width = mp->width;
--	dev->fmt_cap_rect.height = mp->height;
--	tpg_s_buf_height(&dev->tpg, mp->height);
-+	dev->fmt_cap_rect.width = f->width;
-+	dev->fmt_cap_rect.height = f->height;
-+	tpg_s_buf_height(&dev->tpg, f->height);
- 	tpg_s_fourcc(&dev->tpg, dev->fmt_cap->fourcc);
- 	for (p = 0; p < tpg_g_buffers(&dev->tpg); p++)
--		tpg_s_bytesperline(&dev->tpg, p, mp->plane_fmt[p].bytesperline);
--	dev->field_cap = mp->field;
-+		tpg_s_bytesperline(&dev->tpg, p, f->plane_fmt[p].bytesperline);
-+	dev->field_cap = f->field;
- 	if (dev->field_cap == V4L2_FIELD_ALTERNATE)
- 		tpg_s_field(&dev->tpg, V4L2_FIELD_TOP, true);
- 	else
- 		tpg_s_field(&dev->tpg, dev->field_cap, false);
- 	tpg_s_crop_compose(&dev->tpg, &dev->crop_cap, &dev->compose_cap);
- 	if (vivid_is_sdtv_cap(dev))
--		dev->tv_field_cap = mp->field;
-+		dev->tv_field_cap = f->field;
- 	tpg_update_mv_step(&dev->tpg);
--	dev->tpg.colorspace = mp->colorspace;
--	dev->tpg.xfer_func = mp->xfer_func;
-+	dev->tpg.colorspace = f->colorspace;
-+	dev->tpg.xfer_func = f->xfer_func;
- 	if (dev->fmt_cap->color_enc == TGP_COLOR_ENC_YCBCR)
--		dev->tpg.ycbcr_enc = mp->ycbcr_enc;
-+		dev->tpg.ycbcr_enc = f->ycbcr_enc;
- 	else
--		dev->tpg.hsv_enc = mp->hsv_enc;
--	dev->tpg.quantization = mp->quantization;
-+		dev->tpg.hsv_enc = f->hsv_enc;
-+	dev->tpg.quantization = f->quantization;
- 
- 	return 0;
- }
- 
--int vidioc_g_fmt_vid_cap_mplane(struct file *file, void *priv,
--					struct v4l2_format *f)
--{
--	struct vivid_dev *dev = video_drvdata(file);
--
--	if (!dev->multiplanar)
--		return -ENOTTY;
--	return vivid_g_fmt_vid_cap(file, priv, f);
--}
--
--int vidioc_try_fmt_vid_cap_mplane(struct file *file, void *priv,
--			struct v4l2_format *f)
--{
--	struct vivid_dev *dev = video_drvdata(file);
--
--	if (!dev->multiplanar)
--		return -ENOTTY;
--	return vivid_try_fmt_vid_cap(file, priv, f);
--}
--
--int vidioc_s_fmt_vid_cap_mplane(struct file *file, void *priv,
--			struct v4l2_format *f)
--{
--	struct vivid_dev *dev = video_drvdata(file);
--
--	if (!dev->multiplanar)
--		return -ENOTTY;
--	return vivid_s_fmt_vid_cap(file, priv, f);
--}
--
--int vidioc_g_fmt_vid_cap(struct file *file, void *priv,
--					struct v4l2_format *f)
--{
--	struct vivid_dev *dev = video_drvdata(file);
--
--	if (dev->multiplanar)
--		return -ENOTTY;
--	return fmt_sp2mp_func(file, priv, f, vivid_g_fmt_vid_cap);
--}
--
--int vidioc_try_fmt_vid_cap(struct file *file, void *priv,
--			struct v4l2_format *f)
--{
--	struct vivid_dev *dev = video_drvdata(file);
--
--	if (dev->multiplanar)
--		return -ENOTTY;
--	return fmt_sp2mp_func(file, priv, f, vivid_try_fmt_vid_cap);
--}
--
--int vidioc_s_fmt_vid_cap(struct file *file, void *priv,
--			struct v4l2_format *f)
--{
--	struct vivid_dev *dev = video_drvdata(file);
--
--	if (dev->multiplanar)
--		return -ENOTTY;
--	return fmt_sp2mp_func(file, priv, f, vivid_s_fmt_vid_cap);
--}
--
- int vivid_vid_cap_g_selection(struct file *file, void *priv,
- 			      struct v4l2_selection *sel)
- {
-diff --git a/drivers/media/test-drivers/vivid/vivid-vid-cap.h b/drivers/media/test-drivers/vivid/vivid-vid-cap.h
-index 1e422a59eeab..7c9fc5c787b5 100644
---- a/drivers/media/test-drivers/vivid/vivid-vid-cap.h
-+++ b/drivers/media/test-drivers/vivid/vivid-vid-cap.h
-@@ -17,15 +17,12 @@ extern const char * const vivid_ctrl_standard_strings[];
- 
- extern const struct vb2_ops vivid_vid_cap_qops;
- 
--int vivid_g_fmt_vid_cap(struct file *file, void *priv, struct v4l2_format *f);
--int vivid_try_fmt_vid_cap(struct file *file, void *priv, struct v4l2_format *f);
--int vivid_s_fmt_vid_cap(struct file *file, void *priv, struct v4l2_format *f);
--int vidioc_g_fmt_vid_cap_mplane(struct file *file, void *priv, struct v4l2_format *f);
--int vidioc_try_fmt_vid_cap_mplane(struct file *file, void *priv, struct v4l2_format *f);
--int vidioc_s_fmt_vid_cap_mplane(struct file *file, void *priv, struct v4l2_format *f);
--int vidioc_g_fmt_vid_cap(struct file *file, void *priv, struct v4l2_format *f);
--int vidioc_try_fmt_vid_cap(struct file *file, void *priv, struct v4l2_format *f);
--int vidioc_s_fmt_vid_cap(struct file *file, void *priv, struct v4l2_format *f);
-+int vivid_g_fmt_vid_cap(struct file *file, void *priv,
-+			struct v4l2_ext_pix_format *f);
-+int vivid_try_fmt_vid_cap(struct file *file, void *priv,
-+			  struct v4l2_ext_pix_format *f);
-+int vivid_s_fmt_vid_cap(struct file *file, void *priv,
-+			struct v4l2_ext_pix_format *f);
- int vivid_vid_cap_g_selection(struct file *file, void *priv, struct v4l2_selection *sel);
- int vivid_vid_cap_s_selection(struct file *file, void *fh, struct v4l2_selection *s);
- int vivid_vid_cap_g_pixelaspect(struct file *file, void *priv, int type, struct v4l2_fract *f);
-diff --git a/drivers/media/test-drivers/vivid/vivid-vid-out.c b/drivers/media/test-drivers/vivid/vivid-vid-out.c
-index 9f731f085179..936ba93c00cc 100644
---- a/drivers/media/test-drivers/vivid/vivid-vid-out.c
-+++ b/drivers/media/test-drivers/vivid/vivid-vid-out.c
-@@ -13,6 +13,7 @@
- #include <media/v4l2-common.h>
- #include <media/v4l2-event.h>
- #include <media/v4l2-dv-timings.h>
-+#include <media/v4l2-ioctl.h>
- #include <media/v4l2-rect.h>
- 
- #include "vivid-core.h"
-@@ -315,59 +316,57 @@ static enum tpg_pixel_aspect vivid_get_pixel_aspect(const struct vivid_dev *dev)
- }
- 
- int vivid_g_fmt_vid_out(struct file *file, void *priv,
--					struct v4l2_format *f)
-+			struct v4l2_ext_pix_format *f)
- {
- 	struct vivid_dev *dev = video_drvdata(file);
--	struct v4l2_pix_format_mplane *mp = &f->fmt.pix_mp;
- 	const struct vivid_fmt *fmt = dev->fmt_out;
- 	unsigned p;
- 
--	mp->width        = dev->fmt_out_rect.width;
--	mp->height       = dev->fmt_out_rect.height;
--	mp->field        = dev->field_out;
--	mp->pixelformat  = fmt->fourcc;
--	mp->colorspace   = dev->colorspace_out;
--	mp->xfer_func    = dev->xfer_func_out;
--	mp->ycbcr_enc    = dev->ycbcr_enc_out;
--	mp->quantization = dev->quantization_out;
--	mp->num_planes = fmt->buffers;
--	for (p = 0; p < mp->num_planes; p++) {
--		mp->plane_fmt[p].bytesperline = dev->bytesperline_out[p];
--		mp->plane_fmt[p].sizeimage =
--			mp->plane_fmt[p].bytesperline * mp->height +
-+	f->width        = dev->fmt_out_rect.width;
-+	f->height       = dev->fmt_out_rect.height;
-+	f->field        = dev->field_out;
-+	f->pixelformat  = fmt->fourcc;
-+	f->colorspace   = dev->colorspace_out;
-+	f->xfer_func    = dev->xfer_func_out;
-+	f->ycbcr_enc    = dev->ycbcr_enc_out;
-+	f->quantization = dev->quantization_out;
-+	memset(f->plane_fmt, 0, sizeof(f->plane_fmt));
-+	for (p = 0; p < fmt->buffers; p++) {
-+		f->plane_fmt[p].bytesperline = dev->bytesperline_out[p];
-+		f->plane_fmt[p].sizeimage =
-+			f->plane_fmt[p].bytesperline * f->height +
- 			fmt->data_offset[p];
- 	}
- 	for (p = fmt->buffers; p < fmt->planes; p++) {
- 		unsigned stride = dev->bytesperline_out[p];
- 
--		mp->plane_fmt[0].sizeimage +=
--			(stride * mp->height) / fmt->vdownsampling[p];
-+		f->plane_fmt[0].sizeimage +=
-+			(stride * f->height) / fmt->vdownsampling[p];
- 	}
- 	return 0;
- }
- 
- int vivid_try_fmt_vid_out(struct file *file, void *priv,
--			struct v4l2_format *f)
-+			  struct v4l2_ext_pix_format *f)
- {
- 	struct vivid_dev *dev = video_drvdata(file);
-+	struct v4l2_plane_pix_format *pfmt = f->plane_fmt;
- 	struct v4l2_bt_timings *bt = &dev->dv_timings_out.bt;
--	struct v4l2_pix_format_mplane *mp = &f->fmt.pix_mp;
--	struct v4l2_plane_pix_format *pfmt = mp->plane_fmt;
- 	const struct vivid_fmt *fmt;
- 	unsigned bytesperline, max_bpl;
- 	unsigned factor = 1;
- 	unsigned w, h;
- 	unsigned p;
- 
--	fmt = vivid_get_format(dev, mp->pixelformat);
-+	fmt = vivid_get_format(dev, f->pixelformat);
- 	if (!fmt) {
- 		dprintk(dev, 1, "Fourcc format (0x%08x) unknown.\n",
--			mp->pixelformat);
--		mp->pixelformat = V4L2_PIX_FMT_YUYV;
--		fmt = vivid_get_format(dev, mp->pixelformat);
-+			f->pixelformat);
-+		f->pixelformat = V4L2_PIX_FMT_YUYV;
-+		fmt = vivid_get_format(dev, f->pixelformat);
- 	}
- 
--	mp->field = vivid_field_out(dev, mp->field);
-+	f->field = vivid_field_out(dev, f->field);
- 	if (vivid_is_svid_out(dev)) {
- 		w = 720;
- 		h = (dev->std_out & V4L2_STD_525_60) ? 480 : 576;
-@@ -375,13 +374,13 @@ int vivid_try_fmt_vid_out(struct file *file, void *priv,
- 		w = dev->sink_rect.width;
- 		h = dev->sink_rect.height;
- 	}
--	if (V4L2_FIELD_HAS_T_OR_B(mp->field))
-+	if (V4L2_FIELD_HAS_T_OR_B(f->field))
- 		factor = 2;
- 	if (!dev->has_scaler_out && !dev->has_crop_out && !dev->has_compose_out) {
--		mp->width = w;
--		mp->height = h / factor;
-+		f->width = w;
-+		f->height = h / factor;
- 	} else {
--		struct v4l2_rect r = { 0, 0, mp->width, mp->height * factor };
-+		struct v4l2_rect r = { 0, 0, f->width, f->height * factor };
- 
- 		v4l2_rect_set_min_size(&r, &vivid_min_rect);
- 		v4l2_rect_set_max_size(&r, &vivid_max_rect);
-@@ -394,16 +393,15 @@ int vivid_try_fmt_vid_out(struct file *file, void *priv,
- 		} else if (!dev->has_scaler_out && !dev->has_compose_out) {
- 			v4l2_rect_set_min_size(&r, &dev->sink_rect);
- 		}
--		mp->width = r.width;
--		mp->height = r.height / factor;
-+		f->width = r.width;
-+		f->height = r.height / factor;
- 	}
- 
- 	/* This driver supports custom bytesperline values */
- 
--	mp->num_planes = fmt->buffers;
- 	for (p = 0; p < fmt->buffers; p++) {
- 		/* Calculate the minimum supported bytesperline value */
--		bytesperline = (mp->width * fmt->bit_depth[p]) >> 3;
-+		bytesperline = (f->width * fmt->bit_depth[p]) >> 3;
- 		/* Calculate the maximum supported bytesperline value */
- 		max_bpl = (MAX_ZOOM * MAX_WIDTH * fmt->bit_depth[p]) >> 3;
- 
-@@ -412,42 +410,41 @@ int vivid_try_fmt_vid_out(struct file *file, void *priv,
- 		if (pfmt[p].bytesperline < bytesperline)
- 			pfmt[p].bytesperline = bytesperline;
- 
--		pfmt[p].sizeimage = (pfmt[p].bytesperline * mp->height) /
-+		pfmt[p].sizeimage = (pfmt[p].bytesperline * f->height) /
- 				fmt->vdownsampling[p] + fmt->data_offset[p];
- 
--		memset(pfmt[p].reserved, 0, sizeof(pfmt[p].reserved));
- 	}
-+	if (p < VIDEO_MAX_PLANES)
-+		pfmt[p].sizeimage = 0;
- 	for (p = fmt->buffers; p < fmt->planes; p++)
--		pfmt[0].sizeimage += (pfmt[0].bytesperline * mp->height *
-+		pfmt[0].sizeimage += (pfmt[0].bytesperline * f->height *
- 			(fmt->bit_depth[p] / fmt->vdownsampling[p])) /
- 			(fmt->bit_depth[0] / fmt->vdownsampling[0]);
- 
--	mp->xfer_func = V4L2_XFER_FUNC_DEFAULT;
--	mp->ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT;
--	mp->quantization = V4L2_QUANTIZATION_DEFAULT;
-+	f->xfer_func = V4L2_XFER_FUNC_DEFAULT;
-+	f->ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT;
-+	f->quantization = V4L2_QUANTIZATION_DEFAULT;
- 	if (vivid_is_svid_out(dev)) {
--		mp->colorspace = V4L2_COLORSPACE_SMPTE170M;
-+		f->colorspace = V4L2_COLORSPACE_SMPTE170M;
- 	} else if (dev->dvi_d_out || !(bt->flags & V4L2_DV_FL_IS_CE_VIDEO)) {
--		mp->colorspace = V4L2_COLORSPACE_SRGB;
-+		f->colorspace = V4L2_COLORSPACE_SRGB;
- 		if (dev->dvi_d_out)
--			mp->quantization = V4L2_QUANTIZATION_LIM_RANGE;
-+			f->quantization = V4L2_QUANTIZATION_LIM_RANGE;
- 	} else if (bt->width == 720 && bt->height <= 576) {
--		mp->colorspace = V4L2_COLORSPACE_SMPTE170M;
--	} else if (mp->colorspace != V4L2_COLORSPACE_SMPTE170M &&
--		   mp->colorspace != V4L2_COLORSPACE_REC709 &&
--		   mp->colorspace != V4L2_COLORSPACE_OPRGB &&
--		   mp->colorspace != V4L2_COLORSPACE_BT2020 &&
--		   mp->colorspace != V4L2_COLORSPACE_SRGB) {
--		mp->colorspace = V4L2_COLORSPACE_REC709;
-+		f->colorspace = V4L2_COLORSPACE_SMPTE170M;
-+	} else if (f->colorspace != V4L2_COLORSPACE_SMPTE170M &&
-+		   f->colorspace != V4L2_COLORSPACE_REC709 &&
-+		   f->colorspace != V4L2_COLORSPACE_OPRGB &&
-+		   f->colorspace != V4L2_COLORSPACE_BT2020 &&
-+		   f->colorspace != V4L2_COLORSPACE_SRGB) {
-+		f->colorspace = V4L2_COLORSPACE_REC709;
- 	}
--	memset(mp->reserved, 0, sizeof(mp->reserved));
- 	return 0;
- }
- 
- int vivid_s_fmt_vid_out(struct file *file, void *priv,
--					struct v4l2_format *f)
-+			struct v4l2_ext_pix_format *f)
- {
--	struct v4l2_pix_format_mplane *mp = &f->fmt.pix_mp;
- 	struct vivid_dev *dev = video_drvdata(file);
- 	struct v4l2_rect *crop = &dev->crop_out;
- 	struct v4l2_rect *compose = &dev->compose_out;
-@@ -461,10 +458,10 @@ int vivid_s_fmt_vid_out(struct file *file, void *priv,
- 
- 	if (vb2_is_busy(q) &&
- 	    (vivid_is_svid_out(dev) ||
--	     mp->width != dev->fmt_out_rect.width ||
--	     mp->height != dev->fmt_out_rect.height ||
--	     mp->pixelformat != dev->fmt_out->fourcc ||
--	     mp->field != dev->field_out)) {
-+	     f->width != dev->fmt_out_rect.width ||
-+	     f->height != dev->fmt_out_rect.height ||
-+	     f->pixelformat != dev->fmt_out->fourcc ||
-+	     f->field != dev->field_out)) {
- 		dprintk(dev, 1, "%s device busy\n", __func__);
- 		return -EBUSY;
- 	}
-@@ -477,12 +474,12 @@ int vivid_s_fmt_vid_out(struct file *file, void *priv,
- 	if (vb2_is_busy(q))
- 		goto set_colorspace;
- 
--	dev->fmt_out = vivid_get_format(dev, mp->pixelformat);
--	if (V4L2_FIELD_HAS_T_OR_B(mp->field))
-+	dev->fmt_out = vivid_get_format(dev, f->pixelformat);
-+	if (V4L2_FIELD_HAS_T_OR_B(f->field))
- 		factor = 2;
- 
- 	if (dev->has_scaler_out || dev->has_crop_out || dev->has_compose_out) {
--		struct v4l2_rect r = { 0, 0, mp->width, mp->height };
-+		struct v4l2_rect r = { 0, 0, f->width, f->height };
- 
- 		if (dev->has_scaler_out) {
- 			if (dev->has_crop_out)
-@@ -541,30 +538,30 @@ int vivid_s_fmt_vid_out(struct file *file, void *priv,
- 			crop->height /= factor;
- 		}
- 	} else {
--		struct v4l2_rect r = { 0, 0, mp->width, mp->height };
-+		struct v4l2_rect r = { 0, 0, f->width, f->height };
- 
- 		v4l2_rect_set_size_to(crop, &r);
- 		r.height /= factor;
- 		v4l2_rect_set_size_to(compose, &r);
- 	}
- 
--	dev->fmt_out_rect.width = mp->width;
--	dev->fmt_out_rect.height = mp->height;
--	for (p = 0; p < mp->num_planes; p++)
--		dev->bytesperline_out[p] = mp->plane_fmt[p].bytesperline;
-+	dev->fmt_out_rect.width = f->width;
-+	dev->fmt_out_rect.height = f->height;
-+	for (p = 0; p < VIDEO_MAX_PLANES && f->plane_fmt[p].sizeimage; p++)
-+		dev->bytesperline_out[p] = f->plane_fmt[p].bytesperline;
- 	for (p = dev->fmt_out->buffers; p < dev->fmt_out->planes; p++)
- 		dev->bytesperline_out[p] =
- 			(dev->bytesperline_out[0] * dev->fmt_out->bit_depth[p]) /
- 			dev->fmt_out->bit_depth[0];
--	dev->field_out = mp->field;
-+	dev->field_out = f->field;
- 	if (vivid_is_svid_out(dev))
--		dev->tv_field_out = mp->field;
-+		dev->tv_field_out = f->field;
- 
- set_colorspace:
--	dev->colorspace_out = mp->colorspace;
--	dev->xfer_func_out = mp->xfer_func;
--	dev->ycbcr_enc_out = mp->ycbcr_enc;
--	dev->quantization_out = mp->quantization;
-+	dev->colorspace_out = f->colorspace;
-+	dev->xfer_func_out = f->xfer_func;
-+	dev->ycbcr_enc_out = f->ycbcr_enc;
-+	dev->quantization_out = f->quantization;
- 	if (dev->loop_video) {
- 		vivid_send_source_change(dev, SVID);
- 		vivid_send_source_change(dev, HDMI);
-@@ -572,66 +569,6 @@ int vivid_s_fmt_vid_out(struct file *file, void *priv,
- 	return 0;
- }
- 
--int vidioc_g_fmt_vid_out_mplane(struct file *file, void *priv,
--					struct v4l2_format *f)
--{
--	struct vivid_dev *dev = video_drvdata(file);
--
--	if (!dev->multiplanar)
--		return -ENOTTY;
--	return vivid_g_fmt_vid_out(file, priv, f);
--}
--
--int vidioc_try_fmt_vid_out_mplane(struct file *file, void *priv,
--			struct v4l2_format *f)
--{
--	struct vivid_dev *dev = video_drvdata(file);
--
--	if (!dev->multiplanar)
--		return -ENOTTY;
--	return vivid_try_fmt_vid_out(file, priv, f);
--}
--
--int vidioc_s_fmt_vid_out_mplane(struct file *file, void *priv,
--			struct v4l2_format *f)
--{
--	struct vivid_dev *dev = video_drvdata(file);
--
--	if (!dev->multiplanar)
--		return -ENOTTY;
--	return vivid_s_fmt_vid_out(file, priv, f);
--}
--
--int vidioc_g_fmt_vid_out(struct file *file, void *priv,
--					struct v4l2_format *f)
--{
--	struct vivid_dev *dev = video_drvdata(file);
--
--	if (dev->multiplanar)
--		return -ENOTTY;
--	return fmt_sp2mp_func(file, priv, f, vivid_g_fmt_vid_out);
--}
--
--int vidioc_try_fmt_vid_out(struct file *file, void *priv,
--			struct v4l2_format *f)
--{
--	struct vivid_dev *dev = video_drvdata(file);
--
--	if (dev->multiplanar)
--		return -ENOTTY;
--	return fmt_sp2mp_func(file, priv, f, vivid_try_fmt_vid_out);
--}
--
--int vidioc_s_fmt_vid_out(struct file *file, void *priv,
--			struct v4l2_format *f)
--{
--	struct vivid_dev *dev = video_drvdata(file);
--
--	if (dev->multiplanar)
--		return -ENOTTY;
--	return fmt_sp2mp_func(file, priv, f, vivid_s_fmt_vid_out);
--}
--
- int vivid_vid_out_g_selection(struct file *file, void *priv,
- 			      struct v4l2_selection *sel)
- {
-diff --git a/drivers/media/test-drivers/vivid/vivid-vid-out.h b/drivers/media/test-drivers/vivid/vivid-vid-out.h
-index 8d56314f4ea1..b84dc578af36 100644
---- a/drivers/media/test-drivers/vivid/vivid-vid-out.h
-+++ b/drivers/media/test-drivers/vivid/vivid-vid-out.h
-@@ -12,15 +12,12 @@ extern const struct vb2_ops vivid_vid_out_qops;
- 
- void vivid_update_format_out(struct vivid_dev *dev);
- 
--int vivid_g_fmt_vid_out(struct file *file, void *priv, struct v4l2_format *f);
--int vivid_try_fmt_vid_out(struct file *file, void *priv, struct v4l2_format *f);
--int vivid_s_fmt_vid_out(struct file *file, void *priv, struct v4l2_format *f);
--int vidioc_g_fmt_vid_out_mplane(struct file *file, void *priv, struct v4l2_format *f);
--int vidioc_try_fmt_vid_out_mplane(struct file *file, void *priv, struct v4l2_format *f);
--int vidioc_s_fmt_vid_out_mplane(struct file *file, void *priv, struct v4l2_format *f);
--int vidioc_g_fmt_vid_out(struct file *file, void *priv, struct v4l2_format *f);
--int vidioc_try_fmt_vid_out(struct file *file, void *priv, struct v4l2_format *f);
--int vidioc_s_fmt_vid_out(struct file *file, void *priv, struct v4l2_format *f);
-+int vivid_g_fmt_vid_out(struct file *file, void *priv,
-+			struct v4l2_ext_pix_format *f);
-+int vivid_try_fmt_vid_out(struct file *file, void *priv,
-+			  struct v4l2_ext_pix_format *f);
-+int vivid_s_fmt_vid_out(struct file *file, void *priv,
-+			struct v4l2_ext_pix_format *f);
- int vivid_vid_out_g_selection(struct file *file, void *priv, struct v4l2_selection *sel);
- int vivid_vid_out_s_selection(struct file *file, void *fh, struct v4l2_selection *s);
- int vivid_vid_out_g_pixelaspect(struct file *file, void *priv, int type, struct v4l2_fract *f);
+ /* Reminder: when adding new ioctls please add support for them to
+    drivers/media/v4l2-core/v4l2-compat-ioctl32.c as well! */
 -- 
 2.17.1
 
