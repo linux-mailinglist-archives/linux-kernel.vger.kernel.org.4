@@ -2,153 +2,351 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51AE268BE1A
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 14:26:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D07C68BFC4
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 15:15:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbjBFN0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 08:26:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60834 "EHLO
+        id S231411AbjBFONW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 09:13:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbjBFN0S (ORCPT
+        with ESMTP id S231410AbjBFONH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 08:26:18 -0500
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04CA083DE;
-        Mon,  6 Feb 2023 05:26:17 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YbKBTzugjyZoQSoG9efWBXZEDD6Rgg1VPjcLlwbHlpleFztGf0lodpYyh5sTf97cjuPAm1HAEdPbhCwgzKdJSP34wUHPPLhE13UAtH0E6FHlG1Bj6QwwjdnG9moPodSP+mIVqr8Q8MGp8sTyjPuiC1If1KEiAV5/p7mO99oLNLxL/haHXPCV8JU9CUMqox725yzLc1RppBSg+W6J1V9xK5TyPtTInf4YD9Bz2z6P8MjCAP3lzZRCRUs+x7QTSrPck4MKiky4sp6NOtLqOp40QzBrKtUnwxM0NJsu2/jsRqJqy2cGsL0QSegL8q6JXIAPJQiKTQ1VxOH2xlFH7ovPEQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cDinuEiRM1vk46E63gbQSxKb0o8g/pt3ZJzpUpmruhY=;
- b=T137kyYepJf1ST8rUmhKF5rYTtVAX7e99tY8lPt19wMRRrENFHX53kTDsmpcvXE9STdj+9Y46E5ka7X91dvt9LRt5jm7YemKyyG8F5tPywxIY6iDq+ePtjaWLrwLzNsInhzPP56tvY+j+YWHyVBXfuPYPps6yFNymhGFjBCVChVdR86cM5LBpzzpsGR+FJg8kK+ejY4MZfugMMTyGt6QfOJQnNIy+N6xIfbz66At5t8KrhPRvILch3DmoM7GLG8VKzhtOHMGY6MjKi27W3KdYeej3XLVjKHz+NvWGgj7wcFaogGD2JGMinQfC02gdrRHQvFJ9YkH1miweHdEQZjjoA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cDinuEiRM1vk46E63gbQSxKb0o8g/pt3ZJzpUpmruhY=;
- b=pVHZTlHvcN8K0Uf0olBKyueE4Jy7/Fd7Y8bahFYOzpvkZLzQ6C/cdr8iaEvyYWqpAc7/Kv8JBzN5ceM4kJSk8xsf2LaZZ66ZGTAq7LhFavOkkk2n10Xv7EJRqpaFDUCO68UvLOqVOKB6TiRXAjbgqQyiVJbDZPzBIMtQCPDD3uXWs9HYWCFE2Q11hMYzgcPX9SgNwgMK5dVXP8oYfWWrvcj4/KgxcsW1CCu7wLA9vpwTeT/LCC/LQIhyW4Mm1PhIlPjZUaRIHACAF63T4lUkE9BTQP6KsHPyWPAazf/BewVGbJz/cUvleYT/YiQEhsFuLEXd84hQHK1mMlM1aqsn7Q==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by CH2PR12MB4939.namprd12.prod.outlook.com (2603:10b6:610:61::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.34; Mon, 6 Feb
- 2023 13:26:15 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::3cb3:2fce:5c8f:82ee]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::3cb3:2fce:5c8f:82ee%4]) with mapi id 15.20.6064.031; Mon, 6 Feb 2023
- 13:26:15 +0000
-Date:   Mon, 6 Feb 2023 09:26:14 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-Cc:     Nicolin Chen <nicolinc@nvidia.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>
-Subject: Re: [PATCH v1 0/8] Add IO page table replacement support
-Message-ID: <Y+D/9j8Yc444k8QE@nvidia.com>
-References: <cover.1675320212.git.nicolinc@nvidia.com>
- <BN9PR11MB527680F63EC5443DD7A5E98A8CD79@BN9PR11MB5276.namprd11.prod.outlook.com>
- <Y90ieTgl7I2GZfsX@ziepe.ca>
- <BN9PR11MB5276A84ABA311151949215518CDA9@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BN9PR11MB5276A84ABA311151949215518CDA9@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-ClientProxiedBy: BL1PR13CA0423.namprd13.prod.outlook.com
- (2603:10b6:208:2c3::8) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Mon, 6 Feb 2023 09:13:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A83C0298F0
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 06:11:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675692640;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lwje8eVt7eXKybxFr462oqT0TYGic+yXzXszDGevFbE=;
+        b=MnLSCMa15r7JXwO88xqstKmmACdcS5FB6PV0+PA7Lvj/dlrjDQ3Uku9q+xKzh+8WWpXxRB
+        KlhGT8WPr4BuL149JmeqFhIilUAz4xJViRD1ZY30PaxOJJgdNOCsLC2GwSwFTV3jWwoFPD
+        PbR0Sol/TYATXK770Hqs8hWiQEJn+dM=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-117-9rcFir55NMCr0d4uQq4PSQ-1; Mon, 06 Feb 2023 09:10:39 -0500
+X-MC-Unique: 9rcFir55NMCr0d4uQq4PSQ-1
+Received: by mail-ej1-f70.google.com with SMTP id d14-20020a170906c20e00b00889f989d8deso8693061ejz.15
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 06:10:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lwje8eVt7eXKybxFr462oqT0TYGic+yXzXszDGevFbE=;
+        b=hahdok/2UM0MtikxKR0e7auJH+le6XtTOCDr+K2ygI21OgHI3ClYfTUum0q1KEUgRA
+         Cq9y5jlbp44ccaYUr0dwFGNfM0AWboCz4Rwbw/STJBck/RHLCy34CjkT8HuY4jX+8T9X
+         mtSF/D5FdKjlWA6PChLRFSJySiTEfZ+r6wtAPjn/Nmym7vcslBA9v/JqYY5NRXiNXxKl
+         3HrR7EkasJeBpIA4/d8pxpdRuoyotygn5lgtXx7gtm2jHCXVVRkLWOpmZsb6JGbIRB59
+         cKWa27BftQlhTCQBw4vXdlAsno1SRUEa0kzSFHgNlpzwr+nafRzt0FoJvwMSykdQ0Meq
+         L2Tw==
+X-Gm-Message-State: AO0yUKWFVFKvXF1rBuCxv7XDb3Tt88OKpLxe/dAteZ+dn2p5Mbeby84N
+        u9qR4DTGO2ebJngfUBoi/d0Z76X3dMSUAEg9wUzzluV5HexkpKMW4YrgZ7EwfusLUtHKcfIj2Og
+        hlfnsPUWkVVkVtpsBYRo8STeq
+X-Received: by 2002:a17:906:9610:b0:887:dea8:b025 with SMTP id s16-20020a170906961000b00887dea8b025mr23081892ejx.65.1675692638492;
+        Mon, 06 Feb 2023 06:10:38 -0800 (PST)
+X-Google-Smtp-Source: AK7set/ZSeTcdWpLCRrHXd8AjWFnlgDO3CvqRfDlskfptE4Zi0pC0s+i2h2ytva6c0THMVfUFgf5XQ==
+X-Received: by 2002:a17:906:9610:b0:887:dea8:b025 with SMTP id s16-20020a170906961000b00887dea8b025mr23081857ejx.65.1675692638197;
+        Mon, 06 Feb 2023 06:10:38 -0800 (PST)
+Received: from ?IPV6:2a02:810d:4b3f:de78:642:1aff:fe31:a15c? ([2a02:810d:4b3f:de78:642:1aff:fe31:a15c])
+        by smtp.gmail.com with ESMTPSA id j15-20020a170906094f00b0087fa83790d8sm5580399ejd.13.2023.02.06.06.10.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Feb 2023 06:10:37 -0800 (PST)
+Message-ID: <67958920-c5bb-a0f5-2306-e3ae4fdbaeb3@redhat.com>
+Date:   Mon, 6 Feb 2023 14:27:31 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|CH2PR12MB4939:EE_
-X-MS-Office365-Filtering-Correlation-Id: e0feaf00-f039-48d4-c171-08db0845b8d6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: OyX47l+gzZ1kln6CO1WawSrU4T6Yk5h16FpLmz5JOfAWLhnrtXYUiBW8WT9Pi3RTrwdKK4KDsqi2Y3+Q6u1NBfmdXU5d6tx/pg0B661GIaeYAO8CZnlYet4csWrYVSJx5Ys0Z8qQ69a3BPgXQ4AEjSMlQQ0SgznD29SC6Dc4Tr4ZGmatySfJ0tFKS3VCX6hecsTxM5P+iAU6C5ZGvVdJbTajN0msWL23hAADXakiZY31NHwSX3f3TsCEqN1990X8As9tWgJQkvxuH3hvp8IXXvc0k5h9prWG290qi6XuPWaxwdlKvU3Lu8gudkYGizepnFTcbyoVvPyMv0X/N15JIBhHauOqJAEgttzBq+78eEm14cBPq8fH3kiHmsdHxVcoQfMeA+YoikRzzpOYTu228qWTzSCKtPJ0Cf0srpOdH+uBoI6jJj9m80Z3Su8tWnWtMQ2fo5zRN3/PxF0zqVMJcwWpll7TaPg4JzaF8S/v92l2GlJqPl5Y6uB39bzjAORiJulCXUktt8SpRreok6A5F18LIOcs3jfJ2ttQv+qSI3mo2amVSSgaf88qC8oE0MKpX3OkgwB/LxsXi25EoD11wPC+JUD/ZbwlVpsq91wqSgUB8FNgXDP1bf4QrL2TcClbzPTBwDH3ZS8tW1L8MUrzkg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(346002)(136003)(396003)(39860400002)(376002)(451199018)(36756003)(41300700001)(86362001)(6512007)(38100700002)(26005)(2616005)(186003)(8676002)(6506007)(4744005)(478600001)(54906003)(7416002)(6486002)(66946007)(316002)(8936002)(6916009)(4326008)(5660300002)(66476007)(66556008)(2906002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?BMD8tzMgooQGbUFV1y7Az+aU90HbVozMFA/UKXooj9L3J+yAmwkvzHkyI7ST?=
- =?us-ascii?Q?OQ3O/6Pd0zfgRRQwTRBSAgKICaU7+sSv3loshqD7/bBYal1UE/406J0oS5+w?=
- =?us-ascii?Q?e4gYJw7oLSex301Ct3WUH+azdNGYdz11OJkZz1rPcRyJH7KA2l35TRseGAhU?=
- =?us-ascii?Q?ZmMRGVc/LOOjnvd/V8+IHIjMrq0GW5btsP/6wHFzjJc9+Z7CUXY+nfHT5Wxw?=
- =?us-ascii?Q?KxwOo4IjMQOcDloW3C2nEwSPpdTEuHa0Gy0zbvAflNPoZ+gGowiABzEElJuB?=
- =?us-ascii?Q?5Gkv3SXR3hoPoXEzRzZSsNVY++f2HUVJw2/ji7Wu8Ir8pNKqpLNa/F8YAuMs?=
- =?us-ascii?Q?ykkMqQHRW3zRAcX7N8pvSFPwH6fgzcghwclDAbcEVDl4+Tl3pPnPDTYICSDs?=
- =?us-ascii?Q?EeDRqfJcYfVDEfRoayopzRM50qTlpgGBnbPZc6SVspFDQGTZMRGTSpdt/DUN?=
- =?us-ascii?Q?C975/7v1/rGEqktd7/BDXWH0VOFWa8h7HJSpcjhEn/jL8fz5rpbPg/vgpZQh?=
- =?us-ascii?Q?j0JSFIrUz1trtlgtOGzaOrv7eCeDmiS9TUVMCT1SAZhnrcKheDXKL+pZkdO/?=
- =?us-ascii?Q?C5AihT/VSrf3GNMvDPrlkEk4OsTe4fLqJKbJNNxwRNiFFKMT65Ub4I4xLs6J?=
- =?us-ascii?Q?2cgVhX6jz1Fr2RStw8CwmocqYVJQGbpA6OeaWVp1mWIC+XD8E+3v5yZtwRIT?=
- =?us-ascii?Q?Ui0OXPPwzgB1WHFa5fE3N4ux9mLd6StF91qa+tG1BUf2f8d6fjpDtQADvk60?=
- =?us-ascii?Q?hogLXCIBHn/9zCUZBFq0RpoqZ4o871z5dqbq8ivfETfIQlfllSfbkQa+gUoN?=
- =?us-ascii?Q?+OcgYY3Ez1qBVZ6aF/fC0OVDI+73Wx0AjdyLDoBIrxmwO7reSDenyLNL3wPx?=
- =?us-ascii?Q?YW8J+G4DVZ7qr/Ef0l+IPhfLHG5WPcQF64WlY0vN2dqhWPUE7KClJMiFnO5r?=
- =?us-ascii?Q?MNKvGaJtVT2/aolzTQT9Xvba4CISMSsOCIcftiN45Eeh5gHSFW6SOIRBbGp3?=
- =?us-ascii?Q?exjdskpT0ZX+NXxVuURNoLkt4hsws9BMUrDmcXZq5JE9SRp5jprYqa0uCh1W?=
- =?us-ascii?Q?ZcSx6Qx/qKeVxibzTx0PE0pbntmU10zo4PEig/aemH5afKHVgIWJgQh71bgy?=
- =?us-ascii?Q?JBEHgbFoCqMK1YlbI8vkhrG5ho/i+rnEr3ZXZKzUYEYFzqDiOx4b+ia+q0mX?=
- =?us-ascii?Q?3izA+GRT3PXRsFlJtV+su9Ssbr6lL0OuU2OUwIPMDcXcEKZW6EMIcP2YWAH+?=
- =?us-ascii?Q?jaQmIxJio1WQnOknjJm9eMuTXg6NpItzTcg2T+n3sq5KIBajycFcfWygNQro?=
- =?us-ascii?Q?EzJxzqX0p2J8XsFWVFYQyEuQukIqxEGcog1NqeCiHzCYExYkj7hsJ4DVuBrF?=
- =?us-ascii?Q?3MhUTwV+rdXHERl3GC3+w8Nf6ertT07TKojsxDavJW56WVxqAGaGVSkKDEa7?=
- =?us-ascii?Q?qgLd2pDVDq1BSL5cQMCnfRqNnWA7O9wp8paH/XFEUZD4/+TO0jooHrwZHYxJ?=
- =?us-ascii?Q?XSdpcfCHMla4Km//QCBJ7nd+3+ieS2/iIcP89k8WZswgMKj8pCo4jEvBZS/M?=
- =?us-ascii?Q?IcYZngQs6EDtrmqfc6DdNkcFA6s8KPCRyl6ID6DI?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e0feaf00-f039-48d4-c171-08db0845b8d6
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Feb 2023 13:26:15.1310
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: K8nIaN4xiaa0Wg1nR35ENVy2UbM4iI5lts6gcR7ryevFC0RlZbQ77CWQ8VzXk/81
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4939
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [Nouveau] [PATCH drm-next 05/14] drm/nouveau: new VM_BIND uapi
+ interfaces
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Dave Airlie <airlied@gmail.com>
+Cc:     Matthew Brost <matthew.brost@intel.com>, daniel@ffwll.ch,
+        corbet@lwn.net, dri-devel@lists.freedesktop.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mripard@kernel.org, bskeggs@redhat.com, jason@jlekstrand.net,
+        nouveau@lists.freedesktop.org, airlied@redhat.com
+References: <20230118061256.2689-1-dakr@redhat.com>
+ <20230118061256.2689-6-dakr@redhat.com>
+ <Y9MjSeMcsd18r9vM@DUT025-TGLU.fm.intel.com>
+ <7c046ff9-728d-7634-9d77-8536308c7481@redhat.com>
+ <c2256c7d-e768-ae3f-d465-b9f8080d111b@amd.com>
+ <2427a918-5348-d1ef-ccae-a29c1ff33c83@redhat.com>
+ <a214b28b-043c-a8bb-69da-b4d8216fce56@amd.com>
+ <3a76bfa9-8ee5-a7d9-b9fb-a98181baec0b@redhat.com>
+ <49ac3f95-6eda-9009-4b28-0167213301b2@amd.com>
+ <bc523c5c-efe6-1a7f-b49a-e0867dc1413d@redhat.com>
+ <15fb0179-c7c5-8a64-ed08-841189919f5e@redhat.com>
+ <1840e9fb-fd1b-79b7-4238-54ae97333d0b@amd.com>
+ <CAPM=9txON8VCb3H7vDY_DOgtUg2Ad3mBvYVxgSMyZ1noOu-rBQ@mail.gmail.com>
+ <a1c526e0-0df7-12cb-c5a1-06e9cd0d876b@amd.com>
+ <3f935a7e-fede-2bad-c029-4a3af850c9b5@redhat.com>
+ <95d0631b-545c-ea4d-7439-75422e9a9120@amd.com>
+Content-Language: en-US
+From:   Danilo Krummrich <dakr@redhat.com>
+Organization: RedHat
+In-Reply-To: <95d0631b-545c-ea4d-7439-75422e9a9120@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 06, 2023 at 06:39:29AM +0000, Tian, Kevin wrote:
-> > From: Jason Gunthorpe <jgg@nvidia.com>
-> > Sent: Friday, February 3, 2023 11:04 PM
-> > 
-> > On Fri, Feb 03, 2023 at 08:09:30AM +0000, Tian, Kevin wrote:
-> > > > From: Nicolin Chen <nicolinc@nvidia.com>
-> > > > Sent: Thursday, February 2, 2023 3:05 PM
-> > > >
-> > > > QEMU with this feature should have the vIOMMU maintain a cache of the
-> > > > guest io page table addresses and assign a unique IOAS to each unique
-> > > > guest page table.
-> > >
-> > > I didn't get why we impose such requirement to userspace.
-> > 
-> > I read this as implementation guidance for qemu. qemu can do what it
-> > wants of course
-> > 
+On 2/6/23 10:48, Christian König wrote:
+> Am 02.02.23 um 19:31 schrieb Danilo Krummrich:
+>> On 2/2/23 12:53, Christian König wrote:
+>>> Am 01.02.23 um 09:10 schrieb Dave Airlie:
+>>>> [SNIP]
+>>>>>> For drivers that don't intend to merge at all and (somehow) are
+>>>>>> capable of dealing with sparse regions without knowing the sparse
+>>>>>> region's boundaries, it'd be easy to make those gpuva_regions 
+>>>>>> optional.
+>>>>> Yeah, but this then defeats the approach of having the same hw
+>>>>> independent interface/implementation for all drivers.
+>>>> I think you are running a few steps ahead here. The plan isn't to have
+>>>> an independent interface, it's to provide a set of routines and
+>>>> tracking that will be consistent across drivers, so that all drivers
+>>>> once using them will operate in mostly the same fashion with respect
+>>>> to GPU VA tracking and VA/BO lifetimes. Already in the tree we have
+>>>> amdgpu and freedreno which I think end up operating slightly different
+>>>> around lifetimes. I'd like to save future driver writers the effort of
+>>>> dealing with those decisions and this should drive their user api
+>>>> design so to enable vulkan sparse bindings.
+>>>
+>>> Ok in this case I'm pretty sure this is *NOT* a good idea.
+>>>
+>>> See this means that we define the UAPI implicitly by saying to 
+>>> drivers to use a common framework for their VM implementation which 
+>>> then results in behavior A,B,C,D....
+>>>
+>>> If a driver strides away from this common framework because it has 
+>>> different requirements based on how his hw work you certainly get 
+>>> different behavior again (and you have tons of hw specific 
+>>> requirements in here).
+>>>
+>>> What we should do instead if we want to have some common handling 
+>>> among drivers (which I totally agree on makes sense) then we should 
+>>> define the UAPI explicitly.
+>>
+>> By asking that I don't want to say I'm against this idea, I'm just 
+>> wondering how it becomes easier to deal with "tons of hw specific 
+>> requirements" by generalizing things even more?
 > 
-> sure but I still didn't get why this is a guidance specific to the
-> new replace cmd...
+> I'm already maintaining two different GPU VM solutions in the GPU 
+> drivers in the kernel, radeon and amdgpu. The hw they driver is 
+> identical, just the UAPI is different. And only because of the different 
+> UAPI they can't have the same VM backend implementation.
+> 
+> The hw stuff is completely abstract able. That's just stuff you need to 
+> consider when defining the structures you pass around.
 
-I think the guidance is about the change to VFIO uAPI where it is now
-possible to change the domain attached, previously that was not
-possible
+Wouldn't we need to have strict limitations on that, such that HW 
+specific structures / fields are not allowed to break the semantics of 
+the UAPI? Because otherwise we wouldn't be able to attach generalized 
+components to the unified UAPI which ultimately would be the whole 
+purpose. So, if this consideration is correct, I'd still see a risk of 
+drivers striding away from it because of their requirements. Again, I 
+think a unified UAPI is a good idea, but it sounds more difficult to me 
+than this last paragraph implies.
 
-Jason
+> 
+> But a messed up UAPI is sometimes impossible to fix because of backward 
+> compatibility.
+> 
+> We learned that the hard way with radeon and mostly fixed it by coming 
+> up with a completely new implementation for amdgpu.
+> 
+>> What makes us think that we do a better job in considering all hw 
+>> specific requirements with a unified UAPI than with a more lightweight 
+>> generic component for tracking VA mappings?
+> 
+> Because this defines the UAPI implicitly and that's seldom a good idea.
+> 
+> As I said before tracking is the easy part of the job. Defining this 
+> generic component helps a little bit writing new drivers, but it leaves 
+> way to much room for speculations on the UAPI.
+> 
+
+Trying to move forward, I agree that a unified UAPI would improve the 
+situation regarding the problems you mentioned and the examples you have 
+given.
+
+However, not having the GPUVA manager wouldn't give us a unified UAPI 
+either. And as long as it delivers a generic component to solve a 
+problem while not making the overall situation worse or preventing us 
+from reaching this desirable goal of having a unified UAPI I tend to 
+think it's fine to have such a component.
+
+>> Also, wouldn't we need something like the GPUVA manager as part of a 
+>> unified UAPI?
+> 
+> Not necessarily. We can write components to help drivers implement the 
+> UAPI, but this isn't mandatory.
+
+Well, yes, not necessarily. However, as mentioned above, wouldn't it be 
+a major goal of a unified UAPI to be able to attach generic components 
+to it?
+
+> 
+>>
+>>>
+>>> For example we could have a DRM_IOCTL_GPU_VM which takes both driver 
+>>> independent as well as driver dependent information and then has the 
+>>> documented behavior:
+>>> a) VAs do (or don't) vanish automatically when the GEM handle is closed.
+>>> b) GEM BOs do (or don't) get an additional reference for each VM they 
+>>> are used in.
+>>> c) Can handle some common use cases driver independent (BO mappings, 
+>>> readonly, writeonly, sparse etc...).
+>>> d) Has a well defined behavior when the operation is executed async. 
+>>> E.g. in/out fences.
+>>> e) Can still handle hw specific stuff like (for example) trap on 
+>>> access etc....
+>>> ...
+>>>
+>>> Especially d is what Bas and I have pretty much already created a 
+>>> prototype for the amdgpu specific IOCTL for, but essentially this is 
+>>> completely driver independent and actually the more complex stuff. 
+>>> Compared to that common lifetime of BOs is just nice to have.
+>>>
+>>> I strongly think we should concentrate on getting this right as well.
+>>>
+>>>> Now if merging is a feature that makes sense to one driver maybe it
+>>>> makes sense to all, however there may be reasons amdgpu gets away
+>>>> without merging that other drivers might not benefit from, there might
+>>>> also be a benefit to amdgpu from merging that you haven't looked at
+>>>> yet, so I think we could leave merging as an optional extra driver
+>>>> knob here. The userspace API should operate the same, it would just be
+>>>> the gpu pagetables that would end up different sizes.
+>>>
+>>> Yeah, agree completely. The point is that we should not have 
+>>> complexity inside the kernel which is not necessarily needed in the 
+>>> kernel.
+>>>
+>>> So merging or not is something we have gone back and forth for 
+>>> amdgpu, one the one hand it reduces the memory footprint of the 
+>>> housekeeping overhead on the other hand it makes the handling more 
+>>> complex, error prone and use a few more CPU cycles.
+>>>
+>>> For amdgpu merging is mostly beneficial when you can get rid of a 
+>>> whole page tables layer in the hierarchy, but for this you need to 
+>>> merge at least 2MiB or 1GiB together. And since that case doesn't 
+>>> happen that often we stopped doing it.
+>>>
+>>> But for my understanding why you need the ranges for the merging? 
+>>> Isn't it sufficient to check that the mappings have the same type, 
+>>> flags, BO, whatever backing them?
+>>
+>> Not entirely. Let's assume userspace creates two virtually contiguous 
+>> buffers (VKBuffer) A and B. Userspace could bind a BO with BO offset 0 
+>> to A (binding 1) and afterwards bind the same BO with BO offset 
+>> length(A) to B (binding 2), maybe unlikely but AFAIK not illegal.
+>>
+>> If we don't know about the bounds of A and B in the kernel, we detect 
+>> that both bindings are virtually and physically contiguous and we 
+>> merge them.
+> 
+> Well as far as I can see this is actually legal and desirable.
+
+Legal, not sure, may depend on the semantics of the UAPI. (More on that 
+below your next paragraph.)
+
+Desirable, I don't think so. Since those mappings are associated with 
+different VKBuffers they get split up later on anyway, hence why bother 
+merging?
+
+> 
+>>
+>> In the best case this was simply useless, because we'll need to split 
+>> them anyway later on when A or B is destroyed, but in the worst case 
+>> we could fault the GPU, e.g. if merging leads to a change of the page 
+>> tables that are backing binding 1, but buffer A is already in use by 
+>> userspace.
+> 
+> WOW wait a second, regions absolutely don't help you with that anyway.
+> 
+> You need to keep track which mappings are used or otherwise any 
+> modification could lead to problems.
+> 
+> In other words when the GPU already uses A you *must* have a fence on 
+> the page tables backing A to prevent their destruction.
+> 
+
+As mentioned above, I'm not entirely sure about that and it might just 
+depend on the semantics of the UAPI.
+
+My understanding is that userspace is fully responsible on the parts of 
+the GPU VA space it owns. This means that userspace needs to take care 
+to *not* ask the kernel to modify mappings that are in use currently. 
+Hence, the kernel is in charge to not modify mappings it set up on 
+behalf of userspace unless userspace explicitly asks the kernel to do so.
+
+If those are valid preconditions, and based on them we want to support 
+merging, the kernel must know about the VA space allocations (or 
+VKBuffers in userspace terminology) to make sure it never merges across 
+their boundaries, which might not make much sense anyway.
+
+>>
+>> In Nouveau, I think we could also get rid of regions and do something 
+>> driver specific for the handling of the dual page tables, which I want 
+>> to use for sparse regions *and* just don't merge (at least for now). 
+>> But exactly for the sake of not limiting drivers in their HW specifics 
+>> I thought it'd be great if merging is supported in case it makes sense 
+>> for a specific HW, especially given the fact that memory sizes are 
+>> increasing.
+> 
+> What do you mean with that?
+> 
+> If you want your page tables to be modifiable while the GPU is using 
+> them (which is basically a standard requirement from sparse bindings in 
+> Vulkan) you need double housekeeping anyway.
+> 
+> Those regions strongly sound like you are pushing stuff which should be 
+> handled in userspace inside the kernel.
+
+1. userspace allocates a new VKBuffer with the sparse bit set (0x0 - 
+0x800000)
+
+2. kernel creates a new region structure with the range 0x800000 and 
+creates a new PT (A) with 4 PTEs with the sparse flag set (page shift is 21)
+
+3. userspace requests a memory backed mapping at 0x200000 with size 0x2000
+
+4. kernel creates a new mapping structure with base address 0x200000 and 
+range 0x2000 and creates a new PT (B) with 2 PTEs (page shift is 12) 
+"overlaying" PT A
+
+5. userspace crashes unexpectedly for some reason
+
+6. kernel needs to clean things up, iterates the list of mappings and 
+unmaps them (PT B is freed); kernel iterates all regions and removes 
+them (PT A is freed)
+
+> 
+> Regards,
+> Christian.
+> 
+>>
+>>
+>>>
+>>> Regards,
+>>> Christian.
+>>>
+>>>
+>>>>
+>>>> Dave.
+>>>
+>>
+> 
+
