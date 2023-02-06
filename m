@@ -2,181 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF9A568C36D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 17:35:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D9BF68C375
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 17:35:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230163AbjBFQen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 11:34:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46556 "EHLO
+        id S230198AbjBFQfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 11:35:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbjBFQel (ORCPT
+        with ESMTP id S230173AbjBFQfv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 11:34:41 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D952685E
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 08:34:38 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id i38so1214612eda.1
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 08:34:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rqweV/IdMLpHerEGrGcjJETNU3WYwRI8E4zqT9bYsXI=;
-        b=O2oqA4KFh5ssFkA6aephx8mKBllTgUff6NL/yyo3EknEJ6wDgH08O6+HNzyJnvVQUf
-         sgaZmMMlYhHBaqz0NBtOSbaNe3UTQwjY5T9iLYMSdYd5Dxbjxrzg1HqVMXltW3c0BYTY
-         FvYWjhFy8nmt7sGScAm5WLLR9gwtIHBunzmaY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rqweV/IdMLpHerEGrGcjJETNU3WYwRI8E4zqT9bYsXI=;
-        b=Vbn64SNK84nlJptZLvjK6AB2e0/WnQt8HLuU71TBUoOxFIszOYcuTMVCIh9t/7N90u
-         +i1PwqnLS+MMuNOjWRMy7JLradj65zXRfseY/6VZwdZwlc5qoP3kHw2f/wkmu8SfaB6W
-         js4f2f9D/oEcDX8QmcaqeqHGX5fKzuDe2mLaHgD5xSj6YpTBtv/f/Hx6n6tyS/aRx4Uk
-         aggNueiH6nkTNF0Afaka/FF7XbJky2Oou/hNnb/+VxT3RTCzoxvafx0dgkRbH9ZwoGAQ
-         AubZw/nZ9X2VvBbUP5dfiVUvKMUdqdnSex1576HL2BcRhMT4kUUhKRCQyLB8GAtsXJLI
-         36lQ==
-X-Gm-Message-State: AO0yUKXX60Zyd6S1XdjAOcNJ6qDMxIXTSbiZi2EYKaSNadSJLDkTMvfP
-        XZamzmGgi9NEDlnTFcDfrcp1KSz0sa9iGJQLLbLlFg==
-X-Google-Smtp-Source: AK7set+9WrjWtdXZihU+qavsFsZziDpoWaQAn3xCH1NFCy0vT42jiYr8sQIuYqbQa7j0sLzgOiMH1zxqKwS/ZHwA/2U=
-X-Received: by 2002:a50:a458:0:b0:4aa:ab9f:14a0 with SMTP id
- v24-20020a50a458000000b004aaab9f14a0mr21963edb.68.1675701277442; Mon, 06 Feb
- 2023 08:34:37 -0800 (PST)
+        Mon, 6 Feb 2023 11:35:51 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0425F24C81;
+        Mon,  6 Feb 2023 08:35:50 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 9B8E324E01A;
+        Tue,  7 Feb 2023 00:35:48 +0800 (CST)
+Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 7 Feb
+ 2023 00:35:48 +0800
+Received: from [172.16.16.234] (113.72.145.145) by EXMBX172.cuchost.com
+ (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 7 Feb
+ 2023 00:35:47 +0800
+Message-ID: <a365f918-5a99-c9ed-d925-895de5969358@starfivetech.com>
+Date:   Tue, 7 Feb 2023 00:35:45 +0800
 MIME-Version: 1.0
-References: <cover.1674227308.git.alexl@redhat.com> <5fb32a1297821040edd8c19ce796fc0540101653.camel@redhat.com>
- <CAOQ4uxhGX9NVxwsiBMP0q21ZRot6-UA0nGPp1wGNjgmKBjjBBA@mail.gmail.com>
- <b8601c976d6e5d3eccf6ef489da9768ad72f9571.camel@redhat.com>
- <e840d413-c1a7-d047-1a63-468b42571846@linux.alibaba.com> <2ef122849d6f35712b56ffbcc95805672980e185.camel@redhat.com>
- <8ffa28f5-77f6-6bde-5645-5fb799019bca@linux.alibaba.com> <51d9d1b3-2b2a-9b58-2f7f-f3a56c9e04ac@linux.alibaba.com>
- <071074ad149b189661681aada453995741f75039.camel@redhat.com>
- <0d2ef9d6-3b0e-364d-ec2f-c61b19d638e2@linux.alibaba.com> <de57aefc-30e8-470d-bf61-a1cca6514988@linux.alibaba.com>
- <CAOQ4uxgS+-MxydqgO8+NQfOs9N881bHNbov28uJYX9XpthPPiw@mail.gmail.com>
- <9c8e76a3-a60a-90a2-f726-46db39bc6558@linux.alibaba.com> <02edb5d6-a232-eed6-0338-26f9a63cfdb6@linux.alibaba.com>
- <3d4b17795413a696b373553147935bf1560bb8c0.camel@redhat.com>
- <CAOQ4uxjNmM81mgKOBJeScnmeR9+jG_aWvDWxAx7w_dGh0XHg3Q@mail.gmail.com>
- <5fbca304-369d-aeb8-bc60-fdb333ca7a44@linux.alibaba.com> <CAOQ4uximQZ_DL1atbrCg0bQ8GN8JfrEartxDSP+GB_hFvYQOhg@mail.gmail.com>
- <CAJfpegtRacAoWdhVxCE8gpLVmQege4yz8u11mvXCs2weBBQ4jg@mail.gmail.com> <CAOQ4uxiW0=DJpRAu90pJic0qu=pS6f2Eo7v-Uw3pmd0zsvFuuw@mail.gmail.com>
-In-Reply-To: <CAOQ4uxiW0=DJpRAu90pJic0qu=pS6f2Eo7v-Uw3pmd0zsvFuuw@mail.gmail.com>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Mon, 6 Feb 2023 17:34:26 +0100
-Message-ID: <CAJfpeguczp-qOWJgsnKqx6CjCJLV49j1BOWs0Yxv93VUsTZ9AQ@mail.gmail.com>
-Subject: Re: [PATCH v3 0/6] Composefs: an opportunistically sharing verified
- image filesystem
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     Alexander Larsson <alexl@redhat.com>, gscrivan@redhat.com,
-        brauner@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, david@fromorbit.com,
-        viro@zeniv.linux.org.uk, Vivek Goyal <vgoyal@redhat.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Gao Xiang <hsiangkao@linux.alibaba.com>,
-        Jingbo Xu <jefflexu@linux.alibaba.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v4 2/4] dt-bindings: pinctrl: Add StarFive JH7110 aon
+ pinctrl
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Conor Dooley <conor@kernel.org>, <linux-gpio@vger.kernel.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Jianlong Huang <jianlong.huang@starfivetech.com>,
+        Andreas Schwab <schwab@suse.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-riscv@lists.infradead.org>,
+        "Linus Walleij" <linus.walleij@linaro.org>
+References: <20230203141801.59083-1-hal.feng@starfivetech.com>
+ <20230203141801.59083-3-hal.feng@starfivetech.com>
+ <167569988090.161822.12197118549919509895.robh@kernel.org>
+From:   Hal Feng <hal.feng@starfivetech.com>
+In-Reply-To: <167569988090.161822.12197118549919509895.robh@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.72.145.145]
+X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX172.cuchost.com
+ (172.16.6.92)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 6 Feb 2023 at 14:31, Amir Goldstein <amir73il@gmail.com> wrote:
->
-> > > > My little request again, could you help benchmark on your real workload
-> > > > rather than "ls -lR" stuff?  If your hard KPI is really what as you
-> > > > said, why not just benchmark the real workload now and write a detailed
-> > > > analysis to everyone to explain it's a _must_ that we should upstream
-> > > > a new stacked fs for this?
-> > > >
-> > >
-> > > I agree that benchmarking the actual KPI (boot time) will have
-> > > a much stronger impact and help to build a much stronger case
-> > > for composefs if you can prove that the boot time difference really matters.
-> > >
-> > > In order to test boot time on fair grounds, I prepared for you a POC
-> > > branch with overlayfs lazy lookup:
-> > > https://github.com/amir73il/linux/commits/ovl-lazy-lowerdata
-> >
-> > Sorry about being late to the party...
-> >
-> > Can you give a little detail about what exactly this does?
-> >
->
-> Consider a container image distribution system, with base images
-> and derived images and instruction on how to compose these images
-> using overlayfs or other methods.
->
-> Consider a derived image L3 that depends on images L2, L1.
->
-> With the composefs methodology, the image distribution server splits
-> each image is split into metadata only (metacopy) images M3, M2, M1
-> and their underlying data images containing content addressable blobs
-> D3, D2, D1.
->
-> The image distribution server goes on to merge the metadata layers
-> on the server, so U3 = M3 + M2 + M1.
->
-> In order to start image L3, the container client will unpack the data layers
-> D3, D2, D1 to local fs normally, but the server merged U3 metadata image
-> will be distributed as a read-only fsverity signed image that can be mounted
-> by mount -t composefs U3.img (much like mount -t erofs -o loop U3.img).
->
-> The composefs image format contains "redirect" instruction to the data blob
-> path and an fsverity signature that can be used to verify the redirected data
-> content.
->
-> When composefs authors proposed to merge composefs, Gao and me
-> pointed out that the same functionality can be achieved with minimal changes
-> using erofs+overlayfs.
->
-> Composefs authors have presented ls -lR time and memory usage benchmarks
-> that demonstrate how composefs performs better that erofs+overlayfs in
-> this workload and explained that the lookup of the data blobs is what takes
-> the extra time and memory in the erofs+overlayfs ls -lR test.
->
-> The lazyfollow POC optimizes-out the lowerdata lookup for the ls -lR
-> benchmark, so that composefs could be compared to erofs+overlayfs.
+On Mon, 6 Feb 2023 10:11:39 -0600, Rob Herring wrote:
+> On Fri, 03 Feb 2023 22:17:59 +0800, Hal Feng wrote:
+>> From: Jianlong Huang <jianlong.huang@starfivetech.com>
+>> 
+>> Add pinctrl bindings for StarFive JH7110 SoC aon pinctrl controller.
+>> 
+>> Signed-off-by: Jianlong Huang <jianlong.huang@starfivetech.com>
+>> Co-developed-by: Emil Renner Berthing <kernel@esmil.dk>
+>> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+>> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+>> ---
+>>  .../pinctrl/starfive,jh7110-aon-pinctrl.yaml  | 123 ++++++++++++++++++
+>>  .../pinctrl/starfive,jh7110-pinctrl.h         |  22 ++++
+>>  2 files changed, 145 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/pinctrl/starfive,jh7110-aon-pinctrl.yaml
+>> 
+> 
+> With the issue noted fixed:
+> 
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
-Got it, thanks.
+Will fix accordingly. Thank you again for spending time to review.
 
->
-> To answer Alexander's question:
->
-> > Cool. I'll play around with this. Does this need to be an opt-in
-> > option in the final version? It feels like this could be useful to
-> > improve performance in general for overlayfs, for example when
-> > metacopy is used in container layers.
->
-> I think lazyfollow could be enabled by default after we hashed out
-> all the bugs and corner cases and most importantly remove the
-> POC limitation of lower-only overlay.
->
-> The feedback that composefs authors are asking from you
-> is whether you will agree to consider adding the "lazyfollow
-> lower data" optimization and "fsverity signature for metacopy"
-> feature to overlayfs?
->
-> If you do agree, the I think they should invest their resources
-> in making those improvements to overlayfs and perhaps
-> other improvements to erofs, rather than proposing a new
-> specialized filesystem.
-
-Lazy follow seems to make sense.  Why does it need to be optional?
-Does it have any advantage to *not* do lazy follow?
-
-Not sure I follow the fsverity requirement.  For overlay+erofs case
-itsn't it enough to verify the erofs image?
-
-Thanks,
-Miklos
-
-
-
-
-
-
->
-> Thanks,
-> Amir.
+Best regards,
+Hal
