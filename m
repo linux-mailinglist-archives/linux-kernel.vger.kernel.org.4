@@ -2,64 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCBA968B3AE
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 02:15:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B0DC68B3A9
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 02:11:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229548AbjBFBPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 20:15:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58094 "EHLO
+        id S229540AbjBFBKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 20:10:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjBFBPV (ORCPT
+        with ESMTP id S229452AbjBFBKr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 20:15:21 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D87E166E7;
-        Sun,  5 Feb 2023 17:15:20 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id CDC8E24E337;
-        Mon,  6 Feb 2023 09:15:13 +0800 (CST)
-Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 6 Feb
- 2023 09:15:13 +0800
-Received: from [192.168.120.49] (171.223.208.138) by EXMBX073.cuchost.com
- (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 6 Feb
- 2023 09:15:12 +0800
-Message-ID: <1866abb0-d49c-e911-817a-04700cc96cbb@starfivetech.com>
-Date:   Mon, 6 Feb 2023 09:15:11 +0800
+        Sun, 5 Feb 2023 20:10:47 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E7DC10AB1
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 17:10:46 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id n2so7308301pfo.3
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Feb 2023 17:10:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=X8koHqYtcGKtK9ShE60+AKTtKz4cqfXuzvfRTgSACa0=;
+        b=URtug1Wu5FhPZFWn4UEncRpKJEjVT8KGu4Mv2T/cbdiuEEXvj04wSTdZAHBTiaWrM+
+         9iFnqE1CZuMQB4xBQSUuXX6r+MfKwKd4JhaYnzKGB/bOfWct7x+TC/+5RbygsDP+MDNs
+         rW2SMP+E2frDRFZsfGe1oJqq8C8vAVdo2vWRU4MzIiBw2IzfERP6M2VV4u0H6TaFK092
+         gP6sHPQtCI7axgzVW9QiVab7R32SFN/6QIpKpNi9zoifg5aPrafER1lU1emc0Sc9Ej+x
+         Cin5a3/xLYEcGRYQGTgSs8Lgnb5psb1RKWIpZZSB5Eg7RQ4CViR6sZ+c5dGtWWMXeXfb
+         qjWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=X8koHqYtcGKtK9ShE60+AKTtKz4cqfXuzvfRTgSACa0=;
+        b=zq7/rjvHZ4ZehHjpZPsIiLYkwKVjrxiRD8ibypalWXp/cpgmxVdPAJm4UyqykF+cck
+         WlpWjUweeOdNc314x2ij+cuQ+F6Us3QoNj6WXezsvu/ZKzSw5y8+I2nFKFcQ6fMUOtTR
+         4bUCN/WvxVfZkcjrvWD82ITgXomOlSFEN0cmg3D10D0hfgS8dY272Giix5/Lf/ek39xh
+         UWNHTUn8BQLsEaYwbLr9zGFz/2PbkETzgSalUIw78J2dFyz66finYfoiWEW3GHL3+1h4
+         JMzGN6qgvIwR0TUEwtoQ8f24/sv7vRILB95je9xN+opkm9cAWUBFvR4tYPW1NhZCmyCZ
+         hOEw==
+X-Gm-Message-State: AO0yUKUj01p0vwXYeaSVBdYSIvMmrluG6mVVtOuFlglm9tBx46cEUpIb
+        /1OivASqnRwsLjCoXucYrOSF5blu3cE=
+X-Google-Smtp-Source: AK7set8fT3ODZoWF86+1UvsxoUnNGS/nwGtC/D2vrM0qUK8yE/K/FN1lONE6namVd6AjWVKIwnnJCg==
+X-Received: by 2002:aa7:8558:0:b0:592:3e51:d881 with SMTP id y24-20020aa78558000000b005923e51d881mr16184226pfn.14.1675645845522;
+        Sun, 05 Feb 2023 17:10:45 -0800 (PST)
+Received: from localhost ([156.236.96.165])
+        by smtp.gmail.com with ESMTPSA id j4-20020aa78004000000b0059242cd5469sm5919068pfi.13.2023.02.05.17.10.43
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sun, 05 Feb 2023 17:10:45 -0800 (PST)
+Date:   Mon, 6 Feb 2023 09:16:25 +0800
+From:   Yue Hu <zbestahu@gmail.com>
+To:     Gao Xiang <hsiangkao@linux.alibaba.com>
+Cc:     linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>,
+        Jeffle Xu <jefflexu@linux.alibaba.com>,
+        LKML <linux-kernel@vger.kernel.org>, huyue2@coolpad.com,
+        zhangwen@coolpad.com
+Subject: Re: [PATCH 1/6] erofs: get rid of erofs_inode_datablocks()
+Message-ID: <20230206091625.00000a70.zbestahu@gmail.com>
+In-Reply-To: <20230204093040.97967-1-hsiangkao@linux.alibaba.com>
+References: <20230204093040.97967-1-hsiangkao@linux.alibaba.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v4 0/7] Add Ethernet driver for StarFive JH7110 SoC
-Content-Language: en-US
-To:     Andrew Lunn <andrew@lunn.ch>, Conor Dooley <conor@kernel.org>
-CC:     <linux-riscv@lists.infradead.org>, <netdev@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>
-References: <20230118061701.30047-1-yanhong.wang@starfivetech.com>
- <Y8h/D7I7/2KhgM00@spud>
- <81217dc9-5673-f7eb-3114-b39de8302687@starfivetech.com>
- <958E7B1C-E0FF-416A-85AD-783682BA8B54@kernel.org> <Y96S/MMzC92cOkbX@lunn.ch>
-From:   yanhong wang <yanhong.wang@starfivetech.com>
-In-Reply-To: <Y96S/MMzC92cOkbX@lunn.ch>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS061.cuchost.com (172.16.6.21) To EXMBX073.cuchost.com
- (172.16.6.83)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,22 +75,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat,  4 Feb 2023 17:30:35 +0800
+Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
 
-
-On 2023/2/5 1:16, Andrew Lunn wrote:
->> >For the patchs of yt8531, see [1]
->> >
->> >1 - https://patchwork.kernel.org/project/netdevbpf/cover/20230202030037.9075-1-Frank.Sae@motor-comm.com/
->> 
->> Please put that info into the cover of the next round of your submission then.
+> erofs_inode_datablocks() has the only one caller, let's just get
+> rid of it entirely.  No logic changes.
 > 
-> These patches just got merged, so it is less of an issue now. Just
-> make sure you are testing with net-next.
-> 
-> You might need an updated DT blob, the binding for the PHY had a few
-> changes between the initial version to what actually got merged.
-> 
+> Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
 
-I will update the DT blob about the binding for the PHY in the next version.
-
->      Andrew
+Reviewed-by: Yue Hu <huyue2@coolpad.com>
