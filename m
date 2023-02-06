@@ -2,86 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE7A468C84B
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 22:10:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B54868C850
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 22:11:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230159AbjBFVKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 16:10:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32934 "EHLO
+        id S229613AbjBFVLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 16:11:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230091AbjBFVKg (ORCPT
+        with ESMTP id S229500AbjBFVLt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 16:10:36 -0500
-Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A182241FB
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 13:10:32 -0800 (PST)
-Received: by mail-il1-x144.google.com with SMTP id v1so1185447ilg.5
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 13:10:32 -0800 (PST)
+        Mon, 6 Feb 2023 16:11:49 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EF2D222F8
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 13:11:46 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id a2so11440652wrd.6
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 13:11:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ei4VFwLuleRaOtoRA5G2QYwC0Oa6+F6aM5uPuhmObpA=;
-        b=PlIRFIUWOG3snK2ir5MVbWiqkHxoiQiL87CxnahwXyFLOxkF4QxihR74Xuqis0pyOS
-         7/yvGUhMgVSQ2sn6rGAuEblMfRjs4tXiZ6eE0XdjyQNQ9m8QEtNV5bxRkv5ydo2btGv2
-         vpfmlKw4l3+o4Et8xGpmNryTdEhrP16dkDshs=
+        d=jrtc27.com; s=gmail.jrtc27.user;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rC86KoAvXpv+8wZFzH+REYSTORb7w+ZYErKX8Nx95k4=;
+        b=aSVunq7LHPF7onCKmJhaCmW36uSCjAfmH491zyI3iOAEpcl2DjyoIWNSiSzrpS6xTN
+         upTQqioc+CftRH4JrFM+YnVw1Fygwo+S/Bmeqrn+FExwLMXGhbighCEImkB3LbEHfxB3
+         pPZEdv3WoqjTjdS4qov4cnpM7+NBDQNjWuCMv5+UH3CEDixCf7Lt6Xjcbj1Mzs/OZvKR
+         NIrWVWjKbBThOFzik29zXn6n1X6BbSxVcjsS+gIYopq+4F5xkjuGoi/EaJf8uHQ77hTV
+         DNFFo8Khah5P/qRfg9uC1+q9FUEOXdBpUgPFZDZUYtrmH9uDxG67PQD0Cf4Aw0YX5lEO
+         5g8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ei4VFwLuleRaOtoRA5G2QYwC0Oa6+F6aM5uPuhmObpA=;
-        b=JQ/V0LoyOBiOuUd5HiYML0vUs4nGgyGOcVlIY4mGComOs2N+fNSePIFOOzV0CJFCVY
-         vvAVd4sGJ+RmwJF2GULh2CG6kCF0gY4AoZyQggn+y6LmyNqgA87+PSFm8Dn84bROa5Cj
-         QkjwhRO8x6p1RUv0QzUP1qU2z5P9gF+qZbuCA2SXqkrxDcoNCZHw37cihvJhiEVV0WPO
-         wouMhyvSKQAMNlucjuiLsGT40jiqKrm6JdnIRtFVVKH+LC5fVa5M0OO34A6jpcb5ymb+
-         o4uoJJ/wRNk5CnsHjuTl6BCNvG31kmvC+EyhbAeM7afORRcvT4ARVJHUmGhx0v0ChdaQ
-         qBbA==
-X-Gm-Message-State: AO0yUKUl8+C3lyV6EuUIZr4HgPt1HQ+tb/KMmHp2uI1cT90cZ7M7ZciK
-        dc8LHusZBtUiBXKU0HII1NYIAx3DJHhCr2dB
-X-Google-Smtp-Source: AK7set8htGarudmQyhaEoOoYw5k3iiN8lkQFQaI0YA0EViVMZEkzYw/5F0skEBCtyfm0kKFyLZ8MwQ==
-X-Received: by 2002:a92:700c:0:b0:310:ae72:32a0 with SMTP id l12-20020a92700c000000b00310ae7232a0mr429407ilc.21.1675717832001;
-        Mon, 06 Feb 2023 13:10:32 -0800 (PST)
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com. [209.85.166.45])
-        by smtp.gmail.com with ESMTPSA id l13-20020a02cd8d000000b0039d750a1823sm3837257jap.1.2023.02.06.13.10.31
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Feb 2023 13:10:31 -0800 (PST)
-Received: by mail-io1-f45.google.com with SMTP id l7so4947364ioa.7
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 13:10:31 -0800 (PST)
-X-Received: by 2002:a05:6638:5af:b0:3b1:4f93:69b8 with SMTP id
- b15-20020a05663805af00b003b14f9369b8mr245586jar.117.1675717830923; Mon, 06
- Feb 2023 13:10:30 -0800 (PST)
-MIME-Version: 1.0
-References: <20230127104054.895129-1-abel.vesa@linaro.org> <Y9v/z8CYik3faHh7@google.com>
- <Y+ErWTyV8CnE3Hl+@linaro.org> <Y+E3T6bozU1K2sFb@google.com>
- <Y+E9Z+/+eCpPK6DE@linaro.org> <CAGETcx99ev_JdgYoifEdUg6rqNCs5LHc-CfwTc7j3Bd_zeizew@mail.gmail.com>
-In-Reply-To: <CAGETcx99ev_JdgYoifEdUg6rqNCs5LHc-CfwTc7j3Bd_zeizew@mail.gmail.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 6 Feb 2023 13:10:19 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=X3nnwuTK2=w7DJfjL_Ai7MiuvTwv8BiVJPMVEWKzR-_g@mail.gmail.com>
-Message-ID: <CAD=FV=X3nnwuTK2=w7DJfjL_Ai7MiuvTwv8BiVJPMVEWKzR-_g@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 1/2] PM: domains: Skip disabling unused domains if
- provider has sync_state
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Abel Vesa <abel.vesa@linaro.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-pm@vger.kernel.org,
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rC86KoAvXpv+8wZFzH+REYSTORb7w+ZYErKX8Nx95k4=;
+        b=yYB8QUx5ieH3Q5Xoe+MYNZY4L9b3vSBf+zYTjGSYrduMgC5yCDPc+PI0Qq3JBBOdE6
+         kjXuZfeE/yHKdv+qh3P/VA/BzCYZgZCnlZbzpj9l40ot3Lpox0Hmf8DK+TzkZESVIm7S
+         bC4AzyfQMxcqGhlevQIBhGKpC7t0stX+1LCDdWwMmVpJEAD4X39hGChcVwnrXqk4IN67
+         ore1bGgpfvbFSJoYK7FRO3UhFVwWIU0TmmFuzxEIEXkLboLrZ9Jyupxwt4gNZwVzJNeL
+         hRuZJqOEsTsW+j+v0c6oxJTtrcmRH2Un+gmrrcFR+u1BDD/6LZKnj5O7obse45Ycibm3
+         wZgA==
+X-Gm-Message-State: AO0yUKXcWa09n9/GsPeI3Kr21vYXiOvU8nlS/niYV9LEW23GeMUiyvEC
+        4iDqdu0gD1eFRaOBMu5Eo2hFCg==
+X-Google-Smtp-Source: AK7set+qn6JxHyM5CZ+BNMLpM0YVwl27RX//R4K9ijKxYLiMqPu6rBJSBm8bbDpbDwvYPgV3Q3MdRQ==
+X-Received: by 2002:a05:6000:1378:b0:2c3:f00c:ebb5 with SMTP id q24-20020a056000137800b002c3f00cebb5mr269377wrz.47.1675717904648;
+        Mon, 06 Feb 2023 13:11:44 -0800 (PST)
+Received: from smtpclient.apple (global-5-143.n-2.net.cam.ac.uk. [131.111.5.143])
+        by smtp.gmail.com with ESMTPSA id j5-20020a5d5645000000b002c3efee2f4bsm1530879wrw.80.2023.02.06.13.11.43
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 06 Feb 2023 13:11:44 -0800 (PST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: [PATCH v2 0/6] RISC-V Hardware Probing User Interface
+From:   Jessica Clarke <jrtc27@jrtc27.com>
+In-Reply-To: <20230206201455.1790329-1-evan@rivosinc.com>
+Date:   Mon, 6 Feb 2023 21:11:42 +0000
+Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Jisheng Zhang <jszhang@kernel.org>, linux-doc@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Andrew Bresticker <abrestic@rivosinc.com>,
+        Atish Patra <atishp@rivosinc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Celeste Liu <coelacanthus@outlook.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Qinglin Pan <panqinglin2020@iscas.ac.cn>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Xianting Tian <xianting.tian@linux.alibaba.com>,
+        Tsukasa OI <research_trasio@irq.a4lg.com>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Albert Ou <aou@eecs.berkeley.edu>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Vineet Gupta <vineetg@rivosinc.com>,
+        Mark Brown <broonie@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Ruizhe Pan <c141028@gmail.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        linux-kselftest@vger.kernel.org, slewis@rivosinc.com,
+        Randy Dunlap <rdunlap@infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        Conor Dooley <conor@kernel.org>, dram <dramforever@live.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        Guo Ren <guoren@kernel.org>, Dao Lu <daolu@rivosinc.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <212CC1BD-31FF-4B8B-B05D-89C5245EE8A7@jrtc27.com>
+References: <20230206201455.1790329-1-evan@rivosinc.com>
+To:     Evan Green <evan@rivosinc.com>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -90,151 +106,157 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 6 Feb 2023, at 20:14, Evan Green <evan@rivosinc.com> wrote:
+>=20
+>=20
+> These are very much up for discussion, as it's a pretty big new user
+> interface and it's quite a bit different from how we've historically
+> done things: this isn't just providing an ISA string to userspace, =
+this
+> has its own format for providing information to userspace.
+>=20
+> There's been a bunch of off-list discussions about this, including at
+> Plumbers.  The original plan was to do something involving providing =
+an
+> ISA string to userspace, but ISA strings just aren't sufficient for a
+> stable ABI any more: in order to parse an ISA string users need the
+> version of the specifications that the string is written to, the =
+version
+> of each extension (sometimes at a finer granularity than the RISC-V
+> releases/versions encode), and the expected use case for the ISA =
+string
+> (ie, is it a U-mode or M-mode string).  That's a lot of complexity to
+> try and keep ABI compatible and it's probably going to continue to =
+grow,
+> as even if there's no more complexity in the specifications we'll have
+> to deal with the various ISA string parsing oddities that end up all
+> over userspace.
+>=20
+> Instead this patch set takes a very different approach and provides a =
+set
+> of key/value pairs that encode various bits about the system.  The big
+> advantage here is that we can clearly define what these mean so we can
+> ensure ABI stability, but it also allows us to encode information =
+that's
+> unlikely to ever appear in an ISA string (see the misaligned access
+> performance, for example).  The resulting interface looks a lot like
+> what arm64 and x86 do, and will hopefully fit well into something like
+> ACPI in the future.
+>=20
+> The actual user interface is a syscall.  I'm not really sure that's =
+the
+> right way to go about this, but it makes for flexible prototying.
+> Various other approaches have been talked about like making HWCAP2 a
+> pointer, having a VDSO routine, or exposing this via sysfs.  Those =
+seem
+> like generally reasonable approaches, but I've yet to figure out a way
+> to get the general case working without a syscall as that's the only =
+way
+> I've come up with to deal with the heterogenous CPU case.  Happy to =
+hear
+> if someone has a better idea, though, as I don't really want to add a
+> syscall if we can avoid it.
 
-On Mon, Feb 6, 2023 at 11:33 AM Saravana Kannan <saravanak@google.com> wrote:
->
-> On Mon, Feb 6, 2023 at 9:48 AM Abel Vesa <abel.vesa@linaro.org> wrote:
-> >
-> >
-> > CC'ed Saravana
->
-> Thanks. Please do cc me for stuff like this from the start. I skimmed
-> the series and I think it's doing one of my TODO items. So, thanks for
-> the patch!
->
-> I'll take a closer look within a few days -- trying to get through
-> some existing fw_devlink stuff.
->
-> But long story short, it is the right thing to keep a supplier on
-> indefinitely if there's a consumer device (that's not disabled in DT)
-> that never gets probed. It's a pretty common scenario -- for example,
-> say a display backlight. The default case should be functional
-> correctness. And then we can add stuff that allows changing this
-> behavior with command line args or something else that can be done
-> from userspace.
->
-> +1 to what Doug said elsewhere in this thread too. I'm trying to
-> consolidate the "when do we give up" decision at the driver core level
-> independent of what framework is being used.
+Please work with https://github.com/riscv-non-isa/riscv-c-api-doc as
+it=E2=80=99s crucial we have a portable standard interface for =
+applications to
+query this information that works on OSes other than Linux. This can be
+backed by whatever you want, whether a syscall, magic VDSO thing,
+sysfs, etc, but it=E2=80=99s key that the exposed interface outside of =
+libc is
+not Linux-specific otherwise we=E2=80=99re going to get fragmentation in =
+this
+space.
 
-I'm not really sure I agree with the above, at least not without lots
-of discussion in the community. It really goes against what the kernel
-has been doing for years and years in the regulator and clock
-frameworks. Those frameworks both eventually give up and power down
-resources that no active drivers are using. Either changing the
-regulator/clock frameworks or saying that other frameworks should work
-in an opposite way seems like a recipe for confusion.
+I would encourage figuring out the right shape for the exposed
+interface first before continuing to refine details of how that
+information gets communicated between the kernel and libc.
 
-Now, certainly I won't say that the way that the regulator and clock
-frameworks function is perfect nor will I say that they don't cause
-any problems. However, going the opposite way where resources are kept
-at full power indefinitely will _also_ cause problems.
+Jess
 
-Specifically, let's look at the case you mentioned of a display
-backlight. I think you're saying that if there is no backlight driver
-enabled in the kernel that you'd expect the backlight to just be on at
-full brightness. Would you expect this even if the firmware didn't
-leave the backlight on? In any case, why do you say it's more correct?
-I suppose you'd say that the screen is at least usable like this.
-...except that you've broken a different feature: suspend/resume.
-Without being able to turn the backlight off at suspend time the
-device would drain tons of power. It could also overheat when you
-stuffed it in your backpack and damage the battery or start a fire.
-Even if you argue that in the case of the display backlight you're
-better off, what about a keyboard backlight? It's pretty easy to use a
-laptop without the keyboard backlight and if you didn't have a driver
-for it you'd be in better shape leaving it off instead of leaving it
-on 100% of the time, even when the device is suspended.
+> An example series in glibc exposing this syscall and using it in an
+> ifunc selector for memcpy can be found at [1].
+>=20
+> [1] =
+https://public-inbox.org/libc-alpha/20230206194819.1679472-1-evan@rivosinc=
+.com/T/#t
+>=20
+> Changes in v2:
+> - Changed the interface to look more like poll(). Rather than =
+supplying
+>   key_offset and getting back an array of values with numerically
+>   contiguous keys, have the user pre-fill the key members of the =
+array,
+>   and the kernel will fill in the corresponding values. For any key it
+>   doesn't recognize, it will set the key of that element to -1. This
+>   allows usermode to quickly ask for exactly the elements it cares
+>   about, and not get bogged down in a back and forth about newer keys
+>   that older kernels might not recognize. In other words, the kernel
+>   can communicate that it doesn't recognize some of the keys while
+>   still providing the data for the keys it does know.
+> - Added a shortcut to the cpuset parameters that if a size of 0 and
+>   NULL is provided for the CPU set, the kernel will use a cpu mask of
+>   all online CPUs. This is convenient because I suspect most callers
+>   will only want to act on a feature if it's supported on all CPUs, =
+and
+>   it's a headache to dynamically allocate an array of all 1s, not to
+>   mention a waste to have the kernel loop over all of the offline =
+bits.
+> - Fixed logic error in if(of_property_read_string...) that caused =
+crash
+> - Include cpufeature.h in cpufeature.h to avoid undeclared variable
+>   warning.
+> - Added a _MASK define
+> - Fix random checkpatch complaints
+> - Updated the selftests to the new API and added some more.
+> - Fixed indentation, comments in .S, and general checkpatch =
+complaints.
+>=20
+> Evan Green (4):
+>  RISC-V: Move struct riscv_cpuinfo to new header
+>  RISC-V: Add a syscall for HW probing
+>  RISC-V: hwprobe: Support probing of misaligned access performance
+>  selftests: Test the new RISC-V hwprobe interface
+>=20
+> Palmer Dabbelt (2):
+>  RISC-V: hwprobe: Add support for RISCV_HWPROBE_BASE_BEHAVIOR_IMA
+>  dt-bindings: Add RISC-V misaligned access performance
+>=20
+> .../devicetree/bindings/riscv/cpus.yaml       |  15 ++
+> Documentation/riscv/hwprobe.rst               |  66 ++++++
+> Documentation/riscv/index.rst                 |   1 +
+> arch/riscv/include/asm/cpufeature.h           |  23 +++
+> arch/riscv/include/asm/hwprobe.h              |  13 ++
+> arch/riscv/include/asm/smp.h                  |   9 +
+> arch/riscv/include/asm/syscall.h              |   3 +
+> arch/riscv/include/uapi/asm/hwprobe.h         |  35 ++++
+> arch/riscv/include/uapi/asm/unistd.h          |   8 +
+> arch/riscv/kernel/cpu.c                       |  11 +-
+> arch/riscv/kernel/cpufeature.c                |  31 ++-
+> arch/riscv/kernel/sys_riscv.c                 | 192 +++++++++++++++++-
+> tools/testing/selftests/Makefile              |   1 +
+> tools/testing/selftests/riscv/Makefile        |  58 ++++++
+> .../testing/selftests/riscv/hwprobe/Makefile  |  10 +
+> .../testing/selftests/riscv/hwprobe/hwprobe.c |  89 ++++++++
+> .../selftests/riscv/hwprobe/sys_hwprobe.S     |  12 ++
+> tools/testing/selftests/riscv/libc.S          |  46 +++++
+> 18 files changed, 613 insertions(+), 10 deletions(-)
+> create mode 100644 Documentation/riscv/hwprobe.rst
+> create mode 100644 arch/riscv/include/asm/cpufeature.h
+> create mode 100644 arch/riscv/include/asm/hwprobe.h
+> create mode 100644 arch/riscv/include/uapi/asm/hwprobe.h
+> create mode 100644 tools/testing/selftests/riscv/Makefile
+> create mode 100644 tools/testing/selftests/riscv/hwprobe/Makefile
+> create mode 100644 tools/testing/selftests/riscv/hwprobe/hwprobe.c
+> create mode 100644 tools/testing/selftests/riscv/hwprobe/sys_hwprobe.S
+> create mode 100644 tools/testing/selftests/riscv/libc.S
+>=20
+> --=20
+> 2.25.1
+>=20
+>=20
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
 
-Overall: if a kernel isn't configured for a given driver we shouldn't
-be expecting the hardware controlled by that driver to work. The best
-we can hope for is that it's at least in a low power state.
-
-In general I think that having a well-defined way to know it's time to
-give up and power off anything for which a driver didn't probe needs
-to be an important part of any designs here.
-
-
-> -Saravana
->
-> >
-> > On 23-02-06 17:22:23, Matthias Kaehlcke wrote:
-> > > On Mon, Feb 06, 2023 at 06:31:21PM +0200, Abel Vesa wrote:
-> > > > On 23-02-02 18:24:15, Matthias Kaehlcke wrote:
-> > > > > Hi Abel,
-> > > > >
-> > > > > On Fri, Jan 27, 2023 at 12:40:53PM +0200, Abel Vesa wrote:
-> > > > > > Currently, there are cases when a domain needs to remain enabled until
-> > > > > > the consumer driver probes. Sometimes such consumer drivers may be built
-> > > > > > as modules. Since the genpd_power_off_unused is called too early for
-> > > > > > such consumer driver modules to get a chance to probe, the domain, since
-> > > > > > it is unused, will get disabled. On the other hand, the best time for
-> > > > > > an unused domain to be disabled is on the provider's sync_state
-> > > > > > callback. So, if the provider has registered a sync_state callback,
-> > > > > > assume the unused domains for that provider will be disabled on its
-> > > > > > sync_state callback. Also provide a generic sync_state callback which
-> > > > > > disables all the domains unused for the provider that registers it.
-> > > > > >
-> > > > > > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> > > > > > ---
-> > > > > >
-> > > > > > This approach has been applied for unused clocks as well.
-> > > > > > With this patch merged in, all the providers that have sync_state
-> > > > > > callback registered will leave the domains enabled unless the provider's
-> > > > > > sync_state callback explicitly disables them. So those providers will
-> > > > > > need to add the disabling part to their sync_state callback. On the
-> > > > > > other hand, the platforms that have cases where domains need to remain
-> > > > > > enabled (even if unused) until the consumer driver probes, will be able,
-> > > > > > with this patch in, to run without the pd_ignore_unused kernel argument,
-> > > > > > which seems to be the case for most Qualcomm platforms, at this moment.
-> > > > >
-> > > > > I recently encountered a related issue on a Qualcomm platform with a
-> > > > > v6.2-rc kernel, which includes 3a39049f88e4 ("soc: qcom: rpmhpd: Use
-> > > > > highest corner until sync_state"). The issue involves a DT node with a
-> > > > > rpmhpd, the DT node is enabled, however the corresponding device driver
-> > > > > is not enabled in the kernel. In such a scenario the sync_state callback
-> > > > > is never called, because the genpd consumer never probes. As a result
-> > > > > the Always-on subsystem (AOSS) of the SoC doesn't enter sleep mode during
-> > > > > system suspend, which results in a substantially higher power consumption
-> > > > > in S3.
-> > > >
-> > > > If I get this correctly, one of the providers is missing (doesn't matter
-> > > > the reason), in which case, your kernel needs that driver, period. There
-> > > > is no reason why you would expect the consumer to work without the
-> > > > provider. Or, you could just remove the property in the devicetree node,
-> > > > the property that makes the consumer wait for that provider. Anyway, you
-> > > > should never end up with a consumer provider relationship in devicetree
-> > > > without providing the provider driver.
-> > >
-> > > I would agree if it was actually a provider that's missing, however it's a
-> > > 'missing' consumer that prevents the sync_state() call.
-> >
-> > Oh, my bad.
-> >
-> > Still, why would you keep the consumer node enabled in devicetree if you don't
-> > intend to allow its driver to ever probe?
-> >
-> > >
-> > > > > I wonder if genpd (and some other frameworks) needs something like
-> > > > > regulator_init_complete(), which turns off unused regulators 30s after
-> > > > > system boot. That's conceptually similar to the current
-> > > > > genpd_power_off_unused(), but would provide time for modules being loaded.
-> > > >
-> > > > NACK, timeouts are just another hack in this case, specially when we
-> > > > have a pretty reliable mechanism like sync_state.
-> > >
-> > > It does not work properly unless all consumers are probed successfully. It
-> > > makes sense to wait some time for the consumers to probe, but not eternally,
-> > > it's perfectly valid that a driver for a (potential) consumer is not enabled.
-> >
-> > Usually, if you have a consumer devicetree node that you consider it
-> > should not probe, you should consider disabling that node in your board
-> > dts, specially if you don't intend to provide its driver.
-> >
-> > Again, timeouts are bad all-around. What happens if rootfs doesn't get
-> > mounted in time? Will 30 seconds be enough for every scenario? What
-> > happens if I want to load the driver (module) for a consumer a day after boot?
-> >
-> > IMHO, I think even the regulator_init_complete should be switched to some sync
-> > state approach.
