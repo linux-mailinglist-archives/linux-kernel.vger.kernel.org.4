@@ -2,127 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C96FC68C0CB
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 15:58:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F0BD68C0C9
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 15:57:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231210AbjBFO6C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 09:58:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41276 "EHLO
+        id S230365AbjBFO5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 09:57:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231175AbjBFO56 (ORCPT
+        with ESMTP id S229748AbjBFO5t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 09:57:58 -0500
-Received: from sender3-op-o17.zoho.com (sender3-op-o17.zoho.com [136.143.184.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1084CCDC0;
-        Mon,  6 Feb 2023 06:57:56 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1675695459; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=Ub/hzzgDk+/jvohSeOzI+qCT4TMzXFn7T1KSaCK2VZF7sqZIUsnLxjaYUlqUd04FoI5ax/6QtFHtJifTl8elOpOfhXvD3PMoko3uauJMQQVlh5ND3vn7d3Zr/lXRtys4hjKSJl4A5BjRp/0XC778ZGNtGwMCLsITt6G7WDKwKu0=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1675695459; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=krJ/ZF5rOsbLHgpW9JsqG2j4cFlPyOvh+yUpqCeuzLM=; 
-        b=bxUHDjsJVCDm+JA9Tp2n4C2xjF9i7PUDNSjbrH40AbOxQeOm4MjYKCY4THg+wSEwv6gJ4UQcnAUj4XvJlJ1oGhH+/FFN60reGPBeNAt4UeFK+hCaWNHRAJN2fvuqiFQdyLWATG6YI1EAJQZvm3Px96w6igYdOpCdTq1JRf6Wbl8=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=linux.beauty;
-        spf=pass  smtp.mailfrom=me@linux.beauty;
-        dmarc=pass header.from=<me@linux.beauty>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1675695459;
-        s=zmail; d=linux.beauty; i=me@linux.beauty;
-        h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=krJ/ZF5rOsbLHgpW9JsqG2j4cFlPyOvh+yUpqCeuzLM=;
-        b=SzFYHtybFG9XzKA9Rc4wzeHbGJgw3AUqyTwYZivWXbwcy9nR296oGR46A/NWRp5+
-        VKpPOQV/GfAxP5CbuNeYNvSbSRmPe1bVzi6dHxoMf4ecGaN1HEIGaQO7YBGddk2+0OU
-        xldtZL+ZGn0hrPRSjI5Ae/Y5j973PSSzzvpmsr/Y=
-Received: from mail.zoho.com by mx.zohomail.com
-        with SMTP id 1675695457762319.62194466325866; Mon, 6 Feb 2023 06:57:37 -0800 (PST)
-Date:   Mon, 06 Feb 2023 22:57:37 +0800
-From:   Li Chen <me@linux.beauty>
-To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
-Cc:     "li chen" <lchen@ambarella.com>,
-        "michael turquette" <mturquette@baylibre.com>,
-        "stephen boyd" <sboyd@kernel.org>,
-        "rob herring" <robh+dt@kernel.org>,
-        "krzysztof kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "moderated list:arm/ambarella soc support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:common clk framework" <linux-clk@vger.kernel.org>,
-        "open list:open firmware and flattened device tree bindings" 
-        <devicetree@vger.kernel.org>,
-        "open list" <linux-kernel@vger.kernel.org>,
-        "arnd bergmann" <arnd@arndb.de>
-Message-ID: <186273b85d1.e6e326dd2609909.4901324458297607618@linux.beauty>
-In-Reply-To: <8b164c2f-b7b9-c5df-3b9c-ea39bd3eb424@linaro.org>
-References: <20230123073305.149940-1-lchen@ambarella.com>
- <20230123073305.149940-8-lchen@ambarella.com>
- <0c19efb4-3bca-f500-ca24-14b9d24369ef@linaro.org>
- <87y1prgdyu.wl-me@linux.beauty>
- <b26a52ff-6b8a-8a64-7189-346cd2b0d705@linaro.org>
- <87tu0ehl88.wl-me@linux.beauty>
- <ec9fc589-2612-3315-3550-83b68bead926@linaro.org>
- <87sffyhgvw.wl-me@linux.beauty>
- <f70def8e-b148-616f-a93e-c2a8fb85be03@linaro.org>
- <185f3b3a330.11c135c37327076.6300919877819761183@linux.beauty>
- <33c2038b-5e06-4eb2-82b8-007bb735bfb1@linaro.org>
- <186267bd495.c0d336602542450.72693939722996463@linux.beauty> <8b164c2f-b7b9-c5df-3b9c-ea39bd3eb424@linaro.org>
-Subject: Re: [PATCH 07/15] dt-bindings: clock: Add Ambarella clock bindings
+        Mon, 6 Feb 2023 09:57:49 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 009F21AE;
+        Mon,  6 Feb 2023 06:57:46 -0800 (PST)
+Date:   Mon, 06 Feb 2023 14:57:45 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1675695465;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yluV3lLkO9smXnLsr2KsLUa9LqscUFrEopzcZx76aEQ=;
+        b=IWSzC1hVO/xB7xMg9+i/SY/BAx3Y3agOE2b6BlKi0wy81GSlyq4ICwcleOaXiWadkuFQ+O
+        7cpxf1vzT5n/L30qk0rCh+9Qhqju9Wnxl3bf6LynKeFS2s/H6AnR8o6EDBo7E3p1MC9l29
+        Dml31ZKic/kRRKQQYWKFvQkALfUwEwGPAzVD9OuqI95oiadeMWZbPPqlQTcdGMZYONyFS3
+        ZvD26xG5g2VfEQG1oWIDcmL8IEY5YvqCljGJxigT0VGiG1FN7ejJDa3R+DvjS2o8zA1GRZ
+        KdWAaiawwwqUsGW6+Vrtq3bJSp8wvExMMK0J5xzqvSXuk8EUyOfZ0hq4C2INIw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1675695465;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yluV3lLkO9smXnLsr2KsLUa9LqscUFrEopzcZx76aEQ=;
+        b=qSp0js0UZQXCawCJwINFd5+Ok9jBlh6xYnLO/uXiDWH9e/2DGCXesn7Yebgnk3jNMD8sTE
+        +bizSMexRp2vbLBw==
+From:   "tip-bot2 for Sebastian Andrzej Siewior" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/vdso] selftests: Emit a warning if getcpu() is missing on 32bit
+Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Shuah Khan <skhan@linuxfoundation.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20221125094216.3663444-4-bigeasy@linutronix.de>
+References: <20221125094216.3663444-4-bigeasy@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
+Message-ID: <167569546513.4906.15099899150796556318.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
- ---- On Mon, 06 Feb 2023 21:41:44 +0800  Krzysztof Kozlowski  wrote --- 
- > On 06/02/2023 12:28, Li Chen wrote:
- > > Hi Krzysztof ,
- > > 
- > >  ---- On Fri, 27 Jan 2023 23:08:09 +0800  Krzysztof Kozlowski  wrote --- 
- > >  > On 27/01/2023 15:48, Li Chen wrote:
- > >  > >  > 
- > >  > >  > but what you are saying is that there is no separate clock controller
- > >  > >  > device with its own IO address but these clocks are part of rct_syscon.
- > >  > >  > Then model it that way in DTS. The rct_syscon is then your clock
- > >  > >  > controller and all these fake gclk-core and gclk-ddr nodes should be gone.
- > >  > > 
- > >  > > Ok, I will remove these fake nodes, and model the hardware as:
- > >  > > 
- > >  > > rct_syscon node
- > >  > > | clock node(pll, div, mux, composite  clocks live in the same driver)
- > >  > > | other periphal nodes
- > >  > 
- > >  > You need clock node if it takes any resources. If it doesn't, you do not
- > >  > need it.
- > > 
- > > If the only hardware resource the clock node can take is its parent clock(clocks = &osc;),
- > > then can I have this clock node?
- > 
- > I am not sure if I understand. osc does not look like parent device, so
- > this part of comment confuses me.
+The following commit has been merged into the x86/vdso branch of tip:
 
-Sorry for the confusion. I mean osc is the root of clock tree:
+Commit-ID:     5646bbd6684acf5c9b9dedb863b7d2f6f5a330fb
+Gitweb:        https://git.kernel.org/tip/5646bbd6684acf5c9b9dedb863b7d2f6f5a330fb
+Author:        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+AuthorDate:    Fri, 25 Nov 2022 10:42:16 +01:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Mon, 06 Feb 2023 15:48:54 +01:00
 
-osc
-  | pll A
-  | pll B
-  | ...
+selftests: Emit a warning if getcpu() is missing on 32bit
 
-So if I have a clock node under rct_syscon node, I think it should take osc as the parent(node) clock:
-rct_syscon {
-    ......
-    clock_controller {
-          clocks = <&osc>;
-          ......
+The VDSO implementation for getcpu() has been wired up on 32bit so warn if
+missing.
 
-You have said "You need clock node if it takes any resources. ", do you think osc here can be counted as a used resource?
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+Link: https://lore.kernel.org/r/20221125094216.3663444-4-bigeasy@linutronix.de
 
-Regards,
-Li
+---
+ tools/testing/selftests/x86/test_vsyscall.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/tools/testing/selftests/x86/test_vsyscall.c b/tools/testing/selftests/x86/test_vsyscall.c
+index 5b45e69..47cab97 100644
+--- a/tools/testing/selftests/x86/test_vsyscall.c
++++ b/tools/testing/selftests/x86/test_vsyscall.c
+@@ -92,11 +92,8 @@ static void init_vdso(void)
+ 		printf("[WARN]\tfailed to find time in vDSO\n");
+ 
+ 	vdso_getcpu = (getcpu_t)dlsym(vdso, "__vdso_getcpu");
+-	if (!vdso_getcpu) {
+-		/* getcpu() was never wired up in the 32-bit vDSO. */
+-		printf("[%s]\tfailed to find getcpu in vDSO\n",
+-		       sizeof(long) == 8 ? "WARN" : "NOTE");
+-	}
++	if (!vdso_getcpu)
++		printf("[WARN]\tfailed to find getcpu in vDSO\n");
+ }
+ 
+ static int init_vsys(void)
