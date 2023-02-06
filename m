@@ -2,513 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8F9C68B5D8
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 07:53:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23BD868B5CA
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 07:52:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbjBFGxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 01:53:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47480 "EHLO
+        id S229732AbjBFGwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 01:52:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbjBFGxK (ORCPT
+        with ESMTP id S229447AbjBFGwI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 01:53:10 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2969A768D;
-        Sun,  5 Feb 2023 22:53:07 -0800 (PST)
-Received: from dggpeml500019.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4P9H0F6GJczkXsZ;
-        Mon,  6 Feb 2023 14:48:29 +0800 (CST)
-Received: from localhost.localdomain (10.67.165.2) by
- dggpeml500019.china.huawei.com (7.185.36.137) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Mon, 6 Feb 2023 14:53:04 +0800
-From:   Jie Zhan <zhanjie9@hisilicon.com>
-To:     <will@kernel.org>, <mark.rutland@arm.com>,
-        <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
-        <mike.leach@linaro.org>, <leo.yan@linaro.org>,
-        <john.g.garry@oracle.com>, <james.clark@arm.com>,
-        <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <corbet@lwn.net>, <jonathan.cameron@huawei.com>
-CC:     <zhangshaokun@hisilicon.com>, <shenyang39@huawei.com>,
-        <hejunhao3@huawei.com>, <yangyicong@hisilicon.com>,
-        <prime.zeng@huawei.com>, <zhanjie9@hisilicon.com>,
-        <suntao25@huawei.com>, <jiazhao4@hisilicon.com>,
-        <linuxarm@huawei.com>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-perf-users@vger.kernel.org>
-Subject: [RFC PATCH v1 4/4] perf tool: Add HiSilicon PMCU data decoding support
-Date:   Mon, 6 Feb 2023 14:51:46 +0800
-Message-ID: <20230206065146.645505-5-zhanjie9@hisilicon.com>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20230206065146.645505-1-zhanjie9@hisilicon.com>
-References: <20230206065146.645505-1-zhanjie9@hisilicon.com>
+        Mon, 6 Feb 2023 01:52:08 -0500
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82695B745;
+        Sun,  5 Feb 2023 22:52:02 -0800 (PST)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 29E115FD02;
+        Mon,  6 Feb 2023 09:51:59 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1675666319;
+        bh=W0AZoQYdrXV5hWAmgg6fHvPpS8a3OyjtrscQ67WekUk=;
+        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
+        b=DSFpNTfjfEUSklHX0SzcE/2oRVDJSeacU765KhIUBhLb8zJhW7GEI6ACL8HWcJ1Ab
+         FSYaCi/OBq2k7KLiwaERV2mmB+4IAYcJAWm+NG5EqmVbz40WoJhdHlklCu2RZeLc6x
+         SRr7/7wvTRc4DytPFzUGE1xEIw+qZbN0ZFFfrCODCSdsToQ/fkAP9VeQTZTUDlFVPF
+         hVqvvBHH55I+a4xI7MgAspIZesp1tfCzpH+Z4IbB/izENf0m/hywm7Za3raEG+Ipjv
+         TMAknNpCNRzjZxICAkz4J1uw7W3wI0VwnR/TnxAEfxmmRtmMP76HSA5K04gC6yhZXe
+         2fsReO4Dso1fA==
+Received: from S-MS-EXCH02.sberdevices.ru (S-MS-EXCH02.sberdevices.ru [172.16.1.5])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Mon,  6 Feb 2023 09:51:55 +0300 (MSK)
+From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+To:     Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Arseniy Krasnov <AVKrasnov@sberdevices.ru>,
+        "Krasnov Arseniy" <oxffffaa@gmail.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>
+Subject: [RFC PATCH v1 00/12] vsock: MSG_ZEROCOPY flag support
+Thread-Topic: [RFC PATCH v1 00/12] vsock: MSG_ZEROCOPY flag support
+Thread-Index: AQHZOfeA2nL8nCs+GE2d7KRGHhlyGw==
+Date:   Mon, 6 Feb 2023 06:51:55 +0000
+Message-ID: <0e7c6fc4-b4a6-a27b-36e9-359597bba2b5@sberdevices.ru>
+Accept-Language: en-US, ru-RU
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.1.12]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <9DBF5BD914616347BBBBC33C6C85928E@sberdevices.ru>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.165.2]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500019.china.huawei.com (7.185.36.137)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/02/06 01:18:00 #20834045
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,T_SPF_TEMPERROR
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Support for dumping raw trace of HiSilicon PMCU data using 'perf-report'
-or 'perf-script'
-
-Example usage:
-
- # perf report -D
-
-Output will contain the raw PMCU data with notes, such as:
-
-. ... HISI PMCU data: size 0x9630 bytes
-. ... Header: size 0x30 bytes
-.  00000000:  00 00 40 00 04 00 00 00 08 00 00 00 00 00 00 00
-.  00000010:  80 01 00 00 01 00 00 00 04 00 00 00 10 00 00 00
-.  00000020:  11 00 00 00 12 00 00 00 13 00 00 00 00 00 00 00
-.  Auxtrace buffer max size: 0x400000
-.  Number of PMU counters in parallel: 4
-.  Number of monitored CPUs: 8
-.  Compatible mode: no
-.  Subsample size: 0x180
-.  Number of subsamples per sample: 1
-.  Number of events: 4
-.  Event   0: 0x0010
-.  Event   1: 0x0011
-.  Event   2: 0x0012
-.  Event   3: 0x0013
-. ... Data: size 0x9600 bytes
-.  Sample 0
-.    Subsample 0
-.    00000030:  00000000            PMCID0SR CPU 0
-.    00000034:  00000000            PMCID0SR CPU 1
-.    00000038:  00000000            PMCID0SR CPU 2
-.    0000003c:  00000000            PMCID0SR CPU 3
-.    00000040:  00000000            PMCID0SR CPU 4
-.    00000044:  00000000            PMCID0SR CPU 5
-.    00000048:  00000000            PMCID0SR CPU 6
-.    0000004c:  00000000            PMCID0SR CPU 7
-.    00000050:  000000ba            PMCID1SR CPU 0
-.    00000054:  000056fe            PMCID1SR CPU 1
-.    00000058:  00000000            PMCID1SR CPU 2
-.    0000005c:  00000000            PMCID1SR CPU 3
-.    00000060:  00000195            PMCID1SR CPU 4
-.    00000064:  000056fc            PMCID1SR CPU 5
-.    00000068:  00000000            PMCID1SR CPU 6
-.    0000006c:  00000000            PMCID1SR CPU 7
-.    00000070:  0000000000000000    Event 0010 CPU 0
-.    00000078:  0000000000000000    Event 0010 CPU 1
-.    00000080:  0000000000000000    Event 0010 CPU 2
-.    00000088:  0000000000000000    Event 0010 CPU 3
-.    00000090:  0000000000000000    Event 0010 CPU 4
-.    00000098:  0000000000000001    Event 0010 CPU 5
-.    000000a0:  0000000000000000    Event 0010 CPU 6
-.    000000a8:  0000000000000000    Event 0010 CPU 7
-.    000000b0:  0000000000000000    Event 0011 CPU 0
-.    000000b8:  0000000000000000    Event 0011 CPU 1
-.    000000c0:  0000000000000000    Event 0011 CPU 2
-.    000000c8:  0000000000000000    Event 0011 CPU 3
-.    000000d0:  000000000000d614    Event 0011 CPU 4
-.    000000d8:  000000000000046b    Event 0011 CPU 5
-.    000000e0:  0000000000000000    Event 0011 CPU 6
-.    000000e8:  0000000000000000    Event 0011 CPU 7
-.    000000f0:  0000000000000000    Event 0012 CPU 0
-.    000000f8:  0000000000000000    Event 0012 CPU 1
-.    00000100:  0000000000000000    Event 0012 CPU 2
-.    00000108:  0000000000000000    Event 0012 CPU 3
-.    00000110:  00000000000000f4    Event 0012 CPU 4
-.    00000118:  0000000000000003    Event 0012 CPU 5
-.    00000120:  0000000000000000    Event 0012 CPU 6
-.    00000128:  0000000000000000    Event 0012 CPU 7
-.    00000130:  0000000000000000    Event 0013 CPU 0
-.    00000138:  0000000000000000    Event 0013 CPU 1
-.    00000140:  0000000000000000    Event 0013 CPU 2
-.    00000148:  0000000000000000    Event 0013 CPU 3
-.    00000150:  00000000000000f4    Event 0013 CPU 4
-.    00000158:  0000000000000004    Event 0013 CPU 5
-.    00000160:  0000000000000000    Event 0013 CPU 6
-.    00000168:  0000000000000000    Event 0013 CPU 7
-.    00000170:  000000000000d614    Cycle count CPU 0
-.    00000178:  000000000000d614    Cycle count CPU 1
-.    00000180:  0000000000000000    Cycle count CPU 2
-.    00000188:  0000000000000000    Cycle count CPU 3
-.    00000190:  000000000000d614    Cycle count CPU 4
-.    00000198:  000000000000d614    Cycle count CPU 5
-.    000001a0:  0000000000000000    Cycle count CPU 6
-.    000001a8:  0000000000000000    Cycle count CPU 7
-(...more data follows)
-
-Signed-off-by: Jie Zhan <zhanjie9@hisilicon.com>
----
- tools/perf/util/Build       |   1 +
- tools/perf/util/auxtrace.c  |   4 +
- tools/perf/util/hisi-pmcu.c | 305 ++++++++++++++++++++++++++++++++++++
- tools/perf/util/hisi-pmcu.h |   2 +
- 4 files changed, 312 insertions(+)
- create mode 100644 tools/perf/util/hisi-pmcu.c
-
-diff --git a/tools/perf/util/Build b/tools/perf/util/Build
-index e315ecaec323..e062a2c1b962 100644
---- a/tools/perf/util/Build
-+++ b/tools/perf/util/Build
-@@ -120,6 +120,7 @@ perf-$(CONFIG_AUXTRACE) += arm-spe.o
- perf-$(CONFIG_AUXTRACE) += arm-spe-decoder/
- perf-$(CONFIG_AUXTRACE) += hisi-ptt.o
- perf-$(CONFIG_AUXTRACE) += hisi-ptt-decoder/
-+perf-$(CONFIG_AUXTRACE) += hisi-pmcu.o
- perf-$(CONFIG_AUXTRACE) += s390-cpumsf.o
- 
- ifdef CONFIG_LIBOPENCSD
-diff --git a/tools/perf/util/auxtrace.c b/tools/perf/util/auxtrace.c
-index 46ada5ec3f9a..ac19220d307e 100644
---- a/tools/perf/util/auxtrace.c
-+++ b/tools/perf/util/auxtrace.c
-@@ -53,6 +53,7 @@
- #include "intel-bts.h"
- #include "arm-spe.h"
- #include "hisi-ptt.h"
-+#include "hisi-pmcu.h"
- #include "s390-cpumsf.h"
- #include "util/mmap.h"
- 
-@@ -1324,6 +1325,9 @@ int perf_event__process_auxtrace_info(struct perf_session *session,
- 	case PERF_AUXTRACE_HISI_PTT:
- 		err = hisi_ptt_process_auxtrace_info(event, session);
- 		break;
-+	case PERF_AUXTRACE_HISI_PMCU:
-+		err = hisi_pmcu_process_auxtrace_info(event, session);
-+		break;
- 	case PERF_AUXTRACE_UNKNOWN:
- 	default:
- 		return -EINVAL;
-diff --git a/tools/perf/util/hisi-pmcu.c b/tools/perf/util/hisi-pmcu.c
-new file mode 100644
-index 000000000000..7e0b41cd464d
---- /dev/null
-+++ b/tools/perf/util/hisi-pmcu.c
-@@ -0,0 +1,305 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * HiSilicon Performance Monitor Control Unit (PMCU) support
-+ *
-+ * Copyright (C) 2022 HiSilicon Limited
-+ */
-+
-+#include <errno.h>
-+#include <linux/math.h>
-+#include <linux/types.h>
-+#include <linux/zalloc.h>
-+#include <perf/event.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+
-+#include "auxtrace.h"
-+#include "color.h"
-+#include "debug.h"
-+#include "event.h"
-+#include "evsel.h"
-+#include "hisi-pmcu.h"
-+#include "session.h"
-+#include "tool.h"
-+#include <internal/lib.h>
-+
-+#define HISI_PMCU_AUX_HEADER_ALIGN	0x10
-+#define HISI_PMCU_NR_CPU_CLUSTER	8
-+#define dump_print(fmt, ...) \
-+	color_fprintf(stdout, PERF_COLOR_BLUE, fmt, ##__VA_ARGS__)
-+
-+enum hisi_pmcu_auxtrace_header_index {
-+	HISI_PMCU_HEADER_BUFFER_SIZE,
-+	HISI_PMCU_HEADER_NR_PMU,
-+	HISI_PMCU_HEADER_NR_CPU,
-+	HISI_PMCU_HEADER_COMP_MODE,
-+	HISI_PMCU_HEADER_SUBSAMPLE_SIZE,
-+	HISI_PMCU_HEADER_NR_SUBSAMPLE_PER_SAMPLE,
-+	HISI_PMCU_HEADER_NR_EVENT,
-+	HISI_PMCU_HEADER_MAX
-+};
-+
-+struct hisi_pmcu_aux_header_info {
-+	u32 buffer_size;
-+	u32 nr_pmu;
-+	u32 nr_cpu;
-+	u32 comp_mode;
-+	u32 subsample_size;
-+	u32 nr_subsample_per_sample;
-+	u32 nr_event;
-+	u32 events[];
-+};
-+
-+struct hisi_pmcu_process {
-+	u32 pmu_type;
-+	struct auxtrace auxtrace;
-+	struct hisi_pmcu_aux_header_info *header;
-+};
-+
-+static int hisi_pmcu_process_event(struct perf_session *session __maybe_unused,
-+				   union perf_event *event __maybe_unused,
-+				   struct perf_sample *sample __maybe_unused,
-+				   struct perf_tool *tool __maybe_unused)
-+{
-+	return 0;
-+}
-+
-+static int hisi_pmcu_process_header(struct hisi_pmcu_process *pmcu,
-+				    const unsigned char *__data, u64 size)
-+{
-+	struct hisi_pmcu_aux_header_info *header;
-+	const u32 *data = (const u32 *) __data;
-+	unsigned int i, j;
-+	u32 read_size;
-+
-+	read_size = HISI_PMCU_HEADER_MAX * sizeof(*data);
-+	if (size < read_size)
-+		return -EINVAL;
-+
-+	read_size += data[HISI_PMCU_HEADER_NR_EVENT] * sizeof(*data);
-+	if (size < read_size)
-+		return -EINVAL;
-+
-+	pmcu->header = malloc(read_size);
-+	header = pmcu->header;
-+	memcpy(header, data, read_size);
-+	read_size = round_up(read_size, HISI_PMCU_AUX_HEADER_ALIGN);
-+
-+	dump_print(". ... Header: size 0x%lx bytes\n", read_size);
-+	for (i = 0; i < read_size; i += HISI_PMCU_AUX_HEADER_ALIGN) {
-+		dump_print(".  %08lx:  ", i);
-+		for (j = 0; j < HISI_PMCU_AUX_HEADER_ALIGN; j++)
-+			dump_print("%02x ", __data[i + j]);
-+		dump_print("\n");
-+	}
-+
-+	dump_print(".  Auxtrace buffer max size: 0x%lx\n", header->buffer_size);
-+	dump_print(".  Number of PMU counters in parallel: %d\n", header->nr_pmu);
-+	dump_print(".  Number of monitored CPUs: %d\n", header->nr_cpu);
-+	dump_print(".  Compatible mode: %s\n", header->comp_mode ? "yes" : "no");
-+	dump_print(".  Subsample size: 0x%lx\n", header->subsample_size);
-+	dump_print(".  Number of subsamples per sample: %d\n", header->nr_subsample_per_sample);
-+	dump_print(".  Number of events: %d\n", header->nr_event);
-+
-+	for (i = 0; i < header->nr_event; i++)
-+		dump_print(".  Event %3d: 0x%04x\n", i, header->events[i]);
-+
-+	return read_size;
-+}
-+
-+static int hisi_pmcu_dump_subsample(struct hisi_pmcu_aux_header_info *header,
-+				    const unsigned char *data, u64 offset,
-+				    u32 evoffset)
-+{
-+	int nr_cluster, core, cid, i;
-+	u32 pos = 0, event;
-+
-+	nr_cluster = header->nr_cpu / HISI_PMCU_NR_CPU_CLUSTER;
-+
-+	for (cid = 0; cid < 2; cid++) {
-+		for (core = 0; core < HISI_PMCU_NR_CPU_CLUSTER; core++) {
-+			for (i = 0; i < nr_cluster; i++) {
-+				dump_print(".    %08lx:  %08lx            PMCID%dSR CPU %d\n",
-+					   offset + pos, *(u32 *) (data + pos),
-+					   cid,
-+					   core + i * HISI_PMCU_NR_CPU_CLUSTER);
-+				pos += sizeof(u32);
-+			}
-+		}
-+	}
-+
-+	for (event = 0; event < header->nr_pmu; event++) {
-+		for (core = 0; core < HISI_PMCU_NR_CPU_CLUSTER; core++) {
-+			for (i = 0; i < nr_cluster; i++) {
-+				dump_print(".    %08lx:  %016llx    Event %04lx CPU %d\n",
-+					   offset + pos, *(u64 *) (data + pos),
-+					   header->events[event + evoffset],
-+					   core + i * HISI_PMCU_NR_CPU_CLUSTER);
-+				pos += sizeof(u64);
-+			}
-+		}
-+	}
-+
-+	if (!header->comp_mode) {
-+		for (core = 0; core < HISI_PMCU_NR_CPU_CLUSTER; core++) {
-+			for (i = 0; i < nr_cluster; i++) {
-+				dump_print(".    %08lx:  %016llx    Cycle count CPU %d\n",
-+					   offset + pos, *(u64 *) (data + pos),
-+					   core + i * HISI_PMCU_NR_CPU_CLUSTER);
-+				pos += sizeof(u64);
-+			}
-+		}
-+	}
-+
-+	return pos;
-+}
-+
-+static int hisi_pmcu_dump_sample(struct hisi_pmcu_aux_header_info *header,
-+				 const unsigned char *data, u64 offset)
-+{
-+	u32 pos = 0, i = 0;
-+
-+	while (i < header->nr_subsample_per_sample) {
-+		dump_print(".    Subsample %d\n", i + 1);
-+		pos += hisi_pmcu_dump_subsample(header, data + pos,
-+						offset + pos,
-+						i * header->nr_pmu);
-+		i++;
-+	}
-+
-+	return pos;
-+}
-+
-+static int hisi_pmcu_dump_data(struct hisi_pmcu_process *pmcu,
-+			       const unsigned char *data, u64 size)
-+{
-+	struct hisi_pmcu_aux_header_info *header;
-+	u32 sample_size;
-+	u32 nr_sample;
-+	u64 pos = 0;
-+	int ret;
-+
-+	dump_print(". ... HISI PMCU data: size 0x%lx bytes\n", size);
-+
-+	ret = hisi_pmcu_process_header(pmcu, data, size);
-+	if (ret < 0)
-+		return ret;
-+
-+	pos += ret;
-+
-+	header = pmcu->header;
-+	sample_size = header->subsample_size * header->nr_subsample_per_sample;
-+	nr_sample = 1;
-+	dump_print(". ... Data: size 0x%lx bytes\n", size - pos);
-+	while (pos < size) {
-+		u32 buf_remain;
-+
-+		dump_print(".  Sample %d\n", nr_sample);
-+		pos += hisi_pmcu_dump_sample(header, data + pos, pos);
-+		nr_sample++;
-+
-+		// Skip gap at the end of an auxtrace buffer
-+		buf_remain = header->buffer_size - pos % header->buffer_size;
-+		if (buf_remain < sample_size)
-+			pos += buf_remain;
-+	}
-+
-+	return 0;
-+}
-+
-+static int hisi_pmcu_process_auxtrace_event(struct perf_session *session,
-+					    union perf_event *event,
-+					    struct perf_tool *tool __maybe_unused)
-+{
-+	struct hisi_pmcu_process *pmcu_process;
-+	void *data;
-+	u64 size;
-+	int fd;
-+
-+	if (!dump_trace)
-+		return 0;
-+
-+	size = event->auxtrace.size;
-+	if (!size)
-+		return 0;
-+
-+	data = malloc(size);
-+	if (!data)
-+		return -errno;
-+
-+	fd = perf_data__fd(session->data);
-+
-+	if (readn(fd, data, size) < 0) {
-+		free(data);
-+		return -errno;
-+	}
-+
-+	pmcu_process = container_of(session->auxtrace,
-+				    struct hisi_pmcu_process, auxtrace);
-+
-+	return hisi_pmcu_dump_data(pmcu_process, data, size);
-+}
-+
-+static int hisi_pmcu_flush_events(struct perf_session *session __maybe_unused,
-+				  struct perf_tool *tool __maybe_unused)
-+{
-+	return 0;
-+}
-+
-+static void hisi_pmcu_free_events(struct perf_session *session __maybe_unused)
-+{
-+}
-+
-+static void hisi_pmcu_free(struct perf_session *session)
-+{
-+	struct hisi_pmcu_process *pmcu_process;
-+
-+	pmcu_process = container_of(session->auxtrace,
-+				    struct hisi_pmcu_process, auxtrace);
-+
-+	session->auxtrace = NULL;
-+	free(pmcu_process);
-+}
-+
-+static bool hisi_pmcu_evsel_is_auxtrace(struct perf_session *session,
-+					struct evsel *evsel)
-+{
-+	struct hisi_pmcu_process *pmcu_process;
-+
-+	pmcu_process = container_of(session->auxtrace,
-+				    struct hisi_pmcu_process, auxtrace);
-+
-+	return evsel->core.attr.type == pmcu_process->pmu_type;
-+}
-+
-+int hisi_pmcu_process_auxtrace_info(union perf_event *event,
-+				    struct perf_session *session)
-+{
-+	struct perf_record_auxtrace_info *auxtrace_info;
-+	struct hisi_pmcu_process *pmcu_process;
-+
-+	auxtrace_info = &event->auxtrace_info;
-+
-+	if (auxtrace_info->header.size < sizeof(*auxtrace_info) +
-+					 HISI_PMCU_AUXTRACE_PRIV_SIZE)
-+		return -EINVAL;
-+
-+	pmcu_process = zalloc(sizeof(*pmcu_process));
-+	if (!pmcu_process)
-+		return -ENOMEM;
-+
-+	pmcu_process->pmu_type = auxtrace_info->priv[0];
-+
-+	pmcu_process->auxtrace = (struct auxtrace) {
-+		.process_event =  hisi_pmcu_process_event,
-+		.process_auxtrace_event = hisi_pmcu_process_auxtrace_event,
-+		.flush_events = hisi_pmcu_flush_events,
-+		.free_events = hisi_pmcu_free_events,
-+		.free = hisi_pmcu_free,
-+		.evsel_is_auxtrace = hisi_pmcu_evsel_is_auxtrace,
-+	};
-+
-+	session->auxtrace = &pmcu_process->auxtrace;
-+
-+	return 0;
-+}
-diff --git a/tools/perf/util/hisi-pmcu.h b/tools/perf/util/hisi-pmcu.h
-index d46d523a3aee..8df74695164b 100644
---- a/tools/perf/util/hisi-pmcu.h
-+++ b/tools/perf/util/hisi-pmcu.h
-@@ -14,4 +14,6 @@
- struct auxtrace_record *hisi_pmcu_recording_init(int *err,
- 					struct perf_pmu *hisi_pmcu_pmu);
- 
-+int hisi_pmcu_process_auxtrace_info(union perf_event *event,
-+				    struct perf_session *session);
- #endif
--- 
-2.30.0
-
+SGVsbG8sDQoNCiAgICAgICAgICAgICAgICAgICAgICAgICAgIERFU0NSSVBUSU9ODQoNCnRoaXMg
+aXMgTVNHX1pFUk9DT1BZIGZlYXR1cmUgc3VwcG9ydCBmb3IgdmlydGlvL3Zzb2NrLiBJIHRyaWVk
+IHRvIGZvbGxvdw0KY3VycmVudCBpbXBsZW1lbnRhdGlvbiBmb3IgVENQIGFzIG11Y2ggYXMgcG9z
+c2libGU6DQoNCjEpIFNlbmRlciBtdXN0IGVuYWJsZSBTT19aRVJPQ09QWSBmbGFnIHRvIHVzZSB0
+aGlzIGZlYXR1cmUuIFdpdGhvdXQgdGhpcw0KICAgZmxhZywgZGF0YSB3aWxsIGJlIHNlbnQgaW4g
+ImNsYXNzaWMiIGNvcHkgbWFubmVyIGFuZCBNU0dfWkVST0NPUFkNCiAgIGZsYWcgd2lsbCBiZSBp
+Z25vcmVkIChlLmcuIHdpdGhvdXQgY29tcGxldGlvbikuDQoNCjIpIEtlcm5lbCB1c2VzIGNvbXBs
+ZXRpb25zIGZyb20gc29ja2V0J3MgZXJyb3IgcXVldWUuIFNpbmdsZSBjb21wbGV0aW9uDQogICBm
+b3Igc2luZ2xlIHR4IHN5c2NhbGwgKG9yIGl0IGNhbiBtZXJnZSBzZXZlcmFsIGNvbXBsZXRpb25z
+IHRvIHNpbmdsZQ0KICAgb25lKS4gSSB1c2VkIGFscmVhZHkgaW1wbGVtZW50ZWQgbG9naWMgZm9y
+IE1TR19aRVJPQ09QWSBzdXBwb3J0Og0KICAgJ21zZ196ZXJvY29weV9yZWFsbG9jKCknIGV0Yy4N
+Cg0KRGlmZmVyZW5jZSB3aXRoIGNvcHkgd2F5IGlzIG5vdCBzaWduaWZpY2FudC4gRHVyaW5nIHBh
+Y2tldCBhbGxvY2F0aW9uLA0Kbm9uLWxpbmVhciBza2IgaXMgY3JlYXRlZCwgdGhlbiBJIGNhbGwg
+J2dldF91c2VyX3BhZ2VzKCknIGZvciBlYWNoIHBhZ2UNCmZyb20gdXNlcidzIGlvdiBpdGVyYXRv
+ciAoSSB0aGluayBpIGRvbid0IG5lZWQgJ3Bpbl91c2VyX3BhZ2VzKCknIGFzDQp0aGVyZSBpcyBu
+byBiYWNraW5nIHN0b3JhZ2UgZm9yIHRoZXNlIHBhZ2VzKSBhbmQgYWRkIGVhY2ggcmV0dXJuZWQg
+cGFnZQ0KdG8gdGhlIHNrYiBhcyBmcmFnbWVudC4gVGhlcmUgYXJlIGFsc28gc29tZSB1cGRhdGVz
+IGZvciB2aG9zdCBhbmQgZ3Vlc3QNCnBhcnRzIG9mIHRyYW5zcG9ydCAtIGluIGJvdGggY2FzZXMg
+aSd2ZSBhZGRlZCBoYW5kbGluZyBvZiBub24tbGluZWFyIHNrYg0KZm9yIHZpcnRpbyBwYXJ0LiB2
+aG9zdCBjb3BpZXMgZGF0YSBmcm9tIHN1Y2ggc2tiIHRvIHRoZSBndWVzdCdzIHJ4IHZpcnRpbw0K
+YnVmZmVycy4gSW4gdGhlIGd1ZXN0LCB2aXJ0aW8gdHJhbnNwb3J0IGZpbGxzIHZpcnRpbyBxdWV1
+ZSB3aXRoIHBhZ2VzDQpmcm9tIHNrYi4NCg0KSSB0aGluayBkb2MgaW4gRG9jdW1lbnRhdGlvbi9u
+ZXR3b3JraW5nL21zZ196ZXJvY29weS5yc3QgY291bGQgYmUgYWxzbw0KdXBkYXRlZCBpbiBuZXh0
+IHZlcnNpb25zLg0KDQpUaGlzIHZlcnNpb24gaGFzIHNldmVyYWwgbGltaXRzL3Byb2JsZW1zOg0K
+DQoxKSBBcyB0aGlzIGZlYXR1cmUgdG90YWxseSBkZXBlbmRzIG9uIHRyYW5zcG9ydCwgdGhlcmUg
+aXMgbm8gd2F5IChvciBpdA0KICAgaXMgZGlmZmljdWx0KSB0byBjaGVjayB3aGV0aGVyIHRyYW5z
+cG9ydCBpcyBhYmxlIHRvIGhhbmRsZSBpdCBvciBub3QNCiAgIGR1cmluZyBTT19aRVJPQ09QWSBz
+ZXR0aW5nLiBTZWVtcyBJIG5lZWQgdG8gY2FsbCBBRl9WU09DSyBzcGVjaWZpYw0KICAgc2V0c29j
+a29wdCBjYWxsYmFjayBmcm9tIHNldHNvY2tvcHQgY2FsbGJhY2sgZm9yIFNPTF9TT0NLRVQsIGJ1
+dCB0aGlzDQogICBsZWFkcyB0byBsb2NrIHByb2JsZW0sIGJlY2F1c2UgYm90aCBBRl9WU09DSyBh
+bmQgU09MX1NPQ0tFVCBjYWxsYmFjaw0KICAgYXJlIG5vdCBjb25zaWRlcmVkIHRvIGJlIGNhbGxl
+ZCBmcm9tIGVhY2ggb3RoZXIuIFNvIGluIGN1cnJlbnQgdmVyc2lvbg0KICAgU09fWkVST0NPUFkg
+aXMgc2V0IHN1Y2Nlc3NmdWxseSB0byBhbnkgdHlwZSAoZS5nLiB0cmFuc3BvcnQpIG9mDQogICBB
+Rl9WU09DSyBzb2NrZXQsIGJ1dCBpZiB0cmFuc3BvcnQgZG9lcyBub3Qgc3VwcG9ydCBNU0dfWkVS
+T0NPUFksDQogICB0eCByb3V0aW5lIHdpbGwgZmFpbCB3aXRoIEVPUE5PVFNVUFAuDQoNCjIpIFdo
+ZW4gTVNHX1pFUk9DT1BZIGlzIHVzZWQsIGZvciBlYWNoIHR4IHN5c3RlbSBjYWxsIHdlIG5lZWQg
+dG8gZW5xdWV1ZQ0KICAgb25lIGNvbXBsZXRpb24uIEluIGVhY2ggY29tcGxldGlvbiB0aGVyZSBp
+cyBmbGFnIHdoaWNoIHNob3dzIGhvdyB0eA0KICAgd2FzIHBlcmZvcm1lZDogemVyb2NvcHkgb3Ig
+Y29weS4gVGhpcyBsZWFkcyB0aGF0IHdob2xlIG1lc3NhZ2UgbXVzdA0KICAgYmUgc2VuZCBpbiB6
+ZXJvY29weSBvciBjb3B5IHdheSAtIHdlIGNhbid0IHNlbmQgcGFydCBvZiBtZXNzYWdlIHdpdGgN
+CiAgIGNvcHlpbmcgYW5kIHJlc3Qgb2YgbWVzc2FnZSB3aXRoIHplcm9jb3B5IG1vZGUgKG9yIHZp
+Y2UgdmVyc2EpLiBOb3csDQogICB3ZSBuZWVkIHRvIGFjY291bnQgdnNvY2sgY3JlZGl0IGxvZ2lj
+LCBlLmcuIHdlIGNhbid0IHNlbmQgd2hvbGUgZGF0YQ0KICAgb25jZSAtIG9ubHkgYWxsb3dlZCBu
+dW1iZXIgb2YgYnl0ZXMgY291bGQgc2VudCBhdCBhbnkgbW9tZW50LiBJbiBjYXNlDQogICBvZiBj
+b3B5aW5nIHdheSB0aGVyZSBpcyBubyBwcm9ibGVtIGFzIGluIHdvcnN0IGNhc2Ugd2UgY2FuIHNl
+bmQgc2luZ2xlDQogICBieXRlcywgYnV0IHplcm9jb3B5IGlzIG1vcmUgY29tcGxleCBiZWNhdXNl
+IHNtYWxsZXN0IHRyYW5zbWlzc2lvbg0KICAgdW5pdCBpcyBzaW5nbGUgcGFnZS4gU28gaWYgdGhl
+cmUgaXMgbm90IGVub3VnaCBzcGFjZSBhdCBwZWVyJ3Mgc2lkZQ0KICAgdG8gc2VuZCBpbnRlZ2Vy
+IG51bWJlciBvZiBwYWdlcyAoYXQgbGVhc3Qgb25lKSAtIHdlIHdpbGwgd2FpdCwgdGh1cw0KICAg
+c3RhbGxpbmcgdHggc2lkZS4gVG8gb3ZlcmNvbWUgdGhpcyBwcm9ibGVtIGkndmUgYWRkZWQgc2lt
+cGxlIHJ1bGUgLQ0KICAgemVyb2NvcHkgaXMgcG9zc2libGUgb25seSB3aGVuIHRoZXJlIGlzIGVu
+b3VnaCBzcGFjZSBhdCBhbm90aGVyIHNpZGUNCiAgIGZvciB3aG9sZSBtZXNzYWdlICh0byBjaGVj
+aywgdGhhdCBjdXJyZW50ICdtc2doZHInIHdhcyBhbHJlYWR5IHVzZWQNCiAgIGluIHByZXZpb3Vz
+IHR4IGl0ZXJhdGlvbnMgaSB1c2UgJ2lvdl9vZmZzZXQnIGZpZWxkIG9mIGl0J3MgaW92IGl0ZXIp
+Lg0KDQozKSBsb29wYmFjayB0cmFuc3BvcnQgaXMgbm90IHN1cHBvcnRlZCwgYmVjYXVzZSBpdCBy
+ZXF1aXJlcyB0byBpbXBsZW1lbnQNCiAgIG5vbi1saW5lYXIgc2tiIGhhbmRsaW5nIGluIGRlcXVl
+dWUgbG9naWMgKGFzIHdlICJzZW5kIiBmcmFnZ2VkIHNrYg0KICAgYW5kICJyZWNlaXZlIiBpdCBm
+cm9tIHRoZSBzYW1lIHF1ZXVlKS4gSSdtIGdvaW5nIHRvIGltcGxlbWVudCBpdCBpbg0KICAgbmV4
+dCB2ZXJzaW9ucy4NCg0KNCkgQ3VycmVudCBpbXBsZW1lbnRhdGlvbiBzZXRzIG1heCBsZW5ndGgg
+b2YgcGFja2V0IHRvIDY0S0IuIElJVUMgdGhpcw0KICAgaXMgZHVlIHRvICdrbWFsbG9jKCknIGFs
+bG9jYXRlZCBkYXRhIGJ1ZmZlcnMuIEkgdGhpbmssIGluIGNhc2Ugb2YNCiAgIE1TR19aRVJPQ09Q
+WSB0aGlzIHZhbHVlIGNvdWxkIGJlIGluY3JlYXNlZCwgYmVjYXVzZSAna21hbGxvYygpJyBpcw0K
+ICAgbm90IHRvdWNoZWQgZm9yIGRhdGEgLSB1c2VyIHNwYWNlIHBhZ2VzIGFyZSB1c2VkIGFzIGJ1
+ZmZlcnMuIEFsc28NCiAgIHRoaXMgbGltaXQgdHJpbXMgZXZlcnkgbWVzc2FnZSB3aGljaCBpcyA+
+IDY0S0IsIHRodXMgc3VjaCBtZXNzYWdlcw0KICAgd2lsbCBiZSBzZW5kIGluIGNvcHkgbW9kZSBk
+dWUgdG8gJ2lvdl9vZmZzZXQnIGNoZWNrIGluIDIpLg0KDQogICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgUEVSRk9STUFOQ0UNCg0KUGVyZm9ybWFuY2U6IGl0IGlzIGEgbGl0dGxlIGJpdCB0cmlj
+a3kgdG8gY29tcGFyZSBwZXJmb3JtYW5jZSBiZXR3ZWVuDQpjb3B5IGFuZCB6ZXJvY29weSB0cmFu
+c21pc3Npb25zLiBJbiB6ZXJvY29weSB3YXkgd2UgbmVlZCB0byB3YWl0IHdoZW4NCnVzZXIgYnVm
+ZmVycyB3aWxsIGJlIHJlbGVhc2VkIGJ5IGtlcm5lbCwgc28gaXQgc29tZXRoaW5nIGxpa2Ugc3lu
+Y2hyb25vdXMNCnBhdGggKHdhaXQgdW50aWwgZGV2aWNlIGRyaXZlciB3aWxsIHByb2Nlc3MgaXQp
+LCB3aGlsZSBpbiBjb3B5IHdheSB3ZQ0KY2FuIGZlZWQgZGF0YSB0byBrZXJuZWwgYXMgbWFueSBh
+cyB3ZSB3YW50LCBkb24ndCBjYXJlIGFib3V0IGRldmljZQ0KZHJpdmVyLiBTbyBJIGNvbXBhcmVk
+IG9ubHkgdGltZSB3aGljaCB3ZSBzcGVuZCBpbiAnc2VuZG1zZygpJyBzeXNjYWxsLg0KQWxzbyB0
+aGVyZSBpcyBsaW1pdCBmcm9tIDQpIGFib3ZlIHNvIG1heCBidWZmZXIgc2l6ZSBpcyA2NEtCLiBJ
+J3ZlDQp0ZXN0ZWQgdGhpcyBwYXRjaHNldCBpbiB0aGUgbmVzdGVkIFZNLCBidXQgaSB0aGluayBm
+b3IgVjEgaXQgaXMgbm90IGENCmJpZyBkZWFsLg0KDQpTZW5kZXI6DQouL3Zzb2NrX3BlcmYgLS1z
+ZW5kZXIgPENJRD4gLS1idWYtc2l6ZSA8YnVmIHNpemU+IC0tYnl0ZXMgNjBNIFstLXpjXQ0KDQpS
+ZWNlaXZlcjoNCi4vdnNvY2tfcGVyZiAtLXZzay1zaXplIDI1Nk0NCg0KTnVtYmVyIGluIGNlbGwg
+aXMgc2Vjb25kcyB3aGljaCBzZW5kZXJzIHNwZW5kcyBpbnNpZGUgdHggc3lzY2FsbC4NCg0KR3Vl
+c3QgdG8gaG9zdCB0cmFuc21pc3Npb246DQoNCiotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tKg0KfCAgICAgICAgICB8ICAgICAgICAgfCAgICAgICAgICB8DQp8IGJ1ZiBzaXplIHwgICBj
+b3B5ICB8IHplcm9jb3B5IHwNCnwgICAgICAgICAgfCAgICAgICAgIHwgICAgICAgICAgfA0KKi0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0qDQp8ICAgNEtCICAgIHwgIDAuMjYgICB8ICAg
+MC4wNDIgIHwNCiotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tKg0KfCAgIDE2S0IgICB8
+ICAwLjExICAgfCAgIDAuMDE0ICB8DQoqLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSoN
+CnwgICAzMktCICAgfCAgMC4wNSAgIHwgICAwLjAwOSAgfA0KKi0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0qDQp8ICAgNjRLQiAgIHwgIDAuMDQgICB8ICAgMC4wMDUgIHwNCiotLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tKg0KDQpIb3N0IHRvIGd1ZXN0IHRyYW5zbWlzc2lvbjoN
+Cg0KKi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tKg0KfCAgICAgICAgICB8ICAgICAg
+ICAgIHwgICAgICAgICAgfA0KfCBidWYgc2l6ZSB8ICAgY29weSAgIHwgemVyb2NvcHkgfA0KfCAg
+ICAgICAgICB8ICAgICAgICAgIHwgICAgICAgICAgfA0KKi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tKg0KfCAgIDRLQiAgICB8ICAgMC4wNDkgIHwgICAwLjAzNCAgfA0KKi0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tKg0KfCAgIDE2S0IgICB8ICAgMC4wMyAgIHwgICAwLjAy
+NCAgfA0KKi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tKg0KfCAgIDMyS0IgICB8ICAg
+MC4wMjUgIHwgICAwLjAxICAgfA0KKi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tKg0K
+fCAgIDY0S0IgICB8ICAgMC4wMjggIHwgICAwLjAxICAgfA0KKi0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tKg0KDQpJZiBob3N0IGZhaWxzIHRvIHNlbmQgZGF0YSB3aXRoICJDYW5ub3Qg
+YWxsb2NhdGUgbWVtb3J5IiwgY2hlY2sgdmFsdWUNCi9wcm9jL3N5cy9uZXQvY29yZS9vcHRtZW1f
+bWF4IC0gaXQgaXMgYWNjb3VudGVkIGR1cmluZyBjb21wbGV0aW9uIHNrYg0KYWxsb2NhdGlvbi4N
+Cg0KWmVyb2NvcHkgaXMgZmFzdGVyIHRoYW4gY2xhc3NpYyBjb3B5IG1vZGUsIGJ1dCBvZiBjb3Vy
+c2UgaXQgcmVxdWlyZXMNCnNwZWNpZmljIGFyY2hpdGVjdHVyZSBvZiBhcHBsaWNhdGlvbiBkdWUg
+dG8gdXNlciBwYWdlcyBwaW5uaW5nLCBidWZmZXINCnNpemUgYW5kIGFsaWdubWVudC4gSW4gbmV4
+dCB2ZXJzaW9ucyBpJ20gZ29pbmcgdG8gZml4IDY0S0IgYmFycmllciB0bw0KcGVyZm9ybSB0ZXN0
+cyB3aXRoIGJpZ2dlciBidWZmZXIgc2l6ZXMuDQoNCiAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICBURVNUSU5HDQoNClRoaXMgcGF0Y2hzZXQgaW5jbHVkZXMgc2V0IG9mIHRlc3RzIGZvciBNU0df
+WkVST0NPUFkgZmVhdHVyZS4gSSB0cmllZCB0bw0KY292ZXIgbmV3IGNvZGUgYXMgbXVjaCBhcyBw
+b3NzaWJsZSBzbyB0aGVyZSBhcmUgZGlmZmVyZW50IGNhc2VzIGZvcg0KTVNHX1pFUk9DT1BZIHRy
+YW5zbWlzc2lvbnM6IHdpdGggZGlzYWJsZWQgU09fWkVST0NPUFkgYW5kIHNldmVyYWwgaW8NCnZl
+Y3RvciB0eXBlcyAoZGlmZmVyZW50IHNpemVzLCBhbGlnbm1lbnRzLCB3aXRoIHVubWFwcGVkIHBh
+Z2VzKS4NCg0KVGhhbmtzLCBBcnNlbml5DQoNCkFyc2VuaXkgS3Jhc25vdigxMik6DQogdnNvY2s6
+IGNoZWNrIGVycm9yIHF1ZXVlIHRvIHNldCBFUE9MTEVSUg0KIHZzb2NrOiByZWFkIGZyb20gc29j
+a2V0J3MgZXJyb3IgcXVldWUNCiB2c29jazogY2hlY2sgZm9yIE1TR19aRVJPQ09QWSBzdXBwb3J0
+DQogdmhvc3QvdnNvY2s6IG5vbi1saW5lYXIgc2tiIGhhbmRsaW5nIHN1cHBvcnQNCiB2c29jay92
+aXJ0aW86IG5vbi1saW5lYXIgc2tiIHN1cHBvcnQNCiB2c29jay92aXJ0aW86IG5vbi1saW5lYXIg
+c2tiIGhhbmRsaW5nIGZvciBUQVAgZGV2DQogdnNvY2svdmlydGlvOiBNR1NfWkVST0NPUFkgZmxh
+ZyBzdXBwb3J0DQogdmhvc3QvdnNvY2s6IHN1cHBvcnQgTVNHX1pFUk9DT1BZIGZvciB0cmFuc3Bv
+cnQNCiB2c29jay92aXJ0aW86IHN1cHBvcnQgTVNHX1pFUk9DT1BZIGZvciB0cmFuc3BvcnQNCiBu
+ZXQvc29jazogZW5hYmxlIHNldHRpbmcgU09fWkVST0NPUFkgZm9yIFBGX1ZTT0NLDQogdGVzdC92
+c29jazogTVNHX1pFUk9DT1BZIGZsYWcgdGVzdHMNCiB0ZXN0L3Zzb2NrOiBNU0dfWkVST0NPUFkg
+c3VwcG9ydCBmb3IgdnNvY2tfcGVyZg0KDQogZHJpdmVycy92aG9zdC92c29jay5jICAgICAgICAg
+ICAgICAgICAgICAgfCAgNjIgKysrLQ0KIGluY2x1ZGUvbGludXgvc29ja2V0LmggICAgICAgICAg
+ICAgICAgICAgIHwgICAxICsNCiBpbmNsdWRlL2xpbnV4L3ZpcnRpb192c29jay5oICAgICAgICAg
+ICAgICB8ICAxMiArDQogaW5jbHVkZS9uZXQvYWZfdnNvY2suaCAgICAgICAgICAgICAgICAgICAg
+fCAgIDIgKw0KIG5ldC9jb3JlL3NvY2suYyAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgICA0
+ICstDQogbmV0L3Ztd192c29jay9hZl92c29jay5jICAgICAgICAgICAgICAgICAgfCAgMzUgKyst
+DQogbmV0L3Ztd192c29jay92aXJ0aW9fdHJhbnNwb3J0LmMgICAgICAgICAgfCAgMzggKystDQog
+bmV0L3Ztd192c29jay92aXJ0aW9fdHJhbnNwb3J0X2NvbW1vbi5jICAgfCAyNTUgKysrKysrKysr
+KysrKystLQ0KIHRvb2xzL3Rlc3RpbmcvdnNvY2svTWFrZWZpbGUgICAgICAgICAgICAgIHwgICAy
+ICstDQogdG9vbHMvdGVzdGluZy92c29jay91dGlsLmggICAgICAgICAgICAgICAgfCAgIDEgKw0K
+IHRvb2xzL3Rlc3RpbmcvdnNvY2svdnNvY2tfcGVyZi5jICAgICAgICAgIHwgMTI3ICsrKysrKyst
+DQogdG9vbHMvdGVzdGluZy92c29jay92c29ja190ZXN0LmMgICAgICAgICAgfCAgMTEgKw0KIHRv
+b2xzL3Rlc3RpbmcvdnNvY2svdnNvY2tfdGVzdF96ZXJvY29weS5jIHwgNDcwICsrKysrKysrKysr
+KysrKysrKysrKysrKysrKysrKw0KIHRvb2xzL3Rlc3RpbmcvdnNvY2svdnNvY2tfdGVzdF96ZXJv
+Y29weS5oIHwgIDEyICsNCiAxNCBmaWxlcyBjaGFuZ2VkLCA5OTEgaW5zZXJ0aW9ucygrKSwgNDEg
+ZGVsZXRpb25zKC0pDQoNCi0tIA0KMi4yNS4xDQo=
