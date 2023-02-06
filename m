@@ -2,79 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3B5D68C3ED
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 17:56:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF47468C3F8
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 17:58:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbjBFQ4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 11:56:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35192 "EHLO
+        id S230291AbjBFQ6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 11:58:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229834AbjBFQ4l (ORCPT
+        with ESMTP id S229698AbjBFQ6V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 11:56:41 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066A9268C;
-        Mon,  6 Feb 2023 08:56:39 -0800 (PST)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 316GuEqO004598;
-        Mon, 6 Feb 2023 10:56:14 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1675702574;
-        bh=v9ZYSO/ymnvx8bWPKuYYeREqbLf0jUXDtJGQaIeZtvg=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=oBUDxHoeGOaG1FEQnvgsQPGGV+DYB1aj9L670uQuOpPW9hGlmBjvKwTEV9jIueag0
-         cGAPhWnQzW0B0da6TFvfwUqYPjAKcByHDjHxYeVvAWpbOD2gaR+ITAoVbOxvCTlOoh
-         nZWCymQzLXf69YeeT9eToZGqO2biYa9uDxCNiVL0=
-Received: from DFLE107.ent.ti.com (dfle107.ent.ti.com [10.64.6.28])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 316GuE8i110007
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 6 Feb 2023 10:56:14 -0600
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 6
- Feb 2023 10:56:14 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 6 Feb 2023 10:56:14 -0600
-Received: from [10.250.235.106] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 316Gu85B046178;
-        Mon, 6 Feb 2023 10:56:08 -0600
-Message-ID: <d0a6be9e-1597-bd1a-84f3-390820e73a98@ti.com>
-Date:   Mon, 6 Feb 2023 22:26:07 +0530
+        Mon, 6 Feb 2023 11:58:21 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AE3910A94
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 08:57:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675702653;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wbI81WdBnirruIRWlS3/2ZRiepvfYoyUy2ovfA/3d2k=;
+        b=U/nPt5rCgPqKI4bHYPE/vidRbXV7jiPuc0a3UL+rTuIZNPPujHEFRi5cdVWAxasa6mdE+E
+        cG5iyz00lFPid3pAYskxKLV6PDorrFFSvVLXv6JahxMOuGCXSW/nOVGIG5u1QVhlu5lGNP
+        1UQ7X2yFPeMHb/E0Zr0s8FfYpjx8C4I=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-608-KYQ5vO_yORWA_n0aXKGF6Q-1; Mon, 06 Feb 2023 11:57:23 -0500
+X-MC-Unique: KYQ5vO_yORWA_n0aXKGF6Q-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E84F587B2A1;
+        Mon,  6 Feb 2023 16:57:22 +0000 (UTC)
+Received: from lorien.usersys.redhat.com (unknown [10.22.8.144])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E459A2166B29;
+        Mon,  6 Feb 2023 16:57:21 +0000 (UTC)
+Date:   Mon, 6 Feb 2023 11:57:20 -0500
+From:   Phil Auld <pauld@redhat.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Pietro Borrello <borrello@diag.uniroma1.it>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Dmitry Adamushko <dmitry.adamushko@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>,
+        Ingo Molnar <mingo@elte.hu>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] sched: pick_next_rt_entity(): checked list_entry
+Message-ID: <Y+ExcOoHOzSctvue@lorien.usersys.redhat.com>
+References: <20230128-list-entry-null-check-sched-v2-1-d8e010cce91b@diag.uniroma1.it>
+ <20230206112342.223d2c29@rorschach.local.home>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v7 3/6] drm/tidss: Add support for AM625 DSS
-Content-Language: en-US
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jyri Sarha <jyri.sarha@iki.fi>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-CC:     DRI Development List <dri-devel@lists.freedesktop.org>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rahul T R <r-ravikumar@ti.com>,
-        Devarsh Thakkar <devarsht@ti.com>,
-        Jai Luthra <j-luthra@ti.com>,
-        Jayesh Choudhary <j-choudhary@ti.com>
-References: <20230125113529.13952-1-a-bhatia1@ti.com>
- <20230125113529.13952-4-a-bhatia1@ti.com>
- <ab6f52bb-a3f5-afda-c037-f009153a0bb6@ideasonboard.com>
- <1662a593-8a5d-9214-8a3e-ef2699a35265@ti.com>
- <12ba1f03-d6dd-c9c5-abf0-e9298dc22f28@ideasonboard.com>
-From:   Aradhya Bhatia <a-bhatia1@ti.com>
-In-Reply-To: <12ba1f03-d6dd-c9c5-abf0-e9298dc22f28@ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230206112342.223d2c29@rorschach.local.home>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,88 +72,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tomi,
-
-On 06-Feb-23 16:28, Tomi Valkeinen wrote:
-> On 05/02/2023 16:31, Aradhya Bhatia wrote:
->>
->>
->> On 03-Feb-23 21:03, Tomi Valkeinen wrote:
->>> On 25/01/2023 13:35, Aradhya Bhatia wrote:
->>>> Add support for the DSS controller on TI's new AM625 SoC in the tidss
->>>> driver.
->>>>
->>>> The first video port (VP0) in am625-dss can output OLDI signals through
->>>> 2 OLDI TXes. A 3rd output port has been added with "DISPC_PORT_OLDI" bus
->>>> type.
->>>
->>> Not a big thing here as you add support for a new SoC, but the ordering
->>> of the patches is not optimal. Here you add the AM625 DSS support, but
->>> then you continue actually adding the DSS support (well, mainly OLDI) in
->>> the following patches.
->>>
->>> I think patch 6 could be before this patch. Parts of patch 4 could also
->>> be before this patch. The AM65X renames from patch 5 could be before
->>> this patch.
->>
->> I can move whole of Patch 6 and even of Patch 4 before this one. I have
->> mentioned 'AM625-DSS' in a couple comments which I can make generic,
->> and the rest everything is SoC-agnostic.
->>
->> I haven't tried this, but my concern is if we break patch 5 into 2
->> separate patches,
->>
->> i. AM65X rename plus SoC based switch case, and
->> ii. Addition of AM625 SoC case
->>
->> then I might have to overwrite some changes implemented during (i) in
->> (ii). I don't suppose that would be okay, would it?
+On Mon, Feb 06, 2023 at 11:23:42AM -0500 Steven Rostedt wrote:
+> On Tue, 31 Jan 2023 13:01:16 +0000
+> Pietro Borrello <borrello@diag.uniroma1.it> wrote:
 > 
-> I'm not sure I follow here. Wouldn't (i) be a valid patch in its own?
-> Nothing wrong in expanding that later (even if you end up changing a lot
-> of it).
+> > index ed2a47e4ddae..c024529d8416 100644
+> > --- a/kernel/sched/rt.c
+> > +++ b/kernel/sched/rt.c
+> > @@ -1777,6 +1777,7 @@ static struct sched_rt_entity *pick_next_rt_entity(struct rt_rq *rt_rq)
+> >  	BUG_ON(idx >= MAX_RT_PRIO);
+> >  
+> >  	queue = array->queue + idx;
+> > +	SCHED_WARN_ON(list_empty(queue));
 > 
-
-(i) would be a valid patch, but implementing (ii) would over-write
-certain changes done in (i), albeit small changes in terms of brackets
-and indents. That didn't feel right initially and hence the question.
-
-> That said, I don't think this is a very important topic. There are only
-> a few commits in the history that might be problematic. A simple fix
-> would be to add all the features first, and only last add the compatible
-> string for am625.
+> I wonder if we should make this:
 > 
-> Or do all the changes for am625 in a single patch, and try to implement
-> all the generic restructuring work before that.
+> 	if (SCHED_WARN_ON(list_empty(queue)))
+> 		return NULL;
 > 
-> Here we do have to change the vp-to-output mapping management, so maybe
-> the second option won't be simple enough, and it's better to do the
-> am625 changes in pieces, as in the first option.
+> >  	next = list_entry(queue->next, struct sched_rt_entity, run_list);
+> >  
+> >  	return next;
+> > @@ -1789,7 +1790,6 @@ static struct task_struct *_pick_next_task_rt(struct rq *rq)
+> >  
+> >  	do {
+> >  		rt_se = pick_next_rt_entity(rt_rq);
+> > -		BUG_ON(!rt_se);
 > 
+> 		if (unlikely(!rt_se))
+> 			return NULL;
 
-Yeah, the first option does seem a little less complicated. Will try to
-re-order this as much clearly as possible.
+I think that's better than taking a digger in one of the subsequent macros.
 
-> So, it's really up to you. Just wanted to raise this possible issue so
-> that you are aware of it and can do any easy fixes (if there are such).
+
+Cheers,
+Phil
+
+
 > 
->> Also, is it important to keep the compatible-addition patches of
->> DT-binding and driver next to each other in the series? Or should
->> the DT-binding patches should be the first ones? Just curious! =)
+> -- Steve
 > 
-> I believe the convention is to have the DT-binding changes before you
-> add the compatible string to the driver (if I recall right checkpatch or
-> some other checking tool complains if you add a driver for a compatible
-> that doesn't have a DT binding). Generic restructurings could be before
-> the DT patch, of course, but usually I like to keep the DT binding
-> changes at the very beginning of the series.
-> 
-
-Okay, I will keep the compatible-append in the binding as the first
-patch in the series, before the other general structurings.
-
-Thank you!
+> >  		rt_rq = group_rt_rq(rt_se);
+> >  	} while (rt_rq);
+> >  
+>
 
 
-Regards
-Aradhya
+
+-- 
+
