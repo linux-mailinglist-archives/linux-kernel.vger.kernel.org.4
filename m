@@ -2,50 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FF2568BE3B
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 14:31:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AD5168BE3D
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 14:32:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbjBFNbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 08:31:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36442 "EHLO
+        id S229946AbjBFNcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 08:32:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbjBFNbv (ORCPT
+        with ESMTP id S229938AbjBFNb6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 08:31:51 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E941723D9E
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 05:31:03 -0800 (PST)
+        Mon, 6 Feb 2023 08:31:58 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 160AD241E7
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 05:31:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675690263;
+        s=mimecast20190719; t=1675690268;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=p/yG4J9Ql/bW+p/xKSR25YcUKgBdXeKMyLfAbvdTBhw=;
-        b=JT4jYV50+2FYadjxUDlO4lvTKUZlWt5Uuhexi7DM7gGhhdX5mhUfdI1e3w0qrAeniQ2CYp
-        RE0bBnWeicHdOtSTE5YXbBnbaOJ+7YndOBtnQsnlhYC62rtAl/uR0ryrWvF0FQ4Szlapie
-        0kM/BVbAclmifG6b6wHZGhSpEyngGco=
+        bh=MPpoCAzy3QGdRF5CjYYrnG2pjs3nd8X+mOalE/GKH1k=;
+        b=CRYfxYM7mQ35Ru17gTmOGRx6dIZ4RAkTQ0tKzXZOn0PY0WVN0JemQzGE/18GD9DriXIWcI
+        uP3N16v9kd9dRdo43WjVukReo02/w9es0r+PjAQg3tGz6rd2mHPxodoR5UHY2NAsfBjsrz
+        pTHvNDrmCP+QK83DRXomtJWMYd9WPmY=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-582-tTA3LfPHOqapV-1ICjxHhA-1; Mon, 06 Feb 2023 08:31:01 -0500
-X-MC-Unique: tTA3LfPHOqapV-1ICjxHhA-1
+ us-mta-37-wkXYcvevOO-JkyuVoZzCPA-1; Mon, 06 Feb 2023 08:31:04 -0500
+X-MC-Unique: wkXYcvevOO-JkyuVoZzCPA-1
 Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8E1FE3828888;
-        Mon,  6 Feb 2023 13:31:01 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C73B81C05147;
+        Mon,  6 Feb 2023 13:31:03 +0000 (UTC)
 Received: from plouf.local (ovpn-192-160.brq.redhat.com [10.40.192.160])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CEA51492B21;
-        Mon,  6 Feb 2023 13:31:00 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D5B88492B21;
+        Mon,  6 Feb 2023 13:31:01 +0000 (UTC)
 From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-To:     jikos@kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xin Zhao <xnzhao@google.com>
-In-Reply-To: <20230130212947.1315941-1-xnzhao@google.com>
-References: <20230130212947.1315941-1-xnzhao@google.com>
-Subject: Re: [PATCH] HID: core: Fix deadloop in hid_apply_multiplier.
-Message-Id: <167569026047.2830974.6190968641295254608.b4-ty@redhat.com>
-Date:   Mon, 06 Feb 2023 14:31:00 +0100
+To:     linux-input@vger.kernel.org, Bastien Nocera <hadess@hadess.net>
+Cc:     linux-kernel@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
+        "Peter F . Patel-Schneider" <pfpschneider@gmail.com>,
+        =?utf-8?q?Filipe_La=C3=ADns?= <lains@riseup.net>,
+        Nestor Lopez Casado <nlopezcasad@logitech.com>,
+        Tobias Klausmann <klausman@schwarzvogel.de>,
+        stable@vger.kernel.org
+In-Reply-To: <20230203101800.139380-1-hadess@hadess.net>
+References: <20230203101800.139380-1-hadess@hadess.net>
+Subject: Re: [PATCH] HID: logitech: Disable hi-res scrolling on USB
+Message-Id: <167569026165.2830974.5581534197133188329.b4-ty@redhat.com>
+Date:   Mon, 06 Feb 2023 14:31:01 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -60,24 +65,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 30 Jan 2023 21:29:47 +0000, Xin Zhao wrote:
-> The initial value of hid->collection[].parent_idx if 0. When
-> Report descriptor doesn't contain "HID Collection", the value
-> remains as 0.
+On Fri, 03 Feb 2023 11:18:00 +0100, Bastien Nocera wrote:
+> On some Logitech mice, such as the G903, and possibly the G403, the HID
+> events are generated on a different interface to the HID++ one.
 > 
-> In the meanwhile, when the Report descriptor fullfill
-> all following conditions, it will trigger hid_apply_multiplier
-> function call.
-> 1. Usage page is Generic Desktop Ctrls (0x01)
-> 2. Usage is RESOLUTION_MULTIPLIER (0x48)
-> 3. Contain any FEATURE items
+> If we enable hi-res through the HID++ interface, the HID interface
+> wouldn't know anything about it, and handle the events as if they were
+> regular scroll events, making the mouse unusable.
 > 
 > [...]
 
 Applied to hid/hid.git (for-6.2/upstream-fixes), thanks!
 
-[1/1] HID: core: Fix deadloop in hid_apply_multiplier.
-      https://git.kernel.org/hid/hid/c/ea427a222d8b
+[1/1] HID: logitech: Disable hi-res scrolling on USB
+      https://git.kernel.org/hid/hid/c/690eb7dec72a
 
 Cheers,
 -- 
