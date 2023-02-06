@@ -2,174 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F59F68C0CC
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 15:58:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B49BD68C02F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 15:34:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231162AbjBFO55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 09:57:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41056 "EHLO
+        id S230257AbjBFOeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 09:34:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230101AbjBFO5t (ORCPT
+        with ESMTP id S229590AbjBFOeX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 09:57:49 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF0DB30E9;
-        Mon,  6 Feb 2023 06:57:47 -0800 (PST)
-Date:   Mon, 06 Feb 2023 14:57:46 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1675695466;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=btbN0AE/UGdyFWTJPvRWHlPDrIrpiFlhuBh5UGVrx1M=;
-        b=u8WcgwveZlDlKTB3PcAF2v8Of5TluA/5O2okM/udiJdqGcn3zBrt4lE8VErBZlnttYp3cy
-        Zp94ttwdU5BSpN5dLorBjvDpgwDTO0kZhSdthcVcYi6VfCIxv38vUOn66M1tPrwELRaxUV
-        ALnh+7/7PeRixhwIR79L3rv9rMyHjlRkER1r19cd8cLDdozjmKLoh1ESQ2gNSziAGQwTad
-        1v6OtcqOf69vVc0u7alP2Dtnab9322ulbpuWmTcNgGr0BN5IMmPjwz/ntbXnWFXwpb3UeW
-        yocTEFGKjOKbhQnrQfBsJ2I5nUo36jo89vZ8ADrO7VCPK0gv7cyV/MTrCRNFcA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1675695466;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=btbN0AE/UGdyFWTJPvRWHlPDrIrpiFlhuBh5UGVrx1M=;
-        b=YthzoUKr3G3xki8S9TZwIoJ2oP0ChNzjwit+Y3+AbIY/gqiTRAFh9BkbY/xIMqWFhea0Ac
-        haHRXFnb6mpOoLDw==
-From:   "tip-bot2 for Sebastian Andrzej Siewior" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/vdso] x86/cpu: Provide the full setup for getcpu() on x86-32
-Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Roland Mainz <roland.mainz@nrubsig.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20221125094216.3663444-2-bigeasy@linutronix.de>
-References: <20221125094216.3663444-2-bigeasy@linutronix.de>
+        Mon, 6 Feb 2023 09:34:23 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91DCC23C49;
+        Mon,  6 Feb 2023 06:34:16 -0800 (PST)
+Received: from kwepemm600002.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4P9TGx5f68zRrrC;
+        Mon,  6 Feb 2023 22:31:53 +0800 (CST)
+Received: from localhost.localdomain (10.175.127.227) by
+ kwepemm600002.china.huawei.com (7.193.23.29) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Mon, 6 Feb 2023 22:34:13 +0800
+From:   Zhong Jinghua <zhongjinghua@huawei.com>
+To:     <josef@toxicpanda.com>, <axboe@kernel.dk>
+CC:     <linux-block@vger.kernel.org>, <nbd@other.debian.org>,
+        <linux-kernel@vger.kernel.org>, <zhongjinghua@huawei.com>,
+        <yi.zhang@huawei.com>, <yukuai3@huawei.com>, <houtao1@huawei.com>,
+        <yangerkun@huawei.com>
+Subject: [PATCH-next] nbd: fix incomplete validation of ioctl arg
+Date:   Mon, 6 Feb 2023 22:58:05 +0800
+Message-ID: <20230206145805.2645671-1-zhongjinghua@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Message-ID: <167569546601.4906.5987162401774591165.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600002.china.huawei.com (7.193.23.29)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/vdso branch of tip:
+We tested and found an alarm caused by nbd_ioctl arg without verification.
+The UBSAN warning calltrace like below:
 
-Commit-ID:     717cce3bdcf34705417f641bf2fcdf9b038ec36c
-Gitweb:        https://git.kernel.org/tip/717cce3bdcf34705417f641bf2fcdf9b038ec36c
-Author:        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-AuthorDate:    Fri, 25 Nov 2022 10:42:14 +01:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Mon, 06 Feb 2023 15:48:54 +01:00
+UBSAN: Undefined behaviour in fs/buffer.c:1709:35
+signed integer overflow:
+-9223372036854775808 - 1 cannot be represented in type 'long long int'
+CPU: 3 PID: 2523 Comm: syz-executor.0 Not tainted 4.19.90 #1
+Hardware name: linux,dummy-virt (DT)
+Call trace:
+ dump_backtrace+0x0/0x3f0 arch/arm64/kernel/time.c:78
+ show_stack+0x28/0x38 arch/arm64/kernel/traps.c:158
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0x170/0x1dc lib/dump_stack.c:118
+ ubsan_epilogue+0x18/0xb4 lib/ubsan.c:161
+ handle_overflow+0x188/0x1dc lib/ubsan.c:192
+ __ubsan_handle_sub_overflow+0x34/0x44 lib/ubsan.c:206
+ __block_write_full_page+0x94c/0xa20 fs/buffer.c:1709
+ block_write_full_page+0x1f0/0x280 fs/buffer.c:2934
+ blkdev_writepage+0x34/0x40 fs/block_dev.c:607
+ __writepage+0x68/0xe8 mm/page-writeback.c:2305
+ write_cache_pages+0x44c/0xc70 mm/page-writeback.c:2240
+ generic_writepages+0xdc/0x148 mm/page-writeback.c:2329
+ blkdev_writepages+0x2c/0x38 fs/block_dev.c:2114
+ do_writepages+0xd4/0x250 mm/page-writeback.c:2344
 
-x86/cpu: Provide the full setup for getcpu() on x86-32
+The reason for triggering this warning is __block_write_full_page()
+-> i_size_read(inode) - 1 overflow.
+inode->i_size is assigned in __nbd_ioctl() -> nbd_set_size() -> bytesize.
+We think it is necessary to limit the size of arg to prevent errors.
 
-setup_getcpu() configures two things:
+Moreover, __nbd_ioctl() -> nbd_add_socket(), arg will be cast to int.
+Assuming the value of arg is 0x80000000000000001) (on a 64-bit machine),
+it will become 1 after the coercion, which will return unexpected results.
 
-  - it writes the current CPU & node information into MSR_TSC_AUX
-  - it writes the same information as a GDT entry.
+Fix it by adding checks to prevent passing in too large numbers.
 
-By using the "full" setup_getcpu() on i386 it is possible to read the CPU
-information in userland via RDTSCP() or via LSL from the GDT.
-
-Provide an GDT_ENTRY_CPUNODE for x86-32 and make the setup function
-unconditionally available.
-
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Reviewed-by: Roland Mainz <roland.mainz@nrubsig.org>
-Link: https://lore.kernel.org/r/20221125094216.3663444-2-bigeasy@linutronix.de
-
+Signed-off-by: Zhong Jinghua <zhongjinghua@huawei.com>
 ---
- arch/x86/include/asm/segment.h | 8 ++++----
- arch/x86/kernel/cpu/common.c   | 4 +---
- 2 files changed, 5 insertions(+), 7 deletions(-)
+ drivers/block/nbd.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/arch/x86/include/asm/segment.h b/arch/x86/include/asm/segment.h
-index c390a67..794f696 100644
---- a/arch/x86/include/asm/segment.h
-+++ b/arch/x86/include/asm/segment.h
-@@ -96,7 +96,7 @@
-  *
-  *  26 - ESPFIX small SS
-  *  27 - per-cpu			[ offset to per-cpu data area ]
-- *  28 - unused
-+ *  28 - VDSO getcpu
-  *  29 - unused
-  *  30 - unused
-  *  31 - TSS for double fault handler
-@@ -119,6 +119,7 @@
+diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
+index 592cfa8b765a..e1c954094b6c 100644
+--- a/drivers/block/nbd.c
++++ b/drivers/block/nbd.c
+@@ -325,6 +325,9 @@ static int nbd_set_size(struct nbd_device *nbd, loff_t bytesize,
+ 	if (blk_validate_block_size(blksize))
+ 		return -EINVAL;
  
- #define GDT_ENTRY_ESPFIX_SS		26
- #define GDT_ENTRY_PERCPU		27
-+#define GDT_ENTRY_CPUNODE		28
- 
- #define GDT_ENTRY_DOUBLEFAULT_TSS	31
- 
-@@ -159,6 +160,8 @@
- # define __KERNEL_PERCPU		0
- #endif
- 
-+#define __CPUNODE_SEG			(GDT_ENTRY_CPUNODE*8 + 3)
++	if (bytesize < 0)
++		return -EINVAL;
 +
- #else /* 64-bit: */
+ 	nbd->config->bytesize = bytesize;
+ 	nbd->config->blksize_bits = __ffs(blksize);
  
- #include <asm/cache.h>
-@@ -226,8 +229,6 @@
- #define GDT_ENTRY_TLS_ENTRIES		3
- #define TLS_SIZE			(GDT_ENTRY_TLS_ENTRIES* 8)
+@@ -1111,6 +1114,9 @@ static int nbd_add_socket(struct nbd_device *nbd, unsigned long arg,
+ 	struct nbd_sock *nsock;
+ 	int err;
  
--#ifdef CONFIG_X86_64
--
- /* Bit size and mask of CPU number stored in the per CPU data (and TSC_AUX) */
- #define VDSO_CPUNODE_BITS		12
- #define VDSO_CPUNODE_MASK		0xfff
-@@ -265,7 +266,6 @@ static inline void vdso_read_cpunode(unsigned *cpu, unsigned *node)
- }
- 
- #endif /* !__ASSEMBLY__ */
--#endif /* CONFIG_X86_64 */
- 
- #ifdef __KERNEL__
- 
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index 3a9043e..a26ce20 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -2124,7 +2124,6 @@ static void wait_for_master_cpu(int cpu)
- #endif
- }
- 
--#ifdef CONFIG_X86_64
- static inline void setup_getcpu(int cpu)
- {
- 	unsigned long cpudata = vdso_encode_cpunode(cpu, early_cpu_to_node(cpu));
-@@ -2146,6 +2145,7 @@ static inline void setup_getcpu(int cpu)
- 	write_gdt_entry(get_cpu_gdt_rw(cpu), GDT_ENTRY_CPUNODE, &d, DESCTYPE_S);
- }
- 
-+#ifdef CONFIG_X86_64
- static inline void ucode_cpu_init(int cpu)
- {
- 	if (cpu)
-@@ -2165,8 +2165,6 @@ static inline void tss_setup_ist(struct tss_struct *tss)
- 
- #else /* CONFIG_X86_64 */
- 
--static inline void setup_getcpu(int cpu) { }
--
- static inline void ucode_cpu_init(int cpu)
- {
- 	show_ucode_info_early();
++	/* Arg will be cast to int, check it to avoid overflow */
++	if (arg > INT_MAX)
++		return -EINVAL;
+ 	sock = nbd_get_socket(nbd, arg, &err);
+ 	if (!sock)
+ 		return err;
+-- 
+2.31.1
+
