@@ -2,81 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C0F868C55D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 19:07:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1C2F68C561
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 19:07:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230181AbjBFSHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 13:07:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59404 "EHLO
+        id S229722AbjBFSHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 13:07:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbjBFSHH (ORCPT
+        with ESMTP id S229774AbjBFSHo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 13:07:07 -0500
-Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B9A23115;
-        Mon,  6 Feb 2023 10:07:05 -0800 (PST)
-Received: by mail-ed1-x543.google.com with SMTP id r3so2812786edq.13;
-        Mon, 06 Feb 2023 10:07:05 -0800 (PST)
+        Mon, 6 Feb 2023 13:07:44 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1B123872
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 10:07:42 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id m2so13030512plg.4
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 10:07:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=M/180nd6PQXi3CnBsI9/SGgqyujAYT8iG4l6zuBW2bg=;
-        b=f7I99ybdPkKVTn4MSow6UxAV1DpjXcdrEY+8vQtEUlb/P18vYEMUkPOqsujBEapwGs
-         REiiTamXNEuMp5oeyNje5KdZu2mHTn1kiZCPZ8iQXxkM6guU//X63x6/1+2ufYEYPA8y
-         /10AMPOAvk42INsQtC1KqBZpjN44TDUbNZeuLOS7OHkBOt3PWdQUC5k/fVB2RAIoEdW5
-         9vrbBMBvlqk9gLpiaM6NeQuHiJXvvq7TgYb4ZJ1BeNgifzo1eBIQPGH9Z+amTYTAJRMo
-         OFJQD3c8fMbAvEm6Gf4HW7ZfPbOxC34wqK07uCEuefGm4kc9Bc2zt075kXRPdVSYWGf2
-         q2bg==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=qtgxlCHcEg9/GzAJkVDlK65BAtBBeUjha9tRmSPN4Fk=;
+        b=m0F2ArAPmzZy09CrcjGX7iTzr+uhlPBQ555MwCtERC8mt63i+Xhj7AiosNKzev2DN6
+         c55LVAwhrehy+4ivJEiS0u3Z4e8RtCVNwQ+hUWLBqGM4KLcFfyVkUefMzryCi/WOc6dk
+         mvZ9xkMCr1A19Qu+xTfKPOGtjb4qEmEgE7RuQceNAjCkuY7zZ6Gvm1vxsHW4bFS7fTtR
+         Q2jxmXu3X7kZPVjfEqW6Cn+uJRF9nPh/D0CEse+ZGKymRshTejV6rfl5J//NvCHQWjOY
+         K/T3LABwVp5Knbn/MtITU6ILke3Y54fIkWFBBvXLWkCOMhb56tMI77sCNqON4XcRKEVf
+         HnVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=M/180nd6PQXi3CnBsI9/SGgqyujAYT8iG4l6zuBW2bg=;
-        b=VrPuSg4+UEiApvA0Oq19kQTDBeiJG4UfgW0xRJO5TV5025Jqy+rYJJ2yyWuFJRoFF5
-         s82R5JUeFPBX6iUaxYYFFb1eXHHx49WQ61CC/J98iRo5MqUwAiJaX2JSa9kfN627wNwg
-         gqfXwemsC2paP7hZ7DCNlTTe2NM9JFcD0Uy4dKy9n2GXSIO65cWUNiXnGvShGYKGR3EQ
-         PbvxkqT2Qf2M4xQQmF3CGzMJnLH/hgxeqT73JiUBPu+UKT8yOs5kFyBXwkl5xPr+cAqU
-         pdrDRWuqUBJA6TXtBrB0n6swaI6fmJfSfD6la4opDlTvNu8fONpfPqcTpFpPe7zD1i10
-         QbeQ==
-X-Gm-Message-State: AO0yUKWoLJNJhhsz06ZpBYL3Z9CwbLV/He09uPgQ2adsBw6LxKvHkl9v
-        VDq+T540IBBhXsSF1uMj3pI=
-X-Google-Smtp-Source: AK7set++i8bypk9HDCZcSpM1KxhgBSRKCPWUtOCLf4fG2YXpHtT9Ys2W0KORYhaiXqk5T6ylH8LeCw==
-X-Received: by 2002:a50:9e42:0:b0:4a0:d0b7:1fbc with SMTP id z60-20020a509e42000000b004a0d0b71fbcmr535344ede.14.1675706823958;
-        Mon, 06 Feb 2023 10:07:03 -0800 (PST)
-Received: from smtpclient.apple (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.gmail.com with ESMTPSA id v4-20020a056402348400b0049ef04ad502sm5354240edc.40.2023.02.06.10.07.03
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 06 Feb 2023 10:07:03 -0800 (PST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.400.51.1.1\))
-Subject: Re: [PATCH] x86/sgx: Avoid using iterator after loop in
- sgx_mmu_notifier_release()
-From:   Jakob Koschel <jkl820.git@gmail.com>
-In-Reply-To: <1dbc9402-5baf-4a92-96b3-8b3a9c108f01@intel.com>
-Date:   Mon, 6 Feb 2023 19:06:50 +0100
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        linux-sgx@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Pietro Borrello <borrello@diag.uniroma1.it>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <FF4E5F98-A2C5-405D-B538-1AD789E4F989@gmail.com>
-References: <20230206-sgx-use-after-iter-v1-1-c09fb5300b5e@gmail.com>
- <1dbc9402-5baf-4a92-96b3-8b3a9c108f01@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-X-Mailer: Apple Mail (2.3731.400.51.1.1)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qtgxlCHcEg9/GzAJkVDlK65BAtBBeUjha9tRmSPN4Fk=;
+        b=IuXZ4XtNoyR+WktThu3WTUg5K+9+cbjg8OO63lXCzxudnjCH3/5Yf61itMXulpQLkg
+         V8UYJfXtezQfZ4pMf9HSSojqCwPIM8V13/C+BBmrkivd5HM4koo4TEKWkF0pXAyUGxOt
+         nFDs0jBz7EUlllHvvD1+3DKste6VX6eIMjjwtOMNySq6TcA2zX0VEC4FeyspzAgwW8dU
+         5QHBtieqqCjYU7hZrkvKWLWDXLoc5rdbUQ+dvDpjZqnNG0oFkXaxylDUbf9IbmuXhSWr
+         xgy/5GXrvWl0Q/YOb6AsZAdt5YwmJYeACz232A84eI/K24VbhpdWKrdsoxkYDKkrN4DV
+         J9wA==
+X-Gm-Message-State: AO0yUKUFuaQlE3b8a6XCl2Lxm+iRk+A1mgNpjRNQm7sZw7x474eNrm0k
+        WPOm5U2a1uM1N8P4MKVoaWhKZw==
+X-Google-Smtp-Source: AK7set+FNGN/RCOWlSdzdtzluoZ+K/foAvCsXIhYX06GiwX2da2SFNcUJTaK2kNEudSPg/pNZymBaA==
+X-Received: by 2002:a17:903:40ce:b0:189:6624:58c0 with SMTP id t14-20020a17090340ce00b00189662458c0mr39207pld.3.1675706861570;
+        Mon, 06 Feb 2023 10:07:41 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id o6-20020a637306000000b004d346876d37sm6458097pgc.45.2023.02.06.10.07.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Feb 2023 10:07:40 -0800 (PST)
+Date:   Mon, 6 Feb 2023 18:07:37 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Usama Arif <usama.arif@bytedance.com>
+Cc:     David Woodhouse <dwmw2@infradead.org>,
+        Arjan van de Ven <arjan@linux.intel.com>,
+        Kim Phillips <kim.phillips@amd.com>, tglx@linutronix.de,
+        rja@hpe.com, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
+        pbonzini@redhat.com, paulmck@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
+        thomas.lendacky@amd.com, pmenzel@molgen.mpg.de,
+        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
+        simon.evans@bytedance.com, liangma@liangbit.com,
+        Mario Limonciello <Mario.Limonciello@amd.com>
+Subject: Re: [External] Re: [PATCH v6 07/11] x86/smpboot: Disable parallel
+ boot for AMD CPUs
+Message-ID: <Y+FB6f6MEBy2g3Ft@google.com>
+References: <20230202215625.3248306-1-usama.arif@bytedance.com>
+ <20230202215625.3248306-8-usama.arif@bytedance.com>
+ <b3d9fbbf-e760-5d1d-9182-44c144abd1bf@amd.com>
+ <d3ec562fd2e03c3aef9534f64915a14a8cb89ae1.camel@infradead.org>
+ <5ba476f3-e0ac-d630-ce1d-18ab9885496f@linux.intel.com>
+ <E2286684-F8AD-4708-9A3D-74C5EAE183B4@infradead.org>
+ <434b4b74-54ab-68a3-4a81-9cc02ea75e39@bytedance.com>
+ <411cbdb2c8255e48f3e65c59a98bc02410f5dfc7.camel@infradead.org>
+ <de7524ce-563c-2ff6-84a5-6a347c36855b@bytedance.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <de7524ce-563c-2ff6-84a5-6a347c36855b@bytedance.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,86 +93,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Feb 06, 2023, Usama Arif wrote:
+> 
+> 
+> On 06/02/2023 08:05, David Woodhouse wrote:
+> > On Sun, 2023-02-05 at 22:13 +0000, Usama Arif wrote:
+> > > 
+> > > 
+> > > On 04/02/2023 22:31, David Woodhouse wrote:
+> > > > 
+> > > > 
+> > > > On 4 February 2023 18:18:55 GMT, Arjan van de Ven <arjan@linux.intel.com> wrote:
+> > > > > > 
+> > > > > > However...
+> > > > > > 
+> > > > > > Even though we *can* support non-X2APIC processors, we *might* want to
+> > > > > > play it safe and not go back that far; only enabling parallel bringup
+> > > > > > on machines with X2APIC which roughly correlates with "lots of CPUs"
+> > > > > > since that's where the benefit is.
+> > > > > 
+> > > > > I think that this is the right approach, at least on the initial patch series.
+> > > > > KISS principle; do all the easy-but-important cases first, get it stable and working
+> > > > > and in later series/kernels the range can be expanded.... if it matters.
+> > > > 
+> > > > Agreed. I'll split it to do it only with X2APIC for the initial series,
 
+And sanity check CPUID.0xB output even when x2APIC is supported, e.g. require
+CPUID.0xB.EBX to be non-zero.  Odds are very good that there are VMs in the wild
+that support x2APIC but have an empty CPUID.0xB due to it being a topology leaf,
+i.e. may be suppressed when vCPUs aren't pinned.  QEMU even has a knob to deliberately
+disable CPUID.0xB, e.g. booting a VM with
 
-> On 6. Feb 2023, at 18:10, Dave Hansen <dave.hansen@intel.com> wrote:
->=20
-> On 2/6/23 02:39, Jakob Koschel wrote:
->> If &encl_mm->encl->mm_list does not contain the searched 'encl_mm',
->> 'tmp' will not point to a valid sgx_encl_mm struct.
->>=20
->> Since the code within the guarded block is just called when the =
-element
->> is found, it can simply be moved into the list iterator.
->> Within the list iterator 'tmp' is guaranteed to point to a valid
->> element.
->>=20
->> Signed-off-by: Jakob Koschel <jkl820.git@gmail.com>
->> ---
->> Linus proposed to avoid any use of the list iterator variable after =
-the
->> loop, in the attempt to move the list iterator variable declaration =
-into
->> the marcro to avoid any potential misuse after the loop.
->> Using it in a pointer comparision after the loop is undefined =
-behavior
->> and should be omitted if possible [1].
->=20
-> I think there's a big difference between "undefined behavior" and
-> "someone wants to flip a switch to *make* this undefined behavior".  =
-My
-> understanding is that this patch avoids behavior which _is_ defined =
-today.
->=20
-> Is there some effort to change this behavior across the tree that I =
-missed?
+ cpu host,host-phys-bits,-cpuid-0xb,+x2apic
 
-Some background information if interested:=20
+works just fine.
 
-If 'encl_mm' was not found, 'tmp' always points somewhere into =
-'sgx_encl'.
-In that case it is not possible to match 'encl_mm' (if 'encl_mm' always
-points to a valid struct).
+> > > > and then hold the CPUID 0x1 part back for the next phase.
+> > > This was an interesting find! I tested the latest branch
+> > > parallel-6.2-rc6 and it works well. The numbers from Russ makes the
+> > > patch series look so much better! :)
+> > > 
+> > > If we do it with x2apic only and not support non-x2apic CPUID 0x1 case,
+> > > maybe we apply the following diff to part 1?
+> > 
+> > Using x2apic_mode would also disable parallel boot when the CPU *does*
+> > have X2APIC support but the kernel just isn't using it at the moment. I
+> > think boot_cpu_has(X86_FEATURE_X2APIC) is the better criterion?
+> > 
+> 
+> x2apic_mode is set to 0 only in the case when nox2apic is specified in the
+> kernel cmdline or if x2apic_setup fails. As 0xB leaf gets the "x2apic id"
+> and not the "apic id", I thought it would be better to not use the x2apic id
+> if the user doesnt want to use x2apic (cmdline), or the kernel fails to set
+> it up.
 
-It's still used as a 'struct sgx_encl_mm' pointer even though the memory
-it is pointing to is something completely different, which I would argue
-is undefined behavior.=20
-(I would argue not all undefined behavior is automatically exploitable =
-or
-causing a bug)
+I agree with David that checking boot_cpu_has(X86_FEATURE_X2APIC) is preferred,
+x2APIC goes unused on a lot of platforms due to the kernel's interrupt remapping
+requirement.  I would rather have a single explicit "no_parallel_bringup" option
+than try to infer the user's intentions based on tangentially related params.
 
-[1] shows some effort on removing any use of the list iterator variable
-after the loop, so ideally it can be declared within the macro itself.
-I've showcased a similar case to this becoming an issue after reordering
-certain struct members in [2].
+> Another thing I noticed from the Intel Architecture Manual CPUID—CPU
+> Identification section:
+> 
+> "CPUID leaf 1FH is a preferred superset to leaf 0BH. Intel recommends first
+> checking for the existence of Leaf 1FH before using leaf 0BH."
+> 
+> So I think we should switch from 0BH to using the 1FH leaf EDX register.
 
-Some more information here [3], [4].
+I don't think using 0x1F will buy us anything except complexity.  0x1F provides more
+details on the topology, but its x2APIC ID enumeration isn't any more trustworthy
+than 0xB.
 
->=20
-> In any case, this patch also kinda breaks the rule that you're =
-supposed
-> to make the common path through the code at the lowest nesting level.
-> It makes the common case look like some kind of error handling.  Would
-> something like the attached patch work?<sgxmm.patch>
+> > I was thinking I'd tweak the 'no_parallel_bringup' command line
+> > argument into something that also allows us to *enable* it without
+> > X2APIC being supported.
+> > 
+> > But I've also been pondering the fact that this is all only for 64-bit
+> > anyway. It's not like we're doing it for the zoo of ancient i586 and
+> > even i486 machines where the APICs were hooked up with blue wire and
+> > duct tape.
 
-of course! Actually the way I would have preferred.
+The only thing I can see benefiting from parallel bringup without x2APIC is large
+VMs running on pre-x2AVIC hardware.  E.g. IIRC, we (Google) hide x2APIC on AMD-based
+VMs so that VMs would take advantage of AVIC acceleration if AVIC were even to be
+enabled.
 
-I've posted several patches fixing those cases all across the tree and
-always got mixed feedback.=20
-(I proposed your way to others and was asked to change it into the
-way I posted it and vice versa).
+But that's more of an argument for "try to use CPUID.0x1" than it is an argument
+for trying to use CPUID.0xB without x2APIC.
 
-I'm happy to change it to the way you proposed way in v2 ;) Thanks!
-
-- Jakob
-
-Link: =
-https://lore.kernel.org/all/CAHk-=3DwgRr_D8CB-D9Kg-c=3DEHreAsk5SqXPwr9Y7k9=
-sA6cWXJ6w@mail.gmail.com/ [1]
-Link: =
-https://lore.kernel.org/all/86C4CE7D-6D93-456B-AA82-F8ADEACA40B7@gmail.com=
-/ [2]
-Link: https://lwn.net/Articles/885941/ [3]
-Link: https://lwn.net/Articles/887097/ [4]
-
-
+> > Maybe "64-bit only" is good enough, with a command line opt-out. And
+> > maybe a printk pointing out the existence of that command line option
+> > before the bringup, just in case?
