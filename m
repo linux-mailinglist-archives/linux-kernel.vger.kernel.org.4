@@ -2,35 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33FDC68B75F
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 09:30:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 837DC68B760
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 09:30:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbjBFIab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 03:30:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51694 "EHLO
+        id S229963AbjBFIaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 03:30:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbjBFIa3 (ORCPT
+        with ESMTP id S229969AbjBFIac (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 03:30:29 -0500
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C3A7C1C7FA
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 00:30:24 -0800 (PST)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 3168UIbo006320;
-        Mon, 6 Feb 2023 09:30:18 +0100
-Date:   Mon, 6 Feb 2023 09:30:18 +0100
-From:   Willy Tarreau <w@1wt.eu>
-To:     Vincent Dagonneau <v@vda.io>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/4] tools/nolibc: Adding stdint.h, more integer types
- and tests
-Message-ID: <Y+C6mj4F77U43atS@1wt.eu>
-References: <20230206013248.471664-1-v@vda.io>
+        Mon, 6 Feb 2023 03:30:32 -0500
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27D051A49F
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 00:30:30 -0800 (PST)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 75D241C0012;
+        Mon,  6 Feb 2023 08:30:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1675672229;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OMj5Fs+cE7htz9baKVtZ700BYz9yyPIfXJqXxrqoEi4=;
+        b=SNEwGb9Pn9HOlCtzKReMZNxO+N3A3DzDLn4rSE1lREh4Z5ybrWudDu+Qeky0Bnj4EJQe46
+        7LspwC0yNko51n52GuRycvGg0NFbqR6NVdIciW1TCZSp9pAEB4WEwLI8yWOskN+S/11UDx
+        SFruYQ/YqOC80gNV39hVpAIySvDCpN5lmU3KKTtdxJFqEAbzgk0pLUKX0EjSzUQ6dLN2h7
+        JNhHlbNDcnyzA0uGh0uc9HA4AdkyrEd5S2wEGY8ElYRqBLM0KA6DSYYq4oXPtbFS69U4Bx
+        yK4gs3Z8mfOUhhK1RegMGagcHvfQS7CPz0O6OjP0BuoMaF5kxlQnNwNaYL4TYg==
+Date:   Mon, 6 Feb 2023 09:30:26 +0100
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
+        tiwai@suse.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH] ASoC: codecs: Fix unsigned comparison with less than
+ zero
+Message-ID: <20230206093026.6236eea2@bootlin.com>
+In-Reply-To: <20230206075518.84169-1-jiapeng.chong@linux.alibaba.com>
+References: <20230206075518.84169-1-jiapeng.chong@linux.alibaba.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230206013248.471664-1-v@vda.io>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -38,53 +55,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vincent,
+On Mon,  6 Feb 2023 15:55:18 +0800
+Jiapeng Chong <jiapeng.chong@linux.alibaba.com> wrote:
 
-On Sun, Feb 05, 2023 at 08:32:45PM -0500, Vincent Dagonneau wrote:
-> Hi,
-> 
-> This is version 3 of my patch to add stdint.h to nolibc. Previous
-> versions of this patch are available here:
-> 
-> * v2: https://lore.kernel.org/all/20230202201101.43160-1-v@vda.io/
-> * v1: https://lore.kernel.org/all/20230202160236.25342-1-v@vda.io/
-> 
-> This version should address most of the concerns raised by Willy on the
-> previous version (missing LL, ULL suffixes, uintptr/size_max size).
+> The val is defined as unsigned int type, if(val<0) is redundant, so
+> delete it.
+>=20
+> sound/soc/codecs/idt821034.c:449 idt821034_kctrl_gain_put() warn: unsigne=
+d 'val' is never less than zero.
+>=20
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3D3947
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> ---
+>  sound/soc/codecs/idt821034.c | 2 --
+>  1 file changed, 2 deletions(-)
+>=20
+> diff --git a/sound/soc/codecs/idt821034.c b/sound/soc/codecs/idt821034.c
+> index 5d01787b1c1f..2cc7b9166e69 100644
+> --- a/sound/soc/codecs/idt821034.c
+> +++ b/sound/soc/codecs/idt821034.c
+> @@ -446,8 +446,6 @@ static int idt821034_kctrl_gain_put(struct snd_kcontr=
+ol *kcontrol,
+>  	u8 ch;
+> =20
+>  	val =3D ucontrol->value.integer.value[0];
+> -	if (val < 0)
+> -		return -EINVAL;
+>  	if (val > max - min)
+>  		return -EINVAL;
+> =20
 
-OK thank you, that's much better already. I'm still having a few comments:
-  - please avoid the present participle in the subjects of your commits,
-    the imperative form is generally preferred (e.g: "add foo" instead of
-    "adding foo").
+Acked-by: Herve Codina <herve.codina@bootlin.com>
 
-  - do not forget your signed-off-by on patches.
+Thanks,
+Herv=C3=A9
 
-  - 3rd commit had an empty message. There's always something to say
-    about a change, at least why and what it provides.
-
-  - You still have this definition which is only valid for 64-bit,
-    you will need to move it to your ifdef __WORDSIZE block to adjust
-    it based on the word size:
-
-    #define         SIZE_MAX UINT64_MAX
-
-    Maybe this one should also be part of the tests ?
-
-> I tested it successfully on x86_64 and arm64 (on qemu). I have some
-> trouble setting up my cross compilation chain for i386, arm and mips
-> however.
-
-What compilers do you use ? I'm using version 11.3 from these ones:
-
-  https://mirrors.edge.kernel.org/pub/tools/crosstool/
-
-All supported archs work fine for me. Usually on x86_64 you can even
-start the i386 binaries locally (if your kernel has COMPAT or COMPAT_32
-built in, which is most often the case). And very commonly arm64 support
-armv7 binaries as well.
-
-Just let me know if I can help you set up your environment, it's always
-a good long-term investment!
-
-Regards,
-Willy
+--=20
+Herv=C3=A9 Codina, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
