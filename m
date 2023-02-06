@@ -2,58 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8822068C7BE
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 21:38:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6116268C7C0
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 21:38:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230284AbjBFUh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 15:37:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39596 "EHLO
+        id S230305AbjBFUiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 15:38:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230266AbjBFUhx (ORCPT
+        with ESMTP id S230327AbjBFUiP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 15:37:53 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FFFC30F4;
-        Mon,  6 Feb 2023 12:37:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1675715871; x=1707251871;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=CS/vfAX5/Ot+oMAZ0EEUA8Xr6RUbaTmuRhID/hDbHrM=;
-  b=V29em4zNrFSFOAk9yoacmCcL6xfq8/rLV1lLmjCGpjvzKEOUmaX0/Kks
-   jECCO30dUY+MglF9uy+Ft9ivVQKUsUwFbu/VdQN59zA9D+x0yzhgm4yZr
-   9NzOHAWnoRoaX7+yuvTqgUoR8PtQj4Tsh4MBXHb1zyrKu+TGqZXi2q8lG
-   LMuNdGKauh739zINhKJLqXfU93is0OKZT0N0v3u+MCIltw4YpvcyiWk5P
-   PWYd4UWKVb+bbMVFPNGmzOvBh+acLFODdxc3VhTrOtwZTAB73ivo2UoyY
-   48WK3qui38uTaLPKSHDjn/5O5YFLVGdDh+YLaC2GuVh/QcTmGE6F684E7
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.97,276,1669100400"; 
-   d="scan'208";a="199188691"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Feb 2023 13:37:49 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 6 Feb 2023 13:37:48 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Mon, 6 Feb 2023 13:37:46 -0700
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <linus.walleij@linaro.org>, <alexandre.belloni@bootlin.com>,
-        <andy.shevchenko@gmail.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: [PATCH] pinctrl: ocelot: Fix alt mode for ocelot
-Date:   Mon, 6 Feb 2023 21:37:20 +0100
-Message-ID: <20230206203720.1177718-1-horatiu.vultur@microchip.com>
-X-Mailer: git-send-email 2.38.0
+        Mon, 6 Feb 2023 15:38:15 -0500
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E849083DF
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 12:38:07 -0800 (PST)
+Received: by mail-yb1-xb2d.google.com with SMTP id d189so7914916ybc.0
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 12:38:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=p7ue1zRU/AjU5knacS3GDq7lajmNru08tnSXNxYZ0Gw=;
+        b=BHQbX5u1aQjTGJ1iP02gP7C0QSZh7RNID/98p3Gti/sTWNvXOb+gt3LwB4/Uc7gkZP
+         3GEPsR084v4Y0fRYnVQXN78I4o7okvqXp3PXfcH4GP4+L4PSVu8uy1tyQyaOOE7lbLcs
+         Fo7hfGgcMEvvAFzYESxq//p8nL6SfxRmjoriOJvjljK0cie+wYgUN7SJeOalP+EhWpgW
+         bly8+GUnTgUTD5D0KZ3uNFU4vdPn5gvuaRC/UJ5LjRB+aNSnGzflUs1D14KNmaBpUcnt
+         60IU7w969ZTJ9VVmRpVLldsvXmNZp73T2c2j1l4hw7TCf8aGfK+4L7V5TqndMk8ggUAY
+         Azrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=p7ue1zRU/AjU5knacS3GDq7lajmNru08tnSXNxYZ0Gw=;
+        b=dSFlDFO3TOFUkbYs1UBkVM7g5OSBhcuZyZFvWnr/rz6mAyln/jA8GC/ZTK3z67/f1W
+         oD3hpR3UEWuh9TD0C7ekfPGDNCdEn1afIafmzXcwCxdfdzaLXJFdAYZTDIuzShPMu3Hh
+         3MeS/0XjsybT9kabneH+vgaoPUWH7Mkluw2coxLUO4FjsOH1wJCr9ozuFGfKVZi+Vrt5
+         3JZ1is8gqIQWZzYrI1P3JzG8T/PZ17YVIc2KvzcZHUzWdIhCwqyo7k5ImOvHDxEL5/+r
+         3zL2wc3UwpFFTmT1E61hUHYKG4g/NAPxUBpTnr8Xq888BBy/0xIy5QY4bkjNUIzT5Pfq
+         Ihvg==
+X-Gm-Message-State: AO0yUKVuxwQcH08Jm+MFT0/0MVsuSVu+blVilD6J0mVtiQC2ljHEt3OD
+        BTIjJ2uYLxocuboguT1fSfTyH5mojzp75nnFvLBc
+X-Google-Smtp-Source: AK7set+WmFVIug6Skz6bZ/gvAML8mj5Vd83GEt/x5/P8BbbID0lkxXu5H30afIDNA+CbTbvxEcM2GMpQq/xcrypJkOU=
+X-Received: by 2002:a25:22d6:0:b0:861:6af2:d2f3 with SMTP id
+ i205-20020a2522d6000000b008616af2d2f3mr122168ybi.330.1675715887097; Mon, 06
+ Feb 2023 12:38:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <20230203200138.3872873-1-jstultz@google.com> <20230203200138.3872873-4-jstultz@google.com>
+ <20230205190548.7auywdoagy6txpla@offworld>
+In-Reply-To: <20230205190548.7auywdoagy6txpla@offworld>
+From:   John Stultz <jstultz@google.com>
+Date:   Mon, 6 Feb 2023 12:37:56 -0800
+Message-ID: <CANDhNCrG5zRZCFdz_k5fnsc8vqNbEu_9++qvR34FW_DXJcpVNA@mail.gmail.com>
+Subject: Re: [PATCH v2 4/4] locktorture: With nested locks, occasionally skip
+ main lock
+To:     Davidlohr Bueso <dave@stgolabs.net>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,31 +75,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In case the driver was trying to set an alternate mode for gpio
-0 or 32 then the mode was not set correctly. The reason is that
-there is computation error inside the function ocelot_pinmux_set_mux
-because in this case it was trying to shift to left by -1.
-Fix this by actually shifting the function bits and not the position.
+On Sun, Feb 5, 2023 at 11:33 AM Davidlohr Bueso <dave@stgolabs.net> wrote:
+> On Fri, 03 Feb 2023, John Stultz wrote:
+>
+> >@@ -754,21 +755,28 @@ static int lock_torture_writer(void *arg)
+> >                       schedule_timeout_uninterruptible(1);
+> >
+> >               lockset_mask = torture_random(&rand);
+> >+              skip_main_lock = nlocks && !(torture_random(&rand) % 100);
+>
+> For the sake of future readers of locktorture.c, this deserves a comment
+> as to why we wanna skip the main lock (copy/paste from the changelog).
 
-Fixes: 4b36082e2e09 ("pinctrl: ocelot: fix pinmuxing for pins after 31")
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
----
- drivers/pinctrl/pinctrl-ocelot.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Good point! I'll send this update out soon.
 
-diff --git a/drivers/pinctrl/pinctrl-ocelot.c b/drivers/pinctrl/pinctrl-ocelot.c
-index 29e4a6282a641..1dcbd0937ef5a 100644
---- a/drivers/pinctrl/pinctrl-ocelot.c
-+++ b/drivers/pinctrl/pinctrl-ocelot.c
-@@ -1204,7 +1204,7 @@ static int ocelot_pinmux_set_mux(struct pinctrl_dev *pctldev,
- 	regmap_update_bits(info->map, REG_ALT(0, info, pin->pin),
- 			   BIT(p), f << p);
- 	regmap_update_bits(info->map, REG_ALT(1, info, pin->pin),
--			   BIT(p), f << (p - 1));
-+			   BIT(p), (f >> 1) << p);
- 
- 	return 0;
- }
--- 
-2.38.0
-
+Thanks again for the review and feedback!
+-john
