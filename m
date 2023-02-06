@@ -2,71 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9F7E68C231
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 16:50:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C37068C236
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 16:51:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230165AbjBFPur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 10:50:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59284 "EHLO
+        id S230422AbjBFPvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 10:51:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbjBFPup (ORCPT
+        with ESMTP id S229557AbjBFPvN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 10:50:45 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD9C0FE
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 07:50:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675698644; x=1707234644;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Z2z46pZ+plYwvmFUk/wU0Ooz61UTdjoZtZP9H7Gsu7I=;
-  b=hvRpWNhPIN0xtFfFsNyVKQxOfGJ5usM4pdrTyrxRwiMQAcyklIu/BdAN
-   vEdB+ZAwpJUnSwuGSqPfIM60zuEUvPZynL6xAjy+ChPsT6QnIpXp55S2s
-   f+830iPcxFvqFkGnbYBxfbNl6vE3tgbY2CY4bXyS7HV15XE9v+Kf5dV2F
-   YdBikP3MXRcXQsShN/DRzqt5v+c7hNG0Jvj2UDTNNtgZ+tWDw/LbkDa4p
-   VSKct529AWYOcS0gYKZ6or5KayeD21VPNLHMevsabWHEEfyFzY3+FFiwq
-   NsK6hQNPIJ+5StXyerewbdWRcQ2GRDRSu161UHPSDdgoCTAVO13gUbxT6
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="308879635"
-X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
-   d="scan'208";a="308879635"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 07:49:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="809179353"
-X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
-   d="scan'208";a="809179353"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga001.fm.intel.com with ESMTP; 06 Feb 2023 07:49:35 -0800
-Received: from [10.212.205.76] (kliang2-mobl1.ccr.corp.intel.com [10.212.205.76])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 1FE4F58068A;
-        Mon,  6 Feb 2023 07:49:14 -0800 (PST)
-Message-ID: <30bc05e4-a479-ad53-22b1-4afca4fa7ec2@linux.intel.com>
-Date:   Mon, 6 Feb 2023 10:49:02 -0500
+        Mon, 6 Feb 2023 10:51:13 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E207285
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 07:51:13 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pP3ls-0001ay-Nv; Mon, 06 Feb 2023 16:51:08 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pP3lq-0035nw-RB; Mon, 06 Feb 2023 16:51:08 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pP3lr-001KRz-2k; Mon, 06 Feb 2023 16:51:07 +0100
+Date:   Mon, 6 Feb 2023 16:51:07 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Wolfram Sang <wsa@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: Re: [PATCH v3] i2c: dev: don't allow user-space to deadlock the
+ kernel
+Message-ID: <20230206155107.qwf5tbrqsbvv4hln@pengutronix.de>
+References: <20230118134940.240102-1-brgl@bgdev.pl>
+ <Y9DpbChLZfDONHPz@ninjato>
+ <Y9GpL9RBNM8H2ZSL@shikoro>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH V3 3/3] perf test: Support the retire_lat check
-Content-Language: en-US
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     peterz@infradead.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, ak@linux.intel.com,
-        eranian@google.com, irogers@google.com
-References: <20230202192209.1795329-1-kan.liang@linux.intel.com>
- <20230202192209.1795329-3-kan.liang@linux.intel.com>
- <Y+EWWLaBj1OPrkLo@kernel.org>
- <8e493d2f-827a-03d9-610b-6246502bf92a@linux.intel.com>
- <Y+EdposucD4mWp6S@kernel.org> <Y+Ed7823ZSXevwA6@kernel.org>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <Y+Ed7823ZSXevwA6@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ol763elobegcycbx"
+Content-Disposition: inline
+In-Reply-To: <Y9GpL9RBNM8H2ZSL@shikoro>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URI_DOTEDU autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -74,119 +57,57 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--ol763elobegcycbx
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 2023-02-06 10:34 a.m., Arnaldo Carvalho de Melo wrote:
-> Em Mon, Feb 06, 2023 at 12:32:54PM -0300, Arnaldo Carvalho de Melo escreveu:
->> Em Mon, Feb 06, 2023 at 10:17:46AM -0500, Liang, Kan escreveu:
->>>
->>>
->>> On 2023-02-06 10:01 a.m., Arnaldo Carvalho de Melo wrote:
->>>> Em Thu, Feb 02, 2023 at 11:22:09AM -0800, kan.liang@linux.intel.com escreveu:
->>>>> From: Kan Liang <kan.liang@linux.intel.com>
->>>>>
->>>>> Add test for the new field for Retire Latency in the X86 specific test.
->>>>
->>>> Is this passing 'perf test' for you?
->>>
->>> Ah, it should be the original V2 missed the below change.
->>
->> Can you please send this as a separate patch as I already merged
->> torvalds/master and added more csets on top, so to just fix it and
->> force push now would be bad.
->>
->> Please use what is in my perf/core branch and add a Fixes for that v2
->> patch.
-> 
-> BTW, the 3rd patch with the test is already on the tmp.perf/core branch,
-> that will move to perf/core after the next round of container build
-> tests.
-> 
+Hello,
 
-Thanks. I will sent a V4 to fix the 'perf test' issue.
+ah, this is the mail I missed before.
 
-Thanks,
-Kan
-> - Arnaldo
->  
->> Thanks,
->>
->> - Arnaldo
->>  
->>> @@ -100,5 +101,25 @@ void arch_perf_synthesize_sample_weight(const
->>> struct perf_sample *data,
->>>  	if (type & PERF_SAMPLE_WEIGHT_STRUCT) {
->>>  		*array &= 0xffffffff;
->>>  		*array |= ((u64)data->ins_lat << 32);
->>> +		*array |= ((u64)data->retire_lat << 48);
->>>  	}
->>>  }
->>>
->>> Could you please remove the V2 and re-apply the V3?
->>  
->>> $ sudo ./perf test -v "x86 sample parsing"
->>>  74: x86 Sample parsing                                              :
->>> --- start ---
->>> test child forked, pid 3316797
->>> test child finished with 0
->>> ---- end ----
->>> x86 Sample parsing: Ok
->>>
->>>
->>> Thanks,
->>> Kan
->>>
->>>>
->>>> [root@quaco ~]# perf test -v "x86 sample parsing"
->>>>  74: x86 Sample parsing                                              :
->>>> --- start ---
->>>> test child forked, pid 72526
->>>> Samples differ at 'retire_lat'
->>>> parsing failed for sample_type 0x1000000
->>>> test child finished with -1
->>>> ---- end ----
->>>> x86 Sample parsing: FAILED!
->>>> [root@quaco ~]#
->>>>
->>>> - Arnaldo
->>>>  
->>>>> Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
->>>>> ---
->>>>>
->>>>> New patch since V2
->>>>>
->>>>>  tools/perf/arch/x86/tests/sample-parsing.c | 5 ++++-
->>>>>  1 file changed, 4 insertions(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/tools/perf/arch/x86/tests/sample-parsing.c b/tools/perf/arch/x86/tests/sample-parsing.c
->>>>> index 690c7c07e90d..a061e8619267 100644
->>>>> --- a/tools/perf/arch/x86/tests/sample-parsing.c
->>>>> +++ b/tools/perf/arch/x86/tests/sample-parsing.c
->>>>> @@ -27,8 +27,10 @@ static bool samples_same(const struct perf_sample *s1,
->>>>>  			 const struct perf_sample *s2,
->>>>>  			 u64 type)
->>>>>  {
->>>>> -	if (type & PERF_SAMPLE_WEIGHT_STRUCT)
->>>>> +	if (type & PERF_SAMPLE_WEIGHT_STRUCT) {
->>>>>  		COMP(ins_lat);
->>>>> +		COMP(retire_lat);
->>>>> +	}
->>>>>  
->>>>>  	return true;
->>>>>  }
->>>>> @@ -48,6 +50,7 @@ static int do_test(u64 sample_type)
->>>>>  	struct perf_sample sample = {
->>>>>  		.weight		= 101,
->>>>>  		.ins_lat        = 102,
->>>>> +		.retire_lat     = 103,
->>>>>  	};
->>>>>  	struct perf_sample sample_out;
->>>>>  	size_t i, sz, bufsz;
->>>>> -- 
->>>>> 2.35.1
->>>>>
->>>>
->>
->> -- 
->>
->> - Arnaldo
-> 
+On Wed, Jan 25, 2023 at 11:11:59PM +0100, Wolfram Sang wrote:
+>=20
+> > So, this code handled all my stress-testing well so far. I'll try to
+> > think of some more ideas until this evening, but likely I will apply it
+> > later. Nonetheless, more review eyes are still welcome!
+>=20
+> Ah yes, I now recalled why I had the gut feeling that this solution is
+> not complete. See this mail thread from 2015:
+>=20
+> https://lkml.iu.edu/hypermail/linux/kernel/1501.2/01700.html
+>=20
+> There are still drivers using i2c_del_adapter()+kfree(), so removing the
+> completion could cause use-after-free there, or?
+
+There is also a strange construct in spi that I understand at one point
+in time, but I failed to swap it in quickly. It's about commit
+794aaf01444d4e765e2b067cba01cc69c1c68ed9. I think there should be a
+nicer solution than to track if the controller was allocated using devm,
+but I don't remember the details. But before addressing the i2c problem
+it might be worth to invest some time into that spi issue to not make
+the same mistake for i2c.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--ol763elobegcycbx
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmPhId4ACgkQwfwUeK3K
+7AmVZAgAl3Faq9I+XvDqrdflU2pn5514NuWK8YOXY2AZDQ6EWYK9+qv/U1nf6+cS
+rvmqPv/0yoQ/MGcVOPY1dFnPMCRyjgt/dC75VYP0qBOFaJ4xm/xvHKV9QTmsDLhN
++vkwKMAUZkKW/MbIL+rjril1w+GuFhrFp0RoCM4NXF3t+Jo0XwRn3JE/lwvSBL+c
+0SS1w1LykId2Wo6tTSqP9U54OnCc0QiYJ5WyjD+HXmAB0oWx6ZOvx27zNr+0HPSn
+XcTyDTPiBgu8ssss4xyWMGqTGvaBtv2P3nncO8GZsC0ejpWYVd63aJTngB1zwY00
+ugxdHWQpnYOIpiPbE9PipLyu3PEHBQ==
+=quCD
+-----END PGP SIGNATURE-----
+
+--ol763elobegcycbx--
