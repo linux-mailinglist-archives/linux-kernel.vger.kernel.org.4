@@ -2,121 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FF8568C572
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 19:10:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4629768C576
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 19:12:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbjBFSK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 13:10:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34334 "EHLO
+        id S229786AbjBFSME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 13:12:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230027AbjBFSKH (ORCPT
+        with ESMTP id S229756AbjBFSLp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 13:10:07 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8532D22DD4
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 10:10:04 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1675707002;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pnsD8O7AGv/ghgX6NFYa+KhfEm1cKVXyeecAuGcrGc8=;
-        b=LCDwQx6rF0S2wMbs06qsNSIV4PMAkOB0SpBJVrqteSNNl07N6FwgDkuRqLWd7BSNEJeFtz
-        jCF4wUQHomXrDBAYxj3i3GkJTPOe6nJ+l4vjkq4O0ukdsXZNyAEeWwJ9I1j7apBrwBE2xa
-        ByS0kIH6UgWjoBkTSQVVF6CrlNjHYEgYdfL2dmsgFDMJKT77W9SN5E6qDVtM3lM9Ps67UO
-        F1oc/bij8jbkXvFzYJpWMdMLUROkOg444nXbwSQl1iuONGjSKUuSCturmYAXwgKyAs8fGL
-        ay8xfQ0jccYiqLArCDrpE/wWtiJPAehxzUN76X6ngkm6cx0vx9Zqtb8Ly5gQtQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1675707002;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pnsD8O7AGv/ghgX6NFYa+KhfEm1cKVXyeecAuGcrGc8=;
-        b=v854839Ja9qHeAUoo9A55MaeyPfSfr0iCQhaDj0DVimhoIEUpf0w9aY3/4tsed5i7CZoVQ
-        XedNHdH6dBvFe2Aw==
-To:     Vlastimil Babka <vbabka@suse.cz>,
-        kernel test robot <oliver.sang@intel.com>,
-        Shanker Donthineni <sdonthineni@nvidia.com>
-Cc:     oe-lkp@lists.linux.dev, lkp@intel.com,
-        linux-kernel@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
-        Michael Walle <michael@walle.cc>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-mm@kvack.org, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Matthew Wilcox <willy@infradead.org>
-Subject: Re: [PATCH 5/5] genirq: Use the maple tree for IRQ descriptors
- management
-In-Reply-To: <9a682773-df56-f36c-f582-e8eeef55d7f8@suse.cz>
-References: <202302011308.f53123d2-oliver.sang@intel.com>
- <87o7qdzfay.ffs@tglx> <9a682773-df56-f36c-f582-e8eeef55d7f8@suse.cz>
-Date:   Mon, 06 Feb 2023 19:10:02 +0100
-Message-ID: <87lelay8at.ffs@tglx>
+        Mon, 6 Feb 2023 13:11:45 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E14740FA;
+        Mon,  6 Feb 2023 10:11:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675707105; x=1707243105;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=UXKk67sn1KzwtJdfACtz/yZko3ihaRX+Ewb0PlQhwmg=;
+  b=c3xOpzzoNr+Z4GyUD/DUd3JxzLAOBsDfIXe/udskaPnN5Hx7uyRsuYX6
+   GTJmKz1vneRFLfFzWbDXpfIdbRn9C12cTOXZMguU5OxsRq7dRS19/VmSq
+   0QMkBMu5xvwlYy4yPaVOgc2jcpg5nuLs6mz34OYhGnW/mt9qfckOJ/oQ8
+   Ck0PvIURuXeT+PqKpIbBkSbhXKVdrjqyhPpjpiwmwyByYAXz0yjK8ROdF
+   XSj7tQyVbrc/ABlDOaa5zSO1frVojJkWMSP/qMhkf++6Kljd59whAO/Rf
+   HysI3dAYFE2Xy68Mxvh/pOrHxIRO14HhHeLwZlE7T83DWZ5NmB4kHVlxc
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="327909613"
+X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
+   d="scan'208";a="327909613"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 10:11:44 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="659928360"
+X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
+   d="scan'208";a="659928360"
+Received: from patelni-mobl1.amr.corp.intel.com (HELO [10.78.16.176]) ([10.78.16.176])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 10:11:43 -0800
+Message-ID: <9e6cfda1-4309-d1bb-a0cf-404a7fe7d3aa@linux.intel.com>
+Date:   Mon, 6 Feb 2023 11:11:36 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] PCI: vmd: Do not disable MSI-X remapping in VMD 28C0
+ controller
+Content-Language: en-US
+To:     Xinghui Li <korantwork@gmail.com>,
+        Jonathan Derrick <jonathan.derrick@linux.dev>
+Cc:     Keith Busch <kbusch@kernel.org>, lpieralisi@kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xinghui Li <korantli@tencent.com>
+References: <20221222072603.1175248-1-korantwork@gmail.com>
+ <3d1834d9-7905-1225-741a-f298dd5b8a8e@linux.dev>
+ <Y6TSgGdCTvkwPiVg@kbusch-mbp.dhcp.thefacebook.com>
+ <CAEm4hYUWf+Fx3FV7vNTc8+O9NSb0iQp75MTC6gra6XapXK=cxw@mail.gmail.com>
+ <d14ac29d-027a-08a7-c5c8-848a6920d4a2@linux.dev>
+ <CAEm4hYXncuvL-Gk1aEZExrvkbx=N1aiOQNeNjFdB4443EbKNBA@mail.gmail.com>
+ <f05ee82a-4532-b12b-490f-904b946ff7b0@linux.dev>
+ <CAEm4hYXk1RuKEw41VukH2iGTo_9GmZjUfrESWK5vFtpFA_O_4A@mail.gmail.com>
+ <CAEm4hYWeZFrYxSvAcBJ8iw=t507vZMqfBwiQXFSJd2Hcyfw7fA@mail.gmail.com>
+From:   "Patel, Nirmal" <nirmal.patel@linux.intel.com>
+In-Reply-To: <CAEm4hYWeZFrYxSvAcBJ8iw=t507vZMqfBwiQXFSJd2Hcyfw7fA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 06 2023 at 15:24, Vlastimil Babka wrote:
-> On 2/1/23 14:27, Thomas Gleixner wrote:
->> This triggers because __kmem_cache_alloc_bulk() uses
->> lock_irq()/unlock_irq(). Seems nobody used it during early boot stage
->> yet. Though the maple tree conversion of the interrupt descriptor
->> storage which is the purpose of the patch in question makes that happen.
->> 
->> Fix below.
+On 2/6/2023 5:45 AM, Xinghui Li wrote:
+> Friendly ping~
 >
-> Looks like it should work. But I think we also need to adjust SLAB's
-> mm/slab.c kmem_cache_alloc_bulk() which does local_irq_disable(); /
-> local_irq_enable(); right?
+> Xinghui Li <korantwork@gmail.com> 于2023年1月10日周二 20:28写道：
+>> Jonathan Derrick <jonathan.derrick@linux.dev> 于2023年1月10日周二 05:00写道：
+>>> As the bypass mode seems to affect performance greatly depending on the specific configuration,
+>>> it may make sense to use a moduleparam to control it
+>>>
+>> We found that each pcie port can mount four drives. If we only test 2
+>> or 1 dirve of one pcie port,
+>> the performance of the drive performance will be normal. Also, we
+>> observed the interruptions in different modes.
+>> bypass:
+>> .....
+>> 2022-12-28-11-39-14: 1224       181665   IR-PCI-MSI 201850948-edge      nvme0q68
+>> 2022-12-28-11-39-14: 1179       180115   IR-PCI-MSI 201850945-edge      nvme0q65
+>> 2022-12-28-11-39-14:  RES        26743   Rescheduling interrupts
+>> 2022-12-28-11-39-17: irqtop - IRQ : 3029, TOTAL : 2100315228, CPU :
+>> 192, ACTIVE CPU : 192
+>> disable:
+>> ......
+>> 2022-12-28-12-05-56: 1714       169797   IR-PCI-MSI 14155850-edge      nvme1q74
+>> 2022-12-28-12-05-56: 1701       168753   IR-PCI-MSI 14155849-edge      nvme1q73
+>> 2022-12-28-12-05-56:  LOC       163697   Local timer interrupts
+>> 2022-12-28-12-05-56:  TLB         5465   TLB shootdowns
+>> 2022-12-28-12-06-00: irqtop - IRQ : 3029, TOTAL : 2179022106, CPU :
+>> 192, ACTIVE CPU : 192
+>> remapping:
+>> 022-12-28-11-25-38:  283       325568   IR-PCI-MSI 24651790-edge      vmd3
+>> 2022-12-28-11-25-38:  140       267899   IR-PCI-MSI 13117447-edge      vmd1
+>> 2022-12-28-11-25-38:  183       265978   IR-PCI-MSI 13117490-edge      vmd1
+>> ......
+>> 2022-12-28-11-25-42: irqtop - IRQ : 2109, TOTAL : 2377172002, CPU :
+>> 192, ACTIVE CPU : 192
+>>
+>> From the result it is not difficult to find, in remapping mode the
+>> interruptions come from vmd.
+>> While in other modes, interrupts come from nvme devices. Besides, we
+>> found the port mounting
+>> 4 dirves total interruptions is much fewer than the port mounting 2 or 1 drive.
+>> NVME 8 and 9 mount in one port, other port mount 4 dirves.
+>>
+>> 2022-12-28-11-39-14: 2582       494635   IR-PCI-MSI 470810698-edge      nvme9q74
+>> 2022-12-28-11-39-14: 2579       489972   IR-PCI-MSI 470810697-edge      nvme9q73
+>> 2022-12-28-11-39-14: 2573       480024   IR-PCI-MSI 470810695-edge      nvme9q71
+>> 2022-12-28-11-39-14: 2544       312967   IR-PCI-MSI 470286401-edge      nvme8q65
+>> 2022-12-28-11-39-14: 2556       312229   IR-PCI-MSI 470286405-edge      nvme8q69
+>> 2022-12-28-11-39-14: 2547       310013   IR-PCI-MSI 470286402-edge      nvme8q66
+>> 2022-12-28-11-39-14: 2550       308993   IR-PCI-MSI 470286403-edge      nvme8q67
+>> 2022-12-28-11-39-14: 2559       308794   IR-PCI-MSI 470286406-edge      nvme8q70
+>> ......
+>> 2022-12-28-11-39-14: 1296       185773   IR-PCI-MSI 202375243-edge      nvme1q75
+>> 2022-12-28-11-39-14: 1209       185646   IR-PCI-MSI 201850947-edge      nvme0q67
+>> 2022-12-28-11-39-14: 1831       184151   IR-PCI-MSI 203423828-edge      nvme3q84
+>> 2022-12-28-11-39-14: 1254       182313   IR-PCI-MSI 201850950-edge      nvme0q70
+>> 2022-12-28-11-39-14: 1224       181665   IR-PCI-MSI 201850948-edge      nvme0q68
+>> 2022-12-28-11-39-14: 1179       180115   IR-PCI-MSI 201850945-edge      nvme0q65
+>>> I'd vote for it being in VMD mode (non-bypass) by default.
+>> I speculate that the vmd controller equalizes the interrupt load and
+>> acts like a buffer,
+>> which improves the performance of nvme. I am not sure about my
+>> analysis. So, I'd like
+>> to discuss it with the community.
 
-Yup.
-
-> Also if we enter this with IRQ's disabled, then we should take care about
-> the proper gfp flags. Looking at the patch [1] I see
->
-> WARN_ON(mas_store_gfp(&mas, desc, GFP_KERNEL) != 0);
->
-> so GFP_KERNEL would be wrong with irqs disabled, looks like a case for
-> GFP_ATOMIC.
-> OTOH I can see the thing it replaces was:
->
-> static RADIX_TREE(irq_desc_tree, GFP_KERNEL);
->
-> so that's also a GFP_KERNEL and we haven't seen debug splats from
-> might_alloc() checks before in this code?. That's weird, or maybe the
-> case
-
-might_alloc()
-  might_sleep_if()
-    __might_sleep()
-      WARN_ON(task->state != RUNNING);  <- Does not trigger
-      __might_resched()
-        if (.... || system_state == SYSTEM_BOOTING || ...)
-           return;
-
-As system_state is SYSTEM_BOOTING at this point the splats are not
-happening.
-
-> of "we didn't enable irqs yet on this cpu being bootstrapped" is handled
-> differently than "we have temporarily disabled irqs"? Sure, during early
-> boot we should have all the memory and no need to reclaim...
-
-The point is that interrupts are fully disabled during early boot and
-there is no scheduler so there is no scheduling possible.
-
-Quite some code in the kernel relies on GFP_KERNEL being functional
-during that early boot stage. If the kernel runs out of memory that
-early, then the chance of recovery is exactly 0.
-
-Thanks,
-
-        tglx
+I like the idea of module parameter to allow switching between the modes
+but keep MSI remapping enabled (non-bypass) by default.
 
