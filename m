@@ -2,144 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F97468C551
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 19:00:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1DB168C555
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 19:01:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230238AbjBFSAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 13:00:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56686 "EHLO
+        id S230252AbjBFSB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 13:01:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230193AbjBFSAV (ORCPT
+        with ESMTP id S230183AbjBFSBZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 13:00:21 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25FC12D150
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 10:00:17 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id h16so11163964wrz.12
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 10:00:17 -0800 (PST)
+        Mon, 6 Feb 2023 13:01:25 -0500
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC70423131
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 10:01:23 -0800 (PST)
+Received: by mail-vs1-xe32.google.com with SMTP id cz15so3924767vsb.6
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 10:01:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QAzbzHAwMbORwKFGc8I4gB1/HhGTYUVUMIT2p3MVzto=;
-        b=duUAnzGSjSKmhmvXBjIvZ1JQy/33pGphU6VD3fKrWWxkpTSXSv08qtxG2ysiVq8DYh
-         l5yrAn366zu6qlIeEJp/zTFdkIOQzoOzyIF+mIRxSpdaZJakUUjyUUL9FT1OiCUvgQKs
-         6jc4NZidbD6Sg/3X4Awg3R9I29xdb3aA5aN9/0v4bWmn+a1Ncq89QjNGYNAlXPmYov3v
-         NDwKj5jYI4xHZz1kLoLGfLRE25PqdJktTHYTKAO4VhfV9ou9InW8fndaW9JWHbTLo/cl
-         yy0T9gBHWWlWMJJUxLRU+PO4QHE0CA5QGDGPVvww6Dn1RLgJGoewJlSRboajNwHNhIQP
-         VK9g==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AovKaYugu50S/f2B978nfmPElm2qMfvoOhokNIP847U=;
+        b=Ops+BJewCRfpBNkWE2t9Nd5h3no2SfuN3xwaX1TPK17nLkUHjJ3d6qCUhmeR6TLOvl
+         KA54u85d7dGY47W0sc1bbgfNIoJdTUXmNTtAPVGRmpeebPedSU5vbnPrvFGWrjDsGQj6
+         51RKB7l7V3IkE4HUiCwKYm54PVbKp4yKd2nrVDaYfVQfZ76abEKE7a57EH6YHOwAA1oK
+         Blh1XWA+FDzOHH5AYRImKlyKFzaQYVx1YS/A7rkygkrXiQzufHKC//xyDzr8/sNqtStU
+         YOBsUyQ6ODVeEnwY8aR3gy0QByrfgxsVbH4vO1bM3hyfrLYrLp5QKSdBosSKs8Z+YY5o
+         hYtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QAzbzHAwMbORwKFGc8I4gB1/HhGTYUVUMIT2p3MVzto=;
-        b=5E6GD2V2TdnrRpguGF0N4Ny8Xk/54C5+FG3g0mXeCLob4XantCYKo4vx7MzfPcGrKr
-         US9kat2Vxqyc7NsaNhUfS5WzKaIVEr/HLmZxQLYnjQA6S1AWRHZF3Udgrp4B1de1F43t
-         AjeDLQBWdrdzFZ5QIWhzVflTWtMDxS8UolHFeBv3EVm3IVcWttFnxc7yqETJ6dyq1xqN
-         TemM4VT38DfExdX74rBCi+8xNHWCKrcI2hBnhcmMS9DnB7ZBfV0y5WZFt7U99xG7+0GP
-         XXYktNY+fwV7l5yIBAMgK8FGnETHMqn9peRzZb1MYwf3Yot+HEzYkSLfu+xjVeKcSGpb
-         kr7Q==
-X-Gm-Message-State: AO0yUKVFX6ynzHKrhloJonDFRpo1cOy9SDGhfBeOeqL/KgA/JsAlYvv6
-        TncdMq3J3YGqQ1njkqE1Yz868g==
-X-Google-Smtp-Source: AK7set+gHrNvDG7dTutQV1RwYNQpdPvpEFYOvQc9NHBZvdR9G+YemKmTRrXYosqJpvEDpCO35gZT6Q==
-X-Received: by 2002:adf:fb82:0:b0:2c2:ad22:40ba with SMTP id a2-20020adffb82000000b002c2ad2240bamr16759553wrr.68.1675706415588;
-        Mon, 06 Feb 2023 10:00:15 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id p4-20020a5d68c4000000b002c3e4f2ffdbsm4401533wrw.58.2023.02.06.10.00.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Feb 2023 10:00:15 -0800 (PST)
-Message-ID: <474338ff-26af-061e-1166-a1bd906ffe00@linaro.org>
-Date:   Mon, 6 Feb 2023 19:00:13 +0100
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AovKaYugu50S/f2B978nfmPElm2qMfvoOhokNIP847U=;
+        b=3Gp/tWwJqX7jlxfJWwYu+UaqHmXQNU+bPYtwccQrMquUkfY955hk7/gTxfNTh5e1xA
+         EqrjA7zTwurFd7Sn83xDG1eD6MLIKRcvibO3PU6tEsKmHwe9kDRXlvXxm1QS395BUw7r
+         zdPDf6WJFKei83a5nlIVLrDRXAPTznWJjQdMtG4XqaS7A6P3VIcS16L/+ffZYyWM1+JT
+         KulnycHSEB2AF5KRFeNSA2WCjCOjm1A23His+acKCNU/L1J5XTxCCaMVYGTxbaiRP25/
+         VUMmZAEzmIm+d3zZzXSyi2aLxnd65oMq5aMTrmwSpTCar7/cx5mrlGFdOLr0mMVcjaiL
+         Sp4Q==
+X-Gm-Message-State: AO0yUKUCFWwgKexetR3QiI+T/uJYD6P2rHP0Mw96oRW2BnRxXQa1FksF
+        TjOj1KQkpa91c649ZR6vhYSESxS+1z5OgGh2uZ8Zig==
+X-Google-Smtp-Source: AK7set+9Li15tr3aRCwXnHOJLd/UXJaDEEQSZ2h6RaR4pJm9jBZirB4qGtMmATBxRr5/jYOOz8wpY/MDTGP5DA9dKGk=
+X-Received: by 2002:a67:c908:0:b0:408:6a8f:d1c6 with SMTP id
+ w8-20020a67c908000000b004086a8fd1c6mr97061vsk.73.1675706482791; Mon, 06 Feb
+ 2023 10:01:22 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] thermal: Hunt zero trip points thermal zones usage
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     rjw@rjwysocki.net, linux-acpi@vger.kernel.org,
-        linux-pm@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Kees Cook <keescook@chromium.org>,
-        "Lee, Chun-Yi" <joeyli.kernel@gmail.com>,
-        Chuansheng Liu <chuansheng.liu@intel.com>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230203175832.3406504-1-daniel.lezcano@linaro.org>
- <CAJZ5v0jzLCQt22MhfaAvL8w+RP7Y-YqxUdcgQ2u2Tz9i0CS+2A@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0jzLCQt22MhfaAvL8w+RP7Y-YqxUdcgQ2u2Tz9i0CS+2A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20230118134940.240102-1-brgl@bgdev.pl> <Y9DpbChLZfDONHPz@ninjato>
+ <Y9GpL9RBNM8H2ZSL@shikoro> <20230206155107.qwf5tbrqsbvv4hln@pengutronix.de>
+In-Reply-To: <20230206155107.qwf5tbrqsbvv4hln@pengutronix.de>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 6 Feb 2023 19:01:11 +0100
+Message-ID: <CAMRc=Mdz_+_MDJAjkXWa2P8FM8i6XPMAVQ-xTUtZDXfD-RBo_w@mail.gmail.com>
+Subject: Re: [PATCH v3] i2c: dev: don't allow user-space to deadlock the kernel
+To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,URI_DOTEDU
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/02/2023 17:08, Rafael J. Wysocki wrote:
-> On Fri, Feb 3, 2023 at 6:59 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->>
->> Some drivers are declaring a thermal zone without any thermal trip
->> points.
->>
->> On the other side, we are introducing the function
->> thermal_zone_device_register_with_trips() which provides an array of
->> generic thermal trip points. When all the drivers will be converted to
->> the generic trip points, keeping two functions will be useless.
->>
->> Most of the drivers are now using
->> thermal_zone_device_register_with_trips() with the generic trip
->> points. As soon as the remaining drivers are merged, the
->> thermal_zone_device_register_with_trips() will be renamed to
->> thermal_zone_device_register().
-> 
-> So why is this the first time I'm learning about this plan?
+On Mon, Feb 6, 2023 at 4:51 PM Uwe Kleine-K=C3=B6nig
+<u.kleine-koenig@pengutronix.de> wrote:
+>
+> Hello,
+>
+> ah, this is the mail I missed before.
+>
+> On Wed, Jan 25, 2023 at 11:11:59PM +0100, Wolfram Sang wrote:
+> >
+> > > So, this code handled all my stress-testing well so far. I'll try to
+> > > think of some more ideas until this evening, but likely I will apply =
+it
+> > > later. Nonetheless, more review eyes are still welcome!
+> >
+> > Ah yes, I now recalled why I had the gut feeling that this solution is
+> > not complete. See this mail thread from 2015:
+> >
+> > https://lkml.iu.edu/hypermail/linux/kernel/1501.2/01700.html
+> >
+> > There are still drivers using i2c_del_adapter()+kfree(), so removing th=
+e
+> > completion could cause use-after-free there, or?
+>
+> There is also a strange construct in spi that I understand at one point
+> in time, but I failed to swap it in quickly. It's about commit
+> 794aaf01444d4e765e2b067cba01cc69c1c68ed9. I think there should be a
+> nicer solution than to track if the controller was allocated using devm,
+> but I don't remember the details. But before addressing the i2c problem
+> it might be worth to invest some time into that spi issue to not make
+> the same mistake for i2c.
+>
 
-Well it is not a plan, it looked purely logical to me that the 
-_with_trips variant was added to support the generic trip points in 
-addition to the specific trips. As soon as all the drivers are 
-converted, there is no need to have these two functions anymore and we 
-can fall back to the previous name (or a shorter one).
+Yeah, I've seen these constructs before elsewhere... Sadly, we have
+workarounds upon workarounds within workarounds chased by other
+workarounds due to this issue.
 
->> Obviously this renaming can only happen if there are no more user of
->> the thermal_zone_device_register() function.
->>
->> This change uses thermal_zone_device_register_with_trips() with a NULL
->> parameter for the trip point array instead of
->> thermal_zone_device_register().
-> 
-> And later it will be renamed to thermal_zone_device_register() again?
-
-Yes, that was the idea, unify the name and then use a cocci script to 
-rename them all.
-
-> Can we just stop confusing people this way?
-> 
-> What would be wrong with changing both
-> thermal_zone_device_register_with_trips() and
-> thermal_zone_device_register() together when we are ready?  And why
-> can't the both be replaced with something line thermal_zone_register()
-> doing all of the necessary things in one go?  Why do we have to make
-> confusing and redundant changes?
-
-For me the result will be the same, if you prefer to wait for all the 
-drivers to be converted then it is fine for me.
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Bart
