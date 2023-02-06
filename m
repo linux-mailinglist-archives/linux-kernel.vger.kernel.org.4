@@ -2,237 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68A8E68B491
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 04:40:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27C8C68B493
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 04:41:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229577AbjBFDko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 22:40:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42660 "EHLO
+        id S229580AbjBFDl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 22:41:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjBFDkm (ORCPT
+        with ESMTP id S229553AbjBFDlY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 22:40:42 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E6D316AC7;
-        Sun,  5 Feb 2023 19:40:35 -0800 (PST)
-Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4P9Bk70DdbzkXrj;
-        Mon,  6 Feb 2023 11:35:59 +0800 (CST)
-Received: from [10.67.111.205] (10.67.111.205) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Mon, 6 Feb 2023 11:40:32 +0800
-Subject: Re: [PATCH v3] perf record: Fix segfault with --overwrite and
- --max-size
-To:     Namhyung Kim <namhyung@kernel.org>
-CC:     <acme@kernel.org>, <linux-perf-users@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <peterz@infradead.org>,
-        <mingo@redhat.com>, <mark.rutland@arm.com>,
-        <alexander.shishkin@linux.intel.com>, <jolsa@kernel.org>,
-        <jiwei.sun@windriver.com>
-References: <20230113073803.102950-1-yangjihong1@huawei.com>
- <29a8e0bc-e90b-b371-962b-58a4b8c87f20@huawei.com>
- <ee213278-7e76-586b-0564-843dc7a3c84f@huawei.com>
- <CAM9d7cj1v09Q0_AF2Oaa4+UU_YWB8OaaoeOZ-igoMTTFg4VZGg@mail.gmail.com>
-From:   Yang Jihong <yangjihong1@huawei.com>
-Message-ID: <0c93a024-b60c-8ea6-37a3-a55e951dbd12@huawei.com>
-Date:   Mon, 6 Feb 2023 11:40:32 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        Sun, 5 Feb 2023 22:41:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4967216AF7
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 19:41:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D5BFB60C77
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 03:41:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28B97C433EF;
+        Mon,  6 Feb 2023 03:41:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675654870;
+        bh=0e5Vf/+wq9RFfzBH3ksPS6To75J3Rc8u/Il3bhGTie0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sdpLCcMr6Ug8oCrOURoCovSbDtScoGcswvN+oKO7fkXeQ9l6t4FE8EDKxzLPqinbH
+         Q6MLfnhGj7ds7XoGY2XuyJMxJG17bKVlsewPsyGA4l5A+sIk/CMqgb4a7pezgKIha+
+         VKzCOFdERR46lNQi9XCDF4KA2lnEC9oGteuEZL3y9xIQmNy04bG0rF099I51T7eU31
+         2QLWFl2DyhhmgVvhldUqrJTPJArnG+RyuyYpnQ3fo9g4aZ9E/wZKBp8UgrnAibAZ88
+         vEPsXFjuViVM66sj26TxUxq7NoCEjm39iGGfgEKbwP+5xPULox/OC4Y6l3swHC0THo
+         ahHGA6do+S5vw==
+Date:   Sun, 5 Feb 2023 19:41:08 -0800
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] f2fs: clean up __update_extent_tree_range()
+Message-ID: <Y+B21EAHfuw2vyJ6@google.com>
+References: <20230131144701.34418-1-chao@kernel.org>
+ <Y9lkeVCMRA9goN2E@google.com>
+ <a27b1135-757f-9609-1511-7c6738887472@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAM9d7cj1v09Q0_AF2Oaa4+UU_YWB8OaaoeOZ-igoMTTFg4VZGg@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.205]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a27b1135-757f-9609-1511-7c6738887472@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 02/01, Chao Yu wrote:
+> On 2023/2/1 2:56, Jaegeuk Kim wrote:
+> > I wanted to avoid a deep if/else statement.
+> 
+> So how about this:
 
-On 2023/2/6 10:44, Namhyung Kim wrote:
-> Hello,
-> 
-> On Sun, Feb 5, 2023 at 5:29 PM Yang Jihong <yangjihong1@huawei.com> wrote:
->>
->> Hello,
->>
->> Ping again, please take time to review, thanks.
-> 
-> Sorry for the late reply.  Now it looks good to me.
-Thanks for the review.
+Nothing impressive.
 
-Thanks,
-Yang.
 > 
->>
->>
->> Thanks,
->> Yang
->>
->>
->> On 2023/1/28 9:27, Yang Jihong wrote:
->>> Hello,
->>>
->>> The data written by the thread (data.X file) has been saved as
->>> recommended in v2 patch. Please check whether it is feasible. Thank you.
->>>
->>> Thanks,
->>> Yang
->>>
->>> On 2023/1/13 15:38, Yang Jihong wrote:
->>>> When --overwrite and --max-size options of perf record are used together,
->>>> a segmentation fault occurs. The following is an example:
->>>>
->>>>     # perf record -e sched:sched* --overwrite --max-size 1K -a -- sleep 1
->>>>     [ perf record: Woken up 1 times to write data ]
->>>>     perf: Segmentation fault
->>>>     Obtained 12 stack frames.
->>>>     ./perf/perf(+0x197673) [0x55f99710b673]
->>>>     /lib/x86_64-linux-gnu/libc.so.6(+0x3ef0f) [0x7fa45f3cff0f]
->>>>     ./perf/perf(+0x8eb40) [0x55f997002b40]
->>>>     ./perf/perf(+0x1f6882) [0x55f99716a882]
->>>>     ./perf/perf(+0x794c2) [0x55f996fed4c2]
->>>>     ./perf/perf(+0x7b7c7) [0x55f996fef7c7]
->>>>     ./perf/perf(+0x9074b) [0x55f99700474b]
->>>>     ./perf/perf(+0x12e23c) [0x55f9970a223c]
->>>>     ./perf/perf(+0x12e54a) [0x55f9970a254a]
->>>>     ./perf/perf(+0x7db60) [0x55f996ff1b60]
->>>>     /lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0xe6)
->>>> [0x7fa45f3b2c86]
->>>>     ./perf/perf(+0x7dfe9) [0x55f996ff1fe9]
->>>>     Segmentation fault (core dumped)
->>>>
->>>> backtrace of the core file is as follows:
->>>>
->>>>     (gdb) bt
->>>>     #0  record__bytes_written (rec=0x55f99755a200 <record>) at
->>>> builtin-record.c:234
->>>>     #1  record__output_max_size_exceeded (rec=0x55f99755a200 <record>)
->>>> at builtin-record.c:242
->>>>     #2  record__write (map=0x0, size=12816, bf=0x55f9978da2e0,
->>>> rec=0x55f99755a200 <record>) at builtin-record.c:263
->>>>     #3  process_synthesized_event (tool=tool@entry=0x55f99755a200
->>>> <record>, event=event@entry=0x55f9978da2e0, sample=sample@entry=0x0,
->>>> machine=machine@entry=0x55f997893658) at builtin-record.c:618
->>>>     #4  0x000055f99716a883 in __perf_event__synthesize_id_index
->>>> (tool=tool@entry=0x55f99755a200 <record>,
->>>> process=process@entry=0x55f997002aa0 <process_synthesized_event>,
->>>> evlist=0x55f9978928b0, machine=machine@entry=0x55f997893658,
->>>>         from=from@entry=0) at util/synthetic-events.c:1895
->>>>     #5  0x000055f99716a91f in perf_event__synthesize_id_index
->>>> (tool=tool@entry=0x55f99755a200 <record>,
->>>> process=process@entry=0x55f997002aa0 <process_synthesized_event>,
->>>> evlist=<optimized out>, machine=machine@entry=0x55f997893658)
->>>>         at util/synthetic-events.c:1905
->>>>     #6  0x000055f996fed4c3 in record__synthesize (tail=tail@entry=true,
->>>> rec=0x55f99755a200 <record>) at builtin-record.c:1997
->>>>     #7  0x000055f996fef7c8 in __cmd_record (argc=argc@entry=2,
->>>> argv=argv@entry=0x7ffc67551260, rec=0x55f99755a200 <record>) at
->>>> builtin-record.c:2802
->>>>     #8  0x000055f99700474c in cmd_record (argc=<optimized out>,
->>>> argv=0x7ffc67551260) at builtin-record.c:4258
->>>>     #9  0x000055f9970a223d in run_builtin (p=0x55f997564d88
->>>> <commands+264>, argc=10, argv=0x7ffc67551260) at perf.c:330
->>>>     #10 0x000055f9970a254b in handle_internal_command (argc=10,
->>>> argv=0x7ffc67551260) at perf.c:384
->>>>     #11 0x000055f996ff1b61 in run_argv (argcp=<synthetic pointer>,
->>>> argv=<synthetic pointer>) at perf.c:428
->>>>     #12 main (argc=<optimized out>, argv=0x7ffc67551260) at perf.c:562
->>>>
->>>> The reason is that record__bytes_written accesses the freed memory
->>>> rec->thread_data,
->>>> The process is as follows:
->>>>     __cmd_record
->>>>       -> record__free_thread_data
->>>>         -> zfree(&rec->thread_data)         // free rec->thread_data
->>>>       -> record__synthesize
->>>>         -> perf_event__synthesize_id_index
->>>>           -> process_synthesized_event
->>>>             -> record__write
->>>>               -> record__bytes_written      // access rec->thread_data
->>>>
->>>> We add a member variable "thread_bytes_written" in the struct "record"
->>>> to save the data size written by the threads.
->>>>
->>>> Fixes: 6d57581659f7 ("perf record: Add support for limit perf output
->>>> file size")
->>>> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+> From 418b408420367ac5491c97a7c4d26e3d0e68ea57 Mon Sep 17 00:00:00 2001
+> From: Chao Yu <chao@kernel.org>
+> Date: Tue, 31 Jan 2023 22:46:59 +0800
+> Subject: [PATCH v2] f2fs: clean up __update_extent_tree_range()
 > 
-> Acked-by: Namhyung Kim <namhyung@kernel.org>
+> Introduce __update_read_extent_cache() and __update_age_extent_cache()
+> to clean up __update_extent_tree_range(), no logic change.
+> 
+> Signed-off-by: Chao Yu <chao@kernel.org>
+> ---
+> v2
+> - introduce __update_read_extent_cache() and __update_age_extent_cache()
+> to avoid a deep if/else statement in __update_extent_tree_range().
+>  fs/f2fs/extent_cache.c | 116 +++++++++++++++++++++++++++--------------
+>  1 file changed, 77 insertions(+), 39 deletions(-)
+> 
+> diff --git a/fs/f2fs/extent_cache.c b/fs/f2fs/extent_cache.c
+> index d70ad6a44cbf..887b0b2898b9 100644
+> --- a/fs/f2fs/extent_cache.c
+> +++ b/fs/f2fs/extent_cache.c
+> @@ -666,6 +666,75 @@ static struct extent_node *__insert_extent_tree(struct f2fs_sb_info *sbi,
+>  	return en;
+>  }
+> 
+> +static inline bool __update_read_extent_cache(struct inode *inode,
+> +					struct extent_info *tei,
+> +					struct extent_info *ei,
+> +					struct extent_info *dei,
+> +					struct extent_info *prev,
+> +					unsigned int fofs, unsigned int len,
+> +					struct extent_node *prev_en,
+> +					struct extent_node *next_en,
+> +					struct rb_node **insert_p,
+> +					struct rb_node *insert_parent,
+> +					bool leftmost)
+> +{
+> +	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
+> +	struct extent_tree *et = F2FS_I(inode)->extent_tree[EX_READ];
+> +
+> +	if (!tei->blk)
+> +		return false;
+> +
+> +	__set_extent_info(ei, fofs, len, tei->blk, false,
+> +			  0, 0, EX_READ);
+> +	if (!__try_merge_extent_node(sbi, et, ei,
+> +					prev_en, next_en))
+> +		__insert_extent_tree(sbi, et, ei,
+> +			insert_p, insert_parent, leftmost);
+> +
+> +	/* give up read extent cache, if split and small updates happen */
+> +	if (dei->len >= 1 &&
+> +			prev->len < F2FS_MIN_EXTENT_LEN &&
+> +			et->largest.len < F2FS_MIN_EXTENT_LEN) {
+> +		et->largest.len = 0;
+> +		et->largest_updated = true;
+> +		set_inode_flag(inode, FI_NO_EXTENT);
+> +	}
+> +
+> +	if (is_inode_flag_set(inode, FI_NO_EXTENT))
+> +		__free_extent_tree(sbi, et);
+> +
+> +	if (et->largest_updated) {
+> +		et->largest_updated = false;
+> +		return true;
+> +	}
+> +
+> +	return false;
+> +}
+> +
+> +static inline void __update_age_extent_cache(struct inode *inode,
+> +					struct extent_info *tei,
+> +					struct extent_info *ei,
+> +					unsigned int fofs, unsigned int len,
+> +					struct extent_node *prev_en,
+> +					struct extent_node *next_en,
+> +					struct rb_node **insert_p,
+> +					struct rb_node *insert_parent,
+> +					bool leftmost)
+> +{
+> +	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
+> +	struct extent_tree *et = F2FS_I(inode)->extent_tree[EX_BLOCK_AGE];
+> +
+> +	if (!tei->last_blocks)
+> +		return;
+> +
+> +	__set_extent_info(ei, fofs, len, 0, false,
+> +		tei->age, tei->last_blocks, EX_BLOCK_AGE);
+> +	if (!__try_merge_extent_node(sbi, et, ei,
+> +					prev_en, next_en))
+> +		__insert_extent_tree(sbi, et, ei,
+> +			insert_p, insert_parent, leftmost);
+> +}
+> +
+>  static void __update_extent_tree_range(struct inode *inode,
+>  			struct extent_info *tei, enum extent_type type)
+>  {
+> @@ -782,47 +851,16 @@ static void __update_extent_tree_range(struct inode *inode,
+>  		en = next_en;
+>  	}
+> 
+> -	if (type == EX_BLOCK_AGE)
+> -		goto update_age_extent_cache;
+> -
+> -	/* 3. update extent in read extent cache */
+> -	BUG_ON(type != EX_READ);
+> -
+> -	if (tei->blk) {
+> -		__set_extent_info(&ei, fofs, len, tei->blk, false,
+> -				  0, 0, EX_READ);
+> -		if (!__try_merge_extent_node(sbi, et, &ei, prev_en, next_en))
+> -			__insert_extent_tree(sbi, et, &ei,
+> +	/* 3. update extent in extent cache */
+> +	if (type == EX_READ)
+> +		updated = __update_read_extent_cache(inode, tei, &ei, &dei,
+> +					&prev, fofs, len, prev_en, next_en,
+>  					insert_p, insert_parent, leftmost);
+> -
+> -		/* give up extent_cache, if split and small updates happen */
+> -		if (dei.len >= 1 &&
+> -				prev.len < F2FS_MIN_EXTENT_LEN &&
+> -				et->largest.len < F2FS_MIN_EXTENT_LEN) {
+> -			et->largest.len = 0;
+> -			et->largest_updated = true;
+> -			set_inode_flag(inode, FI_NO_EXTENT);
+> -		}
+> -	}
+> -
+> -	if (is_inode_flag_set(inode, FI_NO_EXTENT))
+> -		__free_extent_tree(sbi, et);
+> -
+> -	if (et->largest_updated) {
+> -		et->largest_updated = false;
+> -		updated = true;
+> -	}
+> -	goto out_read_extent_cache;
+> -update_age_extent_cache:
+> -	if (!tei->last_blocks)
+> -		goto out_read_extent_cache;
+> -
+> -	__set_extent_info(&ei, fofs, len, 0, false,
+> -			tei->age, tei->last_blocks, EX_BLOCK_AGE);
+> -	if (!__try_merge_extent_node(sbi, et, &ei, prev_en, next_en))
+> -		__insert_extent_tree(sbi, et, &ei,
+> +	else if (type == EX_BLOCK_AGE)
+> +		__update_age_extent_cache(inode, tei, &ei,
+> +					fofs, len, prev_en, next_en,
+>  					insert_p, insert_parent, leftmost);
+> -out_read_extent_cache:
+> +
+>  	write_unlock(&et->lock);
+> 
+>  	if (updated)
+> -- 
+> 2.25.1
 > 
 > Thanks,
-> Namhyung
-> 
-> 
->>>> ---
->>>>
->>>> Changes since v2:
->>>>    - Save data size written by threads to calculate the correct total
->>>> data size.
->>>>    - Update commit message.
->>>>
->>>> Changes since v1:
->>>>    - Add variable check in record__bytes_written for code hardening.
->>>>    - Save bytes_written separately to reduce one calculation.
->>>>    - Remove rec->opts.tail_synthesize check.
->>>>
->>>>    tools/perf/builtin-record.c | 16 ++++++----------
->>>>    1 file changed, 6 insertions(+), 10 deletions(-)
->>>>
->>>> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
->>>> index 29dcd454b8e2..8374117e66f6 100644
->>>> --- a/tools/perf/builtin-record.c
->>>> +++ b/tools/perf/builtin-record.c
->>>> @@ -154,6 +154,7 @@ struct record {
->>>>        struct perf_tool    tool;
->>>>        struct record_opts    opts;
->>>>        u64            bytes_written;
->>>> +    u64            thread_bytes_written;
->>>>        struct perf_data    data;
->>>>        struct auxtrace_record    *itr;
->>>>        struct evlist    *evlist;
->>>> @@ -226,14 +227,7 @@ static bool switch_output_time(struct record *rec)
->>>>    static u64 record__bytes_written(struct record *rec)
->>>>    {
->>>> -    int t;
->>>> -    u64 bytes_written = rec->bytes_written;
->>>> -    struct record_thread *thread_data = rec->thread_data;
->>>> -
->>>> -    for (t = 0; t < rec->nr_threads; t++)
->>>> -        bytes_written += thread_data[t].bytes_written;
->>>> -
->>>> -    return bytes_written;
->>>> +    return rec->bytes_written + rec->thread_bytes_written;
->>>>    }
->>>>    static bool record__output_max_size_exceeded(struct record *rec)
->>>> @@ -255,10 +249,12 @@ static int record__write(struct record *rec,
->>>> struct mmap *map __maybe_unused,
->>>>            return -1;
->>>>        }
->>>> -    if (map && map->file)
->>>> +    if (map && map->file) {
->>>>            thread->bytes_written += size;
->>>> -    else
->>>> +        rec->thread_bytes_written += size;
->>>> +    } else {
->>>>            rec->bytes_written += size;
->>>> +    }
->>>>        if (record__output_max_size_exceeded(rec) && !done) {
->>>>            fprintf(stderr, "[ perf record: perf size limit reached (%"
->>>> PRIu64 " KB),"
->>>>
->>>
->>> .
-> 
-> .
-> 
