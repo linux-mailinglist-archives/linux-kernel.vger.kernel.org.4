@@ -2,139 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39BEF68C6AF
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 20:21:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6335E68C6B5
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 20:24:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbjBFTVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 14:21:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50594 "EHLO
+        id S229823AbjBFTYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 14:24:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbjBFTVs (ORCPT
+        with ESMTP id S229525AbjBFTYO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 14:21:48 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E35EC68
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 11:21:46 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id n13so9431090wmr.4
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 11:21:46 -0800 (PST)
+        Mon, 6 Feb 2023 14:24:14 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D89E1B32E
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 11:24:12 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id d189so7655612ybc.0
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 11:24:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KGhlandvp32zJuT9yzD1H530+wjS7yGNPZyYGw6c5iw=;
-        b=RK9KdUt9G34mb44xh/5h3OJn/2y9DCQCHJYG6331S3Nkcfl1SCla9sdyBucGntiPxP
-         fCwsuLQRfMDC19jPGH1Y7GtU7tj7qiU+PNQ9WWEc9RdVP7nGXvPJ1whG7edf62isi0WJ
-         9hY/eOpkb+YzwOk7lCraIXsxuQRi2r3r0WGQQUCCsSVgxAV0n7+DM7Wqb4Ph4/ZV5WuJ
-         2BzG6Bys/oFKYCIL40QiJjohO9wOQasfG/5PnsgCj7Dmr/+j84I2kvOCRHhTLFAIn3Gp
-         7rlmaIm9O+vHBDwcnfD0bj856GTRBl1D7nA+L9/lE1Wr4pZiY507foIqIiNwdphuGrZy
-         W5ew==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=BVazd58kum2M1pTJRpVOVODmHtrBqnbElti6UPp8PdY=;
+        b=Xl3fMkj2m73lnBOF92izyHDKUYK6kGPpuMbNC7QoAtt8QrEm1/uJZOpT4Uj1mtXK8N
+         U/TTStbZAb+IZavNREuKeGq60cgFPFsmr7iVUYJl9fKSpuBGPLheRHuMIPXlj+dYzE7u
+         qPBKvHPvoTiQAKeQeiTorc3gW2CLZXarYF54IxJfa5l7qwJoEykxbrrrp8gs9c94+jwv
+         tpVwmlJ9ij4o8LpRsfExhJDF0I7lmRgdTtzkIeh8CrPDVDn1EhAs+ZaxUr1Yhfi3GHCm
+         L9MNKQGMe+hsmAeuTp7Wwzu+GrkDN4ghpr+XBZePbGzP6o3wK0OqpO/v0CNUjfTr91Pw
+         Qw2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KGhlandvp32zJuT9yzD1H530+wjS7yGNPZyYGw6c5iw=;
-        b=oxmI0vUZWbF6ZGSgxlCYDUc+8w4i3gfZgRbxUQwKJqaA8zDZJ6ldC52ouYzZKhkwYT
-         tb9v8WQkWrvsp+BTowbDxfWRoXhr5FNHzqzAmBh0vblYqXprywD6Ecw7C1kXW8pDud2X
-         72+OzKjB4fcQ5u+dpkMI1DM7N4Ff/ITUDHfhdwMPqDwEtoBVGVU3jtAbsJFktvC1X/qu
-         410E3kmBrzrS3jdN2UL5k6xoY7ToOYbLMotPwzScNbjFeGCSngrNUc76prBUIeKuX4V1
-         ek1+4rvKKkz5w/RIkS0Ap2aK7wYY/BoZcXqa8S1/8W0VjxkGLI241u3apgP/PQdndqFV
-         czNQ==
-X-Gm-Message-State: AO0yUKU0wm+b/KFIPaW++U/Ss9d/H4RedHLrqUVi/9o5ZW9Sb6B/20sn
-        jTTm/hyIFAWP5ECH+3oZAjdoHA==
-X-Google-Smtp-Source: AK7set/SDIe02vvcqIXxVdYR1JTowEX0cXIGhrq4GDN8fP/pcdD3VeaD4VIm3863dwYdvnDd4WXa9w==
-X-Received: by 2002:a05:600c:1714:b0:3df:dc29:d69 with SMTP id c20-20020a05600c171400b003dfdc290d69mr676718wmn.36.1675711304635;
-        Mon, 06 Feb 2023 11:21:44 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id r13-20020a05600c35cd00b003dc5b59ed7asm12549446wmq.11.2023.02.06.11.21.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Feb 2023 11:21:44 -0800 (PST)
-Message-ID: <a711905e-dbfb-4258-62be-250a9549a9c4@linaro.org>
-Date:   Mon, 6 Feb 2023 20:21:42 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BVazd58kum2M1pTJRpVOVODmHtrBqnbElti6UPp8PdY=;
+        b=gqd9U+JHmiACy3kW8u3KYeSdo4Vxwt5EiQRiTcO+UkoW3McRPq3BrhIcN4aGu9v+Td
+         nadDPSL9HEP0ll3RKyd+D4MJkXakMSMT6p6BOc7xmA98B7x3vaDzrOYn7nsPVaEzH6sR
+         o5BXB0kLmalznIZ2/qwEHJo/hVRM0jZbhEM2HzK3nmSAwbMqbMX2RpU7yI5rqN9JOahU
+         Th0x99O/eAlw64M9wk0PVXwUHwsoqoRm7eYDA5bH8+qglNtmRfRIAshyL1RoFjXPg1Ly
+         rQBaiFLi6uaYkdaBYBDNJRwcAbkwaIUjRy+b9dgQR92jnMGMPWFRT/acPazySsCT2NIY
+         swxw==
+X-Gm-Message-State: AO0yUKXVZKTQgU2OEWiJ3lamQZbWcEbC9FwCcmypNZDMxQ1dbj4vhpiV
+        coYFRplunikY7WVf0clTgAmX/DHqR2SfyUacAKFq
+X-Google-Smtp-Source: AK7set+8PKF4HEUqt5XWLHVYxiPWC6II/btLz3XLiCqiRYUb0N0rG5cooA7PkjfKNNz3HCExMYitHrJc1kA4KVn4XBw=
+X-Received: by 2002:a25:8585:0:b0:888:1a8:bb26 with SMTP id
+ x5-20020a258585000000b0088801a8bb26mr100033ybk.49.1675711451467; Mon, 06 Feb
+ 2023 11:24:11 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 7/7] ASoC: dt-bindings: meson: convert axg sound card
- control to schema
-Content-Language: en-US
-To:     Jerome Brunet <jbrunet@baylibre.com>,
-        Mark Brown <broonie@kernel.org>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org
-Cc:     linux-amlogic@lists.infradead.org,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org
-References: <20230206153449.596326-1-jbrunet@baylibre.com>
- <20230206153449.596326-8-jbrunet@baylibre.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230206153449.596326-8-jbrunet@baylibre.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230203200138.3872873-1-jstultz@google.com> <20230203200138.3872873-2-jstultz@google.com>
+ <20230205190753.4sgvtxxaqcvr45ei@offworld> <20230206172029.GO2948950@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20230206172029.GO2948950@paulmck-ThinkPad-P17-Gen-1>
+From:   John Stultz <jstultz@google.com>
+Date:   Mon, 6 Feb 2023 11:24:00 -0800
+Message-ID: <CANDhNCrZg3RoC2q=323FTvcVoXD1gfQgXfdGw-Tgt4V7G7vk9g@mail.gmail.com>
+Subject: Re: [PATCH v2 2/4] locktorture: Add nested locking to mutex torture tests
+To:     paulmck@kernel.org
+Cc:     Davidlohr Bueso <dave@stgolabs.net>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/02/2023 16:34, Jerome Brunet wrote:
-> Convert the DT binding documentation for the Amlogic axg sound card to
-> schema.
-> 
-> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
-> ---
->  .../bindings/sound/amlogic,axg-sound-card.txt | 124 ------------
->  .../sound/amlogic,axg-sound-card.yaml         | 183 ++++++++++++++++++
->  2 files changed, 183 insertions(+), 124 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/sound/amlogic,axg-sound-card.txt
->  create mode 100644 Documentation/devicetree/bindings/sound/amlogic,axg-sound-card.yaml
-> 
+On Mon, Feb 6, 2023 at 9:20 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+>
+> On Sun, Feb 05, 2023 at 11:07:53AM -0800, Davidlohr Bueso wrote:
+> > On Fri, 03 Feb 2023, John Stultz wrote:
+> >
+> > > This patch adds randomized nested locking to the mutex torture
+> > > tests, as well as new LOCK08 config files for testing mutexes
+> > > with nested locking
+> > >
+> > > This was inspired by locktorture extensions originally implemented
+> > > by Connor O'Brien, for stress testing the proxy-execution series:
+> > >  https://lore.kernel.org/lkml/20221003214501.2050087-12-connoro@google.com/
+> > >
+> > > Comments or feedback would be greatly appreciated!
+> > >
+> > > Cc: Davidlohr Bueso <dave@stgolabs.net>
+> > > Cc: "Paul E. McKenney" <paulmck@kernel.org>
+> > > Cc: Josh Triplett <josh@joshtriplett.org>
+> > > Cc: Joel Fernandes <joel@joelfernandes.org>
+> > > Cc: Juri Lelli <juri.lelli@redhat.com>
+> > > Cc: Valentin Schneider <vschneid@redhat.com>
+> > > Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> > > Signed-off-by: John Stultz <jstultz@google.com>
+> >
+> > Just realized I sent two review tags for rtmutex, one was supposed
+> > to be this patch.
+> >
+> > Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
+>
+> Thank you!
+>
+> I will apply this to these commits on my next rebase:
+>
+> f5a632cbbbea ("locktorture: Add nested locking to mutex torture tests")
+> 83743c9839f5 ("locktorture: Add nested locking to rtmutex torture tests")
+>
+> John, if you send a new version of these, please add Davidlohr's review
+> tags.
 
+Yeah. I'll respin to address most of the feedback.
 
-Thank you for your patch. There is something to discuss/improve.
-
-
-> -};
-> diff --git a/Documentation/devicetree/bindings/sound/amlogic,axg-sound-card.yaml b/Documentation/devicetree/bindings/sound/amlogic,axg-sound-card.yaml
-> new file mode 100644
-> index 000000000000..b7459fad0e7f
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/sound/amlogic,axg-sound-card.yaml
-> @@ -0,0 +1,183 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/sound/amlogic,axg-sound-card.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Amlogic AXG sound card
-> +
-> +maintainers:
-> +  - Jerome Brunet <jbrunet@baylibre.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: amlogic,axg-sound-card
-> +
-> +  audio-aux-devs:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    description: list of auxiliary devices
-> +
-> +  audio-routing:
-> +    $ref: /schemas/types.yaml#/definitions/non-unique-string-array
-> +    description: |
-
-You still have everywhere | which should be removed. Here and in almost
-every other description when no special formatting is needed.
-
-
-
-Best regards,
-Krzysztof
-
+thanks
+-john
