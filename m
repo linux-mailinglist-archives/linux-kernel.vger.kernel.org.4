@@ -2,109 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9144A68C8F9
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 22:50:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0228268C8FD
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 22:50:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbjBFVuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 16:50:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56006 "EHLO
+        id S230039AbjBFVuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 16:50:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230039AbjBFVt7 (ORCPT
+        with ESMTP id S230048AbjBFVuw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 16:49:59 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F2C303CC;
-        Mon,  6 Feb 2023 13:49:26 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id mi9so12956042pjb.4;
-        Mon, 06 Feb 2023 13:49:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=pZ8nBL9fnm50KWgUG103EnYdV8ecPmtZB51kTE6QsSA=;
-        b=DQQkID5hUpP033/mOHpgBQZWTHKCSByRDkLaZoT/cPufR557J/8Q0jWWOO5KDPuirY
-         zzyyIGeUz7UGnoPyzkwVPfjyRPt/Vt/bepBP4vLh9cM5B/VXeadsX75tAGKuTR1WWyVI
-         7gVjiEnnptVUCLs+uXMNODpZulbQtCyxtsFSYzIARHsaqpoOIQnMBv0iENEc2iF9tdPZ
-         zy9lDvznqeVkWe6tFhx93C6wil2jSimcRah/5T1Em3FfQ/mzRa+A25LeYIxQ0MPCLx/W
-         54NkKo1sCBPU5GwWhjWnaSXsdDOX1AzvJKj8MfNh5zCyCK5j4gyc/YNkf+8p6qYtoTqR
-         IwVg==
+        Mon, 6 Feb 2023 16:50:52 -0500
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173B42DE55;
+        Mon,  6 Feb 2023 13:50:28 -0800 (PST)
+Received: by mail-oi1-f173.google.com with SMTP id 20so10210448oix.5;
+        Mon, 06 Feb 2023 13:50:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pZ8nBL9fnm50KWgUG103EnYdV8ecPmtZB51kTE6QsSA=;
-        b=T2GrF/msxA+NkoKw1sVXP+zJyY9uza44d0r/zDNoSZER1DopdkM3O6GBQFHI0+em9r
-         XR34aDP5ao4R0ADzvGZg1qaK7FBKpMlS1rRnCqg6jHgjfUKBp2hJfkFd7fyCMHe+3MvB
-         zIiPpgA4ZYyFZrexCS4BzdhzLCuA8p0CR1Xu4NKfiO2sp784tPBkxFxPFWcEMDD8x6KN
-         WKs4udhJEsUpkj1a6+TzEhjEDjrldZJHwdx5OkOaECZUL0astb87jdLFNbgUr+n1cKHJ
-         8eQdndxjPF7YpiNfYL/BLzWl4o/kwJA27eQQD2VAO9umRsD2RRoDjIBls6eKUta53qpV
-         bTsg==
-X-Gm-Message-State: AO0yUKUoVWaKRoCL7x1w7DjlHp0rsADwsNV8Ad/ckzwA5h7CpYin8y4b
-        CUgOxDBZI6/kJ9pfp0QJgI0=
-X-Google-Smtp-Source: AK7set+8T3nsc6X6z3oUR56tzCU54cjPawlognigxqcUu5NuW5PrzRhOBzEwNtjOt1ClbDM0d54eig==
-X-Received: by 2002:a17:903:111:b0:199:1faa:1b72 with SMTP id y17-20020a170903011100b001991faa1b72mr298907plc.45.1675720165300;
-        Mon, 06 Feb 2023 13:49:25 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id a17-20020a170902ee9100b00198fcb1b2c2sm4481500pld.218.2023.02.06.13.49.24
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=TComHy6fZylroVxyyvSSlsSThHII6Mu4hEBfm8EqSnQ=;
+        b=wzcgRGz00UQEDrm6wOLuvKXuTvB5rwVlO0eaTY1L4+SX8QIGvV0SFhKJ79vw8RCOfU
+         3aIQkj2vffP9okUNAg429LO+yyrNI/1qDS1pUJG1yP4uUgy1lNHDkzj4CHu0rms9JJlC
+         TfggjfNFmiLPl4yXbclfpNiS11jgvnqB1277QspPjBIewp6OsxTrpJhw/tCGElx3eMRv
+         iMSyNoy2GarWtgsWjC14iWpvjfd6tUBLI878zXFOIUWGk+DW42IweKEBQYLNqaENl4OS
+         GBpFeQP+oEWQbeh2r1pbxyZsf6l+jCGY6lqluCfzkiZqhZZ1GFiebkiRfk61m0L5ndsG
+         kcBA==
+X-Gm-Message-State: AO0yUKVf1pIZv4nlOlZJU/OrkeBigg3FVsRyPZ5k+CKyBlH1JjAuOtpW
+        s/YVzYIcM9Nu7o8t055eCA==
+X-Google-Smtp-Source: AK7set/hYpEoCmUec9o7ktPTMXf736j7C/JoYG/gvXF5wTwFwEmDcTGWh8hMqjewMfZtm/XdF/MBdg==
+X-Received: by 2002:aca:1c03:0:b0:378:4a78:2bba with SMTP id c3-20020aca1c03000000b003784a782bbamr134479oic.18.1675720209074;
+        Mon, 06 Feb 2023 13:50:09 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id x4-20020a9d6284000000b006865f605ce3sm5495840otk.54.2023.02.06.13.50.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Feb 2023 13:49:24 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 6 Feb 2023 11:49:23 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        Waiman Long <longman@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: [GIT PULL] cgroup fixes for v6.2-rc7
-Message-ID: <Y+F149pNVNcMJQIn@slm.duckdns.org>
+        Mon, 06 Feb 2023 13:50:08 -0800 (PST)
+Received: (nullmailer pid 1564985 invoked by uid 1000);
+        Mon, 06 Feb 2023 21:50:08 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Luca Weiss <luca@z3ntu.xyz>
+Cc:     linux-kernel@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-media@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org,
+        Shunqian Zheng <zhengsq@rock-chips.com>,
+        phone-devel@vger.kernel.org
+In-Reply-To: <20230206-ov2685-dtschema-v1-1-9e4da3474c10@z3ntu.xyz>
+References: <20230206-ov2685-dtschema-v1-1-9e4da3474c10@z3ntu.xyz>
+Message-Id: <167572017056.1564123.13342855865502188090.robh@kernel.org>
+Subject: Re: [PATCH] media: dt-bindings: ov2685: convert to dtschema
+Date:   Mon, 06 Feb 2023 15:50:08 -0600
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit d2d11f342b179f1894a901f143ec7c008caba43e:
 
-  Merge branch 'fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs (2023-02-05 17:17:10 -0800)
+On Mon, 06 Feb 2023 21:23:16 +0100, Luca Weiss wrote:
+> Convert the text-based dt-bindings to yaml.
+> 
+> Changes from original txt:
+> * Take wording for various properties from other yaml bindings, this
+>   removes e.g. volt amount from schema since it isn't really relevant
+>   and the datasheet is a better source.
+> * Don't make reset-gpios a required property since it can be tied to
+>   DOVDD instead.
+> 
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> ---
+>  .../devicetree/bindings/media/i2c/ov2685.txt       |  41 ---------
+>  .../devicetree/bindings/media/i2c/ovti,ov2685.yaml | 101 +++++++++++++++++++++
+>  MAINTAINERS                                        |   1 +
+>  3 files changed, 102 insertions(+), 41 deletions(-)
+> 
 
-are available in the Git repository at:
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git/ tags/cgroup-for-6.2-rc7-fixes
+yamllint warnings/errors:
 
-for you to fetch changes up to 7a2127e66a00e073db8d90f9aac308f4a8a64226:
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/rockchip-isp1.example.dtb: camera@3c: 'clocks' is a required property
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/rockchip-isp1.example.dtb: camera@3c: 'clock-names' is a required property
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/rockchip-isp1.example.dtb: camera@3c: 'dvdd-supply' is a required property
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/rockchip-isp1.example.dtb: camera@3c: 'avdd-supply' is a required property
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/rockchip-isp1.example.dtb: camera@3c: 'dovdd-supply' is a required property
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.yaml
 
-  cpuset: Call set_cpus_allowed_ptr() with appropriate mask for task (2023-02-06 10:18:36 -1000)
+doc reference errors (make refcheckdocs):
 
-----------------------------------------------------------------
-cgroup fixes for v6.2-rc7
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230206-ov2685-dtschema-v1-1-9e4da3474c10@z3ntu.xyz
 
-During v6.2 cycle, there were a series of changes to task cpu affinity
-handling which fixed cpuset inadvertently clobbering user-configured
-affinity masks. Unfortunately, they broke the affinity handling on hybrid
-heterogeneous CPUs which have cores that can execute both 64 and 32bit along
-with cores that can only execute 32bit code.
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
 
-This late pull request contains two fix patches for the above issue. While
-reverting the changes that caused the regression is definitely an option,
-the origial patches do improve how cpuset behave signficantly in some cases
-and the fixes seem fairly safe, so I think it'd be better to try to fix them
-first.
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-----------------------------------------------------------------
-Waiman Long (1):
-      cgroup/cpuset: Don't filter offline CPUs in cpuset_cpus_allowed() for top cpuset tasks
+pip3 install dtschema --upgrade
 
-Will Deacon (1):
-      cpuset: Call set_cpus_allowed_ptr() with appropriate mask for task
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
- kernel/cgroup/cpuset.c | 45 ++++++++++++++++++++++++++++++++++++---------
- 1 file changed, 36 insertions(+), 9 deletions(-)
