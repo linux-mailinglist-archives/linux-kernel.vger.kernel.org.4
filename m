@@ -2,106 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EB5468C70B
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 20:49:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F73268C71C
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 20:56:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230151AbjBFTtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 14:49:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37668 "EHLO
+        id S230190AbjBFT4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 14:56:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230327AbjBFTtv (ORCPT
+        with ESMTP id S229517AbjBFT4A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 14:49:51 -0500
-Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A4B2684B;
-        Mon,  6 Feb 2023 11:49:45 -0800 (PST)
-Received: by mail-oi1-f178.google.com with SMTP id dt8so10742174oib.0;
-        Mon, 06 Feb 2023 11:49:45 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=J6lVgx9Ye+fXVcDPZBAErXqmuGkKzZYMKhQaRCupxvo=;
-        b=xPZo0/tRbHOmmeNAe5W/jgFNLf1Fss6P4QznAeKQF2kM91a9mlG33E/EqflF1dd/7R
-         oIpwDwxbGliq3mM9sg05mVTz+GlMur1gwc1K9b0U9xR0Y7xYkopd79AUzA6y9tXaaVxm
-         PCr1kARdMGTYlEDbnQ+K5hWjL/XN61K5p19ulaaURB+Ug1ULrHGwy8r39PAdI55X3B64
-         1H8RrDWghgWyUFPUL2KlsTlZdfBeOYjBbU1tzJ4RzYskj2ZufuaORuPQysfrgdzq8f69
-         X28ZvmVtNDAYaS0SwY82QHx/zdCYuTewhg5YQm/pisnd0DpqO26X62707dVOK8/JhH7A
-         9vsA==
-X-Gm-Message-State: AO0yUKXifQMMEo/YMgXNd3Cc6PyskhXNCP7Gjhpc+RUX1N/1ufqRgDmP
-        xrGTG5CW/hAboC4KYk0p4Q==
-X-Google-Smtp-Source: AK7set8aa786WtgYsb0fgpCCASQHkwkCjX54JwJnRI/IbL+r96zPJmsJPnE+9mqzFfAISnFuKDdNjw==
-X-Received: by 2002:aca:5ec4:0:b0:378:90b7:b28 with SMTP id s187-20020aca5ec4000000b0037890b70b28mr10237783oib.3.1675712985174;
-        Mon, 06 Feb 2023 11:49:45 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r184-20020aca44c1000000b003786e78f2b5sm4615151oia.9.2023.02.06.11.49.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Feb 2023 11:49:44 -0800 (PST)
-Received: (nullmailer pid 1206434 invoked by uid 1000);
-        Mon, 06 Feb 2023 19:49:44 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Mon, 6 Feb 2023 14:56:00 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41D3E2820C;
+        Mon,  6 Feb 2023 11:55:59 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id D607220D16;
+        Mon,  6 Feb 2023 19:55:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1675713357; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=WoGUoqh11J03jqDXORRp3VVpc0HyYHs8ixizU+1AjIg=;
+        b=M42hB5zumOWl9cpsqx5uBkCjJFjng2WobTLQ1DLTFwWwEW2zYPioj4Xu7h5HVbMkGv0PkH
+        C0tbgCFl8MnN6smX05aLc7OwsbmglfaEmDoTqSVWmIbLTledx+DpR35A8GtJNtWpebxGPb
+        9p4DCs6UNSrK51JU/vITTJTRh9IdEko=
+Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
+        by relay2.suse.de (Postfix) with ESMTP id C1F242C141;
+        Mon,  6 Feb 2023 19:55:57 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id B736ADA701; Mon,  6 Feb 2023 20:50:10 +0100 (CET)
+From:   David Sterba <dsterba@suse.com>
+To:     torvalds@linux-foundation.org
+Cc:     David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Btrfs fixes for v6.2-rc8
+Date:   Mon,  6 Feb 2023 20:50:09 +0100
+Message-Id: <cover.1675710734.git.dsterba@suse.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Vijaya Anand <sunrockers8@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Andrew Jeffery <andrew@aj.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, Joel Stanley <joel@jms.id.au>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-In-Reply-To: <20230206153325.43692-1-sunrockers8@gmail.com>
-References: <20230206153325.43692-1-sunrockers8@gmail.com>
-Message-Id: <167571291763.1202238.8557252319537323407.robh@kernel.org>
-Subject: Re: [PATCH] dt-bindings : misc : aspeed,cvic interrupt controller
- : convert the binding document to yaml
-Date:   Mon, 06 Feb 2023 13:49:44 -0600
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-On Mon, 06 Feb 2023 21:03:09 +0530, Vijaya Anand wrote:
->     Convert the binding document for ASPEED AST2400 and AST2500 coprocessor interrupt controller
->     from txt to yaml so one could validate dt-entries correctly and any future additions can go
->     into yaml format. The options for compatability described according to the example given.
-> ---
->  .../devicetree/bindings/misc/aspeed,cvic.txt  | 35 ----------
->  .../devicetree/bindings/misc/aspeed,cvic.yaml | 67 +++++++++++++++++++
->  2 files changed, 67 insertions(+), 35 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/misc/aspeed,cvic.txt
->  create mode 100644 Documentation/devicetree/bindings/misc/aspeed,cvic.yaml
-> 
+a few more short fixes. Please pull, thanks.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+- explicitly initialize zlib work memory to fix a KCSAN warning
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/misc/aspeed,cvic.yaml:23:111: [warning] line too long (123 > 110 characters) (line-length)
+- limit number of send clones by maximum memory allocated
 
-dtschema/dtc warnings/errors:
+- limit device size extent in case it device shrink races with chunk
+  allocation
 
-doc reference errors (make refcheckdocs):
+- raid56 fixes
+  - fix copy&paste error in RAID6 stripe recovery
+  - make error bitmap update atomic
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230206153325.43692-1-sunrockers8@gmail.com
+----------------------------------------------------------------
+The following changes since commit b7adbf9ada3513d2092362c8eac5cddc5b651f5c:
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+  btrfs: fix race between quota rescan and disable leading to NULL pointer deref (2023-01-16 19:46:54 +0100)
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+are available in the Git repository at:
 
-pip3 install dtschema --upgrade
+  git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-6.2-rc7-tag
 
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+for you to fetch changes up to a9ad4d87aa263de36895402b66115a3a4b88bf1c:
 
+  btrfs: raid56: make error_bitmap update atomic (2023-01-27 14:57:10 +0100)
+
+----------------------------------------------------------------
+Alexander Potapenko (1):
+      btrfs: zlib: zero-initialize zlib workspace
+
+David Sterba (1):
+      btrfs: send: limit number of clones and allocated memory size
+
+Josef Bacik (1):
+      btrfs: limit device extents to the device size
+
+Qu Wenruo (1):
+      btrfs: raid56: make error_bitmap update atomic
+
+Tanmay Bhushan (1):
+      btrfs: raid56: fix stripes if vertical errors are found
+
+ fs/btrfs/raid56.c  | 14 +++++++++++---
+ fs/btrfs/send.c    |  6 +++---
+ fs/btrfs/volumes.c |  6 +++++-
+ fs/btrfs/zlib.c    |  2 +-
+ 4 files changed, 20 insertions(+), 8 deletions(-)
