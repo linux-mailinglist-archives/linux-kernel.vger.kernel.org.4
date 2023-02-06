@@ -2,61 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE63168BA15
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 11:28:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E397D68BA18
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 11:28:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230403AbjBFK2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 05:28:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53170 "EHLO
+        id S230413AbjBFK2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 05:28:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230391AbjBFK2R (ORCPT
+        with ESMTP id S230392AbjBFK2S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 05:28:17 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 229A312F2F
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 02:28:16 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so10398373wmb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 02:28:16 -0800 (PST)
+        Mon, 6 Feb 2023 05:28:18 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13BC166DC
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 02:28:17 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id f47-20020a05600c492f00b003dc584a7b7eso10380252wmp.3
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 02:28:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FYkW6U+ZAL6IPEC3v84+mOvhpm/8I/o3t0bipCAwglk=;
-        b=VlcMT6L5u2sbpTqTSvr84Tp/Dxt8Vmtj1UFJ/L7vUi+I2aVS6gz53Er7ulAHoc/0Le
-         JHro8lIslrBL9WHZxOum9VrQ4HPE0pYB8VwJywJfZycm7Czo0OazXxbvzimHfczvaLam
-         ddhQYDA8dxggWIurr8schGAUd0VckMoJ2HS0U5W+pAM8Cu6pfnZmCbFnQ84BqmPkr6lK
-         ja1TOnU7DFeWirqQtQGcQ85Y6GhioUgpaMRuQttOKf7fuQBdhHViEEjx9JFl06j3TFh/
-         zn5FscyDjvaCsoZuCFOUDG+ossC3HRCGUUCn6fyx3IoQ6B/3YYFIgNMg8yuESLfKH52P
-         9+0A==
+        bh=wTC3NAL1hZxJOCcXWMuQzdITVQ+oLa3AAEmCazUtZWo=;
+        b=coJ1KrAQZuALbf5TZA2QK0yc8M8+YC6IOP9jy67LmzfUSrIhaA59DL/yV3dv1zPCS5
+         nV/qiuW5g1lbj2dxWQj7hNcNw386PhM2nHtdoR0uWVWVRCx/wp4Nm6i2KFhkZV1m5vHc
+         rUgCtFCyHe+/scV4EcfzULGqv5Z7P4pAE9AiVNikyNNycoBXdeFwNj6aU3DwlbZKMwVw
+         ob5W52qqNkzBPko/JrgLCWiBipARRazj+/3Locu5grBdnFpHrcJMEPrSaTNKE8aEcsJP
+         Pns4R0yt+SWxmqm3Tdh/ub7FRHuiPQNnujsiN0X4OhsZdVa+ybaMSzfkIen9/wv5HGyA
+         iNzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FYkW6U+ZAL6IPEC3v84+mOvhpm/8I/o3t0bipCAwglk=;
-        b=543Vnf+gW1D0zXI3A5ylTGwr0xccCyQKsBLtsArFtXkM778BL/W2pv08Jr4pEKtBN+
-         1P9NDiAZAqdKTaDPYMBYLhNV0azGizBsP7dgxYsDEXTbETUyEV3XjPNNLuQe8MVgwo65
-         K93sfsg5D0xxs8UX8Mss59l5yISnF3cnZiK6bcU91+OMi6CpoHyS8Croh790JOy0DV/X
-         VRhht/6IRe0E2GAkc4LtFOXQCgIUYxc2buUjRrub0mR6CoB+xTxBieYlM24T+nCPCUQY
-         lWJByJu6ST2rydSQ9evsZt+/kFBRr3nRNn5shKTwHjxd5sH5P0FTHW9VQppBUtls7WQQ
-         l5MQ==
-X-Gm-Message-State: AO0yUKXtDmFTiNgHENIe/7GppKqkMwaeU8KIXhy5IiJoZ2s818wdXuAQ
-        OD1d+JbHrd5MR63pwriZZP2yHx+PGhzma64E
-X-Google-Smtp-Source: AK7set/E3mR2r8DcMeQh5JZu/tw+bPma7hMf9kDfIXdqJ1o2WjEVKtGjStpC8VTKIsaypu+eK7eU1Q==
-X-Received: by 2002:a7b:c8ce:0:b0:3d9:ebf9:7004 with SMTP id f14-20020a7bc8ce000000b003d9ebf97004mr18003254wml.29.1675679294731;
-        Mon, 06 Feb 2023 02:28:14 -0800 (PST)
+        bh=wTC3NAL1hZxJOCcXWMuQzdITVQ+oLa3AAEmCazUtZWo=;
+        b=Yig23y4tKf7MsPtb6aNxd2441vzFoErIl0/QSj++csmSn5RSdOGRdB+PsUpycX1SFJ
+         R2xlnxGXpgCT1ISFObrvhAbPDk5UTr/qSQmMm7m6mejCVEUUvDZ9oUcV6BlWFVKpgp+a
+         gpf5UM5CyUYf69+mLRwVxGgA7mR0u6pxa1p9x6Mpq8r6zpEPAXjaAKGumbNFh/YHtv9l
+         CF7vJeajd++OJQ/awkftQ8LtkCSHY/E8nOobI/GRFIk7SoJF5u1kOSWloOVEtXSLSGpy
+         rUEfjqh9kr31QqtUbN5i3pdGuyWfXFQBbhZG3M3XBmCm5IvwF3umDQo7sBQ9DWDLXvaR
+         6SxA==
+X-Gm-Message-State: AO0yUKWhPqakbvnG6jZq9xUsGUBv0MwI5EeNeSpLnLCLV+tMx+8KnjQ8
+        iCHZlLvffVPpMAKNKdX0aSZcDb6YxizmFP+9
+X-Google-Smtp-Source: AK7set+9Tgk6o3qHR0hqcyy/xm8nsCsz1JkFC8+EGf6EBnSObjAcE9sl6Z3fvL71T4NlPBPP5AsHhA==
+X-Received: by 2002:a05:600c:35c7:b0:3e0:1a9:b1e0 with SMTP id r7-20020a05600c35c700b003e001a9b1e0mr3108242wmq.25.1675679296104;
+        Mon, 06 Feb 2023 02:28:16 -0800 (PST)
 Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id g10-20020a05600c310a00b003de77597f16sm11002446wmo.21.2023.02.06.02.28.13
+        by smtp.gmail.com with ESMTPSA id g10-20020a05600c310a00b003de77597f16sm11002446wmo.21.2023.02.06.02.28.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Feb 2023 02:28:14 -0800 (PST)
+        Mon, 06 Feb 2023 02:28:15 -0800 (PST)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, Samuel Holland <samuel@sholland.org>,
+Cc:     linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [RESEND PATCH 01/37] nvmem: sunxi_sid: Drop the workaround on A64
-Date:   Mon,  6 Feb 2023 10:27:23 +0000
-Message-Id: <20230206102759.669838-2-srinivas.kandagatla@linaro.org>
+Subject: [RESEND PATCH 02/37] dt-bindings: nvmem: Fix qcom,qfprom compatibles enum ordering
+Date:   Mon,  6 Feb 2023 10:27:24 +0000
+Message-Id: <20230206102759.669838-3-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230206102759.669838-1-srinivas.kandagatla@linaro.org>
 References: <20230206102759.669838-1-srinivas.kandagatla@linaro.org>
@@ -71,48 +74,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Samuel Holland <samuel@sholland.org>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Now that the SRAM readout code is fixed by using 32-bit accesses, it
-always returns the same values as register readout, so the A64 variant
-no longer needs the workaround. This makes the D1 variant structure
-redundant, so remove it.
+Move qcom,msm8974-qfprom after qcom,msm8916-qfprom to respect
+alphabetical ordering.
 
-Signed-off-by: Samuel Holland <samuel@sholland.org>
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- drivers/nvmem/sunxi_sid.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+ Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/nvmem/sunxi_sid.c b/drivers/nvmem/sunxi_sid.c
-index 92dfe4cb10e3..a970f1741cc6 100644
---- a/drivers/nvmem/sunxi_sid.c
-+++ b/drivers/nvmem/sunxi_sid.c
-@@ -197,15 +197,9 @@ static const struct sunxi_sid_cfg sun8i_h3_cfg = {
- 	.need_register_readout = true,
- };
- 
--static const struct sunxi_sid_cfg sun20i_d1_cfg = {
--	.value_offset = 0x200,
--	.size = 0x100,
--};
--
- static const struct sunxi_sid_cfg sun50i_a64_cfg = {
- 	.value_offset = 0x200,
- 	.size = 0x100,
--	.need_register_readout = true,
- };
- 
- static const struct sunxi_sid_cfg sun50i_h6_cfg = {
-@@ -218,7 +212,7 @@ static const struct of_device_id sunxi_sid_of_match[] = {
- 	{ .compatible = "allwinner,sun7i-a20-sid", .data = &sun7i_a20_cfg },
- 	{ .compatible = "allwinner,sun8i-a83t-sid", .data = &sun50i_a64_cfg },
- 	{ .compatible = "allwinner,sun8i-h3-sid", .data = &sun8i_h3_cfg },
--	{ .compatible = "allwinner,sun20i-d1-sid", .data = &sun20i_d1_cfg },
-+	{ .compatible = "allwinner,sun20i-d1-sid", .data = &sun50i_a64_cfg },
- 	{ .compatible = "allwinner,sun50i-a64-sid", .data = &sun50i_a64_cfg },
- 	{ .compatible = "allwinner,sun50i-h5-sid", .data = &sun50i_a64_cfg },
- 	{ .compatible = "allwinner,sun50i-h6-sid", .data = &sun50i_h6_cfg },
+diff --git a/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml b/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
+index 8e89b15b535f..cc39514e8c84 100644
+--- a/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
++++ b/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
+@@ -19,8 +19,8 @@ properties:
+           - qcom,apq8064-qfprom
+           - qcom,apq8084-qfprom
+           - qcom,ipq8064-qfprom
+-          - qcom,msm8974-qfprom
+           - qcom,msm8916-qfprom
++          - qcom,msm8974-qfprom
+           - qcom,msm8996-qfprom
+           - qcom,msm8998-qfprom
+           - qcom,qcs404-qfprom
 -- 
 2.25.1
 
