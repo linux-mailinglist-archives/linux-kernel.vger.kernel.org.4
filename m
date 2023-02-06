@@ -2,90 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1198468C5E8
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 19:37:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69CAF68C5F0
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 19:39:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbjBFShY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 13:37:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51340 "EHLO
+        id S229817AbjBFSjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 13:39:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbjBFShS (ORCPT
+        with ESMTP id S229550AbjBFSjJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 13:37:18 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA6F2B0B5
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 10:37:14 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id iy2so2976428plb.11
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 10:37:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=KLC/XkXNzAEy7VypcsOB1BhiDn5tCJJ6z4r2FO96gZ4=;
-        b=Z6Xobl+ifCTmy3tuXbCb4/T7KQuqh1+ELYFMFncOG8gjGjYWHYVKBkKWf/hs7705kQ
-         U9pBsHYgyI4LBsQZ4svp9ACnySmMw1lzFGzLx+r5Z3R6I6fYbCXXJfRBQAJhTeaJt2Rd
-         DZ+n9H0FNUIhVcUTh+hGz3QzvSZi2ZTAZCEBA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KLC/XkXNzAEy7VypcsOB1BhiDn5tCJJ6z4r2FO96gZ4=;
-        b=GZuGL9iHaXOYoTpNgvAskCMsh+zdgRBPdoFGHlTzbvSgSTxD/lxrULYIa5nZx4yBd9
-         4smD/1CoKrJTZRsHNuaAyGIVgWLEzVup7t3/S+CQZdn2rrTOnXR7ClCTTj3QEhBpTreU
-         6MgnfYvi21LUz6JHsQ6FwnD3Ol/UvshlPp1Fha8OpoNj1S7nUeCPtOQpMuEjxHiYKkrj
-         CHiS+9fuRw0ostTcN2fVTEg4+hjwcrzH91VjsCKAcgt3UO3k9AKskxBAtKkPVGKKNfkA
-         pJ8Go8xr8/zB8K13tyoNeRpTLZhfVVJccqIOnPD47rAxdeRaVUp8z8g1uYEEcW7/kKg5
-         QM5g==
-X-Gm-Message-State: AO0yUKXtGBMNlDVyAj2exvDuqkiR9Swv2FeNz1Sm91cii2bM9yGw4ZUV
-        JI/GxZvw77hgnGAGP4Zf5U/IPw==
-X-Google-Smtp-Source: AK7set/Rzubn+NGDwIh+RLUe/eGNYmHcdSo19eILBU6BpKaPvO08yVnkIMQkb7RsLOZ4nQQiabKtPQ==
-X-Received: by 2002:a17:902:e749:b0:196:68ee:f363 with SMTP id p9-20020a170902e74900b0019668eef363mr27185847plf.69.1675708634329;
-        Mon, 06 Feb 2023 10:37:14 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id y15-20020a17090264cf00b001967580f60fsm7204461pli.260.2023.02.06.10.37.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Feb 2023 10:37:13 -0800 (PST)
-Message-ID: <63e148d9.170a0220.20379.b4a7@mx.google.com>
-X-Google-Original-Message-ID: <202302061035.@keescook>
-Date:   Mon, 6 Feb 2023 10:37:13 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] btrfs: sysfs: Handle NULL return values
-References: <20230204183510.never.909-kees@kernel.org>
- <Y99XGrFvXBL32cOO@kroah.com>
+        Mon, 6 Feb 2023 13:39:09 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 56F8D273D
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 10:39:08 -0800 (PST)
+Received: (qmail 665605 invoked by uid 1000); 6 Feb 2023 13:39:07 -0500
+Date:   Mon, 6 Feb 2023 13:39:07 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        kernel-team@meta.com, mingo@kernel.org, parri.andrea@gmail.com,
+        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
+        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+        luc.maranget@inria.fr, akiyks@gmail.com
+Subject: Re: Current LKMM patch disposition
+Message-ID: <Y+FJSzUoGTgReLPB@rowland.harvard.edu>
+References: <20230204004843.GA2677518@paulmck-ThinkPad-P17-Gen-1>
+ <Y920w4QRLtC6kd+x@rowland.harvard.edu>
+ <20230204014941.GS2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y95yhJgNq8lMXPdF@rowland.harvard.edu>
+ <20230204222411.GC2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y9+41ctA54pjm/KG@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y99XGrFvXBL32cOO@kroah.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y9+41ctA54pjm/KG@google.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 05, 2023 at 08:13:30AM +0100, Greg KH wrote:
-> On Sat, Feb 04, 2023 at 10:35:10AM -0800, Kees Cook wrote:
-> > Each of to_fs_info(), discard_to_fs_info(), and to_space_info() can
-> > return NULL values.
+On Sun, Feb 05, 2023 at 02:10:29PM +0000, Joel Fernandes wrote:
+> On Sat, Feb 04, 2023 at 02:24:11PM -0800, Paul E. McKenney wrote:
+> > On Sat, Feb 04, 2023 at 09:58:12AM -0500, Alan Stern wrote:
+> > > On Fri, Feb 03, 2023 at 05:49:41PM -0800, Paul E. McKenney wrote:
+> > > > On Fri, Feb 03, 2023 at 08:28:35PM -0500, Alan Stern wrote:
+> > > > > The "Provide exact semantics for SRCU" patch should have:
+> > > > > 
+> > > > > 	Portions suggested by Boqun Feng and Jonas Oberhauser.
+> > > > > 
+> > > > > added at the end, together with your Reported-by: tag.  With that, I 
+> > > > > think it can be queued for 6.4.
+> > > > 
+> > > > Thank you!  Does the patch shown below work for you?
+> > > > 
+> > > > (I have tentatively queued this, but can easily adjust or replace it.)
+> > > 
+> > > It looks fine.
+> > 
+> > Very good, thank you for looking it over!  I pushed it out on branch
+> > stern.2023.02.04a.
+> > 
+> > Would anyone like to ack/review/whatever this one?
 > 
-> The code says it could, but I really do not think that is possible at
-> all, especially based on the fact that there have never been any crashes
-> reported here.
+> Would it be possible to add comments, something like the following? Apologies
+> if it is missing some ideas. I will try to improve it later.
+> 
+> thanks!
+> 
+>  - Joel
+> 
+> ---8<-----------------------
+> 
+> diff --git a/tools/memory-model/linux-kernel.bell b/tools/memory-model/linux-kernel.bell
+> index ce068700939c..0a16177339bc 100644
+> --- a/tools/memory-model/linux-kernel.bell
+> +++ b/tools/memory-model/linux-kernel.bell
+> @@ -57,7 +57,23 @@ let rcu-rscs = let rec
+>  flag ~empty Rcu-lock \ domain(rcu-rscs) as unmatched-rcu-lock
+>  flag ~empty Rcu-unlock \ range(rcu-rscs) as unmatched-rcu-unlock
+>  
+> +(***************************************************************)
+>  (* Compute matching pairs of nested Srcu-lock and Srcu-unlock *)
+> +(***************************************************************)
+> +(*
+> + * carry-srcu-data: To handle the case of the SRCU critical section split
+> + * across CPUs, where the idx is used to communicate the SRCU index across CPUs
+> + * (say CPU0 and CPU1), data is between the R[srcu-lock] to W[once][idx] on
+> + * CPU0, which is sequenced with the ->rf is between the W[once][idx] and the
+> + * R[once][idx] on CPU1.  The carry-srcu-data is made to exclude Srcu-unlock
+> + * events to prevent capturing accesses across back-to-back SRCU read-side
+> + * critical sections.
+> + *
+> + * srcu-rscs: Putting everything together, the carry-srcu-data is sequenced with
+> + * a data relation, which is the data dependency between R[once][idx] on CPU1
+> + * and the srcu-unlock store, and loc ensures the relation is unique for a
+> + * specific lock.
+> + *)
+>  let carry-srcu-data = (data ; [~ Srcu-unlock] ; rf)*
+>  let srcu-rscs = ([Srcu-lock] ; carry-srcu-data ; data ; [Srcu-unlock]) & loc
 
-I'm not sure that's a useful measure if we're trying to improve
-robustness under memory corruption, but at least one of those helpers is
-performing a type check, not just a simple container_of(), etc.
+My tendency has been to keep comments in the herd7 files to a minimum 
+and to put more extended descriptions in the explanation.txt file.  
+Right now that file contains almost nothing (a single paragraph!) about 
+SRCU, so it needs to be updated to talk about the new definition of 
+srcu-rscs.  In my opinion, that's where this sort of comment belongs.
 
-Regardless, yeah, if this can be done without NULL returns, sure, let's
-do it. I just don't know this code well enough to say what's possible.
-:)
+Joel, would you like to write an extra paragraph of two for that file, 
+explaining in more detail how SRCU lock-to-unlock matching is different 
+from regular RCU and how the definition of the srcu-rscs relation works?  
+I'd be happy to edit anything you come up with.
 
--- 
-Kees Cook
+Alan
+
+PS: We also need to update the PLAIN ACCESSES AND DATA RACES section of 
+explanation.txt, to mention the carry-dep relation and why it is 
+important.
