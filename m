@@ -2,109 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E05AF68C4C1
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 18:29:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 464A268C4D1
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 18:30:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbjBFR3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 12:29:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36004 "EHLO
+        id S230175AbjBFRa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 12:30:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230376AbjBFR2o (ORCPT
+        with ESMTP id S230477AbjBFRaN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 12:28:44 -0500
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E859EEE;
-        Mon,  6 Feb 2023 09:28:31 -0800 (PST)
-Received: by mail-ed1-f42.google.com with SMTP id l12so3530171edb.0;
-        Mon, 06 Feb 2023 09:28:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iNUkQ9XxPrxK4otYbqHTBhXXuiskkXfC9w+d3Yp3xfA=;
-        b=BzFR+A9tlN8T+c/NgfU4sMSwiBpOrwL0O3jWc3SqUl/zr9GdRIFvrTPaEBYVq9Sf1S
-         0m489wbq97qQmpUPs5zifzcngcYU978KfhhPAzi2gV6Tm48Tz1XKH8B0Al6exdfEHfgI
-         0IX8WPb1CyZ8r0Dqbpjss05vEeAQGi+U52HAHS50pK7EnSgXhduZqS6AT0m//+DFt8Om
-         Gmx/u9NAxWVbO0JKUPVDHdHvP1zPEBcL5CKGknitbjq7KAscrD/w70O/+hOvoDI7yWMu
-         80gFvE0P7IAjuhUOwhbS6WYpitmncbV9UjRsfILgnzHZokXOnD+NvmPyu708lShmzEWq
-         TZYA==
-X-Gm-Message-State: AO0yUKXlQrXY3zsyQOoaDkcOZ+du6Fv7lfX3ygtHZg+rr502Pd3+pgx8
-        +jUPgQ+I5NF7zdl639rAX7gnD0ceJjeT7qFfcG4=
-X-Google-Smtp-Source: AK7set+VXS2r5wnk5Ptk/58i/WvzHxY8QKg6Qjw7V+e3YmJSnCNhHeIxgeSg1T7/wEA+8wtYKkp8VjbWNCR26qfNITo=
-X-Received: by 2002:a50:d654:0:b0:4aa:a0ee:7ed1 with SMTP id
- c20-20020a50d654000000b004aaa0ee7ed1mr89647edj.58.1675704510461; Mon, 06 Feb
- 2023 09:28:30 -0800 (PST)
+        Mon, 6 Feb 2023 12:30:13 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0786A5245
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 09:30:11 -0800 (PST)
+Date:   Mon, 06 Feb 2023 17:30:08 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1675704609;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=CFBCRdsDf0oDJduomNR7hJ7n93kuzTkx6Sy+Vjn70rQ=;
+        b=2CURftn8TK9sw2G2lEB+RIFxZukDmAraD+4fH9MYDx7EGmIuHyKsaC9xtNIXw5/RWjqGGg
+        XjAkbMNWUQxuKLRM453sar+v14n6lyHkAYDPs7mzMQNKHcwL2X5lXYU/+YOJftgGYeDh9+
+        +PUnOZH+oViZCGWRrshN/ZX46qFz8NIf2NjB5LLHlVriZdH2qfzSSGJ1lz8g/WOSvDPJOi
+        wQ2zvLVHa6GNmTCe1ksb0e1k3yglcyP4k3WXtBpRbbQFLfa0kBOKxY5EtVjX7F8I/p9DfZ
+        HHa/V3UdS3vUvz92pYfvUnB1ec+4pXs+BrVSe0v0yZu2nEMzMggxo2xIKXtxxw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1675704609;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=CFBCRdsDf0oDJduomNR7hJ7n93kuzTkx6Sy+Vjn70rQ=;
+        b=op2EkjFbzFFI6wp/oYSXkzFGiOrUSxGHswdeNzyzbk6CQKnkeMa+mky4+JawxEgHZsS3xH
+        E+LrkrNHfe1XaaBA==
+From:   "irqchip-bot for Marc Zyngier" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
+Subject: [irqchip: irq/irqchip-next] genirq/ipi-mux: Use irq_domain_alloc_irqs()
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
 MIME-Version: 1.0
-References: <20230203175832.3406504-1-daniel.lezcano@linaro.org> <CAJZ5v0jzLCQt22MhfaAvL8w+RP7Y-YqxUdcgQ2u2Tz9i0CS+2A@mail.gmail.com>
-In-Reply-To: <CAJZ5v0jzLCQt22MhfaAvL8w+RP7Y-YqxUdcgQ2u2Tz9i0CS+2A@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 6 Feb 2023 18:28:19 +0100
-Message-ID: <CAJZ5v0gzaa5KMkULHtp9Vi-VTomOhkf2eP0eufHqz9NMx5crJA@mail.gmail.com>
-Subject: Re: [PATCH] thermal: Hunt zero trip points thermal zones usage
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rjw@rjwysocki.net, linux-acpi@vger.kernel.org,
-        linux-pm@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Kees Cook <keescook@chromium.org>,
-        "Lee, Chun-Yi" <joeyli.kernel@gmail.com>,
-        Chuansheng Liu <chuansheng.liu@intel.com>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Message-ID: <167570460879.4906.13823581978207975292.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 6, 2023 at 5:08 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Fri, Feb 3, 2023 at 6:59 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
-> >
-> > Some drivers are declaring a thermal zone without any thermal trip
-> > points.
-> >
-> > On the other side, we are introducing the function
-> > thermal_zone_device_register_with_trips() which provides an array of
-> > generic thermal trip points. When all the drivers will be converted to
-> > the generic trip points, keeping two functions will be useless.
-> >
-> > Most of the drivers are now using
-> > thermal_zone_device_register_with_trips() with the generic trip
-> > points. As soon as the remaining drivers are merged, the
-> > thermal_zone_device_register_with_trips() will be renamed to
-> > thermal_zone_device_register().
->
-> So why is this the first time I'm learning about this plan?
->
-> > Obviously this renaming can only happen if there are no more user of
-> > the thermal_zone_device_register() function.
-> >
-> > This change uses thermal_zone_device_register_with_trips() with a NULL
-> > parameter for the trip point array instead of
-> > thermal_zone_device_register().
->
-> And later it will be renamed to thermal_zone_device_register() again?
->
-> Can we just stop confusing people this way?
->
-> What would be wrong with changing both
-> thermal_zone_device_register_with_trips() and
-> thermal_zone_device_register() together when we are ready?  And why
-> can't the both be replaced with something line thermal_zone_register()
-> doing all of the necessary things in one go?  Why do we have to make
-> confusing and redundant changes?
+The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Or you can define a thermal_register_tripless_zone() wrapper around
-thermal_zone_device_register_with_trips() and make the drivers in
-question use that, and modify them just once.
+Commit-ID:     3d812a0f27baa2d094f2c18298d48b012878dc0b
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/3d812a0f27baa2d094f2c18298d48b012878dc0b
+Author:        Marc Zyngier <maz@kernel.org>
+AuthorDate:    Mon, 06 Feb 2023 17:21:15 
+Committer:     Marc Zyngier <maz@kernel.org>
+CommitterDate: Mon, 06 Feb 2023 17:21:15 
+
+genirq/ipi-mux: Use irq_domain_alloc_irqs()
+
+Using __irq_domain_alloc_irqs() is an unnecessary complexity. Use
+irq_domain_alloc_irqs(), which is simpler and makes the code more
+readable.
+
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+---
+ kernel/irq/ipi-mux.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/kernel/irq/ipi-mux.c b/kernel/irq/ipi-mux.c
+index 3a403c3..fa4fc18 100644
+--- a/kernel/irq/ipi-mux.c
++++ b/kernel/irq/ipi-mux.c
+@@ -185,8 +185,7 @@ int ipi_mux_create(unsigned int nr_ipi, void (*mux_send)(unsigned int cpu))
+ 	domain->flags |= IRQ_DOMAIN_FLAG_IPI_SINGLE;
+ 	irq_domain_update_bus_token(domain, DOMAIN_BUS_IPI);
+ 
+-	rc = __irq_domain_alloc_irqs(domain, -1, nr_ipi,
+-				     NUMA_NO_NODE, NULL, false, NULL);
++	rc = irq_domain_alloc_irqs(domain, nr_ipi, NUMA_NO_NODE, NULL);
+ 	if (rc <= 0) {
+ 		pr_err("unable to alloc IRQs from IPI Mux domain\n");
+ 		goto fail_free_domain;
