@@ -2,129 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B904068BAFA
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 12:09:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE4A368BB01
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 12:10:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229781AbjBFLJe convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 6 Feb 2023 06:09:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59478 "EHLO
+        id S229893AbjBFLKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 06:10:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbjBFLJc (ORCPT
+        with ESMTP id S229526AbjBFLKp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 06:09:32 -0500
-Received: from relay.hostedemail.com (smtprelay0013.hostedemail.com [216.40.44.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B229913D71
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 03:09:31 -0800 (PST)
-Received: from omf04.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay03.hostedemail.com (Postfix) with ESMTP id 59B52A0C66;
-        Mon,  6 Feb 2023 11:09:30 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf04.hostedemail.com (Postfix) with ESMTPA id 0C6A220027;
-        Mon,  6 Feb 2023 11:09:27 +0000 (UTC)
-Message-ID: <bbdf99df867786510f709473fa2c3744dbf27bb4.camel@perches.com>
-Subject: Re: [PATCH] checkpatch.pl: Relax commit ID check to allow more than
- 12 chars
-From:   Joe Perches <joe@perches.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Jonathan =?ISO-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
-        linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andy Whitcroft <apw@canonical.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Mon, 06 Feb 2023 03:09:26 -0800
-In-Reply-To: <CAMuHMdWcjUXwkk2V29p-hifDnMhLRSwQBXMzVeURRA48znKC5Q@mail.gmail.com>
-References: <20230129123431.1282427-1-j.neuschaefer@gmx.net>
-         <78d224a63f6c27bf700d59007b6f3c89746d728c.camel@perches.com>
-         <3afee0493d3718f2e38b6c54dab23d38360cd5d0.camel@perches.com>
-         <CAMuHMdWcjUXwkk2V29p-hifDnMhLRSwQBXMzVeURRA48znKC5Q@mail.gmail.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Mon, 6 Feb 2023 06:10:45 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D31213D71;
+        Mon,  6 Feb 2023 03:10:44 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P9NpV6n6sz4x1f;
+        Mon,  6 Feb 2023 22:10:26 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1675681839;
+        bh=kUcid2K08WtpFrwk3dq6n2jc2ZZxMaSNsif8b2qLpcI=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=JSr9bUqckLWxlQvgXrqHdLKjhZNKCyo4/W+R7iqEdoTwQny8JL4fA9p8KLiKopoBY
+         5u53AQEtGGXSUIVhYTsKoGTQqHAWk/L2OGiEhn+0/8fSth4VXKAS3aT226D33i5p+m
+         FdbPDX2xoyL2dmmxuKSPL38q4OEI/nwe/wpGmzrwBTQTovoqi6LZ4omZBFLcu1QcvH
+         OCmTE96dRBgZqYLhxf1uVZpSZUhhjl9pivy58AnZ8D9ntUKLxW5BuUV2Rkfq3DMiAR
+         1E1dDbWxoKsiTVWbw5buAHInDRJ1Jkci48lbw53vA/21E8Kh226KSjdHUbEkKMeduf
+         u7otQ9CqmaTuA==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>, linux-kernel@vger.kernel.org
+Cc:     jgross@suse.com, richard.henderson@linaro.org,
+        ink@jurassic.park.msu.ru, mattst88@gmail.com,
+        linux-alpha@vger.kernel.org, linux@armlinux.org.uk,
+        linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
+        will@kernel.org, guoren@kernel.org, linux-csky@vger.kernel.org,
+        linux-ia64@vger.kernel.org, chenhuacai@kernel.org,
+        kernel@xen0n.name, loongarch@lists.linux.dev, f.fainelli@gmail.com,
+        bcm-kernel-feedback-list@broadcom.com, tsbogend@alpha.franken.de,
+        linux-mips@vger.kernel.org, jiaxun.yang@flygoat.com,
+        npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        linuxppc-dev@lists.ozlabs.org, ysato@users.sourceforge.jp,
+        dalias@libc.org, linux-sh@vger.kernel.org, davem@davemloft.net,
+        sparclinux@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        linux-xtensa@linux-xtensa.org, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        paulmck@kernel.org
+Subject: Re: [PATCH 12/22] powerpc/cpu: Mark start_secondary_resume()
+ __noreturn
+In-Reply-To: <b5d065218265e79daa23f82bb84efc6a7ea120fc.1675461757.git.jpoimboe@kernel.org>
+References: <cover.1675461757.git.jpoimboe@kernel.org>
+ <b5d065218265e79daa23f82bb84efc6a7ea120fc.1675461757.git.jpoimboe@kernel.org>
+Date:   Mon, 06 Feb 2023 22:10:22 +1100
+Message-ID: <87v8kfdp7l.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-X-Rspamd-Queue-Id: 0C6A220027
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Stat-Signature: bnxitis48kesjoeto6hdrcmypydkzqmz
-X-Rspamd-Server: rspamout05
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1//DDzdb6fyz0gA5ivMPJw+xCLvCwbCB3Y=
-X-HE-Tag: 1675681767-752193
-X-HE-Meta: U2FsdGVkX19Q90r1YzDwYExj8K7CXjQNFc18ipJ0EFKsYG5TvvbNyI00CKzqWTuvGYpjxP10LFmjpgUpb99OBg==
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-02-06 at 09:38 +0100, Geert Uytterhoeven wrote:
-> Hi Joe,
-> 
-> On Sat, Feb 4, 2023 at 5:59 PM Joe Perches <joe@perches.com> wrote:
-> > On Sun, 2023-01-29 at 09:52 -0800, Joe Perches wrote:
-> > > On Sun, 2023-01-29 at 13:34 +0100, Jonathan Neuschäfer wrote:
-> > > > By now, `git log --pretty=%h` (on my copy of linux.git) prints commit
-> > > > hashes with 13 digits, because of the number of objects.
-> > > > 
-> > > > Relax the rule in checkpatch.pl to allow a few more digits (up to 16).
-> > > 
-> > > NAK without updating the process docs first.
-> > 
-> > btw: it looks like 12 will still be sufficient for awhile yet
-> > 
-> > $ git count
-> > total 1154908
-> 
-> Hmm, Ubuntu git too old?
+Josh Poimboeuf <jpoimboe@kernel.org> writes:
+> start_secondary_resume() doesn't return.  Annotate it as such.  By
+> extension this also makes arch_cpu_idle_dead() noreturn.
 
-Don't think so
+Can we also mark arch_cpu_idle_dead() (the C function) __noreturn ?
 
-$ git --version
-git version 2.39.1
+Seems like it would be good documentation, even if it's not required
+once the generic prototype is __noreturn.
 
-More likely just using Linus' tree and not a
-development tree with a bunch of branches.
+But not a show-stopper.
 
-I've got a -next tree with history back to next-20151106
-with a bunch of missing dates because I don't fetch it
-every day.  It has:
+Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
 
-$ git tag | grep next | wc -l
-1134
+cheers
 
-There I get:
-
-$ git -c core.abbrev=5 log --pretty=format:%h | \
-  perl -nE 'chomp;say length' | sort | uniq -c | sort -n -k2
-      6 5
- 542082 6
- 568573 7
-  51124 8
-   3249 9
-    217 10
-     14 11
-      1 12
-
-> I've been using core.abbrev=16 for a while, and some maintainers
-> reject my patches with Fixes: tags because of that...
-
-Perhaps because that's not the documented format?
-
-> Is it really worthwhile to save on the number of hexits, making lookup
-> of some commits more inconvenient?
-> 
-> Note that while "git show edb9b8" suggests edb9b8f[...],
-> gitweb says bad object id:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=edb9b8
-
-hmm.  Not here.
-
-$ git show edb9b8
-tree edb9b8
-
-Kconfig
-Makefile
-fmvj18x_cs.c
-
-
+> diff --git a/arch/powerpc/include/asm/smp.h b/arch/powerpc/include/asm/smp.h
+> index f63505d74932..cfd42ca8765c 100644
+> --- a/arch/powerpc/include/asm/smp.h
+> +++ b/arch/powerpc/include/asm/smp.h
+> @@ -66,7 +66,7 @@ void start_secondary(void *unused);
+>  extern int smp_send_nmi_ipi(int cpu, void (*fn)(struct pt_regs *), u64 delay_us);
+>  extern int smp_send_safe_nmi_ipi(int cpu, void (*fn)(struct pt_regs *), u64 delay_us);
+>  extern void smp_send_debugger_break(void);
+> -extern void start_secondary_resume(void);
+> +extern void __noreturn start_secondary_resume(void);
+>  extern void smp_generic_give_timebase(void);
+>  extern void smp_generic_take_timebase(void);
+>  
+> -- 
+> 2.39.0
