@@ -2,54 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C37068C236
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 16:51:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E60EB68C235
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 16:51:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230422AbjBFPvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 10:51:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59760 "EHLO
+        id S230419AbjBFPvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 10:51:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbjBFPvN (ORCPT
+        with ESMTP id S230042AbjBFPvN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 6 Feb 2023 10:51:13 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E207285
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 07:51:13 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pP3ls-0001ay-Nv; Mon, 06 Feb 2023 16:51:08 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pP3lq-0035nw-RB; Mon, 06 Feb 2023 16:51:08 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pP3lr-001KRz-2k; Mon, 06 Feb 2023 16:51:07 +0100
-Date:   Mon, 6 Feb 2023 16:51:07 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Wolfram Sang <wsa@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH v3] i2c: dev: don't allow user-space to deadlock the
- kernel
-Message-ID: <20230206155107.qwf5tbrqsbvv4hln@pengutronix.de>
-References: <20230118134940.240102-1-brgl@bgdev.pl>
- <Y9DpbChLZfDONHPz@ninjato>
- <Y9GpL9RBNM8H2ZSL@shikoro>
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C156589;
+        Mon,  6 Feb 2023 07:51:12 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id CFA826061D;
+        Mon,  6 Feb 2023 15:51:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1675698670; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7fhVqQ68veOG9L/p1SZuHOGXVu/+YnsgNDr8L++Nf6Y=;
+        b=hasfkwf5qLMSjdjBN6tNl9erNVm4U6hoHsFNNv8OenccPiydH09u+yHslUPouNtKnn2j4N
+        IRgHQtzLbkOt8iKWYtUOv6bo1JcUIFxWHwPmp2gSgcxRDuF2Ctx5P6pQwAe+dzYWZqeVsp
+        54yNNtbDWOGQDl97k5EHhRinkwPr6Gw=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8D1F7138E7;
+        Mon,  6 Feb 2023 15:51:10 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id R8GOIe4h4WPrdwAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Mon, 06 Feb 2023 15:51:10 +0000
+Date:   Mon, 6 Feb 2023 16:51:09 +0100
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Michal Hocko <mhocko@suse.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Leonardo <leobras@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>, cgroups@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH 1/2] sched/isolation: Merge individual nohz_full features
+ into a common housekeeping flag
+Message-ID: <20230206155107.GA31453@blackbody.suse.cz>
+References: <20230203232409.163847-1-frederic@kernel.org>
+ <20230203232409.163847-2-frederic@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ol763elobegcycbx"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="EVF5PPMfhYS0aIcm"
 Content-Disposition: inline
-In-Reply-To: <Y9GpL9RBNM8H2ZSL@shikoro>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URI_DOTEDU autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230203232409.163847-2-frederic@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -57,57 +75,45 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---ol763elobegcycbx
-Content-Type: text/plain; charset=iso-8859-1
+--EVF5PPMfhYS0aIcm
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hello,
+Hello Frederic.
 
-ah, this is the mail I missed before.
-
-On Wed, Jan 25, 2023 at 11:11:59PM +0100, Wolfram Sang wrote:
+On Sat, Feb 04, 2023 at 12:24:08AM +0100, Frederic Weisbecker <frederic@ker=
+nel.org> wrote:
+> The individual isolation features turned on by nohz_full were initially
+> split in order for each of them to be tunable through cpusets. However
+> plans have changed in favour of an interface (be it cpusets or sysctl)
+> grouping all these features to be turned on/off altogether.
+> Then should the need ever arise, the interface can still be expanded
+> to handle the individual isolation features.
 >=20
-> > So, this code handled all my stress-testing well so far. I'll try to
-> > think of some more ideas until this evening, but likely I will apply it
-> > later. Nonetheless, more review eyes are still welcome!
->=20
-> Ah yes, I now recalled why I had the gut feeling that this solution is
-> not complete. See this mail thread from 2015:
->=20
-> https://lkml.iu.edu/hypermail/linux/kernel/1501.2/01700.html
->=20
-> There are still drivers using i2c_del_adapter()+kfree(), so removing the
-> completion could cause use-after-free there, or?
+> Therefore the current isolation split between tick/timer/workqueue/rcu/
+> kthreads/misc doesn't make sense anymore.
 
-There is also a strange construct in spi that I understand at one point
-in time, but I failed to swap it in quickly. It's about commit
-794aaf01444d4e765e2b067cba01cc69c1c68ed9. I think there should be a
-nicer solution than to track if the controller was allocated using devm,
-but I don't remember the details. But before addressing the i2c problem
-it might be worth to invest some time into that spi issue to not make
-the same mistake for i2c.
+Why it doesn't make sense? I think it's a useful annotation of
+respective operations wrt CPU isolation.
 
-Best regards
-Uwe
+The grouping you did into HK_TYPE_KERNEL_NOISE (or even coarser) should
+IMO be done at the place where it'll be exposed into the favored
+interface (like it's with nohz_full=3D).
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+Thanks,
+Michal
 
---ol763elobegcycbx
+--EVF5PPMfhYS0aIcm
 Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmPhId4ACgkQwfwUeK3K
-7AmVZAgAl3Faq9I+XvDqrdflU2pn5514NuWK8YOXY2AZDQ6EWYK9+qv/U1nf6+cS
-rvmqPv/0yoQ/MGcVOPY1dFnPMCRyjgt/dC75VYP0qBOFaJ4xm/xvHKV9QTmsDLhN
-+vkwKMAUZkKW/MbIL+rjril1w+GuFhrFp0RoCM4NXF3t+Jo0XwRn3JE/lwvSBL+c
-0SS1w1LykId2Wo6tTSqP9U54OnCc0QiYJ5WyjD+HXmAB0oWx6ZOvx27zNr+0HPSn
-XcTyDTPiBgu8ssss4xyWMGqTGvaBtv2P3nncO8GZsC0ejpWYVd63aJTngB1zwY00
-ugxdHWQpnYOIpiPbE9PipLyu3PEHBQ==
-=quCD
+iHUEARYIAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCY+Eh4QAKCRAkDQmsBEOq
+uY4SAQCzuyUGyy1DTu07dJpsvqnTWqj22goDeqZvTqIu0AP03gEAyBFBBPOZ8x2z
+1AxH3gDttpfyCcnalCsgb2sHDcUf+gA=
+=pZsI
 -----END PGP SIGNATURE-----
 
---ol763elobegcycbx--
+--EVF5PPMfhYS0aIcm--
