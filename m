@@ -2,152 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C00568C122
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 16:15:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC14E68C125
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 16:16:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230317AbjBFPPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 10:15:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52496 "EHLO
+        id S230515AbjBFPQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 10:16:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbjBFPPL (ORCPT
+        with ESMTP id S229640AbjBFPQG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 10:15:11 -0500
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2455C1EBCE;
-        Mon,  6 Feb 2023 07:15:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1675696510;
-  x=1707232510;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=JS7h8g3ctjeRZPbI69EcSH0Wy8aIzGJjjvYaYMytls0=;
-  b=mZ0YByfYI5jQxwprZoFbnevdmRmdXo96fTnwoVpuFYufMoKKQJacgGCt
-   LhxfFmQcQWcHOnbjL20qqobGpEErVh6yDWtanmj3Q6HueD6d/NKutSPf7
-   Q3RSMKHMLN0RwGbFheDjjNnkj58MBslI3izbpFgtl3g+/QZa12ZMzlmOB
-   OVcCNHlzV0ew0/ngq7CAANjGeueA1bjT8R34PA8s/njc1G1fyAWNkZp59
-   dZWqgBLPFKFd1Lu3tGG4nLQi+J49fZBY4gAhbw5FuOCausnBvsFsHUXo3
-   sdiZ66SglQwBonIePtac1wNVodpo24JU5oQmimvk2li4Yiuuij53fz6tm
-   A==;
-From:   Jiri Valek - 2N <jiriv@axis.com>
-To:     <linux-input@vger.kernel.org>
-CC:     <devicetree@vger.kernel.org>, <dmitry.torokhov@gmail.com>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-kernel@vger.kernel.org>, <robh+dt@kernel.org>,
-        <u.kleine-koenig@pengutronix.de>, <mkorpershoek@baylibre.com>,
-        <jiriv@axis.com>
-Subject: [PATCH v5 2/2] Input: cap11xx - add support for cap1203, cap1293 and cap1298
-Date:   Mon, 6 Feb 2023 16:13:31 +0100
-Message-ID: <20230206151331.184634-3-jiriv@axis.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230206151331.184634-1-jiriv@axis.com>
-References: <20230206151331.184634-1-jiriv@axis.com>
+        Mon, 6 Feb 2023 10:16:06 -0500
+Received: from exchange.fintech.ru (e10edge.fintech.ru [195.54.195.159])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD65EEFA6;
+        Mon,  6 Feb 2023 07:16:03 -0800 (PST)
+Received: from Ex16-02.fintech.ru (10.0.10.19) by exchange.fintech.ru
+ (195.54.195.159) with Microsoft SMTP Server (TLS) id 14.3.498.0; Mon, 6 Feb
+ 2023 18:15:54 +0300
+Received: from Ex16-01.fintech.ru (10.0.10.18) by Ex16-02.fintech.ru
+ (10.0.10.19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.4; Mon, 6 Feb 2023
+ 18:15:54 +0300
+Received: from Ex16-01.fintech.ru ([fe80::2534:7600:5275:d3f9]) by
+ Ex16-01.fintech.ru ([fe80::2534:7600:5275:d3f9%7]) with mapi id
+ 15.01.2242.004; Mon, 6 Feb 2023 18:15:54 +0300
+From:   =?utf-8?B?0J/QtdGC0YDQvtCy0LAg0J3QsNGC0LDQu9C40Y8g0JzQuNGF0LDQudC70L4=?=
+         =?utf-8?B?0LLQvdCw?= <n.petrova@fintech.ru>
+To:     Ilya Dryomov <idryomov@gmail.com>
+CC:     Dongsheng Yang <dongsheng.yang@easystack.cn>,
+        Jens Axboe <axboe@kernel.dk>,
+        "ceph-devel@vger.kernel.org" <ceph-devel@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "lvc-project@linuxtesting.org" <lvc-project@linuxtesting.org>,
+        "Alexey Khoroshilov" <khoroshilov@ispras.ru>
+Subject: RE: [PATCH] rbd: avoid double free memory on error path in
+ rbd_dev_create()
+Thread-Topic: [PATCH] rbd: avoid double free memory on error path in
+ rbd_dev_create()
+Thread-Index: AQHZN9nxgAE2L2YDAUOtBDoC3Rb6ma7Boq2AgABcKRA=
+Date:   Mon, 6 Feb 2023 15:15:54 +0000
+Message-ID: <c01e807428894bef8fed628df0b8f4b6@fintech.ru>
+References: <20230203141515.125205-1-n.petrova@fintech.ru>
+ <CAOi1vP_7Oaw8O-p2X1xymzym1Xf_RZeN0u=SeE4Zbc2y+AfgYA@mail.gmail.com>
+In-Reply-To: <CAOi1vP_7Oaw8O-p2X1xymzym1Xf_RZeN0u=SeE4Zbc2y+AfgYA@mail.gmail.com>
+Accept-Language: ru-RU, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.0.253.125]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.0.5.60]
-X-ClientProxiedBy: se-mail04w.axis.com (10.20.40.10) To se-mail01w.axis.com
- (10.20.40.7)
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add basic support for more CAP1xxx sensors.
-All models from CAP1xxx family are register-compatible.
-Some advanced features are not used and disabled by default.
-
-Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
-Reported-by: kernel test robot <lkp@xxxxxxxxx>
-Signed-off-by: Jiri Valek - 2N <jiriv@axis.com>
----
-Changes in v2:
-  - Fixed if statement.
-  
-Changes in v3:
-  - Model names sorted alphabetically.
-
-Changes in v4
-  - No changes.
-
-Changes in v5:
-  - Fix indentation.
-
- drivers/input/keyboard/cap11xx.c | 19 +++++++++++++++++--
- 1 file changed, 17 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/input/keyboard/cap11xx.c b/drivers/input/keyboard/cap11xx.c
-index 79afd0386e3f..040696d0e49c 100644
---- a/drivers/input/keyboard/cap11xx.c
-+++ b/drivers/input/keyboard/cap11xx.c
-@@ -98,14 +98,20 @@ enum {
- 	CAP1106,
- 	CAP1126,
- 	CAP1188,
-+	CAP1203,
- 	CAP1206,
-+	CAP1293,
-+	CAP1298
- };
- 
- static const struct cap11xx_hw_model cap11xx_devices[] = {
- 	[CAP1106] = { .product_id = 0x55, .num_channels = 6, .num_leds = 0, .no_gain = false },
- 	[CAP1126] = { .product_id = 0x53, .num_channels = 6, .num_leds = 2, .no_gain = false },
- 	[CAP1188] = { .product_id = 0x50, .num_channels = 8, .num_leds = 8, .no_gain = false },
-+	[CAP1203] = { .product_id = 0x6d, .num_channels = 3, .num_leds = 0, .no_gain = true },
- 	[CAP1206] = { .product_id = 0x67, .num_channels = 6, .num_leds = 0, .no_gain = true },
-+	[CAP1293] = { .product_id = 0x6f, .num_channels = 3, .num_leds = 0, .no_gain = false },
-+	[CAP1298] = { .product_id = 0x71, .num_channels = 8, .num_leds = 0, .no_gain = false },
- };
- 
- static const struct reg_default cap11xx_reg_defaults[] = {
-@@ -377,7 +383,8 @@ static int cap11xx_i2c_probe(struct i2c_client *i2c_client)
- 	if (error < 0)
- 		return error;
- 
--	dev_info(dev, "CAP11XX detected, revision 0x%02x\n", rev);
-+	dev_info(dev, "CAP11XX detected, model %s, revision 0x%02x\n",
-+		 id->name, rev);
- 	node = dev->of_node;
- 
- 	if (!of_property_read_u32(node, "microchip,sensor-gain", &gain32)) {
-@@ -390,7 +397,9 @@ static int cap11xx_i2c_probe(struct i2c_client *i2c_client)
- 			dev_err(dev, "Invalid sensor-gain value %d\n", gain32);
- 	}
- 
--	if (id->driver_data != CAP1206) {
-+	if (id->driver_data == CAP1106 ||
-+	    id->driver_data == CAP1126 ||
-+	    id->driver_data == CAP1188) {
- 		if (of_property_read_bool(node, "microchip,irq-active-high")) {
- 			error = regmap_update_bits(priv->regmap,
- 						   CAP11XX_REG_CONFIG2,
-@@ -483,7 +492,10 @@ static const struct of_device_id cap11xx_dt_ids[] = {
- 	{ .compatible = "microchip,cap1106", },
- 	{ .compatible = "microchip,cap1126", },
- 	{ .compatible = "microchip,cap1188", },
-+	{ .compatible = "microchip,cap1203", },
- 	{ .compatible = "microchip,cap1206", },
-+	{ .compatible = "microchip,cap1293", },
-+	{ .compatible = "microchip,cap1298", },
- 	{}
- };
- MODULE_DEVICE_TABLE(of, cap11xx_dt_ids);
-@@ -492,7 +504,10 @@ static const struct i2c_device_id cap11xx_i2c_ids[] = {
- 	{ "cap1106", CAP1106 },
- 	{ "cap1126", CAP1126 },
- 	{ "cap1188", CAP1188 },
-+	{ "cap1203", CAP1203 },
- 	{ "cap1206", CAP1206 },
-+	{ "cap1293", CAP1293 },
-+	{ "cap1298", CAP1298 },
- 	{}
- };
- MODULE_DEVICE_TABLE(i2c, cap11xx_i2c_ids);
--- 
-2.25.1
-
+SGkgSWx5YSENClRoYW5rcyBmb3IgeW91ciByZXNwb25zZSEgSSBkb24ndCBxdWl0ZSB1bmRlcnN0
+YW5kIHlvdXIgaWRlYSBhbmQgc3VnZ2VzdGlvbi4gVGhlIHBhdGNoIGlzIGRlc2lnbmVkIHRvIGF2
+b2lkIGRvdWJsZSBmcmVlIG1lbW9yeS4gSSBleHBsb3JlZCB0aGUgY29kZSBhZ2FpbiBhbmQgc3Vw
+cG9zZSB0aGVyZSBpcyBhbm90aGVyIHNpdHVhdGlvbiBmb3IgcmJkX2Rldi0+cmJkX2NsaWVudCBh
+bmQgcmJkX2Rldi0+c3BlYy4gRnJlZSBtZW1vcnkgb2YgdGhlc2UgcG9pbnRlcnMgaXMgcG9zc2li
+bGUgb25seSBvbmNlIGluIHJiZF9kZXZfZnJlZSgpIGZ1bmN0aW9uLiBJbiBkb19yYmRfYWRkKCkg
+ZGVhbGxvY2F0aW9uIG1lbW9yeSBpcyBvbmx5IGZvciByYmRfb3B0czogZHJpdmVycy9ibG9jay9y
+YmQuYyA3MTU3Lg0KQ29ycmVjdCBtZSBpZiBJJ20gd3JvbmcuDQoNClRoYW5rcywgDQpOYXRhbGlh
+DQoNCi0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQpGcm9tOiBJbHlhIERyeW9tb3YgPGlkcnlv
+bW92QGdtYWlsLmNvbT4gDQpTZW50OiBNb25kYXksIEZlYnJ1YXJ5IDYsIDIwMjMgMjo1OSBQTQ0K
+VG86INCf0LXRgtGA0L7QstCwINCd0LDRgtCw0LvQuNGPINCc0LjRhdCw0LnQu9C+0LLQvdCwIDxu
+LnBldHJvdmFAZmludGVjaC5ydT4NCkNjOiBEb25nc2hlbmcgWWFuZyA8ZG9uZ3NoZW5nLnlhbmdA
+ZWFzeXN0YWNrLmNuPjsgSmVucyBBeGJvZSA8YXhib2VAa2VybmVsLmRrPjsgY2VwaC1kZXZlbEB2
+Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWJsb2NrQHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVs
+QHZnZXIua2VybmVsLm9yZzsgbHZjLXByb2plY3RAbGludXh0ZXN0aW5nLm9yZzsgQWxleGV5IEto
+b3Jvc2hpbG92IDxraG9yb3NoaWxvdkBpc3ByYXMucnU+DQpTdWJqZWN0OiBSZTogW1BBVENIXSBy
+YmQ6IGF2b2lkIGRvdWJsZSBmcmVlIG1lbW9yeSBvbiBlcnJvciBwYXRoIGluIHJiZF9kZXZfY3Jl
+YXRlKCkNCg0KT24gRnJpLCBGZWIgMywgMjAyMyBhdCAzOjE1IFBNIE5hdGFsaWEgUGV0cm92YSA8
+bi5wZXRyb3ZhQGZpbnRlY2gucnU+IHdyb3RlOg0KPg0KPiBJZiByYmRfZGV2X2NyZWF0ZSgpIGZh
+aWxzIGFmdGVyIGFzc2lnbm1lbnQgJ29wdHMnIHRvICdyYmRfZGV2LT5vcHRzJywgDQo+IGRvdWJs
+ZSBmcmVlIG9mICdyYmRfb3B0aW9ucycgaGFwcGVuczoNCj4gb25lIGlzIGluIHJiZF9kZXZfZnJl
+ZSgpIGFuZCBhbm90aGVyIG9uZSBpcyBpbiBkb19yYmRfYWRkKCkuDQo+DQo+IEZvdW5kIGJ5IExp
+bnV4IFZlcmlmaWNhdGlvbiBDZW50ZXIgKGxpbnV4dGVzdGluZy5vcmcpIHdpdGggU1ZBQ0UuDQo+
+DQo+IEZpeGVzOiAxNjQzZGZhNGMyYzggKCJyYmQ6IGludHJvZHVjZSBhIHBlci1kZXZpY2Ugb3Jk
+ZXJlZCB3b3JrcXVldWUiKQ0KPiBTaWduZWQtb2ZmLWJ5OiBOYXRhbGlhIFBldHJvdmEgPG4ucGV0
+cm92YUBmaW50ZWNoLnJ1Pg0KPiBTaWduZWQtb2ZmLWJ5OiBBbGV4ZXkgS2hvcm9zaGlsb3YgPGto
+b3Jvc2hpbG92QGlzcHJhcy5ydT4NCj4gLS0tDQo+ICBkcml2ZXJzL2Jsb2NrL3JiZC5jIHwgMiAr
+LQ0KPiAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pDQo+DQo+
+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2Jsb2NrL3JiZC5jIGIvZHJpdmVycy9ibG9jay9yYmQuYyBp
+bmRleCANCj4gMDQ0NTNmNGEzMTljLi5hYjZiZmMzNTJjZGUgMTAwNjQ0DQo+IC0tLSBhL2RyaXZl
+cnMvYmxvY2svcmJkLmMNCj4gKysrIGIvZHJpdmVycy9ibG9jay9yYmQuYw0KPiBAQCAtNTM1Nyw3
+ICs1MzU3LDYgQEAgc3RhdGljIHN0cnVjdCByYmRfZGV2aWNlICpyYmRfZGV2X2NyZWF0ZShzdHJ1
+Y3QgcmJkX2NsaWVudCAqcmJkYywNCj4gICAgICAgICBpZiAoIXJiZF9kZXYpDQo+ICAgICAgICAg
+ICAgICAgICByZXR1cm4gTlVMTDsNCj4NCj4gLSAgICAgICByYmRfZGV2LT5vcHRzID0gb3B0czsN
+Cj4NCj4gICAgICAgICAvKiBnZXQgYW4gaWQgYW5kIGZpbGwgaW4gZGV2aWNlIG5hbWUgKi8NCj4g
+ICAgICAgICByYmRfZGV2LT5kZXZfaWQgPSBpZGFfc2ltcGxlX2dldCgmcmJkX2Rldl9pZF9pZGEs
+IDAsIEBAIA0KPiAtNTM3Miw2ICs1MzcxLDcgQEAgc3RhdGljIHN0cnVjdCByYmRfZGV2aWNlICpy
+YmRfZGV2X2NyZWF0ZShzdHJ1Y3QgcmJkX2NsaWVudCAqcmJkYywNCj4gICAgICAgICBpZiAoIXJi
+ZF9kZXYtPnRhc2tfd3EpDQo+ICAgICAgICAgICAgICAgICBnb3RvIGZhaWxfZGV2X2lkOw0KPg0K
+PiArICAgICAgIHJiZF9kZXYtPm9wdHMgPSBvcHRzOw0KPiAgICAgICAgIC8qIHdlIGhhdmUgYSBy
+ZWYgZnJvbSBkb19yYmRfYWRkKCkgKi8NCj4gICAgICAgICBfX21vZHVsZV9nZXQoVEhJU19NT0RV
+TEUpOw0KPg0KPiAtLQ0KPiAyLjM0LjENCj4NCg0KSGkgTmF0YWxpYSwNCg0KSXQgc2VlbXMgbGlr
+ZSBhIHNpbWlsYXIgaXNzdWUgaXMgYWZmZWN0aW5nIHJiZF9kZXYtPnJiZF9jbGllbnQgYW5kIHJi
+ZF9kZXYtPnNwZWMuICBVbmxpa2UgcmJkX2Rldi0+b3B0cywgdGhleSBhcmUgcmVmLWNvdW50ZWQg
+YW5kIEknbSBndWVzc2luZyB0aGF0IHRoZSB2ZXJpZmljYXRpb24gdG9vbCBkb2Vzbid0IGdvIHRo
+YXQgZGVlcC4NCg0KSSdkIHByZWZlciBhbGwgdGhyZWUgdG8gYmUgYWRkcmVzc2VkIGluIHRoZSBz
+YW1lIGNoYW5nZSwgc2luY2UgaXQncyB0aGUgc2FtZSBlcnJvciBwYXRoLiAgV291bGQgeW91IGJl
+IHdpbGxpbmcgdG8gbG9vayBpbnRvIHRoYXQgYW5kIHBvc3QgYSBuZXcgcmV2aXNpb24gb3Igc2hv
+dWxkIEkgdHJlYXQganVzdCB0aGlzIHBhdGNoIGFzIGEgYnVnIHJlcG9ydD8NCg0KVGhhbmtzLA0K
+DQogICAgICAgICAgICAgICAgSWx5YQ0K
