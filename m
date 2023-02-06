@@ -2,197 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA55268C60F
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 19:45:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA03368C610
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 19:45:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230010AbjBFSpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 13:45:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57144 "EHLO
+        id S230161AbjBFSph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 13:45:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbjBFSpS (ORCPT
+        with ESMTP id S229890AbjBFSpf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 13:45:18 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC6F54ED0
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 10:45:16 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id d2so8836142pjd.5
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 10:45:16 -0800 (PST)
+        Mon, 6 Feb 2023 13:45:35 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F7865B5
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 10:45:32 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id hr39so7327144ejc.7
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 10:45:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=DkhDQDKT3oVXHbvXapcI5zTOXdH8Icb/ANsh1giobys=;
-        b=R/gvzAjpkUwIW2Ypz2voQVYC/0MAAoapXn89Mk0mzs1r9FBsjEjUzP53KbAdiKtEv+
-         nCHbrT375Kte2H7weMvqen9+Na7Dr06oH7ZK83AZshB8v0eIGE5Zvi/cZ+H1/C6WTs6u
-         oXgNjd6akjn1A46hqWw6X7Uzgjv4jxq/Fn6h4=
+        d=posk.io; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=SqMveOvFHv1j0KM6AIu8F3PHdkpRYwMXc/KGhDV5SAY=;
+        b=UPH60VYrHJaUvX4zQ/YP+L1spZWWr6QDJaXfRnf5ZDVVklnA1KghHUTIDQfu6JermA
+         l4+X7okmD/wctp0OtYT67eH4GVh96FzL7JiaLIsKJnD/T70vYwddHtzx/hVrnDBaXAzP
+         xqgLquVV1v4pT58UMubDwwW83jlbzXddJ+Hkj8OC9gRNx54vTn68JbhXiogPHgxCQ0AD
+         AorNuF9JsXDHLa1xAfCaBYzu4SRZGPUxkd0YdWeKb8kbW61t/PQ4DW9vcUHGmf7bkVHL
+         dfZGM30ADCzdVa+YiIwUoMCmRPJ9XA6+N9BJ6+17F8nlD9Owdll1UhAJVE6LCPSI4z0F
+         4Muw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DkhDQDKT3oVXHbvXapcI5zTOXdH8Icb/ANsh1giobys=;
-        b=i+yk5Ci+0v+XRkTNVKIVbFRFGev+f5qDcEw6xa2Wzf4OjZEeSj844V59uH8tpv4vAT
-         RZRl6tLgMZqy6kgRkTxVyiEmm1xR9UzHvF6ggkFpb3QCY32v4rVLsENac8UWlwN8QvMl
-         KvoprUkMnd96BBb215TH5DXqA6SPpQK1jkEX1PjgBhZm14Yy2zegcK8PowRoJQhzjXaT
-         YT45+QPfZY1x8fdXboRTGrU3IMHjMw5oO023VSQpukPseOFW8mrZhYQqw4XeqCk0nEGw
-         IKUzpygtgThWY75cW6boQGGIw9cy8Fl2Dj7wregPr6ElYwTxTeRmFyZN+m3tvTZgAzC+
-         N5yw==
-X-Gm-Message-State: AO0yUKUzhGikLKTNmiE1RBVc+RdwhU4YA8NZYoZsdgBf7SV2PKwCyWjW
-        PGCDjl3UMsS8NAX47P35r8eEoQ==
-X-Google-Smtp-Source: AK7set8KFBZcJoyADEvCdNhzMHm/y5MIdXeUfrR90b/geFbtcc/C2jtV6qhmaO/gjfdwti36unuj5w==
-X-Received: by 2002:a17:902:f113:b0:196:7a96:cd82 with SMTP id e19-20020a170902f11300b001967a96cd82mr16617424plb.42.1675709116186;
-        Mon, 06 Feb 2023 10:45:16 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id e21-20020a170902d39500b0019601fbb963sm7225276pld.172.2023.02.06.10.45.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Feb 2023 10:45:15 -0800 (PST)
-Message-ID: <63e14abb.170a0220.ca425.b7bc@mx.google.com>
-X-Google-Original-Message-ID: <202302061040.@keescook>
-Date:   Mon, 6 Feb 2023 10:45:15 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Stanislav Fomichev <sdf@google.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Haowen Bai <baihaowen@meizu.com>, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] bpf: Replace bpf_lpm_trie_key 0-length array with
- flexible array
-References: <20230204183241.never.481-kees@kernel.org>
- <CAKH8qBvqLeR3Wsbpb-v=EUY=Bw0jCP2OAaBn4tOqGmA1AqBZbA@mail.gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SqMveOvFHv1j0KM6AIu8F3PHdkpRYwMXc/KGhDV5SAY=;
+        b=c/hNc+9fCWIElkDdIN1w+hcIWSGqiMWadtsUdopdEZXzcxVXwAIQ2+LDCm39QXHlxW
+         dNjiseglfTTfy+sFiwHY2Ru8C/AVwqjfp0zDeYnoi+Eoos6s8/1I3yNjzlDVhBdyJMmG
+         ApSL1i9PwONoRb5W/gaQ1DMzYkwBmwwUEllH1PycDK6igTu9Sln3soDpGfCPI9JhVye4
+         dHuaEDye4arfbZdK6EdQp+bnjs+OqyezwZN8zRvdKsn7mduawQVas7JnQq5gw2UqFIRm
+         wk9e/HeW35IIkZ0tyPe9JVXL81tCDO4RWOdfi9yG2T+gWGSRHkePlEakkU0UEkiKZEbx
+         sPgg==
+X-Gm-Message-State: AO0yUKV04UpXkMAmQMqcct2Wm0cVJFzWV5t7jy1n82noW3w4klPcgQ0X
+        afcZiQMZumUTLZyYofPzvrGca6yK9TwnLgN9doHJAg==
+X-Google-Smtp-Source: AK7set+h/sPjQ9WR518QCVPWb1cm25ZSoVgbjHBVTDioQsGUzkz+IiHVcp0SUtEztPZKp/I13s9ONprycI1sM9KUlgg=
+X-Received: by 2002:a17:906:f29a:b0:88a:f44e:4878 with SMTP id
+ gu26-20020a170906f29a00b0088af44e4878mr102498ejb.199.1675709131227; Mon, 06
+ Feb 2023 10:45:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKH8qBvqLeR3Wsbpb-v=EUY=Bw0jCP2OAaBn4tOqGmA1AqBZbA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <da1bfb8a-5a88-5697-1c39-8e15c3c208a6@efficios.com>
+In-Reply-To: <da1bfb8a-5a88-5697-1c39-8e15c3c208a6@efficios.com>
+From:   Peter Oskolkov <posk@posk.io>
+Date:   Mon, 6 Feb 2023 10:45:20 -0800
+Message-ID: <CAFTs51XWLT_XJ0QOo8N36WJgP=5edknz37pvmdw_1=LEc4Zonw@mail.gmail.com>
+Subject: Re: Request for contributor approval: Relicensing rseq selftests to MIT
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Shuah Khan <shuah@kernel.org>,
+        Michael Jeanson <mjeanson@efficios.com>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Sabyasachi Gupta <sabyasachi.linux@gmail.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vincent Chen <vincent.chen@sifive.com>,
+        Will Deacon <will@kernel.org>,
+        Xingxing Su <suxingxing@loongson.cn>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 06, 2023 at 09:52:17AM -0800, Stanislav Fomichev wrote:
-> On Sat, Feb 4, 2023 at 10:32 AM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > Replace deprecated 0-length array in struct bpf_lpm_trie_key with
-> > flexible array. Found with GCC 13:
-> >
-> > ../kernel/bpf/lpm_trie.c:207:51: warning: array subscript i is outside array bounds of 'const __u8[0]' {aka 'const unsigned char[]'} [-Warray-bounds=]
-> >   207 |                                        *(__be16 *)&key->data[i]);
-> >       |                                                   ^~~~~~~~~~~~~
-> > ../include/uapi/linux/swab.h:102:54: note: in definition of macro '__swab16'
-> >   102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-> >       |                                                      ^
-> > ../include/linux/byteorder/generic.h:97:21: note: in expansion of macro '__be16_to_cpu'
-> >    97 | #define be16_to_cpu __be16_to_cpu
-> >       |                     ^~~~~~~~~~~~~
-> > ../kernel/bpf/lpm_trie.c:206:28: note: in expansion of macro 'be16_to_cpu'
-> >   206 |                 u16 diff = be16_to_cpu(*(__be16 *)&node->data[i]
-> > ^
-> >       |                            ^~~~~~~~~~~
-> > In file included from ../include/linux/bpf.h:7:
-> > ../include/uapi/linux/bpf.h:82:17: note: while referencing 'data'
-> >    82 |         __u8    data[0];        /* Arbitrary size */
-> >       |                 ^~~~
-> >
-> > This includes fixing the selftest which was incorrectly using a
-> > variable length struct as a header, identified earlier[1]. Avoid this
-> > by just explicitly including the prefixlen member instead of struct
-> > bpf_lpm_trie_key.
-> >
-> > [1] https://lore.kernel.org/all/202206281009.4332AA33@keescook/
-> >
-> > Cc: Alexei Starovoitov <ast@kernel.org>
-> > Cc: Daniel Borkmann <daniel@iogearbox.net>
-> > Cc: Andrii Nakryiko <andrii@kernel.org>
-> > Cc: Martin KaFai Lau <martin.lau@linux.dev>
-> > Cc: Song Liu <song@kernel.org>
-> > Cc: Yonghong Song <yhs@fb.com>
-> > Cc: John Fastabend <john.fastabend@gmail.com>
-> > Cc: KP Singh <kpsingh@kernel.org>
-> > Cc: Stanislav Fomichev <sdf@google.com>
-> > Cc: Hao Luo <haoluo@google.com>
-> > Cc: Jiri Olsa <jolsa@kernel.org>
-> > Cc: Mykola Lysenko <mykolal@fb.com>
-> > Cc: Shuah Khan <shuah@kernel.org>
-> > Cc: Haowen Bai <baihaowen@meizu.com>
-> > Cc: bpf@vger.kernel.org
-> > Cc: linux-kselftest@vger.kernel.org
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > ---
-> >  include/uapi/linux/bpf.h                         | 2 +-
-> >  tools/testing/selftests/bpf/progs/map_ptr_kern.c | 2 +-
-> >  2 files changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> > index ba0f0cfb5e42..5930bc5c7e2c 100644
-> > --- a/include/uapi/linux/bpf.h
-> > +++ b/include/uapi/linux/bpf.h
-> > @@ -79,7 +79,7 @@ struct bpf_insn {
-> >  /* Key of an a BPF_MAP_TYPE_LPM_TRIE entry */
-> >  struct bpf_lpm_trie_key {
-> >         __u32   prefixlen;      /* up to 32 for AF_INET, 128 for AF_INET6 */
-> > -       __u8    data[0];        /* Arbitrary size */
-> > +       __u8    data[];         /* Arbitrary size */
-> >  };
-> 
-> That's a UAPI change, can we do it? The safest option is probably just
-> to remove this field if it's causing any problems (and not do the
-> map_ptr_kern.c change below).
+On Mon, Feb 6, 2023 at 10:35 AM Mathieu Desnoyers
+<mathieu.desnoyers@efficios.com> wrote:
+>
+> Hi,
+>
+> I would like to get contributor approval to relicense the rseq selftests
+> within the Linux kernel and the librseq project to MIT. This will make
+> it easier to use librseq from statically built applications, and I wish
+> to continue sharing code between the kernel rseq selftests and librseq.
 
-The problem was seen because "data" is used by the kernel (see the
-compiler warning above). But if it can be removed, sure, that works too,
-and it much nicer since the resulting structs would have fixed sizes.
+I have no issues with this. Let me know if you need anything more formal.
 
-> The usual use-case (at least that's what we do) is to define some new
-> struct over it:
-> 
-> struct my_key {
->   struct bpf_lpm_trie_key prefix;
->   int a, b, c;
-> };
-> 
-> So I really doubt that the 'data' is ever touched by any programs at all..
+Thanks,
+Peter
 
-Horrible alternative:
-
-struct my_key {
-    union {
-        struct bpf_lpm_trie_key trie;
-        struct {
-            u8 header[sizeof(struct bpf_lpm_trie_key)];
-            int a, b, c;
-        };
-    };
-};
-
-Perhaps better might be:
-
-struct bpf_lpm_trie_key {
-    __u32   prefixlen;      /* up to 32 for AF_INET, 128 for AF_INET6 */
-};
-
-struct bpf_lpm_trie_key_raw {
-    struct bpf_lpm_trie_key_prefix prefix;
-    u8 data[];
-};
-
-struct my_key {
-    struct bpf_lpm_trie_key_prefix prefix;
-    int a, b, c;
-};
-
-Thoughts?
-
--- 
-Kees Cook
+>
+> Allowing use of rseq application headers from statically built
+> applications was the intent from the beginning, but it turns out that
+> having the rseq.c initialization code under LGPL2.1 makes it harder than
+> it should be for users.
+>
+> The current contributor summary commit-wise under
+> tools/testing/selftests/rseq is:
+>
+>     269  Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+>       6  Michael Ellerman <mpe@ellerman.id.au>
+>       5  Shuah Khan <skhan@linuxfoundation.org>
+>       3  Michael Jeanson <mjeanson@efficios.com>
+>       3  Peter Oskolkov <posk@google.com>
+>       2  Martin Schwidefsky <schwidefsky@de.ibm.com>
+>       1  Masahiro Yamada <masahiroy@kernel.org>
+>       1  Paul Burton <paulburton@kernel.org>
+>       1  Sabyasachi Gupta <sabyasachi.linux@gmail.com>
+>       1  Vasily Gorbik <gor@linux.ibm.com>
+>       1  Vincent Chen <vincent.chen@sifive.com>
+>       1  Will Deacon <will@kernel.org>
+>       1  Xingxing Su <suxingxing@loongson.cn>
+>
+> Header files are currently dual-licensed LGPL2.1/MIT, which is
+> somewhat redundant with plain MIT.
+>
+> rseq.c was licensed under LGPL2.1. Relicencing it to MIT will facilitate
+> its integration into statically built applications.
+>
+> In order to facilitate eventual code sharing between tests and the
+> library implementation, I would like to relicense the tests from LGPL2.1
+> to MIT as well.
+>
+> Many of the contributions are trivial, but I prefer to kindly ask for
+> approval nevertheless.
+>
+> Thanks,
+>
+> Mathieu
+>
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> https://www.efficios.com
