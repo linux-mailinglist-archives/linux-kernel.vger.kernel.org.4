@@ -2,94 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FCB668C67D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 20:12:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1C9068C681
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 20:13:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229500AbjBFTMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 14:12:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41194 "EHLO
+        id S229951AbjBFTNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 14:13:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbjBFTMI (ORCPT
+        with ESMTP id S229557AbjBFTNk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 14:12:08 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83EAB2B0AC
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 11:12:05 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id o36so9422899wms.1
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 11:12:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Z7TeXUZSUDSF6HYQKz6bhsTXkRAHdJ9pyS5ZC6tmFPI=;
-        b=NgFUTRlQYbLYTeTRD3Of8qS5nSQO0qb3dJ1o8dKsyUFGdBMO1OxY2HZZ0w3wNnPT0n
-         Bgk0rpi0vqTs47pPAjXLCthSv65D4CnAgr3ry6aejPYzTwJKkDX6qxYQDodu/WphR/nl
-         2HuQwuVRMAg2cPEmPcaDgdQ3MzZXaWcuSebyalKpO1XictcReXjkNuFsO6k78OiAJ0zP
-         td/N3aGqV4OarT5yCRattp/A8AvFVwM5GA4USh9ltvu2v1EWMjarpDmlwX840Y9/qxVM
-         b1Dfu7Es8slXSthDPkdGSUNEtfvhOE62GgkfQ1CfseD9CyCxjS11t9Mw5QZKqaL1Hwt+
-         B6FQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z7TeXUZSUDSF6HYQKz6bhsTXkRAHdJ9pyS5ZC6tmFPI=;
-        b=Ol3vTk+QeJk7TCsa3nd9Ck1VvoPZs5L1fVzEf0a5zgFxd4uLVXHjJjxGIQiNJgDne+
-         64E+PyfLjy8Ov0cC2lHmKct5HZEc9wHWdV7Dk6uljWNhCGgQ+/lSupUF1KkOtFqy9Ew+
-         cjcb1cBKqdlaWevadxWJXJK7i72PbenTVk187CQ/ytHGwVGAnYiYgFmVoEkqjJxng69j
-         wphN1faFOzZBk2CQ3H3fqvQwX+7fOinftt9IBPUB3Y5VHs6XRINs4MSfGR1T+/2g4XVi
-         K2qU3u6n3sNzpUy5ytHyE26Jo0mC8fe9+fp0+Zw74hwfM1JQZiFFfp9o8J8Nw1RbRLd+
-         /cxQ==
-X-Gm-Message-State: AO0yUKVyxeMI8e195ozZzJqXryYzbqx8co9pzGIlCKm4S2ITFJ4ZSTKv
-        4x+hwDRGu/5TfklIfnmALWsMrA==
-X-Google-Smtp-Source: AK7set8uZ5B2m9aXDXsHQl3JhF94bRUla/vOWPgrTbzuMopuJzj/areKdz860Av+Y/KvoolzxtJ7yg==
-X-Received: by 2002:a05:600c:4484:b0:3de:b1ec:7f95 with SMTP id e4-20020a05600c448400b003deb1ec7f95mr690448wmo.18.1675710724147;
-        Mon, 06 Feb 2023 11:12:04 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id n10-20020a05600c4f8a00b003e0010a9f67sm4404639wmq.44.2023.02.06.11.12.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Feb 2023 11:12:03 -0800 (PST)
-Message-ID: <7452928c-f134-8f11-a966-1f3bdc792cb8@linaro.org>
-Date:   Mon, 6 Feb 2023 20:12:02 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 2/7] ASoC: dt-bindings: meson: convert axg tdm
- formatters to schema
-Content-Language: en-US
-To:     Jerome Brunet <jbrunet@baylibre.com>,
-        Mark Brown <broonie@kernel.org>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org
-Cc:     linux-amlogic@lists.infradead.org,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org
-References: <20230206153449.596326-1-jbrunet@baylibre.com>
- <20230206153449.596326-3-jbrunet@baylibre.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230206153449.596326-3-jbrunet@baylibre.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 6 Feb 2023 14:13:40 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41AF720D18;
+        Mon,  6 Feb 2023 11:13:39 -0800 (PST)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 316ETWAZ009718;
+        Mon, 6 Feb 2023 19:13:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=2ygW30YeDTcPzPiF2otx2r+VOzDotuS0oTMi579oCAQ=;
+ b=FVRlGHQiq6l1dS6DdMcN95a89AFiq1TUjcDBd/HFNsJzW6NvqQHUVDUdWF1OYh2IXmi6
+ v1N4rTqyYDV6l8o7HkZa+fkUiUQDP9cGioQqF1Ce1I39p5IxVBmf6sqWX7U/wxLsAWnK
+ QQ+nMcd+h67Xm5MWnRlsD66Iw4jyX2YoYODb5ns0QBdx/jjThU61iiS0tmNfYblEsr7s
+ bhqWuyPALK9ADKdkz+Os6o9mxuYRUtpuwI6N4It5aPNcJvaL6SJHKWx95sNbx/LJJD3V
+ x3Nml59SBx0FP15rnwZVCl2au25LasDTVgm5yCLN9I9RX5Syv3iX05cfgm3RHSt6cqbk /Q== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nhgng4d0h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Feb 2023 19:13:35 +0000
+Received: from pps.filterd (NALASPPMTA02.qualcomm.com [127.0.0.1])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 316JC7rI012072;
+        Mon, 6 Feb 2023 19:13:34 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by NALASPPMTA02.qualcomm.com (PPS) with ESMTP id 3nhgekjv8p-1;
+        Mon, 06 Feb 2023 19:13:34 +0000
+Received: from NALASPPMTA02.qualcomm.com (NALASPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 316JDY9p013623;
+        Mon, 6 Feb 2023 19:13:34 GMT
+Received: from hu-devc-lv-c.qualcomm.com (hu-eserrao-lv.qualcomm.com [10.47.235.164])
+        by NALASPPMTA02.qualcomm.com (PPS) with ESMTP id 316JDXuD013621;
+        Mon, 06 Feb 2023 19:13:34 +0000
+Received: by hu-devc-lv-c.qualcomm.com (Postfix, from userid 464172)
+        id E641420E36; Mon,  6 Feb 2023 11:13:33 -0800 (PST)
+From:   Elson Roy Serrao <quic_eserrao@quicinc.com>
+To:     gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
+        balbi@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        quic_wcheng@quicinc.com, quic_jackp@quicinc.com,
+        Elson Roy Serrao <quic_eserrao@quicinc.com>
+Subject: [PATCH v3 0/5] Add function suspend/resume and remote wakeup support 
+Date:   Mon,  6 Feb 2023 11:13:21 -0800
+Message-Id: <1675710806-9735-1-git-send-email-quic_eserrao@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: tIKFpPlprAEpk4uqoB8ohxo9PLHwdzG3
+X-Proofpoint-ORIG-GUID: tIKFpPlprAEpk4uqoB8ohxo9PLHwdzG3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-06_07,2023-02-06_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=563
+ bulkscore=0 malwarescore=0 spamscore=0 mlxscore=0 suspectscore=0
+ phishscore=0 impostorscore=0 adultscore=0 lowpriorityscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302060167
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/02/2023 16:34, Jerome Brunet wrote:
-> Convert the DT binding documentation for the Amlogic tdm formatters to
-> schema.
-> 
-> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
+Changes in v3
+ - Modified rw_capable flag to reflect the gadgets capability for wakeup
+   signalling.
+ - Added a check to configure wakeup bit in bmAttributes only if gadget
+   is capable of triggering wakeup.
+ - Implemented a gadget op for composite layer to inform UDC whether device
+   is configured for remote wakeup.
+ - Added a check in __usb_gadget_wakeup() API to trigger wakeup only if the
+   device is configured for it.
+ - Cosmetic changes in dwc3_gadget_func_wakeup() API.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Changes in v2
+ - Added a flag to indicate whether the device is remote wakeup capable.
+ - Added an async parameter to _dwc3_gadget_wakeup() API and few cosmetic
+   changes.
+ - Added flags to reflect the state of  function suspend and function remote
+   wakeup to usb_function struct rather than function specific struct (f_ecm).
+ - Changed the dwc3_gadget_func__wakeup() API to run synchronously by first
+   checking the link state and then sending the device notification. Also
+   added debug log for DEVICE_NOTIFICATION generic cmd.
+ - Added changes to arm the device for remotewakeup/function remotewakeup
+   only if device is capable.
 
-Best regards,
-Krzysztof
+An usb device can initate a remote wakeup and bring the link out of
+suspend as dictated by the DEVICE_REMOTE_WAKEUP feature selector.
+To achieve this an interface can invoke gadget_wakeup op and wait for the
+device to come out of LPM. But the current polling based implementation
+fails if the host takes a long time to drive the resume signaling specially
+in high speed capable devices. Switching to an interrupt based approach is
+more robust and efficient. This can be leveraged by enabling link status
+change events and triggering a gadget resume when the link comes to active
+state.
+
+If the device is enhanced super-speed capable, individual interfaces can
+also be put into suspend state. An interface can be in function suspend
+state even when the device is not in suspend state. Function suspend state
+is retained throughout the device suspend entry and exit process.
+A function can be put to function suspend through FUNCTION_SUSPEND feature
+selector sent by the host. This setup packet also decides whether that
+function is capable of initiating a function remote wakeup. When the
+function sends a wakeup notification to the host the link must be first
+brought to a non-U0 state and then this notification is sent.
+
+This change adds the infrastructure needed to support the above
+functionalities.
+
+Elson Roy Serrao (5):
+  usb: gadget: Properly configure the device for remote wakeup
+  usb: dwc3: Add remote wakeup handling
+  usb: gadget: Add function wakeup support
+  usb: dwc3: Add function suspend and function wakeup support
+  usb: gadget: f_ecm: Add suspend/resume and remote wakeup support
+
+ drivers/usb/dwc3/core.h               |   5 ++
+ drivers/usb/dwc3/debug.h              |   2 +
+ drivers/usb/dwc3/ep0.c                |  16 ++---
+ drivers/usb/dwc3/gadget.c             | 110 +++++++++++++++++++++++++++++++---
+ drivers/usb/gadget/composite.c        |  50 +++++++++++++++-
+ drivers/usb/gadget/function/f_ecm.c   |  68 +++++++++++++++++++++
+ drivers/usb/gadget/function/u_ether.c |  63 +++++++++++++++++++
+ drivers/usb/gadget/function/u_ether.h |   4 ++
+ drivers/usb/gadget/udc/core.c         |  46 ++++++++++++++
+ drivers/usb/gadget/udc/trace.h        |   5 ++
+ include/linux/usb/composite.h         |   6 ++
+ include/linux/usb/gadget.h            |  12 ++++
+ 12 files changed, 371 insertions(+), 16 deletions(-)
+
+-- 
+2.7.4
 
