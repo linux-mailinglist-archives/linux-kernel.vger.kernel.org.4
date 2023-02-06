@@ -2,118 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E870D68B46F
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 04:19:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF8D968B47F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 04:31:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229523AbjBFDTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 22:19:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36622 "EHLO
+        id S229510AbjBFDbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 22:31:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbjBFDTb (ORCPT
+        with ESMTP id S229460AbjBFDbU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 22:19:31 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70FCD1ABF5;
-        Sun,  5 Feb 2023 19:19:28 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4P9BLy4ZwBz4f3k67;
-        Mon,  6 Feb 2023 11:19:22 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP3 (Coremail) with SMTP id _Ch0CgDn4R+7ceBjzshECw--.31350S3;
-        Mon, 06 Feb 2023 11:19:24 +0800 (CST)
-Subject: Re: [PATCH-next v2] loop: loop_set_status_from_info() check before
- assignment
-To:     Zhong Jinghua <zhongjinghua@huawei.com>, axboe@kernel.dk,
-        code@siddh.me, Matthew Wilcox <willy@infradead.org>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, houtao1@huawei.com, yangerkun@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20230206020716.2036-1-zhongjinghua@huawei.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <32179e8a-a3ca-9412-1977-fdaa7f065691@huaweicloud.com>
-Date:   Mon, 6 Feb 2023 11:19:22 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Sun, 5 Feb 2023 22:31:20 -0500
+X-Greylist: delayed 476 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 05 Feb 2023 19:31:19 PST
+Received: from out-167.mta1.migadu.com (out-167.mta1.migadu.com [95.215.58.167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 180B914214
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 19:31:19 -0800 (PST)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1675653798;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=xOwSS+IVqwUgIpvtg0R2on3YiSF2ie4HZMHON0xzNfg=;
+        b=xGaJ0KbKXJD7f5xgfXOoDyl03x2BmVvjf77RH15tEGXF9J+E4DyzxjhJI0nCDK2yQF0zQt
+        9YPmmOwQ4Vlh0EdVqCj/CMmcD3znlfqQpqSrELn6pIIVNk2lVODtEucaH2AFEIL80/ECB9
+        XJJGnVgDNTUSmeXZVqj6Kfc8l7XqJ9E=
+From:   Jackie Liu <liu.yun@linux.dev>
+To:     lee@kernel.org
+Cc:     linux-kernel@vger.kernel.org, liuyun01@kylinos.cn
+Subject: [PATCH] mfd: si476x-cmd: fix codespell
+Date:   Mon,  6 Feb 2023 11:22:31 +0800
+Message-Id: <20230206032231.3208296-1-liu.yun@linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <20230206020716.2036-1-zhongjinghua@huawei.com>
-Content-Type: text/plain; charset=gbk; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgDn4R+7ceBjzshECw--.31350S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7KFWDGFWUWr43Xr1xGw13CFg_yoW8Xw48pF
-        srWFyUAa1rKF4fKF4Dt348XFW5G3W7Gry3uFy7tay8AryIvFn2gr9rG3y5urZ7JrykurWF
-        gF15JFykZF1UGrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
-        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q
-        6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE
-        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
-        9x07UWE__UUUUU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Jackie Liu <liuyun01@kylinos.cn>
 
-ÔÚ 2023/02/06 10:07, Zhong Jinghua Ð´µÀ:
-> In loop_set_status_from_info(), lo->lo_offset and lo->lo_sizelimit should
-> be checked before reassignment, because if an overflow error occurs, the
-> original correct value will be changed to the wrong value, and it will not
-> be changed back.
-> 
-> Modifying to the wrong value logic is always not quiet right, we hope to
-> optimize this.
-> 
+Fix some typo, find by 'codespell drivers/mfd/si476x-cmd.c'
 
-Please add a fix tag and cc stable:
+succsess -> success
+interace -> interface
+comand   -> command
+failre   -> failure
 
-Fixes: c490a0b5a4f3 ("loop: Check for overflow while configuring loop")
+Reported-by: k2ci <kernel-bot@kylinos.cn>
+Signed-off-by: Jackie Liu <liuyun01@kylinos.cn>
+---
+ drivers/mfd/si476x-cmd.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-This commit doesn't fix the problem it described in commit message.
-
-Thanks,
-Kuai
-
-> Signed-off-by: Zhong Jinghua <zhongjinghua@huawei.com>
-> ---
->   v1->v2: Modify note: overflowing -> overflow
->   drivers/block/loop.c | 8 ++++----
->   1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/block/loop.c b/drivers/block/loop.c
-> index 1518a6423279..1b35cbd029c7 100644
-> --- a/drivers/block/loop.c
-> +++ b/drivers/block/loop.c
-> @@ -977,13 +977,13 @@ loop_set_status_from_info(struct loop_device *lo,
->   		return -EINVAL;
->   	}
->   
-> +	/* Avoid assigning overflow values */
-> +	if (info->lo_offset > LLONG_MAX || info->lo_sizelimit > LLONG_MAX)
-> +		return -EOVERFLOW;
-> +
->   	lo->lo_offset = info->lo_offset;
->   	lo->lo_sizelimit = info->lo_sizelimit;
->   
-> -	/* loff_t vars have been assigned __u64 */
-> -	if (lo->lo_offset < 0 || lo->lo_sizelimit < 0)
-> -		return -EOVERFLOW;
-> -
->   	memcpy(lo->lo_file_name, info->lo_file_name, LO_NAME_SIZE);
->   	lo->lo_file_name[LO_NAME_SIZE-1] = 0;
->   	lo->lo_flags = info->lo_flags;
-> 
+diff --git a/drivers/mfd/si476x-cmd.c b/drivers/mfd/si476x-cmd.c
+index f32f1fb93e37..c9a0ec084aa8 100644
+--- a/drivers/mfd/si476x-cmd.c
++++ b/drivers/mfd/si476x-cmd.c
+@@ -251,7 +251,7 @@ static int si476x_core_parse_and_nag_about_error(struct si476x_core *core)
+  * @usecs:    amount of time to wait before reading the response (in
+  *            usecs)
+  *
+- * Function returns 0 on succsess and negative error code on
++ * Function returns 0 on success and negative error code on
+  * failure
+  */
+ static int si476x_core_send_command(struct si476x_core *core,
+@@ -398,7 +398,7 @@ static int si476x_cmd_tune_seek_freq(struct si476x_core *core,
+  * The command requests the firmware and patch version for currently
+  * loaded firmware (dependent on the function of the device FM/AM/WB)
+  *
+- * Function returns 0 on succsess and negative error code on
++ * Function returns 0 on success and negative error code on
+  * failure
+  */
+ int si476x_core_cmd_func_info(struct si476x_core *core,
+@@ -429,7 +429,7 @@ EXPORT_SYMBOL_GPL(si476x_core_cmd_func_info);
+  * @property: property address
+  * @value:    property value
+  *
+- * Function returns 0 on succsess and negative error code on
++ * Function returns 0 on success and negative error code on
+  * failure
+  */
+ int si476x_core_cmd_set_property(struct si476x_core *core,
+@@ -545,13 +545,13 @@ EXPORT_SYMBOL_GPL(si476x_core_cmd_dig_audio_pin_cfg);
+  *       SI476X_IQCLK_NOOP     - do not modify the behaviour
+  *       SI476X_IQCLK_TRISTATE - put the pin in tristate condition,
+  *                               enable 1MOhm pulldown
+- *       SI476X_IQCLK_IQ       - set pin to be a part of I/Q interace
++ *       SI476X_IQCLK_IQ       - set pin to be a part of I/Q interface
+  *                               in master mode
+  * @iqfs: - IQFS pin function configuration:
+  *       SI476X_IQFS_NOOP     - do not modify the behaviour
+  *       SI476X_IQFS_TRISTATE - put the pin in tristate condition,
+  *                              enable 1MOhm pulldown
+- *       SI476X_IQFS_IQ       - set pin to be a part of I/Q interace
++ *       SI476X_IQFS_IQ       - set pin to be a part of I/Q interface
+  *                              in master mode
+  * @iout: - IOUT pin function configuration:
+  *       SI476X_IOUT_NOOP     - do not modify the behaviour
+@@ -589,7 +589,7 @@ EXPORT_SYMBOL_GPL(si476x_core_cmd_zif_pin_cfg);
+ 
+ /**
+  * si476x_core_cmd_ic_link_gpo_ctl_pin_cfg - send
+- * 'IC_LINK_GPIO_CTL_PIN_CFG' comand to the device
++ * 'IC_LINK_GPIO_CTL_PIN_CFG' command to the device
+  * @core: - device to send the command to
+  * @icin: - ICIN pin function configuration:
+  *      SI476X_ICIN_NOOP      - do not modify the behaviour
+@@ -1014,7 +1014,7 @@ EXPORT_SYMBOL_GPL(si476x_core_cmd_fm_phase_diversity);
+  * NOTE caller must hold core lock
+  *
+  * Function returns the value of the status bit in case of success and
+- * negative error code in case of failre.
++ * negative error code in case of failure.
+  */
+ int si476x_core_cmd_fm_phase_div_status(struct si476x_core *core)
+ {
+-- 
+2.25.1
 
