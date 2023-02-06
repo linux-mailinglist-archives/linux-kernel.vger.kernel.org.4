@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0C2268BA2C
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 11:30:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A5CA68BA31
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 11:30:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231220AbjBFK3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 05:29:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53928 "EHLO
+        id S229938AbjBFK36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 05:29:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231199AbjBFK3Y (ORCPT
+        with ESMTP id S230408AbjBFK3Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 6 Feb 2023 05:29:24 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED67222FD
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8E021A36
         for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 02:28:43 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id f23-20020a05600c491700b003dff4480a17so2165497wmp.1
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 02:28:43 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id o36so8301023wms.1
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 02:28:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OlgQhz1wWZHgj4L9ZFSLZgiqIbO7/bsHrgNAPDxm69g=;
-        b=uEOtCxamU2FEeYztMe6sLSIfwGm16K9OJnqFJY3ILzBo3xoTlgSPuaDm6a/a4YegsF
-         a527CSzq54KGgEP3SaIwchbMOIcuEh/+6qXCNDg7/Xvg2RMaHI5rYqOtOj6Vt2h4zDOl
-         z2+wReloMKAGeFv2VuI8Tr2XVfThDxzQGAVPmqtp2axu8J+48DsOHsRqJjt5rRfDnVp1
-         CFXIz1SUAzmTAwUIc5vYtSjcjIoBUsnjTY3OqWw3Oxs5ovssTDtdjz2bfyVxGKjd66VB
-         U2BUEBW36qjWx9aK9+4K569LDq/tQvx82Q2ikb9rrac5hA2cjopo57ThHPygmB92wFt1
-         Znew==
+        bh=nqPT9IiPlOeT+18a7EVyxb18GhOwuqWu5IcugbyndEU=;
+        b=VPzogrq9+w7q2CusTGpCio2ntl2twjUvKsQGqbhgMApQ8pIRb902eGRRIXXHwUbgGI
+         1vRwXZH5kils82X8+HfnFjXCiALqpENCMsY/ceWqkkV+640u3GhC4fmtWk+SbhIfKD6N
+         ReKAvMLAHI5T7JqWTrU9QEgM9FA6AiJ3YnWh0UHmBpV/ZfsRX80bCk3966Of3Omuy+LV
+         9PB1mYdiqHa21fh6EBfgvIY++DD+2WYG839dCBZH9qa4AhH6I7LPhHdAHIfe6jvPnH9E
+         HBaNMBBAHlEniH/Nw0XJPN7oQUHLqNZj166cYiggDhxVguiSEAZZXxEAJH8BJngcM4PP
+         7gmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OlgQhz1wWZHgj4L9ZFSLZgiqIbO7/bsHrgNAPDxm69g=;
-        b=il9LdpIZT+Lq6+mOIvSnsw48UK1Jbhg5FT0E8eKw5EV46IjUlV+Padolln/5TMpeck
-         32Q/gGbYqLguZKP/dEUntylW2/xjWG11uvvbTc+ngNMDahINda2uxbjqlzxsg3aUEKCa
-         J5lYJFssWsl3xA6qvopU3E1P4UXOtbVAidqwEk8/Wn5m3O7Wf2cXOL1SsATSTppWA/A6
-         alramSQq8ncYZxMoJhlVAQpsLaxfP1e+dP43MOVtkeZd1/azgZ+Sk4cDA0+3HKOzxENG
-         rh2MI9a+PM1oCFtI9y3akI1DeZW7mQgHzduqIiyQb2+4oy6KZGR8VaYAgijrYHVE8ahr
-         Rq9w==
-X-Gm-Message-State: AO0yUKUwmjPsgT9dYF5uOb7Uh16nnv92ImrujbQl3G2MdIi6OAIXJK76
-        R7IzfkdiVc4i89VpNOLKLT2lbg==
-X-Google-Smtp-Source: AK7set+jNvQiQc0puaD/LiLJjFfzeezvD62gGBk5wwoChQTLa0cne0s8eA08wN5TXSJA6At1kiwJnQ==
-X-Received: by 2002:a05:600c:b88:b0:3df:9858:c033 with SMTP id fl8-20020a05600c0b8800b003df9858c033mr10674011wmb.8.1675679321432;
-        Mon, 06 Feb 2023 02:28:41 -0800 (PST)
+        bh=nqPT9IiPlOeT+18a7EVyxb18GhOwuqWu5IcugbyndEU=;
+        b=gdKsYuQ9XSIWL/cvuVOUkQgjL17wOpagF4otewiJ+M+P4RhAvARUDUHIgzyn6Kwr2M
+         yJ+Iv9O5mvM9SLOTXjw/jqqOWIKUnCSIPPaUx84/WGYn4LuObQyCC7m2YGoG72CKOYED
+         yMgVILszjhoQvCUT3/2SFpHMDbiZ/AUp21AyEwG9TnvshhjzsQ3rmYogBxxsSgWyc/AV
+         SWbVdWG3qhQHgcKYhQfX4KaQc9Yf5icC59cmnIbMpempscFA23BpVj4ri2DwNz+HIv5E
+         SNgPzNe3xHl8NXX6bOcRd6B6MR4LLDYqKsoZxU3vmjoBZmXi6S38EzfrhqW6ilM3r5ER
+         ghkg==
+X-Gm-Message-State: AO0yUKUwfyrUFaFVeXqkC7mSFZP+M0tm7V681ak6tld3BcEnxs7jyznl
+        vbTOh0dK0iIyKvB9jneuKt5Arg==
+X-Google-Smtp-Source: AK7set+qnnpD/32ZmOpfeVntU8PPttuK2DhYuxb4vY8t5ty/R/gT3aSnqboAWAg7szGlAPVye+YgXA==
+X-Received: by 2002:a05:600c:3ba3:b0:3dc:58a2:3900 with SMTP id n35-20020a05600c3ba300b003dc58a23900mr18736987wms.29.1675679322619;
+        Mon, 06 Feb 2023 02:28:42 -0800 (PST)
 Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id g10-20020a05600c310a00b003de77597f16sm11002446wmo.21.2023.02.06.02.28.40
+        by smtp.gmail.com with ESMTPSA id g10-20020a05600c310a00b003de77597f16sm11002446wmo.21.2023.02.06.02.28.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Feb 2023 02:28:40 -0800 (PST)
+        Mon, 06 Feb 2023 02:28:42 -0800 (PST)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org, Michael Walle <michael@walle.cc>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [RESEND PATCH 22/37] nvmem: core: provide own priv pointer in post process callback
-Date:   Mon,  6 Feb 2023 10:27:44 +0000
-Message-Id: <20230206102759.669838-23-srinivas.kandagatla@linaro.org>
+Subject: [RESEND PATCH 23/37] nvmem: layouts: add sl28vpd layout
+Date:   Mon,  6 Feb 2023 10:27:45 +0000
+Message-Id: <20230206102759.669838-24-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230206102759.669838-1-srinivas.kandagatla@linaro.org>
 References: <20230206102759.669838-1-srinivas.kandagatla@linaro.org>
@@ -73,77 +73,208 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Michael Walle <michael@walle.cc>
 
-It doesn't make any more sense to have a opaque pointer set up by the
-nvmem device. Usually, the layout isn't associated with a particular
-nvmem device. Instead, let the caller who set the post process callback
-provide the priv pointer.
+This layout applies to the VPD of the Kontron sl28 boards. The VPD only
+contains a base MAC address. Therefore, we have to add an individual
+offset to it. This is done by taking the second argument of the nvmem
+phandle into account. Also this let us checking the VPD version and the
+checksum.
 
 Signed-off-by: Michael Walle <michael@walle.cc>
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- drivers/nvmem/core.c           | 4 +++-
- include/linux/nvmem-provider.h | 5 ++++-
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ drivers/nvmem/layouts/Kconfig   |   9 ++
+ drivers/nvmem/layouts/Makefile  |   2 +
+ drivers/nvmem/layouts/sl28vpd.c | 153 ++++++++++++++++++++++++++++++++
+ 3 files changed, 164 insertions(+)
+ create mode 100644 drivers/nvmem/layouts/sl28vpd.c
 
-diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
-index ae59d9cb901c..81ad6a4c4f86 100644
---- a/drivers/nvmem/core.c
-+++ b/drivers/nvmem/core.c
-@@ -53,6 +53,7 @@ struct nvmem_cell_entry {
- 	int			bit_offset;
- 	int			nbits;
- 	nvmem_cell_post_process_t read_post_process;
-+	void			*priv;
- 	struct device_node	*np;
- 	struct nvmem_device	*nvmem;
- 	struct list_head	node;
-@@ -470,6 +471,7 @@ static int nvmem_cell_info_to_nvmem_cell_entry_nodup(struct nvmem_device *nvmem,
- 	cell->bytes = info->bytes;
- 	cell->name = info->name;
- 	cell->read_post_process = info->read_post_process;
-+	cell->priv = info->priv;
+diff --git a/drivers/nvmem/layouts/Kconfig b/drivers/nvmem/layouts/Kconfig
+index 9ad3911d1605..75082f6b471d 100644
+--- a/drivers/nvmem/layouts/Kconfig
++++ b/drivers/nvmem/layouts/Kconfig
+@@ -2,4 +2,13 @@
  
- 	cell->bit_offset = info->bit_offset;
- 	cell->nbits = info->nbits;
-@@ -1550,7 +1552,7 @@ static int __nvmem_cell_read(struct nvmem_device *nvmem,
- 		nvmem_shift_read_buffer_in_place(cell, buf);
+ menu "Layout Types"
  
- 	if (cell->read_post_process) {
--		rc = cell->read_post_process(nvmem->priv, id, index,
-+		rc = cell->read_post_process(cell->priv, id, index,
- 					     cell->offset, buf, cell->bytes);
- 		if (rc)
- 			return rc;
-diff --git a/include/linux/nvmem-provider.h b/include/linux/nvmem-provider.h
-index d3d7af86a283..0cf9f9490514 100644
---- a/include/linux/nvmem-provider.h
-+++ b/include/linux/nvmem-provider.h
-@@ -20,7 +20,8 @@ typedef int (*nvmem_reg_write_t)(void *priv, unsigned int offset,
- 				 void *val, size_t bytes);
- /* used for vendor specific post processing of cell data */
- typedef int (*nvmem_cell_post_process_t)(void *priv, const char *id, int index,
--					 unsigned int offset, void *buf, size_t bytes);
-+					 unsigned int offset, void *buf,
-+					 size_t bytes);
- 
- enum nvmem_type {
- 	NVMEM_TYPE_UNKNOWN = 0,
-@@ -56,6 +57,7 @@ struct nvmem_keepout {
-  * @np:		Optional device_node pointer.
-  * @read_post_process:	Callback for optional post processing of cell data
-  *			on reads.
-+ * @priv:	Opaque data passed to the read_post_process hook.
-  */
- struct nvmem_cell_info {
- 	const char		*name;
-@@ -65,6 +67,7 @@ struct nvmem_cell_info {
- 	unsigned int		nbits;
- 	struct device_node	*np;
- 	nvmem_cell_post_process_t read_post_process;
-+	void			*priv;
- };
- 
- /**
++config NVMEM_LAYOUT_SL28_VPD
++	bool "Kontron sl28 VPD layout support"
++	select CRC8
++	help
++	  Say Y here if you want to support the VPD layout of the Kontron
++	  SMARC-sAL28 boards.
++
++	  If unsure, say N.
++
+ endmenu
+diff --git a/drivers/nvmem/layouts/Makefile b/drivers/nvmem/layouts/Makefile
+index 6fdb3c60a4fa..fc617b9e87d0 100644
+--- a/drivers/nvmem/layouts/Makefile
++++ b/drivers/nvmem/layouts/Makefile
+@@ -2,3 +2,5 @@
+ #
+ # Makefile for nvmem layouts.
+ #
++
++obj-$(CONFIG_NVMEM_LAYOUT_SL28_VPD) += sl28vpd.o
+diff --git a/drivers/nvmem/layouts/sl28vpd.c b/drivers/nvmem/layouts/sl28vpd.c
+new file mode 100644
+index 000000000000..a36800f201a3
+--- /dev/null
++++ b/drivers/nvmem/layouts/sl28vpd.c
+@@ -0,0 +1,153 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <linux/crc8.h>
++#include <linux/etherdevice.h>
++#include <linux/nvmem-consumer.h>
++#include <linux/nvmem-provider.h>
++#include <linux/of.h>
++#include <uapi/linux/if_ether.h>
++
++#define SL28VPD_MAGIC 'V'
++
++struct sl28vpd_header {
++	u8 magic;
++	u8 version;
++} __packed;
++
++struct sl28vpd_v1 {
++	struct sl28vpd_header header;
++	char serial_number[15];
++	u8 base_mac_address[ETH_ALEN];
++	u8 crc8;
++} __packed;
++
++static int sl28vpd_mac_address_pp(void *priv, const char *id, int index,
++				  unsigned int offset, void *buf,
++				  size_t bytes)
++{
++	if (bytes != ETH_ALEN)
++		return -EINVAL;
++
++	if (index < 0)
++		return -EINVAL;
++
++	if (!is_valid_ether_addr(buf))
++		return -EINVAL;
++
++	eth_addr_add(buf, index);
++
++	return 0;
++}
++
++static const struct nvmem_cell_info sl28vpd_v1_entries[] = {
++	{
++		.name = "serial-number",
++		.offset = offsetof(struct sl28vpd_v1, serial_number),
++		.bytes = sizeof_field(struct sl28vpd_v1, serial_number),
++	},
++	{
++		.name = "base-mac-address",
++		.offset = offsetof(struct sl28vpd_v1, base_mac_address),
++		.bytes = sizeof_field(struct sl28vpd_v1, base_mac_address),
++		.read_post_process = sl28vpd_mac_address_pp,
++	},
++};
++
++static int sl28vpd_v1_check_crc(struct device *dev, struct nvmem_device *nvmem)
++{
++	struct sl28vpd_v1 data_v1;
++	u8 table[CRC8_TABLE_SIZE];
++	int ret;
++	u8 crc;
++
++	crc8_populate_msb(table, 0x07);
++
++	ret = nvmem_device_read(nvmem, 0, sizeof(data_v1), &data_v1);
++	if (ret < 0)
++		return ret;
++	else if (ret != sizeof(data_v1))
++		return -EIO;
++
++	crc = crc8(table, (void *)&data_v1, sizeof(data_v1) - 1, 0);
++
++	if (crc != data_v1.crc8) {
++		dev_err(dev,
++			"Checksum is invalid (got %02x, expected %02x).\n",
++			crc, data_v1.crc8);
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++static int sl28vpd_add_cells(struct device *dev, struct nvmem_device *nvmem,
++			     struct nvmem_layout *layout)
++{
++	const struct nvmem_cell_info *pinfo;
++	struct nvmem_cell_info info = {0};
++	struct device_node *layout_np;
++	struct sl28vpd_header hdr;
++	int ret, i;
++
++	/* check header */
++	ret = nvmem_device_read(nvmem, 0, sizeof(hdr), &hdr);
++	if (ret < 0)
++		return ret;
++	else if (ret != sizeof(hdr))
++		return -EIO;
++
++	if (hdr.magic != SL28VPD_MAGIC) {
++		dev_err(dev, "Invalid magic value (%02x)\n", hdr.magic);
++		return -EINVAL;
++	}
++
++	if (hdr.version != 1) {
++		dev_err(dev, "Version %d is unsupported.\n", hdr.version);
++		return -EINVAL;
++	}
++
++	ret = sl28vpd_v1_check_crc(dev, nvmem);
++	if (ret)
++		return ret;
++
++	layout_np = of_nvmem_layout_get_container(nvmem);
++	if (!layout_np)
++		return -ENOENT;
++
++	for (i = 0; i < ARRAY_SIZE(sl28vpd_v1_entries); i++) {
++		pinfo = &sl28vpd_v1_entries[i];
++
++		info.name = pinfo->name;
++		info.offset = pinfo->offset;
++		info.bytes = pinfo->bytes;
++		info.read_post_process = pinfo->read_post_process;
++		info.np = of_get_child_by_name(layout_np, pinfo->name);
++
++		ret = nvmem_add_one_cell(nvmem, &info);
++		if (ret) {
++			of_node_put(layout_np);
++			return ret;
++		}
++	}
++
++	of_node_put(layout_np);
++
++	return 0;
++}
++
++static const struct of_device_id sl28vpd_of_match_table[] = {
++	{ .compatible = "kontron,sl28-vpd" },
++	{},
++};
++
++struct nvmem_layout sl28vpd_layout = {
++	.name = "sl28-vpd",
++	.of_match_table = sl28vpd_of_match_table,
++	.add_cells = sl28vpd_add_cells,
++};
++
++static int __init sl28vpd_init(void)
++{
++	return nvmem_layout_register(&sl28vpd_layout);
++}
++subsys_initcall(sl28vpd_init);
 -- 
 2.25.1
 
