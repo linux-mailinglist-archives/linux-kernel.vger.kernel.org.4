@@ -2,71 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEC0268BD2B
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 13:45:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BE0568BD33
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 13:47:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229990AbjBFMpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 07:45:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35024 "EHLO
+        id S230160AbjBFMrq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 07:47:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbjBFMpD (ORCPT
+        with ESMTP id S229960AbjBFMrn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 07:45:03 -0500
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A87CE5FD1;
-        Mon,  6 Feb 2023 04:45:02 -0800 (PST)
-Received: by mail-pj1-x1042.google.com with SMTP id e10-20020a17090a630a00b0022bedd66e6dso15047632pjj.1;
-        Mon, 06 Feb 2023 04:45:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gM1T1LiTjFLuiGBuHxUovgMZMlzmJ0u3GsfkKmTxj0M=;
-        b=LEYtyfsEYNtKsHvFXQmMWDZ3DL1IGzocBn1YvmZHApBcNR9De+PKIGV+8WVH8YXL1W
-         0chffXrUj6aZhNixcKCPqqf0v5pVQxw1QsxWTIwbABujMZCkzEqeH2QEwl3TEN7N4G/S
-         0GnEZ9FytnMSdgw78CgRjBC2FLIpbtv3XACWjog8CWrL7b5Y72BzooQWiyjf2B4JKatu
-         OTYisgAA/UgfjhXpT2bpvSOnh47YBTpytt9p+i/IVua/JqYwISXZ/ZJ83R3VO3T8IEH0
-         hR0HcDM9tQDmL2hZvVVDL0DEpgJbP0nV5dHatlO35aBmn7EoG1Tqr9p4JyOgC272RUey
-         mQfQ==
+        Mon, 6 Feb 2023 07:47:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91F2A5FD1
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 04:46:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675687618;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1d0rh3nWEoqZY/ZNuGhezgAsd8sE5EE9U2j8wF/dmyw=;
+        b=b5Djzwh9SIQVjA5QqtOHOmtT0Xb9OaaPCqJsqeXRcdlRFYADg/S/JpGYY1FCTh9/j1wAl3
+        KluZWF8Kvj059pHjfRU9jyvdhxZFThgLI7fqwHy6/0erLij7SPL29SfwGNRM0ZkyBjz9Ow
+        zNzgAkFtAHz5yysbpe2RsmzqZPh29v8=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-630-Bdp1HkVkOJ209mxf2GprHg-1; Mon, 06 Feb 2023 07:46:54 -0500
+X-MC-Unique: Bdp1HkVkOJ209mxf2GprHg-1
+Received: by mail-qv1-f70.google.com with SMTP id k15-20020a0cd68f000000b00535261af1b1so5796589qvi.13
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 04:46:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gM1T1LiTjFLuiGBuHxUovgMZMlzmJ0u3GsfkKmTxj0M=;
-        b=qoIVtZjF/4qD36I56nMDjAP1HBJlPagS1StnfQlJRsSiX+JuN9M2+xh6EW108DAZcS
-         CK8BymtjQYFajDYXT4yh2sJgAEGyMqVS5qKw57qy+rxL02ZQMLFGsjAoTr69rmGwqWuC
-         XbGdgz1E8z1pLgh0pf7iJLG/UywV9n5eQVPw+AACxh22/zFwiL+0lakVfY93JQzTOvqd
-         GX6G/MqKaznfuAp2D9VRlMP2JMtWqw9IZknDw82LIbLyat/nJBgMzSYb8au4QHDUPzbV
-         fb9n2XsCr4jLZN2kI8wcqt3dYERV2Z9tiFHUs0J4UjDmYrLPX5IL5sSA9DYNiPp4KvCm
-         LdmQ==
-X-Gm-Message-State: AO0yUKULxAWpP0u4eoALfDQNFn6Db0ouKfrRfQ1/9YfkC9S/UGl6auD6
-        BqyFaYQYwSdgqNbUk2XtOiLrHj5Gx43zWDAs+RY=
-X-Google-Smtp-Source: AK7set/U1nmg01crHXqmJueQELsf06ewfSOKn9103EC3Etsc9ROFlDdAWo5G3bi5fo0k8DJH+xKJs8TV08WXvwAs3KU=
-X-Received: by 2002:a17:90a:74c4:b0:22b:f34a:1f52 with SMTP id
- p4-20020a17090a74c400b0022bf34a1f52mr2922483pjl.76.1675687502165; Mon, 06 Feb
- 2023 04:45:02 -0800 (PST)
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1d0rh3nWEoqZY/ZNuGhezgAsd8sE5EE9U2j8wF/dmyw=;
+        b=FqwhFDr2qUXwoYvY3WdaTCGPt0nXgJgUJoLoOWnmMLcbhau/324CIMXA7cXyX+y1oz
+         T7qqFUhijRTA3jT+7utoqiLtSbENdzqk0GOJEYD6zg4f4j9gzH+nkQxgfm6KXtPyoiPN
+         pvqQD4anhlRn77Rzyy5q7bdMofq8jZB6PBvSMwVCsrVlanptHiPhyK47ey9wBUr5Tivd
+         TI4u0FtYiKMIboixtef0b5yYlzbCMZmm4jOSLWNpHBPQGs78cKrHrsmV47rZpjtMx6Cv
+         tIuvY+/wXBtbdNylAgTvpFFYEP8mo4R9MQo4B/ZZvgsd1OQJ/UpeXyoMYxYzKV1fDWO/
+         5W8Q==
+X-Gm-Message-State: AO0yUKU4r7FvUmbnTNvQIqZfOfZb/UYSZ34EEniEtouQeIpod6NcNOP0
+        R5IBVr4pPAZqFN4D/rzapFoqQjwxzpB0wYiUGn2Ps+h0U0mB7+Ql73ytKwMZqiEba90ilJLQzvR
+        dsmiIfubKXeV29nAq5SLRlYrm
+X-Received: by 2002:ac8:7f8e:0:b0:3b9:2b0:5e7a with SMTP id z14-20020ac87f8e000000b003b902b05e7amr35238656qtj.25.1675687614290;
+        Mon, 06 Feb 2023 04:46:54 -0800 (PST)
+X-Google-Smtp-Source: AK7set+Redv3mmetoUzlPGwkO8XZL0q4qme5pGLoZKixQ1KEVHI8kVvC0q/t9IuGl4QDkecF/nCN4w==
+X-Received: by 2002:ac8:7f8e:0:b0:3b9:2b0:5e7a with SMTP id z14-20020ac87f8e000000b003b902b05e7amr35238629qtj.25.1675687614007;
+        Mon, 06 Feb 2023 04:46:54 -0800 (PST)
+Received: from vschneid.remote.csb ([154.57.232.159])
+        by smtp.gmail.com with ESMTPSA id y18-20020ac87c92000000b003b630ea0ea1sm7093957qtv.19.2023.02.06.04.46.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Feb 2023 04:46:53 -0800 (PST)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Juri Lelli <juri.lelli@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Eder Zulian <ezulian@redhat.com>
+Subject: Re: [RFC PATCH v1] sched/deadline: Add more reschedule cases to
+ prio_changed_dl()
+In-Reply-To: <Y9yydSfMvTHhyEqP@localhost.localdomain>
+References: <20230202182854.3696665-1-vschneid@redhat.com>
+ <Y9yydSfMvTHhyEqP@localhost.localdomain>
+Date:   Mon, 06 Feb 2023 12:46:51 +0000
+Message-ID: <xhsmhbkm7rmf8.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-References: <20221222072603.1175248-1-korantwork@gmail.com>
- <3d1834d9-7905-1225-741a-f298dd5b8a8e@linux.dev> <Y6TSgGdCTvkwPiVg@kbusch-mbp.dhcp.thefacebook.com>
- <CAEm4hYUWf+Fx3FV7vNTc8+O9NSb0iQp75MTC6gra6XapXK=cxw@mail.gmail.com>
- <d14ac29d-027a-08a7-c5c8-848a6920d4a2@linux.dev> <CAEm4hYXncuvL-Gk1aEZExrvkbx=N1aiOQNeNjFdB4443EbKNBA@mail.gmail.com>
- <f05ee82a-4532-b12b-490f-904b946ff7b0@linux.dev> <CAEm4hYXk1RuKEw41VukH2iGTo_9GmZjUfrESWK5vFtpFA_O_4A@mail.gmail.com>
-In-Reply-To: <CAEm4hYXk1RuKEw41VukH2iGTo_9GmZjUfrESWK5vFtpFA_O_4A@mail.gmail.com>
-From:   Xinghui Li <korantwork@gmail.com>
-Date:   Mon, 6 Feb 2023 20:45:57 +0800
-Message-ID: <CAEm4hYWeZFrYxSvAcBJ8iw=t507vZMqfBwiQXFSJd2Hcyfw7fA@mail.gmail.com>
-Subject: Re: [PATCH] PCI: vmd: Do not disable MSI-X remapping in VMD 28C0 controller
-To:     Jonathan Derrick <jonathan.derrick@linux.dev>
-Cc:     Keith Busch <kbusch@kernel.org>, nirmal.patel@linux.intel.com,
-        lpieralisi@kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xinghui Li <korantli@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,92 +83,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Friendly ping~
+On 03/02/23 08:06, Juri Lelli wrote:
+> Hi,
+>
+> On 02/02/23 18:28, Valentin Schneider wrote:
+>> I've been tracking down an issue on a ~5.17ish kernel where:
+>>
+>>   CPUx                           CPUy
+>>
+>>   <DL task p0 owns an rtmutex M>
+>>   <p0 depletes its runtime, gets throttled>
+>>   <rq switches to the idle task>
+>>                               <DL task p1 blocks on M, boost/replenish p0>
+>>                               <No call to resched_curr() happens here>
+>>
+>>   [idle task keeps running here until *something*
+>>    accidentally sets TIF_NEED_RESCHED]
+>>
+>> On that kernel, it is quite easy to trigger using rt-tests's deadline_test
+>> [1] with the test running on isolated CPUs (this reduces the chance of
+>> something unrelated setting TIF_NEED_RESCHED on the idle tasks, making the
+>> issue even more obvious as the hung task detector chimes in).
+>>
+>> I haven't been able to reproduce this using a mainline kernel, even if I
+>> revert
+>>
+>>   2972e3050e35 ("tracing: Make trace_marker{,_raw} stream-like")
+>>
+>> which gets rid of the lock involved in the above test, *but* I cannot
+>> convince myself the issue isn't there from looking at the code.
+>>
+>> Make prio_changed_dl() issue a reschedule if the current task isn't a
+>> deadline one. While at it, ensure a reschedule is emitted when a
+>> queued-but-not-current task gets boosted with an earlier deadline that
+>> current's.
+>
+> As discussed offline I agree this needs fixing, but .. :)
+>
+>> [1]: https://git.kernel.org/pub/scm/utils/rt-tests/rt-tests.git
+>> Signed-off-by: Valentin Schneider <vschneid@redhat.com>
+>> ---
+>>  kernel/sched/deadline.c | 45 ++++++++++++++++++++++++++---------------
+>>  1 file changed, 29 insertions(+), 16 deletions(-)
+>>
+>> diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+>> index 0d97d54276cc8..faa382ea084c1 100644
+>> --- a/kernel/sched/deadline.c
+>> +++ b/kernel/sched/deadline.c
+>> @@ -2663,17 +2663,28 @@ static void switched_to_dl(struct rq *rq, struct task_struct *p)
+>>  static void prio_changed_dl(struct rq *rq, struct task_struct *p,
+>>                          int oldprio)
+>>  {
+>> -	if (task_on_rq_queued(p) || task_current(rq, p)) {
+>> -#ifdef CONFIG_SMP
+>
+> Doesn't this break UP? Don't think earlierst_dl etc are defined in UP.
+>
 
-Xinghui Li <korantwork@gmail.com> =E4=BA=8E2023=E5=B9=B41=E6=9C=8810=E6=97=
-=A5=E5=91=A8=E4=BA=8C 20:28=E5=86=99=E9=81=93=EF=BC=9A
->
-> Jonathan Derrick <jonathan.derrick@linux.dev> =E4=BA=8E2023=E5=B9=B41=E6=
-=9C=8810=E6=97=A5=E5=91=A8=E4=BA=8C 05:00=E5=86=99=E9=81=93=EF=BC=9A
-> >
-> > As the bypass mode seems to affect performance greatly depending on the=
- specific configuration,
-> > it may make sense to use a moduleparam to control it
-> >
-> We found that each pcie port can mount four drives. If we only test 2
-> or 1 dirve of one pcie port,
-> the performance of the drive performance will be normal. Also, we
-> observed the interruptions in different modes.
-> bypass:
-> .....
-> 2022-12-28-11-39-14: 1224       181665   IR-PCI-MSI 201850948-edge      n=
-vme0q68
-> 2022-12-28-11-39-14: 1179       180115   IR-PCI-MSI 201850945-edge      n=
-vme0q65
-> 2022-12-28-11-39-14:  RES        26743   Rescheduling interrupts
-> 2022-12-28-11-39-17: irqtop - IRQ : 3029, TOTAL : 2100315228, CPU :
-> 192, ACTIVE CPU : 192
-> disable:
-> ......
-> 2022-12-28-12-05-56: 1714       169797   IR-PCI-MSI 14155850-edge      nv=
-me1q74
-> 2022-12-28-12-05-56: 1701       168753   IR-PCI-MSI 14155849-edge      nv=
-me1q73
-> 2022-12-28-12-05-56:  LOC       163697   Local timer interrupts
-> 2022-12-28-12-05-56:  TLB         5465   TLB shootdowns
-> 2022-12-28-12-06-00: irqtop - IRQ : 3029, TOTAL : 2179022106, CPU :
-> 192, ACTIVE CPU : 192
-> remapping:
-> 022-12-28-11-25-38:  283       325568   IR-PCI-MSI 24651790-edge      vmd=
-3
-> 2022-12-28-11-25-38:  140       267899   IR-PCI-MSI 13117447-edge      vm=
-d1
-> 2022-12-28-11-25-38:  183       265978   IR-PCI-MSI 13117490-edge      vm=
-d1
-> ......
-> 2022-12-28-11-25-42: irqtop - IRQ : 2109, TOTAL : 2377172002, CPU :
-> 192, ACTIVE CPU : 192
->
-> From the result it is not difficult to find, in remapping mode the
-> interruptions come from vmd.
-> While in other modes, interrupts come from nvme devices. Besides, we
-> found the port mounting
-> 4 dirves total interruptions is much fewer than the port mounting 2 or 1 =
-drive.
-> NVME 8 and 9 mount in one port, other port mount 4 dirves.
->
-> 2022-12-28-11-39-14: 2582       494635   IR-PCI-MSI 470810698-edge      n=
-vme9q74
-> 2022-12-28-11-39-14: 2579       489972   IR-PCI-MSI 470810697-edge      n=
-vme9q73
-> 2022-12-28-11-39-14: 2573       480024   IR-PCI-MSI 470810695-edge      n=
-vme9q71
-> 2022-12-28-11-39-14: 2544       312967   IR-PCI-MSI 470286401-edge      n=
-vme8q65
-> 2022-12-28-11-39-14: 2556       312229   IR-PCI-MSI 470286405-edge      n=
-vme8q69
-> 2022-12-28-11-39-14: 2547       310013   IR-PCI-MSI 470286402-edge      n=
-vme8q66
-> 2022-12-28-11-39-14: 2550       308993   IR-PCI-MSI 470286403-edge      n=
-vme8q67
-> 2022-12-28-11-39-14: 2559       308794   IR-PCI-MSI 470286406-edge      n=
-vme8q70
-> ......
-> 2022-12-28-11-39-14: 1296       185773   IR-PCI-MSI 202375243-edge      n=
-vme1q75
-> 2022-12-28-11-39-14: 1209       185646   IR-PCI-MSI 201850947-edge      n=
-vme0q67
-> 2022-12-28-11-39-14: 1831       184151   IR-PCI-MSI 203423828-edge      n=
-vme3q84
-> 2022-12-28-11-39-14: 1254       182313   IR-PCI-MSI 201850950-edge      n=
-vme0q70
-> 2022-12-28-11-39-14: 1224       181665   IR-PCI-MSI 201850948-edge      n=
-vme0q68
-> 2022-12-28-11-39-14: 1179       180115   IR-PCI-MSI 201850945-edge      n=
-vme0q65
-> > I'd vote for it being in VMD mode (non-bypass) by default.
-> I speculate that the vmd controller equalizes the interrupt load and
-> acts like a buffer,
-> which improves the performance of nvme. I am not sure about my
-> analysis. So, I'd like
-> to discuss it with the community.
+Indeed, I thought myself clever by getting rid of the ifdefs...
+
+> Thanks,
+> Juri
+
