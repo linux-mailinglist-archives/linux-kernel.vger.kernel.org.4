@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDCBA68BA24
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 11:29:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF86E68BA21
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 11:29:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230525AbjBFK2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 05:28:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53582 "EHLO
+        id S231138AbjBFK3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 05:29:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230433AbjBFK2d (ORCPT
+        with ESMTP id S230447AbjBFK2e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 05:28:33 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E3D1F5F7
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 02:28:31 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id q8so8282449wmo.5
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 02:28:31 -0800 (PST)
+        Mon, 6 Feb 2023 05:28:34 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A19AD1F90F
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 02:28:32 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id u10so5232218wmj.3
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 02:28:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=nylkfILgKvlTwcBcSR4ZJEvoZ9v4elWH8Nq2L7mAsOo=;
-        b=H+8wDGn6MwsJtorhe1b+KfobkWQ3JGlvl29JCF90CHFiNinpa+46Rj5HEIHW7HtO//
-         vNX7iZermzGFKa4es1GinCckVqmrLOAySnJENWd0jkFnGAW3BPTlUqhatkDwekXtRVAQ
-         c5DTb3AEy9h5/5xYm3kZBHbs5ZD+7d3Z8Xtts6BtWPAhKNLGaK0onVXlbENQE1dreML9
-         uN13ne2aVlE4RngNaBk1PpTAGWDi89jzO7Tc0ybLE2tKHu/OiQFfwd2L2oMfaXaka0el
-         S8+4p6GonpQj8gV+V+ri4+0zW+CNg2udzQkChDD1iaFqjZIuXJ8E243m9inKTLNPLjcq
-         r5ng==
+        bh=IgWqiYoy7iTVqZHJ21rDyJ80SvbTnPhWOGsjkHQz9g4=;
+        b=lOgUCVCaqxODdj7tEr6IKs0wSFLSUJHKj/ZaTYqNh6vopq7DlAw54+J3DDqkOzsiVm
+         7eGQRGHSTi92g6vZa9EuFoxMJiH9Q44cnyEQ9ZBRG14MUd3WnS8xAgdgRJnjy/3jV3jf
+         7R8aIt2IxJb1gN9uBelcLGVJ5XxObArKF7IZ/BWprbE4CWfqpucAlfPPeWpb4cApBxOF
+         JoBEze0h9g0KhMPeYPR0jBV6f960jaEPLCImi0905U9Y2uF6e+YLzSDYeuliD05LpkCb
+         ckedOyxOEvR88dPoEi80JbyFsw84Jg/t5waeR1YZDXhEun9Q1T/5Eg+/dXU7gz1FiV1J
+         gVIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=nylkfILgKvlTwcBcSR4ZJEvoZ9v4elWH8Nq2L7mAsOo=;
-        b=ove2klrhUIRjTvGzxOdBIaLE/nnDrj09VZR748H9eDOPs7GDeJ0uf9sGYrWZlPWfQX
-         pMqnMALamL5JlcDM42umoir6GIXkLR1Kq8R/skR6JQiOADN8OvyS13p/4ewnKNvDlWtv
-         507F3uEg/oSwFOLlJY/7PMNAhJwzL3SpivdWnqJtNkq4Vh1HMlBCn4jdry+uBhrCqltR
-         EPooVZnK6Np8CEF7h0V4bqqmuSTr/wjyTedp4+l4lLx2SM0O7rDmmtOmUkkuJrdeWNet
-         ThhLzkK8cemHi+/QN9KW3nS9ecv45TTCq9HuB5ROUSUkTrpEHY7euowgo396DBAeFNUv
-         q85Q==
-X-Gm-Message-State: AO0yUKWs1p9+qsul41is27bFITEtnCs4i+oJVGDg3ZcYrHYZ07TmYdMd
-        AZgFz6GEH9cUj+9z37QeOXMDHA==
-X-Google-Smtp-Source: AK7set+umTGOJRDhELbFIDMf0pl8JAvB02wJpVkIdr1emtiaE4hiCdHMQi532k0MeAHd4z/GZEtixQ==
-X-Received: by 2002:a05:600c:35ca:b0:3df:f7cc:4da2 with SMTP id r10-20020a05600c35ca00b003dff7cc4da2mr6317627wmq.16.1675679309879;
-        Mon, 06 Feb 2023 02:28:29 -0800 (PST)
+        bh=IgWqiYoy7iTVqZHJ21rDyJ80SvbTnPhWOGsjkHQz9g4=;
+        b=30kYIhT1t3PkRqY0isM0NAAefBmH5e05EJjhOOXzSouM4MseHxFvlWWosCw50gUlJ3
+         wVlyQb6H2kJaK/KD39Cho9WaxJ924F055MVMONDI+aXPoJVZ4rxEqSyJKkWMoFIHxe0Q
+         WCLXJsB6sGYMHD1UbAsdukAVjiZWshNYQOozpeAE/l46uXPCXzCbwLvma7/8PP3Q7AjJ
+         gFrwuZMwk7/p+r9PImWhf1qkhiCHrlTayE13yC4rTC5p4q2YhlgW0bJUCKr3b7QGZbzx
+         lMOKdFDybJ6rt8hPTPARBCq3U0I9wJAR1BIqq/6ayTCEImxV0Kn+g6Pkh1TiBwtxqDnr
+         GjJQ==
+X-Gm-Message-State: AO0yUKVcC6MSGNHeB8Gse9wPgG5s5pqMv+MkFv4hluNvKHj+Pv7cWEl4
+        preZzA8ExxXph48DObmr3jAsaQ==
+X-Google-Smtp-Source: AK7set/a8CAAE/8yx5qiwWDYyjEXEdS3iypgT62qS9oDUUzu8kmty84wC3MigpS9tTCYHSjbYW+SlQ==
+X-Received: by 2002:a05:600c:245:b0:3db:887:8c8c with SMTP id 5-20020a05600c024500b003db08878c8cmr17652380wmj.27.1675679311137;
+        Mon, 06 Feb 2023 02:28:31 -0800 (PST)
 Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id g10-20020a05600c310a00b003de77597f16sm11002446wmo.21.2023.02.06.02.28.28
+        by smtp.gmail.com with ESMTPSA id g10-20020a05600c310a00b003de77597f16sm11002446wmo.21.2023.02.06.02.28.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Feb 2023 02:28:29 -0800 (PST)
+        Mon, 06 Feb 2023 02:28:30 -0800 (PST)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org, Michael Walle <michael@walle.cc>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [RESEND PATCH 13/37] nvmem: core: move struct nvmem_cell_info to nvmem-provider.h
-Date:   Mon,  6 Feb 2023 10:27:35 +0000
-Message-Id: <20230206102759.669838-14-srinivas.kandagatla@linaro.org>
+Subject: [RESEND PATCH 14/37] nvmem: core: drop the removal of the cells in nvmem_add_cells()
+Date:   Mon,  6 Feb 2023 10:27:36 +0000
+Message-Id: <20230206102759.669838-15-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230206102759.669838-1-srinivas.kandagatla@linaro.org>
 References: <20230206102759.669838-1-srinivas.kandagatla@linaro.org>
@@ -73,81 +73,65 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Michael Walle <michael@walle.cc>
 
-struct nvmem_cell_info is used to describe a cell. Thus this should
-really be in the nvmem-provider's header. There are two (unused) nvmem
-access methods which use the nvmem_cell_info to describe the cell to be
-accesses. One can argue, that they will create a cell before accessing,
-thus they are both a provider and a consumer.
+If nvmem_add_cells() fails, the whole nvmem_register() will fail
+and the cells will then be removed anyway. This is a preparation
+to introduce a nvmem_add_one_cell() which can then be used by
+nvmem_add_cells().
 
-struct nvmem_cell_info will get used more and more by nvmem-providers,
-don't force them to also include the consumer header, although they are
-not.
+This is then the same to what nvmem_add_cells_from_table() and
+nvmem_add_cells_from_of() do.
 
 Signed-off-by: Michael Walle <michael@walle.cc>
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- include/linux/nvmem-consumer.h | 10 +---------
- include/linux/nvmem-provider.h | 19 ++++++++++++++++++-
- 2 files changed, 19 insertions(+), 10 deletions(-)
+ drivers/nvmem/core.c | 14 ++++----------
+ 1 file changed, 4 insertions(+), 10 deletions(-)
 
-diff --git a/include/linux/nvmem-consumer.h b/include/linux/nvmem-consumer.h
-index 980f9c9ac0bc..1f62f7ba71ca 100644
---- a/include/linux/nvmem-consumer.h
-+++ b/include/linux/nvmem-consumer.h
-@@ -18,15 +18,7 @@ struct device_node;
- /* consumer cookie */
- struct nvmem_cell;
- struct nvmem_device;
+diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+index 30567dd51fba..98ae70695f36 100644
+--- a/drivers/nvmem/core.c
++++ b/drivers/nvmem/core.c
+@@ -515,7 +515,7 @@ static int nvmem_add_cells(struct nvmem_device *nvmem,
+ 		    int ncells)
+ {
+ 	struct nvmem_cell_entry **cells;
+-	int i, rval;
++	int i, rval = 0;
+ 
+ 	cells = kcalloc(ncells, sizeof(*cells), GFP_KERNEL);
+ 	if (!cells)
+@@ -525,28 +525,22 @@ static int nvmem_add_cells(struct nvmem_device *nvmem,
+ 		cells[i] = kzalloc(sizeof(**cells), GFP_KERNEL);
+ 		if (!cells[i]) {
+ 			rval = -ENOMEM;
+-			goto err;
++			goto out;
+ 		}
+ 
+ 		rval = nvmem_cell_info_to_nvmem_cell_entry(nvmem, &info[i], cells[i]);
+ 		if (rval) {
+ 			kfree(cells[i]);
+-			goto err;
++			goto out;
+ 		}
+ 
+ 		nvmem_cell_entry_add(cells[i]);
+ 	}
+ 
++out:
+ 	/* remove tmp array */
+ 	kfree(cells);
+ 
+-	return 0;
+-err:
+-	while (i--)
+-		nvmem_cell_entry_drop(cells[i]);
 -
--struct nvmem_cell_info {
--	const char		*name;
--	unsigned int		offset;
--	unsigned int		bytes;
--	unsigned int		bit_offset;
--	unsigned int		nbits;
--	struct device_node	*np;
--};
-+struct nvmem_cell_info;
+-	kfree(cells);
+-
+ 	return rval;
+ }
  
- /**
-  * struct nvmem_cell_lookup - cell lookup entry
-diff --git a/include/linux/nvmem-provider.h b/include/linux/nvmem-provider.h
-index 55181d837969..a953a3a59535 100644
---- a/include/linux/nvmem-provider.h
-+++ b/include/linux/nvmem-provider.h
-@@ -14,7 +14,6 @@
- #include <linux/gpio/consumer.h>
- 
- struct nvmem_device;
--struct nvmem_cell_info;
- typedef int (*nvmem_reg_read_t)(void *priv, unsigned int offset,
- 				void *val, size_t bytes);
- typedef int (*nvmem_reg_write_t)(void *priv, unsigned int offset,
-@@ -47,6 +46,24 @@ struct nvmem_keepout {
- 	unsigned char value;
- };
- 
-+/**
-+ * struct nvmem_cell_info - NVMEM cell description
-+ * @name:	Name.
-+ * @offset:	Offset within the NVMEM device.
-+ * @bytes:	Length of the cell.
-+ * @bit_offset:	Bit offset if cell is smaller than a byte.
-+ * @nbits:	Number of bits.
-+ * @np:		Optional device_node pointer.
-+ */
-+struct nvmem_cell_info {
-+	const char		*name;
-+	unsigned int		offset;
-+	unsigned int		bytes;
-+	unsigned int		bit_offset;
-+	unsigned int		nbits;
-+	struct device_node	*np;
-+};
-+
- /**
-  * struct nvmem_config - NVMEM device configuration
-  *
 -- 
 2.25.1
 
