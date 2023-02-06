@@ -2,188 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10B7868BFBA
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 15:14:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47B7268BFCD
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 15:15:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbjBFOOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 09:14:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54570 "EHLO
+        id S231540AbjBFOPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 09:15:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231309AbjBFONo (ORCPT
+        with ESMTP id S231604AbjBFOO6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 09:13:44 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA862658E;
-        Mon,  6 Feb 2023 06:13:06 -0800 (PST)
-Date:   Mon, 06 Feb 2023 14:12:45 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1675692766;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
+        Mon, 6 Feb 2023 09:14:58 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B77122A2B
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 06:13:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675692805;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=hj0Mhlus84qc7jbWOcuoPYl/kpgWwsAus+jEFc07HZo=;
-        b=C0LZxnQxFSP0wZGizyg93du+bTSseKLtNC3wxFlHAeX4xUKOT5eW6rMRDJFSIJuJb9QxUF
-        N79KekZNrkhC30W8u68rQ2MFD4iQNV4wWKElvlG3WTceWqSyMttSaQns+O6rTmLRKIYkyh
-        8YGu25NLOe4Lh+xCq5AG16On1xRAPFhMi/Tnee8gqOusvNSGv7f8ga8fTunBvn+AWWOeqN
-        /3lKgUi+oL5oPRhWukcSZzIWeLA4cMPa5lWad5EVTM318IdvBoeoJfdAfhi2cRDfv0zPMP
-        9RluZEPUvlN3X0cdksgQcd+vlL37yu6y22ziBMf1tNimdwxX9O5lTOaFRDfGUw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1675692766;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hj0Mhlus84qc7jbWOcuoPYl/kpgWwsAus+jEFc07HZo=;
-        b=a9gsloaxOMV1e6d6nOv/FFKRBuTrDfdPvbYLmYM5oiFqJTgzi4l1W7BRNtlGyOlVzzihRc
-        fShbNwGf+EcdDFCg==
-From:   "tip-bot2 for Wander Lairson Costa" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: locking/urgent] rtmutex: Ensure that the top waiter is always woken up
-Cc:     Wander Lairson Costa <wander@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>, stable@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230117172649.52465-1-wander@redhat.com>
-References: <20230117172649.52465-1-wander@redhat.com>
+        bh=02/B40HSR0LR8YaNzHPjtA1YkymmZvawyv7jl3hVYyU=;
+        b=TqpNaqSnkZS9aDXVppLJypNh4i5HMUR7NXPzEpSFYFpt8LXNqMw/+bHgv4mNP6EyKHWUz3
+        oY4Y7gpzRdQFM3gmDMunRahcQJVp5vfiM2Orrv/V6Xk0z4TxgKSq9XbuoHZgmEaIbk3hOT
+        pOmKb/TuNVTHq0LLcDAGz62ijWRhgdY=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-539-hgFAyIBbMIat_NV_jHn0Sw-1; Mon, 06 Feb 2023 09:13:24 -0500
+X-MC-Unique: hgFAyIBbMIat_NV_jHn0Sw-1
+Received: by mail-ed1-f72.google.com with SMTP id d21-20020aa7c1d5000000b004a6e1efa7d0so7573905edp.19
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 06:13:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=02/B40HSR0LR8YaNzHPjtA1YkymmZvawyv7jl3hVYyU=;
+        b=dcVx8JfbFKONpOxKTvXrEFH4bEfHefQIfCy5byInjAz4GZEDFvlgFlCxWfPpmZG5XG
+         JlTfuqNQUjoJ9jkFD/6DxMVgt7BbvEU5XR49fP2/DeVb6DtchTXWl3SKw0epehMEvVZQ
+         0qGC3CU0YOhRV7zJfoicPcWbiyeGehYlgg8EYDZ6Wbc90B4yxvSy4MLgTlz0/Lob2Z65
+         oV1Y4zbBXtFAeAdxPhGMLBZ1xm75aNKSPerg2/wMFBd/qz4g2a49NUbhswe7OlglxsFa
+         ZDkcT+UPxzyxRpRQVWpP8lU8QcoGPty47noYY1m/9zvftPvU0VI4qP12XsWEFEMLAs2w
+         Bp7g==
+X-Gm-Message-State: AO0yUKWPegROaqUJ7FpHKJW9rxzfGkyT3hpzf7s9XAHeOmlb3Z4BIlwp
+        FuOovW8/nkCYH24puoRB42qakOOQeU+sY+Yhqo90wzB4v/6DjjnYgnMDhrEFaqQfxLNKkJLtqcI
+        NByXdW8x84zvdLPSR1XkT0pJy
+X-Received: by 2002:a50:ccc6:0:b0:4aa:bae3:f4bd with SMTP id b6-20020a50ccc6000000b004aabae3f4bdmr1823858edj.25.1675692802650;
+        Mon, 06 Feb 2023 06:13:22 -0800 (PST)
+X-Google-Smtp-Source: AK7set/OmMRaUkWqA9rkq2iEAeoZTCss06qO9F1Xew4pbnxsmaEn1EufcA1OXsVcnJS3wu8Xhm6evA==
+X-Received: by 2002:a50:ccc6:0:b0:4aa:bae3:f4bd with SMTP id b6-20020a50ccc6000000b004aabae3f4bdmr1823841edj.25.1675692802461;
+        Mon, 06 Feb 2023 06:13:22 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id e14-20020a50d4ce000000b004aab66d34c7sm815563edj.7.2023.02.06.06.13.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Feb 2023 06:13:21 -0800 (PST)
+Message-ID: <296c2403-9ba3-f070-c939-ec845c7410a1@redhat.com>
+Date:   Mon, 6 Feb 2023 15:13:21 +0100
 MIME-Version: 1.0
-Message-ID: <167569276573.4906.7991545915243537568.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 2/2] platform/x86: dell-ddv: Prefer asynchronous probing
+Content-Language: en-US, nl
+To:     Armin Wolf <W_Armin@gmx.de>, markgross@kernel.org
+Cc:     jdelvare@suse.com, linux@roeck-us.net,
+        platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230205205456.2364-1-W_Armin@gmx.de>
+ <20230205205456.2364-3-W_Armin@gmx.de>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230205205456.2364-3-W_Armin@gmx.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the locking/urgent branch of tip:
+Hi,
 
-Commit-ID:     db370a8b9f67ae5f17e3d5482493294467784504
-Gitweb:        https://git.kernel.org/tip/db370a8b9f67ae5f17e3d5482493294467784504
-Author:        Wander Lairson Costa <wander@redhat.com>
-AuthorDate:    Thu, 02 Feb 2023 09:30:20 -03:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Mon, 06 Feb 2023 14:49:13 +01:00
+On 2/5/23 21:54, Armin Wolf wrote:
+> During probe, both sensor buffers need to be queried to
+> initialize the hwmon channels. This might be slow on some
+> machines, causing a unnecessary delay during boot.
+> Mark the driver with PROBE_PREFER_ASYNCHRONOUS so that it
+> can be probed asynchronously.
+> 
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 
-rtmutex: Ensure that the top waiter is always woken up
+Thanks, patch looks good to me:
 
-Let L1 and L2 be two spinlocks.
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 
-Let T1 be a task holding L1 and blocked on L2. T1, currently, is the top
-waiter of L2.
+Regards,
 
-Let T2 be the task holding L2.
+Hans
 
-Let T3 be a task trying to acquire L1.
 
-The following events will lead to a state in which the wait queue of L2
-isn't empty, but no task actually holds the lock.
+> ---
+>  drivers/platform/x86/dell/dell-wmi-ddv.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/platform/x86/dell/dell-wmi-ddv.c b/drivers/platform/x86/dell/dell-wmi-ddv.c
+> index b7ac483eff12..cffbba5e2d9a 100644
+> --- a/drivers/platform/x86/dell/dell-wmi-ddv.c
+> +++ b/drivers/platform/x86/dell/dell-wmi-ddv.c
+> @@ -10,6 +10,7 @@
+>  #include <linux/acpi.h>
+>  #include <linux/debugfs.h>
+>  #include <linux/device.h>
+> +#include <linux/device/driver.h>
+>  #include <linux/dev_printk.h>
+>  #include <linux/errno.h>
+>  #include <linux/kconfig.h>
+> @@ -872,6 +873,7 @@ MODULE_DEVICE_TABLE(wmi, dell_wmi_ddv_id_table);
+>  static struct wmi_driver dell_wmi_ddv_driver = {
+>  	.driver = {
+>  		.name = DRIVER_NAME,
+> +		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
+>  	},
+>  	.id_table = dell_wmi_ddv_id_table,
+>  	.probe = dell_wmi_ddv_probe,
+> --
+> 2.30.2
+> 
 
-T1                T2                                  T3
-==                ==                                  ==
-
-                                                      spin_lock(L1)
-                                                      | raw_spin_lock(L1->wait_lock)
-                                                      | rtlock_slowlock_locked(L1)
-                                                      | | task_blocks_on_rt_mutex(L1, T3)
-                                                      | | | orig_waiter->lock = L1
-                                                      | | | orig_waiter->task = T3
-                                                      | | | raw_spin_unlock(L1->wait_lock)
-                                                      | | | rt_mutex_adjust_prio_chain(T1, L1, L2, orig_waiter, T3)
-                  spin_unlock(L2)                     | | | |
-                  | rt_mutex_slowunlock(L2)           | | | |
-                  | | raw_spin_lock(L2->wait_lock)    | | | |
-                  | | wakeup(T1)                      | | | |
-                  | | raw_spin_unlock(L2->wait_lock)  | | | |
-                                                      | | | | waiter = T1->pi_blocked_on
-                                                      | | | | waiter == rt_mutex_top_waiter(L2)
-                                                      | | | | waiter->task == T1
-                                                      | | | | raw_spin_lock(L2->wait_lock)
-                                                      | | | | dequeue(L2, waiter)
-                                                      | | | | update_prio(waiter, T1)
-                                                      | | | | enqueue(L2, waiter)
-                                                      | | | | waiter != rt_mutex_top_waiter(L2)
-                                                      | | | | L2->owner == NULL
-                                                      | | | | wakeup(T1)
-                                                      | | | | raw_spin_unlock(L2->wait_lock)
-T1 wakes up
-T1 != top_waiter(L2)
-schedule_rtlock()
-
-If the deadline of T1 is updated before the call to update_prio(), and the
-new deadline is greater than the deadline of the second top waiter, then
-after the requeue, T1 is no longer the top waiter, and the wrong task is
-woken up which will then go back to sleep because it is not the top waiter.
-
-This can be reproduced in PREEMPT_RT with stress-ng:
-
-while true; do
-    stress-ng --sched deadline --sched-period 1000000000 \
-    	    --sched-runtime 800000000 --sched-deadline \
-    	    1000000000 --mmapfork 23 -t 20
-done
-
-A similar issue was pointed out by Thomas versus the cases where the top
-waiter drops out early due to a signal or timeout, which is a general issue
-for all regular rtmutex use cases, e.g. futex.
-
-The problematic code is in rt_mutex_adjust_prio_chain():
-
-    	// Save the top waiter before dequeue/enqueue
-	prerequeue_top_waiter = rt_mutex_top_waiter(lock);
-
-	rt_mutex_dequeue(lock, waiter);
-	waiter_update_prio(waiter, task);
-	rt_mutex_enqueue(lock, waiter);
-
-	// Lock has no owner?
-	if (!rt_mutex_owner(lock)) {
-	   	// Top waiter changed		      			   
-  ---->		if (prerequeue_top_waiter != rt_mutex_top_waiter(lock))
-  ---->			wake_up_state(waiter->task, waiter->wake_state);
-
-This only takes the case into account where @waiter is the new top waiter
-due to the requeue operation.
-
-But it fails to handle the case where @waiter is not longer the top
-waiter due to the requeue operation.
-
-Ensure that the new top waiter is woken up so in all cases so it can take
-over the ownerless lock.
-
-[ tglx: Amend changelog, add Fixes tag ]
-
-Fixes: c014ef69b3ac ("locking/rtmutex: Add wake_state to rt_mutex_waiter")
-Signed-off-by: Wander Lairson Costa <wander@redhat.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20230117172649.52465-1-wander@redhat.com
-Link: https://lore.kernel.org/r/20230202123020.14844-1-wander@redhat.com
----
- kernel/locking/rtmutex.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/locking/rtmutex.c b/kernel/locking/rtmutex.c
-index 010cf4e..728f434 100644
---- a/kernel/locking/rtmutex.c
-+++ b/kernel/locking/rtmutex.c
-@@ -901,8 +901,9 @@ static int __sched rt_mutex_adjust_prio_chain(struct task_struct *task,
- 		 * then we need to wake the new top waiter up to try
- 		 * to get the lock.
- 		 */
--		if (prerequeue_top_waiter != rt_mutex_top_waiter(lock))
--			wake_up_state(waiter->task, waiter->wake_state);
-+		top_waiter = rt_mutex_top_waiter(lock);
-+		if (prerequeue_top_waiter != top_waiter)
-+			wake_up_state(top_waiter->task, top_waiter->wake_state);
- 		raw_spin_unlock_irq(&lock->wait_lock);
- 		return 0;
- 	}
