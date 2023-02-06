@@ -2,251 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 309FE68B622
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 08:13:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80AFD68B64F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 08:22:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbjBFHN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 02:13:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34682 "EHLO
+        id S229663AbjBFHWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 02:22:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbjBFHNL (ORCPT
+        with ESMTP id S229478AbjBFHW3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 02:13:11 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00971A5CA;
-        Sun,  5 Feb 2023 23:13:09 -0800 (PST)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3166SCqv002258;
-        Mon, 6 Feb 2023 07:12:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=TUy1wZssKyFULBphW/Er2WruP7of5rdb3YYXM7nQEPM=;
- b=pA51vAkvTZHsJTkma7U9g5RQrHzlhXtbQXIqtXdFtr6fJvfWN1jM6zxMGauosg4SIOZa
- fhYxVpmcpaqbSTcMj/2s+L7icDBPeUI4i9Njk2qSOOVkgQJvRjUu6zZZu4JeF3TY1Wm3
- 4uAgIlL8/4X6Y46wQeF8JZunS56O9SGWRv9GUdc3Vt//JJcS13hpmOnD8F+cDx5/qLcx
- P1P/UBOdxfL7FEBaaDRNJb09YZ/NQ8Fm1bnC8gJdoMviUxOYknnNeyobdLO+0epPHP5i
- 6QjFyyg7IHgP+me/JRN7ohUdYUR9C6R9K5+bXKrIBr4B5ixGPmKAKjIVls49iiYcFX9i 4g== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nhgng2vay-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Feb 2023 07:12:53 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3167CqM1025248
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 6 Feb 2023 07:12:52 GMT
-Received: from kathirav-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Sun, 5 Feb 2023 23:12:44 -0800
-From:   Kathiravan T <quic_kathirav@quicinc.com>
-To:     <krzysztof.kozlowski@linaro.org>, <agross@kernel.org>,
-        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <linus.walleij@linaro.org>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <shawnguo@kernel.org>, <arnd@arndb.de>,
-        <dmitry.baryshkov@linaro.org>, <marcel.ziswiler@toradex.com>,
-        <nfraprado@collabora.com>, <robimarko@gmail.com>,
-        <quic_gurus@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <quic_varada@quicinc.com>, <quic_srichara@quicinc.com>,
-        Kathiravan T <quic_kathirav@quicinc.com>
-Subject: [PATCH V3 1/9] dt-bindings: pinctrl: qcom: add IPQ5332 pinctrl
-Date:   Mon, 6 Feb 2023 12:42:09 +0530
-Message-ID: <20230206071217.29313-2-quic_kathirav@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230206071217.29313-1-quic_kathirav@quicinc.com>
-References: <20230206071217.29313-1-quic_kathirav@quicinc.com>
+        Mon, 6 Feb 2023 02:22:29 -0500
+X-Greylist: delayed 581 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 05 Feb 2023 23:22:28 PST
+Received: from smtp-out0.aaront.org (smtp-out0.aaront.org [IPv6:2600:1f14:3bf:e504::15:1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B7E71ABED
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 23:22:28 -0800 (PST)
+Received: by smtp-out0.aaront.org (Postfix) with ESMTP id 4P9HXJ40cczMs;
+        Mon,  6 Feb 2023 07:12:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aaront.org; h=
+    from:to:cc:subject:date:message-id:in-reply-to:references
+    :mime-version:content-transfer-encoding; s=elwxqanhxhag6erl; bh=
+    y7pa9vIM1shhX8XOKE3m/lGhsBFqy8v63C8PQIRZIGM=; b=OwmytaBmSoCrxLGI
+    b8oAMXxhIH7QvQKaG4U4JLebDboLonVTHpvdJ6en1jIOKO+QiT4uVzGJn5ZX2VZ2
+    SO4oHbcOKSCIQoRPHwW0esQyvNM1jueruaA+xlbjcYwHnuNFODy20F/LY4RRzPPK
+    mq5JGpXgLgSKLhFprIT/pL+8pycJK03kyGu6XO02V0ZHsez1d6DnTNPcCUdGc9c5
+    oea9XEUCXzM1GVoNJfd7e1b68eAqlmjeX4KzwN46iC1YTswqHyIEcX6O5jbIH5yu
+    monSUsEZwaKAyQwJ77Q3/Ue5hnKNAt1xpXTgp0p82TvEgBNLEyf73IzNDg3+F0Yw
+    yfZXLA==
+From:   Aaron Thompson <dev@aaront.org>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Aaron Thompson <dev@aaront.org>
+Subject: [PATCH 1/1] mm: Defer freeing reserved pages in memblock_free_late()
+Date:   Mon,  6 Feb 2023 07:12:10 +0000
+Message-Id: <20230206071211.3157-2-dev@aaront.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230206071211.3157-1-dev@aaront.org>
+References: <20230206071211.3157-1-dev@aaront.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: xQSjGAIYYQM4k6X9asfRIJzeTn7GsaYt
-X-Proofpoint-ORIG-GUID: xQSjGAIYYQM4k6X9asfRIJzeTn7GsaYt
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-06_03,2023-02-03_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=999
- bulkscore=0 malwarescore=0 spamscore=0 mlxscore=0 suspectscore=0
- phishscore=0 impostorscore=0 adultscore=0 lowpriorityscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302060061
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add device tree bindings for IPQ5332 TLMM block.
+Commit 115d9d77bb0f ("mm: Always release pages to the buddy allocator in
+memblock_free_late().") introduced a bug. The pages being freed by
+memblock_free_late() have already been initialized, but if they are in
+the deferred init range, __free_one_page() might access nearby
+uninitialized pages when trying to coalesce buddies. This can, for
+example, trigger this BUG:
 
-Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
+  BUG: unable to handle page fault for address: ffffe964c02580c8
+  RIP: 0010:__list_del_entry_valid+0x3f/0x70
+   <TASK>
+   __free_one_page+0x139/0x410
+   __free_pages_ok+0x21d/0x450
+   memblock_free_late+0x8c/0xb9
+   efi_free_boot_services+0x16b/0x25c
+   efi_enter_virtual_mode+0x403/0x446
+   start_kernel+0x678/0x714
+   secondary_startup_64_no_verify+0xd2/0xdb
+   </TASK>
+
+Instead of freeing such pages immediately, remove the range from
+memblock.reserved. This causes the deferred init process to treat it as
+a range of free pages, which means they will be initialized and freed by
+deferred_init_maxorder().
+
+Fixes: 115d9d77bb0f ("mm: Always release pages to the buddy allocator in memblock_free_late().")
+Signed-off-by: Aaron Thompson <dev@aaront.org>
 ---
-Changes in V3:
-	- Grouped the individual pin entries of pta[0-2] and xfem[0-7]
-	  to pta and xfem
-	- Used the descriptive function names for wci pins to avoid the
-	  ambiguity
-	- Din't pick up the Reviewed-By tag due to the above changes
-Changes in V2:
-	- Renamed the file name to match with compatible
-	- Added 'maxItems' for 'interrupt' property
-	- Fixed the gpio pattern to 0 to 52 GPIOs instead of 0 to 53
-	  GPIOs
-	- Converted the function names to lowercase and sort it
+ mm/internal.h                     |  2 ++
+ mm/memblock.c                     | 36 ++++++++++++++++++++-----------
+ mm/page_alloc.c                   | 17 +++++++++++++++
+ tools/testing/memblock/internal.h |  7 +++---
+ 4 files changed, 47 insertions(+), 15 deletions(-)
 
- .../bindings/pinctrl/qcom,ipq5332-tlmm.yaml   | 134 ++++++++++++++++++
- 1 file changed, 134 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,ipq5332-tlmm.yaml
-
-diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,ipq5332-tlmm.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,ipq5332-tlmm.yaml
-new file mode 100644
-index 000000000000..300747252a7b
---- /dev/null
-+++ b/Documentation/devicetree/bindings/pinctrl/qcom,ipq5332-tlmm.yaml
-@@ -0,0 +1,134 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/pinctrl/qcom,ipq5332-tlmm.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/mm/internal.h b/mm/internal.h
+index bcf75a8b032d..48d87f334f8c 100644
+--- a/mm/internal.h
++++ b/mm/internal.h
+@@ -358,6 +358,8 @@ extern void __putback_isolated_page(struct page *page, unsigned int order,
+ 				    int mt);
+ extern void memblock_free_pages(struct page *page, unsigned long pfn,
+ 					unsigned int order);
++extern void memblock_free_reserved_pages(struct page *page, unsigned long pfn,
++					 unsigned int order);
+ extern void __free_pages_core(struct page *page, unsigned int order);
+ extern void prep_compound_page(struct page *page, unsigned int order);
+ extern void post_alloc_hook(struct page *page, unsigned int order,
+diff --git a/mm/memblock.c b/mm/memblock.c
+index 685e30e6d27c..8f65ea3533c6 100644
+--- a/mm/memblock.c
++++ b/mm/memblock.c
+@@ -160,6 +160,7 @@ static bool system_has_some_mirror __initdata_memblock = false;
+ static int memblock_can_resize __initdata_memblock;
+ static int memblock_memory_in_slab __initdata_memblock = 0;
+ static int memblock_reserved_in_slab __initdata_memblock = 0;
++static bool memblock_discard_called __initdata = false;
+ 
+ static enum memblock_flags __init_memblock choose_memblock_flags(void)
+ {
+@@ -366,6 +367,8 @@ void __init memblock_discard(void)
+ {
+ 	phys_addr_t addr, size;
+ 
++	memblock_discard_called = true;
 +
-+title: Qualcomm IPQ5332 TLMM pin controller
+ 	if (memblock.reserved.regions != memblock_reserved_init_regions) {
+ 		addr = __pa(memblock.reserved.regions);
+ 		size = PAGE_ALIGN(sizeof(struct memblock_region) *
+@@ -1620,13 +1623,16 @@ void * __init memblock_alloc_try_nid(
+ }
+ 
+ /**
+- * memblock_free_late - free pages directly to buddy allocator
+- * @base: phys starting address of the  boot memory block
++ * memblock_free_late - free boot memory block after memblock_free_all() has run
++ * @base: phys starting address of the boot memory block
+  * @size: size of the boot memory block in bytes
+  *
+- * This is only useful when the memblock allocator has already been torn
+- * down, but we are still initializing the system.  Pages are released directly
+- * to the buddy allocator.
++ * Free boot memory block previously allocated or reserved via memblock APIs.
++ * This function is to be used after memblock_free_all() has run (prior to that,
++ * use memblock_free()/memblock_phys_free()). Pages will be released to the
++ * buddy allocator, either immediately or as part of deferred page
++ * initialization. The block will also be removed from the reserved regions if
++ * memblock_discard() has not yet run.
+  */
+ void __init memblock_free_late(phys_addr_t base, phys_addr_t size)
+ {
+@@ -1640,15 +1646,21 @@ void __init memblock_free_late(phys_addr_t base, phys_addr_t size)
+ 	end = PFN_DOWN(base + size);
+ 
+ 	for (; cursor < end; cursor++) {
+-		/*
+-		 * Reserved pages are always initialized by the end of
+-		 * memblock_free_all() (by memmap_init() and, if deferred
+-		 * initialization is enabled, memmap_init_reserved_pages()), so
+-		 * these pages can be released directly to the buddy allocator.
+-		 */
+-		__free_pages_core(pfn_to_page(cursor), 0);
++		memblock_free_reserved_pages(pfn_to_page(cursor), cursor, 0);
+ 		totalram_pages_inc();
+ 	}
 +
-+maintainers:
-+  - Bjorn Andersson <andersson@kernel.org>
-+  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
++	if (!memblock_discard_called)
++		/*
++		 * Also remove the range from memblock.reserved. If deferred
++		 * page init is enabled, memblock_free_reserved_pages() does not
++		 * free pages that are in the deferred range, but because the
++		 * range is no longer reserved, deferred init will initialize
++		 * and free the pages. Note that such pages will be initialized
++		 * twice, first by memmap_init_reserved_pages() and again by
++		 * deferred_init_maxorder().
++		 */
++		memblock_remove_range(&memblock.reserved, base, size);
+ }
+ 
+ /*
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 0745aedebb37..4583215bfe3a 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -1813,6 +1813,23 @@ void __init memblock_free_pages(struct page *page, unsigned long pfn,
+ 	__free_pages_core(page, order);
+ }
+ 
++void __init memblock_free_reserved_pages(struct page *page, unsigned long pfn,
++					 unsigned int order)
++{
++	/*
++	 * All reserved pages have been initialized at this point by either
++	 * memmap_init() or memmap_init_reserved_pages(), but if the pages to
++	 * be freed are in the deferred init range (which is what
++	 * early_page_uninitialised() checks), freeing them now could result
++	 * in __free_one_page() accessing nearby uninitialized pages when it
++	 * tries to coalesce buddies. They will be freed as part of deferred
++	 * init instead.
++	 */
++	if (early_page_uninitialised(pfn))
++		return;
++	__free_pages_core(page, order);
++}
 +
-+description: |
-+  Top Level Mode Multiplexer pin controller in Qualcomm IPQ5332 SoC.
-+
-+allOf:
-+  - $ref: /schemas/pinctrl/qcom,tlmm-common.yaml#
-+
-+properties:
-+  compatible:
-+    const: qcom,ipq5332-tlmm
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  interrupt-controller: true
-+  "#interrupt-cells": true
-+  gpio-controller: true
-+  "#gpio-cells": true
-+  gpio-ranges: true
-+  wakeup-parent: true
-+
-+  gpio-reserved-ranges:
-+    minItems: 1
-+    maxItems: 27
-+
-+  gpio-line-names:
-+    maxItems: 53
-+
-+patternProperties:
-+  "-state$":
-+    oneOf:
-+      - $ref: "#/$defs/qcom-ipq5332-tlmm-state"
-+      - patternProperties:
-+          "-pins$":
-+            $ref: "#/$defs/qcom-ipq5332-tlmm-state"
-+        additionalProperties: false
-+
-+$defs:
-+  qcom-ipq5332-tlmm-state:
-+    type: object
-+    description:
-+      Pinctrl node's client devices use subnodes for desired pin configuration.
-+      Client device subnodes use below standard properties.
-+    $ref: qcom,tlmm-common.yaml#/$defs/qcom-tlmm-state
-+
-+    properties:
-+      pins:
-+        description:
-+          List of gpio pins affected by the properties specified in this
-+          subnode.
-+        items:
-+          pattern: "^gpio([0-9]|[1-4][0-9]|5[0-2])$"
-+        minItems: 1
-+        maxItems: 36
-+
-+      function:
-+        description:
-+          Specify the alternative function to be configured for the specified
-+          pins.
-+
-+        enum: [ atest_char, atest_char0, atest_char1, atest_char2, atest_char3,
-+                atest_tic, audio_pri, audio_pri0, audio_pri1, audio_sec,
-+                audio_sec0, audio_sec1, blsp0_i2c, blsp0_spi, blsp0_uart0,
-+                blsp0_uart1, blsp1_i2c0, blsp1_i2c1, blsp1_spi0, blsp1_spi1,
-+                blsp1_uart0, blsp1_uart1, blsp1_uart2, blsp2_i2c0, blsp2_i2c1,
-+                blsp2_spi, blsp2_spi0, blsp2_spi1, core_voltage, cri_trng0,
-+                cri_trng1, cri_trng2, cri_trng3, cxc_clk, cxc_data, dbg_out,
-+                gcc_plltest, gcc_tlmm, gpio, lock_det, mac0, mac1, mdc0, mdc1,
-+                mdio0, mdio1, pc, pcie0_clk, pcie0_wake, pcie1_clk, pcie1_wake,
-+                pcie2_clk, pcie2_wake, pll_test, prng_rosc0, prng_rosc1,
-+                prng_rosc2, prng_rosc3, pta, pwm0, pwm1, pwm2, pwm3,
-+                qdss_cti_trig_in_a0, qdss_cti_trig_in_a1, qdss_cti_trig_in_b0,
-+                qdss_cti_trig_in_b1, qdss_cti_trig_out_a0,
-+                qdss_cti_trig_out_a1, qdss_cti_trig_out_b0,
-+                qdss_cti_trig_out_b1, qdss_traceclk_a, qdss_traceclk_b,
-+                qdss_tracectl_a, qdss_tracectl_b, qdss_tracedata_a,
-+                qdss_tracedata_b, qspi_data, qspi_clk, qspi_cs, resout, rx0,
-+                rx1, sdc_data, sdc_clk, sdc_cmd, tsens_max, wci_txd, wci_rxd,
-+                wsi_clk, wsi_clk3, wsi_data, wsi_data3, wsis_reset, xfem ]
-+
-+      bias-pull-down: true
-+      bias-pull-up: true
-+      bias-disable: true
-+      drive-strength: true
-+      input-enable: true
-+      output-high: true
-+      output-low: true
-+
-+    required:
-+      - pins
-+
-+    additionalProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    tlmm: pinctrl@1000000 {
-+        compatible = "qcom,ipq5332-tlmm";
-+        reg = <0x01000000 0x300000>;
-+        gpio-controller;
-+        #gpio-cells = <0x2>;
-+        gpio-ranges = <&tlmm 0 0 53>;
-+        interrupts = <GIC_SPI 249 IRQ_TYPE_LEVEL_HIGH>;
-+        interrupt-controller;
-+        #interrupt-cells = <0x2>;
-+
-+        serial0-state {
-+            pins = "gpio18", "gpio19";
-+            function = "blsp0_uart0";
-+            drive-strength = <8>;
-+            bias-pull-up;
-+        };
-+    };
+ /*
+  * Check that the whole (or subset of) a pageblock given by the interval of
+  * [start_pfn, end_pfn) is valid and within the same zone, before scanning it
+diff --git a/tools/testing/memblock/internal.h b/tools/testing/memblock/internal.h
+index 85973e55489e..524d93e71bee 100644
+--- a/tools/testing/memblock/internal.h
++++ b/tools/testing/memblock/internal.h
+@@ -15,12 +15,13 @@ bool mirrored_kernelcore = false;
+ 
+ struct page {};
+ 
+-void __free_pages_core(struct page *page, unsigned int order)
++void memblock_free_pages(struct page *page, unsigned long pfn,
++			 unsigned int order)
+ {
+ }
+ 
+-void memblock_free_pages(struct page *page, unsigned long pfn,
+-			 unsigned int order)
++void memblock_free_reserved_pages(struct page *page, unsigned long pfn,
++				  unsigned int order)
+ {
+ }
+ 
 -- 
-2.17.1
+2.30.2
 
