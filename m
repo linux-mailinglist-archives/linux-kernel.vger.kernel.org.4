@@ -2,143 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E57368C448
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 18:11:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13AE168C445
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 18:11:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230084AbjBFRL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 12:11:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45694 "EHLO
+        id S230019AbjBFRLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 12:11:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229756AbjBFRL0 (ORCPT
+        with ESMTP id S229923AbjBFRLE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 12:11:26 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FFD224116;
-        Mon,  6 Feb 2023 09:11:23 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 52D8433AE4;
-        Mon,  6 Feb 2023 17:11:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1675703482; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=JiosyFUMFz7kRTlgHlsP43ogSkUkcL2PJV6W1GvZl3E=;
-        b=h/huH4B2x/yJGg2HFg/LXedjRuFs8CL7GGl8IYft4tEbopr3YFqn7NYQ7ql0K0q/XwktmS
-        IR6lqr0fL1s5ISOfl3N9AQBwEyeg1KYUDGbpp6foFxkS/gqj5q676kyw7XksHMjqmMMACT
-        LX1VkXWK6iVYk3TenEyeln0RUXiAhIM=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3017B138E8;
-        Mon,  6 Feb 2023 17:11:22 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id jAN6Cro04WMTJwAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Mon, 06 Feb 2023 17:11:22 +0000
-From:   =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Petr Mladek <pmladek@suse.com>,
-        Petr Pavlu <petr.pavlu@suse.com>
-Subject: [RFC PATCH] vfs: Delay root FS switch after UMH completion
-Date:   Mon,  6 Feb 2023 18:10:32 +0100
-Message-Id: <20230206171032.12801-1-mkoutny@suse.com>
-X-Mailer: git-send-email 2.39.1
+        Mon, 6 Feb 2023 12:11:04 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D0B414238;
+        Mon,  6 Feb 2023 09:11:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675703463; x=1707239463;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to;
+  bh=Ja5SdUOZuIIC30ACklv9jVK1neyxgWVY60XVa305tTE=;
+  b=ZChkClE4XrdISxAWCyHpaKHS3G2VzhPLxqDz6+2CghG3DrQFNnaAaE/0
+   0PJqd14OatarVDCiyI6nlarJI+IJ/Q8LeQQZ/wuJir48h++t3RMMx6+qe
+   7pJ/zmqhMcTk8ohE8WlXWDqapNQsr5RCnrkjTn26dQHP75ONK/jEuWfbf
+   EQyV7dmlyh1UXb1kLc1+HAY6CBs0W1iClFeo437CZ03GYLAwhrggJhnBt
+   NJwNRGr8d1M4TU71TCoEbLCAmbOiSZkpc/gsC6cOz2veucFPARloN7R8W
+   88j8kLYa2EhREqEEffJvseByFIb/9prNsh9X4Hp6yxTzbFosRlZmFaqDi
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="326944277"
+X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
+   d="scan'208";a="326944277"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 09:10:54 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="840423329"
+X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
+   d="scan'208";a="840423329"
+Received: from ninhngo-mobl.amr.corp.intel.com (HELO [10.212.134.105]) ([10.212.134.105])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 09:10:53 -0800
+Content-Type: multipart/mixed; boundary="------------FG0mL8VM1uuFILP0dHf2P0I2"
+Message-ID: <1dbc9402-5baf-4a92-96b3-8b3a9c108f01@intel.com>
+Date:   Mon, 6 Feb 2023 09:10:53 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] x86/sgx: Avoid using iterator after loop in
+ sgx_mmu_notifier_release()
+Content-Language: en-US
+To:     Jakob Koschel <jkl820.git@gmail.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>
+Cc:     linux-sgx@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Pietro Borrello <borrello@diag.uniroma1.it>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+References: <20230206-sgx-use-after-iter-v1-1-c09fb5300b5e@gmail.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20230206-sgx-use-after-iter-v1-1-c09fb5300b5e@gmail.com>
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We want to make sure no UMHs started with an old root survive into the
-world with the new root (they may fail when it is not expected).
-Therefore, insert a wait for existing UMHs termination (this assumes UMH
-runtime is finite).
+This is a multi-part message in MIME format.
+--------------FG0mL8VM1uuFILP0dHf2P0I2
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-A motivation are asynchronous module loads that start in initrd and they
-may be (un)intentionally terminated by a userspace cleanup during rootfs
-transition.
+On 2/6/23 02:39, Jakob Koschel wrote:
+> If &encl_mm->encl->mm_list does not contain the searched 'encl_mm',
+> 'tmp' will not point to a valid sgx_encl_mm struct.
+> 
+> Since the code within the guarded block is just called when the element
+> is found, it can simply be moved into the list iterator.
+> Within the list iterator 'tmp' is guaranteed to point to a valid
+> element.
+> 
+> Signed-off-by: Jakob Koschel <jkl820.git@gmail.com>
+> ---
+> Linus proposed to avoid any use of the list iterator variable after the
+> loop, in the attempt to move the list iterator variable declaration into
+> the marcro to avoid any potential misuse after the loop.
+> Using it in a pointer comparision after the loop is undefined behavior
+> and should be omitted if possible [1].
 
-This is also inspired by an ancient problem [1].
+I think there's a big difference between "undefined behavior" and
+"someone wants to flip a switch to *make* this undefined behavior".  My
+understanding is that this patch avoids behavior which _is_ defined today.
 
-This is just a rough idea, only superficially tested, no broader context
-(VFS locking et al) is considered.
+Is there some effort to change this behavior across the tree that I missed?
 
-[1] https://kernelnewbies.org/KernelProjects/usermode-helper-enhancements#Filesystem_suspend
+In any case, this patch also kinda breaks the rule that you're supposed
+to make the common path through the code at the lowest nesting level.
+It makes the common case look like some kind of error handling.  Would
+something like the attached patch work?
+--------------FG0mL8VM1uuFILP0dHf2P0I2
+Content-Type: text/x-patch; charset=UTF-8; name="sgxmm.patch"
+Content-Disposition: attachment; filename="sgxmm.patch"
+Content-Transfer-Encoding: base64
 
-Signed-off-by: Michal Koutný <mkoutny@suse.com>
----
+ZGlmZiAtLWdpdCBhL2FyY2gveDg2L2tlcm5lbC9jcHUvc2d4L2VuY2wuYyBiL2FyY2gveDg2
+L2tlcm5lbC9jcHUvc2d4L2VuY2wuYwppbmRleCA2OGY4YjE4ZDIyNzguLmUxYmQyYTU3OTBh
+NyAxMDA2NDQKLS0tIGEvYXJjaC94ODYva2VybmVsL2NwdS9zZ3gvZW5jbC5jCisrKyBiL2Fy
+Y2gveDg2L2tlcm5lbC9jcHUvc2d4L2VuY2wuYwpAQCAtNzU1LDYgKzc1NSw3IEBAIHN0YXRp
+YyB2b2lkIHNneF9tbXVfbm90aWZpZXJfcmVsZWFzZShzdHJ1Y3QgbW11X25vdGlmaWVyICpt
+biwKIHsKIAlzdHJ1Y3Qgc2d4X2VuY2xfbW0gKmVuY2xfbW0gPSBjb250YWluZXJfb2YobW4s
+IHN0cnVjdCBzZ3hfZW5jbF9tbSwgbW11X25vdGlmaWVyKTsKIAlzdHJ1Y3Qgc2d4X2VuY2xf
+bW0gKnRtcCA9IE5VTEw7CisJYm9vbCBtbV9mb3VuZCA9IGZhbHNlOwogCiAJLyoKIAkgKiBU
+aGUgZW5jbGF2ZSBpdHNlbGYgY2FuIHJlbW92ZSBlbmNsX21tLiAgTm90ZSwgb2JqZWN0cyBj
+YW4ndCBiZSBtb3ZlZApAQCAtNzY0LDEyICs3NjUsMTMgQEAgc3RhdGljIHZvaWQgc2d4X21t
+dV9ub3RpZmllcl9yZWxlYXNlKHN0cnVjdCBtbXVfbm90aWZpZXIgKm1uLAogCWxpc3RfZm9y
+X2VhY2hfZW50cnkodG1wLCAmZW5jbF9tbS0+ZW5jbC0+bW1fbGlzdCwgbGlzdCkgewogCQlp
+ZiAodG1wID09IGVuY2xfbW0pIHsKIAkJCWxpc3RfZGVsX3JjdSgmZW5jbF9tbS0+bGlzdCk7
+CisJCQltbV9mb3VuZCA9IHRydWU7CiAJCQlicmVhazsKIAkJfQogCX0KIAlzcGluX3VubG9j
+aygmZW5jbF9tbS0+ZW5jbC0+bW1fbG9jayk7CiAKLQlpZiAodG1wID09IGVuY2xfbW0pIHsK
+KwlpZiAobW1fZm91bmQpIHsKIAkJc3luY2hyb25pemVfc3JjdSgmZW5jbF9tbS0+ZW5jbC0+
+c3JjdSk7CiAJCW1tdV9ub3RpZmllcl9wdXQobW4pOwogCX0K
 
-I'm not amused by this patch. I'm sending it to get some NAck reasons
-(besides indefinite UMH lifetime) and get it off my head. Thanks.
-
- fs/namespace.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
-
-diff --git a/fs/namespace.c b/fs/namespace.c
-index ab467ee58341..48cb658ae10c 100644
---- a/fs/namespace.c
-+++ b/fs/namespace.c
-@@ -2931,6 +2931,7 @@ static int do_move_mount(struct path *old_path, struct path *new_path)
- 	struct mount *old;
- 	struct mount *parent;
- 	struct mountpoint *mp, *old_mp;
-+	struct path ns_root;
- 	int err;
- 	bool attached;
- 
-@@ -2985,6 +2986,14 @@ static int do_move_mount(struct path *old_path, struct path *new_path)
- 		if (p == old)
- 			goto out;
- 
-+	ns_root.mnt = &current->nsproxy->mnt_ns->root->mnt;
-+	ns_root.dentry = ns_root.mnt->mnt_root;
-+	path_get(&ns_root);
-+	/* See argument in pivot_root() */
-+	if (path_equal(new_path, &ns_root))
-+		usermodehelper_disable();
-+
-+
- 	err = attach_recursive_mnt(old, real_mount(new_path->mnt), mp,
- 				   attached);
- 	if (err)
-@@ -2996,6 +3005,9 @@ static int do_move_mount(struct path *old_path, struct path *new_path)
- 	if (attached)
- 		put_mountpoint(old_mp);
- out:
-+	if (path_equal(new_path, &ns_root))
-+		usermodehelper_enable();
-+
- 	unlock_mount(mp);
- 	if (!err) {
- 		if (attached)
-@@ -3997,6 +4009,8 @@ SYSCALL_DEFINE2(pivot_root, const char __user *, new_root,
- 		goto out2;
- 
- 	get_fs_root(current->fs, &root);
-+	/* UMHs started from old root should finish before we switch root under */
-+	usermodehelper_disable(); // XXX error handling
- 	old_mp = lock_mount(&old);
- 	error = PTR_ERR(old_mp);
- 	if (IS_ERR(old_mp))
-@@ -4058,6 +4072,7 @@ SYSCALL_DEFINE2(pivot_root, const char __user *, new_root,
- 	error = 0;
- out4:
- 	unlock_mount(old_mp);
-+	usermodehelper_enable();
- 	if (!error)
- 		mntput_no_expire(ex_parent);
- out3:
--- 
-2.39.1
-
+--------------FG0mL8VM1uuFILP0dHf2P0I2--
