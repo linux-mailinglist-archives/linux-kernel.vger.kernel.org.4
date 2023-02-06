@@ -2,82 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0461368C25C
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 16:57:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F76F68C260
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 16:58:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbjBFP46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 10:56:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38338 "EHLO
+        id S230422AbjBFP6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 10:58:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230084AbjBFP4x (ORCPT
+        with ESMTP id S230344AbjBFP6g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 10:56:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 455781E2B5;
-        Mon,  6 Feb 2023 07:56:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D250D60DC0;
-        Mon,  6 Feb 2023 15:56:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 104B5C433EF;
-        Mon,  6 Feb 2023 15:56:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675699011;
-        bh=BnMU2Vjrd6tRJvjN7xf5KorwAqVeIfdrGkW2yAZq9kQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=ROhVM2Efz4vn2nh6kD6hb6VC89uKawXBwAHz5MXriaSHKM3TGp6uEWGs1ov1dLIBP
-         4AUw3NeaIg0tbdX7P5IJjuSdbVJlJEeIqhGLd8818ThIPLEOtDMjK86AoOBsG9mQ5y
-         bjHTjilv/6+C3nLLDiI114GMOQ2Ek4i/1J8nCf9VBgxIqtHvp+mR5LPP7zIrMksf+s
-         EXnP6pFXTiwpU7u7Nnhju4JP/TojbNXs8hW7sN+gOkyxrn8VA2O2idinA0TMpRPlY5
-         zM+fZOsT6nl/3k3xvNtpxlpr2LPs10GUGN1T3ctmJj8oOP2KG9FS9rDViCRb+QhibI
-         htvSjNWMXZcaA==
-Date:   Mon, 6 Feb 2023 09:56:49 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Dave Airlie <airlied@gmail.com>
-Cc:     linux-fbdev@vger.kernel.org, linux-pci@vger.kernel.org,
-        Helge Deller <deller@gmx.de>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Zeno Davatz <zdavatz@gmail.com>
-Subject: Re: [PATCH] Revert "fbdev: Remove conflicting devices on PCI bus"
-Message-ID: <20230206155649.GA2212009@bhelgaas>
+        Mon, 6 Feb 2023 10:58:36 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60D46FF30;
+        Mon,  6 Feb 2023 07:58:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=8TDVZdwYrPcfERoqHXV0QZVvG/JjJWa414sKcZkelV8=; b=IdOrbjEM5xSxN4+Y5tdroDgmmo
+        e3uWtySHbs+x1XrwoxPAjx4jtCiQsb7beTiYOl3ioTWM9oii8swJmu95NFOINKRm41vF5NzPKIj91
+        IR7xGdzBvux7W7Fi1rMDC/Va6QdlqBHhiDNqQi9eIVAGXebfqlGIdRtm1SLjaidY+X3/rnEB/DFc+
+        1GcFwNU5M1Y3wKD43tdOhXQs48kZFVfDm0IKcnOAnWhi1ToqiPQAjS8SKMJZCo5jzoeE6otpOo3ph
+        rZFuFrHXlqk4+fdRHY7WIQc7ozX1rPxs7LT8QTpCjqd6ASjTmtATnv36q7lFkEvKuEDPf7vCNemZd
+        dOUlvUXA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pP3so-0097jS-EA; Mon, 06 Feb 2023 15:58:18 +0000
+Date:   Mon, 6 Feb 2023 07:58:18 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Julia Lawall <julia.lawall@inria.fr>
+Cc:     Hongchen Zhang <zhanghongchen@loongson.cn>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Christian Brauner (Microsoft)" <brauner@kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        maobibo <maobibo@loongson.cn>,
+        Matthew Wilcox <willy@infradead.org>,
+        Sedat Dilek <sedat.dilek@gmail.com>
+Subject: Re: [PATCH v4] pipe: use __pipe_{lock,unlock} instead of spinlock
+Message-ID: <Y+EjmnRqpLuBFPX1@bombadil.infradead.org>
+References: <20230129060452.7380-1-zhanghongchen@loongson.cn>
+ <CAHk-=wjw-rrT59k6VdeLu4qUarQOzicsZPFGAO5J8TKM=oukUw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAPM=9twrKFPkEXTFWousnmJoH-mEG1KvGEBwqYY2e0biw-h8bw@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAHk-=wjw-rrT59k6VdeLu4qUarQOzicsZPFGAO5J8TKM=oukUw@mail.gmail.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 06, 2023 at 06:59:40AM +1000, Dave Airlie wrote:
-> On Sat, 4 Feb 2023 at 09:09, Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > From: Bjorn Helgaas <bhelgaas@google.com>
+On Sat, Jan 28, 2023 at 11:33:08PM -0800, Linus Torvalds wrote:
+> On Sat, Jan 28, 2023 at 10:05 PM Hongchen Zhang
+> <zhanghongchen@loongson.cn> wrote:
 > >
-> > This reverts commit 145eed48de278007f646b908fd70ac59d24ed81a.
-> >
-> > Zeno Davatz reported that 145eed48de27 ("fbdev: Remove conflicting devices
-> > on PCI bus") caused a console hang.  The machine was actually still usable
-> > via ssh, etc., but there was no activity on the console.
-> >
-> > Reverting 145eed48de27 for the nvidiafb on that system fixed the problem.
-> >
-> > Revert 145eed48de27 ("fbdev: Remove conflicting devices on PCI bus") since
-> > we don't know what caused the problem.
+> > Use spinlock in pipe_{read,write} cost too much time,IMO
+> > pipe->{head,tail} can be protected by __pipe_{lock,unlock}.
+> > On the other hand, we can use __pipe_{lock,unlock} to protect
+> > the pipe->{head,tail} in pipe_resize_ring and
+> > post_one_notification.
 > 
-> Why is the user using nvidiafb?
+> No, we really can't.
+> 
+> post_one_notification() is called under the RCU lock held, *and* with
+> a spinlock held.
+> 
+> It simply cannot do a sleeping lock like __pipe_lock().
+> 
+> So that patch is simply fundamentally buggy, I'm afraid.
 
-I don't know, and of course, it really doesn't matter; we shouldn't
-regress a user's experience, and there's no hint to the user of where
-to look for a resolution.
+This patch lingered for a while until *way* later *Al Viro* and then
+Linus chimed in on this. Ie, the issue for rejecting the patch wasn't so
+obvious it seems.
 
-Thanks for working out a better fix!
+As for Linus' point about us needing to avoid sleep under RCU +
+spinlock, curious if we can capture *existing* bad users of that with
+Coccinelle SmPL.
 
-Bjorn
+  Luis
