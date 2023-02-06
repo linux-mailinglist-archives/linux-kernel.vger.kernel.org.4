@@ -2,105 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAEA568C624
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 19:52:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6B8568C629
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 19:53:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbjBFSwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 13:52:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59638 "EHLO
+        id S230197AbjBFSxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 13:53:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjBFSwl (ORCPT
+        with ESMTP id S229447AbjBFSxg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 13:52:41 -0500
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82537193FB;
-        Mon,  6 Feb 2023 10:52:39 -0800 (PST)
-Received: by mail-qt1-x82b.google.com with SMTP id g7so13981627qto.11;
-        Mon, 06 Feb 2023 10:52:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=C2BVvWwJDpl1vnxID9lKGhlHkyXd2wpAzBHIvBEypFI=;
-        b=NU5yP0net479efL90aEMdAry1GtUGTtcnIM+V5VWpf3OnvalwRYyiB3WTq3O+2sa0L
-         XAfGImxrig945/HunVQx7wMltHs65iFwGt45xht0BtLReW7lLZOozULK6AxNtabIXQJW
-         tCa08cEvtGwLfzBL5KHo9FpbW8JNWeWag913WGGyvmSL3gml4uwXx0MBBv57JoT02gu2
-         6jon78fvEzFm1AztyVKoljbyDXq/RGhYkcjR/Fq5YBdQTuIoNHwhX7P+6GHgkdPJZ95L
-         4SuKl5Sz4J4iQy0dRNy8ZCrG80xIfTBnjI+zLfwCdpNzlW79QdmOwnaw0TiYoIGRWINp
-         H3pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=C2BVvWwJDpl1vnxID9lKGhlHkyXd2wpAzBHIvBEypFI=;
-        b=IS+VhWM5R9GKfDWhkRj7wor359U4wQuS0dLJ34f9tw7+5mlUWzsMSh9HE4IOkpBxWo
-         yXI8fXXzYg8ExW+b4wQv+yTby3l7yFU3tIXVHO4X0prYInpwCobgytevtgSvxKUOue+v
-         tp+8t24ewNMFTt+OtzeBYiapWXZEYU2kawi1Kf8gkq3neLGebdXr0c4W4aCZp4CajUXg
-         9mmauYmGi9NQ8HCuT8SNg/Jz8Ept6VcXG960+BueAw45jYcfqyWPjLTVc5fxqQbRh2t8
-         k9QtHtJP5I/Mk426NU346dUzYnS30lw/DCoDgO82kcN2b+hhYAq+VQczikEN2kFk67f6
-         nSyw==
-X-Gm-Message-State: AO0yUKUIRyMb65R86Z0tM5YMMCRG7JGhd5J8ZDbJG82TAhcuFMwilCFl
-        WsLir1CZPedwK1ZtJeS2AvM=
-X-Google-Smtp-Source: AK7set+NwTyimLUxjlb0jM54xus9V5kklM8Yuwc3DdZL7VVI0c9IYWu9x8AuDMdOH4fl4MNWe0mA2A==
-X-Received: by 2002:ac8:5dcf:0:b0:3b9:b1eb:ad38 with SMTP id e15-20020ac85dcf000000b003b9b1ebad38mr516760qtx.50.1675709558533;
-        Mon, 06 Feb 2023 10:52:38 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id ed4-20020a05620a490400b007195af894e7sm7841310qkb.76.2023.02.06.10.52.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Feb 2023 10:52:37 -0800 (PST)
-Message-ID: <d79aa5f7-23d6-342c-83ec-3badaf111096@gmail.com>
-Date:   Mon, 6 Feb 2023 10:52:27 -0800
+        Mon, 6 Feb 2023 13:53:36 -0500
+Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04DF113D50
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 10:53:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1675709602; bh=LL94QftrpebF5hQo1kJV15ayE2g5+ViggKSMsID+Xso=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:Content-Transfer-Encoding:In-Reply-To;
+        b=XIxC8bFHOStgZNt3tRNRCRJz5goCJY/6C9VKgQ1qQI9FjvcHCrNr9xR4cIJ6PLoYV
+         XYxn5OEMZCcfB3r3AukJjKw4TjFa4O9ClOJGS52t0sN7FuHVqfGq/wmdQsCtRyzT4c
+         /Wu8oYcs/5AUTGHEKYGOtvZZNrsgoe3GzCpatDuk=
+Received: by b-4.in.mailobj.net [192.168.90.14] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Mon,  6 Feb 2023 19:53:22 +0100 (CET)
+X-EA-Auth: 7BcoLB2uw8kAqiclcp9bBXUawDPA9JTZN3vfAtxWvGMNGGJsgfzTPhy1XsSEGodM5h8G2oHzeYC6uJYvYqRsOXJB/AYji1fu
+Date:   Tue, 7 Feb 2023 00:23:17 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Matthew Auld <matthew.auld@intel.com>
+Cc:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Thomas Hellstrom <thomas.hellstrom@intel.com>,
+        Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>
+Subject: Re: [PATCH] drm/i915/gt: Avoid redundant pointer validity check
+Message-ID: <Y+FMnZ5r+aCNjl81@ubun2204.myguest.virtualbox.org>
+References: <Y91g081OauhQNxMe@ubun2204.myguest.virtualbox.org>
+ <d58fff32-edad-4a7f-7409-7e57593df3ed@linux.intel.com>
+ <aa8af778-2a40-7fe0-eb14-234469c74523@intel.com>
+ <Y+FKCth+0r/757Xu@ubun2204.myguest.virtualbox.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 5.4 000/134] 5.4.231-rc2 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230204143608.813973353@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230204143608.813973353@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y+FKCth+0r/757Xu@ubun2204.myguest.virtualbox.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/4/23 06:42, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.231 release.
-> There are 134 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Tue, Feb 07, 2023 at 12:12:18AM +0530, Deepak R Varma wrote:
+> On Mon, Feb 06, 2023 at 10:33:13AM +0000, Matthew Auld wrote:
+> > On 06/02/2023 09:45, Tvrtko Ursulin wrote:
+> > > 
+> > > Hi,
+> > > 
+> > > Adding Matt & Thomas as potential candidates to review.
+> > > 
+> > > Regards,
+> > > 
+> > > Tvrtko
+> > > 
+> > > On 03/02/2023 19:30, Deepak R Varma wrote:
+> > > > The macro definition of gen6_for_all_pdes() expands to a for loop such
+> > > > that it breaks when the page table is null. Hence there is no need to
+> > > > again test validity of the page table entry pointers in the pde list.
+> > > > This change is identified using itnull.cocci semantic patch.
+> > > > 
+> > > > Signed-off-by: Deepak R Varma <drv@mailo.com>
+> > > > ---
+> > > > Please note: Proposed change is compile tested only.
+> > > > 
+> > > >   drivers/gpu/drm/i915/gt/gen6_ppgtt.c | 5 ++---
+> > > >   1 file changed, 2 insertions(+), 3 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/gpu/drm/i915/gt/gen6_ppgtt.c
+> > > > b/drivers/gpu/drm/i915/gt/gen6_ppgtt.c
+> > > > index 5aaacc53fa4c..787b9e6d9f59 100644
+> > > > --- a/drivers/gpu/drm/i915/gt/gen6_ppgtt.c
+> > > > +++ b/drivers/gpu/drm/i915/gt/gen6_ppgtt.c
+> > > > @@ -258,8 +258,7 @@ static void gen6_ppgtt_free_pd(struct gen6_ppgtt
+> > > > *ppgtt)
+> > > >       u32 pde;
+> > > >       gen6_for_all_pdes(pt, pd, pde)
+> > > > -        if (pt)
+> > > > -            free_pt(&ppgtt->base.vm, pt);
+> > > > +        free_pt(&ppgtt->base.vm, pt);
+> > > >   }
+> > > >   static void gen6_ppgtt_cleanup(struct i915_address_space *vm)
+> > > > @@ -304,7 +303,7 @@ static void pd_vma_unbind(struct
+> > > > i915_address_space *vm,
+> > > >       /* Free all no longer used page tables */
+> > > >       gen6_for_all_pdes(pt, ppgtt->base.pd, pde) {
+> > > > -        if (!pt || atomic_read(&pt->used))
+> > > > +        if (atomic_read(&pt->used))
+> > 
+> > Wow, I was really confused trying to remember how this all works.
+> > 
+> > The gen6_for_all_pdes() does:
+> > 
+> > (pt = i915_pt_entry(pd, iter), true)
+> > 
+> > So NULL pt is expected, and does not 'break' here, since 'true' is always
+> > the value that decides whether to terminate the loop. So this patch would
+> > lead to NULL ptr deref, AFAICT.
 > 
-> Responses should be made by Mon, 06 Feb 2023 14:35:41 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.231-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+> Hello Matt,
+> I understand it now. I was misreading the true as part of the function argument.
+> Could you please also comment if the implementation of gen6_ppgtt_free_pd() in
+> the same file is safe? It doesn't appear to have an check on pt validity here.
 
-On ARCH_BRCMSTB using 32-bit and 64-bit, build tested on BMIPS_GENERIC:
+Please ignore the question. I understand it now. My apologies for inconvenience.
+The patch is invalid and can be dropped.
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+deepak.
+
+> 
+> Thank you,
+> deepak.
+> 
+> > 
+> > 
+> > 
+> > > >               continue;
+> > > >           free_pt(&ppgtt->base.vm, pt);
+
 
