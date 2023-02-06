@@ -2,351 +2,332 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D07C68BFC4
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 15:15:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1335668BE1C
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 14:27:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231411AbjBFONW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 09:13:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54558 "EHLO
+        id S229628AbjBFN1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 08:27:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231410AbjBFONH (ORCPT
+        with ESMTP id S229500AbjBFN1t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 09:13:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A83C0298F0
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 06:11:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675692640;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lwje8eVt7eXKybxFr462oqT0TYGic+yXzXszDGevFbE=;
-        b=MnLSCMa15r7JXwO88xqstKmmACdcS5FB6PV0+PA7Lvj/dlrjDQ3Uku9q+xKzh+8WWpXxRB
-        KlhGT8WPr4BuL149JmeqFhIilUAz4xJViRD1ZY30PaxOJJgdNOCsLC2GwSwFTV3jWwoFPD
-        PbR0Sol/TYATXK770Hqs8hWiQEJn+dM=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-117-9rcFir55NMCr0d4uQq4PSQ-1; Mon, 06 Feb 2023 09:10:39 -0500
-X-MC-Unique: 9rcFir55NMCr0d4uQq4PSQ-1
-Received: by mail-ej1-f70.google.com with SMTP id d14-20020a170906c20e00b00889f989d8deso8693061ejz.15
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 06:10:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lwje8eVt7eXKybxFr462oqT0TYGic+yXzXszDGevFbE=;
-        b=hahdok/2UM0MtikxKR0e7auJH+le6XtTOCDr+K2ygI21OgHI3ClYfTUum0q1KEUgRA
-         Cq9y5jlbp44ccaYUr0dwFGNfM0AWboCz4Rwbw/STJBck/RHLCy34CjkT8HuY4jX+8T9X
-         mtSF/D5FdKjlWA6PChLRFSJySiTEfZ+r6wtAPjn/Nmym7vcslBA9v/JqYY5NRXiNXxKl
-         3HrR7EkasJeBpIA4/d8pxpdRuoyotygn5lgtXx7gtm2jHCXVVRkLWOpmZsb6JGbIRB59
-         cKWa27BftQlhTCQBw4vXdlAsno1SRUEa0kzSFHgNlpzwr+nafRzt0FoJvwMSykdQ0Meq
-         L2Tw==
-X-Gm-Message-State: AO0yUKWFVFKvXF1rBuCxv7XDb3Tt88OKpLxe/dAteZ+dn2p5Mbeby84N
-        u9qR4DTGO2ebJngfUBoi/d0Z76X3dMSUAEg9wUzzluV5HexkpKMW4YrgZ7EwfusLUtHKcfIj2Og
-        hlfnsPUWkVVkVtpsBYRo8STeq
-X-Received: by 2002:a17:906:9610:b0:887:dea8:b025 with SMTP id s16-20020a170906961000b00887dea8b025mr23081892ejx.65.1675692638492;
-        Mon, 06 Feb 2023 06:10:38 -0800 (PST)
-X-Google-Smtp-Source: AK7set/ZSeTcdWpLCRrHXd8AjWFnlgDO3CvqRfDlskfptE4Zi0pC0s+i2h2ytva6c0THMVfUFgf5XQ==
-X-Received: by 2002:a17:906:9610:b0:887:dea8:b025 with SMTP id s16-20020a170906961000b00887dea8b025mr23081857ejx.65.1675692638197;
-        Mon, 06 Feb 2023 06:10:38 -0800 (PST)
-Received: from ?IPV6:2a02:810d:4b3f:de78:642:1aff:fe31:a15c? ([2a02:810d:4b3f:de78:642:1aff:fe31:a15c])
-        by smtp.gmail.com with ESMTPSA id j15-20020a170906094f00b0087fa83790d8sm5580399ejd.13.2023.02.06.06.10.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Feb 2023 06:10:37 -0800 (PST)
-Message-ID: <67958920-c5bb-a0f5-2306-e3ae4fdbaeb3@redhat.com>
-Date:   Mon, 6 Feb 2023 14:27:31 +0100
+        Mon, 6 Feb 2023 08:27:49 -0500
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B02E1BCE;
+        Mon,  6 Feb 2023 05:27:44 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R241e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0Vb39R8H_1675690059;
+Received: from 192.168.3.7(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0Vb39R8H_1675690059)
+          by smtp.aliyun-inc.com;
+          Mon, 06 Feb 2023 21:27:40 +0800
+Message-ID: <678002cf-f847-d5c3-a79b-5bebd3c1e518@linux.alibaba.com>
+Date:   Mon, 6 Feb 2023 21:27:38 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [Nouveau] [PATCH drm-next 05/14] drm/nouveau: new VM_BIND uapi
- interfaces
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Dave Airlie <airlied@gmail.com>
-Cc:     Matthew Brost <matthew.brost@intel.com>, daniel@ffwll.ch,
-        corbet@lwn.net, dri-devel@lists.freedesktop.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mripard@kernel.org, bskeggs@redhat.com, jason@jlekstrand.net,
-        nouveau@lists.freedesktop.org, airlied@redhat.com
-References: <20230118061256.2689-1-dakr@redhat.com>
- <20230118061256.2689-6-dakr@redhat.com>
- <Y9MjSeMcsd18r9vM@DUT025-TGLU.fm.intel.com>
- <7c046ff9-728d-7634-9d77-8536308c7481@redhat.com>
- <c2256c7d-e768-ae3f-d465-b9f8080d111b@amd.com>
- <2427a918-5348-d1ef-ccae-a29c1ff33c83@redhat.com>
- <a214b28b-043c-a8bb-69da-b4d8216fce56@amd.com>
- <3a76bfa9-8ee5-a7d9-b9fb-a98181baec0b@redhat.com>
- <49ac3f95-6eda-9009-4b28-0167213301b2@amd.com>
- <bc523c5c-efe6-1a7f-b49a-e0867dc1413d@redhat.com>
- <15fb0179-c7c5-8a64-ed08-841189919f5e@redhat.com>
- <1840e9fb-fd1b-79b7-4238-54ae97333d0b@amd.com>
- <CAPM=9txON8VCb3H7vDY_DOgtUg2Ad3mBvYVxgSMyZ1noOu-rBQ@mail.gmail.com>
- <a1c526e0-0df7-12cb-c5a1-06e9cd0d876b@amd.com>
- <3f935a7e-fede-2bad-c029-4a3af850c9b5@redhat.com>
- <95d0631b-545c-ea4d-7439-75422e9a9120@amd.com>
-Content-Language: en-US
-From:   Danilo Krummrich <dakr@redhat.com>
-Organization: RedHat
-In-Reply-To: <95d0631b-545c-ea4d-7439-75422e9a9120@amd.com>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH v3 0/6] Composefs: an opportunistically sharing verified
+ image filesystem
+To:     Alexander Larsson <alexl@redhat.com>,
+        Amir Goldstein <amir73il@gmail.com>
+Cc:     Miklos Szeredi <miklos@szeredi.hu>,
+        Jingbo Xu <jefflexu@linux.alibaba.com>, gscrivan@redhat.com,
+        brauner@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, david@fromorbit.com,
+        viro@zeniv.linux.org.uk, Vivek Goyal <vgoyal@redhat.com>,
+        Josef Bacik <josef@toxicpanda.com>
+References: <cover.1674227308.git.alexl@redhat.com>
+ <CAOQ4uxhGX9NVxwsiBMP0q21ZRot6-UA0nGPp1wGNjgmKBjjBBA@mail.gmail.com>
+ <b8601c976d6e5d3eccf6ef489da9768ad72f9571.camel@redhat.com>
+ <e840d413-c1a7-d047-1a63-468b42571846@linux.alibaba.com>
+ <2ef122849d6f35712b56ffbcc95805672980e185.camel@redhat.com>
+ <8ffa28f5-77f6-6bde-5645-5fb799019bca@linux.alibaba.com>
+ <51d9d1b3-2b2a-9b58-2f7f-f3a56c9e04ac@linux.alibaba.com>
+ <071074ad149b189661681aada453995741f75039.camel@redhat.com>
+ <0d2ef9d6-3b0e-364d-ec2f-c61b19d638e2@linux.alibaba.com>
+ <de57aefc-30e8-470d-bf61-a1cca6514988@linux.alibaba.com>
+ <CAOQ4uxgS+-MxydqgO8+NQfOs9N881bHNbov28uJYX9XpthPPiw@mail.gmail.com>
+ <9c8e76a3-a60a-90a2-f726-46db39bc6558@linux.alibaba.com>
+ <02edb5d6-a232-eed6-0338-26f9a63cfdb6@linux.alibaba.com>
+ <3d4b17795413a696b373553147935bf1560bb8c0.camel@redhat.com>
+ <CAOQ4uxjNmM81mgKOBJeScnmeR9+jG_aWvDWxAx7w_dGh0XHg3Q@mail.gmail.com>
+ <CAL7ro1Hc4npP9DQjzuWXJYPTi9H=arLstAJvsBgVKzd8Cx8_tg@mail.gmail.com>
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+In-Reply-To: <CAL7ro1Hc4npP9DQjzuWXJYPTi9H=arLstAJvsBgVKzd8Cx8_tg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/6/23 10:48, Christian König wrote:
-> Am 02.02.23 um 19:31 schrieb Danilo Krummrich:
->> On 2/2/23 12:53, Christian König wrote:
->>> Am 01.02.23 um 09:10 schrieb Dave Airlie:
->>>> [SNIP]
->>>>>> For drivers that don't intend to merge at all and (somehow) are
->>>>>> capable of dealing with sparse regions without knowing the sparse
->>>>>> region's boundaries, it'd be easy to make those gpuva_regions 
->>>>>> optional.
->>>>> Yeah, but this then defeats the approach of having the same hw
->>>>> independent interface/implementation for all drivers.
->>>> I think you are running a few steps ahead here. The plan isn't to have
->>>> an independent interface, it's to provide a set of routines and
->>>> tracking that will be consistent across drivers, so that all drivers
->>>> once using them will operate in mostly the same fashion with respect
->>>> to GPU VA tracking and VA/BO lifetimes. Already in the tree we have
->>>> amdgpu and freedreno which I think end up operating slightly different
->>>> around lifetimes. I'd like to save future driver writers the effort of
->>>> dealing with those decisions and this should drive their user api
->>>> design so to enable vulkan sparse bindings.
->>>
->>> Ok in this case I'm pretty sure this is *NOT* a good idea.
->>>
->>> See this means that we define the UAPI implicitly by saying to 
->>> drivers to use a common framework for their VM implementation which 
->>> then results in behavior A,B,C,D....
->>>
->>> If a driver strides away from this common framework because it has 
->>> different requirements based on how his hw work you certainly get 
->>> different behavior again (and you have tons of hw specific 
->>> requirements in here).
->>>
->>> What we should do instead if we want to have some common handling 
->>> among drivers (which I totally agree on makes sense) then we should 
->>> define the UAPI explicitly.
+
+
+On 2023/2/6 20:43, Alexander Larsson wrote:
+> On Fri, Feb 3, 2023 at 1:47 PM Amir Goldstein <amir73il@gmail.com> wrote:
 >>
->> By asking that I don't want to say I'm against this idea, I'm just 
->> wondering how it becomes easier to deal with "tons of hw specific 
->> requirements" by generalizing things even more?
-> 
-> I'm already maintaining two different GPU VM solutions in the GPU 
-> drivers in the kernel, radeon and amdgpu. The hw they driver is 
-> identical, just the UAPI is different. And only because of the different 
-> UAPI they can't have the same VM backend implementation.
-> 
-> The hw stuff is completely abstract able. That's just stuff you need to 
-> consider when defining the structures you pass around.
-
-Wouldn't we need to have strict limitations on that, such that HW 
-specific structures / fields are not allowed to break the semantics of 
-the UAPI? Because otherwise we wouldn't be able to attach generalized 
-components to the unified UAPI which ultimately would be the whole 
-purpose. So, if this consideration is correct, I'd still see a risk of 
-drivers striding away from it because of their requirements. Again, I 
-think a unified UAPI is a good idea, but it sounds more difficult to me 
-than this last paragraph implies.
-
-> 
-> But a messed up UAPI is sometimes impossible to fix because of backward 
-> compatibility.
-> 
-> We learned that the hard way with radeon and mostly fixed it by coming 
-> up with a completely new implementation for amdgpu.
-> 
->> What makes us think that we do a better job in considering all hw 
->> specific requirements with a unified UAPI than with a more lightweight 
->> generic component for tracking VA mappings?
-> 
-> Because this defines the UAPI implicitly and that's seldom a good idea.
-> 
-> As I said before tracking is the easy part of the job. Defining this 
-> generic component helps a little bit writing new drivers, but it leaves 
-> way to much room for speculations on the UAPI.
-> 
-
-Trying to move forward, I agree that a unified UAPI would improve the 
-situation regarding the problems you mentioned and the examples you have 
-given.
-
-However, not having the GPUVA manager wouldn't give us a unified UAPI 
-either. And as long as it delivers a generic component to solve a 
-problem while not making the overall situation worse or preventing us 
-from reaching this desirable goal of having a unified UAPI I tend to 
-think it's fine to have such a component.
-
->> Also, wouldn't we need something like the GPUVA manager as part of a 
->> unified UAPI?
-> 
-> Not necessarily. We can write components to help drivers implement the 
-> UAPI, but this isn't mandatory.
-
-Well, yes, not necessarily. However, as mentioned above, wouldn't it be 
-a major goal of a unified UAPI to be able to attach generic components 
-to it?
-
-> 
->>
->>>
->>> For example we could have a DRM_IOCTL_GPU_VM which takes both driver 
->>> independent as well as driver dependent information and then has the 
->>> documented behavior:
->>> a) VAs do (or don't) vanish automatically when the GEM handle is closed.
->>> b) GEM BOs do (or don't) get an additional reference for each VM they 
->>> are used in.
->>> c) Can handle some common use cases driver independent (BO mappings, 
->>> readonly, writeonly, sparse etc...).
->>> d) Has a well defined behavior when the operation is executed async. 
->>> E.g. in/out fences.
->>> e) Can still handle hw specific stuff like (for example) trap on 
->>> access etc....
->>> ...
->>>
->>> Especially d is what Bas and I have pretty much already created a 
->>> prototype for the amdgpu specific IOCTL for, but essentially this is 
->>> completely driver independent and actually the more complex stuff. 
->>> Compared to that common lifetime of BOs is just nice to have.
->>>
->>> I strongly think we should concentrate on getting this right as well.
->>>
->>>> Now if merging is a feature that makes sense to one driver maybe it
->>>> makes sense to all, however there may be reasons amdgpu gets away
->>>> without merging that other drivers might not benefit from, there might
->>>> also be a benefit to amdgpu from merging that you haven't looked at
->>>> yet, so I think we could leave merging as an optional extra driver
->>>> knob here. The userspace API should operate the same, it would just be
->>>> the gpu pagetables that would end up different sizes.
->>>
->>> Yeah, agree completely. The point is that we should not have 
->>> complexity inside the kernel which is not necessarily needed in the 
->>> kernel.
->>>
->>> So merging or not is something we have gone back and forth for 
->>> amdgpu, one the one hand it reduces the memory footprint of the 
->>> housekeeping overhead on the other hand it makes the handling more 
->>> complex, error prone and use a few more CPU cycles.
->>>
->>> For amdgpu merging is mostly beneficial when you can get rid of a 
->>> whole page tables layer in the hierarchy, but for this you need to 
->>> merge at least 2MiB or 1GiB together. And since that case doesn't 
->>> happen that often we stopped doing it.
->>>
->>> But for my understanding why you need the ranges for the merging? 
->>> Isn't it sufficient to check that the mappings have the same type, 
->>> flags, BO, whatever backing them?
->>
->> Not entirely. Let's assume userspace creates two virtually contiguous 
->> buffers (VKBuffer) A and B. Userspace could bind a BO with BO offset 0 
->> to A (binding 1) and afterwards bind the same BO with BO offset 
->> length(A) to B (binding 2), maybe unlikely but AFAIK not illegal.
->>
->> If we don't know about the bounds of A and B in the kernel, we detect 
->> that both bindings are virtually and physically contiguous and we 
->> merge them.
-> 
-> Well as far as I can see this is actually legal and desirable.
-
-Legal, not sure, may depend on the semantics of the UAPI. (More on that 
-below your next paragraph.)
-
-Desirable, I don't think so. Since those mappings are associated with 
-different VKBuffers they get split up later on anyway, hence why bother 
-merging?
-
-> 
->>
->> In the best case this was simply useless, because we'll need to split 
->> them anyway later on when A or B is destroyed, but in the worst case 
->> we could fault the GPU, e.g. if merging leads to a change of the page 
->> tables that are backing binding 1, but buffer A is already in use by 
->> userspace.
-> 
-> WOW wait a second, regions absolutely don't help you with that anyway.
-> 
-> You need to keep track which mappings are used or otherwise any 
-> modification could lead to problems.
-> 
-> In other words when the GPU already uses A you *must* have a fence on 
-> the page tables backing A to prevent their destruction.
-> 
-
-As mentioned above, I'm not entirely sure about that and it might just 
-depend on the semantics of the UAPI.
-
-My understanding is that userspace is fully responsible on the parts of 
-the GPU VA space it owns. This means that userspace needs to take care 
-to *not* ask the kernel to modify mappings that are in use currently. 
-Hence, the kernel is in charge to not modify mappings it set up on 
-behalf of userspace unless userspace explicitly asks the kernel to do so.
-
-If those are valid preconditions, and based on them we want to support 
-merging, the kernel must know about the VA space allocations (or 
-VKBuffers in userspace terminology) to make sure it never merges across 
-their boundaries, which might not make much sense anyway.
-
->>
->> In Nouveau, I think we could also get rid of regions and do something 
->> driver specific for the handling of the dual page tables, which I want 
->> to use for sparse regions *and* just don't merge (at least for now). 
->> But exactly for the sake of not limiting drivers in their HW specifics 
->> I thought it'd be great if merging is supported in case it makes sense 
->> for a specific HW, especially given the fact that memory sizes are 
->> increasing.
-> 
-> What do you mean with that?
-> 
-> If you want your page tables to be modifiable while the GPU is using 
-> them (which is basically a standard requirement from sparse bindings in 
-> Vulkan) you need double housekeeping anyway.
-> 
-> Those regions strongly sound like you are pushing stuff which should be 
-> handled in userspace inside the kernel.
-
-1. userspace allocates a new VKBuffer with the sparse bit set (0x0 - 
-0x800000)
-
-2. kernel creates a new region structure with the range 0x800000 and 
-creates a new PT (A) with 4 PTEs with the sparse flag set (page shift is 21)
-
-3. userspace requests a memory backed mapping at 0x200000 with size 0x2000
-
-4. kernel creates a new mapping structure with base address 0x200000 and 
-range 0x2000 and creates a new PT (B) with 2 PTEs (page shift is 12) 
-"overlaying" PT A
-
-5. userspace crashes unexpectedly for some reason
-
-6. kernel needs to clean things up, iterates the list of mappings and 
-unmaps them (PT B is freed); kernel iterates all regions and removes 
-them (PT A is freed)
-
-> 
-> Regards,
-> Christian.
-> 
->>
->>
->>>
->>> Regards,
->>> Christian.
->>>
->>>
+>>>>>> Engineering-wise, merging composefs features into EROFS
+>>>>>> would be the simplest option and FWIW, my personal preference.
+>>>>>>
+>>>>>> However, you need to be aware that this will bring into EROFS
+>>>>>> vfs considerations, such as  s_stack_depth nesting (which AFAICS
+>>>>>> is not see incremented composefs?). It's not the end of the
+>>>>>> world, but this
+>>>>>> is no longer plain fs over block game. There's a whole new class
+>>>>>> of bugs
+>>>>>> (that syzbot is very eager to explore) so you need to ask
+>>>>>> yourself whether
+>>>>>> this is a direction you want to lead EROFS towards.
+>>>>>
+>>>>> I'd like to make a seperated Kconfig for this.  I consider this
+>>>>> just because
+>>>>> currently composefs is much similar to EROFS but it doesn't have
+>>>>> some ability
+>>>>> to keep real regular file (even some README, VERSION or Changelog
+>>>>> in these
+>>>>> images) in its (composefs-called) manifest files. Even its on-disk
+>>>>> super block
+>>>>> doesn't have a UUID now [1] and some boot sector for booting or
+>>>>> some potential
+>>>>> hybird formats such as tar + EROFS, cpio + EROFS.
+>>>>>
+>>>>> I'm not sure if those potential new on-disk features is unneeded
+>>>>> even for
+>>>>> future composefs.  But if composefs laterly supports such on-disk
+>>>>> features,
+>>>>> that makes composefs closer to EROFS even more.  I don't see
+>>>>> disadvantage to
+>>>>> make these actual on-disk compatible (like ext2 and ext4).
+>>>>>
+>>>>> The only difference now is manifest file itself I/O interface --
+>>>>> bio vs file.
+>>>>> but EROFS can be distributed to raw block devices as well,
+>>>>> composefs can't.
+>>>>>
+>>>>> Also, I'd like to seperate core-EROFS from advanced features (or
+>>>>> people who
+>>>>> are interested to work on this are always welcome) and composefs-
+>>>>> like model,
+>>>>> if people don't tend to use any EROFS advanced features, it could
+>>>>> be disabled
+>>>>> from compiling explicitly.
 >>>>
->>>> Dave.
+>>>> Apart from that, I still fail to get some thoughts (apart from
+>>>> unprivileged
+>>>> mounts) how EROFS + overlayfs combination fails on automative real
+>>>> workloads
+>>>> aside from "ls -lR" (readdir + stat).
+>>>>
+>>>> And eventually we still need overlayfs for most use cases to do
+>>>> writable
+>>>> stuffs, anyway, it needs some words to describe why such < 1s
+>>>> difference is
+>>>> very very important to the real workload as you already mentioned
+>>>> before.
+>>>>
+>>>> And with overlayfs lazy lookup, I think it can be close to ~100ms or
+>>>> better.
+>>>>
+>>>
+>>> If we had an overlay.fs-verity xattr, then I think there are no
+>>> individual features lacking for it to work for the automotive usecase
+>>> I'm working on. Nor for the OCI container usecase. However, the
+>>> possibility of doing something doesn't mean it is the better technical
+>>> solution.
+>>>
+>>> The container usecase is very important in real world Linux use today,
+>>> and as such it makes sense to have a technically excellent solution for
+>>> it, not just a workable solution. Obviously we all have different
+>>> viewpoints of what that is, but these are the reasons why I think a
+>>> composefs solution is better:
+>>>
+>>> * It is faster than all other approaches for the one thing it actually
+>>> needs to do (lookup and readdir performance). Other kinds of
+>>> performance (file i/o speed, etc) is up to the backing filesystem
+>>> anyway.
+>>>
+>>> Even if there are possible approaches to make overlayfs perform better
+>>> here (the "lazy lookup" idea) it will not reach the performance of
+>>> composefs, while further complicating the overlayfs codebase. (btw, did
+>>> someone ask Miklos what he thinks of that idea?)
 >>>
 >>
+>> Well, Miklos was CCed (now in TO:)
+>> I did ask him specifically about relaxing -ouserxarr,metacopy,redirect:
+>> https://lore.kernel.org/linux-unionfs/20230126082228.rweg75ztaexykejv@wittgenstein/T/#mc375df4c74c0d41aa1a2251c97509c6522487f96
+>> but no response on that yet.
+>>
+>> TBH, in the end, Miklos really is the one who is going to have the most
+>> weight on the outcome.
+>>
+>> If Miklos is interested in adding this functionality to overlayfs, you are going
+>> to have a VERY hard sell, trying to merge composefs as an independent
+>> expert filesystem. The community simply does not approve of this sort of
+>> fragmentation unless there is a very good reason to do that.
 > 
+> Yeah, if overlayfs get close to similar performance it does make more
+> sense to use that. Lets see what miklos says.
+> 
+>>> For the automotive usecase we have strict cold-boot time requirements
+>>> that make cold-cache performance very important to us. Of course, there
+>>> is no simple time requirements for the specific case of listing files
+>>> in an image, but any improvement in cold-cache performance for both the
+>>> ostree rootfs and the containers started during boot will be worth its
+>>> weight in gold trying to reach these hard KPIs.
+>>>
+>>> * It uses less memory, as we don't need the extra inodes that comes
+>>> with the overlayfs mount. (See profiling data in giuseppes mail[1]).
+>>
+>> Understood, but we will need profiling data with the optimized ovl
+>> (or with the single blob hack) to compare the relevant alternatives.
+>>
+>>>
+>>> The use of loopback vs directly reading the image file from page cache
+>>> also have effects on memory use. Normally we have both the loopback
+>>> file in page cache, plus the block cache for the loopback device. We
+>>> could use loopback with O_DIRECT, but then we don't use the page cache
+>>> for the image file, which I think could have performance implications.
+>>>
+>>
+>> I am not sure this is correct. The loop blockdev page cache can be used,
+>> for reading metadata, can it not?
+>> But that argument is true for EROFS and for almost every other fs
+>> that could be mounted with -oloop.
+>> If the loopdev overhead is a problem and O_DIRECT is not a good enough
+>> solution, then you should work on a generic solution that all fs could use.
+>>
+>>> * The userspace API complexity of the combined overlayfs approach is
+>>> much greater than for composefs, with more moving pieces. For
+>>> composefs, all you need is a single mount syscall for set up. For the
+>>> overlay approach you would need to first create a loopback device, then
+>>> create a dm-verity device-mapper device from it, then mount the
+>>> readonly fs, then mount the overlayfs.
+>>
+>> Userspace API complexity has never been and will never be a reason
+>> for making changes in the kernel, let alone add a new filesystem driver.
+>> Userspace API complexity can be hidden behind a userspace expert library.
+>> You can even create a mount.composefs helper that users can use
+>> mount -t composefs that sets up erofs+overlayfs behind the scenes.
+> 
+> I don't really care that it's more work for userspace to set it up,
+> that can clearly always be hidden behind some abstraction.
+> 
+> However, all this complexity is part of the reason why the combination
+> use more memory and perform less well. It also gets in the way when
+> using the code in more complex, stacked ways. For example, you need
+> have /dev/loop and /dev/mapper/control available to be able to
+> loopback mount a dm-verify using erofs image. This means it is not by
+> default doable in typical sandbox/containers environments without
+> adding access to additional global (potentially quite unsafe, in the
+> case of dev-mapper) devices.
+> 
+> Again, not a showstopper, but also not great.
+> 
+> I guess we could use fs-verity for loopback mounted files though,
+> which drops the dependency on dev-mapper. This makes it quite a lot
+> better, but loopback is still a global non-namespaced resource. At
+> some point loopfs was proposed to make namespaced loopback possible,
+> but that seems to have gotten nowhere unfortunately.
 
+Yes, in principle, fsverity could be used as well as long as
+those digests are checked before mounting so that dm-verity is not
+needed.
+
+> 
+>> Similarly, mkfs.composefs can be an alias to mkfs.erofs with a specific
+>> set of preset options, much like mkfs.ext* family.
+>>
+>>> All this complexity has a cost
+>>> in terms of setup/teardown performance, userspace complexity and
+>>> overall memory use.
+>>>
+>>
+>> This claim needs to be quantified *after* the proposed improvements
+>> (or equivalent hack) to existing subsystems.
+>>
+>>> Are any of these a hard blocker for the feature? Not really, but I
+>>> would find it sad to use an (imho) worse solution.
+>>>
+>>
+>> I respect your emotion and it is not uncommon for people to want
+>> to see their creation merged as is, but from personal experience,
+>> it is often a much better option for you, to have your code merge into
+>> an existing subsystem. I think if you knew all the advantages, you
+>> would have fought for this option yourself ;)
+> 
+> I'm gonna do some more experimenting with the erofs+overlayfs approach
+> to get a better idea for the complete solution.
+> 
+> One problem I ran into is that erofs seems to only support mounting
+> filesystem images that are created with the native page size. This
+> means I can't mount a erofs image created on a 4k page-size machine on
+> an arm64 mac with 64k pages. That doesn't seem great. Maybe this
+> limitation can be lifted from the erofs code though.
+
+Honestly, EROFS 64k support has been in our roadmap for a quite long
+time, and it has been almost done for the uncompressed part apart from
+replacing EROFS_BLKSIZ to erofs_blksiz(sb).
+
+Currently it's not urgent just because our Cloud environment always use
+4k PAGE_SIZE, but it seems Android will consider 16k pagesize as well, so
+yes, we will support !4k page size for the uncompressed part in the near
+future.  But it seems that arm64 RHEL 9 switched back to 4k page size?
+
+> 
+>>> The other mentioned approach is to extend EROFS with composefs
+>>> features.  For this to be interesting to me it would have to include:
+>>>
+>>>   * Direct reading of the image from page cache (not via loopback)
+>>>   * Ability to verify fs-verity digest of that image file
+>>>   * Support for stacked content files in a set of specified basedirs
+>>>     (not using fscache).
+>>>   * Verification of expected fs-verity digest for these basedir files
+>>>
+>>> Anything less than this and I think the overlayfs+erofs approach is a
+>>> better choice.
+>>>
+>>> However, this is essentially just proposing we re-implement all the
+>>> composefs code with a different name. And then we get a filesystem
+>>> supporting *both* stacking and traditional block device use, which
+>>> seems a bit weird to me. It will certainly make the erofs code more
+>>> complex having to support all these combinations. Also, given the harsh
+>>> arguments and accusations towards me on the list I don't feel very
+>>> optimistic about how well such a cooperation would work.
+>>>
+>>
+>> I understand why you write that  and I am sorry that you feel this way.
+>> This is a good opportunity to urge you and Giuseppe again to request
+>> an invite to LSFMM [1] and propose composefs vs. erofs+ovl as a TOPIC.
+>>
+>> Meeting the developers in person is often the best way to understand each
+>> other in situations just like this one where the email discussions fail to
+>> remain on a purely technical level and our emotions get involved.
+>> It is just too hard to express emotions accurately in emails and people are
+>> so very often misunderstood when that happens.
+>>
+>> I guarantee you that it is much more pleasant to argue with people over email
+>> after you have met them in person ;)
+> 
+> I'll try to see if this works in my schedule. But, yeah, in-person
+> discussions would probably speed things up.
+
+Jingbo has been investigated in the latest performance numbers, currently,
+it seems O_DIRECT loop device vs composefs manifest file is that
+
+   some composefs reads (like inode reads) are used by using kernel_read()
+with buffered I/O, so that kernel_read() will have builtin readahead, while
+EROFS just uses bdev + page cache sync interface so that it causes some
+difference, but EROFS could do readahead as well for dir data/inode read if
+needed.
+
+   Consider currently the common manifest files are quite small (~10MB), so
+the readahead policy can be adapted honestly.  Jingbo is off work now, but
+he could post some latest "ls -lR" numbers tomorrow if needed.
+
+Thanks,
+Gao Xiang
+
+> 
