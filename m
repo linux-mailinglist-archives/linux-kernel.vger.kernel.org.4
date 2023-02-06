@@ -2,91 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3918868B54E
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 06:40:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FB8668B550
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 06:43:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbjBFFkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 00:40:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47582 "EHLO
+        id S229526AbjBFFns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 00:43:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjBFFkp (ORCPT
+        with ESMTP id S229448AbjBFFnp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 00:40:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15529199D2;
-        Sun,  5 Feb 2023 21:40:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 861A460C86;
-        Mon,  6 Feb 2023 05:40:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49F0FC433D2;
-        Mon,  6 Feb 2023 05:40:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675662020;
-        bh=GLINtM976v7wnJDP6drxyIgyjq9HzOGB48Ep5iyHurc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Llhf7WCls7W3D7CzLM63GJC9Khe7zzrP3EJ1sVS71VDRg89IGP2/lKGYKOWxuGqRd
-         YAKo13TWIOBFE4mLiLg49fDIQsMSg+tu8VFBiuW2wA25q+accrviidObxcQamhTByB
-         /d7HG5fP9X1UGSh+JVVPEOWDpb3s5cXL5Q1d+OCk=
-Date:   Mon, 6 Feb 2023 06:40:17 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Xinghui Li <korantwork@gmail.com>
-Cc:     peterz@infradead.org, jpoimboe@redhat.com, tglx@linutronix.de,
-        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        x86@kernel.org, alexs@kernel.org
-Subject: Re: [bug report]warning about entry_64.S from objtool in v5.4 LTS
-Message-ID: <Y+CSwTDESQjTzS8S@kroah.com>
-References: <CAEm4hYXr28O8TOmZWEKfp-00Y9R7Ky7C6X3JTtfm-0AD42KbrA@mail.gmail.com>
+        Mon, 6 Feb 2023 00:43:45 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 833A813513;
+        Sun,  5 Feb 2023 21:43:43 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id b5so11020209plz.5;
+        Sun, 05 Feb 2023 21:43:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rJwN5lkElu+MAwjaAK326kHhi9oQbdV1CgXiKHMcd54=;
+        b=pQ6++aKSoUmgqSJXZMKEGgl6upAyhVd+SkvW44ELn3xiKOFraC7i0DsZA1JOsDlR+L
+         say+DLBWEp1SWlAfCVPuCGkwSeWSjdr+mOZkrjwbQPUkjltp1+Xen9FSFs6pZPfMovC8
+         RyftxCPoK94bYmyAiWCgxF0iYjhBImc6r+yFwJAobi8xY6t90szElmrG8KQCHC7RSIzF
+         SiWbuVRRMNnWzAyDqagW0VogWGa0DLxDgf62luYQ06GuZDMKbu/9i9kR1zjhFhGcdr/I
+         sgwUQHejZhY68eg4CJhjhsbGlB2sIANjI3tSZfA7IUSdBYM7va4lVCukRaegejqQbdnT
+         rrcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rJwN5lkElu+MAwjaAK326kHhi9oQbdV1CgXiKHMcd54=;
+        b=C0P5SApbqPK04TJLTa+pCA/UtToLNjW78cIGeHJVczOLcnF0hCGp8B5i+mJQh0P9Y0
+         ZVSzQvR71a0lPhX5sQI+w7+3GfFy7gdYe0ZdFknWl8wiYoEdwMJX5QFE+s44+GsJzNje
+         ri4QEAQja/BjRIlQl8PQyhdb4mqiUaDTXL2KQin6ATmlLMtgJvBILJJIL+vXLdezJprW
+         /Zy9DkWzx4mDq2jHbLVU4C58GBiw1n9+rXuWZ2YvfU9u0d9+UqmwmOe23AIx2LgzTxxj
+         TFoq/8iDnp/PpF86lG+uhbeAv8asmoqHgT5XlmnbhkUDj0yDOzAxytaf0Pqn+mEPS26Q
+         buKw==
+X-Gm-Message-State: AO0yUKUGZ5qqe7RLVQA23d9czBo+pakPbtZMQJWfMI7n32oLEfDzHSMJ
+        jwkiuD0pUlxtl8hV1PgOoik=
+X-Google-Smtp-Source: AK7set9zS4to0TPCI7g3T4qwBRkgFpu++DCTMEnJsJ6xxyqMNNqRf5Tc3hNpfj3nWvFM6OQ4P+HYlQ==
+X-Received: by 2002:a17:902:d481:b0:196:1a56:b1d3 with SMTP id c1-20020a170902d48100b001961a56b1d3mr21423349plg.11.1675662222710;
+        Sun, 05 Feb 2023 21:43:42 -0800 (PST)
+Received: from fuzzing.localdomain ([219.254.222.254])
+        by smtp.gmail.com with ESMTPSA id s12-20020a170902b18c00b001949f21e1d2sm5777556plr.308.2023.02.05.21.43.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Feb 2023 21:43:42 -0800 (PST)
+From:   k1rh4.lee@gmail.com
+To:     Wu Hao <hao.wu@intel.com>
+Cc:     Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
+        Xu Yilun <yilun.xu@intel.com>, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Sangsup Lee <k1rh4.lee@gmail.com>
+Subject: [PATCH] fpga: dfl-afu-region: Add overflow checks for region size and offset
+Date:   Sun,  5 Feb 2023 21:43:26 -0800
+Message-Id: <20230206054326.89323-1-k1rh4.lee@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEm4hYXr28O8TOmZWEKfp-00Y9R7Ky7C6X3JTtfm-0AD42KbrA@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 06, 2023 at 11:09:48AM +0800, Xinghui Li wrote:
-> Hi all
-> We found a warning from objtool:
-> arch/x86/entry/entry_64.o: warning: objtool: .entry.text+0x1d1:
-> unsupported intra-function call
-> 
-> and if we enable retpoline in config:
-> arch/x86/entry/entry_64.o: warning: objtool: .entry.text+0x1c1:
-> unsupported intra-function call
-> arch/x86/entry/entry_64.o: warning: objtool: If this is a retpoline,
-> please patch it in with alternatives and annotate it with
-> ANNOTATE_NOSPEC_ALTERNATIVE.
-> 
-> I found this issue has been introduced since “x86/speculation: Change
-> FILL_RETURN_BUFFER to work with objtool( commit 8afd1c7da2)”backported
-> in v5.4.217.
-> Comparing with the upstream version(commit 089dd8e53):
-> There is no “ANNOTATE_INTRA_FUNCTION_CALL” in v5.4 for missing
-> dependency patch. When the “ANNOTATE_NOSPEC_ALTERNATIVE” is removed,
-> this issue just occurs.
-> 
-> I tried to backport “ANNOTATE_INTRA_FUNCTION_CALL”and its dependency
-> patchs in v5.4, but I met the CFA miss match issue from objtool.
-> So, please help check this issue in v5.4 LTS version.
+From: Sangsup Lee <k1rh4.lee@gmail.com>
 
-If you rely on the 5.4.y kernel tree, and you need this speculation
-fixes and feel this is a real problem, please provide some backported
-patches to resolve the problem.
+The size + offset is able to be integer overflow value and it lead to mis-allocate region.
 
-It's been reported many times in the past, but no one seems to actually
-want to fix this bad enough to send in a patch :(
+Signed-off-by: Sangsup Lee <k1rh4.lee@gmail.com>
+---
+ drivers/fpga/dfl-afu-region.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-Usually people just move to a newer kernel, what is preventing you from
-doing that right now?
+diff --git a/drivers/fpga/dfl-afu-region.c b/drivers/fpga/dfl-afu-region.c
+index 2e7b41629406..82b530111601 100644
+--- a/drivers/fpga/dfl-afu-region.c
++++ b/drivers/fpga/dfl-afu-region.c
+@@ -151,12 +151,17 @@ int afu_mmio_region_get_by_offset(struct dfl_feature_platform_data *pdata,
+ 	struct dfl_afu_mmio_region *region;
+ 	struct dfl_afu *afu;
+ 	int ret = 0;
++	u64 region_size = 0;
+ 
+ 	mutex_lock(&pdata->lock);
++	if (check_add_overflow(offset, size, &region_size)) {
++		ret = -EINVAL;
++		goto exit;
++	}
+ 	afu = dfl_fpga_pdata_get_private(pdata);
+ 	for_each_region(region, afu)
+ 		if (region->offset <= offset &&
+-		    region->offset + region->size >= offset + size) {
++		    region->offset + region->size >= region_size) {
+ 			*pregion = *region;
+ 			goto exit;
+ 		}
+-- 
+2.25.1
 
-thanks,
-
-greg k-h
