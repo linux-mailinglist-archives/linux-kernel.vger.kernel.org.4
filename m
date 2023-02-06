@@ -2,149 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1C9068C681
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 20:13:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0044E68C682
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 20:14:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229951AbjBFTNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 14:13:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42178 "EHLO
+        id S230264AbjBFTNz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 14:13:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbjBFTNk (ORCPT
+        with ESMTP id S229557AbjBFTNn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 14:13:40 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41AF720D18;
-        Mon,  6 Feb 2023 11:13:39 -0800 (PST)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 316ETWAZ009718;
+        Mon, 6 Feb 2023 14:13:43 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C3220D18;
+        Mon,  6 Feb 2023 11:13:42 -0800 (PST)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 316Gg22d031706;
         Mon, 6 Feb 2023 19:13:35 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id; s=qcppdkim1;
- bh=2ygW30YeDTcPzPiF2otx2r+VOzDotuS0oTMi579oCAQ=;
- b=FVRlGHQiq6l1dS6DdMcN95a89AFiq1TUjcDBd/HFNsJzW6NvqQHUVDUdWF1OYh2IXmi6
- v1N4rTqyYDV6l8o7HkZa+fkUiUQDP9cGioQqF1Ce1I39p5IxVBmf6sqWX7U/wxLsAWnK
- QQ+nMcd+h67Xm5MWnRlsD66Iw4jyX2YoYODb5ns0QBdx/jjThU61iiS0tmNfYblEsr7s
- bhqWuyPALK9ADKdkz+Os6o9mxuYRUtpuwI6N4It5aPNcJvaL6SJHKWx95sNbx/LJJD3V
- x3Nml59SBx0FP15rnwZVCl2au25LasDTVgm5yCLN9I9RX5Syv3iX05cfgm3RHSt6cqbk /Q== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nhgng4d0h-1
+ subject : date : message-id : in-reply-to : references; s=qcppdkim1;
+ bh=fktbampqwJFPXzZdkvnSuFfkoSZAmrk2w2kwqJ22yGo=;
+ b=Z0ct5m+9rDcMub9fm1S4RZdFExILTA0O34afnz9CMjqptidLxAH/BiU4RMzxESUfU5f4
+ KKTJIOyJfQmOMVEgRw1MAiS89FoKkMALcUxxX0/VRiWJL3jg7Od9GLj6gq4CaK154W83
+ tlB0wV2tUuOInEYnYztpBgpfr2+qTV2tGx5ZrRNrCw9zUPdKj0YSU69Wxexq6CvfrE60
+ UlBfLs4oObT20uo//kaqBf0e2/5RomuGc+wgETsCzk/VIyT8EeWjK26iKQ5YfboCZxzN
+ SNFPMTSxxtvksbUZKoqeha+yZF919DbCWRPVsPZRN1VoHt9I719iN/9cc/Reepk8Ny6l Dg== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nhey74hr4-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Mon, 06 Feb 2023 19:13:35 +0000
-Received: from pps.filterd (NALASPPMTA02.qualcomm.com [127.0.0.1])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 316JC7rI012072;
+Received: from pps.filterd (NALASPPMTA04.qualcomm.com [127.0.0.1])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 316JDYBM018003;
         Mon, 6 Feb 2023 19:13:34 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by NALASPPMTA02.qualcomm.com (PPS) with ESMTP id 3nhgekjv8p-1;
+        by NALASPPMTA04.qualcomm.com (PPS) with ESMTP id 3nhgem2v2h-1;
         Mon, 06 Feb 2023 19:13:34 +0000
-Received: from NALASPPMTA02.qualcomm.com (NALASPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 316JDY9p013623;
+Received: from NALASPPMTA04.qualcomm.com (NALASPPMTA04.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 316JDYqb017992;
         Mon, 6 Feb 2023 19:13:34 GMT
 Received: from hu-devc-lv-c.qualcomm.com (hu-eserrao-lv.qualcomm.com [10.47.235.164])
-        by NALASPPMTA02.qualcomm.com (PPS) with ESMTP id 316JDXuD013621;
+        by NALASPPMTA04.qualcomm.com (PPS) with ESMTP id 316JDXPL017987;
         Mon, 06 Feb 2023 19:13:34 +0000
 Received: by hu-devc-lv-c.qualcomm.com (Postfix, from userid 464172)
-        id E641420E36; Mon,  6 Feb 2023 11:13:33 -0800 (PST)
+        id E8BA920340; Mon,  6 Feb 2023 11:13:33 -0800 (PST)
 From:   Elson Roy Serrao <quic_eserrao@quicinc.com>
 To:     gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
         balbi@kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
         quic_wcheng@quicinc.com, quic_jackp@quicinc.com,
         Elson Roy Serrao <quic_eserrao@quicinc.com>
-Subject: [PATCH v3 0/5] Add function suspend/resume and remote wakeup support 
-Date:   Mon,  6 Feb 2023 11:13:21 -0800
-Message-Id: <1675710806-9735-1-git-send-email-quic_eserrao@quicinc.com>
+Subject: [PATCH v3 1/5] usb: gadget: Properly configure the device for remote wakeup
+Date:   Mon,  6 Feb 2023 11:13:22 -0800
+Message-Id: <1675710806-9735-2-git-send-email-quic_eserrao@quicinc.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1675710806-9735-1-git-send-email-quic_eserrao@quicinc.com>
+References: <1675710806-9735-1-git-send-email-quic_eserrao@quicinc.com>
 X-QCInternal: smtphost
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: tIKFpPlprAEpk4uqoB8ohxo9PLHwdzG3
-X-Proofpoint-ORIG-GUID: tIKFpPlprAEpk4uqoB8ohxo9PLHwdzG3
+X-Proofpoint-ORIG-GUID: uSveIcUz8hnhoZss8nGrhGm3mF7WHZ4S
+X-Proofpoint-GUID: uSveIcUz8hnhoZss8nGrhGm3mF7WHZ4S
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
  definitions=2023-02-06_07,2023-02-06_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=563
- bulkscore=0 malwarescore=0 spamscore=0 mlxscore=0 suspectscore=0
- phishscore=0 impostorscore=0 adultscore=0 lowpriorityscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
+ mlxlogscore=714 priorityscore=1501 adultscore=0 suspectscore=0 mlxscore=0
+ malwarescore=0 spamscore=0 lowpriorityscore=0 impostorscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2212070000 definitions=main-2302060167
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changes in v3
- - Modified rw_capable flag to reflect the gadgets capability for wakeup
-   signalling.
- - Added a check to configure wakeup bit in bmAttributes only if gadget
-   is capable of triggering wakeup.
- - Implemented a gadget op for composite layer to inform UDC whether device
-   is configured for remote wakeup.
- - Added a check in __usb_gadget_wakeup() API to trigger wakeup only if the
-   device is configured for it.
- - Cosmetic changes in dwc3_gadget_func_wakeup() API.
+The wakeup bit in the bmAttributes field indicates whether the device
+is configured for remote wakeup. But this field should be allowed to
+set only if the UDC supports such wakeup mechanism. So configure this
+field based on UDC capability. Also inform the UDC whether the device
+is configured for remote wakeup by implementing a gadget op.
 
-Changes in v2
- - Added a flag to indicate whether the device is remote wakeup capable.
- - Added an async parameter to _dwc3_gadget_wakeup() API and few cosmetic
-   changes.
- - Added flags to reflect the state of  function suspend and function remote
-   wakeup to usb_function struct rather than function specific struct (f_ecm).
- - Changed the dwc3_gadget_func__wakeup() API to run synchronously by first
-   checking the link state and then sending the device notification. Also
-   added debug log for DEVICE_NOTIFICATION generic cmd.
- - Added changes to arm the device for remotewakeup/function remotewakeup
-   only if device is capable.
+Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
+---
+ drivers/usb/gadget/composite.c | 24 +++++++++++++++++++++++-
+ drivers/usb/gadget/udc/core.c  | 27 +++++++++++++++++++++++++++
+ drivers/usb/gadget/udc/trace.h |  5 +++++
+ include/linux/usb/gadget.h     |  8 ++++++++
+ 4 files changed, 63 insertions(+), 1 deletion(-)
 
-An usb device can initate a remote wakeup and bring the link out of
-suspend as dictated by the DEVICE_REMOTE_WAKEUP feature selector.
-To achieve this an interface can invoke gadget_wakeup op and wait for the
-device to come out of LPM. But the current polling based implementation
-fails if the host takes a long time to drive the resume signaling specially
-in high speed capable devices. Switching to an interrupt based approach is
-more robust and efficient. This can be leveraged by enabling link status
-change events and triggering a gadget resume when the link comes to active
-state.
-
-If the device is enhanced super-speed capable, individual interfaces can
-also be put into suspend state. An interface can be in function suspend
-state even when the device is not in suspend state. Function suspend state
-is retained throughout the device suspend entry and exit process.
-A function can be put to function suspend through FUNCTION_SUSPEND feature
-selector sent by the host. This setup packet also decides whether that
-function is capable of initiating a function remote wakeup. When the
-function sends a wakeup notification to the host the link must be first
-brought to a non-U0 state and then this notification is sent.
-
-This change adds the infrastructure needed to support the above
-functionalities.
-
-Elson Roy Serrao (5):
-  usb: gadget: Properly configure the device for remote wakeup
-  usb: dwc3: Add remote wakeup handling
-  usb: gadget: Add function wakeup support
-  usb: dwc3: Add function suspend and function wakeup support
-  usb: gadget: f_ecm: Add suspend/resume and remote wakeup support
-
- drivers/usb/dwc3/core.h               |   5 ++
- drivers/usb/dwc3/debug.h              |   2 +
- drivers/usb/dwc3/ep0.c                |  16 ++---
- drivers/usb/dwc3/gadget.c             | 110 +++++++++++++++++++++++++++++++---
- drivers/usb/gadget/composite.c        |  50 +++++++++++++++-
- drivers/usb/gadget/function/f_ecm.c   |  68 +++++++++++++++++++++
- drivers/usb/gadget/function/u_ether.c |  63 +++++++++++++++++++
- drivers/usb/gadget/function/u_ether.h |   4 ++
- drivers/usb/gadget/udc/core.c         |  46 ++++++++++++++
- drivers/usb/gadget/udc/trace.h        |   5 ++
- include/linux/usb/composite.h         |   6 ++
- include/linux/usb/gadget.h            |  12 ++++
- 12 files changed, 371 insertions(+), 16 deletions(-)
-
+diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
+index fa7dd6c..e459fb0 100644
+--- a/drivers/usb/gadget/composite.c
++++ b/drivers/usb/gadget/composite.c
+@@ -513,6 +513,19 @@ static u8 encode_bMaxPower(enum usb_device_speed speed,
+ 		return min(val, 900U) / 8;
+ }
+ 
++static void check_remote_wakeup_config(struct usb_gadget *gadget,
++				       struct usb_configuration *c)
++{
++	if (USB_CONFIG_ATT_WAKEUP & c->bmAttributes) {
++		/* Reset the rw bit if gadget is not capable of it */
++		if (!gadget->rw_capable) {
++			INFO(c->cdev, "Clearing rw bit for config c.%d\n",
++			     c->bConfigurationValue);
++			c->bmAttributes &= ~USB_CONFIG_ATT_WAKEUP;
++		}
++	}
++}
++
+ static int config_buf(struct usb_configuration *config,
+ 		enum usb_device_speed speed, void *buf, u8 type)
+ {
+@@ -620,8 +633,12 @@ static int config_desc(struct usb_composite_dev *cdev, unsigned w_value)
+ 				continue;
+ 		}
+ 
+-		if (w_value == 0)
++		if (w_value == 0) {
++			/* Correctly configure the bmAttributes wakeup bit */
++			check_remote_wakeup_config(gadget, c);
++
+ 			return config_buf(c, speed, cdev->req->buf, type);
++		}
+ 		w_value--;
+ 	}
+ 	return -EINVAL;
+@@ -1000,6 +1017,11 @@ static int set_config(struct usb_composite_dev *cdev,
+ 	else
+ 		usb_gadget_clear_selfpowered(gadget);
+ 
++	if (USB_CONFIG_ATT_WAKEUP & c->bmAttributes)
++		usb_gadget_set_remotewakeup(gadget, 1);
++	else
++		usb_gadget_set_remotewakeup(gadget, 0);
++
+ 	usb_gadget_vbus_draw(gadget, power);
+ 	if (result >= 0 && cdev->delayed_status)
+ 		result = USB_GADGET_DELAYED_STATUS;
+diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+index 23b0629..5874d4f 100644
+--- a/drivers/usb/gadget/udc/core.c
++++ b/drivers/usb/gadget/udc/core.c
+@@ -514,6 +514,33 @@ int usb_gadget_wakeup(struct usb_gadget *gadget)
+ EXPORT_SYMBOL_GPL(usb_gadget_wakeup);
+ 
+ /**
++ * usb_gadget_set_remotewakeup - configures the device remote wakeup feature.
++ * @gadget:the device being configured for remote wakeup
++ * @set:value to be configured.
++ *
++ * set to one to enable remote wakeup feature and zero to disable it.
++ *
++ * returns zero on success, else negative errno.
++ */
++int usb_gadget_set_remotewakeup(struct usb_gadget *gadget, int set)
++{
++	int ret = 0;
++
++	if (!gadget->ops->set_remotewakeup) {
++		ret = -EOPNOTSUPP;
++		goto out;
++	}
++
++	ret = gadget->ops->set_remotewakeup(gadget, set);
++
++out:
++	trace_usb_gadget_set_remotewakeup(gadget, ret);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(usb_gadget_set_remotewakeup);
++
++/**
+  * usb_gadget_set_selfpowered - sets the device selfpowered feature.
+  * @gadget:the device being declared as self-powered
+  *
+diff --git a/drivers/usb/gadget/udc/trace.h b/drivers/usb/gadget/udc/trace.h
+index abdbcb1..a3314ce 100644
+--- a/drivers/usb/gadget/udc/trace.h
++++ b/drivers/usb/gadget/udc/trace.h
+@@ -91,6 +91,11 @@ DEFINE_EVENT(udc_log_gadget, usb_gadget_wakeup,
+ 	TP_ARGS(g, ret)
+ );
+ 
++DEFINE_EVENT(udc_log_gadget, usb_gadget_set_remotewakeup,
++	TP_PROTO(struct usb_gadget *g, int ret),
++	TP_ARGS(g, ret)
++);
++
+ DEFINE_EVENT(udc_log_gadget, usb_gadget_set_selfpowered,
+ 	TP_PROTO(struct usb_gadget *g, int ret),
+ 	TP_ARGS(g, ret)
+diff --git a/include/linux/usb/gadget.h b/include/linux/usb/gadget.h
+index dc3092c..05d1449 100644
+--- a/include/linux/usb/gadget.h
++++ b/include/linux/usb/gadget.h
+@@ -309,6 +309,7 @@ struct usb_udc;
+ struct usb_gadget_ops {
+ 	int	(*get_frame)(struct usb_gadget *);
+ 	int	(*wakeup)(struct usb_gadget *);
++	int	(*set_remotewakeup)(struct usb_gadget *, int set);
+ 	int	(*set_selfpowered) (struct usb_gadget *, int is_selfpowered);
+ 	int	(*vbus_session) (struct usb_gadget *, int is_active);
+ 	int	(*vbus_draw) (struct usb_gadget *, unsigned mA);
+@@ -383,6 +384,8 @@ struct usb_gadget_ops {
+  * @connected: True if gadget is connected.
+  * @lpm_capable: If the gadget max_speed is FULL or HIGH, this flag
+  *	indicates that it supports LPM as per the LPM ECN & errata.
++ * @rw_capable: True if gadget is capable of sending remote wakeup.
++ * @rw_armed: True if gadget is armed by the host for remote wakeup.
+  * @irq: the interrupt number for device controller.
+  * @id_number: a unique ID number for ensuring that gadget names are distinct
+  *
+@@ -444,6 +447,8 @@ struct usb_gadget {
+ 	unsigned			deactivated:1;
+ 	unsigned			connected:1;
+ 	unsigned			lpm_capable:1;
++	unsigned			rw_capable:1;
++	unsigned			rw_armed:1;
+ 	int				irq;
+ 	int				id_number;
+ };
+@@ -600,6 +605,7 @@ static inline int gadget_is_otg(struct usb_gadget *g)
+ #if IS_ENABLED(CONFIG_USB_GADGET)
+ int usb_gadget_frame_number(struct usb_gadget *gadget);
+ int usb_gadget_wakeup(struct usb_gadget *gadget);
++int usb_gadget_set_remotewakeup(struct usb_gadget *gadget, int set);
+ int usb_gadget_set_selfpowered(struct usb_gadget *gadget);
+ int usb_gadget_clear_selfpowered(struct usb_gadget *gadget);
+ int usb_gadget_vbus_connect(struct usb_gadget *gadget);
+@@ -615,6 +621,8 @@ static inline int usb_gadget_frame_number(struct usb_gadget *gadget)
+ { return 0; }
+ static inline int usb_gadget_wakeup(struct usb_gadget *gadget)
+ { return 0; }
++static inline int usb_gadget_set_remotewakeup(struct usb_gadget *gadget, int set)
++{ return 0; }
+ static inline int usb_gadget_set_selfpowered(struct usb_gadget *gadget)
+ { return 0; }
+ static inline int usb_gadget_clear_selfpowered(struct usb_gadget *gadget)
 -- 
 2.7.4
 
