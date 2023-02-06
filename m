@@ -2,133 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA4EE68B77B
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 09:39:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3533C68B780
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 09:40:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbjBFIjU convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 6 Feb 2023 03:39:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55410 "EHLO
+        id S229542AbjBFIk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 03:40:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbjBFIjQ (ORCPT
+        with ESMTP id S229511AbjBFIkY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 03:39:16 -0500
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A211166D1
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 00:39:14 -0800 (PST)
-Received: by mail-qt1-f180.google.com with SMTP id v17so11993075qto.3
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 00:39:14 -0800 (PST)
+        Mon, 6 Feb 2023 03:40:24 -0500
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FC1915CA8
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 00:40:20 -0800 (PST)
+Received: by mail-vs1-xe29.google.com with SMTP id e9so11874828vsj.3
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 00:40:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=bxGBUMpZ6MlCuOf4ZGY5be1Z/6HawqxmEV6A7eKd+x8=;
+        b=eb4aSDL3eeoPKmPKagfqCIsDqkldstB0QqhkBdstr/XyIHyHdDPeWkcERZl4gZP4wW
+         aYh0I54j0tapjkNd4VT8+FGZJFNpZ0ySFiXDxg9vYibrt5bZt21LE1q6a++C7CFmbdRc
+         AtL+ZeigRmZ3hIG2gZ3K2kRFcgoJVA130tk68=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uwBpv3w7L/SXyUtsSmWuDaKIbkLHcGVq9fg041BM71k=;
-        b=W/iAn4/oj4BuqXsej04Ds7Y3LtCKOg/5fulRnqJLhevvhOBT0k26gC+0wb/jiVO2Yo
-         vda+8BiNm03lYHzFtHhuH9l82em4Qr3tZR5ZZmJKUyiBDH4yWRlYATijaybF5sdFJn1k
-         SBiLdPnDwD7Dw6B6Ooc0jcSXnoPvPu93NT6nP7400Fw+BtCf4KOpfx4RZzFQ0hFp080D
-         +Xa8tDr9iPQnd0kjVN7dnet5DxjJmviRzm3eSHpkJ7TXlVMw47drReyCLtHWPzIBsZYJ
-         q7fZULF2ieUYOhWgIB79TrP1yKG086drixr99SYiyeKj5g1l5yPEsWGi2f4PUE9jDfIA
-         kAEw==
-X-Gm-Message-State: AO0yUKWs0lcCqDJc35WcSrU3znN3HdSA0SYypnlMXwLl5wpmz1z7Uzbc
-        9jJarXvCRphce8OjSIqkOUt7orr+Fqnwmw==
-X-Google-Smtp-Source: AK7set/Dxqm9PEjZmEeK0id6MlymidAZY714nAxe80fMb6X4TnpQ/1z+41Sk30NUL2truHDMfIIsQQ==
-X-Received: by 2002:ac8:5d93:0:b0:3b6:335a:828c with SMTP id d19-20020ac85d93000000b003b6335a828cmr35646527qtx.47.1675672753252;
-        Mon, 06 Feb 2023 00:39:13 -0800 (PST)
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
-        by smtp.gmail.com with ESMTPSA id g15-20020ac87f4f000000b003b86b99690fsm6869085qtk.62.2023.02.06.00.39.12
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Feb 2023 00:39:12 -0800 (PST)
-Received: by mail-yb1-f169.google.com with SMTP id x8so5134109ybt.13
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 00:39:12 -0800 (PST)
-X-Received: by 2002:a25:780e:0:b0:86e:9acc:1635 with SMTP id
- t14-20020a25780e000000b0086e9acc1635mr920452ybc.202.1675672752489; Mon, 06
- Feb 2023 00:39:12 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bxGBUMpZ6MlCuOf4ZGY5be1Z/6HawqxmEV6A7eKd+x8=;
+        b=YQUVIR50sFJy+tmN0Z/vAlFZ+MRbF2M14qLXdCBj8+LsmHZwfmIPrT+2iH0/nYZY7n
+         kKofLlyUdig0KZ/y4yP0VVwbnAy0+A5RroZjToOOd0LO31PGp+oXTdM8DbtmRQVJFgsM
+         NvKRHw1zMN8gXIFk1NaHy7ZLRdp4rTNrmId+DRQFN2TMKSYaBvGFxHUxsw9nP+IO+prt
+         RTntn4glrWssAjlkaGOIzTtA/fdYvx/pA4YkRaZfbKCoT/bbcVfEsM3Lk8z2Z4dkGaot
+         bjeOfLiyOXEpwSdMF2tvT75H0GXyFi1AJEqxjrLIZaZKkrd7tG2VccpFwU634KWFxDuq
+         jbhg==
+X-Gm-Message-State: AO0yUKUqaKYPuVC87wKlrA3sW1YOyc+COBdzLM6dKkVaftuIasYfc2Jx
+        S20RYelf4mkGI54aItPrlrX8swhXHpREPMKRyxuUfw==
+X-Google-Smtp-Source: AK7set/Nc+tRekf0h+tZTWStnrZoa/GmrslGQquHlfY8WRs6V9iTEWlJuxYA3EIydNHfm7RtpJMuutQEZD210Ih9vcw=
+X-Received: by 2002:a05:6102:322a:b0:3fe:ae88:d22 with SMTP id
+ x10-20020a056102322a00b003feae880d22mr2856750vsf.65.1675672819238; Mon, 06
+ Feb 2023 00:40:19 -0800 (PST)
 MIME-Version: 1.0
-References: <20230129123431.1282427-1-j.neuschaefer@gmx.net>
- <78d224a63f6c27bf700d59007b6f3c89746d728c.camel@perches.com> <3afee0493d3718f2e38b6c54dab23d38360cd5d0.camel@perches.com>
-In-Reply-To: <3afee0493d3718f2e38b6c54dab23d38360cd5d0.camel@perches.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 6 Feb 2023 09:38:59 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWcjUXwkk2V29p-hifDnMhLRSwQBXMzVeURRA48znKC5Q@mail.gmail.com>
-Message-ID: <CAMuHMdWcjUXwkk2V29p-hifDnMhLRSwQBXMzVeURRA48znKC5Q@mail.gmail.com>
-Subject: Re: [PATCH] checkpatch.pl: Relax commit ID check to allow more than
- 12 chars
-To:     Joe Perches <joe@perches.com>
-Cc:     =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andy Whitcroft <apw@canonical.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+References: <20230204133040.1236799-1-treapking@chromium.org>
+In-Reply-To: <20230204133040.1236799-1-treapking@chromium.org>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Mon, 6 Feb 2023 16:40:07 +0800
+Message-ID: <CAGXv+5FW8qYnBYJsf+gLEaEGnwunPFdjjVF9YUqDqCVAjXWuKA@mail.gmail.com>
+Subject: Re: [PATCH v11 0/9] Register Type-C mode-switch in DP bridge endpoints
+To:     Pin-yen Lin <treapking@chromium.org>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Marek Vasut <marex@denx.de>, chrome-platform@lists.linux.dev,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        linux-acpi@vger.kernel.org,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        Thierry Reding <treding@nvidia.com>,
+        devicetree@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Jani Nikula <jani.nikula@intel.com>,
+        Allen Chen <allen.chen@ite.com.tw>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Xin Ji <xji@analogixsemi.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Joe,
-
-On Sat, Feb 4, 2023 at 5:59 PM Joe Perches <joe@perches.com> wrote:
-> On Sun, 2023-01-29 at 09:52 -0800, Joe Perches wrote:
-> > On Sun, 2023-01-29 at 13:34 +0100, Jonathan Neuschäfer wrote:
-> > > By now, `git log --pretty=%h` (on my copy of linux.git) prints commit
-> > > hashes with 13 digits, because of the number of objects.
-> > >
-> > > Relax the rule in checkpatch.pl to allow a few more digits (up to 16).
-> >
-> > NAK without updating the process docs first.
+On Sat, Feb 4, 2023 at 9:30 PM Pin-yen Lin <treapking@chromium.org> wrote:
 >
-> btw: it looks like 12 will still be sufficient for awhile yet
 >
-> $ git count
-> total 1154908
+> This series introduces bindings for anx7625/it6505 to register Type-C
+> mode-switch in their output endpoints, and use data-lanes property to
+> describe the pin connections.
+>
+> This series is not directly related to the built-in mux in anx7625,
+> which automatically switches between the two orientations of a single
+> Type-C connector. This series adds support of registering mode switches
+> for two downstream devices, while we use orientation switches for two
+> orientations of the Type-C connector.
+>
+> The first two patch modifies fwnode_graph_devcon_matches and
+> cros_typec_init_ports to enable the registration of the switches.
+>
+> Patch 4~6 introduce the bindings for anx7625 and the corresponding driver
+> modifications.
+>
+> Patch 7~9 add similar bindings and driver changes for it6505.
+>
+> v10: https://lore.kernel.org/all/20230112042104.4107253-1-treapking@chromium.org/
+> v9: https://lore.kernel.org/all/20230109084101.265664-1-treapking@chromium.org/
+> v8: https://lore.kernel.org/all/20230107102231.23682-1-treapking@chromium.org/
+> v7: https://lore.kernel.org/all/20230105132457.4125372-1-treapking@chromium.org/
+> v6: https://lore.kernel.org/all/20221124102056.393220-1-treapking@chromium.org/
+> v5: https://lore.kernel.org/linux-usb/20220622173605.1168416-1-pmalani@chromium.org/
+>
+> Changes in v11:
+> - Added missing fwnode_handle_put in drivers/base/property.c
+> - Collected Acked-by tag
+> - Use fwnode helpers instead of DT
+> - Moved the helpers to a new file
+> - Use "reg" instead of "data-lanes" to determine the port number
+> - Updated the description of the endpoints in the bindings
+> - Referenced video-interfaces.yaml instead for the endpoints binding
+> - Removed duplicated definitions from inherited schema
+> - Moved the "data-lanes" parsing logics to bridge drivers
+> - Removed Kconfig dependencies for the bridge drivers
+> - Updated the usage of the private bridge driver data
+> - Added a clarification on the anx7625 built-in mux in the cover letter
+>
+> Changes in v10:
+> - Collected Reviewed-by and Tested-by tags
+> - Replaced "void *" with "typec_mux_set_fn_t" for mux_set callbacks
+> - Print out the node name when errors on parsing DT
+> - Use dev_dbg instead of dev_warn when no Type-C switch nodes available
+> - Made the return path of drm_dp_register_mode_switch clearer
+> - Added a TODO for implementing orientation switch for anx7625
+> - Updated the commit message for the absence of orientation switch
+> - Fixed typo in the commit message
+>
+> Changes in v9:
+> - Collected Reviewed-by tag
+> - Fixed subject prefix again
+> - Changed the naming of the example node for it6505
+>
+> Changes in v8:
+> - Fixed the build issue when CONFIG_TYPEC=m
+> - Fixed some style issues
+> - Fixed the subject prefixes for the bindings patch
+> - Fixed the bindings for data-lanes properties
+>
+> Changes in v7:
+> - Fix the long comment lines
+> - Extracted the common codes to a helper function
+> - Fixed style issues in anx7625 driver
+> - Removed DT property validation in anx7625 driver.
+> - Fixed style issues in it6505 driver
+> - Removed the redundant sleep in it6505 driver
+> - Removed DT property validation in it6505 driver
+> - Rebased to drm-misc-next
+> - Fixed indentations in bindings patches
+> - Added a new patch to fix indentations in Kconfig
+>
+> Changes in v6:
+> - Changed it6505_typec_mux_set callback function to accommodate with
+>   the latest drm-misc patches
+> - Changed the driver implementation to accommodate with the new binding
+> - Dropped typec-switch binding and use endpoints and data-lanes properties
+>   to describe the pin connections
+> - Added new patches (patch 1,2,4) to fix probing issues
+> - Changed the bindings of it6505/anx7625 and modified the drivers
+>   accordingly
+> - Merged it6505/anx7625 driver changes into a single patch
+>
+> Pin-yen Lin (7):
+>   drm/display: Add Type-C switch helpers
+>   dt-bindings: display: bridge: anx7625: Add mode-switch support
+>   drm/bridge: anx7625: Check for Type-C during panel registration
+>   drm/bridge: anx7625: Register Type C mode switches
+>   dt-bindings: display: bridge: it6505: Add mode-switch support
+>   drm/bridge: it6505: Fix Kconfig indentation
+>   drm/bridge: it6505: Register Type C mode switches
+>
+> Prashant Malani (2):
+>   device property: Add remote endpoint to devcon matcher
+>   platform/chrome: cros_ec_typec: Purge blocking switch devlinks
 
-Hmm, Ubuntu git too old?
+Whole series is
 
-> $ git -c core.abbrev=5 log --pretty=format:%h | \
->   perl -nE 'chomp;say length' | sort | uniq -c | sort -n -k2
->     198 5
->  664613 6
->  450955 7
->   36667 8
->    2312 9
->     155 10
->       8 11
+Tested-by: Chen-Yu Tsai <wenst@chromium.org>
 
-I'm already at twelve:
-
- 433752 6
- 640819 7
-  62759 8
-   3998 9
-    261 10
-     12 11
-      1 12
-
-I've been using core.abbrev=16 for a while, and some maintainers
-reject my patches with Fixes: tags because of that...
-
-Is it really worthwhile to save on the number of hexits, making lookup
-of some commits more inconvenient?
-
-Note that while "git show edb9b8" suggests edb9b8f[...],
-gitweb says bad object id:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=edb9b8
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+on MT8192-based Hayato for anx7625 and not-yet-upstreamed MT8186 device
+for it6505.
