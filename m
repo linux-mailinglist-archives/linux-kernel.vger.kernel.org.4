@@ -2,102 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E087A68BE36
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 14:31:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3826F68BE37
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 14:31:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbjBFNbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 08:31:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36448 "EHLO
+        id S229882AbjBFNbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 08:31:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjBFNbF (ORCPT
+        with ESMTP id S229844AbjBFNbO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 08:31:05 -0500
-X-Greylist: delayed 7930 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 06 Feb 2023 05:31:02 PST
-Received: from xry111.site (xry111.site [89.208.246.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 630E8C17B;
-        Mon,  6 Feb 2023 05:31:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-        s=default; t=1675690262;
-        bh=BcNBytG8LpyrimbJYLehCH+h5QW9ST/22z207Ized/Y=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=G/Bqfhy1zdS1uco+N2xY1SWkwHT7wFq3xB9lGtwxA0yLnLEipotKPEohs/i69CdTy
-         KuqD6gOcfKgwj8agrf2yo84irDWtJkrui48eYypecZWFCDrSW7v4xtLLULFNM6cPhj
-         O5RGNADqsH8g++daoimUkIyyWH+gvRw/xIZrGbek=
-Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
-        (Client did not present a certificate)
-        (Authenticated sender: xry111@xry111.site)
-        by xry111.site (Postfix) with ESMTPSA id E102965EB0;
-        Mon,  6 Feb 2023 08:30:58 -0500 (EST)
-Message-ID: <74ffc2c05475c6af391b87a06df477ae390cc45c.camel@xry111.site>
-Subject: Re: [PATCH] LoongArch: Make -mstrict-align be configurable
-From:   Xi Ruoyao <xry111@xry111.site>
-To:     Jianmin Lv <lvjianmin@loongson.cn>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org
-Date:   Mon, 06 Feb 2023 21:30:55 +0800
-In-Reply-To: <3b17d229-bad4-e6a0-9055-c585dd5a62e4@loongson.cn>
-References: <20230202084238.2408516-1-chenhuacai@loongson.cn>
-         <5fc85453-1e2c-1f00-7879-1b5fa318c78a@xen0n.name>
-         <5303aeda-5c66-ede6-b3ac-7d8ebd73ec70@loongson.cn>
-         <b1809500e4d55564a1084a3014fb9603ba3d1438.camel@xry111.site>
-         <3b17d229-bad4-e6a0-9055-c585dd5a62e4@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 
+        Mon, 6 Feb 2023 08:31:14 -0500
+Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFDA4241DD;
+        Mon,  6 Feb 2023 05:31:11 -0800 (PST)
+Received: by mail-vs1-xe33.google.com with SMTP id h19so12605602vsv.13;
+        Mon, 06 Feb 2023 05:31:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=cTghmzthj1eVo6UlIcvmoqs3oAdOAJPrTblnEt4AALI=;
+        b=jux8ze5nNE4HXD4lXcmwv5v6Ss7OTVtDtFSpsT4nJtTYJjLv++LiYnSoluCibfMRSH
+         oGy+l9u/2dcfcIadR0lLmHP3V0Zw91EEqxTmNNjJiD2+TX80E6qm1AYAb0vIsh9ybiz/
+         kKXrHA/LWmFpZCc5YKKD1wt6ImecGpj2iJBj/AItAGK0lZWd5f12YRUv3HJtHIJ3YrLI
+         OXELvnZ0DQ2Oi/kB48ofRZSAsdrIwHUNU4v9g6VkzTyg6AE6ZYZlDVqHfdYKWMLfTMV3
+         oMs1onsehU8RPbPv6FjpKa4bZ5KfUADmUDje9wJh9T6pI/6fHrl/bAWD0tyi4nm+7biU
+         9jnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cTghmzthj1eVo6UlIcvmoqs3oAdOAJPrTblnEt4AALI=;
+        b=g23kKHUBYLf6/hBlMLCnca3/s/VVyN4Z9WKiN33qoIwmcf8JtVYkskkitMzom1Fh6J
+         7lhxELhfu+wE/6M5gVSVL+YZw6BwnEz4K7glw23fWTK2R1S+DGZQ5Zo2iHBtJwGEzppt
+         O2907p0Bj+XqMwGYB3OkNUQ7C2lgTA0QOf3xVA1eWkN07UIviQIRGhAmonfodI7zegz/
+         nnjIv2SdM1O7APDrAU5BZs67ZohcwWgBJuItrzcoIu7nTYHbOvE1i2UMBvbp3Nl3iNND
+         fEIdAPv+L/+yhbnVho0iVe3fWr4nYDH84myxkEOiDOZrmmiVXDJMOUAtbo9Y9RsJ8bqu
+         vvLw==
+X-Gm-Message-State: AO0yUKV9OH5aov242YCLprXjgxYxpQYWTpSUq5vTLxxE+ZkP6AFucoHr
+        5tDxD9pChlNwAj4HNVNAe9u3wRJ2yYqhADvGubxDmDdDtw8=
+X-Google-Smtp-Source: AK7set/56O2kwBcS7BFgA4V1nIRW3UlBxyYmCBSt5OmgwaqR8/OqXuiidSZCOrmNVExkg7LK+yvoe0zacbG3mHnmYwc=
+X-Received: by 2002:a67:e1cb:0:b0:3e9:6d7f:6f37 with SMTP id
+ p11-20020a67e1cb000000b003e96d7f6f37mr3024602vsl.3.1675690270849; Mon, 06 Feb
+ 2023 05:31:10 -0800 (PST)
 MIME-Version: 1.0
+References: <cover.1674227308.git.alexl@redhat.com> <5fb32a1297821040edd8c19ce796fc0540101653.camel@redhat.com>
+ <CAOQ4uxhGX9NVxwsiBMP0q21ZRot6-UA0nGPp1wGNjgmKBjjBBA@mail.gmail.com>
+ <b8601c976d6e5d3eccf6ef489da9768ad72f9571.camel@redhat.com>
+ <e840d413-c1a7-d047-1a63-468b42571846@linux.alibaba.com> <2ef122849d6f35712b56ffbcc95805672980e185.camel@redhat.com>
+ <8ffa28f5-77f6-6bde-5645-5fb799019bca@linux.alibaba.com> <51d9d1b3-2b2a-9b58-2f7f-f3a56c9e04ac@linux.alibaba.com>
+ <071074ad149b189661681aada453995741f75039.camel@redhat.com>
+ <0d2ef9d6-3b0e-364d-ec2f-c61b19d638e2@linux.alibaba.com> <de57aefc-30e8-470d-bf61-a1cca6514988@linux.alibaba.com>
+ <CAOQ4uxgS+-MxydqgO8+NQfOs9N881bHNbov28uJYX9XpthPPiw@mail.gmail.com>
+ <9c8e76a3-a60a-90a2-f726-46db39bc6558@linux.alibaba.com> <02edb5d6-a232-eed6-0338-26f9a63cfdb6@linux.alibaba.com>
+ <3d4b17795413a696b373553147935bf1560bb8c0.camel@redhat.com>
+ <CAOQ4uxjNmM81mgKOBJeScnmeR9+jG_aWvDWxAx7w_dGh0XHg3Q@mail.gmail.com>
+ <5fbca304-369d-aeb8-bc60-fdb333ca7a44@linux.alibaba.com> <CAOQ4uximQZ_DL1atbrCg0bQ8GN8JfrEartxDSP+GB_hFvYQOhg@mail.gmail.com>
+ <CAJfpegtRacAoWdhVxCE8gpLVmQege4yz8u11mvXCs2weBBQ4jg@mail.gmail.com>
+In-Reply-To: <CAJfpegtRacAoWdhVxCE8gpLVmQege4yz8u11mvXCs2weBBQ4jg@mail.gmail.com>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Mon, 6 Feb 2023 15:30:58 +0200
+Message-ID: <CAOQ4uxiW0=DJpRAu90pJic0qu=pS6f2Eo7v-Uw3pmd0zsvFuuw@mail.gmail.com>
+Subject: Re: [PATCH v3 0/6] Composefs: an opportunistically sharing verified
+ image filesystem
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     Alexander Larsson <alexl@redhat.com>, gscrivan@redhat.com,
+        brauner@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, david@fromorbit.com,
+        viro@zeniv.linux.org.uk, Vivek Goyal <vgoyal@redhat.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Gao Xiang <hsiangkao@linux.alibaba.com>,
+        Jingbo Xu <jefflexu@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-02-06 at 21:13 +0800, Jianmin Lv wrote:
-> > (1) Is the difference contributed by a bad code generation of GCC?=C2=
-=A0 If
-> > true, it's better to improve GCC before someone starts to build a distr=
-o
-> > for LA264 as it would benefit the user space as well.
-> >=20
-> AFAIK, GCC builds to produce unaligned-access-enabled target binary by
-> default (without -mstrict-align) for improving user space performance=20
-> (small size and runtime high performance), which is also based the fact=
-=20
-> that the vast majority of LoongArch CPUs support unaligned-access.
+> > > My little request again, could you help benchmark on your real workload
+> > > rather than "ls -lR" stuff?  If your hard KPI is really what as you
+> > > said, why not just benchmark the real workload now and write a detailed
+> > > analysis to everyone to explain it's a _must_ that we should upstream
+> > > a new stacked fs for this?
+> > >
+> >
+> > I agree that benchmarking the actual KPI (boot time) will have
+> > a much stronger impact and help to build a much stronger case
+> > for composefs if you can prove that the boot time difference really matters.
+> >
+> > In order to test boot time on fair grounds, I prepared for you a POC
+> > branch with overlayfs lazy lookup:
+> > https://github.com/amir73il/linux/commits/ovl-lazy-lowerdata
+>
+> Sorry about being late to the party...
+>
+> Can you give a little detail about what exactly this does?
+>
 
-I mean: if someone starts to build a distro for a less-capable LoongArch
-processor, (s)he will need an entire user space compiled with -mstrict-
-align.  So it would be better to start preparation now.
+Consider a container image distribution system, with base images
+and derived images and instruction on how to compose these images
+using overlayfs or other methods.
 
-And it's likely (s)he will either submit a GCC patch to make GCC
-enable/disable -mstrict-align based on the -march=3D (--with-arch at
-configure time) value, or hack GCC to enable -mstrict-align by default
-for the distro.  So I think we'll also need:
+Consider a derived image L3 that depends on images L2, L1.
 
-> +ifdef CONFIG_ARCH_STRICT_ALIGN may enable strict align by default.
->  # Don't emit unaligned accesses.
->  # Not all LoongArch cores support unaligned access, and as kernel we can=
-'t
->  # rely on others to provide emulation for these accesses.
->  KBUILD_CFLAGS +=3D $(call cc-option,-mstrict-align)
-  +else
-  +# Distros designed for running on both kind of processors may disable
-  +# strict align by default, but the user may want a no-strict-align=C2=A0
-  +# kernel for his/her specific hardware.
-   KBUILD_CFLAGS +=3D $(call cc-option,-mno-strict-align)
-> +endif
+With the composefs methodology, the image distribution server splits
+each image is split into metadata only (metacopy) images M3, M2, M1
+and their underlying data images containing content addressable blobs
+D3, D2, D1.
 
---=20
-Xi Ruoyao <xry111@xry111.site>
-School of Aerospace Science and Technology, Xidian University
+The image distribution server goes on to merge the metadata layers
+on the server, so U3 = M3 + M2 + M1.
+
+In order to start image L3, the container client will unpack the data layers
+D3, D2, D1 to local fs normally, but the server merged U3 metadata image
+will be distributed as a read-only fsverity signed image that can be mounted
+by mount -t composefs U3.img (much like mount -t erofs -o loop U3.img).
+
+The composefs image format contains "redirect" instruction to the data blob
+path and an fsverity signature that can be used to verify the redirected data
+content.
+
+When composefs authors proposed to merge composefs, Gao and me
+pointed out that the same functionality can be achieved with minimal changes
+using erofs+overlayfs.
+
+Composefs authors have presented ls -lR time and memory usage benchmarks
+that demonstrate how composefs performs better that erofs+overlayfs in
+this workload and explained that the lookup of the data blobs is what takes
+the extra time and memory in the erofs+overlayfs ls -lR test.
+
+The lazyfollow POC optimizes-out the lowerdata lookup for the ls -lR
+benchmark, so that composefs could be compared to erofs+overlayfs.
+
+To answer Alexander's question:
+
+> Cool. I'll play around with this. Does this need to be an opt-in
+> option in the final version? It feels like this could be useful to
+> improve performance in general for overlayfs, for example when
+> metacopy is used in container layers.
+
+I think lazyfollow could be enabled by default after we hashed out
+all the bugs and corner cases and most importantly remove the
+POC limitation of lower-only overlay.
+
+The feedback that composefs authors are asking from you
+is whether you will agree to consider adding the "lazyfollow
+lower data" optimization and "fsverity signature for metacopy"
+feature to overlayfs?
+
+If you do agree, the I think they should invest their resources
+in making those improvements to overlayfs and perhaps
+other improvements to erofs, rather than proposing a new
+specialized filesystem.
+
+Thanks,
+Amir.
