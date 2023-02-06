@@ -2,143 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0162568BC19
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 12:54:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5728F68BC1C
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 12:54:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229899AbjBFLyW convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 6 Feb 2023 06:54:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34086 "EHLO
+        id S229910AbjBFLyx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 06:54:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbjBFLyU (ORCPT
+        with ESMTP id S230019AbjBFLyu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 06:54:20 -0500
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2F4712F1D
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 03:54:16 -0800 (PST)
-Received: by mail-qt1-f172.google.com with SMTP id v17so12387418qto.3
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 03:54:16 -0800 (PST)
+        Mon, 6 Feb 2023 06:54:50 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E05A13D4B
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 03:54:48 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id j32-20020a05600c1c2000b003dc4fd6e61dso10561591wms.5
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 03:54:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=f32i0UtHmpYTxPyacuTVXQLMyNqvR3s0aoWUZXvnOLk=;
+        b=Q5WSa6Sjy/zZV9ruut5vijr1P+Y42JVVn0xvkzpI2EGUIxm1doohtqPcWLEFd4/yy6
+         r5c7TWMiRKl2jjF/H8ql65T5E1aipiVedwxtHEYPmFrCyzmK+Sq19W4W3JXpxMRGjdM4
+         7cMGpmrKyk6gwQmN02oqWeWKBoKeARUpjKYoFjhL7NF+6Nq8O+/3Kex2S4x1K7rPI4Mc
+         s+9IaNsGunC0z8UC3IVBANq5yi5t1qB9ohH/c1cl1YckxrOIEbn6Pq/ia1DUtHyy3uK6
+         pQX98u1P6o1OzK2DNVRxzqHdTZOAN9m1g6583Gq74tP31tpt64iYlV3eZNJBeHbZs+gy
+         pWfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GiIai4jWpm01sXsbCZG8kIjSWXRH0hySR+jKxMCXho8=;
-        b=Oh/u3OEY6wrjtSZgga0p6TNHlJhLP2W0bqi7YSTUgqPQc0dcxe/aQ3MCtOK4VJITur
-         wyQ4xOSiAxZO0EMXG2zs1gjYlZmnY/Ia/KMWXDH9s2g0YTI/UOFxgErii2ce3M0AUJwn
-         kS/yuRfel4tidlgGkU7rDmyb6HmQ5YWZNia7cFixIpxLmM1vl9s+SEwFb3FrQ3Po/u+N
-         /CrQVZ2qAjnPjIqPE4xxFjV5o5Qb93hoEOK1W4OCSgW9XEyatkkBUf51VFlFaL/ChiEH
-         Rk9Hk3ilj3NVExKqI4GS3mpfQomZKHy41Nfe2Mx7RVPZ5boECjVroeWTD7Y3d6QCuOwl
-         j2pA==
-X-Gm-Message-State: AO0yUKUpOCxXxIx99dXOgUjRi/dl+4JuRvRux0awJYS5PGYPxxhBm7zu
-        EC6a5EzpfzgMwkFkdN8Re+Fi0+NsuBO2mg==
-X-Google-Smtp-Source: AK7set8kvW9XizXTzTQuBX8anKujIKZyphTdvbQ3g3zQh7NGF/WWACUiW94N1vkX4xFDZpRD/xTXSg==
-X-Received: by 2002:ac8:5e4a:0:b0:3b8:118d:83d9 with SMTP id i10-20020ac85e4a000000b003b8118d83d9mr36828905qtx.4.1675684455755;
-        Mon, 06 Feb 2023 03:54:15 -0800 (PST)
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
-        by smtp.gmail.com with ESMTPSA id x11-20020a05620a448b00b0072c01a3b6aasm7362471qkp.100.2023.02.06.03.54.15
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Feb 2023 03:54:15 -0800 (PST)
-Received: by mail-yb1-f182.google.com with SMTP id t1so4745108ybd.4
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 03:54:15 -0800 (PST)
-X-Received: by 2002:a5b:741:0:b0:87a:68fd:181a with SMTP id
- s1-20020a5b0741000000b0087a68fd181amr1014302ybq.36.1675684454997; Mon, 06 Feb
- 2023 03:54:14 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=f32i0UtHmpYTxPyacuTVXQLMyNqvR3s0aoWUZXvnOLk=;
+        b=pxl4rijlqOvoZ40ZZGLImhf19c4618WHV+wOHGa6+QoV70h6ltdPF2oTW/3YWOOLFx
+         UfhwPfmmcXCHmyiVyR80pMLHL9JLzhSpcPylOSyav4OEpJ1U+p7Uh6xxqMpMVrAE21XO
+         Yo6aKahuRGceNL0xQhnfMjv+9kJh6Br01VaO0W3IiBemMTR3kMkodnzbXGn1pTb8TvIP
+         t2ZJ2BBAWd4JWB+PQjllkanvQ3ErIaIlCUHvLtEX1e0yNdSkFh8cAm9c3tdDiSbxjl98
+         t1u+WWCCJrOLR4nflUquG60ju8fdzQSyegch3lVEZfpfJ8AYbt9kjR9CajFTciBWh9Jh
+         UJug==
+X-Gm-Message-State: AO0yUKX0Yd6sJtbCEuWkZ82e6s73lT+rejzp+SrlJonD8ktcWx8RNnkp
+        S27jnfZFdFMluBKdFxA5HzDZLg==
+X-Google-Smtp-Source: AK7set8q5TEDigFlaoXKvGEyXmW7/pfWOHSWGReOGdbnXfUkXZCqKPhMWAalL3vq95IQNXfwjr3xIA==
+X-Received: by 2002:a05:600c:1c96:b0:3df:9858:c032 with SMTP id k22-20020a05600c1c9600b003df9858c032mr10856043wms.7.1675684486906;
+        Mon, 06 Feb 2023 03:54:46 -0800 (PST)
+Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
+        by smtp.gmail.com with ESMTPSA id bg21-20020a05600c3c9500b003db06493ee7sm17491455wmb.47.2023.02.06.03.54.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Feb 2023 03:54:46 -0800 (PST)
+Date:   Mon, 6 Feb 2023 12:54:45 +0100
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Atish Patra <atishp@rivosinc.com>
+Cc:     linux-kernel@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Guo Ren <guoren@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
+        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v5 11/14] RISC-V: KVM: Implement trap & emulate for
+ hpmcounters
+Message-ID: <20230206115445.4deembtvetojslee@orel>
+References: <20230205011515.1284674-1-atishp@rivosinc.com>
+ <20230205011515.1284674-12-atishp@rivosinc.com>
 MIME-Version: 1.0
-References: <20230129123431.1282427-1-j.neuschaefer@gmx.net>
- <78d224a63f6c27bf700d59007b6f3c89746d728c.camel@perches.com>
- <3afee0493d3718f2e38b6c54dab23d38360cd5d0.camel@perches.com>
- <CAMuHMdWcjUXwkk2V29p-hifDnMhLRSwQBXMzVeURRA48znKC5Q@mail.gmail.com> <bbdf99df867786510f709473fa2c3744dbf27bb4.camel@perches.com>
-In-Reply-To: <bbdf99df867786510f709473fa2c3744dbf27bb4.camel@perches.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 6 Feb 2023 12:54:02 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdU4HUmTJZiecL9u0G1LuZ18K_1hYo4Q_U9S2a2fuo=xRA@mail.gmail.com>
-Message-ID: <CAMuHMdU4HUmTJZiecL9u0G1LuZ18K_1hYo4Q_U9S2a2fuo=xRA@mail.gmail.com>
-Subject: Re: [PATCH] checkpatch.pl: Relax commit ID check to allow more than
- 12 chars
-To:     Joe Perches <joe@perches.com>
-Cc:     =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andy Whitcroft <apw@canonical.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230205011515.1284674-12-atishp@rivosinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Joe,
+On Sat, Feb 04, 2023 at 05:15:12PM -0800, Atish Patra wrote:
+> As the KVM guests only see the virtual PMU counters, all hpmcounter
+> access should trap and KVM emulates the read access on behalf of guests.
+> 
+> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+> Signed-off-by: Atish Patra <atishp@rivosinc.com>
+> ---
+>  arch/riscv/include/asm/kvm_vcpu_pmu.h | 16 ++++++++
+>  arch/riscv/kvm/vcpu_insn.c            |  4 +-
+>  arch/riscv/kvm/vcpu_pmu.c             | 59 ++++++++++++++++++++++++++-
+>  3 files changed, 77 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/riscv/include/asm/kvm_vcpu_pmu.h b/arch/riscv/include/asm/kvm_vcpu_pmu.h
+> index 40905db..344a3ad 100644
+> --- a/arch/riscv/include/asm/kvm_vcpu_pmu.h
+> +++ b/arch/riscv/include/asm/kvm_vcpu_pmu.h
+> @@ -48,6 +48,19 @@ struct kvm_pmu {
+>  #define vcpu_to_pmu(vcpu) (&(vcpu)->arch.pmu_context)
+>  #define pmu_to_vcpu(pmu)  (container_of((pmu), struct kvm_vcpu, arch.pmu_context))
+>  
+> +#if defined(CONFIG_32BIT)
+> +#define KVM_RISCV_VCPU_HPMCOUNTER_CSR_FUNCS \
+> +{.base = CSR_CYCLEH,     .count = 31, .func = kvm_riscv_vcpu_pmu_read_hpm }, \
+> +{.base = CSR_CYCLE,      .count = 31, .func = kvm_riscv_vcpu_pmu_read_hpm },
+                      ^ should be tabs?
 
-On Mon, Feb 6, 2023 at 12:09 PM Joe Perches <joe@perches.com> wrote:
-> On Mon, 2023-02-06 at 09:38 +0100, Geert Uytterhoeven wrote:
-> > On Sat, Feb 4, 2023 at 5:59 PM Joe Perches <joe@perches.com> wrote:
-> > > On Sun, 2023-01-29 at 09:52 -0800, Joe Perches wrote:
-> > > > On Sun, 2023-01-29 at 13:34 +0100, Jonathan Neuschäfer wrote:
-> > > > > By now, `git log --pretty=%h` (on my copy of linux.git) prints commit
-> > > > > hashes with 13 digits, because of the number of objects.
-> > > > >
-> > > > > Relax the rule in checkpatch.pl to allow a few more digits (up to 16).
-> > > >
-> > > > NAK without updating the process docs first.
-> > >
-> > > btw: it looks like 12 will still be sufficient for awhile yet
-> > >
-> > > $ git count
-> > > total 1154908
-> >
-> > Hmm, Ubuntu git too old?
->
-> Don't think so
->
-> $ git --version
-> git version 2.39.1
+> +#else
+> +#define KVM_RISCV_VCPU_HPMCOUNTER_CSR_FUNCS \
+> +{.base = CSR_CYCLE,      .count = 31, .func = kvm_riscv_vcpu_pmu_read_hpm },
+                      ^ here too
+> +#endif
+> +
+> +int kvm_riscv_vcpu_pmu_read_hpm(struct kvm_vcpu *vcpu, unsigned int csr_num,
+> +				unsigned long *val, unsigned long new_val,
+> +				unsigned long wr_mask);
+> +
+>  int kvm_riscv_vcpu_pmu_num_ctrs(struct kvm_vcpu *vcpu, struct kvm_vcpu_sbi_return *retdata);
+>  int kvm_riscv_vcpu_pmu_ctr_info(struct kvm_vcpu *vcpu, unsigned long cidx,
+>  				struct kvm_vcpu_sbi_return *retdata);
+> @@ -71,6 +84,9 @@ void kvm_riscv_vcpu_pmu_reset(struct kvm_vcpu *vcpu);
+>  struct kvm_pmu {
+>  };
+>  
+> +#define KVM_RISCV_VCPU_HPMCOUNTER_CSR_FUNCS \
+> +{ .base = 0,      .count = 0, .func = NULL },
+               ^ and here and aligned with the ones above?
 
-Exactly, Ubuntu 22.04LTS only has
-
-$ git --version
-git version 2.34.1
-
-i.e. no git count.
-
-> > I've been using core.abbrev=16 for a while, and some maintainers
-> > reject my patches with Fixes: tags because of that...
->
-> Perhaps because that's not the documented format?
-
-Right.  I look a lot at history, and don't want to become slowed down
-by ambiguous Fixes: tags anytime soon (or later).
-
-> > Is it really worthwhile to save on the number of hexits, making lookup
-> > of some commits more inconvenient?
-> >
-> > Note that while "git show edb9b8" suggests edb9b8f[...],
-> > gitweb says bad object id:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=edb9b8
->
-> hmm.  Not here.
->
-> $ git show edb9b8
-> tree edb9b8
-
-Yeah, I also have that tree object.  But I don't want to see the tree
-object; I want to see the commit object, which is in v6.2-rc7:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=edb9b8f
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Thanks,
+drew
