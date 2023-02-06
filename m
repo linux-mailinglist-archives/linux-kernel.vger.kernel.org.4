@@ -2,152 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98A6F68C218
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 16:46:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7427768C279
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 17:07:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229965AbjBFPql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 10:46:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53928 "EHLO
+        id S231433AbjBFQHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 11:07:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbjBFPqf (ORCPT
+        with ESMTP id S230283AbjBFQHI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 10:46:35 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C747F2914B;
-        Mon,  6 Feb 2023 07:46:17 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BD81713D5;
-        Mon,  6 Feb 2023 07:40:26 -0800 (PST)
-Received: from bogus (unknown [10.57.12.205])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5EF613F703;
-        Mon,  6 Feb 2023 07:39:42 -0800 (PST)
-Date:   Mon, 6 Feb 2023 15:39:40 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Huisong Li <lihuisong@huawei.com>
-Cc:     robbiek@xsightlabs.com, linux-acpi@vger.kernel.org,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        linux-kernel@vger.kernel.org, rafael@kernel.org,
-        rafael.j.wysocki@intel.com, wanghuiqiang@huawei.com,
-        zhangzekun11@huawei.com, wangxiongfeng2@huawei.com,
-        tanxiaofei@huawei.com, guohanjun@huawei.com, xiexiuqi@huawei.com,
-        wangkefeng.wang@huawei.com, huangdaode@huawei.com
-Subject: Re: [RFC-V3 1/2] mailbox: pcc: Add processing platform notification
- for slave subspaces
-Message-ID: <20230206153940.gcddy3b3znk72yqd@bogus>
-References: <20221016034043.52227-1-lihuisong@huawei.com>
- <20221203095150.45422-1-lihuisong@huawei.com>
- <20221203095150.45422-2-lihuisong@huawei.com>
+        Mon, 6 Feb 2023 11:07:08 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A01E7A88;
+        Mon,  6 Feb 2023 08:07:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=6yhmU5Aj7NOteiUxigfkd0O6jgTm4huNWcrZ7HcVw4s=; b=2jXFx1bj0ZR6HbUWHUe2JKIOsY
+        cfIeL/ydCyPNIjXkWxaa5a1L2Rjwm8cCwAXz6pmZJhEafa43Tzhsc9tpiU09Z/w6KbHH8qwKT3kC6
+        NpZgYl4kXOUOJdkb4jMteQlCMhPaFwAJnHP57sWlYbLGNGP8iKcigzYUfsVhxYsIiBLs=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pP3ay-004DSq-5P; Mon, 06 Feb 2023 16:39:52 +0100
+Date:   Mon, 6 Feb 2023 16:39:52 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Wei Fang <wei.fang@nxp.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Arun.Ramadoss@microchip.com, intel-wired-lan@lists.osuosl.org
+Subject: Re: [PATCH net-next v4 00/23] net: add EEE support for KSZ9477 and
+ AR8035 with i.MX6
+Message-ID: <Y+EfSKRwQMRgEurL@lunn.ch>
+References: <20230201145845.2312060-1-o.rempel@pengutronix.de>
+ <20230204001332.dd4oq4nxqzmuhmb2@skbuf>
+ <20230206054713.GD12366@pengutronix.de>
+ <20230206141038.vp5pdkjyco6pyosl@skbuf>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221203095150.45422-2-lihuisong@huawei.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230206141038.vp5pdkjyco6pyosl@skbuf>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Huisong,
+> > > What is the code flow through the kernel with EEE? I wasn't able to find
+> > > a good explanation about it.
+> > > 
+> > > Is it advertised by default, if supported? I guess phy_advertise_supported()
+> > > does that.
 
-Apologies for such a long delay.
+The old flow is poorly defined. If the MAC supports EEE, it should
+call phy_init_eee(). That looks at the results of auto-neg and returns
+if EEE has been negotiated or not.
 
-Also I would like to hear from Robbie King who I know is playing around
-with this these days 😄. At minimum if this logic works for him as well.
+However, i'm not aware of any code which disables by default the
+advertisement of EEE, or actually enables the negotiation of EEE. So
+there are probably a number of PHYs which are EEE capable, connected
+to a MAC driver which does not call phy_init_eee() and are advertising
+EEE and negotiating EEE. There might also be a subset of that which
+are actually doing EEE, despite not calling phy_init_eee().
 
-On Sat, Dec 03, 2022 at 05:51:49PM +0800, Huisong Li wrote:
-> Currently, PCC driver doesn't support the processing of platform
-> notification for slave PCC subspaces because of the incomplete
-> communication flow.
-> 
-> According to ACPI specification, if platform sends a notification
-> to OSPM, it must clear the command complete bit and trigger platform
-> interrupt. OSPM needs to check whether the command complete bit is
-> cleared, clear platform interrupt, process command, and then set the
-> command complete and ring doorbell to Platform. But the current judgment
-> on the command complete is not applicable to type4 in pcc_mbox_irq().
-> 
-> This patch introduces a communication flow direction field to detect
-> whether the interrupt belongs to the master or slave subspace channel.
-> And PCC driver needs to add the phase of setting the command complete
-> and ring doorbell in pcc_mbox_irq() to complete type4 communication
-> flow after processing command from Platform.
-> 
-> Signed-off-by: Huisong Li <lihuisong@huawei.com>
-> ---
->  drivers/mailbox/pcc.c | 77 +++++++++++++++++++++++++++++++++++++++----
->  1 file changed, 71 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/mailbox/pcc.c b/drivers/mailbox/pcc.c
-> index 105d46c9801b..ad6d0b7d50fc 100644
-> --- a/drivers/mailbox/pcc.c
-> +++ b/drivers/mailbox/pcc.c
-> @@ -80,6 +80,13 @@ struct pcc_chan_reg {
->  	u64 status_mask;
->  };
->  
-> +enum pcc_chan_comm_flow_dir_type {
-> +	PCC_ONLY_OSPM_TO_PLATFORM,
-> +	PCC_ONLY_PLATFORM_TO_OSPM,
-> +	PCC_BIDIRECTIONAL,
-> +	PCC_DIR_UNKNOWN,
-> +};
-> +
->  /**
->   * struct pcc_chan_info - PCC channel specific information
->   *
-> @@ -91,6 +98,7 @@ struct pcc_chan_reg {
->   * @cmd_update: PCC register bundle for the command complete update register
->   * @error: PCC register bundle for the error status register
->   * @plat_irq: platform interrupt
-> + * @comm_flow_dir: direction of communication flow supported by the channel
->   */
->  struct pcc_chan_info {
->  	struct pcc_mbox_chan chan;
-> @@ -100,12 +108,15 @@ struct pcc_chan_info {
->  	struct pcc_chan_reg cmd_update;
->  	struct pcc_chan_reg error;
->  	int plat_irq;
-> +	u8 comm_flow_dir;
+So the current code is not good, and there is a danger we introduce
+power regressions as we sort this out.
 
-I would rather just save the 'type' as read from the PCCT. We don't know
-what future types might be and just identifying them by the direction of
-flow of the data, it restricts the usage of this.
+The current MAC/PHY API is pretty broken. We probably should be
+handling this similar to pause. A MAC which supports pause should call
+phy_support_asym_pause() or phy_support_sym_pause() which will cause
+the PHY to advertise its supported Pause modes. So we might want to
+add a phy_support_eee()? We then want the result of EEE negotiation
+available in phydev for when the link_adjust() callback is called.
 
->  };
->  
->  #define to_pcc_chan_info(c) container_of(c, struct pcc_chan_info, chan)
->  static struct pcc_chan_info *chan_info;
->  static int pcc_chan_count;
->  
-> +static int pcc_send_data(struct mbox_chan *chan, void *data);
-> +
->  /*
->   * PCC can be used with perf critical drivers such as CPPC
->   * So it makes sense to locally cache the virtual address and
-> @@ -221,6 +232,43 @@ static int pcc_map_interrupt(u32 interrupt, u32 flags)
->  	return acpi_register_gsi(NULL, interrupt, trigger, polarity);
->  }
->  
-> +static bool pcc_chan_need_rsp_irq(struct pcc_chan_info *pchan,
-> +				  u64 cmd_complete_reg_val)
+A quick look at a few MAC drivers seems to indicate many are getting
+it wrong and don't actually wait for the result of the auto-neg....
 
-Probably rename this as pcc_chan_command_complete or something similar.
+   Andrew
 
-> +{
-> +	bool need_rsp;
-> +
-> +	if (!pchan->cmd_complete.gas)
-> +		return true;
-> +
-> +	cmd_complete_reg_val &= pchan->cmd_complete.status_mask;
-> +
-> +	switch (pchan->comm_flow_dir) {
-
-Use the channel type instead here.
-
--- 
-Regards,
-Sudeep
