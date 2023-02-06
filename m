@@ -2,123 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E717468C87E
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 22:20:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 600E068C888
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 22:23:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbjBFVUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 16:20:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38498 "EHLO
+        id S229807AbjBFVXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 16:23:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjBFVUM (ORCPT
+        with ESMTP id S229706AbjBFVXN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 16:20:12 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E76913D5B;
-        Mon,  6 Feb 2023 13:20:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1675718388; bh=gBtjdvssNf9n9f0ivSMYdvAOv6l23bSSAPBydFZKfLg=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=kDOKWBRsyFqDzI1QMNzAfVxYHVRc/7HL1giDhA3KCr3IFPyN9B5YqI533KKULhHKd
-         uQ1YVTzkGULHqXaorzvBDVnsvjdfAKY/G6BUdOfqtAd2Y5LUQFcoj2ibtjsasr9yhX
-         rvj8pHJPbt5Edz0HiH/uOD3/sX5QdDAAjkCKBY8adwBAXxnGfrFpZg5d1ORsPKkBQp
-         s876ebbnC4azkBCBxHrm7k7i3BVty0XAYa8HkHSHaVPRBXG8fKz+3NGcNMMkRBhvTs
-         cEVy/btX5h24coZBI+IRHJ5wX6PUq7oh/92O4QQqG8hd1ZzSE+14IqjFhrHXZAlY5j
-         t14pcKE2/iX7w==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.0.14] ([141.30.226.119]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MKbgE-1pAlHU2GwG-00KvLR; Mon, 06
- Feb 2023 22:19:48 +0100
-Subject: Re: [PATCH 1/2] platform/x86: dell-ddv: Add hwmon support
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Hans de Goede <hdegoede@redhat.com>
-Cc:     markgross@kernel.org, jdelvare@suse.com,
-        platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230205205456.2364-1-W_Armin@gmx.de>
- <20230205205456.2364-2-W_Armin@gmx.de>
- <a7d2e011-142d-88b9-2591-cf4508f1b8c5@redhat.com>
- <20230206162303.GA195090@roeck-us.net>
-From:   Armin Wolf <W_Armin@gmx.de>
-Message-ID: <08af724c-8c65-db41-ece8-f330f67a3dc2@gmx.de>
-Date:   Mon, 6 Feb 2023 22:19:47 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Mon, 6 Feb 2023 16:23:13 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49186CDD0
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 13:23:11 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id y19so13478033ljq.7
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 13:23:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=4kSVpgLpfM16u0prsMj5jU/ue6IDxqmnToHq6QUNxFI=;
+        b=QVnH1fzLuEWANQs865eJE5IPrTtuRI3E0A/CtmjmZR36JF8L4gyFfRGEICOOADsEoN
+         v3bjR5GGXhWc3RcDQovKq2aoGHXRO7np4dT9wBoa7eEU8pnMsLclKabUsRCdU09wDcAF
+         mq3m60Q9TQaUYN/+BDcmH2Q4pBT5J7IhBaubw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4kSVpgLpfM16u0prsMj5jU/ue6IDxqmnToHq6QUNxFI=;
+        b=sIXl0zan7Ps+kJYRRPdeSJVqdCeS0nv9h9Byh6EodfosUg8T8bi+REPiWdQI2lkCMY
+         DmAOKqGYDgMESAQc1Dv7g4kd0aAcp18ewldRrSZHShV/lt6bXkngCkGcXfg23NA8JDtl
+         xj3oeew3/UwkOa6N5qeHnICMs3l6zmHLGRggCt/KyncNdel5mE0bXE9PYIYBFZCdqQ/w
+         Ogh792ZmRHYcmNv/nYJiEaMPIn0JXoi51ArRceLIeOBqqeE9I3So6lPkVyzczS4zZG00
+         e9vxIt3s2aGQsuh3EkfRQBTZK/0SeVF5XaKjIJ1niFEZ9Ue+mUM4gUxzS4CTfxH3+ofk
+         VkJQ==
+X-Gm-Message-State: AO0yUKWQZgJHsz6RaVU9KNTP5VMXf3WgPecs4HGcGBUvAMZs+IBSLDvd
+        fDYKNw5mI/W5BivihMqJKC7s/+E8JlzXIt2aYIhuyw==
+X-Google-Smtp-Source: AK7set9fK7J0IK+MG0K9RQCkZfeTedz1prUlL8PM87ENTqelebResyhus+ftvqsn/9kgRydR8fsKtrzM1IdL/YkP0ck=
+X-Received: by 2002:a2e:b4b2:0:b0:290:66b3:53e5 with SMTP id
+ q18-20020a2eb4b2000000b0029066b353e5mr113940ljm.57.1675718589520; Mon, 06 Feb
+ 2023 13:23:09 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20230206162303.GA195090@roeck-us.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-Content-Language: en-US
-X-Provags-ID: V03:K1:NydaLpAeKm/q247J+lHcy0UktCrV7N1pPR5QP4LrMfnndd93t/G
- L+LmJOBW1FOkRer1j+Vxc6xRHr20vxtNr9sK7riC9qIA56A6t6XInus0QOqVF/i1/oVN0AL
- cVU+TtXH041ZQrKCMQURUfNWu5+1S1ushMadQkJKuzHXYdP5tywCkkV7CdpaV3ANbwBrvd+
- r2VYW3EACKnL+UkYLTURw==
-UI-OutboundReport: notjunk:1;M01:P0:rKKXN3+pvtM=;owy0w449dm+D2EMy/Rzxcf04ygy
- kz5sz8iPjgRTpenrSmA4CRxfgCHL5oEFAD86Pm3/WCwQ2/34ZGbUXe/sd6PhIGInG0nSw1ojc
- srO1dOFBRx5DfkRpprDantaaco6QL5QdktGLU6P0Qlesb2CbD5urmM/3SchaSVVf/x/5Yog30
- gEWF1td/ka3hMxwcTztj2Qsfo7oGdQwO/WkGEgt0AnQMHtrbG0w4Ky3mV6pfarm5FATbMaTNi
- n91sxGFkLs3+MqvqZ8uMqjW1az3KvFWQVAhOmP+NbdgZjxUjIGZ1uC/TXJV00yrseMq2yOpML
- P6Sx7qaJuDvfAgCcgz0kN7+xSgWTnbh6YrEGVNbDfn/HRU2Zw42FghNUHatL9LR2W810yhn2K
- CVZC3KwpeMa4C9Nx/XB+wyFg4vQI4FyK46rBWP2+Ulex7swc/pBzu3B7jmQgHpXNB1vnznCdq
- aznvMMhazOKjg5x6qj2MXDCPPpXsaCimFytLMCDnADPvzCFEc5oMx4bTgyj9YN/f9F176a7mD
- Y/IYKjjsFI4fhknfXBdLZ/kzzsR3x16S5+EAliYJWhomIZE7xoAzxQ9pgd0HdlKGH1GBWKtVf
- m7AkQXKIg/OxGGSz1IzOrw7w5KA/yYQNToTzoH8i0kEeRD4x27hjZlR40x0FF4QNcslsy8G69
- 02yFaBPMoF+w7GIi+R0W7/XYebmSmvrZtwAPSm+nPKW1/acpM7LkcpxDntntLtlG8/Eq3n1H4
- aCv+W0qI9ATCuvbg+q66XDc9f+W9U22FdLJ9LYzHAI1eOHl/cFuCLv6Pa/VTsfMCXU5/DOsoE
- NUfn8TTgneCieLufgFW3LXKG/i0ZCIMyBUTUrRb5VYEID/XV7118UVU8EqH49IMG0Su/UXxr4
- zEK/9E0oWoPvfzRTwRyDkQZYFIx51UFCm+Gmd1OfvKPL6TbDfDCoR89mWm891ddiNZiRRPyUo
- 3B2/hxxABwLzOsZpal7GwpxxZ3o=
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230204004843.GA2677518@paulmck-ThinkPad-P17-Gen-1>
+ <Y920w4QRLtC6kd+x@rowland.harvard.edu> <20230204014941.GS2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y95yhJgNq8lMXPdF@rowland.harvard.edu> <20230204222411.GC2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y9+41ctA54pjm/KG@google.com> <Y+FJSzUoGTgReLPB@rowland.harvard.edu>
+In-Reply-To: <Y+FJSzUoGTgReLPB@rowland.harvard.edu>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Mon, 6 Feb 2023 16:22:57 -0500
+Message-ID: <CAEXW_YR=J9Y9acRaZrU_F7S5Fwe7rhxwqKmxV2NOGwo0pjNBnA@mail.gmail.com>
+Subject: Re: Current LKMM patch disposition
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        kernel-team@meta.com, mingo@kernel.org, parri.andrea@gmail.com,
+        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
+        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+        luc.maranget@inria.fr, akiyks@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 06.02.23 um 17:23 schrieb Guenter Roeck:
-
-> On Mon, Feb 06, 2023 at 03:13:25PM +0100, Hans de Goede wrote:
->> Hi Armin,
->>
->> On 2/5/23 21:54, Armin Wolf wrote:
->>> Thanks to bugreport 216655 on bugzilla triggered by the
->>> dell-smm-hwmon driver, the contents of the sensor buffers
->>> could be almost completely decoded.
->>> Add an hwmon interface for exposing the fan and thermal
->>> sensor values. Since the WMI interface can be quite slow
->>> on some machines, the sensor buffers are cached for 1 second
->>> to lessen the performance impact.
->>> The debugfs interface remains in place to aid in reverse-engineering
->>> of unknown sensor types and the thermal buffer.
->>>
->>> Tested-by: Anton=C3=ADn Skala <skala.antonin@gmail.com>
->>> Tested-by: Gustavo Walbon <gustavowalbon@gmail.com>
->>> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
->> This looks nice and clean to me, thank you:
->>
->> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
->>
->> I'm going to wait a bit with merging this to see if Guenter
->> has any remarks. If there are no remarks by next Monday then
->> I'll merge this for the 6.3 merge window.
->>
-> I don't have any further remarks. I won't send an Ack, though.
-> I noticed that the empty lines before return statements distract
-> me sufficiently enough that I am not sure about the actual code.
+On Mon, Feb 6, 2023 at 1:39 PM Alan Stern <stern@rowland.harvard.edu> wrote:
 >
-> Guenter
+> On Sun, Feb 05, 2023 at 02:10:29PM +0000, Joel Fernandes wrote:
+> > On Sat, Feb 04, 2023 at 02:24:11PM -0800, Paul E. McKenney wrote:
+> > > On Sat, Feb 04, 2023 at 09:58:12AM -0500, Alan Stern wrote:
+> > > > On Fri, Feb 03, 2023 at 05:49:41PM -0800, Paul E. McKenney wrote:
+> > > > > On Fri, Feb 03, 2023 at 08:28:35PM -0500, Alan Stern wrote:
+> > > > > > The "Provide exact semantics for SRCU" patch should have:
+> > > > > >
+> > > > > >       Portions suggested by Boqun Feng and Jonas Oberhauser.
+> > > > > >
+> > > > > > added at the end, together with your Reported-by: tag.  With that, I
+> > > > > > think it can be queued for 6.4.
+> > > > >
+> > > > > Thank you!  Does the patch shown below work for you?
+> > > > >
+> > > > > (I have tentatively queued this, but can easily adjust or replace it.)
+> > > >
+> > > > It looks fine.
+> > >
+> > > Very good, thank you for looking it over!  I pushed it out on branch
+> > > stern.2023.02.04a.
+> > >
+> > > Would anyone like to ack/review/whatever this one?
+> >
+> > Would it be possible to add comments, something like the following? Apologies
+> > if it is missing some ideas. I will try to improve it later.
+> >
+> > thanks!
+> >
+> >  - Joel
+> >
+> > ---8<-----------------------
+> >
+> > diff --git a/tools/memory-model/linux-kernel.bell b/tools/memory-model/linux-kernel.bell
+> > index ce068700939c..0a16177339bc 100644
+> > --- a/tools/memory-model/linux-kernel.bell
+> > +++ b/tools/memory-model/linux-kernel.bell
+> > @@ -57,7 +57,23 @@ let rcu-rscs = let rec
+> >  flag ~empty Rcu-lock \ domain(rcu-rscs) as unmatched-rcu-lock
+> >  flag ~empty Rcu-unlock \ range(rcu-rscs) as unmatched-rcu-unlock
+> >
+> > +(***************************************************************)
+> >  (* Compute matching pairs of nested Srcu-lock and Srcu-unlock *)
+> > +(***************************************************************)
+> > +(*
+> > + * carry-srcu-data: To handle the case of the SRCU critical section split
+> > + * across CPUs, where the idx is used to communicate the SRCU index across CPUs
+> > + * (say CPU0 and CPU1), data is between the R[srcu-lock] to W[once][idx] on
+> > + * CPU0, which is sequenced with the ->rf is between the W[once][idx] and the
+> > + * R[once][idx] on CPU1.  The carry-srcu-data is made to exclude Srcu-unlock
+> > + * events to prevent capturing accesses across back-to-back SRCU read-side
+> > + * critical sections.
+> > + *
+> > + * srcu-rscs: Putting everything together, the carry-srcu-data is sequenced with
+> > + * a data relation, which is the data dependency between R[once][idx] on CPU1
+> > + * and the srcu-unlock store, and loc ensures the relation is unique for a
+> > + * specific lock.
+> > + *)
+> >  let carry-srcu-data = (data ; [~ Srcu-unlock] ; rf)*
+> >  let srcu-rscs = ([Srcu-lock] ; carry-srcu-data ; data ; [Srcu-unlock]) & loc
+>
+> My tendency has been to keep comments in the herd7 files to a minimum
+> and to put more extended descriptions in the explanation.txt file.
+> Right now that file contains almost nothing (a single paragraph!) about
+> SRCU, so it needs to be updated to talk about the new definition of
+> srcu-rscs.  In my opinion, that's where this sort of comment belongs.
 
-I will send a 3rd revision of the patch series to remove those empty lines=
- then.
-Speaking of a 3rd revision, i noticed that jiffies are not updated during =
-suspend,
-so the sensor values might be wrong for a short time when resuming after a=
- long time.
+That makes sense, I agree.
 
-This can be solved by either usingktime_get_boottime_ns(), which does not =
-stop during suspend, or by
-invalidating the sensor cache upon resume. Which method should be used
-in this case? Armin Wolf
+> Joel, would you like to write an extra paragraph of two for that file,
+> explaining in more detail how SRCU lock-to-unlock matching is different
+> from regular RCU and how the definition of the srcu-rscs relation works?
+> I'd be happy to edit anything you come up with.
 
+Yes I would love to, I'll spend some more time studying this up a bit
+more so I don't write nonsense. But yes, I am quite interested in
+writing something up and I will do so!
+
+Thanks,
+
+ - Joel
+
+
+> Alan
+>
+> PS: We also need to update the PLAIN ACCESSES AND DATA RACES section of
+> explanation.txt, to mention the carry-dep relation and why it is
+> important.
