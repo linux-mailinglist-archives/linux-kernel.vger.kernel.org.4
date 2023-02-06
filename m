@@ -2,83 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06FC568C451
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 18:13:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA29468C456
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 18:14:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230150AbjBFRNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 12:13:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48098 "EHLO
+        id S229806AbjBFROk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 12:14:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbjBFRNT (ORCPT
+        with ESMTP id S229738AbjBFROi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 12:13:19 -0500
-Received: from out-82.mta0.migadu.com (out-82.mta0.migadu.com [91.218.175.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37F9211658
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 09:13:12 -0800 (PST)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1675703590;
+        Mon, 6 Feb 2023 12:14:38 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D67C180
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 09:14:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675703639;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=2vII0gLu68kSuBCcExcNCtXjKdRpzzjDFHCPp8egne4=;
-        b=UquOkQo+cdHwkgxsDiSw5Ekm1UrcIziy+pGPxa6B4zhpqZxLSovf0DU4J8ASia+yMbqK5E
-        XucgPpDR8o0M4KOoG4TVUPR1M7sYxLmWU/WPpPuWH/RR87nDTwZP1Xr4T1gNSaaHkwYWUB
-        1W5XFq7Vg1vypqQw0MmlB6xRWGDv9a4=
-From:   Oliver Upton <oliver.upton@linux.dev>
-To:     Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Quentin Perret <qperret@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        James Morse <james.morse@arm.com>
-Cc:     Oliver Upton <oliver.upton@linux.dev>, kvmarm@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, kernel-team@android.com,
-        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/4] KVM: arm64: Fix CPU resume/on with pKVM
-Date:   Mon,  6 Feb 2023 17:12:59 +0000
-Message-Id: <167570355326.3822888.6416716908821358162.b4-ty@linux.dev>
-In-Reply-To: <20230201103755.1398086-1-qperret@google.com>
-References: <20230201103755.1398086-1-qperret@google.com>
+        bh=hSe69sBoGFb+EaphbnK9uhzhRzn3kUGhad0XCdDnNY0=;
+        b=BaJ6iQaawl0An5KF+fvbM2DVu7GrPcf4R3+mHy4vKxKDLzbcugsEQvi6WdgbN3gecVF6kb
+        ZMdmoWxtaGmxCFZ4FPGmZ5YamUYzgFadJXpKOWaiugnYzGOPfQJViFpelzNz/3gjtzajkW
+        NXFQ0jr+fBU8IurvDOPoYS5nv774gd0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-563-aCZIekwANT26FerVm4BdFA-1; Mon, 06 Feb 2023 12:13:56 -0500
+X-MC-Unique: aCZIekwANT26FerVm4BdFA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E58B81871D9B;
+        Mon,  6 Feb 2023 17:13:55 +0000 (UTC)
+Received: from plouf.local (ovpn-192-160.brq.redhat.com [10.40.192.160])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3149B51FF;
+        Mon,  6 Feb 2023 17:13:54 +0000 (UTC)
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+To:     jikos@kernel.org, Luka Guzenko <l.guzenko@web.de>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20230120223741.3007-1-l.guzenko@web.de>
+References: <20230120223741.3007-1-l.guzenko@web.de>
+Subject: Re: [PATCH] HID: Ignore battery for ELAN touchscreen 29DF on HP
+Message-Id: <167570363471.2894697.5963789107129435683.b4-ty@redhat.com>
+Date:   Mon, 06 Feb 2023 18:13:54 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 1 Feb 2023 10:37:50 +0000, Quentin Perret wrote:
-> When using pKVM, we do not reset the EL2 exception vectors back to the
-> stubs for e.g. Power Management or CPU hotplug as we normally do in KVM.
-> As consequence, the initialisation perfomed by __finalise_el2 is missing
-> on e.g. the CPU_RESUME path with pKVM, hence leaving certain registers
-> in an incorrect state.
+On Fri, 20 Jan 2023 23:37:41 +0100, Luka Guzenko wrote:
+> The touchscreen reports a battery status of 0% and jumps to 1% when a
+> stylus is used. The device ID was added and the battery ignore quirk was
+> enabled for it.
 > 
-> One such example is ZCR_EL2 which remains configured with SVE traps
-> enabled. And so using SVE on a CPU that has gone through a hotplug
-> off/on cycle leads to a hyp panic. Not good.
 > 
-> [...]
 
-Applied to kvmarm/next, thanks!
+Applied to hid/hid.git (for-6.2/upstream-fixes), thanks!
 
-[1/4] KVM: arm64: Provide sanitized SYS_ID_AA64SMFR0_EL1 to nVHE
-      https://git.kernel.org/kvmarm/kvmarm/c/8669651ce0d9
-[2/4] KVM: arm64: Introduce finalise_el2_state macro
-      https://git.kernel.org/kvmarm/kvmarm/c/e2d4f5ae1771
-[3/4] KVM: arm64: Use sanitized values in __check_override in nVHE
-      https://git.kernel.org/kvmarm/kvmarm/c/3c4cc31537ec
-[4/4] KVM: arm64: Finalise EL2 state from pKVM PSCI relay
-      https://git.kernel.org/kvmarm/kvmarm/c/6f10f2ec61c7
+[1/1] HID: Ignore battery for ELAN touchscreen 29DF on HP
+      https://git.kernel.org/hid/hid/c/ebebf05a4b06
 
---
-Best,
-Oliver
+Cheers,
+-- 
+Benjamin Tissoires <benjamin.tissoires@redhat.com>
+
