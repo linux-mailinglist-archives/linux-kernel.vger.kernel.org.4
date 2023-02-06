@@ -2,195 +2,470 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B436568B956
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 11:02:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C339968B954
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 11:02:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230121AbjBFKCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 05:02:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54698 "EHLO
+        id S230156AbjBFKCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 05:02:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230102AbjBFKBZ (ORCPT
+        with ESMTP id S230052AbjBFKBX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 05:01:25 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2DEE1353F;
-        Mon,  6 Feb 2023 02:01:23 -0800 (PST)
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Mon, 6 Feb 2023 05:01:23 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B761F49D
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 02:01:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id D4967660302F;
-        Mon,  6 Feb 2023 10:01:21 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1675677682;
-        bh=Obi+vQT5xnaobAxtXIDP6ufWD0ahrxBt2y0sg2Yn4lw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PS6kLO5BoOHCEh7QCx7k5NBBfdXTqFo0TCWhCsb19kjBClbMiS2KQYSeigzDbmqGR
-         UT4yCtLQnDY32M64hpAP3otBPkJd2X5HHQzUeS4fkctwppbm2rBmGYGDkR9g82rcS5
-         SLgYXwC3fa8zNc/19L+ELDqwVNaGk6Az9NFc9rLvdRW6eQUDZjnftwCzAFA9NLW2qz
-         Yxn8Xvw0dMff2E9MdLN2uaYZZZrGMiD82SHkFca+sruLMC2/ceQdUqrYlwGQzwU6xa
-         1XXt2TXVR8mtZN6CbcQhC1aNHMpDYTY6cPsKInPvft4iJFQ6oVMmRFBFNIO8MsqbEs
-         kF37EFB3kzwfQ==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     sboyd@kernel.org
-Cc:     mturquette@baylibre.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com,
-        edward-jw.yang@mediatek.com, johnson.wang@mediatek.com,
-        wenst@chromium.org, miles.chen@mediatek.com,
-        chun-jie.chen@mediatek.com, rex-bc.chen@mediatek.com,
-        jose.exposito89@gmail.com, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-Subject: [PATCH v3 7/7] clk: mediatek: mt8195: Add support for frequency hopping through FHCTL
-Date:   Mon,  6 Feb 2023 11:01:05 +0100
-Message-Id: <20230206100105.861720-8-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230206100105.861720-1-angelogioacchino.delregno@collabora.com>
-References: <20230206100105.861720-1-angelogioacchino.delregno@collabora.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CDE1D60DC6
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 10:01:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C7D5C433EF;
+        Mon,  6 Feb 2023 10:01:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675677679;
+        bh=P7gHPX8VeC0xGWNqt3E7cTseLXGXNsyoDEdxjylXwmc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JQ6gI9uqAkPP2TOYtWS6UMXjht1ToeXVwvGfk/wvXQ340ryz5zbUQtr0iXxg+BbQA
+         drwNaKyt+HDkyBK2EY2LeN68bafxuz+niTosVjH4GYV+7Vyc9YMmHUv3Kjw2DL0xoB
+         v71ZpEsnpvQtXQzR7rASVXoTxVBszTYH38pXlLUK7MoMC2sh0XduMvY872R5IOt8RK
+         1Qz08kisPNp/6aXcA0VPvu4yIpitF0wRBBi5QP2gH3kbO9Md85Ei7m7BT/TVuxd+uM
+         v7BDaGR/kOMsEoP8s9b1t/XxtrnrUcj07oArpLP/CRKJDab9sxSIuprTDcEsYwyaAc
+         nU9OXmpsB4lsQ==
+Date:   Mon, 6 Feb 2023 18:01:13 +0800
+From:   Gao Xiang <xiang@kernel.org>
+To:     Sandeep Dhavale <dhavale@google.com>
+Cc:     Gao Xiang <xiang@kernel.org>, Chao Yu <chao@kernel.org>,
+        Yue Hu <huyue2@coolpad.com>,
+        Jeffle Xu <jefflexu@linux.alibaba.com>,
+        kernel-team@android.com, linux-erofs@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] erofs: replace erofs_unzipd workqueue with per-cpu
+ threads
+Message-ID: <Y+DP6V9fZG7XPPGy@debian>
+Mail-Followup-To: Sandeep Dhavale <dhavale@google.com>,
+        Gao Xiang <xiang@kernel.org>, Chao Yu <chao@kernel.org>,
+        Yue Hu <huyue2@coolpad.com>, Jeffle Xu <jefflexu@linux.alibaba.com>,
+        kernel-team@android.com, linux-erofs@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+References: <20230106073502.4017276-1-dhavale@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230106073502.4017276-1-dhavale@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add FHCTL parameters and register PLLs through FHCTL to add support
-for frequency hopping and SSC. FHCTL will be enabled only on PLLs
-specified in devicetree.
+Hi Sandeep,
 
-This commit brings functional changes only upon addition of
-devicetree configuration.
+On Fri, Jan 06, 2023 at 07:35:01AM +0000, Sandeep Dhavale wrote:
+> Using per-cpu thread pool we can reduce the scheduling latency compared
+> to workqueue implementation. With this patch scheduling latency and
+> variation is reduced as per-cpu threads are high priority kthread_workers.
+> 
+> The results were evaluated on arm64 Android devices running 5.10 kernel.
+> 
+> The table below shows resulting improvements of total scheduling latency
+> for the same app launch benchmark runs with 50 iterations. Scheduling
+> latency is the latency between when the task (workqueue kworker vs
+> kthread_worker) became eligible to run to when it actually started
+> running.
+> +-------------------------+-----------+----------------+---------+
+> |                         | workqueue | kthread_worker |  diff   |
+> +-------------------------+-----------+----------------+---------+
+> | Average (us)            |     15253 |           2914 | -80.89% |
+> | Median (us)             |     14001 |           2912 | -79.20% |
+> | Minimum (us)            |      3117 |           1027 | -67.05% |
+> | Maximum (us)            |     30170 |           3805 | -87.39% |
+> | Standard deviation (us) |      7166 |            359 |         |
+> +-------------------------+-----------+----------------+---------+
+> 
+> Background: Boot times and cold app launch benchmarks are very
+> important to the android ecosystem as they directly translate to
+> responsiveness from user point of view. While erofs provides
+> a lot of important features like space savings, we saw some
+> performance penalty in cold app launch benchmarks in few scenarios.
+> Analysis showed that the significant variance was coming from the
+> scheduling cost while decompression cost was more or less the same.
+> 
+> Having per-cpu thread pool we can see from the above table that this
+> variation is reduced by ~80% on average. This problem was discussed
+> at LPC 2022. Link to LPC 2022 slides and
+> talk at [1]
+> 
+> [1] https://lpc.events/event/16/contributions/1338/
+> 
+> Signed-off-by: Sandeep Dhavale <dhavale@google.com>
+> ---
+> V3 -> V4
+> * Updated commit message with background information
+> V2 -> V3
+> * Fix a warning Reported-by: kernel test robot <lkp@intel.com>
+> V1 -> V2
+> * Changed name of kthread_workers from z_erofs to erofs_worker
+> * Added kernel configuration to run kthread_workers at normal or
+>   high priority
+> * Added cpu hotplug support
+> * Added wrapped kthread_workers under worker_pool
+> * Added one unbound thread in a pool to handle a context where
+>   we already stopped per-cpu kthread worker
+> * Updated commit message
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+I've just modified your v4 patch based on erofs -dev branch with
+my previous suggestion [1], but I haven't tested it.
+
+Could you help check if the updated patch looks good to you and
+test it on your side?  If there are unexpected behaviors, please
+help update as well, thanks!
+
+[1] https://lore.kernel.org/r/5e1b7191-9ea6-3781-7928-72ac4cd88591@linux.alibaba.com/
+
+Thanks,
+Gao Xiang
+
+From 2e87235abc745c0fef8e32abcd3a51546b4378ad Mon Sep 17 00:00:00 2001
+From: Sandeep Dhavale <dhavale@google.com>
+Date: Mon, 6 Feb 2023 17:53:39 +0800
+Subject: [PATCH] erofs: add per-cpu threads for decompression
+
+Using per-cpu thread pool we can reduce the scheduling latency compared
+to workqueue implementation. With this patch scheduling latency and
+variation is reduced as per-cpu threads are high priority kthread_workers.
+
+The results were evaluated on arm64 Android devices running 5.10 kernel.
+
+The table below shows resulting improvements of total scheduling latency
+for the same app launch benchmark runs with 50 iterations. Scheduling
+latency is the latency between when the task (workqueue kworker vs
+kthread_worker) became eligible to run to when it actually started
+running.
++-------------------------+-----------+----------------+---------+
+|                         | workqueue | kthread_worker |  diff   |
++-------------------------+-----------+----------------+---------+
+| Average (us)            |     15253 |           2914 | -80.89% |
+| Median (us)             |     14001 |           2912 | -79.20% |
+| Minimum (us)            |      3117 |           1027 | -67.05% |
+| Maximum (us)            |     30170 |           3805 | -87.39% |
+| Standard deviation (us) |      7166 |            359 |         |
++-------------------------+-----------+----------------+---------+
+
+Background: Boot times and cold app launch benchmarks are very
+important to the android ecosystem as they directly translate to
+responsiveness from user point of view. While erofs provides
+a lot of important features like space savings, we saw some
+performance penalty in cold app launch benchmarks in few scenarios.
+Analysis showed that the significant variance was coming from the
+scheduling cost while decompression cost was more or less the same.
+
+Having per-cpu thread pool we can see from the above table that this
+variation is reduced by ~80% on average. This problem was discussed
+at LPC 2022. Link to LPC 2022 slides and
+talk at [1]
+
+[1] https://lpc.events/event/16/contributions/1338/
+
+Signed-off-by: Sandeep Dhavale <dhavale@google.com>
+Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
 ---
- drivers/clk/mediatek/clk-mt8195-apmixedsys.c | 69 +++++++++++++++++++-
- 1 file changed, 66 insertions(+), 3 deletions(-)
+ fs/erofs/Kconfig |  18 +++++
+ fs/erofs/zdata.c | 190 ++++++++++++++++++++++++++++++++++++++++++-----
+ 2 files changed, 189 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/clk/mediatek/clk-mt8195-apmixedsys.c b/drivers/clk/mediatek/clk-mt8195-apmixedsys.c
-index 1bc917f2667e..c0db31ce0741 100644
---- a/drivers/clk/mediatek/clk-mt8195-apmixedsys.c
-+++ b/drivers/clk/mediatek/clk-mt8195-apmixedsys.c
-@@ -3,9 +3,11 @@
- // Copyright (c) 2021 MediaTek Inc.
- // Author: Chun-Jie Chen <chun-jie.chen@mediatek.com>
+diff --git a/fs/erofs/Kconfig b/fs/erofs/Kconfig
+index 85490370e0ca..704fb59577e0 100644
+--- a/fs/erofs/Kconfig
++++ b/fs/erofs/Kconfig
+@@ -108,3 +108,21 @@ config EROFS_FS_ONDEMAND
+ 	  read support.
  
-+#include "clk-fhctl.h"
- #include "clk-gate.h"
- #include "clk-mtk.h"
- #include "clk-pll.h"
-+#include "clk-pllfh.h"
+ 	  If unsure, say N.
++
++config EROFS_FS_PCPU_KTHREAD
++	bool "EROFS per-cpu decompression kthread workers"
++	depends on EROFS_FS_ZIP
++	help
++	  Saying Y here enables per-CPU kthread workers pool to carry out
++	  async decompression for low latencies on some architectures.
++
++	  If unsure, say N.
++
++config EROFS_FS_PCPU_KTHREAD_HIPRI
++	bool "EROFS high priority per-CPU kthread workers"
++	depends on EROFS_FS_ZIP && EROFS_FS_PCPU_KTHREAD
++	help
++	  This permits EROFS to configure per-CPU kthread workers to run
++	  at higher priority.
++
++	  If unsure, say N.
+diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
+index 384f64292f73..73198f494a6a 100644
+--- a/fs/erofs/zdata.c
++++ b/fs/erofs/zdata.c
+@@ -7,6 +7,8 @@
+ #include "compress.h"
+ #include <linux/prefetch.h>
+ #include <linux/psi.h>
++#include <linux/slab.h>
++#include <linux/cpuhotplug.h>
  
- #include <dt-bindings/clock/mt8195-clk.h>
- #include <linux/of_device.h>
-@@ -105,6 +107,61 @@ static const struct mtk_pll_data plls[] = {
- 	    0, 0, 22, 0x0158, 24, 0, 0, 0, 0x0158, 0, 0x0158, 0, 9),
+ #include <trace/events/erofs.h>
+ 
+@@ -109,6 +111,7 @@ struct z_erofs_decompressqueue {
+ 	union {
+ 		struct completion done;
+ 		struct work_struct work;
++		struct kthread_work kthread_work;
+ 	} u;
+ 	bool eio, sync;
  };
+@@ -341,24 +344,128 @@ static void z_erofs_free_pcluster(struct z_erofs_pcluster *pcl)
  
-+enum fh_pll_id {
-+	FH_ARMPLL_LL,
-+	FH_ARMPLL_BL,
-+	FH_MEMPLL,
-+	FH_ADSPPLL,
-+	FH_NNAPLL,
-+	FH_CCIPLL,
-+	FH_MFGPLL,
-+	FH_TVDPLL2,
-+	FH_MPLL,
-+	FH_MMPLL,
-+	FH_MAINPLL,
-+	FH_MSDCPLL,
-+	FH_IMGPLL,
-+	FH_VDECPLL,
-+	FH_TVDPLL1,
-+	FH_NR_FH,
-+};
+ static struct workqueue_struct *z_erofs_workqueue __read_mostly;
+ 
+-void z_erofs_exit_zip_subsystem(void)
++#ifdef CONFIG_EROFS_FS_PCPU_KTHREAD
++static struct kthread_worker __rcu **z_erofs_pcpu_workers;
 +
-+#define FH(_pllid, _fhid, _offset) {					\
-+		.data = {						\
-+			.pll_id = _pllid,				\
-+			.fh_id = _fhid,					\
-+			.fh_ver = FHCTL_PLLFH_V2,			\
-+			.fhx_offset = _offset,				\
-+			.dds_mask = GENMASK(21, 0),			\
-+			.slope0_value = 0x6003c97,			\
-+			.slope1_value = 0x6003c97,			\
-+			.sfstrx_en = BIT(2),				\
-+			.frddsx_en = BIT(1),				\
-+			.fhctlx_en = BIT(0),				\
-+			.tgl_org = BIT(31),				\
-+			.dvfs_tri = BIT(31),				\
-+			.pcwchg = BIT(31),				\
-+			.dt_val = 0x0,					\
-+			.df_val = 0x9,					\
-+			.updnlmt_shft = 16,				\
-+			.msk_frddsx_dys = GENMASK(23, 20),		\
-+			.msk_frddsx_dts = GENMASK(19, 16),		\
-+		},							\
-+	}
-+
-+static struct mtk_pllfh_data pllfhs[] = {
-+	FH(CLK_APMIXED_ADSPPLL, FH_ADSPPLL, 0x78),
-+	FH(CLK_APMIXED_NNAPLL, FH_NNAPLL, 0x8c),
-+	FH(CLK_APMIXED_MFGPLL, FH_MFGPLL, 0xb4),
-+	FH(CLK_APMIXED_TVDPLL2, FH_TVDPLL2, 0xc8),
-+	FH(CLK_APMIXED_MMPLL, FH_MMPLL, 0xf0),
-+	FH(CLK_APMIXED_MAINPLL, FH_MAINPLL, 0x104),
-+	FH(CLK_APMIXED_MSDCPLL, FH_MSDCPLL, 0x118),
-+	FH(CLK_APMIXED_IMGPLL, FH_IMGPLL, 0x12c),
-+	FH(CLK_APMIXED_VDECPLL, FH_VDECPLL, 0x140),
-+	FH(CLK_APMIXED_TVDPLL2, FH_TVDPLL1, 0x154),
-+};
-+
- static const struct of_device_id of_match_clk_mt8195_apmixed[] = {
- 	{ .compatible = "mediatek,mt8195-apmixedsys", },
- 	{}
-@@ -114,13 +171,17 @@ static int clk_mt8195_apmixed_probe(struct platform_device *pdev)
++static void erofs_destroy_percpu_workers(void)
  {
- 	struct clk_hw_onecell_data *clk_data;
- 	struct device_node *node = pdev->dev.of_node;
-+	const u8 *fhctl_node = "mediatek,mt8195-fhctl";
- 	int r;
- 
- 	clk_data = mtk_alloc_clk_data(CLK_APMIXED_NR_CLK);
- 	if (!clk_data)
- 		return -ENOMEM;
- 
--	r = mtk_clk_register_plls(node, plls, ARRAY_SIZE(plls), clk_data);
-+	fhctl_parse_dt(fhctl_node, pllfhs, ARRAY_SIZE(pllfhs));
+-	destroy_workqueue(z_erofs_workqueue);
+-	z_erofs_destroy_pcluster_pool();
++	struct kthread_worker *worker;
++	unsigned int cpu;
 +
-+	r = mtk_clk_register_pllfhs(node, plls, ARRAY_SIZE(plls),
-+				    pllfhs, ARRAY_SIZE(pllfhs), clk_data);
- 	if (r)
- 		goto free_apmixed_data;
++	for_each_possible_cpu(cpu) {
++		worker = rcu_dereference_protected(
++					z_erofs_pcpu_workers[cpu], 1);
++		rcu_assign_pointer(z_erofs_pcpu_workers[cpu], NULL);
++		if (worker)
++			kthread_destroy_worker(worker);
++	}
++	kfree(z_erofs_pcpu_workers);
+ }
  
-@@ -140,7 +201,8 @@ static int clk_mt8195_apmixed_probe(struct platform_device *pdev)
- unregister_gates:
- 	mtk_clk_unregister_gates(apmixed_clks, ARRAY_SIZE(apmixed_clks), clk_data);
- unregister_plls:
--	mtk_clk_unregister_plls(plls, ARRAY_SIZE(plls), clk_data);
-+	mtk_clk_unregister_pllfhs(plls, ARRAY_SIZE(plls), pllfhs,
-+				  ARRAY_SIZE(pllfhs), clk_data);
- free_apmixed_data:
- 	mtk_free_clk_data(clk_data);
- 	return r;
-@@ -153,7 +215,8 @@ static int clk_mt8195_apmixed_remove(struct platform_device *pdev)
+-static inline int z_erofs_init_workqueue(void)
++static struct kthread_worker *erofs_init_percpu_worker(int cpu)
+ {
+-	const unsigned int onlinecpus = num_possible_cpus();
++	struct kthread_worker *worker =
++		kthread_create_worker_on_cpu(cpu, 0, "erofs_worker/%u", cpu);
  
- 	of_clk_del_provider(node);
- 	mtk_clk_unregister_gates(apmixed_clks, ARRAY_SIZE(apmixed_clks), clk_data);
--	mtk_clk_unregister_plls(plls, ARRAY_SIZE(plls), clk_data);
-+	mtk_clk_unregister_pllfhs(plls, ARRAY_SIZE(plls), pllfhs,
-+				  ARRAY_SIZE(pllfhs), clk_data);
- 	mtk_free_clk_data(clk_data);
+-	/*
+-	 * no need to spawn too many threads, limiting threads could minimum
+-	 * scheduling overhead, perhaps per-CPU threads should be better?
+-	 */
+-	z_erofs_workqueue = alloc_workqueue("erofs_unzipd",
+-					    WQ_UNBOUND | WQ_HIGHPRI,
+-					    onlinecpus + onlinecpus / 4);
+-	return z_erofs_workqueue ? 0 : -ENOMEM;
++	if (IS_ERR(worker))
++		return worker;
++	if (IS_ENABLED(CONFIG_EROFS_FS_PCPU_KTHREAD_HIPRI))
++		sched_set_fifo_low(worker->task);
++	else
++		sched_set_normal(worker->task, 0);
++	return worker;
++}
++
++static int erofs_init_percpu_workers(void)
++{
++	struct kthread_worker *worker;
++	unsigned int cpu;
++
++	z_erofs_pcpu_workers = kcalloc(num_possible_cpus(),
++			sizeof(struct kthread_worker *), GFP_ATOMIC);
++	if (!z_erofs_pcpu_workers)
++		return -ENOMEM;
++
++	for_each_online_cpu(cpu) {	/* could miss cpu{off,on}line? */
++		worker = erofs_init_percpu_worker(cpu);
++		if (!IS_ERR(worker))
++			rcu_assign_pointer(z_erofs_pcpu_workers[cpu], worker);
++	}
++	return 0;
++}
++#else
++static inline void erofs_destroy_percpu_workers(void) {}
++static inline int erofs_init_percpu_workers(void) { return 0; }
++#endif
++
++#if defined(CONFIG_HOTPLUG_CPU) && defined(EROFS_FS_PCPU_KTHREAD)
++static DEFINE_SPINLOCK(z_erofs_pcpu_worker_lock);
++static enum cpuhp_state erofs_cpuhp_state;
++
++static int erofs_cpu_online(unsigned int cpu)
++{
++	struct kthread_worker *worker, *old;
++
++	worker = erofs_init_percpu_worker(cpu);
++	if (IS_ERR(worker))
++		return ERR_PTR(worker);
++
++	spin_lock(&z_erofs_pcpu_worker_lock);
++	old = rcu_dereference_protected(z_erofs_pcpu_workers[cpu],
++			lockdep_is_held(&z_erofs_pcpu_worker_lock));
++	if (!old)
++		rcu_assign_pointer(z_erofs_pcpu_workers[cpu], worker);
++	spin_unlock(&z_erofs_pcpu_worker_lock);
++	if (old)
++		kthread_destroy_worker(worker);
++	return 0;
++}
++
++static int erofs_cpu_offline(unsigned int cpu)
++{
++	struct kthread_worker *worker;
++
++	spin_lock(&z_erofs_pcpu_worker_lock);
++	worker = rcu_dereference_protected(z_erofs_pcpu_workers[cpu],
++			lockdep_is_held(&z_erofs_pcpu_worker_lock));
++	rcu_assign_pointer(worker_pool.workers[cpu], NULL);
++	spin_unlock(&z_erofs_pcpu_worker_lock);
++
++	synchronize_rcu();
++	if (worker)
++		kthread_destroy_worker(worker);
++	return 0;
++}
++
++static int erofs_cpu_hotplug_init(void)
++{
++	int state;
++
++	state = cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN,
++			"fs/erofs:online", erofs_cpu_online, erofs_cpu_offline);
++	if (state < 0)
++		return state;
++
++	erofs_cpuhp_state = state;
++	return 0;
++}
++
++static void erofs_cpu_hotplug_destroy(void)
++{
++	if (erofs_cpuhp_state)
++		cpuhp_remove_state_nocalls(erofs_cpuhp_state);
++}
++#else /* !CONFIG_HOTPLUG_CPU || !CONFIG_EROFS_FS_PCPU_KTHREAD */
++static inline int erofs_cpu_hotplug_init(void) { return 0; }
++static inline void erofs_cpu_hotplug_destroy(void) {}
++#endif
++
++void z_erofs_exit_zip_subsystem(void)
++{
++	erofs_cpu_hotplug_destroy();
++	erofs_destroy_percpu_workers();
++	destroy_workqueue(z_erofs_workqueue);
++	z_erofs_destroy_pcluster_pool();
+ }
  
- 	return 0;
+ int __init z_erofs_init_zip_subsystem(void)
+@@ -366,10 +473,29 @@ int __init z_erofs_init_zip_subsystem(void)
+ 	int err = z_erofs_create_pcluster_pool();
+ 
+ 	if (err)
+-		return err;
+-	err = z_erofs_init_workqueue();
++		goto out_error_pcluster_pool;
++
++	z_erofs_workqueue = alloc_workqueue("erofs_worker",
++			WQ_UNBOUND | WQ_HIGHPRI, num_possible_cpus());
++	if (!z_erofs_workqueue)
++		goto out_error_workqueue_init;
++
++	err = erofs_init_percpu_workers();
+ 	if (err)
+-		z_erofs_destroy_pcluster_pool();
++		goto out_error_pcpu_worker;
++
++	err = erofs_cpu_hotplug_init();
++	if (err < 0)
++		goto out_error_cpuhp_init;
++	return err;
++
++out_error_cpuhp_init:
++	erofs_destroy_percpu_workers();
++out_error_pcpu_worker:
++	destroy_workqueue(z_erofs_workqueue);
++out_error_workqueue_init:
++	z_erofs_destroy_pcluster_pool();
++out_error_pcluster_pool:
+ 	return err;
+ }
+ 
+@@ -1305,11 +1431,17 @@ static void z_erofs_decompressqueue_work(struct work_struct *work)
+ 
+ 	DBG_BUGON(bgq->head == Z_EROFS_PCLUSTER_TAIL_CLOSED);
+ 	z_erofs_decompress_queue(bgq, &pagepool);
+-
+ 	erofs_release_pages(&pagepool);
+ 	kvfree(bgq);
+ }
+ 
++#ifdef CONFIG_EROFS_FS_PCPU_KTHREAD
++static void z_erofs_decompressqueue_kthread_work(struct kthread_work *work)
++{
++	z_erofs_decompressqueue_work((struct work_struct *)work);
++}
++#endif
++
+ static void z_erofs_decompress_kickoff(struct z_erofs_decompressqueue *io,
+ 				       int bios)
+ {
+@@ -1324,9 +1456,24 @@ static void z_erofs_decompress_kickoff(struct z_erofs_decompressqueue *io,
+ 
+ 	if (atomic_add_return(bios, &io->pending_bios))
+ 		return;
+-	/* Use workqueue and sync decompression for atomic contexts only */
++	/* Use (kthread_)work and sync decompression for atomic contexts only */
+ 	if (in_atomic() || irqs_disabled()) {
++#ifdef CONFIG_EROFS_FS_PCPU_KTHREAD
++		struct kthread_worker *worker;
++
++		rcu_read_lock();
++		worker = rcu_dereference(
++				z_erofs_pcpu_workers[raw_smp_processor_id()]);
++		if (!worker) {
++			INIT_WORK(&io->u.work, z_erofs_decompressqueue_work);
++			queue_work(z_erofs_workqueue, &io->u.work);
++		} else {
++			kthread_queue_work(worker, &io->u.kthread_work);
++		}
++		rcu_read_unlock();
++#else
+ 		queue_work(z_erofs_workqueue, &io->u.work);
++#endif
+ 		/* enable sync decompression for readahead */
+ 		if (sbi->opt.sync_decompress == EROFS_SYNC_DECOMPRESS_AUTO)
+ 			sbi->opt.sync_decompress = EROFS_SYNC_DECOMPRESS_FORCE_ON;
+@@ -1455,7 +1602,12 @@ static struct z_erofs_decompressqueue *jobqueue_init(struct super_block *sb,
+ 			*fg = true;
+ 			goto fg_out;
+ 		}
++#ifdef CONFIG_EROFS_FS_PCPU_KTHREAD
++		kthread_init_work(&q->u.kthread_work,
++				  z_erofs_decompressqueue_kthread_work);
++#else
+ 		INIT_WORK(&q->u.work, z_erofs_decompressqueue_work);
++#endif
+ 	} else {
+ fg_out:
+ 		q = fgq;
+@@ -1640,7 +1792,7 @@ static void z_erofs_submit_queue(struct z_erofs_decompress_frontend *f,
+ 
+ 	/*
+ 	 * although background is preferred, no one is pending for submission.
+-	 * don't issue workqueue for decompression but drop it directly instead.
++	 * don't issue decompression but drop it directly instead.
+ 	 */
+ 	if (!*force_fg && !nr_bios) {
+ 		kvfree(q[JQ_SUBMIT]);
 -- 
-2.39.1
+2.30.2
 
