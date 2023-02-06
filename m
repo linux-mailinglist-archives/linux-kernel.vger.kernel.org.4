@@ -2,46 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9545E68BE2B
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 14:31:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E087A68BE36
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 14:31:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbjBFNbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 08:31:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36312 "EHLO
+        id S229780AbjBFNbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 08:31:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbjBFNa5 (ORCPT
+        with ESMTP id S229571AbjBFNbF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 08:30:57 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21616C64E;
-        Mon,  6 Feb 2023 05:30:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=rPMkQ0FfP4TyRB/ySG5okmmWPtiq9gLsybMziD5gFZM=; b=UAxI0Su9v5V5lSCU6VZytS5V0m
-        NY+XATGnn5+0t+lpa5rR5p96QQ/AJYWFCIBGP5oUnK+FbmW+TzFAdjMvV8Af9wZYgykulALD1s8TL
-        lMuDgHlxkj4LhPEcvrqfkJRwoCi/y1+rXaE61u25d+lE6OFJoC9+HNW+dzeoM0e9bnF0=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pP1Zy-004Cla-GO; Mon, 06 Feb 2023 14:30:42 +0100
-Date:   Mon, 6 Feb 2023 14:30:42 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hkallweit1@gmail.com,
-        linux@armlinux.org.uk, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, michael@walle.cc
-Subject: Re: [PATCH net-next v3 1/2] net: micrel: Add support for lan8841 PHY
-Message-ID: <Y+EBArQ5JP5bRZpc@lunn.ch>
-References: <20230206082302.958826-1-horatiu.vultur@microchip.com>
- <20230206082302.958826-2-horatiu.vultur@microchip.com>
+        Mon, 6 Feb 2023 08:31:05 -0500
+X-Greylist: delayed 7930 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 06 Feb 2023 05:31:02 PST
+Received: from xry111.site (xry111.site [89.208.246.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 630E8C17B;
+        Mon,  6 Feb 2023 05:31:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+        s=default; t=1675690262;
+        bh=BcNBytG8LpyrimbJYLehCH+h5QW9ST/22z207Ized/Y=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=G/Bqfhy1zdS1uco+N2xY1SWkwHT7wFq3xB9lGtwxA0yLnLEipotKPEohs/i69CdTy
+         KuqD6gOcfKgwj8agrf2yo84irDWtJkrui48eYypecZWFCDrSW7v4xtLLULFNM6cPhj
+         O5RGNADqsH8g++daoimUkIyyWH+gvRw/xIZrGbek=
+Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+        (Client did not present a certificate)
+        (Authenticated sender: xry111@xry111.site)
+        by xry111.site (Postfix) with ESMTPSA id E102965EB0;
+        Mon,  6 Feb 2023 08:30:58 -0500 (EST)
+Message-ID: <74ffc2c05475c6af391b87a06df477ae390cc45c.camel@xry111.site>
+Subject: Re: [PATCH] LoongArch: Make -mstrict-align be configurable
+From:   Xi Ruoyao <xry111@xry111.site>
+To:     Jianmin Lv <lvjianmin@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 06 Feb 2023 21:30:55 +0800
+In-Reply-To: <3b17d229-bad4-e6a0-9055-c585dd5a62e4@loongson.cn>
+References: <20230202084238.2408516-1-chenhuacai@loongson.cn>
+         <5fc85453-1e2c-1f00-7879-1b5fa318c78a@xen0n.name>
+         <5303aeda-5c66-ede6-b3ac-7d8ebd73ec70@loongson.cn>
+         <b1809500e4d55564a1084a3014fb9603ba3d1438.camel@xry111.site>
+         <3b17d229-bad4-e6a0-9055-c585dd5a62e4@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230206082302.958826-2-horatiu.vultur@microchip.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -51,55 +63,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +#define LAN8841_MMD_TIMER_REG			0
-> +#define LAN8841_MMD0_REGISTER_17		17
-> +#define LAN8841_MMD0_REGISTER_17_DROP_OPT(x)	((x) & 0x3)
-> +#define LAN8841_MMD0_REGISTER_17_XMIT_TOG_TX_DIS	BIT(3)
-> +#define LAN8841_OPERATION_MODE_STRAP_OVERRIDE_LOW_REG	2
-> +#define LAN8841_OPERATION_MODE_STRAP_OVERRIDE_LOW_REG_MAGJACK	BIT(14)
-> +#define LAN8841_MMD_ANALOG_REG			28
-> +#define LAN8841_ANALOG_CONTROL_1		1
-> +#define LAN8841_ANALOG_CONTROL_1_PLL_TRIM(x)	(((x) & 0x3) << 5)
-> +#define LAN8841_ANALOG_CONTROL_10		13
-> +#define LAN8841_ANALOG_CONTROL_10_PLL_DIV(x)	((x) & 0x3)
-> +#define LAN8841_ANALOG_CONTROL_11		14
-> +#define LAN8841_ANALOG_CONTROL_11_LDO_REF(x)	(((x) & 0x7) << 12)
-> +#define LAN8841_TX_LOW_I_CH_C_D_POWER_MANAGMENT	69
-> +#define LAN8841_TX_LOW_I_CH_C_D_POWER_MANAGMENT_VAL 0xbffc
-> +#define LAN8841_BTRX_POWER_DOWN			70
-> +#define LAN8841_BTRX_POWER_DOWN_QBIAS_CH_A	BIT(0)
-> +#define LAN8841_BTRX_POWER_DOWN_BTRX_CH_A	BIT(1)
-> +#define LAN8841_BTRX_POWER_DOWN_QBIAS_CH_B	BIT(2)
-> +#define LAN8841_BTRX_POWER_DOWN_BTRX_CH_B	BIT(3)
-> +#define LAN8841_BTRX_POWER_DOWN_BTRX_CH_C	BIT(5)
-> +#define LAN8841_BTRX_POWER_DOWN_BTRX_CH_D	BIT(7)
-> +#define LAN8841_ADC_CHANNEL_MASK		198
-> +static int lan8841_config_init(struct phy_device *phydev)
-> +{
-> +	int err;
+On Mon, 2023-02-06 at 21:13 +0800, Jianmin Lv wrote:
+> > (1) Is the difference contributed by a bad code generation of GCC?=C2=
+=A0 If
+> > true, it's better to improve GCC before someone starts to build a distr=
+o
+> > for LA264 as it would benefit the user space as well.
+> >=20
+> AFAIK, GCC builds to produce unaligned-access-enabled target binary by
+> default (without -mstrict-align) for improving user space performance=20
+> (small size and runtime high performance), which is also based the fact=
+=20
+> that the vast majority of LoongArch CPUs support unaligned-access.
 
-It would be good to add a blank line before the function.
+I mean: if someone starts to build a distro for a less-capable LoongArch
+processor, (s)he will need an entire user space compiled with -mstrict-
+align.  So it would be better to start preparation now.
 
-> +	int ret;
+And it's likely (s)he will either submit a GCC patch to make GCC
+enable/disable -mstrict-align based on the -march=3D (--with-arch at
+configure time) value, or hack GCC to enable -mstrict-align by default
+for the distro.  So I think we'll also need:
 
-I don't think you need both err and ret. But i expect the compiler is
-optimising one of them out anyway.
+> +ifdef CONFIG_ARCH_STRICT_ALIGN may enable strict align by default.
+>  # Don't emit unaligned accesses.
+>  # Not all LoongArch cores support unaligned access, and as kernel we can=
+'t
+>  # rely on others to provide emulation for these accesses.
+>  KBUILD_CFLAGS +=3D $(call cc-option,-mstrict-align)
+  +else
+  +# Distros designed for running on both kind of processors may disable
+  +# strict align by default, but the user may want a no-strict-align=C2=A0
+  +# kernel for his/her specific hardware.
+   KBUILD_CFLAGS +=3D $(call cc-option,-mno-strict-align)
+> +endif
 
-> +
-> +#define LAN8841_OUTPUT_CTRL			25
-> +#define LAN8841_OUTPUT_CTRL_INT_BUFFER		BIT(14)
-> +static int lan8841_config_intr(struct phy_device *phydev)
-> +{
-
-Blank line again, it helpers make the functions stand out.
-
-
-> +#define LAN8841_OPERATION_MODE_STRAP_LOW_REGISTER 3
-> +#define LAN8841_OPERATION_MODE_STRAP_LOW_REGISTER_STRAP_RGMII_EN BIT(0)
-> +static int lan8841_probe(struct phy_device *phydev)
-> +{
-> +	int err;
-
-...
-
-	Andrew
+--=20
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University
