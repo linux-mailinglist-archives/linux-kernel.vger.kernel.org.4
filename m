@@ -2,151 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2054368BF8F
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 15:07:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8083168BF97
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 15:08:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231516AbjBFOHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 09:07:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48260 "EHLO
+        id S231533AbjBFOIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 09:08:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231387AbjBFOHd (ORCPT
+        with ESMTP id S231411AbjBFOHv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 09:07:33 -0500
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C2A3274AA
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 06:04:57 -0800 (PST)
-Received: by mail-ot1-x330.google.com with SMTP id r34-20020a05683044a200b0068d4a8a8d2dso3209177otv.12
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 06:04:57 -0800 (PST)
+        Mon, 6 Feb 2023 09:07:51 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E09EC2BEC9
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 06:05:29 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id o36so8763355wms.1
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 06:05:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FqCfgYIduMpW5p7a5hUsldl/3wfeQTqY76tooEP032g=;
-        b=DnyGpXsFlpveu0IYQM1Xfx9HIIaoLeO8QN5tGRVRkU1waaDsD7k2MlmoY2PvSu/fUx
-         EAgJoOhqef51u1Cebvfe6nMpHvPzOq5jmJvyZE90OzHlCeYb/KBZg6IriOX5jvpeHWhg
-         GJxcqYXT8E9bRsPxbpNGMwLftCOptjcli/2Az1dHVC115LPYnZ1HU48Gnf5opwb1i38q
-         J3T/ZemXPMYtg2BBLdKPn4lbc78600Hcc2FBYDoyD3QHLxOUNkEsTGa3+BZYYoHJ6O+G
-         osxpaTNE4ugadm22ElvMJDZli41BaG9TSjclZXoIzdiM1nskavJysfbsotpO9Dq28ZKr
-         Nl4w==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=l1sBDHSdASz4ecLzalMdlfELS8RCcYMZ2sk1AegZ7C4=;
+        b=gUDkn0Nk6osoDg6kBIqb4HgThjeRoU3B4yStY9UPgtkSB4y1icRX/nUz/3C0iAIpEm
+         MEDJnt9vnKjADTSJTi/kI8xh0D1PAvXE7gH5tvVQcf8lgVPHzvsc5HnaQOH1XCzK8HqA
+         iLF14vnXPg2R+rqK6qe3qmaCI98vVcpebABOShNnLKS3xsvXq448T7tqXjuyVVxuKx9g
+         yMS5bniysbumzLDbyVXjr/7YPXLCHBoUeOW+P4N/JovSFBu+zje1qoxWataFiEkxgOE+
+         ofZGWBbvJfP+qu1nMsNHPX/6rHYDCqnit3Br9d1aFXvJkdUEMDG8tGXoizjtkjstYorr
+         zWKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FqCfgYIduMpW5p7a5hUsldl/3wfeQTqY76tooEP032g=;
-        b=ImQY4KgK4lXWVUSZVu2Lvm4SovYxoQxCRjYELPOUst51/gIO9WJNpNjD/7leh7FyxE
-         fEp5suR2A6CFwDm+C0NM4N5zOzSeQAjk4WWueiKDKyNn4zQ0Sw2CkaUOVOzOs3bG6sRm
-         YwCKNsBlIgm/2BN7GPF8mc+tvKPJrc+PPIIvAtJ+HD5l0nEgqBGLE6V7gj3m8p84xjAm
-         p+wmtC46r2puXDw6YMbYJbtKB8bYSKfvJfgoRdl0JfNOpfm7uIwRQzZCQLOraZvJzONi
-         gZs1THGEYzFPXRP54C/cTqlPODbzI4wgUo2ruN+BVa+ZOM4xp/YiRoS1bRofUSc0rgbE
-         nTNg==
-X-Gm-Message-State: AO0yUKXTMZaTsVKBN3XLaqxVCbaISaG2Fo9E5TGFagWPXqYExkItb6ap
-        bw3S72yl8gsfwkxGdsU42EQ=
-X-Google-Smtp-Source: AK7set9SFjS0GJsFRorEMiNYTOeUZqrzss49nl/vIfEMjuHcvaD0UnXQMmuGOYXd1ZcVf1Ek/JAjYA==
-X-Received: by 2002:a9d:1b27:0:b0:68b:dd09:2b6 with SMTP id l36-20020a9d1b27000000b0068bdd0902b6mr11374574otl.25.1675692284033;
-        Mon, 06 Feb 2023 06:04:44 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d22-20020a9d5e16000000b006864b5f4650sm5030851oti.46.2023.02.06.06.04.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Feb 2023 06:04:43 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <1ba5cedb-0f0f-69a9-96f0-d93ba060745e@roeck-us.net>
-Date:   Mon, 6 Feb 2023 06:04:41 -0800
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=l1sBDHSdASz4ecLzalMdlfELS8RCcYMZ2sk1AegZ7C4=;
+        b=5sQ5v2liY/IUzv3KUgOpLMx9mxexd/4Qb/snMyH9inYz+wyD4V2xX5ETrI7VZhsCQO
+         G9YGr+ynOonJ7fJpfWtHUWj4YHd5UyIxwKs5/6RYLogshc9RmHJ7FX7gzdcjjellCatO
+         8HCrXcmHsL8o5Yg4kTBSn6FsK9Q2aLWLgSYbtYu2EPo7hC+Ci1w8g8TqRagZdmTQgBwx
+         ETN25F9n4av/JozSMp8E62nwRNx4ngPB7aHeK40djKOvECKYQFJIH/TyZZV1mn1JRwfJ
+         J1A146d7fAlqA6hv3JWCUXC2OOBO7L9W3Wi59RDAcFZqvQ8tp5yeMQGhz+TVyX9AFGeL
+         gKyg==
+X-Gm-Message-State: AO0yUKWhRQayKdRa1viPEWpYhbSXc2UUA8kxccTg/pnKSibNzlQSoDKO
+        Jdk4L7AuGEp80GZazgIcTxNIAQ==
+X-Google-Smtp-Source: AK7set8CdDqbiahcj1npFpmbebayGsvVRXrv4P1LiTprnhax7cXuxebkMZ+iX0ubTVrxQMT9rjIupw==
+X-Received: by 2002:a05:600c:3849:b0:3d5:365b:773e with SMTP id s9-20020a05600c384900b003d5365b773emr20826426wmr.39.1675692304690;
+        Mon, 06 Feb 2023 06:05:04 -0800 (PST)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id q9-20020a1ce909000000b003dc34edacf8sm15917337wmc.31.2023.02.06.06.05.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Feb 2023 06:05:04 -0800 (PST)
+Date:   Mon, 6 Feb 2023 16:05:02 +0200
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: Re: [PATCH v7 08/12] phy: qcom-qmp-pcie: Add support for SM8550 g3x2
+ and g4x2 PCIEs
+Message-ID: <Y+EJDofgt6I/abyp@linaro.org>
+References: <20230203081807.2248625-1-abel.vesa@linaro.org>
+ <20230203081807.2248625-9-abel.vesa@linaro.org>
+ <Y9zU2jBdSD72W28F@hovoldconsulting.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Content-Language: en-US
-To:     David Rau <david.rau.zg@renesas.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     "perex@perex.cz" <perex@perex.cz>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "tiwai@suse.com" <tiwai@suse.com>,
-        "support.opensource@diasemi.com" <support.opensource@diasemi.com>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230117195645.GA83401@roeck-us.net>
- <OS3PR01MB66416CEF9F6E5AE62D194BACCDC49@OS3PR01MB6641.jpnprd01.prod.outlook.com>
- <20230119161221.GA981953@roeck-us.net>
- <OS3PR01MB66416C10BF8E6400C84DAD02CDD09@OS3PR01MB6641.jpnprd01.prod.outlook.com>
- <38f09c4d-70d1-f65f-6e9b-4ad84eda4059@roeck-us.net>
- <Y9kE1cSUg2CQM5vq@sirena.org.uk> <20230202155101.GB1373010@roeck-us.net>
- <Y9vtIISfmpICi+9u@sirena.org.uk>
- <8f89eeac-b3ef-4137-80df-6cf044873b05@roeck-us.net>
- <Y9wQygzbFyOWl54r@sirena.org.uk> <20230204154222.GA877819@roeck-us.net>
- <OS3PR01MB6641CA1DB8524BCA0F9867D9CDDA9@OS3PR01MB6641.jpnprd01.prod.outlook.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] ASoC: da7219: Fix pole orientation detection on OMTP
- headsets when playing music
-In-Reply-To: <OS3PR01MB6641CA1DB8524BCA0F9867D9CDDA9@OS3PR01MB6641.jpnprd01.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9zU2jBdSD72W28F@hovoldconsulting.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/5/23 21:38, David Rau wrote:
+On 23-02-03 10:33:14, Johan Hovold wrote:
+> On Fri, Feb 03, 2023 at 10:18:03AM +0200, Abel Vesa wrote:
+> > Add the SM8550 both g4 and g3 configurations. In addition, there is a
+> > new "lane shared" table that needs to be configured for g4, along with
+> > the No-CSR list of resets.
 > 
+> Could you add a comment about the new nocsr reset and how it is used
+> here?
+>  
+> > Co-developed-by: Neil Armstrong <neil.armstrong@linaro.org>
+> > Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > ---
+> > 
+> > This patchset relies on the following patchset:
+> > https://lore.kernel.org/all/20230117224148.1914627-1-abel.vesa@linaro.org/
+> > 
+> > The v6 of this patch is:
+> > https://lore.kernel.org/all/20230202123902.3831491-9-abel.vesa@linaro.org/
+> > 
+> > Changes since v6:
+> >  * none
+> > 
+> > Changes since v5:
+> >  * renmaed the no-CSR reset to "phy_nocsr" as discussed off-list with
+> >    Bjorn and Johan
+> > 
+> > Changes since v4:
+> >  * dropped _serdes infix from ln_shrd table name and from every ln_shrd
+> >    variable name
+> >  * added hyphen between "no CSR" in both places
+> >  * dropped has_ln_shrd_serdes_tbl
+> >  * reordered qmp_pcie_offsets_v6_20 by struct members
+> >  * added rollback for no-CSR reset in qmp_pcie_init fail path
+> >  * moved ln_shrd offset calculation after port_b
+> > 
+> > Changes since v3:
+> >  * added Dmitry's R-b tag
+> > 
+> > Changes since v2:
+> >  * none
+> > 
+> > Changes since v1:
+> >  * split all the offsets into separate patches, like Vinod suggested
+> > 
+> > 
+> >  drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 367 ++++++++++++++++++++++-
+> >  1 file changed, 365 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
+> > index 907f3f236f05..ff6c0b526fde 100644
+> > --- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
+> > +++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
+> > @@ -1506,6 +1506,234 @@ static const struct qmp_phy_init_tbl sm8450_qmp_gen4x2_pcie_ep_pcs_misc_tbl[] =
+> >  	QMP_PHY_INIT_CFG(QPHY_V5_20_PCS_PCIE_OSC_DTCT_MODE2_CONFIG5, 0x08),
+> >  };
 > 
-> -----Original Message-----
-> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
-> Sent: Saturday, February 4, 2023 23:42
-> To: Mark Brown <broonie@kernel.org>
-> Cc: David Rau <david.rau.zg@renesas.com>; perex@perex.cz; lgirdwood@gmail.com; tiwai@suse.com; support.opensource@diasemi.com; alsa-devel@alsa-project.org; linux-kernel@vger.kernel.org
-> Subject: Re: [PATCH] ASoC: da7219: Fix pole orientation detection on OMTP headsets when playing music
+[...]
 > 
-> On Thu, Feb 02, 2023 at 07:36:42PM +0000, Mark Brown wrote:
->>
->>>> they have the potential to actually lock up are the
->>>> cancel_work_sync() calls but they were unchanged and the backtrace
->>>> you showed was showing the thread in the msleep().  My guess would
->>>> be that you've got systems where there are very frequent jack
->>>> detection events (potentiallly with broken accessories, or
->>>> possibly due to the ground switch putting things into the wrong
->>>> priority) and that the interrupt is firing again as soon as the
->>>> thread unmasks the primary interrupt which means it never actually stops running.
->>
->>> That is what I strongly suspect is happening. I don't know why
->>> exactly the interrupt is firing continuously, but the hang is always in msleep().
->>> One possibility might be that the event is actually a disconnect
->>> event, and that enabling and immediately disabling the ground switch
->>> causes another interrupt, which is then handled immediately, causing the hang.
->>
->> Could be.  I'd be willing to guess that it's not just one event but
->> rather a stream of events of some kind.  Possibly if it's due to the
->> ground switch it's spuriously detecting a constant stream of button
->> presses for the affected systems, which don't produce any UI visible
->> result which would cause users to pull the accessory for whatever
->> reason?  Whatever's going on I bet it's broken accessories triggering it.
->>
+> >  
+> > @@ -2214,6 +2469,68 @@ static const struct qmp_phy_cfg sm8450_qmp_gen4x2_pciephy_cfg = {
+> >  	.phy_status		= PHYSTATUS_4_20,
+> >  };
+> >  
+> > +static const struct qmp_phy_cfg sm8550_qmp_gen3x2_pciephy_cfg = {
+> > +	.lanes = 2,
+> > +
+> > +	.offsets		= &qmp_pcie_offsets_v5,
 > 
->> That seems to be unlikely. The average number of crashes per affected system is 1.92, which points to something the users are doing and less to a broken accessory.
->> We do observe crashes due to broken accessories, but in those cases the number of crashes per system tends to be much > higher.
-> 
->> Anyway, below is a patch with a possible fix. Of course, I still don't know what the patch originally tried to fix, so it might not do much if anything good.
-> I added the software debouncing before insertion task to ensue the better compatibility of OMTP Jack.
->> For example, it keeps button detection in the interrupt handler to avoid dropping button events, so if spurious button detection as you suspected is indeed (part of) the problem we might still see a large number of interrupts.
-> 
->> Guenter
-> 
-> Thanks a lot for your big efforts to implement the temporary fix and verifications.
-> Would you please let me know the average number of crashes per affected system if you rollback to the pervious fix?
-> Ref:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/sound/soc/codecs?id=2d969e8f35b1849a43156029a7a6e2943b89d0c0
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/sound/soc/codecs?id=06f5882122e3faa183d76c4ec2c92f4c38e2c7bb
-> 
+> Did you really intend to use the v5 offsets here? It seems you use v6.20
+> defines in the tables below. This may work but it looks a little strange
+> and does not match how we name and use these resources for the other
+> SoCs (e.g. reusing structures and defines from older IP revisions is
+> fine, but not necessarily the other way round).
 
-You mean just keep the above two patches and revert 969357ec94e6 ?
-Sure, I can do that, but feedback from the field would take some
-2-3 months. Is that what you recommend to do for now ?
+So here is what is happening here. The actual IP block version is 6 for
+the g3x2. The offsets of the tables are the same as on v5, but the
+actual offsets of some of the registers within those tables are
+entirely different. Now, if you compare the PCS PCIe offsets (v5 vs v6)
+you'll notice that all v6 registers currently added are the same as v5
+(both names and values). With that in mind, we still need to keep the v6
+offsets for the case when a new register, that might not be in v5, might
+be added later on. As for the table offsets, since they look the same we
+should probably not add a dedicated v6 one.
+> 
+> I assume this means that the gen3 PHY is really is really v5 and using
+> a subset of the v6.20 defines happens to works as they are in fact
+> identical with respect to that subset?
+> 
+> As you have dedicated gen3x2 tables, perhaps those should use the v5
+> defines?
+> 
+> And at least add a comment about this in the commit message.
+> 
+> > +
+> > +	.tbls = {
+> > +		.serdes		= sm8550_qmp_gen3x2_pcie_serdes_tbl,
+> > +		.serdes_num	= ARRAY_SIZE(sm8550_qmp_gen3x2_pcie_serdes_tbl),
+> > +		.tx		= sm8550_qmp_gen3x2_pcie_tx_tbl,
+> > +		.tx_num		= ARRAY_SIZE(sm8550_qmp_gen3x2_pcie_tx_tbl),
+> > +		.rx		= sm8550_qmp_gen3x2_pcie_rx_tbl,
+> > +		.rx_num		= ARRAY_SIZE(sm8550_qmp_gen3x2_pcie_rx_tbl),
+> > +		.pcs		= sm8550_qmp_gen3x2_pcie_pcs_tbl,
+> > +		.pcs_num	= ARRAY_SIZE(sm8550_qmp_gen3x2_pcie_pcs_tbl),
+> > +		.pcs_misc	= sm8550_qmp_gen3x2_pcie_pcs_misc_tbl,
+> > +		.pcs_misc_num	= ARRAY_SIZE(sm8550_qmp_gen3x2_pcie_pcs_misc_tbl),
+> > +	},
+> > +	.clk_list		= sc8280xp_pciephy_clk_l,
+> > +	.num_clks		= ARRAY_SIZE(sc8280xp_pciephy_clk_l),
+> > +	.reset_list		= sdm845_pciephy_reset_l,
+> > +	.num_resets		= ARRAY_SIZE(sdm845_pciephy_reset_l),
+> > +	.vreg_list		= qmp_phy_vreg_l,
+> > +	.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
+> > +	.regs			= pciephy_v5_regs_layout,
+> > +
+> > +	.pwrdn_ctrl		= SW_PWRDN | REFCLK_DRV_DSBL,
+> > +	.phy_status		= PHYSTATUS,
+> > +};
+> > +
 
-Thanks,
-Guenter
-
+[...]
