@@ -2,127 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9292968BFD5
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 15:16:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13CF368BFD9
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 15:17:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231209AbjBFOQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 09:16:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33142 "EHLO
+        id S229939AbjBFORI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 09:17:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjBFOQH (ORCPT
+        with ESMTP id S229993AbjBFORG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 09:16:07 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95AE521A1A;
-        Mon,  6 Feb 2023 06:15:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=Uwm//uEvfmmKxmoWhqyZTBRjYJjdixdhrA7x2SH7ohw=; b=0+7QLZWW47PHov4bvCcj7Lf26c
-        mTtvafXGbP+ERtJRTwpwHOnITOkkhUpcFXpT6mD+gCleRH1k02T3ZnYrZKqQGLx5sTSNhB02RNYpN
-        ymjYsrtqT31c7YtIdwfJ/NwsU9SdGfWQJhgi+bD2JR+Pz/Trv2JRwRDeu9q9aQVLAghs=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pP2HB-004D8x-R5; Mon, 06 Feb 2023 15:15:21 +0100
-Date:   Mon, 6 Feb 2023 15:15:21 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     MD Danish Anwar <danishanwar@ti.com>
-Cc:     "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>, nm@ti.com,
-        ssantosh@kernel.org, srk@ti.com, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 2/2] net: ti: icssg-prueth: Add ICSSG ethernet driver
-Message-ID: <Y+ELeSQX+GWS5N2p@lunn.ch>
-References: <20230206060708.3574472-1-danishanwar@ti.com>
- <20230206060708.3574472-3-danishanwar@ti.com>
+        Mon, 6 Feb 2023 09:17:06 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80CEF227A6;
+        Mon,  6 Feb 2023 06:16:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675693011; x=1707229011;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=rkMn+pXxQ+KKju55X4C3pa/suoqSDKrEPHgqwNgVWTQ=;
+  b=K45G6x52p2EYve27n4pDIMWBT7ftGSQs11yEjSskVewIqB5mFxMJ08lU
+   FGKLhMtu8WwQbzAxOuS1tEjV3XE8UbQVUympUWxn1rCGuYidIvgBrqX+B
+   pDSESxErYZqLSEELsdw88Z1c3z67RvkEzCCQlsjLOGzJjhgryZRQnZx5z
+   /sqyOhmQA3toGw51INWAL7O0fL3ODLEqjrEoJuQeV5amxTVkrCDm/PmjQ
+   VlJPrYY9afXAJX/E6ZZXhfRTjhVsu9swbZhKzEnkh0y4X3ha4HWVPpjVj
+   xI8gJuGRuL455PlHa66UzRswEJR5yMpHglCftiCHZtPwtfIM3OxbBl5Ao
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10612"; a="415431790"
+X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
+   d="scan'208";a="415431790"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 06:16:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10612"; a="666500603"
+X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
+   d="scan'208";a="666500603"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga002.jf.intel.com with ESMTP; 06 Feb 2023 06:16:26 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 427F3241; Mon,  6 Feb 2023 16:17:03 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Andy Shevchenko <andy@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jim Minter <jimminter@microsoft.com>
+Subject: [PATCH v1 1/1] pinctrl: intel: Restore the pins that used to be in Direct IRQ mode
+Date:   Mon,  6 Feb 2023 16:15:59 +0200
+Message-Id: <20230206141558.20916-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230206060708.3574472-3-danishanwar@ti.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +enum mii_mode {
-> +	MII_MODE_MII = 0,
-> +	MII_MODE_RGMII,
-> +	MII_MODE_SGMII
+If the firmware mangled the register contents too much,
+check the saved value for the Direct IRQ mode. If it
+matches, we will restore the pin state.
 
-There is no mention of SGMII anywhere else. And in a couple of places,
-the code makes the assumption that if it is not RGMII it is MII.
+Reported-by: Jim Minter <jimminter@microsoft.com>
+Fixes: 6989ea4881c8 ("pinctrl: intel: Save and restore pins in "direct IRQ" mode")
+Tested-by: Jim Minter <jimminter@microsoft.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
 
-Does the hardware really support SGMII?
+Jim, this is a bit simplified version than what you tested. But it shouldn't
+be a functional changes. Anyway, it would be nice if you have a chance to give
+this a try.
 
-> +static int prueth_config_rgmiidelay(struct prueth *prueth,
-> +				    struct device_node *eth_np,
-> +				    phy_interface_t phy_if)
-> +{
+Linus, I don't expect more to come for this cycle, feel free to apply directly.
 
-...
+ drivers/pinctrl/intel/pinctrl-intel.c | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
-> +	if (phy_if == PHY_INTERFACE_MODE_RGMII_ID ||
-> +	    phy_if == PHY_INTERFACE_MODE_RGMII_TXID)
-> +		rgmii_tx_id |= ICSSG_CTRL_RGMII_ID_MODE;
-> +
-> +	regmap_update_bits(ctrl_mmr, icssgctrl_reg, ICSSG_CTRL_RGMII_ID_MODE, rgmii_tx_id);
-
-Here you are adding the TX delay if the phy-mode indicates it should
-be added.
-
-> +static int prueth_netdev_init(struct prueth *prueth,
-> +			      struct device_node *eth_node)
-> +{
-
-> +	ret = of_get_phy_mode(eth_node, &emac->phy_if);
-> +	if (ret) {
-> +		dev_err(prueth->dev, "could not get phy-mode property\n");
-> +		goto free;
-> +	}
-
-> +	ret = prueth_config_rgmiidelay(prueth, eth_node, emac->phy_if);
-> +	if (ret)
-> +		goto free;
-> +
-
-Reading it from DT and calling the delay function.
-
-> +static int prueth_probe(struct platform_device *pdev)
-> +{
-
-
-> +	/* register the network devices */
-> +	if (eth0_node) {
-> +		ret = register_netdev(prueth->emac[PRUETH_MAC0]->ndev);
-> +		if (ret) {
-> +			dev_err(dev, "can't register netdev for port MII0");
-> +			goto netdev_exit;
-> +		}
-> +
-> +		prueth->registered_netdevs[PRUETH_MAC0] = prueth->emac[PRUETH_MAC0]->ndev;
-> +
-> +		emac_phy_connect(prueth->emac[PRUETH_MAC0]);
-
-And this is connecting the MAC and the PHY, where emac_phy_connect()
-passes emac->phy_if to phylib.
-
-What i don't see anywhere is you changing emac->phy_if to indicate the
-MAC has inserted the TX delay, and so the PHY should not.
-
-    Andrew
+diff --git a/drivers/pinctrl/intel/pinctrl-intel.c b/drivers/pinctrl/intel/pinctrl-intel.c
+index cc3aaba24188..e49f271de936 100644
+--- a/drivers/pinctrl/intel/pinctrl-intel.c
++++ b/drivers/pinctrl/intel/pinctrl-intel.c
+@@ -1709,6 +1709,12 @@ const struct intel_pinctrl_soc_data *intel_pinctrl_get_soc_data(struct platform_
+ EXPORT_SYMBOL_GPL(intel_pinctrl_get_soc_data);
+ 
+ #ifdef CONFIG_PM_SLEEP
++static bool __intel_gpio_is_direct_irq(u32 value)
++{
++	return (value & PADCFG0_GPIROUTIOXAPIC) && (value & PADCFG0_GPIOTXDIS) &&
++	       (__intel_gpio_get_gpio_mode(value) == PADCFG0_PMODE_GPIO);
++}
++
+ static bool intel_pinctrl_should_save(struct intel_pinctrl *pctrl, unsigned int pin)
+ {
+ 	const struct pin_desc *pd = pin_desc_get(pctrl->pctldev, pin);
+@@ -1742,8 +1748,7 @@ static bool intel_pinctrl_should_save(struct intel_pinctrl *pctrl, unsigned int
+ 	 * See https://bugzilla.kernel.org/show_bug.cgi?id=214749.
+ 	 */
+ 	value = readl(intel_get_padcfg(pctrl, pin, PADCFG0));
+-	if ((value & PADCFG0_GPIROUTIOXAPIC) && (value & PADCFG0_GPIOTXDIS) &&
+-	    (__intel_gpio_get_gpio_mode(value) == PADCFG0_PMODE_GPIO))
++	if (__intel_gpio_is_direct_irq(value))
+ 		return true;
+ 
+ 	return false;
+@@ -1873,7 +1878,12 @@ int intel_pinctrl_resume_noirq(struct device *dev)
+ 	for (i = 0; i < pctrl->soc->npins; i++) {
+ 		const struct pinctrl_pin_desc *desc = &pctrl->soc->pins[i];
+ 
+-		if (!intel_pinctrl_should_save(pctrl, desc->number))
++		if (!(intel_pinctrl_should_save(pctrl, desc->number) ||
++		      /*
++		       * If the firmware mangled the register contents too much,
++		       * check the saved value for the Direct IRQ mode.
++		       */
++		      __intel_gpio_is_direct_irq(pads[i].padcfg0)))
+ 			continue;
+ 
+ 		intel_restore_padcfg(pctrl, desc->number, PADCFG0, pads[i].padcfg0);
+-- 
+2.39.1
 
