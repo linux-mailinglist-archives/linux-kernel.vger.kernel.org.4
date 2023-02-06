@@ -2,105 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 086A368C857
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 22:13:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6191468C836
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 22:04:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230116AbjBFVNK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 16:13:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35204 "EHLO
+        id S229685AbjBFVEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 16:04:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbjBFVNI (ORCPT
+        with ESMTP id S229537AbjBFVEc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 16:13:08 -0500
-X-Greylist: delayed 563 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 06 Feb 2023 13:13:07 PST
-Received: from qs51p00im-qukt01072701.me.com (qs51p00im-qukt01072701.me.com [17.57.155.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B71097689
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 13:13:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
-        t=1675717423; bh=nDqcwgYfwv4lTDUs/q+Zq23g/jcLqlPNBpJQ3yHg2Q8=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=NkoYjk58L0yG9WuovJ3Pml7hfE1S+S3YHTS2jANnfYOXuhs9Os/Q+xhbWbyG5m8K5
-         f8zvBWmnz9W9s0jF31rS0ov8ItRNA6EH45q6luWyZumMgppbJsehwgbjEXg+B8afUO
-         C1q8BWOtX1IJsRKdSAAbS5ejM9tFsgmvgqvO7+EDyQZzI3MQgGoVftjvZVIKDPHydN
-         U9hx2mJX1nNrD4HzMZgvjR1dJyNPqilMvjR7q5s03H42woEuJN+lpxES/NepLHicUa
-         gFlEQ5WXBK80Rtzq+KfL/NoxnkEKNv9n5iRim0lzeg/ig9V1NKzrqZ6rK4dlZcGdyZ
-         5qJmGngQnfGvw==
-Received: from localhost (qs51p00im-dlb-asmtp-mailmevip.me.com [17.57.155.28])
-        by qs51p00im-qukt01072701.me.com (Postfix) with ESMTPSA id 62B1315C0702;
-        Mon,  6 Feb 2023 21:03:42 +0000 (UTC)
-From:   Alain Volmat <avolmat@me.com>
-To:     Patrice Chotard <patrice.chotard@foss.st.com>
-Cc:     Alain Volmat <avolmat@me.com>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] i2c: st: use pm_sleep_ptr to avoid ifdef CONFIG_PM_SLEEP
-Date:   Mon,  6 Feb 2023 22:03:23 +0100
-Message-Id: <20230206210324.65508-1-avolmat@me.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 6 Feb 2023 16:04:32 -0500
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E173EE1
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 13:03:44 -0800 (PST)
+Received: by mail-qt1-f180.google.com with SMTP id cr22so14458026qtb.10
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 13:03:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oSuSGckE2C1EffkcYLU7uPOxByUCgrfnKkzD4m2tvZc=;
+        b=nIOWrtRMvVYqqqOSDHtvIFchNczkpLaImb56IBUrY/gKj1A6sbrAGbnqTvbTMXvbl0
+         Ng6tAmM8GzdDc2ozAJpSE4YTO3EyemRgkFocPcXz5n52q3NxhXz4uKVRDa8IwfvQBb7i
+         r15hZKEQCtwgq1KEfqOhK4fxFCGHd9JHw79MfOrpHnkgDubWLd1hqgIxhSVZavwkHFwg
+         5dmuU1v5JjtRlcUt8paieq5CuVJbsEJ0mAwkmhFNwJzFfCPLulXLKviCXGVpNV2oWs1Y
+         IvqDi1m2M2ZtEm1KV7J/4WLs0LzIBQyfgyCTVU6nK3wW73bspQUqEV+Luv8j8DsAQzFH
+         E/kA==
+X-Gm-Message-State: AO0yUKW936W1BiFQzbtPDTMwozOK7NGAC+PY8HxqdWGX0x6TNVlFVGGS
+        YVxZ7bcKwuEOPpfMQ8JOvaXm
+X-Google-Smtp-Source: AK7set9ltDyUBg0Yk4tQF6bp/5fec5LHU/n8GtM/kmq1jFzcUrHIUm5pIjwwd/JRrTdvWA45P4H5Yw==
+X-Received: by 2002:ac8:5bd6:0:b0:3b8:2eca:e6a5 with SMTP id b22-20020ac85bd6000000b003b82ecae6a5mr1368152qtb.29.1675717424083;
+        Mon, 06 Feb 2023 13:03:44 -0800 (PST)
+Received: from localhost (pool-68-160-166-30.bstnma.fios.verizon.net. [68.160.166.30])
+        by smtp.gmail.com with ESMTPSA id f3-20020ac84703000000b003b2d890752dsm7929401qtp.88.2023.02.06.13.03.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Feb 2023 13:03:43 -0800 (PST)
+Date:   Mon, 6 Feb 2023 16:03:42 -0500
+From:   Mike Snitzer <snitzer@kernel.org>
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc:     Mikulas Patocka <mpatocka@redhat.com>,
+        Alasdair Kergon <agk@redhat.com>, dm-devel@redhat.com,
+        lvc-patches@linuxtesting.org, linux-kernel@vger.kernel.org
+Subject: Re: md: dm-ioctl: drop always-false condition
+Message-ID: <Y+FrLt8gt/Pff/zZ@redhat.com>
+References: <c8c9df45-1d59-3195-7631-51b3a58148ee@omp.ru>
+ <alpine.LRH.2.21.2301180658250.13031@file01.intranet.prod.int.rdu2.redhat.com>
+ <b8269463-9f7e-4c28-2bfe-44663f3764c1@omp.ru>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: bffMchFZif8_wUljSr6IvtqqwQ6FZjLq
-X-Proofpoint-GUID: bffMchFZif8_wUljSr6IvtqqwQ6FZjLq
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.425,18.0.572,17.0.605.474.0000000_definitions?=
- =?UTF-8?Q?=3D2022-01-11=5F01:2022-01-11=5F01,2020-02-14=5F11,2020-01-23?=
- =?UTF-8?Q?=5F02_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 clxscore=1011 bulkscore=0
- mlxlogscore=963 phishscore=0 spamscore=0 mlxscore=0 malwarescore=0
- adultscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2209130000 definitions=main-2302060182
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b8269463-9f7e-4c28-2bfe-44663f3764c1@omp.ru>
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rely on pm_sleep_ptr when setting the pm ops and get rid
-of the ifdef CONFIG_PM_SLEEP around suspend/resume functions.
+On Mon, Feb 06 2023 at  3:58P -0500,
+Sergey Shtylyov <s.shtylyov@omp.ru> wrote:
 
-Signed-off-by: Alain Volmat <avolmat@me.com>
----
- drivers/i2c/busses/i2c-st.c | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+> On 1/18/23 2:59 PM, Mikulas Patocka wrote:
+> 
+> [...]
+> 
+> >> The expression 'indata[3] > ULONG_MAX' always evaluates to false since
+> >> indata[] is declared as an array of *unsigned long* elements and #define
+> >> ULONG_MAX represents the max value of that exact type...
+> >>
+> >> Note that gcc seems to be able to detect the dead code here and eliminate
+> >> this check anyway...
+> >>
+> >> Found by Linux Verification Center (linuxtesting.org) with the SVACE static
+> >> analysis tool.
+> >>
+> >> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+> > 
+> > Reviewed-by: Mikulas Patocka <mpatocka@redhat.com>
+> 
+>    Thank you!
+> 
+> >> ---
+> >> This patch is atop of the 'for-next' branch of the device-mapper repo...
+> >>
+> >>  drivers/md/dm-ioctl.c |    3 +--
+> >>  1 file changed, 1 insertion(+), 2 deletions(-)
+> >>
+> >> Index: linux-dm/drivers/md/dm-ioctl.c
+> >> ===================================================================
+> >> --- linux-dm.orig/drivers/md/dm-ioctl.c
+> >> +++ linux-dm/drivers/md/dm-ioctl.c
+> >> @@ -1073,8 +1073,7 @@ static int dev_set_geometry(struct file
+> 
+>    Returning to this patch, I think I should've added the name of the function
+> in question in both the subject and and commit msg... I'll recast...
 
-diff --git a/drivers/i2c/busses/i2c-st.c b/drivers/i2c/busses/i2c-st.c
-index 88482316d22a..f823913b75a6 100644
---- a/drivers/i2c/busses/i2c-st.c
-+++ b/drivers/i2c/busses/i2c-st.c
-@@ -740,7 +740,6 @@ static int st_i2c_xfer(struct i2c_adapter *i2c_adap,
- 	return (ret < 0) ? ret : i;
- }
- 
--#ifdef CONFIG_PM_SLEEP
- static int st_i2c_suspend(struct device *dev)
- {
- 	struct st_i2c_dev *i2c_dev = dev_get_drvdata(dev);
-@@ -762,11 +761,7 @@ static int st_i2c_resume(struct device *dev)
- 	return 0;
- }
- 
--static SIMPLE_DEV_PM_OPS(st_i2c_pm, st_i2c_suspend, st_i2c_resume);
--#define ST_I2C_PM	(&st_i2c_pm)
--#else
--#define ST_I2C_PM	NULL
--#endif
-+static DEFINE_SIMPLE_DEV_PM_OPS(st_i2c_pm, st_i2c_suspend, st_i2c_resume);
- 
- static u32 st_i2c_func(struct i2c_adapter *adap)
- {
-@@ -901,7 +896,7 @@ static struct platform_driver st_i2c_driver = {
- 	.driver = {
- 		.name = "st-i2c",
- 		.of_match_table = st_i2c_match,
--		.pm = ST_I2C_PM,
-+		.pm = pm_sleep_ptr(&st_i2c_pm),
- 	},
- 	.probe = st_i2c_probe,
- 	.remove = st_i2c_remove,
--- 
-2.34.1
+Not a big deal, I've already staged it so please don't resend.
 
+See:
+https://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm.git/commit/?h=dm-6.3&id=151d812251202aa0dce1fdeabd64794292d40b75
