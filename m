@@ -2,103 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5B9E68BC40
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 13:04:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03DFF68BC42
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 13:05:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbjBFMEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 07:04:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40666 "EHLO
+        id S229909AbjBFMFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 07:05:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbjBFMEs (ORCPT
+        with ESMTP id S229545AbjBFMFu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 07:04:48 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899FBB446
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 04:04:47 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id l21-20020a05600c1d1500b003dfe462b7e4so4588651wms.0
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 04:04:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hga6+jXWGD3JgwJgRFXeH2zeYgheW8Avd9g0cfccau4=;
-        b=SocYrnMChbn1Wrrg0A4ZJNO8ixxNP+C7S4MwlhwE5d5xTpwIlUAkGv9ABfVYysfgP2
-         4i5NWzTlvpC5BQ27M8A+pMpAReAT1Aaw7bSxWmdhG3crlYgOJNHTl3znnib1+Z73lxPn
-         /lT95gJ9FRS0SjkKpdliROt+Uyly1sSYfWwWoGI/3QGhZLdY95KGTlhrekyIRigyzD2B
-         uTwv+6DrbZohixJdZxUPFA4mJbaS8pHxAlrUIO8fI+uWpw14DQX/ncXU2kw0a7oznUo7
-         kl9VGlvaEW9AIqJADvrJq4864e2lblyoLNmxvnj/YaAnFY0Zbh9CNTjFIJYWoQIcDfrj
-         FEGA==
+        Mon, 6 Feb 2023 07:05:50 -0500
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F376215CA9
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 04:05:48 -0800 (PST)
+Received: by mail-il1-f198.google.com with SMTP id h4-20020a056e021d8400b00313b9dcdd96so3017978ila.18
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 04:05:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hga6+jXWGD3JgwJgRFXeH2zeYgheW8Avd9g0cfccau4=;
-        b=lm8OvEho8JoCKOtVxoZpOvIjpd4uaM6J8vf8BuzlnjhhPPOELbm/6MHGO9dZHH1qZ+
-         AfceKMkwqIMIXO5bygGqDEg49bLi0zznatKUjYGv07f/S3jO4Tj8sle2cpBSi6oyIlXN
-         XuNN1v4ZtLem72HB3pjZ+sVwTfZd1J/yytQDGUIt0UvX3Cbzm5KMKxe59HWbKQp/4pVk
-         E1oPRv6iFTw6FiRaOhPiQTMJ/c2AzKcSyVK3gpG0VtnxdA48Eic1EyZ2AB8sMlp5gjRE
-         Ljpz+dKCoNnKslCZ2ZYb/u/JWu7AF4mvqp8b+ZEhW7YqK7vG0uzxj4mgXLcg9q/xmSZ9
-         pz8Q==
-X-Gm-Message-State: AO0yUKV1GGdSAkV/VQLyaY2AjJ8NNweKsD7avF19iEtcK2+EnY7WtllS
-        DGqM5GkQsuTvhalbIJCniL1Eag==
-X-Google-Smtp-Source: AK7set/7yaQkxD40Vvi6D7UEvw2RxA5hFBCrhMU2JH60e5v603guyRgl3iQqmUqEY/9LgDZ82G8vAg==
-X-Received: by 2002:a7b:cd17:0:b0:3db:14d0:65be with SMTP id f23-20020a7bcd17000000b003db14d065bemr18464580wmj.34.1675685086178;
-        Mon, 06 Feb 2023 04:04:46 -0800 (PST)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id x7-20020a5d4907000000b002c3e306d3eesm4347131wrq.17.2023.02.06.04.04.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Feb 2023 04:04:45 -0800 (PST)
-Date:   Mon, 6 Feb 2023 13:04:45 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Atish Patra <atishp@rivosinc.com>
-Cc:     linux-kernel@vger.kernel.org, Anup Patel <anup@brainfault.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atishp@atishpatra.org>,
-        Guo Ren <guoren@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
-        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v5 13/14] RISC-V: KVM: Support firmware events
-Message-ID: <20230206120445.6tlsvy5fsawn475v@orel>
-References: <20230205011515.1284674-1-atishp@rivosinc.com>
- <20230205011515.1284674-14-atishp@rivosinc.com>
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Yc5TaIw9e/++YKxo1Lt6L/DeNw+M003kD9JJ5QRXvXE=;
+        b=rHm/TtO3tSoGIq2BrOr8fgD61y+bIkfLvZUqb4Vz9k6MGCSRXXhmP5pFuI+yFBRPPq
+         f4FS7ai1xqRJbbEd5kcyKr6uymGNqnzOoq95VvD62lOKSZG4EhNCSfRq432ntoqTr1ce
+         RLmL+B8eYAw3M7/7FBBNjG1P+leQFqxFUSfASVkPF7NKuYz//PTpJgVXCs3YK+zALlDG
+         rWDU4/IV1pFvKGppZrNkhUZ4DCe9grvt7iVtwSvme0umaKctoednkdE38c1dyGkr+S+k
+         NvnBYowMXCl1/In2q3n2jWw7MggJsGlRafpHwLnfLv/PiH4tm8ehZUI37E+MJCdMoIsk
+         0Hqw==
+X-Gm-Message-State: AO0yUKU2mTGDxytWjDo2HTfRt14Ko9V2TKgsOMMfcK0/ZjBlf/V/DFDe
+        eFuplkE+mTPMTLxEhPdFvkvc4zzhrJcp05vDMSNOaIk+e6hZ
+X-Google-Smtp-Source: AK7set/dPyvOs92oygtpg+rFekRsU13zRFjJQ8iXuQiUWttVgG53X9wmWd1NcMn2VZ9uOOp6CjTDGqMSeQLMXYTF3Kgli5ZaW1pH
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230205011515.1284674-14-atishp@rivosinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a92:7011:0:b0:310:a12c:7898 with SMTP id
+ l17-20020a927011000000b00310a12c7898mr4056030ilc.24.1675685148369; Mon, 06
+ Feb 2023 04:05:48 -0800 (PST)
+Date:   Mon, 06 Feb 2023 04:05:48 -0800
+In-Reply-To: <00000000000043c9a105ef4cccf7@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000062d6005f406daa8@google.com>
+Subject: Re: [syzbot] [hfs?] KMSAN: uninit-value in hfs_brec_find
+From:   syzbot <syzbot+5ce571007a695806e949@syzkaller.appspotmail.com>
+To:     glider@google.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 04, 2023 at 05:15:14PM -0800, Atish Patra wrote:
-> SBI PMU extension defines a set of firmware events which can provide
-> useful information to guests about the number of SBI calls. As
-> hypervisor implements the SBI PMU extension, these firmware events
-> correspond to ecall invocations between VS->HS mode. All other firmware
-> events will always report zero if monitored as KVM doesn't implement them.
-> 
-> This patch adds all the infrastructure required to support firmware
-> events.
-> 
-> Reviewed-by: Anup Patel <anup@brainfault.org>
-> Signed-off-by: Atish Patra <atishp@rivosinc.com>
-> ---
->  arch/riscv/include/asm/kvm_vcpu_pmu.h |  17 ++++
->  arch/riscv/kvm/vcpu_pmu.c             | 141 ++++++++++++++++++++------
->  2 files changed, 125 insertions(+), 33 deletions(-)
->
+syzbot has found a reproducer for the following issue on:
 
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+HEAD commit:    eda666ff2276 kmsan: silence -Wmissing-prototypes warnings
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=17bbb96b480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f27365aeb365b358
+dashboard link: https://syzkaller.appspot.com/bug?extid=5ce571007a695806e949
+compiler:       clang version 15.0.0 (https://github.com/llvm/llvm-project.git 610139d2d9ce6746b3c617fb3e2f7886272d26ff), GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: i386
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15ac6175480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15e00d23480000
 
-Thanks,
-drew
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/fc16035efde4/disk-eda666ff.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/084efc06a321/vmlinux-eda666ff.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/35c07fcfcbf2/bzImage-eda666ff.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/0f9e3b43e8ac/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+5ce571007a695806e949@syzkaller.appspotmail.com
+
+WARNING: The mand mount option has been deprecated and
+         and is ignored by this kernel. Remove the mand
+         option from the mount to silence this warning.
+=======================================================
+hfs: keylen 9474 too large
+=====================================================
+BUG: KMSAN: uninit-value in hfs_brec_find+0x671/0x9b0 fs/hfs/bfind.c:141
+ hfs_brec_find+0x671/0x9b0 fs/hfs/bfind.c:141
+ hfs_brec_read+0x3b/0x190 fs/hfs/bfind.c:165
+ hfs_cat_find_brec+0xfb/0x450 fs/hfs/catalog.c:194
+ hfs_fill_super+0x1f49/0x2400 fs/hfs/super.c:419
+ mount_bdev+0x508/0x840 fs/super.c:1359
+ hfs_mount+0x49/0x60 fs/hfs/super.c:456
+ legacy_get_tree+0x10c/0x280 fs/fs_context.c:610
+ vfs_get_tree+0xa1/0x500 fs/super.c:1489
+ do_new_mount+0x694/0x1580 fs/namespace.c:3145
+ path_mount+0x71a/0x1eb0 fs/namespace.c:3475
+ do_mount fs/namespace.c:3488 [inline]
+ __do_sys_mount fs/namespace.c:3697 [inline]
+ __se_sys_mount+0x734/0x840 fs/namespace.c:3674
+ __ia32_sys_mount+0xdf/0x140 fs/namespace.c:3674
+ do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
+ __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
+ do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
+ do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:246
+ entry_SYSENTER_compat_after_hwframe+0x70/0x82
+
+Local variable fd created at:
+ hfs_fill_super+0x5e/0x2400 fs/hfs/super.c:381
+ mount_bdev+0x508/0x840 fs/super.c:1359
+
+CPU: 0 PID: 4991 Comm: syz-executor151 Not tainted 6.2.0-rc6-syzkaller-80422-geda666ff2276 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
+=====================================================
+
