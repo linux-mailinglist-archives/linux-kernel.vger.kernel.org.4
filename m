@@ -2,132 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D10E68C7A7
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 21:30:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B7B468C7A9
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 21:31:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230282AbjBFUaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 15:30:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35402 "EHLO
+        id S230286AbjBFUbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 15:31:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230248AbjBFUaX (ORCPT
+        with ESMTP id S229906AbjBFUbT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 15:30:23 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC72C2A142;
-        Mon,  6 Feb 2023 12:30:22 -0800 (PST)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 316JkveZ009586;
-        Mon, 6 Feb 2023 20:30:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=VUVE+4OB/gY7oqLRljgHDTCtDScJU9v4s1MnY6To8/Y=;
- b=p0DoSDsVgGZemAM1ND80q98+0Y34mMqZDm9ozKGa7xxLFF+gnqnchvHlx/DwM1I/OTPB
- 7ZT/UtkHuuIwRKhk12k8YR7/j+ytBd2yaJgFtAj5MijQXK+b9Qtdtftd/RYMPN6s9n98
- bvoYAdSIADLQAT6m89qhnQIMH/6PVdJMfE9c2Eg15R09HZ954Qp/e9aHC0UZwa/y9Ufa
- CbR1lpBC8SPxkVp8P7j7vIXOKBiQOl+G4LbAeiw0zGpd6m5d+0n+H7xhbi+dtZSBDl2Y
- GEvwFm9CukRhGzo1tMZq46i07+/b+uu+s2Fcn2Dk0qrspfnEbbjb9nDx6q7Zi2WZQkP4 Sg== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nhd2qcrmp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Feb 2023 20:30:16 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 316KUGq6020525
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 6 Feb 2023 20:30:16 GMT
-Received: from [10.110.22.31] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 6 Feb 2023
- 12:30:15 -0800
-Message-ID: <2cd37948-8927-3a30-eb40-846d7ac8f0fd@quicinc.com>
-Date:   Mon, 6 Feb 2023 12:30:14 -0800
+        Mon, 6 Feb 2023 15:31:19 -0500
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9102B29E38
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 12:31:18 -0800 (PST)
+Received: by mail-il1-f197.google.com with SMTP id o10-20020a056e02102a00b003006328df7bso8947009ilj.17
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 12:31:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lcUfKfT8kk091mUeNDNyNXV+W/bZwlZUrmiavyzWKVE=;
+        b=MLsRS+9PTEGfnxKGl5zXVYv48s18+a73XGS4qCBvg9EWHagllvpt83rr/CsVGqj0vi
+         iYn1OrK0EQoqt1O4VLn15Tonsumv7dU5svHF26qdp3y6Mx/r2uny1A/pSbQLCQL4h/l1
+         Hfn0KVPkwX+OXerafW/wzbUACvnxHT4x/tVLDvs7qEIkoN6yLBA/+s7RaEnNXplEmX9G
+         psxIS9oIq4N3HsIJdEOmNgGAMAIJssifmrbIB7m7v6dN0SNmMujC+x812khrXpcYMacW
+         pfkQvJ2p1ZfZaLyl9q2O5AxvFSkbADYdIL+QYU0RT7B2kXrt0nybVgPknZHMuAyeW6ZH
+         mmcQ==
+X-Gm-Message-State: AO0yUKVAMAGoQp5TZW0ZXb1Zcy61CI0XpNDV9f6ShxshyG/zWwE9ACyY
+        cDQkY8Yzg9HpNkcHlaloHGq+mGv8BY0P+cQ4ne5ukOz0lQUJ
+X-Google-Smtp-Source: AK7set/lIX/2jgf1OGRtFFrJw0DWyiffr52+TS2tT4qR8HmxfNuUDQY4i9GdUbMVWehVVSEfF9bkQInUujE4DKrS6Qceu8NmbEmm
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3 1/5] usb: gadget: Properly configure the device for
- remote wakeup
-Content-Language: en-US
-To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     <gregkh@linuxfoundation.org>, <Thinh.Nguyen@synopsys.com>,
-        <balbi@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <quic_wcheng@quicinc.com>,
-        <quic_jackp@quicinc.com>
-References: <1675710806-9735-1-git-send-email-quic_eserrao@quicinc.com>
- <1675710806-9735-2-git-send-email-quic_eserrao@quicinc.com>
- <Y+Fft/vGfHxGrvC0@rowland.harvard.edu>
-From:   Elson Serrao <quic_eserrao@quicinc.com>
-In-Reply-To: <Y+Fft/vGfHxGrvC0@rowland.harvard.edu>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: _SNwgRh8E5MZQRZ3fbOkpnI2KF26Gg8t
-X-Proofpoint-GUID: _SNwgRh8E5MZQRZ3fbOkpnI2KF26Gg8t
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-06_07,2023-02-06_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
- mlxscore=0 bulkscore=0 mlxlogscore=567 lowpriorityscore=0 spamscore=0
- priorityscore=1501 adultscore=0 suspectscore=0 impostorscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302060177
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:cccb:0:b0:3b1:acaf:d5b2 with SMTP id
+ k11-20020a02cccb000000b003b1acafd5b2mr168551jaq.98.1675715477927; Mon, 06 Feb
+ 2023 12:31:17 -0800 (PST)
+Date:   Mon, 06 Feb 2023 12:31:17 -0800
+In-Reply-To: <000000000000269f9a05f02be9d8@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ce7ebf05f40de992@google.com>
+Subject: Re: [syzbot] KASAN: slab-out-of-bounds Write in copy_verifier_state
+From:   syzbot <syzbot+59af7bf76d795311da8c@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, davem@davemloft.net, haoluo@google.com,
+        hawk@kernel.org, john.fastabend@gmail.com, jolsa@kernel.org,
+        keescook@chromium.org, kpsingh@kernel.org, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        martin.lau@linux.dev, nathan@kernel.org, ndesaulniers@google.com,
+        netdev@vger.kernel.org, sdf@google.com, song@kernel.org,
+        syzkaller-bugs@googlegroups.com, trix@redhat.com, v4bel@theori.io,
+        yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+syzbot suspects this issue was fixed by commit:
 
+commit 45435d8da71f9f3e6860e6e6ea9667b6ec17ec64
+Author: Kees Cook <keescook@chromium.org>
+Date:   Fri Dec 23 18:28:44 2022 +0000
 
-On 2/6/2023 12:14 PM, Alan Stern wrote:
-> On Mon, Feb 06, 2023 at 11:13:22AM -0800, Elson Roy Serrao wrote:
->> The wakeup bit in the bmAttributes field indicates whether the device
->> is configured for remote wakeup. But this field should be allowed to
->> set only if the UDC supports such wakeup mechanism. So configure this
->> field based on UDC capability. Also inform the UDC whether the device
->> is configured for remote wakeup by implementing a gadget op.
->>
->> Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
->> ---
->>   drivers/usb/gadget/composite.c | 24 +++++++++++++++++++++++-
->>   drivers/usb/gadget/udc/core.c  | 27 +++++++++++++++++++++++++++
->>   drivers/usb/gadget/udc/trace.h |  5 +++++
->>   include/linux/usb/gadget.h     |  8 ++++++++
->>   4 files changed, 63 insertions(+), 1 deletion(-)
-> 
->> diff --git a/include/linux/usb/gadget.h b/include/linux/usb/gadget.h
->> index dc3092c..05d1449 100644
->> --- a/include/linux/usb/gadget.h
->> +++ b/include/linux/usb/gadget.h
->> @@ -309,6 +309,7 @@ struct usb_udc;
->>   struct usb_gadget_ops {
->>   	int	(*get_frame)(struct usb_gadget *);
->>   	int	(*wakeup)(struct usb_gadget *);
->> +	int	(*set_remotewakeup)(struct usb_gadget *, int set);
->>   	int	(*set_selfpowered) (struct usb_gadget *, int is_selfpowered);
->>   	int	(*vbus_session) (struct usb_gadget *, int is_active);
->>   	int	(*vbus_draw) (struct usb_gadget *, unsigned mA);
->> @@ -383,6 +384,8 @@ struct usb_gadget_ops {
->>    * @connected: True if gadget is connected.
->>    * @lpm_capable: If the gadget max_speed is FULL or HIGH, this flag
->>    *	indicates that it supports LPM as per the LPM ECN & errata.
->> + * @rw_capable: True if gadget is capable of sending remote wakeup.
->> + * @rw_armed: True if gadget is armed by the host for remote wakeup.
-> 
-> Minor stylistic request: Could you choose something other than "rw" to
-> start these field names?  For too many people, that abbreviation is
-> firmly associated with "read/write".  Maybe just "wakeup"?
-> 
-> Alan Stern
+    bpf: Always use maximal size for copy_array()
 
-Sure. Agree that "rw" is firmly associated with "read/write". Will just 
-rename it to "wakeup"
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14c62f23480000
+start commit:   041fae9c105a Merge tag 'f2fs-for-6.2-rc1' of git://git.ker..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e2f3d9d232a3cac5
+dashboard link: https://syzkaller.appspot.com/bug?extid=59af7bf76d795311da8c
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1650d477880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1305f993880000
 
-Thanks
-Elson
+If the result looks correct, please mark the issue as fixed by replying with:
+
+#syz fix: bpf: Always use maximal size for copy_array()
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
