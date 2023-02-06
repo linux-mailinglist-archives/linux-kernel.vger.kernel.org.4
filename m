@@ -2,245 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3230268BC13
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 12:51:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA01C68BC15
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 12:53:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229827AbjBFLvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 06:51:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60764 "EHLO
+        id S229698AbjBFLxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 06:53:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbjBFLvB (ORCPT
+        with ESMTP id S229514AbjBFLw6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 06:51:01 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46CE430C6
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 03:51:00 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id bk16so10077435wrb.11
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 03:51:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=J+0TXtPqnhTCHG5tLP0V+UKCmicCtT1byKpeIgk+wJs=;
-        b=U+n4+hwgjFGv5eLWPnRS4ScUnBmN9S+Zn+3x55kWpORsAsEBktPiGn0ABD6+v7yhoE
-         34ZR2ZF0qJcBBxrnKAxSjMv8q5jlmVZzCtoCH3mQJ/CPU8NnhC+whiqCimyzwgKyD7/H
-         L3zUwVcVFmhgMlJ/igk1Ss96K11g7Zp1yMbwPYWRmF02SDF709i8uNkMcbTBZY9PdmFq
-         Et2jsPa3nGRGCjsA6hzt/haUBga2yNXD0GhTwpgx7OxPaRhYWcVPNT5j9g55oNkNNZ5C
-         CBtOiElEV5OZwPssovWgqUT4x4OxVKtMWm25jmMj0TUapdj2V0JC8u0bPdKT+nb+t4W7
-         SvIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=J+0TXtPqnhTCHG5tLP0V+UKCmicCtT1byKpeIgk+wJs=;
-        b=FM8jlJ4kqaT0/rOBI6JjpuY4wobVOZeFRHCOcDjjKF8hVYIUbJ72fQ6geUgtR8YjEo
-         ITJr5qjoEBThQ2PX3ftRTKGSWmJDpmtuRRD6nnPDomC9O73tOznzTi5AAq0K5TJyGO+W
-         eoOn6YuMB2IYFvyMeauEe/MzocwOHV0CTpOw3zF71Fvn+O6ftNphnuNbMv70qb884+O8
-         +hxMzZdWr8XnoQM0xeSDhO8Agofa3AHJLmdQqJuL+7uFV7VzYf730doDoWSvYpbIyKbe
-         SaN+YOCBa6imaWvPOmOU7Ah/JGd7fiQ5O5GkiUUI2bU/m/xjWWxo+O9GSnmQP+7GSc+N
-         0pRA==
-X-Gm-Message-State: AO0yUKU+5/XQxc+Xc3y0iR8bLtHSiGJICwNw8jHMSOsYcTdm0A5UqCN0
-        Eyv8B9mqO/u247u4ARAVv8jyDA==
-X-Google-Smtp-Source: AK7set/Mj4P7MptErA0D7w2ixA+AYLqVQICv/N0G3LI2IUjJqSpH7eWx/c4TzCu5tGp00fsZrP8m6g==
-X-Received: by 2002:a5d:5c13:0:b0:2bf:f027:3c30 with SMTP id cc19-20020a5d5c13000000b002bff0273c30mr18141110wrb.56.1675684258803;
-        Mon, 06 Feb 2023 03:50:58 -0800 (PST)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id e2-20020a5d5002000000b002c3be6ae0b1sm8636933wrt.65.2023.02.06.03.50.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Feb 2023 03:50:58 -0800 (PST)
-Date:   Mon, 6 Feb 2023 12:50:57 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Atish Patra <atishp@rivosinc.com>
-Cc:     linux-kernel@vger.kernel.org, Anup Patel <anup@brainfault.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atishp@atishpatra.org>,
-        Guo Ren <guoren@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
-        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v5 08/14] RISC-V: KVM: Add SBI PMU extension support
-Message-ID: <20230206115057.n37ea5rbqp44dkjo@orel>
-References: <20230205011515.1284674-1-atishp@rivosinc.com>
- <20230205011515.1284674-9-atishp@rivosinc.com>
+        Mon, 6 Feb 2023 06:52:58 -0500
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 547C5CDDE;
+        Mon,  6 Feb 2023 03:52:56 -0800 (PST)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 316BqgO3116929;
+        Mon, 6 Feb 2023 05:52:42 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1675684362;
+        bh=PTxMHa0MqV4C75EK6VqoyZC5BlthQBdTPqrUQAlejpI=;
+        h=From:To:CC:Subject:Date;
+        b=tOGPFVebvb058jyCRb1We92C+SUrc3Sl+iiVLPazihlhA/crzFKwbqRjW70vWWx0a
+         xlbn9fuCQX26ype+8TFiaJUHgUDlkJTqeI5/bYx3/dVIzAlfIAVUU3tMhWdDMtnqpc
+         2mkeeClISTvXYyIsluzuXU6B+tNc3DIJWxy4K298=
+Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 316Bqg36026683
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 6 Feb 2023 05:52:42 -0600
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 6
+ Feb 2023 05:52:41 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 6 Feb 2023 05:52:41 -0600
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 316Bqfcm031834;
+        Mon, 6 Feb 2023 05:52:41 -0600
+From:   Devarsh Thakkar <devarsht@ti.com>
+To:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>,
+        <kristo@kernel.org>, <nm@ti.com>, <vigneshr@ti.com>
+CC:     <hnagalla@ti.com>, <praneeth@ti.com>, <a-bhatia1@ti.com>,
+        <j-luthra@ti.com>, <devarsht@ti.com>
+Subject: [PATCH] arm64: dts: ti: k3-am62a7-sk: Enable full 4GB DDR
+Date:   Mon, 6 Feb 2023 17:22:40 +0530
+Message-ID: <20230206115240.6026-1-devarsht@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230205011515.1284674-9-atishp@rivosinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 04, 2023 at 05:15:09PM -0800, Atish Patra wrote:
-> SBI PMU extension allows KVM guests to configure/start/stop/query about
-> the PMU counters in virtualized enviornment as well.
-> 
-> In order to allow that, KVM implements the entire SBI PMU extension.
-> 
-> Reviewed-by: Anup Patel <anup@brainfault.org>
-> Signed-off-by: Atish Patra <atishp@rivosinc.com>
-> ---
->  arch/riscv/kvm/Makefile       |  2 +-
->  arch/riscv/kvm/vcpu_sbi.c     | 11 +++++
->  arch/riscv/kvm/vcpu_sbi_pmu.c | 87 +++++++++++++++++++++++++++++++++++
->  3 files changed, 99 insertions(+), 1 deletion(-)
->  create mode 100644 arch/riscv/kvm/vcpu_sbi_pmu.c
-> 
-> diff --git a/arch/riscv/kvm/Makefile b/arch/riscv/kvm/Makefile
-> index 5de1053..278e97c 100644
-> --- a/arch/riscv/kvm/Makefile
-> +++ b/arch/riscv/kvm/Makefile
-> @@ -25,4 +25,4 @@ kvm-y += vcpu_sbi_base.o
->  kvm-y += vcpu_sbi_replace.o
->  kvm-y += vcpu_sbi_hsm.o
->  kvm-y += vcpu_timer.o
-> -kvm-$(CONFIG_RISCV_PMU_SBI) += vcpu_pmu.o
-> +kvm-$(CONFIG_RISCV_PMU_SBI) += vcpu_pmu.o vcpu_sbi_pmu.o
-> diff --git a/arch/riscv/kvm/vcpu_sbi.c b/arch/riscv/kvm/vcpu_sbi.c
-> index fe2897e..15fde15 100644
-> --- a/arch/riscv/kvm/vcpu_sbi.c
-> +++ b/arch/riscv/kvm/vcpu_sbi.c
-> @@ -20,6 +20,16 @@ static const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_v01 = {
->  };
->  #endif
->  
-> +#ifdef CONFIG_RISCV_PMU_SBI
-> +extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_pmu;
-> +#else
-> +static const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_pmu = {
-> +	.extid_start = -1UL,
-> +	.extid_end = -1UL,
-> +	.handler = NULL,
-> +};
-> +#endif
-> +
->  static const struct kvm_vcpu_sbi_extension *sbi_ext[] = {
->  	&vcpu_sbi_ext_v01,
->  	&vcpu_sbi_ext_base,
-> @@ -28,6 +38,7 @@ static const struct kvm_vcpu_sbi_extension *sbi_ext[] = {
->  	&vcpu_sbi_ext_rfence,
->  	&vcpu_sbi_ext_srst,
->  	&vcpu_sbi_ext_hsm,
-> +	&vcpu_sbi_ext_pmu,
->  	&vcpu_sbi_ext_experimental,
->  	&vcpu_sbi_ext_vendor,
->  };
-> diff --git a/arch/riscv/kvm/vcpu_sbi_pmu.c b/arch/riscv/kvm/vcpu_sbi_pmu.c
-> new file mode 100644
-> index 0000000..9fdc1e1
-> --- /dev/null
-> +++ b/arch/riscv/kvm/vcpu_sbi_pmu.c
-> @@ -0,0 +1,87 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2023 Rivos Inc
-> + *
-> + * Authors:
-> + *     Atish Patra <atishp@rivosinc.com>
-> + */
-> +
-> +#include <linux/errno.h>
-> +#include <linux/err.h>
-> +#include <linux/kvm_host.h>
-> +#include <asm/csr.h>
-> +#include <asm/sbi.h>
-> +#include <asm/kvm_vcpu_sbi.h>
-> +
-> +static int kvm_sbi_ext_pmu_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
-> +				   struct kvm_vcpu_sbi_return *retdata)
-> +{
-> +	int ret = 0;
-> +	struct kvm_cpu_context *cp = &vcpu->arch.guest_context;
-> +	struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
-> +	unsigned long funcid = cp->a6;
-> +	u64 temp;
-> +
-> +	/* Return not supported if PMU is not initialized */
+AM62A7-SK board has 4GB LPDDR4 Micron MT53E2G32D4DE-046 AUT:B memory but
+only 2GB was enabled early.
 
-This comment isn't necessary, it's just stating what the code
-clearly states.
+Enable full 4GB memory by updating the latter 2GB memory region
+which gets mapped to 0x0880000000 i.e. DDR16SS0_SDRAM as referred in
+Table 2-1. AM62A Common SoC Memory of AM62Ax TRM.
 
-> +	if (!kvpmu->init_done) {
-> +		retdata->err_val = SBI_ERR_NOT_SUPPORTED;
-> +		return 0;
-> +	}
-> +
-> +	switch (funcid) {
-> +	case SBI_EXT_PMU_NUM_COUNTERS:
-> +		ret = kvm_riscv_vcpu_pmu_num_ctrs(vcpu, retdata);
-> +		break;
-> +	case SBI_EXT_PMU_COUNTER_GET_INFO:
-> +		ret = kvm_riscv_vcpu_pmu_ctr_info(vcpu, cp->a0, retdata);
-> +		break;
-> +	case SBI_EXT_PMU_COUNTER_CFG_MATCH:
-> +#if defined(CONFIG_32BIT)
-> +		temp = ((uint64_t)cp->a5 << 32) | cp->a4;
-> +#else
-> +		temp = cp->a4;
-> +#endif
-> +		/*
-> +		 * This can fail if perf core framework fails to create an event.
-> +		 * Forward the error to userspace because it's an error happened
-                                                                       ^ which
+TRM : https://www.ti.com/lit/zip/spruj16
 
-> +		 * within the host kernel. The other option would be to convert
-> +		 * this an SBI error and forward to the guest.
-                       ^ to
+Logs:
+Link : https://gist.github.com/devarsht/e85b6af89c01ddadb3a62f3e5f196af8
 
-> +		 */
-> +		ret = kvm_riscv_vcpu_pmu_ctr_cfg_match(vcpu, cp->a0, cp->a1,
-> +						       cp->a2, cp->a3, temp, retdata);
-> +		break;
-> +	case SBI_EXT_PMU_COUNTER_START:
-> +#if defined(CONFIG_32BIT)
-> +		temp = ((uint64_t)cp->a4 << 32) | cp->a3;
-> +#else
-> +		temp = cp->a3;
-> +#endif
-> +		ret = kvm_riscv_vcpu_pmu_ctr_start(vcpu, cp->a0, cp->a1, cp->a2,
-> +						   temp, retdata);
-> +		break;
-> +	case SBI_EXT_PMU_COUNTER_STOP:
-> +		ret = kvm_riscv_vcpu_pmu_ctr_stop(vcpu, cp->a0, cp->a1, cp->a2, retdata);
-> +		break;
-> +	case SBI_EXT_PMU_COUNTER_FW_READ:
-> +		ret = kvm_riscv_vcpu_pmu_ctr_read(vcpu, cp->a0, retdata);
-> +		break;
-> +	default:
-> +		retdata->err_val = SBI_ERR_NOT_SUPPORTED;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static unsigned long kvm_sbi_ext_pmu_probe(struct kvm_vcpu *vcpu)
-> +{
-> +	struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
-> +
-> +	return kvpmu->init_done;
-> +}
-> +
-> +const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_pmu = {
-> +	.extid_start = SBI_EXT_PMU,
-> +	.extid_end = SBI_EXT_PMU,
-> +	.handler = kvm_sbi_ext_pmu_handler,
-> +	.probe = kvm_sbi_ext_pmu_probe,
-> +};
-> -- 
-> 2.25.1
->
+Signed-off-by: Devarsh Thakkar <devarsht@ti.com>
+---
+ arch/arm64/boot/dts/ti/k3-am62a7-sk.dts | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Otherwise,
+diff --git a/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts b/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
+index 5c9012141ee2..f6a67f072dca 100644
+--- a/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
++++ b/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
+@@ -27,8 +27,9 @@
+ 
+ 	memory@80000000 {
+ 		device_type = "memory";
+-		/* 2G RAM */
+-		reg = <0x00000000 0x80000000 0x00000000 0x80000000>;
++		/* 4G RAM */
++		reg = <0x00000000 0x80000000 0x00000000 0x80000000>,
++		      <0x00000008 0x80000000 0x00000000 0x80000000>;
+ 	};
+ 
+ 	reserved-memory {
+-- 
+2.17.1
 
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-
-Thanks,
-drew
