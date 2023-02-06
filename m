@@ -2,80 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84CC168C78D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 21:21:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7803868C78C
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 21:21:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230159AbjBFUVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 15:21:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58988 "EHLO
+        id S229951AbjBFUVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 15:21:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbjBFUVd (ORCPT
+        with ESMTP id S229711AbjBFUVc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 15:21:33 -0500
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D481B279AF;
-        Mon,  6 Feb 2023 12:21:29 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4P9crY1dHsz9xHMt;
-        Tue,  7 Feb 2023 04:13:01 +0800 (CST)
-Received: from [10.81.216.3] (unknown [10.81.216.3])
-        by APP1 (Coremail) with SMTP id LxC2BwCHDQktYeFj6MT8AA--.42193S2;
-        Mon, 06 Feb 2023 21:21:10 +0100 (CET)
-Message-ID: <3e55c8ec-1b02-fa7c-0215-1dbaf3462f94@huaweicloud.com>
-Date:   Mon, 6 Feb 2023 21:20:59 +0100
+        Mon, 6 Feb 2023 15:21:32 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9790E23C5F;
+        Mon,  6 Feb 2023 12:21:28 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id v6-20020a17090ad58600b00229eec90a7fso14180725pju.0;
+        Mon, 06 Feb 2023 12:21:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cQClKqLnds1opGgSJyQ6rzcJmQ10WKwpGChwetbEKcU=;
+        b=efdgSjsOXF6+7eDVBbj4cZDq2y8Fpq1m3BSA/uQkyn5ztYOfHyFuWj8++8RxqBigpS
+         nMOi3bS404AzlJKhRG5k0awpokIR7Pvf60WrtttAOFmQ89gX3iAuanpf7TLimOS4gv81
+         yG6/hoETkFN0z10oPR6XbojvJlTppWmvE5M4ZluVQghRtEG9kdWi/0qnz9tn5aiZX8T2
+         kuykMeZD0bvey/NQ/rgOzvZAX5AJxppVXBvXUY+f4e4qqR997WJ4ScAs3zqFSp1rfXM+
+         Hoaje4tIOy6/OGyDJmBZWKCefW2ObmDrZC+zgSQK4dyudG/cqaV2hm3IZLFDaSOdjD7t
+         8jpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cQClKqLnds1opGgSJyQ6rzcJmQ10WKwpGChwetbEKcU=;
+        b=tCBxCDisaweuXVQu+Yq79+q+zEC5QLo20X6gwqAuvzXE6XiG0dmy4m4SSOW0vx8U03
+         hGfrCwAC25xoqtgxbhKw5qcAeshBqKl8UmElrQJvfAq9MmzlviWteKP8Fd+Z478IBVhG
+         /OQmaTCJWaVouAmsJ7I1iMEqC07WJsAOj9oSipAqyo5RX3lPeMao0WdrADvab9E2agR4
+         DZ55QmPrNc/wiirt0KyROT2Nqks7zn5av4ljSWgmDQvfkQLrla7gLjohcYcZvIbW/NxO
+         RaRtVRjKXB81g81XvKIQH/VqqAV7ZPkwiA+u1ZdX9m/xHDXKOKs1t6sa4a/KcnNmqepV
+         0Jpw==
+X-Gm-Message-State: AO0yUKWBXFF1i7R+2vuSFOAqGgosneHNDqOWGYHxt1bUTWK5qDMXqiVu
+        XwofDAUmWqCws/szazm8FK2ih9HFpO0=
+X-Google-Smtp-Source: AK7set9HnLFBkxMFEQQv95VKfuIJ6fvPGtHx/M9hdT0MnjSe2iA8tslg1okbyq4seLvVxt7cnXKzlw==
+X-Received: by 2002:a17:903:110e:b0:196:8798:57d9 with SMTP id n14-20020a170903110e00b00196879857d9mr260442plh.5.1675714887773;
+        Mon, 06 Feb 2023 12:21:27 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id v3-20020a170902e8c300b0019602274208sm6719975plg.186.2023.02.06.12.21.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Feb 2023 12:21:26 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 6 Feb 2023 10:21:25 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Will Deacon <will@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
+        Peter Zijlstra <peterz@infradead.org>,
+        Waiman Long <longman@redhat.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org
+Subject: Re: [PATCH 2/2] cpuset: Call set_cpus_allowed_ptr() with appropriate
+ mask for task
+Message-ID: <Y+FhRW59h+h1bTcr@slm.duckdns.org>
+References: <20230131221719.3176-1-will@kernel.org>
+ <20230131221719.3176-3-will@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: Current LKMM patch disposition
-To:     paulmck@kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, kernel-team@meta.com, mingo@kernel.org
-Cc:     stern@rowland.harvard.edu, parri.andrea@gmail.com, will@kernel.org,
-        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
-        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
-        akiyks@gmail.com
-References: <20230204004843.GA2677518@paulmck-ThinkPad-P17-Gen-1>
-From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-In-Reply-To: <20230204004843.GA2677518@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwCHDQktYeFj6MT8AA--.42193S2
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY47kC6x804xWl14x267AKxVW8JVW5JwAF
-        c2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII
-        0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xv
-        wVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjc
-        xK6I8E87Iv6xkF7I0E14v26r4j6r4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
-        FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr
-        0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY
-        04v7Mxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7
-        v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF
-        1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIx
-        AIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVW3JVWrJr1l
-        IxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvf
-        C2KfnxnUUI43ZEXa7IUbPEf5UUUUU==
-X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230131221719.3176-3-will@kernel.org>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jan 31, 2023 at 10:17:19PM +0000, Will Deacon wrote:
+> set_cpus_allowed_ptr() will fail with -EINVAL if the requested
+> affinity mask is not a subset of the task_cpu_possible_mask() for the
+> task being updated. Consequently, on a heterogeneous system with cpusets
+> spanning the different CPU types, updates to the cgroup hierarchy can
+> silently fail to update task affinities when the effective affinity
+> mask for the cpuset is expanded.
+> 
+> For example, consider an arm64 system with 4 CPUs, where CPUs 2-3 are
+> the only cores capable of executing 32-bit tasks. Attaching a 32-bit
+> task to a cpuset containing CPUs 0-2 will correctly affine the task to
+> CPU 2. Extending the cpuset to CPUs 0-3, however, will fail to extend
+> the affinity mask of the 32-bit task because update_tasks_cpumask() will
+> pass the full 0-3 mask to set_cpus_allowed_ptr().
+> 
+> Extend update_tasks_cpumask() to take a temporary 'cpumask' paramater
+> and use it to mask the 'effective_cpus' mask with the possible mask for
+> each task being updated.
+> 
+> Fixes: 431c69fac05b ("cpuset: Honour task_cpu_possible_mask() in guarantee_online_cpus()")
+> Signed-off-by: Will Deacon <will@kernel.org>
 
+Applied to cgroup/for-6.2-fixes.
 
-On 2/4/2023 1:48 AM, Paul E. McKenney wrote:
-> [...]
-> https://lore.kernel.org/lkml/20230203201913.2555494-1-joel@joelfernandes.org/
-> 5d871b280e7f ("tools/memory-model: Add smp_mb__after_srcu_read_unlock()")
->
-> 	These need review and perhaps further adjustment.
->
-> So, am I missing any?  Are there any that need to be redirected?
+Thanks.
 
-Didn't you schedule joel's patch for 6.4?
-
-Best wishes,
-jonasx
-
+-- 
+tejun
