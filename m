@@ -2,110 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F244068B66D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 08:31:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8144868B671
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 08:31:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbjBFHbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 02:31:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46308 "EHLO
+        id S229836AbjBFHbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 02:31:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjBFHbN (ORCPT
+        with ESMTP id S229763AbjBFHbi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 02:31:13 -0500
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B25EC1D917;
-        Sun,  5 Feb 2023 23:30:34 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 0AAD532001C6;
-        Mon,  6 Feb 2023 02:29:53 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Mon, 06 Feb 2023 02:29:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1675668593; x=1675754993; bh=fiqx19znL1
-        IjOv95/GPeYngB8bz9vW8hRvhO1w0WvC8=; b=IRb65Q6oUQ+jfDdGkGmHbKkk+M
-        oCqH6UCQa0odDTY0grDIZugsBZ1UbLA7faHgRJxxAdeX4AH6U0SOQSavTGYFU5CN
-        9oKtxASxHhtuXLu+HQx7tcvlw/qlNZVjgH1hRKX9l3uyezL/VXem8gGJJL8xrMpf
-        VgiX+9J5jnA406MlzQbe06HEJco5q+U30Pf9mD9SBQFXusodhyT8FB+AHhPsZZJE
-        zgNUkBCTFuAQ6TXL0ShA1Tn+3ot5888tIMwcM7aHTm2FifXyzXVxRDs4DgG8ANPn
-        aiQrFI7C8FqhpM078F8E1YhzJ5YC3BRKlPpcPSukrxrpM9bwaSTwPJJQm2Ug==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1675668593; x=1675754993; bh=fiqx19znL1IjOv95/GPeYngB8bz9
-        vW8hRvhO1w0WvC8=; b=WTz/ZzfTR3GmBU3rXCwQ92DMxQJtpZWWLgDjpVxOKCsA
-        YnWBpIK+XbOyORpV4EdiHKhU+4uGsj2R0WnxoaL1N5alO495+im2RTqYRh1s/86W
-        VVLihCFh/5qknxp45rqGUs8dQC+vekVE5KMUIRbh5SJXm43aIZBmEN/9/JD9n7By
-        BEEy24FNxT/SSEhx341YVYzotzZlPBJ9unAQJ9JmkrW1VHFnDYmm+mMj3qwQq67B
-        fsjcfNfR0ndVvoYfGcaptFo/o02DwulVCZKn3QVEv5ZXdA3CebReLqdKpTuk07H/
-        GBHaBI+htAkLPzyvgvY9Be4H1ZydQU8Ezf/7spLRFg==
-X-ME-Sender: <xms:cazgYxtrg4ZIOY_9aqjSNJfbdxxm1oWLjPF2fck4BC87lkCvUOv5WA>
-    <xme:cazgY6f4CMfuk_QnT95udCiGOqTD9m8WGclvomef5DYgTLs0iZnBwZwDXbMUYzxmA
-    MI_4PINwal_SA>
-X-ME-Received: <xmr:cazgY0xBjNEmRdT09D_RQCb0x4CyZlbKpNzC-yQzJA2w09mDA6S5MZmCmXBmiJHwic2sS-g64uLLpqthCdsn1pjyieHY9J2Z3RH8pg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeghedguddthecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgv
-    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehge
-    dvvedvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhu
-    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhroh
-    grhhdrtghomh
-X-ME-Proxy: <xmx:cazgY4OBVZq9SRKXzjQ3bM2excSmAqobWs-jbFWO1WaIZ1lvFbEvTQ>
-    <xmx:cazgYx-by8Oe_vO-mR5UDqmDcfljncCSgsUehbpky5-ZJkODRI8jfA>
-    <xmx:cazgY4WCia63Sd6XtYPuQZ4htV-mp7w7QQNFQVJqIK5d8lC8OtmYuQ>
-    <xmx:cazgYxzN3YGYjHKUN62SCD77XrRNQGJgjYIrgXTNhOWvg6WAw_mThA>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 6 Feb 2023 02:29:52 -0500 (EST)
-Date:   Mon, 6 Feb 2023 08:29:49 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Daniel Scally <dan.scally@ideasonboard.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the usb tree
-Message-ID: <Y+CsbZTTPGWLnRAA@kroah.com>
-References: <20230206145004.6e043ed3@canb.auug.org.au>
+        Mon, 6 Feb 2023 02:31:38 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 749DF1D92B;
+        Sun,  5 Feb 2023 23:31:23 -0800 (PST)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3166Em6r002272;
+        Mon, 6 Feb 2023 07:31:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=WJ2PBCzCBe5jQknbYA/Frjaf7PliducbAMo3lx1yCwA=;
+ b=Ve59Ldf3wWBaqtCGjEa9mg8y6c1+mYaR9jwd+38BQ3Q+GWzuD85C6XM7l2hBNQxyycmi
+ VlZZ1+0cMo94/HD7YTVuQfbP3MlrWD8iBKTEqk9MXwu+nyCsL+vXcPCKGW51qVRchqoT
+ zHf7LViIx58p+Uw8HVpNjZO3lVTwkarBTokyVmO3sE8molBx9YOAl08cM0FByqwEHnG/
+ zaob7X0XEuBH6P34EnWGHKWVi+qGFZTuBCTTOwKRh/apqkS1skweW2Kl56BUKVg0grpr
+ O+1GqksR2Vd+11rLIv4gq/81C1z7RXv0B1weFVZATO7u7sfrUZZdSfwMTX1haKtwH4fN lw== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nhcqxu8sf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Feb 2023 07:31:20 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3167VJdG003541
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 6 Feb 2023 07:31:19 GMT
+Received: from kathirav-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Sun, 5 Feb 2023 23:31:15 -0800
+From:   Kathiravan T <quic_kathirav@quicinc.com>
+To:     <andersson@kernel.org>, <agross@kernel.org>,
+        <konrad.dybcio@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <quic_varada@quicinc.com>, <quic_srichara@quicinc.com>,
+        Kathiravan T <quic_kathirav@quicinc.com>
+Subject: [PATCH V2] clk: qcom: ipq5332: mark GPLL4 as critical temporarily
+Date:   Mon, 6 Feb 2023 13:01:01 +0530
+Message-ID: <20230206073101.14796-1-quic_kathirav@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230206145004.6e043ed3@canb.auug.org.au>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: sYETrLwmqa0Vm2Kd3Qdcp-GcUCeycAql
+X-Proofpoint-GUID: sYETrLwmqa0Vm2Kd3Qdcp-GcUCeycAql
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-06_03,2023-02-03_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ priorityscore=1501 suspectscore=0 clxscore=1015 mlxscore=0
+ lowpriorityscore=0 bulkscore=0 spamscore=0 phishscore=0 impostorscore=0
+ mlxlogscore=815 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2302060064
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 06, 2023 at 02:50:04PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the usb tree, today's linux-next build (htmldocs) produced
-> this warning:
-> 
-> Documentation/ABI/testing/configfs-usb-gadget-uvc:14: ERROR: Malformed table.
-> Text in column margin in table line 4.
-> 
-> ================        =============================
-> bInterfaceNumber        USB interface number for this
->                         streaming interface
-> enable_interrupt_ep     flag to enable the interrupt
->                         endpoint for the VC interface
-> ================        =============================
-> 
-> Introduced by commit
-> 
->   a36afe780461 ("usb: gadget: uvc: Add new enable_interrupt_ep attribute")
+Clock framework disables the GPLL4 source since there are no active users
+for this source currently. Some of the clocks initialized by the
+bootloaders uses the GPLL4 as the source. Due to this, when the GPLL4 is
+disabled by the clock framework, system is going for the reboot.
 
-Sorry about this, it's been reported for a while and I think we have a
-working patch for this in my review queue.  I'll push it out soon.
+To avoid this, mark the GPLL4 as CRITICAL so that clock framework
+doesn't disable it. Once the users of this source is enabled, we can get
+rid of this flag.
 
-thanks,
+Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
+---
+Changes in V2:
+	- Added a comment in driver explaining the need of the flag
 
-greg k-h
+ drivers/clk/qcom/gcc-ipq5332.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/drivers/clk/qcom/gcc-ipq5332.c b/drivers/clk/qcom/gcc-ipq5332.c
+index c8a5fa1bafca..2e043d2d0598 100644
+--- a/drivers/clk/qcom/gcc-ipq5332.c
++++ b/drivers/clk/qcom/gcc-ipq5332.c
+@@ -127,6 +127,16 @@ static struct clk_alpha_pll gpll4_main = {
+ 			.parent_data = &gcc_parent_data_xo,
+ 			.num_parents = 1,
+ 			.ops = &clk_alpha_pll_stromer_ops,
++			/*
++			 * There are no consumers for this GPLL in kernel yet,
++			 * (will be added soon), so the clock framework
++			 * disables this source. But some of the clocks
++			 * initialized by boot loaders uses this source. So we
++			 * need to keep this clock ON. Add the CRITICAL flag
++			 * so the clock will not be disabled. Once the consumer
++			 * in kernel is added, we can get rid off this flag.
++			 */
++			.flags = CLK_IS_CRITICAL,
+ 		},
+ 	},
+ };
+-- 
+2.17.1
+
