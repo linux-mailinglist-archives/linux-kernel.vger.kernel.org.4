@@ -2,218 +2,302 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BC7268C64E
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 19:58:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 573B668C651
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 19:59:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229960AbjBFS6s convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 6 Feb 2023 13:58:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34736 "EHLO
+        id S230214AbjBFS7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 13:59:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjBFS6p (ORCPT
+        with ESMTP id S229648AbjBFS7n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 13:58:45 -0500
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC42083ED;
-        Mon,  6 Feb 2023 10:58:43 -0800 (PST)
-Received: by mail-ej1-f54.google.com with SMTP id gr7so37011907ejb.5;
-        Mon, 06 Feb 2023 10:58:43 -0800 (PST)
+        Mon, 6 Feb 2023 13:59:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41F5C26862
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 10:58:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675709930;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=m16OitzwO71nkhwycKeW6iMhsPFeKDcAk5Zf0tX9cZY=;
+        b=TwT4o9kV52bL04RBU0cVfTQ376jxUCWoXPGpzxtBctOahrG8tIPR4UPOT+nWeBdDnIE3HD
+        MuwTJj1YAEAMj+w5mX1v9CD18Eo7XYBIXvr1gTAJ3WCPijXmOeoaKa1sm2oIsVkIO6+P4x
+        GlzyBrtSoxmhpmXkV3Ppe3lkLiH34kE=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-297-XCV19yivOv6bWDV8rhPNJg-1; Mon, 06 Feb 2023 13:58:48 -0500
+X-MC-Unique: XCV19yivOv6bWDV8rhPNJg-1
+Received: by mail-wm1-f71.google.com with SMTP id k17-20020a05600c1c9100b003dd41ad974bso6988977wms.3
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 10:58:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XZRKKRT4ZIDV3Cuy+Qfd+p1zTOEBSHwGJp1JZTzG5ok=;
-        b=6CyGVfzdhvdwnORt3O7GXsIeOTpQ3H0ocQuvUqalA/qNjfXe4VZgSnWr7sKXZYxk9N
-         Bs1RaV4QZd6X6B9Pt8tS4jsXWWVh/pyxPlTCDgLMyoDKajBzIrszL1bxjZv6eaZUoTiI
-         jH8TL8GEECTeLrIEjQXZuAaEYo1SaMIkfRSzu2vk8ew3ZBybql4mK0LuZV2IeXmeHnuc
-         qbiDu72rICnMkGr+rBKGLEPgzeV4T4VOIAEh+xT454w2Ddg9k0o/TaDJxsDQaLq+RJ1n
-         4OUHVuVb8BGWsaNd3nVqAjsU9xEhRTUXTEh6ZgDAjlAwgwN6IUje5BpHcmtMPWZYk/0k
-         D7mw==
-X-Gm-Message-State: AO0yUKVXCggotYin+k4zK798GjIHJ2MN8UvY4EKnomtDwQsr/9iwomkz
-        7QGcdexWFKNz13siKGHwGCzuyoZuKU87skyeg9I=
-X-Google-Smtp-Source: AK7set/ak6MZnYdtQTxsAVE+xz5YVi/RCMv1r2gAopn+b4EYawjkQDtLUqkG7w3CwQvvjMKYVVhk4m9t4/2rSFuORBE=
-X-Received: by 2002:a17:906:ce2e:b0:87f:575a:9b67 with SMTP id
- sd14-20020a170906ce2e00b0087f575a9b67mr108593ejb.274.1675709922484; Mon, 06
- Feb 2023 10:58:42 -0800 (PST)
-MIME-Version: 1.0
-References: <20220707125329.378277-1-jaz@semihalf.com> <20220707125329.378277-2-jaz@semihalf.com>
- <CAJZ5v0gdCN3P52ko44LQMqWJvDArHxZ7p4aSiQamML7aG_kRAA@mail.gmail.com>
- <CAH76GKO9sxnuLM--x6sg7m3bC_NgvLA94N6jHA-+5gW741-ByQ@mail.gmail.com>
- <CAH76GKMw2rAnQOSFqReG1sEC=sdncWOJHNXn-Rp2Gx1oUZR3ZQ@mail.gmail.com>
- <CAH76GKMtMi-Bp9h_49t5TBwF1cT0AQE=4H+4E+a4SK+cJ4JJ6A@mail.gmail.com> <CAH76GKMpnCmrbUfo8oQ1C4ej_iNmSw=xBHb8UZYy5Z8vQwcCzQ@mail.gmail.com>
-In-Reply-To: <CAH76GKMpnCmrbUfo8oQ1C4ej_iNmSw=xBHb8UZYy5Z8vQwcCzQ@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 6 Feb 2023 19:58:31 +0100
-Message-ID: <CAJZ5v0gov4cnWiF9RsbrEOgZZS=K2_tw5w_2ws2kgi66iXUufA@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/2] suspend: extend S2Idle ops by new notify handler
-To:     Grzegorz Jaszczyk <jaz@semihalf.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Dmytro Maluka <dmy@semihalf.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Dominik Behr <dbehr@google.com>, upstream@semihalf.com,
-        Zide Chen <zide.chen@intel.corp-partner.google.com>,
-        Len Brown <lenb@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        h=user-agent:in-reply-to:content-transfer-encoding
+         :content-disposition:mime-version:references:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=m16OitzwO71nkhwycKeW6iMhsPFeKDcAk5Zf0tX9cZY=;
+        b=xMPOv7O7wdyREgTkR/YXYy19a5Hz/Qzm9XcAehi0iCYHTfQ15lv4yCakOQpQhN3Vt7
+         UVTxdBXCMomVr0GmfL8ceroWGLE6cHuY11fzVqdlCszabnq0yem2e4GGBTneIoz/Ldtw
+         Tmf2y72eR+6kn29dZyd85YUl97n502/urkYQPBXpO6mQ99DO6lYJo5n/xWWGj/jSVrZA
+         8jU2ylbX9eWsGzd/EE7c/AksCn/5Qp5qSwLHWEXVPKuJDdfzoeQZCsp5UQS4y7yT6lyh
+         3rtvaC73vNfNpDZ632vXM+BZ/fHOWrLB1hKVgXP6huNz1wGM7I/7GzhYaTSZVOkRoyTc
+         eSJA==
+X-Gm-Message-State: AO0yUKVAHZOVCBcH5Y8Nsue+UmnwQGcQiWre8wlaoLUNt0ktJJkgrHkZ
+        zTRyAXvDJh2pCZVpz6nKXWs9AgTwMKOPVFHBVh8DOtYRLQirhStRos19Xd6P74ouZWuDvopZsZr
+        zXUZstv7vawb64Cx69KhFlmgo
+X-Received: by 2002:a05:6000:69b:b0:2bf:dcdc:afb8 with SMTP id bo27-20020a056000069b00b002bfdcdcafb8mr20030057wrb.64.1675709927237;
+        Mon, 06 Feb 2023 10:58:47 -0800 (PST)
+X-Google-Smtp-Source: AK7set8UHg3rrYoack96/+Aen7rLx+dOSRGVf2dLJL6sX4SVrvCzEJO1dTlVfmXxYWw3BHd7tf86MA==
+X-Received: by 2002:a05:6000:69b:b0:2bf:dcdc:afb8 with SMTP id bo27-20020a056000069b00b002bfdcdcafb8mr20030031wrb.64.1675709926964;
+        Mon, 06 Feb 2023 10:58:46 -0800 (PST)
+Received: from work-vm (ward-16-b2-v4wan-166627-cust863.vm18.cable.virginm.net. [81.97.203.96])
+        by smtp.gmail.com with ESMTPSA id s16-20020adff810000000b002c3dc4131f5sm7212697wrp.18.2023.02.06.10.58.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Feb 2023 10:58:46 -0800 (PST)
+Date:   Mon, 6 Feb 2023 18:58:44 +0000
+From:   "Dr. David Alan Gilbert" <dgilbert@redhat.com>
+To:     Christophe de Dinechin <dinechin@redhat.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Reshetova, Elena" <elena.reshetova@intel.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
+        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
+        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
+        "Kleen, Andi" <andi.kleen@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Wunner, Lukas" <lukas.wunner@intel.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Sachi King <nakato@nakato.io>,
-        "open list:ACPI" <linux-acpi@vger.kernel.org>,
-        "open list:X86 PLATFORM DRIVERS" 
-        <platform-driver-x86@vger.kernel.org>,
-        "open list:HIBERNATION (aka Software Suspend, aka swsusp)" 
-        <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Jason Wang <jasowang@redhat.com>,
+        "Poimboe, Josh" <jpoimboe@redhat.com>,
+        "aarcange@redhat.com" <aarcange@redhat.com>,
+        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
+        "jbachmann@google.com" <jbachmann@google.com>,
+        "pgonda@google.com" <pgonda@google.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        James Morris <jmorris@namei.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        "Lange, Jon" <jlange@microsoft.com>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>
+Subject: Re: Linux guest kernel threat model for Confidential Computing
+Message-ID: <Y+FN5B9VIKNFijCO@work-vm>
+References: <220b0be95a8c733f0a6eeddc08e37977ee21d518.camel@linux.ibm.com>
+ <DM8PR11MB575074D3BCBD02F3DD677A57E7D09@DM8PR11MB5750.namprd11.prod.outlook.com>
+ <261bc99edc43990eecb1aac4fe8005cedc495c20.camel@linux.ibm.com>
+ <m2h6w6k5on.fsf@redhat.com>
+ <20230131123033-mutt-send-email-mst@kernel.org>
+ <6BCC3285-ACA3-4E38-8811-1A91C9F03852@redhat.com>
+ <20230201055412-mutt-send-email-mst@kernel.org>
+ <4B78D161-2712-434A-8E6F-9D8BA468BB3A@redhat.com>
+ <20230201105305-mutt-send-email-mst@kernel.org>
+ <m2zg9xi8gr.fsf@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <m2zg9xi8gr.fsf@redhat.com>
+User-Agent: Mutt/2.2.9 (2022-11-12)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 1:25 PM Grzegorz Jaszczyk <jaz@semihalf.com> wrote:
->
-> Hi Rafael,
->
-> Kindly reminder about this topic.
-
-Well, it's been a bit outdated since Mario's changes have been integrated.
-
-> BTW I've noticed that in the meantime v. similar patch was merged but
-> aimed for debugging purposes [1] (it uses s/notify/check and invokes
-> the callback a bit earlier just before s2idle_entry).
-> Perhaps combining Mario's [1] with aligned to it patch #2 of this
-> series [2] could be used and accepted as s2idle notifications method?
-
-Maybe it could.
-
-Please send a new series based on top of the current mainline kernel
-(6.2-rc7 as of yesterday) and we'll see.
-
-> [1] https://patchwork.kernel.org/project/linux-pm/patch/20220829162953.5947-2-mario.limonciello@amd.com
-> [2] https://patchwork.kernel.org/project/linux-pm/patch/20220707125329.378277-3-jaz@semihalf.com/
->
-> pon., 12 wrz 2022 o 16:44 Grzegorz Jaszczyk <jaz@semihalf.com> napisał(a):
+* Christophe de Dinechin (dinechin@redhat.com) wrote:
+> 
+> On 2023-02-01 at 11:02 -05, "Michael S. Tsirkin" <mst@redhat.com> wrote...
+> > On Wed, Feb 01, 2023 at 02:15:10PM +0100, Christophe de Dinechin Dupont de Dinechin wrote:
+> >>
+> >>
+> >> > On 1 Feb 2023, at 12:01, Michael S. Tsirkin <mst@redhat.com> wrote:
+> >> >
+> >> > On Wed, Feb 01, 2023 at 11:52:27AM +0100, Christophe de Dinechin Dupont de Dinechin wrote:
+> >> >>
+> >> >>
+> >> >>> On 31 Jan 2023, at 18:39, Michael S. Tsirkin <mst@redhat.com> wrote:
+> >> >>>
+> >> >>> On Tue, Jan 31, 2023 at 04:14:29PM +0100, Christophe de Dinechin wrote:
+> >> >>>> Finally, security considerations that apply irrespective of whether the
+> >> >>>> platform is confidential or not are also outside of the scope of this
+> >> >>>> document. This includes topics ranging from timing attacks to social
+> >> >>>> engineering.
+> >> >>>
+> >> >>> Why are timing attacks by hypervisor on the guest out of scope?
+> >> >>
+> >> >> Good point.
+> >> >>
+> >> >> I was thinking that mitigation against timing attacks is the same
+> >> >> irrespective of the source of the attack. However, because the HV
+> >> >> controls CPU time allocation, there are presumably attacks that
+> >> >> are made much easier through the HV. Those should be listed.
+> >> >
+> >> > Not just that, also because it can and does emulate some devices.
+> >> > For example, are disk encryption systems protected against timing of
+> >> > disk accesses?
+> >> > This is why some people keep saying "forget about emulated devices, require
+> >> > passthrough, include devices in the trust zone".
+> >> >
+> >> >>>
+> >> >>>> </doc>
+> >> >>>>
+> >> >>>> Feel free to comment and reword at will ;-)
+> >> >>>>
+> >> >>>>
+> >> >>>> 3/ PCI-as-a-threat: where does that come from
+> >> >>>>
+> >> >>>> Isn't there a fundamental difference, from a threat model perspective,
+> >> >>>> between a bad actor, say a rogue sysadmin dumping the guest memory (which CC
+> >> >>>> should defeat) and compromised software feeding us bad data? I think there
+> >> >>>> is: at leats inside the TCB, we can detect bad software using measurements,
+> >> >>>> and prevent it from running using attestation.  In other words, we first
+> >> >>>> check what we will run, then we run it. The security there is that we know
+> >> >>>> what we are running. The trust we have in the software is from testing,
+> >> >>>> reviewing or using it.
+> >> >>>>
+> >> >>>> This relies on a key aspect provided by TDX and SEV, which is that the
+> >> >>>> software being measured is largely tamper-resistant thanks to memory
+> >> >>>> encryption. In other words, after you have measured your guest software
+> >> >>>> stack, the host or hypervisor cannot willy-nilly change it.
+> >> >>>>
+> >> >>>> So this brings me to the next question: is there any way we could offer the
+> >> >>>> same kind of service for KVM and qemu? The measurement part seems relatively
+> >> >>>> easy. Thetamper-resistant part, on the other hand, seems quite difficult to
+> >> >>>> me. But maybe someone else will have a brilliant idea?
+> >> >>>>
+> >> >>>> So I'm asking the question, because if you could somehow prove to the guest
+> >> >>>> not only that it's running the right guest stack (as we can do today) but
+> >> >>>> also a known host/KVM/hypervisor stack, we would also switch the potential
+> >> >>>> issues with PCI, MSRs and the like from "malicious" to merely "bogus", and
+> >> >>>> this is something which is evidently easier to deal with.
+> >> >>>
+> >> >>> Agree absolutely that's much easier.
+> >> >>>
+> >> >>>> I briefly discussed this with James, and he pointed out two interesting
+> >> >>>> aspects of that question:
+> >> >>>>
+> >> >>>> 1/ In the CC world, we don't really care about *virtual* PCI devices. We
+> >> >>>>  care about either virtio devices, or physical ones being passed through
+> >> >>>>  to the guest. Let's assume physical ones can be trusted, see above.
+> >> >>>>  That leaves virtio devices. How much damage can a malicious virtio device
+> >> >>>>  do to the guest kernel, and can this lead to secrets being leaked?
+> >> >>>>
+> >> >>>> 2/ He was not as negative as I anticipated on the possibility of somehow
+> >> >>>>  being able to prevent tampering of the guest. One example he mentioned is
+> >> >>>>  a research paper [1] about running the hypervisor itself inside an
+> >> >>>>  "outer" TCB, using VMPLs on AMD. Maybe something similar can be achieved
+> >> >>>>  with TDX using secure enclaves or some other mechanism?
+> >> >>>
+> >> >>> Or even just secureboot based root of trust?
+> >> >>
+> >> >> You mean host secureboot? Or guest?
+> >> >>
+> >> >> If it’s host, then the problem is detecting malicious tampering with
+> >> >> host code (whether it’s kernel or hypervisor).
+> >> >
+> >> > Host.  Lots of existing systems do this.  As an extreme boot a RO disk,
+> >> > limit which packages are allowed.
+> >>
+> >> Is that provable to the guest?
+> >>
+> >> Consider a cloud provider doing that: how do they prove to their guest:
+> >>
+> >> a) What firmware, kernel and kvm they run
+> >>
+> >> b) That what they booted cannot be maliciouly modified, e.g. by a rogue
+> >>    device driver installed by a rogue sysadmin
+> >>
+> >> My understanding is that SecureBoot is only intended to prevent non-verified
+> >> operating systems from booting. So the proof is given to the cloud provider,
+> >> and the proof is that the system boots successfully.
 > >
-> > Hi Rafael,
+> > I think I should have said measured boot not secure boot.
+> 
+> The problem again is how you prove to the guest that you are not lying?
+> 
+> We know how to do that from a guest [1], but you will note that in the
+> normal process, a trusted hardware component (e.g. the PSP for AMD SEV)
+> proves the validity of the measurements of the TCB by encrypting it with an
+> attestation signing key derived from some chip-unique secret. For AMD, this
+> is called the VCEK, and TDX has something similar. In the case of SEV, this
+> goes through firmware, and you have to tell the firmware each time you
+> insert data in the original TCB (using SNP_LAUNCH_UPDATE). This is all tied
+> to a VM execution context. I do not believe there is any provision to do the
+> same thing to measure host data. And again, it would be somewhat pointless
+> if there isn't also a mechanism to ensure the host data is not changed after
+> the measurement.
+> 
+> Now, I don't think it would be super-difficult to add a firmware service
+> that would let the host do some kind of equivalent to PVALIDATE, setting
+> some physical pages aside that then get measured and become inaccessible to
+> the host. The PSP or similar could then integrate these measurements as part
+> of the TCB, and the fact that the pages were "transferred" to this special
+> invariant block would ensure the guests that the code will not change after
+> being measured.
+> 
+> I am not aware that such a mechanism exists on any of the existing CC
+> platforms. Please feel free to enlighten me if I'm wrong.
+> 
+> [1] https://www.redhat.com/en/blog/understanding-confidential-containers-attestation-flow
 > >
-> > Gentle ping
+> >>
+> >> After that, I think all bets are off. SecureBoot does little AFAICT
+> >> to prevent malicious modifications of the running system by someone with
+> >> root access, including deliberately loading a malicious kvm-zilog.ko
 > >
-> > Best regards,
-> > Grzegorz
+> > So disable module loading then or don't allow root access?
+> 
+> Who would do that?
+> 
+> The problem is that we have a host and a tenant, and the tenant does not
+> trust the host in principle. So it is not sufficient for the host to disable
+> module loading or carefully control root access. It is also necessary to
+> prove to the tenant(s) that this was done.
+> 
 > >
-> > pon., 22 sie 2022 o 11:26 Grzegorz Jaszczyk <jaz@semihalf.com> napisał(a):
-> > >
-> > > Hi Rafael,
-> > >
-> > > Could you please kindly comment on the above?
-> > >
-> > > Thank you in advance,
-> > > Grzegorz
-> > >
-> > > śr., 20 lip 2022 o 15:15 Grzegorz Jaszczyk <jaz@semihalf.com> napisał(a):
-> > > >
-> > > > wt., 19 lip 2022 o 20:09 Rafael J. Wysocki <rafael@kernel.org> napisał(a):
-> > > > >
-> > > > > On Thu, Jul 7, 2022 at 2:56 PM Grzegorz Jaszczyk <jaz@semihalf.com> wrote:
-> > > > > >
-> > > > > > Currently the LPS0 prepare_late callback is aimed to run as the very
-> > > > > > last thing before entering the S2Idle state from LPS0 perspective,
-> > > > > > nevertheless between this call and the system actually entering the
-> > > > > > S2Idle state there are several places where the suspension process could
-> > > > > > be canceled.
-> > > > >
-> > > > > And why is this a problem?
-> > > > >
-> > > > > The cancellation will occur only if there is a wakeup signal that
-> > > > > would otherwise cause one of the CPUs to exit the idle state.  Such a
-> > > > > wakeup signal can appear after calling the new notifier as well, so
-> > > > > why does it make a difference?
-> > > >
-> > > > It could also occur due to suspend_test. Additionally with new
-> > > > notifier we could get notification when the system wakes up from
-> > > > s2idle_loop and immediately goes to sleep again (due to e.g.
-> > > > acpi_s2idle_wake condition not being met) - in this case relying on
-> > > > prepare_late callback is not possible since it is not called in this
-> > > > path.
-> > > >
-> > > > >
-> > > > > > In order to notify VMM about guest entering suspend, extend the S2Idle
-> > > > > > ops by new notify callback, which will be really invoked as a very last
-> > > > > > thing before guest actually enters S2Idle state.
-> > > > >
-> > > > > It is not guaranteed that "suspend" (defined as all CPUs entering idle
-> > > > > states) will be actually entered even after this "last step".
-> > > >
-> > > > Since this whole patchset is aimed at notifying the host about a guest
-> > > > entering s2idle state, reaching this step can be considered as a
-> > > > suspend "entry point" for VM IMO. It is because we are talking about
-> > > > the vCPU not the real CPU. Therefore it seems to me, that even if some
-> > > > other vCPUs could still get some wakeup signal they will not be able
-> > > > to kick (through s2idle_wake->swake_up_one(&s2idle_wait_head);) the
-> > > > original vCPU which entered s2idle_loop, triggered the new notifier
-> > > > and is halted due to handling vCPU exit (and was about to trigger
-> > > > swait_event_exclusive). So it will prevent the VM's resume process
-> > > > from being started.
-> > > >
-> > > > >
-> > > > > > Additionally extend the acpi_s2idle_dev_ops by notify() callback so
-> > > > > > any driver can hook into it and allow to implement its own notification.
-> > > > > >
-> > > > > > Taking advantage of e.g. existing acpi_s2idle_dev_ops's prepare/restore
-> > > > > > hooks is not an option since it will not allow to prevent race
-> > > > > > conditions:
-> > > > > > - VM0 enters s2idle
-> > > > > > - host notes about VM0 is in s2idle
-> > > > > > - host continues with system suspension but in the meantime VM0 exits
-> > > > > > s2idle and sends notification but it is already too late (VM could not
-> > > > > > even send notification on time).
-> > > > >
-> > > > > Too late for what?
-> > > >
-> > > > Too late to cancel the host suspend process, which thinks that the VM
-> > > > is in s2idle state while it isn't.
-> > > >
-> > > > >
-> > > > > > Introducing notify() as a very last step before the system enters S2Idle
-> > > > > > together with an assumption that the VMM has control over guest
-> > > > > > resumption allows preventing mentioned races.
-> > > > >
-> > > > > How does it do that?
-> > > >
-> > > > At the moment when VM triggers this new notifier we trap on MMIO
-> > > > access and the VMM handles vCPU exit (so the vCPU is "halted").
-> > > > Therefore the VMM could control when it finishes such handling and
-> > > > releases the vCPU again.
-> > > >
-> > > > Maybe adding some more context will be helpful. This patchset was
-> > > > aimed for two different scenarios actually:
-> > > > 1) Host is about to enter the suspend state and needs first to suspend
-> > > > VM with all pass-through devices. In this case the host waits for
-> > > > s2idle notification from the guest and when it receives it, it
-> > > > continues with its own suspend process.
-> > > > 2) Guest could be a "privileged" one (in terms of VMM) and when the
-> > > > guest enters s2idle state it notifies the host, which in turn triggers
-> > > > the suspend process of the host.
-> > > >
-> > > > >
-> > > > > It looks like you want suspend-to-idle to behave like S3 and it won't.
-> > > >
-> > > > In a way, yes, we compensate for the lack of something like PM1_CNT to
-> > > > trap on for detecting that the guest is suspending.
-> > > > We could instead force the guest to use S3 but IMO it is undesirable,
-> > > > since it generally does make a difference which suspend mode is used
-> > > > in the guest, s2idle or S3, e.g some drivers check which suspend type
-> > > > is used and based on that behaves differently during suspend. One of
-> > > > the example is:
-> > > > https://elixir.bootlin.com/linux/v5.18.12/source/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c#L2323
-> > > > https://elixir.bootlin.com/linux/v5.18.12/source/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c#L1069
-> > > > https://elixir.bootlin.com/linux/v5.18.12/source/drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c#L583
-> > > >
-> > > > Thank you,
-> > > > Grzegorz
+> >>
+> >> It does not mean it cannot be done, just that I don’t think we
+> >> have the tools at the moment.
+> >
+> > Phones, chromebooks do this all the time ...
+> 
+> Indeed, but there, this is to prove to the phone's real owner (which,
+> surprise, is not the naive person who thought they'd get some kind of
+> ownership by buying the phone) that the software running on the phone has
+> not been replaced by some horribly jailbreaked goo.
+> 
+> In other words, the user of the phone gets no proof whatsoever of anything,
+> except that the phone appears to work. This is somewhat the situation in the
+> cloud today: the owners of the hardware get all sorts of useful checks, from
+> SecureBoot to error-correction for memory or I/O devices. However, someone
+> running in a VM on the cloud gets none of that, just like the user of your
+> phone.
+
+Assuming you do a measured boot, the host OS and firmware is measured into the host TPM;
+people have thought in the past about triggering attestations of the
+host from the guest; then you could have something external attest the
+host and only release keys to the guests disks if the attestation is
+correct; or a key for the guests disks held in the hosts TPM.
+
+Dave
+
+> --
+> Cheers,
+> Christophe de Dinechin (https://c3d.github.io)
+> Theory of Incomplete Measurements (https://c3d.github.io/TIM)
+> 
+> 
+-- 
+Dr. David Alan Gilbert / dgilbert@redhat.com / Manchester, UK
+
