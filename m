@@ -2,65 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 745E568BE88
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 14:44:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B37468BE89
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 14:44:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230019AbjBFNoW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 08:44:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48168 "EHLO
+        id S230141AbjBFNo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 08:44:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbjBFNoR (ORCPT
+        with ESMTP id S229974AbjBFNoT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 08:44:17 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C150C171B
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 05:44:07 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id h16so10376082wrz.12
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 05:44:07 -0800 (PST)
+        Mon, 6 Feb 2023 08:44:19 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F53E1F914
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 05:44:09 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id h16so10376181wrz.12
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 05:44:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ezl79ZrFtdgcZgpVVd2789IBH+ROi3SQvtmwb7LRshQ=;
-        b=kLbQjpp+yiFEof3kgQGIRvdAG5E4s1w7U0CwzYzfOazeD7mDTdFoIkBj1SLzWJFCOM
-         aIrgw/bXwdXdy7WHWoFwtB6+YB+Pmlcv916+1K4wv1tn39MKp6uATJF48JXAkw96qz7U
-         CuSO5g2O2xkEReMJ7P2lEsd1tJ4JaqcK0lOnvXv8KDhFFHKop7ayer3OIZlFt/yUbE6L
-         4ysc+x9lsVPRRz6Fq31CB3QrsWFNFZVbia0VRROd1j31RW5i+cL1s11fL2rve07yhbXR
-         FHt4+mFFF1Wo/o/hxww2IxXac7oaa//g8NFdDI6BFPMv7DTNv1pnzHPTQ96e80xT0RKA
-         USBw==
+        bh=VFwznKCeayr2WD3soqgUqkepaQfJ5RmftUu8mIvFKwU=;
+        b=pBZ2a0GgWpOdfqVM0qZtjZLpuqEBEy3wnvrNML3WQOPCmkRI8axWjbvCPCRA8aI54I
+         t/QW+oljN27dEotnNiReBAjDoNywMbYgi4xS9Yv9l99bAKQ19bUGyhcMphpPAc5hZ8/r
+         gr+2IAcXvzG2wBgPTy+cs4DULno5EsCRVhHxxBLjReinhQelgS+0O0AF2cgCjTZUvrMn
+         vGuS9b5ycff6HgOHV5k0aSIUtBZ78a1UIP+eoD2a7XxF1eevuaihGnlqF0VgH21GW27+
+         VG37IBR7eSbXQ5MFJf0AK3OWN8UjctXHvhV158+0jHEvgUZosmRU9bxYHwNIUTqa3QIt
+         GjOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Ezl79ZrFtdgcZgpVVd2789IBH+ROi3SQvtmwb7LRshQ=;
-        b=CZ2ahREzkOHyox5cgzT1Bvr7fE8BAtRpg92zOIgNUR934sHX6W0gEpoGajDInT7gPM
-         W2Dc/dQFwUSMOzaJOsQByuYvCrjqtUw9+cq1iNwiJKblNilTaWcuaqyRPfCKRqMZ0q84
-         Dt4lUIF3rzVut3Lb4zw9MPHO/vNn4jqDar4+VSJZYiHMemkY+BShVBbyrNfORJqGAVZh
-         aGV+btTgeVe7YnpwIOCYkY8PVbORxxK0L+eDsbJrBv6ockOXPzXxD46QNcwd5gwaKSCA
-         8YhLlTF7rDInhmIm5mHMIV3ANqDkrd271xmJcE91n9XbhpAIIORH5GqUjKHy+As2kowf
-         zO7w==
-X-Gm-Message-State: AO0yUKUFbaRQXuPWBaK/bISc5a4lO3fMg34K0iwxX1ZJ/yglZkcDEh8g
-        CCxjm8pDJYQpjXtMqCjGzhdMmw==
-X-Google-Smtp-Source: AK7set+d3iadIuWYGv5FMnRCWDbtJkPgZQzhceYHzmr+5LpWHGTFcKvz6y58uJ5ClLQiBmJorLPI1g==
-X-Received: by 2002:a5d:4bc9:0:b0:2c3:e300:f5a2 with SMTP id l9-20020a5d4bc9000000b002c3e300f5a2mr6003394wrt.50.1675691046359;
-        Mon, 06 Feb 2023 05:44:06 -0800 (PST)
+        bh=VFwznKCeayr2WD3soqgUqkepaQfJ5RmftUu8mIvFKwU=;
+        b=BQrV2dS6lcSMhzrMaFYmgfIhT4i6sqCffRT3O1C2RW1tJTAnPX4uklS7V9XvIkmwQ+
+         8hOa4XzCSVKv7JyhYaGbG/lpsnNfQiTLTdT0o4W7BV09PpeT3QbQRY9JOhCFcGbF+0Ox
+         6Df4spPUwBBobqhpmljHbFuthTt/Tcj0SyW4Hx+qIjCGZ6FSlXABeUkhzUYhVu2YeTtP
+         Wi/xcoJR6TLkzACXDbrKYRfnxzPcqne5F+GaEjLT8/sAx+olPNWIT2vmQMyt6cjOFgCO
+         XQxxN6VsBceytrWP3vx2p4AYTRm38eUPabYs8TxSuv6zBMzswk0ampHST9FuEhW7QvQK
+         o/UA==
+X-Gm-Message-State: AO0yUKWYO9ViwWadP63eBeYtwNy1/3xGfERjhGK8hCFjxH5H5HWpd21u
+        xOwwa93fhUCKX4atFMBjVImKnw==
+X-Google-Smtp-Source: AK7set+GY52KL+G87rnx+qvufVRFJD0pAhZNeWiT/1yRg+dVUpn0cCsAOfo61byS6xDEAG8NOx4CsA==
+X-Received: by 2002:adf:da49:0:b0:2c3:b765:76ec with SMTP id r9-20020adfda49000000b002c3b76576ecmr17436731wrl.55.1675691047928;
+        Mon, 06 Feb 2023 05:44:07 -0800 (PST)
 Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id o15-20020adfa10f000000b002bddaea7a0bsm9008037wro.57.2023.02.06.05.44.05
+        by smtp.gmail.com with ESMTPSA id o15-20020adfa10f000000b002bddaea7a0bsm9008037wro.57.2023.02.06.05.44.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Feb 2023 05:44:05 -0800 (PST)
+        Mon, 06 Feb 2023 05:44:07 -0800 (PST)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
+        Richard Acayan <mailingradian@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH v2 03/22] dt-bindings: nvmem: Add compatible for MSM8976
-Date:   Mon,  6 Feb 2023 13:43:37 +0000
-Message-Id: <20230206134356.839737-4-srinivas.kandagatla@linaro.org>
+Subject: [PATCH v2 04/22] dt-bindings: nvmem: qfprom: add sdm670 compatible
+Date:   Mon,  6 Feb 2023 13:43:38 +0000
+Message-Id: <20230206134356.839737-5-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230206134356.839737-1-srinivas.kandagatla@linaro.org>
 References: <20230206134356.839737-1-srinivas.kandagatla@linaro.org>
@@ -75,12 +73,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marijn Suijten <marijn.suijten@somainline.org>
+From: Richard Acayan <mailingradian@gmail.com>
 
-Document generic QFPROM compatibility on MSM8976.
+There is some configuration in SDM670's QFPROM. Add the compatible for
+it.
 
-Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Signed-off-by: Richard Acayan <mailingradian@gmail.com>
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
@@ -88,17 +86,17 @@ Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
  1 file changed, 1 insertion(+)
 
 diff --git a/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml b/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
-index cc39514e8c84..48cfec0c9ece 100644
+index 48cfec0c9ece..b7811bbb0e71 100644
 --- a/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
 +++ b/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
-@@ -21,6 +21,7 @@ properties:
-           - qcom,ipq8064-qfprom
-           - qcom,msm8916-qfprom
-           - qcom,msm8974-qfprom
-+          - qcom,msm8976-qfprom
-           - qcom,msm8996-qfprom
-           - qcom,msm8998-qfprom
-           - qcom,qcs404-qfprom
+@@ -28,6 +28,7 @@ properties:
+           - qcom,sc7180-qfprom
+           - qcom,sc7280-qfprom
+           - qcom,sdm630-qfprom
++          - qcom,sdm670-qfprom
+           - qcom,sdm845-qfprom
+           - qcom,sm6115-qfprom
+       - const: qcom,qfprom
 -- 
 2.25.1
 
