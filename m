@@ -2,202 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB7C168C1C1
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 16:37:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2842D68C229
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 16:49:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231172AbjBFPhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 10:37:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38766 "EHLO
+        id S229772AbjBFPtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 10:49:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229992AbjBFPhI (ORCPT
+        with ESMTP id S230327AbjBFPs6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 10:37:08 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A9AA2A998;
-        Mon,  6 Feb 2023 07:35:55 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id k13so12526265plg.0;
-        Mon, 06 Feb 2023 07:35:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=VFAbb0Q992diuRUuGb5zzfTb2heUqqslWuNG7BHd+yw=;
-        b=GBmNCuzez9ViTbo5c31j8U7hoafrS4Hf2kTye8ahc4Abeoj1Ee3GASHIhmJK7w9gyn
-         GHvLHWsI59WKRaYUwL31G2QDgNtXBMMq0EXqvwbO4uD+n4oo/r+1RPGIW79HHm+qi2dX
-         BO3VV1RbFijXSmd/E+AWs9Q5Ev6WrCC+biMYhsUK4CgOyHpfZJ35NMrKjSVbAKYKrR2D
-         fKz1EHQ2H1xUIfwz+tUXrFa+u4D8K4tAUvMo6M7anvaIWEaiU+IZYKty3nBxPYeT6C9y
-         cGzVGOUKfaqav04heydFDtYjFz1fOFvl1tDikQeYaW6vwGaYdMc9SDb0BBKyoPkoNkYN
-         1mGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VFAbb0Q992diuRUuGb5zzfTb2heUqqslWuNG7BHd+yw=;
-        b=Jbdz0O4ERq+dG33CBj9n0LrHNuShudeU06heTx6AnOsuIuCEFSAKDLka2jz0QEsgg/
-         PYYnweCCxsrKhWl9BHmXN5F632amkZnYjd1hAG/R95gv1jyd3+bXXg66mTPc+V21VlvK
-         JT1LlxQv9tMU4bw0C3oqnD26F6XSW1jDuKD75oiEBzagFLvS5qA/rIqCTlKdyeZytwpp
-         tgkm1EvZE8fzLvuMd1Dbhu18wNRQU4uJsF5VsHeQrA5Dldyd0A+FQYp0wenbmHNbrq1+
-         tY1HNrOOoY2q8Um6j+IBYmhz8E+qLlihUU8hON/gy3vkctcO0QLoV+jpz3Pu8+NTJ9vW
-         faNQ==
-X-Gm-Message-State: AO0yUKXkEhvVVjE1/SGAJrRbmhJR3sVfq8lcH56DQLDBmbE32eSp5LlR
-        kMIv8yrXBDUzdFLekNw3EXo=
-X-Google-Smtp-Source: AK7set+Qq712Bfv+AuekZLeLJcQT4YU4H9ICuPwDYw37RtiqHrDF/vgnFMZzQe8TkU4x2JeeSMtlwQ==
-X-Received: by 2002:a17:90b:4b8a:b0:22c:afa2:4783 with SMTP id lr10-20020a17090b4b8a00b0022cafa24783mr21747537pjb.39.1675697696308;
-        Mon, 06 Feb 2023 07:34:56 -0800 (PST)
-Received: from localhost.localdomain ([14.139.38.195])
-        by smtp.googlemail.com with ESMTPSA id p11-20020a17090a4f0b00b00230c425adbcsm1696091pjh.20.2023.02.06.07.34.51
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 06 Feb 2023 07:34:55 -0800 (PST)
-From:   Vijaya Anand <sunrockers8@gmail.com>
-Cc:     sunrockers8@gmail.com, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings : misc : aspeed,cvic interrupt controller : convert the binding document to yaml
-Date:   Mon,  6 Feb 2023 21:03:09 +0530
-Message-Id: <20230206153325.43692-1-sunrockers8@gmail.com>
-X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
+        Mon, 6 Feb 2023 10:48:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B60692BEFE
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 07:48:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B33B2B811E4
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 15:34:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 462F8C433D2;
+        Mon,  6 Feb 2023 15:34:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675697653;
+        bh=ouiqjuAu5PppAdsMop/lufIECtbBFr60ZbcXqtDW4RU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mrwcGMXZZYUl6mIJTQy9X6DNxj/zEowAYFFRX1wB++FuFCj6sVB0k1DrnAT4ttFcv
+         Kya8cP2rARWqjwtRsYkCtKMCPylyfyL4Xgxlbgb6bNOTorhamgk7Bv/PNB9AzNjP4s
+         NvUlVGlRPb8xXQkFo6Z9jxNMTWuZ5q2YDNsmdVLx4ZqXceMg1XS2/gZ+eHwWS+O+H4
+         qp4VPSwaQRPxrBMc+CMIN1AQS61uF/iiDEjfurtw/Ec2DetK4O6myaRGW1mG+MiUPN
+         uryFK3RpQ7M2lF4qx7sh+xSGBEZmPnoTlDmmqlWKbY6v7RLuVxeryYHu/6QgBWEoJN
+         o7mKSTqwEeU8w==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id D4FD5405BE; Mon,  6 Feb 2023 12:34:07 -0300 (-03)
+Date:   Mon, 6 Feb 2023 12:34:07 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     "Liang, Kan" <kan.liang@linux.intel.com>
+Cc:     peterz@infradead.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org, ak@linux.intel.com,
+        eranian@google.com, irogers@google.com
+Subject: Re: [PATCH V3 3/3] perf test: Support the retire_lat check
+Message-ID: <Y+Ed7823ZSXevwA6@kernel.org>
+References: <20230202192209.1795329-1-kan.liang@linux.intel.com>
+ <20230202192209.1795329-3-kan.liang@linux.intel.com>
+ <Y+EWWLaBj1OPrkLo@kernel.org>
+ <8e493d2f-827a-03d9-610b-6246502bf92a@linux.intel.com>
+ <Y+EdposucD4mWp6S@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+EdposucD4mWp6S@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-    Convert the binding document for ASPEED AST2400 and AST2500 coprocessor interrupt controller
-    from txt to yaml so one could validate dt-entries correctly and any future additions can go
-    into yaml format. The options for compatability described according to the example given.
----
- .../devicetree/bindings/misc/aspeed,cvic.txt  | 35 ----------
- .../devicetree/bindings/misc/aspeed,cvic.yaml | 67 +++++++++++++++++++
- 2 files changed, 67 insertions(+), 35 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/misc/aspeed,cvic.txt
- create mode 100644 Documentation/devicetree/bindings/misc/aspeed,cvic.yaml
+Em Mon, Feb 06, 2023 at 12:32:54PM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Mon, Feb 06, 2023 at 10:17:46AM -0500, Liang, Kan escreveu:
+> > 
+> > 
+> > On 2023-02-06 10:01 a.m., Arnaldo Carvalho de Melo wrote:
+> > > Em Thu, Feb 02, 2023 at 11:22:09AM -0800, kan.liang@linux.intel.com escreveu:
+> > >> From: Kan Liang <kan.liang@linux.intel.com>
+> > >>
+> > >> Add test for the new field for Retire Latency in the X86 specific test.
+> > > 
+> > > Is this passing 'perf test' for you?
+> > 
+> > Ah, it should be the original V2 missed the below change.
+> 
+> Can you please send this as a separate patch as I already merged
+> torvalds/master and added more csets on top, so to just fix it and
+> force push now would be bad.
+> 
+> Please use what is in my perf/core branch and add a Fixes for that v2
+> patch.
 
-diff --git a/Documentation/devicetree/bindings/misc/aspeed,cvic.txt b/Documentation/devicetree/bindings/misc/aspeed,cvic.txt
-deleted file mode 100644
-index d62c783d1d5e..000000000000
---- a/Documentation/devicetree/bindings/misc/aspeed,cvic.txt
-+++ /dev/null
-@@ -1,35 +0,0 @@
--* ASPEED AST2400 and AST2500 coprocessor interrupt controller
--
--This file describes the bindings for the interrupt controller present
--in the AST2400 and AST2500 BMC SoCs which provides interrupt to the
--ColdFire coprocessor.
--
--It is not a normal interrupt controller and it would be rather
--inconvenient to create an interrupt tree for it as it somewhat shares
--some of the same sources as the main ARM interrupt controller but with
--different numbers.
--
--The AST2500 supports a SW generated interrupt
--
--Required properties:
--- reg: address and length of the register for the device.
--- compatible: "aspeed,cvic" and one of:
--		"aspeed,ast2400-cvic"
--	      or
--		"aspeed,ast2500-cvic"
--
--- valid-sources: One cell, bitmap of supported sources for the implementation
--
--Optional properties;
--- copro-sw-interrupts: List of interrupt numbers that can be used as
--		       SW interrupts from the ARM to the coprocessor.
--		       (AST2500 only)
--
--Example:
--
--	cvic: copro-interrupt-controller@1e6c2000 {
--		compatible = "aspeed,ast2500-cvic";
--		valid-sources = <0xffffffff>;
--		copro-sw-interrupts = <1>;
--		reg = <0x1e6c2000 0x80>;
--	};
-diff --git a/Documentation/devicetree/bindings/misc/aspeed,cvic.yaml b/Documentation/devicetree/bindings/misc/aspeed,cvic.yaml
-new file mode 100644
-index 000000000000..bbff0418fa2c
---- /dev/null
-+++ b/Documentation/devicetree/bindings/misc/aspeed,cvic.yaml
-@@ -0,0 +1,67 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/misc/aspeed,cvic.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: ASPEED AST2400 and AST2500 coprocessor interrupt controller
-+
-+maintainers: 
-+  - Benjamin Herrenschmidt <benh@kernel.crashing.org>
-+  - Rob Herring <robh@kernel.org>
-+
-+description: |
-+  This file describes the bindings for the interrupt controller present
-+  in the AST2400 and AST2500 BMC SoCs which provides interrupt to the
-+  ColdFire coprocessor.
-+
-+  It is not a normal interrupt controller and it would be rather
-+  inconvenient to create an interrupt tree for it as it somewhat shares
-+  some of the same sources as the main ARM interrupt controller but with
-+  different numbers.
-+
-+  The AST2500 supports a SW generated interruptThe Soft Decision Forward Error Correction (SDFEC) Engine is a Hard IP block
-+  which provides high-throughput LDPC and Turbo Code implementations.
-+  The LDPC decode & encode functionality is capable of covering a range of
-+  customer specified Quasi-cyclic (QC) codes. The Turbo decode functionality
-+  principally covers codes used by LTE. The FEC Engine offers significant
-+  power and area savings versus implementations done in the FPGA fabric.
-+
-+properties:
-+
-+  compatible:
-+    enum: 
-+      - aspeed,ast2400-cvic
-+      - aspeed,ast2500-cvic
-+
-+  reg:
-+    maxItems: 1
-+    description: address and length of the register for the device.
-+  
-+  valid-sources:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: One cell, bitmap of supported sources for the implementation
-+
-+  copro-sw-interrupts:
-+    $ref: /schemas/types.yaml#/definitions/uint32-array
-+    description: |
-+                  List of interrupt numbers that can be used as
-+                  SW interrupts from the ARM to the coprocessor.
-+                  (AST2500 only)
-+
-+required:
-+  - compatible
-+  - reg
-+  - valid-sources
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    cvic: copro-interrupt-controller@1e6c2000 
-+    {
-+        compatible = "aspeed,ast2500-cvic";
-+        valid-sources = <0xffffffff>;
-+        copro-sw-interrupts = <1>;
-+        reg = <0x1e6c2000 0x80>;
-+    };
+BTW, the 3rd patch with the test is already on the tmp.perf/core branch,
+that will move to perf/core after the next round of container build
+tests.
+
+- Arnaldo
+ 
+> Thanks,
+> 
+> - Arnaldo
+>  
+> > @@ -100,5 +101,25 @@ void arch_perf_synthesize_sample_weight(const
+> > struct perf_sample *data,
+> >  	if (type & PERF_SAMPLE_WEIGHT_STRUCT) {
+> >  		*array &= 0xffffffff;
+> >  		*array |= ((u64)data->ins_lat << 32);
+> > +		*array |= ((u64)data->retire_lat << 48);
+> >  	}
+> >  }
+> > 
+> > Could you please remove the V2 and re-apply the V3?
+>  
+> > $ sudo ./perf test -v "x86 sample parsing"
+> >  74: x86 Sample parsing                                              :
+> > --- start ---
+> > test child forked, pid 3316797
+> > test child finished with 0
+> > ---- end ----
+> > x86 Sample parsing: Ok
+> > 
+> > 
+> > Thanks,
+> > Kan
+> > 
+> > > 
+> > > [root@quaco ~]# perf test -v "x86 sample parsing"
+> > >  74: x86 Sample parsing                                              :
+> > > --- start ---
+> > > test child forked, pid 72526
+> > > Samples differ at 'retire_lat'
+> > > parsing failed for sample_type 0x1000000
+> > > test child finished with -1
+> > > ---- end ----
+> > > x86 Sample parsing: FAILED!
+> > > [root@quaco ~]#
+> > > 
+> > > - Arnaldo
+> > >  
+> > >> Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+> > >> ---
+> > >>
+> > >> New patch since V2
+> > >>
+> > >>  tools/perf/arch/x86/tests/sample-parsing.c | 5 ++++-
+> > >>  1 file changed, 4 insertions(+), 1 deletion(-)
+> > >>
+> > >> diff --git a/tools/perf/arch/x86/tests/sample-parsing.c b/tools/perf/arch/x86/tests/sample-parsing.c
+> > >> index 690c7c07e90d..a061e8619267 100644
+> > >> --- a/tools/perf/arch/x86/tests/sample-parsing.c
+> > >> +++ b/tools/perf/arch/x86/tests/sample-parsing.c
+> > >> @@ -27,8 +27,10 @@ static bool samples_same(const struct perf_sample *s1,
+> > >>  			 const struct perf_sample *s2,
+> > >>  			 u64 type)
+> > >>  {
+> > >> -	if (type & PERF_SAMPLE_WEIGHT_STRUCT)
+> > >> +	if (type & PERF_SAMPLE_WEIGHT_STRUCT) {
+> > >>  		COMP(ins_lat);
+> > >> +		COMP(retire_lat);
+> > >> +	}
+> > >>  
+> > >>  	return true;
+> > >>  }
+> > >> @@ -48,6 +50,7 @@ static int do_test(u64 sample_type)
+> > >>  	struct perf_sample sample = {
+> > >>  		.weight		= 101,
+> > >>  		.ins_lat        = 102,
+> > >> +		.retire_lat     = 103,
+> > >>  	};
+> > >>  	struct perf_sample sample_out;
+> > >>  	size_t i, sz, bufsz;
+> > >> -- 
+> > >> 2.35.1
+> > >>
+> > > 
+> 
+> -- 
+> 
+> - Arnaldo
+
 -- 
-2.37.1 (Apple Git-137.1)
 
+- Arnaldo
