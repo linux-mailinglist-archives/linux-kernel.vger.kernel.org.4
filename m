@@ -2,152 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 770DD68C9DA
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 23:57:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 153BA68C9DB
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 23:59:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbjBFW5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 17:57:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33938 "EHLO
+        id S229893AbjBFW65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 17:58:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjBFW46 (ORCPT
+        with ESMTP id S229523AbjBFW6z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 17:56:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B606199C8
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 14:56:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BE5E2B8165B
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 22:56:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4F2DC433EF;
-        Mon,  6 Feb 2023 22:56:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675724214;
-        bh=GmSYy8SzwpAetwzZfZT+vfJS1g8bBXifQn3bcPn9tiE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nKpqeYTb5Rff8jA3hUyAP/tzoz9USsqt7Slc4XnnQixQbdBQ+ZSx/QScHvZfB7GA0
-         Z8RBvfwySaUOrZSwMFRdaLwOVfwGWMiBOQoIrdrroFc6gyqcaR6eRy+mXboWDMo1JQ
-         ynpXAMzn6F4tmykKPhQnuoUogbhHHzlNOYWyuHry0F6r8Cx+WvgHtsJu93224dYFl3
-         m4KQIOGm07IYRWD0EZCoPySA4vd+GuV9J52a6vl9tWQPy3G+mRKn2zP3Pl2u7Eo19y
-         1ijRIoD3xASOumbxx4y8LjaACx4jd04mMdBDO2YdfojTRbpVDCdWct4mFpt4Ap3ydY
-         j9lXCB22mu6aA==
-From:   SeongJae Park <sj@kernel.org>
-To:     SeongJae Park <sj@kernel.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: Re: Linux 6.2-rc2
-Date:   Mon,  6 Feb 2023 22:56:52 +0000
-Message-Id: <20230206225652.89873-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230123182732.188863-1-sj@kernel.org>
-References: 
+        Mon, 6 Feb 2023 17:58:55 -0500
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1BE728201
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 14:58:51 -0800 (PST)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.lan)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1pPARk-0002Mb-6m; Mon, 06 Feb 2023 23:58:48 +0100
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     palmer@rivosinc.com
+Cc:     greentime.hu@sifive.com, conor@kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        christoph.muellner@vrull.eu,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>
+Subject: [PATCH RFC 00/12] RISC-V: support some cryptography accelerations
+Date:   Mon,  6 Feb 2023 23:58:34 +0100
+Message-Id: <20230206225846.1381789-1-heiko@sntech.de>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 23 Jan 2023 18:27:32 +0000 SeongJae Park <sj@kernel.org> wrote:
+From: Heiko Stuebner <heiko.stuebner@vrull.eu>
 
-> On Mon, 23 Jan 2023 18:09:27 +0900 Masahiro Yamada <masahiroy@kernel.org> wrote:
-> 
-> > On Wed, Jan 11, 2023 at 4:14 AM SeongJae Park <sj@kernel.org> wrote:
-> > >
-> > > Hi Masahiro,
-> > >
-> > > On Wed, 11 Jan 2023 03:39:58 +0900 Masahiro Yamada <masahiroy@kernel.org> wrote:
-> > >
-> > > > On Tue, Jan 10, 2023 at 9:32 AM SeongJae Park <sj@kernel.org> wrote:
-> > > > >
-> > > > > On Tue, 3 Jan 2023 11:58:48 +0100 Ard Biesheuvel <ardb@kernel.org> wrote:
-> > > > >
-> > > > > > On Tue, 3 Jan 2023 at 03:13, Linus Torvalds
-> > > > > > <torvalds@linux-foundation.org> wrote:
-> > > > > > >
-> > > > > > > On Mon, Jan 2, 2023 at 5:45 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> > > > > > > >
-> > > > > [...]
-> > > > > > --- a/include/asm-generic/vmlinux.lds.h
-> > > > > > +++ b/include/asm-generic/vmlinux.lds.h
-> > > > > > @@ -896,7 +896,7 @@
-> > > > > >   * Otherwise, the type of .notes section would become PROGBITS
-> > > > > > instead of NOTES.
-> > > > > >   */
-> > > > > >  #define NOTES                                                          \
-> > > > > > -       /DISCARD/ : { *(.note.GNU-stack) }                              \
-> > > > > > +       .note.GNU-stack : { *(.note.GNU-stack) }                        \
-> > > > > >         .notes : AT(ADDR(.notes) - LOAD_OFFSET) {                       \
-> > > > > >                 BOUNDED_SECTION_BY(.note.*, _notes)                     \
-> > > > > >         } NOTES_HEADERS                                                 \
-> > > > > >
-> > > > > > The .note.GNU-stack has zero size, so the result should be the same.
-> > > > > >
-> > > > >
-> > > > > This also fixes ARCH=um build error on my system.
-> > > > >
-> > > > > Tested-by: SeongJae Park <sj@kernel.org>
-> > > >
-> > > >
-> > > >
-> > > > I am able to build ARCH=um defconfig at least.
-> > > >
-> > > > Can you provide the steps to reproduce the build error?
-> > >
-> > > I do the build for kunit test, like below.
-> > >
-> > >     mkdir ../kunit.out
-> > >     echo "
-> > >         CONFIG_KUNIT=y
-> > >
-> > >         CONFIG_DAMON=y
-> > >         CONFIG_DAMON_KUNIT_TEST=y
-> > >
-> > >         CONFIG_DAMON_VADDR=y
-> > >         CONFIG_DAMON_VADDR_KUNIT_TEST=y
-> > >
-> > >         CONFIG_DEBUG_FS=y
-> > >         CONFIG_DAMON_DBGFS=y
-> > >         CONFIG_DAMON_DBGFS_KUNIT_TEST=y
-> > >     CONFIG_DAMON_PADDR=y" > ../kunit.out/.kunitconfig
-> > >     ./tools/testsing/kunit/kunit.py run --build_dir ../kunit.out
-> > >     [19:12:37] Configuring KUnit Kernel ...
-> > >     [19:12:37] Building KUnit Kernel ...
-> > >     Populating config with:
-> > >     $ make ARCH=um O=../kunit.out/ olddefconfig
-> > >     Building with:
-> > >     $ make ARCH=um O=../kunit.out/ --jobs=36
-> > >     ERROR:root:`.exit.text' referenced in section `.uml.exitcall.exit' of arch/um/drivers/virtio_uml.o: defined in discarded section `.exit.text' of arch/um/drivers/virtio_uml.o
-> > >     collect2: error: ld returned 1 exit status
-> > >     make[2]: *** [/home/sjpark/linux/scripts/Makefile.vmlinux:34: vmlinux] Error 1
-> > >     make[1]: *** [/home/sjpark/linux/Makefile:1252: vmlinux] Error 2
-> > >     make: *** [Makefile:242: __sub-make] Error 2
-> > >
-[...]
-> 
-> Thank you for sharing your results.  I think it may depend on the compiler
-> version, because I use a quite old compiler.
-> 
->     $ gcc --version
->     gcc (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0
+So this was my playground the last days.
 
-I'm still getting the failure on my setup with latest mainline.  Could we merge
-the fix for now?  Or, was there some updates that I was missing?
+The base is v13 of the vector patchset but the first patches up to doing
+the Zbc-based GCM GHash can also run without those. Of course the vector-
+crypto extensions are also not ratified yet, hence the marking as RFC.
 
 
-Thanks,
-SJ
+As v13 of the vector patchset dropped the patches for in-kernel usage of
+vector instructions, I picked the ones from v12 over into this series
+for now.
 
-[...]
+My basic goal was to not re-invent cryptographic code, so the heavy
+lifting is done by those perl-asm scripts used in openssl and the perl
+code used here-in stems from code that is targetted at openssl [0] and is
+unmodified from there to limit needed review effort.
+
+
+With a matching qemu (there are patches for vector-crypto flying around)
+the in-kernel crypto-selftests (also the extended ones) are very happy
+so far.
+
+
+Things to do:
+- The series still includes its own Zbb extension detection,
+  I'll need to untangle my branches to adapt to the applied Zbb
+  patchset [and address Andrews comments]
+- use correct Co-developed-attribution for the code coming from
+  openssl
+- some more cryptographic algorithms (aes, sha512, sm3, sm4)
+
+
+[0] both still open
+https://github.com/openssl/openssl/pull/20078
+https://github.com/openssl/openssl/pull/20149
+
+
+Greentime Hu (2):
+  riscv: Add support for kernel mode vector
+  riscv: Add vector extension XOR implementation
+
+Heiko Stuebner (10):
+  RISC-V: add Zbb extension detection
+  RISC-V: add Zbc extension detection
+  RISC-V: add Zbkb extension detection
+  RISC-V: hook new crypto subdir into build-system
+  RISC-V: crypto: add accelerated GCM GHASH implementation
+  RISC-V: add vector crypto extension detection
+  RISC-V: crypto: update perl include with helpers for vector (crypto)
+    instructions
+  RISC-V: crypto: add Zvkb accelerated GCM GHASH implementation
+  RISC-V: crypto: add Zvkg accelerated GCM GHASH implementation
+  RISC-V: crypto: add a vector-crypto-accelerated SHA256 implementation
+
+ arch/riscv/Kbuild                          |   1 +
+ arch/riscv/Kconfig                         |  45 ++
+ arch/riscv/crypto/Kconfig                  |  28 +
+ arch/riscv/crypto/Makefile                 |  34 +
+ arch/riscv/crypto/ghash-riscv64-glue.c     | 489 ++++++++++++++
+ arch/riscv/crypto/ghash-riscv64-zbc.pl     | 400 ++++++++++++
+ arch/riscv/crypto/ghash-riscv64-zvkb.pl    | 346 ++++++++++
+ arch/riscv/crypto/ghash-riscv64-zvkg.pl    | 172 +++++
+ arch/riscv/crypto/riscv.pm                 | 723 +++++++++++++++++++++
+ arch/riscv/crypto/sha256-riscv64-glue.c    | 103 +++
+ arch/riscv/crypto/sha256-riscv64-zvknha.pl | 502 ++++++++++++++
+ arch/riscv/include/asm/hwcap.h             |   7 +
+ arch/riscv/include/asm/vector.h            |  14 +
+ arch/riscv/include/asm/xor.h               |  82 +++
+ arch/riscv/kernel/Makefile                 |   1 +
+ arch/riscv/kernel/cpu.c                    |   7 +
+ arch/riscv/kernel/cpufeature.c             |   7 +
+ arch/riscv/kernel/kernel_mode_vector.c     | 132 ++++
+ arch/riscv/lib/Makefile                    |   1 +
+ arch/riscv/lib/xor.S                       |  81 +++
+ crypto/Kconfig                             |   3 +
+ 21 files changed, 3178 insertions(+)
+ create mode 100644 arch/riscv/crypto/Kconfig
+ create mode 100644 arch/riscv/crypto/Makefile
+ create mode 100644 arch/riscv/crypto/ghash-riscv64-glue.c
+ create mode 100644 arch/riscv/crypto/ghash-riscv64-zbc.pl
+ create mode 100644 arch/riscv/crypto/ghash-riscv64-zvkb.pl
+ create mode 100644 arch/riscv/crypto/ghash-riscv64-zvkg.pl
+ create mode 100644 arch/riscv/crypto/riscv.pm
+ create mode 100644 arch/riscv/crypto/sha256-riscv64-glue.c
+ create mode 100644 arch/riscv/crypto/sha256-riscv64-zvknha.pl
+ create mode 100644 arch/riscv/include/asm/xor.h
+ create mode 100644 arch/riscv/kernel/kernel_mode_vector.c
+ create mode 100644 arch/riscv/lib/xor.S
+
+-- 
+2.39.0
+
