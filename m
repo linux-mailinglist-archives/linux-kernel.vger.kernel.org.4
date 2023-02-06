@@ -2,196 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C76BB68BC86
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 13:12:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D23B468BC8C
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 13:13:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbjBFMMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 07:12:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47674 "EHLO
+        id S230174AbjBFMNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 07:13:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbjBFML5 (ORCPT
+        with ESMTP id S230094AbjBFMNV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 07:11:57 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6622D65BF
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 04:11:32 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id a2so9877935wrd.6
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 04:11:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jNU2E4rEU6lK6E5UnBCR+OOWZtLTF1apeoMjKMv1xVo=;
-        b=0BJuhb2SP8v0SAx2cFQrOf9KdQKmuD14IU5rp3ELE5hzV++SiFno0c6jIja1iAaH+m
-         KgmbC7JqL38C41B4ROhgq/8gllmhnX1ats4xUrAtUESKykxl4Bhq9bWeoRPNivtxI9Hj
-         nYhDoVCIJPIHrdrEMQD9jB6z9I0tjVPW65Lw5eiG8082b1iH26IIWoMYpIG7ohhhRSDJ
-         d/stbmGlv9lLaLkYKSc/m3vXzRkgZpRnS2l5zo05sO/5/3P16zrp5Plh3DAdTU8VhpER
-         xh44jKllCDz4+tumuIUaqoeH6ccmBeq49305euHcb3bbysnNiJxbA/JqcgkfFtzf6uWD
-         fgkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jNU2E4rEU6lK6E5UnBCR+OOWZtLTF1apeoMjKMv1xVo=;
-        b=5dZtnzoS1NDS+A06PoN5nzCPJOMZV72roejMS7aTSSSzA2sspAh7Y8TLsWSWlpw0ix
-         8s2+04F8JE4T5iAHq/bzPgr63xcDwvRXT+9R07nCOPtB9+KJ+ov0lRtAdKfwMDNwToZl
-         K8dogfNlXyle2aUdhOzBlUbIevpt74tHdhmn3X/68Oj4GJ5lFCp5PLn980zCGWcxzlJ2
-         XJtzHnmPeCc4uPvH5myb1GfvVE356KNkwJw4QJsugquFZ29SZYn8HxWfwpowmlBh23bG
-         GDobYv0W7Va5FzOGuMA1QFeCh+YCFfPyJubvOawZGI5U1A6FNMbQTm94Hx4z/OYYfQPE
-         tbzQ==
-X-Gm-Message-State: AO0yUKUY6XjWlpyb/cqSOa78sg6RHIp7e2degqlGgR2RhfCh5oQMir7G
-        LA4o27Os0WcXkCdg4Ya1RPPZ/w==
-X-Google-Smtp-Source: AK7set+l6WZMcYdFTPEhuqOx7bXf+8SqBlvLrjlLxHBtr5qFvT42GvR0j4f0uSOjBIGP3rZh6CfJbg==
-X-Received: by 2002:a5d:4b50:0:b0:2c3:eaff:aaf1 with SMTP id w16-20020a5d4b50000000b002c3eaffaaf1mr2381474wrs.18.1675685490947;
-        Mon, 06 Feb 2023 04:11:30 -0800 (PST)
-Received: from ?IPV6:2a02:6b6a:b566:0:39c7:f90d:557:dc30? ([2a02:6b6a:b566:0:39c7:f90d:557:dc30])
-        by smtp.gmail.com with ESMTPSA id y10-20020a05600015ca00b002bfd137ecddsm8918926wry.11.2023.02.06.04.11.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Feb 2023 04:11:30 -0800 (PST)
-Message-ID: <de7524ce-563c-2ff6-84a5-6a347c36855b@bytedance.com>
-Date:   Mon, 6 Feb 2023 12:11:29 +0000
+        Mon, 6 Feb 2023 07:13:21 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E6512051
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 04:13:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B4DDDB80EC0
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 12:13:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E3B7C433D2
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 12:13:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675685597;
+        bh=Ks+3bWX8BMBQ1+7CdXHspGcVXJ2Qn/DY7u+Hkp8zSrc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=OPWBFefIHR8JRaFXU4l+xk69wU3NZfrWepDWxuheqGJLvbn6l7WlR8677cImYkWLs
+         izbNClwdBlqWMuWlZOuytrpEEFzgCfYD1LQy26MlbEGKCgeZDDJYWE8BCrvJMWiO1P
+         nfbZV5ElQhmngJpI1WXymjizo/zr8bLC9wEU/vWFrKC2BvP5jIWLIKtBJE7VHtJy0W
+         rYfFiYU5wzLFCQ48eBi2AwPDISp8qLtNWX63eWyPbMJIRh6fvsSAlaSp9nvJwQe+re
+         y3y1JUFsbbPgk0aJyp1gQWaD0++sktmqClZPPIzL49CEMsvegkdQqq2MkdUWd3c61h
+         3hx1uEJIo8Zbw==
+Received: by mail-ed1-f48.google.com with SMTP id u21so11438205edv.3
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 04:13:17 -0800 (PST)
+X-Gm-Message-State: AO0yUKXg98eerTDKtdfN8lA/ScvBUFFu/wMUlvhAdrUnhervMPAfcKIg
+        /xzxa4s663af47q+vrh5LgW4Rl7Q12m1Vk+dbok=
+X-Google-Smtp-Source: AK7set8asN6FOn8+WUmAov8wIo1dn46oFQk0RdBFmZbl0rjD7eA3kd09j/F0iNyrgtzlttyU1SbTIqAVb0C19xb0+g4=
+X-Received: by 2002:a50:cc9a:0:b0:4aa:a4f7:2304 with SMTP id
+ q26-20020a50cc9a000000b004aaa4f72304mr1702807edi.38.1675685595641; Mon, 06
+ Feb 2023 04:13:15 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [External] Re: [PATCH v6 07/11] x86/smpboot: Disable parallel
- boot for AMD CPUs
-Content-Language: en-US
-To:     David Woodhouse <dwmw2@infradead.org>,
-        Arjan van de Ven <arjan@linux.intel.com>,
-        Kim Phillips <kim.phillips@amd.com>, tglx@linutronix.de,
-        rja@hpe.com
-Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, x86@kernel.org, pbonzini@redhat.com,
-        paulmck@kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, rcu@vger.kernel.org, mimoja@mimoja.de,
-        hewenliang4@huawei.com, thomas.lendacky@amd.com, seanjc@google.com,
-        pmenzel@molgen.mpg.de, fam.zheng@bytedance.com,
-        punit.agrawal@bytedance.com, simon.evans@bytedance.com,
-        liangma@liangbit.com, Mario Limonciello <Mario.Limonciello@amd.com>
-References: <20230202215625.3248306-1-usama.arif@bytedance.com>
- <20230202215625.3248306-8-usama.arif@bytedance.com>
- <b3d9fbbf-e760-5d1d-9182-44c144abd1bf@amd.com>
- <d3ec562fd2e03c3aef9534f64915a14a8cb89ae1.camel@infradead.org>
- <5ba476f3-e0ac-d630-ce1d-18ab9885496f@linux.intel.com>
- <E2286684-F8AD-4708-9A3D-74C5EAE183B4@infradead.org>
- <434b4b74-54ab-68a3-4a81-9cc02ea75e39@bytedance.com>
- <411cbdb2c8255e48f3e65c59a98bc02410f5dfc7.camel@infradead.org>
-From:   Usama Arif <usama.arif@bytedance.com>
-In-Reply-To: <411cbdb2c8255e48f3e65c59a98bc02410f5dfc7.camel@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <1674007261-9198-1-git-send-email-yangtiezhu@loongson.cn>
+ <CAAhV-H4aTd6_cSy45KKjv-KrLTiwT4iG6+fkb84KfCrL3Y+hpg@mail.gmail.com>
+ <CAAhV-H5WN5E=0Z9wpbXDc6VO7Nc+j7PGvnyAAGOmCRMJkdwSYw@mail.gmail.com>
+ <CAEr6+ECO-=jfhzHrcdKGx0MsjMBMiN6wsBPCfv7CaXo_amAWWg@mail.gmail.com>
+ <02806f85-bc09-d316-f058-3947353cb190@loongson.cn> <CAEr6+EBYF2xqZWEuZaz5un5FF3Jb-rSAQp3s3uojsovm9RcUYA@mail.gmail.com>
+In-Reply-To: <CAEr6+EBYF2xqZWEuZaz5un5FF3Jb-rSAQp3s3uojsovm9RcUYA@mail.gmail.com>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Mon, 6 Feb 2023 20:13:03 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H5dJGrL3kEwzC-XwMqJTCsYHq-YVDTDRntGcYg9RMz02w@mail.gmail.com>
+Message-ID: <CAAhV-H5dJGrL3kEwzC-XwMqJTCsYHq-YVDTDRntGcYg9RMz02w@mail.gmail.com>
+Subject: Re: [PATCH v12 0/5] Add kprobe and kretprobe support for LoongArch
+To:     Jeff Xie <xiehuan09@gmail.com>
+Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi, Jeff,
 
+Now I add kprobes on ftrace support in
+https://github.com/loongson/linux/commits/loongarch-next, please test
+again. Thank you.
 
-On 06/02/2023 08:05, David Woodhouse wrote:
-> On Sun, 2023-02-05 at 22:13 +0000, Usama Arif wrote:
->>
->>
->> On 04/02/2023 22:31, David Woodhouse wrote:
->>>
->>>
->>> On 4 February 2023 18:18:55 GMT, Arjan van de Ven <arjan@linux.intel.com> wrote:
->>>>>
->>>>> However...
->>>>>
->>>>> Even though we *can* support non-X2APIC processors, we *might* want to
->>>>> play it safe and not go back that far; only enabling parallel bringup
->>>>> on machines with X2APIC which roughly correlates with "lots of CPUs"
->>>>> since that's where the benefit is.
->>>>
->>>> I think that this is the right approach, at least on the initial patch series.
->>>> KISS principle; do all the easy-but-important cases first, get it stable and working
->>>> and in later series/kernels the range can be expanded.... if it matters.
->>>
->>> Agreed. I'll split it to do it only with X2APIC for the initial series, and then hold the CPUID 0x1 part back for the next phase.
->>
->> This was an interesting find! I tested the latest branch
->> parallel-6.2-rc6 and it works well. The numbers from Russ makes the
->> patch series look so much better! :)
->>
->> If we do it with x2apic only and not support non-x2apic CPUID 0x1 case,
->> maybe we apply the following diff to part 1?
-> 
-> Using x2apic_mode would also disable parallel boot when the CPU *does*
-> have X2APIC support but the kernel just isn't using it at the moment. I
-> think boot_cpu_has(X86_FEATURE_X2APIC) is the better criterion?
-> 
+Huacai
 
-x2apic_mode is set to 0 only in the case when nox2apic is specified in 
-the kernel cmdline or if x2apic_setup fails. As 0xB leaf gets the 
-"x2apic id" and not the "apic id", I thought it would be better to not 
-use the x2apic id if the user doesnt want to use x2apic (cmdline), or 
-the kernel fails to set it up.
-
-Another thing I noticed from the Intel Architecture Manual CPUID—CPU 
-Identification section:
-
-"CPUID leaf 1FH is a preferred superset to leaf 0BH. Intel recommends 
-first checking for the existence of Leaf 1FH before using leaf 0BH."
-
-So I think we should switch from 0BH to using the 1FH leaf EDX register.
-
-> I was thinking I'd tweak the 'no_parallel_bringup' command line
-> argument into something that also allows us to *enable* it without
-> X2APIC being supported.
-> 
-> But I've also been pondering the fact that this is all only for 64-bit
-> anyway. It's not like we're doing it for the zoo of ancient i586 and
-> even i486 machines where the APICs were hooked up with blue wire and
-> duct tape.
-> 
-> Maybe "64-bit only" is good enough, with a command line opt-out. And
-> maybe a printk pointing out the existence of that command line option
-> before the bringup, just in case?
-> 
-
-I think that makes sense, the patch only has a significant impact when 
-the core count is high, and x2apic was made to support higher CPU count.
-
-
->> diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
->> index f53a060a899b..f6b89cf40076 100644
->> --- a/arch/x86/kernel/smpboot.c
->> +++ b/arch/x86/kernel/smpboot.c
->> @@ -1564,7 +1564,7 @@ void __init native_smp_prepare_cpus(unsigned int
->> max_cpus)
->>            * sufficient). Otherwise it's too hard. And not for SEV-ES
->>            * guests because they can't use CPUID that early.
->>            */
->> -       if (IS_ENABLED(CONFIG_X86_32) || boot_cpu_data.cpuid_level < 1 ||
->> +       if (IS_ENABLED(CONFIG_X86_32) || !x2apic_mode ||
->>               (x2apic_mode && boot_cpu_data.cpuid_level < 0xb) ||
->>               cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT))
->>                   do_parallel_bringup = false;
->>
->>
->>
->> For reusing timer calibration, calibrate_delay ends up being used in
->> start_kernel, smp_callin, debug_calc_bogomips and check_cx686_slop. I
->> think reusing timer calibration would be ok in the first 2 uses?
->>
-> 
-> It already explicitly allows the calibration to be reused from another
-> CPU in the same *core*, but no further. I think we'd need to be sure
-> about the correctness of extending that further, and which of the mess
-> of constant/invariant/we-really-mean-it-this-time TSC flags need to be
-> set for that to be OK.
-> 
->> but not really sure about the other 2. cx686 seems to be quite old so not sure
->> if anyone will have it to test or will ever run 6.2 kernel on it :).  I
->> guess if unsure, better to leave out initially and try and get part1 merged?
-> 
-> I doubt cx686 advertises constant TSC; the early ones didn't even *have* a TSC.
-> Does it even support SMP?
-
-Just checked the wiki page, and it says core count is 1 :)
+On Thu, Feb 2, 2023 at 11:33 AM Jeff Xie <xiehuan09@gmail.com> wrote:
+>
+> On Thu, Feb 2, 2023 at 10:23 AM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+> >
+> >
+> >
+> > On 02/01/2023 05:40 PM, Jeff Xie wrote:
+> > > On Wed, Feb 1, 2023 at 12:56 PM Huacai Chen <chenhuacai@kernel.org> wrote:
+> > >>
+> > >> Hi, Jeff,
+> > >>
+> > >> Could you please pay some time to test this series? Thank you.
+> > >
+> > > Thanks for notifying me about the test.
+> > >
+> > > I have tested the patchset(based on the
+> > > https://github.com/loongson/linux/tree/loongarch-next),
+> > > I found that some functions can't  be probed e.g. scheduler_tick() or
+> > > uart_write_wakeup()
+> > > the two functions have the same point,  they are all run in the hardirq context.
+> > >
+> > > I don't know if it's related to the hardirq context, I haven't had
+> > > time to study this patchset carefully.
+> > > and they can be probed in the x86_64 arch.
+> > >
+> > > root@loongarch modules]# insmod ./kprobe_example.ko symbol=scheduler_tick
+> > > insmod: can't insert './kprobe_example.ko': invalid parameter
+> > >
+> > > dmesg:
+> > > [   39.806435] kprobe_init: register_kprobe failed, returned -22
+> > >
+> >
+> > Thanks for your test.
+> >
+> > On my test environment, I can not reproduce the above issue,
+> > here are the test results, it seems no problem.
+> >
+> > [root@linux loongson]# dmesg -c
+> > [root@linux loongson]# uname -m
+> > loongarch64
+> > [root@linux loongson]# modprobe kprobe_example symbol=scheduler_tick
+> > [root@linux loongson]# rmmod kprobe_example
+> > [root@linux loongson]# dmesg | tail -2
+> > [ 3317.138086] handler_post: <scheduler_tick> p->addr =
+> > 0x0000000065d12f66, estat = 0xc0000
+> > [ 3317.154086] kprobe_exit: kprobe at 0000000065d12f66 unregistered
+> >
+> > [root@linux loongson]# dmesg -c
+> > [root@linux loongson]# uname -m
+> > loongarch64
+> > [root@linux loongson]# modprobe kprobe_example symbol=uart_write_wakeup
+> > [root@linux loongson]# rmmod kprobe_example
+> > [root@linux loongson]# dmesg | tail -2
+> > [ 3433.502092] handler_post: <uart_write_wakeup> p->addr =
+> > 0x0000000019718061, estat = 0xc0000
+> > [ 3433.762085] kprobe_exit: kprobe at 0000000019718061 unregistered
+> >
+> > Additionally, "register_kprobe failed, returned -22" means the symbol
+> > can not be probed, here is the related code:
+> >
+> > register_kprobe()
+> >    check_kprobe_address_safe()
+> >
+> > static int check_kprobe_address_safe(struct kprobe *p,
+> >                                      struct module **probed_mod)
+> > {
+> >         int ret;
+> >
+> >         ret = check_ftrace_location(p);
+> >         if (ret)
+> >                 return ret;
+> >         jump_label_lock();
+> >         preempt_disable();
+> >
+> >         /* Ensure it is not in reserved area nor out of text */
+> >         if (!(core_kernel_text((unsigned long) p->addr) ||
+> >             is_module_text_address((unsigned long) p->addr)) ||
+> >             in_gate_area_no_mm((unsigned long) p->addr) ||
+> >             within_kprobe_blacklist((unsigned long) p->addr) ||
+> >             jump_label_text_reserved(p->addr, p->addr) ||
+> >             static_call_text_reserved(p->addr, p->addr) ||
+> >             find_bug((unsigned long)p->addr)) {
+> >                 ret = -EINVAL;
+> >                 goto out;
+> >         }
+> > ...
+> > }
+>
+> Today I looked at the code, this has nothing to do with hardirq :-)
+> because I enabled this kernel option CONFIG_DYNAMIC_FTRACE, the
+> loongarch should not support the option yet.
+>
+> #ifdef CONFIG_DYNAMIC_FTRACE
+> unsigned long ftrace_location(unsigned long ip);
+>
+> #else /* CONFIG_DYNAMIC_FTRACE */
+>
+> static inline unsigned long ftrace_location(unsigned long ip)
+> {
+>         return 0;
+> }
+>
+> #endif
+>
+>
+> static int check_ftrace_location(struct kprobe *p)
+> {
+>         unsigned long addr = (unsigned long)p->addr;
+>
+>         if (ftrace_location(addr) == addr) {
+> #ifdef CONFIG_KPROBES_ON_FTRACE
+>                 p->flags |= KPROBE_FLAG_FTRACE;
+> #else   /* !CONFIG_KPROBES_ON_FTRACE */
+>                 return -EINVAL;  // get error from here
+> #endif
+>         }
+>         return 0;
+> }
+>
+> static int check_kprobe_address_safe(struct kprobe *p,
+>                                      struct module **probed_mod)
+> {
+>         int ret;
+>
+>         ret = check_ftrace_location(p);
+>         if (ret)
+>                 return ret; //  return -EINVAL
+> }
+>
+>
+> >
+> > Thanks,
+> > Tiezhu
+> >
+>
+>
+> --
+> Thanks,
+> JeffXie
