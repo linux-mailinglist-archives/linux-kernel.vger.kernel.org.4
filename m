@@ -2,79 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52F5168B3E6
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 02:35:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7192968B3E3
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 02:35:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbjBFBdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 20:33:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38316 "EHLO
+        id S229619AbjBFBds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 20:33:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbjBFBdl (ORCPT
+        with ESMTP id S229546AbjBFBdl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 5 Feb 2023 20:33:41 -0500
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A847166C9
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 17:33:36 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 875245C0140;
-        Sun,  5 Feb 2023 20:33:35 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Sun, 05 Feb 2023 20:33:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vda.io; h=cc:cc
-        :content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1675647215; x=1675733615; bh=f9
-        sG/L1Not5Vf7PbM7l/y4GQBIOVSUACvYMrutDp8/M=; b=L4nycn0yByTVXGcoR/
-        FDDgfIw9GI9Zg+rlMBZ+8PLHXmkXhPyuhVW9scT63/u5Z5H3JlGZatRn6YC1zhsi
-        jEMGviZ1427NeimeJGDaey1pxcS7PE+M56ONUnhgDRbMYYSEnNGhlN/jwSFbHKWS
-        DOQftX5XuwB/r2YFTajzujyY7ZyxPh4bkQqpCceHZl/K+aJ1CpoFHnkrZOkZ5QAB
-        Jc1dtBjXGXybHDCovNK3h+lJjsZC9azQBlTjnENvnV+wexim7XI/GZ7mDZ+J4hbg
-        4rVKgqY/h2P60LBt+wHLg5vPWBDFht3ulGgBH1d9Rq3nv2xhuFRlsnX7RU1HJ0Zp
-        uPsA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1675647215; x=1675733615; bh=f9sG/L1Not5Vf
-        7PbM7l/y4GQBIOVSUACvYMrutDp8/M=; b=Ln6cH8PLdWTboeO+LSAJaNsMlUhgl
-        QyTpTJ0wTWggtXe5Py1rHdVNydaJE7USJ3VtLm+pxt2KMy2EGe6XLtLAstX15ELT
-        aMqN2MgObWvZcUn9wzMKnODKiUbk24ElslgijMSyUrO8LMLRj6hBit6vrcX/L2Tn
-        HpMT6mmhlYTN2NKJevUQoVoic6P5QuXadARZYPnBGr5QnQQaIUQgm8nKZu9tW1bJ
-        Z8O+fFv3acRdjJ1bvxRNeqUrJaGtwOg5oLQ+bt7KITkp0nvuzqOf6czTB6DwkIJa
-        jN/sZcP7JmNe2hcOf9r2x81kXEmZbYtuIW7lst/Ck5oStt84nMNLEJVyw==
-X-ME-Sender: <xms:71jgY1DEiev3RxdInRNwLYZyDMZ6yhLSWdE2twox-7GWY8st9SulXw>
-    <xme:71jgYziSvrEILas7sqJDREfIHG_VJyKT4GSUqL8qjzKpc_wDKMK8_Eizw2dhkvjaf
-    qMu7e4ZKldxz36jljo>
-X-ME-Received: <xmr:71jgYwnqgjjlsZXwCr8LHboLj0lUw7jWI2rI_3Fih5oQFqWO6NpsHAIf1zS1qqywgfoOcFWzo8obXIV42E3AMgXrJiR5>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeghedgfeefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffojghfggfgsedtke
-    ertdertddtnecuhfhrohhmpeggihhntggvnhhtucffrghgohhnnhgvrghuuceovhesvhgu
-    rgdrihhoqeenucggtffrrghtthgvrhhnpedujedtgefgtdelffefjeeggffgiefgjeevve
-    dtjefhuddvleeiudetuedtffefheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgr
-    mhepmhgrihhlfhhrohhmpehvsehvuggrrdhioh
-X-ME-Proxy: <xmx:71jgY_wnMYFZ8OqnIKzC8rtHno5xqUAShQp-AtA3oIMSM9DPphKMfQ>
-    <xmx:71jgY6QybsxgOjNjvg5I6VrB-RbQSnAr4DuL0tzrvOeM2rCWnlpeZg>
-    <xmx:71jgYyaEgXTjzjpzMv4O5DWKT51lTqGDN6zyzs266-C8gZUACsCnVQ>
-    <xmx:71jgY9K27pXUrFN1NJcN9N1pZUOdqF93cKX1C3HRboIkLZ-LjqriSg>
-Feedback-ID: ic7094478:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 5 Feb 2023 20:33:35 -0500 (EST)
-From:   Vincent Dagonneau <v@vda.io>
-To:     linux-kernel@vger.kernel.org
-Cc:     w@1wt.eu, Vincent Dagonneau <v@vda.io>
-Subject: [PATCH v3 4/4] tools/nolibc: Adding tests for the integer limits in stdint.h
-Date:   Sun,  5 Feb 2023 20:32:49 -0500
-Message-Id: <20230206013248.471664-5-v@vda.io>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230206013248.471664-1-v@vda.io>
-References: <20230206013248.471664-1-v@vda.io>
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B48A16AFF
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 17:33:35 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id n2so7332451pfo.3
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Feb 2023 17:33:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kR2veBWbyNFgGYItTwFdh8lQbfIA4xIECeB4pO18LrU=;
+        b=PFwbPgvDzQZdf/HQcszjkJRBI+TWwVFkCgQ1pTZtuRTIo/wlIT3BHJKZePYl3rA+JP
+         95hFB5vyzqBz1Jc54SILNs4ShJ7POM1/z2u66WJgYrGohpZnBl1sBMdI0mKh7YShxBiz
+         2w1gVgSrKCBfhH4ANXDeYDIYzg7AsUBAinEloUsjVb7gYNAHQoWVKnGUFh6d4pnFpoQb
+         1Q95oO5u5QznQa0IK6GWq/1414ezGBU9VQsaDUenD0Pmd8P7aAztAaPsq9YWbsbIqMc2
+         poo5WlAJbhJjVL7wJeGcis+SKQ5KrWaWg/FwaNXAFve7SvEGnI7TLg35saERb0k96x+I
+         luxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kR2veBWbyNFgGYItTwFdh8lQbfIA4xIECeB4pO18LrU=;
+        b=am/wk6TEU+jMFjT9I+a+JBGQLnpznu8VrGGDhFRXbyJOxrg9lPNzmG1GIlWToE2YYt
+         r6tiadyvFLqg9yCMDBrs/hWk2MDOFs6r1xyLs2Z1knbDmxBL9aRmxio24FoJmdj9uj4J
+         m0fRatt16Tx6DUdKCifLPyUFiJ8yRfkD1bF90fSC71AB1wtOWrKzOo+xlZO7VFz9UXTn
+         GlL/4tf8EBAAhipKXew0Wk40E53YmxHKwqB3QtQDFBcKuskENzJE9CuhUI7wOKcvnN6J
+         jG0k8yJbUWM38k4r46fNR4NLJGjtfHyyI0n5zY0GxpYW4HGPR+eOidbjttkfmm/pjRVX
+         Lr6g==
+X-Gm-Message-State: AO0yUKUMouwO4RjusRLeaNxYhsYkOuipEt3vdB+yp9bXQp8Z0sMBEn91
+        2UKiwWFhhABcipozrEJOnorqz9/Zx7VCGgCxB/jnkA==
+X-Google-Smtp-Source: AK7set8u1D8Yx0Ns1ik9250I6OIYVxsmLToiLi2hjLdTsjiKPoILrZB8aX+YQXBoINv9ErwXZE6Ko7BYs7yfuVc+TPE=
+X-Received: by 2002:a62:1a57:0:b0:593:bac2:b49 with SMTP id
+ a84-20020a621a57000000b00593bac20b49mr4285651pfa.44.1675647214386; Sun, 05
+ Feb 2023 17:33:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <20230127001141.407071-1-saravanak@google.com> <20230130085542.38546-1-naresh.kamboju@linaro.org>
+ <CAGETcx_411fVxsM-ZMK7j2Bvkmi2TKPbzSuD+03M3cb7WKHfJw@mail.gmail.com>
+ <20230131101813.goaoy32qvrowvyyb@bogus> <CALHCpMijXAgQx2qq8g8zdq=6AHwP+g5WVBjjry=v+dKEq9KDLw@mail.gmail.com>
+ <CAGETcx_UvW819m1Y-QU_ySB1nG_RegKKT06=YjkK=C_qjbAySw@mail.gmail.com> <CALHCpMha_1nXt4rUe+A184XSWpyNk0_PkYjWZ+tUN7BJWqENLA@mail.gmail.com>
+In-Reply-To: <CALHCpMha_1nXt4rUe+A184XSWpyNk0_PkYjWZ+tUN7BJWqENLA@mail.gmail.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Sun, 5 Feb 2023 17:32:57 -0800
+Message-ID: <CAGETcx_uri6exkv1Jkzmc4PyEam9yjuH2H1zrq4LYNtJ+XDMWw@mail.gmail.com>
+Subject: Re: [PATCH v2 00/11] fw_devlink improvements
+To:     Maxim Kiselev <bigunclemax@gmail.com>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        abel.vesa@linaro.org, alexander.stein@ew.tq-group.com,
+        andriy.shevchenko@linux.intel.com, brgl@bgdev.pl,
+        colin.foster@in-advantage.com, cristian.marussi@arm.com,
+        devicetree@vger.kernel.org, dianders@chromium.org,
+        djrscally@gmail.com, dmitry.baryshkov@linaro.org,
+        festevam@gmail.com, fido_max@inbox.ru, frowand.list@gmail.com,
+        geert+renesas@glider.be, geert@linux-m68k.org,
+        gregkh@linuxfoundation.org, heikki.krogerus@linux.intel.com,
+        jpb@kernel.org, jstultz@google.com, kernel-team@android.com,
+        kernel@pengutronix.de, lenb@kernel.org, linus.walleij@linaro.org,
+        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-imx@nxp.com,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux@roeck-us.net, lkft@linaro.org, luca.weiss@fairphone.com,
+        magnus.damm@gmail.com, martin.kepplinger@puri.sm, maz@kernel.org,
+        miquel.raynal@bootlin.com, rafael@kernel.org, robh+dt@kernel.org,
+        s.hauer@pengutronix.de, sakari.ailus@linux.intel.com,
+        shawnguo@kernel.org, tglx@linutronix.de, tony@atomide.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,60 +91,148 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
----
- tools/testing/selftests/nolibc/nolibc-test.c | 39 +++++++++++++++++++-
- 1 file changed, 38 insertions(+), 1 deletion(-)
+On Fri, Feb 3, 2023 at 1:39 AM Maxim Kiselev <bigunclemax@gmail.com> wrote:
+>
+> =D0=BF=D1=82, 3 =D1=84=D0=B5=D0=B2=D1=80. 2023 =D0=B3. =D0=B2 09:07, Sara=
+vana Kannan <saravanak@google.com>:
+> >
+> > On Thu, Feb 2, 2023 at 9:36 AM Maxim Kiselev <bigunclemax@gmail.com> wr=
+ote:
+> > >
+> > > Hi Saravana,
+> > >
+> > > > Can you try the patch at the end of this email under these
+> > > > configurations and tell me which ones fail vs pass? I don't need lo=
+gs
+> > >
+> > > I did these tests and here is the results:
+> >
+> > Did you hand edit the In-Reply-To: in the header? Because in the
+> > thread you are reply to the wrong email, but the context in your email
+> > seems to be from the right email.
+> >
+> > For example, see how your reply isn't under the email you are replying
+> > to in this thread overview:
+> > https://lore.kernel.org/lkml/20230127001141.407071-1-saravanak@google.c=
+om/#r
+> >
+> > > 1. On top of this series - Not works
+> > > 2. Without this series    - Works
+> > > 3. On top of the series with the fwnode_dev_initialized() deleted - N=
+ot works
+> > > 4. Without this series, with the fwnode_dev_initialized() deleted  - =
+Works
+> > >
+> > > So your nvmem/core.c patch helps only when it is applied without the =
+series.
+> > > But despite the fact that this helps to avoid getting stuck at probin=
+g
+> > > my ethernet device, there is still regression.
+> > >
+> > > When the ethernet module is loaded it takes a lot of time to drop dep=
+endency
+> > > from the nvmem-cell with mac address.
+> > >
+> > > Please look at the kernel logs below.
+> >
+> > The kernel logs below really aren't that useful for me in their
+> > current state. See more below.
+> >
+> > ---8<---- <snip> --->8----
+> >
+> > > P.S. Your nvmem patch definitely helps to avoid a device probe stuck
+> > > but look like it is not best way to solve a problem which we discusse=
+d
+> > > in the MTD thread.
+> > >
+> > > P.P.S. Also I don't know why your nvmem-cell patch doesn't help when =
+it was
+> > > applied on top of this series. Maybe I missed something.
+> >
+> > Yeah, I'm not too sure if the test was done correctly. You also didn't
+> > answer my question about the dts from my earlier email.
+> > https://lore.kernel.org/lkml/CAGETcx8FpmbaRm2CCwqt3BRBpgbogwP5gNB+iA5OE=
+tuxWVTNLA@mail.gmail.com/#t
+> >
+> > So, can you please retest config 1 with all pr_debug and dev_dbg in
+> > drivers/core/base.c changed to the _info variants? And then share the
+> > kernel log from the beginning of boot? Maybe attach it to the email so
+> > it doesn't get word wrapped by your email client. And please point me
+> > to the .dts that corresponds to your board. Without that, I can't
+> > debug much.
+> >
+> > Thanks,
+> > Saravana
+>
+> > Did you hand edit the In-Reply-To: in the header? Because in the
+> > thread you are reply to the wrong email, but the context in your email
+> > seems to be from the right email.
+>
+> Sorry for that, it seems like I accidently deleted it.
+>
+> > So, can you please retest config 1 with all pr_debug and dev_dbg in
+> > drivers/core/base.c changed to the _info variants? And then share the
+> > kernel log from the beginning of boot? Maybe attach it to the email so
+> > it doesn't get word wrapped by your email client. And please point me
+> > to the .dts that corresponds to your board. Without that, I can't
+> > debug much.
+>
+> Ok, I retested config 1 with all _debug logs changed to the _info. I
+> added the kernel log and the dts file to the attachment of this email.
 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 725ee66d059c..f43c451c8ca2 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -531,7 +531,44 @@ int run_syscall(int min, int max)
- 		CASE_TEST(waitpid_child);     EXPECT_SYSER(1, waitpid(getpid(), &tmp, WNOHANG), -1, ECHILD); break;
- 		CASE_TEST(write_badf);        EXPECT_SYSER(1, write(-1, &tmp, 1), -1, EBADF); break;
- 		CASE_TEST(write_zero);        EXPECT_SYSZR(1, write(1, &tmp, 0)); break;
--		case __LINE__:
-+		CASE_TEST(limit_int8_max);          EXPECT_EQ(1, INT8_MAX,   (int8_t)   0x7f); break;
-+		CASE_TEST(limit_int8_min);          EXPECT_EQ(1, INT8_MIN,   (int8_t)   0x80); break;
-+		CASE_TEST(limit_uint8_max);         EXPECT_EQ(1, UINT8_MAX,  (uint8_t)  0xff); break;
-+		CASE_TEST(limit_int16_max);         EXPECT_EQ(1, INT16_MAX,  (int16_t)  0x7fff); break;
-+		CASE_TEST(limit_int16_min);         EXPECT_EQ(1, INT16_MIN,  (int16_t)  0x8000); break;
-+		CASE_TEST(limit_uint16_max);        EXPECT_EQ(1, UINT16_MAX, (uint16_t) 0xffff); break;
-+		CASE_TEST(limit_int32_max);         EXPECT_EQ(1, INT32_MAX,  (int32_t)  0x7fffffff); break;
-+		CASE_TEST(limit_int32_min);         EXPECT_EQ(1, INT32_MIN,  (int32_t)  0x80000000); break;
-+		CASE_TEST(limit_uint32_max);        EXPECT_EQ(1, UINT32_MAX, (uint32_t) 0xffffffff); break;
-+		CASE_TEST(limit_int64_max);         EXPECT_EQ(1, INT64_MAX,  (int64_t)  0x7fffffffffffffff); break;
-+		CASE_TEST(limit_int64_min);         EXPECT_EQ(1, INT64_MIN,  (int64_t)  0x8000000000000000); break;
-+		CASE_TEST(limit_uint64_max);        EXPECT_EQ(1, UINT64_MAX, (uint64_t) 0xffffffffffffffff); break;
-+		CASE_TEST(limit_int_least8_max);    EXPECT_EQ(1, INT_LEAST8_MAX,   (int_least8_t)    0x7f); break;
-+		CASE_TEST(limit_int_least8_min);    EXPECT_EQ(1, INT_LEAST8_MIN,   (int_least8_t)    0x80); break;
-+		CASE_TEST(limit_uint_least8_max);   EXPECT_EQ(1, UINT_LEAST8_MAX,  (uint_least8_t)   0xff); break;
-+		CASE_TEST(limit_int_least16_max);   EXPECT_EQ(1, INT_LEAST16_MAX,  (int_least16_t)   0x7fff); break;
-+		CASE_TEST(limit_int_least16_min);   EXPECT_EQ(1, INT_LEAST16_MIN,  (int_least16_t)   0x8000); break;
-+		CASE_TEST(limit_uint_least16_max);  EXPECT_EQ(1, UINT_LEAST16_MAX, (uint_least16_t)  0xffff); break;
-+		CASE_TEST(limit_int_least32_max);   EXPECT_EQ(1, INT_LEAST32_MAX,  (int_least32_t)   0x7fffffff); break;
-+		CASE_TEST(limit_int_least32_min);   EXPECT_EQ(1, INT_LEAST32_MIN,  (int_least32_t)   0x80000000); break;
-+		CASE_TEST(limit_uint_least32_max);  EXPECT_EQ(1, UINT_LEAST32_MAX, (uint_least32_t)  0xffffffffU); break;
-+		CASE_TEST(limit_int_least64_max);   EXPECT_EQ(1, INT_LEAST64_MAX,  (int_least64_t)   0x7fffffffffffffffLL); break;
-+		CASE_TEST(limit_int_least64_min);   EXPECT_EQ(1, INT_LEAST64_MIN,  (int_least64_t)   0x8000000000000000LL); break;
-+		CASE_TEST(limit_uint_least64_max);  EXPECT_EQ(1, UINT_LEAST64_MAX, (uint_least64_t)  0xffffffffffffffffULL); break;
-+#if __WORDSIZE == 64
-+		CASE_TEST(limit_intptr_min);        EXPECT_EQ(1, INTPTR_MIN,  (intptr_t)  0x8000000000000000LL); break;
-+		CASE_TEST(limit_intptr_max);        EXPECT_EQ(1, INTPTR_MAX,  (intptr_t)  0x7fffffffffffffffLL); break;
-+		CASE_TEST(limit_uintptr_max);       EXPECT_EQ(1, UINTPTR_MAX, (uintptr_t) 0xffffffffffffffffULL); break;
-+		CASE_TEST(limit_ptrdiff_min);       EXPECT_EQ(1, PTRDIFF_MIN, (ptrdiff_t) 0x8000000000000000LL); break;
-+		CASE_TEST(limit_ptrdiff_max);       EXPECT_EQ(1, PTRDIFF_MAX, (ptrdiff_t) 0x7fffffffffffffffLL); break;
-+#else
-+		CASE_TEST(limit_intptr_min);        EXPECT_EQ(1, INTPTR_MIN,  (intptr_t)  0x80000000); break;
-+		CASE_TEST(limit_intptr_max);        EXPECT_EQ(1, INTPTR_MAX,  (intptr_t)  0x7fffffff); break;
-+		CASE_TEST(limit_uintptr_max);       EXPECT_EQ(1, UINTPTR_MAX, (uintptr_t) 0xffffffffU); break;
-+		CASE_TEST(limit_ptrdiff_min);       EXPECT_EQ(1, PTRDIFF_MIN, (ptrdiff_t) 0x80000000); break;
-+		CASE_TEST(limit_ptrdiff_max);       EXPECT_EQ(1, PTRDIFF_MAX, (ptrdiff_t) 0x7fffffff); break;
-+#endif /* __WORDSIZE == 64 */
-+			case __LINE__:
- 			return ret; /* must be last */
- 		/* note: do not set any defaults so as to permit holes above */
- 		}
--- 
-2.39.1
+Ah, so your device is not supported/present upstream? Even though it's
+not upstream, I'll help fix this because it should fix what I believe
+are unreported issues in upstream.
 
+Ok I know why configs 1 - 4 behaved the way they did and why my test
+patch didn't help.
+
+After staring at mtd/nvmem code for a few hours I think mtd/nvmem
+interaction is kind of a mess. mtd core creates "partition" platform
+devices (including for nvmem-cells) that are probed by drivers in
+drivers/nvmem. However, there's no driver for "nvmem-cells" partition
+platform device. However, the nvmem core creates nvmem_device when
+nvmem_register() is called by MTD or these partition platform devices
+created by MTD. But these nvmem_devices are added to a nvmem_bus but
+the bus has no means to even register a driver (it should really be a
+nvmem_class and not nvmem_bus). And the nvmem_device sometimes points
+to the DT node of the MTD device or sometimes the partition platform
+devices or maybe no DT node at all.
+
+So it's a mess of multiple devices pointing to the same DT node with
+no clear way to identify which ones will point to a DT node and which
+ones will probe and which ones won't. In the future, we shouldn't
+allow adding new compatible strings for partitions for which we don't
+plan on adding nvmem drivers.
+
+Can you give the patch at the end of the email a shot? It should fix
+the issue with this series and without this series. It just avoids
+this whole mess by not creating useless platform device for
+nvmem-cells compatible DT nodes.
+
+Thanks,
+Saravana
+
+diff --git a/drivers/mtd/mtdpart.c b/drivers/mtd/mtdpart.c
+index d442fa94c872..88a213f4d651 100644
+--- a/drivers/mtd/mtdpart.c
++++ b/drivers/mtd/mtdpart.c
+@@ -577,6 +577,7 @@ static int mtd_part_of_parse(struct mtd_info *master,
+ {
+        struct mtd_part_parser *parser;
+        struct device_node *np;
++       struct device_node *child;
+        struct property *prop;
+        struct device *dev;
+        const char *compat;
+@@ -594,6 +595,10 @@ static int mtd_part_of_parse(struct mtd_info *master,
+        else
+                np =3D of_get_child_by_name(np, "partitions");
+
++       for_each_child_of_node(np, child)
++               if (of_device_is_compatible(child, "nvmem-cells"))
++                       of_node_set_flag(child, OF_POPULATED);
++
+        of_property_for_each_string(np, "compatible", prop, compat) {
+                parser =3D mtd_part_get_compatible_parser(compat);
+                if (!parser)
