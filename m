@@ -2,121 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34A6868BB68
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 12:25:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A4F368BB70
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 12:25:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229981AbjBFLY4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 06:24:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41536 "EHLO
+        id S230008AbjBFLZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 06:25:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbjBFLYx (ORCPT
+        with ESMTP id S229998AbjBFLZm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 06:24:53 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA56272A4;
-        Mon,  6 Feb 2023 03:24:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=6p5UcUVJMB6FcC7LDxPnes2LOQaJUS8z6IEOS3X783s=; b=Ea7S5G84aDpNMvL/Suxi9XIvmP
-        C3d8gqapGDHgOfKkaP3NfNlfpuswBdZ+/65aPGo8Ipfi4ygRk8xZ7E1lb+BYSVGzxaS2sN48Bj+uV
-        7EcpbhbKtu3+Vy6v0rx38wmRy2zhh9BHTpbWgMb6B1VUojynlRhGLZwyBBeJ97ZTbSyUL+nN/9cdA
-        g3KAlOkdL6bK9I8Ru0c8Xd4so95LlWcA9jGTKHdvLf99ddC9qSvsG4IxnKgYDCF/ShOfXC3/ZQNuz
-        +ltBvaSkLaaFq/cirv5PAA/Jvc9EmJp6O0MLa9hEeS1tkPMdnYzaGXwcTfJ4KZOOty5sepN3i9T7J
-        b/03MOXw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pOzbS-00Gi9E-Dh; Mon, 06 Feb 2023 11:24:06 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C110E30013F;
-        Mon,  6 Feb 2023 12:24:00 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 8C4252CFF4E16; Mon,  6 Feb 2023 12:24:00 +0100 (CET)
-Date:   Mon, 6 Feb 2023 12:24:00 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>, dennis@kernel.org,
-        Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
-        Heiko Carstens <hca@linux.ibm.com>, gor@linux.ibm.com,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        borntraeger@linux.ibm.com, Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Joerg Roedel <joro@8bytes.org>,
-        suravee.suthikulpanit@amd.com, Robin Murphy <robin.murphy@arm.com>,
-        dwmw2@infradead.org, Baolu Lu <baolu.lu@linux.intel.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-s390@vger.kernel.org, iommu@lists.linux.dev,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-crypto@vger.kernel.org
-Subject: Re: [PATCH v2 05/10] percpu: Wire up cmpxchg128
-Message-ID: <Y+DjULnIxcPU/rtp@hirez.programming.kicks-ass.net>
-References: <20230202145030.223740842@infradead.org>
- <20230202152655.494373332@infradead.org>
- <24007667-1ff3-4c86-9c17-a361c3f9f072@app.fastmail.com>
+        Mon, 6 Feb 2023 06:25:42 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B2E083D3
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 03:25:40 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id a1so13977929ybj.9
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 03:25:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=gqoL344ahlUSGKEcPeWSWxdzAFVQeuSWEQ2bFV7PfAw=;
+        b=GQC7Vdd0ShtHyuYbws684oddqVBcnUscuuhAQE0nrgOMJxSOmJwSONncXrg2FupUax
+         EEblB6a6KqEYuoOH1qvl4bpRvNk7xCHyk8FBpuf/Q6e3QJ0YZCpDOf/PkERhTu4a6YeV
+         NsAfL3eGNrVdjNRLSFFoeeMExbwu4TnaI8bS4mkQwX93fE5FzfF8posZD3bavN4zHGBg
+         EOlze0vpR1vV4CRg7WemHThjOAVeh8wxRsMk4G/ML9uDpVmPn3orE+5VCxtQLLp9wef2
+         HSM+WnPTvOKBiTW0QUH9EIaopo71B9xThIHwsKSDqMBoO+FI0QFJsnG5pMvqaVrytIkI
+         8WBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gqoL344ahlUSGKEcPeWSWxdzAFVQeuSWEQ2bFV7PfAw=;
+        b=4MmmyqOjyO490kCkG+EMRxLNsDq7qabvwn8aQghci6Cor/Y/QsbYQohklrbyLROPsw
+         M2jaj+sNsIH+b60+E+NdRtc3+iqsCOCT5K0yg581B4aaxGF5Tq2h5T6LudZr/FfDCaJE
+         yywzMouph/3vumhbHBfKKhisKlXQ99FE+wNK4av5GHZxn2+4QcPoSXLqMJS2xqVvSGlu
+         4n90tCAaDePqxkqqvpZ21UGiwCQ3qPzT/t6ByQ+dKMqU10PtF0hUO0Y7cDbXmdUQP9W7
+         QrY8IOfvnc8FTS1bvZpEh4QKVpWi7HlrZ0UbVF84yU6IkM9gCKyg33ZdmA3ab+WTc0Ea
+         OSag==
+X-Gm-Message-State: AO0yUKWgI7I+M+kSQ+k76KeyjUyQQnYf1zlPswijXnCyIm0FC8HSSAfD
+        yXE9LSdDA7eiWG/2OksRUL0SaWKaTXLrc5M4nnJT/w==
+X-Google-Smtp-Source: AK7set+SFrdnVJOmmGT4T8wNENpdw4jkqUL4JIeIMcevxcJ8Pyit+ExaUYRLjibaZ5z5zrn9F+yeezTbHdktarTKGwM=
+X-Received: by 2002:a5b:d4f:0:b0:893:76b2:9200 with SMTP id
+ f15-20020a5b0d4f000000b0089376b29200mr315983ybr.584.1675682739722; Mon, 06
+ Feb 2023 03:25:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <24007667-1ff3-4c86-9c17-a361c3f9f072@app.fastmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230206071217.29313-1-quic_kathirav@quicinc.com>
+In-Reply-To: <20230206071217.29313-1-quic_kathirav@quicinc.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 6 Feb 2023 12:25:28 +0100
+Message-ID: <CACRpkdbtEFCSKX8VcD9bAZLy-PYfwVCRKYwXJmh0hnK2Nroq0A@mail.gmail.com>
+Subject: Re: [PATCH V3 0/9] Add minimal boot support for IPQ5332
+To:     Kathiravan T <quic_kathirav@quicinc.com>
+Cc:     krzysztof.kozlowski@linaro.org, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, catalin.marinas@arm.com, will@kernel.org,
+        shawnguo@kernel.org, arnd@arndb.de, dmitry.baryshkov@linaro.org,
+        marcel.ziswiler@toradex.com, nfraprado@collabora.com,
+        robimarko@gmail.com, quic_gurus@quicinc.com,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        quic_varada@quicinc.com, quic_srichara@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 06:25:04PM +0100, Arnd Bergmann wrote:
-> On Thu, Feb 2, 2023, at 15:50, Peter Zijlstra wrote:
-> > In order to replace cmpxchg_double() with the newly minted
-> > cmpxchg128() family of functions, wire it up in this_cpu_cmpxchg().
-> >
-> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> 
-> I commented on this in the previous version but never got any
-> reply from you:
-> 
-> https://lore.kernel.org/all/1d88ba9f-5541-4b67-9cc8-a361eef36547@app.fastmail.com/
+Hi Kathiravan,
 
-Sorry, seem to have missed that :/
+thanks for your patches!
 
-> Unless I have misunderstood what you are doing, my concerns are
-> still the same:
-> 
-> >  #define this_cpu_cmpxchg(pcp, oval, nval) \
-> > -	__pcpu_size_call_return2(this_cpu_cmpxchg_, pcp, oval, nval)
-> > +	__pcpu_size16_call_return2(this_cpu_cmpxchg_, pcp, oval, nval)
-> >  #define this_cpu_cmpxchg_double(pcp1, pcp2, oval1, oval2, nval1, 
-> > nval2) \
-> >  	__pcpu_double_call_return_bool(this_cpu_cmpxchg_double_, pcp1, pcp2, 
-> > oval1, oval2, nval1, nval2)
-> 
-> Having a variable-length this_cpu_cmpxchg() that turns into cmpxchg128()
-> and cmpxchg64() even on CPUs where this traps (!X86_FEATURE_CX16) seems
-> like a bad design to me.
-> 
-> I would much prefer fixed-length this_cpu_cmpxchg64()/this_cpu_cmpxchg128()
-> calls that never trap but fall back to the generic version on CPUs that
-> are lacking the atomics.
+On Mon, Feb 6, 2023 at 8:12 AM Kathiravan T <quic_kathirav@quicinc.com> wrote:
 
-You're thinking acidental usage etc..? Lemme see what I can do.
+> Kathiravan T (9):
+>   dt-bindings: pinctrl: qcom: add IPQ5332 pinctrl
+>   pinctrl: qcom: Introduce IPQ5332 TLMM driver
+
+I have applied these two patches to the pin control tree for v6.3.
+
+I see no reason to wait for more review since Krzysztof acked the
+bindings and the driver isn't invasive at all, any problems can certainly
+be fixed up in-tree.
+
+Yours,
+Linus Walleij
