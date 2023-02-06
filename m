@@ -2,109 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D44F368B8B2
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 10:28:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42C0A68B8BF
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 10:31:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229789AbjBFJ2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 04:28:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36274 "EHLO
+        id S229789AbjBFJb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 04:31:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjBFJ2Q (ORCPT
+        with ESMTP id S229448AbjBFJbY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 04:28:16 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D92071BD2;
-        Mon,  6 Feb 2023 01:28:14 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BF661113E;
-        Mon,  6 Feb 2023 01:28:56 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.91.13])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0B6293F71E;
-        Mon,  6 Feb 2023 01:28:11 -0800 (PST)
-Date:   Mon, 6 Feb 2023 09:28:09 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     "Wangshaobo (bobo)" <bobo.shaobowang@huawei.com>
-Cc:     linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
-        lenb@kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mhiramat@kernel.org,
-        ndesaulniers@google.com, ojeda@kernel.org, peterz@infradead.org,
-        rafael.j.wysocki@intel.com, revest@chromium.org,
-        robert.moore@intel.com, rostedt@goodmis.org, will@kernel.org,
-        "liwei (GF)" <liwei391@huawei.com>
-Subject: Re: [PATCH v3 1/8] ftrace: Add DYNAMIC_FTRACE_WITH_CALL_OPS
-Message-ID: <Y+DIKQvfYE15QL3F@FVFF77S0Q05N>
-References: <20230123134603.1064407-1-mark.rutland@arm.com>
- <20230123134603.1064407-2-mark.rutland@arm.com>
- <f2f5dfc6-3deb-9fce-a9be-9386e844a9cf@huawei.com>
- <Y9ebIY/pWz0Ms9S6@FVFF77S0Q05N>
- <60ec7607-7c5c-1a6e-18c9-8025cb2f289f@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <60ec7607-7c5c-1a6e-18c9-8025cb2f289f@huawei.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 6 Feb 2023 04:31:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD12A13DDB;
+        Mon,  6 Feb 2023 01:31:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6679D60DBB;
+        Mon,  6 Feb 2023 09:31:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0912C433EF;
+        Mon,  6 Feb 2023 09:31:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675675882;
+        bh=IbbdJxwExq/xgTnQ3QxlRR4vh7AQ7SmhFQ+DR+Lfkr4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=l4sAkd10OviU9F3grPZsiDbuKk78ANHZn8ZmpfVBK0ikMJji9AdN69CPqafp3VN2T
+         hN1OYKVDAIjkNKghPf3+slZTAvMUo5M0W3u/9h+ylr6KtuYY/G7WnUryDYXOPBCwI+
+         nNwWolcuaUhNe2Y/BKd2vOUCZUJnEDe+F6qk0rvCwAvVLSaopoOWiUyORbbEzt3Ziw
+         f/sFw55ITnc3rEymlnJdvFDLYIqNGynH+X/W2POarSvTxZ30hP9ZyXlHnX7uIA68EE
+         yuou4ZqcJ6ATDPgOSbWTEBItYQM1FRF6URqDBpjvqhcqH/Por5YgMgrlAfEJDTGMxX
+         2JwIh31X8N8NA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pOxqK-007wxh-Do;
+        Mon, 06 Feb 2023 09:31:20 +0000
+Date:   Mon, 06 Feb 2023 09:31:20 +0000
+Message-ID: <86y1pbywbb.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Mark Brown <broonie@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Will Deacon <will@kernel.org>, Oleg Nesterov <oleg@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Shuah Khan <shuah@kernel.org>,
+        Alan Hayward <alan.hayward@arm.com>,
+        Luis Machado <luis.machado@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 07/21] arm64/sme: Enable host kernel to access ZT0
+In-Reply-To: <20221208-arm64-sme2-v4-7-f2fa0aef982f@kernel.org>
+References: <20221208-arm64-sme2-v4-0-f2fa0aef982f@kernel.org>
+        <20221208-arm64-sme2-v4-7-f2fa0aef982f@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: broonie@kernel.org, catalin.marinas@arm.com, will@kernel.org, oleg@redhat.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, oliver.upton@linux.dev, shuah@kernel.org, alan.hayward@arm.com, luis.machado@arm.com, szabolcs.nagy@arm.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 09:25:51AM +0800, Wangshaobo (bobo) wrote:
-> 在 2023/1/30 18:25, Mark Rutland 写道:
-> > On Sat, Jan 28, 2023 at 04:46:48PM +0800, Wangshaobo (bobo) wrote:
-> > > 锟斤拷 2023/1/23 21:45, Mark Rutland 写锟斤拷:
-> > > > +config DYNAMIC_FTRACE_WITH_CALL_OPS
-> > > > +	def_bool y
-> > > > +	depends on HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS
-> > > > +
-> > > Hi Mark,
-> > 
-> > Hi,
-> > 
-> > > I have test your patches and it looks fine with my sample module,
-> > 
-> > Thanks for testing!
-> > 
-> > > but here setting DYNAMIC_FTRACE_WITH_CALL_OPS to y immutably may increase the
-> > > .text section size by 5% or more, how about making this to optional^^
-> > 
-> > We could consider making this optional. I had not made this optional so far as
-> > in the future I'd like to make this the only implementation of ftrace on arm64
-> > (once we can drop the old mcount version, and once we've sorted out the
-> > incompatibility with CFI). In the mean time, it probably makes sense to have
-> > the option at least to enable testing of each of the two forms.
-> > 
-> > Is your concern that the overall kernel image size is larger, or do you care
-> > specifically about the size of the .text section for some reason?
-> > 
-> > Thanks,
-> > Mark
-> Embedded devices may pay more attention to Image size, and which may also
-> indirectly affects performance, for more reason,
+On Mon, 16 Jan 2023 16:04:42 +0000,
+Mark Brown <broonie@kernel.org> wrote:
+>=20
+> The new register ZT0 introduced by SME2 comes with a new trap, disable it
+> for the host kernel so that we can implement support for it.
+>=20
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+>  arch/arm64/kernel/hyp-stub.S       | 6 ++++++
+>  arch/arm64/kernel/idreg-override.c | 1 +
+>  2 files changed, 7 insertions(+)
+>=20
+> diff --git a/arch/arm64/kernel/hyp-stub.S b/arch/arm64/kernel/hyp-stub.S
+> index 2ee18c860f2a..d31d1acb170d 100644
+> --- a/arch/arm64/kernel/hyp-stub.S
+> +++ b/arch/arm64/kernel/hyp-stub.S
+> @@ -132,6 +132,12 @@ SYM_CODE_START_LOCAL(__finalise_el2)
+>  	orr	x0, x0, SMCR_ELx_FA64_MASK
+>  .Lskip_sme_fa64:
+> =20
+> +	// ZT0 available?
+> +	__check_override id_aa64smfr0 ID_AA64SMFR0_EL1_SMEver_SHIFT 4 .Linit_sm=
+e_zt0 .Lskip_sme_zt0
+> +.Linit_sme_zt0:
+> +	orr	x0, x0, SMCR_ELx_EZT0_MASK
+> +.Lskip_sme_zt0:
+> +
 
-I appreciate those concerns, however:
+I've been looking at this in order to solve a merge conflict in next,
+and couldn't convince myself that the above actually works.
 
-a) For the Image size, the mcount_loc table and associated relocations already
-   imposes a much greater penalty. So I'd expect that where the size truly
-   matters, ftrace would be completely disabled anyway.
+__check_override assumes that the ID_AA64SMFR0_EL1 value is in x1, and
+I guess that the intent of the code is to reuse value read a few lines
+above. But as the comment says at the beginning of the macro, x1 will
+be clobbered, and the checks always fails.
 
-   I'm currently looking at shrinking the mcount_loc table (and removing the
-   need for relocationgs), which should save much more space.
+I presume we're just lucky that sme2_kernel_enable() does the same
+thing unconditionally, which probably means this was only ever tested
+with a VHE kernel (it'd otherwise catch fire).
 
-b) For performance, without data this is supposition. Everything so far
-   indicates that there is not a measureable performance difference, and from
-   other threads it's possible that the increased function alignment *aids*
-   performance.
+The easiest fix is just to reload the id register before checking it,
+something like the patch below, compile-tested only.
 
-   If you have data to the contrary, I'm happy to investigate.
+	M.
 
-> I think making sense to have the option for testing is more important.
+=46rom a6c4aaccd33e453ffc8d8ea23a4dd4d9a263cc89 Mon Sep 17 00:00:00 2001
+From: Marc Zyngier <maz@kernel.org>
+Date: Mon, 6 Feb 2023 09:24:40 +0000
+Subject: [PATCH] arm64/sme: Fix __finalise_el2 SMEver check
 
-As above, I'm happy to add an option for functional testing of the ftrace
-implementation, but I don't think that it's a good idea to use that as a size
-or performance tweak.
+When checking for ID_AA64SMFR0_EL1.SMEver, __check_override assumes
+that the ID_AA64SMFR0_EL1 value is in x1, and the intent of the code
+is to reuse value read a few lines above.
 
-Thanks,
-Mark.
+However, as the comment says at the beginning of the macro, x1 will
+be clobbered, and the checks always fails.
+
+The easiest fix is just to reload the id register before checking it.
+
+Fixes: f122576f3533 ("arm64/sme: Enable host kernel to access ZT0")
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+---
+ arch/arm64/kernel/hyp-stub.S | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/kernel/hyp-stub.S b/arch/arm64/kernel/hyp-stub.S
+index d31d1acb170d..111ff33d93ee 100644
+--- a/arch/arm64/kernel/hyp-stub.S
++++ b/arch/arm64/kernel/hyp-stub.S
+@@ -133,6 +133,7 @@ SYM_CODE_START_LOCAL(__finalise_el2)
+ .Lskip_sme_fa64:
+=20
+ 	// ZT0 available?
++	mrs_s	x1, SYS_ID_AA64SMFR0_EL1
+ 	__check_override id_aa64smfr0 ID_AA64SMFR0_EL1_SMEver_SHIFT 4 .Linit_sme_=
+zt0 .Lskip_sme_zt0
+ .Linit_sme_zt0:
+ 	orr	x0, x0, SMCR_ELx_EZT0_MASK
+--=20
+2.34.1
+
+--=20
+Without deviation from the norm, progress is not possible.
