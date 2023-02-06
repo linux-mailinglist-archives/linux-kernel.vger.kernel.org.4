@@ -2,69 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1C2468C726
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 20:59:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA4A168C72D
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 20:59:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230255AbjBFT7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 14:59:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42372 "EHLO
+        id S229700AbjBFT7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 14:59:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbjBFT7M (ORCPT
+        with ESMTP id S230184AbjBFT7x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 14:59:12 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84BC42917F;
-        Mon,  6 Feb 2023 11:59:05 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id mc11so37435479ejb.10;
-        Mon, 06 Feb 2023 11:59:05 -0800 (PST)
+        Mon, 6 Feb 2023 14:59:53 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20E332A16D
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 11:59:42 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id z1so13345463plg.6
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 11:59:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HMN1zat10jBr22fYuOn4khaUn1y+YL7NGcVt8J94/II=;
-        b=qa+wYAR8WuIq5wi0XaKu62WK1I3OHWYPuerrBxWeWFSeCzOossEPHnSt8xOzdQWCIm
-         laN6edncWt4Muu5xihetQGOizGjhu27bFcyOTQLemPJJYgFKkOo9/FHhoEAH+se6NPy+
-         VVG/R61hYxsUnYbGeeV47mxH60V+k7SxiQ2GvEY7Gdiy3koI1L1p7bFnycQFK96DOrTD
-         PSwFBnesZ2yeIHgf8lHpynV4Ok3BQy2kJT2bjppTTBmu4dyp7fs9deQklNdYKXKFzqvB
-         wlxYlK5WgMfBKtllzbmA8LMfFA2/SwddmyMW1PfUqH/LrdeNe0/R3l3evW21qjW51yG9
-         7YGw==
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uiqZzp1m6352u9cE1eTVGIt8ZCSyeo/MwstDjspPGas=;
+        b=X27CqPSsZHQj8wN4Zy+tCNfMySdafRcmUSE8JzjGIH+rCnqM91u56FQY9n4Y9tOoiC
+         1badUOr4gvDkC9HegyTNqkS7PXVXlX0sIr7kWdyUFtsNji1ndIebzZaVswFJtJR3bUNN
+         9sDvxqWHi+h5dfFzV9bdCPzgAKA6NCi88rrWMu5KGixVf59j16rf5PyPISLFZxb2VNJM
+         a9PDMPA2A17USw3ZNEujFVGfsZp5hlr4m8EUbi4QT8blftjOvcC6oqn5P/Ch4sAe/3wi
+         qy7dqYpEnvArK2PK38Sw4pAM7NRN0UW/tAknCTL2B7xpLDydxFD3PZVrQcpuMeAxg6Aj
+         wnxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HMN1zat10jBr22fYuOn4khaUn1y+YL7NGcVt8J94/II=;
-        b=Fp4i7CbZ/Diy4CPqCliq5VAS7jGzKHCioxedYvMn6Ke3Q159UQFgKo1fC8QGg4MpqZ
-         9QHquIufAE3CGBJNNO6oVTSl00He15cuPdqmVddFneN3V2CD8nTfNfN+XkVHzcNM+Sss
-         P6I+ELVMiCTqSl86mltBTKP1uSFFm29cnhuuQ7sCeGXaV8YuKR4JpjeawZaOIUxP+3NM
-         AEUjsDHK/oSF3+RcgaJqtTyI1YYdpylXRfj5OXJOUh80lW4Z/ds1eTY6B6r7YQlvmfk6
-         udGzlWJQJFqvwnujj+cF8WOaYV0KR4cBMjyTazgNb2y/aZ5DdGbK0Iiil/ZFMg5YZW8d
-         OGxg==
-X-Gm-Message-State: AO0yUKWUksjKAPqmq16BUA6EoM6RzxWu0J7/hIxOc6vCzhDO6dcEQ/XM
-        7zaUDZXiniBzLmJV757Spc6IndMpnwrtRH1d9iA=
-X-Google-Smtp-Source: AK7set/r2N3e58ZO16uitn1YASUGRs6MUKw6bQSH/yYT9vZTH21RhrNHpnbwt8x+3DWCQbFtI3ivK1rM4gJQXpbZP5k=
-X-Received: by 2002:a17:906:924c:b0:877:5b9b:b426 with SMTP id
- c12-20020a170906924c00b008775b9bb426mr163060ejx.12.1675713544043; Mon, 06 Feb
- 2023 11:59:04 -0800 (PST)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uiqZzp1m6352u9cE1eTVGIt8ZCSyeo/MwstDjspPGas=;
+        b=MkTJp5UwispZlj7K7h/XI3dQdcf6ACNOwaH30yKBj4lFjCnCJcigBpKkPxp6f9zjU3
+         j8FStnn/duQE82qaGgpx7MtDcmiRkZBnd6Su3szyBs1iS5f9TZGDjGmVQXjld4BpHO/c
+         uBRsh8ByrfsVV0jFQlDON+QnqzS2lCee54mbaGFWI9wlyYhD9IDXsvFQYbAISyLbl0X4
+         C5Mqj0Ssp74hVAyjfNP3zSvP2jwwk/QjWIooPM4CbWzBla5zectKL9cnvnw3q5I18Jc7
+         z/5otr40hVRx28ymlyeAAO7beALSyE0lc8jMe386SpxGqUkemH8ATBD30/7yIzbbxY/O
+         lntA==
+X-Gm-Message-State: AO0yUKXajz/6qtLFMRXpZjtkXnZx5n50VJyZ8Epxt62UwojbLe545LFh
+        ljBMikdsst7FcPGXAAPG4ukG8/TKgu4Yy6AyaVHIQw==
+X-Google-Smtp-Source: AK7set+JyeT7jLCGiKnvTEWqHa2pc44cY6ErYmbe7Od9zICdWyAargVkqjl6Av0+DBNxVvLuGTkSjpMxdGScNPiv2V8=
+X-Received: by 2002:a17:902:ed52:b0:199:62c:15f1 with SMTP id
+ y18-20020a170902ed5200b00199062c15f1mr23982plb.12.1675713581212; Mon, 06 Feb
+ 2023 11:59:41 -0800 (PST)
 MIME-Version: 1.0
-References: <20230203031742.1730761-1-imagedong@tencent.com> <20230203031742.1730761-2-imagedong@tencent.com>
-In-Reply-To: <20230203031742.1730761-2-imagedong@tencent.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 6 Feb 2023 11:58:51 -0800
-Message-ID: <CAEf4Bzbig9DmCEJd0i64gA=jzczK7n=joqiD0MAa6sFSgd=WAw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] libbpf: add support to set kprobe/uprobe
- attach mode
-To:     menglong8.dong@gmail.com
-Cc:     alan.maguire@oracle.com, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Menglong Dong <imagedong@tencent.com>
+References: <20230127001141.407071-1-saravanak@google.com> <20230130085542.38546-1-naresh.kamboju@linaro.org>
+ <CAGETcx_411fVxsM-ZMK7j2Bvkmi2TKPbzSuD+03M3cb7WKHfJw@mail.gmail.com>
+ <20230131101813.goaoy32qvrowvyyb@bogus> <CALHCpMijXAgQx2qq8g8zdq=6AHwP+g5WVBjjry=v+dKEq9KDLw@mail.gmail.com>
+ <CAGETcx_UvW819m1Y-QU_ySB1nG_RegKKT06=YjkK=C_qjbAySw@mail.gmail.com>
+ <CALHCpMha_1nXt4rUe+A184XSWpyNk0_PkYjWZ+tUN7BJWqENLA@mail.gmail.com>
+ <CAGETcx_uri6exkv1Jkzmc4PyEam9yjuH2H1zrq4LYNtJ+XDMWw@mail.gmail.com> <CAL_Jsq+rLZuQYn-90C1gy_uGEXiGeDNZ3OfumTFcx4pP97sXsg@mail.gmail.com>
+In-Reply-To: <CAL_Jsq+rLZuQYn-90C1gy_uGEXiGeDNZ3OfumTFcx4pP97sXsg@mail.gmail.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Mon, 6 Feb 2023 11:59:04 -0800
+Message-ID: <CAGETcx96eBBSfHhPvLBxPwUqwF88cv72KxKQ7tJ=3dYDt8JjGQ@mail.gmail.com>
+Subject: Re: [PATCH v2 00/11] fw_devlink improvements
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Maxim Kiselev <bigunclemax@gmail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        abel.vesa@linaro.org, alexander.stein@ew.tq-group.com,
+        andriy.shevchenko@linux.intel.com, brgl@bgdev.pl,
+        colin.foster@in-advantage.com, cristian.marussi@arm.com,
+        devicetree@vger.kernel.org, dianders@chromium.org,
+        djrscally@gmail.com, dmitry.baryshkov@linaro.org,
+        festevam@gmail.com, fido_max@inbox.ru, frowand.list@gmail.com,
+        geert+renesas@glider.be, geert@linux-m68k.org,
+        gregkh@linuxfoundation.org, heikki.krogerus@linux.intel.com,
+        jpb@kernel.org, jstultz@google.com, kernel-team@android.com,
+        kernel@pengutronix.de, lenb@kernel.org, linus.walleij@linaro.org,
+        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-imx@nxp.com,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux@roeck-us.net, lkft@linaro.org, luca.weiss@fairphone.com,
+        magnus.damm@gmail.com, martin.kepplinger@puri.sm, maz@kernel.org,
+        miquel.raynal@bootlin.com, rafael@kernel.org,
+        s.hauer@pengutronix.de, sakari.ailus@linux.intel.com,
+        shawnguo@kernel.org, tglx@linutronix.de, tony@atomide.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,191 +94,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 2, 2023 at 7:18 PM <menglong8.dong@gmail.com> wrote:
+On Mon, Feb 6, 2023 at 7:19 AM Rob Herring <robh+dt@kernel.org> wrote:
 >
-> From: Menglong Dong <imagedong@tencent.com>
+> On Sun, Feb 5, 2023 at 7:33 PM Saravana Kannan <saravanak@google.com> wro=
+te:
+> >
+> > On Fri, Feb 3, 2023 at 1:39 AM Maxim Kiselev <bigunclemax@gmail.com> wr=
+ote:
+> > >
+> > > =D0=BF=D1=82, 3 =D1=84=D0=B5=D0=B2=D1=80. 2023 =D0=B3. =D0=B2 09:07, =
+Saravana Kannan <saravanak@google.com>:
+> > > >
+> > > > On Thu, Feb 2, 2023 at 9:36 AM Maxim Kiselev <bigunclemax@gmail.com=
+> wrote:
+> > > > >
+> > > > > Hi Saravana,
+> > > > >
+> > > > > > Can you try the patch at the end of this email under these
+> > > > > > configurations and tell me which ones fail vs pass? I don't nee=
+d logs
+> > > > >
+> > > > > I did these tests and here is the results:
+> > > >
+> > > > Did you hand edit the In-Reply-To: in the header? Because in the
+> > > > thread you are reply to the wrong email, but the context in your em=
+ail
+> > > > seems to be from the right email.
+> > > >
+> > > > For example, see how your reply isn't under the email you are reply=
+ing
+> > > > to in this thread overview:
+> > > > https://lore.kernel.org/lkml/20230127001141.407071-1-saravanak@goog=
+le.com/#r
+> > > >
+> > > > > 1. On top of this series - Not works
+> > > > > 2. Without this series    - Works
+> > > > > 3. On top of the series with the fwnode_dev_initialized() deleted=
+ - Not works
+> > > > > 4. Without this series, with the fwnode_dev_initialized() deleted=
+  - Works
+> > > > >
+> > > > > So your nvmem/core.c patch helps only when it is applied without =
+the series.
+> > > > > But despite the fact that this helps to avoid getting stuck at pr=
+obing
+> > > > > my ethernet device, there is still regression.
+> > > > >
+> > > > > When the ethernet module is loaded it takes a lot of time to drop=
+ dependency
+> > > > > from the nvmem-cell with mac address.
+> > > > >
+> > > > > Please look at the kernel logs below.
+> > > >
+> > > > The kernel logs below really aren't that useful for me in their
+> > > > current state. See more below.
+> > > >
+> > > > ---8<---- <snip> --->8----
+> > > >
+> > > > > P.S. Your nvmem patch definitely helps to avoid a device probe st=
+uck
+> > > > > but look like it is not best way to solve a problem which we disc=
+ussed
+> > > > > in the MTD thread.
+> > > > >
+> > > > > P.P.S. Also I don't know why your nvmem-cell patch doesn't help w=
+hen it was
+> > > > > applied on top of this series. Maybe I missed something.
+> > > >
+> > > > Yeah, I'm not too sure if the test was done correctly. You also did=
+n't
+> > > > answer my question about the dts from my earlier email.
+> > > > https://lore.kernel.org/lkml/CAGETcx8FpmbaRm2CCwqt3BRBpgbogwP5gNB+i=
+A5OEtuxWVTNLA@mail.gmail.com/#t
+> > > >
+> > > > So, can you please retest config 1 with all pr_debug and dev_dbg in
+> > > > drivers/core/base.c changed to the _info variants? And then share t=
+he
+> > > > kernel log from the beginning of boot? Maybe attach it to the email=
+ so
+> > > > it doesn't get word wrapped by your email client. And please point =
+me
+> > > > to the .dts that corresponds to your board. Without that, I can't
+> > > > debug much.
+> > > >
+> > > > Thanks,
+> > > > Saravana
+> > >
+> > > > Did you hand edit the In-Reply-To: in the header? Because in the
+> > > > thread you are reply to the wrong email, but the context in your em=
+ail
+> > > > seems to be from the right email.
+> > >
+> > > Sorry for that, it seems like I accidently deleted it.
+> > >
+> > > > So, can you please retest config 1 with all pr_debug and dev_dbg in
+> > > > drivers/core/base.c changed to the _info variants? And then share t=
+he
+> > > > kernel log from the beginning of boot? Maybe attach it to the email=
+ so
+> > > > it doesn't get word wrapped by your email client. And please point =
+me
+> > > > to the .dts that corresponds to your board. Without that, I can't
+> > > > debug much.
+> > >
+> > > Ok, I retested config 1 with all _debug logs changed to the _info. I
+> > > added the kernel log and the dts file to the attachment of this email=
+.
+> >
+> > Ah, so your device is not supported/present upstream? Even though it's
+> > not upstream, I'll help fix this because it should fix what I believe
+> > are unreported issues in upstream.
+> >
+> > Ok I know why configs 1 - 4 behaved the way they did and why my test
+> > patch didn't help.
+> >
+> > After staring at mtd/nvmem code for a few hours I think mtd/nvmem
+> > interaction is kind of a mess. mtd core creates "partition" platform
+> > devices (including for nvmem-cells) that are probed by drivers in
+> > drivers/nvmem. However, there's no driver for "nvmem-cells" partition
+> > platform device. However, the nvmem core creates nvmem_device when
+> > nvmem_register() is called by MTD or these partition platform devices
+> > created by MTD. But these nvmem_devices are added to a nvmem_bus but
+> > the bus has no means to even register a driver (it should really be a
+> > nvmem_class and not nvmem_bus). And the nvmem_device sometimes points
+> > to the DT node of the MTD device or sometimes the partition platform
+> > devices or maybe no DT node at all.
+> >
+> > So it's a mess of multiple devices pointing to the same DT node with
+> > no clear way to identify which ones will point to a DT node and which
+> > ones will probe and which ones won't. In the future, we shouldn't
+> > allow adding new compatible strings for partitions for which we don't
+> > plan on adding nvmem drivers.
 >
-> By default, libbpf will attach the kprobe/uprobe eBPF program in the
-> latest mode that supported by kernel. In this patch, we add the support
-> to let users manually attach kprobe/uprobe in legacy or perf mode.
->
-> There are 3 mode that supported by the kernel to attach kprobe/uprobe:
->
->   LEGACY: create perf event in legacy way and don't use bpf_link
->   PERF: create perf event with perf_event_open() and don't use bpf_link
->   LINK: create perf event with perf_event_open() and use bpf_link
->
-> Users now can manually choose the mode with
-> bpf_program__attach_uprobe_opts()/bpf_program__attach_kprobe_opts().
->
-> Link: https://lore.kernel.org/bpf/20230113093427.1666466-1-imagedong@tencent.com/
-> Signed-off-by: Menglong Dong <imagedong@tencent.com>
-> ---
->  tools/lib/bpf/libbpf.c | 26 +++++++++++++++++++++++++-
->  tools/lib/bpf/libbpf.h | 19 ++++++++++++++++---
->  2 files changed, 41 insertions(+), 4 deletions(-)
->
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index eed5cec6f510..0d20bf1ee301 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -9784,7 +9784,7 @@ struct bpf_link *bpf_program__attach_perf_event_opts(const struct bpf_program *p
->         link->link.dealloc = &bpf_link_perf_dealloc;
->         link->perf_event_fd = pfd;
->
-> -       if (kernel_supports(prog->obj, FEAT_PERF_LINK)) {
-> +       if (kernel_supports(prog->obj, FEAT_PERF_LINK) && !opts->no_link) {
->                 DECLARE_LIBBPF_OPTS(bpf_link_create_opts, link_opts,
->                         .perf_event.bpf_cookie = OPTS_GET(opts, bpf_cookie, 0));
->
-> @@ -10148,16 +10148,28 @@ bpf_program__attach_kprobe_opts(const struct bpf_program *prog,
->         struct bpf_link *link;
->         size_t offset;
->         bool retprobe, legacy;
-> +       enum probe_mode mode;
->         int pfd, err;
->
->         if (!OPTS_VALID(opts, bpf_kprobe_opts))
->                 return libbpf_err_ptr(-EINVAL);
->
-> +       mode = OPTS_GET(opts, mode, PROBE_MODE_DEFAULT);
->         retprobe = OPTS_GET(opts, retprobe, false);
->         offset = OPTS_GET(opts, offset, 0);
->         pe_opts.bpf_cookie = OPTS_GET(opts, bpf_cookie, 0);
->
->         legacy = determine_kprobe_perf_type() < 0;
-> +       switch (mode) {
-> +       case PROBE_MODE_LEGACY:
-> +               legacy = true;
-> +       case PROBE_MODE_PERF:
-> +               pe_opts.no_link = true;
-> +               break;
-> +       default:
-> +               break;
-> +       }
-> +
->         if (!legacy) {
->                 pfd = perf_event_open_probe(false /* uprobe */, retprobe,
->                                             func_name, offset,
-> @@ -10817,10 +10829,12 @@ bpf_program__attach_uprobe_opts(const struct bpf_program *prog, pid_t pid,
->         int pfd, err;
->         bool retprobe, legacy;
->         const char *func_name;
-> +       enum probe_mode mode;
->
->         if (!OPTS_VALID(opts, bpf_uprobe_opts))
->                 return libbpf_err_ptr(-EINVAL);
->
-> +       mode = OPTS_GET(opts, mode, PROBE_MODE_DEFAULT);
->         retprobe = OPTS_GET(opts, retprobe, false);
->         ref_ctr_off = OPTS_GET(opts, ref_ctr_offset, 0);
->         pe_opts.bpf_cookie = OPTS_GET(opts, bpf_cookie, 0);
-> @@ -10849,6 +10863,16 @@ bpf_program__attach_uprobe_opts(const struct bpf_program *prog, pid_t pid,
->         }
->
->         legacy = determine_uprobe_perf_type() < 0;
-> +       switch (mode) {
-> +       case PROBE_MODE_LEGACY:
-> +               legacy = true;
-> +       case PROBE_MODE_PERF:
-> +               pe_opts.no_link = true;
-> +               break;
-> +       default:
-> +               break;
-> +       }
-> +
+> That won't work. Having a compatible string cannot mean there must be a d=
+river.
 
-I think this is a good place to also return errors early if, say, user
-requested LINK mode, but that mode is not supported by kernel. Instead
-of returning some -ENOTSUP generic error, we can error out early?
-Similar for PERF mode, if only legacy is supported, and so on. Similar
-for attach_uprobe, of course.
+Right, I know what you mean Rob and I know where you are coming from
+(DT isn't just about Linux or even driver core). But what I'm saying
+is that this seems to already be the case for MTD partitions after
+commit:
+bcdf0315a61a mtd: call of_platform_populate() for MTD partitions
 
->         if (!legacy) {
->                 pfd = perf_event_open_probe(true /* uprobe */, retprobe, binary_path,
->                                             func_offset, pid, ref_ctr_off);
-> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-> index 8777ff21ea1d..7fb474e036a3 100644
-> --- a/tools/lib/bpf/libbpf.h
-> +++ b/tools/lib/bpf/libbpf.h
-> @@ -451,8 +451,10 @@ struct bpf_perf_event_opts {
->         size_t sz;
->         /* custom user-provided value fetchable through bpf_get_attach_cookie() */
->         __u64 bpf_cookie;
-> +       /* don't use bpf_link when attach eBPF pprogram */
+So, if we are adding compatible properties only for some of them, then
+I'm saying we should make sure people write drivers for them going
+forward.
 
-typo: pprogram
+I don't know enough about MTD partitions to know why only some of them
+have compatible properties.
 
-> +       bool no_link;
-
-I've been struggling with this "no_link" name a bit. It is quite
-confusing considering that from libbpf's API side we do return `struct
-bpf_link`. So I'm thinking that maybe "force_ioctl_attach" would be a
-better way to describe it (and will be scary enough for people not
-knowing what this is about to not set it to true?)
-
-Also, we'll need size_t: 0 at the end to avoid uninitialized padding
-issues (like we have in kprobe_opts and uprobe_opts)
-
->  };
-> -#define bpf_perf_event_opts__last_field bpf_cookie
-> +#define bpf_perf_event_opts__last_field no_link
->
->  LIBBPF_API struct bpf_link *
->  bpf_program__attach_perf_event(const struct bpf_program *prog, int pfd);
-> @@ -461,6 +463,13 @@ LIBBPF_API struct bpf_link *
->  bpf_program__attach_perf_event_opts(const struct bpf_program *prog, int pfd,
->                                     const struct bpf_perf_event_opts *opts);
->
-> +enum probe_mode {
-
-shall we call it probe_attach_mode?
-
-also let's elaborate a bit more in doc comment that specifying mode
-will force libbpf to use that, but if kernel doesn't support it --
-then we'll error out.
-
-> +       PROBE_MODE_DEFAULT = 0, /* latest supported by kernel */
-> +       PROBE_MODE_LEGACY,
-> +       PROBE_MODE_PERF,
-> +       PROBE_MODE_LINK,
-> +};
-> +
->  struct bpf_kprobe_opts {
->         /* size of this struct, for forward/backward compatiblity */
->         size_t sz;
-> @@ -470,9 +479,11 @@ struct bpf_kprobe_opts {
->         size_t offset;
->         /* kprobe is return probe */
->         bool retprobe;
-> +       /* kprobe attach mode */
-> +       enum probe_mode mode;
-
-nit: mode -> attach_mode?
-
->         size_t :0;
->  };
-> -#define bpf_kprobe_opts__last_field retprobe
-> +#define bpf_kprobe_opts__last_field mode
->
->  LIBBPF_API struct bpf_link *
->  bpf_program__attach_kprobe(const struct bpf_program *prog, bool retprobe,
-> @@ -570,9 +581,11 @@ struct bpf_uprobe_opts {
->          * binary_path.
->          */
->         const char *func_name;
-> +       /* uprobe attach mode */
-> +       enum probe_mode mode;
->         size_t :0;
->  };
-> -#define bpf_uprobe_opts__last_field func_name
-> +#define bpf_uprobe_opts__last_field mode
-
-ditto
-
->
->  /**
->   * @brief **bpf_program__attach_uprobe()** attaches a BPF program
-> --
-> 2.39.0
->
+-Saravana
